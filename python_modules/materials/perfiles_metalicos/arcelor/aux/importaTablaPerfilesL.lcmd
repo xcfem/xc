@@ -1,0 +1,84 @@
+fNameIn= "perfiles_l_lados_iguales_arcelor.txt"
+fNameOut= "perfiles_he_arcelor.lcmd"
+'''
+Ejes de la sección:
+
+   ARCELOR          XC
+
+                    ^ Y                    
+                    |
+
+      |             | 
+      | -> Y        | -> Z
+      |             |
+      ------        ------
+
+      |
+      v Z
+
+Los ejes en los que se definen las características mecánicas de la sección
+en el catálogo original de Arcelor se han cambiado para acomodarlos a los
+habituales en XC (eje fuerte paralelo al eje Z). Para ello, como puede verse
+en la figura, basta intercambiar los ejes Y y Z. En este caso al ser los lados
+iguales los valores en los ejes «y» y «z» coinciden.
+  
+'''
+
+\nuevo_archivo_entrada["pp"]{fNameIn}
+strA= 
+csv= 
+lst= 
+\while(good("pp"))
+  {
+    \bucle
+      {
+        strA= readln("pp")
+        \if(strlen(strA)>0)
+          {
+            \then
+              {
+                lst=csv2list(strA)
+                \print{"\\def_prop[\"",lst[13],"\",\"record\"]{}","\n"}
+                \print{"\\",lst[13],"\n"}
+                \print{"  {\n"}
+                \print{"    \def_prop[\"nmb\",\"string\"]{\"",lst[13],"\"}","\n"}
+                \print{"    \def_prop[\"P\",\"double\"]{",lst[1],"}","\n"}
+                \print{"    \def_prop[\"h\",\"double\"]{",lst[2],"e-3}","\n"}
+                \print{"    \def_prop[\"b\",\"double\"]{",lst[2],"e-3}","\n"}
+                \print{"    \def_prop[\"t\",\"double\"]{",lst[3],"e-3}","\n"}
+                \print{"    \def_prop[\"r1\",\"double\"]{",lst[4],"e-3}","\n"}
+                \print{"    \def_prop[\"r2\",\"double\"]{",lst[5],"e-3}","\n"}
+                \print{"    \def_prop[\"A\",\"double\"]{",lst[6],"e-4}","\n"}
+                \print{"    \def_prop[\"zs\",\"double\"]{",lst[7],"e-3}","\n"}
+                \print{"    \def_prop[\"ys\",\"double\"]{",lst[7],"e-3}","\n"}
+                \print{"    \def_prop[\"v\",\"double\"]{",lst[8],"e-2}","\n"}
+                \print{"    \def_prop[\"u1\",\"double\"]{",lst[9],"e-2}","\n"}
+                \print{"    \def_prop[\"u2\",\"double\"]{",lst[10],"e-2}","\n"}
+                \print{"    \def_prop[\"AL\",\"double\"]{",lst[11],"}","\n"}
+                \print{"    \def_prop[\"AG\",\"double\"]{",lst[12],"}","\n"}
+                \print{"    \def_prop[\"Iy\",\"double\"]{",lst[15],"e-8}","\n"}
+                \print{"    \def_prop[\"Iz\",\"double\"]{",lst[15],"e-8}","\n"}
+                \print{"    \def_prop[\"Iyz\",\"double\"]{",lst[22],"e-8}","\n"}
+                \print{"    \def_prop[\"Wzel\",\"double\"]{",lst[16],"e-6}","\n"}
+                \print{"    \def_prop[\"Wyel\",\"double\"]{",lst[16],"e-6}","\n"}
+                \print{"    \def_prop[\"iz\",\"double\"]{",lst[17],"e-2}","\n"}
+                \print{"    \def_prop[\"iy\",\"double\"]{",lst[17],"e-2}","\n"}
+                \print{"    \def_prop[\"Iu\",\"double\"]{",lst[18],"e-8}","\n"}
+                \print{"    \def_prop[\"iu\",\"double\"]{",lst[19],"e-2}","\n"}
+                \print{"    \def_prop[\"Iv\",\"double\"]{",lst[20],"e-8}","\n"}
+                \print{"    \def_prop[\"iv\",\"double\"]{",lst[21],"e-2}","\n"}
+
+                \print{"    \def_prop[\"Avy\",\"double\"]{t*(b-t-r2)}","\n"}
+                \print{"    \def_prop[\"Avz\",\"double\"]{t*(b-t-r2)}","\n"}
+                \print{"    \def_prop[\"It\",\"double\"]{0.0}","\n"}
+
+                \print{"    \def_prop[\"alpha\",\"double\"]{Avy/A}","\n"}
+                \print{"    \def_prop[\"E\",\"double\"]{",210000e6,"}","\n"}
+                \print{"    \def_prop[\"nu\",\"double\"]{",0.3,"}","\n"}
+                \print{"    \def_prop[\"G\",\"double\"]{E/(2*(1+nu))}","\n"}
+                \print{"  }\n"}
+              }
+          }
+      }
+  }
+\cierra_archivo_entrada{"pp"}

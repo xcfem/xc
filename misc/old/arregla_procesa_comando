@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "procesando: " $1
+cp -i $1 $1.bak
+cat $1.bak  | sed 's/void \(.*\)::procesa_comando(CmdStatus/int \1::procesa_comando(CmdStatus/g' \
+> $1

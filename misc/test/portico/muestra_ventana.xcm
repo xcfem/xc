@@ -1,0 +1,6 @@
+\define[vtkRenderWindow,renWin] { \add_renderer{renderer} }
+\define[vtkRenderWindowInteractor,iren] { \set_render_window{renWin} }
+
+\renWin{ \set_size{800, 600} }
+
+\iren{\initialize{} \start{}}

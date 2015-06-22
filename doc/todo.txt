@@ -1,0 +1,87 @@
+- Calculation of Zero-energy modes based on stiffness matrix eigenvalues.
+- Si no se llama al método setupFibers() la sección tiene rigidez nula y no avisa de esta circunstancia.
+- Arreglar el uso de «locales» al leer y escribir números (ver el uso de inbue en streams (cin, cout,...)).
+- Terminar de escribir la formulación corotacional para elementos shell (ver documento elemento_shell_con_formulacion_corrotacional.pdf de Ivan Moura Belo).
+- Comprobar el recubrimiento que se escribe en la descripción de las secciones,
+  al parecer sale siempre 3 cm.
+
+- Migrar desde OpenSees el elemento SurfaceLoad y otros similares para facilitar
+  la introducción de cargas en elementos de superficie y de volumen.
+
+- Implementar el análisis modal empleando «load dependent Ritz vectors» (LDR vectors) como se propone en el capítulo 14 del libro de Wilson. 
+
+- Agregar un KDTree a los objetos que buscan puntos, líneas y superficies por
+  su posición en el espacio (MatrizPnt, TritrizPnt,...).
+
+- Repasar valores de los coeficientes de distorsión en las tablas de perfiles
+  metálicos (archivos perfiles_ipn_arcelor.lcmd, perfiles_ipe_arcelor.lcmd, etc.). Ver R.M de Timoshenko páginas 438 y 708.
+- Escribir un "dosificador de cargas" que facilite la solución de problemas
+  no lineales (ver artículo XC).
+- Hablar en el tutorial de compilación acerca de las cuentas de usuario y
+  permisos sobre archivos y su efecto sobre make install. Explicar también
+  el archivo INSTALL.
+
+- Comprobar el funcionamiento de los elementos barra 3d (ElasticBeam3d, ForceBeamColumn3d)
+  con secciones que no tienen el producto de inercia nulo en los ejes del elemento.
+
+- Crear un comando para girar la definición geométrcia de una sección y
+  las secciones de fibras similar al empleado en ConstantesSecc3d.cc.
+
+- Facilitar la introducción de cargas puntuales y lineales de manera similar
+  a como lo hace CypeCad.
+
+- Simplificar y mejorar la interfaz con VTK.
+
+- Escribir las rutinas de comprobación de piezas de hormigón frente a rasante, punzonamiento y torsión.
+
+- Escribir rutinas para predimensionamiento de piezas de hormigón.
+
+- En los ejemplos de combinaciones de acciones marcar como tales las combinaciones
+  que no puedan ser dominantes. De esta manera se reduce el número de combinaciones
+  a calcular.
+
+- Facilitar la comprobación de las combinaciones en las que interviene alguna acción
+  accidental haciendo la comprobación en dos fases:
+     - En la primera, en la que se comprueba la estructura frente a combinaciones normales,
+       se emplean los coeficientes de minoración apropiados. Finalizada esta se escriben en
+       un archivo los valores pésimos que se hayan obtenido para cada elemento.
+     - A continuación, se genera un nuevo modelo con los coeficientes de minoración del material
+       con valor unidad y se cargan los resultados grabados en el paso anterior. Por último
+       se procede a continuar la comprobación con las acciones accidentales.
+
+- Permitir la creación de archivos temporales (funcion mkstemp) con nombre único
+  de manera que la ejecución simultánea de programas como xLamina o
+  xMarco no de problemas al machacar uno los archivos del otro.
+
+- Repasar los resultados del «linear buckling analysis» (ver modos_imperfeccion_modos_pandeo.pdf, calculo_autovalores_problemas_contacto_unilateral.pdf y la página 630 del libro de Bathe).
+
+- Programar la generación de acelerogramas sintéticos a partir de los programas
+  GENONDAS y GENCOMP del libro «Estructuras sometidas a acciones sísmicas» de Barbat el al.
+  segunda edición página 453 y siguientes.
+
+- Llevar las constantes mecánicas de torsión Ae,ue, etcétera al registro
+  de definición de la seccion. Ver archivos defSeccionHASimple.xcm,
+  fisuracionEHE.xcm, cortanteEHE.xcm, torsionEHE.xcm,etcétera.
+
+- Generar el manual de referencia para el usuario mediante comentarios "marcados"
+  que se envíen a AsciiDoc u otra herramienta similar.
+
+- Escribir un «Emacs Major Mode for Syntax Coloring» para el lenguaje de comandos
+  (ver http://xahlee.org/emacs/elisp_syntax_coloring.html).
+
+- Modificar los test "débiles" para que no lo sean.
+
+- Estudiar los materiales «plate fiber material» y «plate fiber section» para modelizar láminas de hormigón armado.
+
+- Estudiar la comprobación de piezas de hormigón en los casos de interacción con el cortante y la torsión.
+
+- Estudiar la posibilidad de emplear los «straight skeleton» de CGAL para facilitar el tratamiento
+  de la torsión y el cortante en secciones metálicas.
+
+- Implementar un modelo de fibras con interacción axil-flector-cortante-torsión (ver modelo TINSA de Bernat).
+
+- Sustituir la interfaz de comunicación actual (sendSelf, recvSelf, MovableObject,...) por la biblioteca de «serialización» de Boost. http://www.boost.org/doc/libs/1_48_0/libs/serialization/doc/index.html
+
+- Comprobación de paneles metálicos de acuerdo con lo expuesto en el artículo «Aplicación de los
+métodos generales de cálculo no lineal al estudio de los puentes mixtos» de Antonio Martínez Cutillas
+(ver archivo /mnt/madre/conocimiento/documentacion/estructuras/por_uso/puentes/puentes_mixtos/libro/Puentes_Mixtos.pdf).

@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "procesando: " $1 $2
+cp -i $1 $1.bak
+cat $1.bak  | sed 's/\(\w*\)::/XC::\1::/g' \
+> $1

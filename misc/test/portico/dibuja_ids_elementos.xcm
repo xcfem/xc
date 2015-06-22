@@ -1,0 +1,19 @@
+\c{Dibuja las etiquetas de los elementos.}
+\define[vtkCellCenters,cc]
+  { \set_input{ids} } \c{ Centroides de las celdas. }
+
+\define[vtkSelectVisiblePoints,visCells]
+  {
+    \set_input{cc}
+    \set_renderer{renderer}
+    \selection_window_off{}
+  }
+\c{Create the mapper to display the cell ids.  Specify the format to
+   use for the labels.  Also create the associated actor.}
+\define[vtkLabeledShStrMapper,cellMapper]
+  {
+    \set_input{visCells}
+    \label_text_property{ \set_color{0,0,0.9} }
+  }
+\define[vtkActor2D,cellLabels]
+  { \set_mapper{cellMapper} }

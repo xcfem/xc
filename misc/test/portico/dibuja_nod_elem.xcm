@@ -1,0 +1,12 @@
+\c{Dibujamos nodos y elementos}
+\incluye{test/portico/actor_nodos.xcm}
+\incluye{test/portico/actor_elementos.xcm}
+
+\define[vtkRenderer,renderer]
+  {
+    \add_actor{visPoints} \c{Actor para los puntos}
+    \add_actor{wireActor} \c{Actor para las lineas}
+    \set_background{.95, .95, .95}
+  }
+\incluye{test/portico/dibuja_ids_nodos.xcm} \c{Dibuja etiquetas de los puntos.}
+\incluye{test/portico/dibuja_ids_elementos.xcm} \c{Dibuja etiquetas de los elementos.}

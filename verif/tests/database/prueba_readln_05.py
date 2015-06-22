@@ -1,0 +1,68 @@
+# -*- coding: utf-8 -*-
+
+import sqlite3 as sqlite
+from sqliteUtils import macros_sqlite
+from misc import ansysToEsfBarra
+
+import os
+pth= os.path.dirname(__file__)
+#print "pth= ", pth
+if(not pth):
+  pth= "."
+fNameIn= pth+"/pilares.lst"
+dbName= "/tmp/pilares.db"
+tbName= "esfPilares"
+os.system("rm -f " + dbName)
+macros_sqlite.SQLTcreaDBase(dbName)
+ansysToEsfBarra.ansysToEsfBarra(fNameIn,dbName,tbName)
+
+idElem= 0.0
+nmbAccion= ""
+sumN= 0.0
+n= 0.0
+sumM1= 0.0
+m1= 0.0
+sumM2= 0.0
+m2= 0.0
+sumT= 0.0
+t= 0.0
+
+conn= sqlite.connect(dbName)
+conn.row_factory= sqlite.Row
+otra= conn.cursor()
+cur= conn.cursor()
+cur.execute("select * from " + tbName + " where elem=3470")
+for r in cur:
+  idElem= r['ELEM']
+  nmbAccion= r['ACCION']
+  n= r['AXIL']
+  m1= r['M_1']
+  m2= r['M_2']
+  t= r['TORSOR']
+  sumN+= n
+  sumM1+= m1
+  sumM2+= m2
+  sumT+= t
+
+ratio1= abs(sumN+3951.69)/3951.69
+ratio2= abs(sumM1-0.0242008)/0.0242008
+ratio3= abs(sumM2-32.43870)/32.43870
+ratio4= abs(sumT-0.0000115157)/0.0000115157
+
+''' 
+print "ratio1= ",ratio1
+print "ratio2= ",ratio2
+print "ratio3= ",ratio3
+print "ratio4= ",ratio4
+   '''
+
+
+import os
+fname= os.path.basename(__file__)
+if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5):
+  print "test ",fname,": ok."
+else:
+  print "test ",fname,": ERROR."
+
+os.system("rm -f /tmp/pilares.db")
+

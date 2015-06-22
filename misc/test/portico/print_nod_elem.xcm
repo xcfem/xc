@@ -1,0 +1,20 @@
+\dom
+   {
+     \print{"núm. nodos: ",@nnod,"\n"}
+     \nods
+       {
+         \for_each
+           {
+             \print{"  nodo: ",@tag," x= ",@coord[0],", y= ",@coord[1],", z= ",@coord[2],"\n"}
+           }
+       }
+     \print{"núm. elementos: ",@nelem,"\n"}
+     \elems
+       {
+         \expr{cumple= 1}
+         \for_each
+           {
+             \print{"  elem: ",@tag," nod. I: ",@nod[0].tag," nod. J: ",@nod[1].tag," L= ",@length,"\n"}
+           }
+       }
+   }

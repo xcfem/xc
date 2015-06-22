@@ -1,0 +1,1 @@
+{gsub(/\yWEnergy\y/,"XC::WEnergy") gsub(/\yMatrix\y/,"XC::Matrix") gsub(/\yTensor\y/,"XC::Tensor") gsub(/\yVector\y/,"XC::Vector") gsub(/\ystraintensor\y/,"XC::straintensor") gsub(/\ystresstensor\y/,"XC::stresstensor") gsub(/\yNDMaterial\y/,"XC::NDMaterial") gsub(/\yXC::XC::\y/,"XC::")}9

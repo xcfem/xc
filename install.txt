@@ -1,0 +1,87 @@
+XC installation.
+
+0.- Patience (please).
+
+    I'ts not always easy to verify than installation works properly
+    (obviously, the developer's machine is the worst place to test
+    installation process). If you find a bug in the installation please 
+    feel free to write to l.pereztato@gmail.com.
+
+1.- Pre-requisites.
+
+    xc is a C++ (and fortran) library, so a C++ and a Fortran
+    compiler are necessary. You can use the library as a Python module
+    so you need a Python interpreter tooo. The library was tested
+    with GNU C++ and Fortran version 4.8.2
+    
+    - You will also need CMake ((http://www.cmake.org/).
+    - The library is suposed to be used over Linux, maybe it's possible
+      to use it with other Unix flavors.
+    - Libraries needed:
+
+         -xc_basic: basic routines (must be previously installed xc_basic.tar.gz).
+         -xc_util: utilities (must be previously installed xc_utils.tar.gz).
+         -VTK Visualization ToolKit (<http://www.vtk.org>, ).
+         -Boost c++ libraries (<http://www.boost.org>).
+         -f2c Fortran to C translator (paquete Debian: libf2c2-dev)
+         -CGAL (computational geometry algorithms library <http://www.cgal.org/>).
+         -GNU plotutils libraries (libplot-dev).
+         -Multiple precision floating-point computation developers tools (libmpfr-dev).
+         -Multiprecision arithmetic library developers tools (libgmp3-dev).
+         -MySQL C++ library bindings (libmysql++-dev).
+         -Berkeley Database Libraries for C++ (libdb,libdb-dev).
+         -SQLite 3 development files (libsqlite3-dev).
+         -X11 (libX11-dev)
+         -TCL Tcl/Tk development support (tcl-dev).
+         -Arpack Fortran77 subroutines to solve large scale eigenvalue problems (paquete Debian: libarcpack2-dev).
+         -Arpack++ Interfaz C++ para la biblioteca Arpack (paquete Debian: libarcpack++2-dev).
+         -Lapack (Library of linear algebra routines; liblapack-dev).
+         -SuperLU (Direct solution of large, sparse systems of linear equations libsuperlu3-dev).
+         -Suitesparse (collection of libraries for computations for sparse matrices).
+         -Petsc
+         -HDF5 (www.hdfgroup.org). Interfaz con Salome.
+         -MED V3.0 (www.code-aster.org/outils/med). Interfaz con Salome.
+
+      You can find a list of the Ubuntu (or Debian) packages you need to
+      fulfill the installation in "doc/needed_packages.txt". If you have
+      a Debian, Ubuntu or (probably) Linux Mint distribution you can
+      run the "doc/install_deb_packages.sh" to install all needed packages.
+
+2.- Make a directory to place files inside (Debian administrators 
+    know what to do):
+
+    sudo mkdir /usr/local/src/prgs
+    sudo chown yourUserName.yourUserName /usr/local/src/prgs
+
+3.- Unzip the files is "prgs" directory:
+
+    cp xc.tar.gz /usr/local/src/prgs
+    cd /usr/local/src/prgs
+    tar -xzvf xc.tar.gz
+
+4.- Make a directory to compile sources.
+
+    mkdir /usr/local/src/prgs/build
+    mkdir /usr/local/src/prgs/build/xc
+
+
+6.- Use CMake for Makefile generation.
+
+    cd /usr/local/src/prgs/build/xc
+    cmake ../../prgs/xc/src
+
+7.- Compile code.
+
+    make
+
+8.- Install library.
+
+    sudo make install
+
+8.- Verify that in the '/usr/local/lib' there is a file named 'libxc.so'.
+
+
+9.- Install python modules.
+
+    cd /usr/local/src/prgs/xc/python_modules
+    sh local_install.sh

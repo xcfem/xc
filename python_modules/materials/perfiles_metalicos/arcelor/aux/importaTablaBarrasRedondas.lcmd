@@ -1,0 +1,47 @@
+fNameIn= "barras_redondas_acero_laminado_arcelor.csv"
+fNameOut= "barras_redondas_acero_laminado_arcelor.lcmd"
+
+
+
+\nuevo_archivo_entrada["pp"]{fNameIn}
+str1= 
+csv= 
+lst= 
+\while
+  {
+    \cond{good("pp")}
+    \bucle
+      {
+        str1= readln("pp")
+        if(strlen(str1)>0):
+            \then
+              {
+                lst=csv2list(str1)
+                \print{"\def_prop[\"",lst[0],"\",\"record\"]{}","\n"}
+                \print{"\\",lst[0],"\n"}
+                \print{"  {\n"}
+                \print{"    \def_prop[\"nmb\",\"string\"]{\"",lst[0],"\"}","\n"}
+                \print{"    \def_prop[\"d\",\"double\"]{",lst[2],"e-3}","\n"}
+                \print{"    \def_prop[\"r\",\"double\"]{",lst[2]/2,"e-3}","\n"}
+                \print{"    \def_prop[\"P\",\"double\"]{",lst[1],"}","\n"}
+                \print{"    \def_prop[\"A\",\"double\"]{",lst[3],"e-4}","\n"}
+                \print{"    \def_prop[\"Iz\",\"double\"]{PI*r^4/4}\n"}
+                \print{"    \def_prop[\"Wzel\",\"double\"]{Iz/r}\n"}
+                \print{"    \def_prop[\"Wzpl\",\"double\"]{4*r^3/3}\n"}
+                \print{"    \def_prop[\"iz\",\"double\"]{Iz/r}\n"}
+                \print{"    \def_prop[\"Iy\",\"double\"]{PI*r^4/4}\n"}
+                \print{"    \def_prop[\"Wyel\",\"double\"]{Iy/r}\n"}
+                \print{"    \def_prop[\"Wypl\",\"double\"]{4*r^3/3}\n"}
+                \print{"    \def_prop[\"iy\",\"double\"]{Iy/r}\n"}
+                \print{"    \def_prop[\"J\",\"double\"]{PI*r^4/2}\n"}
+                \print{"    \def_prop[\"E\",\"double\"]{210000e6}\n"}
+                \print{"    \def_prop[\"nu\",\"double\"]{",0.3,"}","\n"}
+                \print{"    \def_prop[\"G\",\"double\"]{E/(2*(1+nu))}\n"}
+                \print{"    \def_prop[\"AreaQZ\",\"double\"]{9/10*A}","\n"}
+                \print{"    \def_prop[\"AreaQY\",\"double\"]{AreaQZ}","\n"}
+                \print{"  }\n"}
+              }
+          }
+      }
+  }
+\cierra_archivo_entrada{"pp"}

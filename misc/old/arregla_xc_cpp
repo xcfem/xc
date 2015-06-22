@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "procesando: " $1 $2
+cp -i $1 $1.bak
+cat $1.bak | sed 's/^tensor /XC::tensor /g' \
+ | sed 's/^straintensor /XC::straintensor /g' \
+ | sed 's/^stresstensor /XC::stresstensor /g' \
+> $1

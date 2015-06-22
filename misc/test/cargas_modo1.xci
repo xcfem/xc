@@ -1,0 +1,19 @@
+\c{Debidas a masas en nodos.}
+\nodal_load{ \nod{1} \val{[88519.5,0,0]} }
+\nodal_load{ \nod{2} \val{[142687,0,0]} }
+\nodal_load{ \nod{3} \val{[187747,0,0]} }
+\nodal_load{ \nod{4} \val{[244173,0,0]} }
+\nodal_load{ \nod{5} \val{[274011,0,0]} }
+
+
+\c{Debidas a masas en elementos.}
+\nodal_load{ \nod{0} \val{[0,0,0]} }
+\nodal_load{ \nod{1} \val{[1.31725,0,0]} }
+\nodal_load{ \nod{1} \val{[0.987941,0,0]} }
+\nodal_load{ \nod{2} \val{[1.59249,0,0]} }
+\nodal_load{ \nod{2} \val{[1.59249,0,0]} }
+\nodal_load{ \nod{3} \val{[2.09539,0,0]} }
+\nodal_load{ \nod{3} \val{[2.09539,0,0]} }
+\nodal_load{ \nod{4} \val{[2.72515,0,0]} }
+\nodal_load{ \nod{4} \val{[2.72515,0,0]} }
+\nodal_load{ \nod{5} \val{[3.05816,0,0]} }

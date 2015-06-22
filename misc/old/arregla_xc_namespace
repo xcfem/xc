@@ -1,0 +1,6 @@
+#!/bin/sh
+echo "procesando: " $1
+cp -i $1 $1.bak
+gawk -f 'lista_awk.txt' $1 > $1.$$
+mv $1.$$ $1
+

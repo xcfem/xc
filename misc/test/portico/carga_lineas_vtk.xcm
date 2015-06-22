@@ -1,0 +1,36 @@
+\plot
+  {
+    \c{Definimos el conjunto de puntos a dibujar}
+    \define[vtkPoints,kpuntos]{}
+    \define[vtkShStrArray,etiq_puntos]{}
+    \define[vtkShStrArray,etiq_celdas]{}
+
+    \c{Definimos grid}
+    \define[vtkUnstructuredGrid,ugrid]
+      {
+        \set_points{kpuntos} 
+        \point_data{\set_strings{etiq_puntos}} \c{Etiquetas para los puntos}
+        \cell_data{\set_strings{etiq_celdas}} \c{Etiquetas para las celdas}
+      }
+  }
+
+\c{Cargamos puntos y lineas en vtk}
+\numera{}
+\for_each_pnt
+  {
+    \print{"idx= ",@idx," id: ",@nombre," x= ",@pos.x,," y= ",@pos.y,," z= ",@pos.z,"\n"}
+    \plot
+      {
+        \kpuntos{\insert_point{@idx,@pos.x,@pos.y,@pos.z}}
+        \etiq_puntos{ \insert_value{@idx,@codigo} } \c{Asignamos etiqueta}
+      }
+  }
+\for_each_edge
+  {
+    \plot
+      {
+        \print{"id: ",@nombre," cell type:", @getVtkCellType, " vertices:",@vertices,"\n"}
+        \ugrid{\insert_next_cell[@getVtkCellType]{@vertices}}
+        \etiq_celdas{ \insert_value{@idx,@codigo} } \c{Asignamos etiqueta}
+      }
+  }

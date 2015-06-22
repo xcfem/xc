@@ -1,0 +1,678 @@
+//----------------------------------------------------------------------------
+//  programa XC; cálculo mediante el método de los elementos finitos orientado
+//  a la solución de problemas estructurales.
+//
+//  Copyright (C)  Luis Claudio Pérez Tato
+//
+//  El programa deriva del denominado OpenSees <http://opensees.berkeley.edu>
+//  desarrollado por el «Pacific earthquake engineering research center».
+//
+//  Salvo las restricciones que puedan derivarse del copyright del
+//  programa original (ver archivo copyright_opensees.txt) este
+//  software es libre: usted puede redistribuirlo y/o modificarlo 
+//  bajo los términos de la Licencia Pública General GNU publicada 
+//  por la Fundación para el Software Libre, ya sea la versión 3 
+//  de la Licencia, o (a su elección) cualquier versión posterior.
+//
+//  Este software se distribuye con la esperanza de que sea útil, pero 
+//  SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita
+//  MERCANTIL o de APTITUD PARA UN PROPÓSITO DETERMINADO. 
+//  Consulte los detalles de la Licencia Pública General GNU para obtener 
+//  una información más detallada. 
+//
+// Debería haber recibido una copia de la Licencia Pública General GNU 
+// junto a este programa. 
+// En caso contrario, consulte <http://www.gnu.org/licenses/>.
+//----------------------------------------------------------------------------
+/* ****************************************************************** **
+**    OpenSees - Open System for Earthquake Engineering Simulation    **
+**          Pacific Earthquake Engineering Research Center            **
+**                                                                    **
+**                                                                    **
+** (C) Copyright 1999, The Regents of the University of California    **
+** All Rights Reserved.                                               **
+**                                                                    **
+** Commercial use of this program without express permission of the   **
+** University of California, Berkeley, is strictly prohibited.  See   **
+** file 'COPYRIGHT'  in main directory for information on usage and   **
+** redistribution,  and for a DISCLAIMER OF ALL WARRANTIES.           **
+**                                                                    **
+** Developed by:                                                      **
+**   Frank McKenna (fmckenna@ce.berkeley.edu)                         **
+**   Gregory L. Fenves (fenves@ce.berkeley.edu)                       **
+**   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
+**                                                                    **
+** ****************************************************************** */
+
+// $Revision: 1.2 $
+// $Date: 2005/12/15 00:30:38 $
+// $Source: /usr/local/cvs/OpenSees/SRC/CrdTransf2d.cpp,v $
+
+
+// File: ~/crdTransf/CrdTransf2d.C
+//
+// Written: Remo Magalhaes de Souza (rmsouza@ce.berkeley.edu)
+// Created: 04/2000
+// Revision: A
+//
+// Description: This file contains the implementation for the XC::CrdTransf2d class.
+// CrdTransf2d provides the abstraction of a 2d frame 
+// coordinate transformation. It is an abstract base class and 
+// thus no objects of  it's type can be instatiated. 
+
+#include "CrdTransf2d.h"
+#include "domain/mesh/node/Node.h"
+#include "utility/matrix/Matrix.h"
+#include "xc_utils/src/base/CmdStatus.h"
+#include "xc_utils/src/base/any_const_ptr.h"
+#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
+#include "utility/actor/actor/MovableVector.h"
+
+//! @brief constructor:
+XC::CrdTransf2d::CrdTransf2d(int tag, int classTag)
+  : CrdTransf(tag, classTag,2),cosTheta(0.0), sinTheta(0.0) {}
+
+//! @brief Procesa instrucciones desde archivo.
+bool XC::CrdTransf2d::procesa_comando(CmdStatus &status)
+  {
+    const std::string cmd= deref_cmd(status.Cmd());
+    if(verborrea>2)
+      std::clog << "(CrdTransf2d) Procesando comando: " << cmd << std::endl;
+    return CrdTransf::procesa_comando(status);
+  }
+
+//! @brief check rigid joint offset for node I
+void XC::CrdTransf2d::set_rigid_joint_offsetI(const Vector &rigJntOffset1)
+  {
+    if(&rigJntOffset1 == 0 || rigJntOffset1.Size() != 2 )
+      {
+        std::cerr << "CrdTransf2d:  Invalid rigid joint offset vector for node I\n";
+        std::cerr << "Size must be 2\n";
+      }
+    else
+      if(rigJntOffset1.Norm() > 0.0)
+        {
+          nodeIOffset(0) = rigJntOffset1(0);
+          nodeIOffset(1) = rigJntOffset1(1);
+        }
+  }
+
+//! @brief check rigid joint offset for node J
+void XC::CrdTransf2d::set_rigid_joint_offsetJ(const Vector &rigJntOffset2)
+  {
+    if(&rigJntOffset2 == 0 || rigJntOffset2.Size() != 2 )
+      {
+        std::cerr << "CrdTransf2d:  Invalid rigid joint offset vector for node J\n";
+        std::cerr << "Size must be 2\n";      
+      }
+    else
+      if(rigJntOffset2.Norm() > 0.0)
+        {
+          nodeJOffset(0) = rigJntOffset2(0);
+          nodeJOffset(1) = rigJntOffset2(1);
+        }
+  }
+
+
+//! @brief Comprueba si existen desplazamientos iniciales en los nodos
+//! y, si es asi, 
+void XC::CrdTransf2d::disp_init_nodos(void)
+  {
+    // see if there is some initial displacements at nodes
+    if(initialDispChecked == false)
+      {
+        
+        const Vector &nodeIDisp= nodeIPtr->getDisp();
+        const Vector &nodeJDisp= nodeJPtr->getDisp();
+        for(int i=0; i<3; i++)
+          if(nodeIDisp(i) != 0.0)
+            {
+              nodeIInitialDisp.resize(3);
+              for(int j=0; j<3; j++)
+                nodeIInitialDisp[j] = nodeIDisp(j);
+              i = 3;
+            }
+        for(int j=0; j<3; j++)
+          if(nodeJDisp(j) != 0.0)
+            {
+              nodeJInitialDisp.resize(3);
+              for(int i=0; i<3; i++)
+                nodeJInitialDisp[i] = nodeJDisp(i);
+              j = 3;
+            }
+                
+        initialDispChecked = true;
+      }
+  }
+
+//! @brief Asigna valores iniciales los movimientos a partir
+//! de los movimientos de los nodos.
+int XC::CrdTransf2d::initialize(Node *nodeIPointer, Node *nodeJPointer)
+  {
+    set_ptr_nodos(nodeIPointer,nodeJPointer);
+    
+    // see if there is some initial displacements at nodes
+    if(initialDispChecked == false)
+      {
+        
+        const Vector &nodeIDisp= nodeIPtr->getDisp();
+        const Vector &nodeJDisp= nodeJPtr->getDisp();
+        for(int i=0; i<3; i++)
+          if(nodeIDisp(i) != 0.0)
+            {
+              nodeIInitialDisp.resize(3);
+              for(int j=0; j<3; j++)
+                nodeIInitialDisp[j] = nodeIDisp(j);
+              i = 3;
+            }
+        for(int j=0; j<3; j++)
+          if(nodeJDisp(j) != 0.0)
+            {
+              nodeJInitialDisp.resize(3);
+              for(int i=0; i<3; i++)
+                nodeJInitialDisp[i] = nodeJDisp(i);
+              j = 3;
+            }
+                
+        initialDispChecked = true;
+      }
+
+    int error= 0;
+    // get element length and orientation
+    if((error = this->computeElemtLengthAndOrient()))
+      return error;
+    return 0;
+  }
+
+//! @brief Calcula la longitud y la orientación del elemento.
+int XC::CrdTransf2d::computeElemtLengthAndOrient(void) const
+  {
+    // element projection
+    static Vector dx(2);
+    if(nodeIPtr && nodeJPtr)
+      {
+        const Vector &ndICoords= nodeIPtr->getCrds();
+        const Vector &ndJCoords= nodeJPtr->getCrds();
+    
+        dx(0)= ndJCoords(0) - ndICoords(0);
+        dx(1)= ndJCoords(1) - ndICoords(1);
+    
+        if(!nodeIInitialDisp.empty())
+          {
+            dx(0)-= nodeIInitialDisp[0];
+            dx(1)-= nodeIInitialDisp[1];
+          }
+    
+        if(!nodeJInitialDisp.empty())
+          {
+            dx(0)+= nodeJInitialDisp[0];
+            dx(1)+= nodeJInitialDisp[1];
+          }
+    
+        dx(0)+= nodeJOffset(0);
+        dx(1)+= nodeJOffset(1);
+    
+        dx(0)-= nodeIOffset(0);
+        dx(1)-= nodeIOffset(1);
+    
+        // calculate the element length
+        L = dx.Norm();
+    
+        if(L == 0.0) 
+          {
+            std::cerr << "CrdTransf2d::computeElemtLengthAndOrien: longitud nula. "
+                      << std::endl
+                      << " Nodo I: " << nodeIPtr->getTag() << " coords: " << ndICoords
+                      << std::endl
+                      << " nodo J: " << nodeJPtr->getTag() << " coords: " << ndJCoords
+                      << std::endl;
+            return -2;  
+          }
+    
+        // calculate the element local x axis components (direction cossines)
+        // wrt to the global coordinates 
+        cosTheta= dx(0)/L;
+        sinTheta= dx(1)/L;
+      }
+    else
+      std::cerr << "CrdTransf2d::computeElemtLengthAndOrient; puntero a nodo nulo." << std::endl;
+    return 0;
+  }
+
+//! @brief Devuelve los desplazamientos expresados en el sistema básico.
+const XC::Vector &XC::CrdTransf2d::getBasicTrialDisp(void) const
+  {
+    // determine global displacements
+    const Vector &disp1 = nodeIPtr->getTrialDisp();
+    const Vector &disp2 = nodeJPtr->getTrialDisp();
+    
+    static double ug[6];
+    for(register int i= 0;i<3;i++)
+      {
+        ug[i]   = disp1(i);
+        ug[i+3] = disp2(i);
+      }
+    
+    if(!nodeIInitialDisp.empty())
+      {
+        for(register int j=0;j<3;j++)
+          ug[j]-= nodeIInitialDisp[j];
+      }
+    
+    if(!nodeJInitialDisp.empty())
+      {
+        for(register int j=0;j<3;j++)
+          ug[j+3]-= nodeJInitialDisp[j];
+      }
+    
+    static Vector ub(3);
+    // ub(0)= dx2-dx1: Elongación sufrida por el elemento.
+    // ub(1)= (dy1-dy2)/L+gz1: Giro en torno a z.
+    // ub(2)= (dy1-dy2)/L+gz2: Giro en torno a z.
+    
+    const double oneOverL = 1.0/L;
+    const double sl = sinTheta*oneOverL;
+    const double cl = cosTheta*oneOverL;
+    
+    ub(0)= -cosTheta*ug[0] - sinTheta*ug[1] + cosTheta*ug[3] + sinTheta*ug[4];
+    
+    ub(1)= -sl*ug[0] + cl*ug[1] + ug[2] + sl*ug[3] - cl*ug[4];
+    
+    const double t02= T02();
+    const double t12= T12();
+    ub(0)-= t02*ug[2];
+    ub(1)+= oneOverL*t12*ug[2];
+    
+    const double t35= T35();
+    const double t45= T45();
+    ub(0)+= t35*ug[5];
+    ub(1)-= oneOverL*t45*ug[5];
+    
+    ub(2)= ub(1)+ug[5]-ug[2];
+    return ub;
+  }
+
+//! @brief Devuelve los incrementos de desplazamiento expresados en el sistema básico.
+const XC::Vector &XC::CrdTransf2d::getBasicIncrDisp(void) const
+  {
+    // determine global displacements
+    const Vector &disp1 = nodeIPtr->getIncrDisp();
+    const Vector &disp2 = nodeJPtr->getIncrDisp();
+    
+    static double dug[6];
+    for(register int i= 0;i<3;i++)
+      {
+        dug[i]   = disp1(i);
+        dug[i+3] = disp2(i);
+      }
+    
+    static XC::Vector dub(3);
+    
+    const double oneOverL = 1.0/L;
+    const double sl = sinTheta*oneOverL;
+    const double cl = cosTheta*oneOverL;
+    
+    dub(0) = -cosTheta*dug[0] - sinTheta*dug[1] + cosTheta*dug[3] + sinTheta*dug[4];
+    
+    dub(1) = -sl*dug[0] + cl*dug[1] + dug[2] + sl*dug[3] - cl*dug[4];
+    
+    const double t02= T02();
+    const double t12= T12();
+    dub(0)-= t02*dug[2];
+    dub(1)+= oneOverL*t12*dug[2];
+    
+    const double t35= T35();
+    const double t45= T45();
+    dub(0) += t35*dug[5];
+    dub(1) -= oneOverL*t45*dug[5];
+
+    dub(2) = dub(1) + dug[5] - dug[2];
+    return dub;
+  }
+
+const XC::Vector &XC::CrdTransf2d::getBasicIncrDeltaDisp(void) const
+  {
+    // determine global displacements
+    const Vector &disp1 = nodeIPtr->getIncrDeltaDisp();
+    const Vector &disp2 = nodeJPtr->getIncrDeltaDisp();
+    
+    static double Dug[6];
+    for(register int i = 0; i < 3; i++)
+      {
+        Dug[i]   = disp1(i);
+        Dug[i+3] = disp2(i);
+      }
+    
+    static XC::Vector Dub(3);
+    
+    const double oneOverL = 1.0/L;
+    const double sl = sinTheta*oneOverL;
+    const double cl = cosTheta*oneOverL;
+    
+    Dub(0)= -cosTheta*Dug[0] - sinTheta*Dug[1] + cosTheta*Dug[3] + sinTheta*Dug[4];
+    
+    Dub(1) = -sl*Dug[0] + cl*Dug[1] + Dug[2] + sl*Dug[3] - cl*Dug[4];
+    
+    const double t02= T02();
+    const double t12= T12();
+    Dub(0) -= t02*Dug[2];
+    Dub(1) += oneOverL*t12*Dug[2];
+    
+    const double t35= T35();
+    const double t45= T45();
+    Dub(0) += t35*Dug[5];
+    Dub(1) -= oneOverL*t45*Dug[5];
+    
+    Dub(2) = Dub(1) + Dug[5] - Dug[2];    
+    return Dub;
+  }
+
+const XC::Vector &XC::CrdTransf2d::getBasicTrialVel(void) const
+  {
+    // determine global velocities
+    const XC::Vector &vel1 = nodeIPtr->getTrialVel();
+    const XC::Vector &vel2 = nodeJPtr->getTrialVel();
+	
+    static double vg[6];
+    for(int i = 0; i < 3; i++)
+      {
+	vg[i]   = vel1(i);
+	vg[i+3] = vel2(i);
+      }
+	
+    static XC::Vector vb(3);
+	
+    const double oneOverL = 1.0/L;
+    const double sl = sinTheta*oneOverL;
+    const double cl = cosTheta*oneOverL;
+	
+    vb(0) = -cosTheta*vg[0] - sinTheta*vg[1] + cosTheta*vg[3] + sinTheta*vg[4];
+	
+    vb(1) = -sl*vg[0] + cl*vg[1] + vg[2] + sl*vg[3] - cl*vg[4];
+	
+    const double t02= T02();
+    const double t12= T12();
+    vb(0) -= t02*vg[2];
+    vb(1) += oneOverL*t12*vg[2];
+	
+    const double t35= T35();
+    const double t45= T45();
+    vb(0)+= t35*vg[5];
+    vb(1)-= oneOverL*t45*vg[5];
+	
+    vb(2) = vb(1) + vg[5] - vg[2];	
+    return vb;
+  }
+
+
+const XC::Vector &XC::CrdTransf2d::getBasicTrialAccel(void) const
+  {
+    // determine global accelerations
+    const XC::Vector &accel1 = nodeIPtr->getTrialAccel();
+    const XC::Vector &accel2 = nodeJPtr->getTrialAccel();
+    
+    static double ag[6];
+    for(int i = 0; i < 3; i++)
+      {
+        ag[i]   = accel1(i);
+        ag[i+3] = accel2(i);
+      }
+    
+    static Vector ab(3);
+    
+    const double oneOverL = 1.0/L;
+    const double sl = sinTheta*oneOverL;
+    const double cl = cosTheta*oneOverL;
+    
+    ab(0) = -cosTheta*ag[0] - sinTheta*ag[1] + cosTheta*ag[3] + sinTheta*ag[4];
+    
+    ab(1) = -sl*ag[0] + cl*ag[1] + ag[2] + sl*ag[3] - cl*ag[4];
+    
+    const double t02= T02();
+    const double t12= T12();
+    ab(0) -= t02*ag[2];
+    ab(1) += oneOverL*t12*ag[2];
+    
+    const double t35= T35();
+    const double t45= T45();
+    ab(0) += t35*ag[5];
+    ab(1) -= oneOverL*t45*ag[5];
+    
+    ab(2) = ab(1) + ag[5] - ag[2];    
+    return ab;
+  }
+
+//! @brief Devuelve el vector unitario i de los ejes locales del elemento
+//! en su posición inicial.
+const XC::Vector &XC::CrdTransf2d::getInitialI(void) const
+  {
+    computeElemtLengthAndOrient();
+    static Vector vectorI(2);
+    vectorI(0)= cosTheta;
+    vectorI(1)= sinTheta;
+    return vectorI;
+  }
+
+//! @brief Devuelve el vector unitario i de los ejes locales del elemento
+//! en su posición actual.
+const XC::Vector &XC::CrdTransf2d::getI(void) const
+  { return getInitialI(); }
+
+
+//! @brief Devuelve el vector unitario j de los ejes locales del elemento
+//! en su posición inicial.
+const XC::Vector &XC::CrdTransf2d::getInitialJ(void) const
+  {
+    computeElemtLengthAndOrient();
+    static Vector vectorJ(2);
+    vectorJ(0)= -sinTheta;
+    vectorJ(1)= cosTheta;
+    return vectorJ;
+  }
+
+//! @brief Devuelve el vector unitario j de los ejes locales del elemento
+//! en su posición actual.
+const XC::Vector &XC::CrdTransf2d::getJ(void) const
+  { return getInitialJ(); }
+
+//| @brief Devuelve los vectores dirección de los ejes locales en la posición
+//! inicial del elemento.
+int XC::CrdTransf2d::getInitialLocalAxes(Vector &XAxis, Vector &YAxis) const
+  {
+    XAxis(0)= cosTheta; XAxis(1)= sinTheta;
+    YAxis(0)= -sinTheta; YAxis(1)= cosTheta;
+    return 0;
+  }
+
+//| @brief Devuelve los vectores dirección de los ejes locales en la posición
+//! actual del elemento.
+int XC::CrdTransf2d::getLocalAxes(Vector &XAxis, Vector &YAxis) const
+  { return getInitialLocalAxes(XAxis,YAxis); }
+
+//! @brief Devuelve el punto expresado en coordenadas globales.
+const XC::Vector &XC::CrdTransf2d::getPointGlobalCoordFromBasic(const double &xi) const
+  {
+    static Vector local_coord(2),global_coord(2);
+    local_coord.Zero();
+    local_coord[0]= xi*getDeformedLength();
+    global_coord= getPointGlobalCoordFromLocal(local_coord);
+    return global_coord;
+  }
+
+//! @brief Devuelve la posición del nodo I.
+Pos2d XC::CrdTransf2d::getPosNodeI(void) const
+  {
+    Pos2d retval= nodeIPtr->getPosFinal2d();
+    retval+= Vector2d(nodeIOffset(0),nodeIOffset(1));
+    if(!nodeIInitialDisp.empty())
+      retval-= Vector2d(nodeIInitialDisp[0],nodeIInitialDisp[1]);
+    return retval;
+  }
+
+//! @brief Devuelve la posición del nodo J.
+Pos2d XC::CrdTransf2d::getPosNodeJ(void) const
+  {
+    Pos2d retval= nodeJPtr->getPosFinal2d();
+    retval+= Vector2d(nodeJOffset(0),nodeJOffset(1));
+    if(!nodeJInitialDisp.empty())
+      retval-= Vector2d(nodeJInitialDisp[0],nodeJInitialDisp[1]);
+    return retval;
+  }
+
+//! @brief Devuelve el sistema de referencia local.
+Ref2d2d XC::CrdTransf2d::getLocalReference(void) const
+  {
+    const Vector vI= getI();
+    return Ref2d2d(getPosNodeI(),Vector2d(vI[0],vI[1]));
+  }
+
+//! @brief Devuelve las coordenadas locales del punto a partir de las globales.
+XC::Vector XC::CrdTransf2d::getPointLocalCoordFromGlobal(const Vector &xg) const
+  {
+    Ref2d2d ref= getLocalReference();
+    Pos2d pl= ref.GetPosLocal(Pos2d(xg[0],xg[1]));
+    Vector retval(2);
+    retval[0]= pl.x(); retval[1]= pl.y();
+    return retval;  
+  }
+
+//! @brief Devuelve los puntos expresados en coordenadas globales.
+const XC::Matrix &XC::CrdTransf2d::getPointsGlobalCoordFromBasic(const Vector &basicCoords) const
+  {
+    static Matrix retval;
+    const size_t numPts= basicCoords.Size(); //Número de puntos a transformar.
+    retval.resize(numPts,2);
+    Vector xg(2);
+    for(size_t i= 0;i<numPts;i++)
+      {
+        xg= getPointGlobalCoordFromBasic(basicCoords(i));
+        for(size_t j= 0;j<2;j++)
+          retval(i,j)= xg[j];
+      }
+    return retval;
+  }
+
+//! @brief Devuelve el vector expresado en coordenadas globales.
+const XC::Vector &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Vector &localCoords) const
+  {
+    static XC::Vector retval(2);
+    // retval = Rlj'*localCoords (Multiplica el vector por R traspuesta).
+    retval(0)= cosTheta*localCoords(0) - sinTheta*localCoords(1);
+    retval(1)= sinTheta*localCoords(0) + cosTheta*localCoords(1);
+    return retval;
+  }
+
+//! @brief Devuelve los vectores expresados en coordenadas globales.
+const XC::Matrix &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Matrix &localCoords) const
+  {
+    static Matrix retval;
+    const size_t numPts= localCoords.noRows(); //Número de vectores a transformar.
+    retval.resize(numPts,2);
+    for(size_t i= 0;i<numPts;i++)
+      {
+        // retval = Rlj'*localCoords (Multiplica el vector por R traspuesta).
+        retval(i,0)= cosTheta*localCoords(i,0) - sinTheta*localCoords(i,1);
+        retval(i,1)= sinTheta*localCoords(i,0) + cosTheta*localCoords(i,1);
+      }
+    return retval;
+  }
+
+//! @brief Devuelve el vector expresado en coordenadas locales.
+const XC::Vector &XC::CrdTransf2d::getVectorLocalCoordFromGlobal(const Vector &globalCoords) const
+  {
+    static XC::Vector retval(2);
+    retval(0)=  cosTheta*globalCoords(0) + sinTheta*globalCoords(1);
+    retval(1)= -sinTheta*globalCoords(0) + cosTheta*globalCoords(1);
+    return retval;
+  }
+
+//! @brief Devuelve las coordenadas de los nodos.
+const XC::Matrix &XC::CrdTransf2d::getCooNodos(void) const
+  {
+    static Matrix retval;
+    retval= Matrix(2,2);
+
+    retval(0,0)= nodeIPtr->getCrds()[0];
+    retval(0,1)= nodeIPtr->getCrds()[1];
+
+    retval(1,0)= nodeJPtr->getCrds()[0];
+    retval(1,1)= nodeJPtr->getCrds()[1];
+
+    return retval;
+  }
+
+//! @brief Devuelve puntos distribuidos entre los nodos extremos.
+const XC::Matrix &XC::CrdTransf2d::getCooPuntos(const size_t &ndiv) const
+  {
+    const Pos3d p0= nodeIPtr->getPosInicial3d();
+    const Pos3d p1= nodeJPtr->getPosInicial3d();
+    MatrizPos3d linea(p0,p1,ndiv);
+    static Matrix retval;
+    retval= Matrix(ndiv+1,2);
+    Pos3d tmp;
+    for(size_t i= 0;i<ndiv+1;i++)
+      {
+        tmp= linea(i+1,1);
+        retval(i,0)= tmp.x();
+        retval(i,1)= tmp.y();
+      }
+    return retval;
+  }
+
+//! @brief Devuelve el punto correspondiente a la coordenada 0<=xrel<=1.
+const XC::Vector &XC::CrdTransf2d::getCooPunto(const double &xrel) const
+  {
+    const Pos3d p0= nodeIPtr->getPosInicial3d();
+    const Pos3d p1= nodeJPtr->getPosInicial3d();
+    const Vector3d v= p1-p0;
+    static Vector retval(2);
+    const Pos3d tmp= p0+xrel*v;
+    retval(0)= tmp.x();
+    retval(1)= tmp.y();
+    return retval;
+  }
+
+//! @brief Envia los miembros del objeto a través del canal que se pasa como parámetro.
+int XC::CrdTransf2d::sendData(CommParameters &cp)
+  {
+    int res= CrdTransf::sendData(cp);
+    res+= cp.sendDoubles(cosTheta,sinTheta,getDbTagData(),CommMetaData(9));
+    if(res<0)
+      std::cerr << "CrdTransf2d::sendData - failed to send data.\n";
+    return res;
+  }
+
+//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+int XC::CrdTransf2d::recvData(const CommParameters &cp)
+  {
+    int res= CrdTransf::recvData(cp);
+    res+= cp.receiveDoubles(cosTheta,sinTheta,getDbTagData(),CommMetaData(9));
+    if(res<0)
+      std::cerr << "CrdTransf2d::recvData - failed to receive data.\n";
+    return res;    
+  }
+
+//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
+//! como parámetro.
+//!
+//! Soporta los códigos:
+any_const_ptr XC::CrdTransf2d::GetProp(const std::string &cod) const
+  {
+    if(cod=="getSinTheta")
+      return any_const_ptr(sinTheta);
+    else if(cod=="getCosTheta")
+      return any_const_ptr(cosTheta);
+    if(cod=="getTheta")
+      {
+        tmp_gp_dbl= atan2(sinTheta, cosTheta);
+        return any_const_ptr(tmp_gp_dbl);
+      }
+    else if(cod=="getInitialVectorI")
+      return get_prop_vector(getInitialI());
+    else if(cod=="getInitialVectorJ")
+      return get_prop_vector(getInitialJ());
+    else
+      return CrdTransf::GetProp(cod);
+  }

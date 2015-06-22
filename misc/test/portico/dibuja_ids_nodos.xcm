@@ -1,0 +1,16 @@
+\c{Dibuja las etiquetas de los puntos}
+\define[vtkSelectVisiblePoints,visPts]
+  {
+    \set_input{ids}
+    \set_renderer{renderer}
+    \selection_window_off{}
+  }
+\c{Create the mapper to display the point ids.  Specify the format to
+   use for the labels.  Also create the associated actor.}
+\define[vtkLabeledShStrMapper,ldm]
+  {
+    \set_input{visPts}
+    \label_text_property{ \set_color{0.1,0.1,0.1} }
+  }
+\define[vtkActor2D,pointLabels]
+  { \set_mapper{ldm} }

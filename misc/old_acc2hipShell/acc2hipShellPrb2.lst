@@ -1,0 +1,18 @@
+ 
+ Accion G1: CARGA PERM. CONSTR.                                               
+ 
+    STAT    MIXED       MIXED       MIXED       MIXED       MIXED       MIXED       MIXED       MIXED   
+    ELEM    AXIL_X      AXIL_Y      RASANTE     MOM_X       MOM_Y       TORSOR      Q_X         Q_Y     
+     451  -113.14     -5.2604     0.99376     -90.450     -6.7197     -1.1824      94.981     -33.900    
+ 
+ Accion Q1a: COMPACT. POS-1 CONSTR.                                          
+ 
+    STAT    MIXED       MIXED       MIXED       MIXED       MIXED       MIXED       MIXED       MIXED   
+    ELEM    AXIL_X      AXIL_Y      RASANTE     MOM_X       MOM_Y       TORSOR      Q_X         Q_Y     
+     451   3.0283     0.38425      1.1531     -3.4849    -0.28743     0.12190      5.7432    -0.65652    
+ 
+ Accion Q1b: COMPACT. POS-2 CONSTR.                                          
+ 
+    STAT    MIXED       MIXED       MIXED       MIXED       MIXED       MIXED       MIXED       MIXED   
+    ELEM    AXIL_X      AXIL_Y      RASANTE     MOM_X       MOM_Y       TORSOR      Q_X         Q_Y     
+     451  -7.6424    -0.57973    -0.78792     -1.3375    -0.69349E-01-0.12927     -1.1579    -0.92094    

@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "procesando: " $1 >> pp.txt
+cat $1  | sed 's/XC:://g' | sed 's/BJtensor/tensor/g' | sed 's/namespace.*//g' > $1.tmp
+diff -b -c $1.tmp /mnt/remotos/madre/informatica/software/desarrollo/fuentes/c/ingenieria/elementos_finitos/xc/src/$1 >> pp.txt
+

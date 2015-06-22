@@ -1,0 +1,2 @@
+En este directorio se guardan algunos ejemplos de verificación
+y otras pruebas que todavía no funcionan.

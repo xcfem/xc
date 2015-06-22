@@ -1,0 +1,43 @@
+\plot
+  {
+    \c{Definimos el conjunto de nodos a dibujar.}
+    \define[vtkPoints,nodos]{}
+    \define[vtkShStrArray,etiq_nodos]{}
+    \define[vtkShStrArray,etiq_elems]{}
+
+    \c{Definimos el ugrid para la malla de elementos finitos.}
+    \define[vtkUnstructuredGrid,ugrid_mesh]
+       {
+         \set_points{nodos} 
+         \point_data{\set_strings{etiq_nodos}} \c{Etiquetas para los nodos}
+         \cell_data{\set_strings{etiq_elems}} \c{Etiquetas para las celdas}
+       }
+  }
+\numera{}
+\c{Cargamos los nodos en vtk}
+\nods
+  {
+    \for_each
+      {
+        \c{\print{"idx= ",@idx," id: "," x= ",@coord[0]," y= ",@coord[1]," z= ",@coord[2],"\n"}}
+        \plot
+          {
+            \nodos{\insert_point{@idx,@coord[0],@coord[1],@coord[2]}}
+            \etiq_nodos{ \insert_value{@idx,@str_tag} } \c{Asignamos etiqueta}
+          }
+      }
+  }
+\c{Cargamos los elementos en vtk}
+\elems
+  {
+    \for_each
+      {
+        \c{\print{"idx= ",@idx," vertices= ",@vertices,"\n"}}
+        \plot
+          {
+            \ugrid_mesh{\insert_next_cell[@getVtkCellType]{@vertices}}
+            \etiq_elems{ \insert_value{@idx,@str_tag} } \c{Asignamos etiqueta}
+          }
+      }
+  }
+

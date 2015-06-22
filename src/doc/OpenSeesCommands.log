@@ -1,0 +1,218 @@
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=latex 2014.9.14)  15 MAR 2015 20:51
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**OpenSeesCommands.tex
+(./OpenSeesCommands.tex
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 9 languages loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (./headerfooter.sty
+\pageheaderlineskip=\dimen103
+\pagefooterlineskip=\dimen104
+) (/usr/share/texlive/texmf-dist/tex/generic/epsf/epsf.sty
+This is `epsf.tex' v2.7.4 <14 February 2011>
+\epsffilein=\read1
+\epsfframemargin=\dimen105
+\epsfframethickness=\dimen106
+\epsfrsize=\dimen107
+\epsftmp=\dimen108
+\epsftsize=\dimen109
+\epsfxsize=\dimen110
+\epsfysize=\dimen111
+\pspoints=\dimen112
+) (/usr/share/texlive/texmf-dist/tex/latex/graphics/epsfig.sty
+Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/etc/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2009/08/28 v1.8 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: dvips.def on input line 91.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+))
+\Gin@req@height=\dimen113
+\Gin@req@width=\dimen114
+)
+\epsfxsize=\dimen115
+\epsfysize=\dimen116
+)
+(/usr/share/texlive/texmf-dist/tex/latex/rotating/rotating.sty
+Package: rotating 2009/03/28 v2.16a rotated objects in LaTeX
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\c@r@tfl@t=\count87
+\rotFPtop=\skip43
+\rotFPbot=\skip44
+\rot@float@box=\box26
+\rot@mess@toks=\toks15
+)
+(/usr/share/texlive/texmf-dist/tex/latex/subfigure/subfigure.sty
+Package: subfigure 2002/03/15 v2.1.5 subfigure package
+\subfigtopskip=\skip45
+\subfigcapskip=\skip46
+\subfigcaptopadj=\dimen117
+\subfigbottomskip=\skip47
+\subfigcapmargin=\dimen118
+\subfiglabelskip=\skip48
+\c@subfigure=\count88
+\c@lofdepth=\count89
+\c@subtable=\count90
+\c@lotdepth=\count91
+
+****************************************
+* Local config file subfigure.cfg used *
+****************************************
+(/usr/share/texlive/texmf-dist/tex/latex/subfigure/subfigure.cfg)
+\subfig@top=\skip49
+\subfig@bottom=\skip50
+)
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
+\bigstrutjot=\dimen119
+)
+(./verbatimfiles.sty
+\c@lineno=\count92
+) (./fullpage.sty
+Style Option FULLPAGE Version 2 as of 15 Dec 1988
+) (./OpenSeesCommands.aux)
+\openout1 = `OpenSeesCommands.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+File: ./Essential.eps Graphic file (type eps)
+ <./Essential.eps> [1
+
+]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 137.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 137.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 137.
+ [2] [3] [4] [5]
+Overfull \hbox (22.65657pt too wide) in paragraph at lines 395--404
+\OT1/cmr/m/n/12 To con-struct a uni-ax-ial Kent-Scott-Park con-crete model with
+ de-graded lin-ear un-load-ing/reloading
+ []
+
+[6] [7] [8]
+Overfull \hbox (9.07478pt too wide) in paragraph at lines 602--606
+[]\OT1/cmr/m/n/12 The ma-te-rial for-mu-la-tions for the Elas-ti-cIsotropic ob-
+ject are ``Three-D-i-men-sional'', ``PlaneS-
+ []
+
+[9] [10] [11]
+File: ./quadPatch.eps Graphic file (type eps)
+ <./quadPatch.eps>
+Overfull \hbox (5.54407pt too wide) in paragraph at lines 845--853
+\OT1/cmr/m/n/12 To con-struct a patch with a cir-cu-lar shape. The ar-gu-ments 
+\OT1/cmtt/m/n/12 numSubdivCirc \OT1/cmr/m/n/12 and \OT1/cmtt/m/n/12 numSubdivRa
+d
+ []
+
+File: ./circPatch.eps Graphic file (type eps)
+<./circPatch.eps> [12] [13]
+File: ./straightLayer.eps Graphic file (type eps)
+ <./straightLayer.eps>
+File: ./circLayer.eps Graphic file (type eps)
+ <./circLayer.eps> [14]
+[15]
+File: ./localAxis.eps Graphic file (type eps)
+ <./localAxis.eps> [16] [17]
+Overfull \hbox (13.13478pt too wide) in paragraph at lines 1204--1204
+[]                          \OT1/cmtt/m/n/10.95 E? A? Iz? transfTag? <-mass mas
+sDens> <-iter maxIters tol>[] 
+ []
+
+[18] [19] [20] [21]
+File: ./fig_files/brick.eps Graphic file (type eps)
+ <./fig_files/brick.eps> [22]
+File: ./fig_files/nineNodeQuad.eps Graphic file (type eps)
+
+<./fig_files/nineNodeQuad.eps> [23] [24] [25] [26] [27] [28]
+Overfull \hbox (13.13478pt too wide) in paragraph at lines 1946--1946
+[]   \OT1/cmtt/m/n/10.95 groundMotion gMotionTag? Interpolated gmTag1? gmTag2? 
+... -fact fact1? fact2? ...[] 
+ []
+
+[29] [30] [31]
+Overfull \hbox (10.07985pt too wide) in paragraph at lines 2180--2188
+[]\OT1/cmr/m/n/12 To con-struct a StaticIn-te-gra-tor ob-ject of type Load-Con-
+trol. The third ar-gu-ment, dlambda1,
+ []
+
+[32] [33]
+Overfull \hbox (0.22765pt too wide) in paragraph at lines 2306--2309
+[]\OT1/cmr/m/n/12 To con-struct a New-ton-Raph-son al-go-rithm ob-ject which us
+es the Newton-Raphson method
+ []
+
+
+Overfull \hbox (5.87202pt too wide) in paragraph at lines 2332--2335
+[]\OT1/cmr/m/n/12 To con-struct a Mod-i-fied-New-ton al-go-rithm ob-ject which 
+uses the mod-i-fied Newton-Raphson
+ []
+
+[34] [35]
+Overfull \hbox (20.19392pt too wide) in paragraph at lines 2441--2448
+[]\OT1/cmr/m/n/12 The num-berer com-mand is used to con-struct the DOF[]Numbere
+r ob-ject. The DOF[]Numberer
+ []
+
+[36]
+Underfull \hbox (badness 10000) in paragraph at lines 2518--2521
+
+ []
+
+[37] [38] [39] [40] [41] (./OpenSeesCommands.aux) ) 
+Here is how much of TeX's memory you used:
+ 993 strings out of 494907
+ 12798 string characters out of 6177743
+ 65428 words of memory out of 5000000
+ 4233 multiletter control sequences out of 15000+600000
+ 9798 words of font info for 35 fonts, out of 8000000 for 9000
+ 62 hyphenation exceptions out of 8191
+ 32i,8n,24p,572b,325s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on OpenSeesCommands.dvi (41 pages, 117724 bytes).

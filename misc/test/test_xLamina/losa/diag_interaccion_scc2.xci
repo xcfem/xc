@@ -1,0 +1,57 @@
+\c{Losa horizontal. Armadura en dirección Z (o tangencial)}
+
+\expr{ancho= 1.0} \c{XXX Ancho de la sección expresado en metros.}
+\expr{canto= 0.35} \c{XXX Canto de la sección expresado en metros.}
+\expr{recsup= 0.060+0.010+0.010/2} \c{XXX Recubrimiento superior expresado en metros.}
+\expr{recinf= 0.060+0.010+0.010/2} \c{XXX Recubrimiento inferior expresado en metros.}
+
+\expr{areaFi8= 0.50e-4} \c{XXX Área de las barras expresado en metros cuadrados.}
+\expr{areaFi10=0.785e-4}
+\expr{areaFi12=1.13e-4} 
+\expr{areaFi16= 2.01e-4}
+\expr{areaFi20= 3.14e-4}
+\expr{areaFi25= 4.608e-4}
+
+
+\mdlr
+  {
+    \c{Definimos materiales}
+    \materiales
+      {
+        \geom_secc["geomSecHA2"]
+          {
+            \c{Hormigón}
+            \regiones{\reg_cuad[@HA25.nmbDiagD]
+              {
+                \nDivIJ{10}
+                \nDivJK{10}
+                \pMin{-ancho/2,-canto/2}
+                \pMax{ancho/2,canto/2}
+              }}
+            \c{Armadura}
+            \armaduras{\capa_armadura_recta[@B500S.nmbDiagD]
+              {
+                \numReinfBars{5}
+                \barArea{areaFi10}
+                \p1{-ancho/2+recinf,-canto/2+recinf} \c{Armadura inferior (cara -).}
+                \p2{ancho/2-recinf,-canto/2+recinf}
+              }
+            \capa_armadura_recta[@B500S.nmbDiagD]
+              {
+                \numReinfBars{5}
+                \barArea{areaFi10}
+                \p1{-ancho/2+recsup,canto/2-recsup} \c{Armadura superior (cara +).}
+                \p2{ancho/2-recsup,canto/2-recsup}
+              }}
+          }
+        \fiber_section_3d["secHA2"]
+          {
+            \def_section_repr{ \geom{"geomSecHA2"}}
+          }
+        \define_diagrama_interaccion["secHA2"]
+          {
+            \tag_hormigon{@tagHA25}
+            \tag_armadura{@tagB500S}
+          }
+      }
+  }

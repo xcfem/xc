@@ -1,0 +1,6 @@
+Fri, 30 Jan 2015 14:40:44 +0100
+  Added SIA and EC2 steel diagrams.
+  Related modules renamed in english.
+Wed, 07 Dec 2011 17:07:41 +0100
+  Actualización de la clase ENTMaterial (material elástico no tracción).
+  Elaboración de test de verificación para la clase ENTMaterial.

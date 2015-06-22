@@ -1,0 +1,740 @@
+class_<XC::FieldInfo, bases<EntConNmb>, boost::noncopyable >("FieldInfo", no_init)
+class_<dq_fields, boost::noncopyable >("dqFields", no_init)
+class_<XC::MapFields, bases<EntCmd,dq_fields> >("MapFields")
+class_<XC::Constraint, bases<XC::ContinuaReprComponent>, boost::noncopyable >("Constraint", no_init)
+class_<XC::SP_Constraint, bases<XC::Constraint>, boost::noncopyable >("SPConstraint", no_init)
+class_<XC::ImposedMotionBase , bases<XC::SP_Constraint>, boost::noncopyable >("ImposedMotionBase", no_init);
+class_<XC::ImposedMotionSP , bases<XC::ImposedMotionBase>, boost::noncopyable >("ImposedMotionSP", no_init);
+class_<XC::ImposedMotionSP1 , bases<XC::ImposedMotionBase>, boost::noncopyable >("ImposedMotionSP1", no_init);
+class_<XC::MP_Constraint, bases<XC::Constraint>, boost::noncopyable >("MP_Constraint", no_init);
+class_<XC::EqualDOF, bases<XC::MP_Constraint>, boost::noncopyable >("EqualDOF", no_init);
+class_<XC::MP_Joint2D , bases<XC::MP_Constraint>, boost::noncopyable >("MP_Joint2D", no_init);
+class_<XC::MP_Joint3D, bases<XC::MP_Constraint>, boost::noncopyable >("MP_Joint3D", no_init);
+class_<XC::RigidDiaphragm, bases<XC::MP_Constraint>, boost::noncopyable >("RigidDiaphragm", no_init);
+class_<XC::RigidBase, bases<XC::MP_Constraint>, boost::noncopyable >("RigidBase", no_init);
+class_<XC::RigidBeam, bases<XC::RigidBase>, boost::noncopyable >("RigidBeam", no_init);
+class_<XC::RigidRod, bases<XC::RigidBase>, boost::noncopyable >("RigidRod", no_init);
+//class_<XC::MapCasosActivos, bases<EntCmd>, boost::noncopyable >("MapCasosActivos", no_init);
+class_<XC::CondContorno, bases<XC::MeshComponentContainer>, boost::noncopyable >("CondContorno", no_init);
+class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", no_init)
+class_<XC::Load, bases<XC::DomainComponent>, boost::noncopyable >("Load", no_init);
+class_<XC::NodalLoad, bases<XC::Load>, boost::noncopyable >("NodalLoad", no_init);
+class_<XC::NodalLoadIter, boost::noncopyable >("NodalLoadIter", no_init)
+class_<XC::ElementalLoad, bases<XC::Load>, boost::noncopyable >("ElementalLoad", no_init)
+class_<XC::ElementalLoadIter, boost::noncopyable >("ElementalLoadIter", no_init)
+class_<XC::ElementBodyLoad, bases<XC::ElementalLoad>, boost::noncopyable >("ElementBodyLoad", no_init);
+class_<XC::ForceReprComponent, bases<XC::DomainComponent>, boost::noncopyable >("ForceReprComponent", no_init);
+class_<XC::LoadLoaderMember, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("LoadLoaderMember", no_init);
+class_<XC::BidimLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("BidimLoad", no_init)
+class_<XC::BidimMecLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimMecLoad", no_init)
+class_<XC::ShellMecLoad, bases<XC::BidimMecLoad>, boost::noncopyable >("ShellMecLoad", no_init)
+class_<XC::ShellUniformLoad, bases<XC::ShellMecLoad>, boost::noncopyable >("ShellUniformLoad", no_init)
+class_<XC::BidimStrainLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimStrainLoad", no_init)
+class_<XC::ShellStrainLoad, bases<XC::BidimStrainLoad>, boost::noncopyable >("ShellStrainLoad", no_init)
+class_<XC::TrussStrainLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("TrusStrainLoad", no_init)
+class_<XC::BeamLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("BeamLoad", no_init)
+class_<XC::BeamStrainLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamStrainLoad", no_init)
+class_<XC::BeamMecLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamMecLoad", no_init)
+class_<XC::BeamPointLoad, bases<XC::BeamMecLoad>, boost::noncopyable >("BeamPointLoad", no_init)
+class_<XC::BeamUniformLoad, bases<XC::BeamMecLoad>, boost::noncopyable >("BeamUniformLoad", no_init)
+class_<XC::Beam2dPointLoad, bases<XC::BeamPointLoad>, boost::noncopyable >("Beam2dPointLoad", no_init)
+class_<XC::Beam2dUniformLoad, bases<XC::BeamUniformLoad>, boost::noncopyable >("Beam2dUniformLoad", no_init)
+class_<XC::Beam3dPointLoad, bases<XC::BeamPointLoad>, boost::noncopyable >("Beam3dPointLoad", no_init)
+class_<XC::Beam3dUniformLoad, bases<XC::BeamUniformLoad>, boost::noncopyable >("Beam3dUniformLoad", no_init)
+class_<XC::GroundMotion, bases<EntCmd>, boost::noncopyable >("GroundMotion", no_init)
+class_<XC::MotionHistory, bases<EntCmd>, boost::noncopyable >("MotionHistory", no_init)
+class_<XC::GroundMotionRecord , bases<XC::GroundMotion>, boost::noncopyable >("GroundMotionRecord", no_init)
+class_<XC::InterpolatedGroundMotion, bases<XC::GroundMotion>, boost::noncopyable >("InterpolatedGroundMotion", no_init)
+class_<XC::DqGroundMotions , bases<EntCmd>, boost::noncopyable >("DqGroundMotions", no_init);
+class_<XC::NodeLocker, bases<XC::ForceReprComponent>, boost::noncopyable >("NodeLocker", no_init)
+class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern", no_init)
+class_<XC::Combinacion, XC::Combinacion *, bases<XC::ForceReprComponent>, boost::noncopyable >("LoadCombination", no_init)
+class_<XC::map_combinaciones, boost::noncopyable>("map_combinaciones")
+class_<XC::GrupoCombinaciones, bases<XC::LoadLoaderMember,XC::map_combinaciones>, boost::noncopyable >("LoadCombinationGroup", no_init)
+class_<XC::TimeSeries, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("TimeSeries", no_init)
+class_<XC::TimeSeriesIntegrator , bases<XC::MovableObject>, boost::noncopyable >("TimeSeriesIntegrator", no_init);
+ class_<XC::MapLoadPatterns, bases<XC::LoadLoaderMember>, boost::noncopyable >("MapLoadPatterns", no_init)
+class_<XC::EQBasePattern, bases<XC::LoadPattern>, boost::noncopyable >("EQBasePattern", no_init);
+class_<XC::EarthquakePattern , bases<XC::EQBasePattern>, boost::noncopyable >("EarthquakePattern", no_init);
+class_<XC::UniformExcitation, bases<XC::EarthquakePattern>, boost::noncopyable >("UniformExcitation", no_init)
+class_<XC::MultiSupportPattern, bases<XC::EQBasePattern>, boost::noncopyable >("MultiSupportPattern", no_init);
+class_<XC::PBowlLoading , bases<XC::LoadPattern>, boost::noncopyable >("PBowlLoading", no_init);
+class_<XC::CFactorSeries, bases<XC::TimeSeries>, boost::noncopyable >("CFactorSeries", no_init)
+class_<XC::ConstantSeries, bases<XC::CFactorSeries>, boost::noncopyable >("ConstantSeries", no_init)
+class_<XC::LinearSeries , bases<XC::CFactorSeries>, boost::noncopyable >("LinearSeries", no_init);
+class_<XC::PulseBaseSeries, bases<XC::CFactorSeries>, boost::noncopyable >("PulseBaseSeries", no_init)
+class_<XC::PeriodSeries, bases<XC::PulseBaseSeries>, boost::noncopyable >("PeriodSeries", no_init)
+class_<XC::PulseSeries, bases<XC::PeriodSeries>, boost::noncopyable >("PulseSeries", no_init)
+class_<XC::RectangularSeries, bases<XC::PulseBaseSeries>, boost::noncopyable >("RectangularSeries", no_init)
+class_<XC::PathSeriesBase, bases<XC::CFactorSeries>, boost::noncopyable >("PathSeriesBase", no_init)
+class_<XC::PathSeries, bases<XC::PathSeriesBase>, boost::noncopyable >("PathSeries", no_init)
+class_<XC::PathTimeSeries, bases<XC::PathSeriesBase>, boost::noncopyable >("PathTimeSeries", no_init)
+class_<XC::DiscretizedRandomProcessSeries, bases<XC::TimeSeries>, boost::noncopyable >("DiscretizedRandomProcessSeries", no_init)
+class_<XC::SimulatedRandomProcessSeries, bases<XC::TimeSeries>, boost::noncopyable >("SimulatedRandomProcessSeries", no_init)
+class_<XC::TriangleSeries, bases<XC::PeriodSeries>, boost::noncopyable >("TriangleSeries", no_init)
+class_<XC::TrigSeries, bases<XC::PeriodSeries>, boost::noncopyable >("TrigSeries", no_init)
+class_<XC::TrapezoidalTimeSeriesIntegrator , bases<XC::TimeSeriesIntegrator>, boost::noncopyable >("TrapezoidalTimeSeriesIntegrator", no_init);
+class_<XC::BrickSelfWeight, bases<XC::ElementBodyLoad>, boost::noncopyable >("BrickSelfWeight", no_init);
+class_<XC::DomainComponent, bases<XC::TaggedObject>, boost::noncopyable >("DomainComponent", no_init)
+class_<XC::ContinuaReprComponent, bases<XC::DomainComponent>, boost::noncopyable >("ContinuaReprComponent", no_init)
+class_<XC::MeshComponentContainer, bases<EntCmd>, boost::noncopyable >("MeshComponentContainer", no_init)
+class_<XC::Mesh, bases<XC::MeshComponentContainer>, boost::noncopyable >("Mesh", no_init)
+class_<XC::Node, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
+class_<XC::NodeIter, boost::noncopyable >("NodeIter", no_init)
+class_<XC::Information, bases<XC::MovableObject>, boost::noncopyable >("Information", no_init);
+//class_<XC::ElemPos, bases<XC::KDTreePos>, boost::noncopyable >("ElemPos", no_init);
+class_<XC::RayleighDampingFactors, bases<EntCmd>, boost::noncopyable >("RayleighDampingFactors", no_init);
+class_<XC::NodePtrs, bases<EntCmd>, boost::noncopyable >("NodePtrs", no_init)
+class_<XC::NodePtrsWithIDs, bases<XC::NodePtrs>, boost::noncopyable >("NodePtrsWithIDs", no_init)
+class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
+class_<XC::ElementIter, boost::noncopyable >("ElementIter", no_init)
+class_<XC::ElementBase<2>, bases<XC::Element >, boost::noncopyable >("ElementBase2N", no_init);
+class_<XC::ElementBase<4>, bases<XC::Element >, boost::noncopyable >("ElementBase4N", no_init);
+class_<XC::Element0D , bases<XC::ElementBase<2>>, boost::noncopyable >("Element0D", no_init)
+class_<XC::Element1D, bases<XC::ElementBase<2> >, boost::noncopyable >("Element1D", no_init)
+class_<ElemWithMaterial4N_SFD, bases<XC::ElementBase<4> >, boost::noncopyable >("ElemWithMaterial4N_SFD", no_init)
+class_<XC::ElemFriccionBase, bases<XC::Element0D>, boost::noncopyable >("ElemFriccionBase", no_init);
+class_<XC::FlatSliderSimple2d, bases<XC::ElemFriccionBase>, boost::noncopyable >("FlatSliderSimple2d", no_init);
+class_<XC::FlatSliderSimple3d, bases<XC::ElemFriccionBase>, boost::noncopyable >("FlatSliderSimple3d", no_init);
+class_<XC::SingleFPSimple2d , bases<XC::ElemFriccionBase>, boost::noncopyable >("SingleFPSimple2d", no_init);
+class_<XC::SingleFPSimple3d , bases<XC::ElemFriccionBase>, boost::noncopyable >("SingleFPSimple3d", no_init);
+class_<XC::FrictionResponse, bases<XC::Response>, boost::noncopyable >("FrictionResponse", no_init);
+class_<XC::FrictionModel , bases<XC::TaggedObject>, boost::noncopyable >("FrictionModel", no_init);
+class_<XC::CoulombFriction, bases<XC::FrictionModel>, boost::noncopyable >("CoulombFriction", no_init);
+class_<XC::VDependentFriction, bases<XC::CoulombFriction>, boost::noncopyable >("VDependentFriction", no_init);
+class_<XC::VPDependentFriction, bases<XC::VDependentFriction>, boost::noncopyable >("VPDependentFriction", no_init);
+class_<XC::ProtoBeam2d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam2d", no_init)
+class_<XC::ProtoBeam3d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam3d", no_init)
+class_<XC::BeamColumnWithSectionFD, bases<XC::Element1D>, boost::noncopyable >("BeamColumnWithSectionFD", no_init)
+class_<XC::BeamColumnWithSectionFDTrf2d, bases<XC::BeamColumnWithSectionFD>, boost::noncopyable >("BeamColumnWithSectionFDTrf2d", no_init)
+class_<XC::BeamColumnWithSectionFDTrf3d, bases<XC::BeamColumnWithSectionFD>, boost::noncopyable >("BeamColumnWithSectionFDTrf3d", no_init)
+class_<XC::NLForceBeamColumn2dBase, bases<XC::BeamColumnWithSectionFDTrf2d>, boost::noncopyable >("NLForceBeamColumn2dBase", no_init)
+class_<XC::NLForceBeamColumn3dBase, bases<XC::BeamColumnWithSectionFDTrf3d>, boost::noncopyable >("NLForceBeamColumn3dBase", no_init)
+class_<XC::ForceBeamColumn2d, bases<XC::NLForceBeamColumn2dBase>, boost::noncopyable >("ForceBeamColumn2d", no_init)
+class_<XC::ForceBeamColumn3d, bases<XC::NLForceBeamColumn3dBase>, boost::noncopyable >("ForceBeamColumn3d", no_init)
+class_<XC::BeamIntegration, bases<EntCmd>, boost::noncopyable >("BeamIntegration", no_init);
+class_<XC::LegendreBeamIntegration, bases<XC::BeamIntegration>, boost::noncopyable >("LegendreBeamIntegration", no_init);
+class_<XC::LobattoBeamIntegration , bases<XC::BeamIntegration>, boost::noncopyable >("LobattoBeamIntegration", no_init);
+class_<XC::NewtonCotesBeamIntegration , bases<XC::BeamIntegration>, boost::noncopyable >("NewtonCotesBeamIntegration", no_init);
+class_<XC::RadauBeamIntegration , bases<XC::BeamIntegration>, boost::noncopyable >("RadauBeamIntegration", no_init);
+class_<XC::UserDefinedBeamIntegration , bases<XC::BeamIntegration>, boost::noncopyable >("UserDefinedBeamIntegration", no_init);
+class_<XC::UserDefinedHingeIntegration , bases<XC::BeamIntegration>, boost::noncopyable >("UserDefinedHingeIntegration", no_init);
+class_<XC::UserDefinedHingeIntegration2d , bases<XC::BeamIntegration>, boost::noncopyable >("UserDefinedHingeIntegration2d", no_init);
+class_<XC::UserDefinedHingeIntegration3d , bases<XC::BeamIntegration>, boost::noncopyable >("UserDefinedHingeIntegration3d", no_init);
+class_<XC::PlasticLengthsBeamIntegration, bases<XC::BeamIntegration>, boost::noncopyable >("PlasticLengthsBeamIntegration", no_init);
+class_<XC::DistHingeIntegration , bases<XC::PlasticLengthsBeamIntegration>, boost::noncopyable >("DistHingeIntegration", no_init);
+class_<XC::HingeBeamIntegration2d, bases<XC::PlasticLengthsBeamIntegration>, boost::noncopyable >("HingeBeamIntegration2d", no_init);
+class_<XC::HingeBeamIntegration3d, bases<XC::PlasticLengthsBeamIntegration>, boost::noncopyable >("HingeBeamIntegration3d", no_init);
+class_<XC::HingeEndpointBeamIntegration , bases<XC::PlasticLengthsBeamIntegration>, boost::noncopyable >("HingeEndpointBeamIntegration", no_init);
+class_<XC::HingeMidpointBeamIntegration, bases<XC::PlasticLengthsBeamIntegration>, boost::noncopyable >("HingeMidpointBeamIntegration", no_init);
+class_<XC::HingeRadauBeamIntegration, bases<XC::PlasticLengthsBeamIntegration>, boost::noncopyable >("HingeRadauBeamIntegration", no_init);
+class_<XC::HingeRadauTwoBeamIntegration, bases<XC::PlasticLengthsBeamIntegration>, boost::noncopyable >("HingeRadauTwoBeamIntegration", no_init);
+class_<XC::HingeMidpointBeamIntegration2d, bases<XC::HingeBeamIntegration2d>, boost::noncopyable >("HingeMidpointBeamIntegration2d", no_init);
+class_<XC::HingeMidpointBeamIntegration3d , bases<XC::HingeBeamIntegration3d>, boost::noncopyable >("HingeMidpointBeamIntegration3d", no_init);
+class_<XC::HingeRadauBeamIntegration2d , bases<XC::HingeBeamIntegration2d>, boost::noncopyable >("HingeRadauBeamIntegration2d", no_init);
+class_<XC::HingeRadauBeamIntegration3d , bases<XC::HingeBeamIntegration3d>, boost::noncopyable >("HingeRadauBeamIntegration3d", no_init);
+class_<XC::HingeRadauTwoBeamIntegration2d, bases<XC::HingeBeamIntegration2d>, boost::noncopyable >("HingeRadauTwoBeamIntegration2d", no_init);
+class_<XC::HingeRadauTwoBeamIntegration3d, bases<XC::HingeBeamIntegration3d>, boost::noncopyable >("HingeRadauTwoBeamIntegration3d", no_init);
+class_<XC::ElasticBeam2d, bases<XC::ProtoBeam2d>, boost::noncopyable >("ElasticBeam2d", no_init)
+class_<XC::ElasticBeam3d, bases<XC::ProtoBeam3d>, boost::noncopyable >("ElasticBeam3d", no_init)
+class_<XC::ProtoTruss, bases<XC::Element1D>, boost::noncopyable >("ProtoTruss", no_init)
+class_<XC::TrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("TrussBase", no_init)
+class_<XC::TrussSection , bases<XC::TrussBase>, boost::noncopyable >("TrussSection", no_init);
+class_<XC::Muelle , bases<XC::ProtoTruss>, boost::noncopyable >("Muelle", no_init)
+class_<XC::Truss, bases<XC::TrussBase>, boost::noncopyable >("Truss")
+class_<XC::CorotTrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("CorotTrussBase", no_init);
+class_<XC::CorotTruss, bases<XC::CorotTrussBase>, boost::noncopyable >("CorotTruss", no_init)
+class_<XC::CorotTrussSection , bases<XC::CorotTrussBase>, boost::noncopyable >("CorotTrussSection", no_init);
+class_<ElemWithMaterial4N_NDMat, bases<XC::ElementBase<4> >, boost::noncopyable >("ElemWithMaterial4N_NDMat", no_init)
+class_<ElemPlano4N_NDMat, bases<ElemWithMaterial4N_NDMat>, boost::noncopyable >("ElemPlano4N_NDMat", no_init)
+class_<QuadBase4N_NDMat, bases<ElemPlano4N_NDMat>, boost::noncopyable >("QuadBase4N_NDMat", no_init)
+class_<XC::QuadElastPlana, bases<QuadBase4N_NDMat>, boost::noncopyable  >("QuadElastPlana", no_init)
+class_<ElemPlano4N_SFD, bases<ElemWithMaterial4N_SFD>, boost::noncopyable >("ElemPlano4N_SFD", no_init)
+class_<QuadBase4N_SFD, bases<ElemPlano4N_SFD>, boost::noncopyable >("QuadBase4N_SFD", no_init)
+class_<XC::FourNodeQuad, bases<XC::QuadElastPlana>, boost::noncopyable >("FourNodeQuad", no_init)
+class_<XC::ShellCrdTransf3dBase, bases<EntCmd>, boost::noncopyable >("ShellCrdTransf3dBase", no_init)
+class_<XC::ShellLinearCrdTransf3d, bases<XC::ShellCrdTransf3dBase>, boost::noncopyable >("ShellLinearCrdTransf3d", no_init)
+class_<XC::ShellCorotCrdTransf3d, bases<XC::ShellCrdTransf3dBase>, boost::noncopyable >("ShellCorotCrdTransf3d", no_init)
+class_<XC::ShellMITC4Base, bases<QuadBase4N_SFD>, boost::noncopyable >("ShellMITC4Base", no_init)
+class_<XC::ShellMITC4, bases<XC::ShellMITC4Base>, boost::noncopyable >("ShellMITC4", no_init)
+class_<XC::CorotShellMITC4, bases<XC::ShellMITC4Base>, boost::noncopyable >("CorotShellMITC4", no_init)
+class_<XC::CrdTransf, bases<XC::TaggedObject,XC::MovableObject >, boost::noncopyable >("CrdTransf", no_init)
+class_<XC::CrdTransf2d, bases<XC::CrdTransf >, boost::noncopyable >("CrdTransf2d", no_init)
+class_<XC::SmallDispCrdTransf2d, bases<XC::CrdTransf2d >, boost::noncopyable >("SmallDispCrdTransf2d", no_init)
+class_<XC::LinearCrdTransf2d, bases<XC::SmallDispCrdTransf2d >, boost::noncopyable >("LinearCrdTransf2d", no_init)
+class_<XC::CrdTransf3d, bases<XC::CrdTransf >, boost::noncopyable >("CrdTransf3d", no_init)
+class_<XC::SmallDispCrdTransf3d, bases<XC::CrdTransf3d >, boost::noncopyable >("SmallDispCrdTransf3d", no_init)
+class_<XC::LinearCrdTransf3d, bases<XC::SmallDispCrdTransf3d >, boost::noncopyable >("LinearCrdTransf3d", no_init)
+class_<XC::CorotCrdTransf2d, bases<XC::CrdTransf2d>, boost::noncopyable >("CorotCrdTransf2d", no_init);
+class_<XC::CorotCrdTransf3d, bases<XC::CrdTransf3d>, boost::noncopyable >("CorotCrdTransf3d", no_init);
+class_<XC::PDeltaCrdTransf2d, bases<XC::SmallDispCrdTransf2d>, boost::noncopyable >("PDeltaCrdTransf2d", no_init);
+class_<XC::PDeltaCrdTransf3d, bases<XC::SmallDispCrdTransf3d>, boost::noncopyable >("PDeltaCrdTransf3d", no_init);
+class_<XC::ZeroLength, bases<XC::Element0D>, boost::noncopyable >("ZeroLength", no_init)
+class_<XC::ZeroLengthSection, bases<XC::Element0D>, boost::noncopyable >("ZeroLengthSection", no_init)
+class_<XC::ZeroLengthContact, bases<XC::Element0D>, boost::noncopyable >("ZeroLengthContact", no_init);
+class_<XC::ZeroLengthContact2D, bases<XC::ZeroLengthContact>, boost::noncopyable >("ZeroLengthContact2D", no_init);
+//class_<XC::ZeroLengthContact3D, bases<XC::ZeroLengthContact>, boost::noncopyable >("ZeroLengthContact3D", no_init);
+class_<XC::BrickBase , bases<XC::ElemWithMaterial<8,NDMaterial,8>>, boost::noncopyable >("BrickBase", no_init);
+class_<XC::BrickUP , bases<XC::BrickBase>, boost::noncopyable >("BrickUP", no_init);
+class_<XC::TwentyEightNodeBrickUP , bases<XC::ElemWithMaterial<20,NDMaterial,27>>, boost::noncopyable >("TwentyEightNodeBrickUP", no_init);
+class_<XC::TotalLagrangianFD20NodeBrick, bases<XC::ElemWithMaterial<20,NDMaterial,27>>, boost::noncopyable >("TotalLagrangianFD20NodeBrick", no_init);
+class_<XC::EightNodeBrick, bases<XC::ElementBase<8>>, boost::noncopyable >("EightNodeBrick", no_init);
+class_<XC::TwentyNodeBrick, bases<XC::ElementBase<20>>, boost::noncopyable >("TwentyNodeBrick", no_init);
+class_<XC::Twenty_Node_Brick , bases<XC::ElemWithMaterial<20,NDMaterial,27>>, boost::noncopyable >("Twenty_Node_Brick", no_init);
+class_<XC::EightNodeBrick_u_p_U, bases<XC::BrickBase>, boost::noncopyable >("EightNodeBrick_u_p_U", no_init);
+class_<XC::TwentyNodeBrick_u_p_U, bases<XC::ElemWithMaterial<20,NDMaterial,27>>, boost::noncopyable >("TwentyNodeBrick_u_p_U", no_init);
+class_<XC::BbarBrick , bases<XC::BrickBase>, boost::noncopyable >("BbarBrick", no_init);
+class_<XC::Brick , bases<XC::BrickBase>, boost::noncopyable >("Brick", no_init);
+class_<XC::TwentySevenNodeBrick, bases<XC::ElementBase<27>>, boost::noncopyable >("TwentySevenNodeBrick", no_init);
+class_<XC::FVector, boost::noncopyable >("FVector", no_init);
+class_<FVectorData3, bases<XC::FVector>, boost::noncopyable >("FVectorData3", no_init);
+class_<XC::FVectorBeamColumn2d, bases<FVectorData3>, boost::noncopyable >("FVectorBeamColumn2d", no_init);
+class_<FVectorData5, bases<XC::FVector>, boost::noncopyable >("FVectorData5", no_init);
+class_<XC::FVectorBeamColumn3d, bases<FVectorData5>, boost::noncopyable >("FVectorBeamColumn3d", no_init);
+class_<FVectorData24, bases<XC::FVector>, boost::noncopyable >("FVectorData24", no_init);
+class_<XC::FVectorShell, bases<FVectorData24>, boost::noncopyable >("FVectorShell", no_init);
+class_<XC::Loader, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("Loader", no_init)
+class_<XC::NodeLoader, bases<XC::Loader>, boost::noncopyable >("NodeLoader", no_init)
+class_<XC::MaterialLoader, bases<XC::Loader>, boost::noncopyable >("MaterialLoader", no_init)
+class_<XC::ProtoElementLoader, bases<XC::Loader>, boost::noncopyable >("ProtoElementLoader", no_init)
+class_<XC::ElementLoader::SeedElemLoader, bases<XC::ProtoElementLoader>, boost::noncopyable >("SeedElement", no_init)
+class_<XC::ElementLoader, bases<XC::ProtoElementLoader>, boost::noncopyable >("ElementLoader", no_init)
+class_<XC::ConstraintLoader, bases<XC::Loader>, boost::noncopyable >("ConstraintLoader", no_init)
+class_<XC::LoadLoader, bases<XC::Loader>, boost::noncopyable >("LoadLoader", no_init)
+class_<XC::TransfCooLoader, bases<XC::Loader>, boost::noncopyable >("TransfCooLoader", no_init)
+class_<XC::SisRef, bases<XC::EntMdlrBase>, boost::noncopyable >("SisRef", no_init);
+class_<XC::SisRefCartesianas3d, bases<XC::SisRef>, boost::noncopyable >("SisRefCartesianas3d", no_init)
+class_<XC::MapCadMemberBase, bases<EntCmd>, boost::noncopyable >("MapCadMemberBase", no_init)
+//class_<XC::MapCadMember, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCadMember", no_init);
+class_<MapCadSisRef, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCadSisRef", no_init);
+class_<XC::MapSisRef, bases<MapCadSisRef>, boost::noncopyable >("MapSisRef", no_init)
+class_<XC::Cad, bases<EntCmd>, boost::noncopyable >("Cad", no_init)
+class_<XC::EntMdlr, bases<XC::SetEstruct>, boost::noncopyable >("EntMdlr", no_init)
+class_<XC::Pnt, XC::Pnt *, bases<XC::EntMdlr>, boost::noncopyable >("Pnt", no_init)
+class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_init)
+class_<XC::SupCuadrilatera, XC::SupCuadrilatera *, bases<XC::Face>, boost::noncopyable >("QuadSurface", no_init)
+class_<XC::Body, XC::Body *, bases<XC::EntMdlr>, boost::noncopyable >("Body", no_init)
+class_<XC::Block, XC::Block *, bases<XC::Body>, boost::noncopyable >("Block", no_init);
+class_<XC::UniformGrid, XC::UniformGrid *, bases<XC::EntMdlr>, boost::noncopyable >("UniformGrid", no_init)
+class_<XC::MapCadMemberBase, bases<EntCmd>, boost::noncopyable >("MapCadMemberBase", no_init)
+class_<map_cm_puntos, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCMPuntos", no_init)
+class_<map_puntos, bases<map_cm_puntos>, boost::noncopyable >("map_puntos", no_init)
+class_<XC::MapPuntos, bases<map_puntos>, boost::noncopyable >("MapPuntos", no_init)
+class_<map_cm_edges, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCMEdges", no_init)
+class_<map_edges, bases<map_cm_edges>, boost::noncopyable >("map_edges", no_init)
+class_<XC::MapLineas, bases<map_edges>, boost::noncopyable >("MapLineas", no_init)
+// class_<map_cm_faces::pair >("FacePair") IT DOESN'T WORK.
+class_<map_cm_faces, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCMFaces", no_init)
+class_<map_faces, bases<map_cm_faces>, boost::noncopyable >("map_faces", no_init)
+class_<XC::MapSuperficies, bases<map_faces>, boost::noncopyable >("MapSuperficies", no_init)
+class_<map_cm_bodies, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCMBodies", no_init)
+class_<map_bodies, bases<map_cm_bodies>, boost::noncopyable >("map_bodies", no_init)
+class_<XC::MapCuerpos, bases<map_bodies>, boost::noncopyable >("MapBodies", no_init)
+class_<map_cm_ugrids, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCMUgrids", no_init)
+class_<map_ugrids, bases<map_cm_ugrids>, boost::noncopyable >("map_ugrids", no_init)
+class_<XC::MapUniformGrids, bases<map_ugrids>, boost::noncopyable >("MapUniformgrids", no_init)
+class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge", no_init)
+class_<XC::LineaBase, bases<XC::Edge>, boost::noncopyable >("LineaBase", no_init)
+class_<XC::Linea, bases<XC::LineaBase>, boost::noncopyable >("Line", no_init)
+class_<XC::LineaTramos, bases<XC::Linea>, boost::noncopyable >("DividedLine", no_init)
+class_<XC::ArcoCircunf, bases<XC::LineaBase>, boost::noncopyable >("CircleArc", no_init)
+class_<XC::CmbEdge::Lado,bases<EntCmd> >("Lado", no_init)
+class_<dq_lados, boost::noncopyable >("DqEdges", no_init)
+class_<XC::CmbEdge, bases<XC::Edge>, boost::noncopyable >("CmbEdge", no_init)
+class_<matriz_t_ptr_puntos, bases<ProtoMatriz>, boost::noncopyable >("matriz_t_ptr_puntos", no_init)
+class_<matriz_ptr_puntos, bases<matriz_t_ptr_puntos,EntCmd>, boost::noncopyable >("matriz_ptr_puntos", no_init)
+class_<XC::MatrizPtrPnt, bases<matriz_ptr_puntos>, boost::noncopyable >("MatrizPtrPnt", no_init)
+class_<vector_mp_puntos, boost::noncopyable >("vector_mp_puntos", no_init)
+class_<tritriz_puntos, bases<vector_mp_puntos,EntCmd>, boost::noncopyable >("tritriz_puntos", no_init)
+class_<XC::TritrizPtrPnt, bases<tritriz_puntos>, boost::noncopyable >("TrtrizPtrPnt", no_init)
+class_<matriz_t_ptr_nodos, bases<ProtoMatriz>, boost::noncopyable >("matriz_t_ptr_nodos", no_init)
+class_<matriz_ptr_nodos, bases<matriz_t_ptr_nodos,EntCmd>, boost::noncopyable >("matriz_ptr_nodos", no_init)
+class_<XC::MatrizPtrNod, bases<matriz_ptr_nodos>, boost::noncopyable >("MatrizPtrNod", no_init)
+class_<vector_mp_nodos, boost::noncopyable >("vector_mp_nodos", no_init)
+class_<tritriz_nodos, bases<vector_mp_nodos,EntCmd>, boost::noncopyable >("tritriz_nodos", no_init)
+class_<XC::TritrizPtrNod, bases<tritriz_nodos>, boost::noncopyable >("TrtrizPtrNod", no_init)
+class_<matriz_t_ptr_elements, bases<ProtoMatriz>, boost::noncopyable >("matriz_t_ptr_elements", no_init)
+class_<matriz_ptr_elements, bases<matriz_t_ptr_elements,EntCmd>, boost::noncopyable >("matriz_ptr_elements", no_init)
+class_<XC::MatrizPtrElem, bases<matriz_ptr_elements>, boost::noncopyable >("MatrizPtrElem", no_init)
+class_<vector_mp_elementos, boost::noncopyable >("vector_mp_elementos", no_init)
+class_<tritriz_elementos, bases<vector_mp_elementos,EntCmd>, boost::noncopyable >("tritriz_elementos", no_init)
+class_<XC::TritrizPtrElem, bases<tritriz_elementos>, boost::noncopyable >("TrtrizPtrElem", no_init)
+class_<map_cm_m_puntos, bases<XC::MapCadMemberBase>, boost::noncopyable >("map_cm_m_puntos", no_init);
+class_<XC::MapEsquemas2d, bases<map_cm_m_puntos>, boost::noncopyable >("MapEsquemas2d", no_init)
+class_<map_cm_t_puntos, bases<XC::MapCadMemberBase>, boost::noncopyable >("map_cm_t_puntos", no_init);
+class_<XC::MapEsquemas3d, bases<map_cm_t_puntos>, boost::noncopyable >("MapEsquemas2d", no_init)
+class_<XC::TrfGeom, bases<XC::EntMdlrBase>, boost::noncopyable >("TrfGeom", no_init)
+class_<XC::Traslacion, bases<XC::TrfGeom>, boost::noncopyable >("Traslacion", no_init)
+class_<XC::Escalado, bases<XC::TrfGeom>, boost::noncopyable >("Escalado", no_init)
+class_<XC::Reflexion, bases<XC::TrfGeom>, boost::noncopyable >("Reflexion", no_init)
+class_<XC::Rotacion, bases<XC::TrfGeom>, boost::noncopyable >("Rotacion", no_init)
+class_<MapCadTrfGeom, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCadTraGeom", no_init);
+class_<XC::MapTrfGeom, bases<MapCadTrfGeom>, boost::noncopyable >("MapTrfGeom", no_init)
+class_<dq_ptrs_node, boost::noncopyable >("dq_ptrs_node",no_init)
+class_<XC::DqPtrsNode, bases<dq_ptrs_node>, boost::noncopyable >("DqPtrsNode",no_init)
+class_<dq_ptrs_element, boost::noncopyable >("dq_ptrs_element",no_init)
+class_<XC::DqPtrsElem, bases<dq_ptrs_element>, boost::noncopyable >("DqPtrsElem",no_init)
+class_<dq_ptrs_constraint, boost::noncopyable >("dq_ptrs_constraint",no_init)
+class_<XC::DqPtrsConstraint, bases<dq_ptrs_constraint>, boost::noncopyable >("DqPtrsConstraint",no_init)
+class_<XC::SetMeshComp, bases<XC::SetBase>, boost::noncopyable >("SetMeshComp",no_init)
+class_<dq_ptrs_pnt, boost::noncopyable >("dq_ptrs_pnt",no_init)
+class_<XC::Set::lst_ptr_puntos, bases<dq_ptrs_pnt>, boost::noncopyable >("lstPnts",no_init)
+class_<dq_ptrs_lineas, boost::noncopyable >("dq_ptrs_lineas",no_init)
+class_<XC::Set::lst_ptr_lineas, bases<dq_ptrs_lineas>, boost::noncopyable >("lstLines",no_init)
+class_<dq_ptrs_superficies, boost::noncopyable >("dq_ptrs_superficies",no_init)
+class_<XC::Set::lst_ptr_superficies, bases<dq_ptrs_superficies>, boost::noncopyable >("lstSurfaces",no_init)
+class_<dq_ptrs_cuerpos, boost::noncopyable >("dq_ptrs_cuerpos",no_init)
+class_<XC::Set::lst_ptr_cuerpos, bases<dq_ptrs_cuerpos>, boost::noncopyable >("lstBodies",no_init)
+class_<XC::Set, bases<XC::SetMeshComp> >("Set")
+class_<set_fila_i, bases<XC::SetEstruct>, boost::noncopyable >("set_fila_i", no_init);
+class_<XC::SetFilaI, bases<set_fila_i>, boost::noncopyable >("SetFilaI", no_init);
+class_<set_fila_j, bases<XC::SetEstruct>, boost::noncopyable >("set_fila_j", no_init);
+class_<XC::SetFilaJ, bases<set_fila_j>, boost::noncopyable >("SetFilaJ", no_init);
+class_<set_fila_k, bases<XC::SetEstruct>, boost::noncopyable >("set_fila_k", no_init);
+class_<XC::SetFilaK, bases<set_fila_k>, boost::noncopyable >("SetFilaK", no_init);
+class_<XC::NDMaterial, bases<XC::Material>, boost::noncopyable >("NDMaterial", no_init)
+class_<XC::ElasticIsotropicMaterial, bases<XC::NDMaterial>, boost::noncopyable >("ElasticIsotropicMaterial", no_init)
+//class_<XC::FeapMaterial , bases<XC::NDMaterial>, boost::noncopyable >("FeapMaterial", no_init);
+class_<XC::J2Plasticity, bases<XC::NDMaterial>, boost::noncopyable >("J2Plasticity", no_init);
+class_<XC::NDAdaptorMaterial, bases<XC::NDMaterial>, boost::noncopyable >("NDAdaptorMaterial", no_init);
+// class_<XC::J2AxiSymm, bases<XC::J2Plasticity>, boost::noncopyable >("J2AxiSymm", no_init);
+// class_<XC::J2PlaneStrain , bases<XC::J2Plasticity>, boost::noncopyable >("J2PlaneStrain", no_init);
+// class_<XC::J2PlaneStress, bases<XC::J2Plasticity>, boost::noncopyable >("J2PlaneStress", no_init);
+// class_<XC::J2PlateFiber , bases<XC::J2Plasticity>, boost::noncopyable >("J2PlateFiber", no_init);
+// class_<XC::J2ThreeDimensional , bases<XC::J2Plasticity {>, boost::noncopyable >("J2ThreeDimensional", no_init);
+class_<XC::FiniteDeformationElastic3D , bases<XC::NDMaterial>, boost::noncopyable >("FiniteDeformationElastic3D", no_init);
+class_<XC::FiniteDeformationEP3D, bases<XC::NDMaterial>, boost::noncopyable >("FiniteDeformationEP3D", no_init);
+class_<XC::FDdecoupledElastic3D, bases<XC::FiniteDeformationElastic3D>, boost::noncopyable >("FDdecoupledElastic3D", no_init);
+class_<XC::NeoHookeanCompressible3D , bases<XC::FiniteDeformationElastic3D>, boost::noncopyable >("NeoHookeanCompressible3D", no_init);
+//class_<XC::fdEvolution_SLS , bases<XC::fdEvolution_S>, boost::noncopyable >("fdEvolution_SLS", no_init);
+//class_<XC::fdEvolution_TL , bases<XC::fdEvolution_T>, boost::noncopyable >("fdEvolution_TL", no_init);
+//class_<XC::fdYieldDP , bases<XC::fdYield>, boost::noncopyable >("fdYieldDP", no_init);
+//class_<XC::fdYieldVM , bases<XC::fdYield>, boost::noncopyable >("fdYieldVM", no_init);
+//class_<XC::fdFlowDP , bases<XC::fdFlow>, boost::noncopyable >("fdFlowDP", no_init);
+//class_<XC::fdFlowVM , bases<XC::fdFlow>, boost::noncopyable >("fdFlowVM", no_init);
+class_<XC::LogWEnergy , bases<XC::WEnergy>, boost::noncopyable >("LogWEnergy", no_init);
+class_<XC::MooneyRivlinSimoWEnergy , bases<XC::WEnergy>, boost::noncopyable >("MooneyRivlinSimoWEnergy", no_init);
+class_<XC::MooneyRivlinWEnergy , bases<XC::WEnergy>, boost::noncopyable >("MooneyRivlinWEnergy", no_init);
+class_<XC::NeoHookeanWEnergy , bases<XC::WEnergy>, boost::noncopyable >("NeoHookeanWEnergy", no_init);
+class_<XC::SimoPisterWEnergy , bases<XC::WEnergy>, boost::noncopyable >("SimoPisterWEnergy", no_init);
+class_<XC::OgdenWEnergyBase , bases<XC::WEnergy>, boost::noncopyable >("OgdenWEnergyBase", no_init);
+class_<XC::OgdenSimoWEnergy , bases<XC::OgdenWEnergyBase>, boost::noncopyable >("OgdenSimoWEnergy", no_init);
+class_<XC::OgdenWEnergy , bases<XC::OgdenWEnergyBase>, boost::noncopyable >("OgdenWEnergy", no_init);
+class_<XC::FluidSolidPorousMaterial, bases<XC::NDMaterial>, boost::noncopyable >("FluidSolidPorousMaterial", no_init);
+class_<XC::PressureMultiYieldBase, bases<XC::NDMaterial>, boost::noncopyable >("PressureMultiYieldBase", no_init);
+class_<XC::PressureDependMultiYieldBase, bases<XC::PressureMultiYieldBase>, boost::noncopyable >("PressureDependMultiYieldBase", no_init);
+class_<XC::PressureDependMultiYield, bases<XC::PressureDependMultiYieldBase>, boost::noncopyable >("PressureDependMultiYield", no_init);
+//class_<XC::PressureDependMultiYield02, bases<XC::PressureDependMultiYieldBase>, boost::noncopyable >("PressureDependMultiYield02", no_init);
+class_<XC::PressureIndependMultiYield, bases<XC::PressureMultiYieldBase>, boost::noncopyable >("PressureIndependMultiYield", no_init);
+class_<XC::T2Vector, bases<XC::MovableObject>, boost::noncopyable >("T2Vector", no_init);
+// class_<XC::MultiaxialCyclicPlasticity, bases<XC::NDMaterial>, boost::noncopyable >("MultiaxialCyclicPlasticity", no_init);
+// class_<XC::MultiaxialCyclicPlasticity3D , bases<XC::MultiaxialCyclicPlasticity>, boost::noncopyable >("MultiaxialCyclicPlasticity3D", no_init);
+// class_<XC::MultiaxialCyclicPlasticityAxiSymm , bases<XC::MultiaxialCyclicPlasticity {>, boost::noncopyable >("MultiaxialCyclicPlasticityAxiSymm", no_init);
+// class_<XC::MultiaxialCyclicPlasticityPlaneStrain, bases<XC::MultiaxialCyclicPlasticity>, boost::noncopyable >("MultiaxialCyclicPlasticityPlaneStrain", no_init);
+//class_<XC::BeamFiberMaterial, bases<XC::NDAdaptorMaterial>, boost::noncopyable >("BeamFiberMaterial", no_init);
+class_<XC::PlaneStressMaterial, bases<XC::NDAdaptorMaterial>, boost::noncopyable >("PlaneStressMaterial", no_init);
+class_<XC::PlateFiberMaterial, bases<XC::NDAdaptorMaterial>, boost::noncopyable >("PlateFiberMaterial", no_init);
+class_<XC::ElasticIsotropicPlaneStrain2D, bases<XC::ElasticIsotropicMaterial> >("ElasticIsotropicPlaneStrain2D")
+class_<XC::ElasticIsotropicPlaneStress2D, bases<XC::ElasticIsotropicMaterial> >("ElasticIsotropicPlaneStress2D")
+class_<XC::ElasticIsotropic3D , bases<XC::ElasticIsotropicMaterial>, boost::noncopyable >("ElasticIsotropic3D", no_init);
+class_<XC::ElasticIsotropicAxiSymm , bases<XC::ElasticIsotropicMaterial>, boost::noncopyable >("ElasticIsotropicAxiSymm", no_init);
+//class_<XC::ElasticIsotropicBeamFiber , bases<XC::ElasticIsotropicMaterial>, boost::noncopyable >("ElasticIsotropicBeamFiber", no_init);
+class_<XC::ElasticIsotropicPlateFiber , bases<XC::ElasticIsotropicMaterial>, boost::noncopyable >("ElasticIsotropicPlateFiber", no_init);
+//class_<XC::PressureDependentElastic3D , bases<XC::ElasticIsotropicMaterial>, boost::noncopyable >("PressureDependentElastic3D", no_init);
+//class_<XC::FeapMaterial01 , bases<XC::FeapMaterial>, boost::noncopyable >("FeapMaterial01", no_init);
+//class_<XC::FeapMaterial02 , bases<XC::FeapMaterial>, boost::noncopyable >("FeapMaterial02", no_init);
+//class_<XC::FeapMaterial03 , bases<XC::FeapMaterial>, boost::noncopyable >("FeapMaterial03", no_init);
+class_<XC::SectionForceDeformation, XC::SectionForceDeformation *, bases<XC::Material>, boost::noncopyable >("SectionForceDeformation", no_init)
+class_<XC::Bidirectional, bases<XC::SectionForceDeformation>, boost::noncopyable >("Bidirectional", no_init);
+//class_<XC::GenericSectionNd, bases<XC::SectionForceDeformation>, boost::noncopyable >("GenericSectionNd", no_init);
+//class_<XC::Isolator2spring , bases<XC::SectionForceDeformation>, boost::noncopyable >("Isolator2spring", no_init);
+class_<XC::SeccionBarraPrismatica, XC::SeccionBarraPrismatica *, bases<XC::SectionForceDeformation>, boost::noncopyable >("SeccionBarraPrismatica", no_init)
+class_<XC::SectionAggregator , bases<XC::SeccionBarraPrismatica>, boost::noncopyable >("SectionAggregator", no_init)
+class_<XC::AggregatorAdditions, bases<XC::DqUniaxialMaterial>, boost::noncopyable >("AggregatorAdditions", no_init);
+class_<XC::GenericSection1d , bases<XC::SeccionBarraPrismatica>, boost::noncopyable >("GenericSection1d", no_init);
+class_<v_sections, boost::noncopyable>("v_sections")
+class_<XC::VectorSeccionesBarraPrismatica, bases<EntCmd,v_sections>, boost::noncopyable >("VectorSeccionesBarraPrismatica", no_init);
+class_<XC::KRSeccion, bases<EntCmd>, boost::noncopyable >("KRSeccion", no_init);
+class_<XC::ResponseId, bases<XC::ID>, boost::noncopyable >("ResponseId", no_init);
+class_<XC::RespPMz, bases<XC::ResponseId>, boost::noncopyable >("RespPMz", no_init);
+class_<XC::RespPMzV, bases<XC::ResponseId>, boost::noncopyable >("RespPMzV", no_init);
+class_<XC::RespVyP, bases<XC::ResponseId>, boost::noncopyable >("RespVyP", no_init);
+class_<XC::RespPMzMy, bases<XC::ResponseId>, boost::noncopyable >("RespPMzMy", no_init);
+class_<XC::RespPMzMyT, bases<XC::ResponseId>, boost::noncopyable >("RespPMzMyT", no_init);
+class_<XC::RespPMzVyMyVzT, bases<XC::ResponseId>, boost::noncopyable >("RespPMzVyMyVzT", no_init);
+class_<XC::RespFiberSectionShear3d, bases<XC::ResponseId>, boost::noncopyable >("RespFiberSectionShear3d", no_init);
+class_<XC::RespPVyMz, bases<XC::ResponseId>, boost::noncopyable >("RespPVyMz", no_init);
+class_<XC::RespMembraneMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespMembraneMaterial", no_init);
+class_<XC::RespPlateMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespPlateMaterial", no_init);
+class_<XC::RespShellMaterial, bases<XC::ResponseId>, boost::noncopyable >("RespShellMaterial", no_init);
+class_<XC::PlanoDeformacion, bases<Plano3d> >("PlanoDeformacion")
+class_<XC::CalcPivotes, bases<Ref3d3d>, boost::noncopyable >("CalcPivotes", no_init)
+class_<XC::DefAgotPivotes, bases<EntCmd>, boost::noncopyable >("DefAgotPivotes", no_init)
+class_<XC::DatosDiagInteraccion, bases<EntCmd>>("InteractionDiagramParameters")
+class_<XC::DiagInteraccion, bases<GeomObj3d>, boost::noncopyable >("InteractionDiagram", no_init)
+class_<XC::ElasticPlateBase, bases<XC::SectionForceDeformation>, boost::noncopyable >("ElasticPlateBase", no_init)
+class_<ElasticPlateProto8, bases<XC::ElasticPlateBase>, boost::noncopyable >("ElasticPlateProto8", no_init)
+class_<XC::ElasticMembranePlateSection, bases<ElasticPlateProto8>, boost::noncopyable  >("ElasticMembranePlateSection", no_init)
+class_<ElasticPlateProto5, bases<XC::ElasticPlateBase>, boost::noncopyable >("ElasticPlateProto5", no_init);
+class_<XC::ElasticPlateSection, bases<ElasticPlateProto5>, boost::noncopyable >("ElasticPlateSection", no_init);
+class_<XC::MembranePlateFiberSection, bases<XC::SectionForceDeformation>, boost::noncopyable >("MembranePlateFiberSection", no_init);
+class_<XC::ConstantesSecc2d, bases<EntCmd> >("ConstantesSecc2d")
+class_<XC::ConstantesSecc3d, bases<XC::ConstantesSecc2d> >("ConstantesSecc3d")
+class_<XC::DiscretBase, bases<EntConNmb>, boost::noncopyable >("DiscretBase", no_init)
+class_<XC::SeccionInerte, bases<EntCmd>, boost::noncopyable >("SeccionInerte", no_init)
+class_<XC::Cell, boost::noncopyable >("Cell", no_init);
+class_<XC::QuadCell, bases<XC::Cell>, boost::noncopyable >("QuadCell", no_init);
+class_<XC::TriangCell, bases<XC::Cell>, boost::noncopyable >("TriangCell", no_init);
+class_<XC::SectionRepres, bases<XC::TaggedObject>, boost::noncopyable >("SectionRepres", no_init)
+class_<XC::FiberSectionRepr, bases<XC::SectionRepres>, boost::noncopyable >("FiberSectionRepr", no_init);
+class_<XC::EntGeomSection, bases<EntConNmb>, boost::noncopyable >("EntGeomSection", no_init);
+class_<XC::SisRefScc, bases<XC::EntGeomSection>, boost::noncopyable >("SisRefScc", no_init);
+class_<XC::Eje, bases<XC::EntGeomSection>, boost::noncopyable >("Eje", no_init)
+class_<XC::Spot, bases<XC::EntGeomSection>, boost::noncopyable >("Spot", no_init)
+class_<XC::Segment, bases<XC::Eje>, boost::noncopyable >("Segment", no_init)
+class_<XC::GeomSection, bases<XC::SeccionInerte>, boost::noncopyable >("GeomSection", no_init)
+class_<XC::SisRefSccCartesianas2d, bases<XC::SisRefScc>, boost::noncopyable >("SisRefSccCartesianas2d", no_init);
+class_<XC::RegionSecc, XC::RegionSecc *, bases<XC::DiscretBase>, boost::noncopyable >("RegionSecc", no_init)
+class_<XC::RgQuadCell, bases<XC::RegionSecc>, boost::noncopyable >("RgQuadCell", no_init)
+class_<XC::RgSccCirc, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccCirc", no_init)
+class_<XC::RgSccCuadrilatero, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccCuadrilatero", no_init)
+class_<XC::RgSccPoligono, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccPoligono", no_init);
+// class_<lst_reg_ptrs, boost::noncopyable >("lst_reg_ptrs", no_init)
+class_<XC::ListRegiones, bases<XC::SeccionInerte>, boost::noncopyable >("RgSccPoligono", no_init)
+class_<XC::ReinfBar, bases<XC::DiscretBase>, boost::noncopyable >("ReinfBar", no_init);
+class_<XC::VectorReinfBar, boost::noncopyable >("VectorReinfBar", no_init);
+class_<XC::ReinfLayer, bases<XC::DiscretBase>, boost::noncopyable >("ReinfLayer", no_init)
+class_<XC::BarraSuelta , bases<XC::ReinfLayer>, boost::noncopyable >("BarraSuelta", no_init);
+class_<XC::CircReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("CircReinfLayer", no_init)
+class_<XC::StraightReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("StraightReinfLayer", no_init)
+class_<XC::ListReinfLayer, bases<XC::SeccionInerte>, boost::noncopyable >("ReinfLayer", no_init)
+class_<XC::BaseElasticSection, bases<XC::SeccionBarraPrismatica>, boost::noncopyable >("BaseElasticSection", no_init)
+class_<XC::BaseElasticSection2d, bases<XC::BaseElasticSection>, boost::noncopyable >("BaseElasticSection2d", no_init)
+class_<XC::ElasticSection2d, bases<XC::BaseElasticSection2d>, boost::noncopyable >("ElasticSection2d")
+class_<XC::ElasticShearSection2d, bases<XC::BaseElasticSection2d>, boost::noncopyable >("ElasticShearSection2d")
+class_<XC::BaseElasticSection3d, bases<XC::BaseElasticSection>, boost::noncopyable >("BaseElasticSection3d", no_init)
+class_<XC::ElasticSection3d, bases<XC::BaseElasticSection3d>, boost::noncopyable >("ElasticSection3d")
+class_<XC::ElasticShearSection3d, bases<XC::BaseElasticSection3d>, boost::noncopyable >("ElasticShearSection3d")
+class_<XC::FiberSectionBase, bases<XC::SeccionBarraPrismatica>, boost::noncopyable >("FiberSectionBase", no_init)
+class_<XC::FiberSection2d, bases<XC::FiberSectionBase>, boost::noncopyable >("FiberSection2d", no_init);
+class_<XC::FiberSection3dBase , bases<XC::FiberSectionBase>, boost::noncopyable >("FiberSection3dBase", no_init);
+class_<XC::FiberSection3d, bases<XC::FiberSection3dBase>, boost::noncopyable >("FiberSection3d", no_init);
+class_<XC::FiberSectionGJ, bases<XC::FiberSection3dBase>, boost::noncopyable >("FiberSectionGJ", no_init);
+class_<XC::FiberSectionShear3d , bases<XC::FiberSection3d>, boost::noncopyable >("FiberSectionShear3d", no_init)
+class_<XC::Fiber,XC::Fiber*, bases<XC::TaggedObject>, boost::noncopyable >("Fiber", no_init)
+class_<XC::UniaxialFiber, bases<XC::Fiber>, boost::noncopyable >("UniaxialFiber", no_init)
+class_<XC::UniaxialFiber2d, bases<XC::UniaxialFiber>, boost::noncopyable >("UniaxialFiber2d", no_init);
+class_<XC::UniaxialFiber3d, bases<XC::UniaxialFiber>, boost::noncopyable >("UniaxialFiber3d", no_init);
+class_<dq_ptr_fibras, boost::noncopyable >("dq_ptr_fibras", no_init)
+class_<XC::DqFibras, bases<EntCmd,dq_ptr_fibras>, boost::noncopyable >("DqFibras", no_init)
+class_<XC::StoFibras , bases<XC::DqFibras>, boost::noncopyable >("StoFibras", no_init);
+class_<map_fiber_sets, boost::noncopyable >("MapFiberSets", no_init)
+class_<XC::FiberSets , bases<map_fiber_sets>, boost::noncopyable >("FiberSets", no_init)
+class_<XC::ConnectedMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("ConnectedMaterial", no_init);
+class_<XC::ParallelMaterial, bases<XC::ConnectedMaterial>, boost::noncopyable >("ParallelMaterial", no_init);
+class_<XC::SeriesMaterial , bases<XC::ConnectedMaterial>, boost::noncopyable >("SeriesMaterial", no_init);
+class_<XC::UniaxialMaterial, bases<XC::Material>, boost::noncopyable >("UniaxialMaterial", no_init)
+class_<XC::ElasticBaseMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("ElasticBaseMaterial", no_init)
+class_<XC::ElasticMaterial, bases<XC::ElasticBaseMaterial> >("ElasticMaterial")
+class_<XC::ENTMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable >("ENTMaterial", no_init);
+class_<XC::EPPBaseMaterial , bases<XC::ElasticBaseMaterial>, boost::noncopyable >("EPPBaseMaterial", no_init);
+class_<XC::EPPGapMaterial , bases<XC::EPPBaseMaterial>, boost::noncopyable >("EPPGapMaterial", no_init);
+class_<XC::ElasticPPMaterial , bases<XC::EPPBaseMaterial>, boost::noncopyable >("ElasticPPMaterial", no_init)
+class_<XC::CableMaterial, bases<XC::ElasticBaseMaterial> >("CableMaterial")
+class_<XC::EncapsulatedMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("EncapsulatedMaterial", no_init);
+class_<XC::MinMaxMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("MinMaxMaterial", no_init);
+class_<XC::PathIndependentMaterial, bases<XC::EncapsulatedMaterial>, boost::noncopyable >("PathIndependentMaterial", no_init);
+//class_<XC::BarSlipMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("BarSlipMaterial", no_init);
+//class_<XC::BoucWenMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("BoucWenMaterial", no_init);
+class_<XC::DrainMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("DrainMaterial", no_init);
+//class_<XC::FatigueMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("FatigueMaterial", no_init);
+class_<XC::FedeasMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("FedeasMaterial", no_init);
+class_<XC::HardeningMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("HardeningMaterial", no_init);
+class_<XC::HystereticMaterial, bases<XC::UniaxialMaterial>, boost::noncopyable >("HystereticMaterial", no_init);
+//class_<XC::Pinching4Material , bases<XC::UniaxialMaterial>, boost::noncopyable >("Pinching4Material", no_init);
+//class_<XC::ReinforcingSteel , bases<XC::UniaxialMaterial>, boost::noncopyable >("ReinforcingSteel", no_init);
+class_<XC::ViscousMaterial , bases<XC::UniaxialMaterial>, boost::noncopyable >("ViscousMaterial", no_init);
+class_<dq_ptr_uniaxial_material, boost::noncopyable>("dq_ptr_uniaxial_material")
+class_<XC::DqUniaxialMaterial, bases<EntCmd,dq_ptr_uniaxial_material>, boost::noncopyable >("DqUniaxialMaterial", no_init);
+class_<XC::ZeroLengthMaterials, bases<XC::DqUniaxialMaterial>, boost::noncopyable >("ZeroLengthMaterials", no_init);
+class_<XC::UniaxialHistoryVars, bases<XC::MovableObject>, boost::noncopyable >("UniaxialHistoryVars", no_init);
+class_<XC::UniaxialStateVars, bases<XC::MovableObject>, boost::noncopyable >("UniaxialStateVars", no_init);
+class_<XC::ConcreteBase, bases<XC::UniaxialMaterial>, boost::noncopyable >("ConcreteBase", no_init)
+class_<XC::Concrete01, bases<XC::ConcreteBase>, boost::noncopyable >("Concrete01", no_init)
+class_<XC::Concrete02, bases<XC::UniaxialMaterial>, boost::noncopyable >("Concrete02", no_init);
+class_<XC::Concrete04, bases<XC::ConcreteBase>, boost::noncopyable >("Concrete04", no_init);
+//class_<XC::Bilinear , bases<XC::UniaxialMaterial>, boost::noncopyable >("Bilinear", no_init);
+//class_<XC::Clough , bases<XC::UniaxialMaterial>, boost::noncopyable >("Clough", no_init);
+//class_<XC::CloughDamage , bases<XC::UniaxialMaterial>, boost::noncopyable >("CloughDamage", no_init);
+//class_<XC::Pinching , bases<XC::UniaxialMaterial>, boost::noncopyable >("Pinching", no_init);
+//class_<XC::PinchingDamage , bases<XC::UniaxialMaterial>, boost::noncopyable >("PinchingDamage", no_init);
+class_<XC::SteelBase, bases<XC::UniaxialMaterial>, boost::noncopyable >("SteelBaseMaterial", no_init)
+class_<XC::Steel02, bases<XC::SteelBase> >("Steel02")
+class_<XC::SteelBase0103, bases<XC::SteelBase>, boost::noncopyable >("SteelBase0103", no_init);
+class_<XC::Steel01 , bases<XC::SteelBase0103>, boost::noncopyable >("Steel01", no_init);
+//class_<XC::Steel03 , bases<XC::SteelBase0103>, boost::noncopyable >("Steel03", no_init);
+class_<XC::FedeasBondMaterial, bases<XC::FedeasMaterial>, boost::noncopyable >("FedeasBondMaterial", no_init);
+class_<XC::FedeasHardeningMaterial , bases<XC::FedeasMaterial>, boost::noncopyable >("FedeasHardeningMaterial", no_init);
+class_<XC::FedeasHyster1Material , bases<XC::FedeasMaterial>, boost::noncopyable >("FedeasHyster1Material", no_init);
+class_<XC::FedeasHyster2Material , bases<XC::FedeasMaterial>, boost::noncopyable >("FedeasHyster2Material", no_init);
+class_<XC::FedeasSteel1Material , bases<XC::FedeasMaterial>, boost::noncopyable >("FedeasSteel1Material", no_init);
+class_<XC::FedeasSteel2Material , bases<XC::FedeasMaterial>, boost::noncopyable >("FedeasSteel2Material", no_init);
+class_<XC::FedeasBond1Material, bases<XC::FedeasBondMaterial>, boost::noncopyable >("FedeasBond1Material", no_init);
+class_<XC::FedeasBond2Material , bases<XC::FedeasBondMaterial>, boost::noncopyable >("FedeasBond2Material", no_init);
+class_<XC::FedeasConcrMaterial, bases<XC::FedeasMaterial>, boost::noncopyable >("FedeasConcrMaterial", no_init);
+class_<XC::FedeasConcr1Material , bases<XC::FedeasConcrMaterial>, boost::noncopyable >("FedeasConcr1Material", no_init);
+class_<XC::FedeasConcr2Material, bases<XC::FedeasConcrMaterial>, boost::noncopyable >("FedeasConcr2Material", no_init);
+class_<XC::FedeasConcr3Material, bases<XC::FedeasConcrMaterial>, boost::noncopyable >("FedeasConcr3Material", no_init);
+class_<XC::DrainBilinearMaterial , bases<XC::DrainMaterial>, boost::noncopyable >("DrainBilinearMaterial", no_init);
+class_<XC::DrainClough1Material , bases<XC::DrainMaterial>, boost::noncopyable >("DrainClough1Material", no_init);
+class_<XC::DrainClough2Material, bases<XC::DrainMaterial>, boost::noncopyable >("DrainClough2Material", no_init);
+//class_<XC::DrainHardeningMaterial , bases<XC::DrainMaterial>, boost::noncopyable >("DrainHardeningMaterial", no_init);
+class_<XC::DrainPinch1Material , bases<XC::DrainMaterial>, boost::noncopyable >("DrainPinch1Material", no_init);
+ //class_<XC::InternalParamsA, bases<XC::MovableObject>, boost::noncopyable >("InternalParamsA", no_init);
+ //class_<XC::InternalParamsIn, bases<XC::InternalParamsA>, boost::noncopyable >("InternalParamsIn", no_init);
+ //class_<XC::InternalParamsLR, bases<XC::InternalParamsA>, boost::noncopyable >("InternalParamsLR", no_init);
+ //class_<XC::InternalParamsLRIn, bases<XC::InternalParamsLR>, boost::noncopyable >("InternalParamsLRIn", no_init);
+class_<XC::PYBase, bases<XC::UniaxialMaterial>, boost::noncopyable >("PYBase", no_init);
+class_<XC::PQyzBase, bases<XC::PYBase>, boost::noncopyable >("PQyzBase", no_init);
+class_<XC::TzSimple1, bases<XC::PYBase>, boost::noncopyable >("TzSimple1", no_init);
+class_<XC::TzLiq1 , bases<XC::TzSimple1>, boost::noncopyable >("TzLiq1", no_init);
+class_<XC::PySimple1, bases<XC::PQyzBase>, boost::noncopyable >("PySimple1", no_init);
+class_<XC::QzSimple1 , bases<XC::PQyzBase>, boost::noncopyable >("QzSimple1", no_init);
+class_<XC::PyLiq1 , bases<XC::PySimple1>, boost::noncopyable >("PyLiq1", no_init);
+//class_<XC::PySimple1Gen, bases<XC::Simple1GenBase>, boost::noncopyable >("PySimple1Gen", no_init);
+//class_<XC::TzSimple1Gen, bases<XC::Simple1GenBase>, boost::noncopyable >("TzSimple1Gen", no_init);
+class_<XC::SolutionAlgorithm, bases<XC::MovableObject,XC::ObjWithRecorders>, boost::noncopyable >("SolutionAlgorithm", no_init);
+class_<XC::DomainDecompAlgo, bases<XC::SolutionAlgorithm>, boost::noncopyable >("DomainDecompAlgo", no_init);
+class_<XC::EquiSolnAlgo, bases<XC::SolutionAlgorithm>, boost::noncopyable >("EquiSolnAlgo", no_init);
+class_<XC::EquiSolnConvAlgo, bases<XC::EquiSolnAlgo>, boost::noncopyable >("EquiSolnConvAlgo", no_init);
+class_<XC::BFBRoydenBase, bases<XC::EquiSolnConvAlgo>, boost::noncopyable >("BFBRoydenBase", no_init);
+class_<XC::BFGS, bases<XC::BFBRoydenBase>, boost::noncopyable >("BFGS", no_init);
+class_<XC::Broyden, bases<XC::BFBRoydenBase>, boost::noncopyable >("Broyden", no_init);
+class_<XC::KrylovNewton, bases<XC::EquiSolnAlgo>, boost::noncopyable >("KrylovNewton", no_init);
+class_<XC::Linear, bases<XC::EquiSolnAlgo>, boost::noncopyable >("Linear", no_init);
+class_<XC::NewtonBased, bases<XC::EquiSolnAlgo>, boost::noncopyable >("NewtonBased", no_init);
+class_<XC::ModifiedNewton, bases<XC::NewtonBased>, boost::noncopyable >("ModifiedNewton", no_init);
+class_<XC::NewtonLineSearch, bases<XC::EquiSolnAlgo>, boost::noncopyable >("NewtonLineSearch", no_init);
+class_<XC::NewtonRaphson, bases<XC::NewtonBased>, boost::noncopyable >("NewtonRaphson", no_init);
+class_<XC::PeriodicNewton, bases<XC::NewtonBased>, boost::noncopyable >("PeriodicNewton", no_init);
+class_<XC::LineSearch, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("LineSearch", no_init);
+class_<XC::BisectionLineSearch, bases<XC::LineSearch>, boost::noncopyable >("BisectionLineSearch", no_init);
+class_<XC::InitialInterpolatedLineSearch, bases<XC::LineSearch>, boost::noncopyable >("InitialInterpolatedLineSearch", no_init);
+class_<XC::RegulaFalsiLineSearch, bases<XC::LineSearch>, boost::noncopyable >("RegulaFalsiLineSearch", no_init);
+class_<XC::SecantLineSearch, bases<XC::LineSearch>, boost::noncopyable >("SecantLineSearch", no_init);
+class_<XC::EigenAlgorithm, bases<XC::SolutionAlgorithm>, boost::noncopyable >("EigenAlgorithm", no_init);
+class_<XC::FrequencyAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("FrequencyAlgo", no_init);
+class_<XC::LinearBucklingAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("LinearBucklingAlgo", no_init);
+class_<XC::StandardEigenAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("StandardEigenAlgo", no_init);
+class_<XC::ModelWrapper, bases<EntCmd>, boost::noncopyable >("ModelWrapper", no_init)
+class_<XC::MapModelWrapper, bases<EntCmd>, boost::noncopyable >("MapModelWrapper", no_init)
+class_<XC::Analysis, bases<EntCmd>, boost::noncopyable >("Analysis", no_init)
+class_<XC::StaticAnalysis, bases<XC::Analysis>, boost::noncopyable >("StaticAnalysis", no_init)
+class_<XC::EigenAnalysis , bases<XC::Analysis>, boost::noncopyable >("EigenAnalysis", no_init)
+class_<XC::LinearBucklingAnalysis, bases<XC::StaticAnalysis>, boost::noncopyable >("LinearBucklingAnalysis", no_init)
+class_<XC::LinearBucklingEigenAnalysis, bases<XC::EigenAnalysis>, boost::noncopyable >("LinearBucklingEigenAnalysis", no_init)
+class_<XC::ModalAnalysis , bases<XC::EigenAnalysis>, boost::noncopyable >("ModalAnalysis", no_init)
+//class_<XC::SubdomainAnalysis, bases<XC::Analysis, XC::MovableObject>, boost::noncopyable >("SubdomainAnalysis", no_init);
+class_<XC::TransientAnalysis, bases<XC::Analysis>, boost::noncopyable >("TransientAnalysis", no_init);
+class_<XC::DirectIntegrationAnalysis, bases<XC::TransientAnalysis>, boost::noncopyable >("DirectIntegrationAnalysis", no_init);
+class_<XC::VariableTimeStepDirectIntegrationAnalysis, bases<XC::DirectIntegrationAnalysis>, boost::noncopyable >("VariableTimeStepDirectIntegrationAnalysis", no_init);
+class_<XC::DomainDecompositionAnalysis, bases<XC::Analysis, XC::MovableObject>, boost::noncopyable >("DomainDecompositionAnalysis", no_init);
+class_<XC::StaticDomainDecompositionAnalysis, bases<XC::DomainDecompositionAnalysis>, boost::noncopyable >("StaticDomainDecompositionAnalysis", no_init);
+class_<XC::TransientDomainDecompositionAnalysis, bases<XC::DomainDecompositionAnalysis>, boost::noncopyable >("TransientDomainDecompositionAnalysis", no_init);
+//class_<XC::SubstructuringAnalysis, bases<XC::DomainDecompositionAnalysis>, boost::noncopyable >("SubstructuringAnalysis", no_init);
+class_<XC::Integrator, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("Integrator", no_init);
+class_<XC::EigenIntegrator, bases<XC::Integrator>, boost::noncopyable >("EigenIntegrator", no_init);
+class_<XC::IncrementalIntegrator, bases<XC::Integrator>, boost::noncopyable >("IncrementalIntegrator", no_init);
+class_<XC::StaticIntegrator, bases<XC::IncrementalIntegrator>, boost::noncopyable >("StaticIntegrator", no_init);
+class_<XC::TransientIntegrator, bases<XC::IncrementalIntegrator>, boost::noncopyable >("TransientIntegrator", no_init);
+class_<XC::LinearBucklingIntegrator , bases<XC::EigenIntegrator>, boost::noncopyable >("LinearBucklingIntegrator", no_init);
+// class_<XC::IntegratorVectors, bases<XC::MovableObject>, boost::noncopyable >("IntegratorVectors", no_init);
+class_<XC::ProtoArcLength, bases<XC::StaticIntegrator>, boost::noncopyable >("ProtoArcLength", no_init);
+class_<XC::ArcLengthBase, bases<XC::ProtoArcLength>, boost::noncopyable >("ArcLengthBase", no_init);
+class_<XC::HSConstraint, bases<XC::ProtoArcLength>, boost::noncopyable >("HSConstraint", no_init);
+class_<XC::ArcLength , bases<XC::ArcLengthBase>, boost::noncopyable >("ArcLength", no_init);
+class_<XC::ArcLength1 , bases<XC::ArcLengthBase>, boost::noncopyable >("ArcLength1", no_init);
+class_<XC::BaseControl , bases<XC::StaticIntegrator>, boost::noncopyable >("BaseControl", no_init);
+class_<XC::DispBase, bases<XC::BaseControl>, boost::noncopyable >("DispBase", no_init);
+class_<XC::DisplacementControl, bases<XC::DispBase>, boost::noncopyable >("DisplacementControl", no_init)
+class_<XC::MinUnbalDispNorm, bases<XC::DispBase>, boost::noncopyable >("MinUnbalDispNorm", no_init);
+// class_<XC::DistributedDisplacementControl, bases<XC::DisplacementControl>, boost::noncopyable >("DistributedDisplacementControl", no_init);
+class_<XC::LoadControl , bases<XC::BaseControl>, boost::noncopyable >("LoadControl", no_init)
+class_<XC::LoadPath, bases<XC::StaticIntegrator>, boost::noncopyable >("LoadPath", no_init);
+// class_<XC::ResponseQuantities, bases<XC::MovableObject>, boost::noncopyable >("ResponseQuantities", no_init);
+class_<XC::CentralDifferenceBase , bases<XC::TransientIntegrator>, boost::noncopyable >("CentralDifferenceBase", no_init);
+class_<XC::CentralDifferenceAlternative , bases<XC::CentralDifferenceBase>, boost::noncopyable >("CentralDifferenceAlternative", no_init);
+class_<XC::CentralDifferenceNoDamping, bases<XC::CentralDifferenceBase>, boost::noncopyable >("CentralDifferenceNoDamping", no_init);
+class_<XC::DampingFactorsIntegrator, bases<XC::TransientIntegrator>, boost::noncopyable >("DampingFactorsIntegrator", no_init);
+class_<XC::NewmarkBase, bases<XC::DampingFactorsIntegrator>, boost::noncopyable >("NewmarkBase", no_init);
+class_<XC::RayleighBase , bases<XC::DampingFactorsIntegrator>, boost::noncopyable >("RayleighBase", no_init);
+class_<XC::HHT1, bases<XC::DampingFactorsIntegrator>, boost::noncopyable >("HHT1", no_init);
+class_<XC::CentralDifference, bases<XC::RayleighBase>, boost::noncopyable >("CentralDifference", no_init);
+class_<XC::Collocation , bases<XC::RayleighBase>, boost::noncopyable >("Collocation", no_init);
+class_<XC::HHTGeneralized , bases<XC::RayleighBase>, boost::noncopyable >("HHTGeneralized", no_init);
+class_<XC::WilsonTheta, bases<XC::RayleighBase>, boost::noncopyable >("WilsonTheta", no_init);
+class_<XC::HHTRayleighBase, bases<XC::RayleighBase>, boost::noncopyable >("HHTRayleighBase", no_init);
+class_<XC::HHTExplicit , bases<XC::HHTRayleighBase>, boost::noncopyable >("HHTExplicit", no_init);
+class_<XC::HHTBase, bases<XC::HHTRayleighBase>, boost::noncopyable >("HHTBase", no_init);
+class_<XC::CollocationHybridSimulation , bases<XC::HHTBase>, boost::noncopyable >("CollocationHybridSimulation", no_init);
+class_<XC::HHT, bases<XC::HHTBase>, boost::noncopyable >("HHT", no_init);
+class_<XC::HHTGeneralizedExplicit , bases<XC::HHTBase>, boost::noncopyable >("HHTGeneralizedExplicit", no_init);
+class_<XC::HHTHybridSimulation , bases<XC::HHTBase>, boost::noncopyable >("HHTHybridSimulation", no_init);
+class_<XC::AlphaOSBase , bases<XC::HHTBase>, boost::noncopyable >("AlphaOSBase", no_init);
+class_<XC::AlphaOS , bases<XC::AlphaOSBase>, boost::noncopyable >("AlphaOS", no_init);
+class_<XC::AlphaOSGeneralized, bases<XC::AlphaOSBase>, boost::noncopyable >("AlphaOSGeneralized", no_init);
+class_<XC::NewmarkExplicit , bases<XC::NewmarkBase>, boost::noncopyable >("NewmarkExplicit", no_init);
+class_<XC::NewmarkBase2 , bases<XC::NewmarkBase>, boost::noncopyable >("NewmarkBase2", no_init);
+class_<XC::Newmark , bases<XC::NewmarkBase2>, boost::noncopyable >("Newmark", no_init);
+class_<XC::Newmark1 , bases<XC::NewmarkBase2>, boost::noncopyable >("Newmark1", no_init);
+class_<XC::NewmarkHybridSimulation , bases<XC::NewmarkBase2>, boost::noncopyable >("NewmarkHybridSimulation", no_init);
+class_<XC::ConstraintHandler, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("ConstraintHandler", no_init)
+class_<XC::FactorsConstraintHandler, bases<XC::ConstraintHandler>, boost::noncopyable >("FactorsConstraintHandler", no_init)
+class_<XC::PenaltyConstraintHandler, bases<XC::FactorsConstraintHandler>, boost::noncopyable >("PenaltyConstraintHandler", no_init)
+class_<XC::LagrangeConstraintHandler , bases<XC::FactorsConstraintHandler>, boost::noncopyable >("LagrangeConstraintHandler", no_init);
+class_<XC::PlainHandler , bases<XC::ConstraintHandler>, boost::noncopyable >("PlainHandler", no_init);
+class_<XC::TransformationConstraintHandler , bases<XC::ConstraintHandler>, boost::noncopyable >("TransformationConstraintHandler", no_init);
+class_<XC::DOF_Numberer, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("DOFNumberer", no_init)
+// class_<XC::ParallelNumberer, bases<XC::DOF_Numberer>, boost::noncopyable >("ParallelNumberer", no_init);
+class_<XC::PlainNumberer, bases<XC::DOF_Numberer>, boost::noncopyable >("PlainNumberer", no_init);
+class_<XC::ConvergenceTest, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("ConvergenceTest", no_init)
+class_<XC::CTestFixedNumIter, bases<XC::ConvergenceTest>, boost::noncopyable >("CTestFixedNumIter", no_init);
+class_<XC::ConvergenceTestTol, bases<XC::ConvergenceTest>, boost::noncopyable >("ConvergenceTestTol", no_init)
+class_<XC::CTestEnergyIncr, bases<XC::ConvergenceTestTol>, boost::noncopyable >("CTestEnergyIncr", no_init);
+class_<XC::CTestNormDispIncr, bases<XC::ConvergenceTestTol>, boost::noncopyable >("CTestNormDispIncr", no_init);
+class_<XC::CTestNormUnbalance, bases<XC::ConvergenceTestTol>, boost::noncopyable >("CTestNormUnbalance", no_init);
+class_<XC::ConvergenceTestNorm, bases<XC::ConvergenceTestTol>, boost::noncopyable >("ConvergenceTestNorm", no_init);
+class_<XC::CTestRelativeEnergyIncr, bases<XC::ConvergenceTestNorm>, boost::noncopyable >("CTestRelativeEnergyIncr", no_init);
+class_<XC::CTestRelativeNormDispIncr, bases<XC::ConvergenceTestNorm>, boost::noncopyable >("CTestRelativeNormDispIncr", no_init);
+class_<XC::CTestRelativeNormUnbalance, bases<XC::ConvergenceTestNorm>, boost::noncopyable >("CTestRelativeNormUnbalance", no_init);
+class_<XC::CTestRelativeTotalNormDispIncr, bases<XC::ConvergenceTestNorm>, boost::noncopyable >("CTestRelativeTotalNormDispIncr", no_init);
+class_<XC::SystemOfEqn, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("SystemOfEqn", no_init);
+class_<XC::Solver, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("Solver", no_init);
+class_<XC::EigenSOE, bases<XC::SystemOfEqn>, boost::noncopyable >("EigenSOE", no_init)
+class_<XC::ArpackSOE, bases<XC::EigenSOE>, boost::noncopyable >("ArpackSOE", no_init)
+class_<XC::BandArpackSOE, bases<XC::ArpackSOE>, boost::noncopyable >("BandArpackSOE", no_init)
+class_<XC::BandArpackppSOE, bases<XC::ArpackSOE>, boost::noncopyable >("BandArpackppSOE", no_init)
+class_<XC::SymArpackSOE, bases<XC::ArpackSOE>, boost::noncopyable >("SymArpackSOE", no_init)
+class_<XC::FullGenEigenSOE, bases<XC::EigenSOE>, boost::noncopyable >("FullGenEigenSOE", no_init)
+class_<XC::SymBandEigenSOE, bases<XC::EigenSOE>, boost::noncopyable >("SymBandEigenSOE", no_init)
+class_<XC::EigenSolver, bases<XC::Solver>, boost::noncopyable >("EigenSolver", no_init);
+class_<XC::BandArpackppSolver, bases<XC::EigenSolver>, boost::noncopyable >("BandArpackppSolver", no_init)
+class_<XC::SymArpackSolver, bases<XC::EigenSolver>, boost::noncopyable >("SymArpackSolver", no_init)
+class_<XC::BandArpackSolver, bases<XC::EigenSolver>, boost::noncopyable >("BandArpackSolver", no_init)
+class_<XC::FullGenEigenSolver, bases<XC::EigenSolver>, boost::noncopyable >("FullGenEigenSolver", no_init)
+class_<XC::SymBandEigenSolver, bases<XC::EigenSolver>, boost::noncopyable >("SymBandEigenSolver", no_init)
+class_<XC::LinearSOE, bases<XC::SystemOfEqn>, boost::noncopyable >("LinearSOE", no_init)
+class_<XC::LinearSOEData, bases<XC::LinearSOE>, boost::noncopyable >("LinearSOEData", no_init);
+class_<XC::FactoredSOEBase, bases<XC::LinearSOEData>, boost::noncopyable >("FactoredSOEBase", no_init);
+class_<XC::BandGenLinSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("BandGenLinSOE", no_init)
+class_<XC::BandSPDLinSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("BandSPDLinSOE", no_init)
+class_<XC::DiagonalSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("DiagonalSOE", no_init)
+class_<XC::FullGenLinSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("FullGenLinSOE", no_init)
+class_<XC::PetscSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("PetscSOE", no_init)
+class_<XC::PetscSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("PetscSolver", no_init);
+class_<XC::PetscSparseSeqSolver, bases<XC::SparseGenRowLinSolver>, boost::noncopyable >("PetscSparseSeqSolver", no_init);
+class_<XC::ProfileSPDLinSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("ProfileSPDLinSOE", no_init)
+class_<XC::SparseSOEBase, bases<XC::FactoredSOEBase>, boost::noncopyable >("SparseSOEBase", no_init)
+class_<XC::SparseGenSOEBase, bases<XC::SparseSOEBase>, boost::noncopyable >("SparseGenSOEBase", no_init)
+class_<XC::SparseGenColLinSOE, bases<XC::SparseGenSOEBase>, boost::noncopyable >("SparseGenColLinSOE", no_init)
+class_<XC::DistributedBandGenLinSOE, bases<XC::BandGenLinSOE>, boost::noncopyable >("DistributedBandGenLinSOE", no_init)
+class_<XC::DistributedBandPDLinSOE, bases<XC::BandSPDLinSOE>, boost::noncopyable >("DistributedBandSPDLinSOE", no_init)
+class_<XC::DistributedProfileSPDLinSOE, bases<XC::ProfileSPDLinSOE>, boost::noncopyable >("DistributedProfileSPDLinSOE", no_init)
+class_<XC::DistributedDiagonalSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("DistributedDiagonalSOE", no_init)
+class_<XC::DistributedSparseGenColLinSOE, bases<XC::SparseGenColLinSOE>, boost::noncopyable >("DistributedSparseGenColLinSOE", no_init)
+class_<XC::DistributedSparseGenRowLinSOE, bases<XC::SparseGenSOEBase>, boost::noncopyable >("DistributedSparseGenRowLinSOE", no_init)
+class_<XC::DistributedDiagonalSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("DistributedDiagonalSolver", no_init);
+class_<XC::DistributedSparseGerRowLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("DistributedSparseGerRowLinSolver", no_init);
+class_<XC::DistributedSuperLU, bases<XC::SparseGenColLinSolver>, boost::noncopyable >("DistributedSuperLU", no_init);
+class_<XC::SparseGenRowLinSOE, bases<XC::SparseGenSOEBase>, boost::noncopyable >("SparseGenRowLinSOE", no_init)
+class_<XC::SymSparseLinSOE, bases<XC::SparseSOEBase>, boost::noncopyable >("SymSparseLinSOE", no_init)
+// class_<XC::UmfpackGenLinSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("UmfpackGenLinSOE", no_init)
+class_<XC::LinearSOESolver, bases<XC::Solver>, boost::noncopyable >("LinearSOESolver", no_init);
+class_<XC::BandGenLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("BandGenLinSolver", no_init);
+class_<XC::BandGenLinLapackSolver, bases<XC::BandGenLinSolver>, boost::noncopyable >("BandGenLinLapackSolver", no_init);
+class_<XC::BandSPDLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("BandSPDLinSolver", no_init);
+class_<XC::BandSPDLinLapackSolver, bases<XC::BandSPDLinSolver>, boost::noncopyable >("BandSPDLinLapackSolver", no_init);
+// class_<XC::BandSPDLinThreadSolver, bases<XC::BandSPDLinSolver>, boost::noncopyable >("BandSPDLinThreadSolver", no_init);
+class_<XC::ConjugateGradientSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("ConjugateGradientSolver", no_init);
+class_<XC::DiagonalSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("DiagonalSolver", no_init);
+class_<XC::DiagonalDirectSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("DiagonalDirectSolver", no_init);
+class_<XC::DomainSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("DomainSolver", no_init);
+class_<XC::FullGenLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("FullGenLinSolver", no_init);
+class_<XC::FullGenLinLapackSolver, bases<XC::FullGenLinSolver>, boost::noncopyable >("FullGenLinLapackSolver", no_init);
+// class_<XC::ItPackLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("ItPackLinSolver", no_init);
+class_<XC::ProfileSPDLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("ProfileSPDLinSolver", no_init);
+class_<XC::ProfileSPDLinDirectBase, bases<XC::ProfileSPDLinSolver>, boost::noncopyable >("ProfileSPDLinDirectBase", no_init);
+class_<XC::ProfileSPDLinDirectBlockSolver, bases<XC::ProfileSPDLinDirectBase>, boost::noncopyable >("ProfileSPDLinDirectBlockSolver", no_init);
+class_<XC::ProfileSPDLinDirectSolver, bases<XC::ProfileSPDLinDirectBase>, boost::noncopyable >("ProfileSPDLinDirectSolver", no_init);
+// class_<XC::ProfileSPDLinDirectThreadSolver, bases<XC::ProfileSPDLinDirectBase>, boost::noncopyable >("ProfileSPDLinDirectThreadSolver", no_init);
+class_<XC::ProfileSPDLinSubstrSolver, bases<XC::ProfileSPDLinDirectBase,XC::DomainSolver>, boost::noncopyable >("ProfileSPDLinSubstrSolver", no_init);
+// class_<XC::ProfileSPDLinDirectSkypackSolver, bases<XC::ProfileSPDLinSolver>, boost::noncopyable >("ProfileSPDLinDirectSkypackSolver", no_init);
+class_<XC::SparseGenColLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("SparseGenColLinSolver", no_init);
+class_<XC::SuperLU, bases<XC::SparseGenColLinSolver>, boost::noncopyable >("SuperLU", no_init);
+// class_<XC::ThreadSuperLU, bases<XC::SparseGenColLinSolver>, boost::noncopyable >("ThreadSuperLU", no_init);
+class_<XC::SparseGenRowLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("SparseGenRowLinSolver", no_init);
+class_<XC::SymSparseLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("SymSparseLinSolver", no_init);
+// class_<XC::UmfpackGenLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("UmfpackGenLinSolver", no_init);
+    class_<XC::MeshComponent, bases<XC::ContinuaReprComponent>, boost::noncopyable >("MeshComponent", no_init)
+    class_<XC::ProblemaEF, bases<EntCmd>, boost::noncopyable>("ProblemaEF")
+class_<XC::MEDObject, bases<EntCmd>, boost::noncopyable >("MEDObject", no_init);
+class_<XC::MEDBaseInfo, bases<XC::MEDObject>, boost::noncopyable >("MEDBaseInfo", no_init)
+class_<XC::MEDCellBaseInfo, bases<XC::MEDBaseInfo>, boost::noncopyable >("MEDCellBaseInfo", no_init);
+class_<XC::MEDCellInfo, bases<XC::MEDCellBaseInfo>, boost::noncopyable >("MEDCellInfo", no_init);
+class_<XC::MEDGaussModel, bases<XC::MEDObject>, boost::noncopyable >("MEDGaussModel", no_init);
+class_<XC::MEDGroupInfo, bases<XC::MEDCellBaseInfo>, boost::noncopyable >("MEDGroupInfo", no_init);
+class_<XC::MEDMesh, bases<XC::MEDObject>, boost::noncopyable >("MEDMesh")
+class_<XC::MEDMeshing, bases<XC::MEDObject>, boost::noncopyable >("MEDMeshing", init<const XC::ProblemaEF &>())
+class_<XC::MEDVertexInfo, bases<XC::MEDBaseInfo>, boost::noncopyable >("MEDVertexInfo", no_init)
+class_<MEDFieldInfoInt, bases<XC::MEDObject>, boost::noncopyable >("MEDFieldInfoInt", no_init)
+class_<XC::MEDIntFieldInfo, bases<MEDFieldInfoInt>, boost::noncopyable >("MEDIntFieldInfo", no_init);
+class_<MEDFieldInfoDbl, bases<XC::MEDObject>, boost::noncopyable >("MEDFieldInfoDbl", no_init)
+class_<XC::MEDDblFieldInfo, bases<MEDFieldInfoDbl>, boost::noncopyable >("MEDDblFieldInfo", no_init)
+class_<XC::Channel, bases<EntCmd>, boost::noncopyable  >("Channel", no_init);
+class_<XC::EnvelopeData, boost::noncopyable >("EnvelopeData", no_init);
+class_<XC::Recorder, bases<EntCmd>, boost::noncopyable >("Recorder", no_init);
+//class_<XC::AlgorithmIncrements , bases<XC::Recorder>, boost::noncopyable >("AlgorithmIncrements", no_init);
+//class_<XC::DatastoreRecorder, bases<XC::Recorder>, boost::noncopyable >("DatastoreRecorder", no_init);
+class_<XC::DomainRecorderBase, bases<XC::Recorder>, boost::noncopyable >("DomainRecorderBase", no_init);
+//class_<XC::FilePlotter , bases<XC::Recorder>, boost::noncopyable >("FilePlotter", no_init);
+class_<XC::PropRecorder, bases<XC::Recorder>, boost::noncopyable >("PropRecorder", no_init)
+class_<XC::NodePropRecorder, bases<XC::PropRecorder>, boost::noncopyable >("NodePropRecorder", no_init)
+class_<XC::ElementPropRecorder, bases<XC::PropRecorder>, boost::noncopyable >("PropRecorder", no_init)
+// class_<XC::YsVisual , bases<XC::Recorder>, boost::noncopyable >("YsVisual", no_init);
+// class_<XC::DamageRecorder, bases<XC::DomainRecorderBase>, boost::noncopyable >("DamageRecorder", no_init);
+// class_<XC::GSA_Recorder, bases<XC::DomainRecorderBase>, boost::noncopyable >("GSA_Recorder", no_init);
+ class_<XC::HandlerRecorder, bases<XC::DomainRecorderBase>, boost::noncopyable >("HandlerRecorder", no_init);
+// class_<XC::MaxNodeDispRecorder, bases<XC::DomainRecorderBase>, boost::noncopyable >("MaxNodeDispRecorder", no_init);
+// class_<XC::PatternRecorder, bases<XC::DomainRecorderBase>, boost::noncopyable >("PatternRecorder", no_init);
+// class_<XC::DriftRecorder, bases<XC::HandlerRecorder>, boost::noncopyable >("DriftRecorder", no_init);
+class_<XC::MeshCompRecorder, bases<XC::HandlerRecorder>, boost::noncopyable >("MeshCompRecorder", no_init);
+class_<XC::ElementRecorderBase, bases<XC::MeshCompRecorder>, boost::noncopyable >("ElementRecorderBase", no_init);
+class_<XC::NodeRecorderBase, bases<XC::MeshCompRecorder>, boost::noncopyable >("NodeRecorderBase", no_init);
+class_<XC::NodeRecorder, bases<XC::NodeRecorderBase>, boost::noncopyable >("NodeRecorder", no_init);
+class_<XC::EnvelopeNodeRecorder, bases<XC::NodeRecorderBase>, boost::noncopyable >("EnvelopeNodeRecorder", no_init);
+class_<XC::ElementRecorder, bases<XC::ElementRecorderBase>, boost::noncopyable >("ElementRecorder", no_init);
+class_<XC::EnvelopeElementRecorder, bases<XC::ElementRecorderBase>, boost::noncopyable >("EnvelopeElementRecorder", no_init);
+class_<XC::ObjWithRecorders, bases<EntCmd>, boost::noncopyable >("ObjWithRecorders", no_init)
+class_<XC::Response, boost::noncopyable >("Response", no_init);
+class_<XC::ElementResponse , bases<XC::Response>, boost::noncopyable >("ElementResponse", no_init);
+// class_<XC::FiberResponse , bases<XC::Response>, boost::noncopyable >("FiberResponse", no_init);
+// class_<XC::MaterialResponse , bases<XC::Response>, boost::noncopyable >("MaterialResponse", no_init);
+class_<XC::ID, bases<EntCmd> >("ID")
+class_<CmdVectorBase, bases<EntCmd>, boost::noncopyable >("CmdVectorBase", no_init);
+class_<XC::Vector, bases<CmdVectorBase> >("Vector")
+class_<XC::Matrix, bases<EntCmd> >("Matrix")
+class_<XC::nDarray, boost::noncopyable >("nDarray", no_init);
+class_<XC::BJmatrix , bases<XC::nDarray>, boost::noncopyable >("BJmatrix", no_init);
+class_<XC::BJtensor, bases<XC::nDarray>, boost::noncopyable >("BJtensor", no_init);
+class_<XC::Cosseratstraintensor , bases<XC::BJtensor>, boost::noncopyable >("Cosseratstraintensor", no_init);
+class_<XC::Cosseratstresstensor , bases<XC::BJtensor>, boost::noncopyable >("Cosseratstresstensor", no_init);
+class_<XC::straintensor , bases<XC::BJtensor>, boost::noncopyable >("straintensor", no_init);
+class_<XC::stresstensor , bases<XC::BJtensor>, boost::noncopyable >("stresstensor", no_init);
+class_<XC::FE_Datastore, bases<XC::Channel>, boost::noncopyable  >("FE_Datastore", no_init)
+class_<XC::DBDatastore, bases<XC::FE_Datastore>, boost::noncopyable  >("DBDatastore", no_init)
+class_<XC::BerkeleyDbDatastore, bases<XC::DBDatastore>, boost::noncopyable  >("BerkeleyDbDatastore", no_init)
+class_<XC::SQLiteDatastore, bases<XC::DBDatastore>, boost::noncopyable  >("SQLiteDatastore", no_init)
+//class_<XC::OracleDatastore, bases<XC::DBDatastore>, boost::noncopyable  >("OracleDatastore", no_init)
+class_<XC::MySqlDatastore, bases<XC::DBDatastore>, boost::noncopyable  >("MySqlDatastore", no_init)
+class_<XC::NEESData, bases<XC::FE_Datastore>, boost::noncopyable  >("NEESData", no_init)
+class_<XC::FileDatastore, bases<XC::FE_Datastore>, boost::noncopyable  >("FileDatastore", no_init)

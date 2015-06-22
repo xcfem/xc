@@ -1,0 +1,34 @@
+# ARPACKPP
+# Once done, this will define
+#
+#  ARPACKPP_FOUND - system has libf2c
+#  ARPACKPP_INCLUDE_DIR - the libf2c include directories
+#  ARPACKPP_LIBRARY - link these to use libf2c
+
+SET(ARPACKPP_SEARCH_PATHS ${CMAKE_SOURCE_DIR} /usr/include/arpack++ /usr/local/include/arpack++)
+
+# Include dir
+find_path(ARPACKPP_INCLUDE_DIR NAMES arbnsmat.h PATHS ${ARPACKPP_SEARCH_PATHS})
+IF(NOT ARPACKPP_INCLUDE_DIR)
+  MESSAGE(FATAL_ERROR "No se encontró arpack++ (arbnsmat.h)")
+ENDIF()
+
+FIND_LIBRARY(ARPACKPP_LIB NAMES arpack++ PATHS /usr/lib /usr/local/lib)
+
+SET(ARPACKPP_FOUND FALSE)
+IF (ARPACKPP_INCLUDE_DIR)
+  SET(ARPACKPP_FOUND TRUE)
+    MARK_AS_ADVANCED(ARPACKPP_INCLUDE_DIR)
+ENDIF (ARPACKPP_INCLUDE_DIR)
+
+IF (ARPACKPP_FOUND)
+  MESSAGE(STATUS "Found Arpack++: ${ARPACKPP_INCLUDE_DIR}")
+  MESSAGE(STATUS "Found Arpack++ lib: ${ARPACKPP_LIB}")
+ELSE(ARPACKPP_FOUND)
+  IF (ARPACKPP_INCLUDE_DIR_REQUIRED)
+    MESSAGE(FATAL_ERROR "Could not find Arpack++")
+  ENDIF (ARPACKPP_INCLUDE_DIR_REQUIRED)
+ENDIF (ARPACKPP_FOUND)
+
+
+

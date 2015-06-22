@@ -1,0 +1,12 @@
+\define[vtkSphereSource,sphereSource]
+   { \radio{0.02} \resol_theta{5} \resol_phi{5} }
+
+\define[vtkGlyph3D,markPoints]
+   {
+     \set_input{ugrid_mesh} \set_source{sphereSource}
+     \scaling_off{} \orient_off{}
+   }
+
+\define[vtkPolyDataMapper,mappPoints] { \set_input{markPoints} }
+\define[vtkActor,visPoints]
+  { \set_mapper{mappPoints} \property{\set_color{.7, .5, .5}} }

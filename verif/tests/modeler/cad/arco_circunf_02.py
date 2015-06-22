@@ -1,0 +1,86 @@
+# -*- coding: utf-8 -*-
+
+import xc_base
+import geom
+import xc
+import math
+import os
+from model import predefined_spaces
+from materials import typical_materials
+
+NumDiv= 13
+R= 2.0
+cos45= math.cos(math.radians(45))
+sin45= cos45
+
+# Problem type
+prueba= xc.ProblemaEF()
+mdlr= prueba.getModelador
+# Definimos materiales
+elast= typical_materials.defElasticMaterial(mdlr,"elast",3000)
+
+nodos= mdlr.getNodeLoader
+predefined_spaces.gdls_elasticidad3D(nodos)
+nodos.newSeedNode()
+seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader.defaultMaterial= "elast"
+seedElemLoader.dimElem= 3
+seedElemLoader.defaultTag= 1 #Tag for the next element.
+truss= seedElemLoader.newElement("truss",xc.ID([0,0]));
+truss.area= 10.0
+
+puntos= mdlr.getCad.getPoints
+pt= puntos.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
+puntos.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
+puntos.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
+
+lineas= mdlr.getCad.getLines
+lineas.defaultTag= 1
+l= lineas.newCircleArc(1,2,3)
+l.nDiv= NumDiv
+th1= l.getTheta1()
+th2= l.getTheta2()
+long= l.getLong()
+xC= l.getCentro().x
+yC= l.getCentro().y
+zC= l.getCentro().z
+xi= l.getPInic().x
+yi= l.getPInic().y
+zi= l.getPInic().z
+r= l.getRadio()
+
+l1= mdlr.getSets.getSet("l1")
+l1.genMesh(xc.meshDir.I)
+
+nnodos= l1.getNumNodes
+'''
+print "núm. nodos: ", nnod
+nodos= mdlr.getNodeLoader
+
+for_each
+  print "  nodo: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
+
+'''
+
+nnodteor= NumDiv+1
+ratio1= (nnodteor/nnodos)
+
+''' 
+print "ratio1= ",(ratio1)
+print "theta1= ",(math.radians(th1))
+print "theta2= ",(math.radians(th2))
+print "xC= ",(xC)
+print "yC= ",(yC)
+print "zC= ",(zC)
+print "xi= ",(xi)
+print "yi= ",(yi)
+print "zi= ",(zi)
+print "radio= ",(r)
+   '''
+
+import os
+fname= os.path.basename(__file__)
+if (abs(ratio1-1.0)<1e-12):
+  print "test ",fname,": ok."
+else:
+  print "test ",fname,": ERROR."

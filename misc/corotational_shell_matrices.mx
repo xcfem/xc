@@ -1,0 +1,148 @@
+display2d : false;
+
+declare(d1,nonscalar,d2,nonscalar,d3,nonscalar,d4,nonscalar);
+declare(ng1,nonscalar,ng2,nonscalar,ng3,nonscalar,ng4,nonscalar);
+declare(v130,nonscalar,v140,nonscalar);
+declare(R,nonscalar);
+v13: v130+d3-d1;
+v24: v240+d4-d2;
+
+c13: v13/abs(v13);
+c24: v24/abs(v24);
+
+ex: (c13-c24)/abs(c13-c24);
+ey: (c13+c24)/abs(c13+c24);
+load("vect.mac");
+ez: ex ~ ey;
+/*R: matrix([ex,ey,ez]);*/
+Dex= diff(ex,d1);
+quit();
+
+t1: R . d1 + (R-R0) . v10;
+theta1: R . ng1;
+t2: R . d2 + (R-R0) . v20;
+theta2: R . ng2;
+t3: R . d3 + (R-R0) . v30;
+theta3: R . ng3;
+t4: R . d4 + (R-R0) . v40;
+theta4: R . ng4;
+t5: R . d5 + (R-R0) . v50;
+theta5: R . ng5;
+t6: R . d6 + (R-R0) . v60;
+theta6: R . ng6;
+t7: R . d7 + (R-R0) . v70;
+theta7: R . ng7;
+t8: R . d8 + (R-R0) . v80;
+theta8: R . ng8;
+t9: R . d9 + (R-R0) . v90;
+theta9: R . ng9;
+
+/* Matriz T, primera fila */
+T0101: diff(t1,d1); T0102: 0; T0103: diff(t1,d2); T0104: 0; T0105: diff(t1,d3); T0106: 0; 
+T0107: diff(t1,d4); T0108: 0; T0109: diff(t1,d5); T0110: 0; T0111: diff(t1,d6); T0112: 0;
+T0113: diff(t1,d7); T0114: 0; T0115: diff(t1,d8); T0116: 0; T0117: diff(t1,d9); T0118: 0;
+
+/* Matriz T, segunda fila */
+T0201: diff(theta1,d1); T0202: diff(theta1,ng1); T0203: diff(theta1,d2); T0204: diff(theta1,ng2); T0205: diff(theta1,d3); T0206: diff(theta1,ng3); 
+T0207: diff(theta1,d4); T0208: diff(theta1,ng4); T0209: diff(theta1,d5); T0210: diff(theta1,ng5); T0211: diff(theta1,d6); T0212: diff(theta1,ng6);
+T0213: diff(theta1,d7); T0214: diff(theta1,ng7); T0215: diff(theta1,d8); T0216: diff(theta1,ng8); T0217: diff(theta1,d9); T0218: diff(theta1,ng9);
+
+/* Matriz T, tercera fila */
+T0301: diff(t2,d1); T0302: 0; T0303: diff(t2,d2); T0304: 0; T0305: diff(t2,d3); T0306: 0; 
+T0307: diff(t2,d4); T0308: 0; T0309: diff(t2,d5); T0310: 0; T0311: diff(t2,d6); T0312: 0;
+T0313: diff(t2,d7); T0314: 0; T0315: diff(t2,d8); T0316: 0; T0317: diff(t2,d9); T0318: 0;
+
+/* Matriz T, cuarta fila */
+T0401: diff(theta2,d1); T0402: diff(theta2,ng1); T0403: diff(theta2,d2); T0404: diff(theta2,ng2); T0405: diff(theta2,d3); T0406: diff(theta2,ng3); 
+T0407: diff(theta2,d4); T0408: diff(theta2,ng4); T0409: diff(theta2,d5); T0410: diff(theta2,ng5); T0411: diff(theta2,d6); T0412: diff(theta2,ng6);
+T0413: diff(theta2,d7); T0414: diff(theta2,ng7); T0415: diff(theta2,d8); T0416: diff(theta2,ng8); T0417: diff(theta2,d9); T0418: diff(theta2,ng9);
+
+/* Matriz T, quinta fila */
+T0501: diff(t3,d1); T0502: 0; T0503: diff(t3,d2); T0504: 0; T0505: diff(t3,d3); T0506: 0; 
+T0507: diff(t3,d4); T0508: 0; T0509: diff(t3,d5); T0510: 0; T0511: diff(t3,d6); T0512: 0;
+T0513: diff(t3,d7); T0514: 0; T0515: diff(t3,d8); T0516: 0; T0517: diff(t3,d9); T0518: 0;
+
+/* Matriz T, sexta fila */
+T0601: diff(theta3,d1); T0602: diff(theta3,ng1); T0603: diff(theta3,d2); T0604: diff(theta3,ng2); T0605: diff(theta3,d3); T0606: diff(theta3,ng3); 
+T0607: diff(theta3,d4); T0608: diff(theta3,ng4); T0609: diff(theta3,d5); T0610: diff(theta3,ng5); T0611: diff(theta3,d6); T0612: diff(theta3,ng6);
+T0613: diff(theta3,d7); T0614: diff(theta3,ng7); T0615: diff(theta3,d8); T0616: diff(theta3,ng8); T0617: diff(theta3,d9); T0618: diff(theta3,ng9);
+
+/* Matriz T, séptima fila */
+T0701: diff(t4,d1); T0702: 0; T0703: diff(t4,d2); T0704: 0; T0705: diff(t4,d3); T0706: 0; 
+T0707: diff(t4,d4); T0708: 0; T0709: diff(t4,d5); T0710: 0; T0711: diff(t4,d6); T0712: 0;
+T0713: diff(t4,d7); T0714: 0; T0715: diff(t4,d8); T0716: 0; T0717: diff(t4,d9); T0718: 0;
+
+/* Matriz T, octava fila */
+T0801: diff(theta4,d1); T0802: diff(theta4,ng1); T0803: diff(theta4,d2); T0804: diff(theta4,ng2); T0805: diff(theta4,d3); T0806: diff(theta4,ng3); 
+T0807: diff(theta4,d4); T0808: diff(theta4,ng4); T0809: diff(theta4,d5); T0810: diff(theta4,ng5); T0811: diff(theta4,d6); T0812: diff(theta4,ng6);
+T0813: diff(theta4,d7); T0814: diff(theta4,ng7); T0815: diff(theta4,d8); T0816: diff(theta4,ng8); T0817: diff(theta4,d9); T0818: diff(theta4,ng9);
+
+/* Matriz T, novena fila */
+T0901: diff(t5,d1); T0902: 0; T0903: diff(t5,d2); T0904: 0; T0905: diff(t5,d3); T0906: 0; 
+T0907: diff(t5,d4); T0908: 0; T0909: diff(t5,d5); T0910: 0; T0911: diff(t5,d6); T0912: 0;
+T0913: diff(t5,d7); T0914: 0; T0915: diff(t5,d8); T0916: 0; T0917: diff(t5,d9); T0918: 0;
+
+/* Matriz T, déctima fila */
+T1001: diff(theta5,d1); T1002: diff(theta5,ng1); T1003: diff(theta5,d2); T1004: diff(theta5,ng2); T1005: diff(theta5,d3); T1006: diff(theta5,ng3); 
+T1007: diff(theta5,d4); T1008: diff(theta5,ng4); T1009: diff(theta5,d5); T1010: diff(theta5,ng5); T1011: diff(theta5,d6); T1012: diff(theta5,ng6);
+T1013: diff(theta5,d7); T1014: diff(theta5,ng7); T1015: diff(theta5,d8); T1016: diff(theta5,ng8); T1017: diff(theta5,d9); T1018: diff(theta5,ng9);
+
+/* Matriz T, undécima fila */
+T1101: diff(t6,d1); T1102: 0; T1103: diff(t6,d2); T1104: 0; T1105: diff(t6,d3); T1106: 0; 
+T1107: diff(t6,d4); T1108: 0; T1109: diff(t6,d5); T1110: 0; T1111: diff(t6,d6); T1112: 0;
+T1113: diff(t6,d7); T1114: 0; T1115: diff(t6,d8); T1116: 0; T1117: diff(t6,d9); T1118: 0;
+
+/* Matriz T, duodéctima fila */
+T1201: diff(theta6,d1); T1202: diff(theta6,ng1); T1203: diff(theta6,d2); T1204: diff(theta6,ng2); T1205: diff(theta6,d3); T1206: diff(theta6,ng3); 
+T1207: diff(theta6,d4); T1208: diff(theta6,ng4); T1209: diff(theta6,d5); T1210: diff(theta6,ng5); T1211: diff(theta6,d6); T1212: diff(theta6,ng6);
+T1213: diff(theta6,d7); T1214: diff(theta6,ng7); T1215: diff(theta6,d8); T1216: diff(theta6,ng8); T1217: diff(theta6,d9); T1218: diff(theta6,ng9);
+
+/* Matriz T, décimotercera fila */
+T1301: diff(t7,d1); T1302: 0; T1303: diff(t7,d2); T1304: 0; T1305: diff(t7,d3); T1306: 0; 
+T1307: diff(t7,d4); T1308: 0; T1309: diff(t7,d5); T1310: 0; T1311: diff(t7,d6); T1312: 0;
+T1313: diff(t7,d7); T1314: 0; T1315: diff(t7,d8); T1316: 0; T1317: diff(t7,d9); T1318: 0;
+
+/* Matriz T, décimocuarta fila */
+T1401: diff(theta7,d1); T1402: diff(theta7,ng1); T1403: diff(theta7,d2); T1404: diff(theta7,ng2); T1405: diff(theta7,d3); T1406: diff(theta7,ng3); 
+T1407: diff(theta7,d4); T1408: diff(theta7,ng4); T1409: diff(theta7,d5); T1410: diff(theta7,ng5); T1411: diff(theta7,d6); T1412: diff(theta7,ng6);
+T1413: diff(theta7,d7); T1414: diff(theta7,ng7); T1415: diff(theta7,d8); T1416: diff(theta7,ng8); T1417: diff(theta7,d9); T1418: diff(theta7,ng9);
+
+/* Matriz T, décimoquinta fila */
+T1501: diff(t8,d1); T1502: 0; T1503: diff(t8,d2); T1504: 0; T1505: diff(t8,d3); T1506: 0; 
+T1507: diff(t8,d4); T1508: 0; T1509: diff(t8,d5); T1510: 0; T1511: diff(t8,d6); T1512: 0;
+T1513: diff(t8,d7); T1514: 0; T1515: diff(t8,d8); T1516: 0; T1517: diff(t8,d9); T1518: 0;
+
+/* Matriz T, décimosexta fila */
+T1601: diff(theta8,d1); T1602: diff(theta8,ng1); T1603: diff(theta8,d2); T1604: diff(theta8,ng2); T1605: diff(theta8,d3); T1606: diff(theta8,ng3); 
+T1607: diff(theta8,d4); T1608: diff(theta8,ng4); T1609: diff(theta8,d5); T1610: diff(theta8,ng5); T1611: diff(theta8,d6); T1612: diff(theta8,ng6);
+T1613: diff(theta8,d7); T1614: diff(theta8,ng7); T1615: diff(theta8,d8); T1616: diff(theta8,ng8); T1617: diff(theta8,d9); T1618: diff(theta8,ng9);
+
+/* Matriz T, décimoseptima fila */
+T1701: diff(t9,d1); T1702: 0; T1703: diff(t9,d2); T1704: 0; T1705: diff(t9,d3); T1706: 0; 
+T1707: diff(t9,d4); T1708: 0; T1709: diff(t9,d5); T1710: 0; T1711: diff(t9,d6); T1712: 0;
+T1713: diff(t9,d7); T1714: 0; T1715: diff(t9,d8); T1716: 0; T1717: diff(t9,d9); T1718: 0;
+
+/* Matriz T, décimooctava fila */
+T1801: diff(theta9,d1); T1802: diff(theta9,ng1); T1803: diff(theta9,d2); T1804: diff(theta9,ng2); T1805: diff(theta9,d3); T1806: diff(theta9,ng3); 
+T1807: diff(theta9,d4); T1808: diff(theta9,ng4); T1809: diff(theta9,d5); T1810: diff(theta9,ng5); T1811: diff(theta9,d6); T1812: diff(theta9,ng6);
+T1813: diff(theta9,d7); T1814: diff(theta9,ng7); T1815: diff(theta9,d8); T1816: diff(theta9,ng8); T1817: diff(theta9,d9); T1818: diff(theta9,ng9);
+
+T:[[T0101,T0102,T0103,T0104,T0105,T0106,T0107,T0108,T0109,T0110,T0111,T0112,T0113,T0114,T0115,T0116,T0117,T0118],
+[T0201,T0202,T0203,T0204,T0205,T0206,T0207,T0208,T0209,T0210,T0211,T0212,T0213,T0214,T0215,T0216,T0217,T0218],
+[T0301,T0302,T0303,T0304,T0305,T0306,T0307,T0308,T0309,T0310,T0311,T0312,T0313,T0314,T0315,T0316,T0317,T0318],
+[T0401,T0402,T0403,T0404,T0405,T0406,T0407,T0408,T0409,T0410,T0411,T0412,T0413,T0414,T0415,T0416,T0417,T0418],
+[T0501,T0502,T0503,T0504,T0505,T0506,T0507,T0508,T0509,T0510,T0511,T0512,T0513,T0514,T0515,T0516,T0517,T0518],
+[T0601,T0602,T0603,T0604,T0605,T0606,T0607,T0608,T0609,T0610,T0611,T0612,T0613,T0614,T0615,T0616,T0617,T0618],
+[T0701,T0702,T0703,T0704,T0705,T0706,T0707,T0708,T0709,T0710,T0711,T0712,T0713,T0714,T0715,T0716,T0717,T0718],
+[T0801,T0802,T0803,T0804,T0805,T0806,T0807,T0808,T0809,T0810,T0811,T0812,T0813,T0814,T0815,T0816,T0817,T0818],
+[T0901,T0902,T0903,T0904,T0905,T0906,T0907,T0908,T0909,T0910,T0911,T0912,T0913,T0914,T0915,T0916,T0917,T0918],
+[T1001,T1002,T1003,T1004,T1005,T1006,T1007,T1008,T1009,T1010,T1011,T1012,T1013,T1014,T1015,T1016,T1017,T1018],
+[T1101,T1102,T1103,T1104,T1105,T1106,T1107,T1108,T1109,T1110,T1111,T1112,T1113,T1114,T1115,T1116,T1117,T1118],
+[T1201,T1202,T1203,T1204,T1205,T1206,T1207,T1208,T1209,T1210,T1211,T1212,T1213,T1214,T1215,T1216,T1217,T1218],
+[T1301,T1302,T1303,T1304,T1305,T1306,T1307,T1308,T1309,T1310,T1311,T1312,T1313,T1314,T1315,T1316,T1317,T1318],
+[T1401,T1402,T1403,T1404,T1405,T1406,T1407,T1408,T1409,T1410,T1411,T1412,T1413,T1414,T1415,T1416,T1417,T1418],
+[T1501,T1502,T1503,T1504,T1505,T1506,T1507,T1508,T1509,T1510,T1511,T1512,T1513,T1514,T1515,T1516,T1517,T1518],
+[T1601,T1602,T1603,T1604,T1605,T1606,T1607,T1608,T1609,T1610,T1611,T1612,T1613,T1614,T1615,T1616,T1617,T1618],
+[T1701,T1702,T1703,T1704,T1705,T1706,T1707,T1708,T1709,T1710,T1711,T1712,T1713,T1714,T1715,T1716,T1717,T1718],
+[T1801,T1802,T1803,T1804,T1805,T1806,T1807,T1808,T1809,T1810,T1811,T1812,T1813,T1814,T1815,T1816,T1817,T1818]];
+stringout("T.dat",values);

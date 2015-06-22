@@ -1,0 +1,158 @@
+fNameIn= "perfiles_w_aisc_metric.csv"
+fNameOut= "perfiles_w_aisc_metric_v14.lcmd"
+
+'''
+Ejes de la sección:
+
+   AISC            XC
+
+      ^ Y           ^ Y                    
+      |             |
+
+    -----         -----
+      |             | 
+      | -> X        | -> Z
+      |             |
+    -----         -----
+
+Los ejes en los que se definen las características mecánicas de la sección
+en el catálogo original del AISC se han cambiado para acomodarlos a los
+habituales en XC (eje fuerte paralelo al eje Z). Para ello, como puede verse
+en la figura, basta intercambiar los ejes X y Z.
+  
+'''
+
+\nuevo_archivo_entrada["pp"]{fNameIn}
+strA= 
+csv= 
+lst= 
+columnaTipo= 0
+columnaEDIImperial= 1
+columnaAISCLabelImperial= 2
+columna2InchFlangeThickness= 3
+columnaEDIMetric= 4
+columnaAISCLabelMetric= 5
+columnaP= 6 # Masa por metro (kg/m)
+columnaA= 7 # Área de la sección transversal (mm2)
+columnaH= 8 # Canto total de la sección transversal (mm)
+columnaHDet= 9 # «Detailing value» del canto total de la sección transversal (mm)
+# Ht 10
+# OD 11
+columnaB= 12 # Ancho del ala de la sección transversal (mm)
+columnaBDet= 13 # «Detailing value» del ancho del ala de la sección transversal (mm)
+# b 14
+# ID 15
+columnaTW= 16 # Espesor del alma de la sección transversal (mm)
+columnaTWDet= 17 # «Detailing value» del espesor del alma de la sección transversal (mm)
+columnaTWDet2= 18 # «Detailing value» de la mitad del espesor del alma de la sección transversal (mm)
+columnaTF= 19 # Espesor del ala de la sección transversal (mm)
+columnaTFDet= 20 # «Detailing value» del espesor del ala de la sección transversal (mm)
+# t 21
+# t_nom 22
+# t_des 23
+columnaKDes= 24 # Valor de cálculo de la distancia entre la cara exterior del ala y el contacto del acuerdo con el alma (mm)
+columnaKDet= 25 # «Detailing value» de la distancia entre la cara exterior del ala y el contacto del acuerdo con el alma (mm)
+columnaK1= 26 # «Detailing value» de la distancia entre el centro del alma y el contacto del acuerdo con el ala (mm)
+# x 27
+# y 28
+# e0 29
+# xp 30
+# yp 31
+columnaFSR= 32 # Relación de esbeltez del ala (bf/tf/2).
+# b/t 33
+columnaWSR= 34 # Relación de esbeltez del alma (h/tw).
+# Ht/t 35
+# D/t 36
+columnaIx= 37 # Momento de inercia en torno al eje x (mm4/1e6).
+columnaZx= 38 # Módulo plástico en torno al eje x (mm3/1e3).
+columnaSx= 39 # Módulo elástico en torno al eje x (mm3/1e3).
+columnaRx= 40 # Radio de giro en torno al eje x (mm).
+columnaIy= 41 # Momento de inercia en torno al eje y (mm4/1e6).
+columnaZy= 42 # Módulo plástico en torno al eje y (mm3/1e3).
+columnaSy= 43 # Módulo elástico en torno al eje y (mm3/1e3).
+columnaRy= 44 # Radio de giro en torno al eje y (mm).
+# Iz 45
+# rz 46
+# Sz 47
+columnaJ= 48 # Momento de inercia a torsión (mm4/1e3).
+columnaCw= 49 # Momento de Inercia de alabeo de la sección (mm6/1e9).
+# C 50
+columnaWno= 51 # Función de alabeo normalizada (mm2) (Design guide 9).
+columnaSw1= 52 # Momento estático de alabeo en punto 1 de la sección (mm4/1e6) (Design guide 9).
+# Sw2 53
+# Sw3 54
+columnaQf= 55 #  (Design guide 9).
+columnaQw= 56 #  (Design guide 9).
+# r0 57
+# H 58
+# tan(alpha) 59
+# Qs 60
+# Iw 61
+# SwA 62
+# SwB 63
+# SwC 64
+# SzA 65
+# SzB 66
+# SzC 67
+columnaRts= 68 # Radio de giro efectivo (mm).
+columnaHo= 69 # Distancia entre centroides de ala (mm).
+columnaPa= 70 # Perímetro menos la superficie de un ala (mm).
+columnaPb= 71 # Perímetro como se emplea en Design Guide 19 (mm).
+
+
+
+
+
+\while(good("pp"))
+  {
+    \bucle
+      {
+        strA= readln("pp")
+        \if(strlen(strA)>0)
+          {
+            \then
+              {
+                lst=csv2list(strA)
+                \print{"\\def_prop[\"",lst[columnaEDIImperial],"\",\"record\"]{}","\n"}
+                \print{"\\",lst[columnaEDIImperial],"\n"}
+                \print{"  {\n"}
+                \print{"    \def_prop[\"nmb\",\"string\"]{\"",lst[columnaEDIImperial],"\"}","\n"}
+                \print{"    \def_prop[\"P\",\"double\"]{",lst[columnaP],"}","\n"}
+                \print{"    \def_prop[\"A\",\"double\"]{",lst[columnaA],"e-6}","\n"}
+                \print{"    \def_prop[\"h\",\"double\"]{",lst[columnaH],"e-3}","\n"}
+                \print{"    \def_prop[\"hDet\",\"double\"]{",lst[columnaHDet],"e-3}","\n"}
+                \print{"    \def_prop[\"b\",\"double\"]{",lst[columnaB],"e-3}","\n"}
+                \print{"    \def_prop[\"bDet\",\"double\"]{",lst[columnaBDet],"e-3}","\n"}
+                \print{"    \def_prop[\"tw\",\"double\"]{",lst[columnaTW],"e-3}","\n"}
+                \print{"    \def_prop[\"twDet\",\"double\"]{",lst[columnaTWDet],"e-3}","\n"}
+                \print{"    \def_prop[\"tf\",\"double\"]{",lst[columnaTF],"e-3}","\n"}
+                \print{"    \def_prop[\"tfDet\",\"double\"]{",lst[columnaTFDet],"e-3}","\n"}
+                \print{"    \def_prop[\"kDes\",\"double\"]{",lst[columnaKDes],"e-3}","\n"}
+                \print{"    \def_prop[\"kDet\",\"double\"]{",lst[columnaKDet],"e-3}","\n"}
+                \print{"    \def_prop[\"k1\",\"double\"]{",lst[columnaK1],"e-3}","\n"}
+                \print{"    \def_prop[\"d\",\"double\"]{",lst[columnaH]-2*lst[columnaKDes],"e-3}","\n"}
+
+                \print{"    \def_prop[\"Iz\",\"double\"]{",lst[columnaIx],"e-6}","\n"}
+                \print{"    \def_prop[\"Wzel\",\"double\"]{",lst[columnaSx],"e-6}","\n"}
+                \print{"    \def_prop[\"Wzpl\",\"double\"]{",lst[columnaZx],"e-6}","\n"}
+                \print{"    \def_prop[\"iz\",\"double\"]{",lst[columnaRx],"e-3}","\n"}
+
+                \print{"    \def_prop[\"Avy\",\"double\"]{",(lst[columnaH]-2*lst[columnaKDes])*lst[columnaTW],"e-6}","\n"}
+
+                \print{"    \def_prop[\"Iy\",\"double\"]{",lst[columnaIy],"e-6}","\n"}
+                \print{"    \def_prop[\"Wyel\",\"double\"]{",lst[columnaSy],"e-6}","\n"}
+                \print{"    \def_prop[\"Wypl\",\"double\"]{",lst[columnaZy],"e-6}","\n"}
+                \print{"    \def_prop[\"iy\",\"double\"]{",lst[columnaRy],"e-3}","\n"}
+
+                \print{"    \def_prop[\"It\",\"double\"]{",lst[columnaJ],"e-9}","\n"}
+
+                \print{"    \def_prop[\"alpha\",\"double\"]{Avy/A}","\n"}
+                \print{"    \def_prop[\"E\",\"double\"]{",210000e6,"}","\n"}
+                \print{"    \def_prop[\"nu\",\"double\"]{",0.3,"}","\n"}
+                \print{"    \def_prop[\"G\",\"double\"]{E/(2*(1+nu))}","\n"}
+                \print{"  }\n"}
+              }
+          }
+      }
+  }
+\cierra_archivo_entrada{"pp"}

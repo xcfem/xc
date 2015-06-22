@@ -1,0 +1,10 @@
+#!/bin/sh
+echo "procesando: " $1
+cp -i $1 $1.bak
+csplit -f tmp  $1.bak '/^ *class/' '/^ *};/+1'
+cat tmp00 > $1
+echo "namespace XC {" >> $1
+cat tmp01 >> $1
+echo "} // fin namespace XC" >> $1
+cat tmp02 >> $1
+rm tmp0*

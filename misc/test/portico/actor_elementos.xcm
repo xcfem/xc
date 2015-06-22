@@ -1,0 +1,4 @@
+\c{Creamos el actor para los elementos.}
+\define[vtkDataSetMapper,ugridMapper]{ \set_input{ugrid_mesh} }
+\define[vtkActor,wireActor]
+  { \set_mapper{ugridMapper} \property{\set_color{1,1,1} \set_representation_to_wireframe{}} }

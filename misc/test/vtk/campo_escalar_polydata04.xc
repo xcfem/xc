@@ -1,0 +1,74 @@
+\path{"/usr/local/lib/macros_xc"}
+\incluye{"vtk/vtk_grafico_diagrama_esfuerzos.xcm"}
+
+\def_prop["listaPos","listaPos3d"]{}
+\listaPos
+  {
+    \addPt{ \x{0} \y{0} \z{0} }
+    \addPt{ \x{1} \y{1} \z{1} }
+    \addPt{ \x{2} \y{2} \z{2} }
+    \addPt{ \x{3} \y{3} \z{3} }
+    \addPt{ \x{4} \y{4} \z{4} }
+    \addPt{ \x{5} \y{5} \z{5} }
+    \addPt{ \x{6} \y{6} \z{6} }
+  }
+
+\def_prop["listaVal","list"]{-11.621e3,-24.614e3,-4.7173e3,3.3645e3, 13.401e3,-14.820e3,-7.1529e3,1.1605e3, 12.887e3,-42.543e3,-11.936e3,-5.3686e3}
+
+\def_prop["defDiagrama","record"]{}
+\populateRecordDefDiagramaEsf("defDiagrama"){}
+\defDiagrama
+  {
+    \set{nmbDiagrama= "pData"}
+    \set{nmbPoints= "points"}
+    \set{nmbEscalares= "escalares"}
+    \set{nmbCeldas= "celdas"}
+    \set{nmbLookUpTable= @nmbDiagrama + "LUT"}
+    \set{escala= 0.0001}
+    \set{vDir= @normaliza(@cross([1,1,1],[-1,1,0]))}
+    \set{valMin= @listaVal.getMin}
+    \set{valMax= @listaVal.getMax}
+  }
+
+
+\vtkCreaEstrucDatosDiagrama("defDiagrama"){}
+\def_prop["indice","double"]{0}
+
+\vtk
+  {
+    \set{indice= @vtkCreaTramoDiagrama(@indice,@listaPos[0],@listaVal[0],@listaPos[1],@listaVal[1],"defDiagrama")}
+    \set{indice= @vtkCreaTramoDiagrama(@indice,@listaPos[1],@listaVal[2],@listaPos[2],@listaVal[3],"defDiagrama")}
+    \set{indice= @vtkCreaTramoDiagrama(@indice,@listaPos[2],@listaVal[4],@listaPos[3],@listaVal[5],"defDiagrama")}
+    \set{indice= @vtkCreaTramoDiagrama(@indice,@listaPos[3],@listaVal[6],@listaPos[4],@listaVal[7],"defDiagrama")}
+    \set{indice= @vtkCreaTramoDiagrama(@indice,@listaPos[4],@listaVal[8],@listaPos[5],@listaVal[9],"defDiagrama")}
+    \set{indice= @vtkCreaTramoDiagrama(@indice,@listaPos[5],@listaVal[10],@listaPos[6],@listaVal[11],"defDiagrama")}
+
+
+    \vtkCreaLookUpTable("defDiagrama"){}
+    \vtkCreaActorDiagrama("defDiagrama"){}
+
+\c{Dibuja}
+\define["vtkRenderer","renderer"]{}
+\define["vtkRenderWindow","renWin"]{ \add_renderer{"renderer"} }
+\define["vtkRenderWindowInteractor","iren"]{ \set_render_window{"renWin"} }
+
+
+\renderer{ \add_actor{"pDataActor"} \set_background{1,1,1}}
+\vtkCreaEscalaColores("barraColores",@deref("defDiagrama").nmbLookUpTable){}
+\renderer{ \add_actor2D{"barraColores"} }
+
+\renWin{ \set_size{450,450} }
+     \renderer
+       {
+         \reset_camera{}
+         \active_camera
+           {
+             \view_up{0,0,1}
+             \position{100,0,0}
+             \parallel{}
+           }
+         \reset_camera_clipping_range{}
+       }
+\iren{ \initialize{} }
+\iren{ \start{} }
+  }

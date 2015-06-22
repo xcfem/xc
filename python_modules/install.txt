@@ -1,0 +1,7 @@
+To install modules in user's home type:
+
+python setup.py install --user
+
+To install modules in /usr/local type:
+
+python setup.py install --prefix=/usr/local

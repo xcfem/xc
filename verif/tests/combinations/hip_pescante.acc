@@ -1,0 +1,73 @@
+#Archivo para la generación de combinaciones}
+#path "/usr/local/lib/macros_comb_acc"
+\pond_acciones
+  {
+    \permanentes
+      {
+        \incluye{"ehe/gammaf_ehe_permanentes_ctrl_intenso.cmbm"}
+        \acciones
+          {
+            \accion
+              {
+                \nombre{G} \descripcion{Peso propio y carga permanente}
+                \psi_0{1} \psi_1{1} \psi_2{1}
+              }
+          }
+      }
+    \variables
+      {
+        \incluye{"ehe/gammaf_ehe_variables_ctrl_intenso.cmbm"}
+        \acciones
+          {
+            \accion
+              {
+                \nombre{SC} \descripcion{Sobrecarga de uso}
+                \psi_0{0.7} \psi_1{0.5} \psi_2{0.3}
+              }
+            \accion
+              {
+                \nombre{VT} \descripcion{Viento}
+                \psi_0{0.6} \psi_1{0.5} \psi_2{0.0}
+              }
+            \accion
+              {
+                \nombre{NV} \descripcion{Nieve}
+                \psi_0{0.6} \psi_1{0.2} \psi_2{0.0}
+              }
+          }
+      }
+  }
+
+\genera_combinaciones{}
+
+"def_hip_elu".open(""def_hip_elu"","w")
+\combinaciones
+  {
+    \comb_elu_persistentes
+      {
+        conta= 1
+        \for_each
+          {
+            def_hip_elu.write("\combinacion[\"",@format(@int(conta),"ELU%03u"),"\"]{ \descomp{\"",@getNombre,"\"}}\n")
+            conta= (conta+1)
+          }
+      }
+  }
+def_hip_elu.close()
+
+"calc_hip_elu".open(""calc_hip_elu"","w")
+\combinaciones
+  {
+    \comb_elu_persistentes
+      {
+        conta= 1
+        \for_each
+          {
+            # Añadimos la combinación al dominio
+            calc_hip_elu.write("\\resuelveCombEstatLin(\"",@format(@int(conta),"ELU%03u"),"\"){}","\n")
+            calc_hip_elu.write("\\trataResultsComb(\"",@format(@int(conta),"ELU%03u"),"\"){}","\n")
+            conta= (conta+1)
+          }
+      }
+  }
+calc_hip_elu.close()

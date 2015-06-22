@@ -1,0 +1,67 @@
+# -*- coding: utf-8 -*-
+from __future__ import division
+import xc_base
+import geom
+import xc
+from solution import predefined_solutions
+from model import predefined_spaces
+from materials import typical_materials
+import integra_simpson as isimp
+
+# Problem type
+prueba= xc.ProblemaEF()
+mdlr= prueba.getModelador
+nodos= mdlr.getNodeLoader
+predefined_spaces.gdls_elasticidad3D(nodos)
+# Definimos materiales
+elast= typical_materials.defElasticMaterial(mdlr,"elast",3000)
+
+nodos.newSeedNode()
+seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader.defaultMaterial= "elast"
+seedElemLoader.dimElem= 3
+seedElemLoader.defaultTag= 1 #Tag for the next element.
+truss= seedElemLoader.newElement("truss",xc.ID([0,0]));
+truss.area= 10.0
+
+unifGrids= mdlr.getCad.getUniformGrids
+uGrid= unifGrids.newUniformGrid()
+
+uGrid.org= geom.Pos3d(0.0,0.0,3.0)
+uGrid.Lx= 1
+uGrid.Ly= 1
+uGrid.Lz= 3
+uGrid.nDivX= 0
+uGrid.nDivY= 0
+uGrid.nDivZ= 3
+
+
+
+total= mdlr.getSets.getSet("total")
+total.genMesh(xc.meshDir.I)
+
+ 
+abscissae= []
+gridNodes= uGrid.getNodeLayers
+nNodes= uGrid.nDivZ+1
+for i in range(1,nNodes+1):
+  n= gridNodes.getAtIJK(i,1,1)
+  abscissae.append(n.getInitialPos3d.z)
+
+
+def func(z):
+  return z-1.0
+
+#pesos= uGrid.getSimpsonWeights("i",'z-1.0',1,1,10)
+pesos= isimp.getSimpsonWeights(abscissae,func,10)
+suma= pesos[0]+pesos[1]+pesos[2]+pesos[3]
+
+import os
+fname= os.path.basename(__file__)
+if abs(suma-(9/8.0+3+4+19/8.0))<1e-5:
+  print "test ",fname,": ok."
+else:
+  print "test ",fname,": ERROR."
+
+
+

@@ -1,0 +1,363 @@
+//----------------------------------------------------------------------------
+//  programa XC; cálculo mediante el método de los elementos finitos orientado
+//  a la solución de problemas estructurales.
+//
+//  Copyright (C)  Luis Claudio Pérez Tato
+//
+//  El programa deriva del denominado OpenSees <http://opensees.berkeley.edu>
+//  desarrollado por el «Pacific earthquake engineering research center».
+//
+//  Salvo las restricciones que puedan derivarse del copyright del
+//  programa original (ver archivo copyright_opensees.txt) este
+//  software es libre: usted puede redistribuirlo y/o modificarlo 
+//  bajo los términos de la Licencia Pública General GNU publicada 
+//  por la Fundación para el Software Libre, ya sea la versión 3 
+//  de la Licencia, o (a su elección) cualquier versión posterior.
+//
+//  Este software se distribuye con la esperanza de que sea útil, pero 
+//  SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita
+//  MERCANTIL o de APTITUD PARA UN PROPÓSITO DETERMINADO. 
+//  Consulte los detalles de la Licencia Pública General GNU para obtener 
+//  una información más detallada. 
+//
+// Debería haber recibido una copia de la Licencia Pública General GNU 
+// junto a este programa. 
+// En caso contrario, consulte <http://www.gnu.org/licenses/>.
+//----------------------------------------------------------------------------
+
+/* ****************************************************************** **
+**    OpenSees - Open System for Earthquake Engineering Simulation    **
+**          Pacific Earthquake Engineering Research Center            **
+**                                                                    **
+**                                                                    **
+** (C) Copyright 1999, The Regents of the University of California    **
+** All Rights Reserved.                                               **
+**                                                                    **
+** Commercial use of this program without express permission of the   **
+** University of California, Berkeley, is strictly prohibited.  See   **
+** file 'COPYRIGHT'  in XC::main directory for information on usage and   **
+** redistribution,  and for a DISCLAIMER OF ALL WARRANTIES.           **
+**                                                                    **
+** Developed by:                                                      **
+**   Frank McKenna (fmckenna@ce.berkeley.edu)                         **
+**   Gregory L. Fenves (fenves@ce.berkeley.edu)                       **
+**   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
+**                                                                    **
+** ****************************************************************** */
+                                                                        
+// $Revision: 1.1 $
+// $Date: 2005/11/29 21:59:49 $
+// $Source: /usr/local/cvs/OpenSees/SRC/analysis/integrator/DistributedDisplacementControl.cpp,v $
+                                                                        
+// Written: fmk 
+// Created: 07/98
+//
+// Description: This file contains the class definition for XC::DistributedDisplacementControl.
+// DistributedDisplacementControl is an algorithmic class for perfroming a static analysis
+// using the arc length scheme, that is within a load step the follwing
+// constraint is enforced: dU^TdU + alpha^2*dLambda^2 = DistributedDisplacementControl^2
+// where dU is change in nodal displacements for step, dLambda is
+// change in applied load and XC::DistributedDisplacementControl is a control parameter.
+//
+// What: "@(#) DistributedDisplacementControl.C, revA"
+
+
+#include <solution/analysis/integrator/static/DistributedDisplacementControl.h>
+#include <solution/analysis/model/AnalysisModel.h>
+#include <solution/system_of_eqn/linearSOE/LinearSOE.h>
+#include <utility/matrix/Vector.h>
+#include <utility/actor/channel/Channel.h>
+#include <cmath>
+#include <domain/domain/Domain.h>
+#include <domain/mesh/node/Node.h>
+#include <solution/analysis/model/dof_grp/DOF_Group.h>
+#include <utility/matrix/ID.h>
+
+//! @brief Constructor.
+XC::DistributedDisplacementControl::DistributedDisplacementControl(SoluMethod *owr)
+  :DisplacementControl(owr) {}
+
+//! @brief Constructor.
+XC::DistributedDisplacementControl::DistributedDisplacementControl(SoluMethod *owr,int node, int dof, double increment, int numIncr, double min, double max)
+  :DisplacementControl(owr,node,dof,increment,numIncr,min,max) {}
+
+
+
+
+int XC::DistributedDisplacementControl::newStep(void)
+  {
+    // get pointers to XC::AnalysisModel and XC::LinearSOE
+    AnalysisModel *theModel = this->getAnalysisModelPtr();
+    LinearSOE *theLinSOE = this->getLinearSOEPtr();    
+    if(theModel == 0 || theLinSOE == 0)
+      {
+	std::cerr << "WARNING XC::DistributedDisplacementControl::newStep() ";
+	std::cerr << "No XC::AnalysisModel or XC::LinearSOE has been set\n";
+	return -1;
+      }
+
+    // determine increment for this iteration
+    theIncrement*=factor();
+
+    if(theIncrement < minIncrement)
+      theIncrement = minIncrement;
+    else if(theIncrement > maxIncrement)
+      theIncrement = maxIncrement;
+
+
+    // get the current load factor
+    vectores.setCurrentLambda(getCurrentModelTime());
+
+    // determine dUhat
+    this->formTangent();
+    vectores.distribDetermineUhat(processID,*theLinSOE);
+
+
+    const Vector &dUhat= vectores.getDeltaUhat();
+
+    const double dUahat= dUhat(theDofID);
+    if(dUahat == 0.0)
+      {
+	std::cerr << "WARNING XC::DistributedDisplacementControl::newStep() ";
+	std::cerr << "dUahat is zero -- zero reference displacement at control node DOF\n";
+	return -1;
+      }
+
+
+    // determine delta lambda(1) == dlambda    
+    const double dLambda = theIncrement/dUahat;
+
+    vectores.newStep(dLambda,vectores.getDeltaUhat());
+
+    // update model with delta lambda and delta U
+    theModel->incrDisp(vectores.getDeltaU());    
+    applyLoadModel(vectores.getCurrentLambda());    
+    if(updateModel() < 0)
+      {
+        std::cerr << "DistributedDisplacementControl::newStep - falló la actualización para el nuevo dU\n";
+        return -1;
+      }
+    numIncrLastStep = 0;
+    return 0;
+  }
+
+int XC::DistributedDisplacementControl::update(const XC::Vector &dU)
+  {
+
+    AnalysisModel *theModel = this->getAnalysisModelPtr();
+    LinearSOE *theLinSOE = this->getLinearSOEPtr();    
+    if(theModel == 0 || theLinSOE == 0)
+      {
+	std::cerr << "WARNING XC::DistributedDisplacementControl::update() ";
+	std::cerr << "No XC::AnalysisModel or XC::LinearSOE has been set\n";
+	return -1;
+      }
+
+    vectores.setDeltaUbar(dU); // have to do this as the SOE is gonna change
+    const double dUabar= vectores.getDeltaUbar()(theDofID);
+    
+    vectores.distribDetermineUhat(processID,*theLinSOE);
+
+    const double dUahat=  vectores.getDeltaUhat()(theDofID);
+
+    if(dUahat == 0.0)
+      {
+	std::cerr << "WARNING XC::DistributedDisplacementControl::update() ";
+	std::cerr << "dUahat is zero -- zero reference displacement at control node DOF\n";
+	return -1;
+      }
+
+    // determine delta lambda(1) == dlambda    
+    const double dLambda = -dUabar/dUahat;
+    
+    vectores.update(dLambda);
+
+    // update the model
+    theModel->incrDisp(vectores.getDeltaU());    
+    
+    applyLoadModel(vectores.getCurrentLambda());    
+    if(updateModel() < 0)
+      {
+        std::cerr << "DistributedDisplacementControl::update - falló la actualización para el nuevo dU\n";
+        return -1;
+      }
+
+    // set the X soln in linearSOE to be deltaU for convergence Test
+    theLinSOE->setX(vectores.getDeltaU());
+
+    numIncrLastStep++;
+
+    return 0;
+  }
+
+
+
+int XC::DistributedDisplacementControl::domainChanged(void)
+  {
+
+    // we first create the Vectors needed
+    AnalysisModel *theModel = this->getAnalysisModelPtr();
+    LinearSOE *theLinSOE = this->getLinearSOEPtr();    
+    if(theModel == 0 || theLinSOE == 0)
+      {
+	std::cerr << "WARNING XC::DistributedDisplacementControl::update() ";
+	std::cerr << "No XC::AnalysisModel or XC::LinearSOE has been set\n";
+	return -1;
+      }
+    
+    //int size = theModel->getNumEqn(); // ask model in case N+1 space
+    const Vector &b = theLinSOE->getB(); // ask model in case N+1 space
+    const size_t size = b.Size();
+
+    // first we determine the id of the nodal dof
+    Domain *theDomain = theModel->getDomainPtr();
+    if(!theDomain)
+      {
+        std::cerr << "BUG WARNING DistributedDisplacementControl::domainChanged() - no XC::Domain associated!!";
+        return -1;
+      }
+
+    theDofID = -1;
+    Node *theNodePtr= theDomain->getNode(theNode);
+    if(theNodePtr)
+      {
+        DOF_Group *theGroup = theNodePtr->getDOF_GroupPtr();
+        if(!theGroup)
+          {
+	    std::cerr << "BUG DistributedDisplacementControl::domainChanged() - no XC::DOF_Group associated with the node!!\n";
+	    return -1;
+          }
+        const ID &theID = theGroup->getID();
+        if(theDof < 0 || theDof >= theID.Size())
+          {
+	    std::cerr << "DistributedDisplacementControl::domainChanged() - not a valid dof " << theDof << std::endl;
+	    return -1;
+          }
+        theDofID = theID(theDof);
+        if(theDofID < 0)
+          {
+	    std::cerr << "DistributedDisplacementControl::domainChanged() - constrained dof not a valid a dof\n";;
+	    return -1;
+          }
+      }
+
+    static ID data(1);    
+
+    if(processID != 0)
+      {
+        CommParameters cp(0,*theChannels[0]);
+        cp.sendInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0)); 
+        cp.receiveInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0)); //??
+      } 
+    else
+      {
+        // if main domain, collect all theDofID if not -1 then this is the value & send value out
+        const size_t numChannels= theChannels.size();
+        for(size_t j=0; j<numChannels; j++)
+          {
+            CommParameters cp(0,*theChannels[j]);
+            cp.receiveInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0));
+          }
+        for(size_t k=0; k<numChannels; k++)
+          {
+            CommParameters cp(0,*theChannels[k]);
+            cp.sendInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0));
+          }
+      }
+    vectores.domainChanged(size,*this,*theLinSOE);
+
+    if(theDofID == -1)
+      {
+        std::cerr << "DistributedDisplacementControl::setSize() - failed to find valid dof - are the node tag and dof values correct?\n";
+        return -1;
+      }
+    return 0;
+  }
+
+//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+int XC::DistributedDisplacementControl::sendData(CommParameters &cp)
+  {
+    int res= DispBase::sendData(cp);
+    res+= cp.sendBool(allHaveDofID,DistributedObj::getDbTagData(),CommMetaData(17));
+    return res;
+  }
+
+//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+int XC::DistributedDisplacementControl::recvData(const CommParameters &cp)
+  {
+    int res= DispBase::recvData(cp);
+    res+= cp.receiveBool(allHaveDofID,DistributedObj::getDbTagData(),CommMetaData(17));
+    return res;
+  }
+
+int XC::DistributedDisplacementControl::sendSelf(CommParameters &cp)
+  {					 
+    int sendID =0;
+
+    // if P0 check if already sent. If already sent use old processID; if not allocate a new_ process 
+    // id for remote part of object, enlarge channel * to hold a channel * for this remote object.
+
+    // if not P0, send current processID
+
+    if(processID == 0)
+      {
+        // check if already using this object
+        bool found= buscaCanal(cp,sendID);
+
+        // if new_ object, enlarge XC::Channel pointers to hold new_ channel * & allocate new_ ID
+        if(found == false)
+          {
+            assert(cp.getChannel());
+            theChannels.push_back(cp.getChannel());
+            const int numChannels= theChannels.size();
+            // allocate new_ processID for remote object
+            sendID = numChannels;
+          }
+
+      }
+    else 
+      sendID = processID;
+
+    // send remotes processID & info about node, dof and numIncr
+    int res= cp.sendInts(sendID,theNode,theDof,DistributedObj::getDbTagData(),CommMetaData(18));
+    if(res < 0)
+      {
+        std::cerr <<"WARNING DistributedDisplacementControl::sendSelf() - failed to send data\n";
+        return -1;
+      }
+    res+= cp.sendDoubles(theIncrement,minIncrement,maxIncrement,specNumIncrStep,numIncrLastStep,DistributedObj::getDbTagData(),CommMetaData(19));
+    if(res < 0)
+      {
+        std::cerr <<"WARNING DistributedDisplacementControl::recvSelf() - failed to recv vector data\n";
+        return -1;
+      }	        
+    return 0;
+  }
+
+
+int XC::DistributedDisplacementControl::recvSelf(const CommParameters &cp)
+  {
+    int sendID =0;
+    int res= cp.receiveInts(sendID,theNode,theDof,DistributedObj::getDbTagData(),CommMetaData(18));
+    if(res < 0)
+      {
+        std::cerr <<"WARNING XC::DistributedDisplacementControl::recvSelf() - failed to recv id data\n";
+        return -1;
+      }	      
+    res+= cp.receiveDoubles(theIncrement,minIncrement,maxIncrement,specNumIncrStep,numIncrLastStep,DistributedObj::getDbTagData(),CommMetaData(19));
+
+    if(res < 0)
+      {
+        std::cerr <<"WARNING XC::DistributedDisplacementControl::recvSelf() - failed to recv vector data\n";
+        return -1;
+      }	        
+
+    theChannels.clear();
+    theChannels.push_back(const_cast<CommParameters &>(cp).getChannel());
+    return res;
+  }
+
+void XC::DistributedDisplacementControl::Print(std::ostream &s, int flag)
+  {
+    // TO FINISH    
+  }

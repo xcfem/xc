@@ -1,0 +1,9 @@
+#!/bin/sh
+find  -name '*.cpp' | while read file
+do
+echo "procesando: " $file
+cp -i $file $file.bak
+gawk '{gsub(/\ytensor\y/,"BJtensor")}9' $file >$file.$$
+mv $file.$$ $file
+done
+

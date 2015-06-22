@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "procesando: " $1
+cp -i $1 $1.bak
+cat $1.bak  | sed 's/boost::any GetProp(/any_const_ptr GetProp(/g' \
+> $1

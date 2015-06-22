@@ -1,0 +1,26 @@
+SET( METIS_FOUND 0 )
+
+FIND_PATH(
+  METIS_INCLUDE_DIR
+  NAMES metis.h
+  PATHS /usr/include/metis/
+  PATHS /usr/local/include/metis/
+  )
+
+#MESSAGE( STATUS "METIS_INCLUDE_DIR: ${METIS_INCLUDE_DIR}")
+
+IF (METIS_INCLUDE_DIR)
+  SET( METIS_FOUND 1 )
+  MESSAGE( STATUS "Found METIS: ${METIS_INCLUDE_DIR}")
+ELSE (METIS_INCLUDE_DIR)
+  MESSAGE(FATAL_ERROR "No se encontró metis.h")
+ENDIF (METIS_INCLUDE_DIR)
+
+FIND_LIBRARY(
+  METIS_LIB
+  metis 
+  PATHS /usr/lib
+  PATHS /usr/local/lib
+  )
+
+SET(METIS_LIBRARIES ${METIS_LIB} )
