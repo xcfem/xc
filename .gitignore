@@ -152,7 +152,7 @@ sympy-plots-for-*.tex/
 # WinEdt
 *.bak
 *.sav
-doc/XCManual/XCmanual.pdf
+doc/XCmanual/XCmanual.pdf
 *~
 
 
