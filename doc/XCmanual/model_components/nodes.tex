@@ -1,0 +1,30 @@
+\section{Nodes}
+
+\subsection{Description}
+The nodes of a finite element mesh are the points where the degrees of freedom reside. Each node object has, at least, the following information:
+
+\begin{itemize}
+\item Coordinates wich define its position in space. Typically (x,y,z) coordinates.
+\item Definition of the degrees of freedom in the node (displacements, rotations,\ldots)
+\end{itemize}
+
+The nodes can also serve to define loads or masses that act over the model at its position.
+
+\subsection{Node creation}
+
+To create a node you can use the following commands:
+
+\begin{lstlisting}[frame=single]
+  nodos.newNodeXY(x,y)
+  nodos.newNodeIDXY(tag,x,y)
+  nodos.newNodeXYZ(x,y,z)
+  nodos.newNodeIDXYZ(x,y,z)
+\end{lstlisting}
+
+\noindent where:
+
+\begin{description}
+\item{nodos:} is a node container obtained from the modeler.
+\item{tag:} is an integer that identifies the node in the model.
+\item{(x,y) or (x,y,z):} are the cartesian coordinates that define node's position.
+\end{description}

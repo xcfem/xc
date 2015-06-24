@@ -1,0 +1,28 @@
+\documentclass[a4paper]{book}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{epsfig}
+\usepackage{color}
+\definecolor{grayLines}{gray}{0.6}
+\definecolor{grayText}{gray}{0.3}
+\begin{document}
+\lstset{language=Python}          % Set your language (you can change the language for each code-block optionally)
+
+\chapter{Finite element model components}
+
+\input{model_components/nodes.tex}
+
+\section{Constraints}
+\input{model_components/mp_constraints.tex}
+
+\chapter{Solver components}
+
+\section{Analysis components}
+\subsection{Constraints}
+
+\input{solver_components/LagrangeMP_FE.tex}
+
+\input{materials/materials}
+
+\end{document}

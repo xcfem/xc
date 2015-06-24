@@ -1,0 +1,36 @@
+\subsection{MP constraints}
+
+\subsubsection{Description}
+An MP\_Constraint represents a multiple point constraint in the domain. A multiple point constraint imposes a relationship between the displacement for certain dof at two nodes in the model, typically called the {\em retained} node and the {\em constrained} node:
+
+\begin{equation}
+U_c = C_{cr} U_r
+\end{equation}
+
+
+An MP\_Constraint is responsible for providing information on the relationship between the dof, this is in the form of a constraint matrix, $C_{cr}$, and two ID objects, {\em retainedID} and {\em constrainedID} indicating the dof's at the nodes represented by $C_{cr}$. For example, for the following constraint imposing a relationship between the displacements at node $1$, the constrained node, with the displacements at node $2$, the retainednode in a problem where the x,y,z components are identified as the 0,1,2 degrees-of-freedom:
+
+\begin{align}
+u_{1,x} &= 2 u_{2,x} + u_{2,z} \\
+u_{1,y} &= 3 u_{2,z}
+\end{align}
+
+\noindent the constraint matrix is:
+
+\begin{equation}
+C_{cr} =
+\left[
+\begin{array}{cc}
+2 & 1  \\
+0 & 3
+\end{array}
+\right] 
+\end{equation}
+
+\noindent and the vectors defining the dof's at the nodes are:
+
+\begin{align}
+constrainedID &= [0, 1] \\
+retainedID &= [0, 2]
+\end{align}
+
