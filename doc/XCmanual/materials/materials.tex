@@ -478,7 +478,214 @@ defElasticPlateSection(mdlr,name,E,nu,rho,h)
 *
 \end{verbatim}
 
-\sbusection{Fiber sections}
+\subsection{Fiber sections}
+\subsubsection{FiberSet}
+\noindent This class constructs a set of fibers for a fiber section
+\begin{verbatim}
+FiberSet(scc,nmbSet,tagDiag)
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt scc} & name identifying the fiber section \\
+{\tt nmbSet} & name of the set of fibers to be generated \\
+{\tt tagDiag} & tag of the uniaxial material which forms the fibers \\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{lp{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt getFiberWithMinStrain()} & returns the fiber of the set that has the minimum strain \\
+{\tt getFiberWithMaxStrain()} & returns the fiber of the set that has the maximum strain \\
+\end{tabular}
+\end{center}
+
+
+\subsubsection{RCSets}
+\noindent This class constructs the sets (concrete and reinforcing steel) of a reinforced concrete fiber section.
+\begin{verbatim}
+RCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt scc} & name identifying the fiber section \\
+{\tt tagCDiag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
+{\tt nmbSetC} & name of the set of fibers of concrete to be generated \\
+{\tt tagSdiag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
+{\tt nmbSetS} & name of the set of fibers of reinforcing steel to be generated \\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{lp{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt reselTractionFibers(scc,tractionFibersSetName)} & returns the set of fibers in tension \\
+{\tt getConcreteArea(factor)} & returns the concrete area \\
+{\tt getMaxConcreteStrain()} & returns the maximum strain in the set of concrete fibers \\
+{\tt getConcreteInitialTangent()} & returns the initial tangent in the stress-strain diagram of material that makes up the fibers of concrete \\
+{\tt getConcreteCompression()} & returns the resultant of compressive stresses in concrete fibers \\
+{\tt getNumBarrasTraccion()} & returns the number of reinforcing steel fibers in tension \\
+\end{tabular}
+\end{center}
+
+\subsubsection{fiberSectionSetupRCSets}
+Returns an object of the class \verb|RCSets|
+\begin{verbatim}
+fiberSectionSetupRCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt scc} & name identifying the fiber section \\
+{\tt tagCdiag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
+{\tt nmbSetC} & name of the set of fibers of concrete to be generated \\
+{\tt tagSdiag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
+{\tt nmbSetS} & name of the set of fibers of reinforcing steel to be generated \\
+\end{tabular}
+\end{center}
+
+\subsubsection{creaSetsFibrasHA}
+Construct the sets of concrete fibers (\verb|"hormigon"|) and reinforcing steel fibers (\verb|"armadura"|) for all the elements included in a set of elements.
+\begin{verbatim}
+creaSetsFibrasHA(mdlr, nmbSet, tagHA, tagAcero)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt mdlr} & modeler name \\
+{\tt nmbSet} & name identifying the set of elements \\
+{\tt tagHA} & tag of the uniaxial material that makes up the concrete fibers of the section \\
+{\tt tagAcero} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
+\end{tabular}
+\end{center}
+
+\subsubsection{reselTractionFibers}
+Returns the fibers under tension included in a set of fibers.
+\begin{verbatim}
+reselTractionFibers(scc,fiberSetName,tractionFibersSetName)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt scc} & name identifying the fiber section \\
+{\tt fiberSetName} & name identifying the set of fibers \\
+{\tt tractionFibersSetName} & name of the set of tensioned fibers returned\\
+\end{tabular}
+\end{center}
+
+\subsubsection{fiberSectionSetupRC3Sets}
+Returns a set of tensioned fibers (\verb|"armaduraTraccion"|) of a fiber section of reinforced concrete.
+\begin{verbatim}
+fiberSectionSetupRC3Sets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt scc} & name identifying the fiber section \\
+{\tt tagCdiag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
+{\tt nmbSetC} & name of the set of fibers of concrete to be generated \\
+{\tt tagSdiag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
+{\tt nmbSetS} & name of the set of fibers of reinforcing steel to be generated \\
+\end{tabular}
+\end{center}
+
+\subsubsection{RecordSeccionHAPilar}
+\noindent This class is used to define the variables that make up a reinforced concrete section with reinforcement symmetric in both directions (as usual in columns)
+\begin{verbatim}
+RecordSeccionHAPilar()
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt nmbSeccion} & name identifying the section \\
+{\tt descSeccion} & section description \\
+{\tt nmbGeomSeccion} & name identifying the geometric section \\
+{\tt tipoHormigón} & type of concrete (e.g. hormigonesEHE.HA25) \\
+{\tt nmbDiagHormigon} & name identifying the characteristic stress-strain diagram of the concrete material \\
+{\tt canto} & cross-section height \\
+{\tt ancho} & cross-section width \\
+{\tt numDivIJ} & number of cells in IJ (width) direction \\
+{\tt numDivJK} & number of cells in JK  (height) direction \\
+{\tt tipoArmadura} & type of reinforcement steel \\
+{\tt nmbDiagArmadura} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
+{\tt recub} & cover \\
+{\tt nBarrasAncho} & number of rebars in the width direction of the section (each face)\\
+{\tt areaBarrasAncho} & area of each rebar in  width direction \\
+{\tt nBarrasCanto} & number of rebars in the height direction of the section (each face )\\
+{\tt areaBarrasCanto} & area of each rebar in height direction \\
+{\tt armCortanteZ} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Z direction \\
+{\tt armCortanteY} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Y direction \\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{lp{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt defGeomSeccHAPilar(tipoDiag)} & returns a reinforced concrete section with reinforcement symmetric in both directions \\
+& {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
+\end{tabular}
+\end{center}
+
+
+\subsubsection{Utils}
+\paragraph{Module materials.regimenSeccion}
+\subparagraph{tipoSolicitacion}
+\noindent Returns the following values, depending on the state of stress in the section:
+\begin{description}
+\item{1} pure or combined tension where the entire section is under tension;
+\item{2} pure or combined bending (there are fibres in tension and in compression);
+\item{3} single or combined compression where all the fibres are in compression.
+\end{description}
+\begin{verbatim}
+tipoSolicitacion(epsCMin, epsSMax)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt epsCMin} & minimum strain in concrete \\
+{\tt epsSMax} & maximum strain in steel \\
+\end{tabular}
+\end{center}
+
+\subparagraph{strTipoSolicitacion}
+\noindent Returns:
+\begin{description}
+\item{\verb|"tracción simple o compuesta"|} in pure or combined tension state;
+\item{\verb|"flexotracción"|} in pure or combined bending state;
+\item{\verb|"compresión simple o compuesta"|} in single or combined compression state;
+\item{\verb|"falla"|} in all other cases.
+\end{description}
+\begin{verbatim}
+strTipoSolicitacion(tipoSol)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt tipoSol} & =1 for pure or combined tension state \\
+& =2 for pure or combined bending state \\
+& =3 for single or combined compression state \\
+\end{tabular}
+\end{center}
+
+
+
+
+
+
 
 \end{document}
 
