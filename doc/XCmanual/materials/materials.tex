@@ -911,6 +911,35 @@ RecordSeccionHALosa(nmb,desc,canto,concrete,steel,basicCover)
 \end{tabular}
 \end{center}
 
+\subsubsection{getIMaxPropFiber}
+Returns the fiber in a set with the maximum value of a property.
+\noindent 
+\begin{verbatim}
+getIMaxPropFiber(fibers,methodName)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt fibers} & name of the set of fibers \\
+{\tt methodName} & name of the method or property (e.g. {\tt "getArea"}) \\
+\end{tabular}
+\end{center}
+
+\subsubsection{getIMinPropFiber}
+Returns the fiber in a set with the minimum value of a property.
+\noindent 
+\begin{verbatim}
+getIMinPropFiber(fibers,methodName)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt fibers} & name of the set of fibers \\
+{\tt methodName} & name of the method or property (e.g. {\tt "getArea"}) \\
+\end{tabular}
+\end{center}
 
 
 \subsubsection{Utils}
@@ -955,6 +984,32 @@ strTipoSolicitacion(tipoSol)
 \end{tabular}
 \end{center}
 
+\subsubsection{gmArmCapaHoriz}
+Returns a reinforcement layer parallel to the top and bottom sides of the rectangular section. The row of reinforcement bars is placed at a distance {\tt h} over the horizontal axis of the section. 
+\noindent 
+\begin{verbatim}
+gmArmCapaHoriz(sectionGeom, nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub, h)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt sectionGeom} & name identifying the geometric section \\
+{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt nBarras} & number of rebars in the layer \\
+{\tt areaBarras} &  area of each rebar \\
+{\tt canto} &  cross-section height \\
+{\tt ancho} & cross-section width \\
+{\tt rcub} & cover \\
+{\tt h} & distance between the horizontal axis of the cross-section and the reinforcement layer \\
+\end{tabular}
+\end{center}
+\paragraph{Example}
+\begin{verbatim}
+*
+\end{verbatim}
+
+\begin{figure}[h]
 
 
 
