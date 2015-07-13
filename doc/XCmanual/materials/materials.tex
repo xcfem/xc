@@ -1004,13 +1004,82 @@ gmArmCapaHoriz(sectionGeom, nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub
 {\tt h} & distance between the horizontal axis of the cross-section and the reinforcement layer \\
 \end{tabular}
 \end{center}
-\paragraph{Example}
+
+\subsubsection{gmArmInferior}
+Returns a reinforcement layer in the bottom side of a rectangular section.
+\noindent 
 \begin{verbatim}
-*
+ gmArmInferior(sectionGeom,nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub)
 \end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt sectionGeom} & name identifying the geometric section \\
+{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt nBarras} & number of rebars in the layer \\
+{\tt areaBarras} &  area of each rebar \\
+{\tt canto} &  cross-section height \\
+{\tt ancho} & cross-section width \\
+{\tt rcub} & cover \\
+\end{tabular}
+\end{center}
 
-\begin{figure}[h]
+\subsubsection{gmArmSuperior}
+Returns a reinforcement layer in the top side of a rectangular section.
+\noindent 
+\begin{verbatim}
+gmArmSuperior(sectionGeom,nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt sectionGeom} & name identifying the geometric section \\
+{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt nBarras} & number of rebars in the layer \\
+{\tt areaBarras} &  area of each rebar \\
+{\tt canto} &  cross-section height \\
+{\tt ancho} & cross-section width \\
+{\tt rcub} & cover \\
+\end{tabular}
+\end{center}
 
+\subsubsection{gmSeccCuadrado}
+Returns a square geometric region of fibers' material.
+\noindent 
+\begin{verbatim}
+gmSeccCuadrado(geomSection, nmbFiberMat, ld, nD)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt geomSection} & name identifying the geometric section \\
+{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt ld} & side of the square \\
+{\tt nD} & number of cells in each side of the square \\
+\end{tabular}
+\end{center}
+
+\subsubsection{gmSeccRectangulo}
+Returns a rectangular geometric region of fibers' material.
+\noindent 
+\begin{verbatim}
+gmSeccRectangulo(geomSection,nmbFiberMat, h, b, nDIJ, nDIK)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt geomSection} & name identifying the geometric section \\
+{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt h} & side of the rectangle in IK direction \\
+{\tt b} & side of the rectangle in IJ direction \\
+{\tt nDIJ} & number of cells in IJ direction \\
+{\tt nDIK} & number of cells in IK direction \\
+\end{tabular}
+\end{center}
 
 
 
