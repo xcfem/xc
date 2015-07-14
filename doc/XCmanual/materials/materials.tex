@@ -693,7 +693,7 @@ RecordSeccionHASimple()
 {\tt nmbDiagArmadura} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
 {\tt nBarrasNeg} & number of longitudinal rebars in the negative face of the section\\
 {\tt areaBarrasNeg} & area of each longitudinal rebar in  the negative face \\
-{\tt diamBarrasNeg} & diameter of the bars rebar in  the negative face of the section \\
+{\tt diamBarrasNeg} & diameter of the bars in  the negative face of the section \\
 {\tt recubNeg} & cover of longitudinal reinforcement in the negative face\\
 {\tt recubLatNeg} & lateral cover of longitudinal reinforcement in the negative face\\
 {\tt nBarrasPos} & number of longitudinal rebars in the positive face of the section\\
@@ -948,8 +948,8 @@ getIMinPropFiber(fibers,methodName)
 \noindent Returns the following values, depending on the state of stress in the section:
 \begin{description}
 \item{1} pure or combined tension where the entire section is under tension;
-\item{2} pure or combined bending (there are fibres in tension and in compression);
-\item{3} single or combined compression where all the fibres are in compression.
+\item{2} pure or combined bending (there are fibers in tension and in compression);
+\item{3} single or combined compression where all the fibers are in compression.
 \end{description}
 \begin{verbatim}
 tipoSolicitacion(epsCMin, epsSMax)
@@ -1082,12 +1082,97 @@ gmSeccRectangulo(geomSection,nmbFiberMat, h, b, nDIJ, nDIK)
 \end{center}
 
 
+\subsubsection{RecordFamArmaduraPrincipal}
+\noindent This class constructs a family of main reinforcing bars.
+\begin{verbatim}
+RecordFamArmaduraPrincipal(reinfLayer)
+\end{verbatim}
+
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt reinfLayer} & name identifying the family of reinforcing bars \\
+{\tt nBarras} & number of rebars in the layer \\
+{\tt diamBarras} & diameter of the bars \\
+{\tt areaBarras} & total area of the bars in the family \\
+{\tt recubMec} & cover of the reinforcement\\
+{\tt cdgBarras} & position of the reinforcement centre of gravity \\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\multicolumn{2}{p{13cm}}{{\tt texWrite(archTex)}} \\
+& writes the value of parameters in a file named {\tt archTex} \\ 
+\end{tabular}
+\end{center}
+
+\subsubsection{imprimeArmaduraPrincipal}
+\noindent The function writes in the specified file the characteristics (diameter, area, cover, position of gravity centre, \ldots) of each main reinforcement family provided in a list of family names.
+\begin{verbatim}
+imprimeArmaduraPrincipal(listaFamArmaduraPrincipal, areaHorm, archTex)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt listaFamArmaduraPrincipal} & name identifying a list of names of reinforcement families \\
+{\tt areaHorm} & area of the concrete section \\
+{\tt archTex} &  name of the output file \\
+\end{tabular}
+\end{center}
+
+\subsubsection{imprimeArmaduraCortante}
+\noindent The function writes in the specified file the characteristics (diameter, area, distances, angles, \ldots) of a family of shear reinforcement bars.
+\begin{verbatim}
+imprimeArmaduraCortante(recordArmaduraCortante, archTex)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt recordArmaduraCortante} & name identifying a family of shear reinforcement \\
+{\tt archTex} &  name of the output file \\
+\end{tabular}
+\end{center}
+
+\subsubsection{imprimeArmaduraCortante}
+\noindent The function writes in the specified file the characteristics (diameter, area, distances, angles, \ldots) of a family of shear reinforcement bars.
+\begin{verbatim}
+imprimeArmaduraCortante(recordArmaduraCortante, archTex)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt recordArmaduraCortante} & name identifying a family of shear reinforcement \\
+{\tt archTex} &  name of the output file \\
+\end{tabular}
+\end{center}
+
+\subsubsection{informeGeomSeccion}
+\noindent This function prepares a report with the characteristics of a sections, as illustrated in table \ref{informSec}
+\begin{verbatim}
+informeGeomSeccion(mdlr,scc, archTex, pathFigura)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt mdlr} & modeler name \\
+{\tt scc} & name identifying the section \\
+{\tt archTex} &  name of the output file \\
+{\tt pathFigura} & path to place the figure file representing the reinforcement arrangement \\
+\end{tabular}
+\end{center}
+
+\input{materials/figures/hsticentDatosScc1}
 
 
 
 \end{document}
-
-
 
 
 \subsection{}
