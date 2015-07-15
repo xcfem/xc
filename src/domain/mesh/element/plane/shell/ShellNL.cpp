@@ -52,7 +52,6 @@
 #include "domain/mesh/element/plane/shell/R3vectors.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/load/plane/ShellUniformLoad.h"
-#include "domain/load/plane/ShellStrainLoad.h"
 #include "domain/load/edge_loads/ElementEdge3dUniformLoad.h"
 
 //static data

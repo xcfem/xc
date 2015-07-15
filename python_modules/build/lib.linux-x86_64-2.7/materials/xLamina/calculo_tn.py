@@ -54,6 +54,26 @@ def trataResultsCombTN(mdlr, nmbComb):
       e.setProp("MyCP",MyTmp)
       e.setProp("MzCP",MzTmp)
 
+def trataResultsCombTN2d(mdlr, nmbComb):
+  #print "Postproceso combinación: ",nmbComb
+  elements= mdlr.getSets["total"].getElements
+  for e in elements:
+    e.getResistingForce()
+    TagTmp= e.tag
+    scc= e.getSection()
+    Ntmp= scc.getStressResultantComponent("N")
+    MyTmp= scc.getStressResultantComponent("My")
+    MzTmp= 0.0
+    posEsf= geom.Pos2d(Ntmp,MyTmp)
+    diagInt= e.getProp("diagInt")
+    FCtmp= diagInt.getCapacityFactor(posEsf)
+    if(FCtmp>e.getProp("FCCP")):
+      e.setProp("FCCP",FCtmp) # Caso pésimo
+      e.setProp("HIPCP",nmbComb)
+      e.setProp("NCP",Ntmp)
+      e.setProp("MyCP",MyTmp)
+      e.setProp("MzCP",MzTmp)
+
 # Imprime los resultados de la comprobación frente a tensiones normales
 def xLaminaPrintTNAnsys(mdlr,nmbArchSalida, nmbSeccion1, nmbSeccion2):
   texOutput1= open("/tmp/texOutput1.tmp","w")
@@ -204,6 +224,24 @@ def lanzaCalculoTNFromXCData(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSections
   #nmbDiagIntSec1= "diagInt"+datosScc1.nmbSeccion
   #nmbDiagIntSec2= "diagInt"+datosScc2.nmbSeccion
   calculo_comb.xLaminaCalculaCombEstatLin(mdlr,analysis,trataResultsCombTN)
+  meanFCs= xLaminaPrintTN(mdlr,nmbArchSalida)
+  return meanFCs
+
+'''
+ Lanza la comprobación de tensiones normales en una lámina
+    cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
+    con los materiales que se definen en el archivo nmbArchMateriales,
+    las características de las secciones que se definen en los registros
+    datosScc1 y datosScc2, las combinaciones definidas en el archivo
+    nmbArchDefHipELU e imprime los resultados en archivos con
+    el nombre nmbArchTN.*
+    Emplea diagramas de interacción en 2D en lugar de 3D, en principio
+    debería preferirse este modo pero aún queda comprobar la obtención
+    de diagramas 2D. 
+'''
+def lanzaCalculoTN2dFromXCData(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
+  ec.extraeDatos(mdlr,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  calculo_comb.xLaminaCalculaCombEstatLin(mdlr,analysis,trataResultsCombTN2d)
   meanFCs= xLaminaPrintTN(mdlr,nmbArchSalida)
   return meanFCs
 

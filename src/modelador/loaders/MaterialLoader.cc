@@ -136,6 +136,7 @@
 #include "material/section/diag_interaccion/DatosDiagInteraccion.h"
 #include "material/section/repres/geom_section/GeomSection.h"
 #include "material/section/diag_interaccion/DiagInteraccion.h"
+#include "material/section/diag_interaccion/DiagInteraccion2d.h"
 
 //Plate section.
 #include "material/section/plate_section/ElasticPlateSection.h"
@@ -531,6 +532,24 @@ XC::DiagInteraccion *XC::MaterialLoader::newInteractionDiagram(const std::string
     return retval;
   }
 
+//! @brief New 2d interaction diagram
+XC::DiagInteraccion2d *XC::MaterialLoader::newInteractionDiagramNMy(const std::string &cod_diag)
+  {
+    DiagInteraccion2d *retval= nullptr;
+    if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //El diagrama existe.
+      {
+         std::clog << "MaterialLoader::procesa_comando; ¡ojo! el diagrama de interacción de nombre: '"
+                   << cod_diag << "' ya existe. " << std::endl;
+         retval= diagramas_interaccion2d[cod_diag];
+      }
+    else
+      {
+        retval= new DiagInteraccion2d();
+        diagramas_interaccion2d[cod_diag]= retval;
+      }
+    return retval;
+  }
+
 //! @brief New interaction diagram
 XC::DiagInteraccion *XC::MaterialLoader::calcInteractionDiagram(const std::string &cod_scc,const DatosDiagInteraccion &datos_diag)
   {
@@ -564,157 +583,37 @@ XC::DiagInteraccion *XC::MaterialLoader::calcInteractionDiagram(const std::strin
     return diagI;     
   }
 
-//! @brief Procesa los comandos que se emplean para definir
-//! los materiales del modelo de elementos finitos. Interpreta
-//! los siguientes comandos:
-//!
-//! - for_each: Solicita que cada uno de los materiales del modelo
-//!   ejecute el bloque de código que se pasa como argumento.
-//! - geom_secc: Define la geometría de una sección transversal.
-//! - define_diagrama_interaccion: Define el diagrama de interacción de una sección transversal.
-bool XC::MaterialLoader::procesa_comando(CmdStatus &status)
+//! @brief New interaction diagram
+XC::DiagInteraccion2d *XC::MaterialLoader::calcInteractionDiagramNMy(const std::string &cod_scc,const DatosDiagInteraccion &datos_diag)
   {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string str_log= "(MaterialLoader) Procesando comando: '" + cmd + "'";
-    if(verborrea>2)
-      std::clog << str_log << std::endl;
-    if(cmd == "for_each")
-      { 
-        const std::string bloque= status.GetBloque();
-        ejecuta_bloque_for_each(status,bloque);
-        return true;
-      }
-    const CmdParser &parser= status.Parser();
-    std::deque<boost::any> fnc_indices;
-    std::string cod_mat= "nil";
-    size_t nind= 0; // Número de índices leídos.
-    if(parser.TieneIndices())
+    iterator mat= materiales.find(cod_scc);
+    DiagInteraccion2d *diagI= nullptr;
+    if(mat!=materiales.end())
       {
-	fnc_indices= status.Parser().SeparaIndices(this);
-        nind= fnc_indices.size();
-        if(nind>0)
-          cod_mat= convert_to_string(fnc_indices[0]); //Código del material.
-        if(nind>1)
-          tag_mat= convert_to_int(fnc_indices[1]); //Tag del material.
+        const FiberSectionBase *tmp= dynamic_cast<const FiberSectionBase *>(mat->second);
+        if(tmp)
+          {
+            const std::string cod_diag= "diagInt"+cod_scc;
+            if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //Diagram exists.
+              {
+	        std::clog << "MaterialLoader::procesa_comando; ¡ojo! se redefine el diagrama de interacción de nombre: '"
+                          << cod_diag << "'." << std::endl;
+                delete diagramas_interaccion2d[cod_diag];
+              }
+            else
+              {
+                diagI= new DiagInteraccion2d(calc_diag_interaccionNMy(*tmp,datos_diag));
+                diagramas_interaccion2d[cod_diag]= diagI;
+              }
+          }
         else
-          tag_mat++;
+          std::cerr << "El material: '" << cod_scc
+                    << "' no corresponde a una sección de fibras." << std::endl;
       }
-    if(materiales.find(cmd)!=materiales.end())
-      {
-        materiales[cmd]->LeeCmd(status);
-        return true;
-      }
-    if(geom_secciones.find(cmd)!=geom_secciones.end())
-      {
-        geom_secciones[cmd]->LeeCmd(status);
-        return true;
-      }
-    if(diagramas_interaccion.find(cmd)!=diagramas_interaccion.end())
-      {
-        diagramas_interaccion[cmd]->LeeCmd(status);
-        return true;
-      }
-    Material *material= load_material(tag_mat,cmd,this);
-    if(material)
-      {
-        if(nind<1)
-          std::cerr << str_log << " - uso: " << cmd << "[code,tag] " << std::endl;
-        material->set_owner(this);
-        material->LeeCmd(status);
-        if(materiales.find(cod_mat)!=materiales.end()) //El material existe.
-          {
-            const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
-	    std::clog << "MaterialLoader::procesa_comando; ¡ojo! se redefine el material: '"
-                      << cod_mat << "'. "<< posLectura << '.' << std::endl;
-            delete materiales[cod_mat];
-          }
-        materiales[cod_mat]= material;
-        return true;
-      }
-    else if(cmd == "mat_with_tag")
-      {
-        int tag= -1;
-        int nargs= 0;
-        if(parser.TieneIndices())
-          std::cerr << str_log << " - uso: " << cmd << "(tag)." << std::endl;
-        if(parser.TieneArgs())
-          {
-	    std::deque<boost::any> fnc_args= status.Parser().SeparaArgs(this);
-            nargs= fnc_args.size();
-            if(nargs>0)
-              tag= convert_to_int(fnc_args[0]); //Tag del material.
-          }
-        if(nargs<1)
-          std::cerr << str_log << " - uso: " << cmd << "(tag)." << std::endl;
-        Material *mat= find_ptr(tag);
-        if(mat)
-          mat->LeeCmd(status);
-        else
-          {
-            status.GetBloque(); //Ignoramos entrada.
-	    std::cerr << str_log << " no se encontró el material de tag: "
-                      << tag << " se ignora la entrada.\n";
-          }
-        return true;
-      }
-    else if(cmd == "geom_secc")
-      {
-        if(nind<1)
-          std::cerr << cmd << " - uso: " << cmd << "[code] " << std::endl;
-        GeomSection *gmSecc= new GeomSection(this);
-        gmSecc->set_owner(this);
-        gmSecc->LeeCmd(status);
-        if(geom_secciones.find(cod_mat)!=geom_secciones.end()) //La geometria de la sección existe.
-          {
-            const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
-	    std::clog << "MaterialLoader::procesa_comando; ¡ojo! se redefine la geometría de sección: '"
-                      << cod_mat << "'. "<< posLectura << '.' << std::endl;
-            delete geom_secciones[cod_mat];
-          }
-        geom_secciones[cod_mat]= gmSecc;
-        return true;
-      }
-    else if(cmd == "define_diagrama_interaccion")
-      {
-        if(nind<1)
-          std::cerr << cmd << " - uso: " << cmd << "[code] " << std::endl;
-	std::cerr << "DEPRECATED; use Python." << std::endl;
-        //DiagInteraccion *diagI= calcInteractionDiagram(cod_mat);
-        return true;
-      }
-    else if(cmd == "crea_diagrama_interaccion")
-      {
-	std::cerr << "DEPRECATED; use Python" << std::endl;
-	// const std::string cod_diag= interpretaString(status.GetString());
-        // DiagInteraccion *diagI= newInteractionDiagram(cod_diag);
-        return true;
-      }
-   else if(cmd == "beam_fiber_material")
-      {
-        if(nind<3)
-          {
-            std::cerr << cmd << " - uso: " << cmd 
-                      << "[code,NDMaterial,tag] " << std::endl;
-            return true;
-          }
-        const std::string cod_ndmat= convert_to_string(fnc_indices[1]); //Código del material.
-        NDMaterial *ptr_ndmat= dynamic_cast<NDMaterial *>(find_ptr(cod_ndmat));
-        Material *mat= nullptr;
-        if(ptr_ndmat)
-          mat= new BeamFiberMaterial(tag_mat,*ptr_ndmat);
-        else
-          {
-            const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
-	    std::cerr << cmd 
-                      << " errr; no pudo obtenerse un puntero al NDMaterial: " 
-                      << cod_ndmat << "'. "<< posLectura << '.' << std::endl;
-          }
-        mat->set_owner(this);
-        if(mat) mat->LeeCmd(status);
-        materiales[cod_mat]= mat;
-        return true;
-      }
-    return Loader::procesa_comando(status);
+    else
+      std::cerr << "No se encontró el material : '"
+                      << cod_scc << "' se ignora la entrada.\n";
+    return diagI;     
   }
 
 void XC::MaterialLoader::clearAll(void)
@@ -852,6 +751,28 @@ const XC::DiagInteraccion *XC::MaterialLoader::find_ptr_diag_interaccion(const s
       return nullptr; 
   }
 
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! en otro caso devuelve nullptr.
+XC::DiagInteraccion2d *XC::MaterialLoader::find_ptr_diag_interaccion2d(const std::string &nmb)
+  {
+    diag_interacc2d_iterator i= diagramas_interaccion2d.find(nmb);
+    if(i!= diagramas_interaccion2d.end())
+      return (*i).second;
+    else
+      return nullptr; 
+  }
+
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! en otro caso devuelve nullptr.
+const XC::DiagInteraccion2d *XC::MaterialLoader::find_ptr_diag_interaccion2d(const std::string &nmb) const
+  {
+    const_diag_interacc2d_iterator i= diagramas_interaccion2d.find(nmb);
+    if(i!= diagramas_interaccion2d.end())
+      return (*i).second;
+    else
+      return nullptr;
+  }
+
 //! @brief Devuelve una referencia al material cuyo nombre se pasa como parámetro.
 XC::Material &XC::MaterialLoader::getMaterial(const std::string &nmb)
   {
@@ -897,109 +818,7 @@ bool XC::MaterialLoader::existeGeomSection(const std::string &nmb) const
 bool XC::MaterialLoader::existeDiagInteraccion(const std::string &nmb) const
   { return (diagramas_interaccion.find(nmb)!=diagramas_interaccion.end()); }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//!
-//! - numMateriales: Devuelve el número de materiales definidos en el modelo.
-//! - numGeomSecc: Devuelve el número de definiciones geométricas de sección definidas en el modelo.
-//! - numDiagsInteraccion: Devuelve el número de diagramas de interacción definidos en el modelo.
-//! - getFactorCapacidad: Devuelve el factor de capacidad que corresponde a la terna de
-//!   esfuerzos que se pasan como parámetro.
-//! - getTag: Devuelve el tag (identificador numérico) de un material a partir de su nombre.
-any_const_ptr XC::MaterialLoader::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "MaterialLoader::GetProp (" << nombre_clase() 
-                << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="numMateriales")
-      {
-        tmp_gp_szt= materiales.size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getListaNombresMateriales")
-      {
-        tmp_gp_lista.clear();
-        for(const_iterator i= begin();i!= end();i++)
-          tmp_gp_lista.Inserta((*i).first);
-        return any_const_ptr(tmp_gp_lista);
-      }
-    else if(cod=="getListaTagsMateriales")
-      {
-        tmp_gp_lista.clear();
-        for(const_iterator i= begin();i!= end();i++)
-          tmp_gp_lista.Inserta((*i).second->getTag());
-        return any_const_ptr(tmp_gp_lista);
-      }
-    else if(cod=="numGeomSecc")
-      {
-        tmp_gp_szt= geom_secciones.size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="numDiagsInteraccion")
-      {
-        tmp_gp_szt= diagramas_interaccion.size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getFactorCapacidad") //Devuelve factor de capacidad
-      {                                //que corresponde a una terna de esfuerzos.
-        tmp_gp_dbl= -1;
-	std::string nmb_diag= "";
-        double n= 0.0;
-        double my= 0.0;
-        double mz= 0.0;
-        if(InterpreteRPN::Pila().size()>3)
-          {
-            mz= convert_to_double(InterpreteRPN::Pila().Pop());
-            my= convert_to_double(InterpreteRPN::Pila().Pop());
-            n= convert_to_double(InterpreteRPN::Pila().Pop());
-            nmb_diag= convert_to_string(InterpreteRPN::Pila().Pop());
-          }
-        else
-          err_num_argumentos(std::cerr,4,"GetProp",cod);
-        const DiagInteraccion *ptr_diag= find_ptr_diag_interaccion(nmb_diag);
-        if(ptr_diag)
-          tmp_gp_dbl= ptr_diag->FactorCapacidad(Pos3d(n,my,mz));
-        else
-          std::cerr << "MaterialLoader::GetProp; getTag no se encontró el diagrama de interacción: '"
-                    << nmb_diag << "'\n";
-        return any_const_ptr(tmp_gp_dbl);
-        
-      }
-    else if(cod=="getTag") //Devuelve el tag de un material a partir de su nombre.
-      {
-        tmp_gp_int= -1;
-	const std::string nmb_material= popString(cod);
-        const Material *ptr_mat= find_ptr(nmb_material);
-        if(ptr_mat)
-          tmp_gp_int= ptr_mat->getTag();
-        else
-          std::cerr << "MaterialLoader::GetProp; getTag no se encontró el material: '"
-                    << nmb_material << "'\n";
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="existeMaterial")
-      {
-        tmp_gp_bool= false;
-	const std::string nmb= popString(cod);
-        tmp_gp_bool= existeMaterial(nmb);
-        return any_const_ptr(tmp_gp_bool);
-      }
-    else if(cod=="existeGeomSection")
-      {
-        tmp_gp_bool= false;
-	const std::string nmb= popString(cod);
-        tmp_gp_bool= existeGeomSection(nmb);
-        return any_const_ptr(tmp_gp_bool);
-      }
-    else if(cod=="existeDiagInteraccion")
-      {
-        tmp_gp_bool= false;
-	const std::string nmb= popString(cod);
-        tmp_gp_bool= existeDiagInteraccion(nmb);
-        return any_const_ptr(tmp_gp_bool);
-      }
-    else
-      return Loader::GetProp(cod);
-  }
+//! @brief Devuelve verdadero si existe el diagrama de interacción cuyo código se pasa como parámetro.
+bool XC::MaterialLoader::existeDiagInteraccion2d(const std::string &nmb) const
+  { return (diagramas_interaccion2d.find(nmb)!=diagramas_interaccion2d.end()); }
+

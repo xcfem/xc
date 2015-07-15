@@ -32,7 +32,7 @@
 #include "xc_utils/src/geom/d2/Triedro3d.h"
 #include <set>
 #include <deque>
-#include "utility/actor/actor/MovableObject.h"
+#include "ClosedTriangleMesh.h"
 
 class MallaTriang3d;
 
@@ -45,31 +45,18 @@ class DatosDiagInteraccion;
 //! \@ingroup MATSCCDiagInt
 //
 //! @brief Diagrama de interacción (N,Mx,My) de una sección.
-class DiagInteraccion: public GeomObj3d, public MovableObject
+class DiagInteraccion: public ClosedTriangleMesh
   {
-
-    typedef std::vector<Triedro3d> v_triedros;
-    typedef v_triedros::iterator iterator;
-    typedef v_triedros::const_iterator const_iterator;
-
+  protected:
     typedef std::set<const Triedro3d *> set_ptr_triedros;
 
     
-    v_triedros triedros;
     set_ptr_triedros triedros_cuadrante[8];
-    double tol;
-    double rMax; //! Radio de una esfera circunscrita al convex-hull.
-    double rMin; //! Radio de una esfera que toca al vértice más cercano.
 
     void clasifica_triedro(const Triedro3d &tdro);
     void clasifica_triedros(void);
-    GeomObj::list_Pos3d get_interseccion(const Pos3d &p) const;
-  protected:
-    void getMatrizPosiciones(Matrix &);
     void setMatrizPosiciones(const Matrix &);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+    GeomObj::list_Pos3d get_interseccion(const Pos3d &p) const;
   public:
     DiagInteraccion(void);
     DiagInteraccion(const Pos3d &org,const MallaTriang3d &mll);
@@ -77,38 +64,10 @@ class DiagInteraccion: public GeomObj3d, public MovableObject
     DiagInteraccion &operator=(const DiagInteraccion &otro);
     virtual DiagInteraccion *clon(void) const;
 
-    virtual double GetMax(short unsigned int i) const;
-    virtual double GetMin(short unsigned int i) const;
-    virtual Pos3d Cdg(void) const;
-    virtual double Longitud(void) const;
-    virtual double Area(void) const;
-    virtual double Volumen(void) const;
-    virtual double Ix(void) const; 
-    virtual double Iy(void) const;
-    virtual double Iz(void) const;
-    short unsigned int Dimension() const
-      { return 3; }
-
-    size_t GetNumFacetas(void) const;
-
-    iterator begin(void);
-    iterator end(void);
-    const_iterator begin() const;
-    const_iterator end() const;
-    size_t size(void) const;
-    
-    const_iterator BuscaTriedro(const Pos3d &p) const;
     const Triedro3d *BuscaPtrTriedro(const Pos3d &p) const;
     double FactorCapacidad(const Pos3d &esf_d) const;
     Vector FactorCapacidad(const GeomObj::list_Pos3d &lp) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
-    void write(std::ofstream &);
-    void read(std::ifstream &);
-    void writeTo(const std::string &);
-    void readFrom(const std::string &);
     void Print(std::ostream &os) const;
   };
 

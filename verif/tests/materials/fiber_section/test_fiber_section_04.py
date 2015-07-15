@@ -49,7 +49,8 @@ sgc6= hormigonesEHE.sigmac(e6,hormigonesEHE.HA25.fcd())
 sgs6= reinforcingSteelTest.sigmaDAceroArmar(e6,EHE_reinforcing_steel.B500S)
 
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
+
 mdlr= prueba.getModelador
 # Definimos materiales
 tag= hormigonesEHE.HA25.defDiagD(mdlr)

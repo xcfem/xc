@@ -49,7 +49,7 @@ B500B= ReinforcingSteelSIA262("B500B",500e6,1.08,0.045)
 B500C= ReinforcingSteelSIA262("B500C",500e6,1.15,0.065)
 B700B= ReinforcingSteelSIA262("B700B",700e6,1.08,0.045)
 
-diametres= [8e-3,10e-3,12e-3,14e-3,16e-3,18e-3,20e-3,22e-3,26e-3,30e-3,34e-3,40e-3]
+diametres= [6e-3,8e-3,10e-3,12e-3,14e-3,16e-3,18e-3,20e-3,22e-3,26e-3,30e-3,34e-3,40e-3]
 
 section_barres_courantes={}
 

@@ -68,3 +68,9 @@ class_<XC::DiagInteraccion, bases<GeomObj3d>, boost::noncopyable >("InteractionD
   .def("writeTo",&XC::DiagInteraccion::writeTo)
   .def("readFrom",&XC::DiagInteraccion::readFrom)
   ;
+
+double (XC::DiagInteraccion2d::*getFactorCapacidad2d)(const Pos2d &esf_d) const= &XC::DiagInteraccion2d::FactorCapacidad;
+class_<XC::DiagInteraccion2d, bases<Poligono2d>, boost::noncopyable >("InteractionDiagram2d", no_init)
+  .def("getCapacityFactor",getFactorCapacidad2d)
+  .def("simplify",&XC::DiagInteraccion2d::Simplify)
+  ;

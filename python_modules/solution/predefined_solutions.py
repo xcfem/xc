@@ -153,7 +153,23 @@ class SolutionProcedure(object):
     self.solver= self.soe.newSolver("profile_spd_lin_lapack_solver")
     self.analysis= self.solu.newAnalysis("direct_integration_analysis","smt","")
     return self.analysis;
-    
+
+  def frequencyAnalysis(self,prb):
+    self.solu= prb.getSoluProc
+    self.solCtrl= self.solu.getSoluControl
+    solModels= self.solCtrl.getModelWrapperContainer
+    self.sm= solModels.newModelWrapper("sm")
+    self.cHandler= self.sm.newConstraintHandler("transformation_constraint_handler")
+    self.numberer= self.sm.newNumberer("default_numberer")
+    self.numberer.useAlgorithm("rcm")
+    solMethods= self.solCtrl.getSoluMethodContainer
+    self.smt= solMethods.newSoluMethod("smt","sm")
+    self.solAlgo= self.smt.newSolutionAlgorithm("frequency_soln_algo")
+    self.integ= self.smt.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
+    self.soe= self.smt.newSystemOfEqn("sym_band_eigen_soe")
+    self.solver= self.soe.newSolver("sym_band_eigen_solver")
+    self.analysis= self.solu.newAnalysis("modal_analysis","smt","")
+    return self.analysis
 
 #Typical solution procedures.
 
@@ -178,3 +194,7 @@ def simple_static_modified_newton(prb):
 def penalty_newton_raphson(prb):
   solution= SolutionProcedure()
   return solution.penaltyNewtonRaphson(prb)
+
+def frequency_analysis(prb):
+  solution= SolutionProcedure()
+  return solution.frequencyAnalysis(prb)

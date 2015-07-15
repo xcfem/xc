@@ -4,6 +4,7 @@
 import sys
 import vtk
 import xc_base
+from vtkUtils import utilsVtk
 from xcVtk import vtk_grafico_base
 from xcVtk.malla_ef import vtk_define_malla_nodos
 from xcVtk.malla_ef import vtk_define_malla_elementos
@@ -179,26 +180,30 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     self.defineEscenaMalla(mdlr,defGrid,field)
     self.plotScene(fName)
 
-  def displayNodalLoad(self, nod, baseName, color, carga, momento, fEscala):
-    actorName= baseName+"%04d".format(nod.tag) # Tag nodo.
+  def displayNodalLoad(self, nod, color, carga, momento, fEscala):
+    #actorName= baseName+"%04d".format(nod.tag) # Tag nodo.
 
-    pos= nod.coord
-    if(abs(carga)>1e-6):
-      dibujaFlecha(actorName+"P",self.renderer,color,pos,carga,fEscala*abs(carga))
+    pos= nod.getCurrentPos3d
+    absCarga= carga.Norm()
+    if(absCarga>1e-6):
+      utilsVtk.dibujaFlecha(self.renderer,color,pos,carga,fEscala*absCarga)
 
-    if(abs(momento)>1e-6):
-      dibujaFlechaDoble(actorName+"M",self.renderer,color,pos,momento,fEscala*abs(momento))
+    absMomento= momento.Norm()
+    if(absMomento>1e-6):
+      utilsVtk.dibujaFlechaDoble(self.renderer,color,pos,momento,fEscala*absMomento)
 
   def displayNodalLoads(self, mdlr, loadPattern, color, fEscala):
     loadPattern.addToDomain()
     loadPatternName= loadPattern.getProp("dispName")
-    lIter= lPattern.getNodalLoadIter()
+    lIter= loadPattern.getNodalLoadIter
     load= lIter.next()
     while not(load is None):
       actorName= "flecha"+loadPatternName+"%04d".format(load.tag) # Tag carga.
+      nodeTag= load.getNodeTag
+      node= mdlr.getNodeLoader.getNode(nodeTag)
       carga= load.getForce
       momento= load.getMoment
-      VtkCargaNodo(loadPattern,actorName, color,carga,momento,fEscala)    
+      self.displayNodalLoad(node, color,carga,momento,fEscala)    
       load= lIter.next()
     loadPattern.removeFromDomain()
 
@@ -212,7 +217,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       ele= mdlr.getElementLoader.getElement(tag)
       actorName+= "%04d".format(tag) # Tag elemento.
       pos= ele.punto(xCarga)
-      dibujaFlecha(actorName,self.renderer,color,pos,carga,fEscala)()
+      utilsVtk.dibujaFlecha(self.renderer,color,pos,carga,fEscala)()
 
   def displayElementUniformLoad(self, mdlr, unifLoad,loadPattern, color, carga, fEscala):
     loadPatternName= loadPattern.getProp("dispName")
@@ -221,27 +226,28 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     for tag in eleTags:
       ele= mdlr.getElementLoader.getElement(tag)
       actorName+= "%04d".format(tag) # Tag elemento.
-      puntos= ele.getPoints(3,1,1,True)
-      for capa in puntos:
-        for pos in capa: 
-          print pos
-          dibujaFlecha(actorName+"%02d".format(i),self.renderer,color,pos,carga,fEscala*abs(carga))
-      # for i in range(0,2):
-      #   pos= puntos.getRow(i)
-      #   dibujaFlecha(actorName+"%02d".format(i),self.renderer,color,pos,carga,fEscala*abs(carga))
+      print "displayElementUniformLoad not implemented."
+      # puntos= ele.getPoints(3,1,1,True)
+      # i= 0
+      # for capa in puntos:
+      #   for pos in capa: 
+      #     print pos
+      #     utilsVtk.dibujaFlecha(self.renderer,color,pos,carga,fEscala*carga.Norm())
+      #     i+= 1
 
   def displayElementalLoads(self, mdlr,loadPattern, color, fEscala):
     loadPattern.addToDomain()
     eleLoadIter= loadPattern.getElementalLoadIter
     eleLoad= eleLoadIter.next()
-    while not(eleLoad is None):
-      carga= eleLoad.getGlobalForces
-      categoria= eleLoad.category
-      if(categoria=="uniforme"):
-        self.displayElementUniformLoad(mdlr,eleLoad,loadPattern,color,carga,fEscala)
-      else:
-        self.displayElementPunctualLoad(mdlr,eleLoad,loadPattern,color,carga,fEscala)
-    loadPattern.removeFromDomain()
+    print "displayElementalLoads not implemented."
+    # while not(eleLoad is None):
+    #   carga= eleLoad.getGlobalForces()
+    #   categoria= eleLoad.category
+    #   if(categoria=="uniforme"):
+    #     self.displayElementUniformLoad(mdlr,eleLoad,loadPattern,color,carga,fEscala)
+    #   else:
+    #     self.displayElementPunctualLoad(mdlr,eleLoad,loadPattern,color,carga,fEscala)
+    # loadPattern.removeFromDomain()
 
   def displayLoads(self, mdlr, loadPattern):
     clrVectores= loadPattern.getProp("color")

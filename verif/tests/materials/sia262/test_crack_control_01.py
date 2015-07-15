@@ -30,13 +30,8 @@ datosScc1LosC.tipoHormigon= hormigonesEHE.HA30
 datosScc1LosC.canto= 0.35
 datosScc1LosC.ancho= 1.0
 datosScc1LosC.tipoArmadura= EHE_reinforcing_steel.B500S
-datosScc1LosC.nBarrasNeg= 0
-datosScc1LosC.areaBarrasNeg= 0.0
-datosScc1LosC.recubNeg= 0.1
-datosScc1LosC.nBarrasPos= 6
-datosScc1LosC.areaBarrasPos= (areaFi22+areaFi26)/2.0
-datosScc1LosC.recubPos= 0.05+0.026/2.0
-datosScc1LosC.centraBarrasPos(0.15)
+datosScc1LosC.barrasNeg.setUp(0,0.0,0.0,datosScc1LosC.ancho,0.1)
+datosScc1LosC.barrasPos.setUp(6,26e-3,(areaFi22+areaFi26)/2.0,datosScc1LosC.ancho,0.05+0.026/2.0)
 
 
 

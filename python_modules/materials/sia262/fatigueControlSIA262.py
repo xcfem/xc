@@ -168,7 +168,7 @@ def trataResultsComb(mdlr,nmbComb):
       diagInt= e.getProp("diagInt")
       FCflex= diagInt.getCapacityFactor(posEsf)
       Mu= My/FCflex
-      Vu= secHAParamsCortante.calcVu(My, Mu, Vy)
+      Vu= secHAParamsCortante.calcVu(N,My, Mu, Vy)
       Vy0= e.getProp("Vy0")
       Vy1= Vy
       lim_v= limitShear(section,Vy0,Vy1,Vu)

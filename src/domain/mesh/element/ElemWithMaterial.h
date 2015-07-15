@@ -54,6 +54,7 @@ class ElemWithMaterial : public ElementBase<NNODOS>
     int revertToLastCommit(void);
     int revertToStart(void);
 
+    virtual void zeroInitialGeneralizedStrains(void);	
     
     inline PhysProp &getPhysicalProperties(void)
       { return physicalProperties; }
@@ -97,6 +98,12 @@ int ElemWithMaterial<NNODOS, PhysProp>::revertToStart(void)
     int retval= ElementBase<NNODOS>::revertToStart();
     retval+= physicalProperties.revertToStart();
     return retval;
+  }
+
+template <int NNODOS,class PhysProp>
+void ElemWithMaterial<NNODOS, PhysProp>::zeroInitialGeneralizedStrains(void)
+  {
+    physicalProperties.getMaterialsVector().zeroInitialGeneralizedStrains();
   }
 
 template <int NNODOS,class PhysProp>

@@ -79,6 +79,7 @@ class MaterialVector: public std::vector<MAT *>, public EntCmd, public MovableOb
 
     void setInitialGeneralizedStrains(const std::vector<Vector> &);
     void addInitialGeneralizedStrains(const std::vector<Vector> &);
+    void zeroInitialGeneralizedStrains(void);
 
     static any_const_ptr get_prop_vector(const Vector *ptrVector);
     static any_const_ptr get_prop_vector(const Vector &ptrVector);
@@ -477,6 +478,15 @@ void MaterialVector<MAT>::addInitialGeneralizedStrains(const std::vector<Vector>
                 << nMat << ".\n";
     for(size_t i= 0;i<sz;i++)
       (*this)[i]->addInitialGeneralizedStrain(iS[i]);
+  }
+
+//! \brief Initialize initial strains.
+template <class MAT>
+void MaterialVector<MAT>::zeroInitialGeneralizedStrains(void)
+  {
+    const size_t nMat= this->size();
+    for(size_t i= 0;i<nMat;i++)
+      (*this)[i]->zeroInitialGeneralizedStrain();
   }
 
 //! @brief Devuelve un vector para almacenar los dbTags

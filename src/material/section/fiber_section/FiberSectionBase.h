@@ -43,6 +43,7 @@ class Response;
 class FiberSectionRepr;
 class DatosDiagInteraccion;
 class DiagInteraccion;
+class DiagInteraccion2d;
 
 //! \ingroup MATSCC
 //
@@ -79,6 +80,7 @@ class FiberSectionBase: public SeccionBarraPrismatica
     const Pos3d *InsertaEsfuerzo(const PlanoDeformacion &,GeomObj::list_Pos3d &,const Pos3d *, const double &);
     const Pos3d *get_ptos_diag_interaccion_theta(GeomObj::list_Pos3d &lista_esfuerzos,const DatosDiagInteraccion &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
     const GeomObj::list_Pos3d &get_ptos_diag_interaccion(const DatosDiagInteraccion &);
+    const GeomObj::list_Pos2d &get_ptos_diag_interaccionNMy(const DatosDiagInteraccion &);
     virtual void def_section_repres(CmdStatus &status);
     bool procesa_comando(CmdStatus &status);
   public:
@@ -156,6 +158,7 @@ class FiberSectionBase: public SeccionBarraPrismatica
     double getArea(void) const;
 
     DiagInteraccion GetDiagInteraccion(const DatosDiagInteraccion &datos_diag);
+    DiagInteraccion2d GetDiagInteraccionNMy(const DatosDiagInteraccion &datos_diag);
     virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 } // fin namespace XC

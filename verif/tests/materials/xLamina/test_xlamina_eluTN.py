@@ -35,7 +35,7 @@ csvFile= pth+"/esf_test_xLamina.csv"
 elementTags= [2524,2527]
 mapSectionsForEveryElement= {}
 for eTag in elementTags:
-  mapSectionsForEveryElement[eTag]= ["deckT","deckL"]
+  mapSectionsForEveryElement[eTag]= ["deck2","deck1"]
 
 # deck.
 concrete= hormigonesEHE.HA30

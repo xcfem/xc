@@ -40,14 +40,6 @@
 #include "xc_utils/src/nucleo/InterpreteRPN.h"
 #include "xc_utils/src/base/CmdStatus.h"
 
-XC::DiagInteraccion::iterator XC::DiagInteraccion::begin(void) { return triedros.begin(); }
-XC::DiagInteraccion::iterator XC::DiagInteraccion::end(void) { return triedros.end(); }
-XC::DiagInteraccion::const_iterator XC::DiagInteraccion::begin() const { return triedros.begin(); }
-XC::DiagInteraccion::const_iterator XC::DiagInteraccion::end() const { return triedros.end(); }
-size_t XC::DiagInteraccion::size(void) const { return triedros.size(); }
-
-size_t XC::DiagInteraccion::GetNumFacetas(void) const { return size(); }
-
 
 void XC::DiagInteraccion::clasifica_triedro(const Triedro3d &tdro)
   {
@@ -65,36 +57,17 @@ void XC::DiagInteraccion::clasifica_triedros(void)
 
 //! @brief Constructor por defecto.
 XC::DiagInteraccion::DiagInteraccion(void)
-  : GeomObj3d(), MovableObject(0), triedros(0), tol(0.0), rMax(0.0),rMin(0.0) {}
+  : ClosedTriangleMesh() {}
 
 XC::DiagInteraccion::DiagInteraccion(const Pos3d &org,const MallaTriang3d &mll)
-  : GeomObj3d(), MovableObject(0), triedros(mll.GetNumCaras(),Triedro3d()), tol(0.0), rMax(0.0), rMin(0.0)
+  : ClosedTriangleMesh(org,mll)
   {
-    const size_t nf= mll.GetNumCaras();
-    static const Pos3d org3d;
-    if(nf<4) return;
-    for(MallaTriang3d::Point_const_iterator i= mll.points_begin();i!=mll.points_end();i++)
-      rMax= std::max(rMax,dist(Pos3d(*i),org3d));
-    rMin= 10*rMax;
-    for(MallaTriang3d::Point_const_iterator i= mll.points_begin();i!=mll.points_end();i++)
-      rMin= std::min(rMin,dist(Pos3d(*i),org3d));
-    rMin/=3; //Radio de la esfera inscrita en el tetraedro cuya
-             //esfera circunscrita pasa por el punto más cercano al origen.
-    size_t cont= 0;
-    for(MallaTriang3d::Facet_const_iterator i= mll.facets_begin();i!=mll.facets_end();i++)
-      {
-        const Triangulo3d tf= mll.GetTrianguloCara(i);
-        triedros[cont]= Triedro3d(org,tf);
-        clasifica_triedro(triedros[cont]);
-        cont++;
-      }
-    //const double longDiagonalBND= Abs(Bnd().Diagonal());
-    tol= 0.0;//longDiagonalBND/1e6;
+    clasifica_triedros();
   }
 
 //! @brief Constructor de copia.
 XC::DiagInteraccion::DiagInteraccion(const DiagInteraccion &otro)
-  : GeomObj3d(otro), MovableObject(otro), triedros(otro.triedros), tol(otro.tol), rMax(otro.rMax),rMin(otro.rMin)
+  : ClosedTriangleMesh(otro)
   {
     clasifica_triedros();
   }
@@ -102,115 +75,14 @@ XC::DiagInteraccion::DiagInteraccion(const DiagInteraccion &otro)
 //! @brief Operador de asignación.
 XC::DiagInteraccion &XC::DiagInteraccion::operator=(const DiagInteraccion &otro)
   {
-    GeomObj3d::operator=(otro);
-    triedros= otro.triedros;
-    tol= otro.tol;
-    rMax= otro.rMax;
-    rMin= otro.rMin;
+    ClosedTriangleMesh::operator=(otro);
     clasifica_triedros();
     return *this;
-  }
-
-void XC::DiagInteraccion::writeTo(const std::string &fName)
-  {
-    std::ofstream out(fName.c_str(), std::ios::out | std::ios::binary);
-    write(out);
-    out.close();
-  }
-
-void XC::DiagInteraccion::readFrom(const std::string &fName)
-  {
-    std::ifstream input(fName.c_str(), std::ios::in | std::ios::binary);
-    if(input)
-      {
-        input.seekg(0);
-        read(input);
-        input.close();
-      }
-    else
-      std::cerr << "No se pudo abrir el archivo: '"
-                << fName << "'\n";
-  }
-  
-
-//! @brief Lee un objeto DiagInteraccion desde archivo
-bool XC::DiagInteraccion::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DiagInteraccion) Procesando comando: " << cmd << std::endl;
-    if(cmd=="write")
-      {
-	const std::string fname= interpretaString(status.GetString());
-        writeTo(fname);
-        return true;
-      }
-    else if(cmd=="read")
-      {
-	const std::string fname= interpretaString(status.GetString());
-        readFrom(fname);
-        return true;
-      }
-    else
-      return GeomObj3d::procesa_comando(status);
   }
 
 //! @brief Constructor virtual.
 XC::DiagInteraccion *XC::DiagInteraccion::clon(void) const
   { return new DiagInteraccion(*this); }
-
-double XC::DiagInteraccion::GetMax(short unsigned int i) const
-  {
-    double retval= NAN;
-    if(size()<1) return retval;
-    v_triedros::const_iterator j= triedros.begin();
-    retval= j->GetMax(i);
-    j++;
-    for(;j!=triedros.end();j++)
-      retval= std::max(retval,j->GetMax(i));
-    return retval;
-  }
-double XC::DiagInteraccion::GetMin(short unsigned int i) const
-  {
-    double retval= NAN;
-    if(size()<1) return retval;
-    v_triedros::const_iterator j= triedros.begin();
-    retval= j->GetMin(i);
-    j++;
-    for(;j!=triedros.end();j++)
-      retval= std::min(retval,j->GetMin(i));
-    return retval;
-  }
-
-Pos3d XC::DiagInteraccion::Cdg(void) const
-  { return Pos3d(0,0,0); }
-double XC::DiagInteraccion::Longitud(void) const
-  { return 0.0; }
-double XC::DiagInteraccion::Area(void) const
-  { return 0.0; }
-double XC::DiagInteraccion::Volumen(void) const
-  { return 0.0; }
-double XC::DiagInteraccion::Ix(void) const
-  { return 0.0; }
-double XC::DiagInteraccion::Iy(void) const
-  { return 0.0; }
-double XC::DiagInteraccion::Iz(void) const
-  { return 0.0; }
-
-//! @brief Busca el triedro que contiene al punto que se pasa como parámetro.
-XC::DiagInteraccion::const_iterator XC::DiagInteraccion::BuscaTriedro(const Pos3d &p) const
-  {
-    XC::DiagInteraccion::const_iterator retval= end();
-    for(XC::DiagInteraccion::const_iterator i= begin();i!=end();i++)
-      {
-        if((*i).In(p,tol))
-          {
-            retval= i;
-            break;
-          }
-      }
-    return retval;
-  }
 
 //! @brief Busca el triedro que contiene al punto que se pasa como parámetro.
 const Triedro3d *XC::DiagInteraccion::BuscaPtrTriedro(const Pos3d &p) const
@@ -231,22 +103,45 @@ const Triedro3d *XC::DiagInteraccion::BuscaPtrTriedro(const Pos3d &p) const
           break;
         }
     if(!retval) //No lo encuentra, lo intentamos por fuerza bruta.
-      for(XC::DiagInteraccion::const_iterator i= begin();i!=end();i++)
-        {
-          if((*i).In(p,tol))
-            {
-              retval= &(*i);
-              break;
-            }
-        }
+      {
+        for(XC::DiagInteraccion::const_iterator i= begin();i!=end();i++)
+          {
+            if((*i).In(p,tol))
+              {
+                retval= &(*i);
+                break;
+              }
+          }
+      }
+    // if(!retval) //No lo encuentra, lo intentamos por fuerza más bruta.
+    //   {
+    // 	DiagInteraccion::const_iterator i= begin();
+    //     const Triedro3d *tr= &(*i);
+    //     retval= tr;
+    //     double distMin= tr->PseudoDist(p);
+    //     double dist= distMin;
+    //     i++;
+    //     for(XC::DiagInteraccion::const_iterator i= begin();i!=end();i++)
+    //       {
+    //         tr= &(*i);
+    //         dist= tr->PseudoDist(p);
+    //         if(dist<distMin)
+    //           {
+    //             distMin= dist;
+    //             retval= tr;
+    //           }
+    //       }
+    //     if(distMin>tol)
+    //       retval= nullptr;
+    //   }
     if(!retval) //Sigue sin encontrarlo, buscamos aquel cuyo eje está más próximo.
       {
-	XC::DiagInteraccion::const_iterator i= begin();
+	DiagInteraccion::const_iterator i= begin();
         const Triedro3d *tr= &(*i);
         SemiRecta3d rayo(tr->Cuspide(),p);
         Recta3d eje= tr->Eje();
-        double angEjeRayo= angulo(eje,rayo);
-        double angTmp= angEjeRayo;
+        double angMin= angulo(eje,rayo);
+        double angTmp= angMin;
         retval= tr;
         i++;
         for(;i!=end();i++)
@@ -254,9 +149,9 @@ const Triedro3d *XC::DiagInteraccion::BuscaPtrTriedro(const Pos3d &p) const
             tr= &(*i);
             rayo= SemiRecta3d(tr->Cuspide(),p);
             angTmp= angulo(tr->Eje(),rayo);
-            if(angTmp<angEjeRayo)
+            if(angTmp<angMin)
               {
-                angEjeRayo= angTmp;
+                angMin= angTmp;
                 retval= tr;
               }
           }
@@ -316,30 +211,35 @@ GeomObj::list_Pos3d XC::DiagInteraccion::get_interseccion(const Pos3d &p) const
 //! @brief Devuelve el factor de capacidad para la terna de esfuerzos que se pasan como parámetro.
 double XC::DiagInteraccion::FactorCapacidad(const Pos3d &esf_d) const
   {
+    double retval= 1e6;
     assert(rMax>0.0);
     static const Pos3d O= Pos3d(0.0,0.0,0.0);
     const double d= dist(O,esf_d); //Distancia desde la terna de esfuerzos al origen.
     const double umbralMax= rMax*10.0;
     if(d<mchne_eps_dbl) //Si el punto está muy cerca del origen.
-      return 0.0;//Devolvemos el máximo factor de capacidad que puede presentarse.
-    if(d>umbralMax) //El punto está lejos de la superficie del diagrama.
-      return d/rMax;
-    const double umbralMin= rMin/10.0;
-    if(d<umbralMin) //El punto está dentro de la superficie del diagrama.
-      return d/rMin;
-    const GeomObj::list_Pos3d lst_intersec= get_interseccion(esf_d);
-    if(!lst_intersec.empty())
-      {
-        const Pos3d C= *(lst_intersec.begin());
-        const Segmento3d sOC(O,C);
-        return d/sOC.Longitud();
-      }
+      retval= 0.0;//Devolvemos el máximo factor de capacidad que puede presentarse.
+    else if(d>umbralMax) //El punto está lejos de la superficie del diagrama.
+      retval= d/rMax;
     else
       {
-	std::cerr << "DiagInteraccion::FactorCapacidad; no se encontró la intersección para la terna: "
-                  << esf_d << std::endl;
-        return d/rMin; //No ha encontrado la intersección.
+        const double umbralMin= rMin/10.0;
+        if(d<umbralMin) //El punto está dentro de la superficie del diagrama.
+          retval= d/rMin;
+        const GeomObj::list_Pos3d lst_intersec= get_interseccion(esf_d);
+        if(!lst_intersec.empty())
+          {
+            const Pos3d C= *(lst_intersec.begin());
+            const Segmento3d sOC(O,C);
+            retval= d/sOC.Longitud();
+          }
+        else
+          {
+	    std::cerr << "DiagInteraccion::FactorCapacidad; no se encontró la intersección para la terna: "
+                      << esf_d << std::endl;
+            retval= d/rMin; //No ha encontrado la intersección.
+          }
       }
+    return retval;
   }
 
 XC::Vector XC::DiagInteraccion::FactorCapacidad(const GeomObj::list_Pos3d &lp) const
@@ -357,145 +257,10 @@ void XC::DiagInteraccion::Print(std::ostream &os) const
     std::cerr << "DiagInteraccion::Print no implementada." << std::endl;
   }
 
-//! @brief Devuelve una matriz con las coordenadas de los puntos
-//! que definen cada uno de los triedros.
-void XC::DiagInteraccion::getMatrizPosiciones(Matrix &m)
-  {
-    const int sz= size();
-    size_t fila= 0;
-    m= Matrix(sz,12);
-    for(const_iterator i= begin();i!=end();i++,fila++)
-      {
-        const Triedro3d &t= *i;
-        const Pos3d &c= t.Cuspide();
-        const Triangulo3d &b= t.Base();
-        const Pos3d p1= b.Vertice(1);
-        const Pos3d p2= b.Vertice(2);
-        const Pos3d p3= b.Vertice(3);
-        m(fila,0)= c.x(); m(fila,1)= c.y(); m(fila,2)= c.z();
-        m(fila,3)= p1.x(); m(fila,4)= p1.y(); m(fila,5)= p1.z();
-        m(fila,6)= p2.x(); m(fila,7)= p2.y(); m(fila,8)= p2.z();
-        m(fila,9)= p3.x(); m(fila,10)= p3.y(); m(fila,11)= p3.z();
-      }
-  }
-
-//! @brief Crea los triedros que definen el diagrama a partir
-//! de una matriz con las coordenadas de los puntos
-//! que definen cada uno de los triedros.
 void XC::DiagInteraccion::setMatrizPosiciones(const Matrix &m)
   {
-    const int nfilas= m.noRows();
-    assert(m.noCols()==12);
-    triedros.resize(nfilas);
-    for(int i= 0;i<nfilas;i++)
-      {
-        const Pos3d c(m(i,0),m(i,1),m(i,2));
-        const Pos3d p1(m(i,3),m(i,4),m(i,5));
-        const Pos3d p2(m(i,6),m(i,7),m(i,8));
-        const Pos3d p3(m(i,9),m(i,10),m(i,11));
-        triedros[i]= Triedro3d(c,p1,p2,p3);
-      }
+    ClosedTriangleMesh::setMatrizPosiciones(m);
     clasifica_triedros();   
-  }
-
-//! @brief Escribe la matriz en un archivo binario.
-void XC::DiagInteraccion::write(std::ofstream &os)
-  {
-    os.write((char *) &tol,sizeof tol);
-    os.write((char *) &rMax,sizeof rMax);
-    os.write((char *) &rMin,sizeof rMin); 
-    Matrix m;
-    getMatrizPosiciones(m);
-    m.write(os);
-  }
-
-//! @brief Lee la matriz de un archivo binario.
-void XC::DiagInteraccion::read(std::ifstream &is)
-  {
-    is.read((char *) &tol,sizeof tol);
-    is.read((char *) &rMax,sizeof rMax); 
-    is.read((char *) &rMin,sizeof rMin); 
-    Matrix m;
-    m.read(is);
-    setMatrizPosiciones(m);
-    clasifica_triedros();
-  }
-
-//! @brief Envia los miembros del objeto a través del canal que se pasa como parámetro.
-int XC::DiagInteraccion::sendData(CommParameters &cp)
-  {
-    int res= 0; //MovableObject::sendData(cp);
-    res+= cp.sendDoubles(tol,rMax,rMin,getDbTagData(),CommMetaData(1));
-    Matrix m;
-    getMatrizPosiciones(m);
-    res+= cp.sendMatrix(m,getDbTagData(),CommMetaData(2));
-    return res;
-  }
-
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
-int XC::DiagInteraccion::recvData(const CommParameters &cp)
-  {
-    int res= 0;
-    res+= cp.receiveDoubles(tol,rMax,rMin,getDbTagData(),CommMetaData(1));
-    Matrix m;
-    res+= cp.receiveMatrix(m,getDbTagData(),CommMetaData(2));
-    setMatrizPosiciones(m);
-    clasifica_triedros();   
-    return res;
-  }
-
-//! @brief Envia el objeto a través del canal que se pasa como parámetro.
-int XC::DiagInteraccion::sendSelf(CommParameters &cp)
-  {
-    inicComm(3);
-    int res= sendData(cp);
-
-    const int dataTag= getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dataTag);
-    if(res<0)
-      std::cerr << "DiagInteraccion::sendSelf() - failed to send ID data\n";
-    return res;
-  }
-
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
-int XC::DiagInteraccion::recvSelf(const CommParameters &cp)
-  {
-    const int dataTag= getDbTag();
-    inicComm(3);
-    int res = cp.receiveIdData(getDbTagData(),dataTag);
-    if(res < 0)
-      std::cerr << "DiagInteraccion::recvSelf() - failed to receive ID data\n";
-    else
-      res+= recvData(cp);
-    return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::DiagInteraccion::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "MaterialLoader::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-
-    if(cod=="getFactorCapacidad") //Devuelve factor de capacidad
-      {                           //que corresponde a una terna de esfuerzos.
-        tmp_gp_dbl= -1;
-        double n= 0.0;
-        double my= 0.0;
-        double mz= 0.0;
-        if(InterpreteRPN::Pila().size()>2)
-          {
-            mz= convert_to_double(InterpreteRPN::Pila().Pop());
-            my= convert_to_double(InterpreteRPN::Pila().Pop());
-            n= convert_to_double(InterpreteRPN::Pila().Pop());
-          }
-        else
-          err_num_argumentos(std::cerr,3,"GetProp",cod);
-        tmp_gp_dbl= FactorCapacidad(Pos3d(n,my,mz));
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return GeomObj3d::GetProp(cod);
   }
 
 XC::DiagInteraccion XC::calc_diag_interaccion(const FiberSectionBase &scc,const DatosDiagInteraccion &datos= DatosDiagInteraccion())

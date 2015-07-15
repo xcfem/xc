@@ -88,7 +88,7 @@ python tests/elements/zero_length/test_signo_deformaciones03.py
 python tests/elements/zero_length/test_signo_deformaciones04.py
 python tests/elements/zero_length/test_winkler.py
 python tests/elements/zero_length/test_cuasi_winkler.py
-echo "$BLEU" "  Plane elasticite elements tests." "$NORMAL"
+echo "$BLEU" "  Plane elasticity elements tests." "$NORMAL"
 python tests/elements/plane/test_tri31.py
 python tests/elements/plane/test_four_node_quad_01.py
 python tests/elements/plane/test_four_node_quad_02.py
@@ -127,6 +127,7 @@ python tests/elements/shell/test_corot_shell_mitc4_02.py
 python tests/elements/shell/test_corot_shell_mitc4_03.py
 python tests/elements/shell/test_corot_shell_mitc4_04.py
 python tests/elements/shell/test_shell_mitc4_natural_coordinates_01.py
+python tests/elements/shell/test_transformInternalForces.py
 
 echo "$BLEU" "  Solid elements tests." "$NORMAL"
 python tests/elements/volume/test_brick_00.py
@@ -390,6 +391,7 @@ python tests/materials/fiber_section/test_diag_interaccion02.py
 python tests/materials/fiber_section/test_diag_interaccion03.py
 python tests/materials/fiber_section/test_diag_interaccion04.py
 python tests/materials/fiber_section/test_diag_interaccion05.py
+python tests/materials/fiber_section/test_diag_interaccion06.py
 python tests/materials/fiber_section/test_cortante_01.py
 python tests/materials/fiber_section/test_cortante_02.py
 echo "$BLEU" "  RC sections test." "$NORMAL"

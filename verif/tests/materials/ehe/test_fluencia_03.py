@@ -334,8 +334,11 @@ for key in combs.getKeys():
   resuelveCombEstatLin(mdlr,comb,tagSaveFase0,helper)
   trataResultsComb(mdlr,comb)
 
-dXMaxTeor= -1.04244692895e-3
-dXMinTeor= -1.24522898798e-3
+# 2015.07.06 Values changed when zeroed initial strains in revertToStart
+dXMaxTeor= 0.115734009591e-3 #-1.04244692895e-3
+dXMinTeor= -0.0872327603415e-3 #-1.24522898798e-3
+# End of change
+
 dYMaxTeor= 0
 dYMinTeor= 0
 ratio1= abs(((dXMax-dXMaxTeor)/dXMaxTeor))
