@@ -154,5 +154,5 @@ sympy-plots-for-*.tex/
 *.sav
 doc/XCmanual/XCmanual.pdf
 *~
-python_modulse/build
+python_modulse/build/*
 
