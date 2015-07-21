@@ -86,7 +86,6 @@ typical_materials.defCableMaterial(mdlr,name,E,prestress,rho)
 \end{tabular}
 \end{center}
 
-
 \subsection{defSteel01}
 \noindent Construct a uniaxial bilinear steel material object with kinematic hardening
 \begin{verbatim}
@@ -304,13 +303,13 @@ sectionProperties.sectionProperties(name,E,nu)
 \begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-\multicolumn{2}{p{11cm}}{{\tt defSeccElastica3d(mdlr)}} \\
+\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccElastica3d(mdlr)}} \\
 & returns an elastic section appropiate for 3D beam analysis, from the data of the section geometric properties\\
-\multicolumn{2}{p{11cm}}{{\tt defSeccShElastica3d(mdlr)}} \\
+\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccShElastica3d(mdlr)}} \\
 & returns an elastic section appropiate for 3D beam analysis  including shear deformations, from the data of the section geometric properties\\
-\multicolumn{2}{p{11cm}}{{\tt defSeccElastica2d(mdlr)}} \\
+\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccElastica2d(mdlr)}} \\
 & returns an elastic section appropiate for 2D beam analysis, from the data of the section geometric properties\\
-\multicolumn{2}{p{11cm}}{{\tt defSeccShElastica2d(mdlr)}} \\
+\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccShElastica2d(mdlr)}} \\
 & returns an elastic section appropiate for 2D beam analysis  including shear deformations, from the data of the section geometric properties\\
 \end{tabular}
 \end{center}
@@ -395,7 +394,6 @@ parametrosSeccionCircular.CircularSection(name,r,E,nu)
 {\tt nu} & Poisson's ratio of material \\
 \end{tabular}
 \end{center}
-
 \begin{center}
 \begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
@@ -408,23 +406,106 @@ parametrosSeccionCircular.CircularSection(name,r,E,nu)
 {\tt alphaZ()} & coefficient of distortion about the local z-axis\\
 \end{tabular}
 \end{center}
-\begin{center}
 
+\begin{center}
 \begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Functions for defining circular sections}} \\
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-\multicolumn{2}{p{11cm}}{{\tt setupSeccCircular(nmbSeccion,r,E,nu)}} \\
+\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.setupSeccCircular(nmbSeccion,r,E,nu)}} \\
 & returns a circular section \\
-\multicolumn{2}{p{11cm}}{{\tt defSeccCircularElastica3d(mdlr, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularElastica3d(mdlr, defSecc)}}\\
 & returns an elastic circular section appropiate for 3D beam analysis.\\
-\multicolumn{2}{p{11cm}}{{\tt defSeccCircularShElastica3d(mdlr, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularShElastica3d(mdlr, defSecc)}}\\
 & returns an elastic circular section appropiate for 3D beam analysis, including shear deformations.\\
-\multicolumn{2}{p{11cm}}{{\tt defSeccCircularElastica2d(mdlr, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularElastica2d(mdlr, defSecc)}}\\
 & returns an elastic circular section appropiate for 2D beam analysis.\\
-\multicolumn{2}{p{11cm}}{{\tt defSeccCircularShElastica2d(mdlr, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularShElastica2d(mdlr, defSecc)}}\\
 & returns an elastic circular section appropiate for 2D beam analysis, including shear deformations.\\
 & {\tt mdlr} : modeler name \\
 & {\tt defSecc} : name identifying an object of the class {\tt CircularSection} with the properties of the section. \\
+\end{tabular}
+\end{center}
+
+\subsubsection{RectangularSection}
+\noindent This subclass derived from superclass {\tt sectionProperties} is used to define the properties of a rectangular section.
+\begin{verbatim}
+from materials import parametrosSeccionRectangular
+parametrosSeccionRectangular.RectangularSection(,name,b,h,E,nu)
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt name} & name identifying the section \\
+{\tt b} & width \\
+{\tt h} & height \\
+{\tt E} & elastic modulus of material\\
+{\tt nu} & Poisson's ratio of material \\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt A()} & section area \\
+{\tt Iy()} &  second moment of area about the local y-axis\\
+{\tt Iz()} &  second moment of area about the local z-axis\\
+{\tt J()} & torsional moment of inertia of the section \\
+{\tt Wyel()} & elastic section modulus about the local y-axis \\
+{\tt Wzel()} & elastic section modulus about the local z-axis \\
+{\tt alphaY()} & coefficient of distortion about the local y-axis\\
+{\tt alphaZ()} & coefficient of distortion about the local z-axis\\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Functions for defining parameters of rectangular sections}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionRectangular.getJTorsion( b, h)}} \\
+& returns the torsional moment of inertia of the rectangular section \\
+\end{tabular}
+\end{center}
+
+\subsubsection{sccRectang}
+\noindent This class is used to define a geometric rectangular section.
+\begin{verbatim}
+from materials import sccRectg
+sccRectg.sccRectang()
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt b} & width \\
+{\tt h} & height \\
+{\tt nDivIJ} & number of cells in IJ (width) direction \\
+{\tt nDivJK} & number of cells in JK  (height) direction \\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt area()} & rectangle area \\
+{\tt I1()} &  second moment of area about the axis through the centre of gravity and parallel to the width dimension (axis 1) \\
+{\tt i1()} & bending radius of the section with regard to the axis 1 \\
+{\tt Me1(fy)} & yield moment of the rectangular section about the axis 1 {\tt fy} = yield stress of the section material \\
+{\tt  S1PosG()} & first moment of the area of half a section with regard to the axis 1 \\
+{\tt Mp1(fy)} & plastic moment of the rectangular section about the axis 1 {\tt fy} = yield stress of the section material \\
+{\tt I2()} &  second moment of area about the axis through the centre of gravity and parallel to the high dimension (axis 2) \\
+{\tt i2()} & bending radius of the section with regard to the axis 2 \\
+{\tt Me2(fy)} & yield moment of the rectangular section about the axis 2 {\tt fy} = yield stress of the section material \\
+{\tt  S2PosG()} & first moment of the area of half a section with regard to the axis 2 \\
+{\tt Mp2(fy)} & plastic moment of the rectangular section about the axis 2 {\tt fy} = yield stress of the section material \\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt discretization(gm,nmbMat)} & returns the discretized region \\
+& {\tt gm}: name identifying a section geometry \\
+& {\tt nmbMat}: name identifying the material \\ 
 \end{tabular}
 \end{center}
 
@@ -975,7 +1056,7 @@ defSeccionHASimple.RecordSeccionHASimple()
 {\tt getAsNeg()} & returns the area of the longitudinal reinforcement bars in the section's negative face \\
 {\tt getYAsNeg()} & returns the Y position of the longitudinal reinforcement bars in the section's negative face (equals to {\tt canto/2.0-recubPos}).\\
 {\tt getAc()} & returns the concrete's area of the rectangular section (equals to {\tt ancho*canto})  \\
-{\tt getI()} & returns the moment of inertia of the rectangular section (equals to {\tt 1/12*ancho*canto**3}) \\
+{\tt getI()} & returns the second moment of area of the rectangular section (equals to {\tt 1/12*ancho*canto**3}) \\
 \multicolumn{2}{p{13cm}}{{\tt defSeccionHASimple(mdlr,tipoDiag)}} \\
  & defines a rectangular reinforced concrete section with single top and bottom reinforcement layers \\
 & {\tt mdlr}: modeler name \\
@@ -1211,8 +1292,7 @@ geomSeccionesFibras.gmSeccRectangulo(geomSection,nmbFiberMat, h, b, nDIJ, nDIK)
 
 \subsubsection{RecordFamArmaduraPrincipal}
 \noindent This class constructs a family of main reinforcing bars.
-\begin{verbatim}
-from materials.fiber_section import informeGeomSeccion
+\begin{verbatim} materials.fiber_section import informeGeomSeccion
 informeGeomSeccion.RecordFamArmaduraPrincipal(reinfLayer)
 \end{verbatim}
 
@@ -1289,36 +1369,6 @@ informeGeomSeccion.informeGeomSeccion(mdlr,scc, archTex, pathFigura)
 \input{materials/figures/hsticentDatosScc1}
 
 
-
-\subsubsection{CircularSection}
-\noindent This subclass derived from superclass {\tt sectionProperties} is used to define the properties of a circular section.
-\begin{verbatim}
-from materials import parametrosSeccionCircular
-parametrosSeccionCircular.CircularSection(name,r,E,nu)
-\end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt name} & name identifying the section \\
-{\tt r} & radius \\
-{\tt E} & elastic modulus of material\\
-{\tt nu} & Poisson's ratio of material \\
-\end{tabular}
-\end{center}
-
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt A()} & section area \\
-{\tt Iy()} &  second moment of area about the local y-axis\\
-{\tt Iz()} &  second moment of area about the local z-axis\\
-{\tt J()} & torsional moment of inertia of the section \\
-{\tt alphaY()} & coefficient of distortion about the local y-axis\\
-{\tt alphaZ()} & coefficient of distortion about the local z-axis\\
-\end{tabular}
-\end{center}
 
 
 
