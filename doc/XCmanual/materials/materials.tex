@@ -1,6 +1,6 @@
 \chapter{Materials and sections}
 \section{Stardard uniaxial materials}
-\subsection{defElasticMaterial}
+\subsection{defElasticMaterial} 
 \noindent Construct an elastic uniaxial material
 \begin{verbatim}
 defElasticMaterial(mdlr,name,E)
@@ -180,7 +180,7 @@ defSteel02(mdlr,name,E,fy,b,initialStress)
 \end{center}
 
 \begin{center}
-\begin{tabular}{lp{9cm}}
+\begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
 {\tt fmaxk()} & characteristic ultimate strength \\
@@ -495,11 +495,13 @@ FiberSet(scc,nmbSet,tagDiag)
 \end{center}
 
 \begin{center}
-\begin{tabular}{lp{9cm}}
+\begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt getFiberWithMinStrain()} & returns the fiber of the set that has the minimum strain \\
-{\tt getFiberWithMaxStrain()} & returns the fiber of the set that has the maximum strain \\
+\multicolumn{2}{p{13cm}}{{\tt getFiberWithMinStrain()}}  \\
+ & returns the fiber of the set that has the minimum strain \\
+\multicolumn{2}{p{13cm}}{{\tt getFiberWithMaxStrain()}}  \\
+ & returns the fiber of the set that has the maximum strain \\
 \end{tabular}
 \end{center}
 
@@ -522,15 +524,21 @@ RCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
 \end{center}
 
 \begin{center}
-\begin{tabular}{lp{9cm}}
+\begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt reselTractionFibers(scc,tractionFibersSetName)} & returns the set of fibers in tension \\
-{\tt getConcreteArea(factor)} & returns the concrete area \\
-{\tt getMaxConcreteStrain()} & returns the maximum strain in the set of concrete fibers \\
-{\tt getConcreteInitialTangent()} & returns the initial tangent in the stress-strain diagram of material that makes up the fibers of concrete \\
-{\tt getConcreteCompression()} & returns the resultant of compressive stresses in concrete fibers \\
-{\tt getNumBarrasTraccion()} & returns the number of reinforcing steel fibers in tension \\
+\multicolumn{2}{p{13cm}}{{\tt reselTractionFibers(scc,tractionFibersSetName)}} \\
+& returns the set of fibers in tension \\
+\multicolumn{2}{p{13cm}}{{\tt getConcreteArea(factor)}} \\
+ & returns the concrete area \\
+\multicolumn{2}{p{13cm}}{{\tt getMaxConcreteStrain()}} \\
+ & returns the maximum strain in the set of concrete fibers \\
+\multicolumn{2}{p{13cm}}{{\tt getConcreteInitialTangent()}} \\
+ & returns the initial tangent in the stress-strain diagram of material that makes up the fibers of concrete \\
+\multicolumn{2}{p{13cm}}{{\tt getConcreteCompression()}} \\
+ & returns the resultant of compressive stresses in concrete fibers \\
+\multicolumn{2}{p{13cm}}{{\tt getNumBarrasTraccion()}} \\
+ & returns the number of reinforcing steel fibers in tension \\
 \end{tabular}
 \end{center}
 
@@ -630,11 +638,306 @@ RecordSeccionHAPilar()
 \end{center}
 
 \begin{center}
-\begin{tabular}{lp{9cm}}
+\begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt defGeomSeccHAPilar(tipoDiag)} & returns a reinforced concrete section with reinforcement symmetric in both directions \\
+\multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(tipoDiag)}} \\
+ & returns a reinforced concrete section with reinforcement symmetric in both directions \\
 & {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
+\end{tabular}
+\end{center}
+
+\subsubsection{RecordArmaduraCortante}
+\noindent This class is used to define the variables that make up a family of shear reinforcing bars.
+\begin{verbatim}
+RecordArmaduraCortante()
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt nmbFamilia} & name identifying the family of shear reinforcing bars \\
+{\tt nRamas} & number of effective branches\\
+{\tt areaRama} &  area of the shear reinforcing bar\\
+{\tt espaciamientoRamas} & longitudinal distance between transverse reinforcements (defaults to 0.2)\\
+{\tt angAlphaRamas} & angle between the shear reinforcing bars and the axis of the member (defaults to $\Pi/2$)\\
+{\tt angThetaBielas} & angle between the concrete's compression struts and the axis of the member (defaults to $\Pi/4$)\\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt getAs()} & returns the area per unit length of the family of shear reinforcements\\
+\end{tabular}
+\end{center}
+
+\subsubsection{RecordSeccionHASimple}
+\noindent This class is used to define the variables that make up a rectangular reinforced concrete section with single reinforcement layers in top and bottom faces
+\begin{verbatim}
+RecordSeccionHASimple()
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt nmbSeccion} & name identifying the section \\
+{\tt descSeccion} & section description \\
+{\tt tipoHormigón} & type of concrete (e.g. hormigonesEHE.HA25) \\
+{\tt nmbDiagHormigon} & name identifying the characteristic stress-strain diagram of the concrete material \\
+{\tt canto} & cross-section height \\
+{\tt ancho} & cross-section width \\
+{\tt numDivIJ} & number of cells in IJ (width) direction \\
+{\tt numDivJK} & number of cells in JK  (height) direction \\
+{\tt tipoArmadura} & type of reinforcement steel \\
+{\tt nmbDiagArmadura} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
+{\tt nBarrasNeg} & number of longitudinal rebars in the negative face of the section\\
+{\tt areaBarrasNeg} & area of each longitudinal rebar in  the negative face \\
+{\tt diamBarrasNeg} & diameter of the bars in  the negative face of the section \\
+{\tt recubNeg} & cover of longitudinal reinforcement in the negative face\\
+{\tt recubLatNeg} & lateral cover of longitudinal reinforcement in the negative face\\
+{\tt nBarrasPos} & number of longitudinal rebars in the positive face of the section\\
+{\tt areaBarrasPos} & area of each longitudinal rebar in  the positive face \\
+{\tt diamBarrasPos} & diameter of the bars rebar in  the positive face of the section \\
+{\tt recubPos} & cover of longitudinal reinforcement in the positive face\\
+{\tt recubLatPos} & lateral cover of longitudinal reinforcement in the positive face\\
+{\tt recubMin} & minimal covering of the longitudinal reinforcement \\
+{\tt armCortanteZ} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Z direction \\
+{\tt armCortanteY} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Y direction \\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(tipoDiag)}} \\
+ & returns a reinforced concrete section with reinforcement symmetric in both directions \\
+& {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
+\end{tabular}
+\end{center}
+
+\subsubsection{RecordArmaduraCortante}
+\noindent This class is used to define the variables that make up a family of shear reinforcing bars.
+\begin{verbatim}
+RecordArmaduraCortante()
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt nmbFamilia} & name identifying the family of shear reinforcing bars \\
+{\tt nRamas} & number of effective branches\\
+{\tt areaRama} &  area of the shear reinforcing bar\\
+{\tt espaciamientoRamas} & longitudinal distance between transverse reinforcements (defaults to 0.2)\\
+{\tt angAlphaRamas} & angle between the shear reinforcing bars and the axis of the member (defaults to $\Pi/2$)\\
+{\tt angThetaBielas} & angle between the concrete's compression struts and the axis of the member (defaults to $\Pi/4$)\\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt getAs()} & returns the area per unit length of the family of shear reinforcements\\
+\end{tabular}
+\end{center}
+
+\subsubsection{RecordSeccionHASimple}
+\noindent This class is used to define the variables that make up a reinforced concrete section with reinforcement symmetric in both directions (as usual in columns)
+\begin{verbatim}
+RecordSeccionHASimple()
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt nmbSeccion} & name identifying the section \\
+{\tt descSeccion} & section description \\
+{\tt tipoHormigón} & type of concrete (e.g. hormigonesEHE.HA25) \\
+{\tt nmbDiagHormigon} & name identifying the characteristic stress-strain diagram of the concrete material \\
+{\tt canto} & cross-section height \\
+{\tt ancho} & cross-section width \\
+{\tt numDivIJ} & number of cells in IJ (width) direction \\
+{\tt numDivJK} & number of cells in JK  (height) direction \\
+{\tt tipoArmadura} & type of reinforcement steel \\
+{\tt nmbDiagArmadura} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
+{\tt nBarrasNeg} & number of longitudinal rebars in the negative face of the section\\
+{\tt areaBarrasNeg} & area of each longitudinal rebar in  the negative face \\
+{\tt diamBarrasNeg} & diameter of the bars rebar in  the negative face of the section \\
+{\tt recubNeg} & cover of longitudinal reinforcement in the negative face\\
+{\tt recubLatNeg} & cover of longitudinal reinforcement in the lateral negative face\\
+{\tt nBarrasPos} & number of longitudinal rebars in the positive face of the section\\
+{\tt areaBarrasPos} & area of each longitudinal rebar in  the positive face \\
+{\tt diamBarrasPos} & diameter of the bars rebar in  the positive face of the section \\
+{\tt recubPos} & cover of longitudinal reinforcement in the positive face\\
+{\tt recubLatPos} & cover of longitudinal reinforcement in the lateral positive face\\
+{\tt recubMin} & minimal covering ot the longitudinal reinforcement \\
+{\tt armCortanteZ} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Z direction \\
+{\tt armCortanteY} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Y direction \\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(tipoDiag)}} \\
+ & returns a reinforced concrete section with reinforcement symmetric in both directions \\
+& {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
+\end{tabular}
+\end{center}
+
+\subsubsection{RecordArmaduraCortante}
+\noindent This class is used to define the variables that make up a family of shear reinforcing bars.
+\begin{verbatim}
+RecordArmaduraCortante()
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt nmbFamilia} & name identifying the family of shear reinforcing bars \\
+{\tt nRamas} & number of effective branches\\
+{\tt areaRama} &  area of the shear reinforcing bar\\
+{\tt espaciamientoRamas} & longitudinal distance between transverse reinforcements (defaults to 0.2)\\
+{\tt angAlphaRamas} & angle between the shear reinforcing bars and the axis of the member (defaults to $\Pi/2$)\\
+{\tt angThetaBielas} & angle between the concrete's compression struts and the axis of the member (defaults to $\Pi/4$)\\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt getAs()} & returns the area per unit length of the family of shear reinforcements\\
+\end{tabular}
+\end{center}
+
+\subsubsection{RecordSeccionHASimple}
+\noindent This class is used to define the variables that make up a rectangular  reinforced concrete section with top and bottom reinforcement layers
+\begin{verbatim}
+RecordSeccionHASimple()
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt nmbSeccion} & name identifying the section \\
+{\tt descSeccion} & section description \\
+{\tt tipoHormigón} & type of concrete (e.g. hormigonesEHE.HA25) \\
+{\tt nmbDiagHormigon} & name identifying the characteristic stress-strain diagram of the concrete material \\
+{\tt canto} & cross-section height \\
+{\tt ancho} & cross-section width \\
+{\tt numDivIJ} & number of cells in IJ (width) direction \\
+{\tt numDivJK} & number of cells in JK  (height) direction \\
+{\tt tipoArmadura} & type of reinforcement steel \\
+{\tt nmbDiagArmadura} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
+{\tt nBarrasNeg} & number of longitudinal rebars in the negative face of the section\\
+{\tt areaBarrasNeg} & area of each longitudinal rebar in  the negative face \\
+{\tt diamBarrasNeg} & diameter of the bars rebar in  the negative face of the section \\
+{\tt recubNeg} & cover of longitudinal reinforcement in the negative face\\
+{\tt recubLatNeg} & lateral cover of longitudinal reinforcement in negative face\\
+{\tt nBarrasPos} & number of longitudinal rebars in the positive face of the section\\
+{\tt areaBarrasPos} & area of each longitudinal rebar in  the positive face \\
+{\tt diamBarrasPos} & diameter of the bars rebar in  the positive face of the section \\
+{\tt recubPos} & cover of longitudinal reinforcement in the positive face\\
+{\tt recubLatPos} & cover of longitudinal reinforcement in the lateral positive face\\
+{\tt recubMin} & minimal covering ot the longitudinal reinforcement \\
+{\tt armCortanteZ} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Z direction \\
+{\tt armCortanteY} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Y direction \\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\multicolumn{2}{p{13cm}}{{\tt nmbGeomSeccion()}} \\
+ & returns the name of the geometric section that is formed by the section name with the prefix "geom" \\
+{\tt nmbRespT()} & returns the name of the elastic material that defines the sention's response to torsion; it is formed by the section name with the suffix "RespVy" \\ 
+{\tt nmbRespVy()} & returns the name of the elastic material that defines the sention's response to shear force in Y direction; it is formed by the section name with the suffix "RespT" \\ 
+{\tt nmbRespVz()} & returns the name of the elastic material that defines the sention's response to shear force in Z direction ; it is formed by the section name with the suffix "RespVz" \\ 
+{\tt getAsPos()} & returns the area of the longitudinal reinforcement bars in the section's positive face \\
+{\tt getYAsPos()} & returns the Y position of the longitudinal reinforcement bars in the section's positive face (equals to {\tt canto/2.0-recubPos}).\\
+{\tt getAsNeg()} & returns the area of the longitudinal reinforcement bars in the section's negative face \\
+{\tt getYAsNeg()} & returns the Y position of the longitudinal reinforcement bars in the section's negative face (equals to {\tt canto/2.0-recubPos}).\\
+{\tt getAc()} & returns the concrete's area of the rectangular section (equals to {\tt ancho*canto})  \\
+{\tt getI()} & returns the moment of inertia of the rectangular section (equals to {\tt 1/12*ancho*canto**3}) \\
+\multicolumn{2}{p{13cm}}{{\tt defSeccionHASimple(mdlr,tipoDiag)}} \\
+ & defines a rectangular reinforced concrete section with single top and bottom reinforcement layers \\
+& {\tt mdlr}: modeler name \\
+& {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
+{\tt defInteractionDiagram(mdlr,tipoDiag)} & defines the interaction diagram \\
+& {\tt mdlr}: modeler name \\
+& {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
+\end{tabular}
+\end{center}
+\subsubsection{RecordSeccionHALosa}
+\noindent This class is used to define the variables that make up a reinforced concrete slab section with single reinforcement layers in top and bottom faces
+\begin{verbatim}
+RecordSeccionHALosa(nmb,desc,canto,concrete,steel,basicCover)
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt nmb} & basic name identifying the section \\
+& the name identifying the section in 1 direction is formed adding to {\tt nmb} the suffix  "L"; for the section in 2 direction the suffix added to the basic name is "T" \\
+{\tt desc} & basic section description \\
+{\tt canto} & cross-section height (width is considered = 1)\\
+{\tt concrete} & type of concrete (e.g. hormigonesEHE.HA25) \\
+{\tt steel} & type of reinforcement steel \\
+{\tt basicCover} & minimal cover of longitudinal reinforcement \\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\multicolumn{2}{p{13cm}}{{\tt setMainReinf2neg(diam,area,spacing)}} \\
+ & defines the rebar arrangement of the layer of main reinforcement bars corresponding to the negative face of the section in 2 direction \\
+& {\tt diam} = diameter of the bar \\
+& {\tt area} = area of each bar \\
+& {\tt spacing} = space between axis of bars \\
+\multicolumn{2}{p{13cm}}{{\tt setMainReinf2pos(diam,area,spacing)}} \\
+ & \emph{idem} for the layer of main reinforcement bars corresponding to the positive face of the section in 2 direction \\
+\multicolumn{2}{p{13cm}}{{\tt setMainReinf1neg(diam,area,spacing)}} \\
+ & \emph{idem} for the layer of main reinforcement bars corresponding to the negative face of the section in 1 direction \\
+\multicolumn{2}{p{13cm}}{{\tt setMainReinf1pos(diam,area,spacing)}} \\
+ & \emph{idem} for the layer of main reinforcement bars corresponding to the positive face of the section in 1 direction \\
+\multicolumn{2}{p{13cm}}{{\tt setShearReinfT(nRamas,areaRama,spacing)}} \\
+ & defines the rebar arrangement of the shear reinforcement bars corresponding to the section in 2 direction \\
+& {\tt nRamas} =  number of effective branches \\
+& {\tt areaRama} = area of the shear reinforcing bar \\
+& {\tt spacing} = longitudinal distance between shear reinforcements bars \\
+\multicolumn{2}{p{13cm}}{{\tt setShearReinfL(nRamas,areaRama,spacing)}} \\
+ & \emph{idem} for shear reinforcement bars corresponding to the section in 1 direction \\
+\end{tabular}
+\end{center}
+
+\subsubsection{getIMaxPropFiber}
+Returns the fiber in a set with the maximum value of a property.
+\noindent 
+\begin{verbatim}
+getIMaxPropFiber(fibers,methodName)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt fibers} & name of the set of fibers \\
+{\tt methodName} & name of the method or property (e.g. {\tt "getArea"}) \\
+\end{tabular}
+\end{center}
+
+\subsubsection{getIMinPropFiber}
+Returns the fiber in a set with the minimum value of a property.
+\noindent 
+\begin{verbatim}
+getIMinPropFiber(fibers,methodName)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt fibers} & name of the set of fibers \\
+{\tt methodName} & name of the method or property (e.g. {\tt "getArea"}) \\
 \end{tabular}
 \end{center}
 
@@ -645,8 +948,8 @@ RecordSeccionHAPilar()
 \noindent Returns the following values, depending on the state of stress in the section:
 \begin{description}
 \item{1} pure or combined tension where the entire section is under tension;
-\item{2} pure or combined bending (there are fibres in tension and in compression);
-\item{3} single or combined compression where all the fibres are in compression.
+\item{2} pure or combined bending (there are fibers in tension and in compression);
+\item{3} single or combined compression where all the fibers are in compression.
 \end{description}
 \begin{verbatim}
 tipoSolicitacion(epsCMin, epsSMax)
@@ -681,15 +984,195 @@ strTipoSolicitacion(tipoSol)
 \end{tabular}
 \end{center}
 
+\subsubsection{gmArmCapaHoriz}
+Returns a reinforcement layer parallel to the top and bottom sides of the rectangular section. The row of reinforcement bars is placed at a distance {\tt h} over the horizontal axis of the section. 
+\noindent 
+\begin{verbatim}
+gmArmCapaHoriz(sectionGeom, nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub, h)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt sectionGeom} & name identifying the geometric section \\
+{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt nBarras} & number of rebars in the layer \\
+{\tt areaBarras} &  area of each rebar \\
+{\tt canto} &  cross-section height \\
+{\tt ancho} & cross-section width \\
+{\tt rcub} & cover \\
+{\tt h} & distance between the horizontal axis of the cross-section and the reinforcement layer \\
+\end{tabular}
+\end{center}
+
+\subsubsection{gmArmInferior}
+Returns a reinforcement layer in the bottom side of a rectangular section.
+\noindent 
+\begin{verbatim}
+ gmArmInferior(sectionGeom,nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt sectionGeom} & name identifying the geometric section \\
+{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt nBarras} & number of rebars in the layer \\
+{\tt areaBarras} &  area of each rebar \\
+{\tt canto} &  cross-section height \\
+{\tt ancho} & cross-section width \\
+{\tt rcub} & cover \\
+\end{tabular}
+\end{center}
+
+\subsubsection{gmArmSuperior}
+Returns a reinforcement layer in the top side of a rectangular section.
+\noindent 
+\begin{verbatim}
+gmArmSuperior(sectionGeom,nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt sectionGeom} & name identifying the geometric section \\
+{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt nBarras} & number of rebars in the layer \\
+{\tt areaBarras} &  area of each rebar \\
+{\tt canto} &  cross-section height \\
+{\tt ancho} & cross-section width \\
+{\tt rcub} & cover \\
+\end{tabular}
+\end{center}
+
+\subsubsection{gmSeccCuadrado}
+Returns a square geometric region of fibers' material.
+\noindent 
+\begin{verbatim}
+gmSeccCuadrado(geomSection, nmbFiberMat, ld, nD)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt geomSection} & name identifying the geometric section \\
+{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt ld} & side of the square \\
+{\tt nD} & number of cells in each side of the square \\
+\end{tabular}
+\end{center}
+
+\subsubsection{gmSeccRectangulo}
+Returns a rectangular geometric region of fibers' material.
+\noindent 
+\begin{verbatim}
+gmSeccRectangulo(geomSection,nmbFiberMat, h, b, nDIJ, nDIK)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt geomSection} & name identifying the geometric section \\
+{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt h} & side of the rectangle in IK direction \\
+{\tt b} & side of the rectangle in IJ direction \\
+{\tt nDIJ} & number of cells in IJ direction \\
+{\tt nDIK} & number of cells in IK direction \\
+\end{tabular}
+\end{center}
 
 
+\subsubsection{RecordFamArmaduraPrincipal}
+\noindent This class constructs a family of main reinforcing bars.
+\begin{verbatim}
+RecordFamArmaduraPrincipal(reinfLayer)
+\end{verbatim}
 
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt reinfLayer} & name identifying the family of reinforcing bars \\
+{\tt nBarras} & number of rebars in the layer \\
+{\tt diamBarras} & diameter of the bars \\
+{\tt areaBarras} & total area of the bars in the family \\
+{\tt recubMec} & cover of the reinforcement\\
+{\tt cdgBarras} & position of the reinforcement centre of gravity \\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\multicolumn{2}{p{13cm}}{{\tt texWrite(archTex)}} \\
+& writes the value of parameters in a file named {\tt archTex} \\ 
+\end{tabular}
+\end{center}
+
+\subsubsection{imprimeArmaduraPrincipal}
+\noindent The function writes in the specified file the characteristics (diameter, area, cover, position of gravity centre, \ldots) of each main reinforcement family provided in a list of family names.
+\begin{verbatim}
+imprimeArmaduraPrincipal(listaFamArmaduraPrincipal, areaHorm, archTex)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt listaFamArmaduraPrincipal} & name identifying a list of names of reinforcement families \\
+{\tt areaHorm} & area of the concrete section \\
+{\tt archTex} &  name of the output file \\
+\end{tabular}
+\end{center}
+
+\subsubsection{imprimeArmaduraCortante}
+\noindent The function writes in the specified file the characteristics (diameter, area, distances, angles, \ldots) of a family of shear reinforcement bars.
+\begin{verbatim}
+imprimeArmaduraCortante(recordArmaduraCortante, archTex)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt recordArmaduraCortante} & name identifying a family of shear reinforcement \\
+{\tt archTex} &  name of the output file \\
+\end{tabular}
+\end{center}
+
+\subsubsection{imprimeArmaduraCortante}
+\noindent The function writes in the specified file the characteristics (diameter, area, distances, angles, \ldots) of a family of shear reinforcement bars.
+\begin{verbatim}
+imprimeArmaduraCortante(recordArmaduraCortante, archTex)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt recordArmaduraCortante} & name identifying a family of shear reinforcement \\
+{\tt archTex} &  name of the output file \\
+\end{tabular}
+\end{center}
+
+\subsubsection{informeGeomSeccion}
+\noindent This function prepares a report with the characteristics of a sections, as illustrated in table \ref{informSec}
+\begin{verbatim}
+informeGeomSeccion(mdlr,scc, archTex, pathFigura)
+\end{verbatim}
+\vspace{-10pt}
+{\color{grayLines} \rule{\linewidth}{0.25pt}}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+{\tt mdlr} & modeler name \\
+{\tt scc} & name identifying the section \\
+{\tt archTex} &  name of the output file \\
+{\tt pathFigura} & path to place the figure file representing the reinforcement arrangement \\
+\end{tabular}
+\end{center}
+
+\input{materials/figures/hsticentDatosScc1}
 
 
 
 \end{document}
-
-
 
 
 \subsection{}

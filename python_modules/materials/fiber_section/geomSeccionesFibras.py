@@ -10,7 +10,7 @@ def gmSeccCuadrado(geomSection, nmbFiberMat, ld, nD):
   return rg
 
 # Definición de un rectángulo.
-def gmSeccRectangulo(nmbFiberMat, h, b, nDIJ, nDIK):
+def gmSeccRectangulo(geomSection,nmbFiberMat, h, b, nDIJ, nDIK):
   regiones= geomSection.getRegions
   rg= regiones.newQuadRegion(nmbFiberMat)
   rg.nDivIJ= nDIJ

@@ -16,31 +16,33 @@ from materials import stressCalc as sc
 import sys
 
 class RecordArmaduraCortante(object):
-  # Define una familia de armaduras de cortante
-  nmbFamilia= "noName" # Nombre de la familia de armadura.
-  nRamas= 0.0 # Número de ramas eficaces frente al cortante.
-  areaRama= 0.0 # Área de cada barra.
-  espaciamientoRamas= 0.2 # Separación entre planos.
-  angAlphaRamas= math.pi/2.0 # Ángulo de las barras con el eje de la pieza.
-  angThetaBielas= math.pi/4.0 # Ángulo de bielas de hormigón con el eje de la pieza.
+  # Definition of the variables that make up a family of shear reinforcing bars
+  nmbFamilia= "noName" # name identifying the family of shear reinforcing bars
+  nRamas= 0.0 # Number of effective branches of the transverse reinforcements
+  areaRama= 0.0 # Area of the shear reinforcing bar
+  espaciamientoRamas= 0.2 # longitudinal distance between transverse reinforcement
+  angAlphaRamas= math.pi/2.0 # angle between the shear reinforcing bars and the axis of the member.
+  angThetaBielas= math.pi/4.0 # angle between the concrete's compression struts and the axis of the member
   def __init__(self):
-    self.nmbFamilia= "noName" # Nombre de la familia de armadura.
-    self.nRamas= 0.0 # Número de ramas eficaces frente al cortante.
-    self.areaRama= 0.0 # Área de cada barra.
-    self.espaciamientoRamas= 0.2 # Separación entre planos.
-    self.angAlphaRamas= math.pi/2.0 # Ángulo de las barras con el eje de la pieza.
-    self.angThetaBielas= math.pi/4.0 # Ángulo de bielas de hormigón con el eje de la pieza.
+    self.nmbFamilia= "noName" # name identifying the family of shear reinforcing bars
+    self.nRamas= 0.0 # Number of effective branches
+    self.areaRama= 0.0 # Area of the shear reinforcing bar
+    self.espaciamientoRamas= 0.2 # longitudinal distance between transverse reinforcements
+    self.angAlphaRamas= math.pi/2.0 # angle between the shear reinforcing bars and the axis of the member.
+    self.angThetaBielas= math.pi/4.0 # angle between the concrete's compression struts and the axis of the member
     
   def getAs(self):
+    'returns the area per unit length of the family of shear reinforcements'
     return self.nRamas*self.areaRama/self.espaciamientoRamas
 
+
 class MainReinfLayer(object):
-  nBarras= 5 #Número de barras.
+  nBarras= 5 #number of longitudinal rebars
   sepBarras= 0.15
-  areaBarras= areaBarrasEHE.Fi10 # bar area
-  diamBarras= 10e-3 #Bar diameter.
-  recub= 0.030 # Recubrimiento cara de negativos.
-  recubLat= 0.030 # Recubrimiento lateral cara de negativos.
+  areaBarras= areaBarrasEHE.Fi10 # area of each longitudinal rebar
+  diamBarras= 10e-3 #diameter of the bars rebar
+  recub= 0.030 # cover of longitudinal reinforcement
+  recubLat= 0.030 # lateral cover of longitudinal reinforcement 
 
   def __init__(self,diam=10e-3,area= areaBarrasEHE.Fi10,spacing=0.2,ancho=1.0,basicCover=0.03):
     self.diamBarras= diam
@@ -70,11 +72,10 @@ class MainReinfLayer(object):
 
 class RecordSeccionHASimple(object):
   '''
-  Define las variables que se emplean para definir
-     una sección de hormigón armado sencilla con una
-     capa de armadura superior y otra inferior.
+  This class is used to define the variables that make up a reinforced 
+  concrete section with top and bottom reinforcement layers.
   '''
-  nmbSeccion= "noName"
+  nmbSeccion= "noName" #name identifying the section
   descSeccion= "Texto que ayude a ubicar la sección."
   tipoHormigon= None
   nmbDiagHormigon= None
@@ -83,20 +84,20 @@ class RecordSeccionHASimple(object):
   numDivIJ= 10
   numDivJK= 10
 
-  # Armadura principal
+  # Longitudinal reinforcement
   tipoArmadura= None
-  nmbDiagArmadura= None # Nombre del material uniaxial.
+  nmbDiagArmadura= None # Name of the uniaxial material
 
   barrasNeg= MainReinfLayer()
   barrasPos= MainReinfLayer()
 
-  recubMin= 0.0 # Recubrimiento mínimo de la armadura longitudinal.
+  recubMin= 0.0 # minimal covering of the longitudinal reinforcement
 
-  # Armadura de cortante según z
+  # Transverse reinforcement (z direction)
   armCortanteZ= RecordArmaduraCortante()
   armCortanteZ.nmbFamilia= "Vz"
 
-  # Armadura de cortante según y
+  # Transverse reinforcement (y direction)
   armCortanteY= RecordArmaduraCortante()
   armCortanteY.nmbFamilia= "Vy"
 
@@ -112,10 +113,9 @@ class RecordSeccionHASimple(object):
 
     # Armadura principal
     self.tipoArmadura= None
-    self.nmbDiagArmadura= None # Nombre del material uniaxial.
+    self.nmbDiagArmadura= None 
 
-
-    self.recubMin= 0.0 # Recubrimiento mínimo de la armadura longitudinal.
+    self.recubMin= 0.0 
 
     barrasNeg= MainReinfLayer()
     barrasPos= MainReinfLayer()
