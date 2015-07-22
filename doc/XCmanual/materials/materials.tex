@@ -509,6 +509,37 @@ sccRectg.sccRectang()
 \end{tabular}
 \end{center}
 
+\subsubsection{SteelProfile}
+\noindent This subclass derived from superclass {\tt sectionProperties} is used to define the properties of a structural steel section.
+\begin{verbatim}
+from materials import steelProfile
+steelProfile.SteelProfile(steel,name,table)
+\end{verbatim}
+\begin{center}
+\begin{tabular}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt steel} & type of structural steel (e.g. {\tt S275JR}) \\
+{\tt table} & file containing a table (dictionary) of steel profiles (e.g. {\tt perfiles\_metalicos.arcelor.perfiles\_he\_arcelor})\\
+{\tt name} & name of the profile in the table (e.g. {\tt "HE\_400\_B"}) \\
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt A()} & section area \\
+{\tt Iy()} &  second moment of area about the local y-axis (Y= weak axis)\\
+{\tt Iz()} &  second moment of area about the local z-axis (Z= strong axis)\\
+{\tt J()} & torsional moment of inertia of the section \\
+{\tt EIy()} & product of $E_{steel} \times I_y$ \\
+{\tt EIz()} & product of $E_{steel} \times I_z$ \\
+{\tt GJ()} & product of $E_{steel} \times G$ \\
+{\tt alphaY()} & coefficient of distortion about the local y-axis\\
+{\tt alphaZ()} & coefficient of distortion about the local z-axis\\
+\end{tabular}
+\end{center}
+
 \subsection{Elastic sections}
 \subsubsection{defElasticSection2d}
 \noindent Construct an elastic section appropiate for 2D beam analysis.
