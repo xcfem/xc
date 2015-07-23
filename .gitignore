@@ -156,3 +156,5 @@ doc/XCmanual/XCmanual.pdf
 *~
 python_modules/build/lib*
 
+#python
+*.pyc
