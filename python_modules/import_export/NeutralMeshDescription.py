@@ -9,6 +9,12 @@ class NodeRecord(object):
     self.coords= [coords[0],coords[1],coords[2]]
   def __str__(self):
     return str(self.id)+' '+str(self.coords)
+  def getX(self):
+     return self.coords[0]
+  def getY(self):
+     return self.coords[1]
+  def getZ(self):
+     return self.coords[2]
   def getStrXCCommand(self,nodeLoaderName):
     strId= str(self.id)
     strCommand= '.newNodeIDXYZ(' + strId + ',' + self.coords[0] + ',' + self.coords[1] +','+ self.coords[2]+')'
@@ -104,6 +110,9 @@ class MeshData(object):
   cells= {}
   groups= []
 
+  def appendNode(self,id,x,y,z):
+    self.nodes[id]= NodeRecord(int(id),[x,y,z])
+
   def readFromDATFile(self,fName):
     # Read the source mesh
     f= open(fName,"r")
@@ -121,7 +130,7 @@ class MeshData(object):
     for i in range(beginNodes,endNodes):
       line= lines[i]
       id, x, y ,z = line.split()
-      self.nodes[id]= NodeRecord(int(id),[x,y,z])
+      appendNode(id,x,y,z)
 
     self.cells= {}
     beginCells= endNodes
