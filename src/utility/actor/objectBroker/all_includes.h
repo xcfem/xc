@@ -106,6 +106,7 @@
 #include "material/section/Bidirectional.h"
 #include "material/section/diag_interaccion/DatosDiagInteraccion.h"
 #include "material/section/diag_interaccion/DiagInteraccion.h"
+#include "material/section/diag_interaccion/DiagInteraccion2d.h"
 #include "material/section/diag_interaccion/CalcPivotes.h"
 
 // NDMaterials

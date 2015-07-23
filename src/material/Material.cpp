@@ -145,10 +145,16 @@ void XC::Material::update(void)
 
 void XC::Material::addInitialGeneralizedStrain(const Vector &incS)
   {
-    Vector tmp= getInitialGeneralizedStrain();
-    tmp+= incS;
     setInitialGeneralizedStrain(getInitialGeneralizedStrain()+incS);
   }
+
+void XC::Material::zeroInitialGeneralizedStrain(void)
+  {
+    Vector tmp= getInitialGeneralizedStrain();
+    tmp.Zero();
+    setInitialGeneralizedStrain(tmp);
+  }
+
 
 //! @brief Envía un puntero a material a través del canal que se pasa como parámetro.
 //! @param posClassTag: Posición de ID del identificador de la clase del material.

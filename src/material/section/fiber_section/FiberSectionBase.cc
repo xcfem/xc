@@ -42,9 +42,11 @@
 #include "material/section/diag_interaccion/CalcPivotes.h"
 #include "material/section/diag_interaccion/Pivotes.h"
 #include "material/section/diag_interaccion/DiagInteraccion.h"
+#include "material/section/diag_interaccion/DiagInteraccion2d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d2/MallaTriang3d.h"
 #include "xc_utils/src/geom/d3/ConvexHull3d.h"
+#include "xc_utils/src/geom/d2/ConvexHull2d.h"
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
 #include "xc_utils/src/geom/d1/SemiRecta2d.h"
@@ -868,6 +870,36 @@ const GeomObj::list_Pos3d &XC::FiberSectionBase::get_ptos_diag_interaccion(const
     return lista_esfuerzos;
   }
 
+//! @brief Devuelve los puntos que definen el diagrama de interacción en el plano N-My.
+const GeomObj::list_Pos2d &XC::FiberSectionBase::get_ptos_diag_interaccionNMy(const DatosDiagInteraccion &datos_diag)
+  {
+    static GeomObj::list_Pos2d lista_esfuerzos;
+    lista_esfuerzos.clear();
+    const DqFibras &fsC= sel_mat_tag(datos_diag.getNmbSetHormigon(),datos_diag.getTagHormigon())->second;
+    if(fsC.empty())
+      std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagHormigon()
+                << " que corresponde al hormigón." << std::endl;
+    const DqFibras &fsS= sel_mat_tag(datos_diag.getNmbSetArmadura(),datos_diag.getTagArmadura())->second;
+    if(fsS.empty())
+      std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagArmadura()
+                << " que corresponde al acero de armar." << std::endl;
+    if(!fsC.empty() && !fsS.empty())
+      {
+        static GeomObj::list_Pos3d tmp;
+        tmp.clear();
+        const Pos3d *ultimo_insertado= get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,0.0);
+        for(GeomObj::list_Pos3d::const_iterator i= tmp.begin();i!=tmp.end();i++)
+          {
+            Pos3d p3d= *i;
+	    lista_esfuerzos.push_back(Pos2d(p3d.x(),p3d.y()));
+	  }
+        revertToStart();
+      }
+    else
+      std::cerr << "No se pudo obtener el diagrama de interacción." << std::endl;
+    return lista_esfuerzos;
+  }
+
 //! @brief Devuelve el diagrama de interacción.
 XC::DiagInteraccion XC::FiberSectionBase::GetDiagInteraccion(const DatosDiagInteraccion &datos_diag)
   {
@@ -876,6 +908,22 @@ XC::DiagInteraccion XC::FiberSectionBase::GetDiagInteraccion(const DatosDiagInte
     if(!lp.empty())
       {
         retval= DiagInteraccion(Pos3d(0,0,0),MallaTriang3d(get_convex_hull(lp)));
+        const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
+        if(error>0.005)
+	  std::cerr << "FiberSectionBase::GetDiagInteraccion; el error en el cálculo del diagrama de interacción ("
+                    << error << ") es grande." << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Devuelve el diagrama de interacción.
+XC::DiagInteraccion2d XC::FiberSectionBase::GetDiagInteraccionNMy(const DatosDiagInteraccion &datos_diag)
+  {
+    const GeomObj::list_Pos2d lp= get_ptos_diag_interaccionNMy(datos_diag);
+    DiagInteraccion2d retval;
+    if(!lp.empty())
+      {
+        retval= DiagInteraccion2d(get_convex_hull2d(lp));
         const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
 	  std::cerr << "FiberSectionBase::GetDiagInteraccion; el error en el cálculo del diagrama de interacción ("

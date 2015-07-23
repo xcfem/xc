@@ -36,6 +36,7 @@ namespace XC {
 class Material;
 class GeomSection;
 class DiagInteraccion;
+class DiagInteraccion2d;
 class DatosDiagInteraccion;
 
 //!  \ingroup Ldrs
@@ -55,13 +56,17 @@ class MaterialLoader: public Loader
     typedef std::map<std::string,DiagInteraccion *> map_diag_interaccion;
     typedef map_diag_interaccion::const_iterator const_diag_interacc_iterator;
     typedef map_diag_interaccion::iterator diag_interacc_iterator;
+
+    typedef std::map<std::string,DiagInteraccion2d *> map_diag_interaccion2d;
+    typedef map_diag_interaccion2d::const_iterator const_diag_interacc2d_iterator;
+    typedef map_diag_interaccion2d::iterator diag_interacc2d_iterator;
   private:
     map_materiales materiales; //!< Materiales para el problema.
     int tag_mat; //!< Tag por defecto para el material.
     map_geom_secc geom_secciones; //!< Geometrías de secciones.
     map_diag_interaccion diagramas_interaccion; //!< Diagramas de interacción de secciones.
+    map_diag_interaccion2d diagramas_interaccion2d; //!< Diagramas de interacción de secciones.
   protected:
-    bool procesa_comando(CmdStatus &status);
     friend class ElementLoader;
     void ejecuta_bloque_for_each(CmdStatus &,const std::string &);
   public:
@@ -81,9 +86,12 @@ class MaterialLoader: public Loader
     const GeomSection *find_ptr_geom_section(const std::string &nmb) const;
     DiagInteraccion *find_ptr_diag_interaccion(const std::string &nmb);
     const DiagInteraccion *find_ptr_diag_interaccion(const std::string &nmb) const;
+    DiagInteraccion2d *find_ptr_diag_interaccion2d(const std::string &nmb);
+    const DiagInteraccion2d *find_ptr_diag_interaccion2d(const std::string &nmb) const;
     bool existeMaterial(const std::string &nmb) const;
     bool existeGeomSection(const std::string &nmb) const;
     bool existeDiagInteraccion(const std::string &nmb) const;
+    bool existeDiagInteraccion2d(const std::string &nmb) const;
     Material *nuevoMaterial(const std::string &,const std::string &);
     Material &getMaterial(const std::string &);
     GeomSection *newSectionGeometry(const std::string &);
@@ -91,10 +99,12 @@ class MaterialLoader: public Loader
     DiagInteraccion *newInteractionDiagram(const std::string &);
     DiagInteraccion *calcInteractionDiagram(const std::string &,const DatosDiagInteraccion &datos_diag);
     DiagInteraccion &getDiagInteraccion(const std::string &);
+    DiagInteraccion2d *newInteractionDiagramNMy(const std::string &);
+    DiagInteraccion2d *calcInteractionDiagramNMy(const std::string &,const DatosDiagInteraccion &datos_diag);
+    DiagInteraccion2d &getDiagInteraccionNMy(const std::string &);
     ~MaterialLoader(void);
     void clearAll(void);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // fin namespace XC

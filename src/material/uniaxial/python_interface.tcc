@@ -27,7 +27,7 @@ class_<XC::UniaxialMaterial, bases<XC::Material>, boost::noncopyable >("Uniaxial
   .def("setTrialStrain", &XC::UniaxialMaterial::setTrialStrain,"Assigns trial strain.")
   .def("getStrain", &XC::UniaxialMaterial::getStrain,"Devuelve la deformación en el material.")
   .def("getStress", &XC::UniaxialMaterial::getStress,"Devuelve la tensión en el material.")
-.def("getGeneralizedStress",make_function(&XC::UniaxialMaterial::getGeneralizedStress,return_internal_reference<>()))
+  .def("getGeneralizedStress",make_function(&XC::UniaxialMaterial::getGeneralizedStress,return_internal_reference<>()))
   .def("getGeneralizedStrain",make_function(&XC::UniaxialMaterial::getGeneralizedStrain,return_internal_reference<>()))
   .def("setInitialGeneralizedStrain",&XC::UniaxialMaterial::setInitialGeneralizedStrain)
   .def("getInitialGeneralizedStrain",make_function(&XC::UniaxialMaterial::getInitialGeneralizedStrain,return_internal_reference<>()))

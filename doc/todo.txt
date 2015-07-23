@@ -1,3 +1,4 @@
+- En algunos casos (ver test_diag_interaccion06.py) el diagrama de interacción que se obtiene (en 3D y peor aún 2D) es erróneo. Investigar el problema. Por el momento lo he arreglado adoptando un diagrama simplificado (ver método simplify en DiagInteraccion2d.cc). 
 - Calculation of Zero-energy modes based on stiffness matrix eigenvalues.
 - Si no se llama al método setupFibers() la sección tiene rigidez nula y no avisa de esta circunstancia.
 - Arreglar el uso de «locales» al leer y escribir números (ver el uso de inbue en streams (cin, cout,...)).

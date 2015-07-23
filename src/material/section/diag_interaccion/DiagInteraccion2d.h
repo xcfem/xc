@@ -26,15 +26,10 @@
 //----------------------------------------------------------------------------
 //DiagInteraccion.h
 
-#ifndef DIAG_INTERACCION_H
-#define DIAG_INTERACCION_H
+#ifndef DIAG_INTERACCION2D_H
+#define DIAG_INTERACCION2D_H
 
-#include "xc_utils/src/geom/d2/Triedro3d.h"
-#include <set>
-#include <deque>
-#include "ClosedTriangleMesh.h"
-
-class MallaTriang3d;
+#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
 namespace XC {
 
@@ -44,34 +39,24 @@ class DatosDiagInteraccion;
 
 //! \@ingroup MATSCCDiagInt
 //
-//! @brief Diagrama de interacción (N,Mx,My) de una sección.
-class DiagInteraccion: public ClosedTriangleMesh
+//! @brief Diagrama de interacción (N,My) de una sección.
+class DiagInteraccion2d: public Poligono2d
   {
   protected:
-    typedef std::set<const Triedro3d *> set_ptr_triedros;
-
-    
-    set_ptr_triedros triedros_cuadrante[8];
-
-    void clasifica_triedro(const Triedro3d &tdro);
-    void clasifica_triedros(void);
-    void setMatrizPosiciones(const Matrix &);
-    GeomObj::list_Pos3d get_interseccion(const Pos3d &p) const;
+    Pos2d get_interseccion(const Pos2d &p) const;
   public:
-    DiagInteraccion(void);
-    DiagInteraccion(const Pos3d &org,const MallaTriang3d &mll);
-    DiagInteraccion(const DiagInteraccion &otro);
-    DiagInteraccion &operator=(const DiagInteraccion &otro);
-    virtual DiagInteraccion *clon(void) const;
+    DiagInteraccion2d(void);
+    DiagInteraccion2d(const Poligono2d &);
+    virtual DiagInteraccion2d *clon(void) const;
 
-    const Triedro3d *BuscaPtrTriedro(const Pos3d &p) const;
-    double FactorCapacidad(const Pos3d &esf_d) const;
-    Vector FactorCapacidad(const GeomObj::list_Pos3d &lp) const;
+    void Simplify(void);
+    double FactorCapacidad(const Pos2d &esf_d) const;
+    Vector FactorCapacidad(const GeomObj::list_Pos2d &lp) const;
 
     void Print(std::ostream &os) const;
   };
 
-DiagInteraccion calc_diag_interaccion(const FiberSectionBase &scc,const DatosDiagInteraccion &datos);
+DiagInteraccion2d calc_diag_interaccionNMy(const FiberSectionBase &scc,const DatosDiagInteraccion &datos);
 
 } // fin namespace XC
 

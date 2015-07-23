@@ -54,6 +54,9 @@ class_<XC::MaterialLoader, bases<XC::Loader>, boost::noncopyable >("MaterialLoad
   .def("interactionDiagExists",&XC::MaterialLoader::existeDiagInteraccion,"True if intecractions diagram is already defined.")
   .def("newInteractionDiagram", &XC::MaterialLoader::newInteractionDiagram,return_internal_reference<>())
   .def("calcInteractionDiagram", &XC::MaterialLoader::calcInteractionDiagram,return_internal_reference<>())
+  .def("interactionDiag2dExists",&XC::MaterialLoader::existeDiagInteraccion2d,"True if intecractions diagram is already defined.")
+  .def("newInteractionDiagramNMy", &XC::MaterialLoader::newInteractionDiagramNMy,return_internal_reference<>())
+  .def("calcInteractionDiagramNMy", &XC::MaterialLoader::calcInteractionDiagramNMy,return_internal_reference<>())
    ;
 
 class_<XC::ProtoElementLoader, bases<XC::Loader>, boost::noncopyable >("ProtoElementLoader", no_init)

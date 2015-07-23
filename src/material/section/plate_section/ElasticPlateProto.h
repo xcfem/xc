@@ -66,6 +66,9 @@ class ElasticPlateProto : public ElasticPlateBase
     inline const Vector &getInitialSectionDeformation(void) const
       { return initialStrain; }
     const Vector& getSectionDeformation(void) const;
+
+    int revertToStart(void);
+
   }; //end of ElasticPlateProto declarations
 
 //static vector and matrices
@@ -119,6 +122,14 @@ const XC::Vector &XC::ElasticPlateProto<SZ>::getSectionDeformation(void) const
     static Vector retval;
     retval= trialStrain-initialStrain;
     return retval;
+  }
+
+//@ brief revert to start
+template <int SZ>
+int XC::ElasticPlateProto<SZ>::revertToStart(void)
+  {
+    initialStrain.Zero();
+    return ElasticPlateBase::revertToStart();
   }
 
 //! @brief Envía los datos a través del canal que se pasa como parámetro.

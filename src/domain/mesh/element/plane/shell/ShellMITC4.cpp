@@ -75,7 +75,6 @@
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/geom/d2/Poligono3d.h"
 #include "domain/load/plane/ShellUniformLoad.h"
-#include "domain/load/plane/ShellStrainLoad.h"
 #include "domain/load/edge_loads/ElementEdge3dUniformLoad.h"
 #include "modelador/Modelador.h"
 #include "modelador/loaders/LoadLoader.h"

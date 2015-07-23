@@ -4,6 +4,20 @@ from __future__ import division
 import xc_base
 import geom
 import xc
+import math
+
+def flatten_attribute(elemSet,attributeName, treshold, limit):
+  '''reduce higher values which hide attribute variation over the model.'''
+  flattened= 0
+  for e in elemSet:
+    v= e.getProp(attributeName)
+    if(v>treshold):
+      vCorr= 2*math.atan(v)/math.pi*(limit-treshold)+treshold
+      #print "v= ", v, " vCorr=", vCorr
+      e.setProp(attributeName,vCorr)
+      flattened+= 1
+  if(flattened>0):
+    print "flattened ", flattened, 'values over', len(elemSet)
 
 def create_attribute_at_nodes(elemSet,attributeName,initialValue):
   nodeTags= {}
