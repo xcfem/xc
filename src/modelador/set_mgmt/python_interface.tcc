@@ -24,16 +24,16 @@
 typedef XC::DqPtrs<XC::Node> dq_ptrs_node;
 class_<dq_ptrs_node, boost::noncopyable >("dq_ptrs_node",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_node::indBegin, &dq_ptrs_node::indEnd))
-  .add_property("size", &dq_ptrs_node::size)
-  .def("__len__",&dq_ptrs_node::size)
+  .add_property("size", &dq_ptrs_node::size, "Returns list size.")
+  .def("__len__",&dq_ptrs_node::size, "Returns list size.")
   .def("getTags",make_function(&dq_ptrs_node::getTags, return_internal_reference<>() ),"Returns node identifiers.")
   .def("clear",&dq_ptrs_node::clear,"Removes all items.")
   ;
 
 XC::Node *(XC::DqPtrsNode::*getNearestNodeDqPtrs)(const Pos3d &)= &XC::DqPtrsNode::getNearestNode;
 class_<XC::DqPtrsNode, bases<dq_ptrs_node>, boost::noncopyable >("DqPtrsNode",no_init)
-  .def("append", &XC::DqPtrsNode::push_back,"Appends node at last position.")
-  .def("pushFront", &XC::DqPtrsNode::push_front,"Push node at first position.")
+  .def("append", &XC::DqPtrsNode::push_back,"Appends node at the end of the list.")
+  .def("pushFront", &XC::DqPtrsNode::push_front,"Push node at the beginning of the list.")
   .add_property("getNumLiveNodes", &XC::DqPtrsNode::getNumLiveNodes)
   .add_property("getNumDeadNodes", &XC::DqPtrsNode::getNumDeadNodes)
   .def("getNearestNode",make_function(getNearestNodeDqPtrs, return_internal_reference<>() ),"Returns nearest node.")
@@ -42,16 +42,16 @@ class_<XC::DqPtrsNode, bases<dq_ptrs_node>, boost::noncopyable >("DqPtrsNode",no
 typedef XC::DqPtrs<XC::Element> dq_ptrs_element;
 class_<dq_ptrs_element, boost::noncopyable >("dq_ptrs_element",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_element::indBegin, &dq_ptrs_element::indEnd))
-  .add_property("size", &dq_ptrs_element::size)
-  .def("__len__",&dq_ptrs_element::size)
+  .add_property("size", &dq_ptrs_element::size, "Returns list size.")
+  .def("__len__",&dq_ptrs_element::size, "Returns list size.")
   .def("getTags",make_function(&dq_ptrs_element::getTags, return_internal_reference<>() ),"Returns element identifiers.")
   .def("clear",&dq_ptrs_element::clear,"Removes all items.")
   ;
 
 XC::Element *(XC::DqPtrsElem::*getNearestElementDqPtrs)(const Pos3d &)= &XC::DqPtrsElem::getNearestElement;
 class_<XC::DqPtrsElem, bases<dq_ptrs_element>, boost::noncopyable >("DqPtrsElem",no_init)
-  .def("append", &XC::DqPtrsElem::push_back,"Appends element at last position.")
-  .def("pushFront", &XC::DqPtrsElem::push_front,"Push element at first position.")
+  .def("append", &XC::DqPtrsElem::push_back,"Appends element at the end of the list.")
+  .def("pushFront", &XC::DqPtrsElem::push_front,"Push element at the beginning of the list.")
   .add_property("getNumLiveElements", &XC::DqPtrsElem::getNumLiveElements)
   .add_property("getNumDeadElements", &XC::DqPtrsElem::getNumDeadElements)
   .def("getNearestElement",make_function(getNearestElementDqPtrs, return_internal_reference<>() ),"Returns nearest element.")
@@ -60,15 +60,15 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element>, boost::noncopyable >("DqPtrsElem"
 typedef XC::DqPtrs<XC::Constraint> dq_ptrs_constraint;
 class_<dq_ptrs_constraint, boost::noncopyable >("dq_ptrs_constraint",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_constraint::indBegin, &dq_ptrs_constraint::indEnd))
-  .add_property("size", &dq_ptrs_constraint::size)
-  .def("__len__",&dq_ptrs_constraint::size)
+  .add_property("size", &dq_ptrs_constraint::size, "Returns list size.")
+  .def("__len__",&dq_ptrs_constraint::size, "Returns list size.")
   .def("getTags",make_function(&dq_ptrs_constraint::getTags, return_internal_reference<>() ),"Returns constraint identifiers.")
   .def("clear",&dq_ptrs_constraint::clear,"Removes all items.")
   ;
 
 class_<XC::DqPtrsConstraint, bases<dq_ptrs_constraint>, boost::noncopyable >("DqPtrsConstraint",no_init)
-  .def("append", &XC::DqPtrsConstraint::push_back,"Appends constraint at last position.")
-  .def("pushFront", &XC::DqPtrsConstraint::push_front,"Push constraint at first position.")
+  .def("append", &XC::DqPtrsConstraint::push_back,"Appends constraint at the end of the list.")
+  .def("pushFront", &XC::DqPtrsConstraint::push_front,"Push constraint at the beginning of the list.")
    ;
 
 XC::DqPtrsNode &(XC::SetMeshComp::*GetNodosRef)(void)= &XC::SetMeshComp::GetNodos;
@@ -101,10 +101,10 @@ class_<dq_ptrs_pnt, boost::noncopyable >("dq_ptrs_pnt",no_init)
    ;
 
 class_<XC::Set::lst_ptr_puntos, bases<dq_ptrs_pnt>, boost::noncopyable >("lstPnts",no_init)
-  .def("append", &XC::Set::lst_ptr_puntos::push_back,"Appends node at last position.")
-  .def("pushFront", &XC::Set::lst_ptr_puntos::push_front,"Push node at first position.")
-  .add_property("size", &XC::Set::lst_ptr_puntos::size)
-  .def("__len__",&XC::Set::lst_ptr_puntos::size)
+  .def("append", &XC::Set::lst_ptr_puntos::push_back,"Appends a point at the end of the list.")
+  .def("pushFront", &XC::Set::lst_ptr_puntos::push_front,"Push point at the beginning of the list.")
+  .add_property("size", &XC::Set::lst_ptr_puntos::size, "Returns list size.")
+  .def("__len__",&XC::Set::lst_ptr_puntos::size, "Returns list size.")
    ;
 
 typedef XC::DqPtrs<XC::Edge> dq_ptrs_lineas;
@@ -114,10 +114,10 @@ class_<dq_ptrs_lineas, boost::noncopyable >("dq_ptrs_lineas",no_init)
    ;
 
 class_<XC::Set::lst_ptr_lineas, bases<dq_ptrs_lineas>, boost::noncopyable >("lstLines",no_init)
-  .def("append", &XC::Set::lst_ptr_lineas::push_back,"Appends node at last position.")
-  .def("pushFront", &XC::Set::lst_ptr_lineas::push_front,"Push node at first position.")
-  .add_property("size", &XC::Set::lst_ptr_lineas::size)
-  .def("__len__",&XC::Set::lst_ptr_lineas::size)
+  .def("append", &XC::Set::lst_ptr_lineas::push_back,"Appends line at the end of the list.")
+  .def("pushFront", &XC::Set::lst_ptr_lineas::push_front,"Push line at the beginning of the list.")
+  .add_property("size", &XC::Set::lst_ptr_lineas::size, "Returns list size.")
+  .def("__len__",&XC::Set::lst_ptr_lineas::size, "Returns list size.")
    ;
 
 typedef XC::DqPtrs<XC::Face> dq_ptrs_superficies;
@@ -127,10 +127,10 @@ class_<dq_ptrs_superficies, boost::noncopyable >("dq_ptrs_superficies",no_init)
    ;
 
 class_<XC::Set::lst_ptr_superficies, bases<dq_ptrs_superficies>, boost::noncopyable >("lstSurfaces",no_init)
-  .def("append", &XC::Set::lst_ptr_superficies::push_back,"Appends node at last position.")
-  .def("pushFront", &XC::Set::lst_ptr_superficies::push_front,"Push node at first position.")
-  .add_property("size", &XC::Set::lst_ptr_superficies::size)
-  .def("__len__",&XC::Set::lst_ptr_superficies::size)
+  .def("append", &XC::Set::lst_ptr_superficies::push_back,"Appends surface at the end of the list.")
+  .def("pushFront", &XC::Set::lst_ptr_superficies::push_front,"Push surface at the beginning of the list.")
+  .add_property("size", &XC::Set::lst_ptr_superficies::size, "Returns list size.")
+  .def("__len__",&XC::Set::lst_ptr_superficies::size, "Returns list size.")
    ;
 
 typedef XC::DqPtrs<XC::Body> dq_ptrs_cuerpos;
@@ -140,10 +140,10 @@ class_<dq_ptrs_cuerpos, boost::noncopyable >("dq_ptrs_cuerpos",no_init)
    ;
 
 class_<XC::Set::lst_ptr_cuerpos, bases<dq_ptrs_cuerpos>, boost::noncopyable >("lstBodies",no_init)
-  .def("append", &XC::Set::lst_ptr_cuerpos::push_back,"Appends node at last position.")
-  .def("pushFront", &XC::Set::lst_ptr_cuerpos::push_front,"Push node at first position.")
-  .add_property("size", &XC::Set::lst_ptr_cuerpos::size)
-  .def("__len__",&XC::Set::lst_ptr_cuerpos::size)
+  .def("append", &XC::Set::lst_ptr_cuerpos::push_back,"Appends body at the end of the list.")
+  .def("pushFront", &XC::Set::lst_ptr_cuerpos::push_front,"Push body at the beginning of the list.")
+  .add_property("size", &XC::Set::lst_ptr_cuerpos::size, "Returns list size.")
+  .def("__len__",&XC::Set::lst_ptr_cuerpos::size, "Returns list size.")
    ;
 
 

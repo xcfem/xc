@@ -1223,7 +1223,8 @@ Returns a reinforcement layer parallel to the top and bottom sides of the rectan
 \noindent 
 \begin{verbatim}
 from materials.fiber_section import geomArmaduraSeccionesFibras
-geomArmaduraSeccionesFibras.gmArmCapaHoriz(sectionGeom, nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub, h)
+geomArmaduraSeccionesFibras.gmArmCapaHoriz(sectionGeom, nmbFiberMat, 
+nBarras, areaBarras, canto, ancho, rcub, h)
 \end{verbatim}
 \vspace{-10pt}
 {\color{grayLines} \rule{\linewidth}{0.25pt}}
@@ -1245,7 +1246,8 @@ Returns a reinforcement layer in the bottom side of a rectangular section.
 \noindent 
 \begin{verbatim}
 from materials.fiber_section import geomArmaduraSeccionesFibras
-geomArmaduraSeccionesFibras.gmArmInferior(sectionGeom,nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub)
+geomArmaduraSeccionesFibras.gmArmInferior(sectionGeom,nmbFiberMat, 
+nBarras, areaBarras, canto, ancho, rcub)
 \end{verbatim}
 \vspace{-10pt}
 {\color{grayLines} \rule{\linewidth}{0.25pt}}
@@ -1266,7 +1268,8 @@ Returns a reinforcement layer in the top side of a rectangular section.
 \noindent 
 \begin{verbatim}
 from materials.fiber_section import geomArmaduraSeccionesFibras
-geomArmaduraSeccionesFibras.gmArmSuperior(sectionGeom,nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub)
+geomArmaduraSeccionesFibras.gmArmSuperior(sectionGeom,nmbFiberMat, 
+nBarras, areaBarras, canto, ancho, rcub)
 \end{verbatim}
 \vspace{-10pt}
 {\color{grayLines} \rule{\linewidth}{0.25pt}}
@@ -1305,7 +1308,8 @@ Returns a rectangular geometric region of fibers' material.
 \noindent 
 \begin{verbatim}
 from materials.fiber_section import geomSeccionesFibras
-geomSeccionesFibras.gmSeccRectangulo(geomSection,nmbFiberMat, h, b, nDIJ, nDIK)
+geomSeccionesFibras.gmSeccRectangulo(geomSection,nmbFiberMat, h, b, 
+nDIJ, nDIK)
 \end{verbatim}
 \vspace{-10pt}
 {\color{grayLines} \rule{\linewidth}{0.25pt}}
@@ -1352,7 +1356,8 @@ informeGeomSeccion.RecordFamArmaduraPrincipal(reinfLayer)
 \noindent The function writes in the specified file the characteristics (diameter, area, cover, position of gravity centre, \ldots) of each main reinforcement family provided in a list of family names.
 \begin{verbatim}
 from materials.fiber_section import informeGeomSeccion
-informeGeomSeccion.imprimeArmaduraPrincipal(listaFamArmaduraPrincipal, areaHorm, archTex)
+informeGeomSeccion.imprimeArmaduraPrincipal(listaFamArmaduraPrincipal, 
+areaHorm, archTex)
 \end{verbatim}
 \vspace{-10pt}
 {\color{grayLines} \rule{\linewidth}{0.25pt}}
@@ -1368,7 +1373,8 @@ informeGeomSeccion.imprimeArmaduraPrincipal(listaFamArmaduraPrincipal, areaHorm,
 \noindent The function writes in the specified file the characteristics (diameter, area, distances, angles, \ldots) of a family of shear reinforcement bars.
 \begin{verbatim}
 from materials.fiber_section import informeGeomSeccion
-informeGeomSeccion.imprimeArmaduraCortante(recordArmaduraCortante, archTex)
+informeGeomSeccion.imprimeArmaduraCortante(recordArmaduraCortante, 
+archTex)
 \end{verbatim}
 \vspace{-10pt}
 {\color{grayLines} \rule{\linewidth}{0.25pt}}
@@ -1399,33 +1405,31 @@ informeGeomSeccion.informeGeomSeccion(mdlr,scc, archTex, pathFigura)
 
 \input{materials/figures/hsticentDatosScc1}
 
+\subsection{Sections calculation}
 
-
-
-
-
-\end{document}
-
-
-\subsection{}
-\noindent 
+\noindent This class is used to perform the stress calculations in a rectangular reinforced concrete section with single reinforcement layers in top and bottom faces.
 \begin{verbatim}
-
+from materials import stressCalc
+stressCalc.stressCalc(b,h,r,rp,As,Asp,Ec,Es)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
 \begin{center}
 \begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the \\
-{\tt } &  \\
-{\tt } &  \\
-{\tt } &  \\
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+{\tt b} & cross-section width \\
+{\tt h} & cross-section height \\
+{\tt r} & cover of longitudinal reinforcement in the positive face\\
+{\tt rp} & cover of longitudinal reinforcement in the negative face\\
+{\tt As} & area of longitudinal reinforcement in  the positive face \\
+{\tt Asp} & area of longitudinal reinforcement in  the negative face \\
+{\tt Ec} & concrete elastic modulus \\
+{\tt Es} & reinforcing steel elastic modulus \\
+{\tt N} & normal force \\
+{\tt M} & bending moment \\
 \end{tabular}
 \end{center}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=60mm]{materials/figures/}
-\caption{. Stress-strain diagram}\label{}
-\end{figure}
+
+
+
+
