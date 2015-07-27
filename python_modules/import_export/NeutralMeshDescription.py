@@ -112,6 +112,8 @@ class MeshData(object):
 
   def appendNode(self,id,x,y,z):
     self.nodes[id]= NodeRecord(int(id),[x,y,z])
+  def appendCell(self,cell):
+    self.cells[cell.id]= cell
 
   def readFromDATFile(self,fName):
     # Read the source mesh

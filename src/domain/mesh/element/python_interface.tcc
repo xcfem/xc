@@ -48,6 +48,7 @@ class_<XC::NodePtrs, bases<EntCmd>, boost::noncopyable >("NodePtrs", no_init)
   ;
 
 class_<XC::NodePtrsWithIDs, bases<XC::NodePtrs>, boost::noncopyable >("NodePtrsWithIDs", no_init)
+  .add_property("getExternalNodes",make_function(&XC::NodePtrsWithIDs::getExternalNodes, return_internal_reference<>() ),"Returns tags of external nodes.")
   ;
 
 XC::NodePtrsWithIDs &(XC::Element::*getNodePtrsRef)(void)= &XC::Element::getNodePtrs;
