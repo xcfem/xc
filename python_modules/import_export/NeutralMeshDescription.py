@@ -2,8 +2,7 @@
 import os
 
 class NodeRecord(object):
-  id= None
-  coords= None
+
   def __init__(self,id, coords):
     self.id= id
     self.coords= [coords[0],coords[1],coords[2]]
@@ -22,9 +21,6 @@ class NodeRecord(object):
 
 
 class CellRecord(object):
-  id= None
-  cellType= None
-  nodeIds= []
 
   def __init__(self,id, type, nodes):
     self.id= id
@@ -42,12 +38,15 @@ class CellRecord(object):
     strCommand+= 'e' + strId + '= ' + xcImportExportData.cellLoaderName + '.newElement(' + strType + ',' + self.getStrXCNodes() +')'
     return strCommand
 
+class NodeSupportRecord(object):
+  def __init__(self,id, idGdl):
+    self.id= id
+    self.idGdl= idGdl
+
 class GroupRecord(object):
-  name= None
-  nodeIds= []
-  cellIds= []
 
   def readFromDATFile(self,fName):
+    self.name= None
     meshDesc= MeshData()
     meshDesc.readFromDATFile(fName)
     self.nodeIds= meshDesc.getNodeTags()
@@ -103,12 +102,15 @@ class XCImportExportData(object):
     self.meshDesc.writeToXCFile(self)
 
 class MeshData(object):
-  name= None
-  numberOfCells= None
-  numberOfNodes= None
-  nodes= {}
-  cells= {}
-  groups= []
+
+  def __init__(self):
+    self.name= None
+    self.numberOfCells= None
+    self.numberOfNodes= None
+    self.nodes= {}
+    self.cells= {}
+    self.nodeSupports= {}
+    self.groups= []
 
   def appendNode(self,id,x,y,z):
     self.nodes[id]= NodeRecord(int(id),[x,y,z])

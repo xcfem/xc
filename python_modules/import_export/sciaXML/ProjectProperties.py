@@ -4,23 +4,22 @@
 
 import NodeProperties as ncd
 import EPPlaneProperties as eppp
+import NodeSupportProperties as nsp
 import xml.etree.cElementTree as ET
 
 class ProjectProperties(object):    
     
-  xmlns= 'http://www.scia.cz'
-  fileName= ''
-  nodeProperties= ncd.NodeProperties()
-  epPlaneProperties= eppp.EPPlaneProperties()
-
   def __init__(self,xmlns= 'http://www.scia.cz', fileName= ''):
     self.xmlns= xmlns
     self.fileName= fileName
+    self.nodeProperties= ncd.NodeProperties()
+    self.epPlaneProperties= eppp.EPPlaneProperties()
+    self.nodeSupportProperties= nsp.NodeSupportProperties()
 
   def getXMLElement(self,defFileName):
     project= ET.Element("def_project")
     project.set("xmlns",self.xmlns)
-    containers= [self.nodeProperties,self.epPlaneProperties]
+    containers= [self.nodeProperties,self.epPlaneProperties, self.nodeSupportProperties]
     for c in containers:
       elem= c.getXMLElement(project)
     return project

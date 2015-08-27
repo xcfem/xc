@@ -9,19 +9,12 @@ import xml.etree.cElementTree as ET
 
 class Project:    
     
-  xmlns= ''
-  defn= df.Definition('')
-  containers= []
-  fileName= ''
-  comprimentoX= 0.0
-  comprimentoY= 0.0
-  comprimentoZ= 0.0
-  uuid= ''
-
   def __init__(self,xmlns, defn, containers):
     self.xmlns= xmlns
     self.defn= defn
     self.containers= containers
+    self.fileName= ''
+    self.uuid= ''
 
   # def __init__(self, sumarioDados, fileName):
   #   if(sumarioDados != None):
@@ -218,19 +211,6 @@ class Project:
   def setFileName(self, fileName):
     self.fileName= fileName
 
-
-  def getComprimentoX(self):
-    return self.comprimentoX
-  def setComprimentoX(self, comprimentoX):
-    self.comprimentoX= comprimentoX
-  def getComprimentoY(self):
-    return self.comprimentoY
-  def setComprimentoY(self, comprimentoY):
-    self.comprimentoY= comprimentoY
-  def getComprimentoZ(self):
-    return self.comprimentoZ
-  def setComprimentoZ(self, comprimentoZ):
-    self.comprimentoZ= comprimentoZ
 
   def getXMLElement(self,defFileName):
     project= ET.Element("project")

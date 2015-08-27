@@ -5,23 +5,19 @@
 import Definition as df
 import NodeContainer as nCtr
 import EPPlaneContainer as eppc
+import NodeSupportContainer as nsc
 import ProjectProperties as prjDef
 import xml.etree.cElementTree as ET
 
-class SXMLMesh:    
-    
-  xmlns= ''
-  uuid= ''
-  defn= df.Definition('')
-  nodeContainer= nCtr.NodeContainer([])
-  epPlaneContainer= eppc.EPPlaneContainer([])
-  fileName= ''
-
+class SXMLMesh:
   def __init__(self,xmlns, defn,mesh):
     self.xmlns= xmlns
+    self.uuid= ''
     self.defn= defn
     self.nodeContainer= nCtr.NodeContainer(mesh.nodes)
     self.epPlaneContainer= eppc.EPPlaneContainer(mesh.cells)
+    self.nodeSupportContainer= nsc.NodeSupportContainer(mesh.nodeSupports)
+    self.fileName= ''
 
   def getXMLElement(self,defFileName):
     project= ET.Element("project")
