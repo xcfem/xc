@@ -1,0 +1,123 @@
+\newcommand{\A}[1]{{\tt A{#1}} & cross-sectional area of the section}
+\newcommand{\alphaX}{{\tt alpha} & shear shape factor}
+\newcommand{\alphaY}[1]{{\tt alphaY{#1}} & coefficient of distortion about the local y-axis}
+\newcommand{\alphaZ}[1]{{\tt alphaZ{#1}} & coefficient of distortion about the local z-axis}
+\newcommand{\bX}{{\tt b} & width}
+\newcommand{\E}{{\tt E} & elastic modulus}
+\newcommand{\Es}{{\tt Es} & elastic modulus}
+\newcommand{\epsSMax}{{\tt epsSMax} & maximum strain in steel}
+\newcommand{\epsCMin}{{\tt epsCMin} & minimum strain in concrete}
+\newcommand{\EIy}[1]{{\tt EIy{#1}} & product of $E_{steel} \times I_y$ }
+\newcommand{\EIz}[1]{{\tt EIz{#1}} & product of $E_{steel} \times I_z$} 
+\newcommand{\eyd}[1]{{\tt eyd{#1}} & design strain at yield point}
+\newcommand{\eyk}[1]{{\tt eyk{#1}} & characteristic strain at yield point}
+\newcommand{\fmaxk}[1]{{\tt fmaxk{#1}} & characteristic value of the ultimate strength}
+\newcommand{\fy}[1]{{\tt fy{#1}} &  yield strength}
+\newcommand{\fyd}[1]{{\tt fyk{#1}} & design value of the yield strength}
+\newcommand{\fyk}[1]{{\tt fyk{#1}} & characteristic value of the yield strength}
+\newcommand{\fyn}[1]{{\tt fyn{#1}} &  stress at which material reaches plastic state in compression}
+\newcommand{\fyp}[1]{{\tt fyp{#1}} & stress at which material reaches plastic state in tension}
+\newcommand{\gammaS}{{\tt gammaS} & partial factor}
+\newcommand{\G}[1]{{\tt G{#1}} & transverse modulus of elasticity}
+\newcommand{\GJ}[1]{{\tt GJ{#1}} & product of $E_{steel} \times G$ }
+\newcommand{\h}{{\tt h} & height}
+\newcommand{\IAxisOne}[1]{{\tt I1{#1}} &  second moment of area about the axis through the centre of gravity and parallel to the width dimension (axis 1)}
+\newcommand{\iAxisOne}[1]{{\tt i1{#1}} & bending radius of the section with regard to the axis 1}
+\newcommand{\IAxisTwo}[1]{{\tt I2{#1}} &  second moment of area about the axis through the centre of gravity and parallel to the high dimension (axis 2)}
+\newcommand{\iAxisTwo}[1]{{\tt i2{#1}} & bending radius of the section with regard to the axis 2}
+\newcommand{\Iy}[1]{{\tt Iy{#1}} &  second moment of area about the local y-axis}
+
+\newcommand{\Iz}[1]{{\tt Iz{#1}} &  second moment of area about the local z-axis}
+\newcommand{\J}[1]{{\tt J{#1}} & torsional moment of inertia of the section }
+\newcommand{\mdlr}{{\tt mdlr} & modeler name}
+\newcommand{\MeAxisOne}[1]{{\tt Me1{#1}} & yield moment of the rectangular section about the axis 1}
+\newcommand{\name}[1]{{\tt name} & name identifying the {#1}}
+\newcommand{\nDivIJ}{{\tt nDivIJ} & number of cells in IJ (width) direction}
+\newcommand{\numDivIJ}{{\tt numDivIJ} & number of cells in IJ (width) direction}
+\newcommand{\nDivJK}{{\tt nDivJK} & number of cells in JK  (height) direction}
+\newcommand{\numDivJK}{{\tt numDivJK} & number of cells in JK  (height) direction}
+\newcommand{\nuX}{{\tt nu} & Poisson's ratio}
+\newcommand{\rhoX}{{\tt rho} &  mass density}
+\newcommand{\Wyel}[1]{{\tt Wyel{#1}} & elastic section modulus about the local y-axis}
+\newcommand{\Wzel}[1]{{\tt Wzel()} & elastic section modulus about the local z-axis}
+
+%Elements variables
+\newcommand{\ElementParam}
+{
+%{\tt getNodes} & \\ 
+{\tt getIdxNodes} & vector containing the node index to be used in Vtk graphics \\
+{\tt getDimension} & element dimension \\
+{\tt getVtkCellType} & cell type for Vtk graphics\\ 
+}
+
+\newcommand{\ElementMeth}
+{
+{\tt commitState()} & the element is to commit its current state; returns $0$ if sucessfull, a negative number if not\\
+{\tt revertToLastCommit()} & the element is to set its current state to the last committed state; returnS $0$ if sucessfull, a negative number if not\\
+{\tt revertToStart} & the element is to set its current state to the state it was at before the analysis started; returns $0$ if sucessfull, a negative number if not\\
+{\tt getNumDOF} & returns the number of DOF associated with the element; this should equal the sum of the DOFs at each of the external nodes \\
+{\tt getResistingForce()} & returns the resisting force vector for the element; this is equal to the applied load due to element loads minus the loads at the nodes due to internal stresses in the element due to the current trial displacement, i.e. $ R_e = P_{e} - f_{R_e}(U_{trial}) $ \\ 
+{\tt setDeadSRF} & assigns Stress Reduction Factor for element deactivation\\ 
+{\tt getVtkCellType()} & returns cell type for Vtk graphics\\ 
+{\tt getMEDCellType()} & returns cell type for MED file writing.\\
+\multicolumn{2}{l}{{\tt getPosCentroid(geomInicial)}}\\
+ & returns the element centroid position. \\
+& {\tt geomInicial = True} to consider the initial geometry shape \\
+& {\tt geomInicial = False} to consider the deformed geometry shape \\
+\multicolumn{2}{l}{{\tt getCooCentroid(geomInicial)}} \\
+ & returns the element centroid coordinates\\ 
+& {\tt geomInicial = True} to consider the initial geometry shape \\
+& {\tt geomInicial = False} to consider the deformed geometry shape \\
+\multicolumn{2}{l}{{\tt getPoints(ni,nj,nk,geomInicial)}}\\
+ & returns a uniform grid of points over the element.\\ 
+& {\tt ni,nj,nk} number of divisions in i,j,k directions \\
+& {\tt getLongTributaria} \emph{True} to consider the initial geometry shape, \emph{False} for the deformed geometry shape\\
+{\tt resetTributarias()} & reset the tributary length, area and volume of connected nodes \\
+{\tt vuelcaTributarias} & \\
+\multicolumn{2}{l}{{\tt calculaLongsTributarias(geomInicial)}} \\
+ & returns the tributary length associated with each node of the element; the parameter {\tt geomInicial = True} to consider the initial geometry shape in the calculation or {\tt geomInicial = False} for the deformed geometry shape\\
+\multicolumn{2}{l}{{\tt getLongTributaria(Node)}} \\
+ & returns the tributary length associated with the {\tt Node} given as argument\\
+\multicolumn{2}{l}{{\tt getLongTributariaByTag(tag)}}\\
+ & returns the tributary length associated with the node labeled with the {\tt tag} given as argument \\
+\multicolumn{2}{l}{{\tt calculaAreasTributarias(geomInicial)}}\\
+ & returns the tributary area associated with each node of the element; the parameter {\tt geomInicial = True} to consider the initial geometry shape in the calculation or {\tt geomInicial = False} for the deformed geometry shape\\
+\multicolumn{2}{l}{{\tt getAreaTributaria(Node)}} \\
+ & returns the tributary area associated with the {\tt Node} given as argument\\
+\multicolumn{2}{l}{{\tt getAreaTributariaByTag(tag)}} \\
+& returns the tributary area associated with the node labeled with the {\tt tag} given as argument \\
+\multicolumn{2}{l}{{\tt calculaVolsTributarios(geomInicial)}} \\
+ & returns the tributary volume associated with each node of the element; the parameter {\tt geomInicial = True} to consider the initial geometry shape in the calculation or {\tt geomInicial = False} for the deformed geometry shape\\
+\multicolumn{2}{l}{{\tt getVolTributario(Node)}} \\
+ & returns the tributary volume associated with the {\tt Node} given as argument\\
+\multicolumn{2}{l}{{\tt getVolTributarioByTag(tag)}} \\
+& returns the tributary volume associated with the node labeled with the {\tt tag} given as argument \\
+{\tt getMaxCooNod(axisIdx)} & returns the maximum value among the coordinates in the {\tt axisIdx} axis of the external nodes associated with the element ({\tt axisIdx} adopts the values {\tt 0,1,}\ldots) \\
+{\tt getMinCooNod(axisIdx)} & returns the minimum value among the coordinates in the {\tt axisIdx} axis of the external nodes associated with the element ({\tt axisIdx} adopts the values {\tt 0,1,}\ldots)\\
+}
+
+
+\newcommand{\ElementZERODParam}
+{
+{\tt getIVector} & vector in the element local x-axis direction\\
+{\tt getJVector} & vector in the element local y-axis direction\\
+{\tt getKVector} & vector in the element local z-axis direction\\
+}
+
+\newcommand{\ElementZERODMeth}
+{
+{\tt setupVectors(x,yp)} & establish orientation of element for the transformation matrix \\
+& {\tt x} vector in global coordinates defining local x-axis \\
+& {\tt yp} vector in global coordinates which lies in the local x-y plane for the element \\
+& local z-axis is defined by the vector $\vec{z}=\vec{x}\times\vec{yp}$ \\
+}
+
+\newcommand{\ZeroLengthMeth}
+{
+{\tt clearMaterials()} & clears all material definition of the element \\
+{\tt setMaterial(dir,matName)} & assigns uni-axial materials to the different directions of the element\\
+& {\tt dir}: integer representing the direction in which the uni-axial material acts: {\tt dir} is 0,1,2 for translation in the local x, y, z axes or 3, 4, 5 
+for rotation about the local x, y, z axes.\\
+& {\tt matName}: string representing the name of the material \\
+{\tt getMaterials} & \\
+}

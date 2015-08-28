@@ -1,0 +1,43 @@
+\newenvironment{paramFuncTable}
+{\begin{center} 
+\begin{longtable}{p{3.5cm}p{9cm}}
+}
+{\end{longtable} \end{center}}
+
+
+\newenvironment{methodsTable}
+{\begin{center}
+\begin{longtable}{p{3.5cm}p{9cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\endfirsthead
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods} \ldots continued from previous page} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\endhead
+
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\multicolumn{2}{r}{{\color{grayText} continued on next page \ldots  }} \\ 
+\endfoot
+
+\endlastfoot
+
+}
+{\end{longtable} \end{center}}
+
+\newenvironment{paramClassTable}
+{\begin{center}
+\begin{longtable}{lp{10cm}}
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\endfirsthead
+\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters} \ldots continued from previous page} \\
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\endhead
+
+\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\multicolumn{2}{r}{{\color{grayText} continued on next page \ldots  }} \\ 
+\endfoot
+
+\endlastfoot
+}
+{\end{longtable} \end{center}}

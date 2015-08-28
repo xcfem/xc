@@ -1,0 +1,44 @@
+\chapter{Elements}
+
+\section{Zero-Length Elements}
+\subsection{ZeroLength}
+The ZeroLength class represents an element defined by two nodes at the same geometric location, hence it has zero length.
+The nodes are connected by of uniaxial materials to represent the force-deformation relationship for the element. 
+
+ZeroLength elements are constructed with a {\em tag} in a domain of {\em dimension} 1, 2, or 3, connected by nodes {\em Nd1} and {\em Nd2}. 
+The vector $\vec{x}$ defines the local x-axis for the element and the vector $\vec{yp}$ lies in the local x-y plane for the element.  The local z-axis is the cross product between $\vec{x}$ and $\vec{yp}$, and the local y-axis is the cross product between the local z-axis and $\vec{x}$.
+
+The force-deformation relationship for the element is given by a pointer {\em theMaterial} to a {\bf UniaxialMaterial} model acting in local {\em direction}.
+
+The local {\em direction} is 0, 1, 2 for translation in the local x, y, z axes or 3, 4, 5 for rotation about the local x, y, z axes. 
+
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+ZeroLengthElement=mdlr.getElementLoader.newElement("zero_length",
+xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+\begin{paramClassTable}
+\ElementParam{}
+\ElementZERODParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementZERODMeth{}
+\end{methodsTable}
+
+\subsection{ZeroLengthSection}
+
+
+
+\subsection{ZeroLengthContact}
+
+
+\subsection{ZeroLengthContact2D}
+
+
+\subsection{ZeroLengthContact3D}
+
