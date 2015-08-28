@@ -52,9 +52,9 @@
 
 \newcommand{\ElementMeth}
 {
-{\tt commitState()} & the element is to commit its current state; returns $0$ if sucessfull, a negative number if not\\
-{\tt revertToLastCommit()} & the element is to set its current state to the last committed state; returnS $0$ if sucessfull, a negative number if not\\
-{\tt revertToStart} & the element is to set its current state to the state it was at before the analysis started; returns $0$ if sucessfull, a negative number if not\\
+{\tt commitState()} & the element is to commit its current state; returns $0$ if successful, a negative number if not\\
+{\tt revertToLastCommit()} & the element is to set its current state to the last committed state; returns $0$ if successful, a negative number if not\\
+{\tt revertToStart} & the element is to set its current state to the state it was at before the analysis started; returns $0$ if successful, a negative number if not\\
 {\tt getNumDOF} & returns the number of DOF associated with the element; this should equal the sum of the DOFs at each of the external nodes \\
 {\tt getResistingForce()} & returns the resisting force vector for the element; this is equal to the applied load due to element loads minus the loads at the nodes due to internal stresses in the element due to the current trial displacement, i.e. $ R_e = P_{e} - f_{R_e}(U_{trial}) $ \\ 
 {\tt setDeadSRF} & assigns Stress Reduction Factor for element deactivation\\ 
@@ -79,19 +79,19 @@
 \multicolumn{2}{l}{{\tt getLongTributaria(Node)}} \\
  & returns the tributary length associated with the {\tt Node} given as argument\\
 \multicolumn{2}{l}{{\tt getLongTributariaByTag(tag)}}\\
- & returns the tributary length associated with the node labeled with the {\tt tag} given as argument \\
+ & returns the tributary length associated with the node labelled with the {\tt tag} given as argument \\
 \multicolumn{2}{l}{{\tt calculaAreasTributarias(geomInicial)}}\\
  & returns the tributary area associated with each node of the element; the parameter {\tt geomInicial = True} to consider the initial geometry shape in the calculation or {\tt geomInicial = False} for the deformed geometry shape\\
 \multicolumn{2}{l}{{\tt getAreaTributaria(Node)}} \\
  & returns the tributary area associated with the {\tt Node} given as argument\\
 \multicolumn{2}{l}{{\tt getAreaTributariaByTag(tag)}} \\
-& returns the tributary area associated with the node labeled with the {\tt tag} given as argument \\
+& returns the tributary area associated with the node labelled with the {\tt tag} given as argument \\
 \multicolumn{2}{l}{{\tt calculaVolsTributarios(geomInicial)}} \\
  & returns the tributary volume associated with each node of the element; the parameter {\tt geomInicial = True} to consider the initial geometry shape in the calculation or {\tt geomInicial = False} for the deformed geometry shape\\
 \multicolumn{2}{l}{{\tt getVolTributario(Node)}} \\
  & returns the tributary volume associated with the {\tt Node} given as argument\\
 \multicolumn{2}{l}{{\tt getVolTributarioByTag(tag)}} \\
-& returns the tributary volume associated with the node labeled with the {\tt tag} given as argument \\
+& returns the tributary volume associated with the node labelled with the {\tt tag} given as argument \\
 {\tt getMaxCooNod(axisIdx)} & returns the maximum value among the coordinates in the {\tt axisIdx} axis of the external nodes associated with the element ({\tt axisIdx} adopts the values {\tt 0,1,}\ldots) \\
 {\tt getMinCooNod(axisIdx)} & returns the minimum value among the coordinates in the {\tt axisIdx} axis of the external nodes associated with the element ({\tt axisIdx} adopts the values {\tt 0,1,}\ldots)\\
 }
@@ -120,4 +120,11 @@
 for rotation about the local x, y, z axes.\\
 & {\tt matName}: string representing the name of the material \\
 {\tt getMaterials} & \\
+}
+
+
+\newcommand{\ZeroLengthSectionMeth}
+{
+{\tt getSection()} & returns the section axial force-deformation associated with the element \\
+{\tt getMaterial()} & returns the section axial force-deformation associated with the element \\
 }

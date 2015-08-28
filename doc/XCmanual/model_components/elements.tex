@@ -3,6 +3,7 @@
 \section{Zero-Length Elements}
 \subsection{ZeroLength}
 The ZeroLength class represents an element defined by two nodes at the same geometric location, hence it has zero length.
+
 The nodes are connected by of uniaxial materials to represent the force-deformation relationship for the element. 
 
 ZeroLength elements are constructed with a {\em tag} in a domain of {\em dimension} 1, 2, or 3, connected by nodes {\em Nd1} and {\em Nd2}. 
@@ -20,6 +21,7 @@ xc.ID([Nd1Tag,Nd2Tag]))
 \begin{paramFuncTable}
 {\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
 \end{paramFuncTable}
+
 \begin{paramClassTable}
 \ElementParam{}
 \ElementZERODParam{}
@@ -28,17 +30,49 @@ xc.ID([Nd1Tag,Nd2Tag]))
 \begin{methodsTable}
 \ElementMeth{}
 \ElementZERODMeth{}
+\ZeroLengthMeth{}
 \end{methodsTable}
 
+% ***ZeroLengthSection***
 \subsection{ZeroLengthSection}
+The ZeroLengthSection class represents an element defined by two nodes at the same geometric location, hence it has zero length.
+
+The nodes are connected by a SectionForceDeformation object which represents the force-deformation relationship for the element. 
+
+ZeroLength elements are constructed with a {\em tag} in a domain of {\em dimension} 1, 2, or 3, connected by nodes {\em Nd1} and {\em Nd2}. 
+The vector $\vec{x}$ defines the local x-axis for the element and the vector $\vec{yp}$ lies in the local x-y plane for the element.  The local z-axis is the cross product between $\vec{x}$ and $\vec{yp}$, and the local y-axis is the cross product between the local z-axis and $\vec{x}$.
+
+The force-deformation relationship for the element is obtained by invoking {\em getCopy()} on the {\bf SectionForceDeformation} pointer {\em theSection}. The section model acts in the local space defined by the $\vec{x}$ and $\vec{yp}$ vectors. The section axial force-deformation acts along the element local x-axis and the section y-z axes directly corresponds to the local element y-z axes.
+
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+ZeroLengthElement=mdlr.getElementLoader.newElement(
+"zero_length_section",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementZERODParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementZERODMeth{}
+\ZeroLengthSectionMeth{}
+\end{methodsTable}
 
 
-
+% ***ZeroLengthContact***
 \subsection{ZeroLengthContact}
 
 
+% ***ZeroLengthContact2D***
 \subsection{ZeroLengthContact2D}
 
 
+% ***ZeroLengthContact3D***
 \subsection{ZeroLengthContact3D}
 
