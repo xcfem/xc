@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+
+#Based on sXML-master projet on gitHub
+
+import PropertiesContainer as ctr
+import NodeContainer as nc
+import Property as prop
+import TableProperties as tbProp
+import xml.etree.cElementTree as ET
+
+idName= '{4364BC01-AAB7-11D4-B3D9-00104BC3B531}'
+idXCoord= '{C1DD759A-4291-481B-B819-92E3AA9E04B7}'
+idYCoord= '{A84A15AC-FEC2-4C27-84B4-CFA676615934}'
+idZCoord= '{1017EA1E-F76B-4D4B-8A4C-7E58FDED1B02}'
+idNodeTable= 'F67B790F-88D4-41ED-A3B9-3D9F9744B5AF' #sin llavecitas
+
+class NodeProperties(ctr.PropertiesContainer):
+  tableDef= None;
+  def __init__(self):
+    super(NodeProperties,self).__init__(nc.idNodeContainer,nc.idNodeContainer,nc.progIdNodes)
+    self.tableDef= tbProp.TableProperties(idNodeTable,"XML\default","vertical",nc.idNodeContainer,nc.progIdNodes)
+    self.tableDef.properties.append(prop.Property("0","Name","string",idName))
+    self.tableDef.properties.append(prop.Property("1","XCoord","param",idXCoord,"33619968"))
+    self.tableDef.properties.append(prop.Property("2","YCoord","param",idYCoord,"33619968"))
+    self.tableDef.properties.append(prop.Property("3","ZCoord","param",idZCoord,"33619968"))
+
+  def getXMLElement(self,parent):
+    container= ET.SubElement(parent,"def_container")
+    self.populateXMLElement(container)
+    self.tableDef.getXMLElement(container)
+    return container
+
