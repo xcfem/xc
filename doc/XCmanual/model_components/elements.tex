@@ -65,9 +65,39 @@ ZeroLengthElement=mdlr.getElementLoader.newElement(
 \end{methodsTable}
 
 
+\subsection{ZeroLengthContact2D, ZeroLengthContact3D}
 % ***ZeroLengthContact***
-\subsection{ZeroLengthContact}
+These classes are used to construct a zeroLengthContact2D element or a zeroLengthContact3D element, which are Node-to-node frictional contact element used in two dimensional analysis and three dimensional analysis.
 
+The contact element is node-to-node contact. Contact occurs between two contact nodes when they come close. The relation follows Mohr-coulomb law: $T = \mu \cdot N + c$, where $T$ is tangential force and $N$ is normal force across the interface; $\mu$ is friction coefficient and $c$ is total cohesion (summed over the effective area of contact nodes).
+
+The contact node pair in node-to-node contact element is termed «master node» and «slave node», respectively. Master/slave plane is the contact plane which the master/slave node belongs to. The discrimination is made solely for contact detection purpose. User need to specify the corresponding out normal of the master plane, and this direction is assumed to be unchanged during analysis. For simplicity, 3D contact only allows 3 options to specify the directions of the contact plane. The convention is: out normal of master plane always points to positive axial direction (+X or +Y, or +Z)
+
+For 2D contact, slave nodes and master nodes must be 2 DOF. For 3D contact, slave nodes and master nodes must be 3 DOF.
+
+The resulted tangent from the contact element is NON-SYMMETRIC. Switch to non-symmetric matrix solver. 
+
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+ZeroLengthElement=mdlr.getElementLoader.newElement(
+"zero_length_contact_2d",xc.ID([Nd1Tag,Nd2Tag]))
+"zero_length_contact_3d",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of master and slave nodes\\
+\end{paramFuncTable}
+
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementZERODParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementZERODMeth{}
+\ZeroLengthSectionMeth{}
+\end{methodsTable}
 
 % ***ZeroLengthContact2D***
 \subsection{ZeroLengthContact2D}
