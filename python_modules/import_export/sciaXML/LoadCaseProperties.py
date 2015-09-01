@@ -1,0 +1,59 @@
+# -*- coding: utf-8 -*-
+
+#Based on sXML-master projet on gitHub
+
+#Properties for constraint nodes.
+
+import PropertiesContainer as ctr
+import Property as prop
+import Ref as rf
+import EnumItem as eI
+import Enum as enum
+import TableProperties as tbProp
+import SubTableProperties as stbProp
+import xml.etree.cElementTree as ET
+
+containerId= "{0908D21F-481F-11D4-AB84-00C06C452330}"
+containerClsId= containerId
+tbName="DataSetScia.EP_LoadCase.1"
+tbProgId= tbName
+tbId= "AAEC76F5-9C0D-4340-98D7-330ACB62D905"
+tbClsId= containerClsId
+
+idName= "{4364BC01-AAB7-11D4-B3D9-00104BC3B531}"
+idUniqueId= "{EB2C0F85-7275-4F94-9EA7-E8C3DBFB0FA6}"
+idActionType= "{11D48DC0-E0F4-11D4-A482-00C06C542707}"
+idLoadGroup= "{AA694EDC-83EA-11D4-B37D-000000000000}"
+idLoadGroupReference= "{F9D4AA72-49D5-11D4-A3CF-000000000000}"
+idLoadType= "{11D48DC1-E0F4-11D4-A482-00C06C542707}"
+idDirection= "{11D48DC3-E0F4-11D4-A482-00C06C542707}"
+
+class LoadCaseProperties(ctr.PropertiesContainer):
+  tableProp= None;
+  def __init__(self):
+    super(LoadCaseProperties,self).__init__(containerId,containerClsId,'')
+    self.tableProp= tbProp.TableProperties(tbId,tbName,"vertical",tbClsId,tbProgId)
+    propName= prop.Property("0","Name","string",idName)
+    propUniqueId= prop.Property("1","UniqueId","string",idUniqueId)
+    propActionType= prop.Property("2","Action type","enum",idActionType,"262144")
+    propActionType.value= enum.Enum([eI.EnumItem("0","Permanent"),eI.EnumItem("1","Variable")])
+    propLoadGroupReference= prop.Property("3","LoadGroup","ref",idLoadGroupReference,"131072")
+    propLoadGroupReference.value= rf.Ref("{F9D4AA72-49D5-11D4-A3CF-000000000000}","DataSetScia.EP_LoadGroup.1")
+    propLoadType= prop.Property("4","Load type","enum",idLoadType,"262144")
+    propLoadType.value= enum.Enum([eI.EnumItem("0","Poids propre"),eI.EnumItem("1","Standard"),eI.EnumItem("2","Effet primaire")])
+    propDirection= prop.Property("5","Direction","enum",idDirection,"262144")
+    propDirection.value= enum.Enum([eI.EnumItem("0","-Z"),eI.EnumItem("1","+Z"),eI.EnumItem("2","-Y"),eI.EnumItem("3","-Y"),eI.EnumItem("4","-X"),eI.EnumItem("5","+X")])
+
+    self.tableProp.properties.append(propName) #0
+    self.tableProp.properties.append(propUniqueId) #1
+    self.tableProp.properties.append(propActionType) #2
+    self.tableProp.properties.append(propLoadGroupReference) #3
+    self.tableProp.properties.append(propLoadType) #4
+    self.tableProp.properties.append(propDirection) #5
+
+  def getXMLElement(self,parent):
+    container= ET.SubElement(parent,"def_container")
+    self.populateXMLElement(container)
+    self.tableProp.getXMLElement(container)
+    return container
+

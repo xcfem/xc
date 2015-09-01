@@ -1,0 +1,43 @@
+# -*- coding: utf-8 -*-
+
+#Based on sXML-master projet on gitHub
+
+#Properties for constraint nodes.
+
+import PropertiesContainer as ctr
+import Property as prop
+import Ref as rf
+import EnumItem as eI
+import Enum as enum
+import TableProperties as tbProp
+import SubTableProperties as stbProp
+import xml.etree.cElementTree as ET
+
+containerId= "{F9D4AA72-49D5-11D4-A3CF-000000000000}"
+containerClsId= containerId
+tbName="DataSetScia.EP_LoadGroup.1"
+tbProgId= tbName
+tbId="49D41DBB-F38D-4AF9-B7FD-3F91E1D06036"
+tbClsId= containerClsId
+
+idName= "{4364BC01-AAB7-11D4-B3D9-00104BC3B531}"
+idLoad= "{49F9F892-83EC-11D4-B37D-000000000000}"
+
+class LoadGroupProperties(ctr.PropertiesContainer):
+  tableProp= None;
+  def __init__(self):
+    super(LoadGroupProperties,self).__init__(containerId,containerClsId,'')
+    self.tableProp= tbProp.TableProperties(tbId,tbName,"vertical",tbClsId,tbProgId)
+    propName= prop.Property("0","Name","string",idName)
+    propLoad= prop.Property("1","Load","enum",idLoad)
+    propLoad.value= enum.Enum([eI.EnumItem("0","Permanent")])
+
+    self.tableProp.properties.append(propName) #0
+    self.tableProp.properties.append(propLoad) #1
+
+  def getXMLElement(self,parent):
+    container= ET.SubElement(parent,"def_container")
+    self.populateXMLElement(container)
+    self.tableProp.getXMLElement(container)
+    return container
+

@@ -38,10 +38,35 @@ class CellRecord(object):
     strCommand+= 'e' + strId + '= ' + xcImportExportData.cellLoaderName + '.newElement(' + strType + ',' + self.getStrXCNodes() +')'
     return strCommand
 
+class ComponentSupportRecord:
+  '''Constraints for x,y,z,rx,ry,rz displacements of a node.'''
+  def __init__(self,typ= 'Rigid', k= 0.0):
+    self.typ= typ #Free","Rigid", "Flexible"
+    self.k= k
+  def getTypeCode(self):
+    if(self.typ=='Free'):
+      return '0'
+    elif(self.typ=='Rigid'):
+      return '1'
+    elif(self.typ=='Flexible'):
+      return '2'
+    else:
+      print 'ComponentSupportRecord::getTypeCode; error: unknown type: ', self.typ 
+      return '0'
+
+
 class NodeSupportRecord(object):
-  def __init__(self,id, idGdl):
+  ''' Constraints for node displacements'''
+  def __init__(self, id, nodeId, xComp= ComponentSupportRecord(), yComp= ComponentSupportRecord(), zComp= ComponentSupportRecord(), rxComp= ComponentSupportRecord('Free'), ryComp= ComponentSupportRecord('Free'), rzComp= ComponentSupportRecord('Free')):
     self.id= id
-    self.idGdl= idGdl
+    self.nodeId= nodeId
+    self.typ= 'Standard'
+    self.xComp= xComp
+    self.yComp= yComp
+    self.zComp= zComp
+    self.rxComp= rxComp
+    self.ryComp= ryComp
+    self.rzComp= rzComp
 
 class GroupRecord(object):
 
@@ -116,6 +141,8 @@ class MeshData(object):
     self.nodes[id]= NodeRecord(int(id),[x,y,z])
   def appendCell(self,cell):
     self.cells[cell.id]= cell
+  def appendNodeSupport(self, ns):
+    self.nodeSupports[ns.id]= ns
 
   def readFromDATFile(self,fName):
     # Read the source mesh
