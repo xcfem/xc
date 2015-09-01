@@ -1,0 +1,206 @@
+\chapter{Elements}
+
+\section{Zero-Length Elements}
+\subsection{ZeroLength}
+The ZeroLength class represents an element defined by two nodes at the same geometric location, hence it has zero length.
+
+The nodes are connected by of uniaxial materials to represent the force-deformation relationship for the element. 
+
+ZeroLength elements are constructed with a {\em tag} in a domain of {\em dimension} 1, 2, or 3, connected by nodes {\em Nd1} and {\em Nd2}. 
+The vector $\vec{x}$ defines the local x-axis for the element and the vector $\vec{yp}$ lies in the local x-y plane for the element.  The local z-axis is the cross product between $\vec{x}$ and $\vec{yp}$, and the local y-axis is the cross product between the local z-axis and $\vec{x}$.
+
+The force-deformation relationship for the element is given by a pointer {\em theMaterial} to a {\bf UniaxialMaterial} model acting in local {\em direction}.
+
+The local {\em direction} is 0, 1, 2 for translation in the local x, y, z axes or 3, 4, 5 for rotation about the local x, y, z axes. 
+
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+ZeroLengthElement=mdlr.getElementLoader.newElement("zero_length",
+xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementZERODParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementZERODMeth{}
+\ZeroLengthMeth{}
+\end{methodsTable}
+
+% ***ZeroLengthSection***
+\subsection{ZeroLengthSection}
+The ZeroLengthSection class represents an element defined by two nodes at the same geometric location, hence it has zero length.
+
+The nodes are connected by a SectionForceDeformation object which represents the force-deformation relationship for the element. 
+
+ZeroLength elements are constructed with a {\em tag} in a domain of {\em dimension} 1, 2, or 3, connected by nodes {\em Nd1} and {\em Nd2}. 
+The vector $\vec{x}$ defines the local x-axis for the element and the vector $\vec{yp}$ lies in the local x-y plane for the element.  The local z-axis is the cross product between $\vec{x}$ and $\vec{yp}$, and the local y-axis is the cross product between the local z-axis and $\vec{x}$.
+
+The force-deformation relationship for the element is obtained by invoking {\em getCopy()} on the {\bf SectionForceDeformation} pointer {\em theSection}. The section model acts in the local space defined by the $\vec{x}$ and $\vec{yp}$ vectors. The section axial force-deformation acts along the element local x-axis and the section y-z axes directly corresponds to the local element y-z axes.
+
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+ZeroLengthElement=mdlr.getElementLoader.newElement(
+"zero_length_section",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementZERODParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementZERODMeth{}
+\ZeroLengthSectionMeth{}
+\end{methodsTable}
+
+
+\subsection{ZeroLengthContact2D, ZeroLengthContact3D}
+% ***ZeroLengthContact***
+These classes are used to construct a zeroLengthContact2D element or a zeroLengthContact3D element, which are Node-to-node frictional contact element used in two dimensional analysis and three dimensional analysis.
+
+The contact element is node-to-node contact. Contact occurs between two contact nodes when they come close. The relation follows Mohr-coulomb law: $T = \mu \cdot N + c$, where $T$ is tangential force and $N$ is normal force across the interface; $\mu$ is friction coefficient and $c$ is total cohesion (summed over the effective area of contact nodes).
+
+The contact node pair in node-to-node contact element is termed «master node» and «slave node», respectively. Master/slave plane is the contact plane which the master/slave node belongs to. The discrimination is made solely for contact detection purpose. User need to specify the corresponding out normal of the master plane, and this direction is assumed to be unchanged during analysis. For simplicity, 3D contact only allows 3 options to specify the directions of the contact plane. The convention is: out normal of master plane always points to positive axial direction (+X or +Y, or +Z)
+
+For 2D contact, slave nodes and master nodes must be 2 DOF. For 3D contact, slave nodes and master nodes must be 3 DOF.
+
+The resulted tangent from the contact element is NON-SYMMETRIC. Switch to non-symmetric matrix solver. 
+
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+ZeroLengthElement=mdlr.getElementLoader.newElement(
+"zero_length_contact_2d",xc.ID([Nd1Tag,Nd2Tag]))
+"zero_length_contact_3d",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of master and slave nodes\\
+\end{paramFuncTable}
+
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementZERODParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementZERODMeth{}
+\end{methodsTable}
+
+
+
+\section{Truss Elements}
+
+% ***Truss***
+\subsection{Truss}
+This class is used to construct a truss element object defined by two nodes connected by means of a previously defined uniaxial material.
+The truss element does not include geometric nonlinearities, even when used with beam-columns utilizing P-Delta or Corotational transformations.
+The truss element considers strain-rate effects, and is thus suitable for use as a damping element. 
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+trussElement=mdlr.getElementLoader.newElement(
+"truss",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementONEDParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementONEDMeth{}
+\ProtoTrussMeth{}
+\TrussBaseMeth{}
+\TrussMeth{}
+\end{methodsTable}
+
+
+% ***TrussSection***
+\subsection{TrussSection}
+This class is used to construct a truss element object defined by two nodes connected by means of a previously defined section.
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+trussSectionElement=mdlr.getElementLoader.newElement(
+"truss_section",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementONEDParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementONEDMeth{}
+\ProtoTrussMeth{}
+\TrussBaseMeth{}
+\end{methodsTable}
+
+% ***CorotTruss***
+\subsection{CorotTruss}
+This class is used to construct a corotational truss element object defined by two nodes connected by means of a previously defined uniaxial material.
+
+When constructed with a UniaxialMaterial object, the corotational truss element considers strain-rate effects, and is thus suitable for use as a damping element.
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+corotTrussElement=mdlr.getElementLoader.newElement(
+"corot_truss",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementONEDParam{}
+\CorotTrussParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementONEDMeth{}
+\ProtoTrussMeth{}
+\CorotTrussMeth{}
+\end{methodsTable}
+
+% ***CorotTrussSection***
+\subsection{CorotTrussSection}
+This class is used to construct a corotational truss element object defined by two nodes connected by means of a previously defined section.
+
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+corotTrussSectionElement=mdlr.getElementLoader.newElement(
+"corot_truss_section",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementONEDParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementONEDMeth{}
+\ProtoTrussMeth{}
+\end{methodsTable}

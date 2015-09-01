@@ -9,12 +9,17 @@
 \usepackage{multirow}
 \usepackage{wasysym}
 \usepackage{gensymb} 
+\usepackage{longtable}
 
+\setlength\parindent{0pt}
 \begin{document}
 \lstset{language=Python}          % Set your language (you can change the language for each code-block optionally)
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
 \tableofcontents
+
+\input{envirmt.tex} %environments definition
+\input{varbl.tex}  %Latex variables definition
 
 \chapter{Finite element model components}
 
@@ -32,5 +37,6 @@
 
 \input{materials/materials}
 
+\input{model_components/elements}
 \input{model/model}
 \end{document}

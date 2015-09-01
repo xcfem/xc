@@ -6,14 +6,11 @@
 from materials import typical_materials
 typical_materials.defElasticMaterial(mdlr,name,E)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the material \\
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{material} \\
 {\tt E} & tangent in the stress-strain diagram (see figure \ref{Elastic}) \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 \begin{figure}[h]
 \centering
@@ -27,18 +24,13 @@ typical_materials.defElasticMaterial(mdlr,name,E)
 from materials import typical_materials
 typical_materials.defElasticPPMaterial(mdlr,name,E,fyp,fyn)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the material \\
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{material} \\
 {\tt E} & tangent in the elastic zone of the stress-strain diagram (see figure \ref{ElasticPP}) \\
-{\tt fyp} & stress at which material reaches plastic state in tension (see figure \ref{ElasticPP}) \\
-{\tt fyn} &  stress at which material reaches plastic state in compression (see figure \ref{ElasticPP}) \\
-{\tt } &  \\
-\end{tabular}
-\end{center}
+\fyp{} (see figure \ref{ElasticPP}) \\
+\fyn{} (see figure \ref{ElasticPP}) \\
+\end{paramFuncTable}
 
 \begin{figure}[h]
 \centering
@@ -52,15 +44,12 @@ typical_materials.defElasticPPMaterial(mdlr,name,E,fyp,fyn)
 from materials import typical_materials
 typical_materials.defElastNoTracMaterial(mdlr,name,E)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the material \\
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{material} \\
 {\tt E} & tangent in the elastic zone of the stress-strain diagram (see figure \ref{ENT}) \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 \begin{figure}[h]
 \centering
 \includegraphics[width=50mm]{materials/figures/ENT}
@@ -74,17 +63,14 @@ typical_materials.defElastNoTracMaterial(mdlr,name,E)
 from materials import typical_materials
 typical_materials.defCableMaterial(mdlr,name,E,prestress,rho)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the material \\
-{\tt E} & Young modulus \\
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{material} \\
+\E{} \\
 {\tt prestress} & prestress \\
 {\tt rho} & effective self weight (gravity component of weight per volume transverse to the cable) \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsection{defSteel01}
 \noindent Construct a uniaxial bilinear steel material object with kinematic hardening
@@ -92,17 +78,14 @@ typical_materials.defCableMaterial(mdlr,name,E,prestress,rho)
 from materials import typical_materials
 typical_materials.defSteel01(mdlr,name,E,fy,b)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the material \\
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{material} \\
 {\tt E} & initial elastic tangent (see figure \ref{Steel01}) \\
-{\tt fy} &  yield strength (see figure \ref{Steel01})\\
+\fy{} (see figure \ref{Steel01})\\
 {\tt b} &  strain-hardening ratio: ratio between post-yield tangent and initial elastic tangent (see figure \ref{Steel01})\\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \begin{figure}[h]
 \centering
@@ -117,18 +100,15 @@ typical_materials.defSteel01(mdlr,name,E,fy,b)
 from materials import typical_materials
 typical_materials.defSteel02(mdlr,name,E,fy,b,initialStress)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the material \\
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{material} \\
 {\tt E} & initial elastic tangent (see figure \ref{Steel02}) \\
-{\tt fy} &  yield strength (see figure \ref{Steel02})\\
+\fy{} (see figure \ref{Steel02})\\
 {\tt b} &  strain-hardening ratio: ratio between post-yield tangent and initial elastic tangent)\\
 {\tt initialStress} &  initial stress \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 {\footnotesize The transition from elastic to plastic branches  (see figure \ref{Steel02}) is controlled by parameters R0, R1, R2. The default values R0=15, R1=0.925 and R2=0.15}
 
 \begin{figure}[h]
@@ -140,39 +120,31 @@ typical_materials.defSteel02(mdlr,name,E,fy,b,initialStress)
 \subsection{ReinforcingSteel}
 \noindent This class constructs a bilinear stress-strain diagram to carry out the analysis of reinforced concrete according to Eurocode 2. Other national standards, like the spanish EHE and the swiss SIA also adopt this diagram.
 
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt nmbMaterial} & name identifying the material \\
 {\tt nmbDiagK} & name identifying the characteristic stress-strain diagram (default: {\tt "dgK"+nmbMaterial}) \\
 {\tt tagDiagK} & tag of the uniaxial material with the characteristic stress-strain diagram\\
 {\tt nmbDiagD} &  name identifying the design stress-strain diagram (default: {\tt "dgD"+nmbMaterial}) \\
 {\tt tagDiagD} & tag of the uniaxial material with the design stress-strain diagram\\
-{\tt fyk} & characteristic value of the yield strength\\
+\fyk{} \\
 {\tt gammaS} & partial factor for material (default: 1.15)\\
-{\tt Es} & elastic modulus of the material (default: 2e11)\\
+\Es{} of the material (default: 2e11)\\
 {\tt emax} & maximum strain at failure point\\
 {\tt k} & ratio between characteristic ultimate stress and characteristic yield stress $^{(1)}$ (default: 1.05)\\
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
 \multicolumn{2}{p{13cm}}{\footnotesize{(1): according to annex C of EC2: for class A k$\ge$1,05, for class B k$\ge$1,08}}
-\end{tabular}
-\end{center}
+\end{paramClassTable}
 
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt fmaxk()} & characteristic ultimate strength \\
-{\tt fyd()} & design yield stress \\
-{\tt eyk()} & characteristic strain at yield point\\
-{\tt eyd()} & design strain at yield point\\
+\begin{methodsTable}
+\fmaxk{()} \\
+\fyd{()} \\
+\eyk{()} \\
+\eyd{()} \\
 {\tt Esh()} &  post-yield tangent\\
 {\tt bsh()} & ratio between post-yield tangent and initial elastic tangent\\
 {\tt defDiagK(mdlr)} & returns XC uniaxial material (characteristic values)\\
 {\tt defDiagD(mdlr)} & returns XC uniaxial material (design values)\\
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \section{Concrete materials}
 \subsection{defConcrete01}
@@ -181,12 +153,9 @@ typical_materials.defSteel02(mdlr,name,E,fy,b,initialStress)
 from materials import typical_materials
 typical_materials.defConcrete01(mdlr,name,epsc0,fpc,fpcu,epscu)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the material \\
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{material} \\
 {\tt fpc} &  concrete compressive strength at 28 days (compression is negative) $^{(1)}$\\
 {\tt epsc0} &  concrete strain at maximum strength (see figure \ref{Concrete01}) $^{(2)}$\\
 {\tt fpcu} &  concrete crushing strength (see figure \ref{Concrete01}) \\
@@ -194,8 +163,7 @@ typical_materials.defConcrete01(mdlr,name,epsc0,fpc,fpcu,epscu)
 \hline
 \multicolumn{2}{p{12cm}}{\footnotesize(1): Compressive concrete parameters should be input as negative values (if input as positive, they will be converted to negative internally)}\\
 \multicolumn{2}{p{12cm}}{\footnotesize (2): The initial slope for this model is $2*fpc/epsc0$ (see figure \ref{Concrete01})}\\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 \begin{figure}[h]
 \centering
@@ -212,17 +180,14 @@ An ND material is an object that represents the stress-strain relationship at th
 from materials import typical_materials
 typical_materials.defElasticIsotropic3d(mdlr,name,E,nu,rho)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the material\\
-{\tt E} & elastic modulus \\
-{\tt nu} & Poisson's ratio \\
-{\tt rho} &  mass density, optional (default = 0.0)\\
-\end{tabular}
-\end{center}
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{material}\\
+\E{} \\
+\nuX{} \\
+\rhoX{}, optional (default = 0.0)\\
+\end{paramFuncTable}
+
 
 \subsection{defElasticIsotropicPlaneStrain}
 \noindent Construct an elastic isotropic plane-strain material.
@@ -230,17 +195,13 @@ typical_materials.defElasticIsotropic3d(mdlr,name,E,nu,rho)
 from materials import typical_materials
 typical_materials.defElasticIsotropicPlaneStrain(mdlr,name,E,nu,rho)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the material\\
-{\tt E} & elastic modulus \\
-{\tt nu} & Poisson's ratio \\
+\begin{paramFuncTable}\mdlr{} \\
+\name{material}\\
+\E{} \\
+\nuX \\
 {\tt rho} &  mass density, optional (default = 0.0)\\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsection{defElasticIsotropicPlaneStress}
 \noindent Construct an elastic isotropic plane-stress material.
@@ -248,17 +209,14 @@ typical_materials.defElasticIsotropicPlaneStrain(mdlr,name,E,nu,rho)
 from materials import typical_materials
 typical_materials.defElasticIsotropicPlaneStress(mdlr,name,E,nu,rho)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the material\\
-{\tt E} & elastic modulus \\
-{\tt nu} & Poisson's ratio \\
-{\tt rho} &  mass density, optional (default = 0.0)\\
-\end{tabular}
-\end{center}
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{material}\\
+\E{} \\
+\nuX{} \\
+\rhoX{} , optional (default = 0.0)\\
+\end{paramFuncTable}
+
 \section{Sections}
 A section represents a force-deformation (or resultant stress-strain) relationship at beam-column or plate element.
 
@@ -275,34 +233,27 @@ Three types of sections are going to be considered:
 from materials import sectionProperties
 sectionProperties.sectionProperties(name,E,nu)
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt name} & name identifying the section \\
-{\tt E} & elastic modulus of material\\
-{\tt nu} & Poisson's ratio of material \\
-\end{tabular}
-\end{center}
+\begin{paramClassTable}
+\name{section} \\
+\E{} of material\\
+\nuX{} of material \\
+\end{paramClassTable}
 \begin{center}
 \begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Abstract methods}} \\
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt A()} & section area (to override)\\
-{\tt Iy()} &  second moment of area about the local y-axis (to override)\\
-{\tt Iz()} &  second moment of area about the local z-axis (to override)\\
-{\tt J()} & torsional moment of inertia (to override)\\
-{\tt G()} & Transverse modulus of elasticity (defaults to $\cfrac{E}{2(1+\nu)}$\\
-{\tt alphaY()} & coefficient of distortion about the local y-axis\\
-{\tt alphaZ()} & coefficient of distortion about the local z-axis\\
-{\tt Wyel()} & elastic section modulus about the local y-axis \\
-{\tt Wzel()} & elastic section modulus about the local z-axis \\
+\A{()} (to override)\\
+\Iy{()} (to override)\\
+\Iz{()} (to override)\\
+\J{()} (to override)\\
+\G{()}  (defaults to $\cfrac{E}{2(1+\nu)}$\\
+\alphaY{()} \\
+\alphaZ{()} \\
+\Wyel{()} \\
+\Wzel{()} \\
 \end{tabular}
 \end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccElastica3d(mdlr)}} \\
 & returns an elastic section appropiate for 3D beam analysis, from the data of the section geometric properties\\
 \multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccShElastica3d(mdlr)}} \\
@@ -311,8 +262,7 @@ sectionProperties.sectionProperties(name,E,nu)
 & returns an elastic section appropiate for 2D beam analysis, from the data of the section geometric properties\\
 \multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccShElastica2d(mdlr)}} \\
 & returns an elastic section appropiate for 2D beam analysis  including shear deformations, from the data of the section geometric properties\\
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \subsubsection{defSeccElastica3d}
 \noindent Returns an elastic section appropiate for 3D beam analysis.
@@ -320,15 +270,12 @@ sectionProperties.sectionProperties(name,E,nu)
 from materials import sectionProperties
 sectionProperties.defSeccElastica3d(mdlr,defSecc)
 \end{verbatim}
-\vspace{-10pt}
+\begin{paramFuncTable}
 {\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-{\tt mdlr} & modeler name \\
+\mdlr{} \\
 {\tt defSecc} &   name identifying the class object used to define the properties of the section.\\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsubsection{defSeccShElastica3d}
 \noindent Returns an elastic section appropiate for 3D beam analysis, including shear deformations.
@@ -336,15 +283,12 @@ sectionProperties.defSeccElastica3d(mdlr,defSecc)
 from materials import sectionProperties
 sectionProperties.defSeccShElastica3d(mdlr,defSecc)
 \end{verbatim}
-\vspace{-10pt}
+\begin{paramFuncTable}
 {\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-{\tt mdlr} & modeler name \\
+\mdlr{} \\
 {\tt defSecc} &   name identifying the class object used to define the properties of the section.\\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsubsection{defSeccElastica2d}
 \noindent Returns an elastic section appropiate for 2D beam analysis.
@@ -352,15 +296,12 @@ sectionProperties.defSeccShElastica3d(mdlr,defSecc)
 from materials import sectionProperties
 sectionProperties.defSeccElastica2d(mdlr,defSecc)
 \end{verbatim}
-\vspace{-10pt}
+\begin{paramFuncTable}
 {\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-{\tt mdlr} & modeler name \\
+\mdlr{} \\
 {\tt defSecc} &   name identifying the class object used to define the properties of the section.\\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsubsection{defSeccShElastica2d}
 \noindent Returns an elastic section appropiate for 2D beam analysis, including shear deformations.
@@ -368,15 +309,12 @@ sectionProperties.defSeccElastica2d(mdlr,defSecc)
 from materials import sectionProperties
 sectionProperties.defSeccShElastica2d(mdlr,defSecc)
 \end{verbatim}
-\vspace{-10pt}
+\begin{paramFuncTable}
 {\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-{\tt mdlr} & modeler name \\
+\mdlr{} \\
 {\tt defSecc} &   name identifying the class object used to define the properties of the section.\\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsubsection{CircularSection}
 \noindent This subclass derived from superclass {\tt sectionProperties} is used to define the properties of a circular section.
@@ -384,28 +322,20 @@ sectionProperties.defSeccShElastica2d(mdlr,defSecc)
 from materials import parametrosSeccionCircular
 parametrosSeccionCircular.CircularSection(name,r,E,nu)
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt name} & name identifying the section \\
+\begin{paramClassTable}
+\name{section} \\
 {\tt r} & radius \\
-{\tt E} & elastic modulus of material\\
-{\tt nu} & Poisson's ratio of material \\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt A()} & section area \\
+\E{} of material\\
+\nuX of material \\
+\end{paramClassTable}
+\begin{methodsTable}
+\A{()} \\
 {\tt Iy()} &  second moment of area about the local y-axis\\
 {\tt Iz()} &  second moment of area about the local z-axis\\
 {\tt J()} & torsional moment of inertia of the section \\
 {\tt alphaY()} & coefficient of distortion about the local y-axis\\
 {\tt alphaZ()} & coefficient of distortion about the local z-axis\\
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \begin{center}
 \begin{tabular}{p{3.5cm}p{9cm}}
@@ -432,31 +362,24 @@ parametrosSeccionCircular.CircularSection(name,r,E,nu)
 from materials import parametrosSeccionRectangular
 parametrosSeccionRectangular.RectangularSection(,name,b,h,E,nu)
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt name} & name identifying the section \\
-{\tt b} & width \\
-{\tt h} & height \\
-{\tt E} & elastic modulus of material\\
-{\tt nu} & Poisson's ratio of material \\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt A()} & section area \\
-{\tt Iy()} &  second moment of area about the local y-axis\\
-{\tt Iz()} &  second moment of area about the local z-axis\\
-{\tt J()} & torsional moment of inertia of the section \\
-{\tt Wyel()} & elastic section modulus about the local y-axis \\
-{\tt Wzel()} & elastic section modulus about the local z-axis \\
-{\tt alphaY()} & coefficient of distortion about the local y-axis\\
-{\tt alphaZ()} & coefficient of distortion about the local z-axis\\
-\end{tabular}
-\end{center}
+\begin{paramClassTable}
+\name{section} \\
+\bX{} \\
+\h{} \\
+\E{} of material\\
+\nuX of material \\
+\end{paramClassTable}
+\begin{methodsTable}
+\A(){} \\
+\Iy{()}  (Y= weak axis)\\
+\Iz{()}  (Z= strong axis)\\
+\J{()} \\
+\Wyel{()}\\
+\Wzel{()} \\
+\alphaY{()}\\
+\alphaZ{()}\\
+\end{methodsTable}
+
 \begin{center}
 \begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Functions for defining parameters of rectangular sections}} \\
@@ -472,42 +395,29 @@ parametrosSeccionRectangular.RectangularSection(,name,b,h,E,nu)
 from materials import sccRectg
 sccRectg.sccRectang()
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt b} & width \\
-{\tt h} & height \\
-{\tt nDivIJ} & number of cells in IJ (width) direction \\
-{\tt nDivJK} & number of cells in JK  (height) direction \\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
+\bX{} \\
+\h{} \\
+\nDivIJ{} \\
+\nDivJK{} \\
+\end{paramClassTable}
+\begin{methodsTable}
 {\tt area()} & rectangle area \\
-{\tt I1()} &  second moment of area about the axis through the centre of gravity and parallel to the width dimension (axis 1) \\
-{\tt i1()} & bending radius of the section with regard to the axis 1 \\
-{\tt Me1(fy)} & yield moment of the rectangular section about the axis 1 {\tt fy} = yield stress of the section material \\
+\IAxisOne{()} \\
+\iAxisOne{()} \\
+\MeAxisOne{(fy)} {\tt fy} = yield stress of the section material \\
 {\tt  S1PosG()} & first moment of the area of half a section with regard to the axis 1 \\
 {\tt Mp1(fy)} & plastic moment of the rectangular section about the axis 1 {\tt fy} = yield stress of the section material \\
-{\tt I2()} &  second moment of area about the axis through the centre of gravity and parallel to the high dimension (axis 2) \\
-{\tt i2()} & bending radius of the section with regard to the axis 2 \\
+\IAxisTwo{()} \\
+\iAxisTwo{()} \\
 {\tt Me2(fy)} & yield moment of the rectangular section about the axis 2 {\tt fy} = yield stress of the section material \\
 {\tt  S2PosG()} & first moment of the area of half a section with regard to the axis 2 \\
 {\tt Mp2(fy)} & plastic moment of the rectangular section about the axis 2 {\tt fy} = yield stress of the section material \\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt discretization(gm,nmbMat)} & returns the discretized region \\
+\multicolumn{2}{l}{\tt discretization(gm,nmbMat)} \\
+& returns the discretized region \\
 & {\tt gm}: name identifying a section geometry \\
 & {\tt nmbMat}: name identifying the material \\ 
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \subsubsection{SteelProfile}
 \noindent This subclass derived from superclass {\tt sectionProperties} is used to define the properties of a structural steel section.
@@ -515,30 +425,22 @@ sccRectg.sccRectang()
 from materials import steelProfile
 steelProfile.SteelProfile(steel,name,table)
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt steel} & type of structural steel (e.g. {\tt S275JR}) \\
 {\tt table} & file containing a table (dictionary) of steel profiles (e.g. {\tt perfiles\_metalicos.arcelor.perfiles\_he\_arcelor})\\
 {\tt name} & name of the profile in the table (e.g. {\tt "HE\_400\_B"}) \\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-{\tt A()} & section area \\
-{\tt Iy()} &  second moment of area about the local y-axis (Y= weak axis)\\
-{\tt Iz()} &  second moment of area about the local z-axis (Z= strong axis)\\
-{\tt J()} & torsional moment of inertia of the section \\
-{\tt EIy()} & product of $E_{steel} \times I_y$ \\
-{\tt EIz()} & product of $E_{steel} \times I_z$ \\
-{\tt GJ()} & product of $E_{steel} \times G$ \\
-{\tt alphaY()} & coefficient of distortion about the local y-axis\\
-{\tt alphaZ()} & coefficient of distortion about the local z-axis\\
-\end{tabular}
-\end{center}
+\end{paramClassTable}
+\begin{methodsTable}
+\A{()} \\
+\Iy{()} (Y= weak axis)\\
+\Iz{()}  (Z= strong axis)\\
+\J{()} \\
+\EIy{()}\\
+\EIz{()}\\
+\GJ{()}\\
+\alphaY{()}\\
+\alphaZ{()}\\
+\end{methodsTable}
 
 \subsection{Elastic sections}
 \subsubsection{defElasticSection2d}
@@ -547,17 +449,14 @@ steelProfile.SteelProfile(steel,name,table)
 from materials import typical_materials
 typical_materials.defElasticSection2d(mdlr,name,A,E,I)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the section \\
-{\tt A} &  cross-sectional area of the section \\
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{section} \\
+\A{} \\
 {\tt E} &  Young's modulus of material \\
 {\tt I} &  second moment of area about the local z-axis\\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 
 \subsubsection{defElasticShearSection2d}
@@ -566,19 +465,16 @@ typical_materials.defElasticSection2d(mdlr,name,A,E,I)
 from materials import typical_materials
 typical_materials.defElasticShearSection2d(mdlr,name,A,E,G,I,alpha)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the section \\
-{\tt A} &  cross-sectional area of the section \\
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{section} \\
+\A{} \\
 {\tt E} &  Young's modulus of material \\
 {\tt G} & shear modulus \\
 {\tt I} &  second moment of area about the local z-axis\\
 {\tt alpha} & shear shape factor \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsubsection{defElasticSectionFromMechProp2d}
 \noindent Construct an elastic section appropiate for 2D beam analysis, taking mechanical properties of the section form a MechProp2d object.
@@ -586,15 +482,11 @@ typical_materials.defElasticShearSection2d(mdlr,name,A,E,G,I,alpha)
 from materials import typical_materials
 typical_materials.defElasticSectionFromMechProp2d(mdlr,name,mechProp2d)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the section \\
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{section} \\
 {\tt mechProp2d} & object that contains mechanical properties of the section  \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 %%%
 \subsubsection{defElasticSection3d}
@@ -603,19 +495,15 @@ typical_materials.defElasticSectionFromMechProp2d(mdlr,name,mechProp2d)
 from materials import typical_materials
 typical_materials.defElasticSection3d(mdlr,name,A,E,G,Iz,Iy,J)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the section \\
-{\tt A} &  cross-sectional area of the section \\
-{\tt E} &  Young's modulus of material \\
-{\tt Iz} &  second moment of area about the local z-axis\\
-{\tt Iy} &  second moment of area about the local y-axis\\
-{\tt J} & torsional moment of inertia of the section \\
-\end{tabular}
-\end{center}
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{section} \\
+\A{} \\
+\E{} of material \\
+\Iz{} \\
+\Iy{} \\
+\J{}\\
+\end{paramFuncTable}
 
 
 \subsubsection{defElasticShearSection3d}
@@ -624,21 +512,17 @@ typical_materials.defElasticSection3d(mdlr,name,A,E,G,Iz,Iy,J)
 from materials import typical_materials
 typical_materials.defElasticShearSection3d(mdlr,name,A,E,G,Iz,Iy,J,alpha)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the section \\
-{\tt A} &  cross-sectional area of the section \\
-{\tt E} &  Young's modulus of material \\
-{\tt G} & shear modulus \\
-{\tt Iz} &  second moment of area about the local z-axis\\
-{\tt Iy} &  second moment of area about the local y-axis\\
-{\tt J} & torsional moment of inertia of the section \\
-{\tt alpha} & shear shape factor \\
-\end{tabular}
-\end{center}
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{section} \\
+\A{} \\
+\E of material \\
+\G{} \\
+\Iz{} \\
+\Iy{} \\
+\J{} \\
+\alphaX{} \\
+\end{paramFuncTable}
 
 \subsubsection{defElasticSectionFromMechProp3d}
 \noindent Construct an elastic section appropiate for 3D beam analysis, taking mechanical properties of the section form a MechProp3d object.
@@ -646,15 +530,12 @@ typical_materials.defElasticShearSection3d(mdlr,name,A,E,G,Iz,Iy,J,alpha)
 from materials import typical_materials
 typical_materials.defElasticSectionFromMechProp3d(mdlr,name,mechProp3d)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the section \\
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{section} \\
 {\tt mechProp3d} & object that contains mechanical properties of the section  \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsubsection{defElasticMembranePlateSection}
 \noindent Construct an an isotropic elastic section appropriate for plate and shell analysis.
@@ -662,18 +543,14 @@ typical_materials.defElasticSectionFromMechProp3d(mdlr,name,mechProp3d)
 from materials import typical_materials
 typical_materials.defElasticMembranePlateSection(mdlr,name,E,nu,rho,h)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the section\\
-{\tt E} &  Young's modulus\\
-{\tt nu} &  Poisson's modulus\\
-{\tt rho} &  mass density\\
-{\tt h} &  depth of section\\
-\end{tabular}
-\end{center}
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{section}\\
+\E{} \\
+\nuX{} \\
+\rhoX{} \\
+\h{} of section\\
+\end{paramFuncTable}
 
 \subsubsection{defElasticPlateSection}
 \noindent Construct an an isotropic elastic section appropriate for plate analysis.
@@ -681,18 +558,14 @@ typical_materials.defElasticMembranePlateSection(mdlr,name,E,nu,rho,h)
 from materials import typical_materials
 typical_materials.defElasticPlateSection(mdlr,name,E,nu,rho,h)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
-{\tt name} & name identifying the section\\
-{\tt E} &  Young's modulus\\
-{\tt nu} &  Poisson's modulus\\
-{\tt rho} &  mass density\\
-{\tt h} &  depth of section\\
-\end{tabular}
-\end{center}
+\begin{paramFuncTable}
+\mdlr{} \\
+\name{section}\\
+\E{} \\
+\nuX{}\\
+\rhoX{} \\
+\h{} of section\\
+\end{paramFuncTable}
 
 \subsection{Fiber sections}
 \subsubsection{FiberSet}
@@ -701,26 +574,18 @@ typical_materials.defElasticPlateSection(mdlr,name,E,nu,rho,h)
 from materials.fiber_section import creaSetsFibras
 creaSetsFibras.FiberSet(scc,nmbSet,tagDiag)
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt scc} & name identifying the fiber section \\
 {\tt nmbSet} & name of the set of fibers to be generated \\
 {\tt tagDiag} & tag of the uniaxial material which forms the fibers \\
-\end{tabular}
-\end{center}
+\end{paramClassTable}
 
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt getFiberWithMinStrain()}}  \\
  & returns the fiber of the set that has the minimum strain \\
 \multicolumn{2}{p{13cm}}{{\tt getFiberWithMaxStrain()}}  \\
  & returns the fiber of the set that has the maximum strain \\
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 
 \subsubsection{RCSets}
@@ -729,22 +594,15 @@ creaSetsFibras.FiberSet(scc,nmbSet,tagDiag)
 from materials.fiber_section import creaSetsFibras
 creaSetsFibras.RCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt scc} & name identifying the fiber section \\
 {\tt tagCDiag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
 {\tt nmbSetC} & name of the set of fibers of concrete to be generated \\
 {\tt tagSdiag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
 {\tt nmbSetS} & name of the set of fibers of reinforcing steel to be generated \\
-\end{tabular}
-\end{center}
+\end{paramClassTable}
 
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt reselTractionFibers(scc,tractionFibersSetName)}} \\
 & returns the set of fibers in tension \\
 \multicolumn{2}{p{13cm}}{{\tt getConcreteArea(factor)}} \\
@@ -757,8 +615,7 @@ creaSetsFibras.RCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
  & returns the resultant of compressive stresses in concrete fibers \\
 \multicolumn{2}{p{13cm}}{{\tt getNumBarrasTraccion()}} \\
  & returns the number of reinforcing steel fibers in tension \\
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \subsubsection{fiberSectionSetupRCSets}
 Returns an object of the class \verb|RCSets|
@@ -766,17 +623,14 @@ Returns an object of the class \verb|RCSets|
 from materials.fiber_section import creaSetsFibras
 creaSetsFibras.fiberSectionSetupRCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt scc} & name identifying the fiber section \\
 {\tt tagCdiag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
 {\tt nmbSetC} & name of the set of fibers of concrete to be generated \\
 {\tt tagSdiag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
 {\tt nmbSetS} & name of the set of fibers of reinforcing steel to be generated \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsubsection{creaSetsFibrasHA}
 Construct the sets of concrete fibers (\verb|"hormigon"|) and reinforcing steel fibers (\verb|"armadura"|) for all the elements included in a set of elements.
@@ -784,16 +638,12 @@ Construct the sets of concrete fibers (\verb|"hormigon"|) and reinforcing steel 
 from materials.fiber_section import creaSetsFibras
 creaSetsFibras.creaSetsFibrasHA(mdlr, nmbSet, tagHA, tagAcero)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
+\begin{paramFuncTable}
+\mdlr{} \\
 {\tt nmbSet} & name identifying the set of elements \\
 {\tt tagHA} & tag of the uniaxial material that makes up the concrete fibers of the section \\
 {\tt tagAcero} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 \subsubsection{reselTractionFibers}
 Returns the fibers under tension included in a set of fibers.
@@ -801,15 +651,12 @@ Returns the fibers under tension included in a set of fibers.
 from materials.fiber_section import creaSetsFibras
 creaSetsFibras.reselTractionFibers(scc,fiberSetName,tractionFibersSetName)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt scc} & name identifying the fiber section \\
 {\tt fiberSetName} & name identifying the set of fibers \\
 {\tt tractionFibersSetName} & name of the set of tensioned fibers returned\\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsubsection{fiberSectionSetupRC3Sets}
 Returns a set of tensioned fibers (\verb|"armaduraTraccion"|) of a fiber section of reinforced concrete.
@@ -817,17 +664,14 @@ Returns a set of tensioned fibers (\verb|"armaduraTraccion"|) of a fiber section
 from materials.fiber_section import creaSetsFibras
 creaSetsFibras.fiberSectionSetupRC3Sets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt scc} & name identifying the fiber section \\
 {\tt tagCdiag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
 {\tt nmbSetC} & name of the set of fibers of concrete to be generated \\
 {\tt tagSdiag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
 {\tt nmbSetS} & name of the set of fibers of reinforcing steel to be generated \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsubsection{RecordSeccionHAPilar}
 \noindent This class is used to define the variables that make up a reinforced concrete section with reinforcement symmetric in both directions (as usual in columns)
@@ -835,10 +679,7 @@ creaSetsFibras.fiberSectionSetupRC3Sets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
 from materials.fiber_section import defSeccionHAPilar
 defSeccionHAPilar.RecordSeccionHAPilar()
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt nmbSeccion} & name identifying the section \\
 {\tt descSeccion} & section description \\
 {\tt nmbGeomSeccion} & name identifying the geometric section \\
@@ -846,8 +687,8 @@ defSeccionHAPilar.RecordSeccionHAPilar()
 {\tt nmbDiagHormigon} & name identifying the characteristic stress-strain diagram of the concrete material \\
 {\tt canto} & cross-section height \\
 {\tt ancho} & cross-section width \\
-{\tt numDivIJ} & number of cells in IJ (width) direction \\
-{\tt numDivJK} & number of cells in JK  (height) direction \\
+\numDivIJ{}\\
+\numDivJK{} \\
 {\tt tipoArmadura} & type of reinforcement steel \\
 {\tt nmbDiagArmadura} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
 {\tt recub} & cover \\
@@ -857,18 +698,13 @@ defSeccionHAPilar.RecordSeccionHAPilar()
 {\tt areaBarrasCanto} & area of each rebar in height direction \\
 {\tt armCortanteZ} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Z direction \\
 {\tt armCortanteY} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Y direction \\
-\end{tabular}
-\end{center}
+\end{paramClassTable}
 
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(tipoDiag)}} \\
  & returns a reinforced concrete section with reinforcement symmetric in both directions \\
 & {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \subsubsection{RecordArmaduraCortante}
 \noindent This class is used to define the variables that make up a family of shear reinforcing bars.
@@ -876,25 +712,17 @@ defSeccionHAPilar.RecordSeccionHAPilar()
 from materials.fiber_section import defSeccionHASimple
 defSeccionHASimple.RecordArmaduraCortante()
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt nmbFamilia} & name identifying the family of shear reinforcing bars \\
 {\tt nRamas} & number of effective branches\\
 {\tt areaRama} &  area of the shear reinforcing bar\\
 {\tt espaciamientoRamas} & longitudinal distance between transverse reinforcements (defaults to 0.2)\\
 {\tt angAlphaRamas} & angle between the shear reinforcing bars and the axis of the member (defaults to $\Pi/2$)\\
 {\tt angThetaBielas} & angle between the concrete's compression struts and the axis of the member (defaults to $\Pi/4$)\\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\end{paramClassTable}
+\begin{methodsTable}
 {\tt getAs()} & returns the area per unit length of the family of shear reinforcements\\
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \subsubsection{RecordSeccionHASimple}
 \noindent This class is used to define the variables that make up a rectangular reinforced concrete section with single reinforcement layers in top and bottom faces
@@ -902,18 +730,15 @@ defSeccionHASimple.RecordArmaduraCortante()
 from materials.fiber_section import defSeccionHASimple
 defSeccionHASimple.RecordSeccionHASimple()
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt nmbSeccion} & name identifying the section \\
 {\tt descSeccion} & section description \\
 {\tt tipoHormigón} & type of concrete (e.g. hormigonesEHE.HA25) \\
 {\tt nmbDiagHormigon} & name identifying the characteristic stress-strain diagram of the concrete material \\
 {\tt canto} & cross-section height \\
 {\tt ancho} & cross-section width \\
-{\tt numDivIJ} & number of cells in IJ (width) direction \\
-{\tt numDivJK} & number of cells in JK  (height) direction \\
+\numDivIJ{} \\
+\numDivJK{} \\
 {\tt tipoArmadura} & type of reinforcement steel \\
 {\tt nmbDiagArmadura} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
 {\tt nBarrasNeg} & number of longitudinal rebars in the negative face of the section\\
@@ -929,17 +754,12 @@ defSeccionHASimple.RecordSeccionHASimple()
 {\tt recubMin} & minimal covering of the longitudinal reinforcement \\
 {\tt armCortanteZ} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Z direction \\
 {\tt armCortanteY} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Y direction \\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\end{paramClassTable}
+\begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(tipoDiag)}} \\
  & returns a reinforced concrete section with reinforcement symmetric in both directions \\
 & {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \subsubsection{RecordArmaduraCortante}
 \noindent This class is used to define the variables that make up a family of shear reinforcing bars.
@@ -947,25 +767,17 @@ defSeccionHASimple.RecordSeccionHASimple()
 from materials.fiber_section import defSeccionHASimple
 defSeccionHASimple.RecordArmaduraCortante()
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt nmbFamilia} & name identifying the family of shear reinforcing bars \\
 {\tt nRamas} & number of effective branches\\
 {\tt areaRama} &  area of the shear reinforcing bar\\
 {\tt espaciamientoRamas} & longitudinal distance between transverse reinforcements (defaults to 0.2)\\
 {\tt angAlphaRamas} & angle between the shear reinforcing bars and the axis of the member (defaults to $\Pi/2$)\\
 {\tt angThetaBielas} & angle between the concrete's compression struts and the axis of the member (defaults to $\Pi/4$)\\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\end{paramClassTable}
+\begin{methodsTable}
 {\tt getAs()} & returns the area per unit length of the family of shear reinforcements\\
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \subsubsection{RecordSeccionHASimple}
 \noindent This class is used to define the variables that make up a reinforced concrete section with reinforcement symmetric in both directions (as usual in columns)
@@ -973,18 +785,15 @@ defSeccionHASimple.RecordArmaduraCortante()
 from materials.fiber_section import defSeccionHASimple
 defSeccionHASimple.RecordSeccionHASimple()
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt nmbSeccion} & name identifying the section \\
 {\tt descSeccion} & section description \\
 {\tt tipoHormigón} & type of concrete (e.g. hormigonesEHE.HA25) \\
 {\tt nmbDiagHormigon} & name identifying the characteristic stress-strain diagram of the concrete material \\
 {\tt canto} & cross-section height \\
 {\tt ancho} & cross-section width \\
-{\tt numDivIJ} & number of cells in IJ (width) direction \\
-{\tt numDivJK} & number of cells in JK  (height) direction \\
+\numDivIJ{} \\
+\numDivJK{} \\
 {\tt tipoArmadura} & type of reinforcement steel \\
 {\tt nmbDiagArmadura} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
 {\tt nBarrasNeg} & number of longitudinal rebars in the negative face of the section\\
@@ -1000,17 +809,12 @@ defSeccionHASimple.RecordSeccionHASimple()
 {\tt recubMin} & minimal covering ot the longitudinal reinforcement \\
 {\tt armCortanteZ} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Z direction \\
 {\tt armCortanteY} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Y direction \\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\end{paramClassTable}
+\begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(tipoDiag)}} \\
  & returns a reinforced concrete section with reinforcement symmetric in both directions \\
 & {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \subsubsection{RecordArmaduraCortante}
 \noindent This class is used to define the variables that make up a family of shear reinforcing bars.
@@ -1018,25 +822,17 @@ defSeccionHASimple.RecordSeccionHASimple()
 from materials.fiber_section import defSeccionHASimple
 defSeccionHASimple.RecordArmaduraCortante()
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt nmbFamilia} & name identifying the family of shear reinforcing bars \\
 {\tt nRamas} & number of effective branches\\
 {\tt areaRama} &  area of the shear reinforcing bar\\
 {\tt espaciamientoRamas} & longitudinal distance between transverse reinforcements (defaults to 0.2)\\
 {\tt angAlphaRamas} & angle between the shear reinforcing bars and the axis of the member (defaults to $\Pi/2$)\\
 {\tt angThetaBielas} & angle between the concrete's compression struts and the axis of the member (defaults to $\Pi/4$)\\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\end{paramClassTable}
+\begin{methodsTable}
 {\tt getAs()} & returns the area per unit length of the family of shear reinforcements\\
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \subsubsection{RecordSeccionHASimple}
 \noindent This class is used to define the variables that make up a rectangular  reinforced concrete section with top and bottom reinforcement layers
@@ -1044,18 +840,15 @@ defSeccionHASimple.RecordArmaduraCortante()
 from materials.fiber_section import defSeccionHASimple
 defSeccionHASimple.RecordSeccionHASimple()
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt nmbSeccion} & name identifying the section \\
 {\tt descSeccion} & section description \\
 {\tt tipoHormigón} & type of concrete (e.g. hormigonesEHE.HA25) \\
 {\tt nmbDiagHormigon} & name identifying the characteristic stress-strain diagram of the concrete material \\
 {\tt canto} & cross-section height \\
 {\tt ancho} & cross-section width \\
-{\tt numDivIJ} & number of cells in IJ (width) direction \\
-{\tt numDivJK} & number of cells in JK  (height) direction \\
+\numDivIJ{} \\
+\numDivJK{} \\
 {\tt tipoArmadura} & type of reinforcement steel \\
 {\tt nmbDiagArmadura} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
 {\tt nBarrasNeg} & number of longitudinal rebars in the negative face of the section\\
@@ -1071,12 +864,8 @@ defSeccionHASimple.RecordSeccionHASimple()
 {\tt recubMin} & minimal covering ot the longitudinal reinforcement \\
 {\tt armCortanteZ} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Z direction \\
 {\tt armCortanteY} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Y direction \\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\end{paramClassTable}
+\begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt nmbGeomSeccion()}} \\
  & returns the name of the geometric section that is formed by the section name with the prefix "geom" \\
 {\tt nmbRespT()} & returns the name of the elastic material that defines the sention's response to torsion; it is formed by the section name with the suffix "RespVy" \\ 
@@ -1096,18 +885,15 @@ defSeccionHASimple.RecordSeccionHASimple()
  & defines the interaction diagram \\
 & {\tt mdlr}: modeler name \\
 & {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
-\end{tabular}
-\end{center}
+\end{methodsTable}
+
 \subsubsection{RecordSeccionHALosa}
 \noindent This class is used to define the variables that make up a reinforced concrete slab section with single reinforcement layers in top and bottom faces
 \begin{verbatim}
 from materials.fiber_section import defSeccionHASimple
 defSeccionHASimple.RecordSeccionHALosa(nmb,desc,canto,concrete,steel,basicCover)
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt nmb} & basic name identifying the section \\
 & the name identifying the section in 1 direction is formed adding to {\tt nmb} the suffix  "L"; for the section in 2 direction the suffix added to the basic name is "T" \\
 {\tt desc} & basic section description \\
@@ -1115,12 +901,9 @@ defSeccionHASimple.RecordSeccionHALosa(nmb,desc,canto,concrete,steel,basicCover)
 {\tt concrete} & type of concrete (e.g. hormigonesEHE.HA25) \\
 {\tt steel} & type of reinforcement steel \\
 {\tt basicCover} & minimal cover of longitudinal reinforcement \\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\end{paramClassTable}
+
+\begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt setMainReinf2neg(diam,area,spacing)}} \\
  & defines the rebar arrangement of the layer of main reinforcement bars corresponding to the negative face of the section in 2 direction \\
 & {\tt diam} = diameter of the bar \\
@@ -1139,8 +922,7 @@ defSeccionHASimple.RecordSeccionHALosa(nmb,desc,canto,concrete,steel,basicCover)
 & {\tt spacing} = longitudinal distance between shear reinforcements bars \\
 \multicolumn{2}{p{13cm}}{{\tt setShearReinfL(nRamas,areaRama,spacing)}} \\
  & \emph{idem} for shear reinforcement bars corresponding to the section in 1 direction \\
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \subsubsection{getIMaxPropFiber}
 Returns the fiber in a set with the maximum value of a property.
@@ -1149,14 +931,11 @@ Returns the fiber in a set with the maximum value of a property.
 from materials.fiber_section import fiberUtils
 fiberUtils.getIMaxPropFiber(fibers,methodName)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt fibers} & name of the set of fibers \\
 {\tt methodName} & name of the method or property (e.g. {\tt "getArea"}) \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 \subsubsection{getIMinPropFiber}
 Returns the fiber in a set with the minimum value of a property.
@@ -1165,14 +944,11 @@ Returns the fiber in a set with the minimum value of a property.
 from materials.fiber_section import fiberUtils
 fiberUtils.getIMinPropFiber(fibers,methodName)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt fibers} & name of the set of fibers \\
 {\tt methodName} & name of the method or property (e.g. {\tt "getArea"}) \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
+
 
 
 \subsubsection{Utils}
@@ -1187,14 +963,11 @@ fiberUtils.getIMinPropFiber(fibers,methodName)
 from materials import regimenSeccion
 regimenSeccion.tipoSolicitacion(epsCMin, epsSMax)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt epsCMin} & minimum strain in concrete \\
-{\tt epsSMax} & maximum strain in steel \\
-\end{tabular}
-\end{center}
+\begin{paramFuncTable}
+\epsCMin{}\\
+\epsSMax{}\\
+\end{paramFuncTable}
+
 
 \paragraph{strTipoSolicitacion}
 \noindent Returns:
@@ -1208,15 +981,11 @@ regimenSeccion.tipoSolicitacion(epsCMin, epsSMax)
 from materials import regimenSeccion
 regimenSeccion.strTipoSolicitacion(tipoSol)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt tipoSol} & =1 for pure or combined tension state \\
 & =2 for pure or combined bending state \\
 & =3 for single or combined compression state \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 \subsubsection{gmArmCapaHoriz}
 Returns a reinforcement layer parallel to the top and bottom sides of the rectangular section. The row of reinforcement bars is placed at a distance {\tt h} over the horizontal axis of the section. 
@@ -1226,10 +995,7 @@ from materials.fiber_section import geomArmaduraSeccionesFibras
 geomArmaduraSeccionesFibras.gmArmCapaHoriz(sectionGeom, nmbFiberMat, 
 nBarras, areaBarras, canto, ancho, rcub, h)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt sectionGeom} & name identifying the geometric section \\
 {\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
 {\tt nBarras} & number of rebars in the layer \\
@@ -1238,8 +1004,7 @@ nBarras, areaBarras, canto, ancho, rcub, h)
 {\tt ancho} & cross-section width \\
 {\tt rcub} & cover \\
 {\tt h} & distance between the horizontal axis of the cross-section and the reinforcement layer \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 \subsubsection{gmArmInferior}
 Returns a reinforcement layer in the bottom side of a rectangular section.
@@ -1249,10 +1014,7 @@ from materials.fiber_section import geomArmaduraSeccionesFibras
 geomArmaduraSeccionesFibras.gmArmInferior(sectionGeom,nmbFiberMat, 
 nBarras, areaBarras, canto, ancho, rcub)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt sectionGeom} & name identifying the geometric section \\
 {\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
 {\tt nBarras} & number of rebars in the layer \\
@@ -1260,8 +1022,7 @@ nBarras, areaBarras, canto, ancho, rcub)
 {\tt canto} &  cross-section height \\
 {\tt ancho} & cross-section width \\
 {\tt rcub} & cover \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 \subsubsection{gmArmSuperior}
 Returns a reinforcement layer in the top side of a rectangular section.
@@ -1271,10 +1032,7 @@ from materials.fiber_section import geomArmaduraSeccionesFibras
 geomArmaduraSeccionesFibras.gmArmSuperior(sectionGeom,nmbFiberMat, 
 nBarras, areaBarras, canto, ancho, rcub)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt sectionGeom} & name identifying the geometric section \\
 {\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
 {\tt nBarras} & number of rebars in the layer \\
@@ -1282,8 +1040,7 @@ nBarras, areaBarras, canto, ancho, rcub)
 {\tt canto} &  cross-section height \\
 {\tt ancho} & cross-section width \\
 {\tt rcub} & cover \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 \subsubsection{gmSeccCuadrado}
 Returns a square geometric region of fibers' material.
@@ -1292,16 +1049,12 @@ Returns a square geometric region of fibers' material.
 from materials.fiber_section import geomSeccionesFibras
 geomSeccionesFibras.gmSeccCuadrado(geomSection, nmbFiberMat, ld, nD)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt geomSection} & name identifying the geometric section \\
 {\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
 {\tt ld} & side of the square \\
 {\tt nD} & number of cells in each side of the square \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 \subsubsection{gmSeccRectangulo}
 Returns a rectangular geometric region of fibers' material.
@@ -1311,18 +1064,14 @@ from materials.fiber_section import geomSeccionesFibras
 geomSeccionesFibras.gmSeccRectangulo(geomSection,nmbFiberMat, h, b, 
 nDIJ, nDIK)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt geomSection} & name identifying the geometric section \\
 {\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
 {\tt h} & side of the rectangle in IK direction \\
 {\tt b} & side of the rectangle in IJ direction \\
 {\tt nDIJ} & number of cells in IJ direction \\
 {\tt nDIK} & number of cells in IK direction \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 
 \subsubsection{RecordFamArmaduraPrincipal}
@@ -1331,26 +1080,19 @@ nDIJ, nDIK)
 informeGeomSeccion.RecordFamArmaduraPrincipal(reinfLayer)
 \end{verbatim}
 
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt reinfLayer} & name identifying the family of reinforcing bars \\
 {\tt nBarras} & number of rebars in the layer \\
 {\tt diamBarras} & diameter of the bars \\
 {\tt areaBarras} & total area of the bars in the family \\
 {\tt recubMec} & cover of the reinforcement\\
 {\tt cdgBarras} & position of the reinforcement centre of gravity \\
-\end{tabular}
-\end{center}
-\begin{center}
-\begin{tabular}{p{3.5cm}p{9cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Methods}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\end{paramClassTable}
+
+\begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt texWrite(archTex)}} \\
 & writes the value of parameters in a file named {\tt archTex} \\ 
-\end{tabular}
-\end{center}
+\end{methodsTable}
 
 \subsubsection{imprimeArmaduraPrincipal}
 \noindent The function writes in the specified file the characteristics (diameter, area, cover, position of gravity centre, \ldots) of each main reinforcement family provided in a list of family names.
@@ -1359,15 +1101,11 @@ from materials.fiber_section import informeGeomSeccion
 informeGeomSeccion.imprimeArmaduraPrincipal(listaFamArmaduraPrincipal, 
 areaHorm, archTex)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt listaFamArmaduraPrincipal} & name identifying a list of names of reinforcement families \\
 {\tt areaHorm} & area of the concrete section \\
 {\tt archTex} &  name of the output file \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 \subsubsection{imprimeArmaduraCortante}
 \noindent The function writes in the specified file the characteristics (diameter, area, distances, angles, \ldots) of a family of shear reinforcement bars.
@@ -1376,14 +1114,10 @@ from materials.fiber_section import informeGeomSeccion
 informeGeomSeccion.imprimeArmaduraCortante(recordArmaduraCortante, 
 archTex)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
+\begin{paramFuncTable}
 {\tt recordArmaduraCortante} & name identifying a family of shear reinforcement \\
 {\tt archTex} &  name of the output file \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 
 \subsubsection{informeGeomSeccion}
@@ -1392,16 +1126,12 @@ archTex)
 from materials.fiber_section import informeGeomSeccion
 informeGeomSeccion.informeGeomSeccion(mdlr,scc, archTex, pathFigura)
 \end{verbatim}
-\vspace{-10pt}
-{\color{grayLines} \rule{\linewidth}{0.25pt}}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-{\tt mdlr} & modeler name \\
+\begin{paramFuncTable}
+\mdlr{} \\
 {\tt scc} & name identifying the section \\
 {\tt archTex} &  name of the output file \\
 {\tt pathFigura} & path to place the figure file representing the reinforcement arrangement \\
-\end{tabular}
-\end{center}
+\end{paramFuncTable}
 
 \input{materials/figures/hsticentDatosScc1}
 
@@ -1412,10 +1142,7 @@ informeGeomSeccion.informeGeomSeccion(mdlr,scc, archTex, pathFigura)
 from materials import stressCalc
 stressCalc.stressCalc(b,h,r,rp,As,Asp,Ec,Es)
 \end{verbatim}
-\begin{center}
-\begin{tabular}{lp{10cm}}
-\multicolumn{2}{p{11cm}}{\color{grayText} \large{Parameters}} \\
-\multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
+\begin{paramClassTable}
 {\tt b} & cross-section width \\
 {\tt h} & cross-section height \\
 {\tt r} & cover of longitudinal reinforcement in the positive face\\
@@ -1426,8 +1153,7 @@ stressCalc.stressCalc(b,h,r,rp,As,Asp,Ec,Es)
 {\tt Es} & reinforcing steel elastic modulus \\
 {\tt N} & normal force \\
 {\tt M} & bending moment \\
-\end{tabular}
-\end{center}
+\end{paramClassTable}
 
 
 
