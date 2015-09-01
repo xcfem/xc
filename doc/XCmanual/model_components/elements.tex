@@ -96,13 +96,111 @@ ZeroLengthElement=mdlr.getElementLoader.newElement(
 \begin{methodsTable}
 \ElementMeth{}
 \ElementZERODMeth{}
-\ZeroLengthSectionMeth{}
 \end{methodsTable}
 
-% ***ZeroLengthContact2D***
-\subsection{ZeroLengthContact2D}
 
 
-% ***ZeroLengthContact3D***
-\subsection{ZeroLengthContact3D}
+\section{Truss Elements}
 
+% ***Truss***
+\subsection{Truss}
+This class is used to construct a truss element object defined by two nodes connected by means of a previously defined uniaxial material.
+The truss element does not include geometric nonlinearities, even when used with beam-columns utilizing P-Delta or Corotational transformations.
+The truss element considers strain-rate effects, and is thus suitable for use as a damping element. 
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+trussElement=mdlr.getElementLoader.newElement(
+"truss",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementONEDParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementONEDMeth{}
+\ProtoTrussMeth{}
+\TrussBaseMeth{}
+\TrussMeth{}
+\end{methodsTable}
+
+
+% ***TrussSection***
+\subsection{TrussSection}
+This class is used to construct a truss element object defined by two nodes connected by means of a previously defined section.
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+trussSectionElement=mdlr.getElementLoader.newElement(
+"truss_section",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementONEDParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementONEDMeth{}
+\ProtoTrussMeth{}
+\TrussBaseMeth{}
+\end{methodsTable}
+
+% ***CorotTruss***
+\subsection{CorotTruss}
+This class is used to construct a corotational truss element object defined by two nodes connected by means of a previously defined uniaxial material.
+
+When constructed with a UniaxialMaterial object, the corotational truss element considers strain-rate effects, and is thus suitable for use as a damping element.
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+corotTrussElement=mdlr.getElementLoader.newElement(
+"corot_truss",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementONEDParam{}
+\CorotTrussParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementONEDMeth{}
+\ProtoTrussMeth{}
+\CorotTrussMeth{}
+\end{methodsTable}
+
+% ***CorotTrussSection***
+\subsection{CorotTrussSection}
+This class is used to construct a corotational truss element object defined by two nodes connected by means of a previously defined section.
+
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+corotTrussSectionElement=mdlr.getElementLoader.newElement(
+"corot_truss_section",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementONEDParam{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementONEDMeth{}
+\ProtoTrussMeth{}
+\end{methodsTable}

@@ -112,14 +112,64 @@
 & local z-axis is defined by the vector $\vec{z}=\vec{x}\times\vec{yp}$ \\
 }
 
+\newcommand{\ElementONEDParam}
+{
+{\tt getCoordTransf()} & returns the identifier of the coordinate-transformation associated with the element\\
+}
+
+\newcommand{\ElementONEDMeth}
+{
+{\tt getMEDCellType()} &  interface with MED data format for Salome\\
+\multicolumn{2}{l}{{\tt vector2dUniformLoadGlobal(v)}} \\
+ & applies a uniform surface load to the element; the value and direction of the load is defined by the 2D vector $\vec{v}$, expressed in the global coordinate system  \\
+\multicolumn{2}{l}{{\tt vector2dUniformLoadLocal(v)}} \\
+ & applies a uniform surface load to the element; the value and direction of the load is defined by the 2D vector $\vec{v}$, expressed in the element local coordinate system \\
+\multicolumn{2}{l}{{\tt vector2dPointByRelDistLoadGlobal(d,v)}} \\
+ &  applies a punctual force to the element; scalar $d$ specifies the offset distance from node 2 (toward node 1) where the force is applied, this distance is input as a length fraction (its value varies between 0 and 1); 2D vector $\vec{v}$ defines the force value and orientation, its coordinates are expressed in the global system\\
+\multicolumn{2}{l}{{\tt vector2dPointByRelDistLoadLocal(d,v)}} \\
+ &  applies a punctual force to the element; scalar $d$ specifies the offset distance from node 2 (toward node 1) where the force is applied, this distance is input as a length fraction (its value varies between 0 and 1); 2D vector $\vec{v}$ defines the force value and orientation, its coordinates are expressed in the element local system\\
+\multicolumn{2}{l}{{\tt vector2dPointLoadGlobal(p,v)}} \\
+ &  applies a punctual force to the element;  2D vector $\vec{p}$ defines the global coordinates of the point of application of the force; 2D vector $\vec{v}$ defines the force value and orientation (in global coordinates) \\
+\multicolumn{2}{l}{{\tt vector2dPointLoadLocal(p,v)}} \\
+ &  applies a punctual force to the element;  2D vector $\vec{p}$ defines the coordinates of the point of application of the force; 2D vector $\vec{v}$ defines the force value and orientation; both vectors are expressed in the element local-coordinate system \\
+\multicolumn{2}{l}{{\tt vector3dUniformLoadGlobal(v)}} \\
+ &  applies a uniform surface load to the element; the value and direction of the load is defined by the 3D vector $\vec{v}$, expressed in the global coordinate system\\
+\multicolumn{2}{l}{{\tt vector3dUniformLoadLocal(v)}} \\
+ &  applies a uniform surface load to the element; the value and direction of the load is defined by the 3D vector $\vec{v}$, expressed in the element local coordinate system\\
+\multicolumn{2}{l}{{\tt vector3dPointByRelDistLoadGlobal(d,v)}} \\
+ &  applies a punctual force to the element; scalar $d$ specifies the offset distance from node 2 (toward node 1) where the force is applied, this distance is input as a length fraction (its value varies between 0 and 1); 3D vector $\vec{v}$ defines the force value and orientation, its coordinates are expressed in the global system\\
+\multicolumn{2}{l}{{\tt vector3dPointByRelDistLoadLocal(d,v)}} \\
+ & applies a punctual force to the element; scalar $d$ specifies the offset distance from node 2 (toward node 1) where the force is applied, this distance is input as a length fraction (its value varies between 0 and 1); 3D vector $\vec{v}$ defines the force value and orientation, its coordinates are expressed in the element local-coordinate system \\
+\multicolumn{2}{l}{{\tt vector3dPointLoadGlobal(p,v)}} \\
+ & applies a punctual force to the element;  3D vector $\vec{p}$ defines the global coordinates of the point of application of the force; 3D vector $\vec{v}$ defines the force value and orientation (in global coordinates)\\
+\multicolumn{2}{l}{{\tt vector3dPointLoadLocal(p,v)}} \\
+ &  applies a punctual force to the element;  3D vector $\vec{p}$ defines the coordinates of the point of application of the force; 3D vector $\vec{v}$ defines the force value and orientation; both vectors are expressed in the element local-coordinate system \\
+\multicolumn{2}{l}{{\tt strainLoad(PlanoDeformacion1,PlanoDeformacion2)}} \\
+ &  This function creates an imposed strain load in the current load case. The first argument defines the deformation at element start and the second at the element's end.\\
+{\tt getCooPuntos(ndiv)} & returns $ndiv-1$ equally-spaced points on the element\\
+}
+
+\newcommand{\ProtoTrussMeth}
+{
+{\tt getDim()} &  returns element dimension \\\\
+{\tt getMaterial()} &  returns the material associated with the element \\
+}
+
+\newcommand{\TrussBaseMeth}
+{
+{\tt getL} & returns the element length \\
+}
+
+
 \newcommand{\ZeroLengthMeth}
 {
 {\tt clearMaterials()} & clears all material definition of the element \\
-{\tt setMaterial(dir,matName)} & assigns uni-axial materials to the different directions of the element\\
+\multicolumn{2}{l}{{\tt setMaterial(dir,matName)}} \\
+ & assigns uni-axial materials to the different directions of the element\\
 & {\tt dir}: integer representing the direction in which the uni-axial material acts: {\tt dir} is 0,1,2 for translation in the local x, y, z axes or 3, 4, 5 
 for rotation about the local x, y, z axes.\\
 & {\tt matName}: string representing the name of the material \\
-{\tt getMaterials} & \\
+{\tt getMaterials} &  \\
 }
 
 
@@ -127,4 +177,24 @@ for rotation about the local x, y, z axes.\\
 {
 {\tt getSection()} & returns the section axial force-deformation associated with the element \\
 {\tt getMaterial()} & returns the section axial force-deformation associated with the element \\
+}
+
+\newcommand{\MuelleMeth}
+{
+{\tt getN} & Returns the internal axial force $N$ in the element\\
+}
+
+\newcommand{\TrussMeth}
+{
+{\tt area} &  cross-sectional area of the element\\
+{\tt getN} &  Returns the internal axial force $N$ in the element \\
+}
+
+\newcommand{\CorotTrussParam}
+{
+{\tt area} &  cross-sectional area of the element\\
+}
+\newcommand{\CorotTrussMeth}
+{
+{\tt getN} &  RReturns the internal axial force $N$ in the element \\
 }
