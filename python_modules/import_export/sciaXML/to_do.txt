@@ -1,2 +1,3 @@
-20150831 Continue writing code to export load groups (EP_LoadGroup)
-20150827 Continue writing code to export node constraints (EP_PointSupportPoint)
+20150901 Continue writing code to export load on nodes and elements (NodeLoadContainer and ElementLoadContainer)
+20150831 Continue writing code to export load groups (EP_LoadGroup). Done
+20150827 Continue writing code to export node constraints (EP_PointSupportPoint). Done

@@ -26,10 +26,10 @@ idLoad= "{49F9F892-83EC-11D4-B37D-000000000000}"
 class LoadGroupProperties(ctr.PropertiesContainer):
   tableProp= None;
   def __init__(self):
-    super(LoadGroupProperties,self).__init__(containerId,containerClsId,'')
-    self.tableProp= tbProp.TableProperties(tbId,tbName,"vertical",tbClsId,tbProgId)
+    super(LoadGroupProperties,self).__init__(containerId,containerClsId,tbProgId)
+    self.tableProp= tbProp.TableProperties(tbId,'',"vertical",tbClsId,tbProgId)
     propName= prop.Property("0","Name","string",idName)
-    propLoad= prop.Property("1","Load","enum",idLoad)
+    propLoad= prop.Property("1","Load","enum",idLoad,"262144")
     propLoad.value= enum.Enum([eI.EnumItem("0","Permanent")])
 
     self.tableProp.properties.append(propName) #0

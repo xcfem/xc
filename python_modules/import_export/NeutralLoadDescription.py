@@ -5,20 +5,16 @@ import geom
 import xc
 
 class LoadRecord(object):
-  value= 1.0
-  loadCaseName= 'nil'
-  loadName= 'nil'
-  vDir= [0,0,-1]
-  def __init__(self,lName,bName,v):
+  def __init__(self,lName= 'nil',bName= 'nil',v= 1.0):
     self.loadCaseName= lName
     self.loadName= bName
     self.value= v
+    self.vDir= [0,0,-1]
   def __str__(self):
     return self.loadCaseName + ' ' + self.loadName + ' ' +  str(self.value)
   
 
 class PunctualLoadRecord(LoadRecord):
-  pos= [] #Point coordinates
   tag= -1 #Element or node tag.
   def __init__(self,lName,bName,pos,v):
     super(PunctualLoadRecord,self).__init__(lName,bName,v)
@@ -37,15 +33,11 @@ class PunctualLoadRecord(LoadRecord):
     self.tag= n.tag
 
 class SurfaceLoadRecord(LoadRecord):
-  mode= 'nil'
-  polygon= []
-  tags= [] #Element or node tags
-  projPlane= "xy"
-  def __init__(self,lName,bName,plg,v,mode):
+  def __init__(self,lName= 'nil', bName= 'nil', plg= [],v= 1.0,mode= 'nil'):
     super(SurfaceLoadRecord,self).__init__(lName,bName,v)
     self.mode= mode
     self.setPolygon(plg)
-    self.tags= []
+    self.tags= [] #Element or node tags
     self.projPlane= "xy"
   def __str__(self):
     retval= super(SurfaceLoadRecord,self).__str__()
@@ -81,9 +73,6 @@ class SurfaceLoadRecord(LoadRecord):
       self.polygon.append(p)
 
 class LoadContainer(object):
-  name= 'nil'
-  punctualLoads= []
-  surfaceLoads= []
   setName= 'total'
   def __init__(self,n):
     self.name= n
@@ -116,3 +105,23 @@ class LoadContainer(object):
       for sl in self.surfaceLoads:
         sl.searchLoadedElements(elementSet)
     
+class LoadGroup(object):
+  ''' Loads wich share some property (origin,...).'''
+  def __init__(self,id, desc):
+    self.id= id
+    self.desc= desc #Group description.
+
+class LoadCase(object):
+  ''' Load case.'''
+  def __init__(self,id, desc, lg, ltyp, loads= LoadContainer('')):
+    self.id= id
+    self.desc= desc #Load description.
+    self.loadGroupId= lg
+    self.ltyp= ltyp
+    self.loads= loads
+  
+
+class LoadData(object):
+  def __init__(self):
+    self.loadGroups= {}
+    self.loadCases= {}

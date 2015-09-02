@@ -11,11 +11,11 @@ Finite element analysis program based on:
 The main capabilities of the program:
 
 - Geometry modeling and mesh generation tools.
-- 1D, 2D and 3D elements.
+- OD, 1D, 2D and 3D elements.
 - Linear and non-linear analysis, static and dynamic.
-- Fiber section models (modelization of RC members,...)
-- Activation an deactivation of elements (construction phases,...)
-- Tools for implementing structural codes (Eurocodes, ACI, AISC,...) verifications (in progress...)
-- Interface with Salome (in progress...)
-
+- Fiber section models (modelization of RC members,...).
+- Activation an deactivation of elements (construction phases,...).
+- Tools for implementing structural codes (Eurocodes, ACI, AISC,...) verifications (in progress...).
+- Interface with Salome (in progress...).
+- Interface with SCIA Engineering (in progress...).
 

@@ -25,3 +25,18 @@ class RowP012(Row):
     oo.set("id",self.id)
     self.populateXMLElement(oo)
     return oo
+
+class RowP0123(RowP012):
+  def __init__(self, id, p0, p1, p2, p3):
+    super(RowP0123,self).__init__(id,p0,p1,p2)
+    self.p3= p3
+
+  def populateXMLElement(self,xmlElement):
+    super(RowP0123,self).populateXMLElement(xmlElement)
+    pp3= self.p3.getXMLElement(xmlElement,3)
+
+  def getXMLElement(self,parent):
+    oo= ET.SubElement(parent,'row')
+    oo.set("id",self.id)
+    self.populateXMLElement(oo)
+    return oo

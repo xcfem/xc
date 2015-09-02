@@ -31,18 +31,18 @@ idDirection= "{11D48DC3-E0F4-11D4-A482-00C06C542707}"
 class LoadCaseProperties(ctr.PropertiesContainer):
   tableProp= None;
   def __init__(self):
-    super(LoadCaseProperties,self).__init__(containerId,containerClsId,'')
-    self.tableProp= tbProp.TableProperties(tbId,tbName,"vertical",tbClsId,tbProgId)
+    super(LoadCaseProperties,self).__init__(containerId,containerClsId,tbProgId)
+    self.tableProp= tbProp.TableProperties(tbId,'',"vertical",tbClsId,tbProgId)
     propName= prop.Property("0","Name","string",idName)
-    propUniqueId= prop.Property("1","UniqueId","string",idUniqueId)
+    propUniqueId= prop.Property("1","UniqueID","string",idUniqueId)
     propActionType= prop.Property("2","Action type","enum",idActionType,"262144")
     propActionType.value= enum.Enum([eI.EnumItem("0","Permanent"),eI.EnumItem("1","Variable")])
-    propLoadGroupReference= prop.Property("3","LoadGroup","ref",idLoadGroupReference,"131072")
-    propLoadGroupReference.value= rf.Ref("{F9D4AA72-49D5-11D4-A3CF-000000000000}","DataSetScia.EP_LoadGroup.1")
+    propLoadGroupReference= prop.Property("3","LoadGroup","ref",idLoadGroup,"131072")
+    propLoadGroupReference.value= rf.Ref(idLoadGroupReference,"DataSetScia.EP_LoadGroup.1")
     propLoadType= prop.Property("4","Load type","enum",idLoadType,"262144")
     propLoadType.value= enum.Enum([eI.EnumItem("0","Poids propre"),eI.EnumItem("1","Standard"),eI.EnumItem("2","Effet primaire")])
     propDirection= prop.Property("5","Direction","enum",idDirection,"262144")
-    propDirection.value= enum.Enum([eI.EnumItem("0","-Z"),eI.EnumItem("1","+Z"),eI.EnumItem("2","-Y"),eI.EnumItem("3","-Y"),eI.EnumItem("4","-X"),eI.EnumItem("5","+X")])
+    propDirection.value= enum.Enum([eI.EnumItem("0","-Z"),eI.EnumItem("1","+Z"),eI.EnumItem("2","-Y"),eI.EnumItem("3","+Y"),eI.EnumItem("4","-X"),eI.EnumItem("5","+X")])
 
     self.tableProp.properties.append(propName) #0
     self.tableProp.properties.append(propUniqueId) #1
