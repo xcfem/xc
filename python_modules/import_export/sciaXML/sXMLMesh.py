@@ -36,7 +36,11 @@ class SXMLMesh:
     project.set("xmlns",self.xmlns)
     df= ET.SubElement(project,"def")
     df.set("uri",defFileName)
-    containers= [self.nodeContainer,self.epPlaneContainer, self.nodeSupportContainer, self.loadGroupContainer, self.loadCaseContainer, self.nodeLoadContainer, self.elementLoadContainer]
+    containers= [self.nodeContainer,self.epPlaneContainer, self.nodeSupportContainer, self.loadGroupContainer, self.loadCaseContainer]
+    if(hasattr(self, 'nodeLoadContainer')):
+      containers.append(self.nodeLoadContainer)
+    if(hasattr(self, 'elementLoadContainer')):
+      containers.append(self.elementLoadContainer)
     for c in containers:
       elem= c.getXMLElement(project)
     return project

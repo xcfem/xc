@@ -5,8 +5,9 @@ import geom
 import xc
 
 class LoadRecord(object):
-  def __init__(self,lName= 'nil',bName= 'nil',v= 1.0):
-    self.loadCaseName= lName
+  def __init__(self, lcId= 0, lcName= 'nil',bName= 'nil',v= 1.0):
+    self.loadCaseId= lcId
+    self.loadCaseName= lcName
     self.loadName= bName
     self.value= v
     self.vDir= [0,0,-1]
@@ -16,8 +17,8 @@ class LoadRecord(object):
 
 class PunctualLoadRecord(LoadRecord):
   tag= -1 #Element or node tag.
-  def __init__(self,lName,bName,pos,v):
-    super(PunctualLoadRecord,self).__init__(lName,bName,v)
+  def __init__(self, lcId, lcName,bName,pos,v):
+    super(PunctualLoadRecord,self).__init__(lcId, lcName, bName, v)
     self.pos= pos
   def __str__(self):
     retval= super(PunctualLoadRecord,self).__str__()
@@ -32,16 +33,25 @@ class PunctualLoadRecord(LoadRecord):
     n= elemSet.getNearestNode(pos)
     self.tag= n.tag
 
-class SurfaceLoadRecord(LoadRecord):
-  def __init__(self,lName= 'nil', bName= 'nil', plg= [],v= 1.0,mode= 'nil'):
-    super(SurfaceLoadRecord,self).__init__(lName,bName,v)
+class ElementLoadRecord(LoadRecord):
+  def __init__(self, lcId= 0, lcName= 'nil', bName= 'nil', v= 1.0,mode= 'nil'):
+    super(ElementLoadRecord,self).__init__(lcId, lcName,bName,v)
     self.mode= mode
+    self.tags= [] #Element tags
+  def __str__(self):
+    retval= super(ElementLoadRecord,self).__str__()
+    retval+= ' ' + str(self.mode) + ' ' + str(self.tags)
+    return retval
+
+
+class SurfaceLoadRecord(ElementLoadRecord):
+  def __init__(self, lcId= 0, lcName= 'nil', bName= 'nil', plg= [],v= 1.0,mode= 'nil'):
+    super(SurfaceLoadRecord,self).__init__(lcId, lcName,bName,v)
     self.setPolygon(plg)
-    self.tags= [] #Element or node tags
     self.projPlane= "xy"
   def __str__(self):
     retval= super(SurfaceLoadRecord,self).__str__()
-    retval+= ' ' + str(self.mode) + ' ' + str(len(self.polygon)) + ' ' + str(self.polygon)
+    retval+= ' ' + str(len(self.polygon)) + ' ' + str(self.polygon)
     return retval
   def get2DPolygon(self):
     retval= geom.Poligono2d()
@@ -113,8 +123,9 @@ class LoadGroup(object):
 
 class LoadCase(object):
   ''' Load case.'''
-  def __init__(self,id, desc, lg, ltyp, loads= LoadContainer('')):
+  def __init__(self,id, name, desc, lg, ltyp, loads= LoadContainer('')):
     self.id= id
+    self.name= name
     self.desc= desc #Load description.
     self.loadGroupId= lg
     self.ltyp= ltyp

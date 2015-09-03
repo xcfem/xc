@@ -31,23 +31,26 @@ def getLoadCaseObject(loadCase):
   retval= obj.Object()
   id= str(loadCase.id)
   retval.setId(id)
-  name= loadCasePrefix+id
+  name= loadCase.name
+  if(name==''):
+    name= loadCasePrefix+id
   retval.setNm(name)
   retval.setP0(oI.ObjectItem(name)) #Name
   retval.setP1(oI.ObjectItem('{'+str(uuid.uuid4())+'}')) # Unique id
   tmp= oI.ObjectItem('0')
   tmp.t= 'Permanent'
   retval.setP2(tmp) #??
+  retval.setP3(oI.ObjectItem(loadCase.desc)) #Description
   gId= str(loadCase.loadGroupId)
   gName= lgc.loadGroupPrefix+gId
   tmp= oI.ObjectItem('',gId)
   tmp.n= gName
-  retval.setP3(tmp)
+  retval.setP4(tmp)
   ltyp= loadCase.ltyp
   ltypName= getLoadTypeName(ltyp)
   tmp= oI.ObjectItem(str(ltyp))
   tmp.t= ltypName
-  retval.setP4(tmp) #??
+  retval.setP5(tmp) #??
   return retval
 
 class LoadCaseContainer(ctr.Container):
