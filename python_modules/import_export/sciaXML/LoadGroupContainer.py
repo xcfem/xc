@@ -25,9 +25,14 @@ def getLoadGroupObject(loadGroup):
   name= loadGroupPrefix+id
   retval.setNm(name)
   retval.setP0(oI.ObjectItem(name)) #Name
-  tmp= oI.ObjectItem('0')
-  tmp.t= 'Permanent'
-  retval.setP1(tmp) #??
+  tmp= None
+  if(loadGroup.permanent):
+    tmp= oI.ObjectItem('0')
+    tmp.t= 'Permanent'
+  else:
+    tmp= oI.ObjectItem('1')
+    tmp.t= 'Variable' 
+  retval.setP1(tmp)
   return retval
 
 class LoadGroupContainer(ctr.Container):

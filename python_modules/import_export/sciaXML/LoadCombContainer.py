@@ -97,5 +97,5 @@ class LoadCombContainer(ctr.Container):
     for key in sorted(loadCombsDict):
       ns= loadCombsDict[key]
       loadCombs.append(getLoadCombObject(ns))
-    self.table= tb.TableNode(idLoadCombContainerTb,tLoadCombContainerTb, 'Load cases', None,loadCombs)
+    self.table= tb.TableNode(idLoadCombContainerTb,tLoadCombContainerTb, 'Combinations', None,loadCombs)
   

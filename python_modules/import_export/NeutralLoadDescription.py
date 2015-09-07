@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
-import xc_base
-import geom
-import xc
+import copy
 
 class LoadRecord(object):
   def __init__(self, loadCase,bName= 'nil',v= 1.0):
@@ -86,9 +84,19 @@ class LoadContainer(object):
   setName= 'total'
   def __init__(self,n):
     self.name= n
-    self.punctualLoads= []
-    self.surfaceLoads= []
+    self.punctualLoads= None
+    self.surfaceLoads= None
     self.elementSet= 'total'
+  def addPunctualLoad(self,pLoad):
+    if(not self.punctualLoads):
+      self.punctualLoads= [pLoad]
+    else:
+      self.punctualLoads.append(pLoad)
+  def addSurfaceLoad(self,sLoad):
+    if(not self.surfaceLoads):
+      self.surfaceLoads= [sLoad]
+    else:
+      self.surfaceLoads.append(sLoad)
   def __str__(self):
     retval= str(self.name)
     if(len(self.punctualLoads)>0):
@@ -117,19 +125,21 @@ class LoadContainer(object):
     
 class LoadGroup(object):
   ''' Loads wich share some property (origin,...).'''
-  def __init__(self,id, desc):
+  def __init__(self,id, desc, permanent= False):
     self.id= id
     self.desc= desc #Group description.
+    self.permanent= permanent
 
 class LoadCase(object):
   ''' Load case.'''
-  def __init__(self,id, name, desc, lg, ltyp, loads= LoadContainer('')):
+  def __init__(self,id, name, desc, lg, ltyp):
     self.id= id
     self.name= name
     self.desc= desc #Load description.
     self.loadGroupId= lg
+    self.actionType= "Permanent"
     self.ltyp= ltyp
-    self.loads= loads
+    self.loads= copy.deepcopy(LoadContainer(''))
 
 class LoadCombComponent(object):
   def __init__(self,id, loadCase, coef):
@@ -137,6 +147,20 @@ class LoadCombComponent(object):
     self.loadCaseId= loadCase.id
     self.loadCaseName= loadCase.name
     self.coef= coef #Multiplier for load i.
+    
+def getComponentsFromStr(descompStr,mapLoadCases):
+  retval= []
+  components= descompStr.split('+')
+  counter= 0
+  for c in components:
+    factors= c.split('*')
+    coef= float(factors[0])
+    loadCaseName= factors[1]
+    loadCase= mapLoadCases[loadCaseName]
+    #print "coef= ", coef, "loadCase= ", loadCaseName, " id= ", loadCase.id
+    retval.append(LoadCombComponent(counter,loadCase,coef))
+    counter+= 1
+  return retval
     
 
 class LoadComb(object):

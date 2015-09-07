@@ -27,9 +27,11 @@ class SXMLMesh:
     for key in sorted(loads.loadCases):
       lc= loads.loadCases[key]
       pl= lc.loads.punctualLoads
-      self.nodeLoadContainer= nlc.NodeLoadContainer(pl)
+      if(pl):
+        self.nodeLoadContainer= nlc.NodeLoadContainer(pl)
       sl= lc.loads.surfaceLoads
-      self.elementLoadContainer= elc.ElementLoadContainer(sl)
+      if(sl):
+        self.elementLoadContainer= elc.ElementLoadContainer(sl)
     self.loadCombContainer= lcmb.LoadCombContainer(loads.loadCombs)
     self.fileName= ''
 

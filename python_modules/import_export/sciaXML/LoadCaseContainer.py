@@ -27,6 +27,15 @@ def getLoadTypeName(ltype):
   elif(ltype==2):
     return 'Effet primaire'
 
+def getActionTypeCode(actionType):
+  if(actionType=='Permanent'):
+    return 0
+  elif(actionType=='Variable'):
+    return 1
+  else:
+    print actionType, "Unknown action type (not permanent, not variable)."
+    return 0
+
 def getLoadCaseObject(loadCase):
   retval= obj.Object()
   id= str(loadCase.id)
@@ -37,8 +46,8 @@ def getLoadCaseObject(loadCase):
   retval.setNm(name)
   retval.setP0(oI.ObjectItem(name)) #Name
   retval.setP1(oI.ObjectItem('{'+str(uuid.uuid4())+'}')) # Unique id
-  tmp= oI.ObjectItem('0')
-  tmp.t= 'Permanent'
+  tmp= oI.ObjectItem(str(getActionTypeCode(loadCase.actionType)))
+  tmp.t= loadCase.actionType
   retval.setP2(tmp) #??
   retval.setP3(oI.ObjectItem(loadCase.desc)) #Description
   gId= str(loadCase.loadGroupId)

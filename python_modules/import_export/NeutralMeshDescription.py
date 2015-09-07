@@ -22,10 +22,11 @@ class NodeRecord(object):
 
 class CellRecord(object):
 
-  def __init__(self,id, type, nodes):
+  def __init__(self,id, type, nodes,thk= 0.0):
     self.id= id
     self.cellType= type
     self.nodeIds= nodes
+    self.thickness= thk
   def __str__(self):
     return str(self.id)+' '+str(self.cellType)+' '+str(self.nodeIds)
   def getStrXCNodes(self):

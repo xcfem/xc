@@ -45,7 +45,7 @@ class NodeLoadComponent(lcb.LoadComponentBase):
     retval.setId(loadCompId)
     name= nodeLoadPrefix+loadCompId
     retval.setNm(name)
-    nodeId= str(self.nodeId) # Load name.
+    nodeId= str(self.nodeId) # Node id
     retval.setP0(oI.ObjectItem(name)) #Name
     retval.setP1(self.getLoadCaseReferenceItem()) #Reference to load case.
     retval.setP2(self.getNodeReferenceItem()) #Reference to node.
