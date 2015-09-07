@@ -8,6 +8,7 @@ import EPPlaneContainer as eppc
 import NodeSupportContainer as nsc
 import LoadGroupContainer as lgc
 import LoadCaseContainer as lcc
+import LoadCombContainer as lcmb
 import NodeLoadContainer as nlc
 import ElementLoadContainer as elc
 import ProjectProperties as prjDef
@@ -29,6 +30,7 @@ class SXMLMesh:
       self.nodeLoadContainer= nlc.NodeLoadContainer(pl)
       sl= lc.loads.surfaceLoads
       self.elementLoadContainer= elc.ElementLoadContainer(sl)
+    self.loadCombContainer= lcmb.LoadCombContainer(loads.loadCombs)
     self.fileName= ''
 
   def getXMLElement(self,defFileName):
@@ -36,7 +38,7 @@ class SXMLMesh:
     project.set("xmlns",self.xmlns)
     df= ET.SubElement(project,"def")
     df.set("uri",defFileName)
-    containers= [self.nodeContainer,self.epPlaneContainer, self.nodeSupportContainer, self.loadGroupContainer, self.loadCaseContainer]
+    containers= [self.nodeContainer,self.epPlaneContainer, self.nodeSupportContainer, self.loadGroupContainer, self.loadCaseContainer, self.loadCombContainer]
     if(hasattr(self, 'nodeLoadContainer')):
       containers.append(self.nodeLoadContainer)
     if(hasattr(self, 'elementLoadContainer')):

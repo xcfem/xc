@@ -5,9 +5,9 @@ import geom
 import xc
 
 class LoadRecord(object):
-  def __init__(self, lcId= 0, lcName= 'nil',bName= 'nil',v= 1.0):
-    self.loadCaseId= lcId
-    self.loadCaseName= lcName
+  def __init__(self, loadCase,bName= 'nil',v= 1.0):
+    self.loadCaseId= loadCase.id
+    self.loadCaseName= loadCase.name
     self.loadName= bName
     self.value= v
     self.vDir= [0,0,-1]
@@ -17,8 +17,8 @@ class LoadRecord(object):
 
 class PunctualLoadRecord(LoadRecord):
   tag= -1 #Element or node tag.
-  def __init__(self, lcId, lcName,bName,pos,v):
-    super(PunctualLoadRecord,self).__init__(lcId, lcName, bName, v)
+  def __init__(self, loadCase,bName,pos,v):
+    super(PunctualLoadRecord,self).__init__(loadCase, bName, v)
     self.pos= pos
   def __str__(self):
     retval= super(PunctualLoadRecord,self).__str__()
@@ -34,8 +34,8 @@ class PunctualLoadRecord(LoadRecord):
     self.tag= n.tag
 
 class ElementLoadRecord(LoadRecord):
-  def __init__(self, lcId= 0, lcName= 'nil', bName= 'nil', v= 1.0,mode= 'nil'):
-    super(ElementLoadRecord,self).__init__(lcId, lcName,bName,v)
+  def __init__(self, loadCase, bName= 'nil', v= 1.0,mode= 'nil'):
+    super(ElementLoadRecord,self).__init__(loadCase,bName,v)
     self.mode= mode
     self.tags= [] #Element tags
   def __str__(self):
@@ -45,8 +45,8 @@ class ElementLoadRecord(LoadRecord):
 
 
 class SurfaceLoadRecord(ElementLoadRecord):
-  def __init__(self, lcId= 0, lcName= 'nil', bName= 'nil', plg= [],v= 1.0,mode= 'nil'):
-    super(SurfaceLoadRecord,self).__init__(lcId, lcName,bName,v)
+  def __init__(self, loadCase, bName= 'nil', plg= [],v= 1.0,mode= 'nil'):
+    super(SurfaceLoadRecord,self).__init__(loadCase,bName,v)
     self.setPolygon(plg)
     self.projPlane= "xy"
   def __str__(self):
@@ -130,9 +130,26 @@ class LoadCase(object):
     self.loadGroupId= lg
     self.ltyp= ltyp
     self.loads= loads
-  
+
+class LoadCombComponent(object):
+  def __init__(self,id, loadCase, coef):
+    self.id= id
+    self.loadCaseId= loadCase.id
+    self.loadCaseName= loadCase.name
+    self.coef= coef #Multiplier for load i.
+    
+
+class LoadComb(object):
+  ''' Load combination.'''
+  def __init__(self,id, name, desc, typ, descomp):
+    self.id= id
+    self.name= name
+    self.desc= desc #Comb description.
+    self.typ= typ
+    self.descomp= descomp
 
 class LoadData(object):
   def __init__(self):
     self.loadGroups= {}
     self.loadCases= {}
+    self.loadCombs= {}

@@ -7,6 +7,7 @@ import EPPlaneProperties as eppp
 import NodeSupportProperties as nsp
 import LoadGroupProperties as lgp
 import LoadCaseProperties as lcp
+import LoadCombProperties as lcmbp
 import NodeLoadProperties as nlp
 import ElementLoadProperties as elp
 import xml.etree.cElementTree as ET
@@ -21,13 +22,14 @@ class ProjectProperties(object):
     self.nodeSupportProperties= nsp.NodeSupportProperties()
     self.loadGroupProperties= lgp.LoadGroupProperties()
     self.loadCaseProperties= lcp.LoadCaseProperties()
+    self.loadCombProperties= lcmbp.LoadCombProperties()
     self.nodeLoadProperties= nlp.NodeLoadProperties()
     self.elementLoadProperties= elp.ElementLoadProperties()
 
   def getXMLElement(self,defFileName):
     project= ET.Element("def_project")
     project.set("xmlns",self.xmlns)
-    containers= [self.nodeProperties,self.epPlaneProperties, self.nodeSupportProperties, self.loadGroupProperties, self.loadCaseProperties, self.nodeLoadProperties, self.elementLoadProperties]
+    containers= [self.nodeProperties,self.epPlaneProperties, self.nodeSupportProperties, self.loadGroupProperties, self.loadCaseProperties, self.loadCombProperties, self.nodeLoadProperties, self.elementLoadProperties]
     for c in containers:
       elem= c.getXMLElement(project)
     return project

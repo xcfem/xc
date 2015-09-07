@@ -29,7 +29,7 @@ class ElementLoadComponent(lcb.LoadComponentBase):
     super(ElementLoadComponent,self).__init__(loadCaseId, loadCaseName, direction, value, globalCooSys)
     ElementLoadComponent.counter+=1
     self.elementLoadCompId= ElementLoadComponent.counter
-    print "loadCompId= ", self.elementLoadCompId 
+    #print "loadCompId= ", self.elementLoadCompId 
     self.elementId= elementId
 
   def getElementReferenceItem(self):
