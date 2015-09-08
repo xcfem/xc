@@ -19,18 +19,60 @@
 \newcommand{\fyp}[1]{{\tt fyp{#1}} & stress at which material reaches plastic state in tension}
 \newcommand{\gammaS}{{\tt gammaS} & partial factor}
 \newcommand{\G}[1]{{\tt G{#1}} & transverse modulus of elasticity}
+
+\newcommand{\getAMzOne}{{\tt getAMz1} & returns the bending moment about the local Z axis applied to the back end of the element}
+\newcommand{\getAMzTwo}{{\tt getAMz2} & returns the bending moment about the local Z axis applied to the front end of the element}
+\newcommand{\getANTwo}{{\tt getAN2} & returns the axial force applied to the front end of the element}
+\newcommand{\getAVyOne}{{\tt  getAVy1} & returns the shear force in local Y axis appliend on the back end of the element}
+\newcommand{\getAVyTwo}{{\tt  getAVy2} & returns the shear force in local Y axis direction applied on the front end of the element}
+\newcommand{\getAVzOne}{{\tt  getAVz1} & returns the shear force in local Z axis appliend on the back end of the element}
+\newcommand{\getAVzTwo}{{\tt  getAVz2} & returns the shear force in local Z axis direction applied on the front end of the element}
+
+\newcommand{\getMOne}{{\tt getM1} & returns the bending moment at the back end of the element}
+\newcommand{\getMTwo}{{\tt getM2} & returns the bending moment at the front end of the element}
+\newcommand{\getMyOne}{{\tt getMy1} & returns the bending moment about the local Y axis at the back end of the element}
+\newcommand{\getMyTwo}{{\tt  getMy2} &  returns the bending moment  about the local Y axis at the front end of the element}
+\newcommand{\getMzOne}{{\tt getMz1} & returns the bending moment about the local Z axis at the back end of the element}
+\newcommand{\getMzTwo}{{\tt  getMz2} &  returns the bending moment  about the local Z axis at the front end of the element}
+
+\newcommand{\getN}{{\tt getN} & returns the mean value of the axial force at the the element $N=\cfrac{N_1 + N_2}{2}$}
+\newcommand{\getNOne}{{\tt getN1} & returns the axial force at the back end of the element}
+\newcommand{\getNTwo}{{\tt getN2} & returns the axial force at the front end of the element}
+\newcommand{\getT}{{\tt getT} & returns the mean value of the torsional moment at the the element }
+\newcommand{\getTOne}{{\tt getT1} & returns the torsional moment at the back end of the element}
+\newcommand{\getTTwo}{{\tt getT2} & returns the torsional moment at the front end of the element}
+\newcommand{\getV}{{\tt getV} & returns the shear force at the central section of the element}
+\newcommand{\getVDirEjeFuerteLocales}{{\tt getVDirEjeFuerteLocales()} & returns a vector, expressed in local coordinates, that defines the strong axis orientation}
+\newcommand{\getVDirEjeDebilLocales}{{\tt getVDirEjeDebilLocales()} & returns a vector, expressed in local coordinates, that defines the weak axis orientation}
+\newcommand{\getAnguloEjeFuerte}{{\tt getAnguloEjeFuerte()} & returns the angle between the strong axis and the plane XZ of the element}
+\newcommand{\getAnguloEjeDebil}{{\tt getAnguloEjeDebil()} & returns the angle between the weak axis and the plane XZ of the element}
+\newcommand{\getVDirEjeFuerteGlobales}{{\tt getVDirEjeFuerteGlobales()} & returns a vector, expressed in global coordinates, that defines the strong axis orientation}
+\newcommand{\getVDirEjeDebilGlobales}{{\tt getVDirEjeDebilGlobales()} & returns a vector, expressed in global coordinates, that defines the weak axis orientation}
+
+\newcommand{\getVOne}{{\tt getV1} & returns the shear force at the back end of the element}
+\newcommand{\getVTwo}{{\tt getV2} & returns the shear force at the front end of the element}
+\newcommand{\getVy}{{\tt getVy} & returns the element mean shear force in the local Y axis direction}
+\newcommand{\getVyOne}{{\tt  getVy1} & returns the shear force in local Y axis direction at the back end of the element}
+\newcommand{\getVyTwo}{{\tt  getVy2} & returns the shear force in local Y axis direction at the front end of the element}
+\newcommand{\getVz}{{\tt getVz} & returns the element mean shear force in the local Z axis direction}
+\newcommand{\getVzOne}{{\tt  getVz1} & returns the shear force in local Z axis direction at the back end of the element}
+\newcommand{\getVzTwo}{{\tt  getVz2} & returns the shear force in local Z axis direction at the front end of the element}
+
 \newcommand{\GJ}[1]{{\tt GJ{#1}} & product of $E_{steel} \times G$ }
 \newcommand{\h}{{\tt h} & height}
 \newcommand{\IAxisOne}[1]{{\tt I1{#1}} &  second moment of area about the axis through the centre of gravity and parallel to the width dimension (axis 1)}
 \newcommand{\iAxisOne}[1]{{\tt i1{#1}} & bending radius of the section with regard to the axis 1}
 \newcommand{\IAxisTwo}[1]{{\tt I2{#1}} &  second moment of area about the axis through the centre of gravity and parallel to the high dimension (axis 2)}
 \newcommand{\iAxisTwo}[1]{{\tt i2{#1}} & bending radius of the section with regard to the axis 2}
+\newcommand{\initialStrain}{{\tt initialStrain} & initial strain in the element}
 \newcommand{\Iy}[1]{{\tt Iy{#1}} &  second moment of area about the local y-axis}
 
 \newcommand{\Iz}[1]{{\tt Iz{#1}} &  second moment of area about the local z-axis}
 \newcommand{\J}[1]{{\tt J{#1}} & torsional moment of inertia of the section }
+\newcommand{\M}{{\tt M} & bending moment}
 \newcommand{\mdlr}{{\tt mdlr} & modeler name}
 \newcommand{\MeAxisOne}[1]{{\tt Me1{#1}} & yield moment of the rectangular section about the axis 1}
+\newcommand{\N}{{\tt N} & axial force}
 \newcommand{\name}[1]{{\tt name} & name identifying the {#1}}
 \newcommand{\nDivIJ}{{\tt nDivIJ} & number of cells in IJ (width) direction}
 \newcommand{\numDivIJ}{{\tt numDivIJ} & number of cells in IJ (width) direction}
@@ -38,6 +80,7 @@
 \newcommand{\numDivJK}{{\tt numDivJK} & number of cells in JK  (height) direction}
 \newcommand{\nuX}{{\tt nu} & Poisson's ratio}
 \newcommand{\rhoX}{{\tt rho} &  mass density}
+\newcommand{\V}{{\tt V} & shear force}
 \newcommand{\Wyel}[1]{{\tt Wyel{#1}} & elastic section modulus about the local y-axis}
 \newcommand{\Wzel}[1]{{\tt Wzel()} & elastic section modulus about the local z-axis}
 
@@ -112,12 +155,12 @@
 & local z-axis is defined by the vector $\vec{z}=\vec{x}\times\vec{yp}$ \\
 }
 
-\newcommand{\ElementONEDParam}
+\newcommand{\ElementOneDParam}
 {
 {\tt getCoordTransf()} & returns the identifier of the coordinate-transformation associated with the element\\
 }
 
-\newcommand{\ElementONEDMeth}
+\newcommand{\ElementOneDMeth}
 {
 {\tt getMEDCellType()} &  interface with MED data format for Salome\\
 \multicolumn{2}{l}{{\tt vector2dUniformLoadGlobal(v)}} \\
@@ -151,14 +194,32 @@
 
 \newcommand{\ProtoTrussMeth}
 {
-{\tt getDim()} &  returns element dimension \\\\
+{\tt getDim()} &  returns element dimension \\
 {\tt getMaterial()} &  returns the material associated with the element \\
+}
+
+\newcommand{\ProtoBeamTwoDParam}
+{
+{\tt sectionProperties} & \\
+}
+
+\newcommand{\ProtoBeamThreeDParam}
+{
+{\tt sectionProperties} & \\
+}
+
+\newcommand{\BeamColumnWithSectionFDMeth}
+{
+{\tt getNumSections} & \\
+{\tt getSections} & Returns element sections\\
 }
 
 \newcommand{\TrussBaseMeth}
 {
 {\tt getL} & returns the element length \\
 }
+
+
 
 
 \newcommand{\ZeroLengthMeth}
@@ -198,3 +259,4 @@ for rotation about the local x, y, z axes.\\
 {
 {\tt getN} &  RReturns the internal axial force $N$ in the element \\
 }
+

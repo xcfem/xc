@@ -1,10 +1,10 @@
 \chapter{Elements}
 
-\section{Zero-Length Elements}
+\section{Zero-length elements}
 \subsection{ZeroLength}
 The ZeroLength class represents an element defined by two nodes at the same geometric location, hence it has zero length.
 
-The nodes are connected by of uniaxial materials to represent the force-deformation relationship for the element. 
+The nodes are connected by means of uniaxial materials to represent the force-deformation relationship for the element. 
 
 ZeroLength elements are constructed with a {\em tag} in a domain of {\em dimension} 1, 2, or 3, connected by nodes {\em Nd1} and {\em Nd2}. 
 The vector $\vec{x}$ defines the local x-axis for the element and the vector $\vec{yp}$ lies in the local x-y plane for the element.  The local z-axis is the cross product between $\vec{x}$ and $\vec{yp}$, and the local y-axis is the cross product between the local z-axis and $\vec{x}$.
@@ -75,7 +75,7 @@ The contact node pair in node-to-node contact element is termed «master node» 
 
 For 2D contact, slave nodes and master nodes must be 2 DOF. For 3D contact, slave nodes and master nodes must be 3 DOF.
 
-The resulted tangent from the contact element is NON-SYMMETRIC. Switch to non-symmetric matrix solver. 
+The resulted tangent from the contact element is non-symmetric. Switch to non-symmetric matrix solver. 
 
 \begin{verbatim}
 mdlr=xc.ProblemaEF().getModelador
@@ -100,7 +100,7 @@ ZeroLengthElement=mdlr.getElementLoader.newElement(
 
 
 
-\section{Truss Elements}
+\section{Truss elements}
 
 % ***Truss***
 \subsection{Truss}
@@ -118,12 +118,12 @@ trussElement=mdlr.getElementLoader.newElement(
 
 \begin{paramClassTable}
 \ElementParam{}
-\ElementONEDParam{}
+\ElementOneDParam{}
 \end{paramClassTable}
 
 \begin{methodsTable}
 \ElementMeth{}
-\ElementONEDMeth{}
+\ElementOneDMeth{}
 \ProtoTrussMeth{}
 \TrussBaseMeth{}
 \TrussMeth{}
@@ -144,12 +144,12 @@ trussSectionElement=mdlr.getElementLoader.newElement(
 
 \begin{paramClassTable}
 \ElementParam{}
-\ElementONEDParam{}
+\ElementOneDParam{}
 \end{paramClassTable}
 
 \begin{methodsTable}
 \ElementMeth{}
-\ElementONEDMeth{}
+\ElementOneDMeth{}
 \ProtoTrussMeth{}
 \TrussBaseMeth{}
 \end{methodsTable}
@@ -170,13 +170,13 @@ corotTrussElement=mdlr.getElementLoader.newElement(
 
 \begin{paramClassTable}
 \ElementParam{}
-\ElementONEDParam{}
+\ElementOneDParam{}
 \CorotTrussParam{}
 \end{paramClassTable}
 
 \begin{methodsTable}
 \ElementMeth{}
-\ElementONEDMeth{}
+\ElementOneDMeth{}
 \ProtoTrussMeth{}
 \CorotTrussMeth{}
 \end{methodsTable}
@@ -196,11 +196,162 @@ corotTrussSectionElement=mdlr.getElementLoader.newElement(
 
 \begin{paramClassTable}
 \ElementParam{}
-\ElementONEDParam{}
+\ElementOneDParam{}
 \end{paramClassTable}
 
 \begin{methodsTable}
 \ElementMeth{}
-\ElementONEDMeth{}
+\ElementOneDMeth{}
 \ProtoTrussMeth{}
+\end{methodsTable}
+
+\section{Beam-column elements}
+
+% ***ElasticBeam2d***
+\subsection{ElasticBeam2d}
+This class is used to construct a uniaxial element with tension, compression, and bending capabilities. The element has three degrees of freedom at each node: translations in the nodal x and y directions and rotation about the nodal z-axis.
+
+The element is defined by two 2D nodes, a previously-defined coordinate-transformationt object and a previously-defined 2D elastic section. The initial strain in the element (initialStrain) is given by $\Delta/L$, where $\Delta$ is the difference between the element length, L (as defined by the 1 and 2 node locations), and the zero strain length. 
+
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+elasticBeam2dElement=mdlr.getElementLoader.newElement(
+"elastic_beam_2d",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementOneDParam{}
+\ProtoBeamTwoDParam{}
+\rhoX{} \\
+\h{}  \\
+\initialStrain{} \\
+\getV{} \\
+\getVOne{} \\
+\getVTwo{} \\
+\getNOne{} \\
+\getNTwo{} \\
+\getMOne{} \\
+\getMTwo{} \\
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{} 
+\ElementOneDMeth{}
+\end{methodsTable}
+
+% ***ElasticBeam3d***
+\subsection{ElasticBeam3d}
+This class is used to construct a uniaxial element with tension, compression, torsion, and bending capabilities. The element has six degrees of freedom at each node: translations in the nodal x, y, and z directions and rotations about the nodal x, y, and z axes. 
+
+The element is defined by two 3D nodes, a previously-defined coordinate-transformationt object and a previously-defined 3D elastic section. The element x-axis is oriented from node I toward node J. The initial strain in the element (initialStrain) is given by $\Delta/L$, where $\Delta$ is the difference between the element length, L (as defined by the 1 and 2 node locations), and the zero strain length. 
+
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+elasticBeam2dElement=mdlr.getElementLoader.newElement(
+"elastic_beam_3d",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementOneDParam{}
+\ProtoBeamThreeDParam{}
+\rhoX{} \\
+\initialStrain{} \\
+\getANTwo{} \\
+\getNOne{} \\
+\getNTwo{} \\
+\getN{} \\
+\getAMzOne{} \\
+\getAMzTwo{} \\
+\getMzOne{} \\
+\getMzTwo{} \\
+\getMyOne{} \\
+\getMyTwo{} \\
+\getVy{} \\
+\getVyOne{} \\
+\getVyTwo{} \\
+\getAVyOne{} \\
+\getAVyTwo{} \\
+\getVz{} \\
+\getVzOne{} \\
+\getVzTwo{} \\
+\getAVzOne{} \\
+\getAVzTwo{} \\
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementOneDMeth{}
+\getVDirEjeFuerteLocales{} \\
+\getVDirEjeDebilLocales{} \\
+\getAnguloEjeFuerte{} \\
+\getAnguloEjeDebil{} \\
+\getVDirEjeFuerteGlobales{} \\
+\getVDirEjeDebilGlobales{} \\
+
+\end{methodsTable}
+
+% ***ForceBeamColumn2d***
+\subsection{ForceBeamColumn2d}
+This command is used to construct a 2D forceBeamColumn element object, which is based on the iterative force-based formulation. A variety of numerical integration options can be used in the element state determination and encompass both distributed plasticity and plastic hinge integration. More details on the available numerical integration options can be found in the paper titled «Numerical Integration Options for the Force-Based Beam-Column Element in OpenSees», by Michael H. Scott.
+
+The element is defined by two 2D nodes, a previously-defined coordinate-transformationt object and a previously-defined 2D elastic section.
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+elasticBeam2dElement=mdlr.getElementLoader.newElement(
+"force_beam_column_2d",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+
+\begin{paramClassTable}
+\ElementParam{}
+\ElementOneDParam{}
+\rhoX{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementOneDMeth{}
+\BeamColumnWithSectionFDMeth{}
+\end{methodsTable}
+
+% ***ForceBeamColumn3d***
+\subsection{ForceBeamColumn3d}
+This command is used to construct a 3D forceBeamColumn element object, which is based on the iterative force-based formulation. A variety of numerical integration options can be used in the element state determination and encompass both distributed plasticity and plastic hinge integration. More details on the available numerical integration options can be found in the paper titled «Numerical Integration Options for the Force-Based Beam-Column Element in OpenSees», by Michael H. Scott. 
+
+The element is defined by two 3D nodes, a previously-defined coordinate-transformationt object and a previously-defined 3D elastic section.
+\begin{verbatim}
+mdlr=xc.ProblemaEF().getModelador
+elasticBeam2dElement=mdlr.getElementLoader.newElement(
+"force_beam_column_3d",xc.ID([Nd1Tag,Nd2Tag]))
+\end{verbatim}
+\begin{paramFuncTable}
+{\tt Nd1Tag,Nd2Tag} & tags of the nodes connected by the element\\
+\end{paramFuncTable}
+\begin{paramClassTable}
+\ElementParam{}
+\ElementOneDParam{}
+\rhoX{}
+\end{paramClassTable}
+
+\begin{methodsTable}
+\ElementMeth{}
+\ElementOneDMeth{}
+\BeamColumnWithSectionFDMeth{}
+\getVDirEjeFuerteLocales{} \\
+\getVDirEjeDebilLocales{} \\
+\getAnguloEjeFuerte{} \\
+\getAnguloEjeDebil{} \\
+\getVDirEjeFuerteGlobales{} \\
+\getVDirEjeDebilGlobales{} \\
 \end{methodsTable}
