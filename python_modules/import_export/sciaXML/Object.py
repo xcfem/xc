@@ -139,7 +139,7 @@ class Object(ob.ObjBase):
     items=[self.p0, self.p1, self.p2, self.p3, self.p4, self.p5, self.p6, self.p7, self.p8, self.p9, self.p10, self.p11, self.p12, self.p13, self.p14, self.p15, self.p16, self.p17, self.p18, self.p19, self.p20]
     for i in items:
       if i is not None:
-        if((i.t != '') or (i.v != '') or (i.hasRows()) ):
+        if((i.t != '') or (i.v != '') or (i.i != '') or (i.hasRows()) ):
           ii= i.getXMLElement(oo,cont)
       cont+= 1
     return oo

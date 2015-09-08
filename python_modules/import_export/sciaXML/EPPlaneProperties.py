@@ -9,6 +9,7 @@ import EnumItem as eI
 import Enum as enum
 import TableProperties as tbProp
 import SubTableProperties as stbProp
+import NodeContainer as nc
 import xml.etree.cElementTree as ET
 
 containerId= "{8708ed31-8e66-11d4-ad94-f6f5de2be344}"
@@ -50,14 +51,14 @@ class EPPlaneProperties(ctr.PropertiesContainer):
     propDirection= prop.Property("8","_DIRECTION_","enum",idDirection,"0")
     propDirection.value= enum.Enum([eI.EnumItem("0","X"),eI.EnumItem("1","Y"),eI.EnumItem("2","Z")])
     propPoint1= prop.Property("10","_POINT1_","ref",idPoint1,"0")
-    propPoint1.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}","EP_DSG_Elements.EP_StructNode.1")
+    propPoint1.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}",nc.progIdNodes)
     propPoint2= prop.Property("11","_POINT2_","ref",idPoint2,"0")
-    propPoint2.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}","EP_DSG_Elements.EP_StructNode.1")
+    propPoint2.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}",nc.progIdNodes)
     propGeomTable= prop.Property("12","_TABLE_OF_GEOMETRY_","table",idGeomTable,"0")
     propGeomTable.value= stbProp.SubTableProperties('','',"vertical",'','')
     propGeomTable.value.properties.append(prop.Property("0","_CLOSED_CURVE_","bool","{e0dd8a0c-8e62-49bf-b2ff-cf737a0b65e5}","0"))
     subPropNode= prop.Property("1","_NODE_","ref","{f140e9f9-e8c9-48f1-a305-7f1eb39eeb65}","0")
-    subPropNode.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}","EP_DSG_Elements.EP_StructNode.1")
+    subPropNode.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}",nc.progIdNodes)
     subPropEdge= prop.Property("2","_EDGE_","enum","{406832d0-2125-4389-94e2-fd17d97bd027}","0")
     subPropEdge.value= enum.Enum([eI.EnumItem("0", "Line"), eI.EnumItem("1", "Circle_arc"), eI.EnumItem("2", "Circle_by_centre_and_vertex"), eI.EnumItem("4", "Circle_by_3_pts"), eI.EnumItem("5", "Parabolic_arc"), eI.EnumItem("6", "Bezier"), eI.EnumItem("7", "Spline"), eI.EnumItem("9", "Linestrip")])
     propGeomTable.value.properties.append(subPropNode)
@@ -67,7 +68,7 @@ class EPPlaneProperties(ctr.PropertiesContainer):
     propInternalNodes.value= stbProp.SubTableProperties('','',"vertical",'','')
     propInternalNodes.value.properties.append(prop.Property("0","_INDEX_","integer","{24262aad-7b4d-42ed-b3f7-7d237b2a5484}","0"))
     subPropNode= prop.Property("1","_NODE_","ref","{66c5a1c2-2989-4d02-847b-63e69b346911}","0")
-    subPropNode.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}","EP_DSG_Elements.EP_StructNode.1")
+    subPropNode.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}",nc.progIdNodes)
     propInternalNodes.value.properties.append(subPropNode)
 
     self.tableProp.properties.append(propMat) #0

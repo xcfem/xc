@@ -29,7 +29,7 @@ def getEPPlaneObject(cell):
   retval.setP4(oI.ObjectItem('0')) #Constant thickness.
   retval.setP5(oI.ObjectItem('1')) #Member system plane at prop (center).
   retval.setP6(oI.ObjectItem('0.0')) #Eccentricity Z.
-  retval.setP7(oI.ObjectItem('0.5')) #Thickness.
+  retval.setP7(oI.ObjectItem(str(cell.thickness))) #Thickness.
   retval.setP8(oI.ObjectItem('0')) #Direction.
   oi12= oI.ObjectItem()
   row= rw.RowP012("0", oI.ObjectItem("1", None, None, None,None,None), oI.ObjectItem('', str(cell.nodeIds[0]), nc.nodePrefix+str(cell.nodeIds[0]), None,None,None), oI.ObjectItem("0", None, None, None,None,None))

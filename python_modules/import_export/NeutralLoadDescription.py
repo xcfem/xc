@@ -1,27 +1,22 @@
 #!/usr/bin/env python
 
-import xc_base
-import geom
-import xc
+import copy
 
 class LoadRecord(object):
-  value= 1.0
-  loadCaseName= 'nil'
-  loadName= 'nil'
-  vDir= [0,0,-1]
-  def __init__(self,lName,bName,v):
-    self.loadCaseName= lName
+  def __init__(self, loadCase,bName= 'nil',v= 1.0):
+    self.loadCaseId= loadCase.id
+    self.loadCaseName= loadCase.name
     self.loadName= bName
     self.value= v
+    self.vDir= [0,0,-1]
   def __str__(self):
     return self.loadCaseName + ' ' + self.loadName + ' ' +  str(self.value)
   
 
 class PunctualLoadRecord(LoadRecord):
-  pos= [] #Point coordinates
   tag= -1 #Element or node tag.
-  def __init__(self,lName,bName,pos,v):
-    super(PunctualLoadRecord,self).__init__(lName,bName,v)
+  def __init__(self, loadCase,bName,pos,v):
+    super(PunctualLoadRecord,self).__init__(loadCase, bName, v)
     self.pos= pos
   def __str__(self):
     retval= super(PunctualLoadRecord,self).__str__()
@@ -36,20 +31,25 @@ class PunctualLoadRecord(LoadRecord):
     n= elemSet.getNearestNode(pos)
     self.tag= n.tag
 
-class SurfaceLoadRecord(LoadRecord):
-  mode= 'nil'
-  polygon= []
-  tags= [] #Element or node tags
-  projPlane= "xy"
-  def __init__(self,lName,bName,plg,v,mode):
-    super(SurfaceLoadRecord,self).__init__(lName,bName,v)
+class ElementLoadRecord(LoadRecord):
+  def __init__(self, loadCase, bName= 'nil', v= 1.0,mode= 'nil'):
+    super(ElementLoadRecord,self).__init__(loadCase,bName,v)
     self.mode= mode
+    self.tags= [] #Element tags
+  def __str__(self):
+    retval= super(ElementLoadRecord,self).__str__()
+    retval+= ' ' + str(self.mode) + ' ' + str(self.tags)
+    return retval
+
+
+class SurfaceLoadRecord(ElementLoadRecord):
+  def __init__(self, loadCase, bName= 'nil', plg= [],v= 1.0,mode= 'nil'):
+    super(SurfaceLoadRecord,self).__init__(loadCase,bName,v)
     self.setPolygon(plg)
-    self.tags= []
     self.projPlane= "xy"
   def __str__(self):
     retval= super(SurfaceLoadRecord,self).__str__()
-    retval+= ' ' + str(self.mode) + ' ' + str(len(self.polygon)) + ' ' + str(self.polygon)
+    retval+= ' ' + str(len(self.polygon)) + ' ' + str(self.polygon)
     return retval
   def get2DPolygon(self):
     retval= geom.Poligono2d()
@@ -81,15 +81,22 @@ class SurfaceLoadRecord(LoadRecord):
       self.polygon.append(p)
 
 class LoadContainer(object):
-  name= 'nil'
-  punctualLoads= []
-  surfaceLoads= []
   setName= 'total'
   def __init__(self,n):
     self.name= n
-    self.punctualLoads= []
-    self.surfaceLoads= []
+    self.punctualLoads= None
+    self.surfaceLoads= None
     self.elementSet= 'total'
+  def addPunctualLoad(self,pLoad):
+    if(not self.punctualLoads):
+      self.punctualLoads= [pLoad]
+    else:
+      self.punctualLoads.append(pLoad)
+  def addSurfaceLoad(self,sLoad):
+    if(not self.surfaceLoads):
+      self.surfaceLoads= [sLoad]
+    else:
+      self.surfaceLoads.append(sLoad)
   def __str__(self):
     retval= str(self.name)
     if(len(self.punctualLoads)>0):
@@ -116,3 +123,57 @@ class LoadContainer(object):
       for sl in self.surfaceLoads:
         sl.searchLoadedElements(elementSet)
     
+class LoadGroup(object):
+  ''' Loads wich share some property (origin,...).'''
+  def __init__(self,id, desc, permanent= False):
+    self.id= id
+    self.desc= desc #Group description.
+    self.permanent= permanent
+
+class LoadCase(object):
+  ''' Load case.'''
+  def __init__(self,id, name, desc, lg, ltyp):
+    self.id= id
+    self.name= name
+    self.desc= desc #Load description.
+    self.loadGroupId= lg
+    self.actionType= "Permanent"
+    self.ltyp= ltyp
+    self.loads= copy.deepcopy(LoadContainer(''))
+
+class LoadCombComponent(object):
+  def __init__(self,id, loadCase, coef):
+    self.id= id
+    self.loadCaseId= loadCase.id
+    self.loadCaseName= loadCase.name
+    self.coef= coef #Multiplier for load i.
+    
+def getComponentsFromStr(descompStr,mapLoadCases):
+  retval= []
+  components= descompStr.split('+')
+  counter= 0
+  for c in components:
+    factors= c.split('*')
+    coef= float(factors[0])
+    loadCaseName= factors[1]
+    loadCase= mapLoadCases[loadCaseName]
+    #print "coef= ", coef, "loadCase= ", loadCaseName, " id= ", loadCase.id
+    retval.append(LoadCombComponent(counter,loadCase,coef))
+    counter+= 1
+  return retval
+    
+
+class LoadComb(object):
+  ''' Load combination.'''
+  def __init__(self,id, name, desc, typ, descomp):
+    self.id= id
+    self.name= name
+    self.desc= desc #Comb description.
+    self.typ= typ
+    self.descomp= descomp
+
+class LoadData(object):
+  def __init__(self):
+    self.loadGroups= {}
+    self.loadCases= {}
+    self.loadCombs= {}

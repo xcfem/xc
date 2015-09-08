@@ -11,6 +11,7 @@ import EnumItem as eI
 import Enum as enum
 import TableProperties as tbProp
 import SubTableProperties as stbProp
+import NodeContainer as nc
 import xml.etree.cElementTree as ET
 
 containerId= "{1cbca4de-355b-40f7-a91d-8efd26a6404d}"
@@ -44,7 +45,7 @@ class NodeSupportProperties(ctr.PropertiesContainer):
     self.tableProp= tbProp.TableProperties(tbId,tbName,"vertical",tbClsId,tbProgId)
     propName= prop.Property("0","_NAME_","string",idName,"0")
     propRefNode= prop.Property("1","_NODE_","ref",idNodeRef,"0")
-    propRefNode.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}","EP_DSG_Elements.EP_StructNode.1")
+    propRefNode.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}",nc.progIdNodes)
     propType= prop.Property("2","_TYPE_","enum",idType,"262144")
     propType.value= enum.Enum([eI.EnumItem("0","Standard"),eI.EnumItem("1","Column")])
 
