@@ -14,11 +14,11 @@ def defMaterialesK(mdlr,path, nmbScc1, nmbScc2):
   mat.Ec= getTangent 
   mat= mat_with_tag(tagDiagAceroArmar)
   mat.Es= getTangent 
-  defSeccionHASimple(nmbScc1,"k","defGeomSeccHASimple")
+  defSeccionHASimple(nmbScc1,"k","defSectionGeometry")
   archTex= open(path+nmbScc1+".tex","w")
   informeGeomSeccion(nmbScc1,archTex,path+nmbScc1+".eps")
   archTex.close()
-  defSeccionHASimple(nmbScc2,"k","defGeomSeccHASimple")
+  defSeccionHASimple(nmbScc2,"k","defSectionGeometry")
   archTex= open(path+nmbScc2+".tex","w")
   informeGeomSeccion(nmbScc2,archTex,path+nmbScc2+".eps")
   archTex.close()
@@ -38,11 +38,11 @@ def defMaterialesD(path, nmbScc1, nmbScc2):
   mat= mat_with_tag(tagDiagAceroArmar)
   mat.Es= getTangent 
 
-  defSeccionHASimple(nmbScc1,"d","defGeomSeccHASimple")
+  defSeccionHASimple(nmbScc1,"d","defSectionGeometry")
   archTex= open(path+nmbScc1+".tex","w")
   informeGeomSeccion(nmbScc1,archTex,path+nmbScc1+".eps")
   archTex.close()
-  defSeccionHASimple(nmbScc2,"d","defGeomSeccHASimple")
+  defSeccionHASimple(nmbScc2,"d","defSectionGeometry")
   archTex= open(path+nmbScc2+".tex","w")
   informeGeomSeccion(nmbScc2,archTex,path+nmbScc2+".eps")
   archTex.close()
