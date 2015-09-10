@@ -38,7 +38,7 @@ acero.pMax= geom.Pos2d(y0+y1,z0+z1)
 '''
 print "num. regiones: ",numRegiones
 print "num. capas armado: ",numReinfLayers 
-print "num. barras armado: ",numReinfBars
+print "num. barras armado: ",getNumReinfBars
 print "num. teselas: ",numCells
 for_each_region
   print "  REGION "

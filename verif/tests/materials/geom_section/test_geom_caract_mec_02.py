@@ -33,7 +33,7 @@ armaduraB.barArea= areaFi16
 armaduraB.p1= geom.Pos2d(0.95,0.95) # Armadura inferior.
 armaduraB.p2= geom.Pos2d(0.95,0.05)
 
-nBarras= armaduras.numReinfBars
+nBarras= armaduras.getNumReinfBars
 area= geomPrueba.getAreaSeccHomogeneizada(Ec)
 G= geomPrueba.getCdgSeccHomogeneizada(Ec)
 Iy= geomPrueba.getIySeccHomogeneizada(Ec)
