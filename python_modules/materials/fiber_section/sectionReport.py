@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import plotGeomSeccion as pg
+import sys
 
 class RecordFamArmaduraPrincipal(object):
   # Parámetros que se obtienen de cada familia de armaduras
@@ -26,7 +28,7 @@ class RecordFamArmaduraPrincipal(object):
     archTex.write(" & ",format("%4.1f",self.recubMec*1e2))
     archTex.write(" & ",format("%5.3f",self.cdgBarras.x) ," & ",format("%5.3f",self.cdgBarras.y) ,"\\\\\n")
 
-def imprimeArmaduraPrincipal(listaFamArmaduraPrincipal, areaHorm, archTex):
+def writeMainReinforcement(listaFamArmaduraPrincipal, areaHorm, archTex):
   archTex.write("\\begin{tabular}{ll}\n")
   archTex.write("Área total $A_s=",format("%5.2f",areaArmaduraPrincipal*1e4) ,"\\ cm^2$ & Cuantía geométrica $\\rho= ",format("%4.2f",areaArmaduraPrincipal/AB*1e3) ,"\\permil$\\\\\n")
   archTex.write("\\end{tabular} \\\\\n")
@@ -41,7 +43,7 @@ def imprimeArmaduraPrincipal(listaFamArmaduraPrincipal, areaHorm, archTex):
     f.write(archTex)
   archTex.write("\\end{tabular} \\\\\n")
 
-def imprimeArmaduraCortante(recordArmaduraCortante, archTex):
+def writeShearReinforcement(recordArmaduraCortante, archTex):
   archTex.write("\\hline\n")
   archTex.write(nmbFamilia," & ",recordArmaduraCortante.nRamas)
   diamRamas= sqrt(4*areaRamas/PI)
@@ -52,7 +54,7 @@ def imprimeArmaduraCortante(recordArmaduraCortante, archTex):
   archTex.write(" & ",format("%3.1f",rad2deg(recordArmaduraCortante.angAlphaRamas)))
   archTex.write(" & ",format("%3.1f",rad2deg(recordArmaduraCortante.angThetaBielas)),"\\\\\n")
 
-def getInfoSeccion(mdlr,seccion):
+def getSectionInfo(mdlr,seccion):
 # Elabora un informe con los datos de la sección.
   EHorm= seccion.tipoHormigon.Ecm
   EAcero= seccion.tipoArmadura.Es
@@ -82,10 +84,14 @@ def getInfoSeccion(mdlr,seccion):
 
 
 # Elabora un informe con los datos de la sección.
-def informeGeomSeccion(mdlr,scc, archTex, pathFigura):
-  geomSection= mdlr.getMaterialLoader.getSectionGeometry(scc.nmbGeomSeccion)
-  plotGeomSeccion(geomSection,pathFigura)
-  getInfoSeccion(scc)
+def writeSectionReport(mdlr,scc, archTex, pathFigura):
+  sectionGeometryName= scc.nmbGeomSeccion()
+  geomSection= mdlr.getMaterialLoader.getSectionGeometry(sectionGeometryName)
+  if(geomSection):
+    pg.plotGeomSeccion(geomSection,pathFigura)
+  else:
+    sys.stderr.write('error: geometry of section: '+scc.nmbGeomSeccion()+' not defined\n')
+  getSectionInfo(scc)
   archTex.write("\\begin{table}\n")
   archTex.write("\\begin{center}\n")
   archTex.write("\\begin{tabular}{|c|}\n")

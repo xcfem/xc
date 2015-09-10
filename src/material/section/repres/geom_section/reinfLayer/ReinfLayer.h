@@ -78,7 +78,6 @@ class ReinfLayer: public DiscretBase
   protected:
     mutable VectorReinfBar reinfBars;
 
-    VectorReinfBar &getReinfBars(void);  
     bool procesa_comando(CmdStatus &status);
 
     friend class ListReinfLayer;
@@ -107,6 +106,7 @@ class ReinfLayer: public DiscretBase
 
     inline double getArea(void) const
       { return area*nReinfBars; }
+    VectorReinfBar &getReinfBars(void);  
     virtual const VectorReinfBar &getReinfBars(void) const= 0;  
 
     virtual any_const_ptr GetProp(const std::string &cod) const;

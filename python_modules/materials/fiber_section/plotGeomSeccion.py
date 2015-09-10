@@ -4,12 +4,13 @@ import math
 import cairo
 import xc_base
 import geom
-import geom_utils
+from geom_utils import auxCairoPlot
 
 # Dibuja las armaduras de la sección en un archivo PostScript
 def plotArmaduras(armaduras, ctx):
   fmt= "%u"
-  barras= armaduras.getBars()
+  print "numReinfBars= ", armaduras.getNumReinfBars
+  barras= armaduras.getReinfBars
   for b in barras:
     ptPlot= b.getPos2d
     rPlot= b.getBarDiam/2.0
@@ -21,7 +22,7 @@ def plotArmaduras(armaduras, ctx):
     ctx.text_path(labelPlot)
 
 # Dibuja la geometría de la sección en un archivo PostScript
-def plotGeomSeccion(sectionGeom, path):
+def plotGeomSeccion(geomSection, path):
   WIDTH, HEIGHT = 256, 256
   surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
   ctx = cairo.Context(surface)
@@ -30,8 +31,8 @@ def plotGeomSeccion(sectionGeom, path):
   ctx.set_source_rgb(0, 0, 0) # Black solid color 
   regiones= geomSection.getRegions
   for r in regiones:
-    geom_utils.plotPoligono(r.getPoligono,ctx)
-  armaduras= sectionGeom.getReinfLayers
+    auxCairoPlot.plotPolygon(r.getPoligono(),ctx)
+  armaduras= geomSection.getReinfLayers
   plotArmaduras(armaduras,ctx)
   geom_utils.plotEjesYz(0.06,ctx)
   ctx.stroke()

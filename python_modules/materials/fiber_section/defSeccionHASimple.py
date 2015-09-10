@@ -179,7 +179,7 @@ class RecordSeccionHASimple(object):
   def setMainReinfPos(self,diam,area,spacing,basicCover):
     self.barrasPos= MainReinfLayer(diam,area,spacing,self.ancho,basicCover)
 
-  def defGeomSeccHASimple(self,mdlr,tipoDiag):
+  def defSectionGeometry(self,mdlr,tipoDiag):
     '''
     Definición de una sección de hormigón armado sencilla
     con una capa de armadura superior y otra inferior.
@@ -250,7 +250,7 @@ class RecordSeccionHASimple(object):
     respVy= typical_materials.defElasticMaterial(mdlr,self.nmbRespVy(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())# Respuesta de la sección a cortante según y.
     respVz= typical_materials.defElasticMaterial(mdlr,self.nmbRespVz(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())# Respuesta de la sección a cortante según z.
 
-    self.defGeomSeccHASimple(mdlr,tipoDiag)
+    self.defSectionGeometry(mdlr,tipoDiag)
     fs= mdlr.getMaterialLoader.newMaterial("fiberSectionShear3d",self.nmbSeccion)
     fiberSectionRepr= fs.getFiberSectionRepr()
     fiberSectionRepr.setGeomNamed(self.nmbGeomSeccion())
@@ -265,7 +265,7 @@ class RecordSeccionHASimple(object):
   def defInteractionDiagram(self,mdlr,tipoDiag):
     'Defines 3D interaction diagram.'
 
-    self.defGeomSeccHASimple(mdlr,tipoDiag)
+    self.defSectionGeometry(mdlr,tipoDiag)
     fs= mdlr.getMaterialLoader.newMaterial("fiber_section_3d",self.nmbSeccion)
     fiberSectionRepr= fs.getFiberSectionRepr()
     fiberSectionRepr.setGeomNamed(self.nmbGeomSeccion())
@@ -283,7 +283,7 @@ class RecordSeccionHASimple(object):
   def defInteractionDiagramNMy(self,mdlr,tipoDiag):
     'Defines N-My interaction diagram.'
 
-    self.defGeomSeccHASimple(mdlr,tipoDiag)
+    self.defSectionGeometry(mdlr,tipoDiag)
     fs= mdlr.getMaterialLoader.newMaterial("fiber_section_3d",self.nmbSeccion)
     fiberSectionRepr= fs.getFiberSectionRepr()
     fiberSectionRepr.setGeomNamed(self.nmbGeomSeccion())
