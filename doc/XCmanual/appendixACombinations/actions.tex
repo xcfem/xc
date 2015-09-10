@@ -1,0 +1,462 @@
+\section{Actions} \label{sc_acciones}
+An action is a set of forces applied to the structure  or a set of imposed deformations or accelerations, that has an effect on structural members (e.g. internal force, moment, stress, strain) or on the whole structure (e.g. defection, rotation)
+
+\subsection{Classification of actions}
+Actions can be classified by their variation over time, their nature, their origin, their spatial variation, \ldots
+
+\subsubsection{By their nature}
+\begin{itemize}
+\item \textbf{Direct actions}: loads applied to the structure (e.g. self-weight, dead load, live load, \ldots)
+\item \textbf{Indirect actions}: imposed deformations or accelerations caused for example by temperature changes, moisture variation,\ldots
+\end{itemize}
+
+\subsubsection{By their variation over time} \label{sc_var_tiempo}
+Actions shall be classified by their variation in time, by reference to their \emph{service life}\footnote{See section \ref{sc_vida_util}.}, as follows:
+
+\begin{itemize}
+\item \textbf{Permanent actions G}: actions that are likely to act throughout a given reference period and for which the variation in magnitude with time is negligible, or for which the variation is always in the same direction (monotonic) until the action attains a certain limit value, e.g. self-weight of structures, fixed equipment and road surfacing, and indirect actions caused by shrinkage and uneven settlement.
+\item \textbf{Permanents of a non-constant value G*}: are those which act at any time but whose magnitude is non constant. This group include those actions whose variation is a function of elapsed time and are produced in a single direction, tending towards a certain limit value (rheological actions, pretensioning, subsidence of the ground under the foundations, \ldots). They also include other actions originating from the ground whose magnitude does not vary as a function of time but as a function of the interaction between the ground and the structure (for example, thrusts on vertical elements).
+\item \textbf{Variables Q}: action for which the variation in magnitude with time is neither negligible nor monotonic. E.g. imposed loads on building floors, beams and roofs, wind actions or snow loads.  
+
+\item \textbf{Accidental actions A}: action, usually of short duration but of significant magnitude, that is unlikely to occur
+on a given structure during the design working life. E.g. explosions, or impact from vehicles.
+
+\item \textbf{seismic action AS}: action that arises due to earthquake ground motions.
+
+\end{itemize}
+
+\subsubsection{By their origin}
+\begin{itemize}
+\item \textbf{Gravitational}: which has its origin in the earth's gravitational field (self-weight, dead load, earth pressure, \ldots)
+\item \textbf{Climatic}: whose origin is in the climate (thermal action and wind actions\footnote{thermal and wind actions can not be due to climate, such as in the case of an oven or structures subjected to the thrust of jet engines of aircraft})
+\item \textbf{Rheological}: which has its origin in the response of material with plastic flow rather than deforming elastically when a force is applied (e.g. shrinkage of concrete).
+\item \textbf{Seismic}: due to earthquake ground motions.
+\end{itemize}
+
+
+
+
+
+
+\subsubsection{By the structural response which they produce} 
+\begin{itemize}
+\item \textbf{static action}: action that does not cause significant acceleration of the structure or structural members;
+\item \textbf{dynamic action}:  action that causes significant acceleration of the structure or structural members;
+\item \textbf{quasi-static action}: dynamic action represented by an equivalent static action in a static model.
+\end{itemize}
+
+
+\subsubsection{By their spatial variation}
+\begin{itemize}
+\item \textbf{fixed action}: action that has a fixed distribution and position over the structure or structural member such that the magnitude and direction of the action are determined unambiguously for the whole structure or structural member if this magnitude and direction are determined at one point on the structure or structural member;
+\item \textbf{free action}: action that may have various spatial distributions over the structure.
+\end{itemize}
+
+\subsubsection{By their relation with other actions} \label{sc_acc_rel_otras}
+\begin{itemize}
+\item \textbf{Compatible actions}: two actions are compatible when it's possible for them to act simultaneously.
+\item \textbf{Incompatible actions}: two actions are incompatible when it's impossible for them to act at the same time (e.g. one crane acting simultaneously in two different positions).
+\item \textbf{Synchronous actions}: two actions are synchronous when the act necessarily together, at the same time (e.g. the braking load of a crane bridge will be synchronised with the action of the weight of the crane).
+\end{itemize}
+
+\subsubsection{By their participation in a combination} \label{sc_modo_partic_acc}
+\begin{itemize}
+\item \textbf{Leading action}: in a combination of actions, the leading variable action is the one which produces the largest design load effect; its characteristic value is used.
+\item \textbf{Accompanying action}: variable action that accompanies the leading action in a combination; its characteristic value is reduced by using a factor $\Psi$.
+\end{itemize}
+
+\subsection{Values of actions} \label{sc_val_acciones}
+
+\subsubsection{Characteristic value of an action $F_k$} \label{sc_val_carac}
+It is the principal representative value of an action; it is chosen so as to correspond to a 5\% probability of not being exceeded on the unfavourable side during a "reference period" taking into account the design working life of the structure and the duration of the design situation.
+
+\subsubsection{Combination value of a variable action $F_{r0}$}
+Value chosen so that the probability that the effects caused by the combination will be exceeded is approximately the same as by the characteristic value of an individual action. It may be expressed as a determined part of the characteristic value by using a factor $\Psi_0 \le 1$
+
+\subsubsection{Frequent value of a variable action $F_{r1}$}
+Value determined so that either the total time, within the reference period, during which it is exceeded is only a small given part
+of the reference period, or the frequency of it being exceeded is limited to a given value. It may be expressed as a determined part of the characteristic value by using a factor $\Psi_1 \le 1$.
+
+\subsubsection{Quasi-permanent value of a variable action $F_{r2}$}
+Value determined so that the total period of time for which it will be exceeded is a large fraction \footnote{according to \emph{Documento Nacional de Aplicaci\'{o}n espa\~{n}ol del Euroc\'{o}digo de Hormig\'{o}n (UNE ENV 1992-1-1)} more than half of the service life of the structure} of the reference period. It may be expressed as a determined part of the characteristic value by using a factor $\Psi_1 \le 2$.
+
+\subsubsection{Representative value $F_r$ of the actions. Factors of simultaneity} \label{sc_coef_simult}
+The representative value of an action is the value of it that is used to verify the limit states. By multiplying this representative value by the the corresponding partial coefficient $\gamma_f$, the calculation value shall be obtained.
+
+The principal representative value of the actions is their characteristic value. Usually, for permanent and accidental actions, a single representative value is considered, that matches the characteristic value ($\psi= 1$) \footnote{The IAP instruction  (reference \cite{IAP}) makes some exceptions to this rule)}.
+Other representative values are considered for the variable actions, in accordance with the verification involved and the type of action:
+
+\begin{itemize}
+\item \textbf{Characteristic value $F_k$}: this value is used for leading actions in the verification of ultimate limit states in a continuous or temporary situation and of irreversible serviceability limit states.
+\item \textbf{Combination value $\psi= \psi_{0}F_k$} this value is used for accompanying actions in the verification of ultimate limit states in a continuous or temporary situation and of irreversible serviceability limit states.
+\item \textbf{Frequent value $\psi= \psi_{1}F_k$}: this value is used for the leading action in the verification of ultimate limit states in an accidental situations and of reversible serviceability limit states.
+\item \textbf{Quasi-permanent value $\psi= \psi_{2}F_k$}: this value is used for accompanying actions in the verification of ultimate limit states in an accidental situation and of reversible serviceability limit states as well as in the assessment of the postponed effects.
+\end{itemize}
+
+In short, the representative value of an action depends on:
+\begin{itemize}
+\item its variation over time (G,G*,Q,A,AS);
+\item its participation in the combination as \emph{leading action} or \emph{accompanying action};
+\item the type of situation (accidental, \ldots);
+\item the origin of the load (climate, use, water, \ldots).
+\end{itemize}
+
+\paragraph{Values of $\Psi$ factors of simultaneity}
+The value of the simultaneity factors $\psi$ are different depending on the action that is involved.
+
+\subparagraph{According to EHE:} the recommended values of factors of simultaneity  $\psi_{0}$,$\psi_{1}$,$\psi_{2}$ according to the \emph{Documento Nacional de Aplicaci\'{o}n espa\~{n}ol del Euroc\'{o}digo de Hormig\'{o}n} (UNE ENV 1992-1-1) can be seen in tables \ref{tb_coefs_psi_1EHE} y \ref{tb_coefs_psi_2EHE}.
+
+\begin{table}
+\begin{center}
+\begin{small}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textsc{Climatic actions} & $\psi_{0}$ & $\psi_{1}$ & $\psi_{2}$ \\
+\hline
+Snow loads & 0.6 & 0.2 & 0.0 \\
+Wind loads & 0.6 & 0.5 & 0.0 \\
+Temperature (\emph{non-fire}) & 0.6 & 0.5 & 0.0 \\
+\hline
+\end{tabular}
+\end{small}
+\caption{Recommended values of $\Psi$ factor for climatic actions, according to EHE} \label{tb_coefs_psi_1EHE}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{small}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textsc{Live loads} & $\psi_{0}$ & $\psi_{1}$ & $\psi_{2}$ \\
+\hline
+\textbf{Roofs} & & & \\
+\hline
+Inaccessible or accessible only for maintenance & 0.7 & 0.5 & 0.3 \\
+Accessible & by use & by use & by use \\
+\hline
+\textbf{Residential buildings} & & & \\
+\hline
+Rooms & 0.7 & 0.5 & 0.3 \\
+Stairs and public accesses & 0.7 & 0.5 & 0.3 \\
+Cantilevered balconies & 0.7 & 0.5 & 0.3 \\
+\hline
+\textbf{Hotels, hospitals, prisons, \ldots} & & & \\
+\hline
+Bedrooms & 0.7 & 0.5 & 0.3 \\
+Public areas, stairs and accesses & 0.7 & 0.7 & 0.6 \\
+Assembly and areas  & 0.7 & 0.7 & 0.6 \\
+Cantilevered balconies & by use & by use & by use \\
+\hline
+\textbf{Office and commercial buildings} & & & \\
+\hline
+Private premises & 0.7 & 0.5 & 0.3 \\
+Public offices & 0.7 & 0.5 & 0.3 \\
+Shops & 0.7 & 0.7 & 0.6 \\
+Commercial galleries, stairs and access & 0.7 & 0.7 & 0.6 \\
+Storerooms & 1.0 & 0.9 & 0.8 \\
+Cantilevered balconies & by use & by use & by use \\
+\hline
+\textbf{Educational buildings} & & & \\
+\hline
+Classrooms, offices and canteens & 0.7 & 0.7 & 0.6 \\
+Stairs and access & 0.7 & 0.5 & 0.6 \\
+Cantilevered balconies & by use & by use & by use \\
+\hline
+\textbf{Churches, buildings for assembly and public performances} & & & \\
+\hline
+Halls with fixed seatings & 0.7 & 0.7 & 0.6 \\
+Halls without fixed seatings, tribunes, stairs & 0.7 & 0.7 & 0.6 \\
+Cantilevered balconies & by use & by use & by use \\
+\hline
+\textbf{Driveways and garages} & & & \\
+\hline
+Traffic areas with vehicles under 30 kN in weight & 0.7 & 0.7 & 0.6 \\
+Traffic areas with vehicles of 30 to 160 kN in weight & 0.7 & 0.5 & 0.3 \\
+\hline
+\end{tabular}
+\end{small}
+\end{center}
+\caption{Recommended values of $\Psi$ factors of simultaneity for climatic loads, according to EHE} \label{tb_coefs_psi_2EHE}
+\end{table}
+
+\subparagraph{According to EAE \cite{EAE} :} see tables \ref{tb_coefs_psi_1EAE} y \ref{tb_coefs_psi_2EAE}.
+
+\begin{table}
+\begin{center}
+\begin{small}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textsc{Use of area} & $\psi_{0}$ & $\psi_{1}$ & $\psi_{2}$ \\
+\hline
+Domestic, residential areas & 0.7 & 0.5 & 0.3 \\
+Office areas & 0.7 & 0.5 & 0.3 \\
+Congregation areas  & 0.7 & 0.7 & 0.6 \\
+Shopping areas & 0.7 & 0.7 & 0.6 \\
+Storage areas & 1.0 & 0.9 & 0.8 \\
+Traffic areas, weight of vehicle $\leq 30\ kN$ & 0.7 & 0.7 & 0.6 \\
+Traffic areas, $30\ kN\ <$ weight of vehicle $\leq 160\ kN$ & 0.7 & 0.5 & 0.3 \\
+Inaccessible Roofs  & 0.0 & 0.0 & 0.0 \\
+\hline
+\end{tabular}
+\end{small}
+\end{center}
+\caption{Recommended values of $\Psi$ factors for buildings, according to EAE} \label{tb_coefs_psi_2EAE}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{small}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textsc{Climatic actions} & $\psi_{0}$ & $\psi_{1}$ & $\psi_{2}$ \\
+\hline
+\multicolumn{1}{|p{8cm}|}{Snow loads in buildings set over a thousand meters above sea level.} & 0.7 & 0.5 & 0.2 \\
+\multicolumn{1}{|p{8cm}|}{Snow loads in buildings set under a thousand meters above sea level.} & 0.5 & 0.2 & 0.0 \\
+Wind loads & 0.6 & 0.2 & 0.0 \\
+Thermal action & 0.6 & 0.5 & 0.0 \\
+\hline
+\end{tabular}
+\end{small}
+\caption{Recommended values of $\Psi$ factors of simultaneity, according to EAE} \label{tb_coefs_psi_1EAE}
+\end{center}
+\end{table}
+
+\subparagraph{According to IAP \cite{IAP}:} see table \ref{tb_coefs_psi_IAP}.
+
+\begin{table}
+\begin{center}
+\begin{small}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textsc{Variable actions} & $\psi_{0}$ & $\psi_{1}$ & $\psi_{2}$ \\
+\hline
+Traffic load model fatigue & 1.0 & 1.0 & 1.0 \\
+Other variable actions & 0.6 & 0.5 & 0.2 \\
+\hline
+\end{tabular}
+\end{small}
+\caption{Values of $\Psi$ factors of simultaneity according to IAP.} \label{tb_coefs_psi_IAP}
+\end{center}
+\end{table}
+
+\subsubsection{Calculation value $F_d$ of the actions} \label{sc_valor_calculo_acc}
+The calculation value of an action is obtained by multiplying its characteristic value by the corresponding partial coefficient $\gamma_f$:
+
+\begin{equation}
+F_d= \gamma_f \cdot F_r
+\end{equation}
+
+The values of the coefficients $\gamma_f$ takes into account one or more of the following uncertainties:
+
+\begin{enumerate}
+\item uncertainties in the estimation of the representative value of the actions, in fact, the characteristic value is chosen admitting a 5\% probability of being exceeded during the working life of the structure;
+\item uncertainties in the calculations results, due to simplifications in the models and to certain numeric errors (rounding, truncation, \ldots)
+\item Uncertainty in the geometric and mechanical characteristics of the built structure. During the execution of the structure some errors can be committed \footnote{It is understood that these errors are within the tolerances established in the regulations} that can make the dimensions of the sections, the position of the reinforcement, the position of the axes, the mechanical characteristics of the materials, \ldots, be different from the theoretical.
+\end{enumerate}
+
+\paragraph{Values of the partial coefficients}
+The coefficients $\gamma_f$ have different values in accordance with:
+\begin{enumerate}
+\item the limit state to be verified;
+\item the design situation that is involved (see section \ref{sc_situaciones});
+\item the variation of the action over time (according to classification in \ref{sc_var_tiempo});
+\item the effect favourable o unfavourable of the action in the limit state that is verified;
+\item the control level.
+\end{enumerate}
+
+\subparagraph{According to EHE:} the values of the partial coefficients $\gamma_f$ are specified in table \ref{tb_gf_ELS_EHE} for serviceability limit states and in table \ref{tb_gf_ELU_EHE} for ultimate limit states.
+
+\begin{table}
+\begin{center}
+\begin{footnotesize}
+\begin{tabular}{|l|c|c|}
+\hline
+\textsc{Action} & \multicolumn{2}{|c|}{\textsc{Effect}} \\
+\hline
+ & favourable & unfavourable \\
+\hline
+Permanent  & $\gamma_G= 1.00$ &  $\gamma_G= 1.00$ \\
+\hline
+Prestressing (pre-tensioned concrete) & $\gamma_{P}= 0.95$ &  $\gamma_{P}= 1.05$ \\
+Prestressing (post-tensioned concrete) & $\gamma_{P}= 0.90$ &  $\gamma_{P}= 1.10$ \\ 
+\hline
+Permanent of a non-constant value & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+Variable & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.00$ \\
+\hline
+\multicolumn{3}{|l|}{\textsc{Notation:}} \\
+\hline
+\multicolumn{3}{|l|}{G: Permanent action.} \\
+\multicolumn{3}{|l|}{P: Prestressing.} \\
+\multicolumn{3}{|l|}{G*: Permanent action of a non-constant value.} \\
+\multicolumn{3}{|l|}{Q: Variable action.} \\
+\multicolumn{3}{|l|}{A: Accidental action.} \\
+\hline
+\end{tabular}
+\end{footnotesize}
+\caption{Partial factor for actions in serviceability limit states according to EHE.} \label{tb_gf_ELS_EHE}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{footnotesize}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+Action & Control level & \multicolumn{2}{|p{4cm}|}{Effect in persistent or transient design situations} &\multicolumn{2}{|p{4cm}|}{ Effect in accidental or seismic design situations} \\
+\hline
+ & & favourable & unfavourable & favourable & unfavourable \\
+\hline
+              & intense & $\gamma_G= 1.00$ &  $\gamma_G= 1.35$ & $\gamma_G= 1.00$ &  $\gamma_G= 1.00$ \\
+G             & normal & $\gamma_G= 1.00$ &  $\gamma_G= 1.50$ & $\gamma_G= 1.00$ &  $\gamma_G= 1.00$ \\
+              & low & $\gamma_G= 1.00$ &  $\gamma_G= 1.60$ & $\gamma_G= 1.00$ &  $\gamma_G= 1.00$ \\
+\hline
+              & intense & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.50$ & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+G*            & normal & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.60$ & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+              & low & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.80$ & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+              & intense & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.50$ & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.00$ \\
+Q             & normal & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.60$ & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.00$ \\
+              & low & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.80$ & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.00$ \\
+\hline
+A             & - & - & - &  $\gamma_A= 1.00$ &  $\gamma_A= 1.00$ \\
+\hline
+\multicolumn{6}{|l|}{\textsc{Notation:}} \\
+\hline
+\multicolumn{6}{|l|}{G: Permanent action.} \\
+\multicolumn{6}{|l|}{G*: Permanent action of a non-constant value.} \\
+\multicolumn{6}{|l|}{Q: Variable action.} \\
+\multicolumn{6}{|l|}{A: Accidental action.} \\
+\hline
+\end{tabular}
+\end{footnotesize}
+\caption{Partial factor for actions in ultimate limit states according to EHE.} \label{tb_gf_ELU_EHE}
+\end{center}
+\end{table}
+
+\subparagraph{According to EAE:} the values of the partial coefficients $\gamma_F$ to be used are specified int tables \ref{tb_gf_ELS_EAE} for serviceability limit states and in table \ref{tb_gf_ELU_EAE} for ultimate limit states.
+
+
+\begin{table}
+\begin{center}
+\begin{footnotesize}
+\begin{tabular}{|l|c|c|}
+\hline
+\textsc{Action} & \multicolumn{2}{|c|}{\textsc{Effect}} \\
+\hline
+ & favourable & unfavourable \\
+\hline
+Permanent  & $\gamma_G= 1.00$ &  $\gamma_G= 1.00$ \\
+\hline
+Permanent of a non-constant value & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+Variable & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.00$ \\
+\hline
+\end{tabular}
+\end{footnotesize}
+\caption{Partial factor for actions in serviceability limit states according to EAE.} \label{tb_gf_ELS_EAE}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{footnotesize}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Action & \multicolumn{2}{|p{4cm}|}{Effect in persistent or transient design situations} &\multicolumn{2}{|p{4cm}|}{ Effect in accidental or seismic design situations} \\
+\hline
+ & favourable & unfavourable & favourable & unfavourable \\
+\hline
+G  & $\gamma_G= 1.00$ &  $\gamma_G= 1.35$ & $\gamma_G= 1.00$ &  $\gamma_G= 1.00$ \\
+\hline
+G* & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.50$ & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+Q  & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.50$ & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.00$ \\
+\hline
+A  & - & - &  $\gamma_A= 1.00$ &  $\gamma_A= 1.00$ \\
+\hline
+\multicolumn{5}{|l|}{\textsc{Notation:}} \\
+\hline
+\multicolumn{5}{|l|}{G: Permanent action.} \\
+\multicolumn{5}{|l|}{G*: Permanent action of a non-constant value.} \\
+\multicolumn{5}{|l|}{Q: Variable action.} \\
+\multicolumn{5}{|l|}{A: Accidental action.} \\
+\hline
+\end{tabular}
+\end{footnotesize}
+\caption{Partial factor for actions in ultimate limit states according to EAE.} \label{tb_gf_ELU_EAE}
+\end{center}
+\end{table}
+
+\subparagraph{According to IAP:} the values of the partial coefficients $\gamma_F$ to be used are specified int tables \ref{tb_gf_ELS_IAP} for serviceability limit states and in table \ref{tb_gf_ELU_IAP} for ultimate limit states.
+
+\begin{table}
+\begin{center}
+\begin{footnotesize}
+\begin{tabular}{|l|c|c|}
+\hline
+\textsc{Action} & \multicolumn{2}{|c|}{\textsc{Effect}} \\
+\hline
+ & favourable & unfavourable \\
+\hline
+Permanent  & $\gamma_G= 1.00$ &  $\gamma_G= 1.00$ \\
+\hline
+Internal prestressing (post-tensioned concrete) & $\gamma_{P_1}= 0.9$ &  $\gamma_{P_1}= 1.1$ \\
+Internal prestressing (pre-tensioned concrete) & $\gamma_{P_1}= 0.95$ &  $\gamma_{P_1}= 1.05$ \\ 
+\hline
+External prestressing & $\gamma_{P_2}= 1.0$ &  $\gamma_{P_2}= 1.0$ \\
+\hline
+Other prestressing actions & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+Rheological & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+Thrust of the site & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+Variable & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.00$ \\
+\hline
+\multicolumn{3}{|l|}{\textsc{Notation:}} \\
+\hline
+\multicolumn{3}{|l|}{$G$: Permanent action.} \\
+\multicolumn{3}{|l|}{$P_1$: Internal prestressing.} \\
+\multicolumn{3}{|l|}{$P_2$: External prestressing.} \\
+\multicolumn{3}{|l|}{$G*$: Permanent action of a non-constant value.} \\
+\multicolumn{3}{|l|}{$Q$: Variable action.} \\
+\multicolumn{3}{|l|}{$A$: Accidental action.} \\
+\hline
+\end{tabular}
+\end{footnotesize}
+\caption{Partial factor for actions in serviceability limit states according to IAP.} \label{tb_gf_ELS_IAP}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{footnotesize}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Action & \multicolumn{2}{|p{4cm}|}{Effect in persistent or transient design situations} &\multicolumn{2}{|p{4cm}|}{Effect in accidental or seismic design situations} \\
+\hline
+ & favourable & unfavourable & favourable & unfavourable \\
+\hline
+Permanent  & $\gamma_G= 1.00$ &  $\gamma_G= 1.35$ & $\gamma_G= 1.00$ &  $\gamma_G= 1.00$ \\
+\hline
+Internal prestressing & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+External prestressing & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.35$ & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+Other prestressing actions & $\gamma_{G*}= 0.95$ &  $\gamma_{G*}= 1.05$ & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+Rheological & $\gamma_{G*}= 1.0$ &  $\gamma_{G*}= 1.35$ & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+Thrust of the site & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.50$ & $\gamma_{G*}= 1.00$ &  $\gamma_{G*}= 1.00$ \\
+\hline
+Variable & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.50$ & $\gamma_Q= 0.00$ &  $\gamma_Q= 1.00$ \\
+\hline
+Accidental & - & - &  $\gamma_A= 1.00$ &  $\gamma_A= 1.00$ \\
+\hline
+\end{tabular}
+\end{footnotesize}
+\caption{Partial factor for actions in ultimate limit states according to IAP.} \label{tb_gf_ELU_IAP}
+\end{center}
+\end{table}
