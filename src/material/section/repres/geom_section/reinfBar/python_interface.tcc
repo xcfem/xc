@@ -23,4 +23,9 @@
 
 class_<XC::ReinfBar, bases<XC::DiscretBase>, boost::noncopyable >("ReinfBar", no_init);
 
-class_<XC::VectorReinfBar, boost::noncopyable >("VectorReinfBar", no_init);
+typedef std::vector<XC::ReinfBar *> vector_ptr_reinf_bar;
+class_<vector_ptr_reinf_bar, boost::noncopyable>("vector_ptr_reinf_bar")
+  .def(vector_indexing_suite<vector_ptr_reinf_bar>() )
+  ;
+
+class_<XC::VectorReinfBar, bases<XC::SeccionInerte,vector_ptr_reinf_bar>, boost::noncopyable >("VectorReinfBar", no_init);

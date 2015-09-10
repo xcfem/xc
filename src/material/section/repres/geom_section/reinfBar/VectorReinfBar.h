@@ -44,7 +44,7 @@ class Matrix;
 //! @ingroup MATSCCArmaduras
 //
 //! @brief Vector de barras de armadura.
-class VectorReinfBar: protected std::vector<ReinfBar *>, public SeccionInerte
+class VectorReinfBar: public std::vector<ReinfBar *>, public SeccionInerte
   {
   public:
     typedef std::vector<ReinfBar *> v_rfBar;

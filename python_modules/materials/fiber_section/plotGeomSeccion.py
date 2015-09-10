@@ -9,7 +9,8 @@ from geom_utils import auxCairoPlot
 # Dibuja las armaduras de la sección en un archivo PostScript
 def plotArmaduras(armaduras, ctx):
   fmt= "%u"
-  barras= armaduras.getBars()
+  print "numReinfBars= ", armaduras.getNumReinfBars
+  barras= armaduras.getReinfBars
   for b in barras:
     ptPlot= b.getPos2d
     rPlot= b.getBarDiam/2.0
