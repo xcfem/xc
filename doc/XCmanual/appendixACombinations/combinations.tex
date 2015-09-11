@@ -1,0 +1,514 @@
+\section{Combination of actions} \label{sc_comb}
+When the verification of a structure is carried out by the partial factor method, it shall be verified than, in all relevant design situations, no relevant limit state is exceeded when design values for actions or effects of actions and resistances are used in the design models.
+
+In order to eliminate the combinations that are not possible (or do not make sense), the following criteria will be considered:
+
+\begin{itemize}
+\item When an action is involved in a combination, none of its incompatible actions will be involved in that combination.
+\item When an action is involved in a combination, all of its synchronous actions must be involved in that combination 
+\footnote{See synchronous action and compatible action definitions in section \ref{sc_acc_rel_otras}.}
+\end{itemize}
+In what follows, we will consider any structure, under the following actions:
+\begin{itemize}
+\item $n_G$ permanent actions: $G_i$\footnote{The subscript refers to each of permanent actions on the structure $G_1$, $G_2$, $G_3$, $G_4$, \ldots, $G_{n_G}$ }.
+\item $n_{G*}$ permanent actions of a non-constant value: $G*_j$.
+\item $n_Q$ variable actions: $Q_l$.
+\item $n_A$ accidental actions: $Q_m$.
+\item $n_{AS}$ seismic actions: $Q_n$.
+\end{itemize}
+
+
+\subsection{Combinations of actions for ultimate limit states} \label{sc_comb_elu}
+For the selected design situations and the relevant ultimate limit states the individual actions for the critical load cases should be combined as detailed in this section.
+
+\subsubsection{Combinations of actions for persistent or transient design situations} \label{sc_comb_elu_spt}
+For each variable action, a group of combinations with this action as \emph{leading variable action} will be considered \footnote{See section \ref{sc_modo_partic_acc}.}.
+
+\begin{equation} \label{eq_comb_spt}
+\sum_{i=1}^{n_G} \gamma_G \cdot G_{k,i} +\sum_{j=1}^{n_{G*}} \gamma_{G*} \cdot G*_{k,j} + \gamma_Q \cdot Q_{k,d} + \sum_{l=1}^{d-1} \gamma_Q \cdot Q_{r0,l} + \sum_{l=d+1}^{n_Q} \gamma_Q \cdot Q_{r0,l} 
+\end{equation}
+
+\noindent where:
+
+\begin{description}
+\item{$\gamma_G \cdot G_{k,i}$:} design value of the permanent action $i$, obtained from its characteristic value  ;
+\item{$\gamma_{G*} \cdot G*_{k,j}$:} design value of the permanent action of a non-constant value $j$, obtained from its characteristic value;
+\item{$\gamma_Q \cdot Q_{k,d}$:} design value of the leading variable action $d$, obtained from its characteristic value;
+\item{$\gamma_Q \cdot Q_{r0,l}$:} design value of la variable action $l$, obtained from its accompanying value.
+\end{description}
+
+\paragraph{Number of combinations to be considered:} According to section \ref{sc_valor_calculo_acc}:
+
+\begin{itemize}
+\item The permanent actions, in ULS combinations corresponding to persistent or transient design situations, will have two non-zero partial factors.
+\item In the same case, the permanent actions of a non-constant value will have two non-zero partial factors that, in some cases, can be equal (see the case of internal prestressing on the table \ref{tb_gf_ELU_IAP}).
+\item The variable actions will have a single non-zero partial factor.
+\end{itemize}
+
+\noindent therefore, assuming that:
+
+\begin{description}
+\item{$n_{G2}$} is the number of permanent actions that have two different partial factors;
+\item{$n_{G1}$} is the number of permanent actions that have a single partial factor\footnote{Because both factors are equal.};
+\item{$n_{G*2}$} is the number of permanent actions of a non-constant value that have two different partial factors;
+\item{$n_{G*1}$} the number of permanent actions of a non-constant value that have a single partial factor, and
+\item $n_{Q}$ is the number of variable actions, all of then have a single partial factor.
+\end{description}
+If, by now, incompatibility or synchronicity of actions is ignored, for each variable action we'll have:
+
+\begin{itemize}
+\item $2^{n_{G2}}$ combinations of permanent actions in the set $G2$;
+\item 1 combination of permanent actions in the set $G1$;
+\item $2^{n_{G*2}}$ combinations of permanent actions in the set $G*2$;
+\item 1 combination of permanent actions in the set $G*1$, and
+\item $2^{n_{Q}-1}$ combinations of accompanying variable actions.
+\end{itemize}
+
+As, for each leading action two partial factors must be considered, the total number of combinations $n_{comb,spt}$ for persistent or transient design situations will be equal to the cartesian product of the previous combinations by  $2^{n_{Qd}}$, where $Qd$ is the number of variable actions that can be leading:
+
+\begin{equation} \label{eq_ncomb_spt}
+n_{comb,ULS,spt}= 2^{n_{G2}} \cdot 2^{n_{G*2}} \cdot 2^{n_{Q}-1} \cdot 2^{n_{Qd}}= 2^{n_{G2}+n_{G*2}+n_{Q}+n_{Qd}-1}
+\end{equation}
+
+Among these combinations, those that are incompatibles must be eliminated. 
+
+
+For synchronic actions, the following procedure can be followed:
+
+Let $a$ be a synchronic action of the action $b$:
+
+\begin{enumerate}
+\item $a$ is eliminated from the list of variable actions;
+\item the action $a+b$ is added to the list of variable actions;
+\item incompatibility between $a+b$ and $b$ actions is set.
+\end{enumerate} 
+
+
+\subsubsection{Combinations of actions for accidental design situations}
+For each variable action $Q_l$, $n_A$ combinations with that action as leading are formed.
+
+\begin{equation}\label{eq_comb_acc}
+\sum_{i=1}^{n_G} \gamma_G \cdot G_{k,i} +\sum_{j=1}^{n_{G*}} \gamma_{G*} \cdot G*_{k,j} + A_{k,m} + \gamma_Q \cdot Q_{r1,d} + \sum_{l=1}^{d-1} \gamma_Q \cdot Q_{r2,l} + \sum_{l=d+1}^{n_Q} \gamma_Q \cdot Q_{r2,l} 
+\end{equation}
+
+\noindent where:
+
+\begin{description}
+\item{$A_{k,m}$:} design value of the accidental action $m$, obtained from its characteristic value;
+\item{$\gamma_Q \cdot Q_{r1,d}$:} design value of the leading variable action $d$, obtained from its representative frequent value;
+\item{$\gamma_Q \cdot Q_{r2,l}$:} design value of la variable action $l$, obtained from its representative quasi-permanent value.
+\end{description}
+
+\paragraph{Number of combinations to be considered:} it results the same number of combinations for each sum than in the case solved in the paragraph \ref{sc_comb_elu_spt} (see \ref{eq_ncomb_spt} expression), though, in this case, the representative values of the variable actions are other ones. If, as usual, the partial factors for seismic actions are equal for favourable and unfavourable actions, it suffices to multiply by the number of accidental actions $n_A$.
+
+\begin{equation} \label{eq_ncomb_acc}
+n_{comb,ULS,acc}= 2^{n_{G2}+n_{G*2}+n_{Q}+n_{Qd}-1} \cdot n_A
+\end{equation}
+
+For incompatible actions, the procedure provided for in section \ref{sc_comb_elu_spt} is applicable.
+
+
+\subsubsection{Combinations of actions for seismic design situations} \label{sc_comb_elu_sism}
+For each seismic action one combination will be formed:
+
+\begin{equation}\label{eq_comb_sis}
+\sum_{i=1}^{n_G} \gamma_G \cdot G_{k,i} +\sum_{j=1}^{n_{G*}} \gamma_{G*} \cdot G*_{k,j} + AS_{k,n} + \sum_{l=1}^{n_Q} \gamma_Q \cdot Q_{r2,l}
+\end{equation}
+
+\noindent where:
+
+\begin{description}
+\item{$A_{k,m}$} is the design value of the accidental action $m$, and
+\item{$\gamma_Q \cdot Q_{r2,l}$} is the design value of the variable action $l$, obtained from its representative quasi-permanent value.
+\end{description}
+
+\paragraph{Number of combinations to be considered:} 
+
+\begin{equation} \label{eq_ncomb_sism}
+n_{comb,ULS,sism}= 2^{n_{G2}+n_{G*2}+n_{Q}} \cdot n_{AS}
+\end{equation}
+
+For incompatible actions, the procedure provided for in section \ref{sc_comb_elu_spt} is applicable.
+
+\subsection{Combinations of actions for serviceability limit states} \label{sc_comb_els}
+For the selected design situations and the relevant serviceability limit states the individual actions for the critical load cases should be combined as detailed in this section.
+
+
+\subsubsection{Rare combinations:}\label{sc_comb_els_pf}
+For each variable action, one combination with this action as \emph{leading variable action} will be considered.
+
+\begin{equation}
+\sum_{i=1}^{n_G} G_{k,i} + \sum_{j=1}^{n_{G*}} G*_{k,j} + Q_{k,d} + \sum_{l=1}^{d-1} Q_{r0,l} + \sum_{l=d+1}^{n_Q} Q_{r0,l} 
+\end{equation}
+
+In a general case, with no incompatible or concomitant combinations, the following combinations will be formed (see notation in section \ref{sc_comb_elu_spt}):
+
+\begin{equation} \label{eq_ncomb_els_pf}
+n_{comb,SLS,pf}= 2^{n_{G2}+n_{G*2}+n_{Q}+n_{Qd}-1}
+\end{equation}
+
+Since the partial factors are for serviceability limit states, the sets $G2$ y $G*2$ generally will not match those for ultimate limit states. Given that in many cases both partial factors are equal to the unity, the cardinality of these sets will be much lower than the equivalent in paragraph \ref{sc_comb_elu_spt}.
+
+
+For incompatible actions, the procedure provided for in section \ref{sc_comb_elu_spt} is applicable.
+
+\subsubsection{Frequent combinations:}\label{sc_comb_els_f}
+For each variable action, one combination in which this action acts as \emph{leading} will be formed.
+
+\begin{equation}
+\sum_{i=1}^{n_G} G_{k,i} + \sum_{j=1}^{n_{G*}} G*_{k,j} + Q_{r1,d} + \sum_{l=1}^{d-1} Q_{r2,l} + \sum_{l=d+1}^{n_Q} Q_{r2,l} 
+\end{equation}
+
+the number of combinations will be the same as the precedent case, since only the combination factors can vary.
+
+\subsubsection{Quasi-permanent combinations:}\label{sc_comb_els_cp}
+
+\begin{equation}
+\sum_{i=1}^{n_G} G_{k,i} + \sum_{j=1}^{n_{G*}} G*_{k,j} + \sum_{l=1}^{n_Q} Q_{r2,l} 
+\end{equation}
+
+the number of combinations will be:
+
+\begin{equation} \label{eq_ncomb_els_cp}
+n_{comb,SLS,cp}= 2^{n_{G2}+n_{G*2}+n_{Q}}
+\end{equation}
+
+\subsection{Combinations to be considered in the calculation}
+According to the discussion in the previous sections, the number of combinations for a general calculations will be the following:
+\begin{center}
+\begin{small}
+\begin{tabular}{lr}
+\hline
+Ultimate limit states & number of combinations \\
+\hline
+Persistent or transient design situations & $2^{(n_G+n_{G*}+n_Q)}\cdot n_Q$ \\
+Accidental design situations & $2^{(n_G+n_{G*}+n_Q)} \cdot n_Q \cdot n_A$ \\
+Seismic design situations & $2^{(n_G+n_{G*}+n_Q)}\cdot n_{AS} $ \\
+\hline
+Total ULS & $2^{(n_G+n_{G*}+n_Q)} \cdot (n_Q (1+n_A)+n_{AS})$ \\ 
+\hline
+Serviceability limit states & \\
+\hline
+Rare combinations & $n_Q$ \\
+Frequent combinations & $n_Q$ \\
+Quasi-permanent combination & 1 \\
+\hline
+Total SLS & $2 n_Q + 1$ \\
+\hline
+\textbf{Total combinations} & $\mathbf{2^{(n_G+n_{G*}+n_Q)} \cdot (n_Q (1+n_A)+n_{AS}) +2 n_Q + 1}$ \\ 
+\hline
+\end{tabular}
+\end{small}
+\end{center}
+
+For example, if we had:
+
+\begin{itemize}
+\item $2$ permanent actions;
+\item $1$ permanent action of a non-constant value;
+\item $3$ variable actions;
+\item $1$ accidental action, and
+\item $2$ seismic actions
+\end{itemize}
+
+\noindent the number of combinations will be:
+
+\begin{center}
+\begin{small}
+\begin{tabular}{lr}
+\hline
+Ultimate limit states & number of combinations \\
+\hline
+Persistent or transient design situations & $2^{(2+1+3)}\times 3= 192$ \\
+Accidental design situations & $2^{(2+1+3)}\times 3 \times 1= 192$ \\
+Seismic design situations & $2^{(2+1+3)}\times 2= 128$ \\
+\hline
+Total ULS & $2^{(2+1+3)} \times (3\times(1+1)+2)= 512$ \\ 
+\hline
+Serviceability limit states & \\
+\hline
+Rare combinations & $3$ \\
+Frequent combinations & $3$ \\
+Quasi-permanent combination & $1$ \\
+\hline
+Total SLS & $6 + 1= 7$ \\
+\hline
+\textbf{Total combinations} & $\mathbf{519}$ \\ 
+\hline
+\end{tabular}
+\end{small}
+\end{center}
+
+\subsection{Algorithm to write the complete list of combinations}
+
+\subsubsection{Combinations for ultimate limit states}
+Each of the sums in expressions (\ref{eq_comb_spt}),(\ref{eq_comb_acc}) y (\ref{eq_comb_sis}) appears as follows:
+
+
+\begin{equation} \label{eq_sumatorio}
+\sum_{i=1}^n \gamma_f \cdot F_{r,i}
+\end{equation}
+
+For each action $F_i$ the partial factor can take two values, depending on the effect favourable or unfavourable of the action\footnote{We assume a priory unknown the effect favourable or unfavourable of the action for the limit state and structural element in analysed} .
+
+The design value of the action $F_{r,i}$ depends on:
+
+\begin{itemize}
+\item its variation in time (G,G*,A,A,AS);
+\item its role in the combination, as leading or accompanying action;
+\item if there is or not accidental actions in the combination;
+\item the nature of the action (climatic or live loads).
+\end{itemize}
+
+\noindent in any case, for any combination, the value of $F_{r,i}$ is known.
+
+Moreover, the value of \emph{n} is known for each sum.
+
+Following this, the summands of (\ref{eq_sumatorio}) correspond to the variations with repetition \footnote{The variations with repetition of \emph{n} elements taken \emph{k} by \emph{k} are the arranged groups formed by k elements from A (which may be repeated)} of two elements 
+\footnote{The partial factors corresponding to favourable and unfavourable effects} taken \emph{n} by \emph{n}.
+
+To write the variations with repetition of expression (\ref{eq_sumatorio}), proceed as follows:
+
+Let $\mathbf{\gamma_f}_v$ be the row vector whose components are the partial factors of the variation $v$ ($1 \leq v \leq 2^n$):
+
+\begin{equation}
+\mathbf{\gamma_f}_v= [\gamma_{f,1}, \gamma_{f,2}, \cdots, \gamma_{f,i}, \cdots, \gamma_{f,n}]
+\end{equation}
+
+\noindent that's to say, the element $\gamma_{f,i}$ is the partial factor (favourable or unfavourable) of action $F_{r,i}$.
+
+Let $\mathbf{F_r}$ be the column vector whose components are the actions $F_{r,i}$ of the expression (\ref{eq_sumatorio}):
+
+\begin{equation}
+\mathbf{F_r}^T= [F_{r,1}, F_{r,2}, \cdots, F_{r,i}, \cdots, F_{r,n}]
+\end{equation}
+
+\noindent then, the expression (\ref{eq_sumatorio}) is equivalent to the scalar product:
+
+\begin{equation}
+\sum_{i=1}^n \gamma_f \cdot F_{r,i}= \mathbf{\gamma_f}_v \cdot \mathbf{F_r}
+\end{equation}
+
+\noindent and it must be formed as many scalar products as variations with repetition can be arranged, that's to say, $2^n$.
+
+Let $S_{F,v}$ be the sum that corresponds to variation \emph{v},
+
+\begin{equation}
+S_{F_r,v}= \mathbf{\gamma_f}_v \cdot \mathbf{F_r}
+\end{equation}
+
+then each of sums (\ref{eq_comb_spt}),(\ref{eq_comb_acc}) and (\ref{eq_comb_sis}) gives rise to set of variations:
+
+\begin{align} \notag
+S_{F_r,1} &= \mathbf{\gamma_f}_1 \cdot \mathbf{F_r} \\ \notag
+S_{F_r,2} &= \mathbf{\gamma_f}_2 \cdot \mathbf{F_r} \\ \notag
+\cdots & \\ \notag
+S_{F_r,v} &= \mathbf{\gamma_f}_v \cdot \mathbf{F_r}\\ \notag
+\cdots & \\ \notag
+S_{F_r,n_F} &= \mathbf{\gamma_f}_{n_F} \cdot \mathbf{F_r}
+\end{align}
+
+\noindent where $n_F$ is the number of actions in each case, that's to say $n_G,\ n_{G*},\ n_Q,\ n_A,$ or $n_{AS}$.
+
+Therefore, the summands (\ref{eq_comb_spt}),(\ref{eq_comb_acc}) and (\ref{eq_comb_sis}) will be one of the following scalar products:
+
+\begin{itemize}
+\item Summand corresponding to permanent actions: $S_{G_r,v_G}$ ($1 \leq v_G \leq 2^{n_G}$).
+\item Summand corresponding to permanent actions of a non-constant value: $S_{G*_r,v_{G*}}$ ($1 \leq v_{G*} \leq 2^{n_{G*}}$).
+\item Summand corresponding to variable actions: $S_{Q_r,v_Q}$ ($1 \leq v_Q \leq 2^{n_Q}$). 
+\item Summand corresponding to accidental actions: $S_{A_r,v_A}$ ($1 \leq v_A \leq 2^{n_A}$). 
+\item Summand corresponding to seismic actions: $S_{AS_r,v_{AS}}$ ($1 \leq v_{AS} \leq 2^{n_{AS}}$).
+\end{itemize}
+
+\paragraph{Combinations of actions for persistent or transient design situations}
+With this notation, the expression (\ref{eq_comb_spt}) can be written as follows:
+
+\begin{equation}
+CQ_{v_G,v_{G*},v_Q,d}= S_{G_k,v_G}+S_{G*_k,v_{G*}}+S_{Q_{r0,d},v_Q}
+\end{equation}
+
+\noindent where:
+\begin{description}
+\item{$v_G$} is the variation corresponding to the permanent actions;
+\item{$v_{G*}$} is the variation corresponding to the permanent actions of a non-constant value;
+\item{$v_{Q}$} is the variation corresponding to the variable actions;
+\item{$d$} is the index that corresponds to the leading variable action, and
+\item{$\mathbf{Q}_{r0,d}$} is the vector $[Q_{r0,1}, Q_{r0,2}, \cdots, Q_{r0,d-1},\ Q_{k,d},\ Q_{r0,d+1}, \cdots, Q_{r0,n_Q}]$
+\end{description}
+
+\paragraph{Combinations of actions for accidental design situations}
+Similarly, the expression (\ref{eq_comb_acc}) can be written as follows:
+
+\begin{equation}
+CA_{v_G,v_{G*},v_Q,d,m}= S_{G_k,v_G}+S_{G*_k,v_{G*}}+S_{Q_{r2,d},v_Q}+ A_{k,m}
+\end{equation}
+
+\noindent where:
+\begin{description}
+\item{$v_G$} is the variation corresponding to the permanent actions;
+\item{$v_{G*}$} is the Variation corresponding to the permanent actions of a non-constant value;
+\item{$v_{Q}$} is the variation corresponding to the variable actions;
+\item{$d$} is the index corresponding to the leading variable action;
+\item{$\mathbf{Q}_{r2,d}$} is the vector $[Q_{r2,1}, Q_{r2,2}, \cdots, Q_{r2,d-1},\ Q_{r1,d},\ Q_{r2,d+1}, \cdots, Q_{r2,n_Q}]$;
+\item{$m$} is the index that corresponds to the accidental action considered, and
+\item{$A_{k,m}$} is the design value of the accidental action $m$.
+\end{description}
+
+\paragraph{Combinations for seismic design situations}
+Similarly, the expression (\ref{eq_comb_sis}) can be written as follows:
+
+\begin{equation}
+CS_{v_G,v_{G*},v_Q,n}= S_{G_k,v_G}+S_{G*_k,v_{G*}}+S_{Q_{r2},v_Q}+ AS_{k,n}
+\end{equation}
+
+\noindent where
+\begin{description}
+\item{$v_G$} is the variation corresponding to the permanent actions;
+\item{$v_{G*}$} is the variation corresponding to the permanent actions of a non-constant value;
+\item{$v_{Q}$} is the variation corresponding to the variable actions;
+\item{$\mathbf{Q}_{r2}$} is the vector $[Q_{r2,1}, Q_{r2,2}, \cdots, Q_{r2,n_Q}]$;
+\item{$n$} is the index of the seismic action considered, and
+\item{$AS_{k,n}$} is the design value of the seismic action $n$.
+\end{description}
+
+\paragraph{Calculation algorithm}
+The proposed algorithm for writing all the combinations for ultimate limit states is as follows:
+
+\begin{enumerate}
+\item calculation of all the variations corresponding to actions G: $\mathbf{\gamma}_{g,v_G}$ ($1 \leq v_G \leq 2^{n_G}$)
+\item calculation of all the variations corresponding to actions G*: $\mathbf{\gamma}_{g*,v_{G*}}$ ($1 \leq v_{G*} \leq 2^{n_{G*}}$)
+\item calculation of all the variations corresponding to actions Q: $\mathbf{\gamma}_{q,v_Q}$ ($1 \leq v_Q \leq 2^{n_Q}$)
+\item from $d=1$ to $d=n_q$
+  \begin{enumerate}
+  \item calculation of all the combinations $CQ_{v_G,v_{G*},v_Q,d}$. \label{paso_CQ}
+  \end{enumerate}
+\item from $d=1$ to $d=n_Q$
+  \begin{enumerate}
+  \item from $m=1$ to $m=n_A$
+    \begin{enumerate}
+      \item calculation of all the combinations $CA_{v_G,v_{G*},v_Q,d,m}$. \label{paso_CA}
+    \end{enumerate}
+  \end{enumerate}
+  \item from $n=1$ to $n=n_{AS}$
+    \begin{enumerate}
+      \item calculation of all the combinations $CS_{v_G,v_{G*},v_Q,n}$. \label{paso_CS}
+    \end{enumerate}
+\item end
+\end{enumerate}
+
+\noindent refinement of step \ref{paso_CQ}:
+\begin{enumerate}
+\item from $v_G=1$ to $v_G=2^{n_G}$
+\begin{enumerate}
+\item calculate $S_{G_k,v_G}$
+\item from $v_{G*}=1$ to $v_{G*}=2^{n_{G*}}$
+\begin{enumerate}
+\item calculate $S_{G*_k,v_{G*}}$
+\item from $v_Q=1$ to $v_Q=2^{n_Q}$
+\begin{enumerate}
+\item calculate $S_{Q_{r0,d},v_Q}$
+\item calculate $CQ_{v_G,v_{G*},v_Q,d}= S_{G_k,v_G}+S_{G*_k,v_{G*}}+S_{Q_{r0,d},v_Q}$
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\item end
+\end{enumerate}
+
+\noindent refinement of step \ref{paso_CA}:
+\begin{enumerate}
+\item from $v_G=1$ to $v_G=2^{n_G}$
+\begin{enumerate}
+\item calculate $S_{G_k,v_G}$
+\item from $v_{G*}=1$ to $v_{G*}=2^{n_{G*}}$
+\begin{enumerate}
+\item calculate $S_{G*_k,v_{G*}}$
+\item from $v_Q=1$ to $v_Q=2^{n_Q}$
+\begin{enumerate}
+\item calculate $S_{Q_{r2,d},v_Q}$.
+\item calculate $CA_{v_G,v_{G*},v_Q,d,m}= S_{G_k,v_G}+S_{G*_k,v_{G*}}+S_{Q_{r2,d},v_Q}+A_{k,m}$
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\item end
+\end{enumerate}
+
+\noindent refinement of step \ref{paso_CS}:
+\begin{enumerate}
+\item from $v_G=1$ to $v_G=2^{n_G}$
+\begin{enumerate}
+\item calculate $S_{G_k,v_G}$
+\item from $v_{G*}=1$ to $v_{G*}=2^{n_{G*}}$
+\begin{enumerate}
+\item calculate $S_{G*_k,v_{G*}}$
+\item from $v_Q=1$ to $v_Q=2^{n_Q}$
+\begin{enumerate}
+\item calculate $S_{Q_{r2},v_Q}$.
+\item calculate $CS_{v_G,v_{G*},v_Q,n}= S_{G_k,v_G}+S_{G*_k,v_{G*}}+S_{Q_{r2},v_Q}+AS_{k,n}$
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\item end
+\end{enumerate}
+
+\subsubsection{Combinations for serviceability limit states}
+Taking into account the partial factors for serviceability limit states, if:
+
+\begin{equation}
+S_{G_k}= \sum_{i=1}^{n_G} G_{k,i}
+\end{equation}
+
+\begin{equation}
+S_{G*_k}= \sum_{j=1}^{n_{G*}} G*_{k,j}
+\end{equation}
+
+\begin{equation}
+S_{Q_{r0},d}= \sum_{l=1}^{d-1} Q_{r0,l}+Q_{k,d}+\sum_{l=d+1}^{n_Q} Q_{r0,l}
+\end{equation}
+
+\begin{equation}
+S_{Q_{r2},d}= \sum_{l=1}^{d-1} Q_{r2,l}+Q_{r1,d}+\sum_{l=d+1}^{n_Q} Q_{r2,l}
+\end{equation}
+
+\noindent and
+\begin{equation}
+S_{Q_{r2}}= \sum_{l=1}^{n_Q} Q_{r2,l}
+\end{equation}
+\noindent then:
+\noindent the $n_Q$ rare combinations will be:
+
+\begin{equation}
+CPF_{d}= S_{G_k}+S_{G*_k}+S_{Q_{r0},d}
+\end{equation}
+
+\noindent the $n_Q$ frequent combinations will be:
+
+\begin{equation}
+CF_{d}= S_{G_k}+S_{G*_k}+S_{Q_{r2},d}
+\end{equation}
+
+\noindent and the quasi-permanent combination will be:
+
+\begin{equation}
+CCP= S_{G_k}+S_{G*_k}+S_{Q_{r2}}
+\end{equation}
+
+\paragraph{Calculation algorithm}
+The calculation algorithm of all the combinations for serviceability limit states would be expressed as follows:
+
+\begin{enumerate}
+\item calculation of $S_{G_k}$
+\item calculation of $S_{G*_k}$
+\item from $d=1$ to $d=n_Q$
+  \begin{enumerate}
+  \item calculate $S_{Q_{r0},d}$
+  \item calculate $CPF_d= S_{G_k}+S_{G*_k}+S_{Q_{r0},d}$
+  \end{enumerate}
+\item from $d=1$ to $d=n_Q$
+  \begin{enumerate}
+  \item calculate $S_{Q_{r2},d}$
+  \item calculate $CF_d= S_{G_k}+S_{G*_k}+S_{Q_{r2},d}$
+  \end{enumerate}
+\item calculation of $S_{Q_{r2}}$
+\item calculate $CCP= S_{G_k}+S_{G*_k}+S_{Q_{r2}}$
+\item end
+\end{enumerate}

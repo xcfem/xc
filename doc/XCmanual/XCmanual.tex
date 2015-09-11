@@ -1,8 +1,9 @@
-\documentclass[a4paper,oneside]{book}
+\documentclass[a4paper,twoside]{book}
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage{listings}
 \usepackage{epsfig}
+\usepackage{amsmath}
 \usepackage{color}
 \definecolor{grayLines}{gray}{0.6}
 \definecolor{grayText}{gray}{0.3}
@@ -11,12 +12,34 @@
 \usepackage{gensymb} 
 \usepackage{longtable}
 
+\usepackage{alltt}
+\usepackage{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{ae}
+\usepackage{lastpage}
+\usepackage{fancyhdr,lipsum}
+\usepackage{titlesec}
+
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[CE]{\emph{XC user's guide}}
+\fancyhead[CO]{\slshape \footnotesize{\leftmark}}
+
+
 \setlength\parindent{0pt}
+\title{XC user's guide}
+\author{XC Structural Engineering}
+\date{\today}
+
 \begin{document}
+\maketitle
 \lstset{language=Python}          % Set your language (you can change the language for each code-block optionally)
-\setcounter{secnumdepth}{3}
-\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
 \tableofcontents
+\listoftables
 
 \input{envirmt.tex} %environments definition
 \input{varbl.tex}  %Latex variables definition
@@ -39,4 +62,18 @@
 
 \input{model_components/elements}
 \input{model/model}
+
+
+\appendix
+\chapter{Generation of combinations to consider in the structural calculation}
+
+\input{appendixACombinations/load_combinations_body}
+
+\begin{thebibliography}{77}	% start the bibliography 
+
+\small				% put the bibliography in a small font
+\input{appendixACombinations/bibliografia.tex}
+\end{thebibliography}
+
+
 \end{document}

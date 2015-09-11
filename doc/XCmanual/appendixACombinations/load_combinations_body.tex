@@ -1,0 +1,121 @@
+\section{Introduction}
+This Appendix has the object of defining the actions, weighting coefficients and the combination of actions which shall be taken into account when designing structures.
+
+Checking the structures through design is the most used method to guarantee their safety \footnote{Other procedures are also acceptable such as the reduced model tests, full-scale tests of the structure or its elements, extrapolation of the behaviour of similar structures, \ldots}.
+
+\subsection{The Limit States design method} \label{limit_states_introd}
+The usual method prescribed by the codes for checking the safety of a structure is the so-called \emph{Method of limit states}. A \emph{limit state} is a situation in which, when exceeded, it may be considered that the structure does not fulfil one of the functions for which it has been designed.
+
+The limit states are classified in:
+\begin{itemize}
+\item \emph{Ultimate Limit States (ULS)};
+\item \emph{Serviceability Limit States (SLS)}, and
+\item \emph{Durability Limit States (DLS)}.
+\end{itemize}
+
+\subsection{Design situations}
+The concept of \emph{design situation} is useful to sort the checks performed on the project or study of a structure. A design situation is a simplified representation of the reality that is amenable to analysis.
+
+Thus, it can be considered design situations those that correspond to the different phases of construction of the structure, the normal use of the structure, its reparation, exceptional conditions, \ldots. 
+
+For each of the design situations, it must be checked that the structure doesn't exceed any of the Limit States previously laid down in paragraph \ref{limit_states_introd}
+
+\subsection{Actions}
+\emph{Action} is defined as any cause capable of producing stress states in a structure, or modifying the existing one. Weight coefficients can be different according to the codes that apply for verification of the different structural elements (IAP, EHE, Eurocodes,\ldots).
+
+\subsection{Working life} \label{sc_vida_util}
+The working life of a structure is the period of time from the end of its execution, during which must maintain the requirements of security and functionality of project and an acceptable aesthetic appearance. During that period it will require conservation in accordance with the maintenance plan established for that purpose.
+
+The design working life depends on the type of structure and must be fixed by the Owners at the start of the design. In any case its duration will be lower than that indicated in the regulations applicable or, in the absence of these, than the values laid down in Table \ref{tb_vid_util}.
+
+
+\begin{table}
+\begin{center}
+\begin{small}
+\begin{tabular}{|p{6cm}|l|}
+\hline
+\textbf{Type of structure} & \textbf{Design working life} \\
+\hline
+Temporary structures (*) & 3 to 10 years (*) \\
+\hline
+Replaceable structural elements that are not part of the main structure (eg, handrails, pipe supports) & 10 to 25 years \\
+\hline
+Agricultural or industrial buildings (or installations) and maritime works & 15 to 50 years\\
+\hline
+Residential buildings or offices, bridges or crossings of a total length of less than 10 meters and civil engineering structures (except maritime works) having a low or average economic impact & 50 years \\
+\hline
+Public buildings, health and education. & 75 years\\
+\hline
+Monumental buildings or having a special importance & 100 years \\
+\hline
+Bridges of total length equal to or greater than 10 meters and other civil engineering structures of high economic impact & 100 years \\
+\hline
+\multicolumn{2}{|p{9.5cm}|}{(*)In accordance with the purpose of the structure (temporary exposure, etc.). Under no circumstances shall structures with a design working life greater than 10 years be regarded as temporary structures.} \\
+\hline
+\end{tabular}
+\caption{Design working life of the various types of structure (according reference \cite{EAE}).} \label{tb_vid_util}
+\end{small}
+\end{center}
+\end{table}
+When a structure consists of different members, different working life values may be adopted for such members, always in accordance with the type and characteristics of the construction thereof.
+
+\subsection{Risk level}
+The level of risk of an infrastructure defines the consequences of a structural failure during its construction or service (public building, private store, bridge, \ldots)
+
+\subsection{Control level}
+Regardless of the rigor with which the checking calculations of the structure are made during the project, its safety also depend on careful construction of it. Different standards establish the influence that the level of control during the execution of the work has on safety factors to be used in the execution of the same.
+
+\subsection{Combination of actions}
+When designing a structure or a structural member by the limit state method, load combinations shall be considered as the sum of the products of the load effect corresponding to the basic value of each load and the load factor.
+
+Load factors shall be determined appropriately considering the limit state, the target reliability index, the variability in the load effect of each load and resistance, the probability of load coincidence, etc.
+
+\subsection{Verification of the structure}
+From the discussion in the previous sections, the verification procedure of the structure will consist of performing the following tasks:
+
+\begin{enumerate}
+\item identify the design situations to be considered when checking the structure;
+\item identify the load criterions hypotheses for each of those design situations;
+\item define the combinations of actions to be considered when checking the ULS and SLS, depending on:
+
+\begin{enumerate}
+\item materials composing the structure or the element to check: rolled steel, reinforced concrete, wood, \ldots;
+\item risk level of the infrastructure
+\item level of control with which the construction work is performed;
+\item design situation (persistent, transient or accidental)
+\end{enumerate}
+\item obtain the calculation value of the effect of actions for each combination.
+\item verify all the limit states.
+\end{enumerate}
+
+\input{appendixACombinations/actions}
+
+\section{Design situations} \label{sc_situaciones}
+Design situations, that take into account the circumstances under which the structure can be required during its execution and use, shall be classified as follows:
+
+\begin{enumerate}
+\item Persistent design situations, which refer to the conditions of normal use.
+\item transient design situations, which refer to temporary conditions applicable to the structure, e.g. during execution or repair.
+\item Accidental design situations, which refer to exceptional conditions applicable to the structure or to its exposure, e.g. to fire, explosion, impact or the consequences of localised failure.
+%\item Seismic design situations, which refer to conditions applicable to the structure when subjected to seismic events.
+\end{enumerate}
+
+\section{Level of quality control}
+A two level system for control during execution has been adopted:
+
+\begin{itemize}
+\item Intense control.
+\item Normal control.
+%\item Low control.
+\end{itemize}
+
+As will be seen later, the partial factors for a material or a member resistance depend on the level of inspection during construction.
+
+\input{appendixACombinations/limit_states}
+
+\input{appendixACombinations/combinations}
+
+
+
+
+
