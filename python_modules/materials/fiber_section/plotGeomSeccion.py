@@ -10,16 +10,17 @@ from geom_utils import auxCairoPlot
 def plotArmaduras(armaduras, ctx):
   fmt= "%u"
   print "numReinfBars= ", armaduras.getNumReinfBars
-  barras= armaduras.getReinfBars
-  for b in barras:
-    ptPlot= b.getPos2d
-    rPlot= b.getBarDiam/2.0
-    labelPlot= fmt.format(round(getBarDiam*1e3))
-    ctx.set_line_width(rPlot/5)
-    ctx.arc(ptPlot.x,ptPlot.y,rPlot,2*math.pi)
-    ctx.move_to(ptPlot.x+1.3*rPlot,ptPlot.y)
-    ctx.set_font_size(3*rPlot)
-    ctx.text_path(labelPlot)
+  for reinfLayer in armaduras:
+    barras= reinfLayer.getReinfBars
+    for b in barras:
+      ptPlot= b.getPos2d
+      rPlot= b.getBarDiam/2.0
+      labelPlot= fmt.format(round(getBarDiam*1e3))
+      ctx.set_line_width(rPlot/5)
+      ctx.arc(ptPlot.x,ptPlot.y,rPlot,2*math.pi)
+      ctx.move_to(ptPlot.x+1.3*rPlot,ptPlot.y)
+      ctx.set_font_size(3*rPlot)
+      ctx.text_path(labelPlot)
 
 # Dibuja la geometría de la sección en un archivo PostScript
 def plotGeomSeccion(geomSection, path):

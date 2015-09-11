@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 XC::VectorReinfBar &(XC::ReinfLayer::*getReinfBarsRef)(void)= &XC::ReinfLayer::getReinfBars;
-class_<XC::ReinfLayer, bases<XC::DiscretBase>, boost::noncopyable >("ReinfLayer", no_init)
+class_<XC::ReinfLayer,XC::ReinfLayer *, bases<XC::DiscretBase>, boost::noncopyable >("ReinfLayer", no_init)
   .add_property("numReinfBars",&XC::ReinfLayer::getNumReinfBars,&XC::ReinfLayer::setNumReinfBars,"Number of bars.")
   .add_property("barDiameter",make_function(&XC::ReinfLayer::getReinfBarDiameter, return_value_policy<return_by_value>()),&XC::ReinfLayer::setReinfBarDiameter,"Diameter of bars.")
   .add_property("barArea",make_function(&XC::ReinfLayer::getReinfBarArea, return_value_policy<return_by_value>()),&XC::ReinfLayer::setReinfBarArea,"Area of bars.")
@@ -45,8 +45,22 @@ class_<XC::StraightReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("Str
   .add_property("p2",&XC::StraightReinfLayer::getFinalPos,&XC::StraightReinfLayer::setFinalPos,"Final position.")
   ;
 
-class_<XC::ListReinfLayer, bases<XC::SeccionInerte>, boost::noncopyable >("ListReinfLayer", no_init)
-  .def("__iter__", boost::python::iterator<XC::ListReinfLayer>())
+typedef std::list<XC::ReinfLayer *> list_ptr_reinf_layer;
+class_<list_ptr_reinf_layer, boost::noncopyable>("list_ptr_reinf_layer")
+//.def(vector_indexing_suite<list_ptr_reinf_layer>() )
+  .def("__iter__", boost::python::iterator<list_ptr_reinf_layer>())
+  .def("__len__", &list_ptr_reinf_layer::size)
+  .def("clear", &list_ptr_reinf_layer::clear)
+  // APPEND NOT ALLOWED .def("append", &std_item<list_ptr_reinf_layer>::add,
+  //       with_custodian_and_ward<1,2>()) // to let container keep value
+  //.def("__getitem__", &std_item<list_ptr_reinf_layer>::get,
+  //      return_value_policy<copy_non_const_reference>())
+  // ASSIGN NOT ALLOWED .def("__setitem__", &std_item<list_ptr_reinf_layer>::set,
+  //       with_custodian_and_ward<1,2>()) // to let container keep value
+  // REMOVE NOT ALLOWED .def("__delitem__", &std_item<list_ptr_reinf_layer>::del)
+  ;
+
+class_<XC::ListReinfLayer, bases<XC::SeccionInerte,list_ptr_reinf_layer>, boost::noncopyable >("ListReinfLayer", no_init)
   .def("newStraightReinfLayer",make_function(&XC::ListReinfLayer::newStraightReinfLayer,return_internal_reference<>()))
   .def("newCircReinfLayer",make_function(&XC::ListReinfLayer::newCircReinfLayer,return_internal_reference<>()))
   .def("newReinfBar",make_function(&XC::ListReinfLayer::newReinfBar,return_internal_reference<>()))

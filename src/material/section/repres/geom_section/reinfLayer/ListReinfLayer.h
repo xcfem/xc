@@ -50,7 +50,7 @@ class GeomSection;
 //! @ingroup MATSCCArmaduras
 //
 //! @brief Contenedor (lista) de capas de armadura.
-class ListReinfLayer: protected std::list<ReinfLayer *>, public SeccionInerte
+class ListReinfLayer: public std::list<ReinfLayer *>, public SeccionInerte
   {
   public:
     typedef std::list<ReinfLayer *> l_reg;
@@ -63,7 +63,6 @@ class ListReinfLayer: protected std::list<ReinfLayer *>, public SeccionInerte
     void libera(const size_t i);
     void copia(const ListReinfLayer &otra);
   protected:
-    bool procesa_comando(CmdStatus &status);
 
     MaterialLoader *material_loader; //!< Gestor de materiales (búsqueda,...).
 
@@ -75,17 +74,8 @@ class ListReinfLayer: protected std::list<ReinfLayer *>, public SeccionInerte
    ~ListReinfLayer(void);
 
     ReinfLayer *push_back(const ReinfLayer &reg);
-    inline size_t size(void) const
-      { return l_reg::size(); }
-    inline bool empty(void) const
-      { return l_reg::empty(); }
 
     void clear(void);
-
-    const_iterator begin(void) const;
-    const_iterator end(void) const;
-    iterator begin(void);
-    iterator end(void);
 
     const GeomSection *getGeomSection(void) const;
     double getRecubrimiento(void) const;
@@ -114,7 +104,6 @@ class ListReinfLayer: protected std::list<ReinfLayer *>, public SeccionInerte
     double getIzSeccHomogeneizada(const double &E0) const;
     double getPyzSeccHomogeneizada(const double &E0) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
     void Print(std::ostream &s) const;
   };
 

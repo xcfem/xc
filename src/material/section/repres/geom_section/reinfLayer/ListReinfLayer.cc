@@ -39,10 +39,6 @@
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
 
-#include "xc_utils/src/base/CmdStatus.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
-
 #include "material/section/repres/geom_section/GeomSection.h"
 
 //! @brief Liberta todas las pociciones.
@@ -103,82 +99,6 @@ XC::BarraSuelta *XC::ListReinfLayer::newReinfBar(const std::string &cod_mat)
     return dynamic_cast<BarraSuelta *>(ptr);
   }
 
-//! @brief Lee un objeto XC::GeomSection desde archivo
-bool XC::ListReinfLayer::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ListReinfLayer) Procesando comando: " << cmd << std::endl;
-
-    const CmdParser &parser= status.Parser();
-    if(cmd == "capa_armadura_recta")
-      {
-        std::string cod_mat= "nil";
-        std::deque<boost::any> fnc_indices;
-        if(parser.TieneIndices())
-          {
-            fnc_indices= status.Parser().SeparaIndices(this);
-            if(fnc_indices.size()>0)
-              cod_mat= convert_to_string(fnc_indices[0]); //Código del material.
-            StraightReinfLayer tmp(this,material_loader->find_ptr(cod_mat));
-            ReinfLayer *ptr= push_back(tmp);
-            ptr->set_owner(this);
-            ptr->LeeCmd(status);
-          }
-        else
-	  std::cerr << "Error; " << cmd << " - uso: " << cmd << "[id_material]" << std::endl;
-        return true;
-      }
-    else if(cmd == "capa_armadura_circ")
-      {
-        std::string cod_mat= "nil";
-        std::deque<boost::any> fnc_indices;
-        if(parser.TieneIndices())
-          {
-            fnc_indices= status.Parser().SeparaIndices(this);
-            if(fnc_indices.size()>0)
-              cod_mat= convert_to_string(fnc_indices[0]); //Código del material.
-            CircReinfLayer tmp(this,material_loader->find_ptr(cod_mat));
-            ReinfLayer *ptr= push_back(tmp);
-            ptr->set_owner(this);
-            ptr->LeeCmd(status);
-          }
-        else
-	  std::cerr << "Error; " << cmd << " - uso: " << cmd << "[id_material]" << std::endl;
-        return true;
-      }
-    else if(cmd == "barra_suelta")
-      {
-        std::string cod_mat= "nil";
-        std::deque<boost::any> fnc_indices;
-        if(parser.TieneIndices())
-          {
-            fnc_indices= status.Parser().SeparaIndices(this);
-            if(fnc_indices.size()>0)
-              cod_mat= convert_to_string(fnc_indices[0]); //Código del material.
-            BarraSuelta tmp(this,material_loader->find_ptr(cod_mat));
-            ReinfLayer *ptr= push_back(tmp);
-            ptr->set_owner(this);
-            ptr->LeeCmd(status);
-          }
-        else
-	  std::cerr << "Error; " << cmd << " - uso: " << cmd << "[id_material]" << std::endl;
-        return true;
-      }
-    else if(cmd == "for_each")
-      {
-        EjecutaBloqueForEach(status,status.GetBloque());
-        return true;
-      }
-    else if(cmd == "clear")
-      {
-        clear();
-        return true;
-      }
-    else
-      return SeccionInerte::procesa_comando(status);
-  }
-
 //! @brief Destructor.
 XC::ListReinfLayer::~ListReinfLayer(void)
   { libera(); }
@@ -194,15 +114,6 @@ XC::ReinfLayer *XC::ListReinfLayer::push_back(const ReinfLayer &reg)
     l_reg::push_back(tmp);
     return tmp;
   }
-
-XC::ListReinfLayer::const_iterator XC::ListReinfLayer::begin(void) const
-  { return l_reg::begin(); }
-XC::ListReinfLayer::const_iterator XC::ListReinfLayer::end(void) const
-  { return l_reg::end(); }
-XC::ListReinfLayer::iterator XC::ListReinfLayer::begin(void)
-  { return l_reg::begin(); }
-XC::ListReinfLayer::iterator XC::ListReinfLayer::end(void)
-  { return l_reg::end(); }
 
 //! @brief Devuelve una referencia al objeto propietario.
 const XC::GeomSection *XC::ListReinfLayer::getGeomSection(void) const
@@ -407,48 +318,6 @@ double XC::ListReinfLayer::getPyzSeccBruta(void) const
         retval+= (*i)->getReinfBars().getPyzSeccBruta()+(*i)->getReinfBars().getAreaSeccBruta()*d2;
       }
     return retval;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ListReinfLayer::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "ListReinfLayer::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="numBarras")
-      {
-        tmp_gp_szt= getNumReinfBars();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="numCapas")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="capa")
-      {
-        const size_t i= popInt(cod);
-        ReinfLayer *reg= nullptr;
-	const_iterator reg_iter=begin();
-        if(i<size())
-          {
-            for(size_t j=0;j<=i;j++,reg_iter++);
-              reg= *reg_iter;
-          }
-        else
-	  std::cerr << "(layer) Index out of range: " << i << std::endl;
-        if(reg)
-          return any_const_ptr(reg);
-        else
-          return any_const_ptr();
-      }
-    else if(cod=="getRecubrimiento")
-      {
-        tmp_gp_dbl= getRecubrimiento();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return SeccionInerte::GetProp(cod);
   }
 
 void XC::ListReinfLayer::Print(std::ostream &os) const
