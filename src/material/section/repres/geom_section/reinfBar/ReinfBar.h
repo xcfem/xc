@@ -90,14 +90,12 @@ class ReinfBar: public DiscretBase
 
     void setDiameter(const double &barDiameter);
     void setArea(const double &barArea);
-    void setMaterial(int materialID);
     void setPosition(const Vector &position);
 
     // reinforcing bar inquiring functions
     
     double getDiameter(void) const;
     double getArea(void) const;
-    int getMaterial(void) const; 
     double Iy(void) const;
     double Iz(void) const;
     double Pyz(void) const;

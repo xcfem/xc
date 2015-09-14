@@ -14,8 +14,8 @@ def plotArmaduras(armaduras, ctx):
     barras= reinfLayer.getReinfBars
     for b in barras:
       ptPlot= b.getPos2d
-      rPlot= b.getBarDiam/2.0
-      labelPlot= fmt.format(round(getBarDiam*1e3))
+      rPlot= b.diameter/2.0
+      labelPlot= fmt.format(round(b.diameter*1e3))
       ctx.set_line_width(rPlot/5)
       ctx.arc(ptPlot.x,ptPlot.y,rPlot,2*math.pi)
       ctx.move_to(ptPlot.x+1.3*rPlot,ptPlot.y)
