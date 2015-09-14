@@ -58,8 +58,8 @@ def getSectionInfo(mdlr,seccion):
 # Elabora un informe con los datos de la sección.
   EHorm= seccion.tipoHormigon.Ecm
   EAcero= seccion.tipoArmadura.Es
-  tangHorm= seccion.nmbDiagHormigon.getTangent
-  geomSection= mdlr.getMaterialLoader.getSectionGeometry(nmbGeomSeccion)
+  tangHorm= seccion.getConcreteDiagram(mdlr).getTangent
+  geomSection= mdlr.getMaterialLoader.getSectionGeometry(seccion.nmbGeomSeccion())
   regions= geomSection.getRegions
   GB= regions.getCdgSeccBruta # Centro de gravedad de la sección bruta.
   AB= regions.getAreaSeccBruta # Área de la sección bruta.
@@ -68,7 +68,7 @@ def getSectionInfo(mdlr,seccion):
   PyzB= regions.getPyzSeccBruta
 
   armaduras= geomSection.getReinfLayers
-  areaArmaduraPrincipal= arnaduras.getAreaSeccBruta
+  areaArmaduraPrincipal= armaduras.getAreaSeccBruta
   recubrimiento= armaduras.getRecubrimiento
   lista_fams_armadura= []
   datosFam = RecordFamArmaduraPrincipal()
@@ -91,7 +91,7 @@ def writeSectionReport(mdlr,scc, archTex, pathFigura):
     pg.plotGeomSeccion(geomSection,pathFigura)
   else:
     sys.stderr.write('error: geometry of section: '+scc.nmbGeomSeccion()+' not defined\n')
-  getSectionInfo(scc)
+  getSectionInfo(mdlr,scc)
   archTex.write("\\begin{table}\n")
   archTex.write("\\begin{center}\n")
   archTex.write("\\begin{tabular}{|c|}\n")

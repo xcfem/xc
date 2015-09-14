@@ -3,11 +3,9 @@
 
 from __future__ import division
 import math
+import ng_beam as bm
 
-class SimpleBeam(object):
-  E= 1.0
-  I= 1.0
-  l= 1.0
+class SimpleBeam(bm.Beam):
 
   def getShearUnderUniformLoad(self,q,x):
     return -q*(self.l/2.0-x)
@@ -16,7 +14,7 @@ class SimpleBeam(object):
   def getBendingMomentUnderUniformLoad(self,q,x):
     return q*x/2.0*(self.l-x)
   def getDeflectionUnderUniformLoad(self,q,x):
-    return q*x/(24.0*self.E*self.I)(self.l**3-2*self.l*x**2+x**3)
+    return q*x/(24.0*self.E*self.I)*(self.l**3-2*self.l*x**2+x**3)
 
 #          l
 # |<---------------->|
@@ -85,7 +83,7 @@ class SimpleBeam(object):
 
   def getDeflectionUnderConcentratedLoad(self,P,a,x):
     b= self.l-a
-    retval= P*b*x/(6.0*self.E*self.I*self.l)(self.l**2-b**2-x**2)
+    retval= P*b*x/(6.0*self.E*self.I*self.l)*(self.l**2-b**2-x**2)
     if(x>a):
-      retval= P*b*(self.l-x)/(6.0*self.E*self.I*self.l)(2*self.l*x-x*2-a**2)
+      retval= P*b*(self.l-x)/(6.0*self.E*self.I*self.l)*(2*self.l*x-x*2-a**2)
     return retval

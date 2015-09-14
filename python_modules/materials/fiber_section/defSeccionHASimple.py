@@ -179,6 +179,11 @@ class RecordSeccionHASimple(object):
   def setMainReinfPos(self,diam,area,spacing,basicCover):
     self.barrasPos= MainReinfLayer(diam,area,spacing,self.ancho,basicCover)
 
+  def getConcreteDiagram(self,mdlr):
+    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagHormigon)
+  def getSteelDiagram(self,mdlr):
+    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagArmadura)
+
   def defSectionGeometry(self,mdlr,tipoDiag):
     '''
     Definición de una sección de hormigón armado sencilla

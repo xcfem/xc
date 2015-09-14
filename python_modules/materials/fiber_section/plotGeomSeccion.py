@@ -17,7 +17,7 @@ def plotArmaduras(armaduras, ctx):
       rPlot= b.diameter/2.0
       labelPlot= fmt.format(round(b.diameter*1e3))
       ctx.set_line_width(rPlot/5)
-      ctx.arc(ptPlot.x,ptPlot.y,rPlot,2*math.pi)
+      ctx.arc(ptPlot.x,ptPlot.y,rPlot,0.0,2*math.pi)
       ctx.move_to(ptPlot.x+1.3*rPlot,ptPlot.y)
       ctx.set_font_size(3*rPlot)
       ctx.text_path(labelPlot)
@@ -25,7 +25,7 @@ def plotArmaduras(armaduras, ctx):
 # Dibuja la geometría de la sección en un archivo PostScript
 def plotGeomSeccion(geomSection, path):
   WIDTH, HEIGHT = 256, 256
-  surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, WIDTH, HEIGHT)
+  surface = cairo.PSSurface(path, WIDTH, HEIGHT)
   ctx = cairo.Context(surface)
   ctx.scale (WIDTH, HEIGHT) # Normalizing the canvas
   ctx.set_line_width(0.01)
@@ -35,6 +35,8 @@ def plotGeomSeccion(geomSection, path):
     auxCairoPlot.plotPolygon(r.getPoligono(),ctx)
   armaduras= geomSection.getReinfLayers
   plotArmaduras(armaduras,ctx)
-  geom_utils.plotEjesYz(0.06,ctx)
+  auxCairoPlot.plotEjesYZ(0.06,ctx)
   ctx.stroke()
-  surface.write_to_eps(path) # Output to PNG
+  surface.set_eps(True)
+  ctx.show_page()
+  surface.finish()
