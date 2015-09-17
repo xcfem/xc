@@ -26,7 +26,7 @@ class_<XC::ReinfLayer,XC::ReinfLayer *, bases<XC::DiscretBase>, boost::noncopyab
   .add_property("barDiameter",make_function(&XC::ReinfLayer::getReinfBarDiameter, return_value_policy<return_by_value>()),&XC::ReinfLayer::setReinfBarDiameter,"Diameter of bars.")
   .add_property("barArea",make_function(&XC::ReinfLayer::getReinfBarArea, return_value_policy<return_by_value>()),&XC::ReinfLayer::setReinfBarArea,"Area of bars.")
   .add_property("getReinfBars",make_function(getReinfBarsRef,return_internal_reference<>()),"Returns reinforcement bars.")
-  .def("getRecubrimiento",&XC::ReinfLayer::getRecubrimiento)
+  .def("getRecubrimiento",&XC::ReinfLayer::getRecubrimiento,"returns cover of bars.")
   .def("getCdg",&XC::ReinfLayer::getCdg)
   .def("getArea",&XC::ReinfLayer::getArea)
   ;
@@ -65,4 +65,6 @@ class_<XC::ListReinfLayer, bases<XC::SeccionInerte,list_ptr_reinf_layer>, boost:
   .def("newCircReinfLayer",make_function(&XC::ListReinfLayer::newCircReinfLayer,return_internal_reference<>()))
   .def("newReinfBar",make_function(&XC::ListReinfLayer::newReinfBar,return_internal_reference<>()))
   .add_property("getNumReinfBars",&XC::ListReinfLayer::getNumReinfBars,"Number of bars.")
+  .add_property("getGeomSection",make_function(&XC::ListReinfLayer::getGeomSection,return_internal_reference<>()),"Returns the GeomSection object that owns this bars.")
+  .def("getRecubrimiento",&XC::ListReinfLayer::getRecubrimiento,"returns cover of bars.")
   ;

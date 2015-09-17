@@ -50,7 +50,7 @@ class_<XC::Segment, bases<XC::Eje>, boost::noncopyable >("Segment", no_init)
 
 XC::ListRegiones &(XC::GeomSection::*getRegionContainer)(void)= &XC::GeomSection::getRegiones;
 XC::ListReinfLayer &(XC::GeomSection::*getReinfLayerContainer)(void)= &XC::GeomSection::getCapasArmadura;
-class_<XC::GeomSection, bases<XC::SeccionInerte>, boost::noncopyable >("GeomSection", no_init)
+class_<XC::GeomSection, XC::GeomSection *, bases<XC::SeccionInerte>, boost::noncopyable >("GeomSection", no_init)
   .add_property("getRegions",make_function(getRegionContainer,return_internal_reference<>()))
   .add_property("getReinfLayers",make_function(getReinfLayerContainer,return_internal_reference<>()))
   .def("getContornoRegiones",&XC::GeomSection::getContornoRegiones)

@@ -80,8 +80,6 @@ class GeomSection: public SeccionInerte
     lst_ejes ejes; //!< Lista de ejes.
     size_t tag_eje; //!< Identificador por defecto para el próximo eje.
 
-    bool procesa_comando(CmdStatus &status);
-
   public:
     //Constructores
     GeomSection(MaterialLoader *ml);    
@@ -158,7 +156,6 @@ class GeomSection: public SeccionInerte
     double getIzSeccHomogeneizada(const double &E0) const;
     double getPyzSeccHomogeneizada(const double &E0) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
     void Print(std::ostream &s, int flag =0);
     friend std::ostream &operator<<(std::ostream &s, GeomSection &fiberSectionRepr);    
   };

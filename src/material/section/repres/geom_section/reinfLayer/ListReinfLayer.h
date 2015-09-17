@@ -85,7 +85,6 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SeccionInerte
     BarraSuelta *newReinfBar(const std::string &);
 
 
-    void EjecutaBloqueForEach(CmdStatus &status,const std::string &bloque);
     size_t getNumReinfBars(void) const;
 
     void Cumplen(const std::string &,ListReinfLayer &,bool );

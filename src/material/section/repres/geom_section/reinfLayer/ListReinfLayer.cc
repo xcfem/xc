@@ -137,15 +137,6 @@ double XC::ListReinfLayer::getRecubrimiento(void) const
     return retval;
   }
 
-//! @brief Solicita a cada uno de los miembros que ejecute el bloque
-//! de código que se le pasa como parámetro.
-void XC::ListReinfLayer::EjecutaBloqueForEach(CmdStatus &status,const std::string &bloque)
-  {
-    const std::string nmbBlq= nombre_clase()+":for_each";
-    for(iterator i= begin();i!=end();i++)
-      (*i)->EjecutaBloque(status,bloque,nmbBlq);
-  }
-
 //! @brief Devuelve el número total de celdas.
 size_t XC::ListReinfLayer::getNumReinfBars(void) const
   {
