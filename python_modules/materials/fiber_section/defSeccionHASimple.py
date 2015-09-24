@@ -241,7 +241,7 @@ class RecordSeccionHASimple(object):
   def getJTorsion(self):
     return parametrosSeccionRectangular.getJTorsion(self.ancho,self.canto)
 
-  def getRespT(self,mdlr):
+  def getRespT(self,mdlr,JTorsion):
     '''Material for modeling torsional response of section'''
     return typical_materials.defElasticMaterial(mdlr,self.nmbRespT(),self.tipoHormigon.Gcm()*JTorsion) # Respuesta de la sección a torsión.
 
@@ -261,7 +261,7 @@ class RecordSeccionHASimple(object):
     nmbRutinaDefGeom: Nombre de la rutina que define la geometría de la sección.
     '''
     self.JTorsion= self.getJTorsion()
-    self.respT= self.getRespT(mdlr) # Respuesta de la sección a torsión.
+    self.respT= self.getRespT(mdlr,self.JTorsion) # Respuesta de la sección a torsión.
     self.respVy= self.getRespVy(mdlr)
     self.respVz= self.getRespVz(mdlr)
 

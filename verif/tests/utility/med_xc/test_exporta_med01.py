@@ -55,9 +55,9 @@ quad4n.commitState()
 
 ele0= elementos.getElement(0)
 detJ= ele0.detJ(0.0,0.0)
-sgMed1= ele0.getAvgStress[0]
-sgMed2= ele0.getAvgStress[1]
-sgMed3= ele0.getAvgStress[2]
+sgMed1= ele0.getPhysicalProperties.getCommittedAvgStress[0]
+sgMed2= ele0.getPhysicalProperties.getCommittedAvgStress[1]
+sgMed3= ele0.getPhysicalProperties.getCommittedAvgStress[2]
 
 fields=  prueba.getFields
 
@@ -83,7 +83,7 @@ avgStress.definedOnGaussPoints()
 avgStress.componentNames= ["avgStress"]
 avgStress.componentDescriptions= ["Tensión media"]
 avgStress.componentUnits= ["lbs/in2"]
-avgStress.componentsProperty= "self.getCommittedStress"
+avgStress.componentsProperty= "self.getPhysicalProperties.getCommittedStress"
 
 mesh_output= xc.MEDMeshing(prueba)
 vertices= mesh_output.vertices
