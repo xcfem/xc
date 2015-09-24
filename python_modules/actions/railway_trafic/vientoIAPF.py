@@ -107,7 +107,7 @@ def CdTableroAlmaLlenaIAPF(B,h,angAlma):
     Coeficiente de arrastre para empuje horizontal sobre tableros
     de alma llena según apartado 2.3.7.5.1 IAPF.
     '''
-    coefRedCdIAPF=max(0.7,1-(5/1000*rad2deg(angAlma)))
+    coefRedCdIAPF=max(0.7,1-(5/1000*math.degrees(angAlma)))
     tmpCdIAPF=2.5-0.3*B/h
     tmpCdIAPF= max(tmpCdIAPF,0.3)
     tmpCdIAPF= min(tmpCdIAPF,2.4)*coefReductor
@@ -123,11 +123,10 @@ def FHkPorMetroIAPF(Cd,h,Vc):
     return Cd*h*0.5*rhoAire*Vc**2
   
 def FVkPorMetroIAPF(b,Vc):
-    '''FVkPorMetroIAPF(b,Vc)
-    Empuje vertical por unidad de longitud sobre el tablero
-    de alma llena según apartado 2.3.7.5.2 IAPF.
-    '''
-    rhoAire=1.25
-    return 0.5*b*0.5*rhoAire*Vc**2
-  
+  '''FVkPorMetroIAPF(b,Vc)
+  Empuje vertical por unidad de longitud sobre el tablero
+  de alma llena según apartado 2.3.7.5.2 IAPF.
+  '''
+  rhoAire= 1.25
+  return 0.5*b*0.5*rhoAire*Vc**2
 

@@ -17,12 +17,7 @@ import sys
 
 class RecordArmaduraCortante(object):
   # Definition of the variables that make up a family of shear reinforcing bars
-  nmbFamilia= "noName" # name identifying the family of shear reinforcing bars
-  nRamas= 0.0 # Number of effective branches of the transverse reinforcements
-  areaRama= 0.0 # Area of the shear reinforcing bar
-  espaciamientoRamas= 0.2 # longitudinal distance between transverse reinforcement
-  angAlphaRamas= math.pi/2.0 # angle between the shear reinforcing bars and the axis of the member.
-  angThetaBielas= math.pi/4.0 # angle between the concrete's compression struts and the axis of the member
+
   def __init__(self):
     self.nmbFamilia= "noName" # name identifying the family of shear reinforcing bars
     self.nRamas= 0.0 # Number of effective branches
@@ -243,6 +238,21 @@ class RecordSeccionHASimple(object):
 
     self.recubMin= min(self.barrasNeg.recubLat,min(self.barrasPos.recubLat,min(self.barrasPos.recub,self.barrasNeg.recub)))
 
+  def getJTorsion(self):
+    return parametrosSeccionRectangular.getJTorsion(self.ancho,self.canto)
+
+  def getRespT(self,mdlr):
+    '''Material for modeling torsional response of section'''
+    return typical_materials.defElasticMaterial(mdlr,self.nmbRespT(),self.tipoHormigon.Gcm()*JTorsion) # Respuesta de la sección a torsión.
+
+  def getRespVy(self,mdlr):
+    '''Material for modeling z shear response of section'''
+    return typical_materials.defElasticMaterial(mdlr,self.nmbRespVy(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())
+
+  def getRespVz(self,mdlr):
+    '''Material for modeling z shear response of section'''
+    return typical_materials.defElasticMaterial(mdlr,self.nmbRespVz(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())
+
   def defSeccionHASimple(self, mdlr,tipoDiag):
     '''
     Definición de una sección de hormigón armado sencilla
@@ -250,10 +260,10 @@ class RecordSeccionHASimple(object):
     tipoDiag: Tipo del diagrama k: característico, d: cálculo.
     nmbRutinaDefGeom: Nombre de la rutina que define la geometría de la sección.
     '''
-    JTorsion= parametrosSeccionRectangular.getJTorsion(self.ancho,self.canto)
-    respT= typical_materials.defElasticMaterial(mdlr,self.nmbRespT(),self.tipoHormigon.Gcm()*JTorsion) # Respuesta de la sección a torsión.
-    respVy= typical_materials.defElasticMaterial(mdlr,self.nmbRespVy(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())# Respuesta de la sección a cortante según y.
-    respVz= typical_materials.defElasticMaterial(mdlr,self.nmbRespVz(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())# Respuesta de la sección a cortante según z.
+    self.JTorsion= self.getJTorsion()
+    self.respT= self.getRespT(mdlr) # Respuesta de la sección a torsión.
+    self.respVy= self.getRespVy(mdlr)
+    self.respVz= self.getRespVz(mdlr)
 
     self.defSectionGeometry(mdlr,tipoDiag)
     fs= mdlr.getMaterialLoader.newMaterial("fiberSectionShear3d",self.nmbSeccion)

@@ -24,14 +24,14 @@ def xLaminaPrintVAnsys(nmbArchSalida, nmbSeccion1, nmbSeccion2):
   printCabeceraListadoCortante("texOutput2","2 ("+ nmbSeccion2 +")")
   for e in elementos:
     if(odd(e.tag)):
-      texOutput1.write(floor(tag/10)," & ",HIPCP," & ",format(NCP/1e3,"%5.2f")," & ",format(VyCP/1e3,"%5.2f")," & ",format(VzCP/1e3,"%5.2f")," & ",format(Vu1CP/1e3,"%5.2f")," & ",format(rad2deg(thetaCP),"%4.1f")," & ",format(VcuCP/1e3,"%5.2f")," & ",format(VsuCP/1e3,"%5.2f")," & ",format(Vu2CP/1e3,"%5.2f")," & ",format(VuCP/1e3,"%5.2f")," & ",format(FCCP,"%3.2f"),"\\\\\n")
+      texOutput1.write(floor(tag/10)," & ",HIPCP," & ",format(NCP/1e3,"%5.2f")," & ",format(VyCP/1e3,"%5.2f")," & ",format(VzCP/1e3,"%5.2f")," & ",format(Vu1CP/1e3,"%5.2f")," & ",format(math.degrees(thetaCP),"%4.1f")," & ",format(VcuCP/1e3,"%5.2f")," & ",format(VsuCP/1e3,"%5.2f")," & ",format(Vu2CP/1e3,"%5.2f")," & ",format(VuCP/1e3,"%5.2f")," & ",format(FCCP,"%3.2f"),"\\\\\n")
       ansysOutput1.write("detab,",floor(tag/10),",FCV1,",FCCP,"\n")
       ansysOutput2.write("detab,",floor(tag/10),",NV1,",NCP/1e3,"\n")
       ansysOutput2.write("detab,",floor(tag/10),",Vy1,",VyCP/1e3,"\n")
       ansysOutput2.write("detab,",floor(tag/10),",Vz1,",VzCP/1e3,"\n")
       ansysOutput2.write("detab,",floor(tag/10),",Vu1,",VuCP/1e3,"\n")
     else:
-      texOutput2.write(floor(tag/10)," & ",HIPCP," & ",format(NCP/1e3,"%5.2f")," & ",format(VyCP/1e3,"%5.2f")," & ",format(VzCP/1e3,"%5.2f")," & ",format(Vu1CP/1e3,"%5.2f")," & ",format(rad2deg(thetaCP),"%4.1f")," & ",format(VcuCP/1e3,"%5.2f")," & ",format(VsuCP/1e3,"%5.2f")," & ",format(Vu2CP/1e3,"%5.2f")," & ",format(VuCP/1e3,"%5.2f")," & ",format(FCCP,"%3.2f"),"\\\\\n")
+      texOutput2.write(floor(tag/10)," & ",HIPCP," & ",format(NCP/1e3,"%5.2f")," & ",format(VyCP/1e3,"%5.2f")," & ",format(VzCP/1e3,"%5.2f")," & ",format(Vu1CP/1e3,"%5.2f")," & ",format(math.degrees(thetaCP),"%4.1f")," & ",format(VcuCP/1e3,"%5.2f")," & ",format(VsuCP/1e3,"%5.2f")," & ",format(Vu2CP/1e3,"%5.2f")," & ",format(VuCP/1e3,"%5.2f")," & ",format(FCCP,"%3.2f"),"\\\\\n")
       ansysOutput1.write("detab,",floor(tag/10),",FCV2,",FCCP,"\n")
       ansysOutput2.write("detab,",floor(tag/10),",NV2,",NCP/1e3,"\n")
       ansysOutput2.write("detab,",floor(tag/10),",Vy2,",VyCP/1e3,"\n")

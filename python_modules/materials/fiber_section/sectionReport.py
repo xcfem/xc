@@ -3,15 +3,10 @@
 import plotGeomSeccion as pg
 import sys
 from latex import latexUtils
+import math
 
 class RecordFamArmaduraPrincipal(object):
   # Parámetros que se obtienen de cada familia de armaduras
-  nmb=  None # Código que identifica a la familia de armaduras.
-  nBarras=  0 # Número de las barras.
-  diamBarras=  0.0 # Diámetro de las barras.
-  areaBarras=  0.0 # Area total de la familia de armaduras
-  recubMec=  0.0 # Valor mínimo del recubrimiento mecánico.
-  cdgBarras=  None # Posición del centro de gravedad.
 
   def __init__(self,reinfLayer):
     self.nmb= reinfLayer.nombre
@@ -19,19 +14,20 @@ class RecordFamArmaduraPrincipal(object):
     self.diamBarras= reinfLayer.barDiameter # Diámetro de las barras.
     self.areaBarras= reinfLayer.barArea # Area total de la familia de armaduras
     self.recubMec= reinfLayer.getRecubrimiento() # Valor mínimo del recubrimiento mecánico.
-    self.cdgBarras= reinfLayer.getCdg # Posición del centro de gravedad.
+    self.cdgBarras= reinfLayer.getCdg() # Posición del centro de gravedad.
 
-  def texWrite(self,archTex):
-    archTex.write(self.nmb," & ",self.nBarras)
-    archTex.write(" & ",'%u'.format(round(self.diamBarras*1e3)))
-    archTex.write(" & ",'%5.2f'.format(self.areaBarras*1e4))
-    archTex.write(" & ",'%4.2f'.format(self.areaBarras/areaHorm*1e3))
-    archTex.write(" & ",'%4.1f'.format(self.recubMec*1e2))
-    archTex.write(" & ","%5.3f".format(self.cdgBarras.x) ," & ","%5.3f".format(self.cdgBarras.y) ,"\\\\\n")
+  def texWrite(self,archTex,areaHorm):
+    archTex.write(self.nmb+' & '+str(self.nBarras))
+    archTex.write(' & '+'%u'.format(round(self.diamBarras*1e3)))
+    archTex.write(' & '+'%5.2f'.format(self.areaBarras*1e4))
+    archTex.write(' & '+'%4.2f'.format(self.areaBarras/areaHorm*1e3))
+    archTex.write(' & '+'%4.1f'.format(self.recubMec*1e2))
+    archTex.write(' & '+"%5.3f".format(self.cdgBarras[0]) +' & '+"%5.3f".format(self.cdgBarras[1]) +"\\\\\n")
 
 def writeMainReinforcement(listaFamArmaduraPrincipal, areaHorm, archTex):
   archTex.write("\\begin{tabular}{ll}\n")
-  archTex.write("Área total $A_s=","%5.2f".format(areaArmaduraPrincipal*1e4) ,"\\ cm^2$ & Cuantía geométrica $\\rho= ","%4.2f".format(areaArmaduraPrincipal/areaHorm*1e3) ,"\\permil$\\\\\n")
+  areaArmaduraPrincipal= listaFamArmaduraPrincipal.getAreaSeccBruta()
+  archTex.write("Área total $A_s="+"%5.2f".format(areaArmaduraPrincipal*1e4) +"\\ cm^2$ & Cuantía geométrica $\\rho= "+"%4.2f".format(areaArmaduraPrincipal/areaHorm*1e3) +"\\permil$\\\\\n")
   archTex.write("\\end{tabular} \\\\\n")
   archTex.write("\\hline\n")
   archTex.write("Familias de armadura principal:\\\\\n")
@@ -41,19 +37,20 @@ def writeMainReinforcement(listaFamArmaduraPrincipal, areaHorm, archTex):
   archTex.write(" &  & $(mm)$ & $(cm^2)$ & $(\\permil)$ & $(cm)$ & $(m)$ & $(m)$\\\\\n")
   for f in listaFamArmaduraPrincipal:
     archTex.write("\hline\n")
-    f.write(archTex)
+    RecordFamArmaduraPrincipal(f).texWrite(archTex,areaHorm)
   archTex.write("\\end{tabular} \\\\\n")
 
-def writeShearReinforcement(recordArmaduraCortante, archTex):
+def writeShearReinforcement(recordArmaduraCortante, archTex, ancho):
   archTex.write("\\hline\n")
-  archTex.write(nmbFamilia," & ",recordArmaduraCortante.nRamas)
-  diamRamas= sqrt(4*areaRamas/PI)
-  archTex.write(" & ",'%u'.format(round(recordArmaduraCortante.diamRamas*1e3)))
-  archTex.write(" & ",'%5.2f'.format(recordArmaduraCortante.areaRamas*recordArmaduraCortante.nRamas*1e4))
-  archTex.write(" & ",'%4.1f'.format(recordArmaduraCortante.espaciamientoRamas*1e2))
-  archTex.write(" & ",'%5.2f'.format(recordArmaduraCortante.areaRamas*nRamas/ancho/recordArmaduraCortante.espaciamientoRamas*1e4))
-  archTex.write(" & ",'%3.1f'.format(rad2deg(recordArmaduraCortante.angAlphaRamas)))
-  archTex.write(" & ",'%3.1f'.format(rad2deg(recordArmaduraCortante.angThetaBielas)),"\\\\\n")
+  archTex.write(recordArmaduraCortante.nmbFamilia+' & '+str(recordArmaduraCortante.nRamas))
+  areaRamas= recordArmaduraCortante.getAs()
+  diamRamas= math.sqrt(4*areaRamas/math.pi)
+  archTex.write(' & '+'%u'.format(round(diamRamas*1e3)))
+  archTex.write(' & '+'%5.2f'.format(areaRamas*recordArmaduraCortante.nRamas*1e4))
+  archTex.write(' & '+'%4.1f'.format(recordArmaduraCortante.espaciamientoRamas*1e2))
+  archTex.write(' & '+'%5.2f'.format(areaRamas*recordArmaduraCortante.nRamas/ancho/recordArmaduraCortante.espaciamientoRamas*1e4))
+  archTex.write(' & '+'%3.1f'.format(math.degrees(recordArmaduraCortante.angAlphaRamas)))
+  archTex.write(' & '+'%3.1f'.format(math.degrees(recordArmaduraCortante.angThetaBielas))+"\\\\\n")
 
 class SectionInfo(object):
   ''' Obtains section parameters for report'''
@@ -73,7 +70,7 @@ class SectionInfo(object):
 
 
     self.armaduras= self.geomSection.getReinfLayers
-    self.areaArmaduraPrincipal= self.armaduras.getAreaSeccBruta
+    self.areaArmaduraPrincipal= self.armaduras.getAreaSeccBruta()
     self.recubrimiento= self.armaduras.getRecubrimiento
     self.lista_fams_armadura= []
     for f in self.armaduras:
@@ -129,30 +126,30 @@ class SectionInfo(object):
     fileHandler.write('Sección bruta:\\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\begin{tabular}{ll}\n')
-    fileHandler.write('$A_{bruta}='+'%6.3f'.format(self.AB) +'\\ m^2$ & \\multirow{3}{*}{Tensor de inercia ($cm^4$): $ \\left( \\begin{array}{ccc}'+ '%5.2f'.format(self.JTorsion*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ '%5.2f'.format(self.IyB*1e4) +' & '+'%5.2f'.format(self.PyzB) +' \\\\ 0.00 & '+'%5.2f'.format(self.PyzB) +' & ','%5.2f'.format(self.IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
+    fileHandler.write('$A_{bruta}='+'%6.3f'.format(self.AB) +'\\ m^2$ & \\multirow{3}{*}{Tensor de inercia ($cm^4$): $ \\left( \\begin{array}{ccc}'+ '%5.2f'.format(self.scc.getJTorsion()*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ '%5.2f'.format(self.IyB*1e4) +' & '+'%5.2f'.format(self.PyzB) +' \\\\ 0.00 & '+'%5.2f'.format(self.PyzB) +' & '+'%5.2f'.format(self.IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
     fileHandler.write('& \\\\\n')
-    fileHandler.write('C.D.G.: $(','%5.2f'.format(self.GB[0]) ,',','%5.2f'.format(self.GB[1]) ,')\\ m$  & \\\\\n')
+    fileHandler.write('C.D.G.: $('+'%5.2f'.format(self.GB[0])+','+'%5.2f'.format(self.GB[1])+')\\ m$  & \\\\\n')
     fileHandler.write('\\end{tabular} \\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('Sección homogeneizada:\\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\begin{tabular}{ll}\n')
-    fileHandler.write('$A_{homog.}=','%6.3f'.format(self.AH) ,'\\ m^2$ & \\multirow{3}{*}{Tensor de inercia ($cm^4$): $ \\left( \\begin{array}{ccc}', '%5.2f'.format(self.JTorsion*1e4) ,' & 0.00 & 0.00 \\\\ 0.00 & ', '%5.2f'.format(self.IyH*1e4) ,' & ','%5.2f'.format(self.PyzH) ,' \\\\ 0.00 & ','%5.2f'.format(self.PyzH) ,' & ','%5.2f'.format(self.IzH*1e4),' \\end{array} \\right)$} \\\\\n')
+    fileHandler.write('$A_{homog.}='+'%6.3f'.format(self.AH) +'\\ m^2$ & \\multirow{3}{*}{Tensor de inercia ($cm^4$): $ \\left( \\begin{array}{ccc}'+ '%5.2f'.format(self.scc.getJTorsion()*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ '%5.2f'.format(self.IyH*1e4) +' & '+'%5.2f'.format(self.PyzH) +' \\\\ 0.00 & '+'%5.2f'.format(self.PyzH) +' & '+'%5.2f'.format(self.IzH*1e4)+' \\end{array} \\right)$} \\\\\n')
     fileHandler.write('& \\\\\n')
-    fileHandler.write('C.D.G.: $(','%5.2f'.format(self.GH[0]),',','%5.2f'.format(self.GH[1]),')\\ m$  & \\\\\n')
+    fileHandler.write('C.D.G.: $('+'%5.2f'.format(self.GH[0])+','+'%5.2f'.format(self.GH[1])+')\\ m$  & \\\\\n')
     fileHandler.write('\\end{tabular} \\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\textbf{Armadura pasiva}:\\\\\n')
     fileHandler.write('\\hline\n')
-    imprimeArmaduraPrincipal('lista_fams_armadura',self.AB,fileHandler)
+    writeMainReinforcement(self.armaduras,self.AB,fileHandler)
     fileHandler.write('\\hline\n')
     fileHandler.write('Familias de armadura de cortante:\\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\begin{tabular}{cccccccc}\n')
     fileHandler.write('Id & n. ramas & $\\phi$ & área & sep. & area/m & $\\alpha$ & $\\beta$\\\\\n')
     fileHandler.write(' &  & $(mm)$ & $(cm^2)$ & $(cm)$ & $(cm^2/m)$ & $( \\degree)$ & $( \\degree)$\\\\\n')
-    imprimeArmaduraCortante('armCortanteZ',fileHandler)
-    imprimeArmaduraCortante('armCortanteY',fileHandler)
+    writeShearReinforcement(self.scc.armCortanteZ,fileHandler,self.scc.ancho)
+    writeShearReinforcement(self.scc.armCortanteY,fileHandler,self.scc.canto)
     fileHandler.write('\\end{tabular} \\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\end{tabular}\n')
