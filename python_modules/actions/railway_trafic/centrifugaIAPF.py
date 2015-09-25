@@ -5,7 +5,7 @@ from __future__ import division
 
 
 def CoefReductorCentrifugaIAPF(v, Lf):
- '''Devuelve el coeficiente f reductor de la fuerza centrífuga (según expr. 2.3. IAPF)'''
+  '''Devuelve el coeficiente f reductor de la fuerza centrífuga (según expr. 2.3. IAPF)'''
   vkmhIAPF= v*3.6
   coefFIAPF= 0.0
   if(vkmhIAPF<120):

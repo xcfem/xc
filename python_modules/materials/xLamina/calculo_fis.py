@@ -30,22 +30,22 @@ def xLaminaPrintFIS(nmbArchSalida, nmbSeccion1, nmbSeccion2):
   texOutput2= open("/tmp/texOutput2.tmp","w")
   ansysOutput1= open(nmbArchSalida+".mac","w")
   ansysOutput2= open(nmbArchSalida+"esf.mac","w")
-  printCabeceraListadoFisuracion("texOutput1","1 ("+ nmbSeccion1 +")")
-  printCabeceraListadoFisuracion("texOutput2","2 ("+ nmbSeccion2 +")")
+  printCabeceraListadoFisuracion(texOutput1,"1 ("+ nmbSeccion1 +")")
+  printCabeceraListadoFisuracion(texOutput2,"2 ("+ nmbSeccion2 +")")
   e= mdlr.getElementLoader
   for e in elementos:
     if(odd(e.tag)):
-      texOutput1.write(floor(e,tag/10)," & ",e,HIPCP," & ",fmt.Esf.format(NCP/1e3)," & ",fmt.Esf.format(MyCP/1e3)," & ",fmt.Esf.format(MzCP/1e3)," & ",fmt.Long.format(WkCP*1e3,"%3.2f"),"\\\\\n")
-      ansysOutput1.write("detab,",floor(tag/10),",WK1,",WkCP*1e3,"\n")
-      ansysOutput2.write("detab,",floor(tag/10),",N1,",NCP/1e3,"\n")
-      ansysOutput2.write("detab,",floor(tag/10),",My1,",MyCP/1e3,"\n")
-      ansysOutput2.write("detab,",floor(tag/10),",Mz1,",MzCP/1e3,"\n")
+      texOutput1.write(floor(e,tag/10)+' & '+e,HIPCP+' & '+fmt.Esf.format(NCP/1e3)+' & '+fmt.Esf.format(MyCP/1e3)+' & '+fmt.Esf.format(MzCP/1e3)+' & '+fmt.Long.format(WkCP*1e3,'{:3.2f}'),"\\\\\n")
+      ansysOutput1.write("detab,"+floor(tag/10)+',WK1,'+WkCP*1e3+'\n')
+      ansysOutput2.write("detab,"+floor(tag/10)+',N1,'+NCP/1e3+'\n')
+      ansysOutput2.write("detab,"+floor(tag/10)+',My1,'+MyCP/1e3+'\n')
+      ansysOutput2.write("detab,"+floor(tag/10)+',Mz1,'+MzCP/1e3+'\n')
     else:
-      texOutput2.write(floor(tag/10)," & ",HIPCP," & ",format(NCP/1e3,"%5.2f")," & ",format(MyCP/1e3,"%5.2f")," & ",format(MzCP/1e3,"%5.2f")," & ",format(WkCP*1e3,"%3.2f"),"\\\\\n")
-      ansysOutput1.write("detab,",floor(tag/10),",WK2,",WkCP*1e3,"\n")
-      ansysOutput2.write("detab,",floor(tag/10),",N2,",NCP/1e3,"\n")
-      ansysOutput2.write("detab,",floor(tag/10),",My2,",MyCP/1e3,"\n")
-      ansysOutput2.write("detab,",floor(tag/10),",Mz2,",MzCP/1e3,"\n")
+      texOutput2.write(floor(tag/10)+' & '+HIPCP+' & '+'{:5.2f}'.format(N/1e3)+' & '+'{:5.2f}'.format(MyCP/1e3)+' & '+'{:5.2f}'.format(MzCP/1e3)+' & '+'{:3.2f}'.format(WkCP*1e3),"\\\\\n")
+      ansysOutput1.write("detab,"+floor(tag/10)+',WK2,'+WkCP*1e3+'\n')
+      ansysOutput2.write("detab,"+floor(tag/10)+',N2,'+NCP/1e3+'\n')
+      ansysOutput2.write("detab,"+floor(tag/10)+',My2,'+MyCP/1e3+'\n')
+      ansysOutput2.write("detab,"+floor(tag/10)+',Mz2,'+MzCP/1e3+'\n')
   printCierreListadoFisuracion("texOutput1")
   printCierreListadoFisuracion("texOutput2")
   texOutput1.close()
@@ -121,8 +121,8 @@ def xLaminaPrintFISSIA262(mdlr,nmbArchSalida, mapSections):
     MyCPNeg= e.getProp("MyCPNeg")
     MzCPNeg= e.getProp("MzCPNeg")
     sg_sNeg= e.getProp("sg_sNeg")
-    strOutPos= str(tag)+" & " +idSection + " & + & "+HIPCPPos+" & "+fmt.Esf.format(NCPPos/1e3)+" & "+fmt.Esf.format(MyCPPos/1e3)+" & "+fmt.Esf.format(MzCPPos/1e3)+" & "+fmt.Stress.format(sg_sPos/1e6)+"\\\\\n"
-    strOutNeg= str(tag)+" & " +idSection + " & - & "+HIPCPNeg+" & "+fmt.Esf.format(NCPNeg/1e3)+" & "+fmt.Esf.format(MyCPNeg/1e3)+" & "+fmt.Esf.format(MzCPNeg/1e3)+" & "+fmt.Stress.format(sg_sNeg/1e6)+"\\\\\n"
+    strOutPos= str(tag)+" & " +idSection + " & + & "+HIPCPPos+' & '+fmt.Esf.format(NCPPos/1e3)+' & '+fmt.Esf.format(MyCPPos/1e3)+' & '+fmt.Esf.format(MzCPPos/1e3)+' & '+fmt.Stress.format(sg_sPos/1e6)+"\\\\\n"
+    strOutNeg= str(tag)+" & " +idSection + " & - & "+HIPCPNeg+' & '+fmt.Esf.format(NCPNeg/1e3)+' & '+fmt.Esf.format(MyCPNeg/1e3)+' & '+fmt.Esf.format(MzCPNeg/1e3)+' & '+fmt.Stress.format(sg_sNeg/1e6)+"\\\\\n"
     if(e.getProp("dir")==1):
       texOutput1.write(strOutPos)
       texOutput1.write(strOutNeg)

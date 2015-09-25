@@ -66,7 +66,7 @@ def listaElementosBarraSet(mdlr, nmbSet, fName, fmt):
   s= mdlr.getSetLoader.getSet(nmbSet)
   elems= s.getElements()
   for e in elems:
-    str= "%3d".format(e.tag)+" & "+"%3d".format(e.nod(0).tag)+" & "+"%3d".format(e.nod(1).tag)+" & "
+    str= str(e.tag)+" & "+str(e.nod(0).tag)+" & "+str(e.nod(1).tag)+" & "
     k= 0
     secciones= e.getSections()
     for s in secciones:

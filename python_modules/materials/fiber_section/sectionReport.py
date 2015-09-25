@@ -5,6 +5,13 @@ import sys
 from latex import latexUtils
 import math
 
+fmt3_1f= '{:3.1f}'
+fmt4_1f= '{:4.1f}'
+fmt4_2f= '{:4.2f}'
+fmt5_2f= '{:5.2f}'
+fmt5_3f= '{:5.3f}'
+fmt6_3f= '{:6.3f}'
+
 class RecordFamArmaduraPrincipal(object):
   # Parámetros que se obtienen de cada familia de armaduras
 
@@ -18,16 +25,16 @@ class RecordFamArmaduraPrincipal(object):
 
   def texWrite(self,archTex,areaHorm):
     archTex.write(self.nmb+' & '+str(self.nBarras))
-    archTex.write(' & '+'%u'.format(round(self.diamBarras*1e3)))
-    archTex.write(' & '+'%5.2f'.format(self.areaBarras*1e4))
-    archTex.write(' & '+'%4.2f'.format(self.areaBarras/areaHorm*1e3))
-    archTex.write(' & '+'%4.1f'.format(self.recubMec*1e2))
-    archTex.write(' & '+"%5.3f".format(self.cdgBarras[0]) +' & '+"%5.3f".format(self.cdgBarras[1]) +"\\\\\n")
+    archTex.write(' & '+str(round(self.diamBarras*1e3)))
+    archTex.write(' & '+fmt5_2f.format(self.areaBarras*1e4))
+    archTex.write(' & '+fmt4_2f.format(self.areaBarras/areaHorm*1e3))
+    archTex.write(' & '+fmt4_1f.format(self.recubMec*1e2))
+    archTex.write(' & '+fmt5_3f.format(self.cdgBarras[0]) +' & '+fmt5_3f.format(self.cdgBarras[1]) +"\\\\\n")
 
 def writeMainReinforcement(listaFamArmaduraPrincipal, areaHorm, archTex):
   archTex.write("\\begin{tabular}{ll}\n")
   areaArmaduraPrincipal= listaFamArmaduraPrincipal.getAreaSeccBruta()
-  archTex.write("Área total $A_s="+"%5.2f".format(areaArmaduraPrincipal*1e4) +"\\ cm^2$ & Cuantía geométrica $\\rho= "+"%4.2f".format(areaArmaduraPrincipal/areaHorm*1e3) +"\\permil$\\\\\n")
+  archTex.write("Área total $A_s="+fmt5_2f.format(areaArmaduraPrincipal*1e4) +"\\ cm^2$ & Cuantía geométrica $\\rho= "+fmt4_2f.format(areaArmaduraPrincipal/areaHorm*1e3) +"\\permil$\\\\\n")
   archTex.write("\\end{tabular} \\\\\n")
   archTex.write("\\hline\n")
   archTex.write("Familias de armadura principal:\\\\\n")
@@ -45,12 +52,12 @@ def writeShearReinforcement(recordArmaduraCortante, archTex, ancho):
   archTex.write(recordArmaduraCortante.nmbFamilia+' & '+str(recordArmaduraCortante.nRamas))
   areaRamas= recordArmaduraCortante.getAs()
   diamRamas= math.sqrt(4*areaRamas/math.pi)
-  archTex.write(' & '+'%u'.format(round(diamRamas*1e3)))
-  archTex.write(' & '+'%5.2f'.format(areaRamas*recordArmaduraCortante.nRamas*1e4))
-  archTex.write(' & '+'%4.1f'.format(recordArmaduraCortante.espaciamientoRamas*1e2))
-  archTex.write(' & '+'%5.2f'.format(areaRamas*recordArmaduraCortante.nRamas/ancho/recordArmaduraCortante.espaciamientoRamas*1e4))
-  archTex.write(' & '+'%3.1f'.format(math.degrees(recordArmaduraCortante.angAlphaRamas)))
-  archTex.write(' & '+'%3.1f'.format(math.degrees(recordArmaduraCortante.angThetaBielas))+"\\\\\n")
+  archTex.write(' & '+str(round(diamRamas*1e3)))
+  archTex.write(' & '+fmt5_2f.format(areaRamas*recordArmaduraCortante.nRamas*1e4))
+  archTex.write(' & '+fmt4_1f.format(recordArmaduraCortante.espaciamientoRamas*1e2))
+  archTex.write(' & '+fmt5_2f.format(areaRamas*recordArmaduraCortante.nRamas/ancho/recordArmaduraCortante.espaciamientoRamas*1e4))
+  archTex.write(' & '+fmt3_1f.format(math.degrees(recordArmaduraCortante.angAlphaRamas)))
+  archTex.write(' & '+fmt3_1f.format(math.degrees(recordArmaduraCortante.angThetaBielas))+"\\\\\n")
 
 class SectionInfo(object):
   ''' Obtains section parameters for report'''
@@ -126,17 +133,17 @@ class SectionInfo(object):
     fileHandler.write('Sección bruta:\\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\begin{tabular}{ll}\n')
-    fileHandler.write('$A_{bruta}='+'%6.3f'.format(self.AB) +'\\ m^2$ & \\multirow{3}{*}{Tensor de inercia ($cm^4$): $ \\left( \\begin{array}{ccc}'+ '%5.2f'.format(self.scc.getJTorsion()*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ '%5.2f'.format(self.IyB*1e4) +' & '+'%5.2f'.format(self.PyzB) +' \\\\ 0.00 & '+'%5.2f'.format(self.PyzB) +' & '+'%5.2f'.format(self.IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
+    fileHandler.write('$A_{bruta}='+fmt6_3f.format(self.AB) +'\\ m^2$ & \\multirow{3}{*}{Tensor de inercia ($cm^4$): $ \\left( \\begin{array}{ccc}'+ fmt5_2f.format(self.scc.getJTorsion()*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ fmt5_2f.format(self.IyB*1e4) +' & '+fmt5_2f.format(self.PyzB) +' \\\\ 0.00 & '+fmt5_2f.format(self.PyzB) +' & '+fmt5_2f.format(self.IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
     fileHandler.write('& \\\\\n')
-    fileHandler.write('C.D.G.: $('+'%5.2f'.format(self.GB[0])+','+'%5.2f'.format(self.GB[1])+')\\ m$  & \\\\\n')
+    fileHandler.write('C.D.G.: $('+fmt5_2f.format(self.GB[0])+','+fmt5_2f.format(self.GB[1])+')\\ m$  & \\\\\n')
     fileHandler.write('\\end{tabular} \\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('Sección homogeneizada:\\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\begin{tabular}{ll}\n')
-    fileHandler.write('$A_{homog.}='+'%6.3f'.format(self.AH) +'\\ m^2$ & \\multirow{3}{*}{Tensor de inercia ($cm^4$): $ \\left( \\begin{array}{ccc}'+ '%5.2f'.format(self.scc.getJTorsion()*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ '%5.2f'.format(self.IyH*1e4) +' & '+'%5.2f'.format(self.PyzH) +' \\\\ 0.00 & '+'%5.2f'.format(self.PyzH) +' & '+'%5.2f'.format(self.IzH*1e4)+' \\end{array} \\right)$} \\\\\n')
+    fileHandler.write('$A_{homog.}='+fmt6_3f.format(self.AH) +'\\ m^2$ & \\multirow{3}{*}{Tensor de inercia ($cm^4$): $ \\left( \\begin{array}{ccc}'+ fmt5_2f.format(self.scc.getJTorsion()*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ fmt5_2f.format(self.IyH*1e4) +' & '+fmt5_2f.format(self.PyzH) +' \\\\ 0.00 & '+fmt5_2f.format(self.PyzH) +' & '+fmt5_2f.format(self.IzH*1e4)+' \\end{array} \\right)$} \\\\\n')
     fileHandler.write('& \\\\\n')
-    fileHandler.write('C.D.G.: $('+'%5.2f'.format(self.GH[0])+','+'%5.2f'.format(self.GH[1])+')\\ m$  & \\\\\n')
+    fileHandler.write('C.D.G.: $('+fmt5_2f.format(self.GH[0])+','+fmt5_2f.format(self.GH[1])+')\\ m$  & \\\\\n')
     fileHandler.write('\\end{tabular} \\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\textbf{Armadura pasiva}:\\\\\n')

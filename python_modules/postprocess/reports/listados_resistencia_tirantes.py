@@ -44,13 +44,13 @@ def listaResistenciaTirantes(mdlr,nmbSet, fName, titulo):
   FCTNCPCP= 0
   HIPCPCPTN= ""
   for e in elems:
-    fName.write(e.tag," & ",HIPCPTN," & ","%5.2f".format(e.getProp("NCP")/1e3)," & ","%3.2f".format(e.getProp("FCTNCP")),"\\\\\n")
+    fName.write(e.tag," & ",HIPCPTN," & ",'{:5.2f}'.format(e.getProp("NCP")/1e3)," & ",'{:3.2f}'.format(e.getProp("FCTNCP")),"\\\\\n")
     if(e.getProp("FCTNCP")>FCTNCPCP):
       FCTNCPCP= e.getProp("FCTNCP")
       HIPCPCPTN= e.getProp("HIPCPTN")
       tagFCTNCPCP= e.tag
   fName.write("\\hline\n")
-  fName.write(tagFCTNCPCP," & ",HIPCPCPTN," &  & ","%3.2f".format(FCTNCPCP),"\\\\\n")    
+  fName.write(tagFCTNCPCP," & ",HIPCPCPTN," &  & ",'{:3.2f}'.format(FCTNCPCP),"\\\\\n")    
   printCierreListadoTirante(fName) 
 
 

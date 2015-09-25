@@ -81,7 +81,7 @@ def listaDesplazamientosNodosLineas(mdlr, nmbComb, nmbSetLineas, fmt, fName, enc
     cierraSupertabular(fName)
 
 class RecordListadoDesplazamientos(object):
-  formato= "%7.2f"
+  formato= '{:7.2f}'
   sectionHeadingA= "subsection"
   titulo= "Desplazamientos"
   sectionHeadingB= "subsubsection"
@@ -92,6 +92,6 @@ class RecordListadoDesplazamientos(object):
     fName.write("\\",sectionHeadingA,"{",titulo,"}\n")
     j= 0
     for l in listasPuntos:
-      listaDesplazamientosPuntos(nmbComb,l,"%7.3f",fName,sectionHeadingB,listaCabeceras[j])
+      listaDesplazamientosPuntos(nmbComb,l,'{:7.3f}',fName,sectionHeadingB,listaCabeceras[j])
       j+= 1
 

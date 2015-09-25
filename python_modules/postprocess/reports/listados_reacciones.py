@@ -70,7 +70,7 @@ def listaReaccionesPuntosCSV(mdlr,nmbComb,lstPuntosArranque, fmt, fName):
       fName.write("nodo no definido.\n")
 
 class RecordListadoReacciones(object):
-  formato= "%7.2f"
+  formato= '{:7.2f}'
   sectionHeadingA= "subsection"
   titulo= "Reacciones"
   sectionHeadingB= "subsubsection"
@@ -81,6 +81,6 @@ class RecordListadoReacciones(object):
     fName.write("\\",self.sectionHeadingA,"{",titulo,"}\n")
     j= 0
     for l in self.listasNodos:
-      listaReaccionesNodos(nmbComb,l,"%7.2f",fName,sectionHeadingB,self.listaCabeceras[j])
+      listaReaccionesNodos(nmbComb,l,'{:7.2f}',fName,sectionHeadingB,self.listaCabeceras[j])
       j+= 1
 

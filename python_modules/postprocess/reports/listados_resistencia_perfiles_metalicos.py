@@ -46,7 +46,7 @@ def listaResistenciaPerfilesMetalicosTNRegElastico(nmbSet, fName, titulo):
   FCTNCPCP= 0
   HIPCPCPTN= ""
   for e in elems:
-    fName.write(tag," & ",HIPCPTN," & ","%5.2f",format(e.getProp("NCP")/1e3)," & ","%5.2f".format(e.getProp("MyCP")/1e3)," & ","%5.2f".format(e.getProp("MzCP")/1e3)," & ","%3.2f".format(e.getProp("FCTNCP")),"\\\\\n")
+    fName.write(tag," & ",HIPCPTN," & ",'{:5.2f}',format(e.getProp("NCP")/1e3)," & ",'{:5.2f}'.format(e.getProp("MyCP")/1e3)," & ",'{:5.2f}'.format(e.getProp("MzCP")/1e3)," & ",'{:3.2f}'.format(e.getProp("FCTNCP")),"\\\\\n")
     if(e.getProp("FCTNCP")>FCTNCPCP):
       FCTNCPCP= e.getProp("FCTNCP")
       HIPCPCPTN= e.getProp("HIPCPTN")
@@ -54,7 +54,7 @@ def listaResistenciaPerfilesMetalicosTNRegElastico(nmbSet, fName, titulo):
   fName.write("\\hline\n")
   fName.write("\\multicolumn{6}{|c|}{Caso pésimo}\\\\\n")
   fName.write("\\hline\n")
-  fName.write(tagFCTNCPCP," & ",HIPCPCPTN," &  &  &  & ","%3.2f".format(FCTNCPCP),"\\\\\n")
+  fName.write(tagFCTNCPCP," & ",HIPCPCPTN," &  &  &  & ",'{:3.2f}'.format(FCTNCPCP),"\\\\\n")
 
   printCierreListadoTNPerfilMetalico(fName) 
 
@@ -98,7 +98,7 @@ def listaResistenciaPerfilesMetalicosV(nmbSet, fName, titulo):
   FCTNCPCP= 0
   HIPCPCPTN= ""
   for e in elems:
-    fName.write(tag," & ",HIPCPV," & ","%5.2f".format(e.getProp("VyCP")/1e3)," & ","%5.2f".format(e.getProp("VzCP")/1e3)," & ","%3.2f".format(e.getProp("FCVCP")),"\\\\\n")
+    fName.write(tag," & ",HIPCPV," & ",'{:5.2f}'.format(e.getProp("VyCP")/1e3)," & ",'{:5.2f}'.format(e.getProp("VzCP")/1e3)," & ",'{:3.2f}'.format(e.getProp("FCVCP")),"\\\\\n")
     if(e.getProp("FCTNCP")>FCTNCPCP):
       FCTNCPCP= e.getProp("FCTNCP")
       HIPCPCPTN= e.getProp("HIPCPTN")
@@ -106,6 +106,6 @@ def listaResistenciaPerfilesMetalicosV(nmbSet, fName, titulo):
   fName.write("\\hline\n")
   fName.write("\\multicolumn{5}{|c|}{Caso pésimo}\\\\\n")
   fName.write("\\hline\n")
-  fName.write(tagFCVCPCP," & ",HIPCPCPV," &  &  & ",format(e.getProp("FCVCPCP"),"%3.2f"),"\\\\\n")
+  fName.write(tagFCVCPCP," & ",HIPCPCPV," &  &  & ",format(e.getProp("FCVCPCP"),'{:3.2f}'),"\\\\\n")
   printCierreListadoTNPerfilMetalico(fName) 
 

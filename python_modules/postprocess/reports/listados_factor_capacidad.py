@@ -49,12 +49,12 @@ def listaFactorCapacidad(mdlr,nmbSet, fName, titulo):
   FCCPCP= 0
   HIPCPCP= "" 
   for e in elems:
-    fName.write(tag," & ",e.getProp("HIPCP")," & ","%5.2f".format(e.getProp("NCP")/1e3)," & ","%5.2f".format(e.getProp("MyCP")/1e3)," & ","%5.2f".format(e.getProp("MzCP")/1e3)," & ","%3.2f".format(e.getProp("FCCP")),"\\\\\n")
+    fName.write(tag," & ",e.getProp("HIPCP")," & ",'{:5.2f}'.format(e.getProp("NCP")/1e3)," & ",'{:5.2f}'.format(e.getProp("MyCP")/1e3)," & ",'{:5.2f}'.format(e.getProp("MzCP")/1e3)," & ",'{:3.2f}'.format(e.getProp("FCCP")),"\\\\\n")
     if(e.getProp("FCCP")>FCCPCP):
       FCCPCP= e.getProp("FCCP")
       HIPCPCP= e.getProp("HIPCP")
       tagFCCPCP= e.tag
   fName.write("\\hline\n")
-  fName.write(tagFCCPCP," & ",HIPCPCP," &  &  &  & ","%3.2f".format(FCCPCP),"\\\\\n")
+  fName.write(tagFCCPCP," & ",HIPCPCP," &  &  &  & ",'{:3.2f}'.format(FCCPCP),"\\\\\n")
   printCierreListadoFactorCapacidad(fName) 
 

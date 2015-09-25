@@ -32,7 +32,7 @@ def listaTNBarrasLatex(nmbDBase, nmbTabla, nmbArchivoListadoTex):
     epsCMax= row["epsCMax"]
     epsSMax= row["epsSMax"]
     aprovTN= row["aprovTN"]
-    archTex.write(int(idSecc)," & ",int(idElem)," & ",idComb," & ",format(axil/1e3,"%6.3f")," & ",format(m1/1e3,"%6.3f")," & ",format(m2/1e3,"%6.3f")," & ",format(epsCMin*100,"%3.2f")," & ",format(epsCMax*100,"%3.2f")," & ",format(epsSMax*100,"%3.2f"),"\\\\\n")
+    archTex.write(int(idSecc)," & ",int(idElem)," & ",idComb," & ",format(axil/1e3,'{:6.3f}')," & ",format(m1/1e3,'{:6.3f}')," & ",format(m2/1e3,'{:6.3f}')," & ",format(epsCMin*100,'{:3.2f}')," & ",format(epsCMax*100,'{:3.2f}')," & ",format(epsSMax*100,'{:3.2f}'),"\\\\\n")
   archTex.close()
 
 # Lista resultados de cortante en barras para incluír en un archivo de LaTex.
@@ -61,5 +61,5 @@ def listaVBarrasLatex(nmbDBase, nmbTabla, nmbArchivoListadoTex):
     vu2= row["vu2"]
     vu= row["vu"]
     aprovV= row["aprovV"]
-    archTex.write(int(idSecc)," & ",int(idElem)," & ",idComb," & ",format(axil/1e3,"%6.3f")," & ",format(vrd/1e3,"%6.3f")," & ",format(vu1/1e3,"%6.3f")," & ",format(vu2/1e3,"%6.3f")," & ",format(vu/1e3,"%6.3f"),"\\\\\n")
+    archTex.write(int(idSecc)," & ",int(idElem)," & ",idComb," & ",format(axil/1e3,'{:6.3f}')," & ",format(vrd/1e3,'{:6.3f}')," & ",format(vu1/1e3,'{:6.3f}')," & ",format(vu2/1e3,'{:6.3f}')," & ",format(vu/1e3,'{:6.3f}'),"\\\\\n")
   archTex.close()
