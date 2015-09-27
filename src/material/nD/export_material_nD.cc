@@ -28,7 +28,7 @@ void export_material_nD(void)
     using namespace boost::python;
     docstring_options doc_options;
 
-#include "nD/python_interface.tcc"
+#include "python_interface.tcc"
 
 typedef std::vector<XC::NDMaterial *> vectorNDMaterial;
 class_<vectorNDMaterial,boost::noncopyable>("vectorNDMaterial")

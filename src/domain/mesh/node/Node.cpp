@@ -2124,7 +2124,7 @@ void XC::Node::checkReactionForce(const double &tol)
     if(norm2>tol)
       {
         if(!cc.nodoAfectadoSPsOMPs(getTag()) && !isFrozen())
-          std::cerr << "Node::addReactionForce el nodo: " << getTag()
+          std::cerr << "Node::checkReactionForce el nodo: " << getTag()
                     << " no esta sujeto a condiciones de contorno y sin embargo"
                     << " tiene una reacción de valor: " << reaction 
                     << " y norma: " << sqrt(norm2)

@@ -120,6 +120,7 @@ XC::Mesh::Mesh(EntCmd *owr)
     alloc_iters();
     check_contenedores();
     init_bounds();
+    tagNodeCheckReactionException= -1;
   }
 
 //! @brief Constructor.
@@ -136,6 +137,7 @@ XC::Mesh::Mesh(EntCmd *owr,TaggedObjectStorage &theNodesStorage,TaggedObjectStor
        theNodes->getNumComponents() != 0 )
       { std::cerr << ("Mesh::Mesh(&, & ...) - out of memory\n"); }
     init_bounds();
+    tagNodeCheckReactionException= -1;
   }
 
 
@@ -153,97 +155,9 @@ XC::Mesh::Mesh(EntCmd *owr,TaggedObjectStorage &theStorage)
     alloc_iters();// init the iters
     check_contenedores();
     init_bounds();
+    tagNodeCheckReactionException= -1;
   }
 
-
-//! @brief Lee un objeto Mesh desde archivo
-bool XC::Mesh::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Mesh) Procesando comando: " << cmd << std::endl;
-    if(cmd=="nodos")
-      {
-        if(theNodes)
-          theNodes->LeeCmd(status);
-        else
-          if(verborrea>1)
-            std::cerr << "El dominio no tiene nodos." << std::endl;
-        return true;
-      }
-    else if(cmd=="elementos")
-      {
-        if(theElements)
-          theElements->LeeCmd(status);
-        else
-          if(verborrea>1)
-            std::cerr << "El dominio no tiene elementos." << std::endl;
-        return true;
-      }
-    else if(cmd=="calculate_nodal_reactions") //Calcula reacciones en los nodos.
-      {
-        const bool incl_inercia= interpretaInt(status.GetString());
-        calculateNodalReactions(incl_inercia,1e-4);
-        return true;
-      }
-    else if(cmd=="freeze_dead_nodes") //Coacciona los nodos inactivos.
-      {
-        const std::string nmbLocker= convert_to_string(status.GetString());
-        if(!nmbLocker.empty())
-          freeze_dead_nodes(nmbLocker);
-        else
-          {
-            const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
-	    std::cerr << "freeze_dead_nodes; no se definió el nombre del bloqueador."
-                      << posLectura << std::endl;
-	  }
-        return true;
-      }
-    else if(cmd=="melt_alive_nodes") //Elimina las coacciones de los nodos inactivos.
-      {
-        const std::string nmbLocker= convert_to_string(status.GetString());
-        if(!nmbLocker.empty())
-          melt_alive_nodes(nmbLocker);
-        else
-          {
-            const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
-	    std::cerr << "melt_alive_nodes; no se definió el nombre del bloqueador."
-                      << posLectura << std::endl;
-	  }
-        return true;
-      }
-    else if(cmd=="revert_to_start") //Devuelve la malla a su estado inicial.
-      {
-        status.GetString(); //Ignoramos argumentos.
-        revertToStart();
-        return true;
-      }
-    else if(cmd=="commit")
-      {
-	std::clog << "Node; el comando: " << cmd
-                  << " está pensado para pruebas." << std::endl; 
-        status.GetString(); //Ignoramos argumentos.
-        commit();
-        return true;
-      }
-    else if(cmd == "set_dead_srf")
-      {
-	Element::dead_srf= convert_to_double(status.GetBloque()); //Ignoramos argumentos.
-        return true;
-      }
-    else if(cmd == "setCoordinateNames")
-      {
-	nombresCoordenadas= convert_to_vector_string(interpretaVectorAny(status.GetString()));
-        return true;
-      }
-    else if(cmd == "setCoordinateUnits")
-      {
-	nombreUnidades= convert_to_string(status.GetString());
-        return true;
-      }
-    else
-      return MeshComponentContainer::procesa_comando(status);
-  }
 
 //! @brief Elimina del dominio todos los componentes (nodos, elementos, cargas y condiciones de contorno).
 //! GENERAL NOTE ON REMOVAL OF COMPONENTS:
@@ -882,88 +796,6 @@ void XC::Mesh::EjecutaBloqueForEachNode(CmdStatus &status,const std::string &blo
       theNodes->EjecutaBloqueForEach(status,bloque);
   }
 
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::Mesh::GetProp(const std::string &cod) const
-  {
-    if(cod=="nnod")
-      {
-        tmp_gp_int= getNumNodes();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getNumNodosActivos")
-      {
-        tmp_gp_szt= getNumLiveNodes();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getNumNodosInactivos")
-      {
-        tmp_gp_szt= getNumDeadNodes();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getNumNodosCongelados")
-      {
-        tmp_gp_szt= getNumFrozenNodes();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getNumNodosLibres")
-      {
-        tmp_gp_szt= getNumFreeNodes();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="nelem")
-      {
-        tmp_gp_int= getNumElements();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getNumElementosActivos")
-      {
-        tmp_gp_szt= getNumLiveElements();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getNumElementosInactivos")
-      {
-        tmp_gp_szt= getNumDeadElements();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="nodos")
-      return any_const_ptr(theNodes);
-    else if(cod=="elementos")
-      return any_const_ptr(theElements);
-    else if(cod=="getTagNearestNode")
-      {
-        Pos3d p= popPos3d(cod);
-        const Node *tmp= getNearestNode(p);
-        tmp_gp_int= tmp->getTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getTagNearestElement")
-      {
-        Pos3d p= popPos3d(cod);
-        const Element *tmp= getNearestElement(p);
-        tmp_gp_int= tmp->getTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getCoordinateName")
-      {
-        const size_t i= popSize_t(cod);
-        return any_const_ptr(nombresCoordenadas[i]);
-      }
-    else if(cod=="getCoordinateUnits")
-      return any_const_ptr(nombreUnidades);
-    else if(cod=="getEffectiveModalMass")
-      {
-        const int modo= popInt(cod);
-        tmp_gp_dbl= getEffectiveModalMass(modo);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return MeshComponentContainer::GetProp(cod);
-  }
-
 //! @brief Imprime el dominio.
 void XC::Mesh::Print(std::ostream &s, int flag)
   {
@@ -1249,7 +1081,7 @@ void XC::Mesh::checkNodalReactions(const double &tol)
     NodeIter &theNodes = this->getNodes();
     while((theNode = theNodes()) != 0)
       if(theNode->getTag()!=tagNodeCheckReactionException)
-        { max_norm_reac= std::max(max_norm_reac,theNode->getReaction().Norm2()); }
+        max_norm_reac= std::max(max_norm_reac,theNode->getReaction().Norm2()); 
     
     theNode= nullptr;
     NodeIter &theNodes2 = this->getNodes();

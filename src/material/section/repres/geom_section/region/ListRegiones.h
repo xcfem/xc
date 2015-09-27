@@ -33,6 +33,7 @@
 #include "material/section/repres/SeccionInerte.h"
 
 class Pos2d;
+class BND2d;
 class Poligono2d;
 class Semiplano2d;
 
@@ -61,7 +62,6 @@ class ListRegiones: protected std::list<RegionSecc *>, public SeccionInerte
     void libera(const size_t i);
     void copia(const ListRegiones &otra);
   protected:
-    bool procesa_comando(CmdStatus &status);
 
     MaterialLoader *material_loader; //!< Gestor de materiales (búsqueda,...).
   public:
@@ -87,11 +87,11 @@ class ListRegiones: protected std::list<RegionSecc *>, public SeccionInerte
     RgSccCuadrilatero *newQuadRegion(const std::string &);
     RgSccCirc *newCircularRegion(const std::string &);
 
-    void EjecutaBloqueForEach(CmdStatus &status,const std::string &bloque);
     size_t getNumCells(void) const;
 
     std::list<Poligono2d> getContornosRegiones(void) const;
     std::list<Poligono2d> getContorno(void) const;
+    BND2d getBnd(void) const;
     ListRegiones Interseccion(const Semiplano2d &) const;
 
     void Cumplen(const std::string &,ListRegiones &,bool );
@@ -108,7 +108,6 @@ class ListRegiones: protected std::list<RegionSecc *>, public SeccionInerte
     double getIzSeccHomogeneizada(const double &E0) const;
     double getPyzSeccHomogeneizada(const double &E0) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
     void Print(std::ostream &s) const;
   };
 

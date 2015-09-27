@@ -28,7 +28,7 @@ void export_material_uniaxial(void)
     using namespace boost::python;
     docstring_options doc_options;
 
-#include "uniaxial/python_interface.tcc"
+#include "python_interface.tcc"
 
 typedef std::vector<XC::UniaxialMaterial *> vectorUniaxialMaterial;
 class_<vectorUniaxialMaterial,boost::noncopyable>("vectorUniaxialMaterial")

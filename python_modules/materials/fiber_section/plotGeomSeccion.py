@@ -27,10 +27,12 @@ def plotGeomSeccion(geomSection, path):
   WIDTH, HEIGHT = 256, 256
   surface = cairo.PSSurface(path, WIDTH, HEIGHT)
   ctx = cairo.Context(surface)
-  ctx.scale (WIDTH, HEIGHT) # Normalizing the canvas
   ctx.set_line_width(0.01)
   ctx.set_source_rgb(0, 0, 0) # Black solid color 
   regiones= geomSection.getRegions
+  bnd= regiones.getBnd
+  trf= auxCairoPlot.TransformParams(WIDTH, HEIGHT,auxCairoPlot.Boundary(bnd.getXMin,bnd.getYMin,bnd.getXMax,bnd.getYMax))
+  trf.applyTransform(ctx)# Normalizing the canvas
   for r in regiones:
     auxCairoPlot.plotPolygon(r.getPoligono(),ctx)
   armaduras= geomSection.getReinfLayers

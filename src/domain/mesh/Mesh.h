@@ -102,7 +102,6 @@ class Mesh: public MeshComponentContainer
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
   public:
     Mesh(EntCmd *owr);
     Mesh(EntCmd *owr,TaggedObjectStorage &theNodesStorage, TaggedObjectStorage &theElementsStorage);
@@ -194,7 +193,6 @@ class Mesh: public MeshComponentContainer
 
     void zeroLoads(void);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
     virtual void Print(std::ostream &s, int flag =0);
     friend std::ostream &operator<<(std::ostream &s, Mesh &M);
 

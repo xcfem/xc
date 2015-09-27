@@ -41,6 +41,7 @@
 #include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
+#include "xc_utils/src/geom/d2/BND2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
 
@@ -104,73 +105,6 @@ XC::RgSccCirc *XC::ListRegiones::newCircularRegion(const std::string &cod_mat)
     return ptr;
   }
 
-//! @brief Lee un objeto XC::GeomSection desde archivo
-bool XC::ListRegiones::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string str_log= "(ListRegiones) Procesando comando: "+cmd;
-    if(verborrea>2)
-      std::clog <<  str_log << std::endl;
-
-    const CmdParser &parser= status.Parser();
-    if(cmd == "reg_cuad")
-      {
-        std::string cod_mat= "nil";
-        std::deque<boost::any> fnc_indices;
-        if(parser.TieneIndices())
-          {
-            fnc_indices= status.Parser().SeparaIndices(this);
-            if(fnc_indices.size()>0)
-              cod_mat= convert_to_string(fnc_indices[0]); //Código del material.
-            Material *mat= material_loader->find_ptr(cod_mat);
-            if(!mat)
-	      std::cerr << str_log + "; ¡ojo!, no se encontró el material: '"
-                        << cod_mat << "' deberá asignarse un material a la región.\n";
-            RgSccCuadrilatero tmp(mat);
-            RegionSecc *ptr= push_back(tmp);
-            ptr->set_owner(this);
-            ptr->LeeCmd(status);
-          }
-        else
-	  std::cerr << "Error; " << cmd << " - uso: " << cmd << "[id_material]" << std::endl;
-        return true;
-      }
-    else if(cmd == "reg_circ")
-      {
-        std::string cod_mat= "nil";
-        std::deque<boost::any> fnc_indices;
-        if(parser.TieneIndices())
-          {
-            fnc_indices= status.Parser().SeparaIndices(this);
-            if(fnc_indices.size()>0)
-                cod_mat= convert_to_string(fnc_indices[0]); //Código del material.
-            Material *mat= material_loader->find_ptr(cod_mat);
-            if(!mat)
-	      std::cerr << str_log + "; ¡ojo!, no se encontró el material: '"
-                        << cod_mat << " deberá asignarse un material a la región.\n";
-            RgSccCirc tmp(mat);
-            RegionSecc *ptr= push_back(tmp);
-            ptr->set_owner(this);
-            ptr->LeeCmd(status);
-          }
-        else
-	  std::cerr << "Error; " << cmd << " - uso: " << cmd << "[id_material]" << std::endl;
-        return true;
-      }
-    else if(cmd == "for_each")
-      {
-        EjecutaBloqueForEach(status,status.GetBloque());
-        return true;
-      }
-    else if(cmd == "clear")
-      {
-        libera();
-        return true;
-      }
-    else
-      return SeccionInerte::procesa_comando(status);
-  }
-
 //! @brief Destructor.
 XC::ListRegiones::~ListRegiones(void)
   { libera(); }
@@ -195,13 +129,6 @@ XC::ListRegiones::iterator XC::ListRegiones::begin(void)
   { return l_reg::begin(); }
 XC::ListRegiones::iterator XC::ListRegiones::end(void)
   { return l_reg::end(); }
-
-void XC::ListRegiones::EjecutaBloqueForEach(CmdStatus &status,const std::string &bloque)
-  {
-    const std::string nmbBlq= nombre_clase()+":for_each";
-    for(iterator i= begin();i!=end();i++)
-      (*i)->EjecutaBloque(status,bloque,nmbBlq);
-  }
 
 //! @brief Devuelve el número total de celdas.
 size_t XC::ListRegiones::getNumCells(void) const
@@ -228,6 +155,22 @@ std::list<Poligono2d> XC::ListRegiones::getContornosRegiones(void) const
 std::list<Poligono2d> XC::ListRegiones::getContorno(void) const
   {
     std::list<Poligono2d> retval= join(getContornosRegiones());
+    return retval;
+  }
+
+BND2d XC::ListRegiones::getBnd(void) const
+  {
+    BND2d retval;
+    if(!empty())
+      {
+        const_iterator i= begin();
+        retval= (*i)->getPoligono().Bnd();
+        i++;
+        for(;i!=end();i++)
+          retval+= (*i)->getPoligono().Bnd();
+      }
+    else
+      std::cerr << "region container is empty. Boundary has no sense." << std::endl;
     return retval;
   }
 
@@ -443,41 +386,6 @@ double XC::ListRegiones::getPyzSeccHomogeneizada(const double &E0) const
 	  std::cerr << "ListRegiones::getIySeccHomogeneizada; no se pudo obtener el material la región." << std::endl; 
       }
     return retval;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ListRegiones::GetProp(const std::string &cod) const
-  {
-    if(cod=="numRegiones")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    if(cod=="numCeldas")
-      {
-        tmp_gp_szt= getNumCells();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="regiones")
-      {
-        const size_t i= popSize_t(cod);
-        RegionSecc *reg= nullptr;
-	const_iterator reg_iter=begin();
-        if(i<size())
-          {
-            for(size_t j=0;j<=i;j++,reg_iter++);
-            reg= *reg_iter;
-          }
-        else
-	  std::cerr << "Regin of index: " << i << " not found." << std::endl;
-        if(reg)
-          return any_const_ptr(reg);
-        else
-          return any_const_ptr();
-      }
-    else
-      return SeccionInerte::GetProp(cod);
   }
 
 void XC::ListRegiones::Print(std::ostream &os) const

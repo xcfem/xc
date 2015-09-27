@@ -71,6 +71,7 @@ class_<XC::RgSccPoligono, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccPoli
 
 class_<XC::ListRegiones, bases<XC::SeccionInerte>, boost::noncopyable >("RgSccPoligono", no_init)
   .def("__iter__", boost::python::iterator<XC::ListRegiones >())
+  .add_property("getBnd",&XC::ListRegiones::getBnd, "Returns regions boundary.")
   .def("newQuadRegion",make_function(&XC::ListRegiones::newQuadRegion,return_internal_reference<>()))
   .def("newCircularRegion",make_function(&XC::ListRegiones::newCircularRegion,return_internal_reference<>()))
    ;
