@@ -2,7 +2,18 @@
 \newcommand{\alphaX}{{\tt alpha} & shear shape factor}
 \newcommand{\alphaY}[1]{{\tt alphaY{#1}} & coefficient of distortion about the local y-axis}
 \newcommand{\alphaZ}[1]{{\tt alphaZ{#1}} & coefficient of distortion about the local z-axis}
+\newcommand{\analysis}{{\tt analysis} & type of analysis to be performed. Some predefined types can be selected: \\
+& {\tt from solution import predefined\_solutions as ps} \\
+& {\tt pEF=xc.ProblemaEF()}\\
+& {\tt ps.simple\_static\_linear(pEF)} for linear static analysis \\
+& {\tt ps.simple\_newton\_raphson(pEF)} for non linear analysis using Newton Raphson algorithm to solve the equation \\
+& {\tt ps.simple\_newton\_raphson\_band\_gen(pEF)} \\
+& {\tt ps.simple\_static\_modified\_newton(pEF)} for non linear analysis using the modified Newton Raphson algorithm to solve the equation \\
+& {\tt ps.penalty\_newton\_raphson(pEF)} \\
+& {\tt ps.frequency\_analysis(p)} \\
+}
 \newcommand{\bX}{{\tt b} & width}
+\newcommand{\defSecc}{{\tt defSecc} & name identifying the class object used to define the properties of the section}
 \newcommand{\E}{{\tt E} & elastic modulus}
 \newcommand{\Es}{{\tt Es} & elastic modulus}
 \newcommand{\epsSMax}{{\tt epsSMax} & maximum strain in steel}
@@ -42,12 +53,12 @@
 \newcommand{\getTOne}{{\tt getT1} & returns the torsional moment at the back end of the element}
 \newcommand{\getTTwo}{{\tt getT2} & returns the torsional moment at the front end of the element}
 \newcommand{\getV}{{\tt getV} & returns the shear force at the central section of the element}
-\newcommand{\getVDirEjeFuerteLocales}{{\tt getVDirEjeFuerteLocales()} & returns a vector, expressed in local coordinates, that defines the strong axis orientation}
-\newcommand{\getVDirEjeDebilLocales}{{\tt getVDirEjeDebilLocales()} & returns a vector, expressed in local coordinates, that defines the weak axis orientation}
+\newcommand{\getVDirEjeFuerteLocales}{{\tt getVDirEjeFuerteLocales()} & \\ & returns a vector, expressed in local coordinates, that defines the strong axis orientation}
+\newcommand{\getVDirEjeDebilLocales}{{\tt getVDirEjeDebilLocales()} & \\ & returns a vector, expressed in local coordinates, that defines the weak axis orientation}
 \newcommand{\getAnguloEjeFuerte}{{\tt getAnguloEjeFuerte()} & returns the angle between the strong axis and the plane XZ of the element}
 \newcommand{\getAnguloEjeDebil}{{\tt getAnguloEjeDebil()} & returns the angle between the weak axis and the plane XZ of the element}
-\newcommand{\getVDirEjeFuerteGlobales}{{\tt getVDirEjeFuerteGlobales()} & returns a vector, expressed in global coordinates, that defines the strong axis orientation}
-\newcommand{\getVDirEjeDebilGlobales}{{\tt getVDirEjeDebilGlobales()} & returns a vector, expressed in global coordinates, that defines the weak axis orientation}
+\newcommand{\getVDirEjeFuerteGlobales}{{\tt getVDirEjeFuerteGlobales()} & \\ & returns a vector, expressed in global coordinates, that defines the strong axis orientation}
+\newcommand{\getVDirEjeDebilGlobales}{{\tt getVDirEjeDebilGlobales()} & \\ & returns a vector, expressed in global coordinates, that defines the weak axis orientation}
 
 \newcommand{\getVOne}{{\tt getV1} & returns the shear force at the back end of the element}
 \newcommand{\getVTwo}{{\tt getV2} & returns the shear force at the front end of the element}
@@ -70,6 +81,9 @@
 \newcommand{\Iz}[1]{{\tt Iz{#1}} &  second moment of area about the local z-axis}
 \newcommand{\J}[1]{{\tt J{#1}} & torsional moment of inertia of the section }
 \newcommand{\M}{{\tt M} & bending moment}
+\newcommand{\mapInteractionDiagrams}{{\tt mapInteractionDiagrams} & \\ & data structure that links each section name and direction with the interaction diagram object to be used for its verification}
+\newcommand{\mapSectionsDefinition}{{\tt mapSectionsDefinition} & \\ & data structure that links each section name and direction with the respective record that contains the section definition parameters }
+\newcommand{\mapSectionsForEveryElement}{{\tt mapSectionsForEveryElement} & \\ & data structure, such that, for each shell element: {\tt mapSectionsForEveryElement[tagElem]=[nmbScc1,nmbScc2]}, where {\tt nmbScc1} and {\tt nmbScc2} are the names identifying the sections to be used in 1 and 2 directions respectively}
 \newcommand{\mdlr}{{\tt mdlr} & modeler name}
 \newcommand{\MeAxisOne}[1]{{\tt Me1{#1}} & yield moment of the rectangular section about the axis 1}
 \newcommand{\N}{{\tt N} & axial force}
@@ -77,9 +91,17 @@
 \newcommand{\nDivIJ}{{\tt nDivIJ} & number of cells in IJ (width) direction}
 \newcommand{\numDivIJ}{{\tt numDivIJ} & number of cells in IJ (width) direction}
 \newcommand{\nDivJK}{{\tt nDivJK} & number of cells in JK  (height) direction}
+\newcommand{\nmbArchCsv}[1]{{\tt nmbArchCsv} & name of the file where are to be found the shell element forces and moments to be used in the verification of the {#1}. Directory path, file name and extension must be specified. The file contains a list of the following items (see the positive directions of the forces and moments in figure \ref{shell_forces_moments}):
+$ULS_{id}\ elem_{id}\ N_1\ N_2\ N_{12}\ M_1 M_2\ M_{12}\ Q_1\ Q_2$ }
+
+\newcommand{\nmbArchSalida}{{\tt nmbArchSalida} & name of the output files (directory path and file name without extension) where to write the results of the verification}  
+
+\newcommand{\nmbSccOne}{{\tt nmbScc1} & name identifying the class object used to define the properties of the section orthogonal to direction 1}
+\newcommand{\nmbSccTwo}{{\tt nmbScc2} & name identifying the class object used to define the properties of the section orthogonal to direction 1}
 \newcommand{\numDivJK}{{\tt numDivJK} & number of cells in JK  (height) direction}
 \newcommand{\nuX}{{\tt nu} & Poisson's ratio}
 \newcommand{\rhoX}{{\tt rho} &  mass density}
+\newcommand{\trataResultsCombV}{{\tt trataResultsCombV} & name of the function to be used for carrying out the section verification, e.g. {\tt shearSIA262.trataResultsCombV}}
 \newcommand{\V}{{\tt V} & shear force}
 \newcommand{\Wyel}[1]{{\tt Wyel{#1}} & elastic section modulus about the local y-axis}
 \newcommand{\Wzel}[1]{{\tt Wzel()} & elastic section modulus about the local z-axis}
