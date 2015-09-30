@@ -69,11 +69,11 @@ class SectionInfo(object):
     self.EAcero= self.scc.tipoArmadura.Es
     self.tangHorm= self.scc.getConcreteDiagram(mdlr).getTangent()
     self.regions= self.geomSection.getRegions
-    self.GB= self.regions.getCdgSeccBruta() # Centro de gravedad de la sección bruta.
-    self.AB= self.regions.getAreaSeccBruta() # Área de la sección bruta.
-    self.IyB= self.regions.getIySeccBruta() # Tensor de inercia de la sección bruta.
-    self.IzB= self.regions.getIzSeccBruta()
-    self.PyzB= self.regions.getPyzSeccBruta()
+    self.GB= self.geomSection.getCdgSeccBruta() # Centro de gravedad de la sección bruta.
+    self.AB= self.geomSection.getAreaSeccBruta() # Área de la sección bruta.
+    self.IyB= self.geomSection.getIySeccBruta() # Tensor de inercia de la sección bruta.
+    self.IzB= self.geomSection.getIzSeccBruta()
+    self.PyzB= self.geomSection.getPyzSeccBruta()
 
 
     self.armaduras= self.geomSection.getReinfLayers
@@ -84,11 +84,11 @@ class SectionInfo(object):
       datosFam= RecordFamArmaduraPrincipal(f)
       self.lista_fams_armadura.append(datosFam)
  
-    self.GH= self.regions.getCdgSeccHomogeneizada(self.tangHorm) # Centro de gravedad de la sección homogeneizada.
-    self.AH= self.regions.getAreaSeccHomogeneizada(self.tangHorm) # Área de la sección homogeneizada.
-    self.IyH= self.regions.getIySeccHomogeneizada(self.tangHorm) # Tensor de inercia de la sección homogeneizada.
-    self.IzH=  self.regions.getIzSeccHomogeneizada(self.tangHorm)
-    self.PyzH= self.regions.getPyzSeccHomogeneizada(self.tangHorm)
+    self.GH= self.geomSection.getCdgSeccHomogeneizada(self.tangHorm) # Centro de gravedad de la sección homogeneizada.
+    self.AH= self.geomSection.getAreaSeccHomogeneizada(self.tangHorm) # Área de la sección homogeneizada.
+    self.IyH= self.geomSection.getIySeccHomogeneizada(self.tangHorm) # Tensor de inercia de la sección homogeneizada.
+    self.IzH=  self.geomSection.getIzSeccHomogeneizada(self.tangHorm)
+    self.PyzH= self.geomSection.getPyzSeccHomogeneizada(self.tangHorm)
 
   def writeReport(self,archTex, pathFigura):
     if(self.geomSection):
@@ -135,7 +135,7 @@ class SectionInfo(object):
     fileHandler.write('\\begin{tabular}{ll}\n')
     fileHandler.write('$A_{bruta}='+fmt6_3f.format(self.AB) +'\\ m^2$ & \\multirow{3}{*}{Tensor de inercia ($cm^4$): $ \\left( \\begin{array}{ccc}'+ fmt5_2f.format(self.scc.getJTorsion()*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ fmt5_2f.format(self.IyB*1e4) +' & '+fmt5_2f.format(self.PyzB) +' \\\\ 0.00 & '+fmt5_2f.format(self.PyzB) +' & '+fmt5_2f.format(self.IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
     fileHandler.write('& \\\\\n')
-    fileHandler.write('C.D.G.: $('+fmt5_2f.format(self.GB[0])+','+fmt5_2f.format(self.GB[1])+')\\ m$  & \\\\\n')
+    fileHandler.write('C.D.G.: $('+fmt5_3f.format(self.GB[0])+','+fmt5_3f.format(self.GB[1])+')\\ m$  & \\\\\n')
     fileHandler.write('\\end{tabular} \\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('Sección homogeneizada:\\\\\n')
@@ -143,7 +143,7 @@ class SectionInfo(object):
     fileHandler.write('\\begin{tabular}{ll}\n')
     fileHandler.write('$A_{homog.}='+fmt6_3f.format(self.AH) +'\\ m^2$ & \\multirow{3}{*}{Tensor de inercia ($cm^4$): $ \\left( \\begin{array}{ccc}'+ fmt5_2f.format(self.scc.getJTorsion()*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ fmt5_2f.format(self.IyH*1e4) +' & '+fmt5_2f.format(self.PyzH) +' \\\\ 0.00 & '+fmt5_2f.format(self.PyzH) +' & '+fmt5_2f.format(self.IzH*1e4)+' \\end{array} \\right)$} \\\\\n')
     fileHandler.write('& \\\\\n')
-    fileHandler.write('C.D.G.: $('+fmt5_2f.format(self.GH[0])+','+fmt5_2f.format(self.GH[1])+')\\ m$  & \\\\\n')
+    fileHandler.write('C.D.G.: $('+fmt5_3f.format(self.GH[0])+','+fmt5_3f.format(self.GH[1])+')\\ m$  & \\\\\n')
     fileHandler.write('\\end{tabular} \\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\textbf{Armadura pasiva}:\\\\\n')
