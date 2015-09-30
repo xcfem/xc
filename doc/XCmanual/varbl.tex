@@ -1,4 +1,6 @@
 \newcommand{\A}[1]{{\tt A{#1}} & cross-sectional area of the section}
+\newcommand{\ASupport}{{\tt A} & slab surface covered by the support}
+\newcommand{\abSupport}{{\tt a,b} & section dimensions of the support}
 \newcommand{\alphaX}{{\tt alpha} & shear shape factor}
 \newcommand{\alphaY}[1]{{\tt alphaY{#1}} & coefficient of distortion about the local y-axis}
 \newcommand{\alphaZ}[1]{{\tt alphaZ{#1}} & coefficient of distortion about the local z-axis}
@@ -13,8 +15,10 @@
 & {\tt ps.frequency\_analysis(p)} \\
 }
 \newcommand{\bX}{{\tt b} & width}
+\newcommand{\dEff}[1]{{\tt d} & effective depth #1}
 \newcommand{\defSecc}{{\tt defSecc} & name identifying the class object used to define the properties of the section}
 \newcommand{\E}{{\tt E} & elastic modulus}
+\newcommand{\EI}{{\tt EI} & flexural rigidity of the section}
 \newcommand{\Es}{{\tt Es} & elastic modulus}
 \newcommand{\epsSMax}{{\tt epsSMax} & maximum strain in steel}
 \newcommand{\epsCMin}{{\tt epsCMin} & minimum strain in concrete}
@@ -22,9 +26,10 @@
 \newcommand{\EIz}[1]{{\tt EIz{#1}} & product of $E_{steel} \times I_z$} 
 \newcommand{\eyd}[1]{{\tt eyd{#1}} & design strain at yield point}
 \newcommand{\eyk}[1]{{\tt eyk{#1}} & characteristic strain at yield point}
+\newcommand{\fck}{{\tt fck} & characteristic compressive stregth of concrete}
 \newcommand{\fmaxk}[1]{{\tt fmaxk{#1}} & characteristic value of the ultimate strength}
 \newcommand{\fy}[1]{{\tt fy{#1}} &  yield strength}
-\newcommand{\fyd}[1]{{\tt fyk{#1}} & design value of the yield strength}
+\newcommand{\fyd}[1]{{\tt fyd{#1}} & design value of the yield strength}
 \newcommand{\fyk}[1]{{\tt fyk{#1}} & characteristic value of the yield strength}
 \newcommand{\fyn}[1]{{\tt fyn{#1}} &  stress at which material reaches plastic state in compression}
 \newcommand{\fyp}[1]{{\tt fyp{#1}} & stress at which material reaches plastic state in tension}
@@ -70,7 +75,7 @@
 \newcommand{\getVzTwo}{{\tt  getVz2} & returns the shear force in local Z axis direction at the front end of the element}
 
 \newcommand{\GJ}[1]{{\tt GJ{#1}} & product of $E_{steel} \times G$ }
-\newcommand{\h}{{\tt h} & height}
+\newcommand{\h}[1]{{\tt h} & overall depth #1}
 \newcommand{\IAxisOne}[1]{{\tt I1{#1}} &  second moment of area about the axis through the centre of gravity and parallel to the width dimension (axis 1)}
 \newcommand{\iAxisOne}[1]{{\tt i1{#1}} & bending radius of the section with regard to the axis 1}
 \newcommand{\IAxisTwo}[1]{{\tt I2{#1}} &  second moment of area about the axis through the centre of gravity and parallel to the high dimension (axis 2)}
@@ -80,7 +85,11 @@
 
 \newcommand{\Iz}[1]{{\tt Iz{#1}} &  second moment of area about the local z-axis}
 \newcommand{\J}[1]{{\tt J{#1}} & torsional moment of inertia of the section }
+\newcommand{\lSpan}{{\tt l} & span}
+\newcommand{\length}[1]{{\tt l} & length}
+
 \newcommand{\M}{{\tt M} & bending moment}
+\newcommand{\Mcoup}{{\tt M} & coupled moment}
 \newcommand{\mapInteractionDiagrams}{{\tt mapInteractionDiagrams} & \\ & data structure that links each section name and direction with the interaction diagram object to be used for its verification}
 \newcommand{\mapSectionsDefinition}{{\tt mapSectionsDefinition} & \\ & data structure that links each section name and direction with the respective record that contains the section definition parameters }
 \newcommand{\mapSectionsForEveryElement}{{\tt mapSectionsForEveryElement} & \\ & data structure, such that, for each shell element: {\tt mapSectionsForEveryElement[tagElem]=[nmbScc1,nmbScc2]}, where {\tt nmbScc1} and {\tt nmbScc2} are the names identifying the sections to be used in 1 and 2 directions respectively}
@@ -91,7 +100,7 @@
 \newcommand{\nDivIJ}{{\tt nDivIJ} & number of cells in IJ (width) direction}
 \newcommand{\numDivIJ}{{\tt numDivIJ} & number of cells in IJ (width) direction}
 \newcommand{\nDivJK}{{\tt nDivJK} & number of cells in JK  (height) direction}
-\newcommand{\nmbArchCsv}[1]{{\tt nmbArchCsv} & name of the file where are to be found the shell element forces and moments to be used in the verification of the {#1}. Directory path, file name and extension must be specified. The file contains a list of the following items (see the positive directions of the forces and moments in figure \ref{shell_forces_moments}):
+\newcommand{\nmbArchCsv}[2]{{\tt nmbArchCsv} & name of the file where are to be found the shell element forces and moments obtained for each #2 combination, to be used in the verification of the {#1}. Directory path, file name and extension must be specified. The file contains a list of the following items (see the positive directions of the forces and moments in figure \ref{shell_forces_moments}):
 $ULS_{id}\ elem_{id}\ N_1\ N_2\ N_{12}\ M_1 M_2\ M_{12}\ Q_1\ Q_2$ }
 
 \newcommand{\nmbArchSalida}{{\tt nmbArchSalida} & name of the output files (directory path and file name without extension) where to write the results of the verification}  
@@ -100,7 +109,11 @@ $ULS_{id}\ elem_{id}\ N_1\ N_2\ N_{12}\ M_1 M_2\ M_{12}\ Q_1\ Q_2$ }
 \newcommand{\nmbSccTwo}{{\tt nmbScc2} & name identifying the class object used to define the properties of the section orthogonal to direction 1}
 \newcommand{\numDivJK}{{\tt numDivJK} & number of cells in JK  (height) direction}
 \newcommand{\nuX}{{\tt nu} & Poisson's ratio}
+\newcommand{\Pload}{{\tt P} & concentrated load}
+\newcommand{\qkSlab}{{\tt qk} & characteristic uniformly distributed load on the slab}
+\newcommand{\qload}{{\tt q} &  uniformly distributed load}
 \newcommand{\rhoX}{{\tt rho} &  mass density}
+\newcommand{\trataResultsCombFIS}{{\tt trataResultsCombFIS} & name of the function to be used for carrying out the section verification, e.g. {\tt materials.sia262.crackControlSIA262.trataResultsCombFISSIA262PlanB}}
 \newcommand{\trataResultsCombV}{{\tt trataResultsCombV} & name of the function to be used for carrying out the section verification, e.g. {\tt shearSIA262.trataResultsCombV}}
 \newcommand{\V}{{\tt V} & shear force}
 \newcommand{\Wyel}[1]{{\tt Wyel{#1}} & elastic section modulus about the local y-axis}

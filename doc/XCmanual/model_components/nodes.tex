@@ -28,3 +28,22 @@ To create a node you can use the following commands:
 \item{tag:} is an integer that identifies the node in the model.
 \item{(x,y) or (x,y,z):} are the cartesian coordinates that define node's position.
 \end{description}
+
+\subsection{Predefined spaces}
+Nodes definition in typical elastic FE models.
+\begin{verbatim}
+from model import predefined_spaces as ps
+nodos= mdlr.getNodeLoader
+\end{verbatim}
+\begin{center} 
+\begin{longtable}{ll}
+{\tt ps.gdls\_elasticidad2D(nodos)} & 2 node coordinates $(x,y)$ \\
+                                    & 2 node DOF $(u_x,u_y)$ \\ 
+{\tt ps.gdls\_resist\_materiales2D(nodos)} & 2 node coordinates $(x,y)$ \\
+                                    & 3 node DOF $(u_x,u_y,\theta)$ \\ 
+{\tt ps.gdls\_elasticidad3D(nodos)} & 3 node coordinates $(x,y,z)$ \\
+                                    & 3 node DOF $(u_x,u_y,u_z)$ \\ 
+{\tt ps.gdls\_resist\_materiales3D(nodos)} & 3 node coordinates $(x,y)$ \\
+                                    & 6 node DOF $(u_x,u_y,\theta_x,\theta_y,\theta_z)$ \\ 
+\end{longtable} \end{center}
+
