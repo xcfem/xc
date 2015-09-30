@@ -96,6 +96,12 @@ class SectionInfo(object):
     else:
       sys.stderr.write('error: geometry of section: '+self.sectionGeometryName+' not defined\n')
     fileHandler= open(archTex,'w')
+    fileHandler.write('%% ****** Packages needed for LaTeX document: ****** \n')
+    fileHandler.write('%%\usepackage{graphicx} %%\postscript includes\n')
+    fileHandler.write('%%\usepackage{multirow} %%\multirow command\n')
+    fileHandler.write('%%\usepackage{wasysym} %%\permil command\n')
+    fileHandler.write('%%\usepackage{gensymb} %%\degree command\n')
+
     fileHandler.write('\\begin{table}\n')
     fileHandler.write('\\begin{center}\n')
     fileHandler.write('\\begin{tabular}{|c|}\n')

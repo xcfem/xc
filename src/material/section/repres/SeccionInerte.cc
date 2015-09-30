@@ -42,20 +42,19 @@
 XC::SeccionInerte::SeccionInerte(EntCmd *owr)
   : EntCmd(owr) {}
 
-//! @brief Devuelve el producto de inercia de la sección homogeneizada respecto al eje paralelo al x por el CDG.
-//! @param E0: Módulo elástico de referencia.
+//! @brief Inertia of the homogeinized section about an axis parallel to x through his center of gravity.
+//! @param E0: Elastic modulus used as reference.
 double XC::SeccionInerte::getIxSeccHomogeneizada(const double &E0) const
   { return getIySeccHomogeneizada(E0)+getIzSeccHomogeneizada(E0); }
 
 
 
-//! @brief Devuelve el ángulo que define un eje principal de inercia.
+//! @brief Agle of the principal axis of inertia of the homogeinized section with respect of current axis.
 double XC::SeccionInerte::getTheta_pSeccHomogeneizada(void) const
   { return theta_inercia(getIySeccHomogeneizada(1.0),getIzSeccHomogeneizada(1.0),getPyzSeccHomogeneizada(1.0)); }
 
-//! @brief Devuelve la dirección de un eje principal de inercia (no sabemos si
-//! el mayor o el menor
-//! @param E0: Módulo elástico de referencia.
+//! @brief Direction of a principal axis of inertia of the homogeinized section with respect of current axis.
+//! @param E0: Elastic modulus used as reference.
 XC::Vector XC::SeccionInerte::getDirEjeI_aSeccHomogeneizada(void) const
   {
     const Dir2d p(getTheta_pSeccHomogeneizada());
@@ -65,9 +64,8 @@ XC::Vector XC::SeccionInerte::getDirEjeI_aSeccHomogeneizada(void) const
     return retval;
   }
 
-//! @brief Devuelve la dirección del otro eje principal de inercia (no sabemos si
-//! el mayor o el menor
-//! @param E0: Módulo elástico de referencia.
+//! @brief Direction of the other axis of inertia of the homogeinized section with respect of current axis.
+//! @param E0: Elastic modulus used as reference.
 XC::Vector XC::SeccionInerte::getDirEjeI_bSeccHomogeneizada(void) const
   {
     const Dir2d p= Dir2d(getTheta_pSeccHomogeneizada()).Perpendicular();
@@ -77,7 +75,7 @@ XC::Vector XC::SeccionInerte::getDirEjeI_bSeccHomogeneizada(void) const
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia principal mayor.
+//! @brief Major principal moment of inertia of the homogeinized section.
 double XC::SeccionInerte::getI1SeccHomogeneizada(const double &E0) const
   { 
     const double iy= getIySeccHomogeneizada(E0);
@@ -86,7 +84,7 @@ double XC::SeccionInerte::getI1SeccHomogeneizada(const double &E0) const
     return I1_inercia(iy,iz,pyz);
   }
 
-//! @brief Devuelve el momento de inercia principal menor.
+//! @brief Minor principal moment of inertia of the homogeinized section.
 double XC::SeccionInerte::getI2SeccHomogeneizada(const double &E0) const
   {
     const double iy= getIySeccHomogeneizada(E0);
@@ -95,27 +93,27 @@ double XC::SeccionInerte::getI2SeccHomogeneizada(const double &E0) const
     return I2_inercia(iy,iz,pyz);
   }
 
-//! @brief Devuelve los ejes principales de inercia de la sección homogeneizada.
+//! @brief Principal axis of inertia of the homogeinized section.
 EjesPrincInercia2d XC::SeccionInerte::getEjesInerciaSeccHomogeneizada(const double &E0) const
   {
     const Vector v= getCdgSeccHomogeneizada(E0);
     const Pos2d cdg(v[0],v[1]);
     return EjesPrincInercia2d(cdg,getIySeccHomogeneizada(E0),getIzSeccHomogeneizada(E0),getPyzSeccHomogeneizada(E0));
   }
-//! @brief Devuelve el vector del eje principal I.
+//! @brief Direction of the major principal axis of inertia of the homogeinized section.
 Vector2d XC::SeccionInerte::getVDirEje1SeccHomogeneizada(const double &E0) const
   { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje1(); }
-//! @brief Devuelve el vector del eje principal I.
+//! @brief Direction of the major principal axis of inertia of the homogeinized section.
 Vector2d XC::SeccionInerte::getVDirEjeFuerteSeccHomogeneizada(const double &E0) const
   { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje1(); }
-//! @brief Devuelve el vector del eje principal II.
+//! @brief Direction of the minor principal axis of inertia of the homogeinized section.
 Vector2d XC::SeccionInerte::getVDirEje2SeccHomogeneizada(const double &E0) const
   { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje2(); }
-//! @brief Devuelve el vector del eje principal II.
+//! @brief Direction of the minor principal axis of inertia of the homogeinized section.
 Vector2d XC::SeccionInerte::getVDirEjeDebilSeccHomogeneizada(const double &E0) const
   { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje2(); }
 
-//! @brief Devuelve la componente i,j del tensor de inercia calculado respecto al CDG.
+//! @brief Inertia tensor (i,j) component of the homogeinized section.
 double XC::SeccionInerte::getISeccHomogeneizada(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
@@ -206,16 +204,15 @@ XC::ConstantesSecc2d XC::SeccionInerte::getConstantesSecc2d(const ConstantesSecc
     return retval;
   }
 
-//! @brief Devuelve el producto de inercia de la sección bruta respecto al eje paralelo al x por el CDG.
+//! @brief Inertia of the gross section about an axis parallel to x through his center of gravity.
 double XC::SeccionInerte::getIxSeccBruta(void) const
   { return getIySeccBruta()+getIzSeccBruta(); }
 
-//! @brief Devuelve el ángulo que define un eje principal de inercia.
+//! @brief Agle of the principal axis of inertia of the gross section with respect of current axis.
 double XC::SeccionInerte::getTheta_pSeccBruta(void) const
   { return theta_inercia(getIySeccBruta(),getIzSeccBruta(),getPyzSeccBruta()); }
 
-//! @brief Devuelve la dirección de un eje principal de inercia (no sabemos si
-//! el mayor o el menor
+//! @brief Direction of a principal axis of inertia of the gross section with respect of current axis.
 XC::Vector XC::SeccionInerte::getDirEjeI_aSeccBruta(void) const
   {
     const Dir2d p(getTheta_pSeccBruta());
@@ -225,8 +222,7 @@ XC::Vector XC::SeccionInerte::getDirEjeI_aSeccBruta(void) const
     return retval;
   }
 
-//! @brief Devuelve la dirección del otro eje principal de inercia (no sabemos si
-//! el mayor o el menor
+//! @brief Direction of the other principal axis of inertia of the gross section with respect of current axis.
 XC::Vector XC::SeccionInerte::getDirEjeI_bSeccBruta(void) const
   {
     const Dir2d p= Dir2d(getTheta_pSeccBruta()).Perpendicular();
@@ -236,7 +232,7 @@ XC::Vector XC::SeccionInerte::getDirEjeI_bSeccBruta(void) const
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia principal mayor.
+//! @brief Major principal moment of inertia of the gross section.
 double XC::SeccionInerte::getI1SeccBruta(void) const
   {
     const double iy= getIySeccBruta();
@@ -245,7 +241,7 @@ double XC::SeccionInerte::getI1SeccBruta(void) const
     return I1_inercia(iy,iz,pyz);
   }
 
-//! @brief Devuelve el momento de inercia principal menor.
+//! @brief Minor principal moment of inertia of the gross section.
 double XC::SeccionInerte::getI2SeccBruta(void) const
   {
     const double iy= getIySeccBruta();
@@ -254,23 +250,23 @@ double XC::SeccionInerte::getI2SeccBruta(void) const
     return I2_inercia(iy,iz,pyz);
   }
 
-//! @brief Devuelve los ejes principales de inercia de la sección bruta.
+//! @brief Principal axis of inertia of the gross section.
 EjesPrincInercia2d XC::SeccionInerte::getEjesInerciaSeccBruta(void) const
   {
     const Vector v= getCdgSeccBruta();
     const Pos2d cdg(v[0],v[1]);
     return EjesPrincInercia2d(cdg,getIySeccBruta(),getIzSeccBruta(),getPyzSeccBruta());
   }
-//! @brief Devuelve el vector del eje principal I.
+//! @brief Direction of the major principal axis of inertia of the gross section.
 Vector2d XC::SeccionInerte::getVDirEje1SeccBruta(void) const
   { return getEjesInerciaSeccBruta().getVDirEje1(); }
-//! @brief Devuelve el vector del eje principal I.
+//! @brief Direction of the major principal axis of inertia of the gross section.
 Vector2d XC::SeccionInerte::getVDirEjeFuerteSeccBruta(void) const
   { return getEjesInerciaSeccBruta().getVDirEje1(); }
-//! @brief Devuelve el vector del eje principal II.
+//! @brief Direction of the minor principal axis of inertia of the gross section.
 Vector2d XC::SeccionInerte::getVDirEje2SeccBruta(void) const
   { return getEjesInerciaSeccBruta().getVDirEje2(); }
-//! @brief Devuelve el vector del eje principal II.
+//! @brief Direction of the minor principal axis of inertia of the gross section.
 Vector2d XC::SeccionInerte::getVDirEjeDebilSeccBruta(void) const
   { return getEjesInerciaSeccBruta().getVDirEje2(); }
 
