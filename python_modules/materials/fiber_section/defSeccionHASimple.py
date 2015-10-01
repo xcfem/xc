@@ -32,20 +32,12 @@ class RecordArmaduraCortante(object):
 
 
 class MainReinfLayer(object):
-  nBarras= 5 #number of longitudinal rebars
-  sepBarras= 0.15
-  areaBarras= areaBarrasEHE.Fi10 # area of each longitudinal rebar
-  diamBarras= 10e-3 #diameter of the bars rebar
-  recub= 0.030 # cover of longitudinal reinforcement
-  recubLat= 0.030 # lateral cover of longitudinal reinforcement 
-
   def __init__(self,diam=10e-3,area= areaBarrasEHE.Fi10,spacing=0.2,ancho=1.0,basicCover=0.03):
     self.diamBarras= diam
     self.sepBarras= spacing
     nBarrasTeor= ancho/self.sepBarras
     self.nBarras= int(math.floor(nBarrasTeor))
-    factorReinf= nBarrasTeor/self.nBarras
-    self.areaBarras= area*factorReinf
+    self.areaBarras= area
     self.recub= basicCover+self.diamBarras/2.0
     self.centraBarras(ancho)
   def setUp(self,nBarras= 5, diam=10e-3,area= areaBarrasEHE.Fi10,ancho=1.0,recub=0.03):
@@ -83,9 +75,6 @@ class RecordSeccionHASimple(object):
   tipoArmadura= None
   nmbDiagArmadura= None # Name of the uniaxial material
 
-  barrasNeg= MainReinfLayer()
-  barrasPos= MainReinfLayer()
-
   recubMin= 0.0 # minimal covering of the longitudinal reinforcement
 
   # Transverse reinforcement (z direction)
@@ -112,8 +101,8 @@ class RecordSeccionHASimple(object):
 
     self.recubMin= 0.0 
 
-    barrasNeg= MainReinfLayer()
-    barrasPos= MainReinfLayer()
+    self.barrasNeg= MainReinfLayer()
+    self.barrasPos= MainReinfLayer()
 
     # Armadura de cortante según z
     self.armCortanteZ= RecordArmaduraCortante()
@@ -213,6 +202,7 @@ class RecordSeccionHASimple(object):
       armaduraNeg.codigo= "neg"
       armaduraNeg.numReinfBars= self.barrasNeg.nBarras
       #print "armadura neg. num. barras: ", armaduraNeg.numReinfBars
+      armaduraNeg.barDiameter= self.barrasNeg.diamBarras
       armaduraNeg.barArea= self.barrasNeg.areaBarras
       #print "armadura neg. bar area= ", armaduraNeg.barArea*1e6, " mm2"
       #print "armadura neg. bar diam: ", self.barrasNeg.diamBarras*1e3, " mm"
@@ -228,6 +218,7 @@ class RecordSeccionHASimple(object):
       #print "ancho= ", self.ancho, " m canto= ", self.canto, " m"
       #print "nDivIJ= ", rg.nDivIJ, " nDivJK= ", rg.nDivJK
       #print "armadura pos. num. barras: ", armaduraPos.numReinfBars
+      armaduraPos.barDiameter= self.barrasPos.diamBarras
       armaduraPos.barArea= self.barrasPos.areaBarras
       #print "armadura pos. bar area= ", armaduraPos.barArea*1e6, " mm2"
       #print "armadura pos. bar diam: ", self.barrasPos.diamBarras*1e3, " mm"

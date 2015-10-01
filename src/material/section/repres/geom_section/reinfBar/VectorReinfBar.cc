@@ -240,7 +240,7 @@ double XC::VectorReinfBar::getAreaSeccBruta(void) const
   {
     double retval= 0.0;
     for(const_iterator i= begin();i!=end();i++)
-      { retval+= (*i)->getArea(); }
+      retval+= (*i)->getArea();
     return retval;
   }
 
