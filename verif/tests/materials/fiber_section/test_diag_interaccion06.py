@@ -57,13 +57,19 @@ diag.simplify()
 fcELU13= diag.getCapacityFactor(geom.Pos2d(136.78e3,24.71e3))
 fcELU14= diag.getCapacityFactor(geom.Pos2d(1197.13e3,65.98e3))
 
+''' LCPT 02/10/2015: I've fixed an little error in calculation
+of reinforced bars area. The ancients factors of capacity (calculated
+with the error) were fcELU13=0.143053889044 and fcELU14-0.634956493266.
+'''
+ratio1= abs(fcELU13-0.167199516711)
+ratio2= abs(fcELU14-0.729990573462)
+
 '''
 print "fcELU13= ", fcELU13
 print "fcELU14= ", fcELU14
 '''
 
-ratio1= abs(fcELU13-0.143053889044)
-ratio2= abs(fcELU14-0.634956493266)
+
 import os
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-2) & (abs(ratio2)<1e-2)):

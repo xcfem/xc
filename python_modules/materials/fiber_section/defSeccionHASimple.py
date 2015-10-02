@@ -62,32 +62,9 @@ class RecordSeccionHASimple(object):
   This class is used to define the variables that make up a reinforced 
   concrete section with top and bottom reinforcement layers.
   '''
-  nmbSeccion= "noName" #name identifying the section
-  descSeccion= "Texto que ayude a ubicar la sección."
-  tipoHormigon= None
-  nmbDiagHormigon= None
-  canto= 0.25
-  ancho= 0.25
-  numDivIJ= 10
-  numDivJK= 10
-
-  # Longitudinal reinforcement
-  tipoArmadura= None
-  nmbDiagArmadura= None # Name of the uniaxial material
-
-  recubMin= 0.0 # minimal covering of the longitudinal reinforcement
-
-  # Transverse reinforcement (z direction)
-  armCortanteZ= RecordArmaduraCortante()
-  armCortanteZ.nmbFamilia= "Vz"
-
-  # Transverse reinforcement (y direction)
-  armCortanteY= RecordArmaduraCortante()
-  armCortanteY.nmbFamilia= "Vy"
-
   def __init__(self):
     self.nmbSeccion= "noName"
-    self.descSeccion= "Texto que ayude a ubicar la sección."
+    self.descSeccion= "Text describing the position of the section in the structure."
     self.tipoHormigon= None
     self.nmbDiagHormigon= None
     self.canto= 0.25
@@ -95,20 +72,20 @@ class RecordSeccionHASimple(object):
     self.numDivIJ= 10
     self.numDivJK= 10
 
-    # Armadura principal
+    # Longitudinal reinforcement
     self.tipoArmadura= None
-    self.nmbDiagArmadura= None 
+    self.nmbDiagArmadura= None # Name of the uniaxial material
 
     self.recubMin= 0.0 
 
     self.barrasNeg= MainReinfLayer()
     self.barrasPos= MainReinfLayer()
 
-    # Armadura de cortante según z
+    # Transverse reinforcement (z direction)
     self.armCortanteZ= RecordArmaduraCortante()
     self.armCortanteZ.nmbFamilia= "Vz"
 
-    # Armadura de cortante según y
+    # Transverse reinforcement (y direction)
     self.armCortanteY= RecordArmaduraCortante()
     self.armCortanteY.nmbFamilia= "Vy"
 
@@ -198,34 +175,34 @@ class RecordSeccionHASimple(object):
     rg.pMax= geom.Pos2d(self.ancho/2,self.canto/2)
     armaduras= geomSection.getReinfLayers
     if(self.barrasNeg.nBarras>0):
-      armaduraNeg= armaduras.newStraightReinfLayer(self.nmbDiagArmadura)
-      armaduraNeg.codigo= "neg"
-      armaduraNeg.numReinfBars= self.barrasNeg.nBarras
-      #print "armadura neg. num. barras: ", armaduraNeg.numReinfBars
-      armaduraNeg.barDiameter= self.barrasNeg.diamBarras
-      armaduraNeg.barArea= self.barrasNeg.areaBarras
-      #print "armadura neg. bar area= ", armaduraNeg.barArea*1e6, " mm2"
+      self.negReinfLayer= armaduras.newStraightReinfLayer(self.nmbDiagArmadura)
+      self.negReinfLayer.codigo= "neg"
+      self.negReinfLayer.numReinfBars= self.barrasNeg.nBarras
+      #print "armadura neg. num. barras: ", self.negReinfLayer.numReinfBars
+      self.negReinfLayer.barDiameter= self.barrasNeg.diamBarras
+      self.negReinfLayer.barArea= self.barrasNeg.areaBarras
+      #print "armadura neg. bar area= ", self.negReinfLayer.barArea*1e6, " mm2"
       #print "armadura neg. bar diam: ", self.barrasNeg.diamBarras*1e3, " mm"
       y= self.getYAsNeg()
       #print "y neg.= ", y, " m"
-      armaduraNeg.p1= geom.Pos2d(-self.ancho/2+self.barrasNeg.recubLat,y) # Armadura inferior (cara -).
-      armaduraNeg.p2= geom.Pos2d(self.ancho/2-self.barrasNeg.recubLat,y)
+      self.negReinfLayer.p1= geom.Pos2d(-self.ancho/2+self.barrasNeg.recubLat,y) # Armadura inferior (cara -).
+      self.negReinfLayer.p2= geom.Pos2d(self.ancho/2-self.barrasNeg.recubLat,y)
 
     if(self.barrasPos.nBarras>0):
-      armaduraPos= armaduras.newStraightReinfLayer(self.nmbDiagArmadura)
-      armaduraPos.codigo= "pos"
-      armaduraPos.numReinfBars= self.barrasPos.nBarras
+      self.posReinfLayer= armaduras.newStraightReinfLayer(self.nmbDiagArmadura)
+      self.posReinfLayer.codigo= "pos"
+      self.posReinfLayer.numReinfBars= self.barrasPos.nBarras
       #print "ancho= ", self.ancho, " m canto= ", self.canto, " m"
       #print "nDivIJ= ", rg.nDivIJ, " nDivJK= ", rg.nDivJK
-      #print "armadura pos. num. barras: ", armaduraPos.numReinfBars
-      armaduraPos.barDiameter= self.barrasPos.diamBarras
-      armaduraPos.barArea= self.barrasPos.areaBarras
-      #print "armadura pos. bar area= ", armaduraPos.barArea*1e6, " mm2"
+      #print "armadura pos. num. barras: ", self.posReinfLayer.numReinfBars
+      self.posReinfLayer.barDiameter= self.barrasPos.diamBarras
+      self.posReinfLayer.barArea= self.barrasPos.areaBarras
+      #print "armadura pos. bar area= ", self.posReinfLayer.barArea*1e6, " mm2"
       #print "armadura pos. bar diam: ", self.barrasPos.diamBarras*1e3, " mm"
       y= self.getYAsPos()
       #print "y pos.= ", y, " m"
-      armaduraPos.p1= geom.Pos2d(-self.ancho/2+self.barrasPos.recubLat,y) # Armadura superior (cara +).
-      armaduraPos.p2= geom.Pos2d(self.ancho/2-self.barrasPos.recubLat,y)
+      self.posReinfLayer.p1= geom.Pos2d(-self.ancho/2+self.barrasPos.recubLat,y) # Armadura superior (cara +).
+      self.posReinfLayer.p2= geom.Pos2d(self.ancho/2-self.barrasPos.recubLat,y)
 
     self.recubMin= min(self.barrasNeg.recubLat,min(self.barrasPos.recubLat,min(self.barrasPos.recub,self.barrasNeg.recub)))
 
@@ -315,11 +292,6 @@ class RecordSeccionHALosa(object):
      las secciones de hormigón armado de una losa sencilla con una
      capa de armadura superior y otra inferior.
   '''
-  name= ""
-  basicCover= 30e-3
-  D1Section= None #Normal to direction 1
-  D2Section= None #Normal to direction 2
-
   def __init__(self,nmb,desc,canto,concrete,steel,basicCover):
     self.name= nmb
     self.basicCover= basicCover
