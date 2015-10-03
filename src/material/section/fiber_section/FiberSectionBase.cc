@@ -887,7 +887,8 @@ const GeomObj::list_Pos2d &XC::FiberSectionBase::get_ptos_diag_interaccionNMy(co
       {
         static GeomObj::list_Pos3d tmp;
         tmp.clear();
-        const Pos3d *ultimo_insertado= get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,0.0);
+        const Pos3d *ultimo_insertado= get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,0.0);//theta= 0
+        ultimo_insertado= get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,M_PI); //theta= M_PI
         for(GeomObj::list_Pos3d::const_iterator i= tmp.begin();i!=tmp.end();i++)
           {
             Pos3d p3d= *i;

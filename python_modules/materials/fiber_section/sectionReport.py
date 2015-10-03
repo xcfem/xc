@@ -68,6 +68,7 @@ class SectionInfo(object):
     self.EHorm= self.scc.tipoHormigon.Ecm()
     self.EAcero= self.scc.tipoArmadura.Es
     self.tangHorm= self.scc.getConcreteDiagram(mdlr).getTangent()
+    self.tangSteel= self.scc.getSteelDiagram(mdlr).getTangent()
     self.regions= self.geomSection.getRegions
     self.GB= self.geomSection.getCdgSeccBruta() # Centro de gravedad de la sección bruta.
     self.AB= self.geomSection.getAreaSeccBruta() # Área de la sección bruta.

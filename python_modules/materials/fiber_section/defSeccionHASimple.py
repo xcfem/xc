@@ -144,6 +144,10 @@ class RecordSeccionHASimple(object):
     return mdlr.getMaterialLoader.getMaterial(self.nmbDiagHormigon)
   def getSteelDiagram(self,mdlr):
     return mdlr.getMaterialLoader.getMaterial(self.nmbDiagArmadura)
+  def getSteelEquivalenceCoefficient(self,mdlr):
+    tangHorm= self.getConcreteDiagram(mdlr).getTangent()
+    tangSteel= self.getSteelDiagram(mdlr).getTangent()
+    return tangSteel/tangHorm
 
   def defSectionGeometry(self,mdlr,tipoDiag):
     '''

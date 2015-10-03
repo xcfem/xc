@@ -24,7 +24,7 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DiagInteraccion.cc
+//DiagInteraccion2d.cc
 
 #include "DiagInteraccion2d.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
