@@ -43,9 +43,11 @@ class SectionContainer(object):
     '''Returns 3D interaction diagrams.'''
     mapInteractionDiagrams= {}
     for s in self.sections:
-      diag2= s.D2Section.defInteractionDiagram(mdlr,tipoDiag)
+      s.D2Section.defSeccionHASimple(mdlr,tipoDiag)
+      diag2= s.D2Section.defInteractionDiagram(mdlr)
       mapInteractionDiagrams[s.D2Section.nmbSeccion]= diag2
-      diag1= s.D1Section.defInteractionDiagram(mdlr,tipoDiag)
+      s.D1Section.defSeccionHASimple(mdlr,tipoDiag)
+      diag1= s.D1Section.defInteractionDiagram(mdlr)
       mapInteractionDiagrams[s.D1Section.nmbSeccion]= diag1
     return mapInteractionDiagrams
 

@@ -48,21 +48,20 @@ prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
 prueba.errFileName= "/tmp/borrar.err" # Don't print errors.
 
 mdlr= prueba.getModelador
+sccData.defSeccionHASimple(mdlr,'d')
 param= xc.InteractionDiagramParameters()
-diag= sccData.defInteractionDiagramNMy(mdlr,"d")
-diag.simplify()
-#print "numVertices= ", diag.getNumVertices()
+diag= sccData.defInteractionDiagramNMy(mdlr)
+#from materials.fiber_section import plotGeomSeccion as pg
+#pg.plotInteractionDiagram2D(diag)
+
 
 
 fcELU13= diag.getCapacityFactor(geom.Pos2d(136.78e3,24.71e3))
 fcELU14= diag.getCapacityFactor(geom.Pos2d(1197.13e3,65.98e3))
 
-''' LCPT 02/10/2015: I've fixed an little error in calculation
-of reinforced bars area. The ancients factors of capacity (calculated
-with the error) were fcELU13=0.143053889044 and fcELU14-0.634956493266.
-'''
-ratio1= abs(fcELU13-0.167199516711)
-ratio2= abs(fcELU14-0.729990573462)
+''' Test to be replaced LCPT 02/10/2015'''
+ratio1= abs(fcELU13-0.777283365776)
+ratio2= abs(fcELU14-4.4411488676)
 
 '''
 print "fcELU13= ", fcELU13

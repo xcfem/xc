@@ -99,9 +99,10 @@ class MaterialLoader: public Loader
     DiagInteraccion *newInteractionDiagram(const std::string &);
     DiagInteraccion *calcInteractionDiagram(const std::string &,const DatosDiagInteraccion &datos_diag);
     DiagInteraccion &getDiagInteraccion(const std::string &);
-    DiagInteraccion2d *newInteractionDiagramNMy(const std::string &);
+    DiagInteraccion2d *new2DInteractionDiagram(const std::string &);
     DiagInteraccion2d *calcInteractionDiagramNMy(const std::string &,const DatosDiagInteraccion &datos_diag);
-    DiagInteraccion2d &getDiagInteraccionNMy(const std::string &);
+    DiagInteraccion2d *calcInteractionDiagramNMz(const std::string &,const DatosDiagInteraccion &datos_diag);
+    DiagInteraccion2d &getDiagInteraccionNMz(const std::string &);
     ~MaterialLoader(void);
     void clearAll(void);
 

@@ -80,9 +80,8 @@ class FiberSectionBase: public SeccionBarraPrismatica
     const Pos3d *InsertaEsfuerzo(const PlanoDeformacion &,GeomObj::list_Pos3d &,const Pos3d *, const double &);
     const Pos3d *get_ptos_diag_interaccion_theta(GeomObj::list_Pos3d &lista_esfuerzos,const DatosDiagInteraccion &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
     const GeomObj::list_Pos3d &get_ptos_diag_interaccion(const DatosDiagInteraccion &);
-    const GeomObj::list_Pos2d &get_ptos_diag_interaccionNMy(const DatosDiagInteraccion &);
+    const GeomObj::list_Pos2d &get_ptos_diag_interaccionPlano(const DatosDiagInteraccion &, const double &);
     virtual void def_section_repres(CmdStatus &status);
-    bool procesa_comando(CmdStatus &status);
   public:
     FiberSectionBase(int classTag,int dim,MaterialLoader *mat_ldr= nullptr); 
     FiberSectionBase(int tag, int classTag,int dim,MaterialLoader *mat_ldr= nullptr);
@@ -134,7 +133,7 @@ class FiberSectionBase: public SeccionBarraPrismatica
     void calcRecubrimientos(const std::string &) const;
     void calcSeparaciones(const std::string &) const;
     int updateCDG(void);
-    double getHomogeinizedI(const double &E0) const;
+    double getHomogenizedI(const double &E0) const;
     double getSPosHomogeneizada(const double &E0) const;
 
     const Vector &getStressResultant(void) const;
@@ -157,9 +156,10 @@ class FiberSectionBase: public SeccionBarraPrismatica
       { return fibras.getYCdg(); }
     double getArea(void) const;
 
-    DiagInteraccion GetDiagInteraccion(const DatosDiagInteraccion &datos_diag);
-    DiagInteraccion2d GetDiagInteraccionNMy(const DatosDiagInteraccion &datos_diag);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+    DiagInteraccion GetDiagInteraccion(const DatosDiagInteraccion &);
+    DiagInteraccion2d GetDiagInteraccionPlano(const DatosDiagInteraccion &,const double &);
+    DiagInteraccion2d GetDiagInteraccionNMy(const DatosDiagInteraccion &);
+    DiagInteraccion2d GetDiagInteraccionNMz(const DatosDiagInteraccion &);
   };
 } // fin namespace XC
 

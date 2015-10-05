@@ -56,7 +56,9 @@ class DiagInteraccion2d: public Poligono2d
     void Print(std::ostream &os) const;
   };
 
-DiagInteraccion2d calc_diag_interaccionNMy(const FiberSectionBase &scc,const DatosDiagInteraccion &datos);
+DiagInteraccion2d calc_diag_interaccionPlano(const FiberSectionBase &scc,const DatosDiagInteraccion &, const double &);
+DiagInteraccion2d calc_diag_interaccionNMy(const FiberSectionBase &scc,const DatosDiagInteraccion &);
+DiagInteraccion2d calc_diag_interaccionNMz(const FiberSectionBase &scc,const DatosDiagInteraccion &);
 
 } // fin namespace XC
 

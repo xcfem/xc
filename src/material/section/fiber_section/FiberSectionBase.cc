@@ -169,193 +169,6 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::resel_mat_tag(co
   { return sets_fibras.resel_mat_tag(nmb_set,nmb_set_org,matTag); }
  
 
-//! @brief Lee un objeto FiberSectionBase desde archivo
-bool XC::FiberSectionBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string cabecera_error= "(FiberSectionBase) Procesando comando: '"+cmd+"'";
-    if(verborrea>2)
-      std::clog << cabecera_error << std::endl;
-
-    const CmdParser &parser= status.Parser();
-    std::string nmb_set= "";
-    std::string nmb_set_org= "";
-    std::deque<boost::any> fnc_indices;
-    if(parser.TieneIndices())
-      {
-        fnc_indices= status.Parser().SeparaIndices(this);
-        if(fnc_indices.size()>0)
-          nmb_set= convert_to_string(fnc_indices[0]); //Nombre del conjunto de fibras.
-        if(fnc_indices.size()>1)
-          nmb_set_org= convert_to_string(fnc_indices[1]); //Nombre del conjunto de fibras.
-      }
-
-    if(cmd == "def_section_repr")
-      {
-        def_section_repres(status);
-        return true;
-      }
-    else if(cmd == "section_repr")
-      {
-        if(section_repres)
-          section_repres->LeeCmd(status);
-        else
-          {
-            const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
-            std::cerr << cabecera_error
-                      << " no se ha definido representación para la sección."
-                      << posLectura << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "fibras")
-      {
-        fibras.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "addFiber")
-      {
-        const CmdParser &parser= status.Parser();
-	std::string nmbMat= "nil";
-        double area= 0.0;
-        Vector coo;
-        if(parser.TieneIndices())
-          {
-            interpreta(parser.GetIndices());
-            if(InterpreteRPN::HayArgumentos(1,cmd))
-              {
-                tag_fibra= convert_to_int(InterpreteRPN::Pila().Pop()); //Tag  de la fibra.
-              }
-          }
-        else
-          tag_fibra++;
-        const std::string parametros= status.GetBloque();
-        const std::deque<boost::any> tmp= crea_deque_boost_any(parametros);
-        const size_t sz= tmp.size();
-        if(sz>0)
-          {
-            if(boost_any_is_string(tmp[0]))
-              nmbMat= convert_to_string(tmp[0]);
-	    else
-	      std::cerr << cabecera_error << "; se esperaba el nombre del material." << std::endl;
-            if(sz>1)
-              {
-                if(boost_any_is_number(tmp[1]))
-                  area= convert_to_double(tmp[1]);
-                else
-		  std::cerr << cabecera_error << "; se esperaba el área de la fibra, se obtuvo un objeto de tipo: "
-                            << boost_any_tipo_operando(tmp[1]) << std::endl;
-                if(sz>2)
-                  {
-                    if(boost_any_is_vector_any(tmp[2]))
-                      {
-                        coo= Vector(convert_to_vector_double(tmp[2]));
-	                addFiber(tag_fibra,*GetMaterialLoader(),nmbMat,area,coo);
-                      }
-                    else
-	              std::cerr << cabecera_error << "; se esperaban las coordenadas de la fibra." << std::endl;
-                  }
-               }
-           }
-        return true;
-      }
-    else if(cmd == "nuevo_set_fibras")
-      { 
-        const std::string nmb_set= interpretaString(status.GetString());
-        crea_set_fibras(nmb_set);
-        return true;
-      }
-    else if(cmd == "sel")
-      {
-        if(fnc_indices.size()<1)
-          {
-            std::cerr << cmd << " - uso: " << cmd 
-                      << "[nmb_set]{cond}" << std::endl;
-            status.GetBloque(); //Ignoramos entrada.
-            return true;
-          }
-        const std::string cond= status.GetString(); //Condición.
-        sel(nmb_set,cond);
-        return true;
-      }
-    else if(cmd == "resel")
-      {
-        if(fnc_indices.size()<2)
-          {
-            std::cerr << cmd << " - uso: " << cmd 
-                      << "[nmb_set,nmb_set_org]{cond}" << std::endl;
-            status.GetBloque(); //Ignoramos entrada.
-            return true;
-          }
-        if(nmb_set == nmb_set_org)
-	  {
-	    std::cerr << cmd << " los nombres del conjunto origen"
-                      << " y el conjunto destino coinciden. Se ignora el comando." << std::endl;
-            status.GetBloque(); //Ignoramos entrada.
-          }
-        else
-          {
-            const std::string cond= status.GetString(); //Condición.
-            resel(nmb_set,nmb_set_org,cond);
-          }
-        return true;
-      }
-    else if(cmd == "sel_mat_tag")
-      {
-        if(fnc_indices.size()<1)
-          {
-            std::cerr << cmd << " - uso: " << cmd 
-                      << "[nmb_set]{matTag}" << std::endl;
-            status.GetBloque(); //Ignoramos entrada.
-            return true;
-          }
-        const int matTag= interpretaInt(status.GetString());
-        sel_mat_tag(nmb_set,matTag);
-        return true;
-      }
-    else if(cmd == "resel_mat_tag")
-      {
-        if(fnc_indices.size()<2)
-          {
-            std::cerr << cmd << " - uso: " << cmd 
-                      << "[nmb_set,nmb_set_org]{matTag}" << std::endl;
-            status.GetBloque(); //Ignoramos entrada.
-            return true;
-          }
-        if(nmb_set == nmb_set_org)
-	  {
-	    std::cerr << cmd << " los nombres del conjunto origen"
-                      << " y el conjunto destino coinciden. Se ignora el comando." << std::endl;
-            status.GetBloque(); //Ignoramos entrada.
-          }
-        else
-          {
-            const int matTag= interpretaInt(status.GetString());
-            resel_mat_tag(nmb_set,nmb_set_org,matTag);
-          }
-        return true;
-      }
-    else if(cmd == "calc_recubrimientos")
-      {
-        const std::string nmbSetFibras= interpretaString(status.GetString());
-        calcRecubrimientos(nmbSetFibras);
-        return true;
-      }
-    else if(cmd == "calc_separaciones")
-      {
-        const std::string nmbSetFibras= interpretaString(status.GetString());
-        calcSeparaciones(nmbSetFibras);
-        return true;
-      }
-    if(sets_fibras.find(cmd)!=sets_fibras.end())
-      {
-        sets_fibras[cmd].LeeCmd(status);
-        return true;
-      }
-    else
-      return SeccionBarraPrismatica::procesa_comando(status);
-  }
-
 //! @brief Destructor:
 XC::FiberSectionBase::~FiberSectionBase(void)
   {
@@ -787,62 +600,102 @@ const Pos3d *XC::FiberSectionBase::InsertaEsfuerzo(const PlanoDeformacion &def,G
       return lista_esfuerzos.Agrega(p_esf);  
   }
 
-//! @brief Devuelve los puntos que definen el diagrama de interacción de la sección para un ángulo theta dado.
+//    ^ z
+//    |   /
+//    |  /
+//    | / theta
+//    +------->y
+//
+//! @brief Devuelve los puntos que definen el diagrama de interacción de la sección para un ángulo theta (con el eje Z) dado.
 const Pos3d *XC::FiberSectionBase::get_ptos_diag_interaccion_theta(GeomObj::list_Pos3d &lista_esfuerzos,const DatosDiagInteraccion &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
   {
     const Pos3d *ultimo_insertado= nullptr; //Ultima terna insertada.
     CalcPivotes cp(datos_diag.getDefsAgotPivotes(),fibras,fsC,fsS,theta);
     Pivotes pivotes(cp);
-    //Dominios 1 y 2
-    Pos3d P1= pivotes.GetPivoteA(); //Pivote.
-    Pos3d P2= P1+100.0*cp.GetK(); //Flexión en torno al eje Z.
-    Pos3d P3;
-    PlanoDeformacion def;
-    const double inc_eps_B= datos_diag.getIncEps();
-    const double eps_agot_A= datos_diag.getDefsAgotPivotes().getDefAgotPivoteA();
-    const double eps_agot_B= datos_diag.getDefsAgotPivotes().getDefAgotPivoteB();
-    const double eps_agot_C= datos_diag.getDefsAgotPivotes().getDefAgotPivoteC();
-    for(double e= eps_agot_A;e>=eps_agot_B;e-=inc_eps_B)
+    if(pivotes.Ok())
       {
-        P3= pivotes.GetPuntoB(e);
-        ultimo_insertado= InsertaEsfuerzo(PlanoDeformacion(P1,P2,P3),lista_esfuerzos,ultimo_insertado,datos_diag.getUmbral());
-      }
-    //Dominios 3 y 4
-    P1= pivotes.GetPivoteB(); //Pivote
-    P2= P1+100.0*cp.GetK(); 
-    const double inc_eps_A= datos_diag.getIncEps();
-    for(double e= eps_agot_A;e>=0.0;e-=inc_eps_A)
-      {
-        P3= pivotes.GetPuntoA(e);
-        ultimo_insertado= InsertaEsfuerzo(PlanoDeformacion(P1,P2,P3),lista_esfuerzos,ultimo_insertado,datos_diag.getUmbral());
-      }
-    //Dominio 4a
-    //Calculamos la deformación en D cuando el pivote es B
-    //y la deformación en A es nula (inicio del dominio 4a).
-    const Pos3d PA0= pivotes.GetPuntoA(0.0); //Deformación nula en la armadura.
-    const PlanoDeformacion def_lim_4a= PlanoDeformacion(P1,P2,PA0);
-    const Pos2d PD= pivotes.GetPosPuntoD();
-    const double eps_D4a= def_lim_4a.Deformacion(PD);
-    const double recorr_eps_D4a= eps_D4a;
-    if(recorr_eps_D4a>(eps_agot_A/200.0)) //Si el recorrido es positivo y "apreciable"
-      {
-        const double inc_eps_D4a= datos_diag.getIncEps(); //recorr_eps_D4a/n_div_dominio; //Intervalos de cálculo. 
-        for(double e= eps_D4a;e>=0.0;e-=inc_eps_D4a)
+        //Dominios 1 y 2
+        Pos3d P1= pivotes.GetPivoteA(); //Pivote.
+        Pos3d P2= P1+100.0*cp.GetK(); //Flexión en torno al eje Z local.
+        Pos3d P3;
+        PlanoDeformacion def;
+        const double inc_eps_B= datos_diag.getIncEps();
+        const double eps_agot_A= datos_diag.getDefsAgotPivotes().getDefAgotPivoteA();
+        const double eps_agot_B= datos_diag.getDefsAgotPivotes().getDefAgotPivoteB();
+        const double eps_agot_C= datos_diag.getDefsAgotPivotes().getDefAgotPivoteC();
+        for(double e= eps_agot_A;e>=eps_agot_B;e-=inc_eps_B)
+          {
+            P3= pivotes.GetPuntoB(e);
+            ultimo_insertado= InsertaEsfuerzo(PlanoDeformacion(P1,P2,P3),lista_esfuerzos,ultimo_insertado,datos_diag.getUmbral());
+          }
+        //Dominios 3 y 4
+        P1= pivotes.GetPivoteB(); //Pivote
+        P2= P1+100.0*cp.GetK(); 
+        const double inc_eps_A= datos_diag.getIncEps();
+        for(double e= eps_agot_A;e>=0.0;e-=inc_eps_A)
+          {
+            P3= pivotes.GetPuntoA(e);
+            ultimo_insertado= InsertaEsfuerzo(PlanoDeformacion(P1,P2,P3),lista_esfuerzos,ultimo_insertado,datos_diag.getUmbral());
+          }
+        //Dominio 4a
+        //Calculamos la deformación en D cuando el pivote es B
+        //y la deformación en A es nula (inicio del dominio 4a).
+        const Pos3d PA0= pivotes.GetPuntoA(0.0); //Deformación nula en la armadura.
+        const PlanoDeformacion def_lim_4a= PlanoDeformacion(P1,P2,PA0);
+        const Pos2d PD= pivotes.GetPosPuntoD();
+        const double eps_D4a= def_lim_4a.Deformacion(PD);
+        const double recorr_eps_D4a= eps_D4a;
+        if(recorr_eps_D4a>(eps_agot_A/200.0)) //Si el recorrido es positivo y "apreciable"
+          {
+            const double inc_eps_D4a= datos_diag.getIncEps(); //recorr_eps_D4a/n_div_dominio; //Intervalos de cálculo.
+            for(double e= eps_D4a;e>=0.0;e-=inc_eps_D4a)
+              {
+                P3= pivotes.GetPuntoD(e);
+                ultimo_insertado= InsertaEsfuerzo(PlanoDeformacion(P1,P2,P3),lista_esfuerzos,ultimo_insertado,datos_diag.getUmbral());
+              }
+          }
+        //Dominio 5
+        P1= pivotes.GetPivoteC(); //Pivote
+        P2= P1+100.0*cp.GetK(); 
+        const double inc_eps_D= datos_diag.getIncEps();
+        for(double e= 0.0;e>=eps_agot_C;e-=inc_eps_D)
           {
             P3= pivotes.GetPuntoD(e);
             ultimo_insertado= InsertaEsfuerzo(PlanoDeformacion(P1,P2,P3),lista_esfuerzos,ultimo_insertado,datos_diag.getUmbral());
           }
       }
-    //Dominio 5
-    P1= pivotes.GetPivoteC(); //Pivote
-    P2= P1+100.0*cp.GetK(); 
-    const double inc_eps_D= datos_diag.getIncEps();
-    for(double e= 0.0;e>=eps_agot_C;e-=inc_eps_D)
-      {
-        P3= pivotes.GetPuntoD(e);
-        ultimo_insertado= InsertaEsfuerzo(PlanoDeformacion(P1,P2,P3),lista_esfuerzos,ultimo_insertado,datos_diag.getUmbral());
-      }
     return ultimo_insertado;
+  }
+
+//! @brief Devuelve los puntos que definen el diagrama de interacción en el plano definido por el ángulo que se pasa como parámetro.
+const GeomObj::list_Pos2d &XC::FiberSectionBase::get_ptos_diag_interaccionPlano(const DatosDiagInteraccion &datos_diag, const double &theta)
+  {
+    static GeomObj::list_Pos2d lista_esfuerzos;
+    lista_esfuerzos.clear();
+    const DqFibras &fsC= sel_mat_tag(datos_diag.getNmbSetHormigon(),datos_diag.getTagHormigon())->second;
+    if(fsC.empty())
+      std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagHormigon()
+                << " que corresponde al hormigón." << std::endl;
+    const DqFibras &fsS= sel_mat_tag(datos_diag.getNmbSetArmadura(),datos_diag.getTagArmadura())->second;
+    if(fsS.empty())
+      std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagArmadura()
+                << " que corresponde al acero de armar." << std::endl;
+    if(!fsC.empty() && !fsS.empty())
+      {
+        static GeomObj::list_Pos3d tmp;
+        tmp.clear();
+        const Pos3d *ultimo_insertado= get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,theta);
+        ultimo_insertado= get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,theta+M_PI); //theta+M_PI
+        for(GeomObj::list_Pos3d::const_iterator i= tmp.begin();i!=tmp.end();i++)
+          {
+            Pos3d p3d= *i;
+	    lista_esfuerzos.push_back(Pos2d(p3d.x(),p3d.y()));
+	  }
+        revertToStart();
+      }
+    else
+      std::cerr << "No se pudo obtener el diagrama de interacción." << std::endl;
+    return lista_esfuerzos;
   }
 
 //! @brief Devuelve los puntos que definen el diagrama de interacción de la sección.
@@ -870,37 +723,6 @@ const GeomObj::list_Pos3d &XC::FiberSectionBase::get_ptos_diag_interaccion(const
     return lista_esfuerzos;
   }
 
-//! @brief Devuelve los puntos que definen el diagrama de interacción en el plano N-My.
-const GeomObj::list_Pos2d &XC::FiberSectionBase::get_ptos_diag_interaccionNMy(const DatosDiagInteraccion &datos_diag)
-  {
-    static GeomObj::list_Pos2d lista_esfuerzos;
-    lista_esfuerzos.clear();
-    const DqFibras &fsC= sel_mat_tag(datos_diag.getNmbSetHormigon(),datos_diag.getTagHormigon())->second;
-    if(fsC.empty())
-      std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagHormigon()
-                << " que corresponde al hormigón." << std::endl;
-    const DqFibras &fsS= sel_mat_tag(datos_diag.getNmbSetArmadura(),datos_diag.getTagArmadura())->second;
-    if(fsS.empty())
-      std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagArmadura()
-                << " que corresponde al acero de armar." << std::endl;
-    if(!fsC.empty() && !fsS.empty())
-      {
-        static GeomObj::list_Pos3d tmp;
-        tmp.clear();
-        const Pos3d *ultimo_insertado= get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,0.0);//theta= 0
-        ultimo_insertado= get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,M_PI); //theta= M_PI
-        for(GeomObj::list_Pos3d::const_iterator i= tmp.begin();i!=tmp.end();i++)
-          {
-            Pos3d p3d= *i;
-	    lista_esfuerzos.push_back(Pos2d(p3d.x(),p3d.y()));
-	  }
-        revertToStart();
-      }
-    else
-      std::cerr << "No se pudo obtener el diagrama de interacción." << std::endl;
-    return lista_esfuerzos;
-  }
-
 //! @brief Devuelve el diagrama de interacción.
 XC::DiagInteraccion XC::FiberSectionBase::GetDiagInteraccion(const DatosDiagInteraccion &datos_diag)
   {
@@ -918,20 +740,28 @@ XC::DiagInteraccion XC::FiberSectionBase::GetDiagInteraccion(const DatosDiagInte
   }
 
 //! @brief Devuelve el diagrama de interacción.
-XC::DiagInteraccion2d XC::FiberSectionBase::GetDiagInteraccionNMy(const DatosDiagInteraccion &datos_diag)
+XC::DiagInteraccion2d XC::FiberSectionBase::GetDiagInteraccionPlano(const DatosDiagInteraccion &datos_diag, const double &theta)
   {
-    const GeomObj::list_Pos2d lp= get_ptos_diag_interaccionNMy(datos_diag);
+    const GeomObj::list_Pos2d lp= get_ptos_diag_interaccionPlano(datos_diag, theta);
     DiagInteraccion2d retval;
     if(!lp.empty())
       {
         retval= DiagInteraccion2d(get_convex_hull2d(lp));
         const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
-	  std::cerr << "FiberSectionBase::GetDiagInteraccion; el error en el cálculo del diagrama de interacción ("
+	  std::cerr << "FiberSectionBase::GetDiagInteraccionPlano; el error en el cálculo del diagrama de interacción ("
                     << error << ") es grande." << std::endl;
       }
     return retval;
   }
+
+//! @brief Devuelve el diagrama de interacción en el plano N-My.
+XC::DiagInteraccion2d XC::FiberSectionBase::GetDiagInteraccionNMy(const DatosDiagInteraccion &datos_diag)
+  { return GetDiagInteraccionPlano(datos_diag,M_PI/2.0); }
+
+//! @brief Devuelve el diagrama de interacción en el plano N-Mz.
+XC::DiagInteraccion2d XC::FiberSectionBase::GetDiagInteraccionNMz(const DatosDiagInteraccion &datos_diag)
+  { return GetDiagInteraccionPlano(datos_diag,0.0); }
 
 //! @brief Devuelve un vector orientado desde el centro de tracciones al de compresiones.
 XC::Vector XC::FiberSectionBase::getVectorBrazoMecanico(void) const
@@ -1085,8 +915,10 @@ double XC::FiberSectionBase::getArea(void) const
   { return fibras.getSumaAreas(); }
 
 //! @brief Moment of inertia relative to bending axis.
-double XC::FiberSectionBase::getHomogeinizedI(const double &E0) const
+double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     const Recta2d eje= getEjeEsfuerzos();
     return fibras.getISeccHomogeneizada(E0,eje);
   }
@@ -1094,6 +926,8 @@ double XC::FiberSectionBase::getHomogeinizedI(const double &E0) const
 //! @brief Static moment relative to bending axis of area that rests over this axis.
 double XC::FiberSectionBase::getSPosHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     const Recta2d eje= getEjeEsfuerzos();
     return fibras.getSPosSeccHomogeneizada(E0,Semiplano2d(eje));
   }
@@ -1101,408 +935,3 @@ double XC::FiberSectionBase::getSPosHomogeneizada(const double &E0) const
 std::string XC::FiberSectionBase::getStrClaseEsfuerzo(const double &tol) const
   { return fibras.getStrClaseEsfuerzo(); }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::FiberSectionBase::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "FiberSectionBase::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    static m_double tmp_m_double;
-
-    set_fibras_const_iterator iter=sets_fibras.find(cod);
-
-    if(cod=="numFibras")
-      {
-        tmp_gp_szt= getNumFibers();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="numSets")
-      {
-        tmp_gp_szt= sets_fibras.size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="yCdg")
-      {
-        tmp_gp_dbl= getCdgY();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="zCdg")
-      {
-        tmp_gp_dbl= getCdgZ();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if((cod=="getSumaAreas") || (cod=="getArea"))
-      {
-        tmp_gp_dbl= fibras.getSumaAreas();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getResultanteTracc")
-      {
-        tmp_gp_dbl= fibras.ResultanteTracc();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="MzTracc")
-      {
-        tmp_gp_dbl= fibras.getMzTracc(fibras.getYCdg());
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getBaricentroTracc")
-      {
-        return get_prop_vector(fibras.baricentroTracciones());
-      }
-    else if(cod=="getResultanteComp")
-      {
-        tmp_gp_dbl= fibras.ResultanteComp();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="MzComp")
-      {
-        tmp_gp_dbl= fibras.getMzComp(fibras.getYCdg());
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getBaricentroComp")
-      {
-        return get_prop_vector(fibras.baricentroCompresiones());
-      }
-    else if(cod=="Iy")
-      {
-        tmp_gp_dbl= fibras.getIy(1,getCdgZ());
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="Iz")
-      {
-        tmp_gp_dbl= fibras.getIz(1,getCdgY());
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="Pyz")
-      {
-        tmp_gp_dbl= fibras.getPyz(1,getCdgY(),getCdgZ());
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="I1")
-      {
-        tmp_gp_dbl= fibras.getI1(1,getCdgY(),getCdgZ());
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="i1")
-      {
-        tmp_gp_dbl= sqrt(fibras.getI1(1,getCdgY(),getCdgZ())/fibras.getSumaAreas());
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="I2")
-      {
-        tmp_gp_dbl= fibras.getI2(1,getCdgY(),getCdgZ());
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="i2")
-      {
-        tmp_gp_dbl= sqrt(fibras.getI2(1,getCdgY(),getCdgZ())/fibras.getSumaAreas());
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="eje1")
-      {
-        tmp_gp_mdbl= vector_to_m_double(fibras.getEje1(getCdgY(),getCdgZ()));
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod=="eje2")
-      {
-        tmp_gp_mdbl= vector_to_m_double(fibras.getEje2(getCdgY(),getCdgZ()));
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod=="getIHomogeneizada")
-      {
-        //Devuelve el momento de inercia de la sección homogeneizada
-        //respecto a la fibra neutra.
-        if(InterpreteRPN::Pila().size()>0)
-          {
-            const double E0= convert_to_double(InterpreteRPN::Pila().Pop());
-            const Recta2d eje= getEjeEsfuerzos();
-            tmp_gp_dbl= fibras.getISeccHomogeneizada(E0,eje);
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,1,"GetProp",cod);          
-            tmp_gp_dbl= 0.0;
-          }
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="SzPos")
-      {
-        double factor= 1.0;
-        double y0= 0.0;
-        double yf= 0.0;
-        if(InterpreteRPN::Pila().size()>2)
-          {
-            factor= convert_to_double(InterpreteRPN::Pila().Pop());
-            y0= convert_to_double(InterpreteRPN::Pila().Pop());
-            yf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSzPos(yf,y0,factor);
-          }
-        else if(InterpreteRPN::Pila().size()>1)
-          {
-            y0= convert_to_double(InterpreteRPN::Pila().Pop());
-            yf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSzPos(yf,y0);
-          }
-        else if(InterpreteRPN::Pila().size()>0)
-          {
-            y0= getCdgY();
-            yf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSzPos(yf,y0);
-          }
-        else
-          {
-            y0= getCdgY();
-            yf= y0;
-            tmp_gp_dbl= fibras.getSzPos(yf,y0);
-          }
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="SzNeg")
-      {
-        double factor= 1.0;
-        double y0= 0.0;
-        double yf= 0.0;
-        if(InterpreteRPN::Pila().size()>2)
-          {
-            factor= convert_to_double(InterpreteRPN::Pila().Pop());
-            y0= convert_to_double(InterpreteRPN::Pila().Pop());
-            yf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSzNeg(yf,y0,factor);
-          }
-        else if(InterpreteRPN::Pila().size()>1)
-          {
-            y0= convert_to_double(InterpreteRPN::Pila().Pop());
-            yf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSzNeg(yf,y0);
-          }
-        else if(InterpreteRPN::Pila().size()>0)
-          {
-            y0= getCdgY();
-            yf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSzNeg(yf,y0);
-          }
-        else
-          {
-            y0= getCdgY();
-            yf= y0;
-            tmp_gp_dbl= fibras.getSzNeg(yf,y0);
-          }
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="SyPos")
-      {
-        double factor= 1.0;
-        double z0= 0.0;
-        double zf= 0.0;
-        if(InterpreteRPN::Pila().size()>2)
-          {
-            factor= convert_to_double(InterpreteRPN::Pila().Pop());
-            z0= convert_to_double(InterpreteRPN::Pila().Pop());
-            zf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSyPos(zf,z0,factor);
-          }
-        else if(InterpreteRPN::Pila().size()>1)
-          {
-            z0= convert_to_double(InterpreteRPN::Pila().Pop());
-            zf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSyPos(zf,z0);
-          }
-        else if(InterpreteRPN::Pila().size()>0)
-          {
-            z0= getCdgZ();
-            zf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSyPos(zf,z0);
-          }
-        else
-          {
-            z0= getCdgZ();
-            zf= z0;
-            tmp_gp_dbl= fibras.getSyPos(zf,z0);
-          }
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="SyNeg")
-      {
-        double factor= 1.0;
-        double z0= 0.0;
-        double zf= 0.0;
-        if(InterpreteRPN::Pila().size()>2)
-          {
-            factor= convert_to_double(InterpreteRPN::Pila().Pop());
-            z0= convert_to_double(InterpreteRPN::Pila().Pop());
-            zf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSyNeg(zf,z0,factor);
-          }
-        else if(InterpreteRPN::Pila().size()>1)
-          {
-            z0= convert_to_double(InterpreteRPN::Pila().Pop());
-            zf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSyNeg(zf,z0);
-          }
-        else if(InterpreteRPN::Pila().size()>0)
-          {
-            z0= getCdgZ();
-            zf= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= fibras.getSyNeg(zf,z0);
-          }
-        else
-          {
-            z0= getCdgZ();
-            zf= z0;
-            tmp_gp_dbl= fibras.getSyNeg(zf,z0);
-          }
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getSPosHomogeneizada")
-      {
-        //Devuelve el momento estático de la sección homogeneizada
-        //que queda por encima de la fibra neutra.
-        if(InterpreteRPN::Pila().size()>0)
-          {
-            const double E0= convert_to_double(InterpreteRPN::Pila().Pop());
-            const Recta2d eje= getEjeEsfuerzos();
-            tmp_gp_dbl= fibras.getSPosSeccHomogeneizada(E0,Semiplano2d(eje));
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,1,"GetProp",cod);          
-            tmp_gp_dbl= 0.0;
-          }
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="INearest")
-      {
-        double y= 0.0;
-        double z= 0.0;
-        if(InterpreteRPN::Pila().size()>1)
-          {
-            z= convert_to_double(InterpreteRPN::Pila().Pop());
-            y= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_szt= fibras.nearest_fiber(y,z);
-          }
-        else if(InterpreteRPN::Pila().size()>0)
-          {
-            z= getCdgZ();
-            y= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_szt= fibras.nearest_fiber(y,z);
-          }
-        else
-          {
-            z= getCdgZ();
-            y= getCdgY();
-            tmp_gp_szt= fibras.nearest_fiber(y,z);
-          }
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getNeutralAxisDepth")
-      {
-        tmp_gp_dbl= getNeutralAxisDepth();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="IMaxProp")
-      return fibras.GetProp(cod);
-    else if(cod=="IMinProp")
-      return fibras.GetProp(cod);
-    else if(cod=="fibra")
-      return fibras.GetProp(cod);
-    else if((iter) != sets_fibras.end())
-      return any_const_ptr((*iter).second);
-    else if(cod=="getVectorBrazoMecanico")
-      {
-        tmp_gp_mdbl= vector_to_m_double(getVectorBrazoMecanico());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod=="getVectorCantoUtil")
-      {
-        tmp_gp_mdbl= vector_to_m_double(getVectorCantoUtil());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod=="getBrazoMecanico")
-      {
-        tmp_gp_dbl= getBrazoMecanico();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getCantoMecanico")
-      {
-        tmp_gp_dbl= getCantoMecanico();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getCantoUtil")
-      {
-        tmp_gp_dbl= getCantoUtil();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getAnchoMecanico")
-      {
-        tmp_gp_dbl= getAnchoMecanico();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getAnchoBielaComprimida")
-      {
-        tmp_gp_dbl= getAnchoBielaComprimida();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getRecubrimiento")
-      {
-        double y,z;
-        if(InterpreteRPN::Pila().size()>1)
-          {
-            z= convert_to_double(InterpreteRPN::Pila().Pop());
-            y= convert_to_double(InterpreteRPN::Pila().Pop());
-          }
-        else
-          err_num_argumentos(std::cerr,2,"GetProp",cod);
-        tmp_gp_dbl= getRecubrimiento(Pos2d(y,z));
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getStrClaseEsfuerzo")
-      {
-        tmp_gp_str= fibras.getStrClaseEsfuerzo();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else if(cod=="getAcEficazBruta")
-      {
-        double hEfMax= 0.0;
-        if(InterpreteRPN::Pila().size()>0)
-          {
-            hEfMax= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= getAcEficazBruta(hEfMax);
-          }
-        else
-          err_num_argumentos(std::cerr,1,"GetProp",cod);          
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getAcEficazNeta")
-      {
-        double hEfMax= 0.0;
-        if(InterpreteRPN::Pila().size()>2)
-          {
-            const double factor= convert_to_double(InterpreteRPN::Pila().Pop());
-            const std::string nmb= convert_to_string(InterpreteRPN::Pila().Pop());
-            hEfMax= convert_to_double(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= getAcEficazNeta(hEfMax,nmb,factor);
-          }
-        else
-          err_num_argumentos(std::cerr,3,"GetProp",cod);          
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="calcAcEficazFibras")
-      {
-        double hEfMax= 0.0;
-	std::string nmbSetFibras;
-        double factor= 0.0;
-        if(InterpreteRPN::Pila().size()>2)
-          {
-            factor= convert_to_double(InterpreteRPN::Pila().Pop());
-            nmbSetFibras= convert_to_string(InterpreteRPN::Pila().Pop());
-            hEfMax= convert_to_double(InterpreteRPN::Pila().Pop());
-          }
-        else
-          err_num_argumentos(std::cerr,3,"GetProp",cod);
-        tmp_gp_dbl= calcAcEficazFibras(hEfMax,nmbSetFibras,factor);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return SeccionBarraPrismatica::GetProp(cod);
-  }

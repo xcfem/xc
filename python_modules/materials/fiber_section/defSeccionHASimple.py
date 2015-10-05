@@ -71,6 +71,7 @@ class RecordSeccionHASimple(object):
     self.ancho= 0.25
     self.numDivIJ= 10
     self.numDivJK= 10
+    self.fiberSectionRepr= None
 
     # Longitudinal reinforcement
     self.tipoArmadura= None
@@ -155,14 +156,15 @@ class RecordSeccionHASimple(object):
     con una capa de armadura superior y otra inferior.
     tipoDiag: Cadena de caracteres que será "k" si se emplea el diagrama característico o "d" si se emplea el diagrama de cálculo.
     '''
-    if(tipoDiag=="d"):
+    self.diagType= tipoDiag
+    if(self.diagType=="d"):
       if(self.tipoHormigon.tagDiagD<0):
         tagDiagHormigon= self.tipoHormigon.defDiagD(mdlr)
       if(self.tipoArmadura.tagDiagD<0):
         tagDiagAceroArmar= self.tipoArmadura.defDiagD(mdlr)
       self.nmbDiagHormigon= self.tipoHormigon.nmbDiagD
       self.nmbDiagArmadura= self.tipoArmadura.nmbDiagD
-    elif(tipoDiag=="k"):
+    elif(self.diagType=="k"):
       if(self.tipoHormigon.tagDiagK<0):
         tagDiagHormigon= self.tipoHormigon.defDiagK(mdlr)
       if(self.tipoArmadura.tagDiagK<0):
@@ -225,6 +227,17 @@ class RecordSeccionHASimple(object):
     '''Material for modeling z shear response of section'''
     return typical_materials.defElasticMaterial(mdlr,self.nmbRespVz(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())
 
+  def defFiberSection(self,mdlr):
+    self.fs= mdlr.getMaterialLoader.newMaterial("fiberSectionShear3d",self.nmbSeccion)
+    self.fiberSectionRepr= self.fs.getFiberSectionRepr()
+    self.fiberSectionRepr.setGeomNamed(self.nmbGeomSeccion())
+    self.fs.setupFibers()
+
+    self.fs.setRespVyByName(self.nmbRespVy())
+    self.fs.setRespVzByName(self.nmbRespVz())
+    self.fs.setRespTByName(self.nmbRespT())
+    self.fs.setProp("datosSecc",self)
+
   def defSeccionHASimple(self, mdlr,tipoDiag):
     '''
     Definición de una sección de hormigón armado sencilla
@@ -238,52 +251,32 @@ class RecordSeccionHASimple(object):
     self.respVz= self.getRespVz(mdlr)
 
     self.defSectionGeometry(mdlr,tipoDiag)
-    fs= mdlr.getMaterialLoader.newMaterial("fiberSectionShear3d",self.nmbSeccion)
-    fiberSectionRepr= fs.getFiberSectionRepr()
-    fiberSectionRepr.setGeomNamed(self.nmbGeomSeccion())
-    fs.setupFibers()
+    self.defFiberSection(mdlr)
 
-    fs.setRespVyByName(self.nmbRespVy())
-    fs.setRespVzByName(self.nmbRespVz())
-    fs.setRespTByName(self.nmbRespT())
-    fs.setProp("datosSecc",self)
-    return fs
+  def defInteractionDiagramParameters(self, mdlr):
+    ''' parameters for interaction diagrams. '''
+    self.param= xc.InteractionDiagramParameters()
+    if(self.diagType=="d"):
+      self.param.tagHormigon= self.tipoHormigon.tagDiagD
+      self.param.tagArmadura= self.tipoArmadura.tagDiagD
+    elif(self.diagType=="k"):
+      self.param.tagHormigon= self.tipoHormigon.tagDiagK
+      self.param.tagArmadura= self.tipoArmadura.tagDiagK
+    return self.param
 
-  def defInteractionDiagram(self,mdlr,tipoDiag):
+  def defInteractionDiagram(self,mdlr):
     'Defines 3D interaction diagram.'
+    if(not self.fiberSectionRepr):
+      sys.stderr.write("defInteractionDiagram: fiber section representation for section: "+ self.nmbSeccion + ";  not defined use defFiberSection.\n")
+    self.defInteractionDiagramParameters(mdlr)
+    return mdlr.getMaterialLoader.calcInteractionDiagram(self.nmbSeccion,self.param)
 
-    self.defSectionGeometry(mdlr,tipoDiag)
-    fs= mdlr.getMaterialLoader.newMaterial("fiber_section_3d",self.nmbSeccion)
-    fiberSectionRepr= fs.getFiberSectionRepr()
-    fiberSectionRepr.setGeomNamed(self.nmbGeomSeccion())
-    fs.setupFibers()
-
-    param= xc.InteractionDiagramParameters()
-    if(tipoDiag=="d"):
-      param.tagHormigon= self.tipoHormigon.tagDiagD
-      param.tagArmadura= self.tipoArmadura.tagDiagD
-    elif(tipoDiag=="k"):
-      param.tagHormigon= self.tipoHormigon.tagDiagK
-      param.tagArmadura= self.tipoArmadura.tagDiagK
-    return mdlr.getMaterialLoader.calcInteractionDiagram(self.nmbSeccion,param)
-
-  def defInteractionDiagramNMy(self,mdlr,tipoDiag):
+  def defInteractionDiagramNMy(self,mdlr):
     'Defines N-My interaction diagram.'
-
-    self.defSectionGeometry(mdlr,tipoDiag)
-    fs= mdlr.getMaterialLoader.newMaterial("fiber_section_3d",self.nmbSeccion)
-    fiberSectionRepr= fs.getFiberSectionRepr()
-    fiberSectionRepr.setGeomNamed(self.nmbGeomSeccion())
-    fs.setupFibers()
-
-    param= xc.InteractionDiagramParameters()
-    if(tipoDiag=="d"):
-      param.tagHormigon= self.tipoHormigon.tagDiagD
-      param.tagArmadura= self.tipoArmadura.tagDiagD
-    elif(tipoDiag=="k"):
-      param.tagHormigon= self.tipoHormigon.tagDiagK
-      param.tagArmadura= self.tipoArmadura.tagDiagK
-    return mdlr.getMaterialLoader.calcInteractionDiagramNMy(self.nmbSeccion,param)
+    if(not self.fiberSectionRepr):
+      sys.stderr.write("defInteractionDiagramNMy: fiber section representation for section: "+ self.nmbSeccion + ";  not defined use defFiberSection.\n")
+    self.defInteractionDiagramParameters(mdlr)
+    return mdlr.getMaterialLoader.calcInteractionDiagramNMy(self.nmbSeccion,self.param)
 
   def getStressCalculator(self):
     Ec= self.tipoHormigon.Ecm()

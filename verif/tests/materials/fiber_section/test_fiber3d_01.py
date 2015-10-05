@@ -51,7 +51,6 @@ cuadFibrasTN.setupFibers()
 fibras= cuadFibrasTN.getFibers()
 
 nfibras= fibras.getNumFibers
-sumAreas= fibras.getSumaAreas
 Iz= fibras.getIz
 Iy= fibras.getIy
 zCdg= fibras.getCdgZ()

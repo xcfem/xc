@@ -214,7 +214,7 @@ XC::Vector XC::ListRegiones::getCdgSeccBruta(void) const
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección homogeneizada respecto al eje paralelo al y por el CDG.
+//! @brief Devuelve el momento de inercia de la sección bruta respecto al eje paralelo al y por el CDG.
 double XC::ListRegiones::getIySeccBruta(void) const
   {
     double retval= 0.0;
@@ -228,7 +228,7 @@ double XC::ListRegiones::getIySeccBruta(void) const
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección homogeneizada respecto al eje paralelo al z por el CDG.
+//! @brief Devuelve el momento de inercia de la sección bruta respecto al eje paralelo al z por el CDG.
 double XC::ListRegiones::getIzSeccBruta(void) const
   {
     double retval= 0.0;
@@ -242,7 +242,7 @@ double XC::ListRegiones::getIzSeccBruta(void) const
     return retval;
   }
 
-//! @brief Devuelve el producto de inercia de la sección homogeneizada respecto a los ejes paralelos al y y al z por el CDG.
+//! @brief Devuelve el producto de inercia de la sección bruta respecto a los ejes paralelos al y y al z por el CDG.
 double XC::ListRegiones::getPyzSeccBruta(void) const
   {
     double retval= 0.0;
@@ -273,6 +273,8 @@ void XC::ListRegiones::Cumplen(const std::string &cond,ListRegiones &retval,bool
 //! @brief Devuelve el área homogeneizada de las regiones.
 double XC::ListRegiones::getAreaSeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     for(const_iterator i= begin();i!=end();i++)
@@ -291,6 +293,8 @@ double XC::ListRegiones::getAreaSeccHomogeneizada(const double &E0) const
 
 XC::Vector XC::ListRegiones::getCdgSeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     Vector retval(2);
     double peso= 0.0;
     double divisor= 0.0;
@@ -321,6 +325,8 @@ XC::Vector XC::ListRegiones::getCdgSeccHomogeneizada(const double &E0) const
 //! @param E0: Módulo elástico de referencia.
 double XC::ListRegiones::getIySeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
@@ -344,6 +350,8 @@ double XC::ListRegiones::getIySeccHomogeneizada(const double &E0) const
 //! @param E0: Módulo elástico de referencia.
 double XC::ListRegiones::getIzSeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
@@ -367,6 +375,8 @@ double XC::ListRegiones::getIzSeccHomogeneizada(const double &E0) const
 //! @param E0: Módulo elástico de referencia.
 double XC::ListRegiones::getPyzSeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d2= 0.0;

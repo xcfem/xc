@@ -127,6 +127,9 @@ void XC::VectorReinfBar::EjecutaBloqueForEach(CmdStatus &status,const std::strin
 //! @brief Devuelve el área homogeneizada de las regiones.
 double XC::VectorReinfBar::getAreaSeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+
     double retval= 0.0;
     double n= 0.0;
     for(const_iterator i= begin();i!=end();i++)
@@ -145,6 +148,9 @@ double XC::VectorReinfBar::getAreaSeccHomogeneizada(const double &E0) const
 
 XC::Vector XC::VectorReinfBar::getCdgSeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+
     Vector retval(2);
     double peso= 0.0;
     double divisor= 0.0;

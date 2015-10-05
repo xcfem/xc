@@ -42,18 +42,18 @@
 XC::SeccionInerte::SeccionInerte(EntCmd *owr)
   : EntCmd(owr) {}
 
-//! @brief Inertia of the homogeinized section about an axis parallel to x through his center of gravity.
+//! @brief Inertia of the homogenized section about an axis parallel to x through his center of gravity.
 //! @param E0: Elastic modulus used as reference.
 double XC::SeccionInerte::getIxSeccHomogeneizada(const double &E0) const
   { return getIySeccHomogeneizada(E0)+getIzSeccHomogeneizada(E0); }
 
 
 
-//! @brief Agle of the principal axis of inertia of the homogeinized section with respect of current axis.
+//! @brief Agle of the principal axis of inertia of the homogenized section with respect of current axis.
 double XC::SeccionInerte::getTheta_pSeccHomogeneizada(void) const
   { return theta_inercia(getIySeccHomogeneizada(1.0),getIzSeccHomogeneizada(1.0),getPyzSeccHomogeneizada(1.0)); }
 
-//! @brief Direction of a principal axis of inertia of the homogeinized section with respect of current axis.
+//! @brief Direction of a principal axis of inertia of the homogenized section with respect of current axis.
 //! @param E0: Elastic modulus used as reference.
 XC::Vector XC::SeccionInerte::getDirEjeI_aSeccHomogeneizada(void) const
   {
@@ -64,7 +64,7 @@ XC::Vector XC::SeccionInerte::getDirEjeI_aSeccHomogeneizada(void) const
     return retval;
   }
 
-//! @brief Direction of the other axis of inertia of the homogeinized section with respect of current axis.
+//! @brief Direction of the other axis of inertia of the homogenized section with respect of current axis.
 //! @param E0: Elastic modulus used as reference.
 XC::Vector XC::SeccionInerte::getDirEjeI_bSeccHomogeneizada(void) const
   {
@@ -75,7 +75,7 @@ XC::Vector XC::SeccionInerte::getDirEjeI_bSeccHomogeneizada(void) const
     return retval;
   }
 
-//! @brief Major principal moment of inertia of the homogeinized section.
+//! @brief Major principal moment of inertia of the homogenized section.
 double XC::SeccionInerte::getI1SeccHomogeneizada(const double &E0) const
   { 
     const double iy= getIySeccHomogeneizada(E0);
@@ -84,7 +84,7 @@ double XC::SeccionInerte::getI1SeccHomogeneizada(const double &E0) const
     return I1_inercia(iy,iz,pyz);
   }
 
-//! @brief Minor principal moment of inertia of the homogeinized section.
+//! @brief Minor principal moment of inertia of the homogenized section.
 double XC::SeccionInerte::getI2SeccHomogeneizada(const double &E0) const
   {
     const double iy= getIySeccHomogeneizada(E0);
@@ -93,27 +93,27 @@ double XC::SeccionInerte::getI2SeccHomogeneizada(const double &E0) const
     return I2_inercia(iy,iz,pyz);
   }
 
-//! @brief Principal axis of inertia of the homogeinized section.
+//! @brief Principal axis of inertia of the homogenized section.
 EjesPrincInercia2d XC::SeccionInerte::getEjesInerciaSeccHomogeneizada(const double &E0) const
   {
     const Vector v= getCdgSeccHomogeneizada(E0);
     const Pos2d cdg(v[0],v[1]);
     return EjesPrincInercia2d(cdg,getIySeccHomogeneizada(E0),getIzSeccHomogeneizada(E0),getPyzSeccHomogeneizada(E0));
   }
-//! @brief Direction of the major principal axis of inertia of the homogeinized section.
+//! @brief Direction of the major principal axis of inertia of the homogenized section.
 Vector2d XC::SeccionInerte::getVDirEje1SeccHomogeneizada(const double &E0) const
   { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje1(); }
-//! @brief Direction of the major principal axis of inertia of the homogeinized section.
+//! @brief Direction of the major principal axis of inertia of the homogenized section.
 Vector2d XC::SeccionInerte::getVDirEjeFuerteSeccHomogeneizada(const double &E0) const
   { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje1(); }
-//! @brief Direction of the minor principal axis of inertia of the homogeinized section.
+//! @brief Direction of the minor principal axis of inertia of the homogenized section.
 Vector2d XC::SeccionInerte::getVDirEje2SeccHomogeneizada(const double &E0) const
   { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje2(); }
-//! @brief Direction of the minor principal axis of inertia of the homogeinized section.
+//! @brief Direction of the minor principal axis of inertia of the homogenized section.
 Vector2d XC::SeccionInerte::getVDirEjeDebilSeccHomogeneizada(const double &E0) const
   { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje2(); }
 
-//! @brief Inertia tensor (i,j) component of the homogeinized section.
+//! @brief Inertia tensor (i,j) component of the homogenized section.
 double XC::SeccionInerte::getISeccHomogeneizada(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
@@ -339,140 +339,5 @@ XC::Matrix XC::SeccionInerte::getISeccBruta(const Pos2d &o) const
     const double m= getAreaSeccBruta();
     retval= Ig+m*(og.Norm2()*identity(Ig)-(og & og));
     return retval;
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad)
-//! se pasa como parámetro.
-any_const_ptr XC::SeccionInerte::GetProp(const std::string &cod) const
-  {
-    if(cod=="getAreaSeccHomogeneizada")
-      {
-        const double E0= popDouble(cod);
-        tmp_gp_dbl= getAreaSeccHomogeneizada(E0);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getIySeccHomogeneizada")
-      {
-        const double E0= popDouble(cod);
-        tmp_gp_dbl= getIySeccHomogeneizada(E0);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getIzSeccHomogeneizada")
-      {
-        const double E0= popDouble(cod);
-        tmp_gp_dbl= getIzSeccHomogeneizada(E0);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getPyzSeccHomogeneizada")
-      {
-        const double E0= popDouble(cod);
-        tmp_gp_dbl= getPyzSeccHomogeneizada(E0);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getCdgSeccHomogeneizada")
-      {
-        static m_double tmp_m_double(1,2);
-        const double E0= popDouble(cod);
-        const Vector tmp= getCdgSeccHomogeneizada(E0);
-        tmp_m_double(1,1)= tmp[0];
-        tmp_m_double(1,2)= tmp[1];
-        return any_const_ptr(tmp_m_double);
-      }
-   else if(cod=="getI1SeccHomogeneizada")
-      {
-        const double E0= popDouble(cod);
-        tmp_gp_dbl= getI1SeccHomogeneizada(E0);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getI2SeccHomogeneizada")
-      {
-        const double E0= popDouble(cod);
-        tmp_gp_dbl= getI2SeccHomogeneizada(E0);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getVDirEje1SeccHomogeneizada")
-      {
-        const double E0= popDouble(cod);
-        tmp_gp_vector2d= getEjesInerciaSeccHomogeneizada(E0).getVDirEje1();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else if(cod=="getVDirEje2SeccHomogeneizada")
-      {
-        const double E0= popDouble(cod);
-        tmp_gp_vector2d= getEjesInerciaSeccHomogeneizada(E0).getVDirEje2();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else if(cod=="getVDirEjeFuerteSeccHomogeneizada")
-      {
-        const double E0= popDouble(cod);
-        tmp_gp_vector2d= getEjesInerciaSeccHomogeneizada(E0).getVDirEje1();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else if(cod=="getVDirEjeDebilSeccHomogeneizada")
-      {
-        const double E0= popDouble(cod);
-        tmp_gp_vector2d= getEjesInerciaSeccHomogeneizada(E0).getVDirEje2();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else if(cod=="getAreaSeccBruta")
-      {
-        tmp_gp_dbl= getAreaSeccBruta();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getIySeccBruta")
-      {
-        tmp_gp_dbl= getIySeccBruta();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getIzSeccBruta")
-      {
-        tmp_gp_dbl= getIzSeccBruta();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getPyzSeccBruta")
-      {
-        tmp_gp_dbl= getPyzSeccBruta();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getCdgSeccBruta")
-      {
-        static m_double tmp_m_double(1,2);
-        const Vector tmp= getCdgSeccBruta();
-        tmp_m_double(1,1)= tmp[0];
-        tmp_m_double(1,2)= tmp[1];
-        return any_const_ptr(tmp_m_double);
-      }
-    else if(cod=="getI1SeccBruta")
-      {
-        tmp_gp_dbl= getI1SeccBruta();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getI2SeccBruta")
-      {
-        tmp_gp_dbl= getI2SeccBruta();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getVDirEje1SeccBruta")
-      {
-        tmp_gp_vector2d= getEjesInerciaSeccBruta().getVDirEje1();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else if(cod=="getVDirEje2SeccBruta")
-      {
-        tmp_gp_vector2d= getEjesInerciaSeccBruta().getVDirEje2();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else if(cod=="getVDirEjeFuerteSeccBruta")
-      {
-        tmp_gp_vector2d= getEjesInerciaSeccBruta().getVDirEje1();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else if(cod=="getVDirEjeDebilSeccBruta")
-      {
-        tmp_gp_vector2d= getEjesInerciaSeccBruta().getVDirEje2();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else
-      return EntCmd::GetProp(cod);
   }
 
