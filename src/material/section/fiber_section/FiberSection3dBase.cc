@@ -126,7 +126,7 @@ int XC::FiberSection3dBase::setParameter(const std::vector<std::string> &argv, P
         ok= fibras.setParameter(paramMatTag,argv2, param);
         if(ok<0)
           {
-            std::cerr << "XC::FiberSection3dBase::setParameter() - could not set parameter. " << std::endl;
+            std::cerr << "FiberSection3dBase::setParameter() - could not set parameter. " << std::endl;
             return -1;
           }
         else

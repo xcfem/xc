@@ -14,8 +14,8 @@ from model import movs_nodo_6gdl
 # Geometry
 ancho= .05
 canto= .1
-ndivIJ= 5
-ndivJK= 10
+nDivIJ= 5
+nDivJK= 10
 y0= 0
 z0= 0
 L= 1.5 # Bar length (m)

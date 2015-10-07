@@ -63,21 +63,6 @@ void XC::ElementLoader::SeedElemLoader::agrega(XC::Element *e)
     semilla= e;
   }
 
-//! @brief Lee un objeto SeedElemLoader desde archivo
-bool XC::ElementLoader::SeedElemLoader::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SeedElemLoader) Procesando comando: " << cmd << std::endl;
-    if(!modelador)
-      {
-        std::cerr << "(SeedElemLoader) necesito un modelador." << std::endl;
-        return false;
-      }
-    else
-      return ProtoElementLoader::procesa_comando(status);
-  }
-
 //! @brief Destructor de la clase encargada de leer el elemento semilla.
 XC::ElementLoader::SeedElemLoader::~SeedElemLoader(void)
   { libera(); }
@@ -99,48 +84,6 @@ int XC::ElementLoader::SeedElemLoader::getDefaultTag(void) const
 XC::ElementLoader::ElementLoader(Modelador *mdlr)
   : ProtoElementLoader(mdlr), seed_elem_loader(mdlr) 
   { seed_elem_loader.set_owner(this); }
-
-
-
-//! @brief Lee un objeto ElementLoader desde archivo
-bool XC::ElementLoader::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElementLoader) Procesando comando: " << cmd << std::endl;
-    if(!modelador)
-      {
-        std::cerr << "(ElementLoader) necesito un modelador." << std::endl;
-        return false;
-      }
-    //Si el comando tiene tag lo leemos
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    static int tag_elem= 0;
-    if(fnc_indices.size()>0)
-      {
-        tag_elem= convert_to_int(fnc_indices[0]); //Tag del elemento.
-        Element::getDefaultTag().setTag(tag_elem);
-      }
-
-    if(cmd=="element")
-      {
-        Element *tmp= getElement(tag_elem);
-        tmp->LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "seed_elem_loader")
-      {
-        seed_elem_loader.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "tag_elemento")
-      {
-	Element::getDefaultTag().setTag((interpretaInt(status.GetString())));
-        return true;
-      }
-    else
-      return ProtoElementLoader::procesa_comando(status);
-  }
 
 //! @brief Devuelve el tag por defecto para el siguiente elemento.
 int XC::ElementLoader::getDefaultTag(void) const
@@ -197,9 +140,3 @@ void XC::ElementLoader::nuevo_elemento(Element *e)
     modelador->UpdateSets(e);
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ElementLoader::GetProp(const std::string &cod) const
-  {
-    return ProtoElementLoader::GetProp(cod);
-  }

@@ -85,7 +85,7 @@ class ParamsCortante(object):
         self.axilHormigon= rcSets.getConcreteCompression()
         self.anchoBiela= scc.getAnchoBielaComprimida() # b0
         if((self.E0*self.eps1)<self.fctdH): # Sección no fisurada
-          self.I= scc.getHomogeinizedI(self.E0)
+          self.I= scc.getHomogenizedI(self.E0)
           self.S= scc.getSPosHomogeneizada(self.E0)
           self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.anchoBiela,self.alphaL,self.axilHormigon,self.areaHormigon)
         else: # Sección fisurada
@@ -101,7 +101,7 @@ class ParamsCortante(object):
         self.Vu= self.Vu2
       else: # Sección no fisurada
         axis= scc.getInternalForcesAxis()
-        self.I= scc.getFibers().getHomogeinizedSectionIRelToLine(self.E0,axis)
+        self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axis)
         self.S= scc.getFibers().getSPosSeccHomogeneizada(self.E0,geom.HalfPlane2d(axis))
         self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.anchoBiela,self.alphaL,self.axilHormigon,self.areaHormigon)
 

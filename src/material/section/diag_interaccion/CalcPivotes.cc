@@ -31,22 +31,26 @@
 #include "xc_utils/src/geom/d1/Segmento3d.h"
 #include "material/section/fiber_section/fiber/Fiber.h"
 #include "DefAgotPivotes.h"
+#include "utility/matrix/Vector.h"
+#include "material/uniaxial/UniaxialMaterial.h"
 
 inline Pos3d getPos3d(const XC::Fiber *t,const double &strain= 0.0)
   { return Pos3d(strain,t->getLocY(),t->getLocZ()); }
 
+//! @brief Center for the local reference system
 inline Pos3d getCDG(const XC::DqFibras &fs)
   { return Pos3d(0.0,fs.getYCdg(),fs.getZCdg()); }
 
-Ref3d3d getRef3d(const XC::DqFibras &fs,const double &theta)
+//! @brief Local reference system.
+Ref3d3d getRef3d(const XC::DqFibras &fs, const double &theta)
   {
-    const Pos3d g(getCDG(fs));
+    const Pos3d g= getCDG(fs);
     return Ref3d3d(g,Vector3d(1,0,0),Vector3d(0,cos(theta),sin(theta)));
   }
 
 //! @brief Constructor.
 XC::CalcPivotes::CalcPivotes(const DefAgotPivotes &ap,const StoFibras &fs,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
-  : Ref3d3d(getRef3d(fs,theta)), agot_pivotes(ap), fibras(fs),fibrasC(fsC),fibrasS(fsS) {}
+  : Ref3d3d(getRef3d(fs, theta)), agot_pivotes(ap), fibras(fs),fibrasC(fsC),fibrasS(fsS) {}
 
 const XC::Fiber *XC::CalcPivotes::getFiberSMinY(void) const
   {
@@ -77,7 +81,8 @@ Pos3d XC::CalcPivotes::GetPuntoD(void) const
     return retval;
   }
 
-Pos3d XC::CalcPivotes::GetPivoteA(void) const
+//! @brief Most tensioned steel fiber
+Pos3d XC::CalcPivotes::calcPositionPivotA(void) const
   {
     Pos3d retval;
     if(!fibrasS.empty()) //Hay armadura.
@@ -95,17 +100,19 @@ Pos3d XC::CalcPivotes::GetPivoteA(void) const
     return retval;
   }
 
-Pos3d XC::CalcPivotes::GetPivoteB(void) const
+//! @brief Most compressed concrete fiber.
+Pos3d XC::CalcPivotes::calcPositionPivotB(void) const
   {
     const Fiber *t= getFiberCMaxY();
     Pos3d retval= getPos3d(t,agot_pivotes.getDefAgotPivoteB());
     return retval;
   }
 
-Pos3d XC::CalcPivotes::GetPivoteC(void) const
+//! @brief Intersection of uniform strain (typically 2%) line and line BD 
+Pos3d XC::CalcPivotes::calcPositionPivotC(void) const
   {
     const Pos3d D= GetPuntoD();
-    const Pos3d B= GetPivoteB();
+    const Pos3d B= calcPositionPivotB();
     const Recta3d s(D,B);
     GeomObj::list_Pos3d lp= s.Interseccion(1,agot_pivotes.getDefAgotPivoteC());
     assert(lp.size()>0); //La lista no puede estar vacía.

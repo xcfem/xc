@@ -37,7 +37,7 @@
 #include "material/section/repres/geom_section/GeomSection.h"
 #include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/nucleo/CmdParser.h"
-#include <material/uniaxial/UniaxialMaterial.h>
+#include "material/uniaxial/UniaxialMaterial.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -330,6 +330,8 @@ double XC::DqFibras::getPyz(const double &factor,const double &y0,const double &
 //! @brief Devuelve el área de la sección homogeneizada.
 double XC::DqFibras::getAreaSeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
 
     for(std::deque<Fiber *>::const_iterator i= begin();i!= end();i++)
@@ -346,6 +348,8 @@ double XC::DqFibras::getAreaSeccHomogeneizada(const double &E0) const
 //! @brief Devuelve las coordenadas del CDG de la sección homogeneizada.
 const XC::Vector &XC::DqFibras::getCdgSeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double Qy= 0.0,Qz= 0.0;
     double Atot= 0.0;
     double areaFibraPond= 0.0;
@@ -376,6 +380,8 @@ const XC::Vector &XC::DqFibras::getCdgSeccHomogeneizada(const double &E0) const
 //! @param E0: Módulo elástico de referencia.
 double XC::DqFibras::getIySeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     const Vector &cdg= getCdgSeccHomogeneizada(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
@@ -397,6 +403,8 @@ double XC::DqFibras::getIySeccHomogeneizada(const double &E0) const
 //! @param E0: Módulo elástico de referencia.
 double XC::DqFibras::getIzSeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     const Vector &cdg= getCdgSeccHomogeneizada(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
@@ -418,6 +426,8 @@ double XC::DqFibras::getIzSeccHomogeneizada(const double &E0) const
 //! @param E0: Módulo elástico de referencia.
 double XC::DqFibras::getPyzSeccHomogeneizada(const double &E0) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     const Vector &cdg= getCdgSeccHomogeneizada(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
@@ -575,6 +585,8 @@ double XC::DqFibras::getSyNeg(const double &zf,const double &z0,const double &fa
 //! del semiplano que se pasa como parámetro.
 double XC::DqFibras::getSPosSeccHomogeneizada(const double &E0,const Semiplano2d &sp) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     double d= 0.0;
     for(std::deque<Fiber *>::const_iterator i= begin();i!= end();i++)
@@ -597,6 +609,8 @@ double XC::DqFibras::getSPosSeccHomogeneizada(const double &E0,const Semiplano2d
 //! del semiplano que se pasa como parámetro.
 double XC::DqFibras::getSNegSeccHomogeneizada(const double &E0,const Semiplano2d &sp) const
   {
+    if(fabs(E0)<1e-6)
+      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     double d= 0.0;
     for(std::deque<Fiber *>::const_iterator i= begin();i!= end();i++)

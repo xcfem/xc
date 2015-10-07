@@ -13,8 +13,8 @@ from model import fix_node_6dof
 # Geometry
 ancho= .05
 canto= .1
-ndivIJ= 10
-ndivJK= 5
+nDivIJ= 10
+nDivJK= 5
 y0= 0
 z0= 0
 L= 1.5 # Bar length (m)

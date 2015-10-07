@@ -8,9 +8,9 @@ from materials import typical_materials
 
 ancho= 10
 canto= 20
-ndivIJ= 32
-ndivJK= 32
-nFibTeor= ndivIJ*ndivJK
+nDivIJ= 32
+nDivJK= 32
+nFibTeor= nDivIJ*nDivJK
 areaTeor= ancho*canto
 iyTeor= 1/12.0*ancho*canto**3
 izTeor= 1/12.0*canto*ancho**3
@@ -30,8 +30,8 @@ y1= ancho/2.0
 z1= canto/2.0
 regiones= geomRectang.getRegions
 acero= regiones.newQuadRegion("acero")
-acero.nDivIJ= ndivIJ
-acero.nDivJK= ndivJK
+acero.nDivIJ= nDivIJ
+acero.nDivJK= nDivJK
 acero.pMin= geom.Pos2d(y0-y1,z0-z1)
 acero.pMax= geom.Pos2d(y0+y1,z0+z1)
 

@@ -24,7 +24,7 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DiagInteraccion.cc
+//DiagInteraccion2d.cc
 
 #include "DiagInteraccion2d.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
@@ -130,6 +130,20 @@ void XC::DiagInteraccion2d::Print(std::ostream &os) const
     std::cerr << "DiagInteraccion2d::Print no implementada." << std::endl;
   }
 
+XC::DiagInteraccion2d XC::calc_diag_interaccionPlano(const FiberSectionBase &scc,const DatosDiagInteraccion &datos, const double &theta)
+  {
+    DiagInteraccion2d retval;
+    FiberSectionBase *tmp= dynamic_cast<FiberSectionBase *>(scc.getCopy());
+    if(tmp)
+      {
+        retval= tmp->GetDiagInteraccionPlano(datos,theta);
+        delete tmp;
+      }
+    else
+      std::cerr << "XC::calc_diag_interaccion, no se pudo obtener una copia de la sección."
+                << std::endl;
+    return retval;
+  }
 
 XC::DiagInteraccion2d XC::calc_diag_interaccionNMy(const FiberSectionBase &scc,const DatosDiagInteraccion &datos= DatosDiagInteraccion())
   {
@@ -138,6 +152,21 @@ XC::DiagInteraccion2d XC::calc_diag_interaccionNMy(const FiberSectionBase &scc,c
     if(tmp)
       {
         retval= tmp->GetDiagInteraccionNMy(datos);
+        delete tmp;
+      }
+    else
+      std::cerr << "XC::calc_diag_interaccion, no se pudo obtener una copia de la sección."
+                << std::endl;
+    return retval;
+  }
+
+XC::DiagInteraccion2d XC::calc_diag_interaccionNMz(const FiberSectionBase &scc,const DatosDiagInteraccion &datos= DatosDiagInteraccion())
+  {
+    DiagInteraccion2d retval;
+    FiberSectionBase *tmp= dynamic_cast<FiberSectionBase *>(scc.getCopy());
+    if(tmp)
+      {
+        retval= tmp->GetDiagInteraccionNMz(datos);
         delete tmp;
       }
     else

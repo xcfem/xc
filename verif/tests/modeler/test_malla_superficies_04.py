@@ -43,7 +43,7 @@ puntos.newPntFromPos3d(geom.Pos3d(0.0,R,1.0))
 surfaces= mdlr.getCad.getSurfaces
 surfaces.defaultTag= 1
 s1= surfaces.newQuadSurfaceGridPts([[1,2,3],[4,5,6]])
-s1.ndivI= 100
+s1.nDivI= 100
 s1.nDivJ= 1
 
 for i in surfaces.getKeys():

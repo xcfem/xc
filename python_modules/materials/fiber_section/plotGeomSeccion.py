@@ -6,8 +6,12 @@ import xc_base
 import geom
 from geom_utils import auxCairoPlot
 
-# Dibuja las armaduras de la sección en un archivo PostScript
+import matplotlib.pyplot as plt
+from matplotlib.path import Path
+import matplotlib.patches as patches
+
 def plotArmaduras(armaduras, ctx):
+  '''draw section rebars in a postcript file.'''
   for reinfLayer in armaduras:
     barras= reinfLayer.getReinfBars
     for b in barras:
@@ -22,8 +26,8 @@ def plotArmaduras(armaduras, ctx):
       ctx.text_path(labelPlot)
       ctx.stroke()
 
-# Dibuja la geometría de la sección en un archivo PostScript
 def plotGeomSeccion(geomSection, path):
+  ''' draws section geometry in a postscript file'''
   WIDTH, HEIGHT = 256, 256
   surface = cairo.PSSurface(path, WIDTH, HEIGHT)
   ctx = cairo.Context(surface)
@@ -43,3 +47,24 @@ def plotGeomSeccion(geomSection, path):
   surface.set_eps(True)
   ctx.show_page()
   surface.finish()
+
+def plotInteractionDiagram2D(diag):
+  nv= diag.getNumVertices()
+  fScale= 1e-3
+  v0= diag.getVertice(0)
+  vertices= [(v0.y*fScale,v0.x*fScale)]
+  codes=[Path.MOVETO]
+  for i in range(1,nv):
+    v= diag.getVertice(i)
+    vertices.append((v.y*fScale,v.x*fScale))
+    codes.append(Path.LINETO)
+  vertices.append((v0.y*fScale,v0.x*fScale))
+  codes.append(Path.CLOSEPOLY)
+  path = Path(vertices, codes)
+  fig = plt.figure()
+  ax = fig.add_subplot(111)
+  patch = patches.PathPatch(path, facecolor='orange', lw=2)
+  ax.add_patch(patch)
+  ax.set_xlim(diag.getYMin*fScale,diag.getYMax*fScale)
+  ax.set_ylim(diag.getXMin*fScale,diag.getXMax*fScale)
+  plt.show()

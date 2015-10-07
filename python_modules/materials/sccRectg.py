@@ -57,8 +57,8 @@ class sccRectang(object):
   def discretization(self,gm,nmbMat):
     regiones= gm.getRegions
     reg= regiones.newQuadRegion(nmbMat)
-    reg.nDivIJ= self.ndivIJ
-    reg.nDivJK= self.ndivJK
+    reg.nDivIJ= self.nDivIJ
+    reg.nDivJK= self.nDivJK
     reg.pMin= geom.Pos2d(-self.h/2.0,-self.b/2.0)
     reg.pMax= geom.Pos2d(self.h/2.0,self.b/2.0)
     return reg
@@ -71,9 +71,9 @@ class sccRectang(object):
 #      {
 #        y1= -h/2
 #        y2= h/2
-#        incr= (y2-y1)/scc10x20.ndivJK 
+#        incr= (y2-y1)/scc10x20.nDivJK 
 #        \nuevo_archivo_salida[ley]{nmbFile}
-#           for j in range(0,scc10x20.ndivJK+1):
+#           for j in range(0,scc10x20.nDivJK+1):
 #            \bucle
 #              {
 #                y= y1+j*incr

@@ -62,7 +62,7 @@ class_<XC::FiberSectionBase, bases<XC::SeccionBarraPrismatica>, boost::noncopyab
   .def("getAcEficazNeta",&XC::FiberSectionBase::getAcEficazNeta)
   .def("calcAcEficazFibras",&XC::FiberSectionBase::calcAcEficazFibras)
   .def("getContornoAcEficazBruta",&XC::FiberSectionBase::getContornoAcEficazBruta)
-  .def("getHomogeinizedI",&XC::FiberSectionBase::getHomogeinizedI,"Moment of inertia relative to bending axis.")
+  .def("getHomogenizedI",&XC::FiberSectionBase::getHomogenizedI,"Moment of inertia relative to bending axis.")
   .def("getSPosHomogeneizada",&XC::FiberSectionBase::getSPosHomogeneizada,"Static moment relative to bending axis of area that rests over this axis.")
   .def("calcRecubrimientos",&XC::FiberSectionBase::calcRecubrimientos)
   .def("calcSeparaciones",&XC::FiberSectionBase::calcSeparaciones)

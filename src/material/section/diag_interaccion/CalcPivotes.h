@@ -56,9 +56,9 @@ class CalcPivotes: public Ref3d3d
     const Fiber *getFiberSMinY(void) const;
     const Fiber *getFiberCMaxY(void) const;
     Pos3d GetPuntoD(void) const;
-    Pos3d GetPivoteA(void) const;
-    Pos3d GetPivoteB(void) const;
-    Pos3d GetPivoteC(void) const;
+    Pos3d calcPositionPivotA(void) const;
+    Pos3d calcPositionPivotB(void) const;
+    Pos3d calcPositionPivotC(void) const;
   };
 
 } // fin namespace XC

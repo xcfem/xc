@@ -48,6 +48,8 @@ class Pivotes
     Pos3d B; //!< Pivote B (deformación mínima en el hormigón comprimido).
     Pos3d C; //!< Pivote C (ver diagrama de pivotes en EHE).
     Pos3d D; //!< Deformación nula en el hormigón más traccionado.
+    bool ok; //!< True if positions ok (see checkPositions).
+
   public:
     Pivotes(const Pos3d &a,const Pos3d &b,const Pos3d &c,const Pos3d &d);
     Pivotes(const CalcPivotes &cp);
@@ -73,6 +75,9 @@ class Pivotes
       { return Pos2d(C.y(),C.z()); }
     inline Pos2d GetPosPuntoD(void) const
       { return Pos2d(D.y(),D.z()); }
+    inline bool Ok(void) const
+      { return ok; }
+    bool checkPositions(void) const;
   };
 
 } // fin namespace XC

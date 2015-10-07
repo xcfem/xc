@@ -10,9 +10,9 @@ from materials import typical_materials
 
 ancho= 1
 canto= 1
-ndivIJ= 2
-ndivJK= 2
-nFibTeor= ndivIJ*ndivJK
+nDivIJ= 2
+nDivJK= 2
+nFibTeor= nDivIJ*nDivJK
 areaTeor= ancho*canto
 iyTeor= 1/12.0*ancho*canto**3
 izTeor= 1/12.0*canto*ancho**3
@@ -51,7 +51,6 @@ cuadFibrasTN.setupFibers()
 fibras= cuadFibrasTN.getFibers()
 
 nfibras= fibras.getNumFibers
-sumAreas= fibras.getSumaAreas
 Iz= fibras.getIz
 Iy= fibras.getIy
 zCdg= fibras.getCdgZ()

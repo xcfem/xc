@@ -103,7 +103,6 @@ class SeccionInerte: public EntCmd
     ConstantesSecc3d getConstantesSecc3d(const ConstantesSecc3d &) const;
     ConstantesSecc2d getConstantesSecc2d(const ConstantesSecc2d &) const;
 
-    any_const_ptr GetProp(const std::string &) const;
   };
 
 } // fin namespace XC

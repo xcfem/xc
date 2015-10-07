@@ -501,7 +501,7 @@ XC::GeomSection *XC::MaterialLoader::newSectionGeometry(const std::string &cod)
     XC::GeomSection *retval= nullptr;
     if(geom_secciones.find(cod)!=geom_secciones.end()) //La geometria de la sección existe.
       {
-	std::cerr << "MaterialLoader::procesa_comando; warning! section: '"
+	std::cerr << "MaterialLoader::newSectionGeometry; warning! section: '"
                       << cod << "' already exists. "<< '.' << std::endl;
         retval= geom_secciones[cod];
        }
@@ -520,7 +520,7 @@ XC::DiagInteraccion *XC::MaterialLoader::newInteractionDiagram(const std::string
     DiagInteraccion *retval= nullptr;
     if(diagramas_interaccion.find(cod_diag)!=diagramas_interaccion.end()) //El diagrama existe.
       {
-         std::clog << "MaterialLoader::procesa_comando; ¡ojo! el diagrama de interacción de nombre: '"
+         std::clog << "MaterialLoader::newInteractionDiagram; ¡ojo! el diagrama de interacción de nombre: '"
                    << cod_diag << "' ya existe. " << std::endl;
          retval= diagramas_interaccion[cod_diag];
       }
@@ -533,12 +533,12 @@ XC::DiagInteraccion *XC::MaterialLoader::newInteractionDiagram(const std::string
   }
 
 //! @brief New 2d interaction diagram
-XC::DiagInteraccion2d *XC::MaterialLoader::newInteractionDiagramNMy(const std::string &cod_diag)
+XC::DiagInteraccion2d *XC::MaterialLoader::new2DInteractionDiagram(const std::string &cod_diag)
   {
     DiagInteraccion2d *retval= nullptr;
     if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //El diagrama existe.
       {
-         std::clog << "MaterialLoader::procesa_comando; ¡ojo! el diagrama de interacción de nombre: '"
+         std::clog << "MaterialLoader::new2DInteractionDiagram; ¡ojo! el diagrama de interacción de nombre: '"
                    << cod_diag << "' ya existe. " << std::endl;
          retval= diagramas_interaccion2d[cod_diag];
       }
@@ -563,7 +563,7 @@ XC::DiagInteraccion *XC::MaterialLoader::calcInteractionDiagram(const std::strin
             const std::string cod_diag= "diagInt"+cod_scc;
             if(diagramas_interaccion.find(cod_diag)!=diagramas_interaccion.end()) //Diagram exists.
               {
-	        std::clog << "MaterialLoader::procesa_comando; ¡ojo! se redefine el diagrama de interacción de nombre: '"
+	        std::clog << "MaterialLoader::calcInteractionDiagram; ¡ojo! se redefine el diagrama de interacción de nombre: '"
                           << cod_diag << "'." << std::endl;
                 delete diagramas_interaccion[cod_diag];
               }
@@ -583,7 +583,7 @@ XC::DiagInteraccion *XC::MaterialLoader::calcInteractionDiagram(const std::strin
     return diagI;     
   }
 
-//! @brief New interaction diagram
+//! @brief New 2D interaction diagram (N-My)
 XC::DiagInteraccion2d *XC::MaterialLoader::calcInteractionDiagramNMy(const std::string &cod_scc,const DatosDiagInteraccion &datos_diag)
   {
     iterator mat= materiales.find(cod_scc);
@@ -596,13 +596,46 @@ XC::DiagInteraccion2d *XC::MaterialLoader::calcInteractionDiagramNMy(const std::
             const std::string cod_diag= "diagInt"+cod_scc;
             if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //Diagram exists.
               {
-	        std::clog << "MaterialLoader::procesa_comando; ¡ojo! se redefine el diagrama de interacción de nombre: '"
+	        std::clog << "MaterialLoader::calcInteractionDiagramNMy; ¡ojo! se redefine el diagrama de interacción de nombre: '"
                           << cod_diag << "'." << std::endl;
                 delete diagramas_interaccion2d[cod_diag];
               }
             else
               {
                 diagI= new DiagInteraccion2d(calc_diag_interaccionNMy(*tmp,datos_diag));
+                diagramas_interaccion2d[cod_diag]= diagI;
+              }
+          }
+        else
+          std::cerr << "El material: '" << cod_scc
+                    << "' no corresponde a una sección de fibras." << std::endl;
+      }
+    else
+      std::cerr << "No se encontró el material : '"
+                      << cod_scc << "' se ignora la entrada.\n";
+    return diagI;     
+  }
+
+//! @brief New 2D interaction diagram (N-Mz)
+XC::DiagInteraccion2d *XC::MaterialLoader::calcInteractionDiagramNMz(const std::string &cod_scc,const DatosDiagInteraccion &datos_diag)
+  {
+    iterator mat= materiales.find(cod_scc);
+    DiagInteraccion2d *diagI= nullptr;
+    if(mat!=materiales.end())
+      {
+        const FiberSectionBase *tmp= dynamic_cast<const FiberSectionBase *>(mat->second);
+        if(tmp)
+          {
+            const std::string cod_diag= "diagInt"+cod_scc;
+            if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //Diagram exists.
+              {
+	        std::clog << "MaterialLoader::calcInteractionDiagramNMz; ¡ojo! se redefine el diagrama de interacción de nombre: '"
+                          << cod_diag << "'." << std::endl;
+                delete diagramas_interaccion2d[cod_diag];
+              }
+            else
+              {
+                diagI= new DiagInteraccion2d(calc_diag_interaccionNMz(*tmp,datos_diag));
                 diagramas_interaccion2d[cod_diag]= diagI;
               }
           }

@@ -48,7 +48,6 @@ class ElementLoader: public ProtoElementLoader
         void libera(void);
       protected:
         void agrega(Element *);
-        bool procesa_comando(CmdStatus &);
       public:
         SeedElemLoader(Modelador *mdlr)
           : ProtoElementLoader(mdlr), semilla(NULL) {}
@@ -64,7 +63,6 @@ class ElementLoader: public ProtoElementLoader
     SeedElemLoader seed_elem_loader; //!< Elemento patrón para el mallado semi-automático.
   protected:
     virtual void agrega(Element *);
-    bool procesa_comando(CmdStatus &status);
   public:
     ElementLoader(Modelador *);
     Element *getElement(int tag);
@@ -81,7 +79,6 @@ class ElementLoader: public ProtoElementLoader
     void setDefaultTag(const int &tag);
 
     void clearAll(void);
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // fin namespace XC
