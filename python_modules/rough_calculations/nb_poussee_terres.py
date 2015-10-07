@@ -2,7 +2,7 @@
 from __future__ import division
 import math
 
-# Kray's lateral earth pressure under concentrated load. 
+# Krey's lateral earth pressure under concentrated load. 
 #
 #    Pressure distribution:
 #   
