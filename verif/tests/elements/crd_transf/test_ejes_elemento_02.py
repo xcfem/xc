@@ -10,8 +10,8 @@ from model import fix_node_6dof
 
 b= 0.4
 h= 0.8
-ndivIJ= 2
-ndivJK= 2
+nDivIJ= 2
+nDivJK= 2
 y0= 0
 z0= 0
 L= 1 # Longitud del elmento expresada en metros.
@@ -40,8 +40,8 @@ y1= h/2.0
 z1= b/2.0
 regiones= geomCuadFibras.getRegions
 acero= regiones.newQuadRegion("acero")
-acero.nDivIJ= ndivIJ
-acero.nDivJK= ndivJK
+acero.nDivIJ= nDivIJ
+acero.nDivJK= nDivJK
 acero.pMin= geom.Pos2d(y0-y1,z0-z1)
 acero.pMax= geom.Pos2d(y0+y1,z0+z1)
 cuadFibras= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","cuadFibras")

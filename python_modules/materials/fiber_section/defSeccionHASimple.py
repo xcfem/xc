@@ -57,10 +57,25 @@ class MainReinfLayer(object):
   def centraBarras(self,ancho):
     self.recubLat= (ancho-(self.nBarras-1)*self.sepBarras)/2.0
 
-class RecordSeccionHASimple(object):
+  def defReinfLayer(self,armaduras,code,nmbDiagram,p1,p2):
+    '''Definition of a reinforcement layer in the fiber section model.'''
+    if(self.nBarras>0):
+      self.reinfLayer= armaduras.newStraightReinfLayer(nmbDiagram)
+      self.reinfLayer.codigo= code
+      self.reinfLayer.numReinfBars= self.nBarras
+      #print "armadura ", cod, " num. barras: ", self.reinfLayer.numReinfBars
+      self.reinfLayer.barDiameter= self.diamBarras
+      self.reinfLayer.barArea= self.areaBarras
+      #print "armadura", cod, " bar area= ", self.reinfLayer.barArea*1e6, " mm2"
+      #print "armadura", cod, " bar diam: ", self.diamBarras*1e3, " mm"
+      self.reinfLayer.p1= p1
+      self.reinfLayer.p2= p2
+      return self.reinfLayer
+
+class BasicRecordRCSection(object):
   '''
-  This class is used to define the variables that make up a reinforced 
-  concrete section with top and bottom reinforcement layers.
+  This class is used to define the basic variables that make up a reinforced 
+  concrete section.
   '''
   def __init__(self):
     self.nmbSeccion= "noName"
@@ -69,18 +84,12 @@ class RecordSeccionHASimple(object):
     self.nmbDiagHormigon= None
     self.canto= 0.25
     self.ancho= 0.25
-    self.numDivIJ= 10
-    self.numDivJK= 10
+    self.nDivIJ= 10
+    self.nDivJK= 10
     self.fiberSectionRepr= None
 
-    # Longitudinal reinforcement
     self.tipoArmadura= None
     self.nmbDiagArmadura= None # Name of the uniaxial material
-
-    self.recubMin= 0.0 
-
-    self.barrasNeg= MainReinfLayer()
-    self.barrasPos= MainReinfLayer()
 
     # Transverse reinforcement (z direction)
     self.armCortanteZ= RecordArmaduraCortante()
@@ -98,6 +107,60 @@ class RecordSeccionHASimple(object):
     return self.nmbSeccion+"RespVy"
   def nmbRespVz(self):
     return self.nmbSeccion+"RespVz"
+
+  def getConcreteDiagram(self,mdlr):
+    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagHormigon)
+  def getSteelDiagram(self,mdlr):
+    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagArmadura)
+  def getSteelEquivalenceCoefficient(self,mdlr):
+    tangHorm= self.getConcreteDiagram(mdlr).getTangent()
+    tangSteel= self.getSteelDiagram(mdlr).getTangent()
+    return tangSteel/tangHorm
+
+  def defDiagrams(self,mdlr,tipoDiag):
+    '''
+    Stress-strain diagrams definition.
+    '''
+    self.diagType= tipoDiag
+    if(self.diagType=="d"):
+      if(self.tipoHormigon.tagDiagD<0):
+        tagDiagHormigon= self.tipoHormigon.defDiagD(mdlr)
+      if(self.tipoArmadura.tagDiagD<0):
+        tagDiagAceroArmar= self.tipoArmadura.defDiagD(mdlr)
+      self.nmbDiagHormigon= self.tipoHormigon.nmbDiagD
+      self.nmbDiagArmadura= self.tipoArmadura.nmbDiagD
+    elif(self.diagType=="k"):
+      if(self.tipoHormigon.tagDiagK<0):
+        tagDiagHormigon= self.tipoHormigon.defDiagK(mdlr)
+      if(self.tipoArmadura.tagDiagK<0):
+        tagDiagAceroArmar= self.tipoArmadura.defDiagK(mdlr)
+      self.nmbDiagHormigon= self.tipoHormigon.nmbDiagK
+      self.nmbDiagArmadura= self.tipoArmadura.nmbDiagK
+
+  def defConcreteRegion(self,geomSection):
+    regiones= geomSection.getRegions
+    rg= regiones.newQuadRegion(self.nmbDiagHormigon) # Hormigón
+    rg.nDivIJ= self.nDivIJ
+    rg.nDivJK= self.nDivJK
+    rg.pMin= geom.Pos2d(-self.ancho/2,-self.canto/2)
+    rg.pMax= geom.Pos2d(self.ancho/2,self.canto/2)
+
+
+class RecordSeccionHASimple(BasicRecordRCSection):
+  '''
+  This class is used to define the variables that make up a reinforced 
+  concrete section with top and bottom reinforcement layers.
+  '''
+  def __init__(self):
+    super(RecordSeccionHASimple,self).__init__()
+
+    # Longitudinal reinforcement
+
+    self.recubMin= 0.0 
+
+    self.barrasNeg= MainReinfLayer()
+    self.barrasPos= MainReinfLayer()
+
 
   def getAsPos(self):
     return self.barrasPos.getAs()
@@ -141,14 +204,6 @@ class RecordSeccionHASimple(object):
   def setMainReinfPos(self,diam,area,spacing,basicCover):
     self.barrasPos= MainReinfLayer(diam,area,spacing,self.ancho,basicCover)
 
-  def getConcreteDiagram(self,mdlr):
-    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagHormigon)
-  def getSteelDiagram(self,mdlr):
-    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagArmadura)
-  def getSteelEquivalenceCoefficient(self,mdlr):
-    tangHorm= self.getConcreteDiagram(mdlr).getTangent()
-    tangSteel= self.getSteelDiagram(mdlr).getTangent()
-    return tangSteel/tangHorm
 
   def defSectionGeometry(self,mdlr,tipoDiag):
     '''
@@ -156,59 +211,22 @@ class RecordSeccionHASimple(object):
     con una capa de armadura superior y otra inferior.
     tipoDiag: Cadena de caracteres que será "k" si se emplea el diagrama característico o "d" si se emplea el diagrama de cálculo.
     '''
-    self.diagType= tipoDiag
-    if(self.diagType=="d"):
-      if(self.tipoHormigon.tagDiagD<0):
-        tagDiagHormigon= self.tipoHormigon.defDiagD(mdlr)
-      if(self.tipoArmadura.tagDiagD<0):
-        tagDiagAceroArmar= self.tipoArmadura.defDiagD(mdlr)
-      self.nmbDiagHormigon= self.tipoHormigon.nmbDiagD
-      self.nmbDiagArmadura= self.tipoArmadura.nmbDiagD
-    elif(self.diagType=="k"):
-      if(self.tipoHormigon.tagDiagK<0):
-        tagDiagHormigon= self.tipoHormigon.defDiagK(mdlr)
-      if(self.tipoArmadura.tagDiagK<0):
-        tagDiagAceroArmar= self.tipoArmadura.defDiagK(mdlr)
-      self.nmbDiagHormigon= self.tipoHormigon.nmbDiagK
-      self.nmbDiagArmadura= self.tipoArmadura.nmbDiagK
+    self.defDiagrams(mdlr,tipoDiag)
 
     geomSection= mdlr.getMaterialLoader.newSectionGeometry(self.nmbGeomSeccion())
-    regiones= geomSection.getRegions
-    rg= regiones.newQuadRegion(self.nmbDiagHormigon) # Hormigón
-    rg.nDivIJ= self.numDivIJ
-    rg.nDivJK= self.numDivJK
-    rg.pMin= geom.Pos2d(-self.ancho/2,-self.canto/2)
-    rg.pMax= geom.Pos2d(self.ancho/2,self.canto/2)
-    armaduras= geomSection.getReinfLayers
-    if(self.barrasNeg.nBarras>0):
-      self.negReinfLayer= armaduras.newStraightReinfLayer(self.nmbDiagArmadura)
-      self.negReinfLayer.codigo= "neg"
-      self.negReinfLayer.numReinfBars= self.barrasNeg.nBarras
-      #print "armadura neg. num. barras: ", self.negReinfLayer.numReinfBars
-      self.negReinfLayer.barDiameter= self.barrasNeg.diamBarras
-      self.negReinfLayer.barArea= self.barrasNeg.areaBarras
-      #print "armadura neg. bar area= ", self.negReinfLayer.barArea*1e6, " mm2"
-      #print "armadura neg. bar diam: ", self.barrasNeg.diamBarras*1e3, " mm"
-      y= self.getYAsNeg()
-      #print "y neg.= ", y, " m"
-      self.negReinfLayer.p1= geom.Pos2d(-self.ancho/2+self.barrasNeg.recubLat,y) # Armadura inferior (cara -).
-      self.negReinfLayer.p2= geom.Pos2d(self.ancho/2-self.barrasNeg.recubLat,y)
+    self.defConcreteRegion(geomSection)
 
-    if(self.barrasPos.nBarras>0):
-      self.posReinfLayer= armaduras.newStraightReinfLayer(self.nmbDiagArmadura)
-      self.posReinfLayer.codigo= "pos"
-      self.posReinfLayer.numReinfBars= self.barrasPos.nBarras
-      #print "ancho= ", self.ancho, " m canto= ", self.canto, " m"
-      #print "nDivIJ= ", rg.nDivIJ, " nDivJK= ", rg.nDivJK
-      #print "armadura pos. num. barras: ", self.posReinfLayer.numReinfBars
-      self.posReinfLayer.barDiameter= self.barrasPos.diamBarras
-      self.posReinfLayer.barArea= self.barrasPos.areaBarras
-      #print "armadura pos. bar area= ", self.posReinfLayer.barArea*1e6, " mm2"
-      #print "armadura pos. bar diam: ", self.barrasPos.diamBarras*1e3, " mm"
-      y= self.getYAsPos()
-      #print "y pos.= ", y, " m"
-      self.posReinfLayer.p1= geom.Pos2d(-self.ancho/2+self.barrasPos.recubLat,y) # Armadura superior (cara +).
-      self.posReinfLayer.p2= geom.Pos2d(self.ancho/2-self.barrasPos.recubLat,y)
+    armaduras= geomSection.getReinfLayers
+    y= self.getYAsNeg()
+    #print "y neg.= ", y, " m"
+    p1= geom.Pos2d(-self.ancho/2+self.barrasNeg.recubLat,y) # Armadura inferior (cara -).
+    p2= geom.Pos2d(self.ancho/2-self.barrasNeg.recubLat,y)
+    self.negReinfLayer= self.barrasNeg.defReinfLayer(armaduras,"neg",self.nmbDiagArmadura,p1,p2)
+
+    y= self.getYAsPos()
+    p1= geom.Pos2d(-self.ancho/2+self.barrasPos.recubLat,y) # Armadura superior (cara +).
+    p2= geom.Pos2d(self.ancho/2-self.barrasPos.recubLat,y)
+    self.posReinfLayer= self.barrasPos.defReinfLayer(armaduras,"pos",self.nmbDiagArmadura,p1,p2)
 
     self.recubMin= min(self.barrasNeg.recubLat,min(self.barrasPos.recubLat,min(self.barrasPos.recub,self.barrasNeg.recub)))
 

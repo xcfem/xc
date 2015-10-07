@@ -24,8 +24,8 @@ prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 scc10x20= sccRectg.sccRectang()
 scc10x20.b= 10 # Ancho de la sección expresado en cm.
 scc10x20.h= 20 # Canto de la sección expresado en cm.
-scc10x20.ndivIJ= 32
-scc10x20.ndivJK= 32
+scc10x20.nDivIJ= 32
+scc10x20.nDivJK= 32
 
 import os
 pth= os.path.dirname(__file__)
@@ -110,7 +110,7 @@ ratio13= (esfMz-loadMz)/loadMz
 printRatios(scc10x20)
 print "analOk= ",analOk
 print "numFibras= ", nFibras
-print "numFibrasTeor= ", scc10x20.ndivIJ*scc10x20.ndivJK
+print "numFibrasTeor= ", scc10x20.nDivIJ*scc10x20.nDivJK
 print "RM= ",(RM)
 print "esfMz= ",(esfMz)
 print "loadMz= ",(loadMz)

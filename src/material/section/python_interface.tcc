@@ -53,6 +53,8 @@ class_<XC::SeccionBarraPrismatica, XC::SeccionBarraPrismatica *, bases<XC::Secti
   .def("getNeutralAxis",&XC::SeccionBarraPrismatica::getFibraNeutra,"Returns neutral axis.")
   .def("getPuntoSemiplanoTracciones",&XC::SeccionBarraPrismatica::getPuntoSemiplanoTracciones)
   .def("getPuntoSemiplanoCompresiones",&XC::SeccionBarraPrismatica::getPuntoSemiplanoCompresiones)
+  .def("setTrialDeformationPlane",&XC::SeccionBarraPrismatica::setTrialDeformationPlane,"trial deformations are calculated whith the deformation plane passed as argument.")
+  .def("setInitialDeformationPlane",&XC::SeccionBarraPrismatica::setInitialDeformationPlane,"initial deformations are calculated whith the deformation plane passed as argument.")
 //.def("getTractionHalfPlane",getSemiplanoTracciones)
 //  .def("getTractionHalfPlaneFromLine",getSemiplanoTraccionesRecta)
 //  .def("getSemiplanoCompresiones",&XC::SeccionBarraPrismatica::getSemiplanoCompresiones)

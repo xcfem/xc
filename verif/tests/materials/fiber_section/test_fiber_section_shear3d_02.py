@@ -18,8 +18,8 @@ from materials import typical_materials
 scc1x1= sccRectg.sccRectang()
 scc1x1.b= 1 # Ancho de la sección expresado en cm.
 scc1x1.h= 1 # Canto de la sección expresado en cm.
-scc1x1.ndivIJ= 32
-scc1x1.ndivJK= 32
+scc1x1.nDivIJ= 32
+scc1x1.nDivJK= 32
 
 import os
 pth= os.path.dirname(__file__)
