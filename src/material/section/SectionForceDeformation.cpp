@@ -100,41 +100,6 @@ XC::SectionForceDeformation &XC::SectionForceDeformation::operator=(const Sectio
     return *this;
   }
 
-//! @brief Lee un objeto SectionForceDeformation desde archivo
-bool XC::SectionForceDeformation::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SectionForceDeformation) Procesando comando: " << cmd << std::endl;
-    if(cmd == "set_trial_section_deformation")
-      {
-        std::clog << "El comando: " << cmd << " está pensado para pruebas." << std::endl;
-        const Vector def= interpreta_xc_vector(status.GetString());
-        setTrialSectionDeformation(def);
-        return true;
-      }
-    else if(cmd == "get_stress_resultant")
-      {
-        status.GetBloque(); //Ignoramos argumentos.
-        getStressResultant();
-        return true;
-      }
-    else if(cmd == "get_section_tangent")
-      {
-        status.GetBloque(); //Ignoramos argumentos.
-        ptr_section_tangent= &getSectionTangent();
-        return true;
-      }
-    else if(cmd == "get_initial_tangent")
-      {
-        status.GetBloque(); //Ignoramos argumentos.
-        ptr_initial_tangent= &getInitialTangent();
-        return true;
-      }
-    else
-      return Material::procesa_comando(status);
-  }
-
 XC::SectionForceDeformation::~SectionForceDeformation(void)
   {
     if(fDefault) delete fDefault;
@@ -459,58 +424,6 @@ int XC::SectionForceDeformation::recvData(const CommParameters &cp)
     fDefault= cp.receiveMatrixPtr(fDefault,getDbTagData(),MatrixCommMetaData(1,2,3,4));
     return 0;
   }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::SectionForceDeformation::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "SectionForceDeformation::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-
-    any_const_ptr tmp= GetPropShellResponse(cod);
-    if(!tmp.empty())
-      return tmp;
-    else if(cod == "getTangentStiffness") //Matriz de rigidez tangente.
-      return any_const_ptr(getSectionTangent());
-    else if(cod == "getInitialStiffness") //Matriz de rigidez noval.
-      return any_const_ptr(getInitialTangent());
-    else if(cod == "Flexibility") //Matriz de flexibilidad noval.
-      return any_const_ptr(getSectionFlexibility());
-    else if(cod == "initialFlexibility") //Matriz de flexibilidad noval.
-      return any_const_ptr(getInitialFlexibility());
-    else if(cod == "getTypeString")
-      {
-        tmp_gp_str= getTypeString();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else if(cod == "epsilon")
-      {
-        static double y; y= 0.0;
-        static double z; z= 0.0;
-        if(InterpreteRPN::Pila().size()>1)
-          {
-            z= convert_to_double(InterpreteRPN::Pila().Pop());
-            y= convert_to_double(InterpreteRPN::Pila().Pop());
-          }
-        else if(InterpreteRPN::Pila().size()>0)
-          y= convert_to_double(InterpreteRPN::Pila().Pop());
-        else
-          err_num_argumentos(std::cerr,1,"GetProp",cod);
-        tmp_gp_dbl= getStrain(y,z);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getStressResultant")
-      {
-        return get_prop_vector(getStressResultant());
-      }
-    else if(cod == "getSectionDeformation")
-      {
-        return get_prop_vector(getSectionDeformation());
-      }
-    else
-      return Material::GetProp(cod);
-  }
-
 
 // AddingSensitivity:BEGIN ////////////////////////////////////////
 int XC::SectionForceDeformation::setParameter(const std::vector<std::string> &argv, Parameter &param)

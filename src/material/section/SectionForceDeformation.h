@@ -93,7 +93,6 @@ class SectionForceDeformation: public Material
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
     any_const_ptr GetPropShellResponse(const std::string &cod) const;
   public:
     SectionForceDeformation(int tag,int classTag,MaterialLoader *mat_ldr= NULL);
@@ -152,7 +151,6 @@ class SectionForceDeformation: public Material
     virtual double getRhoSensitivity(int gradNumber);
     virtual int commitSensitivity(const Vector& sectionDeformationGradient, int gradNumber, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // fin namespace XC

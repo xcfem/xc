@@ -82,7 +82,6 @@ class FiberSectionRepr: public SectionRepres
     contenedor_fibras fibras; //!< Punteros a fibras sueltas de la sección.
 
   protected:
-    bool procesa_comando(CmdStatus &status);
     void vacia_fibras(void);
     void copia_fibras(const FiberSectionRepr &otro);
   public:
@@ -107,7 +106,6 @@ class FiberSectionRepr: public SectionRepres
     FiberSection3d getFiberSection3d(int secTag) const;
     FiberSectionGJ getFiberSectionGJ(int secTag,const double &GJ) const;
     
-    virtual any_const_ptr GetProp(const std::string &cod) const;
     void Print(std::ostream &s, int flag =0);
     friend std::ostream &operator<<(std::ostream &s, FiberSectionRepr &fiberSectionRepr);    
   };

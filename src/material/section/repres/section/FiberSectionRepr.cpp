@@ -101,26 +101,6 @@ XC::FiberSectionRepr *XC::FiberSectionRepr::getCopy(void) const
   { return new FiberSectionRepr(*this); }
 
 
-//! @brief Lee un objeto XC::FiberSectionRepr desde archivo
-bool XC::FiberSectionRepr::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(FiberSectionRepr) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "for_each_fiber")
-      {
-        
-        const std::string nmbBlq= nombre_clase()+":"+boost::lexical_cast<std::string>(getTag())+ ":for_each_fiber";
-        const std::string bloque= status.GetBloque();
-        for(contenedor_fibras::iterator i= fibras.begin();i!=fibras.end();i++)
-          (*i)->EjecutaBloque(status,bloque,nmbBlq);
-        return true;
-      }
-    else
-      return SectionRepres::procesa_comando(status);
-  }
-
 XC::FiberSectionRepr::~FiberSectionRepr(void)
   { vacia_fibras(); }
 
@@ -131,19 +111,6 @@ int XC::FiberSectionRepr::getType(void) const
   { return SEC_TAG_FiberSectionRepr; }
 
 
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::FiberSectionRepr::GetProp(const std::string &cod) const
-  {
-    if(cod=="numFibras")
-      {
-        tmp_gp_szt= getNumFibers();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return SectionRepres::GetProp(cod);
-  }
 
 void XC::FiberSectionRepr::Print(std::ostream &s, int flag)
   {
