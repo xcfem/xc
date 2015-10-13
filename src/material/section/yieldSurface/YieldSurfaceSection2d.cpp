@@ -203,6 +203,7 @@ int XC::YieldSurfaceSection2d::setTrialSectionDeformation(const XC::Vector &def)
 const XC::Vector &XC::YieldSurfaceSection2d::getInitialSectionDeformation(void) const
   { return eInic; }
 
+//! @brief Returns generalized trial deformation.
 const XC::Vector &XC::YieldSurfaceSection2d::getSectionDeformation(void) const
   {
     static Vector retval;

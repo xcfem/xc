@@ -364,7 +364,7 @@ double XC::SectionForceDeformation::getStressResultantByName(const std::string &
     return retval;
   }
 
-//! @brief Returns section's deformation.
+//! @brief Returns section's trial deformation component by its name.
 double XC::SectionForceDeformation::getSectionDeformationByName(const std::string &cod) const
   {
     double retval= 0.0;

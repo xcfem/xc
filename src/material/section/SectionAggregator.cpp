@@ -407,13 +407,13 @@ const XC::Vector &XC::SectionAggregator::getInitialSectionDeformation(void) cons
     return *defzero;
   }
 
-//! @brief Devuelve la deformación de la sección.
+//! @brief Returns material's trial generalized deformation.
 const XC::Vector &XC::SectionAggregator::getSectionDeformation(void) const
   {
     int theSectionOrder= 0;
     if(theSection)
       {
-        const XC::Vector &eSec= theSection->getSectionDeformation();
+        const Vector &eSec= theSection->getSectionDeformation();
         theSectionOrder= theSection->getOrder();
         for(register int i= 0; i < theSectionOrder; i++)
           (*def)(i)= eSec(i);

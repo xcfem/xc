@@ -53,9 +53,10 @@ class ResponseId;
 class PlanoDeformacion: public Plano3d, public MovableObject
   {
   protected:
+    bool check_positions(const Pos2d &,const Pos2d &, const Pos2d &);
+    bool check_positions(const Pos3d &,const Pos3d &, const Pos3d &);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
     friend class SectionForceDeformation;
     friend class DqFibras;
     friend class FiberSectionBase; //Borrar esta línea.

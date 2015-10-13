@@ -231,7 +231,7 @@ int XC::MembranePlateFiberSection::setTrialSectionDeformation( const XC::Vector 
   }
 
 
-//send back the strainResultant
+//! @brief Returns material's trial generalized deformation.
 const XC::Vector& XC::MembranePlateFiberSection::getSectionDeformation(void) const
   { return strainResultant; }
 

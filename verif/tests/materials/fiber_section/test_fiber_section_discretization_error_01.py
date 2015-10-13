@@ -33,7 +33,7 @@ z1= canto/2.0
 regiones= geomSCC.getRegions
 rg= regiones.newQuadRegion("elast")
 rg.nDivIJ= 1
-rg.nDivJK= 2
+rg.nDivJK= 23
 nFibTeor= rg.nDivIJ*rg.nDivJK
 rg.pMin= geom.Pos2d(y0-y1,z0-z1)
 rg.pMax= geom.Pos2d(y0+y1,z0+z1)
@@ -58,24 +58,25 @@ N= fiberModel.getStressResultantComponent("N")
 Mz= fiberModel.getStressResultantComponent("Mz")
 My= fiberModel.getStressResultantComponent("My")
 
-nfibras= fibras.getNumFibers()
+nfiber= fibras.getNumFibers()
+hFiber= canto/rg.nDivJK
+IyFiber= 1/12.0*ancho*hFiber**3
 Iy= 1/12.0*ancho*canto**3
-fFibra= E*ancho*canto/4.0*epsilon
-MFibras= -2*fFibra*canto/4.0
 
 MyTeor= -2*E*Iy*epsilon/canto
-expectedError= 2*-1/48.0*E*ancho*(canto**2)*epsilon
+MFiber= -2*E*IyFiber*epsilon/canto
+expectedError= rg.nDivJK*MFiber
 MyCorr= My+expectedError
+error= (1/rg.nDivJK**2)
 
 ratio1= (MyCorr-MyTeor)/MyTeor
-ratio2= (MyCorr-My)/MyCorr-0.25
+ratio2= (MyCorr-My)/MyCorr-error
 
 ''' 
-print "nfibras= ", nfibras
-print " fFibra= ", fFibra
-print " MFibras= ", MFibras
+print "rg.nDivJK= ", rg.nDivJK
 print " My= ", My
 print " MyTeor= ", MyTeor
+print " MyTeor-My= ", MyTeor-My
 print " expectedError= ", expectedError
 print " MyCorr= ", MyCorr
 print "ratio1= ", ratio1

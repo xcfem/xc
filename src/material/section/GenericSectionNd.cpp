@@ -129,6 +129,7 @@ const XC::Vector &XC::GenericSectionNd::getInitialSectionDeformation(void) const
     return theModel->getStrain();
   }
 
+//! @brief Returns material's trial generalized deformation.
 const XC::Vector &XC::GenericSectionNd::getSectionDeformation(void) const
   { return theModel->getStrain(); }
 

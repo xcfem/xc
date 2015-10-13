@@ -52,8 +52,6 @@ class PlanoDeformacion;
 class SeccionBarraPrismatica: public SectionForceDeformation
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
-    any_const_ptr GetPropSectionResponse(const std::string &cod) const;
   public:
     SeccionBarraPrismatica(int tag,int classTag,MaterialLoader *mat_ldr= NULL);
     SeccionBarraPrismatica(const SeccionBarraPrismatica &otro);
@@ -94,7 +92,6 @@ class SeccionBarraPrismatica: public SectionForceDeformation
     bool hayMomento(const double &tol=1e-4) const;
     bool hayTorsor(const double &tol=1e-4) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // fin namespace XC

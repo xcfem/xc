@@ -317,7 +317,7 @@ const XC::Vector &XC::FiberSectionShear3d::getInitialSectionDeformation(void) co
     return defzero;
   }
 
-//! @brief Devuelve la deformación de la sección.
+//! @brief Returns material's trial generalized deformation.
 const XC::Vector &XC::FiberSectionShear3d::getSectionDeformation(void) const
   {
     def.Zero();

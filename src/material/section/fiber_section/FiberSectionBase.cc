@@ -200,7 +200,7 @@ int XC::FiberSectionBase::setTrialSectionDeformation(const Vector &deforms)
     return 0;
   }
 
-//! @brief Devuelve el vector de deformaciones generalizadas.
+//! @brief Returns material's trial generalized deformation.
 const XC::Vector &XC::FiberSectionBase::getSectionDeformation(void) const
   {
     static Vector retval;

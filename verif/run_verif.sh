@@ -360,7 +360,6 @@ echo "$BLEU" "  Fiber section tests." "$NORMAL"
 python tests/materials/fiber_section/test_reg_cuad_01.py
 python tests/materials/fiber_section/test_capa_armadura_recta_01.py
 python tests/materials/fiber_section/test_fiber_section_discretization_error_01.py
-python tests/materials/fiber_section/test_fiber_section_discretization_error_02.py
 python tests/materials/fiber_section/test_fiber2d_01.py
 python tests/materials/fiber_section/test_fiber3d_01.py
 python tests/materials/fiber_section/test_fiber3d_02.py

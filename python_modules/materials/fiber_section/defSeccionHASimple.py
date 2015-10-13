@@ -296,6 +296,13 @@ class RecordSeccionHASimple(BasicRecordRCSection):
     self.defInteractionDiagramParameters(mdlr)
     return mdlr.getMaterialLoader.calcInteractionDiagramNMy(self.nmbSeccion,self.param)
 
+  def defInteractionDiagramNMz(self,mdlr):
+    'Defines N-My interaction diagram.'
+    if(not self.fiberSectionRepr):
+      sys.stderr.write("defInteractionDiagramNMz: fiber section representation for section: "+ self.nmbSeccion + ";  not defined use defFiberSection.\n")
+    self.defInteractionDiagramParameters(mdlr)
+    return mdlr.getMaterialLoader.calcInteractionDiagramNMz(self.nmbSeccion,self.param)
+
   def getStressCalculator(self):
     Ec= self.tipoHormigon.Ecm()
     Es= self.tipoArmadura.Es

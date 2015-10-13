@@ -263,7 +263,7 @@ const XC::Vector &XC::Bidirectional::getInitialSectionDeformation(void) const
     return s;
   }
 
-//! @brief Devuelve el vector de deformaciones de la sección.
+//! @brief Returns material's trial generalized deformation.
 const XC::Vector &XC::Bidirectional::getSectionDeformation(void) const
   {
     // Write to static variable for return

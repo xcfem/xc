@@ -322,7 +322,7 @@ const XC::Vector &XC::Isolator2spring::getInitialSectionDeformation(void) const
     return s;
   }
 
-//! @brief Devuelve la deformación del material.
+//! @brief Returns material's trial deformation.
 const XC::Vector &XC::Isolator2spring::getSectionDeformation(void) const
   {
     // Write to static variable for return

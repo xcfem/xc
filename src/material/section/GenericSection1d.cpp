@@ -116,7 +116,7 @@ const XC::Vector &XC::GenericSection1d::getInitialSectionDeformation(void) const
     return e;
   }
 
-//! @brief Devuelve la deformación (axial y curvaturas) de la sección.
+//! @brief Returns material's trial generalized deformation.
 const XC::Vector &XC::GenericSection1d::getSectionDeformation(void) const
   {
     static Vector e(1); // static for class-wide returns

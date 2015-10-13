@@ -38,9 +38,44 @@
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
 #include "utility/actor/actor/MovableVector.h"
 
+bool XC::PlanoDeformacion::check_positions(const Pos3d &pA,const Pos3d &pB, const Pos3d &pC)
+  {
+    const Pos2d p1= Pos2d(pA.y(),pA.z());
+    const Pos2d p2= Pos2d(pB.y(),pB.z());
+    const Pos2d p3= Pos2d(pC.y(),pC.z());
+    return check_positions(p1,p2,p3);
+  }
+
+bool XC::PlanoDeformacion::check_positions(const Pos2d &p1,const Pos2d &p2, const Pos2d &p3)
+  {
+    bool retval= true;
+    const GEOM_FT tol2= 1e-3;
+    const GEOM_FT d12= p1.dist2(p2);
+    if(d12<tol2)
+      {
+        retval= false;
+        std::clog << "PlanoDeformacion; points p1= " << p1 << " and p2= " 
+                  << p2 << " are too close d= " << sqrt(d12) << std::endl;
+      }
+    const GEOM_FT d13= p1.dist2(p3);
+    if(d13<tol2)
+      {
+        retval= false;
+        std::clog << "PlanoDeformacion; points p1= " << p1 << " and p3= " 
+                  << p3 << " are too close d= " << sqrt(d13) << std::endl;
+      }
+    const GEOM_FT d23= p2.dist2(p3);
+    if(d23<tol2)
+      {
+        retval= false;
+        std::clog << "PlanoDeformacion; points p2= " << p2 << " and p3= " 
+                  << p3 << " are too close d= " << sqrt(d23) << std::endl;
+      }
+    return retval;
+  }
 
 XC::PlanoDeformacion::PlanoDeformacion(const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)
-  : Plano3d(p1,p2,p3), MovableObject(0) {}
+  : Plano3d(p1,p2,p3), MovableObject(0) { check_positions(p1,p2,p3); }
 
 XC::PlanoDeformacion::PlanoDeformacion(const Plano3d &p)
   : Plano3d(p), MovableObject(0) {}
@@ -54,6 +89,7 @@ XC::PlanoDeformacion::PlanoDeformacion( const Pos2d &yz1, const double &e_1, //D
     const Pos3d p1(e_1,yz1.x(),yz1.y());
     const Pos3d p2(e_2,yz2.x(),yz2.y());
     const Pos3d p3(e_3,yz3.x(),yz3.y());
+    check_positions(p1,p2,p3);
     TresPuntos(p1,p2,p3);
   }
 XC::PlanoDeformacion::PlanoDeformacion(const double &eps) //Deformación constante en toda la sección.
@@ -72,21 +108,6 @@ XC::PlanoDeformacion::PlanoDeformacion(const Vector &e)
     const Pos3d p2(e_2,1.0,0.0);
     const Pos3d p3(e_3,0.0,1.0);
     TresPuntos(p1,p2,p3);
-  }
-
-bool XC::PlanoDeformacion::procesa_comando(CmdStatus &status)
-  {
-    const std::string &cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(PlanoDeformacion) Procesando comando: " << cmd << std::endl;
-    if(cmd == "constante")
-      {
-        const double e= interpretaDouble(status.GetString());
-        ConstantStrain(e); 
-        return true;
-      }
-    else
-      return Plano3d::procesa_comando(status);
   }
 
 void XC::PlanoDeformacion::ConstantStrain(const double &e)

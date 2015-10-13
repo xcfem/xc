@@ -78,6 +78,7 @@ int XC::BaseElasticSection::setTrialSectionDeformation(const XC::Vector &def)
     return 0;
   }
 
+//! @brief Returns material's trial deformation.
 const XC::Vector &XC::BaseElasticSection::getSectionDeformation(void) const
   {
     static Vector retval;
