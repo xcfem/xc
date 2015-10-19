@@ -3,7 +3,7 @@
 
 
 # Hormigón
-
+from __future__ import division
 import xc_base
 import geom
 from materials import typical_materials
@@ -11,13 +11,6 @@ from materials.ehe import auxEHE
 
 class HormigonEHE(object):
   """ Concrete model according to EHE"""
-  nmbMaterial= "nil" # Nombre del material.
-  nmbDiagK= "dgK"+nmbMaterial # Nombre para el diagrama característico.
-  tagDiagK= -1 # Tag del material uniaxial con el diagrama característico del material.
-  nmbDiagD= "dgD"+nmbMaterial # Nombre para el diagrama de cálculo.
-  tagDiagD= -1 # Tag del material uniaxial con el diagrama de cálculo del material.
-  fck= 0 # Resistencia característica a compresión (Pa).
-  gmmC= 1.5 # Minoración de la resistencia del hormigón.
   epsilon0= -2e-3 # Deformación para tensión máxima (de compresión).
   epsilonU= -3.5e-3 # Deformación para tensión última (de compresión).
   nuc= 0.2 # Coeficiente de Poisson del hormigón.
