@@ -593,7 +593,7 @@ XC::DiagInteraccion2d *XC::MaterialLoader::calcInteractionDiagramNMy(const std::
         const FiberSectionBase *tmp= dynamic_cast<const FiberSectionBase *>(mat->second);
         if(tmp)
           {
-            const std::string cod_diag= "diagInt"+cod_scc;
+            const std::string cod_diag= "diagIntNMy"+cod_scc;
             if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //Diagram exists.
               {
 	        std::clog << "MaterialLoader::calcInteractionDiagramNMy; ¡ojo! se redefine el diagrama de interacción de nombre: '"
@@ -626,7 +626,7 @@ XC::DiagInteraccion2d *XC::MaterialLoader::calcInteractionDiagramNMz(const std::
         const FiberSectionBase *tmp= dynamic_cast<const FiberSectionBase *>(mat->second);
         if(tmp)
           {
-            const std::string cod_diag= "diagInt"+cod_scc;
+            const std::string cod_diag= "diagIntNMz"+cod_scc;
             if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //Diagram exists.
               {
 	        std::clog << "MaterialLoader::calcInteractionDiagramNMz; ¡ojo! se redefine el diagrama de interacción de nombre: '"

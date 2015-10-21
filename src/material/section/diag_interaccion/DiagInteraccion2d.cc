@@ -140,7 +140,7 @@ XC::DiagInteraccion2d XC::calc_diag_interaccionPlano(const FiberSectionBase &scc
         delete tmp;
       }
     else
-      std::cerr << "XC::calc_diag_interaccion, no se pudo obtener una copia de la sección."
+      std::cerr << "XC::calc_diag_interaccionPlano, no se pudo obtener una copia de la sección."
                 << std::endl;
     return retval;
   }
@@ -155,7 +155,7 @@ XC::DiagInteraccion2d XC::calc_diag_interaccionNMy(const FiberSectionBase &scc,c
         delete tmp;
       }
     else
-      std::cerr << "XC::calc_diag_interaccion, no se pudo obtener una copia de la sección."
+      std::cerr << "XC::calc_diag_interaccionNMy, no se pudo obtener una copia de la sección."
                 << std::endl;
     return retval;
   }
@@ -170,7 +170,7 @@ XC::DiagInteraccion2d XC::calc_diag_interaccionNMz(const FiberSectionBase &scc,c
         delete tmp;
       }
     else
-      std::cerr << "XC::calc_diag_interaccion, no se pudo obtener una copia de la sección."
+      std::cerr << "XC::calc_diag_interaccionNMz, no se pudo obtener una copia de la sección."
                 << std::endl;
     return retval;
   }
