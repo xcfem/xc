@@ -44,6 +44,8 @@ class FiberSectionRepr;
 class DatosDiagInteraccion;
 class DiagInteraccion;
 class DiagInteraccion2d;
+class NMPointCloud;
+class NMyMzPointCloud;
 
 //! \ingroup MATSCC
 //
@@ -77,10 +79,10 @@ class FiberSectionBase: public SeccionBarraPrismatica
     set_fibras_iterator get_set_fibras(const std::string &nmb_set);
     virtual double get_dist_to_neutral_axis(const double &,const double &) const;
     Pos3d Esf2Pos3d(void) const;
-    const Pos3d *InsertaEsfuerzo(const PlanoDeformacion &,GeomObj::list_Pos3d &,const Pos3d *, const double &);
-    const Pos3d *get_ptos_diag_interaccion_theta(GeomObj::list_Pos3d &lista_esfuerzos,const DatosDiagInteraccion &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
-    const GeomObj::list_Pos3d &get_ptos_diag_interaccion(const DatosDiagInteraccion &);
-    const GeomObj::list_Pos2d &get_ptos_diag_interaccionPlano(const DatosDiagInteraccion &, const double &);
+    Pos3d getNMyMz(const PlanoDeformacion &);
+    void get_ptos_diag_interaccion_theta(NMyMzPointCloud &lista_esfuerzos,const DatosDiagInteraccion &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
+    const NMyMzPointCloud &get_ptos_diag_interaccion(const DatosDiagInteraccion &);
+    const NMPointCloud &get_ptos_diag_interaccionPlano(const DatosDiagInteraccion &, const double &);
     virtual void def_section_repres(CmdStatus &status);
   public:
     FiberSectionBase(int classTag,int dim,MaterialLoader *mat_ldr= nullptr); 

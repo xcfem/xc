@@ -4,6 +4,7 @@ import plotGeomSeccion as pg
 import sys
 from latex import latexUtils
 import math
+import os
 
 fmt3_1f= '{:3.1f}'
 fmt4_1f= '{:4.1f}'
@@ -115,7 +116,9 @@ class SectionInfo(object):
     fileHandler.write('\\begin{minipage}{85mm}\n')
     fileHandler.write('\\vspace{2mm}\n')
     fileHandler.write('\\begin{center}\n')
-    fileHandler.write('\\includegraphics[width=80mm]{'+pathFigura+'}\n')
+    #name without extension to allow pdfLatex process the file
+    nameWOExt= os.path.splitext(pathFigura)[0]
+    fileHandler.write('\\includegraphics[width=80mm]{'+nameWOExt+'}\n')
     fileHandler.write('\\end{center}\n')
     fileHandler.write('\\vspace{1pt}\n')
     fileHandler.write('\\end{minipage} & \n')

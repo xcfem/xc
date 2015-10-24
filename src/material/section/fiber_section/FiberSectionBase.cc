@@ -43,6 +43,8 @@
 #include "material/section/diag_interaccion/Pivotes.h"
 #include "material/section/diag_interaccion/DiagInteraccion.h"
 #include "material/section/diag_interaccion/DiagInteraccion2d.h"
+#include "material/section/diag_interaccion/NMPointCloud.h"
+#include "material/section/diag_interaccion/NMyMzPointCloud.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d2/MallaTriang3d.h"
 #include "xc_utils/src/geom/d3/ConvexHull3d.h"
@@ -583,21 +585,11 @@ int XC::FiberSectionBase::revertToStart(void)
 Pos3d XC::FiberSectionBase::Esf2Pos3d(void) const
   { return Pos3d(getStressResultant(XC::SECTION_RESPONSE_P),getStressResultant(XC::SECTION_RESPONSE_MY),getStressResultant(XC::SECTION_RESPONSE_MZ)); }
 
-//! @brief Inserta en la lista de esfuerzos que se pasa como parámetro
-//! la resultante de tensiones normales en la sección.
-const Pos3d *XC::FiberSectionBase::InsertaEsfuerzo(const PlanoDeformacion &def,GeomObj::list_Pos3d &lista_esfuerzos,const Pos3d *ultimo_insertado, const double &umbral)
+//! @brief Devuelve la resultante de tensiones normales en la sección para el plano de deformación.
+Pos3d XC::FiberSectionBase::getNMyMz(const PlanoDeformacion &def)
   {
     setTrialDeformationPlane(def);
-    const Pos3d p_esf= Esf2Pos3d();
-    if(ultimo_insertado)
-      {
-        if(dist(p_esf,*ultimo_insertado)>umbral)
-          return lista_esfuerzos.Agrega(p_esf);
-        else
-          return ultimo_insertado;
-      }
-    else
-      return lista_esfuerzos.Agrega(p_esf);  
+    return Esf2Pos3d();
   }
 
 //    ^ z
@@ -607,42 +599,40 @@ const Pos3d *XC::FiberSectionBase::InsertaEsfuerzo(const PlanoDeformacion &def,G
 //    +------->y
 //
 //! @brief Devuelve los puntos que definen el diagrama de interacción de la sección para un ángulo theta (con el eje Z) dado.
-const Pos3d *XC::FiberSectionBase::get_ptos_diag_interaccion_theta(GeomObj::list_Pos3d &lista_esfuerzos,const DatosDiagInteraccion &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
+void XC::FiberSectionBase::get_ptos_diag_interaccion_theta(NMyMzPointCloud &lista_esfuerzos,const DatosDiagInteraccion &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
   {
-    const Pos3d *ultimo_insertado= nullptr; //Ultima terna insertada.
     CalcPivotes cp(datos_diag.getDefsAgotPivotes(),fibras,fsC,fsS,theta);
     Pivotes pivotes(cp);
     if(pivotes.Ok())
       {
         //Dominios 1 y 2
-        Pos3d P1= pivotes.GetPivoteA(); //Pivote.
+        Pos3d P1= pivotes.getPivoteA(); //Pivote.
         Pos3d P2= P1+100.0*cp.GetK(); //Flexión en torno al eje Z local.
         Pos3d P3;
         PlanoDeformacion def;
         const double inc_eps_B= datos_diag.getIncEps();
         const double eps_agot_A= datos_diag.getDefsAgotPivotes().getDefAgotPivoteA();
         const double eps_agot_B= datos_diag.getDefsAgotPivotes().getDefAgotPivoteB();
-        const double eps_agot_C= datos_diag.getDefsAgotPivotes().getDefAgotPivoteC();
         for(double e= eps_agot_A;e>=eps_agot_B;e-=inc_eps_B)
           {
-            P3= pivotes.GetPuntoB(e);
-            ultimo_insertado= InsertaEsfuerzo(PlanoDeformacion(P1,P2,P3),lista_esfuerzos,ultimo_insertado,datos_diag.getUmbral());
+            P3= pivotes.getPuntoB(e);
+            lista_esfuerzos.append(getNMyMz(PlanoDeformacion(P1,P2,P3)));
           }
         //Dominios 3 y 4
-        P1= pivotes.GetPivoteB(); //Pivote
+        P1= pivotes.getPivoteB(); //Pivote
         P2= P1+100.0*cp.GetK(); 
         const double inc_eps_A= datos_diag.getIncEps();
         for(double e= eps_agot_A;e>=0.0;e-=inc_eps_A)
           {
-            P3= pivotes.GetPuntoA(e);
-            ultimo_insertado= InsertaEsfuerzo(PlanoDeformacion(P1,P2,P3),lista_esfuerzos,ultimo_insertado,datos_diag.getUmbral());
+            P3= pivotes.getPuntoA(e);
+            lista_esfuerzos.append(getNMyMz(PlanoDeformacion(P1,P2,P3)));
           }
         //Dominio 4a
         //Calculamos la deformación en D cuando el pivote es B
         //y la deformación en A es nula (inicio del dominio 4a).
-        const Pos3d PA0= pivotes.GetPuntoA(0.0); //Deformación nula en la armadura.
+        const Pos3d PA0= pivotes.getPuntoA(0.0); //Deformación nula en la armadura.
         const PlanoDeformacion def_lim_4a= PlanoDeformacion(P1,P2,PA0);
-        const Pos2d PD= pivotes.GetPosPuntoD();
+        const Pos2d PD= pivotes.getPosPuntoD();
         const double eps_D4a= def_lim_4a.Deformacion(PD);
         const double recorr_eps_D4a= eps_D4a;
         if(recorr_eps_D4a>(eps_agot_A/200.0)) //Si el recorrido es positivo y "apreciable"
@@ -650,28 +640,29 @@ const Pos3d *XC::FiberSectionBase::get_ptos_diag_interaccion_theta(GeomObj::list
             const double inc_eps_D4a= datos_diag.getIncEps(); //recorr_eps_D4a/n_div_dominio; //Intervalos de cálculo.
             for(double e= eps_D4a;e>=0.0;e-=inc_eps_D4a)
               {
-                P3= pivotes.GetPuntoD(e);
-                ultimo_insertado= InsertaEsfuerzo(PlanoDeformacion(P1,P2,P3),lista_esfuerzos,ultimo_insertado,datos_diag.getUmbral());
+                P3= pivotes.getPuntoD(e);
+                lista_esfuerzos.append(getNMyMz(PlanoDeformacion(P1,P2,P3)));
               }
           }
         //Dominio 5
-        P1= pivotes.GetPivoteC(); //Pivote
+        P1= pivotes.getPivoteC(); //Pivote
         P2= P1+100.0*cp.GetK(); 
+        const double eps_agot_C= datos_diag.getDefsAgotPivotes().getDefAgotPivoteC();
         const double inc_eps_D= datos_diag.getIncEps();
         for(double e= 0.0;e>=eps_agot_C;e-=inc_eps_D)
           {
-            P3= pivotes.GetPuntoD(e);
-            ultimo_insertado= InsertaEsfuerzo(PlanoDeformacion(P1,P2,P3),lista_esfuerzos,ultimo_insertado,datos_diag.getUmbral());
+            P3= pivotes.getPuntoD(e);
+            lista_esfuerzos.append(getNMyMz(PlanoDeformacion(P1,P2,P3)));
           }
       }
-    return ultimo_insertado;
   }
 
 //! @brief Devuelve los puntos que definen el diagrama de interacción en el plano definido por el ángulo que se pasa como parámetro.
-const GeomObj::list_Pos2d &XC::FiberSectionBase::get_ptos_diag_interaccionPlano(const DatosDiagInteraccion &datos_diag, const double &theta)
+const XC::NMPointCloud &XC::FiberSectionBase::get_ptos_diag_interaccionPlano(const DatosDiagInteraccion &datos_diag, const double &theta)
   {
-    static GeomObj::list_Pos2d lista_esfuerzos;
-    lista_esfuerzos.clear();
+    static NMPointCloud retval;
+    retval.clear();
+    retval.setUmbral(datos_diag.getUmbral());
     const DqFibras &fsC= sel_mat_tag(datos_diag.getNmbSetHormigon(),datos_diag.getTagHormigon())->second;
     if(fsC.empty())
       std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagHormigon()
@@ -682,27 +673,25 @@ const GeomObj::list_Pos2d &XC::FiberSectionBase::get_ptos_diag_interaccionPlano(
                 << " que corresponde al acero de armar." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
-        static GeomObj::list_Pos3d tmp;
+        static NMyMzPointCloud tmp;
         tmp.clear();
-        const Pos3d *ultimo_insertado= get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,theta);
-        ultimo_insertado= get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,theta+M_PI); //theta+M_PI
-        for(GeomObj::list_Pos3d::const_iterator i= tmp.begin();i!=tmp.end();i++)
-          {
-            Pos3d p3d= *i;
-	    lista_esfuerzos.push_back(Pos2d(p3d.x(),p3d.y()));
-	  }
+        tmp.setUmbral(datos_diag.getUmbral());
+        get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,theta);
+        get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,theta+M_PI); //theta+M_PI
+        retval= tmp.getNM(theta);
         revertToStart();
       }
     else
       std::cerr << "No se pudo obtener el diagrama de interacción." << std::endl;
-    return lista_esfuerzos;
+    return retval;
   }
 
 //! @brief Devuelve los puntos que definen el diagrama de interacción de la sección.
-const GeomObj::list_Pos3d &XC::FiberSectionBase::get_ptos_diag_interaccion(const DatosDiagInteraccion &datos_diag)
+const XC::NMyMzPointCloud &XC::FiberSectionBase::get_ptos_diag_interaccion(const DatosDiagInteraccion &datos_diag)
   {
-    static GeomObj::list_Pos3d lista_esfuerzos;
+    static NMyMzPointCloud lista_esfuerzos;
     lista_esfuerzos.clear();
+    lista_esfuerzos.setUmbral(datos_diag.getUmbral());
     const DqFibras &fsC= sel_mat_tag(datos_diag.getNmbSetHormigon(),datos_diag.getTagHormigon())->second;
     if(fsC.empty())
       std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagHormigon()
@@ -713,9 +702,8 @@ const GeomObj::list_Pos3d &XC::FiberSectionBase::get_ptos_diag_interaccion(const
                 << " que corresponde al acero de armar." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
-        const Pos3d *ultimo_insertado= nullptr; //Ultima terna insertada.
         for(double theta= 0.0;theta<2*M_PI;theta+=datos_diag.getIncTheta())
-          ultimo_insertado= get_ptos_diag_interaccion_theta(lista_esfuerzos,datos_diag,fsC,fsS,theta);
+          get_ptos_diag_interaccion_theta(lista_esfuerzos,datos_diag,fsC,fsS,theta);
         revertToStart();
       }
     else
@@ -726,7 +714,7 @@ const GeomObj::list_Pos3d &XC::FiberSectionBase::get_ptos_diag_interaccion(const
 //! @brief Devuelve el diagrama de interacción.
 XC::DiagInteraccion XC::FiberSectionBase::GetDiagInteraccion(const DatosDiagInteraccion &datos_diag)
   {
-    const GeomObj::list_Pos3d lp= get_ptos_diag_interaccion(datos_diag);
+    const NMyMzPointCloud lp= get_ptos_diag_interaccion(datos_diag);
     DiagInteraccion retval;
     if(!lp.empty())
       {
@@ -742,7 +730,7 @@ XC::DiagInteraccion XC::FiberSectionBase::GetDiagInteraccion(const DatosDiagInte
 //! @brief Devuelve el diagrama de interacción.
 XC::DiagInteraccion2d XC::FiberSectionBase::GetDiagInteraccionPlano(const DatosDiagInteraccion &datos_diag, const double &theta)
   {
-    const GeomObj::list_Pos2d lp= get_ptos_diag_interaccionPlano(datos_diag, theta);
+    const NMPointCloud lp= get_ptos_diag_interaccionPlano(datos_diag, theta);
     DiagInteraccion2d retval;
     if(!lp.empty())
       {

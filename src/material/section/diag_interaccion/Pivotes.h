@@ -53,32 +53,47 @@ class Pivotes
   public:
     Pivotes(const Pos3d &a,const Pos3d &b,const Pos3d &c,const Pos3d &d);
     Pivotes(const CalcPivotes &cp);
-    inline const Pos3d &GetPuntoD(void) const
+    inline const Pos3d &getPuntoD(void) const
       { return D; }
-    inline const Pos3d &GetPivoteA(void) const
+    inline const Pos3d &getPivoteA(void) const
       { return A; }
-    inline const Pos3d &GetPivoteB(void) const
+    inline const Pos3d &getPivoteB(void) const
       { return B; }
-    inline const Pos3d &GetPivoteC(void) const
+    inline const Pos3d &getPivoteC(void) const
       { return C; }
-    inline Pos3d GetPuntoA(const double &epsilon)
+    inline Pos3d getPuntoA(const double &epsilon)
       { return Pos3d(epsilon,A.y(),A.z()); }
-    inline Pos3d GetPuntoB(const double &epsilon)
+    inline Pos3d getPuntoB(const double &epsilon)
       { return Pos3d(epsilon,B.y(),B.z()); }
-    inline Pos3d GetPuntoD(const double &epsilon)
+    inline Pos3d getPuntoD(const double &epsilon)
       { return Pos3d(epsilon,D.y(),D.z()); }
-    inline Pos2d GetPosPivoteA(void) const
+    inline double getEpsilonA(void) const
+      { return A.x(); }
+    inline double getEpsilonB(void) const
+      { return B.x(); }
+    inline double getEpsilonC(void) const
+      { return C.x(); }
+    inline double getEpsilonD(void) const
+      { return B.x(); }
+    inline Pos2d getPosPivoteA(void) const
       { return Pos2d(A.y(),A.z()); }
-    inline Pos2d GetPosPivoteB(void) const
+    inline Pos2d getPosPivoteB(void) const
       { return Pos2d(B.y(),B.z()); }
-    inline Pos2d GetPosPivoteC(void) const
+    inline Pos2d getPosPivoteC(void) const
       { return Pos2d(C.y(),C.z()); }
-    inline Pos2d GetPosPuntoD(void) const
+    inline Pos2d getPosPuntoD(void) const
       { return Pos2d(D.y(),D.z()); }
     inline bool Ok(void) const
       { return ok; }
     bool checkPositions(void) const;
+    void print(std::ostream &os) const;
   };
+
+ inline std::ostream &operator<<(std::ostream &os, const Pivotes &p)
+  {
+    p.print(os);
+    return os;
+  }
 
 } // fin namespace XC
 

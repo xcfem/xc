@@ -34,10 +34,10 @@ bool XC::Pivotes::checkPositions(void) const
   {
     bool retval= true;
     const double dMin= 1e-4;
-    const Pos2d pA= GetPosPivoteA();
-    const Pos2d pB= GetPosPivoteB();
-    const Pos2d pC= GetPosPivoteC();
-    const Pos2d pD= GetPosPuntoD();
+    const Pos2d pA= getPosPivoteA();
+    const Pos2d pB= getPosPivoteB();
+    const Pos2d pC= getPosPivoteC();
+    const Pos2d pD= getPosPuntoD();
     const double dAB= dist(pA,pB);
     if(dAB<dMin)
       {
@@ -88,4 +88,11 @@ XC::Pivotes::Pivotes(const CalcPivotes &cp)
   : A(cp.calcPositionPivotA()), B(cp.calcPositionPivotB()), C(cp.calcPositionPivotC()), D(cp.GetPuntoD())
   { ok= checkPositions(); }
 
-
+//! @brief Print pivots definition
+void XC::Pivotes::print(std::ostream &os) const
+  {
+    os << "pos(A): " << getPosPivoteA() << " epsilon(A)= " << getEpsilonA() << std::endl;
+    os << "pos(B): " << getPosPivoteB() << " epsilon(B)= " << getEpsilonB() << std::endl;
+    os << "pos(C): " << getPosPivoteC() << " epsilon(C)= " << getEpsilonC() << std::endl;
+    os << "pos(D): " << getPosPuntoD() << " epsilon(D)= " << getEpsilonD() << std::endl;
+  }

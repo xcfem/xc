@@ -2519,7 +2519,7 @@ size_t XC::DqFibras::getFibraCooMin(const Ref3d3d &r,const size_t &iCoo) const
     const size_t nf= getNumFibers();
     if(nf<1)
       {
-        std::cerr << "DqFibras::getFibraCooMin; no hay fibras definidas." << std::endl;
+        std::cerr << "DqFibras::getFibraCooMin; container is empty." << std::endl;
         return retval;
       }
     register size_t i= 0;
