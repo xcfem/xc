@@ -28,8 +28,8 @@ from solution import database_helper as dbHelper
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0,0,0)
@@ -48,11 +48,11 @@ nod= nodos.newNodeXYZ(3,2,0)
 
 # Materials definition
 
-hLosa= typical_materials.defElasticMembranePlateSection(mdlr,"hLosa",Ec,nuC,densLosa,hLosa)
+hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec,nuC,densLosa,hLosa)
 
-typical_materials.defSteel02(mdlr,"aceroPret",Ep,fy,0.001,tInic)
+typical_materials.defSteel02(preprocessor, "aceroPret",Ep,fy,0.001,tInic)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 # Losa de hormigón
 elementos.defaultMaterial= "hLosa"
 elementos.defaultTag= 1
@@ -87,14 +87,14 @@ truss= elementos.newElement("truss",xc.ID([11,12]));
 truss.area= Ap
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.fixNode6DOF(coacciones,5)
 fix_node_6dof.fixNode6DOF(coacciones,9)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -188,7 +188,7 @@ analysis= solu.newAnalysis("static_analysis","smt","")
 
 
 def resuelveCombEstatLin(comb,db,dbHelp):
-  mdlr.resetLoadCase()
+  preprocessor.resetLoadCase()
   dbHelp.helpSolve(comb,db)
   execfile("solution/database_helper_solve.xci")
   ''' 
@@ -208,7 +208,7 @@ dXMin=1e9
 dXMax=-1e9
 
 def trataResultsComb(comb):
-  nodos= mdlr.getNodeLoader
+  nodos= preprocessor.getNodeLoader
   nod8= nodos.getNode(8)
 
   deltaX= nod8.getDisp[0] # Desplazamiento del nodo 2 según z
@@ -229,13 +229,13 @@ db= prueba.newDatabase("BerkeleyDB","/tmp/test_combinacion_05.db")
 
 helper= dbHelper.DatabaseHelperSolve(db)
 
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 nombrePrevia="" 
 tagPrevia= 0 
 tagSave= 0
 for key in combs.getKeys():
   comb= combs[key]
-  helper.solveComb(mdlr,comb,analysis)
+  helper.solveComb(preprocessor, comb,analysis)
   trataResultsComb(comb)
 
 ratio1= abs((dXMax-0.115734e-3)/0.115734e-3)

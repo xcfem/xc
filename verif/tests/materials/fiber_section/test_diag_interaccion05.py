@@ -23,14 +23,14 @@ areaFi20= math.pi*(diam/2.0)**2 # Área de las barras expresado en metros cuadra
 
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos materiales
-tagHA30= hormigonesEHE.HA30.defDiagD(mdlr)
-Ec= hormigonesEHE.HA30.getDiagD(mdlr).getTangent
-tagB500S= EHE_reinforcing_steel.B500S.defDiagD(mdlr)
-Es= EHE_reinforcing_steel.B500S.getDiagD(mdlr).getTangent
+tagHA30= hormigonesEHE.HA30.defDiagD(preprocessor)
+Ec= hormigonesEHE.HA30.getDiagD(preprocessor).getTangent
+tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
+Es= EHE_reinforcing_steel.B500S.getDiagD(preprocessor).getTangent
 
-pileGeometry= mdlr.getMaterialLoader.newSectionGeometry("pileGeometry")
+pileGeometry= preprocessor.getMaterialLoader.newSectionGeometry("pileGeometry")
 regiones= pileGeometry.getRegions
 hormigon= regiones.newCircularRegion(hormigonesEHE.HA30.nmbDiagD)
 hormigon.nDivCirc= 20
@@ -48,7 +48,7 @@ armadura.initAngle= 0.0
 armadura.finalAngle= 2*math.pi
 armadura.radius= hormigon.extRad-recub
 
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("pileGeometry")

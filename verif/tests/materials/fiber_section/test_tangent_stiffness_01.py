@@ -12,11 +12,11 @@ ancho= 0.2 # Ancho de la sección expresado en metros.
 canto= 0.4 # Ancho de la sección expresado en metros.
 E= 2.1e6 # Módulo de Young del material en kp/cm2.
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos materiales
 
-ela= typical_materials.defElasticMaterial(mdlr,"ela",E)
-geomScc= mdlr.getMaterialLoader.newSectionGeometry("geomScc")
+ela= typical_materials.defElasticMaterial(preprocessor, "ela",E)
+geomScc= preprocessor.getMaterialLoader.newSectionGeometry("geomScc")
 regiones= geomScc.getRegions
 regEla= regiones.newQuadRegion("ela")
 regEla.nDivIJ= 11
@@ -24,7 +24,7 @@ regEla.nDivJK= 11
 regEla.pMin= geom.Pos2d(-canto/2.0,-ancho/2.0)
 regEla.pMax= geom.Pos2d(canto/2.0,ancho/2.0)
 
-scc= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","scc")
+scc= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","scc")
 fiberSectionRepr= scc.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomScc")
 scc.setupFibers()

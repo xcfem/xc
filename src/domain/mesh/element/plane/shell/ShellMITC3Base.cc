@@ -52,8 +52,8 @@
 #include "ShellMITC4Base.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
-#include "modelador/cad/matrices/TritrizPtrElem.h"
-#include "modelador/cad/aux_mallado.h"
+#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/cad/aux_mallado.h"
 #include <domain/mesh/node/Node.h>
 #include <material/section/SectionForceDeformation.h>
 #include <domain/domain/Domain.h>
@@ -70,8 +70,8 @@
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
 #include "domain/load/edge_loads/ElementEdge3dUniformLoad.h"
-#include "modelador/Modelador.h"
-#include "modelador/loaders/LoadLoader.h"
+#include "preprocessor/Preprocessor.h"
+#include "preprocessor/loaders/LoadLoader.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/mesh/element/gauss_models/GaussModel.h"
 
@@ -170,10 +170,10 @@ void XC::ShellMITC4Base::defEdgeLoadGlobal(const Node *n1,const Node *n2,const V
 //! @brief  
 void XC::ShellMITC4Base::vector3dUniformLoadLocal(const Vector &v)
   {
-    Modelador *mdlr= GetModelador();
-    if(mdlr)
+    Preprocessor *preprocessor= GetPreprocessor();
+    if(preprocessor)
       {
-        MapLoadPatterns &casos= mdlr->getLoadLoader().getLoadPatterns();
+        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Carga para éste elemento.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
@@ -217,10 +217,10 @@ void XC::ShellMITC4Base::vector3dUniformLoadGlobal(const Vector &v)
 //! @brief  
 void XC::ShellMITC4Base::strainLoad(const Matrix &deformaciones)
   {
-    Modelador *mdlr= GetModelador();
-    if(mdlr)
+    Preprocessor *preprocessor= GetPreprocessor();
+    if(preprocessor)
       {
-        MapLoadPatterns &casos= mdlr->getLoadLoader().getLoadPatterns();
+        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Carga para éste elemento.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.

@@ -31,20 +31,20 @@ NumDiv= 4
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 
 # Materials definition
-scc= typical_materials.defElasticShearSection2d(mdlr,"scc",A,E,G,I,1.0)
+scc= typical_materials.defElasticShearSection2d(preprocessor, "scc",A,E,G,I,1.0)
 
 nodos.newSeedNode()
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newPDeltaCrdTransf2d("lin")
 
 # Definimos elemento semilla
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "scc"
 seedElemLoader.defaultTransformation= "lin"
 seedElemLoader.defaultTag= 1 #Tag for next element.
@@ -52,19 +52,19 @@ beam2d= seedElemLoader.newElement("force_beam_column_2d",xc.ID([0,0]))
 beam2d.h= h
 beam2d.rho= 0.0
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(0.0,L,0.0))
-lines= mdlr.getCad.getLines
+lines= preprocessor.getCad.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)
 l.nDiv= NumDiv
 
 
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 2,gdl 0 # Nodo dorsal.
@@ -72,7 +72,7 @@ spc= coacciones.newSPConstraint(1,1,0.0) # Nodo 2,gdl 1
 spc= coacciones.newSPConstraint(2,0,0.0) # Nodo 2,gdl 0 # Nodo frontal.
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 

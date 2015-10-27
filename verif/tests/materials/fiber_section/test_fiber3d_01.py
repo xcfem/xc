@@ -22,8 +22,8 @@ F= 1000 # Magnitud de la fuerza
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 
 # Definimos nodos
@@ -35,7 +35,7 @@ nod2= nodos.newNodeXY(1,0)
 # Materials definition
 fy= 2600 # Tensión de cedencia del acero.
 E= 2.1e6 # Módulo de Young del acero.
-acero= typical_materials.defSteel01(mdlr,"acero",E,fy,0.001)
+acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 # Secciones
 import os
@@ -44,7 +44,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 execfile(pth+"/geomCuadFibrasTN.py")
-cuadFibrasTN= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","cuadFibrasTN")
+cuadFibrasTN= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","cuadFibrasTN")
 fiberSectionRepr= cuadFibrasTN.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomCuadFibrasTN")
 cuadFibrasTN.setupFibers()
@@ -64,14 +64,14 @@ print "fibra: ",tag, " mat. tag:", getMaterial.tag
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "cuadFibrasTN"
 elementos.dimElem= 1
 elementos.defaultTag= 1
 zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -80,7 +80,7 @@ spc= coacciones.newSPConstraint(2,1,0.0)
 spc= coacciones.newSPConstraint(2,2,0.0)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -104,7 +104,7 @@ deltax= nod2.getDisp[0]
 nod1= nodos.getNode(1)
 R= nod1.getReaction[0] 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 
 elem1= elementos.getElement(1)
 elem1.getResistingForce()

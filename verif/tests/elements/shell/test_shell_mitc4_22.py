@@ -17,8 +17,8 @@ q= 1
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.newNodeIDXYZ(1,0,0,0)
 nodos.newNodeIDXYZ(2,1,0,0)
@@ -28,16 +28,16 @@ nodos.newNodeIDXYZ(4,0,1,0)
 
 # Materials definition
 
-memb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,dens,h)
+memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 1)
 fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 2)
@@ -45,7 +45,7 @@ fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 3)
 fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 4)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -74,7 +74,7 @@ result= analisis.analyze(1)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
 RN1= nodos.getNode(1).getReaction[2] 
 RN2= nodos.getNode(2).getReaction[2] 
@@ -90,14 +90,14 @@ ratio4= (abs((RN4+(q/4.0))/(q/4.0)))
 
 
 ''' 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
         \for_each
 
             print "G3= ",vectorG3
 
 
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
              \nodo[1]{print "reac= ",reac} 
              \nodo[2]{print "reac= ",reac} 

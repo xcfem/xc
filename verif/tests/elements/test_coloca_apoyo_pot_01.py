@@ -24,11 +24,11 @@ diamPot= 993e-3
 # Problem type
 # Definición del modelo
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-apoyosPot.defineMaterialesTeflon(mdlr,diamPot,"teflonKX","teflonKY")
+apoyosPot.defineMaterialesTeflon(preprocessor, diamPot,"teflonKX","teflonKY")
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(1,1,1)
@@ -36,9 +36,9 @@ nod= nodos.newNodeXYZ(1,1,1)
 
 
 
-apoyo_pot.colocaApoyoFicticioPotDeslizanteNodos(mdlr,1,2,1,"teflonKX","teflonKY")
+apoyo_pot.colocaApoyoFicticioPotDeslizanteNodos(preprocessor, 1,2,1,"teflonKX","teflonKY")
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 #
 fix_node_6dof.fixNode6DOF(coacciones,1)
@@ -48,7 +48,7 @@ spc= coacciones.newSPConstraint(2,5,0.0)
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -66,7 +66,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-R= apoyo_pot.getReacApoyoFicticioPotDeslizanteNodos(mdlr,1)
+R= apoyo_pot.getReacApoyoFicticioPotDeslizanteNodos(preprocessor, 1)
 
 ratio1= abs(R[0]+FX)/FX
 ratio2= abs(R[1]+FY)/FY

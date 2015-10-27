@@ -8,7 +8,7 @@ areaCordones= 140e-6 # Área de los cordones expresada en metros cuadrados.
 
 def gmSecHP01(nmbGeomSecc,nmbDiagHormigon,nmbDiagAceroPret):
   # Hormigón
-  geomSecc= mdlr.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
+  geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
   horm= regiones.newQuadRegion(nmbDiagHormigon)
   horm.nDivIJ= 11

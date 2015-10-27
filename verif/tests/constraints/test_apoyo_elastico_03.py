@@ -17,8 +17,8 @@ from materials import typical_materials
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
@@ -26,19 +26,19 @@ nod= nodos.newNodeXYZ(1,1,1)
 
     
 # Materials definition
-kx= typical_materials.defElasticMaterial(mdlr,"kx",KX)
-ky= typical_materials.defElasticMaterial(mdlr,"ky",KY)
-kz= typical_materials.defElasticMaterial(mdlr,"kz",KZ)
+kx= typical_materials.defElasticMaterial(preprocessor, "kx",KX)
+ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
+kz= typical_materials.defElasticMaterial(preprocessor, "kz",KZ)
 
 
 nodosApoyados= [1]
 elementosApoyo= [7]
 
-nodosFijos= define_apoyos.defApoyoNodosListaXYZ(mdlr,nodosApoyados,elementosApoyo,"kx","ky","kz")
+nodosFijos= define_apoyos.defApoyoNodosListaXYZ(preprocessor, nodosApoyados,elementosApoyo,"kx","ky","kz")
 tagNodoFijo= nodosFijos[0]
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 #
 spc= coacciones.newSPConstraint(1,3,0.0) # Nodo 1
@@ -47,7 +47,7 @@ spc= coacciones.newSPConstraint(1,5,0.0)
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 

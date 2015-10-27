@@ -10,15 +10,15 @@ import sys
 import math
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 puntos.defaultTag= 1
 pt= puntos.newPntFromPos3d(geom.Pos3d(0,0,0))
 pt= puntos.newPntFromPos3d(geom.Pos3d(1,1,1))
 pt= puntos.newPntFromPos3d(geom.Pos3d(2,2,2))
 
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 ptsSet= setTotal.getPoints
 numPoints= ptsSet.size
 count= 0

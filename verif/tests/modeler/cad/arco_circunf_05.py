@@ -20,28 +20,28 @@ sin675= math.sin(math.radians(67.5))
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_elasticidad3D(nodos)
 # Definimos materiales
-elast= typical_materials.defElasticMaterial(mdlr,"elast",3000)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodos.newSeedNode()
 
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast"
 seedElemLoader.dimElem= 3
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("truss",xc.ID([0,0]));
 truss.area= 10.0
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(R*cos225,R*sin225,0.0))
 pt= puntos.newPntIDPos3d(3,geom.Pos3d((R*cos45),(R*sin45),0.0))
 pt= puntos.newPntIDPos3d(4,geom.Pos3d((R*cos675),(R*sin675),0.0))
 pt= puntos.newPntIDPos3d(5,geom.Pos3d(0.0,R,0.0))
 
-lineas= mdlr.getCad.getLines
+lineas= preprocessor.getCad.getLines
 lineas.defaultTag= 1
 l1= lineas.newCircleArc(1,2,3)
 l1.nDiv= NumDiv
@@ -60,15 +60,15 @@ l2= lineas.newCircleArc(3,4,5)
 l2.nDiv= NumDiv
 
 
-l1= mdlr.getSets.getSet("l1")
+l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
 
-l2= mdlr.getSets.getSet("l2")
+l2= preprocessor.getSets.getSet("l2")
 l2.genMesh(xc.meshDir.I)
 
 
 nnodos= l1.getNumNodes+l2.getNumNodes-1
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod3= nodos.getNode(3)
 x3= nod3.get3dCoo[0]
 y3= nod3.get3dCoo[1]

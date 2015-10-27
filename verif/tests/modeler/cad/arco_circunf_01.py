@@ -11,14 +11,14 @@ cos45= math.cos(math.radians(45))
 sin45= cos45
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
 puntos.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
 puntos.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
 
-lineas= mdlr.getCad.getLines
+lineas= preprocessor.getCad.getLines
 lineas.defaultTag= 1
 l= lineas.newCircleArc(1,2,3)
 angc= l.getAngle()

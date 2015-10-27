@@ -30,8 +30,8 @@
 #include "domain/mesh/element/zeroLength/ZeroLength.h"
 #include "material/uniaxial/UniaxialMaterial.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "modelador/Modelador.h"
-#include "modelador/loaders/MaterialLoader.h"
+#include "preprocessor/Preprocessor.h"
+#include "preprocessor/loaders/MaterialLoader.h"
 #include "xc_utils/src/base/CmdStatus.h"
 #include "domain/mesh/node/Node.h"
 
@@ -137,9 +137,9 @@ XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
         ZeroLength *elem= dynamic_cast<ZeroLength *>(owr);
         if(elem)
           {
-            Modelador *mdlr= elem->GetModelador();
-            if(mdlr)
-              retval= &mdlr->getMaterialLoader();
+            Preprocessor *preprocessor= elem->GetPreprocessor();
+            if(preprocessor)
+              retval= &preprocessor->getMaterialLoader();
             else
               std::cerr << "ZeroLengthMaterials::get_material_loader; el puntero al modelador es nulo." << std::endl;
           }

@@ -30,24 +30,24 @@ def setupSeccCircular(nmbSeccion,r,E,nu):
   return CircularSection(nmbSeccion,r,E,nu)
 
 # Define una sección elástica para elementos 3d a partir de los datos del registro.
-def defSeccCircularElastica3d(mdlr, defSecc):
+def defSeccCircularElastica3d(preprocessor, defSecc):
   print "DEPRECATED; call defSeccElastica3d."
-  return defSeccElastica3d(mdlr,defSecc)
+  return defSeccElastica3d(preprocessor,defSecc)
 
 
 # Define una sección elástica para elementos 3d a partir de los datos del registro.
-def defSeccCircularShElastica3d(mdlr, defSecc):
+def defSeccCircularShElastica3d(preprocessor, defSecc):
   print "DEPRECATED; call defSeccShElastica3d."
-  return defSeccShElastica3d(mdlr,defSecc)
+  return defSeccShElastica3d(preprocessor,defSecc)
 
 
 # Define una sección elástica para elementos 2d a partir de los datos del registro.
-def defSeccCircularElastica2d(mdlr, defSecc):
+def defSeccCircularElastica2d(preprocessor, defSecc):
   print "DEPRECATED; call defSeccElastica2d."
-  return defSeccElastica2d(mdlr,defSecc)
+  return defSeccElastica2d(preprocessor,defSecc)
 
 # Define una sección elástica para elementos 2d a partir de los datos del registro.
-def defSeccCircularShElastica2d(mdlr, defSecc):
+def defSeccCircularShElastica2d(preprocessor, defSecc):
   print "DEPRECATED; call defSeccShElastica2d."
-  return defSeccShElastica2d(mdlr,defSecc)
+  return defSeccShElastica2d(preprocessor,defSecc)
 

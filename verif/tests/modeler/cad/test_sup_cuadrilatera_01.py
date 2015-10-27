@@ -9,8 +9,8 @@ from model import predefined_spaces
 from materials import typical_materials
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 prueba.logFileName= "/tmp/borrar.log" # Nicely avoid warning messages.
 NumDivI= 3
@@ -25,20 +25,20 @@ predefined_spaces.gdls_elasticidad2D(nodos)
 
 nodos.newSeedNode()
 
-elast= typical_materials.defElasticMaterial(mdlr,"elast",3000)
-elast2d= typical_materials.defElasticIsotropicPlaneStress(mdlr,"elast2d",E,nu,rho)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
+elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast2d"
 quad4n= seedElemLoader.newElement("quad4n",xc.ID([0,0,0,0]))
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax,0.0,0.0))
 pt= puntos.newPntIDPos3d(3,geom.Pos3d(CooMax,CooMax,0.0))
 pt= puntos.newPntIDPos3d(4,geom.Pos3d(0.0,CooMax,0.0))
 
-surfaces= mdlr.getCad.getSurfaces
+surfaces= preprocessor.getCad.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= NumDivI
@@ -51,7 +51,7 @@ s.nDivJ= NumDivJ
 #                 \edge{print "    p1: ",p1.nombre," p2: ",p2.nombre}
 #               }
 
-f1= mdlr.getSets.getSet("f1")
+f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 
 nnodCuadr= f1.getNumNodes

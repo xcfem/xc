@@ -21,10 +21,10 @@ diamBar= 22e-3 # Diámetro de los redondos.
 areaBar= math.pi*(diamBar/2)**2 # Área de los redondos.
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-hormigon= typical_materials.defElasticMaterial(mdlr,"hormigon",Ec)
-acero= typical_materials.defElasticMaterial(mdlr,"acero",Es)
-geomPrueba= mdlr.getMaterialLoader.newSectionGeometry("geomPrueba")
+preprocessor=  prueba.getPreprocessor
+hormigon= typical_materials.defElasticMaterial(preprocessor, "hormigon",Ec)
+acero= typical_materials.defElasticMaterial(preprocessor, "acero",Es)
+geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
 regiones= geomPrueba.getRegions
 
 ala= regiones.newQuadRegion("hormigon")# Ala
@@ -41,7 +41,7 @@ armaduraA.barArea= areaBar
 armaduraA.p1= geom.Pos2d(0.0,b/2-bw/2+0.05)
 armaduraA.p2= geom.Pos2d(0.0,b/2+bw/2-0.05)
 
-prb= typical_materials.defElasticSection3d(mdlr,"prb",0.0,Ec,Gc,0.0,0.0,1.0)
+prb= typical_materials.defElasticSection3d(preprocessor, "prb",0.0,Ec,Gc,0.0,0.0,1.0)
 prb.sectionGeometry("geomPrueba")
 paramSeccion= prb.sectionProperties
 area= paramSeccion.A

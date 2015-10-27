@@ -19,8 +19,8 @@ I= (h)**4/12 # Momento de inercia de la sección expresada en m4
 AT= 10 # Incremento de temperatura expresado en grados centígrados
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 nodos.dimEspace= 2 # coord. for each node (x,y).
 nodos.numGdls= 6 # DOF for each node (Ux,Uy).
 nodos.defaultTag= 1 #First node number.
@@ -31,10 +31,10 @@ nod= nodos.newNodeXY(0,h)
 
 
 # Materials definition
-memb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,0.3,0.0,h)
+memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,0.3,0.0,h)
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elementos.defaultTag= 1
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
@@ -42,7 +42,7 @@ elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 spc= coacciones.newSPConstraint(1,0,0.0)
 spc= coacciones.newSPConstraint(2,0,0.0)
@@ -56,7 +56,7 @@ spc= coacciones.newSPConstraint(1,1,0.0)
 spc= coacciones.newSPConstraint(2,1,0.0)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("linear_ts","ts")

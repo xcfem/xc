@@ -6,7 +6,7 @@ import nodalReactions
 
 print "reacs_nodo_6gdl deprecated; use nodalReactions."
 
-def vectorReacUVW(mdlr,idNodo):
-  return nodalReactions.vectorReacUVW(mdlr,idNodo)
+def vectorReacUVW(preprocessor,idNodo):
+  return nodalReactions.vectorReacUVW(preprocessor,idNodo)
 
 

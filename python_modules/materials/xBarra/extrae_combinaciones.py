@@ -10,7 +10,7 @@ from model import fix_node_6dof
 from materials.xLamina import seccion_ficticia_elementos as sf
 import math
 
-def extraeIdsElem(mdlr,nmbArchComb, diagIntScc):
+def extraeIdsElem(preprocessor,nmbArchComb, diagIntScc):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
   de combinaciones generado en XC '''
   idElements= set()
@@ -26,12 +26,12 @@ def extraeIdsElem(mdlr,nmbArchComb, diagIntScc):
       idElements.add(idElem)
   f.close()
    
-  nodes= mdlr.getNodeLoader
+  nodes= preprocessor.getNodeLoader
   predefined_spaces.gdls_resist_materiales3D(nodes)
-  elements= mdlr.getElementLoader
-  coacciones= mdlr.getConstraintLoader
+  elements= preprocessor.getElementLoader
+  coacciones= preprocessor.getConstraintLoader
   # Definimos materiales
-  scc= sf.sccFICT.defSeccShElastica3d(mdlr) # El problema es isóstático, así que la sección da igual
+  scc= sf.sccFICT.defSeccShElastica3d(preprocessor) # El problema es isóstático, así que la sección da igual
   elements.dimElem= 1
   elements.defaultMaterial= sf.sccFICT.nmb
   for tagElem in idElements:
@@ -47,7 +47,7 @@ def extraeIdsElem(mdlr,nmbArchComb, diagIntScc):
     e1.setProp("FCCP", 0.0) #Valor del factor de capacidad en la hipótesis que produce el caso pésimo.
     e1.setProp("diagInt",diagIntScc) 
  
-  cargas= mdlr.getLoadLoader
+  cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
   #Load modulation.
   ts= casos.newTimeSeries("constant_ts","ts")
@@ -77,8 +77,8 @@ def extraeIdsElem(mdlr,nmbArchComb, diagIntScc):
 
   f.close()
 
-def extraeDatos(mdlr,nmbArchLST, diagIntScc):
+def extraeDatos(preprocessor,nmbArchLST, diagIntScc):
   ''' Define las cargas en el extremo libre de cada elemento a partir
    de las combinaciones de un archivo de salida generado en XC '''
-  extraeIdsElem(mdlr,nmbArchLST,diagIntScc)
+  extraeIdsElem(preprocessor,nmbArchLST,diagIntScc)
 

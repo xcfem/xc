@@ -111,11 +111,11 @@ def VtkDibujaIdsCells(uGrid, setToDraw, nmbTipoEnt, renderer):
        
   renderer.AddActor2D(cellLabels)
 
-def VtkCargaMalla(mdlr,recordGrid):
+def VtkCargaMalla(preprocessor,recordGrid):
   kpuntos= vtk.vtkPoints()
   # Definimos grid
   recordGrid.uGrid.SetPoints(kpuntos)
-  setToDraw= mdlr.getSets.getSet(recordGrid.nmbSet)
+  setToDraw= preprocessor.getSets.getSet(recordGrid.nmbSet)
   setToDraw.numerate()
   pnts= setToDraw.getPoints
   for p in pnts:

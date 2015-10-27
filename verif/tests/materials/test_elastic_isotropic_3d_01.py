@@ -12,8 +12,8 @@ from materials import typical_materials
 
 # Definimos materiales
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-mat= typical_materials.defElasticIsotropic3d(mdlr,"elastIso3d",E,nu,rho)
+preprocessor=  prueba.getPreprocessor
+mat= typical_materials.defElasticIsotropic3d(preprocessor, "elastIso3d",E,nu,rho)
 
 import os
 fname= os.path.basename(__file__)

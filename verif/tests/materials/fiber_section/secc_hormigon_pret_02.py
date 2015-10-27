@@ -3,7 +3,7 @@ areaCordones= 140e-6 # Área de los cordones expresada en metros cuadrados.
 areaFiLong= 0.5e-4 # Fi8 área de la armadura longitudinal expresada en metros cuadrados.
 def gmSecHP02(nmbGeomSecc,nmbDiagHormigon,nmbDiagAceroArmar,nmbDiagAceroPret):
   # Hormigón
-  geomSecc= mdlr.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
+  geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
 
   horm= regiones.newQuadRegion(nmbDiagHormigon)

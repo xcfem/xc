@@ -33,8 +33,8 @@
 #include <utility/matrix/ID.h>
 #include "boost/lexical_cast.hpp"
 
-XC::SQLiteDatastore::SQLiteDatastore(const std::string &projectName, Modelador &mdlr, FEM_ObjectBroker &theObjectBroker, int run)
-  :DBDatastore(mdlr, theObjectBroker), connection(false), db(projectName)
+XC::SQLiteDatastore::SQLiteDatastore(const std::string &projectName, Preprocessor &preprocessor, FEM_ObjectBroker &theObjectBroker, int run)
+  :DBDatastore(preprocessor, theObjectBroker), connection(false), db(projectName)
   {
     if(this->createOpenSeesDatabase(projectName) == 0)
       connection= true;

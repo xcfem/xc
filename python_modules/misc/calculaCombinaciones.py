@@ -20,13 +20,13 @@ def writeInsertResultEsfComb(fName, nmbTabl, idSecc, idElem, idComb, n, vy, vz, 
   fName.write(char(34)+"}\n")
 
 
-def calculaCombSeccionesBarra(mdlr,nmbDatabase, nmbQuerySecciones, idComb, nmbTablaSecc, fOut, nmbTablaResultEsfComb):
+def calculaCombSeccionesBarra(preprocessor,nmbDatabase, nmbQuerySecciones, idComb, nmbTablaSecc, fOut, nmbTablaResultEsfComb):
 # Obtiene los resultados de las secciones para una combinación
   idScc= 0.0
   idElem= 0.0
   idNodo= 0.0
-  nodos= mdlr.getNodeLoader()
-  elements= mdlr.getElementLoader()
+  nodos= preprocessor.getNodeLoader()
+  elements= preprocessor.getElementLoader()
 
   con= sqlite.connect(nmbDataBase)
   con.row_factory= sqlite.Row
@@ -71,7 +71,7 @@ def calculaCombinacionesBarra(nmbDatabase, nmbTablaEsfuerzos, nmbQueryEsfuerzos,
   queryResultPrevio= con.cursor()
   queryResultUpdate= con.cursor()
 
-  cargas= mdlr.getLoadLoader
+  cargas= preprocessor.getLoadLoader
   combs= cargas.getLoadCombinations
   idComb= 0.0
   descomp= ""

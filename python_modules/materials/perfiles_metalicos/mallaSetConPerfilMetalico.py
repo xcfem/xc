@@ -7,19 +7,19 @@ Genera elementos de tipo «ElasticBeam3d» para las líneas
    - nmbGeomTransf: Nombre de la transformación geométrica a emplear.
    - numDivisiones: Número de elementos a generar en cada línea.
 '''
-def mallaSetConPerfilMetalico(mdlr,nmbSet):
+def mallaSetConPerfilMetalico(preprocessor,nmbSet):
   nmbPerfilMet= "" 
   nmbTrf= ""
   nmbTipoAcero= ""
   nmbSeccion= ""
-  setElems= mdlr.getSetLoader.getSet(nmbSet)
+  setElems= preprocessor.getSetLoader.getSet(nmbSet)
   nmbPerfilMet= setElems.getProp(nmbPerfil)
   nmbTipoAcero= setElems.getProp(nmbAcero)
   nmbTrf= setElems.getProp(nmbGeomTransf)
 
   nmbSeccion= nmbPerfilMet+"_"+nmbGeomTransf
   defSeccPerfilMetalicoShElastica3d(nmbPerfilMet,nmbSeccion)
-  seedElemLoader= mdlr.getElementLoader.seedElemLoader
+  seedElemLoader= preprocessor.getElementLoader.seedElemLoader
   seedElemLoader.defaultMaterial= nmbSeccion
   seedElemLoader.defaultTransformation= nmbTrf
   elem= seedElemLoader.newElement("elastic_beam_3d",xc.ID([0,0]))
@@ -45,7 +45,7 @@ def mallaSetConTruss(nmbSet):
   fydMat= 0.0 
   EMat= 0.0 
   
-  setElems= mdlr.getSetLoader.getSet(nmbSet)
+  setElems= preprocessor.getSetLoader.getSet(nmbSet)
   nmbPerfilMet= setElems.getProp("nmbPerfil")
   nmbTipoAcero= setElems.getProp("nmbAcero")
   gammaMat= setElems.getProp("gammaM")
@@ -56,7 +56,7 @@ def mallaSetConTruss(nmbSet):
   EMat= nmbePerfilMet.nmbTipoAcero.E
 
   mat= typical_materials.defElasticMaterial(nmbMat,EMat)
-  seedElemLoader= mdlr.getElementLoader.seedElemLoader
+  seedElemLoader= preprocessor.getElementLoader.seedElemLoader
   seedElemLoader.defaultMaterial= nmbMat
   seedElemLoader.dimElem= 3
   truss= seedElemLoader.newElement("truss",xc.ID([0,0]))

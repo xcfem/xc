@@ -3,9 +3,9 @@
 import sqlite3 as sqlite
 
 # Introduce las cargas en cada una de las secciones
-def creaCargasSecciones(mdlr,nmbDatabase, nmbTablaEsfuerzos, nmbQueryEsfuerzos, nmbTablaSecc):
+def creaCargasSecciones(preprocessor,nmbDatabase, nmbTablaEsfuerzos, nmbQueryEsfuerzos, nmbTablaSecc):
   resetAccionesConstantTS("constant_ts","ts",1000) # Factor 1000 (acciones en kN y kN m)
-  cargas= mdlr.getLoadLoader
+  cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
   casos.currentTimeSeries= "ts"
 

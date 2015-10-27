@@ -56,7 +56,7 @@
 
 #include <material/section/repres/section/SectionRepres.h>
 #include <material/section/repres/geom_section/GeomSection.h>
-#include "modelador/loaders/MaterialLoader.h"
+#include "preprocessor/loaders/MaterialLoader.h"
 
 #include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"

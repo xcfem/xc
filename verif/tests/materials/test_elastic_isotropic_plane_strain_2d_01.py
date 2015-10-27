@@ -11,9 +11,9 @@ import xc
 from materials import typical_materials
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-elast2d= typical_materials.defElasticIsotropicPlaneStrain(mdlr,"elast2d",E,nu,rho)
+elast2d= typical_materials.defElasticIsotropicPlaneStrain(preprocessor, "elast2d",E,nu,rho)
 EE= elast2d.E
 V= elast2d.nu
 dens= elast2d.rho

@@ -27,8 +27,8 @@ y_modelo= [420,839.99999756,1259.9983975,1679.84023129,2094.43925811,2439.744850
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_elasticidad2D(nodos)
@@ -39,28 +39,28 @@ nod= nodos.newNodeXY(0,0)
 nod= nodos.newNodeXY(l,0.0)
 
 # Materials definition
-mat= typical_materials.defSteel02(mdlr,"acero",E,fy,0.001,0.0)
+mat= typical_materials.defSteel02(preprocessor, "acero",E,fy,0.001,0.0)
   
 ''' Se definen nodos en los puntos de aplicación de
 la carga. Puesto que no se van a determinar tensiones
 se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "acero"
 elementos.dimElem= 2
 elementos.defaultTag= 1 #Tag for the next element.
 muelle= elementos.newElement("muelle",xc.ID([1,2]));
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
 spc= coacciones.newSPConstraint(2,1,0.0) # Nodo 2
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("trig_ts","ts")
 ts.factor= 1
@@ -87,7 +87,7 @@ recorder.callbackRestart= "print \"Restart method called.\""
 ''' 
         \prop_recorder
 
-nodos= mdlr.getNodeLoader{2
+nodos= preprocessor.getNodeLoader{2
             \callback_record
 
                 

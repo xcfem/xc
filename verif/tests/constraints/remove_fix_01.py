@@ -29,15 +29,15 @@ F= 1.5e3 # Magnitud de la carga en kN
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0,0.0,0.0)
 nod= nodos.newNodeXYZ(L,0.0,0.0)
 
 
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
@@ -45,24 +45,24 @@ lin.xzVector= xc.Vector([0,1,0])
 caracMecSeccion= xc.ConstantesSecc3d()
 caracMecSeccion.A= A; caracMecSeccion.E= E; caracMecSeccion.G= G;
 caracMecSeccion.Iz= Iz; caracMecSeccion.Iy= Iy; caracMecSeccion.J= J
-seccion= typical_materials.defElasticSectionFromMechProp3d(mdlr,"seccion",caracMecSeccion)
+seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",caracMecSeccion)
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "seccion"
 elementos.defaultTag= 1 #Tag for the next element.
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 spc= coacciones.newSPConstraint(2,1,0.0)
 spcTag= spc.tag
 # \fix[2,1,20]{ \valor{0.0} }
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -78,14 +78,14 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos= mdlr.getNodeLoader 
+nodos= preprocessor.getNodeLoader 
 nod2= nodos.getNode(2)
 delta0= nod2.getDisp[1]  # Desplazamiento del nodo 2 según y
 
 
 
 
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 coacciones.removeSPConstraint(spcTag)
 #remove_fix{20}
 
@@ -97,7 +97,7 @@ result= analisis.analyze(1)
 
 
 
-nodos= mdlr.getNodeLoader 
+nodos= preprocessor.getNodeLoader 
 nod2= nodos.getNode(2)
 delta= nod2.getDisp[1]  # Desplazamiento del nodo 2 según y
 

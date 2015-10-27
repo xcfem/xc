@@ -16,9 +16,9 @@ espesor= 10.3e-3
 RExt= radio+espesor
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-acero= typical_materials.defElasticMaterial(mdlr,"acero",Es)
-geomTuberia= mdlr.getMaterialLoader.newSectionGeometry("geomTuberia")
+preprocessor=  prueba.getPreprocessor
+acero= typical_materials.defElasticMaterial(preprocessor, "acero",Es)
+geomTuberia= preprocessor.getMaterialLoader.newSectionGeometry("geomTuberia")
 regiones= geomTuberia.getRegions
 acero= regiones.newCircularRegion("acero")
 

@@ -24,7 +24,7 @@
 #include "MEDGroupInfo.h"
 #include "MEDMeshing.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "modelador/set_mgmt/Set.h"
+#include "preprocessor/set_mgmt/Set.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "xc_basic/src/med_xc/MEDMEM_Group.hxx"

@@ -21,22 +21,22 @@ centroideL= None # Centroide en locales.
 centroideB= None # Centroide en básicas.
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0,0,0)
 nod= nodos.newNodeXYZ(L*math.sqrt(3)/3,L*math.sqrt(3)/3,L*math.sqrt(3)/3)
 
 # Materials
-seccion= typical_materials.defElasticSection3d(mdlr,"seccion",1,1,1,1,1,1)
+seccion= typical_materials.defElasticSection3d(preprocessor, "seccion",1,1,1,1,1,1)
     
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,-1,0])
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "seccion"

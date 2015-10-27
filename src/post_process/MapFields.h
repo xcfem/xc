@@ -36,7 +36,7 @@
 
 
 namespace XC {
-class Modelador;
+class Preprocessor;
 
 //!  \ingroup POST_PROCESS
 // 
@@ -48,7 +48,7 @@ class MapFields: public EntCmd, public MovableObject, public std::deque<FieldInf
     typedef dq_fields::iterator iterator;
     typedef dq_fields::const_iterator const_iterator;
   private:
-    Modelador *mdlr; //!< Puntero al modelador.
+    Preprocessor *preprocessor; //!< Puntero al modelador.
 
     bool existe(const std::string &nmb) const;
 
@@ -62,9 +62,9 @@ class MapFields: public EntCmd, public MovableObject, public std::deque<FieldInf
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
     virtual bool procesa_comando(CmdStatus &);
-    friend class Modelador;
+    friend class Preprocessor;
   public:
-    MapFields(Modelador *mdlr= NULL);
+    MapFields(Preprocessor *preprocessor= NULL);
     virtual any_const_ptr GetProp(const std::string &cod) const;
 
     FieldInfo &newField(const std::string &);

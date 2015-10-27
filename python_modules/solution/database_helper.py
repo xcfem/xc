@@ -22,8 +22,8 @@ class DatabaseHelperSolve:
   def restore(self):
     if(self.tagPrevia>0):
       self.db.restore(self.tagPrevia*100)
-  def solveComb(self,mdlr,comb,analysis):
-    mdlr.resetLoadCase()
+  def solveComb(self,preprocessor,comb,analysis):
+    preprocessor.resetLoadCase()
     self.helpSolve(comb)
     ''' 
     print "nombrePrevia= ",nombrePrevia

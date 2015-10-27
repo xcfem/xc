@@ -24,27 +24,28 @@ F= 50e3 # Magnitud de la carga en kN
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor= prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0,0.0,0.0)
 nod= nodos.newNodeXYZ(L,0.0,0.0)
 
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 S275JR= steel.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
 HE400B= steelProfile.SteelProfile(S275JR,"HE_400_B",HE_profiles.perfilesHE)
-profil= HE400B.defSeccShElastica3d(mdlr)
+profil= HE400B.defSeccShElastica3d(preprocessor)
 
 # Elements definition
-elementos= mdlr.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= HE400B.nmb
-elem= elementos.newElement("elastic_beam_3d",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+
+elements.defaultMaterial= HE400B.nmb
+elem= elements.newElement("elastic_beam_3d",xc.ID([1,2]))
 elem.rho= HE400B.get('P')
 dp.defParamsPerfilMetalicoRegElasticoElem(elem,HE400B)
 vc.defVarsControlTensRegElastico3d([elem])
@@ -58,11 +59,11 @@ recorder.callbackRecord= cc.controTensRecElastico3d()
 
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -77,13 +78,11 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos= mdlr.getNodeLoader 
+nodos= preprocessor.getNodeLoader 
 nod2= nodos.getNode(2)
 delta= nod2.getDisp[2]  # Desplazamiento del nodo 2 según y
 
-elementos= mdlr.getElementLoader
-
-elem0= elementos.getElement(0)
+elem0= elements.getElement(0)
 elem0.getResistingForce()
 M= elem0.getMz1
 V= elem0.getVy

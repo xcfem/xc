@@ -108,32 +108,32 @@ class BasicRecordRCSection(object):
   def nmbRespVz(self):
     return self.nmbSeccion+"RespVz"
 
-  def getConcreteDiagram(self,mdlr):
-    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagHormigon)
-  def getSteelDiagram(self,mdlr):
-    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagArmadura)
-  def getSteelEquivalenceCoefficient(self,mdlr):
-    tangHorm= self.getConcreteDiagram(mdlr).getTangent()
-    tangSteel= self.getSteelDiagram(mdlr).getTangent()
+  def getConcreteDiagram(self,preprocessor):
+    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagHormigon)
+  def getSteelDiagram(self,preprocessor):
+    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagArmadura)
+  def getSteelEquivalenceCoefficient(self,preprocessor):
+    tangHorm= self.getConcreteDiagram(preprocessor).getTangent()
+    tangSteel= self.getSteelDiagram(preprocessor).getTangent()
     return tangSteel/tangHorm
 
-  def defDiagrams(self,mdlr,tipoDiag):
+  def defDiagrams(self,preprocessor,tipoDiag):
     '''
     Stress-strain diagrams definition.
     '''
     self.diagType= tipoDiag
     if(self.diagType=="d"):
       if(self.tipoHormigon.tagDiagD<0):
-        tagDiagHormigon= self.tipoHormigon.defDiagD(mdlr)
+        tagDiagHormigon= self.tipoHormigon.defDiagD(preprocessor)
       if(self.tipoArmadura.tagDiagD<0):
-        tagDiagAceroArmar= self.tipoArmadura.defDiagD(mdlr)
+        tagDiagAceroArmar= self.tipoArmadura.defDiagD(preprocessor)
       self.nmbDiagHormigon= self.tipoHormigon.nmbDiagD
       self.nmbDiagArmadura= self.tipoArmadura.nmbDiagD
     elif(self.diagType=="k"):
       if(self.tipoHormigon.tagDiagK<0):
-        tagDiagHormigon= self.tipoHormigon.defDiagK(mdlr)
+        tagDiagHormigon= self.tipoHormigon.defDiagK(preprocessor)
       if(self.tipoArmadura.tagDiagK<0):
-        tagDiagAceroArmar= self.tipoArmadura.defDiagK(mdlr)
+        tagDiagAceroArmar= self.tipoArmadura.defDiagK(preprocessor)
       self.nmbDiagHormigon= self.tipoHormigon.nmbDiagK
       self.nmbDiagArmadura= self.tipoArmadura.nmbDiagK
 
@@ -205,15 +205,15 @@ class RecordSeccionHASimple(BasicRecordRCSection):
     self.barrasPos= MainReinfLayer(diam,area,spacing,self.ancho,basicCover)
 
 
-  def defSectionGeometry(self,mdlr,tipoDiag):
+  def defSectionGeometry(self,preprocessor,tipoDiag):
     '''
     Definición de una sección de hormigón armado sencilla
     con una capa de armadura superior y otra inferior.
     tipoDiag: Cadena de caracteres que será "k" si se emplea el diagrama característico o "d" si se emplea el diagrama de cálculo.
     '''
-    self.defDiagrams(mdlr,tipoDiag)
+    self.defDiagrams(preprocessor,tipoDiag)
 
-    geomSection= mdlr.getMaterialLoader.newSectionGeometry(self.nmbGeomSeccion())
+    geomSection= preprocessor.getMaterialLoader.newSectionGeometry(self.nmbGeomSeccion())
     self.defConcreteRegion(geomSection)
 
     armaduras= geomSection.getReinfLayers
@@ -233,20 +233,20 @@ class RecordSeccionHASimple(BasicRecordRCSection):
   def getJTorsion(self):
     return parametrosSeccionRectangular.getJTorsion(self.ancho,self.canto)
 
-  def getRespT(self,mdlr,JTorsion):
+  def getRespT(self,preprocessor,JTorsion):
     '''Material for modeling torsional response of section'''
-    return typical_materials.defElasticMaterial(mdlr,self.nmbRespT(),self.tipoHormigon.Gcm()*JTorsion) # Respuesta de la sección a torsión.
+    return typical_materials.defElasticMaterial(preprocessor,self.nmbRespT(),self.tipoHormigon.Gcm()*JTorsion) # Respuesta de la sección a torsión.
 
-  def getRespVy(self,mdlr):
+  def getRespVy(self,preprocessor):
     '''Material for modeling z shear response of section'''
-    return typical_materials.defElasticMaterial(mdlr,self.nmbRespVy(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())
+    return typical_materials.defElasticMaterial(preprocessor,self.nmbRespVy(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())
 
-  def getRespVz(self,mdlr):
+  def getRespVz(self,preprocessor):
     '''Material for modeling z shear response of section'''
-    return typical_materials.defElasticMaterial(mdlr,self.nmbRespVz(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())
+    return typical_materials.defElasticMaterial(preprocessor,self.nmbRespVz(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())
 
-  def defFiberSection(self,mdlr):
-    self.fs= mdlr.getMaterialLoader.newMaterial("fiberSectionShear3d",self.nmbSeccion)
+  def defFiberSection(self,preprocessor):
+    self.fs= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d",self.nmbSeccion)
     self.fiberSectionRepr= self.fs.getFiberSectionRepr()
     self.fiberSectionRepr.setGeomNamed(self.nmbGeomSeccion())
     self.fs.setupFibers()
@@ -256,7 +256,7 @@ class RecordSeccionHASimple(BasicRecordRCSection):
     self.fs.setRespTByName(self.nmbRespT())
     self.fs.setProp("datosSecc",self)
 
-  def defSeccionHASimple(self, mdlr,tipoDiag):
+  def defSeccionHASimple(self, preprocessor,tipoDiag):
     '''
     Definición de una sección de hormigón armado sencilla
     con una capa de armadura superior y otra inferior.
@@ -264,14 +264,14 @@ class RecordSeccionHASimple(BasicRecordRCSection):
     nmbRutinaDefGeom: Nombre de la rutina que define la geometría de la sección.
     '''
     self.JTorsion= self.getJTorsion()
-    self.respT= self.getRespT(mdlr,self.JTorsion) # Respuesta de la sección a torsión.
-    self.respVy= self.getRespVy(mdlr)
-    self.respVz= self.getRespVz(mdlr)
+    self.respT= self.getRespT(preprocessor,self.JTorsion) # Respuesta de la sección a torsión.
+    self.respVy= self.getRespVy(preprocessor)
+    self.respVz= self.getRespVz(preprocessor)
 
-    self.defSectionGeometry(mdlr,tipoDiag)
-    self.defFiberSection(mdlr)
+    self.defSectionGeometry(preprocessor,tipoDiag)
+    self.defFiberSection(preprocessor)
 
-  def defInteractionDiagramParameters(self, mdlr):
+  def defInteractionDiagramParameters(self, preprocessor):
     ''' parameters for interaction diagrams. '''
     self.param= xc.InteractionDiagramParameters()
     if(self.diagType=="d"):
@@ -282,26 +282,26 @@ class RecordSeccionHASimple(BasicRecordRCSection):
       self.param.tagArmadura= self.tipoArmadura.tagDiagK
     return self.param
 
-  def defInteractionDiagram(self,mdlr):
+  def defInteractionDiagram(self,preprocessor):
     'Defines 3D interaction diagram.'
     if(not self.fiberSectionRepr):
       sys.stderr.write("defInteractionDiagram: fiber section representation for section: "+ self.nmbSeccion + ";  not defined use defFiberSection.\n")
-    self.defInteractionDiagramParameters(mdlr)
-    return mdlr.getMaterialLoader.calcInteractionDiagram(self.nmbSeccion,self.param)
+    self.defInteractionDiagramParameters(preprocessor)
+    return preprocessor.getMaterialLoader.calcInteractionDiagram(self.nmbSeccion,self.param)
 
-  def defInteractionDiagramNMy(self,mdlr):
+  def defInteractionDiagramNMy(self,preprocessor):
     'Defines N-My interaction diagram.'
     if(not self.fiberSectionRepr):
       sys.stderr.write("defInteractionDiagramNMy: fiber section representation for section: "+ self.nmbSeccion + ";  not defined use defFiberSection.\n")
-    self.defInteractionDiagramParameters(mdlr)
-    return mdlr.getMaterialLoader.calcInteractionDiagramNMy(self.nmbSeccion,self.param)
+    self.defInteractionDiagramParameters(preprocessor)
+    return preprocessor.getMaterialLoader.calcInteractionDiagramNMy(self.nmbSeccion,self.param)
 
-  def defInteractionDiagramNMz(self,mdlr):
+  def defInteractionDiagramNMz(self,preprocessor):
     'Defines N-My interaction diagram.'
     if(not self.fiberSectionRepr):
       sys.stderr.write("defInteractionDiagramNMz: fiber section representation for section: "+ self.nmbSeccion + ";  not defined use defFiberSection.\n")
-    self.defInteractionDiagramParameters(mdlr)
-    return mdlr.getMaterialLoader.calcInteractionDiagramNMz(self.nmbSeccion,self.param)
+    self.defInteractionDiagramParameters(preprocessor)
+    return preprocessor.getMaterialLoader.calcInteractionDiagramNMz(self.nmbSeccion,self.param)
 
   def getStressCalculator(self):
     Ec= self.tipoHormigon.Ecm()

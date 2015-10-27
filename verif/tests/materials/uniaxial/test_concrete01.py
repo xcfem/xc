@@ -26,8 +26,8 @@ y_modelo= [-29.1, -56.4, -81.9, -105.6, -127.5, -147.6, -165.9, -182.4, -197.1, 
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_elasticidad2D(nodos)
@@ -38,7 +38,7 @@ nod= nodos.newNodeXY(0,0)
 nod= nodos.newNodeXY(l,0.0)
 
 # Materials definition
-horm= typical_materials.defConcrete01(mdlr,"horm",epsc0,fc,fcu,epsU)
+horm= typical_materials.defConcrete01(preprocessor, "horm",epsc0,fc,fcu,epsU)
 
 ''' 
 print "fpc= ",fpc
@@ -65,21 +65,21 @@ print "TunloadSlope= ",TunloadSlope
     se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "horm"
 elementos.dimElem= 2
 #  sintaxis: muelle[<tag>] 
 muelle= elementos.newElement("muelle",xc.ID([1,2]));
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
 spc= coacciones.newSPConstraint(2,1,0.0) # Nodo 2
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("trig_ts","ts")
 ts.factor= 1
@@ -104,7 +104,7 @@ recorder.callbackRestart= "print \"Restart method called.\""
 '''
         \prop_recorder
 
-nodos= mdlr.getNodeLoader{2}
+nodos= preprocessor.getNodeLoader{2}
             \callback_record
 
                 

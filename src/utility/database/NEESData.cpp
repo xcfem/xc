@@ -74,8 +74,8 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/database/NEESData.h>
 
-XC::NEESData::NEESData(const std::string &dataBaseName, Modelador &mdlr, FEM_ObjectBroker &theObjBroker) 
-  :FE_Datastore(mdlr, theObjBroker), dataBase(dataBaseName), tables(0), numTables(0)  {}
+XC::NEESData::NEESData(const std::string &dataBaseName, Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker) 
+  :FE_Datastore(preprocessor, theObjBroker), dataBase(dataBaseName), tables(0), numTables(0)  {}
 
 XC::NEESData::~NEESData(void) 
   {

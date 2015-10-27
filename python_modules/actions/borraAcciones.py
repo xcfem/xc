@@ -4,11 +4,11 @@
     nmbTimeSeries: Nombre del time series.
     fct: Factor.
 '''
-def resetAccionesConstantTS(mdlr,tipoTimeSeries, nmbTimeSeries, fct):
-  coacciones= mdlr.getConstraintLoader
+def resetAccionesConstantTS(preprocessor,tipoTimeSeries, nmbTimeSeries, fct):
+  coacciones= preprocessor.getConstraintLoader
   lps= coacciones.getActiveLoadPatterns
   lps.clearrAll()
-  loads= mdlr.getLoadLoader
+  loads= preprocessor.getLoadLoader
   casos= loads.getLoadPatterns
   loads.clearAll()
   ts= casos.newTimeSeries(tipoTimeSeries,nmbTimeSeries)

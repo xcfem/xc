@@ -18,8 +18,8 @@ I= (2e-2)**4/12 # Momento de inercia de la sección expresada en m4
 AT= 10 # Incremento de temperatura expresado en grados centígrados
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_resist_materiales2D(nodos)
@@ -29,15 +29,15 @@ nodos.newNodeXY(0.0,0.0)
 nodos.newNodeXY(L,0.0)
 
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
 
 # Materials definition
-scc= typical_materials.defElasticSection2d(mdlr,"scc",A,E,I)
+scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "scc"
 elementos.dimElem= 2
@@ -45,7 +45,7 @@ elementos.defaultTag= 1 #Tag for next element.
 beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]))
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 spc= coacciones.newSPConstraint(1,0,0.0)
 spc= coacciones.newSPConstraint(1,1,0.0)
 spc= coacciones.newSPConstraint(1,2,0.0)
@@ -54,7 +54,7 @@ spc= coacciones.newSPConstraint(2,1,0.0)
 spc= coacciones.newSPConstraint(2,2,0.0)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("linear_ts","ts")

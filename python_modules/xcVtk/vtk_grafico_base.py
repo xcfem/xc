@@ -104,8 +104,8 @@ class RecordDefDisplay(object):
     self.plot(fName)
 
   # Muestra la malla en el dispositivo de salida.
-  def muestraMalla(self, mdlr,recordGrid):
-    self.defineEscenaMalla(mdlr,recordGrid,None)
+  def muestraMalla(self, preprocessor,recordGrid):
+    self.defineEscenaMalla(preprocessor,recordGrid,None)
     self.muestraEscena()
 
   # Plot window contents

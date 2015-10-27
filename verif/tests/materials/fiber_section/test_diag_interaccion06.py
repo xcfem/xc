@@ -47,10 +47,10 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
 prueba.errFileName= "/tmp/borrar.err" # Don't print errors.
 
-mdlr= prueba.getModelador
-sccData.defSeccionHASimple(mdlr,'d')
+preprocessor=  prueba.getPreprocessor
+sccData.defSeccionHASimple(preprocessor, 'd')
 param= xc.InteractionDiagramParameters()
-diag= sccData.defInteractionDiagramNMy(mdlr)
+diag= sccData.defInteractionDiagramNMy(preprocessor)
 #from materials.fiber_section import plotGeomSeccion as pg
 #pg.plotInteractionDiagram2D(diag)
 

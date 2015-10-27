@@ -8,15 +8,15 @@ import os
 from model import puntos as points
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos nodos
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt1= puntos.newPntIDPos3d(1, geom.Pos3d(1.0, 0.0, 0.0) )
 pt2= puntos.newPntIDPos3d(2, geom.Pos3d(0.0, 1.0, 0.0) )
 pt3= puntos.newPntIDPos3d(3, geom.Pos3d(0.0, 0.0, 1.0) )
 plano= geom.Plano3d(pt1.getPos,pt2.getPos,pt3.getPos)
-trfs= mdlr.getCad.getGeometricTransformations
+trfs= preprocessor.getCad.getGeometricTransformations
 reflex1= trfs.newTransformation("reflection")
 reflex1.setPlane(plano)
 

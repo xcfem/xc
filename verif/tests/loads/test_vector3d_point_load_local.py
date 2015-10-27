@@ -27,8 +27,8 @@ P= 1e3 # Carga puntual.
 n= 1e6 # Carga uniforme axial.
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
@@ -38,16 +38,16 @@ nod= nodos.newNodeXYZ(L,0,0)
 
     
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,0,1])
     
 # Materials definition
-scc= typical_materials.defElasticSection3d(mdlr,"scc",A,E,G,Iz,Iy,J)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "scc"
 elementos.defaultTag= 1 #Tag for next element.
@@ -55,12 +55,12 @@ beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -75,7 +75,7 @@ while not(elem is None):
   elem.vector2dPointByRelDistLoadLocal(x,xc.Vector([n,-P,0]))
   elem= eIter.next()
 
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 #We add the load case to domain.
 casos.addToDomain("0")
@@ -85,7 +85,7 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod2= nodos.getNode(2)
 delta0= nod2.getDisp[0] 
 nod2= nodos.getNode(2)

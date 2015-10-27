@@ -58,8 +58,8 @@
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MovableID.h"
 
-#include "modelador/Modelador.h"
-#include "modelador/loaders/LoadLoader.h"
+#include "preprocessor/Preprocessor.h"
+#include "preprocessor/loaders/LoadLoader.h"
 
 void XC::CondContorno::libera(void)
   {
@@ -778,10 +778,10 @@ std::string XC::CondContorno::getNombresLPs(void) const
         const Domain *dom= getDomain();
         if(dom)
           {
-            const Modelador *mdlr= dom->GetModelador();
-            if(mdlr)
+            const Preprocessor *preprocessor= dom->GetPreprocessor();
+            if(preprocessor)
               {
-                const LoadLoader &loadLoader= mdlr->getLoadLoader();
+                const LoadLoader &loadLoader= preprocessor->getLoadLoader();
                 const MapLoadPatterns &casos= loadLoader.getLoadPatterns();
                 for(MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.begin();
                     i!= activeLoadPatterns.end();i++)
@@ -932,10 +932,10 @@ int XC::CondContorno::recvLPatternsTags(const int &posFlag,const int &posDbTag,c
         res= cp.receiveID(loadPatternsTags,getDbTagData(),CommMetaData(posDbTag));
     
         assert(dom);
-        Modelador *mdlr= dom->GetModelador();
-        if(mdlr)
+        Preprocessor *preprocessor= dom->GetPreprocessor();
+        if(preprocessor)
           {
-            LoadLoader &loadLoader= mdlr->getLoadLoader();
+            LoadLoader &loadLoader= preprocessor->getLoadLoader();
             LoadPattern *load= nullptr;
             const size_t sz= loadPatternsTags.Size();
             for(size_t i=0;i<sz;i++)

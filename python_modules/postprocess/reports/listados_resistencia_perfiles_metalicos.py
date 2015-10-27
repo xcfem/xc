@@ -40,7 +40,7 @@ def listaResistenciaPerfilesMetalicosTNRegElastico(nmbSet, fName, titulo):
   elástico de un conjunto de elementos cuyo material es un perfil
   metálico.'''
   printCabeceraListadoTNPerfilMetalico(fName,titulo) 
-  st= mdlr.getSetLoader.getSet(nmbSet)
+  st= preprocessor.getSetLoader.getSet(nmbSet)
   elems= st.getElements()
   tagFCTNCPCP= 0
   FCTNCPCP= 0
@@ -92,7 +92,7 @@ de un conjunto de elementos cuyo material es un perfil metálico.
 '''
 def listaResistenciaPerfilesMetalicosV(nmbSet, fName, titulo):
   printCabeceraListadoVPerfilMetalico(fName,titulo) 
-  st= mdlr.getSetLoader.getSet(nmbSet)
+  st= preprocessor.getSetLoader.getSet(nmbSet)
   elems= st.getElements()
   tagFCTNCPCP= 0
   FCTNCPCP= 0

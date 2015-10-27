@@ -23,8 +23,8 @@ eps= F/(Area*Es)
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1
 nod= nodos.newNodeXYZ(1,0,0)
@@ -44,9 +44,9 @@ TK21= 0.0; TEIy= 0.0; TK23= 0.0
 TK31= 0.0; TK32= 0.0; TEIz= 0.0
 
 
-elast0= typical_materials.defElasticMaterial(mdlr,"elast0",Es)
+elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",Es)
 # Secciones
-prb= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","prb")
+prb= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","prb")
 
 prb.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF+lado/4]))
 prb.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF+lado/4]))
@@ -67,13 +67,13 @@ TK31= tangentStiffness.at(3,1); TK32= tangentStiffness.at(3,2); TEIz=  tangentSt
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "prb"
 elementos.defaultTag= 1
 zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -87,7 +87,7 @@ spc= coacciones.newSPConstraint(2,2,0.0)
 spc= coacciones.newSPConstraint(2,3,0.0)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -111,7 +111,7 @@ deltax= nod2.getDisp[0]
 nod1= nodos.getNode(1)
 Reac= nod1.getReaction 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 
 elem1= elementos.getElement(1)
 elem1.getResistingForce()

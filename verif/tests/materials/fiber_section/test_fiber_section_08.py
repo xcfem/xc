@@ -39,11 +39,11 @@ MzDato= 55.949206e3 # Momento que agota la armadura a tracción.
 NDato= 0.0
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-tagAcero= EHE_reinforcing_steel.B500S.defDiagD(mdlr)
-dgDB500S= EHE_reinforcing_steel.B500S.getDiagD(mdlr)
-tagHormigon= hormigonesEHE.HA25.defDiagD(mdlr)
+tagAcero= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
+dgDB500S= EHE_reinforcing_steel.B500S.getDiagD(preprocessor)
+tagHormigon= hormigonesEHE.HA25.defDiagD(preprocessor)
 
 import os
 pth= os.path.dirname(__file__)
@@ -51,21 +51,21 @@ if(not pth):
   pth= "."
 #print "pth= ", pth
 execfile(pth+"/secc_hormigon_01.py")
-secHA= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","secHA")
+secHA= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHormigon01")
 secHA.setupFibers()
 
-banco_pruebas_scc3d.modeloSecc3d(mdlr,"secHA")
+banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHA")
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.Nodo6DOFMovXGiroZLibres(coacciones,2)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -90,15 +90,15 @@ TEIz= 0.0
 TEIy= 0.0
 x= 0.0
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
 RN= nodos.getNode(1).getReaction[0] 
 RM= nodos.getNode(1).getReaction[5] 
 RN2= nodos.getNode(2).getReaction[0] 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
 fibras= scc.getFibers()

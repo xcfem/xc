@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
-def ListaCargaUniforme(mdlr,loadPattern, archivo, carga, fmt):
+def ListaCargaUniforme(preprocessor,loadPattern, archivo, carga, fmt):
   elemTags= loadPattern.getElementTags()
   for i in elemTags:
-    e= mdlr.getElementLoader.getElement(i)
+    e= preprocessor.getElementLoader.getElement(i)
     archivo.write(e.tag," & ",loadPattern," & unif. & & ",fmt.format(carga[0]/1e3)," & ",fmt.format(carga[1]/1e3)," & ",fmt.format(carga[2]/1e3),"\\\\\n")
 
-def ListaCargaPuntual(mdlr,loadPattern, archivo, carga, fmt):
+def ListaCargaPuntual(preprocessor,loadPattern, archivo, carga, fmt):
   xCarga= x
   elemTags= loadPattern.getElementTags()
   for i in elemTags:
-    e= mdlr.getElementLoader.getElement(i)
+    e= preprocessor.getElementLoader.getElement(i)
     archivo.write(e.tag," & ",loadPattern," & punt. & ",xCarga," & ",fmt.format(carga[0]/1e3)," & ",fmt.format(carga[1]/1e3)," & ",fmt.format(carga[2]/1e3),"\\\\\n")
 
 def ListaCargasElementos(loadPattern, archivo, fmt):
@@ -18,7 +18,7 @@ def ListaCargasElementos(loadPattern, archivo, fmt):
   defCampos= "|r|c|c|r|r|r|r|"
   idsCampos= "Id & Acc. & Tipo & x & Fx & Fy &Fz \\\\\n - & - & - &  & kN/m & kN/m & kN/m "
   cabeceraSupertabular(archivo,7,defCampos,idsCampos,caption)
-  loads= mdlr.getLoadPatterns
+  loads= preprocessor.getLoadPatterns
   print "Número de patrones de carga: ",numLoadPatterns
   print "Número de cargas en elementos: ", loadPattern.getNumEleLoads()
   eleLoads= loadPattern.getEleLoads()

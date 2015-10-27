@@ -49,7 +49,7 @@
 // $Source: /usr/local/cvs/OpenSees/SRC/material/section/ElasticShearSection3d.cpp,v $
 
 #include "material/section/elastic_section/ElasticShearSection3d.h"
-#include "modelador/loaders/MaterialLoader.h"
+#include "preprocessor/loaders/MaterialLoader.h"
 #include "utility/matrix/Matrix.h"
 #include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"

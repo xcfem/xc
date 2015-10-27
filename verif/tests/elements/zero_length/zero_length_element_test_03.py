@@ -18,8 +18,8 @@ from materials import typical_materials
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 
 # Model definition
@@ -28,9 +28,9 @@ nod= nodos.newNodeXY(1,1)
 nod= nodos.newNodeXY(1,1)
 
 # Materials definition
-kx= typical_materials.defElasticMaterial(mdlr,"kx",KX)
-ky= typical_materials.defElasticMaterial(mdlr,"ky",KY)
-kt= typical_materials.defElasticMaterial(mdlr,"kt",KT)
+kx= typical_materials.defElasticMaterial(preprocessor, "kx",KX)
+ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
+kt= typical_materials.defElasticMaterial(preprocessor, "kt",KT)
 
 
 ''' Se definen nodos en los puntos de aplicación de
@@ -38,7 +38,7 @@ kt= typical_materials.defElasticMaterial(mdlr,"kt",KT)
     se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "kx"
 elementos.dimElem= 3
 zl= elementos.newElement("zero_length",xc.ID([1,2]))
@@ -63,7 +63,7 @@ print "trf[2]: ","getTrf[2,0]"," ","getTrf[2,1]"," ","getTrf[2,2]"
 
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -71,7 +71,7 @@ spc= coacciones.newSPConstraint(1,2,0.0)
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -90,7 +90,7 @@ result= analisis.analyze(1)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod2= nodos.getNode(2)
 deltax= nod2.getDisp[0]
 deltay= nod2.getDisp[1]

@@ -139,7 +139,7 @@ PropVrDato= 0.0
 #                         idScc= rowXXX['ELEM']
 #                         idElem= floor(idScc/10)
 #                         idNodo= 10*idScc+1
-#                         \mdlr
+#                         \preprocessor
 #                           {
 #                             if((analOk==0.0)):
 #                                 \then
@@ -198,7 +198,7 @@ PropVrDato= 0.0
 #              descomp= listaDescompComb[i]
 #              print("descomp= ",descomp,"\n")
 #              # Lanzamos el calculo de la combinación.
-#              \mdlr
+#              \preprocessor
 #                {
 #                  \loads
 #                    {
@@ -221,7 +221,7 @@ PropVrDato= 0.0
 #                     }
 #                }
 #              \borra_archivo_si_existe{nmbFileUpdate}
-#              \mdlr
+#              \preprocessor
 #                {
 #                  \loads
 #                    {

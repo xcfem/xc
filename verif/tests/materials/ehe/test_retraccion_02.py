@@ -43,8 +43,8 @@ from materials import typical_materials
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod1= nodos.newNodeXYZ(0,0,0)
@@ -63,11 +63,11 @@ nod12= nodos.newNodeXYZ(3,2,0)
 
 # Materials definition
 
-hLosa= typical_materials.defElasticMembranePlateSection(mdlr,"hLosa",Ec,nuC,densLosa,hLosa)
+hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec,nuC,densLosa,hLosa)
 
-aceroPret= typical_materials.defSteel02(mdlr,"aceroPret",Ep,fy,0.001,tInic)
+aceroPret= typical_materials.defSteel02(preprocessor, "aceroPret",Ep,fy,0.001,tInic)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 # Losa de hormigón
 elementos.defaultMaterial= "hLosa"
 elementos.defaultTag= 1
@@ -102,14 +102,14 @@ truss= elementos.newElement("truss",xc.ID([11,12]));
 truss.area= Ap
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.fixNode6DOF(coacciones,5)
 fix_node_6dof.fixNode6DOF(coacciones,9)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -125,7 +125,7 @@ lpSC= casos.newLoadPattern("default","SC")
 lpVT= casos.newLoadPattern("default","VT")
 lpNV= casos.newLoadPattern("default","NV")
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod4= nodos.getNode(4)
 nod8= nodos.getNode(8)
 nod12= nodos.getNode(12)
@@ -184,7 +184,7 @@ analysis= predefined_solutions.penalty_newton_raphson(prueba)
 from solution import database_helper
 
 def resuelveCombEstatLin(tagComb,comb,tagSaveFase0):
-  mdlr.resetLoadCase()
+  preprocessor.resetLoadCase()
   db.restore(tagSaveFase0)
 
   #execfile("solution/database_helper_solve.xci")
@@ -207,7 +207,7 @@ dXMin=1e9
 dXMax=-1e9
 
 def trataResultsComb(tagComb, nmbComb):
-  nodos= mdlr.getNodeLoader
+  nodos= preprocessor.getNodeLoader
   nod8= nodos.getNode(8)
   deltaX= nod8.getDisp[0] # Desplazamiento del nodo 2 según z
   global dXMin; dXMin= min(dXMin,deltaX)
@@ -227,11 +227,11 @@ db= prueba.newDatabase("BerkeleyDB","/tmp/test_retraccion_02.db")
 # Fase 1: pretensado, retracción y fluencia
 
 # Deformaciones de retracción.
-sets= mdlr.getSets
+sets= preprocessor.getSets
 
-shells= mdlr.getSets.defSet("shells")
+shells= preprocessor.getSets.defSet("shells")
 
-elements= mdlr.getSets.getSet("total").getElements
+elements= preprocessor.getSets.getSet("total").getElements
 for e in elements:
   dim= e.getDimension
   if(dim==2):
@@ -262,7 +262,7 @@ for e in shellElems:
   eleLoad.setStrainComp(3,1,epsRetracc)
 
 
-mdlr.resetLoadCase()
+preprocessor.resetLoadCase()
 
 comb= combs.newLoadCombination("FASE0","1.00*RETRACC")
 tagSaveFase0= comb.tag*100

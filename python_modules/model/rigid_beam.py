@@ -6,7 +6,7 @@ from materials import typical_materials
 
 # Crea un rigid_link entre los nodos que se pasan como parámetro.
 def creaRigidBeamNodos(mdkr,tagNodA, tagNodB):
-  return mdlr.getConstraintLoader.newRigidBeam(tagNodA,tagNodB)
+  return preprocessor.getConstraintLoader.newRigidBeam(tagNodA,tagNodB)
 
 
 '''
@@ -15,27 +15,27 @@ Crea un rigid_link articulado en tabNodoB
    Le llamamos «fulcrum» porque puede pivotar
    en torno al nodeo designado por tagNodoB
 '''
-def creaFulcrumNodos3d(mdlr, tagNodA, tagNodB):
-  nodos= mdlr.getNodeLoader
+def creaFulcrumNodos3d(preprocessor, tagNodA, tagNodB):
+  nodos= preprocessor.getNodeLoader
   coordNodoB= nodos.getNode(tagNodB).getCoo
   fulcrumNode= nodos.newNodeFromVector(coordNodoB)
-  constraints= mdlr.getConstraintLoader
+  constraints= preprocessor.getConstraintLoader
   rb= constraints.newRigidBeam(tagNodA,fulcrumNode.tag)
   ed= constraints.newEqualDOF(fulcrumNode.tag,tagNodB,xc.ID([0,1,2]))
 
 # Crea un rigid_beam entre los nodos de los puntos que se pasan como parámetro.
-def creaRigidBeamPuntos(mdlr,idPuntoA, idPuntoB):
-  tagNodeA= mdlr.getPoint(idPuntoA).getTagNode
-  tagNodeB= mdlr.getPoint(igPuntoB).getTagNode
-  creaRigidBeamNodos(mdlr,tagNodeA,tagNodeB)
+def creaRigidBeamPuntos(preprocessor,idPuntoA, idPuntoB):
+  tagNodeA= preprocessor.getPoint(idPuntoA).getTagNode
+  tagNodeB= preprocessor.getPoint(igPuntoB).getTagNode
+  creaRigidBeamNodos(preprocessor,tagNodeA,tagNodeB)
 
 '''
 Coloca una barra gorda (muy rígida) entre los nodos que se pasan como parámetro.
    (lo uso porque las condiciones de contorno multipunto hacen cosas raras con los valores de las
     reacciones)
 '''
-def creaBarraGordaNodos(mdlr,tagNodA, tagNodB, nmbTransf):
-  elementos= mdlr.getElementLoader
+def creaBarraGordaNodos(preprocessor,tagNodA, tagNodB, nmbTransf):
+  elementos= preprocessor.getElementLoader
   elementos.defaultTransformation= nmbTransf
   # Material definition
   matName= 'bar' + str(tagNodA) + str(tagNodB) + nmbTransf
@@ -45,7 +45,7 @@ def creaBarraGordaNodos(mdlr,tagNodA, tagNodB, nmbTransf):
   Iz= 10
   Iy= 10
   J= 10
-  scc= typical_materials.defElasticSection3d(mdlr,matName,A,E,G,Iz,Iy,J)
+  scc= typical_materials.defElasticSection3d(preprocessor,matName,A,E,G,Iz,Iy,J)
   defMat= elementos.defaultMaterial
   print "defMat= ", defMat
   elementos.defaultMaterial= matName
@@ -61,6 +61,6 @@ Coloca una barra gorda (muy rígida) entre los nodos de los puntos que se pasan 
     reacciones)
 '''
 def creaBarraGordaPuntos(idPuntoA, idPuntoB, nmbTransf):
-  tagNodeA= mdlr.getPoint(idPuntoA).getTagNode
-  tagNodeB= mdlr.getPoint(igPuntoB).getTagNode
+  tagNodeA= preprocessor.getPoint(idPuntoA).getTagNode
+  tagNodeB= preprocessor.getPoint(igPuntoB).getTagNode
   return creaBarraGordaNodos(tagNodeA,tagNodeB)

@@ -39,23 +39,23 @@ NDato= 0 # Axil para comprobar fisuración.
 MyDato= 117e3 # Momento para comprobar fisuración.
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-# tagDiagHormigon= hormigonesEHE.HA30.defDiagK(mdlr)
-# tagDiagAceroArmar= EHE_reinforcing_steel.B500S.defDiagK(mdlr)
+# tagDiagHormigon= hormigonesEHE.HA30.defDiagK(preprocessor)
+# tagDiagAceroArmar= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
 
 
-datosScc1LosC.defSeccionHASimple(mdlr,"k")
+datosScc1LosC.defSeccionHASimple(preprocessor, "k")
 
-banco_pruebas_scc3d.modeloSecc3d(mdlr,datosScc1LosC.nmbSeccion)
+banco_pruebas_scc3d.modeloSecc3d(preprocessor, datosScc1LosC.nmbSeccion)
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.Nodo6DOFMovXGiroYLibres(coacciones,2)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -79,7 +79,7 @@ analOk= analisis.analyze(10)
 secHAParamsFis= cc.CrackControlSIA262()
 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
 sigma_s= secHAParamsFis.calcRebarStress(scc)

@@ -38,7 +38,7 @@ class DBDatastore: public FE_Datastore
   protected:
     mutable int dbTAG;
   public:
-    DBDatastore(Modelador &, FEM_ObjectBroker &theBroker);    
+    DBDatastore(Preprocessor &, FEM_ObjectBroker &theBroker);    
   };
 } // fin namespace XC
 

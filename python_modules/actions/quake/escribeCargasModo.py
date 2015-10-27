@@ -3,9 +3,9 @@
 Escribe las acciones estáticas equivalentes que se obtienen para
 cada nodo del modelo y que corresponden al modo que se pasa como parámetro
 '''
-def escribeCargasModo(mdlr,fName, iModo, aceleraciones):
+def escribeCargasModo(preprocessor,fName, iModo, aceleraciones):
   fName.write("\# Debidas a masas en nodos.)\n")
-  nodos= mdlr.getNodeLoader
+  nodos= preprocessor.getNodeLoader
   for n in nodos:
     if(n.tag>0):
       fuerza_nodo= getEquivalentStaticLoad(iModo,aceleraciones[iModo-1])
@@ -13,7 +13,7 @@ def escribeCargasModo(mdlr,fName, iModo, aceleraciones):
       fName.write(" \\val{",fuerza_nodo,"} }\n")
 
   fName.write("\n\n\# Debidas a masas en elementos.)\n")
-  elementos= mdlr.getElementLoader
+  elementos= preprocessor.getElementLoader
   for e in elementos:
     if(e.tag>0):
       numNodes= e.getNumExternalNodes

@@ -12,7 +12,7 @@ from materials import typical_materials
 from materials import sccRectg
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 
 # Definición de la sección rectangular
@@ -33,10 +33,10 @@ fy= 2600 # Tensión de cedencia del material expresada en kp/cm2.
 E= 2.1e6 # Módulo de Young del material en kp/cm2.
 
 # Definimos materiales
-epp= typical_materials.defElasticPPMaterial(mdlr,"epp",E,fy,-fy)
-geomRectang= mdlr.getMaterialLoader.newSectionGeometry("geomRectang")
+epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
+geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
 reg= scc10x20.discretization(geomRectang,"epp")
-rectang= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","rectang")
+rectang= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 rectang.setupFibers()

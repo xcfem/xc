@@ -80,8 +80,8 @@ class MySqlDatastore: public DBDatastore
     int createOpenSeesDatabase(const std::string &projectName);
     int execute(const std::string &query);
   public:
-    MySqlDatastore(const std::string &,Modelador &, FEM_ObjectBroker &,int dbRun = 0);    
-    MySqlDatastore(const std::string &,const std::string &, const std::string &, const std::string &, unsigned int port, const std::string &, unsigned int clientFlag, Modelador &, FEM_ObjectBroker &, int dbRun = 0);
+    MySqlDatastore(const std::string &,Preprocessor &, FEM_ObjectBroker &,int dbRun = 0);    
+    MySqlDatastore(const std::string &,const std::string &, const std::string &, const std::string &, unsigned int port, const std::string &, unsigned int clientFlag, Preprocessor &, FEM_ObjectBroker &, int dbRun = 0);
     ~MySqlDatastore();
 
     // methods for sending and recieving matrices, vectors and id's

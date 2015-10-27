@@ -25,12 +25,12 @@ NDato= -100.0 # Axil para comprobar fisuración.
 MyDato= 0.0 # Momento para comprobar fisuración.
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-tagHA25= hormigonesEHE.HA25.defDiagK(mdlr)
-tagB500S= EHE_reinforcing_steel.B500S.defDiagK(mdlr)
+tagHA25= hormigonesEHE.HA25.defDiagK(preprocessor)
+tagB500S= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
 
-geomSecHA= mdlr.getMaterialLoader.newSectionGeometry("geomSecHA")
+geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
 hormigon= regiones.newQuadRegion(hormigonesEHE.HA25.nmbDiagK)
 hormigon.nDivIJ= 10
@@ -49,22 +49,22 @@ armaduraSup.barArea= areaFi12
 armaduraSup.p1= geom.Pos2d(recub-ancho/2.0,canto/2.0-recub) # Armadura superior.
 armaduraSup.p2= geom.Pos2d(ancho/2.0-recub,canto/2.0-recub)
 
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHA")
 secHA.setupFibers()
 
-banco_pruebas_scc3d.modeloSecc3d(mdlr,"secHA")
+banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHA")
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.Nodo6DOFMovXGiroYLibres(coacciones,2)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -87,7 +87,7 @@ analOk= analisis.analyze(10)
 secHAParamsFis= fisuracionEHE.ParamsFisuracionEHE()
 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
 secHAParamsFis.calcApertCaracFis(scc,hormigonesEHE.HA25.tagDiagK,EHE_reinforcing_steel.B500S.tagDiagK,hormigonesEHE.HA25.fctm())

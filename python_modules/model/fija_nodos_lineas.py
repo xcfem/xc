@@ -6,7 +6,7 @@
 #             \for_each_nod
 #               {
 #                 tagNodo= tag
-#                 \mdlr{\constraints{\condContorno(tagNodo){}}}
+#                 \preprocessor{\constraints{\condContorno(tagNodo){}}}
 #               }
 #           }
 #       }
@@ -25,7 +25,7 @@ def CondContornoNodosInterioresLinea(setLinea, constraints, condContorno):
 #             \primer_nodo
 #               {
 #                 tagNodo= tag
-#                 \mdlr{\constraints{\condContorno(tagNodo){}}}
+#                 \preprocessor{\constraints{\condContorno(tagNodo){}}}
 #               }
 #           }
 #       }
@@ -39,7 +39,7 @@ def CondContornoNodosInterioresLinea(setLinea, constraints, condContorno):
 #             \ultimo_nodo
 #               {
 #                 tagNodo= tag
-#                 \mdlr{\constraints{\condContorno(tagNodo){}}}
+#                 \preprocessor{\constraints{\condContorno(tagNodo){}}}
 #               }
 #           }
 #       }
@@ -61,7 +61,7 @@ def CondContornoNodosExtremosLinea(setLinea, constraints, condContorno):
 #                 \for_each_interior_nod
 #                   {
 #                     tagNodo= tag
-#                     \mdlr{\constraints{\condContorno(tagNodo){}}}
+#                     \preprocessor{\constraints{\condContorno(tagNodo){}}}
 #                   }
 #               }
 #           }

@@ -14,22 +14,22 @@ ndivZ= 2
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos materiales
-elast3d= typical_materials.defElasticIsotropic3d(mdlr,"elast3d",30e6,0.3,0.0)
+elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",30e6,0.3,0.0)
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_elasticidad3D(nodos)
 
 
 nodos.newSeedNode()
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast3d"
 seedElemLoader.dimElem= 3
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 brick= seedElemLoader.newElement("brick",xc.ID([0,0,0,0,0,0,0,0]));
 
-unifGrids= mdlr.getCad.getUniformGrids
+unifGrids= preprocessor.getCad.getUniformGrids
 uGrid= unifGrids.newUniformGrid()
 
 uGrid.Lx= 10
@@ -40,7 +40,7 @@ uGrid.nDivY= ndivY
 uGrid.nDivZ= ndivZ
 
 
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
 numNodos= setTotal.getNodes.size

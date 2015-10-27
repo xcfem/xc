@@ -37,8 +37,8 @@ Lz= 1
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nod0= nodos.newNodeIDXYZ(0,0,0,0)
 nod1= nodos.newNodeXYZ(0,-Ly,0)
@@ -46,20 +46,20 @@ nod2= nodos.newNodeXYZ(0,-Ly,-Lz)
 nod3= nodos.newNodeXYZ(Lx,-Ly,-Lz)
 nod3.mass= matrizMasasNodo
 
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 nod0.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0]))
 
 # Materials definition
-scc= typical_materials.defElasticSection3d(mdlr,"scc",area,EMat,GMat,Izz,Iyy,Ir)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc",area,EMat,GMat,Izz,Iyy,Ir)
 
 # Definimos transformaciones geométricas
-linX= mdlr.getTransfCooLoader.newLinearCrdTransf3d("linX")
+linX= preprocessor.getTransfCooLoader.newLinearCrdTransf3d("linX")
 linX.xzVector= xc.Vector([1,0,0])
-linY= mdlr.getTransfCooLoader.newLinearCrdTransf3d("linY")
+linY= preprocessor.getTransfCooLoader.newLinearCrdTransf3d("linY")
 linY.xzVector= xc.Vector([0,1,0])
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "linX"
 elementos.defaultMaterial= "scc"
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([0,1]))

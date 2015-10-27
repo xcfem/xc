@@ -76,10 +76,10 @@
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
-#include "modelador/cad/trf/TrfGeom.h"
-#include "modelador/Modelador.h"
-#include "modelador/loaders/LoadLoader.h"
-#include "modelador/set_mgmt/SetMeshComp.h"
+#include "preprocessor/cad/trf/TrfGeom.h"
+#include "preprocessor/Preprocessor.h"
+#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/set_mgmt/SetMeshComp.h"
 #include "domain/load/NodalLoad.h"
 #include "domain/load/pattern/NodeLocker.h"
 
@@ -340,10 +340,10 @@ void XC::Node::alive(void)
 //! @brief Procesa los comandos correspondientes a cargas sobre nodo
 bool XC::Node::procesa_load(const std::string &cmd,CmdStatus &status)
   {
-    Modelador *mdlr= GetModelador();
-    if(mdlr)
+    Preprocessor *preprocessor= GetPreprocessor();
+    if(preprocessor)
       {
-        MapLoadPatterns &casos= mdlr->getLoadLoader().getLoadPatterns();
+        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
 
         if(cmd == "load")
           {
@@ -500,7 +500,7 @@ XC::DefaultTag &XC::Node::getDefaultTag(void)
 //! @brief Introduce en el nodo una condición de contorno
 //! como la que se pasa como parámetro.
 XC::SP_Constraint *XC::Node::fix(const SP_Constraint &semilla)
-  { return GetModelador()->getConstraintLoader().addSP_Constraint(getTag(),semilla); }
+  { return GetPreprocessor()->getConstraintLoader().addSP_Constraint(getTag(),semilla); }
 
 //! @brief Impone desplazamientos prescritos en los grados de libertad
 //! que se pasan como parámetro.
@@ -508,7 +508,7 @@ void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &val
   {
     if(getDomain())
       {
-        ConstraintLoader &cl= GetModelador()->getConstraintLoader();
+        ConstraintLoader &cl= GetPreprocessor()->getConstraintLoader();
         const int sz= std::min(idGdls.size(),valores.size());
         if(valores.size()<idGdls.size())
 	  std::cerr << "El vector de desplazamientos prescritos"
@@ -1504,10 +1504,10 @@ int XC::Node::recvSelf(const CommParameters &cp)
 std::set<XC::SetBase *> XC::Node::get_sets(void) const
   {
     std::set<SetBase *> retval;
-    const Modelador *mdlr= GetModelador();
-    if(mdlr)
+    const Preprocessor *preprocessor= GetPreprocessor();
+    if(preprocessor)
       {
-        MapSet &sets= const_cast<MapSet &>(mdlr->get_sets());
+        MapSet &sets= const_cast<MapSet &>(preprocessor->get_sets());
         retval= sets.get_sets(this);
       }
     else

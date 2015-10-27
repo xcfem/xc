@@ -1671,24 +1671,24 @@ std::ostream & XC::operator<<(std::ostream &s, XC::SectionRepres &sectionRepr)Po
   std::ostream & operator<<(std::ostream &, const MEDMapIndices &)
   std::ostream & operator<<(std::ostream &s, const Timer &E)
 
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/cad/Cad.cc:446: warning: no matching class member found for 
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/cad/Cad.cc:446: warning: no matching class member found for 
   XC::TrfGeom * XC::Cad::busca_transformacion_geometrica(const XC::Cad::indice_trf_geom &id)
 Possible candidates:
   TrfGeom * XC::Cad::busca_transformacion_geometrica(const indice_sis_ref &id)
   const TrfGeom * XC::Cad::busca_transformacion_geometrica(const indice_sis_ref &id) const 
 
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/cad/Cad.cc:456: warning: no matching class member found for 
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/cad/Cad.cc:456: warning: no matching class member found for 
   const XC::TrfGeom * XC::Cad::busca_transformacion_geometrica(const XC::Cad::indice_trf_geom &id) const
 Possible candidates:
   TrfGeom * XC::Cad::busca_transformacion_geometrica(const indice_sis_ref &id)
   const TrfGeom * XC::Cad::busca_transformacion_geometrica(const indice_sis_ref &id) const 
 
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/cad/Cad.cc:868: warning: no uniquely matching class member found for 
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/cad/Cad.cc:868: warning: no uniquely matching class member found for 
   void XC::Cad::CopiaPuntos(const std::vector< XC::Cad::indice_punto > &indices)
 Possible candidates:
-  void XC::Cad::CopiaPuntos(const std::vector< Cad::indice_punto > &) at line 200 of file /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/cad/Cad.h
+  void XC::Cad::CopiaPuntos(const std::vector< Cad::indice_punto > &) at line 200 of file /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/cad/Cad.h
 
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/cad/Cad.cc:881: warning: no matching class member found for 
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/cad/Cad.cc:881: warning: no matching class member found for 
   void XC::Cad::TransformaPuntos(const XC::TrfGeom &trf, const std::vector< XC::Cad::indice_punto > &indices)
 Possible candidates:
   void XC::Cad::TransformaPuntos(const TrfGeom &trf, const std::vector< Cad::indice_punto > &)
@@ -1915,15 +1915,15 @@ std::ostream & XC::operator<<(std::ostream &s, XC::TaggedObject &m)Possible cand
   std::ostream & operator<<(std::ostream &, const MEDMapIndices &)
   std::ostream & operator<<(std::ostream &s, const Timer &E)
 
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/loaders/ConstraintLoader.cc:49: warning: Found unknown command `\grief'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/loaders/ConstraintLoader.cc:49: warning: Found unknown command `\grief'
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/material/nD/FiniteDeformation/WEnergy/OgdenWEnergy.cpp:67: warning: Found unknown command `\brier'
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/material/section/repres/cell/QuadCell.cpp:58: warning: Found unknown command `\briet'
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/material/uniaxial/concrete/ConcreteBase.cpp:93: warning: Found unknown command `\breif'
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/material/uniaxial/concrete/ConcreteBase.cpp:97: warning: Found unknown command `\breif'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/MapSet.cc:168: warning: Found unknown command `\bref'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/MapSet.cc:132: warning: Found unknown command `\bref'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/loaders/ConstraintLoader.cc:89: warning: Found unknown command `\grief'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/MapSet.cc:149: warning: Found unknown command `\bref'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/MapSet.cc:168: warning: Found unknown command `\bref'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/MapSet.cc:132: warning: Found unknown command `\bref'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/loaders/ConstraintLoader.cc:89: warning: Found unknown command `\grief'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/MapSet.cc:149: warning: Found unknown command `\bref'
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/solution/analysis/algorithm/eigenAlgo/FrequencyAlgo.cpp:119: warning: Found unknown command `\breif'
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/solution/analysis/algorithm/eigenAlgo/LinearBucklingAlgo.cc:115: warning: Found unknown command `\breif'
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.cpp:189: warning: The following parameters of XC::receiveBeamIntegrationPtr(BeamIntegration *ptr, int posClassTag, int posDbTag, DbTagData &dt, const CommParameters &cp) are not documented:
@@ -2058,30 +2058,30 @@ std::ostream & XC::operator<<(std::ostream &s, XC::TaggedObject &m)Possible cand
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/material/uniaxial/concrete/ConcreteBase.cpp:97: warning: Found unknown command `\breif'
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/material/uniaxial/concrete/ConcreteBase.cpp:93: warning: Found unknown command `\breif'
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/material/uniaxial/concrete/ConcreteBase.cpp:97: warning: Found unknown command `\breif'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/cad/Edge.cc:49: warning: argument 'i' of command @param is not found in the argument list of XC::Edge::Edge(const std::string &nombre="", Modelador *m=NULL, const size_t &nd=4)
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/cad/Edge.cc:49: warning: The following parameters of XC::Edge::Edge(const std::string &nombre="", Modelador *m=NULL, const size_t &nd=4) are not documented:
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/cad/Edge.cc:49: warning: argument 'i' of command @param is not found in the argument list of XC::Edge::Edge(const std::string &nombre="", Preprocessor *m=NULL, const size_t &nd=4)
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/cad/Edge.cc:49: warning: The following parameters of XC::Edge::Edge(const std::string &nombre="", Preprocessor *m=NULL, const size_t &nd=4) are not documented:
   parameter 'nd'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/cad/Face.cc:46: warning: argument 'nd' of command @param is not found in the argument list of XC::Face::Face(const std::string &nombre, Modelador *m, const size_t &ndivI=4, const size_t &ndivJ=4)
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/cad/Face.cc:46: warning: The following parameters of XC::Face::Face(const std::string &nombre, Modelador *m, const size_t &ndivI=4, const size_t &ndivJ=4) are not documented:
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/cad/Face.cc:46: warning: argument 'nd' of command @param is not found in the argument list of XC::Face::Face(const std::string &nombre, Preprocessor *m, const size_t &ndivI=4, const size_t &ndivJ=4)
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/cad/Face.cc:46: warning: The following parameters of XC::Face::Face(const std::string &nombre, Preprocessor *m, const size_t &ndivI=4, const size_t &ndivJ=4) are not documented:
   parameter 'ndivI'
   parameter 'ndivJ'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/loaders/ConstraintLoader.cc:49: warning: Found unknown command `\grief'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/loaders/ConstraintLoader.cc:65: warning: Found unknown command `\grief'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/loaders/ConstraintLoader.cc:80: warning: Found unknown command `\grief'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/loaders/ConstraintLoader.cc:89: warning: Found unknown command `\grief'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/loaders/ConstraintLoader.cc:89: warning: Found unknown command `\grief'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/loaders/ConstraintLoader.cc:65: warning: Found unknown command `\grief'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/loaders/ConstraintLoader.cc:80: warning: Found unknown command `\grief'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/loaders/ConstraintLoader.cc:49: warning: Found unknown command `\grief'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/MapSet.cc:132: warning: Found unknown command `\bref'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/MapSet.cc:149: warning: Found unknown command `\bref'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/MapSet.cc:168: warning: Found unknown command `\bref'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/MapSet.cc:149: warning: Found unknown command `\bref'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/MapSet.cc:132: warning: Found unknown command `\bref'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/MapSet.cc:168: warning: Found unknown command `\bref'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/set_mgmt/Set.cc:596: warning: argument 'nodo_semilla' of command @param is not found in the argument list of XC::Set::Malla(dir_mallado dm)
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/set_mgmt/Set.cc:596: warning: argument 'elemento_semilla' of command @param is not found in the argument list of XC::Set::Malla(dir_mallado dm)
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/modelador/set_mgmt/Set.cc:596: warning: The following parameters of XC::Set::Malla(dir_mallado dm) are not documented:
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/loaders/ConstraintLoader.cc:49: warning: Found unknown command `\grief'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/loaders/ConstraintLoader.cc:65: warning: Found unknown command `\grief'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/loaders/ConstraintLoader.cc:80: warning: Found unknown command `\grief'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/loaders/ConstraintLoader.cc:89: warning: Found unknown command `\grief'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/loaders/ConstraintLoader.cc:89: warning: Found unknown command `\grief'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/loaders/ConstraintLoader.cc:65: warning: Found unknown command `\grief'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/loaders/ConstraintLoader.cc:80: warning: Found unknown command `\grief'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/loaders/ConstraintLoader.cc:49: warning: Found unknown command `\grief'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/MapSet.cc:132: warning: Found unknown command `\bref'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/MapSet.cc:149: warning: Found unknown command `\bref'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/MapSet.cc:168: warning: Found unknown command `\bref'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/MapSet.cc:149: warning: Found unknown command `\bref'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/MapSet.cc:132: warning: Found unknown command `\bref'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/MapSet.cc:168: warning: Found unknown command `\bref'
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/set_mgmt/Set.cc:596: warning: argument 'nodo_semilla' of command @param is not found in the argument list of XC::Set::Malla(dir_mallado dm)
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/set_mgmt/Set.cc:596: warning: argument 'elemento_semilla' of command @param is not found in the argument list of XC::Set::Malla(dir_mallado dm)
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/preprocessor/set_mgmt/Set.cc:596: warning: The following parameters of XC::Set::Malla(dir_mallado dm) are not documented:
   parameter 'dm'
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/solution/analysis/algorithm/eigenAlgo/FrequencyAlgo.cpp:119: warning: Found unknown command `\breif'
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/solution/analysis/algorithm/eigenAlgo/FrequencyAlgo.cpp:119: warning: Found unknown command `\breif'
@@ -2153,10 +2153,10 @@ std::ostream & XC::operator<<(std::ostream &s, XC::TaggedObject &m)Possible cand
   parameter 'ptr'
   parameter 'dt'
   parameter 'meta'
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/utility/database/NEESData.h:90: warning: argument 'database' of command @param is not found in the argument list of XC::NEESData::NEESData(const std::string &dataBase, Modelador &mdlr, FEM_ObjectBroker &theBroker)
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/utility/database/NEESData.h:90: warning: argument 'domain' of command @param is not found in the argument list of XC::NEESData::NEESData(const std::string &dataBase, Modelador &mdlr, FEM_ObjectBroker &theBroker)
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/utility/database/NEESData.h:90: warning: argument 'object' of command @param is not found in the argument list of XC::NEESData::NEESData(const std::string &dataBase, Modelador &mdlr, FEM_ObjectBroker &theBroker)
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/utility/database/NEESData.h:90: warning: The following parameters of XC::NEESData::NEESData(const std::string &dataBase, Modelador &mdlr, FEM_ObjectBroker &theBroker) are not documented:
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/utility/database/NEESData.h:90: warning: argument 'database' of command @param is not found in the argument list of XC::NEESData::NEESData(const std::string &dataBase, Preprocessor &preprocessor, FEM_ObjectBroker &theBroker)
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/utility/database/NEESData.h:90: warning: argument 'domain' of command @param is not found in the argument list of XC::NEESData::NEESData(const std::string &dataBase, Preprocessor &preprocessor, FEM_ObjectBroker &theBroker)
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/utility/database/NEESData.h:90: warning: argument 'object' of command @param is not found in the argument list of XC::NEESData::NEESData(const std::string &dataBase, Preprocessor &preprocessor, FEM_ObjectBroker &theBroker)
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/utility/database/NEESData.h:90: warning: The following parameters of XC::NEESData::NEESData(const std::string &dataBase, Preprocessor &preprocessor, FEM_ObjectBroker &theBroker) are not documented:
   parameter 'dataBase'
-  parameter 'mdlr'
+  parameter 'preprocessor'
   parameter 'theBroker'

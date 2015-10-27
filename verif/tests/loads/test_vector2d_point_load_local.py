@@ -23,8 +23,8 @@ P= 1e3 # Carga transversal.
 n= 1e6 # Carga axial.
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_resist_materiales2D(nodos)
@@ -34,16 +34,16 @@ nod= nodos.newNodeXY(L,0.0)
 
     
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
     
 # Materials definition
-scc= typical_materials.defElasticSection2d(mdlr,"scc",A,E,I)
+scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "scc"
 elementos.defaultTag= 1 #Tag for next element.
@@ -53,12 +53,12 @@ beam2d.h= h
 # fin de la definición de elementos
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_3dof.fixNode000(coacciones,1)
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -74,7 +74,7 @@ while not(elem is None):
   elem.vector2dPointByRelDistLoadLocal(x,xc.Vector([n,-P]))
   elem= eIter.next()
 
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 #We add the load case to domain.
 casos.addToDomain("0")
 

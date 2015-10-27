@@ -52,26 +52,26 @@ class HormigonEHE(object):
   def tangDHormigon(self,eps):
     """Diagrama característico tensión deformación del hormigón según EHE."""
     return tangc(eps,self.fcd())
-  def defDiagK(self,mdlr):
-    hormigon= typical_materials.defConcrete01(mdlr,self.nmbDiagK,self.epsilon0,self.fmaxK(),self.fmaxK(),self.epsilonU)
+  def defDiagK(self,preprocessor):
+    hormigon= typical_materials.defConcrete01(preprocessor,self.nmbDiagK,self.epsilon0,self.fmaxK(),self.fmaxK(),self.epsilonU)
     self.tagDiagK= hormigon.tag
     return self.tagDiagK
-  def defDiagD(self,mdlr):
-    hormigon= typical_materials.defConcrete01(mdlr,self.nmbDiagD,self.epsilon0,self.fmaxD(),self.fmaxD(),self.epsilonU)
+  def defDiagD(self,preprocessor):
+    hormigon= typical_materials.defConcrete01(preprocessor,self.nmbDiagD,self.epsilon0,self.fmaxD(),self.fmaxD(),self.epsilonU)
     self.tagDiagD= hormigon.tag
     return self.tagDiagD
-  def getDiagD(self,mdlr):
-    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagD)
-  def getDiagK(self,mdlr):
-    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagK)
+  def getDiagD(self,preprocessor):
+    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagD)
+  def getDiagK(self,preprocessor):
+    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagK)
 
 
 
 def defDiagKHormigon(mdkr, concreteRecord):
-  return concreteRecord.defDiagK(mdlr);
+  return concreteRecord.defDiagK(preprocessor);
 
-def defDiagDHormigon(mdlr, concreteRecord):
-  return concreteRecord.defDiagD(mdlr)
+def defDiagDHormigon(preprocessor, concreteRecord):
+  return concreteRecord.defDiagD(preprocessor)
 
 # Diagrama tensión deformación del hormigón según EHE.
 def sigmac(eps,fcd):
@@ -103,9 +103,9 @@ def sigmaDHormigon(eps,mat):
 
 
 # Comprueba la corrección de los resultados del diagrama de cálculo del modelo de elementos finitos.
-def testDiagDHormigon(mdlr, concreteRecord):
-  tag= defDiagDHormigon(mdlr, concreteRecord)
-  diagHormigon= mdlr.getMaterialLoader.getMaterial(concreteRecord.nmbDiagD)
+def testDiagDHormigon(preprocessor, concreteRecord):
+  tag= defDiagDHormigon(preprocessor, concreteRecord)
+  diagHormigon= preprocessor.getMaterialLoader.getMaterial(concreteRecord.nmbDiagD)
   incr= concreteRecord.epsilonU/20
   errMax= 0.0
   e=  -0.1e-8
@@ -120,9 +120,9 @@ def testDiagDHormigon(mdlr, concreteRecord):
   return errMax
 
 # Comprueba la corrección de los resultados de la tangente al diagrama de cálculo del modelo de elementos finitos.
-def testTangDHormigon(mdlr, concreteRecord):
-  tag= defDiagDHormigon(mdlr, concreteRecord)
-  diagHormigon= mdlr.getMaterialLoader.getMaterial(concreteRecord.nmbDiagD)
+def testTangDHormigon(preprocessor, concreteRecord):
+  tag= defDiagDHormigon(preprocessor, concreteRecord)
+  diagHormigon= preprocessor.getMaterialLoader.getMaterial(concreteRecord.nmbDiagD)
   incr= concreteRecord.epsilonU/20
   errMax= 0.0
   e=  -0.1e-8

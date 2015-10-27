@@ -32,7 +32,7 @@
 #include "xc_utils/src/base/CmdStatus.h"
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "xc_basic/src/texto/StringFormatter.h"
-#include "modelador/loaders/LoadLoader.h"
+#include "preprocessor/loaders/LoadLoader.h"
 #include "boost/lexical_cast.hpp"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -40,7 +40,7 @@
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableString.h"
 #include "utility/database/FE_Datastore.h"
-#include "modelador/Modelador.h"
+#include "preprocessor/Preprocessor.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
@@ -457,9 +457,9 @@ bool XC::Combinacion::procesa_comando(CmdStatus &status)
     else if(cmd == "database")
       {
         FE_Datastore *db= nullptr;
-        Modelador *mdlr= GetModelador();
-        if(mdlr)
-          db= mdlr->getDataBase();
+        Preprocessor *preprocessor= GetPreprocessor();
+        if(preprocessor)
+          db= preprocessor->getDataBase();
         if(db)
           db->LeeCmd(status);
         else

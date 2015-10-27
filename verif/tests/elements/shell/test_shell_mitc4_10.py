@@ -25,30 +25,30 @@ from materials import typical_materials
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.newSeedNode()
 
 # Definimos materiales
-nmb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,0.0,thickness)
+nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
 
 
 
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "memb1"
 seedElemLoader.defaultTag= 1
 elem= seedElemLoader.newElement("shell_mitc4",xc.ID([0,0,0,0]))
 
 
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMaxX,0.0,0.0))
 pt= puntos.newPntIDPos3d(3,geom.Pos3d(CooMaxX,CooMaxY,0.0))
 pt= puntos.newPntIDPos3d(4,geom.Pos3d(0.0,CooMaxY,0.0))
-surfaces= mdlr.getCad.getSurfaces
+surfaces= preprocessor.getCad.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= NumDivI
@@ -56,10 +56,10 @@ s.nDivJ= NumDivJ
 
 
 
-f1= mdlr.getSets.getSet("f1")
+f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 lados= s.getEdges
 #Edge iterator
 for l in lados:
@@ -71,7 +71,7 @@ for l in lados:
     fix_node_6dof.Nodo6DOFGirosXZLibresLista(coacciones,l.getEdge.getNodeTags()) # Borde paralelo al eje Y
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -81,7 +81,7 @@ lp0= casos.newLoadPattern("default","0")
 #casos.currentLoadPattern= "0"
 
 
-f1= mdlr.getSets.getSet("f1")
+f1= preprocessor.getSets.getSet("f1")
 nNodos= f1.getNumNodes
  
 nodo= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
@@ -100,9 +100,9 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 analOk= analisis.analyze(1)
 
-f1= mdlr.getSets.getSet("f1")
+f1= preprocessor.getSets.getSet("f1")
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
 nodo= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 # print "Nodo central: ",nodo.tag

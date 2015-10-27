@@ -26,11 +26,11 @@ CurvZ2= 34.787e-3 # Curvatura de prueba 2.
 x2= 0.0649 # Profundidad de la fibra neutra 2.
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
 
-tag= hormigonesEHE.HA25.defDiagD(mdlr)
-tag= EHE_reinforcing_steel.B500S.defDiagD(mdlr)
+tag= hormigonesEHE.HA25.defDiagD(preprocessor)
+tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 # Definimos materiales
 import os
 pth= os.path.dirname(__file__)
@@ -39,7 +39,7 @@ if(not pth):
 #print "pth= ", pth
 execfile(pth+"/secc_hormigon_01.py")
 
-secHA= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","secHA")
+secHA= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHormigon01")
 secHA.setupFibers()

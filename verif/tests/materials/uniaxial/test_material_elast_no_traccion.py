@@ -20,12 +20,12 @@ from materials import typical_materials
 # Definición del modelo
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos materiales
 sIni= -0.01
 sFin= 0.01
 incr= ((sFin-sIni)/Nsteps)
-ent= typical_materials.defElastNoTracMaterial(mdlr,"ent",E)
+ent= typical_materials.defElastNoTracMaterial(preprocessor, "ent",E)
 
 j=sIni
 while(j<=sFin):

@@ -71,7 +71,7 @@ namespace XC {
 class Domain;
 class Renderer;
 class Information;
-class Modelador;
+class Preprocessor;
 
 //! @brief Objeto que forma parte de un dominio.
 class DomainComponent: public TaggedObject, public MovableObject
@@ -91,8 +91,8 @@ class DomainComponent: public TaggedObject, public MovableObject
       { return idx; }
     virtual void setDomain(Domain *theDomain);
     virtual Domain *getDomain(void) const;
-    const Modelador *GetModelador(void) const;
-    Modelador *GetModelador(void);
+    const Preprocessor *GetPreprocessor(void) const;
+    Preprocessor *GetPreprocessor(void);
 
     void set_indice(const size_t &i);
 

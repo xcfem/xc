@@ -46,7 +46,7 @@ class SQLiteDatastore: public DBDatastore
     int createOpenSeesDatabase(const std::string &projectName);
     int execute(const std::string &query);
   public:
-    SQLiteDatastore(const std::string &,Modelador &, FEM_ObjectBroker &,int dbRun = 0);    
+    SQLiteDatastore(const std::string &,Preprocessor &, FEM_ObjectBroker &,int dbRun = 0);    
 
     // methods for sending and recieving matrices, vectors and id's
     int sendMsg(int , int , const Message &, ChannelAddress *a= NULL);    

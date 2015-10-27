@@ -69,9 +69,9 @@
 #include "domain/mesh/node/NodeTopology.h"
 #include <domain/domain/Domain.h>
 #include "utility/matrix/nDarray/basics.h"
-#include "modelador/cad/matrices/TritrizPtrElem.h"
-#include "modelador/Modelador.h"
-#include "modelador/set_mgmt/SetMeshComp.h"
+#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/Preprocessor.h"
+#include "preprocessor/set_mgmt/SetMeshComp.h"
 #include "boost/any.hpp"
 #include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
@@ -703,10 +703,10 @@ XC::ID XC::Element::getLocalIndexNodesEdge(const size_t &i) const
 std::set<XC::SetBase *> XC::Element::get_sets(void) const
   {
     std::set<SetBase *> retval;
-    const Modelador *mdlr= GetModelador();
-    if(mdlr)
+    const Preprocessor *preprocessor= GetPreprocessor();
+    if(preprocessor)
       {
-        MapSet &sets= const_cast<MapSet &>(mdlr->get_sets());
+        MapSet &sets= const_cast<MapSet &>(preprocessor->get_sets());
         retval= sets.get_sets(this);
       }
     else

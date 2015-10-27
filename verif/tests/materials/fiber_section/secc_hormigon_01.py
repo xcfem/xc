@@ -14,7 +14,7 @@ areaBarra= 2.01e-4 # Área de las barras expresado en metros cuadrados.
   )
 
 def gmSecHA01(nmbGeomSecc,defSec,nmbDiagHormigon,nmbDiagAceroArmar):
-  geomSecc= mdlr.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
+  geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
   horm= regiones.newQuadRegion(nmbDiagHormigon)
   horm.nDivIJ= defSec['nIJ']

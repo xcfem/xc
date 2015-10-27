@@ -33,10 +33,10 @@ def getKhorizFicticiaTeflon(d):
   return tablaMuTeflon(35e6)*math.pi*(d/2.0)**2*35e6/20e-3
 
 # Define material para modelizar el teflon.
-def defineMaterialTeflon(mdlr,d, matK):
-  return typical_materials.defElasticMaterial(mdlr, matK,getKhorizFicticiaTeflon(d))
+def defineMaterialTeflon(preprocessor,d, matK):
+  return typical_materials.defElasticMaterial(preprocessor, matK,getKhorizFicticiaTeflon(d))
 
 # Define materiales para modelizar el teflon.
-def defineMaterialesTeflon(mdlr, d, matKX, matKY):
-  defineMaterialTeflon(mdlr,d,matKX)
-  defineMaterialTeflon(mdlr,d,matKY)
+def defineMaterialesTeflon(preprocessor, d, matKX, matKY):
+  defineMaterialTeflon(preprocessor,d,matKX)
+  defineMaterialTeflon(preprocessor,d,matKY)

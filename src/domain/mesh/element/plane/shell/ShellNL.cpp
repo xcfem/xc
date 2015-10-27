@@ -87,9 +87,9 @@ void XC::ShellNL::defEdgeLoadGlobal(const int &iEdge,const Vector &v)
             ID iEdges(1);
             iEdges[0]= iEdge;
             const Vector vTrf= theCoordTransf.getVectorLocalCoordFromGlobal(v);
-            Modelador *mdlr= GetModelador();
-            assert(mdlr);
-            MapLoadPatterns &casos= mdlr->getLoadLoader().getLoadPatterns();
+            Preprocessor *preprocessor= GetPreprocessor();
+            assert(preprocessor);
+            MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
             const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
             ID eTags(1);
             eTags[0]= getTag(); //Carga para éste elemento.

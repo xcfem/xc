@@ -14,11 +14,11 @@ Ec= Es/n
 areaFi16= 2.01e-4
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-acero= typical_materials.defElasticMaterial(mdlr,"acero",Es)
+acero= typical_materials.defElasticMaterial(preprocessor, "acero",Es)
 
-geomPrueba= mdlr.getMaterialLoader.newSectionGeometry("geomPrueba")
+geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
 armaduras= geomPrueba.getReinfLayers
 armaduraA= armaduras.newStraightReinfLayer("acero")
 armaduraA.numReinfBars= 2

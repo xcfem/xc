@@ -95,7 +95,7 @@ def defVarsControlVSIA262(elems):
     e.setProp("VuCP", 0.0)
 
 
-def trataResultsCombV(mdlr,nmbComb):
+def trataResultsCombV(preprocessor,nmbComb):
   '''
   Comprobación de las secciones de hormigón frente a cortante.
      XXX Falta tener en cuenta la dirección de las barras de refuerzo
@@ -103,7 +103,7 @@ def trataResultsCombV(mdlr,nmbComb):
   '''
   print "Postproceso combinación: ",nmbComb
   # XXX Ignoramos la deformación por torsión.
-  elementos= mdlr.getSets.getSet("total").getElements
+  elementos= preprocessor.getSets.getSet("total").getElements
   for e in elementos:
     e.getResistingForce()
     scc= e.getSection()

@@ -12,12 +12,12 @@ xOrg= 1
 yOrg= 2
 zOrg= 3
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
-rsMap= mdlr.getCad.getReferenceSystems
+rsMap= preprocessor.getCad.getReferenceSystems
 
 rs= rsMap.newReferenceSystem("cartesianas")
 rs.org= geom.Pos3d(xOrg,yOrg,zOrg)

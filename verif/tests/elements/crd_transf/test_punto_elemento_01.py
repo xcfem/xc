@@ -21,26 +21,26 @@ L= 5 # Longitud del elmento expresada en metros.
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(1.0,2.0,0.0)
 nod= nodos.newNodeXYZ(1.0,2.0,L)
 
 
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 
 # Materials
 caracMecSeccion= xc.ConstantesSecc3d()
 caracMecSeccion.A= A; caracMecSeccion.E= E; caracMecSeccion.G= G;
 caracMecSeccion.Iz= Iz; caracMecSeccion.Iy= Iy; caracMecSeccion.J= J
-seccion= typical_materials.defElasticSectionFromMechProp3d(mdlr,"seccion",caracMecSeccion)
+seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",caracMecSeccion)
 
 elementos.defaultTransformation= "lin"
 #  sintaxis: elastic_beam_3d[<tag>] 

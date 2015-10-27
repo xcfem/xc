@@ -27,19 +27,19 @@ NumDiv= 10
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_resist_materiales3D(nodos)
 # Definimos materiales
-elast= typical_materials.defElasticMembranePlateSection(mdlr,"elast",EMat,nuMat,espChapa*dens,espChapa)
+elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,espChapa*dens,espChapa)
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt1= puntos.newPntIDPos3d(1, geom.Pos3d(0.0,0.0,0.0) )
 pt2= puntos.newPntIDPos3d(2, geom.Pos3d(b,0.0,0.0) )
 pt3= puntos.newPntIDPos3d(3, geom.Pos3d(b,L,0.0) )
 pt4= puntos.newPntIDPos3d(4, geom.Pos3d(0,L,0.0) )
-surfaces= mdlr.getCad.getSurfaces
+surfaces= preprocessor.getCad.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= 1
@@ -48,19 +48,19 @@ s.nDivJ= NumDiv
 
 nodos.newSeedNode()
 
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast"
 seedElemLoader.defaultTag= 1
 elem= seedElemLoader.newElement("shell_mitc4",xc.ID([0,0,0,0]))
 
 
 
-f1= mdlr.getSets.getSet("f1")
+f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 # Constraints
 
 
-ln= mdlr.getCad.getLineWithEndPoints(pt1.tag,pt2.tag)
+ln= preprocessor.getCad.getLineWithEndPoints(pt1.tag,pt2.tag)
 lNodes= ln.getNodes()
 for n in lNodes:
   n.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0])) # UX,UY,UZ,RX,RY,RZ

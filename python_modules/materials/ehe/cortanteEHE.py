@@ -51,7 +51,7 @@ class ParamsCortante(object):
   Vu2= 0.0 #Agotamiento por tracción en el alma.
   Vu= 0.0 #Cortante último de la sección.
 
-  def calcVuEHE08NoAt(self, mdlr, scc, hormigon, aceroArmar):
+  def calcVuEHE08NoAt(self, preprocessor, scc, hormigon, aceroArmar):
     ''' Calcula el cortante último de la sección sin armadura de cortante.
      XXX Falta considerar la armadura activa.
      tagDiagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
@@ -105,7 +105,7 @@ class ParamsCortante(object):
         self.S= scc.getFibers().getSPosSeccHomogeneizada(self.E0,geom.HalfPlane2d(axis))
         self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.anchoBiela,self.alphaL,self.axilHormigon,self.areaHormigon)
 
-  def calcVuEHE08SiAt(self, mdlr, scc, paramsTorsion, hormigon, aceroArmar, Nd, Md, Vd, Td):
+  def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, hormigon, aceroArmar, Nd, Md, Vd, Td):
     ''' Calcula el cortante último de la sección CON armadura de cortante.
      XXX Falta considerar la armadura activa.
      tagDiagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
@@ -159,7 +159,7 @@ class ParamsCortante(object):
       else: # Sección no fisurada
         sys.stderr.write("La comprobación del cortante sin momento no está implementada.")
 
-  def calcVuEHE08(self, mdlr, scc, nmbParamsTorsion, hormigon, aceroArmar, Nd, Md, Vd, Td):
+  def calcVuEHE08(self, preprocessor, scc, nmbParamsTorsion, hormigon, aceroArmar, Nd, Md, Vd, Td):
     '''  Calcula el cortante último de la sección.
      XXX Falta considerar la armadura activa.
      hormigon: parameters to model concrete.
@@ -169,9 +169,9 @@ class ParamsCortante(object):
      Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
      Td: Torsor de cálculo.'''
     if(self.AsTrsv==0):
-      self.calcVuEHE08NoAt(mdlr,scc,hormigon,aceroArmar)
+      self.calcVuEHE08NoAt(preprocessor,scc,hormigon,aceroArmar)
     else:
-      self.calcVuEHE08SiAt(mdlr,scc,nmbParamsTorsion,hormigon,aceroArmar,Nd,Md,Vd,Td)
+      self.calcVuEHE08SiAt(preprocessor,scc,nmbParamsTorsion,hormigon,aceroArmar,Nd,Md,Vd,Td)
 
 def defVarsControlVEHE(elems):
   for e in elems:
@@ -189,7 +189,7 @@ def defVarsControlVEHE(elems):
     e.setProp("Vu2CP", 0.0)
     e.setProp("VuCP", 0.0)
 
-def trataResultsCombV(mdlr,nmbComb):
+def trataResultsCombV(preprocessor,nmbComb):
   '''
   Comprobación de las secciones de hormigón frente a cortante.
      XXX Falta tener en cuenta la dirección de las barras de refuerzo
@@ -201,7 +201,7 @@ def trataResultsCombV(mdlr,nmbComb):
   # XXX Ignoramos la deformación por torsión.
   secHAParamsTorsion.ue= 0
   secHAParamsTorsion.Ae= 1
-  elementos= mdlr.getSets.getSet("total").getElements
+  elementos= preprocessor.getSets.getSet("total").getElements
   for e in elementos:
     scc= e.getSection()
     section= scc.getProp("datosSecc")
@@ -218,20 +218,20 @@ def trataResultsCombV(mdlr,nmbComb):
     VzTmp= scc.getStressResultantComponent("Vz")
     VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
     TTmp= scc.getStressResultantComponent("Mx")
-    secHAParamsCortante.calcVuEHE08(mdlr,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
+    secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
 
     if(secHAParamsCortante.Vu<VTmp):
       theta= max(secHAParamsCortante.thetaMin,min(secHAParamsCortante.thetaMax,secHAParamsCortante.thetaFisuras))
-      secHAParamsCortante.calcVuEHE08(mdlr,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
+      secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
     if(secHAParamsCortante.Vu<VTmp):
       theta= (secHAParamsCortante.thetaMin+secHAParamsCortante.thetaMax)/2.0
-      secHAParamsCortante.calcVuEHE08(mdlr,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
+      secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
     if(secHAParamsCortante.Vu<VTmp):
       theta= 0.95*secHAParamsCortante.thetaMax
-      secHAParamsCortante.calcVuEHE08(mdlr,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
+      secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
     if(secHAParamsCortante.Vu<VTmp):
        theta= 1.05*secHAParamsCortante.thetaMin
-       secHAParamsCortante.calcVuEHE08(mdlr,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
+       secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
     VuTmp= secHAParamsCortante.Vu
     if(VuTmp!=0.0):
       FCtmp= VTmp/VuTmp

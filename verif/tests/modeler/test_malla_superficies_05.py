@@ -17,19 +17,19 @@ rho= 0.0 # Densidad
 nNodos= 0
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-elast= typical_materials.defElasticMaterial(mdlr,"elast",3000)
-prueba= typical_materials.defElasticMembranePlateSection(mdlr,"prueba",E,nu,rho,0.25)
+preprocessor=  prueba.getPreprocessor
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
+prueba= typical_materials.defElasticMembranePlateSection(preprocessor, "prueba",E,nu,rho,0.25)
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nodos.newSeedNode()
 
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "prueba"
 seedElemLoader.defaultTag= 1
 elem= seedElemLoader.newElement("shell_mitc4",xc.ID([0,0,0,0]))
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
 puntos.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
 puntos.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
@@ -40,7 +40,7 @@ puntos.newPntFromPos3d(geom.Pos3d(R,0.0,1.0))
 puntos.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),1.0))
 puntos.newPntFromPos3d(geom.Pos3d(0.0,R,1.0))
 
-surfaces= mdlr.getCad.getSurfaces
+surfaces= preprocessor.getCad.getSurfaces
 surfaces.defaultTag= 1
 s1= surfaces.newQuadSurfaceGridPts([[1,2,3],[4,5,6]])
 s1.nDivI= 5
@@ -51,10 +51,10 @@ s2.nDivI= 5
 s2.nDivJ= 1
 
 
-Z1= mdlr.getSets.defSet("Z1")
+Z1= preprocessor.getSets.defSet("Z1")
 Z1.getSurfaces.append(s1)
 Z1.fillDownwards()
-Z2= mdlr.getSets.defSet("Z2")
+Z2= preprocessor.getSets.defSet("Z2")
 Z2.getSurfaces.append(s2)
 Z2.fillDownwards()
 
@@ -62,7 +62,7 @@ Z1.genMesh(xc.meshDir.I)
 Z2.genMesh(xc.meshDir.I)
 
 
-nNodos= mdlr.getSets.getSet("total").getNodes.size
+nNodos= preprocessor.getSets.getSet("total").getNodes.size
 
 ratio1= (nNodos-18)/18
 

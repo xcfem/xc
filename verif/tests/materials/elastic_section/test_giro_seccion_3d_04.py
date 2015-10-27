@@ -14,9 +14,9 @@ ratio1= 10
 ratio2= 10
 ratio3= 10
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
+preprocessor=  prueba.getPreprocessor   
 # Definimos materiales
-scc= typical_materials.defElasticSection3d(mdlr,"scc",1,1,1,Iz,Iy,4)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc",1,1,1,Iz,Iy,4)
 scc.sectionProperties.gira(math.radians(45))
 
 I1= scc.sectionProperties.getI1()

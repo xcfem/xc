@@ -4,7 +4,7 @@ from materials import parametrosSeccionRectangular
 import sqlite3 as sqlite
 import os
 
-def construyeModeloShell(mdlr,nmbDB,pth, nmbTbEsf, nmbTbElem, offset):
+def construyeModeloShell(preprocessor,nmbDB,pth, nmbTbEsf, nmbTbElem, offset):
   '''
    Genera las combinaciones para los elementos shell
   nmbDB: Nombre de la base de datos.
@@ -18,7 +18,7 @@ def construyeModeloShell(mdlr,nmbDB,pth, nmbTbEsf, nmbTbElem, offset):
   seccPrueba.h= .60 #Canto de la sección expresado en m.
   seccPrueba.E= 2.1e6 #Módulo de Young del material en kp/cm2.
   seccPrueba.nu= 0.3 #Coeficiente de Poisson del material.
-  defSeccAggregation3d(mdlr,seccPrueba)
+  defSeccAggregation3d(preprocessor,seccPrueba)
   simulaShellElemFromTable(nmbDB,nmbTbElem,seccPrueba.nmb,offset)
 
 
@@ -69,6 +69,6 @@ def acc2hipShell(nmbDBComb, nmbTbCombELU, nmbTbCombELS,pth, fmt):
   os.system("cat " + nmbArchHipELU + " " + nmbArchHipELS + " > " + nmbArchHip)
   os.system("rm -f"+ nmbArchHipELU)
   os.system("rm -f"+ nmbArchHipELS)
-  mdlr.clearAll # Borra el modelo de elementos finitos.
+  preprocessor.clearAll # Borra el modelo de elementos finitos.
   # \borra_archivo{nmbDB}
 

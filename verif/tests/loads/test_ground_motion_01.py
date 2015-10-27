@@ -13,11 +13,11 @@ motionLastSendCommitTag= 0.0
 motionPathTimeIncrement= 0.0
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
 
 #Load modulation.
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("constant_ts","ts")
 gm= casos.newLoadPattern("uniform_excitation","gm")

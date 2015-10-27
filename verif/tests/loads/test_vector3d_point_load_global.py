@@ -33,8 +33,8 @@ ptoAplic= xc.Vector([1+x*L*math.sqrt(2)/2.0,3+x*L*math.sqrt(2)/2.0,0])
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 
 nodos.defaultTag= 1 #First node number.
@@ -42,16 +42,16 @@ nod= nodos.newNodeXYZ(1,3,0)
 nod= nodos.newNodeXYZ(1+L*math.sqrt(2)/2.0,3+L*math.sqrt(2)/2.0,0)
 
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,0,1])
     
 # Materials definition
-scc= typical_materials.defElasticSection3d(mdlr,"scc",A,E,G,Iz,Iy,J)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "scc"
 elementos.defaultTag= 1 #Tag for next element.
@@ -59,12 +59,12 @@ beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -94,7 +94,7 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod2= nodos.getNode(2)
 tmp= nod2.getDisp
 vDispUVW= xc.Vector([tmp[0],tmp[1],tmp[2]])

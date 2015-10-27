@@ -21,8 +21,8 @@ rotacion= xc.Matrix([[1,0,0],[0,math.cos(angRotacion),math.sin(angRotacion)],[0,
 # Problem type
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nod1= nodos.newNodeIDXYZ(1,0,0,0)
 nod2= nodos.newNodeIDXYZ(2,2,0,0)
@@ -37,8 +37,8 @@ vPosN4= xc.Vector([p.x,p.y,p.z])
 movN3= rotacion*vPosN3-vPosN3
 movN4= rotacion*vPosN4-vPosN4
 # Materials definition
-memb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,dens,h)
-elementos = mdlr.getElementLoader
+memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
+elementos = preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("corot_shell_mitc4",xc.ID([1,2,3,4]))
 

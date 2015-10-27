@@ -44,7 +44,7 @@ def exportShellInternalForces(nmbComb, elems, fDesc,fConv= 1.0):
     fDesc.write(nmbComb+", "+str(e.tag)+", "+strEsf+'\n')
 
 # Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
-def exportaEsfuerzosShellSet(mdlr,nmbComb, st, fName):
+def exportaEsfuerzosShellSet(preprocessor,nmbComb, st, fName):
   elems= st.getElements
   exportShellInternalForces(nmbComb,elems,fName)
 

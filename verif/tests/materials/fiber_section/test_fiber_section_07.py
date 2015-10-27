@@ -27,30 +27,30 @@ MzDato= 15e3
 NDato= 0.0
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-tag= EHE_reinforcing_steel.B500S.defDiagD(mdlr)
+tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print "pth= ", pth
 execfile(pth+"/geomSeccBarras.py")
-secBarras= mdlr.getMaterialLoader.newMaterial("fiber_section_GJ","secBarras")
+secBarras= preprocessor.getMaterialLoader.newMaterial("fiber_section_GJ","secBarras")
 fiberSectionRepr= secBarras.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecBarras")
 secBarras.setupFibers()
 
-banco_pruebas_scc3d.modeloSecc3d(mdlr,"secBarras")
+banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secBarras")
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.Nodo6DOFMovXGiroZLibres(coacciones,2)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -70,15 +70,15 @@ analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(1)
 
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
 RN= nodos.getNode(1).getReaction[0] 
 RM= nodos.getNode(1).getReaction[5] 
 RN2= nodos.getNode(2).getReaction[0] 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
 esfN= scc.getFibers().getResultant()

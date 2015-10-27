@@ -302,27 +302,27 @@ SET(siseq_no solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinThreadSolver sol
 
 SET(unittest unittest/unittest)
 
-SET(mdlr_cad_trf modelador/cad/trf/TrfGeom modelador/cad/trf/MapTrfGeom modelador/cad/trf/Rotacion modelador/cad/trf/Escalado modelador/cad/trf/Reflexion modelador/cad/trf/Traslacion)
+SET(preprocessor_cad_trf preprocessor/cad/trf/TrfGeom preprocessor/cad/trf/MapTrfGeom preprocessor/cad/trf/Rotacion preprocessor/cad/trf/Escalado preprocessor/cad/trf/Reflexion preprocessor/cad/trf/Traslacion)
 
-SET(mdlr_cad_entidades modelador/cad/entidades/EntMdlr modelador/cad/entidades/Pnt modelador/cad/entidades/MapPuntos modelador/cad/entidades/Edge modelador/cad/entidades/LineaBase modelador/cad/entidades/Linea modelador/cad/entidades/LineaTramos modelador/cad/entidades/ArcoCircunf modelador/cad/entidades/CmbEdge modelador/cad/entidades/MapLineas modelador/cad/entidades/Face modelador/cad/entidades/SupCuadrilatera modelador/cad/entidades/MapSuperficies modelador/cad/entidades/MapCuerpos modelador/cad/entidades/Body modelador/cad/entidades/Block modelador/cad/entidades/UniformGrid modelador/cad/entidades/MapUniformGrids)
+SET(preprocessor_cad_entidades preprocessor/cad/entidades/EntMdlr preprocessor/cad/entidades/Pnt preprocessor/cad/entidades/MapPuntos preprocessor/cad/entidades/Edge preprocessor/cad/entidades/LineaBase preprocessor/cad/entidades/Linea preprocessor/cad/entidades/LineaTramos preprocessor/cad/entidades/ArcoCircunf preprocessor/cad/entidades/CmbEdge preprocessor/cad/entidades/MapLineas preprocessor/cad/entidades/Face preprocessor/cad/entidades/SupCuadrilatera preprocessor/cad/entidades/MapSuperficies preprocessor/cad/entidades/MapCuerpos preprocessor/cad/entidades/Body preprocessor/cad/entidades/Block preprocessor/cad/entidades/UniformGrid preprocessor/cad/entidades/MapUniformGrids)
 
-SET(mdlr_cad_matrices modelador/cad/matrices/MatrizPtrPnt modelador/cad/matrices/MapEsquemas2d modelador/cad/matrices/TritrizPtrPnt modelador/cad/matrices/MapEsquemas3d modelador/cad/matrices/MatrizPtrNod modelador/cad/matrices/MatrizPtrElem modelador/cad/matrices/TritrizPtrNod modelador/cad/matrices/TritrizPtrElem)
+SET(preprocessor_cad_matrices preprocessor/cad/matrices/MatrizPtrPnt preprocessor/cad/matrices/MapEsquemas2d preprocessor/cad/matrices/TritrizPtrPnt preprocessor/cad/matrices/MapEsquemas3d preprocessor/cad/matrices/MatrizPtrNod preprocessor/cad/matrices/MatrizPtrElem preprocessor/cad/matrices/TritrizPtrNod preprocessor/cad/matrices/TritrizPtrElem)
 
-SET(mdlr_cad modelador/cad/MapCadMemberBase modelador/cad/SisRef modelador/cad/MapSisRef modelador/cad/SisRefCartesianas3d modelador/cad/Cad modelador/cad/aux_mallado ${mdlr_cad_trf} ${mdlr_cad_entidades} ${mdlr_cad_matrices} )
+SET(preprocessor_cad preprocessor/cad/MapCadMemberBase preprocessor/cad/SisRef preprocessor/cad/MapSisRef preprocessor/cad/SisRefCartesianas3d preprocessor/cad/Cad preprocessor/cad/aux_mallado ${preprocessor_cad_trf} ${preprocessor_cad_entidades} ${preprocessor_cad_matrices} )
 
-SET(mdlr_loaders modelador/loaders/Loader modelador/loaders/NodeLoader modelador/loaders/ElementLoader modelador/loaders/ProtoElementLoader modelador/loaders/MaterialLoader modelador/loaders/BeamIntegratorLoader modelador/loaders/TransfCooLoader modelador/loaders/LoadLoaderMember modelador/loaders/LoadLoader modelador/loaders/ConstraintLoader)
+SET(preprocessor_loaders preprocessor/loaders/Loader preprocessor/loaders/NodeLoader preprocessor/loaders/ElementLoader preprocessor/loaders/ProtoElementLoader preprocessor/loaders/MaterialLoader preprocessor/loaders/BeamIntegratorLoader preprocessor/loaders/TransfCooLoader preprocessor/loaders/LoadLoaderMember preprocessor/loaders/LoadLoader preprocessor/loaders/ConstraintLoader)
 
-SET(mdlr modelador/MapSet modelador/EntMdlrBase modelador/SetBase modelador/SetEstruct modelador/ParamMallado ${mdlr_cad} modelador/set_mgmt/DqPtrsNode modelador/set_mgmt/DqPtrsElem modelador/set_mgmt/DqPtrsConstraint modelador/set_mgmt/SetMeshComp modelador/set_mgmt/Set modelador/set_mgmt/SetFilaI modelador/set_mgmt/SetFilaJ modelador/set_mgmt/SetFilaK ${mdlr_loaders} modelador/Modelador)
+SET(preprocessor preprocessor/MapSet preprocessor/EntMdlrBase preprocessor/SetBase preprocessor/SetEstruct preprocessor/ParamMallado ${preprocessor_cad} preprocessor/set_mgmt/DqPtrsNode preprocessor/set_mgmt/DqPtrsElem preprocessor/set_mgmt/DqPtrsConstraint preprocessor/set_mgmt/SetMeshComp preprocessor/set_mgmt/Set preprocessor/set_mgmt/SetFilaI preprocessor/set_mgmt/SetFilaJ preprocessor/set_mgmt/SetFilaK ${preprocessor_loaders} preprocessor/Preprocessor)
 
 SET(solution solution/analysis/ModelWrapper solution/SoluMethod solution/MapSoluMethod solution/analysis/MapModelWrapper solution/ProcSoluControl solution/ProcSolu)
 
-ADD_LIBRARY(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${mdlr} ${solution} ${post_process} ProblemaEF)
+ADD_LIBRARY(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} ${post_process} ProblemaEF)
 
 #Interfaz Python
 LINK_LIBRARIES(XcBib xc_utils xc_basic ${VTK_BIB} ${CGAL_LIBRARIES} ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${Boost_LIBRARIES}  ${PYTHON_LIBRARIES} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${MED_LIBRARIES} ${TCL_LIBRARY} ${Boost_LIBRARIES})
 LINK_DIRECTORIES("/usr/lib/python2.6") # Not needed?
 ADD_DEFINITIONS(-fno-strict-aliasing)
-ADD_LIBRARY(xc SHARED utility/export_utility material/export_material_base material/uniaxial/export_material_uniaxial material/nD/export_material_nD material/section/export_material_section material/section/export_material_fiber_section domain/export_domain domain/mesh/export_domain_mesh modelador/export_modelador_loaders modelador/export_modelador_build_model  modelador/export_modelador_sets modelador/export_modelador_main solution/export_solution python_interface)
+ADD_LIBRARY(xc SHARED utility/export_utility material/export_material_base material/uniaxial/export_material_uniaxial material/nD/export_material_nD material/section/export_material_section material/section/export_material_fiber_section domain/export_domain domain/mesh/export_domain_mesh preprocessor/export_modelador_loaders preprocessor/export_modelador_build_model  preprocessor/export_modelador_sets preprocessor/export_modelador_main solution/export_solution python_interface)
 
 INSTALL(TARGETS XcBib DESTINATION lib)
 #INSTALL(DIRECTORY ${DIR_FUENTES_XC}/macros/ DESTINATION lib/macros_xc)

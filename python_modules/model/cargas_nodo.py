@@ -2,8 +2,8 @@
 import xc
 
 # Asigna una carga al nodo asociado a un punto.
-def CargaNodoPunto(mdlr, lp, idPunto, carga):
-  tagNodo= mdlr.getCad.getPoints.get(idPunto).getTagNode
+def CargaNodoPunto(preprocessor, lp, idPunto, carga):
+  tagNodo= preprocessor.getCad.getPoints.get(idPunto).getTagNode
   lp.newNodalLoad(tagNodo,xc.Vector([carga[0],carga[1],carga[2],carga[3],carga[4],carga[5]]))
 
 # Carga los nodos de la lista.
@@ -12,9 +12,9 @@ def CargaNodosLista(lp, tagNodos, carga):
     lp.newNodalLoad(i,xc.Vector([carga[0],carga[1],carga[2],carga[3],carga[4],carga[5]]))
 
 # Carga los nodos asociados a los puntos de la lista.
-def CargaPuntosLista(mdlr, lp,lstPuntosCarga, carga):
+def CargaPuntosLista(preprocessor, lp,lstPuntosCarga, carga):
   for i in lstPuntosCarga:
-    CargaNodoPunto(mdlr,lp,i,carga)
+    CargaNodoPunto(preprocessor,lp,i,carga)
 
 # Asigna una carga a los nodos interiores de la línea.
 def CargaNodosInterioresLinea(setLinea, loadPattern, carga):

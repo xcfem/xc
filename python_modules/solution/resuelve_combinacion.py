@@ -1,31 +1,31 @@
 # -*- coding: utf-8 -*-
 
-def resuelveComb(mdlr,nmbComb,analysis,numSteps):
-  mdlr.resetLoadCase()
-  mdlr.getLoadLoader.addToDomain(nmbComb)
+def resuelveComb(preprocessor,nmbComb,analysis,numSteps):
+  preprocessor.resetLoadCase()
+  preprocessor.getLoadLoader.addToDomain(nmbComb)
   analOk= analysis.analyze(numSteps)
-  mdlr.getLoadLoader.removeFromDomain(nmbComb)
+  preprocessor.getLoadLoader.removeFromDomain(nmbComb)
   # print "Resuelta combinación: ",nmbComb,"\n"
 
-def resuelveCombEstatLin(mdlr,nmbComb,analysis,numSteps):
+def resuelveCombEstatLin(preprocessor,nmbComb,analysis,numSteps):
   print "DEPRECATED; use resuelveComb"
-  resuelveComb(mdlr,nmbComb,analysis,numSteps)
+  resuelveComb(preprocessor,nmbComb,analysis,numSteps)
 
 
-def resuelveCombEstat2ndOrderLin(mdlr,nmbComb,analysis,numSteps):
-  mdlr.resetLoadCase()
-  mdlr.getLoadLoader.addToDomain(nmbComb)
+def resuelveCombEstat2ndOrderLin(preprocessor,nmbComb,analysis,numSteps):
+  preprocessor.resetLoadCase()
+  preprocessor.getLoadLoader.addToDomain(nmbComb)
   analOk= analysis.analyze(numSteps)
   analOk= analysis.analyze(numSteps)
-  mdlr.getLoadLoader.removeFromDomain(nmbComb)
+  preprocessor.getLoadLoader.removeFromDomain(nmbComb)
   # print "Resuelta combinación: ",nmbComb,"\n"
 
 def resuelveCasoEstatNoLin(nmbComb):
   print "DEPRECATED; use use resuelveComb"
-  resuelveComb(mdlr,nmbComb,analysis,numSteps)
+  resuelveComb(preprocessor,nmbComb,analysis,numSteps)
 
 # def resuelveCasoEstatNoLinNR(nmbComb):
-#     \mdlr \dom{\nuevo_caso
+#     \preprocessor \dom{\nuevo_caso
 #     cargas.addToDomain(nmbComb)
 
 #     \sol_proc

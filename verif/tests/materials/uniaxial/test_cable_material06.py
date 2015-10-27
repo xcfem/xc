@@ -22,8 +22,8 @@ F= 100/NumDiv # Carga vertical
 
 # Definición del modelo
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
@@ -31,14 +31,14 @@ predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.newSeedNode()
 
 # Definimos materiales
-typical_materials.defCableMaterial(mdlr,"cable",E,sigmaPret,0.0)
+typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     
 ''' Se definen nodos en los puntos de aplicación de
     la carga. Puesto que no se van a determinar tensiones
     se emplea una sección arbitraria de área unidad '''
     
 # Definimos elemento semilla
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "cable"
 seedElemLoader.dimElem= 3
 seedElemLoader.defaultTag= 1 #El número del próximo elemento será 1.
@@ -46,26 +46,26 @@ truss= seedElemLoader.newElement("corot_truss",xc.ID([1,2]))
 truss.area= area
 # fin de la definición del elemento semilla
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(lng,lng,0.0))
-lines= mdlr.getCad.getLines
+lines= preprocessor.getCad.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)
 l.nDiv= NumDiv
 
-l1= mdlr.getSets.getSet("l1")
+l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fija_nodos_lineas.CondContornoNodosExtremosLinea(l,coacciones,fix_node_6dof.fixNode6DOF)
 fija_nodos_lineas.CondContornoNodosInterioresLinea(l,coacciones,fix_node_6dof.Nodo6DOFGirosImpedidos)
     # \CondContornoNodosExtremosLinea("l1",fix_node_6dof.fixNode6DOF)
     # \CondContornoNodosInterioresLinea("l1","Nodo6GDLGirosImpedidos")
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -106,7 +106,7 @@ index= int(NumDiv/2)+1
 tagN3= l.getNodeI(index).tag
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 R1X= nodos.getNode(tagN2).getReaction[0]
 R1Y= nodos.getNode(tagN2).getReaction[1] 
 R2X= nodos.getNode(tagN1).getReaction[0]

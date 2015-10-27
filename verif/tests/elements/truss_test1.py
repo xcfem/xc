@@ -18,8 +18,8 @@ F1= 1000 #Magnitud de la fuerza 1 en libras
 F2= 1000/2 #Magnitud de la fuerza 2 en libras
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_elasticidad2D(nodos)
 nodos.defaultTag= 1 #El número del próximo nodo será 1.
@@ -28,12 +28,12 @@ nodos.newNodeXYZ(0,l-a-b,0)
 nodos.newNodeXYZ(0,l-a,0)
 nodos.newNodeXYZ(0,l,0)
 
-elast= typical_materials.defElasticMaterial(mdlr,"elast",E)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
 # Se definen nodos en los puntos de aplicación de
 # la carga. Puesto que no se van a determinar tensiones
 # se emplea una sección arbitraria de área unidad
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.dimElem= 2 #Las barras se definen e un espacio bidimensional.
 elementos.defaultMaterial= "elast"
 elementos.defaultTag= 1 #Tag for the next element.
@@ -44,7 +44,7 @@ truss.area= 1
 truss= elementos.newElement("truss",xc.ID([3,4]));
 truss.area= 1
 
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #Impedimos el movimiento del nodo 1.
 spc= coacciones.newSPConstraint(1,0,0.0)
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -56,7 +56,7 @@ spc= coacciones.newSPConstraint(2,0,0.0)
 #Impedimos el movimiento del nodo 3 según X (gdl 0).
 spc= coacciones.newSPConstraint(3,0,0.0)
 
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 #Contenedor de hipótesis de carga:
 casos= cargas.getLoadPatterns
 #modulación de la carga en el tiempo:

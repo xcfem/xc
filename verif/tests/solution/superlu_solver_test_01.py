@@ -18,8 +18,8 @@ F2= 1000/2 # Magnitud de la fuerza 2 en libras
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_elasticidad2D(nodos)
@@ -32,14 +32,14 @@ nod= nodos.newNodeXY(0.0,l-a)
 nod= nodos.newNodeXY(0.0,l)
 
 # Materials definition
-elast= typical_materials.defElasticMaterial(mdlr,"elast",E)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
     
 ''' Se definen nodos en los puntos de aplicación de
 la carga. Puesto que no se van a determinar tensiones
 se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast"
 elementos.dimElem= 2
 #  sintaxis: truss[<tag>] 
@@ -52,7 +52,7 @@ truss= elementos.newElement("truss",xc.ID([3,4]));
 truss.area= 1
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -63,7 +63,7 @@ spc= coacciones.newSPConstraint(3,0,0.0) # Nodo 3
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

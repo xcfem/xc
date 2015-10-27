@@ -18,8 +18,8 @@ fPret= sigmaPret*area # Magnitud del pretensado en libras
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_elasticidad2D(nodos)
@@ -30,14 +30,14 @@ nod= nodos.newNodeXY(0,0)
 nod= nodos.newNodeXY(l,0.0)
 
 # Materials definition
-mat= typical_materials.defCableMaterial(mdlr,"cable",E,sigmaPret,0.0)
+mat= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     
 ''' Se definen nodos en los puntos de aplicación de
 la carga. Puesto que no se van a determinar tensiones
 se emplea una sección arbitraria de área unidad '''
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "cable"
 elementos.dimElem= 2
 #  sintaxis: truss[<tag>] 
@@ -46,7 +46,7 @@ truss= elementos.newElement("truss",xc.ID([1,2]));
 truss.area= area
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -62,7 +62,7 @@ result= analisis.analyze(1)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 R1= nodos.getNode(2).getReaction[0] 
 R2= nodos.getNode(1).getReaction[0] 
 

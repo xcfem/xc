@@ -52,15 +52,15 @@ Mz= -4*F*depth/2.0 #Mz positive is in the opposite direction sith respecto to th
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
+preprocessor=  prueba.getPreprocessor   
 
 # Materials definition
-elast= typical_materials.defElasticMaterial(mdlr,"elast",E)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
 # Fibers
 y1= -depth/2.0
 z1= -width/2.0
-fourFibersSection= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","fourFibersSection")
+fourFibersSection= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","fourFibersSection")
 
 f1= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([y1,z1]))
 f2= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([-y1,z1]))
@@ -82,20 +82,20 @@ RR= fourFibersSection.getStressResultant()
 R0= xc.Vector([RR[0],RR[2],RR[1]])
 
 fourFibersSection.revertToStart()
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0.0,0.0,0.0)
 nod= nodos.newNodeXYZ(0.0,0.0,0.0)
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "fourFibersSection"
 elementos.dimElem= 1
 zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 spc= coacciones.newSPConstraint(2,1,0.0)
 spc= coacciones.newSPConstraint(2,2,0.0)
@@ -103,7 +103,7 @@ spc= coacciones.newSPConstraint(2,3,0.0)
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

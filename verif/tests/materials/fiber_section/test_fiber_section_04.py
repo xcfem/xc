@@ -51,17 +51,17 @@ sgs6= reinforcingSteelTest.sigmaDAceroArmar(e6,EHE_reinforcing_steel.B500S)
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
 
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos materiales
-tag= hormigonesEHE.HA25.defDiagD(mdlr)
-dgDHA25= hormigonesEHE.HA25.getDiagD(mdlr)
+tag= hormigonesEHE.HA25.defDiagD(preprocessor)
+dgDHA25= hormigonesEHE.HA25.getDiagD(preprocessor)
 Ec= dgDHA25.getTangent
 
-tag= EHE_reinforcing_steel.B500S.defDiagD(mdlr)
-dgDB500S= EHE_reinforcing_steel.B500S.getDiagD(mdlr)
+tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
+dgDB500S= EHE_reinforcing_steel.B500S.getDiagD(preprocessor)
 #Es= dgDB500S.getTangent
 
-geomSecHA= mdlr.getMaterialLoader.newSectionGeometry("geomSecHA")
+geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
 rg= regiones.newQuadRegion(hormigonesEHE.HA25.nmbDiagD)
 rg.nDivIJ= 10
@@ -82,7 +82,7 @@ armaduraSup.barArea= areaFi16
 armaduraSup.p1= geom.Pos2d(canto/2-recub,ancho/2-recub) # Armadura superior.
 armaduraSup.p2= geom.Pos2d(canto/2-recub,recub-ancho/2)
 
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHA")

@@ -35,8 +35,8 @@ numGruposElementos= None
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 
 nodos.newNodeIDXYZ(1,0,0,0)
@@ -48,9 +48,9 @@ nodos.newNodeIDXYZ(6,3,1,0)
 
 
 # Materials definition
-memb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,dens,h)
+memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 elem= elementos.newElement("shell_mitc4",xc.ID([2,5,6,3]))

@@ -4,16 +4,16 @@ import geom
 import xc
 
 # Vectores de elementos unidimensionales.
-def getVectorIElem(mdlr,idElem):
-  elem= mdlr.getElementLoader.getElement(idElem)
+def getVectorIElem(preprocessor,idElem):
+  elem= preprocessor.getElementLoader.getElement(idElem)
   return elem.getCoordTransf.getIVector
 
 
-def getVectorJElem(mdlr,idElem):
-  elem= mdlr.getElementLoader.getElement(idElem)
+def getVectorJElem(preprocessor,idElem):
+  elem= preprocessor.getElementLoader.getElement(idElem)
   return elem.getCoordTransf.getJVector
 
-def getVectorKElem(mdlr,idElem):
-  elem= mdlr.getElementLoader.getElement(idElem)
+def getVectorKElem(preprocessor,idElem):
+  elem= preprocessor.getElementLoader.getElement(idElem)
   return elem.getCoordTransf.getKVector
 

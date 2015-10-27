@@ -8,14 +8,14 @@ import os
 from model import puntos
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos nodos
 
-pts= mdlr.getCad.getPoints
+pts= preprocessor.getCad.getPoints
 ptA= pts.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,3.0))
 ptB= pts.newPntIDPos3d(2,geom.Pos3d(0.0,0.0,4.0))
 
-trfs= mdlr.getCad.getGeometricTransformations
+trfs= preprocessor.getCad.getGeometricTransformations
 transl= trfs.newTransformation("translation")
 v= ptB.getPos-ptA.getPos
 transl.setVector(v)
@@ -30,9 +30,9 @@ for p in pts:
  ''' 
   
 
-dist110= puntos.dist(mdlr,1,10)
+dist110= puntos.dist(preprocessor, 1,10)
 # print "dist(1,10)= ",dist110
-dist211= puntos.dist(mdlr,2,11)
+dist211= puntos.dist(preprocessor, 2,11)
 # print "dist(2,11)= ",dist211
 
 

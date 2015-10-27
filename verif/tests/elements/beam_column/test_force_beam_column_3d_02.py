@@ -24,8 +24,8 @@ Iy= ancho*canto**3/12 # Momento de inercia de la sección expresada en m4
 F= 1.5e3 # Magnitud de la carga en N
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
@@ -33,18 +33,18 @@ nod= nodos.newNodeXYZ(0,0.0,0.0)
 nod= nodos.newNodeXYZ(L,0.0,0.0)
 
 
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
 # Materials definition
 fy= 275e6 # Tensión de cedencia del acero.
 E= 210e9 # Módulo de Young del acero.
-acero= typical_materials.defSteel01(mdlr,"acero",E,fy,0.001)
+acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
-respT= typical_materials.defElasticMaterial(mdlr,"respT",1e10) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(mdlr,"respVy",1e9) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(mdlr,"respVz",1e9) # Respuesta de la sección a cortante según z.
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Respuesta de la sección a cortante según y.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Respuesta de la sección a cortante según z.
 # Secciones
 import os
 pth= os.path.dirname(__file__)
@@ -53,7 +53,7 @@ if(not pth):
   pth= "."
 execfile(pth+"/geomCuadFibrasTN.py")
 
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 cuadFibrasTN= materiales.newMaterial("fiber_section_3d","cuadFibrasTN")
 fiberSectionRepr= cuadFibrasTN.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomCuadFibrasTN")
@@ -68,7 +68,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "cuadFibras"
 elementos.numSections= 3 # Número de secciones a lo largo del elemento.
@@ -78,11 +78,11 @@ el= elementos.newElement("force_beam_column_3d",xc.ID([1,2]))
 
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -105,7 +105,7 @@ Ry= nod1.getReaction[1]
 nod1= nodos.getNode(1)
 RMz= nod1.getReaction[5] 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 
 elem1= elementos.getElement(1)
 elem1.getResistingForce()

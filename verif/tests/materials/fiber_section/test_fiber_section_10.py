@@ -22,32 +22,32 @@ from model import fix_node_6dof
 MzDato= 8e3
 NDato= 299.54e3 # El prontuario informático sólo llega hasta ~285 kN al considerar el diagrama simplificado del acero. '''
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-tag= EHE_reinforcing_steel.B500S.defDiagD(mdlr)
-tag= hormigonesEHE.HA25.defDiagD(mdlr)
+tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
+tag= hormigonesEHE.HA25.defDiagD(preprocessor)
 import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print "pth= ", pth
 execfile(pth+"/secc_hormigon_01.py")
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHormigon01")
 secHA.setupFibers()
 
-banco_pruebas_scc3d.modeloSecc3d(mdlr,"secHA")
+banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHA")
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.Nodo6DOFMovXGiroZLibres(coacciones,2)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -69,14 +69,14 @@ analOk= analisis.analyze(10)
 
 
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nodos.calculateNodalReactions(True)
 
 RN= nodos.getNode(1).getReaction[0] 
 RM= nodos.getNode(1).getReaction[5] 
 RN2= nodos.getNode(2).getReaction[0] 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
 esfN= scc.getStressResultantComponent("N")

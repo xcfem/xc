@@ -30,5 +30,5 @@
 #include "DBDatastore.h"
 
 
-XC::DBDatastore::DBDatastore(Modelador &mdlr, FEM_ObjectBroker &theObjBroker)
-  :FE_Datastore(mdlr, theObjBroker), dbTAG(0) {}
+XC::DBDatastore::DBDatastore(Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker)
+  :FE_Datastore(preprocessor, theObjBroker), dbTAG(0) {}

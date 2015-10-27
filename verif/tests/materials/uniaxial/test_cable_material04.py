@@ -19,8 +19,8 @@ fPret= sigmaPret*area # Magnitud del pretensado en libras
 F= 100 # Magnitud del pretensado en libras
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
@@ -32,14 +32,14 @@ nod= nodos.newNodeXYZ(l/2,0.0,0)
 nod= nodos.newNodeXYZ(l,0.0,0)
 
 # Materials definition
-typical_materials.defCableMaterial(mdlr,"cable",E,sigmaPret,0.0)
+typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     
 ''' Se definen nodos en los puntos de aplicación de
     la carga. Puesto que no se van a determinar tensiones
     se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "cable"
 elementos.dimElem= 3
 truss1= elementos.newElement("corot_truss",xc.ID([1,2]));
@@ -48,13 +48,13 @@ truss2= elementos.newElement("corot_truss",xc.ID([2,3]));
 truss2.area= area
      
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.Nodo6DOFGirosImpedidos(coacciones,2)
 fix_node_6dof.fixNode6DOF(coacciones,3)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

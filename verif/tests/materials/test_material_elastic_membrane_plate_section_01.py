@@ -13,9 +13,9 @@ from materials import typical_materials
 
 # Definición del modelo
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos materiales
-prueba= typical_materials.defElasticMembranePlateSection(mdlr,"prueba",E,nu,dens,h)
+prueba= typical_materials.defElasticMembranePlateSection(preprocessor, "prueba",E,nu,dens,h)
 
 
 ratio1= (prueba.E-E)/E

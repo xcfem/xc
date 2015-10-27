@@ -30,7 +30,7 @@
 #define PROBLEMAEF_H
 
 #include "xc_utils/src/nucleo/EntCmd.h"
-#include "modelador/Modelador.h"
+#include "preprocessor/Preprocessor.h"
 #include "solution/ProcSolu.h"
 #include "post_process/MapFields.h"
 #include "utility/handler/DataOutputHandler.h"
@@ -84,7 +84,7 @@ class MEDMeshing;
 class ProblemaEF: public EntCmd
   {
     mutable DataOutputHandler::map_output_handlers output_handlers; //Manejadores para salida de resultados.
-    Modelador mdlr; //!< Objeto encargado de crear el modelo.
+    Preprocessor preprocessor; //!< Objeto encargado de crear el modelo.
     ProcSolu proc_solu; //!< Procedimiento de solución.
     MapFields fields; //!< Definición de campos para salida de resultados.
     FE_Datastore *dataBase; //!< Base de datos para salvar estados.
@@ -101,14 +101,14 @@ class ProblemaEF: public EntCmd
     FE_Datastore *defineDatabase(const std::string &tipo, const std::string &nombre);
     inline FE_Datastore *getDataBase(void)
       { return dataBase; }
-    inline const Modelador &getModelador(void) const
-      { return mdlr; }
-    inline Modelador &getModelador(void)
-      { return mdlr; }
+    inline const Preprocessor &getPreprocessor(void) const
+      { return preprocessor; }
+    inline Preprocessor &getPreprocessor(void)
+      { return preprocessor; }
     inline Domain *getDomain(void)
-      { return mdlr.GetDominio(); }
+      { return preprocessor.GetDominio(); }
     inline const Domain *getDomain(void) const
-      { return mdlr.GetDominio(); }
+      { return preprocessor.GetDominio(); }
     inline const ProcSolu &getSoluProc(void) const
       { return proc_solu; }
     inline ProcSolu &getSoluProc(void)

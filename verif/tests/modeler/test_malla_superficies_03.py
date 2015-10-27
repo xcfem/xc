@@ -18,25 +18,25 @@ numElem= 0
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_resist_materiales3D(nodos)
 # Materials definition
-elast= typical_materials.defElasticMaterial(mdlr,"elast",3000)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodos.newSeedNode()
 # Materials definition
-matPrb= typical_materials.defElasticMembranePlateSection(mdlr,"matPrb",E,nu,rho,0.25)
+matPrb= typical_materials.defElasticMembranePlateSection(preprocessor, "matPrb",E,nu,rho,0.25)
 
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "matPrb"
 seedElemLoader.defaultTag= 1
 elem= seedElemLoader.newElement("shell_mitc4",xc.ID([0,0,0,0]))
 
 
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(1,0,0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(1,1,0))
 pt= puntos.newPntIDPos3d(3,geom.Pos3d(1,1,1))
@@ -46,7 +46,7 @@ pt= puntos.newPntIDPos3d(6,geom.Pos3d(0,1,1))
 pt= puntos.newPntIDPos3d(7,geom.Pos3d(0,0,1))
 pt= puntos.newPntIDPos3d(8,geom.Pos3d(0,0,0))
 
-surfaces= mdlr.getCad.getSurfaces
+surfaces= preprocessor.getCad.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= 1
@@ -67,7 +67,7 @@ s.nDivJ= 4
 divsOk= surfaces.conciliaNDivs()
 
 
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
 
@@ -112,7 +112,7 @@ execfile("vtk/vtk_vista_yneg.lcmm")
 execfile("vtk/vtk_muestra_ventana.lcmm")
 \VtkMuestraVentana("renderer",800,600)
 
-\mdlr{
+\preprocessor.
 
     \for_each_edge
       {print "linea: ",nombre," p1: ",getTagP1," p2: ",getTagP2, " ndiv: ",ndiv}

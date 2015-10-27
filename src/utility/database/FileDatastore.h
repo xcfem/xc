@@ -134,7 +134,7 @@ class FileDatastore: public FE_Datastore
     void alloc(const size_t &sz);
     std::string getFileName(const std::string &, int idSize,int commitTag) const;
   public:
-    FileDatastore(const std::string &dataBase,Modelador &mdlr, FEM_ObjectBroker &theBroker);    
+    FileDatastore(const std::string &dataBase,Preprocessor &preprocessor, FEM_ObjectBroker &theBroker);    
     
     ~FileDatastore(void);
 

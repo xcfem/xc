@@ -27,23 +27,23 @@ m= A*dens
 NumDiv= 10
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_resist_materiales3D(nodos)
 # Definimos materiales
-scc= typical_materials.defElasticSection3d(mdlr,"scc",A,E,G,I,I,J)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,I,I,J)
 
 
 nodos.newSeedNode()
 
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,0,1])
 
 # Definimos elemento semilla
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "scc"
 seedElemLoader.defaultTransformation= "lin"
 seedElemLoader.defaultTag= 1 #Tag for the next element.
@@ -51,23 +51,23 @@ beam3d= seedElemLoader.newElement("elastic_beam_3d",xc.ID([0,0]))
 beam3d.rho= m
 
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt1= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt2= puntos.newPntIDPos3d(2,geom.Pos3d(L*math.cos(theta),L*math.sin(theta),0.0))
-lines= mdlr.getCad.getLines
+lines= preprocessor.getCad.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)
 l.nDiv= NumDiv
 
 
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
 tagN1= pt1.getNode().tag
 tagN2= pt2.getNode().tag
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 spc= coacciones.newSPConstraint(tagN1,0,0.0) # gdl 0
 spc= coacciones.newSPConstraint(tagN1,1,0.0) # gdl 1

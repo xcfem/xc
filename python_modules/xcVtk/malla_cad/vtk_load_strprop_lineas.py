@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 def VtkLoadStrPropLineas(nmbSet, nmbProp, nmbContndr):
   nmbContndr= vtk.vtkShStrArray()
-  eSet= mdlr.getSets.getSet(nmbSet)
+  eSet= preprocessor.getSets.getSet(nmbSet)
   eSet.numerate()
   lineas= eSet.getLines
   for l in lineas:

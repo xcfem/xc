@@ -9,11 +9,11 @@ from materials import typical_materials
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-elast= typical_materials.defElasticIsotropic3d(mdlr,"elast3d",200000,0.3,0.0)
+elast= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",200000,0.3,0.0)
 
-nodos= mdlr.getNodeLoader 
+nodos= preprocessor.getNodeLoader 
 predefined_spaces.gdls_elasticidad3D(nodos)
 nodos.defaultTag= 1 #Next node number.
 nod1= nodos.newNodeXYZ(100,0,100)
@@ -39,7 +39,7 @@ nod18= nodos.newNodeXYZ(100,300,0)
 nod19= nodos.newNodeXYZ(0,300,0)
 nod20= nodos.newNodeXYZ(0,200,0)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast3d"
 elementos.defaultTag= 1 #Tag for the next element.
 
@@ -54,7 +54,7 @@ nod19.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod20.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -70,7 +70,7 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 dN1Teor= xc.Vector([-2.1569e-2,-3.7891e-3,-4.0982e-1])
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 dN1= nodos.getNode(1).getDisp
 
 ratio= (dN1-dN1Teor).Norm()

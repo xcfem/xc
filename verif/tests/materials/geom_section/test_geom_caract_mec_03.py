@@ -20,10 +20,10 @@ diamBar= 22e-3 # Diámetro de los redondos.
 areaBar= math.pi*(diamBar/2)**2 # Área de los redondos.
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-hormigon= typical_materials.defElasticMaterial(mdlr,"hormigon",Ec)
-acero= typical_materials.defElasticMaterial(mdlr,"acero",Es)
-geomPrueba= mdlr.getMaterialLoader.newSectionGeometry("geomPrueba")
+preprocessor=  prueba.getPreprocessor
+hormigon= typical_materials.defElasticMaterial(preprocessor, "hormigon",Ec)
+acero= typical_materials.defElasticMaterial(preprocessor, "acero",Es)
+geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
 
 regiones= geomPrueba.getRegions
 ala= regiones.newQuadRegion("hormigon")# Ala

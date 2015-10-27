@@ -33,16 +33,16 @@ E= 1e6 # Módulo de Young del material en kp/cm2.
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-elast= typical_materials.defElasticMaterial(mdlr,"elast",E)
-respT= typical_materials.defElasticMaterial(mdlr,"respT",1e6) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(mdlr,"respVy",1e6) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(mdlr,"respVz",1e6) # Respuesta de la sección a cortante según y.
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e6) # Respuesta de la sección a torsión.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respuesta de la sección a cortante según y.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e6) # Respuesta de la sección a cortante según y.
 # Secciones
-geomRectang= mdlr.getMaterialLoader.newSectionGeometry("geomRectang")
+geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
 reg= scc1x1.discretization(geomRectang,"elast")
-sa= mdlr.getMaterialLoader.newMaterial("fiberSectionShear3d","sa")
+sa= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d","sa")
 fiberSectionRepr= sa.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 sa.setupFibers()
@@ -51,14 +51,14 @@ sa.setRespVyByName("respVy")
 sa.setRespVzByName("respVz")
 sa.setRespTByName("respT")
 
-banco_pruebas_scc3d.modeloSecc3d(mdlr,"sa")
+banco_pruebas_scc3d.modeloSecc3d(preprocessor, "sa")
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -87,13 +87,13 @@ if(analOk!=0):
   print "Error!; failed to converge."
   exit()
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 n1= nodos.getNode(1)
 reacN1= n1.getReaction
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
 N= scc.getStressResultantComponent("N")

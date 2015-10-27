@@ -20,8 +20,8 @@ rho= 0.0 # Densidad
 # Problem type
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_elasticidad2D(nodos)
 
 
@@ -33,13 +33,13 @@ n3.setTrialDisp(xc.Vector([0.006,0.0032]))
 n4= nodos.newNodeIDXY(4,0,1)
 
 
-elast2d= typical_materials.defElasticIsotropicPlaneStress(mdlr,"elast2d",E,nu,rho)
+elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast2d"
 quad4n= elementos.newElement("quad4n",xc.ID([1,2,3,4]))
 
-mdlr.getDomain.commit()
+preprocessor.getDomain.commit()
 detJ= quad4n.detJ(0.0,0.0)
 avgStress= quad4n.getPhysicalProperties.getCommittedAvgStress
 sgMed1= avgStress[0]

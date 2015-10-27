@@ -14,25 +14,25 @@ CooMax= 10
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_elasticidad3D(nodos)
 # Definimos materiales
-elast= typical_materials.defElasticMaterial(mdlr,"elast",3000)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodos.newSeedNode()
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast"
 seedElemLoader.dimElem= 3
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("truss",xc.ID([0,0]));
 truss.area= 10.0
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
 
-lineas= mdlr.getCad.getLines
+lineas= preprocessor.getCad.getLines
 lineas.defaultTag= 1
 l1= lineas.newLine(1,2)
 l1.nDiv= NumDiv

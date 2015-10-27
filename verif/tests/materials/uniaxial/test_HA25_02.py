@@ -14,8 +14,8 @@ from materials.ehe import hormigonesEHE
 # Definición del modelo
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-mdlr= prueba.getModelador
-errMax= hormigonesEHE.testTangDHormigon(mdlr,hormigonesEHE.HA25)
+preprocessor=  prueba.getPreprocessor
+errMax= hormigonesEHE.testTangDHormigon(preprocessor, hormigonesEHE.HA25)
 
 #print "errMax= ",errMax
 import os

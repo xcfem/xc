@@ -18,14 +18,14 @@ y0= 5
 z0= 3.2
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos materiales         
 fy= 50.0 # Tensión de cedencia del acero.
 E= 30000.0 # Módulo de Young del acero.
-acero= typical_materials.defSteel01(mdlr,"acero",E,fy,0.001)
+acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 # Secciones
-geomRectang= mdlr.getMaterialLoader.newSectionGeometry("geomRectang")
+geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
 y1= ancho/2.0
 z1= canto/2.0
 regiones= geomRectang.getRegions
@@ -45,7 +45,7 @@ for_each_region
   print "num. teselas: ",numCells
 '''
            
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 rectang= materiales.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")

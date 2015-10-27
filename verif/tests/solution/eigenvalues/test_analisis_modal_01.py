@@ -34,11 +34,11 @@ kPl4a= kPl3a
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nodos.defaultTag= 0; 
 nod0= nodos.newNodeXY(0,0) 
 nod0.mass= matrizMasasNodo
@@ -58,29 +58,29 @@ nod4.setProp("gdlsCoartados",xc.ID([1,2]))
 nod5= nodos.newNodeXY(0,4+3+3+3+3)
 nod5.mass= matrizMasasNodo
 nod5.setProp("gdlsCoartados",xc.ID([1,2]))
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 nodos= setTotal.getNodes
 for n in nodos:
   n.fix(n.getProp("gdlsCoartados"),xc.Vector([0,0,0]))
 
 # Materials definition
-materiales= mdlr.getMaterialLoader
-#scc= typical_materials.defElasticSection2d(mdlr,"scc",A,E,I)
+materiales= preprocessor.getMaterialLoader
+#scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
-sccPlBaja= typical_materials.defElasticSection2d(mdlr,"sccPlBaja",20*Bbaja*Bbaja,Ehorm,20*Ibaja)
-sccPl1a= typical_materials.defElasticSection2d(mdlr,"sccPl1a",20*B1a*B1a,Ehorm,20*I1a) 
-sccPl2a= typical_materials.defElasticSection2d(mdlr,"sccPl2a",20*B1a*B1a,Ehorm,20*I1a) 
-sccPl3a= typical_materials.defElasticSection2d(mdlr,"sccPl3a",20*B3a*B3a,Ehorm,20*I3a) 
-sccPl4a= typical_materials.defElasticSection2d(mdlr,"sccPl4a",20*B3a*B3a,Ehorm,20*I3a)
+sccPlBaja= typical_materials.defElasticSection2d(preprocessor, "sccPlBaja",20*Bbaja*Bbaja,Ehorm,20*Ibaja)
+sccPl1a= typical_materials.defElasticSection2d(preprocessor, "sccPl1a",20*B1a*B1a,Ehorm,20*I1a) 
+sccPl2a= typical_materials.defElasticSection2d(preprocessor, "sccPl2a",20*B1a*B1a,Ehorm,20*I1a) 
+sccPl3a= typical_materials.defElasticSection2d(preprocessor, "sccPl3a",20*B3a*B3a,Ehorm,20*I3a) 
+sccPl4a= typical_materials.defElasticSection2d(preprocessor, "sccPl4a",20*B3a*B3a,Ehorm,20*I3a)
 
 
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "sccPlBaja"
 elementos.defaultTag= 1 #Tag for next element.

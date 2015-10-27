@@ -14,9 +14,9 @@ from materials.ehe import EHE_reinforcing_steel
 FCs= []
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos materiales
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 diagInteg= materiales.newInteractionDiagram("diagInteg")
 diagInteg.readFrom("/tmp/prueba_diag_interaccion02.dat")
 

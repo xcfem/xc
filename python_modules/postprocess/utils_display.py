@@ -62,15 +62,15 @@ class TakePhotos(object):
     self.elementSet= 'None'
     self.defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
 
-  def plotField(self, mdlr, fName, attributeName):
-    extrapolate_elem_attr.extrapolate_elem_function_attr(mdlr,self.elementSet,attributeName,"getProp", attributeName)
+  def plotField(self, preprocessor, fName, attributeName):
+    extrapolate_elem_attr.extrapolate_elem_function_attr(preprocessor,self.elementSet,attributeName,"getProp", attributeName)
     field= vtk_grafico_ef.ScalarField(attributeName,"getProp",None,1.0)
-    self.defDisplay.plotScalarField(mdlr,self.elementSetName,field,fName)
+    self.defDisplay.plotScalarField(preprocessor,self.elementSetName,field,fName)
 
-  def genGraphicFile(self,mdlr,resRepr,nmbFichGraf):
+  def genGraphicFile(self,preprocessor,resRepr,nmbFichGraf):
     jpegName= nmbFichGraf+".jpeg"
     epsName= nmbFichGraf+".eps"
-    self.plotField(mdlr, jpegName, resRepr)
+    self.plotField(preprocessor, jpegName, resRepr)
     os.system("convert "+ jpegName + " " + epsName)
 
   def insertFigureLatex(self, figDef, conta, fichFig,labelText):
@@ -80,10 +80,10 @@ class TakePhotos(object):
     if((conta>0) & (conta % 10==0)):
       self.fichLatexFigs.write('\\clearpage\n' )
 
-  def plotFigures(self,mdlr,figDefinitionList,nmbFichLatexFigs,nmbFichLatexList):
+  def plotFigures(self,preprocessor,figDefinitionList,nmbFichLatexFigs,nmbFichLatexList):
     #nmbLstIss: nombre de la lista donde se definen los resultados a representar
     #nmbFichLatex: nombre del fichero de látex donde montar los gráficos
-    self.elementSet= mdlr.getSets.getSet(self.elementSetName).getElements
+    self.elementSet= preprocessor.getSets.getSet(self.elementSetName).getElements
     conta= 0
     self.fichLatexFigs= open(nmbFichLatexFigs,'w')
     self.fichLatexList= open(nmbFichLatexList,'w')
@@ -91,7 +91,7 @@ class TakePhotos(object):
     for figDef in figDefinitionList:
       resRepr= figDef.attributeName  #result to display
       nmbFichGraf= self.pthGraphOutput+figDef.getFileName()
-      self.genGraphicFile(mdlr,resRepr,nmbFichGraf)
+      self.genGraphicFile(preprocessor,resRepr,nmbFichGraf)
       conta+= 1
       self.insertFigureLatex(figDef,conta,nmbFichGraf,"fg_"+figDef.getFileName())
     self.fichLatexFigs.close()

@@ -2,9 +2,9 @@
 
 import geom
 
-def net2DfromXYlists(mdlr,abscissae,ordinates):
-  puntos= mdlr.getCad.getPoints
-  nets= mdlr.getCad.get2DNets
+def net2DfromXYlists(preprocessor,abscissae,ordinates):
+  puntos= preprocessor.getCad.getPoints
+  nets= preprocessor.getCad.get2DNets
   retval= nets.new2DNet()
   retval.dim(len(ordinates),len(abscissae))
 
@@ -19,8 +19,8 @@ def net2DfromXYlists(mdlr,abscissae,ordinates):
   return retval
 
 
-def createSurfacesNet2D(mdlr,net2D,iSize,jSize):
-  surfaces= mdlr.getCad.getSurfaces
+def createSurfacesNet2D(preprocessor,net2D,iSize,jSize):
+  surfaces= preprocessor.getCad.getSurfaces
   m= net2D.nRow
   n= net2D.nCol
   for i in range(1,m):
@@ -46,5 +46,5 @@ class Net2DHelper(object):
         pos= p.getPos
         pos.z= zFunc(pos.x,pos.y)
 
-  def createSurfaces(self,mdlr,iSize,jSize):
-    return createSurfacesNet2D(mdlr,self.net,iSize,jSize)
+  def createSurfaces(self,preprocessor,iSize,jSize):
+    return createSurfacesNet2D(preprocessor,self.net,iSize,jSize)

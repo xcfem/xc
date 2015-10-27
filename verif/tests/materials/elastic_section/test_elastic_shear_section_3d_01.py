@@ -13,24 +13,24 @@ from misc import banco_pruebas_scc3d
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
 # Definición de la sección rectangular
 scc10x20=  parametrosSeccionRectangular.RectangularSection("rectang",.10,.20,2.1e6,0.3)
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-matPoteau= scc10x20.defSeccShElastica3d(mdlr)
-elemZLS= banco_pruebas_scc3d.modeloSecc3d(mdlr,scc10x20.nmb)
+matPoteau= scc10x20.defSeccShElastica3d(preprocessor)
+elemZLS= banco_pruebas_scc3d.modeloSecc3d(preprocessor, scc10x20.nmb)
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -49,11 +49,11 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nodos.calculateNodalReactions(True)
 RM= nodos.getNode(1).getReaction[5] 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc0= ele1.getSection()
 esfMz= scc0.getStressResultantComponent("Mz")

@@ -82,8 +82,8 @@ extern "C" void queryMatrixTable(int rowSize, int colSize, int projTag, int data
 
 
 
-XC::OracleDatastore::OracleDatastore(const std::string &dataBaseName,Modelador &mdlr, FEM_ObjectBroker &theObjBroker)
-  :DBDatastore(mdlr, theObjBroker)
+XC::OracleDatastore::OracleDatastore(const std::string &dataBaseName,Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker)
+  :DBDatastore(preprocessor, theObjBroker)
   {
     std::string junpeng("junpeng"); 
     std::string g3iscool("g3iscool"); 

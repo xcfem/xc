@@ -10,8 +10,8 @@ from materials import typical_materials
 tg= 0
 lapso= 0
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 for i in range(1,1000):
   n= nodos.newNodeXYZ(i,0,0)
 

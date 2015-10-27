@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-def defMaterialesK(mdlr,path, nmbScc1, nmbScc2):
+def defMaterialesK(preprocessor,path, nmbScc1, nmbScc2):
   '''
    Define los materiales (hormigón, acero y secciones)
     que se emplearán para la comprobación a fisuración
     empleando sus valores característicos.
   '''
-  mdlr.clearAll
-  materiales= mdlr.getMaterialLoader
+  preprocessor.clearAll
+  materiales= preprocessor.getMaterialLoader
   tagDiagHormigon= materiales.defDiagKHormigon(codHormigon)
   tagDiagAceroArmar= materiales.defDiagKAcero(codArmadura)
   mat= mat_with_tag(tagDiagHormigon)
@@ -29,8 +29,8 @@ def defMaterialesD(path, nmbScc1, nmbScc2):
     que se emplearán para la comprobación a flexion
     empleando sus valores de cálculo.
   '''
-  mdlr.clearAll
-  materiales= mdlr.getMaterialLoader
+  preprocessor.clearAll
+  materiales= preprocessor.getMaterialLoader
   tagDiagHormigon= materiales.defDiagDHormigon(codHormigon)
   tagDiagAceroArmar= materiales.defDiagDAcero(codArmadura)
   mat= mat_with_tag(tagDiagHormigon)
@@ -54,8 +54,8 @@ def defMaterialesKBarra(path, nmbScc, nmbRutinaDefGeom):
     que se emplearán para la comprobación a fisuración
     empleando sus valores característicos.
   '''
-  mdlr.clearAll
-  materiales= mdlr.getMaterialLoader
+  preprocessor.clearAll
+  materiales= preprocessor.getMaterialLoader
   tagDiagHormigon= materiales.defDiagKHormigon(codHormigon)
   tagDiagAceroArmar= materiales.defDiagKAcero(codArmadura)
   mat= mat_with_tag(tagDiagHormigon)
@@ -74,8 +74,8 @@ def defMaterialesDBarra(path, nmbScc, nmbRutinaDefGeom):
     que se emplearán para la comprobación a flexión
     empleando sus valores de cálculo.
   '''
-  mdlr.clearAll
-  materiales= mdlr.getMaterialLoader
+  preprocessor.clearAll
+  materiales= preprocessor.getMaterialLoader
   tagDiagHormigon= materiales.defDiagDHormigon(codHormigon)
   tagDiagAceroArmar= materiales.defDiagDAcero(codArmadura)
   mat= mat_with_tag(tagDiagHormigon)

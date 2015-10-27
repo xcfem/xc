@@ -34,27 +34,27 @@ E= 2.1e6 # Módulo de Young del material en kp/cm2.
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-epp= typical_materials.defElasticPPMaterial(mdlr,"epp",E,fy,-fy)
-geomRectang= mdlr.getMaterialLoader.newSectionGeometry("geomRectang")
+epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
+geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
 reg= scc10x20.discretization(geomRectang,"epp")
-rectang= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","rectang")
+rectang= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 rectang.setupFibers()
 extraeParamSccFibras(rectang,scc10x20)
 
-banco_pruebas_scc3d.modeloSecc3d(mdlr,"rectang")
+banco_pruebas_scc3d.modeloSecc3d(preprocessor, "rectang")
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.Nodo6DOFGiroYLibre(coacciones,2)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -76,12 +76,12 @@ analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(1)
 
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nodos.calculateNodalReactions(True)
 
 RM= nodos.getNode(1).getReaction[4] 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
 esfMy= scc.getFibers().getMy(0.0)

@@ -41,9 +41,9 @@ Imprime los resultados de la comprobación de tensiones normales en régimen
 elástico de un conjunto de elementos cuyo material es un perfil
 metálico.
 '''
-def listaFactorCapacidad(mdlr,nmbSet, fName, titulo):
+def listaFactorCapacidad(preprocessor,nmbSet, fName, titulo):
   printCabeceraListadoFactorCapacidad(fName,titulo)
-  st= mdlr.getSetLoader.getSet(nmbSet)
+  st= preprocessor.getSetLoader.getSet(nmbSet)
   elems= st.getElements()
   tagFCCPCP= 0
   FCCPCP= 0

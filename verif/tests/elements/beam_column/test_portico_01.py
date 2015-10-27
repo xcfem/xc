@@ -27,8 +27,8 @@ Iz= 1/12.0 # Momento de inercia de la sección expresada en in4
 P= 1000 # Carga en libras-fuerza.
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 nodos.defaultTag= 1
 nodos.newNodeXY(0,0) # Primer pórtico.
@@ -41,16 +41,16 @@ nod= nodos.newNodeXY(2*B+B,0)
 nod= nodos.newNodeXY(2*B+B,H)
 
 
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
 caracMecSeccion= xc.ConstantesSecc2d()
 caracMecSeccion.A= area; caracMecSeccion.E= Es;
 caracMecSeccion.I= Iz;
-seccion= typical_materials.defElasticSectionFromMechProp2d(mdlr,"seccion",caracMecSeccion)
+seccion= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "seccion",caracMecSeccion)
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "seccion"
 elementos.defaultTag= 1 #Tag for next element.
@@ -62,14 +62,14 @@ beam2d= elementos.newElement("elastic_beam_2d",xc.ID([6,8]))
 beam2d= elementos.newElement("elastic_beam_2d",xc.ID([8,7]))
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_3dof.fixNode000(coacciones,1)
 fix_node_3dof.fixNode000(coacciones,3)
 fix_node_3dof.fixNode000(coacciones,5)
 fix_node_3dof.fixNode000(coacciones,7)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -130,7 +130,7 @@ M52Teor= -5580.4 # Valor teórico del momento frontal en elemento 5
 ratioM52= 0.0
 
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
 nod2= nodos.getNode(2)
 theta2= nod2.getDisp[2]
@@ -140,7 +140,7 @@ theta6= nod6.getDisp[2]
 nod8= nodos.getNode(8)
 theta8= nod8.getDisp[2]
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 
 elem1= elementos.getElement(1)
 elem1.getResistingForce()

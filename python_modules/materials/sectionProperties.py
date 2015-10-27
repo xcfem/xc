@@ -38,54 +38,54 @@ class sectionProperties(object):
     raise "Abstract method, please override"
     return 0.0    
 
-  def defSeccElastica3d(self,mdlr):
-    materiales= mdlr.getMaterialLoader
+  def defSeccElastica3d(self,preprocessor):
+    materiales= preprocessor.getMaterialLoader
     if(materiales.materialExists(self.nmb)):
       sys.stderr.write("Section: "+self.nmb+" is already defined.")
     else:
-      retval= typical_materials.defElasticSection3d(mdlr,self.nmb,self.A(),self.E,self.G(),self.Iz(),self.Iy(),self.J())
+      retval= typical_materials.defElasticSection3d(preprocessor,self.nmb,self.A(),self.E,self.G(),self.Iz(),self.Iy(),self.J())
       return retval;
-  def defSeccShElastica3d(self,mdlr):
-    materiales= mdlr.getMaterialLoader
+  def defSeccShElastica3d(self,preprocessor):
+    materiales= preprocessor.getMaterialLoader
     if(materiales.materialExists(self.nmb)):
       sys.stderr.write("Section: "+self.nmb+" is already defined.")
     else:
-      retval= typical_materials.defElasticShearSection3d(mdlr,self.nmb,self.A(),self.E,self.G(),self.Iz(),self.Iy(),self.J(),self.alphaY())
+      retval= typical_materials.defElasticShearSection3d(preprocessor,self.nmb,self.A(),self.E,self.G(),self.Iz(),self.Iy(),self.J(),self.alphaY())
       return retval;
-  def defSeccElastica2d(self,mdlr):
+  def defSeccElastica2d(self,preprocessor):
     # Define una sección elástica para elementos 2d a partir de los datos del registro.
-    materiales= mdlr.getMaterialLoader
+    materiales= preprocessor.getMaterialLoader
     if(materiales.materialExists(self.nmb)):
       sys.stderr.write("Section: "+self.nmb+" is already defined.")
     else:
-      retval= typical_materials.defElasticSection2d(mdlr,self.nmb,self.A(),self.E,self.Iz())
+      retval= typical_materials.defElasticSection2d(preprocessor,self.nmb,self.A(),self.E,self.Iz())
       return retval;
-  def defSeccShElastica2d(self,mdlr):
+  def defSeccShElastica2d(self,preprocessor):
     # Define una sección elástica para elementos 2d a partir de los datos del registro.
-    materiales= mdlr.getMaterialLoader
+    materiales= preprocessor.getMaterialLoader
     if(materiales.materialExists(self.nmb)):
       sys.stderr.write("Section: "+self.nmb+" is already defined.")
     else:
-      retval= typical_materials.defElasticShearSection2d(mdlr,self.nmb,self.A(),self.E,self.G(),self.Iz(),self.alphaY())
+      retval= typical_materials.defElasticShearSection2d(preprocessor,self.nmb,self.A(),self.E,self.G(),self.Iz(),self.alphaY())
       return retval;
 
 
 # Define una sección elástica para elementos 3d a partir de los datos del registro.
-def defSeccElastica3d(mdlr,defSecc):
+def defSeccElastica3d(preprocessor,defSecc):
   print "DEPRECATED; use object's method defSeccElastica3d"
-  return defSecc.defSeccElastica3d(mdlr)
+  return defSecc.defSeccElastica3d(preprocessor)
 
-def defSeccShElastica3d(mdlr,defSecc):
+def defSeccShElastica3d(preprocessor,defSecc):
   print "DEPRECATED; use object's method defSeccShElastica3d"
-  return defSecc.defSeccShElastica3d(mdlr)
+  return defSecc.defSeccShElastica3d(preprocessor)
 
 # Define una sección elástica para elementos 2d a partir de los datos del registro.
-def defSeccElastica2d(mdlr,defSecc):
+def defSeccElastica2d(preprocessor,defSecc):
   print "DEPRECATED; use object's method defSeccElastica2d"
-  return defSecc.defSeccElastica2d(mdlr)
+  return defSecc.defSeccElastica2d(preprocessor)
 
 # Define una sección elástica para elementos 2d a partir de los datos del registro.
-def defSeccShElastica2d(mdlr,defSecc):
+def defSeccShElastica2d(preprocessor,defSecc):
   print "DEPRECATED; use object's method defSeccShElastica2d"
-  return defSecc.defSeccShElastica2d(mdlr)
+  return defSecc.defSeccShElastica2d(preprocessor)
 

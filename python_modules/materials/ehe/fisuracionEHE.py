@@ -148,17 +148,17 @@ def printParamFisBarra():
   print "alargMedioBarra= ",alargMedioBarra*1e3," por mil.\n"
   print "WkBarra= ",WkBarra*1e3," mm\n\n"
 
-def trataResultsCombFISEHE(mdlr,nmbComb):
+def trataResultsCombFISEHE(preprocessor,nmbComb):
   # Comprobación de las secciones de hormigón frente a fisuración.
   print "Postproceso combinación: ",nmbComb,"\n"
 
   defParamsFisuracion("secHAParamsFisuracion")
-  materiales= mdlr.getMaterialLoader
+  materiales= preprocessor.getMaterialLoader
   hormigon= materiales.getMaterial(codHormigon)
   tagHorm= hormigon.getProp("tagDiagK")
   fctmHorm= hormigon.getProp("fctm")
   armadura= materiales.getMaterial(codArmadura)
-  elementos= mdlr.getElementLoader
+  elementos= preprocessor.getElementLoader
   for e in elementos:
     scc= elementos.getSeccion()
     Ntmp= scc.N

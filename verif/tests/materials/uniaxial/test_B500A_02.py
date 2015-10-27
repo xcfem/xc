@@ -11,9 +11,9 @@ from materials import reinforcingSteelTest
 # Definición del modelo
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos materiales
-errMax= reinforcingSteelTest.testDiagDAceroArmar(mdlr,SIA_reinforcing_steel.B500A)
+errMax= reinforcingSteelTest.testDiagDAceroArmar(preprocessor, SIA_reinforcing_steel.B500A)
 
 
 # print "errMax= ",(errMax)

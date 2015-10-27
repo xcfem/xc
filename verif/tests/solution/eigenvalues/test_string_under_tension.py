@@ -26,21 +26,21 @@ fPret= sigmaPret*area # Magnitud del pretensado en libras
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 # Problem type
 predefined_spaces.gdls_resist_materiales2D(nodos)
 nodos.newSeedNode()
 
 # Materials definition
-typical_materials.defCableMaterial(mdlr,"cable",E,sigmaPret,Mass)
+typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,Mass)
 
 ''' Se definen nodos en los puntos de aplicación de
     la carga. Puesto que no se van a determinar tensiones
     se emplea una sección arbitraria de área unidad '''
     
 # Definimos elemento semilla
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "cable"
 seedElemLoader.dimElem= 2
 seedElemLoader.defaultTag= 1 #Tag for the next element.
@@ -48,19 +48,19 @@ truss= seedElemLoader.newElement("corot_truss",xc.ID([0,0]))
 truss.area= area
 # fin de la definición del elemento semilla
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(l,0.0,0.0))
-lines= mdlr.getCad.getLines
+lines= preprocessor.getCad.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)
 l.nDiv= NumDiv
 
-l1= mdlr.getSets.getSet("l1")
+l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fija_nodos_lineas.CondContornoNodosExtremosLinea(l1,coacciones,fix_node_3dof.fixNode000)
 fija_nodos_lineas.CondContornoNodosInterioresLinea(l1,coacciones,fix_node_3dof.fixNodeFF0)
 
@@ -87,7 +87,7 @@ solver= soe.newSolver("band_gen_lin_lapack_solver")
 analysis= solu.newAnalysis("static_analysis","smt","")
 result= analysis.analyze(Nstep)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 traccion= ele1.getN()
 sigma= ele1.getMaterial().getStress()

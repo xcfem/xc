@@ -30,57 +30,57 @@ class SectionContainer(object):
         retval= s
     return retval
 
-  # def getInteractionDiagrams(self,mdlr,tipoDiag):
+  # def getInteractionDiagrams(self,preprocessor,tipoDiag):
   #   mapInteractionDiagrams= {}
   #   for s in self.sections:
-  #     diag2= s.D2Section.defInteractionDiagram(mdlr,tipoDiag)
+  #     diag2= s.D2Section.defInteractionDiagram(preprocessor,tipoDiag)
   #     mapInteractionDiagrams[s.D2Section.nmbSeccion]= diag2
-  #     diag1= s.D1Section.defInteractionDiagram(mdlr,tipoDiag)
+  #     diag1= s.D1Section.defInteractionDiagram(preprocessor,tipoDiag)
   #     mapInteractionDiagrams[s.D1Section.nmbSeccion]= diag1
   #   return mapInteractionDiagrams
 
-  def getInteractionDiagrams(self,mdlr,tipoDiag):
+  def getInteractionDiagrams(self,preprocessor,tipoDiag):
     '''Returns 3D interaction diagrams.'''
     mapInteractionDiagrams= {}
     for s in self.sections:
-      s.D2Section.defSeccionHASimple(mdlr,tipoDiag)
-      diag2= s.D2Section.defInteractionDiagram(mdlr)
+      s.D2Section.defSeccionHASimple(preprocessor,tipoDiag)
+      diag2= s.D2Section.defInteractionDiagram(preprocessor)
       mapInteractionDiagrams[s.D2Section.nmbSeccion]= diag2
-      s.D1Section.defSeccionHASimple(mdlr,tipoDiag)
-      diag1= s.D1Section.defInteractionDiagram(mdlr)
+      s.D1Section.defSeccionHASimple(preprocessor,tipoDiag)
+      diag1= s.D1Section.defInteractionDiagram(preprocessor)
       mapInteractionDiagrams[s.D1Section.nmbSeccion]= diag1
     return mapInteractionDiagrams
 
-  def getInteractionDiagramsNMy(self,mdlr,tipoDiag):
+  def getInteractionDiagramsNMy(self,preprocessor,tipoDiag):
     '''Returns 2D interaction diagrams in N-My plane.'''
     mapInteractionDiagrams= {}
     for s in self.sections:
-      diag2= s.D2Section.defInteractionDiagramNMy(mdlr,tipoDiag)
+      diag2= s.D2Section.defInteractionDiagramNMy(preprocessor,tipoDiag)
       diag2.simplify() #Hasta corregir la obtención de diagramas NMy
       print "area diag2= ", diag2.getArea()
       mapInteractionDiagrams[s.D2Section.nmbSeccion]= diag2
-      diag1= s.D1Section.defInteractionDiagramNMy(mdlr,tipoDiag)
+      diag1= s.D1Section.defInteractionDiagramNMy(preprocessor,tipoDiag)
       diag1.simplify() #Hasta corregir la obtención de diagramas NMy
       print "area diag1= ", diag1.getArea()
       mapInteractionDiagrams[s.D1Section.nmbSeccion]= diag1
     return mapInteractionDiagrams
 
-  def crackControl(self,mdlr,analysis,csvFile,outputFile,mapSectionsForEveryElement, tipoDiag):
-    mapID= self.getInteractionDiagrams(mdlr,tipoDiag)
-    return calculo_fis.lanzaCalculoFISFromXCDataPlanB(mdlr,analysis,csvFile,outputFile,mapSectionsForEveryElement,self.mapSections, cc.trataResultsCombFISSIA262PlanB)
+  def crackControl(self,preprocessor,analysis,csvFile,outputFile,mapSectionsForEveryElement, tipoDiag):
+    mapID= self.getInteractionDiagrams(preprocessor,tipoDiag)
+    return calculo_fis.lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,csvFile,outputFile,mapSectionsForEveryElement,self.mapSections, cc.trataResultsCombFISSIA262PlanB)
 
-  def verifyNormalStresses(self,mdlr,analysis,csvFile,outputFile,mapSectionsForEveryElement, tipoDiag):
-    mapID= self.getInteractionDiagrams(mdlr,tipoDiag)
-    return calculo_tn.lanzaCalculoTNFromXCData(mdlr,analysis,csvFile,outputFile,mapSectionsForEveryElement, self.mapSections, mapID)
+  def verifyNormalStresses(self,preprocessor,analysis,csvFile,outputFile,mapSectionsForEveryElement, tipoDiag):
+    mapID= self.getInteractionDiagrams(preprocessor,tipoDiag)
+    return calculo_tn.lanzaCalculoTNFromXCData(preprocessor,analysis,csvFile,outputFile,mapSectionsForEveryElement, self.mapSections, mapID)
 
-  def verifyNormalStresses2d(self,mdlr,analysis,csvFile,outputFile,mapSectionsForEveryElement, tipoDiag):
-    mapID= self.getInteractionDiagramsNMy(mdlr,tipoDiag)
-    return calculo_tn.lanzaCalculoTN2dFromXCData(mdlr,analysis,csvFile,outputFile,mapSectionsForEveryElement, self.mapSections, mapID)
+  def verifyNormalStresses2d(self,preprocessor,analysis,csvFile,outputFile,mapSectionsForEveryElement, tipoDiag):
+    mapID= self.getInteractionDiagramsNMy(preprocessor,tipoDiag)
+    return calculo_tn.lanzaCalculoTN2dFromXCData(preprocessor,analysis,csvFile,outputFile,mapSectionsForEveryElement, self.mapSections, mapID)
 
-  def shearVerification(self,mdlr,analysis,csvFile,outputFile,mapSectionsForEveryElement, tipoDiag):
-    mapID= self.getInteractionDiagrams(mdlr,tipoDiag)
-    return calculo_v.lanzaCalculoV(mdlr,analysis,csvFile,outputFile,mapSectionsForEveryElement,self.mapSections, mapID, shearSIA262.trataResultsCombV)
+  def shearVerification(self,preprocessor,analysis,csvFile,outputFile,mapSectionsForEveryElement, tipoDiag):
+    mapID= self.getInteractionDiagrams(preprocessor,tipoDiag)
+    return calculo_v.lanzaCalculoV(preprocessor,analysis,csvFile,outputFile,mapSectionsForEveryElement,self.mapSections, mapID, shearSIA262.trataResultsCombV)
 
-  def fatigueVerification(self,mdlr,analysis,csvFile,outputFile,mapSectionsForEveryElement, tipoDiag):
-    mapID= self.getInteractionDiagrams(mdlr,tipoDiag)
-    return calculo_fatigue.lanzaCalculoFatigueFromXCDataPlanB(mdlr,analysis,csvFile,outputFile,mapSectionsForEveryElement,self.mapSections, mapID,fc.trataResultsComb)
+  def fatigueVerification(self,preprocessor,analysis,csvFile,outputFile,mapSectionsForEveryElement, tipoDiag):
+    mapID= self.getInteractionDiagrams(preprocessor,tipoDiag)
+    return calculo_fatigue.lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,csvFile,outputFile,mapSectionsForEveryElement,self.mapSections, mapID,fc.trataResultsComb)

@@ -64,7 +64,7 @@
 #define Element_h
 
 #include "domain/mesh/MeshComponent.h"
-#include "modelador/ParamMallado.h"
+#include "preprocessor/ParamMallado.h"
 #include "RayleighDampingFactors.h"
 #include "utility/matrix/Matrix.h"
 #include "domain/mesh/node/NodeTopology.h"
@@ -121,7 +121,7 @@ class Element: public MeshComponent
     static DefaultTag defaultTag; //<! tag para un nuevo elemento.
   protected:
     friend class EntMdlr;
-    friend class Modelador;
+    friend class Preprocessor;
     virtual TritrizPtrElem coloca_en_malla(const TritrizPtrNod &,dir_mallado) const;
     virtual TritrizPtrElem cose(const SetEstruct &f1,const SetEstruct &f2) const;
 

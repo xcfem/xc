@@ -32,8 +32,8 @@ from materials import typical_materials
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod1= nodos.newNodeXYZ(2.0,0.0,0.0)
@@ -42,16 +42,16 @@ nod3= nodos.newNodeXYZ(0.0,0.0,4.0)
 nod4= nodos.newNodeXYZ(5.0,0.0,4.0)
 
 
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
     
 # Materials definition
-scc= typical_materials.defElasticSection3d(mdlr,"scc",A,E,G,Iz,Iy,J)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "scc"
 #  sintaxis: elastic_beam_3d[<tag>] 
@@ -64,12 +64,12 @@ beam3= elementos.newElement("elastic_beam_3d",xc.ID([2,4]))
 beam3.rho= densHorm*A
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -87,7 +87,7 @@ lpVT= casos.newLoadPattern("default","VT")
 lpNV= casos.newLoadPattern("default","NV") 
 
 casos.currentLoadPattern= "G"
-elementos= mdlr.getSets.getSet("total").getElements
+elementos= preprocessor.getSets.getSet("total").getElements
 for e in elementos:
   pesoElem= (e.rho*(-10))
   e.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,pesoElem]))
@@ -117,7 +117,7 @@ execfile(pth+"/def_hip_elu.py")
 
 
 def resuelveCombEstatLin(comb):
-  mdlr.resetLoadCase()
+  preprocessor.resetLoadCase()
   previa= comb.getCombPrevia()
   if(previa!=None):
     nombrePrevia= previa.getName
@@ -142,7 +142,7 @@ def resuelveCombEstatLin(comb):
 def trataResultsComb(comb):
   tagSave= comb.tag*100
   db.save(tagSave)
-  elementos= mdlr.getElementLoader
+  elementos= preprocessor.getElementLoader
   elem1= elementos.getElement(1)
   elem1.getResistingForce()
   global NMin1

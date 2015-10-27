@@ -13,16 +13,16 @@ tg= 0
 lapso= 0
 i= 1
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 nodos.defaultTag= 1
 for i in range(1,1001):
   n= nodos.newNodeXYZ(i,0,0)
 
 # Materials definition
-elast= typical_materials.defElasticMaterial(mdlr,"elast",2.1e6)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",2.1e6)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast"
 elementos.dimElem= 2
 elementos.defaultTag= 1 #Tag for the next element.

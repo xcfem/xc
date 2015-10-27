@@ -17,22 +17,22 @@ from materials import typical_materials
 # Problem type
 # Definición del modelo
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(1,1,1)
 
     
 # Definimos materiales
-kx= typical_materials.defElasticMaterial(mdlr,"kx",KX)
-ky= typical_materials.defElasticMaterial(mdlr,"ky",KY)
+kx= typical_materials.defElasticMaterial(preprocessor, "kx",KX)
+ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 
 
-tagNodoFijo= define_apoyos.defApoyoXYRigZ(mdlr,1,7,"kx","ky")
+tagNodoFijo= define_apoyos.defApoyoXYRigZ(preprocessor, 1,7,"kx","ky")
   
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 #
 spc= coacciones.newSPConstraint(1,3,0.0) # Nodo 1
@@ -41,7 +41,7 @@ spc= coacciones.newSPConstraint(1,5,0.0)
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -61,7 +61,7 @@ result= analisis.analyze(1)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
 nod1= nodos.getNode(1)
 deltax= nod1.getDisp[0]

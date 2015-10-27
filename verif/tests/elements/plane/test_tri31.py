@@ -22,8 +22,8 @@ F=1000
 # Problem type
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_elasticidad2D(nodos)
 
 
@@ -33,9 +33,9 @@ n3= nodos.newNodeIDXY(3,1,1)
 n4= nodos.newNodeIDXY(4,0,1)
 
 
-elast2d= typical_materials.defElasticIsotropicPlaneStress(mdlr,"elast2d",E,nu,rho)
+elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast2d"
 tri31= elementos.newElement("tri31",xc.ID([1,2,3]))
 tri31.thickness= t
@@ -43,7 +43,7 @@ tri31= elementos.newElement("tri31",xc.ID([3,4,1]))
 tri31.thickness= t
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 spc= coacciones.newSPConstraint(1,0,0.0)
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -51,7 +51,7 @@ spc= coacciones.newSPConstraint(4,0,0.0)
 spc= coacciones.newSPConstraint(4,1,0.0)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -72,7 +72,7 @@ analOk= analisis.analyze(1)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
  
 # print "reac nodo 1: ",reac
 R1x= n1.getReaction[0]

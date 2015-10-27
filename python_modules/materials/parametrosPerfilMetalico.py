@@ -12,7 +12,7 @@ Define una sección elástica para elementos 3d a partir de los datos
 '''
 def defSeccPerfilMetalicoElastica3d(defPerfil):
   print "DEPRECATED; call defSeccElastica3d."
-  return defSeccElastica3d(mdlr,defPerfil)
+  return defSeccElastica3d(preprocessor,defPerfil)
 
 '''
 Define una sección elástica para elementos 3d a partir de los datos
@@ -20,7 +20,7 @@ Define una sección elástica para elementos 3d a partir de los datos
 '''
 def defSeccPerfilMetalicoShElastica3d(defPerfil):
   print "DEPRECATED; call defSeccShElastica3d."
-  return defSeccShElastica3d(mdlr,defPerfil)
+  return defSeccShElastica3d(preprocessor,defPerfil)
 
 '''
 Define una sección elástica para elementos 2d a partir de los datos
@@ -28,7 +28,7 @@ Define una sección elástica para elementos 2d a partir de los datos
 '''
 def defSeccPerfilMetalicoElastica2d(defPerfil):
   print "DEPRECATED; call defSeccElastica2d."
-  return defSeccElastica2d(mdlr,defPerfil)
+  return defSeccElastica2d(preprocessor,defPerfil)
 
 
 '''
@@ -37,5 +37,5 @@ Define una sección elástica para elementos 2d a partir de los datos
 '''
 def defSeccPerfilMetalicoShElastica2d(defPerfil):
   print "DEPRECATED; call defSeccShElastica2d."
-  return defSeccShElastica2d(mdlr,defPerfil)
+  return defSeccShElastica2d(preprocessor,defPerfil)
 

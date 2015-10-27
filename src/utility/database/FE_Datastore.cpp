@@ -62,7 +62,7 @@
 #include "utility/database/FE_Datastore.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <utility/actor/actor/MovableObject.h>
-#include "modelador/Modelador.h"
+#include "preprocessor/Preprocessor.h"
 #include <utility/matrix/ID.h>
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -73,8 +73,8 @@
 int XC::FE_Datastore::lastDbTag(0);
 
 //! @brief Constructor.
-XC::FE_Datastore::FE_Datastore(Modelador &m, FEM_ObjectBroker &theBroker) 
-  :theObjectBroker(&theBroker), mdlr(&m), savedStates() {}
+XC::FE_Datastore::FE_Datastore(Preprocessor &m, FEM_ObjectBroker &theBroker) 
+  :theObjectBroker(&theBroker), preprocessor(&m), savedStates() {}
 
 bool XC::FE_Datastore::isDatastore(void) const
   { return true; }
@@ -111,10 +111,10 @@ int XC::FE_Datastore::commitState(int commitTag)
       std::cerr << "FE_Datastore::commitState se esperaba un valor de commitTag mayor que 0, se obtuvo: "
                 << commitTag << std::endl;
     clearDbTags();
-    if(mdlr)
+    if(preprocessor)
       {
         CommParameters cp(commitTag,*this);
-        res = mdlr->sendSelf(cp);
+        res = preprocessor->sendSelf(cp);
         if(res < 0)
           std::cerr << "FE_Datastore::commitState - modeler failed to sendSelf\n";
         else
@@ -141,12 +141,12 @@ int XC::FE_Datastore::restoreState(int commitTag)
     clearDbTags();
     if(isSaved(commitTag))
       {
-        if(mdlr)
+        if(preprocessor)
           {
             CommParameters cp(commitTag,*this,*theObjectBroker);
-            res= mdlr->recvSelf(cp);
+            res= preprocessor->recvSelf(cp);
             if(res < 0)
-              { std::cerr << "FE_Datastore::restoreState - mdlr failed to recvSelf\n"; }
+              { std::cerr << "FE_Datastore::restoreState - preprocessor failed to recvSelf\n"; }
             ID maxlastDbTag(1);
             res= recvID(-1,commitTag,maxlastDbTag);
             if(res<0)

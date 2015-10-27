@@ -23,26 +23,26 @@ L=10 # Longitud de las barras
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 
 nodos.defaultTag= 1
 nodos.newSeedNode()
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
  
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt1= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt2= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax,0.0,0.0))
 pt3= puntos.newPntIDPos3d(3,geom.Pos3d(0.0,L,0.0))
 pt4= puntos.newPntIDPos3d(4,geom.Pos3d(CooMax,L,0.0))
-lines= mdlr.getCad.getLines
+lines= preprocessor.getCad.getLines
 lines.defaultTag= 1
 l1= lines.newLine(1,2)
 l1.nDiv= NumDiv
@@ -51,16 +51,16 @@ l2.nDiv= NumDiv
 
 
 # Materials definition
-scc= typical_materials.defElasticSection2d(mdlr,"scc",A,E,I)
+scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 nodosTotal= setTotal.getNodes
 
-setL1= mdlr.getSets.getSet("l1")
+setL1= preprocessor.getSets.getSet("l1")
 setL1.genMesh(xc.meshDir.I)
 
 
-setL2= mdlr.getSets.getSet("l2")
+setL2= preprocessor.getSets.getSet("l2")
 setL2.genMesh(xc.meshDir.I)
 
 # for n in nodosTotal:
@@ -76,11 +76,11 @@ for i in range(1,NumDiv+2):
 
 
 
-fix_node_3dof.fijaNodosLinea3GDL(mdlr.getConstraintLoader,l1)
+fix_node_3dof.fijaNodosLinea3GDL(preprocessor.getConstraintLoader,l1)
 
 
 # Casos de carga
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 #Contenedor de hipótesis de carga:
 casos= cargas.getLoadPatterns
 #Load modulation.
@@ -90,7 +90,7 @@ casos.currentTimeSeries= "ts"
 lp0= casos.newLoadPattern("default","0")
 #casos.currentLoadPattern= "0"
 
-l2= mdlr.getSets.getSet("l2")
+l2= preprocessor.getSets.getSet("l2")
 
 nNodos= l2.getNumNodes
 for i in range(1,nNodos+1):
@@ -125,7 +125,7 @@ for i in range(1,nNodos+1):
 
 errDisp= math.sqrt(errDisp)
 
-constraints= mdlr.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 numSPs= constraints.getNumSPs
 nNodos= setTotal.getNumNodes
 elementos= setTotal.getElements

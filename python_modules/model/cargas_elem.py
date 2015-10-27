@@ -1,29 +1,29 @@
 # -*- coding: utf-8 -*-
 # Rutinas para facilitar la carga de elementos
 
-def vector3dUniformLoadGlobalSetLineas(mdlr,nmbSetLineas, cargaUnif):
-  st= mdlr.getSets.getSet(nmbSetLineas)
+def vector3dUniformLoadGlobalSetLineas(preprocessor,nmbSetLineas, cargaUnif):
+  st= preprocessor.getSets.getSet(nmbSetLineas)
   lines= st.getLines()
   for l in lines:
     elems= l.getElems()
     for e in elems:
       vector3d_uniform_load_global(e.tag,cargaUnif)
 
-def vector3dUniformLoadGlobalSetElementos(mdlr,nmbSetElem, cargaUnif):
-  st= mdlr.getSets.getSet(nmbSetElem)
+def vector3dUniformLoadGlobalSetElementos(preprocessor,nmbSetElem, cargaUnif):
+  st= preprocessor.getSets.getSet(nmbSetElem)
   elems= st.getElems()
   for e in elems:
     vector3d_uniform_load_global(e.tag,cargaUnif)
 
-def vector3dUniformLoadLocalSetElementos(mdlr,nmbSetElem, cargaUnif):
-  st= mdlr.getSets.getSet(nmbSetElem)
+def vector3dUniformLoadLocalSetElementos(preprocessor,nmbSetElem, cargaUnif):
+  st= preprocessor.getSets.getSet(nmbSetElem)
   elems= st.getElems()
   for e in elems:
     vector3d_uniform_load_local(e.tag,cargaUnif)
 
-def beamStrainLoadSetLineas(mdlr,nmbSetLineas, strain):
+def beamStrainLoadSetLineas(preprocessor,nmbSetLineas, strain):
   pDef= xc.PlanoDeformacion(strain)
-  st= mdlr.getSets.getSet(nmbSetLineas)
+  st= preprocessor.getSets.getSet(nmbSetLineas)
   lines= st.getLines()
   for l in lines:
     elems= l.getElems()

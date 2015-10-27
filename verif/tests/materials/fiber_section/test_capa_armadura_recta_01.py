@@ -20,8 +20,8 @@ F= 1000.0 # Magnitud de la fuerza
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 
 nodos.defaultTag= 1 #First node number.
@@ -31,9 +31,9 @@ nod= nodos.newNodeXY(1,0)
 # Materials definition
 fy= 2600 # Tensión de cedencia del acero.
 E= 2.1e6 # Módulo de Young del acero.
-acero= typical_materials.defSteel01(mdlr,"acero",E,fy,0.001)
+acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
-geomCuadFibras= mdlr.getMaterialLoader.newSectionGeometry("geomCuadFibras")
+geomCuadFibras= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibras")
 y1= ancho/2.0
 z1= canto/2.0
 
@@ -50,7 +50,7 @@ armaduraB.barArea= As
 armaduraB.p1= geom.Pos2d(y0-canto/2.0,z0+ancho/2.0)
 armaduraB.p2= geom.Pos2d(y0+canto/2.0,z0+ancho/2.0)
 
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 # Secciones
 cuadFibras= materiales.newMaterial("fiber_section_3d","cuadFibras")
 fiberSectionRepr= cuadFibras.getFiberSectionRepr()
@@ -73,14 +73,14 @@ for_each_fiber
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "cuadFibras"
 elementos.dimElem= 1
 elementos.defaultTag= 1
 elem= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -89,7 +89,7 @@ spc= coacciones.newSPConstraint(2,1,0.0)
 spc= coacciones.newSPConstraint(2,2,0.0)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

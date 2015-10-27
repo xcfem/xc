@@ -15,9 +15,9 @@ def odd(number):
    return number % 2 != 0
 
 # Ejecuta el análisis y la comprobación frente a tensiones normales
-def xBarraCompruebaTNComb(mdlr, nmbDiagIntSec):
+def xBarraCompruebaTNComb(preprocessor, nmbDiagIntSec):
   listaCombinaciones= []
-  cargas= mdlr.getLoadLoader
+  cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
   ts= casos.newTimeSeries("constant_ts","ts")
   casos.currentTimeSeries= "ts"
@@ -33,9 +33,9 @@ def xBarraCompruebaTNComb(mdlr, nmbDiagIntSec):
   os.system("rm -f "+"/tmp/cargas.xci")
   xBarraPrintTN(nmbArch) # XXX Sacar de aquí la impresión de result.
 
-def trataResultsCombTN(mdlr, nmbComb, diagIntSec):
+def trataResultsCombTN(preprocessor, nmbComb, diagIntSec):
   #print "Postproceso combinación: ",nmbComb
-  elements= mdlr.getSets["total"].getElements
+  elements= preprocessor.getSets["total"].getElements
   for e in elements:
     e.getResistingForce()
     TagTmp= e.tag
@@ -53,13 +53,13 @@ def trataResultsCombTN(mdlr, nmbComb, diagIntSec):
       e.setProp("MzCP",MzTmp)
 
 # Imprime los resultados de la comprobación frente a tensiones normales
-def xBarraPrintTN(mdlr,nmbArchSalida, nmbSeccion):
+def xBarraPrintTN(preprocessor,nmbArchSalida, nmbSeccion):
   texOutput= open("/tmp/texOutput.tmp","w")
   texOutput.write("Section\n")
   ansysOutput= open(nmbArchSalida+".mac","w")
   #printCabeceraListadoFactorCapacidad("texOutput"," ("+ nmbSeccion1 +")")
   fcs= [] #Capacity factors at section.
-  elementos= mdlr.getSets["total"].getElements
+  elementos= preprocessor.getSets["total"].getElements
   for e in elementos:
     eTag= e.getProp("idElem")
     FCCP= e.getProp("FCCP")
@@ -99,11 +99,11 @@ def xBarraPrintTN(mdlr,nmbArchSalida, nmbSeccion):
     nmbArchDefHipELU e imprime los resultados en archivos con
     el nombre nmbArchTN.*
 '''
-def lanzaCalculoTNFromXCData(mdlr,analysis,nmbArchCsv,nmbArchSalida, diagIntScc):
-  ec.extraeDatos(mdlr,nmbArchCsv, diagIntScc)
+def lanzaCalculoTNFromXCData(preprocessor,analysis,nmbArchCsv,nmbArchSalida, diagIntScc):
+  ec.extraeDatos(preprocessor,nmbArchCsv, diagIntScc)
   #nmbDiagIntSec= "diagInt"+datosScc.nmbSeccion
-  calculo_comb.xBarraCalculaCombEstatLin(mdlr,analysis,diagIntScc,trataResultsCombTN)
-  meanFCs= xBarraPrintTN(mdlr,nmbArchSalida,"geomSecHA")
+  calculo_comb.xBarraCalculaCombEstatLin(preprocessor,analysis,diagIntScc,trataResultsCombTN)
+  meanFCs= xBarraPrintTN(preprocessor,nmbArchSalida,"geomSecHA")
   return meanFCs
 
 

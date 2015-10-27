@@ -50,12 +50,12 @@ def defVarsControlFISSIA262(elems):
     e.setProp("MzCPPos",0)
     e.setProp("HIPCPPos","")
 
-def trataResultsCombFISSIA262(mdlr,nmbComb):
+def trataResultsCombFISSIA262(preprocessor,nmbComb):
   # Comprobación de las secciones de hormigón frente a fisuración.
   print "Postproceso combinación: ",nmbComb,"\n"
 
   secHAParamsFis= CrackControlSIA262()
-  elementos= mdlr.getSets.getSet("total").getElements
+  elementos= preprocessor.getSets.getSet("total").getElements
   for e in elementos:
     scc= e.getSection()
     sigma_s= secHAParamsFis.calcRebarStress(scc)
@@ -69,12 +69,12 @@ def trataResultsCombFISSIA262(mdlr,nmbComb):
       e.setProp("MyCP",MyTmp)
       e.setProp("MzCP",MzTmp)
 
-def trataResultsCombFISSIA262PlanB(mdlr,nmbComb):
+def trataResultsCombFISSIA262PlanB(preprocessor,nmbComb):
   # Comprobación de las secciones de hormigón frente a fisuración estimando la tensión en la armadura.
   print "Postproceso combinación: ",nmbComb,"\n"
 
   secHAParamsFis= CrackControlSIA262()
-  elementos= mdlr.getSets.getSet("total").getElements
+  elementos= preprocessor.getSets.getSet("total").getElements
   for e in elementos:
     e.getResistingForce()
     scc= e.getSection()

@@ -19,8 +19,8 @@ eps= F/(Area*Es)
 # Problem type
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 
 # Definimos nodos
@@ -39,9 +39,9 @@ IK21= 0.0 ; IEIy= 0.0
 TEA= 0.0  ; TK12= 0.0
 TK21= 0.0 ; TEIy= 0.0
 
-elast0= typical_materials.defElasticMaterial(mdlr,"elast0",Es)
+elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",Es)
 # Secciones
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 prueba= materiales.newMaterial("fiber_section_2d","prueba")
 fiber= prueba.addFiber("elast0",Area,xc.Vector([yF]))
 

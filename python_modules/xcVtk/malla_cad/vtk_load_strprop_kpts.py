@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 def VtkLoadStrPropKPts(nmbSet, nmbProp, nmbContndr):
   nmbContndr= vtk.vtkShStrArray()
-  eSet= mdlr.getSets.getSet(nmbSet)
+  eSet= preprocessor.getSets.getSet(nmbSet)
   eSet.numerate()
   pnts= eSet.getPuntos()
   for p in pnts:

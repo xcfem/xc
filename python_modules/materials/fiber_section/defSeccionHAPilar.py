@@ -38,9 +38,9 @@ class RecordSeccionHAPilar(defSeccionHASimple.BasicRecordRCSection):
      habitualmente en pilares.
      tipoDiag: Cadena de caracteres que será "k" si se emplea el diagrama característicoo "d" si se emplea el diagrama de cálculo.
     '''
-    self.defDiagrams(mdlr,tipoDiag)
+    self.defDiagrams(preprocessor,tipoDiag)
 
-    geomSection= mdlr.getMaterialLoader.newSectionGeometry(self.nmbGeomSeccion())
+    geomSection= preprocessor.getMaterialLoader.newSectionGeometry(self.nmbGeomSeccion())
     self.defConcreteRegion(geomSection)
 
     armaduras= sectionGeom.getReinfLayers

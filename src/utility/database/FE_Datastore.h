@@ -68,22 +68,22 @@
 #include "utility/actor/channel/Channel.h"
 
 namespace XC {
-class Modelador;
+class Preprocessor;
 class FEM_ObjectBroker;
 
 class FE_Datastore: public Channel
   {
   private:
     FEM_ObjectBroker *theObjectBroker;
-    Modelador *mdlr;
+    Preprocessor *preprocessor;
     static int lastDbTag;
     std::set<int> savedStates;
   protected:
     FEM_ObjectBroker *getObjectBroker(void);
-    const Modelador *get_modelador(void) const
-      { return mdlr; }
+    const Preprocessor *get_modelador(void) const
+      { return preprocessor; }
   public:
-    FE_Datastore(Modelador &, FEM_ObjectBroker &theBroker);
+    FE_Datastore(Preprocessor &, FEM_ObjectBroker &theBroker);
     inline virtual ~FE_Datastore(void) {} 
 
     // methods defined in the Channel class interface which mean nothing for a Datastore

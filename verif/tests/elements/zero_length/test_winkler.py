@@ -28,24 +28,24 @@ A= h # Suponemos ancho unidad
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 
 # Definimos materiales
-kY= typical_materials.defElasticMaterial(mdlr,"kY",k*L/numDiv)
+kY= typical_materials.defElasticMaterial(preprocessor, "kY",k*L/numDiv)
 nodos.newSeedNode()
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
 
 # Definimos materiales
-scc= typical_materials.defElasticSection2d(mdlr,"scc",A,E,I)
+scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultTransformation= "lin"
 seedElemLoader.defaultMaterial= "scc"
 seedElemLoader.defaultTag= 1 #Tag for next element.
@@ -53,12 +53,12 @@ beam2d= seedElemLoader.newElement("elastic_beam_2d",xc.ID([0,0]))
 beam2d.h= h
 
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt1= puntos.newPntIDPos3d(1,geom.Pos3d(geom.Pos3d(0.0,0.0,0.0)))
 pt2= puntos.newPntIDPos3d(2,geom.Pos3d(geom.Pos3d(L/2,0.0,0.0)))
 pt3= puntos.newPntIDPos3d(3,geom.Pos3d(geom.Pos3d(L,0.0,0.0)))
 
-lineas= mdlr.getCad.getLines
+lineas= preprocessor.getCad.getLines
 lineas.defaultTag= 1
 l1= lineas.newLine(1,2)
 l1.nDiv= int(numDiv/2)
@@ -69,40 +69,40 @@ l1.nDiv= int(numDiv/2)
 
 
 
-l1= mdlr.getSets.getSet("l1")
+l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
 
 
-l2= mdlr.getSets.getSet("l2")
+l2= preprocessor.getSets.getSet("l2")
 l2.genMesh(xc.meshDir.I)
 
 idNodoFijo= 0
 idNodoCentral= 0
-idElem= mdlr.getElementLoader.defaultTag
+idElem= preprocessor.getElementLoader.defaultTag
 
 # Fijamos los nodos extremos.
-constraints= mdlr.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 fix_node_3dof.fixNode00F(constraints,pt1.getTagNode)
 fix_node_3dof.fixNode00F(constraints,pt3.getTagNode)
 
 # Apoyamos los interiores.
 l1InteriorNodes= line_utils.getInteriorNodes(l1)
 for n in l1InteriorNodes:
-  idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(mdlr,n.tag,idElem,"kY",[0,1])
+  idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(preprocessor, n.tag,idElem,"kY",[0,1])
   idElem+= 1
 
 l1LastNode= line_utils.getLastNode(l1)
 idNodoCentral= l1LastNode.tag
-idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(mdlr,l1LastNode.tag,idElem,"kY",[0,1])
+idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(preprocessor, l1LastNode.tag,idElem,"kY",[0,1])
 idElem+= 1
 
 l2InteriorNodes= line_utils.getInteriorNodes(l2)
 for n in l2InteriorNodes:
-  idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(mdlr,n.tag,idElem,"kY",[0,1])
+  idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(preprocessor, n.tag,idElem,"kY",[0,1])
   idElem+= 1
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

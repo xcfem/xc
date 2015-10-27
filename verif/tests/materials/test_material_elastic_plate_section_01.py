@@ -12,9 +12,9 @@ from materials import typical_materials
 
 # Definición del modelo
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos materiales
-prueba= typical_materials.defElasticPlateSection(mdlr,"prueba",E,nu,0.0,h)
+prueba= typical_materials.defElasticPlateSection(preprocessor, "prueba",E,nu,0.0,h)
 
 ratio1= (prueba.E-E)/E
 ratio2= (prueba.nu-nu)/nu

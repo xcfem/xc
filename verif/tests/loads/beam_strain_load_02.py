@@ -22,8 +22,8 @@ J= 0.721e-8 # Momento de inercia a torsión expresado en m4
 AT= 10 # Incremento de temperatura expresado en grados centígrados
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
@@ -32,14 +32,14 @@ nodos.newNodeXYZ(0.0,0.0,0.0)
 nodos.newNodeXYZ(L,0.0,0.0)
 
 
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
-scc= typical_materials.defElasticSection3d(mdlr,"scc",A,E,G,Iz,Iy,J)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "scc"
 elementos.dimElem= 2
@@ -47,12 +47,12 @@ elementos.defaultTag= 1 #Tag for next element.
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.fixNode6DOF(coacciones,2)
 
     # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("linear_ts","ts")
 casos.currentTimeSeries= "ts"

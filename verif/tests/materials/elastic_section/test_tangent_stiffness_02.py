@@ -18,14 +18,14 @@ b= 0.2 # Ancho de la viga.
 E= 2e6 # Módulo elástico
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 
 seccPrueba= parametrosSeccionRectangular.RectangularSection("prueba",b,h,E,0.3)
 
 # Definimos materiales
-defSeccAggregation.defSeccAggregation2d(mdlr,seccPrueba)
-matPrueba= mdlr.getMaterialLoader.getMaterial("prueba")
+defSeccAggregation.defSeccAggregation2d(preprocessor, seccPrueba)
+matPrueba= preprocessor.getMaterialLoader.getMaterial("prueba")
 tang= matPrueba.getTangentStiffness()
 EI= tang.at(1,1)
 EA= tang.at(0,0)

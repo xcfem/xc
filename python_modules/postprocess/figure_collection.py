@@ -31,7 +31,7 @@ class FigsCollectionPlotter(object):
   txtArmature1= "Armature en dir. long."
   txtArmature2= "Armature en dir. trsv."
 
-  def plotNormalStresses(self,mdlr,partName,elemSetName):
+  def plotNormalStresses(self,preprocessor,partName,elemSetName):
     figureList= []
     figureList.append(utils_display.FigureDefinition(partName,"Flexion","MyCP1",txtMyCP1,self.txtArmature1,self.mUnits))
     figureList.append(utils_display.FigureDefinition(partName,"Flexion","FCCP1",txtFCnormalStresses,self.txtArmature1))
@@ -43,10 +43,10 @@ class FigsCollectionPlotter(object):
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
-    tp.plotFigures(mdlr,figureList,self.latexOutputPath+partName+"_results_verif_tn_eluT2.tex",self.latexOutputPath+partName+"_results_verif_tn_eluT2_list_figures.tex")
+    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_results_verif_tn_eluT2.tex",self.latexOutputPath+partName+"_results_verif_tn_eluT2_list_figures.tex")
 
 
-  def plotShear(self,mdlr,partName,elemSetName):
+  def plotShear(self,preprocessor,partName,elemSetName):
     figureList= []
     eluStr= "Tranchant"
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"VyCP1",txtVyCP1,self.txtArmature1,self.fUnits))
@@ -59,10 +59,10 @@ class FigsCollectionPlotter(object):
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
-    tp.plotFigures(mdlr,figureList,self.latexOutputPath+partName+"_results_verif_v_eluT2.tex",self.latexOutputPath+partName+"_results_verif_v_eluT2_list_figures.tex")
+    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_results_verif_v_eluT2.tex",self.latexOutputPath+partName+"_results_verif_v_eluT2_list_figures.tex")
 
 
-  def plotFissurationFreq(self,mdlr,partName,elemSetName):
+  def plotFissurationFreq(self,preprocessor,partName,elemSetName):
     figureList= []
     eluStr= "FissurationFreq"
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"sg_s1",txtSGSFreq,self.txtArmature1,self.sUnits))
@@ -70,7 +70,7 @@ class FigsCollectionPlotter(object):
     #Load properties to display:
     fName= self.fieldFilesPath + "results_verif_fis_els_freq.py"
     execfile(fName)
-    elemSet= mdlr.getSets.getSet(elemSetName).getElements
+    elemSet= preprocessor.getSets.getSet(elemSetName).getElements
     for e in elemSet:
       sgPos1= e.getProp("sg_sPos1")
       sgNeg1= e.getProp("sg_sNeg1")
@@ -81,10 +81,10 @@ class FigsCollectionPlotter(object):
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
-    tp.plotFigures(mdlr,figureList,self.latexOutputPath+partName+"_results_verif_fis_freq.tex",self.latexOutputPath+partName+"_results_verif_fis_freq_list_figures.tex")
+    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_results_verif_fis_freq.tex",self.latexOutputPath+partName+"_results_verif_fis_freq_list_figures.tex")
 
 
-  def plotFissurationQP(self,mdlr,partName,elemSetName):
+  def plotFissurationQP(self,preprocessor,partName,elemSetName):
     figureList= []
     eluStr= "FissurationQP"
 
@@ -93,7 +93,7 @@ class FigsCollectionPlotter(object):
     #Load properties to display:
     fName= self.fieldFilesPath + "results_verif_fis_els_qp.py"
     execfile(fName)
-    elemSet= mdlr.getSets.getSet(elemSetName).getElements
+    elemSet= preprocessor.getSets.getSet(elemSetName).getElements
     for e in elemSet:
       sgPos1= e.getProp("sg_sPos1")
       sgNeg1= e.getProp("sg_sNeg1")
@@ -104,11 +104,11 @@ class FigsCollectionPlotter(object):
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
-    tp.plotFigures(mdlr,figureList,self.latexOutputPath+partName+"_results_verif_fis_qp.tex",self.latexOutputPath+partName+"_results_verif_fis_qp_list_figures.tex")
+    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_results_verif_fis_qp.tex",self.latexOutputPath+partName+"_results_verif_fis_qp_list_figures.tex")
 
 
 
-  def plotFatigue(self,mdlr,partName,elemSetName):
+  def plotFatigue(self,preprocessor,partName,elemSetName):
     figureList= []
     eluStr= "Fatigue"
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"inc_sg_s1",txtIncSgS,self.txtArmature1,self.sUnits))
@@ -124,7 +124,7 @@ class FigsCollectionPlotter(object):
     fName= self.fieldFilesPath + "results_verif_fatigue.py"
     execfile(fName)
 
-    elemSet= mdlr.getSets.getSet(elemSetName).getElements
+    elemSet= preprocessor.getSets.getSet(elemSetName).getElements
     for e in elemSet:
       Vy11= e.getProp("Vy11")
       Vy01= e.getProp("Vy01")
@@ -136,4 +136,4 @@ class FigsCollectionPlotter(object):
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
-    tp.plotFigures(mdlr,figureList,self.latexOutputPath+partName+"_results_verif_fatigue.tex",self.latexOutputPath+partName+"_results_verif_fatigue_list_figures.tex")
+    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_results_verif_fatigue.tex",self.latexOutputPath+partName+"_results_verif_fatigue_list_figures.tex")

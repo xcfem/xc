@@ -117,13 +117,13 @@ class XCImportExportData(object):
       self.meshDesc.groups.append(grp)
   def writeToXCFile(self):
     self.outputFile= open(self.xcFileName,"w")
-    strCommand= 'mdlr= ' + self.problemName + '.getModelador'
+    strCommand= 'preprocessor= ' + self.problemName + '.getPreprocessor'
     self.outputFile.write(strCommand+'\n')
-    strCommand= self.nodeLoaderName + '= mdlr.getNodeLoader'
+    strCommand= self.nodeLoaderName + '= preprocessor.getNodeLoader'
     self.outputFile.write(strCommand+'\n')
-    strCommand= self.cellLoaderName + '= mdlr.getElementLoader'
+    strCommand= self.cellLoaderName + '= preprocessor.getElementLoader'
     self.outputFile.write(strCommand+'\n')
-    strCommand= self.setLoaderName + '= mdlr.getSets'
+    strCommand= self.setLoaderName + '= preprocessor.getSets'
     self.outputFile.write(strCommand+'\n')
     self.meshDesc.writeToXCFile(self)
 

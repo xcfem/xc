@@ -9,22 +9,22 @@ import integra_simpson as isimp
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_elasticidad3D(nodos)
 
 # Definimos materiales
-elast= typical_materials.defElasticMaterial(mdlr,"elast",3000)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodos.newSeedNode()
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast"
 seedElemLoader.dimElem= 3
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("truss",xc.ID([0,0]));
 truss.area= 10.0
 
-unifGrids= mdlr.getCad.getUniformGrids
+unifGrids= preprocessor.getCad.getUniformGrids
 uGrid= unifGrids.newUniformGrid()
 
 uGrid.org= geom.Pos3d(3.0,0.0,0.0)
@@ -35,7 +35,7 @@ uGrid.nDivX= 3
 uGrid.nDivY= 0
 uGrid.nDivZ= 0
 
-total= mdlr.getSets.getSet("total")
+total= preprocessor.getSets.getSet("total")
 total.genMesh(xc.meshDir.I)
 
 abscissae= []

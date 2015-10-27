@@ -22,8 +22,8 @@ from materials import typical_materials
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_elasticidad2D(nodos)
 nodos.defaultTag= 1 #First node number.
@@ -32,10 +32,10 @@ nod= nodos.newNodeXY(L,0.0)
 
 
 # Materials definition
-typical_materials.defSteel02(mdlr,"aceroPret",E,fy,0.001,tInic)
+typical_materials.defSteel02(preprocessor, "aceroPret",E,fy,0.001,tInic)
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "aceroPret"
 elementos.dimElem= 2
 elementos.defaultTag= 1 #Tag for the next element.
@@ -44,7 +44,7 @@ truss.area= A
 
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 #
 spc= coacciones.newSPConstraint(1,0,0.0)
@@ -77,7 +77,7 @@ result= analysis.analyze(10)
 
 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 
 elem1= elementos.getElement(1)
 elem1.getResistingForce()

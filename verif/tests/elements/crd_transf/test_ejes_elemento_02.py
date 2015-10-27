@@ -18,24 +18,24 @@ L= 1 # Longitud del elmento expresada en metros.
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0.0,0.0,0.0)
 nod= nodos.newNodeXYZ(L,0.0,0)
 
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
 # Materials definition
 fy= 275e6 # Tensión de cedencia del acero.
 E= 210e9 # Módulo de Young del acero.
-acero= typical_materials.defSteel01(mdlr,"acero",E,fy,0.001)
+acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 # Secciones
-geomCuadFibras= mdlr.getMaterialLoader.newSectionGeometry("geomCuadFibras")
+geomCuadFibras= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibras")
 y1= h/2.0
 z1= b/2.0
 regiones= geomCuadFibras.getRegions
@@ -44,7 +44,7 @@ acero.nDivIJ= nDivIJ
 acero.nDivJK= nDivJK
 acero.pMin= geom.Pos2d(y0-y1,z0-z1)
 acero.pMax= geom.Pos2d(y0+y1,z0+z1)
-cuadFibras= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","cuadFibras")
+cuadFibras= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","cuadFibras")
 fiberSectionRepr= cuadFibras.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomCuadFibras")
 cuadFibras.setupFibers()
@@ -53,7 +53,7 @@ A= fibras.getSumaAreas
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "cuadFibras"
 beam3d= elementos.newElement("force_beam_column_3d",xc.ID([1,2]));

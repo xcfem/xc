@@ -39,8 +39,8 @@ F= 1e3 # Magnitud de la carga en kN
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0,0.0,0.0)
@@ -48,12 +48,12 @@ nod= nodos.newNodeXYZ(0.0+L,0.0,0.0)
 
 # Materials definition
 
-elast= typical_materials.defElasticMaterial(mdlr,"elast",E)
-respT= typical_materials.defElasticMaterial(mdlr,"respT",E) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(mdlr,"respVy",E) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(mdlr,"respVz",E) # Respuesta de la sección a cortante según y.
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",E) # Respuesta de la sección a torsión.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",E) # Respuesta de la sección a cortante según y.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",E) # Respuesta de la sección a cortante según y.
 # Secciones
-geomCuadFibrasTN= mdlr.getMaterialLoader.newSectionGeometry("geomCuadFibrasTN")
+geomCuadFibrasTN= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibrasTN")
 y1= ancho/2.0
 z1= canto/2.0
 regiones= geomCuadFibrasTN.getRegions
@@ -62,7 +62,7 @@ elast.nDivIJ= nDivIJ
 elast.nDivJK= nDivJK
 elast.pMin= geom.Pos2d(y0-y1,z0-z1)
 elast.pMax= geom.Pos2d(y0+y1,z0+z1)
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 cuadFibrasTN= materiales.newMaterial("fiber_section_3d","cuadFibrasTN")
 fiberSectionRepr= cuadFibrasTN.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomCuadFibrasTN")
@@ -73,7 +73,7 @@ sa.setSection("cuadFibrasTN")
 sa.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "sa"
 elementos.dimElem= 1
 elementos.defaultTag= 1
@@ -81,11 +81,11 @@ elementos.defaultTag= 1
 zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -168,7 +168,7 @@ vJ= xc.Vector([0,0,0])
 vK= xc.Vector([0,0,0])
 
 for hip in listaHipotesis:
-  cargas= mdlr.getLoadLoader
+  cargas= preprocessor.getLoadLoader
   cargas.addToDomain(hip)
   ok= solve()
   if(ok==0):
@@ -206,7 +206,7 @@ for hip in listaHipotesis:
       epsilonYPos= scc0.getStrain(1.0,0.0)
     epsMz= scc0.getSectionDeformationByName("defMz")
     cargas.removeFromDomain(hip)
-    dom= mdlr.getDomain
+    dom= preprocessor.getDomain
     dom.revertToStart()
 
 fuerzasEnGlobales= Ntot*vI+QyTot*vJ+QzTot*vK

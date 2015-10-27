@@ -17,8 +17,8 @@ from model import nodalReactions
 from solution import predefined_solutions
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 
 p1= geom.Pos3d(0,0,0)
@@ -37,13 +37,13 @@ p10= geom.Pos3d(p1.x,p1.y,p1.z)
 n10= nodos.newNodeIDXYZ(10,p10.x,p10.y,p10.z)
 
 # Materials definition
-memb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,dens,h)
-elementos= mdlr.getElementLoader
+memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 1)
 fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 2)
 fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 3)
@@ -67,7 +67,7 @@ glue= coacciones.newGlueNodeToElement(n10,elem,xc.ID(gluedDOFs))
 #glue= coacciones.newEqualDOF(n10.tag,1,xc.ID(gluedDOFs))
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 

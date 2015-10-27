@@ -20,8 +20,8 @@ from model import fix_node_6dof
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0,0,0)
@@ -35,9 +35,9 @@ nod= nodos.newNodeXYZ(L,h,0)
 
 
 # Materials definition
-nmb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,0.0,h)
+nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,h)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elementos.defaultTag= 1
 elem= elementos.newElement("corot_shell_mitc4",xc.ID([1,2,6,5]))
@@ -45,7 +45,7 @@ elem= elementos.newElement("corot_shell_mitc4",xc.ID([2,3,7,6]))
 elem= elementos.newElement("corot_shell_mitc4",xc.ID([3,4,8,7]))
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 1)
 spc= coacciones.newSPConstraint(2,2,0.0)
@@ -57,7 +57,7 @@ spc= coacciones.newSPConstraint(7,2,0.0)
 spc= coacciones.newSPConstraint(8,2,0.0)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -79,7 +79,7 @@ result= analisis.analyze(1)
 
 
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod8= nodos.getNode(8)
 UX8= nod8.getDisp[0] # Desplazamiento del nodo 8 según x
 UY8= nod8.getDisp[1] # Desplazamiento del nodo 8 según y

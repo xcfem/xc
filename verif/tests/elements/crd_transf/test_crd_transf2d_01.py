@@ -16,8 +16,8 @@ L= 20 # Longitud de la barra.
 # Problem type
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXY(0,0)
@@ -25,14 +25,14 @@ nod= nodos.newNodeXY(L*math.sqrt(2)/2,L*math.sqrt(2)/2)
 
     
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
 # Materials
-seccion= typical_materials.defElasticSection2d(mdlr,"seccion",1,1,1)
+seccion= typical_materials.defElasticSection2d(preprocessor, "seccion",1,1,1)
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "seccion"
 #  sintaxis: beam2d_02[<tag>] 

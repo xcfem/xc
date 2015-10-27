@@ -28,7 +28,7 @@
 
 #include "MapFields.h"
 #include "xc_utils/src/base/CmdStatus.h"
-#include "modelador/Modelador.h"
+#include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "domain/mesh/element/Element.h"
@@ -61,8 +61,8 @@ XC::MapFields::const_iterator XC::MapFields::buscaField(const std::string &nmb) 
   }
 
 //! @brief Constructor por defecto.
-XC::MapFields::MapFields(Modelador *m)
-  : EntCmd(m), MovableObject(0), mdlr(m) {}
+XC::MapFields::MapFields(Preprocessor *m)
+  : EntCmd(m), MovableObject(0), preprocessor(m) {}
 
 //! @bred Defines a new field
 XC::FieldInfo &XC::MapFields::newField(const std::string &nmb_field)

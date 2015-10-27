@@ -61,8 +61,8 @@ def fiberSectionSetupRCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS):
   return RCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
 
 # Crea conjuntos de fibras en las secciones de los elementos de conjunto cuyo nombre.
-def creaSetsFibrasHA(mdlr, nmbSet, tagHA, tagAcero):
-  st= mdlr.getSets.getSet(nmbSet)
+def creaSetsFibrasHA(preprocessor, nmbSet, tagHA, tagAcero):
+  st= preprocessor.getSets.getSet(nmbSet)
   elements= st.getElements
   for e in elements:
     scc= e.getSection()

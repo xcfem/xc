@@ -9,11 +9,11 @@ from materials import typical_materials
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-elast= typical_materials.defElasticIsotropic3d(mdlr,"elast3d",1e6,0.25,0.0)
+elast= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",1e6,0.25,0.0)
 
-nodos= mdlr.getNodeLoader 
+nodos= preprocessor.getNodeLoader 
 predefined_spaces.gdls_elasticidad3D(nodos)
 nod9= nodos.newNodeIDXYZ(9,0,0,0)
 nod10= nodos.newNodeIDXYZ(10,1,0,0)
@@ -25,12 +25,12 @@ nod15= nodos.newNodeIDXYZ(15,1,1,1)
 nod16= nodos.newNodeIDXYZ(16,0,1,1)
 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast3d"
 elementos.defaultTag= 1 #Tag for the next element.
 brick= elementos.newElement("brick",xc.ID([9,10,11,12,13,14,15,16]));
 
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #Impedimos el movimiento del nodo 1.
 
 nod9.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
@@ -39,7 +39,7 @@ nod11.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod12.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -59,7 +59,7 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader 
+nodos= preprocessor.getNodeLoader 
 R9= nod9.getReaction
 R10= nod10.getReaction
 R11= nod11.getReaction

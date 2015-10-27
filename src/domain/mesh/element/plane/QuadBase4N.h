@@ -31,10 +31,10 @@
 #ifndef QuadBase4N_h
 #define QuadBase4N_h
 
-#include "modelador/cad/matrices/TritrizPtrElem.h"
-#include "modelador/cad/aux_mallado.h"
+#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/cad/aux_mallado.h"
 #include "xc_utils/src/base/CmdStatus.h"
-#include "modelador/loaders/LoadLoader.h"
+#include "preprocessor/loaders/LoadLoader.h"
 #include "domain/load/plane/BidimStrainLoad.h"
 #include "med.h"
 #include "vtkCellType.h"

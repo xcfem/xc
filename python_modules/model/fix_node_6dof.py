@@ -27,7 +27,7 @@ def Nodo6DOFGirosLibresLista(coacciones,tagNodos):
 # # Impone movimiento nulo en todos los desplazamientos del nodo asociado al punto.
 # def Nodo6DOFGirosLibresPunto(coacciones,double idPunto)
 #     tagNod= 
-#     \mdlr
+#     \preprocessor
 #       {
 #         \cad
 #           {

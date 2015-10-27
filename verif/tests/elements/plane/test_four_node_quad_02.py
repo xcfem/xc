@@ -19,8 +19,8 @@ from model import fix_node_6dof
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_elasticidad2D(nodos)
 
@@ -35,9 +35,9 @@ nodos.defaultTag= 8; nodos.newNodeXY(L,h)
 
 
 # Materials definition
-elast2d= typical_materials.defElasticIsotropicPlaneStress(mdlr,"elast2d",E,nu,0.0)
+elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,0.0)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast2d"
 quad1= elementos.newElement("quad4n",xc.ID([1,2,6,5]))
 quad1.thickness= t
@@ -47,7 +47,7 @@ quad3= elementos.newElement("quad4n",xc.ID([3,4,8,7]))
 quad3.thickness= t
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 spc= coacciones.newSPConstraint(1,0,0.0)
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -55,7 +55,7 @@ spc= coacciones.newSPConstraint(5,0,0.0)
 spc= coacciones.newSPConstraint(5,1,0.0)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -76,7 +76,7 @@ analOk= analisis.analyze(1)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
  
 nod1= nodos.getNode(1)
 

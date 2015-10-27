@@ -13,7 +13,7 @@ def getListaCombinaciones(nmbArchDefHipELU):
    nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular. 
   '''
   lstCombRetval= []
-  cargas= mdlr.getLoadLoader
+  cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
   ts= casos.newTimeSeries("constant_ts","ts")
   casos.currentTimeSeries= "ts"
@@ -26,29 +26,29 @@ def getListaCombinaciones(nmbArchDefHipELU):
   os.sys("rm -f "+"/tmp/cargas.xci")
   return lstCombRetval
 
-def xLaminaCalculaComb(mdlr, analysis, trataResultsComb):
+def xLaminaCalculaComb(preprocessor, analysis, trataResultsComb):
   '''
   Lanza el análisis (lineal) y la comprobación en las combinaciones que se pasan como parámetros
   nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
   '''
-  casos= mdlr.getLoadLoader.getLoadPatterns #Una combinación en cada caso de carga. 
+  casos= preprocessor.getLoadLoader.getLoadPatterns #Una combinación en cada caso de carga. 
   for key in casos.getKeys():
     comb= casos[key]
     #print "Resolviendo para acción: ",key
-    resuelve_combinacion.resuelveComb(mdlr,key,analysis,1)
-    trataResultsComb(mdlr,key)
+    resuelve_combinacion.resuelveComb(preprocessor,key,analysis,1)
+    trataResultsComb(preprocessor,key)
 
-def xLaminaCalculaCombEstatLin(mdlr, analysis, trataResultsComb):
+def xLaminaCalculaCombEstatLin(preprocessor, analysis, trataResultsComb):
   '''
   Lanza el análisis (lineal) y la comprobación en las combinaciones que se pasan como parámetros
   nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
   '''
-  casos= mdlr.getLoadLoader.getLoadPatterns #Una combinación en cada caso de carga. 
+  casos= preprocessor.getLoadLoader.getLoadPatterns #Una combinación en cada caso de carga. 
   for key in casos.getKeys():
     comb= casos[key]
     #print "Resolviendo para acción: ",key
-    resuelve_combinacion.resuelveComb(mdlr,key,analysis,1)
-    trataResultsComb(mdlr,key)
+    resuelve_combinacion.resuelveComb(preprocessor,key,analysis,1)
+    trataResultsComb(preprocessor,key)
 
 
 def xLaminaCalculaCombEstatNoLin(nmbArchDefHipELU):

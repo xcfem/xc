@@ -106,12 +106,12 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     visNodos.GetProperty().SetColor(.7, .5, .5)
     self.renderer.AddActor(visNodos)
 
-  def VtkCargaMallaElem(self,mdlr,recordGrid,field):
+  def VtkCargaMallaElem(self,preprocessor,recordGrid,field):
     # Definimos grid
     self.nodos= vtk.vtkPoints()
     recordGrid.uGrid= vtk.vtkUnstructuredGrid()
     recordGrid.uGrid.SetPoints(self.nodos)
-    eSet= mdlr.getSets.getSet(recordGrid.nmbSet)
+    eSet= preprocessor.getSets.getSet(recordGrid.nmbSet)
     eSet.numerate()
     # Scalar values.
     nodeSet= eSet.getNodes
@@ -147,9 +147,9 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       if(c.getVtkCellType!="line2"):
          recordGrid.uGrid.InsertNextCell(c.getVtkCellType,vtx)
 
-  def defineEscenaMalla(self, mdlr,recordGrid,field):
+  def defineEscenaMalla(self, preprocessor,recordGrid,field):
     # Define la escena de la malla en el dispositivo de salida.
-    self.VtkCargaMallaElem(mdlr,recordGrid,field)
+    self.VtkCargaMallaElem(preprocessor,recordGrid,field)
     self.renderer= vtk.vtkRenderer()
     self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
     #self.defineActorNode(recordGrid.uGrid,0.02)
@@ -163,21 +163,21 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     #   vtk_define_malla_nodos.VtkDibujaIdsNodos(recordGrid,self.renderer)
     # else:
     #   print "Entity: ", recordGrid.entToLabel, " unknown."
-  def grafico_mef(self,mdlr,nmbSet):
+  def grafico_mef(self,preprocessor,nmbSet):
     defGrid= vtk_grafico_base.RecordDefGrid()
     defGrid.nmbSet= nmbSet
-    self.muestraMalla(mdlr,defGrid)
+    self.muestraMalla(preprocessor,defGrid)
 
-  def displayScalarField(self, mdlr, nmbSet, field):
+  def displayScalarField(self, preprocessor, nmbSet, field):
     defGrid= vtk_grafico_base.RecordDefGrid()
     defGrid.nmbSet= nmbSet
-    self.defineEscenaMalla(mdlr,defGrid,field)
+    self.defineEscenaMalla(preprocessor,defGrid,field)
     self.muestraEscena()
 
-  def plotScalarField(self, mdlr, nmbSet, field, fName):
+  def plotScalarField(self, preprocessor, nmbSet, field, fName):
     defGrid= vtk_grafico_base.RecordDefGrid()
     defGrid.nmbSet= nmbSet
-    self.defineEscenaMalla(mdlr,defGrid,field)
+    self.defineEscenaMalla(preprocessor,defGrid,field)
     self.plotScene(fName)
 
   def displayNodalLoad(self, nod, color, carga, momento, fEscala):
@@ -192,7 +192,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     if(absMomento>1e-6):
       utilsVtk.dibujaFlechaDoble(self.renderer,color,pos,momento,fEscala*absMomento)
 
-  def displayNodalLoads(self, mdlr, loadPattern, color, fEscala):
+  def displayNodalLoads(self, preprocessor, loadPattern, color, fEscala):
     loadPattern.addToDomain()
     loadPatternName= loadPattern.getProp("dispName")
     lIter= loadPattern.getNodalLoadIter
@@ -200,7 +200,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     while not(load is None):
       actorName= "flecha"+loadPatternName+"%04d".format(load.tag) # Tag carga.
       nodeTag= load.getNodeTag
-      node= mdlr.getNodeLoader.getNode(nodeTag)
+      node= preprocessor.getNodeLoader.getNode(nodeTag)
       carga= load.getForce
       momento= load.getMoment
       self.displayNodalLoad(node, color,carga,momento,fEscala)    
@@ -208,23 +208,23 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     loadPattern.removeFromDomain()
 
 
-  def displayElementPunctualLoad(self, mdlr, pLoad,loadPattern, renderer, color, carga, fEscala):
+  def displayElementPunctualLoad(self, preprocessor, pLoad,loadPattern, renderer, color, carga, fEscala):
     xCarga= pLoad.getElems()
     eleTags= pLoad.elementTags
     loadPatternName= loadPattern.getProp("dispName")
     actorName= "flechaP"+loadPatternName+"%04d".format(tag) # Tag carga.
     for tag in eleTags:
-      ele= mdlr.getElementLoader.getElement(tag)
+      ele= preprocessor.getElementLoader.getElement(tag)
       actorName+= "%04d".format(tag) # Tag elemento.
       pos= ele.punto(xCarga)
       utilsVtk.dibujaFlecha(self.renderer,color,pos,carga,fEscala)()
 
-  def displayElementUniformLoad(self, mdlr, unifLoad,loadPattern, color, carga, fEscala):
+  def displayElementUniformLoad(self, preprocessor, unifLoad,loadPattern, color, carga, fEscala):
     loadPatternName= loadPattern.getProp("dispName")
     actorName= "flechaU"+loadPatternName+"%04d".format(unifLoad.tag) # Tag carga.
     eleTags= unifLoad.elementTags
     for tag in eleTags:
-      ele= mdlr.getElementLoader.getElement(tag)
+      ele= preprocessor.getElementLoader.getElement(tag)
       actorName+= "%04d".format(tag) # Tag elemento.
       print "displayElementUniformLoad not implemented."
       # puntos= ele.getPoints(3,1,1,True)
@@ -235,7 +235,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       #     utilsVtk.dibujaFlecha(self.renderer,color,pos,carga,fEscala*carga.Norm())
       #     i+= 1
 
-  def displayElementalLoads(self, mdlr,loadPattern, color, fEscala):
+  def displayElementalLoads(self, preprocessor,loadPattern, color, fEscala):
     loadPattern.addToDomain()
     eleLoadIter= loadPattern.getElementalLoadIter
     eleLoad= eleLoadIter.next()
@@ -244,13 +244,13 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     #   carga= eleLoad.getGlobalForces()
     #   categoria= eleLoad.category
     #   if(categoria=="uniforme"):
-    #     self.displayElementUniformLoad(mdlr,eleLoad,loadPattern,color,carga,fEscala)
+    #     self.displayElementUniformLoad(preprocessor, eleLoad,loadPattern,color,carga,fEscala)
     #   else:
-    #     self.displayElementPunctualLoad(mdlr,eleLoad,loadPattern,color,carga,fEscala)
+    #     self.displayElementPunctualLoad(preprocessor, eleLoad,loadPattern,color,carga,fEscala)
     # loadPattern.removeFromDomain()
 
-  def displayLoads(self, mdlr, loadPattern):
+  def displayLoads(self, preprocessor, loadPattern):
     clrVectores= loadPattern.getProp("color")
     fEscalaVectores= loadPattern.getProp("scale")
-    self.displayElementalLoads(mdlr, loadPattern,clrVectores,fEscalaVectores)
-    self.displayNodalLoads(mdlr, loadPattern,clrVectores,fEscalaVectores)
+    self.displayElementalLoads(preprocessor, loadPattern,clrVectores,fEscalaVectores)
+    self.displayNodalLoads(preprocessor, loadPattern,clrVectores,fEscalaVectores)

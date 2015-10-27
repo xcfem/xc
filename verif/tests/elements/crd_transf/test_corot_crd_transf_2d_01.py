@@ -11,21 +11,21 @@ from materials import typical_materials
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXY(0,0)
 nod= nodos.newNodeXY(5,5)
 
 # Definimos transformaciones geométricas
-lin= mdlr.getTransfCooLoader.newCorotCrdTransf2d("lin")
+lin= preprocessor.getTransfCooLoader.newCorotCrdTransf2d("lin")
 
 # Materials
-seccion= typical_materials.defElasticSection2d(mdlr,"seccion",1,1,1)
+seccion= typical_materials.defElasticSection2d(preprocessor, "seccion",1,1,1)
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin" # Transformación de coordenadas para los nuevos elementos
 elementos.defaultMaterial= "seccion"
 elementos.defaultTag= 1 #Tag for next element.

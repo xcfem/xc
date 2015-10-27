@@ -29,11 +29,11 @@ e= 0.002 # Espesor neto del neopreno (sin chapas).
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-neop= apoyosNeopreno.defineMaterialesNeopreno(mdlr,G,a,b,e,"neopX","neopY","neopZ","neopTHX","neopTHY","neopTHZ")
+neop= apoyosNeopreno.defineMaterialesNeopreno(preprocessor, G,a,b,e,"neopX","neopY","neopZ","neopTHX","neopTHY","neopTHZ")
 
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 KX= materiales.getMaterial("neopX").E
 KY= materiales.getMaterial("neopY").E
 KZ= materiales.getMaterial("neopZ").E
@@ -41,7 +41,7 @@ KTHX= materiales.getMaterial("neopTHX").E
 KTHY= materiales.getMaterial("neopTHY").E
 KTHZ= materiales.getMaterial("neopTHZ").E
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
@@ -50,14 +50,14 @@ nod= nodos.newNodeXYZ(1,1,1)
 
 
 
-define_apoyos.colocaApoyoEntreNodos(mdlr,1,2,1,"neopX","neopY","neopZ","neopTHX","neopTHY","neopTHZ")
+define_apoyos.colocaApoyoEntreNodos(preprocessor, 1,2,1,"neopX","neopY","neopZ","neopTHX","neopTHY","neopTHZ")
 
 ''' Se definen nodos en los puntos de aplicación de
     la carga. Puesto que no se van a determinar tensiones
     se emplea una sección arbitraria de área unidad '''
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -68,7 +68,7 @@ spc= coacciones.newSPConstraint(1,5,0.0)
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -86,7 +86,7 @@ result= analisis.analyze(1)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod2= nodos.getNode(2)
 deltax= nod2.getDisp[0]
 deltay= nod2.getDisp[1]
@@ -97,7 +97,7 @@ RY= nod1.getReaction[1]
 RZ= nod1.getReaction[2] 
 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 zl= elementos.getElement(1)
 
 ''' 

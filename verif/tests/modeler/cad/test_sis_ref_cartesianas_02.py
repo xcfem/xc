@@ -7,9 +7,9 @@ import math
 import os
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt1= puntos.newPntIDPos3d(1,geom.Pos3d(1.0,1.0,0.0))
 pt2= puntos.newPntIDPos3d(2,geom.Pos3d(2,2,0))
 pt3= puntos.newPntIDPos3d(3,geom.Pos3d(0,1,0))

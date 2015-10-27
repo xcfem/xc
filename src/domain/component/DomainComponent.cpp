@@ -61,7 +61,7 @@
 
 #include <domain/component/DomainComponent.h>
 #include <domain/domain/Domain.h>
-#include "modelador/Modelador.h"
+#include "preprocessor/Preprocessor.h"
 #include "boost/any.hpp"
 #include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
@@ -86,11 +86,11 @@ bool XC::DomainComponent::procesa_comando(CmdStatus &status)
         theDomain->LeeCmd(status);
         return true;
       }
-    if(cmd=="mdlr")
+    if(cmd=="preprocessor")
       {
-        Modelador *mdlr= GetModelador();
-        if(mdlr)
-          mdlr->LeeCmd(status);
+        Preprocessor *preprocessor= GetPreprocessor();
+        if(preprocessor)
+          preprocessor->LeeCmd(status);
         else
 	  std::cerr << "msg_proc_cmd" << " puntero a modelador nulo." << std::endl;
         return true;
@@ -125,31 +125,31 @@ any_const_ptr XC::DomainComponent::GetProp(const std::string &cod) const
       std::clog << "DomainComponent::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
     if(cod=="idx" || cod=="indice")
       return any_const_ptr(getIdx());
-    else if(cod=="mdlr")
+    else if(cod=="preprocessor")
       {
-        static const Modelador *mdlr;
-        mdlr= GetModelador();
-        return any_const_ptr(mdlr);
+        static const Preprocessor *preprocessor;
+        preprocessor= GetPreprocessor();
+        return any_const_ptr(preprocessor);
       }
     else
       return TaggedObject::GetProp(cod);
   }
 
 //! @brief Devuelve (si puede) un puntero al modelador.
-const XC::Modelador *XC::DomainComponent::GetModelador(void) const
+const XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void) const
   {
-    const Modelador *retval= nullptr;
+    const Preprocessor *retval= nullptr;
     if(theDomain)
-      retval= theDomain->GetModelador();
+      retval= theDomain->GetPreprocessor();
     return retval;
   }
 
 //! @brief Devuelve (si puede) un puntero al modelador.
-XC::Modelador *XC::DomainComponent::GetModelador(void)
+XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void)
   {
-    Modelador *retval= nullptr;
+    Preprocessor *retval= nullptr;
     if(theDomain)
-      retval= theDomain->GetModelador();
+      retval= theDomain->GetPreprocessor();
     return retval;
   }
 

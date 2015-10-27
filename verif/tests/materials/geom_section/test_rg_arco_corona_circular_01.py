@@ -16,10 +16,10 @@ n1= 1
 n2= 1
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-elast= typical_materials.defElasticMaterial(mdlr,"elast",1.0)
-geomPrueba= mdlr.getMaterialLoader.newSectionGeometry("geomPrueba")
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",1.0)
+geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
 regiones= geomPrueba.getRegions
 elast= regiones.newCircularRegion("elast")
 elast.nDivRad= n1

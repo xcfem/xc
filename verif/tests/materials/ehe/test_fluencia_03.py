@@ -41,8 +41,8 @@ from solution import database_helper as dbHelper
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0,0,0)
@@ -61,11 +61,11 @@ nod= nodos.newNodeXYZ(3,2,0)
 
 # Materials definition
 
-hLosa= typical_materials.defElasticMembranePlateSection(mdlr,"hLosa",Ec,nuC,densLosa,hLosa)
+hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec,nuC,densLosa,hLosa)
 
-typical_materials.defSteel02(mdlr,"aceroPret",Ep,fy,0.001,tInic)
+typical_materials.defSteel02(preprocessor, "aceroPret",Ep,fy,0.001,tInic)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 # Losa de hormigón
 elementos.defaultMaterial= "hLosa"
 elementos.defaultTag= 1
@@ -100,14 +100,14 @@ truss= elementos.newElement("truss",xc.ID([11,12]));
 truss.area= Ap
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.fixNode6DOF(coacciones,5)
 fix_node_6dof.fixNode6DOF(coacciones,9)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -179,8 +179,8 @@ analysis= predefined_solutions.penalty_newton_raphson(prueba)
 from solution import database_helper
 
 
-def resuelveCombEstatLin(mdlr,comb,tagSaveFase0,dbHelp):
-  mdlr.resetLoadCase()
+def resuelveCombEstatLin(preprocessor, comb,tagSaveFase0,dbHelp):
+  preprocessor.resetLoadCase()
   db.restore(tagSaveFase0)
 
   dbHelp.helpSolve(comb)
@@ -204,10 +204,10 @@ dXMax=-1e9
 dYMin=1e9
 dYMax=-1e9
 
-def trataResultsComb(mdlr, comb):
+def trataResultsComb(preprocessor,  comb):
   tagComb= comb.tag
   nmbComb= comb.getName
-  nodos= mdlr.getNodeLoader
+  nodos= preprocessor.getNodeLoader
   nod8= nodos.getNode(8)
   global deltaX
   deltaX= nod8.getDisp[0]
@@ -242,8 +242,8 @@ tagSaveFase0= -1
 
 
 # Deformaciones de retracción.
-setTotal= mdlr.getSets["total"]
-setShells= mdlr.getSets.defSet("shells")
+setTotal= preprocessor.getSets["total"]
+setShells= preprocessor.getSets.defSet("shells")
 for e in setTotal.getElements:
   if(e.getDimension==2):
     setShells.getElements.append(e)
@@ -257,7 +257,7 @@ for e in setShells.getElements:
   espMedio= 2*Ac/u
   e.setProp("epsRetracc",retraccion_fluencia.getDeformacionRetraccion(fckHA30,tFin,tS,Hrel,u,Ac,velCemento))
 
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #casos.setCurrentLoadPattern("RETRACC")
 
@@ -275,7 +275,7 @@ for e in setShells.getElements:
   eleLoad.setStrainComp(3,1,epsRetracc)
 
 
-mdlr.resetLoadCase()
+preprocessor.resetLoadCase()
 
 comb= combs.newLoadCombination("FASE0","1.00*RETRACC")
 tagSaveFase0= comb.tag*100
@@ -296,7 +296,7 @@ for e in setShells.getElements:
   epsFluencia2= retraccion_fluencia.getDeformacionFluencia(fckHA30,t0,0.25,fi1,tension2Media)
 
 
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #cargas.setCurrentLoadPattern("FLU")
 for e in setShells.getElements:
@@ -311,8 +311,8 @@ for e in setShells.getElements:
   eleLoad.setStrainComp(2,1,epsFluencia2)
   eleLoad.setStrainComp(3,1,epsFluencia2)
 
-mdlr.resetLoadCase()
-cargas= mdlr.getLoadLoader
+preprocessor.resetLoadCase()
+cargas= preprocessor.getLoadLoader
 
 comb= combs.newLoadCombination("FASE0","1.00*FLU")
 comb.tagSaveFase0= comb.tag*100
@@ -331,8 +331,8 @@ tagPrevia= 0
 tagSave= 0
 for key in combs.getKeys():
   comb= combs[key]
-  resuelveCombEstatLin(mdlr,comb,tagSaveFase0,helper)
-  trataResultsComb(mdlr,comb)
+  resuelveCombEstatLin(preprocessor, comb,tagSaveFase0,helper)
+  trataResultsComb(preprocessor, comb)
 
 # 2015.07.06 Values changed when zeroed initial strains in revertToStart
 dXMaxTeor= 0.115734009591e-3 #-1.04244692895e-3

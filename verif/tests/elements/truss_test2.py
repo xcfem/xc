@@ -21,8 +21,8 @@ a= 2*l*math.cos(theta) #Distancia entre nodos extremos}
 b= l*math.sin(theta) #Distancia entre nodos extremos}
 
 prb= xc.ProblemaEF()
-mdlr= prb.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prb.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_elasticidad2D(nodos)
@@ -33,12 +33,12 @@ nodos.newNodeXYZ(a/2,-b,0)
 nodos.newNodeXYZ(a,0,0)
 
 # Materials definition
-elast= typical_materials.defElasticMaterial(mdlr,"elast",E)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 elast.E= E
 
 
 # Element definition.
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.dimElem= 2 #Bidimensional space.
 elementos.defaultMaterial= "elast"
 elementos.defaultTag= 1 #Next element number.
@@ -47,7 +47,7 @@ truss.area= A
 truss= elementos.newElement("truss",xc.ID([2,3]))
 truss.area= A
 
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #Zerp movement for node 1.
 spc= coacciones.newSPConstraint(1,0,0.0)
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -55,7 +55,7 @@ spc= coacciones.newSPConstraint(1,1,0.0)
 spc= coacciones.newSPConstraint(3,0,0.0)
 spc= coacciones.newSPConstraint(3,1,0.0)
 
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 #Load case container:
 casos= cargas.getLoadPatterns
 #Load modulation.

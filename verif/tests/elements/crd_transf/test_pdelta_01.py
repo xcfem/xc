@@ -37,23 +37,23 @@ from model import fix_node_3dof
 from materials import typical_materials
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 nodos.newSeedNode()
 
 # Materials definition
-scc= typical_materials.defElasticSection2d(mdlr,"scc",area,Es,Iz)
+scc= typical_materials.defElasticSection2d(preprocessor, "scc",area,Es,Iz)
 
-pd= mdlr.getTransfCooLoader.newPDeltaCrdTransf2d("pd")
+pd= preprocessor.getTransfCooLoader.newPDeltaCrdTransf2d("pd")
 
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultTransformation= "pd"
 seedElemLoader.defaultMaterial= "scc"
 seedElemLoader.defaultTag= 1 #Tag for next element.
 beam2d= seedElemLoader.newElement("elastic_beam_2d",xc.ID([0,0]))
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt1= puntos.newPntIDPos3d(1, geom.Pos3d(0.0,0.0,0) )
 pt2= puntos.newPntIDPos3d(2, geom.Pos3d(0.0,H,0) )
 pt3= puntos.newPntIDPos3d(3, geom.Pos3d(B,0.0,0) )
@@ -63,7 +63,7 @@ pt6= puntos.newPntIDPos3d(6, geom.Pos3d(offset,H,0) )
 pt7= puntos.newPntIDPos3d(7, geom.Pos3d(offset+B,0.0,0) )
 pt8= puntos.newPntIDPos3d(8, geom.Pos3d(offset+B,H,0) )
 
-lineas= mdlr.getCad.getLines
+lineas= preprocessor.getCad.getLines
 l= lineas.newLine(1,2)
 l.nDiv= nDivLineas
 l= lineas.newLine(2,4)
@@ -77,10 +77,10 @@ l.nDiv= nDivLineas*2
 l= lineas.newLine(8,7)
 l.nDiv= nDivLineas
 
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 pt1.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
 pt3.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
 pt5.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
@@ -116,7 +116,7 @@ tagElem6= mesh.getNearestElement(geom.Pos3d(offset+B,H/(10*nDivLineas),0.0)).tag
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -173,14 +173,14 @@ M52Teor= -6153.0 # Valor teórico del momento frontal en elemento 5
 ratioM52= 0.0
 
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
 theta2= nodos.getNode(tagNodo2).getDisp[2]
 delta6= nodos.getNode(tagNodo6).getDisp[0]
 theta6= nodos.getNode(tagNodo6).getDisp[2]
 theta8= nodos.getNode(tagNodo8).getDisp[2]
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 eletagElem1= elementos.getElement(tagElem1)
 eletagElem1.getResistingForce()
 Q= eletagElem1.getV1

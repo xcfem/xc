@@ -32,8 +32,8 @@ L= 1 # Bar length (m)
 F= 1e3 # Magnitud de la carga en kN
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
@@ -41,27 +41,27 @@ nod= nodos.newNodeXYZ(0,0.0,0.0)
 nod= nodos.newNodeXYZ(L,0.0,0.0)
 
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 lin.rotate(math.radians(90))
 
 # Materials definition
-scc= typical_materials.defElasticSection3d(mdlr,"scc",A,E,G,Iz,Iy,J)
+scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "scc"
 elementos.defaultTag= 1 #Tag for next element.
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -76,11 +76,11 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos= mdlr.getNodeLoader 
+nodos= preprocessor.getNodeLoader 
 nod2= nodos.getNode(2)
 delta= nod2.getDisp[2]  # Desplazamiento del nodo 2 según z
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elem1= elementos.getElement(1)
 elem1.getResistingForce()
 M= elem1.getMy1

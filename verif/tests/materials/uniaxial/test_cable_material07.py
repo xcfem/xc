@@ -20,8 +20,8 @@ fPretA= fPret/2 # Magnitud de la fuerza de tesado parcial
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 # Problem type
 predefined_spaces.gdls_elasticidad2D(nodos)
 
@@ -31,7 +31,7 @@ nod= nodos.newNodeXY(0,0)
 nod= nodos.newNodeXY(l,0.0)
 
 # Materials definition
-mat= typical_materials.defCableMaterial(mdlr,"cable",E,sigmaPretA,0.0)
+mat= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPretA,0.0)
 
     
 ''' Se definen nodos en los puntos de aplicación de
@@ -39,7 +39,7 @@ la carga. Puesto que no se van a determinar tensiones
 se emplea una sección arbitraria de área unidad '''
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "cable"
 elementos.dimElem= 2
 #  sintaxis: truss[<tag>] 
@@ -48,7 +48,7 @@ truss= elementos.newElement("truss",xc.ID([1,2]));
 truss.area= area
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -64,7 +64,7 @@ result= analisis.analyze(1)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 R1A= nodos.getNode(2).getReaction[0] 
 R2A= nodos.getNode(1).getReaction[0] 
 
@@ -74,7 +74,7 @@ R2A= nodos.getNode(1).getReaction[0]
 ratio1A= ((R1A-fPretA)/fPretA)
 ratio2A= ((R2A+fPretA)/fPretA)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elem1= elementos.getElement(1)
 elem1.getMaterial().prestress= sigmaPret
 #            \material{\prestress{sigmaPret}}

@@ -24,14 +24,14 @@ areaFi20= 3.14e-4 # Área de las barras expresado en metros cuadrados.
 
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Definimos materiales
-tagHA25= hormigonesEHE.HA25.defDiagD(mdlr)
-Ec= hormigonesEHE.HA25.getDiagD(mdlr).getTangent
-tagB500S= EHE_reinforcing_steel.B500S.defDiagD(mdlr)
-Es= EHE_reinforcing_steel.B500S.getDiagD(mdlr).getTangent
+tagHA25= hormigonesEHE.HA25.defDiagD(preprocessor)
+Ec= hormigonesEHE.HA25.getDiagD(preprocessor).getTangent
+tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
+Es= EHE_reinforcing_steel.B500S.getDiagD(preprocessor).getTangent
 
-geomSecHA= mdlr.getMaterialLoader.newSectionGeometry("geomSecHA")
+geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
 hormigon= regiones.newQuadRegion(hormigonesEHE.HA25.nmbDiagD)
 hormigon.nDivIJ= 10
@@ -62,7 +62,7 @@ armaduraSup.barArea= areaFi20
 armaduraSup.p1= geom.Pos2d(canto/2.0-recub,ancho/2.0-recub) # Armadura superior.
 armaduraSup.p2= geom.Pos2d(canto/2.0-recub,recub-ancho/2.0)
 
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHA")

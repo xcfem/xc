@@ -8,9 +8,9 @@ import os
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt1= puntos.newPntIDPos3d(1,geom.Pos3d(1.0,1.0,0.0))
 pt2= puntos.newPntIDPos3d(2,geom.Pos3d(2,2,0))
 pt3= puntos.newPntIDPos3d(3,geom.Pos3d(0,1,0))
@@ -19,7 +19,7 @@ rs= geom.Ref3d3d(pt1.getPos,pt2.getPos,pt3.getPos)
 
 p= rs.getPosGlobal(geom.Pos3d(7, 0, 0))
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nodos.defaultTag= 1 #First node number.
 nod1= nodos.newNodeXYZ(p.x,p.y,p.z)
 coord= nod1.getCoo

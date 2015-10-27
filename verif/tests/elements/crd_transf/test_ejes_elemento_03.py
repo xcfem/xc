@@ -22,8 +22,8 @@ F= 1.0e3 # Magnitud de la carga en kN
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0.0,0.0,0.0)
@@ -34,14 +34,14 @@ caracMecSeccion= xc.ConstantesSecc3d()
 caracMecSeccion.A= A; caracMecSeccion.E= E; caracMecSeccion.G= G;
 caracMecSeccion.Iz= Iz; caracMecSeccion.Iy= Iy; caracMecSeccion.J= J
 caracMecSeccion.gira(math.radians(90))
-seccion= typical_materials.defElasticSectionFromMechProp3d(mdlr,"seccion",caracMecSeccion)
+seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",caracMecSeccion)
 
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "seccion"
 elementos.defaultTag= 1 #Tag for the next element.
@@ -58,12 +58,12 @@ ratio2= ((fuerte[0])**2+(fuerte[1])**2)
 
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -81,7 +81,7 @@ result= analisis.analyze(1)
 deltaYTeor= (-F*L**3/(3*E*Iz))
 deltaZTeor= (F*L**3/(3*E*Iy))
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
 nod2= nodos.getNode(2)
 deltaY= nod2.getDisp[1]

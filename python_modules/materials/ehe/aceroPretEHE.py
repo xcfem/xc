@@ -38,22 +38,22 @@ class AceroPretEHE(object):
     return self.fpk/self.gammaS
   def tInic(self):
     return 0.75**2*self.fmax # Pretensado final (incial al 75 por ciento y 25 por ciento de pérdidas totales).
-  def defDiagK(self,mdlr,initialStress):
+  def defDiagK(self,preprocessor,initialStress):
     # Diagrama tensión-deformación característico.
-    acero= typical_materials.defSteel02(mdlr,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
+    acero= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
     self.tagDiagK= acero.tag
     return self.tagDiagK
 
-  def defDiagD(self,mdlr,initialStress):
+  def defDiagD(self,preprocessor,initialStress):
     # Diagrama tensión-deformación de cálculo.
-    acero= typical_materials.defSteel02(mdlr,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
+    acero= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
     self.tagDiagD= acero.tag
     return self.tagDiagD
 
-  def getDiagK(self,mdlr):
-    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagK)
-  def getDiagD(self,mdlr):
-    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagD)
+  def getDiagK(self,preprocessor):
+    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagK)
+  def getDiagD(self,preprocessor):
+    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagD)
 
  
 Y1860S7= AceroPretEHE("Y1860S7",fpk= 1171e6,fmax= 1860e6)

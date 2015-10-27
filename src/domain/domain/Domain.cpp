@@ -99,7 +99,7 @@
 #include "utility/database/FE_Datastore.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 
-#include "modelador/Modelador.h"
+#include "preprocessor/Preprocessor.h"
 
 #include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
@@ -1153,22 +1153,22 @@ int XC::Domain::calculateNodalReactions(bool inclInertia,const double &tol)
   }
 
 //! @brief Devuelve (si puede) un puntero al modelador.
-const XC::Modelador *XC::Domain::GetModelador(void) const
+const XC::Preprocessor *XC::Domain::GetPreprocessor(void) const
   {
-    const Modelador *retval= nullptr;
+    const Preprocessor *retval= nullptr;
     const EntProp *owr= Owner();
     if(owr)
-      retval= dynamic_cast<const Modelador *>(owr);
+      retval= dynamic_cast<const Preprocessor *>(owr);
     return retval;
   }
 
 //! @brief Devuelve (si puede) un puntero al modelador.
-XC::Modelador *XC::Domain::GetModelador(void)
+XC::Preprocessor *XC::Domain::GetPreprocessor(void)
   {
-    Modelador *retval= nullptr;
+    Preprocessor *retval= nullptr;
     EntProp *owr= Owner();
     if(owr)
-      retval= dynamic_cast<Modelador *>(owr);
+      retval= dynamic_cast<Preprocessor *>(owr);
     return retval;
   }
 

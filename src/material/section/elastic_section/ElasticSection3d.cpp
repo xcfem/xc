@@ -60,7 +60,7 @@
 // for the XC::ElasticSection3d class.
 
 #include "material/section/elastic_section/ElasticSection3d.h"
-#include "modelador/loaders/MaterialLoader.h"
+#include "preprocessor/loaders/MaterialLoader.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include "xc_utils/src/base/CmdStatus.h"

@@ -62,14 +62,14 @@ def writeShearReinforcement(recordArmaduraCortante, archTex, ancho):
 
 class SectionInfo(object):
   ''' Obtains section parameters for report'''
-  def __init__(self,mdlr,section):
+  def __init__(self,preprocessor,section):
     self.scc= section
     self.sectionGeometryName= self.scc.nmbGeomSeccion()
-    self.geomSection= mdlr.getMaterialLoader.getSectionGeometry(self.sectionGeometryName)
+    self.geomSection= preprocessor.getMaterialLoader.getSectionGeometry(self.sectionGeometryName)
     self.EHorm= self.scc.tipoHormigon.Ecm()
     self.EAcero= self.scc.tipoArmadura.Es
-    self.tangHorm= self.scc.getConcreteDiagram(mdlr).getTangent()
-    self.tangSteel= self.scc.getSteelDiagram(mdlr).getTangent()
+    self.tangHorm= self.scc.getConcreteDiagram(preprocessor).getTangent()
+    self.tangSteel= self.scc.getSteelDiagram(preprocessor).getTangent()
     self.regions= self.geomSection.getRegions
     self.GB= self.geomSection.getCdgSeccBruta() # Centro de gravedad de la sección bruta.
     self.AB= self.geomSection.getAreaSeccBruta() # Área de la sección bruta.

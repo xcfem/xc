@@ -27,7 +27,7 @@
 //GrupoCombinaciones.cc
 
 #include "GrupoCombinaciones.h"
-#include "modelador/loaders/LoadLoader.h"
+#include "preprocessor/loaders/LoadLoader.h"
 #include "xc_utils/src/base/CmdStatus.h"
 
 #include "domain/load/pattern/Combinacion.h"

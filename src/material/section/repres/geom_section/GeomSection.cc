@@ -33,7 +33,7 @@
 #include <material/section/repres/geom_section/Spot.h>
 #include <material/section/repres/geom_section/Segment.h>
 
-#include "modelador/loaders/MaterialLoader.h"
+#include "preprocessor/loaders/MaterialLoader.h"
 #include "material/section/repres/ConstantesSecc3d.h"
 #include "material/section/repres/ConstantesSecc2d.h"
 

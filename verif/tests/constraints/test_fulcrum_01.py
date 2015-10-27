@@ -20,8 +20,8 @@ F= 1.5e3 # Magnitud de la carga en kN
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_elasticidad3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0,0.0,0.0)
@@ -29,13 +29,13 @@ nod= nodos.newNodeXYZ(L,0.0,0.0)
 
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 1)
-fulcrum= rigid_beam.creaFulcrumNodos3d(mdlr,1,2)
+fulcrum= rigid_beam.creaFulcrumNodos3d(preprocessor, 1,2)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 #Load modulation.

@@ -9,7 +9,7 @@ import os
 from postprocess.reports import common_formats as fmt
 
 
-def lanzaCalculoFatigueFromXCDataPlanB(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,trataResultsComb):
+def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,trataResultsComb):
   '''
    Lanza la comprobación de fisuración en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -18,27 +18,27 @@ def lanzaCalculoFatigueFromXCDataPlanB(mdlr,analysis,nmbArchCsv,nmbArchSalida, m
       e imprime los resultados en archivos con
       el nombre nmbArchFis.*
   '''
-  elems= ec.extraeDatos(mdlr,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  elems= ec.extraeDatos(preprocessor,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   fcSIA.defVarsControl(elems)
-  calculo_comb.xLaminaCalculaComb(mdlr,analysis,trataResultsComb)
-  xLaminaPrintFatigueSIA262(mdlr,nmbArchSalida,mapSectionsForEveryElement)
+  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,trataResultsComb)
+  xLaminaPrintFatigueSIA262(preprocessor,nmbArchSalida,mapSectionsForEveryElement)
 
 def strElementProp(eTag,nmbProp,vProp):
-  retval= "mdlr.getElementLoader.getElement("
+  retval= "preprocessor.getElementLoader.getElement("
   retval+= str(eTag)
   retval+= ").setProp("
   retval+= '"' + nmbProp + '"'
   retval+= ',' + str(vProp) + ")\n"
   return retval
 
-def xLaminaPrintFatigueSIA262(mdlr,nmbArchSalida, mapSections):
+def xLaminaPrintFatigueSIA262(preprocessor,nmbArchSalida, mapSections):
   # Imprime los resultados de la comprobación frente a fisuración
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
   xcOutput= open(nmbArchSalida+".py","w")
   #printCabeceraListadoFisuracion("texOutput1","1 ("+ nmbSeccion1 +")")
   #printCabeceraListadoFisuracion("texOutput2","2 ("+ nmbSeccion2 +")")
-  elementos= mdlr.getSets.getSet("total").getElements
+  elementos= preprocessor.getSets.getSet("total").getElements
   strHeader0= "eTag & idSection & N0 kN & My0 kN m/m & Mz0 kN m/m & Vy0 kN m/m & Vz0 kN m/m & $sg_{s,0} MPa & $sg_{c,0} MPa \\\\\n"
   strHeader1= "     &           & N1 kN & My1 kN m/m & Mz1 kN m/m & Vy1 kN m/m & Vz1 kN m/m & $sg_{s,1} MPa & $sg_{c,1} MPa \\\\\n"
   texOutput1.write(strHeader0)

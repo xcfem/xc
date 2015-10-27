@@ -13,11 +13,11 @@ Ec= Es/n
 lado= 1.0
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-hormigon= typical_materials.defElasticMaterial(mdlr,"hormigon",Ec)
+hormigon= typical_materials.defElasticMaterial(preprocessor, "hormigon",Ec)
 
-geomPrueba= mdlr.getMaterialLoader.newSectionGeometry("geomPrueba")
+geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
 regiones= geomPrueba.getRegions
 hormigon= regiones.newQuadRegion("hormigon")
 hormigon.pMin= geom.Pos2d(0.0,0.0)

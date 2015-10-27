@@ -23,8 +23,8 @@ L= 1.5 # Bar length (m)
 F= 1.5e3 # Magnitud de la carga en N
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
@@ -32,14 +32,14 @@ nod= nodos.newNodeXYZ(0,0.0,0.0)
 nod= nodos.newNodeXYZ(L,0.0,0.0)
 
 
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
 # Materials definition
 fy= 275e6 # Tensión de cedencia del acero
 E= 210e9 # Módulo de Young del acero.
-acero= typical_materials.defSteel01(mdlr,"acero",E,fy,0.001)
+acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 import os
 pth= os.path.dirname(__file__)
@@ -47,7 +47,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 execfile(pth+"/geomCuadFibrasTN.py")
-cuadFibrasTN= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","cuadFibrasTN")
+cuadFibrasTN= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","cuadFibrasTN")
 fiberSectionRepr= cuadFibrasTN.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomCuadFibrasTN")
 cuadFibrasTN.setupFibers()
@@ -57,17 +57,17 @@ A= fibras.getSumaAreas(1.0)
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "cuadFibrasTN"
 beam3d= elementos.newElement("force_beam_column_3d",xc.ID([1,2]));
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -81,11 +81,11 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_modified_newton(prueba)
 result= analisis.analyze(10)
 
-nodos= mdlr.getNodeLoader 
+nodos= preprocessor.getNodeLoader 
 nod2= nodos.getNode(2)
 delta= nod2.getDisp[0]  # Desplazamiento del nodo 2 según x
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 
 elem1= elementos.getElement(0)
 elem1.getResistingForce()

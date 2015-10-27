@@ -71,7 +71,7 @@
 namespace XC {
 class Element;
 class Node;
-class Modelador;
+class Preprocessor;
 
 class ElementIter;
 class NodeIter;
@@ -261,8 +261,8 @@ class Domain: public ObjWithRecorders, public DistributedBase
     friend int sendDomain(Domain &, int posDbTag,DbTagData &,CommParameters &cp);
     friend int receiveDomain(Domain &, int posDbTag,DbTagData &,const CommParameters &cp);
 
-    const Modelador *GetModelador(void) const;
-    Modelador *GetModelador(void);
+    const Preprocessor *GetPreprocessor(void) const;
+    Preprocessor *GetPreprocessor(void);
 
     // nodal methods required in domain interface for parallel interprter
     virtual double getNodeDisp(int nodeTag, int dof, int &errorFlag);

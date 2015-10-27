@@ -20,8 +20,8 @@ F= 100 # Magnitud del pretensado en libras
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_elasticidad2D(nodos)
@@ -33,14 +33,14 @@ nod= nodos.newNodeXY(l/2,0.0)
 nod= nodos.newNodeXY(l,0.0)
 
 # Materials definition
-mat= typical_materials.defCableMaterial(mdlr,"cable",E,sigmaPret,0.0)
+mat= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     
 ''' Se definen nodos en los puntos de aplicación de
 la carga. Puesto que no se van a determinar tensiones
 se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "cable"
 elementos.dimElem= 2
 elementos.defaultTag= 1 #First node number.
@@ -50,7 +50,7 @@ truss2= elementos.newElement("corot_truss",xc.ID([2,3]));
 truss2.area= area
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
@@ -58,7 +58,7 @@ spc= coacciones.newSPConstraint(3,0,0.0) # Nodo 3
 spc= coacciones.newSPConstraint(3,1,0.0)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -75,7 +75,7 @@ result= analisis.analyze(10)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod3= nodos.getNode(3)
 R1X= nod3.getReaction[0]
 R1Y= nod3.getReaction[1] 

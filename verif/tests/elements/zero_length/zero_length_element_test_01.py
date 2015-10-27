@@ -15,8 +15,8 @@ from materials import typical_materials
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 nodos.dimEspace= 1
 nodos.numGdls= 1
 
@@ -25,14 +25,14 @@ nod= nodos.newNodeXY(1,0)
 nod= nodos.newNodeXY(1.0+l,0)
 
 # Materials definition
-elast= typical_materials.defElasticMaterial(mdlr,"elast",K)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
 
 ''' Se definen nodos en los puntos de aplicación de
     la carga. Puesto que no se van a determinar tensiones
     se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast"
 elementos.dimElem= 1
 elementos.defaultTag= 1
@@ -49,12 +49,12 @@ print "trf[2]: ","getTrf[2,0]"," ","getTrf[2,1]"," ","getTrf[2,2]"
 
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -73,13 +73,13 @@ result= analisis.analyze(1)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod2= nodos.getNode(2)
 deltax= nod2.getDisp[0] 
 nod1= nodos.getNode(1)
 R= nod1.getReaction[0] 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 
 elem1= elementos.getElement(1)
 elem1.getResistingForce()

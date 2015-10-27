@@ -151,11 +151,11 @@ def getKgiroEjeVertical(G, a, b, e):
     return getBetaTorsionNeoprenoRectang(a,b)*G*a*pow(b,3.0)/e
 
 # Define materiales para modelizar neopreno.
-def defineMaterialesNeopreno(mdlr,G, a, b, e, nmbMatKX, nmbMatKY, nmbMatKZ, nmbMatKTHX, nmbMatKTHY, nmbMatKTHZ):
-  matKX= typical_materials.defElasticMaterial(mdlr, nmbMatKX, getKhoriz(G,a,b,e))
-  matKY= typical_materials.defElasticMaterial(mdlr, nmbMatKY, getKhoriz(G,a,b,e))
-  matKZ= typical_materials.defElasticMaterial(mdlr, nmbMatKZ, getKvert(G,a,b,e))
-  matKTHX= typical_materials.defElasticMaterial(mdlr, nmbMatKTHX, getKgiroEjeDintel(G,a,b,e))
-  matKTHY= typical_materials.defElasticMaterial(mdlr, nmbMatKTHY, getKgiroEjeNormalAlDintel(G,a,b,e))
-  matKTHZ= typical_materials.defElasticMaterial(mdlr, nmbMatKTHZ, getKgiroEjeVertical(G,a,b,e))
+def defineMaterialesNeopreno(preprocessor,G, a, b, e, nmbMatKX, nmbMatKY, nmbMatKZ, nmbMatKTHX, nmbMatKTHY, nmbMatKTHZ):
+  matKX= typical_materials.defElasticMaterial(preprocessor, nmbMatKX, getKhoriz(G,a,b,e))
+  matKY= typical_materials.defElasticMaterial(preprocessor, nmbMatKY, getKhoriz(G,a,b,e))
+  matKZ= typical_materials.defElasticMaterial(preprocessor, nmbMatKZ, getKvert(G,a,b,e))
+  matKTHX= typical_materials.defElasticMaterial(preprocessor, nmbMatKTHX, getKgiroEjeDintel(G,a,b,e))
+  matKTHY= typical_materials.defElasticMaterial(preprocessor, nmbMatKTHY, getKgiroEjeNormalAlDintel(G,a,b,e))
+  matKTHZ= typical_materials.defElasticMaterial(preprocessor, nmbMatKTHZ, getKgiroEjeVertical(G,a,b,e))
 

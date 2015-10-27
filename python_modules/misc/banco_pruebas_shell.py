@@ -24,18 +24,18 @@ def nuevosZeroLengthShell(nmbS, tagElem, offset):
   idNod3= idSecc2
   idNod4= idSecc2+1
 
-  nodos= mdlr.getNodeLoader
+  nodos= preprocessor.getNodeLoader
   nod1= nodos.newNodeIDZYZ(idNod1,idNod1,0,0)
   nod2= nodos.newNodeIDZYZ(idNod2,idNod1,0,0)
   nod3= nodos.newNodeIDZYZ(idNod3,0,idNod3,0)
   nod4= nodos.newNodeIDZYZ(idNod4,0,idNod3,0)
 
-  coacciones= mdlr.getConstraintLoader  # Condiciones de contorno
+  coacciones= preprocessor.getConstraintLoader  # Condiciones de contorno
   fijaNodo6GDL(coacciones,idNod1)
   fijaNodo6GDL(coacciones,idNod3)
 
   # Definimos elementos
-  elems= mdlr.getElementLoader
+  elems= preprocessor.getElementLoader
   elems.dimElem= 3 # Tridimensional space.
   elems.defaultMaterial= nmbS
   elems.defaultTag= idSecc1 #Next element number.
@@ -44,16 +44,16 @@ def nuevosZeroLengthShell(nmbS, tagElem, offset):
   zls2= elems.newElement("zero_lenght_section",xc.ID([idNod3,iNod4]))
 
 
-def simulaShellElemFromTable(mdlr,nmbDBase, nmbTablaElem, nmbSeccion, offset):
+def simulaShellElemFromTable(preprocessor,nmbDBase, nmbTablaElem, nmbSeccion, offset):
   '''
   Crea los elementos a partir de la tabla creada anteriormente
      nmbDBase: Nombre de la base de datos donde se guardará la tabla.
      nmbTableElem: Nombre de la tabla que contiene los índices de elemento.
      nmbSeccion: Nombre de la sección que se asigna a cada elemento.
   '''
-  nodos= mdlr.getNodeLoader
+  nodos= preprocessor.getNodeLoader
   prdefined_spaces.gdls_resist_materiales3D(nodos)
-  elements= mdlr.getElementLoader
+  elements= preprocessor.getElementLoader
   elements.dimElem= 1
   elements.defaultMaterial= nmbSeccion
 
@@ -79,7 +79,7 @@ def simulaCargasXYFromTable(nmbQuery, nmbTbEsf, idElem, offset):
   idSecc2= offset+idSecc1
   iNod2= idSecc2+1
 
-  cargas= mdlr.getLoadLoader
+  cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
 
   logging.info("Cargando elemento: ",int(idElem),"\n")

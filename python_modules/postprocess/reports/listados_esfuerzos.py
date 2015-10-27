@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 # Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
-def listaEsfuerzosBarrasSet(mdlr,nmbComb, nmbSet, fmt, fName):
+def listaEsfuerzosBarrasSet(preprocessor,nmbComb, nmbSet, fmt, fName):
   str= "" 
   k= 0
-  s= mdlr.getSetLoader.getSet(nmbSet)
+  s= preprocessor.getSetLoader.getSet(nmbSet)
   elems= s.getElements()
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
@@ -18,14 +18,14 @@ def listaEsfuerzosBarrasSet(mdlr,nmbComb, nmbSet, fmt, fName):
 
 
 # Imprime los esfuerzos de los elementos contenidos en las lineas del conjunto que se pasa como parámetro.
-def listaEsfuerzosBarrasLineas(mdlr, nmbComb, nmbSetLineas, fmt, fName, encab, tit):
+def listaEsfuerzosBarrasLineas(preprocessor, nmbComb, nmbSetLineas, fmt, fName, encab, tit):
   fName.write("\\",encab,"{",tit,"}\n")
   caption= "Barras del conjunto: "+nmbSetLineas
   defCampos= "|l|r|r|r|r|r|r|r|r|"
   idsCampos= "Caso & Id & Secc. & N & Vy & Vz & Mx & My & Mz \\\\\n - & - & - & kN & kN & kN & kN m & kN m & kN m "
   cabeceraSupertabular(fName,9,defCampos,idsCampos,caption) 
 
-  s= mdlr.getSetLoader.getSet(nmbSetLineas)
+  s= preprocessor.getSetLoader.getSet(nmbSetLineas)
   lines= s.getLines()
   for l in lines:
     nmb= l.getName() 
@@ -36,10 +36,10 @@ def listaEsfuerzosBarrasLineas(mdlr, nmbComb, nmbSetLineas, fmt, fName, encab, t
   cierraSupertabular(fName)
 
 # Imprime los esfuerzos y el factor de capacidad de los elementos contenidos en el conjunto que se pasa como parámetro.
-def listaEsfuerzosFCBarrasSet(mdlr, nmbComb, nmbSet, fmt, fName, nmbDiag):
+def listaEsfuerzosFCBarrasSet(preprocessor, nmbComb, nmbSet, fmt, fName, nmbDiag):
   str= "" 
   k= 0
-  s= mdlr.getSetLoader.getSet(nmbSet)
+  s= preprocessor.getSetLoader.getSet(nmbSet)
   elems= s.getElements()
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
@@ -59,7 +59,7 @@ def listaEsfuerzosFCBarrasLineas(nmbComb, nmbSetLineas, fmt, fName, encab, tit, 
   idsCampos= "Caso & Id & Secc. & N & Vy & Vz & Mx & My & Mz & FC \\\\\n - & - & - & kN & kN & kN & kN m & kN m & kN m & - "
   cabeceraSupertabular(fName,10,defCampos,idsCampos,caption) 
 
-  s= mdlr.getSetLoader.getSet(nmbSetLineas)
+  s= preprocessor.getSetLoader.getSet(nmbSetLineas)
   lines= s.getLines()
   for l in lines:
     nmb= l.getName()
@@ -72,7 +72,7 @@ def listaEsfuerzosFCBarrasLineas(nmbComb, nmbSetLineas, fmt, fName, encab, tit, 
 
 # Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
 def listaDatosEsfuerzosTrussSet(nmbComb, nmbSet, fmt, fName):
-  s= mdlr.getSetLoader.getSet(nmbSet)
+  s= preprocessor.getSetLoader.getSet(nmbSet)
   elems= s.getElements()
   for e in elements:
     fName.write(nmbComb," & ",e.tag," & ",fmt.format(e.getStrain()*1e2)," & ",fmt.format(e.getStress()/1e6)," & ",fmt.format(e.getAxil()/1e3),"\\\\\n")
@@ -95,7 +95,7 @@ def listaEsfuerzosTrussLineas(nmbComb, nmbSetLineas, fmt, fName, encab, tit):
   idsCampos= "Caso & Id & $\\epsilon$ & $\\sigma$ & axil \\\\\n - & - & \\% & MPa & kN "
   cabeceraSupertabular(fName,5,defCampos,idsCampos,caption) 
 
-  s= mdlr.getSetLoader.getSet(nmbSetLineas)
+  s= preprocessor.getSetLoader.getSet(nmbSetLineas)
   lines= s.getLines()
   for l in lines:
     nmb= l.getName()
@@ -122,7 +122,7 @@ def listaEsfuerzosZeroLenghtSet(nmbComb, nmbSet, fmt, fName, encab, tit):
   T= 0
   momY= 0
   momZ= 0
-  s= mdlr.getSetLoader.getSet(nmbSet)
+  s= preprocessor.getSetLoader.getSet(nmbSet)
   elems= s.getElements()
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
@@ -140,8 +140,8 @@ def listaEsfuerzosZeroLenghtSet(nmbComb, nmbSet, fmt, fName, encab, tit):
   cierraSupertabular(fName) 
 
 # Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
-def listaEsfuerzosElasticBeam3dSet(mdlr, nmbComb, nmbSet, fmt, fName):
-  s= mdlr.getSetLoader.getSet(nmbSet)
+def listaEsfuerzosElasticBeam3dSet(preprocessor, nmbComb, nmbSet, fmt, fName):
+  s= preprocessor.getSetLoader.getSet(nmbSet)
   elems= s.getElements()
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "

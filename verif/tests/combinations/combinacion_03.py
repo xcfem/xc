@@ -12,10 +12,10 @@ from materials import typical_materials
 
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador  
+preprocessor=  prueba.getPreprocessor  
 
 #Load modulation.
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"

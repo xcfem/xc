@@ -73,8 +73,8 @@
 
 #include <utility/recorder/response/ElementResponse.h>
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "modelador/Modelador.h"
-#include "modelador/loaders/MaterialLoader.h"
+#include "preprocessor/Preprocessor.h"
+#include "preprocessor/loaders/MaterialLoader.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
 // initialise the class wide variables
@@ -116,10 +116,10 @@ XC::ZeroLength::ZeroLength(void)
 
 void XC::ZeroLength::setMaterial(const int &dir,const std::string &nmbMat)
   {
-    Modelador *mdlr= GetModelador();
-    if(mdlr)
+    Preprocessor *preprocessor= GetPreprocessor();
+    if(preprocessor)
       {
-        const MaterialLoader &material_loader= GetModelador()->getMaterialLoader();
+        const MaterialLoader &material_loader= GetPreprocessor()->getMaterialLoader();
         const Material *ptr_mat= material_loader.find_ptr(nmbMat);
         if(ptr_mat)
           {
@@ -148,10 +148,10 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
     if(n!= dirs.size())
     std::cerr << "Error en el número de materiales; número de direcciones: " << dirs.size()
               << " número de materiales: " << n << std::endl;
-    Modelador *mdlr= GetModelador();
-    if(mdlr)
+    Preprocessor *preprocessor= GetPreprocessor();
+    if(preprocessor)
       {
-        const MaterialLoader &material_loader= GetModelador()->getMaterialLoader();
+        const MaterialLoader &material_loader= GetPreprocessor()->getMaterialLoader();
         for(size_t i= 0;i<n;i++)
           {
             const Material *ptr_mat= material_loader.find_ptr(nmbMats[i]);

@@ -3,9 +3,9 @@ import xc_base
 import geom
 import xc
 
-def vectorReacUVW(mdlr,idNodo):
+def vectorReacUVW(preprocessor,idNodo):
   # Reacciones según los ejes XYZ del nodo cuyo código se pasa como parámetro.
-  nod= mdlr.getNodeLoader.getNode(idNodo)
+  nod= preprocessor.getNodeLoader.getNode(idNodo)
   reac= nod.getReaction
   return xc.Vector([reac[0],reac[1],reac[2]])
 

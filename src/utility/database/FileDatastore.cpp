@@ -71,7 +71,7 @@
 
 
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "modelador/Modelador.h"
+#include "preprocessor/Preprocessor.h"
 #include <utility/matrix/ID.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
@@ -101,8 +101,8 @@ void XC::FileDatastore::alloc(const size_t &sz)
       }
   }
 
-XC::FileDatastore::FileDatastore(const std::string &dataBaseName,Modelador &mdlr, FEM_ObjectBroker &theObjBroker)
-  :FE_Datastore(mdlr, theObjBroker), dataBase(dataBaseName), data(nullptr), sizeData(0), currentMaxInt(0), currentMaxDouble(0)
+XC::FileDatastore::FileDatastore(const std::string &dataBaseName,Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker)
+  :FE_Datastore(preprocessor, theObjBroker), dataBase(dataBaseName), data(nullptr), sizeData(0), currentMaxInt(0), currentMaxDouble(0)
   { resizeDouble(1024); }
 
 XC::FileDatastore::~FileDatastore(void)

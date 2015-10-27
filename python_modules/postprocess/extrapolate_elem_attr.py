@@ -34,7 +34,7 @@ def create_attribute_at_nodes(elemSet,attributeName,initialValue):
         nodeTags[tag]+=1
   return nodeTags
 
-def extrapolate_elem_function_attr(mdlr,elemSet,attributeName,function, argument):
+def extrapolate_elem_function_attr(preprocessor,elemSet,attributeName,function, argument):
   nodeTags= create_attribute_at_nodes(elemSet,attributeName,0.0)
   #Calculate totals.
   for e in elemSet:
@@ -48,6 +48,6 @@ def extrapolate_elem_function_attr(mdlr,elemSet,attributeName,function, argument
       n.setProp(attributeName,oldValue+value)
   #Divide by number of elements in the set that touch the node.
   for tag in nodeTags:
-    n= mdlr.getNodeLoader.getNode(tag)
+    n= preprocessor.getNodeLoader.getNode(tag)
     denom= nodeTags[tag]
     n.setProp(attributeName,n.getProp(attributeName)/denom)

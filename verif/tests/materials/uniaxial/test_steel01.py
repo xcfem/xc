@@ -28,8 +28,8 @@ y_modelo= [420,840,1260,1680,2100,2520,2600.34,2600.76,2180.76,1760.76,1340.76,9
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_elasticidad2D(nodos)
@@ -40,28 +40,28 @@ nod= nodos.newNodeXY(0,0)
 nod= nodos.newNodeXY(l,0.0)
 
 # Materials definition
-acero= typical_materials.defSteel01(mdlr,"acero",E,fy,0.001)
+acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
     
 ''' Se definen nodos en los puntos de aplicación de
     la carga. Puesto que no se van a determinar tensiones
     se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "acero"
 elementos.dimElem= 2
 elementos.defaultTag= 1 #Tag for the next element.
 muelle= elementos.newElement("muelle",xc.ID([1,2]));
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
 spc= coacciones.newSPConstraint(2,1,0.0) # Nodo 2
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #modulación de la carga en el tiempo:
 ts= casos.newTimeSeries("trig_ts","ts")
@@ -88,7 +88,7 @@ recorder.callbackRestart= "print \"Restart method called.\""
 ''' 
 \prop_recorder
 
-nodos= mdlr.getNodeLoader{2}
+nodos= preprocessor.getNodeLoader{2}
             \callback_record
 
                 
@@ -131,14 +131,14 @@ integ.dU1= 0.0002 #Reload
 result= analysis.analyze(16)
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod2= nodos.getNode(2)
 deltax= nod2.getDisp[0] 
 deltay= nod2.getDisp[1] 
 nod1= nodos.getNode(1)
 R= nod1.getReaction[0] 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 
 elem1= elementos.getElement(1)
 elem1.getResistingForce()

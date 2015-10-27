@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # Imprime los desplazamientos de los nodos de la lista se pasa como parámetro.
-def listaDesplazamientosNodos(mdlr,nmbComb,lstNodos, fmt, fName, encab, tit):
+def listaDesplazamientosNodos(preprocessor,nmbComb,lstNodos, fmt, fName, encab, tit):
   fName.write("\\",encab,"{",tit,"}\n")
   caption= tit
   defCampos= "|l|r|r|r|r|r|r|r|r|"
   idsCampos= "Caso & IdN & Ux & Uy & Uz & Rx & Ry & Rz \\\\\n - & - & mm & mm & mm & rad & rad & rad "
   cabeceraSupertabular(fName,8,defCampos,idsCampos,caption)
 
-  nodos= mdlr.getNodeLoader
+  nodos= preprocessor.getNodeLoader
   for iNodo in lstNodos:
     fName.write(nmbComb," & ",iNodo," & ")
     nod= nodos.getNode(iNodo)
@@ -20,7 +20,7 @@ def listaDesplazamientosNodos(mdlr,nmbComb,lstNodos, fmt, fName, encab, tit):
 Imprime los desplazamientos de los nodos asociados a la lista de puntos
    que se pasa como parámetro.
 '''
-def listaDesplazamientosPuntos(mdlr,nmbComb,lstPuntos, fmt, fName, encab, tit):
+def listaDesplazamientosPuntos(preprocessor,nmbComb,lstPuntos, fmt, fName, encab, tit):
   fName.write("\\",encab,"{",tit,"}\n")
   caption= tit
   defCampos= "|l|r|r|r|r|r|r|r|r|"
@@ -29,7 +29,7 @@ def listaDesplazamientosPuntos(mdlr,nmbComb,lstPuntos, fmt, fName, encab, tit):
 
   # Formamos la lista de nodos de arranque.
   for iPunto in lstPuntos:
-    pnt= mdlr.getCad.getPoint(iPunto)
+    pnt= preprocessor.getCad.getPoint(iPunto)
     iNodo= pnt.getTagNodo()
     fName.write(nmbComb," & ",iPunto," & ",iNodo," & ")
     nod= nodos.getNode(iNodo)
@@ -39,8 +39,8 @@ def listaDesplazamientosPuntos(mdlr,nmbComb,lstPuntos, fmt, fName, encab, tit):
   cierraSupertabular(fName)
 
 # Imprime los desplazamientos de los nodos contenidos en el conjunto que se pasa como parámetro.
-def listaDesplazamientosNodosSet(mdlr,nmbComb, nmbSet, fmt, fName):
-  s= mdlr.getSets.getSet(nmbSet)
+def listaDesplazamientosNodosSet(preprocessor,nmbComb, nmbSet, fmt, fName):
+  s= preprocessor.getSets.getSet(nmbSet)
   nodos= s.getNodos()
   for n in nodos:
     fName.write(nmbComb," & ",n.tag," & ")
@@ -63,14 +63,14 @@ def listaDesplazamientosNodosSET(nmbComb, nmbSet, fmt, fName, encab, tit):
 #execfile("modelo/model_inquiry.xcm")
 
 # Imprime los desplazamientos de los nodos contenidos en las lineas del conjunto que se pasa como parámetro.
-def listaDesplazamientosNodosLineas(mdlr, nmbComb, nmbSetLineas, fmt, fName, encab, tit):
+def listaDesplazamientosNodosLineas(preprocessor, nmbComb, nmbSetLineas, fmt, fName, encab, tit):
   fName.write("\\",encab,"{",tit,"}\n")
   caption= "Nodos del conjunto: "+nmbSetLineas
   defCampos= "|l|r|r|r|r|r|r|r|"
   idsCampos= "Caso & IdN & Ux & Uy & Uz & Rx & Ry & Rz \\\\\n - & - & mm & mm & mm & rad & rad & rad "
   cabeceraSupertabular(fName,8,defCampos,idsCampos,caption)
 
-  s= mdlr.getSets.getSet(nmbSetLineas)
+  s= preprocessor.getSets.getSet(nmbSetLineas)
   lineas= s.getLineas
   for l in lineas:
     nmb= l.getName()

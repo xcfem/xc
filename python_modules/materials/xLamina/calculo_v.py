@@ -54,14 +54,14 @@ def xLaminaPrintVAnsys(nmbArchSalida, nmbSeccion1, nmbSeccion2):
   os.system("rm -f "+"/tmp/texOutput2.tmp")
 
 def strElementProp(eTag,nmbProp,vProp):
-  retval= "mdlr.getElementLoader.getElement("
+  retval= "preprocessor.getElementLoader.getElement("
   retval+= str(eTag)
   retval+= ").setProp("
   retval+= '"' + nmbProp + '"'
   retval+= ',' + str(vProp) + ")\n"
   return retval
 
-def xLaminaPrintV(mdlr, nmbArchSalida):
+def xLaminaPrintV(preprocessor, nmbArchSalida):
   # Imprime los resultados de la comprobación frente a cortante
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
@@ -74,7 +74,7 @@ def xLaminaPrintV(mdlr, nmbArchSalida):
   texOutput2.write(strHeader)
   fcs1= [] #Capacity factors at section 1.
   fcs2= [] #Capacity factors at section 2.
-  elementos= mdlr.getSets["total"].getElements
+  elementos= preprocessor.getSets["total"].getElements
   for e in elementos:
     eTag= e.getProp("idElem")
     idSection= e.getProp("idSection")
@@ -149,7 +149,7 @@ def lanzaCalculoVFromAnsysData(nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArc
   xLaminaCalculaCombEstatNoLin(nmbArchDefHipELU)
   xLaminaPrintV(nmbArch+"V",deref(nmbRegDatosScc1).nmbSeccion,deref(nmbRegDatosScc2).nmbSeccion)
 
-def lanzaCalculoV(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,trataResultsCombV):
+def lanzaCalculoV(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,trataResultsCombV):
   '''
    Lanza la comprobación de cortante en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -159,10 +159,10 @@ def lanzaCalculoV(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryEle
       nmbArchDefHipELU e imprime los resultados en archivos con
       el nombre nmbArchTN.*
   '''
-  elems= ec.extraeDatos(mdlr,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  elems= ec.extraeDatos(preprocessor,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   #cortanteEHE.defVarsControlVEHE(elems)
   shearSIA262.defVarsControlVSIA262(elems)
-  calculo_comb.xLaminaCalculaComb(mdlr,analysis,trataResultsCombV)
-  meanFCs= xLaminaPrintV(mdlr,nmbArchSalida)
+  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,trataResultsCombV)
+  meanFCs= xLaminaPrintV(preprocessor,nmbArchSalida)
   return meanFCs
 

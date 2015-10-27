@@ -29,8 +29,8 @@ numGruposElementos= None
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_elasticidad2D(nodos)
 
 
@@ -46,9 +46,9 @@ nodos.defaultTag= 104
 nod4= nodos.newNodeXY(0,1)
 
 
-elast2d= typical_materials.defElasticIsotropicPlaneStress(mdlr,"elast2d",E,nu,rho)
+elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast2d"
 quad4n= elementos.newElement("quad4n",xc.ID([101,102,103,104]))
 quad4n.commitState()

@@ -47,19 +47,19 @@ diamATrsv= 6e-3
 numRamas= 4
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 
 HA30= hormigonesEHE.HA30
-tagHA30= HA30.defDiagD(mdlr)
+tagHA30= HA30.defDiagD(preprocessor)
 B500S= EHE_reinforcing_steel.B500S
-tagB500S= B500S.defDiagD(mdlr)
+tagB500S= B500S.defDiagD(preprocessor)
 
-respT= typical_materials.defElasticMaterial(mdlr,"respT",1e10) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(mdlr,"respVy",1e6) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(mdlr,"respVz",1e3) # Respuesta de la sección a cortante según y.
-geomSecHA= mdlr.getMaterialLoader.newSectionGeometry("geomSecHA")
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respuesta de la sección a cortante según y.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Respuesta de la sección a cortante según y.
+geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
 rg= regiones.newQuadRegion(hormigonesEHE.HA30.nmbDiagD)
 rg.nDivIJ= 10
@@ -86,15 +86,15 @@ secHA.setRespVyByName("respVy")
 secHA.setRespVzByName("respVz")
 secHA.setRespTByName("respT")
 
-banco_pruebas_scc3d.modeloSecc3d(mdlr,"secHA")
+banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHA")
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -124,7 +124,7 @@ secHAParamsCortante.alpha= math.radians(90)
 secHAParamsTorsion= torsionEHE.calcParamsSeccionHuecaEficaz(geomSecHA,canto/2.0,recub)
 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
 N= scc.getStressResultantComponent("N")
@@ -136,7 +136,7 @@ NTmp= N
 MTmp= math.sqrt((My)**2+(Mz)**2)
 VTmp= math.sqrt((Vy)**2+(Vz)**2)
 TTmp= scc.getStressResultantComponent("Mx")
-secHAParamsCortante.calcVuEHE08(mdlr,scc,secHAParamsTorsion,HA30,B500S,NTmp,MTmp,VTmp,TTmp)
+secHAParamsCortante.calcVuEHE08(preprocessor, scc,secHAParamsTorsion,HA30,B500S,NTmp,MTmp,VTmp,TTmp)
 
 
 

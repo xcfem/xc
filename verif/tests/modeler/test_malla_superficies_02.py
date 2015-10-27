@@ -20,22 +20,22 @@ numElem= 0
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_elasticidad2D(nodos)
 nodos.newSeedNode()
 
-elast= typical_materials.defElasticMaterial(mdlr,"elast",3000)
-elast2d= typical_materials.defElasticIsotropicPlaneStress(mdlr,"elast2d",E,nu,rho)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
+elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
 
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast2d"
 elem= seedElemLoader.newElement("quad4n",xc.ID([0,0,0,0]))
 
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMaxX/3.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(3,geom.Pos3d(CooMaxX*2/3.0,0.0,0.0))
@@ -45,7 +45,7 @@ pt= puntos.newPntIDPos3d(6,geom.Pos3d(CooMaxX/3.0,CooMaxY,0.0))
 pt= puntos.newPntIDPos3d(7,geom.Pos3d(CooMaxX*2/3.0,CooMaxY,0.0))
 pt= puntos.newPntIDPos3d(8,geom.Pos3d(CooMaxX,CooMaxY,0.0))
 
-surfaces= mdlr.getCad.getSurfaces
+surfaces= preprocessor.getCad.getSurfaces
 surfaces.defaultTag= 1
 s1= surfaces.newQuadSurfacePts(1,2,6,5)
 s1.nDivI= 1
@@ -80,7 +80,7 @@ divsOk= divsOk & surfaces.conciliaNDivs()
 # print "s3 nDivJ= ", s3.nDivJ
 
 s2.nverborrea= 5
-total= mdlr.getSets.getSet("total")
+total= preprocessor.getSets.getSet("total")
 total.genMesh(xc.meshDir.I)
 
 numNodos= total.getNodes.size
@@ -115,7 +115,7 @@ execfile("vtk/vtk_vista_yneg.lcmm")
 execfile("vtk/vtk_muestra_ventana.lcmm")
 \VtkMuestraVentana("renderer",800,600)
 
-\mdlr{{\for_each_edge
+\preprocessor.{\for_each_edge
     print "linea: ",nombre," p1: ",getTagP1," p2: ",getTagP2, " ndiv: ",ndiv
   }}}
 print "Número de nodos: ",numNodos

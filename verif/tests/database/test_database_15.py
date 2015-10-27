@@ -18,8 +18,8 @@ dens= 1.33 # Densidad kg/m2.
 F= 1000 # Fuerza
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
@@ -36,31 +36,31 @@ nod= nodos.newNodeXYZ(0,L,L)
 
 # Materials definition
 
-memb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,dens,h)
+memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 elem= elementos.newElement("shell_mitc4",xc.ID([5,6,7,8]))
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.fixNode6DOF(coacciones,4)
 fix_node_6dof.fixNode6DOF(coacciones,5)
 fix_node_6dof.fixNode6DOF(coacciones,8)
 
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 setTotal.killElements()
 
-mesh= mdlr.getDomain.getMesh
+mesh= preprocessor.getDomain.getMesh
 mesh.setDeadSRF(0.0)
 mesh.freezeDeadNodes("bloquea") # Coacciona nodos inactivos.
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -87,7 +87,7 @@ db.restore(100)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod1= nodos.getNode(1)
 deltax1= nod1.getDisp[0] 
 deltay1= nod1.getDisp[1] 
@@ -109,9 +109,9 @@ R2= nod2.getReaction[0]
 
 
 # print "Revive.\n"
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 setTotal.aliveElements()
-mesh= mdlr.getDomain.getMesh
+mesh= preprocessor.getDomain.getMesh
 mesh.meltAliveNodes("bloquea") # Reactiva nodos inactivos.
 
 
@@ -124,7 +124,7 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod1= nodos.getNode(1)
 deltaxB1= nod1.getDisp[0] 
 deltayB1= nod1.getDisp[1] 

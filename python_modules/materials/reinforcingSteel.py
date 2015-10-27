@@ -48,28 +48,28 @@ class ReinforcingSteel(object):
   def bsh(self):
     """ Ratio between post-yield tangent and initial elastic tangent. """
     return self.Esh()/self.Es
-  def defDiagK(self,mdlr):
+  def defDiagK(self,preprocessor):
     """ Returns XC uniaxial material (characteristic values). """
-    acero= typical_materials.defSteel01(mdlr,self.nmbDiagK,self.Es,self.fyk,self.bsh())
+    acero= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
     self.tagDiagK= acero.tag
     return self.tagDiagK
-  def defDiagD(self,mdlr):
+  def defDiagD(self,preprocessor):
     """ Returns XC uniaxial material (design values). """
-    acero= typical_materials.defSteel01(mdlr,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
+    acero= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
     self.tagDiagD= acero.tag
     return self.tagDiagD
-  def getDiagK(self,mdlr):
-    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagK)
-  def getDiagD(self,mdlr):
-    return mdlr.getMaterialLoader.getMaterial(self.nmbDiagD)
+  def getDiagK(self,preprocessor):
+    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagK)
+  def getDiagD(self,preprocessor):
+    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagD)
 
 
 # Characteristic stress-strain diagram
-def defDiagKAcero(mdlr, steelRecord):
-  return steelRecord.defDiagK(mdlr)
+def defDiagKAcero(preprocessor, steelRecord):
+  return steelRecord.defDiagK(preprocessor)
 
 
 # Design stress-strain diagram
-def defDiagDAcero(mdlr, steelRecord):
-  return steelRecord.defDiagD(mdlr)
+def defDiagDAcero(preprocessor, steelRecord):
+  return steelRecord.defDiagD(preprocessor)
 

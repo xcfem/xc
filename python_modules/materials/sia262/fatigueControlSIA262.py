@@ -104,13 +104,13 @@ def limitShear(sccData,v_0,v_1,vu):
     print "limite negativo = ", retval
   return retval
 
-def trataResultsComb(mdlr,nmbComb):
+def trataResultsComb(preprocessor,nmbComb):
   # Comprobación de las secciones de hormigón frente a fatiga estimando la tensión en la armadura.
   print "Postproceso combinación: ",nmbComb,"\n"
 
   index= int(nmbComb[-1])
 
-  elementos= mdlr.getSets.getSet("total").getElements
+  elementos= preprocessor.getSets.getSet("total").getElements
   for e in elementos:
     e.getResistingForce()
     scc= e.getSection()

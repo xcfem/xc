@@ -20,22 +20,22 @@ rho= 0.0 # Densidad
 # Problem type
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_elasticidad2D(nodos)# Materials definition
 
-elast= typical_materials.defElasticMaterial(mdlr,"elast",3000)
-elast2d= typical_materials.defElasticIsotropicPlaneStress(mdlr,"elast2d",E,nu,rho)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
+elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
 nodos.newSeedNode()
 
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast2d"
 elem= seedElemLoader.newElement("quad4n",xc.ID([0,0,0,0]))
 
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax,0.0,0.0))
 pt= puntos.newPntIDPos3d(3,geom.Pos3d(CooMax,CooMax,0.0))
@@ -49,7 +49,7 @@ pt= puntos.newPntIDPos3d(4,geom.Pos3d(0.0,CooMax,0.0))
 #  1 +--------------------+ 2
 #
 
-lineas= mdlr.getCad.getLines
+lineas= preprocessor.getCad.getLines
 lineas.defaultTag= 3
 l3= lineas.newLine(1,2)
 lineas.defaultTag= 2
@@ -59,7 +59,7 @@ l1= lineas.newLine(2,3)
 lineas.defaultTag= 4
 l1= lineas.newLine(4,1)
 
-surfaces= mdlr.getCad.getSurfaces
+surfaces= preprocessor.getCad.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfaceLines(1,2,3,4)
 s.nDivI= NumDivI
@@ -76,7 +76,7 @@ s.nDivJ= NumDivJ
 
 
 
-f1= mdlr.getSets.getSet("f1")
+f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 
 
@@ -94,7 +94,7 @@ nnodDom= mesh.getNumNodes()
 
 ''' 
 print "núm. nodos: ",nnod
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
 for_each
   print "  nodo: ",tag," x= ",coord[0],", y= ",coord[1]

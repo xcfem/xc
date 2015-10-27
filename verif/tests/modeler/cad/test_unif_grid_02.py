@@ -14,21 +14,21 @@ ndivX= 5
 ndivY= 8
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-elast2d= typical_materials.defElasticIsotropicPlaneStress(mdlr,"elast2d",30e6,0.3,0.0)
+preprocessor=  prueba.getPreprocessor
+elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",30e6,0.3,0.0)
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
 nodos.dimEspace= 3 # Dimensiones de los nodos
 nodos.numGdls= 2 # Grados de libertad de los nodos
 nodos.newSeedNode()
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast2d"
 seedElemLoader.dimElem= 3
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 quad4n= seedElemLoader.newElement("quad4n",xc.ID([0,0,0,0]));
 
-unifGrids= mdlr.getCad.getUniformGrids
+unifGrids= preprocessor.getCad.getUniformGrids
 uGrid= unifGrids.newUniformGrid()
 
 uGrid.Lx= 10
@@ -38,7 +38,7 @@ uGrid.nDivX= ndivX
 uGrid.nDivY= ndivY
 uGrid.nDivZ= 0
 
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
 numNodos= setTotal.getNodes.size

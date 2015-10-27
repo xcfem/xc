@@ -16,8 +16,8 @@ P= 10e3 # Carga uniforme transversal.
 n= 1e6 # Carga uniforme axial.
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 
 seccPrueba= parametrosSeccionRectangular.RectangularSection("prueba",.20,.30,7E9, 0.3)
 
@@ -25,19 +25,19 @@ seccPrueba= parametrosSeccionRectangular.RectangularSection("prueba",.20,.30,7E9
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
 # Definimos el material
-defSeccAggregation.defSeccAggregation3d(mdlr,seccPrueba)
+defSeccAggregation.defSeccAggregation3d(preprocessor, seccPrueba)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0,0,0)
 nod= nodos.newNodeXYZ(L/2,0,0)
 nod= nodos.newNodeXYZ(L,0,0)
 
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,0,1])
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= seccPrueba.nmb
 elementos.numSections= 3 # Número de secciones a lo largo del elemento.
@@ -46,12 +46,12 @@ beam3d1= elementos.newElement("force_beam_column_3d",xc.ID([1,2]))
 beam3d2= elementos.newElement("force_beam_column_3d",xc.ID([2,3]))
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"

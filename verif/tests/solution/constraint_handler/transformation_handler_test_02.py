@@ -20,8 +20,8 @@ from model import fix_node_6dof
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXY(0,0)
@@ -31,16 +31,16 @@ nod= nodos.newNodeXY(a+l,0.0)
 nod= nodos.newNodeXY(2*a+l,0.0)
 
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
     
 # Materials definition
-scc= typical_materials.defElasticSection2d(mdlr,"scc",A,E,I)
+scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "scc"
 #  sintaxis: beam2d_02[<tag>] 
@@ -58,7 +58,7 @@ beam2d= elementos.newElement("elastic_beam_2d",xc.ID([4,5]))
 beam2d.h= h
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(2,0,0.0) # Nodo 2
 spc= coacciones.newSPConstraint(2,1,0.0)
@@ -66,7 +66,7 @@ spc= coacciones.newSPConstraint(4,1,0.0) # Nodo 4
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

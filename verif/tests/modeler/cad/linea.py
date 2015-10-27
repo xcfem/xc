@@ -13,34 +13,34 @@ NumDiv= 25
 CooMax= 10.0
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_elasticidad3D(nodos)
 
 # Material
-elast= typical_materials.defElasticMaterial(mdlr,"elast",3000)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodos.newSeedNode()
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.dimElem= 3 #Las barras se definen e un espacio tridimensional.
 seedElemLoader.defaultMaterial= "elast"
 seedElemLoader.defaultTag= 1 #El número del próximo elemento será 1.
 truss= seedElemLoader.newElement("truss",xc.ID([1,2]));
 truss.area= 10
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 puntos.defaultTag= 1
 pt= puntos.newPntFromPos3d(geom.Pos3d(0,0,0))
 pt= puntos.newPntFromPos3d(geom.Pos3d(CooMax,CooMax,CooMax))
 
-lineas= mdlr.getCad.getLines
+lineas= preprocessor.getCad.getLines
 lineas.defaultTag= 1
 l= lineas.newLine(1,2)
 l.nDiv= NumDiv
 
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
 mesh= prueba.getDomain.getMesh

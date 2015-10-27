@@ -13,7 +13,7 @@ from misc import banco_pruebas_scc3d
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
 # Definición de la sección rectangular
 #XXX No es una seccion rectangular así que NO PARECE QUE EL
@@ -41,17 +41,17 @@ SHS50x50x2_5.alpha= 5/6 # XXX Corregir
 
 
 # Materials definition
-mat= SHS50x50x2_5.defSeccElastica3d(mdlr)
-elemZLS= banco_pruebas_scc3d.modeloSecc3d(mdlr,SHS50x50x2_5.nmb)
+mat= SHS50x50x2_5.defSeccElastica3d(preprocessor)
+elemZLS= banco_pruebas_scc3d.modeloSecc3d(preprocessor, SHS50x50x2_5.nmb)
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.Nodo6DOFMovXGiroZLibres(coacciones,2)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -72,13 +72,13 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 
 RM= nodos.getNode(1).getReaction[5] 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 ele1.getResistingForce()
 scc0= ele1.getSection()

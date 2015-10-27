@@ -27,8 +27,8 @@ from materials import typical_materials
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod1= nodos.newNodeXYZ(0,0,0)
@@ -47,11 +47,11 @@ nod12= nodos.newNodeXYZ(3,2,0)
 
 # Materials definition
 
-hLosa= typical_materials.defElasticMembranePlateSection(mdlr,"hLosa",Ec,nuC,densLosa,hLosa)
+hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec,nuC,densLosa,hLosa)
 
-typical_materials.defSteel02(mdlr,"aceroPret",Ep,fy,0.001,tInic)
+typical_materials.defSteel02(preprocessor, "aceroPret",Ep,fy,0.001,tInic)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 # Losa de hormigón
 elementos.defaultMaterial= "hLosa"
 elementos.defaultTag= 1
@@ -86,14 +86,14 @@ truss= elementos.newElement("truss",xc.ID([11,12]));
 truss.area= Ap
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.fixNode6DOF(coacciones,5)
 fix_node_6dof.fixNode6DOF(coacciones,9)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -138,7 +138,7 @@ analysis= solu.newAnalysis("static_analysis","smt","")
 def resuelveCombEstatLin(comb):
   tabComb= comb.tag
   nmbComb= comb.getName
-  mdlr.resetLoadCase()
+  preprocessor.resetLoadCase()
   comb.addToDomain()
   analOk= analysis.analyze(1)
   comb.removeFromDomain()
@@ -151,7 +151,7 @@ plano= geom.Plano3d(o,p1,p2)
 def trataResultsComb(comb):
   tabComb= comb.tag
   nmbComb= comb.getName
-  setTotal= mdlr.getSets.getSet("total")
+  setTotal= preprocessor.getSets.getSet("total")
   resultante= setTotal.getResistingSVD3d(plano,o,0.01,0)
   global fuerza
   fuerza= resultante.getResultante()

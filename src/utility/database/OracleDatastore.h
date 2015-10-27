@@ -59,7 +59,7 @@ class OracleDatastore: public DBDatastore
 
     int lastDomainChangeStamp;
   public:
-    OracleDatastore(const std::string &dataBase,Modelador &mdlr, FEM_ObjectBroker &theBroker);    
+    OracleDatastore(const std::string &dataBase,Preprocessor &preprocessor, FEM_ObjectBroker &theBroker);    
     
     ~OracleDatastore(void);
 

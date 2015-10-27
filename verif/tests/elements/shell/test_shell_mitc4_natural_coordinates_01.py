@@ -14,8 +14,8 @@ from materials import typical_materials
 import math
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 
 delta= 10.1
@@ -32,9 +32,9 @@ nodos.newNodeIDXYZ(3,p3.x,p3.y,p3.z)
 nodos.newNodeIDXYZ(4,p4.x,p4.y,p4.z)
 
 # Materials definition
-memb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,dens,h)
+memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 

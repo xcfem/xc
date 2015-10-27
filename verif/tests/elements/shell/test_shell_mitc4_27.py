@@ -18,8 +18,8 @@ from solution import predefined_solutions
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.newNodeIDXYZ(1,0,0,0)
 nodos.newNodeIDXYZ(2,L,0,0)
@@ -28,22 +28,22 @@ nodos.newNodeIDXYZ(4,0,L,0)
 
 
 # Materials definition
-nmb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,0.0,t)
+nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,t)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elementos.defaultTag= 1
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.fixNode6DOF(coacciones,2)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -66,7 +66,7 @@ result= analisis.analyze(1)
 
 q13MedioElem= 0.0
 q23MedioElem= 0.0
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elem.getResistingForce()
 mats= elem.getPhysicalProperties.getVectorMaterials #Materials at gauss points.
 #Gauss points iterator

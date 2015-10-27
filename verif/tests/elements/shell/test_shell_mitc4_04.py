@@ -21,44 +21,44 @@ from model import fix_node_6dof
 from materials import typical_materials
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
 # Definimos materiales
-elast= typical_materials.defElasticMaterial(mdlr,"elast",E)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
 nodos.newSeedNode()
 
 # Definimos materiales
-nmb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,0.0,thickness)
+nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
 
 
 
-seedElemLoader= mdlr.getElementLoader.seedElemLoader
+seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "memb1"
 seedElemLoader.defaultTag= 1
 elem= seedElemLoader.newElement("shell_mitc4",xc.ID([0,0,0,0]))
 
 
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMaxX,0.0,0.0))
 pt= puntos.newPntIDPos3d(3,geom.Pos3d(CooMaxX,CooMaxY,0.0))
 pt= puntos.newPntIDPos3d(4,geom.Pos3d(0.0,CooMaxY,0.0))
-surfaces= mdlr.getCad.getSurfaces
+surfaces= preprocessor.getCad.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
 
-f1= mdlr.getSets.getSet("f1")
+f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 lados= s.getEdges
 #Edge iterator
 for l in lados:
@@ -68,7 +68,7 @@ for l in lados:
 
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 
 #Load modulation.
@@ -79,7 +79,7 @@ lp0= casos.newLoadPattern("default","0")
 #casos.currentLoadPattern= "0"
 
 
-f1= mdlr.getSets.getSet("f1")
+f1= preprocessor.getSets.getSet("f1")
 nNodos= s.getNumNodes
 
 nodo= s.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)

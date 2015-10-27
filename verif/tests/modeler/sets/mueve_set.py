@@ -13,25 +13,25 @@ import math
 NumDiv= 4
 CooMax= NumDiv
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-puntos= mdlr.getCad.getPoints
+puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
 puntos.defaultTag= 100
 
-lineas= mdlr.getCad.getLines
+lineas= preprocessor.getCad.getLines
 lineas.defaultTag= 1
 l1= lineas.newLine(1,2)
 l1.nDiv= NumDiv
 l1.divide()
 
-trfs= mdlr.getCad.getGeometricTransformations
+trfs= preprocessor.getCad.getGeometricTransformations
 transl= trfs.newTransformation("translation")
 transl.setVector(geom.Vector3d(dx,dy,dz))
 
 # Movemos todo
-setTotal= mdlr.getSets.getSet("total")
+setTotal= preprocessor.getSets.getSet("total")
 setTotal.transforms(transl)
 
 ''' 

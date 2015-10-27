@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-geomCuadFibrasTN= mdlr.getMaterialLoader.newSectionGeometry("geomCuadFibrasTN")
+geomCuadFibrasTN= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibrasTN")
 y1= ancho/2.0
 z1= canto/2.0
 regiones= geomCuadFibrasTN.getRegions

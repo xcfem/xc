@@ -11,7 +11,7 @@ from materials.xLamina import seccion_ficticia_elementos as sf
 import math
 
  
-def extraeIdsElem(mdlr,nmbArchComb, mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
+def extraeIdsElem(preprocessor,nmbArchComb, mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
   de combinaciones generado en XC '''
   idElements= set()
@@ -27,12 +27,12 @@ def extraeIdsElem(mdlr,nmbArchComb, mapSectionsForEveryElement, mapSectionsDefin
       idElements.add(idElem)
   f.close()
    
-  nodes= mdlr.getNodeLoader
+  nodes= preprocessor.getNodeLoader
   predefined_spaces.gdls_resist_materiales3D(nodes)
-  elements= mdlr.getElementLoader
-  coacciones= mdlr.getConstraintLoader
+  elements= preprocessor.getElementLoader
+  coacciones= preprocessor.getConstraintLoader
   # Definimos materiales
-  scc= sf.sccFICT.defSeccShElastica3d(mdlr) # El problema es isóstático, así que la sección da igual
+  scc= sf.sccFICT.defSeccShElastica3d(preprocessor) # El problema es isóstático, así que la sección da igual
   elements.dimElem= 1
   tagsNodesToLoad1= {}
   tagsNodesToLoad2= {}
@@ -81,7 +81,7 @@ def extraeIdsElem(mdlr,nmbArchComb, mapSectionsForEveryElement, mapSectionsDefin
       e2.setProp("diagInt",diagIntScc2)
  
  
-  cargas= mdlr.getLoadLoader
+  cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
   #Load modulation.
   ts= casos.newTimeSeries("constant_ts","ts")
@@ -156,12 +156,12 @@ def extraeCargasLamina(nmbArch, nmbArchCargas):
   cargas.close()
 
 
-def extraeDatos(mdlr,nmbArchLST, mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
+def extraeDatos(preprocessor,nmbArchLST, mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
   ''' Define las cargas en el extremo libre de cada elemento a partir
    de las combinaciones de un archivo de salida generado en XC '''
-  return extraeIdsElem(mdlr,nmbArchLST,mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams)
+  return extraeIdsElem(preprocessor,nmbArchLST,mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams)
 
-def creaElems(mdlr,nmbArchComb, mapSectionsForEveryElement):
+def creaElems(preprocessor,nmbArchComb, mapSectionsForEveryElement):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
   de combinaciones generado en XC '''
   idElements= set()
@@ -177,10 +177,10 @@ def creaElems(mdlr,nmbArchComb, mapSectionsForEveryElement):
       idElements.add(idElem)
   f.close()
    
-  nodes= mdlr.getNodeLoader
+  nodes= preprocessor.getNodeLoader
   predefined_spaces.gdls_resist_materiales3D(nodes)
-  elements= mdlr.getElementLoader
-  coacciones= mdlr.getConstraintLoader
+  elements= preprocessor.getElementLoader
+  coacciones= preprocessor.getConstraintLoader
   # Definimos materiales
   elements.dimElem= 1
   tagsNodesToLoad1= {}
@@ -213,7 +213,7 @@ def creaElems(mdlr,nmbArchComb, mapSectionsForEveryElement):
     e2.setProp("idSection", nmbScc2) #Section to verify
  
  
-  cargas= mdlr.getLoadLoader
+  cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
   #Load modulation.
   ts= casos.newTimeSeries("constant_ts","ts")

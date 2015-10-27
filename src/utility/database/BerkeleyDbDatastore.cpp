@@ -52,7 +52,7 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/ID.h>
-#include "modelador/Modelador.h"
+#include "preprocessor/Preprocessor.h"
 #include "domain/domain/Domain.h"
 
 #include <errno.h>
@@ -207,7 +207,7 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
     dbenv->set_errpfx(dbenv, project.c_str());
 
     //Set up cache size.
-    const Modelador *modelador= get_modelador();
+    const Preprocessor *modelador= get_modelador();
     if(modelador)
       {
         const Domain *dom= modelador->GetDominio();
@@ -239,8 +239,8 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
   }
 
 //! @brief Constructor
-XC::BerkeleyDbDatastore::BerkeleyDbDatastore(const std::string &projectName, Modelador &mdlr,FEM_ObjectBroker &theObjectBroker,const std::string &dbType)
-  :DBDatastore(mdlr, theObjectBroker), connection(true), project(projectName)
+XC::BerkeleyDbDatastore::BerkeleyDbDatastore(const std::string &projectName, Preprocessor &preprocessor,FEM_ObjectBroker &theObjectBroker,const std::string &dbType)
+  :DBDatastore(preprocessor, theObjectBroker), connection(true), project(projectName)
   {
     if(create_aux_entities())
       {

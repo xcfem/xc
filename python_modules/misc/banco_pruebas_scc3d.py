@@ -6,15 +6,15 @@ from model import predefined_spaces
 from model import fix_node_6dof
 
 # Define el modelo para probar una sección de fibras.
-def modeloSecc3d(mdlr,nmbS):
-  nodos= mdlr.getNodeLoader
+def modeloSecc3d(preprocessor,nmbS):
+  nodos= preprocessor.getNodeLoader
 
   predefined_spaces.gdls_resist_materiales3D(nodos)
   nodos.defaultTag= 1 #El número del próximo nodo será 1.
   nodos.newNodeXYZ(1,0,0)
   nodos.newNodeXYZ(1,0,0)
 
-  elementos= mdlr.getElementLoader
+  elementos= preprocessor.getElementLoader
   elementos.dimElem= 1
   elementos.defaultMaterial= nmbS
   elementos.defaultTag= 1 #Tag for the next element.
@@ -22,7 +22,7 @@ def modeloSecc3d(mdlr,nmbS):
   return zls
 
 # Define el modelo para probar una sección de fibras.
-def nuevoZeroLengthSecc3d(mdlr, nmbS, tagNodo, tagElem):
+def nuevoZeroLengthSecc3d(preprocessor, nmbS, tagNodo, tagElem):
   idNod1= tagNodo
   idNod2= (tagNodo+1)
 
@@ -30,12 +30,12 @@ def nuevoZeroLengthSecc3d(mdlr, nmbS, tagNodo, tagElem):
   nodos.newNodeIDXYZ(idNod1,tagNodo,0,0)
   nodos.newNodeIDXYZ(idNod2,tagNodo,0,0)
 
-  coacciones= mdlr.getConstraintLoader
+  coacciones= preprocessor.getConstraintLoader
   fix_node_6dof.fixNode6DOF(coacciones,idNod1)
   fix_node_6dof.Nodo6DOFGirosLibres(coacciones,idNod2)
 
   # Definimos elementos
-  elementos= mdlr.getElementLoader
+  elementos= preprocessor.getElementLoader
   elementos.defaultMaterial= nmbS
   elementos.defaultTag= tagElem #Tag for the next element.
   zls= elementos.newElement("zero_length_section",xc.ID([idNod1,idNod2]));
@@ -102,7 +102,7 @@ def nuevoZeroLengthSecc3d(mdlr, nmbS, tagNodo, tagElem):
 #                 fieldQ2= rowXXX['Q_2']
 #                 fieldM1= rowXXX['M_1']
 #                 fieldM2= rowXXX['M_2']
-#                 \mdlr
+#                 \preprocessor
 #                   {
 #                     \loads
 #                       {

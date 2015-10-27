@@ -28,17 +28,17 @@
 
 #include "Element1D.h"
 #include "xc_utils/src/base/CmdStatus.h"
-#include "modelador/cad/matrices/TritrizPtrNod.h"
-#include "modelador/cad/matrices/TritrizPtrElem.h"
-#include "modelador/Modelador.h"
-#include "modelador/loaders/LoadLoader.h"
+#include "preprocessor/cad/matrices/TritrizPtrNod.h"
+#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/Preprocessor.h"
+#include "preprocessor/loaders/LoadLoader.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/load/beam_loads/Beam3dUniformLoad.h"
 #include "domain/load/beam_loads/Beam3dPointLoad.h"
 #include "domain/load/beam_loads/Beam2dUniformLoad.h"
 #include "domain/load/beam_loads/Beam2dPointLoad.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
-#include "modelador/SetEstruct.h"
+#include "preprocessor/SetEstruct.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/matrix/Matrix.h"
 #include "xc_basic/src/matrices/m_int.h"
@@ -71,8 +71,8 @@ void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
 
 void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
   {
-    Modelador *mdlr= GetModelador();
-    MapLoadPatterns &casos= mdlr->getLoadLoader().getLoadPatterns();
+    Preprocessor *preprocessor= GetPreprocessor();
+    MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
     static ID eTags(1);
     eTags[0]= getTag(); //Carga para éste elemento.
     const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
@@ -113,8 +113,8 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
     const size_t sz= v.Size();
     if(sz>1)
       {
-        Modelador *mdlr= GetModelador();
-        MapLoadPatterns &casos= mdlr->getLoadLoader().getLoadPatterns();
+        Preprocessor *preprocessor= GetPreprocessor();
+        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Carga para éste elemento.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
@@ -174,8 +174,8 @@ void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
     const size_t sz= v.Size();
     if(sz>2)
       {
-        Modelador *mdlr= GetModelador();
-        MapLoadPatterns &casos= mdlr->getLoadLoader().getLoadPatterns();
+        Preprocessor *preprocessor= GetPreprocessor();
+        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Carga para éste elemento.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
@@ -213,8 +213,8 @@ void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector
     const size_t sz= v.Size();
     if(sz>2)
       {
-        Modelador *mdlr= GetModelador();
-        MapLoadPatterns &casos= mdlr->getLoadLoader().getLoadPatterns();
+        Preprocessor *preprocessor= GetPreprocessor();
+        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Carga para éste elemento.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
@@ -259,8 +259,8 @@ void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
 
 void XC::Element1D::strainLoad(const PlanoDeformacion &p1,const PlanoDeformacion &p2)
   {
-    Modelador *mdlr= GetModelador();
-    MapLoadPatterns &casos= mdlr->getLoadLoader().getLoadPatterns();
+    Preprocessor *preprocessor= GetPreprocessor();
+    MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
     static ID eTags(1);
     eTags[0]= getTag(); //Carga para éste elemento.
     const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
@@ -283,11 +283,11 @@ void XC::Element1D::strainLoad(const PlanoDeformacion &p1,const PlanoDeformacion
 bool XC::Element1D::procesa_element_load(const std::string &cmd,CmdStatus &status)
   {
     static double x= 0.0;
-    Modelador *mdlr= GetModelador();
+    Preprocessor *preprocessor= GetPreprocessor();
     const CrdTransf *crd_trf= getCoordTransf();
-    if(mdlr && crd_trf)
+    if(preprocessor && crd_trf)
       {
-        MapLoadPatterns &casos= mdlr->getLoadLoader().getLoadPatterns();
+        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Carga para éste elemento.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.

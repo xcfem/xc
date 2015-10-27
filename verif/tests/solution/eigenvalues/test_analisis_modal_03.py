@@ -37,9 +37,9 @@ kPl4a= kPl3a
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 nodos.defaultTag= 0
 nod1= nodos.newNodeXY(0,0) 
@@ -60,26 +60,26 @@ nod5.setProp("gdlsCoartados",xc.ID([1,2]))
 nod6= nodos.newNodeXY(0,4+3+3+3+3)
 nod6.mass= matrizMasasNodo
 nod6.setProp("gdlsCoartados",xc.ID([1,2]))
-setTotal= mdlr.getSets["total"]
+setTotal= preprocessor.getSets["total"]
 nodos= setTotal.getNodes
 for n in nodos:
   n.fix(n.getProp("gdlsCoartados"),xc.Vector([0,0,0]))
 
 # Materials definition
-sccPlBaja= typical_materials.defElasticSection2d(mdlr,"sccPlBaja",20*Bbaja*Bbaja,Ehorm,20*Ibaja)
-sccPl1a= typical_materials.defElasticSection2d(mdlr,"sccPl1a",20*B1a*B1a,Ehorm,20*I1a) 
-sccPl2a= typical_materials.defElasticSection2d(mdlr,"sccPl2a",20*B1a*B1a,Ehorm,20*I1a) 
-sccPl3a= typical_materials.defElasticSection2d(mdlr,"sccPl3a",20*B3a*B3a,Ehorm,20*I3a) 
-sccPl4a= typical_materials.defElasticSection2d(mdlr,"sccPl4a",20*B3a*B3a,Ehorm,20*I3a)
+sccPlBaja= typical_materials.defElasticSection2d(preprocessor, "sccPlBaja",20*Bbaja*Bbaja,Ehorm,20*Ibaja)
+sccPl1a= typical_materials.defElasticSection2d(preprocessor, "sccPl1a",20*B1a*B1a,Ehorm,20*I1a) 
+sccPl2a= typical_materials.defElasticSection2d(preprocessor, "sccPl2a",20*B1a*B1a,Ehorm,20*I1a) 
+sccPl3a= typical_materials.defElasticSection2d(preprocessor, "sccPl3a",20*B3a*B3a,Ehorm,20*I3a) 
+sccPl4a= typical_materials.defElasticSection2d(preprocessor, "sccPl4a",20*B3a*B3a,Ehorm,20*I3a)
 
 
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
 
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "sccPlBaja"
 elementos.defaultTag= 1 #Tag for next element.

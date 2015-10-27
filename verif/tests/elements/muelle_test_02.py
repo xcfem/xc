@@ -16,8 +16,8 @@ from materials import typical_materials
 
 # Model definition
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 # Problem type
 predefined_spaces.gdls_elasticidad2D(nodos)
 
@@ -26,28 +26,28 @@ nod= nodos.newNodeXY(0,0)
 nod= nodos.newNodeXY(l,0.0)
 
 # Materials definition
-elast= typical_materials.defElasticMaterial(mdlr,"elast",K)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
     
 ''' Se definen nodos en los puntos de aplicación de
     la carga. Puesto que no se van a determinar tensiones
     se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast"
 elementos.dimElem= 2
 elementos.defaultTag= 1 #First node number.
 muelle= elementos.newElement("muelle",xc.ID([1,2]));
     
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 #
 spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
 spc= coacciones.newSPConstraint(1,1,0.0)
 spc= coacciones.newSPConstraint(2,1,0.0) # Nodo 2
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -66,14 +66,14 @@ result= analisis.analyze(1)
 
 
 nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 nod2= nodos.getNode(2)
 deltax= nod2.getDisp[0] 
 deltay= nod2.getDisp[1] 
 nod1= nodos.getNode(1)
 R= nod1.getReaction[0] 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elem1= elementos.getElement(1)
 elem1.getResistingForce()
 Ax= elem1.getMaterial().getStrain() # Alargamiento del muelle

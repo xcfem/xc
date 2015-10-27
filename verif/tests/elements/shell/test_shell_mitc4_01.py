@@ -17,8 +17,8 @@ v1= xc.Vector([0,math.sqrt(2)/2,math.sqrt(2)/2])
 v2= xc.Vector([0,-math.sqrt(2)/2,math.sqrt(2)/2])
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor
+nodos= preprocessor.getNodeLoader
 
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
@@ -28,9 +28,9 @@ nodos.newNodeIDXYZ(3,2,1,1)
 nodos.newNodeIDXYZ(4,0,1,1)
 
 # Materials definition
-memb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,dens,h)
+memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 

@@ -16,9 +16,9 @@ def odd(number):
    return number % 2 != 0
 
 # Ejecuta el análisis y la comprobación frente a tensiones normales
-def xLaminaCompruebaTNComb(mdlr, nmbDiagIntSec1, nmbDiagIntSec2):
+def xLaminaCompruebaTNComb(preprocessor, nmbDiagIntSec1, nmbDiagIntSec2):
   listaCombinaciones= []
-  cargas= mdlr.getLoadLoader
+  cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
   ts= casos.newTimeSeries("constant_ts","ts")
   casos.currentTimeSeries= "ts"
@@ -34,9 +34,9 @@ def xLaminaCompruebaTNComb(mdlr, nmbDiagIntSec1, nmbDiagIntSec2):
   os.system("rm -f "+"/tmp/cargas.xci")
   xLaminaPrintTN(nmbArch) # XXX Sacar de aquí la impresión de result.
 
-def trataResultsCombTN(mdlr, nmbComb):
+def trataResultsCombTN(preprocessor, nmbComb):
   #print "Postproceso combinación: ",nmbComb
-  elements= mdlr.getSets["total"].getElements
+  elements= preprocessor.getSets["total"].getElements
   for e in elements:
     e.getResistingForce()
     TagTmp= e.tag
@@ -54,9 +54,9 @@ def trataResultsCombTN(mdlr, nmbComb):
       e.setProp("MyCP",MyTmp)
       e.setProp("MzCP",MzTmp)
 
-def trataResultsCombTN2d(mdlr, nmbComb):
+def trataResultsCombTN2d(preprocessor, nmbComb):
   #print "Postproceso combinación: ",nmbComb
-  elements= mdlr.getSets["total"].getElements
+  elements= preprocessor.getSets["total"].getElements
   for e in elements:
     e.getResistingForce()
     TagTmp= e.tag
@@ -75,7 +75,7 @@ def trataResultsCombTN2d(mdlr, nmbComb):
       e.setProp("MzCP",MzTmp)
 
 # Imprime los resultados de la comprobación frente a tensiones normales
-def xLaminaPrintTNAnsys(mdlr,nmbArchSalida, nmbSeccion1, nmbSeccion2):
+def xLaminaPrintTNAnsys(preprocessor,nmbArchSalida, nmbSeccion1, nmbSeccion2):
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput1.write("Section 1\n")
   texOutput2= open("/tmp/texOutput2.tmp","w")
@@ -86,7 +86,7 @@ def xLaminaPrintTNAnsys(mdlr,nmbArchSalida, nmbSeccion1, nmbSeccion2):
   #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ nmbSeccion2 +")")
   fcs1= [] #Capacity factors at section 1.
   fcs2= [] #Capacity factors at section 2.
-  elementos= mdlr.getSets["total"].getElements
+  elementos= preprocessor.getSets["total"].getElements
   for e in elementos:
     eTag= e.getProp("idElem")
     FCCP= e.getProp("FCCP")
@@ -132,7 +132,7 @@ def xLaminaPrintTNAnsys(mdlr,nmbArchSalida, nmbSeccion1, nmbSeccion2):
   return retval
 
 def strElementProp(eTag,nmbProp,vProp):
-  retval= "mdlr.getElementLoader.getElement("
+  retval= "preprocessor.getElementLoader.getElement("
   retval+= str(eTag)
   retval+= ").setProp("
   retval+= '"' + nmbProp + '"'
@@ -140,7 +140,7 @@ def strElementProp(eTag,nmbProp,vProp):
   return retval
 
 # Imprime los resultados de la comprobación frente a tensiones normales
-def xLaminaPrintTN(mdlr,nmbArchSalida):
+def xLaminaPrintTN(preprocessor,nmbArchSalida):
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput1.write("Section 1\n")
   texOutput2= open("/tmp/texOutput2.tmp","w")
@@ -150,7 +150,7 @@ def xLaminaPrintTN(mdlr,nmbArchSalida):
   #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ nmbSeccion2 +")")
   fcs1= [] #Capacity factors at section 1.
   fcs2= [] #Capacity factors at section 2.
-  elementos= mdlr.getSets["total"].getElements
+  elementos= preprocessor.getSets["total"].getElements
   for e in elementos:
     eTag= e.getProp("idElem")
     idSection= e.getProp("idSection")
@@ -206,7 +206,7 @@ def lanzaCalculoTNFromAnnsysData(nmbArch, datosScc1, datosScc2, nmbArchDefHipELU
   nmbDiagIntSec1= "diagInt"+datosScc1.nmbSeccion
   nmbDiagIntSec2= "diagInt"+datosScc2.nmbSeccion
   xLaminaCalculaCombEstatLin(nmbArchDefHipELU,nmbDiagIntSec1,nmbDiagIntSec2)
-  meanFCs= xLaminaPrintTN(mdlr,nmbArch+"TN",datosScc1.nmbSeccion,datosScc2.nmbSeccion)
+  meanFCs= xLaminaPrintTN(preprocessor,nmbArch+"TN",datosScc1.nmbSeccion,datosScc2.nmbSeccion)
   return meanFCs
 
 '''
@@ -218,13 +218,13 @@ def lanzaCalculoTNFromAnnsysData(nmbArch, datosScc1, datosScc2, nmbArchDefHipELU
     nmbArchDefHipELU e imprime los resultados en archivos con
     el nombre nmbArchTN.*
 '''
-def lanzaCalculoTNFromXCData(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
-  ec.extraeDatos(mdlr,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
-  #modelo.xLaminaConstruyeModeloFicticio(mdlr,datosScc1,datosScc2)
+def lanzaCalculoTNFromXCData(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
+  ec.extraeDatos(preprocessor,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  #modelo.xLaminaConstruyeModeloFicticio(preprocessor,datosScc1,datosScc2)
   #nmbDiagIntSec1= "diagInt"+datosScc1.nmbSeccion
   #nmbDiagIntSec2= "diagInt"+datosScc2.nmbSeccion
-  calculo_comb.xLaminaCalculaCombEstatLin(mdlr,analysis,trataResultsCombTN)
-  meanFCs= xLaminaPrintTN(mdlr,nmbArchSalida)
+  calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,trataResultsCombTN)
+  meanFCs= xLaminaPrintTN(preprocessor,nmbArchSalida)
   return meanFCs
 
 '''
@@ -239,10 +239,10 @@ def lanzaCalculoTNFromXCData(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSections
     debería preferirse este modo pero aún queda comprobar la obtención
     de diagramas 2D. 
 '''
-def lanzaCalculoTN2dFromXCData(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
-  ec.extraeDatos(mdlr,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
-  calculo_comb.xLaminaCalculaCombEstatLin(mdlr,analysis,trataResultsCombTN2d)
-  meanFCs= xLaminaPrintTN(mdlr,nmbArchSalida)
+def lanzaCalculoTN2dFromXCData(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
+  ec.extraeDatos(preprocessor,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,trataResultsCombTN2d)
+  meanFCs= xLaminaPrintTN(preprocessor,nmbArchSalida)
   return meanFCs
 
 

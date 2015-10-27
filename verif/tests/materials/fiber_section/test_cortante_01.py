@@ -43,17 +43,17 @@ print "numBarras= ",numBarras
    '''
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 # Materials definition
-materiales= mdlr.getMaterialLoader
+materiales= preprocessor.getMaterialLoader
 
-tagHA25= hormigonesEHE.HA25.defDiagD(mdlr)
-tagB500S= EHE_reinforcing_steel.B500S.defDiagD(mdlr)
+tagHA25= hormigonesEHE.HA25.defDiagD(preprocessor)
+tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 
-respT= typical_materials.defElasticMaterial(mdlr,"respT",1e10) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(mdlr,"respVy",1e6) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(mdlr,"respVz",1e3) # Respuesta de la sección a cortante según y.
-geomSecHA= mdlr.getMaterialLoader.newSectionGeometry("geomSecHA")
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respuesta de la sección a cortante según y.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Respuesta de la sección a cortante según y.
+geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
 rg= regiones.newQuadRegion(hormigonesEHE.HA25.nmbDiagD)
 rg.nDivIJ= 10
@@ -80,15 +80,15 @@ secHA.setRespVyByName("respVy")
 secHA.setRespVzByName("respVz")
 secHA.setRespTByName("respT")
 
-banco_pruebas_scc3d.modeloSecc3d(mdlr,"secHA")
+banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHA")
 
 
 # Constraints
-coacciones= mdlr.getConstraintLoader
+coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
 
 # Loads definition
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 
 casos= cargas.getLoadPatterns
 
@@ -120,18 +120,18 @@ secHAParamsCortante= cortanteEHE.ParamsCortante()
 
 
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsCortante.calcVuEHE08(mdlr,scc,"",hormigonesEHE.HA25,EHE_reinforcing_steel.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
+secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",hormigonesEHE.HA25,EHE_reinforcing_steel.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
 
 
 Vu2A= secHAParamsCortante.Vu2
 
 
-cargas= mdlr.getLoadLoader.removeFromDomain("0") # Quitamos la carga.
-mdlr.resetLoadCase()
-cargas= mdlr.getLoadLoader.addToDomain("1") # Añadimos la otra carga.
+cargas= preprocessor.getLoadLoader.removeFromDomain("0") # Quitamos la carga.
+preprocessor.resetLoadCase()
+cargas= preprocessor.getLoadLoader.addToDomain("1") # Añadimos la otra carga.
 
 
 analOk= analisis.analyze(10)
@@ -140,14 +140,14 @@ if(analOk!=0):
   exit()
 
 
-secHAParamsCortante.calcVuEHE08(mdlr,scc,"",hormigonesEHE.HA25,EHE_reinforcing_steel.B500S, 0,0,0,0)
+secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",hormigonesEHE.HA25,EHE_reinforcing_steel.B500S, 0,0,0,0)
 
 Vu2B= secHAParamsCortante.Vu2
 
 
-cargas= mdlr.getLoadLoader.removeFromDomain("1") # Quitamos la carga.
-mdlr.resetLoadCase()
-cargas= mdlr.getLoadLoader.addToDomain("2") # Añadimos la otra carga.
+cargas= preprocessor.getLoadLoader.removeFromDomain("1") # Quitamos la carga.
+preprocessor.resetLoadCase()
+cargas= preprocessor.getLoadLoader.addToDomain("2") # Añadimos la otra carga.
 
 
 analOk= analisis.analyze(10)
@@ -156,7 +156,7 @@ if(analOk!=0):
   exit()
 
 
-secHAParamsCortante.calcVuEHE08(mdlr,scc,"",hormigonesEHE.HA25,EHE_reinforcing_steel.B500S, 0,0,0,0)
+secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",hormigonesEHE.HA25,EHE_reinforcing_steel.B500S, 0,0,0,0)
 
 Vu2C= secHAParamsCortante.Vu2
 

@@ -16,24 +16,24 @@ Función que devuelve los puntos del diagrama momento
             intervalo 0->maxK.
   
 '''
-def getDiagMomentoCurvatura3d(mdlr, nmbSecc, esfAxil, maxK, numIncr):
-  nodos= mdlr.getNodeLoader
+def getDiagMomentoCurvatura3d(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
+  nodos= preprocessor.getNodeLoader
 
   predefined_spaces.gdls_resist_materiales3D(nodos)
   nodos.newNodeIDXYZ(1001,1,0,0)
 
   nodos.newNodeIDXYZ(1002,1,0,0)
-  elementos= mdlr.getElementLoader
+  elementos= preprocessor.getElementLoader
   elementos.defaultMaterial= nmbSecc
   elementos.defaultTag= 2001 #Tag for the next element.
   zls= elementos.newElement("zero_length_section",xc.ID([1001,1002]));
 
-  coacciones= mdlr.getConstraintLoader
+  coacciones= preprocessor.getConstraintLoader
   fix_node_6dof.fixNode6DOF(coacciones,1001)
   coacciones.newSPConstraint(1002,1,0.0)
   coacciones.newSPConstraint(1002,2,0.0)
 
-  cargas= mdlr.getLoadLoader
+  cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
   #Load modulation.
   ts= casos.newTimeSeries("constant_ts","ts")

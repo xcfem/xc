@@ -10,8 +10,8 @@ from materials import typical_materials
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador   
-nodos= mdlr.getNodeLoader
+preprocessor=  prueba.getPreprocessor   
+nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0.0,0.0,0.0)
@@ -24,14 +24,14 @@ nod= nodos.newNodeXYZ(1.0,1.0,1.0)
 nod= nodos.newNodeXYZ(0.0,1.0,1.0)
 
 # Definimos transformaciones geométricas
-trfs= mdlr.getTransfCooLoader
+trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,1])
 
 # Materials
-seccion= typical_materials.defElasticSection3d(mdlr,"seccion",1,1,1,1,1,1)
+seccion= typical_materials.defElasticSection3d(preprocessor, "seccion",1,1,1,1,1,1)
 
-elementos= mdlr.getElementLoader
+elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin" # Coord. transformation.
 elementos.defaultMaterial= "seccion"
 elementos.defaultTag= 1 #Tag for next element.
@@ -50,9 +50,9 @@ beam3d= elementos.newElement("elastic_beam_3d",xc.ID([5,7]))
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([6,8]))
 
 # Definimos el conjunto de prueba
-prb1= mdlr.getSets.defSet("prb1")
+prb1= preprocessor.getSets.defSet("prb1")
 
-nodos= mdlr.getSets.getSet("total").getNodes
+nodos= preprocessor.getSets.getSet("total").getNodes
 for n in nodos:
   coord= n.getCoo
   if(abs(coord[1]-0.0)<1e-2):
@@ -66,7 +66,7 @@ for n in nodos:
   coord= n.getCoord
   print "  nodo: ",n.tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
 '''
-elementos= mdlr.getSets.getSet("total").getElements
+elementos= preprocessor.getSets.getSet("total").getElements
 for e in elementos:
   if((abs(e.getMaxCooNod(1)-0.0)<1e-2) & (abs(e.getMinCooNod(1)-0.0)<1e-2)):
     prb1.getElements.append(e)

@@ -56,7 +56,7 @@ XC::Domain *XC::ProblemaEF::theActiveDomain= nullptr;
 
 //! @brief Constructor por defecto.
 XC::ProblemaEF::ProblemaEF(void)
-  : mdlr(this,&output_handlers),proc_solu(this), dataBase(nullptr) {}
+  : preprocessor(this,&output_handlers),proc_solu(this), dataBase(nullptr) {}
 
 //! @brief Define el objeto base de datos.
 XC::FE_Datastore *XC::ProblemaEF::defineDatabase(const std::string &tipo, const std::string &nombre)
@@ -67,13 +67,13 @@ XC::FE_Datastore *XC::ProblemaEF::defineDatabase(const std::string &tipo, const 
         dataBase= nullptr;
       }
     if(tipo == "File")
-      dataBase= new FileDatastore(nombre, mdlr, theBroker);
+      dataBase= new FileDatastore(nombre, preprocessor, theBroker);
     else if(tipo == "MySql")
-      dataBase= new MySqlDatastore(nombre, mdlr, theBroker);
+      dataBase= new MySqlDatastore(nombre, preprocessor, theBroker);
     else if(tipo == "BerkeleyDB")
-      dataBase= new BerkeleyDbDatastore(nombre, mdlr, theBroker);
+      dataBase= new BerkeleyDbDatastore(nombre, preprocessor, theBroker);
     else if(tipo == "SQLite")
-      dataBase= new SQLiteDatastore(nombre, mdlr, theBroker);
+      dataBase= new SQLiteDatastore(nombre, preprocessor, theBroker);
     else
       {  
         std::cerr << "WARNING No database type exists ";
@@ -91,9 +91,9 @@ bool XC::ProblemaEF::procesa_comando(CmdStatus &status)
     const std::string cmd= deref_cmd(status.Cmd());
     if(verborrea>2)
       std::clog << "(ProblemaEF) Procesando comando: " << cmd << std::endl;
-    if(cmd=="mdlr")
+    if(cmd=="preprocessor")
       {
-        mdlr.LeeCmd(status);
+        preprocessor.LeeCmd(status);
         return true;
       }
     else if(cmd=="sol_proc")
@@ -189,7 +189,7 @@ bool XC::ProblemaEF::procesa_comando(CmdStatus &status)
         const std::string fName= status.GetString();
         if(dataBase)
           delete dataBase;
-        dataBase= new FileDatastore(fName,mdlr,theBroker);
+        dataBase= new FileDatastore(fName,preprocessor,theBroker);
         return true;
       }
     else if(cmd=="clearAll")
@@ -230,7 +230,7 @@ void XC::ProblemaEF::clearAll(void)
     output_handlers.clear();
     fields.clearAll();
     proc_solu.clearAll();
-    mdlr.clearAll();
+    preprocessor.clearAll();
   }
 
 //! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa

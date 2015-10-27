@@ -31,10 +31,10 @@
 #ifndef QuadBase9N_h
 #define QuadBase9N_h
 
-#include "modelador/cad/matrices/TritrizPtrElem.h"
-#include "modelador/cad/aux_mallado.h"
+#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/cad/aux_mallado.h"
 #include "xc_utils/src/base/CmdStatus.h"
-#include "modelador/loaders/LoadLoader.h"
+#include "preprocessor/loaders/LoadLoader.h"
 #include "domain/load/plane/BidimStrainLoad.h"
 #include "med.h"
 #include "vtkCellType.h"
@@ -93,10 +93,10 @@ bool XC::QuadBase9N<PhysProp>::procesa_comando(CmdStatus &status)
 
     if(cmd == "strain_load")
       {
-        Modelador *mdlr= this->GetModelador();
-        if(mdlr)
+        Preprocessor *preprocessor= this->GetPreprocessor();
+        if(preprocessor)
           {
-            MapLoadPatterns &casos= mdlr->getLoadLoader().getLoadPatterns();
+            MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
             const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
             static ID eTags(1);
             eTags[0]= this->getTag(); //Carga para éste elemento.

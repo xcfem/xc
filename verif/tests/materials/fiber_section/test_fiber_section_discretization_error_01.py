@@ -20,14 +20,14 @@ F= 1000 # Magnitud de la fuerza
 
 # Problem type
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
 # Materials definition
 E= 2.1e6 # Módulo de Young del acero.
-elast= typical_materials.defElasticMaterial(mdlr,"elast",E)
+elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
 # Section
-geomSCC= mdlr.getMaterialLoader.newSectionGeometry("geomSCC")
+geomSCC= preprocessor.getMaterialLoader.newSectionGeometry("geomSCC")
 y1= ancho/2.0
 z1= canto/2.0
 regiones= geomSCC.getRegions
@@ -40,7 +40,7 @@ rg.pMax= geom.Pos2d(y0+y1,z0+z1)
 
 
 import os
-fiberModel= mdlr.getMaterialLoader.newMaterial("fiber_section_3d","fiberModel")
+fiberModel= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","fiberModel")
 fiberSectionRepr= fiberModel.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSCC")
 fiberModel.setupFibers()

@@ -95,7 +95,7 @@ class NEESData: public FE_Datastore
    *
    * @author fmk
    */
-    NEESData(const std::string &dataBase,Modelador &mdlr, FEM_ObjectBroker &theBroker);
+    NEESData(const std::string &dataBase,Preprocessor &preprocessor, FEM_ObjectBroker &theBroker);
     ~NEESData(void);
 
     // method to get a database tag

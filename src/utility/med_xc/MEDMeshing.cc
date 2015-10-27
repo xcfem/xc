@@ -30,9 +30,9 @@
 #include "xc_utils/src/nucleo/InterpreteRPN.h"
 #include "xc_utils/src/nucleo/MatrizAny.h"
 #include "xc_utils/src/base/utils_any.h"
-#include "modelador/MapSet.h"
+#include "preprocessor/MapSet.h"
 #include "post_process/MapFields.h"
-#include "modelador/set_mgmt/Set.h"
+#include "preprocessor/set_mgmt/Set.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/gauss_models/GaussModel.h"
@@ -44,7 +44,7 @@ const std::string XC::MEDMeshing::str_grupo_elementos= "_elementos";
 
 // @brief Returns med mesh to export.
 XC::MEDMeshing::MEDMeshing(const ProblemaEF &prb) 
-  : sets(prb.getModelador().get_sets()), fields(prb.getFields()), vertices(prb.getDomain()->getMesh()), cells(prb.getDomain()->getMesh(),vertices.getMapIndices())
+  : sets(prb.getPreprocessor().get_sets()), fields(prb.getFields()), vertices(prb.getDomain()->getMesh()), cells(prb.getDomain()->getMesh(),vertices.getMapIndices())
   {}
 
 //! Constructor.

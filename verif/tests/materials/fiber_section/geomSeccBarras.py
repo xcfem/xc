@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-geomSecBarras= mdlr.getMaterialLoader.newSectionGeometry("geomSecBarras")
+geomSecBarras= preprocessor.getMaterialLoader.newSectionGeometry("geomSecBarras")
 armaduras= geomSecBarras.getReinfLayers
 armaduraInf= armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 armaduraInf.numReinfBars= 2

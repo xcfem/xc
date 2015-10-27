@@ -32,7 +32,7 @@ def xLaminaPrintFIS(nmbArchSalida, nmbSeccion1, nmbSeccion2):
   ansysOutput2= open(nmbArchSalida+"esf.mac","w")
   printCabeceraListadoFisuracion(texOutput1,"1 ("+ nmbSeccion1 +")")
   printCabeceraListadoFisuracion(texOutput2,"2 ("+ nmbSeccion2 +")")
-  e= mdlr.getElementLoader
+  e= preprocessor.getElementLoader
   for e in elementos:
     if(odd(e.tag)):
       texOutput1.write(floor(e,tag/10)+' & '+e,HIPCP+' & '+fmt.Esf.format(NCP/1e3)+' & '+fmt.Esf.format(MyCP/1e3)+' & '+fmt.Esf.format(MzCP/1e3)+' & '+fmt.Long.format(WkCP*1e3,'{:3.2f}'),"\\\\\n")
@@ -61,7 +61,7 @@ def xLaminaPrintFIS(nmbArchSalida, nmbSeccion1, nmbSeccion2):
   os.sys("rm -f "+"/tmp/texOutput1.tmp")
   os.sys("rm -f "+"/tmp/texOutput2.tmp")
 
-def lanzaCalculoFISFromXCData(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,trataResultsCombFIS):
+def lanzaCalculoFISFromXCData(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,trataResultsCombFIS):
   '''
    Lanza la comprobación de fisuración en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -70,12 +70,12 @@ def lanzaCalculoFISFromXCData(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSection
       e imprime los resultados en archivos con
       el nombre nmbArchFis.*
   '''
-  elems= ec.creaElems(mdlr,nmbArchCsv, mapSectionsForEveryElement)
+  elems= ec.creaElems(preprocessor,nmbArchCsv, mapSectionsForEveryElement)
   ccSIA.defVarsControlFISSIA262(elems)
-  calculo_comb.xLaminaCalculaComb(mdlr,analysis,trataResultsCombFIS)
-  xLaminaPrintFISSIA262(mdlr,nmbArchSalida,mapSectionsForEveryElement)
+  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,trataResultsCombFIS)
+  xLaminaPrintFISSIA262(preprocessor,nmbArchSalida,mapSectionsForEveryElement)
 
-def lanzaCalculoFISFromXCDataPlanB(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition,trataResultsCombFIS):
+def lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition,trataResultsCombFIS):
   '''
    Lanza la comprobación de fisuración en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -84,27 +84,27 @@ def lanzaCalculoFISFromXCDataPlanB(mdlr,analysis,nmbArchCsv,nmbArchSalida, mapSe
       e imprime los resultados en archivos con
       el nombre nmbArchFis.*
   '''
-  elems= ec.extraeDatos(mdlr,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, None)
+  elems= ec.extraeDatos(preprocessor,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, None)
   ccSIA.defVarsControlFISSIA262(elems)
-  calculo_comb.xLaminaCalculaComb(mdlr,analysis,trataResultsCombFIS)
-  xLaminaPrintFISSIA262(mdlr,nmbArchSalida,mapSectionsForEveryElement)
+  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,trataResultsCombFIS)
+  xLaminaPrintFISSIA262(preprocessor,nmbArchSalida,mapSectionsForEveryElement)
 
 def strElementProp(eTag,nmbProp,vProp):
-  retval= "mdlr.getElementLoader.getElement("
+  retval= "preprocessor.getElementLoader.getElement("
   retval+= str(eTag)
   retval+= ").setProp("
   retval+= '"' + nmbProp + '"'
   retval+= ',' + str(vProp) + ")\n"
   return retval
 
-def xLaminaPrintFISSIA262(mdlr,nmbArchSalida, mapSections):
+def xLaminaPrintFISSIA262(preprocessor,nmbArchSalida, mapSections):
   # Imprime los resultados de la comprobación frente a fisuración
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
   xcOutput= open(nmbArchSalida+".py","w")
   #printCabeceraListadoFisuracion("texOutput1","1 ("+ nmbSeccion1 +")")
   #printCabeceraListadoFisuracion("texOutput2","2 ("+ nmbSeccion2 +")")
-  elementos= mdlr.getSets.getSet("total").getElements
+  elementos= preprocessor.getSets.getSet("total").getElements
   strHeader= "eTag & idSection & HIPCP & NCP kN & MyCP kN m/m & MzCP kN m/m & $sg_{max} MPa \\\\\n"
   texOutput1.write(strHeader)
   texOutput2.write(strHeader)

@@ -9,10 +9,10 @@ import os
 abscissae= [0.0,5.0,10.0,15.0,20.0,25.0]
 numPorticos= len(abscissae)
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
+preprocessor=  prueba.getPreprocessor
 
-puntos= mdlr.getCad.getPoints
-nets= mdlr.getCad.get2DNets
+puntos= preprocessor.getCad.getPoints
+nets= preprocessor.getCad.get2DNets
 porticoLateral= nets.new2DNet()
 porticoLateral.dim(2,numPorticos)
 ordenada= 8.2

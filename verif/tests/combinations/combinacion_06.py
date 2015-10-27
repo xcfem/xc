@@ -7,9 +7,9 @@ import geom
 import xc
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador  
+preprocessor=  prueba.getPreprocessor  
 
-cargas= mdlr.getLoadLoader
+cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

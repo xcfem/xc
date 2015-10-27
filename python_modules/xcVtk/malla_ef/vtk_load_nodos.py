@@ -1,6 +1,6 @@
 def VtkLoadNodos(nmbSet, nmbContndr):
   nmbContndr= vtk.vtkPoints() # Definimos el conjunto de puntos a dibujar
-  nSet= mdlr.getSets.getSet(nmbSet)
+  nSet= preprocessor.getSets.getSet(nmbSet)
   nSet.numerate()
   print "nombre set: ",nSet.nombre
   print "num. nodos: ",nSet.getNumNodes
