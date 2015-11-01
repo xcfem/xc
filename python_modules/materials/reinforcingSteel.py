@@ -23,8 +23,10 @@ class ReinforcingSteel(object):
     self.nmbMaterial= nmbAcero # Name identifying the material.
     self.nmbDiagK= "dgK"+nmbAcero # Name identifying the characteristic stress-strain diagram.
     self.tagDiagK= -1 # Tag of the uniaxial material with the characteristic stress-strain diagram.
+    self.steelDiagramK= None # Characteristic stress-strain diagram.
     self.nmbDiagD= "dgD"+nmbAcero # Name identifying the design stress-strain diagram.
     self.tagDiagD= -1 # Tag of the uniaxial material with the design stress-strain diagram .
+    self.steelDiagramD= None # Design stress-strain diagram.
     self.fyk= fyk # Characteristic value of the yield strength
     self.gammaS= gammaS
     self.emax= emax # Ultimate strain (rupture strain)
@@ -50,13 +52,13 @@ class ReinforcingSteel(object):
     return self.Esh()/self.Es
   def defDiagK(self,preprocessor):
     """ Returns XC uniaxial material (characteristic values). """
-    acero= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
-    self.tagDiagK= acero.tag
+    self.steelDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
+    self.tagDiagK= self.steelDiagramK.tag
     return self.tagDiagK
   def defDiagD(self,preprocessor):
     """ Returns XC uniaxial material (design values). """
-    acero= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
-    self.tagDiagD= acero.tag
+    self.steelDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
+    self.tagDiagD= self.steelDiagramD.tag
     return self.tagDiagD
   def getDiagK(self,preprocessor):
     return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagK)

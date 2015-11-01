@@ -92,12 +92,11 @@ class UniaxialMaterial : public Material
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
   public:
     UniaxialMaterial(int tag, int classTag);
         
     virtual int setInitialStrain(double strain);
-    virtual int setTrialStrain(double strain, double strainRate = 0.0) = 0;
+    virtual int setTrialStrain(double strain, double strainRate = 0.0)= 0;
     virtual int setTrial(double strain, double &stress, double &tangent, double strainRate = 0.0);
 
     virtual double getInitialStrain(void) const;
@@ -136,7 +135,6 @@ class UniaxialMaterial : public Material
     virtual double getRhoSensitivity(int gradNumber);
     virtual int    commitSensitivity(double strainGradient, int gradNumber, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 UniaxialMaterial *receiveUniaxialMaterialPtr(UniaxialMaterial *,DbTagData &,const CommParameters &,const BrokedPtrCommMetaData &);
 

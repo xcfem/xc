@@ -74,28 +74,6 @@
 XC::UniaxialMaterial::UniaxialMaterial(int tag, int clasTag)
   :Material(tag,clasTag), rho(0.0) {}
 
-//! @brief Lee un objeto XC::UniaxialMaterial desde archivo
-bool XC::UniaxialMaterial::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(UniaxialMaterial) Procesando comando: " << cmd << std::endl;
-    if(cmd == "rho")
-      {
-        rho= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "set_trial_strain")
-      {
-        std::clog << "El comando: " << cmd << " está pensado para pruebas." << std::endl;
-        const double trial_eps= interpretaDouble(status.GetString());
-        setTrialStrain(trial_eps);
-        return true;
-      }
-    else
-      return Material::procesa_comando(status);
-  }
-
 int XC::UniaxialMaterial::setTrial(double strain, double &stress, double &tangent, double strainRate)
   {
     int res = this->setTrialStrain(strain, strainRate);
@@ -313,51 +291,6 @@ int XC::UniaxialMaterial::recvData(const CommParameters &cp)
     setTag(getDbTagDataPos(0));
     int res= cp.receiveDouble(rho,getDbTagData(),CommMetaData(1));
     return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::UniaxialMaterial::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "UniaxialMaterial::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="dens")
-      return any_const_ptr(rho);
-    else if(cod=="strain")
-      {
-        tmp_gp_dbl= getStrain();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="strain_rate")
-      {
-        tmp_gp_dbl= getStrainRate();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="stress")
-      {
-        tmp_gp_dbl= getStress();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getTangent")
-      {
-        tmp_gp_dbl= getTangent();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getInitialTangent")
-      {
-        tmp_gp_dbl= getInitialTangent();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getDampTangent")
-      {
-        tmp_gp_dbl= getDampTangent();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return Material::GetProp(cod);
   }
 
 //! @brief Recibe un puntero a material a través del canal que se pasa como parámetro.
