@@ -57,7 +57,7 @@ bool XC::Traslacion::procesa_comando(CmdStatus &status)
       {
         const std::vector<MapPuntos::Indice> tmp= crea_vector_size_t(status.GetString());
         if(tmp.size()>1)
-          v= get_modelador()->getCad().getPuntos().getVector(tmp[0],tmp[1]); 
+          v= get_preprocessor()->getCad().getPuntos().getVector(tmp[0],tmp[1]); 
         else
 	  std::cerr << "(Traslacion) Procesando comando: " << cmd
                     << " se necesitan dos puntos para definir el vector." << std::endl;

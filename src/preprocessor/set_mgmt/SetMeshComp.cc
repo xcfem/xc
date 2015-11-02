@@ -147,7 +147,7 @@ void XC::SetMeshComp::Transforma(const TrfGeom &trf)
 //! @brief Aplica al conjunto la transformación cuyo índice se pasa como parámetro.
 void XC::SetMeshComp::Transforma(const size_t &indice_trf)
   {
-    TrfGeom *trf= get_modelador()->getCad().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= get_preprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
     if(trf)
       Transforma(*trf);
   }
@@ -163,13 +163,13 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
     const std::string cmd= deref_cmd(status.Cmd());
     if(verborrea>2)
       std::clog << "(SetMeshComp) Procesando comando: " << cmd << std::endl;
-    if(!get_modelador())
-      std::cerr << "¡Ojo!, el conjunto: " << GetNombre() << " no tiene asignado un modelador." << std::endl;
+    if(!get_preprocessor())
+      std::cerr << "¡Ojo!, el conjunto: " << GetNombre() << " no tiene asignado un preprocesador." << std::endl;
     if(cmd == "sel_nod") //Lista de tags de nodos.
       {
 	std::vector<int> tags_nodos= crea_vector_int(status.GetString());
         const size_t sz= tags_nodos.size();
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             {
@@ -181,7 +181,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
       {
 	const Lista tmp= interpretaLista(status.GetString());
         const size_t sz= tmp.size();
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         int tag= 0;
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
@@ -194,7 +194,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
     else if(cmd == "sel_nod_cond") //Condición que han de cumplir para añadirlos al conjunto.
       {
 	std::string cond= status.GetBloque(); //Condición a cumplir.
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           {
             SetMeshComp *set_base= nullptr; //Conjunto del que se seleccionan los nodos.
@@ -208,7 +208,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
                     const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
 	            std::cerr << "(SetMeshComp) Procesando comando: " << cmd
                               << " no se encotró el conjunto:'" << nmbSetBase
-                              << " en el modelador." << posLectura << std::endl;
+                              << " en el preprocesador." << posLectura << std::endl;
                   }
 	      }
             else
@@ -240,7 +240,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
       {
 	std::vector<int> tags_elementos= crea_vector_int(status.GetString());
         const size_t sz= tags_elementos.size();
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             {
@@ -252,7 +252,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
       {
 	const Lista tmp= interpretaLista(status.GetString());
         const size_t sz= tmp.size();
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         int tag= 0;
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
@@ -265,7 +265,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
     else if(cmd == "sel_elem_cond") //Condición que han de cumplir para añadirlos al conjunto.
       {
 	const std::string cond= status.GetBloque(); //Condición a cumplir.
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           {
             SetMeshComp *set_base= nullptr; //Conjunto del que se seleccionan los elementos.
@@ -279,7 +279,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
                     const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
 	            std::cerr << "(SetMeshComp) Procesando comando: " << cmd
                               << " no se encotró el conjunto:'" << nmbSetBase
-                              << " en el modelador." << posLectura << std::endl;
+                              << " en el preprocesador." << posLectura << std::endl;
                   }
 	      }
             else
@@ -292,7 +292,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
       {
 	std::vector<int> tags_constraints= crea_vector_int(status.GetString());
         const size_t sz= tags_constraints.size();
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             {
@@ -304,7 +304,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
       {
 	std::vector<int> tags_constraints= crea_vector_int(status.GetString());
         const size_t sz= tags_constraints.size();
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             {
@@ -316,7 +316,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
       {
 	const Lista tmp= interpretaLista(status.GetString());
         const size_t sz= tmp.size();
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         int tag= 0;
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
@@ -330,7 +330,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
       {
 	const Lista tmp= interpretaLista(status.GetString());
         const size_t sz= tmp.size();
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         int tag= 0;
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
@@ -343,7 +343,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
     else if(cmd == "sel_constraints_cond") //Condición que han de cumplir para añadirlos al conjunto.
       {
 	const std::string cond= status.GetBloque(); //Condición a cumplir.
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           {
             SetMeshComp *set_base= nullptr; //Conjunto del que se seleccionan los nodos.
@@ -357,7 +357,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
                     const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
 	            std::cerr << "(SetMeshComp) Procesando comando: " << cmd
                               << " no se encotró el conjunto:'" << nmbSetBase
-                              << " en el modelador." << posLectura << std::endl;
+                              << " en el preprocesador." << posLectura << std::endl;
                   }
 	      }
             else
@@ -405,7 +405,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
     else if(cmd == "sel_set")
       {
         const std::string nmb_set= interpretaString(status.GetString());
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           {
             const SetMeshComp *set= dynamic_cast<SetMeshComp *>(preprocessor->get_sets().busca_set(nmb_set));
@@ -427,7 +427,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
           {
             const std::string nmbSet= args[0];
             const std::string cond= args[1];
-            Preprocessor *preprocessor= get_modelador();
+            Preprocessor *preprocessor= get_preprocessor();
             if(preprocessor)
               {
                 const SetMeshComp *set= dynamic_cast<SetMeshComp *>(preprocessor->get_sets().busca_set(nmbSet));
@@ -886,12 +886,12 @@ void XC::SetMeshComp::sel_nodos_lista(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             nodos.push_back(preprocessor->GetDominio()->getNode(tags(i)));
         else
-          std::cerr << "SetMeshComp::sel_nodos_lista; necesito un modelador." << std::endl;
+          std::cerr << "SetMeshComp::sel_nodos_lista; necesito un preprocesador." << std::endl;
       }
   }
 
@@ -901,12 +901,12 @@ void XC::SetMeshComp::sel_elementos_lista(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             elementos.push_back(preprocessor->GetDominio()->getElement(tags(i)));
         else
-          std::cerr << "SetMeshComp::sel_elementos_lista; necesito un modelador." << std::endl;
+          std::cerr << "SetMeshComp::sel_elementos_lista; necesito un preprocesador." << std::endl;
       }
   }
 
@@ -916,7 +916,7 @@ void XC::SetMeshComp::sel_constraints_lista(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         Constraint *tmp= nullptr;
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
@@ -931,7 +931,7 @@ void XC::SetMeshComp::sel_constraints_lista(const ID &tags)
             }
 
         else
-          std::cerr << "SetMeshComp::sel_constraints_lista; necesito un modelador." << std::endl;
+          std::cerr << "SetMeshComp::sel_constraints_lista; necesito un preprocesador." << std::endl;
       }
   }
 

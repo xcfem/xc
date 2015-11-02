@@ -41,7 +41,7 @@ class Face;
 
 //!  \ingroup Mdlr
 //! 
-//!  \brief Base de los objetos del modelador.
+//!  \brief Base de los objetos del preprocessor.
 class EntMdlrBase: public EntConNmb, public MovableObject
   {
   private:
@@ -49,8 +49,8 @@ class EntMdlrBase: public EntConNmb, public MovableObject
   protected:
     LabelContainer etiquetas;
 
-    const Preprocessor *get_modelador(void) const;
-    Preprocessor *get_modelador(void);
+    const Preprocessor *get_preprocessor(void) const;
+    Preprocessor *get_preprocessor(void);
     int sendIdsEtiquetas(const int &,const int &, CommParameters &);
     int recvIdsEtiquetas(const int &,const int &, const CommParameters &);
     int sendData(CommParameters &);
@@ -61,9 +61,9 @@ class EntMdlrBase: public EntConNmb, public MovableObject
     EntMdlrBase(const EntMdlrBase &otro);
     EntMdlrBase &operator=(const EntMdlrBase &otro);
     inline const Preprocessor *GetPreprocessor(void) const
-      { return get_modelador(); }
+      { return get_preprocessor(); }
     inline Preprocessor *GetPreprocessor(void)
-      { return get_modelador(); }
+      { return get_preprocessor(); }
 
     size_t GetTag(void) const;
 

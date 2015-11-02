@@ -25,7 +25,7 @@
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //SisRef.h
-//Objeto sistema de referencia del modelador
+//Objeto sistema de referencia del preprocesador
 
 #ifndef SISREF_H
 #define SISREF_H

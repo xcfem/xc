@@ -92,7 +92,7 @@ bool XC::DomainComponent::procesa_comando(CmdStatus &status)
         if(preprocessor)
           preprocessor->LeeCmd(status);
         else
-	  std::cerr << "msg_proc_cmd" << " puntero a modelador nulo." << std::endl;
+	  std::cerr << "msg_proc_cmd" << " puntero al preprocessador nulo." << std::endl;
         return true;
       }
     else
@@ -135,7 +135,7 @@ any_const_ptr XC::DomainComponent::GetProp(const std::string &cod) const
       return TaggedObject::GetProp(cod);
   }
 
-//! @brief Devuelve (si puede) un puntero al modelador.
+//! @brief Devuelve (si puede) un puntero al preprocesador.
 const XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void) const
   {
     const Preprocessor *retval= nullptr;
@@ -144,7 +144,7 @@ const XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void) const
     return retval;
   }
 
-//! @brief Devuelve (si puede) un puntero al modelador.
+//! @brief Devuelve (si puede) un puntero al preprocesador.
 XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void)
   {
     Preprocessor *retval= nullptr;

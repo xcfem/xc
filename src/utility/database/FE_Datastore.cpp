@@ -55,7 +55,7 @@
 // Description: This file contains the class implementation for XC::FE_Datastore.
 // FE_Datastore is an abstract base class. An XC::FE_Datastore object is used
 // in the program to store/restore the geometry and state information in
-// a modelador at a particular instance in the analysis.
+// a model at a particular instance in the analysis.
 //
 // What: "@(#) FE_Datastore.C, revA"
 

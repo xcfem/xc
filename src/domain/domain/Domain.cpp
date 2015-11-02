@@ -1152,7 +1152,7 @@ int XC::Domain::calculateNodalReactions(bool inclInertia,const double &tol)
     return retval;
   }
 
-//! @brief Devuelve (si puede) un puntero al modelador.
+//! @brief Devuelve (si puede) un puntero al preprocesador.
 const XC::Preprocessor *XC::Domain::GetPreprocessor(void) const
   {
     const Preprocessor *retval= nullptr;
@@ -1162,7 +1162,7 @@ const XC::Preprocessor *XC::Domain::GetPreprocessor(void) const
     return retval;
   }
 
-//! @brief Devuelve (si puede) un puntero al modelador.
+//! @brief Devuelve (si puede) un puntero al preprocesador.
 XC::Preprocessor *XC::Domain::GetPreprocessor(void)
   {
     Preprocessor *retval= nullptr;

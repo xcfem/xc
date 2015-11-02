@@ -49,7 +49,7 @@ XC::Edge::Edge(Preprocessor *m,const size_t &nd)
 //! @brief Constructor.
 //! @param nombre: Identificador del objeto.
 //! @param i: Índice para gráficos.
-//! @param m: Apuntador al modelador.
+//! @param m: Apuntador al preprocesador.
 XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : EntMdlr(nombre,0,m), ndiv(nd) {}
 
@@ -463,8 +463,8 @@ void XC::Edge::crea_nodos(void)
  
     if(nodos.Null())
       {
-        if(!get_modelador())
-          std::cerr << "Edge::crea_nodos; no está definido el modelador." << std::endl;
+        if(!get_preprocessor())
+          std::cerr << "Edge::crea_nodos; no está definido el preprocesador." << std::endl;
         else
           {
             const MatrizPos3d posiciones= get_pos_nodos();
@@ -547,7 +547,7 @@ std::set<XC::SetBase *> XC::Edge::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << "Edge::get_sets; no se ha definido el modelador." << std::endl;
+      std::cerr << "Edge::get_sets; no se ha definido el preprocesador." << std::endl;
     return retval;
   }
 

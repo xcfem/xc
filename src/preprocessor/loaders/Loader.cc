@@ -37,24 +37,24 @@
 
 //! @brief Constructor por defecto.
 XC::Loader::Loader(Preprocessor *owr)
-  : EntCmd(owr), MovableObject(0), modelador(owr) 
+  : EntCmd(owr), MovableObject(0), preprocessor(owr) 
   {}
 
 //! @brief Devuelve el dominio en el que se cargan los elementos.
 XC::Domain *XC::Loader::getDomain(void) const
   {
-    if(modelador)
-      return modelador->GetDominio();
+    if(preprocessor)
+      return preprocessor->GetDominio();
     else
       {
-	std::cerr << "(Loader) necesito un modelador." << std::endl;
+	std::cerr << "(Loader) necesito un preprocesador." << std::endl;
         return nullptr;
       }
   }
 
-//! @brief Asigna el modelador.
-void XC::Loader::set_modelador(Preprocessor *preprocessor)
-  { modelador= preprocessor; }
+//! @brief Asigna el preprocesador.
+void XC::Loader::set_preprocessor(Preprocessor *p)
+  { preprocessor= p; }
 
 //! @brief Procesa los comandos que se emplean para definir
 //! el modelo de elementos finitos. Interpreta
@@ -81,7 +81,7 @@ bool XC::Loader::procesa_comando(CmdStatus &status)
   }
 
 XC::Loader::~Loader(void)
-  { modelador= nullptr; }
+  { preprocessor= nullptr; }
 
 //! @brief Envía el objeto por el canal que se pasa como parámetro.
 int XC::Loader::sendSelf(CommParameters &cp)
@@ -103,12 +103,12 @@ int XC::Loader::recvSelf(const CommParameters &cp)
 //!
 //! Soporta los códigos:
 //!
-//! - preprocessor: Devuelve una referencia al modelador al que pertenece este objeto.
+//! - preprocessor: Devuelve una referencia al preprocessor al que pertenece este objeto.
 //! - dom: Devuelve el una referencia al dominio del problema.
 any_const_ptr XC::Loader::GetProp(const std::string &cod) const
   {
     if(cod=="preprocessor")
-      return any_const_ptr(modelador);
+      return any_const_ptr(preprocessor);
     else if(cod=="dom")
       {
         static Domain *dom_ptr= nullptr;

@@ -139,7 +139,7 @@ void XC::ZeroLength::setMaterial(const int &dir,const std::string &nmbMat)
           setTran1d(elemType, theMaterial1d.size());
       }
     else
-      { std::cerr << "ZeroLength::set_materials; el puntero al modelador es nulo." << std::endl; }
+      { std::cerr << "ZeroLength::set_materials; el puntero al preprocesador es nulo." << std::endl; }
   }
 
 void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<std::string> &nmbMats)
@@ -174,7 +174,7 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
           setTran1d(elemType, theMaterial1d.size());
       }
     else
-      { std::cerr << "ZeroLength::set_materials; el puntero al modelador es nulo." << std::endl; }
+      { std::cerr << "ZeroLength::set_materials; el puntero al preprocesador es nulo." << std::endl; }
   }
 
 //! @brief Lee un objeto XC::ZeroLength desde archivo

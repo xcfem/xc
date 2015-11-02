@@ -25,7 +25,7 @@
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //Face.h
-//Objeto superficie del modelador.
+//Face entities.
 
 #ifndef FACE_H
 #define FACE_H

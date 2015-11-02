@@ -107,7 +107,7 @@ bool XC::QuadBase9N<PhysProp>::procesa_comando(CmdStatus &status)
             lp->addElementalLoad(tmp);
           }
         else
-	  std::cerr << "El elemento no tiene asignado un modelador." << std::endl;
+	  std::cerr << "El elemento no tiene asignado un preprocesador." << std::endl;
         return true;
       }
     else

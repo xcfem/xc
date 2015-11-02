@@ -322,7 +322,7 @@ ADD_LIBRARY(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergen
 LINK_LIBRARIES(XcBib xc_utils xc_basic ${VTK_BIB} ${CGAL_LIBRARIES} ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${Boost_LIBRARIES}  ${PYTHON_LIBRARIES} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${MED_LIBRARIES} ${TCL_LIBRARY} ${Boost_LIBRARIES})
 LINK_DIRECTORIES("/usr/lib/python2.6") # Not needed?
 ADD_DEFINITIONS(-fno-strict-aliasing)
-ADD_LIBRARY(xc SHARED utility/export_utility material/export_material_base material/uniaxial/export_material_uniaxial material/nD/export_material_nD material/section/export_material_section material/section/export_material_fiber_section domain/export_domain domain/mesh/export_domain_mesh preprocessor/export_modelador_loaders preprocessor/export_modelador_build_model  preprocessor/export_modelador_sets preprocessor/export_modelador_main solution/export_solution python_interface)
+ADD_LIBRARY(xc SHARED utility/export_utility material/export_material_base material/uniaxial/export_material_uniaxial material/nD/export_material_nD material/section/export_material_section material/section/export_material_fiber_section domain/export_domain domain/mesh/export_domain_mesh preprocessor/export_preprocessor_loaders preprocessor/export_preprocessor_build_model  preprocessor/export_preprocessor_sets preprocessor/export_preprocessor_main solution/export_solution python_interface)
 
 INSTALL(TARGETS XcBib DESTINATION lib)
 #INSTALL(DIRECTORY ${DIR_FUENTES_XC}/macros/ DESTINATION lib/macros_xc)

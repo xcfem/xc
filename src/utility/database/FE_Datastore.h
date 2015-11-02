@@ -61,7 +61,7 @@
 // Description: This file contains the class definition for FE_Datastore.
 // FE_Datastore is an abstract base class. An FE_datastore object is used
 // in the program to store/restore the geometry and state information in
-// a modelador at a particular instance in the analysis.
+// a model at a particular instance in the analysis.
 //
 // What: "@(#) FE_Datastore.h, revA"
 
@@ -80,7 +80,7 @@ class FE_Datastore: public Channel
     std::set<int> savedStates;
   protected:
     FEM_ObjectBroker *getObjectBroker(void);
-    const Preprocessor *get_modelador(void) const
+    const Preprocessor *get_preprocessor(void) const
       { return preprocessor; }
   public:
     FE_Datastore(Preprocessor &, FEM_ObjectBroker &theBroker);

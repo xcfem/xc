@@ -88,7 +88,7 @@ double XC::Linea::DistanciaA2(const Pos3d &pt) const
 //! @brief Divide la línea por el punto que se pasa como parámetro.
 XC::Edge *XC::Linea::split_at(Pnt *p,const double &lambda,const double &longitud)
   {
-    Cad &cad= get_modelador()->getCad();
+    Cad &cad= get_preprocessor()->getCad();
     Edge *tmp= nullptr;
     if(lambda<0)
       tmp= cad.getLineas().Line(p,P1());

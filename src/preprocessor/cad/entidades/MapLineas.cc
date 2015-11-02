@@ -163,7 +163,7 @@ XC::Edge *XC::MapLineas::Line(Pnt *pA,Pnt *pB)
         tmp= busca_edge_ptr_extremos(*pA,*pB);
         if(!tmp)
           {
-            assert(get_modelador());
+            assert(get_preprocessor());
             tmp= Nueva<Linea>();
             assert(tmp);
             tmp->SetVertice(1,pA);
@@ -194,7 +194,7 @@ XC::Edge *XC::MapLineas::DividedLine(Pnt *pA,Pnt *pB)
         tmp= busca_edge_ptr_extremos(*pA,*pB);
         if(!tmp)
           {
-            assert(get_modelador());
+            assert(get_preprocessor());
             tmp= Nueva<LineaTramos>();
             assert(tmp);
             tmp->SetVertice(1,pA);
@@ -220,7 +220,7 @@ XC::Edge *XC::MapLineas::Arc(Pnt *pA,Pnt *pB,Pnt *pC)
         tmp= busca_edge_ptr_extremos(*pA,*pB,*pC);
         if(!tmp)
           {
-            assert(get_modelador());
+            assert(get_preprocessor());
             tmp= Nueva<ArcoCircunf>();
             assert(tmp);
             tmp->SetVertice(1,pA);

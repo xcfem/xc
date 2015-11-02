@@ -141,7 +141,7 @@ XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
             if(preprocessor)
               retval= &preprocessor->getMaterialLoader();
             else
-              std::cerr << "ZeroLengthMaterials::get_material_loader; el puntero al modelador es nulo." << std::endl;
+              std::cerr << "ZeroLengthMaterials::get_material_loader; el puntero al preprocesador es nulo." << std::endl;
           }
         else
           std::cerr << "ZeroLengthMaterials::get_material_loader; el propietario no es un elemento." << std::endl;

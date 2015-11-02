@@ -48,7 +48,7 @@ class MapFields: public EntCmd, public MovableObject, public std::deque<FieldInf
     typedef dq_fields::iterator iterator;
     typedef dq_fields::const_iterator const_iterator;
   private:
-    Preprocessor *preprocessor; //!< Puntero al modelador.
+    Preprocessor *preprocessor; //!< Puntero al preprocesador.
 
     bool existe(const std::string &nmb) const;
 

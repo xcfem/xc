@@ -42,7 +42,7 @@ class Body;
 
 //! \ingroup CadEnt
 //!
-//! @brief Clase base para los objetos unidimensionales del modelador.
+//! @brief Clase base para los objetos unidimensionales del preprocesador.
 class Edge: public EntMdlr
   {
     friend class CmbEdge;

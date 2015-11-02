@@ -190,7 +190,7 @@ void XC::SetEstruct::agrega_elementos(const TritrizPtrElem &elementos)
     for(register size_t i= 1;i<=capas;i++)
       for(register size_t j= 1;j<=filas;j++)
         for(register size_t k= 1;k<=cols;k++)
-          get_modelador()->getElementLoader().Agrega(elementos(i,j,k));
+          get_preprocessor()->getElementLoader().Agrega(elementos(i,j,k));
   }
 
 //! @brief Devuelve un puntero a nodo a partir de los índices que haya en la pila.

@@ -25,7 +25,7 @@
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //Pnt.h
-//Objeto punto del modelador (similar a los K points de ANSYS)
+//Point entities (similar a los K points de ANSYS)
 
 #ifndef PNT_H
 #define PNT_H

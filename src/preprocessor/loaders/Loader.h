@@ -50,10 +50,10 @@ class FEM_ObjectBroker;
 class Loader: public EntCmd,public MovableObject
   {
   protected:
-    Preprocessor *modelador; //!< Puntero al modelador.
+    Preprocessor *preprocessor; //!< Puntero al preprocesador.
     bool procesa_comando(CmdStatus &status);
     friend class Preprocessor;    
-    void set_modelador(Preprocessor *preprocessor);
+    void set_preprocessor(Preprocessor *preprocessor);
   public:
     Loader(Preprocessor *owr);
     ~Loader(void);

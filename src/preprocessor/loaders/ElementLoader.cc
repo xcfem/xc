@@ -137,6 +137,6 @@ void XC::ElementLoader::Agrega(XC::Element *e)
 void XC::ElementLoader::nuevo_elemento(Element *e)
   {
     getDomain()->addElement(e);
-    modelador->UpdateSets(e);
+    preprocessor->UpdateSets(e);
   }
 

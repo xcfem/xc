@@ -33,10 +33,10 @@ void export_material_section(void);
 void export_material_fiber_section(void);
 void export_domain(void);
 void export_domain_mesh(void);
-void export_modelador_loaders(void);
-void export_modelador_build_model(void);
-void export_modelador_sets(void);
-void export_modelador_main(void);
+void export_preprocessor_loaders(void);
+void export_preprocessor_build_model(void);
+void export_preprocessor_sets(void);
+void export_preprocessor_main(void);
 void export_solution(void);
 
 BOOST_PYTHON_MODULE(xc)
@@ -60,10 +60,10 @@ BOOST_PYTHON_MODULE(xc)
     export_material_fiber_section(); //Exposición de los materiales.
     export_domain_mesh(); //Exposición de la malla.
     export_domain(); //Exposición del dominio.
-    export_modelador_loaders();//Exposicion del modelador.
-    export_modelador_build_model();
-    export_modelador_sets();
-    export_modelador_main();
+    export_preprocessor_loaders();//Exposicion del preprocessor.
+    export_preprocessor_build_model();
+    export_preprocessor_sets();
+    export_preprocessor_main();
     export_solution(); //Solution routines exposition.
 
 #include "post_process/python_interface.tcc"

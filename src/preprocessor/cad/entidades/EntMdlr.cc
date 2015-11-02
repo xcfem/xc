@@ -52,7 +52,7 @@ XC::EntMdlr::EntMdlr(Preprocessor *m,const size_t &i)
 //! @brief Constructor.
 //! @param nombre: Identificador del objeto.
 //! @param i: Índice para gráficos.
-//! @param m: Apuntador al modelador.
+//! @param m: Apuntador al preprocesador.
 XC::EntMdlr::EntMdlr(const std::string &nombre,const size_t &i,Preprocessor *m)
   : SetEstruct(nombre,m), idx(i), genMalla(true), nodos(), elementos() {}
 
@@ -239,9 +239,9 @@ const XC::Element *XC::EntMdlr::buscaElemento(const int &tag) const
 XC::SetEstruct *XC::EntMdlr::crea_set_fila(const RangoTritriz &rango,const std::string &nmb)
   {
     SetEstruct *retval= nullptr;
-    if(get_modelador())
+    if(get_preprocessor())
       {
-        MapSet &map_set= get_modelador()->get_sets();
+        MapSet &map_set= get_preprocessor()->get_sets();
         if(rango.EsFilaI())
           {
             retval= map_set.crea_set_estruct(GetVarRefFilaI(rango,nmb));
@@ -260,7 +260,7 @@ XC::SetEstruct *XC::EntMdlr::crea_set_fila(const RangoTritriz &rango,const std::
       }
     else
       {
-	std::cerr << "EntMdlr::crea_set_fila; falta un puntero al modelador." << std::endl;
+	std::cerr << "EntMdlr::crea_set_fila; falta un puntero al preprocesador." << std::endl;
         return nullptr;
       }
     return retval;
@@ -397,7 +397,7 @@ bool XC::EntMdlr::procesa_comando(CmdStatus &status)
 //! @brief Crea un nodos en la posición que se pasa como parámetro.
 XC::Node *XC::EntMdlr::crea_nodo(const Pos3d &pos,size_t i,size_t j, size_t k)
   {
-    Node *retval= get_modelador()->getNodeLoader().nuevoNodo(pos);
+    Node *retval= get_preprocessor()->getNodeLoader().nuevoNodo(pos);
     nodos(i,j,k)= retval;
     return retval;
   }
@@ -413,7 +413,7 @@ void XC::EntMdlr::crea_nodos(const TritrizPos3d &posiciones)
         const size_t cols= posiciones(1).getNumCols();
         nodos = TritrizPtrNod(capas,filas,cols);
 
-        if(!get_modelador()) return;
+        if(!get_preprocessor()) return;
         for(register size_t i= 1;i<=capas;i++)
           for(register size_t j= 1;j<=filas;j++)
             for(register size_t k= 1;k<=cols;k++)
@@ -438,11 +438,11 @@ bool XC::EntMdlr::crea_elementos(dir_mallado dm)
         else
           if(elementos.Null())
             {
-              if(get_modelador())
+              if(get_preprocessor())
                 {
                   if(verborrea>4)
                     std::clog << "Creando elementos entidad: '" << GetNombre() << "'...";   
-                  const Element *smll= get_modelador()->getElementLoader().get_elemento_semilla();
+                  const Element *smll= get_preprocessor()->getElementLoader().get_elemento_semilla();
                   if(smll)
                     {
                       elementos= smll->coloca_en_malla(nodos,dm);
@@ -455,7 +455,7 @@ bool XC::EntMdlr::crea_elementos(dir_mallado dm)
                     std::clog << "creados." << std::endl;
                 }
               else
-                std::cerr << "EntMdlr::crea_elementos; falta un puntero al modelador." << std::endl;
+                std::cerr << "EntMdlr::crea_elementos; falta un puntero al preprocesador." << std::endl;
             }
       }
     else
@@ -474,7 +474,7 @@ const bool &XC::EntMdlr::getGenMalla(void) const
 
 //! @brief Crea un punto en la posición que se pasa como parámetro.
 XC::Pnt *XC::EntMdlr::crea_punto(const Pos3d &pos)
-  { return get_modelador()->getCad().getPuntos().Nuevo(pos); }
+  { return get_preprocessor()->getCad().getPuntos().Nuevo(pos); }
 
 //! @brief Crea los puntos en las posiciones que se pasan como parámetro.
 void XC::EntMdlr::crea_puntos(const MatrizPos3d &posiciones)
@@ -484,7 +484,7 @@ void XC::EntMdlr::crea_puntos(const MatrizPos3d &posiciones)
     const size_t filas= posiciones.getNumFilas();
     const size_t cols= posiciones.getNumCols();
 
-    if(get_modelador())
+    if(get_preprocessor())
       {
         size_t cont= 0;
         for(size_t i= 1;i<=filas;i++)
@@ -495,29 +495,29 @@ void XC::EntMdlr::crea_puntos(const MatrizPos3d &posiciones)
             }
       }
     else
-      std::cerr << "Edge::crea_nodos; falta el modelador." << std::endl;
+      std::cerr << "Edge::crea_nodos; falta el preprocesador." << std::endl;
     if(verborrea>4)
       std::clog << "creados." << std::endl;
   }
 
 XC::SetFilaI XC::EntMdlr::GetVarRefFilaI(size_t f,size_t c,const std::string &nmb)
-  { return SetFilaI(*this,f,c,nmb,get_modelador()); }
+  { return SetFilaI(*this,f,c,nmb,get_preprocessor()); }
 XC::SetFilaI XC::EntMdlr::GetVarRefFilaI(const RangoIndice &rango_capas,size_t f,size_t c,const std::string &nmb)
-  { return SetFilaI(*this,rango_capas,f,c,nmb,get_modelador()); }
+  { return SetFilaI(*this,rango_capas,f,c,nmb,get_preprocessor()); }
 XC::SetFilaI XC::EntMdlr::GetVarRefFilaI(const RangoTritriz &rango,const std::string &nmb)
   { return GetVarRefFilaI(rango.GetRangoCapas(),rango.GetRangoFilas().Inf(),rango.GetRangoCols().Inf(),nmb); }
 
 XC::SetFilaJ XC::EntMdlr::GetVarRefFilaJ(size_t capa,size_t c,const std::string &nmb)
-  { return SetFilaJ(*this,capa,c,nmb,get_modelador()); }
+  { return SetFilaJ(*this,capa,c,nmb,get_preprocessor()); }
 XC::SetFilaJ XC::EntMdlr::GetVarRefFilaJ(size_t capa,const RangoIndice &rango_filas,size_t c,const std::string &nmb)
-  { return SetFilaJ(*this,capa,rango_filas,c,nmb,get_modelador()); }
+  { return SetFilaJ(*this,capa,rango_filas,c,nmb,get_preprocessor()); }
 XC::SetFilaJ XC::EntMdlr::GetVarRefFilaJ(const RangoTritriz &rango,const std::string &nmb)
   { return GetVarRefFilaJ(rango.GetRangoCapas().Inf(),rango.GetRangoFilas(),rango.GetRangoCols().Inf(),nmb); }
 
 XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(size_t capa,size_t f,const std::string &nmb)
-  { return SetFilaK(*this,capa,f,nmb,get_modelador()); }
+  { return SetFilaK(*this,capa,f,nmb,get_preprocessor()); }
 XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(size_t capa,size_t f,const RangoIndice &rango_cols,const std::string &nmb)
-  { return SetFilaK(*this,capa,f,rango_cols,nmb,get_modelador()); }
+  { return SetFilaK(*this,capa,f,rango_cols,nmb,get_preprocessor()); }
 XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(const RangoTritriz &rango,const std::string &nmb)
   { return GetVarRefFilaK(rango.GetRangoCapas().Inf(),rango.GetRangoFilas().Inf(),rango.GetRangoCols(),nmb); }
 

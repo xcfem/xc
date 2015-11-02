@@ -162,7 +162,7 @@ void XC::Set::Transforma(const TrfGeom &trf)
 //! @brief Aplica al conjunto la transformación cuyo índice se pasa como parámetro.
 void XC::Set::Transforma(const size_t &indice_trf)
   {
-    TrfGeom *trf= get_modelador()->getCad().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= get_preprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
     if(trf)
       Transforma(*trf);
   }
@@ -173,13 +173,13 @@ void XC::Set::Transforma(const size_t &indice_trf)
 //! vector que se pasa como parámetro.
 void XC::Set::crea_copia(const std::string &nombre,const Vector3d &v= Vector3d())
   {
-    Preprocessor *preprocessor= get_modelador();
+    Preprocessor *preprocessor= get_preprocessor();
     if(!preprocessor)
       {
-        std::cerr << "Set::crea_copia; no está asignado el modelador." << std::endl;
+        std::cerr << "Set::crea_copia; preprocessor not assigned." << std::endl;
 	return;
       }
-    Set *nuevo_set= get_modelador()->get_sets().crea_set(nombre);
+    Set *nuevo_set= get_preprocessor()->get_sets().crea_set(nombre);
     std::clog << "Set::crea_copia; ¡ojo! no se ha implementado la copia"
               << " de nodos ni de elementos." << std::endl;
     //Copiamos los puntos.
@@ -188,7 +188,7 @@ void XC::Set::crea_copia(const std::string &nombre,const Vector3d &v= Vector3d()
       {
         const std::string nombre_viejo= (*i)->GetNombre();
         const std::string nombre_nuevo= nombre+nombre_viejo;
-        Pnt *nuevo_punto= get_modelador()->getCad().getPuntos().Copia(*i,v);
+        Pnt *nuevo_punto= get_preprocessor()->getCad().getPuntos().Copia(*i,v);
         nuevo_punto->BorraPtrNodElem();
         nuevo_set->puntos.push_back(nuevo_punto);
         nombres_nuevos_puntos[nombre_viejo]= nombre_nuevo;
@@ -199,7 +199,7 @@ void XC::Set::crea_copia(const std::string &nombre,const Vector3d &v= Vector3d()
       {
         const std::string nombre_viejo= (*i)->GetNombre();
         const std::string nombre_nuevo= nombre+nombre_viejo;
-        Edge *nuevo_edge= get_modelador()->getCad().getLineas().Copia(*i);
+        Edge *nuevo_edge= get_preprocessor()->getCad().getLineas().Copia(*i);
         nuevo_edge->BorraPtrNodElem();
         nuevo_set->lineas.push_back(nuevo_edge);
         nombres_nuevos_lineas[nombre_viejo]= nombre_nuevo;
@@ -226,15 +226,15 @@ bool XC::Set::procesa_comando(CmdStatus &status)
     const std::string cmd= deref_cmd(status.Cmd());
     if(verborrea>2)
       std::clog << "(Set) Procesando comando: " << cmd << std::endl;
-    if(!get_modelador())
-      std::cerr << "¡Ojo!, el conjunto: " << GetNombre() << " no tiene asignado un modelador." << std::endl;
+    if(!get_preprocessor())
+      std::cerr << "¡Ojo!, el conjunto: " << GetNombre() << " preprocessor not assigned." << std::endl;
     if(cmd == "sel_pnt") //Lista literal de identificadores de punto.
       {
 	std::vector<std::string> nmbs_pntos= crea_vector_string(status.GetString());
         const size_t sz= nmbs_pntos.size();
-        if(get_modelador())
+        if(get_preprocessor())
           {
-            Cad &cad= get_modelador()->getCad();
+            Cad &cad= get_preprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
 	        Pnt *ipt= cad.getPuntos().busca(interpretaSize_t(nmbs_pntos[i])); 
@@ -249,7 +249,7 @@ bool XC::Set::procesa_comando(CmdStatus &status)
     else if(cmd == "sel_puntos_cond") //Condición que han de cumplir para añadirlos al conjunto.
       {
 	std::string cond= status.GetBloque(); //Condición a cumplir.
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           {
             Set *set_base= nullptr; //Conjunto del que se seleccionan las superficies.
@@ -263,7 +263,7 @@ bool XC::Set::procesa_comando(CmdStatus &status)
                     const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
 	            std::cerr << "(Set) Procesando comando: " << cmd
                               << " no se encotró el conjunto:'" << nmbSetBase
-                              << " en el modelador." << posLectura << std::endl;
+                              << " en el preprocesador." << posLectura << std::endl;
                   }
 	      }
             else
@@ -277,11 +277,11 @@ bool XC::Set::procesa_comando(CmdStatus &status)
       {
 	const Lista tmp= interpretaLista(status.GetString());
         const size_t sz= tmp.size();
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         int tag= 0;
         if(preprocessor)
           {
-            Cad &cad= get_modelador()->getCad();
+            Cad &cad= get_preprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
                 tag= convert_to_size_t(tmp[i]);
@@ -298,9 +298,9 @@ bool XC::Set::procesa_comando(CmdStatus &status)
       {
 	std::vector<std::string> nmbs_edges= crea_vector_string(status.GetString());
         const size_t sz= nmbs_edges.size();
-        if(get_modelador())
+        if(get_preprocessor())
           {
-            Cad &cad= get_modelador()->getCad();
+            Cad &cad= get_preprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
 	        Edge *iedge= cad.getLineas().busca(interpretaSize_t(nmbs_edges[i])); 
@@ -315,7 +315,7 @@ bool XC::Set::procesa_comando(CmdStatus &status)
     else if(cmd == "sel_edge_cond") //Condición que han de cumplir para añadirlas al conjunto.
       {
 	std::string cond= status.GetBloque(); //Condición a cumplir.
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           {
             Set *set_base= nullptr; //Conjunto del que se seleccionan las superficies.
@@ -329,7 +329,7 @@ bool XC::Set::procesa_comando(CmdStatus &status)
                     const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
 	            std::cerr << "(Set) Procesando comando: " << cmd
                               << " no se encotró el conjunto:'" << nmbSetBase
-                              << " en el modelador." << posLectura << std::endl;
+                              << " en el preprocesador." << posLectura << std::endl;
                   }
 	      }
             else
@@ -343,11 +343,11 @@ bool XC::Set::procesa_comando(CmdStatus &status)
       {
 	const Lista tmp= interpretaLista(status.GetString());
         const size_t sz= tmp.size();
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         int tag= 0;
         if(preprocessor)
           {
-            Cad &cad= get_modelador()->getCad();
+            Cad &cad= get_preprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
                 tag= convert_to_size_t(tmp[i]);
@@ -364,9 +364,9 @@ bool XC::Set::procesa_comando(CmdStatus &status)
       {
 	std::vector<std::string> nmbs_faces= crea_vector_string(status.GetString());
         const size_t sz= nmbs_faces.size();
-        if(get_modelador())
+        if(get_preprocessor())
           {
-            Cad &cad= get_modelador()->getCad();
+            Cad &cad= get_preprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
 	        Face *iface= cad.getSuperficies().busca(interpretaSize_t(nmbs_faces[i])); 
@@ -381,7 +381,7 @@ bool XC::Set::procesa_comando(CmdStatus &status)
     else if(cmd == "sel_face_cond") //Condición que han de cumplir para añadirlas al conjunto.
       {
 	std::string cond= status.GetBloque(); //Condición a cumplir.
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           {
             Set *set_base= nullptr; //Conjunto del que se seleccionan las superficies.
@@ -395,7 +395,7 @@ bool XC::Set::procesa_comando(CmdStatus &status)
                     const std::string posLectura= status.GetEntradaComandos().getPosicionLecturaActual();
 	            std::cerr << "(Set) Procesando comando: " << cmd
                               << " no se encotró el conjunto:'" << nmbSetBase
-                              << " en el modelador." << posLectura << std::endl;
+                              << " en el preprocesador." << posLectura << std::endl;
                   }
 	      }
             else
@@ -409,11 +409,11 @@ bool XC::Set::procesa_comando(CmdStatus &status)
       {
 	const Lista tmp= interpretaLista(status.GetString());
         const size_t sz= tmp.size();
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         int tag= 0;
         if(preprocessor)
           {
-            Cad &cad= get_modelador()->getCad();
+            Cad &cad= get_preprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
                 tag= convert_to_size_t(tmp[i]);
@@ -429,7 +429,7 @@ bool XC::Set::procesa_comando(CmdStatus &status)
     else if(cmd == "sel_set")
       {
         const std::string nmb_set= interpretaString(status.GetString());
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           {
             const Set *set= dynamic_cast<Set *>(preprocessor->get_sets().busca_set(nmb_set));
@@ -451,7 +451,7 @@ bool XC::Set::procesa_comando(CmdStatus &status)
           {
             const std::string nmbSet= args[0];
             const std::string cond= args[1];
-            Preprocessor *preprocessor= get_modelador();
+            Preprocessor *preprocessor= get_preprocessor();
             if(preprocessor)
               {
                 const Set *set= dynamic_cast<Set *>(preprocessor->get_sets().busca_set(nmbSet));
@@ -609,7 +609,7 @@ void XC::Set::malla_uniform_grids(dir_mallado dm)
 //! @param elemento_semilla: Elemento a copiar en las posiciones de la malla.
 void XC::Set::Malla(dir_mallado dm)
   {
-    Preprocessor *mdl= get_modelador();
+    Preprocessor *mdl= get_preprocessor();
     assert(mdl);
     mdl->get_sets().abre_set(GetNombre()); //Para que nodos y elementos entren en ESTE conjunto.
 
@@ -793,10 +793,10 @@ void XC::Set::sel_puntos_lista(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           {
-            Cad &cad= get_modelador()->getCad();
+            Cad &cad= get_preprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
 	        Pnt *ipt= cad.getPuntos().busca(tags(i)); 
@@ -807,7 +807,7 @@ void XC::Set::sel_puntos_lista(const ID &tags)
               }
           }
         else
-          std::cerr << "Set::sel_puntos_lista; necesito un modelador." << std::endl;
+          std::cerr << "Set::sel_puntos_lista; necesito un preprocesador." << std::endl;
       }
   }
 
@@ -817,10 +817,10 @@ void XC::Set::sel_lineas_lista(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           {
-            Cad &cad= get_modelador()->getCad();
+            Cad &cad= get_preprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
 	        Edge *iedge= cad.getLineas().busca(tags(i)); 
@@ -831,7 +831,7 @@ void XC::Set::sel_lineas_lista(const ID &tags)
               }
           }
         else
-          std::cerr << "Set::sel_lineas_lista; necesito un modelador." << std::endl;
+          std::cerr << "Set::sel_lineas_lista; necesito un preprocesador." << std::endl;
       }
   }
 
@@ -841,10 +841,10 @@ void XC::Set::sel_superficies_lista(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_modelador();
+        Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           {
-            Cad &cad= get_modelador()->getCad();
+            Cad &cad= get_preprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
 	        Face *iface= cad.getSuperficies().busca(tags(i)); 
@@ -855,7 +855,7 @@ void XC::Set::sel_superficies_lista(const ID &tags)
               }
           }
         else
-          std::cerr << "Set::sel_elementos_lista; necesito un modelador." << std::endl;
+          std::cerr << "Set::sel_elementos_lista; necesito un preprocesador." << std::endl;
       }
   }
 

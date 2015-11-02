@@ -1511,7 +1511,7 @@ std::set<XC::SetBase *> XC::Node::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << "Node::get_sets; no se ha definido el modelador." << std::endl;
+      std::cerr << "Node::get_sets; no se ha definido el preprocesador." << std::endl;
     return retval;
   }
 

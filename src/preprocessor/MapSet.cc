@@ -179,7 +179,7 @@ XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb
     return retval;
   }
 
-//! @bref Inserta, como conjunto, una entidad del modelador.
+//! @bref Inserta, como conjunto, una entidad del preprocesador.
 XC::EntMdlr *XC::MapSet::inserta_ent_mdlr(EntMdlr *ent_mdlr)
   {
     assert(ent_mdlr);

@@ -58,7 +58,7 @@ bool XC::Reflexion::procesa_comando(CmdStatus &status)
       {
         const std::vector<MapPuntos::Indice> tmp= crea_vector_size_t(status.GetString());
         if(tmp.size()>2)
-          plano= get_modelador()->getCad().getPuntos().getPlano(tmp[0],tmp[1],tmp[2]); 
+          plano= get_preprocessor()->getCad().getPuntos().getPlano(tmp[0],tmp[1],tmp[2]); 
         else
 	  std::cerr << "(Reflexión) Procesando comando: " << cmd
                     << " se necesitan tres puntos para definir el plano." << std::endl;

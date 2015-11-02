@@ -65,7 +65,7 @@ bool XC::Rotacion::procesa_comando(CmdStatus &status)
       {
         const std::vector<MapPuntos::Indice> tmp= crea_vector_size_t(status.GetString());
         if(tmp.size()>1)
-          eje= get_modelador()->getCad().getPuntos().getRecta(tmp[0],tmp[1]); 
+          eje= get_preprocessor()->getCad().getPuntos().getRecta(tmp[0],tmp[1]); 
         else
 	  std::cerr << "(Rotacion) Procesando comando: " << cmd
                     << " se necesitan dos puntos para definir el eje." << std::endl;

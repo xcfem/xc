@@ -25,7 +25,7 @@
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //Body.h
-//Objeto superficie del modelador.
+//Class for block entities. (XXX: rename as Block?)
 
 #ifndef BODY_H
 #define BODY_H

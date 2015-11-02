@@ -25,7 +25,7 @@
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //Block.h
-//Objeto superficie del modelador.
+//Objeto superficie del preprocesador.
 
 #ifndef BLOCK_H
 #define BLOCK_H

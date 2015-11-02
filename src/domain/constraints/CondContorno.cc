@@ -788,7 +788,7 @@ std::string XC::CondContorno::getNombresLPs(void) const
                   retval+= casos.getNombreLoadPattern((*i).second) + " ";
               }
             else
-	      std::cerr << "CondContorno::getNombresLPs; necesito un modelador." << std::endl;
+	      std::cerr << "CondContorno::getNombresLPs; necesito un preprocesador." << std::endl;
           }
         else
           std::cerr << "CondContorno::getNombresLPs; necesito un dominio." << std::endl;

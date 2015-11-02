@@ -97,11 +97,11 @@ XC::ProtoElementLoader::ProtoElementLoader(Preprocessor *preprocessor)
 
 //! @brief Devuelve una referencia al cargador de materiales.
 XC::MaterialLoader &XC::ProtoElementLoader::get_material_loader(void) const
-  { return modelador->getMaterialLoader(); }
+  { return preprocessor->getMaterialLoader(); }
 
 //! @brief Devuelve un iterador al material que se especifica en nmb_mat.
 XC::MaterialLoader::const_iterator XC::ProtoElementLoader::get_iter_material(void) const
-  { return modelador->getMaterialLoader().find(nmb_mat); }
+  { return preprocessor->getMaterialLoader().find(nmb_mat); }
 
 //! @brief Devuelve un apuntador al material que se especifica en nmb_mat.
 XC::Material *XC::ProtoElementLoader::get_ptr_material(void) const
@@ -118,11 +118,11 @@ XC::Material *XC::ProtoElementLoader::get_ptr_material(void) const
 
 //! @brief Devuelve una referencia al cargador de integradores.
 XC::BeamIntegratorLoader &XC::ProtoElementLoader::get_beam_integrator_loader(void) const
-  { return modelador->getBeamIntegratorLoader(); }
+  { return preprocessor->getBeamIntegratorLoader(); }
 
 //! @brief Devuelve un iterador al integrador que se especifica en nmb_integ.
 XC::BeamIntegratorLoader::const_iterator XC::ProtoElementLoader::get_iter_beam_integrator(void) const
-  { return modelador->getBeamIntegratorLoader().find(nmb_integ); }
+  { return preprocessor->getBeamIntegratorLoader().find(nmb_integ); }
 
 
 //! @brief Devuelve un apuntador al integrador que se especifica en nmb_integ.
@@ -141,11 +141,11 @@ XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void) const
 
 //! @brief Devuelve una referencia al cargador de transformaciones de coordenadas.
 XC::TransfCooLoader &XC::ProtoElementLoader::get_transf_coo_loader(void) const
-  { return modelador->getTransfCooLoader(); }
+  { return preprocessor->getTransfCooLoader(); }
 
 //! @brief Devuelve un iterador a la transformacion que se especifica en nmb_transf.
 XC::TransfCooLoader::const_iterator XC::ProtoElementLoader::get_iter_transf_coo(void) const
-  { return modelador->getTransfCooLoader().find(nmb_transf); }
+  { return preprocessor->getTransfCooLoader().find(nmb_transf); }
 
 //! @brief Devuelve un apuntador a la transformación que se especifica en nmb_transf.
 XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
@@ -306,7 +306,7 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
 XC::Element *XC::ProtoElementLoader::nuevoElemento(const std::string &tipo,const ID &iNodos)
   {
     const int tag_elem= getDefaultTag();
-    Element *retval= modelador->GetDominio()->getElement(tag_elem);
+    Element *retval= preprocessor->GetDominio()->getElement(tag_elem);
     if(!retval) //no existe (efectivament es nuevo).
       {
         retval= crea_elemento(tipo,tag_elem);
@@ -373,9 +373,9 @@ const std::string &XC::ProtoElementLoader::getDefaultIntegrator(void) const
 //! @brief Ejecuta el bloque que se pasa como parámetro.
 void XC::ProtoElementLoader::ejecuta_bloque_for_each(CmdStatus &status,const std::string &bloque)
   {
-    if(modelador)
+    if(preprocessor)
       {
-        Domain *tmp= modelador->GetDominio();
+        Domain *tmp= preprocessor->GetDominio();
         if(tmp)
           tmp->EjecutaBloqueForEachElement(status,bloque);
       }

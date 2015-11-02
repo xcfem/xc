@@ -38,11 +38,11 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
-//! @brief Devuelve un puntero al modelador.
-const XC::Preprocessor *XC::EntMdlrBase::get_modelador(void) const
+//! @brief Devuelve un puntero al preprocesador.
+const XC::Preprocessor *XC::EntMdlrBase::get_preprocessor(void) const
   { return preprocessor; }
-//! @brief Devuelve un puntero al modelador.
-XC::Preprocessor *XC::EntMdlrBase::get_modelador(void)
+//! @brief Devuelve un puntero al preprocesador.
+XC::Preprocessor *XC::EntMdlrBase::get_preprocessor(void)
   { return preprocessor; }
 
 //! @brief Constructor.
@@ -74,7 +74,7 @@ bool XC::EntMdlrBase::procesa_comando(CmdStatus &status)
       std::clog << "(EntMdlrBase) Procesando comando: " << cmd << std::endl;
 
     if(!preprocessor)
-      std::cerr << "¡Ojo!, el objeto: " << GetNombre() << " no tiene asignado un modelador." << std::endl;
+      std::cerr << "¡Ojo!, el objeto: " << GetNombre() << " no tiene asignado un preprocesador." << std::endl;
     if(cmd=="preprocessor")
       {
         if(preprocessor)
@@ -114,12 +114,12 @@ XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto)
     Pnt *retval= nullptr;
     if(preprocessor)
       {
-        Cad &cad= get_modelador()->getCad();
+        Cad &cad= get_preprocessor()->getCad();
         retval= cad.getPuntos().busca(id_punto);
       }
     else
       std::cerr << "EntMdlrBase::BuscaPnt: el objeto: '"
-                << GetNombre() << "' no tiene asignado modelador."
+                << GetNombre() << "' no tiene asignado preprocesador."
                 << std::endl;
     return retval;
   }
@@ -130,12 +130,12 @@ const XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto) const
     const Pnt *retval= nullptr;
     if(preprocessor)
       {
-        const Cad &cad= get_modelador()->getCad();
+        const Cad &cad= get_preprocessor()->getCad();
         retval= cad.getPuntos().busca(id_punto);
       }
     else
       std::cerr << "XC::EntMdlrBase::BuscaPnt: el objeto: '" 
-                << GetNombre() << "' no tiene asignado modelador."
+                << GetNombre() << "' no tiene asignado preprocesador."
                 << std::endl;
     return retval;
   }
@@ -146,12 +146,12 @@ XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge)
     Edge *retval= nullptr;
     if(preprocessor)
       {
-        Cad &cad= get_modelador()->getCad();
+        Cad &cad= get_preprocessor()->getCad();
         retval= cad.getLineas().busca(id_edge);
       }
     else
       std::cerr << "XC::EntMdlrBase::BuscaEdge: el objeto: '"
-                << GetNombre() << "' no tiene asignado modelador."
+                << GetNombre() << "' no tiene asignado preprocesador."
                 << std::endl;
     return retval;
   }
@@ -162,12 +162,12 @@ const XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge) const
     const Edge *retval= nullptr;
     if(preprocessor)
       {
-        const Cad &cad= get_modelador()->getCad();
+        const Cad &cad= get_preprocessor()->getCad();
         retval= cad.getLineas().busca(id_edge);
       }
     else
       std::cerr << "EntMdlrBase::BuscaEdge: el objeto: '" 
-                << GetNombre() << "' no tiene asignado modelador."
+                << GetNombre() << "' no tiene asignado preprocesador."
                 << std::endl;
     return retval;
   }
@@ -178,12 +178,12 @@ XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face)
     Face *retval= nullptr;
     if(preprocessor)
       {
-        Cad &cad= get_modelador()->getCad();
+        Cad &cad= get_preprocessor()->getCad();
         retval= cad.getSuperficies().busca(id_face);
       }
     else
       std::cerr << "XC::EntMdlrBase::BuscaFace: el objeto: '"
-                << GetNombre() << "' no tiene asignado modelador."
+                << GetNombre() << "' no tiene asignado preprocesador."
                 << std::endl;
     return retval;
   }
@@ -194,12 +194,12 @@ const XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face) const
     const Face *retval= nullptr;
     if(preprocessor)
       {
-        const Cad &cad= get_modelador()->getCad();
+        const Cad &cad= get_preprocessor()->getCad();
         retval= cad.getSuperficies().busca(id_face);
       }
     else
       std::cerr << "EntMdlrBase::BuscaFace: el objeto: '" 
-                << GetNombre() << "' no tiene asignado modelador."
+                << GetNombre() << "' no tiene asignado preprocesador."
                 << std::endl;
     return retval;
   }

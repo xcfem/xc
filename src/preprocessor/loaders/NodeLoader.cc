@@ -78,7 +78,7 @@ bool XC::NodeLoader::procesa_comando(CmdStatus &status)
       {
         Node *ptrNod= lee_nodo(status);
         getDomain()->addNode(ptrNod);
-        modelador->UpdateSets(ptrNod);
+        preprocessor->UpdateSets(ptrNod);
         return true;
       }
     else if(cmd == "nod")
@@ -89,7 +89,7 @@ bool XC::NodeLoader::procesa_comando(CmdStatus &status)
             if(!getDomain()->existNode(ptrNod->getTag())) //El nodo es nuevo.
               {
                 getDomain()->addNode(ptrNod);
-                modelador->UpdateSets(ptrNod);
+                preprocessor->UpdateSets(ptrNod);
               }
           }
         return true;
@@ -185,7 +185,7 @@ XC::Node *XC::NodeLoader::duplicateNode(const int &tagNodoOrg)
         if(retval)
           {
             getDomain()->addNode(retval);
-            modelador->UpdateSets(retval);
+            preprocessor->UpdateSets(retval);
           }
       }
     return retval;
@@ -203,7 +203,7 @@ XC::Node *XC::NodeLoader::nuevoNodo(const double &x,const double &y,const double
     if(retval)
       {
         getDomain()->addNode(retval);
-        modelador->UpdateSets(retval);
+        preprocessor->UpdateSets(retval);
       }
     return retval;
   }
@@ -220,7 +220,7 @@ XC::Node *XC::NodeLoader::nuevoNodo(const double &x,const double &y)
     if(retval)
       {
         getDomain()->addNode(retval);
-        modelador->UpdateSets(retval);
+        preprocessor->UpdateSets(retval);
       }
     return retval;
   }
@@ -238,7 +238,7 @@ XC::Node *XC::NodeLoader::nuevoNodo(const double &x)
     if(retval)
       {
         getDomain()->addNode(retval);
-        modelador->UpdateSets(retval);
+        preprocessor->UpdateSets(retval);
       }
     return retval;
   }

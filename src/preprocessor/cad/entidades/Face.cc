@@ -48,7 +48,7 @@ XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
 
 //! @brief Constructor.
 //! @param nombre: Identificador del objeto.
-//! @param m: Apuntador al modelador.
+//! @param m: Apuntador al preprocesador.
 //! @param nd: Número de divisiones.
 XC::Face::Face(const std::string &nombre,Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
   : CmbEdge(nombre,m,ndivI), ndivj(ndivJ) {}
@@ -169,7 +169,7 @@ std::set<XC::SetBase *> XC::Face::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << "Face::get_sets; no se ha definido el modelador." << std::endl;
+      std::cerr << "Face::get_sets; no se ha definido el preprocesador." << std::endl;
     return retval;
   }
 

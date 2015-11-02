@@ -19,11 +19,11 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//export_modelador_loaders.cxx
+//export_preprocessor_loaders.cxx
 
 #include "python_interface.h"
 
-void export_modelador_loaders(void)
+void export_preprocessor_loaders(void)
   {
     using namespace boost::python;
     docstring_options doc_options;

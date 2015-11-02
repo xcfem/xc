@@ -95,7 +95,7 @@ bool XC::Cad::procesa_comando(CmdStatus &status)
     if(verborrea>2)
       std::clog << str_err << std::endl;
     if(!preprocessor)
-      std::cerr << "Cad; ¡Ojo!, no se ha asignado un modelador." << std::endl;
+      std::cerr << "Cad; ¡Ojo!, no se ha asignado un preprocesador." << std::endl;
     if(cmd == "tag_sis_ref")
       {
         sistemas_referencia.setTag(interpretaSize_t(status.GetString())); //Nuevo identificador del sistema de referencia.
@@ -290,7 +290,7 @@ bool XC::Cad::procesa_comando(CmdStatus &status)
         else
           {
             status.GetBloque(); //Ignoramos entrada.
-	    std::cerr << "Cad::procesa_comando; no se ha asignado puntero al modelador." << std::endl;
+	    std::cerr << "Cad::procesa_comando; no se ha asignado puntero al preprocesador." << std::endl;
           }
         return true;
       }
@@ -375,7 +375,7 @@ void XC::Cad::conciliaNDivs(void)
       }
   }
 
-//! @brief Busca la entidad del modelador cuyo nombre se pasa como parámetro.
+//! @brief Busca la entidad cuyo nombre se pasa como parámetro.
 XC::SetEstruct *XC::Cad::busca_set_estruct(const MapUniformGrids::Indice &id)
   {
     SetEstruct *retval= puntos.busca(id);

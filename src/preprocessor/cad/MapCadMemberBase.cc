@@ -67,11 +67,11 @@ XC::Cad *XC::MapCadMemberBase::getCad(void)
     return retval;
   }
 
-//! @brief Devuelve un apuntador al modelador.
+//! @brief Devuelve un apuntador al preprocesador.
 const XC::Preprocessor *XC::MapCadMemberBase::getPreprocessor(void) const
   { return getCad()->getPreprocessor(); }
 
-//! @brief Devuelve un apuntador al modelador.
+//! @brief Devuelve un apuntador al preprocesador.
 XC::Preprocessor *XC::MapCadMemberBase::getPreprocessor(void)
   { return getCad()->getPreprocessor(); }
 

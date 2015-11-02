@@ -271,7 +271,7 @@ XC::CmbEdge::CmbEdge(Preprocessor *m,const size_t &nd)
 
 //! @brief Constructor.
 //! @param nombre: Identificador del objeto.
-//! @param m: Apuntador al modelador.
+//! @param m: Apuntador al preprocesador.
 //! @param nd: Número de divisiones.
 XC::CmbEdge::CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : Edge(nombre,m,nd), lineas(0) {}
@@ -588,8 +588,8 @@ void XC::CmbEdge::cierra(void)
 XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
   {
     Linea *retval= nullptr;
-    assert(get_modelador());
-    retval= dynamic_cast<Linea *>(get_modelador()->getCad().getLineas().Line(pA,pB));
+    assert(get_preprocessor());
+    retval= dynamic_cast<Linea *>(get_preprocessor()->getCad().getLineas().Line(pA,pB));
     if(retval)
       {
         inserta(retval);
@@ -612,8 +612,8 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
 XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
   {
     ArcoCircunf *retval= nullptr;
-    assert(get_modelador());
-    retval= dynamic_cast<ArcoCircunf *>(get_modelador()->getCad().getLineas().Arc(pA,pB,pC));
+    assert(get_preprocessor());
+    retval= dynamic_cast<ArcoCircunf *>(get_preprocessor()->getCad().getLineas().Arc(pA,pB,pC));
     if(retval)
       inserta(retval);
     else

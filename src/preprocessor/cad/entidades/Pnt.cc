@@ -251,7 +251,7 @@ std::set<XC::SetBase *> XC::Pnt::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << "Pnt::get_sets; no se ha definido el modelador." << std::endl;
+      std::cerr << "Pnt::get_sets; no se ha definido el preprocesador." << std::endl;
     return retval;
   }
 
@@ -312,7 +312,7 @@ void XC::Pnt::Transforma(const TrfGeom &trf)
 //! @brief Aplica al punto la transformación cuyo índice se pasa como parámetro.
 void XC::Pnt::Transforma(const size_t &indice_trf)
   {
-    TrfGeom *trf= get_modelador()->getCad().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= get_preprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
     if(trf)
       Transforma(*trf);
   }

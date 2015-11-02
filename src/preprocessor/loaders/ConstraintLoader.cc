@@ -57,7 +57,7 @@ XC::SP_Constraint *XC::ConstraintLoader::addSP_Constraint(const int &tag_nod,con
       {
         sp->setNodeTag(tag_nod);
         getDomain()->addSP_Constraint(sp);
-        modelador->UpdateSets(sp);
+        preprocessor->UpdateSets(sp);
       }
     else
       std::cerr << "ConstraintLoader::addSP_Constraint; se produjo un error al crear la coacción." << std::endl;
@@ -72,7 +72,7 @@ XC::SP_Constraint *XC::ConstraintLoader::addSP_Constraint(const int &tag_nod,con
     if(sp)
       {
         getDomain()->addSP_Constraint(sp);
-        modelador->UpdateSets(sp);
+        preprocessor->UpdateSets(sp);
       }
     else
       std::cerr << "ConstraintLoader::addSP_Constraint; se produjo un error al crear la coacción." << std::endl;
@@ -91,7 +91,7 @@ XC::MP_Constraint *XC::ConstraintLoader::newMPConstraint(const int &masterNode, 
     if(mp)
       {
         getDomain()->addMP_Constraint(mp);
-        modelador->UpdateSets(mp);
+        preprocessor->UpdateSets(mp);
       }
     else
       std::cerr << "ConstraintLoader::newMPConstraint; se produjo un error al crear la coacción." << std::endl;
@@ -106,7 +106,7 @@ XC::MP_Constraint *XC::ConstraintLoader::newEqualDOF(const int &masterNode, cons
       {
         mp->setup(getDomain());
         getDomain()->addMP_Constraint(mp);
-        modelador->UpdateSets(mp);
+        preprocessor->UpdateSets(mp);
       }
     else
       std::cerr << "ConstraintLoader::addMP_Constraint; se produjo un error al crear la coacción." << std::endl;
@@ -121,7 +121,7 @@ XC::MP_Constraint *XC::ConstraintLoader::newRigidBeam(const int &masterNode, con
       {
         mp->setup(getDomain());
         getDomain()->addMP_Constraint(mp);
-        modelador->UpdateSets(mp);
+        preprocessor->UpdateSets(mp);
       }
     else
       std::cerr << "ConstraintLoader::newRigidBeam; se produjo un error al crear la coacción." << std::endl;
@@ -136,7 +136,7 @@ XC::MP_Constraint *XC::ConstraintLoader::newRigidRod(const int &masterNode, cons
       {
         mp->setup(getDomain());
         getDomain()->addMP_Constraint(mp);
-        modelador->UpdateSets(mp);
+        preprocessor->UpdateSets(mp);
       }
     else
       std::cerr << "ConstraintLoader::newRigidRod; se produjo un error al crear la coacción." << std::endl;
@@ -151,7 +151,7 @@ XC::MRMP_Constraint *XC::ConstraintLoader::newMRMPConstraint(const ID &retainedN
     if(mrmp)
       {
         getDomain()->addMRMP_Constraint(mrmp);
-        modelador->UpdateSets(mrmp);
+        preprocessor->UpdateSets(mrmp);
       }
     else
       std::cerr << "ConstraintLoader::newMPConstraint; se produjo un error al crear la coacción." << std::endl;
@@ -165,7 +165,7 @@ XC::MRMP_Constraint *XC::ConstraintLoader::newGlueNodeToElement(const Node &cons
     if(mrmp)
       {
         getDomain()->addMRMP_Constraint(mrmp);
-        modelador->UpdateSets(mrmp);
+        preprocessor->UpdateSets(mrmp);
       }
     else
       std::cerr << "ConstraintLoader::newGlueNodeToElement; se produjo un error al crear la coacción." << std::endl;

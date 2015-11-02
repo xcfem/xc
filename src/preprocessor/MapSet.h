@@ -64,10 +64,10 @@ class MapSet: public EntCmd, public MovableObject
     typedef map_sets::const_iterator const_iterator;
     typedef std::map<std::string,EntMdlr *> map_ent_mdlr;
   private:
-    Preprocessor *preprocessor; //!< Puntero al modelador.
+    Preprocessor *preprocessor; //!< Pointer to preprocessor.
 
     map_sets sets; //!< Conjuntos de entidades.
-    map_ent_mdlr entidades; //! Entidades del modelador (puntos, lineas, superficies,...).
+    map_ent_mdlr entidades; //! Entidades del preprocessor (puntos, lineas, superficies,...).
     Set *total; //!< Puntero al conjunto universal (Se crea en el constructor).
     map_sets abiertos; //!< Conjuntos abiertos (aquellos a los que se añade cada nueva entidad creada en Cad).
 

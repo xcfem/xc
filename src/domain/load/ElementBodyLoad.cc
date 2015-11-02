@@ -83,7 +83,7 @@ bool XC::ElementBodyLoad::procesa_comando(CmdStatus &status)
           }
         else
 	  std::cerr  << "(ElementBodyLoad) Procesando comando: '" << cmd 
-                     << "' necesito un modelador." << std::endl;
+                     << "' necesito un preprocesador." << std::endl;
         return true;
       }
     else if(cmd == "elementList")

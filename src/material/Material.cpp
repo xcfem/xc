@@ -101,7 +101,7 @@ bool XC::Material::procesa_comando(CmdStatus &status)
       return TaggedObject::procesa_comando(status);
   }
 
-//! @brief Devuelve (si puede) un puntero al modelador.
+//! @brief Devuelve (si puede) un puntero al preprocesador.
 const XC::MaterialLoader *XC::Material::GetMaterialLoader(void) const
   {
     const XC::MaterialLoader *retval= dynamic_cast<const MaterialLoader *>(Owner());

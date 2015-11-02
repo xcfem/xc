@@ -25,7 +25,7 @@
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //EntMdlr.h
-//Entidad del modelador.
+//Multiblock topology entity.
 
 #ifndef ENTMDLR_H
 #define ENTMDLR_H
@@ -49,7 +49,7 @@ class SetFilaK;
 
 //!  \ingroup Cad
 //! 
-//!  \brief Entidad del modelador (punto, línea, superficie, volumen,...).
+//!  \brief Multiblock topology object (point, líne, face, block,...).
 class EntMdlr: public SetEstruct
   {
   private:

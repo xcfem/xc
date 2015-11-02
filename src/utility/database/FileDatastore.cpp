@@ -53,9 +53,9 @@
 // Created: 10/98
 //
 // Description: This file contains the class implementation for FileDatastore.
-// FileDatastore is a concrete subclas of XC::FE_Datastore. A FileDatastore
+// FileDatastore is a concrete subclas of FE_Datastore. A FileDatastore
 // object is used in the program to store/restore the geometry and state
-// information in a modelador at a particular instance in the analysis. The
+// information in a model at a particular instance in the analysis. The
 // information is stored in text files.
 //
 // What: "@(#) FileDatastore.C, revA"
