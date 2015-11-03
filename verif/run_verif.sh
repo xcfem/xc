@@ -175,58 +175,58 @@ python tests/solution/eigenvalues/test_analisis_modal_05.py
 python tests/solution/eigenvalues/test_cqc_01.py
 python tests/solution/eigenvalues/test_band_arpackpp_solver_01.py
 
-#Modeler tests
-echo "$BLEU" "Modeler tests." "$NORMAL"
+#Preprocessor tests
+echo "$BLEU" "Preprocessor tests." "$NORMAL"
 echo "$BLEU" "  Simpson rule tests." "$NORMAL"
-python tests/modeler/integra_simpson_fila_i.py
-python tests/modeler/integra_simpson_fila_j.py
-python tests/modeler/integra_simpson_fila_k.py
+python tests/preprocessor/integra_simpson_fila_i.py
+python tests/preprocessor/integra_simpson_fila_j.py
+python tests/preprocessor/integra_simpson_fila_k.py
 
-echo "$BLEU" "  Modeler entities tests." "$NORMAL"
-python tests/modeler/cad/linea.py
-python tests/modeler/cad/linea_02.py
-python tests/modeler/cad/k_points.py
-python tests/modeler/cad/linea_tramos.py
-python tests/modeler/cad/test_sec_lineas_01.py
-python tests/modeler/cad/test_sec_lineas_02.py
-python tests/modeler/cad/arco_circunf_01.py
-python tests/modeler/cad/arco_circunf_02.py
-python tests/modeler/cad/arco_circunf_03.py
-python tests/modeler/cad/arco_circunf_04.py
-python tests/modeler/cad/arco_circunf_05.py
-python tests/modeler/cad/crea_puntos_linea.py
-python tests/modeler/cad/test_traslacion_01.py
-python tests/modeler/cad/test_rotacion_01.py
-python tests/modeler/cad/test_rotacion_02.py
-python tests/modeler/cad/test_rotacion_03.py
-python tests/modeler/cad/test_reflexion_01.py
-python tests/modeler/cad/test_sis_ref_cartesianas_01.py
-python tests/modeler/cad/test_sis_ref_cartesianas_02.py
-python tests/modeler/cad/test_sis_ref_cartesianas_03.py
-python tests/modeler/cad/test_unif_grid_01.py
-python tests/modeler/cad/test_unif_grid_02.py
-python tests/modeler/cad/test_unif_grid_03.py
-python tests/modeler/cad/test_sup_cuadrilatera_01.py
-python tests/modeler/cad/test_sup_cuadrilatera_02.py
-python tests/modeler/cad/test_punto_cruz_01.py
-python tests/modeler/cad/test_esquema2d.py
-python tests/modeler/cad/test_esquema3d.py
-python tests/modeler/cad/test_nearest_node_01.py
-python tests/modeler/cad/test_nearest_element_01.py
-python tests/modeler/cad/split_linea_01.py
-python tests/modeler/cad/split_linea_02.py
-python tests/modeler/cad/split_linea_03.py
+echo "$BLEU" "  Preprocessor entities tests." "$NORMAL"
+python tests/preprocessor/cad/linea.py
+python tests/preprocessor/cad/linea_02.py
+python tests/preprocessor/cad/k_points.py
+python tests/preprocessor/cad/linea_tramos.py
+python tests/preprocessor/cad/test_sec_lineas_01.py
+python tests/preprocessor/cad/test_sec_lineas_02.py
+python tests/preprocessor/cad/arco_circunf_01.py
+python tests/preprocessor/cad/arco_circunf_02.py
+python tests/preprocessor/cad/arco_circunf_03.py
+python tests/preprocessor/cad/arco_circunf_04.py
+python tests/preprocessor/cad/arco_circunf_05.py
+python tests/preprocessor/cad/crea_puntos_linea.py
+python tests/preprocessor/cad/test_traslacion_01.py
+python tests/preprocessor/cad/test_rotacion_01.py
+python tests/preprocessor/cad/test_rotacion_02.py
+python tests/preprocessor/cad/test_rotacion_03.py
+python tests/preprocessor/cad/test_reflexion_01.py
+python tests/preprocessor/cad/test_sis_ref_cartesianas_01.py
+python tests/preprocessor/cad/test_sis_ref_cartesianas_02.py
+python tests/preprocessor/cad/test_sis_ref_cartesianas_03.py
+python tests/preprocessor/cad/test_unif_grid_01.py
+python tests/preprocessor/cad/test_unif_grid_02.py
+python tests/preprocessor/cad/test_unif_grid_03.py
+python tests/preprocessor/cad/test_sup_cuadrilatera_01.py
+python tests/preprocessor/cad/test_sup_cuadrilatera_02.py
+python tests/preprocessor/cad/test_punto_cruz_01.py
+python tests/preprocessor/cad/test_esquema2d.py
+python tests/preprocessor/cad/test_esquema3d.py
+python tests/preprocessor/cad/test_nearest_node_01.py
+python tests/preprocessor/cad/test_nearest_element_01.py
+python tests/preprocessor/cad/split_linea_01.py
+python tests/preprocessor/cad/split_linea_02.py
+python tests/preprocessor/cad/split_linea_03.py
 echo "$BLEU" "  Meshing routines tests." "$NORMAL"
-python tests/modeler/test_malla_superficies_01.py
-python tests/modeler/test_malla_superficies_02.py
-python tests/modeler/test_malla_superficies_03.py
-python tests/modeler/test_malla_superficies_04.py
-python tests/modeler/test_malla_superficies_05.py
+python tests/preprocessor/test_malla_superficies_01.py
+python tests/preprocessor/test_malla_superficies_02.py
+python tests/preprocessor/test_malla_superficies_03.py
+python tests/preprocessor/test_malla_superficies_04.py
+python tests/preprocessor/test_malla_superficies_05.py
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
-python tests/modeler/sets/mueve_set.py
-python tests/modeler/sets/test_set_01.py
-python tests/modeler/sets/une_sets.py
-python tests/modeler/sets/test_resisting_svd01.py
+python tests/preprocessor/sets/mueve_set.py
+python tests/preprocessor/sets/test_set_01.py
+python tests/preprocessor/sets/une_sets.py
+python tests/preprocessor/sets/test_resisting_svd01.py
 
 
 #Tests condiciones de contorno
