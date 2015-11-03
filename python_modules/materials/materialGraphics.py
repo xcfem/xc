@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 import matplotlib.patches as patches
@@ -10,11 +11,17 @@ class MPLGraphicDecorations(object):
     self.title= title
     self.xLabel= None
     self.yLabel= None
+    self.grid= True
   def setLabels(self,plt):
     if(self.xLabel):
       plt.xlabel(self.xLabel)
     if(self.yLabel):
-      plt.ylabel(self.yLabel)    
+      plt.ylabel(self.yLabel)
+  def setGrid(self,plt):
+    plt.grid(self.grid)
+  def setUp(self,plt):
+    self.setLabels(plt)
+    self.setGrid(plt)
 
 class MPLGraphic(object):
   ''' Matplotlib grahic'''
@@ -57,5 +64,52 @@ class InteractionDiagramGraphic(MPLGraphic):
     ax.set_ylim(1.05*diag.getXMin*self.fScale,1.05*diag.getXMax*self.fScale)
     if(self.decorations.title):
       self.fig.suptitle(self.decorations.title)
-    self.decorations.setLabels(plt)
+    self.decorations.setUp(plt)
     
+class UniaxialMaterialDiagramGraphic:
+  def __init__(self,epsMin,epsMax,title):
+    self.decorations= MPLGraphicDecorations(title)
+    self.decorations.xLabel= 'strain'
+    self.decorations.yLabel= 'stress [MPa]'
+    self.epsMin= epsMin
+    self.epsMax= epsMax
+    self.incEps= (epsMax-epsMin)/100.0
+    self.stressScaleFactor= 1.0/1e6
+  def getStrains(self):
+    '''Abcissae for the diagram '''
+    retval= np.arange(self.epsMin,self.epsMax,self.incEps)
+    #retval.extend(np.arange(self.epsMax,self.epsMin,-self.incEps))
+    #retval.extend(np.arange(self.epsMin,self.epsMax,self.incEps))
+    return retval
+  def getStresses(self,diag):
+    self.factoredStresses= []
+    self.strainMin= 1e9
+    self.strainMax= -self.strainMin
+    self.factoredStressMin= 1e9
+    self.factoredStressMax= -self.factoredStressMin
+    self.strains= self.getStrains()
+    for eps in self.strains:
+      diag.setTrialStrain(eps, 0.0)
+      #diag.commitState()
+      self.strainMin= min(eps,self.strainMin)
+      self.strainMax= max(eps,self.strainMax)
+      factoredStress= diag.getStress()*self.stressScaleFactor
+      self.factoredStressMin= min(factoredStress,self.factoredStressMin)
+      self.factoredStressMax= max(factoredStress,self.factoredStressMax)
+      self.factoredStresses.append(factoredStress)
+      #print "strain= ", diag.getStrain(), " stress= ", factoredStress/1e6
+    diag.revertToStart()
+    return self.factoredStresses
+  def setupAxis(self,plt):
+    plt.axis([1.05*self.strainMin, 1.05*self.strainMax, 1.05*self.factoredStressMin, 1.05*self.factoredStressMax])
+  def setupGraphic(self,plt,materialDiagram):
+    factoredStresses= self.getStresses(materialDiagram)
+    plt.plot(self.strains, self.factoredStresses)
+    self.setupAxis(plt)
+    if(self.decorations.title):
+      plt.title(self.decorations.title)
+    self.decorations.setUp(plt)
+  def show(self,plt):
+    plt.show()
+  def savefig(self,plt,fileName):
+    plt.savefig(fileName)
