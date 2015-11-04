@@ -2,6 +2,32 @@
 
 import xc
 
+def defApoyoX(preprocessor,iNod, iElem, matKX):
+  '''
+  Define un apoyo para el nodo cuyo tag se pasa como parámetro.
+  La rigidez  del apoyo viene dada por el material que se pasa como parámetro.
+  '''
+  # Definimos elementos
+  nodos= preprocessor.getNodeLoader
+  nod= nodos.duplicateNode(iNod)
+  retvalNodTag= nod.tag
+
+  # Definimos elementos
+  elems= preprocessor.getElementLoader
+  elems.dimElem= 3 # Tridimensional space.
+  elems.defaultMaterial= matKX
+  elems.defaultTag= iElem #Next element number.
+  zl= elems.newElement("zero_length",xc.ID([retvalNodTag,iNod]))
+  zl.clearMaterials()
+  zl.setMaterial(0,matKX)
+  # fin de la definición de elementos
+  # Condiciones de contorno
+  coacciones= preprocessor.getConstraintLoader
+  numGdls= preprocessor.getNodeLoader.numGdls
+  for i in range(0,numGdls):
+    spc= coacciones.newSPConstraint(retvalNodTag,i,0.0)
+  return retvalNodTag
+
 def defApoyoXY(preprocessor,iNod, iElem, matKX, matKY):
   '''
   Define un apoyo para el nodo cuyo tag se pasa como parámetro.
@@ -24,12 +50,9 @@ def defApoyoXY(preprocessor,iNod, iElem, matKX, matKY):
   # fin de la definición de elementos
   # Condiciones de contorno
   coacciones= preprocessor.getConstraintLoader
-  spc= coacciones.newSPConstraint(retvalNodTag,0,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,1,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,2,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,3,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,4,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,5,0.0)
+  numGdls= preprocessor.getNodeLoader.numGdls
+  for i in range(0,numGdls):
+    spc= coacciones.newSPConstraint(retvalNodTag,i,0.0)
   return retvalNodTag
 
 def defApoyoXYZ(preprocessor,iNod, iElem, matKX, matKY, matKZ):
@@ -55,12 +78,9 @@ def defApoyoXYZ(preprocessor,iNod, iElem, matKX, matKY, matKZ):
   # fin de la definición de elementos
   # Condiciones de contorno
   coacciones= preprocessor.getConstraintLoader
-  spc= coacciones.newSPConstraint(retvalNodTag,0,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,1,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,2,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,3,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,4,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,5,0.0)
+  numGdls= preprocessor.getNodeLoader.numGdls
+  for i in range(0,numGdls):
+    spc= coacciones.newSPConstraint(retvalNodTag,i,0.0)
   return retvalNodTag
 
 '''
@@ -132,12 +152,9 @@ def defApoyoXYRigZ(preprocessor,iNod, iElem, matKX, matKY):
   # fin de la definición de elementos
   # Condiciones de contorno
   coacciones= preprocessor.getConstraintLoader
-  spc= coacciones.newSPConstraint(retvalNodTag,0,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,1,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,2,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,3,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,4,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,5,0.0)
+  numGdls= preprocessor.getNodeLoader.numGdls
+  for i in range(0,numGdls):
+    spc= coacciones.newSPConstraint(retvalNodTag,i,0.0)
   eDofs= coacciones.newEqualDOF(retvalNodTag,iNod,xc.ID([2]))
   #eDofs.dofs= xc.ID([2])
   return retvalNodTag

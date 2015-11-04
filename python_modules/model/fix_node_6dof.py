@@ -141,7 +141,7 @@ def Nodo6DOFMovYImpedido(coacciones, idNodo):
 def Nodo6DOFMovZImpedido(coacciones, idNodo):
   coacciones.newSPConstraint(idNodo,2,0.0)
 
-# Impone movimiento nulo en los giros.
+# Impone giros nulos.
 def Nodo6DOFGirosImpedidos(coacciones, idNodo):
   coacciones.newSPConstraint(idNodo,3,0.0)
   coacciones.newSPConstraint(idNodo,4,0.0)

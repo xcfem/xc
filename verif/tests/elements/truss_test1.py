@@ -19,29 +19,29 @@ F2= 1000/2 #Magnitud de la fuerza 2 en libras
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_elasticidad2D(nodos)
-nodos.defaultTag= 1 #El número del próximo nodo será 1.
-nodos.newNodeXYZ(0,0,0)
-nodos.newNodeXYZ(0,l-a-b,0)
-nodos.newNodeXYZ(0,l-a,0)
-nodos.newNodeXYZ(0,l,0)
+predefined_spaces.gdls_elasticidad2D(nodes)
+nodes.defaultTag= 1 #El número del próximo nodo será 1.
+nodes.newNodeXYZ(0,0,0)
+nodes.newNodeXYZ(0,l-a-b,0)
+nodes.newNodeXYZ(0,l-a,0)
+nodes.newNodeXYZ(0,l,0)
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
 # Se definen nodos en los puntos de aplicación de
 # la carga. Puesto que no se van a determinar tensiones
 # se emplea una sección arbitraria de área unidad
-elementos= preprocessor.getElementLoader
-elementos.dimElem= 2 #Las barras se definen e un espacio bidimensional.
-elementos.defaultMaterial= "elast"
-elementos.defaultTag= 1 #Tag for the next element.
-truss= elementos.newElement("truss",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.dimElem= 2 #Las barras se definen e un espacio bidimensional.
+elements.defaultMaterial= "elast"
+elements.defaultTag= 1 #Tag for the next element.
+truss= elements.newElement("truss",xc.ID([1,2]));
 truss.area= 1
-truss= elementos.newElement("truss",xc.ID([2,3]));
+truss= elements.newElement("truss",xc.ID([2,3]));
 truss.area= 1
-truss= elementos.newElement("truss",xc.ID([3,4]));
+truss= elements.newElement("truss",xc.ID([3,4]));
 truss.area= 1
 
 coacciones= preprocessor.getConstraintLoader
@@ -74,9 +74,9 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-nodos.calculateNodalReactions(True)
-R1= nodos.getNode(4).getReaction[1]
-R2= nodos.getNode(1).getReaction[1]
+nodes.calculateNodalReactions(True)
+R1= nodes.getNode(4).getReaction[1]
+R2= nodes.getNode(1).getReaction[1]
 
 ratio1= (R1-900)/900
 ratio2= (R2-600)/600
