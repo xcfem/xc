@@ -39,15 +39,11 @@ class Domain;
 //! @brief Clase base para las contenedoras de la malla y las condiciones de contorno.
 class MeshComponentContainer: public EntCmd, public MovableObject
   {
-  protected:
-    bool procesa_comando(CmdStatus &status);
   public:
     MeshComponentContainer(EntCmd *owr,int classTag, int dbTag= 0);
 
     const Domain *getDomain(void) const;
     Domain *getDomain(void);
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
 
   };
 } // fin namespace XC

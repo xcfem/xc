@@ -26,8 +26,17 @@ class_<XC::Constraint, bases<XC::ContinuaReprComponent>, boost::noncopyable >("C
   .add_property("getVtkCellType",&XC::Constraint::getVtkCellType,"Returns cell type for Vtk graphics.")
   ;
 
-class_<XC::SP_Constraint, bases<XC::Constraint>, boost::noncopyable >("SPConstraint", no_init)
+class_<XC::SP_Constraint, XC::SP_Constraint *, bases<XC::Constraint>, boost::noncopyable >("SPConstraint", no_init)
+  .add_property("getDOF_Number", &XC::SP_Constraint::getDOF_Number,"return DOF's number.")
+  .add_property("getValue", &XC::SP_Constraint::getValue,"returns imposed value for DOF.")
+  .add_property("isHomogeneous", &XC::SP_Constraint::isHomogeneous,"true if it's an homogeneous boundary condition.")
+  .add_property("loadPatternTag", &XC::SP_Constraint::getLoadPatternTag,&XC::SP_Constraint::setLoadPatternTag,"assigns/retrieves load pattern tag.") 
+  .add_property("getVtkCellType", &XC::SP_Constraint::getVtkCellType, "returns VTK cell type")
   ;
+
+class_<XC::SP_ConstraintIter, boost::noncopyable >("SP_ConstraintIter", no_init)
+  .def("next", &XC::SP_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
+   ;
 
 class_<XC::ImposedMotionBase , bases<XC::SP_Constraint>, boost::noncopyable >("ImposedMotionBase", no_init);
 
@@ -39,6 +48,10 @@ class_<XC::MP_ConstraintBase, bases<XC::Constraint>, boost::noncopyable >("MP_Co
 
 
 class_<XC::MP_Constraint, bases<XC::MP_ConstraintBase>, boost::noncopyable >("MP_Constraint", no_init);
+
+class_<XC::MP_ConstraintIter, boost::noncopyable >("MP_ConstraintIter", no_init)
+  .def("next", &XC::MP_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
+   ;
 
 class_<XC::EqualDOF, bases<XC::MP_Constraint>, boost::noncopyable >("EqualDOF", no_init);
 
@@ -56,8 +69,36 @@ class_<XC::RigidRod, bases<XC::RigidBase>, boost::noncopyable >("RigidRod", no_i
 
 class_<XC::MRMP_Constraint, bases<XC::MP_ConstraintBase>, boost::noncopyable >("MRMP_Constraint", no_init);
 
+class_<XC::MRMP_ConstraintIter, boost::noncopyable >("MRMP_ConstraintIter", no_init)
+  .def("next", &XC::MRMP_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
+   ;
+
+
 class_<XC::GlueNodeToElement, bases<XC::MRMP_Constraint>, boost::noncopyable >("GlueNodeToElement", no_init);
 
 //class_<XC::MapCasosActivos, bases<EntCmd>, boost::noncopyable >("MapCasosActivos", no_init);
 
-class_<XC::CondContorno, bases<XC::MeshComponentContainer>, boost::noncopyable >("CondContorno", no_init);
+typedef std::map<int,XC::LoadPattern *> map_load_patterns;
+class_<map_load_patterns, boost::noncopyable>("map_load_patterns")
+//  .def(map_indexing_suite<map_load_patterns>() )
+  ;
+
+typedef std::map<int,XC::NodeLocker *> map_node_locker;
+class_<map_node_locker, boost::noncopyable>("map_node_locker")
+//  .def(map_indexing_suite<map_node_locker>() )
+  ;
+
+map_load_patterns &(XC::CondContorno::*getLoadPatternsPtr)(void)= &XC::CondContorno::getLoadPatterns;
+map_node_locker &(XC::CondContorno::*getNodeLockersPtr)(void)= &XC::CondContorno::getNodeLockers;
+class_<XC::CondContorno, bases<XC::MeshComponentContainer>, boost::noncopyable >("CondContorno", no_init)
+  .def("getNumSPs", &XC::CondContorno::getNumSPs,"Returns the number of single point constraints.")
+  .def("getNumMPs", &XC::CondContorno::getNumMPs,"Returns the number of multi-point constraints.")
+  .def("getNumMRMPs", &XC::CondContorno::getNumMRMPs,"Returns the number of multi-row multi-point constraints.")
+  .add_property("getSPs", make_function( &XC::CondContorno::getSPs, return_internal_reference<>() ),"Returns the single point constraints container.")
+  .add_property("getMPs", make_function( &XC::CondContorno::getMPs, return_internal_reference<>() ),"Returns the multi-point constraints container.")
+  .add_property("getMRMPs", make_function( &XC::CondContorno::getMRMPs, return_internal_reference<>() ),"Returns the multi-point constraints container.")
+  .def("getNumLoadPatterns", &XC::CondContorno::getNumLoadPatterns,"Returns the number of load cases.")
+  .def("getNumNodeLockers", &XC::CondContorno::getNumNodeLockers,"Returns the number of node lockers.")
+  .def("getNodeLockers", make_function(getNodeLockersPtr, return_internal_reference<>() ),"Returns the node lockers container.")
+  .def("getLoadPatterns", make_function(getLoadPatternsPtr, return_internal_reference<>() ),"Returns the load pattern container.")
+  ;

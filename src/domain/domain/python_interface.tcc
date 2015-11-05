@@ -22,8 +22,10 @@
 //python_interface.tcc
 
 XC::Mesh &(XC::Domain::*getMeshRef)(void)= &XC::Domain::getMesh;
+XC::CondContorno &(XC::Domain::*getCondsContornoRef)(void)= &XC::Domain::getCondsContorno;
 class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", no_init)
-  .add_property("getMesh", make_function( getMeshRef, return_internal_reference<>() ))
+  .add_property("getMesh", make_function( getMeshRef, return_internal_reference<>() ),"return finite element mesh.")
+  .add_property("getConstraints", make_function( getCondsContornoRef, return_internal_reference<>() ),"returns mesh constraints.")
   .def("setDeadSRF",XC::Domain::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .def("commit",&XC::Domain::commit)
   .def("revertToLastCommit",&XC::Domain::revertToLastCommit)

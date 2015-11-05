@@ -22,7 +22,7 @@
 //python_interface.tcc
 
 
-class_<XC::NodeLocker, bases<XC::ForceReprComponent>, boost::noncopyable >("NodeLocker", no_init)
+class_<XC::NodeLocker,XC::NodeLocker *, bases<XC::ForceReprComponent>, boost::noncopyable >("NodeLocker", no_init)
   .def("newSPConstraint", &XC::NodeLocker::newSPConstraint,return_internal_reference<>(),"Crea una nueva condición de contorno monopunto.")
   .def("removeSPConstraint", &XC::NodeLocker::removeSP_Constraint,"Crea una nueva condición de contorno monopunto.")
   ;

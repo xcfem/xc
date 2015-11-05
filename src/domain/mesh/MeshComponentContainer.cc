@@ -36,16 +36,6 @@
 XC::MeshComponentContainer::MeshComponentContainer(EntCmd *owr,int classTag, int dbTag)
   :EntCmd(owr), MovableObject(classTag, dbTag) {}
 
-//! @brief Lee un objeto MeshComponentContainer desde archivo
-bool XC::MeshComponentContainer::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MeshComponentContainer) Procesando comando: " << cmd << std::endl;
-
-    return EntCmd::procesa_comando(status);
-  }
-
 //! @brief Devuelve un puntero al dominio en el que se define la malla.
 const XC::Domain *XC::MeshComponentContainer::getDomain(void) const
   {
@@ -64,11 +54,5 @@ XC::Domain *XC::MeshComponentContainer::getDomain(void)
     if(owr)
       retval= dynamic_cast<Domain *>(owr);
     return retval;
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-any_const_ptr XC::MeshComponentContainer::GetProp(const std::string &cod) const
-  {
-    return EntCmd::GetProp(cod);
   }
 

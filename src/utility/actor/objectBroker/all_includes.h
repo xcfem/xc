@@ -266,11 +266,13 @@
 
 // sp_constraint header files
 #include "domain/constraints/SP_Constraint.h"
+#include "domain/constraints/SP_ConstraintIter.h"
 #include "domain/constraints/ImposedMotionSP.h"
 #include "domain/constraints/ImposedMotionSP1.h"
 
 // mp_constraint header files
 #include "domain/constraints/MP_Constraint.h"
+#include "domain/constraints/MP_ConstraintIter.h"
 #include "domain/constraints/MP_Joint2D.h"
 #include "domain/constraints/MP_Joint3D.h"
 #include "domain/constraints/RigidBase.h"
@@ -279,6 +281,7 @@
 #include "domain/constraints/RigidDiaphragm.h"
 #include "domain/constraints/EqualDOF.h"
 #include "domain/constraints/MRMP_Constraint.h"
+#include "domain/constraints/MRMP_ConstraintIter.h"
 #include "domain/constraints/GlueNodeToElement.h"
 
 #include "domain/constraints/MapCasosActivos.h"
@@ -303,6 +306,9 @@
 #include "domain/load/volumen/BrickSelfWeight.h"
 #include "domain/load/edge_loads/ElementEdge2dUniformLoad.h"
 #include "domain/load/edge_loads/ElementEdge3dUniformLoad.h"
+#include "/usr/local/src/prg/xc/src/domain/load/pattern/NodeLocker.h"
+#include "/usr/local/src/prg/xc/src/domain/load/pattern/NodeLockerIter.h"
+#include "/usr/local/src/prg/xc/src/domain/mesh/NodeLockers.h"
 
 // matrix, vector & id header files
 #include "utility/matrix/Matrix.h"
