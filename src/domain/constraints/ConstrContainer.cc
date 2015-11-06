@@ -24,11 +24,11 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//CondContorno.cc
+//ConstrContainer.cc
 
 #include <cstdlib>
 
-#include "CondContorno.h"
+#include "ConstrContainer.h"
 #include <domain/domain/Domain.h>
 #include <domain/load/ElementalLoadIter.h>
 #include <domain/load/NodalLoadIter.h>
@@ -61,7 +61,7 @@
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/loaders/LoadLoader.h"
 
-void XC::CondContorno::libera(void)
+void XC::ConstrContainer::libera(void)
   {
     //delete the objects in the domain
     clearAll();
@@ -84,7 +84,7 @@ void XC::CondContorno::libera(void)
   }
 
 //! @brief Reserva memoria para los contenedores.
-void XC::CondContorno::alloc_contenedores(int numSPs, int numMPs,int numNodeLockers,int numLoadPatterns)
+void XC::ConstrContainer::alloc_contenedores(int numSPs, int numMPs,int numNodeLockers,int numLoadPatterns)
   {
     // init the arrays for storing the constraints components
     theSPs= new MapOfTaggedObjects(this,"SPs");
@@ -93,7 +93,7 @@ void XC::CondContorno::alloc_contenedores(int numSPs, int numMPs,int numNodeLock
   }
 
 //! @brief Reserva memoria para los iteradores.
-void XC::CondContorno::alloc_iters(void)
+void XC::ConstrContainer::alloc_iters(void)
   {
     // init the iters
     theSP_Iter= new SingleDomSP_Iter(theSPs);
@@ -103,13 +103,13 @@ void XC::CondContorno::alloc_iters(void)
   }
 
 //! @brief Comprueba que se ha podido reservar memoria para los contenedores.
-bool XC::CondContorno::check_contenedores(void) const
+bool XC::ConstrContainer::check_contenedores(void) const
   {
     // check that there was space to create the data structures
     if((theSPs == 0) || (theMPs == 0) || (theMRMPs == 0) ||
        (theMP_Iter == 0) || (theSP_Iter == 0) || (theMRMP_Iter == 0))
       {
-        std::cerr << "CondContorno::CondContorno() - out of memory\n";
+        std::cerr << "ConstrContainer::ConstrContainer() - out of memory\n";
         return false;
       }
     else
@@ -117,8 +117,8 @@ bool XC::CondContorno::check_contenedores(void) const
   }
 
 //! @brief Constructor.
-XC::CondContorno::CondContorno(Domain *owr)
-  :MeshComponentContainer(owr,DOMAIN_TAG_CondContorno), activeNodeLockers(this), activeLoadPatterns(this)
+XC::ConstrContainer::ConstrContainer(Domain *owr)
+  :MeshComponentContainer(owr,DOMAIN_TAG_ConstrContainer), activeNodeLockers(this), activeLoadPatterns(this)
   {
     // init the arrays for storing the domain components
     alloc_contenedores();
@@ -128,8 +128,8 @@ XC::CondContorno::CondContorno(Domain *owr)
   }
 
 //! @brief Constructor.
-XC::CondContorno::CondContorno(Domain *owr,int numSPs, int numMPs, int numNodeLockers, int numLoadPatterns)
-  :MeshComponentContainer(owr,DOMAIN_TAG_CondContorno), activeNodeLockers(this), activeLoadPatterns(this)
+XC::ConstrContainer::ConstrContainer(Domain *owr,int numSPs, int numMPs, int numNodeLockers, int numLoadPatterns)
+  :MeshComponentContainer(owr,DOMAIN_TAG_ConstrContainer), activeNodeLockers(this), activeLoadPatterns(this)
   {
     alloc_contenedores(numSPs,numMPs,numNodeLockers,numLoadPatterns);
     alloc_iters();
@@ -137,7 +137,7 @@ XC::CondContorno::CondContorno(Domain *owr,int numSPs, int numMPs, int numNodeLo
   }
 
 //! @brief Elimina del dominio todos los componentes
-void XC::CondContorno::clearAll(void)
+void XC::ConstrContainer::clearAll(void)
   {
     // clear the loads and constraints from any load pattern
     for(MapCasosActivos<LoadPattern>::iterator i= activeLoadPatterns.begin();
@@ -156,12 +156,12 @@ void XC::CondContorno::clearAll(void)
   }
 
 //! @brief Destructor.
-XC::CondContorno::~CondContorno(void)
+XC::ConstrContainer::~ConstrContainer(void)
   { libera(); }
 
 
-//! @brief Agrega una condición de contorno monopunto.
-bool XC::CondContorno::addSP_Constraint(SP_Constraint *spConstraint)
+//! @brief Agrega una constraint monopunto.
+bool XC::ConstrContainer::addSP_Constraint(SP_Constraint *spConstraint)
   {
     bool retval= false;
 
@@ -170,7 +170,7 @@ bool XC::CondContorno::addSP_Constraint(SP_Constraint *spConstraint)
     TaggedObject *other= theSPs->getComponentPtr(tag);
     if(other)
       {
-        std::clog << "CondContorno::addSP_Constraint - cannot add a constraint with tag "
+        std::clog << "ConstrContainer::addSP_Constraint - cannot add a constraint with tag "
                   << tag << " already exists in model\n";
         retval= false;
       }
@@ -180,8 +180,8 @@ bool XC::CondContorno::addSP_Constraint(SP_Constraint *spConstraint)
   }
 
 
-//! @brief Agrega al dominio una condición de contorno multipunto.
-bool XC::CondContorno::addMP_Constraint(MP_Constraint *mpConstraint)
+//! @brief Agrega al dominio una constraint multipunto.
+bool XC::ConstrContainer::addMP_Constraint(MP_Constraint *mpConstraint)
   {
     bool retval= false;
 
@@ -190,7 +190,7 @@ bool XC::CondContorno::addMP_Constraint(MP_Constraint *mpConstraint)
     TaggedObject *other= theMPs->getComponentPtr(tag);
     if(other)
       {
-        std::clog << "CondContorno::addMP_Constraint - cannot add as constraint with tag "
+        std::clog << "ConstrContainer::addMP_Constraint - cannot add as constraint with tag "
                   << tag << " already exists in model";
       }
     else
@@ -198,8 +198,8 @@ bool XC::CondContorno::addMP_Constraint(MP_Constraint *mpConstraint)
     return retval;
   }
 
-//! @brief Agrega al dominio una condición de contorno multi retained nodes.
-bool XC::CondContorno::addMRMP_Constraint(MRMP_Constraint *mrmpConstraint)
+//! @brief Agrega al dominio una constraint multi retained nodes.
+bool XC::ConstrContainer::addMRMP_Constraint(MRMP_Constraint *mrmpConstraint)
   {
     bool retval= false;
 
@@ -208,7 +208,7 @@ bool XC::CondContorno::addMRMP_Constraint(MRMP_Constraint *mrmpConstraint)
     TaggedObject *other= theMRMPs->getComponentPtr(tag);
     if(other)
       {
-        std::clog << "CondContorno::addMRMP_Constraint - cannot add as constraint with tag "
+        std::clog << "ConstrContainer::addMRMP_Constraint - cannot add as constraint with tag "
                   << tag << " already exists in model";
       }
     else
@@ -217,7 +217,7 @@ bool XC::CondContorno::addMRMP_Constraint(MRMP_Constraint *mrmpConstraint)
   }
 
 //! @brief Añade al modelo la hipótesis simple que se pasa como parámetro.
-bool XC::CondContorno::addLoadPattern(LoadPattern *load)
+bool XC::ConstrContainer::addLoadPattern(LoadPattern *load)
   {
     bool retval= true;
     // first check if a load pattern with a similar tag exists in model
@@ -226,7 +226,7 @@ bool XC::CondContorno::addLoadPattern(LoadPattern *load)
     if(i!=activeLoadPatterns.end())
       {
         if(verborrea>3)
-          std::cerr << "CondContorno::addLoadPattern - cannot add as LoadPattern with tag "
+          std::cerr << "ConstrContainer::addLoadPattern - cannot add as LoadPattern with tag "
                     << tag << " already exists in model\n";
         retval= false;
       }
@@ -236,7 +236,7 @@ bool XC::CondContorno::addLoadPattern(LoadPattern *load)
   }
 
 //! @brief Añade al modelo
-bool XC::CondContorno::addNodeLocker(NodeLocker *nl)
+bool XC::ConstrContainer::addNodeLocker(NodeLocker *nl)
   {
     bool retval= true;
     // first check if a locker with a similar tag exists in model
@@ -244,7 +244,7 @@ bool XC::CondContorno::addNodeLocker(NodeLocker *nl)
     MapCasosActivos<NodeLocker>::const_iterator i= activeNodeLockers.find(tag);
     if(i!=activeNodeLockers.end())
       {
-        std::clog << "CondContorno::addNodeLocker - cannot add as LoadPattern with tag "
+        std::clog << "ConstrContainer::addNodeLocker - cannot add as LoadPattern with tag "
                   << tag << " already exists in model\n";
         retval= false;
       }
@@ -253,8 +253,8 @@ bool XC::CondContorno::addNodeLocker(NodeLocker *nl)
     return retval;
   }
 
-//! @brief Agraga al caso de carga una condición de contorno monopunto.
-bool XC::CondContorno::addSP_Constraint(SP_Constraint *spConstraint, int pattern)
+//! @brief Agraga al caso de carga una constraint monopunto.
+bool XC::ConstrContainer::addSP_Constraint(SP_Constraint *spConstraint, int pattern)
   {
     bool retval= false;
     // now add it to the pattern
@@ -262,20 +262,20 @@ bool XC::CondContorno::addSP_Constraint(SP_Constraint *spConstraint, int pattern
     if(caso)
       retval= caso->addSP_Constraint(spConstraint);
     else
-      std::cerr << "CondContorno::addSP_Constraint - cannot add as pattern with tag "
+      std::cerr << "ConstrContainer::addSP_Constraint - cannot add as pattern with tag "
                 << pattern << " does not exist in domain\n";
     return retval;
   }
 
 //! @brief Agrega al dominio una carga sobre nodo.
-bool XC::CondContorno::addNodalLoad(NodalLoad *load, int pattern)
+bool XC::ConstrContainer::addNodalLoad(NodalLoad *load, int pattern)
   {
     bool retval= false;
     int nodTag= load->getNodeTag();
     const Node *res= getDomain()->getNode(nodTag);
     if(res == 0)
       {
-        std::cerr << "CondContorno::addNodalLoad() HI - no node with tag " << nodTag <<
+        std::cerr << "ConstrContainer::addNodalLoad() HI - no node with tag " << nodTag <<
           " exists in  the model, not adding the nodal load"  << *load << std::endl;
       }
     else
@@ -286,7 +286,7 @@ bool XC::CondContorno::addNodalLoad(NodalLoad *load, int pattern)
           retval= caso->addNodalLoad(load);
         else
           {
-            std::cerr << "CondContorno::addNodalLoad() - no pattern with tag " <<
+            std::cerr << "ConstrContainer::addNodalLoad() - no pattern with tag " <<
             pattern << " in  the model, not adding the nodal load"  << *load << std::endl;
           }
       }
@@ -294,7 +294,7 @@ bool XC::CondContorno::addNodalLoad(NodalLoad *load, int pattern)
   }
 
 //! @brief Agrega al dominio una carga sobre elementos.
-bool XC::CondContorno::addElementalLoad(ElementalLoad *load, int pattern)
+bool XC::ConstrContainer::addElementalLoad(ElementalLoad *load, int pattern)
   {
     bool retval= false;
     // now add it to the pattern
@@ -303,7 +303,7 @@ bool XC::CondContorno::addElementalLoad(ElementalLoad *load, int pattern)
       retval= caso->addElementalLoad(load);
     else
       {
-        std::cerr << "CondContorno::addElementalLoad() - no pattern with tag " << pattern <<
+        std::cerr << "ConstrContainer::addElementalLoad() - no pattern with tag " << pattern <<
         "exits in  the model, not adding the ele load " << *load << std::endl;
       }
     // load->setDomain(this); // done in LoadPattern::addElementalLoad()
@@ -312,7 +312,7 @@ bool XC::CondContorno::addElementalLoad(ElementalLoad *load, int pattern)
   }
 
 
-bool XC::CondContorno::removeSP_Constraint(int theNode, int theDOF, int loadPatternTag)
+bool XC::ConstrContainer::removeSP_Constraint(int theNode, int theDOF, int loadPatternTag)
   {
     SP_Constraint *theSP =nullptr;
     bool found= false;
@@ -357,8 +357,8 @@ bool XC::CondContorno::removeSP_Constraint(int theNode, int theDOF, int loadPatt
     return 0;
   }
 
-//! @brief Elimina del dominio la condición de contorno monopunto cuyo tag se pasa como parámetro.
-bool XC::CondContorno::removeSP_Constraint(int tag)
+//! @brief Elimina del dominio la constraint monopunto cuyo tag se pasa como parámetro.
+bool XC::ConstrContainer::removeSP_Constraint(int tag)
   {
     SP_Constraint *theSP= dynamic_cast<SP_Constraint *>(theSPs->getComponentPtr(tag));
     if(theSP)
@@ -366,8 +366,8 @@ bool XC::CondContorno::removeSP_Constraint(int tag)
     return theSPs->removeComponent(tag);
   }
 
-//! @brief Elimina del dominio la condición de contorno multipunto cuyo tag se pasa como parámetro.
-bool XC::CondContorno::removeMP_Constraint(int tag)
+//! @brief Elimina del dominio la constraint multipunto cuyo tag se pasa como parámetro.
+bool XC::ConstrContainer::removeMP_Constraint(int tag)
   {
     MP_Constraint *theMP= dynamic_cast<MP_Constraint *>(theMPs->getComponentPtr(tag));
     if(theMP)
@@ -375,8 +375,8 @@ bool XC::CondContorno::removeMP_Constraint(int tag)
     return theMPs->removeComponent(tag);
   }
 
-//! @brief Elimina del dominio la condición de contorno multi retained nodes cuyo tag se pasa como parámetro.
-bool XC::CondContorno::removeMRMP_Constraint(int tag)
+//! @brief Elimina del dominio la constraint multi retained nodes cuyo tag se pasa como parámetro.
+bool XC::ConstrContainer::removeMRMP_Constraint(int tag)
   {
     MRMP_Constraint *theMRMP= dynamic_cast<MRMP_Constraint *>(theMRMPs->getComponentPtr(tag));
     if(theMRMP)
@@ -385,7 +385,7 @@ bool XC::CondContorno::removeMRMP_Constraint(int tag)
   }
 
 //! @brief Elimina del dominio el caso de carga cuyo tag se pasa como parámetro.
-bool XC::CondContorno::removeLoadPattern(int tag,int &numSPs)
+bool XC::ConstrContainer::removeLoadPattern(int tag,int &numSPs)
   { 
     MapCasosActivos<LoadPattern>::iterator i= activeLoadPatterns.find(tag);
 
@@ -404,14 +404,14 @@ bool XC::CondContorno::removeLoadPattern(int tag,int &numSPs)
             retval= true;
           }
         else
-	  std::cerr << "error en CondContorno::removeLoadPattern" << std::endl;
+	  std::cerr << "error en ConstrContainer::removeLoadPattern" << std::endl;
       }
     // finally return the load pattern
     return retval;
   }
 
 //! @brief Elimina del dominio el
-bool XC::CondContorno::removeNodeLocker(int tag,int &numSPs)
+bool XC::ConstrContainer::removeNodeLocker(int tag,int &numSPs)
   {
     // remove the object from the container
     MapCasosActivos<NodeLocker>::iterator i= activeNodeLockers.find(tag);
@@ -431,13 +431,13 @@ bool XC::CondContorno::removeNodeLocker(int tag,int &numSPs)
             retval= true;
           }
         else
-	  std::cerr << "error en CondContorno::removeNodeLocker" << std::endl;
+	  std::cerr << "error en ConstrContainer::removeNodeLocker" << std::endl;
       }
     // finally return the node locker
     return retval;
   }
 
-int XC::CondContorno::removeLPs(void)
+int XC::ConstrContainer::removeLPs(void)
   {
     const std::deque<int> tags= getTagsLPs();
     int numSPs= 0;
@@ -450,7 +450,7 @@ int XC::CondContorno::removeLPs(void)
     return numSPs;
   }
 
-int XC::CondContorno::removeNLs(void)
+int XC::ConstrContainer::removeNLs(void)
   {
     const std::deque<int> tags= getTagsNLs();
     int numSPs= 0;
@@ -467,7 +467,7 @@ int XC::CondContorno::removeNLs(void)
 //!
 //! @param tag: Identificador de la carga sobre nodo a eliminar.
 //! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
-bool XC::CondContorno::removeNodalLoad(int tag, int loadPattern)
+bool XC::ConstrContainer::removeNodalLoad(int tag, int loadPattern)
   {
     bool retval= false;
     // remove the object from the container
@@ -483,7 +483,7 @@ bool XC::CondContorno::removeNodalLoad(int tag, int loadPattern)
 //!
 //! @param tag: Identificador de la carga sobre elementos a eliminar.
 //! @param loadPattern: Identificador de la hipótesis a la que pertenece la carga.
-bool XC::CondContorno::removeElementalLoad(int tag, int loadPattern)
+bool XC::ConstrContainer::removeElementalLoad(int tag, int loadPattern)
   {
     bool retval= false;
     // remove the object from the container
@@ -494,11 +494,11 @@ bool XC::CondContorno::removeElementalLoad(int tag, int loadPattern)
     return retval;
   }
 
-//! @brief Elimina del dominio la condición de contorno monopunto que se pasa como parámetro.
+//! @brief Elimina del dominio la constraint monopunto que se pasa como parámetro.
 //!
-//! @param tag: Identificador de la condición de contorno monopunto a eliminar.
+//! @param tag: Identificador de la constraint monopunto a eliminar.
 //! @param loadPattern: Identificador de la hipótesis a la que pertenece la carga.
-bool XC::CondContorno::removeSP_Constraint(int tag, int loadPattern)
+bool XC::ConstrContainer::removeSP_Constraint(int tag, int loadPattern)
   {
     bool retval= false;
     LoadPattern *theLoadPattern= this->getLoadPattern(loadPattern);// remove the object from the container
@@ -507,29 +507,29 @@ bool XC::CondContorno::removeSP_Constraint(int tag, int loadPattern)
     return retval;
   }
 
-//! @brief Devuelve un iterador a las condiciones de contorno monopunto del dominio.
-XC::SP_ConstraintIter &XC::CondContorno::getSPs(void)
+//! @brief Domain single point constraints iterator.
+XC::SP_ConstraintIter &XC::ConstrContainer::getSPs(void)
   {
     theSP_Iter->reset();
     return *theSP_Iter;
   }
 
-//! @brief Devuelve un iterador a todas las condiciones de contorno monopunto.
-XC::SP_ConstraintIter &XC::CondContorno::getDomainAndLoadPatternSPs(void)
+//! @brief All (domain and load cases) single point constraints iterator.
+XC::SP_ConstraintIter &XC::ConstrContainer::getDomainAndLoadPatternSPs(void)
   {
     allSP_Iter->reset();
     return *allSP_Iter;
   }
 
-//! @brief Devuelve un iterador a las condiciones de contorno multipunto del dominio.
-XC::MP_ConstraintIter &XC::CondContorno::getMPs(void)
+//! @brief Domain multi-point constraints iterator.
+XC::MP_ConstraintIter &XC::ConstrContainer::getMPs(void)
   {
     theMP_Iter->reset();
     return *theMP_Iter;
   }
 
-//! @brief Devuelve un iterador a las condiciones de contorno multi retained node del dominio.
-XC::MRMP_ConstraintIter &XC::CondContorno::getMRMPs(void)
+//! @brief Domain multi-row multi-point constraints iterator.
+XC::MRMP_ConstraintIter &XC::ConstrContainer::getMRMPs(void)
   {
     theMRMP_Iter->reset();
     return *theMRMP_Iter;
@@ -537,19 +537,19 @@ XC::MRMP_ConstraintIter &XC::CondContorno::getMRMPs(void)
 
 
 //! @brief Devuelve un iterador a los casos de carga del dominio.
-std::map<int,XC::LoadPattern *> &XC::CondContorno::getLoadPatterns(void)
+std::map<int,XC::LoadPattern *> &XC::ConstrContainer::getLoadPatterns(void)
   { return activeLoadPatterns; }
 
 //! @brief Devuelve un iterador a los casos de carga del dominio.
-std::map<int,XC::NodeLocker *> &XC::CondContorno::getNodeLockers(void)
+std::map<int,XC::NodeLocker *> &XC::ConstrContainer::getNodeLockers(void)
   { return activeNodeLockers; }
 
 //! @brief Devuelve un iterador a los casos de carga del dominio.
-const std::map<int,XC::LoadPattern *> &XC::CondContorno::getLoadPatterns(void) const
+const std::map<int,XC::LoadPattern *> &XC::ConstrContainer::getLoadPatterns(void) const
   { return activeLoadPatterns; }
 
 //! @brief Devuelve un iterador a los casos de carga del dominio.
-const std::map<int,XC::NodeLocker *> &XC::CondContorno::getNodeLockers(void) const
+const std::map<int,XC::NodeLocker *> &XC::ConstrContainer::getNodeLockers(void) const
   { return activeNodeLockers; }
 
 
@@ -559,8 +559,8 @@ const std::map<int,XC::NodeLocker *> &XC::CondContorno::getNodeLockers(void) con
 **   only elements can be added to theElements
 */
 
-//! @brief Devuelve un puntero a la condición de contorno monopunto cuyo tag se pasa como parámetro.
-XC::SP_Constraint *XC::CondContorno::getSP_Constraint(int tag)
+//! @brief Devuelve un puntero a la constraint monopunto cuyo tag se pasa como parámetro.
+XC::SP_Constraint *XC::ConstrContainer::getSP_Constraint(int tag)
   {
     TaggedObject *mc= theSPs->getComponentPtr(tag);
     // if not there return 0 otherwise perform a cast and return that
@@ -569,8 +569,8 @@ XC::SP_Constraint *XC::CondContorno::getSP_Constraint(int tag)
     return result;
   }
 
-//! @brief Devuelve un puntero a la condición de contorno multipunto cuyo tag se pasa como parámetro.
-XC::MP_Constraint *XC::CondContorno::getMP_Constraint(int tag)
+//! @brief Devuelve un puntero a la constraint multipunto cuyo tag se pasa como parámetro.
+XC::MP_Constraint *XC::ConstrContainer::getMP_Constraint(int tag)
   {
     TaggedObject *mc= theMPs->getComponentPtr(tag);
     // if not there return 0 otherwise perform a cast and return that
@@ -579,8 +579,8 @@ XC::MP_Constraint *XC::CondContorno::getMP_Constraint(int tag)
     return result;
   }
 
-//! @brief Devuelve un puntero a la condición de contorno multi retained node cuyo tag se pasa como parámetro.
-XC::MRMP_Constraint *XC::CondContorno::getMRMP_Constraint(int tag)
+//! @brief Devuelve un puntero a la constraint multi retained node cuyo tag se pasa como parámetro.
+XC::MRMP_Constraint *XC::ConstrContainer::getMRMP_Constraint(int tag)
   {
     TaggedObject *mc= theMRMPs->getComponentPtr(tag);
     // if not there return 0 otherwise perform a cast and return that
@@ -590,12 +590,12 @@ XC::MRMP_Constraint *XC::CondContorno::getMRMP_Constraint(int tag)
   }
 
 //! @brief Devuelve un puntero al caso de carga cuyo tag se pasa como parámetro.
-XC::LoadPattern *XC::CondContorno::getLoadPattern(const int &tag)
+XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag)
   {
     LoadPattern *retval= nullptr;
     MapCasosActivos<LoadPattern>::iterator i= activeLoadPatterns.find(tag);
     if(i==activeLoadPatterns.end())
-      std::cerr << "CondContorno::getLoadPattern - no se encontró el caso de carga de tag "
+      std::cerr << "ConstrContainer::getLoadPattern - no se encontró el caso de carga de tag "
                 << tag << "\n";
     else
       retval= (*i).second;
@@ -603,12 +603,12 @@ XC::LoadPattern *XC::CondContorno::getLoadPattern(const int &tag)
   }
 
 //! @brief Devuelve un puntero al caso de carga cuyo tag se pasa como parámetro.
-const XC::LoadPattern *XC::CondContorno::getLoadPattern(const int &tag) const
+const XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag) const
   {
     const LoadPattern *retval= nullptr;
     MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.find(tag);
     if(i==activeLoadPatterns.end())
-      std::cerr << "CondContorno::getLoadPattern - no se encontró el caso de carga de tag "
+      std::cerr << "ConstrContainer::getLoadPattern - no se encontró el caso de carga de tag "
                 << tag << "\n";
     else
       retval= (*i).second;
@@ -616,12 +616,12 @@ const XC::LoadPattern *XC::CondContorno::getLoadPattern(const int &tag) const
   }
 
 //! @brief Devuelve un puntero al bloqueador de nodos cuyo tag se pasa como parámetro.
-XC::NodeLocker *XC::CondContorno::getNodeLocker(const int &tag)
+XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag)
   {
     NodeLocker *retval= nullptr;
     MapCasosActivos<NodeLocker>::iterator i= activeNodeLockers.find(tag);
     if(i==activeNodeLockers.end())
-      std::cerr << "CondContorno::getNodeLocker - no se encontró el caso de carga de tag "
+      std::cerr << "ConstrContainer::getNodeLocker - no se encontró el caso de carga de tag "
                 << tag << "\n";
     else
       retval= (*i).second;
@@ -629,12 +629,12 @@ XC::NodeLocker *XC::CondContorno::getNodeLocker(const int &tag)
   }
 
 //! @brief Devuelve un puntero al bloqueador de nodos cuyo tag se pasa como parámetro.
-const XC::NodeLocker *XC::CondContorno::getNodeLocker(const int &tag) const
+const XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag) const
   {
     const NodeLocker *retval= nullptr;
     MapCasosActivos<NodeLocker>::const_iterator i= activeNodeLockers.find(tag);
     if(i==activeNodeLockers.end())
-      std::cerr << "CondContorno::getNodeLocker - no se encontró el caso de carga de tag "
+      std::cerr << "ConstrContainer::getNodeLocker - no se encontró el caso de carga de tag "
                 << tag << "\n";
     else
       retval= (*i).second;
@@ -643,26 +643,26 @@ const XC::NodeLocker *XC::CondContorno::getNodeLocker(const int &tag) const
 
 
 //! @brief Devuelve el número de coacciones mononodales.
-int XC::CondContorno::getNumSPs(void) const
+int XC::ConstrContainer::getNumSPs(void) const
   { return theSPs->getNumComponents(); }
 
 //! @brief Devuelve el número de coacciones multinodales.
-int XC::CondContorno::getNumMPs(void) const
+int XC::ConstrContainer::getNumMPs(void) const
   { return theMPs->getNumComponents(); }
 
 //! @brief Devuelve el número de coacciones multinodales.
-int XC::CondContorno::getNumMRMPs(void) const
+int XC::ConstrContainer::getNumMRMPs(void) const
   { return theMRMPs->getNumComponents(); }
 
 //! @brief Devuelve el número de casos de carga.
-int XC::CondContorno::getNumLoadPatterns(void) const
+int XC::ConstrContainer::getNumLoadPatterns(void) const
   { return activeLoadPatterns.size(); }
 
 //! @brief Devuelve el número
-int XC::CondContorno::getNumNodeLockers(void) const
+int XC::ConstrContainer::getNumNodeLockers(void) const
   { return activeNodeLockers.size(); }
 
-void XC::CondContorno::applyLoad(double timeStep)
+void XC::ConstrContainer::applyLoad(double timeStep)
   {
     // now loop over node lockers, invoking applyLoad on them
     for(MapCasosActivos<NodeLocker>::iterator i= activeNodeLockers.begin();
@@ -698,13 +698,13 @@ void XC::CondContorno::applyLoad(double timeStep)
 
 //! @brief Devuelve las coacciones correspondientes al nodo
 //! y grado de libertad que se pasan como parámetro.
-std::deque<int> XC::CondContorno::getTagsSPsNodo(int theNode, int theDOF) const
+std::deque<int> XC::ConstrContainer::getTagsSPsNodo(int theNode, int theDOF) const
   {
     std::deque<int> retval; 
 
     int nodeTag= 0;
     int dof= 0;
-    CondContorno *this_no_const= const_cast<CondContorno *>(this);
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     SP_ConstraintIter &theSPs= this_no_const->getSPs();
     SP_Constraint *theSP;
     while(((theSP= theSPs()) != 0))
@@ -719,12 +719,12 @@ std::deque<int> XC::CondContorno::getTagsSPsNodo(int theNode, int theDOF) const
 
 //! @brief Devuelve las coacciones correspondientes al nodo
 //! que se pasan como parámetro.
-std::deque<int> XC::CondContorno::getTagsSPsNodo(int theNode) const
+std::deque<int> XC::ConstrContainer::getTagsSPsNodo(int theNode) const
   {
     std::deque<int> retval; 
 
     int nodeTag= 0;
-    CondContorno *this_no_const= const_cast<CondContorno *>(this);
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     SP_ConstraintIter &theSPs= this_no_const->getSPs();
     SP_Constraint *theSP;
     while(((theSP= theSPs()) != 0))
@@ -738,25 +738,25 @@ std::deque<int> XC::CondContorno::getTagsSPsNodo(int theNode) const
 
 //! @brief Devuelve las coacciones correspondientes al nodo
 //! y grado de libertad que se pasan como parámetro.
-std::deque<int> XC::CondContorno::getTagsMPsNodo(int theNode, int theDOF) const
+std::deque<int> XC::ConstrContainer::getTagsMPsNodo(int theNode, int theDOF) const
   {
     std::deque<int> retval; 
 
-    std::cerr << "XC::CondContorno::getTagsMPsNodo no está implementada." << std::endl;
+    std::cerr << "XC::ConstrContainer::getTagsMPsNodo no está implementada." << std::endl;
     return retval;
   }
 
 //! @brief Devuelve las coacciones correspondientes al nodo
 //! y grado de libertad que se pasan como parámetro.
-std::deque<int> XC::CondContorno::getTagsMPsNodo(int theNode) const
+std::deque<int> XC::ConstrContainer::getTagsMPsNodo(int theNode) const
   {
     std::deque<int> retval; 
 
-    std::cerr << "XC::CondContorno::getTagsMPsNodo no está implementada." << std::endl;
+    std::cerr << "XC::ConstrContainer::getTagsMPsNodo no está implementada." << std::endl;
     return retval;
   }
 
-std::deque<int> XC::CondContorno::getTagsLPs(void) const
+std::deque<int> XC::ConstrContainer::getTagsLPs(void) const
   {
     // loop over all the load patterns that are currently added to the domain
     // getting their tag
@@ -767,7 +767,7 @@ std::deque<int> XC::CondContorno::getTagsLPs(void) const
     return retval;
   }
 
-std::string XC::CondContorno::getNombresLPs(void) const
+std::string XC::ConstrContainer::getNombresLPs(void) const
   {
     // loop over all the load patterns that are currently added to the domain
     // getting their name.
@@ -788,15 +788,15 @@ std::string XC::CondContorno::getNombresLPs(void) const
                   retval+= casos.getNombreLoadPattern((*i).second) + " ";
               }
             else
-	      std::cerr << "CondContorno::getNombresLPs; necesito un preprocesador." << std::endl;
+	      std::cerr << "ConstrContainer::getNombresLPs; necesito un preprocesador." << std::endl;
           }
         else
-          std::cerr << "CondContorno::getNombresLPs; necesito un dominio." << std::endl;
+          std::cerr << "ConstrContainer::getNombresLPs; necesito un dominio." << std::endl;
       }
     return retval;
   }
 
-std::deque<int> XC::CondContorno::getTagsNLs(void) const
+std::deque<int> XC::ConstrContainer::getTagsNLs(void) const
   {
     // loop over all the load patterns that are currently added to the domain
     // getting theit tag
@@ -808,10 +808,10 @@ std::deque<int> XC::CondContorno::getTagsNLs(void) const
   }
 
 //! @brief Devuelve verdadero si las SPs afectan al nodo que se pasa como parámetro.
-bool XC::CondContorno::nodoAfectadoSPs(int tagNodo) const
+bool XC::ConstrContainer::nodoAfectadoSPs(int tagNodo) const
   {
     bool retval= false;
-    CondContorno *this_no_const= const_cast<CondContorno *>(this);
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     SP_ConstraintIter &theSPs= this_no_const->getDomainAndLoadPatternSPs();
     SP_Constraint *theSP;
     while((theSP= theSPs()) != 0)
@@ -824,10 +824,10 @@ bool XC::CondContorno::nodoAfectadoSPs(int tagNodo) const
   }
 
 //! @brief Devuelve verdadero si las MPs afectan al nodo que se pasa como parámetro.
-bool XC::CondContorno::nodoAfectadoMPs(int tagNodo) const
+bool XC::ConstrContainer::nodoAfectadoMPs(int tagNodo) const
   {
     bool retval= false;
-    CondContorno *this_no_const= const_cast<CondContorno *>(this);
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     MP_ConstraintIter &theMPs= this_no_const->getMPs();
     MP_Constraint *theMP;
     while((theMP= theMPs()) != 0)
@@ -840,10 +840,10 @@ bool XC::CondContorno::nodoAfectadoMPs(int tagNodo) const
   }
 
 //! @brief Devuelve verdadero si las MRMPs afectan al nodo que se pasa como parámetro.
-bool XC::CondContorno::nodoAfectadoMRMPs(int tagNodo) const
+bool XC::ConstrContainer::nodoAfectadoMRMPs(int tagNodo) const
   {
     bool retval= false;
-    CondContorno *this_no_const= const_cast<CondContorno *>(this);
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     MRMP_ConstraintIter &theMRMPs= this_no_const->getMRMPs();
     MRMP_Constraint *theMRMP;
     while((theMRMP= theMRMPs()) != 0)
@@ -856,7 +856,7 @@ bool XC::CondContorno::nodoAfectadoMRMPs(int tagNodo) const
   }
 
 //! @brief Devuelve verdadero si MPs o SPs afectan al nodo que se pasa como parámetro.
-bool XC::CondContorno::nodoAfectadoSPsOMPs(int nodeTag) const
+bool XC::ConstrContainer::nodoAfectadoSPsOMPs(int nodeTag) const
   {
     bool retval= nodoAfectadoSPs(nodeTag);
     if(!retval)
@@ -867,7 +867,7 @@ bool XC::CondContorno::nodoAfectadoSPsOMPs(int nodeTag) const
   }
 
 //! @brief Establece como constantes todas las cargas del dominio.
-void XC::CondContorno::setLoadConstant(void)
+void XC::ConstrContainer::setLoadConstant(void)
   {
     // loop over all the load patterns that are currently added to the domain
     // getting them to set their loads as now constant
@@ -876,8 +876,8 @@ void XC::CondContorno::setLoadConstant(void)
       i->second->setLoadConstant();
   }
 
-//! @brief Calcula las reacciones debidas a las condiciones de contorno.
-int XC::CondContorno::calculateNodalReactions(bool inclInertia, const double &tol)
+//! @brief Reactions due to constraints.
+int XC::ConstrContainer::calculateNodalReactions(bool inclInertia, const double &tol)
   {
     MP_ConstraintIter &theMPs= this->getMPs();
     MP_Constraint *theMP;
@@ -894,14 +894,14 @@ int XC::CondContorno::calculateNodalReactions(bool inclInertia, const double &to
 
 //! @brief Devuelve un vector para almacenar los dbTags
 //! de los miembros de la clase.
-XC::DbTagData &XC::CondContorno::getDbTagData(void) const
+XC::DbTagData &XC::ConstrContainer::getDbTagData(void) const
   {
     static DbTagData retval(7);
     return retval;
   }
 
 //! @brief Envía los tags de los casos de carga activos por el canal que se pasa como parámetro.
-int XC::CondContorno::sendLPatternsTags(const int &posFlag,const int &posDbTag,CommParameters &cp)
+int XC::ConstrContainer::sendLPatternsTags(const int &posFlag,const int &posDbTag,CommParameters &cp)
   {
     int res= 0;
     static ID loadPatternsTags;
@@ -921,7 +921,7 @@ int XC::CondContorno::sendLPatternsTags(const int &posFlag,const int &posDbTag,C
   }
 
 //! @brief Recibe los tags de los casos de carga activos por el canal que se pasa como parámetro.
-int XC::CondContorno::recvLPatternsTags(const int &posFlag,const int &posDbTag,const CommParameters &cp)
+int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTag,const CommParameters &cp)
   {
     Domain *dom= getDomain();
     int res= 0;
@@ -950,14 +950,14 @@ int XC::CondContorno::recvLPatternsTags(const int &posFlag,const int &posDbTag,c
                         if(verborrea>3)
                           {
                             const MapLoadPatterns &casos= loadLoader.getLoadPatterns();
-	                    std::cerr << "CondContorno::recvLPatternsTags; no se pudo agregar la acción: '"
+	                    std::cerr << "ConstrContainer::recvLPatternsTags; no se pudo agregar la acción: '"
                                       << casos.getNombreLoadPattern(load)
                                       << "' de tag: " << load->getTag() << std::endl;
                           }
                       }
                   }
                 else
-	          std::cerr << "CondContorno::recvLPatternsTags; no se encontró el caso de carga de tag: "
+	          std::cerr << "ConstrContainer::recvLPatternsTags; no se encontró el caso de carga de tag: "
                             << loadPatternsTags[i] << std::endl;
               }
           }
@@ -966,7 +966,7 @@ int XC::CondContorno::recvLPatternsTags(const int &posFlag,const int &posDbTag,c
   }
 
 //! @brief Envía los tags de los bloqueadores de nodo activos por el canal que se pasa como parámetro.
-int XC::CondContorno::sendNLockersTags(const int &posFlag,const int &posDbTag,CommParameters &cp)
+int XC::ConstrContainer::sendNLockersTags(const int &posFlag,const int &posDbTag,CommParameters &cp)
   {
     int res= 0;
     static ID nLockersTags;
@@ -986,7 +986,7 @@ int XC::CondContorno::sendNLockersTags(const int &posFlag,const int &posDbTag,Co
   }
 
 //! @brief Recibe los tags de los casos de carga activos por el canal que se pasa como parámetro.
-int XC::CondContorno::recvNLockersTags(const int &posFlag,const int &posDbTag,const CommParameters &cp)
+int XC::ConstrContainer::recvNLockersTags(const int &posFlag,const int &posDbTag,const CommParameters &cp)
   {
     Domain *dom= getDomain();
     int res= 0;
@@ -1009,7 +1009,7 @@ int XC::CondContorno::recvNLockersTags(const int &posFlag,const int &posDbTag,co
                   nl->setDomain(dom);
               }
             else
-              std::cerr << "CondContorno::recvNLockersTags; no se encontró el bloqueador de nodos de tag: "
+              std::cerr << "ConstrContainer::recvNLockersTags; no se encontró el bloqueador de nodos de tag: "
                         << nLockersTags[i] << std::endl;
           }
       }
@@ -1017,7 +1017,7 @@ int XC::CondContorno::recvNLockersTags(const int &posFlag,const int &posDbTag,co
   }
 
 //! @brief Envía los miembros del objeto por el canal que se pasa como parámetro.
-int XC::CondContorno::sendData(CommParameters &cp)
+int XC::ConstrContainer::sendData(CommParameters &cp)
   {
     int res= cp.sendMovable(*theSPs,getDbTagData(),CommMetaData(0));
     res+= cp.sendMovable(*theMPs,getDbTagData(),CommMetaData(1));
@@ -1029,7 +1029,7 @@ int XC::CondContorno::sendData(CommParameters &cp)
   }
 
 //! @brief Recibe los miembros del objeto por el canal que se pasa como parámetro.
-int XC::CondContorno::recvData(const CommParameters &cp)
+int XC::ConstrContainer::recvData(const CommParameters &cp)
   {
     int res= theSPs->recibe<SP_Constraint>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewSP);
     res+= theMPs->recibe<MP_Constraint>(getDbTagDataPos(1),cp,&FEM_ObjectBroker::getNewMP);
@@ -1040,7 +1040,7 @@ int XC::CondContorno::recvData(const CommParameters &cp)
   }
 
 //! @brief Envía el objeto por el canal que se pasa como parámetro.
-int XC::CondContorno::sendSelf(CommParameters &cp)
+int XC::ConstrContainer::sendSelf(CommParameters &cp)
   {
     inicComm(7);
     int res= sendData(cp);
@@ -1048,28 +1048,28 @@ int XC::CondContorno::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "CondContorno::send - ch failed to send the initial ID\n";
+      std::cerr << "ConstrContainer::send - ch failed to send the initial ID\n";
     return res;
   }
 
 
-int XC::CondContorno::recvSelf(const CommParameters &cp)
+int XC::ConstrContainer::recvSelf(const CommParameters &cp)
   {
     // first we get the data about the state of the cc for this cTag
     inicComm(7);
     int res= cp.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
-      std::cerr << "CondContorno::recv - ch failed to recv the initial ID\n";
+      std::cerr << "ConstrContainer::recv - ch failed to recv the initial ID\n";
     else
       res+= recvData(cp);
     return res;
   }
 
 //! @brief Imprime el dominio.
-void XC::CondContorno::Print(std::ostream &s, int flag)
+void XC::ConstrContainer::Print(std::ostream &s, int flag)
   {
 
-    s << "Current CondContorno Information\n";
+    s << "Current ConstrContainer Information\n";
 
     s << "\nSP_Constraints: numConstraints: ";
     s << theSPs->getNumComponents() << "\n";
@@ -1092,7 +1092,7 @@ void XC::CondContorno::Print(std::ostream &s, int flag)
     activeNodeLockers.Print(s, flag);
   }
 
-std::ostream &XC::operator<<(std::ostream &s, XC::CondContorno &M)
+std::ostream &XC::operator<<(std::ostream &s, XC::ConstrContainer &M)
   {
     M.Print(s);
     return s;

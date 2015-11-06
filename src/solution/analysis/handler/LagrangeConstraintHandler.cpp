@@ -116,12 +116,12 @@ int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
     // and init the theFEs and theDOFs arrays
 
     int numConstraints = 0;
-    SP_ConstraintIter &theSPss= theDomain->getCondsContorno().getDomainAndLoadPatternSPs();
+    SP_ConstraintIter &theSPss= theDomain->getConstraints().getDomainAndLoadPatternSPs();
     SP_Constraint *spPtr;
     while((spPtr = theSPss()) != 0)
       numConstraints++;
 
-    numConstraints+= theDomain->getCondsContorno().getNumMPs();
+    numConstraints+= theDomain->getConstraints().getNumMPs();
 
     //create a DOF_Group for each Node and add it to the AnalysisModel.
     //    : must of course set the initial IDs
@@ -150,7 +150,7 @@ int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
 
     // create the LagrangeSP_FE for the SP_Constraints and
     // add to the AnalysisModel
-    SP_ConstraintIter &theSPs = theDomain->getCondsContorno().getDomainAndLoadPatternSPs();
+    SP_ConstraintIter &theSPs = theDomain->getConstraints().getDomainAndLoadPatternSPs();
     while((spPtr = theSPs()) != nullptr)
       {
         dofPtr= theModel->createLagrangeDOF_Group(numDofGrp++, spPtr);
@@ -161,7 +161,7 @@ int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
 
     // create the LagrangeMP_FE for the MP_Constraints and
     // add to the AnalysisModel
-    MP_ConstraintIter &theMPs = theDomain->getCondsContorno().getMPs();
+    MP_ConstraintIter &theMPs = theDomain->getConstraints().getMPs();
     MP_Constraint *mpPtr;
     while((mpPtr = theMPs()) != nullptr)
       {
@@ -173,7 +173,7 @@ int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
 
     // create the LagrangeMRMP_FE for the MRMP_Constraints and
     // add to the AnalysisModel
-    MRMP_ConstraintIter &theMRMPs = theDomain->getCondsContorno().getMRMPs();
+    MRMP_ConstraintIter &theMRMPs = theDomain->getConstraints().getMRMPs();
     MRMP_Constraint *mrmpPtr;
     while((mrmpPtr = theMRMPs()) != nullptr)
       {

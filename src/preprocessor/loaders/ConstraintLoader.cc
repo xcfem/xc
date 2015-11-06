@@ -193,18 +193,18 @@ void XC::ConstraintLoader::clearAll(void)
 
 //! @brief returns number of single node constraints.
 int XC::ConstraintLoader::getNumSPs(void) const
-  { return getDomain()->getCondsContorno().getNumSPs(); }
+  { return getDomain()->getConstraints().getNumSPs(); }
 
 //! @brief returns numbr of multiple node constraints.
 int XC::ConstraintLoader::getNumMPs(void) const
-  { return getDomain()->getCondsContorno().getNumMPs(); }
+  { return getDomain()->getConstraints().getNumMPs(); }
 
 //! @brief returns numbr of multiple retained node constraints.
 int XC::ConstraintLoader::getNumMRMPs(void) const
-  { return getDomain()->getCondsContorno().getNumMRMPs(); }
+  { return getDomain()->getConstraints().getNumMRMPs(); }
 
 //! @brief returns number of load patterns.
 int XC::ConstraintLoader::getNumLPs(void) const
-  { return getDomain()->getCondsContorno().getNumLoadPatterns(); }
+  { return getDomain()->getConstraints().getNumLoadPatterns(); }
 
 

@@ -120,7 +120,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
         // loop through the SP_Constraints to see if any of the
         // DOFs are constrained, if so set initial XC::ID value to -1
         int nodeID = nodPtr->getTag();
-        SP_ConstraintIter &theSPs = theDomain->getCondsContorno().getDomainAndLoadPatternSPs();
+        SP_ConstraintIter &theSPs = theDomain->getConstraints().getDomainAndLoadPatternSPs();
         while((spPtr = theSPs()) != 0)
             if(spPtr->getNodeTag() == nodeID) {
                 if(spPtr->isHomogeneous() == false) {
@@ -144,7 +144,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
         // loop through the MP_Constraints to see if any of the
         // DOFs are constrained, note constraint matrix must be diagonal
         // with 1's on the diagonal
-        MP_ConstraintIter &theMPs = theDomain->getCondsContorno().getMPs();
+        MP_ConstraintIter &theMPs = theDomain->getConstraints().getMPs();
         MP_Constraint *mpPtr;
         while((mpPtr = theMPs()) != 0)
           {
@@ -212,7 +212,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
         // loop through the MP_Constraints to see if any of the
         // DOFs are constrained, note constraint matrix must be diagonal
         // with 1's on the diagonal
-        MRMP_ConstraintIter &theMRMPs = theDomain->getCondsContorno().getMRMPs();
+        MRMP_ConstraintIter &theMRMPs = theDomain->getConstraints().getMRMPs();
         MRMP_Constraint *mrmpPtr;
         while((mrmpPtr = theMRMPs()) != 0)
           {

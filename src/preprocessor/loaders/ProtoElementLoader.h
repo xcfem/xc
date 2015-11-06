@@ -71,7 +71,6 @@ class ProtoElementLoader: public Loader
 
     friend class Preprocessor;
 
-    void ejecuta_bloque_for_each(CmdStatus &,const std::string &);
   public:
     ProtoElementLoader(Preprocessor *preprocessor);
     virtual int getDefaultTag(void) const= 0;

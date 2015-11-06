@@ -450,7 +450,7 @@ bool XC::ShadowSubdomain::addNodalLoad(NodalLoad *theLoad, int loadPattern)
 
 bool XC::ShadowSubdomain::addElementalLoad(ElementalLoad *theLoad, int loadPattern)
   {
-    LoadPattern *thePattern = getCondsContorno().getLoadPattern(loadPattern);
+    LoadPattern *thePattern = getConstraints().getLoadPattern(loadPattern);
     if((thePattern == 0) || (thePattern->addElementalLoad(theLoad) == false))
       {
         std::cerr << "XC::ShadowSubdomain::addElementalLoad() - could not add the load: " << *theLoad;

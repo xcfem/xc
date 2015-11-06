@@ -285,7 +285,7 @@
 #include "domain/constraints/GlueNodeToElement.h"
 
 #include "domain/constraints/MapCasosActivos.h"
-#include "domain/constraints/CondContorno.h"
+#include "domain/constraints/ConstrContainer.h"
 
 // nodal load header files
 #include "domain/load/NodalLoad.h"

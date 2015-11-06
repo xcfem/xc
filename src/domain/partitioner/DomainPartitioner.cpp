@@ -241,7 +241,7 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
 
     // now go through the MP_Constraints and ensure the retained node is in every
     // partition the constrained node is in
-    MP_ConstraintIter &theMPs = myDomain->getCondsContorno().getMPs();
+    MP_ConstraintIter &theMPs = myDomain->getConstraints().getMPs();
     MP_Constraint *mpPtr;
     while((mpPtr = theMPs()) != 0)
       {
@@ -318,7 +318,7 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
     // 2) move nodal loads
     // 3) move SP_Constraints
 
-    std::map<int,LoadPattern *> &theLoadPatterns = myDomain->getCondsContorno().getLoadPatterns();
+    std::map<int,LoadPattern *> &theLoadPatterns = myDomain->getConstraints().getLoadPatterns();
     for(std::map<int,LoadPattern *>::iterator theLoadPattern= theLoadPatterns.begin();
         theLoadPattern!= theLoadPatterns.end();theLoadPattern++)
       {
@@ -330,7 +330,7 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
             if(i != mainPartition)
               {
                 Subdomain *theSubdomain = myDomain->getSubdomainPtr(i);
-                LoadPattern *loadPatternCopy = theSubdomain->getCondsContorno().getLoadPattern(loadPatternTag);
+                LoadPattern *loadPatternCopy = theSubdomain->getConstraints().getLoadPattern(loadPatternTag);
                 if(loadPatternCopy == 0)
                   {
                     LoadPattern *newLoadPattern = theLoadPattern->second->getCopy();
@@ -424,7 +424,7 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
       }
 
     // add the single point constraints,
-    SP_ConstraintIter &theDomainSP = myDomain->getCondsContorno().getSPs();
+    SP_ConstraintIter &theDomainSP = myDomain->getConstraints().getSPs();
     SP_Constraint *spPtr;
     while((spPtr = theDomainSP()) != 0)
       {
@@ -457,7 +457,7 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
       }
 
     // move MP_Constraints - add an XC::MP_Constraint to every partition a constrained node is in
-    MP_ConstraintIter &moreMPs = myDomain->getCondsContorno().getMPs();
+    MP_ConstraintIter &moreMPs = myDomain->getConstraints().getMPs();
     while((mpPtr = moreMPs()) != 0)
       {
         int constrained = mpPtr->getNodeConstrained();

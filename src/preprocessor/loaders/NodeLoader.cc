@@ -49,73 +49,6 @@ void XC::NodeLoader::libera(void)
 XC::NodeLoader::NodeLoader(Preprocessor *preprocessor)
   : Loader(preprocessor), ngdl_def_nodo(2),ncoo_def_nodo(3),nodo_semilla(nullptr) {}
 
-//! @brief Lee un objeto NodeLoader desde archivo
-bool XC::NodeLoader::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NodeLoader) Procesando comando: " << cmd << std::endl;
-    if(cmd == "ncoo_def")
-      {
-        ncoo_def_nodo= interpretaInt(status.GetString());
-        if(verborrea>1)
-	  std::clog << ncoo_def_nodo << " coordenadas por nodo." << std::endl;
-        return true;
-      }
-    else if(cmd == "tag_nodo")
-      {
-	setDefaultTag(interpretaInt(status.GetString()));
-        return true;
-      }
-    else if(cmd == "ngdl_def") //Número de grados de libertad por nodo.
-      {
-        ngdl_def_nodo= interpretaInt(status.GetString());
-        if(verborrea>1)
-	  std::clog << ngdl_def_nodo << " grados de libertad por nodo." << std::endl;
-        return true;
-      }
-    else if((cmd == "def_nod"))
-      {
-        Node *ptrNod= lee_nodo(status);
-        getDomain()->addNode(ptrNod);
-        preprocessor->UpdateSets(ptrNod);
-        return true;
-      }
-    else if(cmd == "nod")
-      {
-        Node *ptrNod= lee_nodo(status);
-        if(ptrNod)
-          {
-            if(!getDomain()->existNode(ptrNod->getTag())) //El nodo es nuevo.
-              {
-                getDomain()->addNode(ptrNod);
-                preprocessor->UpdateSets(ptrNod);
-              }
-          }
-        return true;
-      }
-    else if(cmd == "duplica_nod")
-      {
-        const int iNod= interpretaInt(status.GetString());
-        duplicateNode(iNod);
-        return true;
-      }
-    else if(cmd == "nod_semilla")
-      {
-        if(nodo_semilla) delete(nodo_semilla);
-        nodo_semilla= lee_nodo(status);
-        return true;
-      }
-    else if(cmd == "for_each")
-      {
-        const std::string bloque= status.GetBloque();
-        getDomain()->EjecutaBloqueForEachNode(status,bloque);
-        return true;
-      }
-    else
-      return Loader::procesa_comando(status);
-  }
-
 //! @brief Destructor.
 XC::NodeLoader::~NodeLoader(void)
   { libera(); }
@@ -134,24 +67,6 @@ void XC::NodeLoader::clearAll(void)
     libera();
     setDefaultTag(0);
   }
-
-//! @brief Carga un nodo desde archivo.
-XC::Node *XC::NodeLoader::lee_nodo(CmdStatus &status)
-  {
-    int ngdl= ngdl_def_nodo; //No. grados de libertad por defecto.
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    int tag_nodo= getDefaultTag();
-    if(fnc_indices.size()>0)
-      tag_nodo= convert_to_int(fnc_indices[0]); //Tag del nodo.
-    if(fnc_indices.size()>1)
-      ngdl= convert_to_int(fnc_indices[1]); //No. de grados de libertad del nodo.
-    Node *nod= getDomain()->getNode(tag_nodo);
-    if(!nod) //El nodo no existe; lo creamos.
-      nod= new_node(tag_nodo,ncoo_def_nodo,ngdl,0.0,0.0,0.0);
-    if(nod) nod->LeeCmd(status);
-    return nod;
-  }
-
 
 XC::Node *XC::NodeLoader::new_node(const int &tag,const size_t &dim,const int &ngdl,const double &x,const double &y,const double &z)
   {
@@ -306,47 +221,3 @@ void XC::NodeLoader::calculateNodalReactions(bool inclInertia)
     getDomain()->calculateNodalReactions(inclInertia,1e-4);
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::NodeLoader::GetProp(const std::string &cod) const
-  {
-    if(cod=="tag_nodo")
-      return any_const_ptr(getDefaultTag());
-    else if(cod=="last_tag_nodo")
-      {
-        tmp_gp_szt= getDefaultTag()-1;
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="dist_inicial")
-      {
-        size_t iNodoA= 0, iNodoB= 0;
-        if(InterpreteRPN::Pila().size())
-          {
-            iNodoA= convert_to_size_t(InterpreteRPN::Pila().Pop());
-            iNodoB= convert_to_size_t(InterpreteRPN::Pila().Pop());
-          }
-        else
-          err_num_argumentos(std::cerr,2,"GetProp",cod);
-        const Node *ptrNodA= getDomain()->getNode(iNodoA);
-        const Node *ptrNodB= getDomain()->getNode(iNodoB);
-        tmp_gp_dbl= dist(ptrNodA->getPosInicial3d(),ptrNodB->getPosInicial3d());
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="dist_final")
-      {
-        size_t iNodoA= 0, iNodoB= 0;
-        if(InterpreteRPN::Pila().size())
-          {
-            iNodoA= convert_to_size_t(InterpreteRPN::Pila().Pop());
-            iNodoB= convert_to_size_t(InterpreteRPN::Pila().Pop());
-          }
-        else
-          err_num_argumentos(std::cerr,2,"GetProp",cod);
-        const Node *ptrNodA= getDomain()->getNode(iNodoA);
-        const Node *ptrNodB= getDomain()->getNode(iNodoB);
-        tmp_gp_dbl= dist(ptrNodA->getPosFinal3d(),ptrNodB->getPosFinal3d()); 
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return Loader::GetProp(cod);
-  }

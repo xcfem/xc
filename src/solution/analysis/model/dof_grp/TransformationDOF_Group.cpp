@@ -168,7 +168,7 @@ XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, Transf
     // set the SP_Constraint corresponding to the dof in myID
     Domain *theDomain=node->getDomain();
     int nodeTag= node->getTag();
-    SP_ConstraintIter &theSPIter= theDomain->getCondsContorno().getSPs();
+    SP_ConstraintIter &theSPIter= theDomain->getConstraints().getSPs();
     SP_Constraint *sp;
     while ((sp= theSPIter()) != 0) {
         if(sp->getNodeTag() == nodeTag) {

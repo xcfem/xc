@@ -47,9 +47,6 @@ class NodeLoader: public Loader
     Node *nodo_semilla; //!< Nodo patrón para el mallado semi-automático.
     void libera(void);
     Node *new_node(const int &tag,const size_t &dim,const int &ngdl,const double &x,const double &y=0.0,const double &z=0.0);
-  protected:
-    Node *lee_nodo(CmdStatus &);
-    bool procesa_comando(CmdStatus &status);
   public:
     NodeLoader(Preprocessor *);
     virtual ~NodeLoader(void);
@@ -82,7 +79,6 @@ class NodeLoader: public Loader
 
     void calculateNodalReactions(bool inclInertia);
 
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // fin namespace XC

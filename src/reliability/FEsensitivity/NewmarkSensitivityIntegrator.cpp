@@ -280,7 +280,7 @@ int XC::NewmarkSensitivityIntegrator::formSensitivityRHS(int passedGradNumber)
 
     // Loop through load patterns to add external load sensitivity
     double time;
-    std::map<int,LoadPattern *> &theLoadPatterns = theDomain->getCondsContorno().getLoadPatterns();
+    std::map<int,LoadPattern *> &theLoadPatterns = theDomain->getConstraints().getLoadPatterns();
     for(std::map<int,LoadPattern *>::iterator loadPatternPtr= theLoadPatterns.begin();
         loadPatternPtr!= theLoadPatterns.end();loadPatternPtr++)
       {

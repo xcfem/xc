@@ -65,7 +65,7 @@
 #include "utility/recorder/ObjWithRecorders.h"
 #include "PseudoTimeTracker.h"
 #include "../mesh/Mesh.h"
-#include "../constraints/CondContorno.h"
+#include "../constraints/ConstrContainer.h"
 #include "utility/matrix/Vector.h"
 
 namespace XC {
@@ -105,8 +105,8 @@ class Domain: public ObjWithRecorders, public DistributedBase
     int currentGeoTag; //!< an integer used to mark if domain has changed
     bool hasDomainChangedFlag; //!< a bool flag used to indicate if GeoTag needs to be ++
     int commitTag;
-    Mesh mesh; //!< Nodos y elementos
-    CondContorno condsContorno;//!< Condiciones de contorno.
+    Mesh mesh; //!< Nodes and elements.
+    ConstrContainer constraints;//!< Constraint container.
     Vector theEigenvalues; //!< Autovalores.
     Vector modalParticipationFactors; //!< Factores de participación modal.
     DqMeshRegion *theRegions;
@@ -125,7 +125,6 @@ class Domain: public ObjWithRecorders, public DistributedBase
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
   public:
     Domain(EntCmd *owr,DataOutputHandler::map_output_handlers *oh);
     Domain(EntCmd *owr,int numNods, int numElements, int numSPs, int numMPs,int numLPatterns,int numNLockers,DataOutputHandler::map_output_handlers *oh);
@@ -177,8 +176,8 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual NodeIter &getNodes(void);
     virtual Mesh &getMesh(void);
     virtual const Mesh &getMesh(void) const;
-    virtual CondContorno &getCondsContorno(void);
-    virtual const CondContorno &getCondsContorno(void) const;
+    virtual ConstrContainer &getConstraints(void);
+    virtual const ConstrContainer &getConstraints(void) const;
 
     const std::string &getNombreCombActual(void) const;
 
@@ -189,8 +188,6 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual Node *getNode(int tag);
     virtual const Node *getNode(int tag) const;
 
-    void EjecutaBloqueForEachElement(CmdStatus &status,const std::string &bloque);
-    void EjecutaBloqueForEachNode(CmdStatus &status,const std::string &bloque);
 
     // methods to query the state of the domain
     inline const PseudoTimeTracker &getTimeTracker(void) const
@@ -252,7 +249,6 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual int addRegion(MeshRegion &theRegion);
     virtual MeshRegion *getRegion(int region);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
     virtual void Print(std::ostream &s, int flag =0);
     friend std::ostream &operator<<(std::ostream &s, Domain &M);
 

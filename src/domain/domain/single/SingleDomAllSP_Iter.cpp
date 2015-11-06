@@ -79,14 +79,14 @@ XC::SingleDomAllSP_Iter::SingleDomAllSP_Iter(Domain &domain)
 
 void XC::SingleDomAllSP_Iter::reset(void)
   {
-    theDomainSPs = &(theDomain->getCondsContorno().getSPs());
+    theDomainSPs = &(theDomain->getConstraints().getSPs());
 
-    theLoadPatterns= &(theDomain->getCondsContorno().getLoadPatterns());
+    theLoadPatterns= &(theDomain->getConstraints().getLoadPatterns());
     currentLoadPattern= theLoadPatterns->begin();
     if(currentLoadPattern!=theLoadPatterns->end())
       { theLoadPatternSPs= &(currentLoadPattern->second->getSPs()); }
 
-    theNodeLockers= &(theDomain->getCondsContorno().getNodeLockers());
+    theNodeLockers= &(theDomain->getConstraints().getNodeLockers());
     currentNodeLocker= theNodeLockers->begin();
     if(currentNodeLocker!=theNodeLockers->end())
       { theNodeLockerSPs = &(currentNodeLocker->second->getSPs()); }

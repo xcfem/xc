@@ -497,7 +497,7 @@ XC::Node::~Node(void)
 XC::DefaultTag &XC::Node::getDefaultTag(void)
   { return defaultTag; }
 
-//! @brief Introduce en el nodo una condición de contorno
+//! @brief Introduce en el nodo una constraint
 //! como la que se pasa como parámetro.
 XC::SP_Constraint *XC::Node::fix(const SP_Constraint &semilla)
   { return GetPreprocessor()->getConstraintLoader().addSP_Constraint(getTag(),semilla); }
@@ -2062,8 +2062,8 @@ const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &e
                     }
                 }
               else
-		std::cerr << "Node::getResistingForce; el nodo: " << getTag()
-                          << " tiene una condición de contorno." << std::endl;
+		std::cerr << "Node::getResistingForce; node: " << getTag()
+                          << " has a constraint." << std::endl;
             }
       }
     return retval; 
@@ -2119,13 +2119,13 @@ int XC::Node::addReactionForce(const Vector &add, double factor)
 //! @brief Chequea la reacción en el nodo.
 void XC::Node::checkReactionForce(const double &tol)
   {
-    const CondContorno &cc= getDomain()->getCondsContorno();
+    const ConstrContainer &cc= getDomain()->getConstraints();
     const double norm2= reaction.Norm2();
     if(norm2>tol)
       {
         if(!cc.nodoAfectadoSPsOMPs(getTag()) && !isFrozen())
           std::cerr << "Node::checkReactionForce el nodo: " << getTag()
-                    << " no esta sujeto a condiciones de contorno y sin embargo"
+                    << " no esta sujeto a constraints y sin embargo"
                     << " tiene una reacción de valor: " << reaction 
                     << " y norma: " << sqrt(norm2)
                     << " el método de solución empleado no es adecuado al problema. "

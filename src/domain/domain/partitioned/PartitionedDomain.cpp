@@ -288,7 +288,7 @@ bool XC::PartitionedDomain::addLoadPattern(LoadPattern *loadPattern)
     bool result= true;
 
     int tag= loadPattern->getTag();
-    if(this->getCondsContorno().getLoadPattern(tag) != 0)
+    if(this->getConstraints().getLoadPattern(tag) != 0)
       {
         std::cerr << "XC::PartitionedDomain::addLoadPattern - cannot add as XC::LoadPattern with tag" <<
         tag << "already exists in model\n";

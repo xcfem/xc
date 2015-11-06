@@ -155,7 +155,7 @@ int XC::PlainNumberer::numberDOF(int lastDOF)
             // loop through the MP_Constraints to see if any of the
             // DOFs are constrained, note constraint matrix must be diagonal
             // with 1's on the diagonal
-            MP_ConstraintIter &theMPs= theDomain->getCondsContorno().getMPs();
+            MP_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
             MP_Constraint *mpPtr= nullptr;
             while((mpPtr= theMPs()) != 0 )
               {
@@ -178,7 +178,7 @@ int XC::PlainNumberer::numberDOF(int lastDOF)
                       }
                   }
               }
-            MRMP_ConstraintIter &theMRMPs= theDomain->getCondsContorno().getMRMPs();
+            MRMP_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
             MRMP_Constraint *mrmpPtr;
             while((mrmpPtr= theMRMPs()) != 0 )
               {
@@ -268,7 +268,7 @@ int XC::PlainNumberer::numberDOF(ID &lastDOFs)
             // loop through the MP_Constraints to see if any of the
             // DOFs are constrained, note constraint matrix must be diagonal
             // with 1's on the diagonal
-            MP_ConstraintIter &theMPs= theDomain->getCondsContorno().getMPs();
+            MP_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
             MP_Constraint *mpPtr= nullptr;
             while((mpPtr= theMPs()) != 0 )
               {
@@ -291,7 +291,7 @@ int XC::PlainNumberer::numberDOF(ID &lastDOFs)
                       }
                   }
               }
-            MRMP_ConstraintIter &theMRMPs= theDomain->getCondsContorno().getMRMPs();
+            MRMP_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
             MRMP_Constraint *mrmpPtr;
             while((mrmpPtr= theMRMPs()) != 0 )
               {

@@ -17,8 +17,8 @@
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/material/section/SeccionBarraPrismatica.h:46: Trying to add group MATSCC to itself!
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/material/section/SectionForceDeformation.h:82: Trying to add group MATSCC to itself!
 /usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/material/yieldSurface/yieldSurfaceBC/YieldSurface_BC.h:47: Trying to add group MATYS to itself!
-/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/domain/constraints/CondContorno.cc:1104: warning: no matching file member found for 
-std::ostream & XC::operator<<(std::ostream &s, XC::CondContorno &M)Possible candidates:
+/usr/local/src/fuentes/c/ingenieria/elementos_finitos/xc/src/domain/constraints/ConstrContainer.cc:1104: warning: no matching file member found for 
+std::ostream & XC::operator<<(std::ostream &s, XC::ConstrContainer &M)Possible candidates:
   std::ostream & operator<<(std::ostream &s, const PseudoTimeTracker &tt)
   std::ostream & operator<<(std::ostream &os, const Combinacion &)
   std::ostream & operator<<(std::ostream &, const FVector &f)

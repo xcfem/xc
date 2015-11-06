@@ -370,14 +370,3 @@ void XC::ProtoElementLoader::setDefaultIntegrator(const std::string &nmb)
 const std::string &XC::ProtoElementLoader::getDefaultIntegrator(void) const
   { return nmb_integ; }
 
-//! @brief Ejecuta el bloque que se pasa como parámetro.
-void XC::ProtoElementLoader::ejecuta_bloque_for_each(CmdStatus &status,const std::string &bloque)
-  {
-    if(preprocessor)
-      {
-        Domain *tmp= preprocessor->GetDominio();
-        if(tmp)
-          tmp->EjecutaBloqueForEachElement(status,bloque);
-      }
-  }
-

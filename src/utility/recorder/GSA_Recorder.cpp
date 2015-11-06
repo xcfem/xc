@@ -165,7 +165,7 @@ XC::GSA_Recorder::GSA_Recorder(Domain &theDom,
       }
         
     // open file and spit out the initial data
-    SP_ConstraintIter &theSPs = theDomain->getCondsContorno().getSPs();
+    SP_ConstraintIter &theSPs = theDomain->getConstraints().getSPs();
     SP_Constraint *theSP;
     ID theConstrainedNodes(0,6);
     ID theSpMatrix(0, 6*ndf);

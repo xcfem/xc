@@ -104,7 +104,7 @@ int XC::PatternRecorder::record(int commitTag, double timeStamp)
         if(deltaT != 0.0)
           nextTimeStampToRecord = timeStamp + deltaT;
     
-        LoadPattern *pattern = theDomain->getCondsContorno().getLoadPattern(thePattern);
+        LoadPattern *pattern = theDomain->getConstraints().getLoadPattern(thePattern);
         if(pattern) value = pattern->getLoadFactor();
       }
   

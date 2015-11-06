@@ -173,7 +173,7 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
     // Generate and add constraints to domain
 
     // get the constraint numbers
-    int startMPtag = getDomain()->getCondsContorno().getNumMPs();
+    int startMPtag = getDomain()->getConstraints().getNumMPs();
     for( i=0 ; i<4 ; i++ ) InternalConstraints(i) = startMPtag + i ;
 
     // create MP_Joint constraint node 1
@@ -300,7 +300,7 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
     // Generate and add constraints to domain
 
     // get the constraint numbers
-    int startMPtag= getDomain()->getCondsContorno().getNumMPs();
+    int startMPtag= getDomain()->getConstraints().getNumMPs();
     for(int i=0 ; i<4 ; i++ )
       InternalConstraints(i) = startMPtag + i ;
 
@@ -345,7 +345,7 @@ XC::Joint2D::~Joint2D(void)
         MP_Constraint *Temp_MP;
         for(int i=0;i<4;i++ )
           {
-            Temp_MP= getDomain()->getCondsContorno().getMP_Constraint( InternalConstraints(i) );
+            Temp_MP= getDomain()->getConstraints().getMP_Constraint( InternalConstraints(i) );
             if(Temp_MP)
               {
                 getDomain()->removeMP_Constraint( InternalConstraints(i) );

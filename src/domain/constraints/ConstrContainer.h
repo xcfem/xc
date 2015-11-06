@@ -24,10 +24,10 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//CondContorno.h
+//ConstrContainer.h
 
-#ifndef CondContorno_h
-#define CondContorno_h
+#ifndef ConstrContainer_h
+#define ConstrContainer_h
 
 #include "domain/mesh/MeshComponentContainer.h"
 #include "MapCasosActivos.h"
@@ -57,13 +57,13 @@ class TaggedObjectStorage;
 
 //! @ingroup CCont
 //
-//! @brief Contenedor para condiciones de contorno.
-class CondContorno: public MeshComponentContainer
+//! @brief Constraint container.
+class ConstrContainer: public MeshComponentContainer
   {
   private:
-    TaggedObjectStorage *theSPs;//!< Condiciones de contorno mononodales.
-    TaggedObjectStorage *theMPs;//!< Condiciones de contorno multinodales.
-    TaggedObjectStorage *theMRMPs;//!< Condiciones de contorno multi retained node.
+    TaggedObjectStorage *theSPs;//!< Single point constraints.
+    TaggedObjectStorage *theMPs;//!< Multi-point constraints.
+    TaggedObjectStorage *theMRMPs;//!< Multi-row multi-point constraints.
     MapCasosActivos<NodeLocker> activeNodeLockers; //!< Bloqueadores de nodo activos.
     MapCasosActivos<LoadPattern> activeLoadPatterns; //!< Casos de carga activos.
 
@@ -113,10 +113,10 @@ class CondContorno: public MeshComponentContainer
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
   public:
-    CondContorno(Domain *owr);
-    CondContorno(Domain *owr,int numSPs, int numMPs,int numNodeLockers,int numLoadPatterns);
+    ConstrContainer(Domain *owr);
+    ConstrContainer(Domain *owr,int numSPs, int numMPs,int numNodeLockers,int numLoadPatterns);
 
-    virtual ~CondContorno(void);
+    virtual ~ConstrContainer(void);
 
      // methods to access the components
     virtual SP_ConstraintIter &getSPs();
@@ -140,7 +140,7 @@ class CondContorno: public MeshComponentContainer
     virtual void applyLoad(double pseudoTime);
     virtual void setLoadConstant(void);
 
-     // methods to query the state of the CondContorno
+     // methods to query the state of the ConstrContainer
     virtual int getNumSPs(void) const;
     virtual int getNumMPs(void) const;
     virtual int getNumMRMPs(void) const;
@@ -165,7 +165,7 @@ class CondContorno: public MeshComponentContainer
     virtual int recvSelf(const CommParameters &);
 
     virtual void Print(std::ostream &s, int flag =0);
-    friend std::ostream &operator<<(std::ostream &s, CondContorno &cc);
+    friend std::ostream &operator<<(std::ostream &s, ConstrContainer &cc);
   };
 } // fin namespace XC
 

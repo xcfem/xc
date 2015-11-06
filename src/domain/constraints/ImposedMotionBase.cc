@@ -91,7 +91,7 @@ int XC::ImposedMotionBase::getMotion(void)
     if(!theGroundMotion)
       {
 
-        LoadPattern *theLoadPattern = getDomain()->getCondsContorno().getLoadPattern(patternTag);
+        LoadPattern *theLoadPattern = getDomain()->getConstraints().getLoadPattern(patternTag);
         if(theLoadPattern == 0)
           return -3;
 

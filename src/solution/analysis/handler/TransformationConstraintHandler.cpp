@@ -109,11 +109,11 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 
     // get number of elements and nodes in the domain
     // and init the theFEs and theDOFs arrays
-    int numMPConstraints= theDomain->getCondsContorno().getNumMPs();
+    int numMPConstraints= theDomain->getConstraints().getNumMPs();
 
-    //    int numSPConstraints= theDomain->getCondsContorno().getNumSPs();
+    //    int numSPConstraints= theDomain->getConstraints().getNumSPs();
     int numSPConstraints= 0;
-    SP_ConstraintIter &theSP1s= theDomain->getCondsContorno().getDomainAndLoadPatternSPs();
+    SP_ConstraintIter &theSP1s= theDomain->getConstraints().getDomainAndLoadPatternSPs();
     SP_Constraint *theSP1;
     while((theSP1= theSP1s()) != 0)
         numSPConstraints++;
@@ -128,7 +128,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     std::vector<MP_Constraint *> mps(numMPConstraints,static_cast<MP_Constraint *>(nullptr));
     if(numMPConstraints != 0)
       {
-        MP_ConstraintIter &theMPs= theDomain->getCondsContorno().getMPs();
+        MP_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
         MP_Constraint *theMP= nullptr;
         int index= 0;
         while((theMP= theMPs()) != 0)
@@ -141,13 +141,13 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
           }
       }
 
-    int numMRMPConstraints= theDomain->getCondsContorno().getNumMRMPs();
+    int numMRMPConstraints= theDomain->getConstraints().getNumMRMPs();
     // create an ID of constrained node tags in MRMP_Constraints
     ID constrainedNodesMRMP(0, numMRMPConstraints);
     std::vector<MRMP_Constraint *> mrmps(numMRMPConstraints,static_cast<MRMP_Constraint *>(nullptr));
     if(numMRMPConstraints != 0)
       {
-        MRMP_ConstraintIter &theMRMPs= theDomain->getCondsContorno().getMRMPs();
+        MRMP_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
         MRMP_Constraint *theMRMP= nullptr;
         int index= 0;
         while((theMRMP= theMRMPs()) != 0)
@@ -165,7 +165,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     std::vector<SP_Constraint *> sps(numSPConstraints,static_cast<SP_Constraint *>(nullptr));
     if(numSPConstraints != 0)
       {
-        SP_ConstraintIter &theSPs= theDomain->getCondsContorno().getDomainAndLoadPatternSPs();
+        SP_ConstraintIter &theSPs= theDomain->getConstraints().getDomainAndLoadPatternSPs();
         SP_Constraint *theSP;
         int index= 0;
         while((theSP= theSPs()) != 0)

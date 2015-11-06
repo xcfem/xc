@@ -105,7 +105,7 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
     // get number ofelements and nodes in the domain
     // and init the theFEs and theDOFs arrays
     int numSPs = 0;
-    SP_ConstraintIter &theSPs = theDomain->getCondsContorno().getDomainAndLoadPatternSPs();
+    SP_ConstraintIter &theSPs = theDomain->getConstraints().getDomainAndLoadPatternSPs();
     SP_Constraint *spPtr;
     while((spPtr = theSPs()) != 0)
       numSPs++;
@@ -168,7 +168,7 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
 
     // create the PenaltySP_FE for the SP_Constraints and
     // add to the AnalysisModel
-    SP_ConstraintIter &theSPss = theDomain->getCondsContorno().getDomainAndLoadPatternSPs();
+    SP_ConstraintIter &theSPss = theDomain->getConstraints().getDomainAndLoadPatternSPs();
     while((spPtr = theSPss()) != 0)
       {
         fePtr= theModel->createPenaltySP_FE(numFeEle, *spPtr, alphaSP);
@@ -177,7 +177,7 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
 
     // create the PenaltyMP_FE for the MP_Constraints and
     // add to the AnalysisModel
-    MP_ConstraintIter &theMPs = theDomain->getCondsContorno().getMPs();
+    MP_ConstraintIter &theMPs = theDomain->getConstraints().getMPs();
     MP_Constraint *mpPtr;
     while((mpPtr = theMPs()) != 0)
       {
@@ -187,7 +187,7 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
 
     // create the PenaltyMRMP_FE for the MRMP_Constraints and
     // add to the AnalysisModel
-    MRMP_ConstraintIter &theMRMPs = theDomain->getCondsContorno().getMRMPs();
+    MRMP_ConstraintIter &theMRMPs = theDomain->getConstraints().getMRMPs();
     MRMP_Constraint *mrmpPtr;
     while((mrmpPtr = theMRMPs()) != 0)
       {

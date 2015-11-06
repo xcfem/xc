@@ -296,7 +296,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             {
-              constraints.push_back(preprocessor->GetDominio()->getCondsContorno().getSP_Constraint(tags_constraints[i]));
+              constraints.push_back(preprocessor->GetDominio()->getConstraints().getSP_Constraint(tags_constraints[i]));
             }
         return true;
       }
@@ -308,7 +308,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             {
-              constraints.push_back(preprocessor->GetDominio()->getCondsContorno().getMP_Constraint(tags_constraints[i]));
+              constraints.push_back(preprocessor->GetDominio()->getConstraints().getMP_Constraint(tags_constraints[i]));
             }
         return true;
       }
@@ -322,7 +322,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
           for(size_t i= 0;i<sz;i++)
             {
               tag= convert_to_int(tmp[i]);
-              constraints.push_back(preprocessor->GetDominio()->getCondsContorno().getSP_Constraint(tag));
+              constraints.push_back(preprocessor->GetDominio()->getConstraints().getSP_Constraint(tag));
             }
         return true;
       }
@@ -336,7 +336,7 @@ bool XC::SetMeshComp::procesa_comando(CmdStatus &status)
           for(size_t i= 0;i<sz;i++)
             {
               tag= convert_to_int(tmp[i]);
-              constraints.push_back(preprocessor->GetDominio()->getCondsContorno().getMP_Constraint(tag));
+              constraints.push_back(preprocessor->GetDominio()->getConstraints().getMP_Constraint(tag));
             }
         return true;
       }
@@ -921,9 +921,9 @@ void XC::SetMeshComp::sel_constraints_lista(const ID &tags)
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             {
-              if((tmp= preprocessor->GetDominio()->getCondsContorno().getSP_Constraint(tags(i))))
+              if((tmp= preprocessor->GetDominio()->getConstraints().getSP_Constraint(tags(i))))
                 constraints.push_back(tmp);
-              else if((tmp=preprocessor->GetDominio()->getCondsContorno().getMP_Constraint(tags(i))))
+              else if((tmp=preprocessor->GetDominio()->getConstraints().getMP_Constraint(tags(i))))
                 constraints.push_back(tmp);
               else
 		std::cerr << "SetMeshComp::sel_constraints_lista;no se encontró la coacción de tag: "

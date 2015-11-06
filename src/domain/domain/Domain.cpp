@@ -115,23 +115,16 @@ void XC::Domain::libera(void)
 //! @brief Constructor.
 XC::Domain::Domain(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
   :ObjWithRecorders(owr,oh),timeTracker(),CallbackCommit(""), dbTag(0), currentGeoTag(0),
-   hasDomainChangedFlag(false), commitTag(0), mesh(this), condsContorno(this),
+   hasDomainChangedFlag(false), commitTag(0), mesh(this), constraints(this),
    theRegions(nullptr), nmbCombActual(""), lastChannel(0), lastGeoSendTag(-1) {}
 
 //! @brief Constructor.
 XC::Domain::Domain(EntCmd *owr,int numNodes, int numElements, int numSPs, int numMPs, int numLoadPatterns,int numNodeLockers,DataOutputHandler::map_output_handlers *oh)
   :ObjWithRecorders(owr,oh),timeTracker(), CallbackCommit(""), dbTag(0), currentGeoTag(0),
-   hasDomainChangedFlag(false), commitTag(0), mesh(this), condsContorno(this,numSPs,numMPs,numNodeLockers,numLoadPatterns),
+   hasDomainChangedFlag(false), commitTag(0), mesh(this), constraints(this,numSPs,numMPs,numNodeLockers,numLoadPatterns),
   theRegions(nullptr), nmbCombActual(""), lastChannel(0), lastGeoSendTag(-1) {}
 
-//! @brief Lee un objeto XC::Domain desde archivo
-bool XC::Domain::procesa_comando(CmdStatus &status)
-  {
-    std::cerr << "Deprecated; use Python." << std::endl;
-    return ObjWithRecorders::procesa_comando(status);
-  }
-
-//! @brief Elimina del dominio todos los componentes (nodos, elementos, cargas y condiciones de contorno).
+//! @brief Removes all components from domain (nodes, elements, loads & constraints).
 //! GENERAL NOTE ON REMOVAL OF COMPONENTS:
 //!   downward casts (while bad) are o.k. as only the type
 //!  of components can be added to the storage objects, e.g.
@@ -139,7 +132,7 @@ bool XC::Domain::procesa_comando(CmdStatus &status)
 //!  casting a XC::DomainComponent from theElements to an XC::Element is o.k.
 void XC::Domain::clearAll(void)
   {
-    condsContorno.clearAll();
+    constraints.clearAll();
     
     // clean out the containers
     mesh.clearAll();
@@ -196,10 +189,10 @@ bool XC::Domain::addElement(Element *element)
 bool XC::Domain::addNode(Node * node)
   { return mesh.addNode(node); }
 
-//! @brief Agrega al dominio una condición de contorno monopunto.
+//! @brief Agrega al dominio una constraint monopunto.
 bool XC::Domain::addSP_Constraint(SP_Constraint *spConstraint)
   {
-    bool result= condsContorno.addSP_Constraint(spConstraint);
+    bool result= constraints.addSP_Constraint(spConstraint);
     if(result)
       {
         spConstraint->setDomain(this);
@@ -208,10 +201,10 @@ bool XC::Domain::addSP_Constraint(SP_Constraint *spConstraint)
     return true;
   }
 
-//! @brief Agrega al dominio una condición de contorno multipunto.
+//! @brief Agrega al dominio una constraint multipunto.
 bool XC::Domain::addMP_Constraint(MP_Constraint *mpConstraint)
   {
-    bool result= condsContorno.addMP_Constraint(mpConstraint);
+    bool result= constraints.addMP_Constraint(mpConstraint);
     if(result)
       {
         mpConstraint->setDomain(this);
@@ -220,10 +213,10 @@ bool XC::Domain::addMP_Constraint(MP_Constraint *mpConstraint)
     return result;
   }
 
-//! @brief Agrega al dominio una condición de contorno multi retained node.
+//! @brief Agrega al dominio una constraint multi retained node.
 bool XC::Domain::addMRMP_Constraint(MRMP_Constraint *mrmpConstraint)
   {
-    bool result= condsContorno.addMRMP_Constraint(mrmpConstraint);
+    bool result= constraints.addMRMP_Constraint(mrmpConstraint);
     if(result)
       {
         mrmpConstraint->setDomain(this);
@@ -232,10 +225,10 @@ bool XC::Domain::addMRMP_Constraint(MRMP_Constraint *mrmpConstraint)
     return result;
   }
 
-//! @brief Agrega al dominio una condición de contorno monopunto.
+//! @brief Agrega al dominio una constraint monopunto.
 bool XC::Domain::addSP_Constraint(SP_Constraint *spConstraint, int pattern)
   {
-    bool result= condsContorno.addSP_Constraint(spConstraint,pattern);
+    bool result= constraints.addSP_Constraint(spConstraint,pattern);
     if(!result)
       {
         std::cerr << "Domain::addSP_Constraint - " << pattern
@@ -251,7 +244,7 @@ bool XC::Domain::addSP_Constraint(SP_Constraint *spConstraint, int pattern)
 //! @brief Agrega al caso que se pasa como parámetro una carga sobre nodos.
 bool XC::Domain::addNodalLoad(NodalLoad *load, int pattern)
   {
-    bool result= condsContorno.addNodalLoad(load,pattern);
+    bool result= constraints.addNodalLoad(load,pattern);
     if(result)
       {
         load->setDomain(this); // done in LoadPattern::addNodalLoad()
@@ -263,7 +256,7 @@ bool XC::Domain::addNodalLoad(NodalLoad *load, int pattern)
 //! @brief Agrega al caso que se pasa como parámetro una carga sobre elementos.
 bool XC::Domain::addElementalLoad(ElementalLoad *load, int pattern)
   {
-    bool result= condsContorno.addElementalLoad(load,pattern);
+    bool result= constraints.addElementalLoad(load,pattern);
     if(result == false)
       {
         std::cerr << "Domain::addElementalLoad() - no pattern with tag " <<
@@ -286,35 +279,35 @@ bool XC::Domain::removeNode(int tag)
 
 bool XC::Domain::removeSP_Constraint(int theNode, int theDOF, int loadPatternTag)
   {
-    bool retval= condsContorno.removeSP_Constraint(theNode,theDOF,loadPatternTag);
+    bool retval= constraints.removeSP_Constraint(theNode,theDOF,loadPatternTag);
     if(retval)
       domainChange();
     return retval;
   }
 
-//! @brief Elimina del dominio la condición de contorno monopunto cuyo tag se pasa como parámetro.
+//! @brief Elimina del dominio la constraint monopunto cuyo tag se pasa como parámetro.
 bool XC::Domain::removeSP_Constraint(int tag)
   {
-    bool retval= condsContorno.removeSP_Constraint(tag);
+    bool retval= constraints.removeSP_Constraint(tag);
     if(retval)
       domainChange();
     return retval;
   }
 
-//! @brief Elimina del dominio la condición de contorno multipunto cuyo tag se pasa como parámetro.
+//! @brief Elimina del dominio la constraint multipunto cuyo tag se pasa como parámetro.
 bool XC::Domain::removeMP_Constraint(int tag)
   {
-    bool result = condsContorno.removeMP_Constraint(tag);
+    bool result = constraints.removeMP_Constraint(tag);
     if(result)
       domainChange();
     return result;
   }
 
 
-//! @brief Elimina del dominio la condición de contorno multi retained node cuyo tag se pasa como parámetro.
+//! @brief Elimina del dominio la constraint multi retained node cuyo tag se pasa como parámetro.
 bool XC::Domain::removeMRMP_Constraint(int tag)
   {
-    bool result = condsContorno.removeMRMP_Constraint(tag);
+    bool result = constraints.removeMRMP_Constraint(tag);
     if(result)
       domainChange();
     return result;
@@ -323,7 +316,7 @@ bool XC::Domain::removeMRMP_Constraint(int tag)
 //! @brief Añade al modelo la hipótesis simple que se pasa como parámetro.
 bool XC::Domain::addLoadPattern(LoadPattern *load)
   {
-    bool result= condsContorno.addLoadPattern(load);
+    bool result= constraints.addLoadPattern(load);
     if(result)
       {
         load->setDomain(this);
@@ -341,7 +334,7 @@ bool XC::Domain::addLoadPattern(LoadPattern *load)
 //! @brief Añade al modelo 
 bool XC::Domain::addNodeLocker(NodeLocker *nl)
   {
-    bool result= condsContorno.addNodeLocker(nl);
+    bool result= constraints.addNodeLocker(nl);
     if(result)
       {
         nl->setDomain(this);
@@ -373,7 +366,7 @@ bool XC::Domain::addCombinacion(Combinacion *comb)
 bool XC::Domain::removeLoadPattern(int tag)
   {
     int numSPs= 0;
-    bool result= condsContorno.removeLoadPattern(tag,numSPs);
+    bool result= constraints.removeLoadPattern(tag,numSPs);
     if(result)
       {
         // mark the domain has having changed if numSPs > 0
@@ -389,7 +382,7 @@ bool XC::Domain::removeLoadPattern(int tag)
 bool XC::Domain::removeNodeLocker(int tag)
   {
     int numSPs= 0;
-    bool result= condsContorno.removeNodeLocker(tag,numSPs);
+    bool result= constraints.removeNodeLocker(tag,numSPs);
     if(result)
       {
         // mark the domain has having changed if numSPs > 0
@@ -443,7 +436,7 @@ void XC::Domain::removeCombinacion(Combinacion *comb)
 //! @brief Elimina del dominio todos los casos de carga.
 void XC::Domain::removeLPs(void)
   {
-    int numSPs= condsContorno.removeLPs();
+    int numSPs= constraints.removeLPs();
     // mark the domain has having changed if numSPs > 0
     // as the constraint handlers have to be redone
     if(numSPs>0)
@@ -453,7 +446,7 @@ void XC::Domain::removeLPs(void)
 //! @brief Elimina del dominio todos los bloqueos de nodos.
 void XC::Domain::removeNLs(void)
   {
-    int numSPs= condsContorno.removeNLs();
+    int numSPs= constraints.removeNLs();
     // mark the domain has having changed if numSPs > 0
     // as the constraint handlers have to be redone
     if(numSPs>0)
@@ -465,7 +458,7 @@ void XC::Domain::removeNLs(void)
 //! @param tag: Identificador de la carga sobre nodo a eliminar.
 //! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
 bool XC::Domain::removeNodalLoad(int tag, int loadPattern)
-  { return condsContorno.removeNodalLoad(tag,loadPattern); }
+  { return constraints.removeNodalLoad(tag,loadPattern); }
 
 
 //! @brief Elimina del dominio la carga sobre elementos que se pasa como parámetro.
@@ -473,15 +466,15 @@ bool XC::Domain::removeNodalLoad(int tag, int loadPattern)
 //! @param tag: Identificador de la carga sobre elementos a eliminar.
 //! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
 bool XC::Domain::removeElementalLoad(int tag, int loadPattern)
-  { return condsContorno.removeElementalLoad(tag,loadPattern); }
+  { return constraints.removeElementalLoad(tag,loadPattern); }
 
-//! @brief Elimina del dominio la condición de contorno monopunto que se pasa como parámetro.
+//! @brief Elimina del dominio la constraint monopunto que se pasa como parámetro.
 //!
-//! @param tag: Identificador de la condición de contorno monopunto a eliminar.
+//! @param tag: Identificador de la constraint monopunto a eliminar.
 //! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
 bool XC::Domain::removeSP_Constraint(int tag, int loadPattern)
   {
-    bool removed= condsContorno.removeSP_Constraint(tag,loadPattern);
+    bool removed= constraints.removeSP_Constraint(tag,loadPattern);
     if(removed)
       this->domainChange();
     return removed;
@@ -507,13 +500,13 @@ const XC::Mesh &XC::Domain::getMesh(void) const
 XC::Mesh &XC::Domain::getMesh(void)
   { return mesh; }
 
-//! @brief Devuelve las condiciones de contorno del dominio.
-const XC::CondContorno &XC::Domain::getCondsContorno(void) const
-  { return condsContorno; }
+//! @brief Returns domain constraints.
+const XC::ConstrContainer &XC::Domain::getConstraints(void) const
+  { return constraints; }
 
-//! @brief Devuelve las condiciones de contorno del dominio.
-XC::CondContorno &XC::Domain::getCondsContorno(void)
-  { return condsContorno; }
+//! @brief Returns domain constraints.
+XC::ConstrContainer &XC::Domain::getConstraints(void)
+  { return constraints; }
 
 
 /* GENERAL NOTE ON RETRIEVAL OF COMPONENT PTRs:
@@ -596,12 +589,12 @@ void XC::Domain::applyLoad(double timeStep)
     // first loop over nodes and elements getting them to first zero their loads
     mesh.zeroLoads();
 
-    condsContorno.applyLoad(timeStep);
+    constraints.applyLoad(timeStep);
   }
 
 //! @brief Establece como constantes todas las cargas del dominio.
 void XC::Domain::setLoadConstant(void)
-  { condsContorno.setLoadConstant(); }
+  { constraints.setLoadConstant(); }
 
 //! @brief Inicializa.
 int XC::Domain::initialize(void)
@@ -826,148 +819,6 @@ int XC::Domain::hasDomainChanged(void)
     return currentGeoTag;
   }
 
-//! @brief Ejecuta el bloque para cada uno de los elementos.
-void XC::Domain::EjecutaBloqueForEachElement(CmdStatus &status,const std::string &bloque)
-  {
-    mesh.EjecutaBloqueForEachElement(status,bloque);
-  }
-
-//! @brief Ejecuta el bloque para cada uno de los nodos.
-void XC::Domain::EjecutaBloqueForEachNode(CmdStatus &status,const std::string &bloque)
-  {
-    mesh.EjecutaBloqueForEachNode(status,bloque);
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::Domain::GetProp(const std::string &cod) const
-  {
-    if(cod=="nnod")
-      {
-        tmp_gp_int= getNumNodes();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="nelem")
-      {
-        tmp_gp_int= getNumElements();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getNumSPs")
-      {
-        tmp_gp_int= getCondsContorno().getNumSPs();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getNumMPs")
-      {
-        tmp_gp_int= getCondsContorno().getNumMPs();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getNumLPs")
-      {
-        tmp_gp_int= getCondsContorno().getNumLoadPatterns();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getCondsContorno")
-      {
-        return any_const_ptr(&condsContorno);
-      }
-    else if(cod=="getMesh")
-      {
-        return any_const_ptr(&mesh);
-      }
-    else if(cod=="eigen_value")
-      {
-        const int modo= popInt(cod);
-        tmp_gp_dbl= getEigenvalues()(modo);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getPulsacion")
-      {
-        const int modo= popInt(cod);
-        tmp_gp_dbl= getPulsacion(modo);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getPeriodo")
-      {
-        const int modo= popInt(cod);
-        tmp_gp_dbl= getPeriodo(modo);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getFrecuencia")
-      {
-        const int modo= popInt(cod);
-        tmp_gp_dbl= getFrecuencia(modo);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getNumModes")
-      {
-        tmp_gp_int= getNumModes();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getEigenvalues")
-      {
-        tmp_gp_mdbl= vector_to_m_double(getEigenvalues());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod=="getPulsaciones")
-      {
-        tmp_gp_mdbl= vector_to_m_double(getPulsaciones());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod=="getPeriodos")
-      {
-        tmp_gp_mdbl= vector_to_m_double(getPeriodos());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod=="getFrecuencias")
-      {
-        tmp_gp_mdbl= vector_to_m_double(getFrecuencias());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod=="getModalParticipationFactor")
-      {
-        const int modo= popInt(cod);
-        tmp_gp_dbl= getModalParticipationFactor(modo);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getModalParticipationFactors")
-      {
-        tmp_gp_mdbl= vector_to_m_double(getModalParticipationFactors());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod=="getEffectiveModalMass")
-      {
-        const int modo= popInt(cod);
-        tmp_gp_dbl= getEffectiveModalMass(modo);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getEffectiveModalMasses")
-      {
-        tmp_gp_mdbl= vector_to_m_double(getEffectiveModalMasses());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod=="getTotalMass")
-      {
-        tmp_gp_dbl= getTotalMass();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="nodos")
-      return any_const_ptr(mesh.nodes());
-    else if(cod=="elementos")
-      return any_const_ptr(mesh.elements());
-    else if(cod=="currentTime")
-      return any_const_ptr(timeTracker.getCurrentTime()); // current pseudo time
-    else if(cod=="committedTime")
-      return any_const_ptr(timeTracker.getCommittedTime()); // the committed pseudo time
-    else if(cod=="commitTag")
-      return any_const_ptr(commitTag);
-    else
-      return ObjWithRecorders::GetProp(cod);
-  }
-
 //! @brief Imprime el dominio.
 void XC::Domain::Print(std::ostream &s, int flag)
   {
@@ -976,7 +827,7 @@ void XC::Domain::Print(std::ostream &s, int flag)
     s << timeTracker << std::endl;
 
     mesh.Print(s, flag);
-    condsContorno.Print(s,flag);
+    constraints.Print(s,flag);
   }
 
 std::ostream &XC::operator<<(std::ostream &s, XC::Domain &M)
@@ -1049,7 +900,7 @@ int XC::Domain::sendData(CommParameters &cp)
         lastGeoSendTag= currentGeoTag;// now so that we don't do this next time if nothing in the domain has changed
       }
     res+= cp.sendMovable(mesh,getDbTagData(),CommMetaData(4));
-    res+= cp.sendMovable(condsContorno,getDbTagData(),CommMetaData(5));
+    res+= cp.sendMovable(constraints,getDbTagData(),CommMetaData(5));
     res+= cp.sendVector(theEigenvalues,getDbTagData(),CommMetaData(6));
     res+= cp.sendVector(modalParticipationFactors,getDbTagData(),CommMetaData(7));
     return res;
@@ -1082,7 +933,7 @@ int XC::Domain::recvData(const CommParameters &cp)
       }
 
     res+= cp.receiveMovable(mesh,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveMovable(condsContorno,getDbTagData(),CommMetaData(5));
+    res+= cp.receiveMovable(constraints,getDbTagData(),CommMetaData(5));
     // now set the domains lastGeoSendTag and currentDomainChangedFlag
     lastGeoSendTag = currentGeoTag;
     res+= cp.receiveVector(theEigenvalues,getDbTagData(),CommMetaData(6));
@@ -1148,7 +999,7 @@ void XC::Domain::checkNodalReactions(const double &tol)
 int XC::Domain::calculateNodalReactions(bool inclInertia,const double &tol)
   {
     int retval= mesh.calculateNodalReactions(inclInertia,tol);
-    retval+= condsContorno.calculateNodalReactions(inclInertia,tol);
+    retval+= constraints.calculateNodalReactions(inclInertia,tol);
     return retval;
   }
 

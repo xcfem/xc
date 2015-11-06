@@ -342,7 +342,7 @@
 #define CNSTRNT_TAG_GlueNodeToElement 	9
 
 #define DOMAIN_TAG_Mesh      	1
-#define DOMAIN_TAG_CondContorno	2
+#define DOMAIN_TAG_ConstrContainer	2
 
 #define MATRIX_TAG_Matrix 	1
 

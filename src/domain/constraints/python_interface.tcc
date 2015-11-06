@@ -88,17 +88,17 @@ class_<map_node_locker, boost::noncopyable>("map_node_locker")
 //  .def(map_indexing_suite<map_node_locker>() )
   ;
 
-map_load_patterns &(XC::CondContorno::*getLoadPatternsPtr)(void)= &XC::CondContorno::getLoadPatterns;
-map_node_locker &(XC::CondContorno::*getNodeLockersPtr)(void)= &XC::CondContorno::getNodeLockers;
-class_<XC::CondContorno, bases<XC::MeshComponentContainer>, boost::noncopyable >("CondContorno", no_init)
-  .def("getNumSPs", &XC::CondContorno::getNumSPs,"Returns the number of single point constraints.")
-  .def("getNumMPs", &XC::CondContorno::getNumMPs,"Returns the number of multi-point constraints.")
-  .def("getNumMRMPs", &XC::CondContorno::getNumMRMPs,"Returns the number of multi-row multi-point constraints.")
-  .add_property("getSPs", make_function( &XC::CondContorno::getSPs, return_internal_reference<>() ),"Returns the single point constraints container.")
-  .add_property("getMPs", make_function( &XC::CondContorno::getMPs, return_internal_reference<>() ),"Returns the multi-point constraints container.")
-  .add_property("getMRMPs", make_function( &XC::CondContorno::getMRMPs, return_internal_reference<>() ),"Returns the multi-point constraints container.")
-  .def("getNumLoadPatterns", &XC::CondContorno::getNumLoadPatterns,"Returns the number of load cases.")
-  .def("getNumNodeLockers", &XC::CondContorno::getNumNodeLockers,"Returns the number of node lockers.")
+map_load_patterns &(XC::ConstrContainer::*getLoadPatternsPtr)(void)= &XC::ConstrContainer::getLoadPatterns;
+map_node_locker &(XC::ConstrContainer::*getNodeLockersPtr)(void)= &XC::ConstrContainer::getNodeLockers;
+class_<XC::ConstrContainer, bases<XC::MeshComponentContainer>, boost::noncopyable >("ConstrContainer", no_init)
+  .def("getNumSPs", &XC::ConstrContainer::getNumSPs,"Returns the number of single point constraints.")
+  .def("getNumMPs", &XC::ConstrContainer::getNumMPs,"Returns the number of multi-point constraints.")
+  .def("getNumMRMPs", &XC::ConstrContainer::getNumMRMPs,"Returns the number of multi-row multi-point constraints.")
+  .add_property("getSPs", make_function( &XC::ConstrContainer::getSPs, return_internal_reference<>() ),"Returns the single point constraints container.")
+  .add_property("getMPs", make_function( &XC::ConstrContainer::getMPs, return_internal_reference<>() ),"Returns the multi-point constraints container.")
+  .add_property("getMRMPs", make_function( &XC::ConstrContainer::getMRMPs, return_internal_reference<>() ),"Returns the multi-point constraints container.")
+  .def("getNumLoadPatterns", &XC::ConstrContainer::getNumLoadPatterns,"Returns the number of load cases.")
+  .def("getNumNodeLockers", &XC::ConstrContainer::getNumNodeLockers,"Returns the number of node lockers.")
   .def("getNodeLockers", make_function(getNodeLockersPtr, return_internal_reference<>() ),"Returns the node lockers container.")
   .def("getLoadPatterns", make_function(getLoadPatternsPtr, return_internal_reference<>() ),"Returns the load pattern container.")
   ;

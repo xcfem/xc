@@ -115,7 +115,7 @@ int XC::StaticSensitivityIntegrator::formSensitivityRHS(int passedGradNumber)
     DOF_Group *aDofGroup;
     int nodeNumber, dofNumber, relevantID, i, sizeRandomLoads, numRandomLoads;
     Domain *theDomain = mdl->getDomainPtr();
-    std::map<int,LoadPattern *> &theLoadPatterns = theDomain->getCondsContorno().getLoadPatterns();
+    std::map<int,LoadPattern *> &theLoadPatterns = theDomain->getConstraints().getLoadPatterns();
     for(std::map<int,LoadPattern *>::iterator loadPatternPtr= theLoadPatterns.begin();
         loadPatternPtr!= theLoadPatterns.end();loadPatternPtr++)
       {
