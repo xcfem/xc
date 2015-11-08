@@ -48,7 +48,6 @@ class Constraint: public ContinuaReprComponent
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
   public:
     // constructors
     Constraint(int classTag);        

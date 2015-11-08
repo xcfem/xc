@@ -91,6 +91,7 @@ class Vector;
 class LoadPattern: public NodeLocker
   {
   private:
+    std::string description; //!< Load description (self weight, wind,...)
     double loadFactor; //!< factor de ponderación obtenido del TimeSeries (ver applyLoad).
     double gamma_f; //!< Factor de ponderación impuesto por la combinación de hipótesis.
 
@@ -119,7 +120,6 @@ class LoadPattern: public NodeLocker
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
   public:
     LoadPattern(int tag);
     LoadPattern(void);                  // for FEM_ObjectBroker
@@ -156,6 +156,10 @@ class LoadPattern: public NodeLocker
     virtual void setLoadConstant(void);
 
 
+    inline const std::string &getDescription(void) const
+      { return description; }
+    inline void setDescription(const std::string &d)
+      { description= d; }
     virtual const double &getLoadFactor(void) const;
     const double &GammaF(void) const;
     double &GammaF(void);
@@ -167,7 +171,6 @@ class LoadPattern: public NodeLocker
     virtual int recvSelf(const CommParameters &);
 
     virtual void Print(std::ostream &s, int flag =0);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
 
     virtual LoadPattern *getCopy(void);
 

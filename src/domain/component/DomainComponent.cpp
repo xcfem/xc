@@ -73,32 +73,6 @@ XC::DomainComponent::DomainComponent(int tag, int classTag)
   :TaggedObject(tag), MovableObject(classTag), theDomain(nullptr), idx(0)
   {}
 
-//! @brief Lee un objeto DomainComponent desde archivo
-bool XC::DomainComponent::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string msg_proc_cmd= "(DomainComponent) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << msg_proc_cmd << std::endl;
-    if(cmd=="dom")
-      {
-        assert(theDomain);
-        theDomain->LeeCmd(status);
-        return true;
-      }
-    if(cmd=="preprocessor")
-      {
-        Preprocessor *preprocessor= GetPreprocessor();
-        if(preprocessor)
-          preprocessor->LeeCmd(status);
-        else
-	  std::cerr << "msg_proc_cmd" << " puntero al preprocessador nulo." << std::endl;
-        return true;
-      }
-    else
-      return TaggedObject::procesa_comando(status);
-  }
-
 //! @brief Destructor.
 XC::DomainComponent::~DomainComponent(void)
   { setDomain(nullptr); }
@@ -114,26 +88,6 @@ void XC::DomainComponent::set_indice(const size_t &i)
 //! @brief Devuelve un puntero al dominio.
 XC::Domain *XC::DomainComponent::getDomain(void) const
   { return theDomain; }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//! Soporta el comando "codigo" o "nombre" (sinónimos) que
-//! devuelven el nombre del objeto del archivo.
-any_const_ptr XC::DomainComponent::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "DomainComponent::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="idx" || cod=="indice")
-      return any_const_ptr(getIdx());
-    else if(cod=="preprocessor")
-      {
-        static const Preprocessor *preprocessor;
-        preprocessor= GetPreprocessor();
-        return any_const_ptr(preprocessor);
-      }
-    else
-      return TaggedObject::GetProp(cod);
-  }
 
 //! @brief Devuelve (si puede) un puntero al preprocesador.
 const XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void) const

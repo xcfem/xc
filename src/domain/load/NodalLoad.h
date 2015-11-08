@@ -91,7 +91,6 @@ class NodalLoad : public Load
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
   public:
     NodalLoad(int tag, int theClassTag=  LOAD_TAG_NodalLoad);
     NodalLoad(int tag, int node, int classTag);
@@ -111,7 +110,6 @@ class NodalLoad : public Load
     virtual int recvSelf(const CommParameters &);
     
     virtual void Print(std::ostream &s, int flag =0);   
-    virtual any_const_ptr GetProp(const std::string &cod) const;
     
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     int            setParameter(const std::vector<std::string> &argv, Parameter &param);

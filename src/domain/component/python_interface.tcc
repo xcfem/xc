@@ -26,5 +26,9 @@ class_<XC::DomainComponent, bases<XC::TaggedObject>, boost::noncopyable >("Domai
   ;
 
 class_<XC::ContinuaReprComponent, bases<XC::DomainComponent>, boost::noncopyable >("ContinuaReprComponent", no_init)
+  .add_property("isDead", &XC::ContinuaReprComponent::isDead,"true if domain component is not active.")
+  .add_property("isAlive", &XC::ContinuaReprComponent::isAlive,"true if domain component is not active.")
+  .add_property("kill", &XC::ContinuaReprComponent::kill,"deactivates the domain component.")
+  .add_property("alive", &XC::ContinuaReprComponent::alive,"activates the domain component.")
    ;
 

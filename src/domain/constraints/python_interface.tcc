@@ -22,12 +22,15 @@
 //python_interface.tcc
 
 class_<XC::Constraint, bases<XC::ContinuaReprComponent>, boost::noncopyable >("Constraint", no_init)
+  .add_property("nodeTag",&XC::Constraint::getNodeTag,&XC::Constraint::setNodeTag,"sets/gets node tag.")
+  .add_property("getNode",make_function(&XC::Constraint::getNode, return_internal_reference<>()),"gets node.")
   .add_property("getNodeIdx",&XC::Constraint::getNodeIdx,"Returns node idxmfor Vtk graphics.")
   .add_property("getVtkCellType",&XC::Constraint::getVtkCellType,"Returns cell type for Vtk graphics.")
+  .add_property("getMEDCellType",&XC::Constraint::getMEDCellType,"Returns cell type for MED fichier.")
   ;
 
 class_<XC::SP_Constraint, XC::SP_Constraint *, bases<XC::Constraint>, boost::noncopyable >("SPConstraint", no_init)
-  .add_property("getDOF_Number", &XC::SP_Constraint::getDOF_Number,"return DOF's number.")
+  .add_property("getDOFNumber", &XC::SP_Constraint::getDOF_Number,"return DOF's number.")
   .add_property("getValue", &XC::SP_Constraint::getValue,"returns imposed value for DOF.")
   .add_property("isHomogeneous", &XC::SP_Constraint::isHomogeneous,"true if it's an homogeneous boundary condition.")
   .add_property("loadPatternTag", &XC::SP_Constraint::getLoadPatternTag,&XC::SP_Constraint::setLoadPatternTag,"assigns/retrieves load pattern tag.") 

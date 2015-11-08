@@ -37,11 +37,10 @@ namespace XC {
 //! para representar el contínuo.
 class ContinuaReprComponent: public DomainComponent
   {
-    bool dead; //!< Verdadero si el elemento está desactivado.
+    bool dead; //!< True if domain component is not active.
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
   public:
     // constructors
     ContinuaReprComponent(int classTag);
@@ -54,7 +53,6 @@ class ContinuaReprComponent: public DomainComponent
       { dead= true; }
     virtual void alive(void)
       { dead= false; }
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // fin namespace XC

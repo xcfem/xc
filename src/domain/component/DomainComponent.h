@@ -83,7 +83,6 @@ class DomainComponent: public TaggedObject, public MovableObject
     DomainComponent(int tag, int classTag);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
   public:
     ~DomainComponent(void);
     //! @brief Devuelve el índice (NO EL TAG) del objeto.
@@ -96,9 +95,6 @@ class DomainComponent: public TaggedObject, public MovableObject
 
     void set_indice(const size_t &i);
 
-    // Method for visualisation, default does nothing
-    // methods for sensitivity studies
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 } // fin namespace XC
 

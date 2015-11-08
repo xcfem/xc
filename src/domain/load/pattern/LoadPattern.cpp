@@ -201,68 +201,6 @@ XC::LoadPattern *XC::LoadPattern::getCopy(void)
     return nullptr;
   }
 
-//! @brief Lee un objeto XC::LoadPattern desde archivo
-bool XC::LoadPattern::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(LoadPattern) Procesando comando: " << cmd << std::endl;
-    if(cmd == "tseries")
-      {
-        if(theSeries)
-          theSeries->LeeCmd(status);
-        else
-          {
-            status.GetBloque(); //Ignora entrada.
-            std::cerr << "El LoadPattern cuyo identificador es " << getTag()
-                      << " no tiene modulación en el tiempo." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "gamma_f")
-      {
-        gamma_f= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "nodal_load") //Carga sobre nodo.
-      {
-        std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-        if(fnc_indices.size()<1)
-          std::cerr << "uso: " << cmd << "[idNodo,tag] " << std::endl;
-        int tag_nodo= 0;
-        if(fnc_indices.size()>0)
-          tag_nodo= convert_to_int(fnc_indices[0]); //Identificador del nodo.
-        if(fnc_indices.size()>1)
-          nextTag= convert_to_int(fnc_indices[1]); //Tag de la carga.
-        NodalLoad *theLoad= new NodalLoad(nextTag,tag_nodo,Vector(1));
-        nextTag++;
-        if(theLoad)
-          theLoad->LeeCmd(status);
-        addNodalLoad(theLoad);
-        return true;
-      }
-    else if(procesa_comando_element_load(this,nextTag,cmd,status))
-      { return true; }
-    else if(cmd == "nodalLoads")
-      {
-        if(theNodalLoads)
-          theNodalLoads->LeeCmd(status);
-        else
-          std::cerr << cmd << "; no existen cargas nodales." << std::endl;
-        return true;
-      }
-    else if(cmd == "elementalLoads")
-      {
-        if(theElementalLoads)
-          theElementalLoads->LeeCmd(status);
-        else
-          std::cerr << cmd << "; no existen cargas sobre elementos." << std::endl;
-        return true;
-      }
-    else
-      return NodeLocker::procesa_comando(status);
-  }
-
 //! @brief Destructor.
 XC::LoadPattern::~LoadPattern(void)
   { libera(); }
@@ -604,36 +542,6 @@ void XC::LoadPattern::Print(std::ostream &s, int flag)
     std::cerr << "\n  Elemental Loads: \n";
     theElementalLoads->Print(s, flag);
     NodeLocker::Print(s,flag);
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnlds: Número de cargas en los nodos.
-any_const_ptr XC::LoadPattern::GetProp(const std::string &cod) const
-  {
-    if(cod=="tseries")
-      return any_const_ptr(theSeries);
-    else if(cod=="getNumCargasNod") //Número de cargas en los nodos.
-      {
-        tmp_gp_int= theNodalLoads->getNumComponents();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getNumCargasElem") //Número de cargas en los elementos.
-      {
-        tmp_gp_int= theElementalLoads->getNumComponents();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getNumCargas") //Número de cargas en los elementos.
-      {
-        tmp_gp_int= theNodalLoads->getNumComponents();
-        tmp_gp_int+= theElementalLoads->getNumComponents();
-        tmp_gp_int+= theSPs->getNumComponents();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else
-      return NodeLocker::GetProp(cod);
   }
 
 int XC::LoadPattern::addMotion(GroundMotion &theMotion, int tag)

@@ -58,24 +58,6 @@ XC::Constraint::~Constraint(void)
       }
   }
 
-//! @brief Lee un objeto XC::Constraint desde archivo
-//!
-//! Soporta los comandos:
-//! -coo: Lee las coordenadas del nodo.
-bool XC::Constraint::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Constraint) Procesando comando: " << cmd << std::endl;
-    if(cmd == "nod") //Tag del nodo.
-      {
-        constrNodeTag= interpretaInt(status.GetString());
-        return true;
-      }
-    else
-      return ContinuaReprComponent::procesa_comando(status);
-  }
-
 //! @brief Asigna el dominio a la componente. 
 void XC::Constraint::setDomain(Domain *model)
   {

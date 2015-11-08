@@ -68,6 +68,7 @@ class_<XC::Vector, bases<CmdVectorBase> >("Vector")
   .def("getComponents",&XC::Vector::getComponents,"Return the specified set of vecto's components")
   .def("putComponents",&XC::Vector::putComponents,"Assigns the specified values to the specified set of vecto's components")
   .def("addComponents",&XC::Vector::addComponents,"Sums the specified values to the specified set of vecto's components")
+  .def("Normalized",&XC::Vector::Normalized,"Returns normalizxed vector.")
   ;
 
 

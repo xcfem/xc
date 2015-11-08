@@ -10,7 +10,7 @@ class LoadRecord(object):
     self.value= v
     self.vDir= [0,0,-1]
   def __str__(self):
-    return self.loadCaseName + ' ' + self.loadName + ' ' +  str(self.value)
+    return 'id= ' + str(self.loadCaseId) + ' name= ' + self.loadCaseName + ' loadName= ' + str(self.loadName) + ' value= ' +  str(self.value) + ' dir= ' + str(self.vDir)
   
 
 class PunctualLoadRecord(LoadRecord):
@@ -19,8 +19,9 @@ class PunctualLoadRecord(LoadRecord):
     super(PunctualLoadRecord,self).__init__(loadCase, bName, v)
     self.pos= pos
   def __str__(self):
-    retval= super(PunctualLoadRecord,self).__str__()
-    retval+= ' ' + str(self.pos)
+    retval= 'tag= ' + str(self.tag)
+    retval+= ' ' + super(PunctualLoadRecord,self).__str__()
+    if(self.pos): retval+= ' ' + str(self.pos)
     return retval
   def searchLoadedElement(self,elemSet):
     pos= geom.Pos3d(self.pos[0],self.pos[1],self.pos[2])
@@ -84,8 +85,8 @@ class LoadContainer(object):
   setName= 'total'
   def __init__(self,n):
     self.name= n
-    self.punctualLoads= None
-    self.surfaceLoads= None
+    self.punctualLoads= list()
+    self.surfaceLoads= list()
     self.elementSet= 'total'
   def addPunctualLoad(self,pLoad):
     if(not self.punctualLoads):
@@ -140,6 +141,8 @@ class LoadCase(object):
     self.actionType= "Permanent"
     self.ltyp= ltyp
     self.loads= copy.deepcopy(LoadContainer(''))
+  def __str__(self):
+    return str(self.id) + ' name= ' + self.name + ' desc= ' + self.desc
 
 class LoadCombComponent(object):
   def __init__(self,id, loadCase, coef):

@@ -123,74 +123,6 @@ XC::NodalLoad::NodalLoad(int tag, int node, const Vector &theLoad, bool isLoadCo
   }
 
 
-//! @brief Lee un objeto XC::NodalLoad desde archivo
-//!
-//! Soporta los comandos:
-//! -val: Lee las componentes del vector de cargas.
-bool XC::NodalLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NodalLoad) Procesando comando: " << cmd << std::endl;
-    if(cmd == "nod") //Nodo sobre el que actúa.
-      {
-        const int tmp= interpretaInt(status.GetString());
-        if(!myNodePtr)
-          myNode= tmp;
-        else
-          if(myNode!=tmp)
-            std::cerr << "La carga nodal ya tiene nodo asignado, no puede asignarse a otro." << std::endl;
-        return true;
-      }
-    else if(cmd == "nodPtr") //Puntero al nodo sobre el que actúa.
-      {
-        if(!myNodePtr)
-          myNodePtr= get_node_ptr();
-        if(myNodePtr)
-          myNodePtr->LeeCmd(status);
-        else
-          {
-            std::cerr << "El puntero a nodo es nulo." << std::endl;
-            status.GetBloque();
-          }
-        return true;
-      }
-    else if(cmd == "val") //Valor del vector de cargas.
-      {
-        Vector tmp_load(crea_vector_double(status.GetString()));
-        set_load(tmp_load);
-        return true;
-      }
-    else if(cmd == "svd3d") //Sistema de vectores deslizantes en espacio3d.
-      {
-        if(!myNodePtr)
-          myNodePtr= get_node_ptr();
-        if(myNodePtr)
-          {
-            const SVD3d tmp= interpretaSVD3d(status.GetString());
-            const Vector3d R= tmp.getResultante();
-            const Pos3d pt= myNodePtr->getPosFinal3d();
-            const Vector3d M= tmp.getMomento(pt);
-            Vector tmp_load(6);
-            tmp_load[0]= R.x();
-            tmp_load[1]= R.y();
-            tmp_load[2]= R.z();
-            tmp_load[3]= M.x();
-            tmp_load[4]= M.y();
-            tmp_load[5]= M.z();
-            set_load(tmp_load);
-          }
-        else
-          {
-            std::cerr << "El puntero a nodo es nulo." << std::endl;
-            status.GetBloque();
-          }
-        return true;
-      }
-    else
-      return Load::procesa_comando(status);
-  }
-
 //! @brief Destructor.
 XC::NodalLoad::~NodalLoad(void)
   { borra_load(); }
@@ -407,29 +339,6 @@ void XC::NodalLoad::Print(std::ostream &s, int flag)
      if(load)
        s << " load : " << *load;
   }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nod: Devuelve el nodo sobre el que actúa la carga.
-//! load: Devuelve el valor de la carga.
-any_const_ptr XC::NodalLoad::GetProp(const std::string &cod) const
-  {
-    if(cod=="nod") 
-      return any_const_ptr(*myNodePtr);
-    else if(cod=="numNod")
-      return any_const_ptr(myNode);
-    else if(cod=="load")
-      return get_prop_vector(load);
-    else if(cod == "getForce")
-      return get_prop_vector(getForce());
-    else if(cod == "getMoment")
-      return get_prop_vector(getMoment());
-    else
-      return Load::GetProp(cod);
-  }
-
 
 // AddingSensitivity:BEGIN /////////////////////////////////////
 int XC::NodalLoad::setParameter(const std::vector<std::string> &argv, Parameter &param)

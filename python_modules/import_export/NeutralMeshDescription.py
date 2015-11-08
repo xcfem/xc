@@ -52,6 +52,11 @@ class ComponentSupportRecord:
     else:
       print 'ComponentSupportRecord::getTypeCode; error: unknown type: ', self.typ 
       return '0'
+  def __str__(self):
+    retval= self.typ
+    if(self.typ == 'Flexible'):
+      retval+= '('+str(self.k)+')'
+    return retval
 
 
 class NodeSupportRecord(object):
@@ -66,6 +71,17 @@ class NodeSupportRecord(object):
     self.rxComp= rxComp
     self.ryComp= ryComp
     self.rzComp= rzComp
+  def setupFromComponentLabels(self,componentLabels):
+    self.xComp= ComponentSupportRecord(componentLabels[0])
+    self.yComp= ComponentSupportRecord(componentLabels[1])
+    self.zComp= ComponentSupportRecord(componentLabels[2])
+    self.rxComp= ComponentSupportRecord(componentLabels[3])
+    self.ryComp= ComponentSupportRecord(componentLabels[4])
+    self.rzComp= ComponentSupportRecord(componentLabels[5])
+  def __str__(self):
+    return str(self.id) + ' nodeId: ' + str(self.nodeId) + ' type: ' + self.typ + ' x: ' + str(self.xComp)+ ' y: ' + str(self.yComp) + ' z: ' + str(self.zComp)+ ' rx: ' + str(self.rxComp)+ ' ry: ' + str(self.ryComp) + ' rz: ' + str(self.rzComp)
+ 
+
 
 class GroupRecord(object):
 
