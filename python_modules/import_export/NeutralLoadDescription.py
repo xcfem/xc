@@ -36,7 +36,7 @@ class ElementLoadRecord(LoadRecord):
   def __init__(self, loadCase, bName= 'nil', v= 1.0,mode= 'nil'):
     super(ElementLoadRecord,self).__init__(loadCase,bName,v)
     self.mode= mode
-    self.tags= [] #Element tags
+    self.tags= list() #Element tags
   def __str__(self):
     retval= super(ElementLoadRecord,self).__str__()
     retval+= ' ' + str(self.mode) + ' ' + str(self.tags)
@@ -44,7 +44,7 @@ class ElementLoadRecord(LoadRecord):
 
 
 class SurfaceLoadRecord(ElementLoadRecord):
-  def __init__(self, loadCase, bName= 'nil', plg= [],v= 1.0,mode= 'nil'):
+  def __init__(self, loadCase, bName= 'nil', plg= list(),v= 1.0,mode= 'nil'):
     super(SurfaceLoadRecord,self).__init__(loadCase,bName,v)
     self.setPolygon(plg)
     self.projPlane= "xy"
@@ -65,7 +65,7 @@ class SurfaceLoadRecord(ElementLoadRecord):
   def searchLoadedElements(self,elemSet):
     ''' Returns element which have his center inside the polygon'''
     plg= self.get2DPolygon()
-    self.tags= []
+    self.tags= list()
     for e in elemSet.getElements:
       pos= e.getPosCentroid(True)
       projPos= geom.Pos2d(pos.x,pos.y)
@@ -77,7 +77,7 @@ class SurfaceLoadRecord(ElementLoadRecord):
         self.tags.append(e.tag)
     return self.tags
   def setPolygon(self,points):
-    self.polygon= []
+    self.polygon= list()
     for p in points:
       self.polygon.append(p)
 
@@ -152,7 +152,7 @@ class LoadCombComponent(object):
     self.coef= coef #Multiplier for load i.
     
 def getComponentsFromStr(descompStr,mapLoadCases):
-  retval= []
+  retval= list()
   components= descompStr.split('+')
   counter= 0
   for c in components:

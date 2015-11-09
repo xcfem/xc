@@ -14,6 +14,7 @@ import LoadCaseContainer as lcc
 import EPPlaneContainer as ec
 import LoadComponentBase as lcb
 import uuid
+import math
 
 idElementLoadContainer= "{BC16B3CA-F464-11D4-94D3-000000000000}"
 tElementLoadContainer= elp.tbName
@@ -21,7 +22,7 @@ idElementLoadContainerTb= "FC7CC6EF-1D04-492E-B6B2-C70DD56DE898"
 tElementLoadContainerTb= elp.tbName
 elementLoadPrefix= 'SF'
 class ElementLoadComponent(lcb.LoadComponentBase):
-  ''' Each of the components (X, Z or Z) of a punctual load '''
+  ''' Each of the components (X, Z or Z) of an elemental load '''
   counter= 0
   memberType= ec.idEPPlaneContainer
   memberTypeName= ec.tEPPlaneContainerTb
@@ -60,28 +61,32 @@ class ElementLoadComponent(lcb.LoadComponentBase):
 
 def getElementLoadComponents(elementLoad):
   '''get ElementLoadComponent objects from the 3D elementLoad argument.'''
-  retval= []
+  retval= list()
   vDir= elementLoad.vDir
-  loadCaseId= elementLoad.loadCaseId
-  loadCaseName= elementLoad.loadCaseName
-  value= elementLoad.value
-  tags= elementLoad.tags
-  mode= elementLoad.mode #True if referred to global coordinate system.
-  for elementId in tags:
-    if(vDir[0]!=0.0):
-      vComp= value*vDir[0]
-      retval.append(ElementLoadComponent(elementId,loadCaseId, loadCaseName, 'X',vComp, mode)) #X component.
-    if(vDir[1]!=0.0):
-      vComp= value*vDir[1]
-      retval.append(ElementLoadComponent(elementId,loadCaseId, loadCaseName, 'Y',vComp, mode)) #Y component.
-    if(vDir[2]!=0.0):
-      vComp= value*vDir[2]
-      retval.append(ElementLoadComponent(elementId,loadCaseId, loadCaseName, 'Z',vComp, mode)) #Z component.
+  normVDir= math.sqrt(vDir[0]**2+vDir[1]**2+vDir[2]**2)
+  if(normVDir<1e-3):
+    print "getElementLoadComponents: vDir vector very small: ", vDir, " load ignored."
+  else:
+    loadCaseId= elementLoad.loadCaseId
+    loadCaseName= elementLoad.loadCaseName
+    value= elementLoad.value
+    tags= elementLoad.tags
+    mode= elementLoad.mode #True if referred to global coordinate system.
+    for elementId in tags:
+      if(vDir[0]!=0.0):
+        vComp= value*vDir[0]
+        retval.append(ElementLoadComponent(elementId,loadCaseId, loadCaseName, 'X',vComp, mode)) #X component.
+      if(vDir[1]!=0.0):
+        vComp= value*vDir[1]
+        retval.append(ElementLoadComponent(elementId,loadCaseId, loadCaseName, 'Y',vComp, mode)) #Y component.
+      if(vDir[2]!=0.0):
+        vComp= value*vDir[2]
+        retval.append(ElementLoadComponent(elementId,loadCaseId, loadCaseName, 'Z',vComp, mode)) #Z component.
   return retval
 
 def getElementLoadObjects(nl):
   components= getElementLoadComponents(nl)
-  retval= []
+  retval= list()
   for c in components:
     retval.append(c.getObject())
   return retval
@@ -89,7 +94,7 @@ def getElementLoadObjects(nl):
 class ElementLoadContainer(ctr.Container):
   def __init__(self,elementLoadsDict):
     super(ElementLoadContainer,self).__init__(idElementLoadContainer,tElementLoadContainer)
-    elementLoads=[]
+    elementLoads= list()
     for el in elementLoadsDict:
       compObjects= getElementLoadObjects(el)
       for c in compObjects:

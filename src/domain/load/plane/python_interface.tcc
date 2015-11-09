@@ -42,6 +42,9 @@ class_<XC::ShellMecLoad, bases<XC::BidimMecLoad>, boost::noncopyable >("ShellMec
   ;
 
 class_<XC::ShellUniformLoad, bases<XC::ShellMecLoad>, boost::noncopyable >("ShellUniformLoad", no_init)
+  .add_property("Wx",make_function(&XC::ShellUniformLoad::Wx, return_value_policy <copy_const_reference> ()))
+  .add_property("Wy",make_function(&XC::ShellUniformLoad::Wy, return_value_policy <copy_const_reference> ()))
+  .add_property("Wz",make_function(&XC::ShellUniformLoad::Wz, return_value_policy <copy_const_reference> ()))
   ;
 
 class_<XC::BidimStrainLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimStrainLoad", no_init)
