@@ -65,7 +65,7 @@ def getLoadCaseObject(loadCase):
 class LoadCaseContainer(ctr.Container):
   def __init__(self,loadCasesDict):
     super(LoadCaseContainer,self).__init__(idLoadCaseContainer,tLoadCaseContainer)
-    loadCases=[]
+    loadCases= list()
     for key in sorted(loadCasesDict):
       ns= loadCasesDict[key]
       loadCases.append(getLoadCaseObject(ns))

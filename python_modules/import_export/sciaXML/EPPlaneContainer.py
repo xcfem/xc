@@ -46,7 +46,7 @@ def getEPPlaneObject(cell):
 class EPPlaneContainer(ctr.Container):
   def __init__(self,cellsDict):
     super(EPPlaneContainer,self).__init__(idEPPlaneContainer,tEPPlaneContainer)
-    cells=[]
+    cells= list()
     for key in cellsDict:
       cell= cellsDict[key]
       cells.append(getEPPlaneObject(cell))

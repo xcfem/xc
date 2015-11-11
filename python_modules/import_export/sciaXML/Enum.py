@@ -5,7 +5,6 @@
 import xml.etree.cElementTree as ET
 
 class Enum(object):
-  items= []
 
   def __init__(self,items):
     self.items= items

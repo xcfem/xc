@@ -58,7 +58,7 @@ class NodeLoadComponent(lcb.LoadComponentBase):
 
 def getNodeLoadComponents(nodeLoad):
   '''get NodeLoadComponent objects from the 3D nodeLoad argument.'''
-  retval= []
+  retval= list()
   vDir= nodeLoad.vDir
   nodeId= nodeLoad.tag
   loadCaseId= nodeLoad.loadCaseId
@@ -74,7 +74,7 @@ def getNodeLoadComponents(nodeLoad):
   
 def getNodeLoadObjects(nl):
   components= getNodeLoadComponents(nl)
-  retval= []
+  retval= list()
   for c in components:
     retval.append(c.getObject())
   return retval
@@ -82,7 +82,7 @@ def getNodeLoadObjects(nl):
 class NodeLoadContainer(ctr.Container):
   def __init__(self,nodeLoadsDict):
     super(NodeLoadContainer,self).__init__(idNodeLoadContainer,tNodeLoadContainer)
-    nodeLoads=[]
+    nodeLoads= list()
     for nl in nodeLoadsDict:
       compObjects= getNodeLoadObjects(nl)
       for c in compObjects:

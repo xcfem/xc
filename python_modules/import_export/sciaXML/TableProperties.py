@@ -7,17 +7,13 @@ import Header as hdr
 import xml.etree.cElementTree as ET
 
 class TableProperties(tBase.TableBase):
-  typo= ''	
-  clsid= ''
-  progid= ''
-  properties= []
 
   def __init__(self,id= '',name= '',typo= '',clsid='',progid=''):
     super(TableProperties,self).__init__(id,'',name)
     self.typo= typo
     self.clsid= clsid
     self.progid= progid
-    self.properties= []
+    self.properties= list()
 
   def getXMLElementLabel(self):
     return "def_table"

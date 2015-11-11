@@ -82,22 +82,11 @@ class SurfaceLoadRecord(ElementLoadRecord):
       self.polygon.append(p)
 
 class LoadContainer(object):
-  setName= 'total'
   def __init__(self,n):
     self.name= n
     self.punctualLoads= list()
     self.surfaceLoads= list()
-    self.elementSet= 'total'
-  def addPunctualLoad(self,pLoad):
-    if(not self.punctualLoads):
-      self.punctualLoads= [pLoad]
-    else:
-      self.punctualLoads.append(pLoad)
-  def addSurfaceLoad(self,sLoad):
-    if(not self.surfaceLoads):
-      self.surfaceLoads= [sLoad]
-    else:
-      self.surfaceLoads.append(sLoad)
+    #self.elementSet= 'total'
   def __str__(self):
     retval= str(self.name)
     if(len(self.punctualLoads)>0):
@@ -140,7 +129,7 @@ class LoadCase(object):
     self.loadGroupId= lg
     self.actionType= "Permanent"
     self.ltyp= ltyp
-    self.loads= copy.deepcopy(LoadContainer(''))
+    self.loads= LoadContainer(name)
   def __str__(self):
     return str(self.id) + ' name= ' + self.name + ' desc= ' + self.desc
 

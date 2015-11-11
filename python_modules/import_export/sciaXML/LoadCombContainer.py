@@ -93,7 +93,7 @@ def getLoadCombObject(loadComb):
 class LoadCombContainer(ctr.Container):
   def __init__(self,loadCombsDict):
     super(LoadCombContainer,self).__init__(idLoadCombContainer,tLoadCombContainer)
-    loadCombs=[]
+    loadCombs= list()
     for key in sorted(loadCombsDict):
       ns= loadCombsDict[key]
       loadCombs.append(getLoadCombObject(ns))

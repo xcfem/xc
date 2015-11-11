@@ -15,23 +15,25 @@ import ProjectProperties as prjDef
 import xml.etree.cElementTree as ET
 
 class SXMLMesh:
-  def __init__(self,xmlns, defn,mesh,loads):
+  def __init__(self,xmlns, mesh,loads):
     self.xmlns= xmlns
     self.uuid= ''
-    self.defn= defn
+    self.defn= df.Definition(mesh.name),
     self.nodeContainer= nCtr.NodeContainer(mesh.nodes)
     self.epPlaneContainer= eppc.EPPlaneContainer(mesh.cells)
     self.nodeSupportContainer= nsc.NodeSupportContainer(mesh.nodeSupports)
     self.loadGroupContainer= lgc.LoadGroupContainer(loads.loadGroups)
     self.loadCaseContainer= lcc.LoadCaseContainer(loads.loadCases)
+    self.nodeLoadContainers= list()
+    self.elementLoadContainers= list()
     for key in sorted(loads.loadCases):
       lc= loads.loadCases[key]
       pl= lc.loads.punctualLoads
       if(pl):
-        self.nodeLoadContainer= nlc.NodeLoadContainer(pl)
+        self.nodeLoadContainers.append(nlc.NodeLoadContainer(pl))
       sl= lc.loads.surfaceLoads
       if(sl):
-        self.elementLoadContainer= elc.ElementLoadContainer(sl)
+        self.elementLoadContainers.append(elc.ElementLoadContainer(sl))
     self.loadCombContainer= lcmb.LoadCombContainer(loads.loadCombs)
     self.fileName= ''
 
@@ -41,10 +43,8 @@ class SXMLMesh:
     df= ET.SubElement(project,"def")
     df.set("uri",defFileName)
     containers= [self.nodeContainer,self.epPlaneContainer, self.nodeSupportContainer, self.loadGroupContainer, self.loadCaseContainer, self.loadCombContainer]
-    if(hasattr(self, 'nodeLoadContainer')):
-      containers.append(self.nodeLoadContainer)
-    if(hasattr(self, 'elementLoadContainer')):
-      containers.append(self.elementLoadContainer)
+    containers.extend(self.nodeLoadContainers)
+    containers.extend(self.elementLoadContainers)
     for c in containers:
       elem= c.getXMLElement(project)
     return project

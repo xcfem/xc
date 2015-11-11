@@ -21,7 +21,7 @@ class Project:
   #     self.uuid= sumarioDados.getSiglaProjeto()
   #     self.xmlns= SciaXMLConstantes.XMLNS
   #     self.defn= df.Definition(fileName+SciaXMLConstantes.DEF)
-  #     self.containers= []
+  #     self.containers= list()
   #     self.containers.append(getContainerNos(sumarioDados))
   #     self.containers.append(getContainerPecas(sumarioDados))
   #     self.containers.append(getContainerCamadas(sumarioDados))
@@ -30,7 +30,7 @@ class Project:
     nos= sumarioDados.getListaDeNos()
     containerNos= None
     if(len(nos) > 0):
-      objects= []
+      objects= list()
       for coordenada in nos:
         o= obj.Object()
         o.setId(coordenada.getId() + self.uuid)
@@ -50,7 +50,7 @@ class Project:
 
   def getContainerPecas(self, sumarioDados):
     containerPecas= None
-    objects= []
+    objects= list()
     objects.appendAll(getPecas(sumarioDados.getPecasFinais()))
 
     header= getDefaultBeamHeader()
@@ -64,7 +64,7 @@ class Project:
   def getContainerCamadas(self, sumarioDados):
     containerPecas= None
 
-    objects= []
+    objects= list()
     objects.appendAll(getCamadas(sumarioDados.getPecasFinais()))
 
     header= getDefaultDataLayerNodeHeader()
@@ -74,7 +74,7 @@ class Project:
 
 
   def getCamadas(pecas):
-    retorno= []
+    retorno= list()
 
     pecasUnicas= set()
 
@@ -111,7 +111,7 @@ class Project:
 
 
   def getPecas(self, pecas):
-    retorno= []
+    retorno= list()
     for peca in pecas:
       o= Object()
       pecaOrigem= RepositorioPecas.pecas.get(peca.getTipo())

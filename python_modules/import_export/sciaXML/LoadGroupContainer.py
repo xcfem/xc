@@ -38,7 +38,7 @@ def getLoadGroupObject(loadGroup):
 class LoadGroupContainer(ctr.Container):
   def __init__(self,loadGroupsDict):
     super(LoadGroupContainer,self).__init__(idLoadGroupContainer,tLoadGroupContainer)
-    loadGroups=[]
+    loadGroups= list()
     for key in sorted(loadGroupsDict):
       ns= loadGroupsDict[key]
       loadGroups.append(getLoadGroupObject(ns))

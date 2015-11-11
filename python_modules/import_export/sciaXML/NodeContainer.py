@@ -37,7 +37,7 @@ class NodeContainer(ctr.Container):
   def __init__(self,nodesDict):
     super(NodeContainer,self).__init__(idNodeContainer,progIdNodes)
     header= self.getDefaultStructNodeHeader()
-    nodes=[]
+    nodes= list()
     for key in nodesDict:
       nr= nodesDict[key]
       nodes.append(getNodeObject(nr))

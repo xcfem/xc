@@ -7,7 +7,6 @@ import Header as hdr
 import xml.etree.cElementTree as ET
 
 class TableBase(b.Base):
-  name= ''
 
   def __init__(self,id= '',t= '',name= ''):
     super(TableBase,self).__init__(id,t)

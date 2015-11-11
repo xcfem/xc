@@ -100,4 +100,6 @@ class ElementLoadContainer(ctr.Container):
       for c in compObjects:
         elementLoads.append(c)
     self.table= tb.TableNode(idElementLoadContainerTb,tElementLoadContainerTb, 'Forces on surface', None,elementLoads)
-  
+
+  def __len__(self):
+    return len(self.table)

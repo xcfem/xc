@@ -45,7 +45,7 @@ def getNodeSupportObject(nodeSupport):
 class NodeSupportContainer(ctr.Container):
   def __init__(self,nodeSupportsDict):
     super(NodeSupportContainer,self).__init__(idNodeSupportContainer,tNodeSupportContainer)
-    nodeSupports=[]
+    nodeSupports= list()
     for key in nodeSupportsDict:
       ns= nodeSupportsDict[key]
       nodeSupports.append(getNodeSupportObject(ns))

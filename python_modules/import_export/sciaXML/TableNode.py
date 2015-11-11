@@ -7,15 +7,17 @@ import Header as hdr
 import xml.etree.cElementTree as ET
 
 class TableNode(tBase.TableBase):
-
+  ''' Table of XML nodes (NOT FE nodes). '''
   def __init__(self,id= '',t= '',name= '',h= hdr.Header(),objects= None):
     super(TableNode,self).__init__(id,t,name)
     self.h = h
-    if objects is not None:
+    if objects:
       self.objects= objects
     else:
-      self.objects= []
+      self.objects= list()
 
+  def __len__(self):
+    return len(self.objects)
   def getH(self):
     return self.h
   def setH(self,h):

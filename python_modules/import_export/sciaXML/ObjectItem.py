@@ -13,10 +13,10 @@ class ObjectItem(object):
     self.n= n
     self.t= t
     self.h= h
-    if rws is not None:
+    if rws:
       self.rows= rws
     else:
-      self.rows= []
+      self.rows= list()
 
   def getV(self):
     return self.v
