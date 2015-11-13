@@ -306,9 +306,9 @@
 #include "domain/load/volumen/BrickSelfWeight.h"
 #include "domain/load/edge_loads/ElementEdge2dUniformLoad.h"
 #include "domain/load/edge_loads/ElementEdge3dUniformLoad.h"
-#include "/usr/local/src/prg/xc/src/domain/load/pattern/NodeLocker.h"
-#include "/usr/local/src/prg/xc/src/domain/load/pattern/NodeLockerIter.h"
-#include "/usr/local/src/prg/xc/src/domain/mesh/NodeLockers.h"
+#include "domain/load/pattern/NodeLocker.h"
+#include "domain/load/pattern/NodeLockerIter.h"
+#include "domain/mesh/NodeLockers.h"
 
 // matrix, vector & id header files
 #include "utility/matrix/Matrix.h"
