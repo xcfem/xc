@@ -15,8 +15,6 @@ import geom
 '''
 class sccRectang(object):
   """Rectangular section."""
-  b= 0.0 # Ancho de la seccion.
-  h= 0.0 # Canto de la sección.
   def area(self):
     """Devuelve el área de la sección,"""
     return self.b*self.h

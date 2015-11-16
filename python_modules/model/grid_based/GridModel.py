@@ -10,8 +10,10 @@ __email__= "l.pereztato@gmail.com"
 
 import xc
 from materials import typical_materials
+from materials import parametrosSeccionRectangular
 from model import predefined_spaces
 from model import define_apoyos
+from xcVtk.malla_ef import vtk_grafico_ef
 import ijkGrid as grid
 
 class NamedObjectsMap(dict):
@@ -37,6 +39,17 @@ class DeckMaterialData(MaterialData):
     return self.rho*self.thickness
   def setup(self,preprocessor):
     typical_materials.defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.getAreaDensity(),self.thickness)
+
+class BeamMaterialData(MaterialData):
+  def __init__(self,name,E,nu,rho,b,h):
+    super(BeamMaterialData,self).__init__(name,E,nu,rho)
+    self.b= b
+    self.h= h
+  def getLongitudinalDensity(self):
+    return self.rho*self.b*self.h
+  def setup(self,preprocessor):
+    rs= parametrosSeccionRectangular.RectangularSection('',self.b,self.h,self.E,self.nu)
+    typical_materials.defElasticShearSection3d(preprocessor,self.name,rs.A(),rs.E,rs.G(),rs.Iz(),rs.Iy(),rs.J(),rs.alphaZ())
 
 class MaterialDataMap(NamedObjectsMap):
   '''Material data dictionary.'''
@@ -72,13 +85,19 @@ class IJKRangeList(object):
       i+= 1
     return i
 
-class MaterialSurface(IJKRangeList):
-  '''Surface defined by a range list, a material and an element type and size.'''
+class MaterialBase(IJKRangeList):
+  '''Base class for lines and surfaces defined by a range list, a material and an element type and size.'''
   def __init__(self,name, grid, material,elemType,elemSize):
-    super(MaterialSurface,self).__init__(name,grid,list())
+    super(MaterialBase,self).__init__(name,grid,list())
     self.material= material
     self.elemType= elemType
     self.elemSize= elemSize
+
+
+class MaterialSurface(MaterialBase):
+  '''Surface defined by a range list, a material and an element type and size.'''
+  def __init__(self,name, grid, material,elemType,elemSize):
+    super(MaterialSurface,self).__init__(name,grid,material,elemType,elemSize)
 
   def generateAreas(self, dicSup):
     self.lstSup= list()
@@ -91,7 +110,7 @@ class MaterialSurface(IJKRangeList):
     seedElementLoader.defaultMaterial= self.material.name
     elem= seedElementLoader.newElement(self.elemType,xc.ID([0,0,0,0]))
     for s in self.lstSup:
-       s.genMesh(xc.meshDir.I)
+      s.genMesh(xc.meshDir.I)
 
   def applyVector3dUniformLoadGlobal(self,loadVector):
     for s in self.lstSup:
@@ -109,6 +128,40 @@ class MaterialSurface(IJKRangeList):
         eleLoad.setStrainComp(1,3,nabla)
         eleLoad.setStrainComp(2,3,nabla)
         eleLoad.setStrainComp(3,3,nabla)
+
+  def getElementsPart(self):
+    retval= []
+    for sup in self.lstSup:
+      elSup= sup.getElements()
+      for elem in elSup:
+        retval.append(elem)
+    return retval
+
+class MaterialLine(MaterialBase):
+  '''Line defined by a range list, a material and an element type and size.'''
+  def __init__(self,name, grid, material,elemType,elemSize):
+    super(MaterialLine,self).__init__(name,grid,material,elemType,elemSize)
+
+  def generateLines(self, dicLin):
+    self.lstLines= list()
+    for ijkRange in self.ranges:
+      self.lstLines+= self.grid.generateLines(ijkRange,dicLin)
+    for s in self.lstLines:
+       s.setElemSize(self.elemSize)
+
+  def generateMesh(self, seedElementLoader):
+    seedElementLoader.defaultMaterial= self.material.name
+    elem= seedElementLoader.newElement(self.elemType,xc.ID([0,0]))
+    for l in self.lstLines:
+      l.genMesh(xc.meshDir.I)
+
+  def getElementsPart(self):
+    retval= []
+    for lin in self.lstLines:
+      elLin= lin.getElements()
+      for elem in elLin:
+        retval.append(elem)
+    return retval
   
 class MaterialSurfacesMap(NamedObjectsMap):
   '''MaterialSurfaces dictionary.'''
@@ -120,11 +173,26 @@ class MaterialSurfacesMap(NamedObjectsMap):
   def generateMesh(self, preprocessor, dicSup, firstElementTag= 1):
     self.generateAreas(dicSup)
     preprocessor.getCad.getSurfaces.conciliaNDivs()
-    nodes= preprocessor.getNodeLoader
-    predefined_spaces.gdls_resist_materiales3D(nodes)
-    nodes.newSeedNode()
     seedElemLoader= preprocessor.getElementLoader.seedElemLoader
     seedElemLoader.defaultTag= firstElementTag
+    for key in self:
+      self[key].generateMesh(seedElemLoader)
+
+class MaterialLinesMap(NamedObjectsMap):
+  '''MaterialLines dictionary.'''
+  def __init__(self,surfaces):
+    super(MaterialLinesMap,self).__init__(surfaces)
+  def generateLines(self, dicLin):
+    for key in self:
+      self[key].generateLines(dicLin)
+  def generateMesh(self, preprocessor, dicLin):
+    # Definimos transformaciones geométricas (no está programado, estas líneas son para que funcione por el momento) Preguntar a Luis cómo plantear el asunto de las tranformaciones geométricas 
+    trfs= preprocessor.getTransfCooLoader
+    self.trYGlobal=trfs.newPDeltaCrdTransf3d('trYGlobal')
+    self.trYGlobal.xzVector=xc.Vector([0,1,0]) #dirección del eje Y local (el X local sigue siempre la dirección del eje de la barra)
+    self.generateLines(dicLin)
+    seedElemLoader= preprocessor.getElementLoader.seedElemLoader
+    seedElemLoader.defaultTransformation= 'trYGlobal'
     for key in self:
       self[key].generateMesh(seedElemLoader)
 
@@ -356,6 +424,9 @@ class GridModel(object):
   def newMaterialSurface(self,name,material,elemType,elemSize):
     return MaterialSurface(name, self.grid, material,elemType,elemSize)
 
+  def newMaterialLine(self,name,material,elemType,elemSize):
+    return MaterialLine(name, self.grid, material,elemType,elemSize)
+
   def setMaterials(self,materialDataList):
     self.materialData= MaterialDataMap(materialDataList)
     return self.materialData
@@ -363,6 +434,41 @@ class GridModel(object):
   def setMaterialSurfacesMap(self,materialSurfaceList):
     self.conjSup= MaterialSurfacesMap(materialSurfaceList)
     return self.conjSup
+
+  def setMaterialLinesMap(self,materialLineList):
+    self.conjLin= MaterialLinesMap(materialLineList)
+    return self.conjLin
+
+  def getElementsPart(self, nombreConj):
+    retval= list()
+    keys= self.conjSup.keys()
+    if(nombreConj in keys):
+      sup= self.conjSup[nombreConj]
+      retval= sup.getElementsPart()
+    else:
+      keys= self.conjLin.keys()
+      if(nombreConj in keys):
+        lin= self.conjLin[nombreConj]
+        retval= lin.getElementsPart()
+      else:
+        print 'part: ', nombreConj, ' not found.'
+    return retval
+
+  def getElementsFromParts(self, parts):
+    retval= []
+    for p in parts:
+      retval+= self.getElementsPart(p)
+    return retval
+
+  def getSetFromParts(self,setName,parts):
+    elems= self.getElementsFromParts(parts)
+    # Definimos el conjunto
+    st= self.prep.getSets.defSet(setName)
+    st.clear() #Clean set if exists.
+    for e in elems:
+      st.getElements.append(e)
+    st.fillDownwards()
+    return st
 
   def setGrid(self,xList,yList,zList):
     self.grid= grid.ijkGrid(self.prep,xList,yList,zList)
@@ -388,12 +494,30 @@ class GridModel(object):
   def generateMesh(self):
     self.grid.generatePoints() #Key points generation.
     self.materialData.setup(self.prep) #Material definition.
+    nodes= self.prep.getNodeLoader
+    predefined_spaces.gdls_resist_materiales3D(nodes)
+    nodes.newSeedNode()
     self.dicSup= dict() #Surfaces dictionary.
     self.conjSup.generateMesh(self.prep,self.dicSup)
-    self.constrainedRanges.generateContraintsInLines()
-    self.elasticFoundationRanges.generateSprings(self.prep,self.dicSup)
-    self.lPatterns= self.loadStates.applyLoads(self.prep,self.dicSup)
-    for cs in self.conjSup:
-      nbrset='set'+cs
-      self.lPatterns[nbrset]= grid.setEntLstSurf(self.prep,self.conjSup[cs].lstSup,nbrset)
+    self.dicLin= dict() #Lines dictionary.
+    self.conjLin.generateMesh(self.prep,self.dicSup)
+    if(hasattr(self,'constrainedRanges')):
+      self.constrainedRanges.generateContraintsInLines()
+    if(hasattr(self,'elasticFoundationRanges')):
+      self.elasticFoundationRanges.generateSprings(self.prep,self.dicSup)
+    for setName in self.conjSup: #???
+      #vars()[setName]= 
+      grid.setEntLstSurf(self.prep,self.conjSup[setName].lstSup,setName)
+
+  def generateLoads(self):
+    if(hasattr(self,'loadStates')):
+      self.lPatterns= self.loadStates.applyLoads(self.prep,self.dicSup)
+      for cs in self.conjSup: #???
+        nbrset='set'+cs
+        self.lPatterns[nbrset]= grid.setEntLstSurf(self.prep,self.conjSup[cs].lstSup,nbrset)
     return self.dicSup
+
+  def displayMesh(self,partToDisplay):
+    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay.grafico_mef(self.prep,partToDisplay)
+    return defDisplay

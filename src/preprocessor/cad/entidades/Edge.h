@@ -56,7 +56,6 @@ class Edge: public EntMdlr
 
     virtual const Node *get_node_ptr_from_stack(const std::string &cod) const;
     virtual const Element *get_element_ptr_from_stack(const std::string &cod) const;
-    virtual bool procesa_comando(CmdStatus &status);
     virtual Pnt *P1(void);
     virtual Pnt *P2(void);
     void crea_nodos_en_extremos(void);
@@ -83,6 +82,7 @@ class Edge: public EntMdlr
     virtual void SetNDiv(const size_t &);
     inline virtual size_t NDiv(void) const
       { return ndiv; }
+    void SetElemSize(const double &sz);
     std::set<const XC::Edge *> GetLadosHomologos(const std::set<const XC::Edge *> &) const;
     void actualiza_topologia(void);
 
@@ -125,7 +125,6 @@ class Edge: public EntMdlr
     virtual const Vector &getTang(const double &) const;
     void divide(void);
 
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 std::set<const Edge *> GetLineasTocan(const Pnt &p);

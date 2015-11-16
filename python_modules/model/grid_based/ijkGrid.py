@@ -15,6 +15,25 @@ class IJKRange(object):
   def __init__(self,ijkMin,ijkMax):
     self.ijkMin= ijkMin
     self.ijkMax= ijkMax
+  def getIMin(self):
+    return self.ijkMin[0]
+  def getIMax(self):
+    return self.ijkMax[0]
+  def getJMin(self):
+    return self.ijkMin[1]
+  def getJMax(self):
+    return self.ijkMax[1]
+  def getKMin(self):
+    return self.ijkMin[2]
+  def getKMax(self):
+    return self.ijkMax[2]
+  def getIRange(self):
+    return range(self.getIMin(),self.getIMax())
+  def getJRange(self):
+    return range(self.getJMin(),self.getJMax())
+  def getKRange(self):
+    return range(self.getKMin(),self.getKMax())
+
 
 def getLin2Pts(lstLinBusq,tPto1,tPto2):
     #Devuelve la línea que pertenene al conjunto lstLinBusq y tiene
@@ -30,6 +49,11 @@ def getLin2Pts(lstLinBusq,tPto1,tPto2):
     else:
         return l
 
+class moveRange(object):
+  def __init__(self,range,vDisp):
+    self.range= range
+    self.vDisp= vDisp
+
 class ijkGrid(object):
   ''' Possible (or allowed) X,Y,Z positions for the model''' 
   def __init__(self,prep,xList,yList,zList):
@@ -37,6 +61,7 @@ class ijkGrid(object):
     self.gridCoo.append(xList)
     self.gridCoo.append(yList)
     self.gridCoo.append(zList)
+    self.rangesToMove= list()
     self.prep= prep
     self.indices= self.prep.getCad.get3DNets.new3DNet()
     self.indices.dim(len(self.gridCoo[0]),len(self.gridCoo[1]),len(self.gridCoo[2]))
@@ -52,17 +77,31 @@ class ijkGrid(object):
 
   def generatePoints(self):
     '''Point generation.'''
+    points= self.prep.getCad.getPoints
     k= 1;
     for z in self.gridCoo[2]:
       j= 1
       for y in self.gridCoo[1]:
         i= 1
         for x in self.gridCoo[0]:
-          pt= self.prep.getCad.getPoints.newPntIDPos3d(self.pointCounter,geom.Pos3d(x,y,z))
+          pt= points.newPntIDPos3d(self.pointCounter,geom.Pos3d(x,y,z))
           self.indices.setPnt(i,j,k,pt.tag)
           self.pointCounter+=1; i+=1
         j+= 1
       k+= 1
+    for rm in self.rangesToMove:
+      r= rm.range
+      vDisp= rm.vDisp
+      for i in r.getIRange():
+        for j in r.getJRange():
+          for k in r.getKRange():
+            tagp= self.getTagIndices(i,j,k)
+            pt= points.get(tagp)
+            pt.getPos.x+= vDisp[0]
+            pt.getPos.y+= vDisp[1]
+            pt.getPos.z+= vDisp[2]
+             
+
 
   def getTagIndices(self,i,j,k):
     'devuelve el tag del punto situado en las posiciones de la rejilla'
@@ -133,6 +172,51 @@ class ijkGrid(object):
                 dicSup[nmbrSup]= a
                 k+=1
             j+=1
+    return retval
+
+  def generateLines(self,ijkRange,dicLin): #lines,rejXYZ,posXYZmin,posXYZmax,dicLin):
+    'genera las líneas contenidas en un eje paralelo a uno de los globales, entre las coordenadas'
+    'que corresponden a las posiciones en la rejilla posXYZmin=[posXmin,posYmin,posZmin] y'
+    'posXYZmax=[posXmax,posYmax,posZmax]'
+    'también rellena el diccionario de líneas'
+    retval= list()
+    lines= self.prep.getCad.getLines
+    i=ijkRange.ijkMin[0]
+    j=ijkRange.ijkMin[1]
+    k=ijkRange.ijkMin[2]
+    if ijkRange.ijkMax[1]==ijkRange.ijkMin[1] and ijkRange.ijkMax[2]==ijkRange.ijkMin[2] :
+        'línea paralela al eje X'
+        while i<=ijkRange.ijkMax[0]-1:
+            pto1=self.getTagIndices(i,j,k)
+            pto2=self.getTagIndices(i+1,j,k)
+            l=lines.newLine(pto1,pto2)
+            l.nDiv=1     #se inicializa el nº de divisiones a 1 
+            retval.append(l)
+            nmbrLin='l'+'%04.0f' % pto1 +'%04.0f' % pto2 
+            dicLin[nmbrLin]=l
+            i+=1
+    elif ijkRange.ijkMax[0]==ijkRange.ijkMin[0] and ijkRange.ijkMax[2]==ijkRange.ijkMin[2] :
+        'línea paralela al eje Y'
+        while j<=ijkRange.ijkMax[1]-1:
+            pto1=self.getTagIndices(i,j,k)
+            pto2=self.getTagIndices(i,j+1,k)
+            l=lines.newLine(pto1,pto2)
+            l.nDiv=1     #se inicializa el nº de divisiones a 1 
+            retval.append(l)
+            nmbrLin='l'+'%04.0f' % pto1 +'%04.0f' % pto2 
+            dicLin[nmbrLin]=l
+            j+=1
+    elif ijkRange.ijkMax[0]==ijkRange.ijkMin[0] and ijkRange.ijkMax[1]==ijkRange.ijkMin[1] :
+        'línea paralela al eje Z'
+        while k<=ijkRange.ijkMax[2]-1:
+            pto1=self.getTagIndices(i,j,k)
+            pto2=self.getTagIndices(i,j,k+1)
+            l=lines.newLine(pto1,pto2)
+            l.nDiv=1     #se inicializa el nº de divisiones a 1 
+            retval.append(l)
+            nmbrLin='l'+'%04.0f' % pto1 +'%04.0f' % pto2 
+            dicLin[nmbrLin]=l
+            k+=1
     return retval
 
   def getSetInRange(self,ijkRange,dicSup,nmbrSet):
@@ -292,13 +376,13 @@ class ijkGrid(object):
         
 
 def setEntLstSurf(preprocessor,lstSurf,nmbrSet):
-    'devuelve el set de las entidades asociadas con las superficies contenidas'
-    'en la lista de superficies lstSurf'
-    retval= preprocessor.getSets.defSet(nmbrSet)
-    for s in lstSurf:
-        retval.getSurfaces.append(s)
-    retval.fillDownwards()
-    return retval
+  'devuelve el set de las entidades asociadas con las superficies contenidas'
+  'en la lista de superficies lstSurf'
+  retval= preprocessor.getSets.defSet(nmbrSet)
+  for s in lstSurf:
+    retval.getSurfaces.append(s)
+  retval.fillDownwards()
+  return retval
 
 
 

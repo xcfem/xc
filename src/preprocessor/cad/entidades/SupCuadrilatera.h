@@ -40,7 +40,6 @@ namespace XC {
 class SupCuadrilatera: public Face
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
     MatrizPos3d get_posiciones(void) const;
     const Edge *get_lado_homologo(const Edge *l) const;
   public:
