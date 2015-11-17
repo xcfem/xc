@@ -235,6 +235,61 @@ class ElasticFoundationRanges(IJKRangeList):
     super(ElasticFoundationRanges,self).__init__(name,grid,list())
     self.wModulus= wModulus
     self.cRoz= cRoz
+  def generateSprings(self,key,dicSup,kX,kY,kZ):
+    cBal= self.wModulus
+    cRozam= self.cRoz
+    self.springs= list() #Tags of the news springs.
+    i= 0
+    for r in self.ranges:
+      nmbrSet= key+str(i)
+      s= self.grid.getSetInRange(r,dicSup,nmbrSet)
+      #print nmbrSet,s.getNodes.size
+      s.resetTributarias()
+      s.calculaAreasTributarias(False)
+      sNod=s.getNodes
+      idElem= self.grid.prep.getElementLoader.defaultTag
+      for n in sNod:
+        arTribNod=n.getAreaTributaria()
+        kX.E=cRozam*cBal*arTribNod
+        kY.E=cRozam*cBal*arTribNod
+        kZ.E=cBal*arTribNod
+        #print n.tag,arTribNod,kX.E,kY.E,kZ.E
+        nn= define_apoyos.defApoyoXYZ(self.grid.prep,n.tag,idElem,'muellX','muellY','muellZ')
+        self.springs.append(self.grid.prep.getElementLoader.getElement(idElem))
+        idElem+= 1
+      i+=1
+
+  def calcEarthPressures(self):
+    TotX= 0
+    TotY= 0
+    TotZ= 0
+    for e in self.springs:
+      n= e.getNodes[1]
+      a= n.getAreaTributaria()
+      #print "dispZ= ", n.getDisp[2]*1e3, "mm"
+      materials= e.getMaterials()
+      matX= materials[0]
+      matY= materials[1]
+      matZ= materials[2]
+      Fx= matX.getStress()
+      SgX= Fx/a
+      TotX+= Fx
+      Fy= matY.getStress()
+      SgY= Fy/a
+      TotY+= Fy
+      Fz= matZ.getStress()
+      SgZ= Fz/a
+      TotZ+= Fz
+      #print "Fx= ", Fx/1e3, " Fy= ", Fy/1e3, " Fz= ", Fz/1e3
+      #print "SgX= ", SgX/1e6, " SgY= ", SgY/1e6, " SgZ= ", SgZ/1e6
+      n.setProp("SgX",SgX)
+      n.setProp("SgY",SgY)
+      n.setProp("SgZ",SgZ)
+      n.setProp("Fx",Fx)
+      n.setProp("Fy",Fy)
+      n.setProp("Fz",Fz)
+    #print "TotX= ", TotX/1e3, " TotY= ", TotY/1e3, " TotZ= ", TotZ/1e3
+
 
 class ElasticFoundationRangesMap(NamedObjectsMap):
   '''Constrained ranges dictionary.'''
@@ -248,26 +303,7 @@ class ElasticFoundationRangesMap(NamedObjectsMap):
     self.muellZ=typical_materials.defElasticMaterial(prep,'muellZ',1)
     for key in self.keys():
       apel= self[key]
-      cBal= apel.wModulus
-      cRozam= apel.cRoz
-      i= 0
-      for r in apel.ranges:
-        nmbrSet= key+str(i)
-        s= apel.grid.getSetInRange(r,dicSup,nmbrSet)
-        #print nmbrSet,s.getNodes.size
-        s.resetTributarias()
-        s.calculaAreasTributarias(False)
-        sNod=s.getNodes
-        idElem= apel.grid.prep.getElementLoader.defaultTag
-        for n in sNod:
-          arTribNod=n.getAreaTributaria()
-          self.muellX.E=cRozam*cBal*arTribNod
-          self.muellY.E=cRozam*cBal*arTribNod
-          self.muellZ.E=cBal*arTribNod
-          #print n.tag,arTribNod,muellX.E,muellY.E,muellZ.E
-          nn= define_apoyos.defApoyoXYZ(apel.grid.prep,n.tag,idElem,'muellX','muellY','muellZ')
-          idElem+= 1
-        i+=1
+      apel.generateSprings(key,dicSup,self.muellX,self.muellY,self.muellZ)
 
 class LoadOnSurfaces(object):
   '''Load over a list of surfaces (defined as range lists).'''
@@ -418,8 +454,13 @@ class LoadStateMap(NamedObjectsMap):
     return retval
 
 class GridModel(object):
-  def __init__(self,preprocessor):
-    self.prep= preprocessor
+  def __init__(self,efProblem):
+    self.efProblem= efProblem
+
+  def getEFProblem(self):
+    return self.efProblem
+  def getPreprocessor(self):
+    return self.efProblem.getPreprocessor
 
   def newMaterialSurface(self,name,material,elemType,elemSize):
     return MaterialSurface(name, self.grid, material,elemType,elemSize)
@@ -463,7 +504,7 @@ class GridModel(object):
   def getSetFromParts(self,setName,parts):
     elems= self.getElementsFromParts(parts)
     # Definimos el conjunto
-    st= self.prep.getSets.defSet(setName)
+    st= self.getPreprocessor().getSets.defSet(setName)
     st.clear() #Clean set if exists.
     for e in elems:
       st.getElements.append(e)
@@ -471,7 +512,7 @@ class GridModel(object):
     return st
 
   def setGrid(self,xList,yList,zList):
-    self.grid= grid.ijkGrid(self.prep,xList,yList,zList)
+    self.grid= grid.ijkGrid(self.getPreprocessor(),xList,yList,zList)
     return self.grid
 
   def newConstrainedRanges(self,name,constraints):
@@ -493,31 +534,31 @@ class GridModel(object):
 
   def generateMesh(self):
     self.grid.generatePoints() #Key points generation.
-    self.materialData.setup(self.prep) #Material definition.
-    nodes= self.prep.getNodeLoader
+    self.materialData.setup(self.getPreprocessor()) #Material definition.
+    nodes= self.getPreprocessor().getNodeLoader
     predefined_spaces.gdls_resist_materiales3D(nodes)
     nodes.newSeedNode()
     self.dicSup= dict() #Surfaces dictionary.
-    self.conjSup.generateMesh(self.prep,self.dicSup)
+    self.conjSup.generateMesh(self.getPreprocessor(),self.dicSup)
     self.dicLin= dict() #Lines dictionary.
-    self.conjLin.generateMesh(self.prep,self.dicSup)
+    self.conjLin.generateMesh(self.getPreprocessor(),self.dicSup)
     if(hasattr(self,'constrainedRanges')):
       self.constrainedRanges.generateContraintsInLines()
     if(hasattr(self,'elasticFoundationRanges')):
-      self.elasticFoundationRanges.generateSprings(self.prep,self.dicSup)
+      self.elasticFoundationRanges.generateSprings(self.getPreprocessor(),self.dicSup)
     for setName in self.conjSup: #???
       #vars()[setName]= 
-      grid.setEntLstSurf(self.prep,self.conjSup[setName].lstSup,setName)
+      grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[setName].lstSup,setName)
 
   def generateLoads(self):
     if(hasattr(self,'loadStates')):
-      self.lPatterns= self.loadStates.applyLoads(self.prep,self.dicSup)
+      self.lPatterns= self.loadStates.applyLoads(self.getPreprocessor(),self.dicSup)
       for cs in self.conjSup: #???
         nbrset='set'+cs
-        self.lPatterns[nbrset]= grid.setEntLstSurf(self.prep,self.conjSup[cs].lstSup,nbrset)
+        self.lPatterns[nbrset]= grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[cs].lstSup,nbrset)
     return self.dicSup
 
   def displayMesh(self,partToDisplay):
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.grafico_mef(self.prep,partToDisplay)
+    defDisplay.grafico_mef(self.getPreprocessor(),partToDisplay)
     return defDisplay

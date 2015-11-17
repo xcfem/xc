@@ -61,7 +61,6 @@ class LoadLoader: public Loader
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
   public:
     LoadLoader(Preprocessor *owr);
     ~LoadLoader(void);
@@ -90,7 +89,6 @@ class LoadLoader: public Loader
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 
