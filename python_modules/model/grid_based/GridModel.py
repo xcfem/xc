@@ -8,6 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import geom
 import xc
 from materials import typical_materials
 from materials import parametrosSeccionRectangular
@@ -69,6 +70,16 @@ class IJKRangeList(object):
   def append(self,ijkRange):
     self.ranges.append(ijkRange)
 
+  def appendRanges(self,ijkRangeList):
+    if(ijkRangeList.grid==self.grid):
+      self.ranges.extend(ijkRangeList.ranges)
+    else:
+      print "Error: reference grids are not the same."
+
+  def appendSurfaceListRanges(self,surfaces):
+    for s in surfaces:
+      self.appendRanges(s)
+
   def applyLoadVector(self, dicSup, loadVector):
     i= 0
     for r in self.ranges:
@@ -81,9 +92,17 @@ class IJKRangeList(object):
     i= 0
     for r in self.ranges:
       nmbrSet=self.name+str(i)
-      s= self.grid.applyEarthPressure(ijkRange,dicSup,nmbrSet,earthPressure)
+      s= self.grid.applyEarthPressure(r,dicSup,nmbrSet,earthPressure)
       i+= 1
     return i
+
+def getIJKRangeListFromSurfaces(surfaces):
+  if(surfaces):
+    retval= IJKRangeList(surfaces[0].name,surfaces[0].grid)
+    retval.appendSurfaceListRanges(surfaces)
+    return retval
+  else:
+    print "Error: surface list empty."
 
 class MaterialBase(IJKRangeList):
   '''Base class for lines and surfaces defined by a range list, a material and an element type and size.'''
@@ -92,6 +111,9 @@ class MaterialBase(IJKRangeList):
     self.material= material
     self.elemType= elemType
     self.elemSize= elemSize
+
+  def getIJKRangeList(self):
+    return IJKRangeList(self.name,self.grid,self.ranges)
 
 
 class MaterialSurface(MaterialBase):
@@ -259,27 +281,38 @@ class ElasticFoundationRanges(IJKRangeList):
         idElem+= 1
       i+=1
 
-  def calcEarthPressures(self):
-    TotX= 0
-    TotY= 0
-    TotZ= 0
+  def getCDG(self):
+    dx= 0.0; dy= 0.0; dz= 0.0
+    A= 0.0
     for e in self.springs:
       n= e.getNodes[1]
       a= n.getAreaTributaria()
-      #print "dispZ= ", n.getDisp[2]*1e3, "mm"
+      pos= n.getInitialPos3d
+      A+= a
+      dx+= a*pos[0]; dy+= a*pos[1]; dz+= a*pos[2]
+    dx/=A; dy/=A; dz/=A
+    return geom.Pos3d(dx,dy,dz)
+
+  def calcEarthPressures(self):
+    'foundation pressures over the soil'
+    svdReac= geom.SVD3d()
+    for e in self.springs:
+      n= e.getNodes[1]
+      a= n.getAreaTributaria()
+      pos= n.getInitialPos3d
+       #print "dispZ= ", n.getDisp[2]*1e3, "mm"
       materials= e.getMaterials()
       matX= materials[0]
       matY= materials[1]
       matZ= materials[2]
       Fx= matX.getStress()
       SgX= Fx/a
-      TotX+= Fx
       Fy= matY.getStress()
       SgY= Fy/a
-      TotY+= Fy
       Fz= matZ.getStress()
       SgZ= Fz/a
-      TotZ+= Fz
+      reac= geom.Vector3d(-Fx,-Fy,-Fz)
+      svdReac+= geom.VDesliz3d(pos,reac)
       #print "Fx= ", Fx/1e3, " Fy= ", Fy/1e3, " Fz= ", Fz/1e3
       #print "SgX= ", SgX/1e6, " SgY= ", SgY/1e6, " SgZ= ", SgZ/1e6
       n.setProp("SgX",SgX)
@@ -288,7 +321,8 @@ class ElasticFoundationRanges(IJKRangeList):
       n.setProp("Fx",Fx)
       n.setProp("Fy",Fy)
       n.setProp("Fz",Fz)
-    #print "TotX= ", TotX/1e3, " TotY= ", TotY/1e3, " TotZ= ", TotZ/1e3
+    #print "reac= ", svdReac/1e3
+    return svdReac
 
 
 class ElasticFoundationRangesMap(NamedObjectsMap):
@@ -311,10 +345,10 @@ class LoadOnSurfaces(object):
     self.name= name
     self.surfaces= surfaces
 
-class InertialLoadOnSurfaces(LoadOnSurfaces):
+class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
   '''Inertial load over a list of surfaces (defined as range lists).'''
   def __init__(self,name, surfaces, accel):
-    super(InertialLoadOnSurfaces,self).__init__(name, surfaces)
+    super(InertialLoadOnMaterialSurfaces,self).__init__(name, surfaces)
     self.acceleration= accel
 
   def applyLoad(self):
@@ -348,14 +382,14 @@ class EarthPressureOnSurfaces(LoadOnSurfaces):
 
 
 class StrainLoadOnSurfaces(LoadOnSurfaces):
-  '''Inertial load over a list of surfaces (defined as range lists).'''
+  '''Strain load over a list of surfaces (defined as range lists).'''
   def __init__(self,name, surfaces, epsilon):
     super(StrainLoadOnSurfaces,self).__init__(name, surfaces)
     self.epsilon= epsilon
 
 
 class StrainGradientLoadOnSurfaces(StrainLoadOnSurfaces):
-  '''Inertial load over a list of surfaces (defined as range lists).'''
+  '''Strain gradient load over a list of surfaces (defined as range lists).'''
   def __init__(self,name, surfaces,epsilon):
     super(StrainGradientLoadOnSurfaces,self).__init__(name, surfaces, epsilon)
 
@@ -373,13 +407,13 @@ class LoadOnSurfacesMap(NamedObjectsMap):
     super(LoadOnSurfacesMap,self).__init__(efranges)
 
 class LoadState(object):
-  def __init__(self,name, cInerc= list(), cUnifSup= list(), cUnifXYZSup= list(), qPuntual= list(), eTierr= list(), eHidrostVol= list(), gradTemp= list()):
+  def __init__(self,name, cInerc= list(), cUnifSup= list(), cUnifXYZSup= list(), qPuntual= list(), earthP= list(), eHidrostVol= list(), gradTemp= list()):
     self.name= name
     self.cInerc= cInerc
     self.cUnifSup= cUnifSup
     self.cUnifXYZSup= cUnifXYZSup
     self.qPuntual= qPuntual
-    self.eTierr= eTierr
+    self.earthP= earthP
     self.eHidrostVol= eHidrostVol
     self.gradTemp= gradTemp
   def applyInertialLoads(self):
@@ -408,7 +442,8 @@ class LoadState(object):
         lPatterns[key].newNodalLoad(nod.tag,vectorCarga)
 
   def applyEarthPressureLoads(self,dicSup):
-    for ep in self.eTierr:
+    for ep in self.earthP:
+      print 'earthP:', ep.name
       ep.applyEarthPressure(dicSup)
 
   def applyTemperatureGradient(self,lp):
@@ -541,7 +576,8 @@ class GridModel(object):
     self.dicSup= dict() #Surfaces dictionary.
     self.conjSup.generateMesh(self.getPreprocessor(),self.dicSup)
     self.dicLin= dict() #Lines dictionary.
-    self.conjLin.generateMesh(self.getPreprocessor(),self.dicSup)
+    if(hasattr(self,'conjLin')):
+      self.conjLin.generateMesh(self.getPreprocessor(),self.dicSup)
     if(hasattr(self,'constrainedRanges')):
       self.constrainedRanges.generateContraintsInLines()
     if(hasattr(self,'elasticFoundationRanges')):
