@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+'''EHE_reinforcing_steel.py: reinforcing steel as defined in EHE (spanish RC standard).'''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2015, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import math
 from materials import reinforcingSteel
 
