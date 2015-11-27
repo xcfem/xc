@@ -28,10 +28,10 @@
 
 #include "MapSet.h"
 #include "xc_utils/src/base/CmdStatus.h"
-#include "set_mgmt/Set.h"
+#include "Set.h"
 #include "SetEstruct.h"
-#include "cad/entidades/EntMdlr.h"
-#include "Preprocessor.h"
+#include "preprocessor/cad/entidades/EntMdlr.h"
+#include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "utility/actor/actor/MovableID.h"

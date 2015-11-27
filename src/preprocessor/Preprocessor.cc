@@ -31,7 +31,7 @@
 #include "domain/domain/Domain.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "SetEstruct.h"
+#include "preprocessor/set_mgmt/SetEstruct.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 #include "xc_utils/src/base/CmdStatus.h"

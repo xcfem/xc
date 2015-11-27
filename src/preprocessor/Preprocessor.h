@@ -40,7 +40,7 @@
 #include "loaders/ElementLoader.h"
 #include "loaders/LoadLoader.h"
 #include "loaders/ConstraintLoader.h"
-#include "MapSet.h"
+#include "set_mgmt/MapSet.h"
 #include "cad/Cad.h"
 #include "utility/handler/DataOutputHandler.h"
 

@@ -30,7 +30,7 @@
 #ifndef ENTMDLR_H
 #define ENTMDLR_H
 
-#include "preprocessor/SetEstruct.h"
+#include "preprocessor/set_mgmt/SetEstruct.h"
 #include "preprocessor/cad/matrices/TritrizPtrNod.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 #include "preprocessor/ParamMallado.h"
