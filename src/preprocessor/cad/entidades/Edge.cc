@@ -138,73 +138,20 @@ void XC::Edge::SetNDiv(const size_t &nd)
       }
   }
 
+//! @brief Calcula el número de divisiones para que
+//! el tamaño del elemento sea aproximadamente el que se pasa como parámetro.
+void XC::Edge::SetElemSize(const double &sz)
+  {
+    const double l= getLongitud();
+    const size_t n= ceil(l/sz);
+    SetNDiv(n);
+  }
+
 //! @brief Creates points along the line.
 void XC::Edge::divide(void)
   {
     const MatrizPos3d posiciones= get_posiciones();
     crea_puntos(posiciones);
-  }
-
-//! @brief Lee un objeto Edge desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - ndiv: Lee el número de divisiones.
-bool XC::Edge::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Edge) Procesando comando: " << cmd << std::endl;
-    if(cmd == "ndiv")
-      {
-        SetNDiv(interpretaSize_t(status.GetString()));
-        return true;
-      }
-    else if(cmd == "long_elem")
-      {
-        const double lElem= interpretaDouble(status.GetString());
-        const double L= getLongitud();
-        if(lElem>0.0)
-          {
-            const size_t n= std::max(static_cast<size_t>(ceil(L/lElem)),static_cast<size_t>(1));
-            SetNDiv(n);
-	  }
-        return true;
-      }
-    else if(cmd == "divide") //Crea puntos a lo largo de la línea.
-      {
-        status.GetString(); //Ignoramos argumentos.
-        divide();
-        return true;
-      }
-    else if(cmd == "primer_nodo")
-      {
-        Node *ptr= GetPrimerNodo();
-        if(ptr)
-          ptr->LeeCmd(status);
-        else
-          {
-            status.GetString(); //Ignoramos argumentos.
-	    std::cerr << "(Edge) Procesando comando: " << cmd
-                      << " el puntero al primer nodo es nulo." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "ultimo_nodo")
-      {
-        Node *ptr= GetUltimoNodo();
-        if(ptr)
-          ptr->LeeCmd(status);
-        else
-          {
-            status.GetString(); //Ignoramos argumentos.
-	    std::cerr << "(Edge) Procesando comando: " << cmd
-                      << " el puntero al primer nodo es nulo." << std::endl;
-          }
-        return true;
-      }
-    else
-      return EntMdlr::procesa_comando(status);
   }
 
 //! @brief Devuelve un apuntador al nodo cuyos índices se pasan como parámetro.
@@ -584,153 +531,4 @@ XC::ID XC::Edge::getKPoints(void) const
   }
 
 
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::Edge::GetProp(const std::string &cod) const
-  {
-    static const Pnt *ptr= nullptr;;
-    if(cod=="ndiv")
-      {
-        return any_const_ptr(ndiv);
-      }
-    else if(cod=="long") //Devuelve la longitud.
-      {
-        tmp_gp_dbl= getLongitud();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="p1")
-      {
-        ptr= P1();
-        return any_const_ptr(ptr);
-      }
-    else if(cod=="p2")
-      {
-        ptr= P2();
-        return any_const_ptr(ptr);
-      }
-    else if(cod=="getTagP1")
-      {
-        tmp_gp_szt= P1()->GetTag();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getTagP2")
-      {
-        tmp_gp_szt= P2()->GetTag();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getKPts")
-      {
-        static ID retval(2);
-        retval= getKPoints();
-        return any_const_ptr(retval);
-      }
-    else if(cod=="tang")
-      {
-        const double s= popDouble(cod);
-        return vector_to_prop_vector(getTang(s));
-      }
-    if(cod == "vertice")
-      {
-        static const Pnt *vertice;
-        const size_t ivertice= popSize_t(cod);
-        vertice= GetVertice(ivertice);
-        if(vertice)
-          return any_const_ptr(vertice);
-        else
-          {
-            std::cerr << "Edge::GetProp; no se encontró el vértice: '" 
-                      << ivertice << "'.\n";
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getVertices")
-      {
-        const size_t nv= NumVertices();
-        const std::vector<int> idxVertices= getIndicesVertices();
-	static m_int retval;
-        retval= m_int(nv,1,0);
-        if(nv<1) return any_const_ptr(retval);
-        for(size_t i=0;i<nv;i++)
-          retval[i]= idxVertices[i];
-        return any_const_ptr(retval);
-      }
-    else if(cod=="getNombresSupsTocan")
-      {
-        tmp_gp_str= NombresSupsTocan();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else if(cod=="nsup")
-      {
-        tmp_gp_szt= SupsTocan().size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="nodo")
-      {
-        static const Node *nodo;
-        const size_t inodo= popSize_t(cod);
-        nodo= GetNodo(inodo);
-        if(nodo)
-          return any_const_ptr(nodo);
-        else
-          {
-            std::cerr << "Edge::GetProp; no se encontró el nodo de índice: " 
-                      << inodo << ".\n";
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="primerNodo")
-      {
-        static const Node *nodo;
-        nodo= GetPrimerNodo();
-        if(nodo)
-          return any_const_ptr(nodo);
-        else
-          {
-            std::cerr << "Edge::GetProp; no se encontró el primer nodo." << std::endl; 
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="ultimoNodo")
-      {
-        static const Node *nodo;
-        nodo= GetUltimoNodo();
-        if(nodo)
-          return any_const_ptr(nodo);
-        else
-          {
-            std::cerr << "Edge::GetProp; no se encontró el primer nodo." << std::endl; 
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getTagPrimerNodo")
-      {
-        const Node *nodo= GetPrimerNodo();
-        if(nodo)
-          {
-            tmp_gp_int= nodo->getTag();
-            return any_const_ptr(tmp_gp_int);
-          }
-        else
-          {
-            std::cerr << "Edge::GetProp; no se encontró el primer nodo." << std::endl; 
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getTagUltimoNodo")
-      {
-        const Node *nodo= GetUltimoNodo();
-        if(nodo)
-          {
-            tmp_gp_int= nodo->getTag();
-            return any_const_ptr(tmp_gp_int);
-          }
-        else
-          {
-            std::cerr << "Edge::GetProp; no se encontró el último nodo." << std::endl; 
-            return any_const_ptr();
-          }
-      }
-    else
-      return EntMdlr::GetProp(cod);
-  }
 

@@ -27,7 +27,7 @@
 //SetEstruct.cc
 
 #include "SetEstruct.h"
-#include "Preprocessor.h"
+#include "preprocessor/Preprocessor.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"

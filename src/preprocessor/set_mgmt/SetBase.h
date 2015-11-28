@@ -33,8 +33,8 @@
 //! 
 //!  \defgroup Set Manejo de conjuntos.
 
-#include "EntMdlrBase.h"
-#include "ParamMallado.h"
+#include "preprocessor/EntMdlrBase.h"
+#include "preprocessor/ParamMallado.h"
 
 class Lista;
 

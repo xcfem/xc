@@ -1,10 +1,20 @@
 # -*- coding: utf-8 -*-
 
-import plotGeomSeccion as pg
+'''sectionReport.py: report describing RC cross sections mechanical properties.'''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2015, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+
 import sys
-from latex import latexUtils
 import math
 import os
+from latex import latexUtils
+from materials import materialGraphics as mg
+import plotGeomSeccion as pg
 
 fmt3_1f= '{:3.1f}'
 fmt4_1f= '{:4.1f}'

@@ -1,3 +1,3 @@
 # Devuelve una lista con los nombres de los patrones de carga
 def listaNombresLoadPatterns(preprocessor):
-  return preprocessor.loadLoader.getLoadPatterns.getNombresLoadPatterns()
+  return preprocessor.loadLoader.getLoadPatterns.getKeys()

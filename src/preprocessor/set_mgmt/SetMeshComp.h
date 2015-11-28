@@ -29,7 +29,7 @@
 #ifndef SETMESHCOMP_H
 #define SETMESHCOMP_H
 
-#include "preprocessor/SetBase.h"
+#include "SetBase.h"
 #include "DqPtrs.h"
 #include "DqPtrsNode.h"
 #include "DqPtrsElem.h"

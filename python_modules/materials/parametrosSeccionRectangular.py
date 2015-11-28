@@ -51,8 +51,6 @@ def getJTorsion( b, h):
 
 class RectangularSection(sp.sectionProperties):
   """Rectangular section parameters"""
-  b= 0.0 # width.
-  h= 0.0 # height
   def __init__(self,name,b,h,E,nu):
     super(RectangularSection,self).__init__(name,E,nu)
     self.b= b

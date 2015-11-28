@@ -1,8 +1,18 @@
 # -*- coding: utf-8 -*-
 
+'''reinforcingSteel.py: reinforcing steel mechanical properties.'''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2015, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import xc_base
 import geom
 from materials import typical_materials
+from materials import materialGraphics as mg
+import matplotlib.pyplot as plt
 
 class ReinforcingSteel(object):
   """Reinforcing steel parameters"""
@@ -64,12 +74,17 @@ class ReinforcingSteel(object):
     return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagK)
   def getDiagD(self,preprocessor):
     return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagD)
-
+  def plotDesignStressStrainDiagram(self):
+    retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.nmbMaterial + ' design stress-strain diagram')
+    retval.setupGraphic(plt,self.steelDiagramD)
+    fileName= self.nmbMaterial+'_design_stress_strain_diagram'
+    retval.savefig(plt,fileName+'.jpeg')
+    retval.savefig(plt,fileName+'.eps')
+    return retval
 
 # Characteristic stress-strain diagram
 def defDiagKAcero(preprocessor, steelRecord):
   return steelRecord.defDiagK(preprocessor)
-
 
 # Design stress-strain diagram
 def defDiagDAcero(preprocessor, steelRecord):

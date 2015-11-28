@@ -25,6 +25,7 @@ XC::Node *(XC::Edge::*getFirstNodePtr)(void)= &XC::Edge::GetPrimerNodo;
 XC::Node *(XC::Edge::*getLastNodePtr)(void)= &XC::Edge::GetUltimoNodo;
 class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge", no_init)
   .add_property("nDiv", &XC::Edge::NDiv, &XC::Edge::SetNDiv)
+  .def("setElemSize",&XC::Edge::SetElemSize)
   .add_property("getNumVertices", &XC::Edge::NumVertices)
   .add_property("getIdxVertices",&XC::Edge::getIndicesVertices)
   .add_property("firstNode",make_function(getFirstNodePtr, return_internal_reference<>()))

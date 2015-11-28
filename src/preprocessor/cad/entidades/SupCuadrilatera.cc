@@ -44,62 +44,6 @@ XC::SupCuadrilatera::SupCuadrilatera(Preprocessor *m,const size_t &ndivI, const 
 XC::SetEstruct *XC::SupCuadrilatera::getCopy(void) const
   { return new SupCuadrilatera(*this); }
 
-//! @brief Lee un objeto SupCuadrilatera desde el archivo de entrada.
-bool XC::SupCuadrilatera::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SupCuadrilatera) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "def_pnts")
-      {
-        const std::vector<MapLineas::Indice> tmp= crea_vector_size_t(status.GetString());
-	std::cerr << "def_lns deprecated use python." << std::endl;
-        //setPuntos(tmp);
-        return true;
-      }
-    else if(cmd == "def_matriz_pnts")
-      {
-        m_int tmp= interpretaMInt(status.GetString());
-        setPuntos(tmp);
-        return true;
-      }
-    else if(cmd == "def_lns")
-      {
-        const std::vector<MapLineas::Indice> tmp= crea_vector_size_t(status.GetString());
-	std::cerr << "def_lns deprecated use python." << std::endl;
-        //addLines(ID(tmp));
-        return true;
-      }
-    else if(cmd == "elemSizeI")
-      {
-        SetElemSizeI(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else if(cmd == "elemSizeJ")
-      {
-        SetElemSizeJ(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else if(cmd == "elemSizesIJ")
-      {
-        std::vector<double> tmp= crea_vector_double(status.GetString());
-        const int nc= tmp.size();
-        if(nc<2)
-          {           
-            const std::string posLectura= get_ptr_status()->GetEntradaComandos().getPosicionLecturaActual();
-            std::cerr << "SupCuadrilatera::procesa_comando; error procesando comando: "
-                      << cmd << " se leyeron " << nc
-                      << " valores, se esperaban 2." << posLectura << std::endl;
-          }
-        SetElemSizeI(tmp[0]);
-        SetElemSizeJ(tmp[1]);
-        return true;
-      }
-    else
-      return Face::procesa_comando(status);
-  }
-
 size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
   {
     size_t retval= 0;

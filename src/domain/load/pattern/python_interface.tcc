@@ -75,6 +75,7 @@ class_<XC::GrupoCombinaciones, bases<XC::LoadLoaderMember,XC::map_combinaciones>
   .def("getCombPrevia", &XC::GrupoCombinaciones::getPtrCombPrevia,return_internal_reference<>(),"Returns previous load combination.")
   .def("getKeys", &XC::GrupoCombinaciones::getKeys)
   .def("__getitem__",&XC::GrupoCombinaciones::buscaCombinacion, return_value_policy<reference_existing_object>())
+  .def("clear", &XC::GrupoCombinaciones::clear)
   ;
 
 class_<XC::TimeSeries, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("TimeSeries", no_init)
