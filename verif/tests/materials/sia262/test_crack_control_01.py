@@ -6,7 +6,6 @@ import xc_base
 import geom
 import xc
 # Macros
-from materials.ehe import auxEHE
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 from materials.fiber_section import defSeccionHASimple
@@ -14,7 +13,7 @@ from materials.ehe import areaBarrasEHE
 from materials import parametrosSeccionRectangular
 
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.sia262 import steelSIA262
 from materials.sia262 import crackControlSIA262 as cc
@@ -26,7 +25,9 @@ areaFi26= steelSIA262.section_barres_courantes[26e-3]
 datosScc1LosC= defSeccionHASimple.RecordSeccionHASimple()
 datosScc1LosC.nmbSeccion= "secHA1LosC"
 datosScc1LosC.descSeccion= "Losa. Tramo Central. Sección normal al eje X."
-datosScc1LosC.tipoHormigon= hormigonesEHE.HA30
+concr=EHE_concrete.HA30
+concr.alfacc=0.85
+datosScc1LosC.tipoHormigon= concr
 datosScc1LosC.canto= 0.35
 datosScc1LosC.ancho= 1.0
 datosScc1LosC.tipoArmadura= EHE_reinforcing_steel.B500S
@@ -41,7 +42,7 @@ MyDato= 117e3 # Momento para comprobar fisuración.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-# tagDiagHormigon= hormigonesEHE.HA30.defDiagK(preprocessor)
+# tagDiagHormigon= EHE_concrete.HA30.defDiagK(preprocessor)
 # tagDiagAceroArmar= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
 
 
@@ -88,10 +89,10 @@ sigma_s= secHAParamsFis.calcRebarStress(scc)
 ratio1= (sigma_s-168.951255239e6)/168.951255239e6
 
 
-''' 
+#''' 
 print "sigma_s= ",sigma_s/1e6, " MPa"
 print "ratio1= ",ratio1
-'''
+#'''
 
 import os
 fname= os.path.basename(__file__)

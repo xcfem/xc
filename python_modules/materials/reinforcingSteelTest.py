@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import math
-#from materials import reinforcingSteel
-import reinforcingSteel
+from materials import reinforcingSteel
 
 # Stress-strain diagram of reinforcing steel, according to EC2 
 # (the same one is adopted by EHE and SIA).

@@ -7,12 +7,11 @@ import xc_base
 import geom
 import xc
 # Macros
-from materials.ehe import auxEHE
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import fisuracionEHE
 from model import fix_node_6dof
@@ -41,12 +40,12 @@ print "offsetBarras= ",offsetBarras
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-tagHA25= hormigonesEHE.HA25.defDiagK(preprocessor)
+tagHA25= EHE_concrete.HA25.defDiagK(preprocessor)
 tagB400S= EHE_reinforcing_steel.B400S.defDiagK(preprocessor)
 
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
-hormigon= regiones.newQuadRegion(hormigonesEHE.HA25.nmbDiagK)
+hormigon= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagK)
 hormigon.nDivIJ= 10
 hormigon.nDivJK= 10
 hormigon.pMin= geom.Pos2d(-ancho/2.0,-canto/2.0)
@@ -110,7 +109,7 @@ secHAParamsFis= fisuracionEHE.ParamsFisuracionEHE()
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,hormigonesEHE.HA25.tagDiagK,EHE_reinforcing_steel.B400S.tagDiagK,hormigonesEHE.HA25.fctm())
+secHAParamsFis.calcApertCaracFis(scc,EHE_concrete.HA25.tagDiagK,EHE_reinforcing_steel.B400S.tagDiagK,EHE_concrete.HA25.fctm())
 
 ratio1= ((secHAParamsFis.sepBarrasTracc-0.105)/0.105)
 ratio2= ((secHAParamsFis.Wk-0.3e-3)/0.3e-3)

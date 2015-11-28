@@ -103,6 +103,7 @@ def getBetaH(HR, u, A, fck):
       retval= min(tMp,1500)
     else:
       alPha3= getAlpha3Fluencia(fck)
+#      print 'alPha3=',alPha3
       retval= min(tMp,1500*alPha3)
     return retval
 
@@ -119,6 +120,7 @@ Devuelve el valor de la función beta_c(t-t0,HR,e)
    A: Área de la sección transversal de la pieza expresada en metros.
 '''
 def getBetaC(fck, t, t0, HR, u, A):
+#  print 'betaH=',getBetaH(HR,u,A,fck)
   return pow((t-t0)/(getBetaH(HR,u,A,fck)+(t-t0)),0.3)
 
 '''
@@ -134,6 +136,8 @@ Devuelve el valor de la función phi(t,t0,HR,e)
    A: Área de la sección transversal de la pieza expresada en metros.
 '''
 def getPhiFluencia(fck, t, t0, HR, u, A):
+#  print 'Phi0=',getPhi0(fck,t0,HR,u,A)
+#  print 'getBetaC=',getBetaC(fck,t,t0,HR,u,A)
   return getPhi0(fck,t0,HR,u,A)*getBetaC(fck,t,t0,HR,u,A)
 
 '''
@@ -166,6 +170,7 @@ Devuelve el valor del coeficiente de evolución temporal de la retracción
    A: Área de la sección transversal de la pieza expresada en metros.
 '''
 def getBetaDS(fck, t, tS, HR, u, A):
+#  print 'betadstts=',(t-tS)/((t-tS)+0.04*pow(1000*(2*A/u),3/2))
   return (t-tS)/((t-tS)+0.04*pow(1000*(2*A/u),3/2))
 
 '''
@@ -199,6 +204,7 @@ def getBetaHR(HR):
       retval= -1.55*(1-HR**3)
     else:
       retval= 0.25
+#    print 'betaHR',retval
     return retval
 
 '''
@@ -243,6 +249,9 @@ Devuelve la deformación por retracción por secado.
     HR: Humedad relativa del aire expresada en tanto por uno.
 '''
 def getEpsilonCD(fck, t, tS, HR, u, A, velCemento):
+#    print 'Betadstts=',getBetaDS(fck,t,tS,HR,u,A)
+#    print 'Kh=',getKERetraccion(u,A)
+#    print 'Epscd0=',getEpsilonCDInf(fck,HR,velCemento)
     return getBetaDS(fck,t,tS,HR,u,A)*getKERetraccion(u,A)*getEpsilonCDInf(fck,HR,velCemento)
 
 '''
@@ -279,4 +288,6 @@ Devuelve el la deformación por retracción.
   fck: Resistencia característica del hormigón a 28 días expresada en Pa.
 '''
 def getDeformacionRetraccion(fck, t, tS, HR, u, A, velCemento):
+  print 'ShrEpscd=',getEpsilonCD(fck,t,tS,HR,u,A,velCemento)
+  print 'ShrEpsca=',getEpsilonCA(fck,t)
   return getEpsilonCD(fck,t,tS,HR,u,A,velCemento)+getEpsilonCA(fck,t)

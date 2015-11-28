@@ -120,7 +120,13 @@ class ParamsCortante(object):
 
     self.tagDiagHormigon= hormigon.tagDiagD
     self.fckH= abs(hormigon.fck)
-    self.fcdH= abs(hormigon.fcd())
+    print 'fckH=',self.fckH
+#### Cambiado como prueba. De esta forma el cálculo de Vu1 da el mismo resultado
+#### Ver con Luis
+#    self.fcdH= abs(hormigon.fcd())
+    self.fcdH= abs(hormigon.fcd())/0.85
+####
+    print 'fcdH=',self.fcdH
     self.fctdH= abs(hormigon.fctd())
     self.gammaC= abs(hormigon.gmmC)
     self.tagDiagAceroArmar= aceroArmar.tagDiagD

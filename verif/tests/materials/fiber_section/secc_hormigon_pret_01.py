@@ -30,5 +30,5 @@ def gmSecHP01(nmbGeomSecc,nmbDiagHormigon,nmbDiagAceroPret):
   armaduraSup.p2= geom.Pos2d(canto/2.0-recub,ancho/2.0-recub)
   return geomSecc
 
-geomSecPret01= gmSecHP01("geomSecHormigonPret01",hormigonesEHE.HP45.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
+geomSecPret01= gmSecHP01("geomSecHormigonPret01",EHE_concrete.HP45.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
 

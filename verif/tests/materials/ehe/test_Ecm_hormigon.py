@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 # Problem type
 
-from materials.ehe import auxEHE
+from materials.ehe import EHE_concrete
 
 
 fck= 25e6
-fcm= auxEHE.getFcm(fck)
+gammac=1.5
+concr=EHE_concrete.EHEConcrete('HA',-fck,gammac)
+fcm= concr.getFcm()*(-1)
 ratio1= abs(fcm-33e6)/33e6
-Ecm= auxEHE.getEcm(fck)
+Ecm= concr.getEcm()
 ratio2= abs(Ecm-27.3e9)/27.3e9
 
 ''' 

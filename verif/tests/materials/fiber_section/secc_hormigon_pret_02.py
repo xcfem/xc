@@ -88,4 +88,4 @@ def gmSecHP02(nmbGeomSecc,nmbDiagHormigon,nmbDiagAceroArmar,nmbDiagAceroPret):
   return geomSecc
 
 
-geomSecPret02= gmSecHP02("geomSecHormigonPret02",hormigonesEHE.HP45.nmbDiagD,EHE_reinforcing_steel.B500S.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
+geomSecPret02= gmSecHP02("geomSecHormigonPret02",EHE_concrete.HP45.nmbDiagD,EHE_reinforcing_steel.B500S.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)

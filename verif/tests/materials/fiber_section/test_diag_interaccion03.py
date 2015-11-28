@@ -6,9 +6,8 @@ from __future__ import division
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 
 prueba= xc.ProblemaEF()

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from materials.ehe import EHE_reinforcing_steel
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 
 defSec= dict(ancho= 0.2, # Ancho de la sección expresado en metros.
 canto= 0.4, # Canto de la sección expresado en metros.
@@ -37,4 +37,4 @@ def gmSecHA01(nmbGeomSecc,defSec,nmbDiagHormigon,nmbDiagAceroArmar):
   return geomSecc
 
 
-geomSecHormigon01= gmSecHA01("geomSecHormigon01",defSec,hormigonesEHE.HA25.nmbDiagD,EHE_reinforcing_steel.B500S.nmbDiagD)
+geomSecHormigon01= gmSecHA01("geomSecHormigon01",defSec,EHE_concrete.HA25.nmbDiagD,EHE_reinforcing_steel.B500S.nmbDiagD)

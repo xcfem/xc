@@ -6,9 +6,8 @@ from __future__ import division
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 import math
 from materials.sia262 import steelSIA262
@@ -28,7 +27,9 @@ areaFi30= steelSIA262.section_barres_courantes[30e-3]
 areaFi34= steelSIA262.section_barres_courantes[34e-3]
 areaFi40= steelSIA262.section_barres_courantes[40e-3]
 
-concrete= hormigonesEHE.HA30
+concrete= EHE_concrete.HA30
+concrete.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente alfacc=1)
+
 reinfSteel= EHE_reinforcing_steel.B500S
 
 sccData= defSeccionHASimple.RecordSeccionHASimple()

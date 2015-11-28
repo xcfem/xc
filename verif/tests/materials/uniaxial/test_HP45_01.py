@@ -6,16 +6,16 @@ import xc_base
 import geom
 import xc
 from materials import typical_materials
-from materials.ehe import auxEHE
-from materials.ehe import hormigonesEHE
+from materials import concreteBase
+from materials.ehe import EHE_concrete
 
 
 # Definición del modelo
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
-HP45= hormigonesEHE.HA45
-errMax= hormigonesEHE.testDiagDHormigon(preprocessor, HP45)
+HP45= EHE_concrete.HA45
+errMax= concreteBase.testDiagDHormigon(preprocessor, HP45)
 
 
 # print "errMax= ",(errMax)

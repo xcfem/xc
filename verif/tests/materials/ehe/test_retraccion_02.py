@@ -5,9 +5,10 @@
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
-from materials.ehe import retraccion_fluencia
+from materials.ehe import EHE_concrete
 
+concrHA30=EHE_concrete.HA30
+concrHA30.cemType='N'
 fckHA30= 30e6 # Resistencia característica del hormigón HA-30.
 Hrel= 0.8 # Humedad relativa del aire.
 Ec= 2e5*9.81/1e-4 # Módulo de Young del hormigón en Pa.
@@ -24,7 +25,6 @@ F= 5.5e4 # Magnitud de la carga en N
 
 # Retracción del hormigón
 tS= 7 # Inicio del secado.
-velCemento= "normal"
 
 # Armadura activa
 Ep= 190e9 # Módulo elástico expresado en MPa
@@ -245,7 +245,10 @@ for e in shellElems:
   Ac= ladoMedio*grueso
   u= 2*ladoMedio+grueso
   espMedio= 2.0*Ac/u
-  epsRetracc= retraccion_fluencia.getDeformacionRetraccion(fckHA30,tFin,tS,Hrel,u,Ac,velCemento)
+  RH=Hrel*100
+  h0mm=espMedio*1e3
+  epsRetracc= concrHA30.getShrEpscs(tFin,tS,RH,h0mm)
+
 
 #cargas.setCurrentLoadPattern("RETRACC")
 
@@ -289,14 +292,14 @@ ratio1= abs(((dXMax-dXMaxTeor)/dXMaxTeor))
 dXMinTeor= -0.955324e-3
 ratio2= abs(((dXMin-dXMinTeor)/dXMinTeor))
 
-''' 
+#''' 
 print "dXMax= ",(dXMax*1e3)," mm"
 print "dXMaxTeor= ",(dXMaxTeor*1e3)," mm"
 print "ratio1= ",ratio1
 print "dXMin= ",(dXMin*1e3)," mm"
 print "dXMinTeor= ",(dXMinTeor*1e3)," mm"
 print "ratio2= ",ratio2
-   '''
+#   '''
 
 import os
 fname= os.path.basename(__file__)

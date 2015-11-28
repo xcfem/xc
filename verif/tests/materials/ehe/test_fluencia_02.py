@@ -2,24 +2,28 @@
 ''' Test comprobación del cálculo de la deformación por fluencia
    según EHE-08. '''
 
-from materials.ehe import auxEHE
-from materials.ehe import retraccion_fluencia
+from materials.ehe import EHE_concrete
 
 
-fck= 30e6
 t0= 28
 t= 10000
-HR= 0.8
-u= 2
-A= .25
+RH= 80
+u= 2e3
+A= .25e6
+h0mm=2*A/u
 sigma= -10e6
-Ec28= auxEHE.getEcm(fck)
+Ec28= EHE_concrete.HA30.getEcm()
 
-fi1= retraccion_fluencia.getPhiFluencia(fck,t,t0,HR,u,A)
+print 'Phi0=',EHE_concrete.HA30.getCreepFi0(t0,RH,h0mm)
+print 'getBetaC=',EHE_concrete.HA30.getCreepBetactt0(t,t0,RH,h0mm)
+
+fi1= EHE_concrete.HA30.getCreepFitt0(t,t0,RH,2*A/u)
 epsElastica= sigma/Ec28
-epsFluencia= retraccion_fluencia.getDeformacionFluencia(fck,t0,0.25,fi1,sigma)
+epsFluencia= EHE_concrete.HA30.getDeformacionFluencia(t,t0,RH,h0mm,sigma)
 
-ratio1= abs(epsFluencia+9.31793e-04)/9.31793e-04
+# Comparing value of epsFluencia is changed from 9.31793e-04 to 9.319563e-04
+# after detecting an error in the formula used to obtain betaH
+ratio1= abs(epsFluencia+9.319563e-04)/9.319563e-04
 
 ''' 
 print "fi1= ",fi1

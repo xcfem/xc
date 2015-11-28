@@ -11,7 +11,7 @@ from postprocess.reports import listados_factor_capacidad
 import xc_base
 import geom
 import xc
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import defSeccionHASimple
 from materials.xLamina import membranePlateRCSectionContainer as sc
@@ -38,7 +38,8 @@ for eTag in elementTags:
   mapSectionsForEveryElement[eTag]= ["deck2","deck1"]
 
 # deck.
-concrete= hormigonesEHE.HA30
+concrete= EHE_concrete.HA30
+concrete.alfacc=0.85  #coef. de fatiga del hormigón (en general alfacc=1)
 reinfSteel= EHE_reinforcing_steel.B500S
 areaFi8= 0.50e-4 #XXX Área de las barras expresado en metros cuadrados.
 areaFi10=0.785e-4

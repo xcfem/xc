@@ -6,7 +6,6 @@ import xc_base
 import geom
 import xc
 # Macros
-from materials.ehe import auxEHE
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 from materials.fiber_section import defSeccionHASimple
@@ -14,7 +13,7 @@ from materials.ehe import areaBarrasEHE
 from materials import parametrosSeccionRectangular
 
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import fisuracionEHE
 from model import fix_node_6dof
@@ -22,7 +21,7 @@ from model import fix_node_6dof
 datosScc1LosC= defSeccionHASimple.RecordSeccionHASimple()
 datosScc1LosC.nmbSeccion= "secHA1LosC"
 datosScc1LosC.descSeccion= "Losa. Tramo Central. Sección normal al eje X."
-datosScc1LosC.tipoHormigon= hormigonesEHE.HA25
+datosScc1LosC.tipoHormigon= EHE_concrete.HA25
 datosScc1LosC.canto= 0.25
 datosScc1LosC.ancho= 1.0
 datosScc1LosC.tipoArmadura= EHE_reinforcing_steel.B500S
@@ -41,7 +40,7 @@ MyDato= 1000 # Momento para comprobar fisuración.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-tagDiagHormigon= hormigonesEHE.HA25.defDiagK(preprocessor)
+tagDiagHormigon= EHE_concrete.HA25.defDiagK(preprocessor)
 tagDiagAceroArmar= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
 
 
@@ -82,7 +81,7 @@ secHAParamsFis= fisuracionEHE.ParamsFisuracionEHE()
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,hormigonesEHE.HA25.tagDiagK,EHE_reinforcing_steel.B500S.tagDiagK,hormigonesEHE.HA25.fctm())
+secHAParamsFis.calcApertCaracFis(scc,EHE_concrete.HA25.tagDiagK,EHE_reinforcing_steel.B500S.tagDiagK,EHE_concrete.HA25.fctm())
 
 
 ratio1= secHAParamsFis.Wk

@@ -7,10 +7,9 @@ import math
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 
 nmbHorm= "HA25"
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials import reinforcingSteelTest
 
@@ -25,27 +24,27 @@ diam= 16e-3 # Diámetro de las barras expresado en metros.
 areaFi16= 2.01e-4 # Área de las barras expresado en metros cuadrados.
 
 e1= -10e-3 # Deformación axil de prueba 1.
-sgc1= hormigonesEHE.sigmac(e1,hormigonesEHE.HA25.fcd())
+sgc1= EHE_concrete.HA25.sigmac(e1)
 sgs1= reinforcingSteelTest.sigmaDAceroArmar(e1,EHE_reinforcing_steel.B500S)
 
 e2= -3e-3 # Deformación axil de prueba 1.
-sgc2= hormigonesEHE.sigmac(e2,hormigonesEHE.HA25.fcd())
+sgc2= EHE_concrete.HA25.sigmac(e2)
 sgs2= reinforcingSteelTest.sigmaDAceroArmar(e2,EHE_reinforcing_steel.B500S)
 
 e3= -1e-3 # Deformación axil de prueba 1.
-sgc3= hormigonesEHE.sigmac(e3,hormigonesEHE.HA25.fcd())
+sgc3= EHE_concrete.HA25.sigmac(e3)
 sgs3= reinforcingSteelTest.sigmaDAceroArmar(e3,EHE_reinforcing_steel.B500S)
 
 e4= 1e-3 # Deformación axil de prueba 1.
-sgc4= hormigonesEHE.sigmac(e4,hormigonesEHE.HA25.fcd())
+sgc4= EHE_concrete.HA25.sigmac(e4)
 sgs4= reinforcingSteelTest.sigmaDAceroArmar(e4,EHE_reinforcing_steel.B500S)
 
 e5= 3e-3 # Deformación axil de prueba 1.
-sgc5= hormigonesEHE.sigmac(e5,hormigonesEHE.HA25.fcd())
+sgc5= EHE_concrete.HA25.sigmac(e5)
 sgs5= reinforcingSteelTest.sigmaDAceroArmar(e5,EHE_reinforcing_steel.B500S)
 
 e6= 10e-3 # Deformación axil de prueba 1.
-sgc6= hormigonesEHE.sigmac(e6,hormigonesEHE.HA25.fcd())
+sgc6= EHE_concrete.HA25.sigmac(e6)
 sgs6= reinforcingSteelTest.sigmaDAceroArmar(e6,EHE_reinforcing_steel.B500S)
 
 prueba= xc.ProblemaEF()
@@ -53,8 +52,8 @@ prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
 
 preprocessor=  prueba.getPreprocessor
 # Definimos materiales
-tag= hormigonesEHE.HA25.defDiagD(preprocessor)
-dgDHA25= hormigonesEHE.HA25.getDiagD(preprocessor)
+tag= EHE_concrete.HA25.defDiagD(preprocessor)
+dgDHA25= EHE_concrete.HA25.getDiagD(preprocessor)
 Ec= dgDHA25.getTangent
 
 tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
@@ -63,7 +62,7 @@ dgDB500S= EHE_reinforcing_steel.B500S.getDiagD(preprocessor)
 
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
-rg= regiones.newQuadRegion(hormigonesEHE.HA25.nmbDiagD)
+rg= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagD)
 rg.nDivIJ= 10
 rg.nDivJK= 10
 rg.pMin= geom.Pos2d(-canto/2,-ancho/2)

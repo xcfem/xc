@@ -9,11 +9,10 @@
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 from misc import banco_pruebas_scc3d
 
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import creaSetsFibras
 from model import fix_node_6dof
@@ -29,7 +28,9 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
 tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
-tag= hormigonesEHE.HA25.defDiagD(preprocessor)
+concr=EHE_concrete.HA25
+concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente se toma alfacc=1)
+tag= concr.defDiagD(preprocessor)
 
 import os
 pth= os.path.dirname(__file__)
@@ -86,7 +87,7 @@ esfMy= scc.getStressResultantComponent("My")
 esfMz= scc.getStressResultantComponent("Mz")
 defMz= scc.getSectionDeformationByName("defMz")
 defN= scc.getSectionDeformationByName("defN")
-fibrasHormigon= creaSetsFibras.FiberSet(scc,"hormigon",hormigonesEHE.HA25.tagDiagD)
+fibrasHormigon= creaSetsFibras.FiberSet(scc,"hormigon",EHE_concrete.HA25.tagDiagD)
 fibraCEpsMin= fibrasHormigon.getFiberWithMinStrain()
 epsCMin= fibraCEpsMin.getMaterial().getStrain() # Deformación mínima en el hormigón.
 fibraCEpsMax= fibrasHormigon.getFiberWithMaxStrain()

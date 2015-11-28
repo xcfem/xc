@@ -18,12 +18,11 @@ from __future__ import division
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import creaSetsFibras
 from materials import regimenSeccion
@@ -43,7 +42,9 @@ preprocessor=  prueba.getPreprocessor
 # Materials definition
 tagAcero= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 dgDB500S= EHE_reinforcing_steel.B500S.getDiagD(preprocessor)
-tagHormigon= hormigonesEHE.HA25.defDiagD(preprocessor)
+concr=EHE_concrete.HA25
+concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente se toma alfacc=1)
+tagHormigon= concr.defDiagD(preprocessor)
 
 import os
 pth= os.path.dirname(__file__)
@@ -117,7 +118,7 @@ defN= scc.getSectionDeformationByName("defN")
 x= scc.getNeutralAxisDepth()
 Resul= scc.getStressResultant()
 Deform= scc.getSectionDeformation()
-setsRC= creaSetsFibras.fiberSectionSetupRCSets(scc,hormigonesEHE.HA25.tagDiagD,"hormigon",EHE_reinforcing_steel.B500S.tagDiagD,"armadura")
+setsRC= creaSetsFibras.fiberSectionSetupRCSets(scc,EHE_concrete.HA25.tagDiagD,"hormigon",EHE_reinforcing_steel.B500S.tagDiagD,"armadura")
 
 
 fibraCEpsMin= -1
