@@ -28,9 +28,7 @@ class CrackControlSIA262(cc.CrackControlBaseParameters):
       scc.calcRecubrimientos(self.nmbSetFibrasArmaduraTraccion)
       scc.calcSeparaciones(self.nmbSetFibrasArmaduraTraccion)
       self.eps1= fibrasHormigon.getStrainMax()
-      print "eps1= ", self.eps1 
       self.eps2= max(fibrasHormigon.getStrainMin(),0.0)
-      print "eps2= ", self.eps2 
       self.sepBarrasTracc= armaduraTraccion.getDistMediaFibras()
       self.areaBarrasTracc= armaduraTraccion.getArea(1)
       self.yCDGBarrasTracc= armaduraTraccion.getCdgY()
