@@ -9,8 +9,7 @@ import Property as prop
 import Ref as rf
 import EnumItem as eI
 import Enum as enum
-import TableProperties as tbProp
-import SubTableProperties as stbProp
+import PropertiesTable as propTable
 import NodeContainer as nc
 import xml.etree.cElementTree as ET
 
@@ -42,7 +41,7 @@ class NodeSupportProperties(ctr.PropertiesContainer):
   tableProp= None;
   def __init__(self):
     super(NodeSupportProperties,self).__init__(containerId,containerClsId,'')
-    self.tableProp= tbProp.TableProperties(tbId,tbName,"vertical",tbClsId,tbProgId)
+    self.tableProp= propTable.PropertiesTable(tbId,tbName,"vertical",tbClsId,tbProgId)
     propName= prop.Property("0","_NAME_","string",idName,"0")
     propRefNode= prop.Property("1","_NODE_","ref",idNodeRef,"0")
     propRefNode.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}",nc.progIdNodes)

@@ -9,8 +9,8 @@ import Property as prop
 import Ref as rf
 import EnumItem as eI
 import Enum as enum
-import TableProperties as tbProp
-import SubTableProperties as stbProp
+import PropertiesTable as propTable
+import PropertiesSubTable as propSubTable
 import xml.etree.cElementTree as ET
 import LoadCaseProperties as lcp
 
@@ -37,12 +37,12 @@ class NodeLoadProperties(ctr.PropertiesContainer):
   tableProp= None;
   def __init__(self):
     super(NodeLoadProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= tbProp.TableProperties(tbId,"XML\default","vertical",tbClsId,tbProgId)
+    self.tableProp= propTable.PropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)
     propName= prop.Property("0","Name","string",idName)
     propRefLoadCase= prop.Property("1","Load case","ref",idLoadCase)
     propRefLoadCase.value= rf.Ref(idLoadCaseRef,lcp.tbName)
     propRefTable= prop.Property("2","Reference Table","table",idRefTable)
-    propRefTable.value= stbProp.SubTableProperties('','',"vertical",'','')
+    propRefTable.value= propSubTable.PropertiesSubTable('','',"vertical",'','')
     propRefTable.value.properties.append(prop.Property("0","Member Type","string",idMemberType))
     propRefTable.value.properties.append(prop.Property("1","Member Type Name","string",idMemberTypeName))
     propRefTable.value.properties.append(prop.Property("2","Member Name","string",idMemberName))

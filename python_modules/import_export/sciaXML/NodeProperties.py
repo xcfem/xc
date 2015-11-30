@@ -5,7 +5,7 @@
 import PropertiesContainer as ctr
 import NodeContainer as nc
 import Property as prop
-import TableProperties as tbProp
+import PropertiesTable as propTable
 import xml.etree.cElementTree as ET
 
 idName= '{4364BC01-AAB7-11D4-B3D9-00104BC3B531}'
@@ -18,7 +18,7 @@ class NodeProperties(ctr.PropertiesContainer):
   tableDef= None;
   def __init__(self):
     super(NodeProperties,self).__init__(nc.idNodeContainer,nc.idNodeContainer,nc.progIdNodes)
-    self.tableDef= tbProp.TableProperties(idNodeTable,"XML\default","vertical",nc.idNodeContainer,nc.progIdNodes)
+    self.tableDef= propTable.PropertiesTable(idNodeTable,"XML\default","vertical",nc.idNodeContainer,nc.progIdNodes)
     self.tableDef.properties.append(prop.Property("0","Name","string",idName))
     self.tableDef.properties.append(prop.Property("1","XCoord","param",idXCoord,"33619968"))
     self.tableDef.properties.append(prop.Property("2","YCoord","param",idYCoord,"33619968"))

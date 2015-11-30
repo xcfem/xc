@@ -2,9 +2,9 @@
 
 #Based on sXML-master projet on gitHub
 
-import TableProperties as tp
+import PropertiesTable as tp
 
-class SubTableProperties(tp.TableProperties):
+class PropertiesSubTable(tp.PropertiesTable):
 
   def getXMLElementLabel(self):
     return "def_subtable"

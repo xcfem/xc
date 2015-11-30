@@ -88,10 +88,10 @@ sigma_s= secHAParamsFis.calcRebarStress(scc)
 ratio1= (sigma_s-168.951255239e6)/168.951255239e6
 
 
-#''' 
+''' 
 print "sigma_s= ",sigma_s/1e6, " MPa"
 print "ratio1= ",ratio1
-#'''
+'''
 
 import os
 fname= os.path.basename(__file__)
