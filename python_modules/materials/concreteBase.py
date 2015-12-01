@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
-
-#*    Nov. 2015   Ana Ortega    *
-
 # Concrete according to EC2 and EHE.
 
 from __future__ import division
+
+__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2015, AOO and LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 
 import math
 import scipy.interpolate
@@ -206,6 +210,11 @@ class Concrete(object):
         fcmMPa=abs(self.getFcm())/1e6
         fcm0MPa=10       
         epscd0=0.85*((220+110*self.getShrAlfads1())*math.exp(-self.getShrAlfads2()*fcmMPa/fcm0MPa))*1e-6*self.getShrBetaRH(RH)
+        # print 'Alfads1',self.getShrAlfads1()
+        # print 'Alfads2',self.getShrAlfads2()
+        # print 'exponente=',fcmMPa/fcm0MPa
+        # print 'BetaRH',self.getShrBetaRH(RH)
+        # print 'epscd0',epscd0
         return epscd0*(-1)
 
 
@@ -216,8 +225,11 @@ class Concrete(object):
         Attributes:
             RH:  ambient relative humidity(%)
         '''
-        betaRH=1.55*(1-(RH/100)**3)
-#        print 'betaHR',betaRH
+        if RH<99:
+            betaRH=1.55*(1-(RH/100)**3)
+#            print 'betaHR',betaRH
+        else:
+            betaRH=0.25
         return betaRH
 
     def getShrAlfads1(self):
@@ -293,7 +305,7 @@ class Concrete(object):
                         Ac= cross sectional area
                         u = perimeter of the member in contact with the atmosphere
         '''
-        betadstts=(t-ts)/(t-ts+0.04*(h0mm)**(1/3.0))
+        betadstts=(t-ts)/(t-ts+0.04*(h0mm)**(3.0/2.0))
 #        print 'betadstts=',betadstts
         return betadstts
 
@@ -339,9 +351,10 @@ class Concrete(object):
                         Ac= cross sectional area
                         u = perimeter of the member in contact with the atmosphere
         '''
-        print 'ShrEpscd=',self.getShrEpscd(t,ts,RH,h0mm)
-        print 'ShrEpsca=',self.getShrEpsca(t)
+#        print 'ShrEpscd=',self.getShrEpscd(t,ts,RH,h0mm)
+#        print 'ShrEpsca=',self.getShrEpsca(t)
         epscs=self.getShrEpscd(t,ts,RH,h0mm)+self.getShrEpsca(t)
+#        print 'ShrEpscs=',epscs
         return epscs
 
 #Creep

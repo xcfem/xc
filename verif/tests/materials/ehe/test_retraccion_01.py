@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 ''' Test comprobación del cálculo de la deformación por retraccion
    según EHE-08. '''
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import xc_base
 import geom
 import xc

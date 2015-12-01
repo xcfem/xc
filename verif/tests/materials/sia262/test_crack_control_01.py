@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de la comprobación a fisuración de una sección de hormigón armado.
-   Los resultados se comparan con los obtenidos del «Prontuario informático del hormigón armado». '''
+''' Home-made Test de funcionamiento de la comprobación a fisuración de una sección de hormigón armado.
+'''
 
 import xc_base
 import geom
@@ -86,13 +86,13 @@ scc= ele1.getSection()
 sigma_s= secHAParamsFis.calcRebarStress(scc)
 
 
-ratio1= (sigma_s-168.951255239e6)/168.951255239e6
+ratio1= (sigma_s-166.925177095e6)/166.925177095
 
 
-#''' 
+''' 
 print "sigma_s= ",sigma_s/1e6, " MPa"
 print "ratio1= ",ratio1
-#'''
+'''
 
 import os
 fname= os.path.basename(__file__)

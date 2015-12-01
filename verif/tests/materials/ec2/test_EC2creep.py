@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
-
-#*    Nov. 2015   Ana Ortega    *
-
 #Creep verification test. 
 #Data for comparison from the JRC technical report: 
 #"Bridge design to Eurocodes. Worked examples"
-
-
 from __future__ import division
+
+__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2015, AOO and LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+
+
 from materials.ec2 import EC2_concrete
 
 #Data

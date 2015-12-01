@@ -2,6 +2,13 @@
 ''' Test de funcionamiento del cálculo del diagrama de interacción.
    Elaboración propia. '''
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Macros
 import xc_base
 import geom

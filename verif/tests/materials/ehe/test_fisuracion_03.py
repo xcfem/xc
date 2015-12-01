@@ -2,6 +2,12 @@
 ''' Test de funcionamiento de la comprobación a fisuración de una sección de hormigón armado.
    Comprobación a tracción simple. '''
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import xc_base
 import geom
 import xc

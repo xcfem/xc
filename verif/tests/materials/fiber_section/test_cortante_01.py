@@ -2,9 +2,15 @@
 # Test de funcionamiento de la comprobación a cortante de una sección de hormigón armado.
 #    Algunos resultados se comparan con los obtenidos del ejercicio ER-CS-01 de
 #    www.areadecalculo.com. Según la norma EHE-08».
+from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Macros
-from __future__ import division
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
