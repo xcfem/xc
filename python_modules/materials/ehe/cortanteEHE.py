@@ -120,9 +120,7 @@ class ParamsCortante(object):
 
     self.tagDiagHormigon= hormigon.tagDiagD
     self.fckH= abs(hormigon.fck)
-    print 'fckH=',self.fckH
     self.fcdH= abs(hormigon.fcd())
-    print 'fcdH=',self.fcdH
     self.fctdH= abs(hormigon.fctd())
     self.gammaC= abs(hormigon.gmmC)
     self.tagDiagAceroArmar= aceroArmar.tagDiagD

@@ -20,9 +20,6 @@ h0mm=2*A/u
 sigma= -10e6
 Ec28= EHE_concrete.HA30.getEcm()
 
-print 'Phi0=',EHE_concrete.HA30.getCreepFi0(t0,RH,h0mm)
-print 'getBetaC=',EHE_concrete.HA30.getCreepBetactt0(t,t0,RH,h0mm)
-
 fi1= EHE_concrete.HA30.getCreepFitt0(t,t0,RH,2*A/u)
 epsElastica= sigma/Ec28
 epsFluencia= EHE_concrete.HA30.getDeformacionFluencia(t,t0,RH,h0mm,sigma)

@@ -152,7 +152,7 @@ ratio2= ((VcuA-VcuATeor)/VcuATeor)
 ratio3= ((VsuA-111.966e3)/111.966e3)
 ratio4= ((Vu2A-194.574e3)/194.574e3)
 
-#'''
+'''
 print "Vu1A= ",Vu1A/1e3," kN"
 print "Vu1ATeor= ",Vu1ATeor/1e3," kN"
 print "ratio1= ",ratio1
@@ -163,7 +163,7 @@ print "VsuA= ",VsuA/1e3," kN"
 print "Vu2A= ",Vu2A/1e3," kN"
 print "ratio3= ",ratio3
 print "ratio4= ",ratio4
-#'''
+'''
 
 import os
 fname= os.path.basename(__file__)

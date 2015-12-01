@@ -44,7 +44,7 @@ err2= err2+(epsR4d+211e-6)**2
 
 ratio1= math.sqrt(err2)
 
-#'' 
+'' 
 print "epsR1= ",epsR1*1e6,"x10^(-6)\n"
 print "epsR2= ",epsR2*1e6,"x10^(-6)\n"
 print "epsR3= ",epsR3*1e6,"x10^(-6)\n"
@@ -54,7 +54,7 @@ print "epsR2d= ",epsR2d*1e6,"x10^(-6)\n"
 print "epsR3d= ",epsR3d*1e6,"x10^(-6)\n"
 print "epsR4d= ",epsR4d*1e6,"x10^(-6)\n"
 print "ratio1= ",(ratio1)
-#  '''
+  '''
 
 import os
 fname= os.path.basename(__file__)

@@ -67,9 +67,10 @@ Epscs=concrDeck.getShrEpscs(t,ts,RH,h0mm)   #Total shrinkage
 vCalc.append(round(Epscs*(-1),5))
 vComp.append(7.0e-5)
 
+'''
 print vCalc
 print vComp
-
+'''
 sqrErr= 0.0
 for i in range(0,len(vCalc)):
   sqrErr+= (vCalc[i]-vComp[i])**2
