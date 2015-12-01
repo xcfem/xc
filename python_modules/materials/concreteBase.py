@@ -210,11 +210,6 @@ class Concrete(object):
         fcmMPa=abs(self.getFcm())/1e6
         fcm0MPa=10       
         epscd0=0.85*((220+110*self.getShrAlfads1())*math.exp(-self.getShrAlfads2()*fcmMPa/fcm0MPa))*1e-6*self.getShrBetaRH(RH)
-        # print 'Alfads1',self.getShrAlfads1()
-        # print 'Alfads2',self.getShrAlfads2()
-        # print 'exponente=',fcmMPa/fcm0MPa
-        # print 'BetaRH',self.getShrBetaRH(RH)
-        # print 'epscd0',epscd0
         return epscd0*(-1)
 
 
@@ -227,7 +222,6 @@ class Concrete(object):
         '''
         if RH<99:
             betaRH=1.55*(1-(RH/100)**3)
-#            print 'betaHR',betaRH
         else:
             betaRH=0.25
         return betaRH
@@ -272,9 +266,6 @@ class Concrete(object):
         '''
         #epscd: drying shrinkage strain
         epscd=self.getShrBetadstts(t,ts,h0mm)*self.getShrKh(h0mm)*self.getShrEpscd0(RH)
-#        print 'Betadstts=',self.getShrBetadstts(t,ts,h0mm)
-#        print 'Kh=',self.getShrKh(h0mm)
-#        print 'Epscd0=',self.getShrEpscd0(RH)
         return epscd
 
     def getShrKh(self,h0mm):
@@ -306,7 +297,6 @@ class Concrete(object):
                         u = perimeter of the member in contact with the atmosphere
         '''
         betadstts=(t-ts)/(t-ts+0.04*(h0mm)**(3.0/2.0))
-#        print 'betadstts=',betadstts
         return betadstts
 
 #   Autogenous shrinkage strain
@@ -351,10 +341,7 @@ class Concrete(object):
                         Ac= cross sectional area
                         u = perimeter of the member in contact with the atmosphere
         '''
-#        print 'ShrEpscd=',self.getShrEpscd(t,ts,RH,h0mm)
-#        print 'ShrEpsca=',self.getShrEpsca(t)
         epscs=self.getShrEpscd(t,ts,RH,h0mm)+self.getShrEpsca(t)
-#        print 'ShrEpscs=',epscs
         return epscs
 
 #Creep
