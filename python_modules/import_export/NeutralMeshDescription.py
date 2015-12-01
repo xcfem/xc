@@ -2,6 +2,19 @@
 import os
 import DxfReader as dxf
 
+class MaterialRecord(object):
+  def __init__(self,name,typo,thermalExp,rho,E,nu,G,logDec,specHeat,thermalCond):
+    self.name= name
+    self.typo= typo
+    self.thermalExp= thermalExp
+    self.rho= rho
+    self.E= E
+    self.nu= nu
+    self.G= G
+    self.logDec= logDec
+    self.specHeat= specHeat
+    self.thermalCond= thermalCond
+
 class NodeRecord(object):
   def __init__(self,id, coords):
     self.id= id
@@ -187,19 +200,56 @@ class XCImportExportData(object):
     if(self.meshDesc):
       self.meshDesc.writeToXCFile(self)
 
+class NodeData(dict):
+  def appendNode(self,id,x,y,z):
+    self[id]= NodeRecord(int(id),[x,y,z])
+  def readFromDATFile(self,lines,begin,end):
+    self.clear()
+    for i in range(begin,end):
+      line= lines[i]
+      id, x, y ,z = line.split()
+      self.appendNode(id,x,y,z)
+  def readFromUMesh(self,umesh):
+    nodes= umesh.getCoordinatesAndOwner()
+    self.clear()
+    id= 0
+    for n in nodes:
+      self[id]= NodeRecord(id,n)
+      id+= 1
+  def readFromXCSet(self,xcSet):
+    nodeSet= xcSet.getNodes
+    for n in nodeSet:
+      pos= n.getInitialPos3d
+      self.appendNode(n.tag, pos.x, pos.y, pos.z)
+
+  def writeToXCFile(self,f,xcImportExportData):
+    for key in self:
+      strCommand= self[key].getStrXCCommand(xcImportExportData.nodeLoaderName)
+      f.write(strCommand+'\n')
+  def getTags(self):
+    retval= list()
+    for key in self:
+      retval.append(self[key].id)
+    return retval;
+  def __str__(self):
+    retval= ''
+    for key in self:
+      retval+= str(self[key]) + '\n'
+
 class MeshData(object):
 
   def __init__(self):
     self.name= None
     self.numberOfCells= None
     self.numberOfNodes= None
-    self.nodes= {}
+    self.materials= {}
+    self.nodes= NodeData()
     self.cells= {}
     self.nodeSupports= {}
     self.groups= []
 
-  def appendNode(self,id,x,y,z):
-    self.nodes[id]= NodeRecord(int(id),[x,y,z])
+  def appendMaterial(self,mat):
+    self.materials[mat.name]= mat
   def appendCell(self,cell):
     self.cells[cell.id]= cell
   def appendNodeSupport(self, ns):
@@ -218,11 +268,7 @@ class MeshData(object):
     beginNodes= 1
     endNodes= self.numberOfNodes+1
 
-    self.nodes= {}
-    for i in range(beginNodes,endNodes):
-      line= lines[i]
-      id, x, y ,z = line.split()
-      appendNode(id,x,y,z)
+    self.nodes.readFromDATFile(lines,beginNodes,endNodes)
 
     self.cells= {}
     beginCells= endNodes
@@ -240,9 +286,8 @@ class MeshData(object):
 
   def writeToXCFile(self,xcImportExportData):
     f= xcImportExportData.outputFile
-    for key in self.nodes:
-      strCommand= self.nodes[key].getStrXCCommand(xcImportExportData.nodeLoaderName)
-      f.write(strCommand+'\n')
+    self.nodes.writeToXCFile(f,xcImportExportData)
+
     for key in self.cells:
       cell= self.cells[key]
       type= xcImportExportData.convertCellType(cell.cellType)
@@ -253,10 +298,7 @@ class MeshData(object):
       g.writeToXCFile(xcImportExportData)
 
   def getNodeTags(self):
-    tags= []
-    for key in self.nodes:
-      tags.append(self.nodes[key].id)
-    return tags;
+    return self.nodes.getTags()
 
   def getCellTags(self):
     tags= []
@@ -264,12 +306,10 @@ class MeshData(object):
       tags.append(self.cells[key].id)
     return tags;
 
-
   def __str__(self):
     retval= "numberOfNodes= " +' '+str(self.numberOfNodes) + '\n'
     retval+= "numberOfCells= " +' '+str(self.numberOfCells) + '\n'
-    for key in self.nodes:
-      retval+= str(self.nodes[key]) + '\n'
+    retval+= str(self.nodes)
     for key in self.cells:
       retval+= str(self.cells[key]) + '\n'
     return retval
@@ -280,17 +320,13 @@ class MEDMeshData(MeshData):
   spaceDimension= None
 
   def __init__(self,umesh):
+    super(MEDMeshData, self).__init__()
     self.meshDimension= umesh.getMeshDimension()
     self.spaceDimension= umesh.getSpaceDimension()
     self.numberOfCells= umesh.getNumberOfCells()
     self.numberOfNodes= umesh.getNumberOfNodes()
       
-    nodes= umesh.getCoordinatesAndOwner()
-    self.nodes= {}
-    id= 0
-    for n in nodes:
-      self.nodes[id]= NodeRecord(id,n)
-      id+= 1
+    nodes.readFromUMesh(umesh)
 
     for i in range(0,self.numberOfCells):
       self.cells.append(CellRecord(umesh.getTypeOfCell(i), umesh.getNodeIdsOfCell(i)))
@@ -298,12 +334,7 @@ class MEDMeshData(MeshData):
   def __str__(self):
     retval= "meshDimension= " + str(self.meshDimension) + '\n'
     retval+= "spaceDimension= " +' '+str(self.spaceDimension) + '\n'
-    retval+= "numberOfNodes= " +' '+str(self.numberOfNodes) + '\n'
-    retval+= "numberOfCells= " +' '+str(self.numberOfCells) + '\n'
-    for key in self.nodes:
-      retval+= str(self.nodes[key]) + '\n'
-    for e in self.cells:
-      retval+= str(e) + '\n'
+    retval+= super(MEDMeshData, self).__str__()
     return retval
 
 
