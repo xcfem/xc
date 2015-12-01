@@ -55,7 +55,6 @@ class EntMdlrBase: public EntConNmb, public MovableObject
     int recvIdsEtiquetas(const int &,const int &, const CommParameters &);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    virtual bool procesa_comando(CmdStatus &status);
   public:
     EntMdlrBase(const std::string &nmb="",Preprocessor *preprocessor= NULL);
     EntMdlrBase(const EntMdlrBase &otro);
@@ -66,8 +65,6 @@ class EntMdlrBase: public EntConNmb, public MovableObject
       { return get_preprocessor(); }
 
     size_t GetTag(void) const;
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
 
     Pnt *BuscaPnt(const size_t &);    
     const Pnt *BuscaPnt(const size_t &) const;
