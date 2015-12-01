@@ -9,8 +9,7 @@ import Property as prop
 import Ref as rf
 import EnumItem as eI
 import Enum as enum
-import TableProperties as tbProp
-import SubTableProperties as stbProp
+import PropertiesTable as propTable
 import xml.etree.cElementTree as ET
 
 containerId= "{0908D21F-481F-11D4-AB84-00C06C452330}"
@@ -30,10 +29,9 @@ idLoadType= "{11D48DC1-E0F4-11D4-A482-00C06C542707}"
 idDirection= "{11D48DC3-E0F4-11D4-A482-00C06C542707}"
 
 class LoadCaseProperties(ctr.PropertiesContainer):
-  tableProp= None;
   def __init__(self):
     super(LoadCaseProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= tbProp.TableProperties(tbId,'',"vertical",tbClsId,tbProgId)
+    self.tableProp= propTable.PropertiesTable(tbId,'',"vertical",tbClsId,tbProgId)
     propName= prop.Property("0","Name","string",idName)
     propUniqueId= prop.Property("1","UniqueID","string",idUniqueId)
     propActionType= prop.Property("2","Action type","enum",idActionType,"262144")

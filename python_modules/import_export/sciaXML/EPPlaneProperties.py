@@ -7,8 +7,8 @@ import Property as prop
 import Ref as rf
 import EnumItem as eI
 import Enum as enum
-import TableProperties as tbProp
-import SubTableProperties as stbProp
+import PropertiesTable as propTable
+import PropertiesSubTable as propSubTable
 import NodeContainer as nc
 import xml.etree.cElementTree as ET
 
@@ -35,7 +35,7 @@ class EPPlaneProperties(ctr.PropertiesContainer):
   tableProp= None;
   def __init__(self):
     super(EPPlaneProperties,self).__init__(containerId,containerClsId,'')
-    self.tableProp= tbProp.TableProperties(tbId,tbName,"vertical",tbClsId,tbProgId)
+    self.tableProp= propTable.PropertiesTable(tbId,tbName,"vertical",tbClsId,tbProgId)
     propMat= prop.Property("0","_MATERIAL_","ref",idRef,"131072")
     propMat.value= rf.Ref("{77705284-eeb9-11d4-b450-00104bc3b531}","EP_Material.EP_Material.1")
     propType= prop.Property("1","_TYPE_","enum",idType,"0")
@@ -55,7 +55,7 @@ class EPPlaneProperties(ctr.PropertiesContainer):
     propPoint2= prop.Property("11","_POINT2_","ref",idPoint2,"0")
     propPoint2.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}",nc.progIdNodes)
     propGeomTable= prop.Property("12","_TABLE_OF_GEOMETRY_","table",idGeomTable,"0")
-    propGeomTable.value= stbProp.SubTableProperties('','',"vertical",'','')
+    propGeomTable.value= propSubTable.PropertiesSubTable('','',"vertical",'','')
     propGeomTable.value.properties.append(prop.Property("0","_CLOSED_CURVE_","bool","{e0dd8a0c-8e62-49bf-b2ff-cf737a0b65e5}","0"))
     subPropNode= prop.Property("1","_NODE_","ref","{f140e9f9-e8c9-48f1-a305-7f1eb39eeb65}","0")
     subPropNode.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}",nc.progIdNodes)
@@ -65,7 +65,7 @@ class EPPlaneProperties(ctr.PropertiesContainer):
     propGeomTable.value.properties.append(subPropEdge)
     propGeomTable.value.properties.append(prop.Property("3","_WEIGHT_","real","{23292b43-824e-4cc1-9376-83da8bac58db}","0"))
     propInternalNodes= prop.Property("13","_INTERNAL_NODES_","table",idInternalNodes,"0")
-    propInternalNodes.value= stbProp.SubTableProperties('','',"vertical",'','')
+    propInternalNodes.value= propSubTable.PropertiesSubTable('','',"vertical",'','')
     propInternalNodes.value.properties.append(prop.Property("0","_INDEX_","integer","{24262aad-7b4d-42ed-b3f7-7d237b2a5484}","0"))
     subPropNode= prop.Property("1","_NODE_","ref","{66c5a1c2-2989-4d02-847b-63e69b346911}","0")
     subPropNode.value= rf.Ref("{39a7f468-a0d4-4dff-8e5c-5843e1807d13}",nc.progIdNodes)

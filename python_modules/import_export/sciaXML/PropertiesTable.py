@@ -6,10 +6,10 @@ import TableBase as tBase
 import Header as hdr
 import xml.etree.cElementTree as ET
 
-class TableProperties(tBase.TableBase):
+class PropertiesTable(tBase.TableBase):
 
   def __init__(self,id= '',name= '',typo= '',clsid='',progid=''):
-    super(TableProperties,self).__init__(id,'',name)
+    super(PropertiesTable,self).__init__(id,'',name)
     self.typo= typo
     self.clsid= clsid
     self.progid= progid
@@ -19,18 +19,18 @@ class TableProperties(tBase.TableBase):
     return "def_table"
 
   def getXMLElement(self,parent):
-    tbProp= ET.SubElement(parent,self.getXMLElementLabel())
-    super(TableProperties,self).populateXMLElement(tbProp)
+    propTable= ET.SubElement(parent,self.getXMLElementLabel())
+    super(PropertiesTable,self).populateXMLElement(propTable)
     if(self.typo!=''):
-      tbProp.set("type",self.typo)
+      propTable.set("type",self.typo)
     if(self.clsid!=''):
-      tbProp.set("clsid",self.clsid)
+      propTable.set("clsid",self.clsid)
     if(self.progid!=''):
-      tbProp.set("progid",self.progid)
+      propTable.set("progid",self.progid)
     size= str(len(self.properties))
-    tbProp.set("size",size)
+    propTable.set("size",size)
     for p in self.properties:
-      e= p.getXMLElement(tbProp)
-    return tbProp
+      e= p.getXMLElement(propTable)
+    return propTable
     
 

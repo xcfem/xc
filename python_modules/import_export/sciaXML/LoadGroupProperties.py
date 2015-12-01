@@ -9,8 +9,7 @@ import Property as prop
 import Ref as rf
 import EnumItem as eI
 import Enum as enum
-import TableProperties as tbProp
-import SubTableProperties as stbProp
+import PropertiesTable as propTable
 import xml.etree.cElementTree as ET
 
 containerId= "{F9D4AA72-49D5-11D4-A3CF-000000000000}"
@@ -27,7 +26,7 @@ class LoadGroupProperties(ctr.PropertiesContainer):
   tableProp= None;
   def __init__(self):
     super(LoadGroupProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= tbProp.TableProperties(tbId,'',"vertical",tbClsId,tbProgId)
+    self.tableProp= propTable.PropertiesTable(tbId,'',"vertical",tbClsId,tbProgId)
     propName= prop.Property("0","Name","string",idName)
     propLoad= prop.Property("1","Load","enum",idLoad,"262144")
     propLoad.value= enum.Enum([eI.EnumItem("0","Permanent")])

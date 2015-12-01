@@ -9,8 +9,8 @@ import Property as prop
 import Ref as rf
 import EnumItem as eI
 import Enum as enum
-import TableProperties as tbProp
-import SubTableProperties as stbProp
+import PropertiesTable as propTable
+import PropertiesSubTable as propSubTable
 import LoadCaseProperties as lcp
 import xml.etree.cElementTree as ET
 
@@ -39,14 +39,14 @@ class LoadCombProperties(ctr.PropertiesContainer):
   tableProp= None;
   def __init__(self):
     super(LoadCombProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= tbProp.TableProperties(tbId,tbName,"vertical",tbClsId,tbProgId)
+    self.tableProp= propTable.PropertiesTable(tbId,tbName,"vertical",tbClsId,tbProgId)
     propName= prop.Property("0","Name","string",idName)
     propUniqueId= prop.Property("1","UniqueID","string",idUniqueId)
     propDescription= prop.Property("2","Description","string",idDescription)
     propCombType= prop.Property("3","Type","enum",idCombType)
     propCombType.value= enum.Enum([eI.EnumItem("0","Envelope - ultimate"),eI.EnumItem("1","Envelope - serviceability"),eI.EnumItem("2","Linear - ultimate"),eI.EnumItem("3","Linear - serviceability"),eI.EnumItem("4","France - ultimate"),eI.EnumItem("5","France - serviceability"),eI.EnumItem("6","BAEL - ultimate"),eI.EnumItem("7","BAEL - serviceability")])
     propRefTable= prop.Property("4","Load cases","table",idLoadCases)
-    propRefTable.value= stbProp.SubTableProperties('','',"vertical",'','')
+    propRefTable.value= propSubTable.PropertiesSubTable('','',"vertical",'','')
     propRefTable.value.properties.append(prop.Property("0","Name","string",idLoadCaseName))
     propRefTable.value.properties.append(prop.Property("1","Coeff.","param",idLoadCaseCoeff))
     propRefLoadCases= prop.Property("2","Load case ID","ref",idLoadCaseId)

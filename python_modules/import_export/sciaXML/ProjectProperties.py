@@ -3,6 +3,7 @@
 #Based on sXML-master projet on gitHub
 
 import NodeProperties as ncd
+import MaterialProperties as mp
 import EPPlaneProperties as eppp
 import NodeSupportProperties as nsp
 import LoadGroupProperties as lgp
@@ -18,6 +19,7 @@ class ProjectProperties(object):
     self.xmlns= xmlns
     self.fileName= fileName
     self.nodeProperties= ncd.NodeProperties()
+    self.materialProperties= mp.MaterialProperties()
     self.epPlaneProperties= eppp.EPPlaneProperties()
     self.nodeSupportProperties= nsp.NodeSupportProperties()
     self.loadGroupProperties= lgp.LoadGroupProperties()
@@ -29,7 +31,7 @@ class ProjectProperties(object):
   def getXMLElement(self,defFileName):
     project= ET.Element("def_project")
     project.set("xmlns",self.xmlns)
-    containers= [self.nodeProperties,self.epPlaneProperties, self.nodeSupportProperties, self.loadGroupProperties, self.loadCaseProperties, self.loadCombProperties, self.nodeLoadProperties, self.elementLoadProperties]
+    containers= [self.nodeProperties, self.materialProperties, self.epPlaneProperties, self.nodeSupportProperties, self.loadGroupProperties, self.loadCaseProperties, self.loadCombProperties, self.nodeLoadProperties, self.elementLoadProperties]
     for c in containers:
       elem= c.getXMLElement(project)
     return project
