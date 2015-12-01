@@ -3,13 +3,18 @@
 #    elaborado a partir de Nociones de cálculo plástico. C. Benito Hernández.
 #    página 26 y siguientes.
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 from materials import sccRectg
-from materials.ehe import auxEHE
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import comprobVEHE08
 from materials.ehe import cortanteEHE

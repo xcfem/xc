@@ -6,10 +6,9 @@
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 
 nmbHorm= "HA25"
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 
 # Coeficientes de seguridad.
@@ -26,14 +25,16 @@ areaFi20= 3.14e-4 # Área de las barras expresado en metros cuadrados.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Definimos materiales
-tagHA25= hormigonesEHE.HA25.defDiagD(preprocessor)
-Ec= hormigonesEHE.HA25.getDiagD(preprocessor).getTangent
+concr=EHE_concrete.HA25
+concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente alfacc=1)
+tagHA25= concr.defDiagD(preprocessor)
+Ec= concr.getDiagD(preprocessor).getTangent
 tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 Es= EHE_reinforcing_steel.B500S.getDiagD(preprocessor).getTangent
 
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
-hormigon= regiones.newQuadRegion(hormigonesEHE.HA25.nmbDiagD)
+hormigon= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagD)
 hormigon.nDivIJ= 10
 hormigon.nDivJK= 10
 hormigon.pMin= geom.Pos2d(-canto/2.0,-ancho/2.0)
@@ -70,7 +71,7 @@ secHA.setupFibers()
 fibras= secHA.getFibers()
 
 param= xc.InteractionDiagramParameters()
-param.tagHormigon= hormigonesEHE.HA25.tagDiagD
+param.tagHormigon= EHE_concrete.HA25.tagDiagD
 param.tagArmadura= EHE_reinforcing_steel.B500S.tagDiagD
 diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
 

@@ -397,6 +397,7 @@ python tests/materials/fiber_section/test_cortante_01.py
 python tests/materials/fiber_section/test_cortante_02.py
 echo "$BLEU" "  RC sections test." "$NORMAL"
 python tests/materials/ehe/test_Ecm_hormigon.py
+python tests/materials/ehe/test_EHEconcrete.py
 echo "$BLEU" "    Crack amplitude determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_fisuracion_01.py
 python tests/materials/ehe/test_fisuracion_02.py
@@ -412,6 +413,10 @@ python tests/materials/ehe/test_cortante_ehe08_04.py
 python tests/materials/ehe/test_cortante_ehe08_05.py
 echo "$BLEU" "    Misd. (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_mensula_corta_ehe.py
+echo "$BLEU" "   EC2 tests." "$NORMAL"
+python tests/materials/ec2/test_EC2Concrete.py
+python tests/materials/ec2/test_EC2creep.py
+python tests/materials/ec2/test_EC2shrinkage.py
 echo "$BLEU" "    SIA 262 tests." "$NORMAL"
 python tests/materials/sia262/shear_01.py
 python tests/materials/sia262/test_anchorage_length.py

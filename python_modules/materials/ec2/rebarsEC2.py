@@ -23,6 +23,6 @@ rebarsEC2['fi50']= {'nmb':'fi50','d':50e-3,'P':15.413}
 
 for item in rebarsEC2:
   bar= rebarsEC2[item]
-  bar['r']= bar['d']/2
+  bar['r']= bar['d']/2.0
   bar['area']= math.pi*bar['r']*bar['r']
 

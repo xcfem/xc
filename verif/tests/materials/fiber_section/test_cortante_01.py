@@ -2,15 +2,20 @@
 # Test de funcionamiento de la comprobación a cortante de una sección de hormigón armado.
 #    Algunos resultados se comparan con los obtenidos del ejercicio ER-CS-01 de
 #    www.areadecalculo.com. Según la norma EHE-08».
+from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Macros
-from __future__ import division
-from materials.ehe import auxEHE
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import comprobVEHE08
 from materials.ehe import cortanteEHE
@@ -47,7 +52,9 @@ preprocessor=  prueba.getPreprocessor
 # Materials definition
 materiales= preprocessor.getMaterialLoader
 
-tagHA25= hormigonesEHE.HA25.defDiagD(preprocessor)
+concr=EHE_concrete.HA25
+concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente alfacc=1)
+tagHA25= concr.defDiagD(preprocessor)
 tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
@@ -55,7 +62,7 @@ respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respu
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Respuesta de la sección a cortante según y.
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
-rg= regiones.newQuadRegion(hormigonesEHE.HA25.nmbDiagD)
+rg= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagD)
 rg.nDivIJ= 10
 rg.nDivJK= 10
 rg.pMin= geom.Pos2d(-ancho/2.0,-canto/2.0)
@@ -123,7 +130,7 @@ secHAParamsCortante= cortanteEHE.ParamsCortante()
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",hormigonesEHE.HA25,EHE_reinforcing_steel.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
+secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_concrete.HA25,EHE_reinforcing_steel.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
 
 
 Vu2A= secHAParamsCortante.Vu2
@@ -140,7 +147,7 @@ if(analOk!=0):
   exit()
 
 
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",hormigonesEHE.HA25,EHE_reinforcing_steel.B500S, 0,0,0,0)
+secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_concrete.HA25,EHE_reinforcing_steel.B500S, 0,0,0,0)
 
 Vu2B= secHAParamsCortante.Vu2
 
@@ -156,7 +163,7 @@ if(analOk!=0):
   exit()
 
 
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",hormigonesEHE.HA25,EHE_reinforcing_steel.B500S, 0,0,0,0)
+secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_concrete.HA25,EHE_reinforcing_steel.B500S, 0,0,0,0)
 
 Vu2C= secHAParamsCortante.Vu2
 

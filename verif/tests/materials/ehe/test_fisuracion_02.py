@@ -2,16 +2,21 @@
 ''' Test de funcionamiento de la comprobación a fisuración de una sección de hormigón armado.
    Los resultados se comparan con los obtenidos del «Prontuario informático del hormigón armado». '''
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Macros
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import fisuracionEHE
 from model import fix_node_6dof
@@ -27,12 +32,12 @@ MyDato= 0.0 # Momento para comprobar fisuración.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-tagHA25= hormigonesEHE.HA25.defDiagK(preprocessor)
+tagHA25= EHE_concrete.HA25.defDiagK(preprocessor)
 tagB500S= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
 
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
-hormigon= regiones.newQuadRegion(hormigonesEHE.HA25.nmbDiagK)
+hormigon= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagK)
 hormigon.nDivIJ= 10
 hormigon.nDivJK= 10
 hormigon.pMin= geom.Pos2d(-ancho/2.0,-canto/2.0)
@@ -90,7 +95,7 @@ secHAParamsFis= fisuracionEHE.ParamsFisuracionEHE()
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,hormigonesEHE.HA25.tagDiagK,EHE_reinforcing_steel.B500S.tagDiagK,hormigonesEHE.HA25.fctm())
+secHAParamsFis.calcApertCaracFis(scc,EHE_concrete.HA25.tagDiagK,EHE_reinforcing_steel.B500S.tagDiagK,EHE_concrete.HA25.fctm())
 
 ratio1= secHAParamsFis.Wk
 

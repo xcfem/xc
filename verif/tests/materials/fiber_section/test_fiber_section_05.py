@@ -8,7 +8,6 @@
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 

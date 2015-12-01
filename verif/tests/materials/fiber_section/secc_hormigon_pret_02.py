@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 areaCordones= 140e-6 # Área de los cordones expresada en metros cuadrados.
 areaFiLong= 0.5e-4 # Fi8 área de la armadura longitudinal expresada en metros cuadrados.
 def gmSecHP02(nmbGeomSecc,nmbDiagHormigon,nmbDiagAceroArmar,nmbDiagAceroPret):
@@ -88,4 +95,4 @@ def gmSecHP02(nmbGeomSecc,nmbDiagHormigon,nmbDiagAceroArmar,nmbDiagAceroPret):
   return geomSecc
 
 
-geomSecPret02= gmSecHP02("geomSecHormigonPret02",hormigonesEHE.HP45.nmbDiagD,EHE_reinforcing_steel.B500S.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
+geomSecPret02= gmSecHP02("geomSecHormigonPret02",EHE_concrete.HP45.nmbDiagD,EHE_reinforcing_steel.B500S.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)

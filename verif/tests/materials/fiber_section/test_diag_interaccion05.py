@@ -2,13 +2,19 @@
 ''' Test de funcionamiento del cálculo del diagrama de interacción.
    Elaboración propia. '''
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Macros
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 import math
 
@@ -25,14 +31,16 @@ areaFi20= math.pi*(diam/2.0)**2 # Área de las barras expresado en metros cuadra
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Definimos materiales
-tagHA30= hormigonesEHE.HA30.defDiagD(preprocessor)
-Ec= hormigonesEHE.HA30.getDiagD(preprocessor).getTangent
+concr=EHE_concrete.HA30
+concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente alfacc=1)
+tagHA30= concr.defDiagD(preprocessor)
+Ec= concr.getDiagD(preprocessor).getTangent
 tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 Es= EHE_reinforcing_steel.B500S.getDiagD(preprocessor).getTangent
 
 pileGeometry= preprocessor.getMaterialLoader.newSectionGeometry("pileGeometry")
 regiones= pileGeometry.getRegions
-hormigon= regiones.newCircularRegion(hormigonesEHE.HA30.nmbDiagD)
+hormigon= regiones.newCircularRegion(EHE_concrete.HA30.nmbDiagD)
 hormigon.nDivCirc= 20
 hormigon.nDivRad= 5
 hormigon.extRad= radio
@@ -56,7 +64,7 @@ secHA.setupFibers()
 fibras= secHA.getFibers()
 
 param= xc.InteractionDiagramParameters()
-param.tagHormigon= hormigonesEHE.HA30.tagDiagD
+param.tagHormigon= EHE_concrete.HA30.tagDiagD
 param.tagArmadura= EHE_reinforcing_steel.B500S.tagDiagD
 diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
 

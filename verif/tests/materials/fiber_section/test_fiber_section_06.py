@@ -4,14 +4,19 @@
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Macros
 import math
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 
 # Coeficientes de seguridad.
@@ -28,8 +33,10 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 preprocessor=  prueba.getPreprocessor
 
+concr=EHE_concrete.HA25
+concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente alfacc=1)
 
-tag= hormigonesEHE.HA25.defDiagD(preprocessor)
+tag= concr.defDiagD(preprocessor)
 tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 # Definimos materiales
 import os

@@ -7,12 +7,14 @@
 import sys
 
 from materials.ehe import comprobVEHE08
-from materials.ehe import auxEHE
+from materials.ehe import EHE_concrete
 import math
 
 fck=25e6
-fctd=auxEHE.fctkEHE08(fck)/1.5
-fcd=fck/1.5
+gammac=1.5
+concr=EHE_concrete.EHEConcrete('HA',-fck,gammac)
+fctd=concr.fctkEHE08()/gammac
+fcd=concr.fcd()*(-1)
 d=1.45
 b0=0.6
 I=0.76
@@ -36,15 +38,15 @@ ratio4= abs((Vu2A-Vu2NoFis)/Vu2NoFis)
 ratio5= abs((Vu2B-Vu2SiFis)/Vu2SiFis)
 
 
-##print "fctd= ",fctd/1e6," MPa"
-##print "Vu2NoFis= ",Vu2NoFis/1e3," kN"
-##print "Vu2SiFis= ",Vu2SiFis/1e3," kN"
-##print "Vu2Min= ",Vu2Min/1e3," kN"
-##print "ratio1= ",ratio1
-##print "ratio2= ",ratio2
-##print "ratio3= ",ratio3
-##print "ratio4= ",ratio4
-##print "ratio5= ",ratio5
+# print "fctd= ",fctd/1e6," MPa"
+# print "Vu2NoFis= ",Vu2NoFis/1e3," kN"
+# print "Vu2SiFis= ",Vu2SiFis/1e3," kN"
+# print "Vu2Min= ",Vu2Min/1e3," kN"
+# print "ratio1= ",ratio1
+# print "ratio2= ",ratio2
+# print "ratio3= ",ratio3
+# print "ratio4= ",ratio4
+# print "ratio5= ",ratio5
 
 
 if (ratio1<1e-5) and (ratio2<1e-5) and (ratio3<1e-5) and (ratio4<1e-5) and (ratio5<1e-5):

@@ -7,7 +7,6 @@ import math
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 from misc import banco_pruebas_scc3d
 
 areaFi16= 2.01e-4 # Área de las barras expresado en metros cuadrados.

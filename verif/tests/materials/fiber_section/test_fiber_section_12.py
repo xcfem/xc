@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
 # Test de funcionamiento de una sección de hormigón pretensado.
+from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # prueba.logFileName= "/tmp/borrar.log"  #Para no imprimir mensajes de advertencia.
 # Macros
-from __future__ import division
 import xc_base
 import geom
 import xc
-from materials.ehe import auxEHE
 from misc import banco_pruebas_scc3d
 
 
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import aceroPretEHE
 from materials.fiber_section import creaSetsFibras
 from model import fix_node_6dof
@@ -24,7 +29,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
 tag= aceroPretEHE.Y1860S7.defDiagD(preprocessor, aceroPretEHE.Y1860S7.tInic())
-tag= hormigonesEHE.HP45.defDiagD(preprocessor)
+tag= EHE_concrete.HP45.defDiagD(preprocessor)
 import os
 pth= os.path.dirname(__file__)
 if(not pth):
@@ -81,7 +86,7 @@ esfMy= scc.getStressResultantComponent("My")
 esfMz= scc.getStressResultantComponent("Mz")
 defMz= scc.getSectionDeformationByName("defMz")
 defN= scc.getSectionDeformationByName("defN")
-fibrasHormigon= creaSetsFibras.FiberSet(scc,"hormigon",hormigonesEHE.HP45.tagDiagD)
+fibrasHormigon= creaSetsFibras.FiberSet(scc,"hormigon",EHE_concrete.HP45.tagDiagD)
 fibraCEpsMin= fibrasHormigon.getFiberWithMinStrain()
 epsCMin= fibraCEpsMin.getMaterial().getStrain() # Deformación mínima en el hormigón.
 fibraCEpsMax= fibrasHormigon.getFiberWithMaxStrain()

@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 from materials.xLamina import modelo
 #from materials.xLamina import postproceso_xLamina
 from solution import resuelve_combinacion
@@ -11,7 +17,7 @@ from postprocess.reports import listados_factor_capacidad
 import xc_base
 import geom
 import xc
-from materials.ehe import hormigonesEHE
+from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import defSeccionHASimple
 from materials.xLamina import membranePlateRCSectionContainer as sc
@@ -38,7 +44,8 @@ for eTag in elementTags:
   mapSectionsForEveryElement[eTag]= ["deck2","deck1"]
 
 # deck.
-concrete= hormigonesEHE.HA30
+concrete= EHE_concrete.HA30
+concrete.alfacc=0.85  #coef. de fatiga del hormigón (en general alfacc=1)
 reinfSteel= EHE_reinforcing_steel.B500S
 areaFi8= 0.50e-4 #XXX Área de las barras expresado en metros cuadrados.
 areaFi10=0.785e-4

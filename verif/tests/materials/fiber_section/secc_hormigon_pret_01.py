@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 ancho= 0.2 # Ancho de la sección expresado en metros.
 canto= 0.4 # Ancho de la sección expresado en metros.
@@ -30,5 +35,5 @@ def gmSecHP01(nmbGeomSecc,nmbDiagHormigon,nmbDiagAceroPret):
   armaduraSup.p2= geom.Pos2d(canto/2.0-recub,ancho/2.0-recub)
   return geomSecc
 
-geomSecPret01= gmSecHP01("geomSecHormigonPret01",hormigonesEHE.HP45.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
+geomSecPret01= gmSecHP01("geomSecHormigonPret01",EHE_concrete.HP45.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
 
