@@ -169,3 +169,5 @@ class LoadData(object):
     self.loadGroups= {}
     self.loadCases= {}
     self.loadCombs= {}
+  def readLoadCombsFromXC(self,combContainer,mapLoadCases):
+    self.loadCombs= combContainer.getNeutralFormat(mapLoadCases)
