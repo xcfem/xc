@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import DxfReader as dxf
+from collections import defaultdict
 
 class MaterialRecord(object):
   def __init__(self,name,typo,thermalExp,rho,E,nu,G,logDec,specHeat,thermalCond):
@@ -102,8 +103,8 @@ class GroupRecord(object):
     self.name= None
     meshDesc= MeshData()
     meshDesc.readFromDATFile(fName)
-    self.nodeIds= meshDesc.getNodeTags()
-    self.cellIds= meshDesc.getCellTags()
+    self.nodeIds= meshDesc.nodes.getTags()
+    self.cellIds= meshDesc.cells.getTags()
 
   def setUp(self,name,points,lines):
     self.name= name
@@ -200,7 +201,7 @@ class XCImportExportData(object):
     if(self.meshDesc):
       self.meshDesc.writeToXCFile(self)
 
-class NodeData(dict):
+class NodeDict(dict):
   def appendNode(self,id,x,y,z):
     self[id]= NodeRecord(int(id),[x,y,z])
   def readFromDATFile(self,lines,begin,end):
@@ -236,6 +237,83 @@ class NodeData(dict):
     for key in self:
       retval+= str(self[key]) + '\n'
 
+class CellDict(dict):
+  def appendCell(self,cell):
+    self[cell.id]= cell
+  def readFromDATFile(self,lines,begin,end):
+    self.clear()
+    for i in range(begin,end):
+      line= lines[i]
+      lst= line.split()
+      sz= len(lst)
+      id= int(lst[0])
+      type= int(lst[1])
+      nodeIds= list()
+      for j in range(2,sz):
+        nodeIds.append(int(lst[j]))
+      self[id]= CellRecord(id, type, nodeIds)
+  def readFromUMesh(self,umesh):
+    for i in range(0,umesh.getNumberOfCells()):
+      self.append(CellRecord(umesh.getTypeOfCell(i), umesh.getNodeIdsOfCell(i)))
+  def readFromXCSet(self,xcSet):
+    elemSet= xcSet.getElements
+    for e in elemSet:
+      nodes= e.getNodes.getExternalNodes
+      tagNodes= [nodes[0],nodes[1],nodes[2],nodes[3]]
+      thickness= e.getPhysicalProperties.getVectorMaterials[0].h
+      cell= CellRecord(e.tag,str(e.tag),tagNodes,thickness)
+      self.appendCell(cell)
+
+  def writeToXCFile(self,f,xcImportExportData):
+    for key in self:
+      cell= self[key]
+      type= xcImportExportData.convertCellType(cell.cellType)
+      if(type!=None):
+        strCommand= self[key].getStrXCCommand(xcImportExportData)
+        f.write(strCommand+'\n')
+  def getTags(self):
+    retval= list()
+    for key in self:
+      retval.append(self[key].id)
+    return retval;
+  def __str__(self):
+    retval= ''
+    for key in self:
+      retval+= str(self[key]) + '\n'
+
+def getConstraintsByNode(domain):
+  retval= defaultdict(list)
+  spIter= domain.getConstraints.getSPs
+  sp= spIter.next()
+  while sp:
+    retval[sp.nodeTag].append(sp)
+    sp= spIter.next()
+  return retval
+
+class NodeSupportDict(dict):
+  def appendNodeSupport(self, ns):
+    self[ns.id]= ns
+  def readFromXCDomain(self,domain):
+    '''Read SP constraints from an XC domain.'''
+    spConstraintsByNode= getConstraintsByNode(domain)
+    supportId= 1
+    for tagNode in spConstraintsByNode:
+      constraintsNode= spConstraintsByNode[tagNode]
+      labels= ['Free','Free','Free','Free','Free','Free']
+      for sp in constraintsNode:
+        gdl= sp.getDOFNumber
+        dispValue= sp.getValue
+        if(dispValue == 0.0):
+          labels[gdl]= 'Rigid'
+        else:
+          print "Error; imposed displacement constraints not implemented."
+      nsr= NodeSupportRecord(supportId,tagNode)
+      nsr.setupFromComponentLabels(labels)
+      #print "nsr= ", nsr
+      self.appendNodeSupport(nsr)
+      supportId+= 1
+
+
 class MeshData(object):
 
   def __init__(self):
@@ -243,17 +321,14 @@ class MeshData(object):
     self.numberOfCells= None
     self.numberOfNodes= None
     self.materials= {}
-    self.nodes= NodeData()
-    self.cells= {}
-    self.nodeSupports= {}
+    self.nodes= NodeDict()
+    self.cells= CellDict()
+    self.nodeSupports= NodeSupportDict()
     self.groups= []
 
   def appendMaterial(self,mat):
     self.materials[mat.name]= mat
-  def appendCell(self,cell):
-    self.cells[cell.id]= cell
-  def appendNodeSupport(self, ns):
-    self.nodeSupports[ns.id]= ns
+
 
   def readFromDATFile(self,fName):
     # Read the source mesh
@@ -270,48 +345,28 @@ class MeshData(object):
 
     self.nodes.readFromDATFile(lines,beginNodes,endNodes)
 
-    self.cells= {}
     beginCells= endNodes
     endCells= beginCells+self.numberOfCells
-    for i in range(beginCells,endCells):
-      line= lines[i]
-      lst= line.split()
-      sz= len(lst)
-      id= int(lst[0])
-      type= int(lst[1])
-      nodeIds= []
-      for j in range(2,sz):
-        nodeIds.append(int(lst[j]))
-      self.cells[id]= CellRecord(id, type, nodeIds)
+    self.cells.readFromDATFile(lines,beginCells,endCells)
+
+  def readFromXCSet(self,xcSet):
+    '''Read nodes and elements from an XC set.'''
+    self.nodes.readFromXCSet(xcSet)
+    self.cells.readFromXCSet(xcSet)
+    self.nodeSupports.readFromXCDomain(xcSet.getPreprocessor.getDomain)
 
   def writeToXCFile(self,xcImportExportData):
     f= xcImportExportData.outputFile
     self.nodes.writeToXCFile(f,xcImportExportData)
-
-    for key in self.cells:
-      cell= self.cells[key]
-      type= xcImportExportData.convertCellType(cell.cellType)
-      if(type!=None):
-        strCommand= self.cells[key].getStrXCCommand(xcImportExportData)
-        f.write(strCommand+'\n')
+    self.cells.writeToXCFile(f,xcImportExportData)
     for g in self.groups:
       g.writeToXCFile(xcImportExportData)
-
-  def getNodeTags(self):
-    return self.nodes.getTags()
-
-  def getCellTags(self):
-    tags= []
-    for key in self.cells:
-      tags.append(self.cells[key].id)
-    return tags;
 
   def __str__(self):
     retval= "numberOfNodes= " +' '+str(self.numberOfNodes) + '\n'
     retval+= "numberOfCells= " +' '+str(self.numberOfCells) + '\n'
     retval+= str(self.nodes)
-    for key in self.cells:
-      retval+= str(self.cells[key]) + '\n'
+    retval+= str(self.cells)
     return retval
 
 
@@ -327,9 +382,7 @@ class MEDMeshData(MeshData):
     self.numberOfNodes= umesh.getNumberOfNodes()
       
     nodes.readFromUMesh(umesh)
-
-    for i in range(0,self.numberOfCells):
-      self.cells.append(CellRecord(umesh.getTypeOfCell(i), umesh.getNodeIdsOfCell(i)))
+    cells.readFromUMesh(umesh)
 
   def __str__(self):
     retval= "meshDimension= " + str(self.meshDimension) + '\n'

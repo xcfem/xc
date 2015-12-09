@@ -63,44 +63,6 @@ XC::EntMdlrBase &XC::EntMdlrBase::operator=(const EntMdlrBase &otro)
     return *this;
   }
 
-//!  @brief Lee un objeto EntMdlrBase desde el archivo de entrada.
-//! 
-//!  Soporta los comandos:
-//! 
-bool XC::EntMdlrBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(EntMdlrBase) Procesando comando: " << cmd << std::endl;
-
-    if(!preprocessor)
-      std::cerr << "¡Ojo!, el objeto: " << GetNombre() << " no tiene asignado un preprocesador." << std::endl;
-    if(cmd=="preprocessor")
-      {
-        if(preprocessor)
-          preprocessor->LeeCmd(status);
-        else
-	  status.GetBloque(); //Ignoramos entrada.
-        return true;
-      }
-    else if(cmd == "add_labels") //Agrega una etiqueta al objeto.
-      {
-        const std::vector<boost::any> &labels= interpretaVectorAny(status.GetBloque());
-        for(std::vector<boost::any>::const_iterator i= labels.begin();i!=labels.end();i++)
-          etiquetas.addEtiqueta(convert_to_string(*i));
-        return true;
-      }
-    else if(cmd == "remove_labels") //Elimina una etiqueta del objeto.
-      {
-        const std::vector<boost::any> &labels= interpretaVectorAny(status.GetBloque());
-        for(std::vector<boost::any>::const_iterator i= labels.begin();i!=labels.end();i++)
-          etiquetas.removeEtiqueta(convert_to_string(*i));
-        return true;
-      }
-    else
-      return EntConNmb::procesa_comando(status);
-  }
-
 //! @brief Devuelve el código del objeto.
 size_t XC::EntMdlrBase::GetTag(void) const
   {
@@ -292,31 +254,5 @@ int XC::EntMdlrBase::recvSelf(const CommParameters &cp)
           std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
       }
     return res;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::EntMdlrBase::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "EntMdlrBase::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="tag")
-      {
-        tmp_gp_szt= GetTag();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="hasLabel")
-      {
-        const std::string label= popString(cod);
-        tmp_gp_bool= etiquetas.hasEtiqueta(label);
-        return any_const_ptr(tmp_gp_bool);
-      }
-    else if(cod=="getNumEtiquetas")
-      {
-        tmp_gp_szt= etiquetas.getNumEtiquetas();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return EntConNmb::GetProp(cod);
   }
 

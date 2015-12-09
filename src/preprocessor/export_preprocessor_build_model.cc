@@ -28,8 +28,10 @@ void export_preprocessor_build_model(void)
     using namespace boost::python;
     docstring_options doc_options;
 
+XC::Preprocessor *(XC::EntMdlrBase::*getPreprocessorRef)(void)= &XC::EntMdlrBase::GetPreprocessor;
 class_<XC::EntMdlrBase, bases<EntConNmb>, boost::noncopyable >("EntMdlrBase", no_init)
   .add_property("tag", &XC::EntMdlrBase::GetTag)
+  .add_property("getPreprocessor", make_function( getPreprocessorRef, return_internal_reference<>() ))
    ;
 
 bool (XC::SetBase::*isNodeIn)(const XC::Node *) const= &XC::SetBase::In;

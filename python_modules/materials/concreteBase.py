@@ -517,7 +517,7 @@ def testDiagDHormigon(preprocessor, concreteRecord):
 
 # Calculates the differece between the values of the tangent obtained from de Concrete01 uniaxial material (getTangent() ) and the theoretical law defined in Python (see tangc()).
 def testTangDHormigon(preprocessor, concreteRecord):
-    tag= defDiagDConcrete(preprocessor, concreteRecord)
+    tag= concreteRecord.defDiagD(preprocessor)
     diagConcrete= preprocessor.getMaterialLoader.getMaterial(concreteRecord.nmbDiagD)
     incr= concreteRecord.epsilonU()/20
     errMax= 0.0
