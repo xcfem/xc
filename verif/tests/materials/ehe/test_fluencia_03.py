@@ -3,9 +3,17 @@
 #    Prueba del funcionamiento de la base de datos
 #    como almacén de combinaciones para acelerar el cálculo.
 from __future__ import division
-from materials.ehe import auxEHE
-from materials.ehe import retraccion_fluencia
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+from materials.ehe import EHE_concrete
+
+concrHA30=EHE_concrete.HA30
+concrHA30.cemType='N'
 fckHA30= 30e6 # Resistencia característica del hormigón HA-30.
 Hrel= 0.8 # Humedad relativa del aire.
 Ec= 2e5*9.81/1e-4 # Módulo de Young del hormigón en Pa.
@@ -21,7 +29,6 @@ F= 5.5e4 # Magnitud de la carga en N
 
 # Retracción del hormigón
 tS= 7 # Inicio del secado.
-velCemento= "normal"
 
 # Armadura activa
 Ep= 190e9 # Módulo elástico expresado en MPa
@@ -255,7 +262,7 @@ for e in setShells.getElements:
   Ac= ladoMedio*grueso
   u= 2*ladoMedio+grueso
   espMedio= 2*Ac/u
-  e.setProp("epsRetracc",retraccion_fluencia.getDeformacionRetraccion(fckHA30,tFin,tS,Hrel,u,Ac,velCemento))
+  e.setProp("epsRetracc",concrHA30.getShrEpscs(tFin,tS,Hrel*100,espMedio*1000))
 
 cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
@@ -291,9 +298,9 @@ db.save(tagSaveFase0)
 for e in setShells.getElements:
   tension1Media= e.getMeanInternalForce("n1")/Ac
   tension2Media= e.getMeanInternalForce("n2")/Ac
-  fi1= retraccion_fluencia.getPhiFluencia(fckHA30,tFin,t0,Hrel,u,Ac)
-  epsFluencia1= retraccion_fluencia.getDeformacionFluencia(fckHA30,t0,0.25,fi1,tension1Media)
-  epsFluencia2= retraccion_fluencia.getDeformacionFluencia(fckHA30,t0,0.25,fi1,tension2Media)
+#  fi1= retraccion_fluencia.getPhiFluencia(fckHA30,tFin,t0,Hrel,u,Ac)
+  epsFluencia1=concrHA30.getDeformacionFluencia(tFin,t0,Hrel*100,espMedio*1000,tension1Media)
+  epsFluencia2=concrHA30.getDeformacionFluencia(tFin,t0,Hrel*100,espMedio*1000,tension2Media)
 
 
 cargas= preprocessor.getLoadLoader
