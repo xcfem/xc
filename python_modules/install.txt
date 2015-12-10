@@ -1,7 +1,7 @@
-To install modules in user's home type:
+To installe modules type:
+ 
+sh local_install.sh
 
-python setup.py install --user
+To delete modules already installed and (re)install the new ones:
 
-To install modules in /usr/local type:
-
-python setup.py install --prefix=/usr/local
+sh local_reinstall.sh

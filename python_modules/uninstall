@@ -1,0 +1,13 @@
+#!/bin/bash
+#Deletes all the modules previously installed by local_install.sh
+#This is done to solve the problem of zombie modules: Python files that has been
+#deleted or replaced but which remains installed in the machine.
+
+if [[ $EUID -ne 0 ]]; then
+  error "Uninstall script must be run as root."
+  exit 1
+fi
+
+echo "Uninstalling Python modules."
+cat installed_files_history.txt | xargs rm -f
+rm -r build/*

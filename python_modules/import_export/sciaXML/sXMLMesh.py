@@ -19,7 +19,9 @@ class SXMLMesh:
   def __init__(self,xmlns, mesh,loadContainer):
     self.xmlns= xmlns
     self.uuid= ''
-    self.defn= df.Definition(mesh.name),
+    self.defn= df.Definition(mesh.name)
+    print 'XXX Write material container code.'
+    self.materialContaner= None
     self.nodeContainer= nCtr.NodeContainer(mesh.nodes)
     self.epPlaneContainer= eppc.EPPlaneContainer(mesh.cells)
     self.nodeSupportContainer= nsc.NodeSupportContainer(mesh.nodeSupports)
