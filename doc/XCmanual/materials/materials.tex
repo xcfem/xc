@@ -565,7 +565,7 @@ typical_materials.defElasticPlateSection(mdlr,name,E,nu,rho,h)
 
 \subsection{Fiber sections}
 \subsubsection{FiberSet}
-\noindent This class constructs a set of fibers for a fiber section
+\noindent This class constructs a set of all the  fibers made of the same material from a fiber section
 \begin{verbatim}
 from materials.fiber_section import creaSetsFibras
 creaSetsFibras.FiberSet(scc,nmbSet,tagDiag)
@@ -578,14 +578,14 @@ creaSetsFibras.FiberSet(scc,nmbSet,tagDiag)
 
 \begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt getFiberWithMinStrain()}}  \\
- & returns the fiber of the set that has the minimum strain \\
+ & returns the fiber with the minimum straim from the set of fibers \\
 \multicolumn{2}{p{13cm}}{{\tt getFiberWithMaxStrain()}}  \\
- & returns the fiber of the set that has the maximum strain \\
+ & returns the fiber with the maximum straim from the set of fibers \\
 \end{methodsTable}
 
 
 \subsubsection{RCSets}
-\noindent This class constructs the sets (concrete and reinforcing steel) of a reinforced concrete fiber section.
+\noindent This class constructs both the concrete and reinforced steel fiber sets from a reinforced concrete fiber section.
 \begin{verbatim}
 from materials.fiber_section import creaSetsFibras
 creaSetsFibras.RCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
@@ -600,13 +600,13 @@ creaSetsFibras.RCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
 
 \begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt reselTractionFibers(scc,tractionFibersSetName)}} \\
-& returns the set of fibers in tension \\
+& returns a set with those fibers in tension from the total set \\
 \multicolumn{2}{p{13cm}}{{\tt getConcreteArea(factor)}} \\
- & returns the concrete area \\
+ & returns the cross section area of concrete in the set \\
 \multicolumn{2}{p{13cm}}{{\tt getMaxConcreteStrain()}} \\
  & returns the maximum strain in the set of concrete fibers \\
 \multicolumn{2}{p{13cm}}{{\tt getConcreteInitialTangent()}} \\
- & returns the initial tangent in the stress-strain diagram of material that makes up the fibers of concrete \\
+ & returns the initial tangent in the stress-strain diagram of the material that makes up the fibers of concrete \\
 \multicolumn{2}{p{13cm}}{{\tt getConcreteCompression()}} \\
  & returns the resultant of compressive stresses in concrete fibers \\
 \multicolumn{2}{p{13cm}}{{\tt getNumBarrasTraccion()}} \\
@@ -809,7 +809,7 @@ fiberUtils.getIMaxPropFiber(fibers,methodName)
 
 
 \subsubsection{getIMinPropFiber}
-Returns the fiber in a set with the minimum value of a property.
+Returns the fiber with the minimum value of a property from a set of fibers.
 \noindent 
 \begin{verbatim}
 from materials.fiber_section import fiberUtils
