@@ -49,8 +49,6 @@ class UniformGrid;
 //!  \brief Base de las clases Set y SetEstruct.
 class SetBase: public EntMdlrBase
   {
-  protected:
-    virtual bool procesa_comando(CmdStatus &status);
   public:
     SetBase(const std::string &nmb="",Preprocessor *preprocessor= NULL);
     inline virtual ~SetBase(void)
@@ -79,7 +77,6 @@ class SetBase: public EntMdlrBase
 
     virtual size_t NumNodos(void) const= 0;
     virtual size_t NumElementos(void) const= 0;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } //fin namespace XC
