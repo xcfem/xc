@@ -6,24 +6,27 @@ import vtk
 
 class RecordDefGrid(object):
   ''' Define las variables que se emplean para mostrar la malla. '''
-  nmbSet= "nil"
-  entToLabel= "nodos"
-  cellType= "nil"
-  uGrid= None
-  dispScale= 0.0
+
+  def __init__(self):
+    self.nmbSet= "nil"
+    self.entToLabel= "nodos"
+    self.cellType= "nil"
+    self.uGrid= None
+    self.dispScale= 0.0
 
 class RecordDefDisplay(object):
   ''' Define las variables que se emplean para definir
      el dispositivo de salida. '''
-  renderer= None
-  renWin= None
-  windowWidth= 800
-  windowHeight= 600
-  nmbVista= "XYZPos"
-  zoom= 1.0
-  bgRComp= 0.65
-  bgGComp= 0.65
-  bgBComp= 0.65
+  def __init__(self):
+    self.renderer= None
+    self.renWin= None
+    self.windowWidth= 800
+    self.windowHeight= 600
+    self.nmbVista= "XYZPos"
+    self.zoom= 1.0
+    self.bgRComp= 0.65
+    self.bgGComp= 0.65
+    self.bgBComp= 0.65
 
   #Define una vista desde el eje Y-
   def VistaYNeg(self):
@@ -45,12 +48,42 @@ class RecordDefDisplay(object):
     cam.Zoom(self.zoom)
     self.renderer.ResetCameraClippingRange()
 
+  #Define una vista desde el eje X-
+  def VistaXNeg(self):
+    self.renderer.ResetCamera()
+    cam= self.renderer.GetActiveCamera()
+    cam.SetViewUp(0,0,1)
+    cam.SetPosition(-100,0,0)
+    cam.SetParallelProjection(1)
+    cam.Zoom(self.zoom)
+    self.renderer.ResetCameraClippingRange()
+
+  #Define una vista desde el eje X+
+  def VistaXPos(self):
+    self.renderer.ResetCamera()
+    cam= self.renderer.GetActiveCamera()
+    cam.SetViewUp(0,0,1)
+    cam.SetPosition(100,0,0)
+    cam.SetParallelProjection(1)
+    cam.Zoom(self.zoom)
+    self.renderer.ResetCameraClippingRange()
+
   #Define una vista desde el eje Z+
   def VistaZPos(self):
     self.renderer.ResetCamera()
     cam= self.renderer.GetActiveCamera()
-    cam.SetViewUp(1,0,0)
+    cam.SetViewUp(0,1,0)
     cam.SetPosition(0,0,100)
+    cam.SetParallelProjection(1)
+    cam.Zoom(self.zoom)
+    self.renderer.ResetCameraClippingRange()
+
+  #Define una vista desde el eje Z-
+  def VistaZNeg(self):
+    self.renderer.ResetCamera()
+    cam= self.renderer.GetActiveCamera()
+    cam.SetViewUp(0,1,0)
+    cam.SetPosition(0,0,-100)
     cam.SetParallelProjection(1)
     cam.Zoom(self.zoom)
     self.renderer.ResetCameraClippingRange()
@@ -68,10 +101,16 @@ class RecordDefDisplay(object):
   def defineView(self):
     if(self.nmbVista=="ZPos"):
       self.VistaZPos()
+    elif(self.nmbVista=="ZNeg"):
+      self.VistaZNeg()
     elif(self.nmbVista=="YPos"):
       self.VistaYPos()
     elif(self.nmbVista=="YNeg"):
       self.VistaYNeg()
+    elif(self.nmbVista=="XPos"):
+      self.VistaXPos()
+    elif(self.nmbVista=="XNeg"):
+      self.VistaXNeg()
     elif(self.nmbVista=="XYZPos"):
       self.VistaXYZPos()
     else:

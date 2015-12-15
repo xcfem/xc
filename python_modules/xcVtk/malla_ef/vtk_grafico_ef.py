@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Representación de un modelo de elementos finitos.
-
+nDiv= 4
 import sys
 import vtk
 import xc_base
@@ -12,10 +12,6 @@ from xcVtk.malla_ef import vtk_define_malla_cells_ef
 from xcVtk import vtk_lut_field
 
 class ScalarField(vtk_lut_field.LUTField):
-  name= "nil" #Field name.
-  attrName= None #Attribute name to evaluate at nodes
-  attrComponent= -1 #Index of the componenet to evaluate at nodes
-  arr= None #Array of values.
 
   def __init__(self,name,vExpr,component,fUnitConv):
     super(ScalarField,self).__init__(fUnitConv)
@@ -53,9 +49,11 @@ class ScalarField(vtk_lut_field.LUTField):
 class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
   ''' Define las variables que se emplean para definir
      el dispositivo de salida. '''
-  nodos= None
-  gridMapper= None
 
+  def __init__(self):
+    super(RecordDefDisplayEF,self).__init__()
+    self.nodos= None
+    self.gridMapper= None
   def VtkDefineActorElementos(self,uGrid, tipoRepr,field):
     # Creamos el actor para las superficies.
     if(field):
