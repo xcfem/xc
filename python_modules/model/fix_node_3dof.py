@@ -20,6 +20,10 @@ def fixNode00F(coacciones, idNodo):
   coacciones.newSPConstraint(idNodo,1,0.0)
 
 # UX= 0, UY= 0
+def fixNode0FF(coacciones, idNodo):
+  coacciones.newSPConstraint(idNodo,0,0.0) # Nodo idNodo
+
+# UY= 0
 def fixNodeF0F(coacciones, idNodo):
   coacciones.newSPConstraint(idNodo,1,0.0)
 

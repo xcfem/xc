@@ -16,6 +16,11 @@ class MaterialRecord(object):
     self.specHeat= specHeat
     self.thermalCond= thermalCond
 
+class MaterialDict(dict):
+  def append(self,mat):
+    self[mat.name]= mat
+
+
 class NodeRecord(object):
   def __init__(self,id, coords):
     self.id= id
@@ -202,14 +207,14 @@ class XCImportExportData(object):
       self.meshDesc.writeToXCFile(self)
 
 class NodeDict(dict):
-  def appendNode(self,id,x,y,z):
+  def append(self,id,x,y,z):
     self[id]= NodeRecord(int(id),[x,y,z])
   def readFromDATFile(self,lines,begin,end):
     self.clear()
     for i in range(begin,end):
       line= lines[i]
       id, x, y ,z = line.split()
-      self.appendNode(id,x,y,z)
+      self.append(id,x,y,z)
   def readFromUMesh(self,umesh):
     nodes= umesh.getCoordinatesAndOwner()
     self.clear()
@@ -221,7 +226,7 @@ class NodeDict(dict):
     nodeSet= xcSet.getNodes
     for n in nodeSet:
       pos= n.getInitialPos3d
-      self.appendNode(n.tag, pos.x, pos.y, pos.z)
+      self.append(n.tag, pos.x, pos.y, pos.z)
 
   def writeToXCFile(self,f,xcImportExportData):
     for key in self:
@@ -238,7 +243,7 @@ class NodeDict(dict):
       retval+= str(self[key]) + '\n'
 
 class CellDict(dict):
-  def appendCell(self,cell):
+  def append(self,cell):
     self[cell.id]= cell
   def readFromDATFile(self,lines,begin,end):
     self.clear()
@@ -262,7 +267,7 @@ class CellDict(dict):
       tagNodes= [nodes[0],nodes[1],nodes[2],nodes[3]]
       thickness= e.getPhysicalProperties.getVectorMaterials[0].h
       cell= CellRecord(e.tag,str(e.tag),tagNodes,thickness)
-      self.appendCell(cell)
+      self.append(cell)
 
   def writeToXCFile(self,f,xcImportExportData):
     for key in self:
@@ -291,7 +296,7 @@ def getConstraintsByNode(domain):
   return retval
 
 class NodeSupportDict(dict):
-  def appendNodeSupport(self, ns):
+  def append(self, ns):
     self[ns.id]= ns
   def readFromXCDomain(self,domain):
     '''Read SP constraints from an XC domain.'''
@@ -310,7 +315,7 @@ class NodeSupportDict(dict):
       nsr= NodeSupportRecord(supportId,tagNode)
       nsr.setupFromComponentLabels(labels)
       #print "nsr= ", nsr
-      self.appendNodeSupport(nsr)
+      self.append(nsr)
       supportId+= 1
 
 
@@ -320,14 +325,11 @@ class MeshData(object):
     self.name= None
     self.numberOfCells= None
     self.numberOfNodes= None
-    self.materials= {}
+    self.materials= MaterialDict()
     self.nodes= NodeDict()
     self.cells= CellDict()
     self.nodeSupports= NodeSupportDict()
     self.groups= []
-
-  def appendMaterial(self,mat):
-    self.materials[mat.name]= mat
 
 
   def readFromDATFile(self,fName):
