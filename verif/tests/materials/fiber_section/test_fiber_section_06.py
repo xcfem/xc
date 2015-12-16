@@ -51,7 +51,7 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHormigon01")
 secHA.setupFibers()
 
-epsG1= CurvZ1*(defSec['canto']/2-x1)
+epsG1= CurvZ1*(defSec['depth']/2-x1)
 secHA.revertToStart()
 secHA.setTrialSectionDeformation(xc.Vector([epsG1,CurvZ1,0]))
 secHA.commitState()
@@ -60,7 +60,7 @@ Mz1= secHA.getStressResultantComponent("Mz")
 Mz1Dato= 54.4e3
 ratio1= (Mz1-Mz1Dato)/Mz1Dato
 
-epsG2= CurvZ2*(defSec['canto']/2-x2)
+epsG2= CurvZ2*(defSec['depth']/2-x2)
 secHA.revertToStart()
 secHA.setTrialSectionDeformation(xc.Vector([epsG2,CurvZ2,0]))
 secHA.commitState()

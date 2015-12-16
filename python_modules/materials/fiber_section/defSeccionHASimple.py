@@ -16,58 +16,74 @@ from materials import stressCalc as sc
 import sys
 
 class RecordArmaduraCortante(object):
-  # Definition of the variables that make up a family of shear reinforcing bars
-
+  ''' Definition of the variables that make up a family of shear 
+  reinforcing bars
+  Attributes:
+    familyName:        name identifying the family of shear reinforcing bars
+    nShReinfBranches:  number of effective branches 
+    shReinfSpacing:    longitudinal distance between transverse reinforcements
+    angAlphaShReinf:   angle between the shear reinforcing bars and the axis 
+                       of the member
+    angThetaConcrStruts: angle between the concrete's compression struts 
+                         and the axis of the member
+  '''
   def __init__(self):
-    self.nmbFamilia= "noName" # name identifying the family of shear reinforcing bars
-    self.nRamas= 0.0 # Number of effective branches
-    self.areaRama= 0.0 # Area of the shear reinforcing bar
-    self.espaciamientoRamas= 0.2 # longitudinal distance between transverse reinforcements
-    self.angAlphaRamas= math.pi/2.0 # angle between the shear reinforcing bars and the axis of the member.
-    self.angThetaBielas= math.pi/4.0 # angle between the concrete's compression struts and the axis of the member
+    self.familyName= "noName" # name identifying the family of shear reinforcing bars
+    self.nShReinfBranches= 0.0 # Number of effective branches
+    self.areaShReinfBranch= 0.0 # Area of the shear reinforcing bar
+    self.shReinfSpacing= 0.2 # longitudinal distance between transverse reinforcements
+    self.angAlphaShReinf= math.pi/2.0 # angle between the shear reinforcing bars and the axis of the member.
+    self.angThetaConcrStruts= math.pi/4.0 # angle between the concrete's compression struts and the axis of the member
     
   def getAs(self):
-    'returns the area per unit length of the family of shear reinforcements'
-    return self.nRamas*self.areaRama/self.espaciamientoRamas
+    '''returns the area per unit length of the family of shear reinforcements
+    '''
+    return self.nShReinfBranches*self.areaShReinfBranch/self.shReinfSpacing
 
 
 class MainReinfLayer(object):
-  def __init__(self,diam=10e-3,area= areaBarrasEHE.Fi10,spacing=0.2,ancho=1.0,basicCover=0.03):
-    self.diamBarras= diam
-    self.sepBarras= spacing
-    nBarrasTeor= ancho/self.sepBarras
-    self.nBarras= int(math.floor(nBarrasTeor))
-    self.areaBarras= area
-    self.recub= basicCover+self.diamBarras/2.0
-    self.centraBarras(ancho)
-  def setUp(self,nBarras= 5, diam=10e-3,area= areaBarrasEHE.Fi10,ancho=1.0,recub=0.03):
-    self.nBarras= nBarras
-    self.diamBarras= diam
-    if(self.nBarras!=0.0):
-      self.sepBarras= ancho/self.nBarras
-      self.centraBarras(ancho)
+  ''' Definition of the variables that make up a family of shear 
+  reinforcing bars
+  Attributes:
+  rebarsDiam:
+  
+  '''
+  def __init__(self,diam=10e-3,area= areaBarrasEHE.Fi10,spacing=0.2,width=1.0,basicCover=0.03):
+    self.rebarsDiam= diam
+    self.rebarsSpacing= spacing
+    nRebarsTeor= width/self.rebarsSpacing
+    self.nRebars= int(math.floor(nRebarsTeor))
+    self.areaRebar= area
+    self.cover= basicCover+self.rebarsDiam/2.0
+    self.centerRebars(width)
+  def setUp(self,nRebars= 5, diam=10e-3,area= areaBarrasEHE.Fi10,width=1.0,cover=0.03):
+    self.nRebars= nRebars
+    self.rebarsDiam= diam
+    if(self.nRebars!=0.0):
+      self.rebarsSpacing= width/self.nRebars
+      self.centerRebars(width)
     else:
-      self.sepBarras= 100.0
-    self.areaBarras= area
-    self.recub= recub
+      self.rebarsSpacing= 100.0
+    self.areaRebar= area
+    self.cover= cover
     
   def getAs(self):
     '''Steel area.'''
-    return self.nBarras*self.areaBarras
-  def centraBarras(self,ancho):
-    self.recubLat= (ancho-(self.nBarras-1)*self.sepBarras)/2.0
+    return self.nRebars*self.areaRebar
+  def centerRebars(self,width):
+    self.coverLat= (width-(self.nRebars-1)*self.rebarsSpacing)/2.0
 
   def defReinfLayer(self,armaduras,code,nmbDiagram,p1,p2):
     '''Definition of a reinforcement layer in the fiber section model.'''
-    if(self.nBarras>0):
+    if(self.nRebars>0):
       self.reinfLayer= armaduras.newStraightReinfLayer(nmbDiagram)
       self.reinfLayer.codigo= code
-      self.reinfLayer.numReinfBars= self.nBarras
+      self.reinfLayer.numReinfBars= self.nRebars
       #print "armadura ", cod, " num. barras: ", self.reinfLayer.numReinfBars
-      self.reinfLayer.barDiameter= self.diamBarras
-      self.reinfLayer.barArea= self.areaBarras
+      self.reinfLayer.barDiameter= self.rebarsDiam
+      self.reinfLayer.barArea= self.areaRebar
       #print "armadura", cod, " bar area= ", self.reinfLayer.barArea*1e6, " mm2"
-      #print "armadura", cod, " bar diam: ", self.diamBarras*1e3, " mm"
+      #print "armadura", cod, " bar diam: ", self.rebarsDiam*1e3, " mm"
       self.reinfLayer.p1= p1
       self.reinfLayer.p2= p2
       return self.reinfLayer
@@ -82,22 +98,22 @@ class BasicRecordRCSection(object):
     self.descSeccion= "Text describing the position of the section in the structure."
     self.tipoHormigon= None
     self.nmbDiagHormigon= None
-    self.canto= 0.25
-    self.ancho= 0.25
+    self.depth= 0.25
+    self.width= 0.25
     self.nDivIJ= 10
     self.nDivJK= 10
     self.fiberSectionRepr= None
 
     self.tipoArmadura= None
-    self.nmbDiagArmadura= None # Name of the uniaxial material
+    self.reinfDiagName= None # Name of the uniaxial material
 
     # Transverse reinforcement (z direction)
     self.armCortanteZ= RecordArmaduraCortante()
-    self.armCortanteZ.nmbFamilia= "Vz"
+    self.armCortanteZ.familyName= "Vz"
 
     # Transverse reinforcement (y direction)
     self.armCortanteY= RecordArmaduraCortante()
-    self.armCortanteY.nmbFamilia= "Vy"
+    self.armCortanteY.familyName= "Vy"
 
   def nmbGeomSeccion(self):
     return "geom"+self.nmbSeccion
@@ -111,7 +127,7 @@ class BasicRecordRCSection(object):
   def getConcreteDiagram(self,preprocessor):
     return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagHormigon)
   def getSteelDiagram(self,preprocessor):
-    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagArmadura)
+    return preprocessor.getMaterialLoader.getMaterial(self.reinfDiagName)
   def getSteelEquivalenceCoefficient(self,preprocessor):
     tangHorm= self.getConcreteDiagram(preprocessor).getTangent()
     tangSteel= self.getSteelDiagram(preprocessor).getTangent()
@@ -123,27 +139,27 @@ class BasicRecordRCSection(object):
     '''
     self.diagType= tipoDiag
     if(self.diagType=="d"):
-      if(self.tipoHormigon.tagDiagD<0):
-        tagDiagHormigon= self.tipoHormigon.defDiagD(preprocessor)
-      if(self.tipoArmadura.tagDiagD<0):
-        tagDiagAceroArmar= self.tipoArmadura.defDiagD(preprocessor)
+      if(self.tipoHormigon.matTagD<0):
+        matTagHormigon= self.tipoHormigon.defDiagD(preprocessor)
+      if(self.tipoArmadura.matTagD<0):
+        matTagAceroArmar= self.tipoArmadura.defDiagD(preprocessor)
       self.nmbDiagHormigon= self.tipoHormigon.nmbDiagD
-      self.nmbDiagArmadura= self.tipoArmadura.nmbDiagD
+      self.reinfDiagName= self.tipoArmadura.nmbDiagD
     elif(self.diagType=="k"):
-      if(self.tipoHormigon.tagDiagK<0):
-        tagDiagHormigon= self.tipoHormigon.defDiagK(preprocessor)
-      if(self.tipoArmadura.tagDiagK<0):
-        tagDiagAceroArmar= self.tipoArmadura.defDiagK(preprocessor)
+      if(self.tipoHormigon.matTagK<0):
+        matTagHormigon= self.tipoHormigon.defDiagK(preprocessor)
+      if(self.tipoArmadura.matTagK<0):
+        matTagAceroArmar= self.tipoArmadura.defDiagK(preprocessor)
       self.nmbDiagHormigon= self.tipoHormigon.nmbDiagK
-      self.nmbDiagArmadura= self.tipoArmadura.nmbDiagK
+      self.reinfDiagName= self.tipoArmadura.nmbDiagK
 
   def defConcreteRegion(self,geomSection):
     regiones= geomSection.getRegions
     rg= regiones.newQuadRegion(self.nmbDiagHormigon) # Hormigón
     rg.nDivIJ= self.nDivIJ
     rg.nDivJK= self.nDivJK
-    rg.pMin= geom.Pos2d(-self.ancho/2,-self.canto/2)
-    rg.pMax= geom.Pos2d(self.ancho/2,self.canto/2)
+    rg.pMin= geom.Pos2d(-self.width/2,-self.depth/2)
+    rg.pMax= geom.Pos2d(self.width/2,self.depth/2)
 
 
 class RecordSeccionHASimple(BasicRecordRCSection):
@@ -156,7 +172,7 @@ class RecordSeccionHASimple(BasicRecordRCSection):
 
     # Longitudinal reinforcement
 
-    self.recubMin= 0.0 
+    self.coverMin= 0.0 
 
     self.barrasNeg= MainReinfLayer()
     self.barrasPos= MainReinfLayer()
@@ -165,44 +181,44 @@ class RecordSeccionHASimple(BasicRecordRCSection):
   def getAsPos(self):
     return self.barrasPos.getAs()
   def getYAsPos(self):
-    return self.canto/2.0-self.barrasPos.recub
+    return self.depth/2.0-self.barrasPos.cover
   def getAsNeg(self):
     return self.barrasNeg.getAs()
   def getYAsNeg(self):
-    return -self.canto/2.0+self.barrasNeg.recub
+    return -self.depth/2.0+self.barrasNeg.cover
   def getAc(self):
-    return self.ancho*self.canto
+    return self.width*self.depth
   def getI(self):
-    return 1/12.0*self.ancho*self.canto**3
+    return 1/12.0*self.width*self.depth**3
 
   def getSNeg(self):
     '''distance between bars in local negative face.'''
-    return self.barrasNeg.sepBarras
+    return self.barrasNeg.rebarsSpacing
   def getSPos(self):
     '''distance between bars in local positive face.'''
-    return self.barrasPos.sepBarras
+    return self.barrasPos.rebarsSpacing
   def getDiamNeg(self):
     '''bar diameter in local negative face.'''
-    return self.barrasNeg.diamBarras
+    return self.barrasNeg.rebarsDiam
   def getDiamPos(self):
     '''bar diameter in local positive face.'''
-    return self.barrasPos.diamBarras
+    return self.barrasPos.rebarsDiam
   def getNBarNeg(self):
     '''number of bars in local negative face.'''
-    return self.barrasNeg.nBarras
+    return self.barrasNeg.nRebars
   def getNBarPos(self):
     '''number of bars in local positive face.'''
-    return self.barrasPos.nBarras
+    return self.barrasPos.nRebars
 
-  def centraBarrasPos(self):
-    self.barrasPos.centraBarras(self.ancho)
-  def centraBarrasNeg(self):
-    self.barrasNeg.centraBarras(self.ancho)
+  def centerRebarsPos(self):
+    self.barrasPos.centerRebars(self.width)
+  def centerRebarsNeg(self):
+    self.barrasNeg.centerRebars(self.width)
 
   def setMainReinfNeg(self,diam,area,spacing,basicCover):
-    self.barrasNeg= MainReinfLayer(diam,area,spacing,self.ancho,basicCover)
+    self.barrasNeg= MainReinfLayer(diam,area,spacing,self.width,basicCover)
   def setMainReinfPos(self,diam,area,spacing,basicCover):
-    self.barrasPos= MainReinfLayer(diam,area,spacing,self.ancho,basicCover)
+    self.barrasPos= MainReinfLayer(diam,area,spacing,self.width,basicCover)
 
 
   def defSectionGeometry(self,preprocessor,tipoDiag):
@@ -219,19 +235,19 @@ class RecordSeccionHASimple(BasicRecordRCSection):
     armaduras= geomSection.getReinfLayers
     y= self.getYAsNeg()
     #print "y neg.= ", y, " m"
-    p1= geom.Pos2d(-self.ancho/2+self.barrasNeg.recubLat,y) # Armadura inferior (cara -).
-    p2= geom.Pos2d(self.ancho/2-self.barrasNeg.recubLat,y)
-    self.negReinfLayer= self.barrasNeg.defReinfLayer(armaduras,"neg",self.nmbDiagArmadura,p1,p2)
+    p1= geom.Pos2d(-self.width/2+self.barrasNeg.coverLat,y) # Armadura inferior (cara -).
+    p2= geom.Pos2d(self.width/2-self.barrasNeg.coverLat,y)
+    self.negReinfLayer= self.barrasNeg.defReinfLayer(armaduras,"neg",self.reinfDiagName,p1,p2)
 
     y= self.getYAsPos()
-    p1= geom.Pos2d(-self.ancho/2+self.barrasPos.recubLat,y) # Armadura superior (cara +).
-    p2= geom.Pos2d(self.ancho/2-self.barrasPos.recubLat,y)
-    self.posReinfLayer= self.barrasPos.defReinfLayer(armaduras,"pos",self.nmbDiagArmadura,p1,p2)
+    p1= geom.Pos2d(-self.width/2+self.barrasPos.coverLat,y) # Armadura superior (cara +).
+    p2= geom.Pos2d(self.width/2-self.barrasPos.coverLat,y)
+    self.posReinfLayer= self.barrasPos.defReinfLayer(armaduras,"pos",self.reinfDiagName,p1,p2)
 
-    self.recubMin= min(self.barrasNeg.recubLat,min(self.barrasPos.recubLat,min(self.barrasPos.recub,self.barrasNeg.recub)))
+    self.coverMin= min(self.barrasNeg.coverLat,min(self.barrasPos.coverLat,min(self.barrasPos.cover,self.barrasNeg.cover)))
 
   def getJTorsion(self):
-    return parametrosSeccionRectangular.getJTorsion(self.ancho,self.canto)
+    return parametrosSeccionRectangular.getJTorsion(self.width,self.depth)
 
   def getRespT(self,preprocessor,JTorsion):
     '''Material for modeling torsional response of section'''
@@ -239,11 +255,11 @@ class RecordSeccionHASimple(BasicRecordRCSection):
 
   def getRespVy(self,preprocessor):
     '''Material for modeling z shear response of section'''
-    return typical_materials.defElasticMaterial(preprocessor,self.nmbRespVy(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())
+    return typical_materials.defElasticMaterial(preprocessor,self.nmbRespVy(),5/6.0*self.width*self.depth*self.tipoHormigon.Gcm())
 
   def getRespVz(self,preprocessor):
     '''Material for modeling z shear response of section'''
-    return typical_materials.defElasticMaterial(preprocessor,self.nmbRespVz(),5/6.0*self.ancho*self.canto*self.tipoHormigon.Gcm())
+    return typical_materials.defElasticMaterial(preprocessor,self.nmbRespVz(),5/6.0*self.width*self.depth*self.tipoHormigon.Gcm())
 
   def defFiberSection(self,preprocessor):
     self.fs= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d",self.nmbSeccion)
@@ -275,11 +291,11 @@ class RecordSeccionHASimple(BasicRecordRCSection):
     ''' parameters for interaction diagrams. '''
     self.param= xc.InteractionDiagramParameters()
     if(self.diagType=="d"):
-      self.param.tagHormigon= self.tipoHormigon.tagDiagD
-      self.param.tagArmadura= self.tipoArmadura.tagDiagD
+      self.param.tagHormigon= self.tipoHormigon.matTagD
+      self.param.tagArmadura= self.tipoArmadura.matTagD
     elif(self.diagType=="k"):
-      self.param.tagHormigon= self.tipoHormigon.tagDiagK
-      self.param.tagArmadura= self.tipoArmadura.tagDiagK
+      self.param.tagHormigon= self.tipoHormigon.matTagK
+      self.param.tagArmadura= self.tipoArmadura.matTagK
     return self.param
 
   def defInteractionDiagram(self,preprocessor):
@@ -306,7 +322,7 @@ class RecordSeccionHASimple(BasicRecordRCSection):
   def getStressCalculator(self):
     Ec= self.tipoHormigon.Ecm()
     Es= self.tipoArmadura.Es
-    return sc.StressCalc(self.ancho,self.canto,self.barrasPos.recub,self.barrasNeg.recub,self.getAsPos(),self.getAsNeg(),Ec,Es)
+    return sc.StressCalc(self.width,self.depth,self.barrasPos.cover,self.barrasNeg.cover,self.getAsPos(),self.getAsNeg(),Ec,Es)
 
 class RecordSeccionHALosa(object):
   '''
@@ -314,23 +330,23 @@ class RecordSeccionHALosa(object):
      las secciones de hormigón armado de una losa sencilla con una
      capa de armadura superior y otra inferior.
   '''
-  def __init__(self,nmb,desc,canto,concrete,steel,basicCover):
+  def __init__(self,nmb,desc,depth,concrete,steel,basicCover):
     self.name= nmb
     self.basicCover= basicCover
     self.D2Section= RecordSeccionHASimple()
     self.D2Section.nmbSeccion= nmb + "2"
     self.D2Section.descSeccion= desc + ". 2 direction."
     self.D2Section.tipoHormigon= concrete
-    self.D2Section.canto= canto
-    self.D2Section.ancho= 1.0
+    self.D2Section.depth= depth
+    self.D2Section.width= 1.0
     self.D2Section.tipoArmadura= steel
 
     self.D1Section= RecordSeccionHASimple()
     self.D1Section.nmbSeccion= nmb + "1"
     self.D1Section.descSeccion= desc + ". 1 direction."
     self.D1Section.tipoHormigon= concrete
-    self.D1Section.canto= canto
-    self.D1Section.ancho= 1.0
+    self.D1Section.depth= depth
+    self.D1Section.width= 1.0
     self.D1Section.tipoArmadura= steel
 
   def setMainReinf2neg(self,diam,area,spacing):
@@ -339,21 +355,21 @@ class RecordSeccionHALosa(object):
   def setMainReinf2pos(self,diam,area,spacing):
     self.D2Section.setMainReinfPos(diam,area,spacing,self.basicCover)
 
-  def setShearReinfD2(self,nRamas,areaRama,spacing):
-    self.D2Section.armCortanteZ.nRamas= nRamas # Número de ramas eficaces frente al cortante.
-    self.D2Section.armCortanteZ.areaRama= areaRama # Área de cada barra.
-    self.D2Section.armCortanteZ.espaciamientoRamas= spacing
+  def setShearReinfD2(self,nShReinfBranches,areaShReinfBranch,spacing):
+    self.D2Section.armCortanteZ.nShReinfBranches= nShReinfBranches # Número de ramas eficaces frente al cortante.
+    self.D2Section.armCortanteZ.areaShReinfBranch= areaShReinfBranch # Área de cada barra.
+    self.D2Section.armCortanteZ.shReinfSpacing= spacing
 
-  def setShearReinfD1(self,nRamas,areaRama,spacing):
-    self.D1Section.armCortanteZ.nRamas= nRamas # Número de ramas eficaces frente al cortante.
-    self.D1Section.armCortanteZ.areaRama= areaRama # Área de cada barra.
-    self.D1Section.armCortanteZ.espaciamientoRamas= spacing
+  def setShearReinfD1(self,nShReinfBranches,areaShReinfBranch,spacing):
+    self.D1Section.armCortanteZ.nShReinfBranches= nShReinfBranches # Número de ramas eficaces frente al cortante.
+    self.D1Section.armCortanteZ.areaShReinfBranch= areaShReinfBranch # Área de cada barra.
+    self.D1Section.armCortanteZ.shReinfSpacing= spacing
 
   def setMainReinf1neg(self,diam,area,spacing):
-    self.D1Section.setMainReinfNeg(diam,area,spacing,self.basicCover+self.D2Section.barrasNeg.diamBarras)
+    self.D1Section.setMainReinfNeg(diam,area,spacing,self.basicCover+self.D2Section.barrasNeg.rebarsDiam)
 
   def setMainReinf1pos(self,diam,area,spacing):
-    self.D1Section.setMainReinfPos(diam,area,spacing,self.basicCover+self.D2Section.barrasPos.diamBarras)
+    self.D1Section.setMainReinfPos(diam,area,spacing,self.basicCover+self.D2Section.barrasPos.rebarsDiam)
 
   def getAs1neg(self):
     '''Steel area in local negative face direction 1.'''

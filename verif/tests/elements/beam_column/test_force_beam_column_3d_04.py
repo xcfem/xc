@@ -11,15 +11,15 @@ from materials import typical_materials
 from model import fix_node_6dof
 
 # Geometry
-ancho= .05
-canto= .1
+width= .05
+depth= .1
 nDivIJ= 10
 nDivJK= 5
 y0= 0
 z0= 0
 L= 1.5 # Bar length (m)
-Iy= ancho*canto**3/12 # Momento de inercia de la sección expresada en m4
-Iz= canto*ancho**3/12 # Momento de inercia de la sección expresada en m4
+Iy= width*depth**3/12 # Momento de inercia de la sección expresada en m4
+Iz= depth*width**3/12 # Momento de inercia de la sección expresada en m4
 E= 210e9 # Módulo de Young del acero.
 nu= 0.3 # Coeficiente de Poisson
 G= E/(2*(1+nu)) # Módulo de elasticidad a cortante

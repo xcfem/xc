@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 geomCuadFibrasTN= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibrasTN")
-y1= ancho/2.0
-z1= canto/2.0
+y1= width/2.0
+z1= depth/2.0
 regiones= geomCuadFibrasTN.getRegions
 acero= regiones.newQuadRegion("acero")
 acero.nDivIJ= nDivIJ

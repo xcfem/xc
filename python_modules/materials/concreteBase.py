@@ -20,9 +20,9 @@ class Concrete(object):
     Attributes:
         nmbMaterial: name of material.
         nmbDiagK: name of the characteristic diagram
-        tagDiagK:  tag of the uni-axial material in the characteristic diagram
+        matTagK:  tag of the uni-axial material in the characteristic diagram
         nmbDiagD: name of the design diagram
-        tagDiagD:  tag of the uni-axial material in the design diagram
+        matTagD:  tag of the uni-axial material in the design diagram
         fck:       characteristic (5%) cylinder strength of the concrete [Pa]
         gmmC:      partial safety factor for concrete 
         nuc:       Poisson coefficient
@@ -39,9 +39,9 @@ class Concrete(object):
     """
     nmbMaterial= "nil" #** Name of material.
     nmbDiagK= "dgK"+nmbMaterial #** Name of characteristic diagram.
-    tagDiagK= -1 #** Tag of uni-axial material in the characteristic diagram.
+    matTagK= -1 #** Tag of uni-axial material in the characteristic diagram.
     nmbDiagD= "dgD"+nmbMaterial #** Name of the design diagram.
-    tagDiagD= -1 #** Tag of uni-axial material in the design diagram.
+    matTagD= -1 #** Tag of uni-axial material in the design diagram.
     fck=-25e6 #** characteristic (5%) cylinder strength of the concrete [Pa]
     gmmC= 1.5 #** Partial safety factor for concrete 
     nuc= 0.2 #** Poisson coefficient
@@ -63,9 +63,9 @@ class Concrete(object):
     def setupName(self,nmbConcrete):
         self.nmbMaterial= nmbConcrete #** Name of material
         self.nmbDiagK= "dgK"+self.nmbMaterial #** Name of characteristic diagram.
-        self.tagDiagK= -1 #** Tag of uni-axial material in the characteristic diagram.
+        self.matTagK= -1 #** Tag of uni-axial material in the characteristic diagram.
         self.nmbDiagD= "dgD"+self.nmbMaterial #** Name of the design diagram.
-        self.tagDiagD= -1 #** Tag of uni-axial material in the characteristic diagram. 
+        self.matTagD= -1 #** Tag of uni-axial material in the characteristic diagram. 
 
     def fcd(self):
         '''design strength of the concrete [Pa][-]'''
@@ -143,14 +143,14 @@ class Concrete(object):
     def defDiagK(self,preprocessor):
         ''' Defines a Concrete01 uniaxial material to represent the characteristic stress-strain diagram.'''
         hormigon= typical_materials.defConcrete01(preprocessor,self.nmbDiagK,self.epsilon0(),self.fmaxK(),self.fmaxK(),self.epsilonU())
-        self.tagDiagK= hormigon.tag
-        return self.tagDiagK
+        self.matTagK= hormigon.tag
+        return self.matTagK
 
     def defDiagD(self,preprocessor):
         ''' Defines a Concrete01 uniaxial material to represent the design stress-strain diagram..'''
         hormigon= typical_materials.defConcrete01(preprocessor,self.nmbDiagD,self.epsilon0(),self.fmaxD(),self.fmaxD(),self.epsilonU())
-        self.tagDiagD= hormigon.tag
-        return self.tagDiagD
+        self.matTagD= hormigon.tag
+        return self.matTagD
 
     def getDiagD(self,preprocessor):
         return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagD)

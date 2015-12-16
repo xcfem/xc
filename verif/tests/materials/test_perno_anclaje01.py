@@ -41,7 +41,7 @@ C= contornoPiezaSoporte.getRecubrimiento(posAnc)
 Cmin= 5*diamBarra+10e-3
 
 if (C<Cmin):
-  print "El recubrimiento del perno es insuficiente."
+  print "El coverrimiento del perno es insuficiente."
 
 f1N= EOTA_TR029_traccion.getFactor1N(C,CcrN)
 

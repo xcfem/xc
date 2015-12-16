@@ -3,7 +3,7 @@
 Funciones para comprobación de una sección a fisuración según el
 artículo 49.2.4 de la EHE-08.
 '''
-from materials.fiber_section import creaSetsFibras
+from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils
 from materials import crack_control_base as cc
 import math
@@ -13,24 +13,24 @@ class CrackControlSIA262(cc.CrackControlBaseParameters):
   # Calcula la apertura característica de fisura.
   def calcRebarStress(self, scc):
     section= scc.getProp("datosSecc")
-    tagHormigon= section.tipoHormigon.tagDiagK
-    tagAcero= section.tipoArmadura.tagDiagK
+    tagHormigon= section.tipoHormigon.matTagK
+    reinfMatTag= section.tipoArmadura.matTagK
     if(not scc.hasProp("rcSets")):
-      scc.setProp("rcSets", creaSetsFibras.fiberSectionSetupRC3Sets(scc,tagHormigon,self.nmbSetFibrasHormigon,tagAcero,self.nmbSetFibrasArmadura))
+      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,tagHormigon,self.setNameFibrasHormigon,reinfMatTag,self.setNameFibrasArmadura))
     rcSets= scc.getProp("rcSets")
-    fibrasHormigon= rcSets.fibrasHormigon.fSet
-    fibrasArmadura= rcSets.fibrasArmadura.fSet
-    armaduraTraccion= rcSets.tractionFibers
+    concrFibers= rcSets.concrFibers.fSet
+    reinfFibers= rcSets.reinfFibers.fSet
+    armaduraTraccion= rcSets.tensionFibers
 
     self.claseEsfuerzo= scc.getStrClaseEsfuerzo(0.0)
-    self.numBarrasTracc= rcSets.getNumBarrasTraccion()
+    self.numBarrasTracc= rcSets.getNumTensionRebars()
     if(self.numBarrasTracc>0):
-      scc.calcRecubrimientos(self.nmbSetFibrasArmaduraTraccion)
-      scc.calcSeparaciones(self.nmbSetFibrasArmaduraTraccion)
-      self.eps1= fibrasHormigon.getStrainMax()
-      self.eps2= max(fibrasHormigon.getStrainMin(),0.0)
-      self.sepBarrasTracc= armaduraTraccion.getDistMediaFibras()
-      self.areaBarrasTracc= armaduraTraccion.getArea(1)
+      scc.calcRecubrimientos(self.setNameFibrasArmaduraTraccion)
+      scc.calcSeparaciones(self.setNameFibrasArmaduraTraccion)
+      self.eps1= concrFibers.getStrainMax()
+      self.eps2= max(concrFibers.getStrainMin(),0.0)
+      self.rebarsSpacingTracc= armaduraTraccion.getDistMediaFibras()
+      self.areaRebarTracc= armaduraTraccion.getArea(1)
       self.yCDGBarrasTracc= armaduraTraccion.getCdgY()
       self.zCDGBarrasTracc= armaduraTraccion.getCdgZ()
       self.tensMediaBarrasTracc= armaduraTraccion.getStressMed()
@@ -89,17 +89,17 @@ def trataResultsCombFISSIA262PlanB(preprocessor,nmbComb):
     sigma_c= stressCalc.sgc
     #print "sgc0= ", stressCalc.sgc0
     # sigma_s= 0.0
-    # eNC= datosScc.canto/3
+    # eNC= datosScc.depth/3
     # exc= 0.0
     # As= max(datosScc.getAsPos(),datosScc.getAsNeg())
-    # denom= 0.5*As*0.9*datosScc.canto
+    # denom= 0.5*As*0.9*datosScc.depth
     # if(abs(Ntmp)<1e-6):
     #   sigma_s= MyTmp/denom
     # else:
     #   exc= abs(MyTmp/Ntmp)
     #   if(exc<eNC):
     #     sg= Ntmp/datosScc.getAc()
-    #     sg+= MyTmp/datosScc.getI()*datosScc.canto/2
+    #     sg+= MyTmp/datosScc.getI()*datosScc.depth/2
     #     sigma_s= 10*sg
     #   else:
     #     sigma_s= MyTmp/denom

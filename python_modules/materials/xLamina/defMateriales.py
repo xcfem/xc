@@ -8,11 +8,11 @@ def defMaterialesK(preprocessor,path, nmbScc1, nmbScc2):
   '''
   preprocessor.clearAll
   materiales= preprocessor.getMaterialLoader
-  tagDiagHormigon= materiales.defDiagKHormigon(codHormigon)
-  tagDiagAceroArmar= materiales.defDiagKAcero(codArmadura)
-  mat= mat_with_tag(tagDiagHormigon)
+  matTagHormigon= materiales.defDiagKHormigon(codHormigon)
+  matTagAceroArmar= materiales.defDiagKAcero(codArmadura)
+  mat= mat_with_tag(matTagHormigon)
   mat.Ec= getTangent 
-  mat= mat_with_tag(tagDiagAceroArmar)
+  mat= mat_with_tag(matTagAceroArmar)
   mat.Es= getTangent 
   defSeccionHASimple(nmbScc1,"k","defSectionGeometry")
   archTex= open(path+nmbScc1+".tex","w")
@@ -31,11 +31,11 @@ def defMaterialesD(path, nmbScc1, nmbScc2):
   '''
   preprocessor.clearAll
   materiales= preprocessor.getMaterialLoader
-  tagDiagHormigon= materiales.defDiagDHormigon(codHormigon)
-  tagDiagAceroArmar= materiales.defDiagDAcero(codArmadura)
-  mat= mat_with_tag(tagDiagHormigon)
+  matTagHormigon= materiales.defDiagDHormigon(codHormigon)
+  matTagAceroArmar= materiales.defDiagDAcero(codArmadura)
+  mat= mat_with_tag(matTagHormigon)
   mat.Ec= getTangent 
-  mat= mat_with_tag(tagDiagAceroArmar)
+  mat= mat_with_tag(matTagAceroArmar)
   mat.Es= getTangent 
 
   defSeccionHASimple(nmbScc1,"d","defSectionGeometry")
@@ -56,11 +56,11 @@ def defMaterialesKBarra(path, nmbScc, nmbRutinaDefGeom):
   '''
   preprocessor.clearAll
   materiales= preprocessor.getMaterialLoader
-  tagDiagHormigon= materiales.defDiagKHormigon(codHormigon)
-  tagDiagAceroArmar= materiales.defDiagKAcero(codArmadura)
-  mat= mat_with_tag(tagDiagHormigon)
+  matTagHormigon= materiales.defDiagKHormigon(codHormigon)
+  matTagAceroArmar= materiales.defDiagKAcero(codArmadura)
+  mat= mat_with_tag(matTagHormigon)
   mat.Ec= getTangent 
-  mat= mat_with_tag(tagDiagAceroArmar)
+  mat= mat_with_tag(matTagAceroArmar)
   mat.Es= getTangent 
   defSeccionHASimple(nmbScc,"k",nmbRutinaDefGeom)
   archTex= open(path+nmbScc+".tex","w")
@@ -76,11 +76,11 @@ def defMaterialesDBarra(path, nmbScc, nmbRutinaDefGeom):
   '''
   preprocessor.clearAll
   materiales= preprocessor.getMaterialLoader
-  tagDiagHormigon= materiales.defDiagDHormigon(codHormigon)
-  tagDiagAceroArmar= materiales.defDiagDAcero(codArmadura)
-  mat= mat_with_tag(tagDiagHormigon)
+  matTagHormigon= materiales.defDiagDHormigon(codHormigon)
+  matTagAceroArmar= materiales.defDiagDAcero(codArmadura)
+  mat= mat_with_tag(matTagHormigon)
   mat.Ec= getTangent 
-  mat= mat_with_tag(tagDiagAceroArmar)
+  mat= mat_with_tag(matTagAceroArmar)
   mat.Es= getTangent 
 
   defSeccionHASimple(nmbScc,"d",nmbRutinaDefGeom)

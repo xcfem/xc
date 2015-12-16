@@ -51,8 +51,8 @@ def CondContornoNodosExtremosLinea(setLinea, constraints, condContorno):
   condContorno(constraints,fN)
   condContorno(constraints,lN)
 
-# def CondContornoNodosInterioresSetLineas(nmbSetLineas, condContorno):
-#     \nmbSetLineas
+# def CondContornoNodosInterioresSetLineas(setNameLineas, condContorno):
+#     \setNameLineas
 #       {
 #         \lineas
 #           {

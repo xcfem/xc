@@ -44,8 +44,8 @@ class ParamsCortante(object):
    de la resistencia a cortante.'''
   hormigon= concreteSIA262.c35_45
   acero= steelSIA262.B500A
-  ancho= 0.0
-  cantoUtil= 0.0 #Canto útil con el que está trabajando la sección.
+  width= 0.0
+  depthUtil= 0.0 #Canto útil con el que está trabajando la sección.
   brazoMecanico= 0.0 #Brazo mecánico con el que está trabajando la sección.
   AsTrsv= 0.0
   s= 0.30
@@ -56,15 +56,15 @@ class ParamsCortante(object):
   def __init__(self,seccionHA):
     #self.hormigon= seccionHA.tipoHormigon Arreglar
     #self.acero= seccionHA.tipoArmadura
-    self.ancho= seccionHA.ancho
-    self.cantoUtil= 0.9* seccionHA.canto #Mejorar
-    self.brazoMecanico= 0.9*self.cantoUtil #Mejorar
+    self.width= seccionHA.width
+    self.depthUtil= 0.9* seccionHA.depth #Mejorar
+    self.brazoMecanico= 0.9*self.depthUtil #Mejorar
     self.AsTrsv= seccionHA.armCortanteZ.getAs()
-    self.s= seccionHA.armCortanteZ.espaciamientoRamas
+    self.s= seccionHA.armCortanteZ.shReinfSpacing
 
   def calcVcu(self, Nd, Md, Mu):
     ''' Calcula el cortante último de la sección sin armadura de cortante.'''
-    self.Vcu= VuNoShearRebarsSIA262(self.hormigon,self.acero,Nd,abs(Md),abs(Mu),self.ancho,self.cantoUtil)
+    self.Vcu= VuNoShearRebarsSIA262(self.hormigon,self.acero,Nd,abs(Md),abs(Mu),self.width,self.depthUtil)
   def calcVsu(self):
     ''' Calcula el cortante último de la sección sin armadura de cortante pasamos
         s= 1.0 porque AsTrsv ya incorpora todas las ramas en un metro.'''
@@ -112,8 +112,8 @@ def trataResultsCombV(preprocessor,nmbComb):
     #codHormigon= section.tipoHormigon
     #codArmadura= section.tipoArmadura
     AsTrsv= section.armCortanteY.getAs()
-    alpha= section.armCortanteY.angAlphaRamas
-    theta= section.armCortanteY.angThetaBielas
+    alpha= section.armCortanteY.angAlphaShReinf
+    theta= section.armCortanteY.angThetaConcrStruts
 
     NTmp= scc.getStressResultantComponent("N")
     MyTmp= scc.getStressResultantComponent("My")

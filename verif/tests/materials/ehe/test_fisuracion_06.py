@@ -28,15 +28,15 @@ datosScc1LosC= defSeccionHASimple.RecordSeccionHASimple()
 datosScc1LosC.nmbSeccion= "secHA1LosC"
 datosScc1LosC.descSeccion= "Losa. Tramo Central. Sección normal al eje X."
 datosScc1LosC.tipoHormigon= EHE_concrete.HA25
-datosScc1LosC.canto= 0.25
-datosScc1LosC.ancho= 1.0
+datosScc1LosC.depth= 0.25
+datosScc1LosC.width= 1.0
 datosScc1LosC.tipoArmadura= EHE_reinforcing_steel.B500S
-datosScc1LosC.nBarrasNeg= 5
-datosScc1LosC.areaBarrasNeg= areaBarrasEHE.Fi10
-datosScc1LosC.recubNeg= 0.025+0.010+0.010/2.0
-datosScc1LosC.nBarrasPos= 5
-datosScc1LosC.areaBarrasPos= areaBarrasEHE.Fi10
-datosScc1LosC.recubPos= 0.025+0.010/2.0
+datosScc1LosC.nRebarsNeg= 5
+datosScc1LosC.areaRebarNeg= areaBarrasEHE.Fi10
+datosScc1LosC.coverNeg= 0.025+0.010+0.010/2.0
+datosScc1LosC.nRebarsPos= 5
+datosScc1LosC.areaRebarPos= areaBarrasEHE.Fi10
+datosScc1LosC.coverPos= 0.025+0.010/2.0
 
 
 
@@ -46,8 +46,8 @@ MyDato= 1000 # Momento para comprobar fisuración.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-tagDiagHormigon= EHE_concrete.HA25.defDiagK(preprocessor)
-tagDiagAceroArmar= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
+matTagHormigon= EHE_concrete.HA25.defDiagK(preprocessor)
+matTagAceroArmar= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
 
 
 datosScc1LosC.defSeccionHASimple(preprocessor, "k")
@@ -87,7 +87,7 @@ secHAParamsFis= fisuracionEHE.ParamsFisuracionEHE()
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,EHE_concrete.HA25.tagDiagK,EHE_reinforcing_steel.B500S.tagDiagK,EHE_concrete.HA25.fctm())
+secHAParamsFis.calcApertCaracFis(scc,EHE_concrete.HA25.matTagK,EHE_reinforcing_steel.B500S.matTagK,EHE_concrete.HA25.fctm())
 
 
 ratio1= secHAParamsFis.Wk

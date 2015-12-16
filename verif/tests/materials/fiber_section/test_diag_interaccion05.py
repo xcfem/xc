@@ -24,7 +24,7 @@ gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
 
 radio= 0.75/2.0 # Radio de la sección expresado en metros.
 diam= 20e-3 # Diámetro de las barras expresado en metros.
-recub= 0.06+12e-3+diam/2.0 # Recubrimiento de la sección expresado en metros.
+cover= 0.06+12e-3+diam/2.0 # Recubrimiento de la sección expresado en metros.
 areaFi20= math.pi*(diam/2.0)**2 # Área de las barras expresado en metros cuadrados.
 
 
@@ -33,7 +33,7 @@ preprocessor=  prueba.getPreprocessor
 # Definimos materiales
 concr=EHE_concrete.HA30
 concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente alfacc=1)
-tagHA30= concr.defDiagD(preprocessor)
+concrMatTag30= concr.defDiagD(preprocessor)
 Ec= concr.getDiagD(preprocessor).getTangent
 tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 Es= EHE_reinforcing_steel.B500S.getDiagD(preprocessor).getTangent
@@ -54,7 +54,7 @@ armadura.numReinfBars= 14
 armadura.barArea= areaFi20
 armadura.initAngle= 0.0
 armadura.finalAngle= 2*math.pi
-armadura.radius= hormigon.extRad-recub
+armadura.radius= hormigon.extRad-cover
 
 materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
@@ -64,8 +64,8 @@ secHA.setupFibers()
 fibras= secHA.getFibers()
 
 param= xc.InteractionDiagramParameters()
-param.tagHormigon= EHE_concrete.HA30.tagDiagD
-param.tagArmadura= EHE_reinforcing_steel.B500S.tagDiagD
+param.tagHormigon= EHE_concrete.HA30.matTagD
+param.tagArmadura= EHE_reinforcing_steel.B500S.matTagD
 diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
 
 fc1= diagIntsecHA.getCapacityFactor(geom.Pos3d(1850e3,0,0))

@@ -14,9 +14,9 @@ import math
 gammas= 1.15 #Coeficiente de minoración de la resistencia del acero.
 
 numBarrasEstribo=4
-areaRamasEstribo=numBarrasEstribo*areaBarrasEHE.Fi6
+areaShReinfBranchsEstribo=numBarrasEstribo*areaBarrasEHE.Fi6
 sepEstribos=0.2
-AsTrsv=areaRamasEstribo/sepEstribos
+AsTrsv=areaShReinfBranchsEstribo/sepEstribos
 z=0.9*0.55
 alpha=math.pi/2
 theta=math.pi/4
@@ -24,7 +24,7 @@ fyd=500e6/gammas
 Vsu=comprobVEHE08.getVsuEHE08(z,alpha,theta,AsTrsv,fyd)
 ratio1=abs(Vsu-111.966e3)/111.966e3
 
-##print "areaRamasEstribo= ",AsTrsv*1e4," cm2"
+##print "areaShReinfBranchsEstribo= ",AsTrsv*1e4," cm2"
 ##print "Vsu= ",Vsu/1e3," kN"
 ##print "ratio1= ",ratio1," kN"
   

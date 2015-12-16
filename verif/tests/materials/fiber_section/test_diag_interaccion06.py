@@ -43,8 +43,8 @@ sccData= defSeccionHASimple.RecordSeccionHASimple()
 sccData.nmbSeccion= "sccData"
 sccData.descSeccion= "Prueba."
 sccData.tipoHormigon= concrete
-sccData.canto= 0.5
-sccData.ancho= 1.0
+sccData.depth= 0.5
+sccData.width= 1.0
 sccData.tipoArmadura= reinfSteel
 sccData.setMainReinfNeg(40e-3,areaFi40,0.15,0.25-0.19)
 sccData.setMainReinfPos(6e-3,areaFi6,0.15,0.25-0.19)

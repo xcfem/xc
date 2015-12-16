@@ -8,29 +8,29 @@ from postprocess.reports import common_formats as fmt
 
 
 class RCSection(object):
-  tractionRebars= None
+  tensionRebars= None
   beton= concreteSIA262.c25_30
   exigeanceFisuration= "B"
   b= 0.25
   h= 0.25
-  def __init__(self,tractionRebars,beton,exigFis,b,h):
-    self.tractionRebars= tractionRebars
+  def __init__(self,tensionRebars,beton,exigFis,b,h):
+    self.tensionRebars= tensionRebars
     self.beton= beton
     self.exigeanceFisuration= exigFis
     self.b= b
     self.h= h
-  def setArmature(self,tractionRebars):
-    self.tractionRebars= tractionRebars
+  def setArmature(self,tensionRebars):
+    self.tensionRebars= tensionRebars
   def getAsMinFlexion(self):
-    return self.tractionRebars.getAsMinFlexion(self.beton,self.exigeanceFisuration,self.h)
+    return self.tensionRebars.getAsMinFlexion(self.beton,self.exigeanceFisuration,self.h)
   def getAsMinTraction(self):
-    return self.tractionRebars.getAsMinTraction(self.beton,self.exigeanceFisuration,self.h)
+    return self.tensionRebars.getAsMinTraction(self.beton,self.exigeanceFisuration,self.h)
   def getMR(self):
-    return self.tractionRebars.getMR(self.beton,self.b,self.h)
+    return self.tensionRebars.getMR(self.beton,self.b,self.h)
   def getVR(self,Nd,Md):
-    return self.tractionRebars.getVR(self.beton,Nd,Md,self.b,self.h)
+    return self.tensionRebars.getVR(self.beton,Nd,Md,self.b,self.h)
   def writeResultFlexion(self,outputFile,Nd,Md,Vd):
-    famArm= self.tractionRebars
+    famArm= self.tensionRebars
     beton= self.beton
     AsMin= self.getAsMinFlexion()
     ancrage= famArm.getBasicAnchorageLength(beton)
@@ -45,11 +45,11 @@ class RCSection(object):
       outputFile.write("  Vérif. eff. tranchant: Vd= "+ fmt.Esf.format(Vd/1e3)+ "kN,  VR= "+ fmt.Esf.format(VR/1e3)+ "kN")
       ng_rebar_def.writeF(outputFile,"  F(V)",VR/Vd)
   def writeResultTraction(self,outputFile,Nd):
-    famArm= self.tractionRebars
+    famArm= self.tensionRebars
     beton= self.beton
     AsMin= self.getAsMinTraction()/2
     ancrage= famArm.getBasicAnchorageLength(beton)
     ng_rebar_def.writeRebars(outputFile,beton,famArm,AsMin)
     if(abs(Nd)>0):
-      print "ERROR; traction not implemented."
+      print "ERROR; tension not implemented."
 

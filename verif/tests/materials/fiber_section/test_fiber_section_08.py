@@ -24,7 +24,7 @@ from solution import predefined_solutions
 
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
-from materials.fiber_section import creaSetsFibras
+from materials.fiber_section import createFiberSets
 from materials import regimenSeccion
 from model import fix_node_6dof
 
@@ -40,7 +40,7 @@ NDato= 0.0
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-tagAcero= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
+reinfMatTag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 dgDB500S= EHE_reinforcing_steel.B500S.getDiagD(preprocessor)
 concr=EHE_concrete.HA25
 concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente se toma alfacc=1)
@@ -118,25 +118,25 @@ defN= scc.getSectionDeformationByName("defN")
 x= scc.getNeutralAxisDepth()
 Resul= scc.getStressResultant()
 Deform= scc.getSectionDeformation()
-setsRC= creaSetsFibras.fiberSectionSetupRCSets(scc,EHE_concrete.HA25.tagDiagD,"hormigon",EHE_reinforcing_steel.B500S.tagDiagD,"armadura")
+setsRC= createFiberSets.fiberSectionSetupRCSets(scc,EHE_concrete.HA25.matTagD,"hormigon",EHE_reinforcing_steel.B500S.matTagD,"armadura")
 
 
 fibraCEpsMin= -1
-fMin= setsRC.fibrasHormigon.getFiberWithMinStrain()
+fMin= setsRC.concrFibers.getFiberWithMinStrain()
 
 epsCMin= fMin.getMaterial().getStrain() # Deformación mínima en el hormigón.
 sgCMin= fMin.getMaterial().getStress() # Tensión mínima en el hormigón.
 YepsCMin= fMin.getPos().x # Coordenada y de la deformación mínima en el hormigón.
 ZepsCMin= fMin.getPos().y # Coordenada z de la deformación mínima en el hormigón.
 
-fMin= setsRC.fibrasArmadura.getFiberWithMinStrain()
+fMin= setsRC.reinfFibers.getFiberWithMinStrain()
 
 epsSMin= fMin.getMaterial().getStrain() # Deformación mínima en el acero.
 sgSMin= fMin.getMaterial().getStress() # Tensión mínima en el acero.
 YepsSMin= fMin.getPos().x # Coordenada y de la deformación mínima en el acero.
 ZepsSMin= fMin.getPos().y # Coordenada z de la deformación mínima en el acero.
 
-fMax= setsRC.fibrasArmadura.getFiberWithMaxStrain()
+fMax= setsRC.reinfFibers.getFiberWithMaxStrain()
 
 epsSMax= fMax.getMaterial().getStrain() # Deformación máxima en el acero.
 sgSMax= fMax.getMaterial().getStress() # Tensión máxima en el acero.

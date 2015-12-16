@@ -3,7 +3,7 @@
 import vtk
 
 def VtkCargaIdsNodos(recordGrid):
-  VtkCreaStrArraySetData(recordGrid.nmbSet,"nodos","etiqNod","tag")()
+  VtkCreaStrArraySetData(recordGrid.setName,"nodos","etiqNod","tag")()
   nmbUGrid.GetPointData().SetStrings(etiqNod)
 
 def VtkDibujaIdsNodos(recordGrid, renderer):

@@ -57,9 +57,9 @@ def xLaminaConstruyeModeloFicticio(preprocessor,datosScc1, datosScc2):
     FCCP= 0.0 #Valor del factor de capacidad en la hipótesis que produce el caso pésimo.
     # Definimos los diagramas de interacción
     hormigon= preprocessor.getMaterialLoader.getMaterial(codHormigon)
-    tagHorm= hormigon.getProp("tagDiagD")
+    tagHorm= hormigon.getProp("matTagD")
     armadura= preprocessor.getMaterialLoader.getMaterial(codArmadura)
-    tagHorm= armadura.getProp("tagDiagD")
+    tagHorm= armadura.getProp("matTagD")
     diagInt1= preprocessor.getMaterialLoader.newInteractionDiagram(datosScc1.nmbSeccion,tagHorm,tagArmadura)
     diagInt2= preprocessor.getMaterialLoader.newInteractionDiagram(datosScc2.nmbSeccion,tagHorm,tagArmadura)
 

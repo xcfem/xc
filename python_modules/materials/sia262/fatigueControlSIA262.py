@@ -3,7 +3,7 @@
 Funciones para comprobación de una sección a fisuración según el
 artículo 49.2.4 de la EHE-08.
 '''
-from materials.fiber_section import creaSetsFibras
+from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils
 from materials.sia262 import shearSIA262
 from materials import crack_control_base as cc
@@ -33,12 +33,12 @@ def defVarsControl(elems):
 
 def estimateSteelStress(sccData, N, M, As, y):
   retval= 0.0
-  eNC= sccData.canto/3.0
+  eNC= sccData.depth/3.0
   exc= 0.0
-  denom= math.copysign(0.8*As*0.9*sccData.canto,y)
+  denom= math.copysign(0.8*As*0.9*sccData.depth,y)
   retval= M/denom
   if(retval<0.0):
-    f= M/(0.8*0.9*sccData.canto)
+    f= M/(0.8*0.9*sccData.depth)
     retval= -f/(0.2**sccData.getAc())*10.0
   if(abs(N)>1e-6):
     exc= abs(M/N)
@@ -49,7 +49,7 @@ def estimateSteelStress(sccData, N, M, As, y):
 
 def estimateSteelStressPos(sccData, N, M):
   retval= 0.0
-  eNC= sccData.canto/3.0
+  eNC= sccData.depth/3.0
   exc= 0.0
   As= sccData.getAsPos()
   y = sccData.getYAsPos()
@@ -79,8 +79,8 @@ def estimateSigmaC(sccData, sigma_sPos, sigma_sNeg):
 def estimateSigmaCPlanB(sccData, N, M):
   Ac= 0.1*sccData.getAc()
   Ic= sccData.getI()
-  sg1= N/Ac+M/Ic*sccData.canto/2.0
-  sg2= N/Ac-M/Ic*sccData.canto/2.0
+  sg1= N/Ac+M/Ic*sccData.depth/2.0
+  sg2= N/Ac-M/Ic*sccData.depth/2.0
   sgc= min(min(sg1,sg2),0.0)
   return 2.0*sgc #Ver Jiménez Montoya 12.3 (página 244)
 

@@ -2,19 +2,19 @@
 
 import vtk
 
-def VtkCargaIdsElem(nmbUGrid, nmbSet):
-  etiqElementos= VtkCreaStrArraySetData(nmbSet,"elementos","tag")
+def VtkCargaIdsElem(nmbUGrid, setName):
+  etiqElementos= VtkCreaStrArraySetData(setName,"elementos","tag")
   nmbUgrid.CellData().SetStrings(etiqElementos)
 
 
-def VtkDibujaIdsElementos(nmbUGrid, nmbSet, renderer):
+def VtkDibujaIdsElementos(nmbUGrid, setName, renderer):
   # ****** Creamos las etiquetas para las celdas *******
   ids= vtk.vtkIdFilter()
   ids.SetInput(nmbUGrid)
   ids.CellIdsOff()
   ids.PointIdsOff()
  
-  VtkCargaIdsElem(nmbUGrid,nmbSet)()
+  VtkCargaIdsElem(nmbUGrid,setName)()
     
   # Dibuja las etiquetas de las líneas.
   cc= vtk.vtkCellCenters()

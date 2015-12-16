@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-def VtkCreaStrArraySetData(preprocessor,nmbSet,nmbTipoEnt,nmbArray,data):
+def VtkCreaStrArraySetData(preprocessor,setName,nmbTipoEnt,nmbArray,data):
   # Crea una matriz de cadenas de caracteres con datos de los puntos definidas en el conjunto.
   #Creamos el actor para las líneas.
-  st= preprocessor.getSetLoader.getSet(nmbSet)
+  st= preprocessor.getSetLoader.getSet(setName)
   
-    # \preprocessor{\cad{\sets{\@nmbSet
+    # \preprocessor{\cad{\sets{\@setName
     #   {
     #     \c{Definimos la matriz}
     #     \vtk{ \define["vtkShStrArray",@nmbArray]{} }

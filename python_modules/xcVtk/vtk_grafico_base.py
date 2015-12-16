@@ -6,7 +6,7 @@ import vtk
 
 class RecordDefGrid(object):
   ''' Define las variables que se emplean para mostrar la malla. '''
-  nmbSet= "nil"
+  setName= "nil"
   entToLabel= "nodos"
   cellType= "nil"
   uGrid= None

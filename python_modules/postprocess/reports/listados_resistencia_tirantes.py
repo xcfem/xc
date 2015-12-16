@@ -32,13 +32,13 @@ def printCierreListadoTirante(archivo):
   archivo.write("\\end{footnotesize}\n")
   archivo.write("\\end{center}\n")
 
-def listaResistenciaTirantes(preprocessor,nmbSet, fName, titulo):
+def listaResistenciaTirantes(preprocessor,setName, fName, titulo):
   '''
   Imprime los resultados de la comprobación de tensiones normales en régimen
   elástico de un conjunto de elementos que representa un tirante.
   '''
   printCabeceraListadoTirante(fName,titulo)
-  st= preprocessor.getSetLoader.getSet(nmbSet)
+  st= preprocessor.getSetLoader.getSet(setName)
   elems= st.getElements()
   tagFCTNCPCP= 0
   FCTNCPCP= 0

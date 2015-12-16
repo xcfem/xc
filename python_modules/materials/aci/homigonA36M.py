@@ -15,9 +15,9 @@ def setupHormigon(nmbHormigon, gammaC):
       {
         nmbMaterial= nmbHormigon #Nombre del material.
         nmbDiagK= "dgK"+nmbHormigon #Nombre para el diagrama característico.
-        tagDiagK= -1 #Tag del material uniaxial con el diagrama característico del material.
+        matTagK= -1 #Tag del material uniaxial con el diagrama característico del material.
         nmbDiagD= "dgD"+nmbHormigon #Nombre para el diagrama de cálculo.
-        tagDiagD= -1 #Tag del material uniaxial con el diagrama de cálculo del material.
+        matTagD= -1 #Tag del material uniaxial con el diagrama de cálculo del material.
         gmmC= gammaC #Minoración de la resistencia del hormigón.
         fcd= fck/gmmC #Resistencia de cálculo a compresión del hormigón (en Pa).
         fmaxK= 0.85*fck
@@ -41,9 +41,9 @@ def defDiagKHormigon(nmbMat):
             \epsc0{epsilon0} # Deformación para tensión máxima (de compresión).
             \fpc{fmaxK} \fpcu{fmaxK}
             \epscu{epsilonU} # Deformación para tensión última (de compresión).
-            tagDiagK= tag
+            matTagK= tag
           }
-        return tagDiagK
+        return matTagK
       }
   }
 
@@ -55,9 +55,9 @@ def defDiagDHormigon(nmbMat):
             \epsc0{epsilon0} # Deformación para tensión máxima (de compresión).
             \fpc{fmaxD} \fpcu{fmaxD}
             \epscu{epsilonU} # Deformación para tensión última (de compresión).
-            tagDiagD= tag
+            matTagD= tag
           }
-        return tagDiagD
+        return matTagD
   }
 
 # Diagrama tensión deformación del hormigón según EHE.

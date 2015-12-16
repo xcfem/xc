@@ -57,7 +57,7 @@ def getTracArmaduraInfEncepado2Pilotes(v,d,Nd):
 
 def getCantoMinimoEncepado(diam,D):
     '''
-    Devuelve el canto mínimo del encepado
+    Devuelve el depth mínimo del encepado
     diam: Diámetro de la armadura del pilar o del pilote (la que sea mayor).
     D: Diámetro del pilote.
     '''

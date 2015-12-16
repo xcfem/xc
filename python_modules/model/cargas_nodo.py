@@ -30,8 +30,8 @@ def CargaNodosInterioresCara(face, lp, carga):
     lp.newNodalLoad(i,xc.Vector(carga))
 
 # # Asigna una carga a los nodos del conjunto.
-# def CargaNodosSet(nmbSetNodos, cargaNod):
-#     \nmbSetNodos
+# def CargaNodosSet(setNameNodos, cargaNod):
+#     \setNameNodos
 #       {
 #         \nodos
 #           {

@@ -1,28 +1,29 @@
 # -*- coding: utf-8 -*-
 
 
-'''
- Capa de armadura paralela a los paramentos inferior y superior y
-    situada a una altura h sobre el centro.
-'''
-def gmArmCapaHoriz(sectionGeom, nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub, h):
-  armaduras= sectionGeom.getReinfLayers
-  armaduraH= armaduras.newStraightReinfLayer(nmbFiberMat)
-  armaduraH.numReinfBars= nBarras
-  armaduraH.barArea= areaBarras
-  armaduraH.p1= geom.Pos2d(h,rcub-ancho/2) # Armadura superior.
-  armaduraH.p2= geom.Pos2d(h-rcub,ancho/2-rcub)
-  return armaduraH
+def gmHorizRowRebars(sectionGeom, fiberMatName, nRebars, areaRebar, depth, width, cover, h):
+  '''Horizontal row of reinforcement bars, placed at a distance h 
+  from the median plane (h + towards the top face)
+  '''
+  reinforcement= sectionGeom.getReinfLayers
+  reinfH= reinforcement.newStraightReinfLayer(fiberMatName)
+  reinfH.numReinfBars= nRebars
+  reinfH.barArea= areaRebar
+  reinfH.p1= geom.Pos2d(h,cover-width/2) # Armadura superior.
+  reinfH.p2= geom.Pos2d(h-cover,width/2-cover)
+  return reinfH
 
-# Definición de la armadura situada sobre el paramento inferior.
-def gmArmInferior(sectionGeom,nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub):
-  return gmArmCapaHoriz(sectionGeom, nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub, rcub-canto/2)
+def gmBottomRowRebars(sectionGeom,fiberMatName, nRebars, areaRebar, depth, width, cover):
+  '''Horizontal row of reinforcement bars in the bottom face '''
+  return gmHorizRowRebars(sectionGeom, fiberMatName, nRebars, areaRebar, depth, width, cover, cover-depth/2)
 
-# Definición de la armadura situada bajo el paramento superior.
-def gmArmSuperior(sectionGeom, nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub):
-  return gmArmCapaHoriz(sectionGeom, nmbFiberMat, nBarras, areaBarras, canto, ancho, rcub, canto/2-rcub)
+def ggmTopRowRebars(sectionGeom, fiberMatName, nRebars, areaRebar, depth, width, cover):
+  '''Horizontal row of reinforcement bars in the top face '''
+  return gmHorizRowRebars(sectionGeom, fiberMatName, nRebars, areaRebar, depth, width, cover, depth/2-cover)
 
-#  Capa de armadura de piel situada a una altura h sobre el centro de la sección.
-def gmArmPiel(nmbFiberMat, areaBarras, canto, ancho, rcub, h):
-  return gmArmCapaHoriz(sectionGeom, nmbFiberMat, 2, areaBarras, canto, ancho, rcub, h)
+def gmSideFaceRebars(fiberMatName, areaRebar, depth, width, cover, h):
+  '''Side face row of reinforcement, placed at a distance h 
+  from the median plane (h + towards the top face) 
+  '''
+  return gmHorizRowRebars(sectionGeom, fiberMatName, 2, areaRebar, depth, width, cover, h)
 

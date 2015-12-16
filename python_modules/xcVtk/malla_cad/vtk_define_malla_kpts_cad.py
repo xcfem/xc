@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 def VtkCargaIdsKPts(recordGrid):
-  etiqKPt= VtkCreaStrArraySetData(recordGrid.nmbSet,"pnts","codigo")
+  etiqKPt= VtkCreaStrArraySetData(recordGrid.setName,"pnts","codigo")
   recordGrid.uGrid.PointData.SetStrings(etiqKPt)
 
 # Dibuja las etiquetas de los puntos
-def VtkDibujaIdsKPts(nmbUGrid,nmbSet,renderer):
-  st= preprocessor.getSetLoader.getSet(nmbSet)
+def VtkDibujaIdsKPts(nmbUGrid,setName,renderer):
+  st= preprocessor.getSetLoader.getSet(setName)
   numKPtsDI= st.size
 
   if(numKPtsDI>0):
@@ -15,7 +15,7 @@ def VtkDibujaIdsKPts(nmbUGrid,nmbSet,renderer):
     ids.CellsIdsOff()
     ids.PointIdsOff()
 
-    VtkCargaIdsKPts(nmbUGrid,nmbSet)
+    VtkCargaIdsKPts(nmbUGrid,setName)
     visPts= vtk.vtkSelectVisiblePoints
     visPts.SetInput("ids")
     visPts.SetRenderer(renderer)
@@ -29,7 +29,7 @@ def VtkDibujaIdsKPts(nmbUGrid,nmbSet,renderer):
     pointLabels.SetMapper(ldm)
     renderer.AddActor2D(pointLabels)
   else:
-    print "El conjunto: '",nmbSet,"' no tiene KPts"
+    print "El conjunto: '",setName,"' no tiene KPts"
 
 # Define el actor a emplear para dibujar kpoints.
 def VtkDefineActorKPoint(nmbUGrid,renderer,radio):

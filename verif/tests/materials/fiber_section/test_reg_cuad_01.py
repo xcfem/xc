@@ -6,14 +6,14 @@ import geom
 import xc
 from materials import typical_materials
 
-ancho= 10
-canto= 20
+width= 10
+depth= 20
 nDivIJ= 32
 nDivJK= 32
 nFibTeor= nDivIJ*nDivJK
-areaTeor= ancho*canto
-iyTeor= 1/12.0*ancho*canto**3
-izTeor= 1/12.0*canto*ancho**3
+areaTeor= width*depth
+iyTeor= 1/12.0*width*depth**3
+izTeor= 1/12.0*depth*width**3
 y0= 5
 z0= 3.2
 
@@ -26,8 +26,8 @@ acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 # Secciones
 geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
-y1= ancho/2.0
-z1= canto/2.0
+y1= width/2.0
+z1= depth/2.0
 regiones= geomRectang.getRegions
 acero= regiones.newQuadRegion("acero")
 acero.nDivIJ= nDivIJ

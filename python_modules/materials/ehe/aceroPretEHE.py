@@ -16,9 +16,9 @@ class AceroPretEHE(object):
   """Acero de pretensar EHE."""
   nmbMaterial= "nil" # Nombre del material.
   nmbDiagK= "dgK"+nmbMaterial # Nombre para el diagrama característico.
-  tagDiagK= -1 # Tag del material uniaxial con el diagrama característico del material.
+  matTagK= -1 # Tag del material uniaxial con el diagrama característico del material.
   nmbDiagD= "dgD"+nmbMaterial # Nombre para el diagrama de cálculo.
-  tagDiagD= -1 # Tag del material uniaxial con el diagrama de cálculo del material.
+  matTagD= -1 # Tag del material uniaxial con el diagrama de cálculo del material.
   fpk= 1171e6 # Límite elástico del acero en Pa.
   gammaS= 1.15 # Minoración del material.
   fmax= 1860e6
@@ -28,9 +28,9 @@ class AceroPretEHE(object):
   def __init__(self, nmbAcero,fpk,fmax):
     self.nmbMaterial= nmbAcero # Nombre del material.
     self.nmbDiagK= "dgK"+nmbAcero # Nombre para el diagrama característico.
-    self.tagDiagK= -1 # Tag del material uniaxial con el diagrama característico del material.
+    self.matTagK= -1 # Tag del material uniaxial con el diagrama característico del material.
     self.nmbDiagD= "dgD"+nmbAcero # Nombre para el diagrama de cálculo.
-    self.tagDiagD= -1 # Tag del material uniaxial con el diagrama de cálculo del
+    self.matTagD= -1 # Tag del material uniaxial con el diagrama de cálculo del
     self.fpk= fpk # Límite elástico del acero en Pa.
     self.fmax= fmax
 
@@ -41,14 +41,14 @@ class AceroPretEHE(object):
   def defDiagK(self,preprocessor,initialStress):
     # Diagrama tensión-deformación característico.
     acero= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
-    self.tagDiagK= acero.tag
-    return self.tagDiagK
+    self.matTagK= acero.tag
+    return self.matTagK
 
   def defDiagD(self,preprocessor,initialStress):
     # Diagrama tensión-deformación de cálculo.
     acero= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
-    self.tagDiagD= acero.tag
-    return self.tagDiagD
+    self.matTagD= acero.tag
+    return self.matTagD
 
   def getDiagK(self,preprocessor):
     return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagK)

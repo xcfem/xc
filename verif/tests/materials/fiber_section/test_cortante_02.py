@@ -28,9 +28,9 @@ import math
 gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
 gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
 
-ancho= 0.4 # Ancho de la sección expresado en metros.
-canto= 0.6 # Canto de la sección expresado en metros.
-recub= 0.05 # Recubrimiento de la sección expresado en metros.
+width= 0.4 # Ancho de la sección expresado en metros.
+depth= 0.6 # Canto de la sección expresado en metros.
+cover= 0.05 # Recubrimiento de la sección expresado en metros.
 
 NDato= 0 # Axil para comprobar el cortante.
 MyDato= 1.9606e5 # Momento para comprobar el cortante su valor se fuerza para obtener Vcu aproximadamente igual a 82.607 kN.
@@ -52,7 +52,7 @@ materiales= preprocessor.getMaterialLoader
 
 concr= EHE_concrete.HA30
 concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente alfacc=1)
-tagHA30= concr.defDiagD(preprocessor)
+concrMatTag30= concr.defDiagD(preprocessor)
 B500S= EHE_reinforcing_steel.B500S
 tagB500S= B500S.defDiagD(preprocessor)
 
@@ -64,19 +64,19 @@ regiones= geomSecHA.getRegions
 rg= regiones.newQuadRegion(concr.nmbDiagD)
 rg.nDivIJ= 10
 rg.nDivJK= 10
-rg.pMin= geom.Pos2d(-ancho/2.0,-canto/2.0)
-rg.pMax= geom.Pos2d(ancho/2.0,canto/2.0)
+rg.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
+rg.pMax= geom.Pos2d(width/2.0,depth/2.0)
 armaduras= geomSecHA.getReinfLayers
 armaduraInf= armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 armaduraInf.numReinfBars= numBarras
 armaduraInf.barArea= areaBarra
-armaduraInf.p1= geom.Pos2d(recub-ancho/2.0,recub-canto/2.0) # Armadura inferior.
-armaduraInf.p2= geom.Pos2d(ancho/2.0-recub,recub-canto/2.0)
+armaduraInf.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0) # Armadura inferior.
+armaduraInf.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
 armaduraSup= armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 armaduraSup.numReinfBars= numBarras
 armaduraSup.barArea= areaBarra
-armaduraSup.p1= geom.Pos2d(recub-ancho/2.0,canto/2.0-recub) # Armadura superior.
-armaduraSup.p2= geom.Pos2d(ancho/2.0-recub,canto/2.0-recub)
+armaduraSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior.
+armaduraSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
 
 secHA= materiales.newMaterial("fiberSectionShear3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
@@ -121,7 +121,7 @@ secHAParamsCortante.theta= math.radians(45)
 secHAParamsCortante.alpha= math.radians(90)
 
 
-secHAParamsTorsion= torsionEHE.calcParamsSeccionHuecaEficaz(geomSecHA,canto/2.0,recub)
+secHAParamsTorsion= torsionEHE.calcParamsSeccionHuecaEficaz(geomSecHA,depth/2.0,cover)
 
 
 elementos= preprocessor.getElementLoader

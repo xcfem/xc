@@ -115,7 +115,7 @@ def VtkCargaMalla(preprocessor,recordGrid):
   kpuntos= vtk.vtkPoints()
   # Definimos grid
   recordGrid.uGrid.SetPoints(kpuntos)
-  setToDraw= preprocessor.getSets.getSet(recordGrid.nmbSet)
+  setToDraw= preprocessor.getSets.getSet(recordGrid.setName)
   setToDraw.numerate()
   pnts= setToDraw.getPoints
   for p in pnts:

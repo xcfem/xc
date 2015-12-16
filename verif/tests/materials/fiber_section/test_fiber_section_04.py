@@ -17,9 +17,9 @@ from materials import reinforcingSteelTest
 gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
 gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
 
-ancho= 0.2 # Ancho de la sección expresado en metros.
-canto= 0.4 # Ancho de la sección expresado en metros.
-recub= 0.05 # Recubrimiento de la sección expresado en metros.
+width= 0.2 # Ancho de la sección expresado en metros.
+depth= 0.4 # Ancho de la sección expresado en metros.
+cover= 0.05 # Recubrimiento de la sección expresado en metros.
 diam= 16e-3 # Diámetro de las barras expresado en metros.
 areaFi16= 2.01e-4 # Área de las barras expresado en metros cuadrados.
 
@@ -65,21 +65,21 @@ regiones= geomSecHA.getRegions
 rg= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagD)
 rg.nDivIJ= 10
 rg.nDivJK= 10
-rg.pMin= geom.Pos2d(-canto/2,-ancho/2)
-rg.pMax= geom.Pos2d(canto/2,ancho/2)
+rg.pMin= geom.Pos2d(-depth/2,-width/2)
+rg.pMax= geom.Pos2d(depth/2,width/2)
 armaduras= geomSecHA.getReinfLayers
 armaduraInf= armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 armaduraInf.numReinfBars= 2
 armaduraInf.barDiam= 16e-3
 armaduraInf.barArea= areaFi16
-armaduraInf.p1= geom.Pos2d(recub-canto/2,ancho/2-recub) # Armadura inferior.
-armaduraInf.p2= geom.Pos2d(recub-canto/2,recub-ancho/2)
+armaduraInf.p1= geom.Pos2d(cover-depth/2,width/2-cover) # Armadura inferior.
+armaduraInf.p2= geom.Pos2d(cover-depth/2,cover-width/2)
 armaduraSup= armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 armaduraSup.numReinfBars= 2
 armaduraSup.barDiam= 16e-3
 armaduraSup.barArea= areaFi16
-armaduraSup.p1= geom.Pos2d(canto/2-recub,ancho/2-recub) # Armadura superior.
-armaduraSup.p2= geom.Pos2d(canto/2-recub,recub-ancho/2)
+armaduraSup.p1= geom.Pos2d(depth/2-cover,width/2-cover) # Armadura superior.
+armaduraSup.p2= geom.Pos2d(depth/2-cover,cover-width/2)
 
 materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
@@ -117,17 +117,17 @@ secHA.commitState()
 P6= secHA.getStressResultantComponent("N")
 
 
-P1teor= sgc1*ancho*canto+sgs1*4.0*areaFi16
+P1teor= sgc1*width*depth+sgs1*4.0*areaFi16
 ratio1= (P1-P1teor)/P1teor
-P2teor= sgc2*ancho*canto+sgs2*4.0*areaFi16
+P2teor= sgc2*width*depth+sgs2*4.0*areaFi16
 ratio2= (P2-P2teor)/P2teor
-P3teor= sgc3*ancho*canto+sgs3*4.0*areaFi16
+P3teor= sgc3*width*depth+sgs3*4.0*areaFi16
 ratio3= (P3-P3teor)/P3teor
-P4teor= sgc4*ancho*canto+sgs4*4.0*areaFi16
+P4teor= sgc4*width*depth+sgs4*4.0*areaFi16
 ratio4= (P4-P4teor)/P4teor
-P5teor= sgc5*ancho*canto+sgs5*4.0*areaFi16
+P5teor= sgc5*width*depth+sgs5*4.0*areaFi16
 ratio5= (P5-P5teor)/P5teor
-P6teor= sgc6*ancho*canto+sgs6*4.0*areaFi16
+P6teor= sgc6*width*depth+sgs6*4.0*areaFi16
 ratio6= (P6-P6teor)/P6teor
 
 ''' 
