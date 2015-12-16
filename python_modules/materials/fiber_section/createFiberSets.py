@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
+
+
 class FiberSet:
   '''This class constructs a set of all the  fibers made of the same material from a fiber section
   Attributes:

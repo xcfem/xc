@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
-# Definición de un cuadrado.
-def gmSeccCuadrado(geomSection, fiberMatName, ld, nD):
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
+
+def gmSquareSection(geomSection, fiberMatName, ld, nD):
+  '''returns a square section of fibers of the same material
+  Parameters:
+    geomSection:  geometric section
+    fiberMatName: name of the material that makes up the fibers
+    ld:           edge length of the square
+    nD:           number of divisions to be used along the edges
+                  of the square
+  '''
   regiones= geomSection.getRegions
   rg= regiones.newQuadRegion(fiberMatName)
   rg.nDivIJ= nD
@@ -9,8 +23,18 @@ def gmSeccCuadrado(geomSection, fiberMatName, ld, nD):
   rg.pMax= geom.Pos2d(ld/2,ld/2)
   return rg
 
-# Definición de un rectángulo.
-def gmSeccRectangulo(geomSection,fiberMatName, h, b, nDIJ, nDIK):
+def gmRectangSection(geomSection,fiberMatName, h, b, nDIJ, nDIK):
+  '''returns a rectangular section of fibers of the same material
+  Parameters:
+    geomSection:  geometric section
+    fiberMatName: name of the material that makes up the fibers
+    h:            length of the height side of the rectangle
+    b:            length of the width side of the rectangle
+    nDIJ:         number of divisions to be used along the IJ (width)
+                  direction
+    nDJK:         number of divisions to be used along the JK (height)
+                  direction
+  '''
   regiones= geomSection.getRegions
   rg= regiones.newQuadRegion(fiberMatName)
   rg.nDivIJ= nDIJ

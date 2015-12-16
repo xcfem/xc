@@ -248,6 +248,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/ehe/torsionEHE.pyc
 /usr/local/lib/python2.7/dist-packages/materials/fiber_section/creaSetsFibras.py
 /usr/local/lib/python2.7/dist-packages/materials/fiber_section/creaSetsFibras.pyc
+/usr/local/lib/python2.7/dist-packages/materials/fiber_section/createFiberSets.py
+/usr/local/lib/python2.7/dist-packages/materials/fiber_section/createFiberSets.pyc
 /usr/local/lib/python2.7/dist-packages/materials/fiber_section/defSeccionHAPilar.py
 /usr/local/lib/python2.7/dist-packages/materials/fiber_section/defSeccionHAPilar.pyc
 /usr/local/lib/python2.7/dist-packages/materials/fiber_section/defSeccionHASimple.py

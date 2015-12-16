@@ -1,7 +1,7 @@
 #!/bin/bash
 for fl in $(find ../../verif ../../python_modules -type f -name *.py | grep -v build)
 do
-echo $fl
+# echo $fl
 # sed -i 's/nmbSet/setName/g' $fl
 # sed -i 's/fibrasHormigon/concrFibers/g' $fl
 # sed -i 's/fibrasArmadura/reinfFibers/g' $fl
@@ -46,4 +46,6 @@ echo $fl
 # sed -i 's/gmArmInferior/gmBottomRowRebars/g' $fl
 # sed -i 's/mArmSuperior/gmTopRowRebars/g' $fl
 # sed -i 's/gmArmPiel/gmSideFaceRebars/g' $fl
+sed -i 's/gmSeccCuadrado/gmSquareSection/g' $fl
+sed -i 's/gmSeccRectangulo/gmRectangSection/g' $fl
 done
