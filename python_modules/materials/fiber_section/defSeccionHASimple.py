@@ -137,6 +137,7 @@ class BasicRecordRCSection(object):
     self.shReinfY.familyName= "Vy"
 
   def gmSectionName(self):
+    ''' returns de name of the geometric section'''
     return "geom"+self.sectionName
   def nmbRespT(self):
     return self.sectionName+"RespT"
@@ -176,7 +177,7 @@ class BasicRecordRCSection(object):
 
   def defConcreteRegion(self,geomSection):
     regiones= geomSection.getRegions
-    rg= regiones.newQuadRegion(self.concrDiagName) # Hormigón
+    rg= regiones.newQuadRegion(self.concrDiagName) 
     rg.nDivIJ= self.nDivIJ
     rg.nDivJK= self.nDivJK
     rg.pMin= geom.Pos2d(-self.width/2,-self.depth/2)
@@ -187,26 +188,44 @@ class RecordSeccionHASimple(BasicRecordRCSection):
   '''
   This class is used to define the variables that make up a reinforced 
   concrete section with top and bottom reinforcement layers.
+  Attributes:
+    sectionName:     name identifying the section
+    sectionDescr:    section description
+    concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
+    concrDiagName:   name identifying the characteristic stress-strain diagram of the concrete material
+    depth:           cross-section depth
+    width:           cross-section width
+    nDivIJ:          number of cells in IJ (width) direction
+    nDivJK:          number of cells in JK  (height) direction
+    fiberSectionRepr:
+    reinfSteelType:  type of reinforcement steel
+    reinfDiagName:   name identifying the characteristic stress-strain diagram of
+                     the reinforcing steel material
+    shReinfZ:        record of type defSeccionHASimple.RecordShearReinforcement()
+                     defining the shear reinforcement in Z direction
+    shReinfY:        record of type defSeccionHASimple.RecordShearReinforcement() 
+                     defining the shear reinforcement in Y direction
+    coverMin:        minimum value of end or clear concrete cover of main bars from
+                     both the positive and negative faces
+    negRebars:       layer of main rebars in the local negative face of the section
+    posRebars:       layer of main rebars in the local positive face of the section
   '''
   def __init__(self):
     super(RecordSeccionHASimple,self).__init__()
 
     # Longitudinal reinforcement
-
     self.coverMin= 0.0 
-
-    self.barrasNeg= MainReinfLayer()
-    self.barrasPos= MainReinfLayer()
-
+    self.negRebars= MainReinfLayer()
+    self.posRebars= MainReinfLayer()
 
   def getAsPos(self):
-    return self.barrasPos.getAs()
+    return self.posRebars.getAs()
   def getYAsPos(self):
-    return self.depth/2.0-self.barrasPos.cover
+    return self.depth/2.0-self.posRebars.cover
   def getAsNeg(self):
-    return self.barrasNeg.getAs()
+    return self.negRebars.getAs()
   def getYAsNeg(self):
-    return -self.depth/2.0+self.barrasNeg.cover
+    return -self.depth/2.0+self.negRebars.cover
   def getAc(self):
     return self.width*self.depth
   def getI(self):
@@ -214,32 +233,32 @@ class RecordSeccionHASimple(BasicRecordRCSection):
 
   def getSNeg(self):
     '''distance between bars in local negative face.'''
-    return self.barrasNeg.rebarsSpacing
+    return self.negRebars.rebarsSpacing
   def getSPos(self):
     '''distance between bars in local positive face.'''
-    return self.barrasPos.rebarsSpacing
+    return self.posRebars.rebarsSpacing
   def getDiamNeg(self):
     '''bar diameter in local negative face.'''
-    return self.barrasNeg.rebarsDiam
+    return self.negRebars.rebarsDiam
   def getDiamPos(self):
     '''bar diameter in local positive face.'''
-    return self.barrasPos.rebarsDiam
+    return self.posRebars.rebarsDiam
   def getNBarNeg(self):
     '''number of bars in local negative face.'''
-    return self.barrasNeg.nRebars
+    return self.negRebars.nRebars
   def getNBarPos(self):
     '''number of bars in local positive face.'''
-    return self.barrasPos.nRebars
+    return self.posRebars.nRebars
 
   def centerRebarsPos(self):
-    self.barrasPos.centerRebars(self.width)
+    self.posRebars.centerRebars(self.width)
   def centerRebarsNeg(self):
-    self.barrasNeg.centerRebars(self.width)
+    self.negRebars.centerRebars(self.width)
 
   def setMainReinfNeg(self,diam,area,spacing,basicCover):
-    self.barrasNeg= MainReinfLayer(diam,area,spacing,self.width,basicCover)
+    self.negRebars= MainReinfLayer(diam,area,spacing,self.width,basicCover)
   def setMainReinfPos(self,diam,area,spacing,basicCover):
-    self.barrasPos= MainReinfLayer(diam,area,spacing,self.width,basicCover)
+    self.posRebars= MainReinfLayer(diam,area,spacing,self.width,basicCover)
 
 
   def defSectionGeometry(self,preprocessor,tipoDiag):
@@ -256,16 +275,16 @@ class RecordSeccionHASimple(BasicRecordRCSection):
     armaduras= geomSection.getReinfLayers
     y= self.getYAsNeg()
     #print "y neg.= ", y, " m"
-    p1= geom.Pos2d(-self.width/2+self.barrasNeg.coverLat,y) # Armadura inferior (cara -).
-    p2= geom.Pos2d(self.width/2-self.barrasNeg.coverLat,y)
-    self.negReinfLayer= self.barrasNeg.defReinfLayer(armaduras,"neg",self.reinfDiagName,p1,p2)
+    p1= geom.Pos2d(-self.width/2+self.negRebars.coverLat,y) # Armadura inferior (cara -).
+    p2= geom.Pos2d(self.width/2-self.negRebars.coverLat,y)
+    self.negReinfLayer= self.negRebars.defReinfLayer(armaduras,"neg",self.reinfDiagName,p1,p2)
 
     y= self.getYAsPos()
-    p1= geom.Pos2d(-self.width/2+self.barrasPos.coverLat,y) # Armadura superior (cara +).
-    p2= geom.Pos2d(self.width/2-self.barrasPos.coverLat,y)
-    self.posReinfLayer= self.barrasPos.defReinfLayer(armaduras,"pos",self.reinfDiagName,p1,p2)
+    p1= geom.Pos2d(-self.width/2+self.posRebars.coverLat,y) # Armadura superior (cara +).
+    p2= geom.Pos2d(self.width/2-self.posRebars.coverLat,y)
+    self.posReinfLayer= self.posRebars.defReinfLayer(armaduras,"pos",self.reinfDiagName,p1,p2)
 
-    self.coverMin= min(self.barrasNeg.coverLat,min(self.barrasPos.coverLat,min(self.barrasPos.cover,self.barrasNeg.cover)))
+    self.coverMin= min(self.negRebars.coverLat,min(self.posRebars.coverLat,min(self.posRebars.cover,self.negRebars.cover)))
 
   def getJTorsion(self):
     return parametrosSeccionRectangular.getJTorsion(self.width,self.depth)
@@ -343,7 +362,7 @@ class RecordSeccionHASimple(BasicRecordRCSection):
   def getStressCalculator(self):
     Ec= self.concrType.Ecm()
     Es= self.reinfSteelType.Es
-    return sc.StressCalc(self.width,self.depth,self.barrasPos.cover,self.barrasNeg.cover,self.getAsPos(),self.getAsNeg(),Ec,Es)
+    return sc.StressCalc(self.width,self.depth,self.posRebars.cover,self.negRebars.cover,self.getAsPos(),self.getAsNeg(),Ec,Es)
 
 class RecordSeccionHALosa(object):
   '''
@@ -387,10 +406,10 @@ class RecordSeccionHALosa(object):
     self.D1Section.shReinfZ.shReinfSpacing= spacing
 
   def setMainReinf1neg(self,diam,area,spacing):
-    self.D1Section.setMainReinfNeg(diam,area,spacing,self.basicCover+self.D2Section.barrasNeg.rebarsDiam)
+    self.D1Section.setMainReinfNeg(diam,area,spacing,self.basicCover+self.D2Section.negRebars.rebarsDiam)
 
   def setMainReinf1pos(self,diam,area,spacing):
-    self.D1Section.setMainReinfPos(diam,area,spacing,self.basicCover+self.D2Section.barrasPos.rebarsDiam)
+    self.D1Section.setMainReinfPos(diam,area,spacing,self.basicCover+self.D2Section.posRebars.rebarsDiam)
 
   def getAs1neg(self):
     '''Steel area in local negative face direction 1.'''

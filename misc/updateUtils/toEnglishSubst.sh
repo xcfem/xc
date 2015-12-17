@@ -57,4 +57,6 @@ do
 # sed -i 's/armCortanteZ/shReinfZ/g' $fl
 # sed -i 's/armCortanteY/shReinfY/g' $fl
 # sed -i 's/nmbGeomSeccion/gmSectionName/g' $fl
+# sed -i 's/barrasNeg/negRebars/g' $fl
+# sed -i 's/barrasPos/posRebars/g' $fl
 done
