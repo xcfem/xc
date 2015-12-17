@@ -44,9 +44,9 @@ def nuevoZeroLengthSecc3d(preprocessor, nmbS, tagNodo, tagElem):
 # Crea los elementos a partir de la tabla creada anteriormente
 #    nmbDBase: Nombre de la base de datos donde se guardará la tabla.
 #    nmbTableElem: Nombre de la tabla que contiene los índices de elemento.
-#    nmbSeccion: Nombre de la sección que se asigna a cada elemento.
+#    sectionName: Nombre de la sección que se asigna a cada elemento.
 # '''
-# def creaElemFromTable(nmbDBase, nmbTablaElem, nmbSeccion):
+# def creaElemFromTable(nmbDBase, nmbTablaElem, sectionName):
 #     idElem= 0
 #     idNodo= 0
 #     \sqlite
@@ -63,7 +63,7 @@ def nuevoZeroLengthSecc3d(preprocessor, nmbS, tagNodo, tagElem):
 #                        {
 #                          idElem= getInt("ELEM")
 #                          idNodo= 10*idElem
-#                          \nuevoZeroLengthSecc3d(nmbSeccion,int(idNodo),int(idElem))
+#                          \nuevoZeroLengthSecc3d(sectionName,int(idNodo),int(idElem))
 #                        }
 #                    }
 #                  \free_result

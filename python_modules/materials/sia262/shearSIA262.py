@@ -54,13 +54,13 @@ class ParamsCortante(object):
   Vsu= 0.0 # Contribución de las armaduras a cortante a la resistencia al esfuerzo cortante.
 
   def __init__(self,seccionHA):
-    #self.hormigon= seccionHA.tipoHormigon Arreglar
-    #self.acero= seccionHA.tipoArmadura
+    #self.hormigon= seccionHA.concrType Arreglar
+    #self.acero= seccionHA.reinfSteelType
     self.width= seccionHA.width
     self.depthUtil= 0.9* seccionHA.depth #Mejorar
     self.brazoMecanico= 0.9*self.depthUtil #Mejorar
-    self.AsTrsv= seccionHA.armCortanteZ.getAs()
-    self.s= seccionHA.armCortanteZ.shReinfSpacing
+    self.AsTrsv= seccionHA.shReinfZ.getAs()
+    self.s= seccionHA.shReinfZ.shReinfSpacing
 
   def calcVcu(self, Nd, Md, Mu):
     ''' Calcula el cortante último de la sección sin armadura de cortante.'''
@@ -109,11 +109,11 @@ def trataResultsCombV(preprocessor,nmbComb):
     scc= e.getSection()
     section= scc.getProp("datosSecc")
     secHAParamsCortante= ParamsCortante(section)
-    #codHormigon= section.tipoHormigon
-    #codArmadura= section.tipoArmadura
-    AsTrsv= section.armCortanteY.getAs()
-    alpha= section.armCortanteY.angAlphaShReinf
-    theta= section.armCortanteY.angThetaConcrStruts
+    #codHormigon= section.concrType
+    #codArmadura= section.reinfSteelType
+    AsTrsv= section.shReinfY.getAs()
+    alpha= section.shReinfY.angAlphaShReinf
+    theta= section.shReinfY.angThetaConcrStruts
 
     NTmp= scc.getStressResultantComponent("N")
     MyTmp= scc.getStressResultantComponent("My")

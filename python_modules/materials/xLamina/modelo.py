@@ -60,8 +60,8 @@ def xLaminaConstruyeModeloFicticio(preprocessor,datosScc1, datosScc2):
     tagHorm= hormigon.getProp("matTagD")
     armadura= preprocessor.getMaterialLoader.getMaterial(codArmadura)
     tagHorm= armadura.getProp("matTagD")
-    diagInt1= preprocessor.getMaterialLoader.newInteractionDiagram(datosScc1.nmbSeccion,tagHorm,tagArmadura)
-    diagInt2= preprocessor.getMaterialLoader.newInteractionDiagram(datosScc2.nmbSeccion,tagHorm,tagArmadura)
+    diagInt1= preprocessor.getMaterialLoader.newInteractionDiagram(datosScc1.sectionName,tagHorm,tagArmadura)
+    diagInt2= preprocessor.getMaterialLoader.newInteractionDiagram(datosScc2.sectionName,tagHorm,tagArmadura)
 
     os.sys("rm -f "+"/tmp/elementos_scc1.xci")
     os.sys("rm -f "+"/tmp/elementos_scc2.xci")
@@ -72,7 +72,7 @@ def xLaminaConstruyeModeloFibras(nmbRegDatosScc1, nmbRegDatosScc2):
 
   predefined_spaces.gdls_resist_materiales3D(nodos)
   elementos= preprocessor.getElementLoader
-  elementos.defaultMaterial= deref(nmbRegDatosScc1).nmbSeccion
+  elementos.defaultMaterial= deref(nmbRegDatosScc1).sectionName
   execfile("/tmp/elementos_scc1.xci")
   for e in elementos:
     nmbRegDefSecc= "nil" #Nombre del registro que define la sección.

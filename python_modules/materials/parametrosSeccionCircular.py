@@ -26,8 +26,8 @@ class CircularSection(sp.sectionProperties):
 
 
 # Define las propiedades "derivadas" de una sección circular.
-def setupSeccCircular(nmbSeccion,r,E,nu):
-  return CircularSection(nmbSeccion,r,E,nu)
+def setupSeccCircular(sectionName,r,E,nu):
+  return CircularSection(sectionName,r,E,nu)
 
 # Define una sección elástica para elementos 3d a partir de los datos del registro.
 def defSeccCircularElastica3d(preprocessor, defSecc):

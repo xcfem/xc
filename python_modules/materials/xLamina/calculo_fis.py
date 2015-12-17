@@ -22,16 +22,16 @@ def lanzaCalculoFIS(nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArchDefHipELS)
   extraeDatosLST(nmbArch+".lst")
   xLaminaConstruyeModeloFibras(nmbRegDatosScc1,nmbRegDatosScc2)
   xLaminaCalculaCombEstatNoLin(nmbArchDefHipELS)
-  xLaminaPrintFIS(nmbArch+"FIS",deref(nmbRegDatosScc1).nmbSeccion,deref(nmbRegDatosScc2).nmbSeccion)
+  xLaminaPrintFIS(nmbArch+"FIS",deref(nmbRegDatosScc1).sectionName,deref(nmbRegDatosScc2).sectionName)
 
-def xLaminaPrintFIS(nmbArchSalida, nmbSeccion1, nmbSeccion2):
+def xLaminaPrintFIS(nmbArchSalida, sectionName1, sectionName2):
   # Imprime los resultados de la comprobación frente a fisuración
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
   ansysOutput1= open(nmbArchSalida+".mac","w")
   ansysOutput2= open(nmbArchSalida+"esf.mac","w")
-  printCabeceraListadoFisuracion(texOutput1,"1 ("+ nmbSeccion1 +")")
-  printCabeceraListadoFisuracion(texOutput2,"2 ("+ nmbSeccion2 +")")
+  printCabeceraListadoFisuracion(texOutput1,"1 ("+ sectionName1 +")")
+  printCabeceraListadoFisuracion(texOutput2,"2 ("+ sectionName2 +")")
   e= preprocessor.getElementLoader
   for e in elementos:
     if(odd(e.tag)):
@@ -102,8 +102,8 @@ def xLaminaPrintFISSIA262(preprocessor,nmbArchSalida, mapSections):
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
   xcOutput= open(nmbArchSalida+".py","w")
-  #printCabeceraListadoFisuracion("texOutput1","1 ("+ nmbSeccion1 +")")
-  #printCabeceraListadoFisuracion("texOutput2","2 ("+ nmbSeccion2 +")")
+  #printCabeceraListadoFisuracion("texOutput1","1 ("+ sectionName1 +")")
+  #printCabeceraListadoFisuracion("texOutput2","2 ("+ sectionName2 +")")
   elementos= preprocessor.getSets.getSet("total").getElements
   strHeader= "eTag & idSection & HIPCP & NCP kN & MyCP kN m/m & MzCP kN m/m & $sg_{max} MPa \\\\\n"
   texOutput1.write(strHeader)

@@ -13,8 +13,8 @@ class CrackControlSIA262(cc.CrackControlBaseParameters):
   # Calcula la apertura característica de fisura.
   def calcRebarStress(self, scc):
     section= scc.getProp("datosSecc")
-    tagHormigon= section.tipoHormigon.matTagK
-    reinfMatTag= section.tipoArmadura.matTagK
+    tagHormigon= section.concrType.matTagK
+    reinfMatTag= section.reinfSteelType.matTagK
     if(not scc.hasProp("rcSets")):
       scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,tagHormigon,self.setNameFibrasHormigon,reinfMatTag,self.setNameFibrasArmadura))
     rcSets= scc.getProp("rcSets")

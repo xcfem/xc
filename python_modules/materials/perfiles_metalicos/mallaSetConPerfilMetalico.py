@@ -11,16 +11,16 @@ def mallaSetConPerfilMetalico(preprocessor,setName):
   nmbPerfilMet= "" 
   nmbTrf= ""
   nmbTipoAcero= ""
-  nmbSeccion= ""
+  sectionName= ""
   setElems= preprocessor.getSetLoader.getSet(setName)
   nmbPerfilMet= setElems.getProp(nmbPerfil)
   nmbTipoAcero= setElems.getProp(nmbAcero)
   nmbTrf= setElems.getProp(nmbGeomTransf)
 
-  nmbSeccion= nmbPerfilMet+"_"+nmbGeomTransf
-  defSeccPerfilMetalicoShElastica3d(nmbPerfilMet,nmbSeccion)
+  sectionName= nmbPerfilMet+"_"+nmbGeomTransf
+  defSeccPerfilMetalicoShElastica3d(nmbPerfilMet,sectionName)
   seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-  seedElemLoader.defaultMaterial= nmbSeccion
+  seedElemLoader.defaultMaterial= sectionName
   seedElemLoader.defaultTransformation= nmbTrf
   elem= seedElemLoader.newElement("elastic_beam_3d",xc.ID([0,0]))
   elem.rho= nmbPerfilMet.P

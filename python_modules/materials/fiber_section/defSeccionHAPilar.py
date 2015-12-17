@@ -53,7 +53,7 @@ class RecordRCColumnSection(defSeccionHASimple.BasicRecordRCSection):
     '''
     self.defDiagrams(preprocessor,tipoDiag)
 
-    geomSection= preprocessor.getMaterialLoader.newSectionGeometry(self.nmbGeomSeccion())
+    geomSection= preprocessor.getMaterialLoader.newSectionGeometry(self.gmSectionName())
     self.defConcreteRegion(geomSection)
 
     armaduras= sectionGeom.getReinfLayers

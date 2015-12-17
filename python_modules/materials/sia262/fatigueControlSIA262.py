@@ -85,7 +85,7 @@ def estimateSigmaCPlanB(sccData, N, M):
   return 2.0*sgc #Ver Jiménez Montoya 12.3 (página 244)
 
 def limitFatigueBeton(sccData,kc,sigma_c0,sigma_c1):
-  fcd= sccData.tipoHormigon.fcd()
+  fcd= sccData.concrType.fcd()
   #print "sigma_c0= ", sigma_c0/1e6, " sigma_c1= ", sigma_c1/1e6
   sg_max= min(min(sigma_c0,sigma_c1),0.0) # No possitive sttresses.
   sg_min= min(max(sigma_c0,sigma_c1),0.0) # No possitive sttresses.

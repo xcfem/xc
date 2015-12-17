@@ -19,8 +19,8 @@ class SectionContainer(object):
 
   def append(self, deckSections):
     self.sections.append(deckSections)
-    self.mapSections[deckSections.D2Section.nmbSeccion]= deckSections.D2Section
-    self.mapSections[deckSections.D1Section.nmbSeccion]= deckSections.D1Section
+    self.mapSections[deckSections.D2Section.sectionName]= deckSections.D2Section
+    self.mapSections[deckSections.D1Section.sectionName]= deckSections.D1Section
 
   def search(self,nmb):
     ''' Returnrs section named nmb (if founded) '''
@@ -34,9 +34,9 @@ class SectionContainer(object):
   #   mapInteractionDiagrams= {}
   #   for s in self.sections:
   #     diag2= s.D2Section.defInteractionDiagram(preprocessor,tipoDiag)
-  #     mapInteractionDiagrams[s.D2Section.nmbSeccion]= diag2
+  #     mapInteractionDiagrams[s.D2Section.sectionName]= diag2
   #     diag1= s.D1Section.defInteractionDiagram(preprocessor,tipoDiag)
-  #     mapInteractionDiagrams[s.D1Section.nmbSeccion]= diag1
+  #     mapInteractionDiagrams[s.D1Section.sectionName]= diag1
   #   return mapInteractionDiagrams
 
   def getInteractionDiagrams(self,preprocessor,tipoDiag):
@@ -45,10 +45,10 @@ class SectionContainer(object):
     for s in self.sections:
       s.D2Section.defSeccionHASimple(preprocessor,tipoDiag)
       diag2= s.D2Section.defInteractionDiagram(preprocessor)
-      mapInteractionDiagrams[s.D2Section.nmbSeccion]= diag2
+      mapInteractionDiagrams[s.D2Section.sectionName]= diag2
       s.D1Section.defSeccionHASimple(preprocessor,tipoDiag)
       diag1= s.D1Section.defInteractionDiagram(preprocessor)
-      mapInteractionDiagrams[s.D1Section.nmbSeccion]= diag1
+      mapInteractionDiagrams[s.D1Section.sectionName]= diag1
     return mapInteractionDiagrams
 
   def getInteractionDiagramsNMy(self,preprocessor,tipoDiag):
@@ -58,11 +58,11 @@ class SectionContainer(object):
       diag2= s.D2Section.defInteractionDiagramNMy(preprocessor,tipoDiag)
       diag2.simplify() #Hasta corregir la obtención de diagramas NMy
       print "area diag2= ", diag2.getArea()
-      mapInteractionDiagrams[s.D2Section.nmbSeccion]= diag2
+      mapInteractionDiagrams[s.D2Section.sectionName]= diag2
       diag1= s.D1Section.defInteractionDiagramNMy(preprocessor,tipoDiag)
       diag1.simplify() #Hasta corregir la obtención de diagramas NMy
       print "area diag1= ", diag1.getArea()
-      mapInteractionDiagrams[s.D1Section.nmbSeccion]= diag1
+      mapInteractionDiagrams[s.D1Section.sectionName]= diag1
     return mapInteractionDiagrams
 
   def crackControl(self,preprocessor,analysis,csvFile,outputFile,mapSectionsForEveryElement, tipoDiag):

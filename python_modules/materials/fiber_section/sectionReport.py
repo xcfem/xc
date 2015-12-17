@@ -74,10 +74,10 @@ class SectionInfo(object):
   ''' Obtains section parameters for report'''
   def __init__(self,preprocessor,section):
     self.scc= section
-    self.sectionGeometryName= self.scc.nmbGeomSeccion()
+    self.sectionGeometryName= self.scc.gmSectionName()
     self.geomSection= preprocessor.getMaterialLoader.getSectionGeometry(self.sectionGeometryName)
-    self.EHorm= self.scc.tipoHormigon.Ecm()
-    self.EAcero= self.scc.tipoArmadura.Es
+    self.EHorm= self.scc.concrType.Ecm()
+    self.EAcero= self.scc.reinfSteelType.Es
     self.tangHorm= self.scc.getConcreteDiagram(preprocessor).getTangent()
     self.tangSteel= self.scc.getSteelDiagram(preprocessor).getTangent()
     self.regions= self.geomSection.getRegions
@@ -120,7 +120,7 @@ class SectionInfo(object):
     fileHandler.write('\\hline\n')
     fileHandler.write('\\begin{large} '+latexUtils.toLaTex(self.sectionGeometryName)+' \end{large}\\\\\n')
     fileHandler.write('\\hline\n')
-    fileHandler.write(self.scc.descSeccion+'\\\\\n')
+    fileHandler.write(self.scc.sectionDescr+'\\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\begin{tabular}{c|l}\n')
     fileHandler.write('\\begin{minipage}{85mm}\n')
@@ -143,9 +143,9 @@ class SectionInfo(object):
     fileHandler.write('\\textbf{Materials}:\\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\begin{tabular}{ll}\n')
-    fileHandler.write('Concrete: '+self.scc.tipoHormigon.nmbMaterial+' & Módulo de deformación longitudinal: $E_c= '+'{0:.2f}'.format(self.EHorm/1e9)+'\\ GPa$\\\\\n')
+    fileHandler.write('Concrete: '+self.scc.concrType.nmbMaterial+' & Módulo de deformación longitudinal: $E_c= '+'{0:.2f}'.format(self.EHorm/1e9)+'\\ GPa$\\\\\n')
     fileHandler.write('\\hline\n')
-    fileHandler.write('Steel: '+self.scc.tipoArmadura.nmbMaterial+' & Elastic modulus: $E_s= '+'{0:.2f}'.format(self.EAcero/1e9)+'\\ GPa$\\\\\n')
+    fileHandler.write('Steel: '+self.scc.reinfSteelType.nmbMaterial+' & Elastic modulus: $E_s= '+'{0:.2f}'.format(self.EAcero/1e9)+'\\ GPa$\\\\\n')
     fileHandler.write('\\end{tabular} \\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\textbf{Mechanical properties}:\\\\\n')
@@ -175,13 +175,13 @@ class SectionInfo(object):
     fileHandler.write('\\begin{tabular}{cccccccc}\n')
     fileHandler.write('Id & n. ramas & $\\phi$ & área & sep. & area/m & $\\alpha$ & $\\beta$\\\\\n')
     fileHandler.write(' &  & $(mm)$ & $(cm^2)$ & $(cm)$ & $(cm^2/m)$ & $( \\degree)$ & $( \\degree)$\\\\\n')
-    writeShearReinforcement(self.scc.armCortanteZ,fileHandler,self.scc.width)
-    writeShearReinforcement(self.scc.armCortanteY,fileHandler,self.scc.depth)
+    writeShearReinforcement(self.scc.shReinfZ,fileHandler,self.scc.width)
+    writeShearReinforcement(self.scc.shReinfY,fileHandler,self.scc.depth)
     fileHandler.write('\\end{tabular} \\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\end{tabular}\n')
     fileHandler.write('\\end{center}\n')
-    fileHandler.write('\\caption{'+self.scc.descSeccion+' ('+ latexUtils.toLaTex(self.scc.nmbSeccion) +').'+'} \\label{tb_'+self.scc.nmbSeccion+'}\n')
+    fileHandler.write('\\caption{'+self.scc.sectionDescr+' ('+ latexUtils.toLaTex(self.scc.sectionName) +').'+'} \\label{tb_'+self.scc.sectionName+'}\n')
     fileHandler.write('\\end{table}\n')
     fileHandler.close()
 

@@ -123,9 +123,9 @@ typical_materials.defSteel02(mdlr,name,E,fy,b,initialStress)
 \begin{paramClassTable}
 {\tt nmbMaterial} & name identifying the material \\
 {\tt nmbDiagK} & name identifying the characteristic stress-strain diagram (default: {\tt "dgK"+nmbMaterial}) \\
-{\tt tagDiagK} & tag of the uniaxial material with the characteristic stress-strain diagram\\
+{\tt matTagK} & tag of the uniaxial material with the characteristic stress-strain diagram\\
 {\tt nmbDiagD} &  name identifying the design stress-strain diagram (default: {\tt "dgD"+nmbMaterial}) \\
-{\tt tagDiagD} & tag of the uniaxial material with the design stress-strain diagram\\
+{\tt matTagD} & tag of the uniaxial material with the design stress-strain diagram\\
 \fyk{} \\
 {\tt gammaS} & partial factor for material (default: 1.15)\\
 \Es{} of the material (default: 2e11)\\
@@ -337,7 +337,7 @@ parametrosSeccionCircular.CircularSection(name,r,E,nu)
 \begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Functions for defining circular sections}} \\
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.setupSeccCircular(nmbSeccion,r,E,nu)}} \\
+\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.setupSeccCircular(sectionName,r,E,nu)}} \\
 & returns a circular section \\
 \multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularElastica3d(mdlr, defSecc)}}\\
 & returns an elastic circular section appropiate for 3D beam analysis.\\
@@ -567,13 +567,13 @@ typical_materials.defElasticPlateSection(mdlr,name,E,nu,rho,h)
 \subsubsection{FiberSet}
 \noindent This class constructs a set of all the  fibers made of the same material from a fiber section
 \begin{verbatim}
-from materials.fiber_section import creaSetsFibras
-creaSetsFibras.FiberSet(scc,nmbSet,tagDiag)
+from materials.fiber_section import createFiberSets
+createFiberSets.FiberSet(scc,setName,matTag)
 \end{verbatim}
 \begin{paramClassTable}
 {\tt scc} & name identifying the fiber section \\
-{\tt nmbSet} & name of the set of fibers to be generated \\
-{\tt tagDiag} & tag of the uniaxial material which forms the fibers \\
+{\tt setName} & name of the set of fibers to be generated \\
+{\tt matTag} & tag of the uniaxial material which forms the fibers \\
 \end{paramClassTable}
 
 \begin{methodsTable}
@@ -587,19 +587,19 @@ creaSetsFibras.FiberSet(scc,nmbSet,tagDiag)
 \subsubsection{RCSets}
 \noindent This class constructs both the concrete and reinforced steel fiber sets from a reinforced concrete fiber section.
 \begin{verbatim}
-from materials.fiber_section import creaSetsFibras
-creaSetsFibras.RCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
+from materials.fiber_section import createFiberSets
+createFiberSets.RCSets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetName)
 \end{verbatim}
 \begin{paramClassTable}
 {\tt scc} & name identifying the fiber section \\
-{\tt tagCDiag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
-{\tt nmbSetC} & name of the set of fibers of concrete to be generated \\
-{\tt tagSdiag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
-{\tt nmbSetS} & name of the set of fibers of reinforcing steel to be generated \\
+{\tt concrMatTag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
+{\tt concrSetName} & name of the set of fibers of concrete to be generated \\
+{\tt reinfMatTag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
+{\tt reinfSetName} & name of the set of fibers of reinforcing steel to be generated \\
 \end{paramClassTable}
 
 \begin{methodsTable}
-\multicolumn{2}{p{13cm}}{{\tt reselTractionFibers(scc,tractionFibersSetName)}} \\
+\multicolumn{2}{p{13cm}}{{\tt reselTensionFibers(scc,tensionFibersSetName)}} \\
 & returns a set with those fibers in tension from the total set \\
 \multicolumn{2}{p{13cm}}{{\tt getConcreteArea(factor)}} \\
  & returns the cross section area of concrete in the set \\
@@ -609,91 +609,91 @@ creaSetsFibras.RCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
  & returns the initial tangent in the stress-strain diagram of the material that makes up the fibers of concrete \\
 \multicolumn{2}{p{13cm}}{{\tt getConcreteCompression()}} \\
  & returns the resultant of compressive stresses in concrete fibers \\
-\multicolumn{2}{p{13cm}}{{\tt getNumBarrasTraccion()}} \\
+\multicolumn{2}{p{13cm}}{{\tt getNumTensionRebars()}} \\
  & returns the number of reinforcing steel fibers in tension \\
 \end{methodsTable}
 
 \subsubsection{fiberSectionSetupRCSets}
 Returns an object of the class \verb|RCSets|
 \begin{verbatim}
-from materials.fiber_section import creaSetsFibras
-creaSetsFibras.fiberSectionSetupRCSets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
+from materials.fiber_section import createFiberSets
+createFiberSets.fiberSectionSetupRCSets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetName)
 \end{verbatim}
 \begin{paramFuncTable}
 {\tt scc} & name identifying the fiber section \\
-{\tt tagCdiag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
-{\tt nmbSetC} & name of the set of fibers of concrete to be generated \\
-{\tt tagSdiag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
-{\tt nmbSetS} & name of the set of fibers of reinforcing steel to be generated \\
+{\tt concrMatTag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
+{\tt concrSetName} & name of the set of fibers of concrete to be generated \\
+{\tt reinfMatTag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
+{\tt reinfSetName} & name of the set of fibers of reinforcing steel to be generated \\
 \end{paramFuncTable}
 
 
-\subsubsection{creaSetsFibrasHA}
+\subsubsection{createRCFiberSets}
 Construct the sets of concrete fibers (\verb|"hormigon"|) and reinforcing steel fibers (\verb|"armadura"|) for all the elements included in a set of elements.
 \begin{verbatim}
-from materials.fiber_section import creaSetsFibras
-creaSetsFibras.creaSetsFibrasHA(mdlr, nmbSet, tagHA, tagAcero)
+from materials.fiber_section import createFiberSets
+createFiberSets.createRCFiberSets(mdlr, setName, concrMatTag, reinfMatTag)
 \end{verbatim}
 \begin{paramFuncTable}
 \mdlr{} \\
-{\tt nmbSet} & name identifying the set of elements \\
-{\tt tagHA} & tag of the uniaxial material that makes up the concrete fibers of the section \\
-{\tt tagAcero} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
+{\tt setName} & name identifying the set of elements \\
+{\tt concrMatTag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
+{\tt reinfMatTag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
 \end{paramFuncTable}
 
-\subsubsection{reselTractionFibers}
+\subsubsection{reselTensionFibers}
 Returns the fibers under tension included in a set of fibers.
 \begin{verbatim}
-from materials.fiber_section import creaSetsFibras
-creaSetsFibras.reselTractionFibers(scc,fiberSetName,tractionFibersSetName)
+from materials.fiber_section import createFiberSets
+createFiberSets.reselTensionFibers(scc,fiberSetName,tensionFibersSetName)
 \end{verbatim}
 \begin{paramFuncTable}
 {\tt scc} & name identifying the fiber section \\
 {\tt fiberSetName} & name identifying the set of fibers \\
-{\tt tractionFibersSetName} & name of the set of tensioned fibers returned\\
+{\tt tensionFibersSetName} & name of the set of tensioned fibers returned\\
 \end{paramFuncTable}
 
 
 \subsubsection{fiberSectionSetupRC3Sets}
 Returns a set of tensioned fibers (\verb|"armaduraTraccion"|) of a fiber section of reinforced concrete.
 \begin{verbatim}
-from materials.fiber_section import creaSetsFibras
-creaSetsFibras.fiberSectionSetupRC3Sets(scc,tagCdiag, nmbSetC,tagSdiag, nmbSetS)
+from materials.fiber_section import createFiberSets
+createFiberSets.fiberSectionSetupRC3Sets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetName)
 \end{verbatim}
 \begin{paramFuncTable}
 {\tt scc} & name identifying the fiber section \\
-{\tt tagCdiag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
-{\tt nmbSetC} & name of the set of fibers of concrete to be generated \\
-{\tt tagSdiag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
-{\tt nmbSetS} & name of the set of fibers of reinforcing steel to be generated \\
+{\tt concrMatTag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
+{\tt concrSetName} & name of the set of fibers of concrete to be generated \\
+{\tt reinfMatTag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
+{\tt reinfSetName} & name of the set of fibers of reinforcing steel to be generated \\
 \end{paramFuncTable}
 
 
-\subsubsection{RecordSeccionHAPilar}
+\subsubsection{RecordRCColumnSection}
 \noindent This class is used to define the variables that make up a reinforced concrete section with reinforcement symmetric in both directions (as usual in columns)
 \begin{verbatim}
 from materials.fiber_section import defSeccionHAPilar
-defSeccionHAPilar.RecordSeccionHAPilar()
+defSeccionHAPilar.RecordRCColumnSection()
 \end{verbatim}
 \begin{paramClassTable}
-{\tt nmbSeccion} & name identifying the section \\
-{\tt descSeccion} & section description \\
-{\tt nmbGeomSeccion} & name identifying the geometric section \\
-{\tt tipoHormigón} & type of concrete (e.g. hormigonesEHE.HA25) \\
-{\tt nmbDiagHormigon} & name identifying the characteristic stress-strain diagram of the concrete material \\
-{\tt canto} & cross-section depth \\
-{\tt ancho} & cross-section width \\
+{\tt sectionName} & name identifying the section \\
+{\tt sectionDescr} & section description \\
+{\tt gmSectionName} & name identifying the geometric section \\
+{\tt concrType} & type of concrete (e.g. hormigonesEHE.HA25) \\
+{\tt concrDiagName} & name identifying the characteristic stress-strain diagram of the concrete material \\
+{\tt depth} & cross-section depth \\
+{\tt width} & cross-section width \\
 \nDivIJ{}\\
 \nDivJK{} \\
-{\tt tipoArmadura} & type of reinforcement steel \\
-{\tt nmbDiagArmadura} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
-{\tt recub} & cover \\
-{\tt nBarrasAncho} & number of rebars in the width direction of the section (each face)\\
-{\tt areaBarrasAncho} & cross sectional area of each rebar in  width direction \\
-{\tt nBarrasCanto} & number of rebars in the height direction of the section (each face )\\
-{\tt areaBarrasCanto} & cross sectional area of each rebar in height direction \\
-{\tt armCortanteZ} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Z direction \\
-{\tt armCortanteY} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Y direction \\
+{\tt reinfSteelType} & type of reinforcement steel \\
+{\tt reinfDiagName} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
+{\tt cover} & cover \\
+{\tt nRebarsWidth} & number of rebars in the width direction of the section (each face)\\
+{\tt areaRebarWidth} & cross sectional area of each rebar in  width direction \\
+{\tt nRebarsDepth} & number of rebars in the height direction of the section (each face )\\
+{\tt areaRebarDepth} & cross sectional area of each rebar in height direction \\
+{\tt shReinfZ} & record of type {\tt defSeccionHASimple.RecordShearReinforcement()} defining the shear reinforcement in Z direction \\
+{\tt shReinfY} & record of type {\tt defSeccionHASimple.RecordShearReinforcement()} defining the shear reinforcement in Y direction \\
 \end{paramClassTable}
 
 \begin{methodsTable}
@@ -702,19 +702,19 @@ defSeccionHAPilar.RecordSeccionHAPilar()
 & {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
 \end{methodsTable}
 
-\subsubsection{RecordArmaduraCortante}
+\subsubsection{RecordShearReinforcement}
 \noindent This class is used to define the variables that make up a family of shear reinforcing bars.
 \begin{verbatim}
 from materials.fiber_section import defSeccionHASimple
-defSeccionHASimple.RecordArmaduraCortante()
+defSeccionHASimple.RecordShearReinforcement()
 \end{verbatim}
 \begin{paramClassTable}
-{\tt nmbFamilia} & name identifying the family of shear reinforcing bars \\
-{\tt nRamas} & number of effective branches\\
-{\tt areaRama} &  area of the shear reinforcing bar\\
-{\tt espaciamientoRamas} & longitudinal distance between transverse reinforcements (defaults to 0.2)\\
-{\tt angAlphaRamas} & angle between the shear reinforcing bars and the axis of the member (defaults to $\Pi/2$)\\
-{\tt angThetaBielas} & angle between the concrete's compression struts and the axis of the member (defaults to $\Pi/4$)\\
+{\tt familyName} & name identifying the family of shear reinforcing bars \\
+{\tt nShReinfBranches} & number of effective branches\\
+{\tt areaShReinfBranch} &  area of the shear reinforcing bar\\
+{\tt shReinfSpacing} & longitudinal distance between transverse reinforcements (defaults to 0.2)\\
+{\tt angAlphaShReinf} & angle between the shear reinforcing bars and the axis of the member (defaults to $\Pi/2$)\\
+{\tt angThetaConcrStruts} & angle between the concrete's compression struts and the axis of the member (defaults to $\Pi/4$)\\
 \end{paramClassTable}
 \begin{methodsTable}
 {\tt getAs()} & returns the area per unit length of the family of shear reinforcements\\
@@ -727,29 +727,29 @@ from materials.fiber_section import defSeccionHASimple
 defSeccionHASimple.RecordSeccionHASimple()
 \end{verbatim}
 \begin{paramClassTable}
-{\tt nmbSeccion} & name identifying the section \\
-{\tt descSeccion} & section description \\
+{\tt sectionName} & name identifying the section \\
+{\tt sectionDescr} & section description \\
 {\tt tipoHormigón} & type of concrete (e.g. hormigonesEHE.HA25) \\
-{\tt nmbDiagHormigon} & name identifying the characteristic stress-strain diagram of the concrete material \\
-{\tt canto} & cross-section height \\
-{\tt ancho} & cross-section width \\
+{\tt concrDiagName} & name identifying the characteristic stress-strain diagram of the concrete material \\
+{\tt depth} & cross-section height \\
+{\tt width} & cross-section width \\
 \nDivIJ{} \\
 \nDivJK{} \\
-{\tt tipoArmadura} & type of reinforcement steel \\
-{\tt nmbDiagArmadura} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
-{\tt nBarrasNeg} & number of longitudinal rebars in the negative face of the section\\
-{\tt areaBarrasNeg} & area of each longitudinal rebar in  the negative face \\
-{\tt diamBarrasNeg} & diameter of the bars in  the negative face of the section \\
-{\tt recubNeg} & cover of longitudinal reinforcement in the negative face\\
-{\tt recubLatNeg} & lateral cover of longitudinal reinforcement in the negative face\\
-{\tt nBarrasPos} & number of longitudinal rebars in the positive face of the section\\
-{\tt areaBarrasPos} & area of each longitudinal rebar in  the positive face \\
-{\tt diamBarrasPos} & diameter of the bars rebar in  the positive face of the section \\
-{\tt recubPos} & cover of longitudinal reinforcement in the positive face\\
-{\tt recubLatPos} & lateral cover of longitudinal reinforcement in the positive face\\
-{\tt recubMin} & minimal covering of the longitudinal reinforcement \\
-{\tt armCortanteZ} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Z direction \\
-{\tt armCortanteY} & record of type {\tt defSeccionHASimple.RecordArmaduraCortante()} defining the shear reinforcement in Y direction \\
+{\tt reinfSteelType} & type of reinforcement steel \\
+{\tt reinfDiagName} & name identifying the characteristic stress-strain diagram of the reinforcing steel material \\
+{\tt nRebarsNeg} & number of longitudinal rebars in the negative face of the section\\
+{\tt areaRebarNeg} & area of each longitudinal rebar in  the negative face \\
+{\tt rebarsDiamNeg} & diameter of the bars in  the negative face of the section \\
+{\tt coverNeg} & cover of longitudinal reinforcement in the negative face\\
+{\tt coverLatNeg} & lateral cover of longitudinal reinforcement in the negative face\\
+{\tt nRebarsPos} & number of longitudinal rebars in the positive face of the section\\
+{\tt areaRebarPos} & area of each longitudinal rebar in  the positive face \\
+{\tt rebarsDiamPos} & diameter of the bars rebar in  the positive face of the section \\
+{\tt coverPos} & cover of longitudinal reinforcement in the positive face\\
+{\tt coverLatPos} & lateral cover of longitudinal reinforcement in the positive face\\
+{\tt coverMin} & minimal covering of the longitudinal reinforcement \\
+{\tt shReinfZ} & record of type {\tt defSeccionHASimple.RecordShearReinforcement()} defining the shear reinforcement in Z direction \\
+{\tt shReinfY} & record of type {\tt defSeccionHASimple.RecordShearReinforcement()} defining the shear reinforcement in Y direction \\
 \end{paramClassTable}
 \begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(tipoDiag)}} \\
@@ -762,13 +762,13 @@ defSeccionHASimple.RecordSeccionHASimple()
 \noindent This class is used to define the variables that make up a reinforced concrete slab section with single reinforcement layers in top and bottom faces
 \begin{verbatim}
 from materials.fiber_section import defSeccionHASimple
-defSeccionHASimple.RecordSeccionHALosa(nmb,desc,canto,concrete,steel,basicCover)
+defSeccionHASimple.RecordSeccionHALosa(nmb,desc,depth,concrete,steel,basicCover)
 \end{verbatim}
 \begin{paramClassTable}
 {\tt nmb} & basic name identifying the section \\
 & the name identifying the section in 1 direction is formed adding to {\tt nmb} the suffix  "L"; for the section in 2 direction the suffix added to the basic name is "T" \\
 {\tt desc} & basic section description \\
-{\tt canto} & cross-section height (width is considered = 1)\\
+{\tt depth} & cross-section height (width is considered = 1)\\
 {\tt concrete} & type of concrete (e.g. hormigonesEHE.HA25) \\
 {\tt steel} & type of reinforcement steel \\
 {\tt basicCover} & minimal cover of longitudinal reinforcement \\
@@ -786,12 +786,12 @@ defSeccionHASimple.RecordSeccionHALosa(nmb,desc,canto,concrete,steel,basicCover)
  & \emph{idem} for the layer of main reinforcement bars corresponding to the negative face of the section in 1 direction \\
 \multicolumn{2}{p{13cm}}{{\tt setMainReinf1pos(diam,area,spacing)}} \\
  & \emph{idem} for the layer of main reinforcement bars corresponding to the positive face of the section in 1 direction \\
-\multicolumn{2}{p{13cm}}{{\tt setShearReinfT(nRamas,areaRama,spacing)}} \\
+\multicolumn{2}{p{13cm}}{{\tt setShearReinfT(nShReinfBranches,areaShReinfBranch,spacing)}} \\
  & defines the rebar arrangement of the shear reinforcement bars corresponding to the section in 2 direction \\
-& {\tt nRamas} =  number of effective branches \\
-& {\tt areaRama} = area of the shear reinforcing bar \\
+& {\tt nShReinfBranches} =  number of effective branches \\
+& {\tt areaShReinfBranch} = area of the shear reinforcing bar \\
 & {\tt spacing} = longitudinal distance between shear reinforcements bars \\
-\multicolumn{2}{p{13cm}}{{\tt setShearReinfL(nRamas,areaRama,spacing)}} \\
+\multicolumn{2}{p{13cm}}{{\tt setShearReinfL(nShReinfBranches,areaShReinfBranch,spacing)}} \\
  & \emph{idem} for shear reinforcement bars corresponding to the section in 1 direction \\
 \end{methodsTable}
 
@@ -858,86 +858,86 @@ regimenSeccion.strTipoSolicitacion(tipoSol)
 & =3 for single or combined compression state \\
 \end{paramFuncTable}
 
-\subsubsection{gmArmCapaHoriz}
+\subsubsection{gmHorizRowRebars}
 Returns a reinforcement layer parallel to the top and bottom sides of the rectangular section. The row of reinforcement bars is placed at a distance {\tt h} over the horizontal axis of the section. 
 \noindent 
 \begin{verbatim}
 from materials.fiber_section import geomArmaduraSeccionesFibras
-geomArmaduraSeccionesFibras.gmArmCapaHoriz(sectionGeom, nmbFiberMat, 
-nBarras, areaBarras, canto, ancho, rcub, h)
+geomArmaduraSeccionesFibras.gmHorizRowRebars(sectionGeom, fiberMatName, 
+nRebars, areaRebar, depth, width, cover, h)
 \end{verbatim}
 \begin{paramFuncTable}
 {\tt sectionGeom} & name identifying the geometric section \\
-{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
-{\tt nBarras} & number of rebars in the layer \\
-{\tt areaBarras} &  area of each rebar \\
-{\tt canto} &  cross-section height \\
-{\tt ancho} & cross-section width \\
-{\tt rcub} & cover \\
+{\tt fiberMatName} & name identifying the uniaxial material which forms the fibers\\
+{\tt nRebars} & number of rebars in the layer \\
+{\tt areaRebar} &  area of each rebar \\
+{\tt depth} &  cross-section height \\
+{\tt width} & cross-section width \\
+{\tt cover} & cover \\
 {\tt h} & distance between the horizontal axis of the cross-section and the reinforcement layer \\
 \end{paramFuncTable}
 
-\subsubsection{gmArmInferior}
+\subsubsection{gmBottomRowRebars}
 Returns a reinforcement layer in the bottom side of a rectangular section.
 \noindent 
 \begin{verbatim}
 from materials.fiber_section import geomArmaduraSeccionesFibras
-geomArmaduraSeccionesFibras.gmArmInferior(sectionGeom,nmbFiberMat, 
-nBarras, areaBarras, canto, ancho, rcub)
+geomArmaduraSeccionesFibras.gmBottomRowRebars(sectionGeom,fiberMatName, 
+nRebars, areaRebar, depth, width, cover)
 \end{verbatim}
 \begin{paramFuncTable}
 {\tt sectionGeom} & name identifying the geometric section \\
-{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
-{\tt nBarras} & number of rebars in the layer \\
-{\tt areaBarras} &  area of each rebar \\
-{\tt canto} &  cross-section height \\
-{\tt ancho} & cross-section width \\
-{\tt rcub} & cover \\
+{\tt fiberMatName} & name identifying the uniaxial material which forms the fibers\\
+{\tt nRebars} & number of rebars in the layer \\
+{\tt areaRebar} &  area of each rebar \\
+{\tt depth} &  cross-section height \\
+{\tt width} & cross-section width \\
+{\tt cover} & cover \\
 \end{paramFuncTable}
 
-\subsubsection{gmArmSuperior}
+\subsubsection{ggmTopRowRebars}
 Returns a reinforcement layer in the top side of a rectangular section.
 \noindent 
 \begin{verbatim}
 from materials.fiber_section import geomArmaduraSeccionesFibras
-geomArmaduraSeccionesFibras.gmArmSuperior(sectionGeom,nmbFiberMat, 
-nBarras, areaBarras, canto, ancho, rcub)
+geomArmaduraSeccionesFibras.ggmTopRowRebars(sectionGeom,fiberMatName, 
+nRebars, areaRebar, depth, width, cover)
 \end{verbatim}
 \begin{paramFuncTable}
 {\tt sectionGeom} & name identifying the geometric section \\
-{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
-{\tt nBarras} & number of rebars in the layer \\
-{\tt areaBarras} &  area of each rebar \\
-{\tt canto} &  cross-section height \\
-{\tt ancho} & cross-section width \\
-{\tt rcub} & cover \\
+{\tt fiberMatName} & name identifying the uniaxial material which forms the fibers\\
+{\tt nRebars} & number of rebars in the layer \\
+{\tt areaRebar} &  area of each rebar \\
+{\tt depth} &  cross-section height \\
+{\tt width} & cross-section width \\
+{\tt cover} & cover \\
 \end{paramFuncTable}
 
-\subsubsection{gmSeccCuadrado}
+\subsubsection{gmSquareSection}
 Returns a square geometric region of fibers' material.
 \noindent 
 \begin{verbatim}
 from materials.fiber_section import geomSeccionesFibras
-geomSeccionesFibras.gmSeccCuadrado(geomSection, nmbFiberMat, ld, nD)
+geomSeccionesFibras.gmSquareSection(geomSection, fiberMatName, ld, nD)
 \end{verbatim}
 \begin{paramFuncTable}
 {\tt geomSection} & name identifying the geometric section \\
-{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt fiberMatName} & name identifying the uniaxial material which forms the fibers\\
 {\tt ld} & side of the square \\
 {\tt nD} & number of cells in each side of the square \\
 \end{paramFuncTable}
 
-\subsubsection{gmSeccRectangulo}
+\subsubsection{gmRectangSection}
 Returns a rectangular geometric region of fibers' material.
 \noindent 
 \begin{verbatim}
 from materials.fiber_section import geomSeccionesFibras
-geomSeccionesFibras.gmSeccRectangulo(geomSection,nmbFiberMat, h, b, 
+geomSeccionesFibras.gmRectangSection(geomSection,fiberMatName, h, b, 
 nDIJ, nDIK)
 \end{verbatim}
 \begin{paramFuncTable}
 {\tt geomSection} & name identifying the geometric section \\
-{\tt nmbFiberMat} & name identifying the uniaxial material which forms the fibers\\
+{\tt fiberMatName} & name identifying the uniaxial material which forms the fibers\\
 {\tt h} & side of the rectangle in IK direction \\
 {\tt b} & side of the rectangle in IJ direction \\
 {\tt nDIJ} & number of cells in IJ direction \\
@@ -953,10 +953,10 @@ informeGeomSeccion.RecordFamArmaduraPrincipal(reinfLayer)
 
 \begin{paramClassTable}
 {\tt reinfLayer} & name identifying the family of reinforcing bars \\
-{\tt nBarras} & number of rebars in the layer \\
-{\tt diamBarras} & diameter of the bars \\
-{\tt areaBarras} & total area of the bars in the family \\
-{\tt recubMec} & cover of the reinforcement\\
+{\tt nRebars} & number of rebars in the layer \\
+{\tt rebarsDiam} & diameter of the bars \\
+{\tt areaRebar} & total area of the bars in the family \\
+{\tt coverMec} & cover of the reinforcement\\
 {\tt cdgBarras} & position of the reinforcement centre of gravity \\
 \end{paramClassTable}
 

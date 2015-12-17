@@ -11,11 +11,11 @@ depth= 0.4 # Ancho de la sección expresado en metros.
 cover= 0.05 # Recubrimiento de la sección expresado en metros.
 areaCordones= 140e-6 # Área de los cordones expresada en metros cuadrados.
 
-def gmSecHP01(nmbGeomSecc,nmbDiagHormigon,nmbDiagAceroPret):
+def gmSecHP01(nmbGeomSecc,concrDiagName,nmbDiagAceroPret):
   # Hormigón
   geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
-  horm= regiones.newQuadRegion(nmbDiagHormigon)
+  horm= regiones.newQuadRegion(concrDiagName)
   horm.nDivIJ= 11
   horm.nDivJK= 11
   horm.pMin= geom.Pos2d(-depth/2.0,-width/2.0)

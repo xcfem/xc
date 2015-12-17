@@ -107,10 +107,10 @@ def tangDHormigon(eps,record mat):
 # Comprueba la corrección de los resultados del diagrama de cálculo del modelo de elementos finitos.
 def testDiagDHormigon(record mat):
     tag= defDiagDHormigon(mat.nmbMaterial)
-    nmbDiagHormigon= mat.nmbDiagD
+    concrDiagName= mat.nmbDiagD
     incr= mat.epsilonU/20
     errMax= 0.0
-    \nmbDiagHormigon
+    \concrDiagName
       {
         errMax= 0.0
            for      \inicio{e= -0.1e-8}} \continua{e>=mat.epsilonU} \incremento{\expr{e=(e+incr)}
@@ -127,10 +127,10 @@ def testDiagDHormigon(record mat):
 # Comprueba la corrección de los resultados de la tangente al diagrama de cálculo del modelo de elementos finitos.
 def testTangDHormigon(record mat):
     tag= defDiagDHormigon(mat.nmbMaterial)
-    nmbDiagHormigon= mat.nmbDiagD
+    concrDiagName= mat.nmbDiagD
     incr= mat.epsilonU/20
     errMax= 0.0
-    \nmbDiagHormigon
+    \concrDiagName
       {
         incr= mat.epsilonU/30
            for      \inicio{e= -0.1e-8}} \continua{e>=mat.epsilonU} \incremento{\expr{e=(e+incr)}

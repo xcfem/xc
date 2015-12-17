@@ -23,14 +23,14 @@ areaFi22= steelSIA262.section_barres_courantes[22e-3]
 areaFi26= steelSIA262.section_barres_courantes[26e-3]
 
 datosScc1LosC= defSeccionHASimple.RecordSeccionHASimple()
-datosScc1LosC.nmbSeccion= "secHA1LosC"
-datosScc1LosC.descSeccion= "Losa. Tramo Central. Sección normal al eje X."
+datosScc1LosC.sectionName= "secHA1LosC"
+datosScc1LosC.sectionDescr= "Losa. Tramo Central. Sección normal al eje X."
 concr=EHE_concrete.HA30
 concr.alfacc=0.85
-datosScc1LosC.tipoHormigon= concr
+datosScc1LosC.concrType= concr
 datosScc1LosC.depth= 0.35
 datosScc1LosC.width= 1.0
-datosScc1LosC.tipoArmadura= EHE_reinforcing_steel.B500S
+datosScc1LosC.reinfSteelType= EHE_reinforcing_steel.B500S
 datosScc1LosC.barrasNeg.setUp(0,0.0,0.0,datosScc1LosC.width,0.1)
 datosScc1LosC.barrasPos.setUp(6,26e-3,(areaFi22+areaFi26)/2.0,datosScc1LosC.width,0.05+0.026/2.0)
 
@@ -48,7 +48,7 @@ preprocessor=  prueba.getPreprocessor
 
 datosScc1LosC.defSeccionHASimple(preprocessor, "k")
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, datosScc1LosC.nmbSeccion)
+banco_pruebas_scc3d.modeloSecc3d(preprocessor, datosScc1LosC.sectionName)
 
 # Constraints
 coacciones= preprocessor.getConstraintLoader

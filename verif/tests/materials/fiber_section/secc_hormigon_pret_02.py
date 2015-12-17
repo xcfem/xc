@@ -8,45 +8,45 @@ __email__= "l.pereztato@gmail.com"
 
 areaCordones= 140e-6 # Área de los cordones expresada en metros cuadrados.
 areaFiLong= 0.5e-4 # Fi8 área de la armadura longitudinal expresada en metros cuadrados.
-def gmSecHP02(nmbGeomSecc,nmbDiagHormigon,nmbDiagAceroArmar,nmbDiagAceroPret):
+def gmSecHP02(nmbGeomSecc,concrDiagName,nmbDiagAceroArmar,nmbDiagAceroPret):
   # Hormigón
   geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
 
-  horm= regiones.newQuadRegion(nmbDiagHormigon)
+  horm= regiones.newQuadRegion(concrDiagName)
   horm.nDivIJ= 5 # Transicion 1 ala inferior - alma
   horm.nDivJK= 5
   horm.pMin= geom.Pos2d(-0.813,-0.35)
   horm.pMax= geom.Pos2d(-0.593,0.35)
 
-  horm= regiones.newQuadRegion(nmbDiagHormigon)
+  horm= regiones.newQuadRegion(concrDiagName)
   horm.nDivIJ= 5 # Ala inferior
   horm.nDivJK= 5
   horm.setQuad(geom.Cuadrilatero2d(geom.Pos2d(-0.593, 0.35), geom.Pos2d(-0.593, -0.35), geom.Pos2d(-0.523, -0.15), geom.Pos2d(-0.523, 0.15)))
 
 
-  horm= regiones.newQuadRegion(nmbDiagHormigon)
+  horm= regiones.newQuadRegion(concrDiagName)
   horm.nDivIJ= 5 # Transicion 2 ala inferior - alma
   horm.nDivJK= 5
   horm.setQuad(geom.Cuadrilatero2d(geom.Pos2d(-0.523, 0.15), geom.Pos2d(-0.523, -0.15), geom.Pos2d(-0.413, -0.075), geom.Pos2d(-0.413, 0.075)))
 
-  horm= regiones.newQuadRegion(nmbDiagHormigon)
+  horm= regiones.newQuadRegion(concrDiagName)
   horm.nDivIJ= 5 # Alma 
   horm.nDivJK= 5
   horm.pMin= geom.Pos2d(-0.413,-0.075)
   horm.pMax= geom.Pos2d(0.587,0.075)
 
-  horm= regiones.newQuadRegion(nmbDiagHormigon)
+  horm= regiones.newQuadRegion(concrDiagName)
   horm.nDivIJ= 5 # Transicion 1 alma - ala superior
   horm.nDivJK= 5
   horm.setQuad(geom.Cuadrilatero2d(geom.Pos2d(0.587, 0.075), geom.Pos2d(0.587, -0.075), geom.Pos2d(0.687, -0.2), geom.Pos2d(0.687, 0.2)))
 
-  horm= regiones.newQuadRegion(nmbDiagHormigon)
+  horm= regiones.newQuadRegion(concrDiagName)
   horm.nDivIJ= 5 # Transicion 2 alma - ala superior
   horm.nDivJK= 5
   horm.setQuad(geom.Cuadrilatero2d(geom.Pos2d(0.687, 0.2), geom.Pos2d(0.687, -0.2), geom.Pos2d(0.787, -0.6), geom.Pos2d(0.787, 0.6)))
 
-  horm= regiones.newQuadRegion(nmbDiagHormigon)
+  horm= regiones.newQuadRegion(concrDiagName)
   horm.nDivIJ= 4 # Ala superior
   horm.nDivJK= 4
   horm.pMin= geom.Pos2d(0.787,-0.6)

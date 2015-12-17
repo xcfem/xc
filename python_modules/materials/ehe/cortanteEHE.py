@@ -205,11 +205,11 @@ def trataResultsCombV(preprocessor,nmbComb):
   for e in elementos:
     scc= e.getSection()
     section= scc.getProp("datosSecc")
-    codHormigon= section.tipoHormigon
-    codArmadura= section.tipoArmadura
-    AsTrsv= section.armCortanteY.getAs()
-    alpha= section.armCortanteY.angAlphaShReinf
-    theta= section.armCortanteY.angThetaConcrStruts
+    codHormigon= section.concrType
+    codArmadura= section.reinfSteelType
+    AsTrsv= section.shReinfY.getAs()
+    alpha= section.shReinfY.angAlphaShReinf
+    theta= section.shReinfY.angThetaConcrStruts
     NTmp= scc.getStressResultantComponent("N")
     MyTmp= scc.getStressResultantComponent("My")
     MzTmp= scc.getStressResultantComponent("Mz")

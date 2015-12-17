@@ -25,12 +25,12 @@ from materials.ehe import fisuracionEHE
 from model import fix_node_6dof
 
 datosScc1LosC= defSeccionHASimple.RecordSeccionHASimple()
-datosScc1LosC.nmbSeccion= "secHA1LosC"
-datosScc1LosC.descSeccion= "Losa. Tramo Central. Sección normal al eje X."
-datosScc1LosC.tipoHormigon= EHE_concrete.HA25
+datosScc1LosC.sectionName= "secHA1LosC"
+datosScc1LosC.sectionDescr= "Losa. Tramo Central. Sección normal al eje X."
+datosScc1LosC.concrType= EHE_concrete.HA25
 datosScc1LosC.depth= 0.25
 datosScc1LosC.width= 1.0
-datosScc1LosC.tipoArmadura= EHE_reinforcing_steel.B500S
+datosScc1LosC.reinfSteelType= EHE_reinforcing_steel.B500S
 datosScc1LosC.nRebarsNeg= 5
 datosScc1LosC.areaRebarNeg= areaBarrasEHE.Fi10
 datosScc1LosC.coverNeg= 0.025+0.010+0.010/2.0
@@ -52,7 +52,7 @@ matTagAceroArmar= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
 
 datosScc1LosC.defSeccionHASimple(preprocessor, "k")
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, datosScc1LosC.nmbSeccion)
+banco_pruebas_scc3d.modeloSecc3d(preprocessor, datosScc1LosC.sectionName)
 
 # Constraints
 coacciones= preprocessor.getConstraintLoader

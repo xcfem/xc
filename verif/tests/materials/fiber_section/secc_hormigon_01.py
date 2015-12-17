@@ -19,10 +19,10 @@ diamBarra= 16e-3, # Diámetro de las barras expresado en metros.
 areaBarra= 2.01e-4 # Área de las barras expresado en metros cuadrados.
   )
 
-def gmSecHA01(nmbGeomSecc,defSec,nmbDiagHormigon,nmbDiagAceroArmar):
+def gmSecHA01(nmbGeomSecc,defSec,concrDiagName,nmbDiagAceroArmar):
   geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
-  horm= regiones.newQuadRegion(nmbDiagHormigon)
+  horm= regiones.newQuadRegion(concrDiagName)
   horm.nDivIJ= defSec['nIJ']
   horm.nDivJK= defSec['nJK']
   horm.pMin= geom.Pos2d(-(defSec['depth']/2.0),-(defSec['width']/2.0))

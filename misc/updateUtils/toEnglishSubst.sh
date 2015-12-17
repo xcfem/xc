@@ -1,7 +1,7 @@
 #!/bin/bash
-for fl in $(find ../../verif ../../python_modules -type f -name *.py | grep -v build)
+for fl in $(find ../../verif ../../python_modules ../../doc/XCmanual -type f -name *.py -o -name *.tex | grep -v build)
 do
-# echo $fl
+#echo $fl
 # sed -i 's/nmbSet/setName/g' $fl
 # sed -i 's/fibrasHormigon/concrFibers/g' $fl
 # sed -i 's/fibrasArmadura/reinfFibers/g' $fl
@@ -12,22 +12,22 @@ do
 # sed -i 's/setNameC/concrSetName/g' $fl
 # sed -i 's/tagSdiag/reinfMatTag/g' $fl
 # sed -i 's/setNameS/reinfSetName/g' $fl
-#sed -i 's/reselTractionFibers/reselTensionFibers/g' $fl
-#sed -i 's/getNumBarrasTraccion/getNumTensionRebars/g' $fl
-#sed -i 's/tagCdiag/concrMatTag/g' $fl
-#sed -i 's/tagHA/concrMatTag/g' $fl
-#sed -i 's/tagAcero/reinfMatTag/g' $fl
-#sed -i 's/createFiberSetsHA/createRCFiberSets/g' $fl
+# sed -i 's/reselTractionFibers/reselTensionFibers/g' $fl
+# sed -i 's/getNumBarrasTraccion/getNumTensionRebars/g' $fl
+# sed -i 's/tagCdiag/concrMatTag/g' $fl
+# sed -i 's/tagHA/concrMatTag/g' $fl
+# sed -i 's/tagAcero/reinfMatTag/g' $fl
+# sed -i 's/createFiberSetsHA/createRCFiberSets/g' $fl
 # sed -i 's/recub/cover/g' $fl
 # sed -i 's/nBarrasAncho/nRebarsWidth/g' $fl
 # sed -i 's/areaBarrasAncho/areaRebarWidth/g' $fl
 # sed -i 's/nBarrasCanto/nRebarsDepth/g' $fl
 # sed -i 's/areaBarrasCanto/areaRebarDepth/g' $fl
-#sed -i 's/RecordSeccionHAPilar/RecordRCColumnSection/g' $fl
-#sed -i 's/ancho/width/g' $fl
-#sed -i 's/widthrage/anchorage/g' $fl
-#sed -i 's/canto/depth/g' $fl
-#sed -i 's/nmbDiagArmadura/reinfDiagName/g' $fl
+# sed -i 's/RecordSeccionHAPilar/RecordRCColumnSection/g' $fl
+# sed -i 's/ancho/width/g' $fl
+# sed -i 's/widthrage/anchorage/g' $fl
+# sed -i 's/canto/depth/g' $fl
+# sed -i 's/nmbDiagArmadura/reinfDiagName/g' $fl
 # sed -i 's/nmbFamilia/familyName/g' $fl
 # sed -i 's/nRamas/nShReinfBranches/g' $fl
 # sed -i 's/areaRama/areaShReinfBranch/g' $fl
@@ -46,6 +46,15 @@ do
 # sed -i 's/gmArmInferior/gmBottomRowRebars/g' $fl
 # sed -i 's/mArmSuperior/gmTopRowRebars/g' $fl
 # sed -i 's/gmArmPiel/gmSideFaceRebars/g' $fl
-sed -i 's/gmSeccCuadrado/gmSquareSection/g' $fl
-sed -i 's/gmSeccRectangulo/gmRectangSection/g' $fl
+# sed -i 's/gmSeccCuadrado/gmSquareSection/g' $fl
+# sed -i 's/gmSeccRectangulo/gmRectangSection/g' $fl
+# sed -i 's/nmbSeccion/sectionName/g' $fl
+# sed -i 's/descSeccion/sectionDescr/g' $fl
+# sed -i 's/tipoHormigon/concrType/g' $fl
+# sed -i 's/nmbDiagHormigon/concrDiagName/g' $fl
+# sed -i 's/tipoArmadura/reinfSteelType/g' $fl
+# sed -i 's/RecordArmaduraCortante/RecordShearReinforcement/g' $fl
+# sed -i 's/armCortanteZ/shReinfZ/g' $fl
+# sed -i 's/armCortanteY/shReinfY/g' $fl
+# sed -i 's/nmbGeomSeccion/gmSectionName/g' $fl
 done
