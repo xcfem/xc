@@ -109,7 +109,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     self.nodos= vtk.vtkPoints()
     recordGrid.uGrid= vtk.vtkUnstructuredGrid()
     recordGrid.uGrid.SetPoints(self.nodos)
-    eSet= preprocessor.getSets.getSet(recordGrid.nmbSet)
+    eSet= preprocessor.getSets.getSet(recordGrid.setName)
     eSet.numerate()
     # Scalar values.
     nodeSet= eSet.getNodes
@@ -161,20 +161,20 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     #   vtk_define_malla_nodos.VtkDibujaIdsNodos(recordGrid,self.renderer)
     # else:
     #   print "Entity: ", recordGrid.entToLabel, " unknown."
-  def grafico_mef(self,preprocessor,nmbSet):
+  def grafico_mef(self,preprocessor,setName):
     defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.nmbSet= nmbSet
+    defGrid.setName= setName
     self.muestraMalla(preprocessor,defGrid)
 
-  def displayScalarField(self, preprocessor, nmbSet, field):
+  def displayScalarField(self, preprocessor, setName, field):
     defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.nmbSet= nmbSet
+    defGrid.setName= setName
     self.defineEscenaMalla(preprocessor,defGrid,field)
     self.muestraEscena()
 
-  def plotScalarField(self, preprocessor, nmbSet, field, fName):
+  def plotScalarField(self, preprocessor, setName, field, fName):
     defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.nmbSet= nmbSet
+    defGrid.setName= setName
     self.defineEscenaMalla(preprocessor,defGrid,field)
     self.plotScene(fName)
 
@@ -252,3 +252,4 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     fEscalaVectores= loadPattern.getProp("scale")
     self.displayElementalLoads(preprocessor, loadPattern,clrVectores,fEscalaVectores)
     self.displayNodalLoads(preprocessor, loadPattern,clrVectores,fEscalaVectores)
+

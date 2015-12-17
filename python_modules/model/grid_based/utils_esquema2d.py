@@ -19,16 +19,16 @@ idEsquema: Identificador del esquema a emplear
 i1,j1: Índices i y j del punto origen.
 i2,j2: Índices i y j del punto destino.
 nDivL: Número de divisiones para las líneas.
-nmbSet: Set en el que incluiremos la línea.
+setName: Set en el que incluiremos la línea.
 '''
-def defLineaEsquema2d(preprocessor, idEsquema, i1, j1, i2, j2, nDivL, nmbSet):
+def defLineaEsquema2d(preprocessor, idEsquema, i1, j1, i2, j2, nDivL, setName):
   esq2d= preprocessor.getCad.get2DScheme(idEsquema)
   tagP1= esq2d.getPnt(i1,j1)
   tagP2= esq2d.getPnt(i2,j2)
   ln= preprocessor.getCad.newLine(tagP1,tagP2)
   ln.nDiv= nDivL
   tagL= ln.tag
-  st= preprocessor.getSets.getSet(nmbSet)
+  st= preprocessor.getSets.getSet(setName)
   st.selEdge(tagL)
 
 '''

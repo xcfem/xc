@@ -75,15 +75,15 @@ def trataResultsCombTN2d(preprocessor, nmbComb):
       e.setProp("MzCP",MzTmp)
 
 # Imprime los resultados de la comprobación frente a tensiones normales
-def xLaminaPrintTNAnsys(preprocessor,nmbArchSalida, nmbSeccion1, nmbSeccion2):
+def xLaminaPrintTNAnsys(preprocessor,nmbArchSalida, sectionName1, sectionName2):
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput1.write("Section 1\n")
   texOutput2= open("/tmp/texOutput2.tmp","w")
   texOutput2.write("Section 2\n")
   ansysOutput1= open(nmbArchSalida+".mac","w")
   ansysOutput2= open(nmbArchSalida+"esf.mac","w")
-  #printCabeceraListadoFactorCapacidad("texOutput1","1 ("+ nmbSeccion1 +")")
-  #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ nmbSeccion2 +")")
+  #printCabeceraListadoFactorCapacidad("texOutput1","1 ("+ sectionName1 +")")
+  #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ sectionName2 +")")
   fcs1= [] #Capacity factors at section 1.
   fcs2= [] #Capacity factors at section 2.
   elementos= preprocessor.getSets["total"].getElements
@@ -146,8 +146,8 @@ def xLaminaPrintTN(preprocessor,nmbArchSalida):
   texOutput2= open("/tmp/texOutput2.tmp","w")
   texOutput2.write("Section 2\n")
   xcOutput= open(nmbArchSalida+".py","w")
-  #printCabeceraListadoFactorCapacidad("texOutput1","1 ("+ nmbSeccion1 +")")
-  #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ nmbSeccion2 +")")
+  #printCabeceraListadoFactorCapacidad("texOutput1","1 ("+ sectionName1 +")")
+  #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ sectionName2 +")")
   fcs1= [] #Capacity factors at section 1.
   fcs2= [] #Capacity factors at section 2.
   elementos= preprocessor.getSets["total"].getElements
@@ -203,10 +203,10 @@ def xLaminaPrintTN(preprocessor,nmbArchSalida):
 def lanzaCalculoTNFromAnnsysData(nmbArch, datosScc1, datosScc2, nmbArchDefHipELU):
   extraeDatosLST(nmbArch+".lst") 
   xLaminaConstruyeModeloFicticio(datosScc1,datosScc2)
-  nmbDiagIntSec1= "diagInt"+datosScc1.nmbSeccion
-  nmbDiagIntSec2= "diagInt"+datosScc2.nmbSeccion
+  nmbDiagIntSec1= "diagInt"+datosScc1.sectionName
+  nmbDiagIntSec2= "diagInt"+datosScc2.sectionName
   xLaminaCalculaCombEstatLin(nmbArchDefHipELU,nmbDiagIntSec1,nmbDiagIntSec2)
-  meanFCs= xLaminaPrintTN(preprocessor,nmbArch+"TN",datosScc1.nmbSeccion,datosScc2.nmbSeccion)
+  meanFCs= xLaminaPrintTN(preprocessor,nmbArch+"TN",datosScc1.sectionName,datosScc2.sectionName)
   return meanFCs
 
 '''
@@ -221,8 +221,8 @@ def lanzaCalculoTNFromAnnsysData(nmbArch, datosScc1, datosScc2, nmbArchDefHipELU
 def lanzaCalculoTNFromXCData(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
   ec.extraeDatos(preprocessor,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   #modelo.xLaminaConstruyeModeloFicticio(preprocessor,datosScc1,datosScc2)
-  #nmbDiagIntSec1= "diagInt"+datosScc1.nmbSeccion
-  #nmbDiagIntSec2= "diagInt"+datosScc2.nmbSeccion
+  #nmbDiagIntSec1= "diagInt"+datosScc1.sectionName
+  #nmbDiagIntSec2= "diagInt"+datosScc2.sectionName
   calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,trataResultsCombTN)
   meanFCs= xLaminaPrintTN(preprocessor,nmbArchSalida)
   return meanFCs

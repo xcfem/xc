@@ -21,7 +21,7 @@ fyd= fy/1.0 # Minoración límite elástico
 Es= 2.1e6*9.81/1e-4 # Módulo elástico del acero.
 
 # Resultados parciales.
-c= comprobacion_casquillo_rigidizado.anchoMax(tChapa,l,H)
+c= comprobacion_casquillo_rigidizado.widthMax(tChapa,l,H)
 lmbd= comprobacion_casquillo_rigidizado.esbeltezAdim(c,tChapa,fy,Es)
 CE= comprobacion_casquillo_rigidizado.coefEscuadra(lmbd)
 MplRd= comprobacion_casquillo_rigidizado.momPlastRig(tRig,c,fy)

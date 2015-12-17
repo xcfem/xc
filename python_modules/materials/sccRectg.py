@@ -19,37 +19,37 @@ class sccRectang(object):
     """Devuelve el área de la sección,"""
     return self.b*self.h
   def I1(self):
-    """Devuelve el momento de inercia respecto al eje paralelo al ancho que pasa por el CDG de la sección."""
+    """Devuelve el momento de inercia respecto al eje paralelo al width que pasa por el CDG de la sección."""
     return 1.0/12.0*self.b*self.h**3
   def i1(self):
-    """Devuelve el radio de giro respecto al eje paralelo al ancho que pasa por el CDG de la sección."""
+    """Devuelve el radio de giro respecto al eje paralelo al width que pasa por el CDG de la sección."""
     return math.sqrt(self.I1()/self.area())
   def Me1(self,fy):
-    """Devuelve el momento elástico respecto al eje paralelo al ancho que pasa por el CDG de la sección. """
+    """Devuelve el momento elástico respecto al eje paralelo al width que pasa por el CDG de la sección. """
     return 2*fy/self.h*self.I1()
   def S1PosG(self):
-    """ Momento estático de la mitad de la sección respecto al eje paralelo al ancho por el CDG."""
+    """ Momento estático de la mitad de la sección respecto al eje paralelo al width por el CDG."""
     return (self.b*self.h/2.0)*self.h/4.0
   def Mp1(self,fy):
-    """ Devuelve el momento plástico respecto al eje paralelo al ancho que pasa por el CDG de la sección."""
+    """ Devuelve el momento plástico respecto al eje paralelo al width que pasa por el CDG de la sección."""
     return 2*self.S1PosG()*fy
 
   def I2(self):
-    """Devuelve el momento de inercia respecto al eje paralelo al canto que pasa por el CDG de la sección."""
+    """Devuelve el momento de inercia respecto al eje paralelo al depth que pasa por el CDG de la sección."""
     return 1.0/12.0*self.h*self.b**3
 
   def i2(self):
-    """Devuelve el radio de giro respecto al eje paralelo al canto que pasa por el CDG de la sección."""
+    """Devuelve el radio de giro respecto al eje paralelo al depth que pasa por el CDG de la sección."""
     return math.sqrt(self.I2()/self.area())
 
   def Me2(self,fy):
-    """Devuelve el momento elástico respecto al eje paralelo al canto que pasa por el CDG de la sección."""
+    """Devuelve el momento elástico respecto al eje paralelo al depth que pasa por el CDG de la sección."""
     return 2*fy/self.b*self.I2()
   def S2PosG(self):
-    """Momento estático de la mitad de la sección respecto al eje paralelo al ancho por el CDG."""
+    """Momento estático de la mitad de la sección respecto al eje paralelo al width por el CDG."""
     return (self.b*self.h/2.0)*self.b/4.0
   def Mp2(self,fy):
-    """Devuelve el momento plástico respecto al eje paralelo al canto que pasa por el CDG de la sección."""
+    """Devuelve el momento plástico respecto al eje paralelo al depth que pasa por el CDG de la sección."""
     return 2*self.S2PosG()*fy
 
   def discretization(self,gm,nmbMat):

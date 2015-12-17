@@ -11,11 +11,11 @@ from materials import typical_materials
 from model import fix_node_3dof
 
 # Geometry
-ancho= .05
-canto= .1
-A= ancho*canto
+width= .05
+depth= .1
+A= width*depth
 E= 210e9
-I= ancho*canto**3/12
+I= width*depth**3/12
 nu= 0.3
 G= E/(2*(1+nu))
 L= 1.5 # Bar length (m)

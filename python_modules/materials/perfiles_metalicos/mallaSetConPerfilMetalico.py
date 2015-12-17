@@ -7,20 +7,20 @@ Genera elementos de tipo «ElasticBeam3d» para las líneas
    - nmbGeomTransf: Nombre de la transformación geométrica a emplear.
    - numDivisiones: Número de elementos a generar en cada línea.
 '''
-def mallaSetConPerfilMetalico(preprocessor,nmbSet):
+def mallaSetConPerfilMetalico(preprocessor,setName):
   nmbPerfilMet= "" 
   nmbTrf= ""
   nmbTipoAcero= ""
-  nmbSeccion= ""
-  setElems= preprocessor.getSetLoader.getSet(nmbSet)
+  sectionName= ""
+  setElems= preprocessor.getSetLoader.getSet(setName)
   nmbPerfilMet= setElems.getProp(nmbPerfil)
   nmbTipoAcero= setElems.getProp(nmbAcero)
   nmbTrf= setElems.getProp(nmbGeomTransf)
 
-  nmbSeccion= nmbPerfilMet+"_"+nmbGeomTransf
-  defSeccPerfilMetalicoShElastica3d(nmbPerfilMet,nmbSeccion)
+  sectionName= nmbPerfilMet+"_"+nmbGeomTransf
+  defSeccPerfilMetalicoShElastica3d(nmbPerfilMet,sectionName)
   seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-  seedElemLoader.defaultMaterial= nmbSeccion
+  seedElemLoader.defaultMaterial= sectionName
   seedElemLoader.defaultTransformation= nmbTrf
   elem= seedElemLoader.newElement("elastic_beam_3d",xc.ID([0,0]))
   elem.rho= nmbPerfilMet.P
@@ -38,20 +38,20 @@ Genera elementos de tipo «Truss» para las líneas
    - nmbPerfil: Nombre del perfil a emplear (por ejemplo L50x50x5)
    - numDivisiones: Número de elementos a generar en cada línea.
 '''
-def mallaSetConTruss(nmbSet):
+def mallaSetConTruss(setName):
   nmbPerfilMet= "" 
   nmbTipoAcero= ""
   nmbMat= ""
   fydMat= 0.0 
   EMat= 0.0 
   
-  setElems= preprocessor.getSetLoader.getSet(nmbSet)
+  setElems= preprocessor.getSetLoader.getSet(setName)
   nmbPerfilMet= setElems.getProp("nmbPerfil")
   nmbTipoAcero= setElems.getProp("nmbAcero")
   gammaMat= setElems.getProp("gammaM")
   areaBrr= nmbPerfilMet.A
 
-  nmbMat= nmbSet+"_"+nmbPerfilMet.nmbTipoAcero
+  nmbMat= setName+"_"+nmbPerfilMet.nmbTipoAcero
   fydMat= nmbPerfilMet.nmbTipoAcero.fy/gammaMat
   EMat= nmbePerfilMet.nmbTipoAcero.E
 

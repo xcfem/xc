@@ -39,8 +39,8 @@ def listaDesplazamientosPuntos(preprocessor,nmbComb,lstPuntos, fmt, fName, encab
   cierraSupertabular(fName)
 
 # Imprime los desplazamientos de los nodos contenidos en el conjunto que se pasa como parámetro.
-def listaDesplazamientosNodosSet(preprocessor,nmbComb, nmbSet, fmt, fName):
-  s= preprocessor.getSets.getSet(nmbSet)
+def listaDesplazamientosNodosSet(preprocessor,nmbComb, setName, fmt, fName):
+  s= preprocessor.getSets.getSet(setName)
   nodos= s.getNodos()
   for n in nodos:
     fName.write(nmbComb," & ",n.tag," & ")
@@ -49,28 +49,28 @@ def listaDesplazamientosNodosSet(preprocessor,nmbComb, nmbSet, fmt, fName):
     fName.write(fmt.format(disp[3])," & ",fmt.format(disp[4])," & ",fmt.format(disp[5]),"\\\\\n")
 
 # Imprime los desplazamientos de los nodos contenidos en el conjunto que se pasa como parámetro.
-def listaDesplazamientosNodosSET(nmbComb, nmbSet, fmt, fName, encab, tit):
+def listaDesplazamientosNodosSET(nmbComb, setName, fmt, fName, encab, tit):
   fName.write("\\",encab,"{",tit,"}\n")
-  caption= "Nodos del conjunto: "+nmbSet
+  caption= "Nodos del conjunto: "+setName
   defCampos= "|l|r|r|r|r|r|r|r|"
   idsCampos= "Caso & IdN & Ux & Uy & Uz & Rx & Ry & Rz \\\\\n - & - & mm & mm & mm & rad & rad & rad "
   cabeceraSupertabular(fName,8,defCampos,idsCampos,caption)
 
-  listaDesplazamientosNodosSet(nmbComb,nmbSet,fmt,fName)
+  listaDesplazamientosNodosSet(nmbComb,setName,fmt,fName)
 
   cierraSupertabular(fName)
 
 #execfile("modelo/model_inquiry.xcm")
 
 # Imprime los desplazamientos de los nodos contenidos en las lineas del conjunto que se pasa como parámetro.
-def listaDesplazamientosNodosLineas(preprocessor, nmbComb, nmbSetLineas, fmt, fName, encab, tit):
+def listaDesplazamientosNodosLineas(preprocessor, nmbComb, setNameLineas, fmt, fName, encab, tit):
   fName.write("\\",encab,"{",tit,"}\n")
-  caption= "Nodos del conjunto: "+nmbSetLineas
+  caption= "Nodos del conjunto: "+setNameLineas
   defCampos= "|l|r|r|r|r|r|r|r|"
   idsCampos= "Caso & IdN & Ux & Uy & Uz & Rx & Ry & Rz \\\\\n - & - & mm & mm & mm & rad & rad & rad "
   cabeceraSupertabular(fName,8,defCampos,idsCampos,caption)
 
-  s= preprocessor.getSets.getSet(nmbSetLineas)
+  s= preprocessor.getSets.getSet(setNameLineas)
   lineas= s.getLineas
   for l in lineas:
     nmb= l.getName()

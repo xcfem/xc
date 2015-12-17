@@ -18,7 +18,7 @@ from misc import banco_pruebas_scc3d
 
 from materials.ehe import EHE_concrete
 from materials.ehe import aceroPretEHE
-from materials.fiber_section import creaSetsFibras
+from materials.fiber_section import createFiberSets
 from model import fix_node_6dof
 from solution import predefined_solutions
 
@@ -86,13 +86,13 @@ esfMy= scc.getStressResultantComponent("My")
 esfMz= scc.getStressResultantComponent("Mz")
 defMz= scc.getSectionDeformationByName("defMz")
 defN= scc.getSectionDeformationByName("defN")
-fibrasHormigon= creaSetsFibras.FiberSet(scc,"hormigon",EHE_concrete.HP45.tagDiagD)
-fibraCEpsMin= fibrasHormigon.getFiberWithMinStrain()
+concrFibers= createFiberSets.FiberSet(scc,"hormigon",EHE_concrete.HP45.matTagD)
+fibraCEpsMin= concrFibers.getFiberWithMinStrain()
 epsCMin= fibraCEpsMin.getMaterial().getStrain() # Deformación mínima en el hormigón.
-fibraCEpsMax= fibrasHormigon.getFiberWithMaxStrain()
+fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
 epsCMax= fibraCEpsMax.getMaterial().getStrain() # Deformación máxima en el hormigón.
-fibrasArmadura= creaSetsFibras.FiberSet(scc,"armadura",aceroPretEHE.Y1860S7.tagDiagD)
-fibraSEpsMax= fibrasArmadura.getFiberWithMaxStrain()
+reinfFibers= createFiberSets.FiberSet(scc,"armadura",aceroPretEHE.Y1860S7.matTagD)
+fibraSEpsMax= reinfFibers.getFiberWithMaxStrain()
 epsSMax= fibraSEpsMax.getMaterial().getStrain() # Deformación máxima en el acero
 
 from materials import regimenSeccion

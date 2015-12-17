@@ -93,12 +93,12 @@ def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
     gammaC: Coeficiente de minoración de la resistencia del hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     d: Canto útil expresado en metros.
-    chi: Coeficiente que introduce el efecto de los áridos en el canto útil.
+    chi: Coeficiente que introduce el efecto de los áridos en el depth útil.
     sgpcd: Tensión axial media en el alma (compresión positiva).
     AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
 
     Devuelve el valor de fcv (resistencia virtual a cortante del hormigón)
     para piezas CON Ó SIN armadura de cortante en regiones fisuradas, según los
@@ -115,7 +115,7 @@ def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     gammaC: Coeficiente de minoración de la resistencia del hormigón.
     d: Canto útil expresado en metros.
-    chi: Coeficiente que introduce el efecto de los áridos en el canto útil.
+    chi: Coeficiente que introduce el efecto de los áridos en el depth útil.
     sgpcd: Tensión axial media en el alma (compresión positiva).
 
     Devuelve el valor mínimo de fcv (resistencia virtual a cortante del hormigón)
@@ -137,9 +137,9 @@ def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     d: Canto útil expresado en metros.
     AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
 
     Devuelve el valor de Vu2 (cortante de agotamiento por tracción en el alma)
     para piezas SIN armadura de cortante en regiones fisuradas, según el artículo 44.2.3.2.1.2 de EHE-08.
@@ -165,9 +165,9 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     d: Canto útil expresado en metros.
     AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
  
     Devuelve el valor de Vu2 (cortante de agotamiento por tracción en el alma)
     para piezas SIN armadura de cortante, según los artículos 44.2.3.2.1.1 y 44.2.3.2.1.2 de EHE-08.
@@ -207,9 +207,9 @@ def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     Td: Torsor de cálculo.
     z: Brazo mecánico.
     AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     Es: Módulo elástico del acero de la armadura pasiva.
     Ep: Módulo elástico del acero de la armadura activa.
     Fp: Fuerza producida por el pretensado en la sección (positiva si es de tracción).
@@ -240,9 +240,9 @@ def getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     Td: Torsor de cálculo.
     z: Brazo mecánico.
     AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     Es: Módulo elástico del acero de la armadura pasiva.
     Ep: Módulo elástico del acero de la armadura activa.
     Fp: Fuerza producida por el pretensado en la sección (positiva si es de tracción).
@@ -297,9 +297,9 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     d: Canto útil expresado en metros.
     z: Brazo mecánico.
     AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     theta: Ángulo entre las bielas de compresión de hormigón y el eje
     de la pieza.
     Nd: Valor de cálculo del axil (positivo si es de tracción)
@@ -340,9 +340,9 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
     d: Canto útil expresado en metros.
     z: Brazo mecánico.
     AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     AsTrsv: Área de la armadura transversal.
     alpha: Ángulo de la armadura transversal con el eje de la pieza.
     theta: Ángulo entre las bielas de compresión de hormigón y el eje
@@ -380,9 +380,9 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     d: Canto útil expresado en metros.
     z: Brazo mecánico.
     AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-    a una distancia mayor que el canto útil de la sección en estudio.
+    a una distancia mayor que el depth útil de la sección en estudio.
     AsTrsv: Área de la armadura transversal.
     alpha: Ángulo de la armadura transversal con el eje de la pieza.
     theta: Ángulo entre las bielas de compresión de hormigón y el eje

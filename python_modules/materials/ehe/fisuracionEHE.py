@@ -4,7 +4,7 @@ Funciones para comprobación de una sección a fisuración según el
 artículo 49.2.4 de la EHE-08.
 '''
 from __future__ import division
-from materials.fiber_section import creaSetsFibras
+from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils
 from materials import crack_control_base as cc
 import math
@@ -23,9 +23,9 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
   eps2= 0.0 #Deformación mínima en el hormigón.
   k1= 0.0 #Coeficiente que representa la influencia del diagrama de tracciones.
   k2= 0.5 #Coeficiente de valor 1.0 para carga instantánea no repetida y 0.5 para el resto de los casos.
-  cantoMecanico= 0.0 #Canto con el que está trabajando la sección.
-  anchoMecanico= 0.0 #Ancho con el que está trabajando la sección.
-  razonAspecto= 0.0 #Cociente entre ancho y canto.
+  depthMecanico= 0.0 #Canto con el que está trabajando la sección.
+  widthMecanico= 0.0 #Ancho con el que está trabajando la sección.
+  razonAspecto= 0.0 #Cociente entre width y depth.
   hEfMax= 0.0 #Canto máximo del área eficaz.
   AcEfBruta= 0.0 #Área eficaz bruta.
   AcEfNeta= 0.0 #Área eficaz neta.
@@ -36,8 +36,8 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
   def printParams(self):
     # Imprime los parámetros de fisuración de la sección.
     print "Num. armaduras a tracción: ",self.numBarrasTracc,"\n"
-    print "Separación entre armaduras traccionadas; s= ",self.sepBarrasTracc," m\n"
-    print "Area de las armaduras traccionadas; As= ",self.areaBarrasTracc*1e4," cm2\n"
+    print "Separación entre armaduras traccionadas; s= ",self.rebarsSpacingTracc," m\n"
+    print "Area de las armaduras traccionadas; As= ",self.areaRebarTracc*1e4," cm2\n"
     print "Area eficaz; AcEf= ",self.AcEfNeta*1e4," cm2\n"
     print "Centro de gravedad de las armaduras traccionadas; CDG= (",self.yCDGBarrasTracc,",",self.zCDGBarrasTracc,") m\n"
     print "Tensión media en barras traccionadas= ",self.tensMediaBarrasTracc/1e6," MPa\n"
@@ -45,9 +45,9 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
     print "Deformación máxima en la zona traccionada de hormigón; eps1= ",self.eps1*1e3," por mil.\n"
     print "Deformación mínima en la zona traccionada de hormigón; eps2= ",self.eps2*1e3," por mil.\n"
     print "Influencia del diagrama de tracciones; k1= ",self.k1,"\n"
-    print "Canto mecánico; h= ",self.cantoMecanico," m\n"
+    print "Canto mecánico; h= ",self.depthMecanico," m\n"
     print "Brazo mecánico; h= ",self.brazoMecanico," m\n"
-    print "Ancho mecánico; b= ",self.anchoMecanico," m\n"
+    print "Ancho mecánico; b= ",self.widthMecanico," m\n"
     print "Razón aspecto; r= ",self.razonAspecto,"\n"
     print "Canto máximo para el área eficaz; hEfMax= ",self.hEfMax," m\n"
     print "Resistencia media a tracción; fctm= ",self.fctmFis/1e6," MPa\n"
@@ -57,37 +57,37 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
 
 
   # Calcula la apertura característica de fisura.
-  def calcApertCaracFis(self, scc, tagDiagHormigon, tagDiagAceroArmar, fctm):
+  def calcApertCaracFis(self, scc, matTagHormigon, matTagAceroArmar, fctm):
     if(self.rcSets == None):
-      self.rcSets= creaSetsFibras.fiberSectionSetupRC3Sets(scc,tagDiagHormigon,self.nmbSetFibrasHormigon,tagDiagAceroArmar,self.nmbSetFibrasArmadura)
-    fibrasHormigon= self.rcSets.fibrasHormigon.fSet
-    fibrasArmadura= self.rcSets.fibrasArmadura.fSet
-    armaduraTraccion= self.rcSets.tractionFibers
+      self.rcSets= createFiberSets.fiberSectionSetupRC3Sets(scc,matTagHormigon,self.setNameFibrasHormigon,matTagAceroArmar,self.setNameFibrasArmadura)
+    concrFibers= self.rcSets.concrFibers.fSet
+    reinfFibers= self.rcSets.reinfFibers.fSet
+    armaduraTraccion= self.rcSets.tensionFibers
 
     self.fctmFis= fctm
     self.claseEsfuerzo= scc.getStrClaseEsfuerzo(0.0)
-    self.numBarrasTracc= self.rcSets.getNumBarrasTraccion()
+    self.numBarrasTracc= self.rcSets.getNumTensionRebars()
     self.Wk= 0.0
     if(self.numBarrasTracc>0):
-      scc.calcRecubrimientos(self.nmbSetFibrasArmaduraTraccion)
-      scc.calcSeparaciones(self.nmbSetFibrasArmaduraTraccion)
-      self.eps1= fibrasHormigon.getStrainMax()
-      self.eps2= max(fibrasHormigon.getStrainMin(),0.0)
+      scc.calcRecubrimientos(self.setNameFibrasArmaduraTraccion)
+      scc.calcSeparaciones(self.setNameFibrasArmaduraTraccion)
+      self.eps1= concrFibers.getStrainMax()
+      self.eps2= max(concrFibers.getStrainMin(),0.0)
       self.k1= (self.eps1+self.eps2)/8/self.eps1
-      self.E0= fibrasHormigon[0].getMaterial().getInitialTangent()
-      self.areaHormigon= fibrasHormigon.getSumaAreas(1)
-      self.cantoMecanico= scc.getCantoMecanico()
+      self.E0= concrFibers[0].getMaterial().getInitialTangent()
+      self.areaHormigon= concrFibers.getSumaAreas(1)
+      self.depthMecanico= scc.getCantoMecanico()
       self.brazoMecanico= scc.getBrazoMecanico() # z
-      self.anchoMecanico= scc.getAnchoMecanico()
-      self.razonAspecto= self.anchoMecanico/self.cantoMecanico
+      self.widthMecanico= scc.getAnchoMecanico()
+      self.razonAspecto= self.widthMecanico/self.depthMecanico
       if(self.razonAspecto>1):
-        self.hEfMax= self.cantoMecanico/4.0 # Pieza tipo losa
+        self.hEfMax= self.depthMecanico/4.0 # Pieza tipo losa
       else:
-        self.hEfMax= self.cantoMecanico/2.0
-      self.AcEfNeta= scc.calcAcEficazFibras(self.hEfMax,self.nmbSetFibrasArmaduraTraccion,15)
+        self.hEfMax= self.depthMecanico/2.0
+      self.AcEfNeta= scc.calcAcEficazFibras(self.hEfMax,self.setNameFibrasArmaduraTraccion,15)
 
-      self.sepBarrasTracc= armaduraTraccion.getDistMediaFibras()
-      self.areaBarrasTracc= armaduraTraccion.getArea(1)
+      self.rebarsSpacingTracc= armaduraTraccion.getDistMediaFibras()
+      self.areaRebarTracc= armaduraTraccion.getArea(1)
       self.yCDGBarrasTracc= armaduraTraccion.getCdgY()
       self.zCDGBarrasTracc= armaduraTraccion.getCdgZ()
       self.tensMediaBarrasTracc= armaduraTraccion.getStressMed()
@@ -96,7 +96,7 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
 
       self.EsBarrasTracc= armaduraTraccion[0].getMaterial().getInitialTangent()
       AsBarra= 0.0
-      recubBarra= 0.0
+      coverBarra= 0.0
       sepBarra= 0.0
       diamBarra= 0.0
       sigmaBarra= 0.0
@@ -114,20 +114,20 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
         yBarra= posBarra.x
         zBarra= posBarra.y
         sigmaBarra= barra.getMaterial().getStress()
-        recubBarra= armaduraTraccion.getRecubrimientoFibra(i)
+        coverBarra= armaduraTraccion.getRecubrimientoFibra(i)
         diamBarra= armaduraTraccion.getDiamEqFibra(i)
         sigmaSRBarra= armaduraTraccion.getSigmaSRFibra(i,self.E0,self.EsBarrasTracc,self.fctmFis)
         tensSRMediaBarrasTracc+= AsBarra*sigmaSRBarra
 
         AcEfBarra= armaduraTraccion.getAcEficazFibra(i)
         sepBarra= min(armaduraTraccion.getSeparacionFibra(i),15*diamBarra)
-        smFisurasBarra= 2*recubBarra+0.2*sepBarra+0.4*self.k1*diamBarra*AcEfBarra/AsBarra
+        smFisurasBarra= 2*coverBarra+0.2*sepBarra+0.4*self.k1*diamBarra*AcEfBarra/AsBarra
         alargMaxBarra= sigmaBarra/self.EsBarrasTracc
         alargMedioBarra= max(1.0-self.k2*(sigmaSRBarra/sigmaBarra)**2,0.4)*alargMaxBarra
         WkBarra=  self.beta*smFisurasBarra*alargMedioBarra
         self.Wk= max(self.Wk,WkBarra)
         # \printParamFisBarra()
-      self.tensSRMediaBarrasTracc= self.tensSRMediaBarrasTracc/self.areaBarrasTracc
+      self.tensSRMediaBarrasTracc= self.tensSRMediaBarrasTracc/self.areaRebarTracc
 
       
 
@@ -137,7 +137,7 @@ def printParamFisBarra():
   print "Área eficaz Acef= ",AcEfBarra*1e4," cm2\n"
   print "Área barra As= ",AsBarra*1e4," cm2\n"
   print "Pos barra: (",yBarra,",",zBarra,")\n"
-  print "Recubrimiento c= ",recubBarra," m\n"
+  print "Recubrimiento c= ",coverBarra," m\n"
   print "diamBarra fi= ",diamBarra,"\n"
   print "sigmaBarra= ",sigmaBarra/1e6," MPa\n"
   print "sigmaSRBarra= ",sigmaSRBarra/1e6," MPa\n"
@@ -155,7 +155,7 @@ def trataResultsCombFISEHE(preprocessor,nmbComb):
   defParamsFisuracion("secHAParamsFisuracion")
   materiales= preprocessor.getMaterialLoader
   hormigon= materiales.getMaterial(codHormigon)
-  tagHorm= hormigon.getProp("tagDiagK")
+  tagHorm= hormigon.getProp("matTagK")
   fctmHorm= hormigon.getProp("fctm")
   armadura= materiales.getMaterial(codArmadura)
   elementos= preprocessor.getElementLoader

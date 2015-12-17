@@ -35,7 +35,7 @@ class TorsionParameters(object):
 '''
 Calcula los parámetros de torsión que se deducen
  de la sección hueca eficaz. No es válido si la sección no es convexa.
-nmbGeomSeccion: Identificador de la definición geométrica de la sección.
+gmSectionName: Identificador de la definición geométrica de la sección.
 nmbParamsTorsión: Identificador del registro que contiene los parámetros de cálculo
                 de la resistencia a torsión.
 h0: Espesor real de la pared.

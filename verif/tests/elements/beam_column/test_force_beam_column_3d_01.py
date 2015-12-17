@@ -11,8 +11,8 @@ from materials import typical_materials
 from model import fix_node_6dof
 
 # Geometry
-ancho= .001
-canto= .01
+width= .001
+depth= .01
 nDivIJ= 2
 nDivJK= 2
 y0= 0

@@ -5,7 +5,7 @@ Funciones para la comprobación a cortante según el artículo
 '''
 from __future__ import division
 import math
-from materials.fiber_section import creaSetsFibras
+from materials.fiber_section import createFiberSets
 from materials.ehe import comprobVEHE08
 from materials.ehe import torsionEHE
 import geom
@@ -15,9 +15,9 @@ class ParamsCortante(object):
   '''
   Define las propiedades del registro que contiene los parámetros de cálculo
    de la resistencia a cortante.'''
-  nmbSetFibrasHormigon= "hormigon" #Nombre del conjunto de fibras de hormigón.
-  nmbSetFibrasArmadura= "armadura" #Nombre del conjunto de fibras de armadura.
-  nmbSetFibrasArmaduraTraccion= "armaduraTraccion" #Nombre del conjunto de fibras de armadura sometida a tracción.
+  setNameFibrasHormigon= "hormigon" #Nombre del conjunto de fibras de hormigón.
+  setNameFibrasArmadura= "armadura" #Nombre del conjunto de fibras de armadura.
+  setNameFibrasArmaduraTraccion= "armaduraTraccion" #Nombre del conjunto de fibras de armadura sometida a tracción.
   hayMom= False #Verdadero si la sección está sometida a momento.
   fcvH= 0.0 #Resistencia efectiva del hormigón a cortante.
   fckH= 0.0 #Valor característico de la resistencia del hormigón a compresión.
@@ -25,14 +25,14 @@ class ParamsCortante(object):
   fctdH= 0.0 #Valor de cálculo de la resistencia del hormigón a tracción.
   gammaC= 0.0 #Coeficiente de minoración de la resistencia del hormigón.
   fydS= 0.0 #Valor de cálculo de la resistencia del acero de armar a tracción.
-  cantoUtil= 0.0 #Canto útil con el que está trabajando la sección.
+  depthUtil= 0.0 #Canto útil con el que está trabajando la sección.
   brazoMecanico= 0.0 #Brazo mecánico con el que está trabajando la sección.
-  anchoBiela= 0.0 #Ancho «b0» de la biela comprimida.
+  widthBiela= 0.0 #Ancho «b0» de la biela comprimida.
   I= 0.0 #Momento de inercia de la sección respecto a la fibra neutra en régimen elástico.
   S= 0.0 #Momento estático de la sección por encima de la fibra neutra en régimen elástico.
   areaHormigon= 0.0 #Area de la sección de hormigón.
   numBarrasTraccion= 0 #Número de barras sometidas a tracción.
-  areaBarrasTracc= 0.0 #Area total de las barras traccionadas.
+  areaRebarTracc= 0.0 #Area total de las barras traccionadas.
   eps1= 0.0 #Deformación máxima en el hormigón.
   axilHormigon= 0.0 #Esfuerzo axil soportado por el hormigón.
   E0= 0.0 #Módulo de rigidez tangente del hormigón.
@@ -54,47 +54,47 @@ class ParamsCortante(object):
   def calcVuEHE08NoAt(self, preprocessor, scc, hormigon, aceroArmar):
     ''' Calcula el cortante último de la sección sin armadura de cortante.
      XXX Falta considerar la armadura activa.
-     tagDiagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
+     matTagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
      hormigon: Parámetros para modelizar el hormigón.
      aceroArmar: Parámetros para modelizar el acero de armar.'''
-    self.tagDiagHormigon= hormigon.tagDiagD
+    self.matTagHormigon= hormigon.matTagD
     self.fckH= abs(hormigon.fck)
     self.fcdH= abs(hormigon.fcd())
     self.fctdH= hormigon.fctd()
     self.gammaC= hormigon.gmmC
-    self.tagDiagAceroArmar= aceroArmar.tagDiagD
+    self.matTagAceroArmar= aceroArmar.matTagD
     self.fydS= aceroArmar.fyd()
 
     if(not scc.hasProp("rcSets")):
-      scc.setProp("rcSets", creaSetsFibras.fiberSectionSetupRC3Sets(scc,self.tagDiagHormigon,self.nmbSetFibrasHormigon,self.tagDiagAceroArmar,self.nmbSetFibrasArmadura))
+      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,self.matTagHormigon,self.setNameFibrasHormigon,self.matTagAceroArmar,self.setNameFibrasArmadura))
     rcSets= scc.getProp("rcSets")
 
-    fibrasHormigon= rcSets.fibrasHormigon.fSet
+    concrFibers= rcSets.concrFibers.fSet
     self.areaHormigon= rcSets.getConcreteArea(1)
     if(self.areaHormigon<1e-6):
       errMsg= "concrete area too smail; Ac= " + str(self.areaHormigon) + " m2\n"
       sys.stderr.write(errMsg)
     else:
-      fibrasArmadura= rcSets.fibrasArmadura.fSet
-      armaduraTraccion= rcSets.tractionFibers
+      reinfFibers= rcSets.reinfFibers.fSet
+      armaduraTraccion= rcSets.tensionFibers
       self.hayMom= scc.isSubjectedToBending(0.1)
-      self.numBarrasTraccion= rcSets.getNumBarrasTraccion()
+      self.numBarrasTraccion= rcSets.getNumTensionRebars()
       if(self.hayMom):
         self.eps1= rcSets.getMaxConcreteStrain()
         self.E0= rcSets.getConcreteInitialTangent()
         self.axilHormigon= rcSets.getConcreteCompression()
-        self.anchoBiela= scc.getAnchoBielaComprimida() # b0
+        self.widthBiela= scc.getAnchoBielaComprimida() # b0
         if((self.E0*self.eps1)<self.fctdH): # Sección no fisurada
           self.I= scc.getHomogenizedI(self.E0)
           self.S= scc.getSPosHomogeneizada(self.E0)
-          self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.anchoBiela,self.alphaL,self.axilHormigon,self.areaHormigon)
+          self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.widthBiela,self.alphaL,self.axilHormigon,self.areaHormigon)
         else: # Sección fisurada
-          self.cantoUtil= scc.getCantoUtil() # d
+          self.depthUtil= scc.getCantoUtil() # d
           if(self.numBarrasTraccion>0):
-            self.areaBarrasTracc= armaduraTraccion.getArea(1)
+            self.areaRebarTracc= armaduraTraccion.getArea(1)
           else:
-            self.areaBarrasTracc= 0.0
-          self.Vu2= comprobVEHE08.getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.axilHormigon,self.areaHormigon,self.anchoBiela,self.cantoUtil,self.areaBarrasTracc,0.0)
+            self.areaRebarTracc= 0.0
+          self.Vu2= comprobVEHE08.getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.axilHormigon,self.areaHormigon,self.widthBiela,self.depthUtil,self.areaRebarTracc,0.0)
         self.Vcu= self.Vu2
         self.Vsu= 0.0
         self.Vu1= -1.0
@@ -103,12 +103,12 @@ class ParamsCortante(object):
         axis= scc.getInternalForcesAxis()
         self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axis)
         self.S= scc.getFibers().getSPosSeccHomogeneizada(self.E0,geom.HalfPlane2d(axis))
-        self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.anchoBiela,self.alphaL,self.axilHormigon,self.areaHormigon)
+        self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.widthBiela,self.alphaL,self.axilHormigon,self.areaHormigon)
 
   def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, hormigon, aceroArmar, Nd, Md, Vd, Td):
     ''' Calcula el cortante último de la sección CON armadura de cortante.
      XXX Falta considerar la armadura activa.
-     tagDiagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
+     matTagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
      hormigon: Nombre del material empleado para modelizar el hormigón.
      aceroArmar: Nombre del material empleado para modelizar el acero de armar.
      Nd: Valor de cálculo del axil (aquí positivo si es de tracción)
@@ -118,41 +118,41 @@ class ParamsCortante(object):
     self.VuAe= paramsTorsion.Ae()
     self.Vuue= paramsTorsion.ue()
 
-    self.tagDiagHormigon= hormigon.tagDiagD
+    self.matTagHormigon= hormigon.matTagD
     self.fckH= abs(hormigon.fck)
     self.fcdH= abs(hormigon.fcd())
     self.fctdH= abs(hormigon.fctd())
     self.gammaC= abs(hormigon.gmmC)
-    self.tagDiagAceroArmar= aceroArmar.tagDiagD
+    self.matTagAceroArmar= aceroArmar.matTagD
     self.fydS= aceroArmar.fyd()
 
-    creaSetsFibras.fiberSectionSetupRC3Sets(scc,self.tagDiagHormigon,self.nmbSetFibrasHormigon,self.tagDiagAceroArmar,self.nmbSetFibrasArmadura)
-    fibrasHormigon= scc.getFiberSets()[self.nmbSetFibrasHormigon]
-    fibrasArmadura= scc.getFiberSets()[self.nmbSetFibrasArmadura]
-    armaduraTraccion= scc.getFiberSets()[self.nmbSetFibrasArmaduraTraccion]
+    createFiberSets.fiberSectionSetupRC3Sets(scc,self.matTagHormigon,self.setNameFibrasHormigon,self.matTagAceroArmar,self.setNameFibrasArmadura)
+    concrFibers= scc.getFiberSets()[self.setNameFibrasHormigon]
+    reinfFibers= scc.getFiberSets()[self.setNameFibrasArmadura]
+    armaduraTraccion= scc.getFiberSets()[self.setNameFibrasArmaduraTraccion]
 
     self.hayMom= scc.isSubjectedToBending(0.1)
     self.numBarrasTraccion= armaduraTraccion.getNumFibers()
-    self.areaHormigon= fibrasHormigon.getArea(1)
+    self.areaHormigon= concrFibers.getArea(1)
     if(self.areaHormigon<1e-6):
       errMsg= "concrete area too smail; Ac= " + str(self.areaHormigon) + " m2\n"
       sys.stderr.write(errMsg)
     else:
       if(self.hayMom):
-        self.eps1= fibrasHormigon.getStrainMax()
-        self.E0= fibrasHormigon[0].getMaterial().getInitialTangent()
-        self.axilHormigon= fibrasHormigon.ResultanteComp()
-        self.modElastArmadura= fibrasArmadura[0].getMaterial().getInitialTangent()
-        self.anchoBiela= scc.getAnchoBielaComprimida() # b0
-        self.cantoUtil= scc.getCantoUtil() # d
+        self.eps1= concrFibers.getStrainMax()
+        self.E0= concrFibers[0].getMaterial().getInitialTangent()
+        self.axilHormigon= concrFibers.ResultanteComp()
+        self.modElastArmadura= reinfFibers[0].getMaterial().getInitialTangent()
+        self.widthBiela= scc.getAnchoBielaComprimida() # b0
+        self.depthUtil= scc.getCantoUtil() # d
         self.brazoMecanico= scc.getBrazoMecanico() # z
         if(self.numBarrasTraccion>0):
-          self.areaBarrasTracc= armaduraTraccion.getArea(1)
+          self.areaRebarTracc= armaduraTraccion.getArea(1)
         else:
-          self.areaBarrasTracc= 0.0
-        self.thetaFisuras= comprobVEHE08.getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,self.brazoMecanico,self.areaBarrasTracc,0.0,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
-        self.Vcu= comprobVEHE08.getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.axilHormigon,self.areaHormigon,self.anchoBiela,self.cantoUtil,self.brazoMecanico,self.areaBarrasTracc,0.0,self.theta,Nd,Md,Vd,Td,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
-        self.Vu1= comprobVEHE08.getVu1EHE08(self.fckH,self.fcdH,self.axilHormigon,self.areaHormigon,self.anchoBiela,self.cantoUtil,self.alpha,self.theta)
+          self.areaRebarTracc= 0.0
+        self.thetaFisuras= comprobVEHE08.getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,self.brazoMecanico,self.areaRebarTracc,0.0,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
+        self.Vcu= comprobVEHE08.getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.axilHormigon,self.areaHormigon,self.widthBiela,self.depthUtil,self.brazoMecanico,self.areaRebarTracc,0.0,self.theta,Nd,Md,Vd,Td,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
+        self.Vu1= comprobVEHE08.getVu1EHE08(self.fckH,self.fcdH,self.axilHormigon,self.areaHormigon,self.widthBiela,self.depthUtil,self.alpha,self.theta)
         self.Vsu= comprobVEHE08.getVsuEHE08(self.brazoMecanico,self.alpha,self.theta,self.AsTrsv,self.fydS)
         self.Vu2= self.Vcu+self.Vsu
         self.Vu= min(self.Vu1,self.Vu2)
@@ -205,11 +205,11 @@ def trataResultsCombV(preprocessor,nmbComb):
   for e in elementos:
     scc= e.getSection()
     section= scc.getProp("datosSecc")
-    codHormigon= section.tipoHormigon
-    codArmadura= section.tipoArmadura
-    AsTrsv= section.armCortanteY.getAs()
-    alpha= section.armCortanteY.angAlphaRamas
-    theta= section.armCortanteY.angThetaBielas
+    codHormigon= section.concrType
+    codArmadura= section.reinfSteelType
+    AsTrsv= section.shReinfY.getAs()
+    alpha= section.shReinfY.angAlphaShReinf
+    theta= section.shReinfY.angThetaConcrStruts
     NTmp= scc.getStressResultantComponent("N")
     MyTmp= scc.getStressResultantComponent("My")
     MzTmp= scc.getStressResultantComponent("Mz")

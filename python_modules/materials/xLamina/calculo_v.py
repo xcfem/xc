@@ -14,14 +14,14 @@ import scipy
 import os
 
  
-def xLaminaPrintVAnsys(nmbArchSalida, nmbSeccion1, nmbSeccion2):
+def xLaminaPrintVAnsys(nmbArchSalida, sectionName1, sectionName2):
   # Imprime los resultados de la comprobación frente a cortante
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
   ansysOutput1= open(nmbArchSalida+".mac","w")
   ansysOutput2= open(nmbArchSalida+"esf.mac","w")
-  printCabeceraListadoCortante("texOutput1","1 ("+ nmbSeccion1 +")")
-  printCabeceraListadoCortante("texOutput2","2 ("+ nmbSeccion2 +")")
+  printCabeceraListadoCortante("texOutput1","1 ("+ sectionName1 +")")
+  printCabeceraListadoCortante("texOutput2","2 ("+ sectionName2 +")")
   for e in elementos:
     if(odd(e.tag)):
       texOutput1.write(floor(tag/10)+' & '+HIPCP+' & '+'{:5.2f}'.format(N/1e3)+' & '+'{:5.2f}'.format(VyCP/1e3)+' & '+'{:5.2f}'.format(VzCP/1e3)+' & '+'{:5.2f}'.format(Vu1CP/1e3)+' & '+'{:4.1f}'.format(math.degrees(thetaCP))+' & '+'{:5.2f}'.format(VcuCP/1e3)+' & '+'{:5.2f}'.format(VsuCP/1e3)+' & '+'{:5.2f}'.format(Vu2CP/1e3)+' & '+'{:5.2f}'.format(VuCP/1e3)+' & '+'{:3.2f}',format(FCCP),"\\\\\n")
@@ -66,8 +66,8 @@ def xLaminaPrintV(preprocessor, nmbArchSalida):
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
   xcOutput= open(nmbArchSalida+".py","w")
-  #printCabeceraListadoCortante("texOutput1","1 ("+ nmbSeccion1 +")")
-  #printCabeceraListadoCortante("texOutput2","2 ("+ nmbSeccion2 +")")
+  #printCabeceraListadoCortante("texOutput1","1 ("+ sectionName1 +")")
+  #printCabeceraListadoCortante("texOutput2","2 ("+ sectionName2 +")")
   #strHeader= "eTag & idSection & HIPCP & NCP kN & MyCP kN & MzCP kN & Vu1CP kN & VsuCP kN & Vu2CP kN & VuCP kN & FCCP \\\\\n"
   strHeader= "eTag & idSection & HIPCP & NCP kN & MyCP kN m/m & MzCP kN m/m & MuCP kN m/m & VyCP kN & VzCP kN & VuCP kN & FCCP \\\\\n"
   texOutput1.write(strHeader)
@@ -147,7 +147,7 @@ def lanzaCalculoVFromAnsysData(nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArc
   extraeDatosLST(nmbArch+".lst")
   xLaminaConstruyeModeloFibras(nmbRegDatosScc1,nmbRegDatosScc2)
   xLaminaCalculaCombEstatNoLin(nmbArchDefHipELU)
-  xLaminaPrintV(nmbArch+"V",deref(nmbRegDatosScc1).nmbSeccion,deref(nmbRegDatosScc2).nmbSeccion)
+  xLaminaPrintV(nmbArch+"V",deref(nmbRegDatosScc1).sectionName,deref(nmbRegDatosScc2).sectionName)
 
 def lanzaCalculoV(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,trataResultsCombV):
   '''

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-def VtkLoadKPts(nmbSet, nmbContndr):
+def VtkLoadKPts(setName, nmbContndr):
   nmbContndr= vtk.vtkPoints()
-  eSet= preprocessor.getSets.getSet(nmbSet)
+  eSet= preprocessor.getSets.getSet(setName)
   eSet.numerate()
   print("nombre set: ",eSet.nombre,"\n")
   print("num. puntos: ",eSet.getNumPuntos,"\n")

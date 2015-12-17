@@ -21,9 +21,9 @@ from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import fisuracionEHE
 from model import fix_node_6dof
 
-ancho= 0.25 # Ancho de la sección expresado en metros.
-canto= 0.25 # Canto de la sección expresado en metros.
-recub= 0.025 # Recubrimiento de la sección expresado en metros.
+width= 0.25 # Ancho de la sección expresado en metros.
+depth= 0.25 # Canto de la sección expresado en metros.
+cover= 0.025 # Recubrimiento de la sección expresado en metros.
 areaFi12=1.13e-4
 
 NDato= -100.0 # Axil para comprobar fisuración.
@@ -32,7 +32,7 @@ MyDato= 0.0 # Momento para comprobar fisuración.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-tagHA25= EHE_concrete.HA25.defDiagK(preprocessor)
+concrMatTag25= EHE_concrete.HA25.defDiagK(preprocessor)
 tagB500S= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
 
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
@@ -40,19 +40,19 @@ regiones= geomSecHA.getRegions
 hormigon= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagK)
 hormigon.nDivIJ= 10
 hormigon.nDivJK= 10
-hormigon.pMin= geom.Pos2d(-ancho/2.0,-canto/2.0)
-hormigon.pMax= geom.Pos2d(ancho/2.0,canto/2.0)
+hormigon.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
+hormigon.pMax= geom.Pos2d(width/2.0,depth/2.0)
 armaduras= geomSecHA.getReinfLayers
 armaduraInf= armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagK)
 armaduraInf.numReinfBars= 2
 armaduraInf.barArea= areaFi12
-armaduraInf.p1= geom.Pos2d(recub-ancho/2.0,recub-canto/2.0) # Armadura inferior.
-armaduraInf.p2= geom.Pos2d(ancho/2.0-recub,recub-canto/2.0)
+armaduraInf.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0) # Armadura inferior.
+armaduraInf.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
 armaduraSup= armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagK)
 armaduraSup.numReinfBars= 2
 armaduraSup.barArea= areaFi12
-armaduraSup.p1= geom.Pos2d(recub-ancho/2.0,canto/2.0-recub) # Armadura superior.
-armaduraSup.p2= geom.Pos2d(ancho/2.0-recub,canto/2.0-recub)
+armaduraSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior.
+armaduraSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
 
 materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
@@ -95,7 +95,7 @@ secHAParamsFis= fisuracionEHE.ParamsFisuracionEHE()
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,EHE_concrete.HA25.tagDiagK,EHE_reinforcing_steel.B500S.tagDiagK,EHE_concrete.HA25.fctm())
+secHAParamsFis.calcApertCaracFis(scc,EHE_concrete.HA25.matTagK,EHE_reinforcing_steel.B500S.matTagK,EHE_concrete.HA25.fctm())
 
 ratio1= secHAParamsFis.Wk
 

@@ -14,9 +14,9 @@ from materials.ehe import EHE_reinforcing_steel
 gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
 gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
 
-ancho= 0.2 # Ancho de la sección expresado en metros.
-canto= 0.4 # Ancho de la sección expresado en metros.
-recub= 0.05 # Recubrimiento de la sección expresado en metros.
+width= 0.2 # Ancho de la sección expresado en metros.
+depth= 0.4 # Ancho de la sección expresado en metros.
+cover= 0.05 # Recubrimiento de la sección expresado en metros.
 diam= 16e-3 # Diámetro de las barras expresado en metros.
 areaFi16= 2.01e-4 # Área de las barras expresado en metros cuadrados.
 
@@ -26,7 +26,7 @@ preprocessor=  prueba.getPreprocessor
 # Definimos materiales
 concr=EHE_concrete.HA25
 concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente alfacc=1)
-tagHA25= concr.defDiagD(preprocessor)
+concrMatTag25= concr.defDiagD(preprocessor)
 Ec= concr.getDiagD(preprocessor).getTangent
 tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 Es= EHE_reinforcing_steel.B500S.getDiagD(preprocessor).getTangent
@@ -36,19 +36,19 @@ regiones= geomSecHA.getRegions
 hormigon= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagD)
 hormigon.nDivIJ= 10
 hormigon.nDivJK= 10
-hormigon.pMin= geom.Pos2d(-canto/2.0,-ancho/2.0)
-hormigon.pMax= geom.Pos2d(canto/2.0,ancho/2.0)
+hormigon.pMin= geom.Pos2d(-depth/2.0,-width/2.0)
+hormigon.pMax= geom.Pos2d(depth/2.0,width/2.0)
 armaduras= geomSecHA.getReinfLayers
 armaduraInf= armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 armaduraInf.numReinfBars= 2
 armaduraInf.barArea= areaFi16
-armaduraInf.p1= geom.Pos2d(recub-canto/2.0,ancho/2.0-recub) # Armadura inferior.
-armaduraInf.p2= geom.Pos2d(recub-canto/2.0,recub-ancho/2.0)
+armaduraInf.p1= geom.Pos2d(cover-depth/2.0,width/2.0-cover) # Armadura inferior.
+armaduraInf.p2= geom.Pos2d(cover-depth/2.0,cover-width/2.0)
 armaduraSup= armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 armaduraSup.numReinfBars= 2
 armaduraSup.barArea= areaFi16
-armaduraSup.p1= geom.Pos2d(canto/2.0-recub,ancho/2.0-recub) # Armadura superior.
-armaduraSup.p2= geom.Pos2d(canto/2.0-recub,recub-ancho/2.0)
+armaduraSup.p1= geom.Pos2d(depth/2.0-cover,width/2.0-cover) # Armadura superior.
+armaduraSup.p2= geom.Pos2d(depth/2.0-cover,cover-width/2.0)
 
 materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
@@ -58,8 +58,8 @@ secHA.setupFibers()
 fibras= secHA.getFibers()
 
 param= xc.InteractionDiagramParameters()
-param.tagHormigon= EHE_concrete.HA25.tagDiagD
-param.tagArmadura= EHE_reinforcing_steel.B500S.tagDiagD
+param.tagHormigon= EHE_concrete.HA25.matTagD
+param.tagArmadura= EHE_reinforcing_steel.B500S.matTagD
 diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
 
 diagIntsecHA.writeTo("/tmp/prueba_diag_interaccion01.dat") # Se usa en test test_diag_interaccion03

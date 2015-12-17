@@ -23,13 +23,13 @@ G= E/(2.0*(1+nu)) # Módulo de elasticidad a cortante
 # Propiedades de la sección
 y0= 0
 z0= 0
-ancho= 1
-canto= 1
+width= 1
+depth= 1
 nDivIJ= 20
 nDivJK= 20
-A= ancho*canto # Área de la sección expresada en m2
-Iy= 1/12.0*ancho*canto**3 # Momento de inercia de la sección expresada en m4
-Iz= 1/12.0*canto*ancho**3 # Momento de inercia de la sección expresada en m4
+A= width*depth # Área de la sección expresada en m2
+Iy= 1/12.0*width*depth**3 # Momento de inercia de la sección expresada en m4
+Iz= 1/12.0*depth*width**3 # Momento de inercia de la sección expresada en m4
 
 # Geometry
 L= 0 # Longitud expresada en metros
@@ -54,8 +54,8 @@ respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",E) # Respues
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",E) # Respuesta de la sección a cortante según y.
 # Secciones
 geomCuadFibrasTN= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibrasTN")
-y1= ancho/2.0
-z1= canto/2.0
+y1= width/2.0
+z1= depth/2.0
 regiones= geomCuadFibrasTN.getRegions
 elast= regiones.newQuadRegion("elast")
 elast.nDivIJ= nDivIJ

@@ -18,11 +18,11 @@ def punzMaximo(fck,d,a,b):
     #armadura de punzonamiento)
     #Si el esfuerzo de punzonamiento es mayor habrá que:
     #  Aumentar la escuadría del pilar (lo más barato)
-    #  Aumentar el canto de la losa (lo más efectivo)
+    #  Aumentar el depth de la losa (lo más efectivo)
     #  Mejorar la resistencia del hormigón
     #Datos:
     #fck: resistencia característica del hormigón (N/m2)
-    #d: canto útil del forjado (m)
+    #d: depth útil del forjado (m)
     #a,b: escuadría del pilar (m)
     #El resultado se expresa en N
     fcd=fck*10/1.5/1e6  #resistencia de cálculo del hormigón (kp/cm2)
@@ -35,8 +35,8 @@ def armaduraPunz(Vd,fck,d,a,b,h,fyd):
     #Vd: esfuerzo de cálculo de punzomiento (N)
     #fck: resistencia característica del hormigón (N/m2)
     #fyd: límite elástico de cálculo del acero de armas (N/m2)
-    #d: canto útil del forjado (m)
-    #h: canto del forjado (m)
+    #d: depth útil del forjado (m)
+    #h: depth del forjado (m)
     #a,b: escuadría del pilar (m)
     #El resultado de la armadura se expresa en m2/m
     fcd=fck*10/1.5/1e6   #resistencia de cálculo del hormigón (kp/cm2)

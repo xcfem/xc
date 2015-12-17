@@ -14,8 +14,8 @@ def posTensaElementosLinea(preprocessor,numLinea, tension):
     pret= e.getPrestrass
     e.getMaterial().prestress(tension+pret)
 
-def retensaElementos(nmbSetLineas, umbral, tension):
-  setsLines= preprocessor.getSets.getSet(nmbSetLineas)
+def retensaElementos(setNameLineas, umbral, tension):
+  setsLines= preprocessor.getSets.getSet(setNameLineas)
   for s in setsLines:
     elems= linea.getElems()
     for e in elems:

@@ -12,7 +12,7 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
     # Define la escena de la malla en el dispositivo de salida.
     recordGrid.uGrid= vtk.vtkUnstructuredGrid()
     recordGrid.cellType= "lines"
-    setToDraw= preprocessor.getSets.getSet(recordGrid.nmbSet)
+    setToDraw= preprocessor.getSets.getSet(recordGrid.setName)
     numKPts= setToDraw.getPoints.size
     if(numKPts>0):
       cadMesh.VtkCargaMalla(preprocessor,recordGrid)
@@ -28,14 +28,14 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
     # elif(entToLabel=="points"):
     #   xcVtk.cadMesh.VtkDibujaIdsKPts(uGridCad,setToDraw,renderer)
 
-  def grafico_cad(self,preprocessor,nmbSet):
+  def grafico_cad(self,preprocessor,setName):
     defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.nmbSet= nmbSet
+    defGrid.setName= setName
     self.muestraMalla(preprocessor,defGrid)
 
-  def plotCadModel(self, preprocessor, nmbSet, field, fName):
+  def plotCadModel(self, preprocessor, setName, field, fName):
     defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.nmbSet= nmbSet
+    defGrid.setName= setName
     self.defineEscenaMalla(preprocessor,defGrid,field)
     self.plotScene(fName)
 

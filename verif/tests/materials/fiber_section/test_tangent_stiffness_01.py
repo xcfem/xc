@@ -8,8 +8,8 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 
-ancho= 0.2 # Ancho de la sección expresado en metros.
-canto= 0.4 # Ancho de la sección expresado en metros.
+width= 0.2 # Ancho de la sección expresado en metros.
+depth= 0.4 # Ancho de la sección expresado en metros.
 E= 2.1e6 # Módulo de Young del material en kp/cm2.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
@@ -21,8 +21,8 @@ regiones= geomScc.getRegions
 regEla= regiones.newQuadRegion("ela")
 regEla.nDivIJ= 11
 regEla.nDivJK= 11
-regEla.pMin= geom.Pos2d(-canto/2.0,-ancho/2.0)
-regEla.pMax= geom.Pos2d(canto/2.0,ancho/2.0)
+regEla.pMin= geom.Pos2d(-depth/2.0,-width/2.0)
+regEla.pMax= geom.Pos2d(depth/2.0,width/2.0)
 
 scc= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","scc")
 fiberSectionRepr= scc.getFiberSectionRepr()
@@ -36,11 +36,11 @@ EA= ts(0,0)
 
 
 
-EIzTeor= 1/12.0*ancho*canto**3*E
+EIzTeor= 1/12.0*width*depth**3*E
 ratio1= (EIz-EIzTeor)/EIzTeor
-EIyTeor= 1/12.0*canto*ancho**3*E
+EIyTeor= 1/12.0*depth*width**3*E
 ratio2= (EIy-EIyTeor)/EIyTeor
-EATeor= ancho*canto*E
+EATeor= width*depth*E
 ratio3= (EA-EATeor)/EATeor
 
 # print "ratio1= ", ratio1

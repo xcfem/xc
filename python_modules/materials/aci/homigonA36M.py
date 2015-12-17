@@ -15,9 +15,9 @@ def setupHormigon(nmbHormigon, gammaC):
       {
         nmbMaterial= nmbHormigon #Nombre del material.
         nmbDiagK= "dgK"+nmbHormigon #Nombre para el diagrama característico.
-        tagDiagK= -1 #Tag del material uniaxial con el diagrama característico del material.
+        matTagK= -1 #Tag del material uniaxial con el diagrama característico del material.
         nmbDiagD= "dgD"+nmbHormigon #Nombre para el diagrama de cálculo.
-        tagDiagD= -1 #Tag del material uniaxial con el diagrama de cálculo del material.
+        matTagD= -1 #Tag del material uniaxial con el diagrama de cálculo del material.
         gmmC= gammaC #Minoración de la resistencia del hormigón.
         fcd= fck/gmmC #Resistencia de cálculo a compresión del hormigón (en Pa).
         fmaxK= 0.85*fck
@@ -41,9 +41,9 @@ def defDiagKHormigon(nmbMat):
             \epsc0{epsilon0} # Deformación para tensión máxima (de compresión).
             \fpc{fmaxK} \fpcu{fmaxK}
             \epscu{epsilonU} # Deformación para tensión última (de compresión).
-            tagDiagK= tag
+            matTagK= tag
           }
-        return tagDiagK
+        return matTagK
       }
   }
 
@@ -55,9 +55,9 @@ def defDiagDHormigon(nmbMat):
             \epsc0{epsilon0} # Deformación para tensión máxima (de compresión).
             \fpc{fmaxD} \fpcu{fmaxD}
             \epscu{epsilonU} # Deformación para tensión última (de compresión).
-            tagDiagD= tag
+            matTagD= tag
           }
-        return tagDiagD
+        return matTagD
   }
 
 # Diagrama tensión deformación del hormigón según EHE.
@@ -107,10 +107,10 @@ def tangDHormigon(eps,record mat):
 # Comprueba la corrección de los resultados del diagrama de cálculo del modelo de elementos finitos.
 def testDiagDHormigon(record mat):
     tag= defDiagDHormigon(mat.nmbMaterial)
-    nmbDiagHormigon= mat.nmbDiagD
+    concrDiagName= mat.nmbDiagD
     incr= mat.epsilonU/20
     errMax= 0.0
-    \nmbDiagHormigon
+    \concrDiagName
       {
         errMax= 0.0
            for      \inicio{e= -0.1e-8}} \continua{e>=mat.epsilonU} \incremento{\expr{e=(e+incr)}
@@ -127,10 +127,10 @@ def testDiagDHormigon(record mat):
 # Comprueba la corrección de los resultados de la tangente al diagrama de cálculo del modelo de elementos finitos.
 def testTangDHormigon(record mat):
     tag= defDiagDHormigon(mat.nmbMaterial)
-    nmbDiagHormigon= mat.nmbDiagD
+    concrDiagName= mat.nmbDiagD
     incr= mat.epsilonU/20
     errMax= 0.0
-    \nmbDiagHormigon
+    \concrDiagName
       {
         incr= mat.epsilonU/30
            for      \inicio{e= -0.1e-8}} \continua{e>=mat.epsilonU} \incremento{\expr{e=(e+incr)}

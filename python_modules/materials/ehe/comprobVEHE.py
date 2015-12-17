@@ -48,10 +48,10 @@ Ac: Area total de la sección de hormigón.
 b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
 d: Canto útil expresado en metros.
 AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-a una distancia mayor que el canto útil de la sección en estudio.
+a una distancia mayor que el depth útil de la sección en estudio.
 fyd: Resistencia de cálculo de las armaduras pasivas (artículo 38.3 EHE).
 AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-a una distancia mayor que el canto útil de la sección en estudio.
+a una distancia mayor que el depth útil de la sección en estudio.
 fpd: Resistencia de cálculo del acero de las armaduras activas (artículo 38.6 EHE).
   
 '''
@@ -71,10 +71,10 @@ Ac: Area total de la sección de hormigón.
 b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
 d: Canto útil expresado en metros.
 AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-a una distancia mayor que el canto útil de la sección en estudio.
+a una distancia mayor que el depth útil de la sección en estudio.
 fyd: Resistencia de cálculo de las armaduras pasivas (artículo 38.3 EHE).
 AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-a una distancia mayor que el canto útil de la sección en estudio.
+a una distancia mayor que el depth útil de la sección en estudio.
 fpd: Resistencia de cálculo del acero de las armaduras activas (artículo 38.6 EHE).
   
 '''
@@ -91,10 +91,10 @@ b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el ar
 d: Canto útil expresado en metros.
 theta: Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1.a EHE).
 AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-a una distancia mayor que el canto útil de la sección en estudio.
+a una distancia mayor que el depth útil de la sección en estudio.
 fyd: Resistencia de cálculo de las armaduras pasivas (artículo 38.3 EHE).
 AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-a una distancia mayor que el canto útil de la sección en estudio.
+a una distancia mayor que el depth útil de la sección en estudio.
 fpd: Resistencia de cálculo del acero de las armaduras activas (artículo 38.6 EHE).
 sgxd: Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
 sgyd: Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
@@ -139,10 +139,10 @@ z: Brazo mecánico.
 alpha: Ángulo de las armaduras de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
 theta: Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1.a EHE).
 AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-a una distancia mayor que el canto útil de la sección en estudio.
+a una distancia mayor que el depth útil de la sección en estudio.
 fyd: Resistencia de cálculo de las armaduras pasivas (artículo 38.3 EHE).
 AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-a una distancia mayor que el canto útil de la sección en estudio.
+a una distancia mayor que el depth útil de la sección en estudio.
 fpd: Resistencia de cálculo del acero de las armaduras activas (artículo 38.6 EHE).
 sgxd: Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
 sgyd: Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
@@ -172,10 +172,10 @@ z: Brazo mecánico.
 alpha: Ángulo de las armaduras de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
 theta: Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1.a EHE).
 AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
-a una distancia mayor que el canto útil de la sección en estudio.
+a una distancia mayor que el depth útil de la sección en estudio.
 fyd: Resistencia de cálculo de las armaduras pasivas (artículo 38.3 EHE).
 AsAct: Área de la de la armadura longitudinal activa traccionada anclada
-a una distancia mayor que el canto útil de la sección en estudio.
+a una distancia mayor que el depth útil de la sección en estudio.
 fpd: Resistencia de cálculo del acero de las armaduras activas (artículo 38.6 EHE).
 sgxd: Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
 sgyd: Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
@@ -211,12 +211,12 @@ class ParamsCortante(object):
   '''Define las propiedades del registro que contiene los parámetros de cálculo
    a cortante.'''
   areaHormigon= 0.0 # Area total de la sección de hormigón.
-  anchoMin= 0.0 # Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-  cantoUtil= 0.0 # Canto útil expresado en metros.
+  widthMin= 0.0 # Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
+  depthUtil= 0.0 # Canto útil expresado en metros.
   brazoMecanico= 0.0 # Brazo mecánico expresado en metros.
-  areaBarrasTracc= 0.0 # Área de la armadura longitudinal pasiva traccionada anclada a una distancia mayor que el canto útil de la sección en estudio.
-  areaTendonesTracc= 0.0 # Área de la armadura activa longitudinal pasiva traccionada anclada a una distancia mayor que el canto útil de la sección en estudio.
-  areaRamasTrsv= 0.0 # Área de la armadura transversal.
+  areaRebarTracc= 0.0 # Área de la armadura longitudinal pasiva traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
+  areaTendonesTracc= 0.0 # Área de la armadura activa longitudinal pasiva traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
+  areaShReinfBranchsTrsv= 0.0 # Área de la armadura transversal.
   sigmaXD= 0.0 # Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
   sigmaYD= 0.0 # Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
 
@@ -227,22 +227,22 @@ class ParamsCortante(object):
   # Calcula el valor del cortante último de la sección.
   def calcCortanteUltimo(self, setFibrasHormigon, setFibrasArmadura,setFibrasArmaduraTraccion, fck, fcd, fyd, fpd, fydTrsv):
     self.areaHormigon= setFibrasHormigon.getArea()
-    anchoMin= setFibrasHormigon.getAnchoMecanico() # Mejorar (en secciones no convexas estará mal).
-    self.cantoUtil= setFibrasHormigon.getCantoUtil()
+    widthMin= setFibrasHormigon.getAnchoMecanico() # Mejorar (en secciones no convexas estará mal).
+    self.depthUtil= setFibrasHormigon.getCantoUtil()
     self.brazoMecanico= setFibrasHormigon.getBrazoMecanico()
-    self.areaBarrasTracc= setFibrasArmaduraTraccion.getArea
+    self.areaRebarTracc= setFibrasArmaduraTraccion.getArea
     # areaTendonesTracc= 
 
     self.sigmaXD= N/area+Mz/Iz*yCdg+My/Iy*zCdg
-    self.cortanteUltimo= getVu(fck,fcd,N,self.areaHormigon,self.anchoMin,self.cantoUtil,self.brazoMecanico,self.angAlpha,self.angTheta,self.areaBarrasTracc,fyd,self.areaTendonesTracc,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaRamasTrsv,fydTrsv)
+    self.cortanteUltimo= getVu(fck,fcd,N,self.areaHormigon,self.widthMin,self.depthUtil,self.brazoMecanico,self.angAlpha,self.angTheta,self.areaRebarTracc,fyd,self.areaTendonesTracc,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
 
   # Imprime los parámetros de cortante de la sección.
   def printParams(self):
-    print "Area de las armaduras traccionadas; As= ",self.areaBarrasTracc*1e4," cm2"
-    print "Área de la armadura transversal; AsTrsv= ",self.areaRamasTrsv*1e4," cm2"
+    print "Area de las armaduras traccionadas; As= ",self.areaRebarTracc*1e4," cm2"
+    print "Área de la armadura transversal; AsTrsv= ",self.areaShReinfBranchsTrsv*1e4," cm2"
     print "Tensión normal de cálculo = sigmaXD",self.sigmaXD/1e6," MPa"
-    print "Canto útil; d= ",self.cantoUtil," m"
-    print "Ancho mínimo; b0= ",self.anchoMin," m"
+    print "Canto útil; d= ",self.depthUtil," m"
+    print "Ancho mínimo; b0= ",self.widthMin," m"
     print "Brazo mecánico; z= ",self.brazoMecanico," m"
     print "cortanteUltimo; Vu= ",self.cortanteUltimo/1e3," kN"
 

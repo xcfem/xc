@@ -9,9 +9,9 @@ import math
 # 61.5.1, pág 324. Ver también libro metálicas UNED apartado
 # 25.3.3
 
-def anchoMax(tChapa,l,H):
+def widthMax(tChapa,l,H):
     '''
-    Devuelve el "ancho máximo" c del rigidizador (ver figura 61.1.5.b
+    Devuelve el "width máximo" c del rigidizador (ver figura 61.1.5.b
     pág 325 EAE). Siendo:
     tChapa: Espesor de la chapa sobre la que apoya la carga.
     l: Longitud del cateto horizontal del rigidizador.
@@ -25,7 +25,7 @@ def anchoMax(tChapa,l,H):
 def esbeltezAdim(c,tRig,fy,Es):
     '''
     Devuelve la esbeltez adimensional del rigidizador, siendo:
-    c: "ancho máximo" rigidizador.
+    c: "width máximo" rigidizador.
     tRig: Espesor del rigidizador.
     fy: Límite elástico del acero.
     Es: Módulo elástico del acero.
@@ -44,10 +44,10 @@ def coefEscuadra(coefLambda):
   
 def momPlastRig(tRig,c,fy):
     '''
-    Devuelve el momento plástico de la sección del rigidizador de canto c,
+    Devuelve el momento plástico de la sección del rigidizador de depth c,
     siendo:
     tRig: Espesor del rigidizador.
-    c: "ancho máximo" rigidizador.
+    c: "width máximo" rigidizador.
     fy: Límite elástico del acero.
     '''
     return tRig*c**2*fy/4 
@@ -57,7 +57,7 @@ def cargaUltRig(CE,d,MplRd):
     Devuelve la carga última del casquillo rigidizado debida al colapso del rigidizador, siendo:
     CE: Coeficiente de escuadra.
     d: Brazo de la carga.
-    MplRd: Momento plástico de la sección del rigidizador de canto c. 
+    MplRd: Momento plástico de la sección del rigidizador de depth c. 
     '''
     return CE*MplRd/d 
 

@@ -8,14 +8,14 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 
-ancho= 1
-canto= 1
+width= 1
+depth= 1
 nDivIJ= 2
 nDivJK= 2
 nFibTeor= nDivIJ*nDivJK
-areaTeor= ancho*canto
-iyTeor= 1/12.0*ancho*canto**3
-izTeor= 1/12.0*canto*ancho**3
+areaTeor= width*depth
+iyTeor= 1/12.0*width*depth**3
+izTeor= 1/12.0*depth*width**3
 y0= 0
 z0= 0
 F= 1000 # Magnitud de la fuerza

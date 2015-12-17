@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-#*    Nov. 2015   Ana Ortega    *
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 
 # Concrete according to Eurocode 2.
 

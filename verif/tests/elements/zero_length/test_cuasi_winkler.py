@@ -25,7 +25,7 @@ I= 342990
 beta= 3*math.pi/L
 k= pow(beta,4)*4*E*I
 h= pow(12*I,1/3.0)
-A= h # Suponemos ancho unidad
+A= h # Suponemos width unidad
 
 # Problem type
 prueba= xc.ProblemaEF()

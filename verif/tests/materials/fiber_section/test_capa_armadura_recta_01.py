@@ -7,15 +7,15 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 
-ancho= 1
-canto= 2
+width= 1
+depth= 2
 y0= 0
 z0= 0
-nBarras= 4.0
-As= 1.0/nBarras
-areaTeor= nBarras*As
-iyTeor= nBarras*As*(ancho/2.0)**2
-izTeor= nBarras*As*(canto/2.0)**2
+nRebars= 4.0
+As= 1.0/nRebars
+areaTeor= nRebars*As
+iyTeor= nRebars*As*(width/2.0)**2
+izTeor= nRebars*As*(depth/2.0)**2
 F= 1000.0 # Magnitud de la fuerza
 
 # Problem type
@@ -34,21 +34,21 @@ E= 2.1e6 # Módulo de Young del acero.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 geomCuadFibras= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibras")
-y1= ancho/2.0
-z1= canto/2.0
+y1= width/2.0
+z1= depth/2.0
 
 armaduras= geomCuadFibras.getReinfLayers
 armaduraA= armaduras.newStraightReinfLayer("acero")
 armaduraA.numReinfBars= 2
 armaduraA.barArea= As
-armaduraA.p1= geom.Pos2d(y0-canto/2.0,z0-ancho/2.0)
-armaduraA.p2= geom.Pos2d(y0+canto/2.0,z0-ancho/2.0)
+armaduraA.p1= geom.Pos2d(y0-depth/2.0,z0-width/2.0)
+armaduraA.p2= geom.Pos2d(y0+depth/2.0,z0-width/2.0)
 
 armaduraB= armaduras.newStraightReinfLayer("acero")
 armaduraB.numReinfBars= 2
 armaduraB.barArea= As
-armaduraB.p1= geom.Pos2d(y0-canto/2.0,z0+ancho/2.0)
-armaduraB.p2= geom.Pos2d(y0+canto/2.0,z0+ancho/2.0)
+armaduraB.p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)
+armaduraB.p2= geom.Pos2d(y0+depth/2.0,z0+width/2.0)
 
 materiales= preprocessor.getMaterialLoader
 # Secciones
@@ -135,7 +135,7 @@ avgStrain/= nfib
 
 
 
-ratio1= (nfib-nBarras)/nBarras
+ratio1= (nfib-nRebars)/nRebars
 ratio2= (sumAreas-areaTeor)/areaTeor
 ratio3= yCdg-y0
 ratio4= zCdg-z0

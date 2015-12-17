@@ -44,18 +44,18 @@ def nuevosZeroLengthShell(nmbS, tagElem, offset):
   zls2= elems.newElement("zero_lenght_section",xc.ID([idNod3,iNod4]))
 
 
-def simulaShellElemFromTable(preprocessor,nmbDBase, nmbTablaElem, nmbSeccion, offset):
+def simulaShellElemFromTable(preprocessor,nmbDBase, nmbTablaElem, sectionName, offset):
   '''
   Crea los elementos a partir de la tabla creada anteriormente
      nmbDBase: Nombre de la base de datos donde se guardará la tabla.
      nmbTableElem: Nombre de la tabla que contiene los índices de elemento.
-     nmbSeccion: Nombre de la sección que se asigna a cada elemento.
+     sectionName: Nombre de la sección que se asigna a cada elemento.
   '''
   nodos= preprocessor.getNodeLoader
   prdefined_spaces.gdls_resist_materiales3D(nodos)
   elements= preprocessor.getElementLoader
   elements.dimElem= 1
-  elements.defaultMaterial= nmbSeccion
+  elements.defaultMaterial= sectionName
 
   con= sqlite.connect(nmbDataBase)
   con.row_factory = sqlite.Row
@@ -64,7 +64,7 @@ def simulaShellElemFromTable(preprocessor,nmbDBase, nmbTablaElem, nmbSeccion, of
   cur.execute("select * from " + nmbTablaElem)
   for row in cur:
     idSecc= row["ELEM"]
-    nuevosZeroLengthShell(nmbSeccion,int(idElem),offset)
+    nuevosZeroLengthShell(sectionName,int(idElem),offset)
 
 
 def simulaCargasXYFromTable(nmbQuery, nmbTbEsf, idElem, offset):

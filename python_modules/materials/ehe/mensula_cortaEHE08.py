@@ -26,7 +26,7 @@ def getCantoUtilMinimo(tipoJunta, a):
     a: Distancia (m) entre el eje de la carga aplicada y la sección
     de empotramiento de la ménsula (ver figura 64.1.2 de EHE-08).
 
-    Devuelve el canto útil mínimo de la ménsula según
+    Devuelve el depth útil mínimo de la ménsula según
     el apartado 64.1.2.1 de EHE-08.
     '''
     return a*getCotgAnguloBiela(tipoJunta)/0.85

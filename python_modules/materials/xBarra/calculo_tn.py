@@ -53,11 +53,11 @@ def trataResultsCombTN(preprocessor, nmbComb, diagIntSec):
       e.setProp("MzCP",MzTmp)
 
 # Imprime los resultados de la comprobación frente a tensiones normales
-def xBarraPrintTN(preprocessor,nmbArchSalida, nmbSeccion):
+def xBarraPrintTN(preprocessor,nmbArchSalida, sectionName):
   texOutput= open("/tmp/texOutput.tmp","w")
   texOutput.write("Section\n")
   ansysOutput= open(nmbArchSalida+".mac","w")
-  #printCabeceraListadoFactorCapacidad("texOutput"," ("+ nmbSeccion1 +")")
+  #printCabeceraListadoFactorCapacidad("texOutput"," ("+ sectionName1 +")")
   fcs= [] #Capacity factors at section.
   elementos= preprocessor.getSets["total"].getElements
   for e in elementos:
@@ -101,7 +101,7 @@ def xBarraPrintTN(preprocessor,nmbArchSalida, nmbSeccion):
 '''
 def lanzaCalculoTNFromXCData(preprocessor,analysis,nmbArchCsv,nmbArchSalida, diagIntScc):
   ec.extraeDatos(preprocessor,nmbArchCsv, diagIntScc)
-  #nmbDiagIntSec= "diagInt"+datosScc.nmbSeccion
+  #nmbDiagIntSec= "diagInt"+datosScc.sectionName
   calculo_comb.xBarraCalculaCombEstatLin(preprocessor,analysis,diagIntScc,trataResultsCombTN)
   meanFCs= xBarraPrintTN(preprocessor,nmbArchSalida,"geomSecHA")
   return meanFCs

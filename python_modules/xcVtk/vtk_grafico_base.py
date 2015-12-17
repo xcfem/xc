@@ -8,7 +8,7 @@ class RecordDefGrid(object):
   ''' Define las variables que se emplean para mostrar la malla. '''
 
   def __init__(self):
-    self.nmbSet= "nil"
+    self.setName= "nil"
     self.entToLabel= "nodos"
     self.cellType= "nil"
     self.uGrid= None
@@ -158,5 +158,5 @@ class RecordDefDisplay(object):
     self.renWin.Render()
     w2i.Update()
     writer.Write()
-    
-
+ 
+ 

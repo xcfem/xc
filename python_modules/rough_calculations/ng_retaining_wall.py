@@ -270,19 +270,19 @@ class RetainingWall(object):
       outputFile.write(l)
 
     defStrings= {}
-    defStrings[1]= self.getSection1().tractionRebars.getDefStrings()
+    defStrings[1]= self.getSection1().tensionRebars.getDefStrings()
     yCoupe2= effortsMur.getYVoile(self.getBasicAnchorageLength(1))
-    defStrings[2]= self.getSection2(effortsMur.hauteurVoile,yCoupe2).tractionRebars.getDefStrings()
-    defStrings[3]= self.getSection3().tractionRebars.getDefStrings()
-    defStrings[4]= self.getSection4().tractionRebars.getDefStrings()
-    defStrings[5]= self.getSection4().tractionRebars.getDefStrings() #C5==C4
-    defStrings[6]= self.getSection6().tractionRebars.getDefStrings()
-    defStrings[7]= self.getSection7().tractionRebars.getDefStrings()
-    defStrings[8]= self.getSection8().tractionRebars.getDefStrings()
-    defStrings[9]= self.getSection8().tractionRebars.getDefStrings() #C9==C8
-    #defStrings[10]= self.getSection10().tractionRebars.getDefStrings()
-    defStrings[11]= self.getSection11().tractionRebars.getDefStrings()
-    defStrings[12]= self.getSection11().tractionRebars.getDefStrings() #C12==C11
+    defStrings[2]= self.getSection2(effortsMur.hauteurVoile,yCoupe2).tensionRebars.getDefStrings()
+    defStrings[3]= self.getSection3().tensionRebars.getDefStrings()
+    defStrings[4]= self.getSection4().tensionRebars.getDefStrings()
+    defStrings[5]= self.getSection4().tensionRebars.getDefStrings() #C5==C4
+    defStrings[6]= self.getSection6().tensionRebars.getDefStrings()
+    defStrings[7]= self.getSection7().tensionRebars.getDefStrings()
+    defStrings[8]= self.getSection8().tensionRebars.getDefStrings()
+    defStrings[9]= self.getSection8().tensionRebars.getDefStrings() #C9==C8
+    #defStrings[10]= self.getSection10().tensionRebars.getDefStrings()
+    defStrings[11]= self.getSection11().tensionRebars.getDefStrings()
+    defStrings[12]= self.getSection11().tensionRebars.getDefStrings() #C12==C11
 
     rebarAnno= draw_schema.getRebarAnnotationLines(defStrings)
     for l in rebarAnno:

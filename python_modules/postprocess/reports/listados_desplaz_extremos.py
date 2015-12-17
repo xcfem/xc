@@ -4,12 +4,12 @@
 Imprime valores extremos de los desplazamientos de los nodos del conjunto
 cuyo nombre se pasa como parámetro.
 '''
-def listaUMaxUMinNodos(preprocessor,nmbSet, tit, fmt, fName):
+def listaUMaxUMinNodos(preprocessor,setName, tit, fmt, fName):
   caption= tit
   defCampos= "|l|r|r|r|r|"
   idsCampos= "IdN & $U_{max}$ & Comb. & $U_{min}$ & Comb. \\\\\n - & mm & - & mm & - \\\\\n"
   cabeceraSupertabular(fName,5,defCampos,idsCampos,caption)
-  s= preprocessor.getSetLoader.getSet(nmbSet)
+  s= preprocessor.getSetLoader.getSet(setName)
   nodos= s.getNodos()
   tagUMaxMax= 0
   UMaxMax= 0
@@ -40,7 +40,7 @@ def listaUMaxUMinNodos(preprocessor,nmbSet, tit, fmt, fName):
 Imprime valores extremos de los desplazamientos de los nodos del conjunto
 cuyo nombre se pasa como parámetro.
 '''
-def listaVMaxVMinNodos(nmbSet, tit, fmt, fName):
+def listaVMaxVMinNodos(setName, tit, fmt, fName):
   caption= tit
   defCampos= "|l|r|r|r|r|"
   idsCampos= "IdN & $V_{max}$ & Comb. & $V_{min}$ & Comb. \\\\\n - & mm & - & mm & - \\\\\n"
@@ -52,7 +52,7 @@ def listaVMaxVMinNodos(nmbSet, tit, fmt, fName):
   VMinMin= 0
   CombVMinMin= None
  
-  s= preprocessor.getSetLoader.getSet(nmbSet)
+  s= preprocessor.getSetLoader.getSet(setName)
   nodos= s.getNodos()
   for n in nodos:
     fName.write(tag," & ",fmt.format(VMax*1e3)," & ",CombVMax," & ",fmt.format(VMin*1e3)," & ",CombVMin,"\\\\\n")
@@ -76,7 +76,7 @@ def listaVMaxVMinNodos(nmbSet, tit, fmt, fName):
 Imprime valores extremos de los desplazamientos de los nodos del conjunto
 cuyo nombre se pasa como parámetro.
 '''
-def listaWMaxWMinNodos(preprocessor, nmbSet, tit, fmt, fName):
+def listaWMaxWMinNodos(preprocessor, setName, tit, fmt, fName):
   caption= tit
   defCampos= "|l|r|r|r|r|"
   idsCampos= "IdN & $W_{max}$ & Comb. & $W_{min}$ & Comb. \\\\\n - & mm & - & mm & - \\\\\n"
@@ -88,7 +88,7 @@ def listaWMaxWMinNodos(preprocessor, nmbSet, tit, fmt, fName):
   WMinMin= 0
   CombWMinMin= None
  
-  s= preprocessor.getSetLoader.getSet(nmbSet)
+  s= preprocessor.getSetLoader.getSet(setName)
   nodos= s.getNodos()
   for n in nodos:
     fName.write(tag," & ",fmt.format(WMax*1e3)," & ",CombWMax," & ",fmt.format(WMin*1e3)," & ",CombWMin,"\\\\\n")

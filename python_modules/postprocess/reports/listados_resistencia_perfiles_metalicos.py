@@ -34,13 +34,13 @@ def printCierreListadoTNPerfilMetalico(archivo):
   archivo.write("\\end{center}\n")
 
 
-def listaResistenciaPerfilesMetalicosTNRegElastico(nmbSet, fName, titulo):
+def listaResistenciaPerfilesMetalicosTNRegElastico(setName, fName, titulo):
   '''
   Imprime los resultados de la comprobación de tensiones normales en régimen
   elástico de un conjunto de elementos cuyo material es un perfil
   metálico.'''
   printCabeceraListadoTNPerfilMetalico(fName,titulo) 
-  st= preprocessor.getSetLoader.getSet(nmbSet)
+  st= preprocessor.getSetLoader.getSet(setName)
   elems= st.getElements()
   tagFCTNCPCP= 0
   FCTNCPCP= 0
@@ -90,9 +90,9 @@ def printCabeceraListadoVPerfilMetalico(archivo, tit):
 Imprime los resultados de la comprobación de tensiones cortantes
 de un conjunto de elementos cuyo material es un perfil metálico.
 '''
-def listaResistenciaPerfilesMetalicosV(nmbSet, fName, titulo):
+def listaResistenciaPerfilesMetalicosV(setName, fName, titulo):
   printCabeceraListadoVPerfilMetalico(fName,titulo) 
-  st= preprocessor.getSetLoader.getSet(nmbSet)
+  st= preprocessor.getSetLoader.getSet(setName)
   elems= st.getElements()
   tagFCTNCPCP= 0
   FCTNCPCP= 0

@@ -40,15 +40,15 @@ ptsRO1000BarrasEHE= scipy.interpolate.interp1d(x,y)
 '''
 Devuelve el valor de la relajación a 1000 horas
    Ver tabla 38.9.a en la página en EHE-08
-   tipoArmadura: Tipo de acero (alambres, cordones o barras).
+   reinfSteelType: Tipo de acero (alambres, cordones o barras).
    alpha: Fracción de la tensión de rotura con la que se tesa el alambre.
 '''
-def getRO1000EHE(tipoArmadura, alpha):
-  if(tipoArmadura=="alambre"):
+def getRO1000EHE(reinfSteelType, alpha):
+  if(reinfSteelType=="alambre"):
     return ptsRO1000AlambresEHE(alpha) 
-  elif(tipoArmadura=="cordon"):
+  elif(reinfSteelType=="cordon"):
     return ptsRO1000AlambresEHE(alpha)
-  elif(tipoArmadura=="barra"):
+  elif(reinfSteelType=="barra"):
     return ptsRO1000BarrasEHE(alpha)
 
 '''
@@ -70,16 +70,16 @@ ptsRelajacionCortoPlazo= scipy.interpolate.interp1d(x,y)
 '''
 Devuelve el valor de la relajación para el instante t en función
    de la relajación obtenida para 1000 horas y del tipo de acero.
-   tipoArmadura: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o superestabilizado).
    alpha: Fracción de la tensión de rotura con la que se tesa la armadura.
    t: Tiempo expresado en días (para facilitar el tratamiento conjunto con retraccion y
       fluencia).
   
 '''
-def getRelajacionTEHE(tipoArmadura, tipoAcero, alpha, tDias):
+def getRelajacionTEHE(reinfSteelType, tipoAcero, alpha, tDias):
   tHoras= tDias*24
-  RO1000= getRO1000EHE(tipoArmadura,alpha)
+  RO1000= getRO1000EHE(reinfSteelType,alpha)
   if(tHoras<1000):
     return RO1000*ptsRelajacionCortoPlazo(tHoras)
   else:
@@ -87,7 +87,7 @@ def getRelajacionTEHE(tipoArmadura, tipoAcero, alpha, tDias):
 
 '''
 Devuelve el la pérdida de tensión por relajación del acero.
-   tipoArmadura: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o estabilizado).
    alpha: Fracción de la tensión de rotura con la que se tesa la armadura.
    sigmaInic: Tensión inicial.
@@ -95,9 +95,9 @@ Devuelve el la pérdida de tensión por relajación del acero.
       (para facilitar el tratamiento conjunto con retraccion y fluencia).
   
 '''
-def getPerdidaTensionRelajacionTEHE(tipoArmadura, tipoAcero, alpha, tDias, sigmaInicial):
-  LGRO120= math.log10(getRelajacionTEHE(tipoArmadura,tipoAcero,alpha,120/24.0))
-  LGRO1000= math.log10(getRelajacionTEHE(tipoArmadura,tipoAcero,alpha,1000/24.0))
+def getPerdidaTensionRelajacionTEHE(reinfSteelType, tipoAcero, alpha, tDias, sigmaInicial):
+  LGRO120= math.log10(getRelajacionTEHE(reinfSteelType,tipoAcero,alpha,120/24.0))
+  LGRO1000= math.log10(getRelajacionTEHE(reinfSteelType,tipoAcero,alpha,1000/24.0))
   k2= (LGRO1000-LGRO120)/(3-math.log10(120))
   k1= LGRO1000-3*k2
   tHoras= tDias*24
@@ -107,14 +107,14 @@ def getPerdidaTensionRelajacionTEHE(tipoArmadura, tipoAcero, alpha, tDias, sigma
 '''
 Devuelve el la pérdida de tensión por relajación del acero
    a tiempo infinito según los comentarios al artículo 38.9.
-   tipoArmadura: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o estabilizado).
    alpha: Fracción de la tensión de rotura con la que se tesa la armadura.
    sigmaInic: Tensión inicial.
   
 '''
-def getPerdidaTensionRelajacionFinalEHE(tipoArmadura, tipoAcero, alpha, sigmaInicial):
-  ROFINAL= 2.9e-2*getRelajacionTEHE(tipoArmadura,tipoAcero,alpha,1000/24.0)
+def getPerdidaTensionRelajacionFinalEHE(reinfSteelType, tipoAcero, alpha, sigmaInicial):
+  ROFINAL= 2.9e-2*getRelajacionTEHE(reinfSteelType,tipoAcero,alpha,1000/24.0)
   return sigmaInicial*ROFINAL
 
 '''
@@ -168,33 +168,33 @@ ptsRO1000Clase3CEB= scipy.interpolate.interp1d(x,y)
 '''
 Devuelve el valor de la relajación a 1000 horas
    Ver figura 2.3.3. del código modelo CEB-FIP 1990
-   tipoArmadura: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o estabilizado).
    alpha: Fracción de la tensión de rotura con la que se tesa el alambre.
 '''
-def getRO1000CEB(tipoArmadura, tipoAcero, alpha):
-  if((tipoArmadura=="alambre") | (tipoArmadura=="cordon")):
+def getRO1000CEB(reinfSteelType, tipoAcero, alpha):
+  if((reinfSteelType=="alambre") | (reinfSteelType=="cordon")):
     if(tipoAcero=="superestabilizado"):
       return ptsRO1000Clase2CEB(alpha)
     elif(tipoAcero=="normal"):
       return ptsRO1000Clase1CEB(alpha) 
-  elif(tipoArmadura=="barra"):
+  elif(reinfSteelType=="barra"):
     return ptsRO1000Clase3CEB(alpha)
 
 
 '''
 Devuelve el valor de la relajación para el instante t en función
    de la relajación obtenida para 1000 horas y del tipo de acero.
-   tipoArmadura: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o estabilizado).
    alpha: Fracción de la tensión de rotura con la que se tesa la armadura.
    t: Tiempo expresado en días (para facilitar el tratamiento conjunto con retraccion y
       fluencia).
   
 '''
-def getRelajacionTCEB(tipoArmadura, tipoAcero, alpha, tDias):
+def getRelajacionTCEB(reinfSteelType, tipoAcero, alpha, tDias):
   tHoras= tDias*24
-  RO1000= getRO1000CEB(tipoArmadura,tipoAcero,alpha)
+  RO1000= getRO1000CEB(reinfSteelType,tipoAcero,alpha)
   if(tHoras<1000):
     return RO1000*ptsRelajacionCortoPlazo(tHoras)
   else:
@@ -202,7 +202,7 @@ def getRelajacionTCEB(tipoArmadura, tipoAcero, alpha, tDias):
 
 '''
 Devuelve el la pérdida de tensión por relajación del acero.
-   tipoArmadura: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o estabilizado).
    alpha: Fracción de la tensión de rotura con la que se tesa la armadura.
    sigmaInic: Tensión inicial.
@@ -210,9 +210,9 @@ Devuelve el la pérdida de tensión por relajación del acero.
       (para facilitar el tratamiento conjunto con retraccion y fluencia).
   
 '''
-def getPerdidaTensionRelajacionTCEB(tipoArmadura, tipoAcero, alpha, tDias, sigmaInicial):
-  LGRO120= math.log10(getRelajacionTCEB(tipoArmadura,tipoAcero,alpha,120/24.0))
-  LGRO1000= math.log10(getRelajacionTCEB(tipoArmadura,tipoAcero,alpha,1000/24.0))
+def getPerdidaTensionRelajacionTCEB(reinfSteelType, tipoAcero, alpha, tDias, sigmaInicial):
+  LGRO120= math.log10(getRelajacionTCEB(reinfSteelType,tipoAcero,alpha,120/24.0))
+  LGRO1000= math.log10(getRelajacionTCEB(reinfSteelType,tipoAcero,alpha,1000/24.0))
   k2= (LGRO1000-LGRO120)/(3-math.log10(120))
   k1= LGRO1000-3*k2
   tHoras= tDias*24
