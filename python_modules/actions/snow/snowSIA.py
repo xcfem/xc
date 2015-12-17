@@ -4,13 +4,25 @@ from __future__ import division
 
 import math
 
+def PsSIA160_1970(h):
+  '''
+  characteristic value of snow load.
+  according SIA 160 1970 (23.1).
+  h: altitude (m).
+  '''
+  retval= max(40+(h/55)**2,90)*9.81 #N/m2
+  if(h>800):
+    retval= (160+1.4(h/100)**2)*9.81 #N/m2
+  return retval
+
+
 def Sk(h0):
   '''
   characteristic value of snow load.
   according SIA 261 2014 (5.2.6).
   h0: reference altitude (annex D)
   '''
-  return max(((h0/350)**2+1)*400,900) #N/m
+  return max(((h0/350)**2+1)*400,900) #N/m2
 
 def Ce(windExposition):
   '''
