@@ -53,6 +53,6 @@ class Kinematic2D02 : public BkStressLimSurface2D
 
     static NullPlasticMaterial nullMat;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

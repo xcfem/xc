@@ -108,6 +108,6 @@ void XC::LoadLoader::load_ground_motion(const std::string &cmd,CmdStatus &status
 
 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

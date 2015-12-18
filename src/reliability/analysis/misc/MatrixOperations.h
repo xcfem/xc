@@ -105,7 +105,7 @@ private:
 	double theTrace; 
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

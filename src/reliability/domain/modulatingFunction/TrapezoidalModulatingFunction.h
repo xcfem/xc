@@ -82,6 +82,6 @@ class TrapezoidalModulatingFunction : public ModulatingFunction
     double getMaxAmplitude(void);
     Filter *getFilter();
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

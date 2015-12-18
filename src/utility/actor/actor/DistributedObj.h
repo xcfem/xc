@@ -55,7 +55,7 @@ class DistributedObj: public DistributedBase
     int setProcessID(int processTag);
     int setChannels(const ChannelQueue &theChannels);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

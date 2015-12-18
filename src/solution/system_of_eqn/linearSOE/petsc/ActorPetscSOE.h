@@ -95,7 +95,7 @@ class ActorPetscSOE
     ~ActorPetscSOE(void);
     int run(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

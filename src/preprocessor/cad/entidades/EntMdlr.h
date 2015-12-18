@@ -157,6 +157,6 @@ class EntMdlr: public SetEstruct
     virtual ~EntMdlr(void);
   };
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

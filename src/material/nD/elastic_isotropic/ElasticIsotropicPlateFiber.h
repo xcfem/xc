@@ -94,7 +94,7 @@ class ElasticIsotropicPlateFiber : public ElasticIsotropicMaterial
     const std::string &getType(void) const;
     int getOrder(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

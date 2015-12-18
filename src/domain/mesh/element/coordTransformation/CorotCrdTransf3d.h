@@ -163,5 +163,5 @@ class CorotCrdTransf3d: public CrdTransf3d
     const Matrix &getVectorGlobalCoordFromLocal(const Matrix &localCoords) const;
     const Vector &getVectorLocalCoordFromGlobal(const Vector &globalCoords) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 #endif

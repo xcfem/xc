@@ -95,7 +95,7 @@ class DistributedBandSPDLinSOE: public BandSPDLinSOE, public DistributedBandLinS
   };
 inline SystemOfEqn *DistributedBandSPDLinSOE::getCopy(void) const
   { return new DistributedBandSPDLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

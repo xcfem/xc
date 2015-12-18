@@ -45,7 +45,7 @@ class BaseNumberer: public GraphNumberer
       { return theRefResult.Size(); }
     bool checkSize(const Graph &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

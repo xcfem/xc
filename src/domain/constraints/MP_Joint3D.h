@@ -116,7 +116,7 @@ class MP_Joint3D: public MP_Constraint
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

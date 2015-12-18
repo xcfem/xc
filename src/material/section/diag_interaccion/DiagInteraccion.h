@@ -73,6 +73,6 @@ class DiagInteraccion: public ClosedTriangleMesh
 
 DiagInteraccion calc_diag_interaccion(const FiberSectionBase &scc,const DatosDiagInteraccion &datos);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

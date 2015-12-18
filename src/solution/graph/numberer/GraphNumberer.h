@@ -87,7 +87,7 @@ class GraphNumberer : public MovableObject, public EntCmd
     virtual const ID &number(Graph &theGraph, int lastVertex = -1) =0;
     virtual const ID &number(Graph &theGraph, const ID &lastVertices) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

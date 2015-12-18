@@ -163,7 +163,7 @@ class MatPoint3D: public GaussPoint
     void reportpqtheta(const std::string &msg) const;
     void reportTensor(const std::string &msg) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif 
 //

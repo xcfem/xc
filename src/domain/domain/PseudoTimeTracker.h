@@ -69,5 +69,5 @@ class PseudoTimeTracker: public MovableObject
   };
 
 std::ostream &operator<<(std::ostream &s,const PseudoTimeTracker &tt);
-} // fin namespace XC
+} // end of XC namespace
 #endif

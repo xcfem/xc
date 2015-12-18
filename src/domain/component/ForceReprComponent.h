@@ -42,7 +42,7 @@ class ForceReprComponent: public DomainComponent
     ForceReprComponent(int tag, int classTag);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

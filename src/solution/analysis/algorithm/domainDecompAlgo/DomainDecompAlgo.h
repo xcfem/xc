@@ -97,7 +97,7 @@ class DomainDecompAlgo: public SolutionAlgorithm
 inline SolutionAlgorithm *DomainDecompAlgo::getCopy(void) const
   { return new DomainDecompAlgo(*this); }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

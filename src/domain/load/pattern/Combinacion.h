@@ -173,6 +173,6 @@ class Combinacion: public ForceReprComponent
 
 std::ostream &operator<<(std::ostream &os,const Combinacion &);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -112,6 +112,6 @@ private:
   int  plasticPredictor(Vector &trialForce) const;
   int  elasticCorrector(Vector &trialForce, int algo);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

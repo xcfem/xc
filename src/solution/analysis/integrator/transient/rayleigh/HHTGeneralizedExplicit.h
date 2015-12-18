@@ -113,6 +113,6 @@ class HHTGeneralizedExplicit : public HHTBase
   };
 inline Integrator *HHTGeneralizedExplicit::getCopy(void) const
   { return new HHTGeneralizedExplicit(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

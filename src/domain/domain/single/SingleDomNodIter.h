@@ -73,7 +73,7 @@ class SingleDomNodIter : public SingleDomTIter<NodeIter>
     SingleDomNodIter(TaggedObjectStorage *theStorage);
     virtual Node *operator()(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

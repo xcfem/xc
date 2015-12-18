@@ -140,5 +140,5 @@ class MultiaxialCyclicPlasticity3D : public MultiaxialCyclicPlasticity
 
 } ; //end of MultiaxialCyclicPlasticity3D declarations
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

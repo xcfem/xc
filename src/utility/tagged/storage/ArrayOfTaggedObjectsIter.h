@@ -80,7 +80,7 @@ class ArrayOfTaggedObjectsIter: public TaggedObjectIter
     virtual TaggedObject *operator()(void);
     
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -48,7 +48,7 @@ class MovableStrings: public MovableContainer<std::deque<std::string> >
       { return contenedor; }
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

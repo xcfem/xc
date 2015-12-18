@@ -86,7 +86,7 @@ class BandSPDLinSolver : public LinearSOESolver
     virtual bool setLinearSOE(BandSPDLinSOE &theSOE);
     
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

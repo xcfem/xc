@@ -97,7 +97,7 @@ class RegionSecc: public DiscretBase
     virtual void Print(std::ostream &s, int flag= 0) const =0;   
     friend std::ostream &operator<<(std::ostream &s, const RegionSecc &rg_scc);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

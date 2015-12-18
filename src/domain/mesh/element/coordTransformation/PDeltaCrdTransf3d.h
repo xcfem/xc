@@ -105,7 +105,7 @@ class PDeltaCrdTransf3d: public SmallDispCrdTransf3d
     const Vector &getPointGlobalCoordFromLocal(const Vector &localCoords) const;
     const Vector &getPointGlobalDisplFromBasic(double xi, const Vector &basicDisps) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

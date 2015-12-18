@@ -50,6 +50,6 @@ class NMPointCloud: public NMPointCloudBase, public GeomObj::list_Pos2d
     const Pos2d *append(const Pos2d &);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -80,6 +80,6 @@ private:
 	FindDesignPointAlgorithm *theFindDesignPointAlgorithm;
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -103,6 +103,6 @@ class SingleFPSimple2d : public ElemFriccionBase
     
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

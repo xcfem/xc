@@ -164,5 +164,5 @@ void PhysicalProperties<MAT>::Print(std::ostream &, int)
     std::cerr << "PhysicalProperties::Print -- not implemented\n";
   }  
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

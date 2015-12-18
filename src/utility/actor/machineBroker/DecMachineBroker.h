@@ -74,6 +74,6 @@ class DecMachineBroker : public AlphaBaseMachineBroker
 
     virtual int startActor(char *actorProgram,Channel &theChannel,int compDemand =0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -93,7 +93,7 @@ class Linear: public EquiSolnAlgo
   };
 inline SolutionAlgorithm *Linear::getCopy(void) const
   { return new Linear(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

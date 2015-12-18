@@ -177,7 +177,7 @@ class ElasticBeam2d: public ProtoBeam2d
     int updateParameter(int parameterID, Information &info);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -298,7 +298,7 @@ class Template3Dep : public NDMaterial
 
     friend std::ostream& operator<< (std::ostream& os, const Template3Dep & MP);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

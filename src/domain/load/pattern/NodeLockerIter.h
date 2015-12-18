@@ -46,7 +46,7 @@ class NodeLockerIter
     virtual NodeLocker *operator()(void);
     virtual void reset(void);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

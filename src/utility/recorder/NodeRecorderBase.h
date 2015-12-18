@@ -63,6 +63,6 @@ class NodeRecorderBase: public MeshCompRecorder
     ~NodeRecorderBase(void);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

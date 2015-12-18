@@ -85,7 +85,7 @@ class LoadBalancer
     virtual void setLinks(DomainPartitioner &thePartitioner);
     virtual int balance(Graph &theWeightedGraph) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

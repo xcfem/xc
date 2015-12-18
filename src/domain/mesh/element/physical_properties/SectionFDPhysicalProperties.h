@@ -51,5 +51,5 @@ class SectionFDPhysicalProperties : public PhysicalProperties<SectionForceDeform
     void Print(std::ostream &s, int);
   }; 
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

@@ -72,6 +72,6 @@ class FeapMaterial02 : public FeapMaterial
 		 double lamK, double lamG, double theta);
     FeapMaterial02(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

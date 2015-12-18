@@ -76,5 +76,5 @@ class ShellBData
     void computeB(const double shp[3][4],const double &,const double &,const Matrix &,const double &);
   }; 
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

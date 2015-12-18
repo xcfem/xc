@@ -109,6 +109,6 @@ class FiberSectionRepr: public SectionRepres
     void Print(std::ostream &s, int flag =0);
     friend std::ostream &operator<<(std::ostream &s, FiberSectionRepr &fiberSectionRepr);    
   };
-} // fin namespace XC
+} // end of XC namespace
 #endif
 

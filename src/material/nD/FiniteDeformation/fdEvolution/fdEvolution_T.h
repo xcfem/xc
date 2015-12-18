@@ -76,7 +76,7 @@ class fdEvolution_T
     friend std::ostream& operator<< (std::ostream& os, const fdEvolution_T & ev);
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

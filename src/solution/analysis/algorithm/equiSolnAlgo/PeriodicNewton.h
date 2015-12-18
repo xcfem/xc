@@ -90,7 +90,7 @@ class PeriodicNewton: public NewtonBased
   };
 inline SolutionAlgorithm *PeriodicNewton::getCopy(void) const
   { return new PeriodicNewton(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

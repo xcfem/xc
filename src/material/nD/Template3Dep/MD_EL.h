@@ -212,7 +212,7 @@ class MDEvolutionLaw : public EvolutionLaw
 
     
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

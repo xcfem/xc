@@ -122,7 +122,7 @@ class Integrator: public MovableObject, public EntCmd
     // Method provided for Output
     virtual void Print(std::ostream &s, int flag =0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

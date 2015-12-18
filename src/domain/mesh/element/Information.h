@@ -116,7 +116,7 @@ class Information: public MovableObject
     virtual void Print(std::ofstream &s, int flag = 0);
     virtual const Vector &getData(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

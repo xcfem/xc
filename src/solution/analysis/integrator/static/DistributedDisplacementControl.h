@@ -101,7 +101,7 @@ class DistributedDisplacementControl: public DisplacementControl, public Distrib
   };
 inline Integrator *DistributedDisplacementControl::getCopy(void) const
   { return new DistributedDisplacementControl(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

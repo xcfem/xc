@@ -51,7 +51,7 @@ class MRMP_FE: public MPBase_FE
     int determineRetainedDOFsIDs(const int &);
     int determineRetainedNodesDofGrpPtr(Domain &,const int &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

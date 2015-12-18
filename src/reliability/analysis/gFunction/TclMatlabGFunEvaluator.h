@@ -48,6 +48,6 @@ public:
 	double	get_g();
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

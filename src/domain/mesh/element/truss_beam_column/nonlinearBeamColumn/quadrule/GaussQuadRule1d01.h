@@ -113,6 +113,6 @@ class GaussQuadRule1d01: public QuadRule1d
     const Matrix & getIntegrPointCoords  (int quadOrder);
     const Vector & getIntegrPointWeights (int quadOrder); 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

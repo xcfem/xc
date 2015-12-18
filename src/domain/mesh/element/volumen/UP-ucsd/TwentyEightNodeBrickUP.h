@@ -180,4 +180,4 @@ class TwentyEightNodeBrickUP : public ElemWithMaterial<20,NDMaterialPhysicalProp
     friend class TzLiq1;
   };
 
-} // fin namespace XC
+} // end of XC namespace

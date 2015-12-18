@@ -97,7 +97,7 @@ class YieldSurface
     //================================================================================
     friend std::ostream& operator<< (std::ostream& os, const YieldSurface & YS);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

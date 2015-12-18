@@ -169,7 +169,7 @@ class PartitionedDomain: public Domain
     // friend classes
     friend class PartitionedDomainEleIter;    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

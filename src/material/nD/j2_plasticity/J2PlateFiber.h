@@ -168,6 +168,6 @@ class J2PlateFiber : public J2Plasticity
     int recvSelf(const CommParameters &);
   };
 
-}//fin namespace XC
+}//end of XC namespace
 
 #endif

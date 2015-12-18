@@ -77,6 +77,6 @@ private:
 	double stepSize;
 	double gFunValue;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

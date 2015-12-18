@@ -116,7 +116,7 @@ class EvolutionLaw_NL_Ep : public EvolutionLaw_S
 
     
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

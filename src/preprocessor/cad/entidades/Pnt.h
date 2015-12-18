@@ -119,6 +119,6 @@ Edge *busca_edge_ptr_extremos(const Pnt &,const Pnt &,const Pnt &);
 const Edge *busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB);
 const Edge *busca_edge_const_ptr_extremos(const Pnt &,const Pnt &,const Pnt &);
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

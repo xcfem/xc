@@ -96,7 +96,7 @@ class DomainComponent: public TaggedObject, public MovableObject
     void set_indice(const size_t &i);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

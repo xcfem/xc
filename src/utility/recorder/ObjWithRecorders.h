@@ -78,7 +78,7 @@ class ObjWithRecorders: public EntCmd
     void setLinks(Domain *dom);
     void SetOutputHandlers(DataOutputHandler::map_output_handlers *oh);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

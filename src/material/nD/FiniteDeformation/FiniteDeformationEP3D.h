@@ -160,6 +160,6 @@ class FiniteDeformationEP3D: public NDMaterial
 
     const  stresstensor getCauchyStressTensor(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

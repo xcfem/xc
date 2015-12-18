@@ -85,6 +85,6 @@ class ElemFriccionBase: public Element0D
     int getNumDOF();
     
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

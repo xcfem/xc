@@ -59,6 +59,6 @@ class ConvergenceTestTol: public ConvergenceTest
     int recvSelf(const CommParameters &);
     virtual any_const_ptr GetProp(const std::string &cod) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

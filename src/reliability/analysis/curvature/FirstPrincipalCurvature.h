@@ -74,6 +74,6 @@ class FirstPrincipalCurvature : public FindCurvatures
   private:	
     Vector curvatures;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

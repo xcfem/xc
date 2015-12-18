@@ -119,7 +119,7 @@ class DirectIntegrationAnalysis: public TransientAnalysis
   };
 inline Analysis *DirectIntegrationAnalysis::getCopy(void) const
   { return new DirectIntegrationAnalysis(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

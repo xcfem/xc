@@ -82,7 +82,7 @@ class MapOfTaggedObjectsIter: public TaggedObjectIter
     virtual void reset(void);
     virtual TaggedObject *operator()(void);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

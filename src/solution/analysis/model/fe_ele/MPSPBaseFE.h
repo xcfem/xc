@@ -48,7 +48,7 @@ class MPSPBaseFE: public FE_Element
 
     MPSPBaseFE(int tag, int numDOF_Group, int ndof,const double &alpha= 1.0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -46,6 +46,6 @@ class NullPlasticMaterial: public PlasticHardeningMaterial
     double getTrialPlasticStiffness();
     PlasticHardeningMaterial * getCopy();
   };
-} // fin namespace XC
+} // end of XC namespace
  
 #endif

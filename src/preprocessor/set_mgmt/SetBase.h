@@ -79,5 +79,5 @@ class SetBase: public EntMdlrBase
     virtual size_t NumElementos(void) const= 0;
   };
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

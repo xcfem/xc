@@ -114,7 +114,7 @@ class KrylovNewton: public EquiSolnAlgo
   };
 inline SolutionAlgorithm *KrylovNewton::getCopy(void) const
   { return new KrylovNewton(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

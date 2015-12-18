@@ -147,5 +147,5 @@ any_const_ptr XC::SetFila<FILATTZNOD,FILATTZELEM>::GetProp(const std::string &co
 /*   { fix(fila_nod,spc); } */
 
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

@@ -36,5 +36,5 @@ namespace XC
 enum dir_mallado {dirm_i,dirm_j,dirm_k}; //Dirección de mallado.
 
  dir_mallado str_to_dir_mallado(const std::string &);
-} //fin namespace XC
+} //end of XC namespace
 #endif

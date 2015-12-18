@@ -93,7 +93,7 @@ class PartitionedDomainEleIter: public ElementIter
     virtual Element *operator()(void);
     
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

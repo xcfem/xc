@@ -81,6 +81,6 @@ class ElementLoader: public ProtoElementLoader
     void clearAll(void);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

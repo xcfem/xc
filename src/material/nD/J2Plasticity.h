@@ -176,6 +176,6 @@ class J2Plasticity: public NDMaterial
     virtual int getOrder(void) const;
   };
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

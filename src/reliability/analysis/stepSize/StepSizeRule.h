@@ -74,6 +74,6 @@ public:
 	virtual double	getInitialStepSize() =0;
 	virtual double getGFunValue() =0;
  };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

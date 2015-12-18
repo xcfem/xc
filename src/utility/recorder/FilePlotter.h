@@ -103,7 +103,7 @@ class FilePlotter : public Recorder
     int setFile(const std::string &newFile);
     int setCol(const ID &theCols);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

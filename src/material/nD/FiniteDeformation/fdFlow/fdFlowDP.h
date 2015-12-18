@@ -89,7 +89,7 @@ class fdFlowDP : public fdFlow
     void print(void);
     friend std::ostream& operator<< (std::ostream& os, const fdFlowDP &fdflDP);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

@@ -32,4 +32,4 @@ namespace XC
 //	     const double xl[3][8]  ) ;
 
     int brcshl(double shl[4][20][27], double w[27], int nint, int nen);
-  } // fin namespace XC
+  } // end of XC namespace

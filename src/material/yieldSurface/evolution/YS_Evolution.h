@@ -106,6 +106,6 @@ class YS_Evolution: public TaggedObject, public MovableObject
     void toOriginalCoord(double &x, double &y);
     void toOriginalCoord(double &x, double &y, double &z);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

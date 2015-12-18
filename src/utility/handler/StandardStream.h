@@ -101,6 +101,6 @@ class StandardStream : public OPS_Stream
   // OPS_Stream& (OPS_Stream& outs);
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

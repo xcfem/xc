@@ -109,7 +109,7 @@ class UniaxialFiber2d: public UniaxialFiber
     virtual double getLocY(void) const
       { return -y; }
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

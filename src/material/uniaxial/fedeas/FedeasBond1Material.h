@@ -77,7 +77,7 @@ class FedeasBond1Material: public FedeasBondMaterial
 
     UniaxialMaterial *getCopy(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

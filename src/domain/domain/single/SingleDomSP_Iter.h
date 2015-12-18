@@ -75,7 +75,7 @@ class SingleDomSP_Iter: public SingleDomTIter<SP_ConstraintIter>
     SingleDomSP_Iter(TaggedObjectStorage *theStorage);
     virtual SP_Constraint *operator()(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -98,7 +98,7 @@ class RMC01YieldSurface : public YieldSurface
     //================================================================================
     friend std::ostream& operator<< (std::ostream& os, const RMC01YieldSurface & YS);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

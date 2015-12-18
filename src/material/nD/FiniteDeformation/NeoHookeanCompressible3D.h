@@ -122,7 +122,7 @@ class NeoHookeanCompressible3D : public FiniteDeformationElastic3D
     const  stresstensor getCauchyStressTensor(void) ;
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

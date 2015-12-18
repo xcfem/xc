@@ -179,7 +179,7 @@ class BJtensor: public nDarray
 // GLOBAL
 BJtensor operator*(const double &lval,const BJtensor &rval);  // REVIEWER global *
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

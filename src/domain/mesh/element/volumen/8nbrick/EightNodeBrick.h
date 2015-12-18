@@ -272,7 +272,7 @@ class EightNodeBrick: public ElementBase<8>
     //void setInitE(void);
     //void reportStressTensorF(FILE *);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

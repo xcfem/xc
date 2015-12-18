@@ -105,6 +105,6 @@ class HHT: public HHTBase
   };
 inline Integrator *HHT::getCopy(void) const
   { return new HHT(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

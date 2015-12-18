@@ -73,6 +73,6 @@ class ProcSoluControl: public EntCmd
     void clearAll(void);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

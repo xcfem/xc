@@ -99,6 +99,6 @@ class UniformGrid: public EntMdlr
     virtual void Malla(dir_mallado dm);
   };
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

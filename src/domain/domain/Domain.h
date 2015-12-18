@@ -274,7 +274,7 @@ int sendDomain(Domain &,int posDbTag,DbTagData &,CommParameters &cp);
 int receiveDomain(Domain &, int posDbTag,DbTagData &,CommParameters &cp);
 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

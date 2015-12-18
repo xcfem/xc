@@ -62,7 +62,7 @@ namespace XC {
       { return tw; }
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif 
 //

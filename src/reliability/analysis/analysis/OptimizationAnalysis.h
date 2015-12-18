@@ -80,6 +80,6 @@ public:
 	OptimizationAnalysis(ReliabilityDomain *passedReliabilityDomain, const std::string &fileName);
 	int analyze(void);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

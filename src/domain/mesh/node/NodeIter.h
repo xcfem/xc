@@ -77,7 +77,7 @@ class NodeIter
     virtual ~NodeIter() {};
     virtual Node *operator()(void) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

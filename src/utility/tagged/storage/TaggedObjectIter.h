@@ -76,7 +76,7 @@ class TaggedObjectIter
     virtual void reset(void) =0;
     virtual TaggedObject *operator()(void) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

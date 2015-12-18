@@ -99,7 +99,7 @@ class PotentialSurface
         return os;
       }
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

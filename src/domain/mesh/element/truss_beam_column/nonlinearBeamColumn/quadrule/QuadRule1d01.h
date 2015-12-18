@@ -81,7 +81,7 @@ class QuadRule1d01: public QuadRule
   public:
     QuadRule1d01 ();
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

@@ -106,6 +106,6 @@ class Shadow
     FEM_ObjectBroker 	  *getObjectBrokerPtr(void) const;        
     ChannelAddress        *getActorAddressPtr(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

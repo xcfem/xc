@@ -94,6 +94,6 @@ public:
 	Matrix  getDgDdispl();
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

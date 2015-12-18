@@ -181,7 +181,7 @@ class Analysis: public EntCmd
       { return analysis_result; }
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

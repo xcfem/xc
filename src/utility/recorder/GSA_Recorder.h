@@ -97,6 +97,6 @@ class GSA_Recorder: public DomainRecorderBase
     int playback(int commitTag);
     int restart(void);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

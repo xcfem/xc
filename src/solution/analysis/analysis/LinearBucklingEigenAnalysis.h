@@ -61,7 +61,7 @@ class LinearBucklingEigenAnalysis: public EigenAnalysis
   };
 inline Analysis *LinearBucklingEigenAnalysis::getCopy(void) const
   { return new LinearBucklingEigenAnalysis(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

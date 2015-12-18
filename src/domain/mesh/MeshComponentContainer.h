@@ -46,7 +46,7 @@ class MeshComponentContainer: public EntCmd, public MovableObject
     Domain *getDomain(void);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

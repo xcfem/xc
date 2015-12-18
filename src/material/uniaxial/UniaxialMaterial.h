@@ -138,7 +138,7 @@ class UniaxialMaterial : public Material
   };
 UniaxialMaterial *receiveUniaxialMaterialPtr(UniaxialMaterial *,DbTagData &,const CommParameters &,const BrokedPtrCommMetaData &);
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

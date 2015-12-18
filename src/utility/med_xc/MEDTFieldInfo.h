@@ -259,5 +259,5 @@ void MEDTFieldInfo<T>::write(const std::string &filename) const
       std::cerr << "El puntero al campo es nulo." << std::endl;
   }
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

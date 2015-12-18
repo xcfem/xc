@@ -92,7 +92,7 @@ class fdFlow
 
     friend std::ostream& operator<< (std::ostream& os, const fdFlow & fdfl);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

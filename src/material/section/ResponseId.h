@@ -150,6 +150,6 @@ const RespMembraneMaterial RespMembraneMat;
 const RespPlateMaterial RespPlateMat;
 const RespShellMaterial RespShellMat;
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -92,6 +92,6 @@ class EigenSolver : public Solver
     virtual const int &getSize(void) const= 0;
     virtual any_const_ptr GetProp(const std::string &cod) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

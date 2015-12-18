@@ -152,6 +152,6 @@ template <int SZ>
     return res;
   }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

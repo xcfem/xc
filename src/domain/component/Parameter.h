@@ -106,6 +106,6 @@ class Parameter : public TaggedObject, public MovableObject
     virtual int sendSelf(CommParameters &);  
     virtual int recvSelf(const CommParameters &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

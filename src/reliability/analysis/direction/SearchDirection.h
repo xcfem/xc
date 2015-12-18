@@ -76,6 +76,6 @@ public:
 			Vector passedGradientInStandardNormalSpace) =0;
 	virtual Vector getSearchDirection() =0;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

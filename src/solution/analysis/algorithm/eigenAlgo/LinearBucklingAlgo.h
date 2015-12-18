@@ -92,7 +92,7 @@ class LinearBucklingAlgo : public EigenAlgorithm
   };
 inline SolutionAlgorithm *LinearBucklingAlgo::getCopy(void) const
   { return new LinearBucklingAlgo(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

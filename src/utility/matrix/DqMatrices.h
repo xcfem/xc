@@ -58,6 +58,6 @@ class DqMatrices: public std::deque<Matrix *>
 
     void Print(std::ostream &s,const int &flag);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

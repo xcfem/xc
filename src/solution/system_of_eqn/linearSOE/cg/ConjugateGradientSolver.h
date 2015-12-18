@@ -90,7 +90,7 @@ class ConjugateGradientSolver : public LinearSOESolver
     virtual int solve(void);
     virtual int formAp(const Vector &p, Vector &Ap) = 0;    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

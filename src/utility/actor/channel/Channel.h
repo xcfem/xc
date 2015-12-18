@@ -151,6 +151,6 @@ int Channel::recvObjs(int commitTag,const inputIterator &first,const inputIterat
     return retval;
   }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

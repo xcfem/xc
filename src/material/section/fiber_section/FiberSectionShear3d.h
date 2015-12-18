@@ -102,6 +102,6 @@ class FiberSectionShear3d : public FiberSection3d
     int getVariable(int variableID, double &info);
     virtual any_const_ptr GetProp(const std::string &cod) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

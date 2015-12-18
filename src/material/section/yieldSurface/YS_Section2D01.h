@@ -52,6 +52,6 @@ class YS_Section2D01: public YieldSurfaceSection2d
     SectionForceDeformation *getCopy(void) const;
     void Print(std::ostream &s, int flag =0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

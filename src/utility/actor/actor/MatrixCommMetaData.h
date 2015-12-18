@@ -56,6 +56,6 @@ class MatrixCommMetaData: public ArrayCommMetaData
       { return posNc; }
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

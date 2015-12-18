@@ -80,7 +80,7 @@ class DrainPinch1Material : public DrainMaterial
 
     UniaxialMaterial *getCopy(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

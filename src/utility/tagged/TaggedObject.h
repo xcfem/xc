@@ -107,7 +107,7 @@ inline int TaggedObject::getTag(void) const
   { return theTag; }
 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

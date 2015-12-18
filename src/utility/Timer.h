@@ -101,7 +101,7 @@ class Timer
     friend std::ostream &operator<<(std::ostream &s, const Timer &E);    
   };
 std::ostream &operator<<(std::ostream &s, const Timer &E);    
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

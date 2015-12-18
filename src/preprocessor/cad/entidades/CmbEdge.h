@@ -161,6 +161,6 @@ class CmbEdge: public Edge
 
 bool operator==(const CmbEdge::Lado &il1,const CmbEdge::Lado &il2);
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

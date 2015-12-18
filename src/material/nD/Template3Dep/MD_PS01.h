@@ -93,7 +93,7 @@ class MDPotentialSurface01 : public PotentialSurface
     friend std::ostream& operator<< (std::ostream& os, const MDPotentialSurface01 &PS);
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -127,7 +127,7 @@ class CorotTruss: public CorotTrussBase
     int getResponse(int responseID, Information &eleInformation);
     any_const_ptr GetProp(const std::string &cod) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

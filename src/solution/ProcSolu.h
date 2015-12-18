@@ -99,6 +99,6 @@ class ProcSolu: public EntCmd
     DataOutputHandler::map_output_handlers *getOutputHandlers(void) const;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

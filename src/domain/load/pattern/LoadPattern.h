@@ -186,7 +186,7 @@ class LoadPattern: public NodeLocker
     // AddingSensitivity:END ///////////////////////////////////////////
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

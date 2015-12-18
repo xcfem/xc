@@ -137,7 +137,7 @@ class SubdomainAnalysis: public Analysis, public MovableObject
 
 inline Analysis *SubdomainAnalysis::getCopy(void) const
   { return new SubdomainAnalysis(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

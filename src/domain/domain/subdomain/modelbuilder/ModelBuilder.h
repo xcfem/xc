@@ -79,7 +79,7 @@ class ModelBuilder
     
     virtual int buildFE_Model(void) = 0;    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

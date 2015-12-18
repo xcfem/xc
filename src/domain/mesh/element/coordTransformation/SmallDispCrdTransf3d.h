@@ -65,6 +65,6 @@ class SmallDispCrdTransf3d: public CrdTransf3d
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -102,7 +102,7 @@ class ParallelNumberer: public DOF_Numberer, public DistributedObj
     virtual int recvSelf(const CommParameters &);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

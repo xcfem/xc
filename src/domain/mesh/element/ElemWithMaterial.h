@@ -129,5 +129,5 @@ int ElemWithMaterial<NNODOS, PhysProp>::recvData(const CommParameters &cp)
     return res;
   }
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

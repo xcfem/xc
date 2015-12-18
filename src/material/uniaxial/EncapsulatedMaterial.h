@@ -54,7 +54,7 @@ class EncapsulatedMaterial: public UniaxialMaterial
     int sendData(CommParameters &);  
     int recvData(const CommParameters &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

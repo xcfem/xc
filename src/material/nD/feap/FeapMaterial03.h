@@ -71,6 +71,6 @@ class FeapMaterial03 : public FeapMaterial
     FeapMaterial03(int tag, double K, double G, double sigY, double Hiso);
     FeapMaterial03(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

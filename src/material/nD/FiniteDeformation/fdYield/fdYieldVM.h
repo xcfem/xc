@@ -82,7 +82,7 @@ class fdYieldVM : public fdYield
 
     friend std::ostream& operator<< (std::ostream& os, const fdYieldVM & fdydVM);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

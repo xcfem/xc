@@ -116,6 +116,6 @@ class BeamIntegration: public MovableObject, public EntCmd
 int sendBeamIntegrationPtr(BeamIntegration *,int posClassTag, int posDbTag,DbTagData &,CommParameters &);
 BeamIntegration *receiveBeamIntegrationPtr(BeamIntegration *,int posClassTag, int posDbTag,DbTagData &,const CommParameters &);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

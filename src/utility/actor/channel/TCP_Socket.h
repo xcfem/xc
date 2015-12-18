@@ -118,7 +118,7 @@ class TCP_Socket : public Channel
     int sendID(int dbTag, int commitTag, const ID &, ChannelAddress *theAddress =0);
     int recvID(int dbTag, int commitTag, ID &, ChannelAddress *theAddress =0);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif 

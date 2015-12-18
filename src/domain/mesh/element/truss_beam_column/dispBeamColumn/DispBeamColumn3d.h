@@ -131,7 +131,7 @@ class DispBeamColumn3d : public BeamColumnWithSectionFDTrf3d
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);
     int getResponse(int responseID, Information &eleInfo);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -90,7 +90,7 @@ class FrequencyAlgo : public EigenAlgorithm
   };
 inline SolutionAlgorithm *FrequencyAlgo::getCopy(void) const
   { return new FrequencyAlgo(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

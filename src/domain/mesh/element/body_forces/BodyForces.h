@@ -72,6 +72,6 @@ inline std::ostream &operator<<(std::ostream &os,const BodyForces &bf)
     bf.Print(os);
     return os;
   }
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

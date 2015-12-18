@@ -101,6 +101,6 @@ public:
 
 	int analyze(void);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

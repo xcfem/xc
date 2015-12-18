@@ -50,7 +50,7 @@ class ProfileSPDLinDirectBase: public ProfileSPDLinSolver
     ProfileSPDLinDirectBase(int classTag, double tol);    
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

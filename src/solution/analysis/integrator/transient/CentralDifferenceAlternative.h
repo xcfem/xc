@@ -97,7 +97,7 @@ class CentralDifferenceAlternative : public CentralDifferenceBase
   };
 inline Integrator *CentralDifferenceAlternative::getCopy(void) const
   { return new CentralDifferenceAlternative(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

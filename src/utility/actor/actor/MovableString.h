@@ -44,7 +44,7 @@ class MovableString: public MovableID
     const std::string &getString(void);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

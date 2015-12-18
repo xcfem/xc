@@ -72,6 +72,6 @@ public:
 	virtual int		computeCurvatures(ReliabilityDomain *theReliabilityDomain) =0;
 	virtual Vector	getCurvatures() =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

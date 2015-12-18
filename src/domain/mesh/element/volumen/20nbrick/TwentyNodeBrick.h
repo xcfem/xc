@@ -226,7 +226,7 @@ class TwentyNodeBrick: public ElementBase<20>
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

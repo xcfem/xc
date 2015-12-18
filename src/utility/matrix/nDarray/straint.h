@@ -132,7 +132,7 @@ class straintensor : public BJtensor
 
 std::ostream &operator<<(std::ostream &os, const straintensor &rhs);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

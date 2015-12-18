@@ -109,7 +109,7 @@ class StraightReinfLayer : public ReinfLayer
     virtual any_const_ptr GetProp(const std::string &cod) const;
     void Print(std::ostream &s, int flag =0) const;   
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

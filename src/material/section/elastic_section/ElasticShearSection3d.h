@@ -102,6 +102,6 @@ class ElasticShearSection3d : public BaseElasticSection3d
     const Vector& getStressResultantSensitivity(int gradIndex,bool conditional);
     const Matrix& getInitialTangentSensitivity(int gradIndex);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

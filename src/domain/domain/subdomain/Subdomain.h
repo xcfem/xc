@@ -201,7 +201,7 @@ class Subdomain: public Element, public Domain
 
     virtual double getCost(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

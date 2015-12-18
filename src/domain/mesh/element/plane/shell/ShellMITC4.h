@@ -82,6 +82,6 @@ class ShellMITC4 : public ShellMITC4Base
       
   }; 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

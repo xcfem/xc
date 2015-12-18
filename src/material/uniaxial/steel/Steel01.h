@@ -118,6 +118,6 @@ class Steel01 : public SteelBase0103
 // AddingSensitivity:END ///////////////////////////////////////////
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

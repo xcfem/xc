@@ -153,7 +153,7 @@ class SectionForceDeformation: public Material
 // AddingSensitivity:END ///////////////////////////////////////////
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

@@ -345,6 +345,6 @@ MOV *CommParameters::receiveMovablePtr(MOV* &ptr,DbTagData &dbTagData, const Ptr
     return ptr;
   }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -95,7 +95,7 @@ class MotionHistory: public EntCmd
     void loadAccelTimeFile(const std::string &fileNameAccel, const std::string &fileNameTime,const double &theFactor);
     virtual any_const_ptr GetProp(const std::string &cod) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

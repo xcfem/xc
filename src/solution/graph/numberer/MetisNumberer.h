@@ -132,7 +132,7 @@ class Metis : public GraphPartitioner
     
     int partition(Graph &theGraph, int numPart);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

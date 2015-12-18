@@ -110,6 +110,6 @@ private:
 	void function143(double xk, double cov, double mean);
 	void function144(double xk, double gm1, double mean);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

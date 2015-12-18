@@ -181,6 +181,6 @@ class BeamColumnJoint2d : public ElemWithMaterial<4,BeamColumnJointPhysicalPrope
   
   
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

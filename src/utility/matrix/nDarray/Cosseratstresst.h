@@ -168,7 +168,7 @@ class Cosseratstresstensor : public BJtensor
     //  
   };
 std::ostream &operator<<(std::ostream &os, const Cosseratstresstensor & rhs);
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

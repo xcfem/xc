@@ -74,7 +74,7 @@ class PlasticHardeningMaterial : public Material
     virtual int recvSelf(const CommParameters &)
       {return -1;}
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

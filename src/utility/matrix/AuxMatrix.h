@@ -62,7 +62,7 @@ class AuxMatrix: public EntCmd
     int *getIntWork(void);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

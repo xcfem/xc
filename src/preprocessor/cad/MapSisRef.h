@@ -53,5 +53,5 @@ class MapSisRef: public MapCadMember<SisRef>
     any_const_ptr GetProp(const std::string &cod) const;
   };
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

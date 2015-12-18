@@ -82,7 +82,7 @@ class FullGenLinSolver : public LinearSOESolver
   public:
     virtual bool setLinearSOE(FullGenLinSOE &theSOE);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

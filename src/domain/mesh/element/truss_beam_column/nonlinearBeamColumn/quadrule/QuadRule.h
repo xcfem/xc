@@ -88,7 +88,7 @@ class QuadRule
     virtual const Matrix & getIntegrPointCoords  (void) const = 0;
     virtual const Vector & getIntegrPointWeights (void) const = 0; 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

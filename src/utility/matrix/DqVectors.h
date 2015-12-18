@@ -57,6 +57,6 @@ class DqVectors: public std::deque<Vector *>
 
     void Print(std::ostream &s,const int &flag);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

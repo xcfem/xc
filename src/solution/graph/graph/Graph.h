@@ -124,7 +124,7 @@ class Graph: public MovableObject
 
     friend std::ostream &operator<<(std::ostream &s, Graph &M);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

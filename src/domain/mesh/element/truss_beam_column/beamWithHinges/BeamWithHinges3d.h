@@ -154,6 +154,6 @@ class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
     
     void Print(std::ostream &s, int flag = 0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

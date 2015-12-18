@@ -87,6 +87,6 @@ class RectangularSeries: public PulseBaseSeries
     // method to get load factor
     double getFactor(double pseudoTime) const;    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -105,6 +105,6 @@ class NewmarkHybridSimulation : public NewmarkBase2
   };
 inline Integrator *NewmarkHybridSimulation::getCopy(void) const
   { return new NewmarkHybridSimulation(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

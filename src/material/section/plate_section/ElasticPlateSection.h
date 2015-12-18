@@ -84,5 +84,5 @@ class ElasticPlateSection: public ElasticPlateProto<5>
     int recvSelf(const CommParameters &);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

@@ -74,7 +74,7 @@ class ConsoleErrorHandler : public ErrorHandler
     void warning(const char *, ...);
     void fatal(const char *, ...);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

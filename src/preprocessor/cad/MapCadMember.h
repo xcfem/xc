@@ -149,5 +149,5 @@ any_const_ptr MapCadMember<T>::GetProp(const std::string &cod) const
       return MapCadMemberBase::GetProp(cod);
   }
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

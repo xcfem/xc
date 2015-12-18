@@ -52,6 +52,6 @@ class ArrayCommMetaData: public PtrCommMetaData
       { return posSz; }
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

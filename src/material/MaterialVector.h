@@ -569,6 +569,6 @@ int MaterialVector<MAT>::recvSelf(const CommParameters &cp)
     return res;
   }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

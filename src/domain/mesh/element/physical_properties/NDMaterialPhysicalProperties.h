@@ -62,5 +62,5 @@ class NDMaterialPhysicalProperties: public PhysicalProperties<NDMaterial>
     Vector getRhoi(const double &rhoDefault= 0.0) const;
  };
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

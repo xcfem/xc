@@ -69,5 +69,5 @@ class MEDMesh: public MEDObject
     void read(const std::string &);
     any_const_ptr GetProp(const std::string &) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 #endif

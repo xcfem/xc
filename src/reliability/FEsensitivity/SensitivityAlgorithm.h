@@ -81,7 +81,7 @@ class SensitivityAlgorithm
     int computeSensitivities(void);
     bool shouldComputeAtEachStep(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

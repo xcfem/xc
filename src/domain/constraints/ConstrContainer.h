@@ -167,7 +167,7 @@ class ConstrContainer: public MeshComponentContainer
     virtual void Print(std::ostream &s, int flag =0);
     friend std::ostream &operator<<(std::ostream &s, ConstrContainer &cc);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -97,7 +97,7 @@ class DistributedBandGenLinSolver;
   };
 inline SystemOfEqn *DistributedBandGenLinSOE::getCopy(void) const
   { return new DistributedBandGenLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

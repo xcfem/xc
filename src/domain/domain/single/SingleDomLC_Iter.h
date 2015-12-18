@@ -74,7 +74,7 @@ class SingleDomLC_Iter: public SingleDomTIter<LoadCaseIter>
     SingleDomLC_Iter(TaggedObjectStorage *theStorage);
 /*     virtual LoadCase *operator()(void); */
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

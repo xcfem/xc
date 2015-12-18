@@ -62,7 +62,7 @@ class FVector
 
 std::ostream &operator<<(std::ostream &,const FVector &f);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

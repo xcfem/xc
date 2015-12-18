@@ -62,7 +62,7 @@ class UnbalAndTangent
     const Vector &getResidual(void) const;
     Vector &getResidual(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

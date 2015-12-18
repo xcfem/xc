@@ -99,7 +99,7 @@ class SymArpackSOE : public ArpackSOE
   };
 inline SystemOfEqn *SymArpackSOE::getCopy(void) const
   { return new SymArpackSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

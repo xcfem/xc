@@ -75,7 +75,7 @@ class ChannelAddress
 
     virtual int getType(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

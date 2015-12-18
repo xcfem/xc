@@ -163,6 +163,6 @@ class FiberSectionBase: public SeccionBarraPrismatica
     DiagInteraccion2d GetDiagInteraccionNMy(const DatosDiagInteraccion &);
     DiagInteraccion2d GetDiagInteraccionNMz(const DatosDiagInteraccion &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

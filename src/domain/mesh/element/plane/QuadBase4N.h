@@ -193,5 +193,5 @@ template <class PhysProp>
 int XC::QuadBase4N<PhysProp>::getMEDCellType(void) const
   { return MED_QUAD4; }
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

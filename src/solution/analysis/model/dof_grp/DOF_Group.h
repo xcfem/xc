@@ -178,7 +178,7 @@ class DOF_Group: public TaggedObject
     virtual void  Print(std::ostream &, int = 0) {return;};
     virtual void resetNodePtr(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

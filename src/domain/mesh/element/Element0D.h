@@ -84,5 +84,5 @@ class Element0D : public ElementBase<2>
   };
 
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

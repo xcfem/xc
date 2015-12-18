@@ -45,6 +45,6 @@ class BrokedPtrCommMetaData: public PtrCommMetaData
       { return posClassTag; }
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

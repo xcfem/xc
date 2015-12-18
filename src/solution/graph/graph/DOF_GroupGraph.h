@@ -78,7 +78,7 @@ class DOF_GroupGraph: public ModelGraph
     friend class AnalysisModel;
     DOF_GroupGraph(const AnalysisModel &theModel);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

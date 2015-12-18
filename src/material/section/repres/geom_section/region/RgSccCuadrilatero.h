@@ -86,7 +86,7 @@ class RgSccCuadrilatero: public RgQuadCell
     void Print(std::ostream &s, int flag =0) const;   
     friend std::ostream &operator<<(std::ostream &s, RgSccCuadrilatero &rg_scc_cuad);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

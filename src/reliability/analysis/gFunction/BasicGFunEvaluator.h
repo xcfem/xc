@@ -77,6 +77,6 @@ public:
 	int		runGFunAnalysis(Vector x);
 	int		tokenizeSpecials(const std::string &theExpression);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

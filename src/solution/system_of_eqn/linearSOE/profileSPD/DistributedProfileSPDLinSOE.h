@@ -99,7 +99,7 @@ class DistributedProfileSPDLinSOE: public ProfileSPDLinSOE, public DistributedBa
   };
 inline SystemOfEqn *DistributedProfileSPDLinSOE::getCopy(void) const
   { return new DistributedProfileSPDLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

@@ -364,7 +364,7 @@ any_const_ptr DqPtrs<T>::GetProp(const std::string &cod) const
       return EntCmd::GetProp(cod);    
   }
 
-} //fin namespace XC
+} //end of XC namespace
 
 
 #endif

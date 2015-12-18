@@ -76,7 +76,7 @@ class MPI_ChannelAddress: public ChannelAddress
     MPI_ChannelAddress(int otherProcessTag, MPI_Comm otherComm);
     friend class MPI_Channel;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

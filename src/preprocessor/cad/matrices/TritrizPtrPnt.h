@@ -88,6 +88,6 @@ std::ostream &operator<<(std::ostream &os,const TritrizPtrPnt &);
 
 std::vector<size_t> getIdPuntosQuad(const TritrizPtrPnt::const_ref_capa_i_cte &,const size_t &j,const size_t &k);
 
-} //fin namespace XC.
+} //end of XC namespace.
 
 #endif

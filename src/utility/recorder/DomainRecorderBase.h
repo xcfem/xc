@@ -44,6 +44,6 @@ class DomainRecorderBase: public Recorder
 
     int setDomain(Domain &theDomain);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

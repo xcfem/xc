@@ -118,5 +118,5 @@ class PressureDependentElastic3D : public ElasticIsotropicMaterial
     void Print(std::ostream &s, int flag =0);
     void ComputeElasticStiffness(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 #endif

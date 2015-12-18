@@ -119,7 +119,7 @@ class MapOfTaggedObjects : public TaggedObjectStorage
     void Print(std::ostream &s, int flag =0);
     friend class MapOfTaggedObjectsIter;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

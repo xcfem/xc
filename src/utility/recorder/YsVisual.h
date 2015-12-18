@@ -55,6 +55,6 @@ class YsVisual : public Recorder
     int playback(int cTag);
     int restart(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif // !defined

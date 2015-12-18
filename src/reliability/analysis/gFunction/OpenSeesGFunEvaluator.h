@@ -94,6 +94,6 @@ public:
 	void    setNsteps(int nsteps);
 	double  getDt();
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

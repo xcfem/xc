@@ -114,7 +114,7 @@ class FE_Datastore: public Channel
     int restore(const int &commitTag);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

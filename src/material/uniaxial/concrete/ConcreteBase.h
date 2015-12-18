@@ -95,7 +95,7 @@ inline void ConcreteBase::commit_to_trial(void)
     commit_to_trial_state();
   }
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

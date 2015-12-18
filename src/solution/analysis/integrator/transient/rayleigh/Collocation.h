@@ -111,6 +111,6 @@ class Collocation : public RayleighBase
   };
 inline Integrator *Collocation::getCopy(void) const
   { return new Collocation(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

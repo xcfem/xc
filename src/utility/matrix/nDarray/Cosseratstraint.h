@@ -128,7 +128,7 @@ class Cosseratstraintensor : public BJtensor
 //..friend void zroots(complex *, int , complex *, int );
 //..
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -172,5 +172,5 @@ class Set: public SetMeshComp
     virtual any_const_ptr GetProp(const std::string &cod) const;
     ~Set(void);
   };
-} //fin namespace XC
+} //end of XC namespace
 #endif

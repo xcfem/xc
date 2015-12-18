@@ -41,6 +41,6 @@ class TensorCommMetaData: public MatrixCommMetaData
     TensorCommMetaData(const int &pos,const int &flag,const size_t &nf,const size_t &nc);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

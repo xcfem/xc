@@ -97,7 +97,7 @@ class EquiSolnAlgo: public SolutionAlgorithm
     // may need access to them
     IncrementalIntegrator *getIncrementalIntegratorPtr(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

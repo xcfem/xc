@@ -92,6 +92,6 @@ class OPS_Stream
   virtual OPS_Stream& operator<<(float n) {return *this;};
 };
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

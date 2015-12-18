@@ -55,5 +55,5 @@ class SetFilaI: public SetFila<TritrizPtrNod::var_ref_fila_i,TritrizPtrElem::var
     SetFilaI(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= NULL);
     SetFilaI(EntMdlr &e,const RangoIndice &rango_capas,const size_t &f,const size_t &c,const std::string &nmb="",Preprocessor *preprocessor= NULL);
   };
-} //fin namespace XC
+} //end of XC namespace
 #endif

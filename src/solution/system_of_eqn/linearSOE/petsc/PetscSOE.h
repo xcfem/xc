@@ -122,7 +122,7 @@ class PetscSOE: public FactoredSOEBase, public DistributedLinSOE
   };
 inline SystemOfEqn *PetscSOE::getCopy(void) const
   { return new PetscSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

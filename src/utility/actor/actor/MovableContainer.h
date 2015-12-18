@@ -145,7 +145,7 @@ int XC::MovableContainer<C>::recvSelf(const CommParameters &cp)
   }
 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

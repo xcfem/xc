@@ -51,6 +51,6 @@ class Reflexion: public TrfGeom
     virtual Pos3d Transforma(const Pos3d &p) const;
     virtual Vector3d Transforma(const Vector3d &v) const;
   };
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

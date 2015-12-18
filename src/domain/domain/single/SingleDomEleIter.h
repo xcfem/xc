@@ -74,7 +74,7 @@ class SingleDomEleIter: public SingleDomTIter<ElementIter>
     SingleDomEleIter(TaggedObjectStorage *theStorage);
     virtual Element *operator()(void);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

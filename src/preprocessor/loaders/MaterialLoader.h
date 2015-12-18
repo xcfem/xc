@@ -108,6 +108,6 @@ class MaterialLoader: public Loader
 
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

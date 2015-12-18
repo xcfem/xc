@@ -107,7 +107,7 @@ class MinUnbalDispNorm: public DispBase
   };
 inline Integrator *MinUnbalDispNorm::getCopy(void) const
   { return new MinUnbalDispNorm(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

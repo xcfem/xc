@@ -100,5 +100,5 @@ class Element1D : public ElementBase<2>
     any_const_ptr GetProp(const std::string &cod) const;
   };
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

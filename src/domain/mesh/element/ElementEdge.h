@@ -51,7 +51,7 @@ class ElementEdgeLoad;
 
     virtual int addLoad(ElementEdgeLoad *theLoad, double loadFactor);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -81,6 +81,6 @@ class FiberData
     void getFibras3d(contenedor_fibras &) const;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 #endif
 

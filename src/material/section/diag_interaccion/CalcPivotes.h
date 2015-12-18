@@ -61,6 +61,6 @@ class CalcPivotes: public Ref3d3d
     Pos3d calcPositionPivotC(void) const;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

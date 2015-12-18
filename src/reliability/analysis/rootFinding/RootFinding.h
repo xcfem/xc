@@ -71,6 +71,6 @@ public:
 
 	virtual Vector findLimitStateSurface(int space, double g, Vector Direction, Vector thePoint) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

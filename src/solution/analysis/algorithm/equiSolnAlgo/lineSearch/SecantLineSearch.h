@@ -90,7 +90,7 @@ class SecantLineSearch: public LineSearch
   };
 inline LineSearch *SecantLineSearch::getCopy(void) const
   { return new SecantLineSearch(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -160,5 +160,5 @@ void MapEnt<T>::EjecutaBloqueForEach(CmdStatus &status,const std::string &bloque
       }
   }
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

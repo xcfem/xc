@@ -101,7 +101,7 @@ class DistributedDiagonalSOE : public FactoredSOEBase, public DistributedLinSOE
   };
 inline SystemOfEqn *DistributedDiagonalSOE::getCopy(void) const
   { return new DistributedDiagonalSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

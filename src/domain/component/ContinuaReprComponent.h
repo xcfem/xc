@@ -55,7 +55,7 @@ class ContinuaReprComponent: public DomainComponent
       { dead= false; }
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -107,6 +107,6 @@ class EsfBeamColumn3d: public Vector
 int sendEsfBeamColumn3d(const EsfBeamColumn3d &, int posDbTag,DbTagData &dt, CommParameters &cp);
 int receiveEsfBeamColumn3d(EsfBeamColumn3d &v, int posDbTag,DbTagData &dt,const CommParameters &cp);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

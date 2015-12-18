@@ -126,7 +126,7 @@ class BoucWenMaterial : public UniaxialMaterial
     double getRhoSensitivity(int gradNumber);
     int    commitSensitivity(double strainGradient, int gradNumber, int numGrads);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

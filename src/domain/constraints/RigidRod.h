@@ -79,6 +79,6 @@ class RigidRod: public RigidBase
     RigidRod(int tag,const int &, const int &);
     void setup(Domain *theDomain);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

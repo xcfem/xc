@@ -70,7 +70,7 @@ class KDTreeNodes: protected kd_tree::KDTree<3, NodePos, std::pointer_to_binary_
     const Node *getNearestNode(const Pos3d &pos, const double &r) const;
   };
 
-} // fin namespace XC 
+} // end of XC namespace 
 
 
 #endif

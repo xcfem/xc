@@ -43,6 +43,6 @@ class CombinedIsoKin2D01: public PlasticHardening2D
     virtual void Print(std::ostream &s, int flag =0);
     virtual YS_Evolution *getCopy(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

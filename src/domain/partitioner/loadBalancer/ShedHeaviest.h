@@ -78,7 +78,7 @@ class ShedHeaviest: public LoadBalancer
 
     virtual int balance(Graph &theWeightedGraph);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

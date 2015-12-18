@@ -330,7 +330,7 @@ class Node: public MeshComponent
 
 Pos3d pos_nodo(const Node &nod,bool geomInicial= true);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

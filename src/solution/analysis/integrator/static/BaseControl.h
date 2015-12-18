@@ -53,7 +53,7 @@ class BaseControl : public StaticIntegrator
     inline double factor(void) const
       { return specNumIncrStep/numIncrLastStep; }
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

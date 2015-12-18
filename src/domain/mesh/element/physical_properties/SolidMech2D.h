@@ -63,5 +63,5 @@ class SolidMech2D: public NDMaterialPhysicalProperties
     int recvSelf(const CommParameters &);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

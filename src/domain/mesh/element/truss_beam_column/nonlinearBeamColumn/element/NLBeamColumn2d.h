@@ -147,7 +147,7 @@ class NLBeamColumn2d: public NLForceBeamColumn2dBase
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

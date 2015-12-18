@@ -98,7 +98,7 @@ class RegulaFalsiLineSearch: public LineSearch
   };
 inline LineSearch *RegulaFalsiLineSearch::getCopy(void) const
   { return new RegulaFalsiLineSearch(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

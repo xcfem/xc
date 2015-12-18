@@ -91,7 +91,7 @@ private:
 	Vector *xPoints;
 	Vector *PDFpoints;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

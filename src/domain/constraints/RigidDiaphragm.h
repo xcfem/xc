@@ -79,6 +79,6 @@ class RigidDiaphragm: public MP_Constraint
     RigidDiaphragm(Domain &theDomain, int nodeR, ID &nodeC, int perpDirnToPlaneConstrained, int startMPtag);
     virtual ~RigidDiaphragm();
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -166,4 +166,4 @@ class Twenty_Node_Brick : public ElemWithMaterial<20,NDMaterialPhysicalPropertie
     int displaySelf(Renderer &theViewer, int displayMode, float fact);
   };
 
-} // fin namespace XC
+} // end of XC namespace

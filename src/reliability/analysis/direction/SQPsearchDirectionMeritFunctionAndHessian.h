@@ -121,6 +121,6 @@ private:
 	double delta, c, lambda; 
 	double kappa;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

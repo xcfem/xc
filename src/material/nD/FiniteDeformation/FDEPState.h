@@ -117,7 +117,7 @@ class FDEPState
     int revertToLastCommit(void) ;
     int revertToStart(void) ;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

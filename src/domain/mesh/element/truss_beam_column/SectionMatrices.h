@@ -78,5 +78,5 @@ class SectionMatrices: public MovableObject
     int recvSelf(const CommParameters &);
   };
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

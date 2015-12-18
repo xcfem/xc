@@ -110,6 +110,6 @@ class CentralDifference: public RayleighBase
   };
 inline Integrator *CentralDifference::getCopy(void) const
   { return new CentralDifference(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

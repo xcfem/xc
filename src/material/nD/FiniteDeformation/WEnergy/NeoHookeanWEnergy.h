@@ -82,7 +82,7 @@ class NeoHookeanWEnergy : public WEnergy
      const double dvolwOdJ(const double &)  ;
      const double d2volwOdJ2(const double &)  ;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

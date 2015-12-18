@@ -81,6 +81,6 @@ class NodeLoader: public Loader
 
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

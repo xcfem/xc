@@ -131,7 +131,7 @@ class ArrayOfTaggedObjects : public TaggedObjectStorage
     friend class ArrayOfTaggedObjectsIter;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

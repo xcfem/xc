@@ -105,7 +105,7 @@ class EvolutionLaw_L_Eij : public EvolutionLaw_T
 
     
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

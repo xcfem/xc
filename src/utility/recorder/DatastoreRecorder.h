@@ -83,7 +83,7 @@ class DatastoreRecorder: public Recorder
     int playback(int commitTag);
     int restart(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

@@ -104,7 +104,7 @@ class NodeLocker: public ForceReprComponent
   };
 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

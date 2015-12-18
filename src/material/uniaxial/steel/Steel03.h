@@ -135,6 +135,6 @@ class Steel03 : public SteelBase0103
     
     void Print(std::ostream &s, int flag =0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

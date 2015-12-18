@@ -411,7 +411,7 @@ class EPState
     //friend ostream & operator<< (ostream& os, const EPState & EPS);
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

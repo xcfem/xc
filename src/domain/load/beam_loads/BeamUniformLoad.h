@@ -45,7 +45,7 @@ class BeamUniformLoad : public BeamMecLoad
 
     std::string Categoria(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

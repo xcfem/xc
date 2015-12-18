@@ -52,7 +52,7 @@ class beam2d : public ProtoBeam2d
     beam2d(int tag, int class_tag);
     beam2d(int tag, int class_tag, double A, double E, double I, int Nd1, int Nd2);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

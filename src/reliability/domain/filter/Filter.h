@@ -76,6 +76,6 @@ class Filter : public ReliabilityDomainComponent
 protected:
 	int tag;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

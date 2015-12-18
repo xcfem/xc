@@ -50,6 +50,6 @@ class RigidBase: public MP_Constraint
     ~RigidBase(void);
     void setDomain(Domain *theDomain);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

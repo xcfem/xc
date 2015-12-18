@@ -73,6 +73,6 @@ class RandomNumberGenerator
 	virtual Vector	getGeneratedNumbers() =0;
 	virtual int     getSeed() =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

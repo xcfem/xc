@@ -89,7 +89,7 @@ class Solver : public MovableObject, public EntCmd
     virtual int solve(void) = 0;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

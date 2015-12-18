@@ -38,5 +38,5 @@ class Fiber;
 //
 //! @brief Contenedor de fibras.
 typedef std::list<Fiber *> contenedor_fibras;
-} // fin namespace XC
+} // end of XC namespace
 #endif

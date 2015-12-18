@@ -86,7 +86,7 @@ class fdYieldDP : public fdYield
 
     friend std::ostream& operator<< (std::ostream& os, const fdYieldDP & fdydDP);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

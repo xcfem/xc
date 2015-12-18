@@ -149,5 +149,5 @@ class Cad: public EntCmd
   };
 
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

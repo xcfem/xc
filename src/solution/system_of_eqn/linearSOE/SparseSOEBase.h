@@ -45,7 +45,7 @@ class SparseSOEBase : public FactoredSOEBase
 
     SparseSOEBase(SoluMethod *,int classTag,int N= 0, int NNZ= 0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

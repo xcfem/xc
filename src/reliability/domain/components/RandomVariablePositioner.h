@@ -77,7 +77,7 @@ class RandomVariablePositioner : public Positioner
 
     int setNewTag(int newTag);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

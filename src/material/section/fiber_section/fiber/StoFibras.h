@@ -53,6 +53,6 @@ class StoFibras : public DqFibras
     void setup(FiberSectionGJ &,const contenedor_fibras &,KRSeccion &);
     ~StoFibras(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -91,7 +91,7 @@ class HSConstraint: public ProtoArcLength
   };
 inline Integrator *HSConstraint::getCopy(void) const
   { return new HSConstraint(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

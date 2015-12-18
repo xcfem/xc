@@ -91,7 +91,7 @@ class ArcLength : public ArcLengthBase
   };
 inline Integrator *ArcLength::getCopy(void) const
   { return new ArcLength(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

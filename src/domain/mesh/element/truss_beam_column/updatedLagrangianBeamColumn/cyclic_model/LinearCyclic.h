@@ -43,7 +43,7 @@ class LinearCyclic : public CyclicModel
     void Print (std::ostream &, int = 0);
      CyclicModel *getCopy();
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

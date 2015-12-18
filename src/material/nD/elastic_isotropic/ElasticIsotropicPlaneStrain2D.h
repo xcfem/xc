@@ -93,7 +93,7 @@ class ElasticIsotropicPlaneStrain2D : public ElasticIsotropic2D
     NDMaterial *getCopy(void) const;
     const std::string &getType(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

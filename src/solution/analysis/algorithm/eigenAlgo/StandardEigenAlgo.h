@@ -80,6 +80,6 @@ class StandardEigenAlgo : public EigenAlgorithm
   };
 inline SolutionAlgorithm *StandardEigenAlgo::getCopy(void) const
   { return new StandardEigenAlgo(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

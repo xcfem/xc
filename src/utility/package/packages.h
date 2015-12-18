@@ -34,6 +34,6 @@ namespace XC {
 
 int getLibraryFunction(const char *libName, const char *functName, void **libHandle, void **funcHandle);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

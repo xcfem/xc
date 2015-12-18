@@ -84,6 +84,6 @@ class LinearBucklingAnalysis: public StaticAnalysis
   };
 inline Analysis *LinearBucklingAnalysis::getCopy(void) const
   { return new LinearBucklingAnalysis(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

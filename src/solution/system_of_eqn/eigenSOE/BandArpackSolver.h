@@ -87,7 +87,7 @@ class BandArpackSolver : public EigenSolver
 
 inline EigenSolver *BandArpackSolver::getCopy(void) const
    { return new BandArpackSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

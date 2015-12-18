@@ -72,6 +72,6 @@ class HessianApproximation
 	virtual int     setHessianToIdentity(int size) = 0;
 	virtual int     updateHessianApproximation(Vector u_old, double g_old,Vector gradG_old, double stepSize, Vector searchDirection, double g_new, Vector gradG_new) = 0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -42,6 +42,6 @@ class Vector;
 
   m_double Vector_to_m_double(const Vector &);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

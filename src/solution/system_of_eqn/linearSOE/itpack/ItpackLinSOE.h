@@ -104,6 +104,6 @@ class ItpackLinSOE : public LinearSOEData
   };
 inline SystemOfEqn *ItpackLinSOE::getCopy(void) const
   { return new ItpackLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

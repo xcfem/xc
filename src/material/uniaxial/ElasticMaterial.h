@@ -110,7 +110,7 @@ class ElasticMaterial : public ElasticBaseMaterial
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

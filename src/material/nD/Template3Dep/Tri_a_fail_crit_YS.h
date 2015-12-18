@@ -108,7 +108,7 @@ class TriFCYieldSurface : public YieldSurface
     friend std::ostream& operator<< (std::ostream& os, const TriFCYieldSurface & YS);
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

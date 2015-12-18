@@ -112,7 +112,7 @@ class WilsonTheta: public RayleighBase
   };
 inline Integrator *WilsonTheta::getCopy(void) const
   { return new WilsonTheta(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

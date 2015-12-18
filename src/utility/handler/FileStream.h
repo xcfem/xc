@@ -110,6 +110,6 @@ class FileStream : public OPS_Stream
     // OPS_Stream& flush(OPS_Stream& outs);
     // OPS_Stream& (OPS_Stream& outs);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -60,7 +60,7 @@ class LinearBucklingIntegrator : public EigenIntegrator
   };
 inline Integrator *LinearBucklingIntegrator::getCopy(void) const
   { return new LinearBucklingIntegrator(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

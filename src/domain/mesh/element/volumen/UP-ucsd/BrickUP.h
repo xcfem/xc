@@ -151,4 +151,4 @@ class BrickUP : public BrickBase
     friend class TzLiq1;
 } ;
 
-} // fin namespace XC
+} // end of XC namespace

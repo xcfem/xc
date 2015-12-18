@@ -377,7 +377,7 @@ XC::Matrix &XC::Matrix::operator=(const TNSR &V)
       }
     return *this;
   }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

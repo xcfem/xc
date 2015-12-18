@@ -56,6 +56,6 @@ class Attalla2D : public YieldSurface_BC2D
     virtual void setExtent();
 	virtual void	customizeInterpolate(double &xi, double &yi, double &xj, double &yj);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

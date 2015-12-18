@@ -181,7 +181,7 @@ Eje *XC::GeomSection::creaEje(void)
     return retval;
   }
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

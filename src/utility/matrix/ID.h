@@ -166,7 +166,7 @@ inline const int &ID::operator()(const int &x) const
 
   return data[x];
   }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

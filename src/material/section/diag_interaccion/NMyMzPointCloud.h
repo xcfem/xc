@@ -55,6 +55,6 @@ class NMyMzPointCloud: public NMPointCloudBase, public GeomObj::list_Pos3d
     NMPointCloud getNM(const double &) const;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

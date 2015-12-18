@@ -85,7 +85,7 @@ class fdEvolution_SLS : public fdEvolution_S
     friend std::ostream& operator<< (std::ostream& os, const fdEvolution_SLS & fdesl);
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

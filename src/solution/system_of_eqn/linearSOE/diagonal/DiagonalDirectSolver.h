@@ -90,7 +90,7 @@ class DiagonalDirectSolver : public DiagonalSolver
 
 inline LinearSOESolver *DiagonalDirectSolver::getCopy(void) const
    { return new DiagonalDirectSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

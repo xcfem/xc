@@ -83,7 +83,7 @@ class DiagonalSolver : public LinearSOESolver
     virtual int solve(void) = 0;
     virtual bool setLinearSOE(DiagonalSOE &theSOE);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -95,7 +95,7 @@ class OracleDatastore: public DBDatastore
     int sendID(int dbTag, int commitTag, const ID &, ChannelAddress *theAddress= NULL);
     int recvID(int dbTag, int commitTag, ID &theID, ChannelAddress *theAddress= NULL);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

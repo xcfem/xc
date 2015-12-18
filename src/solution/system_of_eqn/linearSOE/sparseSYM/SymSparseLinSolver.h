@@ -77,7 +77,7 @@ class SymSparseLinSolver : public LinearSOESolver
 
 inline LinearSOESolver *SymSparseLinSolver::getCopy(void) const
    { return new SymSparseLinSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -156,7 +156,7 @@ class J2PlaneStrain : public J2Plasticity
      int revertToStart( ) ;
   };
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif
 

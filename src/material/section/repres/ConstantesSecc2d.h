@@ -126,6 +126,6 @@ class ConstantesSecc2d: public EntCmd, public MovableObject
 
 std::ostream &operator<<(std::ostream &os,const ConstantesSecc2d &c);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

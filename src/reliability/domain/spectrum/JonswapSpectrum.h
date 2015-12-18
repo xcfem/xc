@@ -81,6 +81,6 @@ public:
 	double getMaxFrequency();
 	double getAmplitude(double frequency);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

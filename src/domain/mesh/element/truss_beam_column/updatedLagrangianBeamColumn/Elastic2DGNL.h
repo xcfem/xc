@@ -100,7 +100,7 @@ class Elastic2dGNL : public UpdatedLagrangianBeam2D
     // stored in M
     void getLocalMass(Matrix &M) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif // !defined Elastic2dGNL
 

@@ -109,7 +109,7 @@ class TransientDomainDecompositionAnalysis: public DomainDecompositionAnalysis
   };
 inline Analysis *TransientDomainDecompositionAnalysis::getCopy(void) const
   { return new TransientDomainDecompositionAnalysis(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

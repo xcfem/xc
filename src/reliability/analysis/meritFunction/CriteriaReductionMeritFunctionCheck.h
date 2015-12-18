@@ -82,6 +82,6 @@ private:
 	ReliabilityConvergenceCheck *theReliabilityConvergenceCheck;
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

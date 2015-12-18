@@ -48,6 +48,6 @@ class KDTreePos
     double distance_to(const KDTreePos &otra) const;
     inline value_type operator[](const size_t &N) const { return d[N]; }
   };
-} // fin namespace XC 
+} // end of XC namespace 
 
 #endif

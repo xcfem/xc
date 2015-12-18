@@ -66,6 +66,6 @@ inline std::ostream &operator<<(std::ostream &os,const BaseElasticSection3d &scc
     scc.Print(os);
     return os;
   }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -108,7 +108,7 @@ class DistributedSparseGenRowLinSolver;
   };
 inline SystemOfEqn *DistributedSparseGenRowLinSOE::getCopy(void) const
   { return new DistributedSparseGenRowLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

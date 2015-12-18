@@ -80,6 +80,6 @@ class HingeMidpointBeamIntegration: public PlasticLengthsBeamIntegration
     void getLocationsDeriv(int nIP, double L, double dLdh, double *dptsdh);
     void getWeightsDeriv(int nIP, double L, double dLdh, double *dwtsdh);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -106,7 +106,7 @@ class DPYieldSurface : public YieldSurface
     friend std::ostream& operator<< (std::ostream& os, const DPYieldSurface & YS);
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

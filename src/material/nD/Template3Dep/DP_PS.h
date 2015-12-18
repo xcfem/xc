@@ -100,7 +100,7 @@ class DPPotentialSurface : public PotentialSurface
 //================================================================================
 std::ostream& operator<< (std::ostream& os, const DPPotentialSurface &PS);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

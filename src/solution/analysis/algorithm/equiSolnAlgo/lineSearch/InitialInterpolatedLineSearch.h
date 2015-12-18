@@ -87,7 +87,7 @@ class InitialInterpolatedLineSearch: public LineSearch
   };
 inline LineSearch *InitialInterpolatedLineSearch::getCopy(void) const
   { return new InitialInterpolatedLineSearch(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

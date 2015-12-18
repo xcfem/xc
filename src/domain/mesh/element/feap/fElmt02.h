@@ -84,7 +84,7 @@ class fElmt02 : public fElement
     fElmt02();    
     
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

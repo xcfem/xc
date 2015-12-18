@@ -103,7 +103,7 @@ class ArrayGraph: public Graph
     virtual void Print(std::ostream &s) const;
     friend std::ostream &operator<<(std::ostream &s, const ArrayGraph &M);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -83,7 +83,7 @@ class FE_EleIter
     virtual void reset(void);
     virtual FE_Element *operator()(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

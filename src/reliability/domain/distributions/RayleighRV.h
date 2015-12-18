@@ -94,6 +94,6 @@ private:
 	double u;
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

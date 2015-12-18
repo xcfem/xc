@@ -110,6 +110,6 @@ class AlphaOS : public AlphaOSBase
   };
 inline Integrator *AlphaOS::getCopy(void) const
   { return new AlphaOS(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

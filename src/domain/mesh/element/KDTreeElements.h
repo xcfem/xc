@@ -71,7 +71,7 @@ class KDTreeElements: protected kd_tree::KDTree<3, ElemPos, std::pointer_to_bina
     const Element *getNearestElement(const Pos3d &pos, const double &r) const;
   };
 
-} // fin namespace XC 
+} // end of XC namespace 
 
 
 #endif

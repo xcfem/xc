@@ -93,7 +93,7 @@ class LinearSOESolver : public Solver
     virtual int setSize(void) = 0;
     virtual double getDeterminant(void) {return 1.0;};
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
     

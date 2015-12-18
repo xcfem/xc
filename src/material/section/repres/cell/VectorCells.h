@@ -72,7 +72,7 @@ class VectorCells: protected std::vector<Cell *>
     void Print(std::ostream &s) const;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

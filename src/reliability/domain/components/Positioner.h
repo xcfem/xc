@@ -52,7 +52,7 @@ class Positioner : public ReliabilityDomainComponent
     int activate(bool active);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

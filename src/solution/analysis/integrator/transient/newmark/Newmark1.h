@@ -106,7 +106,7 @@ class Newmark1 : public NewmarkBase2
   };
 inline Integrator *Newmark1::getCopy(void) const
   { return new Newmark1(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

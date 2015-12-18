@@ -99,6 +99,6 @@ class SymBandEigenSOE : public EigenSOE
   };
 inline SystemOfEqn *SymBandEigenSOE::getCopy(void) const
   { return new SymBandEigenSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

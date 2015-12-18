@@ -52,7 +52,7 @@ class FVectorBeamColumn2d: public FVectorData<3>
 
     void Print(std::ostream &os) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

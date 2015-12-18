@@ -57,6 +57,6 @@ class DqPtrsConstraint: public DqPtrs<Constraint>
     void numera(void);
   };
 
-} //fin namespace XC
+} //end of XC namespace
 #endif
 

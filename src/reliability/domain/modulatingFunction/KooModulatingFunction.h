@@ -78,6 +78,6 @@ class KooModulatingFunction : public ModulatingFunction
     double getMaxAmplitude();
     Filter *getFilter();
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

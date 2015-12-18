@@ -52,6 +52,6 @@ class EqualDOF: public MP_Constraint
     void setDofs(const ID &);
     void setup(Domain *theDomain);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -40,6 +40,6 @@ class ChannelQueue: public std::deque<Channel *>
   {
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

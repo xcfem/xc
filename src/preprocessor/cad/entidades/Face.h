@@ -94,6 +94,6 @@ class Face: public CmbEdge
 
 std::set<const Face *> GetSupsTocan(const Edge &l);
 
-} //fin namespace XC.
+} //end of XC namespace.
 
 #endif

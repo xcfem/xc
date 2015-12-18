@@ -114,7 +114,7 @@ class EvolutionLaw_NL_Eeq : public EvolutionLaw_S
 
     
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

@@ -65,6 +65,6 @@ class TrfGeom: public EntMdlrBase
     const MatrizPos3d &Transforma(const MatrizPos3d &m) const;
     const TritrizPos3d &Transforma(const TritrizPos3d &m) const;
   };
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

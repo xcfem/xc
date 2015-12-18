@@ -103,7 +103,7 @@ class ProfileSPDLinDirectSkypackSolver : public ProfileSPDLinSolver
 
 inline LinearSOESolver *ProfileSPDLinDirectSkypackSolver::getCopy(void) const
    { return new ProfileSPDLinDirectSkypackSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

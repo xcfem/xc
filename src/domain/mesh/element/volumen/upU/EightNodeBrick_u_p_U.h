@@ -161,7 +161,7 @@ class EightNodeBrick_u_p_U: public BrickBase
     Vector getExForceS();
     Vector getExForceF();
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

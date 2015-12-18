@@ -127,7 +127,7 @@ class ShellNL : public QuadBase9N<SectionFDPhysicalProperties>
     int recvSelf(const CommParameters &);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

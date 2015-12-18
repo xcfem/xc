@@ -155,4 +155,4 @@ class Brick : public BrickBase
     int getResponse(int responseID, Information &eleInformation);
   }; 
 
-} // fin namespace XC
+} // end of XC namespace

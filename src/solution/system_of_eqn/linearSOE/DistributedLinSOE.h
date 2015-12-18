@@ -61,7 +61,7 @@ class DistributedLinSOE: public DistributedObj
   public:
     int setChannels(const ChannelQueue &theChannels);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

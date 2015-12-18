@@ -93,7 +93,7 @@ public:
 	virtual void    setNsteps(int nsteps);
 	virtual double  getDt();
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

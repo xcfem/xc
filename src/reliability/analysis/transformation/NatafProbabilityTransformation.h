@@ -143,6 +143,6 @@ private:
 						    double stdv_j);
 	double solveForCorrelation(int rv_i, int rv_j, double rho_original);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

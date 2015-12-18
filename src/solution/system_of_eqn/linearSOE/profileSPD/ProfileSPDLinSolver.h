@@ -86,7 +86,7 @@ class ProfileSPDLinSolver: public virtual LinearSOESolver
     virtual int solve(void) = 0;
     virtual bool setLinearSOE(ProfileSPDLinSOE &theSOE);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

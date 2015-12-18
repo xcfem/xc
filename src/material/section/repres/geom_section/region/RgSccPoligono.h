@@ -64,7 +64,7 @@ class RgSccPoligono: public RgQuadCell
     void Print(std::ostream &s, int flag =0) const;   
     friend std::ostream &operator<<(std::ostream &s, RgSccPoligono &rg_scc_plg);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

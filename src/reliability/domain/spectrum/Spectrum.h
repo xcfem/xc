@@ -76,6 +76,6 @@ public:
 protected:
 	int tag;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

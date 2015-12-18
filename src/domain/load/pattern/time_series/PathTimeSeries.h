@@ -115,7 +115,7 @@ class PathTimeSeries : public PathSeriesBase
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -95,7 +95,7 @@ class Cell
 
 std::ostream &operator<<(std::ostream &s, const Cell &cell);
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

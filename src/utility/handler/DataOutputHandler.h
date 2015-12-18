@@ -70,6 +70,6 @@ class DataOutputHandler: public MovableObject, public EntCmd
     virtual int open(const std::vector<std::string> &dataDescription) =0;
     virtual int write(Vector &data) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

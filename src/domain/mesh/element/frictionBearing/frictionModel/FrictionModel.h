@@ -97,6 +97,6 @@ class FrictionModel : public TaggedObject, public MovableObject
     virtual Response *setResponse(const std::vector<std::string> &, Information &);
     virtual int getResponse(int responseID, Information &info);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

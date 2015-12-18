@@ -347,7 +347,7 @@ class nDarray
 // GLOBAL
 nDarray operator*(const double lval,const nDarray &rval);  // REVIEWER global *
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

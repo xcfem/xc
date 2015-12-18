@@ -93,6 +93,6 @@ class EigenAlgorithm : public SolutionAlgorithm
      
     virtual EigenIntegrator *getEigenIntegratorPtr(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

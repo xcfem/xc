@@ -50,6 +50,6 @@ class Kinematic2D01: public PlasticHardening2D
     //virtual int evolveSurface(YieldSurfaceBC *ys, double magPlasticDefo);
 	
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

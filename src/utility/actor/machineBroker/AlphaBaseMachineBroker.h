@@ -42,6 +42,6 @@ class AlphaBaseMachineBroker: public MachineBroker
     AlphaBaseMachineBroker(FEM_ObjectBroker *theBroker, int currentMachine,int maxNumMachines);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

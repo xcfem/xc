@@ -210,5 +210,5 @@ class BJmatrix : public nDarray
 //       void eigsrt(double * d, double ** v, int n);
           
 };
-} // fin namespace XC
+} // end of XC namespace
 #endif 

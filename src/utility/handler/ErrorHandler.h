@@ -80,7 +80,7 @@ class ErrorHandler
     virtual void fatal(const char *, ...) =0;
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

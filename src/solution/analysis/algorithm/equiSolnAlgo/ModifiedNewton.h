@@ -88,7 +88,7 @@ class ModifiedNewton: public NewtonBased
 
 inline SolutionAlgorithm *ModifiedNewton::getCopy(void) const
   { return new ModifiedNewton(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 
