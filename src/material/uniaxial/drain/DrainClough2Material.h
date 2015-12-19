@@ -77,7 +77,7 @@ class DrainClough2Material: public DrainMaterial
     int revertToStart(void);
     UniaxialMaterial *getCopy(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

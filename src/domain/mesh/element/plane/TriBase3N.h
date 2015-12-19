@@ -196,5 +196,5 @@ template <class PhysProp>
 int XC::TriBase3N<PhysProp>::getMEDCellType(void) const
   { return MED_TRIA3; }
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

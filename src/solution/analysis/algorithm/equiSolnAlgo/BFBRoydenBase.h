@@ -59,7 +59,7 @@ class BFBRoydenBase: public EquiSolnConvAlgo
 
     int setConvergenceTest(ConvergenceTest *theNewTest);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

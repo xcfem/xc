@@ -87,6 +87,6 @@ class HingeRadauBeamIntegration: public PlasticLengthsBeamIntegration
     void getWeightsDeriv(int nIP, double L, double dLdh, double *dwtsdh);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

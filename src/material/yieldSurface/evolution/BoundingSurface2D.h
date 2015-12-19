@@ -63,6 +63,6 @@ protected:
     virtual double getKinPlasticStiffness(int dir)=0;
     virtual Vector& getEvolDirection(Vector &f_new)=0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

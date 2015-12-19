@@ -118,6 +118,6 @@ class TimeSeries: public MovableObject, public EntCmd
 int sendTimeSeriesPtr(TimeSeries *,int posClassTag, int posDbTag,DbTagData &,CommParameters &cp);
 TimeSeries *receiveTimeSeriesPtr(TimeSeries *,int posClassTag, int posDbTag,DbTagData &,const CommParameters &cp);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

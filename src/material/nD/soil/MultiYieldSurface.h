@@ -73,6 +73,6 @@ class MultiYieldSurface
   // friend istream & operator>> (istream & is, MultiYieldSurface & );
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -111,6 +111,6 @@ class LimitStateFunction : public ReliabilityDomainComponent
     int addExpression(const std::string &expression);
     int removeAddedExpression(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

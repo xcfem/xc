@@ -79,6 +79,6 @@ class BkStressLimSurface2D : public YS_Evolution2D
     double getTrialPlasticStrains(int dof);
     double getCommitPlasticStrains(int dof);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -106,7 +106,7 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SeccionInerte
     void Print(std::ostream &s) const;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

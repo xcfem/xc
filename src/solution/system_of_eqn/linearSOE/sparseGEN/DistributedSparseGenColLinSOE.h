@@ -98,7 +98,7 @@ class DistributedSparseGenColLinSOE : public SparseGenColLinSOE, public Distribu
   };
 inline SystemOfEqn *DistributedSparseGenColLinSOE::getCopy(void) const
   { return new DistributedSparseGenColLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

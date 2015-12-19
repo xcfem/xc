@@ -952,6 +952,6 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsInteriorObjs(void)
     return retval;
   }
 
-} //fin namespace XC.
+} //end of XC namespace.
 
 #endif

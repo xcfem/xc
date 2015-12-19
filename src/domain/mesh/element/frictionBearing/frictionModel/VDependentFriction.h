@@ -92,6 +92,6 @@ class VDependentFriction: public CoulombFriction
     
     void Print(std::ostream &, int flag = 0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

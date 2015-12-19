@@ -99,6 +99,6 @@ class ElasticShearSection2d: public BaseElasticSection2d
     const Matrix& getInitialTangentSensitivity(int gradIndex);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

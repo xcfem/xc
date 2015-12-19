@@ -84,6 +84,6 @@ class PressureMultiYieldBase: public NDMaterial
      PressureMultiYieldBase(const PressureMultiYieldBase &);
      PressureMultiYieldBase &operator=(const PressureMultiYieldBase &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

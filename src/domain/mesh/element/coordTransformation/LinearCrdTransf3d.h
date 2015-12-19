@@ -98,7 +98,7 @@ class LinearCrdTransf3d: public SmallDispCrdTransf3d
     const Vector &getPointGlobalCoordFromLocal(const Vector &) const;
     const Vector &getPointGlobalDisplFromBasic(double xi, const Vector &) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

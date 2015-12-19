@@ -107,6 +107,6 @@ class PlateFiberMaterial: public NDAdaptorMaterial
 
   };
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

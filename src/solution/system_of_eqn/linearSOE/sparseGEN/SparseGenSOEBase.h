@@ -47,7 +47,7 @@ class SparseGenSOEBase: public SparseSOEBase
   public:
     virtual void zeroA(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

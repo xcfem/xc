@@ -103,7 +103,7 @@ class CentralDifferenceNoDamping: public CentralDifferenceBase
   };
 inline Integrator *CentralDifferenceNoDamping::getCopy(void) const
   { return new CentralDifferenceNoDamping(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

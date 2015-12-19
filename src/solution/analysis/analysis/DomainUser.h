@@ -82,7 +82,7 @@ class DomainUser
     // pure virtual functions
     virtual void domainChanged(void) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

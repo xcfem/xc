@@ -111,7 +111,7 @@ class ProfileSPDLinSubstrSolver : public ProfileSPDLinDirectSolver,
 
 inline LinearSOESolver *ProfileSPDLinSubstrSolver::getCopy(void) const
    { return new ProfileSPDLinSubstrSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

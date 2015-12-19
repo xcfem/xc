@@ -180,7 +180,7 @@ class ZeroLengthContact2D: public ZeroLengthContact
     //void updateDir (const Vector& x, const Vector& y);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

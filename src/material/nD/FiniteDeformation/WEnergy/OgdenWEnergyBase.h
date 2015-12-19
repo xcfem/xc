@@ -47,7 +47,7 @@ class OgdenWEnergyBase : public WEnergy
     const Vector  disowOdlambda(const Vector & );
     const Vector  d2isowOdlambda2(const Vector & );
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

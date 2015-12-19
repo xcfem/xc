@@ -105,7 +105,7 @@ class UmfpackGenLinSOE : public FactoredSOEBase
   };
 inline SystemOfEqn *UmfpackGenLinSOE::getCopy(void) const
   { return new UmfpackGenLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

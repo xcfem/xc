@@ -64,4 +64,4 @@ class Simple1GenBase
     Simple1GenBase(void);
     ~Simple1GenBase(void);
   };
-} // fin namespace XC
+} // end of XC namespace

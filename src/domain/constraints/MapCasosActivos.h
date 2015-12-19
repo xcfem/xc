@@ -120,7 +120,7 @@ void MapCasosActivos<T>::Print(std::ostream &s, int flag)
       }
   }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

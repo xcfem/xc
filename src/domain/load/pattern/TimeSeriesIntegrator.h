@@ -78,7 +78,7 @@ class TimeSeriesIntegrator : public MovableObject
       {}
     virtual TimeSeries* integrate(TimeSeries *theSeries, double delta) = 0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -152,6 +152,6 @@ private:
 	std::string fileNamePrint;
 	int numberOfEvaluations;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -180,7 +180,7 @@ class NDMaterial: public Material
 
 NDMaterial *receiveNDMaterialPtr(NDMaterial *,DbTagData &,const CommParameters &,const BrokedPtrCommMetaData &);
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

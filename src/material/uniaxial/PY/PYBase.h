@@ -77,7 +77,7 @@ class PYBase: public UniaxialMaterial
     void Print(std::ostream &s, int flag =0);
     virtual any_const_ptr GetProp(const std::string &cod) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

@@ -156,7 +156,7 @@ class TransformationDOF_Group: public DOF_Group
     int saveSensitivity(Vector *v,Vector *vdot,Vector *vdotdot,int gradNum,int numGrads);
 // AddingSensitivity:END //////////////////////////////////////
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -99,6 +99,6 @@ class SymBandEigenSolver : public EigenSolver
 
 inline EigenSolver *SymBandEigenSolver::getCopy(void) const
    { return new SymBandEigenSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

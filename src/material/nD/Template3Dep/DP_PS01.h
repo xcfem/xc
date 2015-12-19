@@ -93,7 +93,7 @@ class MDPotentialSurface : public PotentialSurface
         return os;
       }
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

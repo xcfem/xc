@@ -48,7 +48,7 @@ class MovableVectors: public MovableContainer<std::vector<Vector> >
   };
 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -132,7 +132,7 @@ class Muelle : public ProtoTruss
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);
     int getResponse(int responseID, Information &eleInformation);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

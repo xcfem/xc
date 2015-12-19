@@ -108,7 +108,7 @@ class ElasticIsotropic3D : public ElasticIsotropicMaterial
     void Print(std::ostream &s, int flag =0);
     void setInitElasticStiffness(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

@@ -70,8 +70,8 @@ namespace XC {
 class FeapMaterial : public NDMaterial
   {
   public:
-   FeapMaterial(int tag, int classTag, int numHV, int numData,double rho = 0.0);
-  FeapMaterial(int classTag);
+    FeapMaterial(int tag, int classTag, int numHV, int numData,double rho = 0.0);
+    FeapMaterial(int classTag);
   virtual ~FeapMaterial();
   
   virtual int setTrialStrain(const Vector &strain);
@@ -130,6 +130,6 @@ class FeapMaterial : public NDMaterial
   int myFormulation;
   void setType(Formulation form);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

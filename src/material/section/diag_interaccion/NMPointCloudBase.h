@@ -50,6 +50,6 @@ class NMPointCloudBase
       { umbral= 0.0; }
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

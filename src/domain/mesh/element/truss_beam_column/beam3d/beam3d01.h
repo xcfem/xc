@@ -78,7 +78,7 @@ class beam3d01 : public beam3dBase
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

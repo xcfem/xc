@@ -148,6 +148,6 @@ class Joint2D : public ElemWithMaterial<5,Joint2DPhysicalProperties>
  protected:
   int 	addMP_Joint(Domain *theDomain, int mpNum, int RnodeID, int CnodeID, int MainDOF, int FixedEnd, int LrgDispFlag );
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

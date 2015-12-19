@@ -118,6 +118,6 @@ class HHTHybridSimulation : public HHTBase
   };
 inline Integrator *HHTHybridSimulation::getCopy(void) const
   { return new HHTHybridSimulation(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -60,6 +60,6 @@ DiagInteraccion2d calc_diag_interaccionPlano(const FiberSectionBase &scc,const D
 DiagInteraccion2d calc_diag_interaccionNMy(const FiberSectionBase &scc,const DatosDiagInteraccion &);
 DiagInteraccion2d calc_diag_interaccionNMz(const FiberSectionBase &scc,const DatosDiagInteraccion &);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

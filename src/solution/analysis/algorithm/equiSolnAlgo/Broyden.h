@@ -94,7 +94,7 @@ class Broyden: public BFBRoydenBase
   };
 inline SolutionAlgorithm *Broyden::getCopy(void) const
   { return new Broyden(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

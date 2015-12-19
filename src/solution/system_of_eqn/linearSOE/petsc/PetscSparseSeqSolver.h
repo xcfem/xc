@@ -110,7 +110,7 @@ class PetscSparseSeqSolver: public SparseGenRowLinSolver
 
 inline LinearSOESolver *PetscSparseSeqSolver::getCopy(void) const
    { return new PetscSparseSeqSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

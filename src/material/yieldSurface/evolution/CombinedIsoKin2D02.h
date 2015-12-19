@@ -75,6 +75,6 @@ class CombinedIsoKin2D02 : public BkStressLimSurface2D
 
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

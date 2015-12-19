@@ -76,7 +76,7 @@ class ZeroLengthContact: public Element0D
     void Print(std::ostream &os, int flag =0);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

@@ -95,7 +95,7 @@ class DiagonalSOE : public FactoredSOEBase
   };
 inline SystemOfEqn *DiagonalSOE::getCopy(void) const
   { return new DiagonalSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

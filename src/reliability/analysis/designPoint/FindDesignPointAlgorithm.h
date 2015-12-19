@@ -85,6 +85,6 @@ public:
 	virtual Vector getGradientInStandardNormalSpace() =0;
 	virtual int getNumberOfEvaluations() = 0;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

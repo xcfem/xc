@@ -248,6 +248,6 @@ class MultiaxialCyclicPlasticity: public NDMaterial
   Vector& getMCPparameter(void);   // used for debug only
   }; //end of MultiaxialCyclicPlasticity declarations
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

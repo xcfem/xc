@@ -94,5 +94,5 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
 
 std::ostream &operator<<(std::ostream &os,const NodePtrsWithIDs &nodePtrs);
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

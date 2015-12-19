@@ -104,7 +104,7 @@ const GaussModel gauss_model_quad9(Pos2d(-1,-1),Pos2d(0,-1),Pos2d(1,-1),Pos2d(1,
  				    GaussPoint(Pos2d(-root3_over_root5,root3_over_root5),25.0 / 81.0),
 				    GaussPoint(Pos2d(-root3_over_root5,0),40.0 / 81.0),
                                     GaussPoint(Pos2d(0,0),64.0 / 81.0));
-} // fin namespace XC
+} // end of XC namespace
 
 #endif 
 //

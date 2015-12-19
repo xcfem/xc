@@ -76,7 +76,7 @@ class ReliabilityDomainComponent: public TaggedObject
   private:    
     ReliabilityDomain *theReliabilityDomain;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

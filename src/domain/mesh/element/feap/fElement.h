@@ -166,7 +166,7 @@ class fElement : public Element
     ID *connectedNodes;
 	
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -80,7 +80,7 @@ class RayleighDampingFactors: public EntCmd, public MovableObject
 
 std::ostream &operator<<(std::ostream &os,const RayleighDampingFactors &rF);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

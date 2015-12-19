@@ -48,7 +48,7 @@ class DOF_GrpConstIter
     virtual void reset(void);    
     virtual const DOF_Group *operator()(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

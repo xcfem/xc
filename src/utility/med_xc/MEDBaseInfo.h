@@ -46,5 +46,5 @@ class MEDBaseInfo: public MEDObject
 
     any_const_ptr GetProp(const std::string &) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 #endif

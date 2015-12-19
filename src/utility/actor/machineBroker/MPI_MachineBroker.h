@@ -93,6 +93,6 @@ class MPI_MachineBroker : public MachineBroker
     Channel *getRemoteProcess(void);
     int freeProcess(Channel *);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

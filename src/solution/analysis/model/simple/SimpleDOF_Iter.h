@@ -84,7 +84,7 @@ class SimpleDOF_Iter: public DOF_GrpIter
     int currIndex;
     int numDone;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

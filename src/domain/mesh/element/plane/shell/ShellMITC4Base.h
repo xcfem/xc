@@ -148,5 +148,5 @@ class ShellMITC4Base : public QuadBase4N<SectionFDPhysicalProperties>
     void Print(std::ostream &s, int flag );
   }; 
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

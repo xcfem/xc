@@ -104,5 +104,5 @@ class FieldInfo: public EntConNmb
       { return time; }
     any_const_ptr GetProp(const std::string &) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 #endif

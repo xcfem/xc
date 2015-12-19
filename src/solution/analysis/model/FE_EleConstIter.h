@@ -48,7 +48,7 @@ class FE_EleConstIter
     virtual void reset(void);
     virtual const FE_Element *operator()(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

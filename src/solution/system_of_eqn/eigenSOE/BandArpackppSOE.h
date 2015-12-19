@@ -79,6 +79,6 @@ class BandArpackppSOE : public ArpackSOE
   };
 inline SystemOfEqn *BandArpackppSOE::getCopy(void) const
   { return new BandArpackppSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

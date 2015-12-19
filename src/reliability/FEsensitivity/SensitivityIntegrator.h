@@ -73,7 +73,7 @@ class SensitivityIntegrator
     virtual int saveSensitivity(const Vector &v, int gradNum, int numGrads) = 0;
     virtual int commitSensitivity(int gradNum, int numGrads) = 0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

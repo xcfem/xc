@@ -220,6 +220,6 @@ class ShadowSubdomain: public Shadow, public Subdomain
     virtual double getNodeDisp(int nodeTag, int dof, int &errorFlag);
     virtual int setMass(const Matrix &mass, int nodeTag);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

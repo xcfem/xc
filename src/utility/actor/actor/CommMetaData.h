@@ -46,6 +46,6 @@ class CommMetaData
       { return posDbTag; }
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

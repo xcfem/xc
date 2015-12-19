@@ -52,6 +52,6 @@ class MeshCompRecorder: public HandlerRecorder
     MeshCompRecorder(int classTag);
     MeshCompRecorder(int classTag, Domain &theDomain, DataOutputHandler &theOutputHandler,double deltaT = 0.0, bool echoTimeFlag = true); 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

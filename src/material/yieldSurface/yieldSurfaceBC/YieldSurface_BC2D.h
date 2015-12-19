@@ -129,6 +129,6 @@ protected:
 //                    void toDeformedCoord(double &x, double &y);
 //                    void toOriginalCoord(double &x, double &y);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

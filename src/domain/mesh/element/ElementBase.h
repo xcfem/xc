@@ -179,5 +179,5 @@ const Pos3d &XC::ElementBase<NNODOS>::getPosCdg(bool geomInicial) const
     return retval;
   }
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

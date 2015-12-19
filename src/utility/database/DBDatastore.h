@@ -40,7 +40,7 @@ class DBDatastore: public FE_Datastore
   public:
     DBDatastore(Preprocessor &, FEM_ObjectBroker &theBroker);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

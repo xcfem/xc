@@ -188,7 +188,7 @@ class EvolutionLaw_NL_EijMD : public EvolutionLaw_T
 
     
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

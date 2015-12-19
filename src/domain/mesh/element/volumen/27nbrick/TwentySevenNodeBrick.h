@@ -229,7 +229,7 @@ class TwentySevenNodeBrick: public ElementBase<27>
     //void reportStressTensorF(FILE *);
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

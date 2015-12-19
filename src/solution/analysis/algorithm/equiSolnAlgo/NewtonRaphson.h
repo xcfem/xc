@@ -91,7 +91,7 @@ class NewtonRaphson: public NewtonBased
 inline SolutionAlgorithm *NewtonRaphson::getCopy(void) const
   { return new NewtonRaphson(*this); }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

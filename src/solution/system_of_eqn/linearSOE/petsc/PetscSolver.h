@@ -111,7 +111,7 @@ class PetscSolver : public LinearSOESolver
 
 inline LinearSOESolver *PetscSolver::getCopy(void) const
    { return new PetscSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

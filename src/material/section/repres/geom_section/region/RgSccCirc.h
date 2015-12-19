@@ -102,7 +102,7 @@ class RgSccCirc: public RgQuadCell
     void Print(std::ostream &s, int flag =0) const;   
     friend std::ostream &operator<<(std::ostream &s, RgSccCirc &rg_scc_circ);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

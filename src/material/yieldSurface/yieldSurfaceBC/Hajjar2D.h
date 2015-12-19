@@ -59,6 +59,6 @@ class Hajjar2D : public YieldSurface_BC2D
     virtual double getSurfaceDrift(double x, double y);
     virtual void setExtent();
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

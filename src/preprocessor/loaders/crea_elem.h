@@ -106,6 +106,6 @@ ELEM *nuevo_elemento_mat_crd(int tag_elem, Material *ptrMat, CrdTransf *ptrTrf)
     ELEM *retval= new ELEM(tag_elem,ptrMat,ptrTrf); //Lo creamos.
     return retval;
   }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

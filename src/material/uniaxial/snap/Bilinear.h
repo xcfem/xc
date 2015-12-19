@@ -145,6 +145,6 @@ class Bilinear : public UniaxialMaterial
     void recordInfo(int cond =0);
  
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -63,7 +63,7 @@ class GlueNodeToElement: public MRMP_Constraint
     GlueNodeToElement(int tag); // LCPT
     GlueNodeToElement(int tag, const Node &,const Element &, const ID &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -117,7 +117,7 @@ class Kratzig : public DamageModel
 	double LastCommitInfo[10];
 	
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

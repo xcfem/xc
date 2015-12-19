@@ -138,7 +138,7 @@ class Actor
     void setCommitTag(int commitTag);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

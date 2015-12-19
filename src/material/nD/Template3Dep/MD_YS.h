@@ -81,7 +81,7 @@ class MDYieldSurface : public YieldSurface
     // Overloaded Insertion Operator
     friend std::ostream& operator<< (std::ostream& os, const MDYieldSurface & YS);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

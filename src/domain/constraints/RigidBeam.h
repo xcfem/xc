@@ -78,6 +78,6 @@ class RigidBeam: public RigidBase
     RigidBeam(int tag,const int &, const int &);
     void setup(Domain *theDomain);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

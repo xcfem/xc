@@ -203,7 +203,7 @@ int TaggedObjectStorage::recibe(int dbTag,const CommParameters &cp,T *(FEM_Objec
     return res;
   }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

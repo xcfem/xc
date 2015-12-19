@@ -122,7 +122,7 @@ class SuperLU : public SparseGenColLinSolver
   };
 inline LinearSOESolver *SuperLU::getCopy(void) const
    { return new SuperLU(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

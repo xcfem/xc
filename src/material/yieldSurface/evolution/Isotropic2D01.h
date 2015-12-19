@@ -45,6 +45,6 @@ class Isotropic2D01 : public PlasticHardening2D
     virtual YS_Evolution *getCopy(void);
     //virtual int evolveSurface(YieldSurfaceBC *ys, double magPlasticDefo);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

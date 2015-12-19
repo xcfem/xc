@@ -223,5 +223,5 @@ template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getDist(const Pos3d &p,bool geomInicial) const
   { return getPoligono(geomInicial).dist(p); }
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

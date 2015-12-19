@@ -123,6 +123,6 @@ class StaticAnalysis: public Analysis
   };
 inline Analysis *StaticAnalysis::getCopy(void) const
   { return new StaticAnalysis(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

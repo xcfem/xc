@@ -133,7 +133,7 @@ class TransformationFE: public FE_Element
     // AddingSensitivity:END //////////////////////////////////////
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

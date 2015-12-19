@@ -52,6 +52,6 @@ namespace XC {
   const std::string strTipoThreeDimensionalFD= "ThreeDimensionalFD";
 
   const std::string strTipoError= "error";
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

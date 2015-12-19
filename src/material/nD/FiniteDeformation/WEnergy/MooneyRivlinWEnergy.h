@@ -78,7 +78,7 @@ class MooneyRivlinWEnergy : public WEnergy
 //  const double dvolwOdJ( const double &);
 //  const double d2volOdj2(const double &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

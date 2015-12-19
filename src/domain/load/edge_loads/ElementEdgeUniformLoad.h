@@ -45,7 +45,7 @@ class ElementEdgeUniformLoad : public ElementEdgeMecLoad
 
     std::string Categoria(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

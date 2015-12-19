@@ -71,7 +71,7 @@ class ParticlePos3d
 
 std::ostream &operator<<(std::ostream &, const ParticlePos3d &);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif 
 //

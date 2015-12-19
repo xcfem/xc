@@ -77,6 +77,6 @@ class Block: public Body
   };
 
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

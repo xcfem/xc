@@ -44,7 +44,7 @@ class ModelGraph: public Graph
 
     ModelGraph(int numVertices,const AnalysisModel &theModel);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

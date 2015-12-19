@@ -51,7 +51,7 @@ class Inelastic2DYS03 : public InelasticYS2DGNL
   protected:
     virtual void getLocalStiff(Matrix &K) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

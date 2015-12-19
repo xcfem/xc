@@ -93,7 +93,7 @@ class TransientIntegrator : public IncrementalIntegrator
     virtual int initialize(void) {return 0;};
     virtual any_const_ptr GetProp(const std::string &cod) const;    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

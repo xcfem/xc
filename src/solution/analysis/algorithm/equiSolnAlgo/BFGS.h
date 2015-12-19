@@ -94,7 +94,7 @@ class BFGS: public BFBRoydenBase
   };
 inline SolutionAlgorithm *BFGS::getCopy(void) const
   { return new BFGS(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

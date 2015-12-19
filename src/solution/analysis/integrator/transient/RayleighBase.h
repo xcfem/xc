@@ -51,6 +51,6 @@ class RayleighBase : public DampingFactorsIntegrator
     RayleighBase(SoluMethod *,int classTag);
     RayleighBase(SoluMethod *,int classTag,const RayleighDampingFactors &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -51,5 +51,5 @@ class MEDMapIndices
   };
 
  std::ostream &operator<<(std::ostream &,const MEDMapIndices &);
-} // fin namespace XC
+} // end of XC namespace
 #endif

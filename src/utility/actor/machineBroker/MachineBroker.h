@@ -103,6 +103,6 @@ class MachineBroker
     virtual int freeProcess(Channel *)         =0;
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -70,5 +70,5 @@ namespace XC{
 double g_0( double, double ) ;
 double g_prime( double, double ); 
 double g_second( double, double ); 
-} //fin namespace XC
+} //end of XC namespace
 #endif

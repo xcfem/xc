@@ -63,6 +63,6 @@ class PropRecorder: public Recorder
     std::string getCallbackRestart(void);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

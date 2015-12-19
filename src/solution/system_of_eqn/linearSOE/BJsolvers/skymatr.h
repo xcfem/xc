@@ -150,7 +150,7 @@ class skymatrix
       double full_val (int , int ) const;
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

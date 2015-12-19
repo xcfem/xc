@@ -81,7 +81,7 @@ class SparseGenRowLinSolver : public LinearSOESolver
 
     virtual bool setLinearSOE(SparseGenRowLinSOE &theSOE);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

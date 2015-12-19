@@ -105,7 +105,7 @@ class ParallelMaterial: public ConnectedMaterial
     Response *setResponse(const std::vector<std::string> &argv, Information &matInformation);
     int getResponse(int responseID, Information &matInformation);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

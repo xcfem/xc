@@ -57,7 +57,7 @@ class QuadraticCyclic : public CyclicModel
     double getQuadFactor(double x1, double y1, double dx);
     int createTask(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -258,7 +258,7 @@ class ElasticBeam3d : public ProtoBeam3d
     Response *setResponse(const std::vector<std::string> &argv, Information &info);
     int getResponse(int responseID, Information &info);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

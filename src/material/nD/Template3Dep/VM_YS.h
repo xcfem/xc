@@ -91,7 +91,7 @@ class VMYieldSurface : public YieldSurface
     //================================================================================
     friend std::ostream& operator<< (std::ostream& os, const VMYieldSurface & YS);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

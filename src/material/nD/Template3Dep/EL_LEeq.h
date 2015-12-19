@@ -103,7 +103,7 @@ class EvolutionLaw_L_Eeq : public EvolutionLaw_S
     double geta() const;      // Linear coefficient used to evolve internal var
     void   seta( double ad);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

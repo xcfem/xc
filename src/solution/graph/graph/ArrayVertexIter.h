@@ -87,7 +87,7 @@ class ArrayVertexIter: public VertexIter
     virtual void reset(void);
     virtual Vertex *operator()(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -83,6 +83,6 @@ private:
 	double maxFreq;
 	double amplitude;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

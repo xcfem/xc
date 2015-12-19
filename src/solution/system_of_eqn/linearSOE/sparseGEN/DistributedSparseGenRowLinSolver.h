@@ -83,7 +83,7 @@ class DistributedSparseGenRowLinSolver : public LinearSOESolver
 
     virtual bool setLinearSOE(DistributedSparseGenRowLinSOE &theSOE);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

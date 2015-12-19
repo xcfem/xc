@@ -105,7 +105,7 @@ class UmfpackGenLinSolver : public LinearSOESolver
 
 inline LinearSOESolver *UmfpackGenLinSolver::getCopy(void) const
    { return new UmfpackGenLinSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

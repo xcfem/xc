@@ -118,7 +118,7 @@ class NodalLoad : public Load
     const Vector & getExternalForceSensitivity(int gradNumber);
     // AddingSensitivity:END ///////////////////////////////////////////
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

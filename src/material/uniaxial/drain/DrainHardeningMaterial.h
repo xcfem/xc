@@ -69,7 +69,7 @@ class DrainHardeningMaterial : public DrainMaterial
     DrainHardeningMaterial(int tag,double E, double sigY, double Hiso, double Hkin, double beto = 0.0);
     DrainHardeningMaterial(int tag= 0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

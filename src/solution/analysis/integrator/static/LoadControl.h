@@ -108,7 +108,7 @@ class LoadControl : public BaseControl
   };
 inline Integrator *LoadControl::getCopy(void) const
   { return new LoadControl(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

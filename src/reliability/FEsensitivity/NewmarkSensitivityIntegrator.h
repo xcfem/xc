@@ -94,7 +94,7 @@ class NewmarkSensitivityIntegrator : public SensitivityIntegrator , public Newma
     int saveSensitivity   (const Vector &v, int gradNum, int numGrads);
     int commitSensitivity (int gradNum, int numGrads);  
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -77,6 +77,6 @@ private:
 	double wn;
 	double xi;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

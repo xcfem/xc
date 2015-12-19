@@ -65,7 +65,7 @@ class DistributedBandLinSOE: public DistributedLinSOE
 
     DistributedBandLinSOE(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

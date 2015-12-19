@@ -53,6 +53,6 @@ class HandlerRecorder: public DomainRecorderBase
     void SetOutputHandler(DataOutputHandler *tH);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

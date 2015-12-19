@@ -102,7 +102,7 @@ class BeamFiberMaterial: public NDAdaptorMaterial
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 

@@ -77,6 +77,6 @@ class ElementResponse : public Response
 
     int getResponse(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

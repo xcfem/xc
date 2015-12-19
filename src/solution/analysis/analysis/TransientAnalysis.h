@@ -81,7 +81,7 @@ class TransientAnalysis: public Analysis
     //! @brief Ejecuta el análisis.
     virtual int analyze(int numSteps, double dT) = 0;    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -219,5 +219,5 @@ void XC::SetMeshComp::numera_lista(L &l)
       }
   }
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

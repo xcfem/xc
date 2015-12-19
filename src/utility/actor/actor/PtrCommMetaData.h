@@ -46,6 +46,6 @@ class PtrCommMetaData: public CommMetaData
       { return posFlag; }
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

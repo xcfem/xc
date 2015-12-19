@@ -56,6 +56,6 @@ class AlphaOSBase : public HHTBase
     int newStep(double deltaT);    
     int revertToLastStep(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

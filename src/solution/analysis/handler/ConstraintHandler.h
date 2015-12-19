@@ -113,7 +113,7 @@ class ConstraintHandler: public MovableObject, public EntCmd
     virtual int doneNumberingDOF(void);
     virtual void clearAll(void);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

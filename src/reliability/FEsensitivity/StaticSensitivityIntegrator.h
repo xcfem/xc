@@ -88,7 +88,7 @@ class StaticSensitivityIntegrator : public SensitivityIntegrator, public StaticI
     int saveSensitivity(const Vector &v, int gradNum, int numGrads);
     int commitSensitivity(int gradNum, int numGrads);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

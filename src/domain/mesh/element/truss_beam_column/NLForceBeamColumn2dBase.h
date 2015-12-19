@@ -100,7 +100,7 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
     const Vector &getResistingForce(void) const;
     any_const_ptr GetProp(const std::string &) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

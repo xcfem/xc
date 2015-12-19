@@ -114,7 +114,7 @@ class LagrangeDOF_Group: public DOF_Group
     virtual const Vector &getC_Force(const Vector &x, double fact = 1.0);
     virtual const Vector &getM_Force(const Vector &x, double fact = 1.0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -92,7 +92,7 @@ class DomainSolver: public virtual LinearSOESolver
     virtual int setComputedXext(const Vector &) =0;
     virtual int solveXint(void) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

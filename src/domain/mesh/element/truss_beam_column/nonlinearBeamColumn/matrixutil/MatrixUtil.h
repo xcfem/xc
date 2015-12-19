@@ -61,7 +61,7 @@ void   invertMatrix(int n, const Matrix &a, Matrix &b);
 void   getCBDIinfluenceMatrix(int nIntegrPts, const Matrix &xi_pt, double L, Matrix &ls);
 void   getCBDIinfluenceMatrix(int nIntegrPts, double *pts, double L, Matrix &ls);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

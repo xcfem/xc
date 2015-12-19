@@ -57,7 +57,7 @@ class CorotTrussBase: public ProtoTruss
     const double &getLo(void) const;
     const double &getLn(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

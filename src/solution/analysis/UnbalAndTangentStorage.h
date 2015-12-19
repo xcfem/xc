@@ -59,7 +59,7 @@ class UnbalAndTangentStorage
     const Vector &getUnbalance(const size_t &) const;
     Vector &getUnbalance(const size_t &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

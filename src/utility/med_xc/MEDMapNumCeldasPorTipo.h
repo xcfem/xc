@@ -57,5 +57,5 @@ class MEDMapNumCeldasPorTipo
     void clear(void);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 #endif

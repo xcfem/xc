@@ -128,6 +128,6 @@ class Joint3D: public ElemWithMaterial<7,Joint3DPhysicalProperties>
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

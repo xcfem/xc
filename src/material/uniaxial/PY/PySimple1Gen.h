@@ -76,4 +76,4 @@ public:
     PySimple1Gen(void);
     ~PySimple1Gen(void);
   };
-} // fin namespace XC
+} // end of XC namespace

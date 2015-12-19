@@ -158,7 +158,7 @@ class FDdecoupledElastic3D: public FiniteDeformationElastic3D
     const  stresstensor getPK1StressTensor(void) ;
     const  stresstensor getCauchyStressTensor(void) ;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -106,6 +106,6 @@ class FullGenEigenSolver: public EigenSolver
 
 inline EigenSolver *FullGenEigenSolver::getCopy(void) const
    { return new FullGenEigenSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

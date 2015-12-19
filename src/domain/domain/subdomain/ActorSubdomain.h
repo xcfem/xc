@@ -82,7 +82,7 @@ class ActorSubdomain: public Subdomain, public Actor
     virtual int  updateTimeDt(void);    
     virtual int  barrierCheck(int res);    
   };
-} // fin namespace XC
+} // end of XC namespace
 	
 		   
 #endif

@@ -127,6 +127,6 @@ T *getBrokedMovable(const int &dbTag,const int &classTag,const CommParameters &c
     return retval;
   }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

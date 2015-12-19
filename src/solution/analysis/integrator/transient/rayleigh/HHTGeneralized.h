@@ -117,6 +117,6 @@ class HHTGeneralized : public RayleighBase
   };
 inline Integrator *HHTGeneralized::getCopy(void) const
   { return new HHTGeneralized(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

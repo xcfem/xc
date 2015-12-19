@@ -157,6 +157,6 @@ class Preprocessor: public EntCmd, public MovableObject
 
     virtual ~Preprocessor(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

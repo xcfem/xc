@@ -91,6 +91,6 @@ class DqPtrsNode: public DqPtrs<Node>
     void numera(void);
   };
 
-} //fin namespace XC
+} //end of XC namespace
 #endif
 

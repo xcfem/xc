@@ -97,7 +97,7 @@ class MyRCM: public BaseNumberer
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

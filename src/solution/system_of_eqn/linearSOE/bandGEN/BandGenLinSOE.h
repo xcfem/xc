@@ -101,7 +101,7 @@ class BandGenLinSOE : public FactoredSOEBase
   };
 inline SystemOfEqn *BandGenLinSOE::getCopy(void) const
   { return new BandGenLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

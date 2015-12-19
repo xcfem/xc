@@ -76,7 +76,7 @@ class FedeasHardeningMaterial : public FedeasMaterial
     double getInitialTangent(void) const;
     UniaxialMaterial *getCopy(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

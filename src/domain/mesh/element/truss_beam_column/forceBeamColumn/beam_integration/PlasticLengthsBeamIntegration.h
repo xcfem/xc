@@ -52,6 +52,6 @@ class PlasticLengthsBeamIntegration: public BeamIntegration
 
     void Print(std::ostream &,int);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

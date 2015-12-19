@@ -65,6 +65,6 @@ class Loader: public EntCmd,public MovableObject
     virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

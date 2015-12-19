@@ -114,6 +114,6 @@ class DiscretizedRandomProcessSeries : public TimeSeries
 // AddingSensitivity:END ////////////////////////////////////////////
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

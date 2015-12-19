@@ -51,7 +51,7 @@ class MovableMatrices: public MovableObject
     virtual int recvSelf(const CommParameters &);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

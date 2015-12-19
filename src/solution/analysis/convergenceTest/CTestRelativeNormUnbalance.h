@@ -84,6 +84,6 @@ class CTestRelativeNormUnbalance: public ConvergenceTestNorm
     int test(void);
     int start(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

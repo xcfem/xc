@@ -73,7 +73,7 @@ class DqMeshRegion: protected std::deque<MeshRegion *>
     void Print(std::ostream &s) const;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

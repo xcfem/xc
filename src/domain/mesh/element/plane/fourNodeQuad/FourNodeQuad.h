@@ -146,7 +146,7 @@ class FourNodeQuad: public QuadBase4N<SolidMech2D>
     double detJ(const double &,const double &) const;
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

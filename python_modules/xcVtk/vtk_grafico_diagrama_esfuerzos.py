@@ -107,7 +107,9 @@ class RecordDefDiagramaEsf(vtk_lut_field.LUTField):
     assert(valOrg*valDest<=0.0)
     org_dest= dest-org
     longTramo= (org_dest).getModulo
-    s0= valOrg/(valOrg-valDest)
+    s0= 0.0
+    if(abs(valOrg-valDest)>0):
+      s0= valOrg/(valOrg-valDest)
     return(org+s0*org_dest)
 
 

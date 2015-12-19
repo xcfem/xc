@@ -122,6 +122,6 @@ class Body: public EntMdlr
 
 std::set<const Body *> GetCuerposTocan(const Face &s);
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

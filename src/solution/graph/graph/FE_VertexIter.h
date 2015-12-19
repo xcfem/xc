@@ -84,7 +84,7 @@ class FE_VertexIter: public VertexIter
     virtual Vertex *operator()(void);
     
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

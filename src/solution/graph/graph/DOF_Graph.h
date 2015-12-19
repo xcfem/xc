@@ -82,7 +82,7 @@ class DOF_Graph: public ModelGraph
     friend class AnalysisModel;
     DOF_Graph(const AnalysisModel &theModel);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

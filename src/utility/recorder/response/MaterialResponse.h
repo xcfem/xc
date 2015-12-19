@@ -77,6 +77,6 @@ private:
   
     int getResponse(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

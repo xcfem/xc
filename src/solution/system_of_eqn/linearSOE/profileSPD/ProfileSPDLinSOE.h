@@ -108,7 +108,7 @@ class ProfileSPDLinSOE : public FactoredSOEBase
   };
 inline SystemOfEqn *ProfileSPDLinSOE::getCopy(void) const
   { return new ProfileSPDLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

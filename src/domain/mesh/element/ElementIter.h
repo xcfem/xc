@@ -77,7 +77,7 @@ class ElementIter
     virtual ~ElementIter() {};
     virtual Element *operator()(void) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

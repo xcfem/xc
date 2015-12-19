@@ -93,6 +93,6 @@ namespace XC {
     any_const_ptr GetProp(const std::string &cod) const;
     void Print(std::ostream &s,const int &flag);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

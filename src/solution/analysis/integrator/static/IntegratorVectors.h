@@ -97,7 +97,7 @@ class IntegratorVectors: public MovableObject
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

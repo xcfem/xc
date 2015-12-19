@@ -106,7 +106,7 @@ class NewtonLineSearch: public EquiSolnAlgo
 inline SolutionAlgorithm *NewtonLineSearch::getCopy(void) const
   { return new NewtonLineSearch(*this); }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

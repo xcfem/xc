@@ -48,7 +48,7 @@ class FedeasBondMaterial: public FedeasMaterial
   public:
     double getInitialTangent(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

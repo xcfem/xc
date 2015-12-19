@@ -88,7 +88,7 @@ class fElmt05 : public fElement
 			       int nh1, int nh2, int nh3, double *h,  
 			       double *ctan, int ior, int iow);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

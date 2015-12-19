@@ -81,6 +81,6 @@ class NullEvolution: public YS_Evolution
   double getTrialPlasticStrains(int dof);
   double getCommitPlasticStrains(int dof);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

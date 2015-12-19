@@ -146,7 +146,7 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
   };
 inline Analysis *DomainDecompositionAnalysis::getCopy(void) const
   { return new DomainDecompositionAnalysis(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

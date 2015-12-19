@@ -74,6 +74,6 @@ public:
 	virtual double getCriteriaValue(int whichCriteria) = 0;
 	virtual int setScaleValue(double scaleValue) = 0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

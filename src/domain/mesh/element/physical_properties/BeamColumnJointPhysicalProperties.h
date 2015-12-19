@@ -43,5 +43,5 @@ class BeamColumnJointPhysicalProperties : public UniaxialMatPhysicalProperties
     BeamColumnJointPhysicalProperties(const UniaxialMaterial &theMat1, const UniaxialMaterial &theMat2, const UniaxialMaterial &theMat3, const UniaxialMaterial &theMat4, const UniaxialMaterial &theMat5, const UniaxialMaterial &theMat6, const UniaxialMaterial &theMat7, const UniaxialMaterial &theMat8, const UniaxialMaterial &theMat9, const UniaxialMaterial &theMat10, const UniaxialMaterial &theMat11, const UniaxialMaterial &theMat12, const UniaxialMaterial &theMat13);
   }; 
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

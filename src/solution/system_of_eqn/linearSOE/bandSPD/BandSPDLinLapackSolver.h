@@ -91,7 +91,7 @@ class BandSPDLinLapackSolver : public BandSPDLinSolver
 
 inline LinearSOESolver *BandSPDLinLapackSolver::getCopy(void) const
    { return new BandSPDLinLapackSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

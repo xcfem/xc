@@ -104,5 +104,5 @@ Body *MapCuerpos::Nuevo(CmdStatus &status)
     return retval;
   }
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

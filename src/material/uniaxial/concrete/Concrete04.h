@@ -130,6 +130,6 @@ class Concrete04: public ConcreteBase
     int getMaterialType(void);
     // LOWES: end
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

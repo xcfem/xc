@@ -51,5 +51,5 @@ class Joint3DPhysicalProperties : public UniaxialMatPhysicalProperties
     Vector getResponse7(void) const;
   }; 
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

@@ -115,7 +115,7 @@ class HystereticEnergy : public DamageModel
     double CommitInfo[8];
     double LastCommitInfo[8];
 };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

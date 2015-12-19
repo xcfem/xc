@@ -67,7 +67,7 @@ T *getIterPtr(TIter &titer)
       return dynamic_cast<T *>(theComponent);
   }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

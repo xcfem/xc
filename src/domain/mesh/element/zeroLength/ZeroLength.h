@@ -170,7 +170,7 @@ class ZeroLength: public Element0D
     void updateDir(const Vector& x, const Vector& y);
     any_const_ptr GetProp(const std::string &cod) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

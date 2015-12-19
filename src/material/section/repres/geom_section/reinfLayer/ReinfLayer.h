@@ -116,7 +116,7 @@ class ReinfLayer: public DiscretBase
 
 std::ostream &operator<<(std::ostream &s, const ReinfLayer &);
    
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

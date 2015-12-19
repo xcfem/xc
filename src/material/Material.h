@@ -123,7 +123,7 @@ class Material: public TaggedObject, public MovableObject
 int sendMaterialPtr(Material *,DbTagData &,CommParameters &cp,const BrokedPtrCommMetaData &);
 Material *receiveMaterialPtr(Material *,DbTagData &,const CommParameters &cp,const BrokedPtrCommMetaData &);
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

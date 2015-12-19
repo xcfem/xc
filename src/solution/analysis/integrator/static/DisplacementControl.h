@@ -125,7 +125,7 @@ class DisplacementControl: public DispBase
   };
 inline Integrator *DisplacementControl::getCopy(void) const
   { return new DisplacementControl(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

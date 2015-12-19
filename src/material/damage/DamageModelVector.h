@@ -82,6 +82,6 @@ class DamageModelVector: public std::vector<DamageModel *>, public EntCmd, publi
 
 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

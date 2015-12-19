@@ -71,6 +71,6 @@ class ObjectBroker
     public:
       ObjectBroker(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

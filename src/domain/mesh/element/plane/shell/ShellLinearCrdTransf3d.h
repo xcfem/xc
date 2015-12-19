@@ -66,6 +66,6 @@ class ShellLinearCrdTransf3d: public ShellCrdTransf3dBase
     int recvSelf(const CommParameters &);
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

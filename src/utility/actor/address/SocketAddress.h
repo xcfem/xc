@@ -82,7 +82,7 @@ class SocketAddress: public ChannelAddress
     friend class TCP_SocketNoDelay;
 };
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 

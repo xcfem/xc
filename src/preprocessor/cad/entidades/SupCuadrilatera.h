@@ -72,5 +72,5 @@ class SupCuadrilatera: public Face
     void Malla(dir_mallado dm);
   };
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

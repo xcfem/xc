@@ -85,7 +85,7 @@ class SubdomainNodIter: public NodeIter
     virtual void reset(void);
     virtual Node *operator()(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -76,7 +76,7 @@ protected:
     double minIsoFactor;
     YieldSurface_BC *tmpYSPtr;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -215,7 +215,7 @@ class FEM_ObjectBroker
 
     virtual int addUniaxialMaterial(int classTag, const char *lib, const char *funcName, UniaxialMaterial *(*)(void));
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

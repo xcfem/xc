@@ -41,5 +41,5 @@ class TritrizPtrElem;
 TritrizPtrElem coloca_quad4N_en_malla(const Element &e,const TritrizPtrNod &,dir_mallado dm);
 TritrizPtrElem coloca_quad9N_en_malla(const Element &e,const TritrizPtrNod &,dir_mallado dm);
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

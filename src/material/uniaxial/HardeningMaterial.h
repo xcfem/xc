@@ -134,7 +134,7 @@ class HardeningMaterial : public UniaxialMaterial
     int commitSensitivity        (double strainGradient, int gradNumber, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

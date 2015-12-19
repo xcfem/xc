@@ -119,7 +119,7 @@ class PlaneStressMaterial: public NDAdaptorMaterial
 
   }; //end of PlaneStressMaterial declarations
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif
 

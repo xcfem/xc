@@ -78,6 +78,6 @@ class DamageResponse : public Response
     DamageResponse(DamageModel *dmg, int id, const BJtensor &val);
     int getResponse(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

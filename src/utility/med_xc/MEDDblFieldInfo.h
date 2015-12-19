@@ -47,5 +47,5 @@ class MEDDblFieldInfo: public MEDTFieldInfo<double>
     void populateOnElements(const Set &,const FieldInfo &);
     void populateOnGaussPoints(const Set &,const FieldInfo &);
   };
-} // fin namespace XC
+} // end of XC namespace
 #endif

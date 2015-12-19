@@ -136,7 +136,7 @@ protected:
     void toElementSystem(Matrix &eleMatrix, double &x, double &y, bool dimensionalize, bool signMult=true);
     void toElementSystem(Matrix &eleMatrix, double &x, double &y, double &z, bool dimensionalize, bool signMult=true);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 /*
 enum Fstate { orig, trans };

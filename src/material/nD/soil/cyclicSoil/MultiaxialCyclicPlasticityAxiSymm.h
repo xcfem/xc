@@ -149,6 +149,6 @@ class MultiaxialCyclicPlasticityAxiSymm : public MultiaxialCyclicPlasticity {
   				     
 } ; //end of MultiaxialCyclicPlasticityAxiSymm declarations
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif

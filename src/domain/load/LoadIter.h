@@ -79,7 +79,7 @@ class LoadIter
     Load *operator()(void);
     
   };
-} // fin namespace XC
+} // end of XC namespace
 
 // Interface Functions:
 //

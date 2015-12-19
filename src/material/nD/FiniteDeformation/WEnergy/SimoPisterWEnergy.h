@@ -77,7 +77,7 @@ class SimoPisterWEnergy : public WEnergy
     const double dvolwOdJ( const double &J_in);
     const double d2volwOdJ2( const double &J_in);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -47,7 +47,7 @@ class SP_FE: public MPSPBaseFE
 
     SP_FE(int tag, int sz, SP_Constraint &theSP,const double &alpha= 1.0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -96,6 +96,6 @@ class YieldSurfaceSection2d: public SeccionBarraPrismatica
     virtual void Print(std::ostream &s, int flag =0);
     virtual SectionForceDeformation *getCopy(void) const=0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

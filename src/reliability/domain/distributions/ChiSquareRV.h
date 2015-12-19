@@ -101,7 +101,7 @@ private:
 	double nu;
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

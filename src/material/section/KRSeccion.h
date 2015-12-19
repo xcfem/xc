@@ -130,6 +130,6 @@ class KRSeccion: public EntCmd
       { return *K; }
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -81,5 +81,5 @@ class Eje: public EntGeomSection
 
 std::set<const Eje *> GetLineasTocan(const Spot &p);
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

@@ -52,5 +52,5 @@ class MEDMapConectividad
 
     const std::vector<int> &getConnectivity(const int &) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 #endif

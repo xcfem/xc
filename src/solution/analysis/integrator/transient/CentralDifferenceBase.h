@@ -53,7 +53,7 @@ class CentralDifferenceBase : public TransientIntegrator
 
     int newStep(double deltaT);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

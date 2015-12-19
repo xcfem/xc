@@ -48,6 +48,6 @@ class FiberSets: public std::map<std::string,DqFibras>, public EntCmd
     iterator sel_mat_tag(DqFibras &fibras, const std::string &nmb_set,const int &matTag);
     iterator resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

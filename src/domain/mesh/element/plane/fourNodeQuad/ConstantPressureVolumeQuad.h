@@ -127,4 +127,4 @@ class ConstantPressureVolumeQuad: public QuadBase4N<NDMaterialPhysicalProperties
 
     void Print( std::ostream &s, int flag ) ;
   }; 
-} // fin namespace XC
+} // end of XC namespace

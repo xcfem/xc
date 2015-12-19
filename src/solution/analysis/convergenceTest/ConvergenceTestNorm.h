@@ -51,6 +51,6 @@ class ConvergenceTestNorm: public ConvergenceTestTol
     virtual int start(void);
     virtual any_const_ptr GetProp(const std::string &cod) const;    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -188,6 +188,6 @@ LoadPattern *XC::MapLoadPatterns::crea_load_pattern(const std::string &cod_lp)
 
 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

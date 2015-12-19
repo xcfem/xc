@@ -49,6 +49,6 @@ class ElementPropRecorder: public PropRecorder
     virtual int record(int,double);
     virtual int restart(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

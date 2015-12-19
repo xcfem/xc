@@ -113,7 +113,7 @@ class ListRegiones: protected std::list<RegionSecc *>, public SeccionInerte
 
  std::ostream &operator<<(std::ostream &os,const ListRegiones &lr);
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

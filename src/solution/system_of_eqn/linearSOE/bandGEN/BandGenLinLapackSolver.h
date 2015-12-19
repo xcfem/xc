@@ -90,7 +90,7 @@ class BandGenLinLapackSolver : public BandGenLinSolver
 
 inline LinearSOESolver *BandGenLinLapackSolver::getCopy(void) const
    { return new BandGenLinLapackSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

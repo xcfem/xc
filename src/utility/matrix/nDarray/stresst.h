@@ -178,7 +178,7 @@ class stresstensor : public BJtensor
 
 std::ostream &operator<<(std::ostream &os, const stresstensor & rhs);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

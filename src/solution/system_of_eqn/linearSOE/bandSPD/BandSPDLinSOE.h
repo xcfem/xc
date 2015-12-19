@@ -110,7 +110,7 @@ class BandSPDLinSOE: public FactoredSOEBase
   };
 inline SystemOfEqn *BandSPDLinSOE::getCopy(void) const
   { return new BandSPDLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

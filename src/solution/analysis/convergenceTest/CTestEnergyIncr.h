@@ -80,6 +80,6 @@ class CTestEnergyIncr: public ConvergenceTestTol
     ConvergenceTest *getCopy(void) const;
     int test(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

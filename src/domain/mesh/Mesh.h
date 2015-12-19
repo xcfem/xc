@@ -207,7 +207,7 @@ class Mesh: public MeshComponentContainer
 
     static void setDeadSRF(const double &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

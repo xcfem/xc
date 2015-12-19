@@ -120,7 +120,7 @@ class EigenIntegrator : public Integrator
   };
 inline Integrator *EigenIntegrator::getCopy(void) const
   { return new EigenIntegrator(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

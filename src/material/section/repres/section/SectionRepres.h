@@ -105,7 +105,7 @@ class SectionRepres: public TaggedObject
     friend std::ostream &operator<<(std::ostream &s, SectionRepres &fiberSectionRepr);    
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

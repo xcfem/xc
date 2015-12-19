@@ -109,6 +109,6 @@ class FiberSectionGJ: public FiberSection3dBase
 FiberSectionGJ FiberSectionReprToFiberSectionGJ(const int &tag,const FiberSectionRepr &fiberSectionRepr,const double &GJ);
 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

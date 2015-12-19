@@ -169,7 +169,7 @@ class UpdatedLagrangianBeam2D : public Element1D
 				Information &eleInformation);
     virtual int getResponse(int responseID, Information &eleInformation);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif // !defined(UpdatedLagrangianElement2D)

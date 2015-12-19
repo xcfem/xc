@@ -63,7 +63,7 @@ class NDAdaptorMaterial: public NDMaterial
     void Print(std::ostream &s, int flag);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -51,7 +51,7 @@ class SingleDomMRMP_Iter: public SingleDomTIter<MRMP_ConstraintIter>
     SingleDomMRMP_Iter(TaggedObjectStorage *theStorage);
     virtual MRMP_Constraint *operator()(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

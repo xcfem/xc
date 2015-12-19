@@ -87,6 +87,6 @@ public:
 	double	getLowerBound();
 	double	getUpperBound();
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

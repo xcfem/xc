@@ -79,7 +79,7 @@ private:
 	Vector *generatedNumbers;
 	int seed;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

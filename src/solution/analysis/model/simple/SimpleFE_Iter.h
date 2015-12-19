@@ -84,7 +84,7 @@ class SimpleFE_Iter: public FE_EleIter
     virtual FE_Element *operator()(void);
     
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

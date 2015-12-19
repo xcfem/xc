@@ -123,6 +123,6 @@ class TzLiq1 : public TzSimple1
     
     void Print(std::ostream &s, int flag =0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif // TZLIQ1_H

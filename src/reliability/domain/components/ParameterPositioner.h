@@ -68,7 +68,7 @@ class ParameterPositioner : public Positioner
   public:
     ParameterPositioner(int tag, DomainComponent *theObject, const std::vector<std::string> &argv);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

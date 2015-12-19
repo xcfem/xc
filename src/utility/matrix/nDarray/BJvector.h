@@ -120,5 +120,5 @@ class BJvector: virtual public BJmatrix
      double cval(int subscript, ... ) const; // const
 // THE ROW COUNTER STARTS FROM 1 ( NOT FROM 0 )
   };
-} // fin namespace XC
+} // end of XC namespace
 #endif

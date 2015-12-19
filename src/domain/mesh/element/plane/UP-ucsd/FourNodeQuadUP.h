@@ -131,7 +131,7 @@ class FourNodeQuadUP : public QuadBase4N<SolidMech2D>
     friend class PyLiq1;
     friend class TzLiq1;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

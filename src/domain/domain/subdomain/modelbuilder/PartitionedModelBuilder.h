@@ -89,7 +89,7 @@ class PartitionedModelBuilder: public ModelBuilder, public MovableObject
   private:
     PartitionedDomain *thePartitionedDomain;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

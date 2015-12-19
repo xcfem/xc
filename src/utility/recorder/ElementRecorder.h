@@ -94,7 +94,7 @@ class ElementRecorder: public ElementRecorderBase
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

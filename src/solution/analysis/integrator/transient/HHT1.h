@@ -108,7 +108,7 @@ class HHT1: public DampingFactorsIntegrator
   };
 inline Integrator *HHT1::getCopy(void) const
   { return new HHT1(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

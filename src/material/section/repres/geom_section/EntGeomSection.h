@@ -74,5 +74,5 @@ class EntGeomSection: public EntConNmb
     const Eje *BuscaEje(const size_t &id_edge) const;
   };
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

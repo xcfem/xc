@@ -122,7 +122,7 @@ int sendGroundMotionPtr(GroundMotion *,DbTagData &,CommParameters &cp,const Brok
 GroundMotion *receiveGroundMotionPtr(GroundMotion *,DbTagData &,const CommParameters &cp,const BrokedPtrCommMetaData &);
 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

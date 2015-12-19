@@ -103,6 +103,6 @@ class NewmarkExplicit : public NewmarkBase
   };
 inline Integrator *NewmarkExplicit::getCopy(void) const
   { return new NewmarkExplicit(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

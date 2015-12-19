@@ -75,7 +75,7 @@ class SingleDomMP_Iter: public SingleDomTIter<MP_ConstraintIter>
     SingleDomMP_Iter(TaggedObjectStorage *theStorage);
     virtual MP_Constraint *operator()(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

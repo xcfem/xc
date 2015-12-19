@@ -53,5 +53,5 @@ class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
     size_t getDimension(void) const;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

@@ -43,5 +43,5 @@ class BodyForces3D: public BodyForces
   };
 
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

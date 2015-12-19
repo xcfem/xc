@@ -87,7 +87,7 @@ class LinearSOEData : public LinearSOE
     void sendB(CommParameters &) const;
     void sendBX(CommParameters &) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

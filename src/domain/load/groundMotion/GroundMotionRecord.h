@@ -107,6 +107,6 @@ class GroundMotionRecord : public GroundMotion
     virtual int activateParameter(int parameterID);
     // AddingSensitivity:END ///////////////////////////////////////////
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

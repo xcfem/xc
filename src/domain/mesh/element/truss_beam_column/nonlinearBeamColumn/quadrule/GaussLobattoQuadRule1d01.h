@@ -112,6 +112,6 @@ class GaussLobattoQuadRule1d01: public QuadRule1d
     const Vector & getIntegrPointWeights (int quadOrder); 
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

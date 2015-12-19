@@ -93,7 +93,7 @@ class FullGenLinLapackSolver : public FullGenLinSolver
 
 inline LinearSOESolver *FullGenLinLapackSolver::getCopy(void) const
    { return new FullGenLinLapackSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

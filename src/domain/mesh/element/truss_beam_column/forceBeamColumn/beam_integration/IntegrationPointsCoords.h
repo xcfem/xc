@@ -84,6 +84,6 @@ class IntegrationPointsCoords
 
     const XC::Vector &eval(const ExprAlgebra &expr) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

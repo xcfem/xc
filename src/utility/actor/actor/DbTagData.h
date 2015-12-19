@@ -65,6 +65,6 @@ class DbTagData
 
 std::ostream &operator<<(std::ostream &os,const DbTagData &);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

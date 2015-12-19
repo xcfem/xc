@@ -91,7 +91,7 @@ int FVectorData<SZ>::receiveData(const CommParameters &cp,DbTagData &dt,const Co
     return res;
   }
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

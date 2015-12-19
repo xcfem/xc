@@ -87,7 +87,7 @@ class fdYield
 
     friend std::ostream& operator<< (std::ostream& os, const fdYield & fdyd);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

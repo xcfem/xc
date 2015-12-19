@@ -198,6 +198,6 @@ class PressureDependMultiYieldBase: public PressureMultiYieldBase
      //void setCurrentStress(const Vector stress) { currentStress=T2Vector(stress); }
      int updateParameter(int responseID, Information &eleInformation);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

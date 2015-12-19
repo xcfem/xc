@@ -160,7 +160,7 @@ class Truss : public TrussBase
     int            commitSensitivity(int gradNumber, int numGrads);
     // AddingSensitivity:END ///////////////////////////////////////////
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

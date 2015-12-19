@@ -56,6 +56,6 @@ class MultiLinearKp : public PlasticHardeningMaterial
     Vector Kp;
     int numPoints;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

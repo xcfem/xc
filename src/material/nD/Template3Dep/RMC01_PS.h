@@ -91,7 +91,7 @@ class RMC01PotentialSurface : public PotentialSurface
     //================================================================================
     friend std::ostream& operator<< (std::ostream& os, const RMC01PotentialSurface &PS);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

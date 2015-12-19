@@ -50,7 +50,7 @@ class MP_FE: public MPBase_FE
     int determineRetainedDOFsIDs(const int &);
     DOF_Group *determineRetainedNodeDofGrpPtr(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

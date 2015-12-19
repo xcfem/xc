@@ -70,4 +70,11 @@
 #define ND_TAG_MultiaxialCyclicPlasticityAxiSymm        2037
 #define ND_TAG_MultiaxialCyclicPlasticityPlaneStrain    2038
 
+// Drucker-Prager - P.Arduino
+#define ND_TAG_DruckerPrager			14003
+#define ND_TAG_DruckerPragerThreeDimensional	14004
+#define ND_TAG_DruckerPragerTensionCutoff	14005
+#define ND_TAG_DruckerPrager3D	                14006
+#define ND_TAG_DruckerPragerPlaneStrain         14007
+
 #endif

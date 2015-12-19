@@ -89,7 +89,7 @@ class CyclicModel : public TaggedObject, public MovableObject
     double rationalize(double x1, double y1, double x2, double y2);
     bool contains(double x1, double x2, double x);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -37,5 +37,5 @@ std::vector<double> vector_double_from_py_object(const boost::python::object &);
 std::vector<int> vector_int_from_py_object(const boost::python::object &);
 m_double m_double_from_py_object(const boost::python::object &);
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

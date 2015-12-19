@@ -86,7 +86,7 @@ class SubstructuringAnalysis: public DomainDecompositionAnalysis
   };
 inline Analysis *SubstructuringAnalysis::getCopy(void) const
   { return new SubstructuringAnalysis(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

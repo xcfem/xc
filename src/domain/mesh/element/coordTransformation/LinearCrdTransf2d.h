@@ -98,7 +98,7 @@ class LinearCrdTransf2d: public SmallDispCrdTransf2d
     
     void Print(std::ostream &s, int flag = 0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

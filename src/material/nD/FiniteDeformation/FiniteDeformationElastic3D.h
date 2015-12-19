@@ -108,7 +108,7 @@ class FiniteDeformationElastic3D : public NDMaterial
     virtual const  stresstensor getPK1StressTensor(void);
     virtual const  stresstensor getCauchyStressTensor(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

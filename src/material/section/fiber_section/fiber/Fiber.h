@@ -147,7 +147,7 @@ inline double Fiber::getMz(const double &y0) const
 inline double Fiber::getMy(const double &z0) const
   { return getFuerza()*(getLocZ() - z0); }
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

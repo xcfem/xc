@@ -91,6 +91,6 @@ class DqPtrsElem: public DqPtrs<Element>
     void numera(void);
   };
 
-} //fin namespace XC
+} //end of XC namespace
 #endif
 

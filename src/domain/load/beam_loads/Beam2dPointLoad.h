@@ -96,7 +96,7 @@ class Beam2dPointLoad: public BeamPointLoad
     void Print(std::ostream &s, int flag =0);       
     any_const_ptr GetProp(const std::string &cod) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

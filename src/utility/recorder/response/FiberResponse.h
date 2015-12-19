@@ -76,6 +76,6 @@ public:
 	FiberResponse(Fiber *fib, int id, const BJtensor &val);
     int getResponse(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

@@ -104,6 +104,6 @@ class MySqlDatastore: public DBDatastore
     int setDbRun(int run);
     int getDbRun(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

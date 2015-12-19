@@ -44,7 +44,7 @@ class ElasticIsotropic2D : public ElasticIsotropicMaterial
 
     int getOrder (void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

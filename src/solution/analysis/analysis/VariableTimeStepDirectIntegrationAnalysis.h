@@ -88,7 +88,7 @@ class VariableTimeStepDirectIntegrationAnalysis: public DirectIntegrationAnalysi
   };
 inline Analysis *VariableTimeStepDirectIntegrationAnalysis::getCopy(void) const
   { return new VariableTimeStepDirectIntegrationAnalysis(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

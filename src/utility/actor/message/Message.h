@@ -80,6 +80,6 @@ class Message
     friend class UDP_Socket;
     friend class MPI_Channel;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

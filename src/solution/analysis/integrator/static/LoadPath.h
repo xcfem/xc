@@ -99,7 +99,7 @@ class LoadPath: public StaticIntegrator
   };
 inline Integrator *LoadPath::getCopy(void) const
   { return new LoadPath(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

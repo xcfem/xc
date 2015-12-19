@@ -120,7 +120,7 @@ class ShadowPetscSOE: public LinearSOE
   };
 inline SystemOfEqn *ShadowPetscSOE::getCopy(void) const
   { return new ShadowPetscSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

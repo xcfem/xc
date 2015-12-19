@@ -43,6 +43,6 @@ ElementEdges getElementEdgesEntreNodos(Node *, Node *);
 ElementEdges getElementEdgesEntreNodos(const NodePtrSet &);
 bool in(const NodePtrSet &,const std::vector<const Node *> &);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

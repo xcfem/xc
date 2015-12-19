@@ -121,7 +121,7 @@ class NEESData: public FE_Datastore
     // the commitState method
     int commitState(int commitTag);        
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 

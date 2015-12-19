@@ -79,7 +79,7 @@ class ResponseQuantities: public MovableObject
 
     void Print(std::ostream &s);        
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

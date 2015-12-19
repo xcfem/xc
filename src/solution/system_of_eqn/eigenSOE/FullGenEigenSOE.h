@@ -96,6 +96,6 @@ class FullGenEigenSOE : public EigenSOE
   };
 inline SystemOfEqn *FullGenEigenSOE::getCopy(void) const
   { return new FullGenEigenSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

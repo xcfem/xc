@@ -143,6 +143,6 @@ class FluidSolidPorousMaterial: public NDMaterial
      friend class PyLiq1;
      friend class TzLiq1;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

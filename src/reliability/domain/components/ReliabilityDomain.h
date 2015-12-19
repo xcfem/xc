@@ -132,7 +132,7 @@ private:
 	int tagOfActiveLimitStateFunction;
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

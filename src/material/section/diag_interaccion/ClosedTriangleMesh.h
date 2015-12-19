@@ -101,6 +101,6 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
     void Print(std::ostream &os) const;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

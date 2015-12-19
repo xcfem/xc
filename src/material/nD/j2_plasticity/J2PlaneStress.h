@@ -170,6 +170,6 @@ class J2PlaneStress: public J2Plasticity
 } ; //end of J2PlaneStress declarations
 
 
-} //fin namespace XC
+} //end of XC namespace
 #endif
 

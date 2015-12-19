@@ -45,7 +45,7 @@ class FedeasConcrMaterial: public FedeasMaterial
 
     double getInitialTangent(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

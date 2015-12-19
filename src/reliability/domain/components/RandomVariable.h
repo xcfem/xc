@@ -93,7 +93,7 @@ private:
 
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

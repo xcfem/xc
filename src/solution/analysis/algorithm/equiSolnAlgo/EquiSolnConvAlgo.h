@@ -89,7 +89,7 @@ class EquiSolnConvAlgo: public EquiSolnAlgo
     ConvergenceTest *getConvergenceTestPtr(void);
     const ConvergenceTest *getConvergenceTestPtr(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

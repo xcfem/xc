@@ -94,6 +94,6 @@ class MultiSupportPattern: public EQBasePattern
     int addMotion(GroundMotion &theMotion, int tag);    
     GroundMotion *getMotion(int tag);        
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

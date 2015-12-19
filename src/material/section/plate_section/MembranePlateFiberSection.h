@@ -127,6 +127,6 @@ class MembranePlateFiberSection: public SectionForceDeformation
     int recvSelf(const CommParameters &);
   }; //end of MembranePlateFiberSection declarations
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

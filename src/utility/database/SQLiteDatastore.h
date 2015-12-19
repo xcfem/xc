@@ -65,6 +65,6 @@ class SQLiteDatastore: public DBDatastore
     int insertData(const std::string &,const std::vector<std::string> &, int , const Vector &);
     int getData(const std::string &,const std::vector<std::string> &, int , Vector &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

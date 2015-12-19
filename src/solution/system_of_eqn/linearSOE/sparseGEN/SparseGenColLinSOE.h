@@ -102,7 +102,7 @@ class SparseGenColLinSOE : public SparseGenSOEBase
   };
 inline SystemOfEqn *SparseGenColLinSOE::getCopy(void) const
   { return new SparseGenColLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

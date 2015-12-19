@@ -31,4 +31,4 @@ void  shp3d( const double ss[3],
 	     const double xl[3][8]  ) ;
 
 
-} // fin namespace XC
+} // end of XC namespace

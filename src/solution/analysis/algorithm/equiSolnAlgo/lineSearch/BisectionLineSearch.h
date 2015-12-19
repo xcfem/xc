@@ -95,7 +95,7 @@ class BisectionLineSearch: public LineSearch
   };
 inline LineSearch *BisectionLineSearch::getCopy(void) const
   { return new BisectionLineSearch(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

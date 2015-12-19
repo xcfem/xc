@@ -56,6 +56,6 @@ class LoadLoaderMember: public EntCmd, public MovableObject
 
 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

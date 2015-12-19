@@ -70,4 +70,4 @@ class TzSimple1Gen: public Simple1GenBase
   TzSimple1Gen();
   ~TzSimple1Gen();
 };
-} // fin namespace XC
+} // end of XC namespace

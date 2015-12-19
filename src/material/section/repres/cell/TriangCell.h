@@ -48,7 +48,7 @@ class TriangCell: public Cell
     void Print(std::ostream &s, int flag =0) const;   
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

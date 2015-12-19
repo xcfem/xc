@@ -217,6 +217,6 @@ class AnalysisModel: public MovableObject, public EntCmd
     ConstraintHandler *getHandlerPtr(void);
     const ConstraintHandler *getHandlerPtr(void) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

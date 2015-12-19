@@ -139,7 +139,7 @@ class Concrete01: public ConcreteBase
     int    commitSensitivity(const double &strainGradient, int gradNumber, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

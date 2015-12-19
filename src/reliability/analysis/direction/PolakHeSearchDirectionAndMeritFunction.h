@@ -97,6 +97,6 @@ private:
 	double gamma;
 	double delta;
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

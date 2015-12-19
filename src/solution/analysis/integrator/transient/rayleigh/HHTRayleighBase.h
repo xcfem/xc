@@ -61,6 +61,6 @@ class HHTRayleighBase: public RayleighBase
     HHTRayleighBase(SoluMethod *,int classTag,double alpha, double gamma,const RayleighDampingFactors &rF);
     
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

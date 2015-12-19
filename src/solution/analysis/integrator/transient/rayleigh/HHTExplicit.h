@@ -110,6 +110,6 @@ class HHTExplicit : public HHTRayleighBase
   };
 inline Integrator *HHTExplicit::getCopy(void) const
   { return new HHTExplicit(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

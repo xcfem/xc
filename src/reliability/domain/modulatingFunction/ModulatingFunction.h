@@ -77,6 +77,6 @@ class ModulatingFunction : public ReliabilityDomainComponent
     virtual double getMaxAmplitude(void)= 0;
     virtual Filter *getFilter(void)= 0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

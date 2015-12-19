@@ -87,6 +87,6 @@ public:
 		     const std::string &fName);
 	int analyze(void);
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

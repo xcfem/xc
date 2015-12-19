@@ -251,7 +251,7 @@ class Element: public MeshComponent
     void add_to_sets(std::set<SetBase *> &);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

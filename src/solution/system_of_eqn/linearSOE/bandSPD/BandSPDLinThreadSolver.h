@@ -94,7 +94,7 @@ class BandSPDLinThreadSolver : public BandSPDLinSolver
 
 inline LinearSOESolver *BandSPDLinThreadSolver::getCopy(void) const
    { return new BandSPDLinThreadSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -95,7 +95,7 @@ class ProfileSPDLinDirectBlockSolver: public ProfileSPDLinDirectBase
 
 inline LinearSOESolver *ProfileSPDLinDirectBlockSolver::getCopy(void) const
    { return new ProfileSPDLinDirectBlockSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

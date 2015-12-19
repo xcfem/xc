@@ -114,6 +114,6 @@ class DamageModel :  public TaggedObject, public MovableObject
     virtual void Print(std::ostream &s, int flag =0) =0;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

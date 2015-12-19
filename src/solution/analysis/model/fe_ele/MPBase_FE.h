@@ -49,7 +49,7 @@ class MPBase_FE: public MPSPBaseFE
     int determineConstrainedDOFsIDs(const MP_ConstraintBase &,const int &);
     DOF_Group *determineConstrainedNodeDofGrpPtr(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

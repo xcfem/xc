@@ -102,6 +102,6 @@ class SingleDomAllSP_Iter: public SP_ConstraintIter
     virtual void reset(void);
     virtual SP_Constraint *operator()(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

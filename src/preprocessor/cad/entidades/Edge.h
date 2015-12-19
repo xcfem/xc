@@ -130,5 +130,5 @@ class Edge: public EntMdlr
 std::set<const Edge *> GetLineasTocan(const Pnt &p);
 size_t calcula_ndiv_lados(const std::set<const XC::Edge *> &);
 
-} //fin namespace XC
+} //end of XC namespace
 #endif

@@ -115,6 +115,6 @@ void procesa_elem_edge_load(LoadPattern *lp,int &tag_el,const std::string &cmd,C
 
 bool procesa_comando_element_edge_load(LoadPattern *lp,int &tag_el,const std::string &cmd,CmdStatus &status);
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

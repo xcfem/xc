@@ -100,7 +100,7 @@ class FullGenLinSOE : public FactoredSOEBase
   };
 inline SystemOfEqn *FullGenLinSOE::getCopy(void) const
   { return new FullGenLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

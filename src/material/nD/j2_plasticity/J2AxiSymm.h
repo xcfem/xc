@@ -170,7 +170,7 @@ class J2AxiSymm: public J2Plasticity
  				     
 } ; //end of J2AxiSymm declarations
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif
 

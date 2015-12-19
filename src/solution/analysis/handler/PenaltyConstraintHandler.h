@@ -91,7 +91,7 @@ class PenaltyConstraintHandler : public FactorsConstraintHandler
 
     int handle(const ID *nodesNumberedLast =0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

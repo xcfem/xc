@@ -127,6 +127,6 @@ class FiberSection2d: public FiberSectionBase
   };
 
 FiberSection2d FiberSectionReprToFiberSection2d(const int &tag,const FiberSectionRepr &fiberSectionRepr);
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

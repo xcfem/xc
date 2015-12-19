@@ -63,7 +63,7 @@ class Lagrange_FE
     int getLagrangeDOFGroupTag(void) const;
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

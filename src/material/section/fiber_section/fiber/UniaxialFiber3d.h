@@ -116,7 +116,7 @@ class UniaxialFiber3d: public UniaxialFiber
     inline virtual double getLocZ(void) const
       { return as[1]; }
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

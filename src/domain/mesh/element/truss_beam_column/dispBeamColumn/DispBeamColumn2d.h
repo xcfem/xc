@@ -146,7 +146,7 @@ class DispBeamColumn2d : public BeamColumnWithSectionFDTrf2d
     int            commitSensitivity(int gradNumber, int numGrads);
     // AddingSensitivity:END ///////////////////////////////////////////
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

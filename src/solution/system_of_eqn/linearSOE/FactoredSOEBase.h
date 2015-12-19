@@ -45,7 +45,7 @@ class FactoredSOEBase: public LinearSOEData
 
     FactoredSOEBase(SoluMethod *,int classTag,int N= 0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

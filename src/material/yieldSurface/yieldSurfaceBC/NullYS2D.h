@@ -54,6 +54,6 @@ public:
 private:
  static NullEvolution evolModel;    
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

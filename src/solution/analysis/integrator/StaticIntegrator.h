@@ -95,7 +95,7 @@ class StaticIntegrator: public IncrementalIntegrator
     
     virtual int newStep(void) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

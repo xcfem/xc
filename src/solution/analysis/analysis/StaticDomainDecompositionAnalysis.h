@@ -111,7 +111,7 @@ class StaticDomainDecompositionAnalysis: public DomainDecompositionAnalysis
   };
 inline Analysis *StaticDomainDecompositionAnalysis::getCopy(void) const
   { return new StaticDomainDecompositionAnalysis(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

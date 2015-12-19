@@ -86,7 +86,7 @@ class BandGenLinSolver : public LinearSOESolver
     virtual int solve(void) = 0;
     virtual bool setLinearSOE(BandGenLinSOE &theSOE);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

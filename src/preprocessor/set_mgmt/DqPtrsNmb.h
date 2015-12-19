@@ -144,7 +144,7 @@ any_const_ptr DqPtrsNmb<T>::GetProp(const std::string &cod) const
       return DqPtrs<T>::GetProp(cod);    
   }
 
-} //fin namespace XC
+} //end of XC namespace
 
 #endif
 

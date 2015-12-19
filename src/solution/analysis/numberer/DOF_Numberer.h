@@ -123,7 +123,7 @@ class DOF_Numberer: public MovableObject, public EntCmd
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

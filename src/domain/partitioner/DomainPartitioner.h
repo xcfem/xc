@@ -128,7 +128,7 @@ class DomainPartitioner
 			       double factorGreater = 1.0,
 			       bool adjacentVertexNotInOther = true);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

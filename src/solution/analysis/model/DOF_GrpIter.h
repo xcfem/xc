@@ -79,7 +79,7 @@ class DOF_GrpIter
     virtual void reset(void);    
     virtual DOF_Group *operator()(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

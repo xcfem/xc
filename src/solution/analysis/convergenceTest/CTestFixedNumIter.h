@@ -80,6 +80,6 @@ class CTestFixedNumIter: public ConvergenceTest
     
     int test(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

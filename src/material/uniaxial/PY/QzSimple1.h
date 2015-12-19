@@ -102,6 +102,6 @@ class QzSimple1 : public PQyzBase
     
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

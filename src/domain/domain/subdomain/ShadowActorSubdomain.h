@@ -117,4 +117,4 @@ static const int ShadowActorSubdomain_setRayleighDampingFactors = 94;
 static const int ShadowActorSubdomain_wipeAnalysis = 95;
 static const int ShadowActorSubdomain_clearAll = 96;
 
-} // fin namespace XC
+} // end of XC namespace

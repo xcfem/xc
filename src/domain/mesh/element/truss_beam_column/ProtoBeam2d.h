@@ -55,6 +55,6 @@ class ProtoBeam2d : public Element1D
       { ctes_scc= ctes; }
     virtual any_const_ptr GetProp(const std::string &cod) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

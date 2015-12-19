@@ -113,6 +113,6 @@ void fix(const TritrizPtrNod::var_ref_caja &ref_caja,const SP_Constraint &spc);
 std::vector<int> getIdNodosQuad4N(const TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k);
 std::vector<int> getIdNodosQuad9N(const TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k);
 
-} //fin namespace XC.
+} //end of XC namespace.
 
 #endif

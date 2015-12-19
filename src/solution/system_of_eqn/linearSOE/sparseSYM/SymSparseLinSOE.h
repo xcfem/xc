@@ -93,7 +93,7 @@ class SymSparseLinSOE : public SparseSOEBase
   };
 inline SystemOfEqn *SymSparseLinSOE::getCopy(void) const
   { return new SymSparseLinSOE(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

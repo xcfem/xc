@@ -76,6 +76,6 @@ class MeritFunctionCheck
     virtual double getMeritFunctionValue(Vector u, double g, Vector grad_G) = 0;
     virtual int updateMeritParameters(Vector u, double g, Vector grad_G) = 0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

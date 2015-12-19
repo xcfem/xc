@@ -180,7 +180,7 @@ int receiveMap(std::map<std::string,T *> &v,const CommParameters &cp,DbTagData &
     return res;
   } 
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

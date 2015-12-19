@@ -80,6 +80,6 @@ class CTestNormUnbalance: public ConvergenceTestTol
 
     int test(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

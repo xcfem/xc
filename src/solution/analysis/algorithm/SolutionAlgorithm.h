@@ -114,7 +114,7 @@ class SolutionAlgorithm: public MovableObject, public ObjWithRecorders
     virtual const Subdomain *getSubdomainPtr(void) const;
     virtual Subdomain *getSubdomainPtr(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -160,7 +160,7 @@ class FE_Element: public TaggedObject
     // AddingSensitivity:END //////////////////////////////////////
     
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

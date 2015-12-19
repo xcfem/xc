@@ -105,7 +105,7 @@ class TCP_SocketNoDelay : public Channel
     unsigned int getPortNumber(void) const;
     char *addToProgram(void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif 

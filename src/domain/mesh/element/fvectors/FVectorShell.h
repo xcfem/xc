@@ -56,7 +56,7 @@ class FVectorShell: public FVectorData<24>
     void Print(std::ostream &os) const;
   };
 
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

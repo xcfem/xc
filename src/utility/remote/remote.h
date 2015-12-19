@@ -25,4 +25,4 @@
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 namespace XC {
-} // fin namespace XC
+} // end of XC namespace

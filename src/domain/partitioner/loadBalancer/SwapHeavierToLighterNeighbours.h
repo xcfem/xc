@@ -81,7 +81,7 @@ class SwapHeavierToLighterNeighbours: public LoadBalancer
     SwapHeavierToLighterNeighbours(double factorGreater, int numReleases);
     virtual int balance(Graph &theWeightedGraph);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -105,7 +105,7 @@ class DamageRecorder: public DomainRecorderBase
 
     int restart(void);    
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

@@ -72,7 +72,7 @@ class UniaxialFiber: public Fiber
     inline double getArea(void) const
       { return area; }
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

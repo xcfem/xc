@@ -122,6 +122,6 @@ class ItpackLinSolver : public LinearSOESolver
 
 inline LinearSOESolver *ItpackLinSolver::getCopy(void) const
    { return new ItpackLinSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

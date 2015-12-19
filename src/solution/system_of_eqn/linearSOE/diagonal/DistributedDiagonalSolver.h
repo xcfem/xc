@@ -90,7 +90,7 @@ class DistributedDiagonalSolver : public LinearSOESolver
 
 inline LinearSOESolver *DistributedDiagonalSolver::getCopy(void) const
    { return new DistributedDiagonalSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

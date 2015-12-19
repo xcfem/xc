@@ -83,6 +83,6 @@ class MatParameter : public Parameter
 
     virtual void setDomain(Domain *theDomain);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

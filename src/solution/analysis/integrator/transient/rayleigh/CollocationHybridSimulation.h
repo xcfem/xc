@@ -109,6 +109,6 @@ class CollocationHybridSimulation : public HHTBase
   };
 inline Integrator *CollocationHybridSimulation::getCopy(void) const
   { return new CollocationHybridSimulation(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

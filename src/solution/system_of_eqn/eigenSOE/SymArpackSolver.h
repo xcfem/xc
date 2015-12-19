@@ -87,7 +87,7 @@ class SymArpackSolver : public EigenSolver
 
 inline EigenSolver *SymArpackSolver::getCopy(void) const
    { return new SymArpackSolver(*this); }
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

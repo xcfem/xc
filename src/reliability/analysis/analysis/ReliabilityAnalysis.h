@@ -68,7 +68,7 @@ public:
 	ReliabilityAnalysis();
 	virtual int analyze(void) =0;    
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

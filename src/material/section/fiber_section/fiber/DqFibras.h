@@ -255,6 +255,6 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
 
     void Print(std::ostream &s,const int &flag);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

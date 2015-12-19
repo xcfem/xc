@@ -75,7 +75,7 @@ class PartitionedDomainSubIter: public SingleDomTIter<SubdomainIter>
     PartitionedDomainSubIter(TaggedObjectStorage *theStorage);
     virtual Subdomain *operator()(void);  
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

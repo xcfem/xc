@@ -85,6 +85,6 @@ class GradientProjectionSearchDirection : public SearchDirection
     int computeSearchDirection(int stepNumber,const Vector &u,const double &g, const Vector &gradG);
     Vector getSearchDirection();
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

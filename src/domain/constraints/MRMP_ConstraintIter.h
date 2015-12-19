@@ -77,7 +77,7 @@ class MRMP_ConstraintIter
     virtual ~MRMP_ConstraintIter() {};  
     virtual MRMP_Constraint *operator()(void) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

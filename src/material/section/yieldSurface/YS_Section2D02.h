@@ -54,6 +54,6 @@ class YS_Section2D02: public YieldSurfaceSection2d
     void Print (std::ostream &s, int flag =0);
     int commitState (void);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

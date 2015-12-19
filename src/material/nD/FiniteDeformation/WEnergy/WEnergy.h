@@ -76,7 +76,7 @@ class WEnergy
     virtual const double dvolwOdJ(const double &) ;
     virtual const double d2volwOdJ2(const double &) ;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

@@ -74,6 +74,6 @@ class MillMachineBroker : public AlphaBaseMachineBroker
 
     virtual int startActor(const std::string &actorProgram, Channel &theChannel,int compDemand =0);
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif

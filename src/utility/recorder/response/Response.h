@@ -86,7 +86,7 @@ class Response
     virtual void Print(std::ofstream &s, int flag = 0);
 
   };
-} // fin namespace XC
+} // end of XC namespace
 
 
 #endif

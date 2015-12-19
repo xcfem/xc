@@ -46,5 +46,5 @@ class UniaxialMatPhysicalProperties : public PhysicalProperties<UniaxialMaterial
     void Print(std::ostream &os);
   }; 
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

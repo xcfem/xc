@@ -233,5 +233,5 @@ any_const_ptr XC::QuadBase9N<PhysProp>::GetProp(const std::string &cod) const
       return ElemPlano<9,PhysProp>::GetProp(cod);
   }
 
-} // fin namespace XC
+} // end of XC namespace
 #endif

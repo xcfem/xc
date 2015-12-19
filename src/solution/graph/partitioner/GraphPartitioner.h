@@ -84,7 +84,7 @@ class GraphPartitioner
   public:
     virtual int partition(Graph &theGraph, int numPart) =0;
   };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

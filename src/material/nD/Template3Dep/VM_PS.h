@@ -84,7 +84,7 @@ class VMPotentialSurface : public PotentialSurface
     friend std::ostream& operator<< (std::ostream& os, const VMPotentialSurface & YS);
 
 };
-} // fin namespace XC
+} // end of XC namespace
 
 #endif
 

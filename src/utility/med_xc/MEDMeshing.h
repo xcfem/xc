@@ -99,5 +99,5 @@ class MEDMeshing: public MEDObject
     void to_med(void);
     any_const_ptr GetProp(const std::string &) const;
   };
-} // fin namespace XC
+} // end of XC namespace
 #endif
