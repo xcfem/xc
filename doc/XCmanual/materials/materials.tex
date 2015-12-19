@@ -697,9 +697,9 @@ defSeccionHAPilar.RecordRCColumnSection()
 \end{paramClassTable}
 
 \begin{methodsTable}
-\multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(tipoDiag)}} \\
+\multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(matDiagType)}} \\
  & returns a reinforced concrete section with reinforcement symmetric in both directions \\
-& {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
+& {\tt matDiagType} ="k" for characteristic diagram, ="d" for design diagram \\ 
 \end{methodsTable}
 
 \subsubsection{RecordShearReinforcement}
@@ -720,11 +720,11 @@ defSeccionHASimple.RecordShearReinforcement()
 {\tt getAs()} & returns the area per unit length of the family of shear reinforcements\\
 \end{methodsTable}
 
-\subsubsection{RecordSeccionHASimple}
+\subsubsection{RecordRCSimpleSection}
 \noindent This class is used to define the variables that make up a rectangular reinforced concrete section with single reinforcement layers in top and bottom faces
 \begin{verbatim}
 from materials.fiber_section import defSeccionHASimple
-defSeccionHASimple.RecordSeccionHASimple()
+defSeccionHASimple.RecordRCSimpleSection()
 \end{verbatim}
 \begin{paramClassTable}
 {\tt sectionName} & name identifying the section \\
@@ -752,17 +752,17 @@ defSeccionHASimple.RecordSeccionHASimple()
 {\tt shReinfY} & record of type {\tt defSeccionHASimple.RecordShearReinforcement()} defining the shear reinforcement in Y direction \\
 \end{paramClassTable}
 \begin{methodsTable}
-\multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(tipoDiag)}} \\
+\multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(matDiagType)}} \\
  & returns a reinforced concrete section with reinforcement symmetric in both directions \\
-& {\tt tipoDiag} ="k" for characteristic diagram, ="d" for design diagram \\ 
+& {\tt matDiagType} ="k" for characteristic diagram, ="d" for design diagram \\ 
 \end{methodsTable}
 
 
-\subsubsection{RecordSeccionHALosa}
+\subsubsection{RecordRCSlabSection}
 \noindent This class is used to define the variables that make up a reinforced concrete slab section with single reinforcement layers in top and bottom faces
 \begin{verbatim}
 from materials.fiber_section import defSeccionHASimple
-defSeccionHASimple.RecordSeccionHALosa(nmb,desc,depth,concrete,steel,basicCover)
+defSeccionHASimple.RecordRCSlabSection(nmb,desc,depth,concrete,steel,basicCover)
 \end{verbatim}
 \begin{paramClassTable}
 {\tt nmb} & basic name identifying the section \\

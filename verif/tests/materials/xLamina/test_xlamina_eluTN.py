@@ -59,7 +59,7 @@ sepT= 1.0/numReinfBarsT
 numReinfBarsL= 7
 sepL= 1.0/numReinfBarsL
 
-deckSections= defSeccionHASimple.RecordSeccionHALosa("deck","RC deck.",0.3,concrete, reinfSteel,basicCover)
+deckSections= defSeccionHASimple.RecordRCSlabSection("deck","RC deck.",0.3,concrete, reinfSteel,basicCover)
 deckSections.setMainReinf2pos(12e-3,areaFi12,sepT)
 deckSections.setMainReinf2neg(12e-3,areaFi12,sepT)
 deckSections.setMainReinf1neg(20e-3,areaFi20,sepL)

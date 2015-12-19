@@ -22,7 +22,7 @@ from model import fix_node_6dof
 areaFi22= steelSIA262.section_barres_courantes[22e-3]
 areaFi26= steelSIA262.section_barres_courantes[26e-3]
 
-datosScc1LosC= defSeccionHASimple.RecordSeccionHASimple()
+datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Losa. Tramo Central. Sección normal al eje X."
 concr=EHE_concrete.HA30
@@ -31,8 +31,8 @@ datosScc1LosC.concrType= concr
 datosScc1LosC.depth= 0.35
 datosScc1LosC.width= 1.0
 datosScc1LosC.reinfSteelType= EHE_reinforcing_steel.B500S
-datosScc1LosC.negRebars.setUp(0,0.0,0.0,datosScc1LosC.width,0.1)
-datosScc1LosC.posRebars.setUp(6,26e-3,(areaFi22+areaFi26)/2.0,datosScc1LosC.width,0.05+0.026/2.0)
+datosScc1LosC.negatvRebars.setUp(0,0.0,0.0,datosScc1LosC.width,0.1)
+datosScc1LosC.positvRebars.setUp(6,26e-3,(areaFi22+areaFi26)/2.0,datosScc1LosC.width,0.05+0.026/2.0)
 
 
 

@@ -24,7 +24,7 @@ from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import fisuracionEHE
 from model import fix_node_6dof
 
-datosScc1LosC= defSeccionHASimple.RecordSeccionHASimple()
+datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Losa. Tramo Central. Sección normal al eje X."
 datosScc1LosC.concrType= EHE_concrete.HA25

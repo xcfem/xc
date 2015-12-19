@@ -39,7 +39,7 @@ concrete.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente alfac
 
 reinfSteel= EHE_reinforcing_steel.B500S
 
-sccData= defSeccionHASimple.RecordSeccionHASimple()
+sccData= defSeccionHASimple.RecordRCSimpleSection()
 sccData.sectionName= "sccData"
 sccData.sectionDescr= "Prueba."
 sccData.concrType= concrete

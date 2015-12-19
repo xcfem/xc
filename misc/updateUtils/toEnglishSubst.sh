@@ -57,6 +57,12 @@ do
 # sed -i 's/armCortanteZ/shReinfZ/g' $fl
 # sed -i 's/armCortanteY/shReinfY/g' $fl
 # sed -i 's/nmbGeomSeccion/gmSectionName/g' $fl
-# sed -i 's/barrasNeg/negRebars/g' $fl
-# sed -i 's/barrasPos/posRebars/g' $fl
+# sed -i 's/barrasNeg/negatvRebars/g' $fl
+# sed -i 's/barrasPos/positvRebars/g' $fl
+# sed -i 's/nmbRespT/respTName/g' $fl
+# sed -i 's/nmbRespVy/respVyName/g' $fl
+# sed -i 's/nmbRespVz/respVzName/g' $fl
+# sed -i 's/tipoDiag/matDiagType/g' $fl
+# sed -i 's/RecordSeccionHASimple/RecordRCSimpleSection/g' $fl
+# sed -i 's/RecordSeccionHALosa/RecordRCSlabSection/g' $fl
 done
