@@ -182,7 +182,7 @@ print "ratio4= ",ratio4
 
 import os
 fname= os.path.basename(__file__)
-if((ratio3<1e-12) & (ratio4<1e-12)):
+if((ratio3<1e-12) & (ratio4<1e-11)):
   print "test ",fname,": ok."
 else:
   print "test ",fname,": ERROR."

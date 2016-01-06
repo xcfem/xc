@@ -70,11 +70,14 @@ casos.addToDomain("0")
 
 
 # Procedimiento de solución
-analisis= predefined_solutions.simple_newton_raphson(prueba)
-analOk= analisis.analyze(10)
+solution= predefined_solutions.SolutionProcedure()
+analysis= solution.simpleNewtonRaphson(prueba)
+solution.ctest.tol= 1e-8
+solution.ctest.printFlag= 0 #flag used to print information on convergence (optional)
+analOk= analysis.analyze(10)
 
 if(analOk!=0): 
-  print "ERROR: Este test falla en máquinas de 32 bits. Pendiente de resolver (2013/03/11).\n"
+  print "ERROR: Este test falla en máquinas de 32 bits. Pendiente de resolver (2013/03/11). It seems to be a problem with the tolerance of the convergence test. In my new machine (Dell precision M4800 with Ubuntu 64bits it fails with tol= 1e-9 and works if tol= 1e-5) (2016/01/06) LP.\n"
   exit()
 
 

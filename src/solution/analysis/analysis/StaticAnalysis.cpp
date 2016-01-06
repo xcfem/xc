@@ -115,7 +115,7 @@ int XC::StaticAnalysis::new_domain_step(int num_step)
     if(result < 0)
       {
         std::cerr << "StaticAnalysis::new_domain_step() - the AnalysisModel failed";
-        std::cerr << " at iteration: " << num_step << " with domain at load factor ";
+        std::cerr << " at step: " << num_step << " with domain at load factor ";
         std::cerr << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
         getDomainPtr()->revertToLastCommit();
         return -2;
@@ -152,7 +152,7 @@ int XC::StaticAnalysis::new_integrator_step(int num_step)
     if(result < 0)
       {
         std::cerr << "StaticAnalysis::new_integrator_step() - the XC::Integrator failed";
-        std::cerr << " at iteration: " << num_step << " with domain at load factor ";
+        std::cerr << " at step: " << num_step << " with domain at load factor ";
         std::cerr << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
         getDomainPtr()->revertToLastCommit();
         return -2;
@@ -167,7 +167,7 @@ int XC::StaticAnalysis::solve_current_step(int num_step)
     if(result < 0)
       {
         std::cerr << "StaticAnalysis::solve_current_step() - the Algorithm failed";
-        std::cerr << " at iteration: " << num_step << " with domain at load factor ";
+        std::cerr << " at step: " << num_step << " with domain at load factor ";
         std::cerr << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
@@ -187,7 +187,7 @@ int XC::StaticAnalysis::compute_sensitivities_step(int num_step)
         if(result < 0)
           {
             std::cerr << "StaticAnalysis::compute_sensitivities_step() - the XC::SensitivityAlgorithm failed";
-            std::cerr << " at iteration: " << num_step << " with domain at load factor ";
+            std::cerr << " at step: " << num_step << " with domain at load factor ";
             std::cerr << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
             getDomainPtr()->revertToLastCommit();
             getStaticIntegratorPtr()->revertToLastStep();
@@ -206,7 +206,7 @@ int XC::StaticAnalysis::commit_step(int num_step)
       {
         std::cerr << "StaticAnalysis::commit_step() - ";
         std::cerr << "the Integrator failed to commit";
-        std::cerr << " at iteration: " << num_step << " with domain at load factor ";
+        std::cerr << " at step: " << num_step << " with domain at load factor ";
         std::cerr << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
