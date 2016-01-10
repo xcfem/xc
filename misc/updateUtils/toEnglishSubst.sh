@@ -1,7 +1,10 @@
 #!/bin/bash
-for fl in $(find ../../verif ../../python_modules ../../doc/XCmanual -type f -name *.py -o -name *.tex | grep -v build)
+#for fl in $(find ../../verif ../../python_modules ../../doc/XCmanual -type f -name *.py -o -name *.tex | grep -v build)
+#Modified by LP to allow generic use (no only in xc directories).
+for fl in $(find -type f -name '*.py')
+
 do
-#echo $fl
+echo $fl
 # sed -i 's/nmbSet/setName/g' $fl
 # sed -i 's/fibrasHormigon/concrFibers/g' $fl
 # sed -i 's/fibrasArmadura/reinfFibers/g' $fl
@@ -64,5 +67,5 @@ do
 # sed -i 's/nmbRespVz/respVzName/g' $fl
 # sed -i 's/tipoDiag/matDiagType/g' $fl
 # sed -i 's/RecordSeccionHASimple/RecordRCSimpleSection/g' $fl
-# sed -i 's/RecordSeccionHALosa/RecordRCSlabSection/g' $fl
+sed -i 's/RecordSeccionHALosa/RecordRCSlabSection/g' $fl
 done
