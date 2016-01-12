@@ -5,7 +5,7 @@ import xc
 from materials import typical_materials
 
 # Crea un rigid_link entre los nodos que se pasan como parámetro.
-def creaRigidBeamNodos(mdkr,tagNodA, tagNodB):
+def creaRigidBeamNodos(preprocessor,tagNodA, tagNodB):
   return preprocessor.getConstraintLoader.newRigidBeam(tagNodA,tagNodB)
 
 
