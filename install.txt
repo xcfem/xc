@@ -53,7 +53,7 @@ XC installation.
     sudo mkdir /usr/local/src/prgs
     sudo chown yourUserName.yourUserName /usr/local/src/prgs
 
-3.- Unzip the files is "prgs" directory:
+3.- Untar the files is "prgs" directory:
 
     cp xc.tar.gz /usr/local/src/prgs
     cd /usr/local/src/prgs
