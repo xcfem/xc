@@ -4,7 +4,7 @@ __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __cppyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
+__email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 
 def gmSquareSection(geomSection, fiberMatName, ld, nD):
   '''returns a square section of fibers of the same material

@@ -35,7 +35,7 @@ pth= os.path.dirname(__file__)
 #print "pth= ", pth
 if(not pth):
   pth= "."
-csvFile= pth+"/esf_test_xLamina.csv"
+intForcCombFileName= pth+"/esf_test_xLamina.csv"
 
 
 elementTags= [2524,2527]
@@ -70,7 +70,7 @@ sections.append(deckSections)
 
 
 
-meanFCs= sections.verifyNormalStresses(preprocessor, analysis,csvFile,"/tmp/ppTN",mapSectionsForEveryElement, "d")
+meanFCs= sections.verifyNormalStresses(preprocessor, analysis,intForcCombFileName,"/tmp/ppTN",mapSectionsForEveryElement, "d")
 
 
 #print "mean FCs: ", meanFCs

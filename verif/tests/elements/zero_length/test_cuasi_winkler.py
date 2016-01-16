@@ -34,7 +34,7 @@ nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 
 # Definimos materiales
-kY= typical_materials.defElastNoTracMaterial(preprocessor, "kY",k*L/numDiv)
+kY= typical_materials.defElastNoTensMaterial(preprocessor, "kY",k*L/numDiv)
 nodos.newSeedNode()
 # Definimos transformaciones geométricas
 trfs= preprocessor.getTransfCooLoader

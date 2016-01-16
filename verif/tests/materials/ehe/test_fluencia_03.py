@@ -211,7 +211,7 @@ dXMax=-1e9
 dYMin=1e9
 dYMax=-1e9
 
-def trataResultsComb(preprocessor,  comb):
+def procesResultVerif(preprocessor,  comb):
   tagComb= comb.tag
   nmbComb= comb.getName
   nodos= preprocessor.getNodeLoader
@@ -339,7 +339,7 @@ tagSave= 0
 for key in combs.getKeys():
   comb= combs[key]
   resuelveCombEstatLin(preprocessor, comb,tagSaveFase0,helper)
-  trataResultsComb(preprocessor, comb)
+  procesResultVerif(preprocessor, comb)
 
 # 2015.07.06 Values changed when zeroed initial strains in revertToStart
 dXMaxTeor= 0.115734009591e-3 #-1.04244692895e-3

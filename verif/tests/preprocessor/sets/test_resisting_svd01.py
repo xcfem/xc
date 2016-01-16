@@ -148,7 +148,7 @@ p1= geom.Pos3d(2,2,0)
 p2= geom.Pos3d(2,1,1)
 plano= geom.Plano3d(o,p1,p2)
 
-def trataResultsComb(comb):
+def procesResultVerif(comb):
   tabComb= comb.tag
   nmbComb= comb.getName
   setTotal= preprocessor.getSets.getSet("total")
@@ -166,7 +166,7 @@ tagSave= 0
 for key in combs.getKeys():
   comb= combs[key]
   resuelveCombEstatLin(comb)
-  trataResultsComb(comb)
+  procesResultVerif(comb)
 
 ratio1= (abs(fuerza.x-3*F)/3/F)
 ratio2= momento.getModulo()

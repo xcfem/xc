@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-def extraeAccionesLST(nmbArchLST, nmbArchAcc):
+def extraeAccionesLST(intForcCombFileName, nmbArchAcc):
   # Extrae las acciones de un archivo de salida generado en Ansys
-  listado= open(nmbArchLST,"r")
+  listado= open(intForcCombFileName,"r")
   acciones= open(nmbArchAcc,"w")
   for line in listado:
     str1= line
@@ -15,9 +15,9 @@ def extraeAccionesLST(nmbArchLST, nmbArchAcc):
   listado.close()
   acciones.close()
 
-def extraeIdsElemLST(nmbArchLST, nmbArchElemScc1, nmbArchElemScc2):
+def extraeIdsElemLST(intForcCombFileName, nmbArchElemScc1, nmbArchElemScc2):
   # Extrae los identificadores de elementos de un archivo de salida generado en Ansys
-  listado= open(nmbArchLST,"r")
+  listado= open(intForcCombFileName,"r")
   elementos_scc1= open(nmbArchElemScc1,"w")
   elementos_scc2= open(nmbArchElemScc2,"w")
 
@@ -54,12 +54,12 @@ def extraeIdsElemLST(nmbArchLST, nmbArchElemScc1, nmbArchElemScc2):
   elementos_scc1.close()
   elementos_scc2.close()
 
-def extraeCargasLaminaLST(nmbArchLST, nmbArchCargas):
+def extraeCargasLaminaLST(intForcCombFileName, nmbArchCargas):
   '''
   Define las cargas en el extremo libre de dada elemento a partir
      de las acciones de un archivo de salida generado en Ansys
   '''
-  listado= open(nmbArchLST,"r")
+  listado= open(intForcCombFileName,"r")
   cargas= open(nmbArchCargas,"w")
 
   fieldwidths = (0,8,9,20,21,32,33,44,45,56,57,68,69,80,81,92,93,106)
@@ -91,11 +91,11 @@ def extraeCargasLaminaLST(nmbArchLST, nmbArchCargas):
   listado.close()
   cargas.close()
 
-def extraeDatosLST(nmbArchLST):
+def extraeDatosLST(intForcCombFileName):
   '''
   Defina las cargas en el extremo libre de dada elemento a partir
      de las acciones de un archivo de salida generado en Ansys
   '''
-  extraeAccionesLST(nmbArchLST,"/tmp/acciones.xci")
-  extraeIdsElemLST(nmbArchLST,"/tmp/elementos_scc1.xci","/tmp/elementos_scc2.xci")
-  extraeCargasLaminaLST(nmbArchLST,"/tmp/cargas.xci")
+  extraeAccionesLST(intForcCombFileName,"/tmp/acciones.xci")
+  extraeIdsElemLST(intForcCombFileName,"/tmp/elementos_scc1.xci","/tmp/elementos_scc2.xci")
+  extraeCargasLaminaLST(intForcCombFileName,"/tmp/cargas.xci")

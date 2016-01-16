@@ -10,13 +10,13 @@ from model import fix_node_6dof
 from materials.xLamina import seccion_ficticia_elementos as sf
 import math
 
-def extraeIdsElem(preprocessor,nmbArchComb, diagIntScc):
+def extraeIdsElem(preprocessor,intForcCombFileName, diagIntScc):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
   de combinaciones generado en XC '''
   idElements= set()
   idCombs= set()
 
-  f= open(nmbArchComb,"r")
+  f= open(intForcCombFileName,"r")
   listado= csv.reader(f)
   for lst in listado:
     if(len(lst)>0):
@@ -57,7 +57,7 @@ def extraeIdsElem(preprocessor,nmbArchComb, diagIntScc):
   for comb in idCombs:
     mapCombs[comb]= casos.newLoadPattern("default",comb)
 
-  f= open(nmbArchComb,"r")
+  f= open(intForcCombFileName,"r")
   listado= csv.reader(f)
   for lst in listado:
     if(len(lst)>0):
@@ -77,8 +77,8 @@ def extraeIdsElem(preprocessor,nmbArchComb, diagIntScc):
 
   f.close()
 
-def extraeDatos(preprocessor,nmbArchLST, diagIntScc):
+def extraeDatos(preprocessor,intForcCombFileName, diagIntScc):
   ''' Define las cargas en el extremo libre de cada elemento a partir
    de las combinaciones de un archivo de salida generado en XC '''
-  extraeIdsElem(preprocessor,nmbArchLST,diagIntScc)
+  extraeIdsElem(preprocessor,intForcCombFileName,diagIntScc)
 

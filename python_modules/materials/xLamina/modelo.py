@@ -12,6 +12,10 @@ from postprocess.reports import exporta_esfuerzos
 from solution import predefined_solutions
 
 def defSectionsForShellSet(preprocessor,elemSet,trsvSection,longSection):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+  '''
   mapSectionsForEveryElement= {}
   for e in elemSet:
     mapSectionsForEveryElement[e.tag]= [trsvSection,longSection]
@@ -37,7 +41,11 @@ def saveInternalForcesForCombs(feProblem,fName,loadCombinations,elemSet,fConv= 1
 
 # Construye el modelo para la comprobación de tensiones normales
 def xLaminaConstruyeModeloFicticio(preprocessor,datosScc1, datosScc2):
-  nodos= preprocessor.getNodeLoader
+   '''
+  Parameters:
+    preprocessor:    preprocessor name
+  '''
+ nodos= preprocessor.getNodeLoader
 
   predefined_spaces.gdls_resist_materiales3D(nodos)
 

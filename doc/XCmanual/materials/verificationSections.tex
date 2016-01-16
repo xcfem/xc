@@ -32,8 +32,8 @@ predefined_solutions.simple_static_linear
 This function carries out the verification of the limit state at failure under nornal stresses. It takes as input the internal forces and bending moments calculated for the shell elements for every ULS combinations, the sections definition and the interaction diagrams to be employed.
 
 The function returns two files with the verification results:
-{\tt nmbArchSalida.py}: XC file that assigns each shell element the capacity factor (worst-case) {\tt FCC} calculated for reinforcement in directions 1 and 2, together with the concomitant axial force and bending moments {\tt N My Mz}.
-{\tt nmbArchSalida.py}: \LaTeX\  file containing a table with the following items:
+{\tt outputFileName.py}: XC file that assigns each shell element the capacity factor (worst-case) {\tt FCC} calculated for reinforcement in directions 1 and 2, together with the concomitant axial force and bending moments {\tt N My Mz}.
+{\tt outputFileName.py}: \LaTeX\  file containing a table with the following items:
 
 \begin{center}
 \begin{tabular}{ccccccc}
@@ -64,14 +64,14 @@ number  & name & name & force NCP2 & moment MyCP2 & moment MzCP2 & factor FCCP2 
  
 \begin{verbatim}
 from materials.xLamina import calculo_tn
-calculo_tn.lanzaCalculoTNFromXCData(mdlr,analysis,nmbArchCsv,nmbArchSalida, 
+calculo_tn.lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, 
 mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \analysis{} \\
-\nmbArchCsv{ULS under normal stresses}{ULS}\\
-\nmbArchSalida{}\\
+\intForcCombFileName{ULS under normal stresses}{ULS}\\
+\outputFileName{}\\
 \mapSectionsForEveryElement{} \\
 \mapSectionsDefinition{} \\
 \mapInteractionDiagrams{} \\
@@ -83,8 +83,8 @@ This function carries out the verification of the limit state at failure under n
 
 The function returns two files with the verification results:
 
-{\tt nmbArchSalida.py}: XC file that assigns each shell element the capacity factor (worst-case) {\tt FCC} calculated for reinforcement in directions 1 and 2, together with the concomitant forces and moments {\tt N My Mz  Vy Vz } and the ultimate shear forces and moment {\tt Mu Vcu Vsu Vu }
-{\tt nmbArchSalida.py}: \LaTeX\  file containing a table with the following items:
+{\tt outputFileName.py}: XC file that assigns each shell element the capacity factor (worst-case) {\tt FCC} calculated for reinforcement in directions 1 and 2, together with the concomitant forces and moments {\tt N My Mz  Vy Vz } and the ultimate shear forces and moment {\tt Mu Vcu Vsu Vu }
+{\tt outputFileName.py}: \LaTeX\  file containing a table with the following items:
 
 \begin{footnotesize}
 \begin{center}
@@ -115,49 +115,49 @@ number  & name    & name & force      & moment       & moment       & moment & f
 
 \begin{verbatim}
 from materials.xLamina import calculo_v
-calculo_v.lanzaCalculoV(mdlr,analysis,nmbArchCsv,nmbArchSalida, 
+calculo_v.lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName, 
 mapSectionsForEveryElement,mapSectionsDefinition,mapInteractionDiagrams,
-trataResultsCombV)
+procesResultVerifV)
 \end{verbatim}
 
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \analysis{} \\
-\nmbArchCsv{ULS due to shear}{ULS}\\
-\nmbArchSalida{}\\
+\intForcCombFileName{ULS due to shear}{ULS}\\
+\outputFileName{}\\
 \mapSectionsForEveryElement{} \\
 \mapSectionsDefinition{} \\
 \mapInteractionDiagrams{} \\
-\trataResultsCombV{} \\
+\procesResultVerifV{} \\
 \end{paramFuncTable}
 
 
 \subsection{Cracking limit state verification}
 \begin{verbatim}
 from materials.xLamina import calculo_fis
-calculo_fis.lanzaCalculoFISFromXCDataPlanB(mdlr,analysis,nmbArchCsv,
-nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition,
-trataResultsCombFIS)
+calculo_fis.lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,
+outputFileName, mapSectionsForEveryElement,mapSectionsDefinition,
+procesResultVerifFIS)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \analysis{} \\
-\nmbArchCsv{cracking limit state}{quasi permanent SLS or frequent SLS}\\
-\nmbArchSalida{}\\
+\intForcCombFileName{cracking limit state}{quasi permanent SLS or frequent SLS}\\
+\outputFileName{}\\
 \mapSectionsForEveryElement{} \\
 \mapSectionsDefinition{} \\
 \mapInteractionDiagrams{} \\
-\trataResultsCombFIS{} \\
+\procesResultVerifFIS{} \\
 \end{paramFuncTable}
 
 %\subsection{defMaterialesK}
 %\noindent This function sets up the sections definition to be used for the verifications relating to Cracking Limit State. Characteristic values are used to define the properties of the materials (concrete, reinforcing steel) that make up the section.
 %\begin{verbatim}
 %from materials import xLamina
-%xLamina.defMateriales.defMaterialesK(mdlr,path, nmbScc1, nmbScc2)
+%xLamina.defMateriales.defMaterialesK(preprocessor,path, nmbScc1, nmbScc2)
 %\end{verbatim}
 %\begin{paramFuncTable}
-%\mdlr{} \\
+%\preprocessor{} \\
 %{\tt defSecc} &   name identifying the class object used to define the properties of the section.\\
 %\end{paramFuncTable}
 

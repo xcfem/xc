@@ -24,12 +24,17 @@ def lanzaCalculoFIS(nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArchDefHipELS)
   xLaminaCalculaCombEstatNoLin(nmbArchDefHipELS)
   xLaminaPrintFIS(nmbArch+"FIS",deref(nmbRegDatosScc1).sectionName,deref(nmbRegDatosScc2).sectionName)
 
-def xLaminaPrintFIS(nmbArchSalida, sectionName1, sectionName2):
+def xLaminaPrintFIS(outputFileName, sectionName1, sectionName2):
+  '''
+  Parameters:
+    outputFileName:  name of the output file containing tue results of the 
+                     verification 
+  '''
   # Imprime los resultados de la comprobación frente a fisuración
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
-  ansysOutput1= open(nmbArchSalida+".mac","w")
-  ansysOutput2= open(nmbArchSalida+"esf.mac","w")
+  ansysOutput1= open(outputFileName+".mac","w")
+  ansysOutput2= open(outputFileName+"esf.mac","w")
   printCabeceraListadoFisuracion(texOutput1,"1 ("+ sectionName1 +")")
   printCabeceraListadoFisuracion(texOutput2,"2 ("+ sectionName2 +")")
   e= preprocessor.getElementLoader
@@ -53,7 +58,7 @@ def xLaminaPrintFIS(nmbArchSalida, sectionName1, sectionName2):
   ansysOutput1.close()
   ansysOutput2.close()
     
-  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+nmbArchSalida+".tex")
+  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+outputFileName+".tex")
     
   os.sys("rm -f "+"/tmp/acciones.xci")
   os.sys("rm -f "+"/tmp/cargas.xci")
@@ -61,7 +66,7 @@ def xLaminaPrintFIS(nmbArchSalida, sectionName1, sectionName2):
   os.sys("rm -f "+"/tmp/texOutput1.tmp")
   os.sys("rm -f "+"/tmp/texOutput2.tmp")
 
-def lanzaCalculoFISFromXCData(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,trataResultsCombFIS):
+def lanzaCalculoFISFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,procesResultVerifFIS):
   '''
    Lanza la comprobación de fisuración en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -69,13 +74,24 @@ def lanzaCalculoFISFromXCData(preprocessor,analysis,nmbArchCsv,nmbArchSalida, ma
       las características de las secciones que se definen en mapSections,
       e imprime los resultados en archivos con
       el nombre nmbArchFis.*
+  Parameters:
+    preprocessor:    preprocessor name
+    analysis:        type of analysis
+    intForcCombFileName: name of the file containing the forces and bending moments 
+                     obtained for each element for the combinations analyzed
+    outputFileName:  name of the output file containing tue results of the 
+                     verification 
+    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+                                (for the sections 1 and 2) to be employed 
+                                in verifications
+    procesResultVerifFIS:          processing of the results of the verification      
   '''
-  elems= ec.creaElems(preprocessor,nmbArchCsv, mapSectionsForEveryElement)
+  elems= ec.creaElems(preprocessor,intForcCombFileName, mapSectionsForEveryElement)
   ccSIA.defVarsControlFISSIA262(elems)
-  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,trataResultsCombFIS)
-  xLaminaPrintFISSIA262(preprocessor,nmbArchSalida,mapSectionsForEveryElement)
+  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerifFIS)
+  xLaminaPrintFISSIA262(preprocessor,outputFileName,mapSectionsForEveryElement)
 
-def lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition,trataResultsCombFIS):
+def lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,mapSectionsDefinition,procesResultVerifFIS):
   '''
    Lanza la comprobación de fisuración en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -83,11 +99,22 @@ def lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,nmbArchCsv,nmbArchSalid
       las características de las secciones que se definen en mapSections,
       e imprime los resultados en archivos con
       el nombre nmbArchFis.*
+  Parameters:
+    preprocessor:    preprocessor name
+    analysis:        type of analysis
+    intForcCombFileName: name of the file containing the forces and bending moments 
+                     obtained for each element for the combinations analyzed
+    outputFileName:  name of the output file containing tue results of the 
+                     verification 
+    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+                                (for the sections 1 and 2) to be employed 
+                                in verifications
+    procesResultVerifFIS:          processing of the results of the verification      
   '''
-  elems= ec.extraeDatos(preprocessor,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, None)
+  elems= ec.extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement,mapSectionsDefinition, None)
   ccSIA.defVarsControlFISSIA262(elems)
-  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,trataResultsCombFIS)
-  xLaminaPrintFISSIA262(preprocessor,nmbArchSalida,mapSectionsForEveryElement)
+  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerifFIS)
+  xLaminaPrintFISSIA262(preprocessor,outputFileName,mapSectionsForEveryElement)
 
 def strElementProp(eTag,nmbProp,vProp):
   retval= "preprocessor.getElementLoader.getElement("
@@ -97,11 +124,17 @@ def strElementProp(eTag,nmbProp,vProp):
   retval+= ',' + str(vProp) + ")\n"
   return retval
 
-def xLaminaPrintFISSIA262(preprocessor,nmbArchSalida, mapSections):
+def xLaminaPrintFISSIA262(preprocessor,outputFileName, mapSections):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+    outputFileName:  name of the output file containing tue results of the 
+                     verification 
+  '''
   # Imprime los resultados de la comprobación frente a fisuración
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
-  xcOutput= open(nmbArchSalida+".py","w")
+  xcOutput= open(outputFileName+".py","w")
   #printCabeceraListadoFisuracion("texOutput1","1 ("+ sectionName1 +")")
   #printCabeceraListadoFisuracion("texOutput2","2 ("+ sectionName2 +")")
   elementos= preprocessor.getSets.getSet("total").getElements
@@ -151,7 +184,7 @@ def xLaminaPrintFISSIA262(preprocessor,nmbArchSalida, mapSections):
   texOutput2.close()
   xcOutput.close()
     
-  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+nmbArchSalida+".tex")
+  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+outputFileName+".tex")
     
   # os.system("rm -f "+"/tmp/acciones.xci")
   # os.system("rm -f "+"/tmp/cargas.xci")

@@ -14,8 +14,8 @@ The force-deformation relationship for the element is given by a pointer {\em th
 The local {\em direction} is 0, 1, 2 for translation in the local x, y, z axes or 3, 4, 5 for rotation about the local x, y, z axes. 
 
 \begin{verbatim}
-mdlr=xc.ProblemaEF().getModelador
-ZeroLengthElement=mdlr.getElementLoader.newElement("zero_length",
+preprocessor=xc.ProblemaEF().getModelador
+ZeroLengthElement=preprocessor.getElementLoader.newElement("zero_length",
 xc.ID([Nd1Tag,Nd2Tag]))
 \end{verbatim}
 \begin{paramFuncTable}
@@ -45,8 +45,8 @@ The vector $\vec{x}$ defines the local x-axis for the element and the vector $\v
 The force-deformation relationship for the element is obtained by invoking {\em getCopy()} on the {\bf SectionForceDeformation} pointer {\em theSection}. The section model acts in the local space defined by the $\vec{x}$ and $\vec{yp}$ vectors. The section axial force-deformation acts along the element local x-axis and the section y-z axes directly corresponds to the local element y-z axes.
 
 \begin{verbatim}
-mdlr=xc.ProblemaEF().getModelador
-ZeroLengthElement=mdlr.getElementLoader.newElement(
+preprocessor=xc.ProblemaEF().getModelador
+ZeroLengthElement=preprocessor.getElementLoader.newElement(
 "zero_length_section",xc.ID([Nd1Tag,Nd2Tag]))
 \end{verbatim}
 \begin{paramFuncTable}
@@ -67,7 +67,7 @@ ZeroLengthElement=mdlr.getElementLoader.newElement(
 
 \subsection{ZeroLengthContact2D, ZeroLengthContact3D}
 % ***ZeroLengthContact***
-These classes are used to construct a zeroLengthContact2D element or a zeroLengthContact3D element, which are Node-to-node frictional contact element used in two dimensional analysis and three dimensional analysis.
+These classes are used to constructs a zeroLengthContact2D element or a zeroLengthContact3D element, which are Node-to-node frictional contact element used in two dimensional analysis and three dimensional analysis.
 
 The contact element is node-to-node contact. Contact occurs between two contact nodes when they come close. The relation follows Mohr-coulomb law: $T = \mu \cdot N + c$, where $T$ is tangential force and $N$ is normal force across the interface; $\mu$ is friction coefficient and $c$ is total cohesion (summed over the effective area of contact nodes).
 
@@ -78,8 +78,8 @@ For 2D contact, slave nodes and master nodes must be 2 DOF. For 3D contact, slav
 The resulted tangent from the contact element is non-symmetric. Switch to non-symmetric matrix solver. 
 
 \begin{verbatim}
-mdlr=xc.ProblemaEF().getModelador
-ZeroLengthElement=mdlr.getElementLoader.newElement(
+preprocessor=xc.ProblemaEF().getModelador
+ZeroLengthElement=preprocessor.getElementLoader.newElement(
 "zero_length_contact_2d",xc.ID([Nd1Tag,Nd2Tag]))
 "zero_length_contact_3d",xc.ID([Nd1Tag,Nd2Tag]))
 \end{verbatim}
@@ -104,12 +104,12 @@ ZeroLengthElement=mdlr.getElementLoader.newElement(
 
 % ***Truss***
 \subsection{Truss}
-This class is used to construct a truss element object defined by two nodes connected by means of a previously defined uniaxial material.
+This class is used to constructs a truss element object defined by two nodes connected by means of a previously defined uniaxial material.
 The truss element does not include geometric nonlinearities, even when used with beam-columns utilizing P-Delta or Corotational transformations.
 The truss element considers strain-rate effects, and is thus suitable for use as a damping element. 
 \begin{verbatim}
-mdlr=xc.ProblemaEF().getModelador
-trussElement=mdlr.getElementLoader.newElement(
+preprocessor=xc.ProblemaEF().getModelador
+trussElement=preprocessor.getElementLoader.newElement(
 "truss",xc.ID([Nd1Tag,Nd2Tag]))
 \end{verbatim}
 \begin{paramFuncTable}
@@ -132,10 +132,10 @@ trussElement=mdlr.getElementLoader.newElement(
 
 % ***TrussSection***
 \subsection{TrussSection}
-This class is used to construct a truss element object defined by two nodes connected by means of a previously defined section.
+This class is used to constructs a truss element object defined by two nodes connected by means of a previously defined section.
 \begin{verbatim}
-mdlr=xc.ProblemaEF().getModelador
-trussSectionElement=mdlr.getElementLoader.newElement(
+preprocessor=xc.ProblemaEF().getModelador
+trussSectionElement=preprocessor.getElementLoader.newElement(
 "truss_section",xc.ID([Nd1Tag,Nd2Tag]))
 \end{verbatim}
 \begin{paramFuncTable}
@@ -156,12 +156,12 @@ trussSectionElement=mdlr.getElementLoader.newElement(
 
 % ***CorotTruss***
 \subsection{CorotTruss}
-This class is used to construct a corotational truss element object defined by two nodes connected by means of a previously defined uniaxial material.
+This class is used to constructs a corotational truss element object defined by two nodes connected by means of a previously defined uniaxial material.
 
 When constructed with a UniaxialMaterial object, the corotational truss element considers strain-rate effects, and is thus suitable for use as a damping element.
 \begin{verbatim}
-mdlr=xc.ProblemaEF().getModelador
-corotTrussElement=mdlr.getElementLoader.newElement(
+preprocessor=xc.ProblemaEF().getModelador
+corotTrussElement=preprocessor.getElementLoader.newElement(
 "corot_truss",xc.ID([Nd1Tag,Nd2Tag]))
 \end{verbatim}
 \begin{paramFuncTable}
@@ -183,11 +183,11 @@ corotTrussElement=mdlr.getElementLoader.newElement(
 
 % ***CorotTrussSection***
 \subsection{CorotTrussSection}
-This class is used to construct a corotational truss element object defined by two nodes connected by means of a previously defined section.
+This class is used to constructs a corotational truss element object defined by two nodes connected by means of a previously defined section.
 
 \begin{verbatim}
-mdlr=xc.ProblemaEF().getModelador
-corotTrussSectionElement=mdlr.getElementLoader.newElement(
+preprocessor=xc.ProblemaEF().getModelador
+corotTrussSectionElement=preprocessor.getElementLoader.newElement(
 "corot_truss_section",xc.ID([Nd1Tag,Nd2Tag]))
 \end{verbatim}
 \begin{paramFuncTable}
@@ -209,13 +209,13 @@ corotTrussSectionElement=mdlr.getElementLoader.newElement(
 
 % ***ElasticBeam2d***
 \subsection{ElasticBeam2d}
-This class is used to construct a uniaxial element with tension, compression, and bending capabilities. The element has three degrees of freedom at each node: translations in the nodal x and y directions and rotation about the nodal z-axis.
+This class is used to constructs a uniaxial element with tension, compression, and bending capabilities. The element has three degrees of freedom at each node: translations in the nodal x and y directions and rotation about the nodal z-axis.
 
 The element is defined by two 2D nodes, a previously-defined coordinate-transformationt object and a previously-defined 2D elastic section. The initial strain in the element (initialStrain) is given by $\Delta/L$, where $\Delta$ is the difference between the element length, L (as defined by the 1 and 2 node locations), and the zero strain length. 
 
 \begin{verbatim}
-mdlr=xc.ProblemaEF().getModelador
-elasticBeam2dElement=mdlr.getElementLoader.newElement(
+preprocessor=xc.ProblemaEF().getModelador
+elasticBeam2dElement=preprocessor.getElementLoader.newElement(
 "elastic_beam_2d",xc.ID([Nd1Tag,Nd2Tag]))
 \end{verbatim}
 \begin{paramFuncTable}
@@ -245,13 +245,13 @@ elasticBeam2dElement=mdlr.getElementLoader.newElement(
 
 % ***ElasticBeam3d***
 \subsection{ElasticBeam3d}
-This class is used to construct a uniaxial element with tension, compression, torsion, and bending capabilities. The element has six degrees of freedom at each node: translations in the nodal x, y, and z directions and rotations about the nodal x, y, and z axes. 
+This class is used to constructs a uniaxial element with tension, compression, torsion, and bending capabilities. The element has six degrees of freedom at each node: translations in the nodal x, y, and z directions and rotations about the nodal x, y, and z axes. 
 
 The element is defined by two 3D nodes, a previously-defined coordinate-transformationt object and a previously-defined 3D elastic section. The element x-axis is oriented from node I toward node J. The initial strain in the element (initialStrain) is given by $\Delta/L$, where $\Delta$ is the difference between the element length, L (as defined by the 1 and 2 node locations), and the zero strain length. 
 
 \begin{verbatim}
-mdlr=xc.ProblemaEF().getModelador
-elasticBeam2dElement=mdlr.getElementLoader.newElement(
+preprocessor=xc.ProblemaEF().getModelador
+elasticBeam2dElement=preprocessor.getElementLoader.newElement(
 "elastic_beam_3d",xc.ID([Nd1Tag,Nd2Tag]))
 \end{verbatim}
 \begin{paramFuncTable}
@@ -301,12 +301,12 @@ elasticBeam2dElement=mdlr.getElementLoader.newElement(
 
 % ***ForceBeamColumn2d***
 \subsection{ForceBeamColumn2d}
-This command is used to construct a 2D forceBeamColumn element object, which is based on the iterative force-based formulation. A variety of numerical integration options can be used in the element state determination and encompass both distributed plasticity and plastic hinge integration. More details on the available numerical integration options can be found in the paper titled «Numerical Integration Options for the Force-Based Beam-Column Element in OpenSees», by Michael H. Scott.
+This command is used to constructs a 2D forceBeamColumn element object, which is based on the iterative force-based formulation. A variety of numerical integration options can be used in the element state determination and encompass both distributed plasticity and plastic hinge integration. More details on the available numerical integration options can be found in the paper titled «Numerical Integration Options for the Force-Based Beam-Column Element in OpenSees», by Michael H. Scott.
 
 The element is defined by two 2D nodes, a previously-defined coordinate-transformationt object and a previously-defined 2D elastic section.
 \begin{verbatim}
-mdlr=xc.ProblemaEF().getModelador
-elasticBeam2dElement=mdlr.getElementLoader.newElement(
+preprocessor=xc.ProblemaEF().getModelador
+elasticBeam2dElement=preprocessor.getElementLoader.newElement(
 "force_beam_column_2d",xc.ID([Nd1Tag,Nd2Tag]))
 \end{verbatim}
 \begin{paramFuncTable}
@@ -327,12 +327,12 @@ elasticBeam2dElement=mdlr.getElementLoader.newElement(
 
 % ***ForceBeamColumn3d***
 \subsection{ForceBeamColumn3d}
-This command is used to construct a 3D forceBeamColumn element object, which is based on the iterative force-based formulation. A variety of numerical integration options can be used in the element state determination and encompass both distributed plasticity and plastic hinge integration. More details on the available numerical integration options can be found in the paper titled «Numerical Integration Options for the Force-Based Beam-Column Element in OpenSees», by Michael H. Scott. 
+This command is used to constructs a 3D forceBeamColumn element object, which is based on the iterative force-based formulation. A variety of numerical integration options can be used in the element state determination and encompass both distributed plasticity and plastic hinge integration. More details on the available numerical integration options can be found in the paper titled «Numerical Integration Options for the Force-Based Beam-Column Element in OpenSees», by Michael H. Scott. 
 
 The element is defined by two 3D nodes, a previously-defined coordinate-transformationt object and a previously-defined 3D elastic section.
 \begin{verbatim}
-mdlr=xc.ProblemaEF().getModelador
-elasticBeam2dElement=mdlr.getElementLoader.newElement(
+preprocessor=xc.ProblemaEF().getModelador
+elasticBeam2dElement=preprocessor.getElementLoader.newElement(
 "force_beam_column_3d",xc.ID([Nd1Tag,Nd2Tag]))
 \end{verbatim}
 \begin{paramFuncTable}

@@ -95,7 +95,7 @@ def defVarsControlVSIA262(elems):
     e.setProp("VuCP", 0.0)
 
 
-def trataResultsCombV(preprocessor,nmbComb):
+def procesResultVerifV(preprocessor,nmbComb):
   '''
   Comprobación de las secciones de hormigón frente a cortante.
      XXX Falta tener en cuenta la dirección de las barras de refuerzo

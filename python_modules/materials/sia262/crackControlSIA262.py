@@ -50,7 +50,7 @@ def defVarsControlFISSIA262(elems):
     e.setProp("MzCPPos",0)
     e.setProp("HIPCPPos","")
 
-def trataResultsCombFISSIA262(preprocessor,nmbComb):
+def procesResultVerifFISSIA262(preprocessor,nmbComb):
   # Comprobación de las secciones de hormigón frente a fisuración.
   print "Postproceso combinación: ",nmbComb,"\n"
 
@@ -69,7 +69,7 @@ def trataResultsCombFISSIA262(preprocessor,nmbComb):
       e.setProp("MyCP",MyTmp)
       e.setProp("MzCP",MzTmp)
 
-def trataResultsCombFISSIA262PlanB(preprocessor,nmbComb):
+def procesResultVerifFISSIA262PlanB(preprocessor,nmbComb):
   # Comprobación de las secciones de hormigón frente a fisuración estimando la tensión en la armadura.
   print "Postproceso combinación: ",nmbComb,"\n"
 

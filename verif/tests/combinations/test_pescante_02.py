@@ -139,7 +139,7 @@ def resuelveCombEstatLin(comb):
     comb.removeFromDomain()
 
 
-def trataResultsComb(comb):
+def procesResultVerif(comb):
   tagSave= comb.tag*100
   db.save(tagSave)
   elementos= preprocessor.getElementLoader
@@ -168,7 +168,7 @@ nombrePrevia=""
 tagPrevia= 0
 for c in combs.getKeys():
   resuelveCombEstatLin(combs[c])
-  trataResultsComb(combs[c])
+  procesResultVerif(combs[c])
           
 ratio1= ((NMin1+440.7e3)/440.7e3)
 ratio2= ((NMin2+397.5e3)/397.5e3)

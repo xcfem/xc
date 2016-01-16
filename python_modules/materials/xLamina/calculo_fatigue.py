@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# Comprobación de secciones de hormigón frente a fisuración.
 
 from materials.ehe import fisuracionEHE
 from materials.sia262 import fatigueControlSIA262 as fcSIA
@@ -9,19 +8,30 @@ import os
 from postprocess.reports import common_formats as fmt
 
 
-def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,trataResultsComb):
-  '''
-   Lanza la comprobación de fisuración en una lámina
-      cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
-      con los materiales que se definen en el archivo nmbArchMateriales,
-      las características de las secciones que se definen en mapSections,
-      e imprime los resultados en archivos con
-      el nombre nmbArchFis.*
-  '''
-  elems= ec.extraeDatos(preprocessor,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,procesResultVerif):
+  '''Launch the calculation for the verification of the Fatigue Limit State
+  in shell elements.
+  Parameters:
+    preprocessor:    preprocessor name
+    analysis:        type of analysis
+    intForcCombFileName: name of the file containing the forces and bending moments 
+                     obtained for each element for the combinations analyzed
+    outputFileName:  name of the output file containing tue results of the 
+                     verification 
+    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+                                (for the sections 1 and 2) to be employed 
+                                in verifications
+    mapSectionsDefinition:      file containing a dictionary with the two 
+                                sections associated with each elements to be
+                                used in the verification
+    mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
+                                diagrams of materials to be used in the verification process
+    procesResultVerif:          processing of the results of the verification          
+   '''
+  elems= ec.extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   fcSIA.defVarsControl(elems)
-  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,trataResultsComb)
-  xLaminaPrintFatigueSIA262(preprocessor,nmbArchSalida,mapSectionsForEveryElement)
+  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerif)
+  xLaminaPrintFatigueSIA262(preprocessor,outputFileName,mapSectionsForEveryElement)
 
 def strElementProp(eTag,nmbProp,vProp):
   retval= "preprocessor.getElementLoader.getElement("
@@ -31,11 +41,15 @@ def strElementProp(eTag,nmbProp,vProp):
   retval+= ',' + str(vProp) + ")\n"
   return retval
 
-def xLaminaPrintFatigueSIA262(preprocessor,nmbArchSalida, mapSections):
+def xLaminaPrintFatigueSIA262(preprocessor,outputFileName, mapSections):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+  '''
   # Imprime los resultados de la comprobación frente a fisuración
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
-  xcOutput= open(nmbArchSalida+".py","w")
+  xcOutput= open(outputFileName+".py","w")
   #printCabeceraListadoFisuracion("texOutput1","1 ("+ sectionName1 +")")
   #printCabeceraListadoFisuracion("texOutput2","2 ("+ sectionName2 +")")
   elementos= preprocessor.getSets.getSet("total").getElements
@@ -148,7 +162,7 @@ def xLaminaPrintFatigueSIA262(preprocessor,nmbArchSalida, mapSections):
   texOutput2.close()
   xcOutput.close()
     
-  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+nmbArchSalida+".tex")
+  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+outputFileName+".tex")
     
   # os.system("rm -f "+"/tmp/acciones.xci")
   # os.system("rm -f "+"/tmp/cargas.xci")

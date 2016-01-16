@@ -4,7 +4,7 @@ __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __cppyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
+__email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 
 
 class FiberSet:
@@ -100,7 +100,7 @@ def fiberSectionSetupRCSets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetN
 
 # Crea conjuntos de fibras en las secciones de los elementos de conjunto cuyo nombre.
 def createRCFiberSets(preprocessor, setName, concrMatTag, reinfMatTag):
-  '''Construct the sets of concrete fibers 'hormigon' and reinforcing steel fibers 'armadura' for all the elements included in a set of elements.
+  '''Constructs the sets of concrete fibers 'hormigon' and reinforcing steel fibers 'armadura' for all the elements included in a set of elements.
   Returns the following two sets of fibers:
     set named hormigon: include all the fibers of material concrMatTag from the set of elements setName
     set named armadura: include all the fibers of material reinfMatTag from the set of elements setName

@@ -26,7 +26,7 @@ def getListaCombinaciones(nmbArchDefHipELU):
   os.sys("rm -f "+"/tmp/cargas.xci")
   return lstCombRetval
 
-def xBarraCalculaCombEstatLin(preprocessor, analysis, diagIntSec,trataResultsComb):
+def xBarraCalculaCombEstatLin(preprocessor, analysis, diagIntSec,procesResultVerif):
   '''
   Lanza el análisis (lineal) y la comprobación en las combinaciones que se pasan como parámetros
   nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
@@ -36,7 +36,7 @@ def xBarraCalculaCombEstatLin(preprocessor, analysis, diagIntSec,trataResultsCom
     comb= casos[key]
     #print "Resolviendo para acción: ",key
     resuelve_combinacion.resuelveComb(preprocessor,key,analysis,1)
-    trataResultsComb(preprocessor,key,diagIntSec)
+    procesResultVerif(preprocessor,key,diagIntSec)
 
 
 def xBarraCalculaCombEstatNoLin(nmbArchDefHipELU):
@@ -50,6 +50,6 @@ def xBarraCalculaCombEstatNoLin(nmbArchDefHipELU):
   for comb in listaCombinaciones:
     print "Resolviendo para acción: ",comb
     resuelveCombEstatLin(comb)
-    trataResultsComb(comb,nmbDiagIntSec)
+    procesResultVerif(comb,nmbDiagIntSec)
   os.sys("rm -f "+"/tmp/acciones.xci")
   os.sys("rm -f "+"/tmp/cargas.xci")

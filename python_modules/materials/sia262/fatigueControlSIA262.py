@@ -104,7 +104,7 @@ def limitShear(sccData,v_0,v_1,vu):
     print "limite negativo = ", retval
   return retval
 
-def trataResultsComb(preprocessor,nmbComb):
+def procesResultVerif(preprocessor,nmbComb):
   # Comprobación de las secciones de hormigón frente a fatiga estimando la tensión en la armadura.
   print "Postproceso combinación: ",nmbComb,"\n"
 

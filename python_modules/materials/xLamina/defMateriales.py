@@ -5,6 +5,9 @@ def defMaterialesK(preprocessor,path, nmbScc1, nmbScc2):
    Define los materiales (hormigón, acero y secciones)
     que se emplearán para la comprobación a fisuración
     empleando sus valores característicos.
+  Parameters:
+    preprocessor:    preprocessor name
+
   '''
   preprocessor.clearAll
   materiales= preprocessor.getMaterialLoader

@@ -1,13 +1,13 @@
 \chapter{Materials and sections}
 \section{Stardard uniaxial materials}
 \subsection{defElasticMaterial} 
-\noindent Construct an elastic uniaxial material
+\noindent Constructs an elastic uniaxial material
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticMaterial(mdlr,name,E)
+typical_materials.defElasticMaterial(preprocessor,name,E)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{material} \\
 {\tt E} & tangent in the stress-strain diagram (see figure \ref{Elastic}) \\
 \end{paramFuncTable}
@@ -19,13 +19,13 @@ typical_materials.defElasticMaterial(mdlr,name,E)
 \end{figure}
 
 \subsection{defElasticPPMaterial}
-\noindent Construct an elastic perfectly-plastic uniaxial material
+\noindent Constructs an elastic perfectly-plastic uniaxial material
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticPPMaterial(mdlr,name,E,fyp,fyn)
+typical_materials.defElasticPPMaterial(preprocessor,name,E,fyp,fyn)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{material} \\
 {\tt E} & tangent in the elastic zone of the stress-strain diagram (see figure \ref{ElasticPP}) \\
 \fyp{} (see figure \ref{ElasticPP}) \\
@@ -38,14 +38,14 @@ typical_materials.defElasticPPMaterial(mdlr,name,E,fyp,fyn)
 \caption{Elastic perfectly-plastic uniaxial material. Stress-strain diagram}\label{ElasticPP}
 \end{figure}
 
-\subsection{defElastNoTracMaterial}
-\noindent Construct a uniaxial elastic-no tension material
+\subsection{defElastNoTensMaterial}
+\noindent Constructs a uniaxial elastic-no tension material
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElastNoTracMaterial(mdlr,name,E)
+typical_materials.defElastNoTensMaterial(preprocessor,name,E)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{material} \\
 {\tt E} & tangent in the elastic zone of the stress-strain diagram (see figure \ref{ENT}) \\
 \end{paramFuncTable}
@@ -58,13 +58,13 @@ typical_materials.defElastNoTracMaterial(mdlr,name,E)
 
 \section{Steel and reinforcing steel materials}
 \subsection{defCableMaterial}
-\noindent Construct a uniaxial bilinear prestressed material. The stress strain ranges from slack (large strain at zero stress) to taught (linear with modulus E).
+\noindent Constructs a uniaxial bilinear prestressed material. The stress strain ranges from slack (large strain at zero stress) to taught (linear with modulus E).
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defCableMaterial(mdlr,name,E,prestress,rho)
+typical_materials.defCableMaterial(preprocessor,name,E,prestress,rho)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{material} \\
 \E{} \\
 {\tt prestress} & prestress \\
@@ -73,13 +73,13 @@ typical_materials.defCableMaterial(mdlr,name,E,prestress,rho)
 
 
 \subsection{defSteel01}
-\noindent Construct a uniaxial bilinear steel material object with kinematic hardening
+\noindent Constructs a uniaxial bilinear steel material object with kinematic hardening
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defSteel01(mdlr,name,E,fy,b)
+typical_materials.defSteel01(preprocessor,name,E,fy,b)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{material} \\
 {\tt E} & initial elastic tangent (see figure \ref{Steel01}) \\
 \fy{} (see figure \ref{Steel01})\\
@@ -95,13 +95,13 @@ typical_materials.defSteel01(mdlr,name,E,fy,b)
 
 
 \subsection{defSteel02}
-\noindent Construct a uniaxial Giuffre-Menegotto-Pinto steel material object with isotropic strain hardening
+\noindent Constructs a uniaxial Giuffre-Menegotto-Pinto steel material object with isotropic strain hardening
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defSteel02(mdlr,name,E,fy,b,initialStress)
+typical_materials.defSteel02(preprocessor,name,E,fy,b,initialStress)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{material} \\
 {\tt E} & initial elastic tangent (see figure \ref{Steel02}) \\
 \fy{} (see figure \ref{Steel02})\\
@@ -142,19 +142,19 @@ typical_materials.defSteel02(mdlr,name,E,fy,b,initialStress)
 \eyd{()} \\
 {\tt Esh()} &  post-yield tangent\\
 {\tt bsh()} & ratio between post-yield tangent and initial elastic tangent\\
-{\tt defDiagK(mdlr)} & returns XC uniaxial material (characteristic values)\\
-{\tt defDiagD(mdlr)} & returns XC uniaxial material (design values)\\
+{\tt defDiagK(preprocessor)} & returns XC uniaxial material (characteristic values)\\
+{\tt defDiagD(preprocessor)} & returns XC uniaxial material (design values)\\
 \end{methodsTable}
 
 \section{Concrete materials}
 \subsection{defConcrete01}
-\noindent Construct a uniaxial Kent-Scott-Park concrete material object with degraded linear unloading/reloading stiffness according to the work of Karsan-Jirsa and no tensile strength.
+\noindent Constructs a uniaxial Kent-Scott-Park concrete material object with degraded linear unloading/reloading stiffness according to the work of Karsan-Jirsa and no tensile strength.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defConcrete01(mdlr,name,epsc0,fpc,fpcu,epscu)
+typical_materials.defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{material} \\
 {\tt fpc} &  concrete compressive strength at 28 days (compression is negative) $^{(1)}$\\
 {\tt epsc0} &  concrete strain at maximum strength (see figure \ref{Concrete01}) $^{(2)}$\\
@@ -175,13 +175,13 @@ typical_materials.defConcrete01(mdlr,name,epsc0,fpc,fpcu,epscu)
 An ND material is an object that represents the stress-strain relationship at the gauss-point of a continuum element.
 
 \subsection{defElasticIsotropic3d}
-\noindent Construct an elastic isotropic material.
+\noindent Constructs an elastic isotropic material.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticIsotropic3d(mdlr,name,E,nu,rho)
+typical_materials.defElasticIsotropic3d(preprocessor,name,E,nu,rho)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{material}\\
 \E{} \\
 \nuX{} \\
@@ -190,12 +190,12 @@ typical_materials.defElasticIsotropic3d(mdlr,name,E,nu,rho)
 
 
 \subsection{defElasticIsotropicPlaneStrain}
-\noindent Construct an elastic isotropic plane-strain material.
+\noindent Constructs an elastic isotropic plane-strain material.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticIsotropicPlaneStrain(mdlr,name,E,nu,rho)
+typical_materials.defElasticIsotropicPlaneStrain(preprocessor,name,E,nu,rho)
 \end{verbatim}
-\begin{paramFuncTable}\mdlr{} \\
+\begin{paramFuncTable}\preprocessor{} \\
 \name{material}\\
 \E{} \\
 \nuX \\
@@ -204,13 +204,13 @@ typical_materials.defElasticIsotropicPlaneStrain(mdlr,name,E,nu,rho)
 
 
 \subsection{defElasticIsotropicPlaneStress}
-\noindent Construct an elastic isotropic plane-stress material.
+\noindent Constructs an elastic isotropic plane-stress material.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticIsotropicPlaneStress(mdlr,name,E,nu,rho)
+typical_materials.defElasticIsotropicPlaneStress(preprocessor,name,E,nu,rho)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{material}\\
 \E{} \\
 \nuX{} \\
@@ -254,13 +254,13 @@ sectionProperties.sectionProperties(name,E,nu)
 \end{tabular}
 \end{center}
 \begin{methodsTable}
-\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccElastica3d(mdlr)}} \\
+\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccElastica3d(preprocessor)}} \\
 & returns an elastic section appropiate for 3D beam analysis, from the data of the section geometric properties\\
-\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccShElastica3d(mdlr)}} \\
+\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccShElastica3d(preprocessor)}} \\
 & returns an elastic section appropiate for 3D beam analysis  including shear deformations, from the data of the section geometric properties\\
-\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccElastica2d(mdlr)}} \\
+\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccElastica2d(preprocessor)}} \\
 & returns an elastic section appropiate for 2D beam analysis, from the data of the section geometric properties\\
-\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccShElastica2d(mdlr)}} \\
+\multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccShElastica2d(preprocessor)}} \\
 & returns an elastic section appropiate for 2D beam analysis  including shear deformations, from the data of the section geometric properties\\
 \end{methodsTable}
 
@@ -268,10 +268,10 @@ sectionProperties.sectionProperties(name,E,nu)
 \noindent Returns an elastic section appropiate for 3D beam analysis.
 \begin{verbatim}
 from materials import sectionProperties
-sectionProperties.defSeccElastica3d(mdlr,defSecc)
+sectionProperties.defSeccElastica3d(preprocessor,defSecc)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \defSecc{} \\
 \end{paramFuncTable}
 
@@ -280,10 +280,10 @@ sectionProperties.defSeccElastica3d(mdlr,defSecc)
 \noindent Returns an elastic section appropiate for 3D beam analysis, including shear deformations.
 \begin{verbatim}
 from materials import sectionProperties
-sectionProperties.defSeccShElastica3d(mdlr,defSecc)
+sectionProperties.defSeccShElastica3d(preprocessor,defSecc)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \defSecc{} \\
 \end{paramFuncTable}
 
@@ -292,10 +292,10 @@ sectionProperties.defSeccShElastica3d(mdlr,defSecc)
 \noindent Returns an elastic section appropiate for 2D beam analysis.
 \begin{verbatim}
 from materials import sectionProperties
-sectionProperties.defSeccElastica2d(mdlr,defSecc)
+sectionProperties.defSeccElastica2d(preprocessor,defSecc)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \defSecc{} \\
 \end{paramFuncTable}
 
@@ -304,10 +304,10 @@ sectionProperties.defSeccElastica2d(mdlr,defSecc)
 \noindent Returns an elastic section appropiate for 2D beam analysis, including shear deformations.
 \begin{verbatim}
 from materials import sectionProperties
-sectionProperties.defSeccShElastica2d(mdlr,defSecc)
+sectionProperties.defSeccShElastica2d(preprocessor,defSecc)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \defSecc{} \\
 \end{paramFuncTable}
 
@@ -339,15 +339,15 @@ parametrosSeccionCircular.CircularSection(name,r,E,nu)
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
 \multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.setupSeccCircular(sectionName,r,E,nu)}} \\
 & returns a circular section \\
-\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularElastica3d(mdlr, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularElastica3d(preprocessor, defSecc)}}\\
 & returns an elastic circular section appropiate for 3D beam analysis.\\
-\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularShElastica3d(mdlr, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularShElastica3d(preprocessor, defSecc)}}\\
 & returns an elastic circular section appropiate for 3D beam analysis, including shear deformations.\\
-\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularElastica2d(mdlr, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularElastica2d(preprocessor, defSecc)}}\\
 & returns an elastic circular section appropiate for 2D beam analysis.\\
-\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularShElastica2d(mdlr, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularShElastica2d(preprocessor, defSecc)}}\\
 & returns an elastic circular section appropiate for 2D beam analysis, including shear deformations.\\
-& {\tt mdlr} : modeler name \\
+& {\tt preprocessor} : preprocessor name \\
 & {\tt defSecc} : name identifying an object of the class {\tt CircularSection} with the properties of the section. \\
 \end{tabular}
 \end{center}
@@ -440,13 +440,13 @@ steelProfile.SteelProfile(steel,name,table)
 
 \subsection{Elastic sections}
 \subsubsection{defElasticSection2d}
-\noindent Construct an elastic section appropiate for 2D beam analysis.
+\noindent Constructs an elastic section appropiate for 2D beam analysis.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticSection2d(mdlr,name,A,E,I)
+typical_materials.defElasticSection2d(preprocessor,name,A,E,I)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{section} \\
 \A{} \\
 {\tt E} &  Young's modulus of material \\
@@ -456,13 +456,13 @@ typical_materials.defElasticSection2d(mdlr,name,A,E,I)
 
 
 \subsubsection{defElasticShearSection2d}
-\noindent Construct an elastic section appropiate for 2D beam analysis, including shear deformations.
+\noindent Constructs an elastic section appropiate for 2D beam analysis, including shear deformations.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticShearSection2d(mdlr,name,A,E,G,I,alpha)
+typical_materials.defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{section} \\
 \A{} \\
 {\tt E} &  Young's modulus of material \\
@@ -473,26 +473,26 @@ typical_materials.defElasticShearSection2d(mdlr,name,A,E,G,I,alpha)
 
 
 \subsubsection{defElasticSectionFromMechProp2d}
-\noindent Construct an elastic section appropiate for 2D beam analysis, taking mechanical properties of the section form a MechProp2d object.
+\noindent Constructs an elastic section appropiate for 2D beam analysis, taking mechanical properties of the section form a MechProp2d object.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticSectionFromMechProp2d(mdlr,name,mechProp2d)
+typical_materials.defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{section} \\
 {\tt mechProp2d} & object that contains mechanical properties of the section  \\
 \end{paramFuncTable}
 
 %%%
 \subsubsection{defElasticSection3d}
-\noindent Construct an elastic section appropiate for 3D beam analysis.
+\noindent Constructs an elastic section appropiate for 3D beam analysis.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticSection3d(mdlr,name,A,E,G,Iz,Iy,J)
+typical_materials.defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{section} \\
 \A{} \\
 \E{} of material \\
@@ -503,13 +503,13 @@ typical_materials.defElasticSection3d(mdlr,name,A,E,G,Iz,Iy,J)
 
 
 \subsubsection{defElasticShearSection3d}
-\noindent Construct an elastic section appropiate for 3D beam analysis, including shear deformations.
+\noindent Constructs an elastic section appropiate for 3D beam analysis, including shear deformations.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticShearSection3d(mdlr,name,A,E,G,Iz,Iy,J,alpha)
+typical_materials.defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{section} \\
 \A{} \\
 \E of material \\
@@ -521,26 +521,26 @@ typical_materials.defElasticShearSection3d(mdlr,name,A,E,G,Iz,Iy,J,alpha)
 \end{paramFuncTable}
 
 \subsubsection{defElasticSectionFromMechProp3d}
-\noindent Construct an elastic section appropiate for 3D beam analysis, taking mechanical properties of the section form a MechProp3d object.
+\noindent Constructs an elastic section appropiate for 3D beam analysis, taking mechanical properties of the section form a MechProp3d object.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticSectionFromMechProp3d(mdlr,name,mechProp3d)
+typical_materials.defElasticSectionFromMechProp3d(preprocessor,name,mechProp3d)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{section} \\
 {\tt mechProp3d} & object that contains mechanical properties of the section  \\
 \end{paramFuncTable}
 
 
 \subsubsection{defElasticMembranePlateSection}
-\noindent Construct an an isotropic elastic section appropriate for plate and shell analysis.
+\noindent Constructs an an isotropic elastic section appropriate for plate and shell analysis.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticMembranePlateSection(mdlr,name,E,nu,rho,h)
+typical_materials.defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{section}\\
 \E{} \\
 \nuX{} \\
@@ -549,13 +549,13 @@ typical_materials.defElasticMembranePlateSection(mdlr,name,E,nu,rho,h)
 \end{paramFuncTable}
 
 \subsubsection{defElasticPlateSection}
-\noindent Construct an an isotropic elastic section appropriate for plate analysis.
+\noindent Constructs an an isotropic elastic section appropriate for plate analysis.
 \begin{verbatim}
 from materials import typical_materials
-typical_materials.defElasticPlateSection(mdlr,name,E,nu,rho,h)
+typical_materials.defElasticPlateSection(preprocessor,name,E,nu,rho,h)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 \name{section}\\
 \E{} \\
 \nuX{}\\
@@ -629,13 +629,13 @@ createFiberSets.fiberSectionSetupRCSets(scc,concrMatTag, concrSetName,reinfMatTa
 
 
 \subsubsection{createRCFiberSets}
-Construct the sets of concrete fibers (\verb|"hormigon"|) and reinforcing steel fibers (\verb|"armadura"|) for all the elements included in a set of elements.
+Constructs the sets of concrete fibers (\verb|"hormigon"|) and reinforcing steel fibers (\verb|"armadura"|) for all the elements included in a set of elements.
 \begin{verbatim}
 from materials.fiber_section import createFiberSets
-createFiberSets.createRCFiberSets(mdlr, setName, concrMatTag, reinfMatTag)
+createFiberSets.createRCFiberSets(preprocessor, setName, concrMatTag, reinfMatTag)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 {\tt setName} & name identifying the set of elements \\
 {\tt concrMatTag} & tag of the uniaxial material that makes up the concrete fibers of the section \\
 {\tt reinfMatTag} & tag of the uniaxial material that makes up the reinforcing steel fibers of the section \\
@@ -697,7 +697,7 @@ defSeccionHAPilar.RecordRCColumnSection()
 \end{paramClassTable}
 
 \begin{methodsTable}
-\multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(matDiagType)}} \\
+\multicolumn{2}{p{13cm}}{{\tt defGeomRCColumnSection(matDiagType)}} \\
  & returns a reinforced concrete section with reinforcement symmetric in both directions \\
 & {\tt matDiagType} ="k" for characteristic diagram, ="d" for design diagram \\ 
 \end{methodsTable}
@@ -752,7 +752,7 @@ defSeccionHASimple.RecordRCSimpleSection()
 {\tt shReinfY} & record of type {\tt defSeccionHASimple.RecordShearReinforcement()} defining the shear reinforcement in Y direction \\
 \end{paramClassTable}
 \begin{methodsTable}
-\multicolumn{2}{p{13cm}}{{\tt defGeomSeccHAPilar(matDiagType)}} \\
+\multicolumn{2}{p{13cm}}{{\tt defGeomRCColumnSection(matDiagType)}} \\
  & returns a reinforced concrete section with reinforcement symmetric in both directions \\
 & {\tt matDiagType} ="k" for characteristic diagram, ="d" for design diagram \\ 
 \end{methodsTable}
@@ -995,10 +995,10 @@ archTex)
 \noindent This function prepares a report with the characteristics of a sections, as illustrated in table \ref{informSec}
 \begin{verbatim}
 from materials.fiber_section import informeGeomSeccion
-informeGeomSeccion.informeGeomSeccion(mdlr,scc, archTex, pathFigura)
+informeGeomSeccion.informeGeomSeccion(preprocessor,scc, archTex, pathFigura)
 \end{verbatim}
 \begin{paramFuncTable}
-\mdlr{} \\
+\preprocessor{} \\
 {\tt scc} & name identifying the section \\
 {\tt archTex} &  name of the output file \\
 {\tt pathFigura} & path to place the figure file representing the reinforcement arrangement \\

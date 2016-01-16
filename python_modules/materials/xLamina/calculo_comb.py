@@ -26,9 +26,11 @@ def getListaCombinaciones(nmbArchDefHipELU):
   os.sys("rm -f "+"/tmp/cargas.xci")
   return lstCombRetval
 
-def xLaminaCalculaComb(preprocessor, analysis, trataResultsComb):
+def xLaminaCalculaComb(preprocessor, analysis, procesResultVerif):
   '''
   Lanza el análisis (lineal) y la comprobación en las combinaciones que se pasan como parámetros
+  Parameters:
+    preprocessor:    preprocessor name
   nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
   '''
   casos= preprocessor.getLoadLoader.getLoadPatterns #Una combinación en cada caso de carga. 
@@ -36,11 +38,13 @@ def xLaminaCalculaComb(preprocessor, analysis, trataResultsComb):
     comb= casos[key]
     #print "Resolviendo para acción: ",key
     resuelve_combinacion.resuelveComb(preprocessor,key,analysis,1)
-    trataResultsComb(preprocessor,key)
+    procesResultVerif(preprocessor,key)
 
-def xLaminaCalculaCombEstatLin(preprocessor, analysis, trataResultsComb):
+def xLaminaCalculaCombEstatLin(preprocessor, analysis, procesResultVerif):
   '''
   Lanza el análisis (lineal) y la comprobación en las combinaciones que se pasan como parámetros
+  Parameters:
+    preprocessor:    preprocessor name
   nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
   '''
   casos= preprocessor.getLoadLoader.getLoadPatterns #Una combinación en cada caso de carga. 
@@ -48,7 +52,7 @@ def xLaminaCalculaCombEstatLin(preprocessor, analysis, trataResultsComb):
     comb= casos[key]
     #print "Resolviendo para acción: ",key
     resuelve_combinacion.resuelveComb(preprocessor,key,analysis,1)
-    trataResultsComb(preprocessor,key)
+    procesResultVerif(preprocessor,key)
 
 
 def xLaminaCalculaCombEstatNoLin(nmbArchDefHipELU):
@@ -62,6 +66,6 @@ def xLaminaCalculaCombEstatNoLin(nmbArchDefHipELU):
   for comb in listaCombinaciones:
     print "Resolviendo para acción: ",comb
     resuelveCombEstatNoLin(comb)
-    trataResultsComb(comb,nmbDiagIntSec1,nmbDiagIntSec2)
+    procesResultVerif(comb,nmbDiagIntSec1,nmbDiagIntSec2)
   os.sys("rm -f "+"/tmp/acciones.xci")
   os.sys("rm -f "+"/tmp/cargas.xci")

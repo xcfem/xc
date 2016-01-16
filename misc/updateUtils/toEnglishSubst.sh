@@ -1,7 +1,9 @@
 #!/bin/bash
 for fl in $(find ../../verif ../../python_modules ../../doc/XCmanual -type f -name *.py -o -name *.tex | grep -v build)
 do
-#echo $fl
+# echo $fl
+# sed -i 's/mdlr/preprocessor/g' $fl
+# sed -i 's/modeler/preprocessor/g' $fl
 # sed -i 's/nmbSet/setName/g' $fl
 # sed -i 's/fibrasHormigon/concrFibers/g' $fl
 # sed -i 's/fibrasArmadura/reinfFibers/g' $fl
@@ -65,4 +67,13 @@ do
 # sed -i 's/tipoDiag/matDiagType/g' $fl
 # sed -i 's/RecordSeccionHASimple/RecordRCSimpleSection/g' $fl
 # sed -i 's/RecordSeccionHALosa/RecordRCSlabSection/g' $fl
+# sed -i 's/defGeomSeccHAPilar/defGeomRCColumnSection/g' $fl
+# sed -i 's/defElastNoTracMaterial/defElastNoTensMaterial/g' $fl
+# sed -i 's/nmbArchCsv/intForcCombFileName/g' $fl
+# sed -i 's/nmbArchSalida/outputFileName/g' $fl
+# sed -i 's/trataResultsComb/procesResultVerif/g' $fl
+# sed -i 's/csvFile/intForcCombFileName/g' $fl
+# sed -i 's/nmbArchComb/intForcCombFileName/g' $fl
+# sed -i 's/nmbArchLST/intForcCombFileName/g' $fl
+
 done

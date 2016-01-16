@@ -201,7 +201,7 @@ def resuelveCombEstatLin(comb,tagSaveFase0,hlp):
 dXMin=1e9
 dXMax=-1e9
 
-def trataResultsComb(comb):
+def procesResultVerif(comb):
   nodos= preprocessor.getNodeLoader
   nod8= nodos.getNode(8)
   deltaX= nod8.getDisp[0] # Desplazamiento del nodo 2 según z
@@ -243,7 +243,7 @@ tagSave= 0
 for key in combs.getKeys():
   c= combs[key]
   resuelveCombEstatLin(c,tagSaveFase0,helper)
-  trataResultsComb(comb)
+  procesResultVerif(comb)
 
 ratio1= abs((dXMax-0.115734e-3)/0.115734e-3)
 ratio2= abs((dXMin+0.0872328e-3)/0.0872328e-3)
