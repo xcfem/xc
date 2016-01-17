@@ -43,7 +43,7 @@ class ArcoCircunf: public LineaBase
   {
     Pnt *p3; //!< Punto intermedio del arco.
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
     const SectorCircular3d get_sector_circular3d(void) const;
     MatrizPos3d get_posiciones(void) const;
   public:
@@ -74,7 +74,7 @@ class ArcoCircunf: public LineaBase
     int getMEDCellType(void) const;
     virtual ID getKPoints(void) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

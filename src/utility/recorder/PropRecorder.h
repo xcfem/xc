@@ -42,7 +42,7 @@ class PropRecorder: public Recorder
     double lastTimeStamp; //!< TimeStamp de la última llamada a record.
 
     Domain *theDomain;
-    bool procesa_comando(CmdStatus &status);
+
   public:
     PropRecorder(int classTag, Domain *ptr_dom= NULL);
 

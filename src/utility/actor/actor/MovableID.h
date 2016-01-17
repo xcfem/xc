@@ -42,7 +42,7 @@ class MovableID: public ID, public MovableObject
   protected:
 
     DbTagData &getDbTagData(void) const;
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors
     MovableID(const size_t &sz= 0);
@@ -52,7 +52,7 @@ class MovableID: public ID, public MovableObject
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } // end of XC namespace

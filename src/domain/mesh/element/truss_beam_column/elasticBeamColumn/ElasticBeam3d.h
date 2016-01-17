@@ -97,7 +97,6 @@ class ElasticBeam3d : public ProtoBeam3d
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
   public:
     ElasticBeam3d(int tag= 0);
     ElasticBeam3d(int tag,const Material *m,const CrdTransf *trf);
@@ -253,7 +252,6 @@ class ElasticBeam3d : public ProtoBeam3d
       {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
         return q.T2(); //Torsor en el extremo frontal.
       }
-    any_const_ptr GetProp(const std::string &) const;
 
     Response *setResponse(const std::vector<std::string> &argv, Information &info);
     int getResponse(int responseID, Information &info);

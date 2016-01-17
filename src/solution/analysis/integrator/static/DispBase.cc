@@ -34,22 +34,12 @@
 #include <domain/mesh/node/Node.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include <utility/matrix/ID.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
 XC::DispBase::DispBase(SoluMethod *owr,int classTag,const int &numIncr) 
   :BaseControl(owr,classTag,numIncr){}
-
-//! @brief Lee un objeto XC::DispBase desde archivo
-bool XC::DispBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DispBase) Procesando comando: " << cmd << std::endl;
-    return BaseControl::procesa_comando(status);
-  }
 
 //! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
 int XC::DispBase::sendData(CommParameters &cp)
@@ -67,16 +57,3 @@ int XC::DispBase::recvData(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::DispBase::GetProp(const std::string &cod) const
-  {
-    if(cod=="getDeltaLambdaStep")
-      return any_const_ptr(vectores.getDeltaLambdaStep());
-    else if(cod== "getCurrentLambda")
-      return any_const_ptr(vectores.getCurrentLambda());
-    else
-      return BaseControl::GetProp(cod);
-  }

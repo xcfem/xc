@@ -33,34 +33,6 @@
 XC::MEDDblFieldInfo::MEDDblFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)
   : MEDTFieldInfo<double>(fi,grp) {}
 
-//! @brief Lectura del objeto desde archivo.
-bool XC::MEDDblFieldInfo::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MEDDblFieldInfo) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "setValueIJ") //Asigna el valor a la componente j del elemento i.
-      {
-        if(!campo) to_med(); //Envía definición del campo a MEDMEM.
-        const double valor= interpretaDouble(status.GetBloque());
-        const CmdParser &parser= status.Parser();
-        if(parser.TieneIndices())
-          {
-            interpreta(parser.GetIndices());
-            if(InterpreteRPN::HayArgumentos(2,cmd))
-              {
-                const int j= convert_to_int(InterpreteRPN::Pila().Pop()); //Índice  de la componente.
-                const int i= convert_to_int(InterpreteRPN::Pila().Pop()); //Índice  del elemento.
-                setValueIJ(i,j,valor);
-              }
-          }
-        return true;
-      }
-    else    
-      return MEDTFieldInfo<double>::procesa_comando(status);
-  }
-
 //! @brief Asigna los valores del campo en los nodos.
 void XC::MEDDblFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
   {

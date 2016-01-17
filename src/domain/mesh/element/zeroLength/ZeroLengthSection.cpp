@@ -63,7 +63,6 @@
 #include "utility/actor/actor/MovableMatrix.h"
 #include <material/section/SectionForceDeformation.h>
 #include <utility/recorder/response/ElementResponse.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "material/section/ResponseId.h"
 #include "utility/matrix/Matrix.h"
@@ -161,59 +160,6 @@ XC::ZeroLengthSection::ZeroLengthSection(void)
 //! @brief Constructor virtual.
 XC::Element *XC::ZeroLengthSection::getCopy(void) const
   { return new ZeroLengthSection(*this); }
-
-//! @brief Lee un objeto XC::ZeroLength desde archivo
-bool XC::ZeroLengthSection::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ZeroLengthSection) Procesando comando: " << cmd << std::endl;
-    if((cmd == "seccion") || (cmd == "for_each_section"))
-      {
-        if(theSection)
-          theSection->LeeCmd(status);
-        else
-          {
-            status.GetBloque();
-            std::cerr << "El elemento no tiene asignada una sección." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "K")
-      {
-        if(K)
-          K->LeeCmd(status);
-        else
-          {
-            status.GetBloque();
-            std::cerr << "El elemento no tiene matriz de rigidez." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "A")
-      {
-        A.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "v")
-      {
-        v.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "P")
-      {
-        if(P)
-          P->LeeCmd(status);
-        else
-          {
-            status.GetBloque();
-            std::cerr << "El elemento no tiene vector de cargas." << std::endl;
-          }
-        return true;
-      }
-    else
-      return Element0D::procesa_comando(status);
-  }
 
 //! @brief Destructor.
 XC::ZeroLengthSection::~ZeroLengthSection(void)
@@ -616,26 +562,3 @@ void XC::ZeroLengthSection::computeSectionDefs(void) const
         def(i)+= -diff(j)*tran(i,j);
   }
 
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ZeroLengthSection::GetProp(const std::string &cod) const
-  {
-    if(cod == "getSection")
-      return any_const_ptr(theSection);
-    if(cod == "getMatrixA") //Matriz para obtención de deformaciones.
-      return any_const_ptr(A);
-    else if(cod=="getVectorP")
-      {
-        if(P)
-          return get_prop_vector(*P);
-        else
-          {
-	    std::cerr << "ZeroLenghtSection: el vector de cargas no está definido." << std::endl;
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getVectorDef")
-      return get_prop_vector(v);
-    else
-      return Element0D::GetProp(cod);
-  }

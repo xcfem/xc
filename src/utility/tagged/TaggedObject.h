@@ -82,23 +82,15 @@ class TaggedObject: public EntCmd
     friend class CommParameters;
     template <class T> friend T *getBrokedTagged(const int &,const int &,const int &,FEM_ObjectBroker &,T *(FEM_ObjectBroker::*ptrFunc)(int));
     void setTag(int newTag);  // CAUTION: this is a dangerous method to call
-    bool procesa_comando(CmdStatus &status);
+
   public:
     TaggedObject(int tag,EntCmd *owr= NULL);
     virtual TaggedObject *getCopy(void) const;
     virtual ~TaggedObject(void) {}
 
-    static any_const_ptr get_prop_vector(const Vector *ptrVector);
-    static any_const_ptr get_prop_vector(const Vector &ptrVector);
-    static any_const_ptr get_row(const Matrix *,int);
-    static any_const_ptr get_row(const Matrix &,int);
-    static any_const_ptr get_col(const Matrix *,int);
-    static any_const_ptr get_col(const Matrix &,int);
-
     void assignTag(int newTag);
     inline int getTag(void) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
     virtual void Print(std::ostream &s, int flag =0);       
     friend std::ostream &operator<<(std::ostream &s, TaggedObject &m);        
   };

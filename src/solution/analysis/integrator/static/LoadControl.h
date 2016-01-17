@@ -80,7 +80,7 @@ class LoadControl : public BaseControl
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
 
     friend class SoluMethod;
     friend class FEM_ObjectBroker;

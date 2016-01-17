@@ -48,7 +48,7 @@ class BeamStrainLoad : public BeamLoad
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     BeamStrainLoad(int tag, const ID &theElementTags);
     BeamStrainLoad(int tag= 0);
@@ -68,7 +68,7 @@ class BeamStrainLoad : public BeamLoad
     int recvSelf(const CommParameters &);
 
     void Print(std::ostream &s, int flag =0) const;
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

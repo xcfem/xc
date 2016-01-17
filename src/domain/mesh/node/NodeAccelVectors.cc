@@ -29,40 +29,12 @@
 #include <domain/mesh/node/NodeAccelVectors.h>
 #include <utility/tagged/TaggedObject.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
 XC::NodeAccelVectors::NodeAccelVectors(void)
   :NodeVectors() {}
 
-
-//! @brief Lee un objeto XC::Node desde archivo
-//!
-//! Soporta los comandos:
-//! -coo: Lee las coordenadas del nodo.
-bool XC::NodeAccelVectors::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NodeAccelVectors) Procesando comando: " << cmd << std::endl;
-    return NodeVectors::procesa_comando(status);
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::NodeAccelVectors::GetProp(const std::string &cod) const
-  {
-    if(cod=="trial_accel" && trialData)
-      return TaggedObject::get_prop_vector(trialData);
-    else if(cod=="commit_accel" && commitData)
-      return TaggedObject::get_prop_vector(commitData);
-    else
-      return NodeVectors::GetProp(cod);
-  }
 
 void XC::NodeAccelVectors::Print(std::ostream &s,int flag)
   {

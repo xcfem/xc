@@ -71,11 +71,10 @@ namespace XC {
 
 //! @ingroup TipoAnalisis
 //
-//! @brief Análisis dinámico del modelo de elementos finitos.
+//! @brief Analysis of the time-dependent response of the model.
 class TransientAnalysis: public Analysis
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
     TransientAnalysis(SoluMethod *);
   public:
     //! @brief Ejecuta el análisis.

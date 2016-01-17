@@ -28,7 +28,6 @@
 
 
 #include <solution/analysis/convergenceTest/ConvergenceTestTol.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
@@ -40,39 +39,12 @@ XC::ConvergenceTestTol::ConvergenceTestTol(EntCmd *owr,int clasTag)
 XC::ConvergenceTestTol::ConvergenceTestTol(EntCmd *owr,int clasTag,double theTol, int maxIter, int printIt, int normType,int sz_norms)
   : ConvergenceTest(owr,clasTag,maxIter,printIt,normType,sz_norms), tol(theTol) {}
 
-//! @brief Lee un objeto ConvergenceTest desde archivo
-bool XC::ConvergenceTestTol::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ConvergenceTest) Procesando comando: " << cmd << std::endl;
-    if(cmd=="tol")
-      {
-        setTolerance(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else
-      return ConvergenceTest::procesa_comando(status);
-  }
-
 void XC::ConvergenceTestTol::setTolerance(double newTol)
   { tol = newTol; }
 
 double XC::ConvergenceTestTol::getTolerance(void) const
   { return tol; }
 
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::ConvergenceTestTol::GetProp(const std::string &cod) const
-  {
-    if(cod=="tol")
-      return any_const_ptr(tol);
-    else
-      return ConvergenceTest::GetProp(cod);
-  }
 
 //! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
 int XC::ConvergenceTestTol::sendData(CommParameters &cp)

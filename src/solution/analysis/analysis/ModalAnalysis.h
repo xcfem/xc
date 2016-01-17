@@ -44,8 +44,6 @@ class ModalAnalysis : public EigenAnalysis
   protected:
     FuncPorPuntosR_R espectro;
 
-    bool procesa_comando(CmdStatus &status);
-
     friend class ProcSolu;
     ModalAnalysis(SoluMethod *metodo);
   public:
@@ -61,8 +59,6 @@ class ModalAnalysis : public EigenAnalysis
 
     //Fuerza estática equivalente.
     Vector getEquivalentStaticLoad(int mode) const;
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // end of XC namespace

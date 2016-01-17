@@ -29,7 +29,6 @@
 #include "Loader.h"
 #include "preprocessor/Preprocessor.h"
 #include "domain/domain/Domain.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -56,30 +55,6 @@ XC::Domain *XC::Loader::getDomain(void) const
 void XC::Loader::set_preprocessor(Preprocessor *p)
   { preprocessor= p; }
 
-//! @brief Procesa los comandos que se emplean para definir
-//! el modelo de elementos finitos. Interpreta
-//! los siguientes comandos:
-//!
-//! - dom: Lanza el intérprete de comandos del dominio.
-bool XC::Loader::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Loader) Procesando comando: " << cmd << std::endl;
-    if(cmd=="dom")
-      {
-        Domain *tmp= getDomain();
-        if(tmp)
-          tmp->LeeCmd(status);
-        else
-	  std::cerr << "(Loader) Procesando comando: " << cmd
-                    << "; el apuntador al dominio es nulo." << std::endl;
-        return true;
-      }
-    else    
-      return EntCmd::procesa_comando(status);
-  }
-
 XC::Loader::~Loader(void)
   { preprocessor= nullptr; }
 
@@ -98,23 +73,3 @@ int XC::Loader::recvSelf(const CommParameters &cp)
     return -1;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//!
-//! - preprocessor: Devuelve una referencia al preprocessor al que pertenece este objeto.
-//! - dom: Devuelve el una referencia al dominio del problema.
-any_const_ptr XC::Loader::GetProp(const std::string &cod) const
-  {
-    if(cod=="preprocessor")
-      return any_const_ptr(preprocessor);
-    else if(cod=="dom")
-      {
-        static Domain *dom_ptr= nullptr;
-        dom_ptr= getDomain();
-        return any_const_ptr(dom_ptr);
-      }
-    else
-      return EntCmd::GetProp(cod);
-  }

@@ -154,9 +154,6 @@ class Mesh: public MeshComponentContainer
     Node *getNearestNode(const Pos3d &p);
     const Node *getNearestNode(const Pos3d &p) const;
 
-    void EjecutaBloqueForEachElement(CmdStatus &,const std::string &);
-    void EjecutaBloqueForEachNode(CmdStatus &,const std::string &);
-
     // methods to query the state of the mesh
     virtual int getNumElements(void) const;
     virtual int getNumNodes(void) const;

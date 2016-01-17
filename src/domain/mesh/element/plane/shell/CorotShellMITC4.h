@@ -44,7 +44,7 @@ class CorotShellMITC4 : public ShellMITC4Base
   protected:
     DbTagData &getDbTagData(void) const;
 
-    bool procesa_comando(CmdStatus &status);
+
   public:
     CorotShellMITC4(void);
     CorotShellMITC4(int tag,const SectionForceDeformation *ptr_mat); 
@@ -56,7 +56,7 @@ class CorotShellMITC4 : public ShellMITC4Base
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
       
-    any_const_ptr GetProp(const std::string &cod) const;
+
   }; 
 
 } // end of XC namespace

@@ -49,7 +49,7 @@ namespace XC{
 class MatrizPtrElem: public MatrizPtrBase<Element>
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     //! @brief Constructor.
     MatrizPtrElem(const size_t &f=0,const size_t &c=0)
@@ -60,7 +60,7 @@ class MatrizPtrElem: public MatrizPtrBase<Element>
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

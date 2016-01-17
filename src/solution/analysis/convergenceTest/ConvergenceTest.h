@@ -83,7 +83,6 @@ class ConvergenceTest: public MovableObject, public BloqueBase
     int nType; //!< type of norm to use (1-norm, 2-norm, p-norm, max-norm)
     Vector norms; //!< vector to hold the norms
 
-    bool procesa_comando(CmdStatus &status);
 
     bool hasLinearSOE(void) const;
     LinearSOE *getLinearSOEPtr(void);
@@ -123,7 +122,7 @@ class ConvergenceTest: public MovableObject, public BloqueBase
     virtual const Vector &getNorms(void) const;
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

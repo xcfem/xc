@@ -50,7 +50,6 @@
 #include <utility/matrix/Vector.h>
 
 #include <cmath>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 // Controls on internal iteration between spring components
@@ -96,38 +95,6 @@ XC::TzSimple1::TzSimple1(void)
     // BTW maxIterations and tolerance should not be private variables, they
     // should be static .. all XC::PySimple1 materials share the same values & 
     // these values don't change
-  }
-
-//! @brief Lee un objeto XC::TzSimple1 desde archivo
-bool XC::TzSimple1::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TzSimple1) Procesando comando: " << cmd << std::endl;
-    if(cmd == "Reese")
-      {
-        status.GetString();
-        soilType= 1;
-        return true;
-      }
-    else if(cmd == "Mosher")
-      {
-        status.GetString();
-        soilType= 2;
-        return true;
-      }
-    else if(cmd == "tult")
-      {
-        matCapacity= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "z50")
-      {
-        v50= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return PYBase::procesa_comando(status);
   }
 
 /////////////////////////////////////////////////////////////////////
@@ -481,18 +448,3 @@ void XC::TzSimple1::Print(std::ostream &s, int flag)
 
 /////////////////////////////////////////////////////////////////////
 
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::TzSimple1::GetProp(const std::string &cod) const
-  {
-    if(cod=="tzType")
-      return any_const_ptr(soilType);
-    else if(cod=="tult")
-      return any_const_ptr(matCapacity);
-    else if(cod=="z50")
-      return any_const_ptr(v50);
-    else
-      return PYBase::GetProp(cod);
-  }

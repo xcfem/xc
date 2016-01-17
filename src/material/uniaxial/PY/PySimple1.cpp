@@ -51,7 +51,6 @@
 #include "material/uniaxial/PY/PySimple1.h"
 #include <utility/matrix/Vector.h>
 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 // Controls on internal iteration between spring components
@@ -78,43 +77,6 @@ XC::PySimple1::PySimple1(int tag,int classtag)
 //! @brief Default constructor.
 XC::PySimple1::PySimple1(void)
   :PQyzBase(0,0),drag(0.0) {}
-
-//! @brief Lee un objeto XC::PySimple1 desde archivo
-bool XC::PySimple1::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(PySimple1) Procesando comando: " << cmd << std::endl;
-    if(cmd == "clay")
-      {
-        status.GetString();
-        soilType= 1; // Soil type = 1 for soft clay
-        return true;
-      }
-    else if(cmd == "sand")
-      {
-        status.GetString();
-        soilType= 2; // Soil type = 2 for sand
-        return true;
-      }
-    else if(cmd == "pult")
-      {
-        matCapacity= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "y50")
-      {
-        v50= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "Cd")
-      {
-        drag= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return PQyzBase::procesa_comando(status);
-  }
 
 
 /////////////////////////////////////////////////////////////////////
@@ -685,19 +647,3 @@ void XC::PySimple1::Print(std::ostream &s, int flag)
 
 /////////////////////////////////////////////////////////////////////
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::PySimple1::GetProp(const std::string &cod) const
-  {
-    if(cod=="pult")
-      return any_const_ptr(matCapacity);
-    else if(cod=="y50")
-      return any_const_ptr(v50);
-    else if(cod=="Cd")
-      return any_const_ptr(drag);
-    else
-      return PQyzBase::GetProp(cod);
-  }

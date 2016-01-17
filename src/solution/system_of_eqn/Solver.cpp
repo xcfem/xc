@@ -64,18 +64,8 @@
 // What: "@(#) Solver.C, revA"
 
 #include <solution/system_of_eqn/Solver.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 //! @brief Constructor.
 XC::Solver::Solver(int classTag)
   : MovableObject(classTag), EntCmd() {}
-
-//! @brief Lee un objeto XC::Solver desde archivo
-bool XC::Solver::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Solver) Procesando comando: " << cmd << std::endl;
-    return EntCmd::procesa_comando(status);
-  }
 

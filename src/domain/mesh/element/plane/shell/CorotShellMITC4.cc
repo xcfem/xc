@@ -39,16 +39,6 @@ XC::CorotShellMITC4::CorotShellMITC4(void)
 XC::CorotShellMITC4::CorotShellMITC4(int tag,const SectionForceDeformation *ptr_mat)
   : ShellMITC4Base(tag,ELE_TAG_CorotShellMITC4,ptr_mat,&corot_trf) {}
 
-//! @brief Lee un objeto XC::CorotShellMITC4 desde archivo
-bool XC::CorotShellMITC4::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(CorotShellMITC4) Procesando comando: " << cmd << std::endl;
-
-    return ShellMITC4Base::procesa_comando(status);
-  }
-
 //! @brief Constructor
 XC::CorotShellMITC4::CorotShellMITC4(int tag,int node1,int node2,int node3,int node4,SectionForceDeformation &theMaterial )
   : ShellMITC4Base(tag,ELE_TAG_CorotShellMITC4,&theMaterial,&corot_trf) {}
@@ -105,11 +95,4 @@ int XC::CorotShellMITC4::recvSelf(const CommParameters &cp)
     else
       res+= recvData(cp);
     return res;
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::CorotShellMITC4::GetProp(const std::string &cod) const
-  {
-    return ShellMITC4Base::GetProp(cod);
   }

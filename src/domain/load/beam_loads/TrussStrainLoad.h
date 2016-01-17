@@ -41,7 +41,7 @@ class TrussStrainLoad : public ElementBodyLoad
     double e1; //!< Deformación impuesta en el nodo 1	
     double e2; //!< Deformación impuesta en el nodo 2
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
   // Constructors based on 2 temperature changes given
     TrussStrainLoad(int tag, const double &e1, const double &e2, const ID &theElementTags);
@@ -62,7 +62,7 @@ class TrussStrainLoad : public ElementBodyLoad
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0) const;       
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

@@ -28,7 +28,6 @@
 
 #include "LoadLoaderMember.h"
 #include "preprocessor/loaders/LoadLoader.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor por defecto.
@@ -72,19 +71,3 @@ int &XC::LoadLoaderMember::getTagLP(void)
 const int &XC::LoadLoaderMember::getTagLP(void) const
   { return getLoadLoader()->getTagLP(); }
 
-//! @brief Lee un objeto LoadLoaderMember desde archivo
-bool XC::LoadLoaderMember::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(LoadLoaderMember) Procesando comando: " << cmd << std::endl;
-
-    return EntCmd::procesa_comando(status);
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::LoadLoaderMember::GetProp(const std::string &cod) const
-  {
-    return EntCmd::GetProp(cod);
-  }

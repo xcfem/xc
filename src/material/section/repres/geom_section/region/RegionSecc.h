@@ -58,7 +58,7 @@ class RegionSecc: public DiscretBase
   {
   protected:
     mutable VectorCells cells;
-    bool procesa_comando(CmdStatus &status);
+
   public:
     RegionSecc(Material *);
     virtual ~RegionSecc(void) {}
@@ -93,7 +93,7 @@ class RegionSecc: public DiscretBase
     Matrix &getI(const Pos2d &o) const;
 
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     virtual void Print(std::ostream &s, int flag= 0) const =0;   
     friend std::ostream &operator<<(std::ostream &s, const RegionSecc &rg_scc);    
   };

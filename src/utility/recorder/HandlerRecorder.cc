@@ -28,7 +28,6 @@
 
 #include <utility/recorder/HandlerRecorder.h>
 #include <utility/handler/DataOutputHandler.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 XC::HandlerRecorder::HandlerRecorder(int classTag)
   :DomainRecorderBase(classTag,nullptr), theHandler(nullptr), initializationDone(false), echoTimeFlag(false)
@@ -36,28 +35,6 @@ XC::HandlerRecorder::HandlerRecorder(int classTag)
 
 XC::HandlerRecorder::HandlerRecorder(int classTag,Domain &theDom,DataOutputHandler &theOutputHandler,bool tf)
   :DomainRecorderBase(classTag,&theDom), theHandler(&theOutputHandler), initializationDone(false), echoTimeFlag(tf) {}
-
-//! @brief Lee un objeto XC::HandlerRecorder desde archivo
-bool XC::HandlerRecorder::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(HandlerRecorder) Procesando comando: " << cmd << std::endl;
-    if(cmd == "echo_time_on")
-      {
-        status.GetString(); //Ignoramos entrada.
-        echoTimeFlag= true;
-        return true;
-      }
-    else if(cmd == "echo_time_off")
-      {
-        status.GetString(); //Ignoramos entrada.
-        echoTimeFlag= false;
-        return true;
-      }
-    else
-      return DomainRecorderBase::procesa_comando(status);
-  }
 
 //! @brief Asigna el manejador de salida de datos
 void XC::HandlerRecorder::SetOutputHandler(DataOutputHandler *tH)

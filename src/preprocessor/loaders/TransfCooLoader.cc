@@ -33,7 +33,6 @@
 #include "domain/mesh/element/coordTransformation/PDeltaCrdTransf3d.h"
 #include "domain/mesh/element/coordTransformation/CorotCrdTransf2d.h"
 #include "domain/mesh/element/coordTransformation/CorotCrdTransf3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "boost/any.hpp"
 
@@ -112,66 +111,6 @@ XC::CorotCrdTransf3d *XC::TransfCooLoader::newCorotCrdTransf3d(const std::string
     assert(retval);
     transfcoo[cod_trf]= retval;
     return retval;
-  }
-
-//! @brief Lee un objeto TransfCooLoader desde archivo
-bool XC::TransfCooLoader::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TransfCooLoader) Procesando comando: " << cmd << std::endl;
-
-    std::string cod_trf= "nil"; //Código de la transformación de coordenadas.
-
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    if(fnc_indices.size()>0)
-      cod_trf= convert_to_string(fnc_indices[0]);
-    if(fnc_indices.size()>1)
-      tag_trf= convert_to_int(fnc_indices[1]);
-    if(cmd == "linear2d")
-      {
-	LinearCrdTransf2d *trf= new LinearCrdTransf2d(tag_trf++);
-        if(trf) trf->LeeCmd(status);
-        transfcoo[cod_trf]= trf;
-        return true;
-      }
-    else if(cmd == "linear3d")
-      {
-	LinearCrdTransf3d *trf= new LinearCrdTransf3d(tag_trf++);
-        if(trf) trf->LeeCmd(status);
-        transfcoo[cod_trf]= trf;
-        return true;
-      }
-    else if(cmd == "p_delta2d")
-      {
-	PDeltaCrdTransf2d *trf= new PDeltaCrdTransf2d(tag_trf++);
-        if(trf) trf->LeeCmd(status);
-        transfcoo[cod_trf]= trf;
-        return true;
-      }
-    else if(cmd == "p_delta3d")
-      {
-	PDeltaCrdTransf3d *trf= new PDeltaCrdTransf3d(tag_trf++);
-        if(trf) trf->LeeCmd(status);
-        transfcoo[cod_trf]= trf;
-        return true;
-      }
-    else if(cmd == "corot2d")
-      {
-	CorotCrdTransf2d *trf= new CorotCrdTransf2d(tag_trf++);
-        if(trf) trf->LeeCmd(status);
-        transfcoo[cod_trf]= trf;
-        return true;
-      }
-    else if(cmd == "corot3d")
-      {
-	CorotCrdTransf3d *trf= new CorotCrdTransf3d(tag_trf++);
-        if(trf) trf->LeeCmd(status);
-        transfcoo[cod_trf]= trf;
-        return true;
-      }
-    else
-      return Loader::procesa_comando(status);
   }
 
 //! @brief Devuelve una referencia al mapa de transformaciones de coordenadas.

@@ -51,7 +51,7 @@ class RayleighDampingFactors: public EntCmd, public MovableObject
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     RayleighDampingFactors(void);
     RayleighDampingFactors(const double &alphaM,const double &betaK,const double &betaK0,const double &betaKc);
@@ -75,7 +75,7 @@ class RayleighDampingFactors: public EntCmd, public MovableObject
     int recvSelf(const CommParameters &);
 
     void Print(std::ostream &s, int flag= 0) const;
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 std::ostream &operator<<(std::ostream &os,const RayleighDampingFactors &rF);

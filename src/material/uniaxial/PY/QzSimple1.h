@@ -77,7 +77,7 @@ class QzSimple1 : public PQyzBase
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     QzSimple1(int tag, int qzType, double Qult, double z50, double suction,double dashpot);
     QzSimple1(int tag, int classtag= MAT_TAG_QzSimple1);
@@ -97,7 +97,7 @@ class QzSimple1 : public PQyzBase
     int recvSelf(const CommParameters &);
     
     void Print(std::ostream &s, int flag =0);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
    
     
 

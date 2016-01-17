@@ -76,20 +76,17 @@ class SensitivityAlgorithm;
 
 //! @ingroup TipoAnalisis
 //
-//! @brief Análisis por integración directa en el dominio del tiempo.
+//! @brief Direct integration dynamic analysis.
 class DirectIntegrationAnalysis: public TransientAnalysis
   {
   private:
     int domainStamp;
-
     // AddingSensitivity:BEGIN ///////////////////////////////
 #ifdef _RELIABILITY
     SensitivityAlgorithm *theSensitivityAlgorithm;
 #endif
     // AddingSensitivity:END ///////////////////////////////
   protected:
-    bool procesa_comando(CmdStatus &status);
-
     friend class ProcSolu;
     DirectIntegrationAnalysis(SoluMethod *metodo);
     Analysis *getCopy(void) const;

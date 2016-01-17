@@ -58,7 +58,7 @@ class EQBasePattern: public LoadPattern
       { theMotions.clear(); }
 
     virtual void Print(std::ostream &s, int flag =0);
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

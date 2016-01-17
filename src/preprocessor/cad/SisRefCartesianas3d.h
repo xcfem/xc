@@ -42,7 +42,7 @@ class SisRefCartesianas3d: public SisRef
   {
     Ref3d3d ref;//!< Sistema de referencia.
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     //! @brief Constructor.
     SisRefCartesianas3d(Preprocessor *m)
@@ -61,7 +61,7 @@ class SisRefCartesianas3d: public SisRef
     Pos3d GetPosLocal(const Pos3d &p) const;
     Vector3d GetCooLocales(const Vector3d &v) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

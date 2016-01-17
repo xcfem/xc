@@ -47,7 +47,6 @@ class NodeDispVectors: public NodeVectors
     Vector *incrDeltaDisp;
   protected:
     void libera(void);
-    bool procesa_comando(CmdStatus &status);
   public:
     // constructors
     NodeDispVectors(void);
@@ -69,7 +68,6 @@ class NodeDispVectors: public NodeVectors
     virtual int commitState(const size_t &nDOF);
     virtual int revertToLastCommit(const size_t &nDOF);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
     virtual void Print(std::ostream &s, int flag = 0);
   };
 

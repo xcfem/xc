@@ -264,12 +264,3 @@ int XC::IncrementalIntegrator::formElementResidual(void)
     return res;	    
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::IncrementalIntegrator::GetProp(const std::string &cod) const
-  {
-    if(cod=="getStatusFlag")
-      return any_const_ptr(statusFlag);
-    else
-      return Integrator::GetProp(cod);    
-  }

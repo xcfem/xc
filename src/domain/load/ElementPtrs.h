@@ -53,7 +53,7 @@ class ElementPtrs: public EntCmd
   private:
     vector_ptr_elements theElements; //!< conjunto de elementos.
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElementPtrs(void);
     ~ElementPtrs(void);
@@ -90,7 +90,7 @@ class ElementPtrs: public EntCmd
     const_reference operator[](const size_t &i) const;
     reference operator[](const size_t &i);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

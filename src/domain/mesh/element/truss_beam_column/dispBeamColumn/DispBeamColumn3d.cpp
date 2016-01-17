@@ -99,22 +99,6 @@ XC::DispBeamColumn3d::DispBeamColumn3d(int tag)
 XC::Element* XC::DispBeamColumn3d::getCopy(void) const
   { return new XC::DispBeamColumn3d(*this); }
 
-//! @brief Lee el objeto desde archivo
-bool XC::DispBeamColumn3d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DispBeamColumn3d) Procesando comando: " << cmd << std::endl;
-    if(cmd == "K")
-      {
-        getTangentStiff();
-        K.LeeCmd(status);
-        return true;
-      }
-    else
-      return BeamColumnWithSectionFDTrf3d::procesa_comando(status);
-  }
-
 int XC::DispBeamColumn3d::getNumDOF(void) const
   { return 12; }
 

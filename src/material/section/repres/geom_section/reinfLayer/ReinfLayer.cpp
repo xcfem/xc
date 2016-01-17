@@ -57,7 +57,6 @@
 #include "material/section/repres/geom_section/reinfLayer/ReinfLayer.h"
 #include "material/section/repres/geom_section/reinfBar/VectorReinfBar.h"
 #include "material/section/repres/geom_section/reinfBar/ReinfBar.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_basic/src/matrices/m_double.h"
@@ -82,49 +81,6 @@ XC::ReinfLayer::ReinfLayer(ListReinfLayer *owr,Material *m,const int &numReinfBa
   : DiscretBase(m), nReinfBars(numReinfBars), barDiam(bDiam),area(bArea) 
   { set_owner(owr); }
 
-
-//! @brief Lee un objeto XC::ReinfLayer desde archivo
-bool XC::ReinfLayer::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ReinfLayer) Procesando comando: " << cmd << std::endl;
-    if(cmd == "numReinfBars")
-      {
-        nReinfBars= interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd == "barDiam")
-      {
-        barDiam= interpretaDouble(status.GetString());
-        if(area<1e-10) //Si no se ha asignado el área lo hacemos ahora.
-          area= M_PI*sqr(barDiam/2.0);
-        if(area<1e-10)
-	  std::clog << "ReinfLayer::procesa_comando: '"
-                    << cmd  << "'; ¡Ojo! el área de las barras ("
-                    << area << "), es muy pequeña." << std::endl;
-        return true;
-      }
-    else if(cmd == "barArea")
-      {
-        area= interpretaDouble(status.GetString());
-        if(area<1e-10)
-	  std::clog << "ReinfLayer::procesa_comando: '"
-                    << cmd  << "'; ¡Ojo! el área de las barras ("
-                    << area << "), es muy pequeña." << std::endl;
-        if(barDiam<1e-10) //Si no se ha asignado el diámetro lo hacemos ahora.
-          barDiam= 2*sqrt(area/M_PI);
-        return true;
-      }
-    else if(cmd == "barras")
-      {
-        VectorReinfBar &barras= getReinfBars();
-        barras.LeeCmd(status);
-        return true;
-      }
-    else
-      return DiscretBase::procesa_comando(status);
-  }
 
 //! @brief Establece el número de barras de la capa.
 void XC::ReinfLayer::setNumReinfBars(int numReinfBars)
@@ -233,40 +189,6 @@ const double &XC::ReinfLayer::getReinfBarDiameter(void) const
 //! @brief Devuelve el área de las barras.
 const double &XC::ReinfLayer::getReinfBarArea(void) const
   { return area; }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ReinfLayer::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "ReinfLayer::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="getBarDiam")
-      return any_const_ptr(barDiam);
-    else if(cod=="getBarArea")
-      return any_const_ptr(area);
-    else if(cod=="getArea")
-      {
-        tmp_gp_dbl= getArea();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="nReinfBars")
-      return any_const_ptr(nReinfBars);
-    else if(cod=="getRecubrimiento")
-      {
-        tmp_gp_dbl= getRecubrimiento();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getCdg")
-      {
-        tmp_gp_mdbl= m_double(1,2);
-        const Vector tmp= getCdg();
-        tmp_gp_mdbl(1,1)= tmp[0];
-        tmp_gp_mdbl(1,2)= tmp[1];
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else
-      return DiscretBase::GetProp(cod);
-  }
 
 //! @brief Imprime.
 void XC::ReinfLayer::Print(std::ostream &s, int flag) const

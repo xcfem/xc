@@ -48,8 +48,6 @@ class MEDCellBaseInfo: public MEDBaseInfo
     const MEDMapNumCeldasPorTipo &getMapCellTypes(void) const;
     void to_support_med(MEDMEM::SUPPORT &supp) const;
     void to_malla_med(MEDMEM::MESHING &) const;
-
-    any_const_ptr GetProp(const std::string &) const;
   };
 } // end of XC namespace
 #endif

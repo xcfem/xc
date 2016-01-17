@@ -27,7 +27,6 @@
 //KRSeccion.cc
 
 #include "KRSeccion.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 double XC::KRSeccion::value= 0.0;
 double XC::KRSeccion::vas1= 0.0;
@@ -67,40 +66,6 @@ void XC::KRSeccion::copia(const KRSeccion &otra)
     kData[12]= otra.kData[12]; kData[13]= otra.kData[13]; kData[14]= otra.kData[14]; kData[15]= otra.kData[15];
 
     alloc(otra.dim());
-  }
-
-//! @brief Lee un objeto XC::KRSeccion desde archivo
-bool XC::KRSeccion::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(KRSeccion) Procesando comando: " << cmd << std::endl;
-    if(cmd == "K") //Rigidez.
-      {
-        if(K)
-          K->LeeCmd(status);
-        else
-          {
-            status.GetBloque();
-            std::cerr << "FiberSection3d::procesa_comando; la sección no tiene matriz de rigidez." 
-                      << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "R") //Resultante de tensiones.
-      {
-        if(R)
-          R->LeeCmd(status);
-        else
-          {
-            status.GetBloque();
-            std::cerr << "FiberSection3d::procesa_comando; la sección no tiene resultante de tensiones." 
-                      << std::endl;
-          }
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
   }
 
 void XC::KRSeccion::zero(void)

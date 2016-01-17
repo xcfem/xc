@@ -44,9 +44,9 @@
 namespace XC {
 //! @ingroup LinearSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de sistemas de ecuaciones lineales con matriz simétrica
-//! empleando la biblioteca arcpack
+//! @brief Arpack solver for banded matrices.
+//! The ARnoldi PACKage, is a numerical software
+//! library written in FORTRAN 77 for solving large scale eigenvalue problems.
 class BandArpackSolver : public EigenSolver
   {
   private:
@@ -64,7 +64,7 @@ class BandArpackSolver : public EigenSolver
 
     void print_err_info(int);
   protected:
-    bool procesa_comando(CmdStatus &status);
+
 
     friend class EigenSOE;
     BandArpackSolver(int numE = 0);   

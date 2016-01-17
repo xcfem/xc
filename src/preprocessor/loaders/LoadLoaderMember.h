@@ -41,8 +41,6 @@ class Domain;
 //! @brief ??.
 class LoadLoaderMember: public EntCmd, public MovableObject
   {
-  protected:
-    bool procesa_comando(CmdStatus &status);
   public:
     LoadLoaderMember(LoadLoader *owr);
     const LoadLoader *getLoadLoader(void) const;
@@ -50,8 +48,6 @@ class LoadLoaderMember: public EntCmd, public MovableObject
     Domain *getDomain(void) const;
     int &getTagLP(void);
     const int &getTagLP(void) const;
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 

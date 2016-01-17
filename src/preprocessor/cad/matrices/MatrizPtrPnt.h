@@ -48,7 +48,7 @@ class Cad;
 class MatrizPtrPnt: public MatrizPtrBase<Pnt>
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
 
     friend class Cad;
   public:
@@ -71,7 +71,7 @@ class MatrizPtrPnt: public MatrizPtrBase<Pnt>
 
     Pos3d getCentroide(void) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

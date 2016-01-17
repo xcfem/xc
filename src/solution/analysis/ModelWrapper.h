@@ -77,9 +77,6 @@ class ModelWrapper: public EntCmd
     const SoluMethod *getSoluMethod(void) const;
   protected:
     friend class ProblemaEF;
-    bool procesa_cmd_constraint_handler(const std::string &cmd,CmdStatus &status);
-    bool procesa_cmd_numerador(const std::string &cmd,CmdStatus &status);
-    bool procesa_comando(CmdStatus &status);
     friend class SoluMethod;
 
   public:

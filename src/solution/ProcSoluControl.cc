@@ -27,7 +27,6 @@
 //ProcSoluControl.cc
 
 #include "ProcSoluControl.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "domain/domain/Domain.h"
 #include "ProcSolu.h"
 
@@ -115,64 +114,6 @@ void XC::ProcSoluControl::revertToStart(void)
   {
     getDomain()->revertToStart();
     solu_methods.revertToStart();
-  }
-
-//! @brief Lee un objeto ProcSoluControl desde archivo.
-bool XC::ProcSoluControl::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ProcSoluControl) Procesando comando: " << cmd << std::endl;
-    //Algoritmo de solución.
-    if(cmd == "solu_model")
-      {
-        const CmdParser &parser= status.Parser();
-        std::string cod_solu_model= "nil";
-        if(parser.TieneIndices())
-          {
-            const std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-            if(fnc_indices.size()>0)
-              cod_solu_model= convert_to_string(fnc_indices[0]);
-          }
-        ModelWrapper &tmp= solu_models.creaModelWrapper(cod_solu_model);
-        tmp.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "solu_method")
-      {
-        const CmdParser &parser= status.Parser();
-        if(!solu_models.empty())
-          {
-            std::string cod_solu_model= solu_models.begin()->first;
-            std::string cod_solu_method= "nil";
-            std::deque<boost::any> fnc_indices;
-            if(parser.TieneIndices())
-              {
-                fnc_indices= status.Parser().SeparaIndices(this);
-                if(fnc_indices.size()>0)
-                  cod_solu_method= convert_to_string(fnc_indices[0]);
-                if(fnc_indices.size()>1)
-                  cod_solu_model= convert_to_string(fnc_indices[1]);
-              }
-            ModelWrapper *mdl= getModelWrapper(cod_solu_model);
-            SoluMethod &tmp= solu_methods.creaSoluMethod(cod_solu_method,mdl);
-            tmp.LeeCmd(status);
-          }
-        else
-          {
-	    std::cerr << "Es necesario definir algún modelo de solución." << std::endl;
-            status.GetString();
-          }
-        return true;
-      }
-    else if(cmd == "clearAll")
-      {
-        status.GetString();
-        clearAll();
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
   }
 
 //! @brief Borra todo.

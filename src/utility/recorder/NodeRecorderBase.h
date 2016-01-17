@@ -54,7 +54,7 @@ class NodeRecorderBase: public MeshCompRecorder
   protected:
     int sendData(CommParameters &);  
     int receiveData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     NodeRecorderBase(int classTag);
     NodeRecorderBase(int classTag, const ID &theDof, 

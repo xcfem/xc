@@ -49,7 +49,7 @@ class UniformGrid: public EntMdlr
     size_t ndiv_y; //! Número de divisiones en el eje y.
     size_t ndiv_z; //! Número de divisiones en el eje z.
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
     void actualiza_topologia(void);
     void crea_nodos(void);
   public:
@@ -57,7 +57,7 @@ class UniformGrid: public EntMdlr
     UniformGrid(const std::string &nombre= "",Preprocessor *m= NULL,const size_t &i= 0);
     SetEstruct *getCopy(void) const;
     virtual unsigned short int GetDimension(void) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
 
     inline void setOrg(const Pos3d &p)
       { org= p; }

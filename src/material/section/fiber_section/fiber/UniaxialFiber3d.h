@@ -89,7 +89,7 @@ class UniaxialFiber3d: public UniaxialFiber
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     UniaxialFiber3d(int classTag= FIBER_TAG_Uniaxial3d);    
     UniaxialFiber3d(int tag,const UniaxialMaterial &theMat,const double &Area, const Vector &position,int classTag= FIBER_TAG_Uniaxial3d);

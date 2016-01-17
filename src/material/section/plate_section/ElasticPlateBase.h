@@ -55,7 +55,7 @@ class ElasticPlateBase: public SectionForceDeformation
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public : 
 
     ElasticPlateBase(int tag,int classTag);
@@ -86,7 +86,7 @@ class ElasticPlateBase: public SectionForceDeformation
     inline double bendingModulus(void) const
       { return (E*(h*h*h)/12.0/( 1.0 - nu*nu )); }
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   }; //end of ElasticPlateBase declarations
 
 } // end of XC namespace

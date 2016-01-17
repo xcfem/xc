@@ -69,7 +69,6 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 XC::GroundMotionRecord::GroundMotionRecord(void)
   :GroundMotion(GROUND_MOTION_TAG_GroundMotionRecord), history(0.0) {}
@@ -85,21 +84,6 @@ XC::GroundMotionRecord::GroundMotionRecord(const std::string &fileNameAccel,cons
 //! @brief Constructor virtual.
 XC::GroundMotion *XC::GroundMotionRecord::getCopy(void) const
   { return new GroundMotionRecord(*this); }
-
-//! @brief Lee un objeto GroundMotionRecord desde archivo
-bool XC::GroundMotionRecord::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(GroundMotionRecord) Procesando comando: " << cmd << std::endl;
-    if(cmd == "motion_history")
-      {
-        history.LeeCmd(status); 
-        return true;
-      }
-    else
-      return GroundMotion::procesa_comando(status);
-  }
 
 double XC::GroundMotionRecord::getDuration(void) const
   { return history.getDuration(); }

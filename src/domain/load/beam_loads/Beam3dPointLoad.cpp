@@ -57,7 +57,6 @@
 #include <utility/matrix/Matrix.h>
 #include "utility/matrix/ID.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/element/fvectors/FVector.h"
 #include "material/section/repres/ConstantesSecc3d.h"
@@ -73,31 +72,6 @@ XC::Beam3dPointLoad::Beam3dPointLoad(int tag)
 
 XC::Beam3dPointLoad::Beam3dPointLoad(void)
   :BeamPointLoad(0,LOAD_TAG_Beam3dPointLoad),Pz(0.0) {}
-
-//! @brief Lee un objeto Beam2dPointLoad desde archivo
-bool XC::Beam3dPointLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Beam3dPointLoad) Procesando comando: " << cmd << std::endl;
-    if(cmd == "Px")
-      {
-        Axial= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "Py")
-      {
-        Trans= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "Pz")
-      {
-        Pz= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return BeamPointLoad::procesa_comando(status);
-  }
 
 //! @brief Devuelve la dimension del vector fuerza.
 size_t XC::Beam3dPointLoad::getDimVectorFuerza(void) const
@@ -429,19 +403,4 @@ void XC::Beam3dPointLoad::Print(std::ostream &s, int flag) const
     s << "  Transverse (z): " << Pz << std::endl;
     s << "  Axial (x):      " << Axial << std::endl;
     s << "  Elements acted on: " << this->getElementTags();
-  }
-
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::Beam3dPointLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "Px")
-      return any_const_ptr(Axial);
-    if(cod == "Py")
-      return any_const_ptr(Trans);
-    if(cod == "Pz")
-      return any_const_ptr(Pz);
-    else
-      return BeamPointLoad::GetProp(cod);
   }

@@ -39,12 +39,12 @@ class MEDBaseInfo: public MEDObject
   protected:
     MEDMapIndices indices; //!< Correspondencia de índices XC y MED.
     void nuevo_tag(size_t tag);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     const MEDMapIndices &getMapIndices(void) const;
     virtual void clear(void);
 
-    any_const_ptr GetProp(const std::string &) const;
+
   };
 } // end of XC namespace
 #endif

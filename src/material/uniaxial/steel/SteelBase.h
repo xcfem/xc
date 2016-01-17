@@ -48,7 +48,7 @@ class SteelBase : public UniaxialMaterial
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
     virtual int setup_parameters(void)= 0;    
   public:
     SteelBase(int tag,int classTag,const double &fy,const double &e0,const double &b,const double &a1,const double &a2,const double &a3,const double &a4);
@@ -67,7 +67,6 @@ class SteelBase : public UniaxialMaterial
       { return b*E0; }
     inline double getEpsy(void) const
       { return fy/E0; }
-    any_const_ptr GetProp(const std::string &) const;
   };
 } // end of XC namespace
 

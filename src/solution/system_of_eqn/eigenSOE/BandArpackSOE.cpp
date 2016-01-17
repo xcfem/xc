@@ -41,7 +41,6 @@
 #include <solution/graph/graph/Graph.h>
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
@@ -64,16 +63,7 @@ bool XC::BandArpackSOE::setSolver(EigenSolver *newSolver)
     return retval;
   }
 
-//! @brief Lee un objeto XC::BandArpackSOE desde archivo
-bool XC::BandArpackSOE::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BandArpackSOE) Procesando comando: " << cmd << std::endl;
-    return ArpackSOE::procesa_comando(status);
-  }
-
-//! @brief Determina el número de superdiagonales y subdiagonales.
+//! @brief Finds number of super and sub diagonals.
 int XC::BandArpackSOE::setSize(Graph &theGraph)
   {
     int result = 0;
@@ -259,15 +249,3 @@ int XC::BandArpackSOE::sendSelf(CommParameters &cp)
 int XC::BandArpackSOE::recvSelf(const CommParameters &cp)
   { return 0; }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::BandArpackSOE::GetProp(const std::string &cod) const
-  {
-    if(cod=="getASize")
-      {
-        tmp_gp_szt= A.Size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return ArpackSOE::GetProp(cod);
-  }

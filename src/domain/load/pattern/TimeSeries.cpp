@@ -62,7 +62,6 @@
 
 #include <domain/load/pattern/TimeSeries.h>
 #include <domain/mesh/element/Information.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/matrix/Vector.h"
@@ -73,15 +72,6 @@
 //! @brief Constructor.
 XC::TimeSeries::TimeSeries(int classTag)
   :MovableObject(classTag){}
-
-//! @brief Lee un objeto XC::TimeSeries desde archivo
-bool XC::TimeSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TimeSeries) Procesando comando: " << cmd << std::endl;
-    return EntCmd::procesa_comando(status);
-  }
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////
 int XC::TimeSeries::setParameter(const std::vector<std::string> &argv, Parameter &param)
@@ -97,18 +87,6 @@ double XC::TimeSeries::getFactorSensitivity(double pseudoTime)
   { return 0.0; }
 
 // AddingSensitivity:END ////////////////////////////////////////////
-
-any_const_ptr XC::TimeSeries::get_prop_vector(const Vector *ptrVector)
-  {
-    assert(ptrVector);
-    static m_double tmp;
-    tmp= vector_to_m_double(*ptrVector);
-    return any_const_ptr(&tmp);
-  }
-
-any_const_ptr XC::TimeSeries::get_prop_vector(const Vector &refVector)
-  { return get_prop_vector(&refVector); }
-
 
 //! @brief Envía un puntero a la serie a través del canal que se pasa como parámetro.
 //! @param posClassTag: Posición de ID del identificador de la clase de la serie.
@@ -157,26 +135,3 @@ XC::TimeSeries *XC::receiveTimeSeriesPtr(TimeSeries* ptr,int posClassTag, int po
   }
 
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::TimeSeries::GetProp(const std::string &cod) const
-  {
-    if(cod == "getFactor")
-      {
-        const double time= popDouble(cod);
-        tmp_gp_dbl= getFactor(time);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getDuration")
-      {
-        tmp_gp_dbl= getDuration();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getPeakFactor")
-      {
-        tmp_gp_dbl= getPeakFactor();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return EntCmd::GetProp(cod);
-  }

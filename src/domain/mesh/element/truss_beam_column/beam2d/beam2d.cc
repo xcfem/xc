@@ -39,15 +39,6 @@ XC::beam2d::beam2d(int tag, int class_tag, double a, double e, double i, int Nd1
   :ProtoBeam2d(tag,class_tag,a,e,i,Nd1,Nd2), L(0)   
   {}
 
-//! @brief Lee un objeto XC::Beam2d desde archivo
-bool XC::beam2d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(beam2d) Procesando comando: " << cmd << std::endl;
-    return ProtoBeam2d::procesa_comando(status);
-  }
-
 //! @brief Envía los miembros por el canal que se pasa como parámetro.
 int XC::beam2d::sendData(CommParameters &cp)
   {

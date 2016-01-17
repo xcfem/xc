@@ -83,7 +83,6 @@ class FiberSectionBase: public SeccionBarraPrismatica
     void get_ptos_diag_interaccion_theta(NMyMzPointCloud &lista_esfuerzos,const DatosDiagInteraccion &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
     const NMyMzPointCloud &get_ptos_diag_interaccion(const DatosDiagInteraccion &);
     const NMPointCloud &get_ptos_diag_interaccionPlano(const DatosDiagInteraccion &, const double &);
-    virtual void def_section_repres(CmdStatus &status);
   public:
     FiberSectionBase(int classTag,int dim,MaterialLoader *mat_ldr= nullptr); 
     FiberSectionBase(int tag, int classTag,int dim,MaterialLoader *mat_ldr= nullptr);

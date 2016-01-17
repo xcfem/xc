@@ -90,9 +90,6 @@ class ProblemaEF: public EntCmd
     FE_Datastore *dataBase; //!< Base de datos para salvar estados.
     static FEM_ObjectBrokerAllClasses theBroker;
 
-  protected:
-    bool procesa_comando(CmdStatus &status);
-
   public:
     static Domain *theActiveDomain;
     ProblemaEF(void);
@@ -117,8 +114,6 @@ class ProblemaEF: public EntCmd
       { return fields; }
     inline DataOutputHandler::map_output_handlers *getOutputHandlers(void) const
       { return &output_handlers; }
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

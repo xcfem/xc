@@ -98,7 +98,6 @@ class CrdTransf: public TaggedObject, public MovableObject
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
     virtual void set_rigid_joint_offsetI(const Vector &rigJntOffsetI)= 0;
     virtual void set_rigid_joint_offsetJ(const Vector &rigJntOffsetJ)= 0;
   public:
@@ -150,7 +149,6 @@ class CrdTransf: public TaggedObject, public MovableObject
     virtual const Matrix &getCooPuntos(const size_t &ndiv) const= 0;
     virtual const Vector &getCooPunto(const double &xrel) const= 0;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

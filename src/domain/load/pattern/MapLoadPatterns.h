@@ -32,7 +32,6 @@
 #include "preprocessor/loaders/LoadLoaderMember.h"
 #include "domain/load/pattern/LoadPattern.h"
 #include "domain/load/pattern/TimeSeries.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include <map>
 
 namespace XC {
@@ -71,9 +70,6 @@ class MapLoadPatterns: public LoadLoaderMember
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_time_series(const std::string &,CmdStatus &);
-    bool procesa_load_pattern(const std::string &,CmdStatus &);
-    bool procesa_comando(CmdStatus &status);
   public:
     MapLoadPatterns(LoadLoader *owr);
     ~MapLoadPatterns(void);
@@ -135,9 +131,7 @@ class MapLoadPatterns: public LoadLoaderMember
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    void EjecutaBloqueForEach(CmdStatus &,const std::string &);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 //! @brief Crea un objeto TimeSeries.

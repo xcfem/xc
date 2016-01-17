@@ -83,7 +83,7 @@ class Load: public DomainComponent
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     Load(int tag, int classTag);
 
@@ -92,7 +92,7 @@ class Load: public DomainComponent
     
     virtual void setLoadPatternTag(int loadPaternTag);
     virtual int  getLoadPatternTag(void) const;
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

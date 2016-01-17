@@ -76,7 +76,7 @@ class ElementRecorder: public ElementRecorderBase
     Vector *data;
 
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElementRecorder(void);
     ElementRecorder(const ID &eleID, 

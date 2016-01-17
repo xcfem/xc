@@ -65,22 +65,12 @@
 
 #include <domain/load/pattern/time_series/LinearSeries.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 
 //! @brief Constructor.
 XC::LinearSeries::LinearSeries(double theFactor)
   :CFactorSeries(TSERIES_TAG_LinearSeries,theFactor)
   {}
-
-//! @brief Lee un objeto XC::LinearSeries desde archivo
-bool XC::LinearSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(LinearSeries) Procesando comando: " << cmd << std::endl;
-    return CFactorSeries::procesa_comando(status);
-  }
 
 //! @brief Devuelve el valor de la función en el instante que se pasa como parámetro.
 double XC::LinearSeries::getFactor(double pseudoTime) const

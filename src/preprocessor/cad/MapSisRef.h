@@ -42,15 +42,13 @@ namespace XC {
 class MapSisRef: public MapCadMember<SisRef>
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
 
   public:
     MapSisRef(Cad *cad= NULL);
 
     SisRef *Nuevo(const std::string &);
-    SisRef *Nuevo(CmdStatus &);
 
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } //end of XC namespace

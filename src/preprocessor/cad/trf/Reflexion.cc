@@ -33,41 +33,8 @@
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d2/Plano3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-
-//! @brief Lee un objeto Reflexion desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - ang: Define el ángulo de rotación.
-bool XC::Reflexion::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= status.Cmd();
-    if(verborrea>2)
-      std::clog << "(Reflexion) Procesando comando: " << cmd << std::endl;
-    static Plano3d plano;
-    if(cmd == "plano")
-      {
-        plano.LeeCmd(status);
-        rf= Reflexion3d(plano);
-        return true;
-      }
-    else if(cmd == "puntos_plano")
-      {
-        const std::vector<MapPuntos::Indice> tmp= crea_vector_size_t(status.GetString());
-        if(tmp.size()>2)
-          plano= get_preprocessor()->getCad().getPuntos().getPlano(tmp[0],tmp[1],tmp[2]); 
-        else
-	  std::cerr << "(Reflexión) Procesando comando: " << cmd
-                    << " se necesitan tres puntos para definir el plano." << std::endl;
-        rf= Reflexion3d(plano);
-        return true;
-      }
-    else
-      return TrfGeom::procesa_comando(status);
-  }
 
 //! @brief Aplica la transformación a los elementos del conjunto.
 Pos3d XC::Reflexion::Transforma(const Pos3d &p) const

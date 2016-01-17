@@ -49,11 +49,10 @@ class ObjWithRecorders: public EntCmd
     lista_recorders theRecorders; //!< Lista de recorders.
     DataOutputHandler::map_output_handlers *output_handlers; //!< Manejadores para salida de resultados.
 
-    Recorder *procesa_cmd_recorder(const std::string &,CmdStatus &);
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
     //! @brief Devuelve el número de recorders definidos.
     inline size_t getNumRecorders(void) const
       { return theRecorders.size(); }

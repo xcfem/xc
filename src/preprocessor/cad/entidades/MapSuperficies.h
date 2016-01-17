@@ -43,7 +43,7 @@ class MapSuperficies: public MapEnt<Face>
   private:
     void UpdateSets(Face *) const;
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
 
   public:
     MapSuperficies(Cad *cad= NULL);
@@ -54,14 +54,9 @@ class MapSuperficies: public MapEnt<Face>
     template <class F>
     Face *Nueva(void);
 
-    template <class F>
-    Face *Nueva(CmdStatus &);
-
     SupCuadrilatera *newQuadSurfacePts(const size_t &, const size_t &,const size_t &,const size_t &);
     SupCuadrilatera *newQuadSurfaceLines(const size_t &, const size_t &,const size_t &,const size_t &);
     SupCuadrilatera *newQuadSurfaceGridPoints(const boost::python::list &);
-
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 
@@ -84,30 +79,5 @@ Face *MapSuperficies::Nueva(void)
       }
     return retval;
   }
-
-//! @brief Lee una superficie.
-template <class F>
-Face *MapSuperficies::Nueva(CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    bool nueva= true;
-    size_t old_tag= getTag();
-    if(fnc_indices.size()>0)
-      {
-        setTag(convert_to_size_t(fnc_indices[0])); //Identificador del punto.
-        if(existe(getTag()))
-          nueva= false;
-      }
-    Face *retval= Nueva<F>();
-    if(!nueva)
-      setTag(old_tag);
-    retval->LeeCmd(status);
-    this->conciliaNDivs();
-    if(!this->checkNDivs())
-	  std::cerr << "MapSuperficies::Nueva; error al agregar la superficie: "
-                    << retval->GetNombre() << std::endl;
-    return retval;
-  }
-
 } //end of XC namespace
 #endif

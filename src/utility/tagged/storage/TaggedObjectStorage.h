@@ -90,10 +90,10 @@ class TaggedObjectStorage: public EntCmd, public MovableObject
     int createObjects(const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
     int receiveObjects(const CommParameters &);
   protected:
-    std::string containerName; //!< Nombre del contenedor en procesa_comando.
+    std::string containerName; //!< Nombre del contenedor en procesa_cmd.
     bool transmitIDs;
     DbTagData &getDbTagData(void) const;
-    bool procesa_comando(CmdStatus &status);
+
     template <class T>
     int recibeDatos(const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
     void copia(const TaggedObjectStorage &);
@@ -125,9 +125,6 @@ class TaggedObjectStorage: public EntCmd, public MovableObject
     int recibe(int dbTag,const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-    void EjecutaBloqueForEach(CmdStatus &,const std::string &);
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
     virtual void Print(std::ostream &s, int flag =0) =0;
   };
 

@@ -30,7 +30,6 @@
 #include "Pnt.h"
 #include "xc_basic/src/matrices/m_int.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "Face.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/node/Node.h"
@@ -196,19 +195,6 @@ void XC::Body::Cara::crea_nodos(void)
 XC::Body::Body(Preprocessor *m,const std::string &nombre)
   : EntMdlr(nombre,0,m) {}
 
-
-//! @brief Lee un objeto Body desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - superficie: Lee la superficie que limita al sólido.
-bool XC::Body::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Body) Procesando comando: " << cmd << std::endl;
-    return EntMdlr::procesa_comando(status);
-  }
 //! @brief Devuelve el BND del objeto.
 BND3d XC::Body::Bnd(void) const
   { 
@@ -280,29 +266,3 @@ std::vector<int> XC::Body::getIndicesVertices(void) const
       }
     return retval;
   }
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-//! -dim: Devuelve la dimensión del objeto.
-any_const_ptr XC::Body::GetProp(const std::string &cod) const
-  {
-    if(cod=="getVertices")
-      {
-        const size_t nv= NumVertices();
-        const std::vector<int> idxVertices= getIndicesVertices();
-	static m_int retval(nv,0);
-        if(nv<1) return any_const_ptr(retval);
-        for(size_t i=0;i<nv;i++)
-          retval[i]= idxVertices[i];
-        return any_const_ptr(retval);
-      }
-    else if(cod=="dim")
-      {
-        tmp_gp_int= GetDimension();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else
-      return EntMdlr::GetProp(cod);
-  }
-

@@ -45,38 +45,11 @@
 #include <solution/analysis/integrator/Integrator.h>
 #include <cstring>
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_basic/src/util/mchne_eps.h"
 
 //! @brief Constructor.
 XC::BandArpackSolver::BandArpackSolver(int numE)
   :EigenSolver(EigenSOLVER_TAGS_BandArpackSolver,numE), tol(mchne_eps_dbl), maxitr(1000) {}
-
-//! @brief Lee un objeto XC::BandArpackSolver desde archivo
-bool XC::BandArpackSolver::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BandArpackSolver) Procesando comando: " << cmd << std::endl;
-    if(cmd == "numE")
-      {
-        numModes= interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd == "tol")
-      {
-        tol= interpretaDouble(status.GetString());
-        return true;
-      }
-    if(cmd == "num_max_iter")
-      {
-        maxitr= interpretaInt(status.GetString());
-        return true;
-      }
-    else
-      return EigenSolver::procesa_comando(status);
-  }
-
 
 extern "C" int dgbsv_(int *N, int *KL, int *KU, int *NRHS, double *A, int *LDA,
                       int *iPiv, double *B, int *LDB, int *INFO);

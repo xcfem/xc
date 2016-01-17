@@ -65,7 +65,6 @@
 #include <utility/matrix/Vector.h>
 
 #include <domain/mesh/element/Information.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
@@ -82,21 +81,6 @@ XC::ElasticMaterial::ElasticMaterial(int tag, int classtag)
 XC::ElasticMaterial::ElasticMaterial(void)
   :ElasticBaseMaterial(0,MAT_TAG_ElasticMaterial,0.0),  trialStrainRate(0.0), eta(0.0)
   {}
-
-//! @brief Lee un objeto XC::ElasticMaterial desde archivo
-bool XC::ElasticMaterial::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElasticMaterial) Procesando comando: " << cmd << std::endl;
-    if(cmd == "eta")
-      {
-        eta= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return ElasticBaseMaterial::procesa_comando(status);
-  }
 
 int XC::ElasticMaterial::setTrialStrain(double strain, double strainRate)
   {
@@ -182,14 +166,6 @@ int XC::ElasticMaterial::recvSelf(const CommParameters &cp)
       }
     return res;
   }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::ElasticMaterial::GetProp(const std::string &cod) const
-  { return ElasticBaseMaterial::GetProp(cod); }
 
 void XC::ElasticMaterial::Print(std::ostream &s, int flag)
   {

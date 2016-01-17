@@ -27,7 +27,6 @@
 //ProtoTruss.cc
 
 #include "ProtoTruss.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include <utility/matrix/Matrix.h>
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
@@ -64,35 +63,6 @@ XC::ProtoTruss &XC::ProtoTruss::operator=(const ProtoTruss &otro)
     theMatrix= otro.theMatrix;
     theVector= otro.theVector;
     return *this;
-  }
-
-//! @brief Lee un objeto ProtoTruss desde archivo
-bool XC::ProtoTruss::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ProtoTruss) Procesando comando: " << cmd << std::endl;
-    if(cmd == "dimSpace")
-      {
-        dimSpace= interpretaInt(status.GetString());
-        return true;
-      }
-    if(cmd == "material")
-      {
-        Material *ptrMat= getMaterial();
-        if(ptrMat)
-          ptrMat->LeeCmd(status);
-        else
-          {
-            status.GetBloque(); //Ignoramos entrada.
-	    std::cerr << "(TrussBase) Procesando comando: " << cmd
-                      << " el material no está asignado. Se ignora la entrada."
-                      << std::endl;
-          }
-        return true;
-      }
-    else
-      return Element1D::procesa_comando(status);
   }
 
 //! @brief Devuelve el número de grados de libertad.
@@ -176,30 +146,3 @@ int XC::ProtoTruss::recvData(const CommParameters &cp)
     theVector= cp.receiveVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(12,13,14)); 
     return res;
   }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ProtoTruss::GetProp(const std::string &cod) const
-  {
-    if(cod=="getDimSpace")
-      return any_const_ptr(dimSpace);
-    else if(cod=="rho")
-      {
-        tmp_gp_dbl= getRho();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getMaterial")
-      {
-        const Material *ptrMat= getMaterial();
-        if(ptrMat)
-          return any_const_ptr(ptrMat);
-        else
-          {
-	    std::cerr << "Error en TrussBase::GetProp; el puntero a material es nulo." << std::endl;
-            return any_const_ptr();
-          }
-      }
-    else
-      return Element1D::GetProp(cod);
-  }
-

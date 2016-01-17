@@ -30,7 +30,6 @@
 #define NodeLocker_h
 
 #include "domain/component/ForceReprComponent.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 namespace XC {
 class SP_Constraint;
@@ -61,7 +60,7 @@ class NodeLocker: public ForceReprComponent
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
 
     friend class NodeLockers;
     friend class FEM_ObjectBroker;
@@ -69,7 +68,6 @@ class NodeLocker: public ForceReprComponent
     NodeLocker(int tag);
     NodeLocker(int tag, int classTag);
     virtual bool addSP_Constraint(SP_Constraint *theSp);
-    SP_Constraint *addSP_Constraint(CmdStatus &status,const int &tagNodo);
   public:
     virtual ~NodeLocker(void);
 
@@ -95,7 +93,7 @@ class NodeLocker: public ForceReprComponent
     virtual int recvSelf(const CommParameters &);
 
     virtual void Print(std::ostream &s, int flag =0);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
 
 
     std::deque<int> getTagsSPsNodo(int theNode, int theDOF) const;

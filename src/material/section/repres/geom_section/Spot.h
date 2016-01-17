@@ -50,7 +50,7 @@ class Spot: public EntGeomSection
     void inserta_linea(Eje *l);
     void borra_linea(Eje *l);
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
     virtual void actualiza_topologia(void);
 
     friend class GeomSection;
@@ -88,7 +88,7 @@ class Spot: public EntGeomSection
 
     double DistanciaA(const Pos2d &pt) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

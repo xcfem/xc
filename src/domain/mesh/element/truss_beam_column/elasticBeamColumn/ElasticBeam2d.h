@@ -99,7 +99,7 @@ class ElasticBeam2d: public ProtoBeam2d
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElasticBeam2d(int tag= 0);
     ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf);
@@ -168,7 +168,7 @@ class ElasticBeam2d: public ProtoBeam2d
       { return q(1); }
     inline double getM2(void)
       { return q(2); }
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
 
     Response *setResponse(const std::vector<std::string> &argv, Parameter &param);
     int getResponse(int responseID, Information &info);

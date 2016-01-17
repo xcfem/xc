@@ -121,7 +121,7 @@ class ReinfBar: public DiscretBase
     double getMinZ(void) const;
 
     virtual void Print(std::ostream &s, int flag =0) const;   
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

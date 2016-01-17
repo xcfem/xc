@@ -86,7 +86,7 @@ class Muelle : public ProtoTruss
     int recvData(const CommParameters &cp);
     void inicializa(void);
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     Muelle(int tag, int dimension, int Nd1, int Nd2, UniaxialMaterial &theMaterial, double A);
     Muelle(int tag,int dimension,const Material *ptr_mat);
@@ -127,7 +127,7 @@ class Muelle : public ProtoTruss
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0);    
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);
     int getResponse(int responseID, Information &eleInformation);

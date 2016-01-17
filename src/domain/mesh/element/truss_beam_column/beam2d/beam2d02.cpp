@@ -88,16 +88,6 @@ XC::beam2d02::beam2d02(int tag, double a, double e, double i, int Nd1, int Nd2,
 XC::Element* XC::beam2d02::getCopy(void) const
   { return new XC::beam2d02(*this); }
 
-//! @brief Lee un objeto XC::beam2d02 desde archivo
-bool XC::beam2d02::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(beam2d02) Procesando comando: " << cmd << std::endl;
-
-    return beam2d::procesa_comando(status);
-  }
-
 //! @brief Destructor.
 XC::beam2d02::~beam2d02(void)
   { if(theCoordTransf) delete theCoordTransf; }
@@ -329,13 +319,6 @@ int XC::beam2d02::recvSelf(const CommParameters &cp)
     else
       res+= recvData(cp);
     return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::beam2d02::GetProp(const std::string &cod) const
-  {
-    return beam2d::GetProp(cod);
   }
 
 void XC::beam2d02::Print(std::ostream &s, int flag)

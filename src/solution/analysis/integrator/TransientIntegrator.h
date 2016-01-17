@@ -90,8 +90,7 @@ class TransientIntegrator : public IncrementalIntegrator
     virtual int formTangent(int statFlag);
     virtual int formEleResidual(FE_Element *theEle);
     virtual int formNodUnbalance(DOF_Group *theDof);    
-    virtual int initialize(void) {return 0;};
-    virtual any_const_ptr GetProp(const std::string &cod) const;    
+    virtual int initialize(void) {return 0;};    
   };
 } // end of XC namespace
 

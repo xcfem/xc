@@ -93,7 +93,6 @@ class SectionForceDeformation: public Material
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    any_const_ptr GetPropShellResponse(const std::string &cod) const;
   public:
     SectionForceDeformation(int tag,int classTag,MaterialLoader *mat_ldr= NULL);
     SectionForceDeformation(const SectionForceDeformation &otro);

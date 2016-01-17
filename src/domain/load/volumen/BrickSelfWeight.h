@@ -45,7 +45,7 @@ class BrickSelfWeight: public ElementBodyLoad
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     BrickSelfWeight(int tag, const ID &theElementTags);
     BrickSelfWeight(int tag);

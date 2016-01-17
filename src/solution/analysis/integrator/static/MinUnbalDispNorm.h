@@ -88,7 +88,7 @@ class MinUnbalDispNorm: public DispBase
     double getDLambdaUpdate(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
 
     friend class SoluMethod;
     MinUnbalDispNorm(SoluMethod *,double lambda1, int specNumIterStep, 

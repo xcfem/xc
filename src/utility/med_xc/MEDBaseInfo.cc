@@ -22,7 +22,6 @@
 //MEDBaseInfo
 
 #include "MEDBaseInfo.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/nucleo/InterpreteRPN.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -43,24 +42,3 @@ void XC::MEDBaseInfo::nuevo_tag(size_t i)
 const XC::MEDMapIndices &XC::MEDBaseInfo::getMapIndices(void) const
   { return indices; }
 
-//! @brief Lectura del objeto desde archivo.
-bool XC::MEDBaseInfo::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MEDBaseInfo) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "clear")
-      {
-        status.GetString(); //Ignoramos argumentos.
-        clear();
-        return true;
-      }
-    else    
-      return EntCmd::procesa_comando(status);
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa 
-//! como parámetro. 
-any_const_ptr XC::MEDBaseInfo::GetProp(const std::string &cod) const 
-  { return MEDObject::GetProp(cod); }

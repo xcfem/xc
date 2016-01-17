@@ -38,7 +38,6 @@
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/geom/d2/BND2d.h"

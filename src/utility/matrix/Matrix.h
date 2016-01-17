@@ -88,7 +88,7 @@ class Matrix: public EntCmd
     Vector data;
 
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     friend class Vector;    
     friend class Message;
@@ -198,7 +198,7 @@ class Matrix: public EntCmd
     int AssembleTranspose(const Matrix &V, int init_row, int init_col, double fact = 1.0);
     int Extract(const Matrix &V, int init_row, int init_col, double fact = 1.0);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     friend std::ostream &operator<<(std::ostream &s, const Matrix &M);
     //    friend istream &operator>>(istream &s, Matrix &M);    
     friend Matrix operator*(double a,const Matrix &M);    

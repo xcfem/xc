@@ -58,7 +58,6 @@
 
 #include <domain/load/volumen/BrickSelfWeight.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/matrix/ID.h"
 
 XC::Vector XC::BrickSelfWeight::data(1);
@@ -71,15 +70,6 @@ XC::BrickSelfWeight::BrickSelfWeight(int tag)
 
 XC::BrickSelfWeight::BrickSelfWeight(void)
   :ElementBodyLoad(LOAD_TAG_BrickSelfWeight) {}
-
-//! @brief Lee un objeto BrickSelfWeight desde archivo
-bool XC::BrickSelfWeight::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BrickSelfWeight) Procesando comando: " << cmd << std::endl;
-    return ElementBodyLoad::procesa_comando(status);
-  }
 
 int XC::BrickSelfWeight::getType(void)
   { return LOAD_TAG_BrickSelfWeight; }

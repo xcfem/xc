@@ -355,12 +355,3 @@ int XC::Newmark::revertToStart(void)
   }
 // AddingSensitivity:END ////////////////////////////////
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::Newmark::GetProp(const std::string &cod) const
-  {
-    if(cod=="getDispl")
-      return any_const_ptr(displ);
-    else
-      return NewmarkBase2::GetProp(cod);    
-  }

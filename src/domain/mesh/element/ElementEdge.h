@@ -43,7 +43,7 @@ class ElementEdgeLoad;
     Element *elem; //! Elemento al que pertenece el borde.
     int iedge; //! índice del borde.
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElementEdge(Element *eptr= NULL,const int &i=-1);
     const Element *getElementPtr(void) const;

@@ -32,21 +32,10 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 
 XC::BaseElasticSection::BaseElasticSection(int tag, int classTag, const size_t &dim, MaterialLoader *mat_ldr)
   : SeccionBarraPrismatica(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim) {}
-
-//! @brief Lee un objeto XC::BaseElasticSection desde archivo
-bool XC::BaseElasticSection::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BaseElasticSection) Procesando comando: " << cmd << std::endl;
-
-    return SeccionBarraPrismatica::procesa_comando(status);
-  }
 
 int XC::BaseElasticSection::commitState(void)
   {
@@ -106,13 +95,6 @@ int XC::BaseElasticSection::recvData(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::BaseElasticSection::GetProp(const std::string &cod) const
-  {
-    return SeccionBarraPrismatica::GetProp(cod);
-  }
- 
 void XC::BaseElasticSection::Print(std::ostream &s, int flag) const
   {
     s << "BaseElasticSection, tag: " << this->getTag() << std::endl;

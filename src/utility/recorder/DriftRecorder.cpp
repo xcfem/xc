@@ -70,7 +70,6 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "boost/lexical_cast.hpp"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 
@@ -163,44 +162,6 @@ XC::DriftRecorder::DriftRecorder(const ID &nI,const ID &nJ, int df,int dirn, Dom
   {
     assert(nI.Size()==nJ.Size());
     set_ndIJ(nI,nJ);
-  }
-
-//! @brief Lee un objeto XC::DriftRecorder desde archivo
-bool XC::DriftRecorder::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DriftRecorder) Procesando comando: " << cmd << std::endl;
-    if(cmd == "nodosI")
-      {
-        std::vector<int> nodos= crea_vector_int(status.GetString());
-        const int sz= nodos.size();
-        setup_ndIJ(sz);
-        for(int i= 0;i<sz;i++)
-          (*ndI)[i]= nodos[i];
-        return true;
-      }
-    else if(cmd == "nodosJ")
-      {
-        std::vector<int> nodos= crea_vector_int(status.GetString());
-        const int sz= nodos.size();
-        setup_ndIJ(sz);
-        for(int i= 0;i<sz;i++)
-          (*ndJ)[i]= nodos[i];
-        return true;
-      }
-    else if(cmd == "dof")
-      {
-        dof= interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd == "dir")
-      {
-        perpDirn= interpretaInt(status.GetString());
-        return true;
-      }
-    else
-      return HandlerRecorder::procesa_comando(status);
   }
 
 XC::DriftRecorder::~DriftRecorder(void)

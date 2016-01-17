@@ -86,7 +86,7 @@ class Vector: public CmdVectorBase
     void libera(void);
     void alloc(const size_t &sz);
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors and destructor
     Vector();
@@ -172,8 +172,7 @@ class Vector: public CmdVectorBase
     Vector getComponents(const ID &) const; 
     void putComponents(const Vector &,const ID &); 
     void addComponents(const Vector &,const ID &); 
-  
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void write(std::ofstream &);
     void read(std::ifstream &);
     friend std::ostream &operator<<(std::ostream &s, const Vector &V);

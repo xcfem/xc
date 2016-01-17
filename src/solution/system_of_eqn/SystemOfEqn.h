@@ -76,7 +76,7 @@ class SoluMethod;
 
 //!  @ingroup Solu
 //! 
-//! \defgroup SOE Sistema de ecuaciones.
+//! \defgroup SOE System of equations.
 //
 //! @ingroup SOE
 //
@@ -88,7 +88,6 @@ class SystemOfEqn: public MovableObject, public EntCmd
   protected:
     virtual AnalysisModel *getAnalysisModelPtr(void);
     virtual const AnalysisModel *getAnalysisModelPtr(void) const;
-    bool procesa_comando(CmdStatus &status);
 
     friend class SoluMethod;
     SystemOfEqn(SoluMethod *,int classTag);

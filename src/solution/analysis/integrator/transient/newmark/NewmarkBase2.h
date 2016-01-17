@@ -45,13 +45,10 @@ class NewmarkBase2 : public NewmarkBase
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
 
     NewmarkBase2(SoluMethod *,int classTag);
     NewmarkBase2(SoluMethod *,int classTag,double gamma, double beta);
     NewmarkBase2(SoluMethod *,int classTag,double gamma, double beta,const RayleighDampingFactors &rF); 
-  public:
-    virtual any_const_ptr GetProp(const std::string &cod) const;    
   };
 } // end of XC namespace
 

@@ -236,20 +236,3 @@ int XC::SymBandEigenSOE::sendSelf(CommParameters &cp)
 int XC::SymBandEigenSOE::recvSelf(const CommParameters &cp)
   { return 0; }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::SymBandEigenSOE::GetProp(const std::string &cod) const
-  {
-    if(cod=="getASize")
-      {
-        tmp_gp_szt= A.Size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getMSize")
-      {
-        tmp_gp_szt= M.Size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return EigenSOE::GetProp(cod);
-  }

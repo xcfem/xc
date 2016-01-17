@@ -94,7 +94,7 @@ class DispBeamColumn3d : public BeamColumnWithSectionFDTrf3d
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     DispBeamColumn3d(int tag= 0);
     DispBeamColumn3d(int tag,int numSec,const Material *theSection,const CrdTransf *trf);

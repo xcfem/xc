@@ -22,7 +22,6 @@
 //MEDVertexInfo
 
 #include "MEDVertexInfo.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/nucleo/InterpreteRPN.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -106,59 +105,6 @@ void XC::MEDVertexInfo::setUnitNames(const boost::python::list &l)
       nombresUnidades.push_back(boost::python::extract<std::string>(l[i]));
   }
 
-
-//! @brief Lectura del objeto desde archivo.
-bool XC::MEDVertexInfo::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MEDVertexInfo) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "setSpaceDimension")
-      {
-        spaceDimension= interpretaInt(status.GetBloque());
-        return true;
-      }
-    else if(cmd == "setTipoCoordenadas")
-      {
-        tipoCoordenadas= interpretaString(status.GetBloque());
-        return true;
-      }
-    else if(cmd == "setCoordinatesNames")
-      {
-	nombresCoordenadas= convert_to_vector_string(interpretaVectorAny(status.GetString()));
-        return true;
-      }
-    else if(cmd == "setCoordinatesUnits")
-      {
-	nombresUnidades= convert_to_vector_string(interpretaVectorAny(status.GetString()));
-        return true;
-      }
-    else if(cmd == "vertice")
-      {
-        const CmdParser &parser= status.Parser();
-        if(parser.TieneIndices())
-          {
-            interpreta(parser.GetIndices());
-            if(InterpreteRPN::HayArgumentos(1,cmd))
-              {
-                const int tag_vert= convert_to_int(InterpreteRPN::Pila().Pop()); //Tag  del vértice.
-                const std::vector<double> coo= convert_to_vector_double(interpretaVectorAny(status.GetString()));
-                nuevo_vertice(tag_vert,coo);
-              }
-          }
-        return true;
-      }
-    else if(cmd == "clear")
-      {
-        status.GetString(); //Ignoramos argumentos.
-        clear();
-        return true;
-      }
-    else    
-      return EntCmd::procesa_comando(status);
-  }
-
 //! @brief Vuelca la definición de las celdas en la
 //! malla MED
 void XC::MEDVertexInfo::to_med(MEDMEM::MESHING &malla) const
@@ -182,8 +128,3 @@ void XC::MEDVertexInfo::to_med(MEDMEM::MESHING &malla) const
     else
       std::cerr << "Espacio de dimensión cero." << std::endl;
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa 
-//! como parámetro. 
-any_const_ptr XC::MEDVertexInfo::GetProp(const std::string &cod) const 
-  { return EntCmd::GetProp(cod); }

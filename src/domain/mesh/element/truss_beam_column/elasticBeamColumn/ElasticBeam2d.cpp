@@ -191,31 +191,6 @@ XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const XC::ElasticBeam2d &otro)
     return *this;
   }
 
-//! @brief Lee un objeto XC::ElasticBeam2d desde archivo
-bool XC::ElasticBeam2d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElasticBeam2d) Procesando comando: " << cmd << std::endl;
-    if(cmd == "h") //Canto de la sección.
-      {
-        d= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "rho") //Densidad.
-      {
-        rho= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "deformacion_inicial")
-      {
-        eInic.LeeCmd(status);
-        return true;
-      }
-    else
-      return ProtoBeam2d::procesa_comando(status);
-  }
-
 //! @brief Constructor virtual.
 XC::Element* XC::ElasticBeam2d::getCopy(void) const
   { return new ElasticBeam2d(*this); }
@@ -596,53 +571,6 @@ void XC::ElasticBeam2d::Print(std::ostream &s, int flag)
           << " " << -V+p0[2] << " " << M2 << std::endl;
       }
    }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::ElasticBeam2d::GetProp(const std::string &cod) const
-  {
-    const double L= theCoordTransf->getInitialLength();
-    if(cod=="getCanto")
-      return any_const_ptr(d);
-    else if(cod =="V") //Cortante en el centro.
-      {
-        tmp_gp_dbl= (q(1)+q(2))/L;
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="V1") //Cortante en el extremo dorsal.
-      {
-        tmp_gp_dbl= (q(1)+q(2))/L+p0[1];
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="V2")
-      {
-        tmp_gp_dbl= -(q(1)+q(2))/L+p0[2]; //Cortante en el extremo frontal.
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="N1")
-      {
-        tmp_gp_dbl= -q(0)+p0[0]; //Axil.
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="N2")
-      return any_const_ptr(q(0));
-    else if(cod=="M1")
-      return any_const_ptr(q(1));
-    else if(cod=="M2")
-      return any_const_ptr(q(2));
-    else if(cod=="length")
-      {
-        tmp_gp_dbl= theCoordTransf->getInitialLength(); //Longitud inicial del elemento.
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="rho") //Densidad de la barra.
-      return any_const_ptr(rho);
-    else
-      return ProtoBeam2d::GetProp(cod);
-  }
-
 
 XC::Response *XC::ElasticBeam2d::setResponse(const std::vector<std::string> &argv, Parameter &param)
   {

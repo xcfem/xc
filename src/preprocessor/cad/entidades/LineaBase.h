@@ -42,7 +42,7 @@ class LineaBase: public Edge
   protected:
     Pnt *p1; //!< Extremo dorsal.
     Pnt *p2; //!< Extremo frontal.
-    virtual bool procesa_comando(CmdStatus &status);
+
     inline Pnt *P1(void)
       { return p1; }
     virtual Pnt *P2(void)
@@ -58,7 +58,7 @@ class LineaBase: public Edge
     void SetVertice(const size_t &,const size_t &);
     void SetVertices(Pnt *,Pnt *);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

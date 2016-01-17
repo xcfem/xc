@@ -87,7 +87,7 @@ class NodeRecorder: public NodeRecorderBase
   protected:
     int sendData(CommParameters &);  
     int receiveData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     NodeRecorder(void);
     NodeRecorder(const ID &theDof, const ID &theNodes, 

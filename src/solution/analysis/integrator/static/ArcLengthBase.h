@@ -39,7 +39,7 @@ class Vector;
 
 //! @ingroup ProtoArcLength
 //
-//! @brief Clase base para ??.
+//! @brief Base class for the arc-length integrators family.
 class ArcLengthBase: public ProtoArcLength
   {
   protected:
@@ -48,15 +48,12 @@ class ArcLengthBase: public ProtoArcLength
     double getDLambdaNewStep(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
 
     ArcLengthBase(SoluMethod *,int classTag,double ArcLength, double alpha = 1.0);
   public:
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

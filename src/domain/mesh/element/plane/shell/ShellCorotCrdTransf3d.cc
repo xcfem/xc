@@ -411,21 +411,3 @@ int XC::ShellCorotCrdTransf3d::recvSelf(const CommParameters &cp)
       res+= recvData(cp);
     return res;
   }
-
-//! @brief Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ShellCorotCrdTransf3d::GetProp(const std::string &cod) const
-  {
-    if(cod == "getR0Matrix")
-      {
-        tmp_gp_mdbl= matrix_to_m_double(getR0());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod == "getRMatrix")
-      {
-        tmp_gp_mdbl= matrix_to_m_double(getR());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else
-      return ShellCrdTransf3dBase::GetProp(cod);
-  }

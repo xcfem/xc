@@ -31,7 +31,6 @@
 #include "Linea.h"
 #include "ArcoCircunf.h"
 #include "preprocessor/Preprocessor.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
@@ -42,26 +41,6 @@
 //! @brief Constructor.
 XC::CmbEdge::Lado::Lado(Edge *ptr,const bool &s)
   : edge(ptr), directo(s) {}
-
-//! @brief Lee un objeto Lado desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - ndiv: Lee el número de divisiones.
-bool XC::CmbEdge::Lado::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Lado) Procesando comando: " << cmd << std::endl;
-    if(cmd == "edge")
-      {
-        assert(edge);
-        edge->LeeCmd(status);
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 //! @brief Devuelve un puntero a la linea.
 XC::Edge *XC::CmbEdge::Lado::Borde(void)
@@ -232,27 +211,6 @@ size_t XC::CmbEdge::Lado::NDiv(void) const
 size_t XC::CmbEdge::Lado::GetTag(void) const
   { return edge->GetTag(); }
 
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::CmbEdge::Lado::GetProp(const std::string &cod) const
-  {
-    if(cod=="edge")
-      {
-        assert(edge);
-        return any_const_ptr(edge);
-      }
-    else if(cod=="directo")
-      { return any_const_ptr(directo); }
-    else if(cod=="getLong")
-      {
-        tmp_gp_dbl= getLongitud();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return EntCmd::GetProp(cod);
-  }
-
-
 //! @brief Operador de igualdad.
 bool XC::operator==(const XC::CmbEdge::Lado &il1,const XC::CmbEdge::Lado &il2)
   {
@@ -280,85 +238,6 @@ XC::CmbEdge::CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd)
 XC::SetEstruct *XC::CmbEdge::getCopy(void) const
   { return new CmbEdge(*this); }
 
-//! @brief Lee un objeto CmbEdge desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - p1: Lee el punto origen.
-//! - p2: Lee el punto destino.
-//! - linea: Lee la línea.
-bool XC::CmbEdge::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(CmbEdge) Procesando comando: " << cmd << std::endl;
-    if(cmd == "p1")
-      {
-        const std::string clave= status.GetString();
-        //Ignora el argumento (como debe hacer).
-        return true;
-      }
-    else if(cmd == "p2")
-      {
-        const std::string clave= status.GetString();
-        //Ignora el argumento (como debe hacer).
-        return true;
-      }
-    else if(cmd == "linea")
-      {
-        const MapLineas::Indice id_linea= interpretaSize_t(status.GetString());
-        inserta(id_linea);
-        return true;
-      }
-    else if(cmd == "add_lns")
-      {
-        std::vector<MapLineas::Indice> tmp= crea_vector_size_t(status.GetString());
-	std::cerr << "add_lns deprecated use python." << std::endl;
-        //addLines(tmp);
-        return true;
-      }
-    else if(cmd == "add_pnts")
-      {
-        const std::vector<MapPuntos::Indice> tmp= crea_vector_size_t(status.GetString());
-	std::cerr << "add_pnts deprecated use python." << std::endl;
-	  //addPoints(tmp);
-        return true;
-      }
-    else if(cmd == "for_each_lado")
-      {
-        const std::string nmbBlq= GetNombre()+":for_each_line";
-        const std::string &bloque= status.GetBloque();
-	std::deque<Lado>::iterator i= lineas.begin();
-	for(;i!= lineas.end();i++)
-          (*i).EjecutaBloque(status,bloque,nmbBlq);
-        return true;
-      }
-    else if(cmd == "for_each_line")
-      {
-        const std::string nmbBlq= GetNombre()+":for_each_line";
-        const std::string &bloque= status.GetBloque();
-        Edge *linea= nullptr;
-	std::deque<Lado>::iterator i= lineas.begin();
-	for(;i!= lineas.end();i++)
-          {
-            linea= (*i).Borde();
-            linea->EjecutaBloque(status,bloque,nmbBlq);
-          }
-        return true;
-      }
-    else if(cmd == "lado_por_puntos")
-      {
-        const std::vector<MapPuntos::Indice> tmp= crea_vector_size_t(status.GetString());
-        if(tmp.size()>1)
-          {
-            Lado *l= GetLadoPorPuntos(tmp[0],tmp[1]);
-            l->LeeCmd(status);
-          }
-        return true;
-      }
-    else
-      return Edge::procesa_comando(status);
-  }
 
 //! @brief Devuelve un puntero al primer lado.
 XC::CmbEdge::Lado *XC::CmbEdge::primera_linea(void)
@@ -780,44 +659,3 @@ BND3d XC::CmbEdge::Bnd(void) const
       retval+= GetVertice(i)->GetPos();
     return retval;
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-//! -nsup: Devuelve el número de superficies que tienen por borde a esta línea.
-any_const_ptr XC::CmbEdge::GetProp(const std::string &cod) const
-  {
-    const std::string str_p= "p(";
-    if(cod.substr(0,str_p.size())==str_p) //Puede ser puntos(ipunto)
-      {
-        std::deque<std::string> fnc_args= getargs(cod);
-        const size_t ipunto= interpretaSize_t(fnc_args[1]);
-        return any_const_ptr(GetVertice(ipunto));
-      }
-    if(cod=="ndiv")
-      {
-        tmp_gp_szt= NDiv();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="nlineas")
-      {
-        tmp_gp_szt= NumEdges();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getLongLado")
-      {
-        const size_t indice= popSize_t(cod);
-        tmp_gp_dbl= GetLado(indice)->getLongitud();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getTagLado")
-      {
-        const size_t indice= popSize_t(cod);
-        tmp_gp_int= GetLado(indice)->GetTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else
-      return Edge::GetProp(cod);
-  }
-

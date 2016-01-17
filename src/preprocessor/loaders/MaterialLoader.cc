@@ -28,7 +28,6 @@
 
 #include "MaterialLoader.h"
 #include "domain/domain/Domain.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/Lista.h"
 
 //Uniaxial material.
@@ -828,15 +827,6 @@ XC::DiagInteraccion &XC::MaterialLoader::getDiagInteraccion(const std::string &n
     DiagInteraccion *retval= find_ptr_diag_interaccion(nmb);
     assert(retval);
     return *retval;
-  }
-
-//! @brief Ejecuta el bloque que se pasa como parámetro.
-void XC::MaterialLoader::ejecuta_bloque_for_each(CmdStatus &status,const std::string &bloque)
-  {
-    const std::string &nmbBlq= nombre_clase()+":for_each";
-    iterator i= begin();
-    for(;i!= end();i++)
-      (*i).second->EjecutaBloque(status,bloque,nmbBlq);
   }
 
 //! @brief Devuelve verdadero si existe el material cuyo código se pasa como parámetro.

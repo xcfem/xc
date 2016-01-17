@@ -48,7 +48,7 @@ namespace XC {
 class SisRef: public EntMdlrBase
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     //! @brief Constructor.
     SisRef(Preprocessor *m)
@@ -78,7 +78,7 @@ class SisRef: public EntMdlrBase
     //! expresado en coordenadas locales.
     virtual Vector3d GetCooLocales(const Vector3d &v) const= 0;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

@@ -75,7 +75,6 @@
 
 #include "utility/matrix/Matrix.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "material/nD/TipoMaterialND.h"
 
 //! @brief Constructor.
@@ -89,31 +88,6 @@ XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int eps_size)
 //! @brief Constructor.
 XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int eps_size, double e, double nu, double r)
   :XC::NDMaterial(tag, ND_TAG_ElasticIsotropic), E(e), v(nu), rho(r), epsilon(eps_size) {}
-
-//! @brief Lee un objeto ElasticIsotropicMaterial desde archivo
-bool XC::ElasticIsotropicMaterial::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElasticIsotropicMaterial) Procesando comando: " << cmd << std::endl;
-    if(cmd == "E")
-      {
-        E= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "nu")
-      {
-        v= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "rho")
-      {
-        rho= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return NDMaterial::procesa_comando(status);
-  }
 
 double XC::ElasticIsotropicMaterial::getRho(void) const
   { return rho; }
@@ -438,16 +412,3 @@ int XC::ElasticIsotropicMaterial::setParameter(const std::vector<std::string> &a
 
 int XC::ElasticIsotropicMaterial::updateParameter(int parameterID, Information &info)
   { return -1; }
-
-//! @brief Devuelve la propiedad cuyo código se pasa como parámetro.
-any_const_ptr XC::ElasticIsotropicMaterial::GetProp(const std::string &cod) const
-  {
-    if(cod=="E")
-      return any_const_ptr(E);
-    else if(cod=="nu")
-      return any_const_ptr(v);
-    else if(cod=="rho")
-      return any_const_ptr(rho);
-    else
-      return NDMaterial::GetProp(cod);
-  }

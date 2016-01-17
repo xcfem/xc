@@ -28,18 +28,7 @@
 
 #include "SisRef.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-
-//! @brief Lee un objeto SisRef desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - pos: Lee las coordenadas del punto.
-bool XC::SisRef::procesa_comando(CmdStatus &status)
-  {
-    return EntMdlrBase::procesa_comando(status);
-  }
 
 //! @brief Devuelve el vector unitario I expresado en el sistema global
 //! en la posición que se pasa como parámetro.
@@ -54,14 +43,4 @@ Vector3d XC::SisRef::GetJ(const Pos3d &p) const
 Vector3d XC::SisRef::GetK(const Pos3d &p) const
   { return GetVDirEje(3,p); }
 
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-//! -nlineas: Devuelve el número de líneas que empiezan o acaban en este punto.
-any_const_ptr XC::SisRef::GetProp(const std::string &cod) const
-  {
-    return EntMdlrBase::GetProp(cod);
-  }
 

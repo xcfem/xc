@@ -53,7 +53,6 @@ class FieldInfo: public EntConNmb
     int orderNumber; //!< Número de orden.
     double time; //!< Instante.
 
-    bool procesa_comando(CmdStatus &status);
   public:
     FieldInfo(const std::string &);
 
@@ -102,7 +101,6 @@ class FieldInfo: public EntConNmb
       { time= t; }
     inline const double &getTime(void) const
       { return time; }
-    any_const_ptr GetProp(const std::string &) const;
   };
 } // end of XC namespace
 #endif

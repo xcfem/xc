@@ -32,7 +32,6 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 
 XC::BaseElasticSection3d::BaseElasticSection3d(int tag, int classTag, const size_t &dim, MaterialLoader *mat_ldr)
@@ -61,33 +60,6 @@ void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
       std::cerr << "El puntero al cargador de materiales es nulo." << std::endl;
   }
 
-//! @brief Lee un objeto XC::BaseElasticSection3d desde archivo
-bool XC::BaseElasticSection3d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BaseElasticSection3d) Procesando comando: " << cmd << std::endl;
-    if((cmd == "paramSeccion"))
-      {
-	ctes_scc.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "geomSeccion")
-      {
-        const std::string cod_geom= interpretaString(status.GetString()); //Código de la geometría.
-        sectionGeometry(cod_geom);
-        return true;
-      }
-    else if(cmd == "checkValues")
-      {
-        status.GetString();
-        ctes_scc.check_values();
-        return true;
-      }
-    else
-      return BaseElasticSection::procesa_comando(status);
-  }
-
 //! \brief Devuelve los parámetros estáticos de la sección.
 const XC::ConstantesSecc3d &XC::BaseElasticSection3d::getConstantesSeccion(void) const
   { return ctes_scc; }
@@ -113,16 +85,6 @@ int XC::BaseElasticSection3d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::BaseElasticSection3d::GetProp(const std::string &cod) const
-  {
-    if(cod=="paramSeccion")
-      return any_const_ptr(&ctes_scc);
-    else
-      return BaseElasticSection::GetProp(cod);
-  }
- 
 void XC::BaseElasticSection3d::Print(std::ostream &s, int flag) const
   {
     s << "BaseElasticSection3d, tag: " << this->getTag() << std::endl;

@@ -47,7 +47,7 @@ class BaseElasticSection2d: public BaseElasticSection
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
 
   public:
     BaseElasticSection2d(int tag,int classTag,const size_t &dim, const double &E, const double &A, const double &I,double G, const double &alpha);
@@ -58,7 +58,7 @@ class BaseElasticSection2d: public BaseElasticSection
     void setConstantesSeccion(const ConstantesSecc2d &);  
     void sectionGeometry(const std::string &);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

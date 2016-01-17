@@ -43,7 +43,7 @@ template <class T>
 class MapEnt: public MapCadMember<T>
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     typedef typename MapCadMember<T>::iterator iterator;
     typedef typename MapCadMember<T>::const_iterator const_iterator;
@@ -52,9 +52,6 @@ class MapEnt: public MapCadMember<T>
 
     T *getNearest(const Pos3d &p);
     const T *getNearest(const Pos3d &p) const;
-
-    void EjecutaBloqueForEach(CmdStatus &status,const std::string &bloque);
-
     void numera(void);
   };
 
@@ -62,25 +59,6 @@ class MapEnt: public MapCadMember<T>
 template <class T>
 MapEnt<T>::MapEnt(Cad *cad)
   : MapCadMember<T>(cad) {}
-
-//! @brief Lee un objeto Edge desde el archivo de entrada.
-template <class T>
-bool MapEnt<T>::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= this->deref_cmd(status.Cmd());
-    const std::string str_err= "(MapEnt) Procesando comando: " + cmd;
-    if(this->verborrea>2)
-      std::clog << str_err << std::endl;
-
-    if(cmd == "for_each")
-      {
-        const std::string bloque= status.GetBloque();
-        EjecutaBloqueForEach(status,bloque);
-        return true;
-      }
-    else
-      return MapCadMember<T>::procesa_comando(status);
-  }
 
 //! @brief Devuelve el objeto más cercano a la posición que se pasa como parámetro.
 template <class T>
@@ -143,20 +121,6 @@ void MapEnt<T>::numera(void)
       {
         EntMdlr *ptr= (*i).second;
         ptr->set_indice(idx);
-      }
-  }
-
-//! @brief Solicita a cada entidad del contenedor que ejecute
-//! el bloque de código que se le pasa como parámetro.
-template <class T>
-void MapEnt<T>::EjecutaBloqueForEach(CmdStatus &status,const std::string &bloque)
-  {
-    const std::string nmbBlq= this->nombre_clase()+":for_each";
-    std::string tmp;
-    for(iterator i=this->begin();i!= this->end();i++)
-      {
-        tmp= nmbBlq+":"+(*i).second->GetNombre();
-        (*i).second->EjecutaBloque(status,bloque,tmp);
       }
   }
 

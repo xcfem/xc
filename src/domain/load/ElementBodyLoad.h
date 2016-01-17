@@ -48,7 +48,7 @@ class ElementBodyLoad: public ElementalLoad
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElementBodyLoad(int tag, int classTag, const ID &theElementTags);
     ElementBodyLoad(int tag, int classTag);
@@ -61,7 +61,7 @@ class ElementBodyLoad: public ElementalLoad
     void Print(std::ostream &s, int flag =0) const;       
 
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

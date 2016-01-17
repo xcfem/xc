@@ -65,7 +65,6 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <utility/recorder/response/MaterialResponse.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include <deque>
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -400,13 +399,6 @@ double XC::SectionForceDeformation::getSectionDeformationByName(const std::strin
       std::cerr << "Deformation code: '" << cod 
                 << "' unknown." << std::endl;
     return retval;
-  }
-
-//! Devuelve los esfuerzos de la placa.
-any_const_ptr XC::SectionForceDeformation::GetPropShellResponse(const std::string &cod) const
-  {
-    std::cerr << "Deprecated. Use python." << std::endl;
-    return any_const_ptr();
   }
 
 //! @brief Envía los datos a través del canal que se pasa como parámetro.

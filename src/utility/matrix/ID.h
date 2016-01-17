@@ -78,8 +78,6 @@ class ID: public EntCmd
     void libera(void);
     void check_sizes(void);
     void alloc(const size_t &);
-  protected:
-    bool procesa_comando(CmdStatus &status);
   public:
     // constructors and destructor
     ID(void);
@@ -117,7 +115,7 @@ class ID: public EntCmd
 
     friend std::ostream &operator<<(std::ostream &, const ID &);
     //    friend istream &operator>>(istream &s, ID &V);    
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
 
     friend class UDP_Socket;
     friend class TCP_Socket;
@@ -143,16 +141,15 @@ inline bool ID::Nulo(void) const
 inline int &ID::operator()(const int &x) 
   {
 #ifdef _G3DEBUG
-  // check if it is inside range [0,sz-1]
-  if (x < 0 || x >= sz) {
-    std::cerr << "ID::(loc) - loc " << x << " outside range 0 - " <<  sz-1 << endln;
-    return ID_NOT_VALID_ENTRY;
-  }
+    // check if it is inside range [0,sz-1]
+    if(x < 0 || x >= sz)
+      {
+        std::cerr << "ID::(loc) - loc " << x << " outside range 0 - " <<  sz-1 << endln;
+        return ID_NOT_VALID_ENTRY;
+      }
 #endif
-
-  
-  return data[x];
-}
+    return data[x];
+  }
 
 inline const int &ID::operator()(const int &x) const 
   {

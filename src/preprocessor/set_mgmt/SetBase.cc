@@ -27,7 +27,6 @@
 //SetBase.cc
 
 #include "SetBase.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/Lista.h"
 #include <boost/any.hpp>
 #include "domain/constraints/SP_Constraint.h"

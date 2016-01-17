@@ -88,7 +88,7 @@ class SP_Constraint: public Constraint
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors
     SP_Constraint(int classTag);        

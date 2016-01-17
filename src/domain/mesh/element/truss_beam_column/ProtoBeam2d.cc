@@ -58,21 +58,6 @@ XC::ProtoBeam2d::ProtoBeam2d(int tag,int class_tag,const Material *m)
 XC::ProtoBeam2d::ProtoBeam2d(int tag, int class_tag, double a, double e, double i, int Nd1, int Nd2)
   :Element1D(tag,class_tag,Nd1,Nd2), ctes_scc(e,a,i) {}
 
-//! @brief Lee un objeto XC::ProtoBeam2d desde archivo
-bool XC::ProtoBeam2d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ProtoBeam2d) Procesando comando: " << cmd << std::endl;
-    if((cmd == "seccion") || (cmd == "for_each_section"))
-      {
-	ctes_scc.LeeCmd(status);
-        return true;
-      }
-    else
-      return Element1D::procesa_comando(status);
-  }
-
 int XC::ProtoBeam2d::getNumDOF(void) const
   { return 6; }
 
@@ -91,20 +76,4 @@ int XC::ProtoBeam2d::recvData(const CommParameters &cp)
     int res= Element1D::recvData(cp);
     res+= cp.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(7));
     return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::ProtoBeam2d::GetProp(const std::string &cod) const
-  {
-    if(cod=="getI")
-      return any_const_ptr(ctes_scc.I());
-    else if(cod=="getE")
-      return any_const_ptr(ctes_scc.E());
-    else if(cod=="getA")
-      return any_const_ptr(ctes_scc.A());
-    else
-      return Element1D::GetProp(cod);
   }

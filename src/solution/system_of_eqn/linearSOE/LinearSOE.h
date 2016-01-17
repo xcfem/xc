@@ -97,7 +97,6 @@ class LinearSOE : public SystemOfEqn
     friend class FEM_ObjectBroker;
     virtual bool setSolver(LinearSOESolver *);
     int setSolverSize(void);
-    bool procesa_comando(CmdStatus &status);
 
     LinearSOE(SoluMethod *,int classTag);
   public:
@@ -126,8 +125,6 @@ class LinearSOE : public SystemOfEqn
     
     LinearSOESolver *getSolver(void);
     LinearSOESolver &newSolver(const std::string &);
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

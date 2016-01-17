@@ -52,7 +52,7 @@ class MapModelWrapper: public EntCmd
   private:
     map_solu_model solu_models; //!< Métodos para la solución.
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     MapModelWrapper(ProcSoluControl *owr);
 

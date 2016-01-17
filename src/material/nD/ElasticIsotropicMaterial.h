@@ -86,7 +86,7 @@ class ElasticIsotropicMaterial : public NDMaterial
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    virtual bool procesa_comando(CmdStatus &);
+
   public:
     // Only called by subclasses to pass their tags to NDMaterialModel
     ElasticIsotropicMaterial(int tag, int classTag, int eps_size, double E, double nu, double rho = 0.0);
@@ -153,7 +153,7 @@ class ElasticIsotropicMaterial : public NDMaterial
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);
     virtual int updateParameter(int parameterID, Information &info);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

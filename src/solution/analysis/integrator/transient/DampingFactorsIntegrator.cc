@@ -27,7 +27,6 @@
 //DampingFactors.cpp
 
 #include "DampingFactorsIntegrator.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
@@ -37,21 +36,6 @@ XC::DampingFactorsIntegrator::DampingFactorsIntegrator(SoluMethod *owr,int class
 //! @brief Constructor.
 XC::DampingFactorsIntegrator::DampingFactorsIntegrator(SoluMethod *owr,int classTag,const RayleighDampingFactors &rF)
   : TransientIntegrator(owr,classTag), rayFactors(rF) {}
-
-//! @brief Lee un objeto XC::DampingFactorsIntegrator desde archivo
-bool XC::DampingFactorsIntegrator::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DampingFactorsIntegrator) Procesando comando: " << cmd << std::endl;
-    if(cmd == "factors")
-      {
-        rayFactors.LeeCmd(status);
-        return true;
-      }
-    else
-      return TransientIntegrator::procesa_comando(status);
-  }
 
 void XC::DampingFactorsIntegrator::setRayleighDampingFactors(void)
   {
@@ -64,16 +48,6 @@ void XC::DampingFactorsIntegrator::Print(std::ostream &s, int flag)
   {
     TransientIntegrator::Print(s,flag);
     s << "  Rayleigh Damping: " << rayFactors << std::endl;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::DampingFactorsIntegrator::GetProp(const std::string &cod) const
-  {
-    if(cod=="factors")
-      return any_const_ptr(&rayFactors);
-    else
-      return TransientIntegrator::GetProp(cod);    
   }
 
 //! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.

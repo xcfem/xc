@@ -73,7 +73,7 @@ class FiberSectionRepr;
 class FiberSection3dBase : public FiberSectionBase
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
+
     friend class DqFibras;
     friend class StoFibras;
     double get_strain(const double &y,const double &z) const;
@@ -94,7 +94,7 @@ class FiberSection3dBase : public FiberSectionBase
     inline virtual double getCdgZ(void) const
       { return fibras.getZCdg(); }
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } // end of XC namespace

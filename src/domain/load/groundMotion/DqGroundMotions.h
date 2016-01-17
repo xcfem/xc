@@ -53,10 +53,10 @@ namespace XC {
     dq_ptr_GroundMotions gMotions; //!< Cola de punteros a GroundMotion.
 
 
-    void ejecuta_bloque_for_each(CmdStatus &status,const std::string &bloque);
+
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
     
   public:
     DqGroundMotions(const size_t &num= 0);
@@ -90,7 +90,7 @@ namespace XC {
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s,const int &flag);
   };
 } // end of XC namespace

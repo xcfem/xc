@@ -65,7 +65,6 @@
 #include <solution/analysis/integrator/StaticIntegrator.h>
 #include <domain/domain/Domain.h>
 #include "solution/SoluMethod.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 // AddingSensitivity:BEGIN //////////////////////////////////
 #ifdef _RELIABILITY

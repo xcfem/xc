@@ -28,7 +28,6 @@
 
 #include "DqGroundMotions.h"
 #include "GroundMotion.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "boost/any.hpp"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/base/any_const_ptr.h"
@@ -56,48 +55,6 @@ void XC::DqGroundMotions::addMotion(GroundMotion &gm)
       gMotions.push_back(&gm);
   }
 
-
-//! @brief Lee un objeto XC::DqGroundMotions desde archivo
-bool XC::DqGroundMotions::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DqGroundMotions) Procesando comando: " << cmd << std::endl;
-    const CmdParser &parser= status.Parser();
-
-    if(cmd == "for_each")
-      { 
-        const std::string bloque= status.GetBloque();
-        ejecuta_bloque_for_each(status,bloque);
-        return true;
-      }
-    else if(cmd == "groundMotion")
-      {
-        std::deque<boost::any> indices;
-        if(parser.TieneIndices())
-          {
-            indices= parser.SeparaIndices(this);
-            if(!indices.empty())
-              {
-                const int idx= convert_to_int(indices[0]);
-                GroundMotion *gm= gMotions[idx];
-                if(gm)
-                  gm->LeeCmd(status);
-                else
-                  std::cerr << "XC::DqGroundMotions::procesa_comando: '" << cmd
-			    << "'; no se encontró la el movimiento de índice: " << idx
-                            << std::endl;
-              }
-          }
-        else
-	  std::cerr << "XC::DqGroundMotions::procesa_comando: '" << cmd
-                    << "'; se necesita el índice del movimiento." << std::endl;
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
-
 void XC::DqGroundMotions::clear(void)
   {
     iterator i= gMotions.begin();
@@ -110,33 +67,6 @@ void XC::DqGroundMotions::clear(void)
 //! @brief Destructor:
 XC::DqGroundMotions::~DqGroundMotions(void)
   { clear(); }
-
-//! @brief Hace que cada una de los objetos ejecute el bloque que se pasa como parámetro.
-void XC::DqGroundMotions::ejecuta_bloque_for_each(CmdStatus &status,const std::string &bloque)
-  {
-    const std::string nmbBlq= nombre_clase()+":for_each";
-    iterator i= gMotions.begin();
-    for(;i!= gMotions.end();i++)
-      if(*i)
-        (*i)->EjecutaBloque(status,bloque,nmbBlq);
-      else
-	std::cerr << "DqGroundMotions::ejecuta_bloque_for_each; Puntero nulo." << std::endl;
-  }
-
-//! como parámetro.
-any_const_ptr XC::DqGroundMotions::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "DqGroundMotions::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-
-    if(cod=="size")
-      {
-        tmp_gp_szt= getNumGroundMotions();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return EntCmd::GetProp(cod);
-  }
 
 //! @brief Envía el objeto a través del canal que se pasa como parámetro.
 int XC::DqGroundMotions::sendData(CommParameters &cp)

@@ -82,7 +82,7 @@ class PathTimeSeries : public PathSeriesBase
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors  
     PathTimeSeries(void);

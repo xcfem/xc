@@ -35,16 +35,11 @@
 #include <solution/analysis/handler/ConstraintHandler.h>
 #include <solution/analysis/integrator/eigen/LinearBucklingIntegrator.h>
 #include <domain/domain/Domain.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
 XC::LinearBucklingEigenAnalysis::LinearBucklingEigenAnalysis(SoluMethod *metodo)
   :EigenAnalysis(metodo) {}
-
-//! @brief Lee un objeto XC::LinearBucklingEigenAnalysis desde archivo
-bool XC::LinearBucklingEigenAnalysis::procesa_comando(CmdStatus &status)
-  { return EigenAnalysis::procesa_comando(status); }
 
 //! @brief Ejecuta el análisis.
 int XC::LinearBucklingEigenAnalysis::setupPreviousStep(void)
@@ -91,7 +86,3 @@ const double &XC::LinearBucklingEigenAnalysis::getEigenvalue(int mode) const
     return retval;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::LinearBucklingEigenAnalysis::GetProp(const std::string &cod) const
-  { return EigenAnalysis::GetProp(cod); }

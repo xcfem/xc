@@ -77,7 +77,7 @@ class PulseSeries : public PeriodSeries
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors
     PulseSeries(double tStart, double tFinish,double period, double pWidth, double shift, double cFactor = 1.0);

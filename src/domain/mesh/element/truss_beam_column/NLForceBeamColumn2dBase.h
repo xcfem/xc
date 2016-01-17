@@ -81,7 +81,7 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     NLForceBeamColumn2dBase(int tag,int classTag,int numSec= 0);
     NLForceBeamColumn2dBase(int tag,int classTag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
@@ -98,7 +98,6 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
     const Matrix &getTangentStiff(void) const;
 
     const Vector &getResistingForce(void) const;
-    any_const_ptr GetProp(const std::string &) const;
   };
 } // end of XC namespace
 

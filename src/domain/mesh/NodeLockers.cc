@@ -28,7 +28,6 @@
 
 #include "NodeLockers.h"
 #include "domain/domain/Domain.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/Lista.h"
 
 //Constraints.
@@ -149,75 +148,6 @@ void XC::NodeLockers::removeAllFromDomain(void)
       nombres.push_back((*i).first);
     for(std::deque<std::string>::const_iterator i= nombres.begin();i!=nombres.end();i++)
       removeFromDomain(*i);
-  }
-
-//! @brief Lee un objeto NodeLockers desde archivo
-bool XC::NodeLockers::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NodeLockers) Procesando comando: " << cmd << std::endl;
-    NodeLocker *nl= busca_node_locker(cmd);
-    if(nl)
-      {
-        nl->LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "set_current_node_locker")
-      {
-        code= interpretaString(status.GetString());
-        return true;
-      }
-    else if(cmd == "current_node_locker")
-      {
-        NodeLocker *tmp= getCurrentNodeLockerPtr();
-        if(tmp)
-          tmp->LeeCmd(status);
-        else
-	  std::cerr << cmd << "; no hay una hipótesis actual." << std::endl;
-        return true;
-      }
-    else if(cmd == "add_to_domain")
-      {
-        const std::string cod= interpretaString(status.GetString());
-	NodeLocker *lp= busca_node_locker(cod);
-        if(lp)
-          getDomain()->addNodeLocker(lp);
-        else
-          {
-            std::cerr << "add_to_domain: no se encontró el locker: " 
-                        << cod << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "remove_from_domain")
-      {
-        const std::string cod= interpretaString(status.GetString());
-        removeFromDomain(cod);
-        return true;
-      }
-    else if(cmd == "remove_all_from_domain")
-      {
-        status.GetString();
-        removeAllFromDomain();
-        return true;
-      }
-    else if(cmd == "for_each")
-      {
-        const std::string nmbBlq= nombre_clase()+":for_each";
-        const std::string bloque= status.GetBloque();
-	for(map_node_lockers::iterator i= node_lockers.begin();i!= node_lockers.end();i++)
-          (*i).second->EjecutaBloque(status,bloque,nmbBlq);
-        return true;
-      }
-    else if(cmd == "clearAll")
-      {
-        status.GetBloque(); //Ignoramos entrada.
-        clearAll();
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
   }
 
 //! @brief Borra todos los objetos.
@@ -352,28 +282,4 @@ int XC::NodeLockers::recvSelf(const CommParameters &cp)
     else
       result+= recvData(cp);
     return result;    
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::NodeLockers::GetProp(const std::string &cod) const
-  {
-    if(cod=="numNodeLockers")
-      {
-        tmp_gp_szt= node_lockers.size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "listaNombresNodeLockers")
-      {
-        EntCmd *this_no_const= const_cast<NodeLockers *>(this);
-        tmp_gp_lista.set_owner(this_no_const);
-        tmp_gp_lista.clearAll();
-	for(map_node_lockers::const_iterator i= node_lockers.begin();i!= node_lockers.end();i++)
-          tmp_gp_lista.Inserta((*i).first);
-        return any_const_ptr(tmp_gp_lista);
-      }
-    else
-      return EntCmd::GetProp(cod);
   }

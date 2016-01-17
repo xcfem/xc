@@ -63,7 +63,6 @@
 #include "CrdTransf2d.h"
 #include "domain/mesh/node/Node.h"
 #include "utility/matrix/Matrix.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
@@ -73,15 +72,6 @@
 //! @brief constructor:
 XC::CrdTransf2d::CrdTransf2d(int tag, int classTag)
   : CrdTransf(tag, classTag,2),cosTheta(0.0), sinTheta(0.0) {}
-
-//! @brief Procesa instrucciones desde archivo.
-bool XC::CrdTransf2d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(CrdTransf2d) Procesando comando: " << cmd << std::endl;
-    return CrdTransf::procesa_comando(status);
-  }
 
 //! @brief check rigid joint offset for node I
 void XC::CrdTransf2d::set_rigid_joint_offsetI(const Vector &rigJntOffset1)
@@ -654,25 +644,3 @@ int XC::CrdTransf2d::recvData(const CommParameters &cp)
     return res;    
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::CrdTransf2d::GetProp(const std::string &cod) const
-  {
-    if(cod=="getSinTheta")
-      return any_const_ptr(sinTheta);
-    else if(cod=="getCosTheta")
-      return any_const_ptr(cosTheta);
-    if(cod=="getTheta")
-      {
-        tmp_gp_dbl= atan2(sinTheta, cosTheta);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getInitialVectorI")
-      return get_prop_vector(getInitialI());
-    else if(cod=="getInitialVectorJ")
-      return get_prop_vector(getInitialJ());
-    else
-      return CrdTransf::GetProp(cod);
-  }

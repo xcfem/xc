@@ -47,7 +47,7 @@ class MeshCompRecorder: public HandlerRecorder
 
     int sendData(CommParameters &);  
     int receiveData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     MeshCompRecorder(int classTag);
     MeshCompRecorder(int classTag, Domain &theDomain, DataOutputHandler &theOutputHandler,double deltaT = 0.0, bool echoTimeFlag = true); 

@@ -43,7 +43,7 @@ class PeriodSeries: public PulseBaseSeries
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors
     PeriodSeries(int classTag,double tStart,double tFinish,double period,double shift,double cFactor = 1.0);
@@ -59,7 +59,7 @@ class PeriodSeries: public PulseBaseSeries
       { shift= d; }
     
     void Print(std::ostream &s, int flag =0) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

@@ -34,34 +34,12 @@
 #include "preprocessor/cad/SisRef.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "SisRefCartesianas3d.h"
 
 //! @brief Constructor.
 XC::MapSisRef::MapSisRef(Cad *cad)
   : MapCadMember<SisRef>(cad) {}
-
-//! @brief Lee un objeto MapSisRef desde el archivo de entrada.
-bool XC::MapSisRef::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string str_err= "(MapSisRef) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << str_err << std::endl;
-    if(cmd == "tag_sis_ref")
-      {
-        setTag(interpretaSize_t(status.GetString()));
-        return true;
-      }
-    else if(cmd == "sistema_referencia") //Crea un nuevo sistema de referencia.
-      {
-        Nuevo(status);
-        return true;
-      }
-    else
-      return MapCadMember<SisRef>::procesa_comando(status);
-  }
 
 //! @brief Crea un nuevo sistema de referencia.
 XC::SisRef *XC::MapSisRef::Nuevo(const std::string &tipo)
@@ -81,45 +59,4 @@ XC::SisRef *XC::MapSisRef::Nuevo(const std::string &tipo)
                     << "' es desconocido." << std::endl;
       }
     return retval;
-  }
-
-//! @brief Lee una transformación geométrica.
-XC::SisRef *XC::MapSisRef::Nuevo(CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    SisRef *retval= nullptr;
-    bool nueva= true;
-    size_t old_tag= getTag();
-    if(fnc_indices.size()>0)
-      {
-        setTag(convert_to_size_t(fnc_indices[0])); //Identificador del sistema de referencia.
-        if(existe(getTag()))
-          nueva= false;
-      }
-    std::string tipo_sis_ref= "cartesianas";
-    if(fnc_indices.size()>1)
-      tipo_sis_ref= convert_to_string(fnc_indices[1]); //Identificador del tipo.
-    if(getTag()>0) //El 0 se reserva para el sistema de coordenadas universal.
-      {
-        retval= Nuevo(tipo_sis_ref);
-        retval->LeeCmd(status);
-      }
-    else
-      std::clog << "No se puede redefinir el sistema de coordenadas de índice 0." << std::endl;
-    if(!nueva)
-      setTag(old_tag);
-    return retval;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::MapSisRef::GetProp(const std::string &cod) const
-  {
-    if(cod=="num_sis_ref")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return MapCadMember<SisRef>::GetProp(cod);
   }

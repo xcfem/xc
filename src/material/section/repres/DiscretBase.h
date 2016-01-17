@@ -47,7 +47,7 @@ class DiscretBase: public EntConNmb
   private:
     Material *mat; //!< Puntero al material que constituye el elemento de la discretización.
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     DiscretBase(Material *mat);
 
@@ -58,7 +58,7 @@ class DiscretBase: public EntConNmb
 
     void setMaterialPtr(Material *mat);
     Material *getMaterialPtr(void) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

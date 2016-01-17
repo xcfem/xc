@@ -106,7 +106,7 @@ class Newmark : public NewmarkBase2
     // AddingSensitivity:BEGIN //////////////////////////////////
     int revertToStart();
     // AddingSensitivity:END ////////////////////////////////////
-    virtual any_const_ptr GetProp(const std::string &cod) const;    
+    
   };
 inline Integrator *Newmark::getCopy(void) const
   { return new Newmark(*this); }

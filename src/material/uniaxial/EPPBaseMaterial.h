@@ -44,7 +44,7 @@ class EPPBaseMaterial : public ElasticBaseMaterial
     double commitStrain; //!< plastic strain at last commit
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     EPPBaseMaterial(int tag, int classtag, double E= 0.0, double e0= 0.0);
 
@@ -54,7 +54,7 @@ class EPPBaseMaterial : public ElasticBaseMaterial
     inline double getTangent(void) const
       { return trialTangent; }
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

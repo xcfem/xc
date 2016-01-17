@@ -89,7 +89,7 @@ class DriftRecorder: public HandlerRecorder
     void alloc_ndIJ(const int &);
     void set_ndIJ(const ID &nI,const ID &);
     void setup_ndIJ(const int &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     DriftRecorder(void);
     DriftRecorder(int ndI, int ndJ, int dof, int perpDirn,

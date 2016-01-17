@@ -32,7 +32,6 @@
 #include <utility/matrix/Matrix.h>
 #include <material/section/repres/geom_section/region/RgSccCirc.h>
 #include <material/section/repres/cell/QuadCell.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
@@ -55,60 +54,6 @@ XC::RgSccCirc::RgSccCirc(Material *mat, int numSubdivCircunf, int numSubdivRadia
     centerPosit(centerPosition), intRad(internRadius), extRad(externRadius), 
     initAng(initialAngle), finalAng(finalAngle)
   {}
-
-//! @brief Lee un objeto RgSccCirc desde archivo
-bool XC::RgSccCirc::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(RgSccCirc) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "yCent") //Coordenada y del centro.
-      {
-        centerPosit(0)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "zCent") //Coordenada z del centro.
-      {
-        centerPosit(1)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "centro") //Coordenadas del centro.
-      {
-	std::deque<std::string> str_coord= separa_cadena(status.GetString(),",");
-        if(str_coord.size()<2)
-	  std::cerr << "Error; " << cmd 
-		    << " se requieren dos coordenadas." << std::endl;
-        else
-          {
-            centerPosit(0)= interpretaDouble(str_coord[0]);
-            centerPosit(1)= interpretaDouble(str_coord[1]);
-	  }
-        return true;
-      }
-    else if(cmd == "intRad")
-      {
-        intRad= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if((cmd == "extRad") || (cmd == "Rad")) //Radio exterior.
-      {
-        extRad= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "initAng")
-      {
-        initAng= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "finalAng")
-      {
-        finalAng= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return RgQuadCell::procesa_comando(status);
-  }
 
 void XC::RgSccCirc::setCenterPosition(const Vector &centerPosition)
   { centerPosit = centerPosition; }
@@ -235,26 +180,6 @@ const XC::VectorCells &XC::RgSccCirc::getCells(void) const
 XC::RegionSecc *XC::RgSccCirc::getCopy(void) const
   { return new XC::RgSccCirc(*this); }
  
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::RgSccCirc::GetProp(const std::string &cod) const
-  {
-    if(cod=="yCent") //Devuelve la coordenada y del centro.
-      return any_const_ptr(centerPosit(0));
-    if(cod=="zCent") //Devuelve la coordenada z del centro.
-      return any_const_ptr(centerPosit(1));
-    if(cod=="intRad") //Devuelve el radio interior.
-      return any_const_ptr(intRad);
-    if((cod=="extRad") ||(cod=="Rad") ) //Devuelve el radio exterior.
-      return any_const_ptr(extRad);
-    if(cod=="initAng") //Devuelve el ángulo inicial.
-      return any_const_ptr(initAng);
-    if(cod=="finalAng") //Devuelve el ángulo final.
-      return any_const_ptr(finalAng);
-    else
-      return RgQuadCell::GetProp(cod);
-  }
-
 void XC::RgSccCirc::Print(std::ostream &s, int flag) const
   {
     s << "\nRgQuadCell Type: RgSccCirc";

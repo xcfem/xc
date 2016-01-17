@@ -28,7 +28,6 @@
 
 
 #include "ModalAnalysis.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/nucleo/InterpreteRPN.h"
@@ -38,22 +37,6 @@
 //! @brief Constructor.
 XC::ModalAnalysis::ModalAnalysis(SoluMethod *metodo)
   :EigenAnalysis(metodo), espectro() {}
-
-//! @brief Lee un objeto XC::ModalAnalysis desde archivo
-bool XC::ModalAnalysis::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ModalAnalysis) Procesando comando: " << cmd << std::endl;
-    if(cmd == "espectro")
-      {
-	std::cerr << "DEPRECATED; use Python." << std::endl;
-        //espectro.LeeCmd(status);
-        return true;
-      }
-    else
-      return EigenAnalysis::procesa_comando(status);
-  }
 
 //! @brief Devuelve la aceleración que corresponde al periodo
 //! que se pasa como parámetro.
@@ -107,26 +90,3 @@ XC::Matrix XC::ModalAnalysis::getCQCModalCrossCorrelationCoefficients(const Vect
     return retval;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ModalAnalysis::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "ModalAnalysis::GetProp ("
-                << nombre_clase() 
-                << "::GetProp) Buscando propiedad: "
-                << cod << std::endl;
-
-    if(cod=="getCQCModalCrossCorrelationCoefficients")
-      {
-        Vector zetas;
-        if(InterpreteRPN::Pila().size()>0)
-          zetas= Vector(convert_to_vector_double(InterpreteRPN::Pila().Pop()));
-        else
-          err_num_argumentos(std::cerr,1,"GetProp",cod);
-        tmp_gp_mdbl= matrix_to_m_double(getCQCModalCrossCorrelationCoefficients(zetas));
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else
-      return EigenAnalysis::GetProp(cod);
-  }

@@ -64,7 +64,6 @@
 #include <utility/recorder/response/MaterialResponse.h>
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <material/section/repres/section/FiberSectionRepr.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "material/section/ResponseId.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
@@ -92,16 +91,6 @@ void XC::FiberSection3d::setupFibers(void)
       fibras.setup(*this,section_repres->getFibras3d(),kr);
     else
       fibras.updateKRCDG(*this,kr);
-  }
-
-//! @brief Lee un objeto FiberSection3d desde archivo
-bool XC::FiberSection3d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(FiberSection3d) Procesando comando: " << cmd << std::endl;
-
-    return FiberSection3dBase::procesa_comando(status);
   }
 
 //! @brief Añade una fibra a la sección.
@@ -176,11 +165,6 @@ void XC::FiberSection3d::Print(std::ostream &s, int flag)
           fibras.Print(s,flag);
       }
   }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::FiberSection3d::GetProp(const std::string &cod) const
-  { return FiberSection3dBase::GetProp(cod); }
 
 XC::FiberSection3d XC::FiberSectionReprToFiberSection3d(const int &tag,const FiberSectionRepr &fiberSectionRepr)
   { return fiberSectionRepr.getFiberSection3d(tag); }

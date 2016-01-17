@@ -45,13 +45,12 @@ class DampingFactorsIntegrator: public TransientIntegrator
     void setRayleighDampingFactors(void);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
 
     DampingFactorsIntegrator(SoluMethod *,int classTag);
     DampingFactorsIntegrator(SoluMethod *,int classTag,const RayleighDampingFactors &rF);
   public:
     void Print(std::ostream &s, int flag = 0);        
-    virtual any_const_ptr GetProp(const std::string &cod) const;    
+    
   };
 } // end of XC namespace
 

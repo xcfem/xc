@@ -78,7 +78,7 @@ class SteelBase0103: public SteelBase
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
     virtual int setup_parameters(void);
   public:
     SteelBase0103(int tag, int classTag, double fy, double E0, double b,

@@ -42,7 +42,7 @@ class MEDDblFieldInfo: public MEDTFieldInfo<double>
     friend class MEDMeshing;
     MEDDblFieldInfo(const FieldInfo &,MEDGroupInfo *);
 
-    bool procesa_comando(CmdStatus &status);
+
     void populateOnNodes(const Set &,const FieldInfo &);
     void populateOnElements(const Set &,const FieldInfo &);
     void populateOnGaussPoints(const Set &,const FieldInfo &);

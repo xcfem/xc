@@ -60,7 +60,7 @@ class FiberSectionShear3d : public FiberSection3d
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     FiberSectionShear3d(int tag= 0,MaterialLoader *mat_ldr= nullptr);
     FiberSectionShear3d(const FiberSectionShear3d &otro);
@@ -100,7 +100,7 @@ class FiberSectionShear3d : public FiberSection3d
 
     int setVariable(const std::string &argv);
     int getVariable(int variableID, double &info);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

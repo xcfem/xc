@@ -97,7 +97,7 @@ class Set: public SetMeshComp
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    virtual bool procesa_comando(CmdStatus &);
+
 
     void malla_puntos(dir_mallado dm);
     void malla_lineas(dir_mallado dm);
@@ -169,7 +169,7 @@ class Set: public SetMeshComp
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     ~Set(void);
   };
 } //end of XC namespace

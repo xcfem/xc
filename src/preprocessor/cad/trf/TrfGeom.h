@@ -52,7 +52,7 @@ namespace XC {
 class TrfGeom: public EntMdlrBase
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     //! @brief Constructor.
     TrfGeom(Preprocessor *m)

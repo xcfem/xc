@@ -65,7 +65,7 @@ class Combinacion: public ForceReprComponent
 
 	std::string getString(const MapLoadPatterns &,const std::string &fmt) const;
         void Print(std::ostream &os) const;
-        virtual any_const_ptr GetProp(const std::string &cod) const;
+    
       };
   public:
     typedef std::deque<sumando> TDescomp; //!< Tipo contenedor para la descomposición de la combinación (1.5*PP+1.0*CP+1.6*SC ...).
@@ -100,7 +100,7 @@ class Combinacion: public ForceReprComponent
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
     int recvDescomp(void);
-    bool procesa_comando(CmdStatus &status);
+
 
     friend class GrupoCombinaciones;
     Combinacion(GrupoCombinaciones *owr= NULL,const std::string &nmb= "",int tag= 0,LoadLoader *ll= NULL);
@@ -168,7 +168,7 @@ class Combinacion: public ForceReprComponent
 
     std::string getString(const std::string &fmt= "") const;
     virtual void Print(std::ostream &s, int flag =0) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 std::ostream &operator<<(std::ostream &os,const Combinacion &);

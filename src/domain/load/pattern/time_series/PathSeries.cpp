@@ -67,7 +67,6 @@
 #include <utility/matrix/Vector.h>
 #include <cmath>
 #include <fstream>
-#include "xc_utils/src/base/CmdStatus.h"
 #include <iomanip>
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MovableVector.h"
@@ -112,29 +111,6 @@ void XC::PathSeries::readFromFile(const std::string &fileName)
             theFile1.close(); // finally close the file
           }
       }
-  }
-
-//! @brief Lee un objeto XC::PathSeries desde archivo
-bool XC::PathSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(PathSeries) Procesando comando: " << cmd << std::endl;
-    if(cmd == "file")
-      {
-        readFromFile(interpretaString(status.GetString()));
-        return true;
-      }
-    else if(cmd == "time_incr")
-      {
-        pathTimeIncr= interpretaDouble(status.GetString());
-        if(pathTimeIncr<=0.0)
-	  std::cerr << "(PathSeries) Procesando comando: " << cmd
-                    << " el incremento de tiempo es incorrecto: " << pathTimeIncr << std::endl;
-        return true;
-      }
-    else
-      return PathSeriesBase::procesa_comando(status);
   }
 
 //! @brief Devuelve el valor correspondiente al instante que se pasa como parámetro.
@@ -210,12 +186,4 @@ int XC::PathSeries::recvSelf(const CommParameters &cp)
 void XC::PathSeries::Print(std::ostream &s, int flag) const
   {
     PathSeriesBase::Print(s,flag);
-  }
-
-any_const_ptr XC::PathSeries::GetProp(const std::string &cod) const
-  {
-    if(cod == "getPathTimeIncr")
-      return any_const_ptr(pathTimeIncr);
-    else
-      return PathSeriesBase::GetProp(cod);
   }

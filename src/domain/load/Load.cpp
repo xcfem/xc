@@ -61,28 +61,12 @@
 
 
 #include <domain/load/Load.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.
 XC::Load::Load(int tag, int clasTag)
   : DomainComponent(tag, clasTag), loadPatternTag(-1) {}
-
-//! @brief Lee un objeto XC::Load desde archivo
-bool XC::Load::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Load) Procesando comando: " << cmd << std::endl;
-    if(cmd == "set_tag_hipot")
-      {
-	setLoadPatternTag(interpretaInt(status.GetString()));
-        return true;
-      }
-    else
-      return DomainComponent::procesa_comando(status);
-  }
 
 //! @brief Establece el valor del identificador de la hipótesis.
 void XC::Load::setLoadPatternTag(int tag)
@@ -106,17 +90,4 @@ int XC::Load::recvData(const CommParameters &cp)
     setTag(getDbTagDataPos(0));
     int res= cp.receiveInt(loadPatternTag,getDbTagData(),CommMetaData(1));
     return res;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::Load::GetProp(const std::string &cod) const
-  {
-    if(cod == "tag_hipot")
-      {
-        tmp_gp_int= getLoadPatternTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else
-      return DomainComponent::GetProp(cod);
   }

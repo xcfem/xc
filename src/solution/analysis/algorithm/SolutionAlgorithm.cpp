@@ -65,7 +65,6 @@
 #include <utility/recorder/PatternRecorder.h>
 #include <solution/analysis/model/AnalysisModel.h>
 
-#include "xc_utils/src/base/CmdStatus.h"
 
 XC::SolutionAlgorithm::SolutionAlgorithm(SoluMethod *owr,int clasTag)
   :MovableObject(clasTag), ObjWithRecorders(owr,nullptr)
@@ -73,15 +72,6 @@ XC::SolutionAlgorithm::SolutionAlgorithm(SoluMethod *owr,int clasTag)
     Domain *dom= get_domain_ptr();
     if(dom)
       ObjWithRecorders::setLinks(dom);
-  }
-
-//! @brief Lee un objeto XC::SolutionAlgorithm desde archivo
-bool XC::SolutionAlgorithm::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SolutionAlgorithm) Procesando comando: " << cmd << std::endl;
-    return ObjWithRecorders::procesa_comando(status);
   }
 
 //! @brief Realiza los cambios que sean necesarios como consecuencia de un cambio en el dominio.

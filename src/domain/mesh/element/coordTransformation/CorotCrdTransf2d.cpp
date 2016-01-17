@@ -1371,16 +1371,3 @@ double XC::CorotCrdTransf2d::getd1overLdh(void)
     return 0.0;
   }
 
-// AddingSensitivity:END /////////////////////////////////////
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::CorotCrdTransf2d::GetProp(const std::string &cod) const
-  {
-    if(cod=="alpha")
-      {
-        tmp_gp_dbl= atan2(sinAlpha, cosAlpha);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return CrdTransf2d::GetProp(cod);
-  }

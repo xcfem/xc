@@ -32,7 +32,6 @@
 #include "RgSccPoligono.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include "xc_utils/src/geom/pos_vec/Dir2d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
@@ -40,22 +39,6 @@
 
 XC::RegionSecc::RegionSecc(Material *mat)
   : DiscretBase(mat) {}
-
-//! @brief Lee un objeto XC::RgSccCuadrilatero desde archivo
-bool XC::RegionSecc::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(RegionSecc) Procesando comando: " << cmd << std::endl;
-    if(cmd == "poligono")
-      {
-        Poligono2d tmp= getPoligono();
-        tmp.LeeCmd(status);
-        return true;
-      }
-    else
-      return DiscretBase::procesa_comando(status);
-  }
 
 Poligono2d XC::RegionSecc::getPoligono(void) const
   {
@@ -192,50 +175,4 @@ XC::Matrix &XC::RegionSecc::getI(const Pos2d &o) const
     i(0,0)= tmp(1,1); i(0,1)= tmp(1,2);
     i(1,0)= tmp(1,2); i(1,1)= tmp(2,2);
     return i;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::RegionSecc::GetProp(const std::string &cod) const
-  {
-    if(cod=="numCells")
-      {
-        tmp_gp_szt= getNumCells();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getPoligono")
-      {
-        tmp_gp_pol2d= getPoligono();
-        return any_const_ptr(&tmp_gp_pol2d);
-      }
-    else if(cod=="getArea")
-      {
-        tmp_gp_dbl= Area();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getIy")
-      {
-        tmp_gp_dbl= Iy();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getIz")
-      {
-        tmp_gp_dbl= Iz();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getPyz")
-      {
-        tmp_gp_dbl= Pyz();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getCdg")
-      {
-        static m_double tmp_m_double(1,2);
-        const Vector tmp= Cdg();
-        tmp_m_double(1,1)= tmp[0];
-        tmp_m_double(1,2)= tmp[1];
-        return any_const_ptr(tmp_m_double);
-      }
-    else
-      return DiscretBase::GetProp(cod);
   }

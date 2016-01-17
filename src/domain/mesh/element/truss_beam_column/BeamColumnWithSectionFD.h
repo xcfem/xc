@@ -43,7 +43,7 @@ class BeamColumnWithSectionFD : public Element1D
   {
   protected:
     VectorSeccionesBarraPrismatica theSections; //!< pointers to the SeccionBarraPrismatica objects
-    bool procesa_comando(CmdStatus &status);
+
 
     SectionMatrices section_matrices;
 
@@ -73,8 +73,6 @@ class BeamColumnWithSectionFD : public Element1D
     int commitState(void);
     int revertToLastCommit(void);
     int revertToStart(void);
-
-    any_const_ptr GetProp(const std::string &) const;
   };
 
 } //end of XC namespace

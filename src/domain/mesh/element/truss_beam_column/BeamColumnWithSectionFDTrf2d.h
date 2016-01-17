@@ -50,7 +50,7 @@ class BeamColumnWithSectionFDTrf2d: public BeamColumnWithSectionFD
     int recvData(const CommParameters &cp);
 
     void set_transf(const CrdTransf *trf);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     BeamColumnWithSectionFDTrf2d(int tag,int classTag,int numSec);
     BeamColumnWithSectionFDTrf2d(int tag,int classTag,int numSec,const Material *mat,const CrdTransf *trf);
@@ -60,7 +60,7 @@ class BeamColumnWithSectionFDTrf2d: public BeamColumnWithSectionFD
     void initialize_trf(void);
     virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

@@ -42,18 +42,16 @@ namespace XC {
 class MapTrfGeom: public MapCadMember<TrfGeom>
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
 
   public:
     MapTrfGeom(Cad *cad= NULL);
 
     template <class T>
     TrfGeom *Nueva(void);
-    template <class F>
-    TrfGeom *Nueva(CmdStatus &);
     TrfGeom *newTransformation(const std::string &type);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 //! @brief Crea una nueva transformación geométrica.
@@ -72,26 +70,6 @@ XC::TrfGeom *XC::MapTrfGeom::Nueva(void)
             tag++;
 	  }
       }
-    return retval;
-  }
-
-//! @brief Lee una transformación geométrica.
-template <class F>
-TrfGeom *MapTrfGeom::Nueva(CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    bool nueva= true;
-    size_t old_tag= getTag();
-    if(fnc_indices.size()>0)
-      {
-        setTag(convert_to_size_t(fnc_indices[0])); //Identificador del punto.
-        if(existe(getTag()))
-          nueva= false;
-      }
-    TrfGeom *retval= Nueva<F>();
-    if(!nueva)
-      setTag(old_tag);
-    retval->LeeCmd(status);
     return retval;
   }
 

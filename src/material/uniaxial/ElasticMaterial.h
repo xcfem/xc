@@ -82,7 +82,7 @@ class ElasticMaterial : public ElasticBaseMaterial
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElasticMaterial(int tag, double E, double eta = 0.0);    
     ElasticMaterial(int tag, int classtag= MAT_TAG_ElasticMaterial);    
@@ -104,7 +104,7 @@ class ElasticMaterial : public ElasticBaseMaterial
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
     
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0);
     
     int setParameter(const std::vector<std::string> &argv, Parameter &param);

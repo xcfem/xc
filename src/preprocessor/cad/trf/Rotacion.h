@@ -41,7 +41,7 @@ class Rotacion: public TrfGeom
   {
     Rotacion3d rr; //!< Rotación.
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     //! @brief Constructor.
     Rotacion(Preprocessor *m)

@@ -41,7 +41,7 @@ class Traslacion: public TrfGeom
   {
     Traslacion3d tr; //!< Traslación.
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     //! @brief Constructor.
     Traslacion(Preprocessor *m)

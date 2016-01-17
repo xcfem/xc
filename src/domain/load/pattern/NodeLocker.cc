@@ -64,7 +64,6 @@
 #include <utility/tagged/storage/ArrayOfTaggedObjects.h>
 #include <domain/domain/single/SingleDomSP_Iter.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 
@@ -121,38 +120,6 @@ XC::NodeLocker::NodeLocker(int tag)
     alloc_iteradores();
   }
 
-//! @brief Lee un objeto XC::NodeLocker desde archivo
-bool XC::NodeLocker::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NodeLocker) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "sp_constraint") //Desplazamiento impuesto.
-      {
-        std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-        if(fnc_indices.size()<1)
-          std::cerr << "uso: " << cmd << "[idNodo,tag] " << std::endl;
-        int tag_nodo= 0;
-        if(fnc_indices.size()>0)
-          tag_nodo= convert_to_int(fnc_indices[0]); //Identificador del nodo.
-        if(fnc_indices.size()>1)
-          nextTag= convert_to_int(fnc_indices[1]); //Tag del desplazamiento impuesto.
-        addSP_Constraint(status,tag_nodo);
-        return true;
-      }
-    else if(cmd == "spConstraints")
-      {
-        if(theSPs)
-          theSPs->LeeCmd(status);
-        else
-          std::cerr << cmd << "; no existen movimientos impuestos sobre nodos." << std::endl;
-        return true;
-      }
-    else
-      return ForceReprComponent::procesa_comando(status);
-  }
-
 //! @brief Destructor.
 XC::NodeLocker::~NodeLocker(void)
   {
@@ -174,18 +141,6 @@ void XC::NodeLocker::setDomain(Domain *theDomain)
 
     // now we set this load patterns domain
     ForceReprComponent::setDomain(theDomain);
-  }
-
-//! @brief Agrega una la coacción mononodal que se pasa como parámetro.
-XC::SP_Constraint *XC::NodeLocker::addSP_Constraint(CmdStatus &status,const int &tagNodo)
-  {
-    SP_Constraint *theSPC= new SP_Constraint(nextTag,tagNodo);
-    if(theSPC)
-      {
-        theSPC->LeeCmd(status);
-        addSP_Constraint(theSPC);
-      }
-    return theSPC;
   }
 
 //! @brief Agrega una la coacción mononodal que se pasa como parámetro.
@@ -320,27 +275,6 @@ void XC::NodeLocker::Print(std::ostream &s, int flag)
     s << "SPC Pattern: " << this->getTag() << "\n";
     std::cerr << "\n  Single Point Constraints: \n";
     theSPs->Print(s, flag);
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnlds: Número de cargas en los nodos.
-any_const_ptr XC::NodeLocker::GetProp(const std::string &cod) const
-  {
-    if(cod=="getNumCoaccionesMononodales") //Número de coacciones mononodales.
-      {
-        tmp_gp_int= theSPs->getNumComponents();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getNumCargas") //Número de cargas en los elementos.
-      {
-        tmp_gp_int= theSPs->getNumComponents();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else
-      return ForceReprComponent::GetProp(cod);
   }
 
 //! @brief Devuelve las coacciones correspondientes al nodo

@@ -84,7 +84,7 @@ class UniaxialFiber2d: public UniaxialFiber
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     UniaxialFiber2d(void);   
     UniaxialFiber2d(int tag, UniaxialMaterial &, const double &,const double &);

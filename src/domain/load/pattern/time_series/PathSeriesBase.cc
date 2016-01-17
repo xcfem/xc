@@ -29,7 +29,6 @@
 
 #include "PathSeriesBase.h"
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include <fstream>
 #include "utility/actor/actor/ArrayCommMetaData.h"
@@ -44,21 +43,6 @@ XC::PathSeriesBase::PathSeriesBase(int classTag, const double &theFactor)
 XC::PathSeriesBase::PathSeriesBase(int classTag,const Vector &theLoadPath,const double &theFactor)
   :CFactorSeries(classTag,theFactor), thePath(theLoadPath), lastSendCommitTag(-1)
   {}
-
-//! @brief Lee un objeto XC::PathSeriesBase desde archivo
-bool XC::PathSeriesBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(PathSeriesBase) Procesando comando: " << cmd << std::endl;
-    if(cmd == "set_path")
-      {
-	thePath= Vector(crea_vector_double(status.GetString()));
-        return true;
-      }
-    else
-      return CFactorSeries::procesa_comando(status);
-  }
 
 //! @brief Devuelve el número de puntos que definen el path.
 size_t XC::PathSeriesBase::getNumDataPoints(void) const
@@ -141,17 +125,3 @@ int XC::PathSeriesBase::recvData(const CommParameters &cp)
     return res;
   }
 
-any_const_ptr XC::PathSeriesBase::GetProp(const std::string &cod) const
-  {
-    if(cod == "getPath")
-      return get_prop_vector(thePath);
-    else if(cod == "getNumDataPoints")
-      {
-        tmp_gp_szt= getNumDataPoints();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "getLastSendCommitTag")
-      return any_const_ptr(lastSendCommitTag);
-    else
-      return CFactorSeries::GetProp(cod);
-  }

@@ -61,7 +61,6 @@
 #include <utility/matrix/Vector.h>
 #include <classTags.h>
 #include <cmath>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
 
@@ -75,15 +74,6 @@ XC::PulseSeries::PulseSeries(double startTime, double finishTime,
 //! @brief Constructor por defecto.
 XC::PulseSeries::PulseSeries(void)
   : PeriodSeries(TSERIES_TAG_PulseSeries),pWidth(0.5) {}
-
-//! @brief Lee un objeto XC::PulseSeries desde archivo
-bool XC::PulseSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(PulseSeries) Procesando comando: " << cmd << std::endl;
-    return PeriodSeries::procesa_comando(status);
-  }
 
 //! @brief Devuelve el valor del factor para el instante que se pasa como parámetro.
 double XC::PulseSeries::getFactor(double pseudoTime) const

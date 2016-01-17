@@ -59,7 +59,6 @@
 
 #include "PeriodSeries.h"
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
@@ -81,27 +80,6 @@ XC::PeriodSeries::PeriodSeries(int classTag,double startTime, double finishTime,
 XC::PeriodSeries::PeriodSeries(int classTag)
   : PulseBaseSeries(classTag,1.0), period(1.0),shift(0.0) {}
 
-//! @brief Lee un objeto XC::PeriodSeries desde archivo
-bool XC::PeriodSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(PeriodSeries) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "period")
-      {
-        period= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "shift")
-      {
-        shift= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return PulseBaseSeries::procesa_comando(status);
-  }
-
 //! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
 int XC::PeriodSeries::sendData(CommParameters &cp)
   {
@@ -116,18 +94,6 @@ int XC::PeriodSeries::recvData(const CommParameters &cp)
     int res= PulseBaseSeries::recvData(cp);
     res+= cp.receiveDoubles(period,shift,getDbTagData(),CommMetaData(2));
     return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::PeriodSeries::GetProp(const std::string &cod) const
-  {
-    if(cod == "getPeriod")
-      return any_const_ptr(period);
-    else if(cod=="getShift")
-      return any_const_ptr(shift);
-    else
-      return PulseBaseSeries::GetProp(cod);
   }
 
 //! @brief Imprime el objeto.

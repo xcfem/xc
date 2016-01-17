@@ -99,7 +99,7 @@ class Truss : public TrussBase
     void libera(void);
     void set_material(const UniaxialMaterial &);
     void set_load_sens(const Vector &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     Truss(int tag, int dimension, int Nd1, int Nd2, UniaxialMaterial &theMaterial, double A);
     Truss(int tag,int dimension,const Material *ptr_mat);
@@ -144,7 +144,7 @@ class Truss : public TrussBase
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0);    
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);
     int getResponse(int responseID, Information &eleInformation);

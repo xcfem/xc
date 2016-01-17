@@ -62,7 +62,6 @@
 // What: "@(#) TaggedObject.C, revA"
 
 #include "utility/tagged/TaggedObject.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_basic/src/matrices/m_double.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
@@ -73,87 +72,12 @@
 XC::TaggedObject::TaggedObject(int tag,EntCmd *owr)
   : EntCmd(owr), theTag(tag) {}
 
-//! @brief Lee un objeto XC::TaggedObject desde archivo
-bool XC::TaggedObject::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TaggedObject) Procesando comando: " << cmd << std::endl;
-    if(cmd == "set_tag")
-      {
-        assignTag(interpretaInt(status.GetString()));
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
-
 //! @brief Constructor virtual.
 XC::TaggedObject *XC::TaggedObject::getCopy(void) const
   {
     std::cerr << "No se ha definido getCopy para la clase: '"
               << nombre_clase() << "'\n";
     return nullptr;
-  }
-
-//! @brief Devuelve una propiedad de tipo vector (se usa en GetProp).
-any_const_ptr XC::TaggedObject::get_prop_vector(const Vector *ptrVector)
-  {
-    assert(ptrVector);
-    static m_double tmp;
-    tmp= vector_to_m_double(*ptrVector);
-    return any_const_ptr(&tmp);
-  }
-
-//! @brief Devuelve una propiedad de tipo vector (se usa en GetProp).
-any_const_ptr XC::TaggedObject::get_prop_vector(const Vector &refVector)
-  { return get_prop_vector(&refVector); }
-
-//! @brief Devuelve una fila de una matriz (se usa en GetProp).
-any_const_ptr XC::TaggedObject::get_row(const Matrix *ptrMatrix, int row)
-  {
-    assert(ptrMatrix);
-    static m_double tmp;
-    tmp= vector_to_m_double(ptrMatrix->getRow(row));
-    return any_const_ptr(&tmp);
-  }
-
-//! @brief Devuelve una fila de una matriz (se usa en GetProp).
-any_const_ptr XC::TaggedObject::get_row(const Matrix &refMatrix, int row)
-  { return get_row(&refMatrix,row); }
-
-//! @brief Devuelve una columna de una matriz (se usa en GetProp).
-any_const_ptr XC::TaggedObject::get_col(const Matrix *ptrMatrix, int col)
-  {
-    assert(ptrMatrix);
-    static m_double tmp;
-    tmp= vector_to_m_double(ptrMatrix->getCol(col));
-    return any_const_ptr(&tmp);
-  }
-
-//! @brief Devuelve una columna de una matriz (se usa en GetProp).
-any_const_ptr XC::TaggedObject::get_col(const Matrix &refMatrix, int col)
-  { return get_col(&refMatrix,col); }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::TaggedObject::GetProp(const std::string &cod) const
-  {
-    if(cod=="tag")
-      {
-        tmp_gp_szt= getTag();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="str_tag")
-      {
-        tmp_gp_str= boost::lexical_cast<std::string>(getTag());
-        return any_const_ptr(tmp_gp_str);
-      }
-    else
-      return EntCmd::GetProp(cod);
   }
 
 //! @brief Establece el valor del tag.

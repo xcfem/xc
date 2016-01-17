@@ -105,7 +105,6 @@ class ZeroLengthSection: public Element0D
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
   public:
     ZeroLengthSection(int tag, int dimension, int Nd1, int Nd2, const Vector& x, const Vector& yprime, SectionForceDeformation& theSection);
     ZeroLengthSection(int tag, int dimension,const Material *theSection);
@@ -139,7 +138,6 @@ class ZeroLengthSection: public Element0D
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0);    
-    any_const_ptr GetProp(const std::string &cod) const;
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);

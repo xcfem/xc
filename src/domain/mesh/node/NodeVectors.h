@@ -59,7 +59,6 @@ class NodeVectors: public EntCmd, public MovableObject
     int createData(const size_t &);
     void libera(void);
     void copia(const NodeVectors &);
-    bool procesa_comando(CmdStatus &status);
   public:
     // constructors
     NodeVectors(const size_t &nv= 2);
@@ -89,7 +88,6 @@ class NodeVectors: public EntCmd, public MovableObject
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // end of XC namespace

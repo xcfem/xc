@@ -27,7 +27,6 @@
 //BeamColumnWithSectionFD.cc
 
 #include "BeamColumnWithSectionFD.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "utility/matrix/Vector.h"
@@ -52,25 +51,6 @@ XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const
   : Element1D(tag,classTag,Nd1,Nd2), theSections(numSecc,sccModel)
   {}
 
-//! @brief Lee un objeto XC::ProtoBeam desde archivo
-bool XC::BeamColumnWithSectionFD::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BeamColumnWithSectionFD) Procesando comando: " << cmd << std::endl;
-    if(cmd == "secciones")
-      {
-        theSections.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "for_each_section")
-      {
-        theSections.for_each(status.GetBloque());
-        return true;
-      }
-    else
-      return Element1D::procesa_comando(status);
-  }
 
 int XC::BeamColumnWithSectionFD::commitState(void)
   {
@@ -151,37 +131,5 @@ int XC::BeamColumnWithSectionFD::recvData(const CommParameters &cp)
     res+= cp.receiveMovable(section_matrices,getDbTagData(),CommMetaData(8));
     return res;
   }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::BeamColumnWithSectionFD::GetProp(const std::string &cod) const
-  {
-    if(cod=="secciones")
-      {
-        return any_const_ptr(&theSections);
-      }
-    else if(cod == "numSecciones")
-      {
-        tmp_gp_szt= getNumSections();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "getPropSecc") //Propiedad de una sección.
-      {
-        if(InterpreteRPN::Pila().size()>1)
-          {
-            const std::string nmb_prop= convert_to_string(InterpreteRPN::Pila().Pop());
-            const size_t i= convert_to_size_t(InterpreteRPN::Pila().Pop());
-            return theSections.GetPropSection(i,nmb_prop);
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,2,"BeamColumnWithSectionFD::GetProp",cod);
-            return any_const_ptr();
-          }
-      }
-    else
-      return Element1D::GetProp(cod);
-  }
-
 
 

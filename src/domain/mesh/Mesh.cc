@@ -46,7 +46,6 @@
 #include <solution/graph/graph/Vertex.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/element/NodePtrsWithIDs.h"
 #include <climits>
@@ -780,20 +779,6 @@ void XC::Mesh::setGraphBuiltFlags(const bool &f)
   {
     nodeGraphBuiltFlag= f;
     eleGraphBuiltFlag= f;
-  }
-
-//! @brief Ejecuta el bloque para cada uno de los elementos.
-void XC::Mesh::EjecutaBloqueForEachElement(CmdStatus &status,const std::string &bloque)
-  {
-    if(theElements)
-      theElements->EjecutaBloqueForEach(status,bloque);
-  }
-
-//! @brief Ejecuta el bloque para cada uno de los nodos.
-void XC::Mesh::EjecutaBloqueForEachNode(CmdStatus &status,const std::string &bloque)
-  {
-    if(theNodes)
-      theNodes->EjecutaBloqueForEach(status,bloque);
   }
 
 //! @brief Imprime el dominio.

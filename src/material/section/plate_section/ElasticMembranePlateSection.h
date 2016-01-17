@@ -74,7 +74,7 @@ class ElasticMembranePlateSection : public ElasticPlateProto<8>
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public : 
     ElasticMembranePlateSection(void);
     ElasticMembranePlateSection(int tag);
@@ -97,7 +97,7 @@ class ElasticMembranePlateSection : public ElasticPlateProto<8>
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } // end of XC namespace

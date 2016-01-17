@@ -66,7 +66,6 @@
 #include <utility/recorder/response/MaterialResponse.h>
 #include <cfloat>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MovableVector.h"
 

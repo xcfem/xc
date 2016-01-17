@@ -50,7 +50,7 @@ class ArpackSolver;
 
 //! @ingroup TipoAnalisis
 //
-//! @brief Análisis de pandeo lineal.
+//! @brief Linear buckling analysis.
 class LinearBucklingAnalysis: public StaticAnalysis
   {
   private:
@@ -59,13 +59,10 @@ class LinearBucklingAnalysis: public StaticAnalysis
     int numModes;
     int linear_buckling_analysis_step; //!Paso en el que se inicia el linear buckling analysis.
   protected:
-    bool procesa_comando(CmdStatus &status);
-
     friend class ProcSolu;
     LinearBucklingAnalysis(SoluMethod *metodo,SoluMethod *eigen_solu);
     Analysis *getCopy(void) const;
   public:
-
     void clearAll(void);	    
     
     int analyze(int numSteps);

@@ -110,7 +110,7 @@ class BeamIntegration: public MovableObject, public EntCmd
     virtual int addElasticFlexDeriv(double L, Matrix &dfedh,double dLdh = 0.0) {return 0;}
 
     virtual void Print(std::ostream &s, int flag = 0) = 0;
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 int sendBeamIntegrationPtr(BeamIntegration *,int posClassTag, int posDbTag,DbTagData &,CommParameters &);

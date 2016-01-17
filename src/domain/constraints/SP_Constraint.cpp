@@ -61,7 +61,6 @@
 #include <utility/matrix/Vector.h>
 #include "utility/matrix/ID.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_basic/src/matrices/m_int.h"
 #include "domain/domain/Domain.h"
@@ -114,31 +113,6 @@ XC::SP_Constraint *XC::SP_Constraint::getCopy(const int &spTag) const
     SP_Constraint *retval= new SP_Constraint(*this);
     retval->setTag(spTag);
     return retval;
-  }
-
-//! @brief Lee un objeto XC::SP_Constraint desde archivo
-//!
-//! Soporta los comandos:
-//! -coo: Lee las coordenadas del nodo.
-bool XC::SP_Constraint::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SP_Constraint) Procesando comando: " << cmd << std::endl;
-    if(cmd == "valor") //Coordenadas del nodo.
-      {
-        const double tmp= interpretaDouble(status.GetString());
-        valueR= tmp;
-        valueC= tmp; //XXX Suponemos que es constante.
-        return true;
-      }
-    else if(cmd == "dof") //Grado de libertad.
-      {
-        dofNumber= interpretaInt(status.GetString());
-        return true;
-      }
-    else
-      return Constraint::procesa_comando(status);
   }
 
 //! @brief Devuelve el identificador del grado de libertad al que se impone la coacción.

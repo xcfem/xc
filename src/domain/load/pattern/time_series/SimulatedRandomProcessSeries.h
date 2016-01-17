@@ -83,7 +83,7 @@ class SimulatedRandomProcessSeries : public TimeSeries
     Vector theta;
     Vector A;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     SimulatedRandomProcessSeries(RandomNumberGenerator *theRandNumGenerator, Spectrum *theSpectrum, int numFreqIntervals, double mean);
 

@@ -71,7 +71,7 @@ class Beam3dPointLoad : public BeamPointLoad
     static Vector data;
   protected:
     DbTagData &getDbTagData(void) const;
-    bool procesa_comando(CmdStatus &status);
+
   public:
     Beam3dPointLoad(int tag, double Py, double Pz, double x,const ID &theElementTags, double Pa = 0.0);
     Beam3dPointLoad(int tag);
@@ -101,7 +101,7 @@ class Beam3dPointLoad : public BeamPointLoad
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0) const;
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

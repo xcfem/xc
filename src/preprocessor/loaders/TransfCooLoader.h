@@ -59,7 +59,6 @@ class TransfCooLoader: public Loader
     void libera(void);
     TransfCooLoader(const TransfCooLoader &otro);
     TransfCooLoader &operator=(const TransfCooLoader &otro);
-    bool procesa_comando(CmdStatus &status);
   public:
     TransfCooLoader(Preprocessor *owr);
     const map_transfcoo &Map(void) const;

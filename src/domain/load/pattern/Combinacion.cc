@@ -29,7 +29,6 @@
 #include "Combinacion.h"
 #include "LoadPattern.h"
 #include "domain/domain/Domain.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "xc_basic/src/texto/StringFormatter.h"
 #include "preprocessor/loaders/LoadLoader.h"
@@ -111,28 +110,6 @@ const XC::Combinacion::sumando &XC::Combinacion::sumando::divide(const float &f)
   {
     factor/= f;
     return *this;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::Combinacion::sumando::GetProp(const std::string &cod) const
-  {
-    if(cod == "factor")
-      return any_const_ptr(factor);
-    else if(cod == "tag_caso")
-      {
-        if(lpattern)
-          {
-            tmp_gp_int= lpattern->getTag();
-            return any_const_ptr(tmp_gp_int);
-          }
-        else
-          return any_const_ptr();
-      }
-    else
-      return EntCmd::GetProp(cod);
   }
 
 //! @brief Devuelve una cadena de caracteres que representa al caso como puede ser
@@ -390,88 +367,6 @@ const std::string XC::Combinacion::getDescompRestoSobrePrevia(void) const
         retval= dif.getString();
       }
     return retval;
-  }
-
-//! @brief Lee un objeto XC::Combinacion desde archivo
-bool XC::Combinacion::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Combinacion) Procesando comando: " << cmd << std::endl;
-    if(cmd == "descomp")
-      {
-        const std::string str= interpretaString(status.GetString());
-        interpreta_descomp(str);
-        return true;
-      }
-    else if(cmd == "mult")
-      {
-        const double f= interpretaDouble(status.GetString());
-        multiplica(f);
-        return true;
-      }
-    else if(cmd == "div")
-      {
-        const double f= interpretaDouble(status.GetString());
-        divide(f);
-        return true;
-      }
-    else if(cmd == "asigna")
-      {
-        const std::string nmbComb= interpretaString(status.GetString());
-        asigna(nmbComb);
-        return true;
-      }
-    else if(cmd == "suma")
-      {
-        const std::string nmbComb= interpretaString(status.GetString());
-        suma(nmbComb);
-        return true;
-      }
-    else if(cmd == "resta")
-      {
-        const std::string nmbComb= interpretaString(status.GetString());
-        resta(nmbComb);
-        return true;
-      }
-    else if(cmd == "add_to_domain")
-      {
-        status.GetString();
-        addToDomain();
-        return true;
-      }
-    else if(cmd == "remove_from_domain")
-      {
-        status.GetString();
-        removeFromDomain();
-        return true;
-      }
-    else if(cmd == "for_each")
-      {
-        const std::string nmbBlq= getNombre()+":for_each";
-        const std::string bloque= status.GetBloque();
-        for(iterator i= begin();i!=end();i++)
-          i->EjecutaBloque(status,bloque,nmbBlq);
-        return true;
-      }
-    else if(cmd == "database")
-      {
-        FE_Datastore *db= nullptr;
-        Preprocessor *preprocessor= GetPreprocessor();
-        if(preprocessor)
-          db= preprocessor->getDataBase();
-        if(db)
-          db->LeeCmd(status);
-        else
-          {
-	    std::cerr << "No se pudo obtener la base de datos, se ignora la entrada."
-                      << std::endl;
-            status.GetBloque();
-          }
-        return true;
-      }
-    else
-      return ForceReprComponent::procesa_comando(status);
   }
 
 //! @brief Asigna el dominio a los casos de carga de la combinación.
@@ -783,49 +678,6 @@ std::string XC::Combinacion::getString(const std::string &fmt) const
 //! @brief Imprime.
 void XC::Combinacion::Print(std::ostream &s, int flag) const
   { s << getString(); }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::Combinacion::GetProp(const std::string &cod) const
-  {
-    if(cod == "sumando")
-      {
-        const size_t i= popSize_t(cod);
-        return any_const_ptr(descomp[i]);
-      }
-    else if(cod == "getNombre")
-      return any_const_ptr(nombre);
-    else if(cod == "getDescomp")
-      {
-        const std::string fmt= popString(cod);
-        tmp_gp_str= getString(fmt);
-        return any_const_ptr(tmp_gp_str);
-      }
-    if(cod=="getNombreCombPrevia")
-      {
-        tmp_gp_str= getNombreCombPrevia();
-        return any_const_ptr(tmp_gp_str);
-      }
-    if(cod=="getTagCombPrevia")
-      {
-        tmp_gp_int= getTagCombPrevia();
-        return any_const_ptr(tmp_gp_int);
-      }
-    if(cod=="getDescompCombPrevia")
-      {
-        tmp_gp_str= getDescompCombPrevia();
-        return any_const_ptr(tmp_gp_str);
-      }
-    if(cod=="getDescompRestoSobrePrevia")
-      {
-        tmp_gp_str= getDescompRestoSobrePrevia();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else
-      return ForceReprComponent::GetProp(cod);
-  }
 
 std::ostream &XC::operator<<(std::ostream &os,const Combinacion &c)
   {

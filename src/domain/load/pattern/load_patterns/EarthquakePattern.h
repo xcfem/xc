@@ -109,7 +109,7 @@ class EarthquakePattern : public EQBasePattern
     virtual int  updateParameter(int parameterID, Information &info);
     virtual int  activateParameter(int parameterID);
     // AddingSensitivity:END ///////////////////////////////////////////
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

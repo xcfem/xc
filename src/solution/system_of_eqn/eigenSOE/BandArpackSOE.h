@@ -68,7 +68,6 @@ class BandArpackSOE: public ArpackSOE
     Vector A;
   protected:
     bool setSolver(EigenSolver *);
-    bool procesa_comando(CmdStatus &status);
 
     friend class SoluMethod;
     friend class FEM_ObjectBroker;
@@ -86,7 +85,7 @@ class BandArpackSOE: public ArpackSOE
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     friend class BandArpackSolver;
   };
 inline SystemOfEqn *BandArpackSOE::getCopy(void) const

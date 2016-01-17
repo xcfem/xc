@@ -43,7 +43,7 @@ class MapUniformGrids: public MapEnt<UniformGrid>
   private:
     void UpdateSets(UniformGrid *) const;
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
 
     UniformGrid *Crea(void);
   public:
@@ -54,9 +54,6 @@ class MapUniformGrids: public MapEnt<UniformGrid>
     Plano3d getPlano(const Indice &i,const Indice &j,const Indice &k) const;
 
     UniformGrid *Nueva(void);
-    UniformGrid *Nueva(CmdStatus &status);
-
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 

@@ -100,7 +100,7 @@ class Integrator: public MovableObject, public EntCmd
     void setRayleighDampingFactors(const RayleighDampingFactors &rF);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
     virtual AnalysisModel *getAnalysisModelPtr(void);
     virtual const AnalysisModel *getAnalysisModelPtr(void) const;
 

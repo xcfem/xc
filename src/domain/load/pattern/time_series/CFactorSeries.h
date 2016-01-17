@@ -44,7 +44,7 @@ class CFactorSeries: public TimeSeries
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     CFactorSeries(int classTag,double cFactor = 1.0);
 
@@ -55,7 +55,7 @@ class CFactorSeries: public TimeSeries
     void setFactor(const double &d)
       { cFactor= d; }
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

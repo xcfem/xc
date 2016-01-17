@@ -55,7 +55,7 @@ class RgSccCuadrilatero: public RgQuadCell
   private:
     Matrix vertCoord; //!< Coordenadas de los vértices.
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     RgSccCuadrilatero(Material *);
     RgSccCuadrilatero(Material *, int numSubdivIJ, int numSubdivJK, const Matrix &vertexCoords);
@@ -82,7 +82,7 @@ class RgSccCuadrilatero: public RgQuadCell
     Poligono2d getPoligono(void) const;
     void swap(void);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0) const;   
     friend std::ostream &operator<<(std::ostream &s, RgSccCuadrilatero &rg_scc_cuad);    
   };

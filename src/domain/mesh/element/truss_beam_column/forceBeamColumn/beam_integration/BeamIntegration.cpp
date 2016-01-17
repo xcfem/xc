@@ -155,13 +155,6 @@ double XC::BeamIntegration::getIntegral(const ExprAlgebra &expr,int nIP,const Cr
     return retval;
   }
 
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::BeamIntegration::GetProp(const std::string &cod) const
-  {
-    return EntCmd::GetProp(cod);
-  }
-
 //! @brief Envía un puntero a material a través del canal que se pasa como parámetro.
 //! @param posClassTag: Posición de ID del identificador de la clase del material.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.

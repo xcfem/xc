@@ -28,7 +28,6 @@
 
 #include <material/section/repres/geom_section/region/RgSccPoligono.h>
 #include <material/section/repres/cell/QuadCell.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
@@ -42,21 +41,6 @@ XC::RgSccPoligono::RgSccPoligono(Material *mat)
 XC::RgSccPoligono::RgSccPoligono(Material *mat, int numSubdivIJ, int numSubdivJK,const Poligono2d &p)
   : RgQuadCell(mat,numSubdivIJ,numSubdivJK), plg(p)
   {}  
-
-//! @brief Lee un objeto XC::RgSccPoligono desde archivo
-bool XC::RgSccPoligono::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(RgSccPoligono) Procesando comando: " << cmd << std::endl;
-    if(cmd == "poligono")
-      {
-        plg.LeeCmd(status);
-        return true;
-      }
-    else
-      return RgQuadCell::procesa_comando(status);
-  }
 
 double XC::RgSccPoligono::getMaxY(void) const
   { return plg.GetXMax(); }
@@ -90,13 +74,6 @@ const XC::VectorCells &XC::RgSccPoligono::getCells(void) const
 XC::RegionSecc *XC::RgSccPoligono::getCopy (void) const
   { return new RgSccPoligono(*this); }
  
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::RgSccPoligono::GetProp(const std::string &cod) const
-  {
-    return RgQuadCell::GetProp(cod);
-  }
-
 void XC::RgSccPoligono::Print(std::ostream &s, int flag) const
   {
     s << "\nRgQuadCell Type: RgSccPoligono";

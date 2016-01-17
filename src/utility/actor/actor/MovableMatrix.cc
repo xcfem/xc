@@ -27,7 +27,6 @@
 //MovableMatrix.cc
 
 #include "MovableMatrix.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/channel/Channel.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
@@ -40,19 +39,6 @@ XC::MovableMatrix::MovableMatrix(const size_t &nr,const size_t &nc)
 //! @brief Constructor.
 XC::MovableMatrix::MovableMatrix(const Matrix &m)
   :Matrix(m),MovableObject(MATRIX_TAG_Matrix) {}
-
-//! @brief Lee un objeto XC::Node desde archivo
-//!
-//! Soporta los comandos:
-//! -coo: Lee las coordenadas del nodo.
-bool XC::MovableMatrix::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MovableMatrix) Procesando comando: " << cmd << std::endl;
-
-      return Matrix::procesa_comando(status);
-  }
 
 //! @brief Asigna el matrix.
 void XC::MovableMatrix::setMatrix(const Matrix &v)
@@ -117,13 +103,4 @@ int XC::MovableMatrix::recvSelf(const CommParameters &cp)
       std::cerr << "MovableMatrix::recvSelf - failed to receive data\n";
     return res;
   }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::MovableMatrix::GetProp(const std::string &cod) const
-  { return Matrix::GetProp(cod); }
-
 

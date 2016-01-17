@@ -66,7 +66,6 @@
 #include <domain/mesh/element/Information.h>
 #include <cmath>
 #include <cfloat>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
@@ -147,15 +146,6 @@ XC::Steel01 &XC::Steel01::operator=(const Steel01 &otro)
     if(otro.SHVs)
       alloc(*otro.SHVs);
     return *this;
-  }
-
-//! @brief Lee un objeto Steel01 desde archivo
-bool XC::Steel01::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Steel01) Procesando comando: " << cmd << std::endl;
-    return SteelBase0103::procesa_comando(status);
   }
 
 XC::Steel01::~Steel01(void)

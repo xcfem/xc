@@ -92,7 +92,7 @@ class Cad: public EntCmd
     MapEsquemas3d esquemas3d; //!< Lista de esquemas tridimensionales.
 
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
     friend class Preprocessor;
     SetEstruct *busca_set_estruct(const MapUniformGrids::Indice &nmb);
   public:
@@ -144,8 +144,6 @@ class Cad: public EntCmd
       { return unif_grid; }
     inline MapUniformGrids &getUniformGrids(void)
       { return unif_grid; }
-
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 

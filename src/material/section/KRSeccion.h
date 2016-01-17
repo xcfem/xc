@@ -109,7 +109,7 @@ class KRSeccion: public EntCmd
       }
     inline void updateKGJ(const double &areaFibra,const double &y,const double &z,const double &tangent)
       { updateKGJ(kData,areaFibra,y,z,tangent); }
-    bool procesa_comando(CmdStatus &status);
+
   public:
     KRSeccion(const size_t &dim);
     KRSeccion(const KRSeccion &otra);

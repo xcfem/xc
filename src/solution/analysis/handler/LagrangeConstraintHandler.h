@@ -81,14 +81,11 @@ class DOF_Group;
 class LagrangeConstraintHandler : public FactorsConstraintHandler
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
-
     friend class ModelWrapper;
     friend class FEM_ObjectBroker;
     LagrangeConstraintHandler(ModelWrapper *,const double &alphaSP= 1.0,const double &alphaMP= 1.0);
     ConstraintHandler *getCopy(void) const;
   public:
-
     int handle(const ID *nodesNumberedLast =0);
   };
 } // end of XC namespace

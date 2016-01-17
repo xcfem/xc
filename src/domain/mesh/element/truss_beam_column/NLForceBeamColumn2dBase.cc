@@ -80,41 +80,6 @@ XC::NLForceBeamColumn2dBase &XC::NLForceBeamColumn2dBase::operator=(const NLForc
     return *this;
   }
 
-//! @brief Lee el objeto desde archivo
-bool XC::NLForceBeamColumn2dBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NLForceBeamColumn2dBase) Procesando comando: " << cmd << std::endl;
-    if(cmd == "rho")
-      {
-        rho= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "tol")
-      {
-        tol= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "maxIters")
-      {
-        maxIters= interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd == "kv")
-      {
-        kv.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "Ki")
-      {
-        Ki.LeeCmd(status);
-        return true;
-      }
-    else
-      return BeamColumnWithSectionFDTrf2d::procesa_comando(status);
-  }
-
 // ~NLForceBeamColumn2dBase():
 //         destructor
 //      delete must be invoked on any objects created by the object
@@ -202,24 +167,4 @@ int XC::NLForceBeamColumn2dBase::recvData(const CommParameters &cp)
     res+= cp.receiveMatrix(sp,getDbTagData(),CommMetaData(22));
     res+= p0.receiveData(cp,getDbTagData(),CommMetaData(23));
     return res;
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::NLForceBeamColumn2dBase::GetProp(const std::string &cod) const
-  {
-    if(cod=="rho")
-      {
-        return any_const_ptr(rho);
-      }
-    else if(cod=="tol")
-      {
-        return any_const_ptr(tol);
-      }
-    else if(cod=="maxIters")
-      {
-        return any_const_ptr(maxIters);
-      }
-    else
-      return BeamColumnWithSectionFDTrf2d::GetProp(cod);
   }

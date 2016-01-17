@@ -91,7 +91,7 @@ class beam2d02 : public beam2d
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     beam2d02(int tag= 0);
     beam2d02(int tag, double A, double E, double I, int Nd1, int Nd2,CrdTransf2d &theTrans, double rho = 0.0);
@@ -122,7 +122,7 @@ class beam2d02 : public beam2d
 
     void Print(std::ostream &s, int flag =0);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;    
+    
   };
 } // end of XC namespace
 

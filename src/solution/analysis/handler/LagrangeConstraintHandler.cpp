@@ -78,7 +78,6 @@
 #include <solution/analysis/model/fe_ele/lagrange/LagrangeSP_FE.h>
 #include <solution/analysis/model/fe_ele/lagrange/LagrangeMP_FE.h>
 #include <solution/analysis/model/fe_ele/lagrange/LagrangeMRMP_FE.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 
 //! @brief Constructor.
@@ -89,14 +88,6 @@ XC::LagrangeConstraintHandler::LagrangeConstraintHandler(ModelWrapper *owr,const
 XC::ConstraintHandler *XC::LagrangeConstraintHandler::getCopy(void) const
   { return new LagrangeConstraintHandler(*this); }
 
-//! @brief Lee un objeto XC::LagrangeConstraintHandler desde archivo
-bool XC::LagrangeConstraintHandler::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(LagrangeConstraintHandler) Procesando comando: " << cmd << std::endl;
-    return FactorsConstraintHandler::procesa_comando(status);
-  }
 
 int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
   {

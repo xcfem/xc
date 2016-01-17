@@ -28,7 +28,6 @@
 //ProblemaEF.cc
 
 #include "ProblemaEF.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 //Salida de resultados.
 #include "utility/handler/DataOutputHandler.h"
@@ -84,138 +83,6 @@ XC::FE_Datastore *XC::ProblemaEF::defineDatabase(const std::string &tipo, const 
     return dataBase; 
   }
 
-//! @brief Lee un objeto ProblemaEF desde archivo
-bool XC::ProblemaEF::procesa_comando(CmdStatus &status)
-  {
-    static FEM_ObjectBroker theBroker;
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ProblemaEF) Procesando comando: " << cmd << std::endl;
-    if(cmd=="preprocessor")
-      {
-        preprocessor.LeeCmd(status);
-        return true;
-      }
-    else if(cmd=="sol_proc")
-      {
-        proc_solu.LeeCmd(status);
-        return true;
-      }
-    else if(cmd=="fields")
-      {
-        fields.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "file_handler")
-      {
-        const CmdParser &parser= status.Parser();
-        std::string cod_file_handler= "nil";
-        if(parser.TieneIndices())
-          {
-            std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-            if(fnc_indices.size()>0)
-              cod_file_handler= convert_to_string(fnc_indices[0]);
-          }
-        DataOutputFileHandler *fh= new DataOutputFileHandler();
-        fh->LeeCmd(status);
-        output_handlers[cod_file_handler]= fh;
-        return true;
-      }
-    else if(cmd == "database_handler")
-      {
-        const CmdParser &parser= status.Parser();
-        std::string cod_file_handler= "nil";
-        if(parser.TieneIndices())
-          {
-            std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-            if(fnc_indices.size()>0)
-              cod_file_handler= convert_to_string(fnc_indices[0]);
-          }
-        DataOutputDatabaseHandler *fh= new DataOutputDatabaseHandler();
-        fh->LeeCmd(status);
-        output_handlers[cod_file_handler]= fh;
-        return true;
-      }
-    else if(cmd == "stream_handler")
-      {
-        const CmdParser &parser= status.Parser();
-        std::string cod_file_handler= "nil";
-        std::deque<std::string> fnc_indices;
-        if(parser.TieneIndices())
-          {
-            std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-            if(fnc_indices.size()>0)
-              cod_file_handler= convert_to_string(fnc_indices[0]);
-          }
-        DataOutputStreamHandler *fh= new DataOutputStreamHandler();
-        fh->LeeCmd(status);
-        output_handlers[cod_file_handler]= fh;
-        return true;
-      }
-    else if(cmd == "database")
-      {
-        if(dataBase)
-          dataBase->LeeCmd(status);
-        else
-          {
-            const std::string str_error= "uso: \\database[nombre,tipo]{...}.";
-            const CmdParser &parser= status.Parser();
-            if(parser.TieneIndices())
-              {
-                interpreta(parser.GetIndices());
-                if(InterpreteRPN::HayArgumentos(2,cmd))
-                  {
-                    const std::string tipo= convert_to_string(InterpreteRPN::Pila().Pop());
-                    const std::string nombre= convert_to_string(InterpreteRPN::Pila().Pop());
-                    defineDatabase(tipo,nombre);
-                  }
-                else
-	          std::cerr << str_error << std::endl;
-              }
-            else
-	      std::cerr << str_error << std::endl;
-            if(dataBase)
-              dataBase->LeeCmd(status);
-            else
-              {
-                status.GetBloque();
-	        std::cerr << "No se ha definido el objeto base de datos, se ignora la entrada" << std::endl;
-              }
-          }
-        return true;
-      }
-    else if(cmd == "fileDataStore")
-      {
-        const std::string fName= status.GetString();
-        if(dataBase)
-          delete dataBase;
-        dataBase= new FileDatastore(fName,preprocessor,theBroker);
-        return true;
-      }
-    else if(cmd=="clearAll")
-      {
-        status.GetString(); //Ignoramos entrada.
-        clearAll();
-        return true;
-      }
-    else if(cmd == "med_export")
-      {
-        MEDMeshing med_xc(*this);
-        med_xc.set_owner(this);
-        med_xc.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "med_import")
-      {
-        MEDMesh med_mesh;
-        med_mesh.set_owner(this);
-        med_mesh.LeeCmd(status);
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
-
 XC::ProblemaEF::~ProblemaEF(void)
   { clearAll(); }
 
@@ -232,10 +99,3 @@ void XC::ProblemaEF::clearAll(void)
     proc_solu.clearAll();
     preprocessor.clearAll();
   }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::ProblemaEF::GetProp(const std::string &cod) const
-  { return EntCmd::GetProp(cod); }

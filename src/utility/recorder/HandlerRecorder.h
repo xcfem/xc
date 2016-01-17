@@ -46,7 +46,7 @@ class HandlerRecorder: public DomainRecorderBase
   protected:
     int sendData(CommParameters &);  
     int receiveData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     HandlerRecorder(int classTag);
     HandlerRecorder(int classTag, Domain &theDomain, DataOutputHandler &theOutputHandler,bool timeFlag);

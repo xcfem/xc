@@ -73,17 +73,14 @@ namespace XC {
 
 //!  \ingroup SOE
 //! 
-//! \defgroup Solver Solución del sistema de ecuaciones.
+//! \defgroup Solver Equation solver.
 //
 //! @ingroup Solver
 //
-//! @brief Objetos que se encargan de la solución
-//! del sistema de ecuaciones.
+//! @brief Equation solver.
 class Solver : public MovableObject, public EntCmd
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
-
     Solver(int classTag);    
   public:
     virtual int solve(void) = 0;

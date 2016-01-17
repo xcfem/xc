@@ -71,7 +71,6 @@
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <utility/matrix/ID.h>
 #include "solution/SoluMethod.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 
 //! @brief Null Constructor
@@ -124,40 +123,6 @@ void XC::NewtonLineSearch::copia(LineSearch *ptr)
       }
     else
      std::cerr << "NewtonLineSearch::copia; se pasó un puntero nulo." << std::endl;
-  }
-
-//! @brief Lee un objeto LineSearch desde archivo
-bool XC::NewtonLineSearch::procesa_cmd_line_search(const std::string &cmd,CmdStatus &status)
-  {
-    bool retval= false;
-    if(cmd.find("_line_search")!=std::string::npos)
-      {
-        if(alloc(cmd))
-          theLineSearch->LeeCmd(status);
-        retval= true;
-      }
-    return retval;
-  }
-
-//! @brief Lee un objeto NewtonLineSearch desde archivo.
-bool XC::NewtonLineSearch::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NewtonLineSearch) Procesando comando: " << cmd << std::endl;
-    //Line search.
-    if(procesa_cmd_line_search(cmd,status))
-      return true;
-    else if(cmd=="line_search")
-      {
-        if(theLineSearch)
-          theLineSearch->LeeCmd(status);
-        else
-	  std::cerr << "NewtonLineSearch::procesa_comando; " << cmd << "no está definido el objet LineSearch." << std::endl;
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
   }
 
 XC::NewtonLineSearch::~NewtonLineSearch(void)

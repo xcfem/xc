@@ -47,7 +47,7 @@ class beam2d : public ProtoBeam2d
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     beam2d(int tag, int class_tag);
     beam2d(int tag, int class_tag, double A, double E, double I, int Nd1, int Nd2);    

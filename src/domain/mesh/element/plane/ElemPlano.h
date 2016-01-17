@@ -33,7 +33,6 @@
 #include "xc_utils/src/geom/d2/Poligono3d.h"
 #include "xc_utils/src/geom/d1/Segmento3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/nucleo/InterpreteRPN.h"
 #include "domain/mesh/node/Node.h"
@@ -52,7 +51,7 @@ class ElemPlano : public ElemWithMaterial<NNODOS, PhysProp>
   protected:
     mutable std::vector<double> areasTributarias;
 
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElemPlano(int tag, int classTag,const PhysProp &);
 
@@ -116,17 +115,6 @@ void XC::ElemPlano<NNODOS, PhysProp>::setDomain(Domain *theDomain)
       checkElem();
     else
       std::cerr << "ElemPlano::setDomain -- Domain is null\n";
-  }
-
-//! @brief Lee un objeto ElemPlano desde archivo
-template <int NNODOS,class PhysProp>
-bool XC::ElemPlano<NNODOS, PhysProp>::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= this->deref_cmd(status.Cmd());
-    if(this->verborrea>2)
-      std::clog << "(ElemPlano) Procesando comando: " << cmd << std::endl;
-
-    return ElemWithMaterial<NNODOS, PhysProp>::procesa_comando(status);
   }
 
 //! @brief Devuelve la posición del centro de gravedad del elemento.

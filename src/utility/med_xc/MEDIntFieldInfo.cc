@@ -31,34 +31,6 @@
 XC::MEDIntFieldInfo::MEDIntFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)
   : MEDTFieldInfo<int>(fi,grp) {}
 
-//! @brief Lectura del objeto desde archivo.
-bool XC::MEDIntFieldInfo::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MEDIntFieldInfo) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "setValueIJ") //Asigna el valor a la componente j del elemento i.
-      {
-        if(!campo) to_med(); //Envía definición del campo a MEDMEM.
-        const int valor= interpretaInt(status.GetBloque());
-        const CmdParser &parser= status.Parser();
-        if(parser.TieneIndices())
-          {
-            interpreta(parser.GetIndices());
-            if(InterpreteRPN::HayArgumentos(2,cmd))
-              {
-                const int j= convert_to_int(InterpreteRPN::Pila().Pop()); //Índice  de la componente.
-                const int i= convert_to_int(InterpreteRPN::Pila().Pop()); //Índice  del elemento.
-                setValueIJ(i,j,valor);
-              }
-          }
-        return true;
-      }
-    else    
-      return MEDTFieldInfo<int>::procesa_comando(status);
-  }
-
 //! @brief Asigna los valores del campo en los nodos.
 void XC::MEDIntFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
   {
@@ -140,7 +112,7 @@ void XC::MEDIntFieldInfo::populateOnGaussPoints(const Set &set,const FieldInfo &
     // const std::string nmb_prop= fi.getComponentsProperty();
     // for(DqPtrsElem::const_iterator j= elementos.begin();j!=elementos.end();j++,conta++)
     //   {
-    //     valor= convert_to_m_int((*j)->GetProp(nmb_prop));
+    //     valor= convert_to_m_int((*j)->GetPrp(nmb_prop));
     //     const MED_EN::medGeometryElement tipo= (*j)->getMEDCellType();
     //     for(size_t k= 1;k<=dim;k++)
     //       {

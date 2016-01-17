@@ -65,8 +65,3 @@ void XC::MEDCellInfo::to_med(MEDMEM::MESHING &malla) const
         malla.setConnectivity(MED_EN::MED_CELL,i->first,&conn[0]);
       }
   }
-
-any_const_ptr XC::MEDCellInfo::GetProp(const std::string &cod) const
-  {
-    return MEDCellBaseInfo::GetProp(cod);
-  }

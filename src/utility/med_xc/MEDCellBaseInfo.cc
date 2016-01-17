@@ -59,8 +59,3 @@ void XC::MEDCellBaseInfo::to_malla_med(MEDMEM::MESHING &malla) const
     const std::vector<int> numberOfElements= cell_types.getNumCeldasPorTipo();
     malla.setNumberOfElements(&numberOfElements[0],MED_EN::MED_CELL);
   }
-
-any_const_ptr XC::MEDCellBaseInfo::GetProp(const std::string &cod) const
-  {
-    return MEDBaseInfo::GetProp(cod);
-  }

@@ -27,7 +27,6 @@
 //MovableID.cc
 
 #include "MovableID.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/channel/Channel.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
@@ -41,19 +40,6 @@ XC::MovableID::MovableID(const size_t &sz)
 //! @brief Constructor.
 XC::MovableID::MovableID(const ID &v)
   :ID(v),MovableObject(0) {}
-
-//! @brief Lee un objeto XC::Node desde archivo
-//!
-//! Soporta los comandos:
-//! -coo: Lee las coordenadas del nodo.
-bool XC::MovableID::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MovableID) Procesando comando: " << cmd << std::endl;
-
-      return ID::procesa_comando(status);
-  }
 
 //! @brief Asigna el ID.
 void XC::MovableID::setID(const ID &v)
@@ -115,12 +101,3 @@ int XC::MovableID::recvSelf(const CommParameters &cp)
     return 0;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::MovableID::GetProp(const std::string &cod) const
-  {
-    return ID::GetProp(cod);
-  }

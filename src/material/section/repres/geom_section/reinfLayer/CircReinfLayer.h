@@ -75,7 +75,7 @@ class CircReinfLayer : public ReinfLayer
     double initAng;
     double finalAng;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
 
     friend class ListReinfLayer;
     CircReinfLayer(ListReinfLayer *,Material *);
@@ -108,7 +108,7 @@ class CircReinfLayer : public ReinfLayer
     double getMinY(void) const;
     double getMinZ(void) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0) const;   
   };
 } // end of XC namespace

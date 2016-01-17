@@ -34,7 +34,6 @@
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "xc_utils/src/nucleo/EntPropSorter.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include <deque>
 #include <set>
 #include "utility/actor/actor/MovableID.h"
@@ -68,9 +67,6 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
     typedef typename lst_ptr::const_reference const_reference;
     typedef typename lst_ptr::size_type size_type;
     typedef boost::indirect_iterator<iterator> indIterator;
-  protected:
-    virtual bool procesa_comando(CmdStatus &);
-    void ejecuta_bloque_for_each(CmdStatus &,const std::string &,const std::string &);
   public:
     DqPtrs(void);
     DqPtrs(const DqPtrs &otro);
@@ -110,7 +106,7 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
     
     int sendTags(int posSz,int posDbTag,DbTagData &dt,CommParameters &cp);
     const ID &receiveTags(int posSz,int pDbTg,DbTagData &dt,const CommParameters &cp);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 //! @brief Constructor.
@@ -200,57 +196,6 @@ bool DqPtrs<T>::in(const T *ptr) const
     return retval;
   }
 
-
-//! @brief Ejecuta el bloque que se pasa como parámetro.
-//!
-//! Soporta los comandos:
-//!
-template<class T>
-void DqPtrs<T>::ejecuta_bloque_for_each(CmdStatus &status,const std::string &bloque,const std::string &nmbBlq)
-  {
-    iterator i= begin();
-    for(;i!= end();i++)
-      {
-        if(*i)
-          (*i)->EjecutaBloque(status,bloque,nmbBlq);
-        else
-	  std::cerr << "DqPtrs::ejecuta_bloque_for_each; se encontró un puntero nulo." << std::endl;
-      }
-  }
-
-
-//!  @brief Lee un objeto DqPtrs<T> desde el archivo de entrada.
-//! 
-//!  Soporta los comandos:
-//! 
-//!  - clear: Vacía la lista de punteros.
-template <class T>
-bool DqPtrs<T>::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DqPtrs<T>) Procesando comando: " << cmd << std::endl;
-    if(cmd == "for_each")
-      { 
-        const std::string nmbBlq= nombre_clase()+":for_each";
-        const std::string bloque= status.GetBloque();
-        ejecuta_bloque_for_each(status,bloque,nmbBlq);
-        return true;
-      }
-    else if(cmd == "clearAll")
-      {
-        clearAll();
-        return true;
-      }
-    else if(cmd == "sort_on_prop")
-      {
-        const std::string cod= status.GetBloque();
-        sort_on_prop(cod);
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 template <class T>
 bool DqPtrs<T>::push_back(T *t)
@@ -349,19 +294,6 @@ const ID &DqPtrs<T>::receiveTags(int posSz,int posDbTag,DbTagData &dt,const Comm
     if(res<0)
       std::cerr << "DqPtrs<T>::receiveTags - failed to receive the IDs.\n";
     return retval;
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo nombre (de la propiedad) se pasa como parámetro.
-template <class T>
-any_const_ptr DqPtrs<T>::GetProp(const std::string &cod) const
-  {
-    if(cod=="size")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return EntCmd::GetProp(cod);    
   }
 
 } //end of XC namespace

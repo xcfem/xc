@@ -54,13 +54,10 @@ class NewmarkBase: public DampingFactorsIntegrator
     void PopulateUs(XC::AnalysisModel *model);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
 
     NewmarkBase(SoluMethod *,int classTag);
     NewmarkBase(SoluMethod *,int classTag,double gamma);
     NewmarkBase(SoluMethod *,int classTag,double gamma,const RayleighDampingFactors &rF);
-  public:
-    virtual any_const_ptr GetProp(const std::string &cod) const;    
   };
 } // end of XC namespace
 

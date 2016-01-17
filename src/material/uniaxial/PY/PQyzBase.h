@@ -61,7 +61,7 @@ class PQyzBase: public PYBase
     int commitState(void);
     int revertToLastCommit(void);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

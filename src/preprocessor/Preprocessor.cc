@@ -34,7 +34,6 @@
 #include "preprocessor/set_mgmt/SetEstruct.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "boost/lexical_cast.hpp"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"

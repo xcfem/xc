@@ -27,7 +27,6 @@
 //MovableVector.cc
 
 #include "MovableVector.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/channel/Channel.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
@@ -42,18 +41,6 @@ XC::MovableVector::MovableVector(const size_t &sz)
 //! @brief Constructor.
 XC::MovableVector::MovableVector(const Vector &v)
   :Vector(v),MovableObject(VECTOR_TAG_Vector) {}
-
-//! @brief Lee un objeto XC::Node desde archivo
-//!
-//! Soporta los comandos:
-//! -coo: Lee las coordenadas del nodo.
-bool XC::MovableVector::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MovableVector) Procesando comando: " << cmd << std::endl;
-    return Vector::procesa_comando(status);
-  }
 
 //! @brief Asigna el vector.
 void XC::MovableVector::setVector(const Vector &v)
@@ -114,12 +101,3 @@ int XC::MovableVector::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::MovableVector::GetProp(const std::string &cod) const
-  {
-    return Vector::GetProp(cod);
-  }

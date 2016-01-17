@@ -93,7 +93,7 @@ class SetMeshComp: public SetBase
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    virtual bool procesa_comando(CmdStatus &);
+
 
     void calc_resisting_force(void);
 
@@ -201,7 +201,7 @@ class SetMeshComp: public SetBase
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     ~SetMeshComp(void);
   };
 

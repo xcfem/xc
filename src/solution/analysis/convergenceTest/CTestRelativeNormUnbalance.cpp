@@ -52,7 +52,6 @@
 #include <solution/analysis/convergenceTest/CTestRelativeNormUnbalance.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/EquiSolnAlgo.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 
 XC::CTestRelativeNormUnbalance::CTestRelativeNormUnbalance(EntCmd *owr)	    	
@@ -61,22 +60,6 @@ XC::CTestRelativeNormUnbalance::CTestRelativeNormUnbalance(EntCmd *owr)
 
 XC::CTestRelativeNormUnbalance::CTestRelativeNormUnbalance(EntCmd *owr,double theTol, int maxIter, int printIt, int normType)
   : ConvergenceTestNorm(owr,CONVERGENCE_TEST_CTestRelativeNormUnbalance,theTol,maxIter,printIt,normType,maxIter+1) {}
-
-//! @brief Lee un objeto CTestRelativeNormUnbalance desde archivo
-bool XC::CTestRelativeNormUnbalance::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(CTestRelativeNormUnbalance) Procesando comando: " << cmd << std::endl;
-    if(cmd=="max_num_iter")
-      {
-        maxNumIter= interpretaInt(status.GetString());
-        norms= Vector(maxNumIter+1);
-        return true;
-      }
-    else
-      return ConvergenceTestNorm::procesa_comando(status);
-  }
 
 XC::ConvergenceTest* XC::CTestRelativeNormUnbalance::getCopy(void) const
   { return new CTestRelativeNormUnbalance(*this); }

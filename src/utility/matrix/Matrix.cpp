@@ -63,7 +63,6 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
 #include "utility/matrix/nDarray/Tensor.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include <cstdlib>
 #include <iostream>
 #include "xc_basic/src/matrices/m_double.h"
@@ -140,16 +139,6 @@ XC::Matrix::Matrix(const boost::python::list &l)
           (*this)(i,j)= boost::python::extract<double>(rowI[j]);
       }
   }
-
-//! @brief Lee un objeto Matrix desde archivo
-bool XC::Matrix::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Matrix) Procesando comando: " << cmd << std::endl;
-    return EntCmd::procesa_comando(status);
-  }
-
 
 //
 // METHODS - Zero, Assemble, Solve
@@ -1249,67 +1238,6 @@ int XC::Matrix::Extract(const Matrix &V, int init_row, int init_col, double fact
 
 XC::Matrix XC::operator*(double a, const Matrix &V)
   { return V * a; }
-
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::Matrix::GetProp(const std::string &cod) const
-  {
-    if(cod=="nrows")
-      {
-        tmp_gp_szt= noRows();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="ncols")
-      {
-        tmp_gp_szt= noCols();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getRow")
-      {
-        static boost::any tmp_vector;
-        static std::vector<boost::any> tmp;
-        const int row= popInt(cod);
-        tmp= convert_to_vector_any(vector_to_m_double(getRow(row)));
-        tmp_vector= tmp;
-        return any_const_ptr(tmp_vector);
-      }
-    else if(cod=="getCol")
-      {
-        static boost::any tmp_vector;
-        static std::vector<boost::any> tmp;
-        const int col= popInt(cod);
-        tmp= convert_to_vector_any(vector_to_m_double(getCol(col)));
-        tmp_vector= tmp;
-        return any_const_ptr(tmp_vector);
-      }
-    else if(cod=="at")
-      {
-        size_t i= 0;
-        size_t j= 0;
-        if(InterpreteRPN::Pila().size()>1)
-          {
-            j= convert_to_size_t(InterpreteRPN::Pila().Pop())-1;
-            i= convert_to_size_t(InterpreteRPN::Pila().Pop())-1;
-            tmp_gp_dbl= XC::Matrix::operator()(i,j);
-          }
-        else if(InterpreteRPN::Pila().size()>0)
-          {
-            j= convert_to_size_t(InterpreteRPN::Pila().Pop())-1;
-            tmp_gp_dbl= XC::Matrix::operator()(i,j);
-          }
-        else
-          {
-            tmp_gp_dbl= XC::Matrix::operator()(i,j);
-          }
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return EntCmd::GetProp(cod);
-  }
 
 //! @brief Convierte en matriz la cadena de caracteres que se pasa como parámetro.
 void XC::Matrix::from_string(const std::string &str)

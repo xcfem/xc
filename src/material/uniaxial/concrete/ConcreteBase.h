@@ -56,7 +56,7 @@ class ConcreteBase: public UniaxialMaterial
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
     void commit_to_trial_history(void);
     void commit_to_trial_state(void);
     void commit_to_trial(void);
@@ -75,7 +75,7 @@ class ConcreteBase: public UniaxialMaterial
     double getStrain(void) const;      
     double getStress(void) const;
     double getTangent(void) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 //! @brief Reset trial history variables to last committed state

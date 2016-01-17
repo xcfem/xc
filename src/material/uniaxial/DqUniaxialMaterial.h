@@ -55,8 +55,8 @@ class DqUniaxialMaterial: public EntCmd, public MovableObject, public std::deque
     void copia_lista(const DqUniaxialMaterial &,SectionForceDeformation *s= NULL);
     int sendData(CommParameters &);  
     int recvData(const CommParameters &);
-    virtual bool procesa_comando(CmdStatus &);
-    void ejecuta_bloque_for_each(CmdStatus &,const std::string &);
+
+
   public:
     DqUniaxialMaterial(EntCmd *owner= NULL,const size_t &sz= 0);
     DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial &);
@@ -106,7 +106,7 @@ class DqUniaxialMaterial: public EntCmd, public MovableObject, public std::deque
     int recvSelf(const CommParameters &);
 
     void Print(std::ostream &s, int flag =0) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

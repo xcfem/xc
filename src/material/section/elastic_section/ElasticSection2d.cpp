@@ -68,7 +68,6 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "material/section/ResponseId.h"
 
@@ -88,16 +87,6 @@ XC::ElasticSection2d::ElasticSection2d(int tag, double E, double A, double I)
 XC::ElasticSection2d::ElasticSection2d(int tag, double EA, double EI)
   :BaseElasticSection2d(tag, SEC_TAG_Elastic2d,2,1,EA,EI,0.0,0.0)
   {}
-
-//! @brief Lee un objeto XC::ElasticSection2d desde archivo
-bool XC::ElasticSection2d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElasticSection2d) Procesando comando: " << cmd << std::endl;
-
-    return BaseElasticSection2d::procesa_comando(status);
-  }
 
 //! @brief Devuelve la resultante de las tensiones en la sección.
 const XC::Vector &XC::ElasticSection2d::getStressResultant(void) const
@@ -168,16 +157,6 @@ int XC::ElasticSection2d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ElasticSection2d::GetProp(const std::string &cod) const
-  {
-    if(cod=="paramSeccion")
-      return any_const_ptr(&ctes_scc);
-    else
-      return BaseElasticSection2d::GetProp(cod);
-  }
- 
 void XC::ElasticSection2d::Print(std::ostream &s, int flag) const
   {
     s << "ElasticSection2d, tag: " << this->getTag() << std::endl;

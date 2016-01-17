@@ -28,7 +28,6 @@
 
 #include "GrupoCombinaciones.h"
 #include "preprocessor/loaders/LoadLoader.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 #include "domain/load/pattern/Combinacion.h"
 #include "domain/domain/Domain.h"
@@ -149,112 +148,6 @@ XC::Combinacion *XC::GrupoCombinaciones::newLoadCombination(const std::string &c
           }
       }
     return comb;
-  }
-
-//! @brief Lee un objeto TimeSeries desde archivo
-int XC::GrupoCombinaciones::procesa_combinacion(const int &tag_lp,const std::string &cmd,CmdStatus &status)
-  {
-    int retval= tag_lp;
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    if(fnc_indices.size()<1)
-      std::cerr << "combinacion: uso combinacion[code,tag] " << std::endl;
-    std::string code= "nil";
-    if(fnc_indices.size()>0)
-      code= convert_to_string(fnc_indices[0]); //Código de la combinacion.
-    Combinacion *comb= busca_combinacion(code);
-    if(comb) //La combinación ya existe. 
-      comb->LeeCmd(status);
-    else //La combinación es nueva.
-      {
-        if(fnc_indices.size()>1)
-          retval= convert_to_int(fnc_indices[1]); //Tag de la combinación.
-        comb= new Combinacion(this,code,retval,getLoadLoader());
-        retval++;
-        if(comb)
-          {
-            comb->setDomain(getDomain());
-            comb->LeeCmd(status);
-            (*this)[comb->getNombre()]= comb;
-          }
-      }
-    return retval;
-  }
-
-void XC::GrupoCombinaciones::EjecutaBloqueForEach(CmdStatus &status,const std::string &blq)
-  {
-    const std::string nmbBlq= nombre_clase()+":for_each";
-    for(iterator i= begin();i!= end();i++)
-      (*i).second->EjecutaBloque(status,blq,nmbBlq);
-  }
-
-
-
-//! @brief Lee un objeto GrupoCombinaciones desde archivo
-bool XC::GrupoCombinaciones::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(GrupoCombinaciones) Procesando comando: " << cmd << std::endl;
-    Combinacion *cmb_ptr= busca_combinacion(cmd);
-    if(cmb_ptr)
-      {
-        cmb_ptr->LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "combinacion")
-      {
-        std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-        if(fnc_indices.size()<1)
-	  std::cerr << "combinacion: uso combinacion[code,tag] " << std::endl;
-	std::string code= "nil";
-        if(fnc_indices.size()>0)
-          code= convert_to_string(fnc_indices[0]); //Código de la combinacion.
-        Combinacion *comb= busca_combinacion(code);
-        if(comb) //La combinación ya existe. 
-          comb->LeeCmd(status);
-        else //La combinación es nueva.
-	  std::cerr << "Las combinaciones nuevas se definen en LoadLoader."
-                    << std::endl;
-        return true;
-      }
-    else if(cmd == "remove") //Elimina la combinación del grup.
-      {
-        const std::string comb_code= interpretaString(status.GetString());
-        remove(comb_code);
-        return true;
-      }
-    else if(cmd == "add_to_domain")
-      {
-        const std::string comb_code= interpretaString(status.GetString());
-        addToDomain(comb_code);
-        return true;
-      }
-    else if(cmd == "remove_from_domain")
-      {
-        const std::string comb_code= interpretaString(status.GetString());
-        removeFromDomain(comb_code);
-        return true;
-      }
-    else if(cmd == "remove_all_from_domain")
-      {
-        status.GetString();
-        removeAllFromDomain();
-        return true;
-      }
-    else if(cmd == "for_each")
-      {
-        const std::string bloque= status.GetBloque();
-        EjecutaBloqueForEach(status,bloque);
-        return true;
-      }
-    else if(cmd == "clear")
-      {
-        status.GetBloque(); //Ignoramos entrada.
-        clear();
-        return true;
-      }
-    else
-      return LoadLoaderMember::procesa_comando(status);
   }
 
 //! @brief Returns container's keys.
@@ -412,41 +305,4 @@ int XC::GrupoCombinaciones::getTagCombPrevia(const std::string &nmb) const
     if(i!=end())
       retval= i->second->getTag();
     return retval;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::GrupoCombinaciones::GetProp(const std::string &cod) const
-  {
-    if(cod=="numCombinaciones")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    if(cod=="getNombreCombPrevia")
-      {
-        const std::string nmb= popString(cod);
-        tmp_gp_str= getNombreCombPrevia(nmb);
-        return any_const_ptr(tmp_gp_str);
-      }
-    if(cod=="getTagCombPrevia")
-      {
-        const std::string nmb= popString(cod);
-        tmp_gp_int= getTagCombPrevia(nmb);
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod == "getListaNombresCombinaciones")
-      {
-        EntCmd *this_no_const= const_cast<GrupoCombinaciones *>(this);
-        tmp_gp_lista.set_owner(this_no_const);
-        tmp_gp_lista.clearAll();
-        const std::deque<std::string> tmp= getListaNombres();
-	for(std::deque<std::string>::const_iterator i= tmp.begin();i!= tmp.end();i++)
-          tmp_gp_lista.Inserta((*i));
-        return any_const_ptr(tmp_gp_lista);
-      }
-    else
-      return LoadLoaderMember::GetProp(cod);
   }

@@ -71,7 +71,6 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "boost/lexical_cast.hpp"
-#include "xc_utils/src/base/CmdStatus.h"
 
 XC::ElementRecorder::ElementRecorder()
   :ElementRecorderBase(RECORDER_TAGS_ElementRecorder),data(nullptr)
@@ -81,25 +80,6 @@ XC::ElementRecorder::ElementRecorder(const ID &ele,const std::vector<std::string
                                      Domain &theDom, DataOutputHandler &theOutputHandler, double dT)
   :ElementRecorderBase(RECORDER_TAGS_ElementRecorder,ele,argv,echoTime,theDom,theOutputHandler,dT),data(nullptr)
   {}
-
-//! @brief Lee un objeto XC::ElementRecorder desde archivo
-bool XC::ElementRecorder::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElementRecorder) Procesando comando: " << cmd << std::endl;
-    if(cmd == "elementos")
-      {
-        std::vector<int> elems= crea_vector_int(status.GetString());
-        const int sz= elems.size();
-        eleID= ID(sz);
-        for(int i= 0;i<sz;i++)
-          eleID[i]= elems[i];
-        return true;
-      }
-    else
-      return ElementRecorderBase::procesa_comando(status);
-  }
 
 XC::ElementRecorder::~ElementRecorder(void)
   { if(data) delete data; }

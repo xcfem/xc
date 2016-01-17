@@ -29,7 +29,6 @@
 #include "ShellMecLoad.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/element/plane/shell/ShellMITC4Base.h"
@@ -42,16 +41,6 @@ XC::ShellMecLoad::ShellMecLoad(int tag,int classTag,const double &wt,const doubl
 
 XC::ShellMecLoad::ShellMecLoad(int tag,int classTag)
   :BidimMecLoad(tag, classTag) {}
-
-//! @brief Lee un objeto ShellMecLoad desde archivo
-bool XC::ShellMecLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ShellMecLoad) Procesando comando: " << cmd << std::endl;
-
-    return BidimMecLoad::procesa_comando(status);
-  }
 
 //! @brief Añade la carga al vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
 //! @param area Area del elemento.
@@ -157,29 +146,3 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalForces(void) const
 //! @brief Devuelve el momento expresado en coordenadas globales.
 const XC::Matrix &XC::ShellMecLoad::getGlobalMoments(void) const
   { return getGlobalVectors(getLocalMoments()); }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ShellMecLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "getLocalForces")
-      {
-        static m_double retval;
-        retval= matrix_to_m_double(getLocalForces());
-        return any_const_ptr(retval);
-      }
-    else if(cod == "getLocalMoments")
-      {
-        static m_double retval;
-        retval= matrix_to_m_double(getLocalMoments());
-        return any_const_ptr(retval);
-      }
-    else if(cod == "getGlobalForces")
-      {
-        static m_double retval;
-        retval= matrix_to_m_double(getGlobalForces());
-        return any_const_ptr(retval);
-      }
-    else
-      return BidimMecLoad::GetProp(cod);
-  }

@@ -121,7 +121,7 @@ class ZeroLength: public Element0D
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // Constructor for a single 1d material model
     ZeroLength(int tag,int dimension,int Nd1, int Nd2,const Vector& x,const Vector& yprime,UniaxialMaterial &theMaterial,int direction );
@@ -168,7 +168,7 @@ class ZeroLength: public Element0D
     int getResponse(int responseID, Information &eleInformation);
     
     void updateDir(const Vector& x, const Vector& y);
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

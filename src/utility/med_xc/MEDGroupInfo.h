@@ -62,8 +62,6 @@ class MEDGroupInfo: public MEDCellBaseInfo
     void nuevo_vertice(size_t i,const MEDMapIndices &);
     void nueva_celda(size_t i,const MED_EN::medGeometryElement &);
     void to_med(void) const;
-
-    any_const_ptr GetProp(const std::string &) const;
   };
 } // end of XC namespace
 #endif

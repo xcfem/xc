@@ -81,7 +81,3 @@ void XC::MEDGaussModel::to_med(void) const
     model= new med_gauss_model(nombre,tipo,num_gauss_pt,&coo_nodos_ref[0],&coo_gauss_pt[0],&gauss_weights[0]);
   }
 
-any_const_ptr XC::MEDGaussModel::GetProp(const std::string &cod) const
-  {
-    return MEDObject::GetProp(cod);
-  }

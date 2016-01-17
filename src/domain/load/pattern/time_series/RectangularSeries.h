@@ -76,7 +76,7 @@ namespace XC {
 class RectangularSeries: public PulseBaseSeries
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors
     RectangularSeries(double tStart, double tFinal, double cFactor = 1.0);

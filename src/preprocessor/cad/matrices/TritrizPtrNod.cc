@@ -33,7 +33,6 @@
 #include <boost/any.hpp>
 #include "domain/domain/Domain.h"
 #include "domain/constraints/SP_Constraint.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
@@ -51,60 +50,6 @@ XC::TritrizPtrNod::TritrizPtrNod(const size_t capas,const size_t filas,const siz
   {
     for(size_t i=0;i<capas;i++)
       (*this)[i]= MatrizPtrNod(filas,cols);
-  }
-
-//! @brief Lee un objeto TritrizPtrNod desde archivo
-//! Soporta los comandos:
-bool XC::TritrizPtrNod::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TritrizPtrNod) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "nodo")
-      {
-        const CmdParser &parser= status.Parser();
-        if(parser.TieneIndices())
-          {
-            interpreta(parser.GetIndices());
-            if(InterpreteRPN::HayArgumentos(3,cmd))
-              {
-                const size_t k= convert_to_size_t(InterpreteRPN::Pila().Pop()); 
-                const size_t j= convert_to_size_t(InterpreteRPN::Pila().Pop()); 
-                const size_t i= convert_to_size_t(InterpreteRPN::Pila().Pop()); 
-                Node *ptr= (*this)(i,j,k);
-                if(ptr)
-                  ptr->LeeCmd(status);
-                else
-	          std::clog << "(TritrizPtrNod) Procesando comando: '" << cmd
-                            << "'; no se encontró el nodo de índices: (" << i << ',' << j << ',' << k << ").\n";
-              }
-          }
-        else
-	  std::cerr << "(TritrizPtrNod) Procesando comando: '" << cmd
-                            << "'; faltan los índices del nodo.\n";
-        return true;
-      }
-    else if(cmd=="nodo_con_tag")
-      {
-        std::deque<boost::any> fnc_args= status.Parser().SeparaArgs(this);
-        if(fnc_args.size()<1)
-          std::cerr << "puntos - uso: puntos(numPuntos) " << std::endl;
-        const int tag= convert_to_int(fnc_args[0]); //Tag del nodo.
-        Node *tmp= buscaNodo(tag);
-        if(tmp)
-          tmp->LeeCmd(status);
-        else
-          {
-	    std::cerr << "(TritrizPtrNod) Procesando comando: " << cmd
-                      << " no se encotró el nodo: " << tag
-                      << " en este conjunto. Se ignora la entrada." << std::endl;
-            status.GetBloque();
-          }
-        return true;
-      }
-    else
-      return TritrizPtrBase<MatrizPtrNod>::procesa_comando(status);
   }
 
 //! @brief Devuelve, si lo encuentra, un puntero al nodo
@@ -239,68 +184,6 @@ void XC::TritrizPtrNod::fix(const SP_Constraint &spc) const
         const MatrizPtrNod &capa= operator()(i);
         capa.fix(spc);
       }
-  }
-
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::TritrizPtrNod::GetProp(const std::string &cod) const
-  {
-    if(cod=="size")
-      {
-        tmp_gp_szt= NumPtrs();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="numCapas")
-      {
-        tmp_gp_szt= GetCapas();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="numFilas")
-      {
-        tmp_gp_szt= getNumFilas();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="numCols")
-      {
-        tmp_gp_szt= getNumCols();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "nodo")
-      {
-        if(InterpreteRPN::Pila().size()>2)
-          {
-            const size_t &k= convert_to_size_t(InterpreteRPN::Pila().Pop());
-            const size_t &j= convert_to_size_t(InterpreteRPN::Pila().Pop());
-            const size_t &i= convert_to_size_t(InterpreteRPN::Pila().Pop());
-            const Node *ptr= (*this)(i,j,k);
-            return any_const_ptr(ptr);
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,3,"GetProp",cod);
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getTagNearestNode")
-      {
-        const Pos3d p= popPos3d(cod);
-        const Node *tmp= getNearestNode(p);
-        tmp_gp_int= tmp->getTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getTags")
-      {
-        const std::vector<int> tmp= getTags();
-        const size_t sz= tmp.size();
-        tmp_gp_vany.clear();
-        tmp_gp_vany.resize(sz);
-	for(size_t i= 0;i<sz;i++)
-          tmp_gp_vany[i]= tmp[i];
-        return any_const_ptr(tmp_gp_vany);
-      }
-    else
-      return EntCmd::GetProp(cod);
   }
 
 std::vector<int> XC::TritrizPtrNod::getTags(void) const

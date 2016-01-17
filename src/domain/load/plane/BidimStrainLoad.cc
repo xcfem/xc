@@ -28,7 +28,6 @@
 
 #include "BidimStrainLoad.h"
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -55,46 +54,6 @@ XC::BidimStrainLoad::BidimStrainLoad(const size_t &sz)
   :BidimLoad(0,LOAD_TAG_BidimStrainLoad), deformaciones(sz) {}
 
 //! @brief Asigna el valor de la deformación de uno de los puntos de Gauss.
-void XC::BidimStrainLoad::set_comp(const std::string &cmd,CmdStatus &status)
-  {
-    const std::vector<size_t> &indices= GetSubscriptsNumericos(status,1);
-    if(!indices.empty())
-      {
-        if(indices[0]<deformaciones.size())
-          deformaciones.at(indices[0])= Vector(convert_to_vector_double(interpretaVectorAny(status.GetBloque())));
-        else
-          std::cerr << nombre_clase() << "procesando comando " << cmd
-                    << " no existe el punto de Gauss de índice: "  << indices[0]
-                    << "." << std::endl;
-      }
-  }
-
-//! @brief Asigna el valor de la deformación de uno de los puntos de Gauss.
-//! el primer índice es el del punto de gauss y el segundo la dirección de
-//! la deformación.
-void XC::BidimStrainLoad::set_strain(const std::string &cmd,CmdStatus &status)
-  {
-    const std::vector<size_t> &indices= GetSubscriptsNumericos(status,2);
-    if(!indices.empty())
-      {
-        if(indices[0]<deformaciones.size())
-          {
-            Vector &def= deformaciones.at(indices[0]);
-            if(indices[1]<size_t(def.Size()))
-              def(indices[1])= interpretaDouble(status.GetString());
-            else
-              std::cerr << nombre_clase() << "procesando comando " << cmd
-                        << " no existe la componente del vector deformación de índice: "
-                        << indices[1] << "." << std::endl;
-          }
-        else
-          std::cerr << nombre_clase() << "procesando comando " << cmd
-                    << " no existe el punto de Gauss de índice: "  << indices[0]
-                    << "." << std::endl;
-      }
-  }
-
-//! @brief Asigna el valor de la deformación de uno de los puntos de Gauss.
 //! el primer índice es el del punto de gauss y el segundo la dirección de
 //! la deformación.
 void XC::BidimStrainLoad::setStrainComp(const size_t &i,const size_t &j,const double &strain)
@@ -113,27 +72,6 @@ void XC::BidimStrainLoad::setStrainComp(const size_t &i,const size_t &j,const do
       std::cerr << nombre_clase() << "::setStrainComp "
                 << " no existe el punto de Gauss de índice: "  << i
                 << std::endl;
-  }
-
-
-//! @brief Lee un objeto BidimStrainLoad desde archivo
-bool XC::BidimStrainLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BidimStrainLoad) Procesando comando: " << cmd << std::endl;
-    if(cmd == "comp") //Asigna el valor de la deformación
-      {               //en uno de los puntos de Gauss.
-        set_comp(cmd,status);
-        return true;
-      }
-    else if(cmd == "strain")
-      {
-        set_strain(cmd,status);
-        return true;
-      }
-    else
-      return BidimLoad::procesa_comando(status);
   }
 
 //! @brief Asigna las deformaciones.
@@ -214,23 +152,3 @@ void XC::BidimStrainLoad::Print(std::ostream &s, int flag) const
     BidimLoad::Print(s,flag);
   }
 
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::BidimStrainLoad::GetProp(const std::string &cod) const
-  {
-    if(cod=="getSize")
-      {
-        tmp_gp_szt= deformaciones.size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    if(cod=="getStrainVectorSize")
-      {
-           
-        tmp_gp_szt= 0;
-        if(!deformaciones.empty())
-          tmp_gp_szt= deformaciones[0].Size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return BidimLoad::GetProp(cod);
-  }

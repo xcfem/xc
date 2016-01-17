@@ -42,14 +42,12 @@ class ConvergenceTestNorm: public ConvergenceTestTol
   protected:
     double norm0; //!< norm at first iteration of each step
 
-    bool procesa_comando(CmdStatus &status);
   public:
     // constructors
     ConvergenceTestNorm(EntCmd *owr,int classTag);	    	
     ConvergenceTestNorm(EntCmd *owr,int cTag,double tl, int maxNIter, int printFlag, int normType, int sz);
 
-    virtual int start(void);
-    virtual any_const_ptr GetProp(const std::string &cod) const;    
+    virtual int start(void);  
   };
 } // end of XC namespace
 

@@ -28,36 +28,15 @@
 
 #include "SisRefScc.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-
-//! @brief Lee un objeto SisRefScc desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - pos: Lee las coordenadas del punto.
-bool XC::SisRefScc::procesa_comando(CmdStatus &status)
-  {
-    return EntGeomSection::procesa_comando(status);
-  }
 
 //! @brief Devuelve el vector unitario I expresado en el sistema global
 //! en la posición que se pasa como parámetro.
 Vector2d XC::SisRefScc::GetI(const Pos2d &p) const
   { return GetVDirEje(1,p); }
+
 //! @brief Devuelve el vector unitario J expresado en el sistema global
 //! en la posición que se pasa como parámetro.
 Vector2d XC::SisRefScc::GetJ(const Pos2d &p) const
   { return GetVDirEje(2,p); }
-
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-//! -nlineas: Devuelve el número de líneas que empiezan o acaban en este punto.
-any_const_ptr XC::SisRefScc::GetProp(const std::string &cod) const
-  {
-    return EntGeomSection::GetProp(cod);
-  }
 

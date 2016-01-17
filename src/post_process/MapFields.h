@@ -61,12 +61,10 @@ class MapFields: public EntCmd, public MovableObject, public std::deque<FieldInf
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    virtual bool procesa_comando(CmdStatus &);
     friend class Preprocessor;
   public:
     MapFields(Preprocessor *preprocessor= NULL);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
-
+ 
     FieldInfo &newField(const std::string &);
 
     const_iterator buscaField(const std::string &nmb) const;

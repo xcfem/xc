@@ -47,7 +47,7 @@ class MapCadMemberBase: public EntCmd
   protected:
     Indice tag; //! Identificador por defecto para el próximo punto.
 
-    virtual bool procesa_comando(CmdStatus &status);
+
 
   public:
     MapCadMemberBase(Cad *cad= NULL);
@@ -62,7 +62,7 @@ class MapCadMemberBase: public EntCmd
     void setTag(const size_t &t)
       { tag= t; }
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

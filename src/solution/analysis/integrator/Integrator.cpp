@@ -61,7 +61,6 @@
 
 #include <solution/analysis/integrator/Integrator.h>
 #include "solution/SoluMethod.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "solution/analysis/model/AnalysisModel.h"
 #include "domain/mesh/element/RayleighDampingFactors.h"
 
@@ -113,15 +112,6 @@ XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void)
     const SoluMethod *sm= getSoluMethod();
     assert(sm);
     return sm->getAnalysisModelPtr();
-  }
-
-//! @brief Lee un objeto XC::Integrator desde archivo
-bool XC::Integrator::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Integrator) Procesando comando: " << cmd << std::endl;
-    return EntCmd::procesa_comando(status);
   }
 
 //! @brief Hace los cambios oportunos cuando se ha producido un cambio en el dominio.

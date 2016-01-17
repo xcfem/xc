@@ -58,7 +58,6 @@
 
 #include "ID.h"
 #include <cstdlib>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include <boost/python/extract.hpp>
@@ -242,16 +241,6 @@ XC::ID::ID(const ID &other)
     for(int i=0; i<sz; i++)
       data[i] = other.data[i];
   }	
-
-
-//! @brief Lee un objeto XC::ID desde archivo
-bool XC::ID::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ID) Procesando comando: " << cmd << std::endl;
-    return EntCmd::procesa_comando(status);
-  }
 
 // ~ID():
 // 	destructor, deletes the [] data
@@ -516,27 +505,5 @@ std::vector<int> XC::id_to_std_vector(const ID &v)
     for(register size_t i=0;i<sz;i++)
       retval[i]= v(i);
     return retval;
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! size: Devuelve el número de componentes del ID.
-any_const_ptr XC::ID::GetProp(const std::string &cod) const
-  {
-    if(cod=="size")
-      {
-        tmp_gp_szt= Size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="at")
-      {
-        const size_t i= popSize_t(cod);
-        tmp_gp_dbl= ID::operator()(i);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return EntCmd::GetProp(cod);
   }
 

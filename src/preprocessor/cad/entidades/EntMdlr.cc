@@ -38,7 +38,6 @@
 #include "preprocessor/set_mgmt/SetFilaI.h"
 #include "preprocessor/set_mgmt/SetFilaJ.h"
 #include "preprocessor/set_mgmt/SetFilaK.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/Lista.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -88,58 +87,6 @@ int XC::EntMdlr::getMEDCellType(void) const
   {
     std::cerr << "EntMdlr::getMEDCellType: la función getMEDCellType debe definirse en las clases derivadas." << std::endl;
     return MED_NONE;
-  }
-
-
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::EntMdlr::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "EntMdlr::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-
-    if(cod=="idx" || cod=="indice")
-      {
-        tmp_gp_int= getIdx();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getVtkCellType")
-      {
-        tmp_gp_str= getVtkCellType();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else if(cod=="getTagNearestNode")
-      {
-        const Pos3d p= popPos3d(cod);
-        const Node *tmp= getNearestNode(p);
-        tmp_gp_int= tmp->getTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getTagNearestElement")
-      {
-        const Pos3d p= popPos3d(cod);
-        const Element *tmp= getNearestElement(p);
-        tmp_gp_int= tmp->getTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getMEDCellType")
-      {
-        tmp_gp_int= getMEDCellType();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getTagsNodos")
-      {
-        const std::vector<int> tmp= getTagsNodos();
-        const size_t sz= tmp.size();
-        tmp_gp_vany.clear();
-        tmp_gp_vany.resize(sz);
-	for(size_t i= 0;i<sz;i++)
-          tmp_gp_vany[i]= tmp[i];
-        return any_const_ptr(tmp_gp_vany);
-      }
-    else
-      return SetEstruct::GetProp(cod);
   }
 
 //! @brief Borra todo el contenido del objeto.
@@ -278,120 +225,6 @@ XC::Vector XC::EntMdlr::getSimpsonWeights(const std::string &ijk,const std::stri
     else if(ijk=="k")
       retval= nodos.IntegSimpsonFilaK(f,c,e,n);
     return retval;
-  }
-
-//! @brief Lee un objeto EntMdlr desde archivo
-//! Soporta los comandos:
-bool XC::EntMdlr::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(EntMdlr) Procesando comando: " << cmd << std::endl;
-    if(cmd == "clearAll") //Borra todo.
-      {
-        const std::string tmp= status.GetString(); //Ignoramos entrada.
-        clearAll();
-        return true;
-      }
-    else if(cmd == "nodos")
-      {
-        nodos.LeeCmd(status);
-        return true;
-      }
-    else if(cmd=="nodo_con_tag")
-      {
-        std::deque<boost::any> fnc_args= status.Parser().SeparaArgs(this);
-        if(fnc_args.size()<1)
-          std::cerr << "puntos - uso: puntos(numPuntos) " << std::endl;
-        const int tag= convert_to_int(fnc_args[0]); //Tag del nodo.
-        Node *tmp= buscaNodo(tag);
-        if(tmp)
-          tmp->LeeCmd(status);
-        else
-	  std::cerr << "(EntMdlr) Procesando comando: " << cmd
-                    << " no se encotró el nodo: " << tag
-                    << " en este conjunto." << std::endl;
-        return true;
-      }
-    else if(cmd == "for_each_interior_nod") //Bucle sobre nodos interiores.
-      {
-	std::cerr << cmd << "; deprecated. Use Python." << std::endl;
-        //nodos.ForEachInteriorObj(status,status.GetBloque());
-        return true;
-      }
-    else if(cmd == "elementos")
-      {
-        elementos.LeeCmd(status);
-        return true;
-      }
-    else if(cmd=="elemento_con_tag")
-      {
-        std::deque<boost::any> fnc_args= status.Parser().SeparaArgs(this);
-        if(fnc_args.size()<1)
-          std::cerr << "puntos - uso: puntos(numPuntos) " << std::endl;
-        const int tag= convert_to_int(fnc_args[0]); //Tag del nodo.
-        Element *tmp= buscaElemento(tag);
-        if(tmp)
-          tmp->LeeCmd(status);
-        else
-          {
-	    std::cerr << "(EntMdlr) Procesando comando: " << cmd
-                      << " no se encotró el nodo: " << tag
-                      << " en este conjunto. Se ignora la entrada." << std::endl;
-            status.GetBloque();
-          }
-        return true;
-      }
-    else if(cmd == "crea_set_fila")
-      {
-        const std::string str_error= "uso: \\fila[rango_i,rango_j,rango_k,nmb]{...}.";
-        const CmdParser &parser= status.Parser();
-        //Parámetros por defecto.
-        std::string nmb= "tmp";
-        if(parser.TieneIndices())
-          {
-	    const std::deque<boost::any> indices= parser.SeparaIndices(this);
-            RangoTritriz rango;
-            if(indices.size()>2)
-              rango= RangoTritriz(RangoIndice(convert_to_vector_size_t(indices[0])),RangoIndice(convert_to_vector_size_t(indices[1])),RangoIndice(convert_to_vector_size_t(indices[2])));
-            if(indices.size()>3) nmb= convert_to_string(indices[3]);
-            SetEstruct *tmp= crea_set_fila(rango,nmb);
-            tmp->LeeCmd(status);
-          }
-        else
-	  std::cerr << str_error << std::endl;
-        return true;
-      }
-    const std::string isimpson= "integ_simpson_fila_";
-    if(cmd.substr(0,isimpson.length())== isimpson)
-      {
-        const std::string str_error= "uso: \\integ_simpson_fila_[ijk][nmb_lista,f,c,n]{expr}.";
-        const CmdParser &parser= status.Parser();
-        //Parámetros por defecto.
-        std::string nmb_lista= "nil";
-        size_t f= 1;
-        size_t c= 1;
-        size_t n= 10;
-        ExprAlgebra e= interpretaExpr(status.GetString());
-        if(parser.TieneIndices())
-          {
-	    const std::deque<boost::any> indices= parser.SeparaIndices(this);
-            if(indices.size()>0) nmb_lista= convert_to_string(indices[0]);
-            if(indices.size()>1) f= convert_to_int(indices[1]);
-            if(indices.size()>2) c= convert_to_int(indices[2]);
-            if(indices.size()>3) n= convert_to_int(indices[3]);
-            if(cmd=="integ_simpson_fila_i")
-              params.Props().CreaUserParam(nmb_lista,nodos.IntegSimpsonFilaI(f,c,e,n));
-            if(cmd=="integ_simpson_fila_j")
-              params.Props().CreaUserParam(nmb_lista,nodos.IntegSimpsonFilaJ(f,c,e,n));
-            if(cmd=="integ_simpson_fila_k")
-              params.Props().CreaUserParam(nmb_lista,nodos.IntegSimpsonFilaK(f,c,e,n));
-          }
-        else
-	  std::cerr << str_error << std::endl;
-        return true;
-      }
-    return SetEstruct::procesa_comando(status);
   }
 
 //! @brief Crea un nodos en la posición que se pasa como parámetro.

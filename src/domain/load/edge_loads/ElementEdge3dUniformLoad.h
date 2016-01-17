@@ -45,7 +45,7 @@ class ElementEdge3dUniformLoad: public ElementEdgeUniformLoad
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElementEdge3dUniformLoad(int tag, const double &, const double &, const double &, const ID &, const ID &);
     ElementEdge3dUniformLoad(int tag, const Vector &Fxyz, const ID &, const ID &);
@@ -71,7 +71,7 @@ class ElementEdge3dUniformLoad: public ElementEdgeUniformLoad
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0);
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

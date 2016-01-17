@@ -66,7 +66,6 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 //! @brief Constructor.
 XC::BaseControl::BaseControl(SoluMethod *owr,int classTag,int numIncr)
@@ -87,21 +86,6 @@ void XC::BaseControl::setup_numIncr(const int &numIncr)
         specNumIncrStep= static_cast<double>(numIncr);
         numIncrLastStep= static_cast<double>(numIncr);
       }
-  }
-
-//! @brief Lee un objeto XC::BaseControl desde archivo
-bool XC::BaseControl::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BaseControl) Procesando comando: " << cmd << std::endl;
-    if(cmd == "Jd")
-      {
-        setup_numIncr(interpretaInt(status.GetString()));
-        return true;
-      }
-    else
-      return StaticIntegrator::procesa_comando(status);
   }
 
 //! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.

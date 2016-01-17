@@ -68,7 +68,7 @@ class EntMdlr: public SetEstruct
     Pnt *crea_punto(const Pos3d &);
     void crea_puntos(const MatrizPos3d &);
     SetEstruct *crea_set_fila(const RangoTritriz &,const std::string &);
-    virtual bool procesa_comando(CmdStatus &status);
+
     void clearAll(void);
   public:
     EntMdlr(Preprocessor *m,const size_t &i= 0);
@@ -152,7 +152,7 @@ class EntMdlr: public SetEstruct
     Vector getSimpsonWeights(const std::string &,const std::string &,const size_t &f=1,const size_t &c=1, const size_t &n= 10) const;
 
     void BorraPtrNodElem(void);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
 
     virtual ~EntMdlr(void);
   };

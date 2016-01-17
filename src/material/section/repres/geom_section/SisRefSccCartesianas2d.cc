@@ -29,64 +29,7 @@
 #include "SisRefSccCartesianas2d.h"
 #include "Spot.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-
-//! @brief Lee un objeto SisRefSccCartesianas2d desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - pos: Lee las coordenadas del punto.
-bool XC::SisRefSccCartesianas2d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SisRefSccCartesianas2d) Procesando comando: " << cmd << std::endl;
-    if(cmd == "coo_org")
-      {
-        ref.Org().LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "spot_org")
-      {
-        const size_t id_spot= interpretaSize_t(status.GetString());
-        const Spot *p= BuscaSpot(id_spot);
-        if(p)
-          ref.Org()= p->GetPos();
-        else
-	  std::cerr << "SisRefSccCartesianas2d::procesa_comando: '"
-                    << cmd << "'; no se encontró el spot: " << id_spot
-                    << std::endl;
-        return true;
-      }
-    else if(cmd == "dos_puntos")
-      {
-        const std::vector<int> indices= crea_vector_int(status.GetString());
-        if(indices.size()>1)
-          {
-            const Spot *p1= BuscaSpot(indices[0]);
-            const Spot *p2= BuscaSpot(indices[1]);
-            if(p1 && p2)
-              ref= Ref2d2d(p1->GetPos(),p2->GetPos());
-            else
-              {
-                std::cerr << "SisRefSccCartesianas2d::procesa_comando: '"
-                          << cmd << "'; no se encontró el punto: ";
-                if(!p1)
-	          std::cerr << indices[0];
-                else
-	          std::cerr << indices[1];
-	        std::cerr << std::endl;
-              }
-          }
-        else
-	  std::cerr << "SisRefSccCartesianas2d::procesa_comando: '"
-		    << cmd << "' se requieren dos identificadores de punto." << std::endl;
-        return true;
-      }
-    else
-      return SisRefScc::procesa_comando(status);
-  }
 
 //! @brief Devuelve el vector unitario en la dirección del eje que se
 //! pasa como parámetro expresado en el sistema global 
@@ -110,21 +53,3 @@ Pos2d XC::SisRefSccCartesianas2d::GetPosLocal(const Pos2d &p) const
 //! expresado en coordenadas locales.
 Vector2d XC::SisRefSccCartesianas2d::GetCooLocales(const Vector2d &v) const
   { return ref.GetCooLocales(v); }
-
-
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-//! -nlineas: Devuelve el número de líneas que empiezan o acaban en este punto.
-any_const_ptr XC::SisRefSccCartesianas2d::GetProp(const std::string &cod) const
-  {
-    if(cod == "org")
-      return any_const_ptr(ref.Org());
-    if(cod == "sis_coo")
-      return any_const_ptr(ref.Trf());
-    else
-      return SisRefScc::GetProp(cod);
-  }
-

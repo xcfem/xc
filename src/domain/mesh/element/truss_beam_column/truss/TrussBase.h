@@ -50,7 +50,7 @@ class TrussBase : public ProtoTruss
     void setup_L_cos_dir(void);
     void set_load(const Vector &);
     void alloc_load(const size_t &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     TrussBase(int classTag,int tag,int dimension, int Nd1, int Nd2);
     TrussBase(int classTag,int tag,int dimension);
@@ -64,7 +64,7 @@ class TrussBase : public ProtoTruss
       { return &load; }
     const double &getL(void) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

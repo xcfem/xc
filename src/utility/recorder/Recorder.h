@@ -70,8 +70,6 @@ class Domain;
 
 class Recorder: public MovableObject, public EntCmd
   {
-  protected:
-    virtual bool procesa_comando(CmdStatus &status);
   public:
     Recorder(int classTag);
     virtual ~Recorder(void) {}

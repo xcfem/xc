@@ -61,7 +61,6 @@
 #include "material/section/fiber_section/FiberSection2d.h"
 #include "material/section/fiber_section/FiberSection3d.h"
 #include "material/section/fiber_section/FiberSectionGJ.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"

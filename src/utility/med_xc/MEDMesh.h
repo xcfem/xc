@@ -43,7 +43,7 @@ class MEDMesh: public MEDObject
     MEDMesh(const MEDMesh &);
     MEDMesh &operator=(const MEDMesh &);
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     MEDMesh(void);
     ~MEDMesh(void);
@@ -67,7 +67,6 @@ class MEDMesh: public MEDObject
     size_t getNumberOfFamilies(int tipo_entidad= MED_EN::MED_ALL_ENTITIES);
 
     void read(const std::string &);
-    any_const_ptr GetProp(const std::string &) const;
   };
 } // end of XC namespace
 #endif

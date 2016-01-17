@@ -53,7 +53,7 @@ class MaterialVector: public std::vector<MAT *>, public EntCmd, public MovableOb
     void clearAll(void);
     void alloc(const std::vector<MAT *> &mats);
 
-    void ejecuta_bloque_for_each(CmdStatus &status,const std::string &bloque);
+
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);  
     int recvData(const CommParameters &);
@@ -80,9 +80,6 @@ class MaterialVector: public std::vector<MAT *>, public EntCmd, public MovableOb
     void setInitialGeneralizedStrains(const std::vector<Vector> &);
     void addInitialGeneralizedStrains(const std::vector<Vector> &);
     void zeroInitialGeneralizedStrains(void);
-
-    static any_const_ptr get_prop_vector(const Vector *ptrVector);
-    static any_const_ptr get_prop_vector(const Vector &ptrVector);
 
     size_t getGeneralizedStressSize(void) const;
     size_t getGeneralizedStrainSize(void) const;
@@ -247,19 +244,6 @@ int MaterialVector<MAT>::revertToStart(void)
     for(iterator i=mat_vector::begin();i!=mat_vector::end();i++)
       retVal+= (*i)->revertToStart() ;
     return retVal;
-  }
-
-//! @brief Hace que cada una de los materiales ejecute el bloque que se pasa como parámetro.
-template <class MAT>
-void MaterialVector<MAT>::ejecuta_bloque_for_each(CmdStatus &status,const std::string &bloque)
-  {
-    const std::string nmbBlq= nombre_clase()+":for_each";
-    iterator i= mat_vector::begin();
-    for(;i!= mat_vector::end();i++)
-      if(*i)
-        (*i)->EjecutaBloque(status,bloque,nmbBlq);
-      else
-	std::cerr << "MaterialVector::ejecuta_bloque_for_each; Puntero a material nulo." << std::endl;
   }
 
 //! @brief Devuelve el tamaño del vector de tensiones.

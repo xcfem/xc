@@ -28,7 +28,6 @@
 
 #include "domain/mesh/element/truss_beam_column/truss/TrussBase.h"
 #include <domain/mesh/node/Node.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
@@ -88,16 +87,6 @@ XC::TrussBase &XC::TrussBase::operator=(const TrussBase &otro)
     cosX[1]= otro.cosX[1];
     cosX[2]= otro.cosX[2];
     return *this;
-  }
-
-//! @brief Lee un objeto Truss desde archivo
-bool XC::TrussBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TrussBase) Procesando comando: " << cmd << std::endl;
-
-    return ProtoTruss::procesa_comando(status);
   }
 
 //! @brief Determine the length, cosines and fill in the transformation
@@ -168,17 +157,4 @@ int XC::TrussBase::recvData(const CommParameters &cp)
     int res= ProtoTruss::recvData(cp);
     res+= cp.receiveDoubles(L,cosX[0],cosX[1],cosX[2],getDbTagData(),CommMetaData(16));
     return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! strain: Devuelve la deformación del elemento.
-any_const_ptr XC::TrussBase::GetProp(const std::string &cod) const
-  {
-    if(cod=="length")
-      return any_const_ptr(L);
-    else
-      return ProtoTruss::GetProp(cod);
   }

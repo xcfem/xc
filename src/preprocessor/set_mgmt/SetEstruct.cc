@@ -32,7 +32,6 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/ElementEdges.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/base/Lista.h"
@@ -135,51 +134,6 @@ XC::ElementEdges XC::SetEstruct::getElementEdges(void)
     return getElementEdgesEntreNodos(nodos);
   }
 
-//!  @brief Lee comandos para un objeto SetEstruct desde el archivo de entrada.
-bool XC::SetEstruct::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SetEstruct) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "for_each_nod") //Bucle sobre nodos.
-      {
-        const std::string nmbBlq= nombre_clase()+":for_each_nod";
-        const std::string bloque= status.GetBloque();
-        const size_t ncapas= GetNumCapasNodos();
-        if(ncapas<1) return true;
-        const size_t nfilas= GetNumFilasNodos();
-        const size_t ncols= GetNumColsNodos();
-        for(size_t i= 1;i<=ncapas;i++)
-          for(size_t j= 1;j<=nfilas;j++)
-            for(size_t k= 1;k<=ncols;k++)
-              GetNodo(i,j,k)->EjecutaBloque(status,bloque,nmbBlq);
-        return true;
-      }
-    else if(cmd == "for_each_elem") //Bucle sobre elementos.
-      {
-        const std::string nmbBlq= nombre_clase()+":for_each_elem";
-        const std::string bloque= status.GetBloque();
-        const size_t ncapas= GetNumCapasElementos();
-        if(ncapas<1) return true;
-        const size_t nfilas= GetNumFilasElementos();
-        const size_t ncols= GetNumColsElementos();
-        for(size_t i= 1;i<=ncapas;i++)
-          for(size_t j= 1;j<=nfilas;j++)
-            for(size_t k= 1;k<=ncols;k++)
-              GetElemento(i,j,k)->EjecutaBloque(status,bloque,nmbBlq);
-        return true;
-      }
-    else if(cmd == "for_each_element_edge") //Bucle sobre bordes de elemento.
-      {
-        ElementEdges edges= getElementEdges();
-        edges.LeeCmd(status);
-        return true;
-      }
-    else
-      return SetBase::procesa_comando(status);
-  }
-
 //! @brief Agrega al modelo los elementos que se pasan como parámetro.
 void XC::SetEstruct::agrega_elementos(const TritrizPtrElem &elementos)
   {
@@ -205,7 +159,7 @@ const XC::Node *XC::SetEstruct::get_node_ptr_from_stack(const std::string &cod) 
         retval= GetNodo(a,b,c);
       }
     else
-      err_num_argumentos(std::cerr,3,"GetProp",cod);
+      err_num_argumentos(std::cerr,3,"get_node_ptr_from_stack",cod);
     return retval;
   }
 
@@ -232,7 +186,7 @@ const XC::Element *XC::SetEstruct::get_element_ptr_from_stack(const std::string 
         retval= GetElemento(a);
       }
     else
-      err_num_argumentos(std::cerr,1,"GetProp",cod);
+      err_num_argumentos(std::cerr,1,"get_element_ptr_from_stack",cod);
     return retval;
   }
 
@@ -383,115 +337,4 @@ XC::Node *XC::SetEstruct::getNodeIJ(const size_t &i,const size_t &j)
 	std::cerr << "SetEstruct::getNodoI; el conjunto de nodos no es bidimensional." << std::endl;
         return nullptr;
       } 
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::SetEstruct::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "SetEstruct::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-
-    if(cod=="nCapasNod") //Devuelve el número de capas de nodos.
-      {
-        tmp_gp_szt= GetNumCapasNodos();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="nFilasNod") //Devuelve el número de filas de nodos.
-      {
-        tmp_gp_szt= GetNumFilasNodos();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="nColsNod") //Devuelve el número de columnas de nodos.
-      {
-        tmp_gp_szt= GetNumColsNodos();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="nCapasElem") //Devuelve el número de capas de elementos.
-      {
-        tmp_gp_szt= GetNumCapasElementos();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="nFilasElem") //Devuelve el número de filas de elementos.
-      {
-        tmp_gp_szt= GetNumFilasElementos();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="nColsElem") //Devuelve el número de columnas de elementos.
-      {
-        tmp_gp_szt= GetNumColsElementos();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="dim") //Devuelve la dimensión.
-      {
-        tmp_gp_szt= Dimension();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="tipo") //Devuelve el tipo.
-      {
-        tmp_gp_str= GetStrTipo();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else if(cod=="esFilaI")
-      {
-        tmp_gp_bool= EsFilaI();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else if(cod=="esFilaJ")
-      {
-        tmp_gp_bool= EsFilaJ();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else if(cod=="esFilaK")
-      {
-        tmp_gp_bool= EsFilaK();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else if(cod=="esCapaICte")
-      {
-        tmp_gp_bool= EsCapaICte();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else if(cod=="esCapaJCte")
-      {
-        tmp_gp_bool= EsCapaJCte();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else if(cod=="esCapaKCte")
-      {
-        tmp_gp_bool= EsCapaKCte();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else if(cod=="nod")
-      {
-        const Node *ptr_nod= get_node_ptr_from_stack(cod);
-        if(ptr_nod)
-          return any_const_ptr(ptr_nod);
-        else
-          return any_const_ptr();
-      }
-    else if(cod=="tagNod")
-      {
-        const Node *ptr_nod= get_node_ptr_from_stack(cod);
-        if(ptr_nod)
-          tmp_gp_szt= ptr_nod->getTag();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="elem")
-      {
-        const Element *ptr_elem= get_element_ptr_from_stack(cod);
-        if(ptr_elem)
-          return any_const_ptr(ptr_elem);
-        else
-          return any_const_ptr();
-      }
-    else if(cod=="tagElem")
-      {
-        const Element *ptr_elem= get_element_ptr_from_stack(cod);
-        if(ptr_elem)
-          tmp_gp_szt= ptr_elem->getTag();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return SetBase::GetProp(cod);
   }

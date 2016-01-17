@@ -33,7 +33,6 @@
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "boost/any.hpp"
-#include "xc_utils/src/base/CmdStatus.h"
 
 //! @brief Constructor.
 XC::Eje::Eje(GeomSection *sr,const size_t &nd)
@@ -89,26 +88,6 @@ const XC::Spot *XC::Eje::P2(void) const
     return nullptr;
   }
 
-//! @brief Lee un objeto Eje desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - ndiv: Lee el número de divisiones.
-bool XC::Eje::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Eje) Procesando comando: " << cmd << std::endl;
-    if(cmd == "ndiv")
-      {
-        SetNDiv(interpretaInt(status.GetString()));
-        return true;
-      }
-    else
-      return EntGeomSection::procesa_comando(status);
-  }
-
-
 //! @brief Devuelve el conjunto de líneas que tocan al punto.
 std::set<const XC::Eje *> XC::GetLineasTocan(const XC::Spot &p)
   {
@@ -118,42 +97,3 @@ std::set<const XC::Eje *> XC::GetLineasTocan(const XC::Spot &p)
       retval.insert(*i);
     return retval;
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::Eje::GetProp(const std::string &cod) const
-  {
-    
-    static const Spot *ptr= nullptr;;
-    if(cod=="ndiv")
-      {
-        return any_const_ptr(ndiv);
-      }
-    else if(cod=="p1")
-      {
-        ptr= P1();
-        return any_const_ptr(ptr);
-      }
-    else if(cod=="p2")
-      {
-        ptr= P2();
-        return any_const_ptr(ptr);
-      }
-    if(cod == "vertice")
-      {
-        static const Spot *vertice;
-        const size_t ivertice= popSize_t(cod);
-        vertice= GetVertice(ivertice);
-        if(vertice)
-          return any_const_ptr(vertice);
-        else
-          {
-            std::cerr << "Eje::GetProp; no se encontró el vértice: '" 
-                      << ivertice << "'.\n";
-            return any_const_ptr();
-          }
-      }
-    else
-      return EntGeomSection::GetProp(cod);
-  }
-

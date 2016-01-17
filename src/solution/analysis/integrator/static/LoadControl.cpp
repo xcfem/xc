@@ -66,36 +66,10 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 //! @brief Constructor.
 XC::LoadControl::LoadControl(SoluMethod *owr,double dLambda, int numIncr, double min, double max)
   :BaseControl(owr,INTEGRATOR_TAGS_LoadControl,numIncr), deltaLambda(dLambda), dLambdaMin(min), dLambdaMax(max) {}
-
-//! @brief Lee un objeto XC::LoadControl desde archivo
-bool XC::LoadControl::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(LoadControl) Procesando comando: " << cmd << std::endl;
-    if(cmd == "dLambda1")
-      {
-        setDeltaLambda(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else if(cmd == "minLambda")
-      {
-        dLambdaMin= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "maxLambda")
-      {
-        dLambdaMax= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return BaseControl::procesa_comando(status);
-  }
 
 int XC::LoadControl::newStep(void)
   {

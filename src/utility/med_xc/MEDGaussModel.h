@@ -58,7 +58,6 @@ class MEDGaussModel: public MEDObject
 
     void to_med(void) const;
 
-    any_const_ptr GetProp(const std::string &) const;
   };
 } // end of XC namespace
 #endif

@@ -32,7 +32,6 @@
 
 #include <material/section/repres/geom_section/region/RgSccCuadrilatero.h>
 #include <material/section/repres/cell/QuadCell.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
@@ -50,150 +49,6 @@ XC::RgSccCuadrilatero::RgSccCuadrilatero(Material *mat, int numSubdivIJ, int num
   : RgQuadCell(mat,numSubdivIJ,numSubdivJK), vertCoord(vertexCoords)
   {}
   
-
-//! @brief Lee un objeto XC::RgSccCuadrilatero desde archivo
-bool XC::RgSccCuadrilatero::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(RgSccCuadrilatero) Procesando comando: " << cmd << std::endl;
-    if(cmd == "yVertI")
-      {
-        vertCoord(I,Y)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "zVertI")
-      {
-        vertCoord(I,Z)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "yVertJ")
-      {
-        vertCoord(J,Y)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "zVertJ")
-      {
-        vertCoord(J,Z)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "yVertK")
-      {
-        vertCoord(K,Y)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "zVertK")
-      {
-        vertCoord(K,Z)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "yVertL")
-      {
-        vertCoord(L,Y)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "zVertL")
-      {
-        vertCoord(L,Z)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "posVertI")
-      {
-	std::deque<std::string> str_coord= separa_cadena(status.GetString(),",");
-        if(str_coord.size()<2)
-	  std::cerr << "Error; " << cmd 
-		    << " se requieren dos coordenadas." << std::endl;
-        else
-          {
-            const double y= interpretaDouble(str_coord[0]);
-            vertCoord(I,Y)= y;
-            const double z= interpretaDouble(str_coord[1]);
-            vertCoord(I,Z)= z;
-	  }
-        return true;
-      }
-    else if(cmd == "posVertJ")
-      {
-	std::deque<std::string> str_coord= separa_cadena(status.GetString(),",");
-        if(str_coord.size()<2)
-	  std::cerr << "Error; " << cmd 
-		    << " se requieren dos coordenadas." << std::endl;
-        else
-          {
-            const double y= interpretaDouble(str_coord[0]);
-            vertCoord(J,Y)= y;
-            const double z= interpretaDouble(str_coord[1]);
-            vertCoord(J,Z)= z;
-	  }
-        return true;
-      }
-    else if(cmd == "posVertK")
-      {
-	std::deque<std::string> str_coord= separa_cadena(status.GetString(),",");
-        if(str_coord.size()<2)
-	  std::cerr << "Error; " << cmd 
-		    << " se requieren dos coordenadas." << std::endl;
-        else
-          {
-            const double y= interpretaDouble(str_coord[0]);
-            vertCoord(K,Y)= y;
-            const double z= interpretaDouble(str_coord[1]);
-            vertCoord(K,Z)= z;
-	  }
-        return true;
-      }
-    else if(cmd == "posVertL")
-      {
-	std::deque<std::string> str_coord= separa_cadena(status.GetString(),",");
-        if(str_coord.size()<2)
-	  std::cerr << "Error; " << cmd 
-		    << " se requieren dos coordenadas." << std::endl;
-        else
-          {
-            const double y= interpretaDouble(str_coord[0]);
-            vertCoord(L,Y)= y;
-            const double z= interpretaDouble(str_coord[1]);
-            vertCoord(L,Z)= z;
-	  }
-        return true;
-      }
-    else if(cmd == "pMin")
-      {
-	std::deque<std::string> str_coord= separa_cadena(status.GetString(),",");
-        if(str_coord.size()<2)
-	  std::cerr << "Error; " << cmd 
-		    << " se requieren dos coordenadas." << std::endl;
-        else
-          {
-            const double y= interpretaDouble(str_coord[0]);
-            const double z= interpretaDouble(str_coord[1]);
-            setPMin(Pos2d(y,z));
- 	  }
-        return true;
-      }
-    else if(cmd == "pMax")
-      {
-	std::deque<std::string> str_coord= separa_cadena(status.GetString(),",");
-        if(str_coord.size()<2)
-	  std::cerr << "Error; " << cmd 
-		    << " se requieren dos coordenadas." << std::endl;
-        else
-          {
-            const double y= interpretaDouble(str_coord[0]);
-            const double z= interpretaDouble(str_coord[1]);
-            setPMax(Pos2d(y,z));
-	  }
-        return true;
-      }
-    else if(cmd == "swap")
-      {
-	status.GetString();
-        swap();
-        return true;
-      }
-    else
-      return RgQuadCell::procesa_comando(status);
-  }
 
 double XC::RgSccCuadrilatero::getMaxY(void) const
   {
@@ -365,30 +220,6 @@ const XC::VectorCells &XC::RgSccCuadrilatero::getCells(void) const
 XC::RegionSecc *XC::RgSccCuadrilatero::getCopy (void) const
   { return new XC::RgSccCuadrilatero(*this); }
  
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::RgSccCuadrilatero::GetProp(const std::string &cod) const
-  {
-    if(cod=="yVertI") //Coordenada y del primer vértice.
-      return any_const_ptr(vertCoord(I,Y));
-    if(cod=="zVertI") //Coordenada z del primer vértice.
-      return any_const_ptr(vertCoord(I,Z));
-    if(cod=="yVertJ") //Coordenada y del segundo vértice.
-      return any_const_ptr(vertCoord(J,Y));
-    if(cod=="zVertJ") //Coordenada z del segundo vértice.
-      return any_const_ptr(vertCoord(J,Z));
-    if(cod=="yVertK") //Coordenada y del tercer vértice.
-      return any_const_ptr(vertCoord(K,Y));
-    if(cod=="zVertK") //Coordenada z del tercer vértice.
-      return any_const_ptr(vertCoord(K,Z));
-    if(cod=="yVertL") //Coordenada y del cuarto vértice.
-      return any_const_ptr(vertCoord(L,Y));
-    if(cod=="zVertL") //Coordenada z del cuarto vértice.
-      return any_const_ptr(vertCoord(L,Z));
-    else
-      return RgQuadCell::GetProp(cod);
-  }
-
 void XC::RgSccCuadrilatero::Print(std::ostream &s, int flag) const
   {
     s << "\nRgQuadCell Type: RgSccCuadrilatero";

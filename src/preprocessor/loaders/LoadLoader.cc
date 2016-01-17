@@ -28,7 +28,6 @@
 
 #include "LoadLoader.h"
 #include "domain/domain/Domain.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/Lista.h"
 
 //Ground motions.
@@ -76,30 +75,6 @@ void XC::LoadLoader::removeAllFromDomain(void)
     combinaciones.removeAllFromDomain();
     lpatterns.removeAllFromDomain();
   }
-
-
-//! @brief Procesa los comandos que se emplean para definir
-//! las el movimiento del terreno (sismo).
-//! Interpreta los siguientes comandos:
-//!
-//! - ground_motion_record: Define un movimiento de tipo GroundMotionRecord.
-//! - interpolated_ground_motion: Define un movimiento de tipo InterpolatedGroundMotion.
-bool XC::LoadLoader::procesa_ground_motion(const std::string &cmd,CmdStatus &status)
-  {
-    if(cmd == "ground_motion_record")
-      {
-        load_ground_motion<GroundMotionRecord>(cmd,status);
-        return true;
-      }
-    else if(cmd == "interpolated_ground_motion")
-      {
-        load_ground_motion<InterpolatedGroundMotion>(cmd,status);
-        return true;       
-      }
-    else
-      return false;
-  }
-
 
 //! @brief Borra todos los objetos.
 void XC::LoadLoader::clearAll(void)

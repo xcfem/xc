@@ -33,48 +33,8 @@
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-
-//! @brief Lee un objeto Rotacion desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - ang: Define el ángulo de rotación.
-bool XC::Rotacion::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= status.Cmd();
-    if(verborrea>2)
-      std::clog << "(Rotacion) Procesando comando: " << cmd << std::endl;
-    static GEOM_FT ang;
-    static Recta3d eje;
-    if(cmd == "ang")
-      {
-        ang= interpretaDouble(status.GetString());
-        rr= Rotacion3d(eje,ang);
-        return true;
-      }
-    else if(cmd == "eje")
-      {
-        eje.LeeCmd(status);
-        rr= Rotacion3d(eje,ang);
-        return true;
-      }
-    else if(cmd == "puntos_eje")
-      {
-        const std::vector<MapPuntos::Indice> tmp= crea_vector_size_t(status.GetString());
-        if(tmp.size()>1)
-          eje= get_preprocessor()->getCad().getPuntos().getRecta(tmp[0],tmp[1]); 
-        else
-	  std::cerr << "(Rotacion) Procesando comando: " << cmd
-                    << " se necesitan dos puntos para definir el eje." << std::endl;
-        rr= Rotacion3d(eje,ang);
-        return true;
-      }
-    else
-      return TrfGeom::procesa_comando(status);
-  }
 
 //! @brief Aplica la transformación a los elementos del conjunto.
 Pos3d XC::Rotacion::Transforma(const Pos3d &p) const

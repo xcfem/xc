@@ -30,7 +30,6 @@
 #include "SeccionBarraPrismatica.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "boost/any.hpp"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/base/any_const_ptr.h"
@@ -121,42 +120,6 @@ void XC::VectorSeccionesBarraPrismatica::for_each(const std::string &bloque)
         if(*i)
           (*i)->EjecutaBloque(bloque,nmbBlq);
       }
-  }
-
-//! @brief Lee un objeto XC::ProtoBeam desde archivo
-bool XC::VectorSeccionesBarraPrismatica::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(VectorSeccionesBarraPrismatica) Procesando comando: " << cmd << std::endl;
-    if(cmd == "seccion")
-      {
-        std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-        if(fnc_indices.size()<1)
-          std::cerr << "uso: seccion[tag] " << std::endl;
-        const size_t tag_scc= convert_to_int(fnc_indices[0]); //Tag  del componente.
-        SeccionBarraPrismatica *ptr= nullptr;
-        if(tag_scc<size())
-          {
-            ptr= (*this)[tag_scc];
-            if(ptr)
-              ptr->LeeCmd(status);
-          }
-        if(!ptr)
-          {
-            status.GetBloque();
-            std::cerr << "VectorSeccionesBarraPrismatica::procesa_comando; no se encontró la sección de índice:"
-                      << tag_scc << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "for_each")
-      {
-        for_each(status.GetBloque());
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
   }
 
 XC::VectorSeccionesBarraPrismatica::~VectorSeccionesBarraPrismatica(void)
@@ -399,34 +362,4 @@ int XC::VectorSeccionesBarraPrismatica::recvSelf(const CommParameters &cp)
           std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
       }
     return res;
-  }
-
-//! \brief Devuelve la propiedad «cod» de la sección cuyo índice se pasa
-//! como parámetro.
-any_const_ptr XC::VectorSeccionesBarraPrismatica::GetPropSection(const size_t &i,const std::string &cod) const
-  {
-    SeccionBarraPrismatica *ptr= nullptr;
-    if(i<size())
-      ptr= (*this)[i];
-    if(ptr)
-      return ptr->GetProp(cod);
-    else
-      {
-        std::cerr << "VectorSeccionesBarraPrismatica::procesa_comando; no se encontró la sección de índice:"
-                  << i << std::endl;
-        return any_const_ptr();
-      }
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::VectorSeccionesBarraPrismatica::GetProp(const std::string &cod) const
-  {
-    if(cod=="num_secc")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return EntCmd::GetProp(cod);
   }

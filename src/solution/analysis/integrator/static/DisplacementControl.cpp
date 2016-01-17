@@ -74,7 +74,6 @@
 #include <domain/mesh/node/Node.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include <utility/matrix/ID.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
@@ -91,44 +90,6 @@ XC::DisplacementControl::DisplacementControl(SoluMethod *owr,int node, int dof,
   :DispBase(owr,INTEGRATOR_TAGS_DisplacementControl,numIncr),
    theNode(node), theDof(dof), theIncrement(increment),
    theDofID(0), minIncrement(min), maxIncrement(max) {}
-
-//! @brief Lee un objeto XC::DisplacementControl desde archivo
-bool XC::DisplacementControl::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DisplacementControl) Procesando comando: " << cmd << std::endl;
-    if(cmd == "nod")
-      {
-        theNode = interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd == "dof")
-      {
-        theDof= interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd == "dU1")
-      {
-        theIncrement= interpretaDouble(status.GetString());
-        //Actualizamos valores extremos.
-        minIncrement= std::min(theIncrement,minIncrement);
-        maxIncrement= std::max(theIncrement,maxIncrement);
-        return true;
-      }
-    else if(cmd == "minDu")
-      {
-        minIncrement= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "maxDu")
-      {
-        maxIncrement= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return DispBase::procesa_comando(status);
-  }
 
 XC::DisplacementControl::~DisplacementControl(void)
   {
@@ -332,18 +293,3 @@ void XC::DisplacementControl::Print(std::ostream &s, int flag)
     // TO FINISH    
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::DisplacementControl::GetProp(const std::string &cod) const
-  {
-    if(cod=="nod")
-      return any_const_ptr(theNode);
-    else if(cod=="dof")
-      return any_const_ptr(theDof);
-    else if(cod=="deltaU")
-      return any_const_ptr(theIncrement);
-    else
-      return DispBase::GetProp(cod);
-  }

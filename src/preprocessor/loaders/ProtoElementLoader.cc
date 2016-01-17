@@ -28,7 +28,6 @@
 
 #include "ProtoElementLoader.h"
 #include "crea_elem.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 #include "domain/mesh/element/truss_beam_column/truss/CorotTruss.h"
 #include "domain/mesh/element/truss_beam_column/truss/CorotTrussSection.h"

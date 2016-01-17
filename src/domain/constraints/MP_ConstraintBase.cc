@@ -38,7 +38,6 @@
 #include <cstdlib>
 #include <utility/matrix/ID.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include <boost/any.hpp>
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_basic/src/matrices/m_int.h"

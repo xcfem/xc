@@ -32,7 +32,6 @@
 #include "preprocessor/set_mgmt/Set.h"
 #include "domain/mesh/element/Element.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/nucleo/InterpreteRPN.h"
 #include "xc_utils/src/base/utils_any.h"
 
@@ -56,7 +55,7 @@ class MEDTFieldInfo: public MEDFieldInfo
     void libera(void) const;
     void alloc(void) const;
     ArrayGauss *getArrayGauss(void) const;
-    bool procesa_comando(CmdStatus &status);
+
   private:
     MEDTFieldInfo(const MEDTFieldInfo &);
     MEDTFieldInfo &operator=(const MEDTFieldInfo &);
@@ -70,7 +69,7 @@ class MEDTFieldInfo: public MEDFieldInfo
     void to_med(void) const;
     void write(const std::string &) const;
 
-    any_const_ptr GetProp(const std::string &) const;
+
   };
 
 //! @brief Constructor.
@@ -82,24 +81,6 @@ MEDTFieldInfo<T>::MEDTFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)
 template <class T>
 MEDTFieldInfo<T>::~MEDTFieldInfo(void)
   { libera(); }
-
-//! @brief Lectura del objeto desde archivo.
-template <class T>
-bool MEDTFieldInfo<T>::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MEDDblFieldInfo) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "write")
-      {
-        const std::string filename= interpretaString(status.GetString());
-        write(filename);
-        return true;
-      }
-    else    
-      return MEDFieldInfo::procesa_comando(status);
-  }
 
 //! @brief Borra la definición del campo en MEDMEM;
 template <class T>
@@ -240,13 +221,6 @@ void MEDTFieldInfo<T>::to_med(void) const
     campo->setIterationNumber(getXCFieldInfo().getIterationNumber());
     campo->setOrderNumber(getXCFieldInfo().getOrderNumber());
     campo->setTime(getXCFieldInfo().getTime());
-  }
-
-//! @brief Devuelve el valor de la propiedad cuyo código se pasa como parámetro.
-template <class T>
-any_const_ptr MEDTFieldInfo<T>::GetProp(const std::string &cod) const
-  {
-    return MEDFieldInfo::GetProp(cod);
   }
 
 //! @brief Escribe el campo en el archivo cuyo nombre se pasa como parámetro.

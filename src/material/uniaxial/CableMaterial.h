@@ -99,7 +99,7 @@ class CableMaterial : public ElasticBaseMaterial
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    virtual bool procesa_comando(CmdStatus &);
+
   public:
     CableMaterial(int tag, double Prestress, double E, double unitWeightEff, double L_Element);    
     CableMaterial(int tag= 0);    
@@ -132,7 +132,7 @@ class CableMaterial : public ElasticBaseMaterial
     int recvSelf(const CommParameters &);
     
     void Print(std::ostream &s, int flag =0);
-    any_const_ptr GetProp(const std::string &cod) const;
+
     
     //int setParameter(const std::vector<std::string> &argv, Parameter &param);
     //int updateParameter(int parameterID, Information &info);

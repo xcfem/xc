@@ -57,7 +57,6 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "boost/any.hpp"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/element/fvectors/FVector.h"
@@ -74,15 +73,6 @@ XC::Beam2dPointLoad::Beam2dPointLoad(int tag)
 
 XC::Beam2dPointLoad::Beam2dPointLoad(void)
   :BeamPointLoad(0,LOAD_TAG_Beam2dPointLoad) {}
-
-//! @brief Lee un objeto Beam2dPointLoad desde archivo
-bool XC::Beam2dPointLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Beam2dPointLoad) Procesando comando: " << cmd << std::endl;
-    return BeamPointLoad::procesa_comando(status);
-  }
 
 //! @brief Devuelve la dimension del vector fuerza.
 size_t XC::Beam2dPointLoad::getDimVectorFuerza(void) const
@@ -329,8 +319,3 @@ void XC::Beam2dPointLoad::Print(std::ostream &s, int flag)
       << ", " << pAxial() << ") acting at : " << X() << " relative to length\n";
     s << "  elements acted on: " << this->getElementTags();
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::Beam2dPointLoad::GetProp(const std::string &cod) const
-  { return BeamPointLoad::GetProp(cod); }

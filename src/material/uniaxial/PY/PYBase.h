@@ -59,7 +59,7 @@ class PYBase: public UniaxialMaterial
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
 
   public:
     PYBase(int tag, int classtag, int soilType, double mCap, double v50, double dashpot);
@@ -75,7 +75,7 @@ class PYBase: public UniaxialMaterial
     int revertToLastCommit(void);
 
     void Print(std::ostream &s, int flag =0);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

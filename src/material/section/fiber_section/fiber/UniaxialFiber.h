@@ -48,7 +48,7 @@ class UniaxialFiber: public Fiber
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     UniaxialFiber(int classTag);
     UniaxialFiber(int tag, int classTag,double Area);

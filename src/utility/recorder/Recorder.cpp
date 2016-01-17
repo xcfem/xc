@@ -58,20 +58,9 @@
 // What: "@(#) Recorder.cpp, revA"
 
 #include <utility/recorder/Recorder.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 XC::Recorder::Recorder(int classTag)
   :MovableObject(classTag), EntCmd() {}
-
-//! Lee un objeto Recorder desde archivo
-//! Soporta los comandos:
-bool XC::Recorder::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "Recorder; procesando comando: " << cmd << std::endl;
-    return EntCmd::procesa_comando(status);
-  }
 
 int XC::Recorder::restart(void)
   { return 0; }

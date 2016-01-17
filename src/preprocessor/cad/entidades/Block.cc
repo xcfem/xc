@@ -31,7 +31,6 @@
 #include "SupCuadrilatera.h"
 #include "xc_basic/src/matrices/m_int.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "Face.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/node/Node.h"
@@ -79,34 +78,6 @@ XC::Block::Block(Preprocessor *m,const std::string &nombre)
 XC::SetEstruct *XC::Block::getCopy(void) const
   { return new Block(*this); }
 
-
-//! @brief Lee un objeto Block desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - superficie: Lee la superficie que limita al sólido.
-bool XC::Block::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Block) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "set_cara")
-      {
-        const size_t id_cara= interpretaSize_t(status.GetString());
-        inserta(id_cara);
-        return true;
-      }
-    if(cmd == "def_caras")
-      {
-        const std::vector<size_t> claves= crea_vector_size_t(status.GetString());
-        for(std::vector<size_t>::const_iterator i= claves.begin();i!=claves.end();i++)
-          inserta(*i);
-        return true;
-      }
-    else
-      return Body::procesa_comando(status);
-  }
 
 //! @brief Interfaz con VTK.
 int XC::Block::getVtkCellType(void) const
@@ -505,14 +476,3 @@ void XC::Block::Malla(dir_mallado dm)
     if(verborrea>3)
       std::clog << "hecho." << std::endl;
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-//! -dim: Devuelve la dimensión del objeto.
-any_const_ptr XC::Block::GetProp(const std::string &cod) const
-  {
-    return Body::GetProp(cod);
-  }
-

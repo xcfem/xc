@@ -98,7 +98,7 @@ class SetFila: public SetEstruct
       { return fila_elem(i,j,k); }
 
     //void fix(int &tag_fix,const SP_Constraint &);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 template <class FILATTZNOD,class FILATTZELEM>
@@ -124,22 +124,6 @@ template <class FILATTZNOD,class FILATTZELEM>
 SetEstruct *XC::SetFila<FILATTZNOD,FILATTZELEM>::getCopy(void) const
   { return new SetFila<FILATTZNOD,FILATTZELEM>(*this); }
 
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//! Soporta el comando "codigo" o "nombre" (sinónimos) que
-//! devuelven el nombre del objeto del archivo.
-template <class FILATTZNOD,class FILATTZELEM>
-any_const_ptr XC::SetFila<FILATTZNOD,FILATTZELEM>::GetProp(const std::string &cod) const
-  {
-    if(cod=="nnod")
-      {
-        tmp_gp_szt= fila_nod.Size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return SetEstruct::GetProp(cod);
-  }
 
 /* //! @brief Impone desplazamiento nulo en los nodos de este conjunto. */
 /* template <class FILATTZNOD,class FILATTZELEM> */

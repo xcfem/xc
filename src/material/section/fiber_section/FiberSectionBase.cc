@@ -28,7 +28,6 @@
 
 #include "FiberSectionBase.h"
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/nucleo/CmdParser.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -113,13 +112,6 @@ XC::FiberSectionRepr *XC::FiberSectionBase::getFiberSectionRepr(void)
   {
     setup_repres();
     return section_repres;
-  }
-
-void XC::FiberSectionBase::def_section_repres(CmdStatus &status)
-  {
-    setup_repres();
-    section_repres->LeeCmd(status);
-    setupFibers();
   }
 
 //! @brief Crea un nuevo conjunto de fibras.

@@ -51,9 +51,6 @@ class LoadLoader: public Loader
 
     GrupoCombinaciones combinaciones; //!< Contenedor de combinaciones.
 
-    template <class GM>
-    void load_ground_motion(const std::string &,CmdStatus &);
-    bool procesa_ground_motion(const std::string &,CmdStatus &);
   protected:
     friend class Combinacion;
     friend class Domain;
@@ -90,23 +87,6 @@ class LoadLoader: public Loader
     int recvSelf(const CommParameters &);
 
   };
-
-
-
-//! @brief Carga un objeto GroundMotions desde archivo
-template <class GM>
-void XC::LoadLoader::load_ground_motion(const std::string &cmd,CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    if(fnc_indices.size()<1)
-      std::cerr << "sintaxis " << cmd << ": " << cmd << "[codigo] " << std::endl;
-    GM *gm= new GM();
-    if(gm) gm->LeeCmd(status);
-    const std::string cod_gm= convert_to_string(fnc_indices[0]); //Código del ground motion.
-    ground_motions[cod_gm]= gm;
-  }
-
-
 
 } // end of XC namespace
 

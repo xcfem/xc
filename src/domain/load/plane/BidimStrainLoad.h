@@ -39,14 +39,11 @@ class BidimStrainLoad: public BidimLoad
   {
   private:
     std::vector<Vector> deformaciones; //!< Deformaciones impuestas en cada punto de Gauss 1.	
-
-    void set_comp(const std::string &cmd,CmdStatus &status);
-    void set_strain(const std::string &cmd,CmdStatus &status);
   protected:
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     BidimStrainLoad(int tag, const std::vector<Vector> &, const ID &theElementTags);
     BidimStrainLoad(int tag, const size_t &, const Vector &, const ID &theElementTags);
@@ -70,7 +67,7 @@ class BidimStrainLoad: public BidimLoad
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0) const;       
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

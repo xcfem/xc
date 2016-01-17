@@ -27,7 +27,6 @@
 //Element0D.cc
 
 #include "Element0D.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include <domain/mesh/node/Node.h>
 #include "preprocessor/cad/matrices/TritrizPtrNod.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
@@ -50,50 +49,6 @@ XC::Element0D::Vxy::Vxy(void)
  
 XC::Element0D::Vxy::Vxy(const Vector &a,const Vector &b)
   : x(a),y(b) {}
-
-//! @brief Lee un objeto XC::Element0D::Vxy desde archivo
-bool XC::Element0D::Vxy::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Element0D::Vxy) Procesando comando: " << cmd << std::endl;
-    if(cmd == "vectorI")
-      {
-        x.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "vectorJ")
-      {
-        y.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "set_local_i_vector")
-      {
-        std::vector<double> tmp= crea_vector_double(status.GetString());
-        const int nc= tmp.size(); //No. de valores leídos.
-        if(nc!=x.Size()) //Índice y valor escalar
-          std::cerr << "XC::Element0D::Vxy::procesa_comando; error procesando comando: "
-                    << cmd << " se leyeron " << nc
-                    << " valores, se esperaban: " << x.Size() << std::endl;
-        for(int i= 0;i<x.Size();i++)
-          x(i)= tmp[i];
-        return true;
-      }
-    else if(cmd == "set_local_j_vector")
-      {
-        std::vector<double> tmp= crea_vector_double(status.GetString());
-        const int nc= tmp.size(); //No. de valores leídos.
-        if(nc!=y.Size()) //Índice y valor escalar
-          std::cerr << "Element0D::Vxy::procesa_comando; error procesando comando: "
-                    << cmd << " se leyeron " << nc
-                    << " valores, se esperaban: " << y.Size() << std::endl;
-        for(int i= 0;i<y.Size();i++)
-          y(i)= tmp[i];
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 //! @brief Chequea los vectores.
 bool XC::Element0D::Vxy::check(void) const
@@ -127,18 +82,6 @@ bool XC::Element0D::Vxy::check(void) const
     return retval;
   }
 
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::Element0D::Vxy::GetProp(const std::string &cod) const
-  {
-    if(cod == "getVectorI") //Vector x local.
-      return any_const_ptr(x);
-    else if(cod == "getVectorJ") //Vector y local.
-      return any_const_ptr(y);
-    else
-      return EntCmd::GetProp(cod);
-  }
-
 //! Constructor.
 XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2)
   : ElementBase<2>(tag,classTag),dimension(1), numDOF(0), transformation(3,3)
@@ -168,36 +111,6 @@ XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2,int dim, const Ve
 //! @brief Devuelve la dimensión del elemento.
 size_t XC::Element0D::getDimension(void) const
   { return 0; }
-
-//! @brief Lee un objeto XC::ZeroLength desde archivo
-bool XC::Element0D::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Element0D) Procesando comando: " << cmd << std::endl;
-    if(cmd == "nodes") //Al cambiar los nodos hay que llamar a setUp
-      {
-	const std::vector<int> inodos= crea_vector_int(status.GetString());
-        theNodes.set_id_nodos(inodos);
-        setUp(theNodes.getTagNode(0),theNodes.getTagNode(1),getX(),getY());
-        return true;
-      }
-    else if(cmd == "vects")
-      {
-        Vxy vxy;
-        vxy.LeeCmd(status);
-        vxy.check();
-        setUpVectors(vxy.getX(),vxy.getY());
-        return true;
-      }
-    else if(cmd == "transformation")
-      {
-        transformation.LeeCmd(status);
-        return true;
-      }
-    else
-      return ElementBase<2>::procesa_comando(status);
-  }
 
 int XC::Element0D::getNumDOF(void) const
   { return numDOF; }
@@ -459,27 +372,3 @@ int XC::Element0D::getVtkCellType(void) const
 int XC::Element0D::getMEDCellType(void) const
   { return MED_SEG2; }
 
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::Element0D::GetProp(const std::string &cod) const
-  {
-    if(cod == "getDim")
-      return any_const_ptr(dimension);
-    if(cod == "getTrf") //Matriz de la transformación.
-      return any_const_ptr(transformation);
-    else if(cod=="getVectorI")
-      return get_prop_vector(getX());
-    else if(cod=="getVectorJ")
-      return get_prop_vector(getY());
-    else if(cod=="getVectorK")
-      return get_prop_vector(getZ());
-    else if(cod=="getVertices")
-      {
-	static m_int retval(1,1,0);
-        if(theNodes[0]) retval(1,1)= theNodes[0]->getIdx();
-        //if(theNodes[1]) retval(2,1)= theNodes[1]->getIdx();
-        return any_const_ptr(retval);
-      }
-    else
-      return ElementBase<2>::GetProp(cod);
-  }

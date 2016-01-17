@@ -37,7 +37,6 @@
 #include "boost/lexical_cast.hpp"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/nucleo/InterpreteRPN.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_basic/src/matrices/m_int.h"
 
 namespace XC{
@@ -57,7 +56,7 @@ class MatrizPtrBase: public MatrizT<T *,std::vector<T *> >, public EntCmd
     typedef typename m_ptr::reference reference;
     typedef typename m_ptr::const_reference const_reference;
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
 
     //! @brief Constructor.
     MatrizPtrBase(const size_t &f=0,const size_t &c=0)
@@ -68,7 +67,6 @@ class MatrizPtrBase: public MatrizT<T *,std::vector<T *> >, public EntCmd
 
     void dim(const size_t &,const size_t &);
 
-    void EjecutaBloqueForEach(CmdStatus &,const std::string &);
     std::vector<int> getTagsObjsFila(const size_t &);
     std::vector<int> getTagsObjsColumna(const size_t &);
     std::vector<int> getTagsObjsInterioresFila(const size_t &);
@@ -81,104 +79,6 @@ class MatrizPtrBase: public MatrizT<T *,std::vector<T *> >, public EntCmd
 template <class T>
 void XC::MatrizPtrBase<T>::dim(const size_t &nRows,const size_t &nCols)
   { this->resize(nRows,nCols,NULL); }
-
-//! @brief Procesa comandos desde archivo
-template <class T>
-bool XC::MatrizPtrBase<T>::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MatrizPtrBase) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "for_each")
-      {
-        const std::string &bloque= status.GetBloque();
-        EjecutaBloqueForEach(status,bloque);
-        return true;
-      }
-    else if(cmd == "dim")
-      {
-	std::vector<size_t> dim(crea_vector_size_t(status.GetString()));
-        if(dim.size()<2)
-          {
-            const std::string posLectura= get_ptr_status()->getPosicionLecturaActual();
-	    std::clog << "(MatrizPtrBase) Procesando comando: '" << cmd
-                      << "'; se esperaban dos valores."
-                      << posLectura << std::endl;
-          }
-        this->resize(dim[0],dim[1],NULL);
-        return true;
-      }
-    else if(cmd == "obj")
-      {
-        const CmdParser &parser= status.Parser();
-        if(parser.TieneIndices())
-          {
-            interpreta(parser.GetIndices());
-            if(InterpreteRPN::HayArgumentos(2,cmd))
-              {
-                const size_t k= convert_to_size_t(InterpreteRPN::Pila().Pop()); 
-                const size_t j= convert_to_size_t(InterpreteRPN::Pila().Pop()); 
-                T *ptr= (*this)(j,k);
-                if(ptr)
-                  ptr->LeeCmd(status);
-                else
-	          std::clog << "(MatrizPtrBase) Procesando comando: '" << cmd
-                            << "'; no se encontró el objeto de índices: (" << j << ',' << k << ").\n";
-              }
-          }
-        else
-	  std::cerr << "(MatrizPtrBase) Procesando comando: '" << cmd
-                            << "'; faltan los índices del punto.\n";
-        return true;
-      }
-    else if(cmd == "objs_fila")
-      {
-	std::cerr << "deprecated." << std::endl;
-        /* const std::string &bloque= status.GetBloque(); */
-        /* const CmdParser &parser= status.Parser(); */
-        /* if(parser.TieneIndices()) */
-        /*   { */
-        /*     interpreta(parser.GetIndices()); */
-        /*     if(InterpreteRPN::HayArgumentos(1,cmd)) */
-        /*       { */
-        /*         const size_t f= convert_to_size_t(InterpreteRPN::Pila().Pop()); */
-        /*         this->EjecutaBloqueObjsFila(f,status,bloque); */
-        /*       } */
-        /*   } */
-        /* else */
-	/*   std::cerr << "(MatrizPtrBase) Procesando comando: '" << cmd */
-        /*                     << "'; faltan los índices del objeto.\n"; */
-        return true;
-      }
-    else if(cmd == "objs_columna")
-      {
-	std::cerr << "deprecated." << std::endl;
-        /* const std::string &bloque= status.GetBloque(); */
-        /* const CmdParser &parser= status.Parser(); */
-        /* if(parser.TieneIndices()) */
-        /*   { */
-        /*     interpreta(parser.GetIndices()); */
-        /*     if(InterpreteRPN::HayArgumentos(1,cmd)) */
-        /*       { */
-        /*         const size_t c= convert_to_size_t(InterpreteRPN::Pila().Pop()); */
-        /*         this->EjecutaBloqueObjsColumna(c,status,bloque); */
-        /*       } */
-        /*   } */
-        /* else */
-	/*   std::cerr << "(MatrizPtrBase) Procesando comando: '" << cmd */
-        /*                     << "'; faltan los índices del objeto.\n"; */
-        return true;
-      }
-    else if(cmd == "objs_interiores")
-      {
-	std::cerr << "deprecated. Use Python." << std::endl;
-        //this->ForEachInteriorObj(status,status.GetBloque());
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 //! @brief Devuelve verdadero si está vacía o si los punteros son nulos.
 template <class T>
@@ -210,20 +110,6 @@ bool MatrizPtrBase<T>::HasNull(void) const
               }
       }
     return retval;
-  }
-
-//! @brief Solicita a cada una de las componentes que ejecute el bloque que
-//! se pasa como parámetro.
-template <class T>
-void MatrizPtrBase<T>::EjecutaBloqueForEach(CmdStatus &status,const std::string &blq)
-  {
-    const std::string nmbBlq= nombre_clase()+":for_each";
-    for(iterator i= this->begin();i!= this->end();i++)
-      {
-        T *ptr= *i;
-        if(ptr)
-          ptr->EjecutaBloque(status,blq,nmbBlq);
-      }
   }
 
 //! @brief Pide a cada uno de los objetos de la fila que ejecuten el código que se pasa como

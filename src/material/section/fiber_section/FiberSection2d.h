@@ -82,7 +82,7 @@ class FiberSection2d: public FiberSectionBase
     friend class DqFibras;
     double get_strain(const double &y) const;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     FiberSection2d(MaterialLoader *mat_ldr= nullptr); 
     FiberSection2d(int tag,MaterialLoader *mat_ldr= nullptr); 
@@ -123,7 +123,7 @@ class FiberSection2d: public FiberSectionBase
     // AddingSensitivity:END ///////////////////////////////////////////
     inline virtual double getCdgZ(void) const
       { return 0.0; }
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 FiberSection2d FiberSectionReprToFiberSection2d(const int &tag,const FiberSectionRepr &fiberSectionRepr);

@@ -28,7 +28,6 @@
 
 #include "LineaBase.h"
 #include "preprocessor/Preprocessor.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "Pnt.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
@@ -52,58 +51,6 @@ const XC::Pnt *XC::LineaBase::P1(void) const
 //! @brief Devuelve un apuntador (constante) al punto final.
 const XC::Pnt *XC::LineaBase::P2(void) const
   { return p2; }
-
-//! @brief Lee un objeto LineaBase desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - p1: Lee el punto inicial.
-//! - p2: Lee el punto final.
-bool XC::LineaBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(LineaBase) Procesando comando: " << cmd << std::endl;
-    if(cmd == "p1")
-      {
-        const MapPuntos::Indice id_punto= interpretaSize_t(status.GetString());
-        SetVertice(1,BuscaPnt(id_punto));
-	if(!p1)
-	  std::cerr << "LineaBase; " << cmd << " , no se encontró el punto: '" 
-                    << id_punto << "'.\n";
-        return true;
-      }
-    else if(cmd == "p2")
-      {
-        const MapPuntos::Indice id_punto= interpretaSize_t(status.GetString());
-        SetVertice(2,BuscaPnt(id_punto));
-	if(!p2)
-	  std::cerr << "LineaBase; " << cmd << " , no se encontró el punto: '" 
-                    << id_punto << "'.\n";
-        return true;
-      }
-    else if(cmd == "puntos")
-      {
-        std::vector<MapPuntos::Indice> tmp= crea_vector_size_t(status.GetString());
-        if(tmp.size()>1)
-          {
-            if(tmp[0]==tmp[1])
-	      std::cerr << "LineaBase; " << cmd
-                   << ", los extremos de la línea coinciden: '["
-                   << tmp[0] << "," << tmp[1] << "]'.\n";
-            SetVertice(1,BuscaPnt(tmp[0]));
-            SetVertice(2,BuscaPnt(tmp[1]));
-          }
-        else
-	  std::cerr << "LineaBase; " << cmd
-                   << ", se esperaban los identificadores de dos puntos"
-                   << ", se obtuvo: '["
-                   << tmp[0] << "," << tmp[1] << "]'.\n";
-        return true;
-      }
-    else
-      return Edge::procesa_comando(status);
-  }
 
 //! @brief Devuelve el vértice de índice i.
 const XC::Pnt *XC::LineaBase::GetVertice(const size_t &i) const
@@ -154,14 +101,3 @@ void XC::LineaBase::SetVertices(Pnt *pA,Pnt *pB)
                 << std::endl; 
     actualiza_topologia();
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-//! -getVtkCellType: Tipo de celda adecuado para VTK.
-any_const_ptr XC::LineaBase::GetProp(const std::string &cod) const
-  {
-    return Edge::GetProp(cod);
-  }
-

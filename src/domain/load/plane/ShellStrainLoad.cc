@@ -28,7 +28,6 @@
 
 #include "ShellStrainLoad.h"
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -41,20 +40,3 @@ XC::ShellStrainLoad::ShellStrainLoad(int tag, const ID &theElementTags)
 //! @brief Constructor.
 XC::ShellStrainLoad::ShellStrainLoad(int tag)
   :BidimStrainLoad(tag,4,Vector(8)) {}
-
-//! @brief Lee un objeto ShellStrainLoad desde archivo
-bool XC::ShellStrainLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ShellStrainLoad) Procesando comando: " << cmd << std::endl;
-
-    return BidimStrainLoad::procesa_comando(status);
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ShellStrainLoad::GetProp(const std::string &cod) const
-  {
-    return BidimStrainLoad::GetProp(cod);
-  }

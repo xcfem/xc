@@ -40,7 +40,7 @@ namespace XC {
 class BidimLoad : public ElementBodyLoad
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     BidimLoad(int tag, int classTag,const ID &theElementTags);
     BidimLoad(int tag, int classTag);
@@ -48,7 +48,7 @@ class BidimLoad : public ElementBodyLoad
     virtual std::string Categoria(void) const;
 
     void Print(std::ostream &s, int flag =0) const;
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

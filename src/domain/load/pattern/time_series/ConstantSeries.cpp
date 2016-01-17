@@ -65,7 +65,6 @@
 #include <domain/load/pattern/time_series/ConstantSeries.h>
 #include <utility/matrix/Vector.h>
 #include <classTags.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 //! @brief Constructor.
 XC::ConstantSeries::ConstantSeries(double theFactor)

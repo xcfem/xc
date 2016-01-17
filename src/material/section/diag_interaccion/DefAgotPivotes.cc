@@ -27,38 +27,10 @@
 //DefAgotPivotes.cc
 
 #include "DefAgotPivotes.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 XC::DefAgotPivotes::DefAgotPivotes(const double &eA,const double &eB,const double &eC)
  : eps_agot_A(eA), eps_agot_B(eB), eps_agot_C(eC) {}
-
-//! @brief Lee un objeto DefAgotPivotes desde archivo
-bool XC::DefAgotPivotes::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string cabecera_error= "(DefAgotPivotes) Procesando comando: '"+cmd+"'";
-    if(verborrea>2)
-      std::clog << cabecera_error << std::endl;
-
-    if(cmd == "epsAgotA")
-      {
-        eps_agot_A= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "epsAgotB")
-      {
-        eps_agot_B= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "epsAgotC")
-      {
-        eps_agot_C= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 const double &XC::DefAgotPivotes::getDefAgotPivoteA(void) const
   { return eps_agot_A; }
@@ -78,17 +50,3 @@ void XC::DefAgotPivotes::setDefAgotPivoteC(const double &v)
 
 const double XC::DefAgotPivotes::getIncEpsAB(const double &ndiv) const
   { return (eps_agot_A-eps_agot_B)/ndiv; }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::DefAgotPivotes::GetProp(const std::string &cod) const
-  {
-    if(cod=="epsAgotA")
-      return any_const_ptr(eps_agot_A);
-    else if(cod=="epsAgotB")
-      return any_const_ptr(eps_agot_B);
-    else if(cod=="epsAgotC")
-      return any_const_ptr(eps_agot_C);
-    else
-      return EntCmd::GetProp(cod);
-  }

@@ -31,7 +31,6 @@
 
 #include <material/section/repres/geom_section/reinfLayer/BarraSuelta.h>
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_basic/src/texto/cadena_carac.h"
 
@@ -46,40 +45,6 @@ XC::BarraSuelta::BarraSuelta(ListReinfLayer *owr,Material *mat, double reinfBarA
 XC::BarraSuelta::BarraSuelta(const ReinfBar &bar)
   : ReinfLayer(nullptr,bar.getMaterialPtr(),1,bar.getDiameter(),bar.getArea()),posit(getPosition()) 
   { set_owner(const_cast<EntCmd *>(bar.Owner())); }
-
-//! @brief Lee un objeto XC::BarraSuelta desde archivo
-bool XC::BarraSuelta::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BarraSuelta) Procesando comando: " << cmd << std::endl;
-    if(cmd == "y")
-      {
-        posit(0)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "z")
-      {
-        posit(1)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "pos")
-      {
-	std::deque<std::string> str_coord= separa_cadena(status.GetString(),",");
-        if(str_coord.size()<2)
-	  std::cerr << "Error; " << cmd 
-		    << " se requieren dos coordenadas." << std::endl;
-        else
-          {
-            posit(0)= interpretaDouble(str_coord[0]);
-            posit(1)= interpretaDouble(str_coord[1]);
-	  }
-        return true;
-      }
-    else
-      return ReinfLayer::procesa_comando(status);
-  }
-
 
 void XC::BarraSuelta::setPosition(const Vector &Position)
   { posit= Position; }
@@ -106,18 +71,6 @@ const XC::Vector &XC::BarraSuelta::getPosition(void) const
 
 XC::ReinfLayer *XC::BarraSuelta::getCopy (void) const
   { return new BarraSuelta(*this); }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::BarraSuelta::GetProp(const std::string &cod) const
-  {
-    if(cod=="y")
-      return any_const_ptr(posit(0));
-    if(cod=="z")
-      return any_const_ptr(posit(1));
-    else
-      return ReinfLayer::GetProp(cod);
-  }
 
 void XC::BarraSuelta::Print(std::ostream &s, int flag) const
   {

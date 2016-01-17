@@ -70,7 +70,6 @@
 #include <utility/matrix/Vector.h>
 
 #include <domain/mesh/element/Information.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MovableVector.h"
 
@@ -83,31 +82,6 @@ XC::CableMaterial::CableMaterial(int tag, double PRESTRESS, double e, double UNI
 XC::CableMaterial::CableMaterial(int tag)
   :ElasticBaseMaterial(tag,MAT_TAG_CableMaterial, 0.0),
    Ps(0.0), Mue(0.0), L(0.0) {}
-
-//! @brief Lee un objeto XC::ElasticBaseMaterial desde archivo
-bool XC::CableMaterial::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(CableMaterial) Procesando comando: " << cmd << std::endl;
-    if(cmd == "prestress")
-      {
-        Ps= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "L")
-      {
-        L= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "unitWeightEff")
-      {
-        Mue= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return ElasticBaseMaterial::procesa_comando(status);
-  }
 
 void XC::CableMaterial::setLength(const double &l)
   { L= l; }
@@ -287,22 +261,7 @@ void XC::CableMaterial::Print(std::ostream &s, int flag)
     s << "  E: " << E << " Prestress: " << Ps << std::endl;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::CableMaterial::GetProp(const std::string &cod) const
-  {
-    if(cod=="getPreStress")
-      return any_const_ptr(Ps);
-    else if((cod=="getUnitWeightEff"))
-      return any_const_ptr(Mue);
-    else if((cod=="getL"))
-      return any_const_ptr(L);
-    else
-      return ElasticBaseMaterial::GetProp(cod);
-  }
-
-//int
-//XC::CableMaterial::setParameter(const std::vector<std::string> &argv, Parameter &param)
+//int XC::CableMaterial::setParameter(const std::vector<std::string> &argv, Parameter &param)
 //{
 //        if (argv[0] == "E") {
 //                info.theType = DoubleType;

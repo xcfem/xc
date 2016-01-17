@@ -34,7 +34,6 @@
 #include <domain/load/pattern/time_series/PathSeries.h>
 #include <domain/load/pattern/time_series/PathTimeSeries.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 
@@ -82,70 +81,6 @@ void XC::MotionHistory::setAccelHistory(const TimeSeries *ts)
 
 XC::TimeSeries *XC::MotionHistory::getAccelHistory(void)
   { return theAccelSeries; }
-
-//! @brief Lee un objeto MotionHistory desde archivo
-bool XC::MotionHistory::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MotionHistory) Procesando comando: " << cmd << std::endl;
-    if(cmd == "dT")
-      {
-        delta= interpretaDouble(status.GetString()); 
-        return true;
-      }
-    else if(cmd == "accel")
-      {
-        clearSeries();
-        theAccelSeries = new XC::PathSeries();
-        if(theAccelSeries)
-          theAccelSeries->LeeCmd(status); 
-        return true;
-      }
-    else if(cmd == "accel_time")
-      {
-        clearSeries();
-        theAccelSeries = new XC::PathTimeSeries();
-        if(theAccelSeries)
-          theAccelSeries->LeeCmd(status); 
-        return true;
-      }
-    else if(cmd == "vel")
-      {
-        if(!theVelSeries)
-          calcVel();
-        if(theVelSeries)
-           theVelSeries->LeeCmd(status);
-        else
-          {
-            status.GetBloque();
-            std::cerr << "(MotionHistory) Procesando comando: '" << cmd
-                      << "' no se ha podido calcular la serie de velocidades." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "disp")
-      {
-        if(!theDispSeries)
-          calcDisp();
-        if(theDispSeries)
-          theDispSeries->LeeCmd(status);
-        else
-          {
-            status.GetBloque();
-            std::cerr << "(MotionHistory) Procesando comando: '" << cmd
-                      << "' no se ha podido calcular la serie de desplazamientos." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "trapezoidal_integrator")
-      {
-        setIntegrator(new TrapezoidalTimeSeriesIntegrator());
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 XC::MotionHistory::~MotionHistory(void)
   {
@@ -360,59 +295,4 @@ void XC::MotionHistory::loadAccelTimeFile(const std::string &fileNameAccel, cons
     theAccelSeries = new PathTimeSeries(fileNameAccel, fileNameTime, theFactor);
     if(!theAccelSeries)
       std::cerr << "XC::MotionHistory::loadAccelFile - unable to create XC::PathTimeSeries\n";
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::MotionHistory::GetProp(const std::string &cod) const
-  {
-    if(cod == "getDelta")
-      return any_const_ptr(delta);
-    else if(cod == "getDuration")
-      {
-        tmp_gp_dbl= getDuration();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getNumDataPoints")
-      {
-        tmp_gp_szt= getNumDataPoints();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "getPeakAccel")
-      {
-        tmp_gp_dbl= getPeakAccel();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getPeakVel")
-      {
-        tmp_gp_dbl= getPeakVel();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getPeakDisp")
-      {
-        tmp_gp_dbl= getPeakDisp();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getAccel")
-      {
-        const double time= popDouble(cod);
-        tmp_gp_dbl= getAccel(time);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getVel")
-      {
-        const double time= popDouble(cod);
-        tmp_gp_dbl= getVel(time);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getDisp")
-      {
-        const double time= popDouble(cod);
-        tmp_gp_dbl= getDisp(time);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return EntCmd::GetProp(cod);
   }

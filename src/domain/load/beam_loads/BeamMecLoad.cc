@@ -29,7 +29,6 @@
 #include <domain/load/beam_loads/BeamMecLoad.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/element/Element1D.h"
@@ -42,26 +41,6 @@ XC::BeamMecLoad::BeamMecLoad(int tag,int classTag,const double &wt,const double 
 
 XC::BeamMecLoad::BeamMecLoad(int tag,int classTag)
   :BeamLoad(tag, classTag), Trans(0.0), Axial(0.0) {}
-
-//! @brief Lee un objeto BeamMecLoad desde archivo
-bool XC::BeamMecLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BeamMecLoad) Procesando comando: " << cmd << std::endl;
-    if(cmd == "trans")
-      {
-        Trans= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "axial")
-      {
-        Axial= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return BeamLoad::procesa_comando(status);
-  }
 
 const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor)
   {
@@ -192,34 +171,4 @@ int XC::BeamMecLoad::recvData(const CommParameters &cp)
     int res= BeamLoad::recvData(cp);
     res+= cp.receiveDoubles(Trans,Axial,getDbTagData(),CommMetaData(5));
     return res;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::BeamMecLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "axial")
-      return any_const_ptr(Axial);
-    else if(cod == "trans")
-      return any_const_ptr(Trans);
-    else if(cod == "getLocalForces")
-      {
-        static m_double retval;
-        retval= matrix_to_m_double(getLocalForces());
-        return any_const_ptr(retval);
-      }
-    else if(cod == "getLocalMoments")
-      {
-        static m_double retval;
-        retval= matrix_to_m_double(getLocalMoments());
-        return any_const_ptr(retval);
-      }
-    else if(cod == "getGlobalForces")
-      {
-        static m_double retval;
-        retval= matrix_to_m_double(getGlobalForces());
-        return any_const_ptr(retval);
-      }
-    else
-      return BeamLoad::GetProp(cod);
   }

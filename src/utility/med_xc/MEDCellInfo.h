@@ -46,8 +46,6 @@ class MEDCellInfo: public MEDCellBaseInfo
     void nueva_celda(size_t i,const MED_EN::medGeometryElement &,const ID &,const MEDMapIndices &);
 
     void to_med(MEDMEM::MESHING &) const;
-
-    any_const_ptr GetProp(const std::string &) const;
   };
 } // end of XC namespace
 #endif

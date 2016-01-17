@@ -28,7 +28,6 @@
 
 
 #include <material/uniaxial/steel/SteelBase.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MovableVector.h"
 
@@ -62,51 +61,6 @@ double XC::SteelBase::getFy(void) const
   { return fy; }
 
 
-//! @brief Lee un objeto XC::SteelBase desde archivo
-bool XC::SteelBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SteelBase) Procesando comando: " << cmd << std::endl;
-    if(cmd == "fy")
-      {
-        setFy(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else if(cmd == "E")
-      {
-        setInitialTangent(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else if(cmd == "b")
-      {
-        b= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "a1")
-      {
-        a1= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "a2")
-      {
-        a2= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "a3")
-      {
-        a3= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "a4")
-      {
-        a4= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return UniaxialMaterial::procesa_comando(status);
-  }
-
 //! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
 int XC::SteelBase::sendData(CommParameters &cp)
   {
@@ -123,32 +77,4 @@ int XC::SteelBase::recvData(const CommParameters &cp)
     res+= cp.receiveDoubles(fy,E0,b,getDbTagData(),CommMetaData(2));
     res+= cp.receiveDoubles(a1,a2,a3,a4,getDbTagData(),CommMetaData(3));
     return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::SteelBase::GetProp(const std::string &cod) const
-  {
-    if(cod=="fy")
-      return any_const_ptr(fy);
-    else if(cod=="E0")
-      return any_const_ptr(E0);
-    else if(cod=="b")
-      return any_const_ptr(b);
-    else if(cod=="a1")
-      return any_const_ptr(a1);
-    else if(cod=="a2")
-      return any_const_ptr(a2);
-    else if(cod=="a3")
-      return any_const_ptr(a3);
-    else if(cod=="a4")
-      return any_const_ptr(a4);
-    else if(cod== "Esh")
-      return any_const_ptr(getEsh());
-    else if(cod== "epsy")
-      return any_const_ptr(getEpsy());
-    else
-      return UniaxialMaterial::GetProp(cod);
   }

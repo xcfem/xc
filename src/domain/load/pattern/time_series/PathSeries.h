@@ -84,7 +84,7 @@ class PathSeries : public PathSeriesBase
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors
     PathSeries(const Vector &thePath,double pathTimeIncr = 1.0, double cfactor = 1.0);
@@ -108,7 +108,7 @@ class PathSeries : public PathSeriesBase
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

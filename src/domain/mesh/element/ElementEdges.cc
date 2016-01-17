@@ -31,7 +31,6 @@
 #include "domain/domain/Domain.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_basic/src/matrices/m_int.h"
 #include "utility/matrix/ID.h"
 
@@ -39,17 +38,6 @@
 //! @brief Constructor.
 XC::ElementEdges::ElementEdges(void)
   : theEdges(0) {}
-
-
-//! @brief Lee un objeto ElementEdges desde archivo
-bool XC::ElementEdges::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElementEdges) Procesando comando: " << cmd << std::endl;
-
-    return EntCmd::procesa_comando(status);
-  }
 
 //! @brief Asigna los punteros a partir de los identificadores de elemento.
 void XC::ElementEdges::setPtrs(Domain *theDomain, const ID &theElementTags, const ID &theEdgesIndex)
@@ -127,30 +115,3 @@ XC::ElementEdges::const_reference XC::ElementEdges::operator[](const size_t &i) 
   { return theEdges[i]; }
 XC::ElementEdges::reference XC::ElementEdges::operator[](const size_t &i)
   { return theEdges[i]; }
-
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ElementEdges::GetProp(const std::string &cod) const
-  {
-    if(cod == "num_edges")
-      {
-        tmp_gp_szt= theEdges.size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getTags")
-      {
-        const size_t sz= theEdges.size();
-	static m_int retval;
-        retval= m_int(1,sz,0);
-        for(size_t i=0; i<sz; i++)
-          {
-            const Element *tmp= theEdges[i].getElementPtr();
-            if(tmp)
-              retval(1,i)= tmp->getTag();
-          }
-        return any_const_ptr(retval);
-      }
-    else
-      return EntCmd::GetProp(cod);
-  }

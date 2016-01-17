@@ -62,7 +62,6 @@
 
 #include <utility/tagged/TaggedObject.h>
 #include <utility/tagged/storage/ArrayOfTaggedObjects.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 
@@ -112,30 +111,6 @@ XC::ArrayOfTaggedObjects &XC::ArrayOfTaggedObjects::operator=(const ArrayOfTagge
     theComponents= tagged_vector(otro.theComponents.size(),nullptr);
     copia(otro);
     return *this;
-  }
-
-
-//! @brief Lee un objeto XC::ArrayOfTaggedObjects desde archivo
-bool XC::ArrayOfTaggedObjects::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ArrayOfTaggedObjects) Procesando comando: " << cmd << std::endl;
-    if(status.Parser().TieneIndices())
-      {
-        int tag_obj= 0;
-        std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-        if(fnc_indices.size()>0)
-          {
-            tag_obj= convert_to_int(fnc_indices[0]); //Tag del objeto.
-            getComponentPtr(tag_obj)->LeeCmd(status);
-          }
-        else
-          std::cerr << "sintaxis: obj[tag]" << std::endl;
-        return true;
-      }
-    else
-      return TaggedObjectStorage::procesa_comando(status);
   }
 
 
@@ -406,14 +381,6 @@ void XC::ArrayOfTaggedObjects::clearAll(bool invokeDestructors)
         numComponents= 0;
       }
   }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! ncomp: Devuelve el número de componentes).
-any_const_ptr XC::ArrayOfTaggedObjects::GetProp(const std::string &cod) const
-  { return TaggedObjectStorage::GetProp(cod); }
 
 //! @brief method which invokes Print on all components
 void XC::ArrayOfTaggedObjects::Print(std::ostream &s, int flag)

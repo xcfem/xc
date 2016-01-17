@@ -42,7 +42,6 @@
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/UserDefinedHingeIntegration.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/DistHingeIntegration.h"
 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 
@@ -77,18 +76,6 @@ XC::BeamIntegratorLoader &XC::BeamIntegratorLoader::operator=(const BeamIntegrat
     Loader::operator=(otro);
     std::cerr << "No se debe asignar este objeto." << std::endl;
     return *this;
-  }
-
-
-
-//! @brief Lee un objeto BeamIntegratorLoader desde archivo
-bool XC::BeamIntegratorLoader::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BeamIntegratorLoader) Procesando comando: " << cmd << std::endl;
-
-    return Loader::procesa_comando(status);
   }
 
 XC::BeamIntegratorLoader::~BeamIntegratorLoader(void)
@@ -141,28 +128,3 @@ const XC::BeamIntegration *XC::BeamIntegratorLoader::find_ptr(const std::string 
       return nullptr; 
   }
 
-//! @brief Ejecuta el bloque que se pasa como parámetro.
-void XC::BeamIntegratorLoader::ejecuta_bloque_for_each(CmdStatus &status,const std::string &bloque)
-  {
-    const std::string &nmbBlq= nombre_clase()+":for_each";
-    iterator i= begin();
-    for(;i!= end();i++)
-      (*i).second->EjecutaBloque(status,bloque,nmbBlq);
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::BeamIntegratorLoader::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "BeamIntegratorLoader::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="numIntegradores")
-      {
-        tmp_gp_szt= integradores.size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return Loader::GetProp(cod);
-  }

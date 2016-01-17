@@ -63,7 +63,6 @@
 #include "CrdTransf3d.h"
 #include <utility/matrix/Vector.h>
 #include <domain/mesh/node/Node.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
@@ -201,29 +200,6 @@ XC::CrdTransf3d::CrdTransf3d(int tag, int classTag)
 XC::CrdTransf3d::CrdTransf3d(int tag, int class_tag, const Vector &vecInLocXZPlane)
   : CrdTransf(tag, class_tag,3)
   { set_xz_vector(vecInLocXZPlane); }
-
-//! @brief Lee el objeto desde archivo.
-bool XC::CrdTransf3d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(CrdTransf2d) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "set_xz_vector")
-      {
-        Vector vecInLocXZPlane(3);
-        vecInLocXZPlane.LeeCmd(status);
-	set_xz_vector(vecInLocXZPlane);
-        return true;
-      }
-    else if(cmd == "gira")
-      {
-        gira(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else
-      return CrdTransf::procesa_comando(status);
-  }
 
 //! @brief check rigid joint offset for node I
 void XC::CrdTransf3d::set_rigid_joint_offsetI(const Vector &rigJntOffset1)
@@ -513,19 +489,5 @@ int XC::CrdTransf3d::recvData(const CommParameters &cp)
     if(res<0)
       std::cerr << "CrdTransf::recvData - failed to receive data.\n";
     return res;    
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::CrdTransf3d::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "CrdTransf3d::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="getVectorK")
-      return get_prop_vector(getK());
-    else
-      return CrdTransf::GetProp(cod);
   }
 

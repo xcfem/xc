@@ -70,50 +70,7 @@ ELEM_LOAD *new_elem_load(LoadPattern *lp,int &tag_el)
     return load;
   }
 
-//! @brief Añade una carga sobre elementos.
-template <class ELEM_LOAD>
-void procesa_elem_load(LoadPattern *lp,int &tag_el,const std::string &cmd,CmdStatus &status)
-  {
-    ELEM_LOAD *load= new_elem_load<ELEM_LOAD>(lp,tag_el);
-    if(load)
-      load->LeeCmd(status);
-    else
-      std::cerr << cmd << ": no se pudo crear la carga sobre elementos: " 
-                << tag_el << std::endl;
-  }
-
 ElementalLoad *procesa_element_load(LoadPattern *,int &,const std::string &);
-
-//! @brief Procesa los comandos correspondientes a cargas sobre elemento
-bool procesa_comando_element_load(LoadPattern *lp,int &tag_el,const std::string &cmd,CmdStatus &status);
-
-//! @brief OBSOLETA Añade una carga sobre elementos.
-template <class ELEM_LOAD>
-void procesa_elem_edge_load(LoadPattern *lp,int &tag_el,const std::string &cmd,CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(lp);
-    if(fnc_indices.size()>0)
-      tag_el= convert_to_int(fnc_indices[0]); //Tag de la carga.
-    /* int id_edge= -1; */
-    /* if(fnc_indices.size()>1) */
-    /*   id_edge= convert_to_int(fnc_indices[1]); //Id del borde cargado. */
-
-    ELEM_LOAD *load= new ELEM_LOAD(tag_el); //,id_edge);
-    if(load)
-      {
-        load->LeeCmd(status);
-        tag_el++;
-        if(!lp->addElementalLoad(load))
-          {
-            delete load;
-            std::cerr << cmd << "LoadLoader::elem_edge_load; no se agregó la carga sobre el elemento." << std::endl;
-          }
-      }
-    else
-      std::cerr << cmd << ": no se pudo crear la carga sobre elementos: " << tag_el << std::endl;
-  }
-
-bool procesa_comando_element_edge_load(LoadPattern *lp,int &tag_el,const std::string &cmd,CmdStatus &status);
 
 } // end of XC namespace
 

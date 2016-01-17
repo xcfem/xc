@@ -58,11 +58,7 @@ class VectorReinfBar: public std::vector<ReinfBar *>, public SeccionInerte
     void alloc(const size_t i,const ReinfBar &c);
     inline reference operator[](const size_t i)
       { return v_rfBar::operator[](i); }
-  protected:
-    void EjecutaBloqueForEach(CmdStatus &status,const std::string &bloque);
-    bool procesa_comando(CmdStatus &status);
   public:
-
     VectorReinfBar(const size_t &sz= 0);
     VectorReinfBar(const VectorReinfBar  &otro);
     VectorReinfBar &operator=(const VectorReinfBar  &otro);
@@ -100,7 +96,7 @@ class VectorReinfBar: public std::vector<ReinfBar *>, public SeccionInerte
       { return v_rfBar::operator[](i); }
 
     void Print(std::ostream &s) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } // end of XC namespace

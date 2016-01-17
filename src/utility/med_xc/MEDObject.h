@@ -40,12 +40,9 @@ class MEDObject: public EntCmd
     typedef ObjMap<MEDObject> contenedor;
     typedef contenedor::iterator iterator;
     typedef contenedor::const_iterator const_iterator;
-  protected:
-    bool procesa_llamada(const std::string &cmd,CmdStatus &status);
-    bool procesa_comando(CmdStatus &status);
   public:
     MEDObject(void);
-    any_const_ptr GetProp(const std::string &) const;
+
   };
 } // end of XC namespace
 #endif

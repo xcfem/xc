@@ -98,7 +98,7 @@ class SectionAggregator : public SeccionBarraPrismatica
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     SectionAggregator(MaterialLoader *mat_ldr= NULL); 
     SectionAggregator(int tag,MaterialLoader *mat_ldr= NULL);
@@ -147,7 +147,7 @@ class SectionAggregator : public SeccionBarraPrismatica
 
     int setVariable(const std::string &argv);
     int getVariable(int variableID, double &info);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

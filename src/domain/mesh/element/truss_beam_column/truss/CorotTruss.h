@@ -79,7 +79,7 @@ class CorotTruss: public CorotTrussBase
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     CorotTruss(int tag, int dim,int Nd1, int Nd2, UniaxialMaterial &theMaterial,double A);
     CorotTruss(int tag,int dimension,const Material *ptr_mat);
@@ -125,7 +125,7 @@ class CorotTruss: public CorotTrussBase
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);
     int getResponse(int responseID, Information &eleInformation);
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

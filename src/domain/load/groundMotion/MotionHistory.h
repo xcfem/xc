@@ -55,7 +55,7 @@ class MotionHistory: public EntCmd
     void calcDisp(void) const;
     void clearSeries(void);
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     MotionHistory(const double &dt= 0.0);
     MotionHistory(const MotionHistory &otro);
@@ -93,7 +93,7 @@ class MotionHistory: public EntCmd
     // AddingSensitivity:END ///////////////////////////////////////////
     void loadAccelFile(const std::string &fileNameAccel,const double &timeStep,const double &theFactor);
     void loadAccelTimeFile(const std::string &fileNameAccel, const std::string &fileNameTime,const double &theFactor);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

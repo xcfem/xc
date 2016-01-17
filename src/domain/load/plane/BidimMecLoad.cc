@@ -29,7 +29,6 @@
 #include "BidimMecLoad.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/element/coordTransformation/CrdTransf.h"
@@ -41,31 +40,6 @@ XC::BidimMecLoad::BidimMecLoad(int tag,int classTag,const double &wt,const doubl
 
 XC::BidimMecLoad::BidimMecLoad(int tag,int classTag)
   :BidimLoad(tag, classTag), Trans(0.0), Axial1(0.0), Axial2(0.0) {}
-
-//! @brief Lee un objeto BidimMecLoad desde archivo
-bool XC::BidimMecLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BidimMecLoad) Procesando comando: " << cmd << std::endl;
-    if(cmd == "trans")
-      {
-        Trans= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "axial1")
-      {
-        Axial1= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "axial2")
-      {
-        Axial1= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return BidimLoad::procesa_comando(status);
-  }
 
 void XC::BidimMecLoad::Print(std::ostream &s, int flag) const
   {
@@ -90,18 +64,4 @@ int XC::BidimMecLoad::recvData(const CommParameters &cp)
     int res= BidimLoad::recvData(cp);
     res+= cp.receiveDoubles(Trans,Axial1,Axial2,getDbTagData(),CommMetaData(5));
     return res;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::BidimMecLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "axial1")
-      return any_const_ptr(Axial1);
-    else if(cod == "axial2")
-      return any_const_ptr(Axial2);
-    else if(cod == "trans")
-      return any_const_ptr(Trans);
-    else
-      return BidimLoad::GetProp(cod);
   }

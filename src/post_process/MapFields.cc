@@ -27,7 +27,6 @@
 //MapFields.cc
 
 #include "MapFields.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -71,40 +70,6 @@ XC::FieldInfo &XC::MapFields::newField(const std::string &nmb_field)
     fi.set_owner(this);
     push_back(fi);
     return back();
-  }
-
-//! @brief Lee un objeto MapFields desde archivo
-bool XC::MapFields::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string msg_proc_cmd= "(MapFields) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << msg_proc_cmd << std::endl;
-    if(cmd == "def_field" || (cmd == "fields")) //Definición de un conjunto.
-      {
-	std::string nmb_field= "";
-        std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-        if(fnc_indices.size()>0)
-          nmb_field= convert_to_string(fnc_indices[0]); //Nombre del campo.
-        FieldInfo fi= newField(nmb_field);
-        fi.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "for_each")
-      {
-        const std::string nmbBlq= nombre_clase()+":for_each";
-        const std::string bloque= status.GetBloque();
-        for(iterator i= begin();i!=end();i++)
-          (*i).EjecutaBloque(status,bloque,nmbBlq);
-        return true;
-      }
-    iterator field_itr= buscaField(cmd);
-    if(field_itr!=end())
-      {
-        field_itr->LeeCmd(status);
-        return true;
-      }
-    return EntCmd::procesa_comando(status);
   }
 
 //! @brief Borra todo.
@@ -158,15 +123,3 @@ int XC::MapFields::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::MapFields::GetProp(const std::string &cod) const
-  {
-    const_iterator field_itr= buscaField(cod);
-    if(field_itr!=end())
-      return any_const_ptr(&(*field_itr));
-    else
-      return EntCmd::GetProp(cod);
-  }

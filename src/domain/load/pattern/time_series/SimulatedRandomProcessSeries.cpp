@@ -65,7 +65,6 @@
 #include <reliability/domain/spectrum/Spectrum.h>
 #include <reliability/analysis/randomNumber/RandomNumberGenerator.h>
 #include <classTags.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 XC::SimulatedRandomProcessSeries::SimulatedRandomProcessSeries(
 								RandomNumberGenerator *theRandNumGenerator,
@@ -97,17 +96,7 @@ XC::SimulatedRandomProcessSeries::SimulatedRandomProcessSeries(
 	deltaW = (theSpectrum->getMaxFrequency()-theSpectrum->getMinFrequency())/numFreqIntervals;
 
 
-}
-
-//! @brief Lee un objeto XC::SimulatedRandomProcessSeries desde archivo
-bool XC::SimulatedRandomProcessSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SimulatedRandomProcessSeries) Procesando comando: " << cmd << std::endl;
-    return TimeSeries::procesa_comando(status);
   }
-
 
 double XC::SimulatedRandomProcessSeries::getFactor(double time) const
   {

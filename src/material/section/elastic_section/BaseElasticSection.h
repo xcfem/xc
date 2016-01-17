@@ -51,7 +51,7 @@ class BaseElasticSection: public SeccionBarraPrismatica
     
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
 
   public:
     BaseElasticSection(int tag,int classTag,const size_t &dim,MaterialLoader *mat_ldr= NULL);    
@@ -68,7 +68,7 @@ class BaseElasticSection: public SeccionBarraPrismatica
       { return eInic; }
     const Vector &getSectionDeformation(void) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

@@ -28,7 +28,6 @@
 #include "domain/load/ElementBodyLoad.h"
 #include <domain/mesh/element/Element.h>
 #include <domain/domain/Domain.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/Lista.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/base/any_const_ptr.h"
@@ -50,67 +49,6 @@ XC::ElementBodyLoad::ElementBodyLoad(int tag, int classTag)
 // to be supplied in recvSelf();
 XC::ElementBodyLoad::ElementBodyLoad(int classTag)
   :ElementalLoad(0, classTag), theElements() {}
-
-bool XC::ElementBodyLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElementBodyLoad) Procesando comando: " << cmd << std::endl;
-    if(cmd == "elements")
-      {
-	std::vector<int> tmp= crea_vector_int(status.GetString());
-        const int sz= tmp.size();
-	ID tags_elementos(sz);
-        for(int i= 0;i<sz;i++)
-          tags_elementos(i)= tmp[i];
-        setElementTags(tags_elementos);
-        return true;
-      }
-    else if(cmd == "elementSet")
-      {
-	const std::string nmbSet= interpretaString(status.GetString());
-        const Preprocessor *preprocessor= GetPreprocessor();
-        if(preprocessor)
-          {
-            const MapSet &sets= preprocessor->get_sets();
-            const SetBase *set= sets.busca_set(nmbSet);
-            if(set)
-              {
-                const size_t sz= set->NumElementos();
-                if(sz>0)
-                  setElementTags(set->getIdElementTags());
-              }
-          }
-        else
-	  std::cerr  << "(ElementBodyLoad) Procesando comando: '" << cmd 
-                     << "' necesito un preprocesador." << std::endl;
-        return true;
-      }
-    else if(cmd == "elementList")
-      {
-        const Lista tmp= interpretaLista(status.GetString());
-        const size_t sz= tmp.size();
-        if(sz>0)
-          { 
-	    ID tags_elementos(sz);
-            size_t conta= 0;
-            for(Lista::const_iterator i= tmp.begin();i!=tmp.end();i++,conta++)
-              tags_elementos(conta)= convert_to_int(*i);
-            setElementTags(tags_elementos);
-          }
-        else
-	  std::cerr  << "(ElementBodyLoad) Procesando comando: '" << cmd 
-                     << "' se pasó una lista vacía." << std::endl;
-        return true;
-      }
-    else if(cmd == "element_pointers")
-      {
-        theElements.LeeCmd(status);
-        return true;
-      }
-    else
-      return ElementalLoad::procesa_comando(status);
-  }
 
 void XC::ElementBodyLoad::setDomain(Domain *theDomain)
   {
@@ -160,22 +98,4 @@ int XC::ElementBodyLoad::recvData(const CommParameters &cp)
   {
     int res= ElementalLoad::recvData(cp);
     return res;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ElementBodyLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "elementTags")
-      {
-        const size_t nv= numElements();
-	static m_int retval;
-        retval= m_int(nv,1,0);
-        if(nv<1) return any_const_ptr(retval);
-        for(size_t i=0;i<nv;i++)
-          retval[i]= elemTags(i);
-        return any_const_ptr(retval);
-      }
-    else
-      return ElementalLoad::GetProp(cod);
   }

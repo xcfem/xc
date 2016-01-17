@@ -52,7 +52,7 @@ class EntGeomSection: public EntConNmb
   protected:
     const GeomSection *getGeomSection(void) const;
     GeomSection *getGeomSection(void);
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     EntGeomSection(const std::string &nmb="",GeomSection *sccGeom= NULL);
     EntGeomSection(const EntGeomSection &otro);
@@ -63,7 +63,7 @@ class EntGeomSection: public EntConNmb
       { return getGeomSection(); }
     int getVtkCellType(void) const;
     virtual int getMEDCellType(void) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
 
     SisRefScc *SisRefSccActual(void);    
     const SisRefScc *SisRefSccActual(void) const;

@@ -69,7 +69,6 @@
 #include <domain/mesh/element/Information.h>
 #include <cmath>
 #include <cfloat>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/BloqueSub.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
@@ -171,21 +170,6 @@ void XC::Concrete01::setFpcu(const double &d)
 
 double XC::Concrete01::getFpcu(void) const
   { return fpcu; }
-
-//! @brief Lee un objeto XC::Concrete01 desde archivo
-bool XC::Concrete01::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Concrete01) Procesando comando: " << cmd << std::endl;
-    if(cmd == "fpcu")
-      {
-        setFpcu(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else
-      return ConcreteBase::procesa_comando(status);
-  }
 
 //! @brief Destructor.
 XC::Concrete01::~Concrete01(void)
@@ -486,22 +470,6 @@ void XC::Concrete01::Print (std::ostream& s, int flag)
     s << "  epsc0: " << epsc0 << std::endl;
     s << "  fpcu: " << fpcu << std::endl;
     s << "  epscu: " << epscu << std::endl;
-  }
-
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::Concrete01::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "Concrete01::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="fpcu")
-      return any_const_ptr(fpcu);
-    else
-      return ConcreteBase::GetProp(cod);
   }
 
 

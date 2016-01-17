@@ -160,7 +160,3 @@ void XC::MEDGroupInfo::to_med(void) const
     malla.getMallaMED().addGroup(*med_group);
   }
 
-any_const_ptr XC::MEDGroupInfo::GetProp(const std::string &cod) const
-  {
-    return MEDCellBaseInfo::GetProp(cod);
-  }

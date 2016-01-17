@@ -72,9 +72,8 @@ class BandArpackppSOE : public ArpackSOE
       { return M; }
     
     int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
-    
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+    int recvSelf(const CommParameters &);    
+
     friend class BandArpackppSolver;
   };
 inline SystemOfEqn *BandArpackppSOE::getCopy(void) const

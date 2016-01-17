@@ -44,7 +44,7 @@ class ElementEdgeMecLoad : public ElementEdgeLoad
   protected:
     double Trans; //!< Transverse load.
     double Axial; //!< Axial load.
-    bool procesa_comando(CmdStatus &status);
+
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
   public:
@@ -63,7 +63,7 @@ class ElementEdgeMecLoad : public ElementEdgeLoad
     virtual const Matrix &getGlobalMoments(void) const;
 
     void Print(std::ostream &s, int flag =0) const;
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

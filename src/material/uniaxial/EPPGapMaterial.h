@@ -97,7 +97,7 @@ class EPPGapMaterial : public EPPBaseMaterial
     double minElasticYieldStrain;
     int damage;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     EPPGapMaterial(int tag, double E, double fy, double gap, double eta, int damage = 0);
     EPPGapMaterial(int tag);  
@@ -117,7 +117,7 @@ class EPPGapMaterial : public EPPBaseMaterial
     int recvSelf(const CommParameters &);
     
     void Print(std::ostream &s, int flag =0);
-    any_const_ptr GetProp(const std::string &cod) const;
+
 
   };
 } // end of XC namespace

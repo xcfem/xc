@@ -35,34 +35,11 @@
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
 XC::MapEsquemas2d::MapEsquemas2d(Cad *cad)
   : MapCadMember<MatrizPtrPnt>(cad) {}
-
-//! @brief Lee un objeto MapEsquemas2d desde el archivo de entrada.
-bool XC::MapEsquemas2d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string str_err= "(MapEsquemas2d) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << str_err << std::endl;
-
-    if(cmd == "tag_esquema2d")
-      {
-        setTag(interpretaSize_t(status.GetString()));
-        return true;
-      }
-    else if(cmd == "esquema2d") //Crea una nueva rotación.
-      {
-        Nuevo(status);
-        return true;
-      }
-    else
-      return MapCadMember<MatrizPtrPnt>::procesa_comando(status);
-  }
 
 //! @brief Crea un nuevo punto.
 XC::MatrizPtrPnt *XC::MapEsquemas2d::Crea(void)
@@ -82,33 +59,4 @@ XC::MatrizPtrPnt *XC::MapEsquemas2d::makeNew(void)
     if(!retval) //El esquema es nuevo.
       retval= Crea();
     return retval;
-  }
-
-//! @brief Crea un nuevo esquema bidimensional.
-XC::MatrizPtrPnt *XC::MapEsquemas2d::Nuevo(CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    bool nuevo= true;
-    size_t old_tag= getTag();
-    MatrizPtrPnt *retval= nullptr;
-    if(fnc_indices.size()>0)
-      {
-        setTag(convert_to_size_t(fnc_indices[0])); //Identificador del punto.
-        retval= busca(getTag());
-      }
-    if(retval)
-      nuevo= false;
-    else
-      retval= Crea();
-    if(!nuevo)
-      setTag(old_tag);
-    retval->LeeCmd(status); //Lee el punto
-    return retval;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::MapEsquemas2d::GetProp(const std::string &cod) const
-  {
-    return MapCadMember<MatrizPtrPnt>::GetProp(cod);
   }

@@ -28,7 +28,6 @@
 
 #include "AggregatorAdditions.h"
 #include "material/section/ResponseId.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "utility/actor/actor/MovableID.h"
@@ -111,24 +110,6 @@ XC::AggregatorAdditions &XC::AggregatorAdditions::operator=(const AggregatorAddi
   }
 
 
-//!  @brief Lee un objeto AggregatorAdditions desde el archivo de entrada.
-//! 
-//!  Soporta los comandos:
-//! 
-bool XC::AggregatorAdditions::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(AggregatorAdditions) Procesando comando: " << cmd << std::endl;
-    if(cmd == "for_each_addition")
-      { 
-        const std::string bloque= status.GetBloque();
-	DqUniaxialMaterial::ejecuta_bloque_for_each(status,bloque);
-        return true;
-      }
-    else
-      return DqUniaxialMaterial::procesa_comando(status);
-  }
 //! @brief Destructor.
 XC::AggregatorAdditions::~AggregatorAdditions(void)
   { libera(); }
@@ -202,27 +183,3 @@ int XC::AggregatorAdditions::recvSelf(const CommParameters &cp)
       }
     return res;
   }
-
-//! @brief Devuelve la propiedad del objeto cuyo nombre (de la propiedad) se pasa como parámetro.
-any_const_ptr XC::AggregatorAdditions::GetProp(const std::string &cod) const
-  {
-    if(cod=="strResponseId")
-      {
-        const size_t i= popSize_t(cod);
-        tmp_gp_str= "NIL";
-        if(matCodes)
-          {
-            const size_t sz= matCodes->Size();
-            if(i<sz)
-              tmp_gp_str= ResponseId::RespIdToString((*matCodes)[i]);
-            else
-	      std::cerr << "AggregatorAdditions::GetProp(strResponseId); índice fuera de rango." << std::endl;
-	  }
-        else
-	  std::cerr << "AggregatorAdditions::GetProp, no se han definido respuestas." << std::endl;
-        return any_const_ptr(tmp_gp_str);
-      }
-    else
-      return DqUniaxialMaterial::GetProp(cod);
-  }
-

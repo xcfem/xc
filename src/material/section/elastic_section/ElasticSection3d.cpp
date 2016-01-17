@@ -63,7 +63,6 @@
 #include "preprocessor/loaders/MaterialLoader.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "material/section/ResponseId.h"
@@ -86,16 +85,6 @@ XC::ElasticSection3d::ElasticSection3d(int tag, double E_in, double A_in, double
 XC::ElasticSection3d::ElasticSection3d(int tag, double EA_in, double EIz_in, double EIy_in, double GJ_in)
   :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,4,ConstantesSecc3d(1,EA_in,EIz_in,EIy_in,1,GJ_in)) {}
 
-
-//! @brief Lee un objeto XC::ElasticSection3d desde archivo
-bool XC::ElasticSection3d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElasticSection3d) Procesando comando: " << cmd << std::endl;
-
-    return BaseElasticSection3d::procesa_comando(status);
-  }
 
 //! @brief Devuelve el valor de la resultante de tensiones.
 const XC::Vector &XC::ElasticSection3d::getStressResultant(void) const
@@ -166,16 +155,6 @@ int XC::ElasticSection3d::recvSelf(const CommParameters &cp)
           std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
       }
     return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ElasticSection3d::GetProp(const std::string &cod) const
-  {
-    if(cod=="paramSeccion")
-      return any_const_ptr(&ctes_scc);
-    else
-      return BaseElasticSection3d::GetProp(cod);
   }
 
 //! @brief Imprime.

@@ -101,7 +101,6 @@
 
 #include "preprocessor/Preprocessor.h"
 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 

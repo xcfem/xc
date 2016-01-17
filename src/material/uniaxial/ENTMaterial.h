@@ -84,7 +84,7 @@ class ENTMaterial : public ElasticBaseMaterial
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ENTMaterial(int tag= 0, const double &E=0.0,const double &a=0.0,const double &b=1.0);    
 
@@ -110,7 +110,7 @@ class ENTMaterial : public ElasticBaseMaterial
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0);
   };
 } // end of XC namespace

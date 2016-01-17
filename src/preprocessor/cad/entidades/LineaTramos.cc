@@ -27,7 +27,6 @@
 //LineaTramos.cc
 
 #include "LineaTramos.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "Pnt.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
@@ -48,25 +47,6 @@ void XC::LineaTramos::setLongs(const XC::Vector &ls)
     longs= vector_to_std_vector(ls);
     SetNDiv(longs.size());
   }
-//! @brief Lee un objeto LineaTramos desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - p1: Lee el punto inicial.
-//! - p2: Lee el punto final.
-bool XC::LineaTramos::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(LineaTramos) Procesando comando: " << cmd << std::endl;
-    if(cmd == "long_tramos")
-      {
-        //setLongs(crea_vector_double(status.GetString()));
-        return true;
-      }
-    else
-      return Linea::procesa_comando(status);
-  }
 
 //! @brief Devuelve ndiv+1 posiciones a lo largo de la línea espaciadas
 //! según las longitudes que contenga el miembro longs.
@@ -84,10 +64,4 @@ MatrizPos3d XC::LineaTramos::get_posiciones(void) const
       std::cerr << "LineaTramos::get_posiciones; la línea no esté definida." << std::endl;
     return retval;
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-any_const_ptr XC::LineaTramos::GetProp(const std::string &cod) const
-  { return Linea::GetProp(cod); }
 

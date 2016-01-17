@@ -27,7 +27,6 @@
 //ElasticBaseMaterial.cc
 
 #include <material/uniaxial/ElasticBaseMaterial.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/matrix/Vector.h"
 
@@ -35,31 +34,6 @@
 //! @brief Constructor.
 XC::ElasticBaseMaterial::ElasticBaseMaterial(int tag, int classtag, double e,double e0)
   :UniaxialMaterial(tag,classtag), trialStrain(0.0),E(e),ezero(e0) {}
-
-//! @brief Lee un objeto XC::ElasticBaseMaterial desde archivo
-bool XC::ElasticBaseMaterial::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElasticBaseMaterial) Procesando comando: " << cmd << std::endl;
-    if(cmd == "E")
-      {
-        E= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "trialStrain")
-      {
-        trialStrain= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "e0")
-      {
-        ezero= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return UniaxialMaterial::procesa_comando(status);
-  }
 
 //! @brief Establece el valor de la tensión inicial.
 int XC::ElasticBaseMaterial::setInitialStrain(double strain)
@@ -114,21 +88,4 @@ int XC::ElasticBaseMaterial::recvSelf(const CommParameters &cp)
            std::cerr << "ElasticBaseMaterial::recvSelf - failed to receive data.\n";
       }
     return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::ElasticBaseMaterial::GetProp(const std::string &cod) const
-  {
-    if(cod=="E")
-      return any_const_ptr(E);
-    if(cod=="trial_strain")
-      return any_const_ptr(trialStrain);
-    if(cod=="e0")
-      return any_const_ptr(ezero);
-    else
-      return UniaxialMaterial::GetProp(cod);
   }

@@ -73,7 +73,7 @@ class Beam3dUniformLoad: public BeamUniformLoad
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     Beam3dUniformLoad(int tag, double wy, double wz, double wx, double tx,const ID &theElementTags);
     Beam3dUniformLoad(int tag, const Vector &Fxyz, double tx,const ID &theElementTags);
@@ -111,7 +111,7 @@ class Beam3dUniformLoad: public BeamUniformLoad
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0);
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

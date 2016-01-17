@@ -47,7 +47,7 @@ class BaseElasticSection3d: public BaseElasticSection
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
 
   public:
     BaseElasticSection3d(int tag,int classTag,const size_t &dim,const ConstantesSecc3d &ctes,MaterialLoader *mat_ldr= NULL);    
@@ -57,7 +57,7 @@ class BaseElasticSection3d: public BaseElasticSection
     void setConstantesSeccion(const ConstantesSecc3d &);  
     void sectionGeometry(const std::string &);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0) const;
   };
 

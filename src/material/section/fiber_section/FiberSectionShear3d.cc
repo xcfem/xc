@@ -38,7 +38,6 @@
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
 XC::Vector XC::FiberSectionShear3d::def(6);
@@ -214,67 +213,6 @@ void XC::FiberSectionShear3d::setRespVyVzTByName(const std::string &rvy,const st
     setRespVyByName(rvy);
     setRespVzByName(rvz);
     setRespTByName(rt);
-  }
-
-//! @brief Lee un objeto XC::FiberSection3d desde archivo
-bool XC::FiberSectionShear3d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(FiberSectionShear3d) Procesando comando: " << cmd << std::endl;
-    if(cmd == "setRespVy")
-      {
-        const std::string nmb_mat= interpretaString(status.GetString());
-        setRespVyByName(nmb_mat);
-        return true;
-      }
-    else if(cmd == "setRespVz")
-      {
-        const std::string nmb_mat= interpretaString(status.GetString());
-        setRespVzByName(nmb_mat);
-        return true;
-      }
-    else if(cmd == "setRespT")
-      {
-        const std::string nmb_mat= interpretaString(status.GetString());
-        setRespTByName(nmb_mat);
-        return true;
-      }
-    else if(cmd == "respVy")
-      {
-        if(respVy)
-          respVy->LeeCmd(status);
-        else
-          {
-            status.GetString();
-	    std::cerr << "La respuesta a cortante según «y» no está definida, se ignora la entrada." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "respVz")
-      {
-        if(respVz)
-          respVz->LeeCmd(status);
-        else
-          {
-            status.GetString();
-	    std::cerr << "La respuesta a cortante según «z» no está definida, se ignora la entrada." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "respT")
-      {
-        if(respT)
-          respT->LeeCmd(status);
-        else
-          {
-            status.GetString();
-	    std::cerr << "La respuesta a torsion no está definida, se ignora la entrada." << std::endl;
-          }
-        return true;
-      }
-    else
-      return FiberSection3d::procesa_comando(status);
   }
 
 //! @brief destructor:
@@ -548,30 +486,3 @@ int XC::FiberSectionShear3d::getVariable(int variableID, double &info)
       }
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::FiberSectionShear3d::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "FiberSectionShear3d::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod == "order")
-      {
-        tmp_gp_szt= getOrder();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "numMateriales") //Número de materiales.
-      {
-        tmp_gp_szt= 3;
-        if(respVy) tmp_gp_szt++;
-        if(respVz) tmp_gp_szt++;
-        if(respT) tmp_gp_szt++;
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "type")
-      {
-        tmp_gp_str= getTypeString();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else
-      return FiberSection3d::GetProp(cod);
-  }

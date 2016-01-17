@@ -39,7 +39,6 @@
 #include "preprocessor/cad/entidades/ArcoCircunf.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
@@ -93,43 +92,6 @@ XC::CmbEdge *XC::MapLineas::newLineSequence(void)
     CmbEdge *retval= dynamic_cast<CmbEdge *>(LineSequence());
     assert(retval);
     return retval;
-  }
-
-
-//! @brief Lee un objeto Edge desde el archivo de entrada.
-bool XC::MapLineas::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string str_err= "(MapLineas) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << str_err << std::endl;
-    if(cmd == "tag_linea")
-      {
-        setTag(interpretaSize_t(status.GetString())); //Nuevo identificador de línea.
-        return true;
-      }
-    else if(cmd == "linea")
-      {
-        Nueva<Linea>(status);
-        return true;
-      }
-    else if(cmd == "linea_tramos")
-      {
-        Nueva<LineaTramos>(status);
-        return true;
-      }
-    else if(cmd == "sec_lineas")
-      {
-        Nueva<CmbEdge>(status);
-        return true;
-      }
-    else if(cmd == "arco_circunf")
-      {
-        Nueva<ArcoCircunf>(status);
-        return true;
-      }
-    else
-      return MapEnt<Edge>::procesa_comando(status);
   }
 
 //! @brief Inserta la nueva linea en el conjunto total y los conjuntos abiertos.
@@ -269,45 +231,4 @@ XC::Edge *XC::MapLineas::Copia(const Edge *l)
                     << l->GetNombre() << " no es una línea." << std::endl; 
       }
     return retval;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::MapLineas::GetProp(const std::string &cod) const
-  {
-    if(cod == "linea")
-      {
-        static const Edge *linea= nullptr;
-        const size_t iLinea= popSize_t(cod);
-        linea= busca(iLinea);
-        if(linea)
-          return any_const_ptr(linea);
-        else
-          {
-            std::cerr << "MapLineas::GetProp; no se encontró la línea: '" 
-                      << iLinea << "'.\n";
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getTagNearestEdge")
-      {
-        const Pos3d p= popPos3d(cod);
-        const Edge *tmp= getNearest(p);
-        if(!tmp)
-          {
-            const std::string posLectura= get_ptr_status()->GetEntradaComandos().getPosicionLecturaActual();
-            std::cerr << "No se encontró una línea cercana a la posición: "
-                      << p << ". " << posLectura << std::endl;
-          }
-        else
-          tmp_gp_int= tmp->GetTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="num_lineas")
-      {
-        tmp_gp_szt= this->size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return MapEnt<Edge>::GetProp(cod);
   }

@@ -59,7 +59,7 @@ class MEDMeshing: public MEDObject
     MEDMeshing &operator=(const MEDMeshing &);
   protected:
     void nuevo_nodo(size_t i,const std::vector<double> &coo);
-    bool procesa_comando(CmdStatus &status);
+
     friend class MEDGroupInfo;
     MEDMEM::MESHING &getMallaMED(void) const;
     MEDGroupInfo *getGroupInfo(const std::string &) const;
@@ -97,7 +97,6 @@ class MEDMeshing: public MEDObject
 
 
     void to_med(void);
-    any_const_ptr GetProp(const std::string &) const;
   };
 } // end of XC namespace
 #endif

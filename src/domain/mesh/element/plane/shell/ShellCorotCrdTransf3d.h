@@ -94,7 +94,7 @@ class ShellCorotCrdTransf3d: public ShellCrdTransf3dBase
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } // end of XC namespace

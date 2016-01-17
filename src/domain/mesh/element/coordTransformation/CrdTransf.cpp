@@ -64,7 +64,6 @@
 #include <domain/mesh/node/Node.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
@@ -78,28 +77,6 @@ XC::CrdTransf::CrdTransf(int tag, int classTag, int dim_joint_offset)
   : TaggedObject(tag), MovableObject(classTag),
     nodeIPtr(nullptr), nodeJPtr(nullptr),L(0.0),nodeIOffset(dim_joint_offset), nodeJOffset(dim_joint_offset), initialDispChecked(false) {}
 
-//! @brief Lee el objeto desde archivo.
-bool XC::CrdTransf::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(CrdTransf) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "set_rigid_joint_offsetI")
-      {
-        const Vector rigJntOffset1= Vector(convert_to_vector_double(interpretaVectorAny(status.GetBloque())));
-	set_rigid_joint_offsetI(rigJntOffset1);
-        return true;
-      }
-    else if(cmd == "set_rigid_joint_offsetJ")
-      {
-        const Vector rigJntOffset2= Vector(convert_to_vector_double(interpretaVectorAny(status.GetBloque())));
-	set_rigid_joint_offsetJ(rigJntOffset2);
-        return true;
-      }
-    else
-      return TaggedObject::procesa_comando(status);
-  }
 
 //! @brief Destructor virtual.
 XC::CrdTransf::~CrdTransf(void)
@@ -202,134 +179,3 @@ int XC::CrdTransf::recvData(const CommParameters &cp)
     return res;    
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::CrdTransf::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "CrdTransf::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="getInitialLength")
-      {
-        tmp_gp_dbl= getInitialLength();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getDeformedLength")
-      {
-        tmp_gp_dbl= getDeformedLength();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getTrialDisp")
-      return get_prop_vector(getBasicTrialDisp());
-    else if(cod=="getIncrDisp")
-      return get_prop_vector(getBasicIncrDisp());
-    else if(cod=="getIncrDeltaDisp")
-      return get_prop_vector(getBasicIncrDeltaDisp());
-    else if(cod=="getTrialVel")
-      return get_prop_vector(getBasicTrialVel());
-    else if(cod=="getTrialAccel")
-      return get_prop_vector(getBasicTrialAccel());
-    else if(cod=="getVectorI")
-      return get_prop_vector(getI());
-    else if(cod=="getVectorJ")
-      return get_prop_vector(getJ());
-    else if(cod == "getPointGlobalCoordFromLocal")
-      {
-        if(InterpreteRPN::Pila().size()>0)
-          {
-            const Vector local_coord= convert_to_vector(InterpreteRPN::Pila().Pop());
-            return get_prop_vector(getPointGlobalCoordFromLocal(local_coord));
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,1,"GetProp",cod);
-            return any_const_ptr();
-          }
-      }
-    else if(cod == "getPointGlobalCoordFromBasic")
-      {
-        const double xi= popDouble(cod);
-        return get_prop_vector(getPointGlobalCoordFromBasic(xi));
-      }
-    else if(cod == "getPointLocalCoordFromGlobal")
-      {
-        if(InterpreteRPN::Pila().size()>0)
-          {
-            const Vector global_coord= convert_to_vector(InterpreteRPN::Pila().Pop());
-            return get_prop_vector(getPointLocalCoordFromGlobal(global_coord));
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,1,"GetProp",cod);
-            return any_const_ptr();
-          }
-      }
-    else if(cod == "getPointBasicCoordFromGlobal")
-      {
-        if(InterpreteRPN::Pila().size()>0)
-          {
-            const Vector global_coord= convert_to_vector(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= getPointBasicCoordFromGlobal(global_coord);
-            return any_const_ptr(tmp_gp_dbl);
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,1,"GetProp",cod);
-            return any_const_ptr();
-          }
-      }
-    else if(cod == "getPointGlobalDisplFromBasic")
-      {
-        if(InterpreteRPN::Pila().size()>1)
-          {
-            const Vector local_coord= convert_to_vector(InterpreteRPN::Pila().Pop());
-            const double xi= convert_to_double(InterpreteRPN::Pila().Pop());
-            return get_prop_vector(getPointGlobalDisplFromBasic(xi,local_coord));
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,2,"GetProp",cod);
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getVectorGlobalCoordFromLocal")
-      {
-        if(InterpreteRPN::Pila().size()>0)
-          {
-            const Vector local_coord= convert_to_vector(InterpreteRPN::Pila().Pop());
-            return get_prop_vector(getVectorGlobalCoordFromLocal(local_coord));
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,1,"GetProp",cod);
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getVectorLocalCoordFromGlobal")
-      {
-        if(InterpreteRPN::Pila().size()>0)
-          {
-            const Vector global_coord= convert_to_vector(InterpreteRPN::Pila().Pop());
-            return get_prop_vector(getVectorLocalCoordFromGlobal(global_coord));
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,1,"GetProp",cod);
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getPointLocalCoordFromGlobal")
-      {
-        if(InterpreteRPN::Pila().size()>0)
-          {
-            const Vector global_coord= convert_to_vector(InterpreteRPN::Pila().Pop());
-            return get_prop_vector(getPointLocalCoordFromGlobal(global_coord));
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,1,"GetProp",cod);
-            return any_const_ptr();
-          }
-      }
-    else
-      return TaggedObject::GetProp(cod);
-  }

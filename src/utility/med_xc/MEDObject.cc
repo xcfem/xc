@@ -22,25 +22,9 @@
 //MEDObject
 
 #include "MEDObject.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
 XC::MEDObject::MEDObject(void)
   {}
 
-//! @brief Lectura del objeto desde archivo.
-bool XC::MEDObject::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MEDObject) Procesando comando: " << cmd << std::endl;
-
-    return EntCmd::procesa_comando(status);
-  }
-
-
-//! Devuelve la propiedad del objeto cuyo código se pasa 
-//! como parámetro. 
-any_const_ptr XC::MEDObject::GetProp(const std::string &cod) const 
-  { return EntCmd::GetProp(cod); }

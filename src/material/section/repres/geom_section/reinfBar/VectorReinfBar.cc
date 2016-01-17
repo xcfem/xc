@@ -35,7 +35,6 @@
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
 #include "material/uniaxial/UniaxialMaterial.h" 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/nucleo/InterpreteRPN.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -94,35 +93,9 @@ XC::VectorReinfBar &XC::VectorReinfBar::operator=(const VectorReinfBar &otro)
     return *this;
   }
 
-//! @brief Lee un objeto XC::VectorReinfBar desde archivo
-bool XC::VectorReinfBar::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(VectorReinfBar) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "for_each")
-      {
-        const std::string &blq= status.GetBloque();
-        EjecutaBloqueForEach(status,blq);
-        return true;
-      }
-    else
-      return SeccionInerte::procesa_comando(status);
-  }
-
 //! @brief Destructor.
 XC::VectorReinfBar::~VectorReinfBar(void)
   { libera(); }
-
-//! @brief Solicita a cada uno de los miembros que ejecute el bloque
-//! de código que se le pasa como parámetro.
-void XC::VectorReinfBar::EjecutaBloqueForEach(CmdStatus &status,const std::string &bloque)
-  {
-    const std::string nmbBlq= nombre_clase()+":for_each";
-    for(iterator i= begin();i!=end();i++)
-      (*i)->EjecutaBloque(status,bloque,nmbBlq);
-  }
 
 //! @brief Devuelve el área homogeneizada de las regiones.
 double XC::VectorReinfBar::getAreaSeccHomogeneizada(const double &E0) const
@@ -329,17 +302,4 @@ void XC::VectorReinfBar::Print(std::ostream &os) const
   {
     for(const_iterator i= begin();i!=end();i++)
       (*i)->Print(os);
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::VectorReinfBar::GetProp(const std::string &cod) const
-  {
-    if(cod=="nReinfBars")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return SeccionInerte::GetProp(cod);
   }

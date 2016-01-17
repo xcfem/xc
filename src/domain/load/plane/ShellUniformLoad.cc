@@ -165,20 +165,6 @@ int XC::ShellUniformLoad::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ShellUniformLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "getAxial1")
-      return any_const_ptr(Axial1);
-    else if(cod == "getAxial2")
-      return any_const_ptr(Axial2);
-    else if(cod == "getTrans")
-      return any_const_ptr(Trans);
-    else
-      return ShellMecLoad::GetProp(cod);
-  }
-
 void  XC::ShellUniformLoad::Print(std::ostream &s, int flag)
   {
     s << "ShellUniformLoad - Reference load" << std::endl;

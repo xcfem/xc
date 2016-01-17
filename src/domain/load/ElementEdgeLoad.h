@@ -52,7 +52,7 @@ class ElementEdgeLoad: public ElementalLoad
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElementEdgeLoad(int tag, int classTag,const ID &,const ID &);
     ElementEdgeLoad(int tag, int classTag);

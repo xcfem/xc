@@ -64,7 +64,6 @@
 #include <classTags.h>
 #include <material/section/SectionAggregator.h>
 #include <utility/recorder/response/MaterialResponse.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "preprocessor/loaders/MaterialLoader.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -258,7 +257,7 @@ void XC::SectionAggregator::setSection(const std::string &sectionName)
         alloc_storage_ptrs();
       }
     else
-      std::cerr << "XC::SectionAggregator::procesa_comando; "
+      std::cerr << "XC::SectionAggregator::setSection "
                 << "no se encontró el material de código: '" << sectionName
                 << "'.\n";
   }
@@ -295,53 +294,6 @@ void XC::SectionAggregator::setAddtions(const std::vector<std::string> &response
 void XC::SectionAggregator::setAddtionsPyList(const boost::python::list &responseCodes,const boost::python::list &nmbMats)
   { setAddtions(vector_string_from_py_list(responseCodes),vector_string_from_py_list(nmbMats)); }
 
-
-//! @brief Lee un objeto XC::SeccionBarraPrismatica desde archivo
-bool XC::SectionAggregator::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SectionAggregator) Procesando comando: " << cmd << std::endl;
-    //const CmdParser &parser= status.Parser();
-    if(cmd == "set_section")
-      {
-        const std::string nmb_seccion= interpretaString(status.GetString());
-        setSection(nmb_seccion);
-        return true;
-      }
-    else if(cmd == "section")
-      {
-        if(theSection)
-          theSection->LeeCmd(status);
-        else
-          {
-            status.GetBloque();
-            std::cerr << "XC::SectionAggregator::procesa_comando: " << cmd 
-                      << "; la sección no está definida." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "set_additions")
-      {
-	std::cerr << "DEPRECATED; use Python." << std::endl;
-        // std::deque<boost::any> indices;
-        // if(parser.TieneIndices())
-        //   {
-        //     indices= parser.SeparaIndices(this);
-        //     const std::vector<std::string> nmbMats= crea_vector_string(status.GetString());
-        //     const std::vector tmp= indices;
-        //     setAdditions(tmp,nmbMats);
-        //   }
-        return true;
-      }
-    else if(cmd == "additions")
-      {
-        theAdditions.LeeCmd(status);
-        return true;
-      }
-    else
-      return SeccionBarraPrismatica::procesa_comando(status);
-  }
 
 //! @brief destructor:
 XC::SectionAggregator::~SectionAggregator(void)
@@ -732,35 +684,4 @@ int XC::SectionAggregator::getVariable(int variableID, double &info)
       default:
         return -1;
       }
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::SectionAggregator::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "SectionAggregator::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod == "order")
-      {
-        tmp_gp_szt= getOrder();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "numMateriales") //Número de materiales.
-      {
-        tmp_gp_szt= theAdditions.size();
-        if(theSection) tmp_gp_szt++;
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "hasSection")
-      {
-        tmp_gp_bool= (theSection != nullptr);
-        return any_const_ptr(tmp_gp_bool);
-      }
-    else if(cod == "type")
-      {
-        tmp_gp_str= getTypeString();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else
-      return SeccionBarraPrismatica::GetProp(cod);
   }

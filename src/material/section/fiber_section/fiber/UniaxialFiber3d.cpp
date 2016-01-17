@@ -72,7 +72,6 @@
 #include <domain/mesh/element/Information.h>
 #include <utility/recorder/response/FiberResponse.h>
 #include "material/section/ResponseId.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/MovableVector.h"
 
 XC::Matrix XC::UniaxialFiber3d::ks(3,3); 
@@ -102,27 +101,6 @@ XC::UniaxialFiber3d::UniaxialFiber3d(int tag,const UniaxialMaterial &theMat,cons
 XC::UniaxialFiber3d::UniaxialFiber3d(int tag,const MaterialLoader &ldr,const std::string &nmbMat, const double &Area,const Vector &position,int classTag)
   : UniaxialFiber(tag, classTag,ldr,nmbMat,Area)
   { set_position(position); }
-
-//! @brief Lee un objeto UniaxialFiber3d desde archivo
-bool XC::UniaxialFiber3d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(UniaxialFiber3d) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "y")
-      {
-        as[0]= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "z")
-      {
-        as[1]= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return UniaxialFiber::procesa_comando(status);
-  }
 
 //! @brief Asigna la deformación de prueba para la fibra.
 int XC::UniaxialFiber3d::setTrialFiberStrain(const Vector &vs)

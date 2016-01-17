@@ -52,7 +52,6 @@ class ProtoArcLength: public StaticIntegrator
     virtual double getDLambdaUpdate(void) const= 0;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
 
     ProtoArcLength(SoluMethod *,int classTag,double ArcLength);
   public:
@@ -63,8 +62,6 @@ class ProtoArcLength: public StaticIntegrator
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

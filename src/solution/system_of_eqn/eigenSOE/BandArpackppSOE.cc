@@ -215,7 +215,3 @@ int XC::BandArpackppSOE::sendSelf(CommParameters &cp)
 int XC::BandArpackppSOE::recvSelf(const CommParameters &cp)
   { return 0; }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::BandArpackppSOE::GetProp(const std::string &cod) const
-  { return ArpackSOE::GetProp(cod); }

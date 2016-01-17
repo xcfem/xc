@@ -27,7 +27,6 @@
 //ConstantesSecc2d.cc
 
 #include <material/section/repres/ConstantesSecc2d.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "domain/mesh/element/Information.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include <utility/matrix/Vector.h>
@@ -89,47 +88,6 @@ XC::ConstantesSecc2d::ConstantesSecc2d(double EA_in, double EI_in)
 XC::ConstantesSecc2d::ConstantesSecc2d(double E_in, double A_in, double I_in, double G_in, double a)
   : EntCmd(), MovableObject(0), e(E_in), g(G_in), a(A_in), i(I_in), alpha(a)
   { check_values(); }
-
-//! @brief Lee un objeto XC::ConstantesSecc2d desde archivo
-bool XC::ConstantesSecc2d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ConstantesSecc2d) Procesando comando: " << cmd << std::endl;
-    if(cmd == "E")
-      {
-        e= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "A")
-      {
-        a= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "alpha")
-      {
-        alpha= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "I")
-      {
-        i= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "G")
-      {
-        g= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "checkValues")
-      {
-        status.GetString();
-        check_values();
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 //! @brief Devuelve la matriz de rigidez tangente.
 const XC::Matrix &XC::ConstantesSecc2d::getSectionTangent2x2(void) const
@@ -279,56 +237,6 @@ int XC::ConstantesSecc2d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::ConstantesSecc2d::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "ConstantesSecc2d::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="getE")
-      {
-        tmp_gp_dbl= E();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getEA")
-      {
-        tmp_gp_dbl= EA();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getG")
-      {
-        tmp_gp_dbl= G();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getA")
-      {
-        tmp_gp_dbl= A();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getAlpha")
-      return any_const_ptr(alpha);
-    else if(cod=="getGA")
-      {
-        tmp_gp_dbl= GAAlpha();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getI")
-      {
-        tmp_gp_dbl= I();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getEI")
-      {
-        tmp_gp_dbl= EI();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return EntCmd::GetProp(cod);
-  }
 
 const XC::Matrix& XC::ConstantesSecc2d::getInitialTangentSensitivity3x3(int gradIndex)
   {

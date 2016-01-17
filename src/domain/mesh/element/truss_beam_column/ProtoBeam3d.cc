@@ -60,21 +60,6 @@ XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, int Nd1, int Nd2)
 XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, double a, double e, double g, double jx, double iy, double iz,int Nd1, int Nd2)
   :Element1D(tag,class_tag,Nd1,Nd2), ctes_scc(e,a,iz,iy,g,jx) {}
 
-//! @brief Lee un objeto XC::ProtoBeam3d desde archivo
-bool XC::ProtoBeam3d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ProtoBeam3d) Procesando comando: " << cmd << std::endl;
-    if((cmd == "seccion") || (cmd == "for_each_section"))
-      {
-	ctes_scc.LeeCmd(status);
-        return true;
-      }
-    else
-      return Element1D::procesa_comando(status);
-  }
-
 int XC::ProtoBeam3d::getNumDOF(void) const
   { return 12; }
 
@@ -95,18 +80,3 @@ int XC::ProtoBeam3d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ProtoBeam3d::GetProp(const std::string &cod) const
-  {
-    if(cod=="getG")
-      return any_const_ptr(ctes_scc.G());
-    if(cod=="getJx")
-      return any_const_ptr(ctes_scc.J());
-    if(cod=="getIy")
-      return any_const_ptr(ctes_scc.Iy());
-    if(cod=="getIz")
-      return any_const_ptr(ctes_scc.Iz());
-    else
-      return Element1D::GetProp(cod);
-  }

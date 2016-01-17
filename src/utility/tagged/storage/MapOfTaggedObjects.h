@@ -88,7 +88,7 @@ class MapOfTaggedObjects : public TaggedObjectStorage
     inline iterator end(void)
       { return theMap.end(); }
     void clearComponents(void);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     MapOfTaggedObjects(EntCmd *owr,const std::string &containerName);
     MapOfTaggedObjects(const MapOfTaggedObjects &otro);

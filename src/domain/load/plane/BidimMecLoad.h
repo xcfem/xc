@@ -47,7 +47,7 @@ class BidimMecLoad : public BidimLoad
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     BidimMecLoad(int tag, int classTag,const double &Trans,const double &,const double &,const ID &theElementTags);
     BidimMecLoad(int tag, int classTag);
@@ -67,7 +67,7 @@ class BidimMecLoad : public BidimLoad
 
 
     void Print(std::ostream &s, int flag =0) const;
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

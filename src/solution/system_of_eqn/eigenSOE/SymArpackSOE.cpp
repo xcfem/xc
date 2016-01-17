@@ -44,7 +44,6 @@
 #include <solution/graph/graph/VertexIter.h>
 #include <cmath>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 //! @brief Constructor.
 XC::SymArpackSOE::SymArpackSOE(SoluMethod *owr,double theShift)
@@ -66,15 +65,6 @@ bool XC::SymArpackSOE::setSolver(EigenSolver *newSolver)
     else
       std::cerr << "XC::BandArpackSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
     return retval;
-  }
-
-//! @brief Lee un objeto XC::BandArpackSOE desde archivo
-bool XC::SymArpackSOE::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SymArpackSOE) Procesando comando: " << cmd << std::endl;
-    return ArpackSOE::procesa_comando(status);
   }
 
 //! @brief Destructor.

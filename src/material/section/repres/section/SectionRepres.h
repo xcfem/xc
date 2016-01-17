@@ -85,7 +85,7 @@ class SectionRepres: public TaggedObject
     MaterialLoader *material_loader; //!< Gestor de materiales (búsqueda,...).
     const GeomSection *gmSecc; //!< Geometría de la sección.
 
-    bool procesa_comando(CmdStatus &status);
+
   public:
     //Constructores
     SectionRepres(int tag,MaterialLoader *ml);
@@ -100,7 +100,7 @@ class SectionRepres: public TaggedObject
     void setGeom(const GeomSection *);
     void setGeomNamed(const std::string &);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0);
     friend std::ostream &operator<<(std::ostream &s, SectionRepres &fiberSectionRepr);    
   };

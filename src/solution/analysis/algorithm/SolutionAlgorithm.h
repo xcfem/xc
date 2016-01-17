@@ -92,7 +92,7 @@ class SolutionAlgorithm: public MovableObject, public ObjWithRecorders
     virtual Domain *get_domain_ptr(void);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
 
     SolutionAlgorithm(SoluMethod *,int classTag);
     friend class SoluMethod;

@@ -30,94 +30,9 @@
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
-
-//! @brief Lee un objeto SisRefCartesianas3d desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - pos: Lee las coordenadas del punto.
-bool XC::SisRefCartesianas3d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SisRefCartesianas3d) Procesando comando: " << cmd << std::endl;
-    if(cmd == "coo_org")
-      {
-        ref.Org().LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "pnt_org")
-      {
-        const MapPuntos::Indice id_punto= interpretaSize_t(status.GetString());
-        const Pnt *p= BuscaPnt(id_punto);
-        if(p)
-          ref.Org()= p->GetPos();
-        else
-	  std::cerr << "SisRefCartesianas3d::procesa_comando: '"
-                    << cmd << "'; no se encontró el punto: " << id_punto
-                    << std::endl;
-        return true;
-      }
-    else if(cmd == "dos_puntos")
-      {
-        const std::vector<int> indices= crea_vector_int(status.GetString());
-        if(indices.size()>1)
-          {
-            const Pnt *p1= BuscaPnt(indices[0]);
-            const Pnt *p2= BuscaPnt(indices[1]);
-            if(p1 && p2)
-              ref= Ref3d3d(p1->GetPos(),p2->GetPos());
-            else
-              {
-                std::cerr << "SisRefCartesianas3d::procesa_comando: '"
-                          << cmd << "'; no se encontró el punto: ";
-                if(!p1)
-	          std::cerr << indices[0];
-                else
-	          std::cerr << indices[1];
-	        std::cerr << std::endl;
-              }
-          }
-        else
-	  std::cerr << "SisRefCartesianas3d::procesa_comando: '"
-		    << cmd << "' se requieren dos identificadores de punto." << std::endl;
-        return true;
-      }
-    else if(cmd == "tres_puntos")
-      {
-        const std::vector<int> indices= crea_vector_int(status.GetString());
-        if(indices.size()>1)
-          {
-            const Pnt *p1= BuscaPnt(indices[0]);
-            const Pnt *p2= BuscaPnt(indices[1]);
-            const Pnt *p3= BuscaPnt(indices[2]);
-            if(p1 && p2 && p3)
-              ref= Ref3d3d(p1->GetPos(),p2->GetPos(),p3->GetPos());
-            else
-              {
-                std::cerr << "SisRefCartesianas3d::procesa_comando: '"
-                          << cmd << "'; no se encontró el punto: ";
-                if(!p1)
-	          std::cerr << indices[0];
-                else if(!p2)
-	          std::cerr << indices[1];
-                else
-	          std::cerr << indices[2];
-	        std::cerr << std::endl;
-              }
-          }
-        else
-	  std::cerr << "SisRefCartesianas3d::procesa_comando: '"
-		    << cmd << "' se requieren tres identificadores de punto." << std::endl;
-        return true;
-      }
-    else
-      return SisRef::procesa_comando(status);
-  }
 
 Pos3d XC::SisRefCartesianas3d::getOrg(void) const
   { return ref.Org(); }
@@ -150,21 +65,3 @@ Pos3d XC::SisRefCartesianas3d::GetPosLocal(const Pos3d &p) const
 //! expresado en coordenadas locales.
 Vector3d XC::SisRefCartesianas3d::GetCooLocales(const Vector3d &v) const
   { return ref.GetCooLocales(v); }
-
-
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-//! -nlineas: Devuelve el número de líneas que empiezan o acaban en este punto.
-any_const_ptr XC::SisRefCartesianas3d::GetProp(const std::string &cod) const
-  {
-    if(cod == "org")
-      return any_const_ptr(ref.Org());
-    if(cod == "sis_coo")
-      return any_const_ptr(ref.Trf());
-    else
-      return SisRef::GetProp(cod);
-  }
-

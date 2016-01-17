@@ -64,7 +64,6 @@
 #include <utility/recorder/response/MaterialResponse.h>
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <material/section/repres/section/FiberSectionRepr.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "material/section/ResponseId.h"
 #include "xc_utils/src/geom/d1/Recta2d.h"
@@ -124,16 +123,6 @@ void XC::FiberSection2d::setupFibers(void)
       fibras.setup(*this,section_repres->getFibras2d(),kr);
     else
       fibras.updateKRCDG(*this,kr);
-  }
-
-//! @brief Lee un objeto XC::FiberSection2d desde archivo
-bool XC::FiberSection2d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(FiberSection2d) Procesando comando: " << cmd << std::endl;
-
-    return FiberSectionBase::procesa_comando(status);
   }
 
 double XC::FiberSection2d::get_strain(const double &y) const
@@ -309,12 +298,6 @@ int XC::FiberSection2d::commitSensitivity(const XC::Vector& defSens, int gradNum
   }
 
 // AddingSensitivity:END ///////////////////////////////////
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::FiberSection2d::GetProp(const std::string &cod) const
-  { return FiberSectionBase::GetProp(cod); }
-
 
 XC::FiberSection2d XC::FiberSectionReprToFiberSection2d(const int &tag,const XC::FiberSectionRepr &fiberSectionRepr)
   { return fiberSectionRepr.getFiberSection2d(tag); }

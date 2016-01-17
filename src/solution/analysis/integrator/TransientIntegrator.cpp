@@ -139,9 +139,3 @@ int XC::TransientIntegrator::formNodUnbalance(DOF_Group *theDof)
     return 0;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::TransientIntegrator::GetProp(const std::string &cod) const
-  {
-    return IncrementalIntegrator::GetProp(cod);    
-  }

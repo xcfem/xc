@@ -85,7 +85,7 @@ class ElementalLoad: public Load
     int setElementTags(const ID &theEleTags);
     virtual const ID &getElementTags(void) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

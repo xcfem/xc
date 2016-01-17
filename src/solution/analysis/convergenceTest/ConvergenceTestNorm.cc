@@ -27,7 +27,6 @@
 //ConvergenceTestNorm.cc
 
 #include <solution/analysis/convergenceTest/ConvergenceTestNorm.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 
@@ -38,37 +37,10 @@ XC::ConvergenceTestNorm::ConvergenceTestNorm(EntCmd *owr,int classTag)
 XC::ConvergenceTestNorm::ConvergenceTestNorm(EntCmd *owr,int classTag,double theTol, int maxIter, int printIt, int normType, int sz)
   : ConvergenceTestTol(owr,classTag,theTol,maxIter,printIt,normType,sz), norm0(0.0) {}
 
-//! @brief Lee un objeto ConvergenceTestNorm desde archivo
-bool XC::ConvergenceTestNorm::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ConvergenceTestNorm) Procesando comando: " << cmd << std::endl;
-    if(cmd=="norm0")
-      {
-        norm0= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return ConvergenceTestTol::procesa_comando(status);
-  }
-
 int XC::ConvergenceTestNorm::start(void)
   {
     ConvergenceTest::start();
     norm0 = 0.0;
     return 0;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::ConvergenceTestNorm::GetProp(const std::string &cod) const
-  {
-    if(cod=="norm0")
-      return any_const_ptr(norm0);
-    else
-      return ConvergenceTestTol::GetProp(cod);
   }
 

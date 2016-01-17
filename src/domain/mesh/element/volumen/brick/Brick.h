@@ -149,7 +149,6 @@ class Brick : public BrickBase
       
     //print out element data
     void Print( std::ostream &s, int flag );
-    any_const_ptr GetProp(const std::string &cod) const;
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);

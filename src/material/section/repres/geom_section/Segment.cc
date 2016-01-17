@@ -28,7 +28,6 @@
 
 #include "Segment.h"
 #include "GeomSection.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "Spot.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
 #include "xc_utils/src/base/any_const_ptr.h"
@@ -70,41 +69,6 @@ void XC::Segment::setEndPoints(size_t idP1, size_t idP2)
       std::cerr << "Segment::setEndPoints, point: '" 
                 << idP2 << "' not found \n";
     actualiza_topologia();
-  }
-
-//! @brief Lee un objeto Segment desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - p1: Lee el punto inicial.
-//! - p2: Lee el punto final.
-bool XC::Segment::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Segment) Procesando comando: " << cmd << std::endl;
-    if(cmd == "p1")
-      {
-        const size_t id_punto= interpretaSize_t(status.GetString());
-        p1= BuscaSpot(id_punto);
-	if(!p1)
-	  std::cerr << "Segment; " << cmd << " , no se encontró el punto: '" 
-                    << id_punto << "' \n";
-        actualiza_topologia();
-        return true;
-      }
-    else if(cmd == "p2")
-      {
-        const size_t id_punto= interpretaSize_t(status.GetString());
-        p2= BuscaSpot(id_punto);
-	if(!p2)
-	  std::cerr << "Segment; " << cmd << " , no se encontró el punto: '" 
-                    << id_punto << "' \n";
-        actualiza_topologia();
-        return true;
-      }
-    else
-      return Eje::procesa_comando(status);
   }
 
 //! @brief Devuelve el vértice de índice i.
@@ -161,24 +125,3 @@ double XC::Segment::getLong(void) const
                  << std::endl;
     return retval;
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-any_const_ptr XC::Segment::GetProp(const std::string &cod) const
-  {
-    if(cod=="long")
-      {
-        if(p1 && p2)
-          {
-            tmp_gp_dbl= getLong();
-            return any_const_ptr(tmp_gp_dbl);
-          }
-        else
-          return any_const_ptr();
-      }
-    else
-      return Eje::GetProp(cod);
-  }
-

@@ -44,7 +44,7 @@ class ProtoBeam3d : public Element1D
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
     void set_material(const Material *m);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ProtoBeam3d(int tag, int class_tag,const Material *m= NULL);
     ProtoBeam3d(int tag, int class_tag, int Nd1, int Nd2);
@@ -54,7 +54,7 @@ class ProtoBeam3d : public Element1D
       { return ctes_scc; }
     void setSectionProperties(const ConstantesSecc3d &ctes)
       { ctes_scc= ctes; }
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

@@ -66,7 +66,7 @@ class TzSimple1: public PYBase
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
     
   public:
     TzSimple1(int tag, int classtag, int tzType, double tult, double z50, double dashpot);
@@ -87,7 +87,7 @@ class TzSimple1: public PYBase
     int recvSelf(const CommParameters &);
     
     void Print(std::ostream &s, int flag =0);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
    
   };
 } // end of XC namespace

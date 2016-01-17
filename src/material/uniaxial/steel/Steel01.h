@@ -88,7 +88,7 @@ class Steel01 : public SteelBase0103
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
     int setup_parameters(void);
   public:
     Steel01(int tag, double fy, double E0, double b,

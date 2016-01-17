@@ -76,7 +76,7 @@ namespace XC {
 class TrigSeries: public PeriodSeries
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors
     TrigSeries(double tStart, double tFinish,
@@ -94,7 +94,7 @@ class TrigSeries: public PeriodSeries
     int recvSelf(const CommParameters &);
 
     void Print(std::ostream &s, int flag =0) const;        
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

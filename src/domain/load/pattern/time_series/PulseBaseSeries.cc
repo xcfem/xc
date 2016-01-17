@@ -30,7 +30,6 @@
 #include <utility/matrix/Vector.h>
 #include <classTags.h>
 #include <cmath>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
@@ -39,27 +38,6 @@
 //! @brief Constructor.
 XC::PulseBaseSeries::PulseBaseSeries(int classTag,const double &startTime,const double &finishTime,const double &factor)
   : CFactorSeries(classTag,factor), tStart(startTime),tFinish(finishTime) {}
-
-//! @brief Lee un objeto XC::PulseBaseSeries desde archivo
-bool XC::PulseBaseSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(PulseBaseSeries) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "start")
-      {
-        tStart= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "finish")
-      {
-        tFinish= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return CFactorSeries::procesa_comando(status);
-  }
 
 //! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
 int XC::PulseBaseSeries::sendData(CommParameters &cp)
@@ -103,18 +81,6 @@ int XC::PulseBaseSeries::recvSelf(const CommParameters &cp)
     else
       result+= recvData(cp);
     return result;    
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::PulseBaseSeries::GetProp(const std::string &cod) const
-  {
-    if(cod == "getStart")
-      return any_const_ptr(tStart);
-    else if(cod=="getFinish")
-      return any_const_ptr(tFinish);
-    else
-      return CFactorSeries::GetProp(cod);
   }
 
 //! @brief Imprime el objeto.

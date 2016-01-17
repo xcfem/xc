@@ -28,7 +28,6 @@
 
 #include "preprocessor/Preprocessor.h"
 #include "ArcoCircunf.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "Pnt.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
@@ -56,29 +55,6 @@ XC::SetEstruct *XC::ArcoCircunf::getCopy(void) const
 //! @brief Devuelve un apuntador (constante) al punto intermedio.
 const XC::Pnt *XC::ArcoCircunf::P3(void) const
   { return p3; }
-
-//! @brief Lee un objeto ArcoCircunf desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - p3: Lee el punto intermedio.
-bool XC::ArcoCircunf::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ArcoCircunf) Procesando comando: " << cmd << std::endl;
-    if(cmd == "p3")
-      {
-        const MapPuntos::Indice id_punto= interpretaSize_t(status.GetString());
-        SetVertice(3,BuscaPnt(id_punto));
-	if(!P3())
-	  std::cerr << "ArcoCircunf; " << cmd << " , no se encontró el punto: '" 
-                    << id_punto << "' \n";
-        return true;
-      }
-    else
-      return LineaBase::procesa_comando(status);
-  }
 
 //! @brief Devuelve el vértice de índice i.
 const XC::Pnt *XC::ArcoCircunf::GetVertice(const size_t &i) const
@@ -257,55 +233,3 @@ XC::ID XC::ArcoCircunf::getKPoints(void) const
     retval[2]= P2()->GetTag();
     return retval;
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-any_const_ptr XC::ArcoCircunf::GetProp(const std::string &cod) const
-  {
-    static Pos3d P;
-    if(cod=="getAngComp") //Devuelve el ángulo comprendido.
-      {
-        tmp_gp_dbl= getAnguloComprendido();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getTheta1") //Devuelve el ángulo inicial respecto al eje x.
-      {
-        tmp_gp_dbl= getTheta1();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getTheta2") //Devuelve el ángulo final respecto al eje x.
-      {
-        tmp_gp_dbl= getTheta2();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getCentro")
-      {
-        P= getCentro();
-        return any_const_ptr(&P);
-      }
-    else if(cod=="getPInic")
-      {
-        P= getPInic();
-        return any_const_ptr(&P);
-      }
-    else if(cod=="getPFin")
-      {
-        P= getPFin();
-        return any_const_ptr(&P);
-      }
-    else if(cod=="getPMed")
-      {
-        P= getPMed();
-        return any_const_ptr(&P);
-      }
-    else if(cod=="getRadio")
-      {
-        tmp_gp_dbl= getRadio();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return LineaBase::GetProp(cod);
-  }
-

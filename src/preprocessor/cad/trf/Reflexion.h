@@ -41,7 +41,7 @@ class Reflexion: public TrfGeom
   {
     Reflexion3d rf; //!< Reflexion.
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     //! @brief Constructor.
     Reflexion(Preprocessor *m)

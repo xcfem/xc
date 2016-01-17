@@ -36,7 +36,6 @@
 // It uses the ARPACK to do eigenvalue analysis.
 
 #include <solution/system_of_eqn/eigenSOE/ArpackSOE.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
@@ -44,34 +43,9 @@ XC::ArpackSOE::ArpackSOE(SoluMethod *owr,int classTag, double theShift)
   :EigenSOE(owr,classTag), shift(theShift) {}
 
 
-//! @brief Lee un objeto XC::ArpackSOE desde archivo
-bool XC::ArpackSOE::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ArpackSOE) Procesando comando: " << cmd << std::endl;
-    if(cmd == "shift")
-      {
-        shift= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return EigenSOE::procesa_comando(status);
-  }
-
 //! @brief Devuelve el valor del parámetro shift.
 const double &XC::ArpackSOE::getShift(void) const
   { return shift; }
 
 void XC::ArpackSOE::setShift(const double &s)
   { shift= s; }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ArpackSOE::GetProp(const std::string &cod) const
-  {
-    if(cod=="shift")
-      return any_const_ptr(getShift());
-    else
-      return EigenSOE::GetProp(cod);
-  }

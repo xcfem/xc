@@ -74,7 +74,7 @@ namespace XC {
 class LinearSeries : public CFactorSeries
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     LinearSeries(double cFactor = 1.0);
 

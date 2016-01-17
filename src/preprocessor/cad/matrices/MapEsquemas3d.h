@@ -42,15 +42,12 @@ class TritrizPtrPnt;
 class MapEsquemas3d: public MapCadMember<TritrizPtrPnt>
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
 
   public:
     MapEsquemas3d(Cad *cad= NULL);
 
     TritrizPtrPnt *makeNew(void);
-    TritrizPtrPnt *Nuevo(CmdStatus &);
-
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } //end of XC namespace

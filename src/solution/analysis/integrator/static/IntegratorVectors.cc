@@ -29,7 +29,6 @@
 
 #include "IntegratorVectors.h"
 #include "solution/analysis/integrator/IncrementalIntegrator.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "solution/system_of_eqn/linearSOE/LinearSOE.h"
 #include "utility/actor/actor/CommMetaData.h"

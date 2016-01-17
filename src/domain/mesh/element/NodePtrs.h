@@ -59,7 +59,7 @@ class NodePtrs: public EntCmd
   protected:
     void desconecta(void);
     void setPtrs(Domain *theDomain, const ID &theNodeTags);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     NodePtrs(Element *owr,const size_t &sz);
     NodePtrs(const NodePtrs &otro);
@@ -120,7 +120,7 @@ class NodePtrs: public EntCmd
     const std::vector<int> &getTags(void) const;
     int getIndiceNodo(const Node *) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

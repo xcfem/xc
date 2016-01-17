@@ -53,7 +53,7 @@ class MapPuntos: public MapEnt<Pnt>
   private:
     void UpdateSets(Pnt *) const;
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
 
     Pnt *Crea(void);
   public:
@@ -67,13 +67,12 @@ class MapPuntos: public MapEnt<Pnt>
     Pnt *Nuevo(const Pos3d &);
     Pnt *Nuevo(const size_t &,const Pos3d &);
 
-    Pnt *Nuevo(CmdStatus &);
     Pnt *Copia(const Pnt *,const Vector3d &v);
     void Copia(const std::vector<MapPuntos::Indice> &);
     void Transforma(const TrfGeom &trf,const std::vector<MapPuntos::Indice> &);
     double Dist(const Indice &i,const Indice &j) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

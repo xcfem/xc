@@ -72,7 +72,6 @@ class BeamColumnWithSectionFDTrf3d: public BeamColumnWithSectionFD
     int recvData(const CommParameters &cp);
 
     void set_transf(const CrdTransf *trf);
-    bool procesa_comando(CmdStatus &status);
   public:
     BeamColumnWithSectionFDTrf3d(int tag,int classTag,int numSec);
     BeamColumnWithSectionFDTrf3d(int tag,int classTag,int numSec,const Material *mat,const CrdTransf *trf);
@@ -89,8 +88,6 @@ class BeamColumnWithSectionFDTrf3d: public BeamColumnWithSectionFD
     double getAnguloEjeDebil(const size_t &i) const;
     const Vector &getVDirEjeFuerteGlobales(const size_t &i) const;
     const Vector &getVDirEjeDebilGlobales(const size_t &i) const;
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

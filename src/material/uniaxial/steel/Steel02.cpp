@@ -66,7 +66,6 @@
 #include <cfloat>
 #include <cstdlib>
 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/MovableVector.h"
 
 //! @brief Sets all history and state variables to initial values
@@ -124,21 +123,6 @@ void XC::Steel02::setInitialStress(const double &d)
   {
     sigini= d;
     setup_parameters(); //Inicializa las variables históricas.
-  }
-
-//! @brief Lee un objeto XC::Steel02 desde archivo
-bool XC::Steel02::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Steel02) Procesando comando: " << cmd << std::endl;
-    if(cmd == "tens_inic")
-      {
-        setInitialStress(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else
-      return SteelBase::procesa_comando(status);
   }
 
 XC::UniaxialMaterial *XC::Steel02::getCopy(void) const

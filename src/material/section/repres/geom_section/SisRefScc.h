@@ -44,7 +44,7 @@ namespace XC {
 class SisRefScc: public EntGeomSection
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     //! @brief Constructor.
     SisRefScc(GeomSection *m)
@@ -72,7 +72,7 @@ class SisRefScc: public EntGeomSection
     //! expresado en coordenadas locales.
     virtual Vector2d GetCooLocales(const Vector2d &v) const= 0;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

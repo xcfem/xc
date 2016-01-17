@@ -32,7 +32,6 @@
 #include "xc_utils/src/geom/d2/EcuacionGeneralPlano3d.h"
 #include "utility/matrix/Vector.h"
 #include "material/section/ResponseId.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
 #include "xc_utils/src/geom/d1/Recta2d.h"
 #include "xc_utils/src/geom/d2/Semiplano2d.h"

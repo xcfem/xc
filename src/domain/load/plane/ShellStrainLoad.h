@@ -37,14 +37,9 @@ namespace XC {
 //! @brief Carga debida a deformación impuesta en un elemento Truss.
 class ShellStrainLoad : public BidimStrainLoad
   {
-    void set_comp(const std::string &cmd,CmdStatus &status);
-  protected:
-    bool procesa_comando(CmdStatus &status);
   public:
     ShellStrainLoad(int tag, const ID &theElementTags);
     ShellStrainLoad(int tag= 0);
-  
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

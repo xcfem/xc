@@ -145,7 +145,7 @@ class CorotCrdTransf2d: public CrdTransf2d
     const Vector &getI(void);
     const Vector &getJ(void);
     int getLocalAxes(Vector &xAxis, Vector &yAxis) const; 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 #endif

@@ -50,7 +50,7 @@ class AggregatorAdditions: public DqUniaxialMaterial
     void alloc_ptrs(const ResponseId *);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    virtual bool procesa_comando(CmdStatus &);
+
   public:
     AggregatorAdditions(EntCmd *owner= NULL);
     AggregatorAdditions(EntCmd *owner,const UniaxialMaterial &,int c);
@@ -68,7 +68,7 @@ class AggregatorAdditions: public DqUniaxialMaterial
     int recvSelf(const CommParameters &);
 
     void Print(std::ostream &s, int flag =0) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

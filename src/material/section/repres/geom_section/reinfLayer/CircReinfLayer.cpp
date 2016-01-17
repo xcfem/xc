@@ -60,7 +60,6 @@
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
 #include <material/section/repres/geom_section/reinfLayer/CircReinfLayer.h>
 #include "xc_basic/src/util/matem.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
@@ -100,45 +99,6 @@ XC::CircReinfLayer::CircReinfLayer(ListReinfLayer *owr,Material *mat, int numRei
     const int num_barras= getNumReinfBars();
     if(num_barras > 0)
       finalAng = 360.0 - 360.0/num_barras;
-  }
-
-//! @brief Lee un objeto XC::CircReinfLayer desde archivo
-bool XC::CircReinfLayer::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(CircReinfLayer) Procesando comando: " << cmd << std::endl;
-    if(cmd == "centro") //Coordenadas del centro.
-      {
-	std::deque<std::string> str_coord= separa_cadena(status.GetString(),",");
-        if(str_coord.size()<2)
-	  std::cerr << "Error; " << cmd 
-		    << " se requieren dos coordenadas." << std::endl;
-        else
-          {
-            const double x= interpretaDouble(str_coord[0]);
-            const double y= interpretaDouble(str_coord[1]);
-            centerPosit= Pos2d(x,y);
-	  }
-        return true;
-      }
-    else if(cmd == "initAng")
-      {
-        initAng= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "finalAng")
-      {
-        finalAng= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "arcRad")
-      {
-        arcRad= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return ReinfLayer::procesa_comando(status);
   }
 
 double XC::CircReinfLayer::getMaxY(void) const
@@ -265,24 +225,6 @@ void XC::CircReinfLayer::setFinalAngle(const double &d)
 XC::ReinfLayer *XC::CircReinfLayer::getCopy(void) const
   { return new CircReinfLayer(*this); }
 
-
-//! \brief Devuelve la propiedad del objeto cuyo código(de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::CircReinfLayer::GetProp(const std::string &cod) const
-  {
-    if(cod=="getYCent")
-      return any_const_ptr(centerPosit(0));
-    if(cod=="getZCent")
-      return any_const_ptr(centerPosit(1));
-    if(cod=="getArcRad")
-      return any_const_ptr(arcRad);
-    if(cod=="getInitAng")
-      return any_const_ptr(initAng);
-    if(cod=="getFinalAng")
-      return any_const_ptr(finalAng);
-    else
-      return ReinfLayer::GetProp(cod);
-  }
 
 void XC::CircReinfLayer::Print(std::ostream &s, int flag) const
   {

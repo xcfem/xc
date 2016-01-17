@@ -60,7 +60,6 @@
 // What: "@(#) MaterialModel.C, revA"
 
 #include "Material.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "preprocessor/loaders/MaterialLoader.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
@@ -71,35 +70,6 @@
 XC::Material::Material(int tag, int clasTag)
   :TaggedObject(tag), MovableObject(clasTag) {}
 
-
-//! @brief Lee un objeto XC::Material desde archivo
-bool XC::Material::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Material) Procesando comando: " << cmd << std::endl;
-    if(cmd == "update")
-      {
-        status.GetString();
-        update();
-        return true;
-      }
-    else if(cmd == "revert_to_start")
-      {
-        status.GetBloque(); //Ignoramos argumentos.
-        revertToStart();
-        return true;
-      }
-    else if(cmd == "commit")
-      {
-	std::clog << "El comando: " << cmd << " está pensado para pruebas." << std::endl;
-        status.GetBloque(); //Ignoramos argumentos.
-        commitState();
-        return true;
-      }
-    else
-      return TaggedObject::procesa_comando(status);
-  }
 
 //! @brief Devuelve (si puede) un puntero al preprocesador.
 const XC::MaterialLoader *XC::Material::GetMaterialLoader(void) const
@@ -195,33 +165,3 @@ XC::Material *XC::receiveMaterialPtr(Material* ptr,DbTagData &dt,const CommParam
     return retval;
   }
 
-//! @brief Devuelve la propiedad cuyo código se pasa como parámetro.
-any_const_ptr XC::Material::GetProp(const std::string &cod) const
-  {
-    if(cod=="getGeneralizedStrain")
-      return get_prop_vector(getGeneralizedStrain());
-    else if(cod=="getInitialGeneralizedStrain")
-      return get_prop_vector(getInitialGeneralizedStrain());
-    else if(cod=="getGeneralizedStress")
-      return get_prop_vector(getGeneralizedStress());
-    else if(cod=="getGeneralizedStrainComp")
-      {
-        const size_t i= popSize_t(cod);
-        tmp_gp_dbl= getGeneralizedStrain()[i-1];
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getIntialGeneralizedStrainComp")
-      {
-        const size_t i= popSize_t(cod);
-        tmp_gp_dbl= getInitialGeneralizedStrain()[i-1];
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getGeneralizedStressComp")
-      {
-        const size_t i= popSize_t(cod);
-        tmp_gp_dbl= getGeneralizedStress()[i-1];
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return TaggedObject::GetProp(cod);
-  }

@@ -46,7 +46,7 @@ class MEDFieldInfo: public MEDObject
 
     const MEDGroupInfo &getGrupo(void) const;
     MEDMEM::GROUP *getGrupoMED(void) const;
-    bool procesa_comando(CmdStatus &status);
+
   public:
     inline virtual ~MEDFieldInfo(void)
       {}
@@ -62,8 +62,6 @@ class MEDFieldInfo: public MEDObject
     virtual void defineGaussModels(const Set &)= 0;
 
     virtual void write(const std::string &) const= 0;
-
-    any_const_ptr GetProp(const std::string &) const;
   };
 } // end of XC namespace
 #endif

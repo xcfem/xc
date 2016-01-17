@@ -62,7 +62,6 @@
 
 #include "MapOfTaggedObjects.h"
 #include <utility/tagged/TaggedObject.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "boost/any.hpp"
 
@@ -84,16 +83,6 @@ XC::MapOfTaggedObjects &XC::MapOfTaggedObjects::operator=(const MapOfTaggedObjec
     TaggedObjectStorage::operator=(otro);
     copia(otro);
     return *this;
-  }
-
-//! @brief Lee un objeto MapOfTaggedObjects desde archivo
-bool XC::MapOfTaggedObjects::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MapOfTaggedObjects) Procesando comando: " << cmd << std::endl;
-
-    return TaggedObjectStorage::procesa_comando(status);
   }
 
 XC::MapOfTaggedObjects::~MapOfTaggedObjects(void)

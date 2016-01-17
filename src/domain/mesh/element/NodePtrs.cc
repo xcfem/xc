@@ -33,7 +33,6 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/domain/Domain.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -102,59 +101,6 @@ void XC::NodePtrs::inic(void)
     desconecta();
     for(iterator i= begin();i!=end();i++)
       (*i)= nullptr;
-  }
-
-//! @brief Lee un objeto NodePtrs desde archivo
-bool XC::NodePtrs::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NodePtrs) Procesando comando: " << cmd << std::endl;
-    if(cmd == "for_each")
-      {
-        const std::string nmbBlq= nombre_clase()+":for_each";
-        const std::string &bloque= status.GetBloque();
-	iterator i= begin();
-	for(;i!= end();i++)
-          (*i)->EjecutaBloque(status,bloque,nmbBlq);
-        return true;
-      }
-    else if(cmd == "nodo")
-      {
-        const std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-        const size_t sz= fnc_indices.size();
-        const std::string posLectura= get_ptr_status()->GetEntradaComandos().getPosicionLecturaActual();
-        if(sz>0)
-          {
-            const size_t i= convert_to_size_t(fnc_indices[0]); //Tag del nodo.
-            if(i<size())
-              {
-                if(theNodes[i])
-                  theNodes[i]->LeeCmd(status);
-                else
-                  {
-                    status.GetBloque(); //Ignoramos entrada.
-	            std::cerr << "El nodo de ídice " << i << " no está asignado."
-                              << posLectura << std::endl;
-                  }
-              }
-            else
-              {
-                status.GetBloque(); //Ignoramos entrada.
-	        std::cerr << "Índice de nodo " << i << " fuera de rango."
-                          << posLectura << std::endl;
-              }
-          }
-        else
-          {
-            status.GetBloque(); //Ignoramos entrada.
-	    std::cerr << "Se esperaba un índice de nodo."
-                          << posLectura << std::endl;
-          }
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
   }
 
 //! @brief Devuelve verdadero si alguno de los punteros
@@ -508,34 +454,4 @@ XC::Matrix XC::NodePtrs::getNodeVectors(const Vector &v) const
       }
     return retval;
     
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::NodePtrs::GetProp(const std::string &cod) const
-  {
-    if(cod == "num_nod")
-      {
-        tmp_gp_szt= theNodes.size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getTagNode")
-      {
-        const size_t i= popSize_t(cod);
-        const Node *tmp= theNodes[i];
-        if(tmp)
-          tmp_gp_int= tmp->getTag();
-        else
-	  std::cerr << "El nodo de ídice " << i << " no está asignado." << std::endl;
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getTagNearestNode")
-      {
-        const Pos3d p= popPos3d(cod);
-        const Node *tmp= getNearestNode(p);
-        tmp_gp_int= tmp->getTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else
-      return EntCmd::GetProp(cod);
   }

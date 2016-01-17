@@ -99,7 +99,7 @@ class ArrayOfTaggedObjects : public TaggedObjectStorage
     iterator end(void)
       { return theComponents.end(); }
     void clearComponents(void);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ArrayOfTaggedObjects(EntCmd *owr,int size,const std::string &containerName);
     ArrayOfTaggedObjects(const ArrayOfTaggedObjects &otro);
@@ -126,7 +126,6 @@ class ArrayOfTaggedObjects : public TaggedObjectStorage
     virtual TaggedObjectStorage *getEmptyCopy(void);
     virtual void clearAll(bool invokeDestructor = true);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
     void Print(std::ostream &s, int flag =0);
     friend class ArrayOfTaggedObjectsIter;
   };

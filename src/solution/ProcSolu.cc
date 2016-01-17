@@ -28,7 +28,6 @@
 
 #include "ProcSolu.h"
 #include "ProblemaEF.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 //Analysis
 #include <solution/analysis/analysis/Analysis.h>
@@ -108,29 +107,6 @@ void XC::ProcSolu::copia_analysis(Analysis *ptr)
     else
      std::cerr << "ProcSolu::copia_analysis; se pasó un puntero nulo." << std::endl;
   }
-//! @brief Lee un objeto Analysis desde archivo
-bool XC::ProcSolu::procesa_cmd_analysis(const std::string &cmd,CmdStatus &status)
-  {
-    bool retval= false;
-    if(cmd.find("_analysis")!=std::string::npos)
-      {
-        const CmdParser &parser= status.Parser();
-        std::string cod_solu_method1= "nil";
-        std::string cod_solu_method2= "nil";
-        std::deque<boost::any> fnc_indices= parser.SeparaIndices(this);
-        if(!fnc_indices.empty())
-          {
-            if(fnc_indices.size()>0)
-              cod_solu_method1= convert_to_string(fnc_indices[0]);
-            if(fnc_indices.size()>1)
-              cod_solu_method2= convert_to_string(fnc_indices[1]);
-          }
-        if(alloc_analysis(cmd,cod_solu_method1,cod_solu_method2))
-          theAnalysis->LeeCmd(status);
-        retval= true;
-      }
-    return retval;
-  }
 
 //! @brief Define el tipo de análisis (estático, dinámico,...)
 XC::Analysis &XC::ProcSolu::newAnalysis(const std::string &nmb,const std::string &cod_solu_metodo,const std::string &cod_solu_eigenM)
@@ -166,43 +142,6 @@ XC::ProcSolu &XC::ProcSolu::operator=(const ProcSolu &otro)
 //! @brief Devuelve el modelo a su estado original.
 void XC::ProcSolu::revertToStart(void)
   { solu_control.revertToStart(); }
-
-//! @brief Lee un objeto ProcSolu desde archivo.
-bool XC::ProcSolu::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ProcSolu) Procesando comando: " << cmd << std::endl;
-
-    //Análisis.
-    if(cmd == "current_analysis") //Comandos para el análisis actual.
-      {
-        if(theAnalysis)
-          theAnalysis->LeeCmd(status);;
-        return true;
-      }
-    else if(cmd == "control")
-      {
-        solu_control.LeeCmd(status);
-        return true;
-      }
-    else if(procesa_cmd_analysis(cmd,status))
-      return true;
-    else if(cmd == "reset")
-      {
-        status.GetString();
-        revertToStart();
-        return true;
-      }
-    else if(cmd == "clearAll")
-      {
-        status.GetString();
-        clearAll();
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 void XC::ProcSolu::clearAll(void)
   {

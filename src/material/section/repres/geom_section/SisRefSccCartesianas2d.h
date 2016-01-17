@@ -42,7 +42,7 @@ class SisRefSccCartesianas2d: public SisRefScc
   {
     Ref2d2d ref;//!< Sistema de referencia.
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     //! @brief Constructor.
     SisRefSccCartesianas2d(GeomSection *m)
@@ -58,7 +58,7 @@ class SisRefSccCartesianas2d: public SisRefScc
     Pos2d GetPosLocal(const Pos2d &p) const;
     Vector2d GetCooLocales(const Vector2d &v) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

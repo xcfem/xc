@@ -27,7 +27,6 @@
 //elem_load.cc
 
 #include "elem_load.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "boost/any.hpp"
 #include "utility/matrix/Vector.h"
 
@@ -56,71 +55,4 @@ XC::ElementalLoad *XC::procesa_element_load(XC::LoadPattern *lp,int &tag_el,cons
     else if(cmd == "truss_temp_load")
       retval= new_elem_load<TrussStrainLoad>(lp,tag_el);
     return retval;
-  }
-
-
-bool XC::procesa_comando_element_load(XC::LoadPattern *lp,int &tag_el,const std::string &cmd,CmdStatus &status)
-  {
-    if(cmd == "beam2d_uniform_load")
-      {
-        procesa_elem_load<Beam2dUniformLoad>(lp,tag_el,cmd,status);
-        return true;
-      }
-    else if(cmd == "beam2d_point_load")
-      {
-        procesa_elem_load<Beam2dPointLoad>(lp,tag_el,cmd,status);
-        return true;
-      }
-    else if(cmd == "beam_strain_load")
-      {
-        procesa_elem_load<BeamStrainLoad>(lp,tag_el,cmd,status);
-        return true;
-      }
-    else if(cmd == "beam3d_point_load")
-      {
-        procesa_elem_load<Beam3dPointLoad>(lp,tag_el,cmd,status);
-        return true;
-      }
-    else if(cmd == "beam3d_uniform_load")
-      {
-        procesa_elem_load<Beam3dUniformLoad>(lp,tag_el,cmd,status);
-        return true;
-      }
-    else if(cmd == "brick_self_weight")
-      {
-        procesa_elem_load<BrickSelfWeight>(lp,tag_el,cmd,status);
-        return true;
-      }
-    else if(cmd == "shell_uniform_load")
-      {
-        procesa_elem_load<ShellUniformLoad>(lp,tag_el,cmd,status);
-        return true;
-      }
-    else if(cmd == "bidim_strain_load")
-      {
-        procesa_elem_load<BidimStrainLoad>(lp,tag_el,cmd,status);
-        return true;
-      }
-    else if(cmd == "shell_strain_load")
-      {
-        procesa_elem_load<ShellStrainLoad>(lp,tag_el,cmd,status);
-        return true;
-      }
-    else if(cmd == "truss_temp_load")
-      {
-        procesa_elem_load<TrussStrainLoad>(lp,tag_el,cmd,status);
-        return true;
-      }
-    return false;
-  }
-
-//! @brief OBSOLETA Procesa los comandos correspondientes a cargas sobre elemento
-bool XC::procesa_comando_element_edge_load(XC::LoadPattern *lp,int &tag_el,const std::string &cmd,CmdStatus &status)
-  {
-    if(cmd == "edge_load_3d")
-      {
-        procesa_elem_edge_load<ElementEdge3dUniformLoad>(lp,tag_el,cmd,status);
-        return true;
-      }
-    return false;
   }

@@ -68,7 +68,6 @@
 #include <fstream>
 
 #include <iomanip>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/matrix/ID.h"
 
@@ -204,35 +203,6 @@ void XC::PathTimeSeries::readFromFiles(const std::string &filePathName,const std
               }
          }
      }
-  }
-
-//! @brief Lee un objeto XC::PathTimeSeries desde archivo
-bool XC::PathTimeSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(PathTimeSeries) Procesando comando: " << cmd << std::endl;
-    if(cmd == "file")
-      {
-        readFromFile(interpretaString(status.GetString()));
-        return true;
-      }
-    else if(cmd == "files")
-      {
-        const std::vector<std::string> nombres= crea_vector_string(status.GetString());
-        if(nombres.size()<2)
-	  std::cerr << "sintaxis: files{fileNamePath,fileNameTime}" << std::endl;
-        else
-          readFromFiles(nombres[0], nombres[1]);
-        return true;
-      }
-    else if(cmd == "set_time")
-      {
-	time= Vector(crea_vector_double(status.GetString()));
-        return true;
-      }
-    else
-      return PathSeriesBase::procesa_comando(status);
   }
 
 double XC::PathTimeSeries::getTimeIncr(double pseudoTime) const

@@ -109,11 +109,11 @@ class MapSet: public EntCmd, public MovableObject
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    virtual bool procesa_comando(CmdStatus &);
+
     friend class Preprocessor;
     MapSet(Preprocessor *preprocessor= NULL);
   public:
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     virtual ~MapSet(void);
 
     EntMdlr *inserta_ent_mdlr(EntMdlr *ent_mdlr);

@@ -1459,27 +1459,3 @@ void XC::ForceBeamColumn2d::setSectionPointers(const std::vector<SeccionBarraPri
       { std::cerr << "Error: ForceBeamColumn2d::setSectionPointers -- max number of sections exceeded"; }
     setSections(secPtrs);
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ForceBeamColumn2d::GetProp(const std::string &cod) const
-  {
-    if(cod == "getIntegral") //Calcula la integral de la expresión que se pasa como parámetro.
-      {
-        if(InterpreteRPN::Pila().size()>1)
-          {
-            const CrdTransf *trf= getCoordTransf();
-            const int nIP= convert_to_int(InterpreteRPN::Pila().Pop());
-            const ExprAlgebra expr= convert_to_ExprAlgebra(InterpreteRPN::Pila().Pop());
-            tmp_gp_dbl= beamIntegr->getIntegral(expr,nIP,*trf);
-            return any_const_ptr(tmp_gp_dbl);
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,2,"GetProp",cod);
-            return any_const_ptr();
-          }
-      }
-    else
-      return NLForceBeamColumn2dBase::GetProp(cod);
-  }

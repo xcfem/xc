@@ -27,7 +27,6 @@
 //PropRecorder.cc
 
 #include <utility/recorder/PropRecorder.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include <domain/domain/Domain.h>
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
@@ -37,64 +36,6 @@
 XC::PropRecorder::PropRecorder(int classTag,Domain *ptr_dom)
   :Recorder(classTag), CallbackRecord(), CallbackRestart(),
   lastCommitTag(-1),lastTimeStamp(-1.0),theDomain(ptr_dom) {}
-
-//! @brief Lee un objeto PropRecorder desde archivo
-bool XC::PropRecorder::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(PropRecorder) Procesando comando: " << cmd << std::endl;
-    if(cmd == "callback_record")
-      {
-        CallbackRecord= status.GetBloque();
-        return true;
-      }   
-    else if(cmd == "callback_restart")
-      {
-        CallbackRestart= status.GetBloque();
-        return true;
-      }
-    // else if(cmd == "nodos")
-    //   {
-    //     if(!theDomain)
-    // 	  std::cerr << "PropRecorder::procesa_comando; el recorder no tiene asignado el dominio." << std::endl;
-    //     else
-    //       {
-    //         std::vector<boost::any> param= interpretaVectorAny(status.GetString());
-    //         std::vector<int> iNodos= convert_to_vector_int(param);
-    //         const int sz= iNodos.size();
-    //         if(sz)
-    //           {
-    //             for(int i= 0;i<sz;i++)
-    //               objetos.push_back(theDomain->getNode(iNodos[i]));
-    //           }
-    //         else
-    // 	      std::cerr << "Error; " << cmd << "la lista de nodos está vacia." << std::endl;
-    //       }
-    //     return true;
-    //   }
-    // else if(cmd == "elementos")
-    //   {
-    //     if(!theDomain)
-    // 	  std::cerr << "PropRecorder::procesa_comando; el recorder no tiene asignado el dominio." << std::endl;
-    //     else
-    //       {
-    //         std::vector<boost::any> param= interpretaVectorAny(status.GetString());
-    //         std::vector<int> iElementos= convert_to_vector_int(param);
-    //         const int sz= iElementos.size();
-    //         if(sz)
-    //           {
-    //             for(int i= 0;i<sz;i++)
-    //               objetos.push_back(theDomain->getElement(iElementos[i]));
-    //           }
-    //         else
-    // 	      std::cerr << "Error; " << cmd << "la lista de elementos está vacia." << std::endl;
-    //       }
-    //     return true;
-    //   }
-    else
-      return Recorder::procesa_comando(status);
-  }
 
 //! @brief Asigna el dominio al recorder.
 int XC::PropRecorder::setDomain(Domain &theDom)

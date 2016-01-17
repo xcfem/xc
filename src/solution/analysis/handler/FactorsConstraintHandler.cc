@@ -55,33 +55,12 @@
 // What: "@(#) FactorsConstraintHandler.C, revA"
 
 #include <solution/analysis/handler/FactorsConstraintHandler.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include <utility/matrix/Vector.h>
 #include "xc_utils/src/base/any_const_ptr.h"
 
 
 XC::FactorsConstraintHandler::FactorsConstraintHandler(ModelWrapper *owr,int classTag,const double &sp,const double &mp)
   :ConstraintHandler(owr,classTag), alphaSP(sp), alphaMP(mp) {}
-
-//! @brief Lee un objeto XC::FactorsConstraintHandler desde archivo
-bool XC::FactorsConstraintHandler::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(FactorsConstraintHandler) Procesando comando: " << cmd << std::endl;
-    if(cmd== "alphaMP")
-      {
-        alphaMP= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd== "alphaSP")
-      {
-        alphaSP= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return ConstraintHandler::procesa_comando(status);
-  }
 
 //! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
 int XC::FactorsConstraintHandler::sendData(CommParameters &cp)
@@ -130,14 +109,3 @@ int XC::FactorsConstraintHandler::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::FactorsConstraintHandler::GetProp(const std::string &cod) const
-  {
-    if(cod=="@getAlphaSP")
-      return any_const_ptr(alphaSP);
-    else if(cod=="@getAlphaMP")
-      return any_const_ptr(alphaMP);
-    else
-      return ConstraintHandler::GetProp(cod);
-  }

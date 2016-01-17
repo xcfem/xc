@@ -27,7 +27,6 @@
 //RayleighDampingFactors.cpp
 
 #include "RayleighDampingFactors.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/matrix/Vector.h"
 #include <domain/mesh/element/Information.h>
@@ -43,36 +42,6 @@ XC::RayleighDampingFactors::RayleighDampingFactors(const double &aM,const double
 //! @brief constructor
 XC::RayleighDampingFactors::RayleighDampingFactors(const Vector &v)
   : EntCmd(), MovableObject(0), alphaM(v[0]), betaK(v[1]), betaK0(v[2]), betaKc(v[3]) {}
-
-//! @brief Lee un objeto XC::RayleighDampingFactors desde archivo
-bool XC::RayleighDampingFactors::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Element) Procesando comando: " << cmd << std::endl;
-    if(cmd == "alphaM")
-      {
-        alphaM= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "betaK")
-      {
-        betaK= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "betaK0")
-      {
-        betaK0= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "betaKc")
-      {
-        betaKc= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 void XC::RayleighDampingFactors::Print(std::ostream &s, int flag) const
   {
@@ -94,23 +63,6 @@ int XC::RayleighDampingFactors::updateParameter(int parameterID, Information &in
       default:
         return 0;
       }
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::RayleighDampingFactors::GetProp(const std::string &cod) const
-  {
-    static m_double tmp;
-    if(cod == "getAlphaM")
-      return any_const_ptr(alphaM);
-    else if(cod == "getBetaK")
-      return any_const_ptr(betaK);
-    else if(cod == "getBetaK0")
-      return any_const_ptr(betaK0);
-    else if(cod == "getBetaKc")
-      return any_const_ptr(betaKc);
-    else
-      return EntCmd::GetProp(cod);
   }
 
 //! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.

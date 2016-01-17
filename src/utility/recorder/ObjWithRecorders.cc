@@ -65,7 +65,6 @@
 #include <utility/recorder/NodePropRecorder.h>
 #include <utility/recorder/ElementPropRecorder.h>
 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "boost/any.hpp"
 
@@ -88,7 +87,7 @@ XC::Recorder *XC::ObjWithRecorders::newRecorder(const std::string &cod,DataOutpu
         if(output_handler)
           tmp->SetOutputHandler(output_handler);
         else
-          std::cerr << "ObjWithRecorders; procesando comando: " << cod 
+          std::cerr << "ObjWithRecorders; new recorder: " << cod 
                     << " no hay gestores de salida." << std::endl;
         retval= tmp;
       }
@@ -98,7 +97,7 @@ XC::Recorder *XC::ObjWithRecorders::newRecorder(const std::string &cod,DataOutpu
         if(output_handler)
           tmp->SetOutputHandler(output_handler);
         else
-          std::cerr << "ObjWithRecorders; procesando comando: " << cod 
+          std::cerr << "ObjWithRecorders; new recorder: " << cod 
                     << " no hay gestores de salida." << std::endl;
         retval= tmp;
       }
@@ -108,7 +107,7 @@ XC::Recorder *XC::ObjWithRecorders::newRecorder(const std::string &cod,DataOutpu
         if(output_handler)
           tmp->SetOutputHandler(output_handler);
         else
-          std::cerr << "ObjWithRecorders; procesando comando: " << cod 
+          std::cerr << "ObjWithRecorders; new recorder: " << cod 
                     << " no hay gestores de salida." << std::endl;
         retval= tmp;
       }
@@ -118,7 +117,7 @@ XC::Recorder *XC::ObjWithRecorders::newRecorder(const std::string &cod,DataOutpu
         if(output_handler)
           tmp->SetOutputHandler(output_handler);
         else
-          std::cerr << "ObjWithRecorders; procesando comando: " << cod 
+          std::cerr << "ObjWithRecorders; new recorder: " << cod 
                     << " no hay gestores de salida." << std::endl;
         retval= tmp;
       }
@@ -133,7 +132,7 @@ XC::Recorder *XC::ObjWithRecorders::newRecorder(const std::string &cod,DataOutpu
         if(output_handler)
           tmp->SetOutputHandler(output_handler);
         else
-          std::cerr << "ObjWithRecorders; procesando comando: " << cod 
+          std::cerr << "ObjWithRecorders; new recorder: " << cod 
                     << " no hay gestores de salida." << std::endl;
         retval= tmp;
       }
@@ -158,51 +157,6 @@ XC::Recorder *XC::ObjWithRecorders::newRecorder(const std::string &cod,DataOutpu
     if(retval)
       addRecorder(*retval);
     return retval;
-  }
-
-//! @brief Lee un objeto Recorder desde archivo.
-XC::Recorder *XC::ObjWithRecorders::procesa_cmd_recorder(const std::string &cmd,CmdStatus &status)
-  {
-    Recorder *retval= nullptr;
-    if(cmd.find("recorder") != std::string::npos) 
-      {
-        const CmdParser &parser= status.Parser();
-        DataOutputHandler *output_handler= nullptr;
-        if(output_handlers)
-          {
-            std::string cod_output_handler= "nil";
-            std::deque<boost::any> fnc_indices;
-            if(parser.TieneIndices())
-              {
-                fnc_indices= status.Parser().SeparaIndices(this);
-                if(fnc_indices.size()>0)
-                  {
-                    cod_output_handler= convert_to_string(fnc_indices[0]);
-                  }
-              }
-            output_handler= output_handlers->find(cod_output_handler)->second;
-            if(!output_handler && verborrea>1)
-	      std::cerr << "ObjWithRecorders::procesa_comando; no se encontró el gestor de salida: '"
-                        << cod_output_handler << "' al procesar el comando '" << cmd << "'\n";
-          }
-        retval= newRecorder(cmd,output_handler);
-      }
-    return retval;
-  }
-
-//! @brief Lee un objeto XC::ObjWithRecorders desde archivo
-bool XC::ObjWithRecorders::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ObjWithRecorders) Procesando comando: " << cmd << std::endl;
-    if(Recorder *tmp= procesa_cmd_recorder(cmd,status))
-      {
-        tmp->LeeCmd(status);
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
   }
 
 //! @brief Destructor.

@@ -27,7 +27,6 @@
 //EqualDOF.cpp
 
 #include <domain/constraints/EqualDOF.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/matrix/ID.h"
 #include "utility/matrix/Matrix.h"
 #include <domain/mesh/node/Node.h>

@@ -76,7 +76,7 @@ class PySimple1: public PQyzBase
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
 
   public:
     PySimple1(int tag, int classtag, int soilType, double pult, double y50,double drag, double dashpot);
@@ -97,7 +97,7 @@ class PySimple1: public PQyzBase
     int recvSelf(const CommParameters &);
 
     void Print(std::ostream &s, int flag =0);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

@@ -52,8 +52,7 @@ typedef std::map<std::string,Combinacion *> map_combinaciones; //!< Combinacione
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    int procesa_combinacion(const int &,const std::string &,CmdStatus &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     GrupoCombinaciones(LoadLoader *owr);
     ~GrupoCombinaciones(void);
@@ -80,10 +79,6 @@ typedef std::map<std::string,Combinacion *> map_combinaciones; //!< Combinacione
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-
-    void EjecutaBloqueForEach(CmdStatus &,const std::string &);
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // end of XC namespace

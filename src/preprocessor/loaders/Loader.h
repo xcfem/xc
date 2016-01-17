@@ -51,7 +51,7 @@ class Loader: public EntCmd,public MovableObject
   {
   protected:
     Preprocessor *preprocessor; //!< Puntero al preprocesador.
-    bool procesa_comando(CmdStatus &status);
+
     friend class Preprocessor;    
     void set_preprocessor(Preprocessor *preprocessor);
   public:
@@ -61,8 +61,6 @@ class Loader: public EntCmd,public MovableObject
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // end of XC namespace

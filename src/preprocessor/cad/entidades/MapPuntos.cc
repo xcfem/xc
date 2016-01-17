@@ -37,52 +37,12 @@
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
 XC::MapPuntos::MapPuntos(Cad *cad)
   : MapEnt<Pnt>(cad) {}
 
-//! @brief Lee un objeto Pnt desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - pnt: Lee un nuevo punto.
-//! - linea: Lee una nueva línea.
-//! - arco: Lee un nuevo arco.
-//! - sec_lineas: Lee una nueva línea compuesta.
-bool XC::MapPuntos::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string str_err= "(MapPuntos) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << str_err << std::endl;
-    if(cmd == "tag_punto")
-      {
-        setTag(interpretaSize_t(status.GetString())); //Nuevo identificador del punto.
-        return true;
-      }
-    else if(cmd == "pnt") //Crea un nuevo punto (o llama a uno existente).
-      {
-        Nuevo(status);
-        return true;
-      }
-    else if(cmd == "copia_puntos")
-      {
-        const std::vector<Indice> tmp= crea_vector_size_t(status.GetString());
-        Copia(tmp);
-        return true;
-      }
-    else if(cmd == "for_each")
-      {
-        const std::string bloque= status.GetBloque();
-        EjecutaBloqueForEach(status,bloque);
-        return true;
-      }
-    else
-      return MapEnt<Pnt>::procesa_comando(status);
-  }
 
 //! @brief Inserta el nuevo punto en el conjunto total y los conjuntos abiertos.
 void XC::MapPuntos::UpdateSets(Pnt *nuevo_punto) const
@@ -204,29 +164,6 @@ XC::Pnt *XC::MapPuntos::Nuevo(const size_t &tag,const Pos3d &pos)
     return retval;
   }
 
-
-//! @brief Lee un nuevo punto desde archivo.
-XC::Pnt *XC::MapPuntos::Nuevo(CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    bool nuevo= true;
-    size_t old_tag= getTag();
-    Pnt *retval= nullptr;
-    if(fnc_indices.size()>0)
-      {
-        setTag(convert_to_size_t(fnc_indices[0])); //Identificador del punto.
-        retval= busca(getTag());
-      }
-    if(retval)
-      nuevo= false;
-    else
-      retval= Crea();
-    if(!nuevo)
-      setTag(old_tag);
-    retval->LeeCmd(status); //Lee el punto
-    return retval;
-  }
-
 //! @brief Crea un nuevo punto, copia del que se pasa como parámetro con
 //! el nombre que le toca según el valor del tag. Las coordenadas del
 //! nuevo punto serán las que resulten de sumar a las del primitivo el
@@ -301,58 +238,4 @@ double XC::MapPuntos::Dist(const Indice &i,const Indice &j) const
     else
       retval= pA->DistanciaA(pB->GetPos());
     return retval;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::MapPuntos::GetProp(const std::string &cod) const
-  {
-    if(cod == "pnt")
-      {
-        static const Pnt *punto;
-        const size_t iPunto= popSize_t(cod);
-        punto= busca(iPunto);
-        if(punto)
-          return any_const_ptr(punto);
-        else
-          {
-            std::cerr << "MapPuntos::GetProp; no se encontró el punto: '" 
-                      << iPunto << "'.\n";
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getTagNearestPnt")
-      {
-        const Pos3d p= popPos3d(cod);
-        const Pnt *tmp= getNearest(p);
-        if(!tmp)
-          {
-            const std::string posLectura= get_ptr_status()->GetEntradaComandos().getPosicionLecturaActual();
-            std::cerr << "No se encontró un punto cercano a la posición: "
-                      << p << ". " << posLectura << std::endl;
-          }
-        else
-          tmp_gp_int= tmp->GetTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="num_puntos")
-      {
-        tmp_gp_szt= this->size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="dist_puntos")
-      {
-        size_t iPuntoA= 0, iPuntoB= 0;
-        if(InterpreteRPN::Pila().size()>1)
-          {
-            iPuntoA= convert_to_size_t(InterpreteRPN::Pila().Pop());
-            iPuntoB= convert_to_size_t(InterpreteRPN::Pila().Pop());
-          }
-        else
-          err_num_argumentos(std::cerr,2,"GetProp",cod);
-        tmp_gp_dbl= Dist(iPuntoA,iPuntoB);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return MapEnt<Pnt>::GetProp(cod);
   }

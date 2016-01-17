@@ -31,7 +31,6 @@
 #include "SisRefScc.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 
@@ -53,28 +52,6 @@ void XC::Spot::borra_linea(Eje *l)
 //! Devuelve el vector de posición del punto.
 Vector2d XC::Spot::VectorPos(void) const
   { return p.VectorPos();  }
-
-//! @brief Lee un objeto Spot desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - pos: Lee las coordenadas del punto.
-bool XC::Spot::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Spot) Procesando comando: " << cmd << std::endl;
-    if(cmd == "pos")
-      {
-        p.LeeCmd(status);
-        const SisRefScc *sr= SisRefSccActual();
-        if(sr) //El sistema de coordenadas no es el global.
-          p= sr->GetPosGlobal(p); //Pasa a coordenadas globales.
-        return true;
-      }
-    else
-      return EntGeomSection::procesa_comando(status);
-  }
 
 //! @brief Actualiza la topología.
 void XC::Spot::actualiza_topologia(void)
@@ -98,22 +75,4 @@ bool XC::Spot::Toca(const Eje &l) const
 double XC::Spot::DistanciaA(const Pos2d &pt) const
   { return dist(p,pt);  }
 
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-//! -nlineas: Devuelve el número de líneas que empiezan o acaban en este punto.
-any_const_ptr XC::Spot::GetProp(const std::string &cod) const
-  {
-    if(cod=="pos")
-      return any_const_ptr(GetPos());
-    else if(cod=="nlineas")
-      {
-        tmp_gp_szt= nLines();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return EntGeomSection::GetProp(cod);
-  }
 

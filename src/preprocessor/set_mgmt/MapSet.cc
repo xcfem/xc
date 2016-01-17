@@ -27,7 +27,6 @@
 //MapSet.cc
 
 #include "MapSet.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "Set.h"
 #include "SetEstruct.h"
 #include "preprocessor/cad/entidades/EntMdlr.h"
@@ -231,58 +230,6 @@ XC::MapSet &XC::MapSet::operator=(const MapSet &otro)
     preprocessor= otro.preprocessor;
     setup_total();
     return *this;
-  }
-
-//! @brief Lee un objeto MapSet desde archivo
-bool XC::MapSet::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string msg_proc_cmd= "(MapSet) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << msg_proc_cmd << std::endl;
-    if(cmd == "def_set" || (cmd == "sets")) //Definición de un conjunto.
-      {
-	std::string nmb_set= "";
-        std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-        if(fnc_indices.size()>0)
-          nmb_set= convert_to_string(fnc_indices[0]); //Nombre del set.
-        Set *s= crea_set(nmb_set);
-        if(s) s->LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "abre_set")
-      {
-	const std::string nmb_set= interpretaString(status.GetString());
-	abre_set(nmb_set);
-        return true;
-      }
-    else if(cmd == "cierra_set")
-      {
-	const std::string nmb_set= interpretaString(status.GetString());
-	cierra_set(nmb_set);
-        return true;
-      }
-    else if(cmd == "for_each")
-      {
-        const std::string nmbBlq= nombre_clase()+":for_each";
-        const std::string bloque= status.GetBloque();
-        for(iterator i= begin();i!=end();i++)
-          (*i).second->EjecutaBloque(status,bloque,nmbBlq);
-        return true;
-      }
-    else if(cmd == "total")
-      {
-        if(total)
-          total->LeeCmd(status);
-        return true;
-      }
-    SetBase *set_ptr= busca_set(cmd);
-    if(set_ptr)
-      {
-        set_ptr->LeeCmd(status);
-        return true;
-      }
-    return EntCmd::procesa_comando(status);
   }
 
 //! @brief Creates a new set with the name which is passed as a parameter.
@@ -613,17 +560,4 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const UniformGrid *ug)
     for(iterator i= begin();i!=end();i++)
       if((*i).second->In(ug)) retval.insert((*i).second);
     return retval;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::MapSet::GetProp(const std::string &cod) const
-  {
-    const SetBase *set_ptr= busca_set(cod);
-    if(set_ptr)
-      return any_const_ptr(set_ptr);
-    else
-      return EntCmd::GetProp(cod);
   }

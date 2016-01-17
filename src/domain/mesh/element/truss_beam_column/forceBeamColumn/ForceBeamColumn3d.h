@@ -127,7 +127,7 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

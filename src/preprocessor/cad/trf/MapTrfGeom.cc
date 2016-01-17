@@ -35,7 +35,6 @@
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "Rotacion.h"
 #include "Reflexion.h"
@@ -62,54 +61,4 @@ XC::TrfGeom *XC::MapTrfGeom::newTransformation(const std::string &type)
       std::cerr << "Transformation type: '" << type
                 << "' unknown." << std::endl;
     return retval;
-  }
-
-//! @brief Lee un objeto MapTrfGeom desde el archivo de entrada.
-bool XC::MapTrfGeom::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string str_err= "(MapTrfGeom) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << str_err << std::endl;
-
-    if(cmd == "tag_trf_geom")
-      {
-        setTag(interpretaSize_t(status.GetString()));
-        return true;
-      }
-    else if(cmd == "rot") //Crea una nueva rotación.
-      {
-        Nueva<Rotacion>(status);
-        return true;
-      }
-    else if(cmd == "reflex") //Crea una nueva reflexión.
-      {
-        Nueva<Reflexion>(status);
-        return true;
-      }
-    else if(cmd == "escal") //Crea un nuevo escalado.
-      {
-        Nueva<Escalado>(status);
-        return true;
-      }
-    else if(cmd == "transl") //Crea una nueva traslacion.
-      {
-        Nueva<Traslacion>(status);
-        return true;
-      }
-    else
-      return MapCadMember<TrfGeom>::procesa_comando(status);
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::MapTrfGeom::GetProp(const std::string &cod) const
-  {
-    if(cod=="num_trfs")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return MapCadMember<TrfGeom>::GetProp(cod);
   }

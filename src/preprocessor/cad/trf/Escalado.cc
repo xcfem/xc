@@ -32,29 +32,8 @@
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-
-//! @brief Lee un objeto Escalado desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - ang: Define el ángulo de rotación.
-bool XC::Escalado::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= status.Cmd();
-    if(verborrea>2)
-      std::clog << "(Escalado) Procesando comando: " << cmd << std::endl;
-    if(cmd == "fe")
-      {
-        GEOM_FT fe= interpretaDouble(status.GetString());
-        ee= Escalado3d(fe);
-        return true;
-      }
-    else
-      return TrfGeom::procesa_comando(status);
-  }
 
 //! @brief Aplica la transformación a los elementos del conjunto.
 Pos3d XC::Escalado::Transforma(const Pos3d &p) const

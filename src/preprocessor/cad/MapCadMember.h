@@ -32,7 +32,6 @@
 #include "preprocessor/cad/MapCadMemberBase.h"
 #include <map>
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "boost/python/list.hpp"
 
 namespace XC {
@@ -60,7 +59,7 @@ template <class T>
     void clearAll(void);
     virtual ~MapCadMember(void);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 //! @brief Constructor.
@@ -134,20 +133,6 @@ boost::python::list MapCadMember<T>::getKeys(void) const
 template <class T>
 MapCadMember<T>::~MapCadMember(void)
   { clearAll(); }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-template <class T>
-any_const_ptr MapCadMember<T>::GetProp(const std::string &cod) const
-  {
-    if(cod=="size")
-      {
-        tmp_gp_szt= this->size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return MapCadMemberBase::GetProp(cod);
-  }
 
 } //end of XC namespace
 #endif

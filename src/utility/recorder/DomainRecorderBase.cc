@@ -27,20 +27,10 @@
 //DomainRecorderBase.cc
 
 #include <utility/recorder/DomainRecorderBase.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 XC::DomainRecorderBase::DomainRecorderBase(int classTag,Domain *ptr_dom)
   :Recorder(classTag),theDomain(0) {}
 
-
-//! @brief Lee un objeto XC::DomainRecorderBase desde archivo
-bool XC::DomainRecorderBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DomainRecorderBase) Procesando comando: " << cmd << std::endl;
-    return Recorder::procesa_comando(status);
-  }
 
 int XC::DomainRecorderBase::setDomain(Domain &theDom)
   {

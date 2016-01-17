@@ -61,8 +61,3 @@ int XC::EQBasePattern::recvData(const CommParameters &cp)
     res+= cp.receiveMovable(theMotions,getDbTagData(),CommMetaData(16));
     return res;
   }
-
-any_const_ptr XC::EQBasePattern::GetProp(const std::string &cod) const
-  {
-    return LoadPattern::GetProp(cod);
-  }

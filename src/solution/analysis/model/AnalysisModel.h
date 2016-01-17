@@ -130,7 +130,7 @@ class AnalysisModel: public MovableObject, public EntCmd
     ModelWrapper *getModelWrapper(void);
     const ModelWrapper *getModelWrapper(void) const;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
 
     friend class Integrator;
     friend class Analysis;

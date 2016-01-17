@@ -61,7 +61,6 @@
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
@@ -227,38 +226,6 @@ double XC::ReinfBar::getMinY(void) const
   { return posit(0)-(diameter/2); }
 double XC::ReinfBar::getMinZ(void) const
   { return posit(1)-(diameter/2); }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ReinfBar::GetProp(const std::string &cod) const
-  {
-    if(cod=="getBarDiam")
-      return any_const_ptr(diameter);
-    else if(cod=="getBarArea")
-      return any_const_ptr(area);
-    else if(cod=="getIy")
-      {
-        tmp_gp_dbl= Iy();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getIz")
-      {
-        tmp_gp_dbl= Iz();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getPyz")
-      {
-        tmp_gp_dbl= Pyz();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getPos2d")
-      {
-        tmp_gp_pos2d= getPos2d();
-        return any_const_ptr(tmp_gp_pos2d);
-      }
-    else
-      return DiscretBase::GetProp(cod);
-  }
 
 void XC::ReinfBar::Print(std::ostream &s, int flag) const
   {

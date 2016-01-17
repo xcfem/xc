@@ -62,7 +62,6 @@
 
 #include <domain/load/pattern/time_series/RectangularSeries.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 //! @brief Constructor.
 XC::RectangularSeries::RectangularSeries(double startTime, double finishTime,double theFactor)
@@ -71,15 +70,6 @@ XC::RectangularSeries::RectangularSeries(double startTime, double finishTime,dou
 //! @brief Constructor por defecto.
 XC::RectangularSeries::RectangularSeries(void)
   :PulseBaseSeries(TSERIES_TAG_RectangularSeries) {}
-
-//! @brief Lee un objeto XC::RectangularSeries desde archivo
-bool XC::RectangularSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(RectangularSeries) Procesando comando: " << cmd << std::endl;
-    return PulseBaseSeries::procesa_comando(status);
-  }
 
 //! @brief Devuelve el valor del factor para el instante que se pasa como parámetro.
 double XC::RectangularSeries::getFactor(double pseudoTime) const

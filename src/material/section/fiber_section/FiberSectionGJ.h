@@ -76,7 +76,7 @@ class FiberSectionGJ: public FiberSection3dBase
     double GJ;
   protected:
     friend class DqFibras;
-     bool procesa_comando(CmdStatus &status);
+ 
   public:
     FiberSectionGJ(MaterialLoader *mat_ldr= nullptr);
     FiberSectionGJ(int tag,MaterialLoader *mat_ldr= nullptr);
@@ -103,7 +103,7 @@ class FiberSectionGJ: public FiberSection3dBase
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag = 0);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 FiberSectionGJ FiberSectionReprToFiberSectionGJ(const int &tag,const FiberSectionRepr &fiberSectionRepr,const double &GJ);

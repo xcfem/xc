@@ -29,7 +29,6 @@
 #include "MeshComponent.h"
 #include "utility/matrix/Matrix.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "utility/actor/actor/MovableID.h"
 
@@ -119,46 +118,3 @@ int XC::MeshComponent::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Lee un objeto XC::MeshComponent desde archivo
-bool XC::MeshComponent::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MeshComponent) Procesando comando: " << cmd << std::endl;
-    
-    if(cmd == "add_labels") //Agrega una etiqueta al objeto.
-      {
-        const std::vector<boost::any> &labels= interpretaVectorAny(status.GetBloque());
-        for(std::vector<boost::any>::const_iterator i= labels.begin();i!=labels.end();i++)
-          etiquetas.addEtiqueta(convert_to_string(*i));
-        return true;
-      }
-    else if(cmd == "remove_labels") //Elimina una etiqueta del objeto.
-      {
-        const std::vector<boost::any> &labels= interpretaVectorAny(status.GetBloque());
-        for(std::vector<boost::any>::const_iterator i= labels.begin();i!=labels.end();i++)
-          etiquetas.removeEtiqueta(convert_to_string(*i));
-        return true;
-      }
-    else
-      return ContinuaReprComponent::procesa_comando(status);
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::MeshComponent::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "MeshComponent::GetProp (" << nombre_clase() 
-                << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="index")
-      return any_const_ptr(index);
-    else if(cod=="hasLabel")
-      {
-        const std::string label= popString(cod);
-        tmp_gp_bool= etiquetas.hasEtiqueta(label);
-        return any_const_ptr(tmp_gp_bool);
-      }
-    else
-      return ContinuaReprComponent::GetProp(cod);
-  }

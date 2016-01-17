@@ -73,8 +73,6 @@ namespace XC {
 //! and a tolerance, set in the constructor.
 class CTestRelativeNormUnbalance: public ConvergenceTestNorm
   {
-  protected:
-    bool procesa_comando(CmdStatus &status);
   public:
     // constructors
     CTestRelativeNormUnbalance(EntCmd *owr);	    	

@@ -28,7 +28,6 @@
 
 #include "ModelWrapper.h"
 #include "solution/SoluMethod.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include <solution/analysis/model/AnalysisModel.h>
 
 //Gestor coacciones.
@@ -116,19 +115,6 @@ void XC::ModelWrapper::copia_constraint_handler(const ConstraintHandler *ptr)
       std::cerr << "ModelWrapper::copia_constraint_handler; se pasó un puntero nulo." << std::endl;
   }
 
-//! @brief Lee un objeto ConstraintHandler desde archivo.
-bool XC::ModelWrapper::procesa_cmd_constraint_handler(const std::string &cmd,CmdStatus &status)
-  {
-    bool retval= false;
-    if(cmd.find("_handler")!=std::string::npos)
-      {
-        if(alloc_constraint_handler(cmd))
-          theHandler->LeeCmd(status);
-        retval= true;
-      }
-    return retval;
-  }
-
 //! @brief Crea un numerador del tipo que se pasa como parámetro.
 XC::ConstraintHandler &XC::ModelWrapper::newConstraintHandler(const std::string &nmb)
   {
@@ -197,20 +183,6 @@ XC::DOF_Numberer &XC::ModelWrapper::newNumberer(const std::string &nmb)
     return *theDOFNumberer;
   }
 
-
-//! @brief Lee un objeto DOFNumberer desde archivo.
-bool XC::ModelWrapper::procesa_cmd_numerador(const std::string &cmd,CmdStatus &status)
-  {
-    bool retval= false;
-    if(cmd.find("_numberer")!=std::string::npos)
-      {
-        if(alloc_numerador(cmd))
-          theDOFNumberer->LeeCmd(status);
-        retval= true;
-      }
-    return retval;
-  }
-
 void XC::ModelWrapper::libera(void)
   {
     libera_analysis_model();
@@ -248,45 +220,6 @@ XC::ModelWrapper &XC::ModelWrapper::operator=(const ModelWrapper &otro)
     EntCmd::operator=(otro);
     copia(otro);
     return *this;
-  }
-
-//! @brief Lee un objeto ModelWrapper desde archivo.
-bool XC::ModelWrapper::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ModelWrapper) Procesando comando: " << cmd << std::endl;
-    
-    if(procesa_cmd_constraint_handler(cmd,status)) //Constraint handler.
-      return true;
-    else if(procesa_cmd_numerador(cmd,status)) //Numerador.
-      return true;
-    else if(cmd=="handler")
-      {
-        if(theHandler)
-          theHandler->LeeCmd(status);
-        else
-	  std::cerr << "ModelWrapper::procesa_comando; el manejador de coacciones no está definido." << std::endl;
-        return true;
-      }
-    else if(cmd=="numberer")
-      {
-        if(theDOFNumberer)
-          theDOFNumberer->LeeCmd(status);
-        else
-	  std::cerr << "ModelWrapper::procesa_comando; el renumerador no está definido." << std::endl;
-        return true;
-      }
-    else if(cmd=="analysis_model")
-      {
-        if(theModel)
-          theModel->LeeCmd(status);
-        else
-	  std::cerr << "ModelWrapper::procesa_comando; el modelo de análisis no está definido." << std::endl;
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
   }
 
 //! @brief Destructor.

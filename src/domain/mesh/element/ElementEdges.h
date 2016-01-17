@@ -54,7 +54,7 @@ class ElementEdges: public EntCmd
   private:
     vector_edges theEdges; //!< conjunto de bordes.
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElementEdges(void);
 
@@ -91,7 +91,7 @@ class ElementEdges: public EntCmd
     const_reference operator[](const size_t &i) const;
     reference operator[](const size_t &i);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

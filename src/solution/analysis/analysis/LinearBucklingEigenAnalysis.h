@@ -39,11 +39,10 @@ namespace XC {
 
 //! @ingroup TipoAnalisis
 //
-//! @brief Análisis de pandeo lineal (se emplea dentro de StaticAnalysis).
+//! @brief Linear buckling analysis (used inside an StaticAnalysis).
 class LinearBucklingEigenAnalysis: public EigenAnalysis
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
 
     friend class ProcSolu;
     friend class LinearBucklingAnalysis;
@@ -57,7 +56,7 @@ class LinearBucklingEigenAnalysis: public EigenAnalysis
     virtual int setIntegrator(LinearBucklingIntegrator &theIntegrator);
     virtual int setEigenSOE(ArpackSOE &theSOE);
     virtual const double &getEigenvalue(int mode) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 inline Analysis *LinearBucklingEigenAnalysis::getCopy(void) const
   { return new LinearBucklingEigenAnalysis(*this); }

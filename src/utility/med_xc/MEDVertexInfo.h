@@ -44,7 +44,7 @@ class MEDVertexInfo: public MEDBaseInfo
 
   protected:
     void nuevo_vertice(size_t i,const std::vector<double> &coo);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     MEDVertexInfo(void);
     MEDVertexInfo(const Mesh &);
@@ -72,7 +72,6 @@ class MEDVertexInfo: public MEDBaseInfo
     void to_med(MEDMEM::MESHING &malla) const;
     void clear(void);
 
-    any_const_ptr GetProp(const std::string &) const;
   };
 } // end of XC namespace
 #endif

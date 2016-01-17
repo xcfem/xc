@@ -99,7 +99,6 @@ class ConstraintHandler: public MovableObject, public EntCmd
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
 
     friend class ModelWrapper;
     ConstraintHandler(ModelWrapper *,int classTag);

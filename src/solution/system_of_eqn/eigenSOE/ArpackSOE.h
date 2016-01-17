@@ -43,13 +43,12 @@ class ArpackSOE : public EigenSOE
   {
   protected:
     double shift;
-    bool procesa_comando(CmdStatus &status);
 
     ArpackSOE(SoluMethod *,int classTag,double shift = 0.0);
   public:
     virtual const double &getShift(void) const;
     void setShift(const double &);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

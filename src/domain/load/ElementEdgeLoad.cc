@@ -28,7 +28,6 @@
 #include "domain/load/ElementEdgeLoad.h"
 #include <domain/mesh/element/Element.h>
 #include <domain/domain/Domain.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/Lista.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/base/any_const_ptr.h"
@@ -47,15 +46,6 @@ XC::ElementEdgeLoad::ElementEdgeLoad(int tag, int classTag,const ID &tags_elems,
 // to be supplied in recvSelf();
 XC::ElementEdgeLoad::ElementEdgeLoad(int tag, int classTag)
   :ElementalLoad(tag, classTag), theElemEdges() {}
-
-bool XC::ElementEdgeLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElementEdgeLoad) Procesando comando: " << cmd << std::endl;
-
-    return ElementalLoad::procesa_comando(status);
-  }
 
 void XC::ElementEdgeLoad::setDomain(Domain *theDomain)
   {

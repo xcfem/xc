@@ -59,7 +59,7 @@ class DqPtrsNmb: public DqPtrs<T>
     T *BuscaNmb(const std::string &nmb);
     T *getNearest(const Pos3d &p);
     const T *getNearest(const Pos3d &p) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 //! @brief Devuelve un puntero al objeto cuyo nombre se pasa como parámetro.
@@ -117,31 +117,6 @@ const T *DqPtrsNmb<T>::getNearest(const Pos3d &p) const
           }
       }
     return retval;
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo nombre (de la propiedad) se pasa como parámetro.
-template <class T>
-any_const_ptr DqPtrsNmb<T>::GetProp(const std::string &cod) const
-  {
-    if(cod=="getTagNearest")
-      {
-        double x= 0.0;
-        double y= 0.0;
-        double z= 0.0;
-        if(InterpreteRPN::Pila().size()>2)
-          {
-            z= convert_to_double(InterpreteRPN::Pila().Pop());
-            y= convert_to_double(InterpreteRPN::Pila().Pop());
-            x= convert_to_double(InterpreteRPN::Pila().Pop());
-          }
-        else
-          this->err_num_argumentos(std::cerr,3,"GetProp",cod);
-        const T *tmp= getNearest(Pos3d(x,y,z));
-        DqPtrsNmb<T>::tmp_gp_int= tmp->GetTag();
-        return any_const_ptr(DqPtrsNmb<T>::tmp_gp_int);
-      }
-    else
-      return DqPtrs<T>::GetProp(cod);    
   }
 
 } //end of XC namespace

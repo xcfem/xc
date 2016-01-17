@@ -44,7 +44,7 @@ class DefAgotPivotes: public EntCmd
     double eps_agot_B; //!< Deformación de agotamiento en el pivote B.
     double eps_agot_C; //!< Deformación de agotamiento en el pivote C.
   protected:
-    bool procesa_comando(CmdStatus &status);    
+    
   public:
     DefAgotPivotes(const double &eA= 0.01,const double &eB= -0.0035,const double &eC= -0.002);
 
@@ -55,7 +55,7 @@ class DefAgotPivotes: public EntCmd
     void setDefAgotPivoteB(const double &);
     void setDefAgotPivoteC(const double &);
     const double getIncEpsAB(const double &ndiv= 25) const;
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } // end of XC namespace

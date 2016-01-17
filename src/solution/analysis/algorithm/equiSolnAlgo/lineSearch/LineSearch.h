@@ -92,7 +92,6 @@ class LineSearch: public MovableObject, public EntCmd
     double maxEta;
     int    printFlag;
 
-    bool procesa_comando(CmdStatus &status);
 
     friend class NewtonLineSearch;
     LineSearch(int classTag,const double &tol= 0.8, const int &mi= 10,const double &mneta= 0.1,const double &mxeta= 10,const int &flag= 1);
@@ -108,7 +107,7 @@ class LineSearch: public MovableObject, public EntCmd
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0);    
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

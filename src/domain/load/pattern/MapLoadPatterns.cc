@@ -28,7 +28,6 @@
 
 #include "MapLoadPatterns.h"
 #include "preprocessor/loaders/LoadLoader.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 //Time series.
 #include "domain/load/pattern/TimeSeries.h"
@@ -248,24 +247,6 @@ XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &tipo, cons
     return ts;
   }
 
-//! @brief Procesa los comandos que se emplean para definir
-//! las funciones temporales que modulan el valor de la carga.
-bool XC::MapLoadPatterns::procesa_time_series(const std::string &cmd, CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    if(fnc_indices.size()<1)
-      std::cerr << "sintaxis " << cmd << ": " << cmd << "[codigo] " << std::endl;
-    const std::string cod_ts= convert_to_string(fnc_indices[0]); //Código del time series.
-    TimeSeries *ts= newTimeSeries(cmd,cod_ts);
-    if(ts)
-      {
-        ts->LeeCmd(status);
-        return true;
-      }
-    else
-      return false;
-  }
-
 //! @brief Define un objeto LoasPattern con el tipo y el nombre que se pasan como parámetro.
 XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &tipo,const std::string &cod_lp)
   {
@@ -279,169 +260,6 @@ XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &tipo,con
     else if(tipo == "pbowl_loading")
       retval= crea_load_pattern<PBowlLoading>(cod_lp);
     return retval;
-  }
-
-//! @brief Lee el caso de carga desde archivo
-bool XC::MapLoadPatterns::procesa_load_pattern(const std::string &cmd,CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    std::string code= "nil";
-    if(fnc_indices.size()>0)
-      code= convert_to_string(fnc_indices[0]); //Código del caso de carga.
-    else
-      std::cerr << "load_pattern: uso load_pattern[code] " << std::endl;
-    LoadPattern *lp= newLoadPattern(cmd,code);
-    if(lp)
-      {
-        lp->LeeCmd(status);
-        return true;
-      }
-    else 
-      return false;
-  }
-
-
-void XC::MapLoadPatterns::EjecutaBloqueForEach(CmdStatus &status,const std::string &blq)
-  {
-    const std::string nmbBlq= nombre_clase()+":for_each";
-    for(iterator i= begin();i!= end();i++)
-      (*i).second->EjecutaBloque(status,blq,nmbBlq);
-  }
-
-//! @brief Procesa los comandos que se emplean para definir
-//! los casos de carga sobre el modelo de
-//! elementos finitos. Interpreta los siguientes comandos:
-//!
-//! - add_to_domain: Agrega al dominio (activa) el caso de carga (hipótesis simple) o
-//!   la combinación cuyo nombre se pasa como parámetro.
-//! - set_current_time_series: Define el nombre de la modulación temporal
-//!   que se empleará para las cargas.
-//! - current_time_series: Dispara el intérprete de comandos de la modulación
-//!   temporal actual.
-//! - for_each_ts: Solicita a cada una de las modulaciones temporales definidas
-//!   que ejecuten el bloque de código que se pasa como argumento.
-bool XC::MapLoadPatterns::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MapLoadPatterns) Procesando comando: " << cmd << std::endl;
-    LoadPattern *lp_ptr= buscaLoadPattern(cmd);
-    TimeSeries *ts_ptr= buscaTS(cmd);
-    if(lp_ptr)
-      {
-        lp_ptr->LeeCmd(status);
-        return true;
-      }
-    else if(ts_ptr)
-      {
-        ts_ptr->LeeCmd(status);
-        return true;
-      }
-    else if(procesa_load_pattern(cmd,status))
-      { return true; }
-    else if(cmd == "add_to_domain")
-      {
-        const std::string lp_code= interpretaString(status.GetString());
-        addToDomain(lp_code);
-        return true;
-      }
-    else if(cmd == "remove_from_domain")
-      {
-        const std::string lp_code= interpretaString(status.GetString());
-        removeFromDomain(lp_code);
-        return true;
-      }
-    else if(cmd == "remove_all_from_domain")
-      {
-        status.GetString();
-        removeAllFromDomain();
-        return true;
-      }
-    else if(cmd == "for_each_ts")
-      {
-        const std::string nmbBlq= nombre_clase()+":for_each_ts";
-        const std::string bloque= status.GetBloque();
-	for(map_timeseries::iterator i= tseries.begin();i!= tseries.end();i++)
-          (*i).second->EjecutaBloque(status,bloque,nmbBlq);
-        return true;
-      }
-    else if(cmd == "set_current_time_series")
-      {
-        nmb_ts= interpretaString(status.GetString());
-        return true;
-      }
-    else if(cmd == "current_time_series")
-      {
-	map_timeseries::const_iterator its= tseries.find(nmb_ts);
-        if(its!= tseries.end())
-          its->second->LeeCmd(status);
-        return true;
-      }
-    else if(procesa_time_series(cmd,status))
-      { return true; }
-    else if(cmd == "for_each")
-      {
-        const std::string bloque= status.GetBloque();
-        EjecutaBloqueForEach(status,bloque);
-        return true;
-      }
-    else if(cmd == "set_current_load_pattern")
-      {
-        lpcode= interpretaString(status.GetString());
-        return true;
-      }
-    else if(cmd == "current_load_pattern")
-      {
-        LoadPattern *tmp= getCurrentLoadPatternPtr();
-        if(tmp)
-          tmp->LeeCmd(status);
-        else
-	  std::cerr << cmd << "; no hay una hipótesis actual." << std::endl;
-        return true;
-      }
-    else if(procesa_comando_element_load(this->getCurrentLoadPatternPtr(),tag_el,cmd,status))
-      { return true; }
-    else if(cmd == "nodal_load")
-      {
-        std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-        if(fnc_indices.size()>0)
-          tag_nl= convert_to_int(fnc_indices[0]); //Tag de la carga sobre nodo.
-        LoadPattern *lp= getCurrentLoadPatternPtr();
-        if(lp) //Lo encuentra.
-          {
-	    NodalLoad *theLoad= lp->newNodalLoad(getCurrentNodeLoadTag(),Vector(1));
-            if(theLoad)
-              theLoad->LeeCmd(status);
-          }
-        else
-	  std::cerr << "nodal_load: no se encontró el caso de carga: " << lpcode << std::endl;
-        return true;
-      }
-    else if(cmd == "sp_constraint")
-      {
-        std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-        if(fnc_indices.size()>0)
-          tag_spc= convert_to_int(fnc_indices[0]); //Tag del desplazamiento impuesto sobre nodo.
-        LoadPattern *lp= getCurrentLoadPatternPtr();
-        if(lp) //Lo encuentra.
-          {
-	    SP_Constraint *theSPC= new SP_Constraint(tag_spc++,-1);
-            if(theSPC)
-              theSPC->LeeCmd(status);
-            lp->addSP_Constraint(theSPC);
-          }
-        else
-	  std::cerr << "sp_constraint: no se encontró la hipótesis: " << lpcode << std::endl;
-        return true;
-      }
-    else if(cmd == "clear")
-      {
-        status.GetBloque(); //Ignoramos entrada.
-        clear();
-        return true;
-      }
-    else
-      return LoadLoaderMember::procesa_comando(status);
   }
 
 //! @brief Borra todos los casos de carga.
@@ -559,45 +377,4 @@ boost::python::list XC::MapLoadPatterns::getKeys(void) const
     for(const_iterator i=this->begin();i!=this->end();i++)
       retval.append((*i).first);
     return retval;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! - numTimeSeries: Devuelve el número de funciones de modulación temporal definidas en el problema.
-//! - numLoadPatterns: Devuelve el número de casos de carga (hipótesis simples) definidas en el problema.
-//! - getListaNombres: Devuelve una lista con los nombres de los casos de carga definidos en el problema.
-any_const_ptr XC::MapLoadPatterns::GetProp(const std::string &cod) const
-  {
-    if(cod=="numLoadPatterns")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="numTimeSeries")
-      {
-        tmp_gp_szt= tseries.size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    if(cod=="currentElementLoadTag")
-      {
-        return any_const_ptr(tag_el);
-      }
-    if(cod=="currentNodalLoadTag")
-      {
-        return any_const_ptr(tag_nl);
-      }
-    else if(cod == "getListaNombres")
-      {
-        EntCmd *this_no_const= const_cast<MapLoadPatterns *>(this);
-        tmp_gp_lista.set_owner(this_no_const);
-        tmp_gp_lista.clearAll();
-        const std::deque<std::string> tmp= getListaNombres();
-	for(std::deque<std::string>::const_iterator i= tmp.begin();i!= tmp.end();i++)
-          tmp_gp_lista.Inserta((*i));
-        return any_const_ptr(tmp_gp_lista);
-      }
-    else
-      return LoadLoaderMember::GetProp(cod);
   }

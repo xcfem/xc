@@ -26,7 +26,6 @@
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_basic/src/med_xc/MEDMEM_Group.hxx"
 #include "xc_basic/src/med_xc/MEDMEM_Field.hxx"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "domain/mesh/element/gauss_models/GaussModel.h"
 
@@ -34,15 +33,6 @@
 XC::MEDFieldInfo::MEDFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)
   : field_info(fi) 
   { set_owner(grp); }
-
-//! @brief Lectura del objeto desde archivo.
-bool XC::MEDFieldInfo::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MEDFieldInfo) Procesando comando: " << cmd << std::endl;
-    return MEDObject::procesa_comando(status);
-  }
 
 //! @brief Devuelve el grupo sobre el que está definido el campo.
 const XC::MEDGroupInfo &XC::MEDFieldInfo::getGrupo(void) const
@@ -53,8 +43,3 @@ const XC::MEDGroupInfo &XC::MEDFieldInfo::getGrupo(void) const
 
 MEDMEM::GROUP *XC::MEDFieldInfo::getGrupoMED(void) const
   { return getGrupo().getGrupoMED(); }
-
-any_const_ptr XC::MEDFieldInfo::GetProp(const std::string &cod) const
-  {
-    return MEDObject::GetProp(cod);
-  }

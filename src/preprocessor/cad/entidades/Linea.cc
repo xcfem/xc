@@ -28,7 +28,6 @@
 
 #include "Linea.h"
 #include "preprocessor/Preprocessor.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "Pnt.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/d1/Segmento3d.h"
@@ -156,44 +155,6 @@ XC::Edge *XC::Linea::splitAtCooNatural(const double &chi)
     return retval;
   }
 
-//! @brief Lee un objeto Linea desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - p1: Lee el punto inicial.
-//! - p2: Lee el punto final.
-bool XC::Linea::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Linea) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "splitAtPoint")
-      {
-        const MapPuntos::Indice id_punto= interpretaSize_t(status.GetString());
-        Pnt *p= BuscaPnt(id_punto);
-	if(!p)
-	  std::cerr << "Linea; " << cmd << " , no se encontró el punto: '" 
-                    << id_punto << "'.\n";
-        else
-          splitAtPoint(p);
-        return true;
-      }
-    else if(cmd == "splitAtLambda")
-      {
-        const double lambda= interpretaDouble(status.GetString());
-        splitAtLambda(lambda);
-        return true;
-      }
-    else if(cmd == "splitAtCooNatural")
-      {
-        const double chi= interpretaDouble(status.GetString());
-        splitAtCooNatural(chi);
-        return true;
-      }
-    return LineaBase::procesa_comando(status);
-  }
-
 BND3d XC::Linea::Bnd(void) const
   {
     BND3d retval;
@@ -241,16 +202,3 @@ int XC::Linea::getVtkCellType(void) const
 //! @brief Interfaz con el formato MED de Salome.
 int XC::Linea::getMEDCellType(void) const
   { return MED_SEG2; }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-any_const_ptr XC::Linea::GetProp(const std::string &cod) const
-  {
-    if(cod=="vector")
-      return vector_to_prop_vector(getVector());
-    else
-      return LineaBase::GetProp(cod);
-  }
-

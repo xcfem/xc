@@ -53,7 +53,6 @@
 // Purpose: This file contains the class implementation XC::BeamPointLoad.
 
 #include <domain/load/beam_loads/BeamPointLoad.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MovableVector.h"
 
@@ -62,25 +61,6 @@ XC::BeamPointLoad::BeamPointLoad(int tag, int classTag, double Pt, double dist, 
 
 XC::BeamPointLoad::BeamPointLoad(int tag, int classTag)
   :BeamMecLoad(tag, classTag), x(0.0) {}
-
-//! @brief Lee un objeto BeamPointLoad desde archivo
-bool XC::BeamPointLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BeamPointLoad) Procesando comando: " << cmd << std::endl;
-    if(cmd == "x")
-      {
-        x= interpretaDouble(status.GetString());
-        if(x<0.0 || x>1.0)
-	  std::cerr << "Error; " << cmd << " la distancia relativa debe estar"
-                    << "comprendida entre 0 y 1." << std::endl;
-        return true;
-      }
-    else
-      return BeamMecLoad::procesa_comando(status);
-  }
-
 
 std::string XC::BeamPointLoad::Categoria(void) const
   { return "puntual"; }
@@ -99,14 +79,4 @@ int XC::BeamPointLoad::recvData(const CommParameters &cp)
     int res= BeamMecLoad::recvData(cp);
     res+= cp.receiveDouble(x,getDbTagData(),CommMetaData(6));
     return res;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::BeamPointLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "x")
-      return any_const_ptr(x);
-    else
-      return BeamMecLoad::GetProp(cod);
   }

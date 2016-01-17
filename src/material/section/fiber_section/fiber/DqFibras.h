@@ -81,7 +81,7 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
       { dq_ptr_fibras::resize(nf,nullptr); }
 
 
-    bool procesa_comando(CmdStatus &status);
+
   private:
     friend class FiberSectionBase;
     
@@ -196,8 +196,7 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
 
     void Cumplen(const std::string &cond,DqFibras &,bool clear= true);
     void SelMatTag(const int &matTag,DqFibras &,bool clear= true);
-    void ejecuta_bloque_for_each(CmdStatus &,const std::string &);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     size_t IMaxProp(const std::string &nmb_prop) const;
     size_t IMinProp(const std::string &nmb_prop) const;
     size_t getFibraCooMax(const Ref3d3d &r,const size_t &iCoo) const;

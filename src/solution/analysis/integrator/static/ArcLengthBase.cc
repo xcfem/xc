@@ -29,7 +29,6 @@
 
 #include <solution/analysis/integrator/static/ArcLengthBase.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/CommMetaData.h"
 
@@ -46,22 +45,6 @@ double XC::ArcLengthBase::getDLambdaNewStep(void) const
     retval *= signLastDeltaLambdaStep; // base sign of load change
                                         // on what was happening last step
     return retval;
-  }
-
-//! @brief Lee un objeto ArcLengthBase desde archivo
-bool XC::ArcLengthBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ArcLengthBase) Procesando comando: " << cmd << std::endl;
-    if(cmd=="alpha")
-      {
-        const double tmp= interpretaDouble(status.GetString());
-        alpha2= tmp*tmp;
-        return true;
-      }
-    else
-      return ProtoArcLength::procesa_comando(status);
   }
 
 //! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
@@ -112,17 +95,3 @@ int XC::ArcLengthBase::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::ArcLengthBase::GetProp(const std::string &cod) const
-  {
-    if(cod=="alpha")
-      {
-        tmp_gp_dbl= sqrt(alpha2);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return ProtoArcLength::GetProp(cod);
-  }

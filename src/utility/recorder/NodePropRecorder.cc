@@ -27,7 +27,6 @@
 //NodePropRecorder.cc
 
 #include <utility/recorder/NodePropRecorder.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/Element.h>

@@ -33,7 +33,6 @@
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
@@ -70,54 +69,6 @@ void XC::Pnt::borra_linea(Edge *l) const
 //! Devuelve el vector de posición del punto.
 Vector3d XC::Pnt::VectorPos(void) const
   { return p.VectorPos();  }
-
-//! @brief Lee un objeto Pnt desde el archivo de entrada.
-//!
-//! Soporta los comandos:
-//!
-//! - pos: Lee las coordenadas del punto.
-bool XC::Pnt::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Pnt) Procesando comando: " << cmd << std::endl;
-    if(cmd == "pos")
-      {
-        p.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "set_pos")
-      {
-        const Pos3d pt= interpretaPos3d(status.GetString());
-        this->p= pt;
-        return true;
-      }
-    else if(cmd == "copia_pos")
-      {
-        const MapPuntos::Indice id_punto= interpretaSize_t(status.GetString());
-        const Pnt *tmp= BuscaPnt(id_punto);
-	if(!tmp)
-	  std::cerr << "Pnt; " << cmd << " , no se encontró el punto: '" 
-                    << id_punto << "' \n";
-        this->p= tmp->p;
-        return true;
-      }
-    else if(cmd == "nodo")
-      {
-        Node *nod= GetNodo();
-        if(nod)
-          nod->LeeCmd(status);
-        else
-          {
-            const std::string posLectura= get_ptr_status()->getPosicionLecturaActual();
-	    std::cerr << "Pnt; " << cmd << " , el punto: '" << GetNombre()
-                      << "' no posee nodo (no se ha mallado)." << posLectura << std::endl;
-          }
-        return true;
-      }
-    else
-      return EntMdlr::procesa_comando(status);
-  }
 
 //! @brief Actualiza la topología.
 void XC::Pnt::actualiza_topologia(void)
@@ -224,7 +175,7 @@ int XC::Pnt::getTagNode(void) const
     if(nod)
       retval= nod->getTag();
     else
-      std::cerr << "Pnt::GetProp; el punto: '" << GetNombre()
+      std::cerr << "Pnt::getTagNode; el punto: '" << GetNombre()
                 << "' no posee nodo (no se ha mallado)." << std::endl;
     return retval;
   }
@@ -235,7 +186,7 @@ XC::Node *XC::Pnt::getNode(void)
   {
     Node *nod= GetNodo();
     if(!nod)
-      std::cerr << "Pnt::GetProp; el punto: '" << GetNombre()
+      std::cerr << "Pnt::getNode; el punto: '" << GetNombre()
                 << "' no posee nodo (no se ha mallado)." << std::endl;
     return nod;
   }
@@ -263,34 +214,6 @@ void XC::Pnt::add_to_sets(std::set<SetBase *> &sets)
         Set *s= dynamic_cast<Set *>(*i);
         if(s) s->GetPuntos().push_back(this);
       }
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-//! -nlineas: Devuelve el número de líneas que empiezan o acaban en este punto.
-any_const_ptr XC::Pnt::GetProp(const std::string &cod) const
-  {
-    if(cod=="pos")
-      return any_const_ptr(GetPos());
-    else if(cod=="tieneNodo")
-      {
-        tmp_gp_bool= tieneNodo();
-        return any_const_ptr(tmp_gp_bool);
-      }
-    else if(cod=="tag_nodo")
-      {
-        tmp_gp_int= getTagNode();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="nlineas")
-      {
-        tmp_gp_szt= getNLines();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return EntMdlr::GetProp(cod);
   }
 
 //! @brief Desplaza la posición del punto (sólo esta previsto que se use desde Set).

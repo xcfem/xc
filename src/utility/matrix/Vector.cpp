@@ -66,7 +66,6 @@
 
 #include <cstdlib>
 #include <cmath>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
@@ -189,69 +188,6 @@ XC::Vector::Vector(const Vector &other)
     for(register int i=0; i<sz; i++)
       theData[i]= other.theData[i];
   }
-
-//! @brief Lee un objeto XC::Vector desde archivo
-bool XC::Vector::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Vector) Procesando comando: " << cmd << std::endl;
-    if(cmd == "x")
-      {
-        if(sz>0)
-          theData[0]= interpretaDouble(status.GetString());
-        else
-          {
-            status.GetBloque(); //Ignoramos argumentos.
-	    std::cerr << "Vector::procesa_comando; índice fuera de rango." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "y")
-      {
-        if(sz>1)
-          theData[1]= interpretaDouble(status.GetString());
-        else
-          {
-            status.GetBloque(); //Ignoramos argumentos.
-	    std::cerr << "Vector::procesa_comando; índice fuera de rango." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "z")
-      {
-        if(sz>1)
-          theData[2]= interpretaDouble(status.GetString());
-        else
-          {
-            status.GetBloque(); //Ignoramos argumentos.
-	    std::cerr << "Vector::procesa_comando; índice fuera de rango." << std::endl;
-          }
-        return true;
-      }
-    else if(cmd == "xyz") //Coordenadas del vector.
-      {
-        std::vector<double> tmp= crea_vector_double(status.GetString());
-        const int nc= tmp.size(); //No. de valores leídos.
-        resize(3);
-        const int n= std::min(nc,3);
-        for(int i=0;i<n;i++)
-          theData[i]= tmp[i];
-        return true;
-      }
-    else if(cmd == "coo") //Coordenadas del vector.
-      {
-        std::vector<double> tmp= crea_vector_double(status.GetString());
-        const int nc= tmp.size(); //No. de valores leídos.
-        resize(nc);
-        for(int i= 0;i<nc;i++)
-          theData[i]= tmp[i];
-        return true;
-      }
-    else
-      return CmdVectorBase::procesa_comando(status);
-  }
-
 
 //! @brief destructor, deletes the [] data
 XC::Vector::~Vector(void)
@@ -1286,22 +1222,6 @@ void XC::Vector::addComponents(const Vector &v,const ID &idx)
       (*this)(idx(i))+= v(i);
   }
 
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! size: Devuelve el número de componentes del vector.
-any_const_ptr XC::Vector::GetProp(const std::string &cod) const
-  {
-    if(cod=="size")
-      {
-        tmp_gp_szt= Size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return CmdVectorBase::GetProp(cod);
-  }
 
 //! @brief Convierte el vector en un std::vector<double>.
 std::vector<double> XC::vector_to_std_vector(const XC::Vector &v)

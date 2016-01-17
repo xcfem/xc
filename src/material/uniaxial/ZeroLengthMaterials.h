@@ -55,7 +55,7 @@ class ZeroLengthMaterials: public DqUniaxialMaterial
 
   protected:
     MaterialLoader *get_material_loader(void);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // Constructor for a single 1d material model
     ZeroLengthMaterials(ZeroLength *owner,UniaxialMaterial &theMaterial,int direction);
@@ -77,7 +77,7 @@ class ZeroLengthMaterials: public DqUniaxialMaterial
 
     void clear(void);    
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

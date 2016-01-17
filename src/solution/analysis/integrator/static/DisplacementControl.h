@@ -91,7 +91,6 @@ class DisplacementControl: public DispBase
 
     const Domain *getDomainPtr(void) const;
     Domain *getDomainPtr(void);
-    bool procesa_comando(CmdStatus &status);
 
     friend class SoluMethod;
     DisplacementControl(SoluMethod *); 
@@ -121,7 +120,7 @@ class DisplacementControl: public DispBase
     int recvSelf(const CommParameters &);
 
     void Print(std::ostream &s, int flag =0);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 inline Integrator *DisplacementControl::getCopy(void) const
   { return new DisplacementControl(*this); }

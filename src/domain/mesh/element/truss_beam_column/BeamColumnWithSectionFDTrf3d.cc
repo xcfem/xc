@@ -82,16 +82,6 @@ XC::BeamColumnWithSectionFDTrf3d &XC::BeamColumnWithSectionFDTrf3d::operator=(co
     return *this;
   }
 
-//! @brief Lee un objeto XC::BeamColumnWithSectionFDTrf3d desde archivo
-bool XC::BeamColumnWithSectionFDTrf3d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BeamColumnWithSectionFDTrf3d) Procesando comando: " << cmd << std::endl;
-
-    return BeamColumnWithSectionFD::procesa_comando(status);
-  }
-
 //! @brief Destructor.
 XC::BeamColumnWithSectionFDTrf3d::~BeamColumnWithSectionFDTrf3d(void)
   {
@@ -225,42 +215,3 @@ int XC::BeamColumnWithSectionFDTrf3d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::BeamColumnWithSectionFDTrf3d::GetProp(const std::string &cod) const
-  {
-    if(cod=="getVDirEjeFuerteLocales")
-      {
-        const size_t i= popInt(cod);
-        return get_prop_vector(getVDirEjeFuerteLocales(i));
-      }
-    else if(cod=="getVDirEjeDebilLocales")
-      {
-        const size_t i= popInt(cod);
-        return get_prop_vector(getVDirEjeDebilLocales(i));
-      }
-    else if(cod=="getAnguloEjeFuerte")
-      {
-        const size_t i= popInt(cod);
-        tmp_gp_dbl= getAnguloEjeFuerte(i);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getAnguloEjeDebil")
-      {
-        const size_t i= popInt(cod);
-        tmp_gp_dbl= getAnguloEjeDebil(i);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getVDirEjeFuerteGlobales")
-      {
-        const size_t i= popInt(cod);
-        return get_prop_vector(getVDirEjeFuerteGlobales(i));
-      }
-    else if(cod=="getVDirEjeDebilGlobales")
-      {
-        const size_t i= popInt(cod);
-        return get_prop_vector(getVDirEjeDebilGlobales(i));
-      }
-    else
-      return BeamColumnWithSectionFD::GetProp(cod);
-  }

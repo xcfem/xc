@@ -49,7 +49,7 @@ class ConstantesSecc3d: public ConstantesSecc2d
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ConstantesSecc3d(double E, double A, double Iz, double Iy, double G, double J);
     ConstantesSecc3d(double EA, double EIz, double EIy, double GJ);
@@ -120,7 +120,7 @@ class ConstantesSecc3d: public ConstantesSecc2d
     int setParameter(const std::vector<std::string> &argv,Parameter &param,SectionForceDeformation *scc);
     int updateParameter(int parameterID, Information &info);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print (std::ostream &s, int flag = 0) const;
   };
 } // end of XC namespace

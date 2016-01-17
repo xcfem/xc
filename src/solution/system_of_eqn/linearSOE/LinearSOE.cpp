@@ -61,7 +61,6 @@
 
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOESolver.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 #include <solution/system_of_eqn/linearSOE/bandGEN/BandGenLinSolver.h>
 #include <solution/system_of_eqn/linearSOE/bandGEN/BandGenLinLapackSolver.h>
@@ -151,112 +150,6 @@ bool XC::LinearSOE::setSolver(LinearSOESolver *newSolver)
     return retval;
   }
 
-//! @brief Lee un objeto XC::LinearSOE desde archivo
-bool XC::LinearSOE::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(LinearSOE) Procesando comando: " << cmd << std::endl;
-    if(cmd=="band_gen_lin_lapack_solver")
-      {
-        setSolver(new BandGenLinLapackSolver());
-        theSolver->LeeCmd(status);
-        return true;
-      }
-    else if(cmd=="band_spd_lin_lapack_solver")
-      {
-        setSolver(new BandSPDLinLapackSolver());
-        theSolver->LeeCmd(status);
-        return true;
-      }
-//     else if(cmd=="band_spd_lin_thread_solver")
-//       {
-//         setSolver(new BandSPDLinThreadSolver());
-//         theSolver->LeeCmd(status);
-//         return true;
-//       }
-//     else if(cmd=="conjugate_gradient_solver")
-//       {
-//         setSolver(new ConjugateGradientSolver());
-//         theSolver->LeeCmd(status);
-//         return true;
-//       }
-    else if(cmd=="diagonal_direct_solver")
-      {
-        setSolver(new DiagonalDirectSolver());
-        theSolver->LeeCmd(status);
-        return true;
-      }
-    else if(cmd=="distributed_diagonal_solver")
-      {
-        setSolver(new DistributedDiagonalSolver());
-        theSolver->LeeCmd(status);
-        return true;
-      }
-    else if(cmd=="full_gen_lin_lapack_solver")
-      {
-        setSolver(new FullGenLinLapackSolver());
-        theSolver->LeeCmd(status);
-        return true;
-      }
-//     else if(cmd=="itpack_lin_solver")
-//       {
-//         setSolver(new ItpackLinSolver());
-//         theSolver->LeeCmd(status);
-//         return true;
-//       }
-    else if(cmd=="profile_spd_lin_direct_solver")
-      {
-        setSolver(new ProfileSPDLinDirectSolver());
-        theSolver->LeeCmd(status);
-        return true;
-      }
-    else if(cmd=="profile_spd_lin_direct_block_solver")
-      {
-        setSolver(new ProfileSPDLinDirectBlockSolver());
-        theSolver->LeeCmd(status);
-        return true;
-      }
-//     else if(cmd=="profile_spd_lin_direct_skypack_solver")
-//       {
-//         setSolver(new ProfileSPDLinDirectSkypackSolver());
-//         theSolver->LeeCmd(status);
-//         return true;
-//       }
-//     else if(cmd=="profile_spd_lin_direct_thread_solver")
-//       {
-//         setSolver(new ProfileSPDLinDirectThreadSolver());
-//         theSolver->LeeCmd(status);
-//         return true;
-//       }
-//     else if(cmd=="profile_spd_lin_substr_solver")
-//       {
-//         setSolver(new ProfileSPDLinSubstrSolver());
-//         theSolver->LeeCmd(status);
-//         return true;
-//       }
-    else if(cmd=="super_lu_solver")
-      {
-        setSolver(new SuperLU());
-        theSolver->LeeCmd(status);
-        return true;
-      }
-    else if(cmd=="sym_sparse_lin_solver")
-      {
-        setSolver(new SymSparseLinSolver());
-        theSolver->LeeCmd(status);
-        return true;
-      }
-//     else if(cmd=="umfpack_gen_lin_solver")
-//       {
-//         setSolver(new UmfpackGenLinSolver());
-//         theSolver->LeeCmd(status);
-//         return true;
-//       }
-    else
-      return SystemOfEqn::procesa_comando(status);
-  }
-
 XC::LinearSOESolver &XC::LinearSOE::newSolver(const std::string &tipo)
   {
     if(tipo=="band_gen_lin_lapack_solver")
@@ -327,26 +220,3 @@ int XC::LinearSOE::setSolverSize(void)
     return retval;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::LinearSOE::GetProp(const std::string &cod) const
-  {
-    if(cod == "num_eq") //Número de ecuaciones.
-      {
-        tmp_gp_szt= getNumEqn();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "normRHS")
-      {
-        tmp_gp_dbl= normRHS();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "x") //Vector x local.
-      { return any_const_ptr(getX()); }
-    else if(cod == "b") //Vector x local.
-      { return any_const_ptr(getB()); }
-    else
-      return SystemOfEqn::GetProp(cod);
-  }

@@ -87,42 +87,6 @@ XC::NLForceBeamColumn3dBase &XC::NLForceBeamColumn3dBase::operator=(const NLForc
     return *this;
   }
 
-//! @brief Lee el objeto desde archivo
-bool XC::NLForceBeamColumn3dBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NLForceBeamColumn3dBase) Procesando comando: " << cmd << std::endl;
-    if(cmd == "rho")
-      {
-        rho= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "tol")
-      {
-        tol= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "maxIters")
-      {
-        maxIters= interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd == "kv")
-      {
-        kv.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "Ki")
-      {
-        Ki.LeeCmd(status);
-        return true;
-      }
-    else
-      return BeamColumnWithSectionFDTrf3d::procesa_comando(status);
-  }
-
-
 void XC::NLForceBeamColumn3dBase::setSection(const SeccionBarraPrismatica *sccModel)
   {
     BeamColumnWithSectionFDTrf3d::setSection(sccModel);
@@ -210,28 +174,4 @@ int XC::NLForceBeamColumn3dBase::recvData(const CommParameters &cp)
     res+= cp.receiveMatrix(sp,getDbTagData(),CommMetaData(23));
     res+= p0.receiveData(cp,getDbTagData(),CommMetaData(24));
     return res;
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::NLForceBeamColumn3dBase::GetProp(const std::string &cod) const
-  {
-    if(cod=="rho")
-      {
-        return any_const_ptr(rho);
-      }
-    else if(cod=="tol")
-      {
-        return any_const_ptr(tol);
-      }
-    else if(cod=="isTorsion")
-      {
-        return any_const_ptr(isTorsion);
-      }
-    else if(cod=="maxIters")
-      {
-        return any_const_ptr(maxIters);
-      }
-    else
-      return BeamColumnWithSectionFDTrf3d::GetProp(cod);
   }

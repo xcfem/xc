@@ -270,13 +270,3 @@ int XC::EarthquakePattern::activateParameter(int pparameterID)
     return theMotions[0]->activateParameter(pparameterID);
   }
 // AddingSensitivity:END ////////////////////////////////////
-
-any_const_ptr XC::EarthquakePattern::GetProp(const std::string &cod) const
-  {
-    if(cod == "getCurrentTime")
-      return any_const_ptr(currentTime);
-    else if(cod == "getParameterID")
-      return any_const_ptr(parameterID);
-    else
-      return EQBasePattern::GetProp(cod);
-  }

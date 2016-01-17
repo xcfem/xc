@@ -30,7 +30,6 @@
 #include "utility/tagged/TaggedObject.h"
 #include "TaggedObjectIter.h"
 #include <boost/any.hpp>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "utility/actor/actor/MovableObject.h"
@@ -48,17 +47,6 @@ const int XC::TaggedObjectStorage::posDbTag3;
 XC::TaggedObjectStorage::TaggedObjectStorage(EntCmd *owr,const std::string &contrName)
   : EntCmd(owr), MovableObject(0), containerName(contrName), transmitIDs(true) {}
 
-//! @brief Solicita a cada uno de los componentes que ejecute el bloque
-//! de código que se pasa como parámetro.
-void XC::TaggedObjectStorage::EjecutaBloqueForEach(CmdStatus &status,const std::string &bloque)
-  {
-    const std::string nmbBlq= nombre_clase()+":for_each";
-    TaggedObject *ptr= nullptr;
-    TaggedObjectIter &theIter= getComponents();
-    while((ptr= theIter()) != nullptr)
-      ptr->EjecutaBloque(status,bloque,nmbBlq);
-  }
-
 //! @brief Copia en éste los componentes del contenedor que se pasa como parámetro.
 void XC::TaggedObjectStorage::copia(const TaggedObjectStorage &otro)
   {
@@ -67,56 +55,6 @@ void XC::TaggedObjectStorage::copia(const TaggedObjectStorage &otro)
     TaggedObjectIter &theIter= otro_no_const.getComponents();
     while((ptr= theIter()) != nullptr)
       addComponent(ptr->getCopy());
-  }
-
-//! @brief Lee un objeto XC::TaggedObjectStorage desde archivo
-bool XC::TaggedObjectStorage::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TaggedObjectStorage) Procesando comando: " << cmd << std::endl;
-    if(cmd == "set_size")
-      {
-        setSize(interpretaInt(status.GetString()));
-        return true;
-      }    
-    else if(cmd == "remove_component")
-      {
-        removeComponent(interpretaInt(status.GetString()));
-        return true;
-      }
-    else if((cmd == "component") || (cmd == containerName))
-      {
-        const CmdParser &parser= status.Parser();
-        if(parser.TieneIndices())
-          {
-            interpreta(parser.GetIndices());
-            if(InterpreteRPN::HayArgumentos(1,cmd))
-              {
-                const int tag_comp= convert_to_int(InterpreteRPN::Pila().Pop()); //Tag  del componente.
-                TaggedObject *ptr= getComponentPtr(tag_comp);
-                if(ptr)
-                  ptr->LeeCmd(status);
-                else
-	          std::clog << "(TaggedObjectStorage) Procesando comando: '" << cmd
-                            << "' no se encontró el objeto de tag: " << tag_comp << std::endl;
-              }
-          }
-        return true;
-      }
-    else if(cmd == "clearAll")
-      {
-        status.GetString(); //Ignoramos argumentos.
-        clearAll();
-        return true;
-      }
-    else if(cmd == "for_each")
-      {
-        EjecutaBloqueForEach(status,status.GetBloque());
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
   }
 
 //! @brief Devuelve verdadero si existe la componente
@@ -340,18 +278,3 @@ int XC::TaggedObjectStorage::sendSelf(CommParameters &cp)
 int XC::TaggedObjectStorage::recvSelf(const CommParameters &cp)
   { return receiveObjects(cp); }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! ncomp: Devuelve el número de componentes).
-any_const_ptr XC::TaggedObjectStorage::GetProp(const std::string &cod) const
-  {
-    if(cod=="ncomp" || cod=="size")
-      {
-        tmp_gp_int= getNumComponents();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else
-      return EntCmd::GetProp(cod);
-  }

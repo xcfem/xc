@@ -70,7 +70,6 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
-#include "xc_utils/src/base/CmdStatus.h"
 #include <deque>
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "boost/lexical_cast.hpp"
@@ -195,52 +194,6 @@ XC::NodeRecorder::NodeRecorder(const XC::ID &dofs, const XC::ID &nodes,
     setup_dofs(dofs);
     setup_nodes(nodes);
     setup_data_flag(dataToStore);
-  }
-
-//! @brief Lee un objeto XC::NodeRecorder desde archivo
-bool XC::NodeRecorder::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NodeRecorder) Procesando comando: " << cmd << std::endl;
-    if(cmd == "dofs")
-      {
-	std::deque<std::string> str_dofs= separa_cadena(status.GetString(),",");
-        const int sz= str_dofs.size();
-        if(sz)
-          {
-            ID gdls(sz);
-            for(int i= 0;i<sz;i++)
-              gdls[i]= interpretaInt(str_dofs[i]);
-            setup_dofs(gdls);
-	  }
-        else
-	  std::cerr << "Error; " << cmd << "la lista de grados de libertad está vacia." << std::endl;
-        return true;
-      }
-    else if(cmd == "nodos")
-      {
-	std::deque<std::string> str_nodos= separa_cadena(status.GetString(),",");
-        const int sz= str_nodos.size();
-        if(sz)
-          {
-            ID nodos(sz);
-            for(int i= 0;i<sz;i++)
-              nodos[i]= interpretaInt(str_nodos[i]);
-            setup_nodes(nodos);
-	  }
-        else
-	  std::cerr << "Error; " << cmd << "la lista de nodos está vacia." << std::endl;
-        return true;
-      }
-    else if(cmd == "data_to_store")
-      {
-        const std::string tmp= interpretaString(status.GetString());
-        setup_data_flag(tmp);
-        return true;
-      }
-    else
-      return NodeRecorderBase::procesa_comando(status);
   }
 
 int XC::NodeRecorder::record(int commitTag, double timeStamp)

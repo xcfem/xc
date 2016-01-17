@@ -55,7 +55,6 @@
 
 
 #include <material/section/plate_section/ElasticMembranePlateSection.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include <cstdio> 
 #include <cstdlib>
@@ -90,21 +89,6 @@ XC::ElasticMembranePlateSection::ElasticMembranePlateSection(void)
 XC::ElasticMembranePlateSection::ElasticMembranePlateSection(int tag,double young,double poisson,double thickness,double r )
   : ElasticPlateProto<8>(tag, SEC_TAG_ElasticMembranePlateSection,young,poisson,thickness), rhoH(r*thickness)
   {}
-
-//! @brief Lee un objeto XC::ElasticMembranePlateSection desde archivo
-bool XC::ElasticMembranePlateSection::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElasticMembranePlateSection) Procesando comando: " << cmd << std::endl;
-    if(cmd == "rho")
-      {
-        rhoH= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return ElasticPlateProto<8>::procesa_comando(status);
-  }
 
 //! @brief make a clone of this material
 XC::SectionForceDeformation*  XC::ElasticMembranePlateSection::getCopy(void) const
@@ -282,14 +266,4 @@ int XC::ElasticMembranePlateSection::recvSelf(const CommParameters &cp)
           std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
       }
     return res;
-  }
- 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::ElasticMembranePlateSection::GetProp(const std::string &cod) const
-  {
-    if(cod=="rho")
-      return any_const_ptr(rhoH);
-    else
-      return ElasticPlateProto<8>::GetProp(cod);
   }

@@ -40,7 +40,7 @@ namespace XC {
 class Linea: public LineaBase
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
     MatrizPos3d get_posiciones(void) const;
     Edge *split_at(Pnt *,const double &,const double &);
   public:
@@ -65,7 +65,7 @@ class Linea: public LineaBase
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

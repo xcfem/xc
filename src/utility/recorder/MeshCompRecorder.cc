@@ -28,7 +28,6 @@
 
 #include <utility/recorder/MeshCompRecorder.h>
 #include <utility/handler/DataOutputHandler.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 XC::MeshCompRecorder::MeshCompRecorder(int classTag)
   :HandlerRecorder(classTag), deltaT(0.0), nextTimeStampToRecord(0.0)
@@ -39,16 +38,6 @@ XC::MeshCompRecorder::MeshCompRecorder(int classTag,Domain &theDom,
                                        double dT, bool timeFlag)
   :HandlerRecorder(classTag,theDom,theOutputHandler,timeFlag),
    deltaT(dT), nextTimeStampToRecord(0.0) {}
-
-//! @brief Lee un objeto XC::MeshCompRecorder desde archivo
-bool XC::MeshCompRecorder::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MeshCompRecorder) Procesando comando: " << cmd << std::endl;
-    return HandlerRecorder::procesa_comando(status);
-  }
-
 
 //! @brief Envia el objeto mediante el comunicador
 //! que se pasa como parámetro.

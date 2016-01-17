@@ -50,7 +50,7 @@ class RgSccCirc: public RgQuadCell
     double intRad, extRad;
     double initAng, finalAng;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     RgSccCirc(Material *mat);
     RgSccCirc(Material *, int numSubdivCircunf, int numSubdivRadial,
@@ -98,7 +98,7 @@ class RgSccCirc: public RgQuadCell
     Poligono2d getPoligono(void) const;
     SectorAnilloCircular2d &getSector(void) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0) const;   
     friend std::ostream &operator<<(std::ostream &s, RgSccCirc &rg_scc_circ);    
   };

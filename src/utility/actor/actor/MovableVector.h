@@ -39,7 +39,7 @@ class MovableVector: public Vector, public MovableObject
   {
   protected:
     DbTagData &getDbTagData(void) const;
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors
     MovableVector(const size_t &sz= 0);
@@ -49,7 +49,7 @@ class MovableVector: public Vector, public MovableObject
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } // end of XC namespace

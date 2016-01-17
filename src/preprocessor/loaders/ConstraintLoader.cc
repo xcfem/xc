@@ -36,7 +36,6 @@
 #include "domain/constraints/RigidRod.h"
 #include "domain/constraints/RigidDiaphragm.h"
 #include "domain/constraints/GlueNodeToElement.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "preprocessor/Preprocessor.h"

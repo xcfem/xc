@@ -27,29 +27,11 @@
 //EPPBaseMaterial.cc
 
 #include <material/uniaxial/EPPBaseMaterial.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
 XC::EPPBaseMaterial::EPPBaseMaterial(int tag, int classtag, double e,double e0)
   :ElasticBaseMaterial(tag,classtag,e,e0), trialStress(0.0), trialTangent(e), commitStrain(0.0) {}
-
-//! @brief Lee un objeto XC::EPPBaseMaterial desde archivo
-bool XC::EPPBaseMaterial::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(EPPBaseMaterial) Procesando comando: " << cmd << std::endl;
-
-    return ElasticBaseMaterial::procesa_comando(status);
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::EPPBaseMaterial::GetProp(const std::string &cod) const
-  {
-    return ElasticBaseMaterial::GetProp(cod);
-  }
 
 //! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
 int XC::EPPBaseMaterial::sendData(CommParameters &cp)

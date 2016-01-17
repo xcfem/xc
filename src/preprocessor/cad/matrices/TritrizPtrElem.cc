@@ -29,7 +29,6 @@
 #include "TritrizPtrElem.h"
 #include "domain/mesh/element/Element.h"
 #include <boost/any.hpp>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
@@ -46,59 +45,6 @@ XC::TritrizPtrElem::TritrizPtrElem(const size_t capas,const size_t filas,const s
     for(size_t i=0;i<capas;i++)
       (*this)[i]= MatrizPtrElem(filas,cols);
   }
-
-//! @brief Lee un objeto TritrizPtrElem desde archivo
-//! Soporta los comandos:
-bool XC::TritrizPtrElem::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TritrizPtrElem) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "element")
-      {
-        const CmdParser &parser= status.Parser();
-        if(parser.TieneIndices())
-          {
-            interpreta(parser.GetIndices());
-            if(InterpreteRPN::HayArgumentos(3,cmd))
-              {
-                const size_t k= convert_to_size_t(InterpreteRPN::Pila().Pop()); 
-                const size_t j= convert_to_size_t(InterpreteRPN::Pila().Pop()); 
-                const size_t i= convert_to_size_t(InterpreteRPN::Pila().Pop()); 
-                Element *ptr= (*this)(i,j,k);
-                if(ptr)
-                  ptr->LeeCmd(status);
-                else
-	          std::clog << "(TritrizPtrElem) Procesando comando: '" << cmd
-                            << "' no se encontró el elemento de índices: (" << i << ',' << j << ',' << k << ").\n";
-              }
-          }
-        return true;
-      }
-    else if(cmd=="elemento_con_tag")
-      {
-        std::deque<boost::any> fnc_args= status.Parser().SeparaArgs(this);
-        if(fnc_args.size()<1)
-          std::cerr << "puntos - uso: puntos(numPuntos) " << std::endl;
-        const int tag= convert_to_int(fnc_args[0]); //Tag del nodo.
-        Element *tmp= buscaElemento(tag);
-        if(tmp)
-          tmp->LeeCmd(status);
-        else
-          {
-	    std::cerr << "(TritrizPtrElem) Procesando comando: " << cmd
-                      << " no se encotró el elemento: " << tag
-                      << " en este conjunto. Se ignora la entrada." << std::endl;
-            status.GetBloque();
-          }
-        return true;
-      }
-    else
-      return TritrizPtrBase<MatrizPtrElem>::procesa_comando(status);
-  }
-
-
 
 //! @brief Devuelve, si lo encuentra, un puntero al nodo
 //! cuyo tag se pasa como parámetro.
@@ -161,41 +107,4 @@ const XC::Element *XC::TritrizPtrElem::getNearestElement(const Pos3d &p) const
   {
     TritrizPtrElem *this_no_const= const_cast<TritrizPtrElem *>(this);
     return this_no_const->getNearestElement(p);
-  }
-
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::TritrizPtrElem::GetProp(const std::string &cod) const
-  {
-    if(cod=="size")
-      {
-        tmp_gp_szt= NumPtrs();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "elemento")
-      {
-        if(InterpreteRPN::Pila().size()>2)
-          {
-            const size_t &k= convert_to_size_t(InterpreteRPN::Pila().Pop());
-            const size_t &j= convert_to_size_t(InterpreteRPN::Pila().Pop());
-            const size_t &i= convert_to_size_t(InterpreteRPN::Pila().Pop());
-            const Element *ptr= (*this)(i,j,k);
-            return any_const_ptr(ptr);
-          }
-        else
-          {
-            err_num_argumentos(std::cerr,3,"GetProp",cod);
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getTagNearestElement")
-      {
-        const Pos3d p= popPos3d(cod);
-        const Element *tmp= getNearestElement(p);
-        tmp_gp_int= tmp->getTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else
-      return EntCmd::GetProp(cod);
   }

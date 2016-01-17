@@ -42,7 +42,7 @@ class Segment: public Eje
     Spot *p1; //!< Extremo dorsal del segment.
     Spot *p2; //!< Extremo frontal del segment.
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     Segment(GeomSection *m,const size_t &ndiv= 4);
     Segment(const std::string &nombre= "",GeomSection *m= NULL,const size_t &ndiv= 4);
@@ -61,7 +61,7 @@ class Segment: public Eje
     virtual void SetVertice(const size_t &,Spot *);
     virtual BND2d Bnd(void) const;
     double getLong(void) const;
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

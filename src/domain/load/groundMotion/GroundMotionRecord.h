@@ -76,7 +76,7 @@ class GroundMotionRecord : public GroundMotion
   private:
     MotionHistory history;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     GroundMotionRecord(void);
     GroundMotionRecord(const std::string &fileNameAccel, double timeStep, double fact = 1.0, double dTintegration = 0.01);

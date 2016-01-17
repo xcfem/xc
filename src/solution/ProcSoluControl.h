@@ -51,7 +51,7 @@ class ProcSoluControl: public EntCmd
     ProcSolu *getProcSolu(void);
     const ProcSolu *getProcSolu(void) const;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ProcSoluControl(ProcSolu *owr);
 

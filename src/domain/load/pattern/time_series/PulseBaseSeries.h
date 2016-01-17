@@ -43,7 +43,7 @@ class PulseBaseSeries: public CFactorSeries
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors
     PulseBaseSeries(int classTag,const double &tS=0.0,const double &tF= 0.0,const double &factor=1.0);
@@ -66,7 +66,7 @@ class PulseBaseSeries: public CFactorSeries
     int recvSelf(const CommParameters &);
 
     void Print(std::ostream &s, int flag =0) const;    
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

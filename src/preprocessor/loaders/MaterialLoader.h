@@ -68,7 +68,6 @@ class MaterialLoader: public Loader
     map_diag_interaccion2d diagramas_interaccion2d; //!< Diagramas de interacción de secciones.
   protected:
     friend class ElementLoader;
-    void ejecuta_bloque_for_each(CmdStatus &,const std::string &);
   public:
     MaterialLoader(Preprocessor *owr);
     const map_materiales &Map(void) const;

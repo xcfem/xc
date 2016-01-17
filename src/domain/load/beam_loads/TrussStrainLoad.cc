@@ -28,7 +28,6 @@
 
 #include "TrussStrainLoad.h"
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MovableVector.h"
@@ -46,26 +45,6 @@ XC::TrussStrainLoad::TrussStrainLoad(int tag)
 
 XC::TrussStrainLoad::TrussStrainLoad(void)
   :ElementBodyLoad(LOAD_TAG_TrussStrainLoad), e1(0.0), e2(0.0) {}
-
-//! @brief Lee un objeto TrussStrainLoad desde archivo
-bool XC::TrussStrainLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TrussStrainLoad) Procesando comando: " << cmd << std::endl;
-    if(cmd == "e1")
-      {
-        e1= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "e2")
-      {
-        e2= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return ElementBodyLoad::procesa_comando(status);
-  }
 
 int XC::TrussStrainLoad::sendSelf(CommParameters &cp)
   {
@@ -99,16 +78,4 @@ void XC::TrussStrainLoad::Print(std::ostream &s, int flag) const
     s << "TrussStrainLoad - reference load : " << e1 << " strain at node 1 : " << e1 << " strain at node 1\n";
     s <<  e2 << " strain at node 2\n";
     ElementBodyLoad::Print(s,flag);
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::TrussStrainLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "e1")
-      return any_const_ptr(e1);
-    if(cod == "e2")
-      return any_const_ptr(e2);
-    else
-      return ElementBodyLoad::GetProp(cod);
   }

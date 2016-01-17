@@ -83,7 +83,7 @@ class ElasticSection2d: public BaseElasticSection2d
     static Vector s;
 
   protected:
-    bool procesa_comando(CmdStatus &status);
+
 
   public:
     ElasticSection2d(int tag, double E, double A, double I);
@@ -104,7 +104,7 @@ class ElasticSection2d: public BaseElasticSection2d
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     
-    any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

@@ -58,7 +58,7 @@ class CmbEdge: public Edge
         Edge *edge; //!< Puntero a línea.
         bool directo; //!< true: directo (P1->P2), false: inverso (P2->P1)
       protected:
-        bool procesa_comando(CmdStatus &status);
+    
       public:
         Lado(Edge *ptr=NULL,const bool &s=true);
         Edge *Borde(void);
@@ -88,7 +88,7 @@ class CmbEdge: public Edge
         const Node *GetNodo(const size_t &i) const;
         void Malla(dir_mallado dm);
         friend bool operator==(const Lado &il1,const Lado &il2);
-        any_const_ptr GetProp(const std::string &cod) const;
+    
       };
   protected:
     std::deque<Lado> lineas; //!< Líneas que componen el objeto.
@@ -104,7 +104,7 @@ class CmbEdge: public Edge
     const Pnt *ultimo_punto(void) const;
 
   protected:
-    bool procesa_comando(CmdStatus &status);
+
     void crea_nodos_lineas(void);
     void malla_lineas(dir_mallado dm);
     Pnt *P1(void);
@@ -156,7 +156,7 @@ class CmbEdge: public Edge
 
     friend bool operator==(const Lado &il1,const Lado &il2);
  
-    any_const_ptr GetProp(const std::string &cod) const;
+
  };
 
 bool operator==(const CmbEdge::Lado &il1,const CmbEdge::Lado &il2);

@@ -60,8 +60,6 @@ class Element1D : public ElementBase<2>
 
     CrdTransf3d *recvCoordTransf3d(int posFlag,const int &,const int &,const CommParameters &);
 
-    bool procesa_element_load(const std::string &cmd,CmdStatus &status);
-    bool procesa_comando(CmdStatus &status);
   public:
     Element1D(int tag, int classTag);
     Element1D(int tag, int classTag,int Nd1,int Nd2);
@@ -97,7 +95,7 @@ class Element1D : public ElementBase<2>
     void vector3dPointLoadLocal(const Vector &,const Vector &);
     void strainLoad(const PlanoDeformacion &p1, const PlanoDeformacion &p2);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

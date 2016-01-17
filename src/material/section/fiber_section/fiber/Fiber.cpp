@@ -65,45 +65,11 @@
 #include "boost/any.hpp"
 #include "material/uniaxial/UniaxialMaterial.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 
 //! @brief constructor.
 XC::Fiber::Fiber(int tag, int classTag)
   : TaggedObject(tag), MovableObject(classTag), dead(false) {}
-
-//! @brief Lee un objeto Fiber desde archivo
-bool XC::Fiber::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Fiber) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "material")
-      {
-        UniaxialMaterial *mat= getMaterial();
-        if(mat)
-          mat->LeeCmd(status);
-        else
-          std::cerr  << "(Fiber) Procesando comando: " << cmd 
-                     << " puntero a material nulo en fibra: " << getTag() << std::endl;
-        return true;
-      }
-    else if(cmd == "kill")
-      {
-        status.GetBloque(); //Ignoramos argumentos.
-        kill();
-        return true;
-      }
-    else if(cmd == "alive")
-      {
-        status.GetBloque(); //Ignoramos argumentos.
-        alive();
-        return true;
-      }
-    else
-      return TaggedObject::procesa_comando(status);
-  }
 
 //! @brief Interpreta una cadena de caracteres y coloca los resultados en la pila.
 bool XC::Fiber::interpreta(const std::string &str,const int &numValEsperados) const

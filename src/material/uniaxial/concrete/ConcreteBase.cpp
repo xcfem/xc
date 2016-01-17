@@ -33,7 +33,6 @@
 #include <domain/mesh/element/Information.h>
 #include <cmath>
 #include <cfloat>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
@@ -85,31 +84,6 @@ void XC::ConcreteBase::setEpscu(const double &d)
 double XC::ConcreteBase::getEpscu(void) const
   { return epscu; }
 
-//! @brief Lee un objeto XC::ConcreteBase desde archivo
-bool XC::ConcreteBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ConcreteBase) Procesando comando: " << cmd << std::endl;
-    if(cmd == "fpc")
-      {
-        setFpc(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else if(cmd == "epsc0")
-      {
-        setEpsc0(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else if(cmd == "epscu")
-      {
-        setEpscu(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else
-      return UniaxialMaterial::procesa_comando(status);
-  }
-
 //! @brief Devuelve la tensión en el material.
 double XC::ConcreteBase::getStress(void) const
   { return trialState.getStress(); }
@@ -146,45 +120,3 @@ int XC::ConcreteBase::recvData(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::ConcreteBase::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "ConcreteBase::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="fpc")
-      return any_const_ptr(fpc);
-    else if(cod=="epsc0")
-      return any_const_ptr(epsc0);
-    else if(cod=="epscu")
-      return any_const_ptr(epscu);
-    else if(cod=="CminStrain")
-      return any_const_ptr(convergedHistory.getMinStrain());
-    else if(cod=="CunloadSlope")
-      return any_const_ptr(convergedHistory.getUnloadSlope());
-    else if(cod=="CendStrain")
-      return any_const_ptr(convergedHistory.getEndStrain());
-    else if(cod=="Ctangent")
-      return any_const_ptr(convergedState.getTangent());
-    else if(cod=="Cstrain")
-      return any_const_ptr(convergedState.getStrain());
-    else if(cod=="Cstress")
-      return any_const_ptr(convergedState.getStress());
-    else if(cod=="TminStrain")
-      return any_const_ptr(trialHistory.getMinStrain());
-    else if(cod=="TunloadSlope")
-      return any_const_ptr(trialHistory.getUnloadSlope());
-    else if(cod=="TendStrain")
-      return any_const_ptr(trialHistory.getEndStrain());
-    else if(cod=="Ttangent")
-      return any_const_ptr(trialState.getTangent());
-    else if(cod=="Tstrain")
-      return any_const_ptr(trialState.getStrain());
-    else if(cod=="Tstress")
-      return any_const_ptr(trialState.getStress());
-    else
-      return UniaxialMaterial::GetProp(cod);
-  }

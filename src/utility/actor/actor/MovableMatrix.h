@@ -41,7 +41,7 @@ class MovableMatrix: public Matrix, public MovableObject
   {
   protected:
     DbTagData &getDbTagData(void) const;
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors
     MovableMatrix(const size_t &nr=0,const size_t &nc=0);
@@ -51,7 +51,7 @@ class MovableMatrix: public Matrix, public MovableObject
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } // end of XC namespace

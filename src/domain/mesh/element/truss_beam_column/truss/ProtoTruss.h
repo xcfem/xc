@@ -65,7 +65,7 @@ class ProtoTruss : public Element1D
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
     void setup_matrix_vector_ptrs(int dofNd1);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ProtoTruss(int tag, int classTag,int Nd1,int Nd2,int ndof,int dimSpace);
     ProtoTruss(const ProtoTruss &);
@@ -79,7 +79,7 @@ class ProtoTruss : public Element1D
     // public methods to obtain inforrmation about dof & connectivity    
     int getNumDIM(void) const;	
     int getNumDOF(void) const;
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

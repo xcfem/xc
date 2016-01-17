@@ -33,40 +33,11 @@
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d2/Plano3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
 void XC::Traslacion::setVector(const Vector3d &v)
   { tr= Traslacion3d(v); }
-
-//! @brief Lee un objeto Traslación desde el archivo de entrada.
-bool XC::Traslacion::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= status.Cmd();
-    if(verborrea>2)
-      std::clog << "(Traslacion) Procesando comando: " << cmd << std::endl;
-    static Vector3d v;
-    if(cmd == "vector")
-      {
-        v.LeeCmd(status);
-        tr= Traslacion3d(v);
-        return true;
-      }
-    else if(cmd == "puntos_vector")
-      {
-        const std::vector<MapPuntos::Indice> tmp= crea_vector_size_t(status.GetString());
-        if(tmp.size()>1)
-          v= get_preprocessor()->getCad().getPuntos().getVector(tmp[0],tmp[1]); 
-        else
-	  std::cerr << "(Traslacion) Procesando comando: " << cmd
-                    << " se necesitan dos puntos para definir el vector." << std::endl;
-        tr= Traslacion3d(v);
-        return true;
-      }
-    else
-      return TrfGeom::procesa_comando(status);
-  }
 
 //! @brief Aplica la transformación a los elementos del conjunto.
 Pos3d XC::Traslacion::Transforma(const Pos3d &p) const

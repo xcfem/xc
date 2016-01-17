@@ -29,7 +29,6 @@
 #include "SupCuadrilatera.h"
 #include "Pnt.h"
 #include "preprocessor/cad/Cad.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "domain/mesh/node/Node.h"

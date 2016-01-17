@@ -92,7 +92,7 @@ class Fiber: public TaggedObject, public MovableObject
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     Fiber(int tag, int classTag);
 

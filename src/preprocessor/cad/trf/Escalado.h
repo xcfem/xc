@@ -41,7 +41,7 @@ class Escalado: public TrfGeom
   {
     Escalado3d ee; //!< Escalado.
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     //! @brief Constructor.
     Escalado(Preprocessor *m)

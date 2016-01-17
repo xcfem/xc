@@ -80,7 +80,7 @@ class ElasticSection3d: public BaseElasticSection3d
   private:   
     static Vector s;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElasticSection3d(int tag, MaterialLoader *mat_ldr= NULL, const ConstantesSecc3d &ctes= ConstantesSecc3d());
     ElasticSection3d(int tag, double E, double A, double Iz, double Iy, double G, double J);
@@ -100,7 +100,7 @@ class ElasticSection3d: public BaseElasticSection3d
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
     
-    any_const_ptr GetProp(const std::string &cod) const;
+
     void Print (std::ostream &s, int flag = 0) const;
   };
 } // end of XC namespace

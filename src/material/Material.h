@@ -84,9 +84,6 @@ class ID;
 //! @brief Clase base para los materiales del modelo.
 class Material: public TaggedObject, public MovableObject
   {
-  protected:
-    bool procesa_comando(CmdStatus &status);
-
   public:
     Material(int tag, int classTag);
 
@@ -117,7 +114,6 @@ class Material: public TaggedObject, public MovableObject
     virtual int revertToLastCommit(void) = 0;
     virtual int revertToStart(void) = 0;
 
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 int sendMaterialPtr(Material *,DbTagData &,CommParameters &cp,const BrokedPtrCommMetaData &);

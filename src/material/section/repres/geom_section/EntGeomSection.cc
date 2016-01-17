@@ -30,7 +30,6 @@
 #include "GeomSection.h"
 #include "Spot.h"
 #include "Eje.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "med.h"
 #include "vtkCellType.h"
@@ -59,29 +58,6 @@ XC::EntGeomSection &XC::EntGeomSection::operator=(const EntGeomSection &otro)
     return *this;
   }
 
-//!  @brief Lee un objeto EntGeomSection desde el archivo de entrada.
-//! 
-//!  Soporta los comandos:
-//! 
-bool XC::EntGeomSection::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(EntGeomSection) Procesando comando: " << cmd << std::endl;
-
-    if(!sccGeom)
-      std::cerr << "¡Ojo!, el objeto: " << GetNombre() << " no tiene asignado un GeomSection." << std::endl;
-    if(cmd=="sccGeom")
-      {
-        if(sccGeom)
-          sccGeom->LeeCmd(status);
-        else
-	  status.GetBloque(); //Ignoramos entrada.
-        return true;
-      }
-    else
-      return EntConNmb::procesa_comando(status);
-  }
 //! @brief Devuelve el sistema de coordenadas activo.
 XC::SisRefScc *XC::EntGeomSection::SisRefSccActual(void)
   {
@@ -170,24 +146,3 @@ int XC::EntGeomSection::getVtkCellType(void) const
 //! @brief Interfaz con el formato MED de Salome.
 int XC::EntGeomSection::getMEDCellType(void) const
   { return MED_NONE; }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//! Soporta el comando "codigo" o "nombre" (sinónimos) que
-//! devuelven el nombre del objeto del archivo.
-any_const_ptr XC::EntGeomSection::GetProp(const std::string &cod) const
-  {
-    if(cod=="getMEDCellType")
-      {
-        tmp_gp_int= getMEDCellType();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="getVtkCellType")
-      {
-        tmp_gp_str= getVtkCellType();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else
-      return EntConNmb::GetProp(cod);
-  }
-

@@ -38,7 +38,7 @@ class DomainRecorderBase: public Recorder
   {
   protected:
     Domain *theDomain;
-    bool procesa_comando(CmdStatus &status);
+
   public:
     DomainRecorderBase(int classTag,Domain *ptr_dom= NULL);
 

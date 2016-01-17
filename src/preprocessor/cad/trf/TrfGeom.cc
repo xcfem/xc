@@ -29,17 +29,6 @@
 #include "TrfGeom.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
-
-//! @brief Lee un objeto TrfGeom desde el archivo de entrada.
-bool XC::TrfGeom::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= status.Cmd();
-    if(verborrea>2)
-      std::clog << "(TrfGeom) Procesando comando: " << cmd << std::endl;
-
-    return EntMdlrBase::procesa_comando(status);
-  }
 
 const MatrizPos3d &XC::TrfGeom::Transforma(const MatrizPos3d &m) const
   {

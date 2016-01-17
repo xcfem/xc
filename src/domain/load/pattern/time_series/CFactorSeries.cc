@@ -63,7 +63,6 @@
 
 
 #include "CFactorSeries.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
@@ -71,21 +70,6 @@
 //! @brief Constructor.
 XC::CFactorSeries::CFactorSeries(int classTag,double theFactor)
   :TimeSeries(classTag), cFactor(theFactor) {}
-
-//! @brief Lee un objeto XC::CFactorSeries desde archivo
-bool XC::CFactorSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(CFactorSeries) Procesando comando: " << cmd << std::endl;
-    if(cmd == "factor")
-      {
-        cFactor= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return TimeSeries::procesa_comando(status);
-  }
 
 //! @brief Devuelve un vector para almacenar los dbTags
 //! de los miembros de la clase.
@@ -128,9 +112,4 @@ int XC::CFactorSeries::recvSelf(const CommParameters &cp)
     else
       result+= recvData(cp);
     return result;    
-  }
-
-any_const_ptr XC::CFactorSeries::GetProp(const std::string &cod) const
-  {
-    return TimeSeries::GetProp(cod);
   }

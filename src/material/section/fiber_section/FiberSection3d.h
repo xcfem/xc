@@ -77,7 +77,7 @@ class FiberSection3d: public FiberSection3dBase
 
     friend class StoFibras;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
     FiberSection3d(int tag, int classTag, MaterialLoader *mat_ldr= nullptr);
   public:
     FiberSection3d(MaterialLoader *mat_ldr= nullptr);
@@ -102,7 +102,7 @@ class FiberSection3d: public FiberSection3dBase
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag = 0);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 FiberSection3d FiberSectionReprToFiberSection3d(const int &tag,const FiberSectionRepr &fiberSectionRepr);

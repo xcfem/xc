@@ -61,7 +61,6 @@
 #include <utility/matrix/Vector.h>
 #include <classTags.h>
 #include <cmath>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
 
@@ -73,17 +72,6 @@ XC::TriangleSeries::TriangleSeries(double startTime, double finishTime,
 
 XC::TriangleSeries::TriangleSeries()
   : PeriodSeries(TSERIES_TAG_TriangleSeries) {}
-
-//! @brief Lee un objeto XC::TriangleSeries desde archivo
-bool XC::TriangleSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TriangleSeries) Procesando comando: " << cmd << std::endl;
-
-    return PeriodSeries::procesa_comando(status);
-  }
-
 
 double XC::TriangleSeries::getFactor(double pseudoTime) const
   {	

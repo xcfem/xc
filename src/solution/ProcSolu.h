@@ -43,7 +43,7 @@ class SystemOfEqn;
 class Analysis;
 class ProblemaEF;
 
-//!  @defgroup Solu Solución del problema de elementos finitos.
+//!  @defgroup Solu Solution of the finite element analysis problem.
 
 //!  \ingroup Solu
 //! 
@@ -64,12 +64,9 @@ class ProcSolu: public EntCmd
     void libera_analysis(void);
     bool alloc_analysis(const std::string &,const std::string &,const std::string &);
     void copia_analysis(Analysis *);
-    bool procesa_cmd_analysis(const std::string &cmd,CmdStatus &status);
  
     void libera(void);
-    bool procesa_comando(CmdStatus &status);
-    template <class LINSOE>
-    void lee_lin_soe(CmdStatus &status);
+
     void revertToStart(void);
     ProblemaEF *getProblemaEF(void);
     const ProblemaEF *getProblemaEF(void) const;

@@ -27,7 +27,6 @@
 //MapSoluMethod.cc
 
 #include "MapSoluMethod.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "domain/domain/Domain.h"
 #include "ProcSolu.h"
 
@@ -40,23 +39,6 @@
 //! @brief Constructor por defecto.
 XC::MapSoluMethod::MapSoluMethod(ProcSoluControl *owr)
   : EntCmd(owr) {}
-
-//! @brief Lee un objeto MapSoluMethod desde archivo.
-bool XC::MapSoluMethod::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MapSoluMethod) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "clearAll")
-      {
-        status.GetString();
-        clearAll();
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 //! @brief Devuelve verdadero si existe el método cuyo nombre
 //! se pasa como parámetro.

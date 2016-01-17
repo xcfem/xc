@@ -33,7 +33,6 @@
 #include <domain/mesh/element/Information.h>
 #include <cmath>
 #include <cfloat>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/MovableVector.h"
 
 //! @brief Sets all history and state variables to initial values
@@ -74,15 +73,6 @@ XC::SteelBase0103::SteelBase0103(int tag, int classTag)
 //! @brief Constructor.
 XC::SteelBase0103::SteelBase0103(int classTag)
   :SteelBase(0,classTag,0.0,0.0,0.0,STEEL_0103_DEFAULT_A1,STEEL_0103_DEFAULT_A2,STEEL_0103_DEFAULT_A3,STEEL_0103_DEFAULT_A4) {}
-
-//! @brief Lee el objeto desde archivo
-bool XC::SteelBase0103::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SteelBase0103) Procesando comando: " << cmd << std::endl;
-    return SteelBase::procesa_comando(status);
-  }
 
 int XC::SteelBase0103::setTrialStrain(double strain, double strainRate)
   {

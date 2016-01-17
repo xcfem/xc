@@ -139,8 +139,6 @@ class Node: public MeshComponent
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_load(const std::string &cmd,CmdStatus &status);
-    bool procesa_comando(CmdStatus &status);
   public:
     // constructors
     Node(int classTag);
@@ -301,7 +299,6 @@ class Node: public MeshComponent
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
     virtual void Print(std::ostream &s, int flag = 0);
 
     virtual const Vector &getReaction(void) const;

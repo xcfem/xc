@@ -29,7 +29,6 @@
 #include <domain/load/beam_loads/BeamLoad.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
@@ -39,16 +38,6 @@ XC::BeamLoad::BeamLoad(int tag,int classTag,const XC::ID &theElementTags)
 XC::BeamLoad::BeamLoad(int tag,int classTag)
   :ElementBodyLoad(tag, classTag) {}
 
-//! @brief Lee un objeto BeamLoad desde archivo
-bool XC::BeamLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BeamLoad) Procesando comando: " << cmd << std::endl;
-
-    return ElementBodyLoad::procesa_comando(status);
-  }
-
 void XC::BeamLoad::Print(std::ostream &s, int flag) const
   {
     s << "BeamLoad - Reference load" << std::endl;
@@ -57,16 +46,3 @@ void XC::BeamLoad::Print(std::ostream &s, int flag) const
 
 std::string XC::BeamLoad::Categoria(void) const
   { return "undefined"; }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::BeamLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "categoria")
-      {
-        tmp_gp_str= Categoria();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else
-      return ElementBodyLoad::GetProp(cod);
-  }

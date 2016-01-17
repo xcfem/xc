@@ -120,7 +120,7 @@ class IncrementalIntegrator : public Integrator
     
     // method introduced for domain decomposition
     virtual int getLastResponse(Vector &result, const ID &id);
-    virtual any_const_ptr GetProp(const std::string &cod) const;    
+    
   };
 } // end of XC namespace
 

@@ -48,8 +48,6 @@ class DatosDiagInteraccion: public EntCmd
     int tag_hormigon; //!< Tag del material empleado para modelizar el hormigón.
     std::string nmb_set_armadura; //!< Nombre del conjunto de fibras de armadura. 
     int tag_armadura; //!< Tag del material empleado para modelizar la armadura.
-  protected:
-    bool procesa_comando(CmdStatus &status);    
   public:
     DatosDiagInteraccion(void);
     DatosDiagInteraccion(const double &u,const double &inc_e,const double &inc_t= M_PI/4,const DefAgotPivotes &agot= DefAgotPivotes());
@@ -86,8 +84,6 @@ class DatosDiagInteraccion: public EntCmd
       { return tag_armadura; }
     inline void setTagArmadura(const int &v)
       { tag_armadura= v; }
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // end of XC namespace

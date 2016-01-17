@@ -40,13 +40,9 @@ namespace XC {
 //! y los valores consumados de la aceleración del nodo.
 class NodeAccelVectors: public NodeVectors
   {
-  protected:
-    bool procesa_comando(CmdStatus &status);
   public:
     // constructors
     NodeAccelVectors(void);
-    
-    virtual any_const_ptr GetProp(const std::string &cod) const;
     virtual void Print(std::ostream &s, int flag = 0);
   };
 

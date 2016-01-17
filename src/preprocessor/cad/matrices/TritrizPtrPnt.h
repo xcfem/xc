@@ -51,7 +51,7 @@ namespace XC{
 class TritrizPtrPnt: public TritrizPtrBase<MatrizPtrPnt>
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
 
     friend class MapEsquemas3d;
     TritrizPtrPnt(const size_t capas= 0);
@@ -79,7 +79,7 @@ class TritrizPtrPnt: public TritrizPtrBase<MatrizPtrPnt>
     void setPnt(const size_t &,const size_t &,const size_t &,const int &);
     Pnt *getPnt(const size_t &,const size_t &,const size_t &);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &os) const;
   };
 

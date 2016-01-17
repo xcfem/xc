@@ -61,7 +61,6 @@
 #include <utility/matrix/ID.h>
 #include <utility/actor/channel/Channel.h>
 #include <utility/actor/message/Message.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include <fstream>
 #include "utility/actor/actor/CommMetaData.h"
 
@@ -97,41 +96,6 @@ XC::DataOutputFileHandler::DataOutputFileHandler(const std::string &theFileName,
         std::cerr << "XC::DataOutputFileHandler::DataOutputFileHandler() - setFile() failed\n";
         fileName= "";
       }
-  }
-
-//! @brief Lee un objeto XC::DataOutputFileHandler desde archivo
-bool XC::DataOutputFileHandler::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DataOutputFileHandler) Procesando comando: " << cmd << std::endl;
-    if(cmd == "file_name")
-      {
-        fileName= interpretaString(status.GetString());
-        return true;
-      }
-    else if(cmd == "echo_mode")
-      {
-        const std::string mode= interpretaString(status.GetString());
-        if(mode == "xml")
-          theEchoMode= XML_FILE;
-        else if(mode == "data")
-          theEchoMode= DATA_FILE;
-        return true;
-      }
-    else if(cmd == "open_mode")
-      {
-        const std::string mode= interpretaString(status.GetString());
-        if(mode == "overwrite")
-          theOpenMode= OVERWRITE;
-        else if (mode == "append")
-          theOpenMode= APPEND;
-        else
-          theOpenMode= OVERWRITE;          
-        return true;
-      }
-    else
-      return DataOutputHandler::procesa_comando(status);
   }
 
 int XC::DataOutputFileHandler::open(const std::vector<std::string> &dataDescription)

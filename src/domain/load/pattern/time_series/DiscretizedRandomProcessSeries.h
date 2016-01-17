@@ -86,7 +86,7 @@ class DiscretizedRandomProcessSeries : public TimeSeries
     int parameterID;
 
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     DiscretizedRandomProcessSeries(int num, const std::vector<ModulatingFunction *> &theModFuncs,double p_mean,double targetStdv);
     TimeSeries *getCopy(void) const;

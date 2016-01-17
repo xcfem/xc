@@ -39,7 +39,6 @@
 #include <utility/recorder/response/MaterialResponse.h>
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <material/section/repres/section/FiberSectionRepr.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
@@ -69,23 +68,6 @@ XC::FiberSection3dBase &XC::FiberSection3dBase::operator=(const FiberSection3dBa
     FiberSectionBase::operator=(otro);
     kr= otro.kr;
     return *this;
-  }
-
-//! @brief Lee un objeto XC::FiberSection3dBase desde archivo
-bool XC::FiberSection3dBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string cabecera_error= "(FiberSection3dBase) Procesando comando: '"+cmd+"'";
-    if(verborrea>2)
-      std::clog <<  cabecera_error << std::endl;
-    if(cmd == "KR") //Rigidez y resultante.
-      {
-        kr.set_owner(this);
-        kr.LeeCmd(status);
-        return true;
-      }
-    else
-      return FiberSectionBase::procesa_comando(status);
   }
 
 double XC::FiberSection3dBase::get_strain(const double &y,const double &z) const
@@ -171,22 +153,3 @@ double XC::FiberSection3dBase::getStrain(const double &y,const double &z) const
                                          //el que la coordenada este cambiada de signo
                                          //ver constructor UniaxialFiber3d y otras líneas.
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::FiberSection3dBase::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "FiberSection3dBase::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="MyTracc")
-      {
-        tmp_gp_dbl= fibras.getMyTracc(getCdgZ());
-        return any_const_ptr(tmp_gp_dbl);
-      }      
-    else if(cod=="MyComp")
-      {
-        tmp_gp_dbl= fibras.getMyComp(getCdgZ());
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return FiberSectionBase::GetProp(cod);
-  }

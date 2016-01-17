@@ -69,7 +69,7 @@ class Beam2dPointLoad: public BeamPointLoad
   private:
     static Vector data;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     Beam2dPointLoad(int tag, double Pt, double x,const ID &theElementTags, double Pa = 0.0);
     Beam2dPointLoad(int tag);    
@@ -94,7 +94,7 @@ class Beam2dPointLoad: public BeamPointLoad
     int recvSelf(const CommParameters &);
 
     void Print(std::ostream &s, int flag =0);       
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

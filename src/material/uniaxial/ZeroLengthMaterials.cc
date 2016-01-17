@@ -32,7 +32,6 @@
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/loaders/MaterialLoader.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "domain/mesh/node/Node.h"
 
 
@@ -69,58 +68,6 @@ XC::ZeroLengthMaterials::ZeroLengthMaterials(ZeroLength *owner,const DqUniaxialM
 XC::ZeroLengthMaterials::ZeroLengthMaterials(ZeroLength *owner)
   :DqUniaxialMaterial(owner), direcciones() {}
 
-
-//! @brief Lee un objeto XC::ZeroLengthMaterials desde archivo
-bool XC::ZeroLengthMaterials::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ZeroLengthMaterials) Procesando comando: " << cmd << std::endl;
-
-    const CmdParser &parser= status.Parser();
-    if(cmd == "clear")
-      {
-        clear();
-        return true;
-      }
-    else if(cmd == "material")
-      {
-        std::deque<boost::any> indices;
-        if(parser.TieneIndices())
-          {
-            indices= parser.SeparaIndices(this);
-            size_t dir= convert_to_int(indices[0]);
-            if(dir<size())
-              {
-                if((*this)[dir])
-                  (*this)[dir]->LeeCmd(status);
-                else
-                  {
-		    std::cerr << "(ZeroLengthMaterials) Procesando comando: '" << cmd 
-			      << " el puntero al material de índice: " << dir
-                              << "es nulo. Se ignora la entrada" << std::endl;
-                    status.GetString();
-                  }
-	      }
-            else
-              {
-		 std::cerr << "(ZeroLengthMaterials) Procesando comando: '" << cmd 
-			   << " indice: " << dir
-                           << " fuera de rango Se ignora la entrada" << std::endl;
-                    status.GetString();
-              }
-          }
-        else
-          {
-	    std::cerr << "(ZeroLengthMaterials) Procesando comando: '" << cmd 
-                      << " faltan el índice. Se ignora la entrada" << std::endl;
-            status.GetString();
-          }
-        return true;
-      }
-    else
-      return DqUniaxialMaterial::procesa_comando(status);
-  }
 
 void XC::ZeroLengthMaterials::clear(void)
   {
@@ -249,20 +196,4 @@ void XC::ZeroLengthMaterials::checkDirection(void)
           std::cerr << "WARNING XC::ZeroLengthMaterials::checkDirection - incorrect direction " << direcciones[i] << " is set to 0\n";
           direcciones[i]= 0;
         }
-  }
-
-
-
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ZeroLengthMaterials::GetProp(const std::string &cod) const
-  {
-    if(cod == "getNumMateriales")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return DqUniaxialMaterial::GetProp(cod);
   }

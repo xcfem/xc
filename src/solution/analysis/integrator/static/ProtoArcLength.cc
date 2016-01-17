@@ -30,29 +30,12 @@
 #include <solution/analysis/integrator/static/ProtoArcLength.h>
 #include "solution/analysis/model/AnalysisModel.h"
 #include "solution/system_of_eqn/linearSOE/LinearSOE.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
 XC::ProtoArcLength::ProtoArcLength(SoluMethod *owr,int classTag,double arcLength)
   :StaticIntegrator(owr,classTag), arcLength2(arcLength*arcLength), signLastDeltaLambdaStep(1) {}
-
-//! @brief Lee un objeto ProtoArcLength desde archivo
-bool XC::ProtoArcLength::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ProtoArcLength) Procesando comando: " << cmd << std::endl;
-    if(cmd=="arc_length")
-      {
-        const double tmp= interpretaDouble(status.GetString());
-        arcLength2= tmp*tmp;
-        return true;
-      }
-    else
-      return StaticIntegrator::procesa_comando(status);
-  }
 
 int XC::ProtoArcLength::newStep(void)
   {
@@ -198,23 +181,3 @@ int XC::ProtoArcLength::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::ProtoArcLength::GetProp(const std::string &cod) const
-  {
-    if(cod=="arc_length")
-      {
-        tmp_gp_dbl= sqrt(arcLength2);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getDeltaLambdaStep")
-      return any_const_ptr(vectores.getDeltaLambdaStep());
-    else if(cod== "getCurrentLambda")
-      return any_const_ptr(vectores.getCurrentLambda());
-    else if(cod=="signLastDeltaLambdaStep")
-      return any_const_ptr(signLastDeltaLambdaStep);
-    else
-      return StaticIntegrator::GetProp(cod);
-  }

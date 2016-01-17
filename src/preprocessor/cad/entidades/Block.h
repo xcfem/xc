@@ -48,7 +48,7 @@ class Block: public Body
     void add_caras(const std::vector<size_t> &);
     void crea_nodos_caras(void);
     TritrizPos3d get_posiciones(void) const;
-    bool procesa_comando(CmdStatus &status);
+
     virtual Cara *GetCara(const size_t &i);
   public:
     Block(Preprocessor *m,const std::string &nombre= "");
@@ -73,7 +73,7 @@ class Block: public Body
     void crea_nodos(void);
     void Malla(dir_mallado dm);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 

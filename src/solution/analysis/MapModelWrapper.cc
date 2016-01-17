@@ -27,7 +27,6 @@
 //MapModelWrapper.cc
 
 #include "MapModelWrapper.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "domain/domain/Domain.h"
 #include "solution/ProcSolu.h"
 
@@ -39,23 +38,6 @@
 //! @brief Constructor por defecto.
 XC::MapModelWrapper::MapModelWrapper(ProcSoluControl *owr)
   : EntCmd(owr) {}
-
-//! @brief Lee un objeto MapModelWrapper desde archivo.
-bool XC::MapModelWrapper::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MapModelWrapper) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "clearAll")
-      {
-        status.GetString();
-        clearAll();
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 //! @brief Devuelve verdadero si existe el método cuyo nombre
 //! se pasa como parámetro.

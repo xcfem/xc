@@ -55,7 +55,7 @@ class RgQuadCell: public RegionSecc
     int nDivIJ, nDivJK; //!< Número de divisiones.
     void libera(void) const;
     const Rejilla2d &alloc(const Rejilla2d &) const;
-    bool procesa_comando(CmdStatus &status);
+
   public:
     RgQuadCell(Material *);
     RgQuadCell(Material *, int numSubdivIJ, int numSubdivJK);
@@ -89,7 +89,7 @@ class RgQuadCell: public RegionSecc
     Vector getVertCoords(const size_t &,const size_t &) const;
     Matrix getCellVertCoords(const size_t &,const size_t &) const;
     
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

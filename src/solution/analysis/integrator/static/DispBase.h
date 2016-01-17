@@ -44,11 +44,8 @@ class DispBase: public BaseControl
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
 
     DispBase(SoluMethod *,int classTag,const int &numIncr= 1);
-  public:
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

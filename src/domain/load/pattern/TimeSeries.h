@@ -81,16 +81,12 @@ namespace XC {
 class TimeSeries: public MovableObject, public EntCmd
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
   public:
     TimeSeries(int classTag);
     inline virtual ~TimeSeries(void)
       {}
 
     virtual TimeSeries *getCopy(void) const= 0;
-
-    static any_const_ptr get_prop_vector(const Vector *ptrVector);
-    static any_const_ptr get_prop_vector(const Vector &ptrVector);
 
     // pure virtual functions
     virtual double getFactor(double pseudoTime) const= 0;
@@ -105,7 +101,6 @@ class TimeSeries: public MovableObject, public EntCmd
     // DECIDE ONCE GroundMotionIntegrator IS IMPLEMENTED
 
     virtual void Print(std::ostream &s, int flag = 0) const= 0;        
-    virtual any_const_ptr GetProp(const std::string &cod) const;
 
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);

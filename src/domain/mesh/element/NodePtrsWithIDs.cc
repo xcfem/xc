@@ -27,7 +27,6 @@
 //NodePtrsWithIDs.cc
 
 #include "NodePtrsWithIDs.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "domain/mesh/node/Node.h"
 
 //! @ brief Constructor por defecto.
@@ -41,22 +40,6 @@ XC::NodePtrsWithIDs::NodePtrsWithIDs(Element *owr,size_t numNodos)
           "failed to create an ID of size " << numNodos << "\n";
         exit(-1);
       }
-  }
-
-//! @brief Lee un objeto XC::NodePtrsWithIDs desde archivo
-bool XC::NodePtrsWithIDs::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NodePtrsWithIDs) Procesando comando: " << cmd << std::endl;
-    if(cmd == "nodes")
-      {
-	const std::vector<int> inodos= crea_vector_int(status.GetString());
-        set_id_nodos(inodos);
-        return true;
-      }
-    else
-      return NodePtrs::procesa_comando(status);
   }
 
 //! @brief Devuelve el número de nodos a los que se conecta.

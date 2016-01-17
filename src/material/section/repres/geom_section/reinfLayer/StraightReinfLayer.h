@@ -74,7 +74,7 @@ class StraightReinfLayer : public ReinfLayer
     Vector initPosit;
     Vector finalPosit;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
 
     friend class ListReinfLayer;
     StraightReinfLayer(ListReinfLayer *,Material *mat);
@@ -106,7 +106,7 @@ class StraightReinfLayer : public ReinfLayer
     double getLongitud(void) const;
     double getSeparacion(void) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0) const;   
   };
 } // end of XC namespace

@@ -66,7 +66,6 @@
 
 #include <cmath>
 #include <cfloat>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 
@@ -108,62 +107,6 @@ XC::EPPGapMaterial::EPPGapMaterial(int tag)
 XC::EPPGapMaterial::EPPGapMaterial(void)
   :EPPBaseMaterial(0,MAT_TAG_EPPGap), fy(0.0),
    gap(0.0), eta(0.0), minElasticYieldStrain(0.0), damage(0) {}
-
-//! @brief Lee un objeto XC::EPPGapMaterial desde archivo
-bool XC::EPPGapMaterial::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(EPPBaseMaterial) Procesando comando: " << cmd << std::endl;
-    if(cmd=="fy")
-      {
-        fy= interpretaDouble(status.GetString());
-        if(fy*gap<0)
-          std::cerr << "XC::EPPGapMaterial::EPPGapMaterial -- Alternate signs on fy and E encountered, continuing anyway\n";
-        return true;
-      }
-    else if(cmd == "E")
-      {
-        E= interpretaDouble(status.GetString());
-        if(E == 0.0)
-          {
-            std::cerr << "XC::EPPGapMaterial::EPPGapMaterial -- E is zero, continuing with E = fy/0.002\n";
-            if(fy != 0.0)
-              E = fabs(fy)/0.002;
-            else
-              {
-                std::cerr << "XC::EPPGapMaterial::EPPGapMaterial -- E and fy are zero\n";
-              }
-          }
-        return true;
-      }
-    else if(cmd=="gap")
-      {
-        gap= interpretaDouble(status.GetString());
-        if(fy*gap<0)
-          std::cerr << "XC::EPPGapMaterial::EPPGapMaterial -- Alternate signs on fy and E encountered, continuing anyway\n";
-        return true;
-      }
-    else if(cmd=="eta")
-      {
-        eta= interpretaDouble(status.GetString());
-        if((eta >= 1) || (eta <= -1))
-          {
-            std::cerr << "XC::EPPGapMaterial::EPPGapMaterial -- value of eta must be -1 <= eta <= 1, setting eta to 0\n";
-            eta = 0;
-          }
-        return true;
-      }
-    else if(cmd=="damage")
-      {
-        damage= interpretaInt(status.GetString());
-        if((damage < 0) || (damage > 1))
-          { std::cerr << "%s -- damage switch must be 0 or 1\n"; }
-        return true;
-      }
-    else
-      return EPPBaseMaterial::procesa_comando(status);
-  }
 
 int XC::EPPGapMaterial::setTrialStrain(double strain, double strainRate)
   {
@@ -304,19 +247,6 @@ int XC::EPPGapMaterial::recvSelf(const CommParameters &cp)
         damage= getDbTagDataPos(3);
       }
     return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::EPPGapMaterial::GetProp(const std::string &cod) const
-  {
-    if(cod=="getEpsy")
-      {
-        tmp_gp_dbl= fy/E+gap; //Deformación para la que se produce la cedencia
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return ElasticBaseMaterial::GetProp(cod);
   }
 
 void XC::EPPGapMaterial::Print(std::ostream &s, int flag)

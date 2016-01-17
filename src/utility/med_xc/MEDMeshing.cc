@@ -25,7 +25,6 @@
 #include "MEDDblFieldInfo.h"
 #include "MEDIntFieldInfo.h"
 #include "MEDGaussModel.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/nucleo/InterpreteRPN.h"
 #include "xc_utils/src/nucleo/MatrizAny.h"
@@ -230,47 +229,3 @@ void XC::MEDMeshing::write(const std::string &fileName)
       (*i)->write(fileName);
   }
 
-//! @brief Lectura del objeto desde archivo.
-bool XC::MEDMeshing::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(MEDMeshing) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "setName") //Asigna nombre a la malla.
-      {
-        const std::string nmb= interpretaString(status.GetBloque());
-        malla.setName(nmb);
-        return true;
-      }
-    else if(cmd == "vertices")
-      {
-        vertices.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "cells")
-      {
-        cells.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "clear")
-      {
-        status.GetString(); //Ignoramos argumentos.
-        clear();
-        return true;
-      }
-    else if(cmd == "write")
-      {
-        const std::string fileName= interpretaString(status.GetString());
-        write(fileName);
-        return true;
-      }
-    else    
-      return MEDObject::procesa_comando(status);
-  }
-
-
-//! Devuelve la propiedad del objeto cuyo código se pasa 
-//! como parámetro. 
-any_const_ptr XC::MEDMeshing::GetProp(const std::string &cod) const 
-  { return MEDObject::GetProp(cod); }

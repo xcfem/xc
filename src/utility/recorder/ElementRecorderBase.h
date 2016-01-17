@@ -56,7 +56,7 @@ class ElementRecorderBase: public MeshCompRecorder
     int sendData(CommParameters &);  
     int receiveData(const CommParameters &);
     void setup_responses(const std::string &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElementRecorderBase(int classTag);
     ElementRecorderBase(int classTag, const ID &eleID, 

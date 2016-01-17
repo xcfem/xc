@@ -76,7 +76,6 @@ class EigenSOE : public SystemOfEqn
     void copia(const EigenSolver *);
     virtual bool setSolver(EigenSolver *);
     void resize_mass_matrix_if_needed(const size_t &);
-    bool procesa_comando(CmdStatus &status);
 
     EigenSOE(SoluMethod *,int classTag);
   public:
@@ -131,8 +130,6 @@ class EigenSOE : public SystemOfEqn
 
     EigenSolver *getSolver(void);
     EigenSolver &newSolver(const std::string &);
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

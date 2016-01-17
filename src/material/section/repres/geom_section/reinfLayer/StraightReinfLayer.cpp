@@ -58,7 +58,6 @@
 
 #include <material/section/repres/geom_section/reinfLayer/StraightReinfLayer.h>
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
@@ -75,62 +74,6 @@ XC::StraightReinfLayer::StraightReinfLayer(ListReinfLayer *owr,Material *mat, in
   : ReinfLayer(owr,mat,numReinfBars,0.0,reinfBarArea),
     initPosit(InitialPosition), finalPosit(FinalPosition) {}
 
-
-//! @brief Lee un objeto XC::StraightReinfLayer desde archivo
-bool XC::StraightReinfLayer::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(StraightReinfLayer) Procesando comando: " << cmd << std::endl;
-    if(cmd == "y1")
-      {
-        initPosit(0)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "z1")
-      {
-        initPosit(1)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "p1")
-      {
-	std::deque<std::string> str_coord= separa_cadena(status.GetString(),",");
-        if(str_coord.size()<2)
-	  std::cerr << "Error; " << cmd 
-		    << " se requieren dos coordenadas." << std::endl;
-        else
-          {
-            initPosit(0)= interpretaDouble(str_coord[0]);
-            initPosit(1)= interpretaDouble(str_coord[1]);
-	  }
-        return true;
-      }
-    else if(cmd == "y2")
-      {
-        finalPosit(0)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "z2")
-      {
-        finalPosit(1)= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "p2")
-      {
-	std::deque<std::string> str_coord= separa_cadena(status.GetString(),",");
-        if(str_coord.size()<2)
-	  std::cerr << "Error; " << cmd 
-		    << " se requieren dos coordenadas." << std::endl;
-        else
-          {
-            finalPosit(0)= interpretaDouble(str_coord[0]);
-            finalPosit(1)= interpretaDouble(str_coord[1]);
-	  }
-        return true;
-      }
-    else
-      return ReinfLayer::procesa_comando(status);
-  }
 
 void XC::StraightReinfLayer::setInitialPosition (const XC::Vector &initialPosition)
   { initPosit = initialPosition; }
@@ -232,27 +175,6 @@ double XC::StraightReinfLayer::getSeparacion(void) const
 
 XC::ReinfLayer *XC::StraightReinfLayer::getCopy (void) const
   { return new XC::StraightReinfLayer(*this); }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::StraightReinfLayer::GetProp(const std::string &cod) const
-  {
-    if(cod=="y1")
-      return any_const_ptr(initPosit(0));
-    else if(cod=="z1")
-      return any_const_ptr(initPosit(1));
-    else if(cod=="y2")
-      return any_const_ptr(finalPosit(0));
-    else if(cod=="z2")
-      return any_const_ptr(finalPosit(1));
-    else if(cod=="getSeparacion")
-      {
-        tmp_gp_dbl= getSeparacion();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return ReinfLayer::GetProp(cod);
-  }
 
 void XC::StraightReinfLayer::Print(std::ostream &s, int flag) const
   {

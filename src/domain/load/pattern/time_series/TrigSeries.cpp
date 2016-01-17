@@ -64,7 +64,6 @@
 #include <utility/matrix/Vector.h>
 #include <classTags.h>
 #include <cmath>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
@@ -74,16 +73,6 @@ XC::TrigSeries::TrigSeries(double startTime, double finishTime, double T, double
 
 XC::TrigSeries::TrigSeries(void)
   :PeriodSeries(TSERIES_TAG_TrigSeries) {}
-
-//! @brief Lee un objeto XC::TrigSeries desde archivo
-bool XC::TrigSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TrigSeries) Procesando comando: " << cmd << std::endl;
-
-    return PeriodSeries::procesa_comando(status);
-  }
 
 double XC::TrigSeries::getFactor(double pseudoTime) const
   {
@@ -128,32 +117,4 @@ void XC::TrigSeries::Print(std::ostream &s, int flag) const
     s << "\ttFinish: " << tFinish << std::endl;
     s << "\tPeriod: " << period << std::endl;
     s << "\tPhase Shift: " << shift << std::endl;
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::TrigSeries::GetProp(const std::string &cod) const
-  {
-    if(cod=="start")
-      return any_const_ptr(tStart);
-    else if(cod=="finish")
-      return any_const_ptr(tFinish);
-    else if(cod=="period")
-      return any_const_ptr(period);
-    else if(cod=="phase_shift")
-      return any_const_ptr(shift);
-    else if(cod=="factor")
-      return any_const_ptr(cFactor);
-    else if(cod=="frec")
-      {
-        tmp_gp_dbl= 1.0/period;
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="puls")
-      {
-        tmp_gp_dbl= (2.0*M_PI/period);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return PeriodSeries::GetProp(cod);
   }

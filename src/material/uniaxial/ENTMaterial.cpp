@@ -64,31 +64,10 @@
 #include "domain/component/Parameter.h"
 #include <utility/matrix/Vector.h>
 #include <domain/mesh/element/Information.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 XC::ENTMaterial::ENTMaterial(int tag, const double &e,const double &A,const double &B)
   :ElasticBaseMaterial(tag,MAT_TAG_ENTMaterial,e), a(A), b(B), parameterID(0) {}
-
-//! @brief Lee un objeto XC::ENTMaterial desde archivo
-bool XC::ENTMaterial::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ENTMaterial) Procesando comando: " << cmd << std::endl;
-    if(cmd == "a")
-      {
-        a= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "b")
-      {
-        b= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return ElasticBaseMaterial::procesa_comando(status);
-  }
 
 int XC::ENTMaterial::setTrialStrain(double strain, double strainRate)
   {
@@ -181,21 +160,6 @@ int XC::ENTMaterial::recvSelf(const CommParameters &cp)
            std::cerr << "ENTMaterial::recvSelf - failed to receive data.\n";
       }
     return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::ENTMaterial::GetProp(const std::string &cod) const
-  {
-    if(cod=="getA")
-      return any_const_ptr(a);
-    if(cod=="getB")
-      return any_const_ptr(b);
-    else
-      return ElasticBaseMaterial::GetProp(cod);
   }
 
 void XC::ENTMaterial::Print(std::ostream &s, int flag)

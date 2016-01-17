@@ -58,7 +58,6 @@
 #include <material/section/repres/geom_section/GeomSection.h>
 #include "preprocessor/loaders/MaterialLoader.h"
 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 
@@ -77,24 +76,6 @@ XC::SectionRepres &XC::SectionRepres::operator=(const SectionRepres &otro)
     gmSecc= otro.gmSecc;
     return *this;
   }
-
-//! @brief Lee un objeto XC::SectionRepres desde archivo
-bool XC::SectionRepres::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SectionRepres) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "geom") //Asigna una geometría a la seccion.
-      {
-        const std::string nmbGeom= interpretaString(status.GetString());
-        setGeomNamed(nmbGeom);
-        return true;
-      }
-    else
-      return TaggedObject::procesa_comando(status);
-  }
-
 
 //! @brief Devuelve el número total de celdas.
 int XC::SectionRepres::getNumCells(void) const
@@ -123,27 +104,6 @@ void XC::SectionRepres::setGeom(const GeomSection *g)
 //! @brief Devuelve un puntero a la geometría de la sección.
 const XC::GeomSection *XC::SectionRepres::getGeom(void) const
   { return gmSecc; }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::SectionRepres::GetProp(const std::string &cod) const
-  {
-    if(cod=="numCells")
-      {
-        tmp_gp_szt= getNumCells();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "geom")
-      {
-        if(gmSecc)
-          return any_const_ptr(gmSecc);
-        else
-          return any_const_ptr();
-      }
-    else
-      return TaggedObject::GetProp(cod);
-  }
-
 
 //! @brief Imprime información sobre el objeto.
 void XC::SectionRepres::Print(std::ostream &s, int flag)

@@ -140,55 +140,6 @@ int XC::GroundMotion::recvSelf(const CommParameters &cp)
     return 0;
   }
 
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::GroundMotion::GetProp(const std::string &cod) const
-  {
-    if(cod == "getDuration")
-      {
-        tmp_gp_dbl= getDuration();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getPeakAccel")
-      {
-        tmp_gp_dbl= getPeakAccel();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getPeakVel")
-      {
-        tmp_gp_dbl= getPeakVel();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getPeakDisp")
-      {
-        tmp_gp_dbl= getPeakDisp();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getAccel")
-      {
-        const double time= popDouble(cod);
-        tmp_gp_dbl= getAccel(time);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getVel")
-      {
-        const double time= popDouble(cod);
-        tmp_gp_dbl= getVel(time);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "getDisp")
-      {
-        const double time= popDouble(cod);
-        tmp_gp_dbl= getDisp(time);
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return EntCmd::GetProp(cod);
-  }
-
 //! @brief Envía un puntero al «ground motion» a través del canal que se pasa como parámetro.
 //! @param posClassTag: Posición de ID del identificador de la clase del objeto.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.

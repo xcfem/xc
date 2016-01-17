@@ -65,7 +65,6 @@
 // What: "@(#) LoadPattern.h, revA"
 
 #include "NodeLocker.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 
 namespace XC {

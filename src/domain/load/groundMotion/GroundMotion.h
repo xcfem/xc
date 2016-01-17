@@ -115,7 +115,7 @@ class GroundMotion: public MovableObject, public EntCmd
     virtual int updateParameter(int parameterID, Information &info)= 0;
     virtual int activateParameter(int parameterID)= 0;
     // AddingSensitivity:END ///////////////////////////////////////////
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 int sendGroundMotionPtr(GroundMotion *,DbTagData &,CommParameters &cp,const BrokedPtrCommMetaData &);

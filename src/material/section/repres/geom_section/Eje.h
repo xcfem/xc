@@ -46,7 +46,7 @@ class Eje: public EntGeomSection
   protected:
     size_t ndiv; //!< Número de divisiones
 
-    virtual bool procesa_comando(CmdStatus &status);
+
 
     friend class GeomSection;
     Eje(GeomSection *sr,const size_t &nd= 4);
@@ -76,7 +76,7 @@ class Eje: public EntGeomSection
  
     virtual BND2d Bnd(void) const= 0;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 std::set<const Eje *> GetLineasTocan(const Spot &p);

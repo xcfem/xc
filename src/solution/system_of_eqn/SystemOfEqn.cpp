@@ -62,20 +62,9 @@
 #include <solution/system_of_eqn/SystemOfEqn.h>
 #include <solution/analysis/model/AnalysisModel.h>
 #include "solution/SoluMethod.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 XC::SystemOfEqn::SystemOfEqn(SoluMethod *owr,int clasTag)
   : MovableObject(clasTag), EntCmd(owr) {}
-
-//! @brief Lee un objeto XC::SystemOfEqn desde archivo
-bool XC::SystemOfEqn::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SystemOfEqn) Procesando comando: " << cmd << std::endl;
-    return EntCmd::procesa_comando(status);
-  }
-
 
 //! @brief Devuelve un puntero al modelo de solución al que pertenece.
 XC::SoluMethod *XC::SystemOfEqn::getSoluMethod(void)

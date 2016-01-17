@@ -45,7 +45,7 @@ class RgSccPoligono: public RgQuadCell
   private:
     Poligono2d plg;
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     RgSccPoligono(Material *);
     RgSccPoligono(Material *, int numSubdivIJ, int numSubdivJK, const Poligono2d &);
@@ -60,7 +60,7 @@ class RgSccPoligono: public RgQuadCell
     double getMinZ(void) const;
     Poligono2d getPoligono(void) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &s, int flag =0) const;   
     friend std::ostream &operator<<(std::ostream &s, RgSccPoligono &rg_scc_plg);    
   };

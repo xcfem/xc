@@ -80,7 +80,6 @@ class EigenAnalysis : public Analysis
   protected:
     int domainStamp;
 
-    bool procesa_comando(CmdStatus &status);
 
     friend class ProcSolu;
     EigenAnalysis(SoluMethod *metodo);
@@ -126,8 +125,6 @@ class EigenAnalysis : public Analysis
 
     //Fuerza estática equivalente.
     Vector getEquivalentStaticLoad(int mode,const double &) const;
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // end of XC namespace

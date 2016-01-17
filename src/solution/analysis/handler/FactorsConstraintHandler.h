@@ -46,7 +46,6 @@ class FactorsConstraintHandler: public ConstraintHandler
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
     FactorsConstraintHandler(ModelWrapper *,int classTag,const double &alphaSP,const double &alphaMP);
   public:
     inline void setAlphaSP(const double &a)
@@ -60,7 +59,6 @@ class FactorsConstraintHandler: public ConstraintHandler
     
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

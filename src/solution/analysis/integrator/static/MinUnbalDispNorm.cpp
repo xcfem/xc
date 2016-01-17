@@ -63,7 +63,6 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/Vector.h>
 #include <cmath>
-#include "xc_utils/src/base/CmdStatus.h"
 
 //! @brief Constructor.
 XC::MinUnbalDispNorm::MinUnbalDispNorm(SoluMethod *owr,double lambda1, int specNumIter,double min, double max, int signFirstStep)
@@ -71,32 +70,6 @@ XC::MinUnbalDispNorm::MinUnbalDispNorm(SoluMethod *owr,double lambda1, int specN
  dLambda1LastStep(lambda1), signLastDeltaLambdaStep(1),
  dLambda1min(min), dLambda1max(max), signLastDeterminant(1), signFirstStepMethod(signFirstStep)
   {}
-
-//! @brief Lee un objeto XC::LoadControl desde archivo
-bool XC::MinUnbalDispNorm::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(LoadControl) Procesando comando: " << cmd << std::endl;
-    if(cmd == "dLambda11")
-      {
-        dLambda1LastStep= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "minLambda")
-      {
-        dLambda1min= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "maxLambda")
-      {
-        dLambda1max= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return DispBase::procesa_comando(status);
-  }
-
 
 //! @brief Devuelve el valor de dLambda para el método newStep
 double XC::MinUnbalDispNorm::getDLambdaNewStep(void) const

@@ -36,7 +36,6 @@
 #include "material/section/repres/ConstantesSecc3d.h"
 #include "material/section/repres/ConstantesSecc2d.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 
 XC::SeccionInerte::SeccionInerte(EntCmd *owr)

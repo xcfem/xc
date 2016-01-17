@@ -42,28 +42,12 @@
 #include "domain/domain/Domain.h"
 #include "solution/SoluMethod.h"
 #include "solution/ProcSolu.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 
 //! @brief Constructor.
 XC::LinearBucklingAnalysis::LinearBucklingAnalysis(SoluMethod *metodo,SoluMethod *esolu)
   :StaticAnalysis(metodo), eigen_solu(esolu), linearBucklingEigenAnalysis(esolu),
    numModes(0),linear_buckling_analysis_step(0) {}
-
-//! @brief Lee un objeto Analysis desde archivo
-bool XC::LinearBucklingAnalysis::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(LinearBucklingAnalysis) Procesando comando: " << cmd << std::endl;
-    if(cmd == "num_modes") //Asigna el número de modos a obtener.
-      {
-        numModes= interpretaInt(status.GetString());
-        return true;
-      }
-    else
-      return StaticAnalysis::procesa_comando(status);
-  }
 
 //! @brief Borra todos los miembros del objeto (Manejador coacciones, modelo de análisis,...).
 void XC::LinearBucklingAnalysis::clearAll(void)

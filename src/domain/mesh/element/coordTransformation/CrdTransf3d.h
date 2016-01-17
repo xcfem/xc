@@ -98,7 +98,6 @@ class CrdTransf3d: public CrdTransf
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
   public:
     CrdTransf3d(int tag, int classTag);
     CrdTransf3d(int tag, int classTag, const Vector &vecInLocXZPlane);
@@ -126,8 +125,6 @@ class CrdTransf3d: public CrdTransf
     const Vector &getCooPunto(const double &xrel) const;
 
     void gira(const double &);
-
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

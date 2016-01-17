@@ -75,7 +75,7 @@ namespace XC {
 class TriangleSeries: public PeriodSeries
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     // constructors
     TriangleSeries(double tStart, double tFinish,

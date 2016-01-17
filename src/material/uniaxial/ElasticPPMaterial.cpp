@@ -66,7 +66,6 @@
 
 #include <cmath>
 #include <cfloat>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Asigna el valor de la deformación de cedencia a tracción.
@@ -122,36 +121,6 @@ XC::ElasticPPMaterial::ElasticPPMaterial(void)
 //! @brief Constructor.
 XC::ElasticPPMaterial::ElasticPPMaterial(int tag)
   :EPPBaseMaterial(tag,MAT_TAG_ElasticPPMaterial,0.0,0.0), fyp(0.0), fyn(0.0) {}
-
-//! @brief Lee un objeto XC::ElasticPPMaterial desde archivo
-bool XC::ElasticPPMaterial::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(EPPBaseMaterial) Procesando comando: " << cmd << std::endl;
-    if(cmd=="eyp")
-      {
-        set_eyp(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else if(cmd=="fyp")
-      {
-        set_fyp(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else if(cmd=="eyn")
-      {
-        set_eyn(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else if(cmd=="fyn")
-      {
-        set_fyn(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else
-      return EPPBaseMaterial::procesa_comando(status);
-  }
 
 //! Asigna el valor de la tensión de prueba.
 int XC::ElasticPPMaterial::setTrialStrain(double strain, double strainRate)
@@ -285,23 +254,3 @@ double XC::ElasticPPMaterial::get_fyn(void) const
 
 double XC::ElasticPPMaterial::get_eyn(void) const
   { return fyn/E; }
-
-any_const_ptr XC::ElasticPPMaterial::GetProp(const std::string &cod) const
-  {
-    if(cod=="fyp")
-      return any_const_ptr(fyp);
-    else if(cod=="eyp")
-      {
-        tmp_gp_dbl= fyp/E;
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    if(cod=="fyn")
-      return any_const_ptr(fyn);
-    else if(cod=="eyn")
-      {
-        tmp_gp_dbl= get_eyn();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return EPPBaseMaterial::GetProp(cod);
-  }

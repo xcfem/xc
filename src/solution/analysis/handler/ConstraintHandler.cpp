@@ -63,19 +63,9 @@
 #include <solution/analysis/integrator/Integrator.h>
 #include <solution/analysis/model/FE_EleIter.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 XC::ConstraintHandler::ConstraintHandler(ModelWrapper *owr,int clasTag)
   :MovableObject(clasTag), EntCmd(owr) {}
-
-//! @brief Lee un objeto XC::ConstraintHandler desde archivo
-bool XC::ConstraintHandler::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ConstraintHandler) Procesando comando: " << cmd << std::endl;
-    return EntCmd::procesa_comando(status);
-  }
 
 int XC::ConstraintHandler::doneNumberingDOF(void)
   {

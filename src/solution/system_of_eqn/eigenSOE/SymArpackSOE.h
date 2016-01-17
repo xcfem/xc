@@ -56,10 +56,7 @@ class SymArpackSolver;
 
 //! @ingroup EigenSOE
 //
-//! @brief Sistema de ecuaciones correspondiente
-//! a un problema de autovalores con matriz simétrica
-//! en cuya solución se empleará la biblioteca
-//! ArPack (http://www.caam.rice.edu/software/ARPACK)
+//! @brief Arpack system of equations for symmetric matrices.
 class SymArpackSOE : public ArpackSOE
   {
   private:
@@ -75,7 +72,7 @@ class SymArpackSOE : public ArpackSOE
     OFFDBLK  *first;
   protected:
     bool setSolver(EigenSolver *);
-    bool procesa_comando(CmdStatus &status);
+
 
     friend class SoluMethod;
     friend class FEM_ObjectBroker;

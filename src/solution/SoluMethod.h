@@ -101,11 +101,6 @@ class SoluMethod: public EntCmd
     void libera(void);
     void copia(const SoluMethod &);
 
-    bool procesa_cmd_soln_algo(const std::string &cmd,CmdStatus &status);
-    bool procesa_cmd_integrator(const std::string &cmd,CmdStatus &status);
-    bool procesa_cmd_sistema_ecuaciones(const std::string &cmd,CmdStatus &status);
-    bool procesa_cmd_conv_test(const std::string &cmd,CmdStatus &status);
-    bool procesa_comando(CmdStatus &status);
   public:
     SoluMethod(Analysis *a=NULL,ModelWrapper *b= NULL);
     SoluMethod(const SoluMethod &);

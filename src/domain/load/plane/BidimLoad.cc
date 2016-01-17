@@ -27,7 +27,6 @@
 //BidimLoad.cpp
 
 #include "BidimLoad.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/matrix/ID.h"
 
@@ -36,16 +35,6 @@ XC::BidimLoad::BidimLoad(int tag,int classTag,const ID &theElementTags)
 
 XC::BidimLoad::BidimLoad(int tag,int classTag)
   :ElementBodyLoad(tag, classTag) {}
-
-//! @brief Lee un objeto BidimLoad desde archivo
-bool XC::BidimLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BidimLoad) Procesando comando: " << cmd << std::endl;
-
-    return ElementBodyLoad::procesa_comando(status);
-  }
 
 //! @brief Imprime el objeto.
 void XC::BidimLoad::Print(std::ostream &s, int flag) const
@@ -56,16 +45,3 @@ void XC::BidimLoad::Print(std::ostream &s, int flag) const
 
 std::string XC::BidimLoad::Categoria(void) const
   { return "bidim_nodef"; }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::BidimLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "categoria")
-      {
-        tmp_gp_str= Categoria();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else
-      return ElementBodyLoad::GetProp(cod);
-  }

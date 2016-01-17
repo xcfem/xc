@@ -38,7 +38,6 @@
 #include "material/section/fiber_section/FiberSectionBase.h"
 #include "material/section/diag_interaccion/DatosDiagInteraccion.h"
 #include "xc_utils/src/nucleo/InterpreteRPN.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 
 void XC::DiagInteraccion::clasifica_triedro(const Triedro3d &tdro)

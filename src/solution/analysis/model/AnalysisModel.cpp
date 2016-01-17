@@ -87,7 +87,6 @@
 #include "domain/mesh/node/NodeIter.h"
 #include "solution/analysis/handler/ConstraintHandler.h"
 #include "solution/analysis/handler/TransformationConstraintHandler.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 //! @brief Constructor.
 XC::AnalysisModel::AnalysisModel(ModelWrapper *owr)
@@ -127,15 +126,6 @@ XC::AnalysisModel &XC::AnalysisModel::operator=(const AnalysisModel &otro)
     myGroupGraph= DOF_GroupGraph(*this);
     updateGraphs= false; //Los acabamos de actualizar
     return *this;
-  }
-
-//! @brief Lee un objeto AnalysisModel desde archivo
-bool XC::AnalysisModel::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(AnalysisModel) Procesando comando: " << cmd << std::endl;
-    return EntCmd::procesa_comando(status);
   }
 
 //! @brief Constructor virtual.

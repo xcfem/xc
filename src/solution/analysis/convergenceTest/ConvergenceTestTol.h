@@ -39,7 +39,7 @@ namespace XC {
 //
 //! @ingroup CTest
 //
-//! @brief Test de convergencia dotado de tolerancia.
+//! @brief Convergence test with tolerance threshold.
 class ConvergenceTestTol: public ConvergenceTest
   {
   protected:
@@ -47,7 +47,6 @@ class ConvergenceTestTol: public ConvergenceTest
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
   public:
     // constructors
     ConvergenceTestTol(EntCmd *owr,int classTag);	    	
@@ -57,7 +56,6 @@ class ConvergenceTestTol: public ConvergenceTest
     double getTolerance(void) const;
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 

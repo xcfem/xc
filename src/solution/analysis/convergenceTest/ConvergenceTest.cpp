@@ -62,7 +62,6 @@
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/EquiSolnAlgo.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "solution/SoluMethod.h"
 
@@ -81,53 +80,6 @@ XC::ConvergenceTest* XC::ConvergenceTest::getCopy(int iterations) const
     ConvergenceTest *theCopy= getCopy();
     theCopy->maxNumIter= iterations;
     return theCopy;
-  }
-
-//! @brief Lee un objeto ConvergenceTest desde archivo
-bool XC::ConvergenceTest::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ConvergenceTest) Procesando comando: " << cmd << std::endl;
-    if(cmd=="norm_type")
-      {
-        nType= interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd=="print_flag")
-      {
-        printFlag= interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd=="max_num_iter")
-      {
-        maxNumIter= interpretaInt(status.GetString());
-        norms= Vector(maxNumIter);
-        return true;
-      }
-    else if(cmd == "test_report")
-      {
-        bloque= status.GetBloque();
-        return true;
-      }
-    else if(cmd == "sist_eq")
-      {
-        bool retval= false;
-        LinearSOE *theSOE= getLinearSOEPtr();
-        if(theSOE)
-          {
-            theSOE->LeeCmd(status);
-            retval= true;
-          }
-        else
-          {
-	    std::cerr << "El puntero al sistema de ecuaciones es nulo; se ignora la entrada." << std::endl;
-            status.GetBloque();
-	  }
-        return retval;
-      }
-    else
-      return BloqueBase::procesa_comando(status);
   }
 
 int XC::ConvergenceTest::getNumTests(void) const
@@ -278,45 +230,3 @@ int XC::ConvergenceTest::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::ConvergenceTest::GetProp(const std::string &cod) const
-  {
-    if(cod=="num_tests")
-      {
-        tmp_gp_int= getNumTests();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod == "max_num_tests")
-      {
-        tmp_gp_int= getMaxNumTests();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod == "get_ratio_num_to_max")
-      {
-        tmp_gp_dbl= getRatioNumToMax();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "print_flag")
-      return any_const_ptr(printFlag);
-    else if(cod == "currentIter")
-      return any_const_ptr(currentIter);
-    else if(cod == "nType")
-      return any_const_ptr(nType);
-    else if(cod == "normB")
-      {
-        tmp_gp_dbl= getNormB();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod == "normX")
-      {
-        tmp_gp_dbl= getNormX();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-//     else if(cod == "X")
-//       if(parser.
-    else
-      return BloqueBase::GetProp(cod);
-  }

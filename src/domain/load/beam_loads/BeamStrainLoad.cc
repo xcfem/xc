@@ -29,7 +29,6 @@
 #include <domain/load/beam_loads/BeamStrainLoad.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "material/section/ResponseId.h"
@@ -39,25 +38,6 @@ XC::BeamStrainLoad::BeamStrainLoad(int tag, const XC::ID &theElementTags)
 
 XC::BeamStrainLoad::BeamStrainLoad(int tag)
   :BeamLoad(tag, LOAD_TAG_BeamStrainLoad) {}
-
-//! @brief Lee un objeto BeamStrainLoad desde archivo
-bool XC::BeamStrainLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BeamStrainLoad) Procesando comando: " << cmd << std::endl;
-    if(cmd == "plano_deformacion_1")
-      {
-        planoDefDorsal.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "plano_deformacion_2")
-      {
-        planoDefFrontal.LeeCmd(status);
-        return true;
-      }
-    return BeamLoad::procesa_comando(status);
-  }
 
 //! @brief Envía los datos a través del canal que se pasa como parámetro.
 int XC::BeamStrainLoad::sendData(CommParameters &cp)
@@ -105,15 +85,3 @@ const XC::Vector &XC::BeamStrainLoad::getSection1Deformation(const size_t &order
 
 const XC::Vector &XC::BeamStrainLoad::getSection2Deformation(const size_t &order,const ResponseId &code) const
   { return planoDefFrontal.getDeformation(order,code); }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::BeamStrainLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "getPlanoDeformacion1")
-      return any_const_ptr(&planoDefDorsal);
-    if(cod == "getPlanoDeformacion2")
-      return any_const_ptr(&planoDefFrontal);
-    else
-      return BeamLoad::GetProp(cod);
-  }

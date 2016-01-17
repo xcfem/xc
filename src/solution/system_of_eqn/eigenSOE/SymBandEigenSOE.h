@@ -94,7 +94,7 @@ class SymBandEigenSOE : public EigenSOE
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     friend class SymBandEigenSolver;
   };
 inline SystemOfEqn *SymBandEigenSOE::getCopy(void) const

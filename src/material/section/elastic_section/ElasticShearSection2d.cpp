@@ -54,7 +54,6 @@
 #include "preprocessor/loaders/MaterialLoader.h"
 #include <utility/matrix/Matrix.h>
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 
 #include <cstdlib>

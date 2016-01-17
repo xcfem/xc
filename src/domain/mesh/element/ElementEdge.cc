@@ -29,30 +29,12 @@
 #include "Element.h"
 #include "domain/load/ElementEdgeLoad.h"
 #include <iostream>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
 XC::ElementEdge::ElementEdge(Element *eptr,const int &i)
   :elem(eptr),iedge(i) {}
-
-//! @brief Lee comandos para un objeto ElementEdge
-bool XC::ElementEdge::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElementEdge) Procesando comando: " << cmd << std::endl;
-
-    if(cmd=="vector3d_load_global")
-      {
-        const Vector v= Vector(convert_to_vector_double(interpretaVectorAny(status.GetBloque())));
-        elem->defEdgeLoadGlobal(iedge,v);        
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 const XC::Element *XC::ElementEdge::getElementPtr(void) const
   { return elem; }

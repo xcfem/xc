@@ -71,7 +71,6 @@
 #include <solution/analysis/integrator/TransientIntegrator.h>
 #include <domain/domain/Domain.h>
 
-#include "xc_utils/src/base/CmdStatus.h"
 // AddingSensitivity:BEGIN //////////////////////////////////
 #ifdef _RELIABILITY
 #include <reliability/FEsensitivity/SensitivityAlgorithm.h>
@@ -88,15 +87,6 @@ XC::DirectIntegrationAnalysis::DirectIntegrationAnalysis(SoluMethod *metodo_solu
 #endif
 // AddingSensitivity:END //////////////////////////////////////
   }
-
-//! @brief Lee un objeto XC::EigenAnalysis desde archivo
-bool XC::DirectIntegrationAnalysis::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DirectIntegrationAnalysis) Procesando comando: " << cmd << std::endl;
-    return TransientAnalysis::procesa_comando(status);
-  }    
 
 //! @brief Destructor.
 XC::DirectIntegrationAnalysis::~DirectIntegrationAnalysis(void)

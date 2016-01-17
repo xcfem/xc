@@ -23,7 +23,6 @@
 
 #include "FieldInfo.h"
 #include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 
 //! @brief Constructor.
@@ -35,81 +34,6 @@ void XC::FieldInfo::definedOnGaussPoints(void)
   {
     definedOnElements();
     sobre_puntos_gauss= true;
-  }
-
-//! @brief Lectura del objeto desde archivo.
-bool XC::FieldInfo::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(FieldInfo) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "setSet") //Conjunto sobre el que se define.
-      {
-        nmb_set= interpretaString(status.GetBloque());
-        return true;
-      }
-    else if(cmd == "onNodes")
-      {
-	status.GetString();
-        sobre_nodos= false;
-        return true;
-      }
-    else if(cmd == "onElements")
-      {
-	status.GetString();
-        sobre_nodos= false;
-        return true;
-      }
-    else if(cmd == "onGaussPoints")
-      {
-	status.GetString();
-        sobre_nodos= false;
-        sobre_puntos_gauss= true;
-        return true;
-      }
-    else if(cmd == "setComponentType")
-      {
-	componentsType= interpretaString(status.GetString());
-        return true;
-      }
-    else if(cmd == "setComponentNames")
-      {
-	componentNames= convert_to_vector_string(interpretaVectorAny(status.GetString()));
-        return true;
-      }
-    else if(cmd == "setComponentDescriptions")
-      {
-	componentDescriptions= convert_to_vector_string(interpretaVectorAny(status.GetString()));
-        return true;
-      }
-    else if(cmd == "setComponentUnits")
-      {
-	componentUnits= convert_to_vector_string(interpretaVectorAny(status.GetString()));
-        return true;
-      }
-    else if(cmd == "setComponentsProperty")
-      {
-	componentsProperty= interpretaString(status.GetString());
-        return true;
-      }
-    else if(cmd == "setIterationNumber")
-      {
-	iterationNumber= interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd == "setOrderNumber")
-      {
-	orderNumber= interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd == "setTime")
-      {
-	time= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return EntConNmb::procesa_comando(status);
   }
 
 //! @brief Assigns field component names.
@@ -138,8 +62,3 @@ void XC::FieldInfo::setComponentUnits(const boost::python::list &l)
 
 const std::string &XC::FieldInfo::getComponentsProperty(void) const
   { return componentsProperty; }
-
-any_const_ptr XC::FieldInfo::GetProp(const std::string &cod) const
-  {
-    return EntConNmb::GetProp(cod);
-  }

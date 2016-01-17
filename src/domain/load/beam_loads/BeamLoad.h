@@ -42,7 +42,7 @@ class ConstantesSecc3d;
 class BeamLoad : public ElementBodyLoad
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     BeamLoad(int tag, int classTag,const ID &theElementTags);
     BeamLoad(int tag, int classTag);
@@ -50,7 +50,7 @@ class BeamLoad : public ElementBodyLoad
     virtual std::string Categoria(void) const;
 
     void Print(std::ostream &s, int flag =0) const;
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

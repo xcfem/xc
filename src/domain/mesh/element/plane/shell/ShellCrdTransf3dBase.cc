@@ -35,7 +35,6 @@
 #include "utility/matrix/ID.h"
 #include "domain/mesh/element/plane/shell/R3vectors.h"
 #include "domain/mesh/element/NodePtrs.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/base/utils_any.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
@@ -54,25 +53,6 @@ XC::ShellCrdTransf3dBase::ShellCrdTransf3dBase(void)
 XC::ShellCrdTransf3dBase::ShellCrdTransf3dBase(const Vector &v1,const Vector &v2,const Vector &v3)
   : EntCmd(), MovableObject(0), theNodes(nullptr),
     vpos_centroide(3,0.0), g1(v1), g2(v2), g3(v3) {}
-
-//! @brief Lee comandos de un objeto ShellCrdTransf3dBase
-bool XC::ShellCrdTransf3dBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ShellCrdTransf3dBase) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "update")
-      {
-        std::clog << "ShellCrdTransf3dBase; el comando: " << cmd
-                  << " está pensado para pruebas." << std::endl; 
-        status.GetBloque(); //Ignoramos argumentos.
-        update();
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 int XC::ShellCrdTransf3dBase::initialize(const NodePtrs &ptrs)
   {
@@ -362,53 +342,4 @@ int XC::ShellCrdTransf3dBase::recvData(const CommParameters &cp)
     res+= cp.receiveVector(g2,getDbTagData(),CommMetaData(1));
     res+= cp.receiveVector(g3,getDbTagData(),CommMetaData(2));
     return res;    
-  }
-
-//! @brief Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ShellCrdTransf3dBase::GetProp(const std::string &cod) const
-  {
-    if(cod == "getVPosCentroide")
-      {
-        tmp_gp_mdbl= vector_to_m_double(vpos_centroide);
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod == "getTrialDisp")
-      {
-        const int iNod= popInt(cod);
-        tmp_gp_mdbl= vector_to_m_double((*theNodes)[iNod]->getTrialDisp());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod == "getBasicTrialDisp")
-      {
-        const int iNod= popInt(cod);
-        tmp_gp_mdbl= vector_to_m_double(getBasicTrialDisp(iNod));
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod == "getTrialVel")
-      {
-        const int iNod= popInt(cod);
-        tmp_gp_mdbl= vector_to_m_double((*theNodes)[iNod]->getTrialVel());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod == "getBasicTrialVel")
-      {
-        const int iNod= popInt(cod);
-        tmp_gp_mdbl= vector_to_m_double(getBasicTrialVel(iNod));
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod == "getTrialAccel")
-      {
-        const int iNod= popInt(cod);
-        tmp_gp_mdbl= vector_to_m_double((*theNodes)[iNod]->getTrialAccel());
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else if(cod == "getBasicTrialAccel")
-      {
-        const int iNod= popInt(cod);
-        tmp_gp_mdbl= vector_to_m_double(getBasicTrialAccel(iNod));
-        return any_const_ptr(tmp_gp_mdbl);
-      }
-    else
-      return EntCmd::GetProp(cod);
   }

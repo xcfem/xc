@@ -50,7 +50,7 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
 
     friend class Element;
     void set_ptr_nodos(Domain *domain);

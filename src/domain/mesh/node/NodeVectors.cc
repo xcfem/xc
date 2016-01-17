@@ -30,7 +30,6 @@
 #include <utility/tagged/TaggedObject.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
@@ -79,50 +78,6 @@ XC::NodeVectors &XC::NodeVectors::operator=(const NodeVectors &otro)
     MovableObject::operator=(otro);
     copia(otro);
     return *this;
-  }
-
-//! @brief Lee un objeto XC::Node desde archivo
-//!
-//! Soporta los comandos:
-//! -coo: Lee las coordenadas del nodo.
-bool XC::NodeVectors::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NodeVectors) Procesando comando: " << cmd << std::endl;
-    if(cmd == "setTrialData")
-      {
-	std::clog << "NodeVectors; el comando: " << cmd
-                  << " está pensado para pruebas." << std::endl;
-        const std::string argumento= status.GetString();
-	const std::vector<double> data_nodo= crea_vector_double(argumento);
-        size_t nDOF= getVectorsSize();
-        if(nDOF==0)
-          {
-            nDOF= data_nodo.size();
-            createData(nDOF);
-          }
-        const size_t sz= std::min(data_nodo.size(),nDOF);
-        if(sz==0)
-	  std::cerr << "(NodeVectors) Procesando comando: " << cmd
-                    << " el argumento: '" << argumento
-                    << "' produce un vector de dimensión 0." << std::endl;
-        for(size_t i= 0;i<sz;i++)
-          setTrialData(nDOF,data_nodo[i],i);
-        return true;
-      }
-    else if(cmd == "commit")
-      {
-	std::clog << "NodeVectors; el comando: " << cmd
-                  << " está pensado para pruebas." << std::endl;
-        status.GetString(); //Ignoramos entrada.
-        const size_t sz= getVectorsSize();
-        if(sz>0)
-          commitState(sz);
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
   }
 
 //! @brief destructor
@@ -419,17 +374,3 @@ int XC::NodeVectors::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::NodeVectors::GetProp(const std::string &cod) const
-  {
-    if(cod=="getTrialData" && trialData)
-      return TaggedObject::get_prop_vector(trialData);
-    else if(cod=="getCommitData" && commitData)
-      return TaggedObject::get_prop_vector(commitData);
-    else
-      return EntCmd::GetProp(cod);
-  }

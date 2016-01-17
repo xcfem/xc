@@ -67,7 +67,6 @@
 #include "solution/ProcSolu.h"
 #include "solution/analysis/model/AnalysisModel.h"
 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.

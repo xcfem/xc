@@ -70,7 +70,6 @@
 #include <domain/mesh/element/Information.h>
 #include <utility/recorder/response/FiberResponse.h>
 #include "material/section/ResponseId.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
@@ -91,22 +90,6 @@ XC::UniaxialFiber2d::UniaxialFiber2d(int tag, UniaxialMaterial &theMat,const dou
 XC::UniaxialFiber2d::UniaxialFiber2d(int tag,const MaterialLoader &ldr,const std::string &nmbMat, const double &Area,const double &position)
   : UniaxialFiber(tag, FIBER_TAG_Uniaxial2d,ldr,nmbMat,Area), y(-position) //XXX signo de la y.
   {}
-
-//! @brief Lee un objeto UniaxialFiber2d desde archivo
-bool XC::UniaxialFiber2d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(UniaxialFiber2d) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "y")
-      {
-        y= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return UniaxialFiber::procesa_comando(status);
-  }
 
 //! @brief Asigna la deformación a la fibra.
 int XC::UniaxialFiber2d::setTrialFiberStrain(const Vector &vs)

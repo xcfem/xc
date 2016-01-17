@@ -59,7 +59,7 @@ class ShellCrdTransf3dBase: public EntCmd, public MovableObject
 
     Vector local_to_global(const Matrix &,const Vector &) const;
     Matrix local_to_global(const Matrix &,const Matrix &) const;
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ShellCrdTransf3dBase(void);
     inline virtual ~ShellCrdTransf3dBase(void)
@@ -106,7 +106,7 @@ class ShellCrdTransf3dBase: public EntCmd, public MovableObject
     Pos2d getLocalCoordinates(const Pos3d &) const;
     ParticlePos3d getNaturalCoordinates(const Pos3d &,double xl[2][4]) const;    
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } // end of XC namespace

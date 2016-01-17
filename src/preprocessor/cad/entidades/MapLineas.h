@@ -51,7 +51,7 @@ class MapLineas: public MapEnt<Edge>
     template <class E>
     Edge *Crea(void);
 
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     MapLineas(Cad *cad= NULL);
 
@@ -61,8 +61,6 @@ class MapLineas: public MapEnt<Edge>
 
     template <class E>
     Edge *Nueva(void);
-    template <class E>
-    Edge *Nueva(CmdStatus &);
     Edge *Line(Pnt *,Pnt *);
     Edge *DividedLine(Pnt *,Pnt *);
     Edge *Arc(Pnt *,Pnt *,Pnt *);
@@ -73,8 +71,6 @@ class MapLineas: public MapEnt<Edge>
     LineaTramos *newDividedLine(const size_t &, const size_t &);
     ArcoCircunf *newCircleArc(const size_t &, const size_t &, const size_t &);
     CmbEdge *newLineSequence(void);
-
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 //! @brief Crea una nueva línea.
@@ -98,29 +94,6 @@ Edge *MapLineas::Nueva(void)
     Edge *retval= busca(getTag());
     if(!retval) //El edge es nuevo.
       retval= Crea<E>();
-    return retval;
-  }
-
-//! @brief Lee un Edge.
-template <class E>
-Edge *MapLineas::Nueva(CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    bool nueva= true;
-    size_t old_tag= getTag();
-    Edge *retval= NULL;
-    if(fnc_indices.size()>0)
-      {
-        setTag(convert_to_size_t(fnc_indices[0])); //Identificador del punto.
-        retval= busca(getTag());
-      }
-    if(retval)
-      nueva= false;
-    else
-      retval= Crea<E>();
-    if(!nueva)
-      setTag(old_tag);
-    retval->LeeCmd(status);
     return retval;
   }
 

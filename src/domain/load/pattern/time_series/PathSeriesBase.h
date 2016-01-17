@@ -48,7 +48,6 @@ class PathSeriesBase: public CFactorSeries
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
   public:
     // constructors
     PathSeriesBase(int classTag,const double &cfactor= 1.0);
@@ -67,7 +66,6 @@ class PathSeriesBase: public CFactorSeries
     inline void setLastSendCommitTag(const int &d)
       { lastSendCommitTag= d; }
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

@@ -44,14 +44,11 @@ class MapEsquemas2d: public MapCadMember<MatrizPtrPnt>
   protected:
     MatrizPtrPnt *Crea(void);
 
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     MapEsquemas2d(Cad *cad= NULL);
 
     MatrizPtrPnt *makeNew(void);
-    MatrizPtrPnt *Nuevo(CmdStatus &);
-
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } //end of XC namespace

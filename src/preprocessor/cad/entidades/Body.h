@@ -92,7 +92,7 @@ class Body: public EntMdlr
       };
 
     void set_surf(Face *s);
-    bool procesa_comando(CmdStatus &status);
+
     virtual Cara *GetCara(const size_t &i)= 0;
   public:
     Body(Preprocessor *m,const std::string &nombre= "");
@@ -117,7 +117,7 @@ class Body: public EntMdlr
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 std::set<const Body *> GetCuerposTocan(const Face &s);

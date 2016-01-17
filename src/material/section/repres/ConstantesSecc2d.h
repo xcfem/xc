@@ -56,7 +56,7 @@ class ConstantesSecc2d: public EntCmd, public MovableObject
     virtual DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ConstantesSecc2d(double E, double A, double I, double G= 0.0,double alpha= 0.0);
     ConstantesSecc2d(double EA, double EI);
@@ -120,7 +120,7 @@ class ConstantesSecc2d: public EntCmd, public MovableObject
 
     const Matrix& getInitialTangentSensitivity3x3(int gradIndex);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print (std::ostream &s, int flag = 0) const;
   };
 

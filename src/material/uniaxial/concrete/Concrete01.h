@@ -101,7 +101,7 @@ class Concrete01: public ConcreteBase
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
     void calcula_trial_state(const double &strain);
   public:
     Concrete01(int tag, double fpc, double eco, double fpcu, double ecu);
@@ -129,7 +129,7 @@ class Concrete01: public ConcreteBase
     int recvSelf(const CommParameters &);
     
     void Print(std::ostream &s, int flag =0);
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////
     int setParameter(const std::vector<std::string> &argv, Parameter &param);

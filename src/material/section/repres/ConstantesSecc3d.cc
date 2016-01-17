@@ -29,7 +29,6 @@
 #include <material/section/repres/ConstantesSecc3d.h>
 #include "xc_basic/src/util/inercia.h"
 #include "xc_utils/src/geom/sis_ref/EjesPrincInercia2d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include <domain/mesh/element/Information.h>
 #include "xc_utils/src/base/any_const_ptr.h"
 #include <utility/matrix/Vector.h>
@@ -74,48 +73,6 @@ XC::ConstantesSecc3d::ConstantesSecc3d(double E_in, double A_in, double Iz_in, d
 XC::ConstantesSecc3d::ConstantesSecc3d(double EA_in, double EIz_in, double EIy_in, double GJ_in)
   : ConstantesSecc2d(EA_in,EIz_in), iy(EIy_in), iyz(0), j(GJ_in)
   { check_values(); }
-
-//! @brief Lee un objeto XC::ConstantesSecc3d desde archivo
-bool XC::ConstantesSecc3d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ConstantesSecc3d) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "Iz")
-      {
-        Iz()= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "Iy")
-      {
-        iy= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "Iyz")
-      {
-        iyz= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "J")
-      {
-        j= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "gira")
-      {
-        gira(interpretaDouble(status.GetString()));
-        return true;
-      }
-    else if(cmd == "checkValues")
-      {
-        status.GetString();
-        check_values();
-        return true;
-      }
-    else
-      return ConstantesSecc2d::procesa_comando(status);
-  }
 
 //! @brief Devuelve el ángulo que define un eje principal de inercia.
 double XC::ConstantesSecc3d::getTheta(void) const
@@ -361,89 +318,6 @@ int XC::ConstantesSecc3d::recvSelf(const CommParameters &cp)
           std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
       }
     return res;
-  }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::ConstantesSecc3d::GetProp(const std::string &cod) const
-  {
-    if(verborrea>4)
-      std::clog << "ConstantesSecc3d::GetProp (" << nombre_clase() << "::GetProp) Buscando propiedad: " << cod << std::endl;
-    if(cod=="getIz")
-      {
-        tmp_gp_dbl= Iz();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getEIz")
-      {
-        tmp_gp_dbl= EIz();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getIy")
-      {
-        tmp_gp_dbl= Iy();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getIyz")
-      {
-        tmp_gp_dbl= Iyz();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getEIy")
-      {
-        tmp_gp_dbl= EIy();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getEIyz")
-      {
-        tmp_gp_dbl= EIyz();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getJ")
-      {
-        tmp_gp_dbl= J();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getGJ")
-      {
-        tmp_gp_dbl= GJ();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getI1")
-      {
-        tmp_gp_dbl= getI1();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getI2")
-      {
-        tmp_gp_dbl= getI2();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getVDirEje1")
-      {
-        tmp_gp_vector2d= getVDirEje1();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else if(cod=="getVDirEje2")
-      {
-        tmp_gp_vector2d= getVDirEje2();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else if(cod=="getVDirEjeFuerte")
-      {
-        tmp_gp_vector2d= getVDirEjeFuerte();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else if(cod=="getVDirEjeDebil")
-      {
-        tmp_gp_vector2d= getVDirEjeDebil();
-        return any_const_ptr(tmp_gp_vector2d);
-      }
-    else
-      return ConstantesSecc2d::GetProp(cod);
   }
 
 void XC::ConstantesSecc3d::Print(std::ostream &s, int flag) const

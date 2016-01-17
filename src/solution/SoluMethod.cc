@@ -28,7 +28,6 @@
 
 #include "SoluMethod.h"
 #include "analysis/ModelWrapper.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/utils_any.h"
 
 //Gestor coacciones.
@@ -113,19 +112,6 @@ void XC::SoluMethod::copia_soln_algo(SolutionAlgorithm *ptr)
       }
     else
      std::cerr << "SoluMethod::copia_soln_algo; se pasó un puntero nulo." << std::endl;
-  }
-
-//! @brief Lee un objeto SolutionAlgorithm desde archivo.
-bool XC::SoluMethod::procesa_cmd_soln_algo(const std::string &cmd,CmdStatus &status)
-  {
-    bool retval= false;
-    if(cmd.find("_soln_algo")!=std::string::npos)
-      {
-        if(alloc_soln_algo(cmd))
-          theSolnAlgo->LeeCmd(status);
-        retval= true;
-      }
-    return retval;
   }
 
 //! @brief Define un nuevo algortitmo de solución.
@@ -273,25 +259,6 @@ void XC::SoluMethod::copia_integrator(Integrator *ptr)
      std::cerr << "SoluMethod::copia_integrator; se pasó un puntero nulo." << std::endl;
   }
 
-//! @brief Lee un objeto Integrator desde archivo.
-bool XC::SoluMethod::procesa_cmd_integrator(const std::string &cmd,CmdStatus &status)
-  {
-    bool retval= false;
-    if(cmd.find("_integrator")!=std::string::npos)
-      {
-        Vector params= Vector(convert_to_vector_double(status.Parser().SeparaIndices(this)));
-        if(alloc_integrator(cmd,params))
-          {
-            DisplacementControl *dtmp= dynamic_cast<DisplacementControl *>(theIntegrator);
-            if(dtmp)
-              dtmp->set_owner(this);
-            theIntegrator->LeeCmd(status);
-          }
-        retval= true;
-      }
-    return retval;
-  }
-
 //! @brief Define un nuevo integrador.
 XC::Integrator &XC::SoluMethod::newIntegrator(const std::string &tipo, const Vector &params)
   {
@@ -379,26 +346,6 @@ void XC::SoluMethod::copia_sistema_ecuaciones(SystemOfEqn *ptr)
      std::cerr << "SoluMethod::copia_sistema_ecuaciones; se pasó un puntero nulo." << std::endl;
   }
 
-//! @brief Lee un objeto Sistema de Ecuaciones desde archivo
-bool XC::SoluMethod::procesa_cmd_sistema_ecuaciones(const std::string &cmd,CmdStatus &status)
-  {
-    bool retval= false;
-    if(cmd.find("_soe")!=std::string::npos)
-      {
-        AnalysisModel *theModel= nullptr;
-        if(base)
-          {
-            theModel= base->getAnalysisModelPtr();
-            if(alloc_sistema_ecuaciones(cmd,theModel))
-              theSOE->LeeCmd(status);
-          }
-        else
-          std::cerr << "No está definido el modelo de cálculo." << std::endl;
-        retval= true;
-      }
-    return retval;
-  }
-
 //! @brief Define el tipo de sistema de ecuaciones a emplear en la solución.
 XC::SystemOfEqn &XC::SoluMethod::newSystemOfEqn(const std::string &tipo)
   {
@@ -462,19 +409,6 @@ void XC::SoluMethod::copia_conv_test(ConvergenceTest *ptr)
      std::cerr << "SoluMethod::copia_conv_test; se pasó un puntero nulo." << std::endl;
   }
 
-//! @brief Lee un objeto ConvergenceTest desde archivo
-bool XC::SoluMethod::procesa_cmd_conv_test(const std::string &cmd,CmdStatus &status)
-  {
-    bool retval= false;
-    if(cmd.find("_conv_test")!=std::string::npos)
-      {
-        if(alloc_conv_test(cmd))
-          theTest->LeeCmd(status);
-        retval= true;
-      }
-    return retval;
-  }
-
 //! @brief Define el test de convergencia a emplear en la solución.
 XC::ConvergenceTest &XC::SoluMethod::newConvergenceTest(const std::string &cmd)
   {
@@ -531,60 +465,6 @@ XC::SoluMethod &XC::SoluMethod::operator=(const SoluMethod &otro)
     return *this;
   }
 
-
-//! @brief Lee un objeto SoluMethod desde archivo.
-bool XC::SoluMethod::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(SoluMethod) Procesando comando: " << cmd << std::endl;
-    //Algoritmo de solución.
-    if(procesa_cmd_soln_algo(cmd,status))
-      return true;
-    //Integración 
-    else if(procesa_cmd_integrator(cmd,status))
-      return true;
-    //Sistema de ecuaciones.
-    else if(procesa_cmd_sistema_ecuaciones(cmd,status))
-      return true;
-    //Criterio de convergencia.
-    else if(procesa_cmd_conv_test(cmd,status))
-      return true;
-    else if(cmd=="system_of_equations")
-      {
-        if(theSOE)
-          theSOE->LeeCmd(status);
-        else
-	  std::cerr << "SoluMethod::procesa_comando: " << cmd << "el sistema de ecuaciones no está definido." << std::endl;
-        return true;
-      }
-    else if(cmd=="integrator")
-      {
-        if(theIntegrator)
-          theIntegrator->LeeCmd(status);
-        else
-	  std::cerr << "SoluMethod::procesa_comando; " << cmd << "el integrador no está definido." << std::endl;
-        return true;
-      }
-    else if(cmd=="solution_algorithm")
-      {
-        if(theSolnAlgo)
-          theSolnAlgo->LeeCmd(status);
-        else
-	  std::cerr << "SoluMethod::procesa_comando; " << cmd << "el algoritmo de solución no está definido." << std::endl;
-        return true;
-      }
-    else if(cmd=="solu_base")
-      {
-        if(base)
-          base->LeeCmd(status);
-        else
-	  std::cerr << "SoluMethod::procesa_comando; " << cmd << "la base de la solución no está definida." << std::endl;
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 //! @brief Destructor.
 XC::SoluMethod::~SoluMethod(void)
@@ -880,7 +760,7 @@ bool XC::SoluMethod::CheckPointers(void)
   {
     if(!base)
       {
-        std::cerr << "SoluMethod::check_pointers; error, no se ha establecido el modelo para la solución." << std::endl;
+        std::cerr << "SoluMethod::check_pointers; error, model not defined." << std::endl;
         return false;
       }
     if(!base->CheckPointers())
@@ -889,17 +769,17 @@ bool XC::SoluMethod::CheckPointers(void)
       }
     if(!theSolnAlgo)
       {
-        std::cerr << "SoluMethod::check_pointers; error, no se ha establecido el algoritmo de solución." << std::endl;
+        std::cerr << "SoluMethod::check_pointers; error, solution algorithm not defined." << std::endl;
         return false;
       }
     if(!theSOE)
       {
-        std::cerr << "SoluMethod::check_pointers; error, no se ha establecido el sistema de ecuaciones." << std::endl;
+        std::cerr << "SoluMethod::check_pointers; error, system of equations not defined." << std::endl;
         return false;
       }
     if(!theIntegrator)
       {
-        std::cerr << "SoluMethod::check_pointers; error, no se ha establecido el procedimiento de integración." << std::endl;
+        std::cerr << "SoluMethod::check_pointers; error, integrator not defined." << std::endl;
         return false;
       }
     return true;

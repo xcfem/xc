@@ -50,7 +50,7 @@ class Face: public CmbEdge
   protected:
     size_t ndivj; //Número de divisiones en el eje j.
     virtual const Edge *get_lado_homologo(const Edge *l) const= 0;
-    bool procesa_comando(CmdStatus &status);
+
   public:
     Face(void);
     Face(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
@@ -89,7 +89,7 @@ class Face: public CmbEdge
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 std::set<const Face *> GetSupsTocan(const Edge &l);

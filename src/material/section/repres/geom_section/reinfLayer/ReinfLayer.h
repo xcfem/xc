@@ -78,7 +78,7 @@ class ReinfLayer: public DiscretBase
   protected:
     mutable VectorReinfBar reinfBars;
 
-    bool procesa_comando(CmdStatus &status);
+
 
     friend class ListReinfLayer;
     ReinfLayer(ListReinfLayer *,Material *m);
@@ -109,7 +109,7 @@ class ReinfLayer: public DiscretBase
     VectorReinfBar &getReinfBars(void);  
     virtual const VectorReinfBar &getReinfBars(void) const= 0;  
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     virtual void Print(std::ostream &s, int flag =0) const;   
     friend std::ostream &operator<<(std::ostream &, const ReinfLayer &);    
   };

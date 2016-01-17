@@ -90,16 +90,3 @@ int XC::ElementalLoad::recvData(const CommParameters &cp)
     res+= cp.receiveID(elemTags,getDbTagData(),CommMetaData(2));
     return res;
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ElementalLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "num_elem")
-      {
-        tmp_gp_int= numElements();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else
-      return Load::GetProp(cod);
-  }

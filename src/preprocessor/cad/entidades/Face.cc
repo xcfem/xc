@@ -28,7 +28,6 @@
 
 #include "Face.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/node/Node.h"
@@ -52,33 +51,6 @@ XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
 //! @param nd: Número de divisiones.
 XC::Face::Face(const std::string &nombre,Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
   : CmbEdge(nombre,m,ndivI), ndivj(ndivJ) {}
-
-//! @brief Lee un objeto Face desde el archivo de entrada.
-bool XC::Face::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Face) Procesando comando: " << cmd << std::endl;
-    if(cmd == "ndivI")
-      {
-        SetNDivI(interpretaSize_t(status.GetString()));
-        return true;
-      }
-    else if(cmd == "ndivJ")
-      {
-        SetNDivJ(interpretaSize_t(status.GetString()));
-        return true;
-      }
-    else if(cmd == "ndiv") //Igual número de divisiones en ambos ejes.
-      {
-        const size_t tmp= interpretaSize_t(status.GetString());
-        SetNDivI(tmp);
-        SetNDivJ(tmp);
-        return true;
-      }
-    else
-      return CmbEdge::procesa_comando(status);
-  }
 
 //! @brief Asigna el número de divisiones en el eje i.
 void XC::Face::SetNDivI(const size_t &ndi)
@@ -262,40 +234,3 @@ int XC::Face::getMEDCellType(void) const
       }
     return retval;
   }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-//!
-//! Soporta las propiedades:
-//! -nsup: Devuelve el número de superficies que tienen por borde a esta línea.
-any_const_ptr XC::Face::GetProp(const std::string &cod) const
-  {
-    if(cod== "num_lineas")
-      {
-        tmp_gp_szt= NumEdges();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="ndivI")
-      {
-        tmp_gp_szt= NDivI();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="ndivJ")
-      {
-        tmp_gp_szt= NDivJ();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod=="getMEDCellType")
-      {
-        tmp_gp_int= getMEDCellType();
-         return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="nvol")
-      {
-        tmp_gp_szt= CuerposTocan().size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return CmbEdge::GetProp(cod);
-  }
-

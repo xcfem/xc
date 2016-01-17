@@ -41,7 +41,7 @@ class FVectorShell;
 class ShellMecLoad: public BidimMecLoad
   {
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ShellMecLoad(int tag, int classTag,const double &Trans,const double &,const double &,const ID &theElementTags);
     ShellMecLoad(int tag, int classTag);
@@ -57,7 +57,7 @@ class ShellMecLoad: public BidimMecLoad
     virtual const Matrix &getGlobalForces(void) const;
     virtual const Matrix &getGlobalMoments(void) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

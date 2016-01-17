@@ -31,7 +31,6 @@
 #include "utility/matrix/ID.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "boost/lexical_cast.hpp"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/element/fvectors/FVector.h"
 #include "domain/mesh/element/Element1D.h"
@@ -49,31 +48,6 @@ XC::ElementEdge3dUniformLoad::ElementEdge3dUniformLoad(int tag)
 
 XC::ElementEdge3dUniformLoad::ElementEdge3dUniformLoad(void)
   :ElementEdgeUniformLoad(0,LOAD_TAG_ElementEdge3dUniformLoad), wz(0.0) {}
-
-//! @brief Lee un objeto ElementEdge3dUniformLoad desde archivo
-bool XC::ElementEdge3dUniformLoad::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElementEdge3dUniformLoad) Procesando comando: " << cmd << std::endl;
-    if(cmd == "wx")
-      {
-        Axial= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "wy")
-      {
-        Trans= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "wz")
-      {
-        wz= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return ElementEdgeUniformLoad::procesa_comando(status);
-  }
 
 int XC::ElementEdge3dUniformLoad::getType(void)
   { return LOAD_TAG_ElementEdge3dUniformLoad; }
@@ -201,18 +175,4 @@ const XC::Matrix &XC::ElementEdge3dUniformLoad::getLocalMoments(void) const
         retval(i,2)= 0.0;
       }
     return retval;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ElementEdge3dUniformLoad::GetProp(const std::string &cod) const
-  {
-    if(cod == "wx")
-      return any_const_ptr(Axial);
-    else if(cod == "wy")
-      return any_const_ptr(Trans);
-    else if(cod == "wz")
-      return any_const_ptr(wz);
-    else
-      return ElementEdgeUniformLoad::GetProp(cod);
   }

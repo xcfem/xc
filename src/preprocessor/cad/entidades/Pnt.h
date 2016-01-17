@@ -53,7 +53,7 @@ class Pnt: public EntMdlr
     Pos3d p; //!< Posición del punto.
     mutable std::set<const Edge *> lineas_pt; //!< Líneas uno de cuyos extremos es este punto:
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
     virtual void actualiza_topologia(void);
     void crea_nodos(void);
   public:
@@ -105,7 +105,7 @@ class Pnt: public EntMdlr
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 Vector &operator-(const Pnt &b,const Pnt &a);

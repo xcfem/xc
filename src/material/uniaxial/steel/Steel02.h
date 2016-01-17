@@ -109,7 +109,7 @@ class Steel02 : public SteelBase
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     Steel02(int tag, double fy, double E0, double b,
             double R0, double cR1, double cR2,

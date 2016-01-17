@@ -28,7 +28,6 @@
 
 #include <utility/recorder/NodeRecorderBase.h>
 #include <utility/matrix/ID.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 XC::NodeRecorderBase::NodeRecorderBase(int classTag)
@@ -42,15 +41,6 @@ XC::NodeRecorderBase::NodeRecorderBase(int classTag,const ID &dofs, const ID &no
   :MeshCompRecorder(classTag,theDom,theOutputHandler,dT,timeFlag),
    theDofs(nullptr), theNodalTags(nullptr), theNodes(), 
    dataFlag(0), numValidNodes(0) {}
-
-//! @brief Lee un objeto XC::NodeRecorderBase desde archivo
-bool XC::NodeRecorderBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NodeRecorderBase) Procesando comando: " << cmd << std::endl;
-    return MeshCompRecorder::procesa_comando(status);
-  }
 
 XC::NodeRecorderBase::~NodeRecorderBase(void)
   {

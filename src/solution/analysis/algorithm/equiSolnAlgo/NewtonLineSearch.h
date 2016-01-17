@@ -91,9 +91,6 @@ class NewtonLineSearch: public EquiSolnAlgo
     void libera(void);
     bool alloc(const std::string &);
     void copia(LineSearch *);
-
-    bool procesa_cmd_line_search(const std::string &cmd,CmdStatus &status);
-    bool procesa_comando(CmdStatus &status);
   public:
     int solveCurrentStep(void);
     

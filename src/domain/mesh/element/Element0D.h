@@ -46,8 +46,6 @@ class Element0D : public ElementBase<2>
     class Vxy: public EntCmd
       {
         Vector x,y;
-      protected:
-        bool procesa_comando(CmdStatus &status);
       public:
         Vxy(void);
         Vxy(const Vector &,const Vector &);
@@ -56,14 +54,12 @@ class Element0D : public ElementBase<2>
         inline const Vector &getY(void)
 	  { return y; }
         bool check(void) const;
-        any_const_ptr GetProp(const std::string &cod) const;
       };
     int dimension; // = 2 or 3 dimensions
     int numDOF;	   // number of dof for ZeroLengthSection
     Matrix transformation; // transformation matrix for orientation
 
     virtual void setUp(int Nd1, int Nd2,const Vector &x,const Vector &y);
-    bool procesa_comando(CmdStatus &status);
     TritrizPtrElem cose(const SetEstruct &f1,const SetEstruct &f2) const;
 
     int sendData(CommParameters &cp);
@@ -80,7 +76,6 @@ class Element0D : public ElementBase<2>
     const Vector &getY(void) const;
     const Vector &getZ(void) const;
     void setUpVectors(const Vector &x, const Vector &yp);
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 

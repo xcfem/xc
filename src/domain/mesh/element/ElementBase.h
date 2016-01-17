@@ -33,7 +33,6 @@
 #include "NodePtrsWithIDs.h"
 #include "material/Material.h"
 #include "domain/domain/Domain.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 
 namespace XC {
@@ -53,7 +52,7 @@ class ElementBase: public Element
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     ElementBase(int tag, int classTag);
     ElementBase(const ElementBase &otro);
@@ -89,28 +88,6 @@ XC::ElementBase<NNODOS> &XC::ElementBase<NNODOS>::operator=(const ElementBase &o
     theNodes= otro.theNodes;
     theNodes.set_owner(this);
     return *this;
-  }
-
-//! @brief Lee un objeto XC::ElementBase desde archivo
-template <int NNODOS>
-bool XC::ElementBase<NNODOS>::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElementBase) Procesando comando: " << cmd << std::endl;
-    if(cmd == "nodes")
-      {
-	const std::vector<int> inodos= this->crea_vector_int(status.GetString());
-        theNodes.set_id_nodos(inodos);
-        return true;
-      }
-    else if(cmd == "nodePtrs")
-      {
-        theNodes.LeeCmd(status);
-        return true;
-      }
-    else
-      return Element::procesa_comando(status);
   }
 
 //! @brief Devuelve el número de nodos a los que se conecta.

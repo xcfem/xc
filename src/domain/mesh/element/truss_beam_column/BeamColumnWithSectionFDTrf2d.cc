@@ -78,16 +78,6 @@ XC::BeamColumnWithSectionFDTrf2d &XC::BeamColumnWithSectionFDTrf2d::operator=(co
     return *this;
   }
 
-//! @brief Lee un objeto XC::BeamColumnWithSectionFDTrf2d desde archivo
-bool XC::BeamColumnWithSectionFDTrf2d::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(BeamColumnWithSectionFDTrf2d) Procesando comando: " << cmd << std::endl;
-
-    return BeamColumnWithSectionFD::procesa_comando(status);
-  }
-
 //! @brief Destructor.
 XC::BeamColumnWithSectionFDTrf2d::~BeamColumnWithSectionFDTrf2d(void)
   {
@@ -127,10 +117,3 @@ int XC::BeamColumnWithSectionFDTrf2d::recvData(const CommParameters &cp)
     theCoordTransf= recvCoordTransf2d(9,10,11,cp);
     return res;
   }
-
-
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::BeamColumnWithSectionFDTrf2d::GetProp(const std::string &cod) const
-  { return BeamColumnWithSectionFD::GetProp(cod); }

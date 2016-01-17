@@ -27,7 +27,6 @@
 //PYBase.cc
 
 #include "material/uniaxial/PY/PYBase.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 /////////////////////////////////////////////////////////////////////
@@ -46,31 +45,6 @@ XC::PYBase::PYBase(int tag,int classtag)
 XC::PYBase::PYBase(void)
   :UniaxialMaterial(0,0), initialTangent(0.0),soilType(0), matCapacity(0.0), v50(0.0), dashpot(0.0)
   {}
-
-//! @brief Lee un objeto XC::PYBase desde archivo
-bool XC::PYBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(PYBase) Procesando comando: " << cmd << std::endl;
-    if(cmd == "matCapacity")
-      {
-        matCapacity= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "v50")
-      {
-        v50= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "dashpot")
-      {
-        dashpot= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return UniaxialMaterial::procesa_comando(status);
-  }
 
 void XC::PYBase::getFarField(const double &v)
   { TFar.getField(v); }
@@ -146,22 +120,3 @@ void XC::PYBase::Print(std::ostream &s, int flag)
   }
 
 /////////////////////////////////////////////////////////////////////
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::PYBase::GetProp(const std::string &cod) const
-  {
-    if(cod=="soilType")
-      return any_const_ptr(soilType);
-    else if(cod=="matCapacity")
-      return any_const_ptr(matCapacity);
-    else if(cod=="v50")
-      return any_const_ptr(v50);
-    else if(cod=="c")
-      return any_const_ptr(dashpot);
-    else
-      return UniaxialMaterial::GetProp(cod);
-  }

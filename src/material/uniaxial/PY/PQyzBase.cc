@@ -47,7 +47,6 @@
 
 
 #include "material/uniaxial/PY/PQyzBase.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 // Controls on internal iteration between spring components
@@ -114,12 +113,3 @@ int XC::PQyzBase::recvData(const CommParameters &cp)
 
 /////////////////////////////////////////////////////////////////////
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! nnod: Devuelve el número de nodos del dominio.
-any_const_ptr XC::PQyzBase::GetProp(const std::string &cod) const
-  {
-    return PYBase::GetProp(cod);
-  }

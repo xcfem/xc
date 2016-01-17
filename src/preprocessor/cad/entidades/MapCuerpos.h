@@ -42,7 +42,7 @@ class MapCuerpos: public MapEnt<Body>
   private:
     void UpdateSets(Body *) const;
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
 
   public:
     MapCuerpos(Cad *cad= NULL);
@@ -53,10 +53,6 @@ class MapCuerpos: public MapEnt<Body>
     template <class B>
     Body *Nuevo(void);
 
-    template <class B>
-    Body *Nuevo(CmdStatus &);
-
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 
 
@@ -77,30 +73,6 @@ Body *MapCuerpos::Nuevo(void)
             tag++;
 	  }
       }
-    return retval;
-  }
-
-//! @brief Lee un cuerpo.
-template <class B>
-Body *MapCuerpos::Nuevo(CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    bool nuevo= true;
-    size_t old_tag= getTag();
-    if(fnc_indices.size()>0)
-      {
-        setTag(convert_to_size_t(fnc_indices[0])); //Identificador del punto.
-        if(existe(getTag()))
-          nuevo= false;
-      }
-    Body *retval= Nuevo<B>();
-    if(!nuevo)
-      setTag(old_tag);
-    retval->LeeCmd(status);
-    this->conciliaNDivs();
-    if(!this->checkNDivs())
-	  std::cerr << "MapCuerpos::Nuevo; error al agregar el cuerpo: "
-                    << retval->GetNombre() << std::endl;
     return retval;
   }
 

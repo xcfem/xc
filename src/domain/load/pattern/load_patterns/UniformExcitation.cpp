@@ -66,7 +66,6 @@
 #include "domain/mesh/node/NodeIter.h"
 #include "domain/mesh/element/ElementIter.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 XC::UniformExcitation::UniformExcitation(int tag)
@@ -89,37 +88,6 @@ XC::GroundMotion &XC::UniformExcitation::getGroundMotionRecord(void)
         addMotion(*theMotion);
       }
     return *theMotion;
-  }
-
-//! @brief Lee un objeto XC::UniformExcitation desde archivo
-bool XC::UniformExcitation::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(UniformExcitation) Procesando comando: " << cmd << std::endl;
-    if(cmd == "initialVel")
-      {
-        vel0= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "dof")
-      {
-        theDof= interpretaInt(status.GetString());
-        return true;
-      }
-    else if(cmd == "ground_motion_record")
-      {
-        if(!theMotion)
-          {
-            theMotion= new GroundMotionRecord();
-            assert(theMotion);
-            addMotion(*theMotion);
-          }
-        theMotion->LeeCmd(status);
-        return true;
-      }
-    else
-      return EarthquakePattern::procesa_comando(status);
   }
 
 void XC::UniformExcitation::setDomain(Domain *theDomain) 
@@ -243,14 +211,4 @@ void XC::UniformExcitation::Print(std::ostream &s, int flag)
   {
     s << "UniformExcitation  " << this->getTag() 
       << " - Not Printing the XC::GroundMotion\n";
-  }
-
-any_const_ptr XC::UniformExcitation::GetProp(const std::string &cod) const
-  {
-    if(cod == "getDof")
-      return any_const_ptr(theDof);
-    else if(cod == "getVel0")
-      return any_const_ptr(vel0);
-    else
-      return EarthquakePattern::GetProp(cod);
   }

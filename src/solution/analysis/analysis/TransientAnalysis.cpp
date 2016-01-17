@@ -63,34 +63,10 @@
 
 #include <solution/analysis/analysis/TransientAnalysis.h>
 #include <solution/analysis/integrator/TransientIntegrator.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 //! @brief Constructor.
-XC::TransientAnalysis::TransientAnalysis(SoluMethod *metodo)
-  :Analysis(metodo) {}
-
-
-//! @brief Lee un objeto XC::TransientAnalysis desde archivo
-bool XC::TransientAnalysis::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(TransientAnalysis) Procesando comando: " << cmd << std::endl;
-    if(cmd == "analyze") //Lanza el análisis del problema.
-      {
-        int numSteps= 1;
-        std::vector<std::string> params= crea_vector_string(status.GetString());
-        if(params.size()>0)
-          numSteps= interpretaInt(params[0]);
-        double dT= 1.0;
-        if(params.size()>1)
-          dT= interpretaDouble(params[1]);
-        analysis_result= analyze(numSteps,dT);
-        return true;
-      }
-    else
-      return Analysis::procesa_comando(status);
-  }
+XC::TransientAnalysis::TransientAnalysis(SoluMethod *method)
+  :Analysis(method) {}
 
 
 

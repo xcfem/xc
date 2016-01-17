@@ -100,21 +100,6 @@ XC::CorotTruss::CorotTruss(const CorotTruss &otro)
       theMaterial= otro.theMaterial->getCopy();
   }
 
-//! @brief Lee un objeto CorotTruss desde archivo
-bool XC::CorotTruss::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(CorotTruss) Procesando comando: " << cmd << std::endl;
-    if(cmd == "A")
-      {
-        A= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return CorotTrussBase::procesa_comando(status);
-  }
-
 //! @brief Operador de asignación.
 XC::CorotTruss &XC::CorotTruss::operator=(const CorotTruss &otro)
   {
@@ -603,28 +588,4 @@ int XC::CorotTruss::recvSelf(const CommParameters &cp)
     else
       res+= recvData(cp);
     return res;
-  }
-
-
-any_const_ptr XC::CorotTruss::GetProp(const std::string &cod) const
-  {
-    if(cod=="getAxil" || cod == "N")
-      {
-        tmp_gp_dbl= getAxil();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getStrain")
-      {
-        tmp_gp_dbl= theMaterial->getStrain();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getStress")
-      {
-        tmp_gp_dbl= theMaterial->getStress();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else if(cod=="getArea")
-      return any_const_ptr(A);
-    else
-      return CorotTrussBase::GetProp(cod);
   }

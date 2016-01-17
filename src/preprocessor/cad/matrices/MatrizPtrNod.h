@@ -46,7 +46,7 @@ class SP_Constraint;
 class MatrizPtrNod: public MatrizPtrBase<Node>
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
     //! @brief Constructor.
     MatrizPtrNod(const size_t &f=0,const size_t &c=0)
@@ -59,7 +59,7 @@ class MatrizPtrNod: public MatrizPtrBase<Node>
     Node *getNearestNode(const Pos3d &p);
     const Node *getNearestNode(const Pos3d &p) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace

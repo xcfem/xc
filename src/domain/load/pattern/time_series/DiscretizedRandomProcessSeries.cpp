@@ -65,7 +65,6 @@
 #include <reliability/domain/filter/Filter.h>
 #include <classTags.h>
 #include "domain/mesh/element/Information.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 
 XC::DiscretizedRandomProcessSeries::DiscretizedRandomProcessSeries(int num, const std::vector<ModulatingFunction *> &theModFuncs,
@@ -73,15 +72,6 @@ XC::DiscretizedRandomProcessSeries::DiscretizedRandomProcessSeries(int num, cons
                                                                double p_maxStdv)
   :TimeSeries(TSERIES_TAG_DiscretizedRandomProcessSeries), numModFuncs(num), c(0.0), mean(p_mean), maxStdv(p_maxStdv), theModulatingFunctions(theModFuncs)
   {}
-
-//! @brief Lee un objeto XC::DiscretizedRandomProcessSeries desde archivo
-bool XC::DiscretizedRandomProcessSeries::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DiscretizedRandomProcessSeries) Procesando comando: " << cmd << std::endl;
-    return TimeSeries::procesa_comando(status);
-  }
 
 XC::TimeSeries *XC::DiscretizedRandomProcessSeries::getCopy(void) const
   {

@@ -44,7 +44,7 @@ class ElasticBaseMaterial: public UniaxialMaterial
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
     inline virtual double def_total(void) const { return trialStrain-ezero; }
   public:
     ElasticBaseMaterial(int tag= 0, int classtag= 0, double E= 0.0, double e0= 0.0);    
@@ -65,7 +65,7 @@ class ElasticBaseMaterial: public UniaxialMaterial
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

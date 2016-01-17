@@ -54,7 +54,7 @@ class VectorSeccionesBarraPrismatica: public EntCmd, public std::vector<SeccionB
     VectorSeccionesBarraPrismatica &operator=(const VectorSeccionesBarraPrismatica &);
     int sendData(CommParameters &);  
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     typedef std::vector<SeccionBarraPrismatica *> mat_vector;
     typedef mat_vector::iterator iterator;
@@ -86,8 +86,6 @@ class VectorSeccionesBarraPrismatica: public EntCmd, public std::vector<SeccionB
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    any_const_ptr GetPropSection(const size_t &i,const std::string &cod) const;
-    any_const_ptr GetProp(const std::string &) const;
   };
 
 } // end of XC namespace

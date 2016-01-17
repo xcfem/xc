@@ -127,7 +127,7 @@ void XC::ZeroLength::setMaterial(const int &dir,const std::string &nmbMat)
             if(tmp)
               theMaterial1d.push_back(dir,tmp);
             else
-	      std::cerr << "ZeroLengthMaterials::procesa_comando; "
+	      std::cerr << "ZeroLengthMaterials::setMaterial; "
                         << "el material de código: '" << nmbMat
                         << "' no corresponde a un material uniaxial.\n";
           }
@@ -161,12 +161,12 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
                 if(tmp)
                   theMaterial1d.push_back(dirs[i],tmp);
                 else
-	      std::cerr << "ZeroLengthMaterials::procesa_comando; "
+	      std::cerr << "ZeroLengthMaterials::setMaterials; "
                             << "el material de código: '" << nmbMats[i]
                             << "' no corresponde a un material uniaxial.\n";
               }
             else
-              std::cerr << "ZeroLengthMaterials::procesa_comando; "
+              std::cerr << "ZeroLengthMaterials::setMaterials; "
             << "no se encontró el material de código: '" << nmbMats[i]
             << "'.\n";
           }
@@ -175,45 +175,6 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
       }
     else
       { std::cerr << "ZeroLength::set_materials; el puntero al preprocesador es nulo." << std::endl; }
-  }
-
-//! @brief Lee un objeto XC::ZeroLength desde archivo
-bool XC::ZeroLength::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ZeroLength) Procesando comando: " << cmd << std::endl;
-    const CmdParser &parser= status.Parser();
-    if(cmd == "materiales")
-      {
-        theMaterial1d.LeeCmd(status);
-        return true;
-      }
-    else if(cmd == "clear_materiales")
-      {
-        status.GetString(); //Ignoramos entrada.
-        clearMaterials();
-        return true;
-      }
-    else if(cmd == "set_materials")
-      {
-        const std::string mats= status.GetString();
-        if(parser.TieneIndices())
-          {
-            std::deque<boost::any> indices= parser.SeparaIndices(this);
-            std::deque<int> dirs= convert_to_dq_int(indices);
-            const std::vector<std::string> nmbMats= crea_vector_string(mats);
-            setMaterials(dirs,nmbMats);
-          }
-        else
-          {
-	    std::cerr << "(ZeroLength) Procesando comando: '" << cmd 
-                      << " faltan las direcciones. Se ignora la entrada" << std::endl;
-          }
-        return true;
-      }
-    else
-      return Element0D::procesa_comando(status);
   }
 
 //! @brief Constructor virtual.
@@ -861,21 +822,3 @@ void XC::ZeroLength::setUp(int Nd1, int Nd2,const Vector &x,const Vector &y)
 
 void XC::ZeroLength::updateDir(const XC::Vector& x, const XC::Vector& y)
   { setUp(theNodes.getTagNode(0), theNodes.getTagNode(1), x, y); }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::ZeroLength::GetProp(const std::string &cod) const
-  {
-    if(cod == "getNumMateriales")
-      {
-        tmp_gp_szt= theMaterial1d.size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else if(cod == "getTipoElemento")
-      {
-        tmp_gp_str= getElementType();
-        return any_const_ptr(tmp_gp_str);
-      }
-    else
-      return Element0D::GetProp(cod);
-  }

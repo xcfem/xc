@@ -79,7 +79,6 @@
 #include <domain/constraints/MP_ConstraintIter.h>
 #include <domain/constraints/MRMP_ConstraintIter.h>
 #include <solution/analysis/model/DOF_GrpIter.h>
-#include "xc_utils/src/base/CmdStatus.h"
 
 //! @brief Crea el numerador de grafos que se le solicita. 
 void XC::DOF_Numberer::alloc(const std::string &str)

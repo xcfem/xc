@@ -66,7 +66,6 @@
 #include "UniaxialFiber.h"
 #include <material/uniaxial/UniaxialMaterial.h>
 #include "preprocessor/loaders/MaterialLoader.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "utility/actor/actor/MovableVector.h"
 
 void XC::UniaxialFiber::libera(void)
@@ -119,21 +118,6 @@ XC::UniaxialFiber &XC::UniaxialFiber::operator=(const UniaxialFiber &otra)
     area= otra.area;
     setMaterial(otra.theMaterial);
     return *this;
-  }
-
-//! @brief Lee un objeto UniaxialFiber desde archivo
-bool XC::UniaxialFiber::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(UniaxialFiber) Procesando comando: " << cmd << std::endl;
-    if(cmd == "area")
-      {
-        area= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return Fiber::procesa_comando(status);
   }
 
 // Destructor: 

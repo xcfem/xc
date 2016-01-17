@@ -50,7 +50,6 @@
 #include "material/uniaxial/PY/QzSimple1.h"
 #include <utility/matrix/Vector.h>
 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 // Controls on internal iterations between spring components
@@ -97,42 +96,6 @@ XC::QzSimple1::QzSimple1(void)
     // these values don't change
   }
 
-//! @brief Lee un objeto XC::QzSimple1 desde archivo
-bool XC::QzSimple1::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(QzSimple1) Procesando comando: " << cmd << std::endl;
-    if(cmd == "clay")
-      {
-        status.GetString();
-        soilType= 1;
-        return true;
-      }
-    else if(cmd == "sand")
-      {
-        status.GetString();
-        soilType= 2;
-        return true;
-      }
-    else if(cmd == "qult")
-      {
-        matCapacity= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "z50")
-      {
-        v50= interpretaDouble(status.GetString());
-        return true;
-      }
-    else if(cmd == "suction")
-      {
-        suction= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return PQyzBase::procesa_comando(status);
-  }
 
 /////////////////////////////////////////////////////////////////////
 void XC::QzSimple1::getGap(double zlast, double dz, double dz_old)
@@ -672,20 +635,3 @@ void XC::QzSimple1::Print(std::ostream &s, int flag)
     s << "  suction: " << suction << std::endl;
   }
 
-//! @brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-any_const_ptr XC::QzSimple1::GetProp(const std::string &cod) const
-  {
-    if(cod=="QzType")
-      return any_const_ptr(soilType);
-    if(cod=="Qult")
-      return any_const_ptr(matCapacity);
-    if(cod=="z50")
-      return any_const_ptr(v50);
-    if(cod=="suction")
-      return any_const_ptr(suction);
-    else
-      return PQyzBase::GetProp(cod);
-  }

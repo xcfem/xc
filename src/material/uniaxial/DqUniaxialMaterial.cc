@@ -29,7 +29,6 @@
 #include "DqUniaxialMaterial.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
@@ -300,45 +299,6 @@ void XC::DqUniaxialMaterial::getStress(Vector &s,const size_t &offset) const
       s(j)= (*i)->getStress();
   }
 
-//! @brief Ejecuta el bloque que se pasa como parámetro.
-//!
-//! Soporta los comandos:
-//!
-void XC::DqUniaxialMaterial::ejecuta_bloque_for_each(CmdStatus &status,const std::string &bloque)
-  {
-    const std::string nmbBlq= nombre_clase()+":for_each";
-    iterator i= begin();
-    for(;i!= end();i++)
-      {
-        (*i)->EjecutaBloque(status,bloque,nmbBlq);
-      }
-  }
-
-//!  @brief Lee un objeto DqUniaxialMaterial desde el archivo de entrada.
-//! 
-//!  Soporta los comandos:
-//! 
-//!  - clear: Vacía la lista de punteros.
-bool XC::DqUniaxialMaterial::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(DqUniaxialMaterial) Procesando comando: " << cmd << std::endl;
-    if(cmd == "for_each")
-      { 
-        const std::string bloque= status.GetBloque();
-        ejecuta_bloque_for_each(status,bloque);
-        return true;
-      }
-    else if(cmd == "clearAll")
-      {
-        clearAll();
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
-
 void XC::DqUniaxialMaterial::push_back(const UniaxialMaterial *t,SectionForceDeformation *s)
   {
     if(!t)
@@ -443,16 +403,3 @@ void XC::DqUniaxialMaterial::Print(std::ostream &s, int flag) const
     for(size_t i= 0;i<sz;i++)
       s << "\t\tUniaxial XC::Material, tag: " << (*this)[i]->getTag() << std::endl;
   }
-
-//! @brief Devuelve la propiedad del objeto cuyo nombre (de la propiedad) se pasa como parámetro.
-any_const_ptr XC::DqUniaxialMaterial::GetProp(const std::string &cod) const
-  {
-    if(cod=="size")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return EntCmd::GetProp(cod);    
-  }
-

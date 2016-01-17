@@ -37,33 +37,11 @@
 #include "preprocessor/cad/entidades/SupCuadrilatera.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
 XC::MapCuerpos::MapCuerpos(Cad *cad)
   : MapEnt<Body>(cad) {}
-
-//! @brief Lee un objeto Body desde el archivo de entrada.
-bool XC::MapCuerpos::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string str_err= "(MapCuerpos) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << str_err << std::endl;
-    if(cmd == "tag_face")
-      { //Nuevo identificador de la superficie.
-        setTag(interpretaSize_t(status.GetString()));
-        return true;
-      }
-    else if(cmd == "block") //Crea un nuevo cuerpo.
-      {
-        Nuevo<Block>(status);
-        return true;
-      }
-    else
-      return MapEnt<Body>::procesa_comando(status);
-  }
 
 //! @brief Inserta el nuevo cuerpo en el conjunto total y los conjuntos abiertos.
 void XC::MapCuerpos::UpdateSets(Body *nuevo) const
@@ -98,16 +76,3 @@ bool XC::MapCuerpos::checkNDivs(void) const
     return (conta==0);
   }
 
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::MapCuerpos::GetProp(const std::string &cod) const
-  {
-    if(cod=="num_bodies")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return MapEnt<Body>::GetProp(cod);
-  }

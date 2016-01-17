@@ -68,7 +68,7 @@ class DataOutputFileHandler : public DataOutputHandler
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     DataOutputFileHandler(const std::string &fileName =0, echoMode = NONE, openMode mode = OVERWRITE);
 

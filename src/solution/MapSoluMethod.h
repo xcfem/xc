@@ -51,7 +51,7 @@ class MapSoluMethod: public EntCmd
 
     map_solu_method solu_methods; //!< Métodos para la solución.
   protected:
-    bool procesa_comando(CmdStatus &status);
+
   public:
     MapSoluMethod(ProcSoluControl *owr);
 

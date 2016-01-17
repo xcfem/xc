@@ -54,7 +54,7 @@ class NodeLockers: public EntCmd, public MovableObject
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
     NodeLockers(Mesh *owr);
     ~NodeLockers(void);
   public:
@@ -76,8 +76,6 @@ class NodeLockers: public EntCmd, public MovableObject
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
-
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // end of XC namespace

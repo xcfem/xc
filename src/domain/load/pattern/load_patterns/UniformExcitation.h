@@ -80,7 +80,7 @@ class UniformExcitation: public EarthquakePattern
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     UniformExcitation(int tag= 0);
     UniformExcitation(GroundMotion &theMotion, int dof, int tag, double vel0 = 0.0);
@@ -97,7 +97,7 @@ class UniformExcitation: public EarthquakePattern
     // AddingSensitivity:BEGIN /////////////////////////////////
     void applyLoadSensitivity(double time);
     // AddingSensitivity:END ///////////////////////////////////
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

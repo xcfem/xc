@@ -36,33 +36,11 @@
 #include "preprocessor/cad/entidades/SupCuadrilatera.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
 XC::MapUniformGrids::MapUniformGrids(Cad *cad)
   : MapEnt<UniformGrid>(cad) {}
-
-//! @brief Lee un objeto UniformGrid desde el archivo de entrada.
-bool XC::MapUniformGrids::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string str_err= "(MapUniformGrids) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << str_err << std::endl;
-    if(cmd == "tag_unif_grid")
-      { //Nuevo identificador de la superficie.
-        setTag(interpretaSize_t(status.GetString()));
-        return true;
-      }
-    else if(cmd == "unif_grid") //Crea una nueva superficie cuadrilátera.
-      {
-        Nueva(status);
-        return true;
-      }
-    else
-      return MapEnt<UniformGrid>::procesa_comando(status);
-  }
 
 //! @brief Inserta la nueva linea en el conjunto total y los conjuntos abiertos.
 void XC::MapUniformGrids::UpdateSets(UniformGrid *nuevo_unif_grid) const
@@ -92,64 +70,4 @@ XC::UniformGrid *XC::MapUniformGrids::Nueva(void)
         tag++;
       }
     return retval;
-  }
-
-//! @brief Crea una nueva malla uniforme.
-XC::UniformGrid *XC::MapUniformGrids::Nueva(CmdStatus &status)
-  {
-    std::deque<boost::any> fnc_indices= status.Parser().SeparaIndices(this);
-    bool nueva= true;
-    size_t old_tag= getTag();
-    if(fnc_indices.size()>0)
-      {
-        setTag(convert_to_size_t(fnc_indices[0])); //Identificador del punto.
-        if(existe(getTag()))
-          nueva= false;
-      }
-    UniformGrid *retval= Nueva();
-    if(!nueva)
-      setTag(old_tag);
-    retval->LeeCmd(status);
-    return retval;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::MapUniformGrids::GetProp(const std::string &cod) const
-  {
-    if(cod == "face")
-      {
-        static const UniformGrid *cara;
-        const size_t iCara= popSize_t(cod);
-        cara= busca(iCara);
-        if(cara)
-          return any_const_ptr(cara);
-        else
-          {
-            std::cerr << "MapUniformGrids::GetProp; no se encontró la superficie: '" 
-                      << iCara << "'.\n";
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getTagNearestUniformGrid")
-      {
-        const Pos3d p= popPos3d(cod);
-        const UniformGrid *tmp= getNearest(p);
-        if(!tmp)
-          {
-            const std::string posLectura= get_ptr_status()->GetEntradaComandos().getPosicionLecturaActual();
-            std::cerr << "No se encontró una superficie cercana a la posición: "
-                      << p << ". " << posLectura << std::endl;
-          }
-        else
-          tmp_gp_int= tmp->GetTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="num_faces")
-      {
-        tmp_gp_szt= this->size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return MapEnt<UniformGrid>::GetProp(cod);
   }

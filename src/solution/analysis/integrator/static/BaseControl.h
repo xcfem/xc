@@ -44,7 +44,7 @@ class BaseControl : public StaticIntegrator
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    bool procesa_comando(CmdStatus &status);
+
     void setup_numIncr(const int &);
 
     BaseControl(SoluMethod *,int classTag,int numIncr= 1);

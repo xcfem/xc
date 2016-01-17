@@ -27,7 +27,6 @@
 //MapCadMemberBase.cc
 
 #include "MapCadMemberBase.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "preprocessor/cad/Cad.h"
 #include "domain/mesh/node/Node.h"
@@ -36,22 +35,6 @@
 //! @brief Constructor.
 XC::MapCadMemberBase::MapCadMemberBase(Cad *cad)
   : EntCmd(cad), tag(0) {}
-
-//! @brief Lee un objeto Pnt desde el archivo de entrada.
-bool XC::MapCadMemberBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string str_err= "(MapCadMemberBase) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << str_err << std::endl;
-    if(cmd == "set_tag")
-      {
-        tag= interpretaSize_t(status.GetString()); //Nuevo identificador del punto.
-        return true;
-      }
-    else
-      return EntCmd::procesa_comando(status);
-  }
 
 //! @brief Devuelve un apuntador al objeto Cad.
 const XC::Cad *XC::MapCadMemberBase::getCad(void) const
@@ -75,17 +58,3 @@ const XC::Preprocessor *XC::MapCadMemberBase::getPreprocessor(void) const
 XC::Preprocessor *XC::MapCadMemberBase::getPreprocessor(void)
   { return getCad()->getPreprocessor(); }
 
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::MapCadMemberBase::GetProp(const std::string &cod) const
-  {
-    if(cod=="tag")
-      return any_const_ptr(tag);
-    else if(cod=="last_tag")
-      {
-        tmp_gp_szt= tag-1;
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return EntCmd::GetProp(cod);
-  }

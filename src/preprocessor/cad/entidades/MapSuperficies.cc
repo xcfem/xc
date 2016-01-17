@@ -36,33 +36,11 @@
 #include "preprocessor/cad/entidades/SupCuadrilatera.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 
 //! @brief Constructor.
 XC::MapSuperficies::MapSuperficies(Cad *cad)
   : MapEnt<Face>(cad) {}
-
-//! @brief Lee un objeto Face desde el archivo de entrada.
-bool XC::MapSuperficies::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    const std::string str_err= "(MapSuperficies) Procesando comando: " + cmd;
-    if(verborrea>2)
-      std::clog << str_err << std::endl;
-    if(cmd == "tag_face")
-      { //Nuevo identificador de la superficie.
-        setTag(interpretaSize_t(status.GetString()));
-        return true;
-      }
-    else if(cmd == "sup_cuadrilatera") //Crea una nueva superficie cuadrilátera.
-      {
-        Nueva<SupCuadrilatera>(status);
-        return true;
-      }
-    else
-      return MapEnt<Face>::procesa_comando(status);
-  }
 
 //! @brief Inserta la nueva linea en el conjunto total y los conjuntos abiertos.
 void XC::MapSuperficies::UpdateSets(Face *nueva_face) const
@@ -126,45 +104,4 @@ XC::SupCuadrilatera *XC::MapSuperficies::newQuadSurfaceGridPoints(const boost::p
     assert(retval);
     retval->defGridPoints(l);
     return retval;
-  }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-any_const_ptr XC::MapSuperficies::GetProp(const std::string &cod) const
-  {
-    if(cod == "face")
-      {
-        static const Face *cara;
-        const size_t iCara= popSize_t(cod);
-        cara= busca(iCara);
-        if(cara)
-          return any_const_ptr(cara);
-        else
-          {
-            std::cerr << "MapSuperficies::GetProp; no se encontró la superficie: '" 
-                      << iCara << "'.\n";
-            return any_const_ptr();
-          }
-      }
-    else if(cod=="getTagNearestFace")
-      {
-        const Pos3d p= popPos3d(cod);
-        const Face *tmp= getNearest(p);
-        if(!tmp)
-          {
-            const std::string posLectura= get_ptr_status()->GetEntradaComandos().getPosicionLecturaActual();
-            std::cerr << "No se encontró una superficie cercana a la posición: "
-                      << p << ". " << posLectura << std::endl;
-          }
-        else
-          tmp_gp_int= tmp->GetTag();
-        return any_const_ptr(tmp_gp_int);
-      }
-    else if(cod=="num_faces")
-      {
-        tmp_gp_szt= size();
-        return any_const_ptr(tmp_gp_szt);
-      }
-    else
-      return MapEnt<Face>::GetProp(cod);
   }

@@ -50,9 +50,7 @@ class BeamIntegratorLoader: public Loader
     BeamIntegratorLoader(const BeamIntegratorLoader &otro);
     BeamIntegratorLoader &operator=(const BeamIntegratorLoader &otro);
   protected:
-    bool procesa_comando(CmdStatus &status);
     friend class ElementLoader;
-    void ejecuta_bloque_for_each(CmdStatus &,const std::string &);
   public:
     BeamIntegratorLoader(Preprocessor *owr);
     const map_integradores &Map(void) const;
@@ -67,7 +65,6 @@ class BeamIntegratorLoader: public Loader
     ~BeamIntegratorLoader(void);
     inline void clearAll(void)
       { libera(); }
-    virtual any_const_ptr GetProp(const std::string &cod) const;
   };
 
 } // end of XC namespace

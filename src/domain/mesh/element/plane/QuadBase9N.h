@@ -33,7 +33,6 @@
 
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 #include "preprocessor/cad/aux_mallado.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include "preprocessor/loaders/LoadLoader.h"
 #include "domain/load/plane/BidimStrainLoad.h"
 #include "med.h"
@@ -52,7 +51,7 @@ class QuadBase9N : public ElemPlano<9,PhysProp>
   {
   protected:
     TritrizPtrElem coloca_en_malla(const TritrizPtrNod &,dir_mallado dm) const;
-    bool procesa_comando(CmdStatus &status);
+
   public:
 
     QuadBase9N(int classTag);
@@ -69,7 +68,7 @@ class QuadBase9N : public ElemPlano<9,PhysProp>
 
     int addLoad(ElementalLoad *theLoad, double loadFactor);
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 //! @brief Constructor
@@ -82,37 +81,6 @@ template <class PhysProp>
 XC::QuadBase9N<PhysProp>::QuadBase9N(int tag,int classTag,const PhysProp &pp)
   :ElemPlano<9,PhysProp>(tag,classTag,pp) {}
 
-
-//! @brief Lee un objeto QuadBase9N desde archivo
-template <class PhysProp>
-bool XC::QuadBase9N<PhysProp>::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= this->deref_cmd(status.Cmd());
-    if(this->verborrea>2)
-      std::clog << "(QuadBase9N) Procesando comando: " << cmd << std::endl;
-
-    if(cmd == "strain_load")
-      {
-        Preprocessor *preprocessor= this->GetPreprocessor();
-        if(preprocessor)
-          {
-            MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
-            const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
-            static ID eTags(1);
-            eTags[0]= this->getTag(); //Carga para éste elemento.
-            const size_t sz= this->physicalProperties.getMaterialsVector().getGeneralizedStrainSize();
-            BidimStrainLoad *tmp= new BidimStrainLoad(loadTag,sz,eTags);
-            tmp->LeeCmd(status);
-            LoadPattern *lp= casos.getCurrentLoadPatternPtr();
-            lp->addElementalLoad(tmp);
-          }
-        else
-	  std::cerr << "El elemento no tiene asignado un preprocesador." << std::endl;
-        return true;
-      }
-    else
-      return ElemPlano<9,PhysProp>::procesa_comando(status);
-  }
 
 //! @brief Coloca el elemento en la malla que se pasa como parámetro.
 template <class PhysProp>
@@ -204,34 +172,6 @@ int XC::QuadBase9N<PhysProp>::getVtkCellType(void) const
 template <class PhysProp>
 int XC::QuadBase9N<PhysProp>::getMEDCellType(void) const
   { return MED_QUAD9; }
-
-//! Devuelve la propiedad del objeto cuyo código se pasa
-//! como parámetro.
-template <class PhysProp>
-any_const_ptr XC::QuadBase9N<PhysProp>::GetProp(const std::string &cod) const
-  {
-    if(cod=="getVtkCellType")
-      {
-	EntProp::tmp_gp_str= "quad8";
-        return any_const_ptr(EntProp::tmp_gp_str);
-      }
-    else if(cod=="getVertices")
-      {
-	static m_int retval(8,1,0);
-        if(this->theNodes[0]) retval(1,1)= this->theNodes[0]->getIdx();
-        if(this->theNodes[1]) retval(2,1)= this->theNodes[1]->getIdx();
-        if(this->theNodes[2]) retval(3,1)= this->theNodes[2]->getIdx();
-        if(this->theNodes[3]) retval(4,1)= this->theNodes[3]->getIdx();
-        if(this->theNodes[4]) retval(1,1)= this->theNodes[4]->getIdx();
-        if(this->theNodes[5]) retval(2,1)= this->theNodes[5]->getIdx();
-        if(this->theNodes[6]) retval(3,1)= this->theNodes[6]->getIdx();
-        if(this->theNodes[7]) retval(4,1)= this->theNodes[7]->getIdx();
-        if(this->theNodes[8]) retval(4,1)= this->theNodes[8]->getIdx();
-        return any_const_ptr(retval);
-      }
-    else
-      return ElemPlano<9,PhysProp>::GetProp(cod);
-  }
 
 } // end of XC namespace
 #endif

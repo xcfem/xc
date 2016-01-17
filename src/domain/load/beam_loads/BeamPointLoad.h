@@ -42,7 +42,7 @@ class BeamPointLoad: public BeamMecLoad
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
+
   public:
     BeamPointLoad(int tag, int classTag, double Pt, double x,const ID &theElementTags, double Pa = 0.0);
     BeamPointLoad(int tag, int classTag);
@@ -54,7 +54,7 @@ class BeamPointLoad: public BeamMecLoad
     
     std::string Categoria(void) const;
 
-    any_const_ptr GetProp(const std::string &cod) const;
+
   };
 } // end of XC namespace
 

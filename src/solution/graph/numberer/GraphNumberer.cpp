@@ -59,7 +59,6 @@
 
 
 #include "GraphNumberer.h"
-#include "xc_utils/src/base/CmdStatus.h"
 
 XC::GraphNumberer::GraphNumberer(int cTag)
   :MovableObject(cTag)

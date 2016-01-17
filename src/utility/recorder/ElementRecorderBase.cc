@@ -28,7 +28,6 @@
                                                                         
 #include <utility/recorder/ElementRecorderBase.h>
 #include <utility/recorder/response/Response.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_basic/src/texto/cadena_carac.h"
 #include <utility/actor/channel/Channel.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
@@ -54,31 +53,6 @@ void XC::ElementRecorderBase::setup_responses(const std::string &dataToStore)
     responseArgs.resize(argc);
     for(int i=0; i<argc; i++)
       responseArgs[i]= campos[i];
-  }
-
-//! @brief Lee un objeto XC::ElementRecorderBase desde archivo
-bool XC::ElementRecorderBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(ElementRecorderBase) Procesando comando: " << cmd << std::endl;
-    if(cmd == "elementos")
-      {
-        std::vector<int> elems= crea_vector_int(status.GetString());
-        const int sz= elems.size();
-        eleID= ID(sz);
-        for(int i= 0;i<sz;i++)
-          eleID[i]= elems[i];
-        return true;
-      }
-    else if(cmd == "data_to_store")
-      {
-        const std::string tmp= interpretaString(status.GetString());
-        setup_responses(tmp);
-        return true;
-      }
-    else
-      return MeshCompRecorder::procesa_comando(status);
   }
 
 //@brief Destructor.

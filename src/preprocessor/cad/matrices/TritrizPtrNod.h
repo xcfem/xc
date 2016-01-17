@@ -50,7 +50,7 @@ namespace XC{
 class TritrizPtrNod: public TritrizPtrBase<MatrizPtrNod>
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
 
     TritrizPtrNod(const size_t capas= 0);
@@ -72,7 +72,7 @@ class TritrizPtrNod: public TritrizPtrBase<MatrizPtrNod>
 
     std::vector<int> getTags(void) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
     void Print(std::ostream &os) const;
   };
 

@@ -33,7 +33,6 @@
 #include "MaterialLoader.h"
 #include "TransfCooLoader.h"
 #include "BeamIntegratorLoader.h"
-#include "xc_utils/src/base/CmdStatus.h"
 #include <map>
 
 namespace XC {

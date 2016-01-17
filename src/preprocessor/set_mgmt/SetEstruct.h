@@ -45,7 +45,6 @@ class Element;
 class SetEstruct: public SetBase
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
     friend class Preprocessor;
     void agrega_elementos(const TritrizPtrElem &);
     virtual const Node *get_node_ptr_from_stack(const std::string &cod) const;
@@ -100,8 +99,6 @@ class SetEstruct: public SetBase
     std::set<int> getElementTags(void) const;
     boost::python::list getElements(void);
     ElementEdges getElementEdges(void);
-
-    any_const_ptr GetProp(const std::string &cod)const;
   };
 } //end of XC namespace
 #endif

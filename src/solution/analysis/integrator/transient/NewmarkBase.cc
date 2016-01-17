@@ -32,7 +32,6 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/analysis/model/DOF_GrpIter.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
@@ -47,21 +46,6 @@ XC::NewmarkBase::NewmarkBase(SoluMethod *owr,int classTag, double _gamma)
 //! @brief Constructor.
 XC::NewmarkBase::NewmarkBase(SoluMethod *owr,int classTag,double _gamma,const RayleighDampingFactors &rF)
   : DampingFactorsIntegrator(owr,classTag,rF),  gamma(_gamma),  c2(0.0), c3(0.0) {}
-
-//! @brief Lee un objeto XC::NewmarkBase desde archivo
-bool XC::NewmarkBase::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(NewmarkBase) Procesando comando: " << cmd << std::endl;
-    if(cmd == "gamma")
-      {
-        gamma= interpretaDouble(status.GetString());
-        return true;
-      }
-    else
-      return DampingFactorsIntegrator::procesa_comando(status);
-  }
 
 //! @brief Populate U, Udot and Udotdot by iterating through the DOF_Groups and 
 //! getting the last committed displacement, velocity and accel
@@ -111,16 +95,3 @@ int XC::NewmarkBase::recvData(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-any_const_ptr XC::NewmarkBase::GetProp(const std::string &cod) const
-  {
-    if(cod=="getGamma")
-      return any_const_ptr(gamma);
-    else if(cod=="getC2")
-      return any_const_ptr(c2);
-    else if(cod=="getC3")
-      return any_const_ptr(c3);
-    else
-      return DampingFactorsIntegrator::GetProp(cod);    
-  }

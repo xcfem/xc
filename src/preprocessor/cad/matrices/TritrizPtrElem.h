@@ -43,7 +43,7 @@ namespace XC{
 class TritrizPtrElem: public TritrizPtrBase<MatrizPtrElem>
   {
   protected:
-    virtual bool procesa_comando(CmdStatus &status);
+
   public:
 
     TritrizPtrElem(const size_t capas= 0,const MatrizPtrElem &m= MatrizPtrElem());
@@ -54,7 +54,7 @@ class TritrizPtrElem: public TritrizPtrBase<MatrizPtrElem>
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
 
-    virtual any_const_ptr GetProp(const std::string &cod) const;
+
   };
 
 } //end of XC namespace.

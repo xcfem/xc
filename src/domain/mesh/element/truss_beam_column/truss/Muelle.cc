@@ -34,7 +34,6 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <material/uniaxial/UniaxialMaterial.h>
 
-#include "xc_utils/src/base/CmdStatus.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
@@ -110,15 +109,6 @@ XC::Muelle &XC::Muelle::operator=(const Muelle &otro)
 //! @brief Constructor virtual.
 XC::Element* XC::Muelle::getCopy(void) const
   { return new Muelle(*this); }
-
-//! @brief Lee un objeto XC::Muelle desde archivo
-bool XC::Muelle::procesa_comando(CmdStatus &status)
-  {
-    const std::string cmd= deref_cmd(status.Cmd());
-    if(verborrea>2)
-      std::clog << "(Muelle) Procesando comando: " << cmd << std::endl;
-    return ProtoTruss::procesa_comando(status);
-  }
 
 //!  destructor
 //!     delete must be invoked on any objects created by the object
@@ -535,27 +525,6 @@ void XC::Muelle::Print(std::ostream &s, int flag)
 
 double XC::Muelle::getAxil(void) const
   { return theMaterial->getStress(); }
-
-//! \brief Devuelve la propiedad del objeto cuyo código (de la propiedad) se pasa
-//! como parámetro.
-//!
-//! Soporta los códigos:
-//! strain: Devuelve la deformación del elemento.
-any_const_ptr XC::Muelle::GetProp(const std::string &cod) const
-  {
-    if(cod=="getStrain")
-      {
-        tmp_gp_dbl= theMaterial->getStrain();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    if(cod=="getAxil")
-      {
-        tmp_gp_dbl= getAxil();
-        return any_const_ptr(tmp_gp_dbl);
-      }
-    else
-      return ProtoTruss::GetProp(cod);
-  }
 
 double XC::Muelle::computeCurrentStrain(void) const
   {

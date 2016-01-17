@@ -93,7 +93,6 @@ class CrdTransf2d: public CrdTransf
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    bool procesa_comando(CmdStatus &status);
   public:
     CrdTransf2d(int tag, int classTag);
 
@@ -130,7 +129,6 @@ class CrdTransf2d: public CrdTransf
     const Matrix &getCooNodos(void) const;
     const Matrix &getCooPuntos(const size_t &ndiv) const;
     const Vector &getCooPunto(const double &xrel) const;
-    any_const_ptr GetProp(const std::string &cod) const;
   };
 } // end of XC namespace
 
