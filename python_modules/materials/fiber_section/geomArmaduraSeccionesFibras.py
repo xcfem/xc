@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
+
 
 def gmHorizRowRebars(sectionGeom, fiberMatName, nRebars, areaRebar, depth, width, cover, h):
   '''Horizontal row of reinforcement bars, placed at a distance h 

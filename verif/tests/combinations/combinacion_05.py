@@ -207,7 +207,7 @@ def resuelveCombEstatLin(comb,db,dbHelp):
 dXMin=1e9
 dXMax=-1e9
 
-def trataResultsComb(comb):
+def procesResultVerif(comb):
   nodos= preprocessor.getNodeLoader
   nod8= nodos.getNode(8)
 
@@ -236,7 +236,7 @@ tagSave= 0
 for key in combs.getKeys():
   comb= combs[key]
   helper.solveComb(preprocessor, comb,analysis)
-  trataResultsComb(comb)
+  procesResultVerif(comb)
 
 ratio1= abs((dXMax-0.115734e-3)/0.115734e-3)
 ratio2= abs((dXMin+0.0872328e-3)/0.0872328e-3)

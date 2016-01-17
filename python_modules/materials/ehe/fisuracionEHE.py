@@ -148,7 +148,7 @@ def printParamFisBarra():
   print "alargMedioBarra= ",alargMedioBarra*1e3," por mil.\n"
   print "WkBarra= ",WkBarra*1e3," mm\n\n"
 
-def trataResultsCombFISEHE(preprocessor,nmbComb):
+def procesResultVerifFISEHE(preprocessor,nmbComb):
   # Comprobación de las secciones de hormigón frente a fisuración.
   print "Postproceso combinación: ",nmbComb,"\n"
 

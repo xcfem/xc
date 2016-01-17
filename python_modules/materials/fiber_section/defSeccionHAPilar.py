@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
+
 '''
 Definition of the variables that make up a reinforced concrete section 
 with reinforcement symmetric in both directions (as usual in columns)
@@ -60,7 +67,7 @@ class RecordRCColumnSection(defSeccionHASimple.BasicRecordRCSection):
     super(RecordRCColumnSection,self).__init__()
     self.mainBars= ColumnMainReinforcement()
 
-  def defGeomSeccHAPilar(self,matDiagType):
+  def defGeomRCColumnSection(self,matDiagType):
     '''Returns a reinforced concrete section with reinforcement 
     symmetric in both directions (as usual in columns)
     Parameters:

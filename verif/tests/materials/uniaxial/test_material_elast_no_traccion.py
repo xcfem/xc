@@ -25,7 +25,7 @@ preprocessor=  prueba.getPreprocessor
 sIni= -0.01
 sFin= 0.01
 incr= ((sFin-sIni)/Nsteps)
-ent= typical_materials.defElastNoTracMaterial(preprocessor, "ent",E)
+ent= typical_materials.defElastNoTensMaterial(preprocessor, "ent",E)
 
 j=sIni
 while(j<=sFin):

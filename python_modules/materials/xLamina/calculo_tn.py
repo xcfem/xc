@@ -17,6 +17,10 @@ def odd(number):
 
 # Ejecuta el análisis y la comprobación frente a tensiones normales
 def xLaminaCompruebaTNComb(preprocessor, nmbDiagIntSec1, nmbDiagIntSec2):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+  '''
   listaCombinaciones= []
   cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
@@ -28,13 +32,17 @@ def xLaminaCompruebaTNComb(preprocessor, nmbDiagIntSec1, nmbDiagIntSec2):
   for comb in listaCombinaciones:
     print("Resolviendo para acción: ",listaCombinaciones[i],"\n")
     resuelveCombEstatLin(comb)
-    trataResultsComb(comb,nmbDiagIntSec1,nmbDiagIntSec2)
+    procesResultVerif(comb,nmbDiagIntSec1,nmbDiagIntSec2)
 
   os.system("rm -f "+"/tmp/acciones.xci")
   os.system("rm -f "+"/tmp/cargas.xci")
   xLaminaPrintTN(nmbArch) # XXX Sacar de aquí la impresión de result.
 
-def trataResultsCombTN(preprocessor, nmbComb):
+def procesResultVerifTN(preprocessor, nmbComb):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+  '''
   #print "Postproceso combinación: ",nmbComb
   elements= preprocessor.getSets["total"].getElements
   for e in elements:
@@ -54,7 +62,11 @@ def trataResultsCombTN(preprocessor, nmbComb):
       e.setProp("MyCP",MyTmp)
       e.setProp("MzCP",MzTmp)
 
-def trataResultsCombTN2d(preprocessor, nmbComb):
+def procesResultVerifTN2d(preprocessor, nmbComb):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+  '''
   #print "Postproceso combinación: ",nmbComb
   elements= preprocessor.getSets["total"].getElements
   for e in elements:
@@ -75,13 +87,19 @@ def trataResultsCombTN2d(preprocessor, nmbComb):
       e.setProp("MzCP",MzTmp)
 
 # Imprime los resultados de la comprobación frente a tensiones normales
-def xLaminaPrintTNAnsys(preprocessor,nmbArchSalida, sectionName1, sectionName2):
+def xLaminaPrintTNAnsys(preprocessor,outputFileName, sectionName1, sectionName2):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+    outputFileName:  name of the output file containing tue results of the 
+                     verification 
+  '''
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput1.write("Section 1\n")
   texOutput2= open("/tmp/texOutput2.tmp","w")
   texOutput2.write("Section 2\n")
-  ansysOutput1= open(nmbArchSalida+".mac","w")
-  ansysOutput2= open(nmbArchSalida+"esf.mac","w")
+  ansysOutput1= open(outputFileName+".mac","w")
+  ansysOutput2= open(outputFileName+"esf.mac","w")
   #printCabeceraListadoFactorCapacidad("texOutput1","1 ("+ sectionName1 +")")
   #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ sectionName2 +")")
   fcs1= [] #Capacity factors at section 1.
@@ -121,7 +139,7 @@ def xLaminaPrintTNAnsys(preprocessor,nmbArchSalida, sectionName1, sectionName2):
   ansysOutput1.close()
   ansysOutput2.close()
     
-  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+nmbArchSalida+".tex")
+  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+outputFileName+".tex")
     
   # os.system("rm -f "+"/tmp/acciones.xci")
   # os.system("rm -f "+"/tmp/cargas.xci")
@@ -140,12 +158,16 @@ def strElementProp(eTag,nmbProp,vProp):
   return retval
 
 # Imprime los resultados de la comprobación frente a tensiones normales
-def xLaminaPrintTN(preprocessor,nmbArchSalida):
+def xLaminaPrintTN(preprocessor,outputFileName):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+  '''
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput1.write("Section 1\n")
   texOutput2= open("/tmp/texOutput2.tmp","w")
   texOutput2.write("Section 2\n")
-  xcOutput= open(nmbArchSalida+".py","w")
+  xcOutput= open(outputFileName+".py","w")
   #printCabeceraListadoFactorCapacidad("texOutput1","1 ("+ sectionName1 +")")
   #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ sectionName2 +")")
   fcs1= [] #Capacity factors at section 1.
@@ -181,7 +203,7 @@ def xLaminaPrintTN(preprocessor,nmbArchSalida):
   texOutput2.close()
   xcOutput.close()
     
-  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+nmbArchSalida+".tex")
+  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+outputFileName+".tex")
     
   # os.system("rm -f "+"/tmp/acciones.xci")
   # os.system("rm -f "+"/tmp/cargas.xci")
@@ -218,13 +240,30 @@ def lanzaCalculoTNFromAnnsysData(nmbArch, datosScc1, datosScc2, nmbArchDefHipELU
     nmbArchDefHipELU e imprime los resultados en archivos con
     el nombre nmbArchTN.*
 '''
-def lanzaCalculoTNFromXCData(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
-  ec.extraeDatos(preprocessor,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+def lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+    analysis:        type of analysis
+    intForcCombFileName: name of the file containing the forces and bending moments 
+                     obtained for each element for the combinations analyzed
+    outputFileName:  name of the output file containing tue results of the 
+                     verification 
+    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+                                (for the sections 1 and 2) to be employed 
+                                in verifications
+    mapSectionsDefinition:      file containing a dictionary with the two 
+                                sections associated with each elements to be
+                                used in the verification
+    mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
+                                diagrams of materials to be used in the verification process
+  '''
+  ec.extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   #modelo.xLaminaConstruyeModeloFicticio(preprocessor,datosScc1,datosScc2)
   #nmbDiagIntSec1= "diagInt"+datosScc1.sectionName
   #nmbDiagIntSec2= "diagInt"+datosScc2.sectionName
-  calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,trataResultsCombTN)
-  meanFCs= xLaminaPrintTN(preprocessor,nmbArchSalida)
+  calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,procesResultVerifTN)
+  meanFCs= xLaminaPrintTN(preprocessor,outputFileName)
   return meanFCs
 
 '''
@@ -239,10 +278,27 @@ def lanzaCalculoTNFromXCData(preprocessor,analysis,nmbArchCsv,nmbArchSalida, map
     debería preferirse este modo pero aún queda comprobar la obtención
     de diagramas 2D. 
 '''
-def lanzaCalculoTN2dFromXCData(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
-  ec.extraeDatos(preprocessor,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
-  calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,trataResultsCombTN2d)
-  meanFCs= xLaminaPrintTN(preprocessor,nmbArchSalida)
+def lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+    analysis:        type of analysis
+    intForcCombFileName: name of the file containing the forces and bending moments 
+                     obtained for each element for the combinations analyzed
+    outputFileName:  name of the output file containing tue results of the 
+                     verification 
+    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+                                (for the sections 1 and 2) to be employed 
+                                in verifications
+    mapSectionsDefinition:      file containing a dictionary with the two 
+                                sections associated with each elements to be
+                                used in the verification
+    mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
+                                diagrams of materials to be used in the verification process
+  '''
+  ec.extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,procesResultVerifTN2d)
+  meanFCs= xLaminaPrintTN(preprocessor,outputFileName)
   return meanFCs
 
 

@@ -11,13 +11,26 @@ from materials.xLamina import seccion_ficticia_elementos as sf
 import math
 
  
-def extraeIdsElem(preprocessor,nmbArchComb, mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
+def extraeIdsElem(preprocessor,intForcCombFileName, mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
-  de combinaciones generado en XC '''
+  de combinaciones generado en XC 
+  Parameters:
+    preprocessor:        preprocessor name
+    intForcCombFileName: name of the file containing the forces and bending moments 
+                         obtained for each element for the combinations analyzed
+   mapSectionsForEveryElement:  file containing a dictionary  such that for each                                        element of the model stores two names 
+                                (for the sections 1 and 2) to be employed 
+                                in verifications
+    mapSectionsDefinition:      file containing a dictionary with the two 
+                                sections associated with each elements to be
+                                used in the verification
+    mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
+                                diagrams of materials to be used in the verification  
+  '''
   idElements= set()
   idCombs= set()
   retval= []
-  f= open(nmbArchComb,"r")
+  f= open(intForcCombFileName,"r")
   listado= csv.reader(f)
   for lst in listado:
     if(len(lst)>0):
@@ -38,6 +51,7 @@ def extraeIdsElem(preprocessor,nmbArchComb, mapSectionsForEveryElement, mapSecti
   tagsNodesToLoad2= {}
   elements.defaultMaterial= sf.sccFICT.nmb
   for tagElem in idElements:
+    print "******************* tagElem: ", tagElem, "num. elementos: ", len(mapSectionsForEveryElement)
     nmbScc1= mapSectionsForEveryElement[tagElem][0]
     n1= nodes.newNodeXYZ(0,0,0)
     n3= nodes.newNodeXYZ(0,0,0)
@@ -91,7 +105,7 @@ def extraeIdsElem(preprocessor,nmbArchComb, mapSectionsForEveryElement, mapSecti
   for comb in idCombs:
     mapCombs[comb]= casos.newLoadPattern("default",comb)
 
-  f= open(nmbArchComb,"r")
+  f= open(intForcCombFileName,"r")
   listado= csv.reader(f)
   for lst in listado:
     if(len(lst)>0):
@@ -156,18 +170,39 @@ def extraeCargasLamina(nmbArch, nmbArchCargas):
   cargas.close()
 
 
-def extraeDatos(preprocessor,nmbArchLST, mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
+def extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
   ''' Define las cargas en el extremo libre de cada elemento a partir
-   de las combinaciones de un archivo de salida generado en XC '''
-  return extraeIdsElem(preprocessor,nmbArchLST,mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams)
+   de las combinaciones de un archivo de salida generado en XC 
+  Parameters:
+    preprocessor:    preprocessor name
+    intForcCombFileName: name of the file containing the forces and bending moments 
+                     obtained for each element for the combinations analyzed
+    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+                                (for the sections 1 and 2) to be employed 
+                                in verifications
+    mapSectionsDefinition:      file containing a dictionary with the two 
+                                sections associated with each elements to be
+                                used in the verification
+    mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
+                                diagrams of materials to be used in the verification process
+  '''
+  return extraeIdsElem(preprocssor,intForcCombFileName,mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams)
 
-def creaElems(preprocessor,nmbArchComb, mapSectionsForEveryElement):
+def creaElems(preprocessor,intForcCombFileName, mapSectionsForEveryElement):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
-  de combinaciones generado en XC '''
+  de combinaciones generado en XC 
+  Parameters:
+    preprocessor:    preprocessor name
+    intForcCombFileName: name of the file containing the forces and bending moments 
+                     obtained for each element for the combinations analyzed
+    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+                                (for the sections 1 and 2) to be employed 
+                                in verifications
+  '''
   idElements= set()
   idCombs= set()
   retval= []
-  f= open(nmbArchComb,"r")
+  f= open(intForcCombFileName,"r")
   listado= csv.reader(f)
   for lst in listado:
     if(len(lst)>0):
@@ -223,7 +258,7 @@ def creaElems(preprocessor,nmbArchComb, mapSectionsForEveryElement):
   for comb in idCombs:
     mapCombs[comb]= casos.newLoadPattern("default",comb)
 
-  f= open(nmbArchComb,"r")
+  f= open(intForcCombFileName,"r")
   listado= csv.reader(f)
   for lst in listado:
     if(len(lst)>0):

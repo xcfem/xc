@@ -93,16 +93,16 @@
 \newcommand{\mapInteractionDiagrams}{{\tt mapInteractionDiagrams} & \\ & data structure that links each section name and direction with the interaction diagram object to be used for its verification}
 \newcommand{\mapSectionsDefinition}{{\tt mapSectionsDefinition} & \\ & data structure that links each section name and direction with the respective record that contains the section definition parameters }
 \newcommand{\mapSectionsForEveryElement}{{\tt mapSectionsForEveryElement} & \\ & data structure, such that, for each shell element: {\tt mapSectionsForEveryElement[tagElem]=[nmbScc1,nmbScc2]}, where {\tt nmbScc1} and {\tt nmbScc2} are the names identifying the sections to be used in 1 and 2 directions respectively}
-\newcommand{\mdlr}{{\tt mdlr} & modeler name}
+\newcommand{\preprocessor}{{\tt preprocessor} & preprocessor name}
 \newcommand{\MeAxisOne}[1]{{\tt Me1{#1}} & yield moment of the rectangular section about the axis 1}
 \newcommand{\N}{{\tt N} & axial force}
 \newcommand{\name}[1]{{\tt name} & name identifying the {#1}}
 \newcommand{\nDivIJ}{{\tt nDivIJ} & number of cells in IJ (width) direction}
 \newcommand{\nDivJK}{{\tt nDivJK} & number of cells in JK  (height) direction}
-\newcommand{\nmbArchCsv}[2]{{\tt nmbArchCsv} & name of the file where are to be found the shell element forces and moments obtained for each #2 combination, to be used in the verification of the {#1}. Directory path, file name and extension must be specified. The file contains a list of the following items (see the positive directions of the forces and moments in figure \ref{shell_forces_moments}):
+\newcommand{\intForcCombFileName}[2]{{\tt intForcCombFileName} & name of the file where are to be found the shell element forces and moments obtained for each #2 combination, to be used in the verification of the {#1}. Directory path, file name and extension must be specified. The file contains a list of the following items (see the positive directions of the forces and moments in figure \ref{shell_forces_moments}):
 $ULS_{id}\ elem_{id}\ N_1\ N_2\ N_{12}\ M_1 M_2\ M_{12}\ Q_1\ Q_2$ }
 
-\newcommand{\nmbArchSalida}{{\tt nmbArchSalida} & name of the output files (directory path and file name without extension) where to write the results of the verification}  
+\newcommand{\outputFileName}{{\tt outputFileName} & name of the output files (directory path and file name without extension) where to write the results of the verification}  
 
 \newcommand{\nmbSccOne}{{\tt nmbScc1} & name identifying the class object used to define the properties of the section orthogonal to direction 1}
 \newcommand{\nmbSccTwo}{{\tt nmbScc2} & name identifying the class object used to define the properties of the section orthogonal to direction 1}
@@ -111,8 +111,8 @@ $ULS_{id}\ elem_{id}\ N_1\ N_2\ N_{12}\ M_1 M_2\ M_{12}\ Q_1\ Q_2$ }
 \newcommand{\qkSlab}{{\tt qk} & characteristic uniformly distributed load on the slab}
 \newcommand{\qload}{{\tt q} &  uniformly distributed load}
 \newcommand{\rhoX}{{\tt rho} &  mass density}
-\newcommand{\trataResultsCombFIS}{{\tt trataResultsCombFIS} & name of the function to be used for carrying out the section verification, e.g. {\tt materials.sia262.crackControlSIA262.trataResultsCombFISSIA262PlanB}}
-\newcommand{\trataResultsCombV}{{\tt trataResultsCombV} & name of the function to be used for carrying out the section verification, e.g. {\tt shearSIA262.trataResultsCombV}}
+\newcommand{\procesResultVerifFIS}{{\tt procesResultVerifFIS} & name of the function to be used for carrying out the section verification, e.g. {\tt materials.sia262.crackControlSIA262.procesResultVerifFISSIA262PlanB}}
+\newcommand{\procesResultVerifV}{{\tt procesResultVerifV} & name of the function to be used for carrying out the section verification, e.g. {\tt shearSIA262.procesResultVerifV}}
 \newcommand{\V}{{\tt V} & shear force}
 \newcommand{\Wyel}[1]{{\tt Wyel{#1}} & elastic section modulus about the local y-axis}
 \newcommand{\Wzel}[1]{{\tt Wzel()} & elastic section modulus about the local z-axis}

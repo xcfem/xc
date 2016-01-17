@@ -118,7 +118,7 @@ execfile(pth+"/def_hip_elu.py")
 NMin1= 6.023e23
 NMin2= 6.023e23
 
-def trataResultsComb(nmbComb):
+def procesResultVerif(nmbComb):
   elementos= preprocessor.getElementLoader
   elem1= elementos.getElement(1)
   elem1.getResistingForce()
@@ -140,7 +140,7 @@ from solution import resuelve_combinacion as rc
 
 for key in combs.getKeys():
   rc.resuelveComb(preprocessor, key,analysis,numSteps)
-  trataResultsComb(key)
+  procesResultVerif(key)
 
 NMin1Teor= 440.7e3
 NMin2Teor= 397.5e3

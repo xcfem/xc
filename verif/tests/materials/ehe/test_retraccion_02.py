@@ -206,7 +206,7 @@ def resuelveCombEstatLin(tagComb,comb,tagSaveFase0):
 dXMin=1e9
 dXMax=-1e9
 
-def trataResultsComb(tagComb, nmbComb):
+def procesResultVerif(tagComb, nmbComb):
   nodos= preprocessor.getNodeLoader
   nod8= nodos.getNode(8)
   deltaX= nod8.getDisp[0] # Desplazamiento del nodo 2 según z
@@ -285,7 +285,7 @@ tagSave= 0
 for key in combs.getKeys():
   comb= combs[key]
   resuelveCombEstatLin(comb.tag,comb,tagSaveFase0)
-  trataResultsComb(comb.tag,comb.getName)
+  procesResultVerif(comb.tag,comb.getName)
 
 dXMaxTeor= -0.752509e-3
 ratio1= abs(((dXMax-dXMaxTeor)/dXMaxTeor))

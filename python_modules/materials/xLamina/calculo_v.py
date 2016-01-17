@@ -14,12 +14,17 @@ import scipy
 import os
 
  
-def xLaminaPrintVAnsys(nmbArchSalida, sectionName1, sectionName2):
+def xLaminaPrintVAnsys(outputFileName, sectionName1, sectionName2):
+  '''
+  Parameters:
+    outputFileName:  name of the output file containing tue results of the 
+                     verification 
+  '''
   # Imprime los resultados de la comprobación frente a cortante
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
-  ansysOutput1= open(nmbArchSalida+".mac","w")
-  ansysOutput2= open(nmbArchSalida+"esf.mac","w")
+  ansysOutput1= open(outputFileName+".mac","w")
+  ansysOutput2= open(outputFileName+"esf.mac","w")
   printCabeceraListadoCortante("texOutput1","1 ("+ sectionName1 +")")
   printCabeceraListadoCortante("texOutput2","2 ("+ sectionName2 +")")
   for e in elementos:
@@ -45,7 +50,7 @@ def xLaminaPrintVAnsys(nmbArchSalida, sectionName1, sectionName2):
   ansysOutput1.close()
   ansysOutput2.close()
     
-  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+nmbArchSalida+".tex")
+  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+outputFileName+".tex")
     
   # os.system("rm -f "+"/tmp/acciones.xci")
   # os.system("rm -f "+"/tmp/cargas.xci")
@@ -61,11 +66,17 @@ def strElementProp(eTag,nmbProp,vProp):
   retval+= ',' + str(vProp) + ")\n"
   return retval
 
-def xLaminaPrintV(preprocessor, nmbArchSalida):
+def xLaminaPrintV(preprocessor, outputFileName):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+    outputFileName:  name of the output file containing tue results of the 
+                     verification 
+  '''
   # Imprime los resultados de la comprobación frente a cortante
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
-  xcOutput= open(nmbArchSalida+".py","w")
+  xcOutput= open(outputFileName+".py","w")
   #printCabeceraListadoCortante("texOutput1","1 ("+ sectionName1 +")")
   #printCabeceraListadoCortante("texOutput2","2 ("+ sectionName2 +")")
   #strHeader= "eTag & idSection & HIPCP & NCP kN & MyCP kN & MzCP kN & Vu1CP kN & VsuCP kN & Vu2CP kN & VuCP kN & FCCP \\\\\n"
@@ -123,7 +134,7 @@ def xLaminaPrintV(preprocessor, nmbArchSalida):
   texOutput2.close()
   xcOutput.close()
     
-  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+nmbArchSalida+".tex")
+  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+outputFileName+".tex")
     
   # os.sys("rm -f "+"/tmp/acciones.xci")
   # os.sys("rm -f "+"/tmp/cargas.xci")
@@ -149,7 +160,7 @@ def lanzaCalculoVFromAnsysData(nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArc
   xLaminaCalculaCombEstatNoLin(nmbArchDefHipELU)
   xLaminaPrintV(nmbArch+"V",deref(nmbRegDatosScc1).sectionName,deref(nmbRegDatosScc2).sectionName)
 
-def lanzaCalculoV(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,trataResultsCombV):
+def lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,procesResultVerifV):
   '''
    Lanza la comprobación de cortante en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -158,11 +169,27 @@ def lanzaCalculoV(preprocessor,analysis,nmbArchCsv,nmbArchSalida, mapSectionsFor
       datosScc1 y datosScc2, las combinaciones definidas en el archivo
       nmbArchDefHipELU e imprime los resultados en archivos con
       el nombre nmbArchTN.*
+  Parameters:
+    preprocessor:    preprocessor name
+    analysis:        type of analysis
+    intForcCombFileName: name of the file containing the forces and bending moments 
+                     obtained for each element for the combinations analyzed
+    outputFileName:  name of the output file containing tue results of the 
+                     verification 
+    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+                                (for the sections 1 and 2) to be employed 
+                                in verifications
+    mapSectionsDefinition:      file containing a dictionary with the two 
+                                sections associated with each elements to be
+                                used in the verification
+    mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
+                                diagrams of materials to be used in the verification process
+    procesResultVerif:          processing of the results of the verification          
   '''
-  elems= ec.extraeDatos(preprocessor,nmbArchCsv, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  elems= ec.extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   #cortanteEHE.defVarsControlVEHE(elems)
   shearSIA262.defVarsControlVSIA262(elems)
-  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,trataResultsCombV)
-  meanFCs= xLaminaPrintV(preprocessor,nmbArchSalida)
+  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerifV)
+  meanFCs= xLaminaPrintV(preprocessor,outputFileName)
   return meanFCs
 

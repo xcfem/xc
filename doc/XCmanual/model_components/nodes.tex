@@ -24,7 +24,7 @@ To create a node you can use the following commands:
 \noindent where:
 
 \begin{description}
-\item{nodos:} is a node container obtained from the modeler.
+\item{nodos:} is a node container obtained from the preprocessor.
 \item{tag:} is an integer that identifies the node in the model.
 \item{(x,y) or (x,y,z):} are the cartesian coordinates that define node's position.
 \end{description}
@@ -33,7 +33,7 @@ To create a node you can use the following commands:
 Nodes definition in typical elastic FE models.
 \begin{verbatim}
 from model import predefined_spaces as ps
-nodos= mdlr.getNodeLoader
+nodos= preprocessor.getNodeLoader
 \end{verbatim}
 \begin{center} 
 \begin{longtable}{ll}
