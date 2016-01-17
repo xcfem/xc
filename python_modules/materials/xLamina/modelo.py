@@ -41,11 +41,11 @@ def saveInternalForcesForCombs(feProblem,fName,loadCombinations,elemSet,fConv= 1
 
 # Construye el modelo para la comprobación de tensiones normales
 def xLaminaConstruyeModeloFicticio(preprocessor,datosScc1, datosScc2):
-   '''
+  '''
   Parameters:
     preprocessor:    preprocessor name
   '''
- nodos= preprocessor.getNodeLoader
+  nodos= preprocessor.getNodeLoader
 
   predefined_spaces.gdls_resist_materiales3D(nodos)
 

@@ -51,7 +51,6 @@ def extraeIdsElem(preprocessor,intForcCombFileName, mapSectionsForEveryElement, 
   tagsNodesToLoad2= {}
   elements.defaultMaterial= sf.sccFICT.nmb
   for tagElem in idElements:
-    print "******************* tagElem: ", tagElem, "num. elementos: ", len(mapSectionsForEveryElement)
     nmbScc1= mapSectionsForEveryElement[tagElem][0]
     n1= nodes.newNodeXYZ(0,0,0)
     n3= nodes.newNodeXYZ(0,0,0)
@@ -186,7 +185,7 @@ def extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement, ma
     mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
                                 diagrams of materials to be used in the verification process
   '''
-  return extraeIdsElem(preprocssor,intForcCombFileName,mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams)
+  return extraeIdsElem(preprocessor,intForcCombFileName,mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams)
 
 def creaElems(preprocessor,intForcCombFileName, mapSectionsForEveryElement):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
@@ -227,7 +226,6 @@ def creaElems(preprocessor,intForcCombFileName, mapSectionsForEveryElement):
     fix_node_6dof.fixNode6DOF(coacciones,n1.tag)
     tagsNodesToLoad1[tagElem]= n3.tag
     elements.defaultMaterial= nmbScc1
-    print "nmbScc1= ", nmbScc1
     e1= elements.newElement("zero_length_section",xc.ID([n1.tag,n3.tag]))
     retval.append(e1)
     e1.setProp("idElem", tagElem) #Elemento que se comprueba
@@ -236,7 +234,6 @@ def creaElems(preprocessor,intForcCombFileName, mapSectionsForEveryElement):
 
     nmbScc2= mapSectionsForEveryElement[tagElem][1]
     elements.defaultMaterial= nmbScc2
-    print "nmbScc2= ", nmbScc2
     n2= nodes.newNodeXYZ(0,0,0)
     n4= nodes.newNodeXYZ(0,0,0)
     fix_node_6dof.fixNode6DOF(coacciones,n2.tag)
