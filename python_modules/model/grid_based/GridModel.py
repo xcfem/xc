@@ -547,6 +547,9 @@ class GridModel(object):
     return st
 
   def setGrid(self,xList,yList,zList):
+    '''Returns the grid of coordinates in the three axis
+    Parameters: 
+    '''
     self.grid= grid.ijkGrid(self.getPreprocessor(),xList,yList,zList)
     return self.grid
 
