@@ -26,6 +26,13 @@ class NamedObjectsMap(dict):
     self[obj.name]= obj
 
 class MaterialData(object):
+  '''Base class to construct some material classes
+  Attributes:
+    name:         name identifying the material or section
+    E:            Young’s modulus of the material
+    nu:           Poisson’s ratio
+    rho:          mass density
+  '''
   def __init__(self,name,E,nu,rho):
     self.name= name
     self.E= E
@@ -33,6 +40,14 @@ class MaterialData(object):
     self.rho= rho
 
 class DeckMaterialData(MaterialData):
+  '''Isotropic elastic section-material appropiate for plate and shell analysis
+  Attributes:
+    name:         name identifying the section
+    E:            Young’s modulus of the material
+    nu:           Poisson’s ratio
+    rho:          mass density
+    thickness:    overall depth of the section
+  '''
   def __init__(self,name,E,nu,rho,thickness):
     super(DeckMaterialData,self).__init__(name,E,nu,rho)
     self.thickness= thickness
@@ -42,6 +57,16 @@ class DeckMaterialData(MaterialData):
     typical_materials.defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.getAreaDensity(),self.thickness)
 
 class BeamMaterialData(MaterialData):
+  '''Constructs an elastic section appropiate for 3D beam analysis, 
+  including shear deformations.
+  Attributes:
+    name:         name identifying the section
+    E:            Young’s modulus of the material
+    nu:           Poisson’s ratio
+    rho:          mass density
+    b:            cross-section width (parallel to local z axis)
+    h:            cross-section height (parallel to local y axis)
+  '''
   def __init__(self,name,E,nu,rho,b,h):
     super(BeamMaterialData,self).__init__(name,E,nu,rho)
     self.b= b
