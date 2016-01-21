@@ -13,26 +13,42 @@ import geom
 import xc
 
 class IJKRange(object):
+  '''Defines a range of indexes i,j,k in the grid to be used
+  select the region bounded by the coordinates associated with
+  those indexes.
+  Attributes:
+    ijkMin: list with minimum value of indexes [minIindex,minJindex,minKindex]
+    ijkMin: list with maximum value of indexes [maxIindex,maxJindex,maxKindex]
+  '''
   def __init__(self,ijkMin,ijkMax):
     self.ijkMin= ijkMin
     self.ijkMax= ijkMax
   def getIMin(self):
+    '''returns the value of the index I minimum in the range '''
     return self.ijkMin[0]
   def getIMax(self):
+    '''returns the value of the index I maximum in the range '''
     return self.ijkMax[0]
   def getJMin(self):
+    '''returns the value of the index J minimum in the range '''
     return self.ijkMin[1]
   def getJMax(self):
+    '''returns the value of the index J maximum in the range '''
     return self.ijkMax[1]
   def getKMin(self):
+    '''returns the value of the index K minimum in the range '''
     return self.ijkMin[2]
   def getKMax(self):
+    '''returns the value of the index K maximum in the range '''
     return self.ijkMax[2]
   def getIRange(self):
+    '''returns a list with the range of indexes between minIindex and maxIindex '''
     return range(self.getIMin(),self.getIMax())
   def getJRange(self):
+    '''returns a list with the range of index between minJindex and maxJindex '''
     return range(self.getJMin(),self.getJMax())
   def getKRange(self):
+    '''returns a list with the range of indexes between minKindex and maxKindex '''
     return range(self.getKMin(),self.getKMax())
 
 
@@ -51,6 +67,13 @@ def getLin2Pts(lstLinBusq,tPto1,tPto2):
         return l
 
 class moveRange(object):
+  '''Applies a displacement to a range of grid points
+  Attributes:
+    range: range of indexes in the grid 
+           e.g.: grid.IJKRange([minI,minJ,minK],[maxI,maxJ,maxK])
+    vDisp: list of displacements in global X, Y, Z directions
+           e.g. [dispX,dispY,dispZ]
+  '''
   def __init__(self,range,vDisp):
     self.range= range
     self.vDisp= vDisp

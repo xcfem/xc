@@ -50,7 +50,14 @@ def getJTorsion( b, h):
   return retval
 
 class RectangularSection(sp.sectionProperties):
-  """Rectangular section parameters"""
+  """Rectangular section geometric parameters
+  Attributes:
+    name:         name identifying the section
+    b:            cross-section width (parallel to local z axis)
+    h:            cross-section height (parallel to local y axis)
+    E:            Young’s modulus of the material
+    nu:           Poisson’s ratio
+  """
   def __init__(self,name,b,h,E,nu):
     super(RectangularSection,self).__init__(name,E,nu)
     self.b= b
