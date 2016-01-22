@@ -40,7 +40,7 @@ namespace XC {
 class ProtoBeam3d : public Element1D
   {
   protected:
-    ConstantesSecc3d ctes_scc; //Características de la seccion E,A,Iy,...
+    ConstantesSecc3d ctes_scc; //Section mechanical properties E,A,Iy,...
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
     void set_material(const Material *m);

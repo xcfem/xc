@@ -52,6 +52,7 @@
 #define BeamWithHinges2d_h
 
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf2d.h>
+#include "material/section/repres/ConstantesSecc2d.h"
 #include "domain/mesh/element/fvectors/FVectorBeamColumn2d.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
@@ -72,7 +73,7 @@ class Renderer;
 class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
   {
   private:
-    double E, A, I;
+    ConstantesSecc2d ctes_scc; //Section mechanical properties E,A,Iy,...
     double beta1, beta2;
     double rho;
 

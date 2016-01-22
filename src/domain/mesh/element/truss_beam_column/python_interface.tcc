@@ -49,6 +49,7 @@ class_<XC::BeamColumnWithSectionFDTrf3d, bases<XC::BeamColumnWithSectionFD>, boo
   .def("getVDirEjeFuerteGlobales",make_function(&XC::BeamColumnWithSectionFDTrf3d::getVDirEjeFuerteGlobales, return_value_policy<copy_const_reference>()))
   .def("getVDirEjeDebilGlobales",make_function(&XC::BeamColumnWithSectionFDTrf3d::getVDirEjeDebilGlobales, return_value_policy<copy_const_reference>()))
    ;
+#include "beamWithHinges/python_interface.tcc"
 
 class_<XC::NLForceBeamColumn2dBase, bases<XC::BeamColumnWithSectionFDTrf2d>, boost::noncopyable >("NLForceBeamColumn2dBase", no_init)
   .add_property("rho", &XC::NLForceBeamColumn2dBase::getRho,&XC::NLForceBeamColumn2dBase::setRho)
