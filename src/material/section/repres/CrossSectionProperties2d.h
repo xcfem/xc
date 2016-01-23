@@ -24,10 +24,10 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ConstantesSecc2d.h
+//CrossSectionProperties2d.h
 
-#ifndef ConstantesSecc2d_h
-#define ConstantesSecc2d_h
+#ifndef CrossSectionProperties2d_h
+#define CrossSectionProperties2d_h
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "utility/actor/actor/MovableObject.h"
@@ -46,7 +46,7 @@ class SectionForceDeformation;
 //
 //! @brief Propiedades mecánicas de una sección (area, inercias,...)
 //! en un problema bidimensional (tres grados de libertad por sección).
-class ConstantesSecc2d: public EntCmd, public MovableObject
+class CrossSectionProperties2d: public EntCmd, public MovableObject
   {
   private:
     double e, g, a, i, alpha;
@@ -58,9 +58,9 @@ class ConstantesSecc2d: public EntCmd, public MovableObject
     int recvData(const CommParameters &);
 
   public:
-    ConstantesSecc2d(double E, double A, double I, double G= 0.0,double alpha= 0.0);
-    ConstantesSecc2d(double EA, double EI);
-    ConstantesSecc2d(void);
+    CrossSectionProperties2d(double E, double A, double I, double G= 0.0,double alpha= 0.0);
+    CrossSectionProperties2d(double EA, double EI);
+    CrossSectionProperties2d(void);
 
     bool check_values(void);
     inline double &E(void)
@@ -124,7 +124,7 @@ class ConstantesSecc2d: public EntCmd, public MovableObject
     void Print (std::ostream &s, int flag = 0) const;
   };
 
-std::ostream &operator<<(std::ostream &os,const ConstantesSecc2d &c);
+std::ostream &operator<<(std::ostream &os,const CrossSectionProperties2d &c);
 
 } // end of XC namespace
 

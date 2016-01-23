@@ -61,7 +61,7 @@
 #include "boost/lexical_cast.hpp"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/element/fvectors/FVector.h"
-#include "material/section/repres/ConstantesSecc3d.h"
+#include "material/section/repres/CrossSectionProperties3d.h"
 #include "domain/mesh/element/Element1D.h"
 
 XC::Vector XC::Beam3dUniformLoad::data(4);
@@ -158,7 +158,7 @@ void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const
   }
 
 //! @brief Agrega las deformaciones elásticas al vector v0.
-void XC::Beam3dUniformLoad::addElasticDeformations(const double &L,const ConstantesSecc3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
+void XC::Beam3dUniformLoad::addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
   {
     // Length of elastic interior
     const double Le = L-lpI-lpJ;

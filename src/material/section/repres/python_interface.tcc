@@ -21,35 +21,35 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-const double &(XC::ConstantesSecc2d::*getE)(void) const= &XC::ConstantesSecc2d::E;
-const double &(XC::ConstantesSecc2d::*getG)(void) const= &XC::ConstantesSecc2d::G;
-const double &(XC::ConstantesSecc2d::*getA)(void) const= &XC::ConstantesSecc2d::A;
-const double &(XC::ConstantesSecc2d::*getAlpha)(void) const= &XC::ConstantesSecc2d::Alpha;
-const double &(XC::ConstantesSecc2d::*getI)(void) const= &XC::ConstantesSecc2d::I;
-class_<XC::ConstantesSecc2d, bases<EntCmd> >("ConstantesSecc2d")
-  .add_property("E", make_function( getE, return_value_policy<return_by_value>() ), &XC::ConstantesSecc2d::setE)
-  .add_property("G", make_function( getG, return_value_policy<return_by_value>() ), &XC::ConstantesSecc2d::setG)
-  .add_property("A", make_function( getA, return_value_policy<return_by_value>() ), &XC::ConstantesSecc2d::setA)
-  .add_property("Alpha", make_function( getAlpha, return_value_policy<return_by_value>() ), &XC::ConstantesSecc2d::setAlpha)
-  .add_property("I", make_function( getI, return_value_policy<return_by_value>() ), &XC::ConstantesSecc2d::setI)
+const double &(XC::CrossSectionProperties2d::*getE)(void) const= &XC::CrossSectionProperties2d::E;
+const double &(XC::CrossSectionProperties2d::*getG)(void) const= &XC::CrossSectionProperties2d::G;
+const double &(XC::CrossSectionProperties2d::*getA)(void) const= &XC::CrossSectionProperties2d::A;
+const double &(XC::CrossSectionProperties2d::*getAlpha)(void) const= &XC::CrossSectionProperties2d::Alpha;
+const double &(XC::CrossSectionProperties2d::*getI)(void) const= &XC::CrossSectionProperties2d::I;
+class_<XC::CrossSectionProperties2d, bases<EntCmd> >("CrossSectionProperties2d")
+  .add_property("E", make_function( getE, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setE)
+  .add_property("G", make_function( getG, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setG)
+  .add_property("A", make_function( getA, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setA)
+  .add_property("Alpha", make_function( getAlpha, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setAlpha)
+  .add_property("I", make_function( getI, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setI)
   ;
 
-const double &(XC::ConstantesSecc3d::*getIz)(void) const= &XC::ConstantesSecc3d::Iz;
-const double &(XC::ConstantesSecc3d::*getIy)(void) const= &XC::ConstantesSecc3d::Iy;
-const double &(XC::ConstantesSecc3d::*getIyz)(void) const= &XC::ConstantesSecc3d::Iyz;
-const double &(XC::ConstantesSecc3d::*getJ)(void) const= &XC::ConstantesSecc3d::J;
-class_<XC::ConstantesSecc3d, bases<XC::ConstantesSecc2d> >("ConstantesSecc3d")
-  .add_property("Iz", make_function( getIz, return_value_policy<return_by_value>() ), &XC::ConstantesSecc3d::setIz)
-  .add_property("Iy", make_function( getIy, return_value_policy<return_by_value>() ), &XC::ConstantesSecc3d::setIy)
-  .add_property("Iyz", make_function( getIyz, return_value_policy<return_by_value>() ), &XC::ConstantesSecc3d::setIyz)
-  .add_property("J", make_function( getJ, return_value_policy<return_by_value>() ), &XC::ConstantesSecc3d::setJ)
-  .def("gira",&XC::ConstantesSecc3d::gira,"Rotate section (deprecated).")
-  .def("getI1",&XC::ConstantesSecc3d::getI1)
-  .def("getI2",&XC::ConstantesSecc3d::getI2)
-  .def("getVDirEje1",&XC::ConstantesSecc3d::getVDirEje1)
-  .def("getVDirEje2",&XC::ConstantesSecc3d::getVDirEje2)
-  .def("getVDirEjeFuerte",&XC::ConstantesSecc3d::getVDirEjeFuerte)
-  .def("getVDirEjeDebil",&XC::ConstantesSecc3d::getVDirEjeDebil)
+const double &(XC::CrossSectionProperties3d::*getIz)(void) const= &XC::CrossSectionProperties3d::Iz;
+const double &(XC::CrossSectionProperties3d::*getIy)(void) const= &XC::CrossSectionProperties3d::Iy;
+const double &(XC::CrossSectionProperties3d::*getIyz)(void) const= &XC::CrossSectionProperties3d::Iyz;
+const double &(XC::CrossSectionProperties3d::*getJ)(void) const= &XC::CrossSectionProperties3d::J;
+class_<XC::CrossSectionProperties3d, bases<XC::CrossSectionProperties2d> >("CrossSectionProperties3d")
+  .add_property("Iz", make_function( getIz, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setIz)
+  .add_property("Iy", make_function( getIy, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setIy)
+  .add_property("Iyz", make_function( getIyz, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setIyz)
+  .add_property("J", make_function( getJ, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setJ)
+  .def("gira",&XC::CrossSectionProperties3d::gira,"Rotate section (deprecated).")
+  .def("getI1",&XC::CrossSectionProperties3d::getI1)
+  .def("getI2",&XC::CrossSectionProperties3d::getI2)
+  .def("getVDirEje1",&XC::CrossSectionProperties3d::getVDirEje1)
+  .def("getVDirEje2",&XC::CrossSectionProperties3d::getVDirEje2)
+  .def("getVDirEjeFuerte",&XC::CrossSectionProperties3d::getVDirEjeFuerte)
+  .def("getVDirEjeDebil",&XC::CrossSectionProperties3d::getVDirEjeDebil)
   ;
 
 class_<XC::DiscretBase, bases<EntConNmb>, boost::noncopyable >("DiscretBase", no_init)
@@ -110,8 +110,8 @@ class_<XC::SeccionInerte, bases<EntCmd>, boost::noncopyable >("SeccionInerte", n
 //.def("getISeccHomogeneizada",&XC::SeccionInerte::getISeccHomogeneizada)
 //.def("getISeccHomogeneizada",&XC::SeccionInerte::getISeccHomogeneizada)
 
-  .def("getConstantesSecc3d",&XC::SeccionInerte::getConstantesSecc3d)
-  .def("getConstantesSecc2d",&XC::SeccionInerte::getConstantesSecc2d)
+  .def("getCrossSectionProperties3d",&XC::SeccionInerte::getCrossSectionProperties3d)
+  .def("getCrossSectionProperties2d",&XC::SeccionInerte::getCrossSectionProperties2d)
   ;
 
 #include "cell/python_interface.tcc"

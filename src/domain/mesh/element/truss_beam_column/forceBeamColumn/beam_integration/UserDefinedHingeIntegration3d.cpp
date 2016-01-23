@@ -100,7 +100,7 @@ XC::UserDefinedHingeIntegration3d::UserDefinedHingeIntegration3d(int npL,
                                                              int npR,
                                                              const XC::Vector &ptR,
                                                              const XC::Vector &wtR,
-                                                             const ConstantesSecc3d &cc)
+                                                             const CrossSectionProperties3d &cc)
   : BeamIntegration(BEAM_INTEGRATION_TAG_UserHinge3d),
     ptsL(npL), wtsL(npL), ptsR(npR), wtsR(npR), ctes_scc(cc)
   {
@@ -128,7 +128,7 @@ XC::UserDefinedHingeIntegration3d::UserDefinedHingeIntegration3d(int npL,
         wtsR(i) = wtR(i);
       }
   }
-XC::UserDefinedHingeIntegration3d::UserDefinedHingeIntegration3d(const ConstantesSecc3d &cts):
+XC::UserDefinedHingeIntegration3d::UserDefinedHingeIntegration3d(const CrossSectionProperties3d &cts):
   BeamIntegration(BEAM_INTEGRATION_TAG_UserHinge3d), ctes_scc(cts) {}
 
 void XC::UserDefinedHingeIntegration3d::getSectionLocations(int numSections,double L, double *xi) const

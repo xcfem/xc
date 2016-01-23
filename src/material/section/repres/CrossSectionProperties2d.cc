@@ -24,9 +24,9 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ConstantesSecc2d.cc
+//CrossSectionProperties2d.cc
 
-#include <material/section/repres/ConstantesSecc2d.h>
+#include <material/section/repres/CrossSectionProperties2d.h>
 #include "domain/mesh/element/Information.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include <utility/matrix/Vector.h>
@@ -36,39 +36,39 @@
 #include "domain/component/Parameter.h"
 #include "material/section/SectionForceDeformation.h"
 
-XC::Matrix XC::ConstantesSecc2d::ks2(2,2);
-XC::Matrix XC::ConstantesSecc2d::ks3(3,3);
+XC::Matrix XC::CrossSectionProperties2d::ks2(2,2);
+XC::Matrix XC::CrossSectionProperties2d::ks3(3,3);
 
-bool XC::ConstantesSecc2d::check_values(void)
+bool XC::CrossSectionProperties2d::check_values(void)
   {
     bool retval= true;
     if(e <= 0.0)
       {
-        std::clog << "ConstantesSecc2d::check_values -- Input E <= 0.0 ... setting E to 1.0\n";
+        std::clog << "CrossSectionProperties2d::check_values -- Input E <= 0.0 ... setting E to 1.0\n";
         e= 1.0;
         retval= false;
       }
     if(g <= 0.0)
       {
-        std::clog << "ConstantesSecc2d::check_values -- Input G <= 0.0 ... setting G to 1.0\n";
+        std::clog << "CrossSectionProperties2d::check_values -- Input G <= 0.0 ... setting G to 1.0\n";
         g= 1.0;
         retval= false;
       }
     if(a <= 0.0)
       {
-        std::clog << "ConstantesSecc2d::check_values -- Input A <= 0.0 ... setting A to 1.0\n";
+        std::clog << "CrossSectionProperties2d::check_values -- Input A <= 0.0 ... setting A to 1.0\n";
         a= 1.0;
         retval= false;
       }
     if(i <= 0.0)
       {
-        std::clog << "ConstantesSecc2d::check_values -- Input I <= 0.0 ... setting I to 1.0\n";
+        std::clog << "CrossSectionProperties2d::check_values -- Input I <= 0.0 ... setting I to 1.0\n";
         i= 1.0;
         retval= false;
       }
     if(alpha <= 0.0)
       {
-        std::clog << "ConstantesSecc2d::check_values -- Input alpha <= 0.0 ... setting alpha to 1.0\n";
+        std::clog << "CrossSectionProperties2d::check_values -- Input alpha <= 0.0 ... setting alpha to 1.0\n";
         alpha= 1.0;
         retval= false;
       }
@@ -76,21 +76,21 @@ bool XC::ConstantesSecc2d::check_values(void)
   }
 
 //! @brief Constructor.
-XC::ConstantesSecc2d::ConstantesSecc2d(void)
+XC::CrossSectionProperties2d::CrossSectionProperties2d(void)
   :EntCmd(), MovableObject(0), e(0), g(0.0) , a(0), i(0), alpha(0) {}
 
 //! @brief Constructor.
-XC::ConstantesSecc2d::ConstantesSecc2d(double EA_in, double EI_in)
+XC::CrossSectionProperties2d::CrossSectionProperties2d(double EA_in, double EI_in)
   : EntCmd(), MovableObject(0), e(1), g(0.0), a(EA_in), i(EI_in), alpha(0)
   { check_values(); }
 
 //! @brief Constructor (seccciones 2d).
-XC::ConstantesSecc2d::ConstantesSecc2d(double E_in, double A_in, double I_in, double G_in, double a)
+XC::CrossSectionProperties2d::CrossSectionProperties2d(double E_in, double A_in, double I_in, double G_in, double a)
   : EntCmd(), MovableObject(0), e(E_in), g(G_in), a(A_in), i(I_in), alpha(a)
   { check_values(); }
 
 //! @brief Devuelve la matriz de rigidez tangente.
-const XC::Matrix &XC::ConstantesSecc2d::getSectionTangent2x2(void) const
+const XC::Matrix &XC::CrossSectionProperties2d::getSectionTangent2x2(void) const
   {
     ks2(0,0) = EA(); //Rigidez frente al esfuerzo axil.
     ks2(1,1) = EI(); //Rigidez frente al giro en torno a z.
@@ -98,11 +98,11 @@ const XC::Matrix &XC::ConstantesSecc2d::getSectionTangent2x2(void) const
   }
 
 //! @brief Devuelve la matriz de rigidez noval.
-const XC::Matrix &XC::ConstantesSecc2d::getInitialTangent2x2(void) const
+const XC::Matrix &XC::CrossSectionProperties2d::getInitialTangent2x2(void) const
   { return getSectionTangent2x2(); }
 
 //! @brief Devuelve la matriz de flexibilidad.
-const XC::Matrix &XC::ConstantesSecc2d::getSectionFlexibility2x2(void) const
+const XC::Matrix &XC::CrossSectionProperties2d::getSectionFlexibility2x2(void) const
   {
     ks2(0,0) = 1.0/(EA());
     ks2(1,1) = 1.0/(EI());
@@ -110,11 +110,11 @@ const XC::Matrix &XC::ConstantesSecc2d::getSectionFlexibility2x2(void) const
   }
 
 //! @brief Devuelve la matriz de flexibilidad noval.
-const XC::Matrix &XC::ConstantesSecc2d::getInitialFlexibility2x2(void) const
+const XC::Matrix &XC::CrossSectionProperties2d::getInitialFlexibility2x2(void) const
   { return getSectionFlexibility2x2(); }
 
 //! @brief Devuelve la matriz de rigidez tangente.
-const XC::Matrix &XC::ConstantesSecc2d::getSectionTangent3x3(void) const
+const XC::Matrix &XC::CrossSectionProperties2d::getSectionTangent3x3(void) const
   {
     ks3(0,0)= EA(); //Rigidez frente al esfuerzo axil.
     ks3(1,1)= EI(); //Rigidez frente al giro en torno a z.
@@ -123,11 +123,11 @@ const XC::Matrix &XC::ConstantesSecc2d::getSectionTangent3x3(void) const
   }
 
 //! @brief Devuelve la matriz de rigidez noval.
-const XC::Matrix &XC::ConstantesSecc2d::getInitialTangent3x3(void) const
+const XC::Matrix &XC::CrossSectionProperties2d::getInitialTangent3x3(void) const
   { return getSectionTangent3x3(); }
 
 //! @brief Devuelve la matriz de flexibilidad.
-const XC::Matrix &XC::ConstantesSecc2d::getSectionFlexibility3x3(void) const
+const XC::Matrix &XC::CrossSectionProperties2d::getSectionFlexibility3x3(void) const
   {
     ks3(0,0)= 1.0/(EA());
     ks3(1,1)= 1.0/(EI());
@@ -136,11 +136,11 @@ const XC::Matrix &XC::ConstantesSecc2d::getSectionFlexibility3x3(void) const
   }
 
 //! @brief Devuelve la matriz de flexibilidad noval.
-const XC::Matrix &XC::ConstantesSecc2d::getInitialFlexibility3x3(void) const
+const XC::Matrix &XC::CrossSectionProperties2d::getInitialFlexibility3x3(void) const
   { return getSectionFlexibility3x3(); }
 
 
-int XC::ConstantesSecc2d::setParameter(const std::vector<std::string> &argv,Parameter &param,SectionForceDeformation *scc)
+int XC::CrossSectionProperties2d::setParameter(const std::vector<std::string> &argv,Parameter &param,SectionForceDeformation *scc)
   {
     if(argv.size() < 1)
       return -1;
@@ -173,7 +173,7 @@ int XC::ConstantesSecc2d::setParameter(const std::vector<std::string> &argv,Para
     return -1;
   }
 
-int XC::ConstantesSecc2d::updateParameter(int paramID, Information &info)
+int XC::CrossSectionProperties2d::updateParameter(int paramID, Information &info)
   {
     if(paramID == 1)
       e= info.theDouble;
@@ -190,22 +190,22 @@ int XC::ConstantesSecc2d::updateParameter(int paramID, Information &info)
 
 //! @brief Devuelve un vector para almacenar los dbTags
 //! de los miembros de la clase.
-XC::DbTagData &XC::ConstantesSecc2d::getDbTagData(void) const
+XC::DbTagData &XC::CrossSectionProperties2d::getDbTagData(void) const
   {
     static DbTagData retval(1);
     return retval;
   }
 
 //! @brief Envía los miembros a través del canal que se pasa como parámetro.
-int XC::ConstantesSecc2d::sendData(CommParameters &cp)
+int XC::CrossSectionProperties2d::sendData(CommParameters &cp)
   { return cp.sendDoubles(e,g,a,i,alpha,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Recibe los miembros a través del canal que se pasa como parámetro.
-int XC::ConstantesSecc2d::recvData(const CommParameters &cp)
+int XC::CrossSectionProperties2d::recvData(const CommParameters &cp)
   { return cp.receiveDoubles(e,g,a,i,alpha,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Envía el objeto a través del canal que se pasa como parámetro.
-int XC::ConstantesSecc2d::sendSelf(CommParameters &cp)
+int XC::CrossSectionProperties2d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
     const int dataTag= getDbTag();
@@ -219,7 +219,7 @@ int XC::ConstantesSecc2d::sendSelf(CommParameters &cp)
   }
 
 //! @brief Recibe el objeto a través del canal que se pasa como parámetro.
-int XC::ConstantesSecc2d::recvSelf(const CommParameters &cp)
+int XC::CrossSectionProperties2d::recvSelf(const CommParameters &cp)
   {
     inicComm(1);
     const int dataTag= getDbTag();
@@ -238,26 +238,26 @@ int XC::ConstantesSecc2d::recvSelf(const CommParameters &cp)
   }
 
 
-const XC::Matrix& XC::ConstantesSecc2d::getInitialTangentSensitivity3x3(int gradIndex)
+const XC::Matrix& XC::CrossSectionProperties2d::getInitialTangentSensitivity3x3(int gradIndex)
   {
     ks3.Zero();
     return ks3;
   }
 
-void XC::ConstantesSecc2d::Print(std::ostream &s, int flag) const
+void XC::CrossSectionProperties2d::Print(std::ostream &s, int flag) const
   {
     if(flag == 2)
       {}
     else
       {
-        s << "ConstantesSecc2d, E: " << E() << std::endl;
+        s << "CrossSectionProperties2d, E: " << E() << std::endl;
         s << "\t G: " << G() << std::endl;
         s << "\t A: " << A() << std::endl;
         s << "\tI: " << I() << std::endl;
       }
   }
 
-std::ostream &XC::operator<<(std::ostream &os,const XC::ConstantesSecc2d &c)
+std::ostream &XC::operator<<(std::ostream &os,const XC::CrossSectionProperties2d &c)
   {
     c.Print(os);
     return os;

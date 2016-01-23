@@ -70,7 +70,7 @@ namespace XC {
 class Channel;
 class Information;
 class Response;
-class ConstantesSecc3d;
+class CrossSectionProperties3d;
 
 //! \ingroup ElemBarra
 //

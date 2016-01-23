@@ -24,9 +24,9 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ConstantesSecc3d.cc
+//CrossSectionProperties3d.cc
 
-#include <material/section/repres/ConstantesSecc3d.h>
+#include <material/section/repres/CrossSectionProperties3d.h>
 #include "xc_basic/src/util/inercia.h"
 #include "xc_utils/src/geom/sis_ref/EjesPrincInercia2d.h"
 #include <domain/mesh/element/Information.h>
@@ -37,76 +37,76 @@
 #include "domain/component/Parameter.h"
 #include "material/section/SectionForceDeformation.h"
 
-XC::Matrix XC::ConstantesSecc3d::ks4(4,4);
-XC::Matrix XC::ConstantesSecc3d::ks6(6,6);
+XC::Matrix XC::CrossSectionProperties3d::ks4(4,4);
+XC::Matrix XC::CrossSectionProperties3d::ks6(6,6);
 
-bool XC::ConstantesSecc3d::check_values(void)
+bool XC::CrossSectionProperties3d::check_values(void)
   {
     bool retval= true;
     if(iy <= 0.0)
       {
-        std::cerr << "ConstantesSecc3d::check_values -- Input Iy <= 0.0 ... setting Iy to 1.0\n";
+        std::cerr << "CrossSectionProperties3d::check_values -- Input Iy <= 0.0 ... setting Iy to 1.0\n";
         iy= 1.0;
         retval= false;
       }
     if(j <= 0.0)
       {
-        std::cerr << "ConstantesSecc3d::check_values -- Input J <= 0.0 ... setting J to 1.0\n";
+        std::cerr << "CrossSectionProperties3d::check_values -- Input J <= 0.0 ... setting J to 1.0\n";
         j= 1.0;
         retval= false;
       }
     if(retval) //Hasta ahora cumple.
-      retval= ConstantesSecc2d::check_values();
+      retval= CrossSectionProperties2d::check_values();
     return retval;
   }
 
 //! @brief Constructor.
-XC::ConstantesSecc3d::ConstantesSecc3d(void)
-  :ConstantesSecc2d(), iy(0), iyz(0), j(0) {}
+XC::CrossSectionProperties3d::CrossSectionProperties3d(void)
+  :CrossSectionProperties2d(), iy(0), iyz(0), j(0) {}
 
 //! @brief Constructor.
-XC::ConstantesSecc3d::ConstantesSecc3d(double E_in, double A_in, double Iz_in, double Iy_in, double G_in, double J_in)
-  : ConstantesSecc2d(E_in,A_in,Iz_in,G_in), iy(Iy_in), iyz(0), j(J_in)
+XC::CrossSectionProperties3d::CrossSectionProperties3d(double E_in, double A_in, double Iz_in, double Iy_in, double G_in, double J_in)
+  : CrossSectionProperties2d(E_in,A_in,Iz_in,G_in), iy(Iy_in), iyz(0), j(J_in)
   { check_values(); }
 
 //! @brief Constructor.
-XC::ConstantesSecc3d::ConstantesSecc3d(double EA_in, double EIz_in, double EIy_in, double GJ_in)
-  : ConstantesSecc2d(EA_in,EIz_in), iy(EIy_in), iyz(0), j(GJ_in)
+XC::CrossSectionProperties3d::CrossSectionProperties3d(double EA_in, double EIz_in, double EIy_in, double GJ_in)
+  : CrossSectionProperties2d(EA_in,EIz_in), iy(EIy_in), iyz(0), j(GJ_in)
   { check_values(); }
 
 //! @brief Devuelve el ángulo que define un eje principal de inercia.
-double XC::ConstantesSecc3d::getTheta(void) const
+double XC::CrossSectionProperties3d::getTheta(void) const
   { return theta_inercia(Iy(),Iz(),Iyz()); }
 
 //! @brief Devuelve el momento de inercia principal mayor.
-double XC::ConstantesSecc3d::getI1(void) const
+double XC::CrossSectionProperties3d::getI1(void) const
   { return I1_inercia(Iy(),Iz(),Iyz()); }
 
 //! @brief Devuelve el momento de inercia principal menor.
-double XC::ConstantesSecc3d::getI2(void) const
+double XC::CrossSectionProperties3d::getI2(void) const
   { return I2_inercia(Iy(),Iz(),Iyz()); }
 
 //! @brief Devuelve los ejes principales de inercia de la sección.
-EjesPrincInercia2d XC::ConstantesSecc3d::getEjesInercia(void) const
+EjesPrincInercia2d XC::CrossSectionProperties3d::getEjesInercia(void) const
   {
     const Pos2d cdg(0,0);
     return EjesPrincInercia2d(cdg,Iy(),Iz(),Iyz());
   }
 //! @brief Devuelve el vector del eje principal I.
-Vector2d XC::ConstantesSecc3d::getVDirEje1(void) const
+Vector2d XC::CrossSectionProperties3d::getVDirEje1(void) const
   { return getEjesInercia().getVDirEje1(); }
 //! @brief Devuelve el vector del eje principal I.
-Vector2d XC::ConstantesSecc3d::getVDirEjeFuerte(void) const
+Vector2d XC::CrossSectionProperties3d::getVDirEjeFuerte(void) const
   { return getEjesInercia().getVDirEje1(); }
 //! @brief Devuelve el vector del eje principal II.
-Vector2d XC::ConstantesSecc3d::getVDirEje2(void) const
+Vector2d XC::CrossSectionProperties3d::getVDirEje2(void) const
   { return getEjesInercia().getVDirEje2(); }
 //! @brief Devuelve el vector del eje principal II.
-Vector2d XC::ConstantesSecc3d::getVDirEjeDebil(void) const
+Vector2d XC::CrossSectionProperties3d::getVDirEjeDebil(void) const
   { return getEjesInercia().getVDirEje2(); }
 
 //! @brief Devuelve la matriz de rigidez tangente.
-const XC::Matrix &XC::ConstantesSecc3d::getSectionTangent4x4(void) const
+const XC::Matrix &XC::CrossSectionProperties3d::getSectionTangent4x4(void) const
   {
     ks4(0,0)= EA(); //Rigidez frente al esfuerzo axil.
     ks4(1,1)= EIz(); //Rigidez frente al giro en torno a z.
@@ -117,11 +117,11 @@ const XC::Matrix &XC::ConstantesSecc3d::getSectionTangent4x4(void) const
   }
 
 //! @brief Devuelve la matriz de rigidez noval.
-const XC::Matrix &XC::ConstantesSecc3d::getInitialTangent4x4(void) const
+const XC::Matrix &XC::CrossSectionProperties3d::getInitialTangent4x4(void) const
   { return getSectionTangent4x4(); }
 
 //! @brief Devuelve la matriz de flexibilidad.
-const XC::Matrix &XC::ConstantesSecc3d::getSectionFlexibility4x4(void) const
+const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility4x4(void) const
   {
     const double eiyz= EIyz();
     const double eimax= std::max(EIz(),EIy());
@@ -147,11 +147,11 @@ const XC::Matrix &XC::ConstantesSecc3d::getSectionFlexibility4x4(void) const
   }
 
 //! @brief Devuelve la matriz de flexibilidad noval.
-const XC::Matrix &XC::ConstantesSecc3d::getInitialFlexibility4x4(void) const
+const XC::Matrix &XC::CrossSectionProperties3d::getInitialFlexibility4x4(void) const
   { return getSectionFlexibility4x4(); }
 
 //! @brief Devuelve la matriz de rigidez tangente.
-const XC::Matrix &XC::ConstantesSecc3d::getSectionTangent6x6(void) const
+const XC::Matrix &XC::CrossSectionProperties3d::getSectionTangent6x6(void) const
   {
     ks6(0,0) = EA(); //Rigidez frente al esfuerzo axil.
     ks6(1,1) = EIz(); //Rigidez frente al giro en torno a z.
@@ -166,11 +166,11 @@ const XC::Matrix &XC::ConstantesSecc3d::getSectionTangent6x6(void) const
   }
 
 //! @brief Devuelve la matriz de rigidez noval.
-const XC::Matrix &XC::ConstantesSecc3d::getInitialTangent6x6(void) const
+const XC::Matrix &XC::CrossSectionProperties3d::getInitialTangent6x6(void) const
   { return getSectionTangent6x6(); }
 
 //! @brief Devuelve la matriz de flexibilidad.
-const XC::Matrix &XC::ConstantesSecc3d::getSectionFlexibility6x6(void) const
+const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility6x6(void) const
   {
     const double eiyz= EIyz();
     const double eimax= std::max(EIz(),EIy());
@@ -205,13 +205,13 @@ const XC::Matrix &XC::ConstantesSecc3d::getSectionFlexibility6x6(void) const
   }
 
 //! @brief Devuelve la matriz de flexibilidad noval.
-const XC::Matrix &XC::ConstantesSecc3d::getInitialFlexibility6x6(void) const
+const XC::Matrix &XC::CrossSectionProperties3d::getInitialFlexibility6x6(void) const
   { return getSectionFlexibility6x6(); }
 
 
 //! @brief Calcula el efecto de girar la sección en sentido
 //! antihorario el ángulo que se pasa como parámetro.
-void XC::ConstantesSecc3d::gira(const double &theta)
+void XC::CrossSectionProperties3d::gira(const double &theta)
   {
     const double &iiy= Iy();
     const double &iiz= Iz();
@@ -227,7 +227,7 @@ void XC::ConstantesSecc3d::gira(const double &theta)
   }
 
 
-int XC::ConstantesSecc3d::setParameter(const std::vector<std::string> &argv,Parameter &param,SectionForceDeformation *scc)
+int XC::CrossSectionProperties3d::setParameter(const std::vector<std::string> &argv,Parameter &param,SectionForceDeformation *scc)
   {
     if(argv[0] == "Iz")
       {
@@ -245,10 +245,10 @@ int XC::ConstantesSecc3d::setParameter(const std::vector<std::string> &argv,Para
         return param.addObject(6,scc);
       }
     else 
-      return ConstantesSecc2d::setParameter(argv,param,scc);
+      return CrossSectionProperties2d::setParameter(argv,param,scc);
   }
 
-int XC::ConstantesSecc3d::updateParameter(int parameterID, Information &info)
+int XC::CrossSectionProperties3d::updateParameter(int parameterID, Information &info)
   {
     switch (parameterID)
       {
@@ -259,36 +259,36 @@ int XC::ConstantesSecc3d::updateParameter(int parameterID, Information &info)
         j= info.theDouble;
         return 0;
       default:
-        return ConstantesSecc2d::updateParameter(parameterID,info);
+        return CrossSectionProperties2d::updateParameter(parameterID,info);
       }
   }
 
 //! @brief Devuelve un vector para almacenar los dbTags
 //! de los miembros de la clase.
-XC::DbTagData &XC::ConstantesSecc3d::getDbTagData(void) const
+XC::DbTagData &XC::CrossSectionProperties3d::getDbTagData(void) const
   {
     static DbTagData retval(2);
     return retval;
   }
 
 //! @brief Envía los miembros a través del canal que se pasa como parámetro.
-int XC::ConstantesSecc3d::sendData(CommParameters &cp)
+int XC::CrossSectionProperties3d::sendData(CommParameters &cp)
   {
-    int res= ConstantesSecc2d::sendData(cp);
+    int res= CrossSectionProperties2d::sendData(cp);
     res+= cp.sendDoubles(iy,iyz,j,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Recibe los miembros a través del canal que se pasa como parámetro.
-int XC::ConstantesSecc3d::recvData(const CommParameters &cp)
+int XC::CrossSectionProperties3d::recvData(const CommParameters &cp)
   {
-    int res= ConstantesSecc2d::recvData(cp); 
+    int res= CrossSectionProperties2d::recvData(cp); 
     res+= cp.receiveDoubles(iy,iyz,j,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Envía el objeto a través del canal que se pasa como parámetro.
-int XC::ConstantesSecc3d::sendSelf(CommParameters &cp)
+int XC::CrossSectionProperties3d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
     const int dataTag= getDbTag();
@@ -302,7 +302,7 @@ int XC::ConstantesSecc3d::sendSelf(CommParameters &cp)
   }
 
 //! @brief Recibe el objeto a través del canal que se pasa como parámetro.
-int XC::ConstantesSecc3d::recvSelf(const CommParameters &cp)
+int XC::CrossSectionProperties3d::recvSelf(const CommParameters &cp)
   {
     inicComm(2);
     const int dataTag= getDbTag();
@@ -320,13 +320,13 @@ int XC::ConstantesSecc3d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::ConstantesSecc3d::Print(std::ostream &s, int flag) const
+void XC::CrossSectionProperties3d::Print(std::ostream &s, int flag) const
   {
     if(flag == 2)
       {}
     else
       {
-        s << "ConstantesSecc3d, E: " << E() << std::endl;
+        s << "CrossSectionProperties3d, E: " << E() << std::endl;
         s << "\t A: " << A() << std::endl;
         s << "\tIz: " << Iz() << std::endl;
         s << "\tIy: " << Iy() << std::endl;

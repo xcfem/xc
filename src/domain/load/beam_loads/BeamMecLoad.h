@@ -35,8 +35,8 @@
 namespace XC {
 class Matrix;
 class FVector;
-class ConstantesSecc2d;
-class ConstantesSecc3d;
+class CrossSectionProperties2d;
+class CrossSectionProperties3d;
 
 //! @ingroup ElemLoads
 //
@@ -65,8 +65,8 @@ class BeamMecLoad : public BeamLoad
     virtual const Matrix &getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor);
     virtual void addReactionsInBasicSystem(const double &,const double &,FVector &);
     virtual void addFixedEndForcesInBasicSystem(const double &,const double &,FVector &);
-    void addElasticDeformations(const double &L,const ConstantesSecc3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
-    void addElasticDeformations(const double &L,const ConstantesSecc2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
+    void addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
+    void addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
 
     virtual size_t getDimVectorFuerza(void) const;
     virtual size_t getDimVectorMomento(void) const;

@@ -54,7 +54,7 @@
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
 
 #include <utility/matrix/Vector.h>
-#include "material/section/repres/ConstantesSecc3d.h"
+#include "material/section/repres/CrossSectionProperties3d.h"
 
 namespace XC {
 
@@ -69,7 +69,7 @@ class UserDefinedHingeIntegration3d : public BeamIntegration
     Vector ptsR;
     Vector wtsR;
 
-    ConstantesSecc3d ctes_scc; //Características de la seccion E,A,Iy,...
+    CrossSectionProperties3d ctes_scc; //Características de la seccion E,A,Iy,...
   public:
     UserDefinedHingeIntegration3d(int npL, const Vector &ptL, const Vector &wtL,
 				int npR, const Vector &ptR, const Vector &wtR,
@@ -77,8 +77,8 @@ class UserDefinedHingeIntegration3d : public BeamIntegration
 				double Iy, double G, double J);
     UserDefinedHingeIntegration3d(int npL, const Vector &ptL, const Vector &wtL,
 				  int npR, const Vector &ptR, const Vector &wtR,
-				  const ConstantesSecc3d &cts);
-    UserDefinedHingeIntegration3d(const ConstantesSecc3d &cts= ConstantesSecc3d());
+				  const CrossSectionProperties3d &cts);
+    UserDefinedHingeIntegration3d(const CrossSectionProperties3d &cts= CrossSectionProperties3d());
   
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;

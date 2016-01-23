@@ -36,8 +36,8 @@ class Recta2d;
 class EjesPrincInercia2d;
 
 namespace XC {
-class ConstantesSecc3d;
-class ConstantesSecc2d;
+class CrossSectionProperties3d;
+class CrossSectionProperties2d;
 class Vector;
 class Matrix;
 
@@ -100,8 +100,8 @@ class SeccionInerte: public EntCmd
     Matrix getISeccHomogeneizada(const double &) const;
     Matrix getISeccHomogeneizada(const double &,const Pos2d &) const;
 
-    ConstantesSecc3d getConstantesSecc3d(const ConstantesSecc3d &) const;
-    ConstantesSecc2d getConstantesSecc2d(const ConstantesSecc2d &) const;
+    CrossSectionProperties3d getCrossSectionProperties3d(const CrossSectionProperties3d &) const;
+    CrossSectionProperties2d getCrossSectionProperties2d(const CrossSectionProperties2d &) const;
 
   };
 

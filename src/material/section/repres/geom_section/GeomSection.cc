@@ -34,8 +34,8 @@
 #include <material/section/repres/geom_section/Segment.h>
 
 #include "preprocessor/loaders/MaterialLoader.h"
-#include "material/section/repres/ConstantesSecc3d.h"
-#include "material/section/repres/ConstantesSecc2d.h"
+#include "material/section/repres/CrossSectionProperties3d.h"
+#include "material/section/repres/CrossSectionProperties2d.h"
 
 #include <material/section/repres/geom_section/region/RegionSecc.h>
 

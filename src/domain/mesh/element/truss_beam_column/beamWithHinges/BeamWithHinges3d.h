@@ -54,7 +54,7 @@
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf3d.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include "material/section/repres/ConstantesSecc3d.h"
+#include "material/section/repres/CrossSectionProperties3d.h"
 #include "domain/mesh/element/fvectors/FVectorBeamColumn3d.h"
 
 namespace XC {
@@ -73,7 +73,7 @@ class Renderer;
 class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
   {
   private:
-    ConstantesSecc3d ctes_scc; //Características de la seccion E,A,Iy,...
+    CrossSectionProperties3d ctes_scc; //Características de la seccion E,A,Iy,...
     double beta1, beta2;
     double rho;
 
@@ -125,6 +125,16 @@ class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
     Element *getCopy(void) const;
     ~BeamWithHinges3d(void);
     
+    double getRho(void) const
+      { return rho; }
+    void setRho(const double &r)
+      { rho= r; }
+
+    inline CrossSectionProperties3d getSectionProperties(void) const
+      { return ctes_scc; }
+    void setSectionProperties(const CrossSectionProperties3d &ctes)
+      { ctes_scc= ctes; }
+
     int getNumDOF(void) const;
     void setDomain(Domain *theDomain);
     

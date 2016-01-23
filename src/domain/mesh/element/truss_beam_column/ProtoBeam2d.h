@@ -30,7 +30,7 @@
 #define ProtoBeam2d_h
 
 #include "domain/mesh/element/Element1D.h"
-#include "material/section/repres/ConstantesSecc2d.h"
+#include "material/section/repres/CrossSectionProperties2d.h"
 namespace XC {
 class CrdTransf2d;
 
@@ -40,7 +40,7 @@ class CrdTransf2d;
 class ProtoBeam2d : public Element1D
   {
   protected:
-    ConstantesSecc2d ctes_scc; //Section mechanical properties E,A,Iy,...
+    CrossSectionProperties2d ctes_scc; //Section mechanical properties E,A,Iy,...
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
     void set_material(const Material *m);
@@ -49,9 +49,9 @@ class ProtoBeam2d : public Element1D
     ProtoBeam2d(int tag, int class_tag,const Material *m= NULL);
     ProtoBeam2d(int tag, int class_tag, double A, double E, double I, int Nd1, int Nd2);
     int getNumDOF(void) const;
-    inline ConstantesSecc2d getSectionProperties(void) const
+    inline CrossSectionProperties2d getSectionProperties(void) const
       { return ctes_scc; }
-    void setSectionProperties(const ConstantesSecc2d &ctes)
+    void setSectionProperties(const CrossSectionProperties2d &ctes)
       { ctes_scc= ctes; }
 
   };

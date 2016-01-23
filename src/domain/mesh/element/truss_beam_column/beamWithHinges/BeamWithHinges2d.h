@@ -52,7 +52,7 @@
 #define BeamWithHinges2d_h
 
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf2d.h>
-#include "material/section/repres/ConstantesSecc2d.h"
+#include "material/section/repres/CrossSectionProperties2d.h"
 #include "domain/mesh/element/fvectors/FVectorBeamColumn2d.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
@@ -73,7 +73,7 @@ class Renderer;
 class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
   {
   private:
-    ConstantesSecc2d ctes_scc; //Section mechanical properties E,A,Iy,...
+    CrossSectionProperties2d ctes_scc; //Section mechanical properties E,A,Iy,...
     double beta1, beta2;
     double rho;
 
@@ -120,6 +120,16 @@ class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
     Element *getCopy(void) const;
     ~BeamWithHinges2d(void);
   
+    double getRho(void) const
+      { return rho; }
+    void setRho(const double &r)
+      { rho= r; }
+
+    inline CrossSectionProperties2d getSectionProperties(void) const
+      { return ctes_scc; }
+    void setSectionProperties(const CrossSectionProperties2d &ctes)
+      { ctes_scc= ctes; }
+
     int getNumDOF(void) const;
     void setDomain(Domain *theDomain);
   

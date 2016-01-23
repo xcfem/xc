@@ -64,7 +64,7 @@ XC::HingeRadauBeamIntegration3d::HingeRadauBeamIntegration3d(double e,
 							 double lpj)
   : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeRadau3d,e,a,iz,iy,g,j,lpi,lpj) {}
 
-XC::HingeRadauBeamIntegration3d::HingeRadauBeamIntegration3d(const ConstantesSecc3d &cts,const double &lpi,const double &lpj)
+XC::HingeRadauBeamIntegration3d::HingeRadauBeamIntegration3d(const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
   : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeRadau3d,cts,lpi,lpj) {}
 
 void XC::HingeRadauBeamIntegration3d::getSectionLocations(int numSections, double L, double *xi) const

@@ -24,14 +24,14 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ConstantesSecc3d.h
+//CrossSectionProperties3d.h
 
-#ifndef ConstantesSecc3d_h
-#define ConstantesSecc3d_h
+#ifndef CrossSectionProperties3d_h
+#define CrossSectionProperties3d_h
 
 class EjesPrincInercia2d;
 
-#include "ConstantesSecc2d.h"
+#include "CrossSectionProperties2d.h"
 
 namespace XC {
 
@@ -39,7 +39,7 @@ namespace XC {
 //
 //! @brief Propiedades mecánicas de una sección (area, inercias,...)
 //! en un problema tridimensional (seis grados de libertad por sección).
-class ConstantesSecc3d: public ConstantesSecc2d
+class CrossSectionProperties3d: public CrossSectionProperties2d
   {
   private:
     double iy, iyz, j;
@@ -51,17 +51,17 @@ class ConstantesSecc3d: public ConstantesSecc2d
     int recvData(const CommParameters &);
 
   public:
-    ConstantesSecc3d(double E, double A, double Iz, double Iy, double G, double J);
-    ConstantesSecc3d(double EA, double EIz, double EIy, double GJ);
-    ConstantesSecc3d(void);
+    CrossSectionProperties3d(double E, double A, double Iz, double Iy, double G, double J);
+    CrossSectionProperties3d(double EA, double EIz, double EIy, double GJ);
+    CrossSectionProperties3d(void);
 
     bool check_values(void);
     inline double &Iz(void)
-      { return ConstantesSecc2d::I(); }
+      { return CrossSectionProperties2d::I(); }
     inline const double &Iz(void) const
-      { return ConstantesSecc2d::I(); }
+      { return CrossSectionProperties2d::I(); }
     inline void setIz(const double &i)
-      { ConstantesSecc2d::I()= i; }
+      { CrossSectionProperties2d::I()= i; }
     inline double &Iy(void)
       { return iy; }
     inline const double &Iy(void) const
@@ -82,7 +82,7 @@ class ConstantesSecc3d: public ConstantesSecc2d
       { j= i; }
     //! @brief Devuelve la rigidez a flexión en z.
     inline double EIz(void) const
-      { return ConstantesSecc2d::EI(); }
+      { return CrossSectionProperties2d::EI(); }
     //! @brief Devuelve la rigidez a flexión en y.
     inline double EIy(void) const
       { return E()*iy; }

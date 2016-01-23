@@ -1,7 +1,7 @@
 #!/bin/bash
-#for fl in $(find ../../verif ../../python_modules ../../doc/XCmanual -type f -name *.py -o -name *.tex | grep -v build)
+for fl in $(find ../../verif ../../python_modules ../../doc/XCmanual -type f -name *.py -o -name *.tex | grep -v build)
 #Modified by LP to allow generic use (no only in xc directories).
-for fl in $(find -type f -name '*.py')
+#for fl in $(find -type f -name '*.py')
 
 do
 
@@ -82,5 +82,7 @@ echo $fl
 # sed -i 's/csvFile/intForcCombFileName/g' $fl
 # sed -i 's/nmbArchComb/intForcCombFileName/g' $fl
 # sed -i 's/nmbArchLST/intForcCombFileName/g' $fl
+sed -i 's/ConstantesSecc2d/CrossSectionProperties2d/g' $fl
+sed -i 's/ConstantesSecc3d/CrossSectionProperties3d/g' $fl
 
 done

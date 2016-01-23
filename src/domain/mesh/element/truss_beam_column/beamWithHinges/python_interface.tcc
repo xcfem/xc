@@ -22,7 +22,11 @@
 //python_interface.tcc
 
 class_<XC::BeamWithHinges2d, bases<XC::BeamColumnWithSectionFDTrf2d>, boost::noncopyable >("BeamWithHinges2d", no_init)
+  .add_property("rho", &XC::BeamWithHinges2d::getRho,&XC::BeamWithHinges2d::setRho)
+  .add_property("sectionProperties", &XC::BeamWithHinges2d::getSectionProperties, &XC::BeamWithHinges2d::setSectionProperties)
    ;
 
 class_<XC::BeamWithHinges3d, bases<XC::BeamColumnWithSectionFDTrf3d>, boost::noncopyable >("BeamWithHinges3d", no_init)
+  .add_property("rho", &XC::BeamWithHinges3d::getRho,&XC::BeamWithHinges3d::setRho)
+  .add_property("sectionProperties", &XC::BeamWithHinges3d::getSectionProperties, &XC::BeamWithHinges3d::setSectionProperties)
    ;

@@ -30,7 +30,7 @@
 #define HingeBeamIntegration3d_h
 
 #include "PlasticLengthsBeamIntegration.h"
-#include "material/section/repres/ConstantesSecc3d.h"
+#include "material/section/repres/CrossSectionProperties3d.h"
 
 namespace XC {
 class FVector;
@@ -41,13 +41,13 @@ class FVector;
 class HingeBeamIntegration3d: public PlasticLengthsBeamIntegration
   {
   protected:
-    ConstantesSecc3d ctes_scc; //Características de la seccion E,A,Iy,...
+    CrossSectionProperties3d ctes_scc; //Características de la seccion E,A,Iy,...
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
     HingeBeamIntegration3d(int classTag, double E, double A, double Iz,double Iy, double G, double J,double lpI, double lpJ);
-    HingeBeamIntegration3d(int classTag, const ConstantesSecc3d &cts= ConstantesSecc3d(),const double &lpi=0.0,const double &lpj=0.0);
+    HingeBeamIntegration3d(int classTag, const CrossSectionProperties3d &cts= CrossSectionProperties3d(),const double &lpi=0.0,const double &lpj=0.0);
   
     void addElasticDeformations(ElementalLoad *theLoad,double loadFactor,double L,FVector &v0);
 
