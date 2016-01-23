@@ -59,7 +59,7 @@ XC::HingeMidpointBeamIntegration3d::HingeMidpointBeamIntegration3d(double e,doub
 							           double g,double j,double lpi,double lpj)
   : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeMidpoint3d,e,a,iz,iy,g,j,lpi,lpj) {}
 
-XC::HingeMidpointBeamIntegration3d::HingeMidpointBeamIntegration3d(const ConstantesSecc3d &cts,const double &lpi,const double &lpj)
+XC::HingeMidpointBeamIntegration3d::HingeMidpointBeamIntegration3d(const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
   : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeMidpoint3d,cts,lpi,lpj) {}
 
 XC::BeamIntegration *XC::HingeMidpointBeamIntegration3d::getCopy(void) const

@@ -38,7 +38,7 @@
 XC::HingeBeamIntegration3d::HingeBeamIntegration3d(int classTag,double e,double a,double iz,double iy,double g,double j,double lpi,double lpj)
   : PlasticLengthsBeamIntegration(classTag,lpi,lpj),ctes_scc(e,a,iz,iy,g,j) {}
 
-XC::HingeBeamIntegration3d::HingeBeamIntegration3d(int classTag, const ConstantesSecc3d &cts,const double &lpi,const double &lpj)
+XC::HingeBeamIntegration3d::HingeBeamIntegration3d(int classTag, const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
   : PlasticLengthsBeamIntegration(classTag,lpi,lpj), ctes_scc(cts) {}
 
 void XC::HingeBeamIntegration3d::addElasticDeformations(ElementalLoad *theLoad,double loadFactor,double L,FVector &v0)

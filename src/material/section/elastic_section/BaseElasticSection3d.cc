@@ -37,7 +37,7 @@
 XC::BaseElasticSection3d::BaseElasticSection3d(int tag, int classTag, const size_t &dim, MaterialLoader *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc() {}
 
-XC::BaseElasticSection3d::BaseElasticSection3d(int tag,int classTag,const size_t &dim,const ConstantesSecc3d &ctes,MaterialLoader *mat_ldr)
+XC::BaseElasticSection3d::BaseElasticSection3d(int tag,int classTag,const size_t &dim,const CrossSectionProperties3d &ctes,MaterialLoader *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc(ctes) {}
 
 void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
@@ -50,7 +50,7 @@ void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
           {
             if(ctes_scc.E()==0.0)
                std::cerr << "El módulo elástico para homogeneización debe ser no nulo." << std::endl;
-            ctes_scc= geom->getConstantesSecc3d(ctes_scc);
+            ctes_scc= geom->getCrossSectionProperties3d(ctes_scc);
           }
         else
           std::cerr << "No se encontró la definición geométrica denominada: '"
@@ -61,11 +61,11 @@ void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
   }
 
 //! \brief Devuelve los parámetros estáticos de la sección.
-const XC::ConstantesSecc3d &XC::BaseElasticSection3d::getConstantesSeccion(void) const
+const XC::CrossSectionProperties3d &XC::BaseElasticSection3d::getCrossSectionProperties(void) const
   { return ctes_scc; }
 
 
-void XC::BaseElasticSection3d::setConstantesSeccion(const ConstantesSecc3d &cs)  
+void XC::BaseElasticSection3d::setCrossSectionProperties(const CrossSectionProperties3d &cs)  
   { ctes_scc= cs; }
 
 

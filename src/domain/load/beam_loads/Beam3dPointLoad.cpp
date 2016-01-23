@@ -59,7 +59,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/element/fvectors/FVector.h"
-#include "material/section/repres/ConstantesSecc3d.h"
+#include "material/section/repres/CrossSectionProperties3d.h"
 #include "utility/actor/actor/MovableVector.h"
 
 XC::Vector XC::Beam3dPointLoad::data(4);
@@ -227,7 +227,7 @@ void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const d
         q0[4]+= -M2;
       }
   }
-void XC::Beam3dPointLoad::addElasticDeformations(const double &L,const ConstantesSecc3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
+void XC::Beam3dPointLoad::addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
   {
     const double Le = L-lpI-lpJ;
     if(Le>0.0)

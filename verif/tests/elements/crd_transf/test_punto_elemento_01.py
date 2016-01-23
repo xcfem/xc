@@ -37,7 +37,7 @@ lin.xzVector= xc.Vector([0,1,0])
 elementos= preprocessor.getElementLoader
 
 # Materials
-caracMecSeccion= xc.ConstantesSecc3d()
+caracMecSeccion= xc.CrossSectionProperties3d()
 caracMecSeccion.A= A; caracMecSeccion.E= E; caracMecSeccion.G= G;
 caracMecSeccion.Iz= Iz; caracMecSeccion.Iy= Iy; caracMecSeccion.J= J
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",caracMecSeccion)

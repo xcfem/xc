@@ -67,12 +67,12 @@ void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const double &L,const doubl
     std::cerr << "addFixedEndForcesInBasicSystem no definida." << std::endl;
   }
 
-void XC::BeamMecLoad::addElasticDeformations(const double &L,const ConstantesSecc2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
+void XC::BeamMecLoad::addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
   {
     std::cerr << "addElasticDeformations no definida para secciones 2d." << std::endl;
   }
 
-void XC::BeamMecLoad::addElasticDeformations(const double &L,const ConstantesSecc3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
+void XC::BeamMecLoad::addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
   {
     std::cerr << "addElasticDeformations no definida para secciones 3d." << std::endl;
   }

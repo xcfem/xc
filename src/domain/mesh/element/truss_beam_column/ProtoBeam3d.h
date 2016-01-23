@@ -30,7 +30,7 @@
 #define ProtoBeam3d_h
 
 #include "domain/mesh/element/Element1D.h"
-#include "material/section/repres/ConstantesSecc3d.h"
+#include "material/section/repres/CrossSectionProperties3d.h"
 
 namespace XC {
 //! \ingroup ElemBarra
@@ -40,7 +40,7 @@ namespace XC {
 class ProtoBeam3d : public Element1D
   {
   protected:
-    ConstantesSecc3d ctes_scc; //Características de la seccion E,A,Iy,...
+    CrossSectionProperties3d ctes_scc; //Section mechanical properties E,A,Iy,...
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
     void set_material(const Material *m);
@@ -50,9 +50,9 @@ class ProtoBeam3d : public Element1D
     ProtoBeam3d(int tag, int class_tag, int Nd1, int Nd2);
     ProtoBeam3d(int tag, int class_tag, double A, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2);
     int getNumDOF(void) const;
-    inline ConstantesSecc3d getSectionProperties(void) const
+    inline CrossSectionProperties3d getSectionProperties(void) const
       { return ctes_scc; }
-    void setSectionProperties(const ConstantesSecc3d &ctes)
+    void setSectionProperties(const CrossSectionProperties3d &ctes)
       { ctes_scc= ctes; }
 
   };

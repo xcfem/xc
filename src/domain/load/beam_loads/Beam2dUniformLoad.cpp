@@ -61,7 +61,7 @@
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "domain/mesh/element/fvectors/FVector.h"
-#include "material/section/repres/ConstantesSecc3d.h"
+#include "material/section/repres/CrossSectionProperties3d.h"
 
 XC::Vector XC::Beam2dUniformLoad::data(2);
 
@@ -172,7 +172,7 @@ void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const
     return;
   }
 
-void XC::Beam2dUniformLoad::addElasticDeformations(const double &L,const ConstantesSecc2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
+void XC::Beam2dUniformLoad::addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
   {
     // Length of elastic interior
     const double Le = L-lpI-lpJ;

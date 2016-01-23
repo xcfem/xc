@@ -53,7 +53,7 @@ void XC::BaseElasticSection2d::sectionGeometry(const std::string &cod_geom)
           {
             if(ctes_scc.E()==0.0)
                std::cerr << "El módulo elástico para homogeneización debe ser no nulo." << std::endl;
-            ctes_scc= geom->getConstantesSecc2d(ctes_scc);
+            ctes_scc= geom->getCrossSectionProperties2d(ctes_scc);
           }
         else
           std::cerr << "No se encontró la definición geométrica denominada: '"
@@ -81,10 +81,10 @@ int XC::BaseElasticSection2d::recvData(const CommParameters &cp)
   }
 
 //! \brief Devuelve los parámetros estáticos de la sección.
-const XC::ConstantesSecc2d &XC::BaseElasticSection2d::getConstantesSeccion(void) const
+const XC::CrossSectionProperties2d &XC::BaseElasticSection2d::getCrossSectionProperties(void) const
   { return ctes_scc; }
 
-void XC::BaseElasticSection2d::setConstantesSeccion(const ConstantesSecc2d &cs)  
+void XC::BaseElasticSection2d::setCrossSectionProperties(const CrossSectionProperties2d &cs)  
   { ctes_scc= cs; }
 
 void XC::BaseElasticSection2d::Print(std::ostream &s, int flag) const

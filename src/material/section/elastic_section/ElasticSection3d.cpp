@@ -70,7 +70,7 @@
 XC::Vector XC::ElasticSection3d::s(4);
 
 //! @brief Constructor.
-XC::ElasticSection3d::ElasticSection3d(int tag, MaterialLoader *mat_ldr,const ConstantesSecc3d &ctes)
+XC::ElasticSection3d::ElasticSection3d(int tag, MaterialLoader *mat_ldr,const CrossSectionProperties3d &ctes)
   :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,4,ctes,mat_ldr) {}
 
 //! @brief Constructor.
@@ -79,11 +79,11 @@ XC::ElasticSection3d::ElasticSection3d(void)
 
 //! @brief Constructor.
 XC::ElasticSection3d::ElasticSection3d(int tag, double E_in, double A_in, double Iz_in, double Iy_in, double G_in, double J_in)
-  :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,4,ConstantesSecc3d(E_in,A_in,Iz_in,Iy_in,G_in,J_in)) {}
+  :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,4,CrossSectionProperties3d(E_in,A_in,Iz_in,Iy_in,G_in,J_in)) {}
 
 //! @brief Constructor.
 XC::ElasticSection3d::ElasticSection3d(int tag, double EA_in, double EIz_in, double EIy_in, double GJ_in)
-  :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,4,ConstantesSecc3d(1,EA_in,EIz_in,EIy_in,1,GJ_in)) {}
+  :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,4,CrossSectionProperties3d(1,EA_in,EIz_in,EIy_in,1,GJ_in)) {}
 
 
 //! @brief Devuelve el valor de la resultante de tensiones.

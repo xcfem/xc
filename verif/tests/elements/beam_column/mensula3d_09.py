@@ -37,7 +37,7 @@ nod= nodos.newNodeXYZ(0,0.0,0.0)
 nod= nodos.newNodeXYZ(L,0.0,0.0)
 
 # Materials
-caracMecSeccion= xc.ConstantesSecc3d()
+caracMecSeccion= xc.CrossSectionProperties3d()
 caracMecSeccion.A= A; caracMecSeccion.E= E; caracMecSeccion.G= G;
 caracMecSeccion.Iz= Iz; caracMecSeccion.Iy= Iy; caracMecSeccion.J= J
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",caracMecSeccion)

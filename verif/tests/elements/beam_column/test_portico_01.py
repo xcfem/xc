@@ -44,7 +44,7 @@ nod= nodos.newNodeXY(2*B+B,H)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
-caracMecSeccion= xc.ConstantesSecc2d()
+caracMecSeccion= xc.CrossSectionProperties2d()
 caracMecSeccion.A= area; caracMecSeccion.E= Es;
 caracMecSeccion.I= Iz;
 seccion= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "seccion",caracMecSeccion)

@@ -38,7 +38,7 @@ void XC::ProtoBeam2d::set_material(const Material *m)
       {
         const BaseElasticSection2d *scc= dynamic_cast<const BaseElasticSection2d *>(m);
         if(scc)
-          ctes_scc= scc->getConstantesSeccion();
+          ctes_scc= scc->getCrossSectionProperties();
         else
           {
             std::cerr << "ProtoBeam2d::ProtoBeam2d -- el material no es del tipo adecuado.\n";

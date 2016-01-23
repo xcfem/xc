@@ -65,7 +65,7 @@
 
 #include <domain/mesh/element/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
-#include "material/section/repres/ConstantesSecc2d.h"
+#include "material/section/repres/CrossSectionProperties2d.h"
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
@@ -75,7 +75,7 @@ double XC::BeamWithHinges2d::workArea[100];
 
 XC::BeamWithHinges2d::BeamWithHinges2d(int tag)
   :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_BeamWithHinges2d,2),
-   E(0.0), A(0.0), I(0.0),
+   ctes_scc(0.0,0.0,0.0),
    beta1(0.0), beta2(0.0), rho(0.0),
    kb(3,3), q(3), kbCommit(3,3), qCommit(3),
    initialFlag(0), maxIter(0), tolerance(0.0), sp(0)
@@ -87,7 +87,7 @@ XC::BeamWithHinges2d::BeamWithHinges2d(int tag)
 
 XC::BeamWithHinges2d::BeamWithHinges2d(int tag,const Material *mat,const CrdTransf *coordTransf)
   :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_BeamWithHinges2d,2,mat,coordTransf),
-   E(0.0), A(0.0), I(0.0),
+   ctes_scc(0.0,0.0,0.0),
    beta1(0.0), beta2(0.0), rho(0.0),
    kb(3,3), q(3), kbCommit(3,3), qCommit(3),
    initialFlag(0), maxIter(0), tolerance(0.0), sp(0)
@@ -104,35 +104,19 @@ XC::BeamWithHinges2d::BeamWithHinges2d(int tag, int nodeI, int nodeJ,
                                        CrdTransf2d &coordTransf,
                                        double r, int max, double tol)
   :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_BeamWithHinges2d,2,nodeI,nodeJ,coordTransf),
-   E(e), A(a), I(i),
+   ctes_scc(e,a,i),
    beta1(lpi), beta2(lpj), rho(r),
    kb(3,3), q(3), kbCommit(3,3), qCommit(3),
    initialFlag(0), maxIter(max), tolerance(tol), sp(0)
   {
     load.reset(6);
-    if(E<= 0.0)
-      {
-        std::cerr << "XC::BeamWithHinges2d::BeamWithHinges2d -- input parameter E is <= 0.0\n";
-        exit(-1);
-      }
 
-    if(I <= 0.0)
-      {
-        std::cerr << "XC::BeamWithHinges2d::BeamWithHinges2d -- input parameter I is <= 0.0\n";
-        exit(-1);
-      }
-    if(A <= 0.0)
-      {
-        std::cerr << "XC::BeamWithHinges2d::BeamWithHinges2d -- input parameter A is <= 0.0\n";
-        exit(-1);
-      }
+    // Get copies of sections
+    theSections.setSectionCopy(0,&sectionRefI);
+    theSections.setSectionCopy(1,&sectionRefJ);
 
-  // Get copies of sections
-  theSections.setSectionCopy(0,&sectionRefI);
-  theSections.setSectionCopy(1,&sectionRefJ);
-
-  // Set up section interpolation and hinge lengths
-  this->setHinges();
+    // Set up section interpolation and hinge lengths
+    this->setHinges();
 
     p0.zero();
     v0.zero();
@@ -140,7 +124,7 @@ XC::BeamWithHinges2d::BeamWithHinges2d(int tag, int nodeI, int nodeJ,
 
 //! @brief Constructor virtual.
 XC::Element* XC::BeamWithHinges2d::getCopy(void) const
-  { return new XC::BeamWithHinges2d(*this); }
+  { return new BeamWithHinges2d(*this); }
 
 XC::BeamWithHinges2d::~BeamWithHinges2d(void)
   {
@@ -283,131 +267,137 @@ const XC::Matrix &XC::BeamWithHinges2d::getInitialStiff(void) const
     xi[0] = 0.5*lp[0];
     xi[1] = L-0.5*lp[1];
 
-  // element properties
-  static XC::Matrix f(3,3);        // element flexibility
-  static XC::Vector vr(3);        // Residual element deformations
+    // element properties
+    static Matrix f(3,3);        // element flexibility
+    static Vector vr(3);        // Residual element deformations
 
-  static XC::Matrix Iden(3,3);   // an identity matrix for matrix inverse
-  Iden.Zero();
-  int i;
-  for(i = 0; i < 3; i++)
-    Iden(i,i) = 1.0;
+    static Matrix Iden(3,3);   // an identity matrix for matrix inverse
+    Iden.Zero();
+    for(int i = 0; i < 3; i++)
+      Iden(i,i) = 1.0;
 
-  // Length of elastic interior
-  double Le = L-lp[0]-lp[1];
-  double LoverEA  = Le/(E*A);
-  double Lover3EI = Le/(3*E*I);
-  double Lover6EI = 0.5*Lover3EI;
+    // Length of elastic interior
+    const double Le = L-lp[0]-lp[1];
+    const double LoverEA  = Le/ctes_scc.EA();
+    const double Lover3EI = Le/(3*ctes_scc.EI());
+    const double Lover6EI = 0.5*Lover3EI;
 
-  // Elastic flexibility of element interior
-  static XC::Matrix fe(2,2);
-  fe(0,0) = fe(1,1) =  Lover3EI;
-  fe(0,1) = fe(1,0) = -Lover6EI;
+    // Elastic flexibility of element interior
+    static Matrix fe(2,2);
+    fe(0,0) = fe(1,1) =  Lover3EI;
+    fe(0,1) = fe(1,0) = -Lover6EI;
 
-  // Equilibrium transformation matrix
-  static XC::Matrix B(2,2);
-  B(0,0) = 1.0 - beta1;
-  B(1,1) = 1.0 - beta2;
-  B(0,1) = -beta1;
-  B(1,0) = -beta2;
+    // Equilibrium transformation matrix
+    static Matrix B(2,2);
+    B(0,0) = 1.0 - beta1;
+    B(1,1) = 1.0 - beta2;
+    B(0,1) = -beta1;
+    B(1,0) = -beta2;
 
-  // Transform the elastic flexibility of the element
-  // interior to the basic system
-  static XC::Matrix fElastic(2,2);
-  fElastic.addMatrixTripleProduct(0.0, B, fe, 1.0);
+    // Transform the elastic flexibility of the element
+    // interior to the basic system
+    static Matrix fElastic(2,2);
+    fElastic.addMatrixTripleProduct(0.0, B, fe, 1.0);
 
-  // Set element flexibility to flexibility of elastic region
-  f(0,0) = LoverEA;
-  f(1,1) = fElastic(0,0);
-  f(2,2) = fElastic(1,1);
-  f(1,2) = fElastic(0,1);
-  f(2,1) = fElastic(1,0);
-  f(0,1) = f(1,0) = f(0,2) = f(2,0) = 0.0;
+    // Set element flexibility to flexibility of elastic region
+    f(0,0) = LoverEA;
+    f(1,1) = fElastic(0,0);
+    f(2,2) = fElastic(1,1);
+    f(1,2) = fElastic(0,1);
+    f(2,1) = fElastic(1,0);
+    f(0,1) = f(1,0) = f(0,2) = f(2,0) = 0.0;
 
-  for(i = 0; i < 2; i++) {
+    for(int i = 0; i < 2; i++)
+      {
+        if(theSections[i] == 0 || lp[i] <= 0.0)
+          continue;
 
-    if(theSections[i] == 0 || lp[i] <= 0.0)
-      continue;
+        // Get section information
+        int order = theSections[i]->getOrder();
+        const ID &code = theSections[i]->getType();
 
-    // Get section information
-    int order = theSections[i]->getOrder();
-    const XC::ID &code = theSections[i]->getType();
+        Vector s(workArea, order);
+        Vector ds(&workArea[order], order);
+        Vector de(&workArea[2*order], order);
 
-    Vector s(workArea, order);
-    Vector ds(&workArea[order], order);
-    Vector de(&workArea[2*order], order);
+        Matrix fb(&workArea[3*order], order, 3);
 
-    Matrix fb(&workArea[3*order], order, 3);
+        const double x= xi[i];
+        const double xL= x*oneOverL;
+        const double xL1= xL-1.0;
 
-    double x   = xi[i];
-    double xL  = x*oneOverL;
-    double xL1 = xL-1.0;
+        // get section flexibility matrix
+        const Matrix &fSec = theSections[i]->getInitialFlexibility();
 
-    // get section flexibility matrix
-    const XC::Matrix &fSec = theSections[i]->getInitialFlexibility();
-
-    // integrate section flexibility matrix
-    // f += (b^ fs * b) * lp[i];
-    //f.addMatrixTripleProduct(1.0, b, fSec, lp[i]);
-    int ii, jj;
-    fb.Zero();
-    double tmp;
-    for(ii = 0; ii < order; ii++) {
-      switch(code(ii)) {
-      case SECTION_RESPONSE_P:
-        for(jj = 0; jj < order; jj++)
-          fb(jj,0) += fSec(jj,ii)*lp[i];
-        break;
-      case SECTION_RESPONSE_MZ:
-        for(jj = 0; jj < order; jj++) {
-          tmp = fSec(jj,ii)*lp[i];
-          fb(jj,1) += xL1*tmp;
-          fb(jj,2) += xL*tmp;
-        }
-        break;
-      case SECTION_RESPONSE_VY:
-        for(jj = 0; jj < order; jj++) {
-          //tmp = oneOverL*fSec(jj,ii)*lp[i]*L/lp[i];
-          tmp = fSec(jj,ii);
-          fb(jj,1) += tmp;
-          fb(jj,2) += tmp;
+        // integrate section flexibility matrix
+        // f += (b^ fs * b) * lp[i];
+        //f.addMatrixTripleProduct(1.0, b, fSec, lp[i]);
+        fb.Zero();
+        double tmp;
+        for(int ii = 0; ii < order; ii++)
+          {
+            switch(code(ii))
+              {
+              case SECTION_RESPONSE_P:
+                for(int jj = 0; jj < order; jj++)
+                  fb(jj,0) += fSec(jj,ii)*lp[i];
+                break;
+              case SECTION_RESPONSE_MZ:
+                for(int jj = 0; jj < order; jj++)
+                  {
+                    tmp = fSec(jj,ii)*lp[i];
+                    fb(jj,1) += xL1*tmp;
+                    fb(jj,2) += xL*tmp;
+                  }
+                break;
+              case SECTION_RESPONSE_VY:
+                for(int jj = 0; jj < order; jj++)
+                  {
+                    //tmp = oneOverL*fSec(jj,ii)*lp[i]*L/lp[i];
+                    tmp= fSec(jj,ii);
+                    fb(jj,1)+= tmp;
+                    fb(jj,2) += tmp;
+                  }
+                break;
+              default:
+                break;
+              }
           }
-        break;
-      default:
-        break;
+        for(int ii = 0; ii < order; ii++)
+          {
+            switch (code(ii))
+              {
+              case SECTION_RESPONSE_P:
+                for(int jj = 0; jj < 3; jj++)
+                  f(0,jj) += fb(ii,jj);
+                break;
+              case SECTION_RESPONSE_MZ:
+                for(int jj = 0; jj < 3; jj++)
+                  {
+                    tmp = fb(ii,jj);
+                    f(1,jj) += xL1*tmp;
+                    f(2,jj) += xL*tmp;
+                  }
+                break;
+              case SECTION_RESPONSE_VY:
+                for(int jj = 0; jj < 3; jj++)
+                  {
+                    tmp= oneOverL*fb(ii,jj);
+                    f(1,jj)+= tmp;
+                    f(2,jj)+= tmp;
+                  }
+                break;
+              default:
+                break;
+              }
+           }
       }
-    }
-    for(ii = 0; ii < order; ii++) {
-      switch (code(ii)) {
-      case SECTION_RESPONSE_P:
-        for(jj = 0; jj < 3; jj++)
-          f(0,jj) += fb(ii,jj);
-        break;
-      case SECTION_RESPONSE_MZ:
-        for(jj = 0; jj < 3; jj++) {
-          tmp = fb(ii,jj);
-          f(1,jj) += xL1*tmp;
-          f(2,jj) += xL*tmp;
-        }
-        break;
-      case SECTION_RESPONSE_VY:
-        for(jj = 0; jj < 3; jj++) {
-          tmp = oneOverL*fb(ii,jj);
-          f(1,jj) += tmp;
-          f(2,jj) += tmp;
-        }
-        break;
-      default:
-        break;
-      }
-    }
-  }
 
-  // calculate element stiffness matrix
-  //invert3by3Matrix(f, kb);
-  static XC::Matrix kbInit(3,3);
-  if(f.Solve(Iden,kbInit) < 0)
-    std::cerr << "XC::BeamWithHinges2d::update() -- could not invert flexibility\n";
+    // calculate element stiffness matrix
+    //invert3by3Matrix(f, kb);
+    static Matrix kbInit(3,3);
+    if(f.Solve(Iden,kbInit) < 0)
+      std::cerr << "BeamWithHinges2d::update() -- could not invert flexibility\n";
     static Matrix K;
     K= theCoordTransf->getInitialGlobalStiffMatrix(kbInit);
     if(isDead())
@@ -422,8 +412,8 @@ const XC::Matrix &XC::BeamWithHinges2d::getMass(void) const
 
     if(rho != 0.0)
       {
-        double L = theCoordTransf->getInitialLength();
-       theMatrix(0,0) = theMatrix(1,1) = theMatrix(3,3) = theMatrix(4,4) = 0.5*L*rho;
+        const double L = theCoordTransf->getInitialLength();
+        theMatrix(0,0) = theMatrix(1,1) = theMatrix(3,3) = theMatrix(4,4) = 0.5*L*rho;
       }
     if(isDead())
       theMatrix*=dead_srf;
@@ -434,7 +424,6 @@ void  XC::BeamWithHinges2d::zeroLoad(void)
   {
     if(sp)
       sp->Zero();
-
     p0.zero();
     v0.zero();
     BeamColumnWithSectionFDTrf2d::zeroLoad();
@@ -474,7 +463,7 @@ int XC::BeamWithHinges2d::addLoad(ElementalLoad *theLoad, double loadFactor)
               }
             (*sp)+= beamMecLoad->getAppliedSectionForces(L,xi_pt,loadFactor); // Accumulate applied section forces due to element loads
             beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
-            beamMecLoad->addElasticDeformations(L,ConstantesSecc2d(E,A,I),lp1,lp2,loadFactor,v0);
+            beamMecLoad->addElasticDeformations(L,ctes_scc,lp1,lp2,loadFactor,v0);
           }
         else
           {
@@ -517,43 +506,43 @@ const XC::Vector &XC::BeamWithHinges2d::getResistingForce(void) const
 
 const XC::Vector &XC::BeamWithHinges2d::getResistingForceIncInertia(void) const
   {
-  theVector =  this->getResistingForce();
+    theVector=  this->getResistingForce();
 
-  if(rho != 0.0) {
+    if(rho != 0.0)
+      {
 
-    double ag[6];
+        double ag[6];
+        const Vector &accel1 = theNodes[0]->getTrialAccel();
+        const Vector &accel2 = theNodes[1]->getTrialAccel();
 
-    const Vector &accel1 = theNodes[0]->getTrialAccel();
-    const Vector &accel2 = theNodes[1]->getTrialAccel();
+        ag[0] = accel1(0);
+        ag[1] = accel1(1);
+        //ag[2] = accel1(2); // no rotational element mass
+        ag[3] = accel2(0);
+        ag[4] = accel2(1);
+        //ag[5] = accel2(2); // no rotational element mass
 
-    ag[0] = accel1(0);
-    ag[1] = accel1(1);
-    //ag[2] = accel1(2); // no rotational element mass
-    ag[3] = accel2(0);
-    ag[4] = accel2(1);
-    //ag[5] = accel2(2); // no rotational element mass
+        theVector = this->getResistingForce();
 
-    theVector = this->getResistingForce();
+        const double L = theCoordTransf->getInitialLength();
+        const double mass= 0.5*L*rho;
 
-    double L = theCoordTransf->getInitialLength();
-    double mass = 0.5*L*rho;
+        for(int i = 0, j = 3; i < 2; i++, j++)
+          {
+            theVector(i)+= mass*ag[i];
+            theVector(j)+= mass*ag[j];
+          }
 
-    int i,j;
-    for(i = 0, j = 3; i < 2; i++, j++) {
-      theVector(i) += mass*ag[i];
-      theVector(j) += mass*ag[j];
-    }
-
-    // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      theVector += this->getRayleighDampingForces();
-
-  } else {
-
-    // add the damping forces if rayleigh damping
-    if(!rayFactors.KNulos())
-      theVector += this->getRayleighDampingForces();
-  }
+        // add the damping forces if rayleigh damping
+        if(!rayFactors.Nulos())
+          theVector += this->getRayleighDampingForces();
+      }
+    else
+      {
+        // add the damping forces if rayleigh damping
+        if(!rayFactors.KNulos())
+         theVector += this->getRayleighDampingForces();
+      }
     if(isDead())
       theVector*=dead_srf; //XXX Se aplica 2 veces sobre getResistingForce: arreglar.
     return theVector;
@@ -563,24 +552,25 @@ const XC::Vector &XC::BeamWithHinges2d::getResistingForceIncInertia(void) const
 int XC::BeamWithHinges2d::sendData(CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf2d::sendData(cp);
-    res+= cp.sendDoubles(E,A,I,beta1,beta2,rho,getDbTagData(),CommMetaData(12));
-    res+= cp.sendMatrix(fs[0],getDbTagData(),CommMetaData(13));
-    res+= cp.sendMatrix(fs[1],getDbTagData(),CommMetaData(14));
-    res+= cp.sendVector(sr[0],getDbTagData(),CommMetaData(15));
-    res+= cp.sendVector(sr[1],getDbTagData(),CommMetaData(16));
-    res+= cp.sendVector(e[0],getDbTagData(),CommMetaData(17));
-    res+= cp.sendVector(e[1],getDbTagData(),CommMetaData(18));
-    res+= cp.sendMatrix(kb,getDbTagData(),CommMetaData(19));
-    res+= cp.sendVector(q,getDbTagData(),CommMetaData(20));
-    res+= cp.sendMatrix(kbCommit,getDbTagData(),CommMetaData(21));
-    res+= cp.sendVector(qCommit,getDbTagData(),CommMetaData(22));
-    res+= cp.sendVector(eCommit[0],getDbTagData(),CommMetaData(23));
-    res+= cp.sendVector(eCommit[1],getDbTagData(),CommMetaData(24));
-    res+= cp.sendInts(initialFlag,maxIter,getDbTagData(),CommMetaData(25));
-    res+= cp.sendDouble(tolerance,getDbTagData(),CommMetaData(26));
-    res+= cp.sendMatrixPtr(sp,getDbTagData(),MatrixCommMetaData(26,27,28,29));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(30));
-    res+= v0.sendData(cp,getDbTagData(),CommMetaData(31));
+    res+= cp.sendMovable(ctes_scc,getDbTagData(),CommMetaData(12));
+    res+= cp.sendDoubles(beta1,beta2,rho,getDbTagData(),CommMetaData(13));
+    res+= cp.sendMatrix(fs[0],getDbTagData(),CommMetaData(14));
+    res+= cp.sendMatrix(fs[1],getDbTagData(),CommMetaData(15));
+    res+= cp.sendVector(sr[0],getDbTagData(),CommMetaData(16));
+    res+= cp.sendVector(sr[1],getDbTagData(),CommMetaData(17));
+    res+= cp.sendVector(e[0],getDbTagData(),CommMetaData(18));
+    res+= cp.sendVector(e[1],getDbTagData(),CommMetaData(19));
+    res+= cp.sendMatrix(kb,getDbTagData(),CommMetaData(20));
+    res+= cp.sendVector(q,getDbTagData(),CommMetaData(21));
+    res+= cp.sendMatrix(kbCommit,getDbTagData(),CommMetaData(22));
+    res+= cp.sendVector(qCommit,getDbTagData(),CommMetaData(23));
+    res+= cp.sendVector(eCommit[0],getDbTagData(),CommMetaData(24));
+    res+= cp.sendVector(eCommit[1],getDbTagData(),CommMetaData(25));
+    res+= cp.sendInts(initialFlag,maxIter,getDbTagData(),CommMetaData(26));
+    res+= cp.sendDouble(tolerance,getDbTagData(),CommMetaData(27));
+    res+= cp.sendMatrixPtr(sp,getDbTagData(),MatrixCommMetaData(28,29,30,31));
+    res+= p0.sendData(cp,getDbTagData(),CommMetaData(32));
+    res+= v0.sendData(cp,getDbTagData(),CommMetaData(33));
     return res;
   }
 
@@ -588,24 +578,25 @@ int XC::BeamWithHinges2d::sendData(CommParameters &cp)
 int XC::BeamWithHinges2d::recvData(const CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf2d::recvData(cp);
-    res+= cp.receiveDoubles(E,A,I,beta1,beta2,rho,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveMatrix(fs[0],getDbTagData(),CommMetaData(13));
-    res+= cp.receiveMatrix(fs[1],getDbTagData(),CommMetaData(14));
-    res+= cp.receiveVector(sr[0],getDbTagData(),CommMetaData(15));
-    res+= cp.receiveVector(sr[1],getDbTagData(),CommMetaData(16));
-    res+= cp.receiveVector(e[0],getDbTagData(),CommMetaData(17));
-    res+= cp.receiveVector(e[1],getDbTagData(),CommMetaData(18));
-    res+= cp.receiveMatrix(kb,getDbTagData(),CommMetaData(19));
-    res+= cp.receiveVector(q,getDbTagData(),CommMetaData(20));
-    res+= cp.receiveMatrix(kbCommit,getDbTagData(),CommMetaData(21));
-    res+= cp.receiveVector(qCommit,getDbTagData(),CommMetaData(22));
-    res+= cp.receiveVector(eCommit[0],getDbTagData(),CommMetaData(23));
-    res+= cp.receiveVector(eCommit[1],getDbTagData(),CommMetaData(24));
-    res+= cp.receiveInts(initialFlag,maxIter,getDbTagData(),CommMetaData(25));
-    res+= cp.receiveDouble(tolerance,getDbTagData(),CommMetaData(26));
-    sp= cp.receiveMatrixPtr(sp,getDbTagData(),MatrixCommMetaData(26,27,28,29));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(30));
-    res+= v0.receiveData(cp,getDbTagData(),CommMetaData(31));
+    res+= cp.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(12));
+    res+= cp.receiveDoubles(beta1,beta2,rho,getDbTagData(),CommMetaData(13));
+    res+= cp.receiveMatrix(fs[0],getDbTagData(),CommMetaData(14));
+    res+= cp.receiveMatrix(fs[1],getDbTagData(),CommMetaData(15));
+    res+= cp.receiveVector(sr[0],getDbTagData(),CommMetaData(16));
+    res+= cp.receiveVector(sr[1],getDbTagData(),CommMetaData(17));
+    res+= cp.receiveVector(e[0],getDbTagData(),CommMetaData(18));
+    res+= cp.receiveVector(e[1],getDbTagData(),CommMetaData(19));
+    res+= cp.receiveMatrix(kb,getDbTagData(),CommMetaData(20));
+    res+= cp.receiveVector(q,getDbTagData(),CommMetaData(21));
+    res+= cp.receiveMatrix(kbCommit,getDbTagData(),CommMetaData(22));
+    res+= cp.receiveVector(qCommit,getDbTagData(),CommMetaData(23));
+    res+= cp.receiveVector(eCommit[0],getDbTagData(),CommMetaData(24));
+    res+= cp.receiveVector(eCommit[1],getDbTagData(),CommMetaData(25));
+    res+= cp.receiveInts(initialFlag,maxIter,getDbTagData(),CommMetaData(26));
+    res+= cp.receiveDouble(tolerance,getDbTagData(),CommMetaData(27));
+    sp= cp.receiveMatrixPtr(sp,getDbTagData(),MatrixCommMetaData(28,29,30,31));
+    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(32));
+    res+= v0.receiveData(cp,getDbTagData(),CommMetaData(33));
     return res;
   }
 
@@ -614,7 +605,7 @@ int XC::BeamWithHinges2d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
     const int dataTag= getDbTag();
-    inicComm(32);
+    inicComm(33);
     int res= sendData(cp);
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
@@ -626,7 +617,7 @@ int XC::BeamWithHinges2d::sendSelf(CommParameters &cp)
 //! @brief Recibe el objeto a través del canal que se pasa como parámetro.
 int XC::BeamWithHinges2d::recvSelf(const CommParameters &cp)
   {
-    inicComm(32);
+    inicComm(33);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
@@ -646,9 +637,7 @@ void XC::BeamWithHinges2d::Print(std::ostream &s, int flag)
   {
     s << "\nBeamWithHinges2d, tag: " << this->getTag() << std::endl;
     s << "\tConnected Nodes: " << theNodes;
-    s << "\tE: " << E << std::endl;
-    s << "\tA: " << A << std::endl;
-    s << "\tI: " << I << std::endl;
+    s << "\tmechanical properties: " << ctes_scc << std::endl;
 
     double P, V, M1, M2;
     double L = theCoordTransf->getInitialLength();
@@ -722,10 +711,10 @@ int XC::BeamWithHinges2d::update(void)
       Iden(i,i) = 1.0;
 
     // Length of elastic interior
-    double Le = L-lp[0]-lp[1];
-    double LoverEA  = Le/(E*A);
-    double Lover3EI = Le/(3*E*I);
-    double Lover6EI = 0.5*Lover3EI;
+    const double Le = L-lp[0]-lp[1];
+    const double LoverEA  = Le/(ctes_scc.EA());
+    const double Lover3EI = Le/(3*ctes_scc.EI());
+    const double Lover6EI = 0.5*Lover3EI;
 
     // Elastic flexibility of element interior
     static XC::Matrix fe(2,2);
@@ -1089,50 +1078,50 @@ XC::Response* XC::BeamWithHinges2d::setResponse(const std::vector<std::string> &
 
 int XC::BeamWithHinges2d::getResponse(int responseID, Information &eleInfo)
   {
-    double V;
     const double L = theCoordTransf->getInitialLength();
-    static XC::Vector force(6);
-    static XC::Vector def(3);
+    static Vector force(6);
+    static Vector def(3);
+    double V= 0.0;
+    switch (responseID)
+      {
+      case 1:
+        {
+          const Vector &v= theCoordTransf->getBasicTrialDisp();
+          const double LoverEA  = L/(ctes_scc.EA());
+          const double Lover3EI = L/(3*ctes_scc.EI());
+          const double Lover6EI = 0.5*Lover3EI;
 
-  switch (responseID) {
-  case 1: {
-    const XC::Vector &v = theCoordTransf->getBasicTrialDisp();
-    double LoverEA  = L/(E*A);
-    double Lover3EI = L/(3*E*I);
-    double Lover6EI = 0.5*Lover3EI;
+          const double q1 = qCommit(1);
+          const double q2 = qCommit(2);
 
-    double q1 = qCommit(1);
-    double q2 = qCommit(2);
+          def(0) = v(0) - LoverEA*qCommit(0);
+          def(1) = v(1) - Lover3EI*q1 + Lover6EI*q2;
+          def(2) = v(2) + Lover6EI*q1 - Lover3EI*q2;
 
-    def(0) = v(0) - LoverEA*qCommit(0);
-    def(1) = v(1) - Lover3EI*q1 + Lover6EI*q2;
-    def(2) = v(2) + Lover6EI*q1 - Lover3EI*q2;
+          return eleInfo.setVector(def);
+        }
 
-    return eleInfo.setVector(def);
-  }
+      case 2: // global forces
+        return eleInfo.setVector(this->getResistingForce());
 
-  case 2: // global forces
-    return eleInfo.setVector(this->getResistingForce());
+      case 3: // stiffness
+        return eleInfo.setMatrix(this->getTangentStiff());
 
-  case 3: // stiffness
-    return eleInfo.setMatrix(this->getTangentStiff());
-
-  case 4: // local forces
-    // Axial
-    force(3) =  q(0);
-    force(0) = -q(0)+p0[0];
-    // Moment
-    force(2) = q(1);
-    force(5) = q(2);
-    // Shear
-    V = (q(1)+q(2))/L;
-    force(1) =  V+p0[1];
-    force(4) = -V+p0[2];
-    return eleInfo.setVector(force);
-
-  default:
-    return -1;
-  }
+      case 4: // local forces
+        // Axial
+        force(3) =  q(0);
+        force(0) = -q(0)+p0[0];
+        // Moment
+        force(2) = q(1);
+        force(5) = q(2);
+        // Shear
+        V = (q(1)+q(2))/L;
+        force(1) =  V+p0[1];
+        force(4) = -V+p0[2];
+        return eleInfo.setVector(force);
+      default:
+        return -1;
+      }
   }
 
 int XC::BeamWithHinges2d::setParameter(const std::vector<std::string> &argv, Parameter &param)
@@ -1175,28 +1164,25 @@ int XC::BeamWithHinges2d::setParameter(const std::vector<std::string> &argv, Par
   }
 
 int XC::BeamWithHinges2d::updateParameter(int parameterID, Information &info)
-{
-  switch (parameterID) {
-  case 1:
-    this->E = info.theDouble;
-    return 0;
-  case 3:
-    this->A = info.theDouble;
-    return 0;
-  case 4:
-    this->I = info.theDouble;
-    return 0;
-  default:
-    if(parameterID >= 100) { // section quantity
-      int sectionNum = parameterID/100;
-      if(sectionNum == 1)
-        return theSections[0]->updateParameter (parameterID-100, info);
-      if(sectionNum == 2)
-        return theSections[1]->updateParameter (parameterID-2*100, info);
-      else
-        return -1;
-    }
-    else // unknown
-      return -1;
+  {
+    switch (parameterID)
+      {
+      case 1:
+      case 3:
+      case 4:
+        return ctes_scc.updateParameter(parameterID,info);
+      default:
+        if(parameterID >= 100)
+          { // section quantity
+            const int sectionNum = parameterID/100;
+            if(sectionNum == 1)
+              return theSections[0]->updateParameter (parameterID-100, info);
+            if(sectionNum == 2)
+              return theSections[1]->updateParameter (parameterID-2*100, info);
+            else
+              return -1;
+          }
+        else // unknown
+          return -1;
+      }
   }
-}

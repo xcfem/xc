@@ -29,7 +29,7 @@
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/HingeBeamIntegration2d.h>
 #include "domain/mesh/element/fvectors/FVector.h"
 #include "domain/load/beam_loads/BeamMecLoad.h"
-#include "material/section/repres/ConstantesSecc2d.h"
+#include "material/section/repres/CrossSectionProperties2d.h"
 
 XC::HingeBeamIntegration2d::HingeBeamIntegration2d(int classTag,double e,double a,double i,double lpi,double lpj)
   : PlasticLengthsBeamIntegration(classTag,lpi,lpj), E(e), A(a), I(i) {}
@@ -41,7 +41,7 @@ XC::HingeBeamIntegration2d::HingeBeamIntegration2d(int classTag)
 void XC::HingeBeamIntegration2d::addElasticDeformations(ElementalLoad *theLoad,double loadFactor,double L,FVector &v0)
   {
     if(BeamMecLoad *beamMecLoad= dynamic_cast<BeamMecLoad *>(theLoad))
-      beamMecLoad->addElasticDeformations(L,ConstantesSecc2d(E,A,I),lpI,lpJ,loadFactor,v0);
+      beamMecLoad->addElasticDeformations(L,CrossSectionProperties2d(E,A,I),lpI,lpJ,loadFactor,v0);
     else
       std::cerr << "XC::HingeBeamIntegration2d::addElasticDeformations -- load type unknown." << std::endl;
     return;

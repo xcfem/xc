@@ -48,8 +48,8 @@ class MaterialLoader;
 class Material;
 class Vector;
 class Matrix;
-class ConstantesSecc3d;
-class ConstantesSecc2d;
+class CrossSectionProperties3d;
+class CrossSectionProperties2d;
 
 //! @ingroup MATSCCRepres
 //

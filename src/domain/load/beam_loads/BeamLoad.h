@@ -34,7 +34,7 @@
 
 namespace XC {
 class Matrix;
-class ConstantesSecc3d;
+class CrossSectionProperties3d;
 
 //! @ingroup ElemLoads
 //

@@ -67,7 +67,7 @@ XC::HingeRadauTwoBeamIntegration3d::HingeRadauTwoBeamIntegration3d(double e,
   : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeRadauTwo3d,e,a,iz,iy,g,j,lpi,lpj) {}
 
 //! @brief Constructor.
-XC::HingeRadauTwoBeamIntegration3d::HingeRadauTwoBeamIntegration3d(const ConstantesSecc3d &cts,const double &lpi,const double &lpj)
+XC::HingeRadauTwoBeamIntegration3d::HingeRadauTwoBeamIntegration3d(const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
   : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeRadauTwo3d,cts,lpi,lpj) {}
 
 //! @brief Devuelve la posición de las secciones en el vector xi.

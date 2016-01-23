@@ -31,7 +31,7 @@
 
 #include "BaseElasticSection.h"
 #include <utility/matrix/Vector.h>
-#include "material/section/repres/ConstantesSecc2d.h"
+#include "material/section/repres/CrossSectionProperties2d.h"
 
 namespace XC {
 
@@ -43,7 +43,7 @@ namespace XC {
 class BaseElasticSection2d: public BaseElasticSection
   {
   protected:
-    ConstantesSecc2d ctes_scc; //!< Características mecánicas de la seccion E,A,I.
+    CrossSectionProperties2d ctes_scc; //!< Características mecánicas de la seccion E,A,I.
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
@@ -54,8 +54,8 @@ class BaseElasticSection2d: public BaseElasticSection
     BaseElasticSection2d(int tag,int classTag,const size_t &dim,MaterialLoader *mat_ldr= NULL);    
     BaseElasticSection2d(int classTag,const size_t &dim);
 
-    const ConstantesSecc2d &getConstantesSeccion(void) const;   
-    void setConstantesSeccion(const ConstantesSecc2d &);  
+    const CrossSectionProperties2d &getCrossSectionProperties(void) const;   
+    void setCrossSectionProperties(const CrossSectionProperties2d &);  
     void sectionGeometry(const std::string &);
 
 

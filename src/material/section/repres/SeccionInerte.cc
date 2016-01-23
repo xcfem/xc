@@ -33,8 +33,8 @@
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
 #include "xc_utils/src/geom/sis_ref/EjesPrincInercia2d.h"
-#include "material/section/repres/ConstantesSecc3d.h"
-#include "material/section/repres/ConstantesSecc2d.h"
+#include "material/section/repres/CrossSectionProperties3d.h"
+#include "material/section/repres/CrossSectionProperties2d.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
 #include "xc_utils/src/base/utils_any.h"
 
@@ -183,9 +183,9 @@ XC::Matrix XC::SeccionInerte::getISeccHomogeneizada(const double &E0,const Pos2d
     return retval;
   }
 
-XC::ConstantesSecc3d XC::SeccionInerte::getConstantesSecc3d(const ConstantesSecc3d &base) const
+XC::CrossSectionProperties3d XC::SeccionInerte::getCrossSectionProperties3d(const CrossSectionProperties3d &base) const
   {
-    ConstantesSecc3d retval;
+    CrossSectionProperties3d retval;
     retval= base; //Asignamos E, G y alpha.
     retval.A()= getAreaSeccHomogeneizada(base.E()); 
     retval.Iy()= getIySeccHomogeneizada(base.E());
@@ -194,9 +194,9 @@ XC::ConstantesSecc3d XC::SeccionInerte::getConstantesSecc3d(const ConstantesSecc
     return retval;
   }
 
-XC::ConstantesSecc2d XC::SeccionInerte::getConstantesSecc2d(const ConstantesSecc2d &base) const
+XC::CrossSectionProperties2d XC::SeccionInerte::getCrossSectionProperties2d(const CrossSectionProperties2d &base) const
   {
-    static ConstantesSecc2d retval;
+    static CrossSectionProperties2d retval;
     retval= base; //Asignamos E, G y alpha.
     retval.A()= getAreaSeccHomogeneizada(base.E()); 
     retval.I()= getIzSeccHomogeneizada(base.E());
