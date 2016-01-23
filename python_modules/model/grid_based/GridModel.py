@@ -6,7 +6,7 @@ __author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
 __cppyright__= "Copyright 2015, AOO and LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
 import geom
 import xc
@@ -52,8 +52,11 @@ class DeckMaterialData(MaterialData):
     super(DeckMaterialData,self).__init__(name,E,nu,rho)
     self.thickness= thickness
   def getAreaDensity(self):
+    '''returns the mass per unit area'''
     return self.rho*self.thickness
   def setup(self,preprocessor):
+    '''returns the elastic isotropic section appropiate for plate and shell analysis
+    '''
     typical_materials.defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.getAreaDensity(),self.thickness)
 
 class BeamMaterialData(MaterialData):
@@ -72,8 +75,11 @@ class BeamMaterialData(MaterialData):
     self.b= b
     self.h= h
   def getLongitudinalDensity(self):
+    '''returns the mass per unit length'''
     return self.rho*self.b*self.h
   def setup(self,preprocessor):
+    '''returns the elastic section appropiate for 3D beam analysis
+    '''
     rs= parametrosSeccionRectangular.RectangularSection('',self.b,self.h,self.E,self.nu)
     typical_materials.defElasticShearSection3d(preprocessor,self.name,rs.A(),rs.E,rs.G(),rs.Iz(),rs.Iy(),rs.J(),rs.alphaZ())
 
@@ -275,7 +281,13 @@ class ConstrainedRangesMap(NamedObjectsMap):
       self[key].generateContraintsInLines()
 
 class ElasticFoundationRanges(IJKRangeList):
-  '''Region resting on springs (Winkler model)'''
+  '''Region resting on springs (Winkler elastic foundation)
+  Attributes:
+    name:     name to identify the region
+    wModulus: Winkler modulus of the foundation (springs in Z direction)
+    cRoz:     fraction of the Winkler modulus to apply for friction in
+              the contact plane (springs in X, Y directions)
+  '''
   def __init__(self,name, grid, wModulus, cRoz):
     ''' wModulus: Winkler modulus.
         cRoz: fraction of the Winkler modulus to apply in the contact plane.'''
@@ -514,29 +526,60 @@ class LoadStateMap(NamedObjectsMap):
     return retval
 
 class GridModel(object):
-  def __init__(self,efProblem):
-    self.efProblem= efProblem
+  '''Class for creating FE models (geometry, materials, mesh, constraints and loads) based on a grid 3D positions.
+  Attributes:
+    FEProblem:  XC finite element problem
+  '''
+  def __init__(self,FEProblem):
+    self.FEProblem= FEProblem
 
-  def getEFProblem(self):
-    return self.efProblem
+  def getFEProblem(self):
+    '''returns the FE problem linked with the grid model'''
+    return self.FEProblem
   def getPreprocessor(self):
-    return self.efProblem.getPreprocessor
+    '''returs the preprocessor'''
+    return self.FEProblem.getPreprocessor
 
   def newMaterialSurface(self,name,material,elemType,elemSize):
+    '''returns a type of surface to be discretized from the defined 
+    material, type of element and size of the elements.
+    Parameters:
+      name:     name to identify the type of surface
+      material: name of the material that makes up the surface
+      elemType: element type to be used in the discretization
+      elemSize: mean size of the elements
+    '''
     return MaterialSurface(name, self.grid, material,elemType,elemSize)
 
   def newMaterialLine(self,name,material,elemType,elemSize):
+    '''returns a type of line to be discretized from the defined 
+    material, type of element and size of the elements.
+    Parameters:
+      name:     name to identify the surface
+      material: name of the material that makes up the surface
+      elemType: element type be used in the discretization
+      elemSize: mean size of the elements
+    '''
     return MaterialLine(name, self.grid, material,elemType,elemSize)
 
   def setMaterials(self,materialDataList):
+    '''returns the dictionary of materials contained in the list
+    given as a parameter
+    '''
     self.materialData= MaterialDataMap(materialDataList)
     return self.materialData
 
   def setMaterialSurfacesMap(self,materialSurfaceList):
+    '''returns the dictionary of the material-surfaces contained in the list
+    given as a parameter
+    '''
     self.conjSup= MaterialSurfacesMap(materialSurfaceList)
     return self.conjSup
 
   def setMaterialLinesMap(self,materialLineList):
+    '''returns the dictionary of the material-lines contained in the list
+    given as a parameter
+    '''
     self.conjLin= MaterialLinesMap(materialLineList)
     return self.conjLin
 
@@ -589,9 +632,19 @@ class GridModel(object):
     return self.constrainedRanges
 
   def newElasticFoundationRanges(self,name, wModulus, cRoz):
+    '''Returns a region resting on springs (Winkler elastic foundation)
+    Parameters:
+      name:     name to identify the region
+      wModulus: Winkler modulus of the foundation (springs in Z direction)
+      cRoz:     fraction of the Winkler modulus to apply for friction in
+                the contact plane (springs in X, Y directions)
+    '''
     return ElasticFoundationRanges(name, self.grid, wModulus, cRoz)
 
   def setElasticFoundationRangesMap(self,elasticFoundationRangesList):
+    '''Returns a dictionary with the list of Winkler elastic foundations
+    given as a parameter
+    '''
     self.elasticFoundationRanges= ElasticFoundationRangesMap(elasticFoundationRangesList)
     return self.elasticFoundationRanges
 
