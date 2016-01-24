@@ -91,7 +91,7 @@
 
 //! @brief Constructor por defecto.
 XC::ProtoElementLoader::ProtoElementLoader(Preprocessor *preprocessor)
-  : Loader(preprocessor), nmb_mat("nil"), num_sec(3), dim_elem(0), nmb_transf("nil"), nmb_integ("lobatto"), dir(0)
+  : Loader(preprocessor), nmb_mat("nil"), num_sec(3), dim_elem(0), nmb_transf("nil"), nmb_integ("Lobatto"), dir(0)
  {}
 
 //! @brief Devuelve una referencia al cargador de materiales.

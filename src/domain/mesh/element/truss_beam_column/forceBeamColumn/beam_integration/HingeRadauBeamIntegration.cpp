@@ -99,7 +99,7 @@ void XC::HingeRadauBeamIntegration::getSectionWeights(int numSections, double L,
 XC::BeamIntegration *XC::HingeRadauBeamIntegration::getCopy(void) const
   { return new HingeRadauBeamIntegration(*this); }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send object members through the channel defined in cp.
 int XC::HingeRadauBeamIntegration::sendData(CommParameters &cp)
   {
     int res= PlasticLengthsBeamIntegration::sendData(cp);
@@ -107,7 +107,7 @@ int XC::HingeRadauBeamIntegration::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object members through the channel defined in cp.
 int XC::HingeRadauBeamIntegration::recvData(const CommParameters &cp)
   {
     int res= PlasticLengthsBeamIntegration::recvData(cp);
@@ -115,7 +115,7 @@ int XC::HingeRadauBeamIntegration::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel defined in cp.
 int XC::HingeRadauBeamIntegration::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -129,7 +129,7 @@ int XC::HingeRadauBeamIntegration::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel defined in cp.
 int XC::HingeRadauBeamIntegration::recvSelf(const CommParameters &cp)
   {
     inicComm(3);

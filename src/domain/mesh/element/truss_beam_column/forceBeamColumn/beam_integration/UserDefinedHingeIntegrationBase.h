@@ -44,43 +44,44 @@
 **                                                                    **
 ** ****************************************************************** */
 
-// $Revision: 1.3 $
-// $Date: 2003/06/10 00:36:09 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedHingeIntegration2d.h,v $
+// $Revision: 1.1 $
+// $Date: 2006/01/18 21:58:24 $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedHingeIntegrationBase.h,v $
 
-#ifndef UserDefinedHingeIntegration2d_h
-#define UserDefinedHingeIntegration2d_h
+#ifndef UserDefinedHingeIntegrationBase_h
+#define UserDefinedHingeIntegrationBase_h
 
-#include "UserDefinedHingeIntegrationBase.h"
-#include "material/section/repres/CrossSectionProperties2d.h"
+#include "UserDefinedBeamIntegrationBase.h"
 
 namespace XC {
+class Channel;
+class FEM_ObjectBroker;
 
 //! \ingroup BeamInteg
 //
 //! @brief Integración en la barra definida por el usuario.
-class UserDefinedHingeIntegration2d : public UserDefinedHingeIntegrationBase
+class UserDefinedHingeIntegrationBase : public UserDefinedBeamIntegrationBase
   {
-  private:
-    CrossSectionProperties2d ctes_scc; //Mechanical properties of the section E,A,Iy,...
+  protected:
+    inline Vector &ptsL(void)
+      { return pts; }
+    inline const Vector &ptsL(void) const
+      { return pts; }
+    inline Vector &wtsL(void)
+      { return wts; }
+    inline const Vector &wtsL(void) const
+      { return wts; }
+    Vector ptsR;
+    Vector wtsR;
+    int sendData(CommParameters &cp);
+    int recvData(const CommParameters &cp);
   public:
-    UserDefinedHingeIntegration2d(int npL, const Vector &ptL, const Vector &wtL,
-  				int npR, const Vector &ptR, const Vector &wtR,
-  				const double &E, const double &A, const double &I);
-    UserDefinedHingeIntegration2d();
+    UserDefinedHingeIntegrationBase(int classTag, const Vector &, const Vector &, const Vector &, const Vector &);
+    UserDefinedHingeIntegrationBase(int classTag);
     
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;
   
-    void addElasticDeformations(ElementalLoad *theLoad, double loadFactor,
-  			      double L, double *v0);
-    int addElasticFlexibility(double L, Matrix &fe);
-  
-    BeamIntegration *getCopy(void) const;
-  
-    int setParameter(const std::vector<std::string> &argv, Parameter &param);
-    int updateParameter(int parameterID, Information &info);
-    int activateParameter(int parameterID);
     void Print(std::ostream &s, int flag = 0);
   };
 } // end of XC namespace

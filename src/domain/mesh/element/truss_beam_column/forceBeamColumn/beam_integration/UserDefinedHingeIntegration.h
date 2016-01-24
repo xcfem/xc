@@ -51,9 +51,7 @@
 #ifndef UserDefinedHingeIntegration_h
 #define UserDefinedHingeIntegration_h
 
-#include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
-
-#include <utility/matrix/Vector.h>
+#include "UserDefinedHingeIntegrationBase.h"
 
 namespace XC {
 class Channel;
@@ -62,27 +60,15 @@ class FEM_ObjectBroker;
 //! \ingroup BeamInteg
 //
 //! @brief Integración en la barra definida por el usuario.
-class UserDefinedHingeIntegration : public BeamIntegration
+class UserDefinedHingeIntegration : public UserDefinedHingeIntegrationBase
   {
-  private:
-    Vector ptsL;
-    Vector wtsL;
-    Vector ptsR;
-    Vector wtsR;
   public:
     UserDefinedHingeIntegration(int npL, const Vector &ptL, const Vector &wtL,
   			      int npR, const Vector &ptR, const Vector &wtR);
     UserDefinedHingeIntegration();
     
-    void getSectionLocations(int numSections, double L, double *xi) const;
-    void getSectionWeights(int numSections, double L, double *wt) const;
-  
     BeamIntegration *getCopy(void) const;
   
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
-  
-    void Print(std::ostream &s, int flag = 0);
   };
 } // end of XC namespace
 

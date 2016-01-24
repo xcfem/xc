@@ -51,7 +51,7 @@
 #ifndef UserDefinedHingeIntegration3d_h
 #define UserDefinedHingeIntegration3d_h
 
-#include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
+#include "UserDefinedHingeIntegrationBase.h"
 
 #include <utility/matrix/Vector.h>
 #include "material/section/repres/CrossSectionProperties3d.h"
@@ -61,14 +61,9 @@ namespace XC {
 //! \ingroup BeamInteg
 //
 //! @brief Integración en la barra definida por el usuario.
-class UserDefinedHingeIntegration3d : public BeamIntegration
+class UserDefinedHingeIntegration3d : public UserDefinedHingeIntegrationBase
   {
-  private:
-    Vector ptsL;
-    Vector wtsL;
-    Vector ptsR;
-    Vector wtsR;
-
+  protected:
     CrossSectionProperties3d ctes_scc; //Características de la seccion E,A,Iy,...
   public:
     UserDefinedHingeIntegration3d(int npL, const Vector &ptL, const Vector &wtL,
