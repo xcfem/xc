@@ -45,9 +45,9 @@ class DatosDiagInteraccion;
 class MaterialLoader: public Loader
   {
   public:
-    typedef std::map<std::string,Material *> map_materiales;
-    typedef map_materiales::const_iterator const_iterator;
-    typedef map_materiales::iterator iterator;
+    typedef std::map<std::string,Material *> map_materials;
+    typedef map_materials::const_iterator const_iterator;
+    typedef map_materials::iterator iterator;
 
     typedef std::map<std::string,GeomSection *> map_geom_secc;
     typedef map_geom_secc::const_iterator const_geom_secc_iterator;
@@ -61,7 +61,7 @@ class MaterialLoader: public Loader
     typedef map_diag_interaccion2d::const_iterator const_diag_interacc2d_iterator;
     typedef map_diag_interaccion2d::iterator diag_interacc2d_iterator;
   private:
-    map_materiales materiales; //!< Materiales para el problema.
+    map_materials materials; //!< Material definitions.
     int tag_mat; //!< Tag por defecto para el material.
     map_geom_secc geom_secciones; //!< Geometrías de secciones.
     map_diag_interaccion diagramas_interaccion; //!< Diagramas de interacción de secciones.
@@ -70,7 +70,7 @@ class MaterialLoader: public Loader
     friend class ElementLoader;
   public:
     MaterialLoader(Preprocessor *owr);
-    const map_materiales &Map(void) const;
+    const map_materials &Map(void) const;
     const_iterator begin(void) const;
     const_iterator end(void) const;
     iterator begin(void);

@@ -46,26 +46,91 @@
 
 // $Revision: 1.4 $
 // $Date: 2003/06/10 00:36:09 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedBeamIntegration.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedBeamIntegrationBase.cpp,v $
 
-#include "UserDefinedBeamIntegration.h"
+#include "UserDefinedBeamIntegrationBase.h"
 
 #include <utility/matrix/Vector.h>
 
-XC::UserDefinedBeamIntegration::UserDefinedBeamIntegration(int nIP, const Vector &pt, const Vector &wt)
-  : UserDefinedBeamIntegrationBase(BEAM_INTEGRATION_TAG_UserDefined,pt,wt)
-  {}
-
-XC::UserDefinedBeamIntegration::UserDefinedBeamIntegration()
-  : UserDefinedBeamIntegrationBase(BEAM_INTEGRATION_TAG_UserDefined)
-  {}
-
-XC::BeamIntegration *XC::UserDefinedBeamIntegration::getCopy(void) const
-  { return new UserDefinedBeamIntegration(*this); }
-
-void XC::UserDefinedBeamIntegration::Print(std::ostream &s, int flag)
+XC::UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase(int classTag,
+						       const Vector &pt,
+						       const Vector &wt)
+  : BeamIntegration(classTag), pts(pt), wts(wt)
   {
-    s << "UserDefined" << std::endl;
+    const size_t sz= pt.Size();
+    for(size_t i= 0; i < sz; i++)
+      {
+        if(pt(i) < 0.0 || pt(i) > 1.0)
+          std::cerr << "UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase -- point lies outside [0,1]" << std::endl;
+        if(wt(i) < 0.0 || wt(i) > 1.0)
+          std::cerr << "UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase -- weight lies outside [0,1]" << std::endl;
+      }
+  }
+
+XC::UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase(int classTag,
+						       const Vector &pt)
+  : BeamIntegration(classTag), pts(pt), wts(pt.Size())
+  {
+    const size_t sz= pt.Size();
+    for(size_t i= 0; i < sz; i++)
+      {
+        if(pt(i) < 0.0 || pt(i) > 1.0)
+          std::cerr << "UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase -- point lies outside [0,1]" << std::endl;
+      }
+  }
+
+XC::UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase(int classTag):
+  BeamIntegration(classTag)
+  {}
+
+void XC::UserDefinedBeamIntegrationBase::getSectionLocations(int numSections,double L, double *xi) const
+  {
+    const int nIP = pts.Size();
+
+    int i;
+    for(i = 0; i < nIP; i++)
+      xi[i] = pts(i);
+    for( ; i < numSections; i++)
+      xi[i] = 0.0;
+  }
+
+void XC::UserDefinedBeamIntegrationBase::getSectionWeights(int numSections,double L, double *wt) const
+  {
+    const int nIP = wts.Size();
+
+    int i;
+    for(i = 0; i < nIP; i++)
+      wt[i] = wts(i);
+    for(;i<numSections;i++)
+      wt[i] = 1.0;
+  }
+
+//! @brief Send object members through the channel defined in cp.
+int XC::UserDefinedBeamIntegrationBase::sendData(CommParameters &cp)
+  {
+    //setDbTagDataPos(0,getTag()); Not tagged.
+    int res= cp.sendVector(pts,getDbTagData(),CommMetaData(1));
+    res+= cp.sendVector(wts,getDbTagData(),CommMetaData(2));
+    return res;
+  }
+
+//! @brief Receives object members through the channel defined in cp.
+int XC::UserDefinedBeamIntegrationBase::recvData(const CommParameters &cp)
+  {
+    //setTag(getDbTagDataPos(0)); Not tagged.
+    int res= cp.receiveVector(pts,getDbTagData(),CommMetaData(1));
+    res+= cp.receiveVector(wts,getDbTagData(),CommMetaData(2));
+    return res;
+  }
+
+int XC::UserDefinedBeamIntegrationBase::sendSelf(CommParameters &cp)
+  { return -1; }
+
+int XC::UserDefinedBeamIntegrationBase::recvSelf(const CommParameters &cp)
+  { return -1; }
+
+void XC::UserDefinedBeamIntegrationBase::Print(std::ostream &s, int flag)
+  {
     s << " Points: " << pts;
     s << " Weights: " << wts;
   }

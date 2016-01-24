@@ -66,7 +66,7 @@ class Preprocessor: public EntCmd, public MovableObject
 
     MaterialLoader materiales; //!< Materiales para el problema.
     TransfCooLoader transf; //!< Transformaciones de coordenadas.
-    BeamIntegratorLoader integradores; //!< Integradores para elementos unidimensionales.
+    BeamIntegratorLoader beamIntegrators; //!< Beam integrator schemes.
     NodeLoader nodos; //! Cargador de nodos.
     ElementLoader elementos; //!< Cargador de elementos.
     LoadLoader loads; //!< Cargador de cargas.
@@ -137,9 +137,9 @@ class Preprocessor: public EntCmd, public MovableObject
     const TransfCooLoader &getTransfCooLoader(void) const
       { return transf; }
     BeamIntegratorLoader &getBeamIntegratorLoader(void)
-      { return integradores; }
+      { return beamIntegrators; }
     const BeamIntegratorLoader &getBeamIntegratorLoader(void) const
-      { return integradores; }
+      { return beamIntegrators; }
 
     const Cad &getCad(void) const
       { return cad; }

@@ -44,45 +44,60 @@
 **                                                                    **
 ** ****************************************************************** */
 
-// $Revision: 1.3 $
-// $Date: 2003/06/10 00:36:09 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedHingeIntegration2d.h,v $
+// $Revision$
+// $Date$
+// $Source$
 
-#ifndef UserDefinedHingeIntegration2d_h
-#define UserDefinedHingeIntegration2d_h
+#include "CompositeSimpsonBeamIntegration.h"
 
-#include "UserDefinedHingeIntegrationBase.h"
-#include "material/section/repres/CrossSectionProperties2d.h"
-
-namespace XC {
-
-//! \ingroup BeamInteg
-//
-//! @brief Integración en la barra definida por el usuario.
-class UserDefinedHingeIntegration2d : public UserDefinedHingeIntegrationBase
+XC::CompositeSimpsonBeamIntegration::CompositeSimpsonBeamIntegration():
+  BeamIntegration(BEAM_INTEGRATION_TAG_CompositeSimpson)
   {
-  private:
-    CrossSectionProperties2d ctes_scc; //Mechanical properties of the section E,A,Iy,...
-  public:
-    UserDefinedHingeIntegration2d(int npL, const Vector &ptL, const Vector &wtL,
-  				int npR, const Vector &ptR, const Vector &wtR,
-  				const double &E, const double &A, const double &I);
-    UserDefinedHingeIntegration2d();
-    
-    void getSectionLocations(int numSections, double L, double *xi) const;
-    void getSectionWeights(int numSections, double L, double *wt) const;
-  
-    void addElasticDeformations(ElementalLoad *theLoad, double loadFactor,
-  			      double L, double *v0);
-    int addElasticFlexibility(double L, Matrix &fe);
-  
-    BeamIntegration *getCopy(void) const;
-  
-    int setParameter(const std::vector<std::string> &argv, Parameter &param);
-    int updateParameter(int parameterID, Information &info);
-    int activateParameter(int parameterID);
-    void Print(std::ostream &s, int flag = 0);
-  };
-} // end of XC namespace
+    // Nothing to do
+  }
 
-#endif
+XC::BeamIntegration *XC::CompositeSimpsonBeamIntegration::getCopy(void) const
+  { return new CompositeSimpsonBeamIntegration(*this); }
+
+void XC::CompositeSimpsonBeamIntegration::getSectionLocations(int numSections, double L, double *xi) const
+  {
+    // Check that num sections is odd
+    if(numSections % 2 == 1)
+      {
+        int numIntervals = (numSections+1)/2; // Num intervals is even
+        double h = 1.0/numIntervals;
+        xi[0] = 0.0;
+        xi[numSections-1] = 1.0;
+        for(int i = 1; i < numSections-1; i++)
+          xi[i] = h*i;    
+      }
+    else
+      {
+	std::cerr << "CompositeSimpson, numSections must be odd (" << numSections << " was input)" << std::endl;
+      }
+  }
+
+void XC::CompositeSimpsonBeamIntegration::getSectionWeights(int numSections, double L, double *wt) const
+  {
+    // Check that num sections is odd
+    if(numSections % 2 == 1)
+      {
+        const int numIntervals = (numSections+1)/2; // Num intervals is even
+        const double h = 1.0/numIntervals;
+        wt[0] = h/3.0;
+        wt[numSections-1] = h/3.0;
+        for(int i = 1; i < numSections; i += 2)
+          wt[i] = 4*h/3.0;  
+        for(int i = 2; i < numSections-1; i += 2)
+          wt[i] = 2*h/3.0;  
+      }
+    else 
+      {
+        std::cerr << "CompositeSimpson, numSections must be odd (" << numSections << " was input)" << std::endl;
+      }
+  }
+
+void XC::CompositeSimpsonBeamIntegration::Print(std::ostream &s, int flag)
+  {
+    s << "CompositeSimpson" << std::endl;
+  }

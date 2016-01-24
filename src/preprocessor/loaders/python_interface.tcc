@@ -60,6 +60,16 @@ class_<XC::MaterialLoader, bases<XC::Loader>, boost::noncopyable >("MaterialLoad
   .def("calcInteractionDiagramNMz", &XC::MaterialLoader::calcInteractionDiagramNMz,return_internal_reference<>())
    ;
 
+class_<XC::BeamIntegratorLoader, bases<XC::Loader>, boost::noncopyable >("BeamIntegratorLoader", no_init)
+  .def("newBeamIntegrator", &XC::BeamIntegratorLoader::newBI,return_internal_reference<>(),"Creates a new integration scheme.")
+  .def("get", &XC::BeamIntegratorLoader::get,return_internal_reference<>(),"Retunrs the integrator.")
+  .def("__getitem__",&XC::BeamIntegratorLoader::get, return_value_policy<reference_existing_object>())
+  .def("exists",&XC::BeamIntegratorLoader::exists,"True if integrator is already defined.")
+  .add_property("size", &XC::BeamIntegratorLoader::size, "Returns container's size (number of defined integration schemes).")
+  .def("__len__",&XC::BeamIntegratorLoader::size, "Returns container's size (number of defined integration schemes).")
+  .def("clear",&XC::BeamIntegratorLoader::clearAll,"Removes all items.")
+ ;
+
 class_<XC::ProtoElementLoader, bases<XC::Loader>, boost::noncopyable >("ProtoElementLoader", no_init)
   .add_property("dimElem", &XC::ProtoElementLoader::getDimElem, &XC::ProtoElementLoader::setDimElem)
   .add_property("numSections", &XC::ProtoElementLoader::getNumSections, &XC::ProtoElementLoader::setNumSections)

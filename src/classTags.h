@@ -287,9 +287,12 @@
 #define BEAM_INTEGRATION_TAG_Radau           3
 #define BEAM_INTEGRATION_TAG_NewtonCotes           4
 #define BEAM_INTEGRATION_TAG_Trapezoidal           5
+#define BEAM_INTEGRATION_TAG_CompositeSimpson           55
 #define BEAM_INTEGRATION_TAG_Midpoint           6
 #define BEAM_INTEGRATION_TAG_UserDefined     7
 #define BEAM_INTEGRATION_TAG_FixedLocation     8
+#define BEAM_INTEGRATION_TAG_LowOrder     9
+#define BEAM_INTEGRATION_TAG_MidDistance     40
 
 #define BEAM_INTEGRATION_TAG_HingeMidpoint 10
 #define BEAM_INTEGRATION_TAG_HingeEndpoint 11
@@ -297,6 +300,7 @@
 #define BEAM_INTEGRATION_TAG_HingeRadauTwo    13
 #define BEAM_INTEGRATION_TAG_UserHinge     14
 #define BEAM_INTEGRATION_TAG_DistHinge     15
+#define BEAM_INTEGRATION_TAG_RegularizedHinge     16
 
 #define BEAM_INTEGRATION_TAG_HingeMidpoint2d 20
 #define BEAM_INTEGRATION_TAG_HingeEndpoint2d 21

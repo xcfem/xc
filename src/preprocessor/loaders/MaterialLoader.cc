@@ -482,13 +482,13 @@ XC::Material *XC::MaterialLoader::nuevoMaterial(const std::string &cmd,const std
     if(retval)
       {
         retval->set_owner(this);
-        if(materiales.find(cod_mat)!=materiales.end()) //El material existe.
+        if(materials.find(cod_mat)!=materials.end()) //El material existe.
           {
 	    std::clog << "MaterialLoader::nuevo_material; ¡ojo! se redefine el material: '"
                       << cod_mat << "'." << std::endl;
-            delete materiales[cod_mat];
+            delete materials[cod_mat];
           }
-        materiales[cod_mat]= retval;
+        materials[cod_mat]= retval;
         tag_mat++;
       }
     return retval;
@@ -552,9 +552,9 @@ XC::DiagInteraccion2d *XC::MaterialLoader::new2DInteractionDiagram(const std::st
 //! @brief New interaction diagram
 XC::DiagInteraccion *XC::MaterialLoader::calcInteractionDiagram(const std::string &cod_scc,const DatosDiagInteraccion &datos_diag)
   {
-    iterator mat= materiales.find(cod_scc);
+    iterator mat= materials.find(cod_scc);
     DiagInteraccion *diagI= nullptr;
-    if(mat!=materiales.end())
+    if(mat!=materials.end())
       {
         const FiberSectionBase *tmp= dynamic_cast<const FiberSectionBase *>(mat->second);
         if(tmp)
@@ -585,9 +585,9 @@ XC::DiagInteraccion *XC::MaterialLoader::calcInteractionDiagram(const std::strin
 //! @brief New 2D interaction diagram (N-My)
 XC::DiagInteraccion2d *XC::MaterialLoader::calcInteractionDiagramNMy(const std::string &cod_scc,const DatosDiagInteraccion &datos_diag)
   {
-    iterator mat= materiales.find(cod_scc);
+    iterator mat= materials.find(cod_scc);
     DiagInteraccion2d *diagI= nullptr;
-    if(mat!=materiales.end())
+    if(mat!=materials.end())
       {
         const FiberSectionBase *tmp= dynamic_cast<const FiberSectionBase *>(mat->second);
         if(tmp)
@@ -618,9 +618,9 @@ XC::DiagInteraccion2d *XC::MaterialLoader::calcInteractionDiagramNMy(const std::
 //! @brief New 2D interaction diagram (N-Mz)
 XC::DiagInteraccion2d *XC::MaterialLoader::calcInteractionDiagramNMz(const std::string &cod_scc,const DatosDiagInteraccion &datos_diag)
   {
-    iterator mat= materiales.find(cod_scc);
+    iterator mat= materials.find(cod_scc);
     DiagInteraccion2d *diagI= nullptr;
-    if(mat!=materiales.end())
+    if(mat!=materials.end())
       {
         const FiberSectionBase *tmp= dynamic_cast<const FiberSectionBase *>(mat->second);
         if(tmp)
@@ -652,7 +652,7 @@ void XC::MaterialLoader::clearAll(void)
   {
     for(iterator i= begin();i!= end();i++)
       delete (*i).second;
-    materiales.erase(begin(),end());
+    materials.erase(begin(),end());
     for(geom_secc_iterator i= geom_secciones.begin();i!= geom_secciones.end();i++)
       delete (*i).second;
     geom_secciones.erase(geom_secciones.begin(),geom_secciones.end());
@@ -662,37 +662,37 @@ void XC::MaterialLoader::clearAll(void)
 XC::MaterialLoader::~MaterialLoader(void)
   { clearAll(); }
 
-//! @brief Devuelve una referencia al mapa de materiales.
-const XC::MaterialLoader::map_materiales &XC::MaterialLoader::Map(void) const
-  { return materiales; }
+//! @brief Devuelve una referencia al mapa de materials.
+const XC::MaterialLoader::map_materials &XC::MaterialLoader::Map(void) const
+  { return materials; }
 
 //! @brief Devuelve un iterador apuntando al principio de la lista.
 XC::MaterialLoader::const_iterator XC::MaterialLoader::begin(void) const
-  { return materiales.begin(); }
+  { return materials.begin(); }
 //! @brief Devuelve un iterador apuntando después del final de la lista.
 XC::MaterialLoader::const_iterator XC::MaterialLoader::end(void) const
-  { return materiales.end(); }
+  { return materials.end(); }
 //! @brief Devuelve un iterador apuntando al principio de la lista.
 XC::MaterialLoader::iterator XC::MaterialLoader::begin(void)
-  { return materiales.begin(); }
+  { return materials.begin(); }
 //! @brief Devuelve un iterador apuntando después del final de la lista.
 XC::MaterialLoader::iterator XC::MaterialLoader::end(void)
-  { return materiales.end(); }
+  { return materials.end(); }
 
 //! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un iterador apuntando al mismo.
 XC::MaterialLoader::const_iterator XC::MaterialLoader::find(const std::string &nmb) const
-  { return materiales.find(nmb); }
+  { return materials.find(nmb); }
 
 //! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un iterador apuntando al mismo.
 XC::MaterialLoader::iterator XC::MaterialLoader::find(const std::string &nmb)
-  { return materiales.find(nmb); }
+  { return materials.find(nmb); }
 
 //! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
 //! en otro caso devuelve nullptr.
 XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb)
   {
     XC::MaterialLoader::iterator i= find(nmb);
-    if(i!= materiales.end())
+    if(i!= materials.end())
       return (*i).second;
     else
       return nullptr; 
@@ -703,7 +703,7 @@ XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb)
 const XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb) const
   {
     XC::MaterialLoader::const_iterator i= find(nmb);
-    if(i!= materiales.end())
+    if(i!= materials.end())
       return (*i).second;
     else
       return nullptr; 
@@ -829,9 +829,9 @@ XC::DiagInteraccion &XC::MaterialLoader::getDiagInteraccion(const std::string &n
     return *retval;
   }
 
-//! @brief Devuelve verdadero si existe el material cuyo código se pasa como parámetro.
+//! @brief True if material exists.
 bool XC::MaterialLoader::existeMaterial(const std::string &nmb) const
-  { return (materiales.find(nmb)!=materiales.end()); }
+  { return (materials.find(nmb)!=materials.end()); }
 
 //! @brief Devuelve verdadero si existe la geometría de la sección cuyo código se pasa como parámetro.
 bool XC::MaterialLoader::existeGeomSection(const std::string &nmb) const

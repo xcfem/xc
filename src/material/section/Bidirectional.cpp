@@ -354,7 +354,7 @@ int XC::Bidirectional::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
     const int dataTag= getDbTag();
-    inicComm(3);
+    inicComm(8);
     int res= sendData(cp);
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
@@ -365,7 +365,7 @@ int XC::Bidirectional::sendSelf(CommParameters &cp)
 
 int XC::Bidirectional::recvSelf(const CommParameters &cp)
   {
-    inicComm(3);
+    inicComm(8);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 

@@ -44,6 +44,7 @@ enum_<XC::dir_mallado>("meshDir")
 
 XC::NodeLoader &(XC::Preprocessor::*getNodeLoaderRef)(void)= &XC::Preprocessor::getNodeLoader;
 XC::MaterialLoader &(XC::Preprocessor::*getMaterialLoaderRef)(void)= &XC::Preprocessor::getMaterialLoader;
+XC::BeamIntegratorLoader &(XC::Preprocessor::*getBeamIntegratorLoaderRef)(void)= &XC::Preprocessor::getBeamIntegratorLoader;
 XC::ElementLoader &(XC::Preprocessor::*getElementLoaderRef)(void)= &XC::Preprocessor::getElementLoader;
 XC::ConstraintLoader &(XC::Preprocessor::*getConstraintLoaderRef)(void)= &XC::Preprocessor::getConstraintLoader;
 XC::LoadLoader &(XC::Preprocessor::*getLoadLoaderRef)(void)= &XC::Preprocessor::getLoadLoader;
@@ -54,6 +55,7 @@ XC::Domain *(XC::Preprocessor::*getDomainRf)(void)= &XC::Preprocessor::GetDomini
 class_<XC::Preprocessor, bases<EntCmd>, boost::noncopyable >("Preprocessor", no_init)
   .add_property("getNodeLoader", make_function( getNodeLoaderRef, return_internal_reference<>() ))
   .add_property("getMaterialLoader", make_function( getMaterialLoaderRef, return_internal_reference<>() ))
+  .add_property("getBeamIntegratorLoader", make_function( getBeamIntegratorLoaderRef, return_internal_reference<>() ))
   .add_property("getElementLoader", make_function( getElementLoaderRef, return_internal_reference<>() ))
   .add_property("getConstraintLoader", make_function( getConstraintLoaderRef, return_internal_reference<>() ))
   .add_property("getLoadLoader", make_function( getLoadLoaderRef, return_internal_reference<>() ))

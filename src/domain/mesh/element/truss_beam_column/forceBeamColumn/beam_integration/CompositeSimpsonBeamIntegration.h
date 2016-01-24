@@ -44,44 +44,35 @@
 **                                                                    **
 ** ****************************************************************** */
 
-// $Revision: 1.3 $
-// $Date: 2003/06/10 00:36:09 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedHingeIntegration2d.h,v $
+// $Revision$
+// $Date$
+// $Source$
 
-#ifndef UserDefinedHingeIntegration2d_h
-#define UserDefinedHingeIntegration2d_h
+#ifndef CompositeSimpsonBeamIntegration_h
+#define CompositeSimpsonBeamIntegration_h
 
-#include "UserDefinedHingeIntegrationBase.h"
-#include "material/section/repres/CrossSectionProperties2d.h"
-
+#include "BeamIntegration.h"
 namespace XC {
 
 //! \ingroup BeamInteg
 //
-//! @brief Integración en la barra definida por el usuario.
-class UserDefinedHingeIntegration2d : public UserDefinedHingeIntegrationBase
+//! @brief Composite Simpson integration scheme.
+class CompositeSimpsonBeamIntegration : public BeamIntegration
   {
-  private:
-    CrossSectionProperties2d ctes_scc; //Mechanical properties of the section E,A,Iy,...
   public:
-    UserDefinedHingeIntegration2d(int npL, const Vector &ptL, const Vector &wtL,
-  				int npR, const Vector &ptR, const Vector &wtR,
-  				const double &E, const double &A, const double &I);
-    UserDefinedHingeIntegration2d();
-    
-    void getSectionLocations(int numSections, double L, double *xi) const;
-    void getSectionWeights(int numSections, double L, double *wt) const;
-  
-    void addElasticDeformations(ElementalLoad *theLoad, double loadFactor,
-  			      double L, double *v0);
-    int addElasticFlexibility(double L, Matrix &fe);
-  
+    CompositeSimpsonBeamIntegration();
+
+    void getSectionLocations(int nIP, double L, double *xi) const;
+    void getSectionWeights(int nIP, double L, double *wt) const;
+
     BeamIntegration *getCopy(void) const;
-  
-    int setParameter(const std::vector<std::string> &argv, Parameter &param);
-    int updateParameter(int parameterID, Information &info);
-    int activateParameter(int parameterID);
-    void Print(std::ostream &s, int flag = 0);
+
+    // These two methods do nothing
+    int sendSelf(CommParameters &)
+      {return 0;}
+    int recvSelf(const CommParameters &)
+      {return 0;}
+    void Print(std::ostream &s, int flag = 0);  
   };
 } // end of XC namespace
 

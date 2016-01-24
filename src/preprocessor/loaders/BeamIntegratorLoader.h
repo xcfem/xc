@@ -41,11 +41,11 @@ class BeamIntegration;
 class BeamIntegratorLoader: public Loader
   {
   public:
-    typedef std::map<std::string,BeamIntegration *> map_integradores;
-    typedef map_integradores::const_iterator const_iterator;
-    typedef map_integradores::iterator iterator;
+    typedef std::map<std::string,BeamIntegration *> map_beam_integrators;
+    typedef map_beam_integrators::const_iterator const_iterator;
+    typedef map_beam_integrators::iterator iterator;
   private:
-    map_integradores integradores; //!< Integradores para el problema.
+    map_beam_integrators beam_integrators;
     void libera(void);
     BeamIntegratorLoader(const BeamIntegratorLoader &otro);
     BeamIntegratorLoader &operator=(const BeamIntegratorLoader &otro);
@@ -53,7 +53,7 @@ class BeamIntegratorLoader: public Loader
     friend class ElementLoader;
   public:
     BeamIntegratorLoader(Preprocessor *owr);
-    const map_integradores &Map(void) const;
+    const map_beam_integrators &Map(void) const;
     const_iterator begin(void) const;
     const_iterator end(void) const;
     iterator begin(void);
@@ -62,6 +62,14 @@ class BeamIntegratorLoader: public Loader
     iterator find(const std::string &str);
     BeamIntegration *find_ptr(const std::string &str);
     const BeamIntegration *find_ptr(const std::string &nmb) const;
+
+    inline size_t size(void) const
+      { return beam_integrators.size(); }
+
+    bool exists(const std::string &nmb) const;
+    BeamIntegration *newBI(const std::string &,const std::string &);
+    BeamIntegration &get(const std::string &);
+
     ~BeamIntegratorLoader(void);
     inline void clearAll(void)
       { libera(); }

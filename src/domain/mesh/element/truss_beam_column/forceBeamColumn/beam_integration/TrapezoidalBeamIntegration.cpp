@@ -44,45 +44,52 @@
 **                                                                    **
 ** ****************************************************************** */
 
-// $Revision: 1.3 $
-// $Date: 2003/06/10 00:36:09 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedHingeIntegration2d.h,v $
+// $Revision: 1.1 $
+// $Date: 2007-10-12 20:57:53 $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/TrapezoidalBeamIntegration.cpp,v $
 
-#ifndef UserDefinedHingeIntegration2d_h
-#define UserDefinedHingeIntegration2d_h
+#include "TrapezoidalBeamIntegration.h"
 
-#include "UserDefinedHingeIntegrationBase.h"
-#include "material/section/repres/CrossSectionProperties2d.h"
-
-namespace XC {
-
-//! \ingroup BeamInteg
-//
-//! @brief Integración en la barra definida por el usuario.
-class UserDefinedHingeIntegration2d : public UserDefinedHingeIntegrationBase
+XC::TrapezoidalBeamIntegration::TrapezoidalBeamIntegration()
+  : BeamIntegration(BEAM_INTEGRATION_TAG_Trapezoidal)
   {
-  private:
-    CrossSectionProperties2d ctes_scc; //Mechanical properties of the section E,A,Iy,...
-  public:
-    UserDefinedHingeIntegration2d(int npL, const Vector &ptL, const Vector &wtL,
-  				int npR, const Vector &ptR, const Vector &wtR,
-  				const double &E, const double &A, const double &I);
-    UserDefinedHingeIntegration2d();
-    
-    void getSectionLocations(int numSections, double L, double *xi) const;
-    void getSectionWeights(int numSections, double L, double *wt) const;
-  
-    void addElasticDeformations(ElementalLoad *theLoad, double loadFactor,
-  			      double L, double *v0);
-    int addElasticFlexibility(double L, Matrix &fe);
-  
-    BeamIntegration *getCopy(void) const;
-  
-    int setParameter(const std::vector<std::string> &argv, Parameter &param);
-    int updateParameter(int parameterID, Information &info);
-    int activateParameter(int parameterID);
-    void Print(std::ostream &s, int flag = 0);
-  };
-} // end of XC namespace
+    // Nothing to do
+  }
 
-#endif
+XC::BeamIntegration *XC::TrapezoidalBeamIntegration::getCopy(void) const
+  { return new TrapezoidalBeamIntegration(*this); }
+
+void XC::TrapezoidalBeamIntegration::getSectionLocations(int numSections, double L,double *xi) const
+  {
+    if(numSections > 1)
+      {
+        xi[0] = -1.0;
+        xi[numSections-1] = 1.0;
+
+        double dxi = 2.0/(numSections-1);
+
+        for(int i = 1; i < numSections-1; i++)
+          xi[i] = -1.0 + dxi*i;
+      }
+    for (int i = 0; i < numSections; i++)
+      xi[i]  = 0.5*(xi[i] + 1.0);
+  }
+
+void XC::TrapezoidalBeamIntegration::getSectionWeights(int numSections, double L, double *wt) const
+  {
+    if(numSections > 1)
+      {
+        const double wti= 2.0/(numSections-1);
+        for(int i = 1; i < numSections-1; i++)
+          wt[i] = wti;
+
+        wt[0] = wt[numSections-1] = 0.5*wti;
+      }
+    for(int i = 0; i < numSections; i++)
+      wt[i] *= 0.5;
+  }
+
+void XC::TrapezoidalBeamIntegration::Print(std::ostream &s, int flag)
+  {
+    s << "Trapezoidal" << std::endl;
+  }

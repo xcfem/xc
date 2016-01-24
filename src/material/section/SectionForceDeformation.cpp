@@ -401,7 +401,7 @@ double XC::SectionForceDeformation::getSectionDeformationByName(const std::strin
     return retval;
   }
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Send object members through the channel defined in cp.
 int XC::SectionForceDeformation::sendData(CommParameters &cp)
   {
     setDbTagDataPos(0,getTag());
@@ -409,7 +409,7 @@ int XC::SectionForceDeformation::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Receives object members through the channel defined in cp.
 int XC::SectionForceDeformation::recvData(const CommParameters &cp)
   {
     setTag(getDbTagDataPos(0));
