@@ -1,1 +1,0 @@
-20150910 Ask SCIA support for a way to export elements (not surfaces -or macro-elements).
