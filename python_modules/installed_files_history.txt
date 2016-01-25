@@ -108,6 +108,8 @@
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/LoadGroupContainer.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/LoadGroupProperties.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/LoadGroupProperties.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/MaterialContainer.py
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/MaterialContainer.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/MaterialProperties.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/MaterialProperties.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/NodeContainer.py

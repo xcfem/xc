@@ -7,7 +7,13 @@ import geom
 import xc
 
 from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as ipe
+from materials import aceros_estructurales as steel
 
-S275JR.gammaM= gammaM0 
-IPE200= steelProfile.SteelProfile(S275JR,"HE_400_B",HE_profiles.perfilesHE)
-profil= IPE200.defSeccShElastica3d(preprocessor)
+test= xc.ProblemaEF()
+preprocessor=  test.getPreprocessor
+
+S275JR= steel.S275JR
+S275JR.gammaM= 1.05
+epp= S275JR.getDesignElasticPerfectlyPlasticMaterial(preprocessor, "epp")
+IPE200= ipe.IPEProfile(S275JR,'IPE_200')
+reg= IPE200.discretization(preprocessor,"epp")

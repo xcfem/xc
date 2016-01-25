@@ -6,8 +6,6 @@ from materials import sectionProperties as sp
 
 class SteelProfile(sp.sectionProperties):
   """Structural steel section properties"""
-  profil= None # record in table.
-  steelType= None
   def __init__(self,steel,name,table):
     self.steelType= steel
     self.profil= table[name]

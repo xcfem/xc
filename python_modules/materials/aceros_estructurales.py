@@ -2,6 +2,7 @@
 # Características mecánicas de distintos tipos de acero.
 
 import math
+from materials import typical_materials
 
 class ASTMSteel(object):
   """ASTM structural steel."""
@@ -26,17 +27,16 @@ ASTM_A500= ASTMSteel(315e6,400e6,1.0)
 ASTM_A307= ASTMSteel(245e6,390e6,1.0)
 
 class EC3Steel(object):
-  """Eurocode 3 structural steel."""
-  fy= 235e6 # Yield stress.
-  fy16= 235e6 #0<t<16mm
-  fy40= 225e6 #16<t<40mm
-  fy63= 215e6 #40<t<63mm
-  fy80= 215e6 #63<t<80mm
-  fy100= 215e6 #80<t<100mm
-  fy125= 195e6 #80<t<125mm
-  fu= 360e6
-  gammaM= 1.0
-  E= 210000e6 #Young modulus
+  '''Eurocode 3 structural steel.
+    fy ->  Yield stress.
+    fy16 -> 0<t<16mm
+    fy40 -> 16<t<40mm
+    fy63 -> 40<t<63mm
+    fy80 -> 63<t<80mm
+    fy100 -> 80<t<100mm
+    fy125 -> 80<t<125mm
+    fu -> ultimate stress
+    gammaM '''
 
   def __init__(self, fy, fy16, fy40, fy63, fy80, fy100, fy125, fu, gammaM):
     self.fy= fy
@@ -48,11 +48,15 @@ class EC3Steel(object):
     self.fy125= fy125
     self.fu= fu
     self.gammaM= gammaM
- 
+    self.E= 210000e6 #Young modulus
+
   def fyd(self):
     return self.fy/self.gammaM
   def fydV(self):
     return self.fyd()/math.sqrt(3)
+
+  def getDesignElasticPerfectlyPlasticMaterial(self,preprocessor,name):
+    return typical_materials.defElasticPPMaterial(preprocessor, name,self.E,self.fyd(),-self.fyd())
 
 # Norma europea EN 10025-2:2004
 S235JR= EC3Steel(fy= 235e6, fy16= 235e6, fy40= 225e6, fy63= 215e6, fy80= 215e6, fy100= 215e6, fy125= 195e6,fu= 360e6,gammaM= 1.1)

@@ -34,9 +34,16 @@
 #include <material/section/repres/cell/QuadCell.h>
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_basic/src/texto/cadena_carac.h"
+#include "xc_utils/src/geom/d1/Segmento2d.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Cuadrilatero2d.h"
 #include <utility/matrix/Matrix.h>
+
+// L +-----------------------+ K
+//   |                       |
+//   |                       |
+//   |                       |
+// I +-----------------------+ J
 
 const int I= 0, J=1, K= 2, L= 3;
 const int Y= 0, Z=1;
@@ -49,6 +56,31 @@ XC::RgSccCuadrilatero::RgSccCuadrilatero(Material *mat, int numSubdivIJ, int num
   : RgQuadCell(mat,numSubdivIJ,numSubdivJK), vertCoord(vertexCoords)
   {}
   
+//! @brief Sets numbers of divisions to get a tile IJ side smaller than size.
+int XC::RgSccCuadrilatero::setTileSizeIJ(const double &size)
+  {
+    const double longIJ= Segmento2d(getIVertex(),getJVertex()).Longitud();
+    const double longKL= Segmento2d(getKVertex(),getLVertex()).Longitud();
+    setNDivIJ(ceil(std::max(longIJ,longKL)/size));
+    return getNDivIJ();
+  }
+
+//! @brief Sets numbers of divisions to get a tile JK side smaller than size.
+int XC::RgSccCuadrilatero::setTileSizeJK(const double &size)
+  {
+    const double longJK= Segmento2d(getJVertex(),getKVertex()).Longitud();
+    const double longIL= Segmento2d(getIVertex(),getLVertex()).Longitud();
+    setNDivJK(ceil(std::max(longJK,longIL)/size));
+    return getNDivJK();
+  }
+
+//! @brief Sets numbers of divisions to get tile sizes smaller than sizeIJ and sizeJK.
+int XC::RgSccCuadrilatero::setTileSize(const double &sizeIJ, const double &sizeJK)
+  {
+    const int ndIJ= setTileSizeIJ(sizeIJ);
+    const int ndJK= setTileSizeJK(sizeJK);
+    return ndIJ*ndJK;
+  }
 
 double XC::RgSccCuadrilatero::getMaxY(void) const
   {
@@ -114,12 +146,26 @@ void XC::RgSccCuadrilatero::setPMin(const Pos2d &p)
     vertCoord(J,Z)= z;
   }
 
+//! @brief Returns position of I vertex.
+Pos2d XC::RgSccCuadrilatero::getIVertex(void) const
+  { return Pos2d(vertCoord(I,Y),vertCoord(I,Z)); }
+
+//! @brief Returns position of J vertex.
+Pos2d XC::RgSccCuadrilatero::getJVertex(void) const
+  { return Pos2d(vertCoord(J,Y),vertCoord(J,Z)); }
+
+//! @brief Returns position of K vertex.
+Pos2d XC::RgSccCuadrilatero::getKVertex(void) const
+  { return Pos2d(vertCoord(K,Y),vertCoord(K,Z)); }
+
+//! @brief Returns position of L vertex.
+Pos2d XC::RgSccCuadrilatero::getLVertex(void) const
+  { return Pos2d(vertCoord(L,Y),vertCoord(L,Z)); }
+
 Cuadrilatero2d XC::RgSccCuadrilatero::getCuadrilatero(void) const
   {
-    Cuadrilatero2d retval= Cuadrilatero2d( Pos2d(vertCoord(I,Y),vertCoord(I,Z)),
-                                           Pos2d(vertCoord(J,Y),vertCoord(J,Z)),
-                                           Pos2d(vertCoord(K,Y),vertCoord(K,Z)),
-                                           Pos2d(vertCoord(L,Y),vertCoord(L,Z)));
+    Cuadrilatero2d retval= Cuadrilatero2d( getIVertex(),getJVertex(),
+                                           getKVertex(),getLVertex());
     return retval;
   }
 

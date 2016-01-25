@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
+European I beams
+
 Ejes de la sección:
 
    ARCELOR          XC
@@ -81,18 +83,66 @@ perfilesIPE['IPE_750x196+']= {'nmb':'IPE_750x196+', 'P':196, 'h':770e-3, 'b':268
 
 
 for item in perfilesIPE:
-  perfil= perfilesIPE[item]
-  Avy= perfil['Avy']
-  A= perfil['A']
-  E= perfil['E']
-  nu= perfil['nu']
-  b= perfil['b']
-  d= perfil['d']
-  hi= perfil['hi']
-  tf= perfil['tf']
-  tw= perfil['tw']
-  r= perfil['r']
-  perfil['alpha']= Avy/A
-  perfil['G']= E/(2*(1+nu))
-  perfil['AreaQy']= A-2*b*tf+(tw+2*r)*tf
-  perfil['AreaQz']= A-hi*tw
+  profile= perfilesIPE[item]
+  Avy= profile['Avy']
+  A= profile['A']
+  E= profile['E']
+  nu= profile['nu']
+  b= profile['b']
+  d= profile['d']
+  hi= profile['hi']
+  tf= profile['tf']
+  tw= profile['tw']
+  r= profile['r']
+  profile['alpha']= Avy/A
+  profile['G']= E/(2*(1+nu))
+  profile['AreaQy']= A-2*b*tf+(tw+2*r)*tf
+  profile['AreaQz']= A-hi*tw
+
+import xc_base
+import geom
+from materials import steelProfile as sp
+
+class IPEProfile(sp.SteelProfile):
+  def __init__(self,steel,name):
+    super(IPEProfile,self).__init__(steel,name,perfilesIPE)
+    print 'nmb', self.profil['nmb']
+    print 'h=', self.profil['h']
+    print 'b=', self.profil['b']
+    self.bHalf= self.profil['b']/2.0 #Half flange width
+    self.hHalf= self.profil['h']/2.0 #Half section height
+    self.hiHalf= self.profil['hi']/2.0 #Half section interior height.
+    self.twHalf= self.profil['tw']/2.0 #Half web thickness
+    self.tileSize= 0.01 #Size of tiles
+
+  def getProfileRegions(self):
+    ''' Returns regions valid for fiber section model creation. '''
+    retval= list()
+    #Lower flange
+    p0= geom.Pos2d(-self.bHalf,-self.hHalf)
+    p1= geom.Pos2d(self.bHalf,-self.hiHalf)
+    print 'p0=', p0 
+    print 'p1=', p1 
+    retval.append([p0,p1])
+    #Web
+    p2= geom.Pos2d(-self.twHalf,-self.hiHalf)
+    p3= geom.Pos2d(self.twHalf,self.hiHalf)
+    retval.append([p2,p3])
+    #Upper flange
+    p4= geom.Pos2d(-self.bHalf,self.hiHalf)
+    p5= geom.Pos2d(self.bHalf,self.hHalf)
+    retval.append([p4,p5])
+    return retval
+
+  def discretization(self,preprocessor,nmbMat):
+    retval= list()
+    gm= preprocessor.getMaterialLoader.newSectionGeometry("gm"+profile['nmb'])
+    regions= gm.getRegions
+    for r in self.getProfileRegions():
+      reg= regions.newQuadRegion(nmbMat)
+      reg.pMin= r[0]
+      reg.pMax= r[1]
+      numberOfTiles= reg.setTileSize(self.tileSize,self.tileSize)
+      print numberOfTiles
+      retval.append(reg)
+    return retval

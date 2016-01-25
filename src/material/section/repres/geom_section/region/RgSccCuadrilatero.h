@@ -63,6 +63,9 @@ class RgSccCuadrilatero: public RgQuadCell
     // edition functions
     void setVertCoords(const Matrix &vertexCoords);
 
+    int setTileSizeIJ(const double &size);
+    int setTileSizeJK(const double &size);
+    int setTileSize(const double &sizeIJ, const double &sizeJK);
     
     const Rejilla2d &Malla(void) const;
     const VectorCells &getCells(void) const;
@@ -77,6 +80,10 @@ class RgSccCuadrilatero: public RgQuadCell
     double getMinZ(void) const;
     Pos2d getPMin(void) const;
     void setPMin(const Pos2d &);
+    Pos2d getIVertex(void) const;
+    Pos2d getJVertex(void) const;
+    Pos2d getKVertex(void) const;
+    Pos2d getLVertex(void) const;
     Cuadrilatero2d getCuadrilatero(void) const;
     void setQuad(const Cuadrilatero2d &);
     Poligono2d getPoligono(void) const;
