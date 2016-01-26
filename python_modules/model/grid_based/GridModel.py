@@ -119,11 +119,11 @@ class IJKRangeList(object):
       i+= 1
     return i
 
-  def applyEarthPressure(self, dicSup, earthPressure):
+  def applyEarthPressure(self, dicSup, earthPressLoadressure):
     i= 0
     for r in self.ranges:
       nmbrSet=self.name+str(i)
-      s= self.grid.applyEarthPressure(r,dicSup,nmbrSet,earthPressure)
+      s= self.grid.applyEarthPressure(r,dicSup,nmbrSet,earthPressLoadressure)
       i+= 1
     return i
 
@@ -383,15 +383,19 @@ class LoadOnSurfaces(object):
     self.surfaces= surfaces
 
 class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
-  '''Inertial load over a list of surfaces (defined as range lists).'''
+  '''Inertial load applied to the shell elements belonging to a list of 
+  surfaces 
+  Attributes:
+    name:     name identifying the load
+    surfaces: list of names of material-surfaces sets
+    accel:    list with the three components of the acceleration vector
+  '''
   def __init__(self,name, surfaces, accel):
     super(InertialLoadOnMaterialSurfaces,self).__init__(name, surfaces)
     self.acceleration= accel
 
   def applyLoad(self):
     vectorAceleracion= xc.Vector(self.acceleration)
-    #print ec, key, vectorAceleracion[0], vectorAceleracion[1], vectorAceleracion[2]
-    #peso propio de elementos tipo shell
     for csup in self.surfaces:
       mat= csup.material
       masaUnit= mat.getAreaDensity()
@@ -399,7 +403,13 @@ class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
       csup.applyVector3dUniformLoadGlobal(vectorCarga)
 
 class PressureLoadOnSurfaces(LoadOnSurfaces):
-  '''Pressure load over a list of surfaces (defined as range lists).'''
+  '''Uniform load applied to shell elements
+    Attributes:
+    name:       name identifying the load
+    surfaces:   lists of grid ranges to delimit the surfaces to
+                be loaded
+    loadVector: list with the three components of the load vector
+  '''
   def __init__(self,name, surfaces, loadVector):
     super(PressureLoadOnSurfaces,self).__init__(name, surfaces)
     self.loadVector= loadVector
@@ -409,13 +419,27 @@ class PressureLoadOnSurfaces(LoadOnSurfaces):
     self.surfaces.applyLoadVector(dicSup,loadVector)
 
 class EarthPressureOnSurfaces(LoadOnSurfaces):
-  '''Earth pressure over a list of surfaces (defined as range lists).'''
-  def __init__(self,name, surfaces, earthPressure):
+  '''Earth pressure applied to shell elements
+    Attributes:
+    name:       name identifying the load
+    surfaces:   lists of grid ranges to delimit the surfaces to
+                be loaded
+    earthPressLoadressure: instance of the class EarthPressure, with 
+                the following attributes:
+                  K:Coefficient of pressure
+                  zTerrain:global Z coordinate of ground level
+                  gammaTerrain: weight density of soil 
+                  zWater: global Z coordinate of groundwater level 
+                          (if zGroundwater<minimum z of model => there is no groundwater)
+                  gammaWater: weight density of water
+                  vDir: unit vector defining pressures direction
+   '''
+  def __init__(self,name, surfaces, earthPressLoadressure):
     super(EarthPressureOnSurfaces,self).__init__(name, surfaces)
-    self.earthPressure= earthPressure
+    self.earthPressLoadressure= earthPressLoadressure
 
   def applyEarthPressure(self,dicSup):
-    self.surfaces.applyEarthPressure(dicSup,self.earthPressure)
+    self.surfaces.applyEarthPressure(dicSup,self.earthPressLoadressure)
 
 
 class StrainLoadOnSurfaces(LoadOnSurfaces):
@@ -444,48 +468,59 @@ class LoadOnSurfacesMap(NamedObjectsMap):
     super(LoadOnSurfacesMap,self).__init__(efranges)
 
 class LoadState(object):
-  def __init__(self,name, cInerc= list(), cUnifSup= list(), cUnifXYZSup= list(), qPuntual= list(), earthP= list(), eHidrostVol= list(), gradTemp= list()):
+  '''Definition of the actions to be combined in design situations for 
+  performing a limit state analysis
+  Attributes:
+    inercLoad:     list of inertial loads
+    unifPressLoad: list of pressures on surfaces
+    unifVectLoad:  list of uniform loads on shell elements
+    pointLoad:     list of point loads
+    earthPressLoad:list of earth pressure loads
+    hydrThrustLoad:list of hydrostatic thrust on the walls that delimit a volume
+    tempGrad:      list of temperature gradient loads
+  '''
+  def __init__(self,name, inercLoad= list(), unifPressLoad= list(), unifVectLoad= list(), pointLoad= list(), earthPressLoad= list(), hydrThrustLoad= list(), tempGrad= list()):
     self.name= name
-    self.cInerc= cInerc
-    self.cUnifSup= cUnifSup
-    self.cUnifXYZSup= cUnifXYZSup
-    self.qPuntual= qPuntual
-    self.earthP= earthP
-    self.eHidrostVol= eHidrostVol
-    self.gradTemp= gradTemp
+    self.inercLoad= inercLoad
+    self.unifPressLoad= unifPressLoad
+    self.unifVectLoad= unifVectLoad
+    self.pointLoad= pointLoad
+    self.earthPressLoad= earthPressLoad
+    self.hydrThrustLoad= hydrThrustLoad
+    self.tempGrad= tempGrad
   def applyInertialLoads(self):
-    for pp in self.cInerc:
-      print 'cInerc:', pp.name
+    for pp in self.inercLoad:
+      print 'inercLoad:', pp.name
       pp.applyLoad()
   def applyUniformLoads(self,dicSup):
-    for load in self.cUnifSup:
-      print 'cUnifSup:', load.name
+    for load in self.unifPressLoad:
+      print 'unifPressLoad:', load.name
       load.applyLoad(dicSup)
-    for load in self.cUnifXYZSup:
-      print 'cUnifXYZSup:', load.name
+    for load in self.unifVectLoad:
+      print 'unifVectLoad:', load.name
       load.applyLoad(dicSup)
 
   def applyPunctualLoads(self):
     #Cargas lineales
     #Cargas puntuales
-    for cpunt in self.qPuntual:
-      print 'qPuntual:', cpunt
-      for i in range(len(qPuntual[cpunt]['coordPto'])):
-        cpto=qPuntual[cpunt]['coordPto'][i]
+    for cpunt in self.pointLoad:
+      print 'pointLoad:', cpunt
+      for i in range(len(pointLoad[cpunt]['coordPto'])):
+        cpto=pointLoad[cpunt]['coordPto'][i]
         #print key,cpto
         posP= geom.Pos3d(cpto[0],cpto[1],cpto[2])
         nod=totNod.getNearestNode(posP)
-        vectorCarga=xc.Vector(qPuntual[cpunt]['qPunt'])
+        vectorCarga=xc.Vector(pointLoad[cpunt]['qPunt'])
         lPatterns[key].newNodalLoad(nod.tag,vectorCarga)
 
   def applyEarthPressureLoads(self,dicSup):
-    for ep in self.earthP:
-      print 'earthP:', ep.name
+    for ep in self.earthPressLoad:
+      print 'earthPressLoad:', ep.name
       ep.applyEarthPressure(dicSup)
 
   def applyTemperatureGradient(self,lp):
-    for gt in self.gradTemp:
-      print 'gradTemp:', gt.name
+    for gt in self.tempGrad:
+      print 'tempGrad:', gt.name
       gt.applyLoad(lp)
 
   def applyLoads(self,lp,dicSup):

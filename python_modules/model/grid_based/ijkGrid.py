@@ -387,15 +387,15 @@ class ijkGrid(object):
       #print e.tag
       e.vector3dUniformLoadGlobal(loadVector)
 
-  def applyEarthPressure(self,ijkRange,dicSup,nmbrSet,earthPressure):
+  def applyEarthPressure(self,ijkRange,dicSup,nmbrSet,earthPressLoadressure):
     s= self.getSetInRange(ijkRange,dicSup,nmbrSet)
     sElem=s.getElements
     for e in sElem:
       zElem=e.getCooCentroid(False)[2]
-      presElem= earthPressure.getPressure(zElem) 
+      presElem= earthPressLoadressure.getPressure(zElem) 
       if(presElem!=0.0):
         #print K, zT, zA, gammaT, gammaA,zElem, presElem
-        vectorCarga=presElem*xc.Vector(earthPressure.vDir)
+        vectorCarga=presElem*xc.Vector(earthPressLoadressure.vDir)
         e.vector3dUniformLoadGlobal(vectorCarga)
         
 
