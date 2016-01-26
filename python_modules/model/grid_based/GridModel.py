@@ -383,15 +383,19 @@ class LoadOnSurfaces(object):
     self.surfaces= surfaces
 
 class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
-  '''Inertial load over a list of surfaces (defined as range lists).'''
+  '''Inertial load applied to the shell elements belonging to a list of 
+  surfaces 
+  Attributes:
+    name:     name identifying the load
+    surfaces: list of names of material-surfaces sets
+    accel:    list with the three components of the acceleration vector
+  '''
   def __init__(self,name, surfaces, accel):
     super(InertialLoadOnMaterialSurfaces,self).__init__(name, surfaces)
     self.acceleration= accel
 
   def applyLoad(self):
     vectorAceleracion= xc.Vector(self.acceleration)
-    #print ec, key, vectorAceleracion[0], vectorAceleracion[1], vectorAceleracion[2]
-    #peso propio de elementos tipo shell
     for csup in self.surfaces:
       mat= csup.material
       masaUnit= mat.getAreaDensity()
@@ -399,7 +403,13 @@ class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
       csup.applyVector3dUniformLoadGlobal(vectorCarga)
 
 class PressureLoadOnSurfaces(LoadOnSurfaces):
-  '''Pressure load over a list of surfaces (defined as range lists).'''
+  '''Uniform load applied to shell elements
+    Attributes:
+    name:       name identifying the load
+    surfaces:   lists of grid ranges to delimit the surfaces to
+                be loaded
+    loadVector: list with the three components of the load vector
+  '''
   def __init__(self,name, surfaces, loadVector):
     super(PressureLoadOnSurfaces,self).__init__(name, surfaces)
     self.loadVector= loadVector
@@ -409,7 +419,21 @@ class PressureLoadOnSurfaces(LoadOnSurfaces):
     self.surfaces.applyLoadVector(dicSup,loadVector)
 
 class EarthPressureOnSurfaces(LoadOnSurfaces):
-  '''Earth pressure over a list of surfaces (defined as range lists).'''
+  '''Earth pressure applied to shell elements
+    Attributes:
+    name:       name identifying the load
+    surfaces:   lists of grid ranges to delimit the surfaces to
+                be loaded
+    earthPressure: instance of the class EarthPressure, with 
+                the following attributes:
+                  K:Coefficient of pressure
+                  zTerrain:global Z coordinate of ground level
+                  gammaTerrain: weight density of soil 
+                  zWater: global Z coordinate of groundwater level 
+                          (if zGroundwater<minimum z of model => there is no groundwater)
+                  gammaWater: weight density of water
+                  vDir: unit vector defining pressures direction
+   '''
   def __init__(self,name, surfaces, earthPressure):
     super(EarthPressureOnSurfaces,self).__init__(name, surfaces)
     self.earthPressure= earthPressure
