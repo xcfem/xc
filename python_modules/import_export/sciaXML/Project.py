@@ -98,7 +98,7 @@ class Project:
 
 
       # Um arquivo de peça só possui um object/peça no container Beam
-      objectOrigem= containerOrigem.getTable().getObjects().get(0)
+      objectOrigem= containerOrigem.getTables()[0].getObjects().get(0)
 
       o.setId(String.valueOf(counterID))
       o.setNm(peca)
@@ -124,7 +124,7 @@ class Project:
           break
 
       # Um arquivo de peça só possui um object/peça no container Beam
-      objectOrigem= containerOrigem.getTable().getObjects().get(0)
+      objectOrigem= containerOrigem.getTables()[0].getObjects().get(0)
 
       o.setId(peca.getId() + self.uuid)
       o.setNm(peca.getName() + self.uuid)

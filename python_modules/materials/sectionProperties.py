@@ -6,9 +6,6 @@ from materials import typical_materials
 
 class sectionProperties(object):
   """Abstract section properties (area, moments of inertia,...)"""
-  nmb= "" # section's name.
-  E= 0.0 # elastic modulus
-  nu= 0.3 # Poisson's ratio
   def __init__(self,name,E,nu):
     self.nmb= name
     self.E= E

@@ -128,15 +128,16 @@ class ConcreteSIAProperties(BasicMaterialProperties):
 class MaterialProperties(ctr.PropertiesContainer):
   def __init__(self):
     super(MaterialProperties,self).__init__(containerId,containerClsId,containerProgId)
-    self.tableGeneric= GenericMaterialProperties()
-    self.tableSteelSIA= SteelSIAProperties()
-    self.tableConcreteSIA= ConcreteSIAProperties()
+    self.tables= dict()
+    self.tables['Generic']= GenericMaterialProperties()
+    self.tables['SteelSIA']= SteelSIAProperties()
+    self.tables['ConcreteSIA']= ConcreteSIAProperties()
 
   def getXMLElement(self,parent):
     container= ET.SubElement(parent,"def_container")
     self.populateXMLElement(container)
-    self.tableGeneric.getXMLElement(container)
-    self.tableSteelSIA.getXMLElement(container)
-    self.tableConcreteSIA.getXMLElement(container)
+    for key in self.tables:
+      tb= self.tables[key]
+      tb.getXMLElement(container)
     return container
 

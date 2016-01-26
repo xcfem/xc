@@ -1,3 +1,0 @@
-\c{Coeficientes de seguridad de los materiales.}
-\expr{gammac= 1.5} \c{Coeficiente de minoración de la resistencia del hormigón.}
-\expr{gammas= 1.15} \c{Coeficiente de minoración de la resistencia del acero.}
