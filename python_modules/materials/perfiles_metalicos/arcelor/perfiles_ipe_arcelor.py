@@ -106,9 +106,6 @@ from materials import steelProfile as sp
 class IPEProfile(sp.SteelProfile):
   def __init__(self,steel,name):
     super(IPEProfile,self).__init__(steel,name,perfilesIPE)
-    print 'nmb', self.profil['nmb']
-    print 'h=', self.profil['h']
-    print 'b=', self.profil['b']
     self.bHalf= self.profil['b']/2.0 #Half flange width
     self.hHalf= self.profil['h']/2.0 #Half section height
     self.hiHalf= self.profil['hi']/2.0 #Half section interior height.
@@ -119,30 +116,36 @@ class IPEProfile(sp.SteelProfile):
     ''' Returns regions valid for fiber section model creation. '''
     retval= list()
     #Lower flange
-    p0= geom.Pos2d(-self.bHalf,-self.hHalf)
-    p1= geom.Pos2d(self.bHalf,-self.hiHalf)
-    print 'p0=', p0 
-    print 'p1=', p1 
+    p0= geom.Pos2d(-self.hHalf,-self.bHalf)
+    p1= geom.Pos2d(-self.hiHalf,self.bHalf)
     retval.append([p0,p1])
     #Web
-    p2= geom.Pos2d(-self.twHalf,-self.hiHalf)
-    p3= geom.Pos2d(self.twHalf,self.hiHalf)
+    p2= geom.Pos2d(-self.hiHalf,-self.twHalf)
+    p3= geom.Pos2d(self.hiHalf,self.twHalf)
     retval.append([p2,p3])
     #Upper flange
-    p4= geom.Pos2d(-self.bHalf,self.hiHalf)
-    p5= geom.Pos2d(self.bHalf,self.hHalf)
+    p4= geom.Pos2d(self.hiHalf,-self.bHalf,)
+    p5= geom.Pos2d(self.hHalf,self.bHalf)
     retval.append([p4,p5])
     return retval
 
-  def discretization(self,preprocessor,nmbMat):
-    retval= list()
-    gm= preprocessor.getMaterialLoader.newSectionGeometry("gm"+profile['nmb'])
-    regions= gm.getRegions
+  def discretization(self,preprocessor,matModelName):
+    self.sectionGeometryName= 'gm'+self.profil['nmb']
+    self.gm= preprocessor.getMaterialLoader.newSectionGeometry(self.sectionGeometryName)
+    regions= self.gm.getRegions
     for r in self.getProfileRegions():
-      reg= regions.newQuadRegion(nmbMat)
+      reg= regions.newQuadRegion(matModelName)
       reg.pMin= r[0]
       reg.pMax= r[1]
       numberOfTiles= reg.setTileSize(self.tileSize,self.tileSize)
-      print numberOfTiles
-      retval.append(reg)
-    return retval
+    return self.gm
+
+  def getFiberSection3d(self,preprocessor,matModelName):
+    reg= self.discretization(preprocessor,matModelName)
+    self.fiberSection3dName= 'fs3d'+self.profil['nmb']
+    self.fiberSection3d= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d",self.fiberSection3dName)
+    fiberSectionRepr= self.fiberSection3d.getFiberSectionRepr()
+    fiberSectionRepr.setGeomNamed(self.sectionGeometryName)
+    self.fiberSection3d.setupFibers()
+    fibras= self.fiberSection3d.getFibers()
+    return self.fiberSection3d

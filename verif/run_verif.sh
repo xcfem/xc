@@ -396,6 +396,7 @@ python tests/materials/fiber_section/test_diag_interaccion05.py
 python tests/materials/fiber_section/test_diag_interaccion06.py
 python tests/materials/fiber_section/test_cortante_01.py
 python tests/materials/fiber_section/test_cortante_02.py
+python tests/materials/fiber_section/plastic_hinge_on_IPE200.py
 echo "$BLEU" "  RC sections test." "$NORMAL"
 python tests/materials/ehe/test_Ecm_hormigon.py
 python tests/materials/ehe/test_EHEconcrete.py
