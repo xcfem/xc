@@ -111,19 +111,19 @@ class IJKRangeList(object):
     for s in surfaces:
       self.appendRanges(s)
 
-  def applyLoadVector(self, dicSup, loadVector):
+  def applyLoadVector(self, dicGeomEnt, loadVector):
     i= 0
     for r in self.ranges:
       nmbrSet=self.name+str(i)
-      s= self.grid.applyLoadInRange(r,dicSup,nmbrSet,loadVector)
+      s= self.grid.applyLoadInRange(r,dicGeomEnt,nmbrSet,loadVector)
       i+= 1
     return i
 
-  def applyEarthPressure(self, dicSup, earthPressLoadressure):
+  def applyEarthPressure(self, dicGeomEnt, earthPressLoadressure):
     i= 0
     for r in self.ranges:
       nmbrSet=self.name+str(i)
-      s= self.grid.applyEarthPressure(r,dicSup,nmbrSet,earthPressLoadressure)
+      s= self.grid.applyEarthPressure(r,dicGeomEnt,nmbrSet,earthPressLoadressure)
       i+= 1
     return i
 
@@ -152,10 +152,10 @@ class MaterialSurface(MaterialBase):
   def __init__(self,name, grid, material,elemType,elemSize):
     super(MaterialSurface,self).__init__(name,grid,material,elemType,elemSize)
 
-  def generateAreas(self, dicSup):
+  def generateAreas(self, dicGeomEnt):
     self.lstSup= list()
     for ijkRange in self.ranges:
-      self.lstSup+= self.grid.generateAreas(ijkRange,dicSup)
+      self.lstSup+= self.grid.generateAreas(ijkRange,dicGeomEnt)
     for s in self.lstSup:
        s.setElemSizeIJ(self.elemSize,self.elemSize)
 
@@ -220,11 +220,11 @@ class MaterialSurfacesMap(NamedObjectsMap):
   '''MaterialSurfaces dictionary.'''
   def __init__(self,surfaces):
     super(MaterialSurfacesMap,self).__init__(surfaces)
-  def generateAreas(self, dicSup):
+  def generateAreas(self, dicGeomEnt):
     for key in self:
-      self[key].generateAreas(dicSup)
-  def generateMesh(self, preprocessor, dicSup, firstElementTag= 1):
-    self.generateAreas(dicSup)
+      self[key].generateAreas(dicGeomEnt)
+  def generateMesh(self, preprocessor, dicGeomEnt, firstElementTag= 1):
+    self.generateAreas(dicGeomEnt)
     preprocessor.getCad.getSurfaces.conciliaNDivs()
     seedElemLoader= preprocessor.getElementLoader.seedElemLoader
     seedElemLoader.defaultTag= firstElementTag
@@ -294,14 +294,14 @@ class ElasticFoundationRanges(IJKRangeList):
     super(ElasticFoundationRanges,self).__init__(name,grid,list())
     self.wModulus= wModulus
     self.cRoz= cRoz
-  def generateSprings(self,key,dicSup,kX,kY,kZ):
+  def generateSprings(self,key,dicGeomEnt,kX,kY,kZ):
     cBal= self.wModulus
     cRozam= self.cRoz
     self.springs= list() #Tags of the news springs.
     i= 0
     for r in self.ranges:
       nmbrSet= key+str(i)
-      s= self.grid.getSetInRange(r,dicSup,nmbrSet)
+      s= self.grid.getSetInRange(r,dicGeomEnt,nmbrSet)
       #print nmbrSet,s.getNodes.size
       s.resetTributarias()
       s.calculaAreasTributarias(False)
@@ -366,7 +366,7 @@ class ElasticFoundationRangesMap(NamedObjectsMap):
   '''Constrained ranges dictionary.'''
   def __init__(self,efranges):
     super(ElasticFoundationRangesMap,self).__init__(efranges)
-  def generateSprings(self, prep, dicSup):
+  def generateSprings(self, prep, dicGeomEnt):
     #Apoyo elástico en el terreno
     #Materiales elásticos (los incializamos aquí para luego aplicar el módulo elástico que corresponda a cada nudo)
     self.muellX=typical_materials.defElasticMaterial(prep,'muellX',0.5)
@@ -374,7 +374,7 @@ class ElasticFoundationRangesMap(NamedObjectsMap):
     self.muellZ=typical_materials.defElasticMaterial(prep,'muellZ',1)
     for key in self.keys():
       apel= self[key]
-      apel.generateSprings(key,dicSup,self.muellX,self.muellY,self.muellZ)
+      apel.generateSprings(key,dicGeomEnt,self.muellX,self.muellY,self.muellZ)
 
 class LoadOnSurfaces(object):
   '''Load over a list of surfaces (defined as range lists).'''
@@ -414,9 +414,9 @@ class PressureLoadOnSurfaces(LoadOnSurfaces):
     super(PressureLoadOnSurfaces,self).__init__(name, surfaces)
     self.loadVector= loadVector
 
-  def applyLoad(self,dicSup):
+  def applyLoad(self,dicGeomEnt):
     loadVector= xc.Vector(self.loadVector)
-    self.surfaces.applyLoadVector(dicSup,loadVector)
+    self.surfaces.applyLoadVector(dicGeomEnt,loadVector)
 
 class EarthPressureOnSurfaces(LoadOnSurfaces):
   '''Earth pressure applied to shell elements
@@ -438,8 +438,8 @@ class EarthPressureOnSurfaces(LoadOnSurfaces):
     super(EarthPressureOnSurfaces,self).__init__(name, surfaces)
     self.earthPressLoadressure= earthPressLoadressure
 
-  def applyEarthPressure(self,dicSup):
-    self.surfaces.applyEarthPressure(dicSup,self.earthPressLoadressure)
+  def applyEarthPressure(self,dicGeomEnt):
+    self.surfaces.applyEarthPressure(dicGeomEnt,self.earthPressLoadressure)
 
 
 class StrainLoadOnSurfaces(LoadOnSurfaces):
@@ -492,13 +492,13 @@ class LoadState(object):
     for pp in self.inercLoad:
       print 'inercLoad:', pp.name
       pp.applyLoad()
-  def applyUniformLoads(self,dicSup):
+  def applyUniformLoads(self,dicGeomEnt):
     for load in self.unifPressLoad:
       print 'unifPressLoad:', load.name
-      load.applyLoad(dicSup)
+      load.applyLoad(dicGeomEnt)
     for load in self.unifVectLoad:
       print 'unifVectLoad:', load.name
-      load.applyLoad(dicSup)
+      load.applyLoad(dicGeomEnt)
 
   def applyPunctualLoads(self):
     #Cargas lineales
@@ -513,39 +513,43 @@ class LoadState(object):
         vectorCarga=xc.Vector(pointLoad[cpunt]['qPunt'])
         lPatterns[key].newNodalLoad(nod.tag,vectorCarga)
 
-  def applyEarthPressureLoads(self,dicSup):
+  def applyEarthPressureLoads(self,dicGeomEnt):
     for ep in self.earthPressLoad:
       print 'earthPressLoad:', ep.name
-      ep.applyEarthPressure(dicSup)
+      ep.applyEarthPressure(dicGeomEnt)
 
   def applyTemperatureGradient(self,lp):
     for gt in self.tempGrad:
       print 'tempGrad:', gt.name
       gt.applyLoad(lp)
 
-  def applyLoads(self,lp,dicSup):
+  def applyLoads(self,lp,dicGeomEnt):
     #Peso propio
     self.applyInertialLoads()
   
     #Cargas uniformes (presiones) sobre superficies
     #Cargas uniformes sobre superficies con componentes XYZ
-    self.applyUniformLoads(dicSup)
+    self.applyUniformLoads(dicGeomEnt)
   
     #Cargas lineales
     #Cargas puntuales
     self.applyPunctualLoads()
   
     #Empuje de tierras
-    self.applyEarthPressureLoads(dicSup)
+    self.applyEarthPressureLoads(dicGeomEnt)
   
     #Gradiente de temperatura
     self.applyTemperatureGradient(lp)
 
 
 class LoadStateMap(NamedObjectsMap):
+  '''Dictionary of actions
+  Attributes:
+    loadStates: list of actions
+  '''
   def __init__(self,loadStates):
     super(LoadStateMap,self).__init__(loadStates)
-  def applyLoads(self,preprocessor,dicSup):
+  def applyLoads(self,preprocessor,dicGeomEnt):
     cargas= preprocessor.getLoadLoader
     casos= cargas.getLoadPatterns
     ts= casos.newTimeSeries("constant_ts","ts")   #Load modulation.
@@ -557,7 +561,7 @@ class LoadStateMap(NamedObjectsMap):
       cargas.getLoadPatterns.currentLoadPattern= key
       loadState= self[key]
       #Peso propio
-      loadState.applyLoads(retval[key],dicSup)
+      loadState.applyLoads(retval[key],dicGeomEnt)
     return retval
 
 class GridModel(object):
@@ -692,26 +696,29 @@ class GridModel(object):
     nodes= self.getPreprocessor().getNodeLoader
     predefined_spaces.gdls_resist_materiales3D(nodes)
     nodes.newSeedNode()
-    self.dicSup= dict() #Surfaces dictionary.
-    self.conjSup.generateMesh(self.getPreprocessor(),self.dicSup)
+    self.dicGeomEnt= dict() #Surfaces dictionary.
+    self.conjSup.generateMesh(self.getPreprocessor(),self.dicGeomEnt)
     self.dicLin= dict() #Lines dictionary.
     if(hasattr(self,'conjLin')):
-      self.conjLin.generateMesh(self.getPreprocessor(),self.dicSup)
+      self.conjLin.generateMesh(self.getPreprocessor(),self.dicGeomEnt)
     if(hasattr(self,'constrainedRanges')):
       self.constrainedRanges.generateContraintsInLines()
     if(hasattr(self,'elasticFoundationRanges')):
-      self.elasticFoundationRanges.generateSprings(self.getPreprocessor(),self.dicSup)
+      self.elasticFoundationRanges.generateSprings(self.getPreprocessor(),self.dicGeomEnt)
     for setName in self.conjSup: #???
       #vars()[setName]= 
       grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[setName].lstSup,setName)
 
   def generateLoads(self):
+    '''Apply the loads for each load state and returns a dictionary
+    with identifiers and the geometric entities (lines and surfaces) generated
+    '''
     if(hasattr(self,'loadStates')):
-      self.lPatterns= self.loadStates.applyLoads(self.getPreprocessor(),self.dicSup)
+      self.lPatterns= self.loadStates.applyLoads(self.getPreprocessor(),self.dicGeomEnt)
       for cs in self.conjSup: #???
         nbrset='set'+cs
         self.lPatterns[nbrset]= grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[cs].lstSup,nbrset)
-    return self.dicSup
+    return self.dicGeomEnt
 
   def displayMesh(self,partToDisplay):
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
