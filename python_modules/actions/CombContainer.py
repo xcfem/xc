@@ -44,6 +44,14 @@ class SituationCombs(dict):
 
 
 class SLSCombinations(object):
+  '''Combinations of actions for serviceability limit states
+  Attributes:
+    name:        name to identify the combination
+    rare:        combination for a rare design situation
+    freq:        combination for a frequent design situation
+    qp:          combination for a quasi-permanent design situation
+    earthquake:  combination for a earthquake design situation
+  '''
   def __init__(self):
     self.name= "Service limit states."
     self.rare= SituationCombs('Rare situations.')
@@ -70,9 +78,17 @@ class SLSCombinations(object):
     
 
 class ULSCombinations(object):
+  '''Combinations of actions for ultimate limit states
+  Attributes:
+    name:        name to identify the combination
+    perm:        combination for a persistent or transient design situation
+    acc:         combination for a accidental design situation
+    fatigue:     combination for a fatigue design situation
+    earthquake:  combination for a seismic design situation
+  '''
   def __init__(self):
     self.name= "Ultimate limit states."
-    self.perm= SituationCombs('Permanent and transitory situations.')
+    self.perm= SituationCombs('Persistent or transient situations.')
     self.acc= SituationCombs('Exceptional (accidental) situations.')
     self.fatigue= SituationCombs('Fatigue situations.')
     self.earthquake= SituationCombs('Earthquake situations for ULS.')
@@ -95,6 +111,10 @@ class ULSCombinations(object):
       s.createCombinations(xcCombLoader)
 
 class CombContainer(object):
+  '''Container of load combinations
+  SLS: serviceability limit state combination
+  ULS: ultimate limit state combination
+  '''
   def __init__(self):
     self.SLS= SLSCombinations()
     self.ULS= ULSCombinations()

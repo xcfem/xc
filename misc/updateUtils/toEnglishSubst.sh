@@ -92,5 +92,5 @@ do
 # sed -i 's/eHidrostVol/hydrThrustLoad/g' $fl
 # sed -i 's/cInerc/inercLoad/g' $fl
 # sed -i 's/earthP/earthPressLoad/g' $fl
-sed -i 's/dicSup/dicGeomEnt/g' $fl
+# sed -i 's/dicSup/dicGeomEnt/g' $fl
 done
