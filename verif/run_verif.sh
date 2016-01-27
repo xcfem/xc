@@ -71,6 +71,7 @@ python tests/elements/beam_column/test_force_beam_column_3d_03.py
 python tests/elements/beam_column/test_force_beam_column_3d_04.py
 python tests/elements/beam_column/test_force_beam_column_3d_05.py
 python tests/elements/beam_column/test_force_beam_column_3d_06.py
+python tests/elements/beam_column/plastic_hinge_on_cantilever.py
 python tests/elements/beam_column/test_giro_crdTransf_01.py
 python tests/elements/beam_column/test_portico_01.py
 python tests/elements/beam_column/test_integration_options_01.py
