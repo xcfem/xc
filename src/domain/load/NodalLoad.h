@@ -59,7 +59,8 @@
 // Purpose: This file contains the class interface for NodalLoad.
 // NodalLoad is a class for applying nodal loads to the model.
 
-#include <domain/load/Load.h>
+#include "domain/load/Load.h"
+#include "utility/matrix/Vector.h"
 
 namespace XC {
 class Node;
@@ -77,7 +78,7 @@ class NodalLoad : public Load
   private:
     int  myNode; //!< tag indicating associated Node objects tag
     mutable Node *myNodePtr; //!< pointer to Node object on which load acts
-    Vector *load;       //!< the reference load - pointer to new copy or 0
+    Vector load;       //!< the reference load
     bool  konstant;     //!< true if load is load factor independent
     // AddingSensitivity:BEGIN /////////////////////////////////////
     int parameterID;
@@ -85,7 +86,6 @@ class NodalLoad : public Load
     // AddingSensitivity:END ///////////////////////////////////////
 
     Node *get_node_ptr(void);
-    void borra_load(void);
 
   protected:
     DbTagData &getDbTagData(void) const;
@@ -95,14 +95,11 @@ class NodalLoad : public Load
     NodalLoad(int tag, int theClassTag=  LOAD_TAG_NodalLoad);
     NodalLoad(int tag, int node, int classTag);
     NodalLoad(int tag, int node, const Vector &load, bool isLoadConstant = false);
-    ~NodalLoad(void);
 
     virtual void setDomain(Domain *newDomain);
     virtual int getNodeTag(void) const;
     virtual void applyLoad(double loadFactor);
     
-    void set_load(const XC::Vector &);
-
     const Vector &getForce(void) const;
     const Vector &getMoment(void) const;
 

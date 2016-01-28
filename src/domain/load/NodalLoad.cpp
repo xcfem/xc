@@ -58,7 +58,6 @@
 #include "NodalLoad.h"
 #include "domain/component/Parameter.h"
 #include <domain/mesh/node/Node.h>
-#include <utility/matrix/Vector.h>
 #include <cstdlib>
 #include <domain/domain/Domain.h>
 #include <domain/mesh/element/Information.h>
@@ -70,31 +69,13 @@
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-void XC::NodalLoad::borra_load(void)
-  {
-    if(load) delete load;
-    load= nullptr;
-  }
-
-void XC::NodalLoad::set_load(const Vector &theLoad)
-  {
-    borra_load();
-    load= new Vector(theLoad);
-    if(!load)
-      {
-        std::cerr << "FATAL XC::NodalLoad::NodalLoad(int node, const Vector &theLoad) -";
-        std::cerr << " ran out of memory for load on Node " << myNode << std::endl;
-        exit(-1);
-      }
-  }
-
 // AddingSensitivity:BEGIN /////////////////////////////////////
  XC::Vector XC::NodalLoad::gradientVector(1);
 // AddingSensitivity:END ///////////////////////////////////////
 
 //! @brief Constructor.
 XC::NodalLoad::NodalLoad(int tag, int theClassTag)
-:Load(tag,theClassTag), myNode(0), myNodePtr(nullptr), load(nullptr), konstant(false)
+  : Load(tag,theClassTag), myNode(0), myNodePtr(nullptr), load(), konstant(false)
   {
     // AddingSensitivity:BEGIN /////////////////////////////////////
     parameterID = 0;
@@ -103,7 +84,7 @@ XC::NodalLoad::NodalLoad(int tag, int theClassTag)
 
 //! @brief Constructor.
 XC::NodalLoad::NodalLoad(int tag, int node, int theClassTag)
-  :Load(tag,theClassTag), myNode(node), myNodePtr(nullptr), load(nullptr), konstant(false)
+  : Load(tag,theClassTag), myNode(node), myNodePtr(nullptr), load(), konstant(false)
   {
     // AddingSensitivity:BEGIN /////////////////////////////////////
     parameterID = 0;
@@ -113,18 +94,13 @@ XC::NodalLoad::NodalLoad(int tag, int node, int theClassTag)
 
 //! @brief Constructor.
 XC::NodalLoad::NodalLoad(int tag, int node, const Vector &theLoad, bool isLoadConstant)
-  :Load(tag, LOAD_TAG_NodalLoad), myNode(node), myNodePtr(nullptr), load(nullptr), konstant(isLoadConstant)
+  :Load(tag, LOAD_TAG_NodalLoad), myNode(node), myNodePtr(nullptr), load(theLoad), konstant(isLoadConstant)
   {
-    set_load(theLoad);
     // AddingSensitivity:BEGIN /////////////////////////////////////
     parameterID = 0;
     // AddingSensitivity:END ///////////////////////////////////////
   }
 
-
-//! @brief Destructor.
-XC::NodalLoad::~NodalLoad(void)
-  { borra_load(); }
 
 void  XC::NodalLoad::setDomain(Domain *newDomain)
   {
@@ -161,36 +137,36 @@ const XC::Vector &XC::NodalLoad::getForce(void) const
     retval.Zero();
     if(!myNodePtr)
       myNodePtr= const_cast<NodalLoad *>(this)->get_node_ptr();
-    if(load && myNodePtr)
+    if(!load.Nulo() && myNodePtr)
       {
         const size_t numGdl= myNodePtr->getNumberDOF();
         const size_t dim= myNodePtr->getCrds().Size();
         switch(numGdl)
           {
           case 1:
-            retval(0)= (*load)(0);
+            retval(0)= load(0);
             break;
           case 2:
-            retval(0)= (*load)(0);
-            retval(1)= (*load)(1);
+            retval(0)= load(0);
+            retval(1)= load(1);
             break;
           case 3:
             if(dim == 2)
               {
-                retval(0)= (*load)(0);
-                retval(1)= (*load)(1);
+                retval(0)= load(0);
+                retval(1)= load(1);
               }
             else if(dim == 3)
               {
-                retval(0)= (*load)(0);
-                retval(1)= (*load)(1);
-                retval(2)= (*load)(2);
+                retval(0)= load(0);
+                retval(1)= load(1);
+                retval(2)= load(2);
               }
             break;
           case 6:
-            retval(0)= (*load)(0);
-            retval(1)= (*load)(1);
-            retval(2)= (*load)(2);
+            retval(0)= load(0);
+            retval(1)= load(1);
+            retval(2)= load(2);
             break;
           default:
             std::cerr << "Error en BeamMecLoad::getForce." << std::endl;
@@ -199,7 +175,7 @@ const XC::Vector &XC::NodalLoad::getForce(void) const
       }
     else
       {
-        if(!load)
+        if(load.Nulo())
           std::cerr << "NodalLoad::getForce; no se ha definido la carga." << std::endl;
         if(!myNodePtr)
           std::cerr << "NodalLoad::getForce; el puntero a nodo es nulo." << std::endl;
@@ -214,7 +190,7 @@ const XC::Vector &XC::NodalLoad::getMoment(void) const
     retval.Zero();
     if(!myNodePtr)
       myNodePtr= const_cast<NodalLoad *>(this)->get_node_ptr();
-    if(load && myNodePtr)
+    if(!load.Nulo() && myNodePtr)
       {
         const size_t numGdl= myNodePtr->getNumberDOF();
         const size_t dim= myNodePtr->getCrds().Size();
@@ -222,12 +198,12 @@ const XC::Vector &XC::NodalLoad::getMoment(void) const
           {
           case 3:
             if(dim == 2)
-              retval(0)= (*load)(2);
+              retval(0)= load(2);
             break;
           case 6:
-            retval(0)= (*load)(3);
-            retval(1)= (*load)(4);
-            retval(2)= (*load)(5);
+            retval(0)= load(3);
+            retval(1)= load(4);
+            retval(2)= load(5);
             break;
           default:
             std::cerr << "Error en BeamMecLoad::getMoment." << std::endl;
@@ -236,7 +212,7 @@ const XC::Vector &XC::NodalLoad::getMoment(void) const
       }
     else
       {
-        if(!load)
+        if(load.Nulo())
           std::cerr << "NodalLoad::getMoment; no se ha definido la carga." << std::endl;
         if(!myNodePtr)
           std::cerr << "NodalLoad::getMoment; el puntero a nodo es nulo." << std::endl;
@@ -269,12 +245,11 @@ void XC::NodalLoad::applyLoad(double loadFactor)
     if(!myNodePtr)
       myNodePtr= get_node_ptr();
 
-    assert(load);
     // add the load times the load factor to nodal unbalanced load
     if(konstant == false)
-      myNodePtr->addUnbalancedLoad(*load,loadFactor);
+      myNodePtr->addUnbalancedLoad(load,loadFactor);
     else
-      myNodePtr->addUnbalancedLoad(*load,1.0);
+      myNodePtr->addUnbalancedLoad(load,1.0);
   } 
 
 //! @brief Devuelve un vector para almacenar los dbTags
@@ -291,8 +266,8 @@ int XC::NodalLoad::sendData(CommParameters &cp)
   {
     int res= Load::sendData(cp);
     res+= cp.sendInts(myNode,parameterID,getDbTagData(),CommMetaData(2));
-    res+= cp.sendVectorPtr(load,getDbTagData(),ArrayCommMetaData(3,4,5));
-    res+= cp.sendBool(konstant,getDbTagData(),CommMetaData(6));
+    res+= cp.sendVector(load,getDbTagData(),CommMetaData(3));
+    res+= cp.sendBool(konstant,getDbTagData(),CommMetaData(4));
     return res;
   }
 
@@ -302,8 +277,8 @@ int XC::NodalLoad::recvData(const CommParameters &cp)
   {
     int res= Load::recvData(cp);
     res+= cp.receiveInts(myNode,parameterID,getDbTagData(),CommMetaData(2));
-    load= cp.receiveVectorPtr(load,getDbTagData(),ArrayCommMetaData(3,4,5));
-    res+= cp.receiveBool(konstant,getDbTagData(),CommMetaData(6));
+    res+= cp.receiveVector(load,getDbTagData(),CommMetaData(3));
+    res+= cp.receiveBool(konstant,getDbTagData(),CommMetaData(4));
     return res;
   }
 
@@ -335,8 +310,7 @@ int XC::NodalLoad::recvSelf(const CommParameters &cp)
 void XC::NodalLoad::Print(std::ostream &s, int flag)
   {
      s << "Nodal Load: " << myNode;
-     if(load)
-       s << " load : " << *load;
+     s << " load : " << load;
   }
 
 // AddingSensitivity:BEGIN /////////////////////////////////////
@@ -369,13 +343,13 @@ int XC::NodalLoad::updateParameter(int parameterID, Information &info)
       case -1:
         return -1;
       case 1:
-        (*load)(0) = info.theDouble;
+        load(0) = info.theDouble;
         return 0;
       case 2:
-        (*load)(1) = info.theDouble;
+        load(1) = info.theDouble;
         return 0;
       case 3:
-        (*load)(2) = info.theDouble;
+        load(2) = info.theDouble;
         return 0;
       default:
         return -1;

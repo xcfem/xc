@@ -106,12 +106,15 @@ from materials import steelProfile as sp
 class IPEProfile(sp.SteelProfile):
   def __init__(self,steel,name):
     super(IPEProfile,self).__init__(steel,name,perfilesIPE)
-    self.bHalf= self.profil['b']/2.0 #Half flange width
-    self.hHalf= self.profil['h']/2.0 #Half section height
-    self.hiHalf= self.profil['hi']/2.0 #Half section interior height.
-    self.twHalf= self.profil['tw']/2.0 #Half web thickness
+    self.bHalf= self.get('b')/2.0 #Half flange width
+    self.hHalf= self.get('h')/2.0 #Half section height
+    self.hiHalf= self.get('hi')/2.0 #Half section interior height.
+    self.twHalf= self.get('tw')/2.0 #Half web thickness
     self.tileSize= 0.01 #Size of tiles
 
+  def getRho(self):
+    ''' Returns mass per unit lenght. '''
+    return self.get('P')
   def getProfileRegions(self):
     ''' Returns regions valid for fiber section model creation. '''
     retval= list()
@@ -130,7 +133,7 @@ class IPEProfile(sp.SteelProfile):
     return retval
 
   def discretization(self,preprocessor,matModelName):
-    self.sectionGeometryName= 'gm'+self.profil['nmb']
+    self.sectionGeometryName= 'gm'+self.get('nmb')
     self.gm= preprocessor.getMaterialLoader.newSectionGeometry(self.sectionGeometryName)
     regions= self.gm.getRegions
     for r in self.getProfileRegions():
@@ -142,7 +145,7 @@ class IPEProfile(sp.SteelProfile):
 
   def getFiberSection3d(self,preprocessor,matModelName):
     reg= self.discretization(preprocessor,matModelName)
-    self.fiberSection3dName= 'fs3d'+self.profil['nmb']
+    self.fiberSection3dName= 'fs3d'+self.get('nmb')
     self.fiberSection3d= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d",self.fiberSection3dName)
     fiberSectionRepr= self.fiberSection3d.getFiberSectionRepr()
     fiberSectionRepr.setGeomNamed(self.sectionGeometryName)
