@@ -135,7 +135,7 @@ class ijkGrid(object):
     tagPto= self.indices.getPnt(i+1,j+1,k+1).tag
     return tagPto
 
-  def generateAreas(self,ijkRange,dicSup):
+  def generateAreas(self,ijkRange,dicGeomEnt):
     'genera las superficies contenidas en un rectángulo comprendido entre las coordenadas'
     'que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
     'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
@@ -159,7 +159,7 @@ class ijkGrid(object):
                 a.nDivJ=1     #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
                 retval.append(a)
                 nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
-                dicSup[nmbrSup]= a
+                dicGeomEnt[nmbrSup]= a
                 j+=1
             i+=1
     elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
@@ -176,7 +176,7 @@ class ijkGrid(object):
                 a.nDivJ=1     #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
                 retval.append(a)
                 nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
-                dicSup[nmbrSup]= a
+                dicGeomEnt[nmbrSup]= a
                 k+=1
             i+=1
     elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
@@ -193,7 +193,7 @@ class ijkGrid(object):
                 a.nDivJ=1     #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
                 retval.append(a)
                 nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
-                dicSup[nmbrSup]= a
+                dicGeomEnt[nmbrSup]= a
                 k+=1
             j+=1
     return retval
@@ -243,7 +243,7 @@ class ijkGrid(object):
             k+=1
     return retval
 
-  def getSetInRange(self,ijkRange,dicSup,nmbrSet):
+  def getSetInRange(self,ijkRange,dicGeomEnt,nmbrSet):
     'devuelve el set de entidades (superficies y todas las asociadas a estas superficies)'
     'contenidas en un rectángulo comprendido entre las coordenadas'
     'que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
@@ -262,7 +262,7 @@ class ijkGrid(object):
                 pto3= self.getTagIndices(i+1,j+1,k)
                 pto4= self.getTagIndices(i,j+1,k)
                 nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
-                retval.getSurfaces.append(dicSup[nmbrSup])
+                retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 j+=1
             i+=1
     elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
@@ -275,7 +275,7 @@ class ijkGrid(object):
                 pto3= self.getTagIndices(i+1,j,k+1)
                 pto4= self.getTagIndices(i+1,j,k)
                 nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
-                retval.getSurfaces.append(dicSup[nmbrSup])
+                retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 k+=1
             i+=1
     elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
@@ -288,7 +288,7 @@ class ijkGrid(object):
                 pto3= self.getTagIndices(i,j+1,k+1)
                 pto4= self.getTagIndices(i,j,k+1)
                 nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
-                retval.getSurfaces.append(dicSup[nmbrSup])
+                retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 k+=1
             j+=1
     retval.fillDownwards()    
@@ -380,15 +380,15 @@ class ijkGrid(object):
             j+=1
     return retval
 
-  def applyLoadInRange(self,ijkRange,dicSup,nmbrSet,loadVector):
-    s= self.getSetInRange(ijkRange,dicSup,nmbrSet)
+  def applyLoadInRange(self,ijkRange,dicGeomEnt,nmbrSet,loadVector):
+    s= self.getSetInRange(ijkRange,dicGeomEnt,nmbrSet)
     sElem=s.getElements
     for e in sElem:
       #print e.tag
       e.vector3dUniformLoadGlobal(loadVector)
 
-  def applyEarthPressure(self,ijkRange,dicSup,nmbrSet,earthPressLoadressure):
-    s= self.getSetInRange(ijkRange,dicSup,nmbrSet)
+  def applyEarthPressure(self,ijkRange,dicGeomEnt,nmbrSet,earthPressLoadressure):
+    s= self.getSetInRange(ijkRange,dicGeomEnt,nmbrSet)
     sElem=s.getElements
     for e in sElem:
       zElem=e.getCooCentroid(False)[2]
