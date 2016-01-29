@@ -111,6 +111,7 @@ class_<XC::Element0D , bases<XC::ElementBase<2>>, boost::noncopyable >("Element0
 XC::CrdTransf *(XC::Element1D::*getCrdTransf)(void)= &XC::Element1D::getCoordTransf;
 class_<XC::Element1D, bases<XC::ElementBase<2> >, boost::noncopyable >("Element1D", no_init)
     .add_property("getCoordTransf", make_function( getCrdTransf, return_internal_reference<>() ))
+    .def("getLineSegment", &XC::Element1D::getSegmento,"Devuelve el tipo de celda que le corresponde al elemento en un archivo MED.")
     .def("getMEDCellType", &XC::Element1D::getMEDCellType,"Devuelve el tipo de celda que le corresponde al elemento en un archivo MED.")
     .def("vector2dUniformLoadGlobal", &XC::Element1D::vector2dUniformLoadGlobal,"Element's load.")
     .def("vector2dUniformLoadLocal", &XC::Element1D::vector2dUniformLoadLocal,"Element's load.")

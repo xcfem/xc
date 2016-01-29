@@ -47,12 +47,12 @@ def creaBarraGordaNodos(preprocessor,tagNodA, tagNodB, nmbTransf):
   J= 10
   scc= typical_materials.defElasticSection3d(preprocessor,matName,A,E,G,Iz,Iy,J)
   defMat= elementos.defaultMaterial
-  print "defMat= ", defMat
+  #print "defMat= ", defMat
   elementos.defaultMaterial= matName
   elem= elementos.newElement("elastic_beam_3d",xc.ID([tagNodA,tagNodB]))
   elementos.defaultMaterial= defMat
   scc= elem.sectionProperties
-  print "A= ", elem.sectionProperties.A
+  #print "A= ", elem.sectionProperties.A
   return elem
 
 '''
