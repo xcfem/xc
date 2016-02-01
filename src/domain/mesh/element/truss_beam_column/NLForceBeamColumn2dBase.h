@@ -33,6 +33,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include "domain/mesh/element/fvectors/FVectorBeamColumn2d.h"
+#include "domain/mesh/element/coordTransformation/CrdTransf2d.h"
 
 namespace XC {
 
@@ -98,6 +99,21 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
     const Matrix &getTangentStiff(void) const;
 
     const Vector &getResistingForce(void) const;
+
+    inline double getV(void) //Shear force in the middle.
+      { return (Secommit(1)+Secommit(2))/theCoordTransf->getInitialLength(); }
+    inline double getV1(void) //Shear force in the back end.
+      { return  (Secommit(1)+Secommit(2))/theCoordTransf->getInitialLength()+p0[1]; }
+    inline double getV2(void) //Shear force in the front end.
+      { return -(Secommit(1)+Secommit(2))/theCoordTransf->getInitialLength()+p0[2]; }
+    inline double getN1(void) //Axial force.
+      { return -Secommit(0)+p0[0]; }
+    inline double getN2(void)
+      { return Secommit(0); }
+    inline double getM1(void)
+      { return Secommit(1); }
+    inline double getM2(void)
+      { return Secommit(2); }
   };
 } // end of XC namespace
 

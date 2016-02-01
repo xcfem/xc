@@ -228,6 +228,7 @@ class RecordDefDiagramaEsf(vtk_lut_field.LUTField):
     for e in elems:
       self.vDir= e.getCoordTransf.getJVector 
       e.getResistingForce()
+      print "e= ", e
       indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,-e.getMz1,e.getMz2)
 
   def agregaDatosADiagramaVY(self, eSet,indxDiagrama):

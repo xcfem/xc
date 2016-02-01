@@ -27,9 +27,6 @@
 //NLForceBeamColumn3dBase.cpp
 
 #include <domain/mesh/element/truss_beam_column/NLForceBeamColumn3dBase.h>
-#include <utility/matrix/Matrix.h>
-#include <utility/matrix/Vector.h>
-#include <domain/mesh/element/coordTransformation/CrdTransf3d.h>
 #include <material/section/SeccionBarraPrismatica.h>
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
@@ -57,7 +54,7 @@ void XC::NLForceBeamColumn3dBase::resizeMatrices(const size_t &nSections)
 XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int numSec)
   : BeamColumnWithSectionFDTrf3d(tag,classTag,numSec),
   rho(0.0), maxIters(10), tol(1e-8), initialFlag(0), isTorsion(false),
-  kv(NEBD,NEBD), Se(NEBD), kvcommit(NEBD,NEBD), Secommit(NEBD),
+  kv(NEBD,NEBD), Se(), kvcommit(NEBD,NEBD), Secommit(),
   fs(numSec), vs(numSec), Ssr(numSec),vscommit(numSec), p0()
   {}
 
@@ -66,7 +63,7 @@ XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int nu
 XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int numSec,const Material *m,const CrdTransf *coordTransf)
   : BeamColumnWithSectionFDTrf3d(tag,classTag,numSec,m,coordTransf),
   rho(0.0), maxIters(10), tol(1e-8), initialFlag(0), isTorsion(false),
-  kv(NEBD,NEBD), Se(NEBD), kvcommit(NEBD,NEBD), Secommit(NEBD),
+  kv(NEBD,NEBD), Se(), kvcommit(NEBD,NEBD), Secommit(),
   fs(numSec), vs(numSec), Ssr(numSec),vscommit(numSec), p0()
   {
     isTorsion= theSections.isTorsion();

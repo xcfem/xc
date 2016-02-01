@@ -156,100 +156,100 @@ class ElasticBeam3d : public ProtoBeam3d
     
     void Print(std::ostream &s, int flag =0);    
 
-    inline double getAN1(void) //fuerza axil que se ejerce sobre la barra en su extremo dorsal.
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+    inline double getAN1(void) //Axial force which acts over the element in his back end.
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.AN1()+p0[0];
       }
-    inline double getAN2(void) //fuerza axil que se ejerce sobre la barra en su extremo frontal.
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+    inline double getAN2(void) //Axial force which acts over the element in his front end.
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.AN2();
       }
-    inline double getN1(void) //axil en el extremo dorsal.
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+    inline double getN1(void) //Axial force in the front end.
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return -q.AN1()-p0[0];
       }
-    inline double getN2(void) //axil en el extremo frontal.
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+    inline double getN2(void) //Axial force in the back end.
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.AN2();
       }
-    inline double getN(void) //axil medio.
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+    inline double getN(void) //Mean axial force.
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return (-q.AN1()-p0[0]+q.AN2())/2.0;
       }
     inline double getAMz1(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.Mz1(); //Momento z que se ejerce sobre la barra en su extremo dorsal.
       }
     inline double getAMz2(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.Mz2(); //Momento z que se ejerce sobre la barra en su extremo frontal.
       }
     inline double getMz1(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return -q.Mz1(); //Momento z en su extremo dorsal.
       }
     inline double getMz2(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return -q.Mz2(); //Momento z en su extremo frontal.
       }
     inline double getVy(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.Vy(theCoordTransf->getInitialLength()); //Cortante y.
       }
     inline double getAVy1(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.Vy(theCoordTransf->getInitialLength())+p0[1]; //Cortante y que se ejerce sobre la barra en su extremo dorsal.
       }
     inline double getAVy2(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return -q.Vy(theCoordTransf->getInitialLength())+p0[2]; //Cortante y que se ejerce sobre la barra en su extremo frontal.
       }
     inline double getVy1(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return -q.Vy(theCoordTransf->getInitialLength())-p0[1]; //Cortante y en su extremo dorsal.
       }
     inline double getVy2(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.Vy(theCoordTransf->getInitialLength())-p0[2]; //Cortante y en su extremo frontal.
       }
     inline double getVz(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.Vz(theCoordTransf->getInitialLength()); //Cortante z.
       }
     inline double getAVz1(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.Vz(theCoordTransf->getInitialLength())+p0[3]; //Cortante z que se ejerce sobre la barra en su extremo dorsal.
       }
     inline double getAVz2(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return -q.Vz(theCoordTransf->getInitialLength())+p0[4]; //Cortante z que se ejerce sobre la barra en su extremo frontal.
       }
     inline double getVz1(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return -q.Vz(theCoordTransf->getInitialLength())-p0[3]; //Cortante z en su extremo dorsal.
       }
     inline double getVz2(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.Vz(theCoordTransf->getInitialLength())-p0[4]; //Cortante z en su extremo frontal.
       }
     inline double getMy1(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.My1(); //Momento y en el extremo dorsal.
       }
     inline double getMy2(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.My2(); //Momento y en el extremo frontal.
       }
     inline double getT(void) //Torsor en la barra.
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.T();
       }
     inline double getT1(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.T1(); //+p0[0]; //Torsor en el extremo dorsal.
       }
     inline double getT2(void)
-      {                 //¡Ojo! antes hay que llamara a "calc_resisting_force".
+      {                 //¡Warning! call "calc_resisting_force" before calling this method.
         return q.T2(); //Torsor en el extremo frontal.
       }
 

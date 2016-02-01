@@ -354,7 +354,7 @@ int XC::ForceBeamColumn3d::update(void)
     static Vector dSe(NEBD);
     static Vector dvToDo(NEBD);
     static Vector dvTrial(NEBD);
-    static Vector SeTrial(NEBD);
+    static EsfBeamColumn3d SeTrial;
     static Matrix kvTrial(NEBD, NEBD);
 
     dvToDo = dv;
