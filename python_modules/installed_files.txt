@@ -283,10 +283,12 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_cells.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_grafico_base.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_dblprop_cells.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/ColoredDiagram.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_lut_field.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_dibuja_prop_points.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/graficos.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_dibuja_prop_cells.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/LinearLoadDiagram.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_strprop_cells.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_grafico_diagrama_esfuerzos.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/cadMesh.py
@@ -595,10 +597,12 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_cells.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_grafico_base.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_dblprop_cells.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/ColoredDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_lut_field.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_dibuja_prop_points.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/graficos.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_dibuja_prop_cells.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/LinearLoadDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_strprop_cells.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_grafico_diagrama_esfuerzos.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/cadMesh.pyc

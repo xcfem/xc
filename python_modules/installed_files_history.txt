@@ -598,12 +598,16 @@
 /usr/local/lib/python2.7/dist-packages/xc.so
 /usr/local/lib/python2.7/dist-packages/xcVtk/cadMesh.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/cadMesh.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/ColoredDiagram.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/ColoredDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/creaArraySetData.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/creaArraySetData.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/graficos.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/graficos.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/__init__.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/LinearLoadDiagram.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/LinearLoadDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/__init__.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/vtk_define_malla_cells_cad.py
