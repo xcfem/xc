@@ -2,6 +2,7 @@
 import os
 import DxfReader as dxf
 from collections import defaultdict
+from dxfwrite import DXFEngine as dxf
 
 class MaterialRecord(object):
   def __init__(self,name,typo,thermalExp,rho,E,nu,G,logDec,specHeat,thermalCond):
@@ -37,6 +38,9 @@ class NodeRecord(object):
     strId= str(self.id)
     strCommand= '.newNodeIDXYZ(' + strId + ',' + self.coords[0] + ',' + self.coords[1] +','+ self.coords[2]+')'
     return 'n' + strId + '= ' + nodeLoaderName + strCommand
+  def writeDxf(self,drawing,layerName):
+    drawing.add(dxf.point((self.coords[0], self.coords[1], self.coords[2]), color=0, layer=layerName))
+
 
 class CellRecord(object):
   def __init__(self,id, type, nodes,thk= 0.0):
@@ -55,6 +59,12 @@ class CellRecord(object):
     strCommand= xcImportExportData.cellLoaderName + ".defaultTag= "+ strId +'; '
     strCommand+= 'e' + strId + '= ' + xcImportExportData.cellLoaderName + '.newElement(' + strType + ',' + self.getStrXCNodes() +')'
     return strCommand
+  def writeDxf(self,nodeDict,drawing,layerName):
+    numNodes= len(self.nodeIds)
+    for i in range(0,numNodes-1):
+      coordsA= nodeDict[self.nodeIds[i]].coords
+      coordsB= nodeDict[self.nodeIds[i+1]].coords
+      drawing.add(dxf.line((coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), color=0, layer=layerName))
 
 class ComponentSupportRecord:
   '''Constraints for x,y,z,rx,ry,rz displacements of a node.'''
@@ -121,7 +131,12 @@ class GroupRecord(object):
   def empty(self):
     return not(self.nodeIds or self.cellIds or self.pointIds or self.lineIds)
 
+  def writeDxfFile(self,xcImportExportData):
+    '''groups have not representation in dxf files.'''
+    return
+
   def writeToXCFile(self,xcImportExportData):
+    ''' writes the XC commands to define the group in a file.'''
     if(not self.empty()):
       f= xcImportExportData.outputFile
       strCommand= self.name + '= ' + xcImportExportData.setLoaderName + '.defSet("' + self.name +'")'
@@ -145,8 +160,8 @@ class XCImportExportData(object):
   def __init__(self):
     self.mainDATFile= ""
     self.groupDATFiles= [] 
-    self.dxfLayers= [] 
-    self.xcFileName= "xc_mesh.py"
+    self.dxfLayers= []
+    self.outputFileName= 'xc_mesh' 
     self.problemName= None
     self.nodeLoaderName= "nodes"
     self.cellLoaderName= "elements"
@@ -156,6 +171,12 @@ class XCImportExportData(object):
     self.outputFile= None
     self.meshDesc= None
     self.blockData= None
+
+  def getXCFileName(self):
+    return self.outputFileName+'.py'
+
+  def getDxfFileName(self):
+    return self.outputFileName+'.dxf'
 
   def getBlockLoaderName(self,blockType):
     if(blockType=='line'):
@@ -187,8 +208,16 @@ class XCImportExportData(object):
       grp.setUp(l,self.blockData.pointsInLayer[l],self.blockData.blocksInLayer[l])
       self.blockData.groups.append(grp)
       
+  def writeDxfFile(self,fileName):
+    drawing= dxf.drawing(fileName)
+    if(self.blockData):
+      self.blockData.writeDxf(self)
+    if(self.meshDesc):
+      self.meshDesc.writeDxf(self)
+    drawing.save()
+      
   def writeToXCFile(self):
-    self.outputFile= open(self.xcFileName,"w")
+    self.outputFile= open(self.getXCFileName(),"w")
     strCommand= 'preprocessor= ' + self.problemName + '.getPreprocessor'
     self.outputFile.write(strCommand+'\n')
     strCommand= self.nodeLoaderName + '= preprocessor.getNodeLoader'
@@ -228,10 +257,19 @@ class NodeDict(dict):
       pos= n.getInitialPos3d
       self.append(n.tag, pos.x, pos.y, pos.z)
 
+  def writeDxf(self,drawing):
+    '''Write the node positions in dxf file.'''
+    layerName= 'nodes'
+    drawing.add_layer(layerName)
+    for key in self:
+      self[key].writeDxf(drawing,layerName)
+
   def writeToXCFile(self,f,xcImportExportData):
+    ''' Write the XC commands that define nodes.'''
     for key in self:
       strCommand= self[key].getStrXCCommand(xcImportExportData.nodeLoaderName)
       f.write(strCommand+'\n')
+
   def getTags(self):
     retval= list()
     for key in self:
@@ -264,18 +302,32 @@ class CellDict(dict):
     elemSet= xcSet.getElements
     for e in elemSet:
       nodes= e.getNodes.getExternalNodes
-      tagNodes= [nodes[0],nodes[1],nodes[2],nodes[3]]
-      thickness= e.getPhysicalProperties.getVectorMaterials[0].h
-      cell= CellRecord(e.tag,str(e.tag),tagNodes,thickness)
-      self.append(cell)
+      numNodes= len(nodes)
+      if(numNodes==4):
+        tagNodes= [nodes[0],nodes[1],nodes[2],nodes[3]]
+        thickness= e.getPhysicalProperties.getVectorMaterials[0].h
+        cell= CellRecord(e.tag,str(e.tag),tagNodes,thickness)
+      elif(numNodes==2):
+        tagNodes= [nodes[0],nodes[1]]
+        cell= CellRecord(e.tag,str(e.tag),tagNodes,0.0)
+      self.append(cell)        
+
+  def writeDxf(self,nodeDict,drawing):
+    '''Write the cells in dxf file.'''
+    layerName= 'cells'
+    drawing.add_layer(layerName)
+    for key in self:
+      self[key].writeDxf(nodeDict,drawing,layerName)
 
   def writeToXCFile(self,f,xcImportExportData):
+    '''Write the XC commands that define the cells (elements).'''
     for key in self:
       cell= self[key]
       type= xcImportExportData.convertCellType(cell.cellType)
       if(type!=None):
         strCommand= self[key].getStrXCCommand(xcImportExportData)
         f.write(strCommand+'\n')
+
   def getTags(self):
     retval= list()
     for key in self:
@@ -357,7 +409,20 @@ class MeshData(object):
     self.cells.readFromXCSet(xcSet)
     self.nodeSupports.readFromXCDomain(xcSet.getPreprocessor.getDomain)
 
+  def writeDxf(self,drawing):
+    '''Write mesh in a DXF file.'''
+    self.nodes.writeDxf(drawing)
+    self.cells.writeDxf(self.nodes,drawing)
+    #groups have no representation in DXF files.
+
+  def writeDxfFile(self,fileName):
+    '''Write mesh in a DXF file.'''
+    drawing= dxf.drawing(fileName)
+    self.writeDxf(drawing)
+    drawing.save()
+
   def writeToXCFile(self,xcImportExportData):
+    '''Write the XC commands that define the mesh.'''
     f= xcImportExportData.outputFile
     self.nodes.writeToXCFile(f,xcImportExportData)
     self.cells.writeToXCFile(f,xcImportExportData)
@@ -452,6 +517,21 @@ class BlockData(object):
     self.pointsInLayer= dxfReader.pointsInLayer
     self.blocksInLayer= dxfReader.blocksInLayer
 
+  def writeDxf(self,drawing):
+    '''Write the blocs (point, lines, surfaces, volumes,...) in a DXF file'''
+    layerName= 'points'
+    drawing.add_layer(layerName)
+    for key in self.points:
+      self.points[key].writeDxf(drawing,layername)
+
+    drawing.add_layer('lines')
+    drawing.add_layer('surfaces')
+    drawing.add_layer('volumes')
+    for key in self.blocks:
+      block= self.blocks[key]
+      block.writeDxf(drawing)
+    #groups have no DXF representation.
+    
 
   def writeToXCFile(self,xcImportExportData):
     f= xcImportExportData.outputFile
@@ -460,7 +540,7 @@ class BlockData(object):
       f.write(strCommand+'\n')
     for key in self.blocks:
       block= self.blocks[key]
-      strCommand= self.blocks[key].getStrXCCommand(xcImportExportData)
+      strCommand= block.getStrXCCommand(xcImportExportData)
       f.write(strCommand+'\n')
     for g in self.groups:
       g.writeToXCFile(xcImportExportData)
