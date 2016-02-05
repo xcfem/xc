@@ -566,6 +566,8 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_min_dim_of_abutement_support.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_min_dim_of_abutment_support.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_min_dim_of_abutment_support.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_pinned_fixed_beam.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_pinned_fixed_beam.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_predim_pilotes.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_predim_pilotes.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_prestressing_wire.py
