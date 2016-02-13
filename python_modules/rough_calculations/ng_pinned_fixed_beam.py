@@ -5,8 +5,8 @@ from __future__ import division
 import math
 import ng_beam as bm
 
-#Step functions.
-def step(x,a,n=0):
+#Macaulay functions.
+def macaulay(x,a,n=0):
   if(x<a):
     return 0.0
   else:
@@ -73,15 +73,15 @@ class PinnedFixedBeam(bm.Beam):
 
   def getShearUnderConcentratedLoad(self,P,a,x):
     b= self.l-a
-    return P*(b**2/(2*self.l**3)*(2*self.l+a)-step(x,a,0))
+    return P*(b**2/(2*self.l**3)*(2*self.l+a)-macaulay(x,a,0))
 
   def getBendingMomentUnderConcentratedLoad(self,P,a,x):
     b= self.l-a
-    return P*(b**2/(2*self.l**3)*x*(2*self.l+a)-step(x,a,1))
+    return P*(b**2/(2*self.l**3)*x*(2*self.l+a)-macaulay(x,a,1))
 
   def getDeflectionUnderConcentratedLoad(self,P,a,x):
     b= self.l-a
     sum1= b**2*x**3/(2.0*self.l**3)*(2*self.l+a)
     sum2= -3*a*b**2*x/(2*self.l)
-    sum3= -step(x,a,3)
+    sum3= -macaulay(x,a,3)
     return P/(6.0*self.E*self.I)*(sum1+sum2+sum3)

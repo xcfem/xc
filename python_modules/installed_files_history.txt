@@ -558,6 +558,8 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_beam.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_cantilever.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_cantilever.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_concrete_slab.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_concrete_slab.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_encepados.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_encepados.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_esf_pilares.py

@@ -12,6 +12,7 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/masonry_bridge.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/nb_poussee_terres.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_concrete_slab.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_encepados.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_rc_section.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_simple_beam.py
@@ -327,6 +328,7 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/masonry_bridge.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/nb_poussee_terres.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_concrete_slab.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_encepados.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_rc_section.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_simple_beam.pyc
