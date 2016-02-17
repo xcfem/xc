@@ -301,9 +301,9 @@ elasticBeam2dElement=preprocessor.getElementLoader.newElement(
 
 % ***ForceBeamColumn2d***
 \subsection{ForceBeamColumn2d}
-This command is used to constructs a 2D forceBeamColumn element object, which is based on the iterative force-based formulation. A variety of numerical integration options can be used in the element state determination and encompass both distributed plasticity and plastic hinge integration. More details on the available numerical integration options can be found in the paper titled «Numerical Integration Options for the Force-Based Beam-Column Element in OpenSees», by Michael H. Scott.
+This command is used to constructs a 2D forceBeamColumn element object, which is based on the iterative force-based formulation. A variety of numerical integration options can be used in the element state determination and encompass both distributed plasticity and plastic hinge integration. More details on the available numerical integration options can be found in the paper titled ``Numerical Integration Options for the Force-Based Beam-Column Element in OpenSees'', by Michael H. Scott.
 
-The element is defined by two 2D nodes, a previously-defined coordinate-transformationt object and a previously-defined 2D elastic section.
+The element is defined by two 2D nodes, a previously-defined coordinate-transformation object and a previously-defined 2D elastic section.
 \begin{verbatim}
 preprocessor=xc.ProblemaEF().getModelador
 elasticBeam2dElement=preprocessor.getElementLoader.newElement(
@@ -356,6 +356,7 @@ elasticBeam2dElement=preprocessor.getElementLoader.newElement(
 \getVDirEjeDebilGlobales{} \\
 \end{methodsTable}
 
-\subsection{Numerical integration options for the forceBeamColumn elements\footnote{From the Michael H. Scott article in OpenSees.}.}
+\subsection{Numerical integration options for the forceBeamColumn elements.}
+The following paragraph are based on the Michael H. Scott article in OpenSees.
 
 To specify the numerical integration options to represent distributed plasticity or non-prismatic section details in force-based beam-column elements, i.e., across the entire element domain $[0, L]$ we can use one of the following schemes.

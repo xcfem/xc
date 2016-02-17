@@ -1,34 +1,43 @@
-\chapter{Verification of sections relating to Ultimate and Serviceability Limit States}
-\section{Verification of shell sections}
-\subsection{Sections definition}
-\subsubsection{hormigonesEHE}
+\chapter{Check routines}
+\section{Introduction}
+This chapter describes the routines that can be used to check the design following the specifications of different design codes.
+
+\section{Check routines for steel}
+
+\subsection{Lateral torsional buckling of steel beams (EC3)}
+ 
+
+\section{Check routines for reinforced concrete}
+\subsection{Verification of RC shell sections}
+\subsubsection{Sections definition}
+\paragraph{hormigonesEHE}
 \begin{verbatim}
 from materials.ehe import hormigonesEHE
 \end{verbatim}
 
-\subsubsection{EHE\_reinforcing\_steel}
+\paragraph{EHE\_reinforcing\_steel}
 \begin{verbatim}
 from materials.ehe import EHE_reinforcing_steel
 \end{verbatim}
 
-\subsubsection{RecordRCSlabSection}
+\paragraph{RecordRCSlabSection}
 \begin{verbatim}
 from materials.fiber_section import defSeccionHASimple
 \end{verbatim}
 
 
-\subsection{Types of calculation}
-\subsubsection{defInteractionDiagram}
+\subsubsection{Types of calculation}
+\paragraph{defInteractionDiagram}
 
-\subsubsection{simple\_static\_linear}
+\paragraph{simple\_static\_linear}
 \begin{verbatim}
 from solution import predefined_solutions
 predefined_solutions.simple_static_linear
 \end{verbatim}
 
-\subsection{Limit State at Failure under normal stresses verification}
+\subsubsection{Limit State at Failure under normal stresses verification}
 
-\subsubsection{lanzaCalculoTNFromXCData}
+\paragraph{lanzaCalculoTNFromXCData}
 This function carries out the verification of the limit state at failure under nornal stresses. It takes as input the internal forces and bending moments calculated for the shell elements for every ULS combinations, the sections definition and the interaction diagrams to be employed.
 
 The function returns two files with the verification results:
@@ -78,7 +87,7 @@ mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
 \end{paramFuncTable}
 
 
-\subsection{Limit State of Failure due to shear verification}
+\subsubsection{Limit State of Failure due to shear verification}
 This function carries out the verification of the limit state at failure under nornal stresses. It takes as input the internal forces and bending moments calculated for the shell elements for every ULS combinations, the sections definition and the interaction diagrams to be employed.
 
 The function returns two files with the verification results:
@@ -132,7 +141,7 @@ procesResultVerifV)
 \end{paramFuncTable}
 
 
-\subsection{Cracking limit state verification}
+\subsubsection{Cracking limit state verification}
 \begin{verbatim}
 from materials.xLamina import calculo_fis
 calculo_fis.lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,
@@ -150,7 +159,7 @@ procesResultVerifFIS)
 \procesResultVerifFIS{} \\
 \end{paramFuncTable}
 
-%\subsection{defMaterialesK}
+%\subsubsection{defMaterialesK}
 %\noindent This function sets up the sections definition to be used for the verifications relating to Cracking Limit State. Characteristic values are used to define the properties of the materials (concrete, reinforcing steel) that make up the section.
 %\begin{verbatim}
 %from materials import xLamina
@@ -167,5 +176,5 @@ procesResultVerifFIS)
 
 
 
-\section{Verification of beam sections}
+\subsection{Verification of beam sections}
 
