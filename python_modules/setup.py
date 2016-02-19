@@ -47,6 +47,6 @@ print pth_to_libs
 setup(name='XCModules',
       version='0.12.0',
       author='Luis C. Pérez Tato',
-      packages=['rough_calculations','solution', 'model', 'model/geometry', 'model/grid_based','postprocess','import_export','import_export/sciaXML','postprocess/reports','postprocess/elastic_beam_3d',"actions","actions/quake","actions/earth_pressure","actions/railway_trafic","actions/snow","actions/weight","actions/wind",'materials',"materials/ec2","materials/ehe","materials/eae","materials/fiber_section","materials/perfiles_metalicos","materials/perfiles_metalicos/aisc","materials/perfiles_metalicos/arcelor","materials/sia262","materials/sia263","materials/pernos_anclaje","materials/xLamina","materials/xBarra","import_export","misc","xcVtk","xcVtk/malla_ef","xcVtk/malla_cad"],
+      packages=['rough_calculations','solution', 'model', 'model/geometry', 'model/grid_based','postprocess','import_export','import_export/sciaXML','postprocess/reports','postprocess/elastic_beam_3d',"actions","actions/quake","actions/earth_pressure","actions/railway_trafic","actions/snow","actions/weight","actions/wind",'materials',"materials/ec2","materials/ec3","materials/ehe","materials/eae","materials/fiber_section","materials/perfiles_metalicos","materials/perfiles_metalicos/aisc","materials/perfiles_metalicos/arcelor","materials/sia262","materials/sia263","materials/pernos_anclaje","materials/xLamina","materials/xBarra","import_export","misc","xcVtk","xcVtk/malla_ef","xcVtk/malla_cad"],
       data_files=[(pth_to_libs, ['extensions/xc.so'])]
      )

@@ -200,6 +200,14 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/rebarsEC2.py
 /usr/local/lib/python2.7/dist-packages/materials/ec2/rebarsEC2.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/acerosEC3.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/acerosEC3.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/aceroPretEHE.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/aceroPretEHE.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/acerosEHE.py

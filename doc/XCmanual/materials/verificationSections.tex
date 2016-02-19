@@ -72,11 +72,72 @@ Depending on the buckling curves \footnote{Selection of flexural buckling curve 
 
 Where the non-dimensional slenderness $\overline{\lambda}_{LT} \leq 0.4$ no allowance for lateral-torsional buckling is necessary\footnote{This value can be adapted in the national annex.}
 
-\subparagraph{Critical bending moment $M_{cr}}
+\subparagraph{Critical bending moment $M_{cr}$}
+Following the \cite{lopez06} reference, the elastic critical moment is directly affected by the following factors:
 
+\begin{itemize}
+\item Material properties (elastic modulus, poisson ratio,\ldots).
+\item Properties of the cross section (torsion constant, warping constant\footnote{The effect of torsional loading can be split into two parts, the first part causing twist and the second, \emph{warping}.} and moment of inertia about the minor axis).
+\item Properties of the beam such as its length, lateral bending and warping restrictions at supports.
+\item Loading: lataeral-torsional buckling is greatly affected by moment diagram and loading position with respect to the section shear centre.
+\end{itemize}
 
+\begin{figure}
+\centering
+\includegraphics[width=90mm]{materials/figures/warping}
+\caption{Warping on a rectangular section due to pure torsion}\label{fg_warping}
+\end{figure}
 
+As a generally accepted procedure, consideration of the bending moment diagram is taken into account by means of the \emph{equivalent uniform moment factor (EUMF)}, also called the \emph{moment gradient correction factor}. The elastic critical moment for any bending moment diagram is obtained by multipliying this factor by the elastic critical moment of the simply supported beam with uniform moment.
 
+The expression of the elastic critical moment is the calculated as:
+
+\begin{equation}
+M_{cr}= C_1 \frac{\pi^2 EI_z}{(k_z L)^2} \sqrt{(\frac{k_z}{k_w})^2 \frac{I_w}{I_z}+\frac{(k_z L)^2 GI_t}{\pi^2 EI_z}} 
+\end{equation}
+
+\noindent where the lateral bending coefficient $k_z$ and the warping ceofficient $k_w$ are introduced to consider support conditions different from the simply supported beam. These coefficients are equal to 1 for free lateral bending and free warping and 0.5 for prevented lateral bending and prevented warping. There rest of the parameters are defined as follows:
+
+\begin{description}
+\item{$E$} Elastic modulus.
+\item{$G$} Shear modulus.
+\item{$k_z L$} Lateral torsional buckling length of the beam: length between points which have lateral restraint.
+\item{$I_z$} Moment of inertia about the minor axis.
+\item{$I_t$} Torsional constant.
+\item{$I_w$} Warping constant.
+\end{description}
+
+Finally, the moment moment gradient factor $C_1$ is calculated as:
+
+\begin{equation}
+%%\frac{
+C_1= \frac{\sqrt{\sqrt{k} A_1+[\frac{(1-\sqrt{k})}{2} A_2]^2}+\frac{(1-\sqrt{k})}{2} A_2}{A_1}
+\end{equation}
+
+\noindent where:
+\begin{description}
+\item{$k= \sqrt{k_1 k_2}$} depends on the lateral bending and warping conditions coefficients $k_1$ and $k_2$.
+\item{$M_i$ and $M_{max}$} moments which represent moment diagram of the beam as in figure \ref{fg_moment_diagrams}. $M_{max}$ is the maximum moment and $M_1$, $M_2$, $M_3$, $M_4$ and $M_5$ are the values of the moment at the different sections of the beam as indicated int the figure, each of them wit the corresponding sign.
+\item{$A_1= \frac{M_{max}^2+\sum\limits_{i= 1..5} \alpha_i M_i^2}{(1+\sum\limits_{i= 1..5} \alpha_i) \cdot M_{max}^2}$}
+\item{$A_2= \frac{M_1+2 M_2+ 3 M_3 + 2 M_4 + M_5}{9 \cdot M_{max}}$}
+\item{$\alpha_i$} factor calculated as follows:
+\begin{equation}
+\alpha_1= (1-k_2);\ \alpha_2= 5 \frac{k_1^3}{k_2^2};\ \alpha_3= 5 (\frac{1}{k_1}+\frac{1}{k_2});\ \alpha_4= 5 \frac{k_2^3}{k_1^2};\ \alpha_5= (1-k_1)
+\end{equation}
+\item{$k_1$ and $k_2$} support conditions at each end of the beam as follows:
+\begin{description}
+\item{$k_1= 1.0$} Free lateral bending and warping at left end.
+\item{$k_1= 0.5$} Prevented support conditions at left end.
+\item{$k_2= 1.0$} Free lateral bending and warping at right end.
+\item{$k_2= 0.5$} Prevented support conditions at right end.
+\end{description}
+\end{description}
+
+\begin{figure}
+\centering
+\includegraphics[width=120mm]{materials/figures/ltb_moment_diagrams}
+\caption{Moment diagrams and moment values for calculation of $C_1$}\label{fg_moment_diagrams}
+\end{figure}
 
 \section{Check routines for reinforced concrete}
 \subsection{Verification of RC shell sections}
