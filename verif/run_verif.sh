@@ -483,6 +483,7 @@ python tests/rough_calculations/test_min_dim_abut_support.py
 python tests/rough_calculations/test_cantilever01.py
 python tests/rough_calculations/test_simple_beam_01.py
 python tests/rough_calculations/test_earth_pressure_kray.py
+python tests/rough_calculations/test_suspension_bridge_simple_model.py
 
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing,...)." "$NORMAL"

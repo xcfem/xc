@@ -1,4 +1,5 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/__init__.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/suspension_bridge_simple_model.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_beam.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_prestressing_wire.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_min_dim_of_abutment_support.py
@@ -315,6 +316,7 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/vtk_define_malla_cells_cad.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/vtk_dibuja_kpoints.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/suspension_bridge_simple_model.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_beam.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_prestressing_wire.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_min_dim_of_abutment_support.pyc

@@ -590,6 +590,8 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_simple_bending_reinforcement.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/suspension_bridge_simple_model.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/suspension_bridge_simple_model.pyc
 /usr/local/lib/python2.7/dist-packages/solution/database_helper.py
 /usr/local/lib/python2.7/dist-packages/solution/database_helper.pyc
 /usr/local/lib/python2.7/dist-packages/solution/__init__.py

@@ -5,7 +5,78 @@ This chapter describes the routines that can be used to check the design followi
 \section{Check routines for steel}
 
 \subsection{Lateral torsional buckling of steel beams (EC3)}
- 
+Flexural buckling check, according to article 5.5.2 of EC3, can be written as:
+
+\begin{equation}
+F= \frac{M_d}{M_{b,Rd}} \leq 1
+\end{equation}   
+
+\noindent where:
+\begin{description}
+\item{$M_d$} Design value of bending moment.
+\item{$M_{b,Rd}$} Buckling resistance
+\end{description}
+
+\subsubsection{Design lateral torsional buckling resistance $M_{b,Rd}$}
+Design value of lateral torsional buckling resistance can be determined as follows:
+
+\begin{equation}
+M_{b,Rd}= \chi_{LT} \cdot W_y \cdot \frac{f_y}{\gamma_{M_1}} 
+\end{equation}
+
+\noindent where $\gamma_M1$ is the partial factor for member buckling resistance and $f_y$ is the characteristic value of the yield strength.
+
+\paragraph{Cross section modulus $W_y$}
+\begin{equation}
+W_y= \left\{
+\begin{array}{lr}
+W_{pl,y} & : \text{1 or 2 class cross section (plastic section modulus)}\\
+W_{el,y} & : \text{class 3 cross section (elastic section modulus)}\\
+W_{eff,y} & : \text{class 4 cross section (effective section modulus)}
+\end{array}
+\right.
+\end{equation}
+
+\paragraph{Reduction factor $\chi_{LT}$}
+The reduction factor $\chi_{LT}$ for the appropriate non-dimensional slenderness $\lambda_{LT}$ may be determined from:
+
+\begin{equation}
+\chi_{LT}= \frac{1}{\phi_{LT}+\sqrt{\phi_{LT}^2-\overline{\lambda}_{LT}^2}}
+\end{equation}
+
+\subparagraph{Intermediate factor $\phi_{LT}$} calculated as:
+
+\begin{equation}
+\phi_{LT}= 0.5 [1+\alpha_{LT}\cdot(\overline{\lambda}_{LT}-0.2)+\overline{\lambda}_{LT}^2]
+\end{equation}
+
+\subparagraph{Imperfection factor $\alpha_{LT}$}
+Depending on the buckling curves \footnote{Selection of flexural buckling curve for a cross section can be made from EC3 tables.}:
+
+\begin{equation}
+\alpha_{LT}= \left\{
+\begin{array}{lr}
+0.21 & : \text{curve a}\\
+0.34 & : \text{curve b}\\
+0.49 & : \text{curve c}\\
+0.76 & : \text{curve d}
+\end{array}
+\right.
+\end{equation}
+
+\subparagraph{Non-dimensional beam slenderness $\overline{\lambda}_{LT}$} calculated as:
+
+\begin{equation}
+\overline{\lambda}_{LT}= \sqrt{\frac{W_y f_y}{M_{cr}}}
+\end{equation}
+
+Where the non-dimensional slenderness $\overline{\lambda}_{LT} \leq 0.4$ no allowance for lateral-torsional buckling is necessary\footnote{This value can be adapted in the national annex.}
+
+\subparagraph{Critical bending moment $M_{cr}}
+
+
+
+
 
 \section{Check routines for reinforced concrete}
 \subsection{Verification of RC shell sections}
