@@ -90,10 +90,12 @@ for item in perfilesIPE:
   nu= profile['nu']
   b= profile['b']
   d= profile['d']
+  h= profile['h']
   hi= profile['hi']
   tf= profile['tf']
   tw= profile['tw']
   r= profile['r']
+  profile['Iw']= tf*h**2*b**3/24.0
   profile['alpha']= Avy/A
   profile['G']= E/(2*(1+nu))
   profile['AreaQy']= A-2*b*tf+(tw+2*r)*tf
