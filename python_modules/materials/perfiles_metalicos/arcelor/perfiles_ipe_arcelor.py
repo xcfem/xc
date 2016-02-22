@@ -95,12 +95,13 @@ for item in perfilesIPE:
   tf= profile['tf']
   tw= profile['tw']
   r= profile['r']
-  profile['Iw']= tf*h**2*b**3/24.0
+  profile['Iw']= tf*((h+hi)/2.0)**2*b**3/24.0
   profile['alpha']= Avy/A
   profile['G']= E/(2*(1+nu))
   profile['AreaQy']= A-2*b*tf+(tw+2*r)*tf
   profile['AreaQz']= A-hi*tw
 
+import math
 import xc_base
 import geom
 from materials import steelProfile as sp
@@ -113,7 +114,46 @@ class IPEProfile(sp.SteelProfile):
     self.hiHalf= self.get('hi')/2.0 #Half section interior height.
     self.twHalf= self.get('tw')/2.0 #Half web thickness
     self.tileSize= 0.01 #Size of tiles
-
+  def b(self):
+    return self.get('b')
+  def h(self):
+    return self.get('h')
+  def getBucklingCurve(self,typo= 'rolled'):
+    if(typo=='rolled'):
+      if((self.h()/self.b())<=2):
+        return 'a'
+      else:
+        return 'b'
+    elif(typo=='welded'):
+      if((self.h()/self.b())<=2):
+        return 'c'
+      else:
+        return 'd'
+    else:
+      return 'd'
+  def getImperfectionFactor(self,typo= 'rolled'):
+    curve= self.getBucklingCurve(typo= 'rolled')
+    if(curve=='A' or curve=='a'):
+      return 0.21
+    elif(curve=='B' or curve=='b'):
+      return 0.34
+    elif(curve=='C' or curve=='c'):
+      return 0.49
+    elif(curve=='D' or curve=='d'):
+      return 0.76
+    else:
+      return 0.76
+  def getIntermediateFactor(self,sectionClass,xi,Mi,ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0,typo= 'rolled'):
+    alphaLT= self.getImperfectionFactor(typo)
+    overlineLambdaLT= self.getNonDimensionalBeamSlenderness(sectionClass,xi,Mi,ky,kw, k1, k2)
+    return 0.5*(1+alphaLT*(overlineLambdaLT-0.2)+overlineLambdaLT**2)
+  def getReductionFactor(self,sectionClass,xi,Mi,ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0,typo= 'rolled'):
+    phiLT= self.getIntermediateFactor(sectionClass,xi,Mi,ky,kw, k1, k2,typo)
+    overlineLambdaLT= self.getNonDimensionalBeamSlenderness(sectionClass,xi,Mi,ky,kw, k1, k2)
+    return 1.0/(phiLT+math.sqrt(phiLT**2-overlineLambdaLT**2))
+  def getLateralTorsionalBuclingResistance(self,sectionClass,xi,Mi,ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0,typo= 'rolled'):
+    chiLT= self.getReductionFactor(sectionClass,xi,Mi,ky,kw, k1, k2,typo)
+    return chiLT*self.getWz(sectionClass)*self.steelType.fy/self.steelType.gammaM1
   def getRho(self):
     ''' Returns mass per unit lenght. '''
     return self.get('P')

@@ -422,6 +422,9 @@ python tests/materials/ec2/test_EC2creep.py
 python tests/materials/ec2/test_EC2shrinkage.py
 echo "$BLEU" "   EC3 tests." "$NORMAL"
 python tests/materials/ec3/test_lateral_torsional_buckling00.py
+python tests/materials/ec3/test_lateral_torsional_buckling01.py
+python tests/materials/ec3/test_lateral_torsional_buckling02.py
+python tests/materials/ec3/test_lateral_torsional_buckling03.py
 echo "$BLEU" "    SIA 262 tests." "$NORMAL"
 python tests/materials/sia262/shear_01.py
 python tests/materials/sia262/test_anchorage_length.py

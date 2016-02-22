@@ -6,12 +6,13 @@ from materials import typical_materials
 
 class ASTMSteel(object):
   """ASTM structural steel."""
-  fy= 250e6 # Yield stress.
-  fu= 400e6
-  gammaM= 1.0
   E= 200e9 #Young modulus
+  nu= 0.3
 
-  def __init__(self, fy, fu, gammaM):
+  def G(self):
+    return self.E/(2*(1+self.nu))
+
+  def __init__(self, fy= 250e6, fu= 400e6, gammaM= 1.0):
     self.fy= fy
     self.fu= fu
     self.gammaM= gammaM
@@ -38,7 +39,10 @@ class EC3Steel(object):
     fu -> ultimate stress
     gammaM '''
 
-  def __init__(self, fy, fy16, fy40, fy63, fy80, fy100, fy125, fu, gammaM):
+  E= 210000e6 #Young modulus
+  nu= 0.3
+
+  def __init__(self, fy, fy16, fy40, fy63, fy80, fy100, fy125, fu, gammaM, gammaM1= 1.0, gammaM2= 1.1):
     self.fy= fy
     self.fy16= fy16
     self.fy40= fy40
@@ -47,8 +51,14 @@ class EC3Steel(object):
     self.fy100= fy100
     self.fy125= fy125
     self.fu= fu
-    self.gammaM= gammaM
-    self.E= 210000e6 #Young modulus
+    self.gammaM= gammaM #Partial factor for cross-section resistance.
+    self.gammaM1= gammaM1 #Partial factor for buckling resistance.
+    self.gammaM2= gammaM2 #Partial factor for cross-sections in tension to fracture.
+
+  def gammaM0(self):
+    return self.gammaM
+  def G(self):
+    return self.E/(2*(1+self.nu))
 
   def fyd(self):
     return self.fy/self.gammaM

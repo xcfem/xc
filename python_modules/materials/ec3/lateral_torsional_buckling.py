@@ -2,8 +2,12 @@
 ''' Lateral torsional buckling of steel beams. '''
 from __future__ import division
 import math
+import logging
 import scipy.interpolate
 import numpy
+
+logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
+logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
 
 class MomentGradientFactorC1(object):
   ''' Calculation of the C1 moment gradient factor as defined
@@ -84,3 +88,5 @@ class MomentGradientFactorC1(object):
     A2= self.getA2()
     B1= rootK*A1+((1-rootK)/2.0*A2)**2
     return (math.sqrt(B1)+(1-rootK)/2.0*A2)/A1
+
+  
