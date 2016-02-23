@@ -12,15 +12,14 @@ import xc
 import scipy.interpolate
 
 
-from materials.ec3 import lateral_torsional_buckling as ltb
 from materials import aceros_estructurales as steel
-from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as IPE_profiles
+from materials.ec3 import EC3IPEProfile as EC3IPE
 from rough_calculations import ng_simple_beam as sb
 
 S355JR= steel.S355JR
-gammaM0= 1.05
+gammaM0= 1.00
 S355JR.gammaM= gammaM0 
-IPE400= IPE_profiles.IPEProfile(S355JR,"IPE_400")
+IPE400= EC3IPE.EC3IPEProfile(S355JR,"IPE_400")
 
 
 # Geometry
@@ -30,13 +29,12 @@ k1= 1.0; k2= 1.0
 L= 3 # Bar length (m)
 x= [0.0,0.25*L,0.5*L,0.75*L,1.0*L]
 M= [-93.7e3,-93.7e3/2.0,0.0,114.3e3/2.0,114.3e3]
-mgf= ltb.MomentGradientFactorC1(x,M)
-overlineLambdaLT= IPE400.getNonDimensionalBeamSlenderness(1,x,M)
-alphaLT= IPE400.getImperfectionFactor()
-# phiLT= IPE400.getIntermediateFactor(1,x,M)
-# chiLT= IPE400.getReductionFactor(1,x,M)
-# chiLT= IPE400.getReductionFactor(1,x,M)
-MbRd= IPE400.getLateralTorsionalBuclingResistance(1,x,M)
+overlineLambdaLT= IPE400.getLateralBucklingNonDimensionalBeamSlenderness(1,x,M)
+alphaLT= IPE400.getLateralBucklingImperfectionFactor()
+# phiLT= IPE400.getLateralBucklingIntermediateFactor(1,x,M)
+# chiLT= IPE400.getLateralBucklingReductionFactor(1,x,M)
+# chiLT= IPE400.getLateralBucklingReductionFactor(1,x,M)
+MbRd= IPE400.getLateralTorsionalBucklingResistance(1,x,M)
 MbRdTeor= 412.9e3
 ratio1= abs(MbRd-MbRdTeor)/MbRdTeor
 ratio2= abs(overlineLambdaLT-0.51)/0.51

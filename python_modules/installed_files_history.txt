@@ -202,6 +202,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/rebarsEC2.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/acerosEC3.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/acerosEC3.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.py

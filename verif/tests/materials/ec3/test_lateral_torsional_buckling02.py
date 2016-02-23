@@ -14,13 +14,12 @@ import scipy.interpolate
 
 from materials.ec3 import lateral_torsional_buckling as ltb
 from materials import aceros_estructurales as steel
-from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as IPE_profiles
-from rough_calculations import ng_simple_beam as sb
+from materials.ec3 import EC3IPEProfile as EC3IPE
 
 S355JR= steel.S355JR
 gammaM0= 1.05
 S355JR.gammaM= gammaM0 
-IPE400= IPE_profiles.IPEProfile(S355JR,"IPE_400")
+IPE400= EC3IPE.EC3IPEProfile(S355JR,"IPE_400")
 
 
 # Geometry

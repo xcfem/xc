@@ -189,6 +189,7 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/rebarsEC2.py
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/__init__.py
@@ -509,6 +510,7 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/rebarsEC2.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/__init__.pyc
