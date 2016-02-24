@@ -49,7 +49,7 @@
 
 //! @brief Constructor.
 XC::SetMeshComp::SetMeshComp(const std::string &nmb,Preprocessor *md)
-  : SetBase(nmb,md) {}
+  : SetBase(nmb,md), nodos(this), elementos(this), constraints(this) {}
 
 //! @brief Constructor de copia.
 XC::SetMeshComp::SetMeshComp(const SetMeshComp &otro)
@@ -71,8 +71,11 @@ XC::SetMeshComp &XC::SetMeshComp::operator=(const SetMeshComp &otro)
 void XC::SetMeshComp::copia_listas(const SetMeshComp &otro)
   {
     nodos= otro.nodos;
+    nodos.set_owner(this);
     elementos= otro.elementos;
+    elementos.set_owner(this);
     constraints= otro.constraints;
+    constraints.set_owner(this);
   }
 
 //! @brief Agrega a este conjunto los objetos del conjunto

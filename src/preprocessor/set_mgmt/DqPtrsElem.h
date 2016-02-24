@@ -59,7 +59,7 @@ class DqPtrsElem: public DqPtrs<Element>
     typedef DqPtrs<Element>::const_reference const_reference;
     typedef DqPtrs<Element>::size_type size_type;
 
-    DqPtrsElem(void);
+    DqPtrsElem(EntCmd *owr= nullptr);
     DqPtrsElem(const DqPtrsElem &otro);
     explicit DqPtrsElem(const std::deque<Element *> &ts);
     explicit DqPtrsElem(const std::set<const Element *> &ts);

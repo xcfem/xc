@@ -68,7 +68,7 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
     typedef typename lst_ptr::size_type size_type;
     typedef boost::indirect_iterator<iterator> indIterator;
   public:
-    DqPtrs(void);
+    DqPtrs(EntCmd *owr= nullptr);
     DqPtrs(const DqPtrs &otro);
     explicit DqPtrs(const std::deque<T *> &ts);
     explicit DqPtrs(const std::set<const T *> &ts);
@@ -111,8 +111,8 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
 
 //! @brief Constructor.
 template <class T>
-DqPtrs<T>::DqPtrs(void)
-  : EntCmd(),lst_ptr() {}
+DqPtrs<T>::DqPtrs(EntCmd *owr)
+  : EntCmd(owr),lst_ptr() {}
 
 //! @brief Constructor de copia.
 template <class T>

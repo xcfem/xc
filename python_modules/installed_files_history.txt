@@ -520,6 +520,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/med_xc_vars.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.py
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/recorders.py
+/usr/local/lib/python2.7/dist-packages/postprocess/recorders.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/common_formats.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/common_formats.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/draw_schema_armature_mur.py

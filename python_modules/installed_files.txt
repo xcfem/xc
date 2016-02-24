@@ -65,6 +65,7 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/extrapolate_elem_attr.py
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.py
 /usr/local/lib/python2.7/dist-packages/postprocess/figure_collection.py
+/usr/local/lib/python2.7/dist-packages/postprocess/recorders.py
 /usr/local/lib/python2.7/dist-packages/import_export/__init__.py
 /usr/local/lib/python2.7/dist-packages/import_export/scia_xml.py
 /usr/local/lib/python2.7/dist-packages/import_export/scia_xml_base.py
@@ -386,6 +387,7 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/extrapolate_elem_attr.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/figure_collection.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/recorders.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/scia_xml.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/scia_xml_base.pyc

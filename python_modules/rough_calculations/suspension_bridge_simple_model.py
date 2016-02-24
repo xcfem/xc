@@ -24,6 +24,18 @@ class SuspensionBridgeRoughModel:
     '''Horizontal reaction at tower due to the main span.'''
     return q*self.Lm**2/(8.0*self.d)
 
+  def getCableSlopeAtTower(self,q):
+    '''Returns the slope (angle) of the cable at the tower'''
+    return math.atan2(self.getVm(q),self.getHm(q))
+
+  def getCableAxialForceAtTower(self,q):
+    '''Returns the axial force of the cable at the tower'''
+    return math.sqrt(self.getVm(q)**2+self.getHm(q)**2)
+
+  def getCableAxialForceAtMidSpan(self,q):
+    '''Returns the axial force of the cable at the tower'''
+    return self.getHm(q)
+
   def getHb(self,q):
     '''Horizontal reaction at tower due to the back span.'''
     return self.getHm(q)

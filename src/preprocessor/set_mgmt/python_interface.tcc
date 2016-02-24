@@ -22,7 +22,7 @@
 //python_interface.tcc
 
 typedef XC::DqPtrs<XC::Node> dq_ptrs_node;
-class_<dq_ptrs_node, boost::noncopyable >("dq_ptrs_node",no_init)
+class_<dq_ptrs_node, bases<EntCmd>, boost::noncopyable >("dq_ptrs_node",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_node::indBegin, &dq_ptrs_node::indEnd))
   .add_property("size", &dq_ptrs_node::size, "Returns list size.")
   .def("__len__",&dq_ptrs_node::size, "Returns list size.")

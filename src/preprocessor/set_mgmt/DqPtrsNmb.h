@@ -47,8 +47,8 @@ class DqPtrsNmb: public DqPtrs<T>
     typedef typename dq_ptr::const_iterator const_iterator;
     typedef typename dq_ptr::iterator iterator;
 
-    DqPtrsNmb(void)
-      : DqPtrs<T>() {}
+    DqPtrsNmb(EntCmd *owr= nullptr)
+      : DqPtrs<T>(owr) {}
     DqPtrsNmb(const DqPtrs<T> &otro)
       : DqPtrs<T>(otro) {}
     explicit DqPtrsNmb(const std::deque<T *> &ts)

@@ -32,8 +32,8 @@
 
 
 //! @brief Constructor.
-XC::DqPtrsConstraint::DqPtrsConstraint(void)
-  : DqPtrs<Constraint>() {}
+XC::DqPtrsConstraint::DqPtrsConstraint(EntCmd *owr)
+  : DqPtrs<Constraint>(owr) {}
 
 //! @brief Constructor de copia.
 XC::DqPtrsConstraint::DqPtrsConstraint(const std::deque<Constraint *> &ts)
