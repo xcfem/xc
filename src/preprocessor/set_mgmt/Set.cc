@@ -47,28 +47,21 @@
 
 //! @brief Constructor.
 XC::Set::Set(const std::string &nmb,Preprocessor *md)
-  : SetMeshComp(nmb,md) {}
+  : SetMeshComp(nmb,md), puntos(this), lineas(this), superficies(this),
+    cuerpos(this), uniform_grids(this) {}
 
 //! @brief Constructor de copia.
 XC::Set::Set(const Set &otro)
   : SetMeshComp(otro)
   {
-    puntos= otro.puntos;
-    lineas= otro.lineas;
-    superficies= otro.superficies;
-    cuerpos= otro.cuerpos;
-    uniform_grids= otro.uniform_grids;
+    copia_listas(otro);
   }
 
 //! @brief Operator asignación.
 XC::Set &XC::Set::operator=(const Set &otro)
   {
     SetMeshComp::operator=(otro);
-    puntos= otro.puntos;
-    lineas= otro.lineas;
-    superficies= otro.superficies;
-    cuerpos= otro.cuerpos;
-    uniform_grids= otro.uniform_grids;
+    copia_listas(otro);
     return *this;
   }
 
@@ -80,10 +73,15 @@ void XC::Set::copia_listas(const Set &otro)
   {
     SetMeshComp::copia_listas(otro);
     puntos= otro.puntos;
+    puntos.set_owner(this);
     lineas= otro.lineas;
+    lineas.set_owner(this);
     superficies= otro.superficies;
+    superficies.set_owner(this);
     cuerpos= otro.cuerpos;
+    cuerpos.set_owner(this);
     uniform_grids= otro.uniform_grids;
+    uniform_grids.set_owner(this);
   }
 
 //! @brief Agrega a este conjunto los objetos del conjunto

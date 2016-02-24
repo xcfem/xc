@@ -62,10 +62,16 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.py
 /usr/local/lib/python2.7/dist-packages/postprocess/__init__.py
 /usr/local/lib/python2.7/dist-packages/postprocess/figure_collection.py
+<<<<<<< HEAD
 /usr/local/lib/python2.7/dist-packages/postprocess/def_vars_control.py
 /usr/local/lib/python2.7/dist-packages/postprocess/def_params_control.py
 /usr/local/lib/python2.7/dist-packages/postprocess/utils_display.py
 /usr/local/lib/python2.7/dist-packages/postprocess/callback_controls.py
+=======
+/usr/local/lib/python2.7/dist-packages/postprocess/recorders.py
+/usr/local/lib/python2.7/dist-packages/import_export/__init__.py
+/usr/local/lib/python2.7/dist-packages/import_export/scia_xml.py
+>>>>>>> 3ee1f9d6fddb15da605f13c1c51f9c4f300c6ccf
 /usr/local/lib/python2.7/dist-packages/import_export/scia_xml_base.py
 /usr/local/lib/python2.7/dist-packages/import_export/NeutralMeshDescription.py
 /usr/local/lib/python2.7/dist-packages/import_export/__init__.py
@@ -191,6 +197,7 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/__init__.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/mensula_cortaEHE08.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/acerosEHE.py
@@ -383,10 +390,16 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/figure_collection.pyc
+<<<<<<< HEAD
 /usr/local/lib/python2.7/dist-packages/postprocess/def_vars_control.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/def_params_control.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/utils_display.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/callback_controls.pyc
+=======
+/usr/local/lib/python2.7/dist-packages/postprocess/recorders.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/scia_xml.pyc
+>>>>>>> 3ee1f9d6fddb15da605f13c1c51f9c4f300c6ccf
 /usr/local/lib/python2.7/dist-packages/import_export/scia_xml_base.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/NeutralMeshDescription.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/__init__.pyc
@@ -512,6 +525,7 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/mensula_cortaEHE08.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/acerosEHE.pyc

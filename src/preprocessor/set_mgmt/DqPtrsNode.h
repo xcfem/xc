@@ -55,7 +55,7 @@ class DqPtrsNode: public DqPtrs<Node>
     typedef DqPtrs<Node>::const_reference const_reference;
     typedef DqPtrs<Node>::size_type size_type;
 
-    DqPtrsNode(void);
+    DqPtrsNode(EntCmd *owr= nullptr);
     DqPtrsNode(const DqPtrsNode &otro);
     explicit DqPtrsNode(const std::deque<Node *> &ts);
     explicit DqPtrsNode(const std::set<const Node *> &ts);

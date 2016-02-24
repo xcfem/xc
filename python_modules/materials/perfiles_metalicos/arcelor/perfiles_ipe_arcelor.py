@@ -118,42 +118,12 @@ class IPEProfile(sp.SteelProfile):
     return self.get('b')
   def h(self):
     return self.get('h')
-  def getBucklingCurve(self,typo= 'rolled'):
-    if(typo=='rolled'):
-      if((self.h()/self.b())<=2):
-        return 'a'
-      else:
-        return 'b'
-    elif(typo=='welded'):
-      if((self.h()/self.b())<=2):
-        return 'c'
-      else:
-        return 'd'
-    else:
-      return 'd'
-  def getImperfectionFactor(self,typo= 'rolled'):
-    curve= self.getBucklingCurve(typo= 'rolled')
-    if(curve=='A' or curve=='a'):
-      return 0.21
-    elif(curve=='B' or curve=='b'):
-      return 0.34
-    elif(curve=='C' or curve=='c'):
-      return 0.49
-    elif(curve=='D' or curve=='d'):
-      return 0.76
-    else:
-      return 0.76
-  def getIntermediateFactor(self,sectionClass,xi,Mi,ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0,typo= 'rolled'):
-    alphaLT= self.getImperfectionFactor(typo)
-    overlineLambdaLT= self.getNonDimensionalBeamSlenderness(sectionClass,xi,Mi,ky,kw, k1, k2)
-    return 0.5*(1+alphaLT*(overlineLambdaLT-0.2)+overlineLambdaLT**2)
-  def getReductionFactor(self,sectionClass,xi,Mi,ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0,typo= 'rolled'):
-    phiLT= self.getIntermediateFactor(sectionClass,xi,Mi,ky,kw, k1, k2,typo)
-    overlineLambdaLT= self.getNonDimensionalBeamSlenderness(sectionClass,xi,Mi,ky,kw, k1, k2)
-    return 1.0/(phiLT+math.sqrt(phiLT**2-overlineLambdaLT**2))
-  def getLateralTorsionalBuclingResistance(self,sectionClass,xi,Mi,ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0,typo= 'rolled'):
-    chiLT= self.getReductionFactor(sectionClass,xi,Mi,ky,kw, k1, k2,typo)
-    return chiLT*self.getWz(sectionClass)*self.steelType.fy/self.steelType.gammaM1
+  def tf(self):
+    return self.get('tf')
+  def tw(self):
+    return self.get('tw')
+  def hw(self):
+    return self.h()-2*self.tf()
   def getRho(self):
     ''' Returns mass per unit lenght. '''
     return self.get('P')

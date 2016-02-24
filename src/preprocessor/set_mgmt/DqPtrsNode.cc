@@ -42,8 +42,8 @@ void XC::DqPtrsNode::crea_arbol(void)
   }
 
 //! @brief Constructor.
-XC::DqPtrsNode::DqPtrsNode(void)
-  : DqPtrs<Node>() {}
+XC::DqPtrsNode::DqPtrsNode(EntCmd *owr)
+  : DqPtrs<Node>(owr) {}
 
 //! @brief Constructor de copia.
 XC::DqPtrsNode::DqPtrsNode(const DqPtrsNode &otro)

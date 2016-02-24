@@ -202,6 +202,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/rebarsEC2.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/acerosEC3.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/acerosEC3.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.py
@@ -518,6 +520,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/med_xc_vars.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.py
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/recorders.py
+/usr/local/lib/python2.7/dist-packages/postprocess/recorders.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/common_formats.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/common_formats.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/draw_schema_armature_mur.py
