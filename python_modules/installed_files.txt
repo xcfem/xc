@@ -199,6 +199,20 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.py
+<<<<<<< HEAD
+=======
+/usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.py
+/usr/local/lib/python2.7/dist-packages/materials/ec5/__init__.py
+/usr/local/lib/python2.7/dist-packages/materials/ec5/EC5TimberCrossSection.py
+/usr/local/lib/python2.7/dist-packages/materials/ehe/__init__.py
+/usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_reinforcing_steel.py
+/usr/local/lib/python2.7/dist-packages/materials/ehe/comprobCargaConcentrada.py
+/usr/local/lib/python2.7/dist-packages/materials/ehe/comprobVEHE08.py
+/usr/local/lib/python2.7/dist-packages/materials/ehe/aceroPretEHE.py
+/usr/local/lib/python2.7/dist-packages/materials/ehe/acerosEHE.py
+/usr/local/lib/python2.7/dist-packages/materials/ehe/areaBarrasEHE.py
+/usr/local/lib/python2.7/dist-packages/materials/ehe/rasanteAlaAma.py
+>>>>>>> 4d10544b39af1f34b813bbba7e14c39642392eca
 /usr/local/lib/python2.7/dist-packages/materials/ehe/mensula_cortaEHE08.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/acerosEHE.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_reinforcing_steel.py
@@ -527,6 +541,20 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.pyc
+<<<<<<< HEAD
+=======
+/usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec5/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec5/EC5TimberCrossSection.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ehe/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_reinforcing_steel.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ehe/comprobCargaConcentrada.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ehe/comprobVEHE08.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ehe/aceroPretEHE.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ehe/acerosEHE.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ehe/areaBarrasEHE.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ehe/rasanteAlaAma.pyc
+>>>>>>> 4d10544b39af1f34b813bbba7e14c39642392eca
 /usr/local/lib/python2.7/dist-packages/materials/ehe/mensula_cortaEHE08.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/acerosEHE.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_reinforcing_steel.pyc

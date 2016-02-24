@@ -7,7 +7,7 @@ def installNodeDisplacementRecorder(recorderName, nodeSet):
 
   preprocessor= nodeSet.owner.getPreprocessor
   nodes= preprocessor.getNodeLoader
-  domain= nodeSet.owner.getPreprocessor.getDomain
+  domain= preprocessor.getDomain
   recorder= domain.newRecorder(recorderName,None);
   recorder.setNodes(nodeSet.getTags())
   if(nodes.numGdls==3):
@@ -17,3 +17,4 @@ def installNodeDisplacementRecorder(recorderName, nodeSet):
 
   recorder.callbackRestart= "print \"Restart method called.\""
   return recorder
+
