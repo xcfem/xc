@@ -210,6 +210,10 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec5/EC5TimberCrossSection.py
+/usr/local/lib/python2.7/dist-packages/materials/ec5/EC5TimberCrossSection.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec5/__init__.py
+/usr/local/lib/python2.7/dist-packages/materials/ec5/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/aceroPretEHE.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/aceroPretEHE.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/acerosEHE.py

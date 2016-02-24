@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-def rec_getattr(obj, attr):
+def rec_getattr(obj, attr, argv= ''):
     """Get object's attribute. May use dot notation.
 
     >>> class C(object): pass
@@ -11,11 +11,14 @@ def rec_getattr(obj, attr):
     4
     """
     if '.' not in attr:
-      if(callable(obj)):
-        return getattr(obj(), attr)
+      if(attr=='getProp'):
+        return obj.getProp(argv)
       else:
-        return getattr(obj, attr)
-    else:
+        if(callable(obj)):
+          return getattr(obj(), attr)
+        else:
+          return getattr(obj, attr)
+    else :
       L = attr.split('.')
       return rec_getattr(getattr(obj, L[0]), '.'.join(L[1:]))
 
@@ -36,12 +39,12 @@ def rec_setattr(obj, attr, value):
         L = attr.split('.')
         rec_setattr(getattr(obj, L[0]), '.'.join(L[1:]), value)
 
-def getItemWithMaxProp(iterable,attrName):
+def getItemWithMaxProp(iterable,attrName, argv= ''):
   ''' Return item wich maximizes property named as indicated in attrName'''
   retval= iter(iterable).next()
-  vMax= rec_getattr(retval,attrName)  
+  vMax= rec_getattr(retval,attrName,argv)  
   for e in iterable:
-    v= rec_getattr(e,attrName)
+    v= rec_getattr(e,attrName,argv)
     if(v>vMax):
       retval= e
       vMax= v

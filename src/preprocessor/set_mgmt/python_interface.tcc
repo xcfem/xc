@@ -40,7 +40,7 @@ class_<XC::DqPtrsNode, bases<dq_ptrs_node>, boost::noncopyable >("DqPtrsNode",no
    ;
 
 typedef XC::DqPtrs<XC::Element> dq_ptrs_element;
-class_<dq_ptrs_element, boost::noncopyable >("dq_ptrs_element",no_init)
+class_<dq_ptrs_element, bases<EntCmd>, boost::noncopyable >("dq_ptrs_element",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_element::indBegin, &dq_ptrs_element::indEnd))
   .add_property("size", &dq_ptrs_element::size, "Returns list size.")
   .def("__len__",&dq_ptrs_element::size, "Returns list size.")
@@ -58,7 +58,7 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element>, boost::noncopyable >("DqPtrsElem"
    ;
 
 typedef XC::DqPtrs<XC::Constraint> dq_ptrs_constraint;
-class_<dq_ptrs_constraint, boost::noncopyable >("dq_ptrs_constraint",no_init)
+class_<dq_ptrs_constraint, bases<EntCmd>, boost::noncopyable >("dq_ptrs_constraint",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_constraint::indBegin, &dq_ptrs_constraint::indEnd))
   .add_property("size", &dq_ptrs_constraint::size, "Returns list size.")
   .def("__len__",&dq_ptrs_constraint::size, "Returns list size.")
@@ -95,7 +95,7 @@ class_<XC::SetMeshComp, bases<XC::SetBase>, boost::noncopyable >("SetMeshComp",n
    ;
 
 typedef XC::DqPtrs<XC::Pnt> dq_ptrs_pnt;
-class_<dq_ptrs_pnt, boost::noncopyable >("dq_ptrs_pnt",no_init)
+class_<dq_ptrs_pnt, bases<EntCmd>, boost::noncopyable >("dq_ptrs_pnt",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_pnt::indBegin, &dq_ptrs_pnt::indEnd))
   .def("clear",&dq_ptrs_pnt::clear,"Removes all items.")
    ;
@@ -108,7 +108,7 @@ class_<XC::Set::lst_ptr_puntos, bases<dq_ptrs_pnt>, boost::noncopyable >("lstPnt
    ;
 
 typedef XC::DqPtrs<XC::Edge> dq_ptrs_lineas;
-class_<dq_ptrs_lineas, boost::noncopyable >("dq_ptrs_lineas",no_init)
+class_<dq_ptrs_lineas, bases<EntCmd>, boost::noncopyable >("dq_ptrs_lineas",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_lineas::indBegin, &dq_ptrs_lineas::indEnd))
   .def("clear",&dq_ptrs_lineas::clear,"Removes all items.")
    ;
@@ -121,7 +121,7 @@ class_<XC::Set::lst_ptr_lineas, bases<dq_ptrs_lineas>, boost::noncopyable >("lst
    ;
 
 typedef XC::DqPtrs<XC::Face> dq_ptrs_superficies;
-class_<dq_ptrs_superficies, boost::noncopyable >("dq_ptrs_superficies",no_init)
+class_<dq_ptrs_superficies, bases<EntCmd>, boost::noncopyable >("dq_ptrs_superficies",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_superficies::indBegin, &dq_ptrs_superficies::indEnd))
   .def("clear",&dq_ptrs_superficies::clear,"Removes all items.")
    ;
@@ -134,7 +134,7 @@ class_<XC::Set::lst_ptr_superficies, bases<dq_ptrs_superficies>, boost::noncopya
    ;
 
 typedef XC::DqPtrs<XC::Body> dq_ptrs_cuerpos;
-class_<dq_ptrs_cuerpos, boost::noncopyable >("dq_ptrs_cuerpos",no_init)
+class_<dq_ptrs_cuerpos, bases<EntCmd>, boost::noncopyable >("dq_ptrs_cuerpos",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_cuerpos::indBegin, &dq_ptrs_cuerpos::indEnd))
   .def("clear",&dq_ptrs_cuerpos::clear,"Removes all items.")
    ;
