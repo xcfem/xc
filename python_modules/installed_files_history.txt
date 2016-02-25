@@ -564,6 +564,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/listados_resultados.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/utils_display.py
 /usr/local/lib/python2.7/dist-packages/postprocess/utils_display.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/arch_brige_simple_model.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/arch_brige_simple_model.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/flechas_vigas.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/flechas_vigas.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/__init__.py
