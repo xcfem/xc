@@ -94,6 +94,7 @@ if(modMov>self.getProp("dispMax")):
    self.setProp("CombDispMax",nmbComb)"""
 
 def controTensRecElastico3d():
+  '''Code to execute in every commit to check stress criterion (bars in 3D problems).'''
   return """nmbComb= recorder.getNombreCombActual
 self.getResistingForce()
 Area= self.sectionProperties.A
@@ -291,6 +292,7 @@ if(self.getProp("FCV") > self.getProp("FCVCP")):
 
 
 def controTensRecElastico2d():
+  '''Code to execute in every commit to check stress criterion (bars in plane problems).'''
   return """nmbComb= recorder.getNombreCombActual
 self.getResistingForce()
 Area= self.sectionProperties.A

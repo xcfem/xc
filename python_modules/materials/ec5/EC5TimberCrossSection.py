@@ -18,7 +18,8 @@ class EC3TimberRectCrossSection(parametrosSeccionRectangular.RectangularSection)
     self.taud= taud
 
   def setupULSControlVars2d(self,elems):
-    '''Creates control variables for ULS in elems.'''
+    '''For each element creates the variables
+       needed to check ultimate limit state criterion to satisfy.'''
     def_vars_control.defVarsControlTensRegElastico2d(elems)
     W= self.Wzel()
     for e in elems:
@@ -27,7 +28,8 @@ class EC3TimberRectCrossSection(parametrosSeccionRectangular.RectangularSection)
       e.setProp("Wel",W)
 
   def setupULSControlVars3d(self,elems):
-    '''Creates control variables for ULS in elems.'''
+    '''For each element creates the variables
+       needed to check ultimate limit state criterion to satisfy.'''
     def_vars_control.defVarsControlTensRegElastico3d(elems)
     Wz= self.Wzel()
     Wy= self.Wyel()

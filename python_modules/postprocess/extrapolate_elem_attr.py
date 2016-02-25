@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import xc_base
 import geom
 import xc
 import math
+import logging
 
 def flatten_attribute(elemSet,attributeName, treshold, limit):
   '''reduce higher values which hide attribute variation over the model.'''
@@ -29,12 +36,14 @@ def create_attribute_at_nodes(elemSet,attributeName,initialValue):
       tag= n.tag
       if tag not in nodeTags:
         nodeTags[tag]= 1
+        if(n.hasProp(attributeName)):
+          logging.warning('node: '+ str(n.tag) + ' already has a property named: \'' + attributeName +'\'.')
         n.setProp(attributeName,initialValue)
       else:
         nodeTags[tag]+=1
   return nodeTags
 
-def extrapolate_elem_function_attr(preprocessor,elemSet,attributeName,function, argument):
+def extrapolate_elem_function_attr(elemSet,attributeName,function, argument):
   nodeTags= create_attribute_at_nodes(elemSet,attributeName,0.0)
   #Calculate totals.
   for e in elemSet:
@@ -47,6 +56,7 @@ def extrapolate_elem_function_attr(preprocessor,elemSet,attributeName,function, 
       oldValue= n.getProp(attributeName)
       n.setProp(attributeName,oldValue+value)
   #Divide by number of elements in the set that touch the node.
+  preprocessor= elemSet.owner.getPreprocessor
   for tag in nodeTags:
     n= preprocessor.getNodeLoader.getNode(tag)
     denom= nodeTags[tag]

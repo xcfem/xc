@@ -63,7 +63,7 @@ class TakePhotos(object):
     self.defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
 
   def plotField(self, preprocessor, fName, attributeName):
-    extrapolate_elem_attr.extrapolate_elem_function_attr(preprocessor,self.elementSet,attributeName,"getProp", attributeName)
+    extrapolate_elem_attr.extrapolate_elem_function_attr(self.elementSet,attributeName,"getProp", attributeName)
     field= vtk_grafico_ef.ScalarField(attributeName,"getProp",None,1.0)
     self.defDisplay.plotScalarField(preprocessor,self.elementSetName,field,fName)
 

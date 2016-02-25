@@ -30,6 +30,7 @@ import math
 import logging
 from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as ipe
 from materials.ec3 import lateral_torsional_buckling as ltb
+from materials.ec3 import EC3_callback_controls as EC3cc
 
 logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
 logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
@@ -200,8 +201,8 @@ class EC3IPEProfile(ipe.IPEProfile):
     return math.sqrt(self.getWz(sectionClass)*self.steelType.fy/Mcr)
 
   def getYShearEfficiency(self,sectionClass,Vyd):
-    '''Returns major axis bending efficiency'''
-    return Vyd/self.getVcRdy()
+    '''Returns major axis shear efficiency'''
+    return abs(Vyd/self.getVcRdy())
 
   def getZBendingEfficiency(self,sectionClass,Mzd,Vyd= 0.0, chiLT= 1.0):
     '''Returns major axis bending efficiency
@@ -222,3 +223,29 @@ class EC3IPEProfile(ipe.IPEProfile):
     alpha= 2.0
     beta= max(1.0,Nd/NcRd)
     return (Mzd/MbRdz)**alpha+(Myd/McRdy)**beta
+
+  def setupULSControlVars(self,elems,sectionClass= 1, chiLT=1.0):
+    '''For each element creates the variables
+       needed to check ultimate limit state criterion to satisfy.'''
+    for e in elems:
+      e.setProp('sectionClass',sectionClass) #Cross section class.
+      e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
+      e.setProp('FCTNCP',-1.0) #Normal stresses.
+      e.setProp('FCVCP',-1.0) #Shear
+      e.setProp('crossSection',self)
+
+  def installULSControlRecorder(self,recorderName, elems,sectionClass= 1, chiLT=1.0):
+    '''Installs recorder for verification of ULS criterion.'''
+    preprocessor= elems.owner.getPreprocessor
+    nodes= preprocessor.getNodeLoader
+    domain= preprocessor.getDomain
+    recorder= domain.newRecorder(recorderName,None);
+    recorder.setElements(elems.getTags())
+    self.setupULSControlVars(elems,sectionClass,chiLT)
+    if(nodes.numGdls==3):
+      recorder.callbackRecord= '''print \'ERROR in element: , self.tag, bidimensional criterion not implemented.\''''
+    else:
+      recorder.callbackRecord= EC3cc.controlULSCriterion()
+
+    recorder.callbackRestart= "print \"Restart method called.\""
+    return recorder

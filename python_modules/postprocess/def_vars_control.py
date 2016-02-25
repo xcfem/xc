@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
+import logging
+logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
+logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
 
 def defVarControlMov(obj, code):
+  if(not obj.hasProp('span')):
+    logging.warning('span property not defined for: '+str(obj.tag) + ' object.')
   obj.setProp(code+'Max',0.0)
   obj.setProp('Comb'+code+'Max',"")
   obj.setProp(code+'Min',0.0)
@@ -35,6 +40,8 @@ def defVarsControlMovs(nodes,flags):
 def defVarsControlMovModulus(nodes):
   tags= []
   for n in nodes:
+    if(not n.hasProp('span')):
+      logging.warning('span property not defined for node: '+str(n.tag) + '.')
     tags.append(n.tag)
     n.setProp("dispMax",0.0)
     n.setProp("CombdispMax","")

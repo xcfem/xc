@@ -191,6 +191,7 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_callback_controls.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.py
 /usr/local/lib/python2.7/dist-packages/materials/ec5/__init__.py
@@ -289,10 +290,12 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/__init__.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_crea_array_set_data.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_define_id_filter.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/ElementPropertyDiagram.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/creaArraySetData.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_cells.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_grafico_base.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_dblprop_cells.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/NodePropertyDiagram.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/ColoredDiagram.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_lut_field.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_dibuja_prop_points.py
@@ -515,6 +518,7 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_callback_controls.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec5/__init__.pyc
@@ -613,10 +617,12 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_crea_array_set_data.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_define_id_filter.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/ElementPropertyDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/creaArraySetData.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_cells.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_grafico_base.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_dblprop_cells.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/NodePropertyDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/ColoredDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_lut_field.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_dibuja_prop_points.pyc

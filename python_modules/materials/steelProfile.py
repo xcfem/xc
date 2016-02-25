@@ -66,3 +66,45 @@ class SteelProfile(sp.sectionProperties):
     return self.get('Avy')/self.A()
   def alphaZ(self):
     return self.get('Avz')/self.A()
+
+  def checkBiaxialBendingForElement(self,elem,nmbComb):
+    '''Called in every commit to check biaxial bending criterion (bars in 3D problems).'''
+    elem.getResistingForce()
+    sectionClass= elem.getProp('sectionClass')
+    chiLT= elem.getProp('chiLT')
+    N1= elem.getN1
+    My1= elem.getMy1
+    Mz1= elem.getMz1
+    Vy= elem.getVy
+    FCTN= self.getBiaxialBendingEfficiency(sectionClass,N1,My1,Mz1,Vy,chiLT)
+    if(FCTN > elem.getProp("FCTNCP")):
+      elem.setProp("FCTNCP",FCTN)
+      elem.setProp("NCP",N1)
+      elem.setProp("MyCP",My1)
+      elem.setProp("MzCP",Mz1)
+      elem.setProp("VyCP",Vy)
+      elem.setProp("HIPCPTN",nmbComb)
+
+    N2= elem.getN2
+    My2= elem.getMy2
+    Mz2= elem.getMz2
+    Vy= elem.getVy
+    FCTN= self.getBiaxialBendingEfficiency(sectionClass,N2,My2,Mz2,Vy,chiLT)
+    if(FCTN > elem.getProp("FCTNCP")):
+      elem.setProp("FCTNCP",FCTN)
+      elem.setProp("NCP",N2)
+      elem.setProp("MyCP",My2)
+      elem.setProp("MzCP",Mz2)
+      elem.setProp("VyCP",Vy)
+      elem.setProp("HIPCPTN",nmbComb)
+
+  def checkYShearForElement(self,elem,nmbComb):
+    '''Called in every commit to y shear criterion.'''
+    elem.getResistingForce()
+    sectionClass= elem.getProp('sectionClass')
+    Vy= elem.getVy
+    FCV= self.getYShearEfficiency(sectionClass,Vy)
+    if(FCV > elem.getProp("FCVCP")):
+      elem.setProp("FCVCP",FCV)
+      elem.setProp("VyCP",Vy)
+      elem.setProp("HIPCPV",nmbComb)
