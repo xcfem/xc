@@ -43,8 +43,8 @@ def create_attribute_at_nodes(elemSet,attributeName,initialValue):
         nodeTags[tag]+=1
   return nodeTags
 
-def extrapolate_elem_function_attr(elemSet,attributeName,function, argument):
-  nodeTags= create_attribute_at_nodes(elemSet,attributeName,0.0)
+def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,initialValue= 0.0):
+  nodeTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
   #Calculate totals.
   for e in elemSet:
     elemNodes= e.getNodes

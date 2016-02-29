@@ -8,17 +8,9 @@ import vtk
 ''' Define las variables que se emplean para definir
    un diagrama de esfuerzos. '''
 class LUTField(object):
-  lookUpTable= None
-  scalarBar= None
-  valMin= 1e99
-  valMax= -1e99
-  fConvUnidades= 1e-3 #Factor de conversión de unidades.
-  mapper= None
-  actor= None
 
   def __init__(self,fUnitConv):
-    self.valMin= 1e99
-    self.valMax= -self.valMin
+    self.initializeMinMax()
     self.lookUpTable= None
     self.scalarBar= None
     self.fConvUnidades= fUnitConv
@@ -28,6 +20,10 @@ class LUTField(object):
   def updateMinMax(self,value):
     self.valMin= min(self.valMin,value)
     self.valMax= max(self.valMax,value)
+
+  def initializeMinMax(self):
+    self.valMin= 1e99
+    self.valMax= -self.valMin
 
   def creaLookUpTable(self):
     ''' Crea una tabla de búsqueda de colores.'''

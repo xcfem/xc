@@ -210,7 +210,7 @@ class EC3IPEProfile(ipe.IPEProfile):
     '''
     MvRdz= self.getMvRdz(sectionClass,Vyd)
     MbRdz= chiLT*MvRdz #Lateral buckling reduction.
-    return Mzd/MbRdz
+    return abs(Mzd)/MbRdz
 
   def getBiaxialBendingEfficiency(self,sectionClass,Nd,Myd,Mzd,Vyd= 0.0,chiLT=1.0):
     '''Returns biaxial bending efficiency (clause 6.2.9 of EC3.1.1)
@@ -222,16 +222,15 @@ class EC3IPEProfile(ipe.IPEProfile):
     MbRdz= chiLT*MvRdz #Lateral buckling reduction.
     alpha= 2.0
     beta= max(1.0,Nd/NcRd)
-    return (Mzd/MbRdz)**alpha+(Myd/McRdy)**beta
+    return (abs(Mzd)/MbRdz)**alpha+(abs(Myd)/McRdy)**beta
 
   def setupULSControlVars(self,elems,sectionClass= 1, chiLT=1.0):
     '''For each element creates the variables
        needed to check ultimate limit state criterion to satisfy.'''
+    super(EC3IPEProfile,self).setupULSControlVars(elems)
     for e in elems:
       e.setProp('sectionClass',sectionClass) #Cross section class.
       e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
-      e.setProp('FCTNCP',-1.0) #Normal stresses.
-      e.setProp('FCVCP',-1.0) #Shear
       e.setProp('crossSection',self)
 
   def installULSControlRecorder(self,recorderName, elems,sectionClass= 1, chiLT=1.0):

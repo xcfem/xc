@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 from postprocess import callback_controls
 from postprocess import def_vars_control
 

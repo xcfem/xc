@@ -1,50 +1,24 @@
 # -*- coding: utf-8 -*-
 # Representación de un modelo de elementos finitos.
-nDiv= 4
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2014 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import sys
 import vtk
+import logging
 import xc_base
 from vtkUtils import utilsVtk
 from xcVtk import vtk_grafico_base
 from xcVtk.malla_ef import vtk_define_malla_nodos
 from xcVtk.malla_ef import vtk_define_malla_elementos
 from xcVtk.malla_ef import vtk_define_malla_cells_ef
-from xcVtk import vtk_lut_field
 
-class ScalarField(vtk_lut_field.LUTField):
-
-  def __init__(self,name,vExpr,component,fUnitConv):
-    super(ScalarField,self).__init__(fUnitConv)
-    self.name= name
-    self.attrName= vExpr
-    self.attrComponent= component
-    self.arr= None
-
-  def fillArray(self, nodeSet):
-    # Scalar values.
-    self.arr= vtk.vtkDoubleArray()
-    self.arr.SetName(self.name)
-    self.arr.SetNumberOfTuples(len(nodeSet))
-    self.arr.SetNumberOfComponents(1)
-    for n in nodeSet:
-      attr= getattr(n,self.attrName)
-      tmp= None
-      if hasattr(attr,"__getitem__"):
-        tmp= attr[self.attrComponent]
-      elif callable(attr):
-        if(attr.__name__!='getProp'):
-          tmp= attr(self.name)
-        elif(n.hasProp(self.name)):
-          tmp= attr(self.name)
-        else:
-          tmp= 0.0
-      else:
-        tmp= attr
-      tmp*= self.fConvUnidades
-      self.updateMinMax(tmp)
-      self.arr.SetTuple1(n.getIdx,tmp)
-    return self.arr
-
+logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
+logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
 
 class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
   ''' Define las variables que se emplean para definir
@@ -57,16 +31,11 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
   def VtkDefineActorElementos(self,uGrid, tipoRepr,field):
     # Creamos el actor para las superficies.
     if(field):
-      uGrid.GetPointData().SetScalars(field.arr)
-      uGrid.GetPointData().SetActiveScalars(field.name)
-      uGrid.Modified()
+      field.setupOnGrid(uGrid)
     self.gridMapper= vtk.vtkDataSetMapper()
     self.gridMapper.SetInput(uGrid)
     if(field):
-      self.gridMapper.SetScalarRange(field.valMin,field.valMax)
-      self.gridMapper.SetLookupTable(field.lookUpTable)
-      self.gridMapper.SetScalarModeToUsePointData()
-      self.gridMapper.ScalarVisibilityOn()
+      field.setupOnMapper(self.gridMapper)
     elemActor= vtk.vtkActor()
     elemActor.SetMapper(self.gridMapper)
     elemActor.GetProperty().SetColor(1,1,0)
@@ -161,22 +130,29 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     #   vtk_define_malla_nodos.VtkDibujaIdsNodos(recordGrid,self.renderer)
     # else:
     #   print "Entity: ", recordGrid.entToLabel, " unknown."
-  def grafico_mef(self,preprocessor,setName):
+  def setupGrid(self,setName):
     defGrid= vtk_grafico_base.RecordDefGrid()
     defGrid.setName= setName
+    return defGrid
+
+  def grafico_mef(self,preprocessor,setName):
+    defGrid= self.setupGrid(setName)
     self.muestraMalla(preprocessor,defGrid)
 
-  def displayScalarField(self, preprocessor, setName, field):
-    defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.setName= setName
+  def displayMesh(self, preprocessor, setName, field= None, diagrams= None, fName= None):
+    defGrid= self.setupGrid(setName)
     self.defineEscenaMalla(preprocessor,defGrid,field)
-    self.muestraEscena()
+    if(diagrams):
+      for d in diagrams:
+        self.appendDiagram(d)
+    if(fName):
+      self.plotScene(fName)
+    else:
+      self.muestraEscena()
 
-  def plotScalarField(self, preprocessor, setName, field, fName):
-    defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.setName= setName
-    self.defineEscenaMalla(preprocessor,defGrid,field)
-    self.plotScene(fName)
+  def displayScalarField(self, preprocessor, setName, field, fName= None):
+    logging.warning('displayScalarField DEPRECATED; use displayMesh.')
+    self.displayMesh(preprocessor, setName, field, None, fName)
 
   def displayNodalLoad(self, nod, color, carga, momento, fEscala):
     #actorName= baseName+"%04d".format(nod.tag) # Tag nodo.
@@ -253,3 +229,5 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     self.displayElementalLoads(preprocessor, loadPattern,clrVectores,fEscalaVectores)
     self.displayNodalLoads(preprocessor, loadPattern,clrVectores,fEscalaVectores)
 
+  def appendDiagram(self,diagram):
+    diagram.agregaDiagramaAEscena(self)

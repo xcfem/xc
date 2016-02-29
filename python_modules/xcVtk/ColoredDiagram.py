@@ -29,13 +29,14 @@ class ColoredDiagram(vtk_lut_field.LUTField):
 
   def creaEstrucDatosDiagrama(self):
     # Crea las estructuras de datos necesarias para crear el diagrama.
-
+    self.initializeMinMax()
     self.points= vtk.vtkPoints()
     self.escalares= vtk.vtkDoubleArray()
     self.cells= vtk.vtkCellArray()
 
   def resetEstrucDatosDiagrama(self):
     #«Resetea» las estructuras de datos necesarias para crear el diagrama.
+    self.initializeMinMax()
     self.points.reset()
     self.escalares.reset()
     self.cells.reset()

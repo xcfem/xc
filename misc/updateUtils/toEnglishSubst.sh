@@ -95,4 +95,6 @@ do
 # sed -i 's/dicSup/dicGeomEnt/g' $fl
 #20160225 LCPT
 # sed -i 's/extrapolate_elem_attr.extrapolate_elem_function_attr(preprocessor,/extrapolate_elem_attr.extrapolate_elem_function_attr(/g' $fl
+#20160229 LCPT
+# sed -i 's/nmbVista/viewName/g' $fl
 done

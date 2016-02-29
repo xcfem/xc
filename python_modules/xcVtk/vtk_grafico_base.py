@@ -22,7 +22,7 @@ class RecordDefDisplay(object):
     self.renWin= None
     self.windowWidth= 800
     self.windowHeight= 600
-    self.nmbVista= "XYZPos"
+    self.viewName= "XYZPos"
     self.zoom= 1.0
     self.bgRComp= 0.65
     self.bgGComp= 0.65
@@ -99,22 +99,22 @@ class RecordDefDisplay(object):
     self.renderer.ResetCameraClippingRange()
 
   def defineView(self):
-    if(self.nmbVista=="ZPos"):
+    if(self.viewName=="ZPos"):
       self.VistaZPos()
-    elif(self.nmbVista=="ZNeg"):
+    elif(self.viewName=="ZNeg"):
       self.VistaZNeg()
-    elif(self.nmbVista=="YPos"):
+    elif(self.viewName=="YPos"):
       self.VistaYPos()
-    elif(self.nmbVista=="YNeg"):
+    elif(self.viewName=="YNeg"):
       self.VistaYNeg()
-    elif(self.nmbVista=="XPos"):
+    elif(self.viewName=="XPos"):
       self.VistaXPos()
-    elif(self.nmbVista=="XNeg"):
+    elif(self.viewName=="XNeg"):
       self.VistaXNeg()
-    elif(self.nmbVista=="XYZPos"):
+    elif(self.viewName=="XYZPos"):
       self.VistaXYZPos()
     else:
-      sys.stderr.write("View name: '"+self.nmbVista+"' unknown.")
+      sys.stderr.write("View name: '"+self.viewName+"' unknown.")
 
   def setupWindow(self):
     self.renWin= vtk.vtkRenderWindow()

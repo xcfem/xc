@@ -520,6 +520,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/extrapolate_elem_attr.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/figure_collection.py
 /usr/local/lib/python2.7/dist-packages/postprocess/figure_collection.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/get_reactions.py
+/usr/local/lib/python2.7/dist-packages/postprocess/get_reactions.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/__init__.py
 /usr/local/lib/python2.7/dist-packages/postprocess/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/med_xc_vars.py
@@ -656,6 +658,8 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/vtk_load_strprop_kpts.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/vtk_load_strprop_lineas.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/vtk_load_strprop_lineas.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/Fields.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/Fields.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/__init__.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_define_malla_cells_ef.py
