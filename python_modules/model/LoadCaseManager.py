@@ -24,6 +24,16 @@ class LoadCaseManager(object):
       self.loadCases[name]= self.loadPatterns.newLoadPattern('default',name)
 
   def setCurrentLoadCase(self,name):
+    '''Sets current load case.'''
     self.loadPatterns.currentLoadPattern= name
     if(name not in self.loadCases):
       lmsg.warning('Load case: \''+ name+ '\' doesn\'t exists.')
+    return self.getLoadCase(name)
+
+  def getCurrentLoadCase(self):
+    '''Returns current load case.'''
+    name= self.loadPatterns.currentLoadPattern
+    return self.getLoadCase(name)
+
+  def getLoadCase(self,name):
+    return self.loadCases[name]
