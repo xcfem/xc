@@ -9,8 +9,6 @@ from materials import sectionProperties as sp
 from materials.ec3 import lateral_torsional_buckling as ltb
 
 
-
-
 class SteelProfile(sp.sectionProperties):
   """Structural steel section properties"""
   def __init__(self,steel,name,table):

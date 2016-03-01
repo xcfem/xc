@@ -9,35 +9,45 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-def getReactionForces(preprocessor,supportNodes):
-  '''Returns a dictionary with the reactions forces at the nodes.
-     The key of the map is the node tag.''' 
-  reactions= dict()
-  meshNodes= preprocessor.getNodeLoader
-  print 'meshNodes.numGdls= ', meshNodes.numGdls
-  meshNodes.calculateNodalReactions(True)
-  for n in supportNodes:
-    tmp= n.getReaction
-    if(meshNodes.numGdls==3):
-      reac= geom.Vector2d(tmp[0],tmp[1])
-    else:
-      reac= geom.Vector3d(tmp[0],tmp[1],tmp[2])
-    reactions[n.tag]= reac
-  return reactions
+class Reactions(object):
+  def __init__(self,preprocessor,supportNodes):
+    self.forces= dict()
+    self.moments= dict()
+    self.positions= dict()
+    self.svdReac= geom.SVD3d()
+    meshNodes= preprocessor.getNodeLoader
+    meshNodes.calculateNodalReactions(True)
+    f3d= geom.Vector3d(0.0,0.0,0.0)
+    m3d= geom.Vector3d(0.0,0.0,0.0)
+    for n in supportNodes:
+      tag= n.tag
+      tmp= n.getReaction
+      if(meshNodes.numGdls==3):
+        force= geom.Vector2d(tmp[0],tmp[1])
+        f3d= geom.Vector3d(tmp[0],tmp[1],0.0)
+        moment= geom.Vector3d(0.0,0.0,tmp[2])
+        m3d= moment
+      else:
+        force= geom.Vector3d(tmp[0],tmp[1],tmp[2])
+        f3d= force
+        moment= geom.Vector3d(tmp[3],tmp[4],tmp[5])
+        m3d= moment
+      self.forces[tag]= force
+      self.moments[tag]= moment
+      pos= n.getInitialPos3d
+      self.positions[tag]= pos
+      self.svdReac+= geom.SVD3d(pos,f3d,m3d)
+  def getReactionForces(self):
+    '''Returns a dictionary with the reactions forces at the nodes.
+       The key of the map is the node tag.''' 
+    return self.forces
 
-def getReactionMoments(preprocessor,supportNodes):
-  '''Returns a dictionary with the reactions moments at the nodes.
-     The key of the map is the node tag.''' 
-  reactions= dict()
-  meshNodes= preprocessor.getNodeLoader
-  meshNodes.calculateNodalReactions(True)
-  for n in supportNodes:
-    tmp= n.getReaction
-    if(meshNodes.numGdls==3):
-      reac= geom.Vector3d(0.0,0.0,tmp[2])
-    else:
-      reac= geom.Vector3d(tmp[3],tmp[4],tmp[5])
-    reactions[n.tag]= reac
-  return reactions
+  def getReactionMoments(self):
+    '''Returns a dictionary with the reactions moments at the nodes.
+       The key of the map is the node tag.''' 
+    return self.moments
+
+  def getResultant(self):
+    return self.svdReac
 
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import os
-import DxfReader as dxf
 from collections import defaultdict
-from dxfwrite import DXFEngine as dxf
+from dxfwrite import DXFEngine
+import DxfReader
 
 class MaterialRecord(object):
   def __init__(self,name,typo,thermalExp,rho,E,nu,G,logDec,specHeat,thermalCond):
@@ -39,7 +39,7 @@ class NodeRecord(object):
     strCommand= '.newNodeIDXYZ(' + strId + ',' + self.coords[0] + ',' + self.coords[1] +','+ self.coords[2]+')'
     return 'n' + strId + '= ' + nodeLoaderName + strCommand
   def writeDxf(self,drawing,layerName):
-    drawing.add(dxf.point((self.coords[0], self.coords[1], self.coords[2]), color=0, layer=layerName))
+    drawing.add(dxfEngine.point((self.coords[0], self.coords[1], self.coords[2]), color=0, layer=layerName))
 
 
 class CellRecord(object):
@@ -64,7 +64,7 @@ class CellRecord(object):
     for i in range(0,numNodes-1):
       coordsA= nodeDict[self.nodeIds[i]].coords
       coordsB= nodeDict[self.nodeIds[i+1]].coords
-      drawing.add(dxf.line((coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), color=0, layer=layerName))
+      drawing.add(dxfEngine.line((coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), color=0, layer=layerName))
 
 class ComponentSupportRecord:
   '''Constraints for x,y,z,rx,ry,rz displacements of a node.'''
@@ -209,7 +209,7 @@ class XCImportExportData(object):
       self.blockData.groups.append(grp)
       
   def writeDxfFile(self,fileName):
-    drawing= dxf.drawing(fileName)
+    drawing= dxfEngine.drawing(fileName)
     if(self.blockData):
       self.blockData.writeDxf(self)
     if(self.meshDesc):
@@ -417,7 +417,7 @@ class MeshData(object):
 
   def writeDxfFile(self,fileName):
     '''Write mesh in a DXF file.'''
-    drawing= dxf.drawing(fileName)
+    drawing= dxfEngine.drawing(fileName)
     self.writeDxf(drawing)
     drawing.save()
 
@@ -502,7 +502,7 @@ class BlockData(object):
     self.blocks[block.id]= block
 
   def readFromDxfFile(self,fName,preprocessor,dxfLayers):
-    dxfReader= dxf.DxfReader()
+    dxfReader= DxfReader.DxfReader()
     dxfReader.read(fName,preprocessor,dxfLayers)
     pointSet= preprocessor.getSets.getSet("total").getPoints
     for p in pointSet:
