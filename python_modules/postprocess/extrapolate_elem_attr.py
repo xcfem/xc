@@ -11,7 +11,7 @@ import xc_base
 import geom
 import xc
 import math
-import logging
+from miscUtils import LogMessages as lmsg
 
 def flatten_attribute(elemSet,attributeName, treshold, limit):
   '''reduce higher values which hide attribute variation over the model.'''
@@ -37,7 +37,7 @@ def create_attribute_at_nodes(elemSet,attributeName,initialValue):
       if tag not in nodeTags:
         nodeTags[tag]= 1
         if(n.hasProp(attributeName)):
-          logging.warning('node: '+ str(n.tag) + ' already has a property named: \'' + attributeName +'\'.')
+          lmsg.warning('node: '+ str(n.tag) + ' already has a property named: \'' + attributeName +'\'.')
         n.setProp(attributeName,initialValue)
       else:
         nodeTags[tag]+=1

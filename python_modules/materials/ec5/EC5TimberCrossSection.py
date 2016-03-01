@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division
-import logging
+from miscUtils import LogMessages as lmsg
 from materials import parametrosSeccionRectangular
 from postprocess import def_vars_control
 from postprocess import callback_controls
 from postprocess import prop_statistics as ps
 
-logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
+
+
 
 class EC3TimberRectCrossSection(parametrosSeccionRectangular.RectangularSection):
   """IPE profile with Eurocode 3 verification routines."""

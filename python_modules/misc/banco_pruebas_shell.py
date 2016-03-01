@@ -5,7 +5,7 @@ import geom
 import xc
 from model import predefined_spaces
 import sqlite3 as sqlite
-import logging
+from miscUtils import LogMessages as lmsg
 
 def nuevosZeroLengthShell(nmbS, tagElem, offset):
 # Define el modelo para probar las dos secciones de un elemento shell.
@@ -82,7 +82,7 @@ def simulaCargasXYFromTable(nmbQuery, nmbTbEsf, idElem, offset):
   cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
 
-  logging.info("Cargando elemento: ",int(idElem),"\n")
+  lmsg.info("Cargando elemento: ",int(idElem),"\n")
   con= sqlite.connect(nmbDataBase)
   con.row_factory = sqlite.Row
   idSecc= 0.0

@@ -2,7 +2,7 @@
 import vtk
 import xc_base
 import xc
-import logging
+from miscUtils import LogMessages as lmsg
 import creaArraySetData
 
 
@@ -42,7 +42,7 @@ def VtkDefineActorCells(recordGrid, renderer, tipoRepr):
   elif(tipoRepr== "surface"):
     cellActor.GetProperty().SetRepresentationToSurface()
   else:
-    logging.error("error: "+tipoRepr+" no implementada.")
+    lmsg.error("error: "+tipoRepr+" no implementada.")
   renderer.AddActor(cellActor) # Actor para las celdas
 
 def VtkCargaIdsKPts(uGrid, setToDraw):

@@ -27,13 +27,13 @@ So:
 
 from __future__ import division
 import math
-import logging
+from miscUtils import LogMessages as lmsg
 from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as ipe
 from materials.ec3 import lateral_torsional_buckling as ltb
 from materials.ec3 import EC3_callback_controls as EC3cc
 
-logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
+
+
 
 class EC3IPEProfile(ipe.IPEProfile):
   """IPE profile with Eurocode 3 verification routines."""
@@ -66,7 +66,7 @@ class EC3IPEProfile(ipe.IPEProfile):
   def getVplRdy(self):
     '''Returns y direction (web direction) plastic shear resistance'''
     if(self.shearBucklingVerificationNeeded()):
-      logging.warning('section needs shear buckling verification.')
+      lmsg.warning('section needs shear buckling verification.')
     return self.getAvy()*(self.steelType.fy/math.sqrt(3))/self.steelType.gammaM0()
   def getVcRdy(self):
     '''Returns y direction (web direction) shear resistance'''

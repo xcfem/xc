@@ -7,23 +7,23 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import os
-import logging
+from miscUtils import LogMessages as lmsg
 from xcVtk import vtk_grafico_base
 from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk.malla_ef import Fields
 from xcVtk import vtk_grafico_diagrama_esfuerzos as gde
 
-logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
+
+
 
 class FigureBase(object):
-  def __init__(self,pLabel,vLabel,fDesc,aDesc=None,units=None,sz= "90mm"):
+  def __init__(self,pLabel,vLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
     self.partLabel= pLabel #Something like 'wall' or '2ndFloorDeck'
     self.verifLabel= vLabel #Something like "Fatigue" or "CrackControl"
     self.attributeName= ''
-    self.figDescription= fDesc #Text to insert as caption in the LaTeX file.
+    self.figDescription= figDescr #Text to insert as caption in the LaTeX file.
     self.unitsLabel= units # Somethin like '[MPa]' or 'radians'...
-    self.armatureDescription= aDesc #Something like "horizontal reinforcement."
+    self.armatureDescription= reinfDescr #Something like "horizontal reinforcement."
     self.figSize= sz #LaTeX size for the figure.
     self.viewName= "XYZPos"
   def getCaption(self):
@@ -49,8 +49,8 @@ class FigureBase(object):
     fichLatexList.write('}: ' + self.getCaption() + '\n' )
 
 class SlideDefinition(FigureBase):
-  def __init__(self,pLabel,vLabel,fDesc,aDesc=None,units=None,sz= "90mm"):
-    super(SlideDefinition,self).__init__(pLabel,vLabel,fDesc,aDesc,units,sz)
+  def __init__(self,pLabel,vLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+    super(SlideDefinition,self).__init__(pLabel,vLabel,figDescr,reinfDescr,units,sz)
     self.field= None
     self.diagrams= list()
 
@@ -73,10 +73,10 @@ class SlideDefinition(FigureBase):
 class FigureDefinition(SlideDefinition):
   diagrams= None #List of diagrams to display (see ColoredDiagram, LinearLoadDiagram,...)
 
-  def __init__(self,pLabel,vLabel,attrName,fDesc,aDesc=None,units=None,sz= "90mm"):
-    super(FigureDefinition,self).__init__(pLabel,vLabel,fDesc,aDesc,units,sz)
+  def __init__(self,pLabel,vLabel,attrName,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+    super(FigureDefinition,self).__init__(pLabel,vLabel,figDescr,reinfDescr,units,sz)
     self.attributeName= attrName
-    logging.warning('FigureDefinition DEPRECATED; use SlideDefinition.')
+    lmsg.warning('FigureDefinition DEPRECATED; use SlideDefinition.')
 
   def defField(self, elementSetName):
     self.field= Fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,elementSetName)
@@ -125,6 +125,6 @@ class TakePhotos(object):
     return
 
   def plotFigures(self,preprocessor,figDefinitionList,nmbFichLatexFigs,nmbFichLatexList):
-    logging.warning('plotFigures DEPRECATED; use displayFigures.')
+    lmsg.warning('plotFigures DEPRECATED; use displayFigures.')
     self.displayFigures(preprocessor,figDefinitionList,nmbFichLatexFigs,nmbFichLatexList)
 

@@ -9,7 +9,7 @@ __email__= "l.pereztato@gmail.com"
 
 import sys
 import vtk
-import logging
+from miscUtils import LogMessages as lmsg
 import xc_base
 from vtkUtils import utilsVtk
 from xcVtk import vtk_grafico_base
@@ -17,8 +17,8 @@ from xcVtk.malla_ef import vtk_define_malla_nodos
 from xcVtk.malla_ef import vtk_define_malla_elementos
 from xcVtk.malla_ef import vtk_define_malla_cells_ef
 
-logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
+
+
 
 class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
   ''' Define las variables que se emplean para definir
@@ -145,13 +145,10 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     if(diagrams):
       for d in diagrams:
         self.appendDiagram(d)
-    if(fName):
-      self.plotScene(fName)
-    else:
-      self.muestraEscena()
+    self.displayScene(fName)
 
   def displayScalarField(self, preprocessor, setName, field, fName= None):
-    logging.warning('displayScalarField DEPRECATED; use displayMesh.')
+    lmsg.warning('displayScalarField DEPRECATED; use displayMesh.')
     self.displayMesh(preprocessor, setName, field, None, fName)
 
   def displayNodalLoad(self, nod, color, carga, momento, fEscala):

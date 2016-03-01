@@ -6,13 +6,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import logging
-logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
+from miscUtils import LogMessages as lmsg
+
+
 
 def defVarControlMov(obj, code):
   if(not obj.hasProp('span')):
-    logging.warning('span property not defined for: '+str(obj.tag) + ' object.')
+    lmsg.warning('span property not defined for: '+str(obj.tag) + ' object.')
   obj.setProp(code+'Max',0.0)
   obj.setProp('Comb'+code+'Max',"")
   obj.setProp(code+'Min',0.0)
@@ -48,7 +48,7 @@ def defVarsControlMovModulus(nodes):
   tags= []
   for n in nodes:
     if(not n.hasProp('span')):
-      logging.warning('span property not defined for node: '+str(n.tag) + '.')
+      lmsg.warning('span property not defined for node: '+str(n.tag) + '.')
     tags.append(n.tag)
     n.setProp("dispMax",0.0)
     n.setProp("CombdispMax","")

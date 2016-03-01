@@ -7,13 +7,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import logging
+from miscUtils import LogMessages as lmsg
 import vtk
 from xcVtk import ColoredDiagram as cd
 from postprocess import extrapolate_elem_attr
 
-logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
+
+
 
 class ElementPropertyDiagram(cd.ColoredDiagram):
   '''Diagram of internal forces (N,My,Mz,T,Vy,Vz)'''

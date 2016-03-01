@@ -1,5 +1,5 @@
 import vtk
-import logging
+from miscUtils import LogMessages as lmsg
 
 #Crea una matriz de cadenas de caracteres con datos de los puntos
 # definidas en el conjunto.
@@ -17,7 +17,7 @@ def VtkCreaStrArraySetData(setToDraw, nmbTipoEnt, attr):
   elif(nmbTipoEnt=="elementos"):
     container= setToDraw.getElements
   else:
-    logging.error("error: "+nmbTipoEnt+" no implementada.")
+    lmsg.error("error: "+nmbTipoEnt+" no implementada.")
   for e in container:
     tmp= str(getattr(e,attr))
     arr.InsertValue(e.getIdx,tmp)

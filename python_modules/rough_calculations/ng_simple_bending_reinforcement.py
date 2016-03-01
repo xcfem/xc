@@ -28,10 +28,10 @@
 #ng_simple_bending_reinforcement
 
 import math
-import logging
+from miscUtils import LogMessages as lmsg
 
-logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
+
+
 
 def neutralFiberDepth(M,fcd,b,d):
   c= 0.85*fcd*b
@@ -54,7 +54,7 @@ def Mlim(fcd,b,d):
 def AsSimpleBending(M,fcd,fsd,b,d):
   Ml= Mlim(fcd,b,d)
   if(M>Ml):
-    logging.warning('compression reinforcement needed Ml= '+ str(Ml/1e3) + ' kN m < '+ str(M/1e3)+ ' kN m') 
+    lmsg.warning('compression reinforcement needed Ml= '+ str(Ml/1e3) + ' kN m < '+ str(M/1e3)+ ' kN m') 
     T= 1e9
   else:
     c= 0.85*fcd*b

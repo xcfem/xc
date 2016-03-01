@@ -16,7 +16,7 @@ def getKRelajacion(tipoAcero):
   elif(tipoAcero=="superestabilizado"):
     return 0.19 
   else:
-    logging.error("Tipo de acero: ",tipoAcero," desconocido.\n")
+    lmsg.error("Tipo de acero: ",tipoAcero," desconocido.\n")
     return 0
 
 '''

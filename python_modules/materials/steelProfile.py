@@ -3,13 +3,13 @@
 from __future__ import division
 
 import math
-import logging
+from miscUtils import LogMessages as lmsg
 from materials import typical_materials
 from materials import sectionProperties as sp
 from materials.ec3 import lateral_torsional_buckling as ltb
 
-logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
+
+
 
 class SteelProfile(sp.sectionProperties):
   """Structural steel section properties"""
@@ -47,20 +47,20 @@ class SteelProfile(sp.sectionProperties):
     elif(sectionClass==3):
       return self.get('Wzel')
     else:
-      logging.warning('cross sections of class: '+ str(sectionClass) + ' not implemented.')
+      lmsg.warning('cross sections of class: '+ str(sectionClass) + ' not implemented.')
   def getWy(self,sectionClass= 1):
     if(sectionClass<3):
       return self.get('Wypl')
     elif(sectionClass==3):
       return self.get('Wyel')
     else:
-      logging.warning('cross sections of class: '+ str(sectionClass) + ' not implemented.')
+      lmsg.warning('cross sections of class: '+ str(sectionClass) + ' not implemented.')
   def getAeff(self,sectionClass= 1):
     '''Returns effective area depending of the cross-section class.'''
     if(sectionClass<3):
       return self.A()
     else:
-      logging.warning('effective area for sections of class: '+ str(sectionClass) + ' not implemented.')
+      lmsg.warning('effective area for sections of class: '+ str(sectionClass) + ' not implemented.')
       
   def alphaY(self):
     return self.get('Avy')/self.A()
