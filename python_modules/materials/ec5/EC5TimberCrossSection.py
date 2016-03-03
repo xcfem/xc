@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division
-import logging
+from miscUtils import LogMessages as lmsg
 from materials import parametrosSeccionRectangular
 from postprocess import def_vars_control
 from postprocess import callback_controls
 from postprocess import prop_statistics as ps
 
-logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
+
+
 
 class EC3TimberRectCrossSection(parametrosSeccionRectangular.RectangularSection):
   """IPE profile with Eurocode 3 verification routines."""
@@ -18,7 +18,8 @@ class EC3TimberRectCrossSection(parametrosSeccionRectangular.RectangularSection)
     self.taud= taud
 
   def setupULSControlVars2d(self,elems):
-    '''Creates control variables for ULS in elems.'''
+    '''For each element creates the variables
+       needed to check ultimate limit state criterion to satisfy.'''
     def_vars_control.defVarsControlTensRegElastico2d(elems)
     W= self.Wzel()
     for e in elems:
@@ -27,7 +28,8 @@ class EC3TimberRectCrossSection(parametrosSeccionRectangular.RectangularSection)
       e.setProp("Wel",W)
 
   def setupULSControlVars3d(self,elems):
-    '''Creates control variables for ULS in elems.'''
+    '''For each element creates the variables
+       needed to check ultimate limit state criterion to satisfy.'''
     def_vars_control.defVarsControlTensRegElastico3d(elems)
     Wz= self.Wzel()
     Wy= self.Wyel()

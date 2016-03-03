@@ -2,10 +2,8 @@
 
 import geom
 import xc
-import logging
+from miscUtils import LogMessages as lmsg
 
-logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
 
 class LoadCaseManager(object):
   '''Manager for XC load cases.'''
@@ -26,6 +24,16 @@ class LoadCaseManager(object):
       self.loadCases[name]= self.loadPatterns.newLoadPattern('default',name)
 
   def setCurrentLoadCase(self,name):
+    '''Sets current load case.'''
     self.loadPatterns.currentLoadPattern= name
     if(name not in self.loadCases):
-      logging.warning('Load case: \''+ name+ '\' doesn\'t exists.')
+      lmsg.warning('Load case: \''+ name+ '\' doesn\'t exists.')
+    return self.getLoadCase(name)
+
+  def getCurrentLoadCase(self):
+    '''Returns current load case.'''
+    name= self.loadPatterns.currentLoadPattern
+    return self.getLoadCase(name)
+
+  def getLoadCase(self,name):
+    return self.loadCases[name]

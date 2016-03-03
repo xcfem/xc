@@ -8,7 +8,7 @@ Devuelve el límite elástico del acero en función de su designación
 def fyEC3(desig, t):
   retval= 0.0
   if(t>0.1):
-    logging.error("Espesor de la pieza fuera de rango: ",t*1000," mm\n")
+    lmsg.error("Espesor de la pieza fuera de rango: ",t*1000," mm\n")
 
   if(desig == 235):
     retval= ifte(t<40e-3,235e6,215e6)
@@ -17,7 +17,7 @@ def fyEC3(desig, t):
   elif(desig == 355):
     retval= ifte(t<40e-3,355e6,335e6)
   else:
-    logging.error("No se conoce la designación del acero: ",desig,"\n")
+    lmsg.error("No se conoce la designación del acero: ",desig,"\n")
   return retval
 
 '''
@@ -27,7 +27,7 @@ Devuelve la resistencia última a tracción del acero en función de su designac
 def fuEC3(desig, t):
   retval= 0.0
   if(t>0.1):
-    logging.error("Espesor de la pieza fuera de rango: ",t*1000," mm\n")
+    lmsg.error("Espesor de la pieza fuera de rango: ",t*1000," mm\n")
 
   if(desig == 235):
     retval= ifte(t<40e-3,360e6,340e6)
@@ -36,5 +36,5 @@ def fuEC3(desig, t):
   elif(desig == 355):
     retval= ifte(t<40e-3,510e6,490e6)
   else:
-    logging.error("No se conoce la designación del acero: ",desig,"\n")
+    lmsg.error("No se conoce la designación del acero: ",desig,"\n")
   return retval

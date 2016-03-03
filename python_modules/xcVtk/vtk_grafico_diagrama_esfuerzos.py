@@ -34,7 +34,7 @@ class RecordDefDiagramaEsf(cd.ColoredDiagram):
     #   eSet: Conjunto de elementos cuyos valore se incorporan al diagrama.
     elems= eSet.getElements
     for e in elems:
-      self.vDir= e.getVDirEjeDebilGlobales
+      self.vDir= e.getVDirEjeDebilGlobales()
       e.getResistingForce()
       indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,e.getN1,e.getN2)
 

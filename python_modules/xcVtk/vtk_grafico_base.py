@@ -1,8 +1,18 @@
 # -*- coding: utf-8 -*-
-# Representación de un modelo de elementos finitos.
+
+''' Display nice images of the model. '''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import sys
 import vtk
+import xc_base
+from miscUtils import LogMessages as lmsg
+
 
 class RecordDefGrid(object):
   ''' Define las variables que se emplean para mostrar la malla. '''
@@ -22,7 +32,7 @@ class RecordDefDisplay(object):
     self.renWin= None
     self.windowWidth= 800
     self.windowHeight= 600
-    self.nmbVista= "XYZPos"
+    self.viewName= "XYZPos"
     self.zoom= 1.0
     self.bgRComp= 0.65
     self.bgGComp= 0.65
@@ -99,53 +109,54 @@ class RecordDefDisplay(object):
     self.renderer.ResetCameraClippingRange()
 
   def defineView(self):
-    if(self.nmbVista=="ZPos"):
+    if(self.viewName=="ZPos"):
       self.VistaZPos()
-    elif(self.nmbVista=="ZNeg"):
+    elif(self.viewName=="ZNeg"):
       self.VistaZNeg()
-    elif(self.nmbVista=="YPos"):
+    elif(self.viewName=="YPos"):
       self.VistaYPos()
-    elif(self.nmbVista=="YNeg"):
+    elif(self.viewName=="YNeg"):
       self.VistaYNeg()
-    elif(self.nmbVista=="XPos"):
+    elif(self.viewName=="XPos"):
       self.VistaXPos()
-    elif(self.nmbVista=="XNeg"):
+    elif(self.viewName=="XNeg"):
       self.VistaXNeg()
-    elif(self.nmbVista=="XYZPos"):
+    elif(self.viewName=="XYZPos"):
       self.VistaXYZPos()
     else:
-      sys.stderr.write("View name: '"+self.nmbVista+"' unknown.")
+      sys.stderr.write("View name: '"+self.viewName+"' unknown.")
 
   def setupWindow(self):
     self.renWin= vtk.vtkRenderWindow()
+    self.renWin.SetSize(self.windowWidth,self.windowHeight)
     self.renWin.AddRenderer(self.renderer)
     return self.renWin
 
-  def MuestraVentana(self):
-    self.setupWindow()
+  def setupWindowInteractor(self):
     iren= vtk.vtkRenderWindowInteractor()
     iren.SetRenderWindow(self.renWin)
     iren.SetSize(self.windowWidth,self.windowHeight)
     iren.Initialize()
-    iren.Start()
-    return self.renWin
+    return iren
 
-
-  def muestraEscena(self):
-    # Muestra la escena en el dispositivo de salida.
-    self.defineView()
-    self.MuestraVentana()
-
-  def plotScene(self,fName):
+  def displayScene(self,fName= None):
     self.defineView()
     self.setupWindow()
-    self.renWin.SetSize(self.windowWidth,self.windowHeight)
-    self.plot(fName)
+    if(fName):
+      self.plot(fName)
+    else:
+      iren= self.setupWindowInteractor()
+      iren.Start()
+
+  def muestraEscena(self):
+    lmsg.warning('muestraEscena is deprecated. Use displayScene')
+    self.displayScene(None)
+    
 
   # Muestra la malla en el dispositivo de salida.
   def muestraMalla(self, preprocessor,recordGrid):
     self.defineEscenaMalla(preprocessor,recordGrid,None)
-    self.muestraEscena()
+    self.displayScene()
 
   # Plot window contents
   def plot(self,fName):

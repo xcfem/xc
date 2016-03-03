@@ -27,12 +27,10 @@ So:
 
 from __future__ import division
 import math
-import logging
+from miscUtils import LogMessages as lmsg
 from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as ipe
 from materials.ec3 import lateral_torsional_buckling as ltb
-
-logging.addLevelName( logging.WARNING, "\033[1;31m%s\033[1;0m" % logging.getLevelName(logging.WARNING))
-logging.addLevelName( logging.ERROR, "\033[1;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR))
+from materials.ec3 import EC3_callback_controls as EC3cc
 
 class EC3IPEProfile(ipe.IPEProfile):
   """IPE profile with Eurocode 3 verification routines."""
@@ -65,7 +63,7 @@ class EC3IPEProfile(ipe.IPEProfile):
   def getVplRdy(self):
     '''Returns y direction (web direction) plastic shear resistance'''
     if(self.shearBucklingVerificationNeeded()):
-      logging.warning('section needs shear buckling verification.')
+      lmsg.warning('section needs shear buckling verification.')
     return self.getAvy()*(self.steelType.fy/math.sqrt(3))/self.steelType.gammaM0()
   def getVcRdy(self):
     '''Returns y direction (web direction) shear resistance'''
@@ -200,8 +198,8 @@ class EC3IPEProfile(ipe.IPEProfile):
     return math.sqrt(self.getWz(sectionClass)*self.steelType.fy/Mcr)
 
   def getYShearEfficiency(self,sectionClass,Vyd):
-    '''Returns major axis bending efficiency'''
-    return Vyd/self.getVcRdy()
+    '''Returns major axis shear efficiency'''
+    return abs(Vyd/self.getVcRdy())
 
   def getZBendingEfficiency(self,sectionClass,Mzd,Vyd= 0.0, chiLT= 1.0):
     '''Returns major axis bending efficiency
@@ -209,7 +207,7 @@ class EC3IPEProfile(ipe.IPEProfile):
     '''
     MvRdz= self.getMvRdz(sectionClass,Vyd)
     MbRdz= chiLT*MvRdz #Lateral buckling reduction.
-    return Mzd/MbRdz
+    return abs(Mzd)/MbRdz
 
   def getBiaxialBendingEfficiency(self,sectionClass,Nd,Myd,Mzd,Vyd= 0.0,chiLT=1.0):
     '''Returns biaxial bending efficiency (clause 6.2.9 of EC3.1.1)
@@ -221,4 +219,31 @@ class EC3IPEProfile(ipe.IPEProfile):
     MbRdz= chiLT*MvRdz #Lateral buckling reduction.
     alpha= 2.0
     beta= max(1.0,Nd/NcRd)
-    return (Mzd/MbRdz)**alpha+(Myd/McRdy)**beta
+    return (abs(Mzd)/MbRdz)**alpha+(abs(Myd)/McRdy)**beta
+
+  def setupULSControlVars(self,elems,sectionClass= 1, chiLT=1.0):
+    '''For each element creates the variables
+       needed to check ultimate limit state criterion to satisfy.'''
+    super(EC3IPEProfile,self).setupULSControlVars(elems)
+    for e in elems:
+      e.setProp('sectionClass',sectionClass) #Cross section class.
+      e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
+      e.setProp('crossSection',self)
+
+  def installULSControlRecorder(self,recorderType, elems,sectionClass= 1, chiLT=1.0):
+    '''Installs recorder for verification of ULS criterion. Preprocessor obtained from the set of elements.'''
+    preprocessor= elems.owner.getPreprocessor
+    nodes= preprocessor.getNodeLoader
+    domain= preprocessor.getDomain
+    recorder= domain.newRecorder(recorderType,None);
+    recorder.setElements(elems.getTags())
+    for e in elems:
+      e.setProp('ULSControlRecorder',recorder)
+    self.setupULSControlVars(elems,sectionClass,chiLT)
+    if(nodes.numGdls==3):
+      recorder.callbackRecord= '''print \'ERROR in element: , self.tag, bidimensional criterion not implemented.\''''
+    else:
+      recorder.callbackRecord= EC3cc.controlULSCriterion()
+
+    recorder.callbackRestart= "print \"Restart method called.\""
+    return recorder

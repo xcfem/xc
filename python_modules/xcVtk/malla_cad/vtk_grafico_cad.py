@@ -37,6 +37,6 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
     defGrid= vtk_grafico_base.RecordDefGrid()
     defGrid.setName= setName
     self.defineEscenaMalla(preprocessor,defGrid,field)
-    self.plotScene(fName)
+    self.displayScene(fName)
 
 

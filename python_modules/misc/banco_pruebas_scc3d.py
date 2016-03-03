@@ -86,8 +86,8 @@ def nuevoZeroLengthSecc3d(preprocessor, nmbS, tagNodo, tagElem):
 #     fieldM1= 0.0
 #     fieldM2= 0.0
 #     iNod= 10*idSecc+1
-#     logging.info("Cargando sección: ",int(idSecc),"\n")
-#     logging.info("Cargando nodo: ",int(iNod),"\n")
+#     lmsg.info("Cargando sección: ",int(idSecc),"\n")
+#     lmsg.info("Cargando nodo: ",int(iNod),"\n")
 #     \nmbQuery
 #       {
 #         \get_result{"select * from "+ nmbTbEsf + " where idSecc = " + sqlValue(idSecc)}

@@ -1,6 +1,11 @@
  # -*- coding: utf-8 -*-
 
 ''' Colored diagram of a function over a linear domain (set of 1D elments for example). '''
+__author__= "Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import geom
 import vtk
@@ -29,13 +34,14 @@ class ColoredDiagram(vtk_lut_field.LUTField):
 
   def creaEstrucDatosDiagrama(self):
     # Crea las estructuras de datos necesarias para crear el diagrama.
-
+    self.initializeMinMax()
     self.points= vtk.vtkPoints()
     self.escalares= vtk.vtkDoubleArray()
     self.cells= vtk.vtkCellArray()
 
   def resetEstrucDatosDiagrama(self):
     #«Resetea» las estructuras de datos necesarias para crear el diagrama.
+    self.initializeMinMax()
     self.points.reset()
     self.escalares.reset()
     self.cells.reset()

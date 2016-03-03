@@ -38,7 +38,7 @@ def calculaCombSeccionesBarra(preprocessor,nmbDatabase, nmbQuerySecciones, idCom
     idNodo= 10*idScc+1
     if((analOk==0.0)):
       nodos.calculateNodalReactions(True)
-      logging.info("Calculando combinación ",idComb," para sección: ",int(idScc),"\n")
+      lmsg.info("Calculando combinación ",idComb," para sección: ",int(idScc),"\n")
       nod= nodos.getNode(idNodo)
       reac= nod.getReac()
       Qy= reac[1]
@@ -47,7 +47,7 @@ def calculaCombSeccionesBarra(preprocessor,nmbDatabase, nmbQuerySecciones, idCom
       scc= elem.getSections().getScc(idScc)
       writeInsertResultEsfComb(fOut,nmbTablaResultEsfComb,idScc,idElem,idComb,N,Qy,Qz,Mx,My,Mz)
     else:
-      logging.error("Fallo en sección: ",ind(idScc), ", elemento: ",int(idElem)," combinación: ",idComb,"\n")
+      lmsg.error("Fallo en sección: ",ind(idScc), ", elemento: ",int(idElem)," combinación: ",idComb,"\n")
       exit()
       
 
@@ -80,9 +80,9 @@ def calculaCombinacionesBarra(nmbDatabase, nmbTablaEsfuerzos, nmbQueryEsfuerzos,
   analisis= predefined_solutions.simple_static_linear(prueba)
   for i in range(0,nComb+1):
     idComb= listaIdComb[i]
-    logging.info("idComb= ",idComb,"\n")
+    lmsg.info("idComb= ",idComb,"\n")
     descomp= listaDescompComb[i]
-    logging.info("descomp= ",descomp,"\n")
+    lmsg.info("descomp= ",descomp,"\n")
     # Lanzamos el calculo de la combinación.
     comb= combs.newLoadCombination(idComb,descomp)
     cargas.addToDomain(idComb)
@@ -124,7 +124,7 @@ def exportaCombELUxBarra(nmbDatabase, nmbTablaSecc, nmbQuerySecc, nmbTablaResult
     queryCombinaciones.execute("select * from " + nmbTablaResultEsfComb + " where idSecc= " + sqlValue(int(idScc)))
     for rowC in queryCombinaciones:
       idComb= rowC['dComb']
-      logging.info("idScc= ",int(idScc)," idComb= ",idComb,"\n")
+      lmsg.info("idScc= ",int(idScc)," idComb= ",idComb,"\n")
       fOut.write("           \\combinacion{ \\nmb_hipot{",sqlValue(int(idComb)),"}")
       fOut.write(" \\esf_norm{\\N{",sqlValue(rowC['n']),"} \\Mx{",sqlValue(rowC['my']),"} \\My{",sqlValue(rowC['mz']),"}} \\esf_tang{ \\T{",sqlValue(rowC['mx']),"} \\Vx{",sqlValue(rowC['vz']),"} \\Vy{",sqlValue(rowC['vy']),"}}")
       fOut.write("}\n")
@@ -152,7 +152,7 @@ def calculaCombSeccionesShell(nmbDatabase, nmbQuerySecciones, idComb, nmbTablaSe
       scc= elem.getSection()
       scc.writeInsertResultEsfComb(fOut,nmbTablaResultEsfComb,idSecc2,idElem,idComb,N,Vy,Vz,Mx,My,Mz)
     else:
-      logging.error("Fallo en elemento: ",int(idElem)," combinación: ",idComb,"\n")
+      lmsg.error("Fallo en elemento: ",int(idElem)," combinación: ",idComb,"\n")
       exit()
  
 def calculaCombinacionesShell(nmbDatabase, nmbTablaEsfuerzos, nmbQueryEsfuerzos, nmbTablaComb, nmbQueryCombinaciones, nmbFileUpdate, nmbTablaSecc, nmbTablaResultEsfComb, offset):
@@ -171,9 +171,9 @@ def calculaCombinacionesShell(nmbDatabase, nmbTablaEsfuerzos, nmbQueryEsfuerzos,
   analisis= predefined_solutions.simple_static_linear(prueba)
   for i in range(0,nComb+1):
     idCombShell= listaIdComb[i]
-    logging.info("idCombShell= ",idCombShell,"\n")
+    lmsg.info("idCombShell= ",idCombShell,"\n")
     descomp= listaDescompComb[i]
-    logging.info("descomp= ",descomp,"\n")
+    lmsg.info("descomp= ",descomp,"\n")
     # Lanzamos el calculo de la combinación.
     comb= combs.newLoadCombination(idCombShell,descomp)
     cargas.addToDomain(idCombShell)
@@ -219,7 +219,7 @@ def exportaCombxLamina(nmbDatabase, nmbTablaSecc, nmbQuerySecc, nmbTablaResultEs
   for row in nmbQuerySecc:
     row= nmbQuerySecc.fetchrow()
     idElem= row["ELEM"]
-    logging.info("Cargando en tabla resultados del elemento: ",int(idElem),"\n")
+    lmsg.info("Cargando en tabla resultados del elemento: ",int(idElem),"\n")
     idSecc1= idElem*10
     idSecc2= offset+idSecc1
     queryCombinaciones.execute("select * from " + nmbTablaResultEsfComb + " where idSecc= " + sqlValue(int(idSecc1)))
@@ -253,7 +253,7 @@ def exportaCombxLamina(nmbDatabase, nmbTablaSecc, nmbQuerySecc, nmbTablaResultEs
     nmbQuerySecc.execute("select * from " + nmbTablaSecc)
     for rowC in nmbQuerySecc:
       idElem= rowC["ELEM"]
-      logging.info("Exportando combinaciones elemento: ",idElem,"\n")
+      lmsg.info("Exportando combinaciones elemento: ",idElem,"\n")
       idSecc1= idElem*10
       idSecc2= offset+idSecc1
       fOut.write("     \\comb_elemento\n")

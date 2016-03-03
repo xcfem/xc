@@ -119,11 +119,11 @@ class IJKRangeList(object):
       i+= 1
     return i
 
-  def applyEarthPressure(self, dicGeomEnt, earthPressLoadressure):
+  def applyEarthPressure(self, dicGeomEnt, earthPressure):
     i= 0
     for r in self.ranges:
       nmbrSet=self.name+str(i)
-      s= self.grid.applyEarthPressure(r,dicGeomEnt,nmbrSet,earthPressLoadressure)
+      s= self.grid.applyEarthPressure(r,dicGeomEnt,nmbrSet,earthPressure)
       i+= 1
     return i
 
@@ -424,7 +424,7 @@ class EarthPressureOnSurfaces(LoadOnSurfaces):
     name:       name identifying the load
     surfaces:   lists of grid ranges to delimit the surfaces to
                 be loaded
-    earthPressLoadressure: instance of the class EarthPressure, with 
+    earthPressure: instance of the class EarthPressure, with 
                 the following attributes:
                   K:Coefficient of pressure
                   zTerrain:global Z coordinate of ground level
@@ -434,12 +434,12 @@ class EarthPressureOnSurfaces(LoadOnSurfaces):
                   gammaWater: weight density of water
                   vDir: unit vector defining pressures direction
    '''
-  def __init__(self,name, surfaces, earthPressLoadressure):
+  def __init__(self,name, surfaces, earthPressure):
     super(EarthPressureOnSurfaces,self).__init__(name, surfaces)
-    self.earthPressLoadressure= earthPressLoadressure
+    self.earthPressure= earthPressure
 
   def applyEarthPressure(self,dicGeomEnt):
-    self.surfaces.applyEarthPressure(dicGeomEnt,self.earthPressLoadressure)
+    self.surfaces.applyEarthPressure(dicGeomEnt,self.earthPressure)
 
 
 class StrainLoadOnSurfaces(LoadOnSurfaces):

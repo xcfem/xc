@@ -63,6 +63,18 @@ double XC::Linea::getLongitud(void) const
     return retval;
   }
 
+//! @brief Returns the parameter of the point in the line (distance to the line's first point measured over the line)
+double XC::Linea::getLambda(const Pos3d &p) const
+  {
+    double retval= 0;
+    if(p1 && p2)
+      retval= getSegmento().getLambda(p);
+    else
+      std::cerr << "error Linea::getLambda the line: '" << GetNombre()
+                << " undefined." << std::endl;
+    return retval;
+  }
+
 //! @brief Devuelve el segmento que une los extremos
 //! de la línea.
 Segmento3d XC::Linea::getSegmento(void) const

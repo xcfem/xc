@@ -84,17 +84,17 @@ fix_node_3dof.fixNode00F(constraints,pt1.getTagNode)
 fix_node_3dof.fixNode00F(constraints,pt3.getTagNode)
 
 # Apoyamos los interiores.
-l1InteriorNodes= line_utils.getInteriorNodes(l1)
+l1InteriorNodes= line_utils.LineWrapper(l1).getInteriorNodes()
 for n in l1InteriorNodes:
   idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(preprocessor, n.tag,idElem,"kY",[0,1])
   idElem+= 1
 
-l1LastNode= line_utils.getLastNode(l1)
+l1LastNode= line_utils.LineWrapper(l1).getLastNode()
 idNodoCentral= l1LastNode.tag
 idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(preprocessor, l1LastNode.tag,idElem,"kY",[0,1])
 idElem+= 1
 
-l2InteriorNodes= line_utils.getInteriorNodes(l2)
+l2InteriorNodes= line_utils.LineWrapper(l2).getInteriorNodes()
 for n in l2InteriorNodes:
   idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(preprocessor, n.tag,idElem,"kY",[0,1])
   idElem+= 1
