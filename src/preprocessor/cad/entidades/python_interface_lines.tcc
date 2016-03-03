@@ -39,6 +39,7 @@ class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge", no_init)
    ;
 
 class_<XC::LineaBase, bases<XC::Edge>, boost::noncopyable >("LineaBase", no_init)
+  .def("getLambda",&XC::LineaBase::getLambda,"Returns the parameter of the point in the line (distance to the line's first point measured over the line).")
    ;
 
 class_<XC::Linea, bases<XC::LineaBase>, boost::noncopyable >("Line", no_init)

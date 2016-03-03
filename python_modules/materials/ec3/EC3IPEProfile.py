@@ -32,9 +32,6 @@ from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as ipe
 from materials.ec3 import lateral_torsional_buckling as ltb
 from materials.ec3 import EC3_callback_controls as EC3cc
 
-
-
-
 class EC3IPEProfile(ipe.IPEProfile):
   """IPE profile with Eurocode 3 verification routines."""
   def __init__(self,steel,name):
@@ -233,13 +230,15 @@ class EC3IPEProfile(ipe.IPEProfile):
       e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
       e.setProp('crossSection',self)
 
-  def installULSControlRecorder(self,recorderName, elems,sectionClass= 1, chiLT=1.0):
-    '''Installs recorder for verification of ULS criterion.'''
+  def installULSControlRecorder(self,recorderType, elems,sectionClass= 1, chiLT=1.0):
+    '''Installs recorder for verification of ULS criterion. Preprocessor obtained from the set of elements.'''
     preprocessor= elems.owner.getPreprocessor
     nodes= preprocessor.getNodeLoader
     domain= preprocessor.getDomain
-    recorder= domain.newRecorder(recorderName,None);
+    recorder= domain.newRecorder(recorderType,None);
     recorder.setElements(elems.getTags())
+    for e in elems:
+      e.setProp('ULSControlRecorder',recorder)
     self.setupULSControlVars(elems,sectionClass,chiLT)
     if(nodes.numGdls==3):
       recorder.callbackRecord= '''print \'ERROR in element: , self.tag, bidimensional criterion not implemented.\''''

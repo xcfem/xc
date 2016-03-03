@@ -52,6 +52,8 @@ class Linea: public LineaBase
     Edge *splitAtPoint(Pnt *p);
     Edge *splitAtLambda(const double &);
     Edge *splitAtCooNatural(const double &);
+
+    double getLambda(const Pos3d &) const;
     
     //! @brief Devuelve el número de vértices.
     inline virtual size_t NumVertices(void) const

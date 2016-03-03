@@ -143,6 +143,18 @@ double XC::ArcoCircunf::getTheta2(void) const
     return retval;
   }
 
+//! @brief Returns the parameter of the point in the arc (distance to the arc's first point measured over the arc)
+double XC::ArcoCircunf::getLambda(const Pos3d &p) const
+  {
+    double retval= 0;
+    if(p1 && p2 && p3)
+      retval= get_sector_circular3d().getLambda(p);
+    else
+      std::cerr << "error in ArcoCircunf::getLambda, arc: '" << GetNombre()
+                << " undefined." << std::endl;
+    return retval;
+  }
+
 //! @brief Devuelve el centro.
 Pos3d XC::ArcoCircunf::getCentro(void) const
   {

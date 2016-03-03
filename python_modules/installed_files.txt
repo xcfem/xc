@@ -194,6 +194,7 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_callback_controls.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3Beam.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.py
 /usr/local/lib/python2.7/dist-packages/materials/ec5/__init__.py
@@ -524,6 +525,7 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_callback_controls.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3Beam.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec5/__init__.pyc

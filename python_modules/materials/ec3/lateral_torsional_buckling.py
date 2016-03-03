@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 ''' Lateral torsional buckling of steel beams. '''
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__cppyright__= "Copyright 2016 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import math
 from miscUtils import LogMessages as lmsg
 import scipy.interpolate
 import numpy
-
-
-
 
 class MomentGradientFactorC1(object):
   ''' Calculation of the C1 moment gradient factor as defined

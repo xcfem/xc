@@ -7,6 +7,7 @@ from miscUtils import LogMessages as lmsg
 from materials import typical_materials
 from materials import sectionProperties as sp
 from materials.ec3 import lateral_torsional_buckling as ltb
+from postprocess import def_vars_control as vc
 
 
 class SteelProfile(sp.sectionProperties):
@@ -68,54 +69,52 @@ class SteelProfile(sp.sectionProperties):
   def setupULSControlVars(self,elems):
     '''For each element creates the variables
        needed to check ultimate limit state criterion to satisfy.'''
+    vc.defVarsEnvelopeInternalForcesBeamElems(elems)
     for e in elems:
-      e.setProp('FCTNCP',-1.0) #Normal stresses efficiency.
-      e.setProp('N+',-6.023e23) #Positive axial force envelope
-      e.setProp('N-',6.023e23) #Negative axial force envelope
-      e.setProp('Mz+',-6.023e23) #Positive bending moment envelope
-      e.setProp('Mz-',6.023e23) #Negative bending moment envelope
-      e.setProp('My+',-6.023e23) #Positive bending moment envelope
-      e.setProp('My-',6.023e23) #Negative bending moment envelope
-      e.setProp('FCVCP',-1.0) #Shear stresses efficiency.
-      e.setProp('Vy+',-6.023e23) #Positive y shear envelope
-      e.setProp('Vy-',6.023e23) #Negative y shear  envelope
+      e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
+      e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
 
   def checkBiaxialBendingForElement(self,elem,nmbComb):
     '''Called in every commit to check biaxial bending criterion (bars in 3D problems).'''
     elem.getResistingForce()
     sectionClass= elem.getProp('sectionClass')
     chiLT= elem.getProp('chiLT')
-    N= elem.getN
-    My= (elem.getMy2-elem.getMy1)/2.0
-    Mz= (elem.getMz2-elem.getMz1)/2.0
-    Vy= elem.getVy
-    FCTN= self.getBiaxialBendingEfficiency(sectionClass,N,My,Mz,Vy,chiLT)
-    if(FCTN > elem.getProp("FCTNCP")):
-      elem.setProp("FCTNCP",FCTN)
-      elem.setProp("HIPCPTN",nmbComb)
-    if(N>elem.getProp('N+')):
-      elem.setProp("N+",N)
-    if(N<elem.getProp('N-')):
-      elem.setProp("N-",N)
-    if(My>elem.getProp('My+')):
-      elem.setProp("My+",My)
-    if(My<elem.getProp('My-')):
-      elem.setProp("My-",My)
-    if(Mz>elem.getProp('Mz+')):
-      elem.setProp("Mz+",Mz)
-    if(Mz<elem.getProp('Mz-')):
-      elem.setProp("Mz-",Mz)
+    N1= elem.getN1
+    My1= elem.getMy1
+    Mz1= -elem.getMz1
+    Vy1= elem.getVy1
+    FCTN1= self.getBiaxialBendingEfficiency(sectionClass,N1,My1,Mz1,Vy1,chiLT)
+    N2= elem.getN2
+    My2= -elem.getMy2
+    Mz2= elem.getMz2
+    Vy2= -elem.getVy2
+    FCTN2= self.getBiaxialBendingEfficiency(sectionClass,N2,My2,Mz2,Vy2,chiLT)
+
+    fctn= elem.getProp("FCTNCP")
+    if(FCTN1 > fctn[0]):
+      fctn[0]= FCTN1
+      elem.setProp("HIPCPTN1",nmbComb)
+    if(FCTN2 > fctn[1]):
+      fctn[1]= FCTN2
+      elem.setProp("HIPCPTN2",nmbComb)
+    elem.setProp("FCTNCP",fctn)
+
+    vc.updateEnvelopeInternalForcesBeamElem(elem)
 
   def checkYShearForElement(self,elem,nmbComb):
     '''Called in every commit to y shear criterion.'''
     elem.getResistingForce()
     sectionClass= elem.getProp('sectionClass')
-    Vy= elem.getVy
-    FCV= self.getYShearEfficiency(sectionClass,Vy)
-    if(FCV > elem.getProp("FCVCP")):
-      elem.setProp("FCVCP",FCV)
-      elem.setProp("HIPCPV",nmbComb)
-    if(Vy>elem.getProp('Vy+')):
-      elem.setProp("Vy+",Vy)
-    if(Vy<elem.getProp('Vy-')):
-      elem.setProp("Vy-",Vy)
+    Vy1= elem.getVy1
+    FCV1= self.getYShearEfficiency(sectionClass,Vy1)
+    Vy2= elem.getVy2
+    FCV2= self.getYShearEfficiency(sectionClass,Vy2)
+
+    fcv= elem.getProp("FCVCP")
+    if(FCV1 > fcv[0]):
+      fcv[0]= FCV1
+      elem.setProp("HIPCPV1",nmbComb)
+    if(FCV2 > fcv[1]):
+      fcv[1]= FCV2
+      elem.setProp("HIPCPV2",nmbComb)
+    elem.setProp("FCVCP",fcv)

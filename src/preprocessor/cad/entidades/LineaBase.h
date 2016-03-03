@@ -53,6 +53,8 @@ class LineaBase: public Edge
     const Pnt *P1(void) const;
     const Pnt *P2(void) const;
 
+    virtual double getLambda(const Pos3d &) const= 0;
+
     virtual const Pnt *GetVertice(const size_t &i) const;
     virtual void SetVertice(const size_t &,Pnt *);
     void SetVertice(const size_t &,const size_t &);

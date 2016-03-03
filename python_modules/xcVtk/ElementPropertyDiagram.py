@@ -16,7 +16,9 @@ from postprocess import extrapolate_elem_attr
 
 
 class ElementPropertyDiagram(cd.ColoredDiagram):
-  '''Diagram of internal forces (N,My,Mz,T,Vy,Vz)'''
+  '''Diagram of element properties'''
+  envelopes= set(['N+','N-','My+','My-','Mz+','Mz-','Vy+','Vy-','Vz+','Vz-','T+','T-'])
+
   def __init__(self,scale,fUnitConv,sets,propertyName):
     super(ElementPropertyDiagram,self).__init__(scale,fUnitConv)
     self.conjuntos= sets
@@ -26,12 +28,73 @@ class ElementPropertyDiagram(cd.ColoredDiagram):
     # Append property values to diagram .
     #   eSet: Element set.
     elems= eSet.getElements
-    extrapolate_elem_attr.extrapolate_elem_function_attr(elems,self.propertyName,"getProp", self.propertyName)
-    for e in elems:
-      self.vDir= e.getVDirEjeDebilGlobales()
-      v0= e.getNodes[0].getProp(self.propertyName)
-      v1= e.getNodes[1].getProp(self.propertyName)
-      indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,v0,v1)
+    if(self.propertyName=='FCTNCP'):
+      for e in elems:
+        self.vDir= e.getVDirEjeDebilGlobales()
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    elif(self.propertyName=='FCVCP'):
+      for e in elems:
+        self.vDir= e.getVDirEjeDebilGlobales()
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    elif(self.propertyName=='N+'):
+      for e in elems:
+        self.vDir= e.getVDirEjeDebilGlobales()
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    elif(self.propertyName=='N-'):
+      for e in elems:
+        self.vDir= e.getVDirEjeDebilGlobales()
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    elif(self.propertyName=='My+'):
+      for e in elems:
+        self.vDir= e.getCoordTransf.getKVector 
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    elif(self.propertyName=='My-'):
+      for e in elems:
+        self.vDir= e.getCoordTransf.getKVector 
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    elif(self.propertyName=='Mz+'):
+      for e in elems:
+        self.vDir= e.getCoordTransf.getJVector 
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    elif(self.propertyName=='Mz-'):
+      for e in elems:
+        self.vDir= e.getCoordTransf.getJVector 
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    elif(self.propertyName=='Vy+'):
+      for e in elems:
+        self.vDir= e.getCoordTransf.getJVector 
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    elif(self.propertyName=='Vy-'):
+      for e in elems:
+        self.vDir= e.getCoordTransf.getJVector 
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    elif(self.propertyName=='Vz+'):
+      for e in elems:
+        self.vDir= e.getCoordTransf.getKVector 
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    elif(self.propertyName=='Vz-'):
+      for e in elems:
+        self.vDir= e.getCoordTransf.getKVector 
+        values= e.getProp(self.propertyName) # [back node value, front node value]
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1])      
+    else:
+      extrapolate_elem_attr.extrapolate_elem_function_attr(elems,self.propertyName,"getProp", self.propertyName)
+      for e in elems:
+        self.vDir= e.getVDirEjeDebilGlobales()
+        v0= e.getNodes[0].getProp(self.propertyName)
+        v1= e.getNodes[1].getProp(self.propertyName)
+        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,v0,v1)
 
   def agregaDiagrama(self):
     self.creaEstrucDatosDiagrama()

@@ -44,6 +44,13 @@ def create_attribute_at_nodes(elemSet,attributeName,initialValue):
   return nodeTags
 
 def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,initialValue= 0.0):
+  '''Extrapolates element's function values to the nodes.
+     elemSet: set of elements.
+     attributeName: name of the property which will be defined at the nodes.
+     function: name of the function to call for each element.
+     argument: name of the argument to send to the function (optional).
+     initialValue: initial value for the attribute defined at the nodes.
+  '''
   nodeTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
   #Calculate totals.
   for e in elemSet:

@@ -14,8 +14,6 @@ from xcVtk.malla_ef import Fields
 from xcVtk import vtk_grafico_diagrama_esfuerzos as gde
 
 
-
-
 class FigureBase(object):
   def __init__(self,pLabel,vLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
     self.partLabel= pLabel #Something like 'wall' or '2ndFloorDeck'
