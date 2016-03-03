@@ -41,15 +41,27 @@ class IJKRange(object):
   def getKMax(self):
     '''returns the value of the index K maximum in the range '''
     return self.ijkMax[2]
+  def getRange(self,index):
+    '''returns a list with the range of indexes between minIindex and maxIindex '''
+    mn= self.ijkMin[index]
+    mx= self.ijkMax[index]
+    retval= range(mn,mx)
+    if(mn==mx):
+      retval= [mn]
+    return retval
   def getIRange(self):
     '''returns a list with the range of indexes between minIindex and maxIindex '''
-    return range(self.getIMin(),self.getIMax())
+    return self.getRange(0)
   def getJRange(self):
     '''returns a list with the range of index between minJindex and maxJindex '''
-    return range(self.getJMin(),self.getJMax())
+    return self.getRange(1)
+
   def getKRange(self):
     '''returns a list with the range of indexes between minKindex and maxKindex '''
-    return range(self.getKMin(),self.getKMax())
+    return self.getRange(2)
+
+  def __str__(self):
+    return 'IRange: ' + str(self.getIRange()) + ' JRange: ' + str(self.getJRange()) + ' KRange: ' + str(self.getKRange())
 
 
 def getLin2Pts(lstLinBusq,tPto1,tPto2):
