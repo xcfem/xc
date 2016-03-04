@@ -44,11 +44,8 @@ class IJKRange(object):
   def getRange(self,index):
     '''returns a list with the range of indexes between minIindex and maxIindex '''
     mn= self.ijkMin[index]
-    mx= self.ijkMax[index]
-    retval= range(mn,mx)
-    if(mn==mx):
-      retval= [mn]
-    return retval
+    mx= self.ijkMax[index]+1 #Last index included
+    return range(mn,mx)
   def getIRange(self):
     '''returns a list with the range of indexes between minIindex and maxIindex '''
     return self.getRange(0)
