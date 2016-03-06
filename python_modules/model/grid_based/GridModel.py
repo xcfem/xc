@@ -26,7 +26,7 @@ class NamedObjectsMap(dict):
     self[obj.name]= obj
 
 class MaterialData(object):
-  '''Base class to construct some material classes
+  '''Base class to construct some material definition classes
   Attributes:
     name:         name identifying the material or section
     E:            Young’s modulus of the material
@@ -376,10 +376,22 @@ class ElasticFoundationRangesMap(NamedObjectsMap):
       apel= self[key]
       apel.generateSprings(key,dicGeomEnt,self.muellX,self.muellY,self.muellZ)
 
-class LoadOnSurfaces(object):
-  '''Load over a list of surfaces (defined as range lists).'''
-  def __init__(self,name, surfaces):
+class LoadBase(object):
+  '''Base class for loads.
+     Attributes:
+     name:     name identifying the load
+  '''
+  def __init__(self,name):
     self.name= name
+
+
+class LoadOnSurfaces(LoadBase):
+  '''Load over a list of surfaces (defined as range lists). 
+  Attributes:
+    name:     name identifying the load
+    surfaces: list of names of material-surfaces sets'''
+  def __init__(self,name, surfaces):
+    super(LoadOnSurfaces,self).__init__(name)
     self.surfaces= surfaces
 
 class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
@@ -401,6 +413,23 @@ class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
       masaUnit= mat.getAreaDensity()
       vectorCarga=masaUnit*vectorAceleracion
       csup.applyVector3dUniformLoadGlobal(vectorCarga)
+
+class LoadOnPoints(LoadBase):
+  '''Load that acts on a point 
+  Attributes:
+    name:     name identifying the load
+    points: list of points (list of geom.Pos3d(x,y,z)) where the load must be applied.
+    loadVector: xc.Vector with the six components of the load: xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
+  '''
+  def __init__(self,name, points, loadVector):
+    super(LoadOnPoints,self).__init__(name)
+    self.points= points
+    self.loadVector= loadVector
+
+  def applyLoad(self,nodes,loadPattern):
+     for pos in self.points:
+       nod=nodes.getNearestNode(pos)
+       loadPattern.newNodalLoad(nod.tag,self.vectorCarga)
 
 class PressureLoadOnSurfaces(LoadOnSurfaces):
   '''Uniform load applied to shell elements
@@ -505,13 +534,7 @@ class LoadState(object):
     #Cargas puntuales
     for cpunt in self.pointLoad:
       print 'pointLoad:', cpunt
-      for i in range(len(pointLoad[cpunt]['coordPto'])):
-        cpto=pointLoad[cpunt]['coordPto'][i]
-        #print key,cpto
-        posP= geom.Pos3d(cpto[0],cpto[1],cpto[2])
-        nod=totNod.getNearestNode(posP)
-        vectorCarga=xc.Vector(pointLoad[cpunt]['qPunt'])
-        lPatterns[key].newNodalLoad(nod.tag,vectorCarga)
+      cpunt.applyLoad(totNod,lPatterns[key])
 
   def applyEarthPressureLoads(self,dicGeomEnt):
     for ep in self.earthPressLoad:
@@ -523,7 +546,7 @@ class LoadState(object):
       print 'tempGrad:', gt.name
       gt.applyLoad(lp)
 
-  def applyLoads(self,lp,dicGeomEnt):
+  def applyLoads(self,lp,dicGeomEnt,nodes):
     #Peso propio
     self.applyInertialLoads()
   
@@ -533,7 +556,7 @@ class LoadState(object):
   
     #Cargas lineales
     #Cargas puntuales
-    self.applyPunctualLoads()
+    self.applyPunctualLoads(nodes,lp)
   
     #Empuje de tierras
     self.applyEarthPressureLoads(dicGeomEnt)
@@ -561,7 +584,7 @@ class LoadStateMap(NamedObjectsMap):
       cargas.getLoadPatterns.currentLoadPattern= key
       loadState= self[key]
       #Peso propio
-      loadState.applyLoads(retval[key],dicGeomEnt)
+      loadState.applyLoads(retval[key],dicGeomEnt,preprocessor.getNodeLoader)
     return retval
 
 class GridModel(object):
