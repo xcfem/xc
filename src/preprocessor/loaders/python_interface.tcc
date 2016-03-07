@@ -21,7 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 class_<XC::Loader, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("Loader", no_init)
-   ;
+.add_property("getDomain", make_function( &XC::Loader::getDomain, return_internal_reference<>() ),"Returns a reference to the domain.")
+    ;
 
 XC::Node *(XC::NodeLoader::*nuevoNodoFromXYZ)(const double &x,const double &y,const double &z)= &XC::NodeLoader::nuevoNodo;
 XC::Node *(XC::NodeLoader::*nuevoNodoFromXY)(const double &x,const double &y)= &XC::NodeLoader::nuevoNodo;

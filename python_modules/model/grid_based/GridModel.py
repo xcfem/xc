@@ -389,7 +389,7 @@ class LoadOnSurfaces(LoadBase):
   '''Load over a list of surfaces (defined as range lists). 
   Attributes:
     name:     name identifying the load
-    surfaces: list of names of material-surfaces sets'''
+    surfaces: list of names of material-surfaces sets, e.g. [deck,wall]'''
   def __init__(self,name, surfaces):
     super(LoadOnSurfaces,self).__init__(name)
     self.surfaces= surfaces
@@ -399,8 +399,8 @@ class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
   surfaces 
   Attributes:
     name:     name identifying the load
-    surfaces: list of names of material-surfaces sets
-    accel:    list with the three components of the acceleration vector
+    surfaces: list of names of material-surfaces sets, e.g. [deck,wall]
+    accel:    list with the three components of the acceleration vector [ax,ay,az]
   '''
   def __init__(self,name, surfaces, accel):
     super(InertialLoadOnMaterialSurfaces,self).__init__(name, surfaces)
@@ -415,7 +415,7 @@ class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
       csup.applyVector3dUniformLoadGlobal(vectorCarga)
 
 class LoadOnPoints(LoadBase):
-  '''Load that acts on a point 
+  '''Load that acts on one or several points 
   Attributes:
     name:     name identifying the load
     points: list of points (list of geom.Pos3d(x,y,z)) where the load must be applied.
@@ -428,8 +428,8 @@ class LoadOnPoints(LoadBase):
 
   def applyLoad(self,nodes,loadPattern):
      for pos in self.points:
-       nod=nodes.getNearestNode(pos)
-       loadPattern.newNodalLoad(nod.tag,self.vectorCarga)
+       nod= nodes.getDomain.getMesh.getNearestNode(pos)
+       loadPattern.newNodalLoad(nod.tag,self.loadVector)
 
 class PressureLoadOnSurfaces(LoadOnSurfaces):
   '''Uniform load applied to shell elements
@@ -445,6 +445,7 @@ class PressureLoadOnSurfaces(LoadOnSurfaces):
 
   def applyLoad(self,dicGeomEnt):
     loadVector= xc.Vector(self.loadVector)
+    print 'surf', self.surfaces
     self.surfaces.applyLoadVector(dicGeomEnt,loadVector)
 
 class EarthPressureOnSurfaces(LoadOnSurfaces):
@@ -529,12 +530,13 @@ class LoadState(object):
       print 'unifVectLoad:', load.name
       load.applyLoad(dicGeomEnt)
 
-  def applyPunctualLoads(self):
+
+  def applyPunctualLoads(self,nodes,lp):
     #Cargas lineales
     #Cargas puntuales
     for cpunt in self.pointLoad:
       print 'pointLoad:', cpunt
-      cpunt.applyLoad(totNod,lPatterns[key])
+      cpunt.applyLoad(nodes,lp)
 
   def applyEarthPressureLoads(self,dicGeomEnt):
     for ep in self.earthPressLoad:
@@ -739,6 +741,7 @@ class GridModel(object):
     if(hasattr(self,'loadStates')):
       self.lPatterns= self.loadStates.applyLoads(self.getPreprocessor(),self.dicGeomEnt)
       for cs in self.conjSup: #???
+        print 'cs',cs
         nbrset='set'+cs
         self.lPatterns[nbrset]= grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[cs].lstSup,nbrset)
     return self.dicGeomEnt
