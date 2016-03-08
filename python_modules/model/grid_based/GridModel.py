@@ -445,7 +445,6 @@ class PressureLoadOnSurfaces(LoadOnSurfaces):
 
   def applyLoad(self,dicGeomEnt):
     loadVector= xc.Vector(self.loadVector)
-    print 'surf', self.surfaces
     self.surfaces.applyLoadVector(dicGeomEnt,loadVector)
 
 class EarthPressureOnSurfaces(LoadOnSurfaces):
@@ -486,7 +485,6 @@ class StrainGradientLoadOnSurfaces(StrainLoadOnSurfaces):
 
   def applyLoad(self,lp):
     for csup in self.surfaces:
-      #print csup
       mat= csup.material
       esp= mat.thickness
       nabla= self.epsilon/esp
@@ -535,7 +533,7 @@ class LoadState(object):
     #Cargas lineales
     #Cargas puntuales
     for cpunt in self.pointLoad:
-      print 'pointLoad:', cpunt
+      print 'pointLoad:', cpunt.name
       cpunt.applyLoad(nodes,lp)
 
   def applyEarthPressureLoads(self,dicGeomEnt):
