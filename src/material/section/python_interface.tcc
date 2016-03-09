@@ -23,6 +23,7 @@
 
 const XC::Vector &(XC::SectionForceDeformation::*getStressResultantVector)(void) const= &XC::SectionForceDeformation::getStressResultant;
 class_<XC::SectionForceDeformation, XC::SectionForceDeformation *, bases<XC::Material>, boost::noncopyable >("SectionForceDeformation", no_init)
+  .add_property("getType",make_function(&XC::SectionForceDeformation::getType, return_internal_reference<>()),"Returns section type.")
   .def("getStressResultantComponent",&XC::SectionForceDeformation::getStressResultantByName)
   .def("getStressResultant",make_function(getStressResultantVector, return_internal_reference<>()))
   .def("getSectionDeformationByName",&XC::SectionForceDeformation::getSectionDeformationByName)

@@ -116,10 +116,18 @@ class ZeroLengthSection: public Element0D
 
     void setDomain(Domain *theDomain);
 
+    inline int getOrder(void) const
+      { return order; }
+   
     // public methods to set the state of the element    
     int commitState(void);
     int revertToLastCommit(void);        
-    int revertToStart(void);        
+    int revertToStart(void);
+
+    //! @brief Return the matrix that transforms internal forces into element reactions.
+    inline const Matrix &getInternalForcesTransformation(void) const
+      { return A; }
+    void setUpVectors(const Vector &, const Vector &);
 
     // public methods to obtain stiffness, mass, damping and residual information    
     const Matrix &getTangentStiff(void) const;

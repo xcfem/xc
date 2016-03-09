@@ -111,8 +111,8 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     for c in setConstraints:
       vtx= vtk.vtkIdList()
       vtx.InsertNextId(c.getNodeIdx)
-      if(c.getVtkCellType!="line2"):
-         recordGrid.uGrid.InsertNextCell(c.getVtkCellType,vtx)
+      if(c.getVtkCellType!= vtk.VTK_LINE):
+        recordGrid.uGrid.InsertNextCell(c.getVtkCellType,vtx)
 
   def defineEscenaMalla(self, preprocessor,recordGrid,field):
     # Define la escena de la malla en el dispositivo de salida.

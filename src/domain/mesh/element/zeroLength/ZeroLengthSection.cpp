@@ -221,9 +221,9 @@ void XC::ZeroLengthSection::setDomain(Domain *theDomain)
       }
 
     // Check that length is zero within tolerance
-    const XC::Vector &end1Crd = theNodes[0]->getCrds();
-    const XC::Vector &end2Crd = theNodes[1]->getCrds();
-    const XC::Vector diff = end1Crd - end2Crd;
+    const Vector &end1Crd = theNodes[0]->getCrds();
+    const Vector &end2Crd = theNodes[1]->getCrds();
+    const Vector diff = end1Crd - end2Crd;
     double L  = diff.Norm();
     double v1 = end1Crd.Norm();
     double v2 = end2Crd.Norm();
@@ -238,8 +238,7 @@ void XC::ZeroLengthSection::setDomain(Domain *theDomain)
     // call the base class method
     XC::Element0D::setDomain(theDomain);
 
-    // Set up the A matrix
-    setTransformation();
+    setTransformation(); // Set up the A matrix
   }
 
 int XC::ZeroLengthSection::commitState()
@@ -539,6 +538,15 @@ void XC::ZeroLengthSection::setTransformation(void)
         for(int j=0;j<numDOF/2;j++)
           tran(i,j) = -tran(i,j+numDOF/2);
       }
+  }
+
+//! @brief Set up the transformation matrix for orientation
+//! @param x: vector components in global coordinates defining local x-axis (vector x)
+//! @param y: vector components in global coordinates defining vector yp which lies in the local x-y plane for the element. The local z-axis is defined by the cross product between the vectors x and yp
+void XC::ZeroLengthSection::setUpVectors(const Vector &x, const Vector &yp)
+  {
+    Element0D::setUpVectors(x,yp);
+    setTransformation(); // Set up the A matrix
   }
 
 void XC::ZeroLengthSection::computeSectionDefs(void) const

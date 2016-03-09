@@ -102,9 +102,12 @@ class_<XC::ElementBase<27>, bases<XC::Element >, boost::noncopyable >("ElementBa
 
 class_<XC::Element0D , bases<XC::ElementBase<2>>, boost::noncopyable >("Element0D", no_init)
   .def("setupVectors",&XC::Element0D::setUpVectors)
+  .add_property("getNumDOF",&XC::Element0D::getNumDOF,"Returns element number of DOFs (6 or 12).")
+  .add_property("getDimension",&XC::Element0D::getDimension,"Returns element dimension.")
   .add_property("getIVector",make_function(&XC::Element0D::getX, return_internal_reference<>() ),"Returns i vector.")
   .add_property("getJVector",make_function(&XC::Element0D::getY, return_internal_reference<>() ),"Returns j vector.")
   .add_property("getKVector",make_function(&XC::Element0D::getZ, return_internal_reference<>() ),"Returns k vector.")
+  .add_property("getTransformation",make_function(&XC::Element0D::getTransformation, return_internal_reference<>() ),"Returns element transformation.")
   ;
 
 

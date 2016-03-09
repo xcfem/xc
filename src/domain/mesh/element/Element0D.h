@@ -75,7 +75,10 @@ class Element0D : public ElementBase<2>
     const Vector &getX(void) const;
     const Vector &getY(void) const;
     const Vector &getZ(void) const;
-    void setUpVectors(const Vector &x, const Vector &yp);
+    inline virtual const Matrix &getTransformation(void) const
+      { return transformation; }
+
+    virtual void setUpVectors(const Vector &, const Vector &);
   };
 
 

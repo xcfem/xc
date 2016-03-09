@@ -146,8 +146,8 @@ const XC::Vector &XC::Element0D::getZ(void) const
   }
 
 //! @brief Set up the transformation matrix for orientation
-//! @param x: Componentes del eje x local, expresadas en coordenadas globales.
-//! @param y: Componentes de un vector contenido en el plano xy local, expresadas en coordenadas globales.
+//! @param x: vector components in global coordinates defining local x-axis (vector x)
+//! @param y: vector components in global coordinates defining vector yp which lies in the local x-y plane for the element. The local z-axis is defined by the cross product between the vectors x and yp
 void XC::Element0D::setUpVectors(const Vector &x, const Vector &yp)
   { 
     // check that vectors for orientation are correct size

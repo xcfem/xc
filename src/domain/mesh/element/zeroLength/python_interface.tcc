@@ -28,8 +28,10 @@ class_<XC::ZeroLength, bases<XC::Element0D>, boost::noncopyable >("ZeroLength", 
   ;
 
 class_<XC::ZeroLengthSection, bases<XC::Element0D>, boost::noncopyable >("ZeroLengthSection", no_init)
+  .add_property("getOrder",&XC::ZeroLengthSection::getOrder,"Returns element order (order of the underlying section deformation vector).")
   .def("getSection",make_function(&XC::ZeroLengthSection::getSection,return_internal_reference<>()),"Returns element's section.")
   .def("getMaterial",make_function(&XC::ZeroLengthSection::getSection,return_internal_reference<>()),"Returns element's section.")
+  .add_property("getInternalForcesTransformation",make_function(&XC::ZeroLengthSection::getInternalForcesTransformation, return_internal_reference<>() ),"Returns element transformation.")
   ;
 
 class_<XC::ZeroLengthContact, bases<XC::Element0D>, boost::noncopyable >("ZeroLengthContact", no_init);
