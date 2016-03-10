@@ -10,9 +10,9 @@ import matplotlib.pyplot as plt
 from matplotlib.path import Path
 import matplotlib.patches as patches
 
-def plotArmaduras(armaduras, ctx):
+def plotArmaduras(reinforcement, ctx):
   '''draw section rebars in a postcript file.'''
-  for reinfLayer in armaduras:
+  for reinfLayer in reinforcement:
     barras= reinfLayer.getReinfBars
     for b in barras:
       ptPlot= b.getPos2d
@@ -41,8 +41,8 @@ def plotGeomSeccion(geomSection, path):
     trf.plotPolygon(r.getPoligono(),ctx)
   ctx.stroke()
   ctx.set_line_width(trf.scale/300000)
-  armaduras= geomSection.getReinfLayers
-  plotArmaduras(armaduras,ctx)
+  reinforcement= geomSection.getReinfLayers
+  plotArmaduras(reinforcement,ctx)
   trf.plotEjesYZ(ctx)
   surface.set_eps(True)
   ctx.show_page()

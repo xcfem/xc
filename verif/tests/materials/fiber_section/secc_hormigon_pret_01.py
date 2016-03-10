@@ -21,13 +21,13 @@ def gmSecHP01(nmbGeomSecc,concrDiagName,nmbDiagAceroPret):
   horm.pMin= geom.Pos2d(-depth/2.0,-width/2.0)
   horm.pMax= geom.Pos2d(depth/2.0,width/2.0)
   # Armadura
-  armaduras= geomSecc.getReinfLayers
-  armaduraInf= armaduras.newStraightReinfLayer(nmbDiagAceroPret)
+  reinforcement= geomSecc.getReinfLayers
+  armaduraInf= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
   armaduraInf.numReinfBars= 2
   armaduraInf.barArea= areaCordones
   armaduraInf.p1= geom.Pos2d(cover-depth/2.0,cover-width/2.0)
   armaduraInf.p2= geom.Pos2d(cover-depth/2.0,width/2.0-cover)
-  armaduraSup= armaduras.newStraightReinfLayer(nmbDiagAceroPret)
+  armaduraSup= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
   armaduraSup.numReinfBars= 2
   armaduraSup.barDiam= 16e-3
   armaduraSup.barArea= areaCordones

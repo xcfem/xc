@@ -49,9 +49,9 @@ def shearResistanceConcretePryOut(NRkp, NRkc, hEf):
 Coeficiente que introduce la influencia del tipo de refuerzo empleado en hormigón fisurado
  en la expresión 5.8 de EOTA TR029, calculado según el apartado g) del artículo 5.2.3.4 de EOTA TR029.
   descr: Descriptor que puede tomar los valores:
-  1: Anclaje en hormigón fisurado o no fisurado sin armaduras de refuerzo en el borde.
-  2: Anclaje en hormigón fisurado con armaduras de refuerzo en el borde (diámetro > 12mm).
-  3: Anclaje en hormigón fisurado con armaduras de refuerzo en el borde y estribos próximos entre si (separados menos de 10 cm).
+  1: Anclaje en hormigón fisurado o no fisurado sin reinforcement de refuerzo en el borde.
+  2: Anclaje en hormigón fisurado con reinforcement de refuerzo en el borde (diámetro > 12mm).
+  3: Anclaje en hormigón fisurado con reinforcement de refuerzo en el borde y estribos próximos entre si (separados menos de 10 cm).
 '''
 def psiReVFactor(descr):
   return ifte(descr<=1,1.0,ifte(descr<=2,1.2,1.4))

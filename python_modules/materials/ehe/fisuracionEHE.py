@@ -35,11 +35,11 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
 
   def printParams(self):
     # Imprime los parámetros de fisuración de la sección.
-    print "Num. armaduras a tracción: ",self.numBarrasTracc,"\n"
-    print "Separación entre armaduras traccionadas; s= ",self.rebarsSpacingTracc," m\n"
-    print "Area de las armaduras traccionadas; As= ",self.areaRebarTracc*1e4," cm2\n"
+    print "Num. reinforcement a tracción: ",self.numBarrasTracc,"\n"
+    print "Separación entre reinforcement traccionadas; s= ",self.rebarsSpacingTracc," m\n"
+    print "Area de las reinforcement traccionadas; As= ",self.areaRebarTracc*1e4," cm2\n"
     print "Area eficaz; AcEf= ",self.AcEfNeta*1e4," cm2\n"
-    print "Centro de gravedad de las armaduras traccionadas; CDG= (",self.yCDGBarrasTracc,",",self.zCDGBarrasTracc,") m\n"
+    print "Centro de gravedad de las reinforcement traccionadas; CDG= (",self.yCDGBarrasTracc,",",self.zCDGBarrasTracc,") m\n"
     print "Tensión media en barras traccionadas= ",self.tensMediaBarrasTracc/1e6," MPa\n"
     print "Tensión media en fisuración en barras traccionadas= ",self.tensSRMediaBarrasTracc/1e6," MPa\n"
     print "Deformación máxima en la zona traccionada de hormigón; eps1= ",self.eps1*1e3," por mil.\n"

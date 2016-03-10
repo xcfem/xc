@@ -33,8 +33,8 @@ nervio= regiones.newQuadRegion("hormigon")# Nervio
 nervio.pMin= geom.Pos2d(0.0,b/2-bw/2)
 nervio.pMax= geom.Pos2d(d-hf,b/2+bw/2)
 
-armaduras= geomPrueba.getReinfLayers
-armaduraA= armaduras.newStraightReinfLayer("acero")
+reinforcement= geomPrueba.getReinfLayers
+armaduraA= reinforcement.newStraightReinfLayer("acero")
 armaduraA.numReinfBars= 5
 armaduraA.barArea= areaBar
 armaduraA.p1= geom.Pos2d(0.0,b/2-bw/2+0.05)

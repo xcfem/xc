@@ -24,13 +24,13 @@ fmt5_3f= '{:5.3f}'
 fmt6_3f= '{:6.3f}'
 
 class RecordFamArmaduraPrincipal(object):
-  # Parámetros que se obtienen de cada familia de armaduras
+  # Parámetros que se obtienen de cada familia de reinforcement
 
   def __init__(self,reinfLayer):
     self.nmb= reinfLayer.nombre
     self.nRebars= reinfLayer.numReinfBars # Número de las barras.
     self.rebarsDiam= reinfLayer.barDiameter # Diámetro de las barras.
-    self.areaRebar= reinfLayer.barArea # Area total de la familia de armaduras
+    self.areaRebar= reinfLayer.barArea # Area total de la familia de reinforcement
     self.coverMec= reinfLayer.getRecubrimiento() # Valor mínimo del coverrimiento mecánico.
     self.cdgBarras= reinfLayer.getCdg() # Posición del centro de gravedad.
 
@@ -88,11 +88,11 @@ class SectionInfo(object):
     self.PyzB= self.geomSection.getPyzSeccBruta()
 
 
-    self.armaduras= self.geomSection.getReinfLayers
-    self.areaArmaduraPrincipal= self.armaduras.getAreaSeccBruta()
-    self.coverrimiento= self.armaduras.getRecubrimiento
+    self.reinforcement= self.geomSection.getReinfLayers
+    self.areaArmaduraPrincipal= self.reinforcement.getAreaSeccBruta()
+    self.coverrimiento= self.reinforcement.getRecubrimiento
     self.lista_fams_armadura= []
-    for f in self.armaduras:
+    for f in self.reinforcement:
       datosFam= RecordFamArmaduraPrincipal(f)
       self.lista_fams_armadura.append(datosFam)
  
@@ -168,7 +168,7 @@ class SectionInfo(object):
     fileHandler.write('\\hline\n')
     fileHandler.write('\\textbf{Armadura pasiva}:\\\\\n')
     fileHandler.write('\\hline\n')
-    writeMainReinforcement(self.armaduras,self.AB,fileHandler)
+    writeMainReinforcement(self.reinforcement,self.AB,fileHandler)
     fileHandler.write('\\hline\n')
     fileHandler.write('Familias de armadura de cortante:\\\\\n')
     fileHandler.write('\\hline\n')

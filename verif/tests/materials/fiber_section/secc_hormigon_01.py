@@ -27,14 +27,14 @@ def gmSecHA01(nmbGeomSecc,defSec,concrDiagName,nmbDiagAceroArmar):
   horm.nDivJK= defSec['nJK']
   horm.pMin= geom.Pos2d(-(defSec['depth']/2.0),-(defSec['width']/2.0))
   horm.pMax= geom.Pos2d(defSec['depth']/2.0,defSec['width']/2.0)
-  armaduras= geomSecc.getReinfLayers
-  armaduraInf= armaduras.newStraightReinfLayer(nmbDiagAceroArmar)
+  reinforcement= geomSecc.getReinfLayers
+  armaduraInf= reinforcement.newStraightReinfLayer(nmbDiagAceroArmar)
   armaduraInf.numReinfBars= 2
   armaduraInf.barDiam= 16e-3
   armaduraInf.barArea= defSec['areaBarra']
   armaduraInf.p1= geom.Pos2d(defSec['cover']-defSec['depth']/2.0,defSec['cover']-defSec['width']/2.0) # Armadura inferior.
   armaduraInf.p2= geom.Pos2d(defSec['cover']-defSec['depth']/2.0,defSec['width']/2.0-defSec['cover'])
-  armaduraSup= armaduras.newStraightReinfLayer(nmbDiagAceroArmar)
+  armaduraSup= reinforcement.newStraightReinfLayer(nmbDiagAceroArmar)
   armaduraSup.numReinfBars= 2
   armaduraSup.barDiam= 16e-3
   armaduraSup.barArea= defSec['areaBarra']

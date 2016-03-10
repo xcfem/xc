@@ -37,14 +37,14 @@ geomCuadFibras= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibra
 y1= width/2.0
 z1= depth/2.0
 
-armaduras= geomCuadFibras.getReinfLayers
-armaduraA= armaduras.newStraightReinfLayer("acero")
+reinforcement= geomCuadFibras.getReinfLayers
+armaduraA= reinforcement.newStraightReinfLayer("acero")
 armaduraA.numReinfBars= 2
 armaduraA.barArea= As
 armaduraA.p1= geom.Pos2d(y0-depth/2.0,z0-width/2.0)
 armaduraA.p2= geom.Pos2d(y0+depth/2.0,z0-width/2.0)
 
-armaduraB= armaduras.newStraightReinfLayer("acero")
+armaduraB= reinforcement.newStraightReinfLayer("acero")
 armaduraB.numReinfBars= 2
 armaduraB.barArea= As
 armaduraB.p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)

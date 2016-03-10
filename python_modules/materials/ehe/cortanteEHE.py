@@ -39,14 +39,14 @@ class ParamsCortante(object):
 
   alphaL= 1.0 #Factor que depende de la transferencia de pretensado.
   AsTrsv= 0.0 #Área de la armadura de cortante.
-  alpha= math.radians(90) #Ángulo de las armaduras de cortante con el eje de la pieza (figura 44.2.3.1 EHE-08).
+  alpha= math.radians(90) #Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1 EHE-08).
   theta= math.radians(45) #Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1 EHE-08).
   thetaMin= math.atan(0.5) #Valor mínimo del angulo entre las bielas de compresión del hormigón y el eje de la pieza.
   thetaMax= math.atan(2) #Valor mínimo del angulo entre las bielas de compresión del hormigón y el eje de la pieza.
 
   thetaFisuras= 0.0 #Angulo de las fisuras con el eje de la pieza.
   Vcu= 0.0 # Contribución del hormigón a la resistencia al esfuerzo cortante.
-  Vsu= 0.0 # Contribución de las armaduras a cortante a la resistencia al esfuerzo cortante.
+  Vsu= 0.0 # Contribución de las reinforcement a cortante a la resistencia al esfuerzo cortante.
   Vu1= 0.0 #Agotamiento por compresión oblicua del alma.
   Vu2= 0.0 #Agotamiento por tracción en el alma.
   Vu= 0.0 #Cortante último de la sección.

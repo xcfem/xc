@@ -96,7 +96,7 @@ def xLaminaConstruyeModeloFibras(nmbRegDatosScc1, nmbRegDatosScc2):
     VzCP= 0.0 #Valor del cortante según z en la hipótesis que produce el caso pésimo.
     thetaCP= 0.0 #Ángulo de las bielas de hormigón en el caso pésimo.
     VcuCP= 0.0 #Valor de la contribución del hormigón a la resistencia al esfuerzo cortante en el caso pésimo.
-    VsuCP= 0.0 #Valor de la contribución de las armaduras a la resistencia al esfuerzo cortante en el caso pésimo.
+    VsuCP= 0.0 #Valor de la contribución de las reinforcement a la resistencia al esfuerzo cortante en el caso pésimo.
     Vu1CP= 0.0 #Valor del agotamiento por compresión oblicua del alma en el caso pésimo.
     Vu2CP= 0.0 #Valor del agotamiento por tracción en el alma en el caso pésimo.
     VuCP= 0.0 #Valor del cortante último en la hipótesis que produce el caso pésimo.

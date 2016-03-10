@@ -12,7 +12,7 @@ def getPerdidaTensionPenetracionCunaTendonRectoCorto(a, L, Ep):
 Pérdidas por acortamiento elástico del hormigón en tendones
    pretensados.
    sigma_cp: Tensión de compresión en el hormigón, a nivel del centro de gravedad de
-             las armaduras activas, producida por el pretensado una
+             las reinforcement activas, producida por el pretensado una
              vez descontadas la pérdida por penetración de cuñas
    Ep: Módulo de deformación longitudinal de la armadura activa (190e9).
    Ecj: Módulo de deformación longitudinal del hoirmigón en el momento

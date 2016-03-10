@@ -11,7 +11,7 @@ Funciones para la comprobación a torsión según el artículo
 class TorsionParameters(object):
   """Torsion parameters"""
   h0= 0.0  # Espesor real de la pared.
-  c= 0.0  # Recubrimiento de las armaduras longitudinales.
+  c= 0.0  # Recubrimiento de las reinforcement longitudinales.
 
   seccionHuecaEficaz= 0.0 # Contorno de la sección
   contornoSecc= geom.Poligono2d()  # Contorno de la sección
@@ -39,7 +39,7 @@ gmSectionName: Identificador de la definición geométrica de la sección.
 nmbParamsTorsión: Identificador del registro que contiene los parámetros de cálculo
                 de la resistencia a torsión.
 h0: Espesor real de la pared.
-c: Recubrimiento de las armaduras longitudinales.
+c: Recubrimiento de las reinforcement longitudinales.
 
 '''
 def calcParamsSeccionHuecaEficaz(geomSeccion, h0, c):

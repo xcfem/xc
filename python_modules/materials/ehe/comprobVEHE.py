@@ -25,7 +25,7 @@ Nd: Axil de cálculo (positivo si es de tracción).
 Ac: Area total de la sección de hormigón.
 b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
 d: Canto útil.
-alpha: Ángulo de las armaduras de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
+alpha: Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
 theta: Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1.a EHE).
   
 '''
@@ -49,10 +49,10 @@ b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el ar
 d: Canto útil expresado en metros.
 AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
 a una distancia mayor que el depth útil de la sección en estudio.
-fyd: Resistencia de cálculo de las armaduras pasivas (artículo 38.3 EHE).
+fyd: Resistencia de cálculo de las reinforcement pasivas (artículo 38.3 EHE).
 AsAct: Área de la de la armadura longitudinal activa traccionada anclada
 a una distancia mayor que el depth útil de la sección en estudio.
-fpd: Resistencia de cálculo del acero de las armaduras activas (artículo 38.6 EHE).
+fpd: Resistencia de cálculo del acero de las reinforcement activas (artículo 38.6 EHE).
   
 '''
 def getFcv(fact, fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
@@ -72,10 +72,10 @@ b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el ar
 d: Canto útil expresado en metros.
 AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
 a una distancia mayor que el depth útil de la sección en estudio.
-fyd: Resistencia de cálculo de las armaduras pasivas (artículo 38.3 EHE).
+fyd: Resistencia de cálculo de las reinforcement pasivas (artículo 38.3 EHE).
 AsAct: Área de la de la armadura longitudinal activa traccionada anclada
 a una distancia mayor que el depth útil de la sección en estudio.
-fpd: Resistencia de cálculo del acero de las armaduras activas (artículo 38.6 EHE).
+fpd: Resistencia de cálculo del acero de las reinforcement activas (artículo 38.6 EHE).
   
 '''
 def getVu2SIN(fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
@@ -92,10 +92,10 @@ d: Canto útil expresado en metros.
 theta: Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1.a EHE).
 AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
 a una distancia mayor que el depth útil de la sección en estudio.
-fyd: Resistencia de cálculo de las armaduras pasivas (artículo 38.3 EHE).
+fyd: Resistencia de cálculo de las reinforcement pasivas (artículo 38.3 EHE).
 AsAct: Área de la de la armadura longitudinal activa traccionada anclada
 a una distancia mayor que el depth útil de la sección en estudio.
-fpd: Resistencia de cálculo del acero de las armaduras activas (artículo 38.6 EHE).
+fpd: Resistencia de cálculo del acero de las reinforcement activas (artículo 38.6 EHE).
 sgxd: Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
 sgyd: Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
   
@@ -116,7 +116,7 @@ def getVcu(fck, Nd, Ac, b0, d, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd):
 Devuelve el valor de Vsu (contribución de la armadura transversal de alma a la resistencia a cortante)
    para piezas CON armadura de cortante, según el artículo 44.2.3.2.2 de EHE.
 z: Brazo mecánico.
-alpha: Ángulo de las armaduras de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
+alpha: Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
 theta: Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1.a EHE).
 AsTrsv: Área de la armadura transversal.
 fyd: Resistencia de cálculo de la armadura transversal.
@@ -136,14 +136,14 @@ Ac: Area total de la sección de hormigón.
 b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
 d: Canto útil expresado en metros.
 z: Brazo mecánico.
-alpha: Ángulo de las armaduras de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
+alpha: Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
 theta: Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1.a EHE).
 AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
 a una distancia mayor que el depth útil de la sección en estudio.
-fyd: Resistencia de cálculo de las armaduras pasivas (artículo 38.3 EHE).
+fyd: Resistencia de cálculo de las reinforcement pasivas (artículo 38.3 EHE).
 AsAct: Área de la de la armadura longitudinal activa traccionada anclada
 a una distancia mayor que el depth útil de la sección en estudio.
-fpd: Resistencia de cálculo del acero de las armaduras activas (artículo 38.6 EHE).
+fpd: Resistencia de cálculo del acero de las reinforcement activas (artículo 38.6 EHE).
 sgxd: Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
 sgyd: Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
 AsTrsv: Área de la armadura transversal.
@@ -169,14 +169,14 @@ Ac: Area total de la sección de hormigón.
 b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
 d: Canto útil expresado en metros.
 z: Brazo mecánico.
-alpha: Ángulo de las armaduras de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
+alpha: Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
 theta: Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1.a EHE).
 AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
 a una distancia mayor que el depth útil de la sección en estudio.
-fyd: Resistencia de cálculo de las armaduras pasivas (artículo 38.3 EHE).
+fyd: Resistencia de cálculo de las reinforcement pasivas (artículo 38.3 EHE).
 AsAct: Área de la de la armadura longitudinal activa traccionada anclada
 a una distancia mayor que el depth útil de la sección en estudio.
-fpd: Resistencia de cálculo del acero de las armaduras activas (artículo 38.6 EHE).
+fpd: Resistencia de cálculo del acero de las reinforcement activas (artículo 38.6 EHE).
 sgxd: Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
 sgyd: Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
 AsTrsv: Área de la armadura transversal.
@@ -220,7 +220,7 @@ class ParamsCortante(object):
   sigmaXD= 0.0 # Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
   sigmaYD= 0.0 # Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
 
-  angAlpha= math.pi/2 # Ángulo de las armaduras de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
+  angAlpha= math.pi/2 # Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
   angTheta= math.pi/6 # Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1.a EHE).
   cortanteUltimo= 0.0
 
@@ -238,7 +238,7 @@ class ParamsCortante(object):
 
   # Imprime los parámetros de cortante de la sección.
   def printParams(self):
-    print "Area de las armaduras traccionadas; As= ",self.areaRebarTracc*1e4," cm2"
+    print "Area de las reinforcement traccionadas; As= ",self.areaRebarTracc*1e4," cm2"
     print "Área de la armadura transversal; AsTrsv= ",self.areaShReinfBranchsTrsv*1e4," cm2"
     print "Tensión normal de cálculo = sigmaXD",self.sigmaXD/1e6," MPa"
     print "Canto útil; d= ",self.depthUtil," m"

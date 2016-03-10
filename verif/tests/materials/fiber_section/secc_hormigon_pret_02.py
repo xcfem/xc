@@ -52,41 +52,41 @@ def gmSecHP02(nmbGeomSecc,concrDiagName,nmbDiagAceroArmar,nmbDiagAceroPret):
   horm.pMin= geom.Pos2d(0.787,-0.6)
   horm.pMax= geom.Pos2d(0.837,0.6)
 
-  armaduras= geomSecc.getReinfLayers
+  reinforcement= geomSecc.getReinfLayers
 
   # Armadura activa
-  armadura= armaduras.newStraightReinfLayer(nmbDiagAceroPret)
+  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
   armadura.numReinfBars= 13 # Armadura activa inferior ala inferior.
   armadura.barArea= areaCordones
   armadura.p1= geom.Pos2d(-0.773,-0.31) 
   armadura.p2= geom.Pos2d(-0.773,0.31)
 
-  armadura= armaduras.newStraightReinfLayer(nmbDiagAceroPret)
+  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
   armadura.numReinfBars= 13 # Armadura activa intermedia ala inferior.
   armadura.barArea= areaCordones
   armadura.p1= geom.Pos2d(-0.713,-0.31) 
   armadura.p2= geom.Pos2d(-0.713,0.31)
 
-  armadura= armaduras.newStraightReinfLayer(nmbDiagAceroPret)
+  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
   armadura.numReinfBars= 7
   armadura.barArea= areaCordones
   armadura.p1= geom.Pos2d(-0.653,-0.155) # Armadura activa superior ala inferior.
   armadura.p2= geom.Pos2d(-0.653,0.155)
 
-  armadura= armaduras.newStraightReinfLayer(nmbDiagAceroPret)
+  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
   armadura.numReinfBars= 3
   armadura.barArea= areaCordones
   armadura.p1= geom.Pos2d(0.797,-0.478) # Armadura activa ala superior.
   armadura.p2= geom.Pos2d(0.797,0.478)
 
   # Armadura pasiva
-  armadura= armaduras.newStraightReinfLayer(nmbDiagAceroArmar)
+  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroArmar)
   armadura.numReinfBars= 5
   armadura.barArea= areaFiLong
   armadura.p1= geom.Pos2d(-0.413,-0.031)
   armadura.p2= geom.Pos2d(0.587,-0.031)
 
-  armadura= armaduras.newStraightReinfLayer(nmbDiagAceroArmar)
+  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroArmar)
   armadura.numReinfBars= 5
   armadura.barArea= areaFiLong
   armadura.p1= geom.Pos2d(-0.413,0.031)

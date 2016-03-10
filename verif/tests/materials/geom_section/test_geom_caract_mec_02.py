@@ -19,21 +19,21 @@ preprocessor=  prueba.getPreprocessor
 acero= typical_materials.defElasticMaterial(preprocessor, "acero",Es)
 
 geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
-armaduras= geomPrueba.getReinfLayers
-armaduraA= armaduras.newStraightReinfLayer("acero")
+reinforcement= geomPrueba.getReinfLayers
+armaduraA= reinforcement.newStraightReinfLayer("acero")
 armaduraA.numReinfBars= 2
 armaduraA.barDiam= 16e-3
 armaduraA.barArea= areaFi16
 armaduraA.p1= geom.Pos2d(0.05,0.95) # Armadura inferior.
 armaduraA.p2= geom.Pos2d(0.05,0.05)
-armaduraB= armaduras.newStraightReinfLayer("acero")
+armaduraB= reinforcement.newStraightReinfLayer("acero")
 armaduraB.numReinfBars= 2
 armaduraB.barDiam= 16e-3
 armaduraB.barArea= areaFi16
 armaduraB.p1= geom.Pos2d(0.95,0.95) # Armadura inferior.
 armaduraB.p2= geom.Pos2d(0.95,0.05)
 
-nRebars= armaduras.getNumReinfBars
+nRebars= reinforcement.getNumReinfBars
 area= geomPrueba.getAreaSeccHomogeneizada(Ec)
 G= geomPrueba.getCdgSeccHomogeneizada(Ec)
 Iy= geomPrueba.getIySeccHomogeneizada(Ec)

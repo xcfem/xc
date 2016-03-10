@@ -79,18 +79,18 @@ class RecordRCColumnSection(defSeccionHASimple.BasicRecordRCSection):
     geomSection= preprocessor.getMaterialLoader.newSectionGeometry(self.gmSectionName())
     self.defConcreteRegion(geomSection)
 
-    armaduras= sectionGeom.getReinfLayers
+    reinforcement= sectionGeom.getReinfLayers
     p1= geom.Pos2d(-width/2+cover,-depth/2+cover) # Armadura inferior (cara -).
     p2= geom.Pos2d(width/2-cover,-depth/2+cover)
 
-    self.armaduraInf= armaduras.newStraightReinfLayer(reinfDiagName)
+    self.armaduraInf= reinforcement.newStraightReinfLayer(reinfDiagName)
     self.armaduraInf.codigo= "widthInf"
     self.armaduraInf.numReinfBars= nRebarsWidth
     self.armaduraInf.barArea= areaRebarWidth
     self.armaduraInf.p1= geom.Pos2d(-width/2+cover,-depth/2+cover) # Armadura inferior (cara -).
     self.armaduraInf.p2= geom.Pos2d(width/2-cover,-depth/2+cover)
 
-    self.armaduraSup= armaduras.newStraightReinfLayer(reinfDiagName)
+    self.armaduraSup= reinforcement.newStraightReinfLayer(reinfDiagName)
     self.armaduraSup.codigo= "widthSup"
     self.armaduraSup.numReinfBars= nRebarsWidth
     self.armaduraSup.barArea= areaRebarWidth
@@ -99,14 +99,14 @@ class RecordRCColumnSection(defSeccionHASimple.BasicRecordRCSection):
 
     rebarsSpacingCanto= (depth-2*cover)/(nRebarsDepth+1)
 
-    self.armaduraCIzq= armaduras.newStraightReinfLayer(reinfDiagName)
+    self.armaduraCIzq= reinforcement.newStraightReinfLayer(reinfDiagName)
     self.armaduraCIzq.codigo= "depthIzda"
     self.armaduraCIzq.numReinfBars= nRebarsDepth
     self.armaduraCIzq.barArea= areaRebarDepth
     self.armaduraCIzq.p1= geom.Pos2d(-width/2+cover,-depth/2+cover+rebarsSpacingCanto) # Armadura lateral izquierda.
     self.armaduraCIzq.p2= geom.Pos2d(-width/2+cover,depth/2-cover-rebarsSpacingCanto)
 
-    self.armaduraCDer= armaduras.newStraightReinfLayer(reinfDiagName)
+    self.armaduraCDer= reinforcement.newStraightReinfLayer(reinfDiagName)
     self.armaduraCDer.codigo= "depthDcha"
     self.armaduraCDer.numReinfBars= nRebarsDepth
     self.armaduraCDer.barArea= areaRebarDepth

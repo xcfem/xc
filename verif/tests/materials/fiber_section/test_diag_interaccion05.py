@@ -48,8 +48,8 @@ hormigon.intRad= 0.0
 hormigon.initAngle= 0.0
 hormigon.finalAngle= 2*math.pi
 
-armaduras= pileGeometry.getReinfLayers
-armadura= armaduras.newCircReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcement= pileGeometry.getReinfLayers
+armadura= reinforcement.newCircReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 armadura.numReinfBars= 14
 armadura.barArea= areaFi20
 armadura.initAngle= 0.0

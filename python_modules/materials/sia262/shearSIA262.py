@@ -51,7 +51,7 @@ class ParamsCortante(object):
   s= 0.30
 
   Vcu= 0.0 # Contribución del hormigón a la resistencia al esfuerzo cortante.
-  Vsu= 0.0 # Contribución de las armaduras a cortante a la resistencia al esfuerzo cortante.
+  Vsu= 0.0 # Contribución de las reinforcement a cortante a la resistencia al esfuerzo cortante.
 
   def __init__(self,seccionHA):
     #self.hormigon= seccionHA.concrType Arreglar

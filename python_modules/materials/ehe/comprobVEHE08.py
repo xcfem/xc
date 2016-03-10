@@ -52,7 +52,7 @@ def getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta):
     Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     d: Canto útil.
-    alpha: Ángulo de las armaduras de cortante con el eje de la pieza (figura 44.2.3.1 EHE-08).
+    alpha: Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1 EHE-08).
     theta: Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1 EHE-08).
     Devuelve el valor de Vu1 (cortante de agotamiento por compresión oblicua del alma)
     según el artículo 44.2.3.1 de EHE-08.

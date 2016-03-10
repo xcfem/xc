@@ -81,10 +81,10 @@ class MainReinfLayer(object):
     '''center the row of rebars in the width of the section'''
     self.coverLat= (width-(self.nRebars-1)*self.rebarsSpacing)/2.0
 
-  def defReinfLayer(self,armaduras,code,nmbDiagram,p1,p2):
+  def defReinfLayer(self,reinforcement,code,nmbDiagram,p1,p2):
     '''Definition of a reinforcement layer in the fiber section model.'''
     if(self.nRebars>0):
-      self.reinfLayer= armaduras.newStraightReinfLayer(nmbDiagram)
+      self.reinfLayer= reinforcement.newStraightReinfLayer(nmbDiagram)
       self.reinfLayer.codigo= code
       self.reinfLayer.numReinfBars= self.nRebars
       #print "armadura ", cod, " num. barras: ", self.reinfLayer.numReinfBars
@@ -307,17 +307,17 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     geomSection= preprocessor.getMaterialLoader.newSectionGeometry(self.gmSectionName())
     self.defConcreteRegion(geomSection)
 
-    armaduras= geomSection.getReinfLayers
+    reinforcement= geomSection.getReinfLayers
     y= self.getYAsNeg()
     #print "y neg.= ", y, " m"
     p1= geom.Pos2d(-self.width/2+self.negatvRebars.coverLat,y) # Armadura inferior (cara -).
     p2= geom.Pos2d(self.width/2-self.negatvRebars.coverLat,y)
-    self.negReinfLayer= self.negatvRebars.defReinfLayer(armaduras,"neg",self.reinfDiagName,p1,p2)
+    self.negReinfLayer= self.negatvRebars.defReinfLayer(reinforcement,"neg",self.reinfDiagName,p1,p2)
 
     y= self.getYAsPos()
     p1= geom.Pos2d(-self.width/2+self.positvRebars.coverLat,y) # Armadura superior (cara +).
     p2= geom.Pos2d(self.width/2-self.positvRebars.coverLat,y)
-    self.posReinfLayer= self.positvRebars.defReinfLayer(armaduras,"pos",self.reinfDiagName,p1,p2)
+    self.posReinfLayer= self.positvRebars.defReinfLayer(reinforcement,"pos",self.reinfDiagName,p1,p2)
 
     self.coverMin= min(self.negatvRebars.coverLat,min(self.positvRebars.coverLat,min(self.positvRebars.cover,self.negatvRebars.cover)))
 

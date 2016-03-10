@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Acero para armaduras activas.
+# Acero para reinforcement activas.
 '''
    nmbAceroPret: Nombre del acero.
    fpk: Valor característico del límite elástico a tracción (Pa) (Artículo 38.7 EHE).

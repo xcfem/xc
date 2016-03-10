@@ -67,13 +67,13 @@ rg.nDivIJ= 10
 rg.nDivJK= 10
 rg.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
 rg.pMax= geom.Pos2d(width/2.0,depth/2.0)
-armaduras= geomSecHA.getReinfLayers
-armaduraInf= armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcement= geomSecHA.getReinfLayers
+armaduraInf= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 armaduraInf.numReinfBars= numBarras
 armaduraInf.barArea= areaBarra
 armaduraInf.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0) # Armadura inferior.
 armaduraInf.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
-armaduraSup= armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+armaduraSup= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 armaduraSup.numReinfBars= numBarras
 armaduraSup.barArea= areaBarra
 armaduraSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior.
@@ -170,7 +170,7 @@ Vu2C= secHAParamsCortante.Vu2
 
 ''' En lugar de tomar Vu2= 127.638 kN como indica en el documento
 que sirve de base, tomamos 117.052 kN, el motivo es que aquí si
-se tiene en cuenta el axil que toman las armaduras por lo que
+se tiene en cuenta el axil que toman las reinforcement por lo que
 el valor de la tensión media en el alma que se obtiene es inferior. '''
 Vu2ATeor= 117.052e3
 ratio1= ((Vu2A-Vu2ATeor)/Vu2ATeor)

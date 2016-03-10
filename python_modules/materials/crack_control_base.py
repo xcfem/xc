@@ -27,9 +27,9 @@ class CrackControlBaseParameters(object):
   def printParams(self):
     # Imprime los parámetros de fisuración de la sección.
     print "Clase esfuerzo: ",self.claseEsfuerzo,"\n"
-    print "Num. armaduras a tracción: ",self.numBarrasTracc,"\n"
-    print "Separación entre armaduras traccionadas; s= ",self.rebarsSpacingTracc," m\n"
-    print "Area de las armaduras traccionadas; As= ",self.areaRebarTracc*1e4," cm2\n"
-    print "Centro de gravedad de las armaduras traccionadas; CDG= (",self.yCDGBarrasTracc,",",self.zCDGBarrasTracc,") m\n"
+    print "Num. reinforcement a tracción: ",self.numBarrasTracc,"\n"
+    print "Separación entre reinforcement traccionadas; s= ",self.rebarsSpacingTracc," m\n"
+    print "Area de las reinforcement traccionadas; As= ",self.areaRebarTracc*1e4," cm2\n"
+    print "Centro de gravedad de las reinforcement traccionadas; CDG= (",self.yCDGBarrasTracc,",",self.zCDGBarrasTracc,") m\n"
     print "Tensión media en barras traccionadas= ",self.tensMediaBarrasTracc/1e6," MPa\n"
 
