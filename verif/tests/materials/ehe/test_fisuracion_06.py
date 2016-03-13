@@ -31,12 +31,19 @@ datosScc1LosC.concrType= EHE_concrete.HA25
 datosScc1LosC.depth= 0.25
 datosScc1LosC.width= 1.0
 datosScc1LosC.reinfSteelType= EHE_reinforcing_steel.B500S
-datosScc1LosC.nRebarsNeg= 5
-datosScc1LosC.areaRebarNeg= areaBarrasEHE.Fi10
-datosScc1LosC.coverNeg= 0.025+0.010+0.010/2.0
-datosScc1LosC.nRebarsPos= 5
-datosScc1LosC.areaRebarPos= areaBarrasEHE.Fi10
-datosScc1LosC.coverPos= 0.025+0.010/2.0
+rebNeg=defSeccionHASimple.MainReinfLayer()
+rebNeg.setUp(nRebars= 5, areaRebar= areaBarrasEHE.Fi10,cover=0.025+0.010+0.010/2.0)
+datosScc1LosC.negatvRebarRows=[rebNeg]
+rebPos=defSeccionHASimple.MainReinfLayer()
+rebNeg.setUp(nRebars= 5, areaRebar= areaBarrasEHE.Fi10,cover=0.025+0.010/2.0)
+datosScc1LosC.positvRebarRows=[rebPos]
+
+# datosScc1LosC.nRebarsNeg= 5
+# datosScc1LosC.areaRebarNeg= areaBarrasEHE.Fi10
+# datosScc1LosC.coverNeg= 0.025+0.010+0.010/2.0
+# datosScc1LosC.nRebarsPos= 5
+# datosScc1LosC.areaRebarPos= areaBarrasEHE.Fi10
+# datosScc1LosC.coverPos= 0.025+0.010/2.0
 
 
 

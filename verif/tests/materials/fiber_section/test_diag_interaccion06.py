@@ -46,10 +46,11 @@ sccData.concrType= concrete
 sccData.depth= 0.5
 sccData.width= 1.0
 sccData.reinfSteelType= reinfSteel
-sccData.setMainReinfNeg(40e-3,areaFi40,0.15,0.25-0.19)
-sccData.setMainReinfPos(6e-3,areaFi6,0.15,0.25-0.19)
-#sccData.setMainReinfPos(8e-3,areaFi8,0.15,0.25-0.19)
-#sccData.setMainReinfPos(10e-3,areaFi10,0.15,0.25-0.19)
+sccData.negatvRebarRows=[defSeccionHASimple.MainReinfLayer(rebarsDiam=40e-3,areaRebar= areaFi40,rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)]
+sccData.positvRebarRows=[defSeccionHASimple.MainReinfLayer(rebarsDiam=6e-3,areaRebar= areaFi6,rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)]
+#sccData.setMainReinfNeg(40e-3,areaFi40,0.15,0.25-0.19)
+#sccData.setMainReinfPos(6e-3,areaFi6,0.15,0.25-0.19)
+
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.

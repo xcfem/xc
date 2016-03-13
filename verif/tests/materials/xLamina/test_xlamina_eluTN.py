@@ -59,11 +59,16 @@ sepT= 1.0/numReinfBarsT
 numReinfBarsL= 7
 sepL= 1.0/numReinfBarsL
 
-deckSections= defSeccionHASimple.RecordRCSlabSection("deck","RC deck.",0.3,concrete, reinfSteel,basicCover)
-deckSections.setMainReinf2pos(12e-3,areaFi12,sepT)
-deckSections.setMainReinf2neg(12e-3,areaFi12,sepT)
-deckSections.setMainReinf1neg(20e-3,areaFi20,sepL)
-deckSections.setMainReinf1pos(20e-3,areaFi20,sepL)
+deckSections= defSeccionHASimple.RecordRCSlabSection("deck","RC deck.",0.3,concrete, reinfSteel)
+deckSections.D2Section.positvRebarRows=[defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSections.D2Section.negatvRebarRows=[defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSections.D1Section.positvRebarRows=[defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+deckSections.D1Section.negatvRebarRows=[defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+
+#deckSections.setMainReinf2pos(12e-3,areaFi12,sepT)
+#deckSections.setMainReinf2neg(12e-3,areaFi12,sepT)
+#deckSections.setMainReinf1neg(20e-3,areaFi20,sepL)
+#deckSections.setMainReinf1pos(20e-3,areaFi20,sepL)
 
 sections= sc.SectionContainer()
 sections.append(deckSections)

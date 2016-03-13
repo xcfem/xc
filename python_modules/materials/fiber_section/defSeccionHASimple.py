@@ -51,16 +51,16 @@ class MainReinfLayer(object):
     rebarsSpacing: spacing between bars
     nRebars:       number of rebars to be placed in the row
     areaRebar:     cross-sectional area of the bar
-    basicCover:    clear cover 
-    cover:         effective cover (basicCover+fi/2)
+    nominalCover:    clear cover 
+    cover:         effective cover (nominalCover+fi/2)
   '''
-  def __init__(self,rebarsDiam=10e-3,areaRebar= areaBarrasEHE.Fi10,rebarsSpacing=0.2,width=1.0,basicCover=0.03):
+  def __init__(self,rebarsDiam=10e-3,areaRebar= areaBarrasEHE.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03):
     self.rebarsDiam= rebarsDiam
     self.rebarsSpacing= rebarsSpacing
     nRebarsTeor= width/self.rebarsSpacing
     self.nRebars= int(math.floor(nRebarsTeor))
     self.areaRebar= areaRebar
-    self.cover= basicCover+self.rebarsDiam/2.0
+    self.cover= nominalCover+self.rebarsDiam/2.0
     self.centerRebars(width)
   def setUp(self,nRebars= 5, rebarsDiam=10e-3,areaRebar= areaBarrasEHE.Fi10,width=1.0,cover=0.03):
     self.nRebars= nRebars
@@ -82,7 +82,9 @@ class MainReinfLayer(object):
     self.coverLat= (width-(self.nRebars-1)*self.rebarsSpacing)/2.0
 
   def defReinfLayer(self,reinforcement,code,nmbDiagram,p1,p2):
-    '''Definition of a reinforcement layer in the fiber section model.'''
+    '''Definition of a reinforcement layer in the fiber section model 
+    between the 2d positions p1 and p2.
+    '''
     if(self.nRebars>0):
       self.reinfLayer= reinforcement.newStraightReinfLayer(nmbDiagram)
       self.reinfLayer.codigo= code
@@ -214,33 +216,71 @@ class RecordRCSimpleSection(BasicRecordRCSection):
                      defining the shear reinforcement in Y direction
     coverMin:        minimum value of end or clear concrete cover of main bars from
                      both the positive and negative faces
-    negatvRebars:       layer of main rebars in the local negative face of the section
-    positvRebars:       layer of main rebars in the local positive face of the section
+    negatvRebarRows:       layers of main rebars in the local negative face of the section
+    positvRebarRows:       layers of main rebars in the local positive face of the section
   '''
   def __init__(self):
     super(RecordRCSimpleSection,self).__init__()
 
     # Longitudinal reinforcement
     self.coverMin= 0.0 
-    self.negatvRebars= MainReinfLayer()
-    self.positvRebars= MainReinfLayer()
+    self.positvRebarRows= []  #list of MainReinfLayer data (positive face)
+    self.negatvRebarRows= [] #list of MainReinfLayer data (negative face)
+    self.posReinfLayers=[]  #list of xc.StraightReinfLayer created (positive face)
+    self.negReinfLayers=[]  #list of xc.StraightReinfLayer created (negative face)
+
+  def getAsPosRows(self):
+    '''returns a list with the cross-sectional area of the rebars in each row of the positive face'''
+    retval=[]
+    for rbRow in self.positvRebarRows:
+      retval.append(rbRow.getAs())
+    return retval
+
+  def getAsNegRows(self):
+    '''returns a list with the cross-sectional area of the rebars in each row of the negative face'''
+    retval=[]
+    for rbRow in self.negatvRebarRows:
+      retval.append(rbRow.getAs())
+    return retval
 
   def getAsPos(self):
     '''returns the cross-sectional area of the rebars in the positive face'''
-    return self.positvRebars.getAs()
+    return sum(self.getAsPosRows())
+
+  def getPosRowsCGcover(self):
+    '''returns the distance from the center of gravity of the positive rebars
+    to the positive face of the section 
+    '''
+    retval=0
+    for rbRow in self.positvRebarRows:
+      retval+=rbRow.getAs()*rbRow.cover
+    return retval/self.getAsPos()
+
   def getYAsPos(self):
     '''returns the local Y coordinate of the center of gravity of the rebars
        in the positive face
     '''
-    return self.depth/2.0-self.positvRebars.cover
+    return self.depth/2.0-self.getPosRowsCGcover()
+
   def getAsNeg(self):
     '''returns the cross-sectional area of the rebars in the negative face'''
-    return self.negatvRebars.getAs()
+    return sum(self.getAsNegRows())
+
+  def getNegRowsCGcover(self):
+    '''returns the distance from the center of gravity of the negative rebars
+    to the negative face of the section 
+    '''
+    retval=0
+    for rbRow in self.negatvRebarRows:
+      retval+=rbRow.getAs()*rbRow.cover
+    return retval/self.getAsNeg()
+
   def getYAsNeg(self):
     '''returns the local Y coordinate of the center of gravity of the rebars
        in the negative face
     '''
-    return -self.depth/2.0+self.negatvRebars.cover
+    return -self.depth/2.0+self.getNegRowsCGcover()
+
   def getAc(self):
     '''returns the cross-sectional area of the section'''
     return self.width*self.depth
@@ -248,51 +288,85 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     '''returns the second moment of area about the middle axis parallel to the width '''
     return 1/12.0*self.width*self.depth**3
 
-  def getSNeg(self):
-    '''distance between bars in local negative face.'''
-    return self.negatvRebars.rebarsSpacing
   def getSPos(self):
-    '''distance between bars in local positive face.'''
-    return self.positvRebars.rebarsSpacing
-  def getDiamNeg(self):
-    '''bar diameter in local negative face.'''
-    return self.negatvRebars.rebarsDiam
+    '''returns a list with the distance between bars for each row of bars in local positive face.'''
+    retval=[]
+    for rbRow in self.positvRebarRows:
+      retval.append(rbRow.rebarsSpacing)
+    return retval
+
+  def getSNeg(self):
+    '''returns a list with the distance between bars for each row of bars in local negative face.'''
+    retval=[]
+    for rbRow in self.negatvRebarRows:
+      retval.append(rbRow.rebarsSpacing)
+    return retval
+
   def getDiamPos(self):
-    '''bar diameter in local positive face.'''
-    return self.positvRebars.rebarsDiam
-  def getNBarNeg(self):
-    '''number of bars in local negative face.'''
-    return self.negatvRebars.nRebars
+    '''returns a list with the bar diameter for each row of bars in local positive face.'''
+    retval=[]
+    for rbRow in self.positvRebarRows:
+      retval.append(rbRow.rebarsDiam)
+    return retval
+
+  def getDiamNeg(self):
+    '''returns a list with the bar diameter for each row of bars in local negative face.'''
+    retval=[]
+    for rbRow in self.negatvRebarRows:
+      retval.append(rbRow.rebarsDiam)
+    return retval
+
   def getNBarPos(self):
-    '''number of bars in local positive face.'''
-    return self.positvRebars.nRebars
+    '''returns a list with the number of bars for each row of bars in local positive face.'''
+    retval=[]
+    for rbRow in self.positvRebarRows:
+      retval.append(rbRow.nRebars)
+    return retval
+
+  def getNBarNeg(self):
+    '''returns a list with the number of bars for each row of bars in local negative face.'''
+    retval=[]
+    for rbRow in self.negatvRebarRows:
+      retval.append(rbRow.nRebars)
+    return retval
+
+  def getCoverPos(self):
+    '''returns a list with the cover of bars for each row of bars in local positive face.'''
+    retval=[]
+    for rbRow in self.positvRebarRows:
+      retval.append(rbRow.cover)
+    return retval
+
+  def getCoverNeg(self):
+    '''returns a list with the cover of bars for each row of bars in local negative face.'''
+    retval=[]
+    for rbRow in self.negatvRebarRows:
+      retval.append(rbRow.cover)
+    return retval
+
+  def getLatCoverPos(self):
+    '''returns a list with the lateral cover of bars for each row of bars in local positive face.'''
+    retval=[]
+    for rbRow in self.positvRebarRows:
+      retval.append(rbRow.coverLat)
+    return retval
+
+  def getLatCoverNeg(self):
+    '''returns a list with the lateral cover of bars for each row of bars in local negative face.'''
+    retval=[]
+    for rbRow in self.negatvRebarRows:
+      retval.append(rbRow.coverLat)
+    return retval
 
   def centerRebarsPos(self):
     '''centers in the width of the section the rebars placed in the positive face''' 
-    self.positvRebars.centerRebars(self.width)
+    for rbRow in self.positvRebarRows:
+      rbRow.centerRebars(self.width)
+
   def centerRebarsNeg(self):
     '''centers in the width of the section the rebars placed in the negative face''' 
-    self.negatvRebars.centerRebars(self.width)
-
-  def setMainReinfNeg(self,diam,area,spacing,basicCover):
-    '''creates a row of rebars in the negative face 
-    Parameters:
-      diam:       diameter of the bars
-      area:       cross-sectional area of the bar
-      spacing:    spacing between bars
-      basicCover: clear cover
-    '''
-    self.negatvRebars= MainReinfLayer(diam,area,spacing,self.width,basicCover)
-  def setMainReinfPos(self,diam,area,spacing,basicCover):
-    '''creates a row of rebars in the positive face 
-    Parameters:
-      diam:       diameter of the bars
-      area:       cross-sectional area of the bar
-      spacing:    spacing between bars
-      basicCover: clear cover
-    '''
-    self.positvRebars= MainReinfLayer(diam,area,spacing,self.width,basicCover)
-
+    for rbRow in self.negatvRebarRows:
+      rbRow.centerRebars(self.width)
 
   def defSectionGeometry(self,preprocessor,matDiagType):
     '''
@@ -308,18 +382,20 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     self.defConcreteRegion(geomSection)
 
     reinforcement= geomSection.getReinfLayers
-    y= self.getYAsNeg()
-    #print "y neg.= ", y, " m"
-    p1= geom.Pos2d(-self.width/2+self.negatvRebars.coverLat,y) # Armadura inferior (cara -).
-    p2= geom.Pos2d(self.width/2-self.negatvRebars.coverLat,y)
-    self.negReinfLayer= self.negatvRebars.defReinfLayer(reinforcement,"neg",self.reinfDiagName,p1,p2)
+    for rbRow in self.negatvRebarRows:
+      y= -self.depth/2.0+rbRow.cover
+      #print "y neg.= ", y, " m"
+      p1= geom.Pos2d(-self.width/2+rbRow.coverLat,y)
+      p2= geom.Pos2d(self.width/2-rbRow.coverLat,y)
+      self.negReinfLayers.append(rbRow.defReinfLayer(reinforcement,"neg",self.reinfDiagName,p1,p2))
 
-    y= self.getYAsPos()
-    p1= geom.Pos2d(-self.width/2+self.positvRebars.coverLat,y) # Armadura superior (cara +).
-    p2= geom.Pos2d(self.width/2-self.positvRebars.coverLat,y)
-    self.posReinfLayer= self.positvRebars.defReinfLayer(reinforcement,"pos",self.reinfDiagName,p1,p2)
+    for rbRow in self.positvRebarRows:
+      y= self.depth/2.0-rbRow.cover
+      p1= geom.Pos2d(-self.width/2+rbRow.coverLat,y)
+      p2= geom.Pos2d(self.width/2-rbRow.coverLat,y)
+      self.posReinfLayers.append(rbRow.defReinfLayer(reinforcement,"pos",self.reinfDiagName,p1,p2))
 
-    self.coverMin= min(self.negatvRebars.coverLat,min(self.positvRebars.coverLat,min(self.positvRebars.cover,self.negatvRebars.cover)))
+    self.coverMin= min(min(self.getCoverPos()),min(self.getCoverNeg()),min(self.getLatCoverPos()),min(self.getLatCoverNeg()))
 
   def getJTorsion(self):
     return parametrosSeccionRectangular.getJTorsion(self.width,self.depth)
@@ -397,7 +473,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   def getStressCalculator(self):
     Ec= self.concrType.Ecm()
     Es= self.reinfSteelType.Es
-    return sc.StressCalc(self.width,self.depth,self.positvRebars.cover,self.negatvRebars.cover,self.getAsPos(),self.getAsNeg(),Ec,Es)
+    return sc.StressCalc(self.width,self.depth,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
 
 class RecordRCSlabSection(object):
   '''This class is used to define the variables that make up a reinforced concrete slab 
@@ -409,12 +485,18 @@ class RecordRCSlabSection(object):
     depth:           cross-section depth (width=1.0)
     concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
     reinfSteelType:  type of reinforcement steel
-    basicCover:      clear cover 
+    posMainRebarRowsD1: layers of main rebars in direction 1 in the local 
+                        positive face of the section (list of MainReinfLayer)
+    negMainRebarRowsD1: layers of main rebars in direction 1 in the local 
+                        negative face of the section (list of MainReinfLayer)
+    posMainRebarRowsD2: layers of main rebars in direction 2 in the local 
+                        positive face of the section (list of MainReinfLayer)
+    negMainRebarRowsD2: layers of main rebars in direction 2 in the local 
+                        negative face of the section (list of MainReinfLayer)
 
   '''
-  def __init__(self,name,sectionDescr,depth,concrType,reinfSteelType,basicCover):
+  def __init__(self,name,sectionDescr,depth,concrType,reinfSteelType):
     self.name= name
-    self.basicCover= basicCover
     self.D2Section= RecordRCSimpleSection()
     self.D2Section.sectionName= name + "2"
     self.D2Section.sectionDescr= sectionDescr + ". 2 direction."
@@ -422,6 +504,10 @@ class RecordRCSlabSection(object):
     self.D2Section.depth= depth
     self.D2Section.width= 1.0
     self.D2Section.reinfSteelType= reinfSteelType
+    self.D2Section.positvRebarRows=[]
+    self.D2Section.negatvRebarRows=[]
+#    self.setPosMainRebarRowsD2(posMainRebarRowsD2)
+#    self.setNegMainRebarRowsD2(negMainRebarRowsD2)
 
     self.D1Section= RecordRCSimpleSection()
     self.D1Section.sectionName= name + "1"
@@ -430,12 +516,24 @@ class RecordRCSlabSection(object):
     self.D1Section.depth= depth
     self.D1Section.width= 1.0
     self.D1Section.reinfSteelType= reinfSteelType
+    self.D1Section.positvRebarRows=[]
+    self.D1Section.negatvRebarRows=[]
+#    self.setPosMainRebarRowsD1(posMainRebarRowsD1)
+#    self.setNegMainRebarRowsD1(negMainRebarRowsD1)
 
-  def setMainReinf2neg(self,diam,area,spacing):
-    self.D2Section.setMainReinfNeg(diam,area,spacing,self.basicCover)
-
-  def setMainReinf2pos(self,diam,area,spacing):
-    self.D2Section.setMainReinfPos(diam,area,spacing,self.basicCover)
+  # def setPosMainRebarRowsD1(self,rebarLayerList):
+  #   '''Assigns...'''
+  #   self.D1Section.positvRebarRows= rebarLayerList
+  # def setNegMainRebarRowsD1(self,rebarLayerList):
+  #   '''Assigns...'''
+  #   self.D1Section.negatvRebarRows= rebarLayerList
+  # def setPosMainRebarRowsD2(self,rebarLayerList):
+  #   '''Assigns...'''
+  #   self.D2Section.positvRebarRows= rebarLayerList
+  # def setNegMainRebarRowsD2(self,rebarLayerList):
+  #   '''Assigns...'''
+  #   self.D2Section.negatvRebarRows= rebarLayerList
+     
 
   def setShearReinfD2(self,nShReinfBranches,areaShReinfBranch,spacing):
     self.D2Section.shReinfZ.nShReinfBranches= nShReinfBranches # Número de ramas eficaces frente al cortante.
@@ -446,12 +544,6 @@ class RecordRCSlabSection(object):
     self.D1Section.shReinfZ.nShReinfBranches= nShReinfBranches # Número de ramas eficaces frente al cortante.
     self.D1Section.shReinfZ.areaShReinfBranch= areaShReinfBranch # Área de cada barra.
     self.D1Section.shReinfZ.shReinfSpacing= spacing
-
-  def setMainReinf1neg(self,diam,area,spacing):
-    self.D1Section.setMainReinfNeg(diam,area,spacing,self.basicCover+self.D2Section.negatvRebars.rebarsDiam)
-
-  def setMainReinf1pos(self,diam,area,spacing):
-    self.D1Section.setMainReinfPos(diam,area,spacing,self.basicCover+self.D2Section.positvRebars.rebarsDiam)
 
   def getAs1neg(self):
     '''Steel area in local negative face direction 1.'''
@@ -466,7 +558,12 @@ class RecordRCSlabSection(object):
     '''Steel area in local positive face direction 2.'''
     return self.D2Section.getAsPos()
   def getReinfArea(self,code):
-    '''get steel area.'''
+    '''get steel area.
+    code='As1+' for direction 1, positive face
+    code='As1-' for direction 1, negative face
+    code='As2+' for direction 2, positive face
+    code='As2-' for direction 2, negative face
+    '''
     if(code=='As1-'):
       return self.getAs1neg()
     elif(code=='As1+'):
@@ -479,20 +576,25 @@ class RecordRCSlabSection(object):
       sys.stderr.write("code: "+ code + " unknown.\n")
       return None
 
-  def getS1neg(self):
-    '''distance between bars in local negative face direction 1.'''
-    return self.D1Section.getSNeg()
   def getS1pos(self):
-    '''distance between bars in local positive face direction 1.'''
+    '''list of distances between bars of rows the in local positive face direction 1.'''
     return self.D1Section.getSPos()
-  def getS2neg(self):
-    '''distance between bars in local negative face direction 2.'''
-    return self.D2Section.getSNeg()
+  def getS1neg(self):
+    '''list of distances between bars of rows  in the local negative face direction 1.'''
+    return self.D1Section.getSNeg()
   def getS2pos(self):
-    '''distance between bars in local positive face direction 2.'''
+    '''list of distances between bars of rows  in the local positive face direction 2.'''
     return self.D2Section.getSPos()
+  def getS2neg(self):
+    '''list of distances between bars of rows  in the local negative face direction 2.'''
+    return self.D2Section.getSNeg()
   def getS(self,code):
-    '''distance between bars.'''
+    '''list of distances between bars
+    code='s1+' for direction 1, positive face
+    code='s1-' for direction 1, negative face
+    code='s2+' for direction 2, positive face
+    code='s2-' for direction 2, negative face
+    '''
     if(code=='s1-'):
       return self.getS1neg()
     elif(code=='s1+'):
@@ -506,19 +608,19 @@ class RecordRCSlabSection(object):
       return None
 
   def getDiam1neg(self):
-    '''bar diameter in local negative face direction 1.'''
+    '''list of bar diameter in rows of the local negative face direction 1.'''
     return self.D1Section.getDiamNeg()
   def getDiam1pos(self):
-    '''bar diameter in local positive face direction 1.'''
+    '''list of bar diameter in rows of the local positive face direction 1.'''
     return self.D1Section.getDiamPos()
   def getDiam2neg(self):
-    '''bar diameter in local negative face direction 2.'''
+    '''list of bar diameter in rows of the local negative face direction 2.'''
     return self.D2Section.getDiamNeg()
   def getDiam2pos(self):
-    '''bar diameter in local positive face direction 2.'''
+    '''list of bar diameter in rows of the local positive face direction 2.'''
     return self.D2Section.getDiamPos()
   def getDiam(self,code):
-    '''bar diameter.'''
+    '''list of bar diameter.'''
     if(code=='d1-'):
       return self.getDiam1neg()
     elif(code=='d1+'):
@@ -531,20 +633,20 @@ class RecordRCSlabSection(object):
       sys.stderr.write("code: "+ code + " unknown.\n")
       return None
 
-  def getNBar1neg(self):
-    '''number of bars in local negative face direction 1.'''
-    return self.D1Section.getNBarNeg()
   def getNBar1pos(self):
-    '''number of bars in local positive face direction 1.'''
+    '''list of number of bars in rows of the local positive face direction 1.'''
     return self.D1Section.getNBarPos()
-  def getNBar2neg(self):
-    '''number of bars in local negative face direction 2.'''
-    return self.D2Section.getNBarNeg()
+  def getNBar1neg(self):
+    '''list of number of bars in rows of the local negative face direction 1.'''
+    return self.D1Section.getNBarNeg()
   def getNBar2pos(self):
-    '''number of bars in local positive face direction 2.'''
+    '''list of number of bars in rows of the local positive face direction 2.'''
     return self.D2Section.getNBarPos()
+  def getNBar2neg(self):
+    '''list of number of bars in rows of the local negative face direction 2.'''
+    return self.D2Section.getNBarNeg()
   def getNBar(self,code):
-    '''number of bars.'''
+    '''list of number of bars.'''
     if(code=='nBars1-'):
       return self.getNBar1neg()
     elif(code=='nBars1+'):
