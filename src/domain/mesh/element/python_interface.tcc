@@ -107,6 +107,7 @@ class_<XC::Element0D , bases<XC::ElementBase<2>>, boost::noncopyable >("Element0
   .add_property("getIVector",make_function(&XC::Element0D::getX, return_internal_reference<>() ),"Returns i vector.")
   .add_property("getJVector",make_function(&XC::Element0D::getY, return_internal_reference<>() ),"Returns j vector.")
   .add_property("getKVector",make_function(&XC::Element0D::getZ, return_internal_reference<>() ),"Returns k vector.")
+  .add_property("getSisCoo",&XC::Element0D::getSisCoo,"Returns element coordinate system.")
   .add_property("getTransformation",make_function(&XC::Element0D::getTransformation, return_internal_reference<>() ),"Returns element transformation.")
   ;
 

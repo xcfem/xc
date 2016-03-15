@@ -74,34 +74,34 @@ XC::CrossSectionProperties3d::CrossSectionProperties3d(double EA_in, double EIz_
   : CrossSectionProperties2d(EA_in,EIz_in), iy(EIy_in), iyz(0), j(GJ_in)
   { check_values(); }
 
-//! @brief Devuelve el ángulo que define un eje principal de inercia.
+//! @brief Returns the angle between the principal axes and the local system.
 double XC::CrossSectionProperties3d::getTheta(void) const
   { return theta_inercia(Iy(),Iz(),Iyz()); }
 
-//! @brief Devuelve el momento de inercia principal mayor.
+//! @brief Returns the major principal axis of inertia.
 double XC::CrossSectionProperties3d::getI1(void) const
   { return I1_inercia(Iy(),Iz(),Iyz()); }
 
-//! @brief Devuelve el momento de inercia principal menor.
+//! @brief Returns the minor principal axis of inertia.
 double XC::CrossSectionProperties3d::getI2(void) const
   { return I2_inercia(Iy(),Iz(),Iyz()); }
 
-//! @brief Devuelve los ejes principales de inercia de la sección.
+//! @brief Returns the principal axis of inertia.
 EjesPrincInercia2d XC::CrossSectionProperties3d::getEjesInercia(void) const
   {
     const Pos2d cdg(0,0);
     return EjesPrincInercia2d(cdg,Iy(),Iz(),Iyz());
   }
-//! @brief Devuelve el vector del eje principal I.
+//! @brief Returns principal axis I (strong).
 Vector2d XC::CrossSectionProperties3d::getVDirEje1(void) const
   { return getEjesInercia().getVDirEje1(); }
-//! @brief Devuelve el vector del eje principal I.
+//! @brief Returns principal axis I (strong).
 Vector2d XC::CrossSectionProperties3d::getVDirEjeFuerte(void) const
   { return getEjesInercia().getVDirEje1(); }
-//! @brief Devuelve el vector del eje principal II.
+//! @brief Returns principal axis II (weak).
 Vector2d XC::CrossSectionProperties3d::getVDirEje2(void) const
   { return getEjesInercia().getVDirEje2(); }
-//! @brief Devuelve el vector del eje principal II.
+//! @brief Returns principal axis II (weak).
 Vector2d XC::CrossSectionProperties3d::getVDirEjeDebil(void) const
   { return getEjesInercia().getVDirEje2(); }
 

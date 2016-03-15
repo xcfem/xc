@@ -572,8 +572,8 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
     return P;
   }
 
-//! @brief Devuelve el vector dirección del eje fuerte (mayor inercia) del elemento
-//! expresado en coordenadas locales del elemento.
+//! @brief Returns the direction vector of element strong axis
+//! expressed in the local coordinate system.
 XC::Vector XC::ElasticBeam3d::getVDirEjeFuerteLocales(void) const
   {
     const Vector2d ejeFuerteSeccion= ctes_scc.getVDirEjeFuerte();
@@ -581,8 +581,8 @@ XC::Vector XC::ElasticBeam3d::getVDirEjeFuerteLocales(void) const
     return eF;
   }
 
-//! @brief Devuelve el vector dirección del eje fuerte (mayor inercia) del elemento
-//! expresado en coordenadas locales del elemento.
+//! @brief Returns the direction vector of element weak axis
+//! expressed in the local coordinate system.
 XC::Vector XC::ElasticBeam3d::getVDirEjeDebilLocales(void) const
   {
     const Vector2d ejeDebilSeccion= ctes_scc.getVDirEjeDebil();
@@ -590,23 +590,24 @@ XC::Vector XC::ElasticBeam3d::getVDirEjeDebilLocales(void) const
     return eD;
   }
 
-//! @brief Devuelve el ángulo del eje fuerte (mayor inercia) del elemento
-//! con su plano XZ.
+//! @brief Returns the angle between element strong axis
+//! and local XZ plane.
 double XC::ElasticBeam3d::getAnguloEjeFuerte(void) const
   {
     Vector eF= getVDirEjeFuerteLocales();
     return atan2(eF(2),eF(1));
   }
 
-//! @brief Devuelve el ángulo del eje débil (menor inercia) del elemento
-//! con su plano XZ.
+//! @brief Returns the angle between element weak axis
+//! and local XZ plane.
 double XC::ElasticBeam3d::getAnguloEjeDebil(void) const
   {
     Vector eD= getVDirEjeDebilLocales();
     return atan2(eD(2),eD(1));
   }
 
-//! @brief Devuelve el vector dirección del eje fuerte (mayor inercia) del elemento.
+//! @brief Returns the direction vector of element strong axis
+//! expressed in the global coordinate system.
 const XC::Vector &XC::ElasticBeam3d::getVDirEjeFuerteGlobales(void) const
   {
     if(theCoordTransf)
@@ -622,7 +623,8 @@ const XC::Vector &XC::ElasticBeam3d::getVDirEjeFuerteGlobales(void) const
       }
   }
 
-//! @brief Devuelve el vector dirección del eje débil (menor inercia) del elemento.
+//! @brief Returns the direction vector of element weak axis
+//! expressed in the global coordinate system.
 const XC::Vector &XC::ElasticBeam3d::getVDirEjeDebilGlobales(void) const
   {
     if(theCoordTransf)

@@ -42,10 +42,10 @@ class SmallDispCrdTransf3d: public CrdTransf3d
   protected:
     virtual int computeElemtLengthAndOrient(void) const;
     virtual int calculaEjesLocales(void) const;
-    Vector &basic_to_local_resisting_force(const XC::Vector &pb, const XC::Vector &p0) const;
+    Vector &basic_to_local_resisting_force(const Vector &pb, const Vector &p0) const;
     const Vector &local_to_global_resisting_force(const Vector &pl) const;
-    Matrix &basic_to_local_stiff_matrix(const XC::Matrix &KB) const;
-    const Matrix &local_to_global_stiff_matrix(const XC::Matrix &kl) const;
+    Matrix &basic_to_local_stiff_matrix(const Matrix &KB) const;
+    const Matrix &local_to_global_stiff_matrix(const Matrix &kl) const;
     DbTagData &getDbTagData(void) const;
   public:
     SmallDispCrdTransf3d(int tag, int classTag);

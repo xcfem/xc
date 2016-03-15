@@ -32,6 +32,8 @@
 #include <domain/mesh/element/ElementBase.h>
 #include <utility/matrix/Matrix.h>
 
+class SisCooRect3d3d;
+
 namespace XC {
 class Node;
 class Material;
@@ -75,6 +77,7 @@ class Element0D : public ElementBase<2>
     const Vector &getX(void) const;
     const Vector &getY(void) const;
     const Vector &getZ(void) const;
+    SisCooRect3d3d getSisCoo(void) const;    
     inline virtual const Matrix &getTransformation(void) const
       { return transformation; }
 

@@ -34,6 +34,7 @@
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "med.h"
 #include "vtkCellType.h"
@@ -144,6 +145,16 @@ const XC::Vector &XC::Element0D::getZ(void) const
     retval(2)= transformation(2,2);
     return retval;
   }
+
+//! @brief Returns the element coordinate system.
+SisCooRect3d3d XC::Element0D::getSisCoo(void) const
+  {
+    const Vector3d x(transformation(0,0), transformation(0,1), transformation(0,2));
+    const Vector3d y(transformation(1,0), transformation(1,1), transformation(1,2));
+    const Vector3d z(transformation(2,0), transformation(2,1), transformation(2,2));
+    return SisCooRect3d3d(x,y,z);
+  }    
+
 
 //! @brief Set up the transformation matrix for orientation
 //! @param x: vector components in global coordinates defining local x-axis (vector x)
