@@ -72,7 +72,7 @@ XC::LinearCrdTransf3d::LinearCrdTransf3d(int tag)
 
 //! @brief constructor
 //! @param vecInLocXZPlane: Vector en el plano XZ local.
-XC::LinearCrdTransf3d::LinearCrdTransf3d(int tag, const XC::Vector &vecInLocXZPlane)
+XC::LinearCrdTransf3d::LinearCrdTransf3d(int tag, const Vector &vecInLocXZPlane)
   : XC::SmallDispCrdTransf3d(tag, CRDTR_TAG_LinearCrdTransf3d,vecInLocXZPlane) {}
 
 //! @brief Constructor

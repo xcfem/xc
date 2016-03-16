@@ -65,10 +65,10 @@ class_<XC::ElasticBeam3d, bases<XC::ProtoBeam3d>, boost::noncopyable >("ElasticB
   .add_property("getT1", &XC::ElasticBeam3d::getT1,"Torque at the back end of the element.")
   .add_property("getT2", &XC::ElasticBeam3d::getT2,"Torque at the front end of the element.")
 
-  .def("getVDirEjeFuerteLocales",&XC::ElasticBeam3d::getVDirEjeFuerteLocales)
-  .def("getVDirEjeDebilLocales",&XC::ElasticBeam3d::getVDirEjeDebilLocales)
-  .def("getAnguloEjeFuerte",&XC::ElasticBeam3d::getAnguloEjeFuerte)
-  .def("getAnguloEjeDebil",&XC::ElasticBeam3d::getAnguloEjeDebil)
-  .def("getVDirEjeFuerteGlobales",make_function(&XC::ElasticBeam3d::getVDirEjeFuerteGlobales, return_value_policy<copy_const_reference>()))
-  .def("getVDirEjeDebilGlobales",make_function(&XC::ElasticBeam3d::getVDirEjeDebilGlobales, return_value_policy<copy_const_reference>()))
+  .def("getVDirEjeFuerteLocales",&XC::ElasticBeam3d::getVDirEjeFuerteLocales,"Returns the direction vector of element strong axis expressed in the local coordinate system.")
+  .def("getVDirEjeDebilLocales",&XC::ElasticBeam3d::getVDirEjeDebilLocales,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
+.def("getAnguloEjeFuerte",&XC::ElasticBeam3d::getAnguloEjeFuerte,"Returns the angle between element strong axis and local XZ plane.")
+  .def("getAnguloEjeDebil",&XC::ElasticBeam3d::getAnguloEjeDebil,"Returns the angle between element weak axis and local XZ plane.")
+  .def("getVDirEjeFuerteGlobales",make_function(&XC::ElasticBeam3d::getVDirEjeFuerteGlobales, return_value_policy<copy_const_reference>()),"Returns the direction vector of element strong axis expressed in the global coordinate system.")
+  .def("getVDirEjeDebilGlobales",make_function(&XC::ElasticBeam3d::getVDirEjeDebilGlobales, return_value_policy<copy_const_reference>()),"Returns the direction vector of element weak axis expressed in the global coordinate system.")
    ;

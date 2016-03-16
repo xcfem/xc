@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //SeccionBarraPrismatica.cpp
 
-#include <material/section/SeccionBarraPrismatica.h>
+#include "SeccionBarraPrismatica.h"
 #include "material/section/diag_interaccion/PlanoDeformacion.h"
 #include <domain/mesh/element/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
