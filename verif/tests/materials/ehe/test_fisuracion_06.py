@@ -57,7 +57,7 @@ matTagHormigon= EHE_concrete.HA25.defDiagK(preprocessor)
 matTagAceroArmar= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
 
 
-datosScc1LosC.defSeccionHASimple(preprocessor, "k")
+datosScc1LosC.defRCSimpleSection(preprocessor, "k")
 
 banco_pruebas_scc3d.modeloSecc3d(preprocessor, datosScc1LosC.sectionName)
 

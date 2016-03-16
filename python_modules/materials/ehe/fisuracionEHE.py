@@ -17,7 +17,7 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
   fctmFis= 0.0 #Resistencia media del hormigón a tracción.
   tensSRMediaBarrasTracc= 0.0 #Tensión media en las barras traccionadas en fisuración.
   iAreaMaxima= None #Barra traccionada de área máxima.
-  diamMaxTracc= 0.0 #Diámetro de la armadura traccionada más gruesa.
+  diamMaxTracc= 0.0 #Diámetro de la reinforcement traccionada más gruesa.
   EsBarrasTracc= 0.0 #Módulo de deformación longitudinal de las barras traccionadas.
   eps1= 0.0 #Deformación máxima en el hormigón.
   eps2= 0.0 #Deformación mínima en el hormigón.
@@ -62,7 +62,7 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
       self.rcSets= createFiberSets.fiberSectionSetupRC3Sets(scc,matTagHormigon,self.setNameFibrasHormigon,matTagAceroArmar,self.setNameFibrasArmadura)
     concrFibers= self.rcSets.concrFibers.fSet
     reinfFibers= self.rcSets.reinfFibers.fSet
-    armaduraTraccion= self.rcSets.tensionFibers
+    reinforcementTraccion= self.rcSets.tensionFibers
 
     self.fctmFis= fctm
     self.claseEsfuerzo= scc.getStrClaseEsfuerzo(0.0)
@@ -86,15 +86,15 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
         self.hEfMax= self.depthMecanico/2.0
       self.AcEfNeta= scc.calcAcEficazFibras(self.hEfMax,self.setNameFibrasArmaduraTraccion,15)
 
-      self.rebarsSpacingTracc= armaduraTraccion.getDistMediaFibras()
-      self.areaRebarTracc= armaduraTraccion.getArea(1)
-      self.yCDGBarrasTracc= armaduraTraccion.getCdgY()
-      self.zCDGBarrasTracc= armaduraTraccion.getCdgZ()
-      self.tensMediaBarrasTracc= armaduraTraccion.getStressMed()
-      self.iAreaMaxima=  fiberUtils.getIMaxPropFiber(armaduraTraccion,"getArea")
-      self.diamMaxTracc= 2*math.sqrt(armaduraTraccion[self.iAreaMaxima].getArea()/math.pi) 
+      self.rebarsSpacingTracc= reinforcementTraccion.getDistMediaFibras()
+      self.areaRebarTracc= reinforcementTraccion.getArea(1)
+      self.yCDGBarrasTracc= reinforcementTraccion.getCdgY()
+      self.zCDGBarrasTracc= reinforcementTraccion.getCdgZ()
+      self.tensMediaBarrasTracc= reinforcementTraccion.getStressMed()
+      self.iAreaMaxima=  fiberUtils.getIMaxPropFiber(reinforcementTraccion,"getArea")
+      self.diamMaxTracc= 2*math.sqrt(reinforcementTraccion[self.iAreaMaxima].getArea()/math.pi) 
 
-      self.EsBarrasTracc= armaduraTraccion[0].getMaterial().getInitialTangent()
+      self.EsBarrasTracc= reinforcementTraccion[0].getMaterial().getInitialTangent()
       AsBarra= 0.0
       coverBarra= 0.0
       sepBarra= 0.0
@@ -106,21 +106,21 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
       alargMedioBarra= 0.0
       tensSRMediaBarrasTracc= 0.0
       WkBarra= 0.0
-      sz= len(armaduraTraccion)
+      sz= len(reinforcementTraccion)
       for i in range(0,sz):
-        barra= armaduraTraccion[i]
+        barra= reinforcementTraccion[i]
         AsBarra= barra.getArea()
         posBarra= barra.getPos()
         yBarra= posBarra.x
         zBarra= posBarra.y
         sigmaBarra= barra.getMaterial().getStress()
-        coverBarra= armaduraTraccion.getRecubrimientoFibra(i)
-        diamBarra= armaduraTraccion.getDiamEqFibra(i)
-        sigmaSRBarra= armaduraTraccion.getSigmaSRFibra(i,self.E0,self.EsBarrasTracc,self.fctmFis)
+        coverBarra= reinforcementTraccion.getRecubrimientoFibra(i)
+        diamBarra= reinforcementTraccion.getDiamEqFibra(i)
+        sigmaSRBarra= reinforcementTraccion.getSigmaSRFibra(i,self.E0,self.EsBarrasTracc,self.fctmFis)
         tensSRMediaBarrasTracc+= AsBarra*sigmaSRBarra
 
-        AcEfBarra= armaduraTraccion.getAcEficazFibra(i)
-        sepBarra= min(armaduraTraccion.getSeparacionFibra(i),15*diamBarra)
+        AcEfBarra= reinforcementTraccion.getAcEficazFibra(i)
+        sepBarra= min(reinforcementTraccion.getSeparacionFibra(i),15*diamBarra)
         smFisurasBarra= 2*coverBarra+0.2*sepBarra+0.4*self.k1*diamBarra*AcEfBarra/AsBarra
         alargMaxBarra= sigmaBarra/self.EsBarrasTracc
         alargMedioBarra= max(1.0-self.k2*(sigmaSRBarra/sigmaBarra)**2,0.4)*alargMaxBarra
@@ -157,7 +157,7 @@ def procesResultVerifFISEHE(preprocessor,nmbComb):
   hormigon= materiales.getMaterial(codHormigon)
   tagHorm= hormigon.getProp("matTagK")
   fctmHorm= hormigon.getProp("fctm")
-  armadura= materiales.getMaterial(codArmadura)
+  reinforcement= materiales.getMaterial(codArmadura)
   elementos= preprocessor.getElementLoader
   for e in elementos:
     scc= elementos.getSeccion()

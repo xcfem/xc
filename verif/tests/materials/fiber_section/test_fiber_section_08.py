@@ -8,7 +8,7 @@ Los resultados obtenidos son aceptables teniendo en cuenta que:
 
 - El prontuario no tiene en cuenta que el valor máximo de la resistencia de 1.05 veces el de
   la resistencia característica.
-- Este programa no descuenta los huecos en el hormigón ocupados por la armadura.
+- Este programa no descuenta los huecos en el hormigón ocupados por la reinforcement.
 - La discretización de la sección empleada en el modelo de fibras introduce un error.
  '''
 
@@ -34,7 +34,7 @@ gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
 
 CurvZ= 11.474e-3 # Curvatura de prueba 1.
 x1= 0.0997 # Profundidad de la fibra neutra 1.
-MzDato= 55.949206e3 # Momento que agota la armadura a tracción.
+MzDato= 55.949206e3 # Momento que agota la reinforcement a tracción.
 NDato= 0.0
 
 prueba= xc.ProblemaEF()
@@ -118,7 +118,7 @@ defN= scc.getSectionDeformationByName("defN")
 x= scc.getNeutralAxisDepth()
 Resul= scc.getStressResultant()
 Deform= scc.getSectionDeformation()
-setsRC= createFiberSets.fiberSectionSetupRCSets(scc,EHE_concrete.HA25.matTagD,"hormigon",EHE_reinforcing_steel.B500S.matTagD,"armadura")
+setsRC= createFiberSets.fiberSectionSetupRCSets(scc,EHE_concrete.HA25.matTagD,"hormigon",EHE_reinforcing_steel.B500S.matTagD,"reinforcement")
 
 
 fibraCEpsMin= -1
@@ -177,15 +177,15 @@ print "Tensión mínima en el hormigón: ",(sgCMin/1e6),"E6"
 print "Coordenada y para deformación mínima en el hormigón: ",(YepsCMin)
 print "Coordenada z para deformación mínima en el hormigón: ",(ZepsCMin)
 
-print "\nDeformación mínima en la armadura: ",(epsSMin*1E3),"E-3"
+print "\nDeformación mínima en la reinforcement: ",(epsSMin*1E3),"E-3"
 print "Tensión mínima en el acero: ",(sgSMin/1e6),"E6"
-print "Coordenada y para deformación mínima en la armadura: ",(YepsSMin)
-print "Coordenada z para deformación mínima en la armadura: ",(ZepsSMin)
+print "Coordenada y para deformación mínima en la reinforcement: ",(YepsSMin)
+print "Coordenada z para deformación mínima en la reinforcement: ",(ZepsSMin)
 
-print "\nDeformación máxima en la armadura: ",(epsSMax*1E3),"E-3"
+print "\nDeformación máxima en la reinforcement: ",(epsSMax*1E3),"E-3"
 print "Tensión máxima en el acero: ",(sgSMax/1e6),"E6"
-print "Coordenada y para deformación máxima en la armadura: ",(YepsSMax)
-print "Coordenada z para deformación máxima en la armadura: ",(ZepsSMax)
+print "Coordenada y para deformación máxima en la reinforcement: ",(YepsSMax)
+print "Coordenada z para deformación máxima en la reinforcement: ",(ZepsSMax)
 print "\nTipo solicitación: ",strTipoSolic," (",(tipoSolic),") "
 print "Cumple a ",strTipoSolic,": ",(cumpleFT)
 print "Aprovechamiento a ",strTipoSolic,": ",(aprovSecc)

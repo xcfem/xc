@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+## -*- coding: utf-8 -*-
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __cppyright__= "Copyright 2015, LCPT and AOO"
@@ -96,3 +96,4 @@ def gmSecHP02(nmbGeomSecc,concrDiagName,nmbDiagAceroArmar,nmbDiagAceroPret):
 
 
 geomSecPret02= gmSecHP02("geomSecHormigonPret02",EHE_concrete.HP45.nmbDiagD,EHE_reinforcing_steel.B500S.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
+

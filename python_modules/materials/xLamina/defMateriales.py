@@ -90,3 +90,4 @@ def defMaterialesDBarra(path, nmbScc, nmbRutinaDefGeom):
   archTex= open(path+nmbScc+".tex","w")
   informeGeomSeccion(nmbScc,archTex,path+nmbScc+".eps")
   archTex.close()
+

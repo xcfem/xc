@@ -15,7 +15,7 @@ def punzMaximo(fck,d,a,b):
     #Estimación de la resistencia de las bielas en la sección de
     #intersección del contorno del pilar con el forjado (HL.3 números gordos)
     #(Interpreto que este es el punzonamiento máximo si no vamos a disponer
-    #armadura de punzonamiento)
+    #reinforcement de punzonamiento)
     #Si el esfuerzo de punzonamiento es mayor habrá que:
     #  Aumentar la escuadría del pilar (lo más barato)
     #  Aumentar el depth de la losa (lo más efectivo)
@@ -28,8 +28,8 @@ def punzMaximo(fck,d,a,b):
     fcd=fck*10/1.5/1e6  #resistencia de cálculo del hormigón (kp/cm2)
     return 1.5*math.sqrt(fcd)*2*d*(a+b)*100e3
 
-def armaduraPunz(Vd,fck,d,a,b,h,fyd):
-    #Estimación de la armadura necesaria por punzonamiento
+def reinforcementPunz(Vd,fck,d,a,b,h,fyd):
+    #Estimación de la reinforcement necesaria por punzonamiento
     #comprobación en la superficie crítica de punzonamiento 
     #situada a d/2 del perímetro del pilar (HL.3 números gordos)
     #Vd: esfuerzo de cálculo de punzomiento (N)
@@ -38,7 +38,7 @@ def armaduraPunz(Vd,fck,d,a,b,h,fyd):
     #d: depth útil del forjado (m)
     #h: depth del forjado (m)
     #a,b: escuadría del pilar (m)
-    #El resultado de la armadura se expresa en m2/m
+    #El resultado de la reinforcement se expresa en m2/m
     fcd=fck*10/1.5/1e6   #resistencia de cálculo del hormigón (kp/cm2)
     Vcu=math.sqrt(fcd)*2*d*(a+b+2*d)*100e3 #resistencia del hormigón a punzonamiento (kN)
     if Vd < Vcu:

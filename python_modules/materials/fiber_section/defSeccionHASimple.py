@@ -89,11 +89,11 @@ class MainReinfLayer(object):
       self.reinfLayer= reinforcement.newStraightReinfLayer(nmbDiagram)
       self.reinfLayer.codigo= code
       self.reinfLayer.numReinfBars= self.nRebars
-      #print "armadura ", cod, " num. barras: ", self.reinfLayer.numReinfBars
+      #print "reinforcement ", cod, " num. barras: ", self.reinfLayer.numReinfBars
       self.reinfLayer.barDiameter= self.rebarsDiam
       self.reinfLayer.barArea= self.areaRebar
-      #print "armadura", cod, " bar area= ", self.reinfLayer.barArea*1e6, " mm2"
-      #print "armadura", cod, " bar diam: ", self.rebarsDiam*1e3, " mm"
+      #print "reinforcement", cod, " bar area= ", self.reinfLayer.barArea*1e6, " mm2"
+      #print "reinforcement", cod, " bar diam: ", self.rebarsDiam*1e3, " mm"
       self.reinfLayer.p1= p1
       self.reinfLayer.p2= p2
       return self.reinfLayer
@@ -115,9 +115,9 @@ class BasicRecordRCSection(object):
     reinfSteelType:  type of reinforcement steel
     reinfDiagName:   name identifying the characteristic stress-strain diagram
                      of the reinforcing steel material
-    shReinfZ:        record of type defSeccionHASimple.RecordShearReinforcement()
+    shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
                       defining the shear reinforcement in Z direction
-    shReinfY:        record of type defSeccionHASimple.RecordShearReinforcement()
+    shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement()
                      defining the shear reinforcement in Y direction
   '''
   def __init__(self):
@@ -210,9 +210,9 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     reinfSteelType:  type of reinforcement steel
     reinfDiagName:   name identifying the characteristic stress-strain diagram of
                      the reinforcing steel material
-    shReinfZ:        record of type defSeccionHASimple.RecordShearReinforcement()
+    shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
                      defining the shear reinforcement in Z direction
-    shReinfY:        record of type defSeccionHASimple.RecordShearReinforcement() 
+    shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement() 
                      defining the shear reinforcement in Y direction
     coverMin:        minimum value of end or clear concrete cover of main bars from
                      both the positive and negative faces
@@ -423,9 +423,9 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     self.fs.setRespTByName(self.respTName())
     self.fs.setProp("datosSecc",self)
 
-  def defSeccionHASimple(self, preprocessor,matDiagType):
+  def defRCSimpleSection(self, preprocessor,matDiagType):
     '''
-    Definition of a reinforced concrete section with simple 
+    Definition of a reinforced concrete section with several
     top and bottom reinforcement layers.
     matDiagType: type of stress-strain diagram (="k" for characteristic diagrama, 
                  ="d" for design diagram)
@@ -477,7 +477,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
 
 class RecordRCSlabSection(object):
   '''This class is used to define the variables that make up a reinforced concrete slab 
-  section with single reinforcement layers in the top and bottom faces
+  section with several reinforcement layers in the top and bottom faces
   Attributes:
     name:    basic name to form the RC sections in direction 1 (name+'1') 
              and direction 2(name+'1') 

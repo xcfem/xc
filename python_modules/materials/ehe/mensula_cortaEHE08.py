@@ -31,29 +31,29 @@ def getCantoUtilMinimo(tipoJunta, a):
     '''
     return a*getCotgAnguloBiela(tipoJunta)/0.85
 
-def getTraccionArmaduraPrincipal(tipoJunta, Fv,Fh):
-    '''getTraccionArmaduraPrincipal(tipoJunta, Fv,Fh)
+def getTraccionMainReinforcement(tipoJunta, Fv,Fh):
+    '''getTraccionMainReinforcement(tipoJunta, Fv,Fh)
     tipojunta: calidad de la junta de la ménsula con el pilar
     ("monolitica", "junta" o "junta_debil")
     Fv: Carga vertical en la ménsula, positiva hacia abajo (N).
     Fh: Carga horizontal en la ménsula, positiva hacia afuera (N).
 
-    Devuelve la tracción en la armadura principal de la ménsula según
+    Devuelve la tracción en la reinforcement principal de la ménsula según
     el apartado 64.1.2.1.1 de EHE-08.
     '''
     return Fv/getCotgAnguloBiela(tipoJunta)+Fh
 
-def getAreaNecArmaduraPrincipal(tipoJunta, Fv,Fh,fyd):
-    '''getAreaNecArmaduraPrincipal(tipoJunta, Fv,Fh,fyd)
+def getAreaNecMainReinforcement(tipoJunta, Fv,Fh,fyd):
+    '''getAreaNecMainReinforcement(tipoJunta, Fv,Fh,fyd)
     tipojunta: calidad de la junta de la ménsula con el pilar
     ("monolitica", "junta" o "junta_debil")
     Fv: Carga vertical en la ménsula, positiva hacia abajo (N).
     Fh: Carga horizontal en la ménsula, positiva hacia afuera (N).
 
-    Devuelve el área necesaria para la armadura principal de la ménsula según
+    Devuelve el área necesaria para la reinforcement principal de la ménsula según
     el apartado 64.1.2.1.1 de EHE-08.
     '''
-    return getTraccionArmaduraPrincipal(tipoJunta,Fv,Fh)/min(fyd,400e6)
+    return getTraccionMainReinforcement(tipoJunta,Fv,Fh)/min(fyd,400e6)
 
 def getTraccionCercos(Fv):
     ''' getTraccionCercos(Fv)

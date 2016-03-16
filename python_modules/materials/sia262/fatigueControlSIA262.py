@@ -105,7 +105,7 @@ def limitShear(sccData,v_0,v_1,vu):
   return retval
 
 def procesResultVerif(preprocessor,nmbComb):
-  # Comprobación de las secciones de hormigón frente a fatiga estimando la tensión en la armadura.
+  # Comprobación de las secciones de hormigón frente a fatiga estimando la tensión en la reinforcement.
   print "Postproceso combinación: ",nmbComb,"\n"
 
   index= int(nmbComb[-1])

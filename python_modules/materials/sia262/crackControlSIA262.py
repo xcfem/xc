@@ -20,7 +20,7 @@ class CrackControlSIA262(cc.CrackControlBaseParameters):
     rcSets= scc.getProp("rcSets")
     concrFibers= rcSets.concrFibers.fSet
     reinfFibers= rcSets.reinfFibers.fSet
-    armaduraTraccion= rcSets.tensionFibers
+    reinforcementTraccion= rcSets.tensionFibers
 
     self.claseEsfuerzo= scc.getStrClaseEsfuerzo(0.0)
     self.numBarrasTracc= rcSets.getNumTensionRebars()
@@ -29,12 +29,12 @@ class CrackControlSIA262(cc.CrackControlBaseParameters):
       scc.calcSeparaciones(self.setNameFibrasArmaduraTraccion)
       self.eps1= concrFibers.getStrainMax()
       self.eps2= max(concrFibers.getStrainMin(),0.0)
-      self.rebarsSpacingTracc= armaduraTraccion.getDistMediaFibras()
-      self.areaRebarTracc= armaduraTraccion.getArea(1)
-      self.yCDGBarrasTracc= armaduraTraccion.getCdgY()
-      self.zCDGBarrasTracc= armaduraTraccion.getCdgZ()
-      self.tensMediaBarrasTracc= armaduraTraccion.getStressMed()
-      self.iAreaMaxima=  fiberUtils.getIMaxPropFiber(armaduraTraccion,"getArea")
+      self.rebarsSpacingTracc= reinforcementTraccion.getDistMediaFibras()
+      self.areaRebarTracc= reinforcementTraccion.getArea(1)
+      self.yCDGBarrasTracc= reinforcementTraccion.getCdgY()
+      self.zCDGBarrasTracc= reinforcementTraccion.getCdgZ()
+      self.tensMediaBarrasTracc= reinforcementTraccion.getStressMed()
+      self.iAreaMaxima=  fiberUtils.getIMaxPropFiber(reinforcementTraccion,"getArea")
     return self.tensMediaBarrasTracc
 
 def defVarsControlFISSIA262(elems):
@@ -70,7 +70,7 @@ def procesResultVerifFISSIA262(preprocessor,nmbComb):
       e.setProp("MzCP",MzTmp)
 
 def procesResultVerifFISSIA262PlanB(preprocessor,nmbComb):
-  # Comprobación de las secciones de hormigón frente a fisuración estimando la tensión en la armadura.
+  # Comprobación de las secciones de hormigón frente a fisuración estimando la tensión en la reinforcement.
   print "Postproceso combinación: ",nmbComb,"\n"
 
   secHAParamsFis= CrackControlSIA262()

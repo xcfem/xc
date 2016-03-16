@@ -55,15 +55,15 @@ else:
 
 print "\\item{Recomendaciones de armado} \\\\"
 print "\\begin{tabular}{lr}"
-print "Diámetro mínimo de la armadura longitudinal & $\\Phi$12 mm     \\\\"
+print "Diámetro mínimo de la reinforcement longitudinal & $\\Phi$12 mm     \\\\"
 print "Número mínimo de barras & 6   \\\\"
 print "Separación mínima entre redondos arm. long. & 20 cm  \\\\"
-print "Diámetro mínimo de la armadura transversal & $\\Phi_{transv.min} = 0,25\\Phi_{long}$   \\\\"
+print "Diámetro mínimo de la reinforcement transversal & $\\Phi_{transv.min} = 0,25\\Phi_{long}$   \\\\"
 print "Separación entre cercos & s<15$\\Phi_{long}$  \\\\"
 if(prefabricado=="si"):
-  print "Recubrimiento de la armadura & 4-5 cm  \\\\"
+  print "Recubrimiento de la reinforcement & 4-5 cm  \\\\"
 else:
-  print "Recubrimiento de la armadura & 7 cm  \\\\"
+  print "Recubrimiento de la reinforcement & 7 cm  \\\\"
 print "   \\\\"
 print "\\end{tabular}"
 print "\\end{itemize}"

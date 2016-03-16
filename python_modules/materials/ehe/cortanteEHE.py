@@ -16,8 +16,8 @@ class ParamsCortante(object):
   Define las propiedades del registro que contiene los parámetros de cálculo
    de la resistencia a cortante.'''
   setNameFibrasHormigon= "hormigon" #Nombre del conjunto de fibras de hormigón.
-  setNameFibrasArmadura= "armadura" #Nombre del conjunto de fibras de armadura.
-  setNameFibrasArmaduraTraccion= "armaduraTraccion" #Nombre del conjunto de fibras de armadura sometida a tracción.
+  setNameFibrasArmadura= "reinforcement" #Nombre del conjunto de fibras de reinforcement.
+  setNameFibrasArmaduraTraccion= "reinforcementTraccion" #Nombre del conjunto de fibras de reinforcement sometida a tracción.
   hayMom= False #Verdadero si la sección está sometida a momento.
   fcvH= 0.0 #Resistencia efectiva del hormigón a cortante.
   fckH= 0.0 #Valor característico de la resistencia del hormigón a compresión.
@@ -38,7 +38,7 @@ class ParamsCortante(object):
   E0= 0.0 #Módulo de rigidez tangente del hormigón.
 
   alphaL= 1.0 #Factor que depende de la transferencia de pretensado.
-  AsTrsv= 0.0 #Área de la armadura de cortante.
+  AsTrsv= 0.0 #Área de la reinforcement de cortante.
   alpha= math.radians(90) #Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1 EHE-08).
   theta= math.radians(45) #Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1 EHE-08).
   thetaMin= math.atan(0.5) #Valor mínimo del angulo entre las bielas de compresión del hormigón y el eje de la pieza.
@@ -52,8 +52,8 @@ class ParamsCortante(object):
   Vu= 0.0 #Cortante último de la sección.
 
   def calcVuEHE08NoAt(self, preprocessor, scc, hormigon, aceroArmar):
-    ''' Calcula el cortante último de la sección sin armadura de cortante.
-     XXX Falta considerar la armadura activa.
+    ''' Calcula el cortante último de la sección sin reinforcement de cortante.
+     XXX Falta considerar la reinforcement activa.
      matTagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
      hormigon: Parámetros para modelizar el hormigón.
      aceroArmar: Parámetros para modelizar el acero de armar.'''
@@ -76,7 +76,7 @@ class ParamsCortante(object):
       sys.stderr.write(errMsg)
     else:
       reinfFibers= rcSets.reinfFibers.fSet
-      armaduraTraccion= rcSets.tensionFibers
+      reinforcementTraccion= rcSets.tensionFibers
       self.hayMom= scc.isSubjectedToBending(0.1)
       self.numBarrasTraccion= rcSets.getNumTensionRebars()
       if(self.hayMom):
@@ -91,7 +91,7 @@ class ParamsCortante(object):
         else: # Sección fisurada
           self.depthUtil= scc.getCantoUtil() # d
           if(self.numBarrasTraccion>0):
-            self.areaRebarTracc= armaduraTraccion.getArea(1)
+            self.areaRebarTracc= reinforcementTraccion.getArea(1)
           else:
             self.areaRebarTracc= 0.0
           self.Vu2= comprobVEHE08.getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.axilHormigon,self.areaHormigon,self.widthBiela,self.depthUtil,self.areaRebarTracc,0.0)
@@ -106,8 +106,8 @@ class ParamsCortante(object):
         self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.widthBiela,self.alphaL,self.axilHormigon,self.areaHormigon)
 
   def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, hormigon, aceroArmar, Nd, Md, Vd, Td):
-    ''' Calcula el cortante último de la sección CON armadura de cortante.
-     XXX Falta considerar la armadura activa.
+    ''' Calcula el cortante último de la sección CON reinforcement de cortante.
+     XXX Falta considerar la reinforcement activa.
      matTagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
      hormigon: Nombre del material empleado para modelizar el hormigón.
      aceroArmar: Nombre del material empleado para modelizar el acero de armar.
@@ -129,10 +129,10 @@ class ParamsCortante(object):
     createFiberSets.fiberSectionSetupRC3Sets(scc,self.matTagHormigon,self.setNameFibrasHormigon,self.matTagAceroArmar,self.setNameFibrasArmadura)
     concrFibers= scc.getFiberSets()[self.setNameFibrasHormigon]
     reinfFibers= scc.getFiberSets()[self.setNameFibrasArmadura]
-    armaduraTraccion= scc.getFiberSets()[self.setNameFibrasArmaduraTraccion]
+    reinforcementTraccion= scc.getFiberSets()[self.setNameFibrasArmaduraTraccion]
 
     self.hayMom= scc.isSubjectedToBending(0.1)
-    self.numBarrasTraccion= armaduraTraccion.getNumFibers()
+    self.numBarrasTraccion= reinforcementTraccion.getNumFibers()
     self.areaHormigon= concrFibers.getArea(1)
     if(self.areaHormigon<1e-6):
       errMsg= "concrete area too smail; Ac= " + str(self.areaHormigon) + " m2\n"
@@ -147,7 +147,7 @@ class ParamsCortante(object):
         self.depthUtil= scc.getCantoUtil() # d
         self.brazoMecanico= scc.getBrazoMecanico() # z
         if(self.numBarrasTraccion>0):
-          self.areaRebarTracc= armaduraTraccion.getArea(1)
+          self.areaRebarTracc= reinforcementTraccion.getArea(1)
         else:
           self.areaRebarTracc= 0.0
         self.thetaFisuras= comprobVEHE08.getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,self.brazoMecanico,self.areaRebarTracc,0.0,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
@@ -161,7 +161,7 @@ class ParamsCortante(object):
 
   def calcVuEHE08(self, preprocessor, scc, nmbParamsTorsion, hormigon, aceroArmar, Nd, Md, Vd, Td):
     '''  Calcula el cortante último de la sección.
-     XXX Falta considerar la armadura activa.
+     XXX Falta considerar la reinforcement activa.
      hormigon: parameters to model concrete.
      aceroArmar: parameters to model rebar's steel.
      Nd: Valor de cálculo del axil (aquí positivo si es de tracción)

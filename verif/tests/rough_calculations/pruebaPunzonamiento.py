@@ -20,8 +20,8 @@ Vdmax= rough_calculations.ng_punzonamiento.punzMaximo(fck,d,a,b)
 h=0.25
 fyd=500/1.15
 
-As= rough_calculations.ng_punzonamiento.armaduraPunz(Vd,fck,d,a,b,h,fyd)
-#Da como resultado Vd<Vcu -> No necesita armadura de punzonamiento
+As= rough_calculations.ng_punzonamiento.reinforcementPunz(Vd,fck,d,a,b,h,fyd)
+#Da como resultado Vd<Vcu -> No necesita reinforcement de punzonamiento
 
 
 #CASO 2
@@ -43,5 +43,5 @@ Vdmax=rough_calculations.ng_punzonamiento.punzMaximo(fck,d,a,b)
 h=0.20
 fyd=500/1.15
 
-As=rough_calculations.ng_punzonamiento.armaduraPunz(Vd,fck,d,a,b,h,fyd)
+As=rough_calculations.ng_punzonamiento.reinforcementPunz(Vd,fck,d,a,b,h,fyd)
 #Da como resultado As=39 cm2

@@ -93,7 +93,7 @@ epsCMin= fibraCEpsMin.getMaterial().getStrain() # Deformación mínima en el hor
 fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
 epsCMax= fibraCEpsMax.getMaterial().getStrain() # Deformación máxima en el hormigón.
 
-reinfFibers= createFiberSets.FiberSet(scc,"armadura",EHE_reinforcing_steel.B500S.matTagD)
+reinfFibers= createFiberSets.FiberSet(scc,"reinforcement",EHE_reinforcing_steel.B500S.matTagD)
 fibraSEpsMax= reinfFibers.getFiberWithMaxStrain()
 epsSMax= fibraSEpsMax.getMaterial().getStrain() # Deformación máxima en el acero.
 
@@ -123,7 +123,7 @@ print "ratio5= ", ratio5
 
 print "Deformación mínima en el hormigón: ",(epsCMin)
 print "Deformación máxima en el hormigón: ",(epsCMax)
-print "Deformación máxima en la armadura: ",(epsSMax)
+print "Deformación máxima en la reinforcement: ",(epsSMax)
 print "Tipo solicitación: ",strTipoSolic," (",(tipoSolic),") \n"
 print "Cumple a ",strTipoSolic,": ",(cumpleFT)
 print "Aprovechamiento a ",strTipoSolic,": ",(aprovSecc)

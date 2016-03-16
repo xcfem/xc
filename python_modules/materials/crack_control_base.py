@@ -12,8 +12,8 @@ class CrackControlBaseParameters(object):
   Define las propiedades del registro que contiene los parámetros de cálculo
      de la fisuración.'''
   setNameFibrasHormigon= "hormigon" #Nombre del conjunto de fibras de hormigón.
-  setNameFibrasArmadura= "armadura" #Nombre del conjunto de fibras de armadura.
-  setNameFibrasArmaduraTraccion= "armaduraTraccion" #Nombre del conjunto de fibras de armadura sometida a tracción.
+  setNameFibrasArmadura= "reinforcement" #Nombre del conjunto de fibras de reinforcement.
+  setNameFibrasArmaduraTraccion= "reinforcementTraccion" #Nombre del conjunto de fibras de reinforcement sometida a tracción.
   claseEsfuerzo= "" #Clase de esfuerzo al que está sometida la sección.
   rcSets= None
   numBarrasTracc= 0.0 #Número de barras sometidas a tracción.

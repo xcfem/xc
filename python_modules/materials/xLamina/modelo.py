@@ -66,8 +66,8 @@ def xLaminaConstruyeModeloFicticio(preprocessor,datosScc1, datosScc2):
     # Definimos los diagramas de interacción
     hormigon= preprocessor.getMaterialLoader.getMaterial(codHormigon)
     tagHorm= hormigon.getProp("matTagD")
-    armadura= preprocessor.getMaterialLoader.getMaterial(codArmadura)
-    tagHorm= armadura.getProp("matTagD")
+    reinforcement= preprocessor.getMaterialLoader.getMaterial(codArmadura)
+    tagHorm= reinforcement.getProp("matTagD")
     diagInt1= preprocessor.getMaterialLoader.newInteractionDiagram(datosScc1.sectionName,tagHorm,tagArmadura)
     diagInt2= preprocessor.getMaterialLoader.newInteractionDiagram(datosScc2.sectionName,tagHorm,tagArmadura)
 

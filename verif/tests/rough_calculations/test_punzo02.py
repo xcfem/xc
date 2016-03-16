@@ -21,7 +21,7 @@ Vdmax=rough_calculations.ng_punzonamiento.punzMaximo(fck,d,a,b)
 h=0.20
 fyd=500e6/1.15
 
-As=rough_calculations.ng_punzonamiento.armaduraPunz(Vd,fck,d,a,b,h,fyd)
+As=rough_calculations.ng_punzonamiento.reinforcementPunz(Vd,fck,d,a,b,h,fyd)
 #Da como resultado As=39 cm2
 
 ratio1= (Vd-403.2e3)/403.2e3

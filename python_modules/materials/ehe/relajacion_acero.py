@@ -70,9 +70,9 @@ ptsRelajacionCortoPlazo= scipy.interpolate.interp1d(x,y)
 '''
 Devuelve el valor de la relajación para el instante t en función
    de la relajación obtenida para 1000 horas y del tipo de acero.
-   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de reinforcement (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o superestabilizado).
-   alpha: Fracción de la tensión de rotura con la que se tesa la armadura.
+   alpha: Fracción de la tensión de rotura con la que se tesa la reinforcement.
    t: Tiempo expresado en días (para facilitar el tratamiento conjunto con retraccion y
       fluencia).
   
@@ -87,9 +87,9 @@ def getRelajacionTEHE(reinfSteelType, tipoAcero, alpha, tDias):
 
 '''
 Devuelve el la pérdida de tensión por relajación del acero.
-   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de reinforcement (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o estabilizado).
-   alpha: Fracción de la tensión de rotura con la que se tesa la armadura.
+   alpha: Fracción de la tensión de rotura con la que se tesa la reinforcement.
    sigmaInic: Tensión inicial.
    t: Tiempo transcurrido expresado en días
       (para facilitar el tratamiento conjunto con retraccion y fluencia).
@@ -107,9 +107,9 @@ def getPerdidaTensionRelajacionTEHE(reinfSteelType, tipoAcero, alpha, tDias, sig
 '''
 Devuelve el la pérdida de tensión por relajación del acero
    a tiempo infinito según los comentarios al artículo 38.9.
-   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de reinforcement (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o estabilizado).
-   alpha: Fracción de la tensión de rotura con la que se tesa la armadura.
+   alpha: Fracción de la tensión de rotura con la que se tesa la reinforcement.
    sigmaInic: Tensión inicial.
   
 '''
@@ -168,7 +168,7 @@ ptsRO1000Clase3CEB= scipy.interpolate.interp1d(x,y)
 '''
 Devuelve el valor de la relajación a 1000 horas
    Ver figura 2.3.3. del código modelo CEB-FIP 1990
-   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de reinforcement (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o estabilizado).
    alpha: Fracción de la tensión de rotura con la que se tesa el alambre.
 '''
@@ -185,9 +185,9 @@ def getRO1000CEB(reinfSteelType, tipoAcero, alpha):
 '''
 Devuelve el valor de la relajación para el instante t en función
    de la relajación obtenida para 1000 horas y del tipo de acero.
-   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de reinforcement (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o estabilizado).
-   alpha: Fracción de la tensión de rotura con la que se tesa la armadura.
+   alpha: Fracción de la tensión de rotura con la que se tesa la reinforcement.
    t: Tiempo expresado en días (para facilitar el tratamiento conjunto con retraccion y
       fluencia).
   
@@ -202,9 +202,9 @@ def getRelajacionTCEB(reinfSteelType, tipoAcero, alpha, tDias):
 
 '''
 Devuelve el la pérdida de tensión por relajación del acero.
-   reinfSteelType: Tipo de armadura (alambre, cordón o barra).
+   reinfSteelType: Tipo de reinforcement (alambre, cordón o barra).
    tipoAcero: Tipo de acero (normal o estabilizado).
-   alpha: Fracción de la tensión de rotura con la que se tesa la armadura.
+   alpha: Fracción de la tensión de rotura con la que se tesa la reinforcement.
    sigmaInic: Tensión inicial.
    t: Tiempo transcurrido expresado en días
       (para facilitar el tratamiento conjunto con retraccion y fluencia).

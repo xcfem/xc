@@ -16,7 +16,7 @@ def getNuCargaConcentrada(Ac, Ac1, fcd):
   return Ac1*getF3cd(Ac,Ac1,fcd)
 
 '''
-Devuelve la capacidad mecánica necesaria para la armadura paralela al
+Devuelve la capacidad mecánica necesaria para la reinforcement paralela al
 lado a (ver figura 61.1.a página 302 EHE-08)
   a: Dimensión de la sección.
   a1: Dimensión del área cargada paralela a a.
@@ -27,7 +27,7 @@ def getUad(a, a1, Nd):
   return 0.25*((a-a1)/a)*Nd
 
 '''
-Devuelve el área necesaria para la armadura paralela al
+Devuelve el área necesaria para la reinforcement paralela al
 lado a (ver figura 61.1.a página 302 EHE-08)
   a: Dimensión de la sección.
   a1: Dimensión del área cargada paralela a a.
@@ -40,7 +40,7 @@ def getAreaArmadAd(a, a1, Nd, fyd):
 
 
 '''
-Devuelve la capacidad mecánica necesaria para la armadura paralela al
+Devuelve la capacidad mecánica necesaria para la reinforcement paralela al
 lado b (ver figura 61.1.a página 302 EHE-08)
   b: Dimensión de la sección.
   b1: Dimensión del área cargada paralela a b.
@@ -51,7 +51,7 @@ def getUbd(b, b1, Nd):
   return 0.25*((b-b1)/b)*Nd
 
 '''
-Devuelve el área necesaria para la armadura paralela al
+Devuelve el área necesaria para la reinforcement paralela al
 lado b (ver figura 61.1.a página 302 EHE-08)
   b: Dimensión de la sección.
   b1: Dimensión del área cargada paralela a a.

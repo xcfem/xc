@@ -21,8 +21,8 @@ Vdmax= rough_calculations.ng_punzonamiento.punzMaximo(fck,d,a,b)
 h=0.25
 fyd=500e6/1.15
 
-As= rough_calculations.ng_punzonamiento.armaduraPunz(Vd,fck,d,a,b,h,fyd)
-#Da como resultado Vd<Vcu -> No necesita armadura de punzonamiento
+As= rough_calculations.ng_punzonamiento.reinforcementPunz(Vd,fck,d,a,b,h,fyd)
+#Da como resultado Vd<Vcu -> No necesita reinforcement de punzonamiento
 
 
 ratio1= (Vd-80e3)/80e3

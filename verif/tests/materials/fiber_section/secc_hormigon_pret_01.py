@@ -22,17 +22,17 @@ def gmSecHP01(nmbGeomSecc,concrDiagName,nmbDiagAceroPret):
   horm.pMax= geom.Pos2d(depth/2.0,width/2.0)
   # Armadura
   reinforcement= geomSecc.getReinfLayers
-  armaduraInf= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
-  armaduraInf.numReinfBars= 2
-  armaduraInf.barArea= areaCordones
-  armaduraInf.p1= geom.Pos2d(cover-depth/2.0,cover-width/2.0)
-  armaduraInf.p2= geom.Pos2d(cover-depth/2.0,width/2.0-cover)
-  armaduraSup= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
-  armaduraSup.numReinfBars= 2
-  armaduraSup.barDiam= 16e-3
-  armaduraSup.barArea= areaCordones
-  armaduraSup.p1= geom.Pos2d(depth/2.0-cover,cover-width/2.0)
-  armaduraSup.p2= geom.Pos2d(depth/2.0-cover,width/2.0-cover)
+  reinforcementInf= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
+  reinforcementInf.numReinfBars= 2
+  reinforcementInf.barArea= areaCordones
+  reinforcementInf.p1= geom.Pos2d(cover-depth/2.0,cover-width/2.0)
+  reinforcementInf.p2= geom.Pos2d(cover-depth/2.0,width/2.0-cover)
+  reinforcementSup= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
+  reinforcementSup.numReinfBars= 2
+  reinforcementSup.barDiam= 16e-3
+  reinforcementSup.barArea= areaCordones
+  reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,cover-width/2.0)
+  reinforcementSup.p2= geom.Pos2d(depth/2.0-cover,width/2.0-cover)
   return geomSecc
 
 geomSecPret01= gmSecHP01("geomSecHormigonPret01",EHE_concrete.HP45.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)

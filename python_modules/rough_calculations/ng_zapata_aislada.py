@@ -8,14 +8,14 @@ print "\input{cabecera.tex}"
 # Datos necesarios
 Nk=10 # Axil característico (kN)
 Sadm=1 # Tensión admisible del terreno (kN/m2)
-FiArmPilar=1.2 # Diámetro de la armadura longitudinal del pilar (cm)
+FiArmPilar=1.2 # Diámetro de la reinforcement longitudinal del pilar (cm)
 Lpilar=0.5 # Escuadría del pilar (m)
 print "\\textsc{Predimensionamiento de zapata aislada} \\\\ \\\\"
 print "Datos"
 print "\\begin{itemize}"
 print "\\item Axil característico del pilar N$_k$ = ", "%5.2f".format(Nk), " kN" 
 print "\\item Tensión admisible del terreno $\\sigma_{adm}$ = ", Sadm, " kN/m$^2$" 
-print "\\item Diámetro de la armadura longitudinal del pilar $\\Phi$ = ", "%2.1f".format(FiArmPilar), " cm" 
+print "\\item Diámetro de la reinforcement longitudinal del pilar $\\Phi$ = ", "%2.1f".format(FiArmPilar), " cm" 
 print "\item Escuadría del pilar $l$ = ",  "%3.2f".format(Lpilar), " m"
 print "\\end{itemize}"
 
@@ -35,10 +35,10 @@ As=(Md/0.8/depth/500*1.15*10)
 print "$$M_d = 1.5 \\sigma_{adm} \\cfrac{a^2}{8}= ","%3.2f".format(Md),"\\ mkN/m $$"
 print "$$A_s = \\cfrac{M_d}{0.8hf_{yd}} \\times 10 =", "%3.2f".format(As),"\\ cm^2/m $$"
 print "\\begin{itemize}"
-print "\\item La armadura se dispondrá en el paramento inferior en ambas direcciones"
-print "\\item No es necesario disponer armadura en el paramento superior"
+print "\\item La reinforcement se dispondrá en el paramento inferior en ambas direcciones"
+print "\\item No es necesario disponer reinforcement en el paramento superior"
 print "\\item Se recomienda disponer patilla de, al menos, la mitad del depth de la zapata"
-print "\\item Comprobar la armadura mínima"
+print "\\item Comprobar la reinforcement mínima"
 print "\\end{itemize}"
 
 # # Dibujo

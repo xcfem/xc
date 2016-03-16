@@ -39,7 +39,7 @@ concrete.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente alfac
 
 reinfSteel= EHE_reinforcing_steel.B500S
 
-sccData= defSeccionHASimple.RecordRCSimpleSection()
+sccData=defSeccionHASimple.RecordRCSimpleSection()
 sccData.sectionName= "sccData"
 sccData.sectionDescr= "Prueba."
 sccData.concrType= concrete
@@ -57,7 +57,7 @@ prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
 prueba.errFileName= "/tmp/borrar.err" # Don't print errors.
 
 preprocessor=  prueba.getPreprocessor
-sccData.defSeccionHASimple(preprocessor, 'd')
+sccData.defRCSimpleSection(preprocessor, 'd')
 param= xc.InteractionDiagramParameters()
 diag= sccData.defInteractionDiagramNMy(preprocessor)
 #from materials.fiber_section import plotGeomSeccion as pg

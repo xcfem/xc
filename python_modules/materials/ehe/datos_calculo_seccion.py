@@ -11,8 +11,8 @@ Ac= 0.0 # Área de hormigón.
 sgxd= 0.0
 fibraSEpsMax= 0.0 # Fibra de acero con deformación mínima.
 epsSMax= 0.0 # Valor de la deformación máxima en el acero.
-AsPas= 0.0 # Área de la armadura pasiva.
-AsPasTracc= 0.0 # Área de la armadura pasiva a tracción.
+AsPas= 0.0 # Área de la reinforcement pasiva.
+AsPasTracc= 0.0 # Área de la reinforcement pasiva a tracción.
 T= 0.0 # Resultante de las tracciones.
 tipoSolic= 0.0 # Tipo de la solicitación.
 strTipoSolic= "nil" # Descripción del tipo de solicitación.
@@ -73,11 +73,11 @@ PropVrDato= 0.0
 
 
 
-#     AsPas= armadura.area # Area de armadura a tracción
-#     fibraSEpsMax= armadura.IMaxProp("material.strain")
-#     epsSMax= ((armadura.fibra(fibraSEpsMax)).material).strain # Deformación máxima en el acero.
+#     AsPas= reinforcement.area # Area de reinforcement a tracción
+#     fibraSEpsMax= reinforcement.IMaxProp("material.strain")
+#     epsSMax= ((reinforcement.fibra(fibraSEpsMax)).material).strain # Deformación máxima en el acero.
 
-#     AsPasTracc= armaduraTracc.area # Area de armadura a tracción
+#     AsPasTracc= reinforcementTracc.area # Area de reinforcement a tracción
 #     T= getResultanteTracc # Resultante tracciones en la sección
 
 #     tipoSolic= tipoSolicitacion(epsCMin,epsSMax)
@@ -152,7 +152,7 @@ PropVrDato= 0.0
 #                                         \nodos{nod= nodos.getNode(idNodo){VrDato= sqrt(reac[1]^2+reac[2]^2)} }  # Obtención del cortante.
 #                                         \elementos{\elemento[idScc]{\seccion
 #                                          {
-#                                            \resel["armaduraTracc","armadura"]{(material.stress>0)} # Armadura traccionada.
+#                                            \resel["reinforcementTracc","reinforcement"]{(material.stress>0)} # Armadura traccionada.
 #                                            \datCalcSecc(fOut,nmbTablaResulTN,nmbTablaResulV,idScc,idElem,idComb,rutinaVerifCuantias)
 #                                          }}}# Comprobamos seccion
 #                                       }
