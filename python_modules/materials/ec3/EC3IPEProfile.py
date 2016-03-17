@@ -241,7 +241,7 @@ class EC3IPEProfile(ipe.IPEProfile):
       e.setProp('ULSControlRecorder',recorder)
     self.setupULSControlVars(elems,sectionClass,chiLT)
     if(nodes.numGdls==3):
-      recorder.callbackRecord= '''print \'ERROR in element: , self.tag, bidimensional criterion not implemented.\''''
+      recorder.callbackRecord= EC3cc.controlULSCriterion2D()
     else:
       recorder.callbackRecord= EC3cc.controlULSCriterion()
 

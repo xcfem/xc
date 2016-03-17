@@ -111,6 +111,53 @@ def defVarsEnvelopeInternalForcesBeamElems(elems):
     e.setProp('T+',[-6.023e23,-6.023e23]) #Positive torque envelope
     e.setProp('T-',[6.023e23,6.023e23]) #Negative torque envelope
 
+def updateEnvelopeInternalForcesBeamElem2D(beamElem2D):
+  '''Update values for extreme values of internal forces in 2D elements.'''
+  beamElem2D.getResistingForce()
+  N1= beamElem2D.getN1
+  M1= -beamElem2D.getM1
+  V1= beamElem2D.getV1
+  N2= beamElem2D.getN2
+  M2= beamElem2D.getM2
+  V2= -beamElem2D.getV2
+  maxN= beamElem2D.getProp('N+') # [back node value, front node value]
+  maxM= beamElem2D.getProp('Mz+')
+  maxV= beamElem2D.getProp('Vy+')
+  minN= beamElem2D.getProp('N-')
+  minM= beamElem2D.getProp('Mz-')
+  minV= beamElem2D.getProp('Vy-')
+  if(N1>maxN[0]):
+    maxN[0]= N1
+  if(N1<minN[0]):
+    minN[0]= N1
+  if(M1>maxM[0]):
+    maxM[0]= M1
+  if(M1<minM[0]):
+    minM[0]= M1
+  if(V1>maxV[0]):
+    maxV[0]= V1
+  if(V1<minV[0]):
+    minV[0]= V1
+  if(N2>maxN[1]):
+    maxN[1]= N2
+  if(N2<minN[1]):
+    minN[1]= N2
+  if(M2>maxM[1]):
+    maxM[1]= M2
+  if(M2<minM[1]):
+    minM[1]= M2
+  if(V2>maxV[1]):
+    maxV[1]= V2
+  if(V2<minV[1]):
+    minV[1]= V2
+  beamElem2D.setProp('N+',maxN)
+  beamElem2D.setProp('Mz+',maxM)
+  beamElem2D.setProp('Vy+',maxV)
+  beamElem2D.setProp('N-',minN)
+  beamElem2D.setProp('Mz-',minM)
+  beamElem2D.setProp('Vy-',minV)
+
+
 def updateEnvelopeInternalForcesBeamElem(beamElem):
   '''Update values for extreme values of internal forces.'''
   beamElem.getResistingForce()

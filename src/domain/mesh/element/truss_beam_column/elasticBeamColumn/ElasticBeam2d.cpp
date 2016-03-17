@@ -286,6 +286,41 @@ int XC::ElasticBeam2d::revertToStart()
 int XC::ElasticBeam2d::update(void)
   { return theCoordTransf->update(); }
 
+//! @brief Returns the direction vector of element strong axis
+//! expressed in the global coordinate system.
+const XC::Vector &XC::ElasticBeam2d::getVDirEjeFuerteGlobales(void) const
+  {
+    if(theCoordTransf)
+      {
+        const Vector eF= getVDirEjeFuerteLocales();
+        return theCoordTransf->getVectorGlobalCoordFromLocal(eF);
+      }
+    else
+      {
+        std::cerr << "ElasticBeam2d::getVDirEjeFuerteGlobales; no se ha asignado una transformación de coordenadas."
+                  << std::endl;
+        return P;
+      }
+  }
+
+//! @brief Returns the direction vector of element weak axis
+//! expressed in the global coordinate system.
+const XC::Vector &XC::ElasticBeam2d::getVDirEjeDebilGlobales(void) const
+  {
+    if(theCoordTransf)
+      {
+        const Vector eD= getVDirEjeDebilLocales();
+        return theCoordTransf->getVectorGlobalCoordFromLocal(eD);
+      }
+    else
+      {
+        std::cerr << "ElasticBeam2d::getVDirEjeDebilGlobales; no se ha asignado una transformación de coordenadas."
+                  << std::endl;
+        return P;
+      }
+  }
+
+
 const XC::Matrix &XC::ElasticBeam2d::getTangentStiff(void) const
   {
     const Vector &v= getSectionDeformation();

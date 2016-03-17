@@ -32,6 +32,8 @@
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "utility/actor/actor/MovableObject.h"
 
+class EjesPrincInercia2d;
+
 namespace XC {
 class Channel;
 class FEM_ObjectBroker;
@@ -102,6 +104,15 @@ class CrossSectionProperties2d: public EntCmd, public MovableObject
     //! @brief Devuelve la rigidez a cortante.
     inline double GAAlpha(void) const
       { return g*a*alpha; }
+
+    virtual double getTheta(void) const;
+    virtual double getI1(void) const;
+    virtual double getI2(void) const;
+    virtual EjesPrincInercia2d getEjesInercia(void) const;
+    virtual Vector2d getVDirEje1(void) const;
+    virtual Vector2d getVDirEjeFuerte(void) const;
+    virtual Vector2d getVDirEje2(void) const;
+    virtual Vector2d getVDirEjeDebil(void) const;
 
     const Matrix &getSectionTangent2x2(void) const;
     const Matrix &getInitialTangent2x2(void) const;

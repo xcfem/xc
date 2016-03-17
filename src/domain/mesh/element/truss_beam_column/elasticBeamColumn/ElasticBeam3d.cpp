@@ -73,7 +73,6 @@
 #include "xc_utils/src/base/any_const_ptr.h"
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
 
 XC::Matrix XC::ElasticBeam3d::K(12,12);
 XC::Vector XC::ElasticBeam3d::P(12);
@@ -572,39 +571,6 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
     return P;
   }
 
-//! @brief Returns the direction vector of element strong axis
-//! expressed in the local coordinate system.
-XC::Vector XC::ElasticBeam3d::getVDirEjeFuerteLocales(void) const
-  {
-    const Vector2d ejeFuerteSeccion= ctes_scc.getVDirEjeFuerte();
-    Vector eF(3); eF(0)= 0.0; eF(1)= ejeFuerteSeccion.x(); eF(2)= ejeFuerteSeccion.y();
-    return eF;
-  }
-
-//! @brief Returns the direction vector of element weak axis
-//! expressed in the local coordinate system.
-XC::Vector XC::ElasticBeam3d::getVDirEjeDebilLocales(void) const
-  {
-    const Vector2d ejeDebilSeccion= ctes_scc.getVDirEjeDebil();
-    Vector eD(3); eD(0)= 0.0; eD(1)= ejeDebilSeccion.x(); eD(2)= ejeDebilSeccion.y();
-    return eD;
-  }
-
-//! @brief Returns the angle between element strong axis
-//! and local XZ plane.
-double XC::ElasticBeam3d::getAnguloEjeFuerte(void) const
-  {
-    Vector eF= getVDirEjeFuerteLocales();
-    return atan2(eF(2),eF(1));
-  }
-
-//! @brief Returns the angle between element weak axis
-//! and local XZ plane.
-double XC::ElasticBeam3d::getAnguloEjeDebil(void) const
-  {
-    Vector eD= getVDirEjeDebilLocales();
-    return atan2(eD(2),eD(1));
-  }
 
 //! @brief Returns the direction vector of element strong axis
 //! expressed in the global coordinate system.

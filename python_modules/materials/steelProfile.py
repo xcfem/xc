@@ -74,6 +74,31 @@ class SteelProfile(sp.sectionProperties):
       e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
       e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
 
+  def checkUniaxialBendingForElement(self,elem,nmbComb):
+    '''Called in every commit to check uniaxial bending criterion (bars in 2D problems).'''
+    elem.getResistingForce()
+    sectionClass= elem.getProp('sectionClass')
+    chiLT= elem.getProp('chiLT')
+    N1= elem.getN1
+    M1= -elem.getM1
+    V1= elem.getV1
+    FCTN1= self.getZBendingEfficiency(sectionClass,M1,V1,chiLT)
+    N2= elem.getN2
+    M2= elem.getM2
+    V2= -elem.getV2
+    FCTN2= self.getZBendingEfficiency(sectionClass,M2,V2,chiLT)
+
+    fctn= elem.getProp("FCTNCP")
+    if(FCTN1 > fctn[0]):
+      fctn[0]= FCTN1
+      elem.setProp("HIPCPTN1",nmbComb)
+    if(FCTN2 > fctn[1]):
+      fctn[1]= FCTN2
+      elem.setProp("HIPCPTN2",nmbComb)
+    elem.setProp("FCTNCP",fctn)
+
+    vc.updateEnvelopeInternalForcesBeamElem2D(elem)
+
   def checkBiaxialBendingForElement(self,elem,nmbComb):
     '''Called in every commit to check biaxial bending criterion (bars in 3D problems).'''
     elem.getResistingForce()
