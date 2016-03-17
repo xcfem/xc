@@ -37,11 +37,11 @@ hormigon.nDivJK= 10
 hormigon.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
 hormigon.pMax= geom.Pos2d(width/2.0,depth/2.0)
 reinforcement= geomSecHA.getReinfLayers
-armaduraSup= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagK)
-armaduraSup.numReinfBars= 7
-armaduraSup.barArea= areaFi12
-armaduraSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior (cara +).
-armaduraSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
+reinforcementSup= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagK)
+reinforcementSup.numReinfBars= 7
+reinforcementSup.barArea= areaFi12
+reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior (cara +).
+reinforcementSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
 
 materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")

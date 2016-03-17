@@ -50,9 +50,9 @@ class RecordRCColumnSection(defSeccionHASimple.BasicRecordRCSection):
     reinfSteelType:  type of reinforcement steel
     reinfDiagName:   name identifying the characteristic stress-strain diagram
                      of the reinforcing steel material
-    shReinfZ:        record of type defSeccionHASimple.RecordShearReinforcement()
+    shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
                       defining the shear reinforcement in Z direction
-    shReinfY:        record of type defSeccionHASimple.RecordShearReinforcement()
+    shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement()
                      defining the shear reinforcement in Y direction
     cover:          concrete clear cover of main reinforcement
     nRebarsWidth:   number of rebars in the width direction of the 
@@ -83,33 +83,33 @@ class RecordRCColumnSection(defSeccionHASimple.BasicRecordRCSection):
     p1= geom.Pos2d(-width/2+cover,-depth/2+cover) # Armadura inferior (cara -).
     p2= geom.Pos2d(width/2-cover,-depth/2+cover)
 
-    self.armaduraInf= reinforcement.newStraightReinfLayer(reinfDiagName)
-    self.armaduraInf.codigo= "widthInf"
-    self.armaduraInf.numReinfBars= nRebarsWidth
-    self.armaduraInf.barArea= areaRebarWidth
-    self.armaduraInf.p1= geom.Pos2d(-width/2+cover,-depth/2+cover) # Armadura inferior (cara -).
-    self.armaduraInf.p2= geom.Pos2d(width/2-cover,-depth/2+cover)
+    self.reinforcementInf= reinforcement.newStraightReinfLayer(reinfDiagName)
+    self.reinforcementInf.codigo= "widthInf"
+    self.reinforcementInf.numReinfBars= nRebarsWidth
+    self.reinforcementInf.barArea= areaRebarWidth
+    self.reinforcementInf.p1= geom.Pos2d(-width/2+cover,-depth/2+cover) # Armadura inferior (cara -).
+    self.reinforcementInf.p2= geom.Pos2d(width/2-cover,-depth/2+cover)
 
-    self.armaduraSup= reinforcement.newStraightReinfLayer(reinfDiagName)
-    self.armaduraSup.codigo= "widthSup"
-    self.armaduraSup.numReinfBars= nRebarsWidth
-    self.armaduraSup.barArea= areaRebarWidth
-    self.armaduraSup.p1= geom.Pos2d(-width/2+cover,depth/2+cover) # Armadura superior (cara +).
-    self.armaduraSup.p2= geom.Pos2d(width/2-cover,depth/2+cover)
+    self.reinforcementSup= reinforcement.newStraightReinfLayer(reinfDiagName)
+    self.reinforcementSup.codigo= "widthSup"
+    self.reinforcementSup.numReinfBars= nRebarsWidth
+    self.reinforcementSup.barArea= areaRebarWidth
+    self.reinforcementSup.p1= geom.Pos2d(-width/2+cover,depth/2+cover) # Armadura superior (cara +).
+    self.reinforcementSup.p2= geom.Pos2d(width/2-cover,depth/2+cover)
 
     rebarsSpacingCanto= (depth-2*cover)/(nRebarsDepth+1)
 
-    self.armaduraCIzq= reinforcement.newStraightReinfLayer(reinfDiagName)
-    self.armaduraCIzq.codigo= "depthIzda"
-    self.armaduraCIzq.numReinfBars= nRebarsDepth
-    self.armaduraCIzq.barArea= areaRebarDepth
-    self.armaduraCIzq.p1= geom.Pos2d(-width/2+cover,-depth/2+cover+rebarsSpacingCanto) # Armadura lateral izquierda.
-    self.armaduraCIzq.p2= geom.Pos2d(-width/2+cover,depth/2-cover-rebarsSpacingCanto)
+    self.reinforcementCIzq= reinforcement.newStraightReinfLayer(reinfDiagName)
+    self.reinforcementCIzq.codigo= "depthIzda"
+    self.reinforcementCIzq.numReinfBars= nRebarsDepth
+    self.reinforcementCIzq.barArea= areaRebarDepth
+    self.reinforcementCIzq.p1= geom.Pos2d(-width/2+cover,-depth/2+cover+rebarsSpacingCanto) # Armadura lateral izquierda.
+    self.reinforcementCIzq.p2= geom.Pos2d(-width/2+cover,depth/2-cover-rebarsSpacingCanto)
 
-    self.armaduraCDer= reinforcement.newStraightReinfLayer(reinfDiagName)
-    self.armaduraCDer.codigo= "depthDcha"
-    self.armaduraCDer.numReinfBars= nRebarsDepth
-    self.armaduraCDer.barArea= areaRebarDepth
-    self.armaduraCDer.p1= geom.Pos2d(width/2-cover,-depth/2+cover+rebarsSpacingCanto) # Armadura lateral derecha.
-    self.armaduraCDer.p2= geom.Pos2d(width/2-cover,depth/2-cover-rebarsSpacingCanto)
+    self.reinforcementCDer= reinforcement.newStraightReinfLayer(reinfDiagName)
+    self.reinforcementCDer.codigo= "depthDcha"
+    self.reinforcementCDer.numReinfBars= nRebarsDepth
+    self.reinforcementCDer.barArea= areaRebarDepth
+    self.reinforcementCDer.p1= geom.Pos2d(width/2-cover,-depth/2+cover+rebarsSpacingCanto) # Armadura lateral derecha.
+    self.reinforcementCDer.p2= geom.Pos2d(width/2-cover,depth/2-cover-rebarsSpacingCanto)
 

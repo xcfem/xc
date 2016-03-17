@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #Test comprobación del cálculo del cortante de agotamiento por
 #resistencia a tracción del hormigón (Vu2) en una sección
-#SIN armadura de cortante según los artículos 44.2.3.2.1.1
+#SIN reinforcement de cortante según los artículos 44.2.3.2.1.1
 #y  44.2.3.2.1.2 de EHE-08.
 
 import sys

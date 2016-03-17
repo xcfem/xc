@@ -35,11 +35,11 @@ nervio.pMin= geom.Pos2d(0.0,b/2-bw/2)
 nervio.pMax= geom.Pos2d(d-hf,b/2+bw/2)
 
 reinforcement= geomPrueba.getReinfLayers
-armaduraA= reinforcement.newStraightReinfLayer("acero")
-armaduraA.numReinfBars= 5
-armaduraA.barArea= areaBar
-armaduraA.p1= geom.Pos2d(0.0,b/2-bw/2+0.05)
-armaduraA.p2= geom.Pos2d(0.0,b/2+bw/2-0.05)
+reinforcementA= reinforcement.newStraightReinfLayer("acero")
+reinforcementA.numReinfBars= 5
+reinforcementA.barArea= areaBar
+reinforcementA.p1= geom.Pos2d(0.0,b/2-bw/2+0.05)
+reinforcementA.p2= geom.Pos2d(0.0,b/2+bw/2-0.05)
 
 prb= typical_materials.defElasticSection3d(preprocessor, "prb",0.0,Ec,Gc,0.0,0.0,1.0)
 prb.sectionGeometry("geomPrueba")

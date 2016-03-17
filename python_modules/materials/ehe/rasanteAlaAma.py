@@ -11,9 +11,9 @@ def rasanteAgotamiento(fck,gammac,hf,Asf,Sf,fyd):
     #fck: resistencia característica a compresión del hormigón (N/mm2)
     #gammac= coeficiente de minoración de la resistencia del hormigón
     #hf: espesor del ala (m)
-    #Asf: armadura por unidad de longitud que atraviesa la sección (mm2)
+    #Asf: reinforcement por unidad de longitud que atraviesa la sección (mm2)
     #Sf: separación entre las barras de armaura que atraviesa la sección (mm)
-    #fyd: resistencia de cálculo de la armadura (N/mm2)
+    #fyd: resistencia de cálculo de la reinforcement (N/mm2)
     hf=hf*1000     #espesor del ala en mm
     #Esfuerzo rasante de agotamiento por compresión oblicua en la sección
     fcd=fck/gammac

@@ -85,23 +85,23 @@ def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
 
 def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
     '''getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)  [uds: N, m, rad]
-    fact: Factor que toma el valor 0.18 para piezas SIN armadura de cortante y 0.15 para piezas CON
-    armadura de cortante.
-    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin armadura de cortante
-    será fcv= min(fck,60MPa). En piezas con armadura de cortante fcv= min(fck,100MPa).
+    fact: Factor que toma el valor 0.18 para piezas SIN reinforcement de cortante y 0.15 para piezas CON
+    reinforcement de cortante.
+    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
+    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     gammaC: Coeficiente de minoración de la resistencia del hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     d: Canto útil expresado en metros.
     chi: Coeficiente que introduce el efecto de los áridos en el depth útil.
     sgpcd: Tensión axial media en el alma (compresión positiva).
-    AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
+    AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    AsAct: Área de la de la armadura longitudinal activa traccionada anclada
+    AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
 
     Devuelve el valor de fcv (resistencia virtual a cortante del hormigón)
-    para piezas CON Ó SIN armadura de cortante en regiones fisuradas, según los
+    para piezas CON Ó SIN reinforcement de cortante en regiones fisuradas, según los
     artículos 44.2.3.2.1.2 y  44.2.3.2.2 de EHE-08.
     '''
     rol=min((AsPas+AsAct)/(b0*d),0.02)
@@ -110,8 +110,8 @@ def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
 
 def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
     '''getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd)
-    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin armadura de cortante
-    será fcv= min(fck,60MPa). En piezas con armadura de cortante fcv= min(fck,100MPa).
+    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
+    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     gammaC: Coeficiente de minoración de la resistencia del hormigón.
     d: Canto útil expresado en metros.
@@ -119,7 +119,7 @@ def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
     sgpcd: Tensión axial media en el alma (compresión positiva).
 
     Devuelve el valor mínimo de fcv (resistencia virtual a cortante del hormigón)
-    para piezas SIN armadura de cortante en regiones fisuradas, según el
+    para piezas SIN reinforcement de cortante en regiones fisuradas, según el
     artículo 44.2.3.2.1.2 de EHE-08.
     '''
     return 0.075/gammaC*math.pow(chi,1.5)*math.sqrt(fcv)*1e3-0.15*sgpcd
@@ -127,8 +127,8 @@ def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
 
 def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     '''getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct) [uds: N, m]
-    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin armadura de cortante
-    será fcv= min(fck,60MPa). En piezas con armadura de cortante fcv= min(fck,100MPa).
+    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
+    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     fcd: Resistencia de cálculo del hormigón a compresión.
     gammaC: Coeficiente de minoración de la resistencia del hormigón.
@@ -136,13 +136,13 @@ def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     d: Canto útil expresado en metros.
-    AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
+    AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    AsAct: Área de la de la armadura longitudinal activa traccionada anclada
+    AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
 
     Devuelve el valor de Vu2 (cortante de agotamiento por tracción en el alma)
-    para piezas SIN armadura de cortante en regiones fisuradas, según el artículo 44.2.3.2.1.2 de EHE-08.
+    para piezas SIN reinforcement de cortante en regiones fisuradas, según el artículo 44.2.3.2.1.2 de EHE-08.
     '''
     chi=min(2,1+math.sqrt(200/(d*1000.))) #HA DE EXPRESARSE EN METROS.
     sgpcd=max(max(Ncd/Ac,-0.3*fcd),-12e6)
@@ -155,8 +155,8 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     M: Momento que actúa sobre la sección.
     Mfis: Momento de fisuración de la sección correspondiente al mismo plano y sentido
     flexión que M.
-    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin armadura de cortante
-    será fcv= min(fck,60MPa). En piezas con armadura de cortante fcv= min(fck,100MPa).
+    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
+    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     fck: Valor característico de la resistencia del hormigón a compresión.
     gammaC: Coeficiente de minoración de la resistencia del hormigón.
@@ -164,13 +164,13 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     d: Canto útil expresado en metros.
-    AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
+    AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    AsAct: Área de la de la armadura longitudinal activa traccionada anclada
+    AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
  
     Devuelve el valor de Vu2 (cortante de agotamiento por tracción en el alma)
-    para piezas SIN armadura de cortante, según los artículos 44.2.3.2.1.1 y 44.2.3.2.1.2 de EHE-08.
+    para piezas SIN reinforcement de cortante, según los artículos 44.2.3.2.1.1 y 44.2.3.2.1.2 de EHE-08.
     '''
     concrTmp=EHE_concrete.EHEConcrete("HA",fck,gammaC)
     fctdTmp=concrTmp.fctkEHE08()/gammaC
@@ -185,13 +185,13 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
 def getVsuEHE08(z,alpha,theta,AsTrsv,fyd):
     '''getVsuEHE08(z,alpha,theta,AsTrsv,fyd)  [uds: N, m, rad]
     z: Brazo mecánico.
-    alpha: Ángulo de la armadura transversal con el eje de la pieza.
+    alpha: Ángulo de la reinforcement transversal con el eje de la pieza.
     theta: Ángulo entre las bielas de compresión de hormigón y el eje de la pieza.
-    AsTrsv: Área de la armadura transversal cuya contribución se calcula.
-    fyd: Valor de cálculo de la resistencia de la armadura a cortante.
+    AsTrsv: Área de la reinforcement transversal cuya contribución se calcula.
+    fyd: Valor de cálculo de la resistencia de la reinforcement a cortante.
 
-    Devuelve el valor de Vsu (contribución de la armadura transversal de alma
-    a la resistencia al esfuerzo cortante) para piezas CON armadura de cortante,
+    Devuelve el valor de Vsu (contribución de la reinforcement transversal de alma
+    a la resistencia al esfuerzo cortante) para piezas CON reinforcement de cortante,
     según el artículo 44.2.3.2.2 de EHE-08.
     '''
     fyalphad=min(fyd,400e6)
@@ -206,12 +206,12 @@ def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     Td: Torsor de cálculo.
     z: Brazo mecánico.
-    AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
+    AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    AsAct: Área de la de la armadura longitudinal activa traccionada anclada
+    AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    Es: Módulo elástico del acero de la armadura pasiva.
-    Ep: Módulo elástico del acero de la armadura activa.
+    Es: Módulo elástico del acero de la reinforcement pasiva.
+    Ep: Módulo elástico del acero de la reinforcement activa.
     Fp: Fuerza producida por el pretensado en la sección (positiva si es de tracción).
     Ae: Área encerrada por la línea media de la sección hueca eficaz.
     ue: Perímetro de la línea media de la sección hueca eficaz.
@@ -239,12 +239,12 @@ def getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     Td: Torsor de cálculo.
     z: Brazo mecánico.
-    AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
+    AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    AsAct: Área de la de la armadura longitudinal activa traccionada anclada
+    AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    Es: Módulo elástico del acero de la armadura pasiva.
-    Ep: Módulo elástico del acero de la armadura activa.
+    Es: Módulo elástico del acero de la reinforcement pasiva.
+    Ep: Módulo elástico del acero de la reinforcement activa.
     Fp: Fuerza producida por el pretensado en la sección (positiva si es de tracción).
     Ae: Área encerrada por la línea media de la sección hueca eficaz.
     ue: Perímetro de la línea media de la sección hueca eficaz.
@@ -286,8 +286,8 @@ def getBetaVcuEHE08(theta,thetaE):
  
 def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
     '''getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
-    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin armadura de cortante
-    será fcv= min(fck,60MPa). En piezas con armadura de cortante fcv= min(fck,100MPa).
+    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
+    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     fcd: Valor de cálculo de la resistencia del hormigón a compresión.
     gammaC: Coeficiente de minoración de la resistencia del hormigón.
@@ -296,9 +296,9 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     d: Canto útil expresado en metros.
     z: Brazo mecánico.
-    AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
+    AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    AsAct: Área de la de la armadura longitudinal activa traccionada anclada
+    AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     theta: Ángulo entre las bielas de compresión de hormigón y el eje
     de la pieza.
@@ -306,14 +306,14 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     Md: Valor absoluto del momento de cálculo.
     Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     Td: Torsor de cálculo.
-    Es: Módulo elástico del acero de la armadura pasiva.
-    Ep: Módulo elástico del acero de la armadura activa.
+    Es: Módulo elástico del acero de la reinforcement pasiva.
+    Ep: Módulo elástico del acero de la reinforcement activa.
     Fp: Fuerza producida por el pretensado en la sección (positiva si es de tracción).
     Ae: Área encerrada por la línea media de la sección hueca eficaz.
     ue: Perímetro de la línea media de la sección hueca eficaz.
 
     Devuelve el valor de Vcu (contribución del hormigón a la resistencia al esfuerzo cortante)
-    para piezas CON armadura de cortante, según el artículo 44.2.3.2.2 de EHE-08.
+    para piezas CON reinforcement de cortante, según el artículo 44.2.3.2.2 de EHE-08.
     '''
   
     chi=min(2,1+math.sqrt(200/(d*1000.)))   #HA DE EXPRESARSE EN METROS.
@@ -328,37 +328,37 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
   
 def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
     '''getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
-    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin armadura de cortante
-    será fcv= min(fck,60MPa). En piezas con armadura de cortante fcv= min(fck,100MPa).
+    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
+    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     fcd: Valor de cálculo de la resistencia del hormigón a compresión.
-    fyd: Valor de cálculo de la resistencia de la armadura a cortante.
+    fyd: Valor de cálculo de la resistencia de la reinforcement a cortante.
     gammaC: Coeficiente de minoración de la resistencia del hormigón.
     Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     d: Canto útil expresado en metros.
     z: Brazo mecánico.
-    AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
+    AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    AsAct: Área de la de la armadura longitudinal activa traccionada anclada
+    AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    AsTrsv: Área de la armadura transversal.
-    alpha: Ángulo de la armadura transversal con el eje de la pieza.
+    AsTrsv: Área de la reinforcement transversal.
+    alpha: Ángulo de la reinforcement transversal con el eje de la pieza.
     theta: Ángulo entre las bielas de compresión de hormigón y el eje
     de la pieza.
     Nd: Valor de cálculo del axil (positivo si es de tracción)
     Md: Valor absoluto del momento de cálculo.
     Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     Td: Torsor de cálculo.
-    Es: Módulo elástico del acero de la armadura pasiva.
-    Ep: Módulo elástico del acero de la armadura activa.
+    Es: Módulo elástico del acero de la reinforcement pasiva.
+    Ep: Módulo elástico del acero de la reinforcement activa.
     Fp: Fuerza producida por el pretensado en la sección (positiva si es de tracción).
     Ae: Área encerrada por la línea media de la sección hueca eficaz.
     ue: Perímetro de la línea media de la sección hueca eficaz.
 
     Devuelve el valor de Vu2 (esfuerzo cortante de agotamiento por tracción en el alma)
-    para piezas CON armadura de cortante, según el artículo 44.2.3.2.2 de EHE-08.
+    para piezas CON reinforcement de cortante, según el artículo 44.2.3.2.2 de EHE-08.
     '''
     return getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue)+getVsuEHE08(z,alpha,theta,AsTrsv,fyd)
   
@@ -368,37 +368,37 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
 def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
     '''def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
     fck: Resistencia característica del hormigón a compresión.
-    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin armadura de cortante
-    será fcv= min(fck,60MPa). En piezas con armadura de cortante fcv= min(fck,100MPa).
+    fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
+    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     fcd: Valor de cálculo de la resistencia del hormigón a compresión.
-    fyd: Valor de cálculo de la resistencia de la armadura a cortante.
+    fyd: Valor de cálculo de la resistencia de la reinforcement a cortante.
     gammaC: Coeficiente de minoración de la resistencia del hormigón.
     Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     d: Canto útil expresado en metros.
     z: Brazo mecánico.
-    AsPas: Área de la de la armadura longitudinal pasiva traccionada anclada
+    AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    AsAct: Área de la de la armadura longitudinal activa traccionada anclada
+    AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    AsTrsv: Área de la armadura transversal.
-    alpha: Ángulo de la armadura transversal con el eje de la pieza.
+    AsTrsv: Área de la reinforcement transversal.
+    alpha: Ángulo de la reinforcement transversal con el eje de la pieza.
     theta: Ángulo entre las bielas de compresión de hormigón y el eje
     de la pieza.
     Nd: Valor de cálculo del axil (positivo si es de tracción)
     Md: Valor absoluto del momento de cálculo.
     Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     Td: Torsor de cálculo.
-    Es: Módulo elástico del acero de la armadura pasiva.
-    Ep: Módulo elástico del acero de la armadura activa.
+    Es: Módulo elástico del acero de la reinforcement pasiva.
+    Ep: Módulo elástico del acero de la reinforcement activa.
     Fp: Fuerza producida por el pretensado en la sección (positiva si es de tracción).
     Ae: Área encerrada por la línea media de la sección hueca eficaz.
     ue: Perímetro de la línea media de la sección hueca eficaz.
     
     Devuelve el valor de Vu (cortante de agotamiento de la sección)
-    para piezas CON armadura de cortante, según el artículo 44.2.3.2.2 de EHE-08.
+    para piezas CON reinforcement de cortante, según el artículo 44.2.3.2.2 de EHE-08.
     '''
     return  min(getVu2EHE08(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
   

@@ -28,7 +28,7 @@
 
 def getTracArmaduraInfEncepado(alpha,Nd):
     '''
-    Devuelve la traccion en la armadura inferior del encepado
+    Devuelve la traccion en la reinforcement inferior del encepado
     alpha: Ángulo de la biela a compresión con la horizontal.
     Nd: Axil de cálculo en el pilote.
     '''
@@ -37,7 +37,7 @@ def getTracArmaduraInfEncepado(alpha,Nd):
 
 def getAreaNecArmaduraInfEncepado(alpha,Nd,fyd):
     '''
-    Devuelve el área necesaria para la armadura inferior del encepado
+    Devuelve el área necesaria para la reinforcement inferior del encepado
     alpha: Ángulo de la biela a compresión con la horizontal.
     Nd: Axil de cálculo en el pilote.
     '''
@@ -46,7 +46,7 @@ def getAreaNecArmaduraInfEncepado(alpha,Nd,fyd):
 
 def getTracArmaduraInfEncepado2Pilotes(v,d,Nd):
     '''
-    Devuelve la traccion en la armadura inferior de un encepado
+    Devuelve la traccion en la reinforcement inferior de un encepado
     de DOS pilotes (ver números gordos HC.9 página 32).
     v: Distancia entre la pila y el pilote.
     d: Canto útil del encepado.
@@ -58,7 +58,7 @@ def getTracArmaduraInfEncepado2Pilotes(v,d,Nd):
 def getCantoMinimoEncepado(diam,D):
     '''
     Devuelve el depth mínimo del encepado
-    diam: Diámetro de la armadura del pilar o del pilote (la que sea mayor).
+    diam: Diámetro de la reinforcement del pilar o del pilote (la que sea mayor).
     D: Diámetro del pilote.
     '''
     return max((15*diam*diam)*100,max(D,0.4))
@@ -77,7 +77,7 @@ def getDistMinEjesPilotes(D):
 
 def getAreaArmaduraCercosVertEncepado2Pilotes(b,h,L):
     '''
-    Devuelve el área de armadura necesaria para los cercos
+    Devuelve el área de reinforcement necesaria para los cercos
     verticales de un encepado de DOS pilotes (ver números gordos
     HC.9 página 33).
     b: Ancho del encepado.
@@ -89,7 +89,7 @@ def getAreaArmaduraCercosVertEncepado2Pilotes(b,h,L):
 
 def getAreaArmaduraCercosHorizEncepado2Pilotes(b,h):
     '''
-    Devuelve el área de armadura necesaria para los cercos
+    Devuelve el área de reinforcement necesaria para los cercos
     horizontales de un encepado de DOS pilotes (ver números gordos
     HC.9 página 33).
     b: Ancho del encepado.

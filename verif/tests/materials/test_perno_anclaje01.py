@@ -86,7 +86,7 @@ NRdSp= N0RdSp*f1Nsp*f2spN # Desprendimiento de cono.
 
 ''' Resistencia a tracción del perno aislado sin
    tener en cuenta el efecto favorable de la presencia
-   de armadura. '''
+   de reinforcement. '''
 NRd= min(min(min(NRdSp,NRdc),NRdp),NRds)
 
 ratio1= abs(NRds-192900)/192900

@@ -629,7 +629,7 @@ createFiberSets.fiberSectionSetupRCSets(scc,concrMatTag, concrSetName,reinfMatTa
 
 
 \subsubsection{createRCFiberSets}
-Constructs the sets of concrete fibers (\verb|"hormigon"|) and reinforcing steel fibers (\verb|"armadura"|) for all the elements included in a set of elements.
+Constructs the sets of concrete fibers (\verb|"hormigon"|) and reinforcing steel fibers (\verb|"reinforcement"|) for all the elements included in a set of elements.
 \begin{verbatim}
 from materials.fiber_section import createFiberSets
 createFiberSets.createRCFiberSets(preprocessor, setName, concrMatTag, reinfMatTag)
@@ -655,7 +655,7 @@ createFiberSets.reselTensionFibers(scc,fiberSetName,tensionFibersSetName)
 
 
 \subsubsection{fiberSectionSetupRC3Sets}
-Returns a set of tensioned fibers (\verb|"armaduraTraccion"|) of a fiber section of reinforced concrete.
+Returns a set of tensioned fibers (\verb|"reinforcementTraccion"|) of a fiber section of reinforced concrete.
 \begin{verbatim}
 from materials.fiber_section import createFiberSets
 createFiberSets.fiberSectionSetupRC3Sets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetName)
@@ -692,8 +692,8 @@ defSeccionHAPilar.RecordRCColumnSection()
 {\tt areaRebarWidth} & cross sectional area of each rebar in  width direction \\
 {\tt nRebarsDepth} & number of rebars in the height direction of the section (each face )\\
 {\tt areaRebarDepth} & cross sectional area of each rebar in height direction \\
-{\tt shReinfZ} & record of type {\tt defSeccionHASimple.RecordShearReinforcement()} defining the shear reinforcement in Z direction \\
-{\tt shReinfY} & record of type {\tt defSeccionHASimple.RecordShearReinforcement()} defining the shear reinforcement in Y direction \\
+{\tt shReinfZ} & record of type {\tt.defRCSimpleSection.RecordShearReinforcement()} defining the shear reinforcement in Z direction \\
+{\tt shReinfY} & record of type {\tt.defRCSimpleSection.RecordShearReinforcement()} defining the shear reinforcement in Y direction \\
 \end{paramClassTable}
 
 \begin{methodsTable}
@@ -705,7 +705,7 @@ defSeccionHAPilar.RecordRCColumnSection()
 \subsubsection{RecordShearReinforcement}
 \noindent This class is used to define the variables that make up a family of shear reinforcing bars.
 \begin{verbatim}
-from materials.fiber_section import defSeccionHASimple
+from materials.fiber_section import.defRCSimpleSection
 defSeccionHASimple.RecordShearReinforcement()
 \end{verbatim}
 \begin{paramClassTable}
@@ -723,7 +723,7 @@ defSeccionHASimple.RecordShearReinforcement()
 \subsubsection{RecordRCSimpleSection}
 \noindent This class is used to define the variables that make up a rectangular reinforced concrete section with single reinforcement layers in top and bottom faces
 \begin{verbatim}
-from materials.fiber_section import defSeccionHASimple
+from materials.fiber_section import.defRCSimpleSection
 defSeccionHASimple.RecordRCSimpleSection()
 \end{verbatim}
 \begin{paramClassTable}
@@ -748,8 +748,8 @@ defSeccionHASimple.RecordRCSimpleSection()
 {\tt coverPos} & cover of longitudinal reinforcement in the positive face\\
 {\tt coverLatPos} & lateral cover of longitudinal reinforcement in the positive face\\
 {\tt coverMin} & minimal covering of the longitudinal reinforcement \\
-{\tt shReinfZ} & record of type {\tt defSeccionHASimple.RecordShearReinforcement()} defining the shear reinforcement in Z direction \\
-{\tt shReinfY} & record of type {\tt defSeccionHASimple.RecordShearReinforcement()} defining the shear reinforcement in Y direction \\
+{\tt shReinfZ} & record of type {\tt.defRCSimpleSection.RecordShearReinforcement()} defining the shear reinforcement in Z direction \\
+{\tt shReinfY} & record of type {\tt.defRCSimpleSection.RecordShearReinforcement()} defining the shear reinforcement in Y direction \\
 \end{paramClassTable}
 \begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt defGeomRCColumnSection(matDiagType)}} \\
@@ -761,7 +761,7 @@ defSeccionHASimple.RecordRCSimpleSection()
 \subsubsection{RecordRCSlabSection}
 \noindent This class is used to define the variables that make up a reinforced concrete slab section with single reinforcement layers in top and bottom faces
 \begin{verbatim}
-from materials.fiber_section import defSeccionHASimple
+from materials.fiber_section import.defRCSimpleSection
 defSeccionHASimple.RecordRCSlabSection(nmb,desc,depth,concrete,steel,basicCover)
 \end{verbatim}
 \begin{paramClassTable}
@@ -945,10 +945,10 @@ nDIJ, nDIK)
 \end{paramFuncTable}
 
 
-\subsubsection{RecordFamArmaduraPrincipal}
+\subsubsection{RecordFamMainReinforcement}
 \noindent This class constructs a family of main reinforcing bars.
 \begin{verbatim} materials.fiber_section import informeGeomSeccion
-informeGeomSeccion.RecordFamArmaduraPrincipal(reinfLayer)
+informeGeomSeccion.RecordFamMainReinforcement(reinfLayer)
 \end{verbatim}
 
 \begin{paramClassTable}
@@ -965,15 +965,15 @@ informeGeomSeccion.RecordFamArmaduraPrincipal(reinfLayer)
 & writes the value of parameters in a file named {\tt archTex} \\ 
 \end{methodsTable}
 
-\subsubsection{imprimeArmaduraPrincipal}
+\subsubsection{imprimeMainReinforcement}
 \noindent The function writes in the specified file the characteristics (diameter, area, cover, position of gravity centre, \ldots) of each main reinforcement family provided in a list of family names.
 \begin{verbatim}
 from materials.fiber_section import informeGeomSeccion
-informeGeomSeccion.imprimeArmaduraPrincipal(listaFamArmaduraPrincipal, 
+informeGeomSeccion.imprimeMainReinforcement(listaFamMainReinforcement, 
 areaHorm, archTex)
 \end{verbatim}
 \begin{paramFuncTable}
-{\tt listaFamArmaduraPrincipal} & name identifying a list of names of reinforcement families \\
+{\tt listaFamMainReinforcement} & name identifying a list of names of reinforcement families \\
 {\tt areaHorm} & area of the concrete section \\
 {\tt archTex} &  name of the output file \\
 \end{paramFuncTable}
@@ -982,11 +982,11 @@ areaHorm, archTex)
 \noindent The function writes in the specified file the characteristics (diameter, area, distances, angles, \ldots) of a family of shear reinforcement bars.
 \begin{verbatim}
 from materials.fiber_section import informeGeomSeccion
-informeGeomSeccion.imprimeArmaduraCortante(recordArmaduraCortante, 
+informeGeomSeccion.imprimeArmaduraCortante(recordShearReinf, 
 archTex)
 \end{verbatim}
 \begin{paramFuncTable}
-{\tt recordArmaduraCortante} & name identifying a family of shear reinforcement \\
+{\tt recordShearReinf} & name identifying a family of shear reinforcement \\
 {\tt archTex} &  name of the output file \\
 \end{paramFuncTable}
 

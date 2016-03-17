@@ -49,12 +49,12 @@ hormigon.initAngle= 0.0
 hormigon.finalAngle= 2*math.pi
 
 reinforcement= pileGeometry.getReinfLayers
-armadura= reinforcement.newCircReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
-armadura.numReinfBars= 14
-armadura.barArea= areaFi20
-armadura.initAngle= 0.0
-armadura.finalAngle= 2*math.pi
-armadura.radius= hormigon.extRad-cover
+reinforcement= reinforcement.newCircReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcement.numReinfBars= 14
+reinforcement.barArea= areaFi20
+reinforcement.initAngle= 0.0
+reinforcement.finalAngle= 2*math.pi
+reinforcement.radius= hormigon.extRad-cover
 
 materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")

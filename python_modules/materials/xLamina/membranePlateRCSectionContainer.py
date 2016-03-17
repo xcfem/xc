@@ -46,10 +46,10 @@ class SectionContainer(object):
     '''
     mapInteractionDiagrams= {}
     for s in self.sections:
-      s.D2Section.defSeccionHASimple(preprocessor,matDiagType)
+      s.D2Section.defRCSimpleSection(preprocessor,matDiagType)
       diag2= s.D2Section.defInteractionDiagram(preprocessor)
       mapInteractionDiagrams[s.D2Section.sectionName]= diag2
-      s.D1Section.defSeccionHASimple(preprocessor,matDiagType)
+      s.D1Section.defRCSimpleSection(preprocessor,matDiagType)
       diag1= s.D1Section.defInteractionDiagram(preprocessor)
       mapInteractionDiagrams[s.D1Section.sectionName]= diag1
     return mapInteractionDiagrams

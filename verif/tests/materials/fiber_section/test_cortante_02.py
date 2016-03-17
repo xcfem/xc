@@ -67,16 +67,16 @@ rg.nDivJK= 10
 rg.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
 rg.pMax= geom.Pos2d(width/2.0,depth/2.0)
 reinforcement= geomSecHA.getReinfLayers
-armaduraInf= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
-armaduraInf.numReinfBars= numBarras
-armaduraInf.barArea= areaBarra
-armaduraInf.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0) # Armadura inferior.
-armaduraInf.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
-armaduraSup= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
-armaduraSup.numReinfBars= numBarras
-armaduraSup.barArea= areaBarra
-armaduraSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior.
-armaduraSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
+reinforcementInf= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcementInf.numReinfBars= numBarras
+reinforcementInf.barArea= areaBarra
+reinforcementInf.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0) # Armadura inferior.
+reinforcementInf.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
+reinforcementSup= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcementSup.numReinfBars= numBarras
+reinforcementSup.barArea= areaBarra
+reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior.
+reinforcementSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
 
 secHA= materiales.newMaterial("fiberSectionShear3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
@@ -116,7 +116,7 @@ analOk= analisis.analyze(10)
 
 secHAParamsCortante= cortanteEHE.ParamsCortante()
 
-secHAParamsCortante.AsTrsv= areaBarrasEHE.Fi6*numRamas/0.2 # Área de la armadura transversal
+secHAParamsCortante.AsTrsv= areaBarrasEHE.Fi6*numRamas/0.2 # Área de la reinforcement transversal
 secHAParamsCortante.theta= math.radians(45)
 secHAParamsCortante.alpha= math.radians(90)
 

@@ -63,10 +63,10 @@ class ParamsCortante(object):
     self.s= seccionHA.shReinfZ.shReinfSpacing
 
   def calcVcu(self, Nd, Md, Mu):
-    ''' Calcula el cortante último de la sección sin armadura de cortante.'''
+    ''' Calcula el cortante último de la sección sin reinforcement de cortante.'''
     self.Vcu= VuNoShearRebarsSIA262(self.hormigon,self.acero,Nd,abs(Md),abs(Mu),self.width,self.depthUtil)
   def calcVsu(self):
-    ''' Calcula el cortante último de la sección sin armadura de cortante pasamos
+    ''' Calcula el cortante último de la sección sin reinforcement de cortante pasamos
         s= 1.0 porque AsTrsv ya incorpora todas las ramas en un metro.'''
     self.Vsu= VuShearRebars90SIA262(self.AsTrsv,1.0,self.acero,self.brazoMecanico)
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento del comando capa_armadura_recta
+# Test de funcionamiento del comando capa_reinforcement_recta
 import xc_base
 import geom
 import xc
@@ -38,17 +38,17 @@ y1= width/2.0
 z1= depth/2.0
 
 reinforcement= geomCuadFibras.getReinfLayers
-armaduraA= reinforcement.newStraightReinfLayer("acero")
-armaduraA.numReinfBars= 2
-armaduraA.barArea= As
-armaduraA.p1= geom.Pos2d(y0-depth/2.0,z0-width/2.0)
-armaduraA.p2= geom.Pos2d(y0+depth/2.0,z0-width/2.0)
+reinforcementA= reinforcement.newStraightReinfLayer("acero")
+reinforcementA.numReinfBars= 2
+reinforcementA.barArea= As
+reinforcementA.p1= geom.Pos2d(y0-depth/2.0,z0-width/2.0)
+reinforcementA.p2= geom.Pos2d(y0+depth/2.0,z0-width/2.0)
 
-armaduraB= reinforcement.newStraightReinfLayer("acero")
-armaduraB.numReinfBars= 2
-armaduraB.barArea= As
-armaduraB.p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)
-armaduraB.p2= geom.Pos2d(y0+depth/2.0,z0+width/2.0)
+reinforcementB= reinforcement.newStraightReinfLayer("acero")
+reinforcementB.numReinfBars= 2
+reinforcementB.barArea= As
+reinforcementB.p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)
+reinforcementB.p2= geom.Pos2d(y0+depth/2.0,z0+width/2.0)
 
 materiales= preprocessor.getMaterialLoader
 # Secciones
