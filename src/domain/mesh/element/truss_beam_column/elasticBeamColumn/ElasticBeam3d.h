@@ -144,10 +144,6 @@ class ElasticBeam3d : public ProtoBeam3d
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
 
-    Vector getVDirEjeFuerteLocales(void) const;
-    Vector getVDirEjeDebilLocales(void) const;
-    double getAnguloEjeFuerte(void) const;
-    double getAnguloEjeDebil(void) const;
     const Vector &getVDirEjeFuerteGlobales(void) const;
     const Vector &getVDirEjeDebilGlobales(void) const;
     

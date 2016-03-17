@@ -29,8 +29,6 @@
 #ifndef CrossSectionProperties3d_h
 #define CrossSectionProperties3d_h
 
-class EjesPrincInercia2d;
-
 #include "CrossSectionProperties2d.h"
 
 namespace XC {

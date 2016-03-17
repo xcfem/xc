@@ -30,3 +30,11 @@ crossSection= self.getProp('crossSection')
 crossSection.checkBiaxialBendingForElement(self,nmbComb)
 crossSection.checkYShearForElement(self,nmbComb)'''
 
+def controlULSCriterion2D():
+  return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getNombreCombActual
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkUniaxialBendingForElement(self,nmbComb)
+crossSection.checkYShearForElement(self,nmbComb)'''
+

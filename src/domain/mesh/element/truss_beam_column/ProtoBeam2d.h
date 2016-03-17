@@ -54,6 +54,11 @@ class ProtoBeam2d : public Element1D
     void setSectionProperties(const CrossSectionProperties2d &ctes)
       { ctes_scc= ctes; }
 
+    Vector getVDirEjeFuerteLocales(void) const;
+    Vector getVDirEjeDebilLocales(void) const;
+    double getAnguloEjeFuerte(void) const;
+    double getAnguloEjeDebil(void) const;
+
   };
 } // end of XC namespace
 

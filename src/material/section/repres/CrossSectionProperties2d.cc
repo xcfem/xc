@@ -27,6 +27,8 @@
 //CrossSectionProperties2d.cc
 
 #include <material/section/repres/CrossSectionProperties2d.h>
+#include "xc_basic/src/util/inercia.h"
+#include "xc_utils/src/geom/sis_ref/EjesPrincInercia2d.h"
 #include "domain/mesh/element/Information.h"
 #include "xc_utils/src/base/any_const_ptr.h"
 #include <utility/matrix/Vector.h>
@@ -88,6 +90,37 @@ XC::CrossSectionProperties2d::CrossSectionProperties2d(double EA_in, double EI_i
 XC::CrossSectionProperties2d::CrossSectionProperties2d(double E_in, double A_in, double I_in, double G_in, double a)
   : EntCmd(), MovableObject(0), e(E_in), g(G_in), a(A_in), i(I_in), alpha(a)
   { check_values(); }
+
+//! @brief Returns the angle between the principal axes and the local system.
+double XC::CrossSectionProperties2d::getTheta(void) const
+  { return 0.0; }
+
+//! @brief Returns the major principal axis of inertia.
+double XC::CrossSectionProperties2d::getI1(void) const
+  { return I(); }
+
+//! @brief Returns the minor principal axis of inertia.
+double XC::CrossSectionProperties2d::getI2(void) const
+  { return 0.0; }
+
+//! @brief Returns the principal axis of inertia.
+EjesPrincInercia2d XC::CrossSectionProperties2d::getEjesInercia(void) const
+  {
+    const Pos2d cdg(0,0);
+    return EjesPrincInercia2d(cdg,0.0,I(),0.0);
+  }
+//! @brief Returns principal axis I (strong).
+Vector2d XC::CrossSectionProperties2d::getVDirEje1(void) const
+  { return getEjesInercia().getVDirEje1(); }
+//! @brief Returns principal axis I (strong).
+Vector2d XC::CrossSectionProperties2d::getVDirEjeFuerte(void) const
+  { return getEjesInercia().getVDirEje1(); }
+//! @brief Returns principal axis II (weak).
+Vector2d XC::CrossSectionProperties2d::getVDirEje2(void) const
+  { return getEjesInercia().getVDirEje2(); }
+//! @brief Returns principal axis II (weak).
+Vector2d XC::CrossSectionProperties2d::getVDirEjeDebil(void) const
+  { return getEjesInercia().getVDirEje2(); }
 
 //! @brief Devuelve la matriz de rigidez tangente.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionTangent2x2(void) const
