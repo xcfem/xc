@@ -612,6 +612,8 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_simple_beam.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_simple_bending_reinforcement.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_simple_bending_reinforcement.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_tied_arch_simple_model.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_tied_arch_simple_model.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/suspension_bridge_simple_model.py

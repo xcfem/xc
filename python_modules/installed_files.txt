@@ -14,6 +14,7 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_pinned_fixed_beam.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_rc_section.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_prestressing_wire.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_tied_arch_simple_model.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_predim_pilotes.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_cantilever.py
@@ -345,6 +346,7 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_pinned_fixed_beam.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_rc_section.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_prestressing_wire.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_tied_arch_simple_model.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_predim_pilotes.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_cantilever.pyc
