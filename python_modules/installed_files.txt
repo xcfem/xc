@@ -12,6 +12,9 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_retaining_wall.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_esf_pilares.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_pinned_fixed_beam.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/cable_stayed_bridge_simple_model.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/masonry_bridge.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/nb_poussee_terres.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_rc_section.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_prestressing_wire.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_tied_arch_simple_model.py
@@ -344,6 +347,10 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_retaining_wall.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_esf_pilares.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_pinned_fixed_beam.pyc
+<<<<<<< HEAD
+/usr/local/lib/python2.7/dist-packages/rough_calculations/cable_stayed_bridge_simple_model.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/masonry_bridge.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/nb_poussee_terres.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_rc_section.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_prestressing_wire.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_tied_arch_simple_model.pyc
