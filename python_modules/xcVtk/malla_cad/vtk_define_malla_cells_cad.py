@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
-def VtkCargaIdsCells(nmbUGrid,setName,nmbTipoEnt):
-  etiqCeldas= VtkCreaStrArraySetData(setName,nmbTipoEnt,"codigo")
+def VtkCargaIdsCells(nmbUGrid,setName,entTypeName):
+  etiqCeldas= VtkCreaStrArraySetData(setName,entTypeName,"codigo")
   nmbUGrid.cell_data.set_strings(etiqCeldas)
 
 # ****** Creamos las etiquetas para las celdas *******
-def VtkDibujaIdsCells(nmbUGrid,setName,nmbTipoEnt,renderer):
+def VtkDibujaIdsCells(nmbUGrid,setName,entTypeName,renderer):
   ids= vtk.VtkIdFilter()
   ids.SetInput(nmbUGrid)
   ids.CellIdsOff()
   ids.PointIdsOff()
-  VtkCargaIdsCells(nmbUGrid,setName,nmbTipoEnt)
+  VtkCargaIdsCells(nmbUGrid,setName,entTypeName)
   # Dibuja las etiquetas de las líneas.
   cc= vtk.VtkCellCenters() # Centroides de las celdas.
   cc.SetInput(ids)

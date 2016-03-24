@@ -32,9 +32,9 @@ def VtkDibujaIdsKPts(nmbUGrid,setName,renderer):
     print "El conjunto: '",setName,"' no tiene KPts"
 
 # Define el actor a emplear para dibujar kpoints.
-def VtkDefineActorKPoint(nmbUGrid,renderer,radio):
+def VtkDefineActorKPoint(nmbUGrid,renderer,radius):
   sphereSource= vtk.VtkSphereSource()
-  sphereSource.radio(radio)
+  sphereSource.radius(radius)
   sphereSource.ResolTheta(5)
   sphereSource.ResolPhi(5)
     

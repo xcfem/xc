@@ -22,7 +22,7 @@ import math
 gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
 gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
 
-radio= 0.75/2.0 # Radio de la sección expresado en metros.
+radius= 0.75/2.0 # Radio de la sección expresado en metros.
 diam= 20e-3 # Diámetro de las barras expresado en metros.
 cover= 0.06+12e-3+diam/2.0 # Recubrimiento de la sección expresado en metros.
 areaFi20= math.pi*(diam/2.0)**2 # Área de las barras expresado en metros cuadrados.
@@ -43,7 +43,7 @@ regiones= pileGeometry.getRegions
 hormigon= regiones.newCircularRegion(EHE_concrete.HA30.nmbDiagD)
 hormigon.nDivCirc= 20
 hormigon.nDivRad= 5
-hormigon.extRad= radio
+hormigon.extRad= radius
 hormigon.intRad= 0.0
 hormigon.initAngle= 0.0
 hormigon.finalAngle= 2*math.pi

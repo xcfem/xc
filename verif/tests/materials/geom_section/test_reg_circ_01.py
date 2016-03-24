@@ -11,9 +11,9 @@ import math
 Es= 2.1e11
 nu= 0.3
 Gs= 0.01*Es/(2*(1+nu))
-radio= 1.2/2.0
+radius= 1.2/2.0
 espesor= 10.3e-3
-RExt= radio+espesor
+RExt= radius+espesor
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
@@ -24,8 +24,8 @@ acero= regiones.newCircularRegion("acero")
 
 acero.nDivCirc= 1000
 acero.centro= geom.Pos2d(0.0,0.0)
-acero.extRad= radio+espesor
-acero.intRad= radio
+acero.extRad= radius+espesor
+acero.intRad= radius
 acero.initAngle= 0.0
 acero.finalAngle= 2*math.pi
 
@@ -40,9 +40,9 @@ G= geomTuberia.getCdgSeccHomogeneizada(Es)
 
 
 
-areaTeor= math.pi*(RExt**2-radio**2)
+areaTeor= math.pi*(RExt**2-radius**2)
 ratio1= ((area-areaTeor)/areaTeor)
-ITeor= math.pi/4*(RExt**4-radio**4)
+ITeor= math.pi/4*(RExt**4-radius**4)
 ratio2= ((Iy-ITeor)/ITeor)
 ratio3= ((Iz-ITeor)/ITeor)
 ratio4= G.Norm()

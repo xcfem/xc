@@ -22,7 +22,7 @@ class sccRectang(object):
     """Devuelve el momento de inercia respecto al eje paralelo al width que pasa por el CDG de la sección."""
     return 1.0/12.0*self.b*self.h**3
   def i1(self):
-    """Devuelve el radio de giro respecto al eje paralelo al width que pasa por el CDG de la sección."""
+    """Devuelve el radius de giro respecto al eje paralelo al width que pasa por el CDG de la sección."""
     return math.sqrt(self.I1()/self.area())
   def Me1(self,fy):
     """Devuelve el momento elástico respecto al eje paralelo al width que pasa por el CDG de la sección. """
@@ -39,7 +39,7 @@ class sccRectang(object):
     return 1.0/12.0*self.h*self.b**3
 
   def i2(self):
-    """Devuelve el radio de giro respecto al eje paralelo al depth que pasa por el CDG de la sección."""
+    """Devuelve el radius de giro respecto al eje paralelo al depth que pasa por el CDG de la sección."""
     return math.sqrt(self.I2()/self.area())
 
   def Me2(self,fy):

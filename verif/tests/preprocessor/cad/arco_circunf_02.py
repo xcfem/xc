@@ -75,7 +75,7 @@ print "zC= ",(zC)
 print "xi= ",(xi)
 print "yi= ",(yi)
 print "zi= ",(zi)
-print "radio= ",(r)
+print "radius= ",(r)
    '''
 
 import os
