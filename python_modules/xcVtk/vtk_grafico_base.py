@@ -87,8 +87,8 @@ class RecordDefDisplay(object):
     cam.Zoom(self.zoom)
     self.renderer.ResetCameraClippingRange()
 
-  #Define una vista desde el eje X-
   def ViewXNeg(self):
+    '''View from negative X axis (X-)'''
     self.renderer.ResetCamera()
     cam= self.renderer.GetActiveCamera()
     cam.SetViewUp(0,0,1)
@@ -97,8 +97,8 @@ class RecordDefDisplay(object):
     cam.Zoom(self.zoom)
     self.renderer.ResetCameraClippingRange()
 
-  #Define una vista desde el eje X+
   def ViewXPos(self):
+    '''View from positive X axis (X+)'''
     self.renderer.ResetCamera()
     cam= self.renderer.GetActiveCamera()
     cam.SetViewUp(0,0,1)
@@ -107,8 +107,8 @@ class RecordDefDisplay(object):
     cam.Zoom(self.zoom)
     self.renderer.ResetCameraClippingRange()
 
-  #Define una vista desde el eje Z+
   def ViewZPos(self):
+    '''View from positive Z axis (Z+)'''
     self.renderer.ResetCamera()
     cam= self.renderer.GetActiveCamera()
     cam.SetViewUp(0,1,0)
@@ -117,8 +117,8 @@ class RecordDefDisplay(object):
     cam.Zoom(self.zoom)
     self.renderer.ResetCameraClippingRange()
 
-  #Define una vista desde el eje Z-
   def ViewZNeg(self):
+    '''View from negative Z axis (Z-)'''
     self.renderer.ResetCamera()
     cam= self.renderer.GetActiveCamera()
     cam.SetViewUp(0,1,0)
@@ -127,8 +127,8 @@ class RecordDefDisplay(object):
     cam.Zoom(self.zoom)
     self.renderer.ResetCameraClippingRange()
 
-  #Define una vista desde XYZ+
   def ViewXYZPos(self):
+    '''View from point (1,1,1)'''
     self.renderer.ResetCamera()
     cam= self.renderer.GetActiveCamera()
     cam.SetViewUp(-1,-1,1)
@@ -138,6 +138,9 @@ class RecordDefDisplay(object):
     self.renderer.ResetCameraClippingRange()
 
   def defineView(self):
+    '''Sets the view for the following predefined viewNames:
+    "ZPos","ZNeg","YPos","YNeg","XPos","XNeg","XYZPos"
+    '''
     if(self.viewName=="ZPos"):
       self.ViewZPos()
     elif(self.viewName=="ZNeg"):
@@ -156,12 +159,18 @@ class RecordDefDisplay(object):
       sys.stderr.write("View name: '"+self.viewName+"' unknown.")
 
   def setupWindow(self):
+    '''sets the rendering window. A rendering window is a window in a
+       graphical user interface where renderers draw their images.
+    '''
     self.renWin= vtk.vtkRenderWindow()
     self.renWin.SetSize(self.windowWidth,self.windowHeight)
     self.renWin.AddRenderer(self.renderer)
     return self.renWin
 
   def setupWindowInteractor(self):
+    '''sets the window interactor, which provides a platform-independent
+    interaction mechanism for mouse/key/time events.
+    '''
     iren= vtk.vtkRenderWindowInteractor()
     iren.SetRenderWindow(self.renWin)
     iren.SetSize(self.windowWidth,self.windowHeight)
@@ -182,13 +191,13 @@ class RecordDefDisplay(object):
     self.displayScene(None)
     
 
-  # Muestra la malla en el dispositivo de salida.
-  def muestraMalla(self, preprocessor,recordGrid):
+  def displayGrid(self, preprocessor,recordGrid):
+    '''Displays the grid in the output device'''
     self.defineEscenaMalla(preprocessor,recordGrid,None)
     self.displayScene()
 
-  # Plot window contents
   def plot(self,fName):
+    '''Plots window contents'''
     w2i = vtk.vtkWindowToImageFilter()
     writer = vtk.vtkJPEGWriter()
     w2i.SetInput(self.renWin)

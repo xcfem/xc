@@ -137,7 +137,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
 
   def grafico_mef(self,preprocessor,setName):
     defGrid= self.setupGrid(setName)
-    self.muestraMalla(preprocessor,defGrid)
+    self.displayGrid(preprocessor,defGrid)
 
   def displayMesh(self, preprocessor, setName, field= None, diagrams= None, fName= None):
     defGrid= self.setupGrid(setName)
