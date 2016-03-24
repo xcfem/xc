@@ -2,11 +2,11 @@
 
 '''reinforcingSteel.py: reinforcing steel mechanical properties.'''
 
-__author__= "Luis C. Pérez Tato (LCPT)"
-__cppyright__= "Copyright 2015, LCPT"
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT AOO"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 import xc_base
 import geom
@@ -15,7 +15,14 @@ from materials import materialGraphics as mg
 import matplotlib.pyplot as plt
 
 class ReinforcingSteel(object):
-  """Reinforcing steel parameters"""
+  """Reinforcing steel parameters 
+  Attributes:
+    nmbAcero: Name identifying the material.
+    fyk:      Characteristic value of the yield strength.
+    emax:     maximum strain in tension
+    gammaS:   Partial factor for material.
+    k:        fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 , class B k>=1,08)
+  """
   nmbMaterial= "nil" # Name identifying the material.
   nmbDiagK= "dgK"+nmbMaterial # Name identifying the characteristic stress-strain diagram.
   matTagK= -1 # Tag of the uniaxial material with the characteristic stress-strain diagram.

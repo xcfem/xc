@@ -31,7 +31,7 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
   def grafico_cad(self,preprocessor,setName):
     defGrid= vtk_grafico_base.RecordDefGrid()
     defGrid.setName= setName
-    self.muestraMalla(preprocessor,defGrid)
+    self.displayGrid(preprocessor,defGrid)
 
   def plotCadModel(self, preprocessor, setName, field, fName):
     defGrid= vtk_grafico_base.RecordDefGrid()
