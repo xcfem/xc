@@ -14,12 +14,8 @@ class LinearLoadDiagram(cd.ColoredDiagram):
     self.lpName= loadPatternName
     self.component= component
 
-  def dumpLoads(self, preprocessor, indxDiagrama):
-    preprocessor.resetLoadCase()
-    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
-    loadPatterns.addToDomain(self.lpName)
-    lp= loadPatterns[self.lpName]
-    #Iterate over loaded elements.
+  def dumpElementalLoads(self,preprocessor,lp,indxDiagram):
+    ''' Iterate over loaded elements dumping its loads into the graphic.'''
     lIter= lp.getElementalLoadIter
     el= lIter.next()
     while(el):
@@ -29,27 +25,35 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         elem= preprocessor.getElementLoader.getElement(eTag)
         if(self.component=='axialComponent'):
           self.vDir= elem.getVDirEjeDebilGlobales
-          indxDiagrama= self.agregaDatosADiagrama(elem,indxDiagrama,el.axialComponent,el.axialComponent)
+          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.axialComponent,el.axialComponent)
         elif(self.component=='transComponent'):
           self.vDir= elem.getCoordTransf.getJVector 
-          indxDiagrama= self.agregaDatosADiagrama(elem,indxDiagrama,el.transComponent,el.transComponent)
+          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.transComponent,el.transComponent)
         elif(self.component=='transYComponent'):
           self.vDir= elem.getCoordTransf.getJVector 
-          indxDiagrama= self.agregaDatosADiagrama(elem,indxDiagrama,el.transYComponent,el.transYComponent)
+          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.transYComponent,el.transYComponent)
         elif(self.component=='transZComponent'):
           self.vDir= elem.getCoordTransf.getKVector 
-          indxDiagrama= self.agregaDatosADiagrama(elem,indxDiagrama,el.transZComponent,el.transZComponent)
+          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.transZComponent,el.transZComponent)
         else:
           print "LinearLoadDiagram :'", self.component, "' unknown."        
       el= lIter.next()
+
+  def dumpLoads(self, preprocessor, indxDiagram):
+    preprocessor.resetLoadCase()
+    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
+    loadPatterns.addToDomain(self.lpName)
+    lp= loadPatterns[self.lpName]
+    #Iterate over loaded elements.
+    self.dumpElementalLoads(preprocessor,lp,indxDiagram)
 
   def agregaDiagrama(self,preprocessor):
     self.creaEstrucDatosDiagrama()
     self.creaLookUpTable()
     self.creaActorDiagrama()
 
-    indxDiagrama= 0
-    self.dumpLoads(preprocessor,indxDiagrama)
+    indxDiagram= 0
+    self.dumpLoads(preprocessor,indxDiagram)
 
     self.updateLookUpTable()
     self.updateActorDiagrama()

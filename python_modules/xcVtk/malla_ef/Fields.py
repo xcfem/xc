@@ -3,14 +3,13 @@
 '''Graphic representation of fields over the mesh.'''
 
 import vtk
-from xcVtk import vtk_lut_field
+from xcVtk import FieldBase as fb
 from postprocess import extrapolate_elem_attr
 
-class ScalarField(vtk_lut_field.LUTField):
+class ScalarField(fb.FieldBase):
   '''Scalar field defined at nodes.'''
   def __init__(self,name,vExpr,component,fUnitConv):
-    super(ScalarField,self).__init__(fUnitConv)
-    self.name= name
+    super(ScalarField,self).__init__(name,fUnitConv)
     self.attrName= vExpr
     self.attrComponent= component
     self.arr= None

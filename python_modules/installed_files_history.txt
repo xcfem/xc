@@ -638,12 +638,16 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/creaArraySetData.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/ElementPropertyDiagram.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/ElementPropertyDiagram.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/FieldBase.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/FieldBase.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/graficos.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/graficos.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/__init__.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/LinearLoadDiagram.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/LinearLoadDiagram.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/LoadVectorField.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/LoadVectorField.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/__init__.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/vtk_define_malla_cells_cad.py
@@ -688,6 +692,8 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_load_nodos.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/NodePropertyDiagram.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/NodePropertyDiagram.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/VectorField.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/VectorField.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/views.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/views.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_cargas_elementos.py

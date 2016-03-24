@@ -377,7 +377,7 @@ const XC::Matrix &XC::CrdTransf3d::getPointsGlobalCoordFromBasic(const Vector &b
     return retval;
   }
 
-//! @brief Devuelve el vector expresado en coordenadas globales.
+//! @brief Returns the vector expressed in global coordinates.
 const XC::Vector &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Vector &localCoords) const
   {
     calculaEjesLocales(); //Actualiza la matriz R.

@@ -21,6 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
+const XC::Vector &(XC::ShellCrdTransf3dBase::*getVGlobalFromLocal)(const XC::Vector &) const= &XC::ShellCrdTransf3dBase::getVectorGlobalCoordFromLocal;
+const XC::Vector &(XC::ShellCrdTransf3dBase::*getVLocalFromGlobal)(const XC::Vector &) const= &XC::ShellCrdTransf3dBase::getVectorLocalCoordFromGlobal;
 class_<XC::ShellCrdTransf3dBase, bases<EntCmd>, boost::noncopyable >("ShellCrdTransf3dBase", no_init)
   .add_property("getG1Vector", make_function(&XC::ShellCrdTransf3dBase::G1, return_internal_reference<>() ))
   .add_property("getG2Vector", make_function(&XC::ShellCrdTransf3dBase::G2, return_internal_reference<>() ))
@@ -33,8 +35,10 @@ class_<XC::ShellCrdTransf3dBase, bases<EntCmd>, boost::noncopyable >("ShellCrdTr
   .def("getBasicTrialAccel", &XC::ShellCrdTransf3dBase::getBasicTrialAccel)
   .def("getProj", &XC::ShellCrdTransf3dBase::getProj)
   .add_property("getLocalReference", &XC::ShellCrdTransf3dBase::getLocalReference)
-  .def("getLocalCoordinates", &XC::ShellCrdTransf3dBase::getLocalCoordinates)
-  .def("getNaturalCoordinates", &XC::ShellCrdTransf3dBase::getNaturalCoordinates)
+  .def("getLocalCoordinates", &XC::ShellCrdTransf3dBase::getLocalCoordinates,"Returns local coordinates of a point.")
+  .def("getNaturalCoordinates", &XC::ShellCrdTransf3dBase::getNaturalCoordinates,"Returns local coordinates of a point.")
+  .def("getVectorGlobalCoordFromLocal", getVGlobalFromLocal, return_value_policy<copy_const_reference>(),"Returns global coordinates of a vector.")
+  .def("getVectorLocalCoordFromGlobal", getVLocalFromGlobal,  return_value_policy<copy_const_reference>(),"Returns local coordinates of a vector.")
    ;
 
 class_<XC::ShellLinearCrdTransf3d, bases<XC::ShellCrdTransf3dBase>, boost::noncopyable >("ShellLinearCrdTransf3d", no_init)

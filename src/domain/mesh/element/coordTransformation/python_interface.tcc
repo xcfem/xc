@@ -23,14 +23,14 @@
 
 //Coordinate transformations
 
-const XC::Vector &(XC::CrdTransf::*getVectorGlobelFromLocal)(const XC::Vector &) const= &XC::CrdTransf::getVectorGlobalCoordFromLocal;
+const XC::Vector &(XC::CrdTransf::*getVectorGlobalFromLocal)(const XC::Vector &) const= &XC::CrdTransf::getVectorGlobalCoordFromLocal;
 const XC::Vector &(XC::CrdTransf::*getVectorLocalFromGlobal)(const XC::Vector &) const= &XC::CrdTransf::getVectorLocalCoordFromGlobal;
 class_<XC::CrdTransf, bases<XC::TaggedObject,XC::MovableObject >, boost::noncopyable >("CrdTransf", no_init)
   .add_property("getInitialLength", &XC::CrdTransf::getInitialLength)
   .add_property("getDeformedLength", &XC::CrdTransf::getDeformedLength)
   .add_property("getIVector", make_function(&XC::CrdTransf::getI, return_internal_reference<>()))
   .add_property("getJVector", make_function(&XC::CrdTransf::getJ, return_internal_reference<>()))
-  .def("getVectorGlobalCoordFromLocal", getVectorGlobelFromLocal, return_value_policy<copy_const_reference>())
+  .def("getVectorGlobalCoordFromLocal", getVectorGlobalFromLocal, return_value_policy<copy_const_reference>())
   .def("getVectorLocalCoordFromGlobal", getVectorLocalFromGlobal,  return_value_policy<copy_const_reference>())
     
   .def("commitState",&XC::CrdTransf::commitState)

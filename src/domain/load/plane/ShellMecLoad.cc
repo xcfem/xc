@@ -68,6 +68,26 @@ size_t XC::ShellMecLoad::getDimVectorFuerza(void) const
 size_t XC::ShellMecLoad::getDimVectorMomento(void) const
   { return 3; }
 
+//! @brief Returns force expressed in local coordinates.
+XC::Vector XC::ShellMecLoad::getLocalForce(void) const
+  {
+    XC::Vector retval(3);
+    retval(0)= Trans;
+    retval(1)= Axial1;
+    retval(2)= Axial2;
+    return retval;
+  }
+
+//! @brief Returns moment expressed in local coordinates.
+XC::Vector XC::ShellMecLoad::getLocalMoment(void) const
+  {
+    XC::Vector retval(3);
+    retval(0)= 0.0;
+    retval(1)= 0.0;
+    retval(2)= 0.0;
+    return retval;
+  }
+
 //! @brief Devuelve las componentes de los vectores fuerza.
 const XC::Matrix &XC::ShellMecLoad::getLocalForces(void) const
   {
@@ -98,7 +118,7 @@ const XC::Matrix &XC::ShellMecLoad::getLocalMoments(void) const
     return retval;
   }
 
-//! @brief Devuelve los vectores expresados en coordenadas globales.
+//! @brief Returns the vectors expressed in global coordinates.
 const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors) const
   {
     static Matrix retval;
@@ -130,8 +150,8 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
                         << elemTag << " no tiene transformación de coordenadas." << std::endl;
               }
             else
-	      std::cerr << "ShellMecLoad::getGlobalVectors; el elemento: "
-                        << elemTag << " no es unidimensional." << std::endl;
+	      std::cerr << "ShellMecLoad::getGlobalVectors; the element: "
+                        << elemTag << " is not a shell element." << std::endl;
           }
       }
     else
