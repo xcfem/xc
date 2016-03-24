@@ -6,8 +6,12 @@ from miscUtils import LogMessages as lmsg
 import creaArraySetData
 
 
-# Define el actor a emplear para dibujar kpoints.
 def VtkDefineActorKPoint(recordGrid, renderer, radio):
+  '''Returns a vtkActor to represent key-points in a rendering scene.
+  It defines scale, rendering properties, textures, ...
+  Attributes:
+    recordGrid: 
+  '''
   sphereSource= vtk.vtkSphereSource()
   sphereSource.SetRadius(radio)
   sphereSource.SetThetaResolution(5)

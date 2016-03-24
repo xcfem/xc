@@ -100,6 +100,7 @@ do
 # sed -i 's/armaduras/reinforcement/g' $fl
 # sed -i 's/recordArmaduraCortante/recordShearReinf/g' $fl
 # sed -i 's/ArmaduraPrincipal/MainReinforcement/g' $fl
+# sed -i 's/Vista/View/g' $fl
 
 
 done
