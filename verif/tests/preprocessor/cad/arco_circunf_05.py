@@ -95,7 +95,7 @@ print "zc= ",(zc)
 print "xi= ",(xi)
 print "yi= ",(yi)
 print "zi= ",(zi)
-print "radio= ",(r)
+print "radius= ",(r)
 print "ratio2= ",(ratio2)
 '''
 

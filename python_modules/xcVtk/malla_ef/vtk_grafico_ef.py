@@ -54,9 +54,9 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       self.renderer.AddActor2D(field.scalarBar)
 
   # Define el actor a emplear para dibujar nodos.
-  def defineActorNode(self,uGrid, radio):
+  def defineActorNode(self,uGrid, radius):
     sphereSource= vtk.vtkSphereSource()
-    sphereSource.SetRadius(radio)
+    sphereSource.SetRadius(radius)
     sphereSource.SetThetaResolution(5)
     sphereSource.SetPhiResolution(5)
     

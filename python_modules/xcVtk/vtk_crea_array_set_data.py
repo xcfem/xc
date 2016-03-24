@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-def VtkCreaStrArraySetData(preprocessor,setName,nmbTipoEnt,nmbArray,data):
+def VtkCreaStrArraySetData(preprocessor,setName,entTypeName,nmbArray,data):
   # Crea una matriz de cadenas de caracteres con datos de los puntos definidas en el conjunto.
   #Creamos el actor para las líneas.
   st= preprocessor.getSetLoader.getSet(setName)
@@ -12,7 +12,7 @@ def VtkCreaStrArraySetData(preprocessor,setName,nmbTipoEnt,nmbArray,data):
     #     \numera{}
     #     \c{Cargamos los valores en la matriz}
     #     \def_var["tmp","string"]{}
-    #     \@nmbTipoEnt{\for_each
+    #     \@entTypeName{\for_each
     #       {
     #         \set{tmp= @eval(@data)}
     #         \vtk{\@nmbArray{ \insert_value{getIdx,@tmp} }}

@@ -6,14 +6,19 @@ from miscUtils import LogMessages as lmsg
 import creaArraySetData
 
 
-def VtkDefineActorKPoint(recordGrid, renderer, radio):
+def VtkDefineActorKPoint(recordGrid, renderer, radius):
   '''Returns a vtkActor to represent key-points in a rendering scene.
-  It defines scale, rendering properties, textures, ...
+  It defines the scale, orientation, rendering properties, textures, ...
   Attributes:
-    recordGrid: 
+    recordGrid: unstructured grid (generic data set) to which incorporate
+                the actor KPoint
+    renderer:   name of the renderer (lights, views, ...) to be used in the
+                display
+    radius:     radius of the spheres to be employed in the KPoints 
+                representation
   '''
   sphereSource= vtk.vtkSphereSource()
-  sphereSource.SetRadius(radio)
+  sphereSource.SetRadius(radius)
   sphereSource.SetThetaResolution(5)
   sphereSource.SetPhiResolution(5)
   
@@ -53,8 +58,8 @@ def VtkCargaIdsKPts(uGrid, setToDraw):
   etiqKPt=  creaArraySetData.VtkCreaStrArraySetData(setToDraw,'pnts','nombre')
   uGrid.GetPointData().AddArray(etiqKPt)
 
-def VtkCargaIdsCells(uGrid, setToDraw, nmbTipoEnt):
-  etiqCells= creaArraySetData.VtkCreaStrArraySetData(setToDraw,nmbTipoEnt,'nombre')
+def VtkCargaIdsCells(uGrid, setToDraw, entTypeName):
+  etiqCells= creaArraySetData.VtkCreaStrArraySetData(setToDraw,entTypeName,'nombre')
   uGrid.GetCellData().AddArray(etiqCells)
 
 # Dibuja las etiquetas de los puntos
@@ -87,13 +92,13 @@ def VtkDibujaIdsKPts(uGrid, setToDraw, renderer):
     print "El conjunto: '",setToDraw,"' no tiene KPts."
 
 # ****** Creamos las etiquetas para las celdas *******
-def VtkDibujaIdsCells(uGrid, setToDraw, nmbTipoEnt, renderer):
+def VtkDibujaIdsCells(uGrid, setToDraw, entTypeName, renderer):
   ids= vtk.vtkIdFilter()
   ids.SetInput(uGrid)
   ids.CellIdsOff()
   ids.PointIdsOff()
 
-  VtkCargaIdsCells(uGrid,setToDraw,nmbTipoEnt)
+  VtkCargaIdsCells(uGrid,setToDraw,entTypeName)
     
   # Dibuja las etiquetas de las líneas.
   cc= vtk.vtkCellCenters()
