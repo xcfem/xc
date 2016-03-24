@@ -10,6 +10,7 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_punzonamiento.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_rebar_def.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_pinned_fixed_beam.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/cable_stayed_bridge_simple_model.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/masonry_bridge.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/nb_poussee_terres.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.py
@@ -341,6 +342,7 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_punzonamiento.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_rebar_def.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_pinned_fixed_beam.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/cable_stayed_bridge_simple_model.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/masonry_bridge.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/nb_poussee_terres.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.pyc
