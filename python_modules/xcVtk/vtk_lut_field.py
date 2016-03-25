@@ -59,4 +59,3 @@ class LUTField(object):
     self.scalarBar.SetLookupTable(self.lookUpTable)
     self.scalarBar.Modified()
 
-

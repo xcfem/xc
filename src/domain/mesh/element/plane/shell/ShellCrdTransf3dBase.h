@@ -99,6 +99,7 @@ class ShellCrdTransf3dBase: public EntCmd, public MovableObject
     virtual void getGlobalResidAndTangent(Vector &resid,Matrix &stiff) const;
     virtual const Vector &getGlobalResistingForce(const Vector &p0) const= 0;
 
+    const Vector &getVectorGlobalCoordFromLocal(const Vector &localCoords) const;
     const Matrix &getVectorGlobalCoordFromLocal(const Matrix &localCoords) const;
     const Vector &getVectorLocalCoordFromGlobal(const Vector &globalCoords) const;
 

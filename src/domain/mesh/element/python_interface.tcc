@@ -56,7 +56,7 @@ const XC::Vector &(XC::Element::*getResistingForceRef)(void) const= &XC::Element
 class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
   .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ))
   .add_property("getIdxNodes",&XC::Element::getIdxNodes)
-.add_property("getDimension",&XC::Element::getDimension,"Returns element's dimension (point: 0, line: 1, surface: 2 or volume: 3).")
+  .add_property("getDimension",&XC::Element::getDimension,"Returns element's dimension (point: 0, line: 1, surface: 2 or volume: 3).")
   .def("commitState", &XC::Element::commitState,"Consuma el estado del elemento.")
   .def("revertToLastCommit", &XC::Element::revertToLastCommit,"Devuelve el estado del elemento al último consumado.")
   .def("revertToStart", &XC::Element::revertToStart,"Devuelve el elemento a su estado inicial.")

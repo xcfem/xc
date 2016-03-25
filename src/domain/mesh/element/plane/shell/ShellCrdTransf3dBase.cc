@@ -290,7 +290,19 @@ void XC::ShellCrdTransf3dBase::getGlobalResidAndTangent(Vector &resid,Matrix &st
   { //Por defecto ya está en globales.
   }
 
-//! @brief Devuelve los vectores expresados en coordenadas globales.
+//! @brief Returns the vector expressed in global coordinates.
+const XC::Vector &XC::ShellCrdTransf3dBase::getVectorGlobalCoordFromLocal(const Vector &localCoords) const
+  {
+    const Matrix &R= getTrfMatrix();
+    static Vector retval(3);
+    // retval = Rlj'*localCoords (Multiplica el vector por R traspuesta).
+    retval(0)= R(0,0)*localCoords(0) + R(1,0)*localCoords(1) + R(2,0)*localCoords(2);
+    retval(1)= R(0,1)*localCoords(0) + R(1,1)*localCoords(1) + R(2,1)*localCoords(2);
+    retval(2)= R(0,2)*localCoords(0) + R(1,2)*localCoords(1) + R(2,2)*localCoords(2);
+    return retval;
+  }
+
+//! @brief Returns the vectors expressed in global coordinates.
 const XC::Matrix &XC::ShellCrdTransf3dBase::getVectorGlobalCoordFromLocal(const Matrix &localCoords) const
   {
     const Matrix &R= getTrfMatrix();
