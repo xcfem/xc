@@ -103,5 +103,6 @@ do
 # sed -i 's/Vista/View/g' $fl
 # sed -i 's/muestraMalla/displayGrid/g' $fl
 # sed -i 's/nmbTipoEnt/entTypeName/g' $fl
-sed -i 's/radio/radius/g' $fl
+# sed -i 's/radio/radius/g' $fl
+# sed -i 's/creaEscalaColores/creaColorScaleBar/g' $fl
 done

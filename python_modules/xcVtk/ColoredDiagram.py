@@ -175,7 +175,7 @@ class ColoredDiagram(vtk_lut_field.LUTField):
   def agregaDiagramaAEscena(self, recordDisplay):
     # Agrega el diagrama al display.
     recordDisplay.renderer.AddActor(self.actor)
-    self.creaEscalaColores()
+    self.creaColorScaleBar()
     recordDisplay.renderer.AddActor2D(self.scalarBar)
 
   def agregaDatosADiagrama(self, elem,indxDiagrama,v0,v1):
