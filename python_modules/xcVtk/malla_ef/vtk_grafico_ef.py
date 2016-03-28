@@ -50,7 +50,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       print "Representation type: '", tipoRepr, "' unknown."
     self.renderer.AddActor(elemActor)
     if(field):
-      field.creaEscalaColores()
+      field.creaColorScaleBar()
       self.renderer.AddActor2D(field.scalarBar)
 
   # Define el actor a emplear para dibujar nodos.

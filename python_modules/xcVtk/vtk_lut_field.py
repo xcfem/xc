@@ -1,14 +1,22 @@
  # -*- coding: utf-8 -*-
 
-''' Representación de diagramas de esfuerzos (o de otras magnitudes)
-   sobre elementos lineales. '''
+''' Drawing of diagrams showing a law of internal 
+    forces (or any other input) on linear elements
+'''
 
 import vtk
 
-''' Define las variables que se emplean para definir
-   un diagrama de esfuerzos. '''
 class LUTField(object):
-
+  '''Provides de variables involved in the drawing of a
+  diagram showing a law of internal forces (or any other input)
+  on linear elements
+  Attributes:
+    lookUpTable:object that is used by mapper objects to map scalar values
+                into rga (red-green-blue-alpha transparency) color specification
+                or rga into scalar values. 
+    scalarBar:  legend that indicates to the viewer the correspondence between 
+                color value and data value.
+  '''
   def __init__(self,fUnitConv):
     self.initializeMinMax()
     self.lookUpTable= None
@@ -21,12 +29,17 @@ class LUTField(object):
     self.valMin= min(self.valMin,value)
     self.valMax= max(self.valMax,value)
 
-  def initializeMinMax(self):
-    self.valMin= 1e99
-    self.valMax= -self.valMin
+  def initializeMinMax(self,value= 1.0e99):
+    '''Initialize minimum and maximum values that hopefully
+       will be replaced by the real ones.''' 
+    self.valMin= value #Extremely BIG (yes BIG) positive value.
+    self.valMax= -self.valMin #Extremely BIG negative value.
 
   def creaLookUpTable(self):
-    ''' Crea una tabla de búsqueda de colores.'''
+    ''' Creates a  lookUpTable, that is an object used by mapper objects 
+    to map scalar values into rga (red-green-blue-alpha transparency) color 
+    specification or rga into scalar values. 
+    '''
     self.lookUpTable= vtk.vtkLookupTable()
     self.lookUpTable.SetNumberOfTableValues(1024)
     self.lookUpTable.SetHueRange(0.667,0)
@@ -35,8 +48,10 @@ class LUTField(object):
 
 
   def updateLookUpTable(self):
-    # Actualiza la tabla de búsqueda de colores.
- 
+    '''Sets the minimum and maximum scalar values for scalar mapping.
+    Scalar values less than minimum and greater than maximum range values 
+    are respectively clamped to those minimum and maximum range values
+    '''
     self.lookUpTable.SetTableRange(self.valMin,self.valMax)
     self.lookUpTable.Build()
 
@@ -44,8 +59,10 @@ class LUTField(object):
     # Actualiza el actor para el diagrama.
     self.mapper.SetScalarRange(self.valMin,self.valMax)
 
-  def creaEscalaColores(self):
-    # Crea la escala de colores.
+  def creaColorScaleBar(self):
+    '''Creates the scalar bar that indicates to the viewer the correspondence
+    between color values and data values
+    '''
 
     self.scalarBar= vtk.vtkScalarBarActor()
 
