@@ -38,11 +38,11 @@ N=tiedArchBridge.getAxialForceArch(qunif)
 fc=tiedArchBridge.getQunfCompStress(qunif,A)
 
 
-print 'Vertical reaction at each abutment: V= ',V
-print 'Horizontal reaction at each abutment : H= ',H
-print 'Tension nin the deck T: ', Tdeck
-print 'Axial compressive force in the arch N: ', N
-print 'Mean compressive stress in the arch at the abutments fc: ',fc
+# print 'Vertical reaction at each abutment: V= ',V
+# print 'Horizontal reaction at each abutment : H= ',H
+# print 'Tension nin the deck T: ', Tdeck
+# print 'Axial compressive force in the arch N: ', N
+# print 'Mean compressive stress in the arch at the abutments fc: ',fc
 
 
 ratio1=(V-3829.45)/3829.45

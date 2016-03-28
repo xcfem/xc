@@ -26,7 +26,7 @@ datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Losa. Tramo Central. Sección normal al eje X."
 concr=EHE_concrete.HA30
-concr.alfacc=0.85
+concr.alfacc=0.85 #f_maxd= 0.85*fcd
 datosScc1LosC.concrType= concr
 datosScc1LosC.depth= 0.35
 datosScc1LosC.width= 1.0

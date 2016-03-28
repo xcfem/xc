@@ -53,7 +53,7 @@ preprocessor=  prueba.getPreprocessor
 materiales= preprocessor.getMaterialLoader
 
 concr=EHE_concrete.HA25
-concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente alfacc=1)
+concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
 concrMatTag25= concr.defDiagD(preprocessor)
 tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 

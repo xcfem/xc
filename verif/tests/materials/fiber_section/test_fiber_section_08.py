@@ -43,7 +43,7 @@ preprocessor=  prueba.getPreprocessor
 reinfMatTag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 dgDB500S= EHE_reinforcing_steel.B500S.getDiagD(preprocessor)
 concr=EHE_concrete.HA25
-concr.alfacc=0.85    #coeficiente de fatiga del hormigón (generalmente se toma alfacc=1)
+concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente se toma alfacc=1)
 tagHormigon= concr.defDiagD(preprocessor)
 
 import os
