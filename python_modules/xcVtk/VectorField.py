@@ -4,6 +4,7 @@
 
 import math
 import vtk
+from miscUtils import LogMessages as lmsg
 from xcVtk import FieldBase as fb
 
 class VectorField(fb.FieldBase):
@@ -21,11 +22,14 @@ class VectorField(fb.FieldBase):
     self.lenghtsName= self.name+'Lengths'
     self.lengths.SetName(self.lenghtsName)
     sz= self.vectors.GetNumberOfTuples()
-    self.lengths.SetNumberOfValues(sz)
-    for i in range(0,sz):
-      v= self.vectors.GetTuple(i)
-      l= math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2])
-      self.lengths.SetValue(i,l)
+    if(sz):
+      self.lengths.SetNumberOfValues(sz)
+      for i in range(0,sz):
+        v= self.vectors.GetTuple(i)
+        l= math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2])
+        self.lengths.SetValue(i,l)
+    else:
+      lmsg.warning('VectorField.calculateLengths: no vectors defined.')
     return self.lengths
 
   def insertNextPair(self,px,py,pz,vx,vy,vz):
@@ -39,6 +43,7 @@ class VectorField(fb.FieldBase):
     self.polydata.GetPointData().AddArray(self.vectors)
     self.calculateLengths()
     self.polydata.GetPointData().AddArray(self.lengths)
+    return self.polydata
 
   def setupGlyph(self):
     self.setupPolydata()
@@ -82,7 +87,8 @@ class VectorField(fb.FieldBase):
     self.mapper.SetScalarModeToUsePointFieldData()
     self.mapper.SetColorModeToMapScalars()
     self.mapper.ScalarVisibilityOn()
-    self.mapper.SetScalarRange(self.glyph.GetOutputDataObject(0).GetPointData().GetArray(self.lenghtsName).GetRange())
+    #self.mapper.SetScalarRange(self.glyph.GetOutputDataObject(0).GetPointData().GetArray(self.lenghtsName).GetRange())
+    self.mapper.SetScalarRange(self.lengths.GetRange())
     self.mapper.SelectColorArray(self.lenghtsName)
     return self.mapper
 

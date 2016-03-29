@@ -4,6 +4,7 @@
 
 import geom
 import vtk
+from miscUtils import LogMessages as lmsg
 from xcVtk import VectorField as vf
 
 
@@ -18,7 +19,8 @@ class LoadVectorField(vf.VectorField):
     ''' Iterate over loaded elements dumping its loads into the graphic.'''
     lIter= lp.getElementalLoadIter
     el= lIter.next()
-    i= self.components[0]; j= self.components[1]; k= self.components[2]; 
+    i= self.components[0]; j= self.components[1]; k= self.components[2]
+    count= 0 
     while(el):
       tags= el.elementTags
       for i in range(0,len(tags)):
@@ -30,19 +32,26 @@ class LoadVectorField(vf.VectorField):
         p= elem.getPosCentroid(True)
         self.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
       el= lIter.next()
+      count+= 1
+    return count
 
   def dumpNodalLoads(self,preprocessor,lp):
     ''' Iterate over loaded nodes dumping its loads into the graphic.'''
     lIter= lp.getNodalLoadIter
     nl= lIter.next()
+    count= 0 
     while(nl):
       tags= nl.nodeTags
       for i in range(0,len(tags)):
         nTag= tags[i]
         node= preprocessor.getElementLoader.getElement(nTag)
-        points= node.getInitialPos3d()
+        p= node.getInitialPos3d()
         vLoad= nl.getLoadVectorOnNode(node)
+        vx= vLoad[i]; vy= vLoad[j]; vz= vLoad[k]
+        self.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
       nl= lIter.next()
+      count+= 1
+    return count
 
   def dumpLoads(self, preprocessor):
     preprocessor.resetLoadCase()
@@ -50,7 +59,9 @@ class LoadVectorField(vf.VectorField):
     loadPatterns.addToDomain(self.lpName)
     lp= loadPatterns[self.lpName]
     #Iterate over loaded elements.
-    self.dumpElementalLoads(preprocessor,lp)
+    count= self.dumpElementalLoads(preprocessor,lp)
     #Iterate over loaded nodes.
-    self.dumpNodalLoads(preprocessor,lp)
+    count+= self.dumpNodalLoads(preprocessor,lp)
+    if(count==0):
+      lmsg.warning('LoadVectorField.dumpLoads: no loads defined.')
 
