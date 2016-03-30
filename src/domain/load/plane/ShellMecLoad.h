@@ -40,8 +40,6 @@ class FVectorShell;
 //! @brief Carga de tipo mecánico (fuerzas) sobre elementos de tipo viga.
 class ShellMecLoad: public BidimMecLoad
   {
-  protected:
-
   public:
     ShellMecLoad(int tag, int classTag,const double &Trans,const double &,const double &,const ID &theElementTags);
     ShellMecLoad(int tag, int classTag);

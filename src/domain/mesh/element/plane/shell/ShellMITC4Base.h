@@ -41,6 +41,8 @@ class Poligono3d;
 
 namespace XC {
 
+class ShellUniformLoad;
+
 //! \ingroup ElemPlanos
 //
 //! @brief Clase base para los elementos shell MIT C4.
@@ -117,8 +119,8 @@ class ShellMITC4Base : public QuadBase4N<SectionFDPhysicalProperties>
     Vector getInterpolatedDisplacements(const Pos3d &) const;
 
     //Métodos para definir cargas.
-    void vector3dUniformLoadLocal(const Vector &);
-    void vector3dUniformLoadGlobal(const Vector &);
+    const ShellUniformLoad *vector3dUniformLoadLocal(const Vector &);
+    const ShellUniformLoad *vector3dUniformLoadGlobal(const Vector &);
     void strainLoad(const Matrix &);
     void defEdgeLoadGlobal(const int &iEdge,const Vector &);
     void defEdgeLoadGlobal(const Node *,const Node *,const Vector &);

@@ -169,7 +169,7 @@ class MaterialSurface(MaterialBase):
     for s in self.lstSup:
       elSup=s.getElements()
       for el in elSup:
-        el.vector3dUniformLoadGlobal(loadVector)    
+        elementLoad= el.vector3dUniformLoadGlobal(loadVector)    
 
   def applyStrainGradient(self,loadPattern,nabla):
     for s in self.lstSup:

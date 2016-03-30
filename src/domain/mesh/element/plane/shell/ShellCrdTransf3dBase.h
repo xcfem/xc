@@ -67,7 +67,8 @@ class ShellCrdTransf3dBase: public EntCmd, public MovableObject
     ShellCrdTransf3dBase(const Vector &,const Vector &,const Vector &);
     virtual ShellCrdTransf3dBase *getCopy(void) const= 0;
 
-    const Matrix &getTrfMatrix(void) const;
+    //! @brief Returns the transformation matrix.
+    Matrix getTrfMatrix(void) const;
     //! @brief Devuelve el eje 1 local (contenido en el plano del elemento)
     inline const Vector &G1(void) const
       { return g1; }

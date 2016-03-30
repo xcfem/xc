@@ -166,9 +166,10 @@ void XC::ShellMITC4Base::defEdgeLoadGlobal(const Node *n1,const Node *n2,const V
                 << getTag() << std::endl;
   }
 
-//! @brief  
-void XC::ShellMITC4Base::vector3dUniformLoadLocal(const Vector &v)
+//! @brief Defines a load over the element from a vector in local coordinates.
+const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadLocal(const Vector &v)
   {
+    ShellUniformLoad *retval= nullptr;
     Preprocessor *preprocessor= GetPreprocessor();
     if(preprocessor)
       {
@@ -183,8 +184,8 @@ void XC::ShellMITC4Base::vector3dUniformLoadLocal(const Vector &v)
             LoadPattern *lp= casos.getCurrentLoadPatternPtr();
             if(lp)
               {
-                ShellUniformLoad *tmp= new ShellUniformLoad(loadTag,v,eTags);
-                lp->addElementalLoad(tmp);
+                retval= new ShellUniformLoad(loadTag,v,eTags);
+                lp->addElementalLoad(retval);
                 casos.setCurrentElementLoadTag(loadTag+1);
               }
             else
@@ -197,20 +198,23 @@ void XC::ShellMITC4Base::vector3dUniformLoadLocal(const Vector &v)
       }
     else
       std::cerr << "ShellMITC4Base::vector3dUniformLoadLocal; modeler not defined." << std::endl;
+    return retval;
   }
 
-//! @brief  
-void XC::ShellMITC4Base::vector3dUniformLoadGlobal(const Vector &v)
+//! @brief Defines a load over the element from a vector in global coordinates.  
+const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadGlobal(const Vector &v)
   {
+    const ShellUniformLoad *retval= nullptr;
     const size_t sz= v.Size();
     if(sz>2)
       {
         assert(theCoordTransf);
         const Vector vTrf= theCoordTransf->getVectorLocalCoordFromGlobal(v);
-        vector3dUniformLoadLocal(vTrf);
+        retval= vector3dUniformLoadLocal(vTrf);
       }
     else
       std::cerr << "ShellMITC4Base::vector3dUniformLoadGlobal; el vector debe ser de dimensión 3" << std::endl;
+    return retval;
   }
 
 //! @brief  
