@@ -8,27 +8,13 @@ __version__= "1.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
 import math
+import ArchBridgeRoughModelBase as base
 
-class ArchBridgeRoughModel:
+class ArchBridgeRoughModel(base.ArchBridgeRoughModelBase):
   ''' Arch bridge simple model'''
   def __init__(self,L,d):
-    self.d= d # rise (depth) of the arch at midspan
-    self.L= L # horizontal distance between supports
+    super(ArchBridgeRoughModel,self).__init__(L,d)
 
-  #*Uniformly distributed loads
-  #Abutment reactions
-  def getQunfVabtm(self,qunif):
-    '''Vertical reaction at each abutment due to a uniform load.
-    Attributes:
-       qunif: uniformly distributed load applied to the arch
-    '''
-    return qunif*self.L/2.0
-  def getQunfHabtm(self,qunif):
-    '''Horizontal reaction at each abutment due to a uniform load.
-    Attributes:
-       qunif: uniformly distributed load applied to the arch
-    '''
-    return qunif*self.L**2/8.0/self.d
   #Compressive stress
   def getQunfCompStress(self,qunif,A):
     '''Approximation of the compressive stress in a section of the 

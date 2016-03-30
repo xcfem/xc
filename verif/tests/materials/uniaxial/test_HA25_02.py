@@ -21,7 +21,7 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 mdlr= prueba.getPreprocessor
 concr=EHE_concrete.HA25
-concr.alfacc=0.85
+concr.alfacc=0.85 #f_maxd= 0.85*fcd
 errMax= concreteBase.testTangDHormigon(mdlr,concr)
 
 #print "errMax= ",errMax

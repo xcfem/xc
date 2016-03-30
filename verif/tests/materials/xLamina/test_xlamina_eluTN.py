@@ -45,7 +45,7 @@ for eTag in elementTags:
 
 # deck.
 concrete= EHE_concrete.HA30
-concrete.alfacc=0.85  #coef. de fatiga del hormigón (en general alfacc=1)
+concrete.alfacc=0.85  #f_maxd= 0.85*fcd coef. de fatiga del hormigón (en general alfacc=1)
 reinfSteel= EHE_reinforcing_steel.B500S
 areaFi8= 0.50e-4 #XXX Área de las barras expresado en metros cuadrados.
 areaFi10=0.785e-4

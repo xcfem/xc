@@ -7,7 +7,7 @@ __license__= "GPL"
 __version__= "1.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
-from rough_calculations import arch_brige_simple_model as archsm
+from rough_calculations import arch_bridge_simple_model as archsm
 
 
 #Salginatobel Bridge

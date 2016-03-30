@@ -11,31 +11,18 @@ __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 #file: L8-_Tied_Arches_Jan_10.pdf
 
 import math
+import ArchBridgeRoughModelBase as base
 
-class TiedArchBridgeRoughModel:
+class TiedArchBridgeRoughModel(base.ArchBridgeRoughModelBase):
   ''' Tied Arch bridge simple model
   Attributes:
     d: rise (depth) of the arch at midspan
     L: horizontal distance between supports
   '''
   def __init__(self,L,d):
-    self.d= d # rise (depth) of the arch at midspan
-    self.L= L # horizontal distance between supports
+    super(TiedArchBridgeRoughModel,self).__init__(L,d)
 
-  #*Uniformly distributed loads
-  #Abutment reactions
-  def getQunfVabtm(self,qunif):
-    '''Vertical reaction at each abutment due to a uniform load.
-    Attributes:
-       qunif: uniformly distributed load applied on the deck
-    '''
-    return qunif*self.L/2.0
-  def getQunfHabtm(self,qunif):
-    '''Horizontal reaction at each abutment due to a uniform load.
-    Attributes:
-       qunif: uniformly distributed load applied to the arch
-    '''
-    return qunif*self.L**2/8.0/self.d
+
   def getTensionDeck(self,qunif):
     '''Tension in the deck tie due to a uniform load.
     Attributes:
