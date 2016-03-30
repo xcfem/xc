@@ -27,9 +27,7 @@ class LoadVectorField(vf.VectorField):
         eTag= tags[i]
         elem= preprocessor.getElementLoader.getElement(eTag)
         area= elem.getArea(True)
-        vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
-        print '******* tags= ', eTag, ' g3= ', elem.getCoordTransf.getG3Vector, '  localForce= ', elementLoad.getLocalForce(), '  globalForce= ', vLoad
-        vLoad*= area
+        vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())*area
         vx= vLoad[i]; vy= vLoad[j]; vz= vLoad[k]
         p= elem.getPosCentroid(True)
         self.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
