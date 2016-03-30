@@ -10,8 +10,8 @@ from xcVtk import VectorField as vf
 
 class LoadVectorField(vf.VectorField):
   '''Draws a load over a points on nodes and on elements.'''
-  def __init__(self,fUnitConv,loadPatternName,components= [0,1,2]):
-    super(LoadVectorField,self).__init__(loadPatternName,fUnitConv)
+  def __init__(self,loadPatternName,fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True,components= [0,1,2]):
+    super(LoadVectorField,self).__init__(loadPatternName,fUnitConv,scaleFactor,showPushing)
     self.lpName= loadPatternName
     self.components= components
 
@@ -41,14 +41,12 @@ class LoadVectorField(vf.VectorField):
     nl= lIter.next()
     count= 0 
     while(nl):
-      tags= nl.nodeTags
-      for i in range(0,len(tags)):
-        nTag= tags[i]
-        node= preprocessor.getElementLoader.getElement(nTag)
-        p= node.getInitialPos3d()
-        vLoad= nl.getLoadVectorOnNode(node)
-        vx= vLoad[i]; vy= vLoad[j]; vz= vLoad[k]
-        self.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+      nTag= nl.getNodeTag
+      node= preprocessor.getNodeLoader.getNode(nTag)
+      p= node.getInitialPos3d
+      vLoad= nl.getForce
+      vx= vLoad[0]; vy= vLoad[1]; vz= vLoad[2]
+      self.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
       nl= lIter.next()
       count+= 1
     return count

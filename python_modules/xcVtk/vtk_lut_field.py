@@ -75,4 +75,5 @@ class LUTField(object):
     self.scalarBar.SetHeight(0.125)
     self.scalarBar.SetLookupTable(self.lookUpTable)
     self.scalarBar.Modified()
+    return self.scalarBar
 

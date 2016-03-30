@@ -76,8 +76,8 @@ class Vector;
 class NodalLoad : public Load
   {
   private:
-    int  myNode; //!< tag indicating associated Node objects tag
-    mutable Node *myNodePtr; //!< pointer to Node object on which load acts
+    int  myNode; //!< tag of node on which load acts.
+    mutable Node *myNodePtr; //!< pointer to node object on which load acts
     Vector load;       //!< the reference load
     bool  konstant;     //!< true if load is load factor independent
     // AddingSensitivity:BEGIN /////////////////////////////////////
