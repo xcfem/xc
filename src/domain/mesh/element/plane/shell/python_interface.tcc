@@ -24,6 +24,7 @@
 const XC::Vector &(XC::ShellCrdTransf3dBase::*getVGlobalFromLocal)(const XC::Vector &) const= &XC::ShellCrdTransf3dBase::getVectorGlobalCoordFromLocal;
 const XC::Vector &(XC::ShellCrdTransf3dBase::*getVLocalFromGlobal)(const XC::Vector &) const= &XC::ShellCrdTransf3dBase::getVectorLocalCoordFromGlobal;
 class_<XC::ShellCrdTransf3dBase, bases<EntCmd>, boost::noncopyable >("ShellCrdTransf3dBase", no_init)
+  .add_property("getTrfMatrix", &XC::ShellCrdTransf3dBase::getTrfMatrix,"Returns the transformation matrix.")
   .add_property("getG1Vector", make_function(&XC::ShellCrdTransf3dBase::G1, return_internal_reference<>() ))
   .add_property("getG2Vector", make_function(&XC::ShellCrdTransf3dBase::G2, return_internal_reference<>() ))
   .add_property("getG3Vector", make_function(&XC::ShellCrdTransf3dBase::G3, return_internal_reference<>() ))
@@ -70,9 +71,8 @@ class_<XC::ShellMITC4Base, bases<QuadBase4N_SFD>, boost::noncopyable >("ShellMIT
     .def("getNaturalCoordinates", &XC::ShellMITC4Base::getNaturalCoordinates,"Returns natural coordinates of point.")
     .def("getMeanInternalForce",&XC::ShellMITC4Base::getMeanInternalForce)
     .def("getMeanInternalDeformation",&XC::ShellMITC4Base::getMeanInternalDeformation)
-    .def("vector3dUniformLoadGlobal",&XC::ShellMITC4Base::getMeanInternalForce)
-    .def("vector3dUniformLoadLocal",&XC::ShellMITC4Base::vector3dUniformLoadLocal)
-    .def("vector3dUniformLoadGlobal",&XC::ShellMITC4Base::vector3dUniformLoadGlobal)
+    .def("vector3dUniformLoadLocal",make_function(&XC::ShellMITC4Base::vector3dUniformLoadLocal, return_internal_reference<>() ))
+    .def("vector3dUniformLoadGlobal",make_function(&XC::ShellMITC4Base::vector3dUniformLoadGlobal, return_internal_reference<>() ))
     .def("strainLoad",&XC::ShellMITC4Base::strainLoad)
     .def("getParticlePos3dInterpolationFactors",getParticlePos3dInterpolationFactors)
     .def("getPos3dInterpolationFactors",getPos3dInterpolationFactors)

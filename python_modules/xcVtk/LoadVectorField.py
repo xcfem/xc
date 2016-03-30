@@ -18,20 +18,22 @@ class LoadVectorField(vf.VectorField):
   def dumpElementalLoads(self,preprocessor,lp):
     ''' Iterate over loaded elements dumping its loads into the graphic.'''
     lIter= lp.getElementalLoadIter
-    el= lIter.next()
+    elementLoad= lIter.next()
     i= self.components[0]; j= self.components[1]; k= self.components[2]
     count= 0 
-    while(el):
-      tags= el.elementTags
+    while(elementLoad):
+      tags= elementLoad.elementTags
       for i in range(0,len(tags)):
         eTag= tags[i]
         elem= preprocessor.getElementLoader.getElement(eTag)
         area= elem.getArea(True)
-        vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(el.getLocalForce())*area
+        vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
+        print '******* tags= ', eTag, ' g3= ', elem.getCoordTransf.getG3Vector, '  localForce= ', elementLoad.getLocalForce(), '  globalForce= ', vLoad
+        vLoad*= area
         vx= vLoad[i]; vy= vLoad[j]; vz= vLoad[k]
         p= elem.getPosCentroid(True)
         self.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
-      el= lIter.next()
+      elementLoad= lIter.next()
       count+= 1
     return count
 

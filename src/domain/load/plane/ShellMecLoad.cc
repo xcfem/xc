@@ -72,9 +72,9 @@ size_t XC::ShellMecLoad::getDimVectorMomento(void) const
 XC::Vector XC::ShellMecLoad::getLocalForce(void) const
   {
     XC::Vector retval(3);
-    retval(0)= Trans;
-    retval(1)= Axial1;
-    retval(2)= Axial2;
+    retval(0)= Axial1;
+    retval(1)= Axial2;
+    retval(2)= Trans;
     return retval;
   }
 

@@ -58,10 +58,11 @@ casos.currentLoadPattern= "0"
 
 
 mesh= prueba.getDomain.getMesh
+loadVector= xc.Vector([0.0,0.0,q])
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-  elem.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,q]))
+  elementLoad= elem.vector3dUniformLoadGlobal(loadVector)
   elem= eIter.next()
 
 #We add the load case to domain.
@@ -90,22 +91,6 @@ ratio4= (abs((RN4+(q/4.0))/(q/4.0)))
 
 
 ''' 
-elementos= preprocessor.getElementLoader
-        \for_each
-
-            print "G3= ",vectorG3
-
-
-
-nodos= preprocessor.getNodeLoader
-
-             \nodo[1]{print "reac= ",reac} 
-             \nodo[2]{print "reac= ",reac} 
-             \nodo[3]{print "reac= ",reac} 
-             \nodo[4]{print "reac= ",reac} 
-
-
-
 print "ratio1= ",ratio1
 print "ratio2= ",ratio2
 print "ratio3= ",ratio3
