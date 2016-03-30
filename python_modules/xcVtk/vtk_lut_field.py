@@ -3,6 +3,11 @@
 ''' Drawing of diagrams showing a law of internal 
     forces (or any other input) on linear elements
 '''
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AOO)"
+__cppyright__= "Copyright 2015, LCPT AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
 import vtk
 
@@ -11,11 +16,17 @@ class LUTField(object):
   diagram showing a law of internal forces (or any other input)
   on linear elements
   Attributes:
+    fUnitConv:  units conversion factor
     lookUpTable:object that is used by mapper objects to map scalar values
                 into rga (red-green-blue-alpha transparency) color specification
                 or rga into scalar values. 
     scalarBar:  legend that indicates to the viewer the correspondence between 
                 color value and data value.
+    mapper:     object that specifies the interface between data and graphic 
+                primitives.
+    actor:      used to represent an entity in a rendering scene. The actor has position, 
+                orientation, scaling, a reference to the defining geometry, rendering 
+                properties and possibly a texture map.
   '''
   def __init__(self,fUnitConv):
     self.initializeMinMax()
@@ -56,7 +67,8 @@ class LUTField(object):
     self.lookUpTable.Build()
 
   def updateActorDiagrama(self):
-    # Actualiza el actor para el diagrama.
+    '''Updates de actor
+    '''
     self.mapper.SetScalarRange(self.valMin,self.valMax)
 
   def creaColorScaleBar(self):
