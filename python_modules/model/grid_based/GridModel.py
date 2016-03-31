@@ -10,6 +10,7 @@ __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
 import geom
 import xc
+from miscUtils import LogMessages as lmsg
 from materials import typical_materials
 from materials import parametrosSeccionRectangular
 from model import predefined_spaces
@@ -96,7 +97,7 @@ class IJKRangeList(object):
   def __init__(self, name, grid, ranges= list()):
     self.name= name
     self.grid= grid
-    self.ranges= list()
+    self.ranges= ranges
 
   def append(self,ijkRange):
     self.ranges.append(ijkRange)
@@ -105,7 +106,7 @@ class IJKRangeList(object):
     if(ijkRangeList.grid==self.grid):
       self.ranges.extend(ijkRangeList.ranges)
     else:
-      print "Error: reference grids are not the same."
+      lmsg.error("Error: reference grids are not the same.")
 
   def appendSurfaceListRanges(self,surfaces):
     for s in surfaces:
@@ -133,7 +134,7 @@ def getIJKRangeListFromSurfaces(surfaces):
     retval.appendSurfaceListRanges(surfaces)
     return retval
   else:
-    print "Error: surface list empty."
+    lmsg.error('Error: surface list empty.')
 
 class MaterialBase(IJKRangeList):
   '''Base class for lines and surfaces defined by a range list, a material and an element type and size.'''
@@ -518,14 +519,14 @@ class LoadState(object):
     self.tempGrad= tempGrad
   def applyInertialLoads(self):
     for pp in self.inercLoad:
-      print 'inercLoad:', pp.name
+      lmsg.log('inercLoad: '+ pp.name)
       pp.applyLoad()
   def applyUniformLoads(self,dicGeomEnt):
     for load in self.unifPressLoad:
-      print 'unifPressLoad:', load.name
+      lmsg.log('unifPressLoad: '+ load.name)
       load.applyLoad(dicGeomEnt)
     for load in self.unifVectLoad:
-      print 'unifVectLoad:', load.name
+      lmsg.log('unifVectLoad: '+ load.name)
       load.applyLoad(dicGeomEnt)
 
 
@@ -533,17 +534,17 @@ class LoadState(object):
     #Cargas lineales
     #Cargas puntuales
     for cpunt in self.pointLoad:
-      print 'pointLoad:', cpunt.name
+      lmsg.log('pointLoad: '+ cpunt.name)
       cpunt.applyLoad(nodes,lp)
 
   def applyEarthPressureLoads(self,dicGeomEnt):
     for ep in self.earthPressLoad:
-      print 'earthPressLoad:', ep.name
+      lmsg.log('earthPressLoad: '+ ep.name)
       ep.applyEarthPressure(dicGeomEnt)
 
   def applyTemperatureGradient(self,lp):
     for gt in self.tempGrad:
-      print 'tempGrad:', gt.name
+      lmsg.log('tempGrad: '+ gt.name)
       gt.applyLoad(lp)
 
   def applyLoads(self,lp,dicGeomEnt,nodes):
@@ -579,7 +580,7 @@ class LoadStateMap(NamedObjectsMap):
     casos.currentTimeSeries= "ts"
     retval= dict()
     for key in self.keys():
-      print '   ***   ',key,'   ***   '
+      lmsg.log('   ***   '+key+'   ***   ')
       retval[key]= casos.newLoadPattern("default",key)
       cargas.getLoadPatterns.currentLoadPattern= key
       loadState= self[key]
@@ -657,7 +658,7 @@ class GridModel(object):
         lin= self.conjLin[nombreConj]
         retval= lin.getElementsPart()
       else:
-        print 'part: ', nombreConj, ' not found.'
+        lmsg.warning('part: '+ nombreConj+ ' not found.')
     return retval
 
   def getElementsFromParts(self, parts):
@@ -739,7 +740,6 @@ class GridModel(object):
     if(hasattr(self,'loadStates')):
       self.lPatterns= self.loadStates.applyLoads(self.getPreprocessor(),self.dicGeomEnt)
       for cs in self.conjSup: #???
-        print 'cs',cs
         nbrset='set'+cs
         self.lPatterns[nbrset]= grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[cs].lstSup,nbrset)
     return self.dicGeomEnt
