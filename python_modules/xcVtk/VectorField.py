@@ -9,8 +9,10 @@ from xcVtk import FieldBase as fb
 
 class VectorField(fb.FieldBase):
   '''Vector field defined at points.'''
-  def __init__(self,name,fUnitConv):
+  def __init__(self,name,fUnitConv,scaleFactor,showPushing= True):
     super(VectorField,self).__init__(name,fUnitConv)
+    self.scaleFactor= scaleFactor
+    self.showPushing= showPushing #If true vector push else pulls from point
     self.points= vtk.vtkPoints()
     self.vectors= vtk.vtkDoubleArray()
     self.vectorsName= self.name+'Vectors'
@@ -26,7 +28,7 @@ class VectorField(fb.FieldBase):
       self.lengths.SetNumberOfValues(sz)
       for i in range(0,sz):
         v= self.vectors.GetTuple(i)
-        l= math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2])
+        l= math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2])*self.fConvUnidades
         self.lengths.SetValue(i,l)
     else:
       lmsg.warning('VectorField.calculateLengths: no vectors defined.')
@@ -34,7 +36,10 @@ class VectorField(fb.FieldBase):
 
   def insertNextPair(self,px,py,pz,vx,vy,vz):
     '''Inserts a point in the collection.'''
-    self.points.InsertNextPoint(px,py,pz)
+    if(self.showPushing):
+      self.points.InsertNextPoint(px-vx*self.fConvUnidades*self.scaleFactor,py-vy*self.fConvUnidades*self.scaleFactor,pz-vz*self.fConvUnidades*self.scaleFactor)
+    else:
+      self.points.InsertNextPoint(px,py,pz)
     self.vectors.InsertNextTuple3(vx,vy,vz)
 
   def setupPolydata(self):
@@ -61,7 +66,7 @@ class VectorField(fb.FieldBase):
     # Tell the filter to "clamp" the scalar range
     #self.glyph.ClampingOn()  
     # Set the overall (multiplicative) scaling factor
-    self.glyph.SetScaleFactor(self.fConvUnidades)
+    self.glyph.SetScaleFactor(self.scaleFactor)
 
     # Set the Range to "clamp" the data to 
     #   -- see equations above for nonintuitive definition of "clamping"
@@ -90,6 +95,8 @@ class VectorField(fb.FieldBase):
     #self.mapper.SetScalarRange(self.glyph.GetOutputDataObject(0).GetPointData().GetArray(self.lenghtsName).GetRange())
     self.mapper.SetScalarRange(self.lengths.GetRange())
     self.mapper.SelectColorArray(self.lenghtsName)
+    self.creaLookUpTable()
+    self.mapper.SetLookupTable(self.lookUpTable)
     return self.mapper
 
   def setupActor(self):
@@ -97,3 +104,12 @@ class VectorField(fb.FieldBase):
     self.actor = vtk.vtkActor()
     self.actor.SetMapper(self.mapper)
     return self.actor
+
+  def addToDisplay(self, recordDisplay):
+    # Adds the vector field to the display.
+    self.setupActor()
+    recordDisplay.renderer.AddActor(self.actor)
+    self.creaColorScaleBar()
+    # mapper2D= vtk.vtkPolyDataMapper2D()
+    # self.scalarBar.SetMapper(mapper2D)
+    recordDisplay.renderer.AddActor2D(self.scalarBar)
