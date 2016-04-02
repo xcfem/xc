@@ -95,10 +95,13 @@ class MaterialDataMap(NamedObjectsMap):
 
 class IJKRangeList(object):
   ''' a named IJK range list.'''
-  def __init__(self, name, grid, ranges= list()):
+  def __init__(self, name, grid, ranges= None):
     self.name= name
     self.grid= grid
-    self.ranges= ranges
+    if(ranges is None):
+      self.ranges= list() 
+    else:
+      self.ranges= ranges
 
   def append(self,ijkRange):
     self.ranges.append(ijkRange)
@@ -117,7 +120,7 @@ class IJKRangeList(object):
     '''append the load to the current load pattern.'''
     i= 0
     for r in self.ranges:
-      nmbrSet=self.name+str(i)
+      nmbrSet=self.name+'LoadVector'+str(i)
       s= self.grid.appendLoadInRangeToCurrentLoadPattern(r,dicGeomEnt,nmbrSet,loadVector)
       i+= 1
     return i
@@ -125,18 +128,19 @@ class IJKRangeList(object):
   def appendEarthPressureToCurrentLoadPattern(self, dicGeomEnt, earthPressure):
     i= 0
     for r in self.ranges:
-      nmbrSet=self.name+str(i)
+      nmbrSet=self.name+'EarthPressure'+str(i)
       s= self.grid.appendEarthPressureToCurrentLoadPattern(r,dicGeomEnt,nmbrSet,earthPressure)
       i+= 1
     return i
 
 def getIJKRangeListFromSurfaces(surfaces):
+  retval= None
   if(surfaces):
-    retval= IJKRangeList(surfaces[0].name,surfaces[0].grid)
+    retval= IJKRangeList(surfaces[0].name+'IJKRangeList',surfaces[0].grid)
     retval.appendSurfaceListRanges(surfaces)
-    return retval
   else:
     lmsg.error('Error: surface list empty.')
+  return retval
 
 class MaterialBase(IJKRangeList):
   '''Base class for lines and surfaces defined by a range list, a material and an element type and size.'''
@@ -513,15 +517,36 @@ class LoadState(object):
     hydrThrustLoad:list of hydrostatic thrust on the walls that delimit a volume
     tempGrad:      list of temperature gradient loads
   '''
-  def __init__(self,name, inercLoad= list(), unifPressLoad= list(), unifVectLoad= list(), pointLoad= list(), earthPressLoad= list(), hydrThrustLoad= list(), tempGrad= list()):
+  def __init__(self,name, inercLoad= None, unifPressLoad= None, unifVectLoad= None, pointLoad= None, earthPressLoad= None, hydrThrustLoad= None, tempGrad= None):
     self.name= name
-    self.inercLoad= inercLoad
-    self.unifPressLoad= unifPressLoad
-    self.unifVectLoad= unifVectLoad
-    self.pointLoad= pointLoad
-    self.earthPressLoad= earthPressLoad
-    self.hydrThrustLoad= hydrThrustLoad
-    self.tempGrad= tempGrad
+    if(inercLoad):
+      self.inercLoad= inercLoad
+    else:
+      self.inercLoad= list()
+    if(unifPressLoad):
+      self.unifPressLoad= unifPressLoad
+    else:
+      self.unifPressLoad= list()
+    if(unifVectLoad):
+      self.unifVectLoad= unifVectLoad
+    else:
+      self.unifVectLoad= list()
+    if(pointLoad):
+      self.pointLoad= pointLoad
+    else:
+      self.pointLoad= list()
+    if(earthPressLoad):
+      self.earthPressLoad= earthPressLoad
+    else:
+      self.earthPressLoad= list()
+    if(hydrThrustLoad):
+      self.hydrThrustLoad= hydrThrustLoad
+    else:
+      self.hydrThrustLoad= list()
+    if(tempGrad):
+      self.tempGrad= tempGrad
+    else:
+      self.tempGrad= list()
     self.lPattern= None #Corresponding load pattern.
 
   def appendInertialLoadsToCurrentLoadPattern(self):

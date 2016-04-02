@@ -44,9 +44,10 @@ class ElementLoadRecord(LoadRecord):
 
 
 class SurfaceLoadRecord(ElementLoadRecord):
-  def __init__(self, loadCase, bName= 'nil', plg= list(),v= 1.0,mode= 'nil'):
+  def __init__(self, loadCase, bName= 'nil', plg= None,v= 1.0,mode= 'nil'):
     super(SurfaceLoadRecord,self).__init__(loadCase,bName,v)
-    self.setPolygon(plg)
+    if(plg):
+      self.setPolygon(plg)
     self.projPlane= "xy"
   def __str__(self):
     retval= super(SurfaceLoadRecord,self).__str__()
