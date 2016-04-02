@@ -389,14 +389,14 @@ class ijkGrid(object):
             j+=1
     return retval
 
-  def applyLoadInRange(self,ijkRange,dicGeomEnt,nmbrSet,loadVector):
+  def appendLoadInRangeToCurrentLoadPattern(self,ijkRange,dicGeomEnt,nmbrSet,loadVector):
     s= self.getSetInRange(ijkRange,dicGeomEnt,nmbrSet)
     sElem=s.getElements
     for e in sElem:
       #print e.tag
       e.vector3dUniformLoadGlobal(loadVector)
 
-  def applyEarthPressure(self,ijkRange,dicGeomEnt,nmbrSet,earthPressLoadressure):
+  def appendEarthPressureToCurrentLoadPattern(self,ijkRange,dicGeomEnt,nmbrSet,earthPressLoadressure):
     s= self.getSetInRange(ijkRange,dicGeomEnt,nmbrSet)
     sElem=s.getElements
     for e in sElem:
@@ -425,7 +425,7 @@ def lstNodesPLine(setBusq,lstPtsPLine):
     #Devuelve los nodos del conjunto "setBusq" que pertenecen a la línea
     #quebrada definida por los puntos de la lista ordenada "lstPts"
     nodAux= setBusq.getNodes
-    retval= [] 
+    retval= list() 
     for i in range(0,len(lstPtsPLine)-1):
         segmAux= geom.LineSegment3d(lstPtsPLine[i].getPos,lstPtsPLine[i+1].getPos)
         for n in nodAux:
@@ -438,7 +438,7 @@ def lstNodesPLine(setBusq,lstPtsPLine):
 
 def setLin2lstLin(setLin):
     #devuelve una lista con las líneas del setLin
-    retval=[]
+    retval= list()
     linAux= setLin.getLines
     for l in linAux:
         retval.append(l)
@@ -446,7 +446,7 @@ def setLin2lstLin(setLin):
     
 def setPnt2lstPnt(setPnt):
     #devuelve una lista con los puntos del setPto
-    retval=[]
+    retval= list()
     pntAux= setPnt.getPoints
     for p in pntAux:
         retval.append(p)
@@ -454,7 +454,7 @@ def setPnt2lstPnt(setPnt):
  
 def setSurf2lstSurf(setSurf):
     #devuelve una lista con las superficies del setSurf
-    retval=[]
+    retval= list()
     surfAux= setSurf.getSurfaces
     for s in surfAux:
         retval.append(s)
@@ -462,7 +462,7 @@ def setSurf2lstSurf(setSurf):
 
 def setNod2lstNod(setNod):
     #devuelve una lista con los nodos de setNod
-    retval=[]
+    retval= list()
     nodAux= setNod.getNodes
     for n in nodAux:
         retval.append(n)
@@ -470,7 +470,7 @@ def setNod2lstNod(setNod):
 
 def setElem2lstElem(setElem):
     #devuelve una lista con los elementos en setElem
-    retval=[]
+    retval= list()
     elemAux= setElem.getElements
     for n in elemAux:
         retval.append(n)
@@ -479,7 +479,7 @@ def setElem2lstElem(setElem):
 def lstUnionSetsSurf(setSurf1,setSurf2):
     #devuelve una lista de tags de superficies unión de los conjuntos
     #setSurf1 y setSurf2
-    retval=[]
+    retval= list()
     for s in setSurf1.getSufaces:
         retval.append(s.tag)
     for s in setSurf2.getSufaces:

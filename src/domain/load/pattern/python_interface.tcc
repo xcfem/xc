@@ -97,7 +97,7 @@ class_<XC::MapLoadPatterns, bases<XC::LoadLoaderMember>, boost::noncopyable >("M
   .add_property("defaultNodeLoadTag", make_function( &XC::MapLoadPatterns::getCurrentElementLoadTag, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentElementLoadTag)
   .add_property("currentTimeSeries", make_function( &XC::MapLoadPatterns::getCurrentTimeSeries, return_internal_reference<>() ), &XC::MapLoadPatterns::setCurrentTimeSeries)
   .def("newTimeSeries", &XC::MapLoadPatterns::newTimeSeries,return_internal_reference<>(),"Crea una modulación de la carga en el tiempo.")
-  .add_property("currentLoadPattern", make_function( &XC::MapLoadPatterns::getCurrentLoadPattern, return_internal_reference<>() ), &XC::MapLoadPatterns::setCurrentLoadPattern)
+  .add_property("currentLoadPattern", make_function( &XC::MapLoadPatterns::getCurrentLoadPattern, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentLoadPattern)
   .def("newLoadPattern", &XC::MapLoadPatterns::newLoadPattern,return_internal_reference<>(),"Crea un nuevo caso de carga.")
   .def("addToDomain", &XC::MapLoadPatterns::addToDomain,return_internal_reference<>(),"Agrega el caso de carga al dominio.")
   .def("removeFromDomain", &XC::MapLoadPatterns::removeFromDomain,return_internal_reference<>(),"Eliminates load case from domain.")

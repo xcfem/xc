@@ -18,3 +18,5 @@ from materials import reinforcingSteel
 #   k:        fmaxk/fyk ratio
 B500A= reinforcingSteel.ReinforcingSteel(nmbAcero="B500A", fyk=500e6, emax=0.02,gammaS=500/435,k=1.05)
 B500B= reinforcingSteel.ReinforcingSteel(nmbAcero="B500B", fyk=500e6, emax=0.045,gammaS=500/435,k=1.08)
+
+SIA161_1956_specialII= reinforcingSteel.ReinforcingSteel(nmbAcero="SIA161_1956_specialII", fyk=200e6, emax=0.02,gammaS=1.15,k=1.05)

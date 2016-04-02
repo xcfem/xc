@@ -8,6 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
+import uuid
 import geom
 import xc
 from miscUtils import LogMessages as lmsg
@@ -112,19 +113,20 @@ class IJKRangeList(object):
     for s in surfaces:
       self.appendRanges(s)
 
-  def applyLoadVector(self, dicGeomEnt, loadVector):
+  def appendLoadVectorToCurrentLoadPattern(self, dicGeomEnt, loadVector):
+    '''append the load to the current load pattern.'''
     i= 0
     for r in self.ranges:
       nmbrSet=self.name+str(i)
-      s= self.grid.applyLoadInRange(r,dicGeomEnt,nmbrSet,loadVector)
+      s= self.grid.appendLoadInRangeToCurrentLoadPattern(r,dicGeomEnt,nmbrSet,loadVector)
       i+= 1
     return i
 
-  def applyEarthPressure(self, dicGeomEnt, earthPressure):
+  def appendEarthPressureToCurrentLoadPattern(self, dicGeomEnt, earthPressure):
     i= 0
     for r in self.ranges:
       nmbrSet=self.name+str(i)
-      s= self.grid.applyEarthPressure(r,dicGeomEnt,nmbrSet,earthPressure)
+      s= self.grid.appendEarthPressureToCurrentLoadPattern(r,dicGeomEnt,nmbrSet,earthPressure)
       i+= 1
     return i
 
@@ -166,13 +168,13 @@ class MaterialSurface(MaterialBase):
     for s in self.lstSup:
       s.genMesh(xc.meshDir.I)
 
-  def applyVector3dUniformLoadGlobal(self,loadVector):
+  def appendVector3dUniformLoadGlobalToCurrentLoadPattern(self,loadVector):
     for s in self.lstSup:
       elSup=s.getElements()
       for el in elSup:
         elementLoad= el.vector3dUniformLoadGlobal(loadVector)    
 
-  def applyStrainGradient(self,loadPattern,nabla):
+  def appendStrainGradientToLoadPattern(self,loadPattern,nabla):
     for s in self.lstSup:
       elSup=s.getElements()
       for el in elSup:
@@ -395,6 +397,8 @@ class LoadOnSurfaces(LoadBase):
     super(LoadOnSurfaces,self).__init__(name)
     self.surfaces= surfaces
 
+
+
 class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
   '''Inertial load applied to the shell elements belonging to a list of 
   surfaces 
@@ -407,13 +411,13 @@ class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
     super(InertialLoadOnMaterialSurfaces,self).__init__(name, surfaces)
     self.acceleration= accel
 
-  def applyLoad(self):
+  def appendLoadToCurrentLoadPattern(self):
     vectorAceleracion= xc.Vector(self.acceleration)
     for csup in self.surfaces:
       mat= csup.material
       masaUnit= mat.getAreaDensity()
       vectorCarga=masaUnit*vectorAceleracion
-      csup.applyVector3dUniformLoadGlobal(vectorCarga)
+      csup.appendVector3dUniformLoadGlobalToCurrentLoadPattern(vectorCarga)
 
 class LoadOnPoints(LoadBase):
   '''Load that acts on one or several points 
@@ -427,7 +431,7 @@ class LoadOnPoints(LoadBase):
     self.points= points
     self.loadVector= loadVector
 
-  def applyLoad(self,nodes,loadPattern):
+  def appendLoadToLoadPattern(self,nodes,loadPattern):
      for pos in self.points:
        nod= nodes.getDomain.getMesh.getNearestNode(pos)
        loadPattern.newNodalLoad(nod.tag,self.loadVector)
@@ -444,9 +448,10 @@ class PressureLoadOnSurfaces(LoadOnSurfaces):
     super(PressureLoadOnSurfaces,self).__init__(name, surfaces)
     self.loadVector= loadVector
 
-  def applyLoad(self,dicGeomEnt):
+  def appendLoadToCurrentLoadPattern(self,dicGeomEnt):
+    ''' Append load to the current load pattern.'''
     loadVector= xc.Vector(self.loadVector)
-    self.surfaces.applyLoadVector(dicGeomEnt,loadVector)
+    self.surfaces.appendLoadVectorToCurrentLoadPattern(dicGeomEnt,loadVector)
 
 class EarthPressureOnSurfaces(LoadOnSurfaces):
   '''Earth pressure applied to shell elements
@@ -468,8 +473,8 @@ class EarthPressureOnSurfaces(LoadOnSurfaces):
     super(EarthPressureOnSurfaces,self).__init__(name, surfaces)
     self.earthPressure= earthPressure
 
-  def applyEarthPressure(self,dicGeomEnt):
-    self.surfaces.applyEarthPressure(dicGeomEnt,self.earthPressure)
+  def appendEarthPressureToCurrentLoadPattern(self,dicGeomEnt):
+    self.surfaces.appendEarthPressureToCurrentLoadPattern(dicGeomEnt,self.earthPressure)
 
 
 class StrainLoadOnSurfaces(LoadOnSurfaces):
@@ -484,12 +489,12 @@ class StrainGradientLoadOnSurfaces(StrainLoadOnSurfaces):
   def __init__(self,name, surfaces,epsilon):
     super(StrainGradientLoadOnSurfaces,self).__init__(name, surfaces, epsilon)
 
-  def applyLoad(self,lp):
+  def appendLoadToLoadPattern(self,lPattern):
     for csup in self.surfaces:
       mat= csup.material
       esp= mat.thickness
       nabla= self.epsilon/esp
-      csup.applyStrainGradient(lp,nabla)
+      csup.applyStrainGradient(lPattern,nabla)
 
 class LoadOnSurfacesMap(NamedObjectsMap):
   '''Map of inertial load over surfaces.'''
@@ -517,54 +522,64 @@ class LoadState(object):
     self.earthPressLoad= earthPressLoad
     self.hydrThrustLoad= hydrThrustLoad
     self.tempGrad= tempGrad
-  def applyInertialLoads(self):
+    self.lPattern= None #Corresponding load pattern.
+
+  def appendInertialLoadsToCurrentLoadPattern(self):
     for pp in self.inercLoad:
       lmsg.log('inercLoad: '+ pp.name)
-      pp.applyLoad()
-  def applyUniformLoads(self,dicGeomEnt):
+      pp.appendLoadToCurrentLoadPattern()
+
+  def appendUniformLoadsToCurrentLoadPattern(self,dicGeomEnt):
     for load in self.unifPressLoad:
       lmsg.log('unifPressLoad: '+ load.name)
-      load.applyLoad(dicGeomEnt)
+      load.appendLoadToCurrentLoadPattern(dicGeomEnt)
     for load in self.unifVectLoad:
       lmsg.log('unifVectLoad: '+ load.name)
-      load.applyLoad(dicGeomEnt)
+      load.appendLoadToCurrentLoadPattern(dicGeomEnt)
 
 
-  def applyPunctualLoads(self,nodes,lp):
-    #Cargas lineales
-    #Cargas puntuales
+  def appendPunctualLoadsToLoadPattern(self,nodes):
+    '''Append punctual loads to the load pattern.'''
     for cpunt in self.pointLoad:
       lmsg.log('pointLoad: '+ cpunt.name)
-      cpunt.applyLoad(nodes,lp)
+      cpunt.appendLoadToLoadPattern(nodes,self.lPattern)
 
-  def applyEarthPressureLoads(self,dicGeomEnt):
+  def appendEarthPressureLoadsToCurrentLoadPattern(self,dicGeomEnt):
     for ep in self.earthPressLoad:
       lmsg.log('earthPressLoad: '+ ep.name)
-      ep.applyEarthPressure(dicGeomEnt)
+      ep.appendEarthPressureToCurrentLoadPattern(dicGeomEnt)
 
-  def applyTemperatureGradient(self,lp):
+  def appendTemperatureGradientToLoadPattern(self):
     for gt in self.tempGrad:
       lmsg.log('tempGrad: '+ gt.name)
-      gt.applyLoad(lp)
+      gt.appendLoadToLoadPattern(self.lPattern)
 
-  def applyLoads(self,lp,dicGeomEnt,nodes):
-    #Peso propio
-    self.applyInertialLoads()
+  def appendLoadsToLoadPattern(self,dicGeomEnt,nodes):
+    #Inertial loads
+    self.appendInertialLoadsToCurrentLoadPattern()
   
-    #Cargas uniformes (presiones) sobre superficies
-    #Cargas uniformes sobre superficies con componentes XYZ
-    self.applyUniformLoads(dicGeomEnt)
+     #Uniform load (fx,fy,fz) on surfaces.
+    self.appendUniformLoadsToCurrentLoadPattern(dicGeomEnt)
   
     #Cargas lineales
     #Cargas puntuales
-    self.applyPunctualLoads(nodes,lp)
+    self.appendPunctualLoadsToLoadPattern(nodes)
   
     #Empuje de tierras
-    self.applyEarthPressureLoads(dicGeomEnt)
+    self.appendEarthPressureLoadsToCurrentLoadPattern(dicGeomEnt)
   
     #Gradiente de temperatura
-    self.applyTemperatureGradient(lp)
+    self.appendTemperatureGradientToLoadPattern()
 
+  def generateLoadPattern(self,preprocessor,dictGeomEnt,lPatterns):
+    lmsg.log('   ***   '+self.name+'   ***   ')
+    if(not self.lPattern):
+      self.lPattern= lPatterns.newLoadPattern("default",self.name)
+      lPatterns.currentLoadPattern= self.name
+      self.appendLoadsToLoadPattern(dictGeomEnt,preprocessor.getNodeLoader)
+    else:
+      lmsg.error('Error load pattern: '+ self.name+ ' already generated.')
+    return self.lPattern
 
 class LoadStateMap(NamedObjectsMap):
   '''Dictionary of actions
@@ -573,19 +588,17 @@ class LoadStateMap(NamedObjectsMap):
   '''
   def __init__(self,loadStates):
     super(LoadStateMap,self).__init__(loadStates)
-  def applyLoads(self,preprocessor,dicGeomEnt):
-    cargas= preprocessor.getLoadLoader
-    casos= cargas.getLoadPatterns
-    ts= casos.newTimeSeries("constant_ts","ts")   #Load modulation.
-    casos.currentTimeSeries= "ts"
+
+  def generateLoadPatterns(self,preprocessor,dicGeomEnt):
+    ''' generate a load pattern for each one of the load states. '''
+    loadLoader= preprocessor.getLoadLoader
+    lPatterns= loadLoader.getLoadPatterns
+    ts= lPatterns.newTimeSeries("constant_ts","ts")   #Load modulation.
+    lPatterns.currentTimeSeries= "ts"
     retval= dict()
     for key in self.keys():
-      lmsg.log('   ***   '+key+'   ***   ')
-      retval[key]= casos.newLoadPattern("default",key)
-      cargas.getLoadPatterns.currentLoadPattern= key
       loadState= self[key]
-      #Peso propio
-      loadState.applyLoads(retval[key],dicGeomEnt,preprocessor.getNodeLoader)
+      retval[key]= loadState.generateLoadPattern(preprocessor,dicGeomEnt,lPatterns)
     return retval
 
 class GridModel(object):
@@ -687,6 +700,14 @@ class GridModel(object):
     self.grid= grid.ijkGrid(self.getPreprocessor(),xList,yList,zList)
     return self.grid
 
+  def getSurfacesFromListOfRanges(self,listOfRanges):
+    '''Returns surfaces (IJKRangeList object) created from the list of ranges.'''
+    sf= list()
+    for r in listOfRanges:
+      sf.append(grid.IJKRange(r[0],r[1]))
+    unique_name = str(uuid.uuid4())
+    return IJKRangeList(unique_name,self.grid,sf)
+
   def newConstrainedRanges(self,name,constraints):
     return ConstrainedRanges(name, self.grid, constraints)
 
@@ -734,11 +755,12 @@ class GridModel(object):
       grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[setName].lstSup,setName)
 
   def generateLoads(self):
-    '''Apply the loads for each load state and returns a dictionary
-    with identifiers and the geometric entities (lines and surfaces) generated
+    '''Append the loads for each load state into corresponding load patterns
+       and returns a dictionary with identifiers and the geometric
+       entities (lines and surfaces) generated.
     '''
     if(hasattr(self,'loadStates')):
-      self.lPatterns= self.loadStates.applyLoads(self.getPreprocessor(),self.dicGeomEnt)
+      self.lPatterns= self.loadStates.generateLoadPatterns(self.getPreprocessor(),self.dicGeomEnt)
       for cs in self.conjSup: #???
         nbrset='set'+cs
         self.lPatterns[nbrset]= grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[cs].lstSup,nbrset)
