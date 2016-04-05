@@ -57,6 +57,20 @@ SET(LIBRARY_OUTPUT_PATH ${DIR_FUENTES_XC}/lib)
 
 INCLUDE(${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
 
+INCLUDE(${DIR_FUENTES_XC}CMake/GetGitRevisionDescription.cmake)
+git_describe(VERSION --tags --dirty=-d)
+
+#parse the version information into pieces.
+string(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" VERSION_MAJOR "${VERSION}")
+string(REGEX REPLACE "^v[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${VERSION}")
+string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${VERSION}")
+string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.[0-9]+(.*)" "\\1" VERSION_SHA1 "${VERSION}")
+set(VERSION_SHORT "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+
+configure_file(${DIR_FUENTES_XC}CMake/version.cc.in
+                ${DIR_FUENTES_XC}src/version.cc)
+set(version_file "${DIR_FUENTES_XC}src/version.cc")
+
 enable_language(Fortran)
 INCLUDE(${DIR_FUENTES_XC}CMake/find_packages.cmake)
 
@@ -321,7 +335,7 @@ SET(preprocessor preprocessor/EntMdlrBase preprocessor/ParamMallado ${preprocess
 
 SET(solution solution/analysis/ModelWrapper solution/SoluMethod solution/MapSoluMethod solution/analysis/MapModelWrapper solution/ProcSoluControl solution/ProcSolu)
 
-ADD_LIBRARY(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} ${post_process} ProblemaEF)
+ADD_LIBRARY(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} ${post_process} version ProblemaEF)
 
 #Interfaz Python
 LINK_LIBRARIES(XcBib xc_utils xc_basic ${VTK_BIB} ${CGAL_LIBRARIES} ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${Boost_LIBRARIES}  ${PYTHON_LIBRARIES} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${MED_LIBRARIES} ${TCL_LIBRARY} ${Boost_LIBRARIES})
@@ -340,6 +354,9 @@ SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "BibXC")
 SET(CPACK_DEBIAN_PACKAGE_NAME "BibXC")
 SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 INCLUDE(${DIR_FUENTES_XC}/CMake/debian_package_params.txt)
+SET(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
+SET(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
+SET(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
 
 SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libstdc++ (>=4.3), libgcc1 (>=1:4.3), libc6 (>=2.7), libvtk5 (>=5.0), libcgal2 (>=3.3), libplot2c2 (>=2.5), libmpfr1ldbl  (>=2.3), libgmp3c2 (>=4.2), libboost-regex1.34.1 (>=1.34), libmysql++3 (>=3.0), libsqlite3-0 (>=3.5), libxt6  (>=1.0), libsm6  (>=1.0), libxext6  (>=1.0), libice6  (>=1.0), libxft2  (>=2.1), xc_basic (>=0.9), xc_utils (>=0.9)")
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Luis C. Pérez Tato") #required

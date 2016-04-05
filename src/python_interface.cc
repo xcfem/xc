@@ -72,6 +72,8 @@ BOOST_PYTHON_MODULE(xc)
     XC::Preprocessor &(XC::ProblemaEF::*getPreprocessorRef)(void)= &XC::ProblemaEF::getPreprocessor;
     XC::ProcSolu &(XC::ProblemaEF::*getSoluProcRef)(void)= &XC::ProblemaEF::getSoluProc;
     class_<XC::ProblemaEF, bases<EntCmd>, boost::noncopyable>("ProblemaEF")
+      .def("getVersion",  make_function(&XC::ProblemaEF::getVersion,return_value_policy<copy_const_reference>()),"Returns program version string.").staticmethod("getVersion")
+      .def("getVersionShort",  make_function(&XC::ProblemaEF::getVersionShort,return_value_policy<copy_const_reference>()),"Returns program (short) version string.").staticmethod("getVersionShort")
       .add_property("getDomain", make_function( getDomainRef, return_internal_reference<>() ),"Returns a reference to the domain.")
       .add_property("getPreprocessor", make_function( getPreprocessorRef, return_internal_reference<>() ))
       .add_property("getSoluProc", make_function( getSoluProcRef, return_internal_reference<>() ))
