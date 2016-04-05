@@ -30,6 +30,7 @@
 #define PROBLEMAEF_H
 
 #include "xc_utils/src/nucleo/EntCmd.h"
+#include "version.h"
 #include "preprocessor/Preprocessor.h"
 #include "solution/ProcSolu.h"
 #include "post_process/MapFields.h"
@@ -94,6 +95,10 @@ class ProblemaEF: public EntCmd
     static Domain *theActiveDomain;
     ProblemaEF(void);
     ~ProblemaEF(void);
+    static inline const std::string &getVersion(void)
+      { return gVERSION; }
+    static inline const std::string &getVersionShort(void)
+      { return gVERSION_SHORT; }
     void clearAll(void);
     FE_Datastore *defineDatabase(const std::string &tipo, const std::string &nombre);
     inline FE_Datastore *getDataBase(void)

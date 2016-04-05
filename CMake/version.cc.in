@@ -1,0 +1,5 @@
+//the path to the version.h file is relative to your build directory.
+#include "version.h"
+
+const std::string XC::gVERSION= "@VERSION@";
+const std::string XC::gVERSION_SHORT= "@VERSION_SHORT@";
