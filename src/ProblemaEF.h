@@ -95,9 +95,9 @@ class ProblemaEF: public EntCmd
     static Domain *theActiveDomain;
     ProblemaEF(void);
     ~ProblemaEF(void);
-    static inline const std::string &getVersion(void)
+    static inline const std::string &getXCVersion(void)
       { return gVERSION; }
-    static inline const std::string &getVersionShort(void)
+    static inline const std::string &getXCVersionShort(void)
       { return gVERSION_SHORT; }
     void clearAll(void);
     FE_Datastore *defineDatabase(const std::string &tipo, const std::string &nombre);
