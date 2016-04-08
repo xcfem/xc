@@ -157,7 +157,7 @@ class SectionInfo(object):
     fileHandler.write('Gross section:\\\\\n')
     fileHandler.write('\\hline\n')
     fileHandler.write('\\begin{tabular}{ll}\n')
-    fileHandler.write('$A_{gross}='+fmt6_3f.format(self.AB) +'\\ m^2$ & \\multirow{3}{*}{Tensor de inercia ($cm^4$): $ \\left( \\begin{array}{ccc}'+ fmt5_2f.format(self.scc.getJTorsion()*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ fmt5_2f.format(self.IyB*1e4) +' & '+fmt5_2f.format(self.PyzB) +' \\\\ 0.00 & '+fmt5_2f.format(self.PyzB) +' & '+fmt5_2f.format(self.IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
+    fileHandler.write('$A_{gross}='+fmt6_3f.format(self.AB) +'\\ m^2$ & \\multirow{3}{*}{Inertia tensor ($cm^4$): $ \\left( \\begin{array}{ccc}'+ fmt5_2f.format(self.scc.getJTorsion()*1e4) +' & 0.00 & 0.00 \\\\ 0.00 & '+ fmt5_2f.format(self.IyB*1e4) +' & '+fmt5_2f.format(self.PyzB) +' \\\\ 0.00 & '+fmt5_2f.format(self.PyzB) +' & '+fmt5_2f.format(self.IzB*1e4) +' \\end{array} \\right)$} \\\\\n')
     fileHandler.write('& \\\\\n')
     fileHandler.write('C.O.G.: $('+fmt5_3f.format(self.GB[0])+','+fmt5_3f.format(self.GB[1])+')\\ m$  & \\\\\n')
     fileHandler.write('\\end{tabular} \\\\\n')
