@@ -14,6 +14,8 @@ import math
 import scipy.interpolate
 
 from materials import typical_materials
+from materials import materialGraphics
+import matplotlib.pyplot as plt
 
 class Concrete(object):
     """ Concrete model according to Eurocode 2 - Base class.
@@ -59,6 +61,8 @@ class Concrete(object):
         self.setupName(nmbConcrete)
         self.fck= fck #** characteristic (5%) cylinder strength of the concrete [Pa]
         self.gmmC= gammaC #** Partial safety factor for concrete 
+        self.concrDiagramK= None # Characteristic stress-strain diagram.
+        self.concrDiagramD= None # Design stress-strain diagram.
 
     def setupName(self,nmbConcrete):
         self.nmbMaterial= nmbConcrete #** Name of material
@@ -142,14 +146,14 @@ class Concrete(object):
 
     def defDiagK(self,preprocessor):
         ''' Defines a Concrete01 uniaxial material to represent the characteristic stress-strain diagram.'''
-        hormigon= typical_materials.defConcrete01(preprocessor,self.nmbDiagK,self.epsilon0(),self.fmaxK(),self.fmaxK(),self.epsilonU())
-        self.matTagK= hormigon.tag
+        self.concrDiagramK= typical_materials.defConcrete01(preprocessor,self.nmbDiagK,self.epsilon0(),self.fmaxK(),self.fmaxK(),self.epsilonU())
+        self.matTagK= self.concrDiagramK.tag
         return self.matTagK
 
     def defDiagD(self,preprocessor):
         ''' Defines a Concrete01 uniaxial material to represent the design stress-strain diagram..'''
-        hormigon= typical_materials.defConcrete01(preprocessor,self.nmbDiagD,self.epsilon0(),self.fmaxD(),self.fmaxD(),self.epsilonU())
-        self.matTagD= hormigon.tag
+        self.concrDiagramD= typical_materials.defConcrete01(preprocessor,self.nmbDiagD,self.epsilon0(),self.fmaxD(),self.fmaxD(),self.epsilonU())
+        self.matTagD= self.concrDiagramD.tag
         return self.matTagD
 
     def getDiagD(self,preprocessor):
@@ -483,6 +487,15 @@ class Concrete(object):
             return 0.0
         else:
           return 0.0 
+
+    def plotDesignStressStrainDiagram(self):
+        retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.nmbMaterial + ' design stress-strain diagram')
+        retval.setupGraphic(plt,self.concrDiagramD)
+        fileName= self.nmbMaterial+'_design_stress_strain_diagram'
+        retval.savefig(plt,fileName+'.jpeg')
+        retval.savefig(plt,fileName+'.eps')
+        return retval
+
 
 def defDiagKConcrete(preprocessor, concreteRecord):
   print 'defDiagKConcrete deprecated; use concreteRecord.defDiagK(preproccesor)'
