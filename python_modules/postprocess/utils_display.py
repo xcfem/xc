@@ -8,6 +8,7 @@ __email__= "l.pereztato@gmail.com"
 
 import os
 from miscUtils import LogMessages as lmsg
+from miscUtils import string_utils as su
 from xcVtk import vtk_grafico_base
 from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk.malla_ef import Fields
@@ -16,6 +17,14 @@ from xcVtk import vtk_grafico_diagrama_esfuerzos as gde
 
 class FigureBase(object):
   def __init__(self,pLabel,vLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+    ''' Figure base constructor.
+    pLabel: part label; something like 'wall' or '2ndFloorDeck'
+    vLabel; check label; Something like "Fatigue" or "CrackControl"
+    figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
+    units: units displayed; something like '[MPa]' or 'radians'...
+    reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
+    sz: LaTeX size for the figure.
+    '''
     self.partLabel= pLabel #Something like 'wall' or '2ndFloorDeck'
     self.verifLabel= vLabel #Something like "Fatigue" or "CrackControl"
     self.attributeName= ''
@@ -48,6 +57,14 @@ class FigureBase(object):
 
 class SlideDefinition(FigureBase):
   def __init__(self,pLabel,vLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+    ''' Slide constructor.
+    pLabel: part label; something like 'wall' or '2ndFloorDeck'
+    vLabel; check label; Something like "Fatigue" or "CrackControl"
+    figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
+    units: units displayed; something like '[MPa]' or 'radians'...
+    reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
+    sz: LaTeX size for the figure.
+    '''
     super(SlideDefinition,self).__init__(pLabel,vLabel,figDescr,reinfDescr,units,sz)
     self.field= None
     self.diagrams= list()
@@ -64,7 +81,7 @@ class SlideDefinition(FigureBase):
     if(self.field):
       self.field.plot(preprocessor, defDisplay,fName)
     else:
-      defDisplay.displayMesh(preprocessor,elementSetName,None,self.diagrams,jpegName)
+      defDisplay.displayMesh(preprocessor,elementSetName,None,self.diagrams,jpegName,self.getCaption())
     os.system("convert "+ jpegName + " " + epsName)
   
 
@@ -72,6 +89,14 @@ class FigureDefinition(SlideDefinition):
   diagrams= None #List of diagrams to display (see ColoredDiagram, LinearLoadDiagram,...)
 
   def __init__(self,pLabel,vLabel,attrName,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+    ''' Figure constructor.
+    pLabel: part label as defined in model; something like 'wall' or '2ndFloorDeck'
+    vLabel; check label; Something like "Fatigue" or "CrackControl"
+    figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
+    units: units displayed; something like '[MPa]' or 'radians'...
+    reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
+    sz: LaTeX size for the figure.
+    '''
     super(FigureDefinition,self).__init__(pLabel,vLabel,figDescr,reinfDescr,units,sz)
     self.attributeName= attrName
     lmsg.warning('FigureDefinition DEPRECATED; use SlideDefinition.')
@@ -83,17 +108,17 @@ class FigureDefinition(SlideDefinition):
     jpegName= nmbFichGraf+".jpeg"
     epsName= nmbFichGraf+".eps"
     self.defField(elementSetName)
-    self.field.plot(preprocessor, defDisplay,jpegName)
+    self.field.plot(preprocessor, defDisplay,jpegName,self.getCaption())
     os.system("convert "+ jpegName + " " + epsName)
  
-
 class TakePhotos(object):
-
+  '''Generation of bitmaps with analysis and design results.'''
   def __init__(self,elemSetName):
     self.defDisplay= None
     self.elementSetName= elemSetName
     self.defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
     self.pthGraphOutput= '/tmp/'  #Directory to put the graphics in.
+    self.pthTextOutput= '/tmp/'  #Directory to put the texts in.
     self.fichLatexFigs= None #Latex file to include figures.
     self.fichLatexList= None #Latex file with figures list.
 
@@ -104,25 +129,60 @@ class TakePhotos(object):
     if((conta>0) & (conta % 10==0)):
       self.fichLatexFigs.write('\\clearpage\n' )
 
-  def displayFigures(self,preprocessor,figDefinitionList,nmbFichLatexFigs,nmbFichLatexList):
+  def displayFigures(self,preprocessor,figDefinitionList,LatexFigsFilename,LatexListFilename):
     '''Creates graphics files from figure definition list.'''
     #nmbLstIss: nombre de la lista donde se definen los resultados a representar
-    #nmbFichLatex: nombre del fichero de látex donde montar los gráficos
+    #LatexFilename: nombre del fichero de látex donde montar los gráficos
     conta= 0
-    self.fichLatexFigs= open(nmbFichLatexFigs,'w')
-    self.fichLatexList= open(nmbFichLatexList,'w')
+    self.fichLatexFigs= open(self.pthTextOutput+LatexFigsFilename,'w')
+    self.fichLatexList= open(self.pthTextOutput+LatexListFilename,'w')
     self.fichLatexList.write('\\begin{itemize}\n' )
     for figDef in figDefinitionList:
-      nmbFichGraf= self.pthGraphOutput+figDef.getFileName()
-      figDef.genGraphicFile(preprocessor,self.defDisplay, self.elementSetName,nmbFichGraf)
+      bitmapFilename= self.pthGraphOutput+figDef.getFileName()
+      figDef.genGraphicFile(preprocessor,self.defDisplay, self.elementSetName,bitmapFilename)
       conta+= 1
-      self.insertFigureLatex(figDef,conta,nmbFichGraf,"fg_"+figDef.getFileName())
+      self.insertFigureLatex(figDef,conta,bitmapFilename,"fg_"+figDef.getFileName())
     self.fichLatexFigs.close()
     self.fichLatexList.write('\\end{itemize}\n' )
     self.fichLatexList.close()
     return
 
-  def plotFigures(self,preprocessor,figDefinitionList,nmbFichLatexFigs,nmbFichLatexList):
+  def plotFigures(self,preprocessor,figDefinitionList,LatexFigsFilename,LatexListFilename):
     lmsg.warning('plotFigures DEPRECATED; use displayFigures.')
-    self.displayFigures(preprocessor,figDefinitionList,nmbFichLatexFigs,nmbFichLatexList)
+    self.displayFigures(preprocessor,figDefinitionList,LatexFigsFilename,LatexListFilename)
 
+class PartToDisplay(object):
+  def __init__(self,partName, surfaceList,reinforcementLabels):
+    ''' PartsToDisplay constructor
+    partName: name assigned to the part to show.
+    surfaceList: list of surfaces to show (with the names used in the model).
+    reinforcementLabels: labels to identify the rebars (longitudinal reinf, vertical reinf,...).    
+    '''
+    self.partName= partName
+    self.surfaceList= surfaceList
+    self.reinforcementLabels= reinforcementLabels
+  def getShortName(self):
+    return su.slugify(self.partName)
+  def display(self,preprocessor,tp,resultsToDisplay,check_results_dir):
+    '''Generate an image for every result to display
+       resultToDisplay: collection of results to be displayed.
+       check_results_dir: directory where the files with the results values are.
+    '''
+    resultsToDisplay.display(preprocessor,tp,self,check_results_dir)
+       
+
+class PartToDisplayContainer(dict):
+  ''' Parts to display in figures... '''
+  def __init__(self,lst):
+    for l in lst:
+      self.add(l)
+  def add(self,part):
+    self[part.getShortName()]= part
+  def display(self,preprocessor,tp,resultsToDisplay):
+    '''Display results for each part.
+       resultToDisplay: collection of results to be displayed.
+       check_results_dir: directory where the files with the results values are.
+    '''
+    for k in self.keys():
+      part= self[k]
+      part.display(preprocessor,tp,resultsToDisplay,self.check_results_directory)
