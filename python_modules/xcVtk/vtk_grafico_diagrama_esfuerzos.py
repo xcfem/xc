@@ -12,20 +12,21 @@ class RecordDefDiagramaEsf(cd.ColoredDiagram):
   def __init__(self,scale,fUnitConv,sets,component):
     super(RecordDefDiagramaEsf,self).__init__(scale,fUnitConv)
     self.conjuntos= sets
-    if(component == "N"):
+    self.component= component
+    if(self.component == "N"):
       self.nmbRutinaDiagrama= self.agregaDatosADiagramaAxiles
-    elif(component == "Qy"): 
+    elif(self.component == "Qy"): 
       self.nmbRutinaDiagrama= self.agregaDatosADiagramaVY
-    elif(component == "Qz"): 
+    elif(self.component == "Qz"): 
       self.nmbRutinaDiagrama= self.agregaDatosADiagramaVZ
-    elif(component == "T"): 
+    elif(self.component == "T"): 
       self.nmbRutinaDiagrama= self.agregaDatosADiagramaT
-    elif(component == "My"): 
+    elif(self.component == "My"): 
       self.nmbRutinaDiagrama= self.agregaDatosADiagramaMomEjeY
-    elif(component == "Mz"): 
+    elif(self.component == "Mz"): 
       self.nmbRutinaDiagrama= self.agregaDatosADiagramaMomEjeZ
     else:
-      print "component :'", component, "' unknown."
+      print "component :'", self.component, "' unknown."
 
 
 
