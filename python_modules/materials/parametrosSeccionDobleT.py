@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division
+from materials import sectionProperties 
+
 ##   Parámetros que definen la sección doble T.
 ##
 ##                        b1
@@ -62,4 +64,90 @@ def getMomentoModuloTorsionSeccDobleT(b1,b2,ef,ew,ht):
     J=getInerciaTorsionSeccDobleT(b1,b2,ef,ew,ht)
     return J/max(ef,ew)
   
+
+class ISection(sectionProperties.sectionProperties):
+  """I section geometric parameters
+  Attributes:
+    name:         name identifying the section
+    wdTopFlange:  width of the top flange (parallel to local z axis)
+    thTopFlange:  thickness of the top flange (parallel to local y axis)
+    thWeb:        thickness of the web (parallel to local z axis)
+    hgWeb:        height of the web (parallel to local y axis)
+    wdBotFlange:  width of the bottom flange (parallel to local z axis)
+    thBotFlange:  thickness of the bottom flange (parallel to local y axis)
+    E:            Young’s modulus of the material
+    nu:           Poisson’s ratio
+ 
+         wdTopFlange
+    --------------------- thTopFlange
+              |
+              |
+              |<-thWeb
+              |
+              |          hgWeb
+              |
+              |
+              |
+              |
+         ----------- thBotFlange 
+         wdBotFlange
+
+  """
+  def __init__(self,name,wdTopFlange,thTopFlange,thWeb,hgWeb,wdBotFlange,thBotFlange,E,nu):
+    super(ISection,self).__init__(name,E,nu)
+    self.wTF= wdTopFlange
+    self.tTF= thTopFlange
+    self.tW=thWeb
+    self.hW=hgWeb
+    self.wBF= wdBotFlange
+    self.tBF= thBotFlange
+  def hTotal(self):
+    '''Total height (parallel to local y axis) of the section
+    '''
+    retval=self.tTF+self.hW+self.tBF
+    return retval
+  def A(self):
+    """ Cross-section area."""
+    retval=self.wTF*self.tTF+self.tW*self.hW+self.wBF*self.tBF
+    return retval
+  def hCOG(self):
+    '''distance from the bottom fiber of the inferior flange to the 
+    centre of gravity of the section
+    '''
+    ATF=self.wTF*self.tTF
+    AW=self.tW*self.hW
+    ABF=self.wBF*self.tBF
+    retval=(ATF*(self.hTotal()-self.tTF/2.0)+AW*(self.tBF+self.hW/2.0)+ABF*self.tBF/2.0)/self.A()
+    return retval
+  def Iy(self):
+    '''Second moment of area which respect to local axis y
+    '''
+    retval=1/12.0*self.tTF*self.wTF**3+1/12.0*self.hW*self.tW**3+1/12.0*self.tBF*self.wBF**3
+    return retval
+  def Iz(self):
+    '''Second moment of area which respect to local axis z
+    '''
+    ATF=self.wTF*self.tTF
+    AW=self.tW*self.hW
+    ABF=self.wBF*self.tBF
+    ITF=1/12.0*self.wTF*self.tTF**3
+    IW=1/12.0*self.tW*self.hW**3
+    IBF=1/12.0*self.wBF*self.tBF**3
+    retval1=ITF+ATF*(self.hTotal()-self.tTF/2.0-self.hCOG())**2
+    retval=retval1+IW+AW*(self.tBF+self.hW/2-self.hCOG())**2+IBF+ABF*(self.tBF/2.0-self.hCOG())**2
+    return retval
+  def J(self):
+    hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
+    retval=(self.wTF*self.tTF**3+self.wBF*self.tBF**3+hPrf*self.tW**3)/3.0
+    return retval
+  def Wyel(self):
+    zmax=max(self.wTF/2.0,self.wBF/2.0)
+    return self.Iy()/zmax
+  def Wzel(self):
+    ymax=max(self.hCOG(),self.hTotal()-self.hCOG())
+    return self.Iz()/ymax
+  def alphaY(self):
+    return 0.32 #Coeficiente de distorsión, ver libro E. Oñate pág. 122.
+  def alphaZ(self):
+    return 0.69
 
