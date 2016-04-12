@@ -510,6 +510,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/def_params_control.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/def_vars_control.py
 /usr/local/lib/python2.7/dist-packages/postprocess/def_vars_control.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/displayable_results.py
+/usr/local/lib/python2.7/dist-packages/postprocess/displayable_results.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/elastic_beam_3d/callback_control_tn_ha.py
 /usr/local/lib/python2.7/dist-packages/postprocess/elastic_beam_3d/callback_control_tn_ha.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/elastic_beam_3d/def_params_perfil_metalico_reg_elastico.py
@@ -696,6 +698,8 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_load_nodos.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/NodePropertyDiagram.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/NodePropertyDiagram.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/ScreenAnnotation.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/ScreenAnnotation.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/VectorField.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/VectorField.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/views.py

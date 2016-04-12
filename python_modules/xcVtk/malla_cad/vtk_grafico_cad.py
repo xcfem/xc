@@ -33,10 +33,10 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
     defGrid.setName= setName
     self.displayGrid(preprocessor,defGrid)
 
-  def plotCadModel(self, preprocessor, setName, field, fName):
+  def plotCadModel(self, preprocessor, setName, field, fName, caption= ''):
     defGrid= vtk_grafico_base.RecordDefGrid()
     defGrid.setName= setName
     self.defineEscenaMalla(preprocessor,defGrid,field)
-    self.displayScene(fName)
+    self.displayScene(caption,fName)
 
 

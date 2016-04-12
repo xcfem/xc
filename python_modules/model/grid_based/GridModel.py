@@ -791,7 +791,7 @@ class GridModel(object):
         self.lPatterns[nbrset]= grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[cs].lstSup,nbrset)
     return self.dicGeomEnt
 
-  def displayMesh(self,partToDisplay):
+  def displayMesh(self,partToDisplay,caption= ''):
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.grafico_mef(self.getPreprocessor(),partToDisplay)
+    defDisplay.grafico_mef(self.getPreprocessor(),partToDisplay,caption)
     return defDisplay

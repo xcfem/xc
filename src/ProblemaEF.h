@@ -120,6 +120,12 @@ class ProblemaEF: public EntCmd
     inline DataOutputHandler::map_output_handlers *getOutputHandlers(void) const
       { return &output_handlers; }
   };
+
+inline std::string getXCVersion(void)
+   { return ProblemaEF::getXCVersion(); }
+inline std::string getXCVersionShort(void)
+   { return ProblemaEF::getXCVersionShort(); }
+
 } // end of XC namespace
 
 #endif

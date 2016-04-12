@@ -82,5 +82,7 @@ BOOST_PYTHON_MODULE(xc)
       .add_property("getFields", make_function( &XC::ProblemaEF::getFields, return_internal_reference<>() ),"Returns fields definition (export).")
       .def("clearAll",&XC::ProblemaEF::clearAll)
    ;
+    def("getXCVersion",XC::getXCVersion);
+    def("getXCVersionShort",XC::getXCVersionShort);
   }
 

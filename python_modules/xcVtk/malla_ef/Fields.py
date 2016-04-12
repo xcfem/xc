@@ -58,7 +58,7 @@ class ExtrapolatedScalarField(ScalarField):
     super(ExtrapolatedScalarField,self).__init__(name,vExpr,component,fUnitConv)
     self.elementSetName= elementSetName
 
-  def plot(self,preprocessor,defDisplay,fName):
+  def plot(self,preprocessor,defDisplay,fName,caption= ''):
     elementSet= preprocessor.getSets.getSet(self.elementSetName).getElements
     extrapolate_elem_attr.extrapolate_elem_function_attr(elementSet,self.name,"getProp", self.name)
-    defDisplay.displayMesh(preprocessor, self.elementSetName,self,None,fName)
+    defDisplay.displayMesh(preprocessor, self.elementSetName,self,None,fName,caption)

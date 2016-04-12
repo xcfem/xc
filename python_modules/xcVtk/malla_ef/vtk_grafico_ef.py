@@ -135,17 +135,17 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     defGrid.setName= setName
     return defGrid
 
-  def grafico_mef(self,preprocessor,setName):
+  def grafico_mef(self,preprocessor,setName,caption= ''):
     defGrid= self.setupGrid(setName)
-    self.displayGrid(preprocessor,defGrid)
+    self.displayGrid(preprocessor,defGrid,caption)
 
-  def displayMesh(self, preprocessor, setName, field= None, diagrams= None, fName= None):
+  def displayMesh(self, preprocessor, setName, field= None, diagrams= None, fName= None, caption= ''):
     defGrid= self.setupGrid(setName)
     self.defineEscenaMalla(preprocessor,defGrid,field)
     if(diagrams):
       for d in diagrams:
         self.appendDiagram(d)
-    self.displayScene(fName)
+    self.displayScene(caption,fName)
 
   def displayScalarField(self, preprocessor, setName, field, fName= None):
     lmsg.warning('displayScalarField DEPRECATED; use displayMesh.')

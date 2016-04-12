@@ -12,11 +12,12 @@ __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 import sys
 import vtk
 import xc_base
+from xcVtk import ScreenAnnotation as sa
 from miscUtils import LogMessages as lmsg
 
 
 class RecordDefGrid(object):
-  '''Provides the variables involved in the grid representation
+  '''Provides the variables involved in the VTK grid representation
   Attributes:
     setName:     name of the set to be represented
     entToLabel:  entities to be labeled (defaults to "nodos")
@@ -61,6 +62,7 @@ class RecordDefDisplay(object):
     self.renWin= None
     self.windowWidth= 800
     self.windowHeight= 600
+    self.annotation= sa.ScreenAnnotation()
     self.viewName= "XYZPos"
     self.zoom= 1.0
     self.bgRComp= 0.65
@@ -158,13 +160,18 @@ class RecordDefDisplay(object):
     else:
       sys.stderr.write("View name: '"+self.viewName+"' unknown.")
 
-  def setupWindow(self):
+  def setupWindow(self,caption= ''):
     '''sets the rendering window. A rendering window is a window in a
        graphical user interface where renderers draw their images.
     '''
     self.renWin= vtk.vtkRenderWindow()
     self.renWin.SetSize(self.windowWidth,self.windowHeight)
     self.renWin.AddRenderer(self.renderer)
+    #Time stamp and window decorations.
+    if(caption==''):
+      lmsg.warning('setupWindow; window caption empty.')
+    vtkCornerAnno= self.annotation.getVtkCornerAnnotation(caption)
+    self.renderer.AddActor(vtkCornerAnno)
     return self.renWin
 
   def setupWindowInteractor(self):
@@ -177,9 +184,9 @@ class RecordDefDisplay(object):
     iren.Initialize()
     return iren
 
-  def displayScene(self,fName= None):
+  def displayScene(self,caption= '', fName= None):
     self.defineView()
-    self.setupWindow()
+    self.setupWindow(caption)
     if(fName):
       self.plot(fName)
     else:
@@ -188,13 +195,13 @@ class RecordDefDisplay(object):
 
   def muestraEscena(self):
     lmsg.warning('muestraEscena is deprecated. Use displayScene')
-    self.displayScene(None)
+    self.displayScene('noCaption', None)
     
 
-  def displayGrid(self, preprocessor,recordGrid):
+  def displayGrid(self, preprocessor,recordGrid,caption= ''):
     '''Displays the grid in the output device'''
     self.defineEscenaMalla(preprocessor,recordGrid,None)
-    self.displayScene()
+    self.displayScene(caption)
 
   def plot(self,fName):
     '''Plots window contents'''

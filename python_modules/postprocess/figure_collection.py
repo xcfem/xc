@@ -35,7 +35,7 @@ class FigsCollectionPlotter(object):
     figureList= []
     figureList.append(utils_display.FigureDefinition(partName,"Flexion","MyCP1",txtMyCP1,self.txtArmature1,self.mUnits))
     figureList.append(utils_display.FigureDefinition(partName,"Flexion","FCCP1",txtFCnormalStresses,self.txtArmature1))
-    figureList.append(utils_display.FigureDefinition(partName,"Flexion","MyCP2",txtMyCP2,self.txtArmature1,self.mUnits))
+    figureList.append(utils_display.FigureDefinition(partName,"Flexion","MyCP2",txtMyCP2,self.txtArmature2,self.mUnits))
     figureList.append(utils_display.FigureDefinition(partName,"Flexion","FCCP2",txtFCnormalStresses,self.txtArmature2))
     #Load properties to display:
     fName= self.fieldFilesPath + "results_verif_tn_eluT2.py"
