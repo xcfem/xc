@@ -82,7 +82,8 @@ class ReinforcingSteel(object):
   def getDiagD(self,preprocessor):
     return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagD)
   def plotDesignStressStrainDiagram(self,preprocessor):
-    self.defDiagD(preprocessor)
+    if self.steelDiagramD== None:
+      self.defDiagD(preprocessor)
     retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.nmbMaterial + ' design stress-strain diagram')
     retval.setupGraphic(plt,self.steelDiagramD)
     fileName= self.nmbMaterial+'_design_stress_strain_diagram'
