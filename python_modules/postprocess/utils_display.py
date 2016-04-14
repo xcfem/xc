@@ -7,6 +7,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import os
+import uuid
 from miscUtils import LogMessages as lmsg
 from miscUtils import string_utils as su
 from xcVtk import vtk_grafico_base
@@ -41,7 +42,7 @@ class FigureBase(object):
       retval+= '. ' + self.armatureDescription
     return retval
   def getFileName(self):
-    return self.partLabel+self.verifLabel+self.attributeName
+    return su.slugify(self.partLabel+self.verifLabel+self.attributeName)
   def insertIntoLatex(self, fichLatexFigs, fichLatexList, fichFig, labelText):
     #fichLatexFigs: fichero latex donde insertar el gráfico
     #fichFig: nombre del fichero que contiene el gráfico (sin extensión y con path completo)
@@ -163,6 +164,14 @@ class PartToDisplay(object):
     self.reinforcementLabels= reinforcementLabels
   def getShortName(self):
     return su.slugify(self.partName)
+  def getElements(self):
+    '''Returns a list of the elements of this part.'''
+    retval= list()
+    for sup in self.surfaceList:
+      elSup= sup.getElements()
+      for elem in elSup:
+        retval.append(elem)
+    return retval
   def display(self,preprocessor,tp,resultsToDisplay,check_results_dir):
     '''Generate an image for every result to display
        resultToDisplay: collection of results to be displayed.
@@ -176,6 +185,22 @@ class PartToDisplayContainer(dict):
   def __init__(self,lst):
     for l in lst:
       self.add(l)
+  def getElements(self):
+    '''Returns a list of the elements of this part container.'''
+    retval= list()
+    for k in self.keys():
+      part= self[k]
+      retval+= part.getElements()
+    return retval
+  def getElementSet(self,preprocessor):
+    self.elementSetName= str(uuid.uuid4())
+    elems= self.getElements()
+    # Definimos el conjunto
+    st= preprocessor.getSets.defSet(self.elementSetName)
+    for e in elems:
+      st.getElements.append(e)
+    st.fillDownwards()
+    return st
   def add(self,part):
     self[part.getShortName()]= part
   def display(self,preprocessor,tp,resultsToDisplay):
@@ -183,6 +208,9 @@ class PartToDisplayContainer(dict):
        resultToDisplay: collection of results to be displayed.
        check_results_dir: directory where the files with the results values are.
     '''
+    elementSet= self.getElementSet(preprocessor)
+    tp.elementSetName= self.elementSetName
     for k in self.keys():
       part= self[k]
       part.display(preprocessor,tp,resultsToDisplay,self.check_results_directory)
+

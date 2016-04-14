@@ -188,14 +188,18 @@ class MaterialSurface(MaterialBase):
         eleLoad.setStrainComp(1,3,nabla)
         eleLoad.setStrainComp(2,3,nabla)
         eleLoad.setStrainComp(3,3,nabla)
-
-  def getElementsPart(self):
+  def getElements(self):
+    '''Return a list of the elements of the material surface.'''
     retval= []
     for sup in self.lstSup:
       elSup= sup.getElements()
       for elem in elSup:
         retval.append(elem)
     return retval
+  def getElementsPart(self):
+    '''DEPRECATED (use getElements); return a list of the elements of the material surface.'''
+    lmsg.warning('MaterialSurface.getElementsPart DEPRECATED; use getElements.')
+    return self.getElements()
 
 class MaterialLine(MaterialBase):
   '''Line defined by a range list, a material and an element type and size.'''
@@ -215,13 +219,18 @@ class MaterialLine(MaterialBase):
     for l in self.lstLines:
       l.genMesh(xc.meshDir.I)
 
-  def getElementsPart(self):
+  def getElements(self):
+    '''Return a list of the elements of the material line.'''
     retval= []
     for lin in self.lstLines:
       elLin= lin.getElements()
       for elem in elLin:
         retval.append(elem)
     return retval
+  def getElementsPart(self):
+    '''DEPRECATED (use getElements); return a list of the elements of the material line.'''
+    lmsg.warning('MaterialLine.getElementsPart DEPRECATED; use getElements.')
+    return self.getElements()
   
 class MaterialSurfacesMap(NamedObjectsMap):
   '''MaterialSurfaces dictionary.'''
@@ -684,17 +693,18 @@ class GridModel(object):
     self.conjLin= MaterialLinesMap(materialLineList)
     return self.conjLin
 
-  def getElementsPart(self, nombreConj):
+  def getElements(self, nombreConj):
+    '''Return a list of the elements of the material surfaces and linew.'''
     retval= list()
     keys= self.conjSup.keys()
     if(nombreConj in keys):
       sup= self.conjSup[nombreConj]
-      retval= sup.getElementsPart()
+      retval= sup.getElements()
     else:
       keys= self.conjLin.keys()
       if(nombreConj in keys):
         lin= self.conjLin[nombreConj]
-        retval= lin.getElementsPart()
+        retval= lin.getElements()
       else:
         lmsg.warning('part: '+ nombreConj+ ' not found.')
     return retval
@@ -702,7 +712,7 @@ class GridModel(object):
   def getElementsFromParts(self, parts):
     retval= []
     for p in parts:
-      retval+= self.getElementsPart(p)
+      retval+= self.getElements(p)
     return retval
 
   def getSetFromParts(self,setName,parts):

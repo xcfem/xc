@@ -51,7 +51,8 @@ class ResultsDescriptionContainer(dict):
       partName= partToDisplay.partName
       index= result.getReinforcementLabel()
       txtArmature= partToDisplay.reinforcementLabels[index-1]
-      retval.append(utils_display.SlideDefinition(partName,self.eluStr,k,result.description,txtArmature,result.units))
+      figDef= utils_display.FigureDefinition(partName,self.eluStr,k,result.description,txtArmature,result.units)
+      retval.append(figDef)
     #Load properties to display:
     fName= check_results_dir+self.resultsToLoadFileName
     execfile(fName)
@@ -60,6 +61,7 @@ class ResultsDescriptionContainer(dict):
     '''Calls TakePhoto object tp to display figures corresponding to part.
        check_results_dir: directory where the files with the results values are.'''
     latexFigsFilename= self.getLaTeXOutputFileName(partToDisplay.getShortName())
+    print 'latexFigsFilename= ', latexFigsFilename
     latexListFilename= self.getLaTeXFigureListFileName(partToDisplay.getShortName())
     figList= self.getFigureDefinitionList(preprocessor,partToDisplay,check_results_dir)
     tp.displayFigures(preprocessor,figList,latexFigsFilename,latexListFilename)
