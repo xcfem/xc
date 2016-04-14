@@ -488,7 +488,9 @@ class Concrete(object):
         else:
           return 0.0 
 
-    def plotDesignStressStrainDiagram(self):
+    def plotDesignStressStrainDiagram(self,preprocessor):
+        if self.concrDiagramD== None:
+          self.defDiagD(preprocessor)
         retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.nmbMaterial + ' design stress-strain diagram')
         retval.setupGraphic(plt,self.concrDiagramD)
         fileName= self.nmbMaterial+'_design_stress_strain_diagram'
