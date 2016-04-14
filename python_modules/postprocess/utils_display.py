@@ -37,7 +37,7 @@ class FigureBase(object):
   def getCaption(self):
     retval= self.partLabel+'. '+self.figDescription
     if(self.unitsLabel!=None):
-      retval+= ' '+ self.unitsLabel
+      retval+= ' ['+ self.unitsLabel +']'
     if(self.armatureDescription!=None):
       retval+= '. ' + self.armatureDescription
     return retval
@@ -100,7 +100,7 @@ class FigureDefinition(SlideDefinition):
     '''
     super(FigureDefinition,self).__init__(pLabel,vLabel,figDescr,reinfDescr,units,sz)
     self.attributeName= attrName
-    lmsg.warning('FigureDefinition DEPRECATED; use SlideDefinition.')
+    #lmsg.warning('FigureDefinition DEPRECATED; use SlideDefinition.')
 
   def defField(self, elementSetName):
     self.field= Fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,elementSetName)
