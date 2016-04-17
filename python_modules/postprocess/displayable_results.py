@@ -20,13 +20,13 @@ class ResultDescription(object):
 
 class ResultsDescriptionContainer(dict):
   ''' Results to display as figures... '''
-  def __init__(self,eluStr,resultsToLoadFileName,lst):
+  def __init__(self,lsStr,resultsToLoadFileName,lst):
     '''Results description container constructor
-       eluStr: word describing limit state type
+       lsStr: word describing limit state type
        resultsToLoadFileName: name of the file that contains the results to display.
        lst: list of results descriptions.
     '''
-    self.eluStr= eluStr
+    self.lsStr= lsStr
     self.resultsToLoadFileName= resultsToLoadFileName
     for l in lst:
       self.add(l)
@@ -34,36 +34,32 @@ class ResultsDescriptionContainer(dict):
     self[rd.code]= rd
   def getBaseOutputFileName(self,partCode):
     '''Returns the basic part of the output file names.'''
-    return partCode+ '_results_verif_' + self.eluStr
+    return partCode+ '_results_verif_' + self.lsStr
   def getLaTeXOutputFileName(self,partCode):
     '''Return the name of the LaTeX file to write figures into.'''
     return self.getBaseOutputFileName(partCode)+'.tex'
   def getLaTeXFigureListFileName(self,partCode):
     '''Return the name of the LaTeX file to write a list explaining figures.'''
     return self.getBaseOutputFileName(partCode)+'_figure_list.tex'
-  def getFigureDefinitionList(self,preprocessor,partToDisplay,check_results_dir):
+  def getFigureDefinitionList(self,preprocessor,partToDisplay):
     '''Builds a list of figures to display.
-       partToDisplay: part of the model wich will be displayed
-       check_results_dir: directory where the files with the results values are.'''
+       partToDisplay: part of the model wich will be displayed'''
     retval= list()
     for k in self.keys():
       result= self[k]
       partName= partToDisplay.partName
       index= result.getReinforcementLabel()
       txtArmature= partToDisplay.reinforcementLabels[index-1]
-      figDef= utils_display.FigureDefinition(partName,self.eluStr,k,result.description,txtArmature,result.units)
+      figDef= utils_display.FigureDefinition(partName,self.lsStr,k,result.description,txtArmature,result.units)
       retval.append(figDef)
-    #Load properties to display:
-    fName= check_results_dir+self.resultsToLoadFileName
-    execfile(fName)
     return retval
-  def display(self,preprocessor,tp,partToDisplay,check_results_dir):
+  def display(self,preprocessor,tp,partToDisplay):
     '''Calls TakePhoto object tp to display figures corresponding to part.
-       check_results_dir: directory where the files with the results values are.'''
+       partToDisplay: part of the model that will be displayed.'''
     latexFigsFilename= self.getLaTeXOutputFileName(partToDisplay.getShortName())
     print 'latexFigsFilename= ', latexFigsFilename
     latexListFilename= self.getLaTeXFigureListFileName(partToDisplay.getShortName())
-    figList= self.getFigureDefinitionList(preprocessor,partToDisplay,check_results_dir)
+    figList= self.getFigureDefinitionList(preprocessor,partToDisplay)
     tp.displayFigures(preprocessor,figList,latexFigsFilename,latexListFilename)
 
 

@@ -7,7 +7,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import os
-import uuid
 from miscUtils import LogMessages as lmsg
 from miscUtils import string_utils as su
 from xcVtk import vtk_grafico_base
@@ -103,7 +102,9 @@ class FigureDefinition(SlideDefinition):
     #lmsg.warning('FigureDefinition DEPRECATED; use SlideDefinition.')
 
   def defField(self, elementSetName):
+    print '********** Enters FigureDefinition::defField; attributeName= ', self.attributeName, ' elementSetName= ', elementSetName 
     self.field= Fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,elementSetName)
+    print '********** Exits FigureDefinition::defField; attributeName= ', self.attributeName, ' elementSetName= ', elementSetName 
 
   def genGraphicFile(self,preprocessor,defDisplay, elementSetName, nmbFichGraf):
     jpegName= nmbFichGraf+".jpeg"
@@ -172,28 +173,8 @@ class PartToDisplay(object):
       for elem in elSup:
         retval.append(elem)
     return retval
-  def display(self,preprocessor,tp,resultsToDisplay,check_results_dir):
-    '''Generate an image for every result to display
-       resultToDisplay: collection of results to be displayed.
-       check_results_dir: directory where the files with the results values are.
-    '''
-    resultsToDisplay.display(preprocessor,tp,self,check_results_dir)
-       
-
-class PartToDisplayContainer(dict):
-  ''' Parts to display in figures... '''
-  def __init__(self,lst):
-    for l in lst:
-      self.add(l)
-  def getElements(self):
-    '''Returns a list of the elements of this part container.'''
-    retval= list()
-    for k in self.keys():
-      part= self[k]
-      retval+= part.getElements()
-    return retval
   def getElementSet(self,preprocessor):
-    self.elementSetName= str(uuid.uuid4())
+    self.elementSetName= self.getShortName()+'_elementSet'
     elems= self.getElements()
     # Definimos el conjunto
     st= preprocessor.getSets.defSet(self.elementSetName)
@@ -201,16 +182,31 @@ class PartToDisplayContainer(dict):
       st.getElements.append(e)
     st.fillDownwards()
     return st
+  def display(self,preprocessor,tp,resultsToDisplay):
+    '''Generate an image for every result to display
+       resultToDisplay: collection of results to be displayed.
+    '''
+    elementSet= self.getElementSet(preprocessor)
+    tp.elementSetName= self.elementSetName
+    resultsToDisplay.display(preprocessor,tp,self)
+       
+
+class PartToDisplayContainer(dict):
+  ''' Parts to display in figures... '''
+  def __init__(self,lst):
+    for l in lst:
+      self.add(l)
   def add(self,part):
     self[part.getShortName()]= part
   def display(self,preprocessor,tp,resultsToDisplay):
     '''Display results for each part.
        resultToDisplay: collection of results to be displayed.
-       check_results_dir: directory where the files with the results values are.
     '''
-    elementSet= self.getElementSet(preprocessor)
-    tp.elementSetName= self.elementSetName
+    #Load properties to display:
+    fName= self.check_results_directory+resultsToDisplay.resultsToLoadFileName
+    print '******* calling: ', fName
+    execfile(fName)
     for k in self.keys():
       part= self[k]
-      part.display(preprocessor,tp,resultsToDisplay,self.check_results_directory)
+      part.display(preprocessor,tp,resultsToDisplay)
 

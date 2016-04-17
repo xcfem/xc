@@ -23,7 +23,8 @@ class ScreenAnnotation(object):
     self.date= datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     self.annotation.SetText(self.upperRight, self.date) 
     self.annotation.SetText(self.upperLeft, self.version)
-    fill= caption #su.remove_accents(caption)
+    #vtkCornerAnnotation doesn't seems to support UTF-8 very well.
+    caption= su.remove_accents(caption)
     if(len(caption)>self.captionWidth):
       fill= textwrap.fill(caption,self.captionWidth)
     self.annotation.SetText(self.lowerLeft,fill)
