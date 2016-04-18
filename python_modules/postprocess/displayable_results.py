@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from postprocess import utils_display
+from postprocess import LimitStateData as led
 
 #Codenames and descriptions of common analysis and design results.
 
@@ -20,21 +21,19 @@ class ResultDescription(object):
 
 class ResultsDescriptionContainer(dict):
   ''' Results to display as figures... '''
-  def __init__(self,lsStr,resultsToLoadFileName,lst):
+  def __init__(self,limitStateData,lst):
     '''Results description container constructor
-       lsStr: word describing limit state type
-       resultsToLoadFileName: name of the file that contains the results to display.
+       limitStateData; data defining limit state check label (something like "Fatigue" or "CrackControl") and the name of the file that contains the results to display.
        lst: list of results descriptions.
     '''
-    self.lsStr= lsStr
-    self.resultsToLoadFileName= resultsToLoadFileName
+    self.limitStateData= limitStateData
     for l in lst:
       self.add(l)
   def add(self,rd):
     self[rd.code]= rd
   def getBaseOutputFileName(self,partCode):
     '''Returns the basic part of the output file names.'''
-    return partCode+ '_results_verif_' + self.lsStr
+    return partCode+ '_results_verif_' + self.limitStateData.label
   def getLaTeXOutputFileName(self,partCode):
     '''Return the name of the LaTeX file to write figures into.'''
     return self.getBaseOutputFileName(partCode)+'.tex'
@@ -50,7 +49,7 @@ class ResultsDescriptionContainer(dict):
       partName= partToDisplay.partName
       index= result.getReinforcementLabel()
       txtArmature= partToDisplay.reinforcementLabels[index-1]
-      figDef= utils_display.FigureDefinition(partName,self.lsStr,k,result.description,txtArmature,result.units)
+      figDef= utils_display.FigureDefinition(partName,self.limitStateData.label,k,result.description,txtArmature,result.units)
       retval.append(figDef)
     return retval
   def display(self,preprocessor,tp,partToDisplay):
@@ -64,7 +63,7 @@ class ResultsDescriptionContainer(dict):
 
 
 #Issues sous charges quasi-permanentes (fissuration)
-issQPfisFrench= ResultsDescriptionContainer("FissurationQP","results_verif_fis_els_qp.py",[ResultDescription("sg_sPos1","Enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", 'MPa'),
+issQPfisFrench= ResultsDescriptionContainer(led.quasiPermanentLoadsCrackControl,[ResultDescription("sg_sPos1","Enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", 'MPa'),
     ResultDescription("NCPPos1","Effort normal associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", 'kN/m'),
     ResultDescription("MyCPPos1","Moment de flexion associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face positive", 'm.kN/m'),
     ResultDescription("sg_sNeg1","Enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", 'MPa'),
@@ -78,7 +77,7 @@ issQPfisFrench= ResultsDescriptionContainer("FissurationQP","results_verif_fis_e
     ResultDescription("MyCPNeg2","Moment de flexion associé à l'enveloppe de contraintes maximales sous charges quasi-permanentes, face negative", 'm.kN/m')])
 
 #Issues sous charges fréquentes (fissuration)
-issFQfisFrench= ResultsDescriptionContainer("FissurationFreq","results_verif_fis_els_freq.py",[ResultDescription("sg_sPos1","Enveloppe de contraintes maximales sous charges fréquentes, face positive", 'MPa'),
+issFQfisFrench= ResultsDescriptionContainer(led.freqLoadsCrackControl,[ResultDescription("sg_sPos1","Enveloppe de contraintes maximales sous charges fréquentes, face positive", 'MPa'),
     ResultDescription("NCPPos1","Effort normal associé à l'enveloppe de contraintes maximales sous charges fréquentes, face positive", 'kN/m'),
     ResultDescription("MyCPPos1","Moment de flexion associé à l'enveloppe de contraintes maximales sous charges fréquentes, face positive", 'm.kN/m'),
     ResultDescription("sg_sNeg1","Enveloppe de contraintes maximales sous charges fréquentes, face negative", 'MPa'),
@@ -92,7 +91,7 @@ issFQfisFrench= ResultsDescriptionContainer("FissurationFreq","results_verif_fis
     ResultDescription("MyCPNeg2","Moment de flexion associé à l'enveloppe de contraintes maximales sous charges fréquentes, face negative", 'm.kN/m')])
 
 #Issues sous charges durables - contraintes normales
-issDRnormFrench= ResultsDescriptionContainer("Flexion","results_verif_tn_eluT2.py",[ResultDescription("FCCP1","Facteur de capacité (contraintes normales) des éléments sous charges durables (ELUT2*)"),
+issDRnormFrench= ResultsDescriptionContainer(led.normalStressesResistance,[ResultDescription("FCCP1","Facteur de capacité (contraintes normales) des éléments sous charges durables (ELUT2*)"),
     ResultDescription("NCP1","Effort normal associé au facteur de capacité (contraintes normales) sous charges durables", 'kN/m'),
     ResultDescription("MyCP1","Moment de flexion associé au facteur de capacité (contraintes normales) sous charges durables", 'm.kN/m'),
     ResultDescription("FCCP2","Facteur de capacité (contraintes normales) des éléments sous charges durables (ELUT2*)"),
@@ -100,7 +99,7 @@ issDRnormFrench= ResultsDescriptionContainer("Flexion","results_verif_tn_eluT2.p
     ResultDescription("MyCP2","Moment de flexion associé au facteur de capacité (contraintes normales) sous charges durables", 'm.kN/m')])
 
 #Issues sous charges durables - contraintes de cisaillement
-issDRcisFrench= ResultsDescriptionContainer("Tranchant","results_verif_v_eluT2.py",[ResultDescription("FCCP1","Facteur de capacité (contraintes de cisaillement) des éléments sous charges durables (ELUT2*)"),
+issDRcisFrench= ResultsDescriptionContainer(led.shearResistance,[ResultDescription("FCCP1","Facteur de capacité (contraintes de cisaillement) des éléments sous charges durables (ELUT2*)"),
     ResultDescription("NCP1","Effort normal associé au facteur de capacité (contraintes de cisaillement) sous charges durables", 'kN/m'),
     ResultDescription("VuCP1","Effort tranchant associé au facteur de capacité (contraintes de cisaillement) sous charges durables", 'kN/m'),
     ResultDescription("FCCP2","Facteur de capacité (contraintes de cisaillement) des éléments sous charges durables (ELUT2*)"),
@@ -108,7 +107,7 @@ issDRcisFrench= ResultsDescriptionContainer("Tranchant","results_verif_v_eluT2.p
     ResultDescription("VuCP2","Effort tranchant associé au facteur de capacité (contraintes de cisaillement) sous charges durables", 'kN/m')])
 
 #Fatigue
-issFatigueFrench= ResultsDescriptionContainer("Fatigue","results_verif_fatigue.py",[ResultDescription("sg_sPos01","Contraintes dans l'acier sous charges permanentes, face positive", 'MPa'),
+issFatigueFrench= ResultsDescriptionContainer(led.fatigueResistance,[ResultDescription("sg_sPos01","Contraintes dans l'acier sous charges permanentes, face positive", 'MPa'),
     ResultDescription("sg_sPos11","Contraintes dans l'acier sous modèle de charge de fatigue, face positive", 'MPa'),
     ResultDescription("inc_sg_sPos1","Incrément des Contraintes dans l'acier sous modèle de charge de fatigue, face positive", 'MPa'),
     ResultDescription("sg_sNeg01","Contraintes dans l'acier sous charges permanentes, face negative", 'MPa'),
@@ -144,7 +143,7 @@ issFatigueFrench= ResultsDescriptionContainer("Fatigue","results_verif_fatigue.p
     ResultDescription("Vu2","Valeur ultime de l'Effort tranchant", ' kN/m')])
 
 #Resultados bajo cargas quasi-permanentes (fisuración)
-issQPfisEsp= ResultsDescriptionContainer("FisuracionQP","results_verif_fis_els_qp.py",[ResultDescription("sg_sPos1","Envolvente de tensiones máximas bajo cargas quasi-permanentes, cara positiva", 'MPa'),
+issQPfisEsp= ResultsDescriptionContainer(led.quasiPermanentLoadsCrackControl,[ResultDescription("sg_sPos1","Envolvente de tensiones máximas bajo cargas quasi-permanentes, cara positiva", 'MPa'),
     ResultDescription("NCPPos1","Axil asociado a la envolvente de tensiones máximas bajo cargas quasi-permanentes, cara positiva", 'kN/m'),
     ResultDescription("MyCPPos1","Momento flector asociado a la envolvente de tensiones máximas bajo cargas quasi-permanentes, cara positiva", 'm.kN/m'),
     ResultDescription("sg_sNeg1","Envolvente de tensiones máximas bajo cargas quasi-permanentes, cara negativa", 'MPa'),
@@ -158,7 +157,7 @@ issQPfisEsp= ResultsDescriptionContainer("FisuracionQP","results_verif_fis_els_q
     ResultDescription("MyCPNeg2","Momento flector asociado a la envolvente de tensiones máximas bajo cargas quasi-permanentes, cara negativa", 'm.kN/m')])
 
 #Resultados bajo cargas frecuentes (fissuration)
-issFQfisEsp= ResultsDescriptionContainer("FisuracionFreq","results_verif_fis_els_freq.py", [ResultDescription("sg_sPos1","Envolvente de tensiones máximas bajo cargas frecuentes, cara positiva", 'MPa'),
+issFQfisEsp= ResultsDescriptionContainer(led.freqLoadsCrackControl, [ResultDescription("sg_sPos1","Envolvente de tensiones máximas bajo cargas frecuentes, cara positiva", 'MPa'),
     ResultDescription("NCPPos1","Axil asociado a la envolvente de tensiones máximas bajo cargas frecuentes, cara positiva", 'kN/m'),
     ResultDescription("MyCPPos1","Momento flector asociado a la envolvente de tensiones máximas bajo cargas frecuentes, cara positiva", 'm.kN/m'),
     ResultDescription("sg_sNeg1","Envolvente de tensiones máximas bajo cargas frecuentes, cara negativa", 'MPa'),
@@ -172,7 +171,7 @@ issFQfisEsp= ResultsDescriptionContainer("FisuracionFreq","results_verif_fis_els
     ResultDescription("MyCPNeg2","Momento flector asociado a la envolvente de tensiones máximas charges frecuentes, cara negativa", 'm.kN/m')])
  
 #Resultados bajo cargas durables - tensiones normales
-issDRnormEsp= ResultsDescriptionContainer("Flexión","results_verif_tn_eluT2.py",[ResultDescription("FCCP1","Factor de capacidad (tensiones normales) de los elementos bajo cargas durables (ELUT2*)"),
+issDRnormEsp= ResultsDescriptionContainer(led.normalStressesResistance,[ResultDescription("FCCP1","Factor de capacidad (tensiones normales) de los elementos bajo cargas durables (ELUT2*)"),
     ResultDescription("NCP1","Axil asociado al factor de capacidad (tensiones normales) bajo cargas durables", 'kN/m'),
     ResultDescription("MyCP1","Momento flector asociado al factor de capacidad (tensiones normales) bajo cargas durables", 'm.kN/m'),
     ResultDescription("FCCP2","Factor de capacidad (tensiones normales) de los elementos bajo cargas durables (ELUT2*)"),
@@ -180,7 +179,7 @@ issDRnormEsp= ResultsDescriptionContainer("Flexión","results_verif_tn_eluT2.py"
     ResultDescription("MyCP2","Momento flector asociado al factor de capacidad (tensiones normales) bajo cargas durables", 'm.kN/m')])
  
 #Resultados bajo cargas durables - tensiones tangenciales
-issDRcisEsp= ResultsDescriptionContainer("Cortante","results_verif_v_eluT2.py",[ResultDescription("FCCP1","Factor de capacidad (tensiones tangenciales) de los elementos bajo cargas durables (ELUT2*)"),
+issDRcisEsp= ResultsDescriptionContainer(led.shearResistance,[ResultDescription("FCCP1","Factor de capacidad (tensiones tangenciales) de los elementos bajo cargas durables (ELUT2*)"),
     ResultDescription("NCP1","Axil asociado al factor de capacidad (tensiones tangenciales) bajo cargas durables", 'kN/m'),
     ResultDescription("VuCP1","Esfuerzo cortante asociado al factor de capacidad (tensiones tangenciales) bajo cargas durables", 'kN/m'),
     ResultDescription("FCCP2","Factor de capacidad (tensiones tangenciales) de los elementos bajo cargas durables (ELUT2*)"),
@@ -188,7 +187,7 @@ issDRcisEsp= ResultsDescriptionContainer("Cortante","results_verif_v_eluT2.py",[
     ResultDescription("VuCP2","Esfuerzo cortante asociado al factor de capacidad (tensiones tangenciales) bajo cargas durables", 'kN/m')])
 
 #Fatiga
-issFatigueEsp= ResultsDescriptionContainer("Fatiga","results_verif_fatigue.py",[ResultDescription("sg_sPos01","Tensiones en el acero bajo cargas permanentes, cara positiva", 'MPa'),
+issFatigueEsp= ResultsDescriptionContainer(led.fatigueResistance,[ResultDescription("sg_sPos01","Tensiones en el acero bajo cargas permanentes, cara positiva", 'MPa'),
     ResultDescription("sg_sPos11","Tensiones en el acero bajo el modelo de carga de fatiga, cara positiva", 'MPa'),
     ResultDescription("inc_sg_sPos1","Incremento de tensiones en el acero bajo el modelo de carga de fatiga, cara positiva", 'MPa'),
     ResultDescription("sg_sNeg01","Tensiones en el acero bajo cargas permanentes, cara negativa", 'MPa'),

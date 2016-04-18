@@ -25,7 +25,13 @@ def saveSectionsForShellSet(mapSections,fName):
   with open(fName + '.pkl', 'wb') as f:
     pickle.dump(mapSections, f, pickle.HIGHEST_PROTOCOL)
 
-def saveInternalForcesForCombs(feProblem,fName,loadCombinations,elemSet,fConv= 1.0):
+def saveInternalForcesForCombs(model,limitStateData,combContainer,elemSet,fConv= 1.0):
+  '''Writes internal forces for each combination'''
+  feProblem= model.getFEProblem()
+  preprocessor= model.getPreprocessor()
+  loadCombinations= preprocessor.getLoadLoader.getLoadCombinations
+  loadCombinations= limitStateData.createCombinations(combContainer,loadCombinations)
+  fName= limitStateData.getInternalForcesFileName()
   os.system("rm -f " + fName)
   for key in loadCombinations.getKeys():
     comb= loadCombinations[key]

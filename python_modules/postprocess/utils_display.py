@@ -16,17 +16,17 @@ from xcVtk import vtk_grafico_diagrama_esfuerzos as gde
 
 
 class FigureBase(object):
-  def __init__(self,pLabel,vLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+  def __init__(self,pLabel,limitStateLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
     ''' Figure base constructor.
     pLabel: part label; something like 'wall' or '2ndFloorDeck'
-    vLabel; check label; Something like "Fatigue" or "CrackControl"
+    limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
     figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
     units: units displayed; something like '[MPa]' or 'radians'...
     reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
     sz: LaTeX size for the figure.
     '''
     self.partLabel= pLabel #Something like 'wall' or '2ndFloorDeck'
-    self.verifLabel= vLabel #Something like "Fatigue" or "CrackControl"
+    self.limitStateLabel= limitStateLabel #Something like "Fatigue" or "CrackControl"
     self.attributeName= ''
     self.figDescription= figDescr #Text to insert as caption in the LaTeX file.
     self.unitsLabel= units # Somethin like '[MPa]' or 'radians'...
@@ -41,7 +41,7 @@ class FigureBase(object):
       retval+= '. ' + self.armatureDescription
     return retval
   def getFileName(self):
-    return su.slugify(self.partLabel+self.verifLabel+self.attributeName)
+    return su.slugify(self.partLabel+self.limitStateLabel+self.attributeName)
   def insertIntoLatex(self, fichLatexFigs, fichLatexList, fichFig, labelText):
     #fichLatexFigs: fichero latex donde insertar el gráfico
     #fichFig: nombre del fichero que contiene el gráfico (sin extensión y con path completo)
@@ -56,16 +56,16 @@ class FigureBase(object):
     fichLatexList.write('}: ' + self.getCaption() + '\n' )
 
 class SlideDefinition(FigureBase):
-  def __init__(self,pLabel,vLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+  def __init__(self,pLabel,limitStateLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
     ''' Slide constructor.
     pLabel: part label; something like 'wall' or '2ndFloorDeck'
-    vLabel; check label; Something like "Fatigue" or "CrackControl"
+    limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
     figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
     units: units displayed; something like '[MPa]' or 'radians'...
     reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
     sz: LaTeX size for the figure.
     '''
-    super(SlideDefinition,self).__init__(pLabel,vLabel,figDescr,reinfDescr,units,sz)
+    super(SlideDefinition,self).__init__(pLabel,limitStateLabel,figDescr,reinfDescr,units,sz)
     self.field= None
     self.diagrams= list()
 
@@ -88,23 +88,23 @@ class SlideDefinition(FigureBase):
 class FigureDefinition(SlideDefinition):
   diagrams= None #List of diagrams to display (see ColoredDiagram, LinearLoadDiagram,...)
 
-  def __init__(self,pLabel,vLabel,attrName,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+  def __init__(self,pLabel,limitStateLabel,attrName,figDescr,reinfDescr=None,units=None,sz= "90mm"):
     ''' Figure constructor.
     pLabel: part label as defined in model; something like 'wall' or '2ndFloorDeck'
-    vLabel; check label; Something like "Fatigue" or "CrackControl"
+    limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
     figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
     units: units displayed; something like '[MPa]' or 'radians'...
     reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
     sz: LaTeX size for the figure.
     '''
-    super(FigureDefinition,self).__init__(pLabel,vLabel,figDescr,reinfDescr,units,sz)
+    super(FigureDefinition,self).__init__(pLabel,limitStateLabel,figDescr,reinfDescr,units,sz)
     self.attributeName= attrName
     #lmsg.warning('FigureDefinition DEPRECATED; use SlideDefinition.')
 
   def defField(self, elementSetName):
-    print '********** Enters FigureDefinition::defField; attributeName= ', self.attributeName, ' elementSetName= ', elementSetName 
+    print '********** Enters FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' elementSetName= ', elementSetName 
     self.field= Fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,elementSetName)
-    print '********** Exits FigureDefinition::defField; attributeName= ', self.attributeName, ' elementSetName= ', elementSetName 
+    print '********** Exits FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' elementSetName= ', elementSetName 
 
   def genGraphicFile(self,preprocessor,defDisplay, elementSetName, nmbFichGraf):
     jpegName= nmbFichGraf+".jpeg"
@@ -203,7 +203,7 @@ class PartToDisplayContainer(dict):
        resultToDisplay: collection of results to be displayed.
     '''
     #Load properties to display:
-    fName= self.check_results_directory+resultsToDisplay.resultsToLoadFileName
+    fName= resultsToDisplay.limitStateData.getOutputDataFileName()
     print '******* calling: ', fName
     execfile(fName)
     for k in self.keys():

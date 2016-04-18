@@ -78,7 +78,7 @@ class SectionContainer(object):
     analysis:        type of analysis
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing tue results of the 
+    outputFileName:  name of the output file containing the results of the 
                      verification 
     mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
@@ -94,7 +94,7 @@ class SectionContainer(object):
     analysis:        type of analysis
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing tue results of the 
+    outputFileName:  name of the output file containing the results of the 
                      verification 
     mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
@@ -110,7 +110,7 @@ class SectionContainer(object):
     analysis:        type of analysis
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing tue results of the 
+    outputFileName:  name of the output file containing the results of the 
                      verification 
     mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
@@ -126,7 +126,7 @@ class SectionContainer(object):
     analysis:        type of analysis
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing tue results of the 
+    outputFileName:  name of the output file containing the results of the 
                      verification 
     mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
@@ -142,7 +142,7 @@ class SectionContainer(object):
     analysis:        type of analysis
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing tue results of the 
+    outputFileName:  name of the output file containing the results of the 
                      verification 
     mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
