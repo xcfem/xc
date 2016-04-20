@@ -28,7 +28,8 @@ def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName
                                 diagrams of materials to be used in the verification process
     procesResultVerif:          processing of the results of the verification          
    '''
-  elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  controlVarName= "ULS_fatigue"
+  elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controlVarName)
   fcSIA.defVarsControl(elems)
   calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerif)
   xLaminaPrintFatigueSIA262(preprocessor,outputFileName,sectionsNamesForEveryElement)

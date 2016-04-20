@@ -37,19 +37,6 @@ class CrackControlSIA262(cc.CrackControlBaseParameters):
       self.iAreaMaxima=  fiberUtils.getIMaxPropFiber(reinforcementTraccion,"getArea")
     return self.tensMediaBarrasTracc
 
-def defVarsControlFISSIA262(elems):
-  for e in elems:
-    e.setProp("sg_sNeg",0)
-    e.setProp("NCPNeg",0)
-    e.setProp("MyCPNeg",0)
-    e.setProp("MzCPNeg",0)
-    e.setProp("HIPCPNeg","")
-    e.setProp("sg_sPos",0)
-    e.setProp("NCPPos",0)
-    e.setProp("MyCPPos",0)
-    e.setProp("MzCPPos",0)
-    e.setProp("HIPCPPos","")
-
 def procesResultVerifFISSIA262(preprocessor,nmbComb):
   # Comprobación de las secciones de hormigón frente a fisuración.
   print "Postproceso combinación: ",nmbComb,"\n"

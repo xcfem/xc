@@ -6,6 +6,7 @@ import geom
 
 from materials.sia262 import concreteSIA262
 from materials.sia262 import steelSIA262
+from postprocess import ControlVars as cv
 
 def VuNoShearRebars(beton,acier,Nd,Md,AsTrac,b,d):
   # Section shear capacity without shear reinforcement.  
@@ -81,20 +82,6 @@ class ParamsCortante(object):
   def Vu(self):
     return self.Vcu+self.Vsu
 
-def defVarsControlVSIA262(elems):
-  for e in elems:
-    e.setProp("FCCP",0.0) # Caso pésimo
-    e.setProp("HIPCP", "")
-    e.setProp("NCP", 0.0)
-    e.setProp("MyCP", 0.0)
-    e.setProp("MzCP", 0.0)
-    e.setProp("VyCP", 0.0)
-    e.setProp("VzCP", 0.0)
-    e.setProp("VsuCP", 0.0)
-    e.setProp("VcuCP", 0.0)
-    e.setProp("VuCP", 0.0)
-
-
 def procesResultVerifV(preprocessor,nmbComb):
   '''
   Comprobación de las secciones de hormigón frente a cortante.
@@ -107,6 +94,7 @@ def procesResultVerifV(preprocessor,nmbComb):
   for e in elementos:
     e.getResistingForce()
     scc= e.getSection()
+    idSection= e.getProp("idSection")
     section= scc.getProp("datosSecc")
     secHAParamsCortante= ParamsCortante(section)
     #codHormigon= section.concrType
@@ -131,16 +119,6 @@ def procesResultVerifV(preprocessor,nmbComb):
       FCtmp= abs(VyTmp)/VuTmp
     else:
       FCtmp= 10
-    if(FCtmp>=e.getProp("FCCP")):
-      e.setProp("FCCP",FCtmp) # Caso pésimo
-      e.setProp("HIPCP",nmbComb)
-      e.setProp("NCP",NTmp)
-      e.setProp("MyCP",MyTmp)
-      e.setProp("MzCP",MzTmp)
-      e.setProp("MuCP",Mu)
-      e.setProp("VyCP",VyTmp)
-      e.setProp("VzCP",VzTmp)
-      e.setProp("thetaCP",theta)
-      e.setProp("VsuCP",secHAParamsCortante.Vsu)
-      e.setProp("VcuCP",secHAParamsCortante.Vcu)
-      e.setProp("VuCP",VuTmp)
+    if(FCtmp>=e.getProp("ULS_shear").CF):
+      e.setProp("ULS_shear",cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,secHAParamsCortante.Vcu,secHAParamsCortante.Vsu,VuTmp)) # Worst case
+

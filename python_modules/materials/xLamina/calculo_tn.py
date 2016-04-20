@@ -2,14 +2,13 @@
 # Comprobación de secciones de hormigón frente a tensiones normales.
 
 import os
+import math
 from materials.xLamina import extrae_combinaciones as ec
 from materials.xLamina import modelo
 from materials.xLamina import calculo_comb
 import geom
-import math
-from postprocess.reports import common_formats as fmt
 from postprocess import ControlVars as cv
-import scipy
+
 
 def even(number):
    return number % 2 == 0
@@ -50,6 +49,7 @@ def procesResultVerifTN(preprocessor, nmbComb):
     e.getResistingForce()
     TagTmp= e.tag
     scc= e.getSection()
+    idSection= e.getProp("idSection")
     Ntmp= scc.getStressResultantComponent("N")
     MyTmp= scc.getStressResultantComponent("My")
     MzTmp= scc.getStressResultantComponent("Mz")
@@ -57,7 +57,7 @@ def procesResultVerifTN(preprocessor, nmbComb):
     diagInt= e.getProp("diagInt")
     CFtmp= diagInt.getCapacityFactor(posEsf)
     if(CFtmp>e.getProp("ULS_normStr").CF):
-      e.setProp("ULS_normStr",cv.CFNMyMz(nmbComb,CFtmp,Ntmp,MyTmp,MzTmp)) # Worst case.
+      e.setProp("ULS_normStr",cv.BiaxialBendingControlVars(idSection,nmbComb,CFtmp,Ntmp,MyTmp,MzTmp)) # Worst case.
 
 def procesResultVerifTN2d(preprocessor, nmbComb):
   '''
@@ -70,112 +70,16 @@ def procesResultVerifTN2d(preprocessor, nmbComb):
     e.getResistingForce()
     TagTmp= e.tag
     scc= e.getSection()
+    idSection= e.getProp("idSection")
     Ntmp= scc.getStressResultantComponent("N")
     MyTmp= scc.getStressResultantComponent("My")
     posEsf= geom.Pos2d(Ntmp,MyTmp)
     diagInt= e.getProp("diagInt")
     CFtmp= diagInt.getCapacityFactor(posEsf)
     if(CFtmp>e.getProp("ULS_normStr").CF):
-      e.setProp("ULS_normStr",cv.CFNMy(nmbComb,CFtmp,Ntmp,MyTmp)) # Worst case.
+      e.setProp("ULS_normStr",cv.BiaxialBendingControlVars(idSection,nmbComb,CFtmp,Ntmp,MyTmp)) # Worst case.
 
-# Imprime los resultados de la comprobación frente a tensiones normales
-def xLaminaPrintTNAnsys(preprocessor,outputFileName, sectionName1, sectionName2):
-  '''
-  Parameters:
-    preprocessor:    preprocessor name
-    outputFileName:  name of the output file containing tue results of the 
-                     verification 
-  '''
-  texOutput1= open("/tmp/texOutput1.tmp","w")
-  texOutput1.write("Section 1\n")
-  texOutput2= open("/tmp/texOutput2.tmp","w")
-  texOutput2.write("Section 2\n")
-  ansysOutput1= open(outputFileName+".mac","w")
-  ansysOutput2= open(outputFileName+"esf.mac","w")
-  #printCabeceraListadoFactorCapacidad("texOutput1","1 ("+ sectionName1 +")")
-  #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ sectionName2 +")")
-  fcs1= [] #Capacity factors at section 1.
-  fcs2= [] #Capacity factors at section 2.
-  elementos= preprocessor.getSets["total"].getElements
-  for e in elementos:
-    eTag= e.getProp("idElem")
-    controlVar= e.getProp("ULS_normStr")
-    outStr= controlVar.getLaTeXString(eTag,1e-3)
-    if(odd(e.tag)):
-      fcs1.append(controlVar.CF)
-      texOutput1.write(outStr)
-      ansOut= controlVal.getAnsysStrings(eTag,'1',1e-3)
-      for s in ansOut:
-        ansysOutput1.write(s)
-    else:
-      fcs2.append(controlVar.CF)
-      texOutput2.write(outStr)
-      ansOut= controlVal.getAnsysStrings(eTag,'2',1e-3)
-      for s in ansOut:
-        ansysOutput2.write(s)
-  
-  #printCierreListadoFactorCapacidad("texOutput1")
-  #printCierreListadoFactorCapacidad("texOutput2")
-  texOutput1.close()
-  texOutput2.close()
-  ansysOutput1.close()
-  ansysOutput2.close()
-    
-  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+outputFileName+".tex")
-    
-  # os.system("rm -f "+"/tmp/acciones.xci")
-  # os.system("rm -f "+"/tmp/cargas.xci")
-  # os.system("rm -f "+"/tmp/elementos.xci")
-  os.system("rm -f "+"/tmp/texOutput1.tmp")
-  os.system("rm -f "+"/tmp/texOutput2.tmp")
-  retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
-  return retval
 
-# Imprime los resultados de la comprobación frente a tensiones normales
-def xLaminaPrintTN(preprocessor,outputFileName):
-  '''
-  Parameters:
-    preprocessor:    preprocessor name
-  '''
-  texOutput1= open("/tmp/texOutput1.tmp","w")
-  texOutput1.write("Section 1\n")
-  texOutput2= open("/tmp/texOutput2.tmp","w")
-  texOutput2.write("Section 2\n")
-  xcOutput= open(outputFileName+".py","w")
-  #printCabeceraListadoFactorCapacidad("texOutput1","1 ("+ sectionName1 +")")
-  #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ sectionName2 +")")
-  fcs1= [] #Capacity factors at section 1.
-  fcs2= [] #Capacity factors at section 2.
-  elementos= preprocessor.getSets["total"].getElements
-  for e in elementos:
-    eTag= e.getProp("idElem")
-    idSection= e.getProp("idSection")
-    controlVar= e.getProp("ULS_normStr")
-    outStr= controlVar.getLaTeXString(eTag,1e-3)
-    if(e.getProp("dir")==1):
-      fcs1.append(controlVar.CF)
-      texOutput1.write(outStr)
-      xcOutput.write(controlVar.strElementProp(eTag,"ULS_normStrDir1",1e-3))
-    else:
-      fcs2.append(controlVar.CF)
-      texOutput2.write(outStr)
-      xcOutput.write(controlVar.strElementProp(eTag,"ULS_normStrDir2",1e-3))
-
-  #printCierreListadoFactorCapacidad("texOutput1")
-  #printCierreListadoFactorCapacidad("texOutput2")
-  texOutput1.close()
-  texOutput2.close()
-  xcOutput.close()
-    
-  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+outputFileName+".tex")
-    
-  # os.system("rm -f "+"/tmp/acciones.xci")
-  # os.system("rm -f "+"/tmp/cargas.xci")
-  # os.system("rm -f "+"/tmp/elementos.xci")
-  os.system("rm -f "+"/tmp/texOutput1.tmp")
-  os.system("rm -f "+"/tmp/texOutput2.tmp")
-  retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
-  return retval
 
 '''
  Lanza la comprobación de tensiones normales en una lámina
@@ -192,7 +96,7 @@ def lanzaCalculoTNFromAnnsysData(nmbArch, datosScc1, datosScc2, nmbArchDefHipELU
   nmbDiagIntSec1= "diagInt"+datosScc1.sectionName
   nmbDiagIntSec2= "diagInt"+datosScc2.sectionName
   xLaminaCalculaCombEstatLin(nmbArchDefHipELU,nmbDiagIntSec1,nmbDiagIntSec2)
-  meanCFs= xLaminaPrintTN(preprocessor,nmbArch+"TN",datosScc1.sectionName,datosScc2.sectionName)
+  meanCFs= cv.writeControlVarsFromElements("ULS_normStr",preprocessor,nmbArch+"TN",datosScc1.sectionName,datosScc2.sectionName)
   return meanCFs
 
 '''
@@ -222,9 +126,10 @@ def lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFil
     mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
                                 diagrams of materials to be used in the verification process
   '''
-  ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  controlVarName= "ULS_normStr"
+  ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controlVarName)
   calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,procesResultVerifTN)
-  meanCFs= xLaminaPrintTN(preprocessor,outputFileName)
+  meanCFs= cv.writeControlVarsFromElements(controlVarName,preprocessor,outputFileName)
   return meanCFs
 
 '''
@@ -257,9 +162,10 @@ def lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputF
     mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
                                 diagrams of materials to be used in the verification process
   '''
-  ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  controlVarName= "ULS_normStr"
+  ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controlVarName)
   calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,procesResultVerifTN2d)
-  meanCFs= xLaminaPrintTN(preprocessor,outputFileName)
+  meanCFs= cv.writeControlVarsFromElements(controlVarName,preprocessor,outputFileName)
   return meanCFs
 
 

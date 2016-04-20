@@ -12,7 +12,7 @@ from postprocess import ControlVars as cv
 import math
 
  
-def extraeIdsElem(preprocessor,intForcCombFileName, sectionsNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
+def extraeIdsElem(preprocessor,intForcCombFileName, sectionsNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams,controlVarName):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
   de combinaciones generado en XC 
   Parameters:
@@ -64,7 +64,7 @@ def extraeIdsElem(preprocessor,intForcCombFileName, sectionsNamesForEveryElement
     e1.setProp("idSection", nmbScc1) #Section to verify
     scc= e1.getSection()
     scc.setProp("datosSecc", mapSectionsDefinition[nmbScc1]) #Section definition (XXX duplicated)
-    e1.setProp("ULS_normStr",cv.CFNMy('nil',0.0,0.0,0.0))
+    e1.setProp(controlVarName,cv.UniaxialBendingControlVars(nmbScc1,'nil',0.0,0.0,0.0))
     if(mapInteractionDiagrams != None):
       diagIntScc1= mapInteractionDiagrams[nmbScc1]
       e1.setProp("diagInt",diagIntScc1) 
@@ -81,7 +81,7 @@ def extraeIdsElem(preprocessor,intForcCombFileName, sectionsNamesForEveryElement
     e2.setProp("idSection", nmbScc2) #Section to verify
     scc= e2.getSection()
     scc.setProp("datosSecc",  mapSectionsDefinition[nmbScc2]) #Section definition.
-    e2.setProp("ULS_normStr",cv.CFNMy('nil',0.0,0.0,0.0))
+    e2.setProp(controlVarName,cv.UniaxialBendingControlVars(nmbScc2,'nil',0.0,0.0,0.0))
     if(mapInteractionDiagrams != None):
       diagIntScc2= mapInteractionDiagrams[nmbScc2]
       e2.setProp("diagInt",diagIntScc2)
@@ -162,7 +162,7 @@ def extraeCargasLamina(nmbArch, nmbArchCargas):
   cargas.close()
 
 
-def extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
+def extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams,controlVarName):
   ''' Define las cargas en el extremo libre de cada elemento a partir
    de las combinaciones de un archivo de salida generado en XC 
   Parameters:
@@ -178,7 +178,7 @@ def extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement, 
     mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
                                 diagrams of materials to be used in the verification process
   '''
-  return extraeIdsElem(preprocessor,intForcCombFileName,sectionsNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams)
+  return extraeIdsElem(preprocessor,intForcCombFileName,sectionsNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams,controlVarName)
 
 def creaElems(preprocessor,intForcCombFileName, sectionsNamesForEveryElement):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados

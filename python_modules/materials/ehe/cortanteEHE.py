@@ -10,6 +10,7 @@ from materials.ehe import comprobVEHE08
 from materials.ehe import torsionEHE
 import geom
 import sys
+from postprocess import ControlVars as cv
 
 class ParamsCortante(object):
   '''
@@ -173,21 +174,6 @@ class ParamsCortante(object):
     else:
       self.calcVuEHE08SiAt(preprocessor,scc,nmbParamsTorsion,hormigon,aceroArmar,Nd,Md,Vd,Td)
 
-def defVarsControlVEHE(elems):
-  for e in elems:
-    e.setProp("FCCP",0.0) # Caso pésimo
-    e.setProp("HIPCP", 0.0)
-    e.setProp("NCP", 0.0)
-    e.setProp("MyCP", 0.0)
-    e.setProp("MzCP", 0.0)
-    e.setProp("VyCP", 0.0)
-    e.setProp("VzCP", 0.0)
-    e.setProp("thetaCP", 0.0)
-    e.setProp("VsuCP", 0.0)
-    e.setProp("VcuCP", 0.0)
-    e.setProp("Vu1CP", 0.0)
-    e.setProp("Vu2CP", 0.0)
-    e.setProp("VuCP", 0.0)
 
 def procesResultVerifV(preprocessor,nmbComb):
   '''
@@ -204,6 +190,7 @@ def procesResultVerifV(preprocessor,nmbComb):
   elementos= preprocessor.getSets.getSet("total").getElements
   for e in elementos:
     scc= e.getSection()
+    idSection= e.getProp("idSection")
     section= scc.getProp("datosSecc")
     codHormigon= section.concrType
     codArmadura= section.reinfSteelType
@@ -237,17 +224,5 @@ def procesResultVerifV(preprocessor,nmbComb):
       FCtmp= VTmp/VuTmp
     else:
       FCtmp= 1e99
-    if(FCtmp>e.getProp("FCCP")):
-      e.setProp("FCCP",FCtmp) # Caso pésimo
-      e.setProp("HIPCP",nmbComb)
-      e.setProp("NCP",NTmp)
-      e.setProp("MyCP",MyTmp)
-      e.setProp("MzCP",MzTmp)
-      e.setProp("VyCP",VyTmp)
-      e.setProp("VzCP",VzTmp)
-      e.setProp("thetaCP",theta)
-      e.setProp("VsuCP",secHAParamsCortante.Vsu)
-      e.setProp("VcuCP",secHAParamsCortante.Vcu)
-      e.setProp("Vu1CP",secHAParamsCortante.Vu1)
-      e.setProp("Vu2CP",secHAParamsCortante.Vu2)
-      e.setProp("VuCP",VuTmp)
+    if(FCtmp>=e.getProp("ULS_shear").CF):
+      e.setProp("ULS_shear",cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,secHAParamsCortante.Vcu,secHAParamsCortante.Vsu,VuTmp)) # Worst case
