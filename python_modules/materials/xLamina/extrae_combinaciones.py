@@ -8,6 +8,7 @@ import xc
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials.xLamina import seccion_ficticia_elementos as sf
+from postprocess import ControlVars as cv
 import math
 
  
@@ -63,11 +64,7 @@ def extraeIdsElem(preprocessor,intForcCombFileName, sectionsNamesForEveryElement
     e1.setProp("idSection", nmbScc1) #Section to verify
     scc= e1.getSection()
     scc.setProp("datosSecc", mapSectionsDefinition[nmbScc1]) #Section definition (XXX duplicated)
-    e1.setProp("HIPCP", "nil") #Hipótesis que produce el caso pésimo
-    e1.setProp("NCP", 0.0) #Valor del axil en la hipótesis que produce el caso pésimo.
-    e1.setProp("MyCP", 0.0) #Valor del momento en torno al eje y en la hipótesis que produce el caso pésimo.
-    e1.setProp("MzCP", 0.0) #Valor del momento en torno al eje z en la hipótesis que produce el caso pésimo.
-    e1.setProp("FCCP", 0.0) #Valor del factor de capacidad en la hipótesis que produce el caso pésimo.
+    e1.setProp("ULS_normStr",cv.CFNMy('nil',0.0,0.0,0.0))
     if(mapInteractionDiagrams != None):
       diagIntScc1= mapInteractionDiagrams[nmbScc1]
       e1.setProp("diagInt",diagIntScc1) 
@@ -84,11 +81,7 @@ def extraeIdsElem(preprocessor,intForcCombFileName, sectionsNamesForEveryElement
     e2.setProp("idSection", nmbScc2) #Section to verify
     scc= e2.getSection()
     scc.setProp("datosSecc",  mapSectionsDefinition[nmbScc2]) #Section definition.
-    e2.setProp("HIPCP", "nil") #Hipótesis que produce el caso pésimo
-    e2.setProp("NCP", 0.0) #Valor del axil en la hipótesis que produce el caso pésimo.
-    e2.setProp("MyCP", 0.0) #Valor del momento en torno al eje y en la hipótesis que produce el caso pésimo.
-    e2.setProp("MzCP", 0.0) #Valor del momento en torno al eje z en la hipótesis que produce el caso pésimo.
-    e2.setProp("FCCP", 0.0) #Valor del factor de capacidad en la hipótesis que produce el caso pésimo.
+    e2.setProp("ULS_normStr",cv.CFNMy('nil',0.0,0.0,0.0))
     if(mapInteractionDiagrams != None):
       diagIntScc2= mapInteractionDiagrams[nmbScc2]
       e2.setProp("diagInt",diagIntScc2)

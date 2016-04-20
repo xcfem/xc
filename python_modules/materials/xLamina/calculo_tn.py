@@ -8,6 +8,7 @@ from materials.xLamina import calculo_comb
 import geom
 import math
 from postprocess.reports import common_formats as fmt
+from postprocess import ControlVars as cv
 import scipy
 
 def even(number):
@@ -54,13 +55,9 @@ def procesResultVerifTN(preprocessor, nmbComb):
     MzTmp= scc.getStressResultantComponent("Mz")
     posEsf= geom.Pos3d(Ntmp,MyTmp,MzTmp)
     diagInt= e.getProp("diagInt")
-    FCtmp= diagInt.getCapacityFactor(posEsf)
-    if(FCtmp>e.getProp("FCCP")):
-      e.setProp("FCCP",FCtmp) # Caso pésimo
-      e.setProp("HIPCP",nmbComb)
-      e.setProp("NCP",Ntmp)
-      e.setProp("MyCP",MyTmp)
-      e.setProp("MzCP",MzTmp)
+    CFtmp= diagInt.getCapacityFactor(posEsf)
+    if(CFtmp>e.getProp("ULS_normStr").CF):
+      e.setProp("ULS_normStr",cv.CFNMyMz(nmbComb,CFtmp,Ntmp,MyTmp,MzTmp)) # Worst case.
 
 def procesResultVerifTN2d(preprocessor, nmbComb):
   '''
@@ -75,16 +72,11 @@ def procesResultVerifTN2d(preprocessor, nmbComb):
     scc= e.getSection()
     Ntmp= scc.getStressResultantComponent("N")
     MyTmp= scc.getStressResultantComponent("My")
-    MzTmp= 0.0
     posEsf= geom.Pos2d(Ntmp,MyTmp)
     diagInt= e.getProp("diagInt")
-    FCtmp= diagInt.getCapacityFactor(posEsf)
-    if(FCtmp>e.getProp("FCCP")):
-      e.setProp("FCCP",FCtmp) # Caso pésimo
-      e.setProp("HIPCP",nmbComb)
-      e.setProp("NCP",Ntmp)
-      e.setProp("MyCP",MyTmp)
-      e.setProp("MzCP",MzTmp)
+    CFtmp= diagInt.getCapacityFactor(posEsf)
+    if(CFtmp>e.getProp("ULS_normStr").CF):
+      e.setProp("ULS_normStr",cv.CFNMy(nmbComb,CFtmp,Ntmp,MyTmp)) # Worst case.
 
 # Imprime los resultados de la comprobación frente a tensiones normales
 def xLaminaPrintTNAnsys(preprocessor,outputFileName, sectionName1, sectionName2):
@@ -107,30 +99,20 @@ def xLaminaPrintTNAnsys(preprocessor,outputFileName, sectionName1, sectionName2)
   elementos= preprocessor.getSets["total"].getElements
   for e in elementos:
     eTag= e.getProp("idElem")
-    FCCP= e.getProp("FCCP")
-    HIPCP= e.getProp("HIPCP")
-    NCP= e.getProp("NCP")
-    MyCP= e.getProp("MyCP")
-    MzCP= e.getProp("MzCP")
-    outStr= str(eTag)+" & "+HIPCP+" & "+fmt.Esf.format(NCP/1e3)+" & "+fmt.Esf.format(MyCP/1e3)+" & "+fmt.Esf.format(MzCP/1e3)+" & "+fmt.Esf.format(FCCP)+"\\\\\n"
-    ansOutStr1= "detab,"+str(math.floor(e.tag/10))+",FC1,"+str(FCCP)+"\n"
-    ansOutStr2= "detab,"+str(math.floor(e.tag/10))+",N1,"+str(NCP/1e3)+"\n"
-    ansOutStr3= "detab,"+str(math.floor(e.tag/10))+",My1,"+str(MyCP/1e3)+"\n"
-    ansOutStr4= "detab,"+str(math.floor(e.tag/10))+",Mz1,"+str(MzCP/1e3)+"\n"
+    controlVar= e.getProp("ULS_normStr")
+    outStr= controlVar.getLaTeXString(eTag,1e-3)
     if(odd(e.tag)):
-      fcs1.append(FCCP)
+      fcs1.append(controlVar.CF)
       texOutput1.write(outStr)
-      ansysOutput1.write(ansOutStr1)
-      ansysOutput1.write(ansOutStr2)
-      ansysOutput1.write(ansOutStr3)
-      ansysOutput1.write(ansOutStr4)
+      ansOut= controlVal.getAnsysStrings(eTag,'1',1e-3)
+      for s in ansOut:
+        ansysOutput1.write(s)
     else:
-      fcs2.append(FCCP)
+      fcs2.append(controlVar.CF)
       texOutput2.write(outStr)
-      ansysOutput2.write(ansOutStr1)
-      ansysOutput2.write(ansOutStr2)
-      ansysOutput2.write(ansOutStr3)
-      ansysOutput2.write(ansOutStr4)
+      ansOut= controlVal.getAnsysStrings(eTag,'2',1e-3)
+      for s in ansOut:
+        ansysOutput2.write(s)
   
   #printCierreListadoFactorCapacidad("texOutput1")
   #printCierreListadoFactorCapacidad("texOutput2")
@@ -147,14 +129,6 @@ def xLaminaPrintTNAnsys(preprocessor,outputFileName, sectionName1, sectionName2)
   os.system("rm -f "+"/tmp/texOutput1.tmp")
   os.system("rm -f "+"/tmp/texOutput2.tmp")
   retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
-  return retval
-
-def strElementProp(eTag,nmbProp,vProp):
-  retval= "preprocessor.getElementLoader.getElement("
-  retval+= str(eTag)
-  retval+= ").setProp("
-  retval+= '"' + nmbProp + '"'
-  retval+= ',' + str(vProp) + ")\n"
   return retval
 
 # Imprime los resultados de la comprobación frente a tensiones normales
@@ -176,26 +150,16 @@ def xLaminaPrintTN(preprocessor,outputFileName):
   for e in elementos:
     eTag= e.getProp("idElem")
     idSection= e.getProp("idSection")
-    FCCP= e.getProp("FCCP")
-    HIPCP= e.getProp("HIPCP")
-    NCP= e.getProp("NCP")
-    MyCP= e.getProp("MyCP")
-    MzCP= e.getProp("MzCP")
-    strOut= str(eTag)+" & "+idSection+" & "+HIPCP+" & "+fmt.Esf.format(NCP/1e3)+" & "+fmt.Esf.format(MyCP/1e3)+" & "+fmt.Esf.format(MzCP/1e3)+" & "+fmt.Esf.format(FCCP)+"\\\\\n"
+    controlVar= e.getProp("ULS_normStr")
+    outStr= controlVar.getLaTeXString(eTag,1e-3)
     if(e.getProp("dir")==1):
-      fcs1.append(FCCP)
-      texOutput1.write(strOut)
-      xcOutput.write(strElementProp(eTag,"FCCP1",FCCP))
-      xcOutput.write(strElementProp(eTag,"NCP1",NCP/1e3))
-      xcOutput.write(strElementProp(eTag,"MyCP1",MyCP/1e3))
-      xcOutput.write(strElementProp(eTag,"MzCP1",MzCP/1e3))
+      fcs1.append(controlVar.CF)
+      texOutput1.write(outStr)
+      xcOutput.write(controlVar.strElementProp(eTag,"ULS_normStrDir1",1e-3))
     else:
-      fcs2.append(FCCP)
-      texOutput2.write(strOut)
-      xcOutput.write(strElementProp(eTag,"FCCP2",FCCP))
-      xcOutput.write(strElementProp(eTag,"NCP2",NCP/1e3))
-      xcOutput.write(strElementProp(eTag,"MyCP2",MyCP/1e3))
-      xcOutput.write(strElementProp(eTag,"MzCP2",MzCP/1e3))
+      fcs2.append(controlVar.CF)
+      texOutput2.write(outStr)
+      xcOutput.write(controlVar.strElementProp(eTag,"ULS_normStrDir2",1e-3))
 
   #printCierreListadoFactorCapacidad("texOutput1")
   #printCierreListadoFactorCapacidad("texOutput2")
@@ -228,8 +192,8 @@ def lanzaCalculoTNFromAnnsysData(nmbArch, datosScc1, datosScc2, nmbArchDefHipELU
   nmbDiagIntSec1= "diagInt"+datosScc1.sectionName
   nmbDiagIntSec2= "diagInt"+datosScc2.sectionName
   xLaminaCalculaCombEstatLin(nmbArchDefHipELU,nmbDiagIntSec1,nmbDiagIntSec2)
-  meanFCs= xLaminaPrintTN(preprocessor,nmbArch+"TN",datosScc1.sectionName,datosScc2.sectionName)
-  return meanFCs
+  meanCFs= xLaminaPrintTN(preprocessor,nmbArch+"TN",datosScc1.sectionName,datosScc2.sectionName)
+  return meanCFs
 
 '''
  Lanza la comprobación de tensiones normales en una lámina
@@ -260,8 +224,8 @@ def lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFil
   '''
   ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,procesResultVerifTN)
-  meanFCs= xLaminaPrintTN(preprocessor,outputFileName)
-  return meanFCs
+  meanCFs= xLaminaPrintTN(preprocessor,outputFileName)
+  return meanCFs
 
 '''
  Lanza la comprobación de tensiones normales en una lámina
@@ -295,7 +259,7 @@ def lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputF
   '''
   ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,procesResultVerifTN2d)
-  meanFCs= xLaminaPrintTN(preprocessor,outputFileName)
-  return meanFCs
+  meanCFs= xLaminaPrintTN(preprocessor,outputFileName)
+  return meanCFs
 
 

@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+'''
+   THIS PROPERTIES MUST BE REPLACED BY THE CLASSES 
+   DEFINED IN ControlVars.py 
+   THIS FILE MUST DISSAPEAR.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __cppyright__= "Copyright 2014 LCPT"
