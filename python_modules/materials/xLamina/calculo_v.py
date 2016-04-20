@@ -160,7 +160,7 @@ def lanzaCalculoVFromAnsysData(nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArc
   xLaminaCalculaCombEstatNoLin(nmbArchDefHipELU)
   xLaminaPrintV(nmbArch+"V",deref(nmbRegDatosScc1).sectionName,deref(nmbRegDatosScc2).sectionName)
 
-def lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,procesResultVerifV):
+def lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,procesResultVerifV):
   '''
    Lanza la comprobación de cortante en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -176,7 +176,7 @@ def lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName, mapS
                      obtained for each element for the combinations analyzed
     outputFileName:  name of the output file containing tue results of the 
                      verification 
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     mapSectionsDefinition:      file containing a dictionary with the two 
@@ -186,7 +186,7 @@ def lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName, mapS
                                 diagrams of materials to be used in the verification process
     procesResultVerif:          processing of the results of the verification          
   '''
-  elems= ec.extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   #cortanteEHE.defVarsControlVEHE(elems)
   shearSIA262.defVarsControlVSIA262(elems)
   calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerifV)

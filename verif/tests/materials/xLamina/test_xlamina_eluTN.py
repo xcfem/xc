@@ -26,9 +26,6 @@ from solution import predefined_solutions
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 prueba.errFileName= "/tmp/borrar.err" # Para no imprimir mensajes de advertencia sobre error máximo en cálculo del diagrama de interacción.
-preprocessor=  prueba.getPreprocessor
-# Definimos el procedimiento de solución.
-analysis= predefined_solutions.simple_static_linear(prueba)
 
 import os
 pth= os.path.dirname(__file__)
@@ -75,7 +72,7 @@ sections.append(deckSections)
 
 
 
-meanFCs= sections.verifyNormalStresses(preprocessor, analysis,intForcCombFileName,"/tmp/ppTN",mapSectionsForEveryElement, "d")
+meanFCs= sections.verifyNormalStresses(intForcCombFileName,"/tmp/ppTN",mapSectionsForEveryElement, "d")
 
 
 #print "mean FCs: ", meanFCs

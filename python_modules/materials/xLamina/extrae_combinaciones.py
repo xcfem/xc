@@ -11,14 +11,14 @@ from materials.xLamina import seccion_ficticia_elementos as sf
 import math
 
  
-def extraeIdsElem(preprocessor,intForcCombFileName, mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
+def extraeIdsElem(preprocessor,intForcCombFileName, sectionsNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
   de combinaciones generado en XC 
   Parameters:
     preprocessor:        preprocessor name
     intForcCombFileName: name of the file containing the forces and bending moments 
                          obtained for each element for the combinations analyzed
-   mapSectionsForEveryElement:  file containing a dictionary  such that for each                                        element of the model stores two names 
+   sectionsNamesForEveryElement:  file containing a dictionary  such that for each                                        element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     mapSectionsDefinition:      file containing a dictionary with the two 
@@ -51,7 +51,7 @@ def extraeIdsElem(preprocessor,intForcCombFileName, mapSectionsForEveryElement, 
   tagsNodesToLoad2= {}
   elements.defaultMaterial= sf.sccFICT.nmb
   for tagElem in idElements:
-    nmbScc1= mapSectionsForEveryElement[tagElem][0]
+    nmbScc1= sectionsNamesForEveryElement[tagElem][0]
     n1= nodes.newNodeXYZ(0,0,0)
     n3= nodes.newNodeXYZ(0,0,0)
     fix_node_6dof.fixNode6DOF(coacciones,n1.tag)
@@ -72,7 +72,7 @@ def extraeIdsElem(preprocessor,intForcCombFileName, mapSectionsForEveryElement, 
       diagIntScc1= mapInteractionDiagrams[nmbScc1]
       e1.setProp("diagInt",diagIntScc1) 
 
-    nmbScc2= mapSectionsForEveryElement[tagElem][1]
+    nmbScc2= sectionsNamesForEveryElement[tagElem][1]
     n2= nodes.newNodeIDXYZ(tagElem*10+2,0,0,0)
     n4= nodes.newNodeIDXYZ(tagElem*10+4,0,0,0)
     fix_node_6dof.fixNode6DOF(coacciones,n2.tag)
@@ -169,14 +169,14 @@ def extraeCargasLamina(nmbArch, nmbArchCargas):
   cargas.close()
 
 
-def extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
+def extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
   ''' Define las cargas en el extremo libre de cada elemento a partir
    de las combinaciones de un archivo de salida generado en XC 
   Parameters:
     preprocessor:    preprocessor name
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     mapSectionsDefinition:      file containing a dictionary with the two 
@@ -185,16 +185,16 @@ def extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement, ma
     mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
                                 diagrams of materials to be used in the verification process
   '''
-  return extraeIdsElem(preprocessor,intForcCombFileName,mapSectionsForEveryElement, mapSectionsDefinition, mapInteractionDiagrams)
+  return extraeIdsElem(preprocessor,intForcCombFileName,sectionsNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams)
 
-def creaElems(preprocessor,intForcCombFileName, mapSectionsForEveryElement):
+def creaElems(preprocessor,intForcCombFileName, sectionsNamesForEveryElement):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
   de combinaciones generado en XC 
   Parameters:
     preprocessor:    preprocessor name
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
   '''
@@ -220,7 +220,7 @@ def creaElems(preprocessor,intForcCombFileName, mapSectionsForEveryElement):
   tagsNodesToLoad1= {}
   tagsNodesToLoad2= {}
   for tagElem in idElements:
-    nmbScc1= mapSectionsForEveryElement[tagElem][0]
+    nmbScc1= sectionsNamesForEveryElement[tagElem][0]
     n1= nodes.newNodeXYZ(0,0,0)
     n3= nodes.newNodeXYZ(0,0,0)
     fix_node_6dof.fixNode6DOF(coacciones,n1.tag)
@@ -232,7 +232,7 @@ def creaElems(preprocessor,intForcCombFileName, mapSectionsForEveryElement):
     e1.setProp("dir",1)
     e1.setProp("idSection", nmbScc1) #Section to verify
 
-    nmbScc2= mapSectionsForEveryElement[tagElem][1]
+    nmbScc2= sectionsNamesForEveryElement[tagElem][1]
     elements.defaultMaterial= nmbScc2
     n2= nodes.newNodeXYZ(0,0,0)
     n4= nodes.newNodeXYZ(0,0,0)

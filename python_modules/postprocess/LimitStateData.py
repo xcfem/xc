@@ -38,10 +38,10 @@ class NormalStressesRCLimitStateData(LimitStateData):
     combContainer.ULS.createCombinations(loadCombinations)
     return loadCombinations
 
-  def check(self,sections,preprocessor,analysis,mapSectionsForEveryElement):
+  def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
-    return sections.verifyNormalStresses(preprocessor,analysis,intForcCombFileName,out,mapSectionsForEveryElement, "d")
+    return sections.verifyNormalStresses(intForcCombFileName,out,sectionsNamesForEveryElement, "d")
 
 class ShearResistanceRCLimitStateData(LimitStateData):
   ''' Reinforced concrete shear resistance limit state data.'''
@@ -53,10 +53,10 @@ class ShearResistanceRCLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.ULS.createCombinations(loadCombinations)
     return loadCombinations
-  def check(self,sections,preprocessor,analysis,mapSectionsForEveryElement):
+  def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
-    return sections.shearVerification(preprocessor,analysis,intForcCombFileName,out,mapSectionsForEveryElement, "d")
+    return sections.shearVerification(intForcCombFileName,out,sectionsNamesForEveryElement, "d")
 
 class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -68,10 +68,10 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.SLS.freq.createCombinations(loadCombinations)
     return loadCombinations
-  def check(self,sections,preprocessor,analysis,mapSectionsForEveryElement):
+  def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
-    return sections.crackControl(preprocessor,analysis,intForcCombFileName,out,mapSectionsForEveryElement, "k")
+    return sections.crackControl(intForcCombFileName,out,sectionsNamesForEveryElement, "k")
 
 class QPLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
@@ -83,10 +83,10 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.SLS.qp.createCombinations(loadCombinations)
     return loadCombinations
-  def check(self,sections,preprocessor,analysis,mapSectionsForEveryElement):
+  def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
-    return sections.crackControl(preprocessor,analysis,intForcCombFileName,out,mapSectionsForEveryElement, "k")
+    return sections.crackControl(intForcCombFileName,out,sectionsNamesForEveryElement, "k")
 
 
 class FatigueResistanceRCLimitStateData(LimitStateData):

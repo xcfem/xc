@@ -8,7 +8,7 @@ import os
 from postprocess.reports import common_formats as fmt
 
 
-def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,procesResultVerif):
+def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,procesResultVerif):
   '''Launch the calculation for the verification of the Fatigue Limit State
   in shell elements.
   Parameters:
@@ -18,7 +18,7 @@ def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName
                      obtained for each element for the combinations analyzed
     outputFileName:  name of the output file containing tue results of the 
                      verification 
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     mapSectionsDefinition:      file containing a dictionary with the two 
@@ -28,10 +28,10 @@ def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName
                                 diagrams of materials to be used in the verification process
     procesResultVerif:          processing of the results of the verification          
    '''
-  elems= ec.extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   fcSIA.defVarsControl(elems)
   calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerif)
-  xLaminaPrintFatigueSIA262(preprocessor,outputFileName,mapSectionsForEveryElement)
+  xLaminaPrintFatigueSIA262(preprocessor,outputFileName,sectionsNamesForEveryElement)
 
 def strElementProp(eTag,nmbProp,vProp):
   retval= "preprocessor.getElementLoader.getElement("

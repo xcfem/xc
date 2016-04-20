@@ -240,7 +240,7 @@ def lanzaCalculoTNFromAnnsysData(nmbArch, datosScc1, datosScc2, nmbArchDefHipELU
     nmbArchDefHipELU e imprime los resultados en archivos con
     el nombre nmbArchTN.*
 '''
-def lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
+def lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
   '''
   Parameters:
     preprocessor:    preprocessor name
@@ -249,7 +249,7 @@ def lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFil
                      obtained for each element for the combinations analyzed
     outputFileName:  name of the output file containing tue results of the 
                      verification 
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     mapSectionsDefinition:      file containing a dictionary with the two 
@@ -258,10 +258,7 @@ def lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFil
     mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
                                 diagrams of materials to be used in the verification process
   '''
-  ec.extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
-  #modelo.xLaminaConstruyeModeloFicticio(preprocessor,datosScc1,datosScc2)
-  #nmbDiagIntSec1= "diagInt"+datosScc1.sectionName
-  #nmbDiagIntSec2= "diagInt"+datosScc2.sectionName
+  ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,procesResultVerifTN)
   meanFCs= xLaminaPrintTN(preprocessor,outputFileName)
   return meanFCs
@@ -278,7 +275,7 @@ def lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFil
     debería preferirse este modo pero aún queda comprobar la obtención
     de diagramas 2D. 
 '''
-def lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
+def lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams):
   '''
   Parameters:
     preprocessor:    preprocessor name
@@ -287,7 +284,7 @@ def lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputF
                      obtained for each element for the combinations analyzed
     outputFileName:  name of the output file containing tue results of the 
                      verification 
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     mapSectionsDefinition:      file containing a dictionary with the two 
@@ -296,7 +293,7 @@ def lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputF
     mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
                                 diagrams of materials to be used in the verification process
   '''
-  ec.extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
+  ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams)
   calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,analysis,procesResultVerifTN2d)
   meanFCs= xLaminaPrintTN(preprocessor,outputFileName)
   return meanFCs

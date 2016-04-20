@@ -16,10 +16,10 @@ def defSectionsForShellSet(preprocessor,elemSet,trsvSection,longSection):
   Parameters:
     preprocessor:    preprocessor name
   '''
-  mapSectionsForEveryElement= {}
+  sectionsNamesForEveryElement= {}
   for e in elemSet:
-    mapSectionsForEveryElement[e.tag]= [trsvSection,longSection]
-  return mapSectionsForEveryElement
+    sectionsNamesForEveryElement[e.tag]= [trsvSection,longSection]
+  return sectionsNamesForEveryElement
 
 def saveSectionsForShellSet(mapSections,fName):
   with open(fName + '.pkl', 'wb') as f:

@@ -66,7 +66,7 @@ def xLaminaPrintFIS(outputFileName, sectionName1, sectionName2):
   os.sys("rm -f "+"/tmp/texOutput1.tmp")
   os.sys("rm -f "+"/tmp/texOutput2.tmp")
 
-def lanzaCalculoFISFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,procesResultVerifFIS):
+def lanzaCalculoFISFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,procesResultVerifFIS):
   '''
    Lanza la comprobación de fisuración en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -81,17 +81,17 @@ def lanzaCalculoFISFromXCData(preprocessor,analysis,intForcCombFileName,outputFi
                      obtained for each element for the combinations analyzed
     outputFileName:  name of the output file containing tue results of the 
                      verification 
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     procesResultVerifFIS:          processing of the results of the verification      
   '''
-  elems= ec.creaElems(preprocessor,intForcCombFileName, mapSectionsForEveryElement)
+  elems= ec.creaElems(preprocessor,intForcCombFileName, sectionsNamesForEveryElement)
   ccSIA.defVarsControlFISSIA262(elems)
   calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerifFIS)
-  xLaminaPrintFISSIA262(preprocessor,outputFileName,mapSectionsForEveryElement)
+  xLaminaPrintFISSIA262(preprocessor,outputFileName,sectionsNamesForEveryElement)
 
-def lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, mapSectionsForEveryElement,mapSectionsDefinition,procesResultVerifFIS):
+def lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition,procesResultVerifFIS):
   '''
    Lanza la comprobación de fisuración en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -106,15 +106,15 @@ def lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,out
                      obtained for each element for the combinations analyzed
     outputFileName:  name of the output file containing tue results of the 
                      verification 
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     procesResultVerifFIS:          processing of the results of the verification      
   '''
-  elems= ec.extraeDatos(preprocessor,intForcCombFileName, mapSectionsForEveryElement,mapSectionsDefinition, None)
+  elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, None)
   ccSIA.defVarsControlFISSIA262(elems)
   calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerifFIS)
-  xLaminaPrintFISSIA262(preprocessor,outputFileName,mapSectionsForEveryElement)
+  xLaminaPrintFISSIA262(preprocessor,outputFileName,sectionsNamesForEveryElement)
 
 def strElementProp(eTag,nmbProp,vProp):
   retval= "preprocessor.getElementLoader.getElement("

@@ -11,7 +11,11 @@ from materials.xLamina import calculo_fatigue
 from materials.sia262 import fatigueControlSIA262 as fc
 from materials.sia262 import shearSIA262
 from materials.sia262 import crackControlSIA262 as cc
+from solution import predefined_solutions
 
+# TO ENHANCE: Interactions diagrams ("d" and "k") are calculated each time we call
+# the check routines. Maybe it's a good idea to calculate them once and write them
+# in a file to use them as needed.
 
 class SectionContainer(object):
   sections= []
@@ -42,7 +46,7 @@ class SectionContainer(object):
   def getInteractionDiagrams(self,preprocessor,matDiagType):
     '''Returns 3D interaction diagrams.
     Parameters:
-      preprocessor:    preprocessor name
+      preprocessor:    FEA problem preprocessor
     '''
     mapInteractionDiagrams= {}
     for s in self.sections:
@@ -57,7 +61,7 @@ class SectionContainer(object):
   def getInteractionDiagramsNMy(self,preprocessor,matDiagType):
     '''Returns 2D interaction diagrams in N-My plane.
     Parameters:
-      preprocessor:    preprocessor name
+      preprocessor:    FEA problem preprocessor
     '''
     mapInteractionDiagrams= {}
     for s in self.sections:
@@ -71,82 +75,97 @@ class SectionContainer(object):
       mapInteractionDiagrams[s.D1Section.sectionName]= diag1
     return mapInteractionDiagrams
 
-  def crackControl(self,preprocessor,analysis,intForcCombFileName,outputFileName,mapSectionsForEveryElement, matDiagType):
+  def crackControl(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType):
     '''
     Parameters:
-      preprocessor:    preprocessor name
-    analysis:        type of analysis
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
     outputFileName:  name of the output file containing the results of the 
                      verification 
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     '''
+    tmp= xc.ProblemaEF()
+    preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
-    return calculo_fis.lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,mapSectionsForEveryElement,self.mapSections, cc.procesResultVerifFISSIA262PlanB)
+    analysis= predefined_solutions.simple_static_linear(tmp)
+    retval= calculo_fis.lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, cc.procesResultVerifFISSIA262PlanB)
+    tmp.clearAll()
+    return retval
 
-  def verifyNormalStresses(self,preprocessor,analysis,intForcCombFileName,outputFileName,mapSectionsForEveryElement, matDiagType):
+  def verifyNormalStresses(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType):
     '''
     Parameters:
-      preprocessor:    preprocessor name
-    analysis:        type of analysis
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
     outputFileName:  name of the output file containing the results of the 
                      verification 
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     '''
+    tmp= xc.ProblemaEF()
+    preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
-    return calculo_tn.lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,mapSectionsForEveryElement, self.mapSections, mapID)
+    analysis= predefined_solutions.simple_static_linear(tmp)
+    retval= calculo_tn.lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID)
+    tmp.clearAll()
+    return retval
 
-  def verifyNormalStresses2d(self,preprocessor,analysis,intForcCombFileName,outputFileName,mapSectionsForEveryElement, matDiagType):
+  def verifyNormalStresses2d(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType):
     '''
     Parameters:
-      preprocessor:    preprocessor name
-    analysis:        type of analysis
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
     outputFileName:  name of the output file containing the results of the 
                      verification 
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     '''
+    tmp= xc.ProblemaEF()
+    preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagramsNMy(preprocessor,matDiagType)
-    return calculo_tn.lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,mapSectionsForEveryElement, self.mapSections, mapID)
+    analysis= predefined_solutions.simple_static_linear(tmp)
+    retval= calculo_tn.lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID)
+    tmp.clearAll()
+    return retval
 
-  def shearVerification(self,preprocessor,analysis,intForcCombFileName,outputFileName,mapSectionsForEveryElement, matDiagType):
+  def shearVerification(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType):
     '''
     Parameters:
-      preprocessor:    preprocessor name
-    analysis:        type of analysis
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
     outputFileName:  name of the output file containing the results of the 
                      verification 
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     '''
+    tmp= xc.ProblemaEF()
+    preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
-    return calculo_v.lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName,mapSectionsForEveryElement,self.mapSections, mapID, shearSIA262.procesResultVerifV)
+    analysis= predefined_solutions.simple_static_linear(tmp)
+    retval= calculo_v.lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID, shearSIA262.procesResultVerifV)
+    tmp.clearAll()
+    return retval
 
-  def fatigueVerification(self,preprocessor,analysis,intForcCombFileName,outputFileName,mapSectionsForEveryElement, matDiagType):
+  def fatigueVerification(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType):
     '''
     Parameters:
-      preprocessor:    preprocessor name
-    analysis:        type of analysis
     intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
     outputFileName:  name of the output file containing the results of the 
                      verification 
-    mapSectionsForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
     '''
+    tmp= xc.ProblemaEF()
+    preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
-    return calculo_fatigue.lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,mapSectionsForEveryElement,self.mapSections, mapID,fc.procesResultVerif)
+    analysis= predefined_solutions.simple_static_linear(tmp)
+    retval= calculo_fatigue.lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID,fc.procesResultVerif)
+    tmp.clearAll()
+    return retval
