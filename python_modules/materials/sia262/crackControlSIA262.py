@@ -9,9 +9,11 @@ from materials import crack_control_base as cc
 import math
 
 class CrackControlSIA262(cc.CrackControlBaseParameters):
-
-  # Calcula la apertura característica de fisura.
+  def __init__(self,limitStateLabel,limitStress):
+    super(CrackControlSIA262,self).__init__(limitStateLabel)
+    self.limitStress= "limitStress" #Limit value for rebar stresses.
   def calcRebarStress(self, scc):
+    '''Returns average stress in rebars.'''
     section= scc.getProp("datosSecc")
     tagHormigon= section.concrType.matTagK
     reinfMatTag= section.reinfSteelType.matTagK
@@ -36,70 +38,83 @@ class CrackControlSIA262(cc.CrackControlBaseParameters):
       self.tensMediaBarrasTracc= reinforcementTraccion.getStressMed()
       self.iAreaMaxima=  fiberUtils.getIMaxPropFiber(reinforcementTraccion,"getArea")
     return self.tensMediaBarrasTracc
+  def check(self,elements,nmbComb):
+    '''Crack control.'''
+    for e in elements:
+      scc= e.getSection()
+      sigma_s= secHAParamsFis.calcRebarStress(scc)
+      if(sigma_s>e.getProp("sg_sCP")):
+        e.setProp("sg_sCP",sigma_s) # Caso pésimo
+        e.setProp("HIPCP",nmbComb)
+        Ntmp= scc.getStressResultantComponent("N")
+        MyTmp= scc.getStressResultantComponent("My")
+        MzTmp= scc.getStressResultantComponent("Mz")
+        e.setProp("NCP",Ntmp)
+        e.setProp("MyCP",MyTmp)
+        e.setProp("MzCP",MzTmp)
 
-def procesResultVerifFISSIA262(preprocessor,nmbComb):
-  # Comprobación de las secciones de hormigón frente a fisuración.
-  print "Postproceso combinación: ",nmbComb,"\n"
 
-  secHAParamsFis= CrackControlSIA262()
-  elementos= preprocessor.getSets.getSet("total").getElements
-  for e in elementos:
-    scc= e.getSection()
-    sigma_s= secHAParamsFis.calcRebarStress(scc)
-    if(sigma_s>e.getProp("sg_sCP")):
-      e.setProp("sg_sCP",sigma_s) # Caso pésimo
-      e.setProp("HIPCP",nmbComb)
+class CrackControlSIA262PlanB(CrackControlSIA262):
+  def __init__(self,limitStateLabel,limitStress):
+    super(CrackControlSIA262PlanB,self).__init__(limitStateLabel,limitStress)
+  def check(self,elements,nmbComb):
+    '''Crack control.'''
+    for e in elements:
+      e.getResistingForce()
+      scc= e.getSection()
+      idSection= e.getProp("idSection")
       Ntmp= scc.getStressResultantComponent("N")
       MyTmp= scc.getStressResultantComponent("My")
       MzTmp= scc.getStressResultantComponent("Mz")
-      e.setProp("NCP",Ntmp)
-      e.setProp("MyCP",MyTmp)
-      e.setProp("MzCP",MzTmp)
+      datosScc= scc.getProp("datosSecc")
+      stressCalc= datosScc.getStressCalculator()
+      stressCalc.solve(Ntmp, MyTmp)
+      sigma_sPos= stressCalc.sgs
+      sigma_sNeg= stressCalc.sgsp
+      sigma_c= stressCalc.sgc
+      #print "sgc0= ", stressCalc.sgc0
+      # sigma_s= 0.0
+      # eNC= datosScc.depth/3
+      # exc= 0.0
+      # As= max(datosScc.getAsPos(),datosScc.getAsNeg())
+      # denom= 0.5*As*0.9*datosScc.depth
+      # if(abs(Ntmp)<1e-6):
+      #   sigma_s= MyTmp/denom
+      # else:
+      #   exc= abs(MyTmp/Ntmp)
+      #   if(exc<eNC):
+      #     sg= Ntmp/datosScc.getAc()
+      #     sg+= MyTmp/datosScc.getI()*datosScc.depth/2
+      #     sigma_s= 10*sg
+      #   else:
+      #     sigma_s= MyTmp/denom
+      # print "eNC= ", eNC, " exc= ", exc, "sigma_s= ", sigma_s/1e6
+      CFPos= sigma_sPos/self.limitStress #Positive face capacity factor.
+      CFNeg= sigma_sNeg/self.limitStress #Negative face capacity factor.
+      elementControlVars= None
+      if(e.hasProp(self.limitStateLabel)):
+        elementControlVars= e.getProp(self.limitStateLabel)
+      else:
+        elementControlVars= cv.CrackControlVars(idSection,cv.CrackControlBaseVars(nmbComb,CFPos,Ntmp,MyTmp,MzTmp,sigma_sPos),CrackControlBaseVars(nmbComb,CFNeg,Ntmp,MyTmp,MzTmp,sigma_sNeg))
+      if(CFPos>elementControlVars.crackControlVarsPos.CF):
+        elementControlVars.crackControlVarsPos= cv.CrackControlBaseVars(nmbComb,CFPos,Ntmp,MyTmp,MzTmp,sigma_sPos)
+      if(CFNeg>elementControlVars.crackControlVarsNeg.CF):
+        elementControlVars.crackControlVarsNeg= cv.CrackControlBaseVars(nmbComb,CFNeg,Ntmp,MyTmp,MzTmp,sigma_sNeg)
+      e.setProp(self.limitStateLabel,elementControlVars)
 
-def procesResultVerifFISSIA262PlanB(preprocessor,nmbComb):
+
+def procesResultVerifFISSIA262(preprocessor,nmbComb,limitStress):
+  # Comprobación de las secciones de hormigón frente a fisuración.
+  print "Postproceso combinación: ",nmbComb,"\n"
+
+  secHAParamsFis= CrackControlSIA262(limitStress)
+  elements= preprocessor.getSets.getSet("total").getElements
+  secHAParamsFis.check(elements,nmbComb)
+
+def procesResultVerifFISSIA262PlanB(preprocessor,nmbComb,limitStress):
   # Comprobación de las secciones de hormigón frente a fisuración estimando la tensión en la reinforcement.
   print "Postproceso combinación: ",nmbComb,"\n"
 
-  secHAParamsFis= CrackControlSIA262()
-  elementos= preprocessor.getSets.getSet("total").getElements
-  for e in elementos:
-    e.getResistingForce()
-    scc= e.getSection()
-    Ntmp= scc.getStressResultantComponent("N")
-    MyTmp= scc.getStressResultantComponent("My")
-    MzTmp= scc.getStressResultantComponent("Mz")
-    datosScc= scc.getProp("datosSecc")
-    stressCalc= datosScc.getStressCalculator()
-    stressCalc.solve(Ntmp, MyTmp)
-    sigma_sPos= stressCalc.sgs
-    sigma_sNeg= stressCalc.sgsp
-    sigma_c= stressCalc.sgc
-    #print "sgc0= ", stressCalc.sgc0
-    # sigma_s= 0.0
-    # eNC= datosScc.depth/3
-    # exc= 0.0
-    # As= max(datosScc.getAsPos(),datosScc.getAsNeg())
-    # denom= 0.5*As*0.9*datosScc.depth
-    # if(abs(Ntmp)<1e-6):
-    #   sigma_s= MyTmp/denom
-    # else:
-    #   exc= abs(MyTmp/Ntmp)
-    #   if(exc<eNC):
-    #     sg= Ntmp/datosScc.getAc()
-    #     sg+= MyTmp/datosScc.getI()*datosScc.depth/2
-    #     sigma_s= 10*sg
-    #   else:
-    #     sigma_s= MyTmp/denom
-    # print "eNC= ", eNC, " exc= ", exc, "sigma_s= ", sigma_s/1e6
-    if(sigma_sPos>e.getProp("sg_sPos")):
-      e.setProp("sg_sPos",sigma_sPos) # Caso pésimo
-      e.setProp("HIPCPPos",nmbComb)
-      e.setProp("NCPPos",Ntmp)
-      e.setProp("MyCPPos",MyTmp)
-      e.setProp("MzCPPos",MzTmp)
-    if(sigma_sNeg>e.getProp("sg_sNeg")):
-      e.setProp("sg_sNeg",sigma_sNeg) # Caso pésimo
-      e.setProp("HIPCPNeg",nmbComb)
-      e.setProp("NCPNeg",Ntmp)
-      e.setProp("MyCPNeg",MyTmp)
-      e.setProp("MzCPNeg",MzTmp)
+  secHAParamsFis= CrackControlSIA262PlanB(limitStress)
+  elements= preprocessor.getSets.getSet("total").getElements
+  secHAParamsFis.check(elements,nmbComb)

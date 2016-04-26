@@ -11,6 +11,7 @@ from rough_calculations import ng_simple_bending_reinforcement
 
 beton= concreteSIA262.c25_30
 acier= steelSIA262.B500A
+acier.gammaS= 1.15 #EC2 takes 500/435
 Dmax= 32e-3
 b= 1.0
 d= 0.74

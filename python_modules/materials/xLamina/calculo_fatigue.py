@@ -8,7 +8,7 @@ import os
 from postprocess.reports import common_formats as fmt
 
 
-def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,procesResultVerif):
+def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controller):
   '''Launch the calculation for the verification of the Fatigue Limit State
   in shell elements.
   Parameters:
@@ -26,13 +26,16 @@ def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName
                                 used in the verification
     mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
                                 diagrams of materials to be used in the verification process
-    procesResultVerif:          processing of the results of the verification          
+    controller: object that controls limit state on elements.
    '''
-  controlVarName= "ULS_fatigue"
-  elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controlVarName)
-  fcSIA.defVarsControl(elems)
-  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerif)
-  xLaminaPrintFatigueSIA262(preprocessor,outputFileName,sectionsNamesForEveryElement)
+  if(controller):
+    elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controller.limitStateLabel)
+    fcSIA.defVarsControl(elems)
+    elements= preprocessor.getSets.getSet("total").getElements
+    calculo_comb.xLaminaCalculaComb(preprocessor,elements,analysis,controller)
+    xLaminaPrintFatigueSIA262(preprocessor,outputFileName,sectionsNamesForEveryElement)
+  else:
+    lmsg.error('lanzaCalculoFatigueFromXCDataPlanB controller not defined.')
 
 def strElementProp(eTag,nmbProp,vProp):
   retval= "preprocessor.getElementLoader.getElement("

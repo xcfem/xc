@@ -23,15 +23,7 @@ class ReinforcingSteel(object):
     gammaS:   Partial factor for material.
     k:        fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 , class B k>=1,08)
   """
-  nmbMaterial= "nil" # Name identifying the material.
-  nmbDiagK= "dgK"+nmbMaterial # Name identifying the characteristic stress-strain diagram.
-  matTagK= -1 # Tag of the uniaxial material with the characteristic stress-strain diagram.
-  nmbDiagD= "dgD"+nmbMaterial # Name identifying the design stress-strain diagram.
-  matTagD= -1 # Tag of the uniaxial material with the design stress-strain diagram .
-  fyk= 0.0 # Characteristic value of the yield strength.
-  gammaS= 1.15 # Partial factor for material.
   Es= 2e11 # Elastic modulus of the material.
-  emax= 0.0 # maximum strain in tension
 #  fmaxk= 0.0 # Characteristic ultimate stress
   Esh= 0.0 # Slope of the line in the yielding region.
   bsh= 0.0 # Ratio between post-yield tangent and initial elastic tangent
@@ -49,6 +41,9 @@ class ReinforcingSteel(object):
     self.emax= emax # Ultimate strain (rupture strain)
     self.k=k        # fmaxk/fyk ratio
  
+  def __repr__(self):
+    return self.nmbMaterial
+
   def fmaxk(self):
     """ Characteristic ultimate strength. """
     return self.k*self.fyk

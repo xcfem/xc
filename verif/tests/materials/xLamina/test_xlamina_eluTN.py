@@ -17,6 +17,7 @@ from postprocess.reports import listados_factor_capacidad
 import xc_base
 import geom
 import xc
+from materials.sia262 import normalStressesSIA262 as ns #Change SIA262->EHE
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import defSeccionHASimple
@@ -72,7 +73,8 @@ sections.append(deckSections)
 
 
 
-meanFCs= sections.verifyNormalStresses(intForcCombFileName,"/tmp/ppTN",mapSectionsForEveryElement, "d")
+controller= ns.BiaxialBendingNormalStressController('ULS_normalStress')
+meanFCs= sections.verifyNormalStresses(intForcCombFileName,"/tmp/ppTN",mapSectionsForEveryElement, "d",controller)
 
 
 #print "mean FCs: ", meanFCs

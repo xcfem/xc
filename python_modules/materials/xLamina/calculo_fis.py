@@ -25,7 +25,7 @@ def lanzaCalculoFIS(nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArchDefHipELS)
   xLaminaPrintFIS(nmbArch+"FIS",deref(nmbRegDatosScc1).sectionName,deref(nmbRegDatosScc2).sectionName)
 
 
-def lanzaCalculoFISFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,procesResultVerifFIS):
+def lanzaCalculoFISFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,controller):
   '''
    Lanza la comprobación de fisuración en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -43,14 +43,20 @@ def lanzaCalculoFISFromXCData(preprocessor,analysis,intForcCombFileName,outputFi
     sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
-    procesResultVerifFIS:          processing of the results of the verification      
+    controller: object that controls limit state on elements      
   '''
-  elems= ec.creaElems(preprocessor,intForcCombFileName, sectionsNamesForEveryElement)
-  ccSIA.defVarsControlFISSIA262(elems)
-  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerifFIS)
-  return cv.writeControlVarsFromElements('SLS_crack',preprocessor,outputFileName,sectionsNamesForEveryElement)
+  meanCFs= -1.0
+  if(controller):
+    elems= ec.creaElems(preprocessor,intForcCombFileName, sectionsNamesForEveryElement)
+    ccSIA.defVarsControlFISSIA262(elems)
+    elements= preprocessor.getSets.getSet("total").getElements
+    calculo_comb.xLaminaCalculaComb(preprocessor,elements,analysis,controller)
+    meanCFs= cv.writeControlVarsFromElements(controller.limitStateLabel,preprocessor,outputFileName,sectionsNamesForEveryElement)
+  else:
+    lmsg.error('lanzaCalculoFISFromXCData controller not defined.')
+  return meanCFs
 
-def lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition,procesResultVerifFIS):
+def lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition,controller):
   '''
    Lanza la comprobación de fisuración en una lámina
       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
@@ -68,11 +74,15 @@ def lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,out
     sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
-    procesResultVerifFIS:          processing of the results of the verification      
+    controller: object that controls limit state on elements      
   '''
-  controlVarName= "SLS_crack"
-  elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, None,controlVarName)
-  calculo_comb.xLaminaCalculaComb(preprocessor,analysis,procesResultVerifFIS)
-  cv.writeControlVarsFromElements('SLS_crack',preprocessor,outputFileName,sectionsNamesForEveryElement)
+  if(controller):
+    elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, None,controller.limitStateLabel)
+    elements= preprocessor.getSets.getSet("total").getElements
+    calculo_comb.xLaminaCalculaComb(elements,analysis,controller)
+    cv.writeControlVarsFromElements(controller.limitStateLabel,preprocessor,outputFileName,sectionsNamesForEveryElement)
+  else:
+    lmsg.error('lanzaCalculoFISFromXCDataPlanB controller not defined.')
+  return meanCFs
 
 

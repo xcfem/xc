@@ -9,7 +9,7 @@ from materials.fiber_section import fiberUtils
 from materials import crack_control_base as cc
 import math
 
-class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
+class CrackControl(cc.CrackControlBaseParameters):
   '''
   Define las propiedades del registro que contiene los parámetros de cálculo
      de la fisuración.'''
@@ -128,6 +128,29 @@ class ParamsFisuracionEHE(cc.CrackControlBaseParameters):
         self.Wk= max(self.Wk,WkBarra)
         # \printParamFisBarra()
       self.tensSRMediaBarrasTracc= self.tensSRMediaBarrasTracc/self.areaRebarTracc
+  def check(self,elements,nmbComb):
+    # Comprobación de las secciones de hormigón frente a fisuración.
+    print "Postproceso combinación: ",nmbComb,"\n"
+
+    defParamsFisuracion("secHAParamsFisuracion")
+    materiales= preprocessor.getMaterialLoader
+    hormigon= materiales.getMaterial(codHormigon)
+    tagHorm= hormigon.getProp("matTagK")
+    fctmHorm= hormigon.getProp("fctm")
+    reinforcement= materiales.getMaterial(codArmadura)
+    for e in elements:
+      scc= elements.getSeccion()
+      Ntmp= scc.N
+      MyTmp= scc.My
+      MzTmp= scc.Mz
+      secHAParamsFisuracion= calcApertCaracFis(tagHorm,tagArmadura,fctmHorm)
+      Wk= secHAParamsFisuracion.Wk
+      if(Wk>WkCP):
+        WkCP= Wk # Caso pésimo
+        HIPCP= nmbComb
+        NCP= Ntmp
+        MyCP= MyTmp
+        MzCP= MzTmp
 
       
 
@@ -148,27 +171,3 @@ def printParamFisBarra():
   print "alargMedioBarra= ",alargMedioBarra*1e3," por mil.\n"
   print "WkBarra= ",WkBarra*1e3," mm\n\n"
 
-def procesResultVerifFISEHE(preprocessor,nmbComb):
-  # Comprobación de las secciones de hormigón frente a fisuración.
-  print "Postproceso combinación: ",nmbComb,"\n"
-
-  defParamsFisuracion("secHAParamsFisuracion")
-  materiales= preprocessor.getMaterialLoader
-  hormigon= materiales.getMaterial(codHormigon)
-  tagHorm= hormigon.getProp("matTagK")
-  fctmHorm= hormigon.getProp("fctm")
-  reinforcement= materiales.getMaterial(codArmadura)
-  elementos= preprocessor.getElementLoader
-  for e in elementos:
-    scc= elementos.getSeccion()
-    Ntmp= scc.N
-    MyTmp= scc.My
-    MzTmp= scc.Mz
-    secHAParamsFisuracion= calcApertCaracFis(tagHorm,tagArmadura,fctmHorm)
-    Wk= secHAParamsFisuracion.Wk
-    if(Wk>WkCP):
-      WkCP= Wk # Caso pésimo
-      HIPCP= nmbComb
-      NCP= Ntmp
-      MyCP= MyTmp
-      MzCP= MzTmp

@@ -80,7 +80,7 @@ analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 
 
-secHAParamsFis= fisuracionEHE.ParamsFisuracionEHE()
+secHAParamsFis= fisuracionEHE.CrackControl('SLS_crack')
 
 
 

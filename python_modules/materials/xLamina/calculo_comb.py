@@ -26,39 +26,41 @@ def getListaCombinaciones(nmbArchDefHipELU):
   os.sys("rm -f "+"/tmp/cargas.xci")
   return lstCombRetval
 
-def xLaminaCalculaComb(preprocessor, analysis, procesResultVerif):
+def xLaminaCalculaComb(preprocessor,elements, analysis, controller):
   '''
   Lanza el análisis (lineal) y la comprobación en las combinaciones que se pasan como parámetros
   Parameters:
-    preprocessor:    preprocessor name
-  nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
+    elements: elements to check
+    controller: object that controls limit state in elements.
   '''
-  casos= preprocessor.getLoadLoader.getLoadPatterns #Una combinación en cada caso de carga. 
-  for key in casos.getKeys():
-    comb= casos[key]
+  combs= preprocessor.getLoadLoader.getLoadPatterns #Here each load pattern represents a combination.
+  for key in combs.getKeys():
+    comb= combs[key]
     #print "Resolviendo para acción: ",key
     resuelve_combinacion.resuelveComb(preprocessor,key,analysis,1)
-    procesResultVerif(preprocessor,key)
+    controller.check(elements,key)
 
-def xLaminaCalculaCombEstatLin(preprocessor, analysis, procesResultVerif):
+def xLaminaCalculaCombEstatLin(preprocessor,elements, analysis, controller):
   '''
   Lanza el análisis (lineal) y la comprobación en las combinaciones que se pasan como parámetros
   Parameters:
-    preprocessor:    preprocessor name
-  nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
+    elements: elements to check
+    controller: object that controls limit state in elements.
   '''
-  casos= preprocessor.getLoadLoader.getLoadPatterns #Una combinación en cada caso de carga. 
-  for key in casos.getKeys():
-    comb= casos[key]
+  combs= preprocessor.getLoadLoader.getLoadPatterns #Here each load pattern represents a combination.
+  for key in combs.getKeys():
+    comb= combs[key]
     #print "Resolviendo para acción: ",key
     resuelve_combinacion.resuelveComb(preprocessor,key,analysis,1)
-    procesResultVerif(preprocessor,key)
+    controller.check(elements,key)
 
 
-def xLaminaCalculaCombEstatNoLin(nmbArchDefHipELU):
+def xLaminaCalculaCombEstatNoLin(elements,nmbArchDefHipELU,controller):
   '''
   Lanza el análisis (no lineal) y la comprobación en las combinaciones que se pasan como parámetros
-  nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
+  Parameters:
+    nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
+    controller: object that controls limit state in elements.
   '''
   # Definimos el procedimiento de solución.
   print "XXX Definir el procedimiento de solution (simple_newton_raphson_band_genr)"
@@ -66,6 +68,6 @@ def xLaminaCalculaCombEstatNoLin(nmbArchDefHipELU):
   for comb in listaCombinaciones:
     print "Resolviendo para acción: ",comb
     resuelveCombEstatNoLin(comb)
-    procesResultVerif(comb,nmbDiagIntSec1,nmbDiagIntSec2)
+    controller.check(elements,comb,nmbDiagIntSec1,nmbDiagIntSec2)
   os.sys("rm -f "+"/tmp/acciones.xci")
   os.sys("rm -f "+"/tmp/cargas.xci")

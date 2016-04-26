@@ -14,6 +14,7 @@ class LimitStateData(object):
     self.label= limitStateLabel
     self.inputDataFileName= inputDataFileName
     self.outputDataBaseFileName= outputDataBaseFileName
+    self.controller= None
   def getInternalForcesFileName(self):
     return self.internal_forces_results_directory+self.inputDataFileName
   def getOutputDataBaseFileName(self):
@@ -41,7 +42,7 @@ class NormalStressesRCLimitStateData(LimitStateData):
   def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
-    return sections.verifyNormalStresses(intForcCombFileName,out,sectionsNamesForEveryElement, "d")
+    return sections.verifyNormalStresses(intForcCombFileName,out,sectionsNamesForEveryElement, "d",self.controller)
 
 class ShearResistanceRCLimitStateData(LimitStateData):
   ''' Reinforced concrete shear resistance limit state data.'''
@@ -56,7 +57,7 @@ class ShearResistanceRCLimitStateData(LimitStateData):
   def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
-    return sections.shearVerification(intForcCombFileName,out,sectionsNamesForEveryElement, "d")
+    return sections.shearVerification(intForcCombFileName,out,sectionsNamesForEveryElement, "d",self.controller)
 
 class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -71,7 +72,7 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
   def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
-    return sections.crackControl(intForcCombFileName,out,sectionsNamesForEveryElement, "k")
+    return sections.crackControl(intForcCombFileName,out,sectionsNamesForEveryElement, "k", self.controller)
 
 class QPLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
@@ -86,7 +87,7 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
   def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
-    return sections.crackControl(intForcCombFileName,out,sectionsNamesForEveryElement, "k")
+    return sections.crackControl(intForcCombFileName,out,sectionsNamesForEveryElement, "k",self.controller)
 
 
 class FatigueResistanceRCLimitStateData(LimitStateData):

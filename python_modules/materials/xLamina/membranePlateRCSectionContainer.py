@@ -8,9 +8,9 @@ from materials.xLamina import calculo_fis
 from materials.xLamina import calculo_tn
 from materials.xLamina import calculo_v
 from materials.xLamina import calculo_fatigue
-from materials.sia262 import fatigueControlSIA262 as fc
-from materials.sia262 import shearSIA262
-from materials.sia262 import crackControlSIA262 as cc
+#from materials.sia262 import fatigueControlSIA262 as fc
+#from materials.sia262 import shearSIA262
+#from materials.sia262 import crackControlSIA262 as cc
 from solution import predefined_solutions
 
 # TO ENHANCE: Interactions diagrams ("d" and "k") are calculated each time we call
@@ -75,7 +75,7 @@ class SectionContainer(object):
       mapInteractionDiagrams[s.D1Section.sectionName]= diag1
     return mapInteractionDiagrams
 
-  def crackControl(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType):
+  def crackControl(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
     '''
     Parameters:
     intForcCombFileName: name of the file containing the forces and bending moments 
@@ -85,16 +85,17 @@ class SectionContainer(object):
     sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
+    controller: object that controls crack limit state.
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calculo_fis.lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, cc.procesResultVerifFISSIA262PlanB)
+    retval= calculo_fis.lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, controller)
     tmp.clearAll()
     return retval
 
-  def verifyNormalStresses(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType):
+  def verifyNormalStresses(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
     '''
     Parameters:
     intForcCombFileName: name of the file containing the forces and bending moments 
@@ -104,16 +105,17 @@ class SectionContainer(object):
     sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
+    controller: object that controls normal stresses limit state on elements.
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calculo_tn.lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID)
+    retval= calculo_tn.lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID,controller)
     tmp.clearAll()
     return retval
 
-  def verifyNormalStresses2d(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType):
+  def verifyNormalStresses2d(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
     '''
     Parameters:
     intForcCombFileName: name of the file containing the forces and bending moments 
@@ -123,16 +125,17 @@ class SectionContainer(object):
     sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
+    controller: object that controls normal stresses limit state on elements.
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagramsNMy(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calculo_tn.lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID)
+    retval= calculo_tn.lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID,controller)
     tmp.clearAll()
     return retval
 
-  def shearVerification(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType):
+  def shearVerification(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
     '''
     Parameters:
     intForcCombFileName: name of the file containing the forces and bending moments 
@@ -142,16 +145,17 @@ class SectionContainer(object):
     sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
+    controller: object that controls shear limit state.
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calculo_v.lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID, shearSIA262.procesResultVerifV)
+    retval= calculo_v.lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID, controller)
     tmp.clearAll()
     return retval
 
-  def fatigueVerification(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType):
+  def fatigueVerification(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
     '''
     Parameters:
     intForcCombFileName: name of the file containing the forces and bending moments 
@@ -161,11 +165,12 @@ class SectionContainer(object):
     sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
+    controller: object that controls fatigue limit state
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calculo_fatigue.lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID,fc.procesResultVerif)
+    retval= calculo_fatigue.lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID,controller)
     tmp.clearAll()
     return retval

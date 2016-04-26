@@ -7,6 +7,7 @@ from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils
 from materials.sia262 import shearSIA262
 from materials import crack_control_base as cc
+from materials import LimitStateControllerBase as lsc
 from materials import stressCalc as sc
 import math
 import geom
@@ -104,76 +105,84 @@ def limitShear(sccData,v_0,v_1,vu):
     print "limite negativo = ", retval
   return retval
 
-def procesResultVerif(preprocessor,nmbComb):
-  # Comprobación de las secciones de hormigón frente a fatiga estimando la tensión en la reinforcement.
-  print "Postproceso combinación: ",nmbComb,"\n"
+class FatigueController(lsc.LimitStateControllerBase):
+  '''Object that controls RC fatigue limit state.'''
 
-  index= int(nmbComb[-1])
+  def __init__(self,limitStateLabel,seccionHA):
+    super(FatigueController,self).__init__(limitStateLabel)
 
-  elementos= preprocessor.getSets.getSet("total").getElements
-  for e in elementos:
-    e.getResistingForce()
-    scc= e.getSection()
-    N= scc.getStressResultantComponent("N")
-    My= scc.getStressResultantComponent("My")
-    Mz= scc.getStressResultantComponent("Mz")
-    Vy= scc.getStressResultantComponent("Vy")
-    Vz= scc.getStressResultantComponent("Vz")
-    datosScc= scc.getProp("datosSecc")
-    stressCalc= datosScc.getStressCalculator()
-    stressCalc.solve(N, My)
-    sigma_sPos= stressCalc.sgs
-    sigma_sNeg= stressCalc.sgsp
-    sigma_c= stressCalc.sgc
-    #print "sgc0= ", stressCalc.sgc0
+  def check(self,elements, nmbComb):
+    '''
+    Comprobación de las secciones de hormigón frente a fatiga estimando la tensión en la reinforcement.
+    Parameters:
+      elements:    elements to check
+    '''
+    print 'Controlling limit state: ',self.limitStateLabel, ' for load combination: ',nmbComb,"\n"
 
-    # sigma_sPos= estimateSteelStressPos(datosScc, N, My)
-    # sigma_sNeg= estimateSteelStressNeg(datosScc, N, My)
-    # sigma_s= max(sigma_sPos,sigma_sNeg)
-    # #sigma_c= estimateSigmaC(datosScc, sigma_sPos, sigma_sNeg)
-    # sigma_c= estimateSigmaCPlanB(datosScc, N, My)
+    index= int(nmbComb[-1])
+    for e in elementos:
+      e.getResistingForce()
+      scc= e.getSection()
+      N= scc.getStressResultantComponent("N")
+      My= scc.getStressResultantComponent("My")
+      Mz= scc.getStressResultantComponent("Mz")
+      Vy= scc.getStressResultantComponent("Vy")
+      Vz= scc.getStressResultantComponent("Vz")
+      datosScc= scc.getProp("datosSecc")
+      stressCalc= datosScc.getStressCalculator()
+      stressCalc.solve(N, My)
+      sigma_sPos= stressCalc.sgs
+      sigma_sNeg= stressCalc.sgsp
+      sigma_c= stressCalc.sgc
+      #print "sgc0= ", stressCalc.sgc0
 
-    # if(sigma_c==0.0):
-    #   print "****** sigma_sPos=", sigma_sPos/1e6, "sigma_sNeg=", sigma_sNeg/1e6, " sigma_c= ", sigma_c, " N= ",N/1e3, "M= ", My/1e3 
-    if(index==0):
-      e.setProp("sg_sPos0",sigma_sPos)
-      e.setProp("sg_sNeg0",sigma_sNeg)
-      e.setProp("sg_c0",sigma_c)
-      e.setProp("N0",N)
-      e.setProp("My0",My)
-      e.setProp("Mz0",Mz)
-      e.setProp("Vy0",Vy)
-      e.setProp("Vz0",Vz)
-    else:
-      e.setProp("sg_sPos1",sigma_sPos)
-      e.setProp("sg_sNeg1",sigma_sNeg)
-      e.setProp("sg_c1",sigma_c)
-      e.setProp("N1",N)
-      e.setProp("My1",My)
-      e.setProp("Mz1",Mz)
-      e.setProp("Vy1",Vy)
-      e.setProp("Vz1",Vz)
-      kc= 1.0 #XXX  SIA 262 4.2.1.7
-      lim_sg_c= limitFatigueBeton(datosScc,kc,e.getProp("sg_c0"),sigma_c)
-      #print "lim_sg_c= ", lim_sg_c/1e6
-      sgc0= abs(min(e.getProp("sg_c0"),0.0))
-      sgc1= abs(min(sigma_c,0.0))
-      fc_sg_c= max(sgc0,sgc1)/lim_sg_c
-      #print "fc_sg_c= ",fc_sg_c
-      e.setProp("lim_sg_c",lim_sg_c)
-      e.setProp("fc_sg_c",fc_sg_c)
-      section= scc.getProp("datosSecc")
-      secHAParamsCortante= shearSIA262.ParamsCortante(section)
-      posEsf= geom.Pos3d(N,My,Mz)
-      diagInt= e.getProp("diagInt")
-      FCflex= diagInt.getCapacityFactor(posEsf)
-      Mu= My/FCflex
-      Vu= secHAParamsCortante.calcVu(N,My, Mu, Vy)
-      Vy0= e.getProp("Vy0")
-      Vy1= Vy
-      lim_v= limitShear(section,Vy0,Vy1,Vu)
-      fc_v= max(abs(Vy0),abs(Vy1))/lim_v
-      e.setProp("Mu",Mu)
-      e.setProp("Vu",Vu)
-      e.setProp("lim_v",lim_v)
-      e.setProp("fc_v",fc_v)
+      # sigma_sPos= estimateSteelStressPos(datosScc, N, My)
+      # sigma_sNeg= estimateSteelStressNeg(datosScc, N, My)
+      # sigma_s= max(sigma_sPos,sigma_sNeg)
+      # #sigma_c= estimateSigmaC(datosScc, sigma_sPos, sigma_sNeg)
+      # sigma_c= estimateSigmaCPlanB(datosScc, N, My)
+
+      # if(sigma_c==0.0):
+      #   print "****** sigma_sPos=", sigma_sPos/1e6, "sigma_sNeg=", sigma_sNeg/1e6, " sigma_c= ", sigma_c, " N= ",N/1e3, "M= ", My/1e3 
+      if(index==0):
+        e.setProp("sg_sPos0",sigma_sPos)
+        e.setProp("sg_sNeg0",sigma_sNeg)
+        e.setProp("sg_c0",sigma_c)
+        e.setProp("N0",N)
+        e.setProp("My0",My)
+        e.setProp("Mz0",Mz)
+        e.setProp("Vy0",Vy)
+        e.setProp("Vz0",Vz)
+      else:
+        e.setProp("sg_sPos1",sigma_sPos)
+        e.setProp("sg_sNeg1",sigma_sNeg)
+        e.setProp("sg_c1",sigma_c)
+        e.setProp("N1",N)
+        e.setProp("My1",My)
+        e.setProp("Mz1",Mz)
+        e.setProp("Vy1",Vy)
+        e.setProp("Vz1",Vz)
+        kc= 1.0 #XXX  SIA 262 4.2.1.7
+        lim_sg_c= limitFatigueBeton(datosScc,kc,e.getProp("sg_c0"),sigma_c)
+        #print "lim_sg_c= ", lim_sg_c/1e6
+        sgc0= abs(min(e.getProp("sg_c0"),0.0))
+        sgc1= abs(min(sigma_c,0.0))
+        fc_sg_c= max(sgc0,sgc1)/lim_sg_c
+        #print "fc_sg_c= ",fc_sg_c
+        e.setProp("lim_sg_c",lim_sg_c)
+        e.setProp("fc_sg_c",fc_sg_c)
+        section= scc.getProp("datosSecc")
+        secHAParamsCortante= shearSIA262.ParamsCortante(section)
+        posEsf= geom.Pos3d(N,My,Mz)
+        diagInt= e.getProp("diagInt")
+        FCflex= diagInt.getCapacityFactor(posEsf)
+        Mu= My/FCflex
+        Vu= secHAParamsCortante.calcVu(N,My, Mu, Vy)
+        Vy0= e.getProp("Vy0")
+        Vy1= Vy
+        lim_v= limitShear(section,Vy0,Vy1,Vu)
+        fc_v= max(abs(Vy0),abs(Vy1))/lim_v
+        e.setProp("Mu",Mu)
+        e.setProp("Vu",Vu)
+        e.setProp("lim_v",lim_v)
+        e.setProp("fc_v",fc_v)

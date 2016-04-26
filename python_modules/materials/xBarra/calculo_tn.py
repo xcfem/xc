@@ -9,13 +9,8 @@ import math
 from postprocess.reports import common_formats as fmt
 import scipy
 
-def even(number):
-   return number % 2 == 0
-def odd(number):
-   return number % 2 != 0
-
-# Ejecuta el análisis y la comprobación frente a tensiones normales
-def xBarraCompruebaTNComb(preprocessor, nmbDiagIntSec):
+def xBarraCompruebaTNComb(preprocessor, nmbDiagIntSec, controller):
+  '''Ejecuta el análisis y la comprobación frente a tensiones normales '''
   listaCombinaciones= []
   cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
@@ -27,30 +22,12 @@ def xBarraCompruebaTNComb(preprocessor, nmbDiagIntSec):
   for comb in listaCombinaciones:
     print("Resolviendo para acción: ",listaCombinaciones[i],"\n")
     resuelveCombEstatLin(comb)
-    procesResultVerif(comb,nmbDiagIntSec)
+    controller.check(comb,nmbDiagIntSec)
 
   os.system("rm -f "+"/tmp/acciones.xci")
   os.system("rm -f "+"/tmp/cargas.xci")
   xBarraPrintTN(nmbArch) # XXX Sacar de aquí la impresión de result.
 
-def procesResultVerifTN(preprocessor, nmbComb, diagIntSec):
-  #print "Postproceso combinación: ",nmbComb
-  elements= preprocessor.getSets["total"].getElements
-  for e in elements:
-    e.getResistingForce()
-    TagTmp= e.tag
-    scc= e.getSection()
-    Ntmp= scc.getStressResultantComponent("N")
-    MyTmp= scc.getStressResultantComponent("My")
-    MzTmp= scc.getStressResultantComponent("Mz")
-    posEsf= geom.Pos3d(Ntmp,MyTmp,MzTmp)
-    FCtmp= diagIntSec.getCapacityFactor(posEsf)
-    if(FCtmp>e.getProp("FCCP")):
-      e.setProp("FCCP",FCtmp) # Caso pésimo
-      e.setProp("HIPCP",nmbComb)
-      e.setProp("NCP",Ntmp)
-      e.setProp("MyCP",MyTmp)
-      e.setProp("MzCP",MzTmp)
 
 # Imprime los resultados de la comprobación frente a tensiones normales
 def xBarraPrintTN(preprocessor,outputFileName, sectionName):
@@ -90,19 +67,22 @@ def xBarraPrintTN(preprocessor,outputFileName, sectionName):
 
 
 
-'''
- Lanza la comprobación de tensiones normales en una lámina
+def lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, diagIntScc,controller):
+  '''
+  Lanza la comprobación de tensiones normales en una lámina
     cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
     con los materiales que se definen en el archivo nmbArchMateriales,
     las características de las secciones que se definen en los registros
     datosScc, las combinaciones definidas en el archivo
     nmbArchDefHipELU e imprime los resultados en archivos con
     el nombre nmbArchTN.*
-'''
-def lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, diagIntScc):
+
+    controller: object that controls normal stress limit state.
+  '''
   ec.extraeDatos(preprocessor,intForcCombFileName, diagIntScc)
   #nmbDiagIntSec= "diagInt"+datosScc.sectionName
-  calculo_comb.xBarraCalculaCombEstatLin(preprocessor,analysis,diagIntScc,procesResultVerifTN)
+  elements= preprocessor.getSets.getSet("total").getElements
+  calculo_comb.xBarraCalculaCombEstatLin(elements,analysis,diagIntScc,controller)
   meanFCs= xBarraPrintTN(preprocessor,outputFileName,"geomSecHA")
   return meanFCs
 

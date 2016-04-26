@@ -84,7 +84,7 @@ analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 
 
-secHAParamsFis= cc.CrackControlSIA262()
+secHAParamsFis= cc.CrackControlSIA262('SLS_crack',400e6)
 
 
 elementos= preprocessor.getElementLoader

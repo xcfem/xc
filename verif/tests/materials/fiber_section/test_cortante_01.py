@@ -123,7 +123,7 @@ if(analOk!=0):
 
 
 
-secHAParamsCortante= cortanteEHE.ParamsCortante()
+secHAParamsCortante= cortanteEHE.ShearControllerEHE('ULS_shear')
 
 
 
