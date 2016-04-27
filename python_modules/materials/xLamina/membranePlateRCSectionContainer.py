@@ -4,10 +4,7 @@ import xc_base
 import geom
 import xc
 # Macros
-from materials.xLamina import calculo_fis
-from materials.xLamina import calculo_tn
-from materials.xLamina import calculo_v
-from materials.xLamina import calculo_fatigue
+from materials.xLamina import calcsLauncher
 #from materials.sia262 import fatigueControlSIA262 as fc
 #from materials.sia262 import shearSIA262
 #from materials.sia262 import crackControlSIA262 as cc
@@ -91,7 +88,7 @@ class SectionContainer(object):
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calculo_fis.lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, controller)
+    retval= calcsLauncher.lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, controller)
     tmp.clearAll()
     return retval
 
@@ -111,7 +108,7 @@ class SectionContainer(object):
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calculo_tn.lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID,controller)
+    retval= calcsLauncher.lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID,controller)
     tmp.clearAll()
     return retval
 
@@ -131,7 +128,7 @@ class SectionContainer(object):
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagramsNMy(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calculo_tn.lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID,controller)
+    retval= calcsLauncher.lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID,controller)
     tmp.clearAll()
     return retval
 
@@ -151,7 +148,7 @@ class SectionContainer(object):
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calculo_v.lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID, controller)
+    retval= calcsLauncher.lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID, controller)
     tmp.clearAll()
     return retval
 
@@ -171,6 +168,6 @@ class SectionContainer(object):
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calculo_fatigue.lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID,controller)
+    retval= calcsLauncher.lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID,controller)
     tmp.clearAll()
     return retval
