@@ -392,6 +392,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/xBarra/extrae_combinaciones.pyc
 /usr/local/lib/python2.7/dist-packages/materials/xBarra/__init__.py
 /usr/local/lib/python2.7/dist-packages/materials/xBarra/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/materials/xLamina/calcsLauncher.py
+/usr/local/lib/python2.7/dist-packages/materials/xLamina/calcsLauncher.pyc
 /usr/local/lib/python2.7/dist-packages/materials/xLamina/calculo_comb.py
 /usr/local/lib/python2.7/dist-packages/materials/xLamina/calculo_comb.pyc
 /usr/local/lib/python2.7/dist-packages/materials/xLamina/calculo_fatigue.py

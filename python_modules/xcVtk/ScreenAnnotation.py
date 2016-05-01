@@ -26,6 +26,6 @@ class ScreenAnnotation(object):
     #vtkCornerAnnotation doesn't seems to support UTF-8 very well.
     caption= su.remove_accents(caption)
     if(len(caption)>self.captionWidth):
-      fill= textwrap.fill(caption,self.captionWidth)
-    self.annotation.SetText(self.lowerLeft,fill)
+      caption= textwrap.fill(caption,self.captionWidth)
+    self.annotation.SetText(self.lowerLeft,caption)
     return self.annotation
