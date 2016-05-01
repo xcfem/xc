@@ -40,11 +40,11 @@
 #include "solution/graph/graph/Graph.h"
 #include "solution/graph/graph/Vertex.h"
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/d2/Plano3d.h"
 #include "xc_utils/src/geom/d3/SemiEspacio3d.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 
 
 //! @brief Constructor.
@@ -87,14 +87,14 @@ void XC::SetMeshComp::agrega_listas(const SetMeshComp &otro)
     constraints.agrega(otro.constraints);
   }
 
-//! @brief Agrega a este conjunto los objetos del conjunto
-//! que se pasa como parámetro que cumplen la condición.
-void XC::SetMeshComp::agrega_listas_cond(const SetMeshComp &otro,const std::string &cond)
-  {
-    nodos.agrega_cond(otro.nodos,cond);
-    elementos.agrega_cond(otro.elementos,cond);
-    constraints.agrega_cond(otro.constraints,cond);
-  }
+// //! @brief Agrega a este conjunto los objetos del conjunto
+// //! que se pasa como parámetro que cumplen la condición.
+// void XC::SetMeshComp::agrega_listas_cond(const SetMeshComp &otro,const std::string &cond)
+//   {
+//     nodos.agrega_cond(otro.nodos,cond);
+//     elementos.agrega_cond(otro.elementos,cond);
+//     constraints.agrega_cond(otro.constraints,cond);
+//   }
 
 //!  \brief Borra todos los objetos de las listas.
 void XC::SetMeshComp::clear(void)
@@ -108,7 +108,7 @@ void XC::SetMeshComp::clear(void)
 //!  \brief Borra todos los objetos del conjunto.
 void XC::SetMeshComp::clearAll(void)
   {
-    SetBase::clearProps();
+    SetBase::clearPyProps();
     nodos.clearAll();
     constraints.clearAll();
     elementos.clearAll();
@@ -139,7 +139,7 @@ void XC::SetMeshComp::numera(void)
   }
 
 //! @brief Desplaza los nodos del conjunto.
-void XC::SetMeshComp::mueve(const std::vector<ExprAlgebra> &desplaz)
+void XC::SetMeshComp::mueve(const Vector3d &desplaz)
   { nodos.mueve(desplaz); }
 
 //! @brief Aplica la transformación a los elementos del conjunto.

@@ -29,18 +29,7 @@
 #include "util_matrix.h"
 #include "Vector.h"
 #include "Matrix.h"
-#include "xc_utils/src/base/any_const_ptr.h"
 
-any_const_ptr XC::vector_to_prop_vector(const XC::Vector *ptrVector)
-  {
-    assert(ptrVector);
-    static m_double tmp;
-    tmp= vector_to_m_double(*ptrVector);
-    return any_const_ptr(&tmp);
-  }
-
-any_const_ptr XC::vector_to_prop_vector(const XC::Vector &refVector)
-  { return vector_to_prop_vector(&refVector); }
 
 m_double XC::Vector_to_m_double(const Vector &v)
   {

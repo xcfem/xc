@@ -70,8 +70,8 @@
 #include <cstring>
 #include <domain/mesh/element/Information.h>
 #include "domain/constraints/SP_Constraint.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
@@ -92,7 +92,7 @@
 #include "xc_utils/src/nucleo/python_utils.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 #include "utility/tagged/DefaultTag.h"
 
 std::deque<XC::Matrix> XC::Node::theMatrices;
@@ -1680,10 +1680,9 @@ int XC::Node::resetReactionForce(bool inclInertia)
   }
 
 //! @brief Desplaza la posición del nodo (sólo esta previsto que se use desde XC::Set).
-void XC::Node::Mueve(const std::vector<ExprAlgebra> &desplaz)
+void XC::Node::Mueve(const Vector3d &desplaz)
   {
-    const size_t sz= std::min(desplaz.size(),getDim());
-    for(size_t i= 0;i<sz;i++)
-      Crd(i)+= desplaz[i].ToNum();
-    return;
+    Crd(0)+= desplaz.x();
+    Crd(1)+= desplaz.y();
+    Crd(2)+= desplaz.z();
   }

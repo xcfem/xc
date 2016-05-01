@@ -36,6 +36,7 @@
 
 class Pos3d;
 class RangoMatriz;
+class Vector3d;
 
 namespace XC{
 class Pnt;

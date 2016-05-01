@@ -38,7 +38,7 @@
 #include "domain/load/beam_loads/Beam2dUniformLoad.h"
 #include "domain/load/beam_loads/Beam2dPointLoad.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/matrix/Matrix.h"
 #include "xc_basic/src/matrices/m_int.h"
 #include "domain/mesh/element/coordTransformation/CrdTransf2d.h"

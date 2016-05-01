@@ -33,6 +33,7 @@
 #include <vector>
 
 class ExprAlgebra;
+class MapValores;
 
 namespace XC {
 

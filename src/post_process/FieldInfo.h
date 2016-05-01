@@ -25,7 +25,7 @@
 #ifndef FIELDINFO_H
 #define FIELDINFO_H
 
-#include "xc_utils/src/base/EntConNmb.h"
+#include "xc_utils/src/nucleo/EntConNmb.h"
 #include "xc_basic/src/matrices/m_string.h"
 #include <boost/python/list.hpp>
 

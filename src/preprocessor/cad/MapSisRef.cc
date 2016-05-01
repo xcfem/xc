@@ -33,8 +33,8 @@
 
 #include "preprocessor/cad/SisRef.h"
 #include "preprocessor/set_mgmt/Set.h"
-#include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
+
 #include "SisRefCartesianas3d.h"
 
 //! @brief Constructor.

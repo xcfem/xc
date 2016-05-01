@@ -38,9 +38,9 @@
 #include "preprocessor/set_mgmt/SetFilaI.h"
 #include "preprocessor/set_mgmt/SetFilaJ.h"
 #include "preprocessor/set_mgmt/SetFilaK.h"
-#include "xc_utils/src/base/Lista.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
+
 #include "med.h"
 #include "vtkCellType.h"
 
@@ -92,7 +92,7 @@ int XC::EntMdlr::getMEDCellType(void) const
 //! @brief Borra todo el contenido del objeto.
 void XC::EntMdlr::clearAll(void)
   {
-    SetEstruct::clearProps();
+    SetEstruct::clearPyProps();
     BorraPtrNodElem();
   }
 

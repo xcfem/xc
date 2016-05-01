@@ -27,7 +27,7 @@
 //ConvergenceTestNorm.cc
 
 #include <solution/analysis/convergenceTest/ConvergenceTestNorm.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 
 XC::ConvergenceTestNorm::ConvergenceTestNorm(EntCmd *owr,int classTag)	    	

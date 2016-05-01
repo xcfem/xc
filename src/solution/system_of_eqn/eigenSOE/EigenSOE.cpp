@@ -50,9 +50,9 @@
 #include <solution/system_of_eqn/eigenSOE/SymArpackSolver.h>
 #include <solution/system_of_eqn/eigenSOE/SymBandEigenSolver.h>
 #include <solution/system_of_eqn/eigenSOE/FullGenEigenSolver.h>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
+
+
 #include "boost/numeric/ublas/io.hpp"
 #include "boost/numeric/ublas/vector.hpp"
 #include "utility/matrix/Matrix.h"

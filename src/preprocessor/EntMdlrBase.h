@@ -29,7 +29,7 @@
 #ifndef ENTMDLRBASE_H
 #define ENTMDLRBASE_H
 
-#include "xc_utils/src/base/EntConNmb.h"
+#include "xc_utils/src/nucleo/EntConNmb.h"
 #include "xc_basic/src/texto/LabelContainer.h"
 #include "utility/actor/actor/MovableObject.h"
 

@@ -29,7 +29,7 @@
 #include "ZeroLengthMaterials.h"
 #include "domain/mesh/element/zeroLength/ZeroLength.h"
 #include "material/uniaxial/UniaxialMaterial.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/loaders/MaterialLoader.h"
 #include "domain/mesh/node/Node.h"

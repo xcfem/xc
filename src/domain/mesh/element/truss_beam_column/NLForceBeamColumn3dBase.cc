@@ -28,7 +28,7 @@
 
 #include <domain/mesh/element/truss_beam_column/NLForceBeamColumn3dBase.h>
 #include <material/section/SeccionBarraPrismatica.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
 const size_t XC::NLForceBeamColumn3dBase::NDM= 3; //!< dimension of the problem (3d)

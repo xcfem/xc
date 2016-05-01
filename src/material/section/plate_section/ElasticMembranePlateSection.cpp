@@ -55,7 +55,7 @@
 
 
 #include <material/section/plate_section/ElasticMembranePlateSection.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include <cstdio> 
 #include <cstdlib>
 #include <cmath> 

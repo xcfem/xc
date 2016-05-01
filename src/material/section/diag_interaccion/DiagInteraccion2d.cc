@@ -29,10 +29,10 @@
 #include "DiagInteraccion2d.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/base/utils_any.h"
+
 #include "material/section/fiber_section/FiberSectionBase.h"
 #include "material/section/diag_interaccion/DatosDiagInteraccion.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 
 inline double angle(const Pos2d &p)
   {

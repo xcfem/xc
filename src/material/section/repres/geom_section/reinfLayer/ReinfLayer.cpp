@@ -57,8 +57,8 @@
 #include "material/section/repres/geom_section/reinfLayer/ReinfLayer.h"
 #include "material/section/repres/geom_section/reinfBar/VectorReinfBar.h"
 #include "material/section/repres/geom_section/reinfBar/ReinfBar.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "xc_basic/src/matrices/m_double.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
@@ -67,7 +67,7 @@
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 
 #include "material/section/repres/geom_section/GeomSection.h"
 
@@ -123,18 +123,18 @@ XC::Vector XC::ReinfLayer::getCdg(void) const
     return barras.getCdgSeccBruta();
   }
 
-//! @brief Devuelve el subconjunto de barras de ésta que cumplen la condición que se
-//! pasa como parámetro.
-void XC::ReinfLayer::Cumplen(const std::string &cond,ListReinfLayer &retval,bool clear)
-  {
-    if(clear) retval.clear();
-    const VectorReinfBar &barras= getReinfBars();  
+// //! @brief Devuelve el subconjunto de barras de ésta que cumplen la condición que se
+// //! pasa como parámetro.
+// void XC::ReinfLayer::Cumplen(const std::string &cond,ListReinfLayer &retval,bool clear)
+//   {
+//     if(clear) retval.clear();
+//     const VectorReinfBar &barras= getReinfBars();  
 
-    VectorReinfBar::const_iterator i= barras.begin();
-    for(;i!= barras.end();i++)
-      if((*i)->verdadero(cond))
-        retval.push_back(BarraSuelta(**i));
-  }
+//     VectorReinfBar::const_iterator i= barras.begin();
+//     for(;i!= barras.end();i++)
+//       if((*i)->verdadero(cond))
+//         retval.push_back(BarraSuelta(**i));
+//   }
 
 //! @brief Devuelve las barras contenidas total o parcialmente en el polígono.
 void XC::ReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bool clear)

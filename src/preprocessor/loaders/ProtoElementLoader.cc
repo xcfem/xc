@@ -87,7 +87,7 @@
 #include "domain/mesh/element/zeroLength/ZeroLengthContact3D.h"
 
 #include "preprocessor/Preprocessor.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor por defecto.
 XC::ProtoElementLoader::ProtoElementLoader(Preprocessor *preprocessor)

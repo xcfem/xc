@@ -67,6 +67,7 @@
 
 #include "CrdTransf.h"
 
+class Pos2d;
 class Ref2d2d;
 
 namespace XC {

@@ -64,10 +64,10 @@
 #include <cfloat>
 #include "domain/load/beam_loads/BeamMecLoad.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "material/section/ResponseId.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 
 void XC::ForceBeamColumn3d::libera(void)
   {

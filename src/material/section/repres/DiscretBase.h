@@ -30,7 +30,7 @@
 #define DiscretBase_h 
 
 
-#include "xc_utils/src/base/EntConNmb.h"
+#include "xc_utils/src/nucleo/EntConNmb.h"
 
 namespace XC {
   class Material;

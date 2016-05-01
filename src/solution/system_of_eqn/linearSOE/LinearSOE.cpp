@@ -97,7 +97,7 @@
 #include <solution/system_of_eqn/linearSOE/sparseSYM/SymSparseLinSolver.h>
 
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 
 //#include <solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSolver.h>

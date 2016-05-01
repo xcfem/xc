@@ -29,16 +29,16 @@
 #include "TritrizPtrNod.h"
 #include "domain/mesh/node/Node.h"
 #include "xc_basic/src/funciones/algebra/integ_num.h"
-#include "xc_utils/src/base/Lista.h"
+
 #include <boost/any.hpp>
 #include "domain/domain/Domain.h"
 #include "domain/constraints/SP_Constraint.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d2/Poligono3d.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 #include "boost/lexical_cast.hpp"
 
 //! @brief Constructor por defecto.

@@ -32,10 +32,10 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/ElementEdges.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/Lista.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
+
+
+
 
 //! @brief Constructor.
 XC::SetEstruct::SetEstruct(const std::string &nmb,Preprocessor *md)
@@ -145,49 +145,6 @@ void XC::SetEstruct::agrega_elementos(const TritrizPtrElem &elementos)
       for(register size_t j= 1;j<=filas;j++)
         for(register size_t k= 1;k<=cols;k++)
           get_preprocessor()->getElementLoader().Agrega(elementos(i,j,k));
-  }
-
-//! @brief Devuelve un puntero a nodo a partir de los índices que haya en la pila.
-const XC::Node *XC::SetEstruct::get_node_ptr_from_stack(const std::string &cod) const
-  {
-    const Node *retval= nullptr;
-    if(InterpreteRPN::Pila().size()>2)
-      {
-        const size_t c= convert_to_size_t(InterpreteRPN::Pila().Pop());
-        const size_t b= convert_to_size_t(InterpreteRPN::Pila().Pop());
-        const size_t a= convert_to_size_t(InterpreteRPN::Pila().Pop());
-        retval= GetNodo(a,b,c);
-      }
-    else
-      err_num_argumentos(std::cerr,3,"get_node_ptr_from_stack",cod);
-    return retval;
-  }
-
-//! @brief Devuelve un puntero a elemento a partir de los índices que haya en la pila.
-const XC::Element *XC::SetEstruct::get_element_ptr_from_stack(const std::string &cod) const
-  {
-    const Element *retval= nullptr;
-    if(InterpreteRPN::Pila().size()>2)
-      {
-        const size_t c= convert_to_size_t(InterpreteRPN::Pila().Pop());
-        const size_t b= convert_to_size_t(InterpreteRPN::Pila().Pop());
-        const size_t a= convert_to_size_t(InterpreteRPN::Pila().Pop());
-        retval= GetElemento(a,b,c);
-      }
-    else if(InterpreteRPN::Pila().size()>1)
-      {
-        const size_t b= convert_to_size_t(InterpreteRPN::Pila().Pop());
-        const size_t a= convert_to_size_t(InterpreteRPN::Pila().Pop());
-        retval= GetElemento(a,b);
-      }
-    else if(InterpreteRPN::Pila().size()>0)
-      {
-        const size_t a= convert_to_size_t(InterpreteRPN::Pila().Pop());
-        retval= GetElemento(a);
-      }
-    else
-      err_num_argumentos(std::cerr,1,"get_element_ptr_from_stack",cod);
-    return retval;
   }
 
 //! @brief Devuelve los tags de los nodos.

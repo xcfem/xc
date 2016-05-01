@@ -77,7 +77,7 @@ Journal of Structural Engineering, 133(2):155-165.
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include <domain/mesh/node/Node.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
 

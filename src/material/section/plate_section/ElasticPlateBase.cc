@@ -27,7 +27,7 @@
 //ElasticPlateBase.cc
 
 #include <material/section/plate_section/ElasticPlateBase.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/MovableVector.h"
 
 

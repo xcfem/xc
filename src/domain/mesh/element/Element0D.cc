@@ -31,7 +31,7 @@
 #include "preprocessor/cad/matrices/TritrizPtrNod.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 #include "preprocessor/set_mgmt/SetEstruct.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"

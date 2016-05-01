@@ -62,8 +62,8 @@
 
 #include <utility/tagged/TaggedObject.h>
 #include <utility/tagged/storage/ArrayOfTaggedObjects.h>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 
 //! @brief Libera la memoria ocupada por los componentes.
 void XC::ArrayOfTaggedObjects::clearComponents(void)

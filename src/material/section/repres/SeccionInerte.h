@@ -34,6 +34,7 @@
 class Pos2d;
 class Recta2d;
 class EjesPrincInercia2d;
+class Vector2d;
 
 namespace XC {
 class CrossSectionProperties3d;

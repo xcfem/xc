@@ -22,10 +22,10 @@
 //MEDMesh
 
 #include "MEDMesh.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
-#include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/Lista.h"
+
+
+
+
 #include "utility/matrix/Matrix.h"
 
 //! @brief Libera la memoria ocupada.
@@ -105,7 +105,7 @@ size_t XC::MEDMesh::getMeshDimension(void)
   {
     size_t retval= 0;
     if(malla)
-      tmp_gp_szt= malla->getMeshDimension();
+      retval= malla->getMeshDimension();
     else
       std::cerr << "MEDMesh::getMeshDimension(); no se ha leído la malla." << std::endl;
     return retval;

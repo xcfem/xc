@@ -30,7 +30,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "domain/mesh/element/plane/shell/ShellMITC4Base.h"
 #include "domain/mesh/element/plane/shell/ShellNL.h"
 #include "domain/mesh/element/coordTransformation/CrdTransf.h"

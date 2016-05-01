@@ -31,6 +31,9 @@
 
 #include "MapEnt.h"
 
+class Recta3d;
+class Plano3d;
+
 namespace XC {
 
 class UniformGrid;

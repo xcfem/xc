@@ -28,7 +28,7 @@
 
 #include "MaterialLoader.h"
 #include "domain/domain/Domain.h"
-#include "xc_utils/src/base/Lista.h"
+
 
 //Uniaxial material.
 #include "material/uniaxial/BarSlipMaterial.h"
@@ -146,12 +146,6 @@
 #include "material/yieldSurface/plasticHardeningMaterial/ExponReducing.h"
 #include "material/yieldSurface/plasticHardeningMaterial/MultiLinearKp.h"
 #include "material/yieldSurface/plasticHardeningMaterial/NullPlasticMaterial.h"
-
-
-
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
 
 //! @brief Constructor por defecto.
 XC::MaterialLoader::MaterialLoader(Preprocessor *owr)

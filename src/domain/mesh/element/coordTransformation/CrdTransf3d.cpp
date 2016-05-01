@@ -63,7 +63,7 @@
 #include "CrdTransf3d.h"
 #include <utility/matrix/Vector.h>
 #include <domain/mesh/node/Node.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"

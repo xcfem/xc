@@ -98,7 +98,7 @@ class Pnt: public EntMdlr
     bool Toca(const Body &b) const;
     double DistanciaA2(const Pos3d &pt) const;
 
-    void Mueve(const std::vector<ExprAlgebra> &);
+    void Mueve(const Vector3d &);
     void Transforma(const TrfGeom &trf);
     void Transforma(const size_t &indice_trf);
 

@@ -91,7 +91,7 @@ class Set: public SetMeshComp
 
     void clearAll(void);
     void copia_listas(const Set &);
-    void agrega_listas_cond(const Set &,const std::string &);
+    //void agrega_listas_cond(const Set &,const std::string &);
     void crea_copia(const std::string &,const Vector3d &v);
 
     DbTagData &getDbTagData(void) const;
@@ -105,7 +105,7 @@ class Set: public SetMeshComp
     void malla_cuerpos(dir_mallado dm);
     void malla_uniform_grids(dir_mallado dm);
 
-    void mueve(const std::vector<ExprAlgebra> &);
+    void mueve(const Vector3d &);
   public:
     Set(const std::string &nmb="",Preprocessor *preprocessor= NULL);
     Set(const Set &otro);

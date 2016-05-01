@@ -31,6 +31,7 @@
 
 #include "LineaBase.h"
 
+class Segmento3d;
 
 namespace XC {
 

@@ -71,7 +71,7 @@
 #include "domain/load/beam_loads/TrussStrainLoad.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/recorder/response/ElementResponse.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "domain/component/Parameter.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 

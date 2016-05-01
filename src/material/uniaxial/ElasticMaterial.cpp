@@ -65,7 +65,7 @@
 #include <utility/matrix/Vector.h>
 
 #include <domain/mesh/element/Information.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::ElasticMaterial::ElasticMaterial(int tag, double e, double et)

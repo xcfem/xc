@@ -35,7 +35,7 @@
 #include <solution/analysis/handler/ConstraintHandler.h>
 #include <solution/analysis/integrator/eigen/LinearBucklingIntegrator.h>
 #include <domain/domain/Domain.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::LinearBucklingEigenAnalysis::LinearBucklingEigenAnalysis(SoluMethod *metodo)

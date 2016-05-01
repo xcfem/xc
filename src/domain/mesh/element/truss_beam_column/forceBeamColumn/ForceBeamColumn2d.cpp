@@ -99,11 +99,11 @@ Journal of Structural Engineering, Approved for publication, February 2007.
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
 #include <material/section/SeccionBarraPrismatica.h>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 
 void XC::ForceBeamColumn2d::libera(void)
   {

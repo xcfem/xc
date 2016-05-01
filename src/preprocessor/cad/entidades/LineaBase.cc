@@ -32,7 +32,7 @@
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "utility/matrix/util_matrix.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "med.h"

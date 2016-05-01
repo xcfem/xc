@@ -29,7 +29,7 @@
 #include "SisRefSccCartesianas2d.h"
 #include "Spot.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Devuelve el vector unitario en la dirección del eje que se
 //! pasa como parámetro expresado en el sistema global 

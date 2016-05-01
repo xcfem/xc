@@ -101,7 +101,7 @@
 
 #include "preprocessor/Preprocessor.h"
 
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 
@@ -614,8 +614,8 @@ int XC::Domain::commit(void)
     // set the new committed time in the domain
     setCommittedTime(timeTracker.getCurrentTime());
 
-    if(!CallbackCommit.empty())
-      EjecutaBloque(CallbackCommit,"domain:callback_commit");
+    // if(!CallbackCommit.empty())
+    //   EjecutaBloque(CallbackCommit,"domain:callback_commit");
 
     ObjWithRecorders::record(commitTag,timeTracker.getCurrentTime()); //Llama al método record de todos los recorders.
 

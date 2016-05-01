@@ -27,7 +27,7 @@
 //ProtoBeam3d.cc
 
 #include "ProtoBeam3d.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "material/section/elastic_section/BaseElasticSection3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 

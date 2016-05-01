@@ -60,7 +60,7 @@
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
 #include <material/section/repres/geom_section/reinfLayer/CircReinfLayer.h>
 #include "xc_basic/src/util/matem.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::CircReinfLayer::CircReinfLayer(ListReinfLayer *owr,Material *mat)

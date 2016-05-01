@@ -307,7 +307,7 @@ template <class MatrizPtr>
 void TritrizPtrBase<MatrizPtr>::clearAll(void)
   {
     std::vector<MatrizPtr>::clear();
-    EntProp::clearProps();
+    EntCmd::clearPyProps();
   }
 
 

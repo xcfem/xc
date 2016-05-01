@@ -80,18 +80,18 @@ void XC::DqPtrsNode::agrega(const DqPtrsNode &otro)
       push_back(*i);
   }
 
-//! @brief Agrega a ésta lista los elementos de la que se le pasa como parámetro,
-//! si cumplen la condición.
-void XC::DqPtrsNode::agrega_cond(const DqPtrsNode &otro,const std::string &cond)
-  {
-    bool result= false;
-    for(register const_iterator i= otro.begin();i!=otro.end();i++)
-      {
-        result= (*i)->interpretaBool(cond);
-        if(result)
-	  push_back(*i);
-      }
-  }
+// //! @brief Agrega a ésta lista los elementos de la que se le pasa como parámetro,
+// //! si cumplen la condición.
+// void XC::DqPtrsNode::agrega_cond(const DqPtrsNode &otro,const std::string &cond)
+//   {
+//     bool result= false;
+//     for(register const_iterator i= otro.begin();i!=otro.end();i++)
+//       {
+//         result= (*i)->interpretaBool(cond);
+//         if(result)
+// 	  push_back(*i);
+//       }
+//   }
 
 //! @brief Vacía la lista de punteros y elimina las propiedades que pudiera tener el objeto.
 void XC::DqPtrsNode::clearAll(void)
@@ -131,7 +131,7 @@ const XC::Node *XC::DqPtrsNode::getNearestNode(const Pos3d &p) const
   }
 
 //! @brief Desplaza los nodos del conjunto.
-void XC::DqPtrsNode::mueve(const std::vector<ExprAlgebra> &desplaz)
+void XC::DqPtrsNode::mueve(const Vector3d &desplaz)
   {
     for(iterator i= begin();i!=end();i++)
       (*i)->Mueve(desplaz);

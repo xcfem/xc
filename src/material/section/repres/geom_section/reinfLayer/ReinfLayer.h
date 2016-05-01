@@ -60,6 +60,7 @@
 #include <material/section/repres/geom_section/reinfBar/VectorReinfBar.h>
 
 class Semiplano2d;
+class Poligono2d;
 
 namespace XC {
 class ReinfBar;
@@ -96,7 +97,7 @@ class ReinfLayer: public DiscretBase
     virtual const double &getReinfBarArea(void) const;
 
     // reinforcing layer inquiring functions
-    void Cumplen(const std::string &,ListReinfLayer &,bool );
+    //void Cumplen(const std::string &,ListReinfLayer &,bool );
     void getBarrasIn(const Poligono2d &,ListReinfLayer &,bool );
     void getBarrasIn(const Semiplano2d &,ListReinfLayer &,bool );
     

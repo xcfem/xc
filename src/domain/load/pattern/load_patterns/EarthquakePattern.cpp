@@ -64,7 +64,7 @@
 #include "domain/mesh/element/ElementIter.h"
 #include <cstdlib>
 #include <utility/handler/ErrorHandler.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 void XC::EarthquakePattern::libera(void)

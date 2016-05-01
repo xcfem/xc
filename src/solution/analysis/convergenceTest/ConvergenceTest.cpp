@@ -62,16 +62,16 @@
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/EquiSolnAlgo.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "solution/SoluMethod.h"
 
 XC::ConvergenceTest::ConvergenceTest(EntCmd *owr,int clasTag)
-  :MovableObject(clasTag), BloqueBase(owr,""), currentIter(0), maxNumIter(0),
+  :MovableObject(clasTag), EntWOwner(owr), currentIter(0), maxNumIter(0),
    printFlag(0), nType(2), norms(1)
   {}
 
 XC::ConvergenceTest::ConvergenceTest(EntCmd *owr,int clasTag,int maxIter,int prtFlg, int normType, int sz_norms)
-  :MovableObject(clasTag), BloqueBase(owr,""), currentIter(0), maxNumIter(maxIter),
+  :MovableObject(clasTag), EntWOwner(owr), currentIter(0), maxNumIter(maxIter),
    printFlag(prtFlg), nType(normType), norms(sz_norms)
   {}
 

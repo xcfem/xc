@@ -31,7 +31,6 @@
 
 #include "SetEstruct.h"
 #include "xc_utils/src/geom/pos_vec/RangoTritriz.h"
-#include "xc_utils/src/base/any_const_ptr.h"
 
 namespace XC {
 

@@ -38,8 +38,8 @@
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
 
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "xc_utils/src/geom/d2/BND2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
@@ -257,16 +257,16 @@ double XC::ListRegiones::getPyzSeccBruta(void) const
     return retval;
   }
 
-//! Devuelve el subconjunto de regiones de éste que cumplen la condición que se
-//! pasa como parámetro.
-void XC::ListRegiones::Cumplen(const std::string &cond,ListRegiones &retval,bool clear)
-  {
-    if(clear) retval.clear();
-    const_iterator i= begin();
-    for(;i!= end();i++)
-      if((*i)->verdadero(cond))
-        retval.push_back(**i);
-  }
+// //! Devuelve el subconjunto de regiones de éste que cumplen la condición que se
+// //! pasa como parámetro.
+// void XC::ListRegiones::Cumplen(const std::string &cond,ListRegiones &retval,bool clear)
+//   {
+//     if(clear) retval.clear();
+//     const_iterator i= begin();
+//     for(;i!= end();i++)
+//       if((*i)->verdadero(cond))
+//         retval.push_back(**i);
+//   }
 
 
 //! @brief Devuelve el área homogeneizada de las regiones.

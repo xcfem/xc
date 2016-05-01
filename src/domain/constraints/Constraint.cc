@@ -29,7 +29,7 @@
 #include "domain/constraints/Constraint.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/node/Node.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/matrix/ID.h"
 #include "med.h"
 #include "vtkCellType.h"

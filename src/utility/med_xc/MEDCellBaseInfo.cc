@@ -22,7 +22,7 @@
 //MEDCellBaseInfo
 
 #include "MEDCellBaseInfo.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Devuelve el número de elementos.
 size_t XC::MEDCellBaseInfo::getNumeroElementos(void) const

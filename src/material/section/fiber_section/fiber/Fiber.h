@@ -96,8 +96,6 @@ class Fiber: public TaggedObject, public MovableObject
   public:
     Fiber(int tag, int classTag);
 
-    bool interpreta(const std::string &,const int &numValEsperados= -1) const;
-
     virtual int setTrialFiberStrain(const Vector &vs)=0;
     virtual Vector &getFiberStressResultants(void) =0;
     virtual Matrix &getFiberTangentStiffContr(void) =0;

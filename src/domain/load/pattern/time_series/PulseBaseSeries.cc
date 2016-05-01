@@ -32,7 +32,7 @@
 #include <cmath>
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 
 //! @brief Constructor.

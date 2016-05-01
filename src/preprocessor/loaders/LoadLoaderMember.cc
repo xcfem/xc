@@ -28,7 +28,7 @@
 
 #include "LoadLoaderMember.h"
 #include "preprocessor/loaders/LoadLoader.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor por defecto.
 XC::LoadLoaderMember::LoadLoaderMember(LoadLoader *owr)

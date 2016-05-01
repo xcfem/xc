@@ -29,8 +29,8 @@
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf3d.h>
 #include <domain/mesh/element/coordTransformation/CrdTransf3d.h>
 #include "material/section/SeccionBarraPrismatica.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 
 

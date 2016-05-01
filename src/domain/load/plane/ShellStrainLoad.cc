@@ -29,8 +29,8 @@
 #include "ShellStrainLoad.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 
 
 //! @brief Constructor.

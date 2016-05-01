@@ -62,7 +62,7 @@
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
 #include <cmath>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 
 //! @brief Constructor.

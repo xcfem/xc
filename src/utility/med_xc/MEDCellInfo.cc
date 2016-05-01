@@ -22,7 +22,7 @@
 //MEDCellInfo
 
 #include "MEDCellInfo.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "domain/mesh/Mesh.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/ElementIter.h"

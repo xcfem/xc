@@ -29,7 +29,7 @@
 
 #include <solution/analysis/integrator/static/ArcLengthBase.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/CommMetaData.h"
 
 //! @brief Constructor.

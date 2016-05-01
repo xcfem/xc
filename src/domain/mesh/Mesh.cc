@@ -46,11 +46,11 @@
 #include <solution/graph/graph/Vertex.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "domain/mesh/element/NodePtrsWithIDs.h"
 #include <climits>
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/base/utils_any.h"
+
 #include "utility/actor/actor/MovableVector.h"
 
 //! @brief Libera la memoria ocupada por los objetos de la malla.

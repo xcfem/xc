@@ -37,6 +37,8 @@
 #include <set>
 
 class Pos3d;
+class SVD3d;
+class Plano3d;
 
 namespace XC {
 class TrfGeom;
@@ -97,7 +99,7 @@ class SetMeshComp: public SetBase
 
     void calc_resisting_force(void);
 
-    void mueve(const std::vector<ExprAlgebra> &);
+    void mueve(const Vector3d &);
   public:
     SetMeshComp(const std::string &nmb="",Preprocessor *preprocessor= NULL);
     SetMeshComp(const SetMeshComp &otro);

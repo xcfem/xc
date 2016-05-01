@@ -27,7 +27,7 @@
 //NewmarkBase2.cpp
 
 #include <solution/analysis/integrator/transient/newmark/NewmarkBase2.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::NewmarkBase2::NewmarkBase2(SoluMethod *owr,int classTag)

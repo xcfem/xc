@@ -63,7 +63,7 @@
 #ifndef Vector_h
 #define Vector_h 
 
-#include "xc_utils/src/base/CmdVectorBase.h"
+#include "xc_utils/src/nucleo/EntCmd.h"
 #include "xc_basic/src/matrices/m_double.h"
 
 class Vector2d;
@@ -76,7 +76,7 @@ class Matrix;
 class Message;
 class SystemOfEqn;
 
-class Vector: public CmdVectorBase
+class Vector: public EntCmd
   {
   private:
     static double VECTOR_NOT_VALID_ENTRY;
@@ -98,7 +98,7 @@ class Vector: public CmdVectorBase
     Vector(const Vector &);    
     Vector(double *data, int size);
     Vector(const boost::python::list &);
-    ~Vector(void);
+    virtual ~Vector(void);
 
     // utility methods
     int setData(double *newData, int size);
@@ -106,7 +106,7 @@ class Vector: public CmdVectorBase
     double *getDataPtr(void);
     bool Nulo(void) const;
     int Assemble(const Vector &V, const ID &l, double fact = 1.0);
-    void from_string(const std::string &str);
+    //void from_string(const std::string &str);
     double Norm2(void) const;
     double Norm(void) const;
     double pNorm(int p) const;
@@ -190,8 +190,8 @@ class Vector: public CmdVectorBase
 
 std::vector<double> vector_to_std_vector(const Vector &);
 m_double vector_to_m_double(const Vector &);
-Vector interpreta_xc_vector(const std::string &str);
-Vector convert_to_vector(const boost::any &);
+//Vector interpreta_xc_vector(const std::string &str);
+//Vector convert_to_vector(const boost::any &);
 
 double dot(const Vector &a,const Vector &b);
 Matrix prod_tensor(const Vector &,const Vector &);

@@ -27,6 +27,7 @@
 //KDTreePos.cc
 
 #include "KDTreePos.h"
+#include "xc_basic/src/util/matem.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 
 //! @brief Constructor.

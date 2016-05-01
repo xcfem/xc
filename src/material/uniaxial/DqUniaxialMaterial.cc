@@ -29,7 +29,7 @@
 #include "DqUniaxialMaterial.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/MovableID.h"
@@ -147,7 +147,7 @@ void XC::DqUniaxialMaterial::clear(void)
 void XC::DqUniaxialMaterial::clearAll(void)
   {
     clear();
-    EntCmd::clearProps();
+    EntCmd::clearPyProps();
   }
 
 //! @brief Consuma el estado de los materiales tras alcanzar la convergencia.

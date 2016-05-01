@@ -61,7 +61,7 @@
 // to test the convergence of an algorithm. 
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/base/BloqueBase.h"
+#include "xc_utils/src/nucleo/EntWOwner.h"
 #include "utility/matrix/Vector.h"
 #include "solution/system_of_eqn/linearSOE/LinearSOE.h"
 
@@ -72,7 +72,7 @@ class SoluMethod;
 //! @ingroup CTest
 //
 //! @brief Test de convergencia.
-class ConvergenceTest: public MovableObject, public BloqueBase
+class ConvergenceTest: public MovableObject, public EntWOwner
   {
     SoluMethod *getSoluMethod(void);
     const SoluMethod *getSoluMethod(void) const;

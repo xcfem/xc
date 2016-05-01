@@ -29,7 +29,7 @@
 #include "TrussStrainLoad.h"
 #include <utility/matrix/Vector.h>
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/MovableVector.h"
 
 XC::TrussStrainLoad::TrussStrainLoad(int tag,const double &t1, const double &t2,const ID &theElementTags)

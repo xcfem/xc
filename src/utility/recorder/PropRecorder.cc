@@ -28,8 +28,8 @@
 
 #include <utility/recorder/PropRecorder.h>
 #include <domain/domain/Domain.h>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "xc_basic/src/texto/cadena_carac.h"
 
 //! @brief Constructor.

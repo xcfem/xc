@@ -34,7 +34,7 @@
 #include "MatrizPtrPnt.h"
 #include "TritrizPtrBase.h"
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/base/Lista.h"
+
 #include "xc_basic/src/matrices/TritrizIndices.h"
 
 class ExprAlgebra;

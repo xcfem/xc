@@ -194,11 +194,11 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
 
     Response *setResponse(const std::vector<std::string> &argv, Information &sectInfo);
 
-    void Cumplen(const std::string &cond,DqFibras &,bool clear= true);
+    //void Cumplen(const std::string &cond,DqFibras &,bool clear= true);
     void SelMatTag(const int &matTag,DqFibras &,bool clear= true);
 
-    size_t IMaxProp(const std::string &nmb_prop) const;
-    size_t IMinProp(const std::string &nmb_prop) const;
+    //size_t IMaxProp(const std::string &nmb_prop) const;
+    //size_t IMinProp(const std::string &nmb_prop) const;
     size_t getFibraCooMax(const Ref3d3d &r,const size_t &iCoo) const;
     size_t getFibraCooMin(const Ref3d3d &r,const size_t &iCoo) const;
 

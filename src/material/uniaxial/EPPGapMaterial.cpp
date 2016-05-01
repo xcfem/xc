@@ -66,7 +66,7 @@
 
 #include <cmath>
 #include <cfloat>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 
 //! @brief Constructor.

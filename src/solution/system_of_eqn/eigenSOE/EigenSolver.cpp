@@ -41,8 +41,8 @@
 
 
 #include <solution/system_of_eqn/eigenSOE/EigenSolver.h>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 

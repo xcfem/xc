@@ -64,16 +64,12 @@
 #include "Fiber.h"
 #include "boost/any.hpp"
 #include "material/uniaxial/UniaxialMaterial.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 
 //! @brief constructor.
 XC::Fiber::Fiber(int tag, int classTag)
   : TaggedObject(tag), MovableObject(classTag), dead(false) {}
-
-//! @brief Interpreta una cadena de caracteres y coloca los resultados en la pila.
-bool XC::Fiber::interpreta(const std::string &str,const int &numValEsperados) const
-  { return EntCmd::interpreta(str,numValEsperados); }
 
 XC::Response *XC::Fiber::setResponse(const std::vector<std::string> &argv, Information &info)
   { return nullptr; }

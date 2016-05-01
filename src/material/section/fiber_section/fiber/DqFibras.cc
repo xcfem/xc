@@ -37,9 +37,7 @@
 #include "material/section/repres/geom_section/GeomSection.h"
 #include "xc_utils/src/nucleo/CmdParser.h"
 #include "material/uniaxial/UniaxialMaterial.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
 #include <domain/mesh/element/Information.h>
 #include <utility/matrix/Vector.h>
 #include "xc_utils/src/geom/sis_ref/Ref3d3d.h"
@@ -54,7 +52,7 @@
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
 #include "xc_utils/src/geom/listas/utils_list_pos2d.h"
 #include "material/section/diag_interaccion/PlanoDeformacion.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 
 //! @brief Constructor.
 XC::DqFibras::DqFibras(const size_t &num)
@@ -941,22 +939,22 @@ size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
     return retval;
   }
 
-//! Devuelve el subconjunto de fibras de éste que cumplen la condición que se
-//! pasa como parámetro.
-void XC::DqFibras::Cumplen(const std::string &cond,DqFibras &retval,bool clear)
-  {
-    if(clear) retval.clear();
-    std::deque<Fiber *>::iterator i= begin();
-    for(;i!= end();i++)
-      if(*i)
-        {
-          if((*i)->verdadero(cond))
-            retval.push_back(*i);
-        }
-      else
-        std::cerr << "DqFibras::Cumplen; Puntero a fibra nulo." << std::endl;
-    retval.updateCDG();
-  }
+// //! Devuelve el subconjunto de fibras de éste que cumplen la condición que se
+// //! pasa como parámetro.
+// void XC::DqFibras::Cumplen(const std::string &cond,DqFibras &retval,bool clear)
+//   {
+//     if(clear) retval.clear();
+//     std::deque<Fiber *>::iterator i= begin();
+//     for(;i!= end();i++)
+//       if(*i)
+//         {
+//           if((*i)->verdadero(cond))
+//             retval.push_back(*i);
+//         }
+//       else
+//         std::cerr << "DqFibras::Cumplen; Puntero a fibra nulo." << std::endl;
+//     retval.updateCDG();
+//   }
 
 //! Devuelve el subconjunto de fibras de éste cuyo material tiene por tag el que se
 //! pasa como parámetro.
@@ -2084,89 +2082,89 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
       return 0;
   }
 
-//! Devuelve el valor máximo en el conjunto de fibras de la propiedad que se
-//! pasa como parámetro.
-size_t XC::DqFibras::IMaxProp(const std::string &nmb_prop) const
-  {
-    size_t retval= 0;
-    double vmax= 0.0;
-    const size_t nf= getNumFibers();
-    if(nf<1)
-      {
-        std::cerr << "DqFibras::IMaxProp; No hay fibras definidas." << std::endl;
-        return retval;
-      }
-    register size_t i= 0;
-    (*this)[i]->interpreta(nmb_prop);
-    boost::any valor_prop= InterpreteRPN::Pila().Pop();
-    if(boost_any_is_number(valor_prop))
-      {
-        vmax= convert_to_double(valor_prop);
-        retval= i;
-      }
-    i++;
-    double tmp= vmax;
-    for(;i<nf;i++)
-      if((*this)[i])
-        {
-          (*this)[i]->interpreta(nmb_prop);
-          boost::any valor_prop= InterpreteRPN::Pila().Pop();
-          if(boost_any_is_number(valor_prop))
-            {
-              tmp= convert_to_double(valor_prop);
-              if(tmp>vmax)
-                {
-                  retval= i;
-                  vmax= tmp;
-                }
-            }
-        }
-      else
-        std::cerr << "DqFibras::IMaxProp; Puntero a fibra nulo." << std::endl;
-    return retval;
-  }
+// //! Devuelve el valor máximo en el conjunto de fibras de la propiedad que se
+// //! pasa como parámetro.
+// size_t XC::DqFibras::IMaxProp(const std::string &nmb_prop) const
+//   {
+//     size_t retval= 0;
+//     double vmax= 0.0;
+//     const size_t nf= getNumFibers();
+//     if(nf<1)
+//       {
+//         std::cerr << "DqFibras::IMaxProp; No hay fibras definidas." << std::endl;
+//         return retval;
+//       }
+//     register size_t i= 0;
+//     (*this)[i]->interpreta(nmb_prop);
+//     boost::any valor_prop= InterpreteRPN::Pila().Pop();
+//     if(boost_any_is_number(valor_prop))
+//       {
+//         vmax= convert_to_double(valor_prop);
+//         retval= i;
+//       }
+//     i++;
+//     double tmp= vmax;
+//     for(;i<nf;i++)
+//       if((*this)[i])
+//         {
+//           (*this)[i]->interpreta(nmb_prop);
+//           boost::any valor_prop= InterpreteRPN::Pila().Pop();
+//           if(boost_any_is_number(valor_prop))
+//             {
+//               tmp= convert_to_double(valor_prop);
+//               if(tmp>vmax)
+//                 {
+//                   retval= i;
+//                   vmax= tmp;
+//                 }
+//             }
+//         }
+//       else
+//         std::cerr << "DqFibras::IMaxProp; Puntero a fibra nulo." << std::endl;
+//     return retval;
+//   }
 
-//! Devuelve el indice de la fibra que presenta el valor mínimo
-//! en el conjunto de fibras de la propiedad que se pasa como parámetro.
-size_t XC::DqFibras::IMinProp(const std::string &nmb_prop) const
-  {
-    size_t retval= 0;
-    double vmin= 0.0;
-    const size_t nf= getNumFibers();
-    if(nf<1)
-      {
-        std::cerr << "DqFibras::IMinProp; No hay fibras definidas." << std::endl;
-        return retval;
-      }
-    register size_t i= 0;
-    (*this)[i]->interpreta(nmb_prop);
-    boost::any valor_prop= InterpreteRPN::Pila().Pop();
-    if(boost_any_is_number(valor_prop))
-      {
-        vmin= convert_to_double(valor_prop);
-        retval= i;
-      }
-    i++;
-    double tmp= vmin;
-    for(;i<nf;i++)
-      if((*this)[i])
-        {
-          (*this)[i]->interpreta(nmb_prop);
-          valor_prop= InterpreteRPN::Pila().Pop();
-          if(boost_any_is_number(valor_prop))
-            {
-              tmp= convert_to_double(valor_prop);
-              if(tmp<vmin)
-                {
-                  retval= i;
-                  vmin= tmp;
-                }
-            }
-        }
-      else
-        std::cerr << "DqFibras::IMinProp; Puntero a fibra nulo." << std::endl;
-    return retval;
-  }
+// //! Devuelve el indice de la fibra que presenta el valor mínimo
+// //! en el conjunto de fibras de la propiedad que se pasa como parámetro.
+// size_t XC::DqFibras::IMinProp(const std::string &nmb_prop) const
+//   {
+//     size_t retval= 0;
+//     double vmin= 0.0;
+//     const size_t nf= getNumFibers();
+//     if(nf<1)
+//       {
+//         std::cerr << "DqFibras::IMinProp; No hay fibras definidas." << std::endl;
+//         return retval;
+//       }
+//     register size_t i= 0;
+//     (*this)[i]->interpreta(nmb_prop);
+//     boost::any valor_prop= InterpreteRPN::Pila().Pop();
+//     if(boost_any_is_number(valor_prop))
+//       {
+//         vmin= convert_to_double(valor_prop);
+//         retval= i;
+//       }
+//     i++;
+//     double tmp= vmin;
+//     for(;i<nf;i++)
+//       if((*this)[i])
+//         {
+//           (*this)[i]->interpreta(nmb_prop);
+//           valor_prop= InterpreteRPN::Pila().Pop();
+//           if(boost_any_is_number(valor_prop))
+//             {
+//               tmp= convert_to_double(valor_prop);
+//               if(tmp<vmin)
+//                 {
+//                   retval= i;
+//                   vmin= tmp;
+//                 }
+//             }
+//         }
+//       else
+//         std::cerr << "DqFibras::IMinProp; Puntero a fibra nulo." << std::endl;
+//     return retval;
+//   }
 
 //! @brief Devuelve el índice de la fibra cuya coordenada iCoo respecto al sistema
 //! de referencia que se pasa como parámetro es máxima.

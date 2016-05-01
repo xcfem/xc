@@ -27,7 +27,7 @@
 //DefAgotPivotes.cc
 
 #include "DefAgotPivotes.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 XC::DefAgotPivotes::DefAgotPivotes(const double &eA,const double &eB,const double &eC)
  : eps_agot_A(eA), eps_agot_B(eB), eps_agot_C(eC) {}

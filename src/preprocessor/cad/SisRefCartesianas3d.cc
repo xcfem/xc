@@ -30,7 +30,7 @@
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 

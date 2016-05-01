@@ -34,8 +34,8 @@
 
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "preprocessor/set_mgmt/Set.h"
-#include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
+
 
 //! @brief Constructor.
 XC::MapEsquemas3d::MapEsquemas3d(Cad *cad)

@@ -27,7 +27,7 @@
 //DatosDiagInteraccion.cc
 
 #include "DatosDiagInteraccion.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 XC::DatosDiagInteraccion::DatosDiagInteraccion(void)
   : umbral(10), inc_eps(0.0), inc_t(M_PI/4), agot_pivotes(),

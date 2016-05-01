@@ -36,8 +36,8 @@
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "boost/any.hpp"
 #include "domain/mesh/element/Element.h"
 
@@ -453,25 +453,6 @@ void XC::Edge::Malla(dir_mallado dm)
     crea_elementos(dm);
     if(verborrea>3)
       std::clog << "hecho." << std::endl;
-  }
-
-
-//! @brief Devuelve un puntero a nodo a partir de los índices que haya en la pila.
-const XC::Node *XC::Edge::get_node_ptr_from_stack(const std::string &cod) const
-  {
-    const Node *retval= nullptr;
-    const size_t a= popSize_t(cod);
-    retval= GetNodo(a);
-    return retval;
-  }
-
-//! @brief Devuelve un puntero a elemento a partir de los índices que haya en la pila.
-const XC::Element *XC::Edge::get_element_ptr_from_stack(const std::string &cod) const
-  {
-    const Element *retval= nullptr;
-    const size_t a= popSize_t(cod);
-    retval= GetElemento(a);
-    return retval;
   }
 
 //! @brief Devuelve un vector tangente a la línea en el punto s

@@ -72,7 +72,7 @@
 #include <cstring>
 
 #include <utility/recorder/response/ElementResponse.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/loaders/MaterialLoader.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"

@@ -33,7 +33,7 @@
 #include <domain/mesh/element/Information.h>
 #include <cmath>
 #include <cfloat>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::ConcreteBase::ConcreteBase(int tag, int classTag, double FPC, double EPSC0, double EPSCU)

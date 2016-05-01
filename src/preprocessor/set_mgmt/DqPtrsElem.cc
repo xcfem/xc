@@ -80,18 +80,18 @@ void XC::DqPtrsElem::agrega(const DqPtrsElem &otro)
       push_back(*i);
   }
 
-//! @brief Agrega a ésta lista los elementos de la que se le pasa como parámetro,
-//! si cumplen la condición.
-void XC::DqPtrsElem::agrega_cond(const DqPtrsElem &otro,const std::string &cond)
-  {
-    bool result= false;
-    for(register const_iterator i= otro.begin();i!=otro.end();i++)
-      {
-        result= (*i)->interpretaBool(cond);
-        if(result)
-	  push_back(*i);
-      }
-  }
+// //! @brief Agrega a ésta lista los elementos de la que se le pasa como parámetro,
+// //! si cumplen la condición.
+// void XC::DqPtrsElem::agrega_cond(const DqPtrsElem &otro,const std::string &cond)
+//   {
+//     bool result= false;
+//     for(register const_iterator i= otro.begin();i!=otro.end();i++)
+//       {
+//         result= (*i)->interpretaBool(cond);
+//         if(result)
+// 	  push_back(*i);
+//       }
+//   }
 
 //! @brief Vacía la lista de punteros y elimina las propiedades que pudiera tener el objeto.
 void XC::DqPtrsElem::clearAll(void)

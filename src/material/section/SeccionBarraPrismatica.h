@@ -35,6 +35,9 @@ class EjesPrincInercia2d;
 #include "material/section/SectionForceDeformation.h"
 
 class Semiplano2d;
+class Recta2d;
+class Pos2d;
+class Vector2d;
 
 namespace XC {
 
@@ -51,7 +54,6 @@ class PlanoDeformacion;
 //! Representa las ecuaciones consititutivas de la sección.
 class SeccionBarraPrismatica: public SectionForceDeformation
   {
-  protected:
   public:
     SeccionBarraPrismatica(int tag,int classTag,MaterialLoader *mat_ldr= NULL);
     SeccionBarraPrismatica(const SeccionBarraPrismatica &otro);

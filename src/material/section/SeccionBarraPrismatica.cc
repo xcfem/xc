@@ -34,8 +34,8 @@
 #include <utility/matrix/Vector.h>
 #include <utility/recorder/response/MaterialResponse.h>
 #include <deque>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "material/section/ResponseId.h"
 #include "preprocessor/loaders/MaterialLoader.h"
 #include "material/section/diag_interaccion/DiagInteraccion.h"

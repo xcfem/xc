@@ -64,7 +64,7 @@
 #include "domain/component/Parameter.h"
 #include <utility/matrix/Vector.h>
 #include <domain/mesh/element/Information.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 XC::ENTMaterial::ENTMaterial(int tag, const double &e,const double &A,const double &B)
   :ElasticBaseMaterial(tag,MAT_TAG_ENTMaterial,e), a(A), b(B), parameterID(0) {}

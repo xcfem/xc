@@ -31,7 +31,6 @@
 
 #include "preprocessor/cad/MapCadMemberBase.h"
 #include <map>
-#include "xc_utils/src/base/any_const_ptr.h"
 #include "boost/python/list.hpp"
 
 namespace XC {

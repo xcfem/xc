@@ -59,7 +59,7 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/LineSearch.h>
 #include <utility/matrix/Vector.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 XC::LineSearch::LineSearch(int clasTag,const double &tol, const int &mi,const double &mneta,const double &mxeta,const int &flag)
   :MovableObject(clasTag), tolerance(tol), maxIter(mi), minEta(mneta), maxEta(mxeta),printFlag(flag) {}

@@ -34,7 +34,7 @@
 #include <domain/mesh/node/Node.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include <utility/matrix/ID.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.

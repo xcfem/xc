@@ -34,6 +34,7 @@
 #include "DqPtrs.h"
 #include "domain/mesh/node/KDTreeNodes.h"
 
+class Vector3d;
 class ExprAlgebra;
 
 namespace XC {
@@ -61,7 +62,7 @@ class DqPtrsNode: public DqPtrs<Node>
     explicit DqPtrsNode(const std::set<const Node *> &ts);
     DqPtrsNode &operator=(const DqPtrsNode &otro);
     void agrega(const DqPtrsNode &otro);
-    void agrega_cond(const DqPtrsNode &otro,const std::string &cond);
+    //void agrega_cond(const DqPtrsNode &otro,const std::string &cond);
     bool push_back(Node *);
     bool push_front(Node *);
     void clearAll(void);
@@ -73,7 +74,7 @@ class DqPtrsNode: public DqPtrs<Node>
       { return DqPtrs<Node>::begin(); }
     inline const_iterator end(void) const
       { return DqPtrs<Node>::end(); }
-    void mueve(const std::vector<ExprAlgebra> &);
+    void mueve(const Vector3d &);
     void transforma(const TrfGeom &trf);
 
     size_t getNumLiveNodes(void) const;

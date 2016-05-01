@@ -28,7 +28,7 @@
 
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf2d.h>
 #include <domain/mesh/element/coordTransformation/CrdTransf2d.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Asigna la transformación de coordenadas.
 void XC::BeamColumnWithSectionFDTrf2d::set_transf(const CrdTransf *trf)

@@ -29,7 +29,7 @@
 #include <domain/mesh/node/NodeDispVectors.h>
 #include <utility/tagged/TaggedObject.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 
 void XC::NodeDispVectors::libera(void)

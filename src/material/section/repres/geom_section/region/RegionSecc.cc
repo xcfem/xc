@@ -32,7 +32,7 @@
 #include "RgSccPoligono.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include "xc_utils/src/geom/pos_vec/Dir2d.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include "xc_utils/src/geom/matriz_FT.h"

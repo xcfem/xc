@@ -31,17 +31,16 @@
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "domain/domain/Domain.h"
 #include "domain/constraints/SP_Constraint.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 #include "preprocessor/cad/Cad.h"
-#include "xc_utils/src/base/Record.h"
 #include "xc_basic/src/matrices/RangoMatriz.h"
-#include "xc_utils/src/nucleo/aux_any.h"
+
 
 
 void XC::MatrizPtrPnt::setPnt(const size_t &j,const size_t &k,const int &id_punto)

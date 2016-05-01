@@ -27,7 +27,7 @@
 //ProtoBeam2d.cc
 
 #include "ProtoBeam2d.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/MovableVector.h"
 #include "material/section/elastic_section/BaseElasticSection2d.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"

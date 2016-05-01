@@ -33,7 +33,6 @@
 #include "domain/mesh/element/coordTransformation/PDeltaCrdTransf3d.h"
 #include "domain/mesh/element/coordTransformation/CorotCrdTransf2d.h"
 #include "domain/mesh/element/coordTransformation/CorotCrdTransf3d.h"
-#include "xc_utils/src/base/utils_any.h"
 #include "boost/any.hpp"
 
 //! @brief Libera la memoria ocupada por las transformaciones de coordenadas.

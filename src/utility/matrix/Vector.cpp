@@ -66,8 +66,8 @@
 
 #include <cstdlib>
 #include <cmath>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 
@@ -1243,30 +1243,30 @@ m_double XC::vector_to_m_double(const XC::Vector &v)
     return retval;
   }
 
-//! @brief Convierte en vector la cadena de caracteres que se pasa como parámetro.
-void XC::Vector::from_string(const std::string &str)
-  {
-    std::vector<double> tmp= crea_vector_double(str);
-    const int nc=tmp.size(); //No. de valores leídos.
-    resize(nc);
-    for(register int i= 0;i<nc;i++)
-      theData[i]= tmp[i];
-  }
+// //! @brief Convierte en vector la cadena de caracteres que se pasa como parámetro.
+// void XC::Vector::from_string(const std::string &str)
+//   {
+//     std::vector<double> tmp= crea_vector_double(str);
+//     const int nc=tmp.size(); //No. de valores leídos.
+//     resize(nc);
+//     for(register int i= 0;i<nc;i++)
+//       theData[i]= tmp[i];
+//   }
 
-XC::Vector XC::interpreta_xc_vector(const std::string &str)
-  {
-    Vector retval(1);
-    retval.from_string(str);
-    return retval;
-  }
+// XC::Vector XC::interpreta_xc_vector(const std::string &str)
+//   {
+//     Vector retval(1);
+//     retval.from_string(str);
+//     return retval;
+//   }
 
-//! @brief Intenta, por todos los medios, convertir el argumento en un vector.
-XC::Vector XC::convert_to_vector(const boost::any &operand)
-  {
-    const std::vector<double> tmp= convert_to_vector_double(operand);
-    const size_t sz= tmp.size();
-    XC::Vector retval(sz);
-    for(size_t i= 0;i<sz;i++)
-      retval[i]= tmp[i];
-    return retval;
-  }
+// //! @brief Intenta, por todos los medios, convertir el argumento en un vector.
+// XC::Vector XC::convert_to_vector(const boost::any &operand)
+//   {
+//     const std::vector<double> tmp= convert_to_vector_double(operand);
+//     const size_t sz= tmp.size();
+//     XC::Vector retval(sz);
+//     for(size_t i= 0;i<sz;i++)
+//       retval[i]= tmp[i];
+//     return retval;
+//   }

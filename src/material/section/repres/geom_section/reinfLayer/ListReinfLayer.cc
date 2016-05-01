@@ -146,15 +146,15 @@ size_t XC::ListReinfLayer::getNumReinfBars(void) const
     return nbars;
   }
 
-//! Devuelve el subconjunto de barras de ésta que cumplen la condición que se
-//! pasa como parámetro.
-void XC::ListReinfLayer::Cumplen(const std::string &cond,ListReinfLayer &retval,bool clear)
-  {
-    if(clear) retval.clear();
-    const_iterator i= begin();
-    for(;i!= end();i++)
-      (*i)->Cumplen(cond,retval,false);
-  }
+// //! Devuelve el subconjunto de barras de ésta que cumplen la condición que se
+// //! pasa como parámetro.
+// void XC::ListReinfLayer::Cumplen(const std::string &cond,ListReinfLayer &retval,bool clear)
+//   {
+//     if(clear) retval.clear();
+//     const_iterator i= begin();
+//     for(;i!= end();i++)
+//       (*i)->Cumplen(cond,retval,false);
+//   }
 
 //! Devuelve el subconjunto de barras cuyo centro esta contenido en el polígono.
 void XC::ListReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bool clear)

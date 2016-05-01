@@ -31,9 +31,6 @@
 #include "MEDGaussModel.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "domain/mesh/element/Element.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
-#include "xc_utils/src/base/utils_any.h"
 
 namespace XC {
 class Set;

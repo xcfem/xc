@@ -30,7 +30,7 @@
 #include "GeomSection.h"
 #include "Spot.h"
 #include "Eje.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "med.h"
 #include "vtkCellType.h"
 

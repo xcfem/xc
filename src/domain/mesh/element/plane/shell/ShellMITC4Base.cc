@@ -64,7 +64,7 @@
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MovableVectors.h"
 
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "xc_utils/src/geom/d2/Poligono3d.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"

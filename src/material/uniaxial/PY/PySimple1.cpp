@@ -51,7 +51,7 @@
 #include "material/uniaxial/PY/PySimple1.h"
 #include <utility/matrix/Vector.h>
 
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 // Controls on internal iteration between spring components
 const int PYmaxIterations = 20;

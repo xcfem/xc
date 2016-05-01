@@ -50,7 +50,7 @@
 #include <utility/matrix/Vector.h>
 
 #include <cmath>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 // Controls on internal iteration between spring components
 const int TZmaxIterations= 20;

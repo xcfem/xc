@@ -32,7 +32,7 @@
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
 //#include "boost/any.hpp"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::BandArpackppSOE::BandArpackppSOE(SoluMethod *owr,const double &shift)

@@ -35,8 +35,8 @@
 #include "preprocessor/cad/entidades/Face.h"
 #include "preprocessor/cad/entidades/SupCuadrilatera.h"
 #include "preprocessor/set_mgmt/Set.h"
-#include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
+
 
 //! @brief Constructor.
 XC::MapSuperficies::MapSuperficies(Cad *cad)

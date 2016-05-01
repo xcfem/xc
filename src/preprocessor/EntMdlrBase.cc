@@ -30,7 +30,7 @@
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "preprocessor/cad/entidades/Edge.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/MovableID.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/MovableString.h"

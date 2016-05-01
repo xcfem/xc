@@ -35,7 +35,7 @@
 #include "utility/matrix/ID.h"
 #include "domain/mesh/element/NodePtrs.h"
 #include "domain/mesh/element/plane/shell/R3vectors.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor por defecto
 XC::ShellCorotCrdTransf3d::ShellCorotCrdTransf3d(void)

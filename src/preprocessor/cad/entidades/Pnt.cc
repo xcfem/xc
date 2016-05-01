@@ -39,7 +39,7 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "preprocessor/cad/SisRef.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::Pnt::Pnt(Preprocessor *m,const Pos3d &pto)
@@ -217,14 +217,9 @@ void XC::Pnt::add_to_sets(std::set<SetBase *> &sets)
   }
 
 //! @brief Desplaza la posición del punto (sólo esta previsto que se use desde Set).
-void XC::Pnt::Mueve(const std::vector<ExprAlgebra> &desplaz)
+void XC::Pnt::Mueve(const Vector3d &desplaz)
   {
-    Vector3d d(0,0,0);
-    const size_t sz= desplaz.size();
-    if(sz>0) d.SetX(desplaz[0].ToNum());
-    if(sz>1) d.SetY(desplaz[1].ToNum());
-    if(sz>2) d.SetZ(desplaz[2].ToNum());
-    p+=d;
+    p+=desplaz;
     return;
   }
 

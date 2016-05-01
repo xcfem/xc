@@ -30,9 +30,11 @@
 #define NodePtrs_h
 
 #include "xc_utils/src/nucleo/EntCmd.h"
+#include <list>
 
 class Pos3d;
 class SemiEspacio3d;
+class Plano3d;
 
 namespace XC {
 class Element;

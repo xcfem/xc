@@ -50,7 +50,7 @@
 #include "material/uniaxial/PY/QzSimple1.h"
 #include <utility/matrix/Vector.h>
 
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 // Controls on internal iterations between spring components
 const int QZmaxIterations= 20;

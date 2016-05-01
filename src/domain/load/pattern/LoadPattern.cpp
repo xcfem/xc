@@ -71,7 +71,7 @@
 #include <domain/load/NodalLoad.h>
 #include "domain/load/elem_load.h"
 
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 #include "preprocessor/loaders/LoadLoader.h"

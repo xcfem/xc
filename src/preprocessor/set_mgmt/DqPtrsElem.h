@@ -65,7 +65,7 @@ class DqPtrsElem: public DqPtrs<Element>
     explicit DqPtrsElem(const std::set<const Element *> &ts);
     DqPtrsElem &operator=(const DqPtrsElem &otro);
     void agrega(const DqPtrsElem &otro);
-    void agrega_cond(const DqPtrsElem &otro,const std::string &cond);
+    //void agrega_cond(const DqPtrsElem &otro,const std::string &cond);
     bool push_back(Element *);
     bool push_front(Element *);
     void clearAll(void);

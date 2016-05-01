@@ -31,7 +31,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "boost/any.hpp"
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "domain/mesh/element/fvectors/FVector.h"
 
 XC::Vector XC::ElementEdge2dUniformLoad::data(2);

@@ -32,7 +32,7 @@
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include <map>
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 
 namespace XC {
 template<class T>

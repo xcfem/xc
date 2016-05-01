@@ -56,10 +56,10 @@
 
 #include "domain/domain/Domain.h"
 
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "utility/actor/actor/MovableMap.h"
-#include "xc_utils/src/base/Lista.h"
+
 
 
 //! @brief Constructor por defecto.

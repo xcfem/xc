@@ -63,8 +63,8 @@
 #include "preprocessor/loaders/MaterialLoader.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "material/section/ResponseId.h"
 
 XC::Vector XC::ElasticSection3d::s(4);

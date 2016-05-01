@@ -149,9 +149,9 @@ class FiberSectionBase: public SeccionBarraPrismatica
     
     inline FiberSets &getFiberSets(void)
       { return sets_fibras; }
-    set_fibras_iterator sel(const std::string &nmb_set,const std::string &cond);
+    //set_fibras_iterator sel(const std::string &nmb_set,const std::string &cond);
     set_fibras_iterator sel_mat_tag(const std::string &nmb_set,const int &matTag);
-    set_fibras_iterator resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond);
+    //set_fibras_iterator resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond);
     set_fibras_iterator resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag);
     inline virtual double getCdgY(void) const
       { return fibras.getYCdg(); }

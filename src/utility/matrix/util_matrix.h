@@ -30,15 +30,10 @@
 
 #include "xc_basic/src/matrices/m_double.h"
 
-class any_const_ptr;
-
 namespace XC {
 
 class Matrix;
 class Vector;
-
-  any_const_ptr vector_to_prop_vector(const Vector *ptrVector);
-  any_const_ptr vector_to_prop_vector(const Vector &ptrVector);
 
   m_double Vector_to_m_double(const Vector &);
 

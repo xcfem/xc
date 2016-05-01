@@ -41,7 +41,7 @@
 #include <solution/graph/graph/Graph.h>
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::BandArpackSOE::BandArpackSOE(SoluMethod *owr, double theShift)

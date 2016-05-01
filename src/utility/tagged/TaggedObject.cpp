@@ -66,7 +66,7 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "boost/lexical_cast.hpp"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::TaggedObject::TaggedObject(int tag,EntCmd *owr)

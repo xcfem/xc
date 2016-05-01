@@ -47,8 +47,6 @@ class SetEstruct: public SetBase
   protected:
     friend class Preprocessor;
     void agrega_elementos(const TritrizPtrElem &);
-    virtual const Node *get_node_ptr_from_stack(const std::string &cod) const;
-    virtual const Element *get_element_ptr_from_stack(const std::string &cod) const;
 
     NodePtrSet getNodePtrSet(void);
   public:

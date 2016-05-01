@@ -31,7 +31,7 @@
 #include "SisRefScc.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 
 XC::Spot::Spot(const Pos2d &pto)

@@ -65,7 +65,7 @@
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include <solution/analysis/model/FE_EleIter.h>
 #include <solution/analysis/model/DOF_GrpIter.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::IncrementalIntegrator::IncrementalIntegrator(SoluMethod *owr,int clasTag)

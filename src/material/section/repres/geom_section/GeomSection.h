@@ -37,6 +37,7 @@
 #include "material/section/repres/SeccionInerte.h"
 
 class Semiplano2d;
+class Segmento2d;
 
 namespace XC {
 class SisRefScc;

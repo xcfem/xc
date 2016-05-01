@@ -326,9 +326,10 @@ XC::NDMaterial *XC::DruckerPrager::getCopy(void) const
 
 const std::string &XC::DruckerPrager::getType(void) const
   {
+    static std::string retval= "";
     std::cerr << "XC::DruckerPrager::getType -- subclass responsibility\n";
     exit(-1);
-    return tmp_gp_str;
+    return retval;
   }
 
 int XC::DruckerPrager::getOrder (void) const

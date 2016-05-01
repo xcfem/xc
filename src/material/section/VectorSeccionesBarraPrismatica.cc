@@ -31,8 +31,8 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "boost/any.hpp"
-#include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
+
 #include "material/section/ResponseId.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
 #include "utility/actor/actor/MovableID.h"
@@ -111,17 +111,6 @@ XC::VectorSeccionesBarraPrismatica &XC::VectorSeccionesBarraPrismatica::operator
     return *this;
   }
 
-//! @brief Solicita a cada sección que ejecute el bloque de código que se pasa como parámetro.
-void XC::VectorSeccionesBarraPrismatica::for_each(const std::string &bloque)
-  {
-    const std::string nmbBlq= nombre_clase()+":for_each";
-    for(iterator i= begin();i!=end();i++)
-      {
-        if(*i)
-          (*i)->EjecutaBloque(bloque,nmbBlq);
-      }
-  }
-
 XC::VectorSeccionesBarraPrismatica::~VectorSeccionesBarraPrismatica(void)
   { clearAll(); }
 
@@ -175,7 +164,7 @@ void XC::VectorSeccionesBarraPrismatica::clearAll(void)
   {
     borra_secciones();
     std::vector<SeccionBarraPrismatica *>::clear();
-    //EntCmd::clearProps();
+    EntCmd::clearPyProps();
   }
 
 

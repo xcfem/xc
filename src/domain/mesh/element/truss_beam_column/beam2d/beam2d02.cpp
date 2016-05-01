@@ -62,7 +62,7 @@
 #include <domain/mesh/node/Node.h>
 
 #include <domain/mesh/element/coordTransformation/CrdTransf2d.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/MovableVector.h"
 
 XC::beam2d02::beam2d02(int tag)

@@ -31,10 +31,11 @@
 #define TRITRIZPTRNOD_H
 
 #include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_basic/src/funciones/algebra/ExprAlgebra.h"
 #include "MatrizPtrNod.h"
 #include "TritrizPtrBase.h"
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/base/Lista.h"
+
 
 class ExprAlgebra;
 class Intervalo1D;

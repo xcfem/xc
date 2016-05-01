@@ -74,7 +74,7 @@
 
 
 #include "utility/matrix/Matrix.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "material/nD/TipoMaterialND.h"
 
 //! @brief Constructor.
@@ -335,9 +335,10 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(void) const
 
 const std::string &XC::ElasticIsotropicMaterial::getType(void) const
   {
+    static std::string retval= "";
     std::cerr << "ElasticIsotropicMaterial::getType -- subclass responsibility\n";
     exit(-1);
-    return tmp_gp_str;
+    return retval;
   }
 
 int XC::ElasticIsotropicMaterial::getOrder(void) const

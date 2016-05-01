@@ -73,6 +73,7 @@
 
 class Pos2d;
 class Pos3d;
+class SVD3d;
 
 namespace XC {
 class ContinuaReprComponent;
@@ -188,7 +189,7 @@ class Node: public MeshComponent
     Pos2d getPosFinal2d(void) const;
     Pos3d getPosFinal3d(void) const;
     void setPos(const Pos3d &);
-    void Mueve(const std::vector<ExprAlgebra> &desplaz);  
+    void Mueve(const Vector3d &desplaz);  
     void Transforma(const TrfGeom &trf);
     double getDist2(const Pos2d &p,bool geomInicial= true) const;
     double getDist(const Pos2d &p,bool geomInicial= true) const;

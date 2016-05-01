@@ -27,11 +27,11 @@
 //SetBase.cc
 
 #include "SetBase.h"
-#include "xc_utils/src/base/Lista.h"
+
 #include <boost/any.hpp>
 #include "domain/constraints/SP_Constraint.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "utility/matrix/ID.h"
 #include "preprocessor/Preprocessor.h"
 #include "domain/domain/Domain.h"

@@ -30,8 +30,8 @@
 #include "Spot.h"
 #include "xc_basic/src/matrices/m_int.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "boost/any.hpp"
 
 //! @brief Constructor.

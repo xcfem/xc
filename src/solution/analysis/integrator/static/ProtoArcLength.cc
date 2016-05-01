@@ -30,7 +30,7 @@
 #include <solution/analysis/integrator/static/ProtoArcLength.h>
 #include "solution/analysis/model/AnalysisModel.h"
 #include "solution/system_of_eqn/linearSOE/LinearSOE.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.

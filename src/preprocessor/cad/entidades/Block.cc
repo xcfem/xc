@@ -32,7 +32,7 @@
 #include "xc_basic/src/matrices/m_int.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "Face.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "med.h"

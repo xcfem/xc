@@ -32,7 +32,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/analysis/model/DOF_GrpIter.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.

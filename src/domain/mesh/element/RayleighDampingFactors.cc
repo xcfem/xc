@@ -27,7 +27,7 @@
 //RayleighDampingFactors.cpp
 
 #include "RayleighDampingFactors.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/matrix/Vector.h"
 #include <domain/mesh/element/Information.h>
 

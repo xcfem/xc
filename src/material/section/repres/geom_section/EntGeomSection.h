@@ -29,7 +29,7 @@
 #ifndef ENTGEOMSECTION_H
 #define ENTGEOMSECTION_H
 
-#include "xc_utils/src/base/EntConNmb.h"
+#include "xc_utils/src/nucleo/EntConNmb.h"
 
 namespace XC {
 class GeomSection;

@@ -28,13 +28,13 @@
 
 #include "NodeLockers.h"
 #include "domain/domain/Domain.h"
-#include "xc_utils/src/base/Lista.h"
+
 
 //Constraints.
 #include <domain/constraints/SP_Constraint.h>
 
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "utility/actor/actor/MovableString.h"
 #include "utility/actor/actor/MovableID.h"
 #include "utility/matrix/ID.h"

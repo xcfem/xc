@@ -28,7 +28,7 @@
 
 #include <domain/load/pattern/load_patterns/EQBasePattern.h>
 #include <domain/load/groundMotion/GroundMotion.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 XC::EQBasePattern::EQBasePattern(int tag, int _classTag)
   :LoadPattern(tag, _classTag), theMotions() {}

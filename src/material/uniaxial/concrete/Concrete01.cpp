@@ -69,8 +69,6 @@
 #include <domain/mesh/element/Information.h>
 #include <cmath>
 #include <cfloat>
-#include "xc_utils/src/base/BloqueSub.h"
-#include "xc_utils/src/base/any_const_ptr.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
 //int count= 0;

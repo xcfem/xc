@@ -35,9 +35,9 @@
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
 #include "material/uniaxial/UniaxialMaterial.h" 
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
+
 
 //! @brief Libera todas las pociciones.
 void XC::VectorReinfBar::libera(void)

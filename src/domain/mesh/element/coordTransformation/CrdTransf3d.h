@@ -68,6 +68,7 @@
 #include "CrdTransf.h"
 #include "utility/matrix/Matrix.h"
 
+class Pos3d;
 class Ref3d3d;
 
 namespace XC {

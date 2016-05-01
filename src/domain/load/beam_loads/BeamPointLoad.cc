@@ -53,7 +53,7 @@
 // Purpose: This file contains the class implementation XC::BeamPointLoad.
 
 #include <domain/load/beam_loads/BeamPointLoad.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/MovableVector.h"
 
 XC::BeamPointLoad::BeamPointLoad(int tag, int classTag, double Pt, double dist, const XC::ID &theElementTags, double Pa)

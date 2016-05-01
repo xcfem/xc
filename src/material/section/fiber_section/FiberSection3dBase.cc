@@ -39,8 +39,8 @@
 #include <utility/recorder/response/MaterialResponse.h>
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <material/section/repres/section/FiberSectionRepr.h>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"

@@ -62,7 +62,7 @@
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <material/uniaxial/CableMaterial.h>
 #include <utility/recorder/response/ElementResponse.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "domain/load/beam_loads/TrussStrainLoad.h"
 #include "utility/actor/actor/MovableVector.h"
 

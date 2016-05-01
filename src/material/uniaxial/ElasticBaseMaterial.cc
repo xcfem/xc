@@ -27,7 +27,7 @@
 //ElasticBaseMaterial.cc
 
 #include <material/uniaxial/ElasticBaseMaterial.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/matrix/Vector.h"
 
 

@@ -30,7 +30,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 XC::BeamLoad::BeamLoad(int tag,int classTag,const XC::ID &theElementTags)
   :ElementBodyLoad(tag, classTag, theElementTags) {}

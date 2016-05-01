@@ -34,8 +34,8 @@
 #include <domain/load/pattern/time_series/PathSeries.h>
 #include <domain/load/pattern/time_series/PathTimeSeries.h>
 #include <utility/matrix/Vector.h>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 
 
 XC::MotionHistory::MotionHistory(const double &dt)

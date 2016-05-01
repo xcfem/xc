@@ -55,7 +55,7 @@
 // Purpose: This file contains the methods for class XC::ElementalLoad.
 
 #include "domain/load/ElementalLoad.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 XC::ElementalLoad::ElementalLoad(int tag, int classTag)
   :Load(tag, classTag) {}

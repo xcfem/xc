@@ -27,7 +27,7 @@
 //EPPBaseMaterial.cc
 
 #include <material/uniaxial/EPPBaseMaterial.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::EPPBaseMaterial::EPPBaseMaterial(int tag, int classtag, double e,double e0)

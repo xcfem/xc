@@ -30,7 +30,7 @@
 #include <utility/tagged/TaggedObject.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
 void XC::NodeVectors::libera(void)

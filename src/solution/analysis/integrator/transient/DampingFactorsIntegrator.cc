@@ -27,7 +27,7 @@
 //DampingFactors.cpp
 
 #include "DampingFactorsIntegrator.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::DampingFactorsIntegrator::DampingFactorsIntegrator(SoluMethod *owr,int classTag)

@@ -58,8 +58,8 @@
 #include <material/section/repres/geom_section/GeomSection.h>
 #include "preprocessor/loaders/MaterialLoader.h"
 
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 
 XC::SectionRepres::SectionRepres(int tag,MaterialLoader *ml)
   : TaggedObject(tag), material_loader(ml), gmSecc(nullptr) {}

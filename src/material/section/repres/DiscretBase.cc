@@ -28,7 +28,7 @@
 
 #include "material/section/repres/DiscretBase.h" 
 #include "material/Material.h" 
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 XC::DiscretBase::DiscretBase(Material *m)
   : mat(m) {}

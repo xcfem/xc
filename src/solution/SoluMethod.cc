@@ -28,7 +28,7 @@
 
 #include "SoluMethod.h"
 #include "analysis/ModelWrapper.h"
-#include "xc_utils/src/base/utils_any.h"
+
 
 //Gestor coacciones.
 #include <solution/analysis/handler/ConstraintHandler.h>
@@ -139,20 +139,20 @@ bool XC::SoluMethod::alloc_integrator(const std::string &nmb,const Vector &param
       {
         double arc_length= 1.0;
         if(params.Size()>0)
-          arc_length= convert_to_double(params[0]);
+          arc_length= params[0];
         double alpha= 1.0;
         if(params.Size()>1)
-          alpha= convert_to_double(params[1]);
+          alpha= params[1];
         theIntegrator=new ArcLength(this,arc_length,alpha);
       }
     else if(nmb=="arc_length1_integrator")
       {
         double arc_length= 1.0;
         if(params.Size()>0)
-          arc_length= convert_to_double(params[0]);
+          arc_length= params[0];
         double alpha= 1.0;
         if(params.Size()>1)
-          alpha= convert_to_double(params[1]);
+          alpha= params[1];
         theIntegrator=new ArcLength1(this,arc_length,alpha);
       }
     else if(nmb=="displacement_control_integrator")
@@ -165,16 +165,16 @@ bool XC::SoluMethod::alloc_integrator(const std::string &nmb,const Vector &param
       {
         double arc_length= 1.0;
         if(params.Size()>0)
-          arc_length= convert_to_double(params[0]);
+          arc_length= params[0];
         double psi_u= 1.0;
         if(params.Size()>1)
-          psi_u= convert_to_double(params[1]);
+          psi_u= params[1];
         double psi_f= 1.0;
         if(params.Size()>2)
-          psi_f= convert_to_double(params[2]);
+          psi_f= params[2];
         double u_ref= 1.0;
         if(params.Size()>3)
-          u_ref= convert_to_double(params[3]);
+          u_ref= params[3];
         theIntegrator=new HSConstraint(this,arc_length,psi_u,psi_f,u_ref);
       }
     else if(nmb=="load_control_integrator")
@@ -185,16 +185,16 @@ bool XC::SoluMethod::alloc_integrator(const std::string &nmb,const Vector &param
       {
         double lambda1= 1.0;
         if(params.Size()>0)
-          lambda1= convert_to_double(params[0]);
+          lambda1= params[0];
         int specnum_iter_step= 1;
         if(params.Size()>1)
-          specnum_iter_step= convert_to_int(params[1]);
+          specnum_iter_step= params[1];
         double dlambda1min= 1.0;
         if(params.Size()>2)
-          dlambda1min= convert_to_double(params[2]);
+          dlambda1min= params[2];
         double dlambda1max= 1.0;
         if(params.Size()>3)
-          dlambda1max= convert_to_double(params[3]);
+          dlambda1max= params[3];
         theIntegrator=new MinUnbalDispNorm(this,lambda1,specnum_iter_step,dlambda1min,dlambda1max);
       }
     else if(nmb=="eigen_integrator")

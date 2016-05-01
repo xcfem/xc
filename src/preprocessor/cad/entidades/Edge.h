@@ -54,8 +54,6 @@ class Edge: public EntMdlr
 
     void inserta_surf(Face *s);
 
-    virtual const Node *get_node_ptr_from_stack(const std::string &cod) const;
-    virtual const Element *get_element_ptr_from_stack(const std::string &cod) const;
     virtual Pnt *P1(void);
     virtual Pnt *P2(void);
     void crea_nodos_en_extremos(void);

@@ -35,8 +35,8 @@
 #include "preprocessor/set_mgmt/Set.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 #include "boost/lexical_cast.hpp"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor por defecto.

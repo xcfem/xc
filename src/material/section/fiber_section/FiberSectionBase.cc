@@ -29,9 +29,9 @@
 #include "FiberSectionBase.h"
 #include "utility/matrix/Vector.h"
 #include "xc_utils/src/nucleo/CmdParser.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/nucleo/aux_any.h"
+
+
+
 #include "material/section/ResponseId.h"
 #include "material/section/repres/section/FiberSectionRepr.h"
 #include "material/section/repres/geom_section/GeomSection.h"
@@ -52,7 +52,7 @@
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
 #include "xc_utils/src/geom/d1/SemiRecta2d.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 
 //! @brief Constructor.
 XC::FiberSectionBase::FiberSectionBase(int tag,int num,int classTag,int dim,MaterialLoader *mat_ldr)
@@ -123,32 +123,32 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::get_set_fibras(c
   { return sets_fibras.get_set_fibras(nmb_set); }
 
 
-//! @brief Crea un conjunto de fibras que cumplen la condición que se pasa como parámetro.
-XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel(const std::string &nmb_set,const std::string &cond)
-  {
-    set_fibras_iterator i= get_set_fibras(nmb_set);
-    fibras.Cumplen(cond,(*i).second);
-    return i;
-  }
+// //! @brief Crea un conjunto de fibras que cumplen la condición que se pasa como parámetro.
+// XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel(const std::string &nmb_set,const std::string &cond)
+//   {
+//     set_fibras_iterator i= get_set_fibras(nmb_set);
+//     fibras.Cumplen(cond,(*i).second);
+//     return i;
+//   }
 
-//! @brief Crea un conjunto de fibras que perteneciendo al conjunto nmb_set_org, cumplen la condición que se pasa como parámetro.
-XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond)
-  {
-    set_fibras_iterator i= sets_fibras.end();
-    if(nmb_set != nmb_set_org)
-      {
-        i= get_set_fibras(nmb_set);
-        set_fibras_iterator j= sets_fibras.find(nmb_set_org);
-        if(j == sets_fibras.end())
-          {
-            std::clog << "Origin fibers set: '" << nmb_set_org
-                      << "' doesn't exists; command ignored." << std::endl;
-          }
-        else
-          (*j).second.Cumplen(cond,(*i).second);
-      }
-    return i;
-  }
+// //! @brief Crea un conjunto de fibras que perteneciendo al conjunto nmb_set_org, cumplen la condición que se pasa como parámetro.
+// XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond)
+//   {
+//     set_fibras_iterator i= sets_fibras.end();
+//     if(nmb_set != nmb_set_org)
+//       {
+//         i= get_set_fibras(nmb_set);
+//         set_fibras_iterator j= sets_fibras.find(nmb_set_org);
+//         if(j == sets_fibras.end())
+//           {
+//             std::clog << "Origin fibers set: '" << nmb_set_org
+//                       << "' doesn't exists; command ignored." << std::endl;
+//           }
+//         else
+//           (*j).second.Cumplen(cond,(*i).second);
+//       }
+//     return i;
+//   }
 
 //! @brief Crea un conjunto de fibras cuyo material tiene el tag que se pasa como parámetro.
 XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel_mat_tag(const std::string &nmb_set,const int &matTag)

@@ -39,7 +39,7 @@
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 #include "preprocessor/cad/trf/TrfGeom.h"
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/d2/Plano3d.h"
 #include "xc_utils/src/geom/d3/SemiEspacio3d.h"
@@ -96,17 +96,17 @@ void XC::Set::agrega_listas(const Set &otro)
     uniform_grids.agrega(otro.uniform_grids);
   }
 
-//! @brief Agrega a este conjunto los objetos del conjunto
-//! que se pasa como parámetro que cumplen la condición.
-void XC::Set::agrega_listas_cond(const Set &otro,const std::string &cond)
-  {
-    SetMeshComp::agrega_listas_cond(otro,cond);
-    puntos.agrega_cond(otro.puntos,cond);
-    lineas.agrega_cond(otro.lineas,cond);
-    superficies.agrega_cond(otro.superficies,cond);
-    cuerpos.agrega_cond(otro.cuerpos,cond);
-    uniform_grids.agrega_cond(otro.uniform_grids,cond);
-  }
+// //! @brief Agrega a este conjunto los objetos del conjunto
+// //! que se pasa como parámetro que cumplen la condición.
+// void XC::Set::agrega_listas_cond(const Set &otro,const std::string &cond)
+//   {
+//     SetMeshComp::agrega_listas_cond(otro,cond);
+//     puntos.agrega_cond(otro.puntos,cond);
+//     lineas.agrega_cond(otro.lineas,cond);
+//     superficies.agrega_cond(otro.superficies,cond);
+//     cuerpos.agrega_cond(otro.cuerpos,cond);
+//     uniform_grids.agrega_cond(otro.uniform_grids,cond);
+//   }
 
 //! @brief Vacía las listas del conjunto.
 void XC::Set::clear(void)
@@ -141,7 +141,7 @@ void XC::Set::numera(void)
   }
 
 //! @brief Desplaza los elementos del conjunto.
-void XC::Set::mueve(const std::vector<ExprAlgebra> &desplaz)
+void XC::Set::mueve(const Vector3d &desplaz)
   {
     for(lst_ptr_puntos::iterator i= puntos.begin();i!=puntos.end();i++)
       (*i)->Mueve(desplaz);

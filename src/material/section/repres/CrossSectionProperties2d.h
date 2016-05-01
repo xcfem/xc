@@ -33,6 +33,7 @@
 #include "utility/actor/actor/MovableObject.h"
 
 class EjesPrincInercia2d;
+class Vector2d;
 
 namespace XC {
 class Channel;

@@ -64,13 +64,13 @@
 #include <domain/mesh/node/Node.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 
 //! @brief Constructor.
 XC::CrdTransf::CrdTransf(int tag, int classTag, int dim_joint_offset)

@@ -64,7 +64,7 @@
 #include <utility/recorder/response/MaterialResponse.h>
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <material/section/repres/section/FiberSectionRepr.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "material/section/ResponseId.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 

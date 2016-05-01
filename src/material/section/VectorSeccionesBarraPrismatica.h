@@ -67,8 +67,6 @@ class VectorSeccionesBarraPrismatica: public EntCmd, public std::vector<SeccionB
     VectorSeccionesBarraPrismatica(const VectorSeccionesBarraPrismatica &);
     ~VectorSeccionesBarraPrismatica(void);
 
-    void for_each(const std::string &);
-
     bool isTorsion(void) const;
 
     void setSection(const SeccionBarraPrismatica *nueva_secc);

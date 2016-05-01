@@ -27,8 +27,8 @@
 //RgQuadCell.cpp
 
 #include <material/section/repres/geom_section/region/RgQuadCell.h> 
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>

@@ -23,10 +23,10 @@
 
 #include "MEDFieldInfo.h"
 #include "MEDGaussModel.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "xc_basic/src/med_xc/MEDMEM_Group.hxx"
 #include "xc_basic/src/med_xc/MEDMEM_Field.hxx"
-#include "xc_utils/src/base/utils_any.h"
+
 #include "domain/mesh/element/gauss_models/GaussModel.h"
 
 //! @brief Constructor.

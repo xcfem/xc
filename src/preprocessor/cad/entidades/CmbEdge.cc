@@ -32,7 +32,7 @@
 #include "ArcoCircunf.h"
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "domain/mesh/node/Node.h"

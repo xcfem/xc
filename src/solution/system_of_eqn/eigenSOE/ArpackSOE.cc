@@ -36,7 +36,7 @@
 // It uses the ARPACK to do eigenvalue analysis.
 
 #include <solution/system_of_eqn/eigenSOE/ArpackSOE.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Constructor.
 XC::ArpackSOE::ArpackSOE(SoluMethod *owr,int classTag, double theShift)

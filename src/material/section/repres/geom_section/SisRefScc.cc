@@ -28,7 +28,7 @@
 
 #include "SisRefScc.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 //! @brief Devuelve el vector unitario I expresado en el sistema global
 //! en la posición que se pasa como parámetro.

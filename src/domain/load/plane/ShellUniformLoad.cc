@@ -30,7 +30,7 @@
 #include "domain/mesh/element/fvectors/FVectorShell.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 
 XC::ShellUniformLoad::ShellUniformLoad(int tag,const double &wt,const double &wa1,const double &wa2,const ID &theElementTags)

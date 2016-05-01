@@ -66,7 +66,7 @@
 #include "domain/mesh/node/NodeIter.h"
 #include "domain/mesh/element/ElementIter.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 
 XC::UniformExcitation::UniformExcitation(int tag)
   :EarthquakePattern(tag, PATTERN_TAG_UniformExcitation),

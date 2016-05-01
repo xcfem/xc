@@ -66,13 +66,13 @@
 #include <utility/matrix/Vector.h>
 #include <utility/recorder/response/MaterialResponse.h>
 #include <deque>
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 #include "material/section/ResponseId.h"
 #include "preprocessor/loaders/MaterialLoader.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 
 const XC::Matrix *ptr_section_tangent= nullptr;
 const XC::Matrix *ptr_initial_tangent= nullptr;

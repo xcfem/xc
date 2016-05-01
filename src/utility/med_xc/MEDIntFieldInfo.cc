@@ -55,7 +55,7 @@ void XC::MEDIntFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
                             << valor.size() << " se esperaba uno de dimensión "
                             << dim << std::endl;
                 for(size_t k= 1;k<=dim;k++)
-                  setValueIJ(conta,k,convert_to_int(valor[k-1]));
+                  setValueIJ(conta,k,valor[k-1]);
               }
             else
 	      std::cerr << "MEDIntFieldInfo::populateOnNodes; el nodo: "
@@ -90,7 +90,7 @@ void XC::MEDIntFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
                             << valor.size() << " se esperaba uno de dimensión "
                             << dim << std::endl;
                 for(size_t k= 1;k<=dim;k++)
-                  setValueIJ(conta,k,convert_to_int(valor[k-1]));
+                  setValueIJ(conta,k,valor[k-1]);
               }
             else
 	      std::cerr << "MEDIntFieldInfo::populateOnElements; el elemento: "

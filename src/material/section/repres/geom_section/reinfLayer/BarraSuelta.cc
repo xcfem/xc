@@ -31,7 +31,7 @@
 
 #include <material/section/repres/geom_section/reinfLayer/BarraSuelta.h>
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "xc_basic/src/texto/cadena_carac.h"
 
 

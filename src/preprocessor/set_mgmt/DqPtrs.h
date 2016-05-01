@@ -33,7 +33,6 @@
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "xc_utils/src/nucleo/EntPropSorter.h"
-#include "xc_utils/src/base/any_const_ptr.h"
 #include <deque>
 #include <set>
 #include "utility/actor/actor/MovableID.h"
@@ -74,7 +73,7 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
     explicit DqPtrs(const std::set<const T *> &ts);
     DqPtrs &operator=(const DqPtrs &otro);
     void agrega(const DqPtrs &otro);
-    void agrega_cond(const DqPtrs &otro,const std::string &cond);
+    //void agrega_cond(const DqPtrs &otro,const std::string &cond);
     bool push_back(T *);
     bool push_front(T *);
     inline bool empty(void) const
@@ -96,7 +95,7 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
     inline size_type size(void) const
       { return lst_ptr::size(); }
     bool in(const T *) const;
-    void sort_on_prop(const std::string &cod,const bool &ascending= true);
+    //void sort_on_prop(const std::string &cod,const bool &ascending= true);
 
     const ID &getTags(void) const;
     template <class InputIterator>
@@ -154,19 +153,19 @@ void DqPtrs<T>::agrega(const DqPtrs &otro)
       push_back(*i);
   }
 
-//! @brief Agrega a ésta lista los elementos de la que se le pasa como parámetro,
-//! si cumplen la condición.
-template <class T>
-void DqPtrs<T>::agrega_cond(const DqPtrs &otro,const std::string &cond)
-  {
-    bool result= false;
-    for(register const_iterator i= otro.begin();i!=otro.end();i++)
-      {
-        result= (*i)->interpretaBool(cond);
-        if(result)
-	  push_back(*i);
-      }
-  }
+/* //! @brief Agrega a ésta lista los elementos de la que se le pasa como parámetro, */
+/* //! si cumplen la condición. */
+/* template <class T> */
+/* void DqPtrs<T>::agrega_cond(const DqPtrs &otro,const std::string &cond) */
+/*   { */
+/*     bool result= false; */
+/*     for(register const_iterator i= otro.begin();i!=otro.end();i++) */
+/*       { */
+/*         result= (*i)->interpretaBool(cond); */
+/*         if(result) */
+/* 	  push_back(*i); */
+/*       } */
+/*   } */
 
 
 //! @brief Vacía la lista de punteros.
@@ -179,7 +178,7 @@ template<class T>
 void DqPtrs<T>::clearAll(void)
   {
     clear();
-    EntCmd::clearProps();
+    EntCmd::clearPyProps();
   }
 
 //! @brief Devuelve verdadero si el puntero está en el contenedor.
@@ -231,17 +230,17 @@ bool DqPtrs<T>::push_front(T *t)
     return retval;
   }
 
-//! @brief Ordena los elementos del contenedor por
-//! el valor de la propiedad que se pasa como parámetro.
-template <class T>
-void DqPtrs<T>::sort_on_prop(const std::string &cod,const bool &ascending)
-  {
-    EntProp::set_sorter_cod(cod);
-    if(ascending)
-      std::sort(begin(),end(),EntProp::menor_ent_prop);
-    else
-      std::sort(begin(),end(),EntProp::mayor_ent_prop);
-  }
+/* //! @brief Ordena los elementos del contenedor por */
+/* //! el valor de la propiedad que se pasa como parámetro. */
+/* template <class T> */
+/* void DqPtrs<T>::sort_on_prop(const std::string &cod,const bool &ascending) */
+/*   { */
+/*     EntProp::set_sorter_cod(cod); */
+/*     if(ascending) */
+/*       std::sort(begin(),end(),EntProp::menor_ent_prop); */
+/*     else */
+/*       std::sort(begin(),end(),EntProp::mayor_ent_prop); */
+/*   } */
 
 //! @brief Devuelve los Tags de los objetos.
 template <class T>

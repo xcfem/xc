@@ -66,11 +66,11 @@
 #include <cstdlib>
 #include <iostream>
 #include "xc_basic/src/matrices/m_double.h"
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/nucleo/MatrizAny.h"
-#include "xc_utils/src/base/utils_any.h"
-#include <boost/any.hpp>
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
+//#include "xc_utils/src/nucleo/MatrizAny.h"
+
+//#include <boost/any.hpp>
+
 #include "AuxMatrix.h"
 
 #define MATRIX_WORK_AREA 400
@@ -1239,28 +1239,28 @@ int XC::Matrix::Extract(const Matrix &V, int init_row, int init_col, double fact
 XC::Matrix XC::operator*(double a, const Matrix &V)
   { return V * a; }
 
-//! @brief Convierte en matriz la cadena de caracteres que se pasa como parámetro.
-void XC::Matrix::from_string(const std::string &str)
-  {
-    MatrizAny tmp= interpretaMatrizAny(str);
-    if(!tmp.empty())
-      {
-        const size_t nfilas= tmp.getNumFilas(); //Número de filas.
-        const size_t ncols= tmp.getNumCols(); //Número de columnas.
-        resize(nfilas,ncols);
-        for(size_t i= 0;i<nfilas;i++)
-          for(size_t j= 0;j<ncols;j++)
-            XC::Matrix::operator()(i,j)= convert_to_double(tmp(i+1,j+1));
-      }
-  }
+// //! @brief Convierte en matriz la cadena de caracteres que se pasa como parámetro.
+// void XC::Matrix::from_string(const std::string &str)
+//   {
+//     MatrizAny tmp= interpretaMatrizAny(str);
+//     if(!tmp.empty())
+//       {
+//         const size_t nfilas= tmp.getNumFilas(); //Número de filas.
+//         const size_t ncols= tmp.getNumCols(); //Número de columnas.
+//         resize(nfilas,ncols);
+//         for(size_t i= 0;i<nfilas;i++)
+//           for(size_t j= 0;j<ncols;j++)
+//             XC::Matrix::operator()(i,j)= convert_to_double(tmp(i+1,j+1));
+//       }
+//   }
 
-//! @brief Devuelve la matriz que resulta de interpretar la cadena de caracteres que se pasa como parámetro.
-XC::Matrix XC::interpreta_xc_matriz(const std::string &str)
-  {
-    Matrix retval(1,1);
-    retval.from_string(str);
-    return retval;
-  }
+// //! @brief Devuelve la matriz que resulta de interpretar la cadena de caracteres que se pasa como parámetro.
+// XC::Matrix XC::interpreta_xc_matriz(const std::string &str)
+//   {
+//     Matrix retval(1,1);
+//     retval.from_string(str);
+//     return retval;
+//   }
 
 XC::Matrix XC::identity(const Matrix &m)
   {

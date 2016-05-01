@@ -34,7 +34,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <material/uniaxial/UniaxialMaterial.h>
 
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Pone a cero los punteros a nodo y los cosenos directores.

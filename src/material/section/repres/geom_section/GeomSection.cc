@@ -51,11 +51,11 @@
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
 
-#include "xc_utils/src/base/any_const_ptr.h"
-#include "xc_utils/src/base/utils_any.h"
+
+
 
 #include "boost/lexical_cast.hpp"
-#include "xc_utils/src/nucleo/InterpreteRPN.h"
+
 
 XC::GeomSection::GeomSection(MaterialLoader *ml)
   : SeccionInerte(),material_loader(ml), regiones(ml), capas_armado(this,ml), tag_sis_ref(0),tag_spot(0) {}

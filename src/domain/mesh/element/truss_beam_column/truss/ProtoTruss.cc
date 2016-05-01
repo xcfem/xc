@@ -28,7 +28,7 @@
 
 #include "ProtoTruss.h"
 #include <utility/matrix/Matrix.h>
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
 // initialise the class wide variables

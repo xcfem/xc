@@ -34,8 +34,8 @@
 #include "preprocessor/cad/trf/TrfGeom.h"
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "preprocessor/set_mgmt/Set.h"
-#include "xc_utils/src/base/utils_any.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
+
 #include "Rotacion.h"
 #include "Reflexion.h"
 #include "Escalado.h"

@@ -62,7 +62,7 @@
 
 #include "MapOfTaggedObjects.h"
 #include <utility/tagged/TaggedObject.h>
-#include "xc_utils/src/base/utils_any.h"
+
 #include "boost/any.hpp"
 
 // some typedefs that will be useful

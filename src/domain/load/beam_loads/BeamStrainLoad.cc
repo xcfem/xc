@@ -30,7 +30,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/base/any_const_ptr.h"
+
 #include "material/section/ResponseId.h"
 
 XC::BeamStrainLoad::BeamStrainLoad(int tag, const XC::ID &theElementTags)

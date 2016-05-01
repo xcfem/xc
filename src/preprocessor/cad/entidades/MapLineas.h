@@ -32,6 +32,9 @@
 #include "MapEnt.h"
 #include "Edge.h"
 
+class Recta3d;
+class Plano3d;
+
 namespace XC {
 
 class Edge;
