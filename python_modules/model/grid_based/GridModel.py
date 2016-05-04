@@ -829,6 +829,7 @@ class GridModel(object):
                       "ZPos", "ZNeg")
       fileName:       full name of the graphic file to generate. Defaults to 
                       None, in this case it returns a console output graphic.
+      caption:        text to display in the graphic 
     '''
     defGrid= vtk_grafico_base.RecordDefGrid()
     defGrid.setName=setToDisplay

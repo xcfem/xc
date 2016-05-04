@@ -552,6 +552,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/draw_schema_armature_mur.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/exporta_esfuerzos.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/exporta_esfuerzos.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/graphLoadCase.py
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/graphLoadCase.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/__init__.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/listados_cargas.py
