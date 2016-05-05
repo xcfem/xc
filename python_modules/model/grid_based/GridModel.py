@@ -16,7 +16,9 @@ from materials import typical_materials
 from materials import parametrosSeccionRectangular
 from model import predefined_spaces
 from model import define_apoyos
+from xcVtk import vtk_grafico_base
 from xcVtk.malla_ef import vtk_grafico_ef
+from xcVtk import LoadVectorField as lvf
 import ijkGrid as grid
 
 class NamedObjectsMap(dict):
@@ -805,3 +807,43 @@ class GridModel(object):
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
     defDisplay.grafico_mef(self.getPreprocessor(),partToDisplay,caption)
     return defDisplay
+
+  def displayLoad(self,setToDisplay='total',loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",caption= '',fileName=None):
+    '''vector field display of the loads applied to the chosen set of elements 
+    in the load case passed as parameter
+    Parameters:
+      setToDisplay:   name of the set of elements to be displayed
+      loadCaseNm:     name of the load case to be depicted
+      unitsScale:     factor to apply to the results if we want to change
+                      the units.
+      vectorScale:    factor to apply to the vectors length in the 
+                      representation
+      
+      multByElemArea: boolean value that must be 'True' if we want to 
+                      represent the total load on each element 
+                      (=load multiplied by element area) and 'False' if we 
+                      are going to depict the value of the uniform load 
+                      per unit area
+      viewNm:         name of the view  that contains the renderer (possible
+                      options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
+                      "ZPos", "ZNeg")
+      fileName:       full name of the graphic file to generate. Defaults to 
+                      None, in this case it returns a console output graphic.
+      caption:        text to display in the graphic 
+    '''
+    defGrid= vtk_grafico_base.RecordDefGrid()
+    defGrid.setName=setToDisplay
+    vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
+    vField.multiplyByElementArea=multByElemArea
+    vField.dumpLoads(self.getPreprocessor())
+    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay.viewName= viewNm
+    defDisplay.defineEscenaMalla(self.getPreprocessor(),defGrid,None) 
+    vField.addToDisplay(defDisplay)
+    defDisplay.displayScene(caption,fileName)
+    return defDisplay
+
+
+
+
+
