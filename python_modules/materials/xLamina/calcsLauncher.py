@@ -239,8 +239,6 @@ def xLaminaPrintFatigueSIA262(preprocessor,outputFileName, mapSections):
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
   xcOutput= open(outputFileName+".py","w")
-  #printCabeceraListadoFisuracion("texOutput1","1 ("+ sectionName1 +")")
-  #printCabeceraListadoFisuracion("texOutput2","2 ("+ sectionName2 +")")
   elementos= preprocessor.getSets.getSet("total").getElements
   strHeader0= "eTag & idSection & N0 kN & My0 kN m/m & Mz0 kN m/m & Vy0 kN m/m & Vz0 kN m/m & $sg_{s,0} MPa & $sg_{c,0} MPa \\\\\n"
   strHeader1= "     &           & N1 kN & My1 kN m/m & Mz1 kN m/m & Vy1 kN m/m & Vz1 kN m/m & $sg_{s,1} MPa & $sg_{c,1} MPa \\\\\n"
@@ -345,8 +343,6 @@ def xLaminaPrintFatigueSIA262(preprocessor,outputFileName, mapSections):
       xcOutput.write(strElementProp(tag,"fc_v2",fc_v))
 
 
-  #printCierreListadoFisuracion("texOutput1")
-  #printCierreListadoFisuracion("texOutput2")
   texOutput1.close()
   texOutput2.close()
   xcOutput.close()
