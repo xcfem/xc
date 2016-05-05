@@ -76,6 +76,14 @@ class ShearController(lsc.LimitStateControllerBase):
   def Vu(self):
     return self.Vcu+self.Vsu
 
+  def initControlVars(self,elements):
+    '''
+    Initialize control variables over elements.
+    Parameters:
+      elements:    elements to define control variables in
+    '''
+    for e in elements:
+      e.setProp(self.limitStateLabel,cv.RCShearControlVars())
 
   def check(self,elements,nmbComb):
     '''

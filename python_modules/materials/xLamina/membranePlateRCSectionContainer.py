@@ -4,11 +4,11 @@ import xc_base
 import geom
 import xc
 # Macros
-from materials.xLamina import calcsLauncher
 #from materials.sia262 import fatigueControlSIA262 as fc
 #from materials.sia262 import shearSIA262
 #from materials.sia262 import crackControlSIA262 as cc
 from solution import predefined_solutions
+from postprocess import PhantomModel as phm
 
 # TO ENHANCE: Interactions diagrams ("d" and "k") are calculated each time we call
 # the check routines. Maybe it's a good idea to calculate them once and write them
@@ -88,7 +88,8 @@ class SectionContainer(object):
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calcsLauncher.lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, controller)
+    phantomModel= phm.PhantomModel(preprocessor,sectionsNamesForEveryElement,self.mapSections, mapID)
+    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
     tmp.clearAll()
     return retval
 
@@ -108,7 +109,8 @@ class SectionContainer(object):
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calcsLauncher.lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID,controller)
+    phantomModel= phm.PhantomModel(preprocessor,sectionsNamesForEveryElement,self.mapSections, mapID)
+    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
     tmp.clearAll()
     return retval
 
@@ -128,7 +130,8 @@ class SectionContainer(object):
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagramsNMy(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calcsLauncher.lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, self.mapSections, mapID,controller)
+    phantomModel= phm.PhantomModel(preprocessor,sectionsNamesForEveryElement,self.mapSections, mapID)
+    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
     tmp.clearAll()
     return retval
 
@@ -148,7 +151,8 @@ class SectionContainer(object):
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calcsLauncher.lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID, controller)
+    phantomModel= phm.PhantomModel(preprocessor,sectionsNamesForEveryElement,self.mapSections, mapID)
+    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
     tmp.clearAll()
     return retval
 
@@ -168,6 +172,7 @@ class SectionContainer(object):
     preprocessor= tmp.getPreprocessor
     mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    retval= calcsLauncher.lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName,sectionsNamesForEveryElement,self.mapSections, mapID,controller)
+    phantomModel= phm.PhantomModel(preprocessor,sectionsNamesForEveryElement,self.mapSections, mapID)
+    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
     tmp.clearAll()
     return retval

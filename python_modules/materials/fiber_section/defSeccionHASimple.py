@@ -111,7 +111,7 @@ class BasicRecordRCSection(object):
     width:           cross-section width
     nDivIJ:          number of cells in IJ (width) direction
     nDivJK:          number of cells in JK  (height) direction
-    fiberSectionRepr:
+    fiberSectionRepr: fiber model of the section.
     reinfSteelType:  type of reinforcement steel
     reinfDiagName:   name identifying the characteristic stress-strain diagram
                      of the reinforcing steel material
@@ -206,7 +206,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     width:           cross-section width
     nDivIJ:          number of cells in IJ (width) direction
     nDivJK:          number of cells in JK  (height) direction
-    fiberSectionRepr:
+    fiberSectionRepr: fiber model of the section
     reinfSteelType:  type of reinforcement steel
     reinfDiagName:   name identifying the characteristic stress-strain diagram of
                      the reinforcing steel material

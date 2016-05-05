@@ -7,8 +7,11 @@ import geom
 import xc
 from model import predefined_spaces
 from model import fix_node_6dof
-from materials.xLamina import seccion_ficticia_elementos as sf
+from materials import parametrosSeccionRectangular
 import math
+
+# Fake section (elements must have a stiffness)
+sccFICT= parametrosSeccionRectangular.RectangularSection("rectang",.40,40,2.1e6,0.3)
 
 def extraeIdsElem(preprocessor,intForcCombFileName, diagIntScc):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
@@ -31,9 +34,9 @@ def extraeIdsElem(preprocessor,intForcCombFileName, diagIntScc):
   elements= preprocessor.getElementLoader
   coacciones= preprocessor.getConstraintLoader
   # Definimos materiales
-  scc= sf.sccFICT.defSeccShElastica3d(preprocessor) # El problema es isóstático, así que la sección da igual
+  scc= sccFICT.defSeccShElastica3d(preprocessor) # El problema es isóstático, así que la sección da igual
   elements.dimElem= 1
-  elements.defaultMaterial= sf.sccFICT.nmb
+  elements.defaultMaterial= sccFICT.nmb
   for tagElem in idElements:
     n1= nodes.newNodeIDXYZ(tagElem*10+1,0,0,0)
     n2= nodes.newNodeIDXYZ(tagElem*10+2,0,0,0)

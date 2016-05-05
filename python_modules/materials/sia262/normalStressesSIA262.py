@@ -10,6 +10,15 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
   def __init__(self,limitStateLabel):
     super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
+  def initControlVars(self,elements):
+    '''
+    Initialize control variables over elements.
+    Parameters:
+      elements:    elements to define control variables in
+    '''
+    for e in elements:
+      e.setProp(self.limitStateLabel,cv.BiaxialBendingControlVars())
+
   def check(self,elements, nmbComb):
     '''
     Parameters:
@@ -35,6 +44,15 @@ class UniaxialBendingNormalStressController(lsc.LimitStateControllerBase):
 
   def __init__(self,limitStateLabel):
     super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
+
+  def initControlVars(self,elements):
+    '''
+    Initialize control variables over elements.
+    Parameters:
+      elements:    elements to define control variables in
+    '''
+    for e in elements:
+      e.setProp(self.limitStateLabel,cv.BiaxialBendingControlVars())
 
   def check(self,elements, nmbComb):
     '''

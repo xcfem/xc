@@ -3,15 +3,16 @@
 Funciones para comprobación de una sección a fisuración según el
 artículo 49.2.4 de la EHE-08.
 '''
+import math
 from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils
 from materials import crack_control_base as cc
-import math
+from postprocess import ControlVars as cv
 
 class CrackControlSIA262(cc.CrackControlBaseParameters):
   def __init__(self,limitStateLabel,limitStress):
     super(CrackControlSIA262,self).__init__(limitStateLabel)
-    self.limitStress= "limitStress" #Limit value for rebar stresses.
+    self.limitStress= limitStress #Limit value for rebar stresses.
   def calcRebarStress(self, scc):
     '''Returns average stress in rebars.'''
     section= scc.getProp("datosSecc")
@@ -38,11 +39,23 @@ class CrackControlSIA262(cc.CrackControlBaseParameters):
       self.tensMediaBarrasTracc= reinforcementTraccion.getStressMed()
       self.iAreaMaxima=  fiberUtils.getIMaxPropFiber(reinforcementTraccion,"getArea")
     return self.tensMediaBarrasTracc
+
+  def initControlVars(self,elements):
+    '''
+    Initialize control variables over elements.
+    Parameters:
+      elements:    elements to define control variables in
+    '''
+    for e in elements:
+      e.setProp(self.limitStateLabel,cv.CrackControlVars(idSection= e.getProp('idSection')))
+
   def check(self,elements,nmbComb):
-    '''Crack control.'''
+    '''Crack control checking.'''
+    print "REWRITE NEEDED. See equivalent function in  CrackControlSIA262PlanB."
     for e in elements:
       scc= e.getSection()
-      sigma_s= secHAParamsFis.calcRebarStress(scc)
+      idSection= e.getProp("idSection")
+      sigma_s= self.calcRebarStress(scc)
       if(sigma_s>e.getProp("sg_sCP")):
         e.setProp("sg_sCP",sigma_s) # Caso pésimo
         e.setProp("HIPCP",nmbComb)

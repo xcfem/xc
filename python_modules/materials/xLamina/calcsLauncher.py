@@ -6,9 +6,6 @@ import os
 import math
 import geom
 from miscUtils import LogMessages as lmsg
-from materials.xLamina import extrae_combinaciones as ec
-from materials.xLamina import modelo
-from materials.xLamina import calculo_comb
 from materials.ehe import comprobVEHE08
 from materials.ehe import cortanteEHE
 from materials.ehe import torsionEHE
@@ -17,8 +14,10 @@ from materials.sia262 import shearSIA262
 from materials.sia262 import fatigueControlSIA262 as fcSIA
 from materials.sia262 import crackControlSIA262 as ccSIA
 from postprocess import ControlVars as cv
+from postprocess import PhantomModel as phm
 from postprocess.reports import common_formats as fmt
 
+print 'Module calcsLauncher is DEPRECATED.' 
 
 ###                 *** Verifications related to 
 ###                     ULS of failure under Normal Stresses ***
@@ -48,7 +47,54 @@ def xLaminaCompruebaTNComb(preprocessor, nmbDiagIntSec1, nmbDiagIntSec2,controll
   xLaminaPrintTN(nmbArch) # XXX Sacar de aquí la impresión de result.
 
 
+def xLaminaCalculaCombEstatLin(preprocessor,elements, analysis, controller):
+  '''
+  Lanza el análisis (lineal) y la comprobación en las combinaciones que se pasan como parámetros
+  Parameters:
+    elements: elements to check
+    controller: object that controls limit state in elements.
+  '''
+  combs= preprocessor.getLoadLoader.getLoadPatterns #Here each load pattern represents a combination.
+  for key in combs.getKeys():
+    comb= combs[key]
+    #print "Resolviendo para acción: ",key
+    resuelve_combinacion.resuelveComb(preprocessor,key,analysis,1)
+    controller.check(elements,key)
 
+# Construye el modelo para la comprobación de tensiones normales
+def xLaminaConstruyeModeloFicticio(preprocessor,datosScc1, datosScc2):
+  '''
+  Parameters:
+    preprocessor:    preprocessor name
+  '''
+  nodos= preprocessor.getNodeLoader
+
+  predefined_spaces.gdls_resist_materiales3D(nodos)
+
+  # Definimos materiales
+  scc= sccFICT.defSeccShElastica3d(preprocessor) # El problema es isóstático, así que la sección da igual
+  elementos= preprocessor.getElementLoader
+  elementos.dimElem= 1
+  elementos.defaultMaterial= sccFICT.nmb
+
+  execfile("/tmp/elementos_scc1.xci")
+  execfile("/tmp/elementos_scc2.xci")
+  for e in elementos:
+    HIPCP= "nil" #Hipótesis que produce el caso pésimo
+    NCP= 0.0 #Valor del axil en la hipótesis que produce el caso pésimo.
+    MyCP= 0.0 #Valor del momento en torno al eje y en la hipótesis que produce el caso pésimo.
+    MzCP= 0.0 #Valor del momento en torno al eje z en la hipótesis que produce el caso pésimo.
+    FCCP= 0.0 #Valor del factor de capacidad en la hipótesis que produce el caso pésimo.
+    # Definimos los diagramas de interacción
+    hormigon= preprocessor.getMaterialLoader.getMaterial(codHormigon)
+    tagHorm= hormigon.getProp("matTagD")
+    reinforcement= preprocessor.getMaterialLoader.getMaterial(codArmadura)
+    tagHorm= reinforcement.getProp("matTagD")
+    diagInt1= preprocessor.getMaterialLoader.newInteractionDiagram(datosScc1.sectionName,tagHorm,tagArmadura)
+    diagInt2= preprocessor.getMaterialLoader.newInteractionDiagram(datosScc2.sectionName,tagHorm,tagArmadura)
+
+    os.sys("rm -f "+"/tmp/elementos_scc1.xci")
+    os.sys("rm -f "+"/tmp/elementos_scc2.xci")
 
 '''
  Lanza la comprobación de tensiones normales en una lámina
@@ -68,76 +114,73 @@ def lanzaCalculoTNFromAnsysData(nmbArch, datosScc1, datosScc2, nmbArchDefHipELU)
   meanCFs= cv.writeControlVarsFromElements("ULS_normStr",preprocessor,nmbArch+"TN",datosScc1.sectionName,datosScc2.sectionName)
   return meanCFs
 
-def lanzaCalculoTNFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controller):
+def getListaCombinaciones(nmbArchDefHipELU):
   '''
-  Lanza la comprobación de tensiones normales en una lámina
-    cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
-    con los materiales que se definen en el archivo nmbArchMateriales,
-    las características de las secciones que se definen en los registros
-    datosScc1 y datosScc2, las combinaciones definidas en el archivo
-    nmbArchDefHipELU e imprime los resultados en archivos con
-    el nombre nmbArchTN.*
+  Define las combinaciones descritas en el archivo que se pasa como parámetro
+   y coloca sus nombres en la lista que devuelve.
+   nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular. 
+  '''
+  lstCombRetval= []
+  cargas= preprocessor.getLoadLoader
+  casos= cargas.getLoadPatterns
+  ts= casos.newTimeSeries("constant_ts","ts")
+  casos.currentTimeSeries= "ts"
+  execfile("/tmp/acciones.xci")
+  execfile("/tmp/cargas.xci")
+  execfile(nmbArchDefHipELU)
+
+  lstCombRetval= cargas.listaNombresCombinaciones()
+  os.sys("rm -f "+"/tmp/acciones.xci")
+  os.sys("rm -f "+"/tmp/cargas.xci")
+  return lstCombRetval
+
+def xLaminaCalculaCombEstatNoLin(elements,nmbArchDefHipELU,controller):
+  '''
+  Lanza el análisis (no lineal) y la comprobación en las combinaciones que se pasan como parámetros
   Parameters:
-    preprocessor:    preprocessor name
-    analysis:        type of analysis
-    intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing tue results of the 
-                     verification 
-    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
-                                (for the sections 1 and 2) to be employed 
-                                in verifications
-    mapSectionsDefinition:      file containing a dictionary with the two 
-                                sections associated with each elements to be
-                                used in the verification
-    mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
-                                diagrams of materials to be used in the verification process
+    nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
+    controller: object that controls limit state in elements.
   '''
-  meanCFs= -1.0
-  if(controller):
-    ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controller.limitStateLabel)
-    elements= preprocessor.getSets.getSet("total").getElements
-    calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,elements,analysis,controller)
-    meanCFs= cv.writeControlVarsFromElements(controller.limitStateLabel,preprocessor,outputFileName)
-  else:
-    lmsg.error('lanzaCalculoTNFromXCData controller not defined.')
-  return meanCFs
+  # Definimos el procedimiento de solución.
+  print "XXX Definir el procedimiento de solution (simple_newton_raphson_band_genr)"
+  listaCombinaciones= getListaCombinaciones(nmbArchDefHipELU)
+  for comb in listaCombinaciones:
+    print "Resolviendo para acción: ",comb
+    resuelveCombEstatNoLin(comb)
+    controller.check(elements,comb,nmbDiagIntSec1,nmbDiagIntSec2)
+  os.sys("rm -f "+"/tmp/acciones.xci")
+  os.sys("rm -f "+"/tmp/cargas.xci")
 
-def lanzaCalculoTN2dFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controller):
-  '''
-  Parameters:
-    preprocessor:        preprocessor name
-    analysis:            type of analysis
-    intForcCombFileName: name of the file containing the forces and bending moments 
-                         obtained for each element for the combinations analyzed
-    outputFileName:      name of the output file containing the results of the 
-                         verification  
-    sectionsNamesForEveryElement: file containing a dictionary  such that for each 
-                                  element of the model stores two names 
-                                (for the sections 1 and 2) to be employed 
-                                in verifications
-    mapSectionsDefinition:      file containing a dictionary with the two 
-                                sections associated with each elements to be
-                                used in the verification
-    mapInteractionDiagrams:     file containing a dictionary such that
-                                associates each element with the two interactions
-                                diagrams of materials to be used in the verification process
-  '''
-  lmsg.warning('lanzaCalculoTN2dFromXCData DEPRECATED call lanzaCalculoTNFromXCData with an uniaxial bending controller.')
-  meanCFs= -1.0
-  if(controller):
-    ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controller.limitStateLabel)
-    elements= preprocessor.getSets.getSet("total").getElements
-    calculo_comb.xLaminaCalculaCombEstatLin(preprocessor,elements,analysis,controller)
-    meanCFs= cv.writeControlVarsFromElements(controller.limitStateLabel,preprocessor,outputFileName)
-  else:
-    lmsg.error('lanzaCalculoTNFromXCData controller not defined.')
-  return meanCFs
+# Construye el modelo para la comprobación a cortante
+def xLaminaConstruyeModeloFibras(nmbRegDatosScc1, nmbRegDatosScc2):
+  nodos= preprocessor.getNodeLoader
 
-
-
-###                    *** Verifications related to 
-###                        ULS of failure due to Shear ***
+  predefined_spaces.gdls_resist_materiales3D(nodos)
+  elementos= preprocessor.getElementLoader
+  elementos.defaultMaterial= deref(nmbRegDatosScc1).sectionName
+  execfile("/tmp/elementos_scc1.xci")
+  for e in elementos:
+    nmbRegDefSecc= "nil" #Nombre del registro que define la sección.
+    if(odd(e.tag)):
+      nmbRegDefSecc= nmbRegDatosScc1 # Sección 1
+    else: 
+      nmbRegDefSecc= nmbRegDatosScc2 # Sección 2
+    HIPCP= "nil" #Hipótesis que produce el caso pésimo
+    NCP= 0.0 #Valor del axil en la hipótesis que produce el caso pésimo.
+    MyCP= 0.0 #Valor del momento en torno al eje y en la hipótesis que produce el caso pésimo.
+    MzCP= 0.0 #Valor del momento en torno al eje z en la hipótesis que produce el caso pésimo.
+    VyCP= 0.0 #Valor del cortante según y en la hipótesis que produce el caso pésimo.
+    VzCP= 0.0 #Valor del cortante según z en la hipótesis que produce el caso pésimo.
+    thetaCP= 0.0 #Ángulo de las bielas de hormigón en el caso pésimo.
+    VcuCP= 0.0 #Valor de la contribución del hormigón a la resistencia al esfuerzo cortante en el caso pésimo.
+    VsuCP= 0.0 #Valor de la contribución de las reinforcement a la resistencia al esfuerzo cortante en el caso pésimo.
+    Vu1CP= 0.0 #Valor del agotamiento por compresión oblicua del alma en el caso pésimo.
+    Vu2CP= 0.0 #Valor del agotamiento por tracción en el alma en el caso pésimo.
+    VuCP= 0.0 #Valor del cortante último en la hipótesis que produce el caso pésimo.
+    WkCP= 0.0 #Apertura de fisura en la hipótesis que produce el caso pésimo.
+    FCCP= 0.0 #Valor del factor de cumplimiento en la hipótesis que produce el caso pésimo. 
+  os.sys("rm -f "+"/tmp/elementos_scc1.xci")
+  os.sys("rm -f "+"/tmp/elementos_scc2.xci")
 
 
 def lanzaCalculoVFromAnsysData(preprocessor,nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArchDefHipELU):
@@ -154,73 +197,6 @@ def lanzaCalculoVFromAnsysData(preprocessor,nmbArch, nmbRegDatosScc1, nmbRegDato
   xLaminaConstruyeModeloFibras(nmbRegDatosScc1,nmbRegDatosScc2)
   xLaminaCalculaCombEstatNoLin(nmbArchDefHipELU)
   cv.writeControlVarsFromElementsForAnsys('ULS_shear',preprocessor,nmbArch+"V",deref(nmbRegDatosScc1).sectionName,deref(nmbRegDatosScc2).sectionName)
-
-def lanzaCalculoV(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controller):
-  '''
-   Lanza la comprobación de cortante en una lámina
-      cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
-      con los materiales que se definen en el archivo nmbArchMateriales,
-      las características de las secciones que se definen en los registros
-      datosScc1 y datosScc2, las combinaciones definidas en el archivo
-      nmbArchDefHipELU e imprime los resultados en archivos con
-      el nombre nmbArchTN.*
-  Parameters:
-    preprocessor:    preprocessor name
-    analysis:        type of analysis
-    intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing tue results of the 
-                     verification 
-    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
-                                (for the sections 1 and 2) to be employed 
-                                in verifications
-    mapSectionsDefinition:      file containing a dictionary with the two 
-                                sections associated with each elements to be
-                                used in the verification
-    mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
-                                diagrams of materials to be used in the verification process
-    controller: object that controls the limit state on elements.
-  '''
-  meanCFs= -1.0
-  if(controller):
-    elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controller.limitStateLabel)
-    elements= preprocessor.getSets.getSet("total").getElements
-    calculo_comb.xLaminaCalculaComb(preprocessor,elements,analysis,controller)
-    meanCFs= cv.writeControlVarsFromElements(controller.limitStateLabel,preprocessor,outputFileName)
-  else:
-    lmsg.error('lanzaCalculoV controller not defined.')
-  return meanCFs
-
-###                 *** Verifications related to 
-###                     ULS of Fatigue ***
-def lanzaCalculoFatigueFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controller):
-  '''Launch the calculation for the verification of the Fatigue Limit State
-  in shell elements.
-  Parameters:
-    preprocessor:    preprocessor name
-    analysis:        type of analysis
-    intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing tue results of the 
-                     verification 
-    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
-                                (for the sections 1 and 2) to be employed 
-                                in verifications
-    mapSectionsDefinition:      file containing a dictionary with the two 
-                                sections associated with each elements to be
-                                used in the verification
-    mapInteractionDiagrams:     file containing a dictionary such that                                                      associates each element with the two interactions
-                                diagrams of materials to be used in the verification process
-    controller: object that controls limit state on elements.
-   '''
-  if(controller):
-    elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, mapInteractionDiagrams,controller.limitStateLabel)
-    fcSIA.defVarsControl(elems)
-    elements= preprocessor.getSets.getSet("total").getElements
-    calculo_comb.xLaminaCalculaComb(preprocessor,elements,analysis,controller)
-    xLaminaPrintFatigueSIA262(preprocessor,outputFileName,sectionsNamesForEveryElement)
-  else:
-    lmsg.error('lanzaCalculoFatigueFromXCDataPlanB controller not defined.')
 
 def strElementProp(eTag,nmbProp,vProp):
   retval= "preprocessor.getElementLoader.getElement("
@@ -359,82 +335,19 @@ def xLaminaPrintFatigueSIA262(preprocessor,outputFileName, mapSections):
 ###                 *** Verifications related to 
 ###                     Cracking SLS  ***
 
-def lanzaCalculoFIS(nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArchDefHipELS):
-  '''
-   Lanza la comprobación de fisuración en una lámina
-      cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
-      con los materiales que se definen en el archivo nmbArchMateriales,
-      las características de las secciones que se definen en los registros
-      datosScc1 y datosScc2, las combinaciones definidas en el archivo
-      nmbArchDefHipELS e imprime los resultados en archivos con
-      el nombre nmbArchFis.*
-  '''
-  extraeDatosLST(nmbArch+".lst")
-  xLaminaConstruyeModeloFibras(nmbRegDatosScc1,nmbRegDatosScc2)
-  xLaminaCalculaCombEstatNoLin(nmbArchDefHipELS)
-  xLaminaPrintFIS(nmbArch+"FIS",deref(nmbRegDatosScc1).sectionName,deref(nmbRegDatosScc2).sectionName)
-
-
-def lanzaCalculoFISFromXCData(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,controller):
-  '''
-   Lanza la comprobación de fisuración en una lámina
-      cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
-      con los materiales que se definen en el archivo nmbArchMateriales,
-      las características de las secciones que se definen en mapSections,
-      e imprime los resultados en archivos con
-      el nombre nmbArchFis.*
-  Parameters:
-    preprocessor:    preprocessor name
-    analysis:        type of analysis
-    intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing tue results of the 
-                     verification 
-    sectionsNamesForEveryElement: file containing a dictionary  such that for each
-                                element of the model stores two names 
-                                (for the sections 1 and 2) to be employed 
-                                in verifications
-    controller: object that controls limit state on elements      
-  '''
-  meanCFs= -1.0
-  if(controller):
-    elems= ec.creaElems(preprocessor,intForcCombFileName, sectionsNamesForEveryElement)
-    ccSIA.defVarsControlFISSIA262(elems)
-    elements= preprocessor.getSets.getSet("total").getElements
-    calculo_comb.xLaminaCalculaComb(preprocessor,elements,analysis,controller)
-    meanCFs= cv.writeControlVarsFromElements(controller.limitStateLabel,preprocessor,outputFileName,sectionsNamesForEveryElement)
-  else:
-    lmsg.error('lanzaCalculoFISFromXCData controller not defined.')
-  return meanCFs
-
-def lanzaCalculoFISFromXCDataPlanB(preprocessor,analysis,intForcCombFileName,outputFileName, sectionsNamesForEveryElement,mapSectionsDefinition,controller):
-  '''
-   Lanza la comprobación de fisuración en una lámina
-      cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
-      con los materiales que se definen en el archivo nmbArchMateriales,
-      las características de las secciones que se definen en mapSections,
-      e imprime los resultados en archivos con
-      el nombre nmbArchFis.*
-  Parameters:
-    preprocessor:    preprocessor name
-    analysis:        type of analysis
-    intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing tue results of the 
-                     verification 
-    sectionsNamesForEveryElement: file containing a dictionary  such that for each
-                                element of the model stores two names 
-                                (for the sections 1 and 2) to be employed 
-                                in verifications
-    controller: object that controls limit state on elements      
-  '''
-  if(controller):
-    elems= ec.extraeDatos(preprocessor,intForcCombFileName, sectionsNamesForEveryElement,mapSectionsDefinition, None,controller.limitStateLabel)
-    elements= preprocessor.getSets.getSet("total").getElements
-    calculo_comb.xLaminaCalculaComb(elements,analysis,controller)
-    cv.writeControlVarsFromElements(controller.limitStateLabel,preprocessor,outputFileName,sectionsNamesForEveryElement)
-  else:
-    lmsg.error('lanzaCalculoFISFromXCDataPlanB controller not defined.')
-  return meanCFs
+# def lanzaCalculoFIS(nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArchDefHipELS):
+#   '''
+#    Lanza la comprobación de fisuración en una lámina
+#       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
+#       con los materiales que se definen en el archivo nmbArchMateriales,
+#       las características de las secciones que se definen en los registros
+#       datosScc1 y datosScc2, las combinaciones definidas en el archivo
+#       nmbArchDefHipELS e imprime los resultados en archivos con
+#       el nombre nmbArchFis.*
+#   '''
+#   extraeDatosLST(nmbArch+".lst")
+#   xLaminaConstruyeModeloFibras(nmbRegDatosScc1,nmbRegDatosScc2)
+#   xLaminaCalculaCombEstatNoLin(nmbArchDefHipELS)
+#   xLaminaPrintFIS(nmbArch+"FIS",deref(nmbRegDatosScc1).sectionName,deref(nmbRegDatosScc2).sectionName)
 
 

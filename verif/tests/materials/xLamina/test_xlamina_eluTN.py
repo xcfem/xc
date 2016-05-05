@@ -7,8 +7,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from materials.xLamina import modelo
-#from materials.xLamina import postproceso_xLamina
 from solution import resuelve_combinacion
 from postprocess.reports import listados_factor_capacidad
 
