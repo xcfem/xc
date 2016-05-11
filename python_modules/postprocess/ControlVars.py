@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
 '''Classes to store limit state control variables (internal forces, 
    strains, stresses,...) calculated in the analysis.
    THESE CLASSES ARE INTENDED TO REPLACE THE PROPERTIES DEFINED
@@ -13,11 +14,13 @@ __email__= "l.pereztato@gmail.com"
 
 import os
 import scipy
+import inspect
 from miscUtils import LogMessages as lmsg
 import xc_base
 import geom
 import xc
 from postprocess.reports import common_formats as fmt
+from postprocess import extrapolate_elem_attr as ext
 
 
 class ControlVarsBase(object):
@@ -26,6 +29,19 @@ class ControlVarsBase(object):
     self.combName= combName #Name of the corresponding load combination
   def getCF(self):
     return -1.0
+  def __call__(self,arguments):
+    retval= None
+    obj= self
+    args= arguments.split('.')
+    for arg in args:
+      if(hasattr(obj,arg)):
+        obj= getattr(obj,arg)
+        if(hasattr(obj,'__call__')):
+          obj= obj.__call__()
+      else:
+        lmsg.error('argument: '+ arg+' not found')
+    retval= obj
+    return retval
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
         factor: factor for units (default 1e-3 -> kN)'''
@@ -264,6 +280,9 @@ class CrackControlVars(ControlVarsBase):
     self.crackControlVarsNeg= crackControlBaseVarsNeg #Cracks in - face.
   def getCF(self):
     return max(self.crackControlVarsPos.getCF(),self.crackControlVarsNeg.getCF())
+  def getMaxSteelStress(self):
+    '''Maximum value for rebar stresses.'''
+    return max(self.crackControlVarsPos.steelStress,self.crackControlVarsNeg.steelStress)
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
         factor: factor for units (default 1e-3 -> kN)'''
@@ -471,3 +490,33 @@ def writeControlVarsFromElementsForAnsys(controlVarName,preprocessor,outputFileN
   os.system("rm -f "+"/tmp/texOutput2.tmp")
   retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
   return retval
+
+def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
+  '''Extrapolates element's function values to the nodes.
+     elemSet: set of elements.
+     propName: name of the property that contains the control variables.
+     function: name of the function to call for each element.
+     argument: name of the control variable to extrapolate.
+     initialValue: initial value for the prop defined at the nodes.
+  '''
+  print 'propName: ', propName
+  print 'argument: ', argument
+  nodePropName= propName+'_'+argument
+  nodeTags= ext.create_attribute_at_nodes(elemSet,nodePropName,initialValue)
+  #Calculate totals.
+  for e in elemSet:
+    elemNodes= e.getNodes
+    sz= len(elemNodes)
+    for i in range(0,sz):
+      n= elemNodes[i]
+      controlVar= e.getProp(propName)
+      value= controlVar(argument)
+      oldValue= n.getProp(nodePropName)
+      n.setProp(nodePropName,oldValue+value)
+  #Divide by number of elements in the set that touch the node.
+  preprocessor= elemSet.owner.getPreprocessor
+  for tag in nodeTags:
+    n= preprocessor.getNodeLoader.getNode(tag)
+    denom= nodeTags[tag]
+    n.setProp(nodePropName,n.getProp(nodePropName)/denom)
+  return nodePropName
