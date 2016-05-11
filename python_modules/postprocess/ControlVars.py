@@ -19,6 +19,7 @@ import geom
 import xc
 from postprocess.reports import common_formats as fmt
 
+
 class ControlVarsBase(object):
   '''Base class for control variabless.'''
   def __init__(self,combName= 'nil'):
@@ -61,19 +62,16 @@ class ControlVarsBase(object):
     retval+= ")\n"
     return retval
 
-class CFNMy(ControlVarsBase):
-  '''Uniaxial bending. Normal stresses limit state variables.'''
-  def __init__(self,combName= 'nil',CF= -1.0,N= 0.0,My= 0.0):
-    super(CFNMy,self).__init__(combName)
-    self.CF= CF # Capacity factor or efficiency
+class NMy(ControlVarsBase):
+  '''Uniaxial bending. Internal forces for a combination.'''
+  def __init__(self,combName= 'nil',N= 0.0,My= 0.0):
+    super(NMy,self).__init__(combName)
     self.N= N # Axial force.
     self.My= My #Bending moment about y axis.
-  def getCF(self):
-    return self.CF
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
         factor: factor for units (default 1e-3 -> kN)'''
-    retval= super(CFNMy,self).getLaTeXFields(factor)
+    retval= super(NMy,self).getLaTeXFields(factor)
     retval+= " & "+fmt.Esf.format(self.N*factor)+" & "+fmt.Esf.format(self.My*factor)
     return retval
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
@@ -81,16 +79,50 @@ class CFNMy(ControlVarsBase):
         eTag: element identifier.
         axis: section 1 or 2
         factor: factor for units (default 1e-3 -> kN)'''
-    retval= super(CFNMy,self).getAnsysStrings(eTag,axis,factor)
+    retval= super(NMy,self).getAnsysStrings(eTag,axis,factor)
     retval.append("detab,"+str(eTag)+",N" +axis+","+str(self.N*factor)+"\n")
     retval.append("detab,"+str(eTag)+",My" +axis+","+str(self.My*factor)+"\n")
     return retval
   def getStrArguments(self,factor):
     '''Returns a string for a 'copy' (kind of) constructor.'''
-    retval= super(CFNMy,self).getStrArguments(factor)
+    retval= super(NMy,self).getStrArguments(factor)
     retval+= ',N= ' + str(self.N*factor) 
     retval+= ',My= ' + str(self.My*factor)
     return retval
+
+class NMyMz(NMy):
+  '''Uniaxial bending. Internal forces for a combination.'''
+  def __init__(self,combName= 'nil',N= 0.0,My= 0.0, Mz= 0.0):
+    super(NMyMz,self).__init__(combName,N,My)
+    self.Mz= Mz #Bending moment about z axis.
+  def getLaTeXFields(self,factor= 1e-3):
+    ''' Returns a string with the intermediate fields of the LaTeX string.
+        factor: factor for units (default 1e-3 -> kN)'''
+    retval= super(NMyMz,self).getLaTeXFields(factor)
+    retval+= " & "+fmt.Esf.format(self.Mz*factor)
+    return retval
+  def getAnsysStrings(self,eTag,axis, factor= 1e-3):
+    ''' Returns a string to represent fields in ANSYS (R).
+        eTag: element identifier.
+        axis: section 1 or 2
+        factor: factor for units (default 1e-3 -> kN)'''
+    retval= super(NMyMz,self).getAnsysStrings(eTag,axis,factor)
+    retval.append("detab,"+str(eTag)+",Mz" +axis+","+str(self.Mz*factor)+"\n")
+    return retval
+  def getStrArguments(self,factor):
+    '''Returns a string for a 'copy' (kind of) constructor.'''
+    retval= super(NMyMz,self).getStrArguments(factor)
+    retval+= ',Mz= ' + str(self.Mz*factor)
+    return retval
+
+
+class CFNMy(NMy):
+  '''Uniaxial bending. Normal stresses limit state variables.'''
+  def __init__(self,combName= 'nil',CF= -1.0,N= 0.0,My= 0.0):
+    super(CFNMy,self).__init__(combName,N,My)
+    self.CF= CF # Capacity factor or efficiency
+  def getCF(self):
+    return self.CF
 
 class UniaxialBendingControlVars(CFNMy):
   '''Uniaxial bending. Normal stresses limit state variables.'''
@@ -203,11 +235,11 @@ class CrackControlBaseVars(CFNMyMz):
   '''Biaxial bending. Normal stresses limit state variables.'''
   def __init__(self,combName= 'nil',CF= -1.0,N= 0.0, My= 0.0, Mz= 0.0, steelStress= 0.0):
     super(CrackControlBaseVars,self).__init__(combName,CF,N,My)
-    self.steelStress= steelStress #Bending moment about z axis.
+    self.steelStress= steelStress #Stress in rebars.
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
         factor: factor for units (default 1e-3 -> kN)'''
-    retval= super(CrackControlBaseVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.steelStress*factor*factor) #Factor for stresses ??
+    retval= super(CrackControlBaseVars,self).getLaTeXFields(factor)+" & "+fmt.Stress.format(self.steelStress*factor*factor) #Factor for stresses ??
     return retval
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
     ''' Returns a string to represent fields in ANSYS (R).
@@ -246,6 +278,100 @@ class CrackControlVars(ControlVarsBase):
     retval+= ', crackControlBaseVarsNeg= ' + self.crackControlVarsNeg.getStrConstructor(factor)
     return retval
 
+class FatigueControlBaseVars(NMyMz):
+  '''Biaxial bending. Normal stresses limit state variables.'''
+  def __init__(self,combName= 'nil',N= 0.0, My= 0.0, Mz= 0.0, Vy= 0.0, posSteelStress= 0.0, negSteelStress= 0.0, concreteStress= 0.0):
+    super(FatigueControlBaseVars,self).__init__(combName,N,My,Mz)
+    self.Vy= Vy #Shear.
+    self.posSteelStress= posSteelStress #traction stress in rebars.
+    self.negSteelStress= negSteelStress #negative stress in rebars.
+    self.concreteStress= concreteStress #negative stress in concrete.
+  def getLaTeXFields(self,factor= 1e-3):
+    ''' Returns a string with the intermediate fields of the LaTeX string.
+        factor: factor for units (default 1e-3 -> kN)'''
+    retval= super(FatigueControlBaseVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Vy*factor)+" & "+fmt.Stress.format(self.posSteelStress*factor*factor)+" & "+fmt.Stress.format(self.negSteelStress*factor*factor)+" & "+fmt.Stress.format(self.concreteStress*factor*factor) #Factor for stresses == factor*factor ??
+    return retval
+  def getAnsysStrings(self,eTag,axis, factor= 1e-3):
+    ''' Returns a string to represent fields in ANSYS (R).
+        eTag: element identifier.
+        axis: section 1 or 2
+        factor: factor for units (default 1e-3 -> kN)'''
+    retval= super(FatigueControlBaseVars,self).getAnsysStrings(eTag,axis,factor)
+    retval.append("detab,"+str(eTag)+",Vy" +axis+","+str(self.Vy*factor)+"\n")
+    retval.append("detab,"+str(eTag)+",posSteelStress" +axis+","+str(self.posSteelStress*factor*factor)+"\n")
+    retval.append("detab,"+str(eTag)+",negSteelStress" +axis+","+str(self.negSteelStress*factor*factor)+"\n")
+    retval.append("detab,"+str(eTag)+",concreteStress" +axis+","+str(self.concreteStress*factor*factor)+"\n")
+    return retval
+  def getStrArguments(self,factor):
+    '''Returns a string for a 'copy' (kind of) constructor.'''
+    retval= super(FatigueControlBaseVars,self).getStrArguments(factor)
+    retval+= ',Vy= ' + str(self.Vy*factor)
+    retval+= ',negSteelStress= ' + str(self.negSteelStress*factor*factor)
+    retval+= ',posSteelStress= ' + str(self.posSteelStress*factor*factor)
+    retval+= ',concreteStress= ' + str(self.concreteStress*factor*factor)
+    return retval
+
+class FatigueControlVars(ControlVarsBase):
+  '''Fatigue limit state control variables.'''
+  def __init__(self,idSection= 'nil',state0= FatigueControlBaseVars(), state1= FatigueControlBaseVars()):
+    self.idSection= idSection #Reinforced concrete section identifier.
+    self.state0= state0 #Under permanent loads.
+    self.state1= state1 #Under fatigue loads.
+    self.concreteLimitStress= 0.0 #SIA 262(2013)  4.3.8.3.1
+    self.concreteBendingCF= -1.0 #Concrete capacity factor.
+    self.shearLimit= 0.0 #SIA 262(2013)  4.3.8.3.2
+    self.concreteShearCF= -1.0 #Concrete shear factor.
+    self.Mu= 0.0 #Ultimate bending moment.
+    self.Vu= 0.0 #Ultimate shear.
+  def getSteelPosStressIncrement(self):
+    '''Returns positive stress increment in rebars.'''
+    return self.state1.posSteelStress-self.state0.posSteelStress
+  def getSteelNegStressIncrement(self):
+    '''Returns negative stress increment in rebars.'''
+    return self.state1.negSteelStress-self.state0.negSteelStress
+  def getAbsSteelStressIncrement(self):
+    '''Returns maximun stress increment in rebars (absolute value).'''
+    return max(self.getSteelPosStressIncrement(),-self.getSteelNegStressIncrement())
+  def getConcreteStressIncrement(self):
+    '''Returns stress increment in concrete.'''
+    return self.state1.concreteStress-self.state0.concreteStress
+  def getConcreteMaxMinStresses(self):
+    '''Used in FatigueController.concreteLimitStress.''' 
+    retval= [0.0,0.0]
+    retval[0]= min(min(self.state0.concreteStress,self.state1.concreteStress),0.0) # No positive stresses.
+    retval[1]= min(max(self.state0.concreteStress,self.state1.concreteStress),0.0) # No positive stresses.
+    return retval
+  def getConcreteMinStress(self):
+    '''Returns minimum (max. compressive) concrete stress between loaded and unloaded states.'''
+    sgc0= abs(min(self.state0.concreteStress,0.0))
+    sgc1= abs(min(self.state1.concreteStress,0.0))
+    return max(sgc0,sgc1)
+
+  def getLaTeXFields(self,factor= 1e-3):
+    ''' Returns a string with the intermediate fields of the LaTeX string.
+        factor: factor for units (default 1e-3 -> kN)'''
+    retval= self.idSection+" & "
+    retval+= self.state0.getLaTeXFields()+" & "
+    retval+= self.state1.getLaTeXFields()+" & "
+    retval+= fmt.Stress.format(self.concreteLimitStress*factor*factor)+" & "
+    retval+= fmt.Esf.format(self.concreteBendingCF)+" & "
+    retval+= fmt.Esf.format(self.shearLimit*factor)+" & "
+    retval+= fmt.Esf.format(self.concreteShearCF)+" & "
+    retval+= fmt.Esf.format(self.Mu*factor)+" & "
+    retval+= fmt.Esf.format(self.Vu*factor)
+    return retval
+  def getStrArguments(self,factor):
+    '''Returns a string for a 'copy' (kind of) constructor.'''
+    retval= 'idSection= "' + self.idSection + '"' 
+    retval+= ', controlBaseVars0= ' + self.state0.getStrConstructor(factor)
+    retval+= ', controlBaseVars1= ' + self.state1.getStrConstructor(factor)
+    retval+= ', concreteLimitStress= ' + str(self.concreteLimitStress*factor*factor)
+    retval+= ', concreteBendingCF= ' + str(self.concreteBendingCF)
+    retval+= ', shearLimit= ' + str(self.shearLimit*factor)
+    retval+= ', concreteShearCF= ' + str(self.concreteShearCF)
+    retval+= ', Mu= ' + str(self.Mu*factor)
+    retval+= ', Vu= ' + str(self.Vu*factor)
+    return retval
 
 def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName):
   '''Writes control var values from element into a file for

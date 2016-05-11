@@ -510,6 +510,8 @@
 /usr/local/lib/python2.7/dist-packages/model/setMgmtUtils.pyc
 /usr/local/lib/python2.7/dist-packages/model/tensa_cables.py
 /usr/local/lib/python2.7/dist-packages/model/tensa_cables.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/analysis_results.py
+/usr/local/lib/python2.7/dist-packages/postprocess/analysis_results.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/callback_controls.py
 /usr/local/lib/python2.7/dist-packages/postprocess/callback_controls.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/ControlVars.py
@@ -554,6 +556,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/draw_schema_armature_mur.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/exporta_esfuerzos.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/exporta_esfuerzos.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/export_internal_forces.py
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/export_internal_forces.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/graphLoadCase.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/graphLoadCase.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/__init__.py

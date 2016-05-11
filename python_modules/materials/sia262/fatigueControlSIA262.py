@@ -3,34 +3,15 @@
 Funciones para comprobación de una sección a fisuración según el
 artículo 49.2.4 de la EHE-08.
 '''
+import math
 from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils
 from materials.sia262 import shearSIA262
 from materials import crack_control_base as cc
 from materials import LimitStateControllerBase as lsc
 from materials import stressCalc as sc
-import math
+from postprocess import ControlVars as cv
 import geom
-
-def defVarsControl(elems):
-  for e in elems:
-    e.setProp("sg_sPos0",0)
-    e.setProp("sg_sNeg0",0)
-    e.setProp("sg_c0",0)
-    e.setProp("N0",0)
-    e.setProp("My0",0)
-    e.setProp("Mz0",0)
-    e.setProp("Vy0",0)
-    e.setProp("Vz0",0)
-    e.setProp("sg_sPos1",0)
-    e.setProp("sg_sNeg1",0)
-    e.setProp("sg_c1",0)
-    e.setProp("N1",0)
-    e.setProp("My1",0)
-    e.setProp("Mz1",0)
-    e.setProp("Vy1",0)
-    e.setProp("Vz1",0)
-
 
 def estimateSteelStress(sccData, N, M, As, y):
   retval= 0.0
@@ -85,14 +66,19 @@ def estimateSigmaCPlanB(sccData, N, M):
   sgc= min(min(sg1,sg2),0.0)
   return 2.0*sgc #Ver Jiménez Montoya 12.3 (página 244)
 
-def limitFatigueBeton(sccData,kc,sigma_c0,sigma_c1):
+def getConcreteLimitStress(sccData,kc,controlVars):
+  '''4.3.8.3.1 SIA 262 2013'''
   fcd= sccData.concrType.fcd()
   #print "sigma_c0= ", sigma_c0/1e6, " sigma_c1= ", sigma_c1/1e6
-  sg_max= min(min(sigma_c0,sigma_c1),0.0) # No possitive sttresses.
-  sg_min= min(max(sigma_c0,sigma_c1),0.0) # No possitive sttresses.
+  concreteStresses= controlVars.getConcreteMaxMinStresses()
+  sg_max= concreteStresses[0]
+  sg_min= concreteStresses[1]
   return min(-0.5*kc*fcd+0.45*abs(sg_min),-0.9*kc*fcd)
 
-def limitShear(sccData,v_0,v_1,vu):
+def getShearLimit(sccData,controlVars,vu):
+  '''4.3.8.3.2 SIA 262 2013'''
+  v_0= controlVars.state0.Vy
+  v_1= controlVars.state1.Vy
   vd_max= min(v_0,v_1)
   vd_min= max(v_0,v_1)
   coc= vd_min/vd_max
@@ -105,22 +91,39 @@ def limitShear(sccData,v_0,v_1,vu):
     print "limite negativo = ", retval
   return retval
 
+def getShearCF(controlVars):
+  '''Fatigue shear capacity factor.'''
+  return max(abs(controlVars.state0.Vy),abs(controlVars.state1.Vy))/controlVars.shearLimit
+
 class FatigueController(lsc.LimitStateControllerBase):
   '''Object that controls RC fatigue limit state.'''
 
-  def __init__(self,limitStateLabel,seccionHA):
+  def __init__(self,limitStateLabel):
     super(FatigueController,self).__init__(limitStateLabel)
 
-  def check(self,elements, nmbComb):
+  def initControlVars(self,elements):
+    ''' Defines limit state control variables for all the elements.'''
+    for e in elements:
+      idS= e.getProp("idSection")
+      e.setProp(self.limitStateLabel,cv.FatigueControlVars(idSection= idS))
+
+  def check(self,elements, combNm):
     '''
-    Comprobación de las secciones de hormigón frente a fatiga estimando la tensión en la reinforcement.
+    Checks fatigue limit state.
     Parameters:
       elements:    elements to check
+      combNm: combination name i.e.:
+        ELUF0: unloaded structure.
+        ELUF1: fatigue load in position 1.
+        ELUF2: fatigue load in position 2 (XXX not yet implemented!!!).
+        ELUF3: fatigue load in position 3 (XXX not yet implemented!!!).
+        ...
     '''
-    print 'Controlling limit state: ',self.limitStateLabel, ' for load combination: ',nmbComb,"\n"
+    print 'Controlling limit state: ',self.limitStateLabel, ' for load combination: ',combNm,"\n"
 
-    index= int(nmbComb[-1])
-    for e in elementos:
+
+    index= int(combNm[-1])
+    for e in elements:
       e.getResistingForce()
       scc= e.getSection()
       N= scc.getStressResultantComponent("N")
@@ -136,53 +139,26 @@ class FatigueController(lsc.LimitStateControllerBase):
       sigma_c= stressCalc.sgc
       #print "sgc0= ", stressCalc.sgc0
 
-      # sigma_sPos= estimateSteelStressPos(datosScc, N, My)
-      # sigma_sNeg= estimateSteelStressNeg(datosScc, N, My)
-      # sigma_s= max(sigma_sPos,sigma_sNeg)
-      # #sigma_c= estimateSigmaC(datosScc, sigma_sPos, sigma_sNeg)
-      # sigma_c= estimateSigmaCPlanB(datosScc, N, My)
-
-      # if(sigma_c==0.0):
-      #   print "****** sigma_sPos=", sigma_sPos/1e6, "sigma_sNeg=", sigma_sNeg/1e6, " sigma_c= ", sigma_c, " N= ",N/1e3, "M= ", My/1e3 
+      controlVars= e.getProp(self.limitStateLabel)
+      resultsComb= cv.FatigueControlBaseVars(combNm,N, My, Mz,Vy,sigma_sPos, sigma_sNeg,sigma_c)
       if(index==0):
-        e.setProp("sg_sPos0",sigma_sPos)
-        e.setProp("sg_sNeg0",sigma_sNeg)
-        e.setProp("sg_c0",sigma_c)
-        e.setProp("N0",N)
-        e.setProp("My0",My)
-        e.setProp("Mz0",Mz)
-        e.setProp("Vy0",Vy)
-        e.setProp("Vz0",Vz)
+        controlVars.state0= resultsComb
       else:
-        e.setProp("sg_sPos1",sigma_sPos)
-        e.setProp("sg_sNeg1",sigma_sNeg)
-        e.setProp("sg_c1",sigma_c)
-        e.setProp("N1",N)
-        e.setProp("My1",My)
-        e.setProp("Mz1",Mz)
-        e.setProp("Vy1",Vy)
-        e.setProp("Vz1",Vz)
+        controlVars.state1= resultsComb
         kc= 1.0 #XXX  SIA 262 4.2.1.7
-        lim_sg_c= limitFatigueBeton(datosScc,kc,e.getProp("sg_c0"),sigma_c)
-        #print "lim_sg_c= ", lim_sg_c/1e6
-        sgc0= abs(min(e.getProp("sg_c0"),0.0))
-        sgc1= abs(min(sigma_c,0.0))
-        fc_sg_c= max(sgc0,sgc1)/lim_sg_c
-        #print "fc_sg_c= ",fc_sg_c
-        e.setProp("lim_sg_c",lim_sg_c)
-        e.setProp("fc_sg_c",fc_sg_c)
+        controlVars.concreteLimitStress= getConcreteLimitStress(datosScc,kc,controlVars)
+        #print "concreteLimitStress= ", controlVars.concreteLimitStress/1e6
+        controlVars.concreteBendingCF= controlVars.getConcreteMinStress()/controlVars.concreteLimitStress
+        
+        #print "concreteBendingCF= ",controlVars.concreteBendingCF
         section= scc.getProp("datosSecc")
-        secHAParamsCortante= shearSIA262.ParamsCortante(section)
+        secHAParamsCortante= shearSIA262.ShearController(self.limitStateLabel)
+        secHAParamsCortante.setSection(section)
         posEsf= geom.Pos3d(N,My,Mz)
         diagInt= e.getProp("diagInt")
         FCflex= diagInt.getCapacityFactor(posEsf)
-        Mu= My/FCflex
-        Vu= secHAParamsCortante.calcVu(N,My, Mu, Vy)
-        Vy0= e.getProp("Vy0")
-        Vy1= Vy
-        lim_v= limitShear(section,Vy0,Vy1,Vu)
-        fc_v= max(abs(Vy0),abs(Vy1))/lim_v
-        e.setProp("Mu",Mu)
-        e.setProp("Vu",Vu)
-        e.setProp("lim_v",lim_v)
-        e.setProp("fc_v",fc_v)
+        controlVars.Mu= My/FCflex
+        controlVars.Vu= secHAParamsCortante.calcVu(N,My, controlVars.Mu, Vy)
+        controlVars.shearLimit= getShearLimit(section,controlVars,controlVars.Vu)
+        controlVars.concreteShearCF= getShearCF(controlVars)
+        e.setProp(self.limitStateLabel,controlVars)

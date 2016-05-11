@@ -99,11 +99,11 @@ analOk= analisis.analyze(1)
 
 f1= preprocessor.getSets.getSet("f1")
 
-from postprocess.reports import exporta_esfuerzos
+from postprocess.reports import export_internal_forces
 setTotal= preprocessor.getSets["total"]
 fName= "/tmp/test_export_shell_internal_forces.txt"
 f= open(fName,"w")
-exporta_esfuerzos.exportaEsfuerzosShellSet(preprocessor, "prueba",setTotal,f)
+export_internal_forces.exportaEsfuerzosShellSet(preprocessor, "prueba",setTotal,f)
 f.close()
 
 
