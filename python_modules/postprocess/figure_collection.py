@@ -38,12 +38,12 @@ class FigsCollectionPlotter(object):
     figureList.append(utils_display.FigureDefinition(partName,"Flexion","MyCP2",txtMyCP2,self.txtArmature2,self.mUnits))
     figureList.append(utils_display.FigureDefinition(partName,"Flexion","FCCP2",txtFCnormalStresses,self.txtArmature2))
     #Load properties to display:
-    fName= self.fieldFilesPath + "results_verif_tn_eluT2.py"
+    fName= self.fieldFilesPath + "verifRsl_normStrsULS.py"
     execfile(fName)
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
-    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_results_verif_tn_eluT2.tex",self.latexOutputPath+partName+"_results_verif_tn_eluT2_list_figures.tex")
+    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_verifRsl_normStrsULS.tex",self.latexOutputPath+partName+"_verifRsl_normStrsULS_list_figures.tex")
 
 
   def plotShear(self,preprocessor,partName,elemSetName):
@@ -54,12 +54,12 @@ class FigsCollectionPlotter(object):
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"VyCP2",txtVyCP2,self.txtArmature2,self.fUnits))
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"FCCP2",txtFCshearStresses,self.txtArmature2))
     #Load properties to display:
-    fName= self.fieldFilesPath + "results_verif_v_eluT2.py"
+    fName= self.fieldFilesPath + "verifRsl_shearULS.py"
     execfile(fName)
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
-    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_results_verif_v_eluT2.tex",self.latexOutputPath+partName+"_results_verif_v_eluT2_list_figures.tex")
+    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_verifRsl_shearULS.tex",self.latexOutputPath+partName+"_verifRsl_shearULS_list_figures.tex")
 
 
   def plotFissurationFreq(self,preprocessor,partName,elemSetName):
@@ -68,7 +68,7 @@ class FigsCollectionPlotter(object):
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"sg_s1",txtSGSFreq,self.txtArmature1,self.sUnits))
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"sg_s2",txtSGSFreq,self.txtArmature2,self.sUnits))
     #Load properties to display:
-    fName= self.fieldFilesPath + "results_verif_fis_els_freq.py"
+    fName= self.fieldFilesPath + "verifRsl_crackingSLS_freq.py"
     execfile(fName)
     elemSet= preprocessor.getSets.getSet(elemSetName).getElements
     for e in elemSet:
@@ -81,7 +81,7 @@ class FigsCollectionPlotter(object):
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
-    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_results_verif_fis_freq.tex",self.latexOutputPath+partName+"_results_verif_fis_freq_list_figures.tex")
+    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_verifRsl_crackingSLS_freq.tex",self.latexOutputPath+partName+"_verifRsl_crackingSLS_freq_list_figures.tex")
 
 
   def plotFissurationQP(self,preprocessor,partName,elemSetName):
@@ -91,7 +91,7 @@ class FigsCollectionPlotter(object):
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"sg_s1",txtSGSQP,self.txtArmature1,self.sUnits))
     figureList.append(utils_display.FigureDefinition(partName,eluStr,"sg_s2",txtSGSQP,self.txtArmature2,self.sUnits))
     #Load properties to display:
-    fName= self.fieldFilesPath + "results_verif_fis_els_qp.py"
+    fName= self.fieldFilesPath + "verifRsl_crackingSLS_qperm.py"
     execfile(fName)
     elemSet= preprocessor.getSets.getSet(elemSetName).getElements
     for e in elemSet:
@@ -104,7 +104,7 @@ class FigsCollectionPlotter(object):
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
-    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_results_verif_fis_qp.tex",self.latexOutputPath+partName+"_results_verif_fis_qp_list_figures.tex")
+    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_verifRsl_crackingSLS_qperm.tex",self.latexOutputPath+partName+"_verifRsl_crackingSLS_qperm_list_figures.tex")
 
 
 
@@ -121,7 +121,7 @@ class FigsCollectionPlotter(object):
 
 
     #Load properties to display:
-    fName= self.fieldFilesPath + "results_verif_fatigue.py"
+    fName= self.fieldFilesPath + "verifRsl_fatigueULS.py"
     execfile(fName)
 
     elemSet= preprocessor.getSets.getSet(elemSetName).getElements
@@ -136,4 +136,4 @@ class FigsCollectionPlotter(object):
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
-    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_results_verif_fatigue.tex",self.latexOutputPath+partName+"_results_verif_fatigue_list_figures.tex")
+    tp.plotFigures(preprocessor,figureList,self.latexOutputPath+partName+"_verifRsl_fatigueULS.tex",self.latexOutputPath+partName+"_verifRsl_fatigueULS_list_figures.tex")

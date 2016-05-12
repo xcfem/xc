@@ -19,7 +19,7 @@ from miscUtils import LogMessages as lmsg
 class RecordDefGrid(object):
   '''Provides the variables involved in the VTK grid representation
   Attributes:
-    setName:     name of the set to be represented
+    xcSet:     set to be represented
     entToLabel:  entities to be labeled (defaults to "nodos")
     cellType:    specifies the type of data cells (defaults to "nil"). Data cells are simple 
                  topological elements like points, lines, polygons and tetrahedra of which 
@@ -32,7 +32,7 @@ class RecordDefGrid(object):
 
   '''
   def __init__(self):
-    self.setName= "nil"
+    self.xcSet= None
     self.entToLabel= "nodos"
     self.cellType= "nil"
     self.uGrid= None

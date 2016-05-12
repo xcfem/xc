@@ -73,12 +73,12 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     visNodos.GetProperty().SetColor(.7, .5, .5)
     self.renderer.AddActor(visNodos)
 
-  def VtkCargaMallaElem(self,preprocessor,recordGrid,field):
+  def VtkCargaMallaElem(self,recordGrid,field):
     # Definimos grid
     self.nodos= vtk.vtkPoints()
     recordGrid.uGrid= vtk.vtkUnstructuredGrid()
     recordGrid.uGrid.SetPoints(self.nodos)
-    eSet= preprocessor.getSets.getSet(recordGrid.setName)
+    eSet= recordGrid.xcSet
     eSet.numerate()
     # Scalar values.
     nodeSet= eSet.getNodes
@@ -116,7 +116,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
 
   def defineEscenaMalla(self, preprocessor,recordGrid,field):
     # Define la escena de la malla en el dispositivo de salida.
-    self.VtkCargaMallaElem(preprocessor,recordGrid,field)
+    self.VtkCargaMallaElem(recordGrid,field)
     self.renderer= vtk.vtkRenderer()
     self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
     #self.defineActorNode(recordGrid.uGrid,0.02)
@@ -130,26 +130,40 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     #   vtk_define_malla_nodos.VtkDibujaIdsNodos(recordGrid,self.renderer)
     # else:
     #   print "Entity: ", recordGrid.entToLabel, " unknown."
-  def setupGrid(self,setName):
+  def setupGrid(self,xcSet):
+    ''' Parameters:
+       xcSet:     set to be represented
+    '''
     defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.setName= setName
+    defGrid.xcSet= xcSet
     return defGrid
 
-  def grafico_mef(self,preprocessor,setName,caption= ''):
-    defGrid= self.setupGrid(setName)
+  def grafico_mef(self,preprocessor,xcSet,caption= ''):
+    ''' Parameters:
+       xcSet:   set to be represented
+       caption: text to display in the graphic.
+    '''
+    defGrid= self.setupGrid(xcSet)
     self.displayGrid(preprocessor,defGrid,caption)
 
-  def displayMesh(self, preprocessor, setName, field= None, diagrams= None, fName= None, caption= ''):
-    defGrid= self.setupGrid(setName)
+  def displayMesh(self, preprocessor, xcSet, field= None, diagrams= None, fName= None, caption= ''):
+    ''' Parameters:
+       xcSet: set to be represented
+       field: field to show (optional)
+       diagrams: diagrams to show (optional)
+       fName: name of the graphic file to create (if None then -> screen window).
+       caption: text to display in the graphic.
+    '''
+    defGrid= self.setupGrid(xcSet)
     self.defineEscenaMalla(preprocessor,defGrid,field)
     if(diagrams):
       for d in diagrams:
         self.appendDiagram(d)
     self.displayScene(caption,fName)
 
-  def displayScalarField(self, preprocessor, setName, field, fName= None):
+  def displayScalarField(self, preprocessor, xcSet, field, fName= None):
     lmsg.warning('displayScalarField DEPRECATED; use displayMesh.')
-    self.displayMesh(preprocessor, setName, field, None, fName)
+    self.displayMesh(preprocessor, xcSet, field, None, fName)
 
   def displayNodalLoad(self, nod, color, carga, momento, fEscala):
     #actorName= baseName+"%04d".format(nod.tag) # Tag nodo.
