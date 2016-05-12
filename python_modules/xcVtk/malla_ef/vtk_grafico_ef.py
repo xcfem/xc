@@ -114,7 +114,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       if(c.getVtkCellType!= vtk.VTK_LINE):
         recordGrid.uGrid.InsertNextCell(c.getVtkCellType,vtx)
 
-  def defineEscenaMalla(self, preprocessor,recordGrid,field):
+  def defineEscenaMalla(self, recordGrid,field):
     # Define la escena de la malla en el dispositivo de salida.
     self.VtkCargaMallaElem(recordGrid,field)
     self.renderer= vtk.vtkRenderer()
@@ -138,15 +138,15 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     defGrid.xcSet= xcSet
     return defGrid
 
-  def grafico_mef(self,preprocessor,xcSet,caption= ''):
+  def grafico_mef(self,xcSet,caption= ''):
     ''' Parameters:
        xcSet:   set to be represented
        caption: text to display in the graphic.
     '''
     defGrid= self.setupGrid(xcSet)
-    self.displayGrid(preprocessor,defGrid,caption)
+    self.displayGrid(defGrid,caption)
 
-  def displayMesh(self, preprocessor, xcSet, field= None, diagrams= None, fName= None, caption= ''):
+  def displayMesh(self, xcSet, field= None, diagrams= None, fName= None, caption= ''):
     ''' Parameters:
        xcSet: set to be represented
        field: field to show (optional)
@@ -155,7 +155,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
        caption: text to display in the graphic.
     '''
     defGrid= self.setupGrid(xcSet)
-    self.defineEscenaMalla(preprocessor,defGrid,field)
+    self.defineEscenaMalla(defGrid,field)
     if(diagrams):
       for d in diagrams:
         self.appendDiagram(d)
@@ -163,7 +163,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
 
   def displayScalarField(self, preprocessor, xcSet, field, fName= None):
     lmsg.warning('displayScalarField DEPRECATED; use displayMesh.')
-    self.displayMesh(preprocessor, xcSet, field, None, fName)
+    self.displayMesh(xcSet, field, None, fName)
 
   def displayNodalLoad(self, nod, color, carga, momento, fEscala):
     #actorName= baseName+"%04d".format(nod.tag) # Tag nodo.

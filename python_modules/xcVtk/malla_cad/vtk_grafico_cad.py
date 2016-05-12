@@ -8,14 +8,14 @@ from xcVtk import vtk_grafico_base
 
 class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
   ''' Define la salida gráfica.'''
-  def defineEscenaMalla(self, preprocessor,recordGrid, field):
+  def defineEscenaMalla(self, recordGrid, field):
     # Define la escena de la malla en el dispositivo de salida.
     recordGrid.uGrid= vtk.vtkUnstructuredGrid()
     recordGrid.cellType= "lines"
-    setToDraw= preprocessor.getSets.getSet(recordGrid.setName)
+    setToDraw= recordGrid.xcSet
     numKPts= setToDraw.getPoints.size
     if(numKPts>0):
-      cadMesh.VtkCargaMalla(preprocessor,recordGrid)
+      cadMesh.VtkCargaMalla(recordGrid)
       self.renderer= vtk.vtkRenderer()
       self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
       cadMesh.VtkDefineActorKPoint(recordGrid,self.renderer,0.02)
@@ -28,15 +28,15 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
     # elif(entToLabel=="points"):
     #   xcVtk.cadMesh.VtkDibujaIdsKPts(uGridCad,setToDraw,renderer)
 
-  def grafico_cad(self,preprocessor,setName):
+  def grafico_cad(self,xcSet,caption= ''):
     defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.setName= setName
-    self.displayGrid(preprocessor,defGrid)
+    defGrid.xcSet= xcSet
+    self.displayGrid(defGrid,caption)
 
-  def plotCadModel(self, preprocessor, setName, field, fName, caption= ''):
+  def plotCadModel(self, xcSet, field, fName, caption= ''):
     defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.setName= setName
-    self.defineEscenaMalla(preprocessor,defGrid,field)
+    defGrid.xcSet= xcSet
+    self.defineEscenaMalla(defGrid,field)
     self.displayScene(caption,fName)
 
 

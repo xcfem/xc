@@ -198,9 +198,9 @@ class RecordDefDisplay(object):
     self.displayScene('noCaption', None)
     
 
-  def displayGrid(self, preprocessor,recordGrid,caption= ''):
+  def displayGrid(self, recordGrid,caption= ''):
     '''Displays the grid in the output device'''
-    self.defineEscenaMalla(preprocessor,recordGrid,None)
+    self.defineEscenaMalla(recordGrid,None)
     self.displayScene(caption)
 
   def plot(self,fName):
