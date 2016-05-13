@@ -808,11 +808,11 @@ class GridModel(object):
     defDisplay.grafico_mef(self.getPreprocessor(),partToDisplay,caption)
     return defDisplay
 
-  def displayLoad(self,setToDisplay='total',loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",caption= '',fileName=None):
+  def displayLoad(self,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",caption= '',fileName=None):
     '''vector field display of the loads applied to the chosen set of elements 
     in the load case passed as parameter
     Parameters:
-      setToDisplay:   name of the set of elements to be displayed
+      setToDisplay:   set of elements to be displayed (defaults to total set)
       loadCaseNm:     name of the load case to be depicted
       unitsScale:     factor to apply to the results if we want to change
                       the units.
@@ -831,14 +831,18 @@ class GridModel(object):
                       None, in this case it returns a console output graphic.
       caption:        text to display in the graphic 
     '''
+    if setToDisplay == None:
+        setToDisplay=self.getPreprocessor().getSets.getSet('total')
+        setToDisplay.fillDownwards()
+
     defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.setName=setToDisplay
+    defGrid.xcSet=setToDisplay
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea
     vField.dumpLoads(self.getPreprocessor())
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
     defDisplay.viewName= viewNm
-    defDisplay.defineEscenaMalla(self.getPreprocessor(),defGrid,None) 
+    defDisplay.defineEscenaMalla(defGrid,None) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
