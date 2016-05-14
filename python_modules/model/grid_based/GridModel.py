@@ -821,7 +821,7 @@ class GridModel(object):
     '''vector field display of the loads applied to the chosen set of elements 
     in the load case passed as parameter
     Parameters:
-      setToDisplay:   name of the set of elements to be displayed
+      setToDisplay:   set of elements to be displayed (defaults to total set)
       loadCaseNm:     name of the load case to be depicted
       unitsScale:     factor to apply to the results if we want to change
                       the units.
@@ -845,7 +845,7 @@ class GridModel(object):
         setToDisplay.fillDownwards()
 
     defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.setName=setToDisplay
+    defGrid.xcSet=setToDisplay
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea
     vField.dumpLoads(self.getPreprocessor())

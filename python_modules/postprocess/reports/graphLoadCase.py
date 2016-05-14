@@ -11,7 +11,7 @@ class RecordLoadCaseDisp(object):
   '''Generation of graphic files and adding to report-tex files for a load case
   Attributes:
    loadCaseName:   name of the load case to be depicted
-   setToDisplay:   name of the set of elements to be displayed
+   setToDisplay:   set of elements to be displayed
                    (defaults to 'total')
    unitsScale:     factor to apply to the results if we want to change
                    the units (defaults to 1).
@@ -32,7 +32,7 @@ class RecordLoadCaseDisp(object):
 
   def __init__(self,loadCaseName):
     self.loadCaseName=loadCaseName
-    self.setToDisplay='total'
+    self.setToDisplay=None
     self.unitsScale=1.0
     self.vectorScale=1.0
     self.multByElemArea=False
