@@ -33,6 +33,8 @@ class_<XC::MapSet, bases<EntCmd>, boost::noncopyable >("MapSet", no_init)
   .def("__getitem__",&XC::MapSet::getSet, return_internal_reference<>())
   .def("getSet", &XC::MapSet::getSet, return_internal_reference<>(),"Returns set by name.")
   .def("defSet", &XC::MapSet::defSet, return_internal_reference<>(),"Creates a new set with the name which is passed as a parameter.")
+  .def("removeSet", &XC::MapSet::removeSet,"Deletes the set and removes it from the sets map.")
+
    ;
 
 

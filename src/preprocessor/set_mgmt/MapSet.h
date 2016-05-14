@@ -74,7 +74,7 @@ class MapSet: public EntCmd, public MovableObject
     bool existe(const std::string &nmb) const;
     friend class EntMdlr;
 
-    Set *crea_set(const std::string &nmb);
+    Set *crea_set(const std::string &);
     SetEstruct *crea_set_estruct(const SetEstruct &);
     SetBase *broke_set(const std::string &,const std::string &);
 
@@ -127,6 +127,7 @@ class MapSet: public EntCmd, public MovableObject
     inline map_sets &get_sets_abiertos(void)
       { return abiertos; }
     Set *defSet(const std::string &);
+    void removeSet(const std::string &);
 
     const SetBase *busca_set(const std::string &nmb) const;
     SetBase &getSet(const std::string &nmb);

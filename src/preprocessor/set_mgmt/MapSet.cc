@@ -141,7 +141,6 @@ void XC::MapSet::cierra_set(const std::string &nmb)
       }
   }
 
-
 //! @bref Crea un conjunto estructurado copia del que se le pasa como parámetro.
 XC::SetEstruct *XC::MapSet::crea_set_estruct(const SetEstruct &set_estruct)
   {
@@ -235,6 +234,21 @@ XC::MapSet &XC::MapSet::operator=(const MapSet &otro)
 //! @brief Creates a new set with the name which is passed as a parameter.
 XC::Set *XC::MapSet::defSet(const std::string &nmb)
   { return crea_set(nmb); }
+
+//! @brief Deletes the set and removes it from the sets map.
+void XC::MapSet::removeSet(const std::string &nmb)
+  {
+    Set *tmp= dynamic_cast<Set *>(sets[nmb]);
+    if(tmp) //Set exists.
+      {
+        sets[nmb]= nullptr;
+        delete tmp;
+        sets.erase(nmb);
+      }
+    else
+      std::cerr << "MapSet::removeSet; ERROR set named: "
+                << nmb << " not found." << std::endl;
+  }
 
 //! @brief Borra todos los conjuntos definidos.
 void XC::MapSet::clearSets(void)

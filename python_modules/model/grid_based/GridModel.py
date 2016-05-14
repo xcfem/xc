@@ -105,6 +105,9 @@ class IJKRangeList(object):
     else:
       self.ranges= ranges
 
+  def getPreprocessor(self):
+    return self.grid.prep
+
   def append(self,ijkRange):
     self.ranges.append(ijkRange)
 
@@ -135,6 +138,19 @@ class IJKRangeList(object):
       i+= 1
     return i
 
+  def getSet(self,dicGeomEnt):
+    '''Returns an XC set with all the elements in the range list.'''
+    setName= self.name + '_xcSet'
+    xcSets= self.getPreprocessor().getSets
+    retval= xcSets.defSet(setName)
+    for r in self.ranges:
+      tmpName= setName+'_tmp'
+      s= self.grid.getSetInRange(r,dicGeomEnt,tmpName)
+      retval.append(s)
+      xcSets.removeSet(tmpName)
+    return retval
+
+
 def getIJKRangeListFromSurfaces(surfaces):
   retval= None
   if(surfaces):
@@ -147,13 +163,10 @@ def getIJKRangeListFromSurfaces(surfaces):
 class MaterialBase(IJKRangeList):
   '''Base class for lines and surfaces defined by a range list, a material and an element type and size.'''
   def __init__(self,name, grid, material,elemType,elemSize):
-    super(MaterialBase,self).__init__(name,grid,list())
+    super(MaterialBase,self).__init__(name,grid)
     self.material= material
     self.elemType= elemType
     self.elemSize= elemSize
-
-  def getIJKRangeList(self):
-    return IJKRangeList(self.name,self.grid,self.ranges)
 
 
 class MaterialSurface(MaterialBase):
@@ -316,11 +329,8 @@ class ElasticFoundationRanges(IJKRangeList):
     cBal= self.wModulus
     cRozam= self.cRoz
     self.springs= list() #Tags of the news springs.
-    i= 0
+    s= self.getSet(dicGeomEnt)
     for r in self.ranges:
-      nmbrSet= key+str(i)
-      s= self.grid.getSetInRange(r,dicGeomEnt,nmbrSet)
-      #print nmbrSet,s.getNodes.size
       s.resetTributarias()
       s.calculaAreasTributarias(False)
       sNod=s.getNodes
@@ -334,7 +344,6 @@ class ElasticFoundationRanges(IJKRangeList):
         nn= define_apoyos.defApoyoXYZ(self.grid.prep,n.tag,idElem,'muellX','muellY','muellZ')
         self.springs.append(self.grid.prep.getElementLoader.getElement(idElem))
         idElem+= 1
-      i+=1
 
   def getCDG(self):
     dx= 0.0; dy= 0.0; dz= 0.0
@@ -805,10 +814,10 @@ class GridModel(object):
 
   def displayMesh(self,partToDisplay,caption= ''):
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.grafico_mef(self.getPreprocessor(),partToDisplay,caption)
+    defDisplay.grafico_mef(partToDisplay,caption)
     return defDisplay
 
-  def displayLoad(self,setToDisplay='total',loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",caption= '',fileName=None):
+  def displayLoad(self,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",caption= '',fileName=None):
     '''vector field display of the loads applied to the chosen set of elements 
     in the load case passed as parameter
     Parameters:
@@ -831,6 +840,10 @@ class GridModel(object):
                       None, in this case it returns a console output graphic.
       caption:        text to display in the graphic 
     '''
+    if setToDisplay == None:
+        setToDisplay=self.getPreprocessor().getSets.getSet('total')
+        setToDisplay.fillDownwards()
+
     defGrid= vtk_grafico_base.RecordDefGrid()
     defGrid.setName=setToDisplay
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
@@ -838,7 +851,7 @@ class GridModel(object):
     vField.dumpLoads(self.getPreprocessor())
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
     defDisplay.viewName= viewNm
-    defDisplay.defineEscenaMalla(self.getPreprocessor(),defGrid,None) 
+    defDisplay.defineEscenaMalla(defGrid,None) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay

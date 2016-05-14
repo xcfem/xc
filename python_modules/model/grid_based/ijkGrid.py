@@ -167,7 +167,7 @@ class ijkGrid(object):
                 a.nDivI=1     #se inicializa el nº de divisiones a 1 (en otro caso
                 a.nDivJ=1     #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
                 retval.append(a)
-                nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
+                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
                 dicGeomEnt[nmbrSup]= a
                 j+=1
             i+=1
@@ -184,7 +184,7 @@ class ijkGrid(object):
                 a.nDivI=1     #se inicializa el nº de divisiones a 1 (en otro caso
                 a.nDivJ=1     #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
                 retval.append(a)
-                nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
+                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
                 dicGeomEnt[nmbrSup]= a
                 k+=1
             i+=1
@@ -201,7 +201,7 @@ class ijkGrid(object):
                 a.nDivI=1     #se inicializa el nº de divisiones a 1 (en otro caso
                 a.nDivJ=1     #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
                 retval.append(a)
-                nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
+                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
                 dicGeomEnt[nmbrSup]= a
                 k+=1
             j+=1
@@ -252,6 +252,8 @@ class ijkGrid(object):
             k+=1
     return retval
 
+  def getSupName(self,pt1,pt2,pt3,pt4):
+    return 's'+'%04.0f' % pt1 +'%04.0f' % pt2 +'%04.0f' % pt3 +'%04.0f' % pt4
   def getSetInRange(self,ijkRange,dicGeomEnt,nmbrSet):
     'devuelve el set de entidades (superficies y todas las asociadas a estas superficies)'
     'contenidas en un rectángulo comprendido entre las coordenadas'
@@ -270,7 +272,7 @@ class ijkGrid(object):
                 pto2= self.getTagIndices(i+1,j,k)
                 pto3= self.getTagIndices(i+1,j+1,k)
                 pto4= self.getTagIndices(i,j+1,k)
-                nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
+                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
                 retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 j+=1
             i+=1
@@ -283,7 +285,7 @@ class ijkGrid(object):
                 pto2= self.getTagIndices(i,j,k+1)
                 pto3= self.getTagIndices(i+1,j,k+1)
                 pto4= self.getTagIndices(i+1,j,k)
-                nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
+                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
                 retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 k+=1
             i+=1
@@ -296,7 +298,7 @@ class ijkGrid(object):
                 pto2= self.getTagIndices(i,j+1,k)
                 pto3= self.getTagIndices(i,j+1,k+1)
                 pto4= self.getTagIndices(i,j,k+1)
-                nmbrSup='s'+'%04.0f' % pto1 +'%04.0f' % pto2 +'%04.0f' % pto3 +'%04.0f' % pto4
+                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
                 retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 k+=1
             j+=1
