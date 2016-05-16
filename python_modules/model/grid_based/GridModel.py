@@ -839,6 +839,7 @@ class GridModel(object):
     if setToDisplay == None:
         setToDisplay=self.getPreprocessor().getSets.getSet('total')
         setToDisplay.fillDownwards()
+        lmsg.warning('set to display not defined; using total set.')
 
     defGrid= vtk_grafico_base.RecordDefGrid()
     defGrid.xcSet=setToDisplay
