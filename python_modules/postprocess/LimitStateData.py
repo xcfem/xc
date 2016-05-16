@@ -25,7 +25,7 @@ class LimitStateData(object):
     self.outputDataBaseFileName= outputDataBaseFileName
     self.controller= None
   def getInternalForcesFileName(self):
-    return self.internal_forces_results_directory+self.inputDataFileName
+    return self.internal_forces_results_directory+self.inputDataFileName #+ 'intForce_'+ self.label +'.csv'
   def getOutputDataBaseFileName(self):
     '''Returns the output file name without extension.'''
     return self.check_results_directory+self.outputDataBaseFileName
@@ -40,7 +40,7 @@ class LimitStateData(object):
     feProblem= model.getFEProblem()
     preprocessor= model.getPreprocessor()
     loadCombinations= preprocessor.getLoadLoader.getLoadCombinations
-    loadCombinations= self.createCombinations(combContainer,loadCombinations)
+    loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
     fName= self.getInternalForcesFileName()
     os.system("rm -f " + fName)
     for key in loadCombinations.getKeys():
@@ -59,12 +59,12 @@ class NormalStressesRCLimitStateData(LimitStateData):
   ''' Reinforced concrete normal stresses limit state data.'''
   def __init__(self):
     '''Limit state data constructor '''
-    super(NormalStressesRCLimitStateData,self).__init__('normalStressesResistance','intForc_normShULS.csv','verifRsl_normStrsULS')
+    super(NormalStressesRCLimitStateData,self).__init__('ULS_normalStressesResistance','intForc_normShULS.csv','verifRsl_normStrsULS')
 
-  def createCombinations(self,combContainer,loadCombinations):
+  def dumpCombinations(self,combContainer,loadCombinations):
     '''Load into the solver the combinations needed for this limit state.'''
     loadCombinations.clear()
-    combContainer.ULS.createCombinations(loadCombinations)
+    combContainer.ULS.dumpCombinations(loadCombinations)
     return loadCombinations
 
   def check(self,sections,sectionsNamesForEveryElement):
@@ -76,11 +76,11 @@ class ShearResistanceRCLimitStateData(LimitStateData):
   ''' Reinforced concrete shear resistance limit state data.'''
   def __init__(self):
     '''Limit state data constructor '''
-    super(ShearResistanceRCLimitStateData,self).__init__('shearResistance','intForc_normShULS.csv','verifRsl_shearULS')
-  def createCombinations(self,combContainer,loadCombinations):
+    super(ShearResistanceRCLimitStateData,self).__init__('ULS_shearResistance','intForc_normShULS.csv','verifRsl_shearULS')
+  def dumpCombinations(self,combContainer,loadCombinations):
     '''Load into the solver the combinations needed for this limit state.'''
     loadCombinations.clear()
-    combContainer.ULS.createCombinations(loadCombinations)
+    combContainer.ULS.dumpCombinations(loadCombinations)
     return loadCombinations
   def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
@@ -91,11 +91,11 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under frequent loads limit state data.'''
   def __init__(self):
     '''Limit state data constructor '''
-    super(FreqLoadsCrackControlRCLimitStateData,self).__init__('frequentLoadsCrackControl','intForc_crackingSLS_freq.csv','verifRsl_crackingSLS_freq')
-  def createCombinations(self,combContainer,loadCombinations):
+    super(FreqLoadsCrackControlRCLimitStateData,self).__init__('SLS_frequentLoadsCrackControl','intForc_crackingSLS_freq.csv','verifRsl_crackingSLS_freq')
+  def dumpCombinations(self,combContainer,loadCombinations):
     '''Load into the solver the combinations needed for this limit state.'''
     loadCombinations.clear()
-    combContainer.SLS.freq.createCombinations(loadCombinations)
+    combContainer.SLS.freq.dumpCombinations(loadCombinations)
     return loadCombinations
   def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
@@ -106,27 +106,40 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
   def __init__(self):
     '''Limit state data constructor '''
-    super(QPLoadsCrackControlRCLimitStateData,self).__init__('quasiPermanentLoadsLoadsCrackControl','intForc_crackingSLS_qperm.csv','verifRsl_crackingSLS_qperm')
-  def createCombinations(self,combContainer,loadCombinations):
+    super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsLoadsCrackControl','intForc_crackingSLS_qperm.csv','verifRsl_crackingSLS_qperm')
+  def dumpCombinations(self,combContainer,loadCombinations):
     '''Load into the solver the combinations needed for this limit state.'''
     loadCombinations.clear()
-    combContainer.SLS.qp.createCombinations(loadCombinations)
+    combContainer.SLS.qp.dumpCombinations(loadCombinations)
     return loadCombinations
   def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
     return sections.crackControl(intForcCombFileName,out,sectionsNamesForEveryElement, "k",self.controller)
 
+class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
+  ''' Displacement control under frequent loads limit state data.'''
+  def __init__(self):
+    '''Limit state data constructor '''
+    super(FreqLoadsDisplacementControlLimitStateData,self).__init__('SLS_frequentLoadsDisplacementControl','','')
+  def dumpCombinations(self,combContainer,loadCombinations):
+    '''Load into the solver the combinations needed for this limit state.'''
+    loadCombinations.clear()
+    combContainer.SLS.freq.dumpCombinations(loadCombinations)
+    return loadCombinations
+  def check(self,sections,sectionsNamesForEveryElement):
+    print 'FreqLoadsDisplacementControlLimitStateData.check() not implemented.'
+
 
 class FatigueResistanceRCLimitStateData(LimitStateData):
   ''' Reinforced concrete shear resistance limit state data.'''
   def __init__(self):
     '''Limit state data constructor '''
-    super(FatigueResistanceRCLimitStateData,self).__init__('fatigueResistance','intForc_fatigueULS.csv','verifRsl_fatigueULS')
-  def createCombinations(self,combContainer,loadCombinations):
+    super(FatigueResistanceRCLimitStateData,self).__init__('ULS_fatigueResistance','intForc_fatigueULS.csv','verifRsl_fatigueULS')
+  def dumpCombinations(self,combContainer,loadCombinations):
     '''Load into the solver the combinations needed for this limit state.'''
     loadCombinations.clear()
-    combContainer.ULS.fatigue.createCombinations(loadCombinations)
+    combContainer.ULS.fatigue.dumpCombinations(loadCombinations)
     return loadCombinations
   def check(self,sections,sectionsNamesForEveryElement):
     intForcCombFileName= self.getInternalForcesFileName()
@@ -134,6 +147,7 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
     return sections.fatigueVerification(intForcCombFileName,out,sectionsNamesForEveryElement, "d",self.controller)
 
 
+freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()
 freqLoadsCrackControl= FreqLoadsCrackControlRCLimitStateData()
 quasiPermanentLoadsCrackControl= QPLoadsCrackControlRCLimitStateData()
 normalStressesResistance= NormalStressesRCLimitStateData()
