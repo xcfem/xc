@@ -2,15 +2,23 @@
 
 '''Graphic representation of fields over the mesh.'''
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import vtk
+from miscUtils import LogMessages as lmsg
 from xcVtk import FieldBase as fb
 from postprocess import extrapolate_elem_attr
+from postprocess import ControlVars as cv
 
 class ScalarField(fb.FieldBase):
   '''Scalar field defined at nodes.'''
-  def __init__(self,name,vExpr,component,fUnitConv):
+  def __init__(self,name, functionName, component=None, fUnitConv= 1.0):
     super(ScalarField,self).__init__(name,fUnitConv)
-    self.attrName= vExpr
+    self.attrName= functionName
     self.attrComponent= component
     self.arr= None
 
@@ -54,11 +62,25 @@ class ScalarField(fb.FieldBase):
 
 class ExtrapolatedScalarField(ScalarField):
   '''Scalar field defined at nodes.'''
-  def __init__(self,name,vExpr,component,fUnitConv,elementSetName):
-    super(ExtrapolatedScalarField,self).__init__(name,vExpr,component,fUnitConv)
-    self.elementSetName= elementSetName
+  def __init__(self,name, functionName, xcSet, component= None, fUnitConv= 1.0):
+    super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv)
+    self.xcSet= xcSet
 
-  def plot(self,preprocessor,defDisplay,fName,caption= ''):
-    elementSet= preprocessor.getSets.getSet(self.elementSetName).getElements
-    extrapolate_elem_attr.extrapolate_elem_function_attr(elementSet,self.name,"getProp", self.name)
-    defDisplay.displayMesh(preprocessor, self.elementSetName,self,None,fName,caption)
+  def plot(self,defDisplay,fName= None,caption= ''):
+    defDisplay.displayMesh(self.xcSet,self,None,fName,caption)
+
+class ExtrapolatedProperty(ExtrapolatedScalarField):
+  '''Scalar field defined as property value at nodes.'''
+  def __init__(self,name,functionName,xcSet, component= None,fUnitConv= 1.0):
+    super(ExtrapolatedProperty,self).__init__(name,functionName, xcSet, component= None, fUnitConv= 1.0)
+
+  def extrapolate(self):
+    extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.getElements,self.name,"getProp", self.name)
+
+  def plot(self,defDisplay,fName= None,caption= ''):
+    self.extrapolate()
+    defDisplay.displayMesh(self.xcSet,self,None,fName,caption)
+
+def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv):
+  nodePropName= cv.extrapolate_control_var(xcSet.getElements,attributeName,argument)
+  return ExtrapolatedScalarField(nodePropName,"getProp",xcSet,component,fUnitConv)

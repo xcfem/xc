@@ -42,6 +42,11 @@ class ControlVarsBase(object):
         lmsg.error('argument: '+ arg+' not found')
     retval= obj
     return retval
+  def getFieldNames(self):
+    retval= list()
+    for key in self.__dict__:
+      retval.append(key)
+    return retval
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
         factor: factor for units (default 1e-3 -> kN)'''

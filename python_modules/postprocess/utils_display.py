@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 __author__= "Luis C. Pérez Tato (LCPT)"
-__cppyright__= "Copyright 2015 LCPT"
+__copyright__= "Copyright 2015 LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -74,7 +74,7 @@ class SlideDefinition(FigureBase):
     for d in self.diagrams:
       d.agregaDiagrama()
 
-  def genGraphicFile(self,preprocessor,defDisplay, elementSetName, nmbFichGraf):
+  def genGraphicFile(self,preprocessor,defDisplay, xcSet, nmbFichGraf):
     jpegName= nmbFichGraf+".jpeg"
     epsName= nmbFichGraf+".eps"
     self.setupDiagrams()
@@ -82,14 +82,14 @@ class SlideDefinition(FigureBase):
     if(self.field):
       self.field.plot(preprocessor, defDisplay,fName)
     else:
-      defDisplay.displayMesh(preprocessor,elementSetName,None,self.diagrams,jpegName,self.getCaption())
+      defDisplay.displayMesh(xcSet,None,self.diagrams,jpegName,self.getCaption())
     os.system("convert "+ jpegName + " " + epsName)
   
 
 class FigureDefinition(SlideDefinition):
   diagrams= None #List of diagrams to display (see ColoredDiagram, LinearLoadDiagram,...)
 
-  def __init__(self,pLabel,limitStateLabel,attrName,figDescr,reinfDescr=None,units=None,sz= "90mm"):
+  def __init__(self,pLabel,limitStateLabel,attrName,argument,figDescr,reinfDescr=None,units=None,sz= "90mm"):
     ''' Figure constructor.
     pLabel: part label as defined in model; something like 'wall' or '2ndFloorDeck'
     limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
@@ -100,25 +100,26 @@ class FigureDefinition(SlideDefinition):
     '''
     super(FigureDefinition,self).__init__(pLabel,limitStateLabel,figDescr,reinfDescr,units,sz)
     self.attributeName= attrName
-    #lmsg.warning('FigureDefinition DEPRECATED; use SlideDefinition.')
+    self.argument= argument
 
-  def defField(self, elementSetName):
-    print '********** Enters FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' elementSetName= ', elementSetName 
-    self.field= Fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,elementSetName)
-    print '********** Exits FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' elementSetName= ', elementSetName 
+  def defField(self, xcSet):
+    print '********** Enters FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name
+    #self.field= Fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,xcSet)
+    self.field= Fields.getScalarFieldFromControlVar(self.attributeName,self.argument,xcSet,None,1.0)
+    print '********** Exits FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name
 
-  def genGraphicFile(self,preprocessor,defDisplay, elementSetName, nmbFichGraf):
+  def genGraphicFile(self,defDisplay, xcSet, nmbFichGraf):
     jpegName= nmbFichGraf+".jpeg"
     epsName= nmbFichGraf+".eps"
-    self.defField(elementSetName)
-    self.field.plot(preprocessor, defDisplay,jpegName,self.getCaption())
+    self.defField(xcSet)
+    self.field.plot(defDisplay,jpegName,self.getCaption())
     os.system("convert "+ jpegName + " " + epsName)
  
 class TakePhotos(object):
   '''Generation of bitmaps with analysis and design results.'''
-  def __init__(self,elemSetName):
+  def __init__(self,xcSet):
     self.defDisplay= None
-    self.elementSetName= elemSetName
+    self.xcSet= xcSet
     self.defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
     self.pthGraphOutput= '/tmp/'  #Directory to put the graphics in.
     self.pthTextOutput= '/tmp/'  #Directory to put the texts in.
@@ -132,7 +133,7 @@ class TakePhotos(object):
     if((conta>0) & (conta % 10==0)):
       self.fichLatexFigs.write('\\clearpage\n' )
 
-  def displayFigures(self,preprocessor,figDefinitionList,LatexFigsFilename,LatexListFilename):
+  def displayFigures(self,figDefinitionList,LatexFigsFilename,LatexListFilename):
     '''Creates graphics files from figure definition list.'''
     #nmbLstIss: nombre de la lista donde se definen los resultados a representar
     #LatexFilename: nombre del fichero de látex donde montar los gráficos
@@ -142,7 +143,7 @@ class TakePhotos(object):
     self.fichLatexList.write('\\begin{itemize}\n' )
     for figDef in figDefinitionList:
       bitmapFilename= self.pthGraphOutput+figDef.getFileName()
-      figDef.genGraphicFile(preprocessor,self.defDisplay, self.elementSetName,bitmapFilename)
+      figDef.genGraphicFile(self.defDisplay, self.xcSet,bitmapFilename)
       conta+= 1
       self.insertFigureLatex(figDef,conta,bitmapFilename,"fg_"+figDef.getFileName())
     self.fichLatexFigs.close()
@@ -152,7 +153,7 @@ class TakePhotos(object):
 
   def plotFigures(self,preprocessor,figDefinitionList,LatexFigsFilename,LatexListFilename):
     lmsg.warning('plotFigures DEPRECATED; use displayFigures.')
-    self.displayFigures(preprocessor,figDefinitionList,LatexFigsFilename,LatexListFilename)
+    self.displayFigures(figDefinitionList,LatexFigsFilename,LatexListFilename)
 
 class PartToDisplay(object):
   def __init__(self,partName, surfaceList,reinforcementLabels):
@@ -175,21 +176,21 @@ class PartToDisplay(object):
         retval.append(elem)
     return retval
   def getElementSet(self,preprocessor):
-    self.elementSetName= self.getShortName()+'_elementSet'
+    elementSetName= self.getShortName()+'_elementSet'
     elems= self.getElements()
     # Definimos el conjunto
-    st= preprocessor.getSets.defSet(self.elementSetName)
+    self.xcSet= preprocessor.getSets.defSet(elementSetName)
     for e in elems:
-      st.getElements.append(e)
-    st.fillDownwards()
-    return st
+      self.xcSet.getElements.append(e)
+    self.xcSet.fillDownwards()
+    return self.xcSet
   def display(self,preprocessor,tp,resultsToDisplay):
     '''Generate an image for every result to display
        resultToDisplay: collection of results to be displayed.
     '''
     elementSet= self.getElementSet(preprocessor)
-    tp.elementSetName= self.elementSetName
-    resultsToDisplay.display(preprocessor,tp,self)
+    tp.elementSetName= elementSet.name
+    resultsToDisplay.display(tp,self)
        
 
 class PartToDisplayContainer(dict):
