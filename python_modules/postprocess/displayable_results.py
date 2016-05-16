@@ -44,12 +44,14 @@ class ResultsDescriptionContainer(dict):
     '''Builds a list of figures to display.
        partToDisplay: part of the model wich will be displayed'''
     retval= list()
-    for k in self.keys():
-      result= self[k]
+    for key in self.keys():
+      result= self[key]
       partName= partToDisplay.partName
       index= result.getReinforcementLabel()
       txtArmature= partToDisplay.reinforcementLabels[index-1]
-      figDef= utils_display.FigureDefinition(partName,self.limitStateData.label,k,result.description,txtArmature,result.units)
+      print '**** key= ', key
+      print '**** label= ', self.limitStateData.label
+      figDef= utils_display.FigureDefinition(partName,self.limitStateData.label,key,result.description,txtArmature,result.units)
       retval.append(figDef)
     return retval
   def display(self,preprocessor,tp,partToDisplay):

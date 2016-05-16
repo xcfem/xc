@@ -36,7 +36,7 @@ class SituationCombs(dict):
       retval[comb.name]= nld.LoadComb(counter,comb.name,self.description,typ,nld.getComponentsFromStr(comb.expr,mapLoadCases))
       counter+=1
     return retval
-  def createCombinations(self,xcCombLoader):
+  def dumpCombinations(self,xcCombLoader):
     '''Introduces the combinations into the XC combination loader.'''
     for key in self:
       self[key].createCombination(xcCombLoader)
@@ -71,10 +71,10 @@ class SLSCombinations(object):
     for s in self.situations:
       retval.extend(s.getNames())
     return retval
-  def createCombinations(self,xcCombLoader):
+  def dumpCombinations(self,xcCombLoader):
     '''Introduces the combinations into the XC combination loader.'''
     for s in self.situations:
-      s.createCombinations(xcCombLoader)
+      s.dumpCombinations(xcCombLoader)
     
 
 class ULSCombinations(object):
@@ -105,10 +105,10 @@ class ULSCombinations(object):
     retval.update(self.fatigue.getNeutralFormat(counter+len(retval),'ULSF', mapLoadCases))
     retval.update(self.earthquake.getNeutralFormat(counter+len(retval),'ULSS', mapLoadCases))
     return retval
-  def createCombinations(self,xcCombLoader):
+  def dumpCombinations(self,xcCombLoader):
     '''Introduces the combinations into the XC combination loader.'''
     for s in self.situations:
-      s.createCombinations(xcCombLoader)
+      s.dumpCombinations(xcCombLoader)
 
 class CombContainer(object):
   '''Container of load combinations
@@ -130,8 +130,8 @@ class CombContainer(object):
     retval= self.SLS.getNeutralFormat(counter, mapLoadCases)
     retval.update(self.ULS.getNeutralFormat(counter+len(retval), mapLoadCases))
     return retval
-  def createCombinations(self,preprocessor):
+  def dumpCombinations(self,preprocessor):
     '''Introduces the combinations into the XC combination loader.'''
     xcCombLoader= preprocessor.getLoadLoader.getLoadCombinations
     for ls in self.limitStates:
-      ls.createCombinations(xcCombLoader)
+      ls.dumpCombinations(xcCombLoader)

@@ -13,6 +13,7 @@ from xcVtk import vtk_grafico_base
 from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk.malla_ef import Fields
 from xcVtk import vtk_grafico_diagrama_esfuerzos as gde
+from postprocess.ControlVars import *
 
 
 class FigureBase(object):
@@ -205,7 +206,7 @@ class PartToDisplayContainer(dict):
     #Load properties to display:
     fName= resultsToDisplay.limitStateData.getOutputDataFileName()
     print '******* calling: ', fName
-    execfile(fName)
+    execfile(fName) #Load data to display.
     for k in self.keys():
       part= self[k]
       part.display(preprocessor,tp,resultsToDisplay)
