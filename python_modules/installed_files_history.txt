@@ -556,6 +556,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/draw_schema_armature_mur.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/exporta_esfuerzos.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/exporta_esfuerzos.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/export_displacements.py
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/export_displacements.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/export_internal_forces.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/export_internal_forces.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/graphLoadCase.py

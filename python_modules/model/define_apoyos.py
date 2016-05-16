@@ -55,7 +55,7 @@ def defApoyoXY(preprocessor,iNod, iElem, matKX, matKY):
     spc= coacciones.newSPConstraint(retvalNodTag,i,0.0)
   return retvalNodTag
 
-def defApoyoXYZ(preprocessor,iNod, iElem, matKX, matKY, matKZ):
+def defApoyoXYZ(preprocessor,iNod, iElem, matKXName, matKYName, matKZName):
   '''
   Define un apoyo para el nodo cuyo tag se pasa como parámetro.
   Las rigideces del apoyo vienen dadas por los materiales que se pasan como parámetro.
@@ -68,13 +68,13 @@ def defApoyoXYZ(preprocessor,iNod, iElem, matKX, matKY, matKZ):
   # Definimos elementos
   elems= preprocessor.getElementLoader
   elems.dimElem= 3 # Tridimensional space.
-  elems.defaultMaterial= matKX
+  elems.defaultMaterial= matKXName
   elems.defaultTag= iElem #Next element number.
   zl= elems.newElement("zero_length",xc.ID([retvalNodTag,iNod]))
   zl.clearMaterials()
-  zl.setMaterial(0,matKX)
-  zl.setMaterial(1,matKY)
-  zl.setMaterial(2,matKZ)
+  zl.setMaterial(0,matKXName)
+  zl.setMaterial(1,matKYName)
+  zl.setMaterial(2,matKZName)
   # fin de la definición de elementos
   # Condiciones de contorno
   coacciones= preprocessor.getConstraintLoader
@@ -112,11 +112,11 @@ def defApoyoUniaxialProb2D(preprocessor, iNod, iElem, nmbMat, dir):
   return retvalNodTag
 
 # Coloca apoyos en todos los nodos de la lista (numera los elementos con el mismo índice de los nodos).
-def defApoyoNodosListaXYZ(preprocessor,tagNodos, tagElementos, matKX, matKY, matKZ):
+def defApoyoNodosListaXYZ(preprocessor,tagNodos, tagElementos, matKXName, matKYName, matKZName):
   sz= len(tagNodos)
   nodosNuevos= []
   for i in range(0,sz):
-    nodosNuevos.append(defApoyoXYZ(preprocessor,tagNodos[i],tagElementos[i],matKX,matKY,matKZ))
+    nodosNuevos.append(defApoyoXYZ(preprocessor,tagNodos[i],tagElementos[i],matKXName,matKYName,matKZName))
   return nodosNuevos
 
 # Coloca apoyos en todos los nodos de la lista de puntos.

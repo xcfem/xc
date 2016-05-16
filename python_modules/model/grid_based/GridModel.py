@@ -325,25 +325,22 @@ class ElasticFoundationRanges(IJKRangeList):
     super(ElasticFoundationRanges,self).__init__(name,grid,list())
     self.wModulus= wModulus
     self.cRoz= cRoz
-  def generateSprings(self,key,dicGeomEnt,kX,kY,kZ):
-    cBal= self.wModulus
-    cRozam= self.cRoz
+  def generateSprings(self,key,dicGeomEnt,matKX,matKY,matKZ):
+    '''Creates the springs at the nodes.'''
     self.springs= list() #Tags of the news springs.
     s= self.getSet(dicGeomEnt)
-    for r in self.ranges:
-      s.resetTributarias()
-      s.calculaAreasTributarias(False)
-      sNod=s.getNodes
-      idElem= self.grid.prep.getElementLoader.defaultTag
-      for n in sNod:
-        arTribNod=n.getAreaTributaria()
-        kX.E=cRozam*cBal*arTribNod
-        kY.E=cRozam*cBal*arTribNod
-        kZ.E=cBal*arTribNod
-        #print n.tag,arTribNod,kX.E,kY.E,kZ.E
-        nn= define_apoyos.defApoyoXYZ(self.grid.prep,n.tag,idElem,'muellX','muellY','muellZ')
-        self.springs.append(self.grid.prep.getElementLoader.getElement(idElem))
-        idElem+= 1
+    s.resetTributarias()
+    s.calculaAreasTributarias(False)
+    sNod= s.getNodes
+    idElem= self.grid.prep.getElementLoader.defaultTag
+    for n in sNod:
+      arTribNod=n.getAreaTributaria()
+      matKX.E= self.cRoz*self.wModulus*arTribNod
+      matKY.E= self.cRoz*self.wModulus*arTribNod
+      matKZ.E= self.wModulus*arTribNod
+      nn= define_apoyos.defApoyoXYZ(self.grid.prep,n.tag,idElem,'muellX','muellY','muellZ')
+      self.springs.append(self.grid.prep.getElementLoader.getElement(idElem))
+      idElem+= 1
 
   def getCDG(self):
     dx= 0.0; dy= 0.0; dz= 0.0
@@ -364,7 +361,6 @@ class ElasticFoundationRanges(IJKRangeList):
       n= e.getNodes[1]
       a= n.getAreaTributaria()
       pos= n.getInitialPos3d
-       #print "dispZ= ", n.getDisp[2]*1e3, "mm"
       materials= e.getMaterials()
       matX= materials[0]
       matY= materials[1]
