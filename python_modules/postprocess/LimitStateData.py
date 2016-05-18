@@ -47,7 +47,7 @@ class LimitStateData(object):
                     (The use of this factor won't be allowed in future versions)
     '''
     if fConvIntForc != 1.0:
-      lmsg.warning('fConvIntForc= ' + fConvIntForc + 'In future versions only the value 1.0 will be allowed for conversion factors between units' )
+      lmsg.warning('fConvIntForc= ' + fConvIntForc + 'In future versions only the value 1.0 will be allowed as conversion factor between units' )
     feProblem= model.getFEProblem()
     preprocessor= model.getPreprocessor()
     loadCombinations= preprocessor.getLoadLoader.getLoadCombinations
