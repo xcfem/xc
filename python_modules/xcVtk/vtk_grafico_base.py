@@ -12,6 +12,7 @@ __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 import sys
 import vtk
 import xc_base
+import geom
 from xcVtk import ScreenAnnotation as sa
 from miscUtils import LogMessages as lmsg
 
@@ -37,6 +38,12 @@ class RecordDefGrid(object):
     self.cellType= "nil"
     self.uGrid= None
     self.dispScale= 0.0
+
+  def getBND(self):
+    ''' Returns the grid boundary'''
+    bounds= self.uGrid.GetPoints().GetBounds()
+    retval= geom.BND3d(geom.Pos3d(bounds[0],bounds[2],bounds[4]),geom.Pos3d(bounds[1],bounds[3],bounds[5]))
+    return retval    
 
 class RecordDefDisplay(object):
   ''' Provides de variables to define the output device.
@@ -160,6 +167,37 @@ class RecordDefDisplay(object):
     else:
       sys.stderr.write("View name: '"+self.viewName+"' unknown.")
 
+  def setupAxes(self):
+    '''Add an vtkAxesActor to the renerer.'''
+    bnd= self.gridRecord.getBND()
+    offsetVector= bnd.diagonal*0.1
+    offset= offsetVector.getModulo()
+    axesPosition= bnd.pMin-offsetVector
+    transform = vtk.vtkTransform()
+    transform.Translate(axesPosition.x, axesPosition.y, axesPosition.z)
+    axes= vtk.vtkAxesActor()
+    #  The axes are positioned with a user transform
+    axes.SetUserTransform(transform)
+
+    length= offset
+    axes.SetTotalLength(length,length,length)
+
+    textSize= 10*offset
+    axes.GetXAxisCaptionActor2D().GetTextActor().SetTextScaleMode(False)
+    axes.GetXAxisCaptionActor2D().GetTextActor().GetTextProperty().SetFontSize(textSize)
+    axes.GetYAxisCaptionActor2D().GetTextActor().SetTextScaleMode(False)
+    axes.GetYAxisCaptionActor2D().GetTextActor().GetTextProperty().SetFontSize(textSize)
+    axes.GetZAxisCaptionActor2D().GetTextActor().SetTextScaleMode(False)
+    axes.GetZAxisCaptionActor2D().GetTextActor().GetTextProperty().SetFontSize(textSize)
+
+    # properties of the axes labels can be set as follows
+    # this sets the x axis label to red
+    # axes.GetXAxisCaptionActor2D().GetCaptionTextProperty().SetColor(1,0,0);
+ 
+    # the actual text of the axis label can be changed:
+    # axes.SetXAxisLabelText("test");
+    self.renderer.AddActor(axes)
+
   def setupWindow(self,caption= ''):
     '''sets the rendering window. A rendering window is a window in a
        graphical user interface where renderers draw their images.
@@ -167,6 +205,9 @@ class RecordDefDisplay(object):
     self.renWin= vtk.vtkRenderWindow()
     self.renWin.SetSize(self.windowWidth,self.windowHeight)
     self.renWin.AddRenderer(self.renderer)
+    #Axes
+    self.setupAxes()
+
     #Time stamp and window decorations.
     if(caption==''):
       lmsg.warning('setupWindow; window caption empty.')
@@ -196,11 +237,18 @@ class RecordDefDisplay(object):
   def muestraEscena(self):
     lmsg.warning('muestraEscena is deprecated. Use displayScene')
     self.displayScene('noCaption', None)
-    
 
-  def displayGrid(self, recordGrid,caption= ''):
+  def setupGrid(self,xcSet):
+    ''' Parameters:
+       xcSet:     set to be represented
+    '''
+    self.gridRecord= RecordDefGrid()
+    self.gridRecord.xcSet= xcSet
+    return self.gridRecord
+
+  def displayGrid(self, caption= ''):
     '''Displays the grid in the output device'''
-    self.defineEscenaMalla(recordGrid,None)
+    self.defineEscenaMalla(None)
     self.displayScene(caption)
 
   def plot(self,fName):

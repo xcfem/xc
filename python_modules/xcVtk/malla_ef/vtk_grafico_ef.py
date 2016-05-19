@@ -28,12 +28,12 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     super(RecordDefDisplayEF,self).__init__()
     self.nodos= None
     self.gridMapper= None
-  def VtkDefineActorElementos(self,uGrid, tipoRepr,field):
+  def VtkDefineActorElementos(self, tipoRepr,field):
     # Creamos el actor para las superficies.
     if(field):
-      field.setupOnGrid(uGrid)
+      field.setupOnGrid(self.gridRecord.uGrid)
     self.gridMapper= vtk.vtkDataSetMapper()
-    self.gridMapper.SetInput(uGrid)
+    self.gridMapper.SetInput(self.gridRecord.uGrid)
     if(field):
       field.setupOnMapper(self.gridMapper)
     elemActor= vtk.vtkActor()
@@ -54,14 +54,14 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       self.renderer.AddActor2D(field.scalarBar)
 
   # Define el actor a emplear para dibujar nodos.
-  def defineActorNode(self,uGrid, radius):
+  def defineActorNode(self, radius):
     sphereSource= vtk.vtkSphereSource()
     sphereSource.SetRadius(radius)
     sphereSource.SetThetaResolution(5)
     sphereSource.SetPhiResolution(5)
     
     markNodos= vtk.vtkGlyph3D()
-    markNodos.SetInput(uGrid)
+    markNodos.SetInput(self.gridRecord.uGrid)
     markNodos.SetSource(sphereSource.GetOutput())
     markNodos.ScalingOff()
     markNodos.OrientOff()
@@ -73,12 +73,12 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     visNodos.GetProperty().SetColor(.7, .5, .5)
     self.renderer.AddActor(visNodos)
 
-  def VtkCargaMallaElem(self,recordGrid,field):
+  def VtkCargaMallaElem(self,field):
     # Definimos grid
     self.nodos= vtk.vtkPoints()
-    recordGrid.uGrid= vtk.vtkUnstructuredGrid()
-    recordGrid.uGrid.SetPoints(self.nodos)
-    eSet= recordGrid.xcSet
+    self.gridRecord.uGrid= vtk.vtkUnstructuredGrid()
+    self.gridRecord.uGrid.SetPoints(self.nodos)
+    eSet= self.gridRecord.xcSet
     eSet.numerate()
     # Scalar values.
     nodeSet= eSet.getNodes
@@ -87,14 +87,14 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       field.creaLookUpTable()      
     # Cargamos los nodos en vtk
     setNodos= eSet.getNodes
-    if(recordGrid.dispScale==0.0):
+    if(self.gridRecord.dispScale==0.0):
       for n in setNodos:
         pos= n.getInitialPos3d
         self.nodos.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
     else:
       posNodo= xc.Vector([0,0,0])
       for n in setNodos:
-        posNodo= n.get3dCoo+recordGrid.dispScale*n.getDispXYZ
+        posNodo= n.get3dCoo+self.gridRecord.dispScale*n.getDispXYZ
         self.nodos.insertPoint(n.getIdx,posNodo[0],posNodo[1],posNodo[2])
     # Cargamos los elementos en vtk
     setElems= eSet.getElements
@@ -104,7 +104,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       for vIndex in vertices:
         vtx.InsertNextId(vIndex)
       if(e.getVtkCellType!= vtk.VTK_VERTEX):
-        recordGrid.uGrid.InsertNextCell(e.getVtkCellType,vtx)
+        self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
  
     #Cargamos las condiciones de contorno en vtk XXX FALLA
     setConstraints= eSet.getConstraints
@@ -112,39 +112,32 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       vtx= vtk.vtkIdList()
       vtx.InsertNextId(c.getNodeIdx)
       if(c.getVtkCellType!= vtk.VTK_LINE):
-        recordGrid.uGrid.InsertNextCell(c.getVtkCellType,vtx)
+        self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
 
-  def defineEscenaMalla(self, recordGrid,field):
+  def defineEscenaMalla(self, field):
     # Define la escena de la malla en el dispositivo de salida.
-    self.VtkCargaMallaElem(recordGrid,field)
+    self.VtkCargaMallaElem(field)
     self.renderer= vtk.vtkRenderer()
     self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
-    #self.defineActorNode(recordGrid.uGrid,0.02)
-    self.VtkDefineActorElementos(recordGrid.uGrid,"surface",field)
+    #self.defineActorNode(0.02)
+    self.VtkDefineActorElementos("surface",field)
     self.renderer.ResetCamera()
 
     #Implementar dibujo de etiquetas.
-    # if(recordGrid.entToLabel=="elementos"):
-    #   VtkDibujaIdsElementos(recordGrid,self.renderer)
-    # elif(recordGrid.entToLabel=="nodos"):
-    #   vtk_define_malla_nodos.VtkDibujaIdsNodos(recordGrid,self.renderer)
+    # if(self.gridRecord.entToLabel=="elementos"):
+    #   VtkDibujaIdsElementos(self.renderer)
+    # elif(self.gridRecord.entToLabel=="nodos"):
+    #   vtk_define_malla_nodos.VtkDibujaIdsNodos(self.renderer)
     # else:
-    #   print "Entity: ", recordGrid.entToLabel, " unknown."
-  def setupGrid(self,xcSet):
-    ''' Parameters:
-       xcSet:     set to be represented
-    '''
-    defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.xcSet= xcSet
-    return defGrid
+    #   print "Entity: ", self.gridRecord.entToLabel, " unknown."
 
   def grafico_mef(self,xcSet,caption= ''):
     ''' Parameters:
        xcSet:   set to be represented
        caption: text to display in the graphic.
     '''
-    defGrid= self.setupGrid(xcSet)
-    self.displayGrid(defGrid,caption)
+    self.setupGrid(xcSet)
+    self.displayGrid(caption)
 
   def displayMesh(self, xcSet, field= None, diagrams= None, fName= None, caption= ''):
     ''' Parameters:
@@ -154,8 +147,8 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
        fName: name of the graphic file to create (if None then -> screen window).
        caption: text to display in the graphic.
     '''
-    defGrid= self.setupGrid(xcSet)
-    self.defineEscenaMalla(defGrid,field)
+    self.setupGrid(xcSet)
+    self.defineEscenaMalla(field)
     if(diagrams):
       for d in diagrams:
         self.appendDiagram(d)

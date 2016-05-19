@@ -73,7 +73,6 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
   '''Scalar field defined as property value at nodes.'''
   def __init__(self,name,functionName,xcSet, component= None,fUnitConv= 1.0):
     super(ExtrapolatedProperty,self).__init__(name,functionName, xcSet, component, fUnitConv)
-    print 'ExtrapolatedProperty fUnitConv= ', fUnitConv
 
   def extrapolate(self):
     extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.getElements,self.name,"getProp", self.name)

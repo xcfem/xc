@@ -121,14 +121,14 @@ def VtkDibujaIdsCells(uGrid, setToDraw, entTypeName, renderer):
   renderer.AddActor2D(cellLabels)
 
 def VtkCargaMalla(recordGrid):
-  kpuntos= vtk.vtkPoints()
+  kpoints= vtk.vtkPoints()
   # Definimos grid
-  recordGrid.uGrid.SetPoints(kpuntos)
+  recordGrid.uGrid.SetPoints(kpoints)
   setToDraw= recordGrid.xcSet
   setToDraw.numerate()
   pnts= setToDraw.getPoints
   for p in pnts:
-    kpuntos.InsertPoint(p.getIdx,p.getPos.x,p.getPos.y,p.getPos.z)
+    kpoints.InsertPoint(p.getIdx,p.getPos.x,p.getPos.y,p.getPos.z)
   cellSet= setToDraw.getLines # cells are lines as default.
   if(recordGrid.cellType=="faces"):
     cellSet= setToDraw.getSurfaces
