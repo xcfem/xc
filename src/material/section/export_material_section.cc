@@ -36,16 +36,16 @@ class_<vectorSectionForceDeformation,boost::noncopyable>("vectorSectionForceDefo
   .def(vector_indexing_suite<vectorSectionForceDeformation>() )
   ;
 
-    class_<material_vector_SectionFDMat,bases<vectorSectionForceDeformation,EntCmd>,boost::noncopyable>("MaterialVectorSectionFDMat", no_init)
-        .def("commitState", &material_vector_SectionFDMat::commitState,"Commits materials state.")
-        .def("revertToLastCommit", &material_vector_SectionFDMat::revertToLastCommit,"Devuelve el estado del material al último consumado.")
-        .def("revertToStart", &material_vector_SectionFDMat::revertToStart,"Devuelve el material a su estado inicial.")
-        .def("getGeneralizedStresses", &material_vector_SectionFDMat::getGeneralizedStresses)
-        .def("getGeneralizedStrains", &material_vector_SectionFDMat::getGeneralizedStrains)
-      //.def("getMeanGeneralizedStress", &material_vector_SectionFDMat::getMeanGeneralizedStress)
-      //.def("getMeanGeneralizedStrain", &material_vector_SectionFDMat::getMeanGeneralizedStrain)
-        .def("getMeanGeneralizedStressByName", &material_vector_SectionFDMat::getMeanGeneralizedStressByName)
-        .def("getMeanGeneralizedStrainByName", &material_vector_SectionFDMat::getMeanGeneralizedStrainByName)
+class_<material_vector_SectionFDMat,bases<vectorSectionForceDeformation,EntCmd>,boost::noncopyable>("MaterialVectorSectionFDMat", no_init)
+  .def("commitState", &material_vector_SectionFDMat::commitState,"Commits materials state.")
+  .def("revertToLastCommit", &material_vector_SectionFDMat::revertToLastCommit,"Devuelve el estado del material al último consumado.")
+  .def("revertToStart", &material_vector_SectionFDMat::revertToStart,"Devuelve el material a su estado inicial.")
+  .def("getGeneralizedStresses", &material_vector_SectionFDMat::getGeneralizedStresses)
+  .def("getGeneralizedStrains", &material_vector_SectionFDMat::getGeneralizedStrains)
+//.def("getMeanGeneralizedStress", &material_vector_SectionFDMat::getMeanGeneralizedStress)
+//.def("getMeanGeneralizedStrain", &material_vector_SectionFDMat::getMeanGeneralizedStrain)
+  .def("getMeanGeneralizedStressByName", &material_vector_SectionFDMat::getMeanGeneralizedStressByName)
+  .def("getMeanGeneralizedStrainByName", &material_vector_SectionFDMat::getMeanGeneralizedStrainByName)
   ;
 
 

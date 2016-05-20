@@ -43,6 +43,8 @@ class ScalarField(fb.FieldBase):
           tmp= 0.0
       else:
         tmp= attr
+      if hasattr(tmp,"__getitem__"):
+        tmp= tmp[self.attrComponent]
       tmp*= self.fConvUnidades
       self.updateMinMax(tmp)
       self.arr.SetTuple1(n.getIdx,tmp)
@@ -66,8 +68,11 @@ class ExtrapolatedScalarField(ScalarField):
     super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv)
     self.xcSet= xcSet
 
-  def plot(self,defDisplay,fName= None,caption= ''):
+  def display(self,defDisplay,fName= None,caption= ''):
     defDisplay.displayMesh(self.xcSet,self,None,fName,caption)
+  def plot(self,defDisplay,fName= None,caption= ''):
+    lmsg.warning('ExtrapolatedScalarField.plot is DEPRECATED use display.')
+    self.display(defDisplay,fName,caption)
 
 class ExtrapolatedProperty(ExtrapolatedScalarField):
   '''Scalar field defined as property value at nodes.'''
@@ -77,9 +82,12 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
   def extrapolate(self):
     extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.getElements,self.name,"getProp", self.name)
 
-  def plot(self,defDisplay,fName= None,caption= ''):
+  def display(self,defDisplay,fName= None,caption= ''):
     self.extrapolate()
     defDisplay.displayMesh(self.xcSet,self,None,fName,caption)
+  def plot(self,defDisplay,fName= None,caption= ''):
+    lmsg.warning('ExtrapolatedProperty.plot is DEPRECATED use display.')
+    self.display(defDisplay,fName,caption)
 
 def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv):
   nodePropName= cv.extrapolate_control_var(xcSet.getElements,attributeName,argument)

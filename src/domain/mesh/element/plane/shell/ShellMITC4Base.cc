@@ -824,7 +824,7 @@ XC::Vector XC::ShellMITC4Base::getInterpolationFactors(const ParticlePos3d &pos)
     return retval;
   }
 
-//! @brief Returns interpolattion factors for a material point.
+//! @brief Returns interpolation factors for a material point.
 XC::Vector XC::ShellMITC4Base::getInterpolationFactors(const Pos3d &pos) const
   { return getInterpolationFactors(getNaturalCoordinates(pos)); }
 

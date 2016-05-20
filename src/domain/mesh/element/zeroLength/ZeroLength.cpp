@@ -495,7 +495,7 @@ const XC::Vector &XC::ZeroLength::getResistingForce(void) const
     for(size_t mat=0; mat<theMaterial1d.size(); mat++)
       {
         // get resisting force for material
-        force = theMaterial1d[mat]->getStress();
+        force= theMaterial1d[mat]->getStress();
 
         // compute residual due to resisting force
         for(int i=0; i<numDOF; i++)

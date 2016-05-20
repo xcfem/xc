@@ -15,7 +15,7 @@ from miscUtils import LogMessages as lmsg
 from materials import typical_materials
 from materials import parametrosSeccionRectangular
 from model import predefined_spaces
-from model import define_apoyos
+from model import ElasticFoundation as ef
 from xcVtk import vtk_grafico_base
 from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk import LoadVectorField as lvf
@@ -323,66 +323,25 @@ class ElasticFoundationRanges(IJKRangeList):
     ''' wModulus: Winkler modulus.
         cRoz: fraction of the Winkler modulus to apply in the contact plane.'''
     super(ElasticFoundationRanges,self).__init__(name,grid,list())
-    self.wModulus= wModulus
-    self.cRoz= cRoz
-  def generateSprings(self,key,dicGeomEnt,matKX,matKY,matKZ):
+    self.elasticFoundation= ef.ElasticFoundation(wModulus,cRoz)
+  def generateSprings(self,dicGeomEnt):
     '''Creates the springs at the nodes.'''
-    self.springs= list() #Tags of the news springs.
+    self.springs= list() #spring elements.
     s= self.getSet(dicGeomEnt)
-    s.resetTributarias()
-    s.calculaAreasTributarias(False)
-    sNod= s.getNodes
-    idElem= self.grid.prep.getElementLoader.defaultTag
-    for n in sNod:
-      arTribNod=n.getAreaTributaria()
-      matKX.E= self.cRoz*self.wModulus*arTribNod
-      matKY.E= self.cRoz*self.wModulus*arTribNod
-      matKZ.E= self.wModulus*arTribNod
-      nn= define_apoyos.defApoyoXYZ(self.grid.prep,n.tag,idElem,'muellX','muellY','muellZ')
-      self.springs.append(self.grid.prep.getElementLoader.getElement(idElem))
-      idElem+= 1
+    self.elasticFoundation.generateSprings(s)
 
   def getCDG(self):
-    dx= 0.0; dy= 0.0; dz= 0.0
-    A= 0.0
-    for e in self.springs:
-      n= e.getNodes[1]
-      a= n.getAreaTributaria()
-      pos= n.getInitialPos3d
-      A+= a
-      dx+= a*pos[0]; dy+= a*pos[1]; dz+= a*pos[2]
-    dx/=A; dy/=A; dz/=A
-    return geom.Pos3d(dx,dy,dz)
+    '''Returns the geometric baricenter of the springs.'''
+    return self.elasticFoundation.getCentroid()
 
-  def calcEarthPressures(self):
-    'foundation pressures over the soil'
-    svdReac= geom.SVD3d()
-    for e in self.springs:
-      n= e.getNodes[1]
-      a= n.getAreaTributaria()
-      pos= n.getInitialPos3d
-      materials= e.getMaterials()
-      matX= materials[0]
-      matY= materials[1]
-      matZ= materials[2]
-      Fx= matX.getStress()
-      SgX= Fx/a
-      Fy= matY.getStress()
-      SgY= Fy/a
-      Fz= matZ.getStress()
-      SgZ= Fz/a
-      reac= geom.Vector3d(-Fx,-Fy,-Fz)
-      svdReac+= geom.VDesliz3d(pos,reac)
-      #print "Fx= ", Fx/1e3, " Fy= ", Fy/1e3, " Fz= ", Fz/1e3
-      #print "SgX= ", SgX/1e6, " SgY= ", SgY/1e6, " SgZ= ", SgZ/1e6
-      n.setProp("SgX",SgX)
-      n.setProp("SgY",SgY)
-      n.setProp("SgZ",SgZ)
-      n.setProp("Fx",Fx)
-      n.setProp("Fy",Fy)
-      n.setProp("Fz",Fz)
-    #print "reac= ", svdReac/1e3
-    return svdReac
+  def calcPressures(self):
+    ''' Foundation pressures over the soil. Calculates pressures
+       and forces in the free nodes of the springs
+       (those that belongs to both the spring and the foundation)
+       and stores these values as properties of those nodes:
+       property 'soilPressure:' [xStress,yStress,zStress]
+       property 'soilReaction:' [xForce,yForce,zForce]'''
+    return self.elasticFoundation.calcPressures()
 
 
 class ElasticFoundationRangesMap(NamedObjectsMap):
@@ -392,12 +351,9 @@ class ElasticFoundationRangesMap(NamedObjectsMap):
   def generateSprings(self, prep, dicGeomEnt):
     #Apoyo elástico en el terreno
     #Materiales elásticos (los incializamos aquí para luego aplicar el módulo elástico que corresponda a cada nudo)
-    self.muellX=typical_materials.defElasticMaterial(prep,'muellX',0.5)
-    self.muellY=typical_materials.defElasticMaterial(prep,'muellY',0.5)
-    self.muellZ=typical_materials.defElasticMaterial(prep,'muellZ',1)
     for key in self.keys():
       apel= self[key]
-      apel.generateSprings(key,dicGeomEnt,self.muellX,self.muellY,self.muellZ)
+      apel.generateSprings(dicGeomEnt)
 
 class LoadBase(object):
   '''Base class for loads.
@@ -836,10 +792,10 @@ class GridModel(object):
                       None, in this case it returns a console output graphic.
       caption:        text to display in the graphic 
     '''
-    if setToDisplay == None:
-        setToDisplay=self.getPreprocessor().getSets.getSet('total')
-        setToDisplay.fillDownwards()
-        lmsg.warning('set to display not defined; using total set.')
+    if(setToDisplay == None):
+      setToDisplay=self.getPreprocessor().getSets.getSet('total')
+      setToDisplay.fillDownwards()
+      lmsg.warning('set to display not defined; using total set.')
 
     defGrid= vtk_grafico_base.RecordDefGrid()
     defGrid.xcSet=setToDisplay

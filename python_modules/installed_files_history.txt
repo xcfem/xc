@@ -454,6 +454,8 @@
 /usr/local/lib/python2.7/dist-packages/model/crea_lineas.pyc
 /usr/local/lib/python2.7/dist-packages/model/define_apoyos.py
 /usr/local/lib/python2.7/dist-packages/model/define_apoyos.pyc
+/usr/local/lib/python2.7/dist-packages/model/ElasticFoundation.py
+/usr/local/lib/python2.7/dist-packages/model/ElasticFoundation.pyc
 /usr/local/lib/python2.7/dist-packages/model/element_vectors.py
 /usr/local/lib/python2.7/dist-packages/model/element_vectors.pyc
 /usr/local/lib/python2.7/dist-packages/model/fija_nodos_lineas.py
