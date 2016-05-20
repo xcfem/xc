@@ -19,6 +19,7 @@ from model import ElasticFoundation as ef
 from xcVtk import vtk_grafico_base
 from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk import LoadVectorField as lvf
+from xcVtk import LocalAxesVectorField as lavf
 import ijkGrid as grid
 
 class NamedObjectsMap(dict):
@@ -769,6 +770,35 @@ class GridModel(object):
     defDisplay.grafico_mef(partToDisplay,caption)
     return defDisplay
 
+  def displayLocalAxes(self,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",caption= '',fileName=None):
+    '''vector field display of the loads applied to the chosen set of elements 
+    in the load case passed as parameter
+    Parameters:
+      setToDisplay:   set of elements to be displayed (defaults to total set)
+      vectorScale:    factor to apply to the vectors length in the 
+                      representation
+      viewNm:         name of the view  that contains the renderer (possible
+                      options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
+                      "ZPos", "ZNeg")
+      fileName:       full name of the graphic file to generate. Defaults to 
+                      None, in this case it returns a console output graphic.
+      caption:        text to display in the graphic 
+    '''
+    if(setToDisplay == None):
+      setToDisplay=self.getPreprocessor().getSets.getSet('total')
+      setToDisplay.fillDownwards()
+      lmsg.warning('set to display not defined; using total set.')
+
+    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay.setupGrid(setToDisplay)
+    vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
+    vField.dumpLocalAxes(setToDisplay)
+    defDisplay.viewName= viewNm
+    defDisplay.defineEscenaMalla(None) 
+    vField.addToDisplay(defDisplay)
+    defDisplay.displayScene(caption,fileName)
+    return defDisplay
+
   def displayLoad(self,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",caption= '',fileName=None):
     '''vector field display of the loads applied to the chosen set of elements 
     in the load case passed as parameter
@@ -797,14 +827,13 @@ class GridModel(object):
       setToDisplay.fillDownwards()
       lmsg.warning('set to display not defined; using total set.')
 
-    defGrid= vtk_grafico_base.RecordDefGrid()
-    defGrid.xcSet=setToDisplay
+    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay.setupGrid(setToDisplay)
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea
     vField.dumpLoads(self.getPreprocessor())
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
     defDisplay.viewName= viewNm
-    defDisplay.defineEscenaMalla(defGrid,None) 
+    defDisplay.defineEscenaMalla(None) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay

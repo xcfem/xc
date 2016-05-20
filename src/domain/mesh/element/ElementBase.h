@@ -64,7 +64,7 @@ class ElementBase: public Element
     int getNumExternalNodes(void) const;
     NodePtrsWithIDs &getNodePtrs(void);
     const NodePtrsWithIDs &getNodePtrs(void) const;
-    const Pos3d &getPosCdg(bool geomInicial= true) const;
+    const Pos3d &getPosCdg(bool initialGeometry= true) const;
   };
 
 
@@ -149,10 +149,10 @@ int XC::ElementBase<NNODOS>::recvData(const CommParameters &cp)
 
 //! @brief Devuelve la posición del centroide del elemento.
 template <int NNODOS>
-const Pos3d &XC::ElementBase<NNODOS>::getPosCdg(bool geomInicial) const
+const Pos3d &XC::ElementBase<NNODOS>::getPosCdg(bool initialGeometry) const
   {
     static Pos3d retval;
-    retval= theNodes.getPosCdg(geomInicial);
+    retval= theNodes.getPosCdg(initialGeometry);
     return retval;
   }
 

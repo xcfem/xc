@@ -191,10 +191,10 @@ class Node: public MeshComponent
     void setPos(const Pos3d &);
     void Mueve(const Vector3d &desplaz);  
     void Transforma(const TrfGeom &trf);
-    double getDist2(const Pos2d &p,bool geomInicial= true) const;
-    double getDist(const Pos2d &p,bool geomInicial= true) const;
-    double getDist2(const Pos3d &p,bool geomInicial= true) const;
-    double getDist(const Pos3d &p,bool geomInicial= true) const;
+    double getDist2(const Pos2d &p,bool initialGeometry= true) const;
+    double getDist(const Pos2d &p,bool initialGeometry= true) const;
+    double getDist2(const Pos3d &p,bool initialGeometry= true) const;
+    double getDist(const Pos3d &p,bool initialGeometry= true) const;
 
     // public methods for obtaining committed and trial 
     // response quantities of the node
@@ -326,7 +326,7 @@ class Node: public MeshComponent
 
   };
 
-Pos3d pos_nodo(const Node &nod,bool geomInicial= true);
+Pos3d pos_nodo(const Node &nod,bool initialGeometry= true);
 
 } // end of XC namespace
 

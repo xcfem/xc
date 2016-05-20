@@ -40,7 +40,7 @@ class_<XC::RayleighDampingFactors, bases<EntCmd>, boost::noncopyable >("Rayleigh
 #include "fvectors/python_interface.tcc"
 #include "physical_properties/python_interface.tcc"
 
-XC::Node *(XC::NodePtrs::*getNearestNodePtr)(const Pos3d &,bool geomInicial)= &XC::NodePtrs::getNearestNode;
+XC::Node *(XC::NodePtrs::*getNearestNodePtr)(const Pos3d &,bool initialGeometry)= &XC::NodePtrs::getNearestNode;
 class_<XC::NodePtrs, bases<EntCmd>, boost::noncopyable >("NodePtrs", no_init)
   .def("__getitem__",&XC::NodePtrs::getNodePtr, return_value_policy<reference_existing_object>())
   .def("__len__",&XC::NodePtrs::size)
@@ -67,6 +67,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getMEDCellType",&XC::Element::getVtkCellType,"Returns cell type for MED file writing.")
   .def("getPosCentroid",make_function(&XC::Element::getPosCdg, return_internal_reference<>() ),"Returns centroid's position.")
   .def("getCooCentroid",make_function(&XC::Element::getCooCdg, return_internal_reference<>() ),"Returns centroid's coordinates.")
+  .def("getLocalAxes",&XC::Element::getLocalAxes,"Returns element local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
   .def("getPoints",&XC::Element::getPuntos,"Returns a uniform grid of points over the element.")
   .def("resetTributarias",&XC::Element::resetTributarias)
   .def("vuelcaTributarias",&XC::Element::vuelcaTributarias)

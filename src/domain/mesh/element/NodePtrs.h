@@ -107,14 +107,14 @@ class NodePtrs: public EntCmd
     double MinCooNod(int i) const;
     std::vector<int> getIdx(void) const;
     const Matrix &getCoordinates(void) const;
-    Pos3d getPosNodo(const size_t &i,bool geomInicial= true) const;
-    std::list<Pos3d> getPosiciones(bool geomInicial= true) const;
-    Pos3d getPosCdg(bool geomInicial= true) const;
-    Node *getNearestNode(const Pos3d &p,bool geomInicial= true);
-    const Node *getNearestNode(const Pos3d &p,bool geomInicial= true) const;
-    bool In(const SemiEspacio3d &semiEsp,const double &tol= 0.0,bool geomInicial= true) const;
-    bool Out(const SemiEspacio3d &semiEsp,const double &tol= 0.0,bool geomInicial= true) const;
-    bool Corta(const Plano3d &,bool geomInicial= true) const;
+    Pos3d getPosNodo(const size_t &i,bool initialGeometry= true) const;
+    std::list<Pos3d> getPosiciones(bool initialGeometry= true) const;
+    Pos3d getPosCdg(bool initialGeometry= true) const;
+    Node *getNearestNode(const Pos3d &p,bool initialGeometry= true);
+    const Node *getNearestNode(const Pos3d &p,bool initialGeometry= true) const;
+    bool In(const SemiEspacio3d &semiEsp,const double &tol= 0.0,bool initialGeometry= true) const;
+    bool Out(const SemiEspacio3d &semiEsp,const double &tol= 0.0,bool initialGeometry= true) const;
+    bool Corta(const Plano3d &,bool initialGeometry= true) const;
 
     void resetTributarias(void) const;
     void vuelcaTributarias(const std::vector<double> &) const;

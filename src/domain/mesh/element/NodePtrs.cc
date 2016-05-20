@@ -294,34 +294,34 @@ const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
 
 //! @brief Devuelve la posición del nodo cuyo índice se
 //! pasa como parámetro.
-Pos3d XC::NodePtrs::getPosNodo(const size_t &i,bool geomInicial) const
+Pos3d XC::NodePtrs::getPosNodo(const size_t &i,bool initialGeometry) const
   {
-    if(geomInicial)
+    if(initialGeometry)
       return theNodes[i]->getPosInicial3d();
     else
       return theNodes[i]->getPosFinal3d();
   }
 
 //! @brief Devuelve una matriz con las posiciones de los nodos.
-std::list<Pos3d> XC::NodePtrs::getPosiciones(bool geomInicial) const
+std::list<Pos3d> XC::NodePtrs::getPosiciones(bool initialGeometry) const
   {
     std::list<Pos3d> retval;
     const size_t sz= theNodes.size();
     for(size_t i=0;i<sz;i++)
-      retval.push_back(getPosNodo(i,geomInicial));
+      retval.push_back(getPosNodo(i,initialGeometry));
     return retval;
   }
 
 //! @brief Devuelve el centro de gravedad de las posiciones de los nodos.
-Pos3d XC::NodePtrs::getPosCdg(bool geomInicial) const
+Pos3d XC::NodePtrs::getPosCdg(bool initialGeometry) const
   {
     Pos3d retval;
     const size_t sz= theNodes.size();
     if(sz>0)
       {
-        Vector3d tmp= getPosNodo(0,geomInicial).VectorPos();;
+        Vector3d tmp= getPosNodo(0,initialGeometry).VectorPos();;
         for(size_t i=1;i<sz;i++)
-          tmp+= getPosNodo(i,geomInicial).VectorPos();
+          tmp+= getPosNodo(i,initialGeometry).VectorPos();
         tmp= tmp * 1.0/sz;
         retval= Pos3d()+tmp;
       }
@@ -329,10 +329,10 @@ Pos3d XC::NodePtrs::getPosCdg(bool geomInicial) const
   }
 
 //! @brief Devuelve verdadero si los nodos están contenidos en el semiespacio.
-bool XC::NodePtrs::In(const SemiEspacio3d &semiEsp,const double &tol,bool geomInicial) const
+bool XC::NodePtrs::In(const SemiEspacio3d &semiEsp,const double &tol,bool initialGeometry) const
   {
     bool retval= true;
-    std::list<Pos3d> posiciones= getPosiciones(geomInicial);
+    std::list<Pos3d> posiciones= getPosiciones(initialGeometry);
     for(std::list<Pos3d>::const_iterator i= posiciones.begin();i!=posiciones.end();i++)
       if(!semiEsp.In(*i))
         { retval= false; break; }
@@ -340,35 +340,35 @@ bool XC::NodePtrs::In(const SemiEspacio3d &semiEsp,const double &tol,bool geomIn
   }
 
 //! @brief Devuelve verdadero si los nodos están fuera en el semiespacio.
-bool XC::NodePtrs::Out(const SemiEspacio3d &semiEsp,const double &tol,bool geomInicial) const
+bool XC::NodePtrs::Out(const SemiEspacio3d &semiEsp,const double &tol,bool initialGeometry) const
   {
     SemiEspacio3d complementario(semiEsp);
     complementario.Swap();
-    return In(complementario,tol,geomInicial);
+    return In(complementario,tol,initialGeometry);
   }
 
 //! @brief Devuelve verdadero si los nodos están a uno y otro lado del plano.
-bool XC::NodePtrs::Corta(const Plano3d &plano,bool geomInicial) const
+bool XC::NodePtrs::Corta(const Plano3d &plano,bool initialGeometry) const
   {
-    bool in= In(plano,0.0,geomInicial);
-    bool out= Out(plano,0.0,geomInicial);
+    bool in= In(plano,0.0,initialGeometry);
+    bool out= Out(plano,0.0,initialGeometry);
     return (!in && !out);
   }
 
 //! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
-XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool geomInicial)
+XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry)
   {
     Node *retval= nullptr;
     double d= DBL_MAX;
     const size_t sz= theNodes.size();
     if(!theNodes.empty() && !hasNull())
       {
-        d= theNodes[0]->getDist2(p,geomInicial);
+        d= theNodes[0]->getDist2(p,initialGeometry);
         retval= theNodes[0];
         double tmp;
         for(size_t i=1;i<sz;i++)
           {
-            tmp= theNodes[i]->getDist2(p,geomInicial);
+            tmp= theNodes[i]->getDist2(p,initialGeometry);
             if(tmp<d)
               {
                 d= tmp;
@@ -380,10 +380,10 @@ XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool geomInicial)
   }
 
 //! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
-const XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool geomInicial) const
+const XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry) const
   {
     NodePtrs *this_no_const= const_cast<NodePtrs *>(this);
-    return this_no_const->getNearestNode(p,geomInicial);
+    return this_no_const->getNearestNode(p,initialGeometry);
   }
 
 //! @brief Devuelve la posición del puntero a nodo en el array.

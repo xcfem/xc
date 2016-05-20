@@ -92,9 +92,22 @@ Plano3d XC::ShellCrdTransf3dBase::getPlane(void) const
 Pos3d XC::ShellCrdTransf3dBase::getProj(const Pos3d &p)
   { return getPlane().Proyeccion(p); }
 
-//! @brief Returns element's reference.
-Ref2d3d XC::ShellCrdTransf3dBase::getLocalReference(void) const
+//! @brief Returs a matrix with the axes of the element as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+XC::Matrix XC::ShellCrdTransf3dBase::getLocalAxes(bool initialGeometry) const
   {
+    if(!initialGeometry)
+      std::cerr << "ShellCrdTransf3dBase::getLocalReference for deformed geometry."
+                << std::endl;
+    return getTrfMatrix();
+  }
+
+//! @brief Returns element's reference.
+Ref2d3d XC::ShellCrdTransf3dBase::getLocalReference(bool initialGeometry) const
+  {
+    if(!initialGeometry)
+      std::cerr << "ShellCrdTransf3dBase::getLocalReference for deformed geometry."
+                << std::endl;
     const Vector &vO= getVPosCentroide();
     const Pos3d O(vO[0],vO[1],vO[2]);
     const Vector3d v1= Vector3d(g1[0],g1[1],g1[2]);

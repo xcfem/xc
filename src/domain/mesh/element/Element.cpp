@@ -763,16 +763,27 @@ const XC::Matrix &XC::Element::getCooNodos(void) const
   { return getNodePtrs().getCoordinates(); }
 
 //! @brief Devuelve las coordenadas de los nodos.
-std::list<Pos3d> XC::Element::getPosNodos(bool geomInicial) const
-  { return getNodePtrs().getPosiciones(geomInicial); }
+std::list<Pos3d> XC::Element::getPosNodos(bool initialGeometry) const
+  { return getNodePtrs().getPosiciones(initialGeometry); }
+
+//! @brief Returs a matrix with the axes of the element as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
+  {
+    Matrix retval;
+    std::cerr << "Function getLocalAxes must be implemented in derived class:" 
+              << nombre_clase() << std::endl;
+    return retval;
+  }
+
 
 //! @brief Devuelve la posición del nodo cuyo índice se
 //! pasa como parámetro.
-Pos3d XC::Element::getPosNodo(const size_t &i,bool geomInicial) const
-  { return getNodePtrs().getPosNodo(i,geomInicial); }
+Pos3d XC::Element::getPosNodo(const size_t &i,bool initialGeometry) const
+  { return getNodePtrs().getPosNodo(i,initialGeometry); }
 
 //! @brief Devuelve puntos distribuidos en el elemento.
-TritrizPos3d XC::Element::getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool geomInicial)
+TritrizPos3d XC::Element::getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)
   {
     TritrizPos3d retval;
     std::cerr << "La función getPuntos debe redefinirse en la clase hija."
@@ -792,7 +803,7 @@ void XC::Element::vuelcaTributarias(const std::vector<double> &t) const
 
 //! @brief Calcula las longitudes tributarias correspondientes a cada
 //! nodo del elemento
-void XC::Element::calculaLongsTributarias(bool geomInicial) const
+void XC::Element::calculaLongsTributarias(bool initialGeometry) const
   {
     std::cerr << "La función calculaLongsTributarias "
               << "debe redefinirse en la clase hija."
@@ -814,7 +825,7 @@ double XC::Element::getLongTributariaByTag(const int &tag) const
 
 //! @brief Calcula las áreas tributarias correspondientes a cada
 //! nodo del elemento
-void XC::Element::calculaAreasTributarias(bool geomInicial) const
+void XC::Element::calculaAreasTributarias(bool initialGeometry) const
   {
     std::cerr << "La función calculaAreasTributarias "
               << "debe redefinirse en la clase hija."
@@ -836,7 +847,7 @@ double XC::Element::getAreaTributariaByTag(const int &tag) const
 
 //! @brief Calcula los volúmenes tributarios correspondientes a cada
 //! nodo del elemento
-void XC::Element::calculaVolsTributarios(bool geomInicial) const
+void XC::Element::calculaVolsTributarios(bool initialGeometry) const
   {
     std::cerr << "La función calculaVolsTributarios "
               << "debe redefinirse en la clase hija."
@@ -858,7 +869,7 @@ double XC::Element::getVolTributarioByTag(const int &tag) const
 
 //! @brief Devuelve el cuadrado de la distancia desde el elemento al punto que
 //! se pasa como parámetro.
-double XC::Element::getDist2(const Pos2d &p,bool geomInicial) const
+double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
   {
     std::cerr << "La función getDist2(Pos2d) no se ha definido para los elementos de clase: '"
               << nombre_clase() << "'" << std::endl;
@@ -867,7 +878,7 @@ double XC::Element::getDist2(const Pos2d &p,bool geomInicial) const
 
 //! @brief Devuelve la distancia desde el elemento al punto que
 //! se pasa como parámetro.
-double XC::Element::getDist(const Pos2d &p,bool geomInicial) const
+double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
   {
     std::cerr << "La función getDist(Pos2d) no se ha definido para los elementos de clase: '"
               << nombre_clase() << "'" << std::endl;
@@ -876,7 +887,7 @@ double XC::Element::getDist(const Pos2d &p,bool geomInicial) const
 
 //! @brief Devuelve el cuadrado de la distancia desde el elemento al punto que
 //! se pasa como parámetro.
-double XC::Element::getDist2(const Pos3d &p,bool geomInicial) const
+double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
   {
     std::cerr << "La función getDist2(Pos3d) no se ha definido para los elementos de clase: '"
               << nombre_clase() << "'" << std::endl;
@@ -885,7 +896,7 @@ double XC::Element::getDist2(const Pos3d &p,bool geomInicial) const
 
 //! @brief Devuelve la distancia desde el elemento al punto que
 //! se pasa como parámetro.
-double XC::Element::getDist(const Pos3d &p,bool geomInicial) const
+double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
   {
     std::cerr << "La función getDist(Pos3d) no se ha definido para los elementos de clase: '"
               << nombre_clase() << "'" << std::endl;
@@ -893,7 +904,7 @@ double XC::Element::getDist(const Pos3d &p,bool geomInicial) const
   }
 
 //! @brief Devuelve las coordenadas del centro de gravedad del elemento.
-const Pos3d &XC::Element::getPosCdg(bool geomInicial) const
+const Pos3d &XC::Element::getPosCdg(bool initialGeometry) const
   {
     std::cerr << "getPosCdg no implementada para los elementos de tipo: "
               << nombre_clase() << std::endl;
@@ -902,9 +913,9 @@ const Pos3d &XC::Element::getPosCdg(bool geomInicial) const
   }
 
 //! @brief Devuelve las coordenadas del centro de gravedad del elemento.
-const XC::Vector &XC::Element::getCooCdg(bool geomInicial) const
+const XC::Vector &XC::Element::getCooCdg(bool initialGeometry) const
   {
-    const Pos3d &cdg= getPosCdg(geomInicial);
+    const Pos3d &cdg= getPosCdg(initialGeometry);
     static Vector retval(3);
     retval(0)= cdg.x();
     retval(1)= cdg.y();

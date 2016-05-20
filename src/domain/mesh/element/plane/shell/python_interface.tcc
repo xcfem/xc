@@ -25,6 +25,7 @@ const XC::Vector &(XC::ShellCrdTransf3dBase::*getVGlobalFromLocal)(const XC::Vec
 const XC::Vector &(XC::ShellCrdTransf3dBase::*getVLocalFromGlobal)(const XC::Vector &) const= &XC::ShellCrdTransf3dBase::getVectorLocalCoordFromGlobal;
 class_<XC::ShellCrdTransf3dBase, bases<EntCmd>, boost::noncopyable >("ShellCrdTransf3dBase", no_init)
   .add_property("getTrfMatrix", &XC::ShellCrdTransf3dBase::getTrfMatrix,"Returns the transformation matrix.")
+  .add_property("getLocalAxes", &XC::ShellCrdTransf3dBase::getTrfMatrix,"Returns transformation local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
   .add_property("getG1Vector", make_function(&XC::ShellCrdTransf3dBase::G1, return_internal_reference<>() ))
   .add_property("getG2Vector", make_function(&XC::ShellCrdTransf3dBase::G2, return_internal_reference<>() ))
   .add_property("getG3Vector", make_function(&XC::ShellCrdTransf3dBase::G3, return_internal_reference<>() ))

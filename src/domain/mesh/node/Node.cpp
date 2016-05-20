@@ -586,19 +586,19 @@ XC::Vector XC::Node::getAlphaXYZ(void) const
 
 //! @brief Devuelve el cuadrado de la distancia desde el nodo al punto que
 //! se pasa como parámetro.
-double XC::Node::getDist2(const Pos2d &p,bool geomInicial) const
-  { return getDist2(To3dXY2d(p),geomInicial); }
+double XC::Node::getDist2(const Pos2d &p,bool initialGeometry) const
+  { return getDist2(To3dXY2d(p),initialGeometry); }
 
 //! @brief Devuelve la distancia desde el nodo al punto que
 //! se pasa como parámetro.
-double XC::Node::getDist(const Pos2d &p,bool geomInicial) const
-  { return sqrt(getDist2(p,geomInicial)); }
+double XC::Node::getDist(const Pos2d &p,bool initialGeometry) const
+  { return sqrt(getDist2(p,initialGeometry)); }
 
 //! @brief Devuelve el cuadrado de la distancia desde el nodo al punto que
 //! se pasa como parámetro.
-double XC::Node::getDist2(const Pos3d &p,bool geomInicial) const
+double XC::Node::getDist2(const Pos3d &p,bool initialGeometry) const
   {
-    if(geomInicial)
+    if(initialGeometry)
       return ::dist2(getPosInicial3d(),p);
     else
       return ::dist2(getPosFinal3d(),p);
@@ -606,8 +606,8 @@ double XC::Node::getDist2(const Pos3d &p,bool geomInicial) const
 
 //! @brief Devuelve la distancia desde el nodo al punto que
 //! se pasa como parámetro.
-double XC::Node::getDist(const Pos3d &p,bool geomInicial) const
-  { return sqrt(getDist2(p,geomInicial)); }
+double XC::Node::getDist(const Pos3d &p,bool initialGeometry) const
+  { return sqrt(getDist2(p,initialGeometry)); }
 
 //! @brief Asigna la posición del nodo.
 void XC::Node::setPos(const Pos3d &p)
@@ -636,9 +636,9 @@ void XC::Node::Transforma(const TrfGeom &trf)
   }
 
 //! @brief Devuelve la posición de un nodo.
-Pos3d XC::pos_nodo(const Node &nod,bool geomInicial)
+Pos3d XC::pos_nodo(const Node &nod,bool initialGeometry)
   {
-    if(geomInicial)
+    if(initialGeometry)
       return nod.getPosInicial3d();
     else
       return nod.getPosFinal3d();

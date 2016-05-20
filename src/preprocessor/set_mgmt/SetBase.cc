@@ -132,7 +132,7 @@ void XC::SetBase::resetTributarias(void) const
  
 //! @brief Calcula las longitudes tributarias correspondientes a cada
 //! nodo de los elementos del conjunto.
-void XC::SetBase::calculaLongsTributarias(bool geomInicial) const
+void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
     const Domain *dom= GetPreprocessor()->GetDominio();
@@ -143,7 +143,7 @@ void XC::SetBase::calculaLongsTributarias(bool geomInicial) const
             const int &tag_elem= *i;
             const Element *elem= dom->getElement(tag_elem);
             if(elem)
-              elem->calculaLongsTributarias(geomInicial);
+              elem->calculaLongsTributarias(initialGeometry);
             else
 	      std::cerr << "SetBase::calculaLongsTributarias; "
                         << " no se encontró el elemento: "
@@ -156,7 +156,7 @@ void XC::SetBase::calculaLongsTributarias(bool geomInicial) const
 
 //! @brief Calcula las áreas tributarias correspondientes a cada
 //! nodo de los elementos del conjunto.
-void XC::SetBase::calculaAreasTributarias(bool geomInicial) const
+void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
     const Domain *dom= GetPreprocessor()->GetDominio();
@@ -167,7 +167,7 @@ void XC::SetBase::calculaAreasTributarias(bool geomInicial) const
             const int &tag_elem= *i;
             const Element *elem= dom->getElement(tag_elem);
             if(elem)
-              elem->calculaAreasTributarias(geomInicial);
+              elem->calculaAreasTributarias(initialGeometry);
             else
 	      std::cerr << "SetBase::calculaLongsTributarias; "
                         << " no se encontró el elemento: "
@@ -180,7 +180,7 @@ void XC::SetBase::calculaAreasTributarias(bool geomInicial) const
 
 //! @brief Calcula los volúmenes tributarios correspondientes a cada
 //! nodo de los elementos del conjunto.
-void XC::SetBase::calculaVolsTributarios(bool geomInicial) const
+void XC::SetBase::calculaVolsTributarios(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
     const Domain *dom= GetPreprocessor()->GetDominio();
@@ -191,7 +191,7 @@ void XC::SetBase::calculaVolsTributarios(bool geomInicial) const
             const int &tag_elem= *i;
             const Element *elem= dom->getElement(tag_elem);
             if(elem)
-              elem->calculaVolsTributarios(geomInicial);
+              elem->calculaVolsTributarios(initialGeometry);
             else
 	      std::cerr << "SetBase::calculaLongsTributarias; "
                         << " no se encontró el elemento: "

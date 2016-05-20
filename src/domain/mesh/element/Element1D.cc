@@ -493,9 +493,9 @@ const XC::Vector &XC::Element1D::getCooPunto(const double &xrel) const
   }
 
 //! @brief Devuelve el segmento definido por el elemento.
-Segmento3d XC::Element1D::getSegmento(bool geomInicial) const
+Segmento3d XC::Element1D::getSegmento(bool initialGeometry) const
   {
-    if(geomInicial)
+    if(initialGeometry)
       return Segmento3d(theNodes[0]->getPosInicial3d(),theNodes[1]->getPosInicial3d());
     else
       return Segmento3d(theNodes[0]->getPosFinal3d(),theNodes[1]->getPosFinal3d());
@@ -503,27 +503,27 @@ Segmento3d XC::Element1D::getSegmento(bool geomInicial) const
 
 //! @brief Devuelve el cuadrado de la distancia desde el elemento al punto que
 //! se pasa como parámetro.
-double XC::Element1D::getDist2(const Pos2d &p,bool geomInicial) const
-  { return getDist2(To3dXY2d(p),geomInicial); }
+double XC::Element1D::getDist2(const Pos2d &p,bool initialGeometry) const
+  { return getDist2(To3dXY2d(p),initialGeometry); }
 
 //! @brief Devuelve la distancia desde el elemento al punto que
 //! se pasa como parámetro.
-double XC::Element1D::getDist(const Pos2d &p,bool geomInicial) const
-  { return getDist(To3dXY2d(p),geomInicial); }
+double XC::Element1D::getDist(const Pos2d &p,bool initialGeometry) const
+  { return getDist(To3dXY2d(p),initialGeometry); }
 
 //! @brief Devuelve el cuadrado de la distancia desde el elemento al punto que
 //! se pasa como parámetro.
-double XC::Element1D::getDist2(const Pos3d &p,bool geomInicial) const
+double XC::Element1D::getDist2(const Pos3d &p,bool initialGeometry) const
   {
-    const Segmento3d sg(getSegmento(geomInicial));
+    const Segmento3d sg(getSegmento(initialGeometry));
     return sg.dist2(p);
   }
 
 //! @brief Devuelve la distancia desde el elemento al punto que
 //! se pasa como parámetro.
-double XC::Element1D::getDist(const Pos3d &p,bool geomInicial) const
+double XC::Element1D::getDist(const Pos3d &p,bool initialGeometry) const
   {
-    const Segmento3d sg(getSegmento(geomInicial));
+    const Segmento3d sg(getSegmento(initialGeometry));
     return sg.dist(p);
   }
 
@@ -617,9 +617,9 @@ int XC::Element1D::getMEDCellType(void) const
 
 //! @brief Calcula las longitudes tributarias correspondientes a cada
 //! nodo del elemento
-void XC::Element1D::calculaLongsTributarias(bool geomInicial) const
+void XC::Element1D::calculaLongsTributarias(bool initialGeometry) const
   {
-    const double lt= getSegmento(geomInicial).Longitud()/2.0;
+    const double lt= getSegmento(initialGeometry).Longitud()/2.0;
     longsTributarias[0]= lt;
     longsTributarias[1]= lt;
     vuelcaTributarias(longsTributarias);

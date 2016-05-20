@@ -1609,6 +1609,11 @@ int XC::ShellMITC4Base::recvData(const CommParameters &cp)
     return res;
   }
 
+//! @brief Returs a matrix with the axes of the element as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+XC::Matrix XC::ShellMITC4Base::getLocalAxes(bool initialGeometry) const
+  { return theCoordTransf->getLocalAxes(initialGeometry); }
+
 //! @brief Devuelve un apuntador a la transformación de coordenadas.
 XC::ShellCrdTransf3dBase *XC::ShellMITC4Base::getCoordTransf(void)
   { return theCoordTransf; }

@@ -68,17 +68,17 @@ class Element1D : public ElementBase<2>
     virtual const CrdTransf *getCoordTransf(void) const;
     virtual const Matrix &getCooPuntos(const size_t &ndiv) const;
     virtual const Vector &getCooPunto(const double &xrel) const;
-    Segmento3d getSegmento(bool geomInicial= true) const;
-    double getDist2(const Pos2d &p,bool geomInicial= true) const;
-    double getDist(const Pos2d &p,bool geomInicial= true) const;
-    double getDist2(const Pos3d &p,bool geomInicial= true) const;
-    double getDist(const Pos3d &p,bool geomInicial= true) const;
+    Segmento3d getSegmento(bool initialGeometry= true) const;
+    double getDist2(const Pos2d &p,bool initialGeometry= true) const;
+    double getDist(const Pos2d &p,bool initialGeometry= true) const;
+    double getDist2(const Pos3d &p,bool initialGeometry= true) const;
+    double getDist(const Pos3d &p,bool initialGeometry= true) const;
 
     size_t getDimension(void) const;
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
 
-    virtual void calculaLongsTributarias(bool geomInicial= true) const;
+    virtual void calculaLongsTributarias(bool initialGeometry= true) const;
     double getLongTributaria(const Node *) const;
 
     void vector2dUniformLoadGlobal(const Vector &);

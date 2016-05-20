@@ -678,6 +678,8 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/LinearLoadDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/LoadVectorField.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/LoadVectorField.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/LocalAxesVectorField.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/LocalAxesVectorField.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/__init__.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_cad/vtk_define_malla_cells_cad.py

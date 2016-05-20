@@ -104,7 +104,8 @@ class ShellCrdTransf3dBase: public EntCmd, public MovableObject
     const Matrix &getVectorGlobalCoordFromLocal(const Matrix &localCoords) const;
     const Vector &getVectorLocalCoordFromGlobal(const Vector &globalCoords) const;
 
-    Ref2d3d getLocalReference(void) const;
+    virtual Matrix getLocalAxes(bool initialGeometry= true) const;
+    Ref2d3d getLocalReference(bool initialGeometry= true) const;
     Pos2d getLocalCoordinates(const Pos3d &) const;
     ParticlePos3d getNaturalCoordinates(const Pos3d &,double xl[2][4]) const;    
 

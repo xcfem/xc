@@ -140,6 +140,7 @@ class ShellMITC4Base : public QuadBase4N<SectionFDPhysicalProperties>
     double getMeanInternalForce(const std::string &) const;
     double getMeanInternalDeformation(const std::string &) const;
 
+    virtual Matrix getLocalAxes(bool initialGeometry= true) const;
     virtual ShellCrdTransf3dBase *getCoordTransf(void);
     virtual const ShellCrdTransf3dBase *getCoordTransf(void) const;
 

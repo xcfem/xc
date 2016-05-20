@@ -60,8 +60,8 @@ class QuadBase9N : public ElemPlano<9,PhysProp>
     Element::NodesEdge getNodesEdge(const size_t &i) const;
     ID getLocalIndexNodesEdge(const size_t &i) const;
     int getEdgeNodes(const Node *,const Node *) const;
-    Poligono3d getPoligono(bool geomInicial= true) const;
-    Segmento3d getLado(const size_t &i,bool geomInicial= true) const;
+    Poligono3d getPoligono(bool initialGeometry= true) const;
+    Segmento3d getLado(const size_t &i,bool initialGeometry= true) const;
 
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
@@ -89,7 +89,7 @@ XC::TritrizPtrElem XC::QuadBase9N<PhysProp>::coloca_en_malla(const TritrizPtrNod
 
 //! @brief Devuelve el polígono que forma el contorno del elemento.
 template <class PhysProp>
-Poligono3d XC::QuadBase9N<PhysProp>::getPoligono(bool geomInicial) const
+Poligono3d XC::QuadBase9N<PhysProp>::getPoligono(bool initialGeometry) const
   {
     Poligono3d retval;
     std::cerr << "QuadBase9N<PhysProp>::getPoligono no implementada." << std::endl;
@@ -98,7 +98,7 @@ Poligono3d XC::QuadBase9N<PhysProp>::getPoligono(bool geomInicial) const
 
 //! @brief Devuelve un lado del elemento.
 template <class PhysProp>
-Segmento3d XC::QuadBase9N<PhysProp>::getLado(const size_t &i,bool geomInicial) const
+Segmento3d XC::QuadBase9N<PhysProp>::getLado(const size_t &i,bool initialGeometry) const
   {
     Segmento3d retval;
     std::cerr << "QuadBase9N<PhysProp>::getLado no implementada." << std::endl;

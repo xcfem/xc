@@ -1,6 +1,12 @@
  # -*- coding: utf-8 -*-
 
-''' Representación de cargas sobre elementos lineales. '''
+''' Loads represented as vectors. '''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import geom
 import vtk
@@ -11,8 +17,17 @@ from xcVtk import VectorField as vf
 class LoadVectorField(vf.VectorField):
   '''Draws a load over a points on nodes and on elements.'''
   def __init__(self,loadPatternName,fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True,components= [0,1,2],multiplyByElementArea= True):
+    '''
+    Parameters:
+      loadPatternName: name of the load pattern to display.
+      fUnitConv: unit conversion factor.
+      scaleFactor: scale factor for the size of the vectors.
+      showPushing: true if the loads push the loaded point (as oppssed to pull). Default: True
+      components: index of the components of the load. Default: [0,1,2] 
+      multiplyByElementArea: for loads over elements (default= True).
+    '''
     super(LoadVectorField,self).__init__(loadPatternName,fUnitConv,scaleFactor,showPushing)
-    self.lpName= loadPatternName
+    self.lpName= loadPatternName 
     self.components= components
     self.multiplyByElementArea= multiplyByElementArea
 

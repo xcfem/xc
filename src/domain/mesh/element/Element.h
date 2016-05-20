@@ -210,25 +210,26 @@ class Element: public MeshComponent
     double MaxCooNod(int i) const;
     double MinCooNod(int i) const;
     const Matrix &getCooNodos(void) const;
-    Pos3d getPosNodo(const size_t &i,bool geomInicial= true) const;
-    std::list<Pos3d> getPosNodos(bool geomInicial= true) const;
-    virtual const Pos3d &getPosCdg(bool geomInicial= true) const;
-    const Vector &getCooCdg(bool geomInicial= true) const;
-    TritrizPos3d getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool geomInicial= true);
-    virtual double getDist2(const Pos2d &p,bool geomInicial= true) const;
-    virtual double getDist(const Pos2d &p,bool geomInicial= true) const;
-    virtual double getDist2(const Pos3d &p,bool geomInicial= true) const;
-    virtual double getDist(const Pos3d &p,bool geomInicial= true) const;
+    virtual Matrix getLocalAxes(bool initialGeometry= true) const;
+    Pos3d getPosNodo(const size_t &i,bool initialGeometry= true) const;
+    std::list<Pos3d> getPosNodos(bool initialGeometry= true) const;
+    virtual const Pos3d &getPosCdg(bool initialGeometry= true) const;
+    const Vector &getCooCdg(bool initialGeometry= true) const;
+    TritrizPos3d getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry= true);
+    virtual double getDist2(const Pos2d &p,bool initialGeometry= true) const;
+    virtual double getDist(const Pos2d &p,bool initialGeometry= true) const;
+    virtual double getDist2(const Pos3d &p,bool initialGeometry= true) const;
+    virtual double getDist(const Pos3d &p,bool initialGeometry= true) const;
 
     void resetTributarias(void) const;
     void vuelcaTributarias(const std::vector<double> &) const;
-    virtual void calculaLongsTributarias(bool geomInicial= true) const;
+    virtual void calculaLongsTributarias(bool initialGeometry= true) const;
     virtual double getLongTributaria(const Node *) const;
     virtual double getLongTributariaByTag(const int &) const;
-    virtual void calculaAreasTributarias(bool geomInicial= true) const;
+    virtual void calculaAreasTributarias(bool initialGeometry= true) const;
     virtual double getAreaTributaria(const Node *) const;
     virtual double getAreaTributariaByTag(const int &) const;
-    virtual void calculaVolsTributarios(bool geomInicial= true) const;
+    virtual void calculaVolsTributarios(bool initialGeometry= true) const;
     virtual double getVolTributario(const Node *) const;
     virtual double getVolTributarioByTag(const int &) const;
 
