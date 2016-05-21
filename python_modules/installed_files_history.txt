@@ -666,6 +666,8 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/ColoredDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/creaArraySetData.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/creaArraySetData.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/DirectionFieldData.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/DirectionFieldData.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/ElementPropertyDiagram.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/ElementPropertyDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/FieldBase.py
@@ -726,6 +728,8 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/NodePropertyDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/ScreenAnnotation.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/ScreenAnnotation.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/VectorFieldData.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/VectorFieldData.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/VectorField.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/VectorField.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/views.py

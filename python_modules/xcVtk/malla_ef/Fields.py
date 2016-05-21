@@ -45,7 +45,7 @@ class ScalarField(fb.FieldBase):
         tmp= attr
       if hasattr(tmp,"__getitem__"):
         tmp= tmp[self.attrComponent]
-      tmp*= self.fConvUnidades
+      tmp*= self.fUnitConv
       self.updateMinMax(tmp)
       self.arr.SetTuple1(n.getIdx,tmp)
     return self.arr

@@ -32,7 +32,7 @@ class LUTField(object):
     self.initializeMinMax()
     self.lookUpTable= None
     self.scalarBar= None
-    self.fConvUnidades= fUnitConv
+    self.fUnitConv= fUnitConv
     self.mapper= None
     self.actor= None
 

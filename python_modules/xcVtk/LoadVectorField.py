@@ -47,7 +47,7 @@ class LoadVectorField(vf.VectorField):
           vLoad*=elem.getArea(True)
         vx= vLoad[i]; vy= vLoad[j]; vz= vLoad[k]
         p= elem.getPosCentroid(True)
-        self.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+        self.data.insertNextPair(p.x,p.y,p.z,vx,vy,vz,self.fUnitConv,self.showPushing)
       elementLoad= lIter.next()
       count+= 1
     return count
@@ -63,7 +63,7 @@ class LoadVectorField(vf.VectorField):
       p= node.getInitialPos3d
       vLoad= nl.getForce
       vx= vLoad[0]; vy= vLoad[1]; vz= vLoad[2]
-      self.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+      self.data.insertNextPair(p.x,p.y,p.z,vx,vy,vz,self.fUnitConv,self.showPushing)
       nl= lIter.next()
       count+= 1
     return count

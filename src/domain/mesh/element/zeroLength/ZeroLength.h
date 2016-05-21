@@ -90,10 +90,10 @@ class ZeroLength: public Element0D
   {
   private:
     Etype elemType;
-    Matrix *theMatrix; //!< pointer to objects matrix (a class Matrix)
-    Vector *theVector; //!< pointer to objects vector (a class Vector)
+    Matrix *theMatrix; //!< pointer to objects matrix
+    Vector *theVector; //!< pointer to objects vector
     // Storage for uniaxial material models
-    ZeroLengthMaterials theMaterial1d; //!< array of pointers to 1d materials y direcciones asociadas.
+    ZeroLengthMaterials theMaterial1d; //!< array of pointers to 1d materials y related directionss.
 
     Matrix t1d;        // hold the transformation matrix
 
@@ -124,9 +124,9 @@ class ZeroLength: public Element0D
 
   public:
     // Constructor for a single 1d material model
-    ZeroLength(int tag,int dimension,int Nd1, int Nd2,const Vector& x,const Vector& yprime,UniaxialMaterial &theMaterial,int direction );
+    ZeroLength(int tag,int dimension,int Nd1, int Nd2,const Vector &,const Vector &,UniaxialMaterial &,int direction );
     // Constructor for a multiple 1d material models
-    ZeroLength(int tag,int dimension,int Nd1, int Nd2, const Vector& x,const Vector& yprime,const DqUniaxialMaterial &theMaterial,const ID &direction);
+    ZeroLength(int tag,int dimension,int Nd1, int Nd2, const Vector &,const Vector &,const DqUniaxialMaterial &,const ID &direction);
     ZeroLength(int tag,int dimension,const Material *ptr_mat,int direction);
     ZeroLength(void);
     Element *getCopy(void) const;

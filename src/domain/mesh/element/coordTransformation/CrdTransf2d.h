@@ -117,6 +117,7 @@ class CrdTransf2d: public CrdTransf
     const Vector &getJ(void) const;
     int getInitialLocalAxes(Vector &xAxis, Vector &yAxis) const; 
     int getLocalAxes(Vector &xAxis, Vector &yAxis) const;
+    Matrix getLocalAxes(bool) const;
     Pos2d getPosNodeI(void) const;
     Pos2d getPosNodeJ(void) const;
     Ref2d2d getLocalReference(void) const;

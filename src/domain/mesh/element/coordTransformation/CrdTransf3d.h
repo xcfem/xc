@@ -110,6 +110,7 @@ class CrdTransf3d: public CrdTransf
     const Vector &getI(void) const;
     const Vector &getJ(void) const;
     const Vector &getK(void) const;
+    Matrix getLocalAxes(bool) const;
     int getLocalAxes(Vector &xAxis, Vector &yAxis, Vector &zAxis) const; 
     Pos3d getPosNodeI(void) const;
     Pos3d getPosNodeJ(void) const;

@@ -313,6 +313,22 @@ int XC::CrdTransf3d::getLocalAxes(Vector &XAxis, Vector &YAxis, Vector &ZAxis) c
     return retval;
   }
 
+//! @brief Returs a matrix with the axes of the element as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+XC::Matrix XC::CrdTransf3d::getLocalAxes(bool initialGeometry) const
+  {
+    Matrix retval(3,3);
+    int err= calculaEjesLocales();
+    if(err==0)
+      {
+        retval(0,0)= vectorI(0); retval(0,1)= vectorI(1); retval(0,2)= vectorI(2);
+        retval(1,0)= vectorJ(0); retval(1,1)= vectorJ(1); retval(1,2)= vectorJ(2);
+        retval(2,0)= vectorK(0); retval(2,1)= vectorK(1); retval(2,2)= vectorK(2);
+      }
+    return retval;
+  }
+
+
 //! @brief Devuelve la posición del nodo I.
 Pos3d XC::CrdTransf3d::getPosNodeI(void) const
   {

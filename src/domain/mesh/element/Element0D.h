@@ -77,6 +77,7 @@ class Element0D : public ElementBase<2>
     const Vector &getX(void) const;
     const Vector &getY(void) const;
     const Vector &getZ(void) const;
+    Matrix getLocalAxes(bool) const;
     SisCooRect3d3d getSisCoo(void) const;    
     inline virtual const Matrix &getTransformation(void) const
       { return transformation; }

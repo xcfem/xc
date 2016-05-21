@@ -481,6 +481,22 @@ int XC::CrdTransf2d::getInitialLocalAxes(Vector &XAxis, Vector &YAxis) const
 int XC::CrdTransf2d::getLocalAxes(Vector &XAxis, Vector &YAxis) const
   { return getInitialLocalAxes(XAxis,YAxis); }
 
+//! @brief Returs a matrix with the axes of the element as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+XC::Matrix XC::CrdTransf2d::getLocalAxes(bool initialGeometry) const
+  {
+    Vector vectorI(2);
+    Vector vectorJ(2);
+    if(initialGeometry)
+      getInitialLocalAxes(vectorI,vectorJ);
+    else
+      getLocalAxes(vectorI,vectorJ);
+    Matrix retval(2,2);
+    retval(0,0)= vectorI(0); retval(0,1)= vectorI(1);
+    retval(1,0)= vectorJ(0); retval(1,1)= vectorJ(1);
+    return retval;
+  }
+
 //! @brief Devuelve el punto expresado en coordenadas globales.
 const XC::Vector &XC::CrdTransf2d::getPointGlobalCoordFromBasic(const double &xi) const
   {

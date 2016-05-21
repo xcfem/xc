@@ -132,6 +132,7 @@ class CrdTransf: public TaggedObject, public MovableObject
     
     virtual const Vector &getI(void) const= 0;
     virtual const Vector &getJ(void) const= 0;
+    virtual Matrix getLocalAxes(bool) const= 0;
 
     virtual const Vector &getPointGlobalCoordFromLocal(const Vector &localCoords) const= 0;
     virtual const Vector &getPointGlobalCoordFromBasic(const double &xi) const= 0;

@@ -446,6 +446,13 @@ XC::CrdTransf *XC::Element1D::getCoordTransf(void)
 const XC::CrdTransf *XC::Element1D::getCoordTransf(void) const
   { return nullptr; }
 
+//! @brief Returs a matrix with the axes of the element as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+XC::Matrix XC::Element1D::getLocalAxes(bool initialGeometry) const
+  {
+    return getCoordTransf()->getLocalAxes(initialGeometry);
+  }
+
 //! @brief Devuelve puntos distribuidos entre los nodos extremos.
 const XC::Matrix &XC::Element1D::getCooPuntos(const size_t &ndiv) const
   {

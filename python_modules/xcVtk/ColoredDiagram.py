@@ -144,8 +144,8 @@ class ColoredDiagram(vtk_lut_field.LUTField):
        dest: Extremo frontal del elemento lineal.
        valOrg: Valor del campo escalar en el extremo dorsal.
        valDest: Valor del campo escalar en el extremo frontal.'''
-    vOrg= valOrg*self.fConvUnidades
-    vDest= valDest*self.fConvUnidades
+    vOrg= valOrg*self.fUnitConv
+    vDest= valDest*self.fUnitConv
 
     if(vOrg*vDest>0.0):
       return self.creaTramoDiagramaSignoCte(offset,org,vOrg,dest,vDest)
