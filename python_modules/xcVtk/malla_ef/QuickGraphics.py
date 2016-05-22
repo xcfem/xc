@@ -91,7 +91,7 @@ class QuickGraphics(object):
       n.setProp('propToDisp',n.getDisp[vCompDisp])
     field= Fields.ScalarField('propToDisp',"getProp",None,fConvUnits)
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.displayMesh(self.xcSet,field,caption=self.loadCaseName+' '+itemToDisp+' '+self.xcSet.name)
+    defDisplay.displayMesh(self.xcSet,field,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.name)
 
   def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= ''):
     '''displays the component of internal forces in the 
