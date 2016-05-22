@@ -6,7 +6,7 @@ __author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
 __cppyright__= "Copyright 2015, AOO and LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
+__email__= "ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
 
 import uuid
 import geom
@@ -18,8 +18,10 @@ from model import predefined_spaces
 from model import ElasticFoundation as ef
 from xcVtk import vtk_grafico_base
 from xcVtk.malla_ef import vtk_grafico_ef
+from xcVtk.malla_ef import Fields
 from xcVtk import LoadVectorField as lvf
 from xcVtk import LocalAxesVectorField as lavf
+from xcVtk.malla_ef import QuickGraphics as qg
 import ijkGrid as grid
 
 class NamedObjectsMap(dict):
@@ -344,6 +346,10 @@ class ElasticFoundationRanges(IJKRangeList):
        property 'soilReaction:' [xForce,yForce,zForce]'''
     return self.elasticFoundation.calcPressures()
 
+  def displayPressures(self, defDisplay, caption,fUnitConv,unitDescription):
+    '''Display foundation pressures.'''
+    reac= self.elasticFoundation.displayPressures(defDisplay, caption,fUnitConv,unitDescription)
+
 
 class ElasticFoundationRangesMap(NamedObjectsMap):
   '''Constrained ranges dictionary.'''
@@ -658,7 +664,7 @@ class GridModel(object):
     return self.conjLin
 
   def getElements(self, nombreConj):
-    '''Return a list of the elements of the material surfaces and linew.'''
+    '''Return a list of the elements of the material surfaces or lines.'''
     retval= list()
     keys= self.conjSup.keys()
     if(nombreConj in keys):
@@ -838,7 +844,19 @@ class GridModel(object):
     defDisplay.displayScene(caption,fileName)
     return defDisplay
 
-
-
-
-
+#QuickGraphics class definition.
+# This class is aimed at providing the user with a quick and easy way to 
+# display results (internal forces, displacements) of an user-defined
+# load case
+class QuickGraphics(qg.QuickGraphics):
+  '''This class is aimed at providing the user with a quick and easy way to 
+  display results (internal forces, displacements) of an user-defined
+  load case.
+  Attributes:
+   loadCaseName:   name of the load case to be created
+   loadCaseExpr:   expression that defines de load case as a
+                   combination of previously defined actions
+                   e.g. '1.0*GselfWeight+1.0*GearthPress'
+  '''
+  def __init__(self,model):
+    super(QuickGraphics,self).__init__(model.getFEProblem())

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Representación de un modelo de elementos finitos.
+# Graphing of a finite element model.
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __cppyright__= "Copyright 2014 LCPT"

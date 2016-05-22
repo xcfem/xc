@@ -5,6 +5,7 @@ import xc_base
 import geom
 from materials import typical_materials
 from model import define_apoyos
+from xcVtk.malla_ef import Fields
 
 '''Generation of springs for nodes at foundation.'''
 
@@ -34,12 +35,13 @@ class ElasticFoundation(object):
     self.zSpring=typical_materials.defElasticMaterial(preprocessor,self.zSpringName,1)
   def generateSprings(self,xcSet):
     '''Creates the springs at the nodes.'''
+    self.foundationSet= xcSet #Set with elastic supported elements
     self.springs= list() #spring elements.
-    xcSet.resetTributarias()
-    xcSet.calculaAreasTributarias(False)
-    sNod= xcSet.getNodes
-    preprocessor= xcSet.getPreprocessor
-    self.createMaterials(preprocessor,xcSet.name)
+    self.foundationSet.resetTributarias()
+    self.foundationSet.calculaAreasTributarias(False)
+    sNod= self.foundationSet.getNodes
+    preprocessor= self.foundationSet.getPreprocessor
+    self.createMaterials(preprocessor,self.foundationSet.name)
     idElem= preprocessor.getElementLoader.defaultTag
     for n in sNod:
       arTribNod=n.getAreaTributaria()
@@ -89,3 +91,9 @@ class ElasticFoundation(object):
       n.setProp('soilReaction',[f3d.x,f3d.y,f3d.z])
     return self.svdReac.reduceTo(self.getCentroid())
 
+  def displayPressures(self, defDisplay, caption,fUnitConv,unitDescription):
+    '''Display foundation pressures.'''
+    reac= self.calcPressures()
+
+    field= Fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv)
+    field.display(defDisplay,caption= caption+' '+unitDescription)

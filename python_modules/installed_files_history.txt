@@ -706,6 +706,8 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/Fields.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/__init__.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/QuickGraphics.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/QuickGraphics.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_define_malla_cells_ef.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_define_malla_cells_ef.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_define_malla_elementos.py

@@ -12,6 +12,9 @@ import xc_base
 import geom
 import xc
 
+def getSupName(pt1,pt2,pt3,pt4):
+  return 's'+'%04.0f' % pt1 +'%04.0f' % pt2 +'%04.0f' % pt3 +'%04.0f' % pt4
+
 class IJKRange(object):
   '''Defines a range of indexes i,j,k in the grid to be used
   select the region bounded by the coordinates associated with
@@ -144,13 +147,51 @@ class ijkGrid(object):
     tagPto= self.indices.getPnt(i+1,j+1,k+1).tag
     return tagPto
 
+  def newQuadSurfaceConstK(self,i,j,k):
+    ''' return indexes for a const k.'''
+    pto1= self.getTagIndices(i,j,k)
+    pto2= self.getTagIndices(i+1,j,k)
+    pto3= self.getTagIndices(i+1,j+1,k)
+    pto4= self.getTagIndices(i,j+1,k)
+    surfaces= self.prep.getCad.getSurfaces
+    retval= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
+    retval.name= getSupName(pto1,pto2,pto3,pto4)
+    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (en otro caso
+    retval.nDivJ=1 #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
+    return retval
+
+  def newQuadSurfaceConstJ(self,i,j,k):
+    ''' return indexes for a const j.'''
+    pto1= self.getTagIndices(i,j,k)
+    pto2= self.getTagIndices(i,j,k+1)
+    pto3= self.getTagIndices(i+1,j,k+1)
+    pto4= self.getTagIndices(i+1,j,k)
+    surfaces= self.prep.getCad.getSurfaces
+    retval= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
+    retval.name= getSupName(pto1,pto2,pto3,pto4)
+    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (en otro caso
+    retval.nDivJ=1 #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
+    return retval
+
+  def newQuadSurfaceConstI(self,i,j,k):
+    ''' return indexes for a const i.'''
+    pto1= self.getTagIndices(i,j,k)
+    pto2= self.getTagIndices(i,j+1,k)
+    pto3= self.getTagIndices(i,j+1,k+1)
+    pto4= self.getTagIndices(i,j,k+1)
+    surfaces= self.prep.getCad.getSurfaces
+    retval= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
+    retval.name= getSupName(pto1,pto2,pto3,pto4)
+    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (en otro caso
+    retval.nDivJ=1 #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
+    return retval
+
   def generateAreas(self,ijkRange,dicGeomEnt):
     'genera las superficies contenidas en un rectángulo comprendido entre las coordenadas'
     'que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
     'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
     'también rellena el diccionario de superficies'
     retval= list()
-    surfaces= self.prep.getCad.getSurfaces
     i= ijkRange.ijkMin[0]
     j= ijkRange.ijkMin[1]
     k= ijkRange.ijkMin[2]
@@ -159,16 +200,9 @@ class ijkGrid(object):
         while i<= ijkRange.ijkMax[0]-1:
             j= ijkRange.ijkMin[1]
             while j<= ijkRange.ijkMax[1]-1:
-                pto1= self.getTagIndices(i,j,k)
-                pto2= self.getTagIndices(i+1,j,k)
-                pto3= self.getTagIndices(i+1,j+1,k)
-                pto4= self.getTagIndices(i,j+1,k)
-                a= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
-                a.nDivI=1     #se inicializa el nº de divisiones a 1 (en otro caso
-                a.nDivJ=1     #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
+                a= self.newQuadSurfaceConstK(i,j,k)
                 retval.append(a)
-                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
-                dicGeomEnt[nmbrSup]= a
+                dicGeomEnt[a.name]= a
                 j+=1
             i+=1
     elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
@@ -176,16 +210,9 @@ class ijkGrid(object):
         while i<= ijkRange.ijkMax[0]-1:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]-1:
-                pto1= self.getTagIndices(i,j,k)
-                pto2= self.getTagIndices(i,j,k+1)
-                pto3= self.getTagIndices(i+1,j,k+1)
-                pto4= self.getTagIndices(i+1,j,k)
-                a= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
-                a.nDivI=1     #se inicializa el nº de divisiones a 1 (en otro caso
-                a.nDivJ=1     #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
+                a= self.newQuadSurfaceConstJ(i,j,k)
                 retval.append(a)
-                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
-                dicGeomEnt[nmbrSup]= a
+                dicGeomEnt[a.name]= a
                 k+=1
             i+=1
     elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
@@ -193,16 +220,9 @@ class ijkGrid(object):
         while j<= ijkRange.ijkMax[1]-1:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]-1:
-                pto1= self.getTagIndices(i,j,k)
-                pto2= self.getTagIndices(i,j+1,k)
-                pto3= self.getTagIndices(i,j+1,k+1)
-                pto4= self.getTagIndices(i,j,k+1)
-                a= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
-                a.nDivI=1     #se inicializa el nº de divisiones a 1 (en otro caso
-                a.nDivJ=1     #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
+                a= self.newQuadSurfaceConstI(i,j,k)
                 retval.append(a)
-                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
-                dicGeomEnt[nmbrSup]= a
+                dicGeomEnt[a.name]= a
                 k+=1
             j+=1
     return retval
@@ -252,8 +272,6 @@ class ijkGrid(object):
             k+=1
     return retval
 
-  def getSupName(self,pt1,pt2,pt3,pt4):
-    return 's'+'%04.0f' % pt1 +'%04.0f' % pt2 +'%04.0f' % pt3 +'%04.0f' % pt4
   def getSetInRange(self,ijkRange,dicGeomEnt,nmbrSet):
     'devuelve el set de entidades (superficies y todas las asociadas a estas superficies)'
     'contenidas en un rectángulo comprendido entre las coordenadas'
@@ -272,7 +290,7 @@ class ijkGrid(object):
                 pto2= self.getTagIndices(i+1,j,k)
                 pto3= self.getTagIndices(i+1,j+1,k)
                 pto4= self.getTagIndices(i,j+1,k)
-                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
+                nmbrSup= getSupName(pto1,pto2,pto3,pto4)
                 retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 j+=1
             i+=1
@@ -285,7 +303,7 @@ class ijkGrid(object):
                 pto2= self.getTagIndices(i,j,k+1)
                 pto3= self.getTagIndices(i+1,j,k+1)
                 pto4= self.getTagIndices(i+1,j,k)
-                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
+                nmbrSup= getSupName(pto1,pto2,pto3,pto4)
                 retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 k+=1
             i+=1
@@ -298,7 +316,7 @@ class ijkGrid(object):
                 pto2= self.getTagIndices(i,j+1,k)
                 pto3= self.getTagIndices(i,j+1,k+1)
                 pto4= self.getTagIndices(i,j,k+1)
-                nmbrSup= self.getSupName(pto1,pto2,pto3,pto4)
+                nmbrSup= getSupName(pto1,pto2,pto3,pto4)
                 retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 k+=1
             j+=1
