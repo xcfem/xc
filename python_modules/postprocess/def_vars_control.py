@@ -5,7 +5,7 @@
    THIS FILE MUST DISSAPEAR.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
-__cppyright__= "Copyright 2014 LCPT"
+__copyright__= "Copyright 2014 LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"

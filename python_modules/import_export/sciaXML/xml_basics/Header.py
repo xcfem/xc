@@ -2,33 +2,18 @@
 
 #Based on sXML-master projet on gitHub
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import HeaderItem as hi
 import xml.etree.cElementTree as ET
 
 
 class Header(object):
-  h0= hi.HeaderItem()
-  h1= hi.HeaderItem()
-  h2= hi.HeaderItem()
-  h3= hi.HeaderItem()
-  h4= hi.HeaderItem()
-  h5= hi.HeaderItem()
-  h6= hi.HeaderItem()
-  h7= hi.HeaderItem()
-  h8= hi.HeaderItem()
-  h9= hi.HeaderItem()
-  h10= hi.HeaderItem()
-  h11= hi.HeaderItem()
-  h12= hi.HeaderItem()
-  h13= hi.HeaderItem()
-  h14= hi.HeaderItem()
-  h15= hi.HeaderItem()
-  h16= hi.HeaderItem()
-  h17= hi.HeaderItem()
-  h18= hi.HeaderItem()
-  h19= hi.HeaderItem()
-  h20= hi.HeaderItem()
-
+  ''' Header for SCIA XML. '''
   def __init__(self,h0= hi.HeaderItem(), h1= hi.HeaderItem(), h2= hi.HeaderItem(), h3= hi.HeaderItem(), h4= hi.HeaderItem(), h5= hi.HeaderItem(), h6= hi.HeaderItem(), h7= hi.HeaderItem(), h8= hi.HeaderItem(), h9= hi.HeaderItem(), h10= hi.HeaderItem(), h11= hi.HeaderItem(), h12= hi.HeaderItem(), h13= hi.HeaderItem(), h14= hi.HeaderItem(), h15= hi.HeaderItem(), h16= hi.HeaderItem(), h17= hi.HeaderItem(), h18= hi.HeaderItem(), h19= hi.HeaderItem(), h20= hi.HeaderItem()):
       self.h0= h0
       self.h1= h1
@@ -178,6 +163,7 @@ class Header(object):
     self.h20 = h20
 
   def getXMLElement(self,parent):
+    '''Returns an XML element for the header.'''
     hh= ET.SubElement(parent,"h")
     cont= 0
     items=[self.h0, self.h1, self.h2, self.h3, self.h4, self.h5, self.h6, self.h7, self.h8, self.h9, self.h10, self.h11, self.h12, self.h13, self.h14, self.h15, self.h16, self.h17, self.h18, self.h19, self.h20]

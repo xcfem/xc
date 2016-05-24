@@ -2,10 +2,10 @@
 
 #Based on sXML-master projet on gitHub
 
-import PropertiesContainer as ctr
+from xml_basics import PropertiesContainer as ctr
 import NodeContainer as nc
-import Property as prop
-import PropertiesTable as propTable
+from xml_basics import Property as prop
+from xml_basics import PropertiesTable as propTable
 import xml.etree.cElementTree as ET
 
 idName= '{4364BC01-AAB7-11D4-B3D9-00104BC3B531}'

@@ -2,13 +2,13 @@
 
 #Based on sXML-master projet on gitHub
 
-import Container as ctr
-import TableNode as tb
-import Header as hdr
-import HeaderItem as hi
-import Object as obj
-import ObjectItem as oI
-import Row as rw
+from xml_basics import Container as ctr
+from xml_basics import TableXMLNodes  as tb
+from xml_basics import Header as hdr
+from xml_basics import HeaderItem as hi
+from xml_basics import Object as obj
+from xml_basics import ObjectItem as oI
+from xml_basics import Row as rw
 import LoadGroupContainer as lgc
 import LoadCombProperties as lcp
 import uuid
@@ -97,5 +97,5 @@ class LoadCombContainer(ctr.Container):
     for key in sorted(loadCombsDict):
       ns= loadCombsDict[key]
       loadCombs.append(getLoadCombObject(ns))
-    self.table= tb.TableNode(idLoadCombContainerTb,tLoadCombContainerTb, 'Combinations', None,loadCombs)
+    self.appendTable(tb.TableXMLNodes(idLoadCombContainerTb,tLoadCombContainerTb, 'Combinations', None,loadCombs))
   

@@ -3,7 +3,7 @@
 '''CombContainer.py: container for load combinations.'''
 
 __author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
-__cppyright__= "Copyright 2015, AOO and LCPT"
+__copyright__= "Copyright 2015, AOO and LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"

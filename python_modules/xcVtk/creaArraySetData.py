@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AOO)"
-__cppyright__= "Copyright 2015, LCPT AOO"
+__copyright__= "Copyright 2015, LCPT AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"

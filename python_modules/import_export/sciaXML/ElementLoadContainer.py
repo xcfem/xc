@@ -2,13 +2,13 @@
 
 #Based on sXML-master projet on gitHub
 
-import Container as ctr
-import TableNode as tb
-import Header as hdr
-import HeaderItem as hi
-import Object as obj
-import ObjectItem as oI
-import Row as rw
+from xml_basics import Container as ctr
+from xml_basics import TableXMLNodes  as tb
+from xml_basics import Header as hdr
+from xml_basics import HeaderItem as hi
+from xml_basics import Object as obj
+from xml_basics import ObjectItem as oI
+from xml_basics import Row as rw
 import ElementLoadProperties as elp
 import LoadCaseContainer as lcc
 import EPPlaneContainer as ec
@@ -99,7 +99,7 @@ class ElementLoadContainer(ctr.Container):
       compObjects= getElementLoadObjects(el)
       for c in compObjects:
         elementLoads.append(c)
-    self.table= tb.TableNode(idElementLoadContainerTb,tElementLoadContainerTb, 'Forces on surface', None,elementLoads)
+    self.appendTable(tb.TableXMLNodes(idElementLoadContainerTb,tElementLoadContainerTb, 'Forces on surface', None,elementLoads))
 
   def __len__(self):
     return len(self.table)

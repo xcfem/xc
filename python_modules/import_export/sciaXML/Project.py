@@ -3,8 +3,8 @@
 #Based on sXML-master projet on gitHub
 
 import Definition as df
-import Object as obj
-import Container as ctr
+from xml_basics import Object as obj
+from xml_basics import Container as ctr
 import xml.etree.cElementTree as ET
 
 class Project:    
@@ -43,7 +43,7 @@ class Project:
 
 
       header= getDefaultStructNodeHeader()
-      tabelaNos=TableNode(SciaXMLConstantes.STRUCT_NODE_TABLE_ID,SciaXMLConstantes.STRUCT_NODE_TABLE, SciaXMLConstantes.STRUCT_NODE_TABLE_NAME, header, objects)
+      tabelaNos=TableXMLNodes(SciaXMLConstantes.STRUCT_NODE_TABLE_ID,SciaXMLConstantes.STRUCT_NODE_TABLE, SciaXMLConstantes.STRUCT_NODE_TABLE_NAME, header, objects)
       containerNos= Container(SciaXMLConstantes.STRUCT_NODE_ID, SciaXMLConstantes.STRUCT_NODE_TITLE, tabelaNos)
       return containerNos
 
@@ -54,7 +54,7 @@ class Project:
     objects.appendAll(getPecas(sumarioDados.getPecasFinais()))
 
     header= getDefaultBeamHeader()
-    tabelaPecas= TableNode(SciaXMLConstantes.BEAM_TABLE_ID, SciaXMLConstantes.BEAM_TABLE, SciaXMLConstantes.BEAM_TABLE_NAME, header, objects)
+    tabelaPecas= TableXMLNodes(SciaXMLConstantes.BEAM_TABLE_ID, SciaXMLConstantes.BEAM_TABLE, SciaXMLConstantes.BEAM_TABLE_NAME, header, objects)
 
     containerPecas= ctr.Container(SciaXMLConstantes.BEAM_ID, SciaXMLConstantes.BEAM_TITLE, tabelaPecas)
 
@@ -68,7 +68,7 @@ class Project:
     objects.appendAll(getCamadas(sumarioDados.getPecasFinais()))
 
     header= getDefaultDataLayerNodeHeader()
-    tabelaPecas= TableNode(SciaXMLConstantes.DATA_LAYER_TABLE_ID,SciaXMLConstantes.DATA_LAYER_TABLE, SciaXMLConstantes.DATA_LAYER_TABLE_NAME, header, objects)
+    tabelaPecas= TableXMLNodes(SciaXMLConstantes.DATA_LAYER_TABLE_ID,SciaXMLConstantes.DATA_LAYER_TABLE, SciaXMLConstantes.DATA_LAYER_TABLE_NAME, header, objects)
     containerPecas= Container(SciaXMLConstantes.DATA_LAYER_ID, SciaXMLConstantes.DATA_LAYER_TITLE, tabelaPecas)
     return containerPecas
 

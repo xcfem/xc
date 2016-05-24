@@ -2,17 +2,17 @@
 
 #Based on sXML-master projet on gitHub
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import Header as hdr
 import xml.etree.cElementTree as ET
 
 class Property(object):  
-  x= ''  
-  name= ''
-  typo= ''	
-  id= ''
-  flag= ''
-  value= None
-	
+  '''SCIA XML property.'''
   def __init__(self, x= '', name= '', typo= '', id= '', flag= ''):
     self.x= x
     self.name= name
@@ -22,6 +22,7 @@ class Property(object):
     self.value= None
   
   def getXMLElement(self,parent):
+    '''Returns an XML element for the property.'''
     property= ET.SubElement(parent,"def_property")
     if(self.x!=''):
       property.set("x",self.x)

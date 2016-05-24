@@ -4,12 +4,12 @@
 
 #Properties for constraint nodes.
 
-import PropertiesContainer as ctr
-import Property as prop
-import Ref as rf
-import EnumItem as eI
-import Enum as enum
-import PropertiesTable as propTable
+from xml_basics import PropertiesContainer as ctr
+from xml_basics import Property as prop
+from xml_basics import Ref as rf
+from xml_basics import EnumItem as eI
+from xml_basics import Enum as enum
+from xml_basics import PropertiesTable as propTable
 import xml.etree.cElementTree as ET
 
 containerId= "{77705284-EEB9-11D4-B450-00104BC3B531}"
