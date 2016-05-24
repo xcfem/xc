@@ -2,7 +2,7 @@
 
 #Based on sXML-master projet on gitHub
 
-import Definition as df
+from xml_basics import Definition as df
 from xml_basics import Object as obj
 from xml_basics import Container as ctr
 import xml.etree.cElementTree as ET

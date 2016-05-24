@@ -54,10 +54,14 @@
 /usr/local/lib/python2.7/dist-packages/actions/wind/vientoParamVerticalesCTE.pyc
 /usr/local/lib/python2.7/dist-packages/actions/wind/windSIA261.py
 /usr/local/lib/python2.7/dist-packages/actions/wind/windSIA261.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/BlockTopologyEntities.py
+/usr/local/lib/python2.7/dist-packages/import_export/BlockTopologyEntities.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/DxfReader.py
 /usr/local/lib/python2.7/dist-packages/import_export/DxfReader.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/__init__.py
 /usr/local/lib/python2.7/dist-packages/import_export/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/MeshEntities.py
+/usr/local/lib/python2.7/dist-packages/import_export/MeshEntities.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/NeutralLoadDescription.py
 /usr/local/lib/python2.7/dist-packages/import_export/NeutralLoadDescription.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/NeutralMeshDescription.py
@@ -156,6 +160,8 @@
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/SciaXMLConstants.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/SubTableProperties.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/SubTableProperties.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/sXMLBase.py
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/sXMLBase.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/sXMLMesh.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/sXMLMesh.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/TableBase.py
@@ -170,6 +176,8 @@
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/xml_basics/Base.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/xml_basics/Container.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/xml_basics/Container.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/xml_basics/Definition.py
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/xml_basics/Definition.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/xml_basics/EnumItem.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/xml_basics/EnumItem.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/xml_basics/Enum.py
