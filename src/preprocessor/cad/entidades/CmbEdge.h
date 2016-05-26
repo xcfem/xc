@@ -150,6 +150,7 @@ class CmbEdge: public Edge
     std::deque<Edge *> GetEdges(void);
     virtual const Pnt *GetVertice(const size_t &i) const;
     virtual void SetVertice(const size_t &,Pnt *);
+    virtual ID getKPoints(void) const;
 
     BND3d Bnd(void) const;
     void Malla(dir_mallado dm);

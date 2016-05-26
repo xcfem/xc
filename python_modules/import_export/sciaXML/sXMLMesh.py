@@ -2,18 +2,18 @@
 
 #Based on sXML-master projet on gitHub
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import os
-from xml_basics import Definition as df
 import NodeContainer as nCtr
 import EPPlaneContainer as eppc
 import NodeSupportContainer as nsc
-import LoadGroupContainer as lgc
-import LoadCaseContainer as lcc
-import LoadCombContainer as lcmb
 import NodeLoadContainer as nlc
 import ElementLoadContainer as elc
-import ProjectProperties as prjDef
-import xml.etree.cElementTree as ET
 import sXMLBase as base
 
 class SXMLMesh(base.SXMLBase):

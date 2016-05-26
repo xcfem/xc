@@ -76,7 +76,6 @@ typedef XC::QuadBase4N<XC::SolidMech2D> QuadBase4N_Mech2D;
 typedef XC::ElemWithMaterial<4,XC::SectionFDPhysicalProperties> ElemWithMaterial4N_SFD;
 typedef XC::ElemPlano<4,XC::SectionFDPhysicalProperties> ElemPlano4N_SFD;
 
-
 #endif
 
 

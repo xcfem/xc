@@ -252,7 +252,6 @@ class MeshData(object):
     self.nodeSupports= NodeSupportDict()
     self.groups= []
 
-
   def readFromDATFile(self,fName):
     # Read the source mesh
     f= open(fName,"r")

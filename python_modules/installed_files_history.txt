@@ -162,6 +162,8 @@
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/SubTableProperties.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/sXMLBase.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/sXMLBase.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/sXMLBlockTopology.py
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/sXMLBlockTopology.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/sXMLMesh.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/sXMLMesh.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/TableBase.py

@@ -2,6 +2,12 @@
 
 #Based on sXML-master projet on gitHub
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import os
 from xml_basics import Definition as df
 import NodeContainer as nCtr
@@ -51,14 +57,15 @@ class SXMLBase(object):
   def getDefFileName(self):
     return self.fileName + ".def"
 
-  def writeXMLFile(self): 
+  def writeXMLFile(self,outputPath= ''):
+    self.outputPath= outputPath 
     defFileName= self.getDefFileName()
     prj_def= prjDef.ProjectProperties(self.xmlns,defFileName)
     def_tree= prj_def.getXMLTree(defFileName)
-    def_tree.write(defFileName,encoding="UTF-8", xml_declaration=None, default_namespace=None, method="xml")
+    def_tree.write(self.outputPath+defFileName,encoding="UTF-8", xml_declaration=None, default_namespace=None, method="xml")
     tree= self.getXMLTree(defFileName)
-    tree.write(self.fileName,encoding="UTF-8", xml_declaration=None, default_namespace=None, method="xml")
+    tree.write(self.outputPath+self.fileName,encoding="UTF-8", xml_declaration=None, default_namespace=None, method="xml")
 
   def indent(self):
-    os.system("xmlindent -w "+self.fileName)
-    os.system("xmlindent -w "+self.getDefFileName())
+    os.system("xmlindent -w "+self.outputPath+self.fileName)
+    os.system("xmlindent -w "+self.outputPath+self.getDefFileName())

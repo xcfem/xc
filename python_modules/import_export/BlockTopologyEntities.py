@@ -44,17 +44,17 @@ class BlockDict(dict):
   def append(self,cell):
     self[cell.id]= cell
   def readFromXCSet(self,xcSet):
-    elemSet= xcSet.getElements
-    for e in elemSet:
-      nodes= e.getNodes.getExternalNodes
-      numNodes= len(nodes)
-      if(numNodes==4):
-        tagNodes= [nodes[0],nodes[1],nodes[2],nodes[3]]
-        thickness= e.getPhysicalProperties.getVectorMaterials[0].h
-        block= BlockRecord(e.tag,str(e.tag),tagNodes,thickness)
-      elif(numNodes==2):
-        tagNodes= [nodes[0],nodes[1]]
-        block= BlockRecord(e.tag,str(e.tag),tagNodes,0.0)
+    surfaces= xcSet.getSurfaces
+    for s in surfaces:
+      points= s.getKPoints()
+      numPoints= len(points)
+      if(numPoints==4):
+        tagPoints= [points[0],points[1],points[2],points[3]]
+        thickness= s.getElement(1,1,1).getPhysicalProperties.getVectorMaterials[0].h
+        block= BlockRecord(s.tag,str(s.tag),tagPoints,thickness)
+      elif(numPoints==2):
+        tagPoints= [points[0],points[1]]
+        block= BlockRecord(s.tag,str(s.tag),tagPoints,0.0)
       self.append(block)        
   def writeDxf(self,nodeDict,drawing):
     '''Write the cells in dxf file.'''
@@ -87,7 +87,9 @@ class BlockData(object):
     self.materials= me.MaterialDict()
     self.points= PointDict()
     self.blocks= BlockDict()
-    self.groups= []
+    print 'XXX add point supports.'
+    print 'XXX add free loads.'
+
 
   def appendPoint(self,id,x,y,z):
     self.points[id]= PointRecord(int(id),[x,y,z])
@@ -95,7 +97,7 @@ class BlockData(object):
     self.blocks[block.id]= block
 
   def readFromXCSet(self,xcSet):
-    '''Read nodes and elements from an XC set.'''
+    '''Read points and surfaces from an XC set.'''
     self.points.readFromXCSet(xcSet)
     self.blocks.readFromXCSet(xcSet)
 
@@ -128,7 +130,6 @@ class BlockData(object):
     for key in self.blocks:
       block= self.blocks[key]
       block.writeDxf(drawing)
-    #groups have no DXF representation.
     
 
   def writeToXCFile(self,xcImportExportData):
@@ -140,8 +141,6 @@ class BlockData(object):
       block= self.blocks[key]
       strCommand= block.getStrXCCommand(xcImportExportData)
       f.write(strCommand+'\n')
-    for g in self.groups:
-      g.writeToXCFile(xcImportExportData)
 
   def getPointTags(self):
     tags= []
