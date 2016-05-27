@@ -21,11 +21,11 @@ class SXMLBlockTopology(base.SXMLBase):
     super(SXMLBlockTopology,self).__init__(xmlns,blocks,loadContainer)
     self.pointContainer= nCtr.NodeContainer(blocks.points)
     self.blockContainer= eppc.EPPlaneContainer(blocks.blocks)
-    print 'XXX add point supports.'
+    self.pointSupportContainer= nsc.NodeSupportContainer(blocks.pointSupports)
     print 'XXX add free loads.'
 
   def getContainers(self):
-    retval= [self.pointContainer,self.blockContainer]
+    retval= [self.pointContainer,self.blockContainer,self.pointSupportContainer]
     retval.extend(super(SXMLBlockTopology,self).getContainers())
     return retval
 

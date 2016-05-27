@@ -90,6 +90,7 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
       { return indIterator(lst_ptr::begin()); }
     inline indIterator indEnd(void)
       { return indIterator(lst_ptr::end()); }
+    const T &get(const size_t &i) const;
     void clear(void);
     void clearAll(void);
     inline size_type size(void) const
@@ -179,6 +180,14 @@ void DqPtrs<T>::clearAll(void)
   {
     clear();
     EntCmd::clearPyProps();
+  }
+
+//! @brief Access specified node with bounds checking.
+template<class T>
+const T &DqPtrs<T>::get(const size_t &i) const
+  { 
+    const T *ptr= lst_ptr::at(i);
+    return *ptr; 
   }
 
 //! @brief Devuelve verdadero si el puntero está en el contenedor.

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
 
+import BasicEntities as be
+from miscUtils import LogMessages as lmsg
+
 class MaterialRecord(object):
   def __init__(self,name,typo,thermalExp,rho,E,nu,G,logDec,specHeat,thermalCond):
     self.name= name
@@ -164,49 +167,15 @@ class CellDict(dict):
     for key in self:
       retval+= str(self[key]) + '\n'
 
-class ComponentSupportRecord:
-  '''Constraints for x,y,z,rx,ry,rz displacements of a node.'''
-  def __init__(self,typ= 'Rigid', k= 0.0):
-    self.typ= typ #Free","Rigid", "Flexible"
-    self.k= k
-  def getTypeCode(self):
-    if(self.typ=='Free'):
-      return '0'
-    elif(self.typ=='Rigid'):
-      return '1'
-    elif(self.typ=='Flexible'):
-      return '2'
-    else:
-      print 'ComponentSupportRecord::getTypeCode; error: unknown type: ', self.typ 
-      return '0'
-  def __str__(self):
-    retval= self.typ
-    if(self.typ == 'Flexible'):
-      retval+= '('+str(self.k)+')'
-    return retval
 
 
-class NodeSupportRecord(object):
+class NodeSupportRecord(be.SupportRecord):
   ''' Constraints for node displacements'''
-  def __init__(self, id, nodeId, xComp= ComponentSupportRecord(), yComp= ComponentSupportRecord(), zComp= ComponentSupportRecord(), rxComp= ComponentSupportRecord('Free'), ryComp= ComponentSupportRecord('Free'), rzComp= ComponentSupportRecord('Free')):
-    self.id= id
+  def __init__(self, id, nodeId, xComp= be.ComponentSupportRecord(), yComp= be.ComponentSupportRecord(), zComp= be.ComponentSupportRecord(), rxComp= be.ComponentSupportRecord('Free'), ryComp= be.ComponentSupportRecord('Free'), rzComp= be.ComponentSupportRecord('Free')):
+    super(NodeSupportRecord,self).__init__(id,xComp,yComp,zComp,rxComp,ryComp,rzComp)
     self.nodeId= nodeId
-    self.typ= 'Standard'
-    self.xComp= xComp
-    self.yComp= yComp
-    self.zComp= zComp
-    self.rxComp= rxComp
-    self.ryComp= ryComp
-    self.rzComp= rzComp
-  def setupFromComponentLabels(self,componentLabels):
-    self.xComp= ComponentSupportRecord(componentLabels[0])
-    self.yComp= ComponentSupportRecord(componentLabels[1])
-    self.zComp= ComponentSupportRecord(componentLabels[2])
-    self.rxComp= ComponentSupportRecord(componentLabels[3])
-    self.ryComp= ComponentSupportRecord(componentLabels[4])
-    self.rzComp= ComponentSupportRecord(componentLabels[5])
   def __str__(self):
-    return str(self.id) + ' nodeId: ' + str(self.nodeId) + ' type: ' + self.typ + ' x: ' + str(self.xComp)+ ' y: ' + str(self.yComp) + ' z: ' + str(self.zComp)+ ' rx: ' + str(self.rxComp)+ ' ry: ' + str(self.ryComp) + ' rz: ' + str(self.rzComp)
+    return str(self.id) + ' nodeId: ' + str(self.nodeId) + ' ' + self.getStrConstraints()
 
 def getConstraintsByNode(domain):
   retval= defaultdict(list)
@@ -219,7 +188,9 @@ def getConstraintsByNode(domain):
 
 class NodeSupportDict(dict):
   def append(self, ns):
-    self[ns.id]= ns
+    if (ns.nodeId in self):
+      lmsg.warning('support for node: '+ns.nodeId+' redefined.')
+    self[ns.nodeId]= ns
   def readFromXCDomain(self,domain):
     '''Read SP constraints from an XC domain.'''
     spConstraintsByNode= getConstraintsByNode(domain)
@@ -233,12 +204,18 @@ class NodeSupportDict(dict):
         if(dispValue == 0.0):
           labels[gdl]= 'Rigid'
         else:
-          print "Error; imposed displacement constraints not implemented."
+          lmsg.error('Error; imposed displacement constraints not implemented.')
       nsr= NodeSupportRecord(supportId,tagNode)
       nsr.setupFromComponentLabels(labels)
-      #print "nsr= ", nsr
       self.append(nsr)
       supportId+= 1
+  def getNodeTags(self):
+    '''Return dictionary keys in a list.'''
+    retval= list()
+    for key in self:
+      nodeTag= self[key].nodeId
+      retval.append(nodeTag)
+    return retval
 
 class MeshData(object):
 

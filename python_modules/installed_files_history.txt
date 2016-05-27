@@ -54,6 +54,8 @@
 /usr/local/lib/python2.7/dist-packages/actions/wind/vientoParamVerticalesCTE.pyc
 /usr/local/lib/python2.7/dist-packages/actions/wind/windSIA261.py
 /usr/local/lib/python2.7/dist-packages/actions/wind/windSIA261.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/BasicEntities.py
+/usr/local/lib/python2.7/dist-packages/import_export/BasicEntities.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/BlockTopologyEntities.py
 /usr/local/lib/python2.7/dist-packages/import_export/BlockTopologyEntities.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/DxfReader.py

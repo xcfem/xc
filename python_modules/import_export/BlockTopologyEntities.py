@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+import BasicEntities as be
 import MeshEntities as me
+from miscUtils import LogMessages as lmsg
 
 class PointRecord(me.NodeRecord):
   '''kPoint entities'''
@@ -36,7 +38,7 @@ class BlockRecord(me.CellRecord):
     if(self.cellType=='line'):
       strCommand= 'l' + strId + '= ' + loaderName + '.newLine(' + str(self.nodeIds[0]) + ',' + str(self.nodeIds[1]) +')'
     else:
-      print 'BlockRecord::getStrXCCommand not implemented for blocks of type: ', self.cellType
+      lmsg.error('BlockRecord::getStrXCCommand not implemented for blocks of type: '+ self.cellType)
     return strCommand
 
 class BlockDict(dict):
@@ -80,6 +82,35 @@ class BlockDict(dict):
     for key in self:
       retval+= str(self[key]) + '\n'
 
+class PointSupportRecord(be.SupportRecord):
+  ''' Constraints for node displacements'''
+  def __init__(self, id, pointId, nsr):
+    super(PointSupportRecord,self).__init__(id,nsr.xComp, nsr.yComp, nsr.zComp, nsr.rxComp, nsr.ryComp, nsr.rzComp)
+    self.nodeId= pointId
+  def __str__(self):
+    return str(self.id) + ' nodeId: ' + str(self.nodeId) + ' ' + self.getStrConstraints()
+
+class PointSupportDict(dict):
+  def append(self, ps):
+    if (ps.nodeId in self):
+      lmsg.warning('support for node: '+ps.nodeId+' redefined.')
+    self[ps.nodeId]= ps
+  def readFromXCSet(self,xcSet,points):
+    '''Read supports from an XC set.'''
+    nodeSupports= me.NodeSupportDict()
+    preprocessor= xcSet.getPreprocessor
+    nodeSupports.readFromXCDomain(preprocessor.getDomain)
+    nodeSupportsTags= nodeSupports.getNodeTags()
+    supportId= 0
+    for k in points:
+      p= preprocessor.getCad.getPoints.get(k)
+      pointTag= p.tag
+      nodeTag= p.getNode().tag
+      if(nodeTag in nodeSupportsTags):
+        psr= PointSupportRecord(supportId,pointTag,nodeSupports[nodeTag])
+        self.append(psr)
+        supportId+= 1
+
 class BlockData(object):
   '''Block topology entities: points, lines, faces, solids,... '''
   def __init__(self):
@@ -87,7 +118,7 @@ class BlockData(object):
     self.materials= me.MaterialDict()
     self.points= PointDict()
     self.blocks= BlockDict()
-    print 'XXX add point supports.'
+    self.pointSupports= PointSupportDict()
     print 'XXX add free loads.'
 
 
@@ -100,6 +131,7 @@ class BlockData(object):
     '''Read points and surfaces from an XC set.'''
     self.points.readFromXCSet(xcSet)
     self.blocks.readFromXCSet(xcSet)
+    self.pointSupports.readFromXCSet(xcSet,self.points)
 
   def readFromDxfFile(self,fName,preprocessor,dxfLayers):
     dxfReader= DxfReader.DxfReader()
