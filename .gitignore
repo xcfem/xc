@@ -159,3 +159,9 @@ python_modules/build/lib*
 #python
 *.pyc
 version.cc
+
+#sphinx
+doc/build
+_templates
+_static
+_build
