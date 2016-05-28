@@ -37,7 +37,7 @@ namespace XC {
 
 //! @ingroup Cad
 //
-//! @brief Contenedor de entidades del modelo.
+//! @brief Container for model entities.
 template <class T>
  class MapCadMember: public MapCadMemberBase, public std::map<MapCadMemberBase::Indice,T *>
   {

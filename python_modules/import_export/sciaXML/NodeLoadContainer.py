@@ -2,13 +2,19 @@
 
 #Based on sXML-master projet on gitHub
 
-import Container as ctr
-import TableNode as tb
-import Header as hdr
-import HeaderItem as hi
-import Object as obj
-import ObjectItem as oI
-import Row as rw
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+from xml_basics import Container as ctr
+from xml_basics import TableXMLNodes  as tb
+from xml_basics import Header as hdr
+from xml_basics import HeaderItem as hi
+from xml_basics import Object as obj
+from xml_basics import ObjectItem as oI
+from xml_basics import Row as rw
 import NodeLoadProperties as nlp
 import LoadCaseContainer as lcc
 import NodeContainer as nc
@@ -87,5 +93,5 @@ class NodeLoadContainer(ctr.Container):
       compObjects= getNodeLoadObjects(nl)
       for c in compObjects:
         nodeLoads.append(c)
-    self.table= tb.TableNode(idNodeLoadContainerTb,tNodeLoadContainerTb, 'Point forces in node', None,nodeLoads)
+    self.appendTable(tb.TableXMLNodes(idNodeLoadContainerTb,tNodeLoadContainerTb, 'Point forces in node', None,nodeLoads))
   

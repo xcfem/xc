@@ -638,6 +638,17 @@ void XC::CmbEdge::SetVertice(const size_t &,Pnt *)
     std::cerr << "Función XC::CmbEdge::SetVertice no implementada." << std::endl;
   }
 
+//! @brief Returns object k-points.
+XC::ID XC::CmbEdge::getKPoints(void) const
+  {
+    const size_t numVertices= NumVertices();
+    ID retval(numVertices);
+    for(size_t i= 0;i<numVertices;i++)
+      retval[i]= GetLado(i+1)->P1()->GetTag();
+    return retval;
+  }
+
+
 //! @brief Devuelve el BND del objeto.
 BND3d XC::CmbEdge::Bnd(void) const
   { 

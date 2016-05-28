@@ -10,7 +10,7 @@ from xcVtk.malla_ef import Fields
 '''Generation of springs for nodes at foundation.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
-__cppyright__= "Copyright 2016 LCPT"
+__copyright__= "Copyright 2016 LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"

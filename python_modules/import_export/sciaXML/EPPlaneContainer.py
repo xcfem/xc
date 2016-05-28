@@ -2,13 +2,19 @@
 
 #Based on sXML-master projet on gitHub
 
-import Container as ctr
-import TableNode as tb
-import Header as hdr
-import HeaderItem as hi
-import Object as obj
-import ObjectItem as oI
-import Row as rw
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+from xml_basics import Container as ctr
+from xml_basics import TableXMLNodes  as tb
+from xml_basics import Header as hdr
+from xml_basics import HeaderItem as hi
+from xml_basics import Object as obj
+from xml_basics import ObjectItem as oI
+from xml_basics import Row as rw
 import NodeContainer as nc
 
 idEPPlaneContainer= '{8708ed31-8e66-11d4-ad94-f6f5de2be344}'
@@ -50,5 +56,5 @@ class EPPlaneContainer(ctr.Container):
     for key in cellsDict:
       cell= cellsDict[key]
       cells.append(getEPPlaneObject(cell))
-    self.table= tb.TableNode(idEPPlaneContainerTb,tEPPlaneContainerTb, '', None,cells)
+    self.appendTable(tb.TableXMLNodes(idEPPlaneContainerTb,tEPPlaneContainerTb, '', None,cells))
   

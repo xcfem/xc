@@ -2,13 +2,19 @@
 
 #Based on sXML-master projet on gitHub
 
-import PropertiesContainer as ctr
-import Property as prop
-import Ref as rf
-import EnumItem as eI
-import Enum as enum
-import PropertiesTable as propTable
-import PropertiesSubTable as propSubTable
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+from xml_basics import PropertiesContainer as ctr
+from xml_basics import Property as prop
+from xml_basics import Ref as rf
+from xml_basics import EnumItem as eI
+from xml_basics import Enum as enum
+from xml_basics import PropertiesTable as propTable
+from xml_basics import PropertiesSubTable as propSubTable
 import NodeContainer as nc
 import xml.etree.cElementTree as ET
 

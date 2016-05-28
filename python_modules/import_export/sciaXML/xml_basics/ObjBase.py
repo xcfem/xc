@@ -2,6 +2,12 @@
 
 #Based on sXML-master projet on gitHub
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import ObjectItem as oi
 import xml.etree.cElementTree as ET
 
@@ -32,6 +38,7 @@ class ObjBase(object):
     pp2= self.p2.getXMLElement(xmlElement,2)
 
   def getXMLElement(self,parent):
+    '''Returns an XML element for the object.'''
     oo= ET.SubElement(parent,'row')
     oo.set("id",self.id)
     self.populateXMLElement(oo)

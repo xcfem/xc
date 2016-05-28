@@ -2,12 +2,26 @@
 
 #Based on sXML-master projet on gitHub
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import Header as hdr
 import xml.etree.cElementTree as ET
 
 class ObjectItem(object):
-	
+  ''' Item of a table.'''	
   def __init__(self, v= '', i= '', n= '', t= '', h= None, rws= None):
+    ''' Constructor.
+        Parameters:
+        v: v field.
+        i: i field.
+        n: n field.
+        h: h field.
+        rws: rows.
+    '''
     self.v= v
     self.i= i
     self.n= n
@@ -19,40 +33,52 @@ class ObjectItem(object):
       self.rows= list()
 
   def getV(self):
+    '''Returns v field.'''
     return self.v
   def setV(self, v):
+    '''Sets v field.'''
     self.v= v
 
   def getI(self):
+    '''Returns i field.'''
     return self.i
   def setI(self, i):
+    '''Sets i field.'''
     self.i= i
   
 
   def getN(self):
+    '''Returns n field.'''
     return self.n
   def setN(self, n):
+    '''Sets n field.'''
     self.n= n
 
   def setT(self, t):
+    '''Returns t field.'''
     self.t= t
   def getT(self):
+    '''Sets t field.'''
     return self.t
   
 
   def getH(self):
+    '''Returns h field.'''
     return self.h
   def setH(self, h):
+    '''Sets h field.'''
     self.h= h
   
 
   def hasRows(self):
+    '''Returns true if rows are not empty.'''
     retval= False
     if self.rows is not None:
       retval= (len(self.rows)>0)
     return retval
 
   def getXMLElement(self,parent, cont):
+    '''Returns an XML element for the object.'''
     itemId= 'p'+str(cont) 
     p= ET.SubElement(parent,itemId)
     if self.v is not None:

@@ -26,6 +26,7 @@ class_<dq_ptrs_node, bases<EntCmd>, boost::noncopyable >("dq_ptrs_node",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_node::indBegin, &dq_ptrs_node::indEnd))
   .add_property("size", &dq_ptrs_node::size, "Returns list size.")
   .def("__len__",&dq_ptrs_node::size, "Returns list size.")
+  .def("at",make_function(&dq_ptrs_node::get, return_internal_reference<>() ), "Access specified node with bounds checking.")
   .def("getTags",make_function(&dq_ptrs_node::getTags, return_internal_reference<>() ),"Returns node identifiers.")
   .def("clear",&dq_ptrs_node::clear,"Removes all items.")
   ;
@@ -44,6 +45,7 @@ class_<dq_ptrs_element, bases<EntCmd>, boost::noncopyable >("dq_ptrs_element",no
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_element::indBegin, &dq_ptrs_element::indEnd))
   .add_property("size", &dq_ptrs_element::size, "Returns list size.")
   .def("__len__",&dq_ptrs_element::size, "Returns list size.")
+  .def("at",make_function(&dq_ptrs_element::get, return_internal_reference<>() ), "Access specified element with bounds checking.")
   .def("getTags",make_function(&dq_ptrs_element::getTags, return_internal_reference<>() ),"Returns element identifiers.")
   .def("clear",&dq_ptrs_element::clear,"Removes all items.")
   ;
@@ -62,6 +64,7 @@ class_<dq_ptrs_constraint, bases<EntCmd>, boost::noncopyable >("dq_ptrs_constrai
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_constraint::indBegin, &dq_ptrs_constraint::indEnd))
   .add_property("size", &dq_ptrs_constraint::size, "Returns list size.")
   .def("__len__",&dq_ptrs_constraint::size, "Returns list size.")
+  .def("at",make_function(&dq_ptrs_constraint::get, return_internal_reference<>() ), "Access specified constraint with bounds checking.")
   .def("getTags",make_function(&dq_ptrs_constraint::getTags, return_internal_reference<>() ),"Returns constraint identifiers.")
   .def("clear",&dq_ptrs_constraint::clear,"Removes all items.")
   ;
@@ -97,6 +100,7 @@ class_<XC::SetMeshComp, bases<XC::SetBase>, boost::noncopyable >("SetMeshComp",n
 typedef XC::DqPtrs<XC::Pnt> dq_ptrs_pnt;
 class_<dq_ptrs_pnt, bases<EntCmd>, boost::noncopyable >("dq_ptrs_pnt",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_pnt::indBegin, &dq_ptrs_pnt::indEnd))
+  .def("at",make_function(&dq_ptrs_pnt::get, return_internal_reference<>() ), "Access specified point with bounds checking.")
   .def("clear",&dq_ptrs_pnt::clear,"Removes all items.")
    ;
 
@@ -110,6 +114,7 @@ class_<XC::Set::lst_ptr_puntos, bases<dq_ptrs_pnt>, boost::noncopyable >("lstPnt
 typedef XC::DqPtrs<XC::Edge> dq_ptrs_lineas;
 class_<dq_ptrs_lineas, bases<EntCmd>, boost::noncopyable >("dq_ptrs_lineas",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_lineas::indBegin, &dq_ptrs_lineas::indEnd))
+  .def("at",make_function(&dq_ptrs_lineas::get, return_internal_reference<>() ), "Access specified line with bounds checking.")
   .def("clear",&dq_ptrs_lineas::clear,"Removes all items.")
    ;
 
@@ -123,6 +128,7 @@ class_<XC::Set::lst_ptr_lineas, bases<dq_ptrs_lineas>, boost::noncopyable >("lst
 typedef XC::DqPtrs<XC::Face> dq_ptrs_superficies;
 class_<dq_ptrs_superficies, bases<EntCmd>, boost::noncopyable >("dq_ptrs_superficies",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_superficies::indBegin, &dq_ptrs_superficies::indEnd))
+  .def("at",make_function(&dq_ptrs_superficies::get, return_internal_reference<>() ), "Access specified surface with bounds checking.")
   .def("clear",&dq_ptrs_superficies::clear,"Removes all items.")
    ;
 
@@ -136,6 +142,7 @@ class_<XC::Set::lst_ptr_superficies, bases<dq_ptrs_superficies>, boost::noncopya
 typedef XC::DqPtrs<XC::Body> dq_ptrs_cuerpos;
 class_<dq_ptrs_cuerpos, bases<EntCmd>, boost::noncopyable >("dq_ptrs_cuerpos",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_cuerpos::indBegin, &dq_ptrs_cuerpos::indEnd))
+  .def("at",make_function(&dq_ptrs_cuerpos::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
   .def("clear",&dq_ptrs_cuerpos::clear,"Removes all items.")
    ;
 

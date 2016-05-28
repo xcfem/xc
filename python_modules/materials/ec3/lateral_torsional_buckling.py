@@ -3,7 +3,7 @@
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT)"
-__cppyright__= "Copyright 2016 LCPT"
+__copyright__= "Copyright 2016 LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"

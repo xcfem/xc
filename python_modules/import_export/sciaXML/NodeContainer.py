@@ -2,12 +2,18 @@
 
 #Based on sXML-master projet on gitHub
 
-import Container as ctr
-import TableNode as tb
-import Header as hdr
-import HeaderItem as hi
-import Object as obj
-import ObjectItem as oI
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+from xml_basics import Container as ctr
+from xml_basics import TableXMLNodes as tb
+from xml_basics import Header as hdr
+from xml_basics import HeaderItem as hi
+from xml_basics import Object as obj
+from xml_basics import ObjectItem as oI
 
 idNodeContainer= '{39A7F468-A0D4-4DFF-8E5C-5843E1807D13}'
 progIdNodes= 'EP_DSG_Elements.EP_StructNode.1'
@@ -41,7 +47,7 @@ class NodeContainer(ctr.Container):
     for key in nodesDict:
       nr= nodesDict[key]
       nodes.append(getNodeObject(nr))
-    self.table= tb.TableNode(STRUCT_NODE_TABLE_ID,STRUCT_NODE_TABLE, STRUCT_NODE_TABLE_NAME, header,nodes)
+    self.appendTable(tb.TableXMLNodes(STRUCT_NODE_TABLE_ID,STRUCT_NODE_TABLE, STRUCT_NODE_TABLE_NAME, header,nodes))
   def getDefaultStructNodeHeader(self):
     retorno= hdr.Header()
     retorno.setH0(hi.HeaderItem(STRUCT_NODE_HEADER_H0))
