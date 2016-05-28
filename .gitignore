@@ -161,7 +161,7 @@ python_modules/build/lib*
 version.cc
 
 #sphinx
-doc/build
+doc/sphinxDoc/build/
 _templates
 _static
 _build

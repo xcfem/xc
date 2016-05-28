@@ -20,3 +20,12 @@ This is something I want to say that is not in the docstring.
    :members:
 
 
+C++ classes
+===========
+.. automodule:: geom
+  :members:
+  :undoc-members:
+
+.. automodule:: xc_base
+  :members:
+  :undoc-members:
