@@ -20,8 +20,8 @@ import re
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
-pth_materials= '../../python_modules/materials'
-sys.path.insert(0,os.path.abspath(pth_materials))
+pth_python= '../../python_modules'
+sys.path.insert(0,os.path.abspath(pth_python))
 pth_cpplib= '../../lib'
 sys.path.insert(0,os.path.abspath(pth_cpplib))
 
