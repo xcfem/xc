@@ -9,9 +9,26 @@ Welcome to XC's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
 
    code.rst
+
+   _static/materials.rst
+
+   _static/actions.rst 
+
+   _static/solution.rst
+
+..   _static/postprocess.rst
+
+   _static/xcVtk.rst
+
+   _static/misc.rst
+
+   _static/import_export.rst
+
+..   _static/rough_calculations.rst
+
 
 Indices and tables
 ==================

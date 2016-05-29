@@ -15,10 +15,10 @@ import xc
 
 def defElasticMaterial(preprocessor,name,E):
   '''Constructs an elastic uniaxial material.
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the material
-    E:            tangent in the stress-strain diagram
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the material
+  :param E:            tangent in the stress-strain diagram
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_material",name)
@@ -28,12 +28,12 @@ def defElasticMaterial(preprocessor,name,E):
 
 def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
   '''Constructs an elastic perfectly-plastic uniaxial material.
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the material
-    E:            tangent in the elastic zone of the stress-strain diagram
-    fyp:          stress at which material reaches plastic state in tension
-    fyn:          stress at which material reaches plastic state in compression
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the material
+  :param E:            tangent in the elastic zone of the stress-strain diagram
+  :param fyp:          stress at which material reaches plastic state in tension
+  :param fyn:          stress at which material reaches plastic state in compression
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elasticpp_material",name)
@@ -45,10 +45,10 @@ def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
 
 def defElastNoTensMaterial(preprocessor,name,E):
   '''Constructs a uniaxial elastic - no tension material.
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the material
-    E:            tangent in the elastic zone of the stress-strain diagram
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the material
+  :param E:            tangent in the elastic zone of the stress-strain diagram
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elast_no_trac_material",name)
@@ -61,12 +61,12 @@ def defCableMaterial(preprocessor,name,E,prestress,rho):
   '''Constructs a uniaxial bilinear prestressed material. 
   The stress strain ranges from slack (large strain at zero stress) 
   to taught (linear with modulus E).
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the material
-    E:            elastic modulus
-    prestress:    prestress
-    rho:          effective self weight (gravity component of weight per 
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the material
+  :param E:            elastic modulus
+  :param prestress:    prestress
+  :param rho:          effective self weight (gravity component of weight per 
                   volume transverse to the cable)
   '''
   materiales= preprocessor.getMaterialLoader
@@ -81,12 +81,12 @@ def defCableMaterial(preprocessor,name,E,prestress,rho):
 #Steel 01.
 def defSteel01(preprocessor,name,E,fy,b):
   '''Constructs a uniaxial bilinear steel material object with kinematic hardening
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the material
-    E:            initial elastic tangent 
-    fy:           yield strength 
-    b:            strain-hardening ratio: ratio between post-yield tangent
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the material
+  :param E:            initial elastic tangent 
+  :param fy:           yield strength 
+  :param b:            strain-hardening ratio: ratio between post-yield tangent
                   and initial elastic tangent
   '''
   materiales= preprocessor.getMaterialLoader
@@ -101,12 +101,12 @@ def defSteel01(preprocessor,name,E,fy,b):
 def defSteel02(preprocessor,name,E,fy,b,initialStress):
   '''Constructs a uniaxial bilinear Giuffre-Menegotto-Pinto steel material with 
   isotropic strain hardening
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the material
-    E:            initial elastic tangent 
-    fy:           yield strength 
-    b:            strain-hardening ratio: ratio between post-yield tangent
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the material
+  :param E:            initial elastic tangent 
+  :param fy:           yield strength 
+  :param b:            strain-hardening ratio: ratio between post-yield tangent
                   and initial elastic tangent
     initialStress:initial stress
   '''
@@ -124,14 +124,13 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
   '''Constructs a uniaxial Kent-Scott-Park concrete material object 
   with degraded linear unloading/reloading stiffness according to 
   the work of Karsan-Jirsa and no tensile strength
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the material
-    epsc0:        concrete strain at maximum strength 
-    fpc:          concrete compressive strength at 28 days 
-                  (compression is negative)
-    fpcu:         concrete crushing strength 
-    epscu:        concrete strain at crushing strength 
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the material
+  :param epsc0:        concrete strain at maximum strength 
+  :param fpc:          concrete compressive strength at 28 days (compression is negative)
+  :param fpcu:         concrete crushing strength 
+  :param epscu:        concrete strain at crushing strength 
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("concrete01_material",name)
@@ -146,12 +145,12 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
 #Elastic section 2d.
 def defElasticSection2d(preprocessor,name,A,E,I):
   '''Constructs an elastic section appropiate for 2D beam analysis.
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the section
-    A:            cross-sectional area of the section
-    E:            Young’s modulus of material
-    I:            second moment of area about the local z-axis
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the section
+  :param A:            cross-sectional area of the section
+  :param E:            Young’s modulus of material
+  :param I:            second moment of area about the local z-axis
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_section_2d",name)
@@ -165,14 +164,14 @@ def defElasticSection2d(preprocessor,name,A,E,I):
 def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha):
   '''Constructs an elastic section appropiate for 2D beam analysis, 
   including shear deformations.
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the section
-    A:            cross-sectional area of the section
-    E:            Young’s modulus of the material
-    G:            Shear modulus of the material          
-    I:            second moment of area about the local z-axis
-    alpha:        shear shape factor
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the section
+  :param A:            cross-sectional area of the section
+  :param E:            Young’s modulus of the material
+  :param G:            Shear modulus of the material          
+  :param I:            second moment of area about the local z-axis
+   :param alpha:        shear shape factor
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elasticShearSection2d",name)
@@ -187,10 +186,10 @@ def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha):
 def defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d):
   '''Constructs an elastic section appropiate for 2D beam analysis, 
   taking mechanical properties of the section form a MechProp2d object.
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the section
-    mechProp2d:   object of type MechProp2d that contains the mechanical 
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the section
+  :param mechProp2d:   object of type MechProp2d that contains the mechanical 
                   properties of the section
   '''  
   return defElasticSection2d(preprocessor,name,mechProp2d.A,mechProp2d.E,mechProp2d.I)
@@ -198,15 +197,15 @@ def defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d):
 #Elastic section 3d.
 def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J):
   '''Constructs an elastic section appropiate for 3D beam analysis
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the section
-    A:            cross-sectional area of the section
-    E:            Young’s modulus of the material
-    G:            Shear modulus of the material          
-    Iz:           second moment of area about the local z-axis
-    Iy:           second moment of area about the local y-axis
-    J:            torsional moment of inertia of the section
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the section
+  :param A:            cross-sectional area of the section
+  :param E:            Young’s modulus of the material
+  :param G:            Shear modulus of the material          
+  :param Iz:           second moment of area about the local z-axis
+  :param Iy:           second moment of area about the local y-axis
+  :param J:            torsional moment of inertia of the section
 
   '''
   materiales= preprocessor.getMaterialLoader
@@ -223,10 +222,10 @@ def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J):
 def defElasticSectionFromMechProp3d(preprocessor,name,mechProp3d):
   '''Constructs an elastic section appropiate for 3D beam analysis, 
   taking mechanical properties of the section form a MechProp3d object.
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the section
-    mechProp2d:   instance of the class MechProp3d that contains the mechanical 
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the section
+  :param mechProp2d:   instance of the class MechProp3d that contains the mechanical 
                   properties of the section
   '''  
   return defElasticSection3d(preprocessor,name,mechProp3d.A,mechProp3d.E,mechProp3d.G,mechProp3d.Iz,mechProp3d.Iy,mechProp3d.J)
@@ -235,16 +234,16 @@ def defElasticSectionFromMechProp3d(preprocessor,name,mechProp3d):
 def defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha):
   '''Constructs an elastic section appropiate for 3D beam analysis, 
   including shear deformations.
-  Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the section
-    A:            cross-sectional area of the section
-    E:            Young’s modulus of the material
-    G:            shear modulus of the material          
-    Iz:           second moment of area about the local z-axis
-    Iy:           second moment of area about the local y-axis
-    J:            torsional moment of inertia of the section
-    alpha:        shear shape factor
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the section
+  :param A:            cross-sectional area of the section
+  :param E:            Young’s modulus of the material
+  :param G:            shear modulus of the material          
+  :param Iz:           second moment of area about the local z-axis
+  :param Iy:           second moment of area about the local y-axis
+  :param J:            torsional moment of inertia of the section
+  :param alpha:        shear shape factor
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elasticShearSection3d",name)
@@ -262,12 +261,12 @@ def defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha):
 #Linear elastic isotropic plane strain material.
 def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu,rho):
   '''Constructs an linear elastic isotropic plane-strain material.
- Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the material
-    E:            Young’s modulus of the material
-    nu:           Poisson’s ratio
-    rho:          mass density, optional (defaults to 0.0)
+
+  :param  preprocessor: preprocessor name
+  :param  name:         name identifying the material
+  :param  E:            Young’s modulus of the material
+  :param  nu:           Poisson’s ratio
+  :param  rho:          mass density, optional (defaults to 0.0)
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_isotropic_plane_strain_2d",name)
@@ -280,12 +279,12 @@ def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu,rho):
 #Linear elastic isotropic plane stress material.
 def defElasticIsotropicPlaneStress(preprocessor,name,E,nu,rho):
   '''Constructs an linear elastic isotropic plane-stress material.
- Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the material
-    E:            Young’s modulus of the material
-    nu:           Poisson’s ratio
-    rho:          mass density, optional (defaults to 0.0)
+
+  :param  preprocessor: preprocessor name
+  :param  name:         name identifying the material
+  :param  E:            Young’s modulus of the material
+  :param  nu:           Poisson’s ratio
+  :param  rho:          mass density, optional (defaults to 0.0)
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_isotropic_plane_stress_2d",name)
@@ -298,12 +297,12 @@ def defElasticIsotropicPlaneStress(preprocessor,name,E,nu,rho):
 #Linear elastic isotropic 3d material.
 def defElasticIsotropic3d(preprocessor,name,E,nu,rho):
   '''Constructs an linear elastic isotropic 3D material.
- Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the material
-    E:            Young’s modulus of the material
-    nu:           Poisson’s ratio
-    rho:          mass density, optional (defaults to 0.0)
+
+  :param  preprocessor: preprocessor name
+  :param  name:         name identifying the material
+  :param  E:            Young’s modulus of the material
+  :param  nu:           Poisson’s ratio
+  :param  rho:          mass density, optional (defaults to 0.0)
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_isotropic_3d",name)
@@ -316,13 +315,13 @@ def defElasticIsotropic3d(preprocessor,name,E,nu,rho):
 #Elastic membrane plate section.
 def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
   '''Constructs an elastic isotropic section appropiate for plate analysis
- Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the section
-    E:            Young’s modulus of the material
-    nu:           Poisson’s ratio
-    rho:          mass density
-    h:            overall depth of the section
+
+  :param  preprocessor: preprocessor name
+  :param  name:         name identifying the section
+  :param  E:            Young’s modulus of the material
+  :param  nu:           Poisson’s ratio
+  :param  rho:          mass density
+  :param  h:            overall depth of the section
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_membrane_plate_section",name)
@@ -336,13 +335,13 @@ def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
 #Elastic membrane plate section.
 def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
   '''Constructs an elastic isotropic section appropiate for plate and shell analysis
- Parameters:
-    preprocessor: preprocessor name
-    name:         name identifying the section
-    E:            Young’s modulus of the material
-    nu:           Poisson’s ratio
-    rho:          mass density
-    h:            overall depth of the section
+
+  :param  preprocessor: preprocessor name
+  :param  name:         name identifying the section
+  :param  E:            Young’s modulus of the material
+  :param  nu:           Poisson’s ratio
+  :param  rho:          mass density
+  :param  h:            overall depth of the section
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_membrane_plate_section",name)
