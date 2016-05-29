@@ -19,25 +19,22 @@ import matplotlib.pyplot as plt
 
 class Concrete(object):
     """ Concrete model according to Eurocode 2 - Base class.
-    Attributes:
-        nmbMaterial: name of material.
-        nmbDiagK: name of the characteristic diagram
-        matTagK:  tag of the uni-axial material in the characteristic diagram
-        nmbDiagD: name of the design diagram
-        matTagD:  tag of the uni-axial material in the design diagram
-        fck:       characteristic (5%) cylinder strength of the concrete [Pa]
-        gmmC:      partial safety factor for concrete 
-        nuc:       Poisson coefficient
-        cemType:   type of cement:
-                     = 'R'  for cement of strength Classes CEM 42,5 R, CEM 52,5 Nand CEM 52,5 R (Class R) 
-                            [cementos de alta resistencia en EHE]
-                     = 'N'  for cement of strength Classes CEM 32,5 R, CEM 42,5 N (Class N) 
-                            [cementos normales en EHE]
-                     = 'S'  for cement of strength Classes CEM 32,5 N (Class S) 
-                            [cementos de endurecimiento lento en EHE]
-        alfacc:    factor which takes account of the fatigue in the concrete when
-                   it is subjected to high levels of compression stress due to long
-                   duration loads. Normally alfacc=1 (default value)
+
+    :ivar nmbMaterial: name of material
+    :ivar nmbDiagK: name of the characteristic diagram
+    :ivar matTagK:  tag of the uni-axial material in the characteristic diagram
+    :ivar nmbDiagD: name of the design diagram
+    :ivar matTagD:  tag of the uni-axial material in the design diagram
+    :ivar fck:       characteristic (5%) cylinder strength of the concrete [Pa]
+    :ivar gmmC:      partial safety factor for concrete
+    :ivar nuc:       Poisson coefficient
+    :ivar cemType:   type of cement
+
+      - ``R``  for cement of strength Classes CEM 42,5 R, CEM 52,5 Nand CEM 52,5 R (Class R) [cementos de alta resistencia en EHE]
+      - ``N``  for cement of strength Classes CEM 32,5 R, CEM 42,5 N (Class N) [cementos normales en EHE]
+      - ``S``  for cement of strength Classes CEM 32,5 N (Class S) [cementos de endurecimiento lento en EHE]
+
+    :ivar alfacc:    factor which takes account of the fatigue in the concrete when it is subjected to high levels of compression stress due to long duration loads. Normally alfacc=1 (default value)
     """
     nmbMaterial= "nil" #** Name of material.
     nmbDiagK= "dgK"+nmbMaterial #** Name of characteristic diagram.
@@ -72,11 +69,13 @@ class Concrete(object):
         self.matTagD= -1 #** Tag of uni-axial material in the characteristic diagram. 
 
     def fcd(self):
-        '''design strength of the concrete [Pa][-]'''
+        '''design strength of the concrete [Pa][-]
+        '''
         return self.alfacc*self.fck/self.gmmC 
 
     def fmaxK(self):
-        '''maximum characteristic strength of the concrete [Pa][-]'''
+        '''maximum characteristic strength of the concrete [Pa][-]
+        '''
         #in the previous version fmaxK was calculated as the product of 0.85 by fck
 #        return self.alfacc*self.fck
         return self.fck
@@ -129,29 +128,27 @@ class Concrete(object):
         return (self.fckMPa()+8)*(-1e6)
  
     def getFctk005(self,t=28):
-        """
-        Fctk005: tensile strength [Pa][+] 5% fractile (table 3.1 EC2)
-        Attributes:
-        t:      age of the concrete in days
+        """Fctk005: tensile strength [Pa][+] 5% fractile (table 3.1 EC2)
+
+        :param t: age of the concrete in days
         """
         return 0.7*self.getFctm()
  
     def getFctk095(self,t=28):
-        """
-        Fctk095: tensile strength [Pa][+] 95% fractile (table 3.1 EC2)
-        Attributes:
-        t:      age of the concrete in days
+        """Fctk095: tensile strength [Pa][+] 95% fractile (table 3.1 EC2)
+
+        :param t:      age of the concrete in days
         """
         return 1.3*self.getFctm()
 
     def defDiagK(self,preprocessor):
-        ''' Defines a Concrete01 uniaxial material to represent the characteristic stress-strain diagram.'''
+        ''' Defines a ``Concrete01`` uniaxial material to represent the characteristic stress-strain diagram'''
         self.concrDiagramK= typical_materials.defConcrete01(preprocessor,self.nmbDiagK,self.epsilon0(),self.fmaxK(),self.fmaxK(),self.epsilonU())
         self.matTagK= self.concrDiagramK.tag
         return self.matTagK
 
     def defDiagD(self,preprocessor):
-        ''' Defines a Concrete01 uniaxial material to represent the design stress-strain diagram..'''
+        ''' Defines a ``Concrete01`` uniaxial material to represent the design stress-strain diagram'''
         self.concrDiagramD= typical_materials.defConcrete01(preprocessor,self.nmbDiagD,self.epsilon0(),self.fmaxD(),self.fmaxD(),self.epsilonU())
         self.matTagD= self.concrDiagramD.tag
         return self.matTagD
@@ -168,10 +165,9 @@ class Concrete(object):
 
 #Time-dependent properties of concrete according to Eurocode 2
     def getBetaCC(self,t=28):
-        """
-        beta_cc: coefficient (sect. 3.1.2 EC2, art. 31.3 EHE-08)
-        Attributes:
-        t:      age of the concrete in days
+        """beta_cc: coefficient (sect. 3.1.2 EC2, art. 31.3 EHE-08)
+
+        :param t:      age of the concrete in days
         """
         if self.cemType=='R':    #high-strength cement
             s=0.20
@@ -184,16 +180,16 @@ class Concrete(object):
     def getFcmT(self,t=28):
         """FcmT: mean concrete compressive strength [Pa][-] at an age of t days 
         (sect. 3.1.2 EC2, art. 31.3 EHE-08)
-        Attributes:
-        t:      age of the concrete in days
+ 
+        :param t: age of the concrete in days
         """
         return self.getFcm()*self.getBetaCC(t)
 
     def getFckt(self,t=28):
         """Fckt: concrete compressive strength [Pa][-] at time t (for stages) 
            (sect. 3.1.2 EC2)
-        Attributes:
-        t:      age of the concrete in days
+
+        :param t:      age of the concrete in days
         """
         if t >= 28:
             return self.fckMPa()*(-1e6)
@@ -208,8 +204,8 @@ class Concrete(object):
         '''Basic drying shrinkage strain [-]
         for the calculation of the drying shrinkage strain
         (Annex B Eurocode 2 part 1-1)
-        Attributes:
-            RH:  ambient relative humidity(%)
+ 
+        :param RH:  ambient relative humidity(%)
         '''
         fcmMPa=abs(self.getFcm())/1e6
         fcm0MPa=10       
@@ -221,8 +217,8 @@ class Concrete(object):
         '''Coefficient for the calculation of the
         basic drying shrinkage strain 
         (Annex B Eurocode 2 part 1-1)
-        Attributes:
-            RH:  ambient relative humidity(%)
+
+        :param RH:  ambient relative humidity(%)
         '''
         if RH<99:
             betaRH=1.55*(1-(RH/100)**3)
@@ -244,9 +240,7 @@ class Concrete(object):
         return alfads1
 
     def getShrAlfads2(self):
-        '''Coefficient for the calculation of the
-        basic drying shrinkage strain 
-        (Annex B Eurocode 2 part 1-1)
+        '''Coefficient for the calculation of the basic drying shrinkage strain (Annex B Eurocode 2 part 1-1)
         '''
         if self.cemType=='R':    #high-strength cement
             alfads2=0.11
@@ -258,15 +252,16 @@ class Concrete(object):
 
     def getShrEpscd(self,t,ts,RH,h0mm):
         '''Drying shrinkage strain[-] (art. 3.1.4 Eurocode 2 part 1-1)
-        Attributes:
-            t:     age of concrete in days at the moment considered
-            ts:    age of concrete in days at the beginning of drying shrinkage (or swelling)
-                   Normally this is at the end of curing
-            RH:    ambient relative humidity(%)
-            h0mm:  notional size of the member in mm
-                   h0mm=2*Ac/u, where:
-                        Ac= cross sectional area
-                        u = perimeter of the member in contact with the atmosphere
+
+        :param t:     age of concrete in days at the moment considered
+        :param ts:    age of concrete in days at the beginning of drying shrinkage (or swelling).  Normally this is at the end of curing
+        :param RH:    ambient relative humidity(%)
+        :param h0mm:  notional size of the member in mm
+
+           - h0mm=``2*Ac/u``, where:
+               - Ac= cross sectional area
+               - u = perimeter of the member in contact with the atmosphere
+
         '''
         #epscd: drying shrinkage strain
         epscd=self.getShrBetadstts(t,ts,h0mm)*self.getShrKh(h0mm)*self.getShrEpscd0(RH)
@@ -276,11 +271,12 @@ class Concrete(object):
         '''coefficient depending on the notional size h0mm
         for the calculation of the drying shrinkage strain
         (table 3.3 Eurocode 2 part 1-1)
-        Attributes:
-            h0mm:  notional size of the member in mm
-                   h0mm=2*Ac/u, where:
-                        Ac= cross sectional area
-                        u = perimeter of the member in contact with the atmosphere
+
+        :param h0mm:  notional size of the member in mm
+
+                  - h0mm=``2*Ac/u``, where:
+                       - Ac= cross sectional area
+                       - u = perimeter of the member in contact with the atmosphere
         '''
         x=(0,100,200,300,500,1e10)
         y=(1.0,1.0,0.85,0.75,0.70,0.70)
@@ -291,14 +287,15 @@ class Concrete(object):
     def getShrBetadstts(self,t,ts,h0mm):
         '''coefficient for the calculation of the drying shrinkage strain
         (table 3.3 Eurocode 2 part 1-1)
-        Attributes:
-            t:     age of concrete in days at the moment considered
-            ts:    age of concrete in days at the beginning of drying shrinkage (or swelling)
+ 
+        :param t:     age of concrete in days at the moment considered
+        :param ts:    age of concrete in days at the beginning of drying shrinkage (or swelling)
                    Normally this is at the end of curing
-            h0mm:  notional size of the member in mm
-                   h0mm=2*Ac/u, where:
-                        Ac= cross sectional area
-                        u = perimeter of the member in contact with the atmosphere
+        :param h0mm:  notional size of the member in mm
+
+                   - h0mm=2*Ac/u, where:
+                        - Ac= cross sectional area
+                        - u = perimeter of the member in contact with the atmosphere
         '''
         betadstts=(t-ts)/(t-ts+0.04*(h0mm)**(3.0/2.0))
         return betadstts
@@ -307,8 +304,8 @@ class Concrete(object):
     def getShrEpsca(self,t):
         '''Autogenous shrinkage strain 
         (art. 3.1.4 Eurocode 2 part 1-1)
-        Attributes:
-            t:     age of concrete in days at the moment considered
+
+        :param t:     age of concrete in days at the moment considered
         '''
         epsca=self.getShrEpscainf(t)*self.getShrBetaast(t)
         return epsca
@@ -316,8 +313,8 @@ class Concrete(object):
     def getShrEpscainf(self,t):
         '''coefficient for calculating the autogenous shrinkage strain [-]
         (art. 3.1.4 Eurocode 2 part 1-1)
-        Attributes:
-            t:     age of concrete in days at the moment considered
+
+        :param t:     age of concrete in days at the moment considered
         '''
         epscainf=2.5*(self.fckMPa()-10)*1e-6
         return epscainf*(-1)
@@ -325,8 +322,8 @@ class Concrete(object):
     def getShrBetaast(self,t):
         '''coefficient for calculating the autogenous shrinkage strain
         (art. 3.1.4 Eurocode 2 part 1-1)
-        Attributes:
-            t:     age of concrete in days at the moment considered
+
+        :param t:     age of concrete in days at the moment considered
         '''
         betaast=1-math.exp(-0.2*t**0.5)
         return betaast
@@ -335,15 +332,16 @@ class Concrete(object):
     def getShrEpscs(self,t,ts,RH,h0mm):
         '''Total shrinkage strain = 
         autogenous + drying shrinkages
-        Attributes:
-            t:     age of concrete in days at the moment considered
-            ts:    age of concrete in days at the beginning of drying shrinkage (or swelling)
+
+        :param t:     age of concrete in days at the moment considered
+        :param ts:    age of concrete in days at the beginning of drying shrinkage (or swelling)
                    Normally this is at the end of curing
-            RH:    ambient relative humidity(%)
-            h0mm:  notional size of the member in mm
-                   h0mm=2*Ac/u, where:
-                        Ac= cross sectional area
-                        u = perimeter of the member in contact with the atmosphere
+        :param RH:    ambient relative humidity(%)
+        :param h0mm:  notional size of the member in mm
+
+                  - h0mm=2*Ac/u, where:
+                       - Ac= cross sectional area
+                       - u = perimeter of the member in contact with the atmosphere
         '''
         epscs=self.getShrEpscd(t,ts,RH,h0mm)+self.getShrEpsca(t)
         return epscs
@@ -352,14 +350,15 @@ class Concrete(object):
     def getCreepFitt0(self,t,t0,RH,h0mm):
         '''Creep coefficient  
         (Annex B Eurocode 2 part 1-1)
-        Attributes:
-            t:     age of concrete in days at the moment considered
-            t0:    age of concrete in days at loading
-            RH:    ambient relative humidity(%)
-            h0mm:  notional size of the member in mm
-                   h0mm=2*Ac/u, where:
-                        Ac= cross sectional area
-                        u = perimeter of the member in contact with the atmosphere
+
+        :param t:     age of concrete in days at the moment considered
+        :param t0:    age of concrete in days at loading
+        :param RH:    ambient relative humidity(%)
+        :param h0mm:  notional size of the member in mm
+
+                  - h0mm=2*Ac/u, where:
+                       - Ac= cross sectional area
+                       - u = perimeter of the member in contact with the atmosphere
         '''
         fitt0=self.getCreepFi0(t0,RH,h0mm)*self.getCreepBetactt0(t,t0,RH,h0mm)
         return fitt0
@@ -392,12 +391,13 @@ class Concrete(object):
         '''factor to allow for the effect of relative humidity 
         on the notional creep coefficient
         (Annex B Eurocode 2 part 1-1)
-        Attributes:
-            RH:    ambient relative humidity(%)
-            h0mm:  notional size of the member in mm
-                   h0mm=2*Ac/u, where:
-                        Ac= cross sectional area
-                        u = perimeter of the member in contact with the atmosphere
+
+        :param RH:    ambient relative humidity(%)
+        :param h0mm:  notional size of the member in mm
+ 
+                  - h0mm=2*Ac/u, where:
+                        - Ac= cross sectional area
+                        - u = perimeter of the member in contact with the atmosphere
         '''
         fcmMPa=abs(self.getFcm())/1e6
         if fcmMPa <= 35:
@@ -407,8 +407,7 @@ class Concrete(object):
         return fiRH
 
     def getCreepBetafcm(self):
-        '''factor to allow for the effect of concrete strength
-        on the notational creep coefficient
+        '''factor to allow for the effect of concrete strength on the notational creep coefficient
         (Annex B Eurocode 2 part 1-1)
         '''
         fcmMPa=abs(self.getFcm())/1e6
@@ -416,42 +415,41 @@ class Concrete(object):
         return betafcm
 
     def getCreepBetat0(self,t0):
-        '''factor to allow for the effect of concrete age at loading
-        on the notational creep coefficient
-       (Annex B Eurocode 2 part 1-1)
-        Attributes:
-            t0:    age of concrete in days at loading
+        '''factor to allow for the effect of concrete age at loading on the notational creep coefficient 
+        (Annex B Eurocode 2 part 1-1)
+
+        :param t0:    age of concrete in days at loading
         '''
         betat0=1/(0.1+t0**0.20)
         return betat0
 
     def getCreepFi0(self,t0,RH,h0mm):
-        '''notational creep coefficient for the calculation 
-        of the creep coefficient
+        '''notational creep coefficient for the calculation of the creep coefficient
         (Annex B Eurocode 2 part 1-1)
-        Attributes:
-            t0:    age of concrete in days at loading
-            RH:    ambient relative humidity(%)
-            h0mm:  notional size of the member in mm
-                   h0mm=2*Ac/u, where:
-                        Ac= cross sectional area
-                        u = perimeter of the member in contact with the atmosphere
+
+        :param t0:    age of concrete in days at loading
+        :param RH:    ambient relative humidity(%)
+        :param h0mm:  notional size of the member in mm
+
+                   - h0mm=2*Ac/u, where:
+                       - Ac= cross sectional area
+                       - u = perimeter of the member in contact with the atmosphere
         '''
         fi0=self.getCreepFiRH(RH,h0mm)*self.getCreepBetafcm()*self.getCreepBetat0(t0)
         return fi0
 
     def getCreepBetactt0(self,t,t0,RH,h0mm):
-        '''coefficient to describe the development of creep 
-        with time after loading, used to calculate the creep coefficient
+        '''coefficient to describe the development of creep with time after loading, used to calculate the creep coefficient
         (Annex B Eurocode 2 part 1-1)
-        Attributes:
-            t:     age of concrete in days at the moment considered
-            t0:    age of concrete in days at loading
-            RH:    ambient relative humidity(%)
-            h0mm:  notional size of the member in mm
-                   h0mm=2*Ac/u, where:
-                        Ac= cross sectional area
-                        u = perimeter of the member in contact with the atmosphere
+ 
+        :param t:     age of concrete in days at the moment considered
+        :param t0:    age of concrete in days at loading
+        :param RH:    ambient relative humidity(%)
+        :param h0mm:  notional size of the member in mm
+
+                   - h0mm=2*Ac/u, where:
+                       - Ac= cross sectional area
+                       - u = perimeter of the member in contact with the atmosphere
         '''
         fcmMPa=abs(self.getFcm())/1e6
         if fcmMPa <= 35:
@@ -464,8 +462,8 @@ class Concrete(object):
 #Parabola-rectangle diagrams for concrete under compression 
     def sigmac(self,eps):
         '''Stress [Pa][-] from parabola-rectangle diagram
-        Atributtes:
-            eps: strain [-]
+
+        :param eps: strain [-]
         '''
         if(eps<0):
             if(eps>self.getEpsc2()):
@@ -477,8 +475,8 @@ class Concrete(object):
 
     def tangc(self,eps):
         ''' Tangent of the parabola-rectangle diagram
-        Atributtes:
-            eps: strain [-]
+
+        :param eps: strain [-]
         '''
         if(eps<0):
           if(eps>self.getEpsc2()):

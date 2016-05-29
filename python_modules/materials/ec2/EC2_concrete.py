@@ -15,18 +15,19 @@ from materials import concreteBase
 class EC2Concrete(concreteBase.Concrete):
     """Concrete model according to Eurocode 2
 
-       :ivar typeAggregate: type of aggregate=
-                            'Q' for quartzite aggregate 
-                            'L' for limestone aggregate
-                            'S' for sandstone aggregate
-                            'B' for basalt aggregate
+       :ivar typeAggregate: type of aggregate
+ 
+                            - ``Q`` for quartzite aggregate 
+                            - ``L`` for limestone aggregate
+                            - ``S`` for sandstone aggregate
+                            - ``B`` for basalt aggregate
 
     """
     typeAggregate='Q'
 
     def getEcm(self):
         """
-        :param Ecm: approximate value of the modulus of elasticity [Pa][+] secant value between sigma_c=0 and 0,4fcm, at age 28 days (table 3.1 EC2)
+        Ecm: approximate value of the modulus of elasticity [Pa][+] secant value between sigma_c=0 and 0,4fcm, at age 28 days (table 3.1 EC2)
          """
         fcmMPa=abs(self.getFcm())*1e-6
         EcmGPa=22*(fcmMPa/10)**0.3
