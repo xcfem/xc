@@ -22,6 +22,9 @@ class Enum(object):
     else:
       self.items= list()
   def getXMLElement(self,parent):
+    '''Returns the corresponding XML element for the enum object.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     tb= ET.SubElement(parent,"def_enum")
     tb.set("size",str(len(self.items)))
     for i in self.items:

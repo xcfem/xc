@@ -32,7 +32,9 @@ class Container(b.Base):
     self.tables.append(table)
         
   def getXMLElement(self,parent):
-    '''Returns an XML element for the container.'''
+    '''Returns an XML element for the container.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     container= ET.SubElement(parent,"container")
     super(Container,self).populateXMLElement(container)
     print 'container id= ', self.id, ' table number: ', len(self.tables)

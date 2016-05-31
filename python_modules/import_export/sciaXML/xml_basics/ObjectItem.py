@@ -77,9 +77,12 @@ class ObjectItem(object):
       retval= (len(self.rows)>0)
     return retval
 
-  def getXMLElement(self,parent, cont):
-    '''Returns an XML element for the object.'''
-    itemId= 'p'+str(cont) 
+  def getXMLElement(self,parent, count):
+    '''Returns the corresponding XML element for the object.
+       Parameters:
+       parent: owner of this object in the XML structure.
+       count: counter.'''
+    itemId= 'p'+str(count) 
     p= ET.SubElement(parent,itemId)
     if self.v is not None:
       if self.v != '':

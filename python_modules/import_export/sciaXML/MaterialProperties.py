@@ -140,6 +140,9 @@ class MaterialProperties(ctr.PropertiesContainer):
     self.tables['ConcreteSIA']= ConcreteSIAProperties()
 
   def getXMLElement(self,parent):
+    '''Returns the corresponding XML element for the materials property.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     container= ET.SubElement(parent,"def_container")
     self.populateXMLElement(container)
     for key in self.tables:

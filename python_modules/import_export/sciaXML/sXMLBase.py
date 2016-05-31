@@ -37,6 +37,9 @@ class SXMLBase(object):
     return [self.loadGroupContainer, self.loadCaseContainer, self.loadCombContainer]
 
   def getXMLElement(self,defFileName):
+    '''Returns the corresponding XML element for the object.
+       Parameters:
+       defFileName: XML definition file name.'''
     project= ET.Element("project")
     project.set("xmlns",self.xmlns)
     df= ET.SubElement(project,"def")
@@ -47,6 +50,7 @@ class SXMLBase(object):
     return project
 
   def getXMLTree(self,defFileName):
+    '''Returns the corresponding XML tree.'''
     project= self.getXMLElement(defFileName)
     tree = ET.ElementTree(project)
     return tree
@@ -58,6 +62,7 @@ class SXMLBase(object):
     return self.fileName + ".def"
 
   def writeXMLFile(self,outputPath= ''):
+    '''Write XML files for the object.'''
     self.outputPath= outputPath 
     defFileName= self.getDefFileName()
     prj_def= prjDef.ProjectProperties(self.xmlns,defFileName)
