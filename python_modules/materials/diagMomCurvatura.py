@@ -6,17 +6,15 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
-'''
-Función que devuelve los puntos del diagrama momento
-   curvatura de una sección.
-   nmbSecc: Nombre de la sección a analizar.
-   esfAxil: Esfuerzo axil que actúa sobre la sección.
-   maxK: Curvatura máxima alcanzada durante el análisis.
-   numIncr: Número de incrementos en que se divide el
-            intervalo 0->maxK.
-  
-'''
+
 def getDiagMomentoCurvatura3d(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
+  ''' Función que devuelve los puntos del diagrama momento curvatura de una sección.
+
+  :param nmbSecc: Nombre de la sección a analizar.
+  :param esfAxil: Esfuerzo axil que actúa sobre la sección.
+  :param maxK: Curvatura máxima alcanzada durante el análisis.
+  :param numIncr: Número de incrementos en que se divide el intervalo 0->maxK.
+  '''
   nodos= preprocessor.getNodeLoader
 
   predefined_spaces.gdls_resist_materiales3D(nodos)

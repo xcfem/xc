@@ -29,15 +29,17 @@ ASTM_A307= ASTMSteel(245e6,390e6,1.0)
 
 class EC3Steel(object):
   '''Eurocode 3 structural steel.
-    fy ->  Yield stress.
-    fy16 -> 0<t<16mm
-    fy40 -> 16<t<40mm
-    fy63 -> 40<t<63mm
-    fy80 -> 63<t<80mm
-    fy100 -> 80<t<100mm
-    fy125 -> 80<t<125mm
-    fu -> ultimate stress
-    gammaM '''
+
+    :ivar fy:  Yield stress.
+    :ivar fy16: 0<t<16mm
+    :ivar fy40: 16<t<40mm
+    :ivar fy63: 40<t<63mm
+    :ivar fy80: 63<t<80mm
+    :ivar fy100: 80<t<100mm
+    :ivar fy125: 80<t<125mm
+    :ivar fu: ultimate stress
+    :ivar gammaM:
+'''
 
   E= 210000e6 #Young modulus
   nu= 0.3
