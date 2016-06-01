@@ -45,7 +45,9 @@ class TableXMLNodes(tBase.TableBase):
     self.objects.extend(objects)
     
   def getXMLElement(self,parent):
-    '''Returns an XML element for the table.'''
+    '''Returns the corresponding XML element for the table.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     tb= ET.SubElement(parent,"table")
     super(TableXMLNodes,self).populateXMLElement(tb)
     if(self.h is not None):

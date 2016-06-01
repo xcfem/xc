@@ -163,7 +163,9 @@ class Header(object):
     self.h20 = h20
 
   def getXMLElement(self,parent):
-    '''Returns an XML element for the header.'''
+    '''Returns the corresponding XML element for the header.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     hh= ET.SubElement(parent,"h")
     cont= 0
     items=[self.h0, self.h1, self.h2, self.h3, self.h4, self.h5, self.h6, self.h7, self.h8, self.h9, self.h10, self.h11, self.h12, self.h13, self.h14, self.h15, self.h16, self.h17, self.h18, self.h19, self.h20]

@@ -31,6 +31,9 @@ class NodeProperties(ctr.PropertiesContainer):
     self.tableDef.properties.append(prop.Property("3","ZCoord","param",idZCoord,"33619968"))
 
   def getXMLElement(self,parent):
+    '''Returns the corresponding XML element for the node properties.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     container= ET.SubElement(parent,"def_container")
     self.populateXMLElement(container)
     self.tableDef.getXMLElement(container)

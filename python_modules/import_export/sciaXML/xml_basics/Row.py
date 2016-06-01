@@ -27,6 +27,9 @@ class RowP012(Row):
     super(RowP012,self).populateXMLElement(xmlElement)
 
   def getXMLElement(self,parent):
+    '''Returns the corresponding XML element for the row.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     oo= ET.SubElement(parent,'row')
     oo.set("id",self.id)
     self.populateXMLElement(oo)

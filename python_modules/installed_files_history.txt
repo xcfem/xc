@@ -136,6 +136,8 @@
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/ObjectItem.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/Object.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/Object.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/PointForceFreeProperties.py
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/PointForceFreeProperties.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/PointSupportContainer.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/PointSupportContainer.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/PointSupportProperties.py

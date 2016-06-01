@@ -138,7 +138,9 @@ class Object(ob.ObjBase):
     self.nm = nm
 
   def getXMLElement(self,parent):
-    '''Returns an XML element for the object.'''
+    '''Returns the corresponding XML element for the object.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     oo= ET.SubElement(parent,"obj")
     oo.set("nm",self.nm)
     oo.set("id",self.id)

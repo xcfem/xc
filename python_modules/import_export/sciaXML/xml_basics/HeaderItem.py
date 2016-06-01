@@ -23,9 +23,12 @@ class HeaderItem(object):
   def setT(self,t):
     self.t= t
 
-  def getXMLElement(self,parent, cont):
-    '''Returns an XML element for the object.'''
-    itemId= 'h'+str(cont) 
+  def getXMLElement(self,parent, count):
+    '''Returns the corresponding XML element for the object.
+       Parameters:
+       parent: owner of this object in the XML structure.
+       count: counter.'''
+    itemId= 'h'+str(count) 
     hi= ET.SubElement(parent,itemId)
     hi.set("t",self.t)
     return hi

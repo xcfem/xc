@@ -38,7 +38,9 @@ class ObjBase(object):
     pp2= self.p2.getXMLElement(xmlElement,2)
 
   def getXMLElement(self,parent):
-    '''Returns an XML element for the object.'''
+    '''Returns the corresponding XML element for the object.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     oo= ET.SubElement(parent,'row')
     oo.set("id",self.id)
     self.populateXMLElement(oo)

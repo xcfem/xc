@@ -73,6 +73,9 @@ class LoadCombProperties(ctr.PropertiesContainer):
     self.tableProp.properties.append(propMasterID) #7
 
   def getXMLElement(self,parent):
+    '''Returns the corresponding XML element for the load combination properties.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     container= ET.SubElement(parent,"def_container")
     self.populateXMLElement(container)
     self.tableProp.getXMLElement(container)

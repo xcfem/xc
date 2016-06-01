@@ -22,7 +22,9 @@ class EnumItem(object):
     self.t = t
 
   def getXMLElement(self,parent):
-    '''Returns an XML element for the object.'''
+    '''Returns the corresponding XML element for the object.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     ei= ET.SubElement(parent,"it_enum")
     if(self.v!=''):
       ei.set("v",self.v)

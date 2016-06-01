@@ -18,7 +18,9 @@ class Ref(b.Base):
     self.progid= progid
   
   def getXMLElement(self,parent):
-    '''Returns an XML element for the reference.'''
+    '''Returns the corresponding XML element for the reference..
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     ref= ET.SubElement(parent,"def_ref")
     super(Ref,self).populateXMLElement(ref)
     if(self.progid!=''):

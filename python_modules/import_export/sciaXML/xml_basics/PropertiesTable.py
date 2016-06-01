@@ -19,6 +19,9 @@ class PropertiesTable(tBase.TableBase):
     return "def_table"
 
   def getXMLElement(self,parent):
+    '''Returns the corresponding XML element for the table.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     propTable= ET.SubElement(parent,self.getXMLElementLabel())
     super(PropertiesTable,self).populateXMLElement(propTable)
     if(self.typo!=''):

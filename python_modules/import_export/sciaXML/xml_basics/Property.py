@@ -22,7 +22,9 @@ class Property(object):
     self.value= None
   
   def getXMLElement(self,parent):
-    '''Returns an XML element for the property.'''
+    '''Returns the corresponding XML element for the property.
+       Parameters:
+       parent: owner of this object in the XML structure.'''
     property= ET.SubElement(parent,"def_property")
     if(self.x!=''):
       property.set("x",self.x)

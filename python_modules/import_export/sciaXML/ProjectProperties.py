@@ -35,6 +35,9 @@ class ProjectProperties(object):
     self.elementLoadProperties= elp.ElementLoadProperties()
 
   def getXMLElement(self,defFileName):
+    '''Returns the corresponding XML element for the object.
+       Parameters:
+       defFileName: XML definition file name.'''
     project= ET.Element("def_project")
     project.set("xmlns",self.xmlns)
     containers= [self.nodeProperties, self.materialProperties, self.epPlaneProperties, self.nodeSupportProperties, self.loadGroupProperties, self.loadCaseProperties, self.loadCombProperties, self.nodeLoadProperties, self.elementLoadProperties]
@@ -43,10 +46,12 @@ class ProjectProperties(object):
     return project
 
   def getXMLTree(self,defFileName):
+    '''Returns the corresponding XML tree.'''
     project= self.getXMLElement(defFileName)
     tree = ET.ElementTree(project)
     return tree
 
   def writeXMLFile(self): 
+    '''Writes the corresponding XML element in a file.'''
     tree= self.getXMLTree(self.fileName)
     tree.write(self.fileName,encoding="UTF-8", xml_declaration=None, default_namespace=None, method="xml")

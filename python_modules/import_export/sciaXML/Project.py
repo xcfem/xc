@@ -219,6 +219,9 @@ class Project:
 
 
   def getXMLElement(self,defFileName):
+    '''Returns the corresponding XML element for the object.
+       Parameters:
+       defFileName: XML definition file name.'''
     project= ET.Element("project")
     project.set("xmlns",self.xmlns)
     df= ET.SubElement(project,"def")
@@ -228,6 +231,7 @@ class Project:
     return project
 
   def getXMLTree(self,defFileName):
+    '''Returns the corresponding XML tree.'''
     project= self.getXMLElement(defFileName)
     tree = ET.ElementTree(project)
     return tree
@@ -236,5 +240,6 @@ class Project:
     return self.fileName + ".def"
 
   def writeXMLFile(self): 
+    '''Write XML files for the object.'''
     tree= self.getXMLTree(getDefFileName())
     tree.write(self.fileName,encoding="UTF-8", xml_declaration=None, default_namespace=None, method="xml")
