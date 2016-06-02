@@ -14,7 +14,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from xml_basics import ObjectItem as oI
+from import_export.sciaXML.xml_basics import ObjectItem as oI
 import LoadCaseContainer as lcc
 
 class LoadComponentBase(object):

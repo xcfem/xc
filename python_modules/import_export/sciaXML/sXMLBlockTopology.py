@@ -12,8 +12,8 @@ import os
 import NodeContainer as nCtr
 import EPPlaneContainer as eppc
 import NodeSupportContainer as nsc
-import NodeLoadContainer as nlc
-import ElementLoadContainer as elc
+from scia_loads import NodeLoadContainer as nlc
+from scia_loads import ElementLoadContainer as elc
 import sXMLBase as base
 
 class SXMLBlockTopology(base.SXMLBase):

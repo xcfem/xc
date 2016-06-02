@@ -14,13 +14,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from xml_basics import Container as ctr
-from xml_basics import TableXMLNodes  as tb
-from xml_basics import Header as hdr
-from xml_basics import HeaderItem as hi
-from xml_basics import Object as obj
-from xml_basics import ObjectItem as oI
-from xml_basics import Row as rw
+from import_export.sciaXML.xml_basics import Container as ctr
+from import_export.sciaXML.xml_basics import TableXMLNodes  as tb
+from import_export.sciaXML.xml_basics import Header as hdr
+from import_export.sciaXML.xml_basics import HeaderItem as hi
+from import_export.sciaXML.xml_basics import Object as obj
+from import_export.sciaXML.xml_basics import ObjectItem as oI
+from import_export.sciaXML.xml_basics import Row as rw
 import LoadGroupContainer as lgc
 import LoadCaseProperties as lcp
 import uuid

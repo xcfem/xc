@@ -12,11 +12,11 @@ import NodeProperties as ncd
 import MaterialProperties as mp
 import EPPlaneProperties as eppp
 import NodeSupportProperties as nsp
-import LoadGroupProperties as lgp
-import LoadCaseProperties as lcp
-import LoadCombProperties as lcmbp
-import NodeLoadProperties as nlp
-import ElementLoadProperties as elp
+from scia_loads import LoadGroupProperties as lgp
+from scia_loads import LoadCaseProperties as lcp
+from scia_loads import LoadCombProperties as lcmbp
+from scia_loads import NodeLoadProperties as nlp
+from scia_loads import ElementLoadProperties as elp
 import xml.etree.cElementTree as ET
 
 class ProjectProperties(object):    

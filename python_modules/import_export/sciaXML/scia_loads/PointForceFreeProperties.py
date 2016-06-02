@@ -10,13 +10,13 @@ __email__= "l.pereztato@gmail.com"
 
 #Properties for constraint nodes.
 
-from xml_basics import PropertiesContainer as ctr
-from xml_basics import Property as prop
-from xml_basics import Ref as rf
-from xml_basics import EnumItem as eI
-from xml_basics import Enum as enum
-from xml_basics import PropertiesTable as propTable
-from xml_basics import PropertiesSubTable as propSubTable
+from import_export.sciaXML.xml_basics import PropertiesContainer as ctr
+from import_export.sciaXML.xml_basics import Property as prop
+from import_export.sciaXML.xml_basics import Ref as rf
+from import_export.sciaXML.xml_basics import EnumItem as eI
+from import_export.sciaXML.xml_basics import Enum as enum
+from import_export.sciaXML.xml_basics import PropertiesTable as propTable
+from import_export.sciaXML.xml_basics import PropertiesSubTable as propSubTable
 import xml.etree.cElementTree as ET
 import LoadCaseProperties as lcp
 import NodeLoadProperties as nlp
