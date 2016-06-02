@@ -49,18 +49,18 @@ class PointForceFreeProperties(ctr.PropertiesContainer):
   '''Free point force properties in SCIA XML file.''' 
   def __init__(self):
     '''Constructor.'''
-    super(NodeLoadProperties,self).__init__(containerId,containerClsId,tbProgId)
+    super(PointForceFreeProperties,self).__init__(containerId,containerClsId,tbProgId)
     self.tableProp= propTable.PropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)
     propRefLoadCase= prop.Property("0","Load case","ref",idLoadCase)
     propRefLoadCase.value= rf.Ref(idLoadCaseRef,lcp.tbName)
     propName= prop.Property("1","Name","string",idName)
-    propUniqueID= prop.Property('2','UniqueID','string',idUniqueID)
+    propUniqueID= prop.Property('2','UniqueID','string',idUniqueId)
     propDirection= prop.Property("3","Direction","enum",idDirection,"262144")
     propDirection.value= enum.Enum([eI.EnumItem("0","X"),eI.EnumItem("1","Y"),eI.EnumItem("2","Z")])
     propType= prop.Property("4","Type","enum",idType)
     propType.value= enum.Enum([eI.EnumItem("0","Force")])
     propValidity= prop.Property("5","Validity","enum",idValidity,"262144")
-    propValidity.value= enum.Enum([eI.EnumItem("0","Tout"), ei.EnumItem("1", "-Z"), ei.EnumItem("2", "+Z"), ei.EnumItem("3", "Intervalle"), ei.EnumItem("4", "Z=0"), ei.EnumItem("5", "-Z (yc. 0)"), ei.EnumItem("6", "+Z (yc. 0)")])
+    propValidity.value= enum.Enum([eI.EnumItem("0","Tout"), eI.EnumItem("1", "-Z"), eI.EnumItem("2", "+Z"), eI.EnumItem("3", "Intervalle"), eI.EnumItem("4", "Z=0"), eI.EnumItem("5", "-Z (yc. 0)"), eI.EnumItem("6", "+Z (yc. 0)")])
     propSelect= prop.Property("6","Select","enum",idSelect)
     propSelect.value= enum.Enum([eI.EnumItem("0","Auto"),eI.EnumItem("1","Select")])
     propValueF= prop.Property("7","Value - F","param",idValueF,"33619968")
@@ -71,16 +71,16 @@ class PointForceFreeProperties(ctr.PropertiesContainer):
     propCoordUY= prop.Property("12","Coord uy","real",idCoordUY,"33619968")
     propCoordUZ= prop.Property("13","Coord uz","real",idCoordUZ,"33619968")
     propSystem= prop.Property("14","System","enum",idSystem)
-    propSystem.value= enum.Enum([eI.EnumItem("0","GCS"),eI.EnumItem("1","Member LCS"),eI.EnumItem("1","Load LCS")])
+    propSystem.value= enum.Enum([eI.EnumItem("0","GCS"),eI.EnumItem("1","Member LCS"),eI.EnumItem("2","Load LCS")])
 
-    self.tableProp.properties.append(propLoadCase) #0
+    self.tableProp.properties.append(propRefLoadCase) #0
     self.tableProp.properties.append(propName) #1
     self.tableProp.properties.append(propUniqueID) #2
     self.tableProp.properties.append(propDirection) #3
     self.tableProp.properties.append(propType) #4
     self.tableProp.properties.append(propValidity) #5
     self.tableProp.properties.append(propSelect) #6
-    self.tableProp.properties.append(propValue - F) #7
+    self.tableProp.properties.append(propValueF) #7
     self.tableProp.properties.append(propCoordX) #8
     self.tableProp.properties.append(propCoordY) #9
     self.tableProp.properties.append(propCoordZ) #10

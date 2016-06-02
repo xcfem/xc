@@ -17,6 +17,8 @@ from scia_loads import LoadCaseProperties as lcp
 from scia_loads import LoadCombProperties as lcmbp
 from scia_loads import NodeLoadProperties as nlp
 from scia_loads import ElementLoadProperties as elp
+from scia_loads import PointForceFreeProperties as pffp
+from scia_loads import SurfaceForceFreeProperties as sffp
 import xml.etree.cElementTree as ET
 
 class ProjectProperties(object):    
@@ -33,6 +35,8 @@ class ProjectProperties(object):
     self.loadCombProperties= lcmbp.LoadCombProperties()
     self.nodeLoadProperties= nlp.NodeLoadProperties()
     self.elementLoadProperties= elp.ElementLoadProperties()
+    self.pointLoadFreeProperties= pffp.PointForceFreeProperties()
+    self.surfaceLoadFreeProperties= sffp.SurfaceForceFreeProperties()
 
   def getXMLElement(self,defFileName):
     '''Returns the corresponding XML element for the object.
