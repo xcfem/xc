@@ -27,11 +27,12 @@ def getInerciaTorsionSeccDobleT(b1,b2,ef,ew,ht):
     '''
     Devuelve el valor de la inercia a torsión de una sección doble T
     monocelular según el artículo «Perfil doble T» de la Wikipedia.
-    -b1: Ancho del ala superior.
-    -b2: Ancho del ala inferior.
-    -ef: Espesor de las alas.
-    -ew: Espesor del alma.
-    -ht: Canto del perfil.
+
+    :param b1: Ancho del ala superior.
+    :param b2: Ancho del ala inferior.
+    :param ef: Espesor de las alas.
+    :param ew: Espesor del alma.
+    :param ht: Canto del perfil.
     '''
     hPrf=ht-ef
     return ((b1+b2)*ef**3+hPrf*ew**3)/3
@@ -41,11 +42,12 @@ def getMomentoAlabeoSeccDobleT(b1,b2,ef,ew,ht):
     '''
     Devuelve el momento de alabeo de una sección doble T
     monocelular según el artículo «Perfil doble T» de la Wikipedia.
-    -b1: Ancho del ala superior.
-    -b2: Ancho del ala inferior.
-    -ef: Espesor de las alas.
-    -ew: Espesor del alma.
-    -ht: Canto del perfil.
+
+    :param b1: Ancho del ala superior.
+    :param b2: Ancho del ala inferior.
+    :param ef: Espesor de las alas.
+    :param ew: Espesor del alma.
+    :param ht: Canto del perfil.
      '''
     hPrf=ht-ef
     return ef*hPrf**2/12*b1**3*b2**3/(b1**3+b2**3)
@@ -55,11 +57,12 @@ def getMomentoModuloTorsionSeccDobleT(b1,b2,ef,ew,ht):
     '''
     Devuelve el momento resistente de una sección doble T
     monocelular según el artículo «Perfil doble T» de la Wikipedia.
-    -b1: Ancho del ala superior.
-    -b2: Ancho del ala inferior.
-    -ef: Espesor de las alas.
-    -ew: Espesor del alma.
-    -ht: Canto del perfil.
+
+    :param b1: Ancho del ala superior.
+    :param b2: Ancho del ala inferior.
+    :param ef: Espesor de las alas.
+    :param ew: Espesor del alma.
+    :param ht: Canto del perfil.
      '''
     J=getInerciaTorsionSeccDobleT(b1,b2,ef,ew,ht)
     return J/max(ef,ew)
@@ -67,16 +70,16 @@ def getMomentoModuloTorsionSeccDobleT(b1,b2,ef,ew,ht):
 
 class ISection(sectionProperties.sectionProperties):
   """I section geometric parameters
-  Attributes:
-    name:         name identifying the section
-    wdTopFlange:  width of the top flange (parallel to local z axis)
-    thTopFlange:  thickness of the top flange (parallel to local y axis)
-    thWeb:        thickness of the web (parallel to local z axis)
-    hgWeb:        height of the web (parallel to local y axis)
-    wdBotFlange:  width of the bottom flange (parallel to local z axis)
-    thBotFlange:  thickness of the bottom flange (parallel to local y axis)
-    E:            Young’s modulus of the material
-    nu:           Poisson’s ratio
+
+  :ivar name:         name identifying the section
+  :ivar wdTopFlange:  width of the top flange (parallel to local z axis)
+  :ivar thTopFlange:  thickness of the top flange (parallel to local y axis)
+  :ivar thWeb:        thickness of the web (parallel to local z axis)
+  :ivar hgWeb:        height of the web (parallel to local y axis)
+  :ivar wdBotFlange:  width of the bottom flange (parallel to local z axis)
+  :ivar thBotFlange:  thickness of the bottom flange (parallel to local y axis)
+  :ivar E:            Young’s modulus of the material
+  :ivar nu:           Poisson’s ratio
  
          wdTopFlange
     --------------------- thTopFlange
