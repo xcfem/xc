@@ -13,7 +13,7 @@ import ObjBase as ob
 import xml.etree.cElementTree as ET
 
 class Object(ob.ObjBase):
-	
+  '''XML SCIA object with 21 items (ObjectItem) p0 to p10.'''
   def __init__(self,p0= oi.ObjectItem(), p1= oi.ObjectItem(), p2= oi.ObjectItem(), p3= oi.ObjectItem(), p4= oi.ObjectItem(), p5= oi.ObjectItem(), p6= oi.ObjectItem(), p7= oi.ObjectItem(), p8= oi.ObjectItem(), p9= oi.ObjectItem(), p10= oi.ObjectItem(), p11= oi.ObjectItem(), p12= oi.ObjectItem(), p13= oi.ObjectItem(), p14= oi.ObjectItem(), p15= oi.ObjectItem(), p16= oi.ObjectItem(), p17= oi.ObjectItem(), p18= oi.ObjectItem(), p19= oi.ObjectItem(), p20= oi.ObjectItem() ):
     self.nm= ''
     self.p0 = p0

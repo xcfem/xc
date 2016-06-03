@@ -186,10 +186,16 @@
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/NodeLoadContainer.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/NodeLoadProperties.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/NodeLoadProperties.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/PointForceFreeContainer.py
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/PointForceFreeContainer.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/PointForceFreeProperties.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/PointForceFreeProperties.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/SurfaceForceFreeProperties.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/SurfaceForceFreeProperties.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/SurfacePressureFreeContainer.py
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/SurfacePressureFreeContainer.pyc
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/SurfacePressureFreeProperties.py
+/usr/local/lib/python2.7/dist-packages/import_export/sciaXML/scia_loads/SurfacePressureFreeProperties.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/SciaXMLConstants.py
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/SciaXMLConstants.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/sciaXML/SubTableProperties.py

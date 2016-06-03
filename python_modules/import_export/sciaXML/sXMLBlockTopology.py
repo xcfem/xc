@@ -12,8 +12,8 @@ import os
 import NodeContainer as nCtr
 import EPPlaneContainer as eppc
 import NodeSupportContainer as nsc
-from scia_loads import NodeLoadContainer as nlc
-from scia_loads import ElementLoadContainer as elc
+from scia_loads import PointForceFreeContainer as pffc
+from scia_loads import SurfacePressureFreeContainer as spf
 import sXMLBase as base
 
 class SXMLBlockTopology(base.SXMLBase):
@@ -22,7 +22,17 @@ class SXMLBlockTopology(base.SXMLBase):
     self.pointContainer= nCtr.NodeContainer(blocks.points)
     self.blockContainer= eppc.EPPlaneContainer(blocks.blocks)
     self.pointSupportContainer= nsc.NodeSupportContainer(blocks.pointSupports)
-    print 'XXX add free loads.'
+    loads= loadContainer.loads
+    self.pointForceFreeContainers= list()
+    self.surfacePressureFreeContainers= list()
+    for key in sorted(loads.loadCases):
+      lc= loads.loadCases[key]
+      pl= lc.loads.freePunctualLoads
+      if(pl):
+        self.pointForceFreeContainers.append(pffc.PointForceFreeContainer(pl))
+      sl= lc.loads.freeSurfaceLoads
+      if(sl):
+        self.surfacePressureFreeContainers.append(elc.ElementLoadContainer(sl))
 
   def getContainers(self):
     retval= [self.pointContainer,self.blockContainer,self.pointSupportContainer]

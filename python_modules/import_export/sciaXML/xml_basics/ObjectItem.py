@@ -15,12 +15,13 @@ class ObjectItem(object):
   ''' Item of a table.'''	
   def __init__(self, v= '', i= '', n= '', t= '', h= None, rws= None):
     ''' Constructor.
+
         Parameters:
-        v: v field.
-        i: i field.
-        n: n field.
-        h: h field.
-        rws: rows.
+        :param v: v field.
+        :param i: i field.
+        :param n: n field.
+        :param h: h field.
+        :param rws: rows.
     '''
     self.v= v
     self.i= i
@@ -79,9 +80,9 @@ class ObjectItem(object):
 
   def getXMLElement(self,parent, count):
     '''Returns the corresponding XML element for the object.
-       Parameters:
-       parent: owner of this object in the XML structure.
-       count: counter.'''
+
+       :param parent: owner of this object in the XML structure.
+       :param count:  counter.'''
     itemId= 'p'+str(count) 
     p= ET.SubElement(parent,itemId)
     if self.v is not None:

@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015 LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import copy
 
 class LoadRecord(object):
@@ -12,16 +18,24 @@ class LoadRecord(object):
   def __str__(self):
     return 'id= ' + str(self.loadCaseId) + ' name= ' + self.loadCaseName + ' loadName= ' + str(self.loadName) + ' value= ' +  str(self.value) + ' dir= ' + str(self.vDir)
   
-
-class PunctualLoadRecord(LoadRecord):
-  tag= -1 #Element or node tag.
+class PointForceRecord(LoadRecord):
+  '''Force applied in a point.'''
   def __init__(self, loadCase,bName,pos,v):
-    super(PunctualLoadRecord,self).__init__(loadCase, bName, v)
+    super(PointForceRecord,self).__init__(loadCase, bName, v)
     self.pos= pos
   def __str__(self):
-    retval= 'tag= ' + str(self.tag)
-    retval+= ' ' + super(PunctualLoadRecord,self).__str__()
+    retval= super(PointForceRecord,self).__str__()
     if(self.pos): retval+= ' ' + str(self.pos)
+    return retval
+
+class NodalLoadRecord(PointForceRecord):
+  '''Load over a node.'''
+  def __init__(self, loadCase,bName,pos,v):
+    super(NodalLoadRecord,self).__init__(loadCase, bName, pos, v)
+    self.tag= -1 #node tag.
+  def __str__(self):
+    retval= 'tag= ' + str(self.tag)
+    retval+= ' ' + super(NodalLoadRecord,self).__str__()
     return retval
   def searchLoadedElement(self,elemSet):
     pos= geom.Pos3d(self.pos[0],self.pos[1],self.pos[2])

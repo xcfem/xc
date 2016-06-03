@@ -18,7 +18,7 @@ from scia_loads import LoadCombProperties as lcmbp
 from scia_loads import NodeLoadProperties as nlp
 from scia_loads import ElementLoadProperties as elp
 from scia_loads import PointForceFreeProperties as pffp
-from scia_loads import SurfaceForceFreeProperties as sffp
+from scia_loads import SurfacePressureFreeProperties as sffp
 import xml.etree.cElementTree as ET
 
 class ProjectProperties(object):    
@@ -36,7 +36,7 @@ class ProjectProperties(object):
     self.nodeLoadProperties= nlp.NodeLoadProperties()
     self.elementLoadProperties= elp.ElementLoadProperties()
     self.pointLoadFreeProperties= pffp.PointForceFreeProperties()
-    self.surfaceLoadFreeProperties= sffp.SurfaceForceFreeProperties()
+    self.surfaceLoadFreeProperties= sffp.SurfacePressureFreeProperties()
 
   def getXMLElement(self,defFileName):
     '''Returns the corresponding XML element for the object.
@@ -44,7 +44,7 @@ class ProjectProperties(object):
        defFileName: XML definition file name.'''
     project= ET.Element("def_project")
     project.set("xmlns",self.xmlns)
-    containers= [self.nodeProperties, self.materialProperties, self.epPlaneProperties, self.nodeSupportProperties, self.loadGroupProperties, self.loadCaseProperties, self.loadCombProperties, self.nodeLoadProperties, self.elementLoadProperties]
+    containers= [self.nodeProperties, self.materialProperties, self.epPlaneProperties, self.nodeSupportProperties, self.loadGroupProperties, self.loadCaseProperties, self.loadCombProperties, self.nodeLoadProperties, self.elementLoadProperties, self.pointLoadFreeProperties, self.surfaceLoadFreeProperties]
     for c in containers:
       elem= c.getXMLElement(project)
     return project

@@ -32,7 +32,7 @@ class LoadContainer(object):
     lIter= lp.getNodalLoadIter
     nl= lIter.next()
     while nl:
-      pLoad= nld.PunctualLoadRecord(destLoadCase, self.nodalLoadCounter,None,1.0)
+      pLoad= nld.NodalLoadRecord(destLoadCase, self.nodalLoadCounter,None,1.0)
       force= nl.getForce 
       pLoad.value= force.Norm()
       pLoad.vDir= force.Normalized()

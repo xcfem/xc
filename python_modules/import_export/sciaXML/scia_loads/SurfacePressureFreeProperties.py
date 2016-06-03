@@ -66,11 +66,11 @@ idCoordUY= pffp.idCoordUY
 idCoordUZ= pffp.idCoordUZ
 idEdge= "{ECDF6620-F0FD-4476-B095-3610E641C35C}"
 
-class SurfaceForceFreeProperties(ctr.PropertiesContainer):
+class SurfacePressureFreeProperties(ctr.PropertiesContainer):
   '''Free point force properties in SCIA XML file.''' 
   def __init__(self):
     '''Constructor.'''
-    super(SurfaceForceFreeProperties,self).__init__(containerId,containerClsId,tbProgId)
+    super(SurfacePressureFreeProperties,self).__init__(containerId,containerClsId,tbProgId)
     self.tableProp= propTable.PropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)
     propRefLoadCase= prop.Property("0","Load case","ref",idLoadCase)
     propRefLoadCase.value= rf.Ref(idLoadCaseRef,lcp.tbName)
