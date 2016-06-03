@@ -1,11 +1,9 @@
-materials.sia263 package
-========================
+SIA263 materials
+================
 
-Submodules
-----------
 
-materials.sia263.fatigueControlSIA263 module
---------------------------------------------
+fatigueControlSIA263
+--------------------
 
 .. automodule:: materials.sia263.fatigueControlSIA263
     :members:
@@ -13,10 +11,3 @@ materials.sia263.fatigueControlSIA263 module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: materials.sia263
-    :members:
-    :undoc-members:
-    :show-inheritance:

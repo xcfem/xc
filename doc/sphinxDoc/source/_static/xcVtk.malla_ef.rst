@@ -1,102 +1,93 @@
-xcVtk.malla_ef package
-======================
+FE mesh
+=======
 
-Submodules
-----------
 
-xcVtk.malla_ef.Fields module
-----------------------------
+Fields
+------
 
 .. automodule:: xcVtk.malla_ef.Fields
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_ef.QuickGraphics module
------------------------------------
-
-.. automodule:: xcVtk.malla_ef.QuickGraphics
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-xcVtk.malla_ef.vtk_define_malla_cells_ef module
------------------------------------------------
+vtk_define_malla_cells_ef
+-------------------------
 
 .. automodule:: xcVtk.malla_ef.vtk_define_malla_cells_ef
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_ef.vtk_define_malla_elementos module
-------------------------------------------------
+vtk_define_malla_elementos
+--------------------------
 
 .. automodule:: xcVtk.malla_ef.vtk_define_malla_elementos
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_ef.vtk_define_malla_nodos module
---------------------------------------------
+vtk_define_malla_nodos
+----------------------
 
 .. automodule:: xcVtk.malla_ef.vtk_define_malla_nodos
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_ef.vtk_dibuja_elementos module
-------------------------------------------
+vtk_dibuja_elementos
+--------------------
 
 .. automodule:: xcVtk.malla_ef.vtk_dibuja_elementos
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_ef.vtk_dibuja_ids_elementos module
-----------------------------------------------
+vtk_dibuja_ids_elementos
+------------------------
 
 .. automodule:: xcVtk.malla_ef.vtk_dibuja_ids_elementos
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_ef.vtk_dibuja_nodos module
---------------------------------------
+vtk_dibuja_nodos
+----------------
 
 .. automodule:: xcVtk.malla_ef.vtk_dibuja_nodos
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_ef.vtk_grafico_ef module
-------------------------------------
+vtk_grafico_ef
+--------------
 
 .. automodule:: xcVtk.malla_ef.vtk_grafico_ef
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_ef.vtk_load_elem module
------------------------------------
+vtk_load_elem
+-------------
 
 .. automodule:: xcVtk.malla_ef.vtk_load_elem
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_ef.vtk_load_nodos module
-------------------------------------
+vtk_load_nodos
+--------------
 
 .. automodule:: xcVtk.malla_ef.vtk_load_nodos
     :members:
     :undoc-members:
     :show-inheritance:
 
+QuickGraphics
+-------------
 
-Module contents
----------------
-
-.. automodule:: xcVtk.malla_ef
+.. automodule:: xcVtk.malla_ef.QuickGraphics
     :members:
     :undoc-members:
     :show-inheritance:
+
+

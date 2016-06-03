@@ -1,33 +1,53 @@
-.. XC documentation master file, created by
-   sphinx-quickstart on Fri May 27 07:42:59 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
 
+==============================
 Welcome to XC's documentation!
 ==============================
 
-Contents:
+------------
+Preprocessor
+------------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
-   code.rst
+   _static/code.rst
 
    _static/materials.rst
 
    _static/actions.rst 
 
+--------
+Solution
+--------
+
+.. toctree::
+   :maxdepth: 1
+
    _static/solution.rst
 
-..   _static/postprocess.rst
+-------------
+Postprocessor
+-------------
+.. toctree::
+   :maxdepth: 1
 
    _static/xcVtk.rst
+
+   _static/postprocess.rst
+
+
+----------
+Miscellany
+----------
+
+.. toctree::
+   :maxdepth: 1
 
    _static/misc.rst
 
    _static/import_export.rst
 
-..   _static/rough_calculations.rst
+   _static/rough_calculations.rst
 
 
 Indices and tables

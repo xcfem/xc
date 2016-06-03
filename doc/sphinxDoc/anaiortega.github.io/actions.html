@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>actions package &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="index.html" />
+    <link rel="next" title="actions.earth_pressure package" href="actions.earth_pressure.html" />
+    <link rel="prev" title="materials.pernos_anclaje package" href="materials.pernos_anclaje.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.earth_pressure.html" title="actions.earth_pressure package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="materials.pernos_anclaje.html" title="materials.pernos_anclaje package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">XC 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="actions-package">
+<h1>actions package<a class="headerlink" href="#actions-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="actions.earth_pressure.html">actions.earth_pressure package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actions.earth_pressure.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.earth_pressure.html#module-actions.earth_pressure.EarthPressure">actions.earth_pressure.EarthPressure module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.earth_pressure.html#module-actions.earth_pressure">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="actions.quake.html">actions.quake package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actions.quake.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.quake.html#module-actions.quake.escribeCargasModo">actions.quake.escribeCargasModo module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.quake.html#module-actions.quake.seismeSIA">actions.quake.seismeSIA module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.quake.html#module-actions.quake">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="actions.railway_trafic.html">actions.railway_trafic package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actions.railway_trafic.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.railway_trafic.html#module-actions.railway_trafic.centrifugaIAPF">actions.railway_trafic.centrifugaIAPF module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.railway_trafic.html#module-actions.railway_trafic.sia_rail_load_models">actions.railway_trafic.sia_rail_load_models module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.railway_trafic.html#module-actions.railway_trafic.trenes_reales_av">actions.railway_trafic.trenes_reales_av module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.railway_trafic.html#module-actions.railway_trafic.vientoIAPF">actions.railway_trafic.vientoIAPF module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.railway_trafic.html#module-actions.railway_trafic">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="actions.snow.html">actions.snow package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actions.snow.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.snow.html#module-actions.snow.snowSIA">actions.snow.snowSIA module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.snow.html#module-actions.snow">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="actions.weight.html">actions.weight package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actions.weight.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.weight.html#module-actions.weight.peso_especifico_elementos_cobertura">actions.weight.peso_especifico_elementos_cobertura module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.weight.html#module-actions.weight.peso_especifico_pavimentos">actions.weight.peso_especifico_pavimentos module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.weight.html#module-actions.weight.pesos_especificos_materiales_construccion">actions.weight.pesos_especificos_materiales_construccion module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.weight.html#module-actions.weight">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="actions.wind.html">actions.wind package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actions.wind.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.wind.html#module-actions.wind.vientoCTE">actions.wind.vientoCTE module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.wind.html#module-actions.wind.vientoCubiertaDosAguasCTE">actions.wind.vientoCubiertaDosAguasCTE module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.wind.html#module-actions.wind.vientoCubiertaPlanaCTE">actions.wind.vientoCubiertaPlanaCTE module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.wind.html#module-actions.wind.vientoMarquesinaCTE">actions.wind.vientoMarquesinaCTE module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.wind.html#module-actions.wind.vientoParamVerticalesCTE">actions.wind.vientoParamVerticalesCTE module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.wind.html#module-actions.wind.windSIA261">actions.wind.windSIA261 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actions.wind.html#module-actions.wind">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-actions.CombContainer">
+<span id="actions-combcontainer-module"></span><h2>actions.CombContainer module<a class="headerlink" href="#module-actions.CombContainer" title="Permalink to this headline">¶</a></h2>
+<p>CombContainer.py: container for load combinations.</p>
+<dl class="class">
+<dt id="actions.CombContainer.CombContainer">
+<em class="property">class </em><tt class="descclassname">actions.CombContainer.</tt><tt class="descname">CombContainer</tt><a class="headerlink" href="#actions.CombContainer.CombContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Container of load combinations
+SLS: serviceability limit state combination
+ULS: ultimate limit state combination</p>
+<dl class="method">
+<dt id="actions.CombContainer.CombContainer.dumpCombinations">
+<tt class="descname">dumpCombinations</tt><big>(</big><em>preprocessor</em><big>)</big><a class="headerlink" href="#actions.CombContainer.CombContainer.dumpCombinations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduces the combinations into the XC combination loader.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.CombContainer.CombContainer.getNames">
+<tt class="descname">getNames</tt><big>(</big><big>)</big><a class="headerlink" href="#actions.CombContainer.CombContainer.getNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a list of the combination names.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.CombContainer.CombContainer.getNeutralFormat">
+<tt class="descname">getNeutralFormat</tt><big>(</big><em>mapLoadCases</em><big>)</big><a class="headerlink" href="#actions.CombContainer.CombContainer.getNeutralFormat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="actions.CombContainer.CombinationRecord">
+<em class="property">class </em><tt class="descclassname">actions.CombContainer.</tt><tt class="descname">CombinationRecord</tt><big>(</big><em>name</em>, <em>expr</em><big>)</big><a class="headerlink" href="#actions.CombContainer.CombinationRecord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Combination name and expression (i.e. ELS01= 1.0*G+1.0*Q)</p>
+<dl class="method">
+<dt id="actions.CombContainer.CombinationRecord.createCombination">
+<tt class="descname">createCombination</tt><big>(</big><em>xcCombLoader</em><big>)</big><a class="headerlink" href="#actions.CombContainer.CombinationRecord.createCombination" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduce the combination into the XC combination loader.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="actions.CombContainer.SLSCombinations">
+<em class="property">class </em><tt class="descclassname">actions.CombContainer.</tt><tt class="descname">SLSCombinations</tt><a class="headerlink" href="#actions.CombContainer.SLSCombinations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Combinations of actions for serviceability limit states
+Attributes:</p>
+<blockquote>
+<div>name:        name to identify the combination
+rare:        combination for a rare design situation
+freq:        combination for a frequent design situation
+qp:          combination for a quasi-permanent design situation
+earthquake:  combination for a earthquake design situation</div></blockquote>
+<dl class="method">
+<dt id="actions.CombContainer.SLSCombinations.dumpCombinations">
+<tt class="descname">dumpCombinations</tt><big>(</big><em>xcCombLoader</em><big>)</big><a class="headerlink" href="#actions.CombContainer.SLSCombinations.dumpCombinations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduces the combinations into the XC combination loader.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.CombContainer.SLSCombinations.getNames">
+<tt class="descname">getNames</tt><big>(</big><big>)</big><a class="headerlink" href="#actions.CombContainer.SLSCombinations.getNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a list of the combination names.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.CombContainer.SLSCombinations.getNeutralFormat">
+<tt class="descname">getNeutralFormat</tt><big>(</big><em>counter</em>, <em>mapLoadCases</em><big>)</big><a class="headerlink" href="#actions.CombContainer.SLSCombinations.getNeutralFormat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="actions.CombContainer.SituationCombs">
+<em class="property">class </em><tt class="descclassname">actions.CombContainer.</tt><tt class="descname">SituationCombs</tt><big>(</big><em>desc</em><big>)</big><a class="headerlink" href="#actions.CombContainer.SituationCombs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></p>
+<p>Combinations for a situation (frequent, rare, persistent,...).</p>
+<dl class="method">
+<dt id="actions.CombContainer.SituationCombs.add">
+<tt class="descname">add</tt><big>(</big><em>name</em>, <em>expr</em><big>)</big><a class="headerlink" href="#actions.CombContainer.SituationCombs.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="actions.CombContainer.SituationCombs.dumpCombinations">
+<tt class="descname">dumpCombinations</tt><big>(</big><em>xcCombLoader</em><big>)</big><a class="headerlink" href="#actions.CombContainer.SituationCombs.dumpCombinations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduces the combinations into the XC combination loader.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.CombContainer.SituationCombs.getNames">
+<tt class="descname">getNames</tt><big>(</big><big>)</big><a class="headerlink" href="#actions.CombContainer.SituationCombs.getNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a list of the combination names.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.CombContainer.SituationCombs.getNeutralFormat">
+<tt class="descname">getNeutralFormat</tt><big>(</big><em>counter</em>, <em>typ</em>, <em>mapLoadCases</em><big>)</big><a class="headerlink" href="#actions.CombContainer.SituationCombs.getNeutralFormat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="actions.CombContainer.ULSCombinations">
+<em class="property">class </em><tt class="descclassname">actions.CombContainer.</tt><tt class="descname">ULSCombinations</tt><a class="headerlink" href="#actions.CombContainer.ULSCombinations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Combinations of actions for ultimate limit states
+Attributes:</p>
+<blockquote>
+<div>name:        name to identify the combination
+perm:        combination for a persistent or transient design situation
+acc:         combination for a accidental design situation
+fatigue:     combination for a fatigue design situation
+earthquake:  combination for a seismic design situation</div></blockquote>
+<dl class="method">
+<dt id="actions.CombContainer.ULSCombinations.dumpCombinations">
+<tt class="descname">dumpCombinations</tt><big>(</big><em>xcCombLoader</em><big>)</big><a class="headerlink" href="#actions.CombContainer.ULSCombinations.dumpCombinations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Introduces the combinations into the XC combination loader.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.CombContainer.ULSCombinations.getNames">
+<tt class="descname">getNames</tt><big>(</big><big>)</big><a class="headerlink" href="#actions.CombContainer.ULSCombinations.getNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a list of the combination names.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.CombContainer.ULSCombinations.getNeutralFormat">
+<tt class="descname">getNeutralFormat</tt><big>(</big><em>counter</em>, <em>mapLoadCases</em><big>)</big><a class="headerlink" href="#actions.CombContainer.ULSCombinations.getNeutralFormat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-actions.borraAcciones">
+<span id="actions-borraacciones-module"></span><h2>actions.borraAcciones module<a class="headerlink" href="#module-actions.borraAcciones" title="Permalink to this headline">¶</a></h2>
+<p>Borra todas las acciones del modelo y crea un nuevo TimeSeries
+tipoTimeSeries: Tipo del time series.
+nmbTimeSeries: Nombre del time series.
+fct: Factor.</p>
+<dl class="function">
+<dt id="actions.borraAcciones.resetAccionesConstantTS">
+<tt class="descclassname">actions.borraAcciones.</tt><tt class="descname">resetAccionesConstantTS</tt><big>(</big><em>preprocessor</em>, <em>tipoTimeSeries</em>, <em>nmbTimeSeries</em>, <em>fct</em><big>)</big><a class="headerlink" href="#actions.borraAcciones.resetAccionesConstantTS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-actions.estadillo_cargas">
+<span id="actions-estadillo-cargas-module"></span><h2>actions.estadillo_cargas module<a class="headerlink" href="#module-actions.estadillo_cargas" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="actions.estadillo_cargas.printCargas">
+<tt class="descclassname">actions.estadillo_cargas.</tt><tt class="descname">printCargas</tt><big>(</big><em>nmbLst</em>, <em>nmbTipoCargas</em>, <em>ud</em><big>)</big><a class="headerlink" href="#actions.estadillo_cargas.printCargas" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.estadillo_cargas.printCargasLin">
+<tt class="descclassname">actions.estadillo_cargas.</tt><tt class="descname">printCargasLin</tt><big>(</big><em>nmbLst</em>, <em>nmbTipoCargas</em><big>)</big><a class="headerlink" href="#actions.estadillo_cargas.printCargasLin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.estadillo_cargas.printCargasPlanta">
+<tt class="descclassname">actions.estadillo_cargas.</tt><tt class="descname">printCargasPlanta</tt><big>(</big><em>nmbPlanta</em>, <em>nmbCP</em>, <em>nmbSC</em><big>)</big><a class="headerlink" href="#actions.estadillo_cargas.printCargasPlanta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.estadillo_cargas.printCargasSup">
+<tt class="descclassname">actions.estadillo_cargas.</tt><tt class="descname">printCargasSup</tt><big>(</big><em>nmbLst</em>, <em>nmbTipoCargas</em><big>)</big><a class="headerlink" href="#actions.estadillo_cargas.printCargasSup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-actions.utilsAcciones">
+<span id="actions-utilsacciones-module"></span><h2>actions.utilsAcciones module<a class="headerlink" href="#module-actions.utilsAcciones" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="actions.utilsAcciones.listaNombresLoadPatterns">
+<tt class="descclassname">actions.utilsAcciones.</tt><tt class="descname">listaNombresLoadPatterns</tt><big>(</big><em>preprocessor</em><big>)</big><a class="headerlink" href="#actions.utilsAcciones.listaNombresLoadPatterns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-actions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-actions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">actions package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-actions.CombContainer">actions.CombContainer module</a></li>
+<li><a class="reference internal" href="#module-actions.borraAcciones">actions.borraAcciones module</a></li>
+<li><a class="reference internal" href="#module-actions.estadillo_cargas">actions.estadillo_cargas module</a></li>
+<li><a class="reference internal" href="#module-actions.utilsAcciones">actions.utilsAcciones module</a></li>
+<li><a class="reference internal" href="#module-actions">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="materials.pernos_anclaje.html"
+                        title="previous chapter">materials.pernos_anclaje package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="actions.earth_pressure.html"
+                        title="next chapter">actions.earth_pressure package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/actions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.earth_pressure.html" title="actions.earth_pressure package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="materials.pernos_anclaje.html" title="materials.pernos_anclaje package"
+             >previous</a> |</li>
+        <li><a href="index.html">XC 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2016, LCPT A_OO.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

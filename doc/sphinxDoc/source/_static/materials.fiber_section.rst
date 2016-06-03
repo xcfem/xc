@@ -1,67 +1,64 @@
-materials.fiber_section package
-===============================
+Fiber sections
+==============
 
-Submodules
-----------
-
-materials.fiber_section.createFiberSets module
-----------------------------------------------
+createFiberSets 
+----------------
 
 .. automodule:: materials.fiber_section.createFiberSets
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.fiber_section.defSeccionHAPilar module
-------------------------------------------------
-
-.. automodule:: materials.fiber_section.defSeccionHAPilar
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-materials.fiber_section.defSeccionHASimple module
--------------------------------------------------
-
-.. automodule:: materials.fiber_section.defSeccionHASimple
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-materials.fiber_section.fiberUtils module
------------------------------------------
-
-.. automodule:: materials.fiber_section.fiberUtils
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-materials.fiber_section.geomArmaduraSeccionesFibras module
-----------------------------------------------------------
+geomArmaduraSeccionesFibras 
+----------------------------
 
 .. automodule:: materials.fiber_section.geomArmaduraSeccionesFibras
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.fiber_section.geomSeccionesFibras module
---------------------------------------------------
+geomSeccionesFibras 
+--------------------
 
 .. automodule:: materials.fiber_section.geomSeccionesFibras
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.fiber_section.plotGeomSeccion module
-----------------------------------------------
+defSeccionHAPilar 
+------------------
+
+.. automodule:: materials.fiber_section.defSeccionHAPilar
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+defSeccionHASimple 
+-------------------
+
+.. automodule:: materials.fiber_section.defSeccionHASimple
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+fiberUtils 
+-----------
+
+.. automodule:: materials.fiber_section.fiberUtils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+plotGeomSeccion 
+----------------
 
 .. automodule:: materials.fiber_section.plotGeomSeccion
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.fiber_section.sectionReport module
---------------------------------------------
+sectionReport 
+--------------
 
 .. automodule:: materials.fiber_section.sectionReport
     :members:
@@ -69,10 +66,3 @@ materials.fiber_section.sectionReport module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: materials.fiber_section
-    :members:
-    :undoc-members:
-    :show-inheritance:

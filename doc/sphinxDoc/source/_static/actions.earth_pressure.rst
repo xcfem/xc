@@ -1,11 +1,9 @@
-actions.earth_pressure package
-==============================
+Earth pressure
+==============
 
-Submodules
-----------
 
-actions.earth_pressure.EarthPressure module
--------------------------------------------
+EarthPressure
+-------------
 
 .. automodule:: actions.earth_pressure.EarthPressure
     :members:
@@ -13,10 +11,4 @@ actions.earth_pressure.EarthPressure module
     :show-inheritance:
 
 
-Module contents
----------------
 
-.. automodule:: actions.earth_pressure
-    :members:
-    :undoc-members:
-    :show-inheritance:

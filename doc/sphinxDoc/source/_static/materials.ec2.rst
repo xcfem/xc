@@ -1,19 +1,16 @@
-materials.ec2 package
-=====================
+Eurocode 2 materials
+====================
 
-Submodules
-----------
-
-materials.ec2.EC2_concrete module
----------------------------------
+EC2_concrete 
+-------------
 
 .. automodule:: materials.ec2.EC2_concrete
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.ec2.rebarsEC2 module
-------------------------------
+rebarsEC2 
+----------
 
 .. automodule:: materials.ec2.rebarsEC2
     :members:
@@ -21,10 +18,3 @@ materials.ec2.rebarsEC2 module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: materials.ec2
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,67 +1,65 @@
-materials.perfiles_metalicos.arcelor package
-============================================
+ARCELOR metal profiles
+======================
 
-Submodules
-----------
 
-materials.perfiles_metalicos.arcelor.barras_redondas_acero_laminado_arcelor module
-----------------------------------------------------------------------------------
+barras_redondas_acero_laminado_arcelor
+--------------------------------------
 
 .. automodule:: materials.perfiles_metalicos.arcelor.barras_redondas_acero_laminado_arcelor
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.perfiles_metalicos.arcelor.perfiles_L_lados_iguales_arcelor module
-----------------------------------------------------------------------------
+perfiles_L_lados_iguales_arcelor
+--------------------------------
 
 .. automodule:: materials.perfiles_metalicos.arcelor.perfiles_L_lados_iguales_arcelor
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.perfiles_metalicos.arcelor.perfiles_he_arcelor module
----------------------------------------------------------------
+perfiles_he_arcelor
+-------------------
 
 .. automodule:: materials.perfiles_metalicos.arcelor.perfiles_he_arcelor
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.perfiles_metalicos.arcelor.perfiles_ipe_arcelor module
-----------------------------------------------------------------
+perfiles_ipe_arcelor
+--------------------
 
 .. automodule:: materials.perfiles_metalicos.arcelor.perfiles_ipe_arcelor
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.perfiles_metalicos.arcelor.perfiles_ipn_arcelor module
-----------------------------------------------------------------
+perfiles_ipn_arcelor
+--------------------
 
 .. automodule:: materials.perfiles_metalicos.arcelor.perfiles_ipn_arcelor
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.perfiles_metalicos.arcelor.perfiles_upn_arcelor module
-----------------------------------------------------------------
+perfiles_upn_arcelor
+--------------------
 
 .. automodule:: materials.perfiles_metalicos.arcelor.perfiles_upn_arcelor
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.perfiles_metalicos.arcelor.tubos_estructurales_cuadrados_arcelor module
----------------------------------------------------------------------------------
+tubos_estructurales_cuadrados_arcelor
+-------------------------------------
 
 .. automodule:: materials.perfiles_metalicos.arcelor.tubos_estructurales_cuadrados_arcelor
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.perfiles_metalicos.arcelor.tubos_estructurales_rectangulares_arcelor module
--------------------------------------------------------------------------------------
+tubos_estructurales_rectangulares_arcelor
+-----------------------------------------
 
 .. automodule:: materials.perfiles_metalicos.arcelor.tubos_estructurales_rectangulares_arcelor
     :members:
@@ -69,10 +67,3 @@ materials.perfiles_metalicos.arcelor.tubos_estructurales_rectangulares_arcelor m
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: materials.perfiles_metalicos.arcelor
-    :members:
-    :undoc-members:
-    :show-inheritance:

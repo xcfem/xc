@@ -1,19 +1,10 @@
-materials.xLamina package
-=========================
 
-Submodules
-----------
+Shell sections
+==============
 
-materials.xLamina.calcsLauncher module
---------------------------------------
 
-.. automodule:: materials.xLamina.calcsLauncher
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-materials.xLamina.membranePlateRCSectionContainer module
---------------------------------------------------------
+membranePlateRCSectionContainer
+--------------------------------
 
 .. automodule:: materials.xLamina.membranePlateRCSectionContainer
     :members:
@@ -21,10 +12,9 @@ materials.xLamina.membranePlateRCSectionContainer module
     :show-inheritance:
 
 
-Module contents
----------------
 
-.. automodule:: materials.xLamina
-    :members:
-    :undoc-members:
-    :show-inheritance:
+
+
+
+
+

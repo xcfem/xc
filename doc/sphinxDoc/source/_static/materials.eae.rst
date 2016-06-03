@@ -1,43 +1,41 @@
-materials.eae package
-=====================
+EAE materials
+=============
 
-Submodules
-----------
 
-materials.eae.apoyo_por_soldadura_alma module
----------------------------------------------
+apoyo_por_soldadura_alma
+------------------------
 
 .. automodule:: materials.eae.apoyo_por_soldadura_alma
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.eae.apoyo_sobre_casquillo_no_rig module
--------------------------------------------------
+apoyo_sobre_casquillo_no_rig
+----------------------------
 
 .. automodule:: materials.eae.apoyo_sobre_casquillo_no_rig
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.eae.comprobacion_casquillo_rigidizado module
-------------------------------------------------------
+comprobacion_casquillo_rigidizado
+---------------------------------
 
 .. automodule:: materials.eae.comprobacion_casquillo_rigidizado
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.eae.garganta_min_max_EAE module
------------------------------------------
+garganta_min_max_EAE
+--------------------
 
 .. automodule:: materials.eae.garganta_min_max_EAE
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.eae.resistencia_cordon_soldadura module
--------------------------------------------------
+resistencia_cordon_soldadura
+----------------------------
 
 .. automodule:: materials.eae.resistencia_cordon_soldadura
     :members:
@@ -45,10 +43,4 @@ materials.eae.resistencia_cordon_soldadura module
     :show-inheritance:
 
 
-Module contents
----------------
 
-.. automodule:: materials.eae
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,11 +1,9 @@
-materials.ec5 package
+Eurocode 5 materials
 =====================
 
-Submodules
-----------
 
-materials.ec5.EC5TimberCrossSection module
-------------------------------------------
+EC5TimberCrossSection
+---------------------
 
 .. automodule:: materials.ec5.EC5TimberCrossSection
     :members:
@@ -13,10 +11,3 @@ materials.ec5.EC5TimberCrossSection module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: materials.ec5
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,11 +1,9 @@
-actions.snow package
-====================
+snow
+====
 
-Submodules
-----------
 
-actions.snow.snowSIA module
----------------------------
+snowSIA
+-------
 
 .. automodule:: actions.snow.snowSIA
     :members:
@@ -13,10 +11,4 @@ actions.snow.snowSIA module
     :show-inheritance:
 
 
-Module contents
----------------
 
-.. automodule:: actions.snow
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>actions.railway_trafic package &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="index.html" />
+    <link rel="up" title="actions package" href="actions.html" />
+    <link rel="next" title="actions.snow package" href="actions.snow.html" />
+    <link rel="prev" title="actions.quake package" href="actions.quake.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.snow.html" title="actions.snow package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="actions.quake.html" title="actions.quake package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li><a href="actions.html" accesskey="U">actions package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="actions-railway-trafic-package">
+<h1>actions.railway_trafic package<a class="headerlink" href="#actions-railway-trafic-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-actions.railway_trafic.centrifugaIAPF">
+<span id="actions-railway-trafic-centrifugaiapf-module"></span><h2>actions.railway_trafic.centrifugaIAPF module<a class="headerlink" href="#module-actions.railway_trafic.centrifugaIAPF" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="actions.railway_trafic.centrifugaIAPF.CoefReductorCentrifugaIAPF">
+<tt class="descclassname">actions.railway_trafic.centrifugaIAPF.</tt><tt class="descname">CoefReductorCentrifugaIAPF</tt><big>(</big><em>v</em>, <em>Lf</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.centrifugaIAPF.CoefReductorCentrifugaIAPF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve el coeficiente f reductor de la fuerza centrífuga (según expr. 2.3. IAPF)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-actions.railway_trafic.sia_rail_load_models">
+<span id="actions-railway-trafic-sia-rail-load-models-module"></span><h2>actions.railway_trafic.sia_rail_load_models module<a class="headerlink" href="#module-actions.railway_trafic.sia_rail_load_models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel">
+<em class="property">class </em><tt class="descclassname">actions.railway_trafic.sia_rail_load_models.</tt><tt class="descname">LoadModel</tt><big>(</big><em>mn</em>, <em>Qk</em>, <em>nA</em>, <em>dQk</em>, <em>qk</em>, <em>dQq</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Railway load model SIA 261.</p>
+<dl class="attribute">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.Qk">
+<tt class="descname">Qk</tt><em class="property"> = 160000.0</em><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.Qk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.accelerationLoad">
+<tt class="descname">accelerationLoad</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.accelerationLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns acceleration load</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.brakingLoad">
+<tt class="descname">brakingLoad</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.brakingLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns braking load</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.centrifugalAcceleration">
+<tt class="descname">centrifugalAcceleration</tt><big>(</big><em>r</em>, <em>v</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.centrifugalAcceleration" title="Permalink to this definition">¶</a></dt>
+<dd><p>centrifugal acceleration 11.2.4.3</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.centrifugalForceReductionFactor">
+<tt class="descname">centrifugalForceReductionFactor</tt><big>(</big><em>v</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.centrifugalForceReductionFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>centrifugal force reduction factor (11.3.2)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.dQk">
+<tt class="descname">dQk</tt><em class="property"> = 1.6</em><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.dQk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.dQq">
+<tt class="descname">dQq</tt><em class="property"> = 0.8</em><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.dQq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.loadModelNumber">
+<tt class="descname">loadModelNumber</tt><em class="property"> = 0</em><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.loadModelNumber" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.locomotiveAccelerationLoad456">
+<tt class="descname">locomotiveAccelerationLoad456</tt><big>(</big><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.locomotiveAccelerationLoad456" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns locomotive acceleration load for models 4, 5 and 6 (table 19)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.locomotiveAccelerationLoadByAxe456">
+<tt class="descname">locomotiveAccelerationLoadByAxe456</tt><big>(</big><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.locomotiveAccelerationLoadByAxe456" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns locomotive acceleration load in each axe for models 4, 5 and 6 (table 19)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.locomotiveCentrifugalForce">
+<tt class="descname">locomotiveCentrifugalForce</tt><big>(</big><em>r</em>, <em>v</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.locomotiveCentrifugalForce" title="Permalink to this definition">¶</a></dt>
+<dd><p>centrifugal force for Qk loads 11.2.4.3</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.locomotiveDerailmentModel1">
+<tt class="descname">locomotiveDerailmentModel1</tt><big>(</big><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.locomotiveDerailmentModel1" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns locomotive loads dues to derailment model 1 (table 17 and table 21)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.locomotiveDerailmentModel2">
+<tt class="descname">locomotiveDerailmentModel2</tt><big>(</big><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.locomotiveDerailmentModel2" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns locomotive loads dues to derailment model 2 (table 17 and table 21)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.nosingForce">
+<tt class="descname">nosingForce</tt><big>(</big><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.nosingForce" title="Permalink to this definition">¶</a></dt>
+<dd><p>nosing force (11.2.3 et 12.2.3).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.numberOfAxes">
+<tt class="descname">numberOfAxes</tt><em class="property"> = 4</em><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.numberOfAxes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.qk">
+<tt class="descname">qk</tt><em class="property"> = 70000.0</em><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.qk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.trainAccelerationLoad123">
+<tt class="descname">trainAccelerationLoad123</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.trainAccelerationLoad123" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns locomotive acceleration load for models 1, 2 and 3 (table 14)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.trainBrakingLoad123">
+<tt class="descname">trainBrakingLoad123</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.trainBrakingLoad123" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns train braking load for models 1, 2 and 3 (table 19)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.trainBrakingLoad456">
+<tt class="descname">trainBrakingLoad456</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.trainBrakingLoad456" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns train braking load for models 4, 5 and 6</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.trainCentrifugalForce">
+<tt class="descname">trainCentrifugalForce</tt><big>(</big><em>r</em>, <em>v</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.trainCentrifugalForce" title="Permalink to this definition">¶</a></dt>
+<dd><p>centrifugal force for qk loads 11.2.4.3</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.trainDerailmentModel1">
+<tt class="descname">trainDerailmentModel1</tt><big>(</big><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.trainDerailmentModel1" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns train loads dues to derailment model 1 (table 17 and table 21)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.trainDerailmentModel2">
+<tt class="descname">trainDerailmentModel2</tt><big>(</big><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.trainDerailmentModel2" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns train loads dues to derailment model 2 (table 17 and table 21)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="actions.railway_trafic.sia_rail_load_models.LoadModel.writeData">
+<tt class="descname">writeData</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.LoadModel.writeData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.railway_trafic.sia_rail_load_models.determinantLengthSingleSpanPortalFrame">
+<tt class="descclassname">actions.railway_trafic.sia_rail_load_models.</tt><tt class="descname">determinantLengthSingleSpanPortalFrame</tt><big>(</big><em>ls1</em>, <em>l</em>, <em>ls2</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.determinantLengthSingleSpanPortalFrame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.railway_trafic.sia_rail_load_models.dynamicFactor">
+<tt class="descclassname">actions.railway_trafic.sia_rail_load_models.</tt><tt class="descname">dynamicFactor</tt><big>(</big><em>lPhi</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.sia_rail_load_models.dynamicFactor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-actions.railway_trafic.trenes_reales_av">
+<span id="actions-railway-trafic-trenes-reales-av-module"></span><h2>actions.railway_trafic.trenes_reales_av module<a class="headerlink" href="#module-actions.railway_trafic.trenes_reales_av" title="Permalink to this headline">¶</a></h2>
+<p>Cargas por eje de trenes de alta velocidad según IAPF apartado
+C.2 del apéndice C de la IAPF.</p>
+</div>
+<div class="section" id="module-actions.railway_trafic.vientoIAPF">
+<span id="actions-railway-trafic-vientoiapf-module"></span><h2>actions.railway_trafic.vientoIAPF module<a class="headerlink" href="#module-actions.railway_trafic.vientoIAPF" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="actions.railway_trafic.vientoIAPF.CdTableroAlmaLlenaIAPF">
+<tt class="descclassname">actions.railway_trafic.vientoIAPF.</tt><tt class="descname">CdTableroAlmaLlenaIAPF</tt><big>(</big><em>B</em>, <em>h</em>, <em>angAlma</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.vientoIAPF.CdTableroAlmaLlenaIAPF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de arrastre para empuje horizontal sobre tableros
+de alma llena según apartado 2.3.7.5.1 IAPF.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.railway_trafic.vientoIAPF.CgIAPF">
+<tt class="descclassname">actions.railway_trafic.vientoIAPF.</tt><tt class="descname">CgIAPF</tt><big>(</big><em>kz</em>, <em>Cz</em>, <em>Ct</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.vientoIAPF.CgIAPF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Factor de ráfaga según apartado 2.3.7.2 IAPF.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.railway_trafic.vientoIAPF.CzIAPF">
+<tt class="descclassname">actions.railway_trafic.vientoIAPF.</tt><tt class="descname">CzIAPF</tt><big>(</big><em>gae</em>, <em>z</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.vientoIAPF.CzIAPF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Factor de altura según apartado 2.3.7.2 IAPF.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.railway_trafic.vientoIAPF.FHkPorMetroIAPF">
+<tt class="descclassname">actions.railway_trafic.vientoIAPF.</tt><tt class="descname">FHkPorMetroIAPF</tt><big>(</big><em>Cd</em>, <em>h</em>, <em>Vc</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.vientoIAPF.FHkPorMetroIAPF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empuje horizontal por unidad de longitud sobre el tablero
+de alma llena según apartado 2.3.7.3 IAPF.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.railway_trafic.vientoIAPF.FVkPorMetroIAPF">
+<tt class="descclassname">actions.railway_trafic.vientoIAPF.</tt><tt class="descname">FVkPorMetroIAPF</tt><big>(</big><em>b</em>, <em>Vc</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.vientoIAPF.FVkPorMetroIAPF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empuje vertical por unidad de longitud sobre el tablero
+de alma llena según apartado 2.3.7.5.2 IAPF.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.railway_trafic.vientoIAPF.ParamKIAPF">
+<tt class="descclassname">actions.railway_trafic.vientoIAPF.</tt><tt class="descname">ParamKIAPF</tt><big>(</big><em>gae</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.vientoIAPF.ParamKIAPF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parámetro k en función del grado de aspereza del entorno
+según IAPF (cuadro 2.4).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.railway_trafic.vientoIAPF.Z0IAPF">
+<tt class="descclassname">actions.railway_trafic.vientoIAPF.</tt><tt class="descname">Z0IAPF</tt><big>(</big><em>gae</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.vientoIAPF.Z0IAPF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Longitud de la rugosidad z_0 en función del grado de aspereza del entorno
+según IAPF (cuadro 2.4).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.railway_trafic.vientoIAPF.ZminIAPF">
+<tt class="descclassname">actions.railway_trafic.vientoIAPF.</tt><tt class="descname">ZminIAPF</tt><big>(</big><em>gae</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.vientoIAPF.ZminIAPF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Altura mínima z_min en función del grado de aspereza del entorno
+según IAPF (cuadro 2.4).}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.railway_trafic.vientoIAPF.alphaIAPF">
+<tt class="descclassname">actions.railway_trafic.vientoIAPF.</tt><tt class="descname">alphaIAPF</tt><big>(</big><em>gae</em><big>)</big><a class="headerlink" href="#actions.railway_trafic.vientoIAPF.alphaIAPF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Valor del alpha en función del grado de aspereza del entorno
+según IAPF (cuadro 2.4).}</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-actions.railway_trafic">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-actions.railway_trafic" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">actions.railway_trafic package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-actions.railway_trafic.centrifugaIAPF">actions.railway_trafic.centrifugaIAPF module</a></li>
+<li><a class="reference internal" href="#module-actions.railway_trafic.sia_rail_load_models">actions.railway_trafic.sia_rail_load_models module</a></li>
+<li><a class="reference internal" href="#module-actions.railway_trafic.trenes_reales_av">actions.railway_trafic.trenes_reales_av module</a></li>
+<li><a class="reference internal" href="#module-actions.railway_trafic.vientoIAPF">actions.railway_trafic.vientoIAPF module</a></li>
+<li><a class="reference internal" href="#module-actions.railway_trafic">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="actions.quake.html"
+                        title="previous chapter">actions.quake package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="actions.snow.html"
+                        title="next chapter">actions.snow package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/actions.railway_trafic.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.snow.html" title="actions.snow package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="actions.quake.html" title="actions.quake package"
+             >previous</a> |</li>
+        <li><a href="index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li><a href="actions.html" >actions package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2016, LCPT A_OO.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

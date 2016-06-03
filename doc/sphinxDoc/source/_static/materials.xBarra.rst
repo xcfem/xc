@@ -1,27 +1,25 @@
-materials.xBarra package
-========================
+Beam sections
+=============
 
-Submodules
-----------
 
-materials.xBarra.calculo_comb module
-------------------------------------
+calculo_comb 
+-------------
 
 .. automodule:: materials.xBarra.calculo_comb
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.xBarra.calculo_tn module
-----------------------------------
+calculo_tn 
+-----------
 
 .. automodule:: materials.xBarra.calculo_tn
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.xBarra.extrae_combinaciones module
---------------------------------------------
+extrae_combinaciones 
+---------------------
 
 .. automodule:: materials.xBarra.extrae_combinaciones
     :members:
@@ -29,10 +27,3 @@ materials.xBarra.extrae_combinaciones module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: materials.xBarra
-    :members:
-    :undoc-members:
-    :show-inheritance:

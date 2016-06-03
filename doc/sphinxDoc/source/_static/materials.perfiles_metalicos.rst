@@ -1,19 +1,14 @@
-materials.perfiles_metalicos package
-====================================
-
-Subpackages
------------
+materials.perfiles_metalicos
+============================
 
 .. toctree::
 
     materials.perfiles_metalicos.aisc
     materials.perfiles_metalicos.arcelor
 
-Submodules
-----------
 
-materials.perfiles_metalicos.mallaSetConPerfilMetalico module
--------------------------------------------------------------
+mallaSetConPerfilMetalico
+-------------------------
 
 .. automodule:: materials.perfiles_metalicos.mallaSetConPerfilMetalico
     :members:
@@ -21,10 +16,4 @@ materials.perfiles_metalicos.mallaSetConPerfilMetalico module
     :show-inheritance:
 
 
-Module contents
----------------
 
-.. automodule:: materials.perfiles_metalicos
-    :members:
-    :undoc-members:
-    :show-inheritance:

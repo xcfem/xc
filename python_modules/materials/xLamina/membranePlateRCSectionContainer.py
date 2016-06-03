@@ -42,8 +42,8 @@ class SectionContainer(object):
 
   def getInteractionDiagrams(self,preprocessor,matDiagType):
     '''Returns 3D interaction diagrams.
-    Parameters:
-      preprocessor:    FEA problem preprocessor
+
+    :param preprocessor:    FEA problem preprocessor
     '''
     mapInteractionDiagrams= {}
     for s in self.sections:
@@ -57,8 +57,8 @@ class SectionContainer(object):
 
   def getInteractionDiagramsNMy(self,preprocessor,matDiagType):
     '''Returns 2D interaction diagrams in N-My plane.
-    Parameters:
-      preprocessor:    FEA problem preprocessor
+
+    :param preprocessor:    FEA problem preprocessor
     '''
     mapInteractionDiagrams= {}
     for s in self.sections:
@@ -74,15 +74,16 @@ class SectionContainer(object):
 
   def crackControl(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
     '''
-    Parameters:
-    intForcCombFileName: name of the file containing the forces and bending moments 
+
+    :param intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing the results of the 
+    :param outputFileName:  name of the output file containing the results of the 
                      verification 
-    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    :param sectionsNamesForEveryElement: file containing a dictionary  such that for each 
+                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
-    controller: object that controls crack limit state.
+    :param controller: object that controls crack limit state.
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
@@ -95,15 +96,16 @@ class SectionContainer(object):
 
   def verifyNormalStresses(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
     '''
-    Parameters:
-    intForcCombFileName: name of the file containing the forces and bending moments 
+
+    :param intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing the results of the 
+    :param outputFileName:  name of the output file containing the results of the 
                      verification 
-    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    :param sectionsNamesForEveryElement: file containing a dictionary  such that for each
+                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
-    controller: object that controls normal stresses limit state on elements.
+    :param controller: object that controls normal stresses limit state on elements.
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
@@ -116,15 +118,15 @@ class SectionContainer(object):
 
   def verifyNormalStresses2d(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
     '''
-    Parameters:
-    intForcCombFileName: name of the file containing the forces and bending moments 
+
+    :param intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing the results of the 
+    :param outputFileName:  name of the output file containing the results of the 
                      verification 
-    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    :param sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
-    controller: object that controls normal stresses limit state on elements.
+    :param controller: object that controls normal stresses limit state on elements.
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
@@ -137,15 +139,15 @@ class SectionContainer(object):
 
   def shearVerification(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
     '''
-    Parameters:
-    intForcCombFileName: name of the file containing the forces and bending moments 
+
+    :param intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing the results of the 
+    :param outputFileName:  name of the output file containing the results of the 
                      verification 
-    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    :param sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
-    controller: object that controls shear limit state.
+    :param controller: object that controls shear limit state.
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
@@ -158,15 +160,15 @@ class SectionContainer(object):
 
   def fatigueVerification(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
     '''
-    Parameters:
-    intForcCombFileName: name of the file containing the forces and bending moments 
+
+    :param intForcCombFileName: name of the file containing the forces and bending moments 
                      obtained for each element for the combinations analyzed
-    outputFileName:  name of the output file containing the results of the 
+    :param outputFileName:  name of the output file containing the results of the 
                      verification 
-    sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
+    :param sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
                                 (for the sections 1 and 2) to be employed 
                                 in verifications
-    controller: object that controls fatigue limit state
+    :param controller: object that controls fatigue limit state
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor

@@ -1,51 +1,49 @@
-actions.wind package
-====================
+wind
+====
 
-Submodules
-----------
 
-actions.wind.vientoCTE module
------------------------------
+vientoCTE
+---------
 
 .. automodule:: actions.wind.vientoCTE
     :members:
     :undoc-members:
     :show-inheritance:
 
-actions.wind.vientoCubiertaDosAguasCTE module
----------------------------------------------
+vientoCubiertaDosAguasCTE
+-------------------------
 
 .. automodule:: actions.wind.vientoCubiertaDosAguasCTE
     :members:
     :undoc-members:
     :show-inheritance:
 
-actions.wind.vientoCubiertaPlanaCTE module
-------------------------------------------
+vientoCubiertaPlanaCTE
+----------------------
 
 .. automodule:: actions.wind.vientoCubiertaPlanaCTE
     :members:
     :undoc-members:
     :show-inheritance:
 
-actions.wind.vientoMarquesinaCTE module
----------------------------------------
+vientoMarquesinaCTE
+-------------------
 
 .. automodule:: actions.wind.vientoMarquesinaCTE
     :members:
     :undoc-members:
     :show-inheritance:
 
-actions.wind.vientoParamVerticalesCTE module
---------------------------------------------
+vientoParamVerticalesCTE
+------------------------
 
 .. automodule:: actions.wind.vientoParamVerticalesCTE
     :members:
     :undoc-members:
     :show-inheritance:
 
-actions.wind.windSIA261 module
-------------------------------
+windSIA261
+----------
 
 .. automodule:: actions.wind.windSIA261
     :members:
@@ -53,10 +51,3 @@ actions.wind.windSIA261 module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: actions.wind
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,86 +1,77 @@
-materials.sia262 package
-========================
+SIA262 materials
+================
 
-Submodules
-----------
 
-materials.sia262.SIA_reinforcing_steel module
----------------------------------------------
-
-.. automodule:: materials.sia262.SIA_reinforcing_steel
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-materials.sia262.anchorage module
----------------------------------
-
-.. automodule:: materials.sia262.anchorage
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-materials.sia262.concreteSIA262 module
---------------------------------------
+concreteSIA262
+--------------
 
 .. automodule:: materials.sia262.concreteSIA262
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.sia262.crackControlSIA262 module
-------------------------------------------
+SIA_reinforcing_steel
+---------------------
 
-.. automodule:: materials.sia262.crackControlSIA262
+.. automodule:: materials.sia262.SIA_reinforcing_steel
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.sia262.fatigueControlSIA262 module
---------------------------------------------
-
-.. automodule:: materials.sia262.fatigueControlSIA262
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-materials.sia262.minimal_reinforcement module
----------------------------------------------
-
-.. automodule:: materials.sia262.minimal_reinforcement
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-materials.sia262.normalStressesSIA262 module
---------------------------------------------
+normalStressesSIA262
+--------------------
 
 .. automodule:: materials.sia262.normalStressesSIA262
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.sia262.shearSIA262 module
------------------------------------
+shearSIA262
+-----------
 
 .. automodule:: materials.sia262.shearSIA262
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.sia262.steelSIA262 module
------------------------------------
+steelSIA262
+-----------
 
 .. automodule:: materials.sia262.steelSIA262
     :members:
     :undoc-members:
     :show-inheritance:
 
+crackControlSIA262
+------------------
 
-Module contents
----------------
-
-.. automodule:: materials.sia262
+.. automodule:: materials.sia262.crackControlSIA262
     :members:
     :undoc-members:
     :show-inheritance:
+
+fatigueControlSIA262
+--------------------
+
+.. automodule:: materials.sia262.fatigueControlSIA262
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+minimal_reinforcement
+---------------------
+
+.. automodule:: materials.sia262.minimal_reinforcement
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+anchorage
+---------
+
+.. automodule:: materials.sia262.anchorage
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+

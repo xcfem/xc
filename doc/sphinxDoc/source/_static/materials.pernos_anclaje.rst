@@ -1,19 +1,17 @@
-materials.pernos_anclaje package
-================================
+Anchor bolts
+============
 
-Submodules
+
+EOTA_TR029
 ----------
-
-materials.pernos_anclaje.EOTA_TR029 module
-------------------------------------------
 
 .. automodule:: materials.pernos_anclaje.EOTA_TR029
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.pernos_anclaje.EOTA_TR029_traccion module
----------------------------------------------------
+EOTA_TR029_traccion
+-------------------
 
 .. automodule:: materials.pernos_anclaje.EOTA_TR029_traccion
     :members:
@@ -21,10 +19,4 @@ materials.pernos_anclaje.EOTA_TR029_traccion module
     :show-inheritance:
 
 
-Module contents
----------------
 
-.. automodule:: materials.pernos_anclaje
-    :members:
-    :undoc-members:
-    :show-inheritance:

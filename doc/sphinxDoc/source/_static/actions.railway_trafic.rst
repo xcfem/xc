@@ -1,46 +1,38 @@
-actions.railway_trafic package
-==============================
+railway traffic
+===============
 
-Submodules
-----------
 
-actions.railway_trafic.centrifugaIAPF module
---------------------------------------------
-
-.. automodule:: actions.railway_trafic.centrifugaIAPF
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-actions.railway_trafic.sia_rail_load_models module
---------------------------------------------------
-
-.. automodule:: actions.railway_trafic.sia_rail_load_models
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-actions.railway_trafic.trenes_reales_av module
-----------------------------------------------
+railway_trafic.trenes_reales_av
+-------------------------------
 
 .. automodule:: actions.railway_trafic.trenes_reales_av
     :members:
     :undoc-members:
     :show-inheritance:
 
-actions.railway_trafic.vientoIAPF module
-----------------------------------------
+railway_trafic.centrifugaIAPF
+-----------------------------
+
+.. automodule:: actions.railway_trafic.centrifugaIAPF
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+railway_trafic.vientoIAPF
+-------------------------
 
 .. automodule:: actions.railway_trafic.vientoIAPF
     :members:
     :undoc-members:
     :show-inheritance:
 
+railway_trafic.sia_rail_load_models
+-----------------------------------
 
-Module contents
----------------
-
-.. automodule:: actions.railway_trafic
+.. automodule:: actions.railway_trafic.sia_rail_load_models
     :members:
     :undoc-members:
     :show-inheritance:
+
+
+

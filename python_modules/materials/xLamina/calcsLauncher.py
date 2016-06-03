@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 # Launcher of various calculations for RC elements of type xLamina, related to the 
 # verificacion of Ultimate and Serviceability Limit States 
 
@@ -25,9 +26,9 @@ print 'Module calcsLauncher is DEPRECATED.'
 def xLaminaCompruebaTNComb(preprocessor, nmbDiagIntSec1, nmbDiagIntSec2,controller):
   '''
   Perfoms the verification under normal stresses.
-  Parameters:
-    preprocessor:    preprocessor name
-    controller: object that control normal stress limit state.
+
+  :param preprocessor:    preprocessor name
+  :param controller: object that control normal stress limit state.
   '''
   listaCombinaciones= []
   cargas= preprocessor.getLoadLoader
@@ -49,10 +50,10 @@ def xLaminaCompruebaTNComb(preprocessor, nmbDiagIntSec1, nmbDiagIntSec2,controll
 
 def xLaminaCalculaCombEstatLin(preprocessor,elements, analysis, controller):
   '''
-  Lanza el análisis (lineal) y la comprobación en las combinaciones que se pasan como parámetros
-  Parameters:
-    elements: elements to check
-    controller: object that controls limit state in elements.
+  Lanza el analisis (lineal) y la comprobacion en las combinaciones que se pasan como parametros
+
+  :param  elements: elements to check
+  :param  controller: object that controls limit state in elements.
   '''
   combs= preprocessor.getLoadLoader.getLoadPatterns #Here each load pattern represents a combination.
   for key in combs.getKeys():
@@ -64,8 +65,7 @@ def xLaminaCalculaCombEstatLin(preprocessor,elements, analysis, controller):
 # Construye el modelo para la comprobación de tensiones normales
 def xLaminaConstruyeModeloFicticio(preprocessor,datosScc1, datosScc2):
   '''
-  Parameters:
-    preprocessor:    preprocessor name
+  :param  preprocessor:    preprocessor name
   '''
   nodos= preprocessor.getNodeLoader
 
@@ -96,16 +96,16 @@ def xLaminaConstruyeModeloFicticio(preprocessor,datosScc1, datosScc2):
     os.sys("rm -f "+"/tmp/elementos_scc1.xci")
     os.sys("rm -f "+"/tmp/elementos_scc2.xci")
 
-'''
- Lanza la comprobación de tensiones normales en una lámina
-    cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
-    con los materiales que se definen en el archivo nmbArchMateriales,
-    las características de las secciones que se definen en los registros
-    datosScc1 y datosScc2, las combinaciones definidas en el archivo
-    nmbArchDefHipELU e imprime los resultados en archivos con
-    el nombre nmbArchTN.*
-'''
 def lanzaCalculoTNFromAnsysData(nmbArch, datosScc1, datosScc2, nmbArchDefHipELU):
+  '''
+  Lanza la comprobacion de tensiones normales en una lamina
+  cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
+  con los materiales que se definen en el archivo nmbArchMateriales,
+  las caracteristicas de las secciones que se definen en los registros
+  datosScc1 y datosScc2, las combinaciones definidas en el archivo
+  nmbArchDefHipELU e imprime los resultados en archivos con
+  el nombre nmbArchTN.*
+  '''
   extraeDatosLST(nmbArch+".lst") 
   xLaminaConstruyeModeloFicticio(datosScc1,datosScc2)
   nmbDiagIntSec1= "diagInt"+datosScc1.sectionName
@@ -116,9 +116,9 @@ def lanzaCalculoTNFromAnsysData(nmbArch, datosScc1, datosScc2, nmbArchDefHipELU)
 
 def getListaCombinaciones(nmbArchDefHipELU):
   '''
-  Define las combinaciones descritas en el archivo que se pasa como parámetro
-   y coloca sus nombres en la lista que devuelve.
-   nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular. 
+  Define las combinaciones descritas en el archivo que se pasa como parametro
+  y coloca sus nombres en la lista que devuelve.
+  nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular. 
   '''
   lstCombRetval= []
   cargas= preprocessor.getLoadLoader
@@ -136,10 +136,10 @@ def getListaCombinaciones(nmbArchDefHipELU):
 
 def xLaminaCalculaCombEstatNoLin(elements,nmbArchDefHipELU,controller):
   '''
-  Lanza el análisis (no lineal) y la comprobación en las combinaciones que se pasan como parámetros
-  Parameters:
-    nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
-    controller: object that controls limit state in elements.
+  Lanza el analisis (no lineal) y la comprobacion en las combinaciones que se pasan como parametros
+
+  :param  nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
+  :param  controller: object that controls limit state in elements.
   '''
   # Definimos el procedimiento de solución.
   print "XXX Definir el procedimiento de solution (simple_newton_raphson_band_genr)"
@@ -185,13 +185,13 @@ def xLaminaConstruyeModeloFibras(nmbRegDatosScc1, nmbRegDatosScc2):
 
 def lanzaCalculoVFromAnsysData(preprocessor,nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArchDefHipELU):
   '''
-   Lanza la comprobación de cortante en una lámina
-      cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
-      con los materiales que se definen en el archivo nmbArchMateriales,
-      las características de las secciones que se definen en los registros
-      datosScc1 y datosScc2, las combinaciones definidas en el archivo
-      nmbArchDefHipELU e imprime los resultados en archivos con
-      el nombre nmbArchTN.*
+  Lanza la comprobacion de cortante en una lamina
+  cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
+  con los materiales que se definen en el archivo nmbArchMateriales,
+  las caracteristicas de las secciones que se definen en los registros
+  datosScc1 y datosScc2, las combinaciones definidas en el archivo
+  nmbArchDefHipELU e imprime los resultados en archivos con
+  el nombre nmbArchTN.*
   '''
   extraeDatosLST(nmbArch+".lst")
   xLaminaConstruyeModeloFibras(nmbRegDatosScc1,nmbRegDatosScc2)
@@ -208,8 +208,8 @@ def strElementProp(eTag,nmbProp,vProp):
 
 def xLaminaPrintFatigueSIA262(preprocessor,outputFileName, mapSections):
   '''
-  Parameters:
-    preprocessor:    preprocessor name
+
+  :param  preprocessor:    preprocessor name
   '''
   # Imprime los resultados de la comprobación frente a fisuración
   texOutput1= open("/tmp/texOutput1.tmp","w")

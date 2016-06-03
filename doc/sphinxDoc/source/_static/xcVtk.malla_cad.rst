@@ -1,42 +1,40 @@
-xcVtk.malla_cad package
-=======================
+CAD model
+=========
 
-Submodules
-----------
 
-xcVtk.malla_cad.vtk_define_malla_cells_cad module
--------------------------------------------------
+vtk_define_malla_cells_cad
+--------------------------
 
 .. automodule:: xcVtk.malla_cad.vtk_define_malla_cells_cad
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_cad.vtk_define_malla_kpts_cad module
-------------------------------------------------
+vtk_define_malla_kpts_cad
+-------------------------
 
 .. automodule:: xcVtk.malla_cad.vtk_define_malla_kpts_cad
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_cad.vtk_dibuja_kpoints module
------------------------------------------
+vtk_dibuja_kpoints
+------------------
 
 .. automodule:: xcVtk.malla_cad.vtk_dibuja_kpoints
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_cad.vtk_dibuja_lineas module
-----------------------------------------
+vtk_dibuja_lineas
+-----------------
 
 .. automodule:: xcVtk.malla_cad.vtk_dibuja_lineas
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_cad.vtk_grafico_cad module
+vtk_grafico_cad module
 --------------------------------------
 
 .. automodule:: xcVtk.malla_cad.vtk_grafico_cad
@@ -44,15 +42,15 @@ xcVtk.malla_cad.vtk_grafico_cad module
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_cad.vtk_load_kpoints module
----------------------------------------
+vtk_load_kpoints
+----------------
 
 .. automodule:: xcVtk.malla_cad.vtk_load_kpoints
     :members:
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_cad.vtk_load_lineas module
+vtk_load_lineas module
 --------------------------------------
 
 .. automodule:: xcVtk.malla_cad.vtk_load_lineas
@@ -60,7 +58,7 @@ xcVtk.malla_cad.vtk_load_lineas module
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_cad.vtk_load_strprop_kpts module
+vtk_load_strprop_kpts module
 --------------------------------------------
 
 .. automodule:: xcVtk.malla_cad.vtk_load_strprop_kpts
@@ -68,8 +66,8 @@ xcVtk.malla_cad.vtk_load_strprop_kpts module
     :undoc-members:
     :show-inheritance:
 
-xcVtk.malla_cad.vtk_load_strprop_lineas module
-----------------------------------------------
+vtk_load_strprop_lineas
+-----------------------
 
 .. automodule:: xcVtk.malla_cad.vtk_load_strprop_lineas
     :members:
@@ -77,10 +75,4 @@ xcVtk.malla_cad.vtk_load_strprop_lineas module
     :show-inheritance:
 
 
-Module contents
----------------
 
-.. automodule:: xcVtk.malla_cad
-    :members:
-    :undoc-members:
-    :show-inheritance:

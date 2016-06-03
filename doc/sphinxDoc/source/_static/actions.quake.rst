@@ -1,19 +1,16 @@
-actions.quake package
-=====================
+Earthquake
+==========
 
-Submodules
-----------
-
-actions.quake.escribeCargasModo module
---------------------------------------
+escribeCargasModo
+-----------------
 
 .. automodule:: actions.quake.escribeCargasModo
     :members:
     :undoc-members:
     :show-inheritance:
 
-actions.quake.seismeSIA module
-------------------------------
+seismeSIA
+---------
 
 .. automodule:: actions.quake.seismeSIA
     :members:
@@ -21,10 +18,3 @@ actions.quake.seismeSIA module
     :show-inheritance:
 
 
-Module contents
----------------
-
-.. automodule:: actions.quake
-    :members:
-    :undoc-members:
-    :show-inheritance:

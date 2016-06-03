@@ -1,168 +1,138 @@
-materials.ehe package
-=====================
+EHE materials
+=============
 
-Submodules
-----------
 
-materials.ehe.EHE_concrete module
----------------------------------
+EHE_concrete
+------------
 
 .. automodule:: materials.ehe.EHE_concrete
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.ehe.EHE_reinforcing_steel module
-------------------------------------------
+EHE_reinforcing_steel
+---------------------
 
 .. automodule:: materials.ehe.EHE_reinforcing_steel
     :members:
     :undoc-members:
     :show-inheritance:
 
-materials.ehe.aceroPretEHE module
----------------------------------
+acerosEHE
+---------
+
+.. automodule:: materials.ehe.acerosEHE
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+areaBarrasEHE
+-------------
+
+.. automodule:: materials.ehe.areaBarrasEHE
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+aceroPretEHE
+------------
 
 .. automodule:: materials.ehe.aceroPretEHE
     :members:
     :undoc-members:
     :show-inheritance:
 
-..
-   materials.ehe.acerosEHE module
-   ------------------------------
+datos_calculo_seccion
+---------------------
 
-   .. automodule:: materials.ehe.acerosEHE
-       :members:
-       :undoc-members:
-       :show-inheritance:
+.. automodule:: materials.ehe.datos_calculo_seccion
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-..
-   materials.ehe.areaBarrasEHE module
-   ----------------------------------
+comprobCargaConcentrada
+-----------------------
 
-   .. automodule:: materials.ehe.areaBarrasEHE
-       :members:
-       :undoc-members:
-       :show-inheritance:
+.. automodule:: materials.ehe.comprobCargaConcentrada
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-   materials.ehe.comprobCargaConcentrada module
-   --------------------------------------------
+comprobTnEHE
+------------
 
-   .. automodule:: materials.ehe.comprobCargaConcentrada
-       :members:
-       :undoc-members:
-       :show-inheritance:
+.. automodule:: materials.ehe.comprobTnEHE
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-   materials.ehe.comprobTnEHE module
-   ---------------------------------
+comprobVEHE
+-----------
 
-   .. automodule:: materials.ehe.comprobTnEHE
-       :members:
-       :undoc-members:
-       :show-inheritance:
+.. automodule:: materials.ehe.comprobVEHE
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-   materials.ehe.comprobVEHE module
-   --------------------------------
+comprobVEHE08
+-------------
 
-   .. automodule:: materials.ehe.comprobVEHE
-       :members:
-       :undoc-members:
-       :show-inheritance:
+.. automodule:: materials.ehe.comprobVEHE08
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-   materials.ehe.comprobVEHE08 module
-   ----------------------------------
+cuantias_minimas
+----------------
 
-   .. automodule:: materials.ehe.comprobVEHE08
-       :members:
-       :undoc-members:
-       :show-inheritance:
+.. automodule:: materials.ehe.cuantias_minimas
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-   materials.ehe.cortanteEHE module
-   --------------------------------
+fisuracionEHE module
+----------------------------------
 
-   .. automodule:: materials.ehe.cortanteEHE
-       :members:
-       :undoc-members:
-       :show-inheritance:
+.. automodule:: materials.ehe.fisuracionEHE
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-   materials.ehe.cuantias_minimas module
-   -------------------------------------
+tablasResult
+------------
 
-   .. automodule:: materials.ehe.cuantias_minimas
-       :members:
-       :undoc-members:
-       :show-inheritance:
+.. automodule:: materials.ehe.tablasResult
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-   materials.ehe.datos_calculo_seccion module
-   ------------------------------------------
+mensula_cortaEHE08
+------------------
 
-   .. automodule:: materials.ehe.datos_calculo_seccion
-       :members:
-       :undoc-members:
-       :show-inheritance:
+.. automodule:: materials.ehe.mensula_cortaEHE08
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-   materials.ehe.fisuracionEHE module
-   ----------------------------------
+rasanteAlaAma
+-------------
 
-   .. automodule:: materials.ehe.fisuracionEHE
-       :members:
-       :undoc-members:
-       :show-inheritance:
+.. automodule:: materials.ehe.rasanteAlaAma
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-   materials.ehe.mensula_cortaEHE08 module
-   ---------------------------------------
+relajacion_acero
+----------------
 
-   .. automodule:: materials.ehe.mensula_cortaEHE08
-       :members:
-       :undoc-members:
-       :show-inheritance:
-
-   materials.ehe.perdidas_pretensado_instantaneas module
-   -----------------------------------------------------
-
-   .. automodule:: materials.ehe.perdidas_pretensado_instantaneas
-       :members:
-       :undoc-members:
-       :show-inheritance:
-
-   materials.ehe.rasanteAlaAma module
-   ----------------------------------
-
-   .. automodule:: materials.ehe.rasanteAlaAma
-       :members:
-       :undoc-members:
-       :show-inheritance:
-
-   materials.ehe.relajacion_acero module
-   -------------------------------------
-
-   .. automodule:: materials.ehe.relajacion_acero
-       :members:
-       :undoc-members:
-       :show-inheritance:
-
-   materials.ehe.tablasResult module
-   ---------------------------------
-
-   .. automodule:: materials.ehe.tablasResult
-       :members:
-       :undoc-members:
-       :show-inheritance:
-
-   materials.ehe.torsionEHE module
-   -------------------------------
-
-   .. automodule:: materials.ehe.torsionEHE
-       :members:
-       :undoc-members:
-       :show-inheritance:
+.. automodule:: materials.ehe.relajacion_acero
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 
-   Module contents
-   ---------------
 
-   .. automodule:: materials.ehe
-       :members:
-       :undoc-members:
-       :show-inheritance:
+
+
+
