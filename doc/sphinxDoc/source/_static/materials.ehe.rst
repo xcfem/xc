@@ -51,6 +51,14 @@ datos_calculo_seccion
     :undoc-members:
     :show-inheritance:
 
+torsionEHE
+---------------------
+
+.. automodule:: materials.ehe.torsionEHE
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 comprobCargaConcentrada
 -----------------------
 
@@ -71,6 +79,14 @@ comprobVEHE
 -----------
 
 .. automodule:: materials.ehe.comprobVEHE
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cortanteEHE
+-----------
+
+.. automodule:: materials.ehe.cortanteEHE
     :members:
     :undoc-members:
     :show-inheritance:
@@ -127,6 +143,14 @@ relajacion_acero
 ----------------
 
 .. automodule:: materials.ehe.relajacion_acero
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+perdidas_pretensado_instantaneas
+--------------------------------
+
+.. automodule:: materials.ehe.perdidas_pretensado_instantaneas
     :members:
     :undoc-members:
     :show-inheritance:

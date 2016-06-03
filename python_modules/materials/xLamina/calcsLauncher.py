@@ -80,11 +80,11 @@ def xLaminaConstruyeModeloFicticio(preprocessor,datosScc1, datosScc2):
   execfile("/tmp/elementos_scc1.xci")
   execfile("/tmp/elementos_scc2.xci")
   for e in elementos:
-    HIPCP= "nil" #Hipótesis que produce el caso pésimo
-    NCP= 0.0 #Valor del axil en la hipótesis que produce el caso pésimo.
-    MyCP= 0.0 #Valor del momento en torno al eje y en la hipótesis que produce el caso pésimo.
-    MzCP= 0.0 #Valor del momento en torno al eje z en la hipótesis que produce el caso pésimo.
-    FCCP= 0.0 #Valor del factor de capacidad en la hipótesis que produce el caso pésimo.
+    HIPCP= "nil" #Worst case hypothesis
+    NCP= 0.0 #Valor del axil en la worst case hypothesis.
+    MyCP= 0.0 #Valor del momento en torno al eje y en la worst case hypothesis.
+    MzCP= 0.0 #Valor del momento en torno al eje z en la worst case hypothesis.
+    FCCP= 0.0 #Valor del factor de capacidad en la worst case hypothesis.
     # Definimos los diagramas de interacción
     hormigon= preprocessor.getMaterialLoader.getMaterial(codHormigon)
     tagHorm= hormigon.getProp("matTagD")
@@ -141,7 +141,7 @@ def xLaminaCalculaCombEstatNoLin(elements,nmbArchDefHipELU,controller):
   :param  nmbArchDefHipELU: Archivo en el que se definen las combinaciones a calcular.
   :param  controller: object that controls limit state in elements.
   '''
-  # Definimos el procedimiento de solución.
+  # Solution method definition.
   print "XXX Definir el procedimiento de solution (simple_newton_raphson_band_genr)"
   listaCombinaciones= getListaCombinaciones(nmbArchDefHipELU)
   for comb in listaCombinaciones:
@@ -151,7 +151,7 @@ def xLaminaCalculaCombEstatNoLin(elements,nmbArchDefHipELU,controller):
   os.sys("rm -f "+"/tmp/acciones.xci")
   os.sys("rm -f "+"/tmp/cargas.xci")
 
-# Construye el modelo para la comprobación a cortante
+# Builds the model for shear checking.
 def xLaminaConstruyeModeloFibras(nmbRegDatosScc1, nmbRegDatosScc2):
   nodos= preprocessor.getNodeLoader
 
@@ -160,25 +160,25 @@ def xLaminaConstruyeModeloFibras(nmbRegDatosScc1, nmbRegDatosScc2):
   elementos.defaultMaterial= deref(nmbRegDatosScc1).sectionName
   execfile("/tmp/elementos_scc1.xci")
   for e in elementos:
-    nmbRegDefSecc= "nil" #Nombre del registro que define la sección.
+    nmbRegDefSecc= "nil" #Name of the record that defines cross section.
     if(odd(e.tag)):
-      nmbRegDefSecc= nmbRegDatosScc1 # Sección 1
+      nmbRegDefSecc= nmbRegDatosScc1 # cross section 1
     else: 
-      nmbRegDefSecc= nmbRegDatosScc2 # Sección 2
-    HIPCP= "nil" #Hipótesis que produce el caso pésimo
-    NCP= 0.0 #Valor del axil en la hipótesis que produce el caso pésimo.
-    MyCP= 0.0 #Valor del momento en torno al eje y en la hipótesis que produce el caso pésimo.
-    MzCP= 0.0 #Valor del momento en torno al eje z en la hipótesis que produce el caso pésimo.
-    VyCP= 0.0 #Valor del cortante según y en la hipótesis que produce el caso pésimo.
-    VzCP= 0.0 #Valor del cortante según z en la hipótesis que produce el caso pésimo.
-    thetaCP= 0.0 #Ángulo de las bielas de hormigón en el caso pésimo.
-    VcuCP= 0.0 #Valor de la contribución del hormigón a la resistencia al esfuerzo cortante en el caso pésimo.
-    VsuCP= 0.0 #Valor de la contribución de las reinforcement a la resistencia al esfuerzo cortante en el caso pésimo.
-    Vu1CP= 0.0 #Valor del agotamiento por compresión oblicua del alma en el caso pésimo.
-    Vu2CP= 0.0 #Valor del agotamiento por tracción en el alma en el caso pésimo.
-    VuCP= 0.0 #Valor del cortante último en la hipótesis que produce el caso pésimo.
-    WkCP= 0.0 #Apertura de fisura en la hipótesis que produce el caso pésimo.
-    FCCP= 0.0 #Valor del factor de cumplimiento en la hipótesis que produce el caso pésimo. 
+      nmbRegDefSecc= nmbRegDatosScc2 # cross section 2
+    HIPCP= "nil" #worst case hypothesis
+    NCP= 0.0 #Valor del axil for the worst case hypothesis.
+    MyCP= 0.0 #Bending moment value en torno al eje y for the worst case hypothesis.
+    MzCP= 0.0 #Bending moment value en torno al eje z for the worst case hypothesis.
+    VyCP= 0.0 #Shear value según y for the worst case hypothesis.
+    VzCP= 0.0 #Shear value según z for the worst case hypothesis.
+    thetaCP= 0.0 #Concrete struts angle in the worst case.
+    VcuCP= 0.0 #Concrete contribution to shear resistance in the worst case.
+    VsuCP= 0.0 #Reinforcement contribution to shear resistance in the worst case.
+    Vu1CP= 0.0 #Ultimate shear due to oblique compression in the web in the worst case.
+    Vu2CP= 0.0 #Ultimate shear due to web traction in the worst case.
+    VuCP= 0.0 #Ultimate shear value for the worst case hypothesis.
+    WkCP= 0.0 #Crack opening for the worst case hypothesis.
+    FCCP= 0.0 #Capacity factor for the worst case hypothesis. 
   os.sys("rm -f "+"/tmp/elementos_scc1.xci")
   os.sys("rm -f "+"/tmp/elementos_scc2.xci")
 
@@ -211,7 +211,7 @@ def xLaminaPrintFatigueSIA262(preprocessor,outputFileName, mapSections):
 
   :param  preprocessor:    preprocessor name
   '''
-  # Imprime los resultados de la comprobación frente a fisuración
+  # Prints crack control checking results.
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput2= open("/tmp/texOutput2.tmp","w")
   xcOutput= open(outputFileName+".py","w")
@@ -337,10 +337,10 @@ def xLaminaPrintFatigueSIA262(preprocessor,outputFileName, mapSections):
 
 # def lanzaCalculoFIS(nmbArch, nmbRegDatosScc1, nmbRegDatosScc2, nmbArchDefHipELS):
 #   '''
-#    Lanza la comprobación de fisuración en una lámina
+#    Runs crack control for a shell
 #       cuyos esfuerzos se dan en el archivo de nombre nmbArch.lst
 #       con los materiales que se definen en el archivo nmbArchMateriales,
-#       las características de las secciones que se definen en los registros
+#       las caracteristicas de las secciones que se definen en los registros
 #       datosScc1 y datosScc2, las combinaciones definidas en el archivo
 #       nmbArchDefHipELS e imprime los resultados en archivos con
 #       el nombre nmbArchFis.*
