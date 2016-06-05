@@ -45,7 +45,7 @@ XC::ImposedMotionBase::ImposedMotionBase(int classTag,int tag, int node, int ndo
 XC::ImposedMotionBase::~ImposedMotionBase(void)
   {
     if(theNode)
-      theNode->desconecta(this);
+      theNode->disconnect(this);
   }
 
 void XC::ImposedMotionBase::setDomain(Domain *theDomain)
@@ -67,7 +67,7 @@ void XC::ImposedMotionBase::setDomain(Domain *theDomain)
             std::cerr << "ImposedMotionBase::setup - retained node " <<  getNodeTag() <<  " not in domain\n";
           }
         else
-          theNode->conecta(this);
+          theNode->connect(this);
       }
   }
 

@@ -193,9 +193,8 @@ XC::ZeroLength::~ZeroLength(void)
     theMaterial1d.clear();
   }
 
-//! @brief Asigna el tipo de elemento y dimensiones de las matrices
-//! a partir de la dimensión del elemento y del número de grados
-//! de libertad de los nodos a los que se conecta.
+//! @brief Sets the element type and matrix dimensions from
+//! element dimension and the number of DOF of the connected nodes.
 void XC::ZeroLength::setUpType(const size_t &numDOFsNodos)
   {
     if(dimension == 1 && numDOFsNodos == 1)

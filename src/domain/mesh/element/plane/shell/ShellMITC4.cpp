@@ -74,7 +74,6 @@
 
 #include "xc_utils/src/geom/d2/Poligono3d.h"
 #include "domain/load/plane/ShellUniformLoad.h"
-#include "domain/load/edge_loads/ElementEdge3dUniformLoad.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/loaders/LoadLoader.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"

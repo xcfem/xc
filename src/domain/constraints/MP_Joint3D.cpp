@@ -187,13 +187,13 @@ XC::MP_Joint3D::MP_Joint3D(Domain *theDomain, int tag, int nodeRetain, int nodeC
 XC::MP_Joint3D::~MP_Joint3D(void)
   {
     if(RetainedNode)
-      RetainedNode->desconecta(this);
+      RetainedNode->disconnect(this);
     if(ConstrainedNode)
-      ConstrainedNode->desconecta(this);
+      ConstrainedNode->disconnect(this);
     if(RotationNode)
-      RotationNode->desconecta(this);
+      RotationNode->disconnect(this);
     if(DisplacementNode)
-      DisplacementNode->desconecta(this);
+      DisplacementNode->disconnect(this);
   }
 
 int XC::MP_Joint3D::applyConstraint(double timeStamp)
@@ -351,13 +351,13 @@ void XC::MP_Joint3D::setDomain(Domain *theDomain)
     if(theDomain)
       {
         RetainedNode = theDomain->getNode(getNodeRetained());
-        if(RetainedNode)  RetainedNode->conecta(this);
+        if(RetainedNode)  RetainedNode->connect(this);
         ConstrainedNode = theDomain->getNode(getNodeConstrained());
-        if(ConstrainedNode) ConstrainedNode->conecta(this);
+        if(ConstrainedNode) ConstrainedNode->connect(this);
         RotationNode = theDomain->getNode(nodeRotation);
-        if(RotationNode) RotationNode->conecta(this);
+        if(RotationNode) RotationNode->connect(this);
         DisplacementNode = theDomain->getNode(nodeDisplacement);
-        if(DisplacementNode) DisplacementNode->conecta(this);
+        if(DisplacementNode) DisplacementNode->connect(this);
     
         if(ConstrainedNode == nullptr)
           {

@@ -28,28 +28,26 @@
 #define ElementEdge_h
 
 #include <cstdlib>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "Element.h"
 
 namespace XC {
 
-class Element;
-class ElementEdgeLoad;
-
 //! \ingroup Elem
 //
-//! @brief Borde (o arista) de un elemento.
- class ElementEdge: public EntCmd
+//! @brief Element edge.
+class ElementEdge: public EntCmd
   {
     Element *elem; //! Elemento al que pertenece el borde.
     int iedge; //! índice del borde.
-  protected:
-
   public:
+    typedef Element::NodesEdge NodesEdge; //!< Nodos de un borde del elemento.
+    typedef std::deque<Element *> Elements; //!< Elements that share this edge.
     ElementEdge(Element *eptr= NULL,const int &i=-1);
     const Element *getElementPtr(void) const;
-    const int &getEdgeIndex(void) const;
-
-    virtual int addLoad(ElementEdgeLoad *theLoad, double loadFactor);
+    const int &getEdgeIndex(void) const; 
+    ID getLocalIndexNodes(void) const;
+    NodesEdge getNodes(void) const;
+    Elements getElements(void) const;
   };
 } // end of XC namespace
 

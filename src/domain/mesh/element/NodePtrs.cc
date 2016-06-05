@@ -83,7 +83,7 @@ XC::NodePtrs::~NodePtrs(void)
     theNodes.clear();
   }
 
-void XC::NodePtrs::desconecta(void)
+void XC::NodePtrs::disconnect(void)
   {
     ContinuaReprComponent *owr= dynamic_cast<ContinuaReprComponent *>(Owner());
     assert(owr);
@@ -91,14 +91,14 @@ void XC::NodePtrs::desconecta(void)
       {
         Node *tmp= *i;
         if(tmp)
-          tmp->desconecta(owr);
+          tmp->disconnect(owr);
       }
   }
 
 //! @brief Pone a cero los punteros a nodo.
 void XC::NodePtrs::inic(void)
   {
-    desconecta();
+    disconnect();
     for(iterator i= begin();i!=end();i++)
       (*i)= nullptr;
   }
@@ -132,7 +132,7 @@ void XC::NodePtrs::setPtrs(Domain *theDomain, const ID &theNodeTags)
       {
         theNodes[i]= theDomain->getNode(theNodeTags(i));
         if(theNodes[i])
-          theNodes[i]->conecta(owr);
+          theNodes[i]->connect(owr);
         else
           {
             std::cerr << "WARNING - NodePtrs::setDomain - node with tag ";
@@ -194,17 +194,17 @@ void XC::NodePtrs::set_node(const size_t &i,Node *n)
       {
         if(theNodes[i]!=n)
           {
-            theNodes[i]->desconecta(owr);
+            theNodes[i]->disconnect(owr);
             theNodes[i]= n;
             if(n)
-              theNodes[i]->conecta(owr);
+              theNodes[i]->connect(owr);
           }
       }
     else
       {
         theNodes[i]= n;
         if(n)
-          theNodes[i]->conecta(owr);
+          theNodes[i]->connect(owr);
       }
   }
 
@@ -401,8 +401,7 @@ int XC::NodePtrs::getIndiceNodo(const Node *ptrNod) const
   }
 
 
-//! @brief Anula la longitud, área o volumen de los
-//! nodos conectados.
+//! @brief Resets tributary areas (or lengths or volumes) of connected nodes.
 void XC::NodePtrs::resetTributarias(void) const
   {
     const size_t sz= theNodes.size();

@@ -63,7 +63,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Materiales uniaxiales conectados en serie.
+//! @brief Serially connected uniaxial materials.
 class SeriesMaterial : public ConnectedMaterial
   {
   private:

@@ -44,8 +44,3 @@ class RowP0123(RowP012):
     super(RowP0123,self).populateXMLElement(xmlElement)
     pp3= self.p3.getXMLElement(xmlElement,3)
 
-  def getXMLElement(self,parent):
-    oo= ET.SubElement(parent,'row')
-    oo.set("id",self.id)
-    self.populateXMLElement(oo)
-    return oo

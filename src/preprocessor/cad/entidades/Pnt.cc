@@ -246,7 +246,7 @@ XC::Vector &XC::operator-(const Pnt &b,const Pnt &a)
     return retval;
   }
 
-//! @brief Busca una línea que conecta los puntos que se pasan como parámetro.
+//! @brief Search for a line that connects the points.
 const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB)
   {
     const Edge *retval= nullptr;
@@ -260,7 +260,7 @@ const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB)
     return retval;
   }
 
-//! @brief Busca una línea que conecta los puntos que se pasan como parámetro.
+//! @brief Search for a line that connects the points.
 const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     const Edge *retval= nullptr;
@@ -274,7 +274,7 @@ const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB, const
     return retval;
   }
 
-//! @brief Busca una línea que conecta los puntos que se pasan como parámetro.
+//! @brief Search for a line that connects the points.
 XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB)
   {
     Edge *retval= nullptr;
@@ -288,7 +288,7 @@ XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB)
     return retval;
   }
 
-//! @brief Busca una línea que conecta los puntos que se pasan como parámetro.
+//! @brief Search for a line that connects the points.
 XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     Edge *retval= nullptr;
@@ -316,7 +316,7 @@ XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB)
     return retval;
   }
 
-//! @brief Busca una línea que conecta los puntos que se pasan como parámetro.
+//! @brief Search for a line that connects the points.
 XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     Edge *retval= nullptr;
@@ -344,7 +344,7 @@ const XC::Edge *XC::busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB)
     return retval;
   }
 
-//! @brief Busca una línea que conecta los puntos que se pasan como parámetro.
+//! @brief Search for a line that connects the points.
 const XC::Edge *XC::busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     const Edge *retval= nullptr;

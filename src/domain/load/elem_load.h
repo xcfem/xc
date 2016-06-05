@@ -39,8 +39,6 @@
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/BidimStrainLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
-#include "domain/load/edge_loads/ElementEdge3dUniformLoad.h"
-#include "domain/load/edge_loads/ElementEdge2dUniformLoad.h"
 #include "domain/load/pattern/LoadPattern.h"
 
 namespace XC {

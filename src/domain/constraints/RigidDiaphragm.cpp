@@ -96,7 +96,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
         return;
       }
     else
-      nodeR->conecta(this);
+      nodeR->connect(this);
 
     const Vector &crdR = nodeR->getCrds();
     if((nodeR->getNumberDOF() != 6) || (crdR.Size() != 3))
@@ -134,7 +134,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
       // ensure node exists
       if(nodeC)
         {
-          nodeC->conecta(this);
+          nodeC->connect(this);
           // get node coordinates
           const Vector &crdC = nodeC->getCrds();
 
@@ -226,7 +226,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
 //! @brief Destructor.
 XC::RigidDiaphragm::~RigidDiaphragm(void)
   {
-    //XXX Colocar aquí las llamadas a desconectar.
+    //XXX Put here calls to disconnec.
   }
 
 

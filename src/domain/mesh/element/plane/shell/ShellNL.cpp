@@ -52,7 +52,6 @@
 #include "domain/mesh/element/plane/shell/R3vectors.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/load/plane/ShellUniformLoad.h"
-#include "domain/load/edge_loads/ElementEdge3dUniformLoad.h"
 
 //static data
 XC::Matrix  XC::ShellNL::stiff(54,54);
@@ -71,57 +70,6 @@ const XC::GaussModel &XC::ShellNL::getGaussModel(void) const
 //! @brief full constructor
 XC::ShellNL::ShellNL(int tag,const SectionForceDeformation *ptr_mat)
   :QuadBase9N<SectionFDPhysicalProperties>(tag, ELE_TAG_ShellNL, SectionFDPhysicalProperties(9,ptr_mat)), Ktt(0.0),theCoordTransf(), Ki(nullptr) {}
-
-//! @brief Define una carga sobre uno de los bordes del elemento y la agrega al caso
-//! de carga que esté activo.
-//! @param n1: Nodo extremo del borde a cargar.
-//! @param n2: Nodo extremo del borde a cargar.
-//! @param v: Vector de carga expresado en coordenadas globales.
-void XC::ShellNL::defEdgeLoadGlobal(const int &iEdge,const Vector &v)
-  {
-    const size_t sz= v.Size();
-    if(sz>2)
-      {
-        if(iEdge>=0)
-          {
-            ID iEdges(1);
-            iEdges[0]= iEdge;
-            const Vector vTrf= theCoordTransf.getVectorLocalCoordFromGlobal(v);
-            Preprocessor *preprocessor= GetPreprocessor();
-            assert(preprocessor);
-            MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
-            const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
-            ID eTags(1);
-            eTags[0]= getTag(); //Carga para éste elemento.
-            ElementEdge3dUniformLoad *tmp= new ElementEdge3dUniformLoad(loadTag,vTrf,eTags,iEdges);
-            LoadPattern *lp= casos.getCurrentLoadPatternPtr();
-            lp->addElementalLoad(tmp);
-          }
-        else
-          std::cerr << "El borde: " << iEdge
-                    << " no pertenece al elemento: "
-                    << getTag() << std::endl;
-      }
-    else
-      std::cerr << "ShellNL::defEdgeLoadGlobal; el vector: "
-                << v << " debería ser de dimensión 3." << std::endl;
-  }
-
-//! @brief Define una carga sobre uno de los bordes del elemento y la agrega al caso
-//! de carga que esté activo.
-//! @param iEdge: Índice del borde a cargar.
-//! @param v: Vector de carga expresado en coordenadas globales.
-void XC::ShellNL::defEdgeLoadGlobal(const Node *n1,const Node *n2,const Vector &v)
-  {
-    const int iEdge= getEdgeNodes(n1,n2);
-    if(iEdge>=0)
-      { defEdgeLoadGlobal(iEdge,v); }
-    else
-      std::cerr << "Los nodos: " << n1->getTag() << " y "
-                << n2->getTag()
-                << " no corresponden a extremos de un borde del elemento: "
-                << getTag() << std::endl;
-  }
 
 //! @brief Constructor virtual.
 XC::Element* XC::ShellNL::getCopy(void) const
@@ -382,14 +330,6 @@ int XC::ShellNL::addLoad(ElementalLoad *theLoad, double loadFactor)
         if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))
           {
             shellMecLoad->addReactionsInBasicSystem(area,loadFactor,p0); // Accumulate reactions in basic system
-          }
-        else if(ElementEdge3dUniformLoad *edgeLoad= dynamic_cast<ElementEdge3dUniformLoad *>(theLoad))
-          {
-            int edge= edgeLoad->getEdgeElement(this);
-            const ID iNodos= getLocalIndexNodesEdge(edge);
-            Vector pesos(2); pesos[0]= 0.5; pesos[1]= 0.5;
-            const double L= getLado(edge).Longitud();
-            edgeLoad->addReactionsInBasicSystem(iNodos,pesos,L,loadFactor,p0); // Accumulate reactions in basic system
           }
         else
           return QuadBase9N<SectionFDPhysicalProperties>::addLoad(theLoad,loadFactor);

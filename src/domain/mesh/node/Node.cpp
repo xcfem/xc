@@ -208,7 +208,7 @@ XC::Node::Node(const Node &otherNode, bool copyMass)
    R(otherNode.R), unbalLoad(otherNode.unbalLoad),
    unbalLoadWithInertia(otherNode.unbalLoadWithInertia), reaction(otherNode.reaction),
    alphaM(otherNode.alphaM), tributaria(otherNode.tributaria), theEigenvectors(otherNode.theEigenvectors),
-   conectados(otherNode.conectados), coacciones_freeze(otherNode.coacciones_freeze)
+   connected(otherNode.connected), coacciones_freeze(otherNode.coacciones_freeze)
   {
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     parameterID = 0;
@@ -223,21 +223,21 @@ XC::Node::Node(const Node &otherNode, bool copyMass)
     setup_matrices(theMatrices,numberDOF);
   }
 
-//! @brief Agrega una componente a la lista de conectados.
-void XC::Node::conecta(ContinuaReprComponent *el) const
+//! @brief Inserts a component (element, constraint,...) to the connected component list.
+void XC::Node::connect(ContinuaReprComponent *el) const
   { 
     if(el)
-      conectados.insert(el);
+      connected.insert(el);
     else
-      std::cerr << "Node::conecta; se intentó conectar un puntero nuelo." << std::endl;
+      std::cerr << "Node::connect; null argument." << std::endl;
   }
 
-//! @brief Elimina una componente de la lista de conectados.
-void XC::Node::desconecta(ContinuaReprComponent *el) const
+//! @brief Removes a component (element, constraint,...) from the connected component list.
+void XC::Node::disconnect(ContinuaReprComponent *el) const
   {
-    std::set<ContinuaReprComponent *>::const_iterator i= conectados.find(el);
-    if(i!=conectados.end())
-      conectados.erase(i);
+    std::set<ContinuaReprComponent *>::const_iterator i= connected.find(el);
+    if(i!=connected.end())
+      connected.erase(i);
   }
 
 XC::Node *XC::Node::getCopy(void) const
@@ -249,14 +249,14 @@ const bool XC::Node::isDead(void) const
 const bool XC::Node::isAlive(void) const
   {
     bool retval= false;
-    if(conectados.empty())
+    if(connected.empty())
       {
         std::cerr << "Node: " << getTag() << " is free." << std::endl;
         retval= true;
       }
     else
       {
-        for(std::set<ContinuaReprComponent *>::const_iterator i= conectados.begin();i!=conectados.end();i++)
+        for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
           {
             const ContinuaReprComponent *ptr= *i;
             if(ptr)
@@ -268,7 +268,7 @@ const bool XC::Node::isAlive(void) const
                   }
               }
             else
-	      std::cerr << "Node::isAlive; puntero nulo en lista de conectados." << std::endl;
+	      std::cerr << "Node::isAlive; null pointer in the connected list." << std::endl;
           }
       }
     return retval;
@@ -328,7 +328,7 @@ const bool XC::Node::isFrozen(void) const
   { return !coacciones_freeze.empty(); }
 
 const bool XC::Node::isFree(void) const
-  { return conectados.empty(); }
+  { return connected.empty(); }
 
 void XC::Node::kill(void)
   { std::cerr << "No se debe llamar a Node::kill" << std::endl; }
@@ -1546,11 +1546,11 @@ double XC::Node::getAccSensitivity(int dof, int gradNum)
   }
 // AddingSensitivity:END /////////////////////////////////////////
 
-//! @brief Devuelve un conjunto de apuntadores a elementos conectados.
-std::set<const XC::Element *> XC::Node::getElementosConectados(void) const
+//! @brief Return a list of pointers to the elements that are connected with this node.
+std::set<const XC::Element *> XC::Node::getConnectedElements(void) const
   {
     std::set<const Element *> retval;
-    for(std::set<ContinuaReprComponent *>::const_iterator i= conectados.begin();i!=conectados.end();i++)
+    for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
       {
         const Element *ptrElem= dynamic_cast<const Element *>(*i);
         if(ptrElem)
@@ -1559,11 +1559,11 @@ std::set<const XC::Element *> XC::Node::getElementosConectados(void) const
     return retval;
   }
 
-//! @brief Devuelve un conjunto de apuntadores a elementos conectados.
-std::set<XC::Element *> XC::Node::getElementosConectados(void)
+//! @brief Return a list of pointers to the elements that are connected with this node.
+std::set<XC::Element *> XC::Node::getConnectedElements(void)
   {
     std::set<Element *> retval;
-    for(std::set<ContinuaReprComponent *>::const_iterator i= conectados.begin();i!=conectados.end();i++)
+    for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
       {
         Element *ptrElem= dynamic_cast<Element *>(*i);
         if(ptrElem)
@@ -1580,7 +1580,7 @@ const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &e
     retval.Zero();
     if(isAlive())
       {
-        for(std::set<ContinuaReprComponent *>::const_iterator i= conectados.begin();i!=conectados.end();i++)
+        for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
           if((*i)->isAlive())
             {
               const Element *ptrElem= dynamic_cast<const Element *>(*i);

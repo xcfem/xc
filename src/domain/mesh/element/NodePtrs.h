@@ -59,7 +59,7 @@ class NodePtrs: public EntCmd
   private:
     vector_ptr_nodes theNodes; //!< conjunto de Nodos.
   protected:
-    void desconecta(void);
+    void disconnect(void);
     void setPtrs(Domain *theDomain, const ID &theNodeTags);
 
   public:

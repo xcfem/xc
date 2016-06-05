@@ -50,14 +50,14 @@ void XC::RigidBase::setDomain(Domain *theDomain)
             std::cerr << "XC::RigidBase::setup - retained node " <<  getNodeRetained() <<  " not in domain\n";
           }
         else
-          nodeR->conecta(this);
+          nodeR->connect(this);
         nodeC = theDomain->getNode(getNodeConstrained());
         if(!nodeC)
           {
             std::cerr << "XC::RigidBase::setup - constrained node " <<  getNodeConstrained() <<  " not in domain\n";
           }
         else
-          nodeC->conecta(this);
+          nodeC->connect(this);
       }
   }
 
@@ -70,7 +70,7 @@ XC::RigidBase::RigidBase(int mPtag,const int &masterNode, const int &slaveNode, 
 XC::RigidBase::~RigidBase(void)
   {
     if(nodeR)
-      nodeR->desconecta(this);
+      nodeR->disconnect(this);
     if(nodeC)
-      nodeC->desconecta(this);
+      nodeC->disconnect(this);
   }

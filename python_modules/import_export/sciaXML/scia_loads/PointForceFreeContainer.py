@@ -52,7 +52,6 @@ class PointForceFreeComponent(lcb.LoadComponentBase):
     retval.setId(loadCompId)
     name= pointForceFreePrefix+loadCompId
     retval.setNm(name)
-    nodeId= str(self.nodeId) # Node id
     retval.setP0(self.getLoadCaseReferenceItem()) #Reference to load case.
     retval.setP1(oI.ObjectItem(name)) #Name
     retval.setP2(oI.ObjectItem('{'+str(uuid.uuid4())+'}')) # Unique id
@@ -80,11 +79,11 @@ def getPointForceFreeComponents(pointForceFree):
   loadCaseName= pointForceFree.loadCaseName
   value= pointForceFree.value
   if(vDir[0]!=0.0):
-    retval.append(PointForceFreeComponent(nodeId, loadCaseId, loadCaseName, 'X',value*vDir[0]),position.x,position.y,position.z) #X component.
+    retval.append(PointForceFreeComponent(loadCaseId, loadCaseName, 'X',value*vDir[0]),position.x,position.y,position.z) #X component.
   if(vDir[1]!=0.0):
-    retval.append(PointForceFreeComponent(nodeId, loadCaseId, loadCaseName, 'Y',value*vDir[1]),position.x,position.y,position.z) #Y component.
+    retval.append(PointForceFreeComponent(loadCaseId, loadCaseName, 'Y',value*vDir[1]),position.x,position.y,position.z) #Y component.
   if(vDir[2]!=0.0):
-    retval.append(PointForceFreeComponent(nodeId, loadCaseId, loadCaseName, 'Z',value*vDir[2]),position.x,position.y,position.z) #Z component.
+    retval.append(PointForceFreeComponent(loadCaseId, loadCaseName, 'Z',value*vDir[2]),position.x,position.y,position.z) #Z component.
   return retval
   
 def getPointForceFreeObjects(nl):

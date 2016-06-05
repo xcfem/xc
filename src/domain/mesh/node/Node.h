@@ -128,7 +128,7 @@ class Node: public MeshComponent
 
     static std::deque<Matrix> theMatrices;
 
-    mutable std::set<ContinuaReprComponent *> conectados; //!< Componentes que hacen referencia a este nodo.
+    mutable std::set<ContinuaReprComponent *> connected; //!< Components (elements, contraints,...) that are connected with this node.
 
     std::set<int> coacciones_freeze;//!< Tags de las coacciones introducidas por el método freeze():
     const ID &get_id_coacciones(void) const;
@@ -161,10 +161,10 @@ class Node: public MeshComponent
     virtual void setDOF_GroupPtr(DOF_Group *theDOF_Grp);
     virtual DOF_Group *getDOF_GroupPtr(void);
 
-    void conecta(ContinuaReprComponent *el) const;
-    void desconecta(ContinuaReprComponent *el) const;
-    std::set<const Element *> getElementosConectados(void) const;
-    std::set<Element *> getElementosConectados(void);
+    void connect(ContinuaReprComponent *el) const;
+    void disconnect(ContinuaReprComponent *el) const;
+    std::set<const Element *> getConnectedElements(void) const;
+    std::set<Element *> getConnectedElements(void);
 
     const bool isDead(void) const;
     const bool isAlive(void) const;

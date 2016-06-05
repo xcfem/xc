@@ -175,16 +175,6 @@ void XC::Element::setDomain(Domain *theDomain)
   }
 
 
-//! @brief Define una carga sobre uno de los bordes del elemento y la agrega al caso
-//! de carga que esté activo.
-//! @param iEdge: Índice del borde a cargar.
-//! @param v: Vector de carga expresado en coordenadas globales.
-void XC::Element::defEdgeLoadGlobal(const int &iEdge,const Vector &)
-  {
-    std::cerr << "La rutina: defEdgeLoadGlobal no está definida en la clase: "
-              << nombre_clase() << std::endl;
-  }
-
 //! @brief Anula el vector de cargas aplicadas del elemento.
 void XC::Element::zeroLoad(void)
   { load.Zero(); }
@@ -791,8 +781,7 @@ TritrizPos3d XC::Element::getPuntos(const size_t &ni,const size_t &nj,const size
     return retval;
   }
 
-//! @brief Anula la longitud, área o volumen de los
-//! nodos conectados.
+//! @brief Resets tributary areas of connected nodes.
 void XC::Element::resetTributarias(void) const
   { getNodePtrs().resetTributarias(); }
 

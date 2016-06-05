@@ -108,8 +108,6 @@ class ShellNL : public QuadBase9N<SectionFDPhysicalProperties>
     const GaussModel &getGaussModel(void) const;
 
     //Métodos para definir cargas.
-    void defEdgeLoadGlobal(const int &iEdge,const Vector &);
-    void defEdgeLoadGlobal(const Node *,const Node *,const Vector &);
 
     // methods for applying loads
     void zeroLoad(void);

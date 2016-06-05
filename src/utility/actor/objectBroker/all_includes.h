@@ -304,8 +304,6 @@
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
 #include "domain/load/volumen/BrickSelfWeight.h"
-#include "domain/load/edge_loads/ElementEdge2dUniformLoad.h"
-#include "domain/load/edge_loads/ElementEdge3dUniformLoad.h"
 #include "domain/load/pattern/NodeLocker.h"
 #include "domain/load/pattern/NodeLockerIter.h"
 #include "domain/mesh/NodeLockers.h"

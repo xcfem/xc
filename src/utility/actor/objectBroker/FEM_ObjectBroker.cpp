@@ -362,23 +362,6 @@ XC::ElementalLoad *XC::FEM_ObjectBroker::getNewElementalLoad(int classTag)
     return nullptr;
   }
 
-XC::ElementEdgeLoad *XC::FEM_ObjectBroker::getNewElementEdgeLoad(int classTag)
-  {
-    switch(classTag)
-      {
-      case LOAD_TAG_ElementEdge2dUniformLoad:
-        return new ElementEdge2dUniformLoad();
-      case LOAD_TAG_ElementEdge3dUniformLoad:
-        return new ElementEdge3dUniformLoad();
-      default:
-        std::cerr << "FEM_ObjectBroker::getNewElementEdgeLoad - ";
-        std::cerr << " - no XC::ElementEdgeLoad type exists for class tag ";
-        std::cerr << classTag << std::endl;
-        return nullptr;
-      }
-    return nullptr;
-  }
-
 XC::CrdTransf2d *XC::FEM_ObjectBroker::getNewCrdTransf2d(int classTag)
   {
     switch(classTag)

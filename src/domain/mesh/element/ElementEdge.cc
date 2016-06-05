@@ -27,7 +27,6 @@
 
 #include "ElementEdge.h"
 #include "Element.h"
-#include "domain/load/ElementEdgeLoad.h"
 #include <iostream>
 
 
@@ -42,8 +41,16 @@ const XC::Element *XC::ElementEdge::getElementPtr(void) const
 const int &XC::ElementEdge::getEdgeIndex(void) const
   { return iedge; }
 
-int XC::ElementEdge::addLoad(ElementEdgeLoad *theLoad, double loadFactor)
+XC::ID XC::ElementEdge::getLocalIndexNodes(void) const
+  { return elem->getLocalIndexNodesEdge(iedge); }
+
+XC::ElementEdge::NodesEdge XC::ElementEdge::getNodes(void) const
+  { return elem->getNodesEdge(iedge); }
+
+XC::ElementEdge::Elements XC::ElementEdge::getElements(void) const
   {
-    elem->addLoad(theLoad,loadFactor);
-    return -1;
+    Elements retval;
+    std::cerr << "XC::ElementEdge::getElements not implemented yet."
+              << std::endl;
+    return retval;
   }

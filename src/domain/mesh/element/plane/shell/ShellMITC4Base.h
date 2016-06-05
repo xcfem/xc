@@ -122,8 +122,6 @@ class ShellMITC4Base : public QuadBase4N<SectionFDPhysicalProperties>
     const ShellUniformLoad *vector3dUniformLoadLocal(const Vector &);
     const ShellUniformLoad *vector3dUniformLoadGlobal(const Vector &);
     void strainLoad(const Matrix &);
-    void defEdgeLoadGlobal(const int &iEdge,const Vector &);
-    void defEdgeLoadGlobal(const Node *,const Node *,const Vector &);
 
     // methods for applying loads
     void zeroLoad(void);

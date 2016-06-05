@@ -156,7 +156,6 @@ class FEM_ObjectBroker
     virtual SP_Constraint *getNewSP(int classTag);
     virtual NodalLoad     *getNewNodalLoad(int classTag);
     virtual ElementalLoad *getNewElementalLoad(int classTag);
-    virtual ElementEdgeLoad *getNewElementEdgeLoad(int classTag);
 
     virtual CrdTransf2d *getNewCrdTransf2d(int classTag);
     virtual CrdTransf3d *getNewCrdTransf3d(int classTag);

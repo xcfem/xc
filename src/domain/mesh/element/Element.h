@@ -166,9 +166,6 @@ class Element: public MeshComponent
     virtual const Matrix &getDamp(void) const;
     virtual const Matrix &getMass(void) const;
 
-    //Métodos para definir cargas.
-    virtual void defEdgeLoadGlobal(const int &iEdge,const Vector &);
-
     // methods for applying loads
     virtual void zeroLoad(void);	
     virtual int addLoad(ElementalLoad *theLoad, double loadFactor)=0;

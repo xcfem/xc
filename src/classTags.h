@@ -176,8 +176,6 @@
 #define LOAD_TAG_ShellUniformLoad         40 //Añadido LCPT.
 #define LOAD_TAG_BidimStrainLoad          50 //Añadido LCPT.
 #define LOAD_TAG_ShellStrainLoad          60 //Añadido LCPT.
-#define LOAD_TAG_ElementEdge2dUniformLoad 100 //Añadido LCPT.
-#define LOAD_TAG_ElementEdge3dUniformLoad 101 //Añadido LCPT.
 
 
 #define MAT_TAG_IsotropicLinElastic         1001

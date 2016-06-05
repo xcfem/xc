@@ -90,7 +90,7 @@ XC::ElementBase<NNODOS> &XC::ElementBase<NNODOS>::operator=(const ElementBase &o
     return *this;
   }
 
-//! @brief Devuelve el número de nodos a los que se conecta.
+//! @brief Return the number of external nodes.
 template <int NNODOS>
 int XC::ElementBase<NNODOS>::getNumExternalNodes(void) const
   { return theNodes.size(); }

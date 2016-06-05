@@ -68,7 +68,6 @@
 #include "xc_utils/src/geom/d2/Poligono3d.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
-#include "domain/load/edge_loads/ElementEdge3dUniformLoad.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/loaders/LoadLoader.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
@@ -139,32 +138,6 @@ XC::ShellMITC4Base &XC::ShellMITC4Base::operator=(const ShellMITC4Base &otro)
 //! @brief Destructor.
 XC::ShellMITC4Base::~ShellMITC4Base(void)
   { libera(); }
-
-//! @brief Define una carga sobre uno de los bordes del elemento y la agrega al caso
-//! de carga que esté activo.
-//! @param n1: Nodo extremo del borde a cargar.
-//! @param n2: Nodo extremo del borde a cargar.
-//! @param v: Vector de carga expresado en coordenadas globales.
-void XC::ShellMITC4Base::defEdgeLoadGlobal(const int &iEdge,const Vector &v)
-  {
-    std::cerr << "Deprecated. Implement load elements." << std::endl;
-  }
-
-//! @brief Define una carga sobre uno de los bordes del elemento y la agrega al caso
-//! de carga que esté activo.
-//! @param iEdge: Índice del borde a cargar.
-//! @param v: Vector de carga expresado en coordenadas globales.
-void XC::ShellMITC4Base::defEdgeLoadGlobal(const Node *n1,const Node *n2,const Vector &v)
-  {
-    const int iEdge= getEdgeNodes(n1,n2);
-    if(iEdge>=0)
-      { defEdgeLoadGlobal(iEdge,v); }
-    else
-      std::cerr << "Los nodos: " << n1->getTag() << " y "
-                << n2->getTag()
-                << " no corresponden a extremos de un borde del elemento: "
-                << getTag() << std::endl;
-  }
 
 //! @brief Defines a load over the element from a vector in local coordinates.
 const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadLocal(const Vector &v)
@@ -692,14 +665,6 @@ int XC::ShellMITC4Base::addLoad(ElementalLoad *theLoad, double loadFactor)
         if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))
           {
             shellMecLoad->addReactionsInBasicSystem(area,loadFactor,p0); // Accumulate reactions in basic system
-          }
-        else if(ElementEdge3dUniformLoad *edgeLoad= dynamic_cast<ElementEdge3dUniformLoad *>(theLoad))
-          {
-            int edge= edgeLoad->getEdgeElement(this);
-            const ID iNodos= getLocalIndexNodesEdge(edge);
-            Vector pesos(2); pesos[0]= 0.5; pesos[1]= 0.5;
-            const double L= getLado(edge).Longitud();
-            edgeLoad->addReactionsInBasicSystem(iNodos,pesos,L,loadFactor,p0); // Accumulate reactions in basic system
           }
         else
           return QuadBase4N<SectionFDPhysicalProperties>::addLoad(theLoad,loadFactor);

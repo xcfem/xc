@@ -42,7 +42,7 @@ XC::NodePtrsWithIDs::NodePtrsWithIDs(Element *owr,size_t numNodos)
       }
   }
 
-//! @brief Devuelve el número de nodos a los que se conecta.
+//! @brief Return the number of external nodes.
 int XC::NodePtrsWithIDs::getNumExternalNodes(void) const
   { return connectedExternalNodes.Size(); }
 
@@ -54,7 +54,7 @@ const XC::NodePtrs &XC::NodePtrsWithIDs::getNodePtrs(void) const
 XC::NodePtrs &XC::NodePtrsWithIDs::getNodePtrs(void)
   { return *this; }
 
-//! @brief Devuelve los identificadores de los nodos a los que se conecta.
+//! @brief Reuturns external nodes identifiers.
 const XC::ID &XC::NodePtrsWithIDs::getExternalNodes(void) const
   { return connectedExternalNodes; }
 

@@ -30,11 +30,11 @@
 #include "domain/mesh/element/ElementEdges.h"
 #include "domain/mesh/element/Element.h"
 
-//! @brief Devuelve los nodos conectados simultáneamente a ambos nodos.
+//! @brief Returns the elements that are connected to both nodes.
 std::set<XC::Element *> XC::getElementosEntreNodos(Node &n1, Node &n2)
   {
-    const std::set<Element *> set1= n1.getElementosConectados();
-    const std::set<Element *> set2= n2.getElementosConectados();
+    const std::set<Element *> set1= n1.getConnectedElements();
+    const std::set<Element *> set2= n2.getConnectedElements();
     std::set<Element *> retval;
     //std::set<const Element *>::const_iterator iter= set_intersection(set1.begin(),set1.end(),set2.begin(),set2.end(),retval.begin());
     for(std::set<Element *>::const_iterator i= set1.begin();i!=set1.end();i++)
@@ -64,13 +64,13 @@ XC::ElementEdges XC::getElementEdgesEntreNodos(Node *n1, Node *n2)
     return retval;
   }
 
-//! @brief Devuelve los elementos conectados a alguno de los nodos del conjunto.
-std::set<XC::Element *> XC::getElementosConectados(const NodePtrSet &nodos)
+//! @brief Returns the elements connected to any of the set nodes.
+std::set<XC::Element *> XC::getConnectedElements(const NodePtrSet &nodos)
   {
     std::set<Element *> retval;
     for(NodePtrSet::const_iterator i= nodos.begin();i!=nodos.end();i++)
       {
-        std::set<Element *> tmp= (*i)->getElementosConectados();
+        std::set<Element *> tmp= (*i)->getConnectedElements();
         retval.insert(tmp.begin(),tmp.end());
       }
     return retval;
@@ -80,7 +80,7 @@ std::set<XC::Element *> XC::getElementosConectados(const NodePtrSet &nodos)
 XC::ElementEdges XC::getElementEdgesEntreNodos(const NodePtrSet &nodos)
   {
     ElementEdges retval;
-    std::set<Element *> elems= getElementosConectados(nodos);
+    std::set<Element *> elems= getConnectedElements(nodos);
     for(std::set<Element *>::const_iterator i= elems.begin();i!=elems.end();i++)
       {
         Element *elem_ptr= *i;

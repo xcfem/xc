@@ -38,10 +38,9 @@ class Domain;
 class ID;
  
 
-//! @ingroup ElemLoads
+//! @ingroup Elem
 //
-//! @brief Conjunto de bordes (o aristas) de elemento que
-//! recibirán la carga.
+//! @brief Element edge container.
 class ElementEdges: public EntCmd
   {
   public:

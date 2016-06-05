@@ -69,7 +69,7 @@
 namespace XC{
 //! @ingroup MatUnx
 //
-//! @brief Materiales uniaxiales conectados en paralelo.
+//! @brief Parallel connected materials.
 class ParallelMaterial: public ConnectedMaterial
   {
   private:

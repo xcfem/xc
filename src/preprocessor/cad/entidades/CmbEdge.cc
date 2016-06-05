@@ -534,13 +534,13 @@ void XC::CmbEdge::inserta(Edge *l)
             else if(l->P2()== P1()) //directo
               lineas.push_front(Lado(l,true));
             else
-              std::cerr << "CmbEdge::inserta; la linea: '" << l->GetNombre()
-			<< "' cuyos extremos son: '" << l->P1()->GetNombre() << "' y '"
+              std::cerr << "CmbEdge::inserta; line: '" << l->GetNombre()
+			<< "' which ends are: '" << l->P1()->GetNombre() << "' y '"
                         << l->P2()->GetNombre() 
-                        << "' no puede conectarse a la combinación: " << Nombre() 
-			<< "' cuyos extremos son: '" << P1()->GetNombre() << "' y '"
+                        << "' can't connect to the combination: " << Nombre() 
+			<< "' which ends are: '" << P1()->GetNombre() << "' y '"
                         << P2()->GetNombre() 
-                        << " porque no comparten ningún extremo." << std::endl;
+                        << " because they don't have shared ends." << std::endl;
           }
         actualiza_topologia();
       }

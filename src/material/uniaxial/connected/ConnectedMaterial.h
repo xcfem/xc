@@ -35,7 +35,7 @@
 namespace XC{
 //! @ingroup MatUnx
 //
-//! @brief Materiales uniaxiales conectados (en serie o en paralelo).
+//! @brief Connected uniaxial materials (parallel or serial).
 class ConnectedMaterial : public UniaxialMaterial
   {
   protected:

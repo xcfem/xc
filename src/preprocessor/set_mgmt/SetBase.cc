@@ -106,8 +106,8 @@ bool XC::SetBase::In(const Body *) const
 bool XC::SetBase::In(const UniformGrid *) const
   { return false; }
 
-//! @brief Anula las magnitudes tributarias de los nodos conectados
-//! a los elementos del conjunto.
+//! @brief Reset tributary areas (or lengths, or volumes) for the nodes that
+//! are connected to the set elements.
 void XC::SetBase::resetTributarias(void) const
   {
     const std::set<int> tmp= getElementTags();

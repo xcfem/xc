@@ -306,8 +306,8 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
     const Node *ptrNod= nullptr;
     const SemiEspacio3d se(plano);
     std::set<const Node *> nodos_plano;
-    std::set<const Element *> conectados_nodo;
-    std::set<const Element *> elem_conectados;
+    std::set<const Element *> connected_to_node;
+    std::set<const Element *> connected_elements;
     for(DqPtrsNode::const_iterator i= nodos.begin();i!=nodos.end();i++)
       {
         ptrNod= *i;
@@ -316,17 +316,17 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
             {
               if(plano.dist2(ptrNod->getPosInicial3d())<tol2)
                 {
-                  conectados_nodo= ptrNod->getElementosConectados();
-                  if(!conectados_nodo.empty())
+                  connected_to_node= ptrNod->getConnectedElements();
+                  if(!connected_to_node.empty())
                     {
                       nodos_plano.insert(ptrNod); //Nodo sobre el plano.
-                      for(std::set<const Element *>::const_iterator j= conectados_nodo.begin();
-                          j!=conectados_nodo.end();j++)
+                      for(std::set<const Element *>::const_iterator j= connected_to_node.begin();
+                          j!=connected_to_node.end();j++)
                         {
                           if((*j)->getNodePtrs().In(se)) //Elemento tras el plano.
-                            elem_conectados.insert(*j);
+                            connected_elements.insert(*j);
                           else if((*j)->getNodePtrs().Corta(plano)) //Elemento sobre el plano.
-                            elem_conectados.insert(*j);
+                            connected_elements.insert(*j);
                         }
                     }
 	        }
@@ -334,7 +334,7 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
       }
     SVD3d retval(centro);
     for(std::set<const Node *>::const_iterator i= nodos_plano.begin();i!=nodos_plano.end();i++)
-      retval+= (*i)->getResistingSVD3d(elem_conectados,inc_inertia);
+      retval+= (*i)->getResistingSVD3d(connected_elements,inc_inertia);
     return retval;    
   }
 

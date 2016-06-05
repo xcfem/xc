@@ -53,7 +53,7 @@ XC::Constraint::~Constraint(void)
     if(tmp)
       {
         Node *n= tmp->getNode(constrNodeTag);
-        if(n) n->desconecta(this);
+        if(n) n->disconnect(this);
       }
   }
 
@@ -66,13 +66,13 @@ void XC::Constraint::setDomain(Domain *model)
         if(tmp)
           {
             Node *n= tmp->getNode(constrNodeTag);
-            if(n) n->desconecta(this);
+            if(n) n->disconnect(this);
           }
         DomainComponent::setDomain(model);
         if(model)
           {
             Node *n= model->getNode(constrNodeTag);
-            if(n) n->conecta(this);
+            if(n) n->connect(this);
           }
       }
   }

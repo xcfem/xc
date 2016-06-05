@@ -214,9 +214,9 @@ XC::MP_Joint2D::MP_Joint2D(Domain *domain, int tag, int nodeRetain, int nodeCons
 XC::MP_Joint2D::~MP_Joint2D(void)
   {
     if(RetainedNode)
-      RetainedNode->desconecta(this);
+      RetainedNode->disconnect(this);
     if(ConstrainedNode)
-      ConstrainedNode->desconecta(this);
+      ConstrainedNode->disconnect(this);
   }
 
 
@@ -368,10 +368,10 @@ void XC::MP_Joint2D::setDomain(Domain *domain)
     MP_Constraint::setDomain(domain);
     RetainedNode= getDomain()->getNode(getNodeRetained());
     if(RetainedNode)
-      RetainedNode->conecta(this);
+      RetainedNode->connect(this);
     ConstrainedNode= getDomain()->getNode(getNodeConstrained());
     if(ConstrainedNode)
-      ConstrainedNode->conecta(this);
+      ConstrainedNode->connect(this);
   }
 
 
