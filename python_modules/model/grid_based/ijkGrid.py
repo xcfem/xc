@@ -2,11 +2,11 @@
 
 '''ijkGrid.py: model generation based on a grid of 3D positions.'''
 
-__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, AOO and LCPT"
+__author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, A_OO and LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com" 
+__email__= "ana.Ortega.Ort@gmail.com l.pereztato@gmail.com" 
 
 import xc_base
 import geom
@@ -16,48 +16,46 @@ def getSupName(pt1,pt2,pt3,pt4):
   return 's'+'%04.0f' % pt1 +'%04.0f' % pt2 +'%04.0f' % pt3 +'%04.0f' % pt4
 
 class IJKRange(object):
-  '''Defines a range of indexes i,j,k in the grid to be used
-  select the region bounded by the coordinates associated with
-  those indexes.
-  Attributes:
-    ijkMin: list with minimum value of indexes [minIindex,minJindex,minKindex]
-    ijkMin: list with maximum value of indexes [maxIindex,maxJindex,maxKindex]
+  '''Defines a range of indexes i,j,k in the grid to be used select the region bounded by the coordinates associated with those indexes.
+  
+  :ivar ijkMin: list with minimum value of indexes [minIindex,minJindex,minKindex]
+  :ivar ijkMax: list with maximum value of indexes [maxIindex,maxJindex,maxKindex]
   '''
   def __init__(self,ijkMin,ijkMax):
     self.ijkMin= ijkMin
     self.ijkMax= ijkMax
   def getIMin(self):
-    '''returns the value of the index I minimum in the range '''
+    ''':returns: the value of the index I minimum in the range '''
     return self.ijkMin[0]
   def getIMax(self):
-    '''returns the value of the index I maximum in the range '''
+    ''':returns: the value of the index I maximum in the range '''
     return self.ijkMax[0]
   def getJMin(self):
-    '''returns the value of the index J minimum in the range '''
+    ''':returns: the value of the index J minimum in the range '''
     return self.ijkMin[1]
   def getJMax(self):
-    '''returns the value of the index J maximum in the range '''
+    ''':returns: the value of the index J maximum in the range '''
     return self.ijkMax[1]
   def getKMin(self):
-    '''returns the value of the index K minimum in the range '''
+    ''':returns: the value of the index K minimum in the range '''
     return self.ijkMin[2]
   def getKMax(self):
-    '''returns the value of the index K maximum in the range '''
+    ''':returns: the value of the index K maximum in the range '''
     return self.ijkMax[2]
   def getRange(self,index):
-    '''returns a list with the range of indexes between minIindex and maxIindex '''
+    ''':returns: a list with the range of indexes between minIindex and maxIindex '''
     mn= self.ijkMin[index]
     mx= self.ijkMax[index]+1 #Last index included
     return range(mn,mx)
   def getIRange(self):
-    '''returns a list with the range of indexes between minIindex and maxIindex '''
+    ''':returns: a list with the range of indexes between minIindex and maxIindex '''
     return self.getRange(0)
   def getJRange(self):
-    '''returns a list with the range of index between minJindex and maxJindex '''
+    ''':returns: a list with the range of index between minJindex and maxJindex '''
     return self.getRange(1)
 
   def getKRange(self):
-    '''returns a list with the range of indexes between minKindex and maxKindex '''
+    ''':returns: a list with the range of indexes between minKindex and maxKindex '''
     return self.getRange(2)
 
   def __str__(self):
@@ -80,10 +78,10 @@ def getLin2Pts(lstLinBusq,tPto1,tPto2):
 
 class moveRange(object):
   '''Applies a displacement to a range of grid points
-  Attributes:
-    range: range of indexes in the grid 
+  
+  :ivar range: range of indexes in the grid 
            e.g.: grid.IJKRange([minI,minJ,minK],[maxI,maxJ,maxK])
-    vDisp: list of displacements in global X, Y, Z directions
+  :ivar vDisp: list of displacements in global X, Y, Z directions
            e.g. [dispX,dispY,dispZ]
   '''
   def __init__(self,range,vDisp):
@@ -324,9 +322,10 @@ class ijkGrid(object):
     return retval
 
   def getLstLinRange(self,ijkRange):
-    'devuelve una lista con las líneas contenidas en el segmento que va' 
-    'de ijkRange.ijkMin=[posXmin,posYmin,posZmin]'
-    'a ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
+    '''devuelve una lista con las líneas contenidas en el segmento que va 
+    de ijkRange.ijkMin=[posXmin,posYmin,posZmin]
+    a ijkRange.ijkMax=[posXmax,posYmax,posZmax]
+    '''
     setLinBusq= self.prep.getSets["total"].getLines
     lstLinBusq= setLinBusq
     #lstLinBusq= setLin2lstLin(setLinBusq)
@@ -368,9 +367,9 @@ class ijkGrid(object):
     return retval
 
   def getSetPtosRange(self,ijkRange,nombre):
-    'devuelve un set de puntos contenidos en un rectángulo comprendido entre las coordenadas'
-    'que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
-    'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
+    '''devuelve un set de puntos contenidos en un rectángulo comprendido entre las coordenadas
+    que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y
+    ijkRange.ijkMax=[posXmax,posYmax,posZmax]'''
     retval= self.prep.getSets.defSet(nombre)
     i= ijkRange.ijkMin[0]
     j= ijkRange.ijkMin[1]
@@ -429,8 +428,8 @@ class ijkGrid(object):
         
 
 def setEntLstSurf(preprocessor,lstSurf,nmbrSet):
-  'devuelve el set de las entidades asociadas con las superficies contenidas'
-  'en la lista de superficies lstSurf'
+  ''':returns: the set of entities associated with the surfaces in the list `lstSurf`
+  '''
   retval= preprocessor.getSets.defSet(nmbrSet)
   for s in lstSurf:
     retval.getSurfaces.append(s)
@@ -442,8 +441,8 @@ def setEntLstSurf(preprocessor,lstSurf,nmbrSet):
 #Funciones geométricas simples
 
 def lstNodesPLine(setBusq,lstPtsPLine):
-    #Devuelve los nodos del conjunto "setBusq" que pertenecen a la línea
-    #quebrada definida por los puntos de la lista ordenada "lstPts"
+    ''':returns: the subset of nodes from the set `setBusq` that belong to the line defined by the successive points in list `lstPts`
+    '''
     nodAux= setBusq.getNodes
     retval= list() 
     for i in range(0,len(lstPtsPLine)-1):
@@ -457,7 +456,7 @@ def lstNodesPLine(setBusq,lstPtsPLine):
     return retval
 
 def setLin2lstLin(setLin):
-    #devuelve una lista con las líneas del setLin
+    ''':returns: a list with the lines included in the set `setLin` '''
     retval= list()
     linAux= setLin.getLines
     for l in linAux:
@@ -465,7 +464,7 @@ def setLin2lstLin(setLin):
     return retval
     
 def setPnt2lstPnt(setPnt):
-    #devuelve una lista con los puntos del setPto
+    ''':returns: a list with the points included in set `setPto` '''
     retval= list()
     pntAux= setPnt.getPoints
     for p in pntAux:
@@ -473,7 +472,7 @@ def setPnt2lstPnt(setPnt):
     return retval
  
 def setSurf2lstSurf(setSurf):
-    #devuelve una lista con las superficies del setSurf
+    ''':returns: a list with the surfaces included in the set `setSurf`'''
     retval= list()
     surfAux= setSurf.getSurfaces
     for s in surfAux:
@@ -481,7 +480,7 @@ def setSurf2lstSurf(setSurf):
     return retval
 
 def setNod2lstNod(setNod):
-    #devuelve una lista con los nodos de setNod
+    ''':returns: a list with the nodes included in the set `setNod` '''
     retval= list()
     nodAux= setNod.getNodes
     for n in nodAux:
@@ -489,7 +488,7 @@ def setNod2lstNod(setNod):
     return retval
 
 def setElem2lstElem(setElem):
-    #devuelve una lista con los elementos en setElem
+    ''':returns: a list with the elements included in the set `setElem` '''
     retval= list()
     elemAux= setElem.getElements
     for n in elemAux:
@@ -497,8 +496,7 @@ def setElem2lstElem(setElem):
     return retval
    
 def lstUnionSetsSurf(setSurf1,setSurf2):
-    #devuelve una lista de tags de superficies unión de los conjuntos
-    #setSurf1 y setSurf2
+    ''':returns: a list with the tags of the surfaces inlcuded in the union of sets `setSurf1` and `setSurf2` '''
     retval= list()
     for s in setSurf1.getSufaces:
         retval.append(s.tag)

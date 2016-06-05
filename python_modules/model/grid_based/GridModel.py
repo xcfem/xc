@@ -2,8 +2,8 @@
 
 '''gridModelData.py: model generation based on a grid of 3D positions. Data structures.'''
 
-__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, AOO and LCPT"
+__author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, A_OO and LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
@@ -34,11 +34,11 @@ class NamedObjectsMap(dict):
 
 class MaterialData(object):
   '''Base class to construct some material definition classes
-  Attributes:
-    name:         name identifying the material or section
-    E:            Young’s modulus of the material
-    nu:           Poisson’s ratio
-    rho:          mass density
+  
+  :ivar name:         name identifying the material or section
+  :ivar E:            Young’s modulus of the material
+  :ivar nu:           Poisson’s ratio
+  :ivar rho:          mass density
   '''
   def __init__(self,name,E,nu,rho):
     self.name= name
@@ -48,44 +48,43 @@ class MaterialData(object):
 
 class DeckMaterialData(MaterialData):
   '''Isotropic elastic section-material appropiate for plate and shell analysis
-  Attributes:
-    name:         name identifying the section
-    E:            Young’s modulus of the material
-    nu:           Poisson’s ratio
-    rho:          mass density
-    thickness:    overall depth of the section
+  
+  :ivar name:         name identifying the section
+  :ivar E:            Young’s modulus of the material
+  :ivar nu:           Poisson’s ratio
+  :ivar rho:          mass density
+  :ivar thickness:    overall depth of the section
   '''
   def __init__(self,name,E,nu,rho,thickness):
     super(DeckMaterialData,self).__init__(name,E,nu,rho)
     self.thickness= thickness
   def getAreaDensity(self):
-    '''returns the mass per unit area'''
+    ''':returns: the mass per unit area'''
     return self.rho*self.thickness
   def setup(self,preprocessor):
-    '''returns the elastic isotropic section appropiate for plate and shell analysis
+    ''':returns: the elastic isotropic section appropiate for plate and shell analysis
     '''
     typical_materials.defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.getAreaDensity(),self.thickness)
 
 class BeamMaterialData(MaterialData):
-  '''Constructs an elastic section appropiate for 3D beam analysis, 
-  including shear deformations.
-  Attributes:
-    name:         name identifying the section
-    E:            Young’s modulus of the material
-    nu:           Poisson’s ratio
-    rho:          mass density
-    b:            cross-section width (parallel to local z axis)
-    h:            cross-section height (parallel to local y axis)
+  '''Constructs an elastic section appropiate for 3D beam analysis, including shear deformations.
+  
+  :ivar name:         name identifying the section
+  :ivar E:            Young’s modulus of the material
+  :ivar nu:           Poisson’s ratio
+  :ivar rho:          mass density
+  :ivar b:            cross-section width (parallel to local z axis)
+  :ivar h:            cross-section height (parallel to local y axis)
   '''
   def __init__(self,name,E,nu,rho,b,h):
     super(BeamMaterialData,self).__init__(name,E,nu,rho)
     self.b= b
     self.h= h
   def getLongitudinalDensity(self):
-    '''returns the mass per unit length'''
+    ''':returns: the mass per unit length'''
     return self.rho*self.b*self.h
   def setup(self,preprocessor):
-    '''returns the elastic section appropiate for 3D beam analysis
+    ''':returns: the elastic section appropiate for 3D beam analysis
     '''
     rs= parametrosSeccionRectangular.RectangularSection('',self.b,self.h,self.E,self.nu)
     typical_materials.defElasticShearSection3d(preprocessor,self.name,rs.A(),rs.E,rs.G(),rs.Iz(),rs.Iy(),rs.J(),rs.alphaZ())
@@ -142,7 +141,7 @@ class IJKRangeList(object):
     return i
 
   def getSet(self,dicGeomEnt):
-    '''Returns an XC set with all the elements in the range list.'''
+    ''':Returns: an XC set with all the elements in the range list.'''
     setName= self.name + '_xcSet'
     xcSets= self.getPreprocessor().getSets
     retval= xcSets.defSet(setName)
@@ -284,11 +283,11 @@ class MaterialLinesMap(NamedObjectsMap):
       self[key].generateMesh(seedElemLoader)
 
 class ConstrainedRanges(IJKRangeList):
-  '''Region of constrained nodes
-     [uX, uY, uZ,rotX, rotY, rotZ]
-     uX, uY, uZ: translations in the X, Y and Z directions; 
-     rotX, rotY, rotZ: rotations about the X, Y and Z axis
-     -free- means no constraint
+  '''Region of constrained nodes [uX, uY, uZ,rotX, rotY, rotZ], where
+
+       - uX, uY, uZ: translations in the X, Y and Z directions; 
+       - rotX, rotY, rotZ: rotations about the X, Y and Z axis
+       - free: means no constraint
   '''
   def __init__(self,name, grid, constraints):
     super(ConstrainedRanges,self).__init__(name,grid,list())
@@ -316,15 +315,15 @@ class ConstrainedRangesMap(NamedObjectsMap):
 
 class ElasticFoundationRanges(IJKRangeList):
   '''Region resting on springs (Winkler elastic foundation)
-  Attributes:
-    name:     name to identify the region
-    wModulus: Winkler modulus of the foundation (springs in Z direction)
-    cRoz:     fraction of the Winkler modulus to apply for friction in
-              the contact plane (springs in X, Y directions)
+  
+  :ivar name:     name to identify the region
+  :ivar wModulus: Winkler modulus of the foundation (springs in Z direction)
+  :ivar cRoz:     fraction of the Winkler modulus to apply for friction in the contact plane (springs in X, Y directions)
   '''
   def __init__(self,name, grid, wModulus, cRoz):
-    ''' wModulus: Winkler modulus.
-        cRoz: fraction of the Winkler modulus to apply in the contact plane.'''
+    ''' 
+    :ivar wModulus: Winkler modulus.
+    :ivar cRoz: fraction of the Winkler modulus to apply in the contact plane.'''
     super(ElasticFoundationRanges,self).__init__(name,grid,list())
     self.elasticFoundation= ef.ElasticFoundation(wModulus,cRoz)
   def generateSprings(self,dicGeomEnt):
@@ -334,16 +333,15 @@ class ElasticFoundationRanges(IJKRangeList):
     self.elasticFoundation.generateSprings(s)
 
   def getCDG(self):
-    '''Returns the geometric baricenter of the springs.'''
+    ''':Returns: the geometric baricenter of the springs.'''
     return self.elasticFoundation.getCentroid()
 
   def calcPressures(self):
-    ''' Foundation pressures over the soil. Calculates pressures
-       and forces in the free nodes of the springs
-       (those that belongs to both the spring and the foundation)
-       and stores these values as properties of those nodes:
-       property 'soilPressure:' [xStress,yStress,zStress]
-       property 'soilReaction:' [xForce,yForce,zForce]'''
+    ''' Foundation pressures over the soil. Calculates pressures and forces in the free nodes of the springs (those that belongs to both the spring and the foundation) and stores these values as properties of those nodes:
+
+       - property `soilPressure`:' [xStress,yStress,zStress]
+       - property `soilReaction`: [xForce,yForce,zForce]
+    '''
     return self.elasticFoundation.calcPressures()
 
   def displayPressures(self, defDisplay, caption,fUnitConv,unitDescription):
@@ -364,8 +362,8 @@ class ElasticFoundationRangesMap(NamedObjectsMap):
 
 class LoadBase(object):
   '''Base class for loads.
-     Attributes:
-     name:     name identifying the load
+     
+  :ivar name:     name identifying the load
   '''
   def __init__(self,name):
     self.name= name
@@ -373,9 +371,9 @@ class LoadBase(object):
 
 class LoadOnSurfaces(LoadBase):
   '''Load over a list of surfaces (defined as range lists). 
-  Attributes:
-    name:     name identifying the load
-    surfaces: list of names of material-surfaces sets, e.g. [deck,wall]'''
+  
+  :ivar name:     name identifying the load
+  :ivar surfaces: list of names of material-surfaces sets, e.g. [deck,wall]'''
   def __init__(self,name, surfaces):
     super(LoadOnSurfaces,self).__init__(name)
     self.surfaces= surfaces
@@ -385,10 +383,10 @@ class LoadOnSurfaces(LoadBase):
 class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
   '''Inertial load applied to the shell elements belonging to a list of 
   surfaces 
-  Attributes:
-    name:     name identifying the load
-    surfaces: list of names of material-surfaces sets, e.g. [deck,wall]
-    accel:    list with the three components of the acceleration vector [ax,ay,az]
+  
+  :ivar name:     name identifying the load
+  :ivar surfaces: list of names of material-surfaces sets, e.g. [deck,wall]
+  :ivar accel:    list with the three components of the acceleration vector [ax,ay,az]
   '''
   def __init__(self,name, surfaces, accel):
     super(InertialLoadOnMaterialSurfaces,self).__init__(name, surfaces)
@@ -404,10 +402,10 @@ class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
 
 class LoadOnPoints(LoadBase):
   '''Load that acts on one or several points 
-  Attributes:
-    name:     name identifying the load
-    points: list of points (list of geom.Pos3d(x,y,z)) where the load must be applied.
-    loadVector: xc.Vector with the six components of the load: xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
+  
+  :ivar name:     name identifying the load
+  :ivar points: list of points (list of geom.Pos3d(x,y,z)) where the load must be applied.
+  :ivar loadVector: xc.Vector with the six components of the load: xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
   '''
   def __init__(self,name, points, loadVector):
     super(LoadOnPoints,self).__init__(name)
@@ -421,11 +419,10 @@ class LoadOnPoints(LoadBase):
 
 class PressureLoadOnSurfaces(LoadOnSurfaces):
   '''Uniform load applied to shell elements
-    Attributes:
-    name:       name identifying the load
-    surfaces:   lists of grid ranges to delimit the surfaces to
-                be loaded
-    loadVector: list with the three components of the load vector
+    
+  :ivar name:       name identifying the load
+  :ivar surfaces:   lists of grid ranges to delimit the surfaces to be loaded
+  :ivar loadVector: list with the three components of the load vector
   '''
   def __init__(self,name, surfaces, loadVector):
     super(PressureLoadOnSurfaces,self).__init__(name, surfaces)
@@ -438,19 +435,17 @@ class PressureLoadOnSurfaces(LoadOnSurfaces):
 
 class EarthPressureOnSurfaces(LoadOnSurfaces):
   '''Earth pressure applied to shell elements
-    Attributes:
-    name:       name identifying the load
-    surfaces:   lists of grid ranges to delimit the surfaces to
-                be loaded
-    earthPressure: instance of the class EarthPressure, with 
-                the following attributes:
-                  K:Coefficient of pressure
-                  zTerrain:global Z coordinate of ground level
-                  gammaTerrain: weight density of soil 
-                  zWater: global Z coordinate of groundwater level 
-                          (if zGroundwater<minimum z of model => there is no groundwater)
-                  gammaWater: weight density of water
-                  vDir: unit vector defining pressures direction
+    
+  :ivar name:       name identifying the load
+  :ivar surfaces:   lists of grid ranges to delimit the surfaces to be loaded
+  :ivar earthPressure: instance of the class EarthPressure, with the following attributes:
+
+                  - K:Coefficient of pressure
+                  - zTerrain:global Z coordinate of ground level
+                  - gammaTerrain: weight density of soil 
+                  - zWater: global Z coordinate of groundwater level (if zGroundwater<minimum z of model => there is no groundwater)
+                  - gammaWater: weight density of water
+                  - vDir: unit vector defining pressures direction
    '''
   def __init__(self,name, surfaces, earthPressure):
     super(EarthPressureOnSurfaces,self).__init__(name, surfaces)
@@ -487,14 +482,14 @@ class LoadOnSurfacesMap(NamedObjectsMap):
 class LoadState(object):
   '''Definition of the actions to be combined in design situations for 
   performing a limit state analysis
-  Attributes:
-    inercLoad:     list of inertial loads
-    unifPressLoad: list of pressures on surfaces
-    unifVectLoad:  list of uniform loads on shell elements
-    pointLoad:     list of point loads
-    earthPressLoad:list of earth pressure loads
-    hydrThrustLoad:list of hydrostatic thrust on the walls that delimit a volume
-    tempGrad:      list of temperature gradient loads
+  
+  :ivar inercLoad:     list of inertial loads
+  :ivar unifPressLoad: list of pressures on surfaces
+  :ivar unifVectLoad:  list of uniform loads on shell elements
+  :ivar pointLoad:     list of point loads
+  :ivar earthPressLoad:list of earth pressure loads
+  :ivar hydrThrustLoad:list of hydrostatic thrust on the walls that delimit a volume
+  :ivar tempGrad:      list of temperature gradient loads
   '''
   def __init__(self,name, inercLoad= None, unifPressLoad= None, unifVectLoad= None, pointLoad= None, earthPressLoad= None, hydrThrustLoad= None, tempGrad= None):
     self.name= name
@@ -587,8 +582,8 @@ class LoadState(object):
 
 class LoadStateMap(NamedObjectsMap):
   '''Dictionary of actions
-  Attributes:
-    loadStates: list of actions
+  
+  :ivar loadStates: list of actions
   '''
   def __init__(self,loadStates):
     super(LoadStateMap,self).__init__(loadStates)
@@ -607,64 +602,61 @@ class LoadStateMap(NamedObjectsMap):
 
 class GridModel(object):
   '''Class for creating FE models (geometry, materials, mesh, constraints and loads) based on a grid 3D positions.
-  Attributes:
-    FEProblem:  XC finite element problem
+  
+  :ivar FEProblem:  XC finite element problem
   '''
   def __init__(self,FEProblem):
     self.FEProblem= FEProblem
 
   def getFEProblem(self):
-    '''returns the FE problem linked with the grid model'''
+    ''':returns: the FE problem linked with the grid model'''
     return self.FEProblem
   def getPreprocessor(self):
-    '''returs the preprocessor'''
+    ''':returns: the preprocessor'''
     return self.FEProblem.getPreprocessor
 
   def newMaterialSurface(self,name,material,elemType,elemSize):
-    '''returns a type of surface to be discretized from the defined 
+    ''':returns: a type of surface to be discretized from the defined 
     material, type of element and size of the elements.
-    Parameters:
-      name:     name to identify the type of surface
-      material: name of the material that makes up the surface
-      elemType: element type to be used in the discretization
-      elemSize: mean size of the elements
+    
+    :param name:     name to identify the type of surface
+    :param material: name of the material that makes up the surface
+    :param elemType: element type to be used in the discretization
+    :param elemSize: mean size of the elements
     '''
     return MaterialSurface(name, self.grid, material,elemType,elemSize)
 
   def newMaterialLine(self,name,material,elemType,elemSize):
-    '''returns a type of line to be discretized from the defined 
+    ''':returns: a type of line to be discretized from the defined 
     material, type of element and size of the elements.
-    Parameters:
-      name:     name to identify the surface
-      material: name of the material that makes up the surface
-      elemType: element type be used in the discretization
-      elemSize: mean size of the elements
+    
+    :param name:     name to identify the surface
+    :param material: name of the material that makes up the surface
+    :param elemType: element type be used in the discretization
+    :param elemSize: mean size of the elements
     '''
     return MaterialLine(name, self.grid, material,elemType,elemSize)
 
   def setMaterials(self,materialDataList):
-    '''returns the dictionary of materials contained in the list
-    given as a parameter
+    ''':returns: the dictionary of materials contained in the list given as a parameter
     '''
     self.materialData= MaterialDataMap(materialDataList)
     return self.materialData
 
   def setMaterialSurfacesMap(self,materialSurfaceList):
-    '''returns the dictionary of the material-surfaces contained in the list
-    given as a parameter
+    ''':returns: the dictionary of the material-surfaces contained in the list given as a parameter
     '''
     self.conjSup= MaterialSurfacesMap(materialSurfaceList)
     return self.conjSup
 
   def setMaterialLinesMap(self,materialLineList):
-    '''returns the dictionary of the material-lines contained in the list
-    given as a parameter
+    ''':returns: the dictionary of the material-lines contained in the list given as a parameter
     '''
     self.conjLin= MaterialLinesMap(materialLineList)
     return self.conjLin
 
   def getElements(self, nombreConj):
-    '''Return a list of the elements of the material surfaces or lines.'''
+    ''':returns: a list of the elements of the material surfaces or lines.'''
     retval= list()
     keys= self.conjSup.keys()
     if(nombreConj in keys):
@@ -696,17 +688,17 @@ class GridModel(object):
     return st
 
   def setGrid(self,xList,yList,zList):
-    '''Returns the grid of coordinates in the three axes
-    Parameters:
-      xList: list of coordinates in global X axis
-      yList: list of coordinates in global Y axis  
-      zList: list of coordinates in global Z axis  
+    ''':Returns: the grid of coordinates in the three axes
+    
+    :param xList: list of coordinates in global X axis
+    :param yList: list of coordinates in global Y axis  
+    :param zList: list of coordinates in global Z axis  
     '''
     self.grid= grid.ijkGrid(self.getPreprocessor(),xList,yList,zList)
     return self.grid
 
   def getSurfacesFromListOfRanges(self,listOfRanges):
-    '''Returns surfaces (IJKRangeList object) created from the list of ranges.'''
+    ''':Returns: surfaces (IJKRangeList object) created from the list of ranges.'''
     sf= list()
     for r in listOfRanges:
       sf.append(grid.IJKRange(r[0],r[1]))
@@ -721,17 +713,17 @@ class GridModel(object):
     return self.constrainedRanges
 
   def newElasticFoundationRanges(self,name, wModulus, cRoz):
-    '''Returns a region resting on springs (Winkler elastic foundation)
-    Parameters:
-      name:     name to identify the region
-      wModulus: Winkler modulus of the foundation (springs in Z direction)
-      cRoz:     fraction of the Winkler modulus to apply for friction in
+    ''':Returns: a region resting on springs (Winkler elastic foundation)
+    
+    :param name:     name to identify the region
+    :param wModulus: Winkler modulus of the foundation (springs in Z direction)
+    :param cRoz:     fraction of the Winkler modulus to apply for friction in
                 the contact plane (springs in X, Y directions)
     '''
     return ElasticFoundationRanges(name, self.grid, wModulus, cRoz)
 
   def setElasticFoundationRangesMap(self,elasticFoundationRangesList):
-    '''Returns a dictionary with the list of Winkler elastic foundations
+    ''':Returns: a dictionary with the list of Winkler elastic foundations
     given as a parameter
     '''
     self.elasticFoundationRanges= ElasticFoundationRangesMap(elasticFoundationRangesList)
@@ -760,9 +752,7 @@ class GridModel(object):
       grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[setName].lstSup,setName)
 
   def generateLoads(self):
-    '''Append the loads for each load state into corresponding load patterns
-       and returns a dictionary with identifiers and the geometric
-       entities (lines and surfaces) generated.
+    '''Append the loads for each load state into corresponding load patterns and :returns: a dictionary with identifiers and the geometric entities (lines and surfaces) generated.
     '''
     if(hasattr(self,'loadStates')):
       self.lPatterns= self.loadStates.generateLoadPatterns(self.getPreprocessor(),self.dicGeomEnt)
@@ -777,18 +767,13 @@ class GridModel(object):
     return defDisplay
 
   def displayLocalAxes(self,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",caption= '',fileName=None):
-    '''vector field display of the loads applied to the chosen set of elements 
-    in the load case passed as parameter
-    Parameters:
-      setToDisplay:   set of elements to be displayed (defaults to total set)
-      vectorScale:    factor to apply to the vectors length in the 
-                      representation
-      viewNm:         name of the view  that contains the renderer (possible
-                      options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
-                      "ZPos", "ZNeg")
-      fileName:       full name of the graphic file to generate. Defaults to 
-                      None, in this case it returns a console output graphic.
-      caption:        text to display in the graphic 
+    '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
+    
+    :param setToDisplay:   set of elements to be displayed (defaults to total set)
+    :param vectorScale:    factor to apply to the vectors length in the representation
+    :param viewNm:         name of the view  that contains the renderer (possible options: "XYZPos", "XPos", "XNeg","YPos", "YNeg", "ZPos", "ZNeg")
+    :param fileName:       full name of the graphic file to generate. Defaults to `None`, in this case it returns a console output graphic.
+    :param caption:        text to display in the graphic 
     '''
     if(setToDisplay == None):
       setToDisplay=self.getPreprocessor().getSets.getSet('total')
@@ -806,27 +791,17 @@ class GridModel(object):
     return defDisplay
 
   def displayLoad(self,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",caption= '',fileName=None):
-    '''vector field display of the loads applied to the chosen set of elements 
-    in the load case passed as parameter
-    Parameters:
-      setToDisplay:   set of elements to be displayed (defaults to total set)
-      loadCaseNm:     name of the load case to be depicted
-      unitsScale:     factor to apply to the results if we want to change
-                      the units.
-      vectorScale:    factor to apply to the vectors length in the 
-                      representation
+    '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
+    
+    :param setToDisplay:   set of elements to be displayed (defaults to total set)
+    :param loadCaseNm:     name of the load case to be depicted
+    :param unitsScale:     factor to apply to the results if we want to change the units.
+    :param vectorScale:    factor to apply to the vectors length in the representation
       
-      multByElemArea: boolean value that must be 'True' if we want to 
-                      represent the total load on each element 
-                      (=load multiplied by element area) and 'False' if we 
-                      are going to depict the value of the uniform load 
-                      per unit area
-      viewNm:         name of the view  that contains the renderer (possible
-                      options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
-                      "ZPos", "ZNeg")
-      fileName:       full name of the graphic file to generate. Defaults to 
-                      None, in this case it returns a console output graphic.
-      caption:        text to display in the graphic 
+    :param multByElemArea: boolean value that must be `True` if we want to represent the total load on each element (=load multiplied by element area) and `False` if we are going to depict the value of the uniform load per unit area
+    :param viewNm:         name of the view  that contains the renderer (possible options: `XYZPos`, `XPos`, `XNeg`,`YPos`, `YNeg`, `ZPos`, `ZNeg`)
+    :param fileName:       full name of the graphic file to generate. Defaults to ` None`, in this case it returns a console output graphic.
+    :param caption:        text to display in the graphic 
     '''
     if(setToDisplay == None):
       setToDisplay=self.getPreprocessor().getSets.getSet('total')
@@ -849,12 +824,10 @@ class GridModel(object):
 # display results (internal forces, displacements) of an user-defined
 # load case
 class QuickGraphics(qg.QuickGraphics):
-  '''This class is aimed at providing the user with a quick and easy way to 
-  display results (internal forces, displacements) of an user-defined
-  load case.
-  Attributes:
-   loadCaseName:   name of the load case to be created
-   loadCaseExpr:   expression that defines de load case as a
+  '''This class is aimed at providing the user with a quick and easy way to display results (internal forces, displacements) of an user-defined load case.
+  
+  :ivar loadCaseName:   name of the load case to be created
+  :ivar loadCaseExpr:   expression that defines de load case as a
                    combination of previously defined actions
                    e.g. '1.0*GselfWeight+1.0*GearthPress'
   '''
