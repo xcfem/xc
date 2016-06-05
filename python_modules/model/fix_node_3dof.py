@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 # Impone movimiento nulo en todos los GDL del nodo.
 def fixNode3DOF(coacciones, idNodo):
   print "obsolete, use fixNode000."

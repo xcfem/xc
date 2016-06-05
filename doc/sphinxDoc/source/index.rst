@@ -12,6 +12,8 @@ Preprocessor
 
    _static/code.rst
 
+   _static/model.rst
+
    _static/materials.rst
 
    _static/actions.rst 
