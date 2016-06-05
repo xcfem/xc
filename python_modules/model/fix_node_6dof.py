@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Impone movimiento nulo en todos los DOF del nodo.
 def fixNode6DOF(coacciones, idNodo):
   coacciones.newSPConstraint(idNodo,0,0.0) # Nodo idNodo

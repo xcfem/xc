@@ -10,11 +10,13 @@ Preprocessor
 .. toctree::
    :maxdepth: 1
 
-   _static/code.rst
+   preprocessor/code.rst
 
-   _static/materials.rst
+   preprocessor/model.rst
 
-   _static/actions.rst 
+   preprocessor/materials.rst
+
+   preprocessor/actions.rst 
 
 --------
 Solution
@@ -23,7 +25,7 @@ Solution
 .. toctree::
    :maxdepth: 1
 
-   _static/solution.rst
+   solution/solution.rst
 
 -------------
 Postprocessor
@@ -31,9 +33,9 @@ Postprocessor
 .. toctree::
    :maxdepth: 1
 
-   _static/xcVtk.rst
+   postprocessor/xcVtk.rst
 
-   _static/postprocess.rst
+   postprocessor/postprocess.rst
 
 
 ----------
@@ -43,11 +45,11 @@ Miscellany
 .. toctree::
    :maxdepth: 1
 
-   _static/misc.rst
+   miscellany/misc.rst
 
-   _static/import_export.rst
+   miscellany/import_export.rst
 
-   _static/rough_calculations.rst
+   miscellany/rough_calculations.rst
 
 
 Indices and tables
