@@ -2,11 +2,11 @@
 # Concrete according to EHE-08.
 from __future__ import division
 
-__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, AOO and LCPT"
+__author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, A_OO and LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
 
 
 
@@ -16,8 +16,8 @@ from materials import concreteBase
 
 class EHEConcrete(concreteBase.Concrete):
     """ Concrete model according to EHE
-    Attributes:
-        typeAggregate:types of aggregate= 
+    
+    :ivar typeAggregate:types of aggregate= 
             "cuarcita", "arenisca", "caliza normal", 
             "caliza densa", "volcanica porosa", 
             "volcanica normal", "granito", "diabasa"
@@ -26,8 +26,7 @@ class EHEConcrete(concreteBase.Concrete):
     typeAggregate='cuarcita'
 
     def getAlphaEcm(self):
-        '''getAlphaEcm()
-        Coeficiente corrector del módulo de deformación
+        '''Coeficiente corrector del módulo de deformación
         longitudinal del hormigón en función de la naturaleza
         del árido.
         '''
@@ -66,8 +65,8 @@ class EHEConcrete(concreteBase.Concrete):
     def getEcmT(self,t):
         '''Módulo de deformación longitudinal secante a t días expresado
         en [Pa] [+] de acuerdo con los comentarios al artículo 39.6 de EHE-08.
-        Attributes:
-            t: Edad del hormigón expresada en días.
+        
+        :param t: Edad del hormigón expresada en días.
         '''
         return math.pow(self.getBetaCC(t),0.3)*self.getEcm()
 
@@ -109,7 +108,7 @@ class EHEConcrete(concreteBase.Concrete):
 
     def getEpsc2(self):
         """
-        epsc2: strain [-] at peak stress at parabola-rectangle diagram 
+        :returns: strain [-] at peak stress at parabola-rectangle diagram 
         (art. 39.5 EHE, figure 39.5.a EHE)
         """
         if self.fckMPa()<=50:
@@ -119,7 +118,7 @@ class EHEConcrete(concreteBase.Concrete):
 
     def getExpN(self):
         """
-        expN: exponent n for the parabola-rectangle diagram 
+        :returns: exponent n for the parabola-rectangle diagram 
         (art. 39.5 EHE, figure 39.5.a EHE)
         """
         if self.fckMPa()<=50:
@@ -129,7 +128,7 @@ class EHEConcrete(concreteBase.Concrete):
 
     def getEpscu2(self):
         """
-        epscu2: nominal ultimate strain [-] at parabola-rectangle diagram 
+        :returns:: nominal ultimate strain [-] at parabola-rectangle diagram 
         (art. 39.5 EHE, figure 39.5.a EHE)
         """
         if self.fckMPa()<=50:
@@ -165,17 +164,17 @@ class EHEConcrete(concreteBase.Concrete):
     #       return 0.0 
     def getDeformacionFluencia(self, t,t0,RH,h0mm, sigmaT0):
         '''
-        Devuelve el valor de la deformación por fluencia en el hormigón
-        que se produce entre los instantes t0 y t.
-        Attributes:
-            t:     age of concrete in days at the moment considered
-            t0:    age of concrete in days at loading
-            RH:    ambient relative humidity(%)
-            h0mm:  notional size of the member in mm
+        :Returns: the creep deformation between t0 and t
+        
+        :param t:     age of concrete in days at the moment considered
+        :param t0:    age of concrete in days at loading
+        :param RH:    ambient relative humidity(%)
+        :param h0mm:  notional size of the member in mm 
                    h0mm=2*Ac/u, where:
-                        Ac= cross sectional area
-                        u = perimeter of the member in contact with the atmosphere
-                        sigmaT0: Tensión constante aplicada en t0.
+
+                       - Ac= cross sectional area
+                       - u = perimeter of the member in contact with the atmosphere
+                       - sigmaT0: Tensión constante aplicada en t0.
         '''
         return sigmaT0*(1.0/self.getEcmT(t0)+self.getCreepFitt0(t,t0,RH,h0mm)/self.getEcm())
  

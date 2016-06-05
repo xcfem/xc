@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and A_OO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
@@ -16,14 +16,14 @@ from materials.fiber_section import defSeccionHASimple
 
 class ColumnMainReinforcement(object):
   ''' Main (longitudinal) rebars of a column.
-  Attributes:
-    cover:          concrete clear cover of main reinforcement
-    nRebarsWidth:   number of rebars in the width direction of the 
+  
+  :ivar cover:          concrete clear cover of main reinforcement
+  :ivar nRebarsWidth:   number of rebars in the width direction of the 
                     section (each face)
-    areaRebarWidth: cross sectional area of each rebar in  width direction
-    nRebarsDepth:   number of rebars in the depth direction of the 
+  :ivar areaRebarWidth: cross sectional area of each rebar in  width direction
+  :ivar nRebarsDepth:   number of rebars in the depth direction of the 
                     section (each face)
-    areaRebarDepth: cross sectional area of each rebar in  depth direction
+  :ivar areaRebarDepth: cross sectional area of each rebar in  depth direction
   '''
   def __init__(self):
     self.cover= 0.030 
@@ -37,30 +37,30 @@ class ColumnMainReinforcement(object):
 class RecordRCColumnSection(defSeccionHASimple.BasicRecordRCSection):
   '''Definition of the variables that make up a reinforced concrete section 
   with reinforcement symmetric in both directions (as usual in columns)
-  Attributes:
-    sectionName:     name identifying the section
-    sectionDescr:    section description
-    concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
-    concrDiagName:   name identifying the characteristic stress-strain diagram of the concrete material
-    depth:           cross-section depth
-    width:           cross-section width
-    nDivIJ:          number of cells in IJ (width) direction
-    nDivJK:          number of cells in JK  (height) direction
-    fiberSectionRepr:
-    reinfSteelType:  type of reinforcement steel
-    reinfDiagName:   name identifying the characteristic stress-strain diagram
+  
+  :ivar sectionName:     name identifying the section
+  :ivar sectionDescr:    section description
+  :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
+  :ivar concrDiagName:   name identifying the characteristic stress-strain diagram of the concrete material
+  :ivar depth:           cross-section depth
+  :ivar width:           cross-section width
+  :ivar nDivIJ:          number of cells in IJ (width) direction
+  :ivar nDivJK:          number of cells in JK  (height) direction
+  :ivar fiberSectionRepr:
+  :ivar reinfSteelType:  type of reinforcement steel
+  :ivar reinfDiagName:   name identifying the characteristic stress-strain diagram
                      of the reinforcing steel material
-    shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
+  :ivar shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
                       defining the shear reinforcement in Z direction
-    shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement()
+  :ivar shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement()
                      defining the shear reinforcement in Y direction
-    cover:          concrete clear cover of main reinforcement
-    nRebarsWidth:   number of rebars in the width direction of the 
+  :ivar cover:          concrete clear cover of main reinforcement
+  :ivar nRebarsWidth:   number of rebars in the width direction of the 
                     section (each face)
-    areaRebarWidth: cross sectional area of each rebar in  width direction
-    nRebarsDepth:   number of rebars in the depth direction of the 
+  :ivar areaRebarWidth: cross sectional area of each rebar in  width direction
+  :ivar nRebarsDepth:   number of rebars in the depth direction of the 
                     section (each face)
-    areaRebarDepth: cross sectional area of each rebar in the depth direction
+  :ivar areaRebarDepth: cross sectional area of each rebar in the depth direction
   '''
 
   def __init__(self):
@@ -71,7 +71,7 @@ class RecordRCColumnSection(defSeccionHASimple.BasicRecordRCSection):
     '''Returns a reinforced concrete section with reinforcement 
     symmetric in both directions (as usual in columns)
     Parameters:
-     matDiagType: type of stress-strain diagram (="k" for characteristic diagram, 
+   :param matDiagType: type of stress-strain diagram (="k" for characteristic diagram, 
                    ="d" for design diagram)
     '''
     self.defDiagrams(preprocessor,matDiagType)

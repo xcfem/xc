@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and A_OO"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
+__email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 
 import xc_base
 import geom
@@ -20,13 +20,13 @@ import sys
 class RecordShearReinforcement(object):
   ''' Definition of the variables that make up a family of shear 
   reinforcing bars
-  Attributes:
-    familyName:        name identifying the family of shear reinforcing bars
-    nShReinfBranches:  number of effective branches 
-    shReinfSpacing:    longitudinal distance between transverse reinforcements
-    angAlphaShReinf:   angle between the shear reinforcing bars and the axis 
+  
+  :ivar familyName:        name identifying the family of shear reinforcing bars
+  :ivar nShReinfBranches:  number of effective branches 
+  :ivar shReinfSpacing:    longitudinal distance between transverse reinforcements
+  :ivar angAlphaShReinf:   angle between the shear reinforcing bars and the axis 
                        of the member
-    angThetaConcrStruts: angle between the concrete's compression struts 
+  :ivar angThetaConcrStruts: angle between the concrete's compression struts 
                          and the axis of the member
   '''
   def __init__(self):
@@ -46,13 +46,13 @@ class RecordShearReinforcement(object):
 class MainReinfLayer(object):
   ''' Definition of the variables that make up a family (row) of main 
   (longitudinal) reinforcing bars
-  Attributes:
-    rebarsDiam:    diameter of the bars
-    rebarsSpacing: spacing between bars
-    nRebars:       number of rebars to be placed in the row
-    areaRebar:     cross-sectional area of the bar
-    nominalCover:    clear cover 
-    cover:         effective cover (nominalCover+fi/2)
+  
+  :ivar rebarsDiam:    diameter of the bars
+  :ivar rebarsSpacing: spacing between bars
+  :ivar nRebars:       number of rebars to be placed in the row
+  :ivar areaRebar:     cross-sectional area of the bar
+  :ivar nominalCover:    clear cover 
+  :ivar cover:         effective cover (nominalCover+fi/2)
   '''
   def __init__(self,rebarsDiam=10e-3,areaRebar= areaBarrasEHE.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03):
     self.rebarsDiam= rebarsDiam
@@ -102,22 +102,22 @@ class BasicRecordRCSection(object):
   '''
   This class is used to define the basic variables that make up a reinforced 
   concrete section.
-  Attributes:
-    sectionName:     name identifying the section
-    sectionDescr:    section description
-    concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
-    concrDiagName:   name identifying the characteristic stress-strain diagram of the concrete material
-    depth:           cross-section depth
-    width:           cross-section width
-    nDivIJ:          number of cells in IJ (width) direction
-    nDivJK:          number of cells in JK  (height) direction
-    fiberSectionRepr: fiber model of the section.
-    reinfSteelType:  type of reinforcement steel
-    reinfDiagName:   name identifying the characteristic stress-strain diagram
+  
+  :ivar sectionName:     name identifying the section
+  :ivar sectionDescr:    section description
+  :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
+  :ivar concrDiagName:   name identifying the characteristic stress-strain diagram of the concrete material
+  :ivar depth:           cross-section depth
+  :ivar width:           cross-section width
+  :ivar nDivIJ:          number of cells in IJ (width) direction
+  :ivar nDivJK:          number of cells in JK  (height) direction
+  :ivar fiberSectionRepr: fiber model of the section.
+  :ivar reinfSteelType:  type of reinforcement steel
+  :ivar reinfDiagName:   name identifying the characteristic stress-strain diagram
                      of the reinforcing steel material
-    shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
+  :ivar shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
                       defining the shear reinforcement in Z direction
-    shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement()
+  :ivar shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement()
                      defining the shear reinforcement in Y direction
   '''
   def __init__(self):
@@ -197,27 +197,27 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   '''
   This class is used to define the variables that make up a reinforced 
   concrete section with top and bottom reinforcement layers.
-  Attributes:
-    sectionName:     name identifying the section
-    sectionDescr:    section description
-    concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
-    concrDiagName:   name identifying the characteristic stress-strain diagram of the concrete material
-    depth:           cross-section depth
-    width:           cross-section width
-    nDivIJ:          number of cells in IJ (width) direction
-    nDivJK:          number of cells in JK  (height) direction
-    fiberSectionRepr: fiber model of the section
-    reinfSteelType:  type of reinforcement steel
-    reinfDiagName:   name identifying the characteristic stress-strain diagram of
+  
+  :ivar sectionName:     name identifying the section
+  :ivar sectionDescr:    section description
+  :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
+  :ivar concrDiagName:   name identifying the characteristic stress-strain diagram of the concrete material
+  :ivar depth:           cross-section depth
+  :ivar width:           cross-section width
+  :ivar nDivIJ:          number of cells in IJ (width) direction
+  :ivar nDivJK:          number of cells in JK  (height) direction
+  :ivar fiberSectionRepr: fiber model of the section
+  :ivar reinfSteelType:  type of reinforcement steel
+  :ivar reinfDiagName:   name identifying the characteristic stress-strain diagram of
                      the reinforcing steel material
-    shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
+  :ivar shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
                      defining the shear reinforcement in Z direction
-    shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement() 
+  :ivar shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement() 
                      defining the shear reinforcement in Y direction
-    coverMin:        minimum value of end or clear concrete cover of main bars from
+  :ivar coverMin:        minimum value of end or clear concrete cover of main bars from
                      both the positive and negative faces
-    negatvRebarRows:       layers of main rebars in the local negative face of the section
-    positvRebarRows:       layers of main rebars in the local positive face of the section
+  :ivar negatvRebarRows:       layers of main rebars in the local negative face of the section
+  :ivar positvRebarRows:       layers of main rebars in the local positive face of the section
   '''
   def __init__(self):
     super(RecordRCSimpleSection,self).__init__()
@@ -372,9 +372,10 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     '''
     Definition of a reinforced concrete geometric section 
     with one row of rebars in the top face and another one in the bottom face
-    Parameters:
-      matDiagType: type of stress-strain diagram (="k" for characteristic diagram, 
-                   ="d" for design diagram)
+    
+    :ivar matDiagType: type of stress-strain diagram 
+                 -  ="k" for characteristic diagram, 
+                 -  ="d" for design diagram
     '''
     self.defDiagrams(preprocessor,matDiagType)
 
@@ -478,20 +479,20 @@ class RecordRCSimpleSection(BasicRecordRCSection):
 class RecordRCSlabSection(object):
   '''This class is used to define the variables that make up a reinforced concrete slab 
   section with several reinforcement layers in the top and bottom faces
-  Attributes:
-    name:    basic name to form the RC sections in direction 1 (name+'1') 
+  
+  :ivar name:    basic name to form the RC sections in direction 1 (name+'1') 
              and direction 2(name+'1') 
-    sectionDescr:    section description
-    depth:           cross-section depth (width=1.0)
-    concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
-    reinfSteelType:  type of reinforcement steel
-    posMainRebarRowsD1: layers of main rebars in direction 1 in the local 
+  :ivar sectionDescr:    section description
+  :ivar depth:           cross-section depth (width=1.0)
+  :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
+  :ivar reinfSteelType:  type of reinforcement steel
+  :ivar posMainRebarRowsD1: layers of main rebars in direction 1 in the local 
                         positive face of the section (list of MainReinfLayer)
-    negMainRebarRowsD1: layers of main rebars in direction 1 in the local 
+  :ivar negMainRebarRowsD1: layers of main rebars in direction 1 in the local 
                         negative face of the section (list of MainReinfLayer)
-    posMainRebarRowsD2: layers of main rebars in direction 2 in the local 
+  :ivar posMainRebarRowsD2: layers of main rebars in direction 2 in the local 
                         positive face of the section (list of MainReinfLayer)
-    negMainRebarRowsD2: layers of main rebars in direction 2 in the local 
+  :ivar negMainRebarRowsD2: layers of main rebars in direction 2 in the local 
                         negative face of the section (list of MainReinfLayer)
 
   '''

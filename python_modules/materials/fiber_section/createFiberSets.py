@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and A_OO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
@@ -9,10 +9,10 @@ __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 
 class FiberSet:
   '''This class constructs a set of all the  fibers made of the same material from a fiber section
-  Attributes:
-    scc:       name identifying the fiber section
-    setName:   name of the set of fibers to be generated
-    matTag:    integer tag indentifying the uniaxial material which forms the fibers
+  
+  :ivar scc:       name identifying the fiber section
+  :ivar setName:   name of the set of fibers to be generated
+  :ivar matTag:    integer tag indentifying the uniaxial material which forms the fibers
   '''
   fSet= None
 
@@ -49,12 +49,12 @@ class FiberSet:
 
 class RCSets(object):
   '''This class constructs both the concrete and reinforced steel fiber sets from a reinforced concrete fiber section
-  Attributes:
-    scc:       name identifying the fiber section
-    concrMatTag:  tag of the uniaxial material that makes up the concrete fibers of the section
-    concrSetName:   name of the set of fibers of concrete to be generated
-    reinfMatTag:  tag of the uniaxial material that makes up the reinforcing steel fibers of the section
-    reinfSetName:   name of the set of fibers of reinforcing steel to be generated
+  
+  :ivar scc:       name identifying the fiber section
+  :ivar concrMatTag:  tag of the uniaxial material that makes up the concrete fibers of the section
+  :ivar concrSetName:   name of the set of fibers of concrete to be generated
+  :ivar reinfMatTag:  tag of the uniaxial material that makes up the reinforcing steel fibers of the section
+  :ivar reinfSetName:   name of the set of fibers of reinforcing steel to be generated
   '''
   concrFibers= None
   reinfFibers= None
@@ -98,17 +98,17 @@ class RCSets(object):
 def fiberSectionSetupRCSets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetName):
   return RCSets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetName)
 
-# Crea conjuntos de fibras en las secciones de los elementos de conjunto cuyo nombre.
+
 def createRCFiberSets(preprocessor, setName, concrMatTag, reinfMatTag):
   '''Constructs the sets of concrete fibers 'hormigon' and reinforcing steel fibers 'reinforcement' for all the elements included in a set of elements.
   Returns the following two sets of fibers:
     set named hormigon: include all the fibers of material concrMatTag from the set of elements setName
     set named reinforcement: include all the fibers of material reinfMatTag from the set of elements setName
-  Parameters:
-    preprocessor:     preprocessor name
-    setName:          name identifying the set of element
-    concrMatTag:      tag of the uniaxial material that makes up the concrete fibers
-    reinfMatTag:      tag of the uniaxial material that makes up the reinforcing steel fibers
+  
+  :param preprocessor:     preprocessor name
+  :param setName:          name identifying the set of element
+  :param concrMatTag:      tag of the uniaxial material that makes up the concrete fibers
+  :param reinfMatTag:      tag of the uniaxial material that makes up the reinforcing steel fibers
   '''
   st= preprocessor.getSets.getSet(setName)
   elements= st.getElements
@@ -119,9 +119,9 @@ def createRCFiberSets(preprocessor, setName, concrMatTag, reinfMatTag):
 
 def reselTensionFibers(scc,fiberSetName,tensionFibersSetName):
   '''Returns the fibers under tension included in a set of fibers of a fiber section type
-  Parameters:
-  scc:          name identifying the fiber section
-  fiberSetName:     name identifying the set of fibers 
+  
+  :param scc:          name identifying the fiber section
+  :param fiberSetName:     name identifying the set of fibers 
   '''
   fiberSet= scc.getFiberSets()[fiberSetName]
   tensionFibers= scc.getFiberSets().create(tensionFibersSetName)
@@ -131,13 +131,13 @@ def reselTensionFibers(scc,fiberSetName,tensionFibersSetName):
   return tensionFibers
 
 def fiberSectionSetupRC3Sets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetName):
-  '''returns a set of tensioned fibers 'reinforcementTraccion' of a fiber section of reinforced concrete.
-  Parameters:
-  scc:         name identifying the fiber section
-  concrMatTag:     tag of the uniaxial material that makes up the concrete fibers
-  concrSetName:    name of the set of fibers of concrete to be generated
-  reinfMatTag:     tag of the uniaxial material that makes up the reinforcing steel fibers
-  reinfSetName:    name of the set of fibers of reinforcing steel to be generated
+  '''returns a set of tensioned fibers `reinforcementTraccion` of a fiber section of reinforced concrete.
+  
+  :param scc:         name identifying the fiber section
+  :param concrMatTag:     tag of the uniaxial material that makes up the concrete fibers
+  :param concrSetName:    name of the set of fibers of concrete to be generated
+  :param reinfMatTag:     tag of the uniaxial material that makes up the reinforcing steel fibers
+  :param reinfSetName:    name of the set of fibers of reinforcing steel to be generated
   '''
   sets= fiberSectionSetupRCSets(scc,concrMatTag,concrSetName,reinfMatTag,reinfSetName)
   sets.reselTensionFibers(scc,"reinforcementTraccion")
