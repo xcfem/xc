@@ -5,16 +5,22 @@ import xc
 from miscUtils import LogMessages as lmsg
 import creaArraySetData
 
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
+
 
 def VtkDefineActorKPoint(recordGrid, renderer, radius):
   '''Returns a vtkActor to represent key-points in a rendering scene.
   It defines the scale, orientation, rendering properties, textures, ...
-  Attributes:
-    recordGrid: unstructured grid (generic data set) to which incorporate
+  
+  :ivar recordGrid: unstructured grid (generic data set) to which incorporate
                 the actor KPoint
-    renderer:   name of the renderer (lights, views, ...) to be used in the
+  :ivar renderer:   name of the renderer (lights, views, ...) to be used in the
                 display
-    radius:     radius of the spheres to be employed in the KPoints 
+  :ivar radius:     radius of the spheres to be employed in the KPoints 
                 representation
   '''
   sphereSource= vtk.vtkSphereSource()

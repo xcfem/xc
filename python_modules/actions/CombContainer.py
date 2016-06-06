@@ -2,11 +2,11 @@
 
 '''CombContainer.py: container for load combinations.'''
 
-__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, AOO and LCPT"
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO) "
+__copyright__= "Copyright 2015,  LCPT A_OO "
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 from import_export import NeutralLoadDescription as nld
 
@@ -45,12 +45,12 @@ class SituationCombs(dict):
 
 class SLSCombinations(object):
   '''Combinations of actions for serviceability limit states
-  Attributes:
-    name:        name to identify the combination
-    rare:        combination for a rare design situation
-    freq:        combination for a frequent design situation
-    qp:          combination for a quasi-permanent design situation
-    earthquake:  combination for a earthquake design situation
+  
+  :ivar name:        name to identify the combination
+  :ivar rare:        combination for a rare design situation
+  :ivar freq:        combination for a frequent design situation
+  :ivar qp:          combination for a quasi-permanent design situation
+  :ivar earthquake:  combination for a earthquake design situation
   '''
   def __init__(self):
     self.name= "Service limit states."
@@ -79,12 +79,12 @@ class SLSCombinations(object):
 
 class ULSCombinations(object):
   '''Combinations of actions for ultimate limit states
-  Attributes:
-    name:        name to identify the combination
-    perm:        combination for a persistent or transient design situation
-    acc:         combination for a accidental design situation
-    fatigue:     combination for a fatigue design situation
-    earthquake:  combination for a seismic design situation
+  
+  :ivar name:        name to identify the combination
+  :ivar perm:        combination for a persistent or transient design situation
+  :ivar acc:         combination for a accidental design situation
+  :ivar fatigue:     combination for a fatigue design situation
+  :ivar earthquake:  combination for a seismic design situation
   '''
   def __init__(self):
     self.name= "Ultimate limit states."
@@ -112,8 +112,8 @@ class ULSCombinations(object):
 
 class CombContainer(object):
   '''Container of load combinations
-  SLS: serviceability limit state combination
-  ULS: ultimate limit state combination
+  :ivar SLS: serviceability limit state combination
+  :ivar ULS: ultimate limit state combination
   '''
   def __init__(self):
     self.SLS= SLSCombinations()

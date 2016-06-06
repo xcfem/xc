@@ -1,33 +1,33 @@
 # -*- coding: utf-8 -*-
 
-__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2016, AOO and LCPT"
+__author__= "Ana Ortega (A_OO) "
+__copyright__= "Copyright 2016, A_OO" 
 __license__= "GPL"
 __version__= "3.0"
-__email__= " ana.Ortega.Ort@gmail.com l.pereztato@gmail.com "
+__email__= " ana.Ortega.Ort@gmail.com "
 
 
 class RecordLoadCaseDisp(object):
   '''Generation of graphic files and adding to report-tex files for a load case
-  Attributes:
-   loadCaseName:   name of the load case to be depicted
-   setToDisplay:   set of elements to be displayed
+  
+  :ivar loadCaseName:   name of the load case to be depicted
+  :ivar setToDisplay:   set of elements to be displayed
                    (defaults to 'total')
-   unitsScale:     factor to apply to the results if we want to change
+  :ivar unitsScale:     factor to apply to the results if we want to change
                    the units (defaults to 1).
-   vectorScale:    factor to apply to the vectors length in the 
+  :ivar vectorScale:    factor to apply to the vectors length in the 
                    representation (defaults to 1).
-   multByElemArea: boolean value that must be True if we want to 
+  :ivar multByElemArea: boolean value that must be True if we want to 
                    represent the total load on each element 
                    (=load multiplied by element area) and False if we 
                    are going to depict the value of the uniform load 
                    per unit area (defaults to False)
-   viewName:       name of the view  that contains the renderer (possible
+  :ivar viewName:       name of the view  that contains the renderer (possible
                    options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
                    "ZPos", "ZNeg") (defaults to "XYZPos")
-   descGrph:       description text to be displayed in the graphic
-   captTex:        caption to describe the graphic content in the tex file
-   lablTex:        label to be associated to the graphic in the tex file
+  :ivar descGrph:       description text to be displayed in the graphic
+  :ivar captTex:        caption to describe the graphic content in the tex file
+  :ivar lablTex:        label to be associated to the graphic in the tex file
   '''
 
   def __init__(self,loadCaseName):
@@ -43,19 +43,19 @@ class RecordLoadCaseDisp(object):
 
   def createGraphicFile(self,gridmodl,fileName):
     '''Creates the graphic file
-    Paramaters:
-      gridmodl:   object of type GridModel
-      fileName:   full name of the graphic file to be created
+    
+    :param gridmodl:   object of type GridModel
+    :param fileName:   full name of the graphic file to be created
     '''
     gridmodl.displayLoad(self.setToDisplay,self.loadCaseName,self.unitsScale,self.vectorScale, self.multByElemArea,self.viewName,self.descGrph,fileName)
     return
 
   def insertGraphic(self,grfileNm,grWdt,texFile):
     '''Inserts the graphic file in the report tex file
-    Parameters:
-      grfileNm:   name of the graphics file
-      grWdt:      width of the grafic 
-      texFile:    opened tex file in which the graphic is being inserted
+    
+    :param grfileNm:   name of the graphics file
+    :param grWdt:      width of the grafic 
+    :param texFile:    opened tex file in which the graphic is being inserted
     '''
     texFile.write('\\begin{center}\n')
     texFile.write('\includegraphics[width='+grWdt+']{./'+grfileNm+'}\n')

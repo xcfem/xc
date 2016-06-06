@@ -17,9 +17,9 @@ __email__= "l.pereztato@gmail.com"
 
 class ElasticFoundation(object):
   '''Region resting on springs (Winkler elastic foundation)
-  Attributes:
-    wModulus: Winkler modulus of the foundation (springs in Z direction)
-    cRoz:     fraction of the Winkler modulus to apply for friction in
+  
+  :ivar wModulus: Winkler modulus of the foundation (springs in Z direction)
+  :ivar cRoz:     fraction of the Winkler modulus to apply for friction in
               the contact plane (springs in X, Y directions)
   '''
   def __init__(self,wModulus,cRoz):

@@ -11,14 +11,14 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 class EarthPressure:
   '''Parameters to define a load of type earth pressure
-    Attributes:
-      K:       Coefficient of pressure
-      zTerrain:global Z coordinate of ground level
-      gammaTerrain: weight density of soil 
-      zWater:  global Z coordinate of groundwater level 
+    
+    :ivar K:       Coefficient of pressure
+    :ivar zTerrain:global Z coordinate of ground level
+    :ivar gammaTerrain: weight density of soil 
+    :ivar zWater:  global Z coordinate of groundwater level 
                (if zGroundwater<minimum z of model => there is no groundwater)
-      gammaWater: weight density of water
-      vDir:    unit vector defining pressures direction
+    :ivar gammaWater: weight density of water
+    :ivar vDir:    unit vector defining pressures direction
   '''
   def __init__(self,K , zTerrain, gammaTerrain, zWater, gammaWater, vDir):
     self.K= K

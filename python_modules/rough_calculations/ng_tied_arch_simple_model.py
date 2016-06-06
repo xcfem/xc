@@ -15,9 +15,9 @@ import ArchBridgeRoughModelBase as base
 
 class TiedArchBridgeRoughModel(base.ArchBridgeRoughModelBase):
   ''' Tied Arch bridge simple model
-  Attributes:
-    d: rise (depth) of the arch at midspan
-    L: horizontal distance between supports
+  
+  :ivar d: rise (depth) of the arch at midspan
+  :ivar L: horizontal distance between supports
   '''
   def __init__(self,L,d):
     super(TiedArchBridgeRoughModel,self).__init__(L,d)
@@ -25,15 +25,15 @@ class TiedArchBridgeRoughModel(base.ArchBridgeRoughModelBase):
 
   def getTensionDeck(self,qunif):
     '''Tension in the deck tie due to a uniform load.
-    Attributes:
-       qunif: uniformly distributed load applied on the deck
+    
+    :param qunif: uniformly distributed load applied on the deck
     '''
     H=self.getQunfHabtm(qunif)
     return H
   def getAxialForceArch(self,qunif):
     '''Compressive axial force in the arch due to a uniform load.
-     Attributes:
-       qunif: uniformly distributed load applied on the deck
+
+     :param qunif: uniformly distributed load applied on the deck
     '''
     V= self.getQunfVabtm(qunif)
     H=self.getQunfHabtm(qunif)
