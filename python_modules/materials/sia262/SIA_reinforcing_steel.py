@@ -10,7 +10,7 @@ from materials import reinforcingSteel
 #               fsd=435MPa,, ks=1,05,, epsud=2,0%
 #  acier B500B: fsk=500MPa,, k=ftk/fsk>=1,08,, epsuk>=5,0%
 #               fsd=435MPa,, ks=1,08,, epsud=4,5%
-#Attributes:
+#
 #   nmbAcero: Name identifying the material.
 #   fyk:      Characteristic value of the yield strength.
 #   emax:     maximum strain in tension

@@ -24,7 +24,7 @@ from postprocess import extrapolate_elem_attr as ext
 
 
 class ControlVarsBase(object):
-  '''Base class for control variabless.'''
+  '''Base class for control variables.'''
   def __init__(self,combName= 'nil'):
     self.combName= combName #Name of the corresponding load combination
   def getCF(self):
@@ -57,14 +57,16 @@ class ControlVarsBase(object):
     return self.combName
   def getLaTeXString(self,eTag,factor= 1e-3):
     ''' Returns a string that we can insert in a LaTeX table.
-        eTag: element identifier.
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param eTag: element identifier.
+    :param factor: factor for units (default 1e-3 -> kN)'''
     return str(eTag)+" & "+self.getLaTeXFields(factor)+" & "+fmt.Esf.format(self.getCF())+"\\\\\n"
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
     ''' Returns a string to represent fields in ANSYS (R).
-        eTag: element identifier.
-        axis: section 1 or 2
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param eTag: element identifier.
+    :param axis: section 1 or 2
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= []
     retval.append("detab,"+str(eTag)+",CF" +axis+","+str(self.getCF())+"\n")
     return retval
@@ -95,15 +97,17 @@ class NMy(ControlVarsBase):
     self.My= My #Bending moment about y axis.
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(NMy,self).getLaTeXFields(factor)
     retval+= " & "+fmt.Esf.format(self.N*factor)+" & "+fmt.Esf.format(self.My*factor)
     return retval
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
     ''' Returns a string to represent fields in ANSYS (R).
-        eTag: element identifier.
-        axis: section 1 or 2
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param eTag: element identifier.
+    :param axis: section 1 or 2
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(NMy,self).getAnsysStrings(eTag,axis,factor)
     retval.append("detab,"+str(eTag)+",N" +axis+","+str(self.N*factor)+"\n")
     retval.append("detab,"+str(eTag)+",My" +axis+","+str(self.My*factor)+"\n")
@@ -122,15 +126,17 @@ class NMyMz(NMy):
     self.Mz= Mz #Bending moment about z axis.
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
-        factor: factor for units (default 1e-3 -> kN)'''
+ 
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(NMyMz,self).getLaTeXFields(factor)
     retval+= " & "+fmt.Esf.format(self.Mz*factor)
     return retval
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
     ''' Returns a string to represent fields in ANSYS (R).
-        eTag: element identifier.
-        axis: section 1 or 2
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param eTag: element identifier.
+    :param axis: section 1 or 2
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(NMyMz,self).getAnsysStrings(eTag,axis,factor)
     retval.append("detab,"+str(eTag)+",Mz" +axis+","+str(self.Mz*factor)+"\n")
     return retval
@@ -156,7 +162,8 @@ class UniaxialBendingControlVars(CFNMy):
     self.idSection= idSection #Reinforced concrete section identifier.
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= self.idSection+" & "
     retval+= super(UniaxialBendingControlVars,self).getLaTeXFields(factor)
     return retval
@@ -173,14 +180,16 @@ class CFNMyMz(CFNMy):
     self.Mz= Mz #Bending moment about z axis.
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(CFNMyMz,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Mz*factor)
     return retval
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
     ''' Returns a string to represent fields in ANSYS (R).
-        eTag: element identifier.
-        axis: section 1 or 2
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param eTag: element identifier.
+    :param axis: section 1 or 2
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(CFNMyMz,self).getAnsysStrings(eTag,axis,factor)
     retval.append("detab,"+str(eTag)+",Mz" +axis+","+str(self.Mz*factor)+"\n")
     return retval
@@ -197,14 +206,16 @@ class BiaxialBendingControlVars(UniaxialBendingControlVars):
     self.Mz= Mz #Bending moment about z axis.
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(BiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Mz*factor)
     return retval
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
     ''' Returns a string to represent fields in ANSYS (R).
-        eTag: element identifier.
-        axis: section 1 or 2
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param eTag: element identifier.
+    :param axis: section 1 or 2
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(BiaxialBendingControlVars,self).getAnsysStrings(eTag,axis,factor)
     retval.append("detab,"+str(eTag)+",Mz" +axis+","+str(self.Mz*factor)+"\n")
     return retval
@@ -228,14 +239,16 @@ class RCShearControlVars(BiaxialBendingControlVars):
     self.Vu= Vu # Shear resistance.
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(BiaxialBendingControlVars,self).getLaTeXFields(factor)+' & '+fmt.Esf.format(self.Mu*factor)+' & '+fmt.Esf.format(self.Vy*factor)+' & '+fmt.Esf.format(self.Vz*factor)+' & '+fmt.Esf.format(self.Vu*factor)
     return retval
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
     ''' Returns a string to represent fields in ANSYS (R).
-        eTag: element identifier.
-        axis: section 1 or 2
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param eTag: element identifier.
+    :param axis: section 1 or 2
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(RCShearControlVars,self).getAnsysStrings(eTag,axis,factor)
     retval.append("detab,"+str(eTag)+",Mu" +axis+","+str(self.Mu*factor)+"\n")
     retval.append("detab,"+str(eTag)+",Vy" +axis+","+str(self.Vy*factor)+"\n")
@@ -263,14 +276,16 @@ class CrackControlBaseVars(CFNMyMz):
     self.steelStress= steelStress #Stress in rebars.
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(CrackControlBaseVars,self).getLaTeXFields(factor)+" & "+fmt.Stress.format(self.steelStress*factor*factor) #Factor for stresses ??
     return retval
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
     ''' Returns a string to represent fields in ANSYS (R).
-        eTag: element identifier.
-        axis: section 1 or 2
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param eTag: element identifier.
+    :param axis: section 1 or 2
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(CrackControlBaseVars,self).getAnsysStrings(eTag,axis,factor)
     retval.append("detab,"+str(eTag)+",steelStress" +axis+","+str(self.steelStress*factor)+"\n")
     return retval
@@ -316,14 +331,16 @@ class FatigueControlBaseVars(NMyMz):
     self.concreteStress= concreteStress #negative stress in concrete.
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(FatigueControlBaseVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Vy*factor)+" & "+fmt.Stress.format(self.posSteelStress*factor*factor)+" & "+fmt.Stress.format(self.negSteelStress*factor*factor)+" & "+fmt.Stress.format(self.concreteStress*factor*factor) #Factor for stresses == factor*factor ??
     return retval
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
     ''' Returns a string to represent fields in ANSYS (R).
-        eTag: element identifier.
-        axis: section 1 or 2
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param eTag: element identifier.
+    :param axis: section 1 or 2
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= super(FatigueControlBaseVars,self).getAnsysStrings(eTag,axis,factor)
     retval.append("detab,"+str(eTag)+",Vy" +axis+","+str(self.Vy*factor)+"\n")
     retval.append("detab,"+str(eTag)+",posSteelStress" +axis+","+str(self.posSteelStress*factor*factor)+"\n")
@@ -377,7 +394,8 @@ class FatigueControlVars(ControlVarsBase):
 
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param factor: factor for units (default 1e-3 -> kN)'''
     retval= self.idSection+" & "
     retval+= self.state0.getLaTeXFields()+" & "
     retval+= self.state1.getLaTeXFields()+" & "
@@ -405,10 +423,10 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName):
   '''Writes control var values from element into a file for
      doing graphics and into a latex file.
 
-     Parameters:
-     controlVarName: name of the control var. 
-     preprocessor:    preprocessor from FEA model.
-     outputFileName: name of the files to write (.py and .tex)
+
+  :param controlVarName: name of the control var. 
+  :param preprocessor:    preprocessor from FEA model.
+  :param outputFileName: name of the files to write (.py and .tex)
   '''
   texOutput1= open("/tmp/texOutput1.tmp","w")
   texOutput1.write("Section 1\n")
@@ -450,9 +468,8 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName):
 # Imprime los resultados de la comprobación frente a tensiones normales
 def writeControlVarsFromElementsForAnsys(controlVarName,preprocessor,outputFileName, sectionName1, sectionName2):
   '''
-  Parameters:
-    preprocessor:    preprocessor name
-    outputFileName:  name of the output file containing tue results of the 
+  :param   preprocessor:    preprocessor name
+  :param   outputFileName:  name of the output file containing tue results of the 
                      verification 
   '''
   texOutput1= open("/tmp/texOutput1.tmp","w")
@@ -502,11 +519,12 @@ def writeControlVarsFromElementsForAnsys(controlVarName,preprocessor,outputFileN
 
 def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
   '''Extrapolates element's function values to the nodes.
-     elemSet: set of elements.
-     propName: name of the property that contains the control variables.
-     function: name of the function to call for each element.
-     argument: name of the control variable to extrapolate.
-     initialValue: initial value for the prop defined at the nodes.
+
+   :param elemSet: set of elements.
+   :param propName: name of the property that contains the control variables.
+   :param function: name of the function to call for each element.
+   :param argument: name of the control variable to extrapolate.
+   :param initialValue: initial value for the prop defined at the nodes.
   '''
   print 'propName: ', propName
   print 'argument: ', argument

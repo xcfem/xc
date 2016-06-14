@@ -15,16 +15,16 @@ class LUTField(object):
   '''Provides de variables involved in the drawing of a
   diagram showing a law of internal forces (or any other input)
   on linear elements
-  Attributes:
-    fUnitConv:  units conversion factor
-    lookUpTable:object that is used by mapper objects to map scalar values
+  
+  :ivar fUnitConv:  units conversion factor
+  :ivar lookUpTable:object that is used by mapper objects to map scalar values
                 into rga (red-green-blue-alpha transparency) color specification
                 or rga into scalar values. 
-    scalarBar:  legend that indicates to the viewer the correspondence between 
+  :ivar scalarBar:  legend that indicates to the viewer the correspondence between 
                 color value and data value.
-    mapper:     object that specifies the interface between data and graphic 
+  :ivar mapper:     object that specifies the interface between data and graphic 
                 primitives.
-    actor:      used to represent an entity in a rendering scene. The actor has position, 
+  :ivar actor:      used to represent an entity in a rendering scene. The actor has position, 
                 orientation, scaling, a reference to the defining geometry, rendering 
                 properties and possibly a texture map.
   '''
