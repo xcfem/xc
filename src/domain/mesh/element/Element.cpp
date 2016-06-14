@@ -102,6 +102,11 @@ XC::Element::Element(int tag, int cTag)
 XC::DefaultTag &XC::Element::getDefaultTag(void)
   { return defaultTag; }
 
+//! @brief Returns number of edges (it must be overloaded for elements that
+//! have nodes inside edges.
+int XC::Element::getNumEdges(void) const
+  { return getNumExternalNodes(); }
+
 //! @brief Consuma el estado del elemento.
 int XC::Element::commitState(void)
   {

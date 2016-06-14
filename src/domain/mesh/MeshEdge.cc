@@ -25,33 +25,45 @@
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 
-#include "ElementEdge.h"
-#include "Element.h"
+#include "MeshEdge.h"
 #include "domain/mesh/node/Node.h"
 #include <iostream>
-#include "domain/mesh/MeshEdge.h"
+
+
 
 //! @brief Constructor.
-XC::ElementEdge::ElementEdge(Element *eptr,const int &i)
-  :elem(eptr),iedge(i) {}
-
-//! @brief Returns a pointer to the element that "owns" the edge.
-const XC::Element *XC::ElementEdge::getElementPtr(void) const
-  { return elem; }
-
-//! @brief Returns the index of the edge in its owner element.
-const int &XC::ElementEdge::getEdgeIndex(void) const
-  { return iedge; }
-
-//! @brief Get the the element indexes of the edge nodes. 
-XC::ID XC::ElementEdge::getLocalIndexNodes(void) const
-  { return elem->getLocalIndexNodesEdge(iedge); }
+XC::MeshEdge::MeshEdge(const  NodesEdge &ns)
+  :nodes(ns) {}
 
 //! @brief Returns the edge nodes. 
-XC::ElementEdge::NodesEdge XC::ElementEdge::getNodes(void) const
-  { return elem->getNodesEdge(iedge); }
+XC::MeshEdge::NodesEdge XC::MeshEdge::getNodes(void) const
+  { return nodes; }
 
-//! @brief Returns the corresponding mesh edge. 
-XC::MeshEdge XC::ElementEdge::getMeshEdge(void) const
-  { return MeshEdge(getNodes()); }
+//! @brief Returns a deque<Element *> with the elements that share the edge.
+XC::MeshEdge::ElementConstPtrSet XC::MeshEdge::getConnectedElements(void) const
+  {
+    ElementConstPtrSet retval;
+    NodesEdge nodes= getNodes();
+    const Node *node0= nodes.front();
+    ElementConstPtrSet elementsNode0= node0->getConnectedElements();
+    const Node *node1= nodes.back();
+    ElementConstPtrSet elementsNode1= node1->getConnectedElements();
+    set_intersection(elementsNode0.begin(),elementsNode0.end(),elementsNode1.begin(),elementsNode1.end(),std::inserter(retval,retval.begin()));
+    return retval;
+  }
 
+bool XC::MeshEdge::operator==(const MeshEdge &otro) const
+  {
+    bool retval= true;
+    const size_t sz= size();
+    if(sz!= otro.size())
+      retval= false;
+    else
+      for(size_t i= 0;i<sz;i++)
+        if(nodes[i]!=otro.nodes[i])
+          {
+            retval= false;
+            break;
+          }
+    return retval; 
+  }

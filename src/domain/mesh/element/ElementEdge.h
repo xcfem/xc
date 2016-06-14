@@ -32,6 +32,8 @@
 
 namespace XC {
 
+class MeshEdge;
+
 //! \ingroup Elem
 //
 //! @brief Element edge.
@@ -41,13 +43,14 @@ class ElementEdge: public EntCmd
     int iedge; //! índice del borde.
   public:
     typedef Element::NodesEdge NodesEdge; //!< Nodos de un borde del elemento.
-    typedef std::deque<Element *> Elements; //!< Elements that share this edge.
+    typedef std::set<const Element *> ElementConstPtrSet;
+
     ElementEdge(Element *eptr= NULL,const int &i=-1);
     const Element *getElementPtr(void) const;
     const int &getEdgeIndex(void) const; 
     ID getLocalIndexNodes(void) const;
     NodesEdge getNodes(void) const;
-    Elements getElements(void) const;
+    MeshEdge getMeshEdge(void) const;    
   };
 } // end of XC namespace
 

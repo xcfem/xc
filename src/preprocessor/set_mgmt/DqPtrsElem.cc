@@ -28,7 +28,9 @@
 #include "DqPtrsElem.h"
 #include "domain/mesh/element/Element.h"
 #include "preprocessor/cad/trf/TrfGeom.h"
-#include "xc_basic/src/funciones/algebra/ExprAlgebra.h"
+#include "xc_utils/src/geom/d1/Polilinea3d.h"
+#include "domain/mesh/node/Node.h"
+#include "domain/mesh/MeshEdge.h"
 
 void XC::DqPtrsElem::crea_arbol(void)
   {
@@ -253,5 +255,29 @@ std::set<int> XC::DqPtrsElem::getTags(void) const
     std::set<int> retval;
     for(const_iterator i= begin();i!=end();i++)
       retval.insert((*i)->getTag());
+    return retval;
+  }
+
+//! @brief Returns the element set contour.
+Polilinea3d XC::DqPtrsElem::getContour(void) const
+  {
+    typedef std::set<const Element *> ElementConstPtrSet;
+    Polilinea3d retval;
+    const Element *elem= nullptr;
+    std::deque<MeshEdge> edgesContour;
+    for(const_iterator i= begin();i!=end();i++)
+      {
+        elem= *i;
+        const int numEdges= elem->getNumEdges();
+        for(int j= 0;j<numEdges;j++)
+          {
+	    MeshEdge meshEdge(elem->getNodesEdge(j));
+            ElementConstPtrSet elementsShared= meshEdge.getConnectedElements();
+            if(elementsShared.size()==1) //border element.
+              if(find(edgesContour.begin(), edgesContour.end(), meshEdge) == edgesContour.end())
+                { edgesContour.push_back(meshEdge); }
+            //XXX Continue here 2016.06.14 
+          }          
+      }    
     return retval;
   }
