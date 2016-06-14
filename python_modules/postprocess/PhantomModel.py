@@ -36,17 +36,17 @@ sccFICT= parametrosSeccionRectangular.RectangularSection("rectang",.40,40,2.1e6,
 class PhantomModel(object):
   def __init__(self,preprocessor, sectionNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
     ''' Extrae los identificadores de elementos de un archivo de salida con resultados
-        de combinaciones generado en XC 
-        Parameters:
-        preprocessor:        preprocessor name
-        sectionsNamesForEveryElement:  file containing a dictionary  such that
+    de combinaciones generado en XC 
+    
+    :ivar preprocessor:        preprocessor name
+    :ivar    sectionsNamesForEveryElement:  file containing a dictionary  such that
                                        for each shell element of the model stores 
                                        two names (for the sections 1 and 2) to 
                                        be employed in verifications
-        mapSectionsDefinition:      file containing a dictionary with the two 
+     :ivar   mapSectionsDefinition:      file containing a dictionary with the two 
                                     sections associated with each elements to be
                                     used in the verification
-        mapInteractionDiagrams:     file containing a dictionary such that
+     :ivar   mapInteractionDiagrams:     file containing a dictionary such that
                                     associates each element with the two interactions
                                     diagrams of materials to be used in the verification  
     '''
@@ -56,12 +56,12 @@ class PhantomModel(object):
     self.mapInteractionDiagrams= mapInteractionDiagrams
 
   def createElements(self,intForcCombFileName,controller,fakeSection= True):
-    '''Creates the phantom model elements from the data readed on the file.
-    Parameters:
-       intForcCombFileName: name of the file containing the forces and bending moments 
+    '''Creates the phantom model elements from the data read on the file.
+    
+    :param   intForcCombFileName: name of the file containing the forces and bending moments 
                            obtained for each element for the combinations analyzed
-       controller:     object that takes the results and checks the limit state.
-       fakeSection:  true if a fiber section model of the section is not needed for control.
+    :param   controller:     object that takes the results and checks the limit state.
+    :param   fakeSection:  true if a fiber section model of the section is not needed for control.
     '''
     idElements= set()
     self.idCombs= set()
