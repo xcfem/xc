@@ -23,35 +23,34 @@
 // Debería haber recibido una copia de la Licencia Pública General GNU 
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
-//----------------------------------------------------------------------------
 
-#include "ElementEdge.h"
-#include "Element.h"
-#include "domain/mesh/node/Node.h"
-#include <iostream>
-#include "domain/mesh/MeshEdge.h"
+#ifndef MeshEdge_h
+#define MeshEdge_h
 
-//! @brief Constructor.
-XC::ElementEdge::ElementEdge(Element *eptr,const int &i)
-  :elem(eptr),iedge(i) {}
+#include <cstdlib>
+#include "domain/mesh/element/Element.h"
 
-//! @brief Returns a pointer to the element that "owns" the edge.
-const XC::Element *XC::ElementEdge::getElementPtr(void) const
-  { return elem; }
+namespace XC {
 
-//! @brief Returns the index of the edge in its owner element.
-const int &XC::ElementEdge::getEdgeIndex(void) const
-  { return iedge; }
+//! \ingroup Mesh
+//
+//! @brief Mesh edge.
+class MeshEdge: public EntCmd
+  {
+  public:
+    typedef Element::NodesEdge NodesEdge; 
+  private:
+    NodesEdge nodes; //!< Nodes of a mesh edge.
+    typedef std::set<const Element *> ElementConstPtrSet;
+  public:
+    MeshEdge(const NodesEdge &);
+    NodesEdge getNodes(void) const;
+    inline size_t size(void) const
+      { return nodes.size(); }
+    ElementConstPtrSet getConnectedElements(void) const;
+    bool operator==(const MeshEdge &) const;
+  };
+} // end of XC namespace
 
-//! @brief Get the the element indexes of the edge nodes. 
-XC::ID XC::ElementEdge::getLocalIndexNodes(void) const
-  { return elem->getLocalIndexNodesEdge(iedge); }
-
-//! @brief Returns the edge nodes. 
-XC::ElementEdge::NodesEdge XC::ElementEdge::getNodes(void) const
-  { return elem->getNodesEdge(iedge); }
-
-//! @brief Returns the corresponding mesh edge. 
-XC::MeshEdge XC::ElementEdge::getMeshEdge(void) const
-  { return MeshEdge(getNodes()); }
+#endif
 

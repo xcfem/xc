@@ -143,6 +143,7 @@ class Element: public MeshComponent
 
     // methods dealing with nodes and number of external dof
     virtual int getNumExternalNodes(void) const =0;
+    virtual int getNumEdges(void) const;
     virtual NodePtrsWithIDs &getNodePtrs(void)= 0;	
     virtual const NodePtrsWithIDs &getNodePtrs(void) const= 0;	
     std::vector<int> getIdxNodes(void) const;

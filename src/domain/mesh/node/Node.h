@@ -141,6 +141,10 @@ class Node: public MeshComponent
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
+    // typedefs.
+    typedef std::set<Element *> ElementPtrSet;
+    typedef std::set<const Element *> ElementConstPtrSet;
+    
     // constructors
     Node(int classTag);
     Node(int tag, int classTag);
@@ -163,8 +167,8 @@ class Node: public MeshComponent
 
     void connect(ContinuaReprComponent *el) const;
     void disconnect(ContinuaReprComponent *el) const;
-    std::set<const Element *> getConnectedElements(void) const;
-    std::set<Element *> getConnectedElements(void);
+    ElementConstPtrSet getConnectedElements(void) const;
+    ElementPtrSet getConnectedElements(void);
 
     const bool isDead(void) const;
     const bool isAlive(void) const;
@@ -303,8 +307,8 @@ class Node: public MeshComponent
     virtual void Print(std::ostream &s, int flag = 0);
 
     virtual const Vector &getReaction(void) const;
-    const Vector &getResistingForce(const std::set<const Element *> &,const bool &) const;
-    SVD3d getResistingSVD3d(const std::set<const Element *> &,const bool &) const;
+    const Vector &getResistingForce(const ElementConstPtrSet &,const bool &) const;
+    SVD3d getResistingSVD3d(const ElementConstPtrSet &,const bool &) const;
     virtual int addReactionForce(const Vector &, double factor);
     virtual int resetReactionForce(bool inclInertia);
     void checkReactionForce(const double &);
