@@ -5,6 +5,13 @@
     fct: Factor.
 '''
 def resetAccionesConstantTS(preprocessor,tipoTimeSeries, nmbTimeSeries, fct):
+  '''Clears all load patterns in the model and creates a new TimeSeries
+
+  :param tipoTimeSeries: time series type
+  :param  nmbTimeSeries: time series name.
+  :param  fct: Factor
+
+  '''
   coacciones= preprocessor.getConstraintLoader
   lps= coacciones.getActiveLoadPatterns
   lps.clearrAll()

@@ -2,6 +2,11 @@
 # Rutinas para facilitar el tesado de elementos
 
 def preTensaElementosLinea(preprocessor,numLinea, tension):
+  '''Introduces a prestressing tension on the elements in a line
+  :param preprocessor: preprocessor name
+  :param numLinea: line number
+  :parm tension: tension value
+  '''
   line= preprocessor.getCad.getLine(numLinea)
   elems= linea.getElems()
   for e in elems:
