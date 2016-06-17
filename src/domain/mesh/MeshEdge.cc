@@ -84,18 +84,19 @@ XC::MeshEdge::ElementConstPtrSet XC::MeshEdge::getConnectedElements(void) const
   }
 
 //! @brief Returns an edge that follows the edge been passed as parameter.
-const XC::MeshEdge *XC::MeshEdge::next(const std::deque<MeshEdge> &edges) const
+const XC::MeshEdge *XC::MeshEdge::next(const std::deque<MeshEdge> &edges, const std::set<const MeshEdge *> &visited) const
   {
     const MeshEdge *retval= nullptr;
     const Node *endNode= nodes.back();
     for(std::deque<MeshEdge>::const_iterator i= edges.begin();i!=edges.end();i++)
       {
-        MeshEdge edge= *i; 
-        if(isConnected(edge))
-          {
-            retval= &edge;
-            break;
-          }
+        const MeshEdge &edge= *i;
+        if(visited.find(&edge)!=visited.end()) //Already visited
+          if(isConnected(edge))
+            {
+              retval= &edge;
+              break;
+            }
       }
     return retval;
   }

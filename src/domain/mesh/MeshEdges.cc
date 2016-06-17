@@ -35,30 +35,63 @@
 XC::MeshEdges::MeshEdges(void)
   : EntCmd() {}
 
+std::deque<const XC::MeshEdge *> XC::MeshEdges::getLoop(const MeshEdge *first) const
+  {
+    const Node *firstNode= first->getFirstNode();
+    const Node *lastNode= first->getLastNode();
+    std::set<const MeshEdge *> visited;
+    visited.insert(first);
+    std::deque<const MeshEdge *> retval;
+    retval.push_back(first);
+    do
+      {
+        const MeshEdge *next= first->next(*this,visited);
+        if(next)
+          {
+            retval.push_back(next);
+            visited.insert(next);
+            first= next;
+            lastNode= first->getLastNode();
+          }
+        else
+          {
+	    std::cerr << "MeshEdges::getLoop error; next edge not found." << std::endl;
+            break;
+          }
+      }
+    while(firstNode!=lastNode);
+    return retval;
+  }
+
+Polilinea3d getPolylineFromLoop(const std::deque<const XC::MeshEdge *> &loop,bool undeformedGeometry)
+  {
+    Polilinea3d retval;
+    Pos3d pt;
+    for(std::deque<const XC::MeshEdge *>::const_iterator i= loop.begin();i!=loop.end();i++)
+      {
+        if(undeformedGeometry)
+          pt= (*i)->getFirstNode()->getPosInicial3d();
+        else
+          pt= (*i)->getFirstNode()->getPosFinal3d();
+        retval.AgregaVertice(pt);
+      }
+    pt= retval.front(); //First point.
+    retval.AgregaVertice(pt); //Polyline closed.
+    return retval;
+  } 
+
 std::deque<Polilinea3d> XC::MeshEdges::getContours(bool undeformedGeometry) const
   {
     std::deque<Polilinea3d> retval;
     if(!empty())
       {
-        const size_t sz= size();
         const_iterator i= begin();
-        const MeshEdge *first= &(*i); 
-        const Pos3d pt;
-        if(undeformedGeometry)
-          first->getFirstNode()->getPosInicial3d();
-        else
-          first->getFirstNode()->getPosFinal3d();
-        Polilinea3d pol;
-        pol.AgregaVertice(pt);
-
-        std::set<const MeshEdge *> visitados;
-        visitados.insert(first);
-        i++;
-        do
-          {
-            const MeshEdge *next= first->next(*this);
-	  }
-        while(visitados.size()<sz);
+        const MeshEdge *first= &(*i);
+        std::deque<const MeshEdge *> loop= getLoop(first);
+        if(loop.size()!=size())
+	  std::cerr << "MeshEdges::getContours error; contour with more than a loop not implemented."
+                    << std::endl;
+        retval.push_back(getPolylineFromLoop(loop,undeformedGeometry));
       }
     return retval;
   }

@@ -57,6 +57,7 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element>, boost::noncopyable >("DqPtrsElem"
   .add_property("getNumLiveElements", &XC::DqPtrsElem::getNumLiveElements)
   .add_property("getNumDeadElements", &XC::DqPtrsElem::getNumDeadElements)
   .def("getNearestElement",make_function(getNearestElementDqPtrs, return_internal_reference<>() ),"Returns nearest element.")
+  .def("getContours",&XC::DqPtrsElem::getContours,"Returs contour(s) from the element set in the form of closed 3D polylines.")
    ;
 
 typedef XC::DqPtrs<XC::Constraint> dq_ptrs_constraint;

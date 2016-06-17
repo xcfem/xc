@@ -51,7 +51,7 @@ class MeshEdge: public EntCmd
     const Node *getLastNode(void) const;
     bool isConnected(const Node &) const;
     bool isConnected(const MeshEdge &) const;
-    const MeshEdge *next(const std::deque<MeshEdge> &) const;
+    const MeshEdge *next(const std::deque<MeshEdge> &, const std::set<const MeshEdge *> &) const;
     ElementConstPtrSet getConnectedElements(void) const;
     bool operator==(const MeshEdge &) const;
   };

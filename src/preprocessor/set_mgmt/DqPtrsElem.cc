@@ -275,7 +275,6 @@ std::deque<Polilinea3d> XC::DqPtrsElem::getContours(bool undeformedGeometry) con
             if(elementsShared.size()==1) //border element.
               if(find(edgesContour.begin(), edgesContour.end(), meshEdge) == edgesContour.end())
                 { edgesContour.push_back(meshEdge); }
-            //XXX Continue here 2016.06.14 
           }
       }
     return edgesContour.getContours(undeformedGeometry);
