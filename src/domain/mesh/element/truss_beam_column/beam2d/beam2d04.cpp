@@ -311,14 +311,14 @@ const XC::Vector &XC::beam2d04::getResistingForce(void) const
     return rForce;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::beam2d04::sendData(CommParameters &cp)
   {
     int res= beam2d::sendData(cp);
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::beam2d04::recvData(const CommParameters &cp)
   {
     int res= beam2d::recvData(cp);

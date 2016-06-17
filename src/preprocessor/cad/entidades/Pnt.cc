@@ -53,12 +53,12 @@ XC::Pnt::Pnt(const std::string &nombre, Preprocessor *m,const Pos3d &pto)
 XC::SetEstruct *XC::Pnt::getCopy(void) const
   { return new Pnt(*this); }
 
-//! Inserta la línea que se pasa como parámetro en la lista
+//! Inserta la línea being passed as parameter en la lista
 //! de líneas que tocan al punto.
 void XC::Pnt::inserta_linea(Edge *l) const
   { lineas_pt.insert(l); }
 
-//! Borra la línea que se pasa como parámetro de la lista
+//! Borra la línea being passed as parameter de la lista
 //! de líneas que tocan al punto.
 void XC::Pnt::borra_linea(Edge *l) const
   {
@@ -137,7 +137,7 @@ bool XC::Pnt::Toca(const Body &b) const
     return false;
   }
 
-//! @brief Devuelve el cuadrado de la distancia a la posición que se pasa como parámetro.
+//! @brief Devuelve el cuadrado de la distancia a la posición being passed as parameter.
 double XC::Pnt::DistanciaA2(const Pos3d &pt) const
   { return dist2(p,pt);  }
 

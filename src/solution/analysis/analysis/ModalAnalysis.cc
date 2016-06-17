@@ -39,7 +39,7 @@ XC::ModalAnalysis::ModalAnalysis(SoluMethod *metodo)
   :EigenAnalysis(metodo), espectro() {}
 
 //! @brief Devuelve la aceleración que corresponde al periodo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::ModalAnalysis::getAcceleration(const double &T) const
   { return espectro(T); }
 
@@ -60,7 +60,7 @@ XC::Vector XC::ModalAnalysis::getModalAccelerations(void) const
   { return getAccelerations(getPeriodos()); }
 
 //! @brief Devuelve la fuerzas estática equivalente para el modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 XC::Vector XC::ModalAnalysis::getEquivalentStaticLoad(int mode) const
   {
     const double accel= getAcceleration(getPeriodo(mode));

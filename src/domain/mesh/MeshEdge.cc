@@ -29,26 +29,74 @@
 #include "domain/mesh/node/Node.h"
 #include <iostream>
 
-
+//! @brief Constructor.
+XC::MeshEdge::MeshEdge(void)
+  :nodes() {}
 
 //! @brief Constructor.
-XC::MeshEdge::MeshEdge(const  NodesEdge &ns)
+XC::MeshEdge::MeshEdge(const NodesEdge &ns)
   :nodes(ns) {}
 
 //! @brief Returns the edge nodes. 
 XC::MeshEdge::NodesEdge XC::MeshEdge::getNodes(void) const
   { return nodes; }
 
+//! @brief Returns the first node from the edge:
+//      x-----+-------+--------x
+//      ^
+//      |
+const XC::Node *XC::MeshEdge::getFirstNode(void) const
+  { return nodes.front(); }
+
+//! @brief Returns the last node from the edge:
+//      x-----+-------+--------x
+//                             ^
+//                             |
+const XC::Node *XC::MeshEdge::getLastNode(void) const
+  { return nodes.back(); }
+
+//! @brief Returns true if the edge is connected to the node.
+bool XC::MeshEdge::isConnected(const Node &n) const
+  {
+    bool retval= false;
+    if((getFirstNode()== &n) || (getLastNode()== &n))
+      retval= true;
+    return retval;
+  }
+
+//! @brief Returns true if the edge is connected to the edge being passed as parameter.
+bool XC::MeshEdge::isConnected(const MeshEdge &edge) const
+  {
+    bool retval= false;
+    if(isConnected(*edge.getFirstNode()) || isConnected(*edge.getLastNode()))
+      retval= true;
+    return retval;
+  }
+
 //! @brief Returns a deque<Element *> with the elements that share the edge.
 XC::MeshEdge::ElementConstPtrSet XC::MeshEdge::getConnectedElements(void) const
   {
     ElementConstPtrSet retval;
-    NodesEdge nodes= getNodes();
-    const Node *node0= nodes.front();
-    ElementConstPtrSet elementsNode0= node0->getConnectedElements();
-    const Node *node1= nodes.back();
-    ElementConstPtrSet elementsNode1= node1->getConnectedElements();
+    ElementConstPtrSet elementsNode0= getFirstNode()->getConnectedElements();
+    ElementConstPtrSet elementsNode1= getLastNode()->getConnectedElements();
     set_intersection(elementsNode0.begin(),elementsNode0.end(),elementsNode1.begin(),elementsNode1.end(),std::inserter(retval,retval.begin()));
+    return retval;
+  }
+
+//! @brief Returns an edge that follows the edge been passed as parameter.
+const XC::MeshEdge *XC::MeshEdge::next(const std::deque<MeshEdge> &edges) const
+  {
+    const MeshEdge *retval= nullptr;
+    const Node *endNode= nodes.back();
+    for(std::deque<MeshEdge>::const_iterator i= edges.begin();i!=edges.end();i++)
+      {
+        MeshEdge edge= *i; 
+        if(isConnected(edge))
+          {
+            retval= &edge;
+            break;
+          }
+      }
     return retval;
   }
 

@@ -36,7 +36,7 @@ void XC::MEDMapConectividad::nueva_celda(const MED_EN::medGeometryElement &tipo,
   }
 
 //! @brief Devuelve el vector con la conectividad de los elementos
-//! del tipo que se pasa como parámetro.
+//! del tipo being passed as parameter.
 std::vector<int> &XC::MEDMapConectividad::getConnectivity(const int &tipoElem)
   {
     iterator i= med_cell_connectivity.find(tipoElem);
@@ -47,7 +47,7 @@ std::vector<int> &XC::MEDMapConectividad::getConnectivity(const int &tipoElem)
   }
 
 //! @brief Devuelve el vector con la conectividad de los elementos
-//! del tipo que se pasa como parámetro.
+//! del tipo being passed as parameter.
 const std::vector<int> &XC::MEDMapConectividad::getConnectivity(const int &tipoElem) const
   { return med_cell_connectivity.find(tipoElem)->second; }
 

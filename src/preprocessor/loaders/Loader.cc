@@ -58,7 +58,7 @@ void XC::Loader::set_preprocessor(Preprocessor *p)
 XC::Loader::~Loader(void)
   { preprocessor= nullptr; }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Loader::sendSelf(CommParameters &cp)
   {
     std::cerr << "Loader::sendSelf() no implementada.\n";    
@@ -66,7 +66,7 @@ int XC::Loader::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Loader::recvSelf(const CommParameters &cp)
   {
     std::cerr << "Loader::recvSelf() no implementada.\n";    

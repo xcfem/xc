@@ -39,21 +39,21 @@ XC::PlasticLengthsBeamIntegration::PlasticLengthsBeamIntegration(int classTag)
   : BeamIntegration(classTag), lpI(0.0), lpJ(0.0) {}
 
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::PlasticLengthsBeamIntegration::sendData(CommParameters &cp)
   {
     int res= cp.sendDoubles(lpI,lpJ,getDbTagData(),CommMetaData(1));
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::PlasticLengthsBeamIntegration::recvData(const CommParameters &cp)
   {
     int res= cp.receiveDoubles(lpI,lpJ,getDbTagData(),CommMetaData(1));
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::PlasticLengthsBeamIntegration::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -67,7 +67,7 @@ int XC::PlasticLengthsBeamIntegration::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::PlasticLengthsBeamIntegration::recvSelf(const CommParameters &cp)
   {
     inicComm(2);

@@ -68,7 +68,7 @@ XC::Set &XC::Set::operator=(const Set &otro)
 //! @brief Copia las listas de objetos del conjunto s.
 //!
 //! Copia en ESTE objeto las listas de objetos del conjunto
-//! que se pasa como parámetro.
+//! being passed as parameter.
 void XC::Set::copia_listas(const Set &otro)
   {
     SetMeshComp::copia_listas(otro);
@@ -85,7 +85,7 @@ void XC::Set::copia_listas(const Set &otro)
   }
 
 //! @brief Agrega a este conjunto los objetos del conjunto
-//! que se pasa como parámetro.
+//! being passed as parameter.
 void XC::Set::agrega_listas(const Set &otro)
   {
     SetMeshComp::agrega_listas(otro);
@@ -97,7 +97,7 @@ void XC::Set::agrega_listas(const Set &otro)
   }
 
 // //! @brief Agrega a este conjunto los objetos del conjunto
-// //! que se pasa como parámetro que cumplen la condición.
+// //! being passed as parameter que cumplen la condición.
 // void XC::Set::agrega_listas_cond(const Set &otro,const std::string &cond)
 //   {
 //     SetMeshComp::agrega_listas_cond(otro,cond);
@@ -167,7 +167,7 @@ void XC::Set::Transforma(const size_t &indice_trf)
 //! @brief Crea una copia de los elementos del conjunto y los mete en otro
 //! cuyo nombre se pasa como parámetro.Las coordenadas de los
 //! nuevos puntos serán las que resulten de sumar a las del primitivo el
-//! vector que se pasa como parámetro.
+//! vector being passed as parameter.
 void XC::Set::crea_copia(const std::string &nombre,const Vector3d &v= Vector3d())
   {
     Preprocessor *preprocessor= get_preprocessor();
@@ -313,7 +313,7 @@ bool XC::Set::In(const Body *b) const
 bool XC::Set::In(const UniformGrid *ug) const
   { return uniform_grids.in(ug); }
 
-//! @brief Agrega al conjunto que se pasa como parámetro
+//! @brief Agrega al conjunto being passed as parameter
 //! los elementos que intervienen en la
 //! definición de los que ya están en el conjunto.
 void XC::Set::CompletaHaciaAbajo(void)
@@ -464,7 +464,7 @@ XC::DbTagData &XC::Set::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::Set::sendData(CommParameters &cp)
   {
     int res= SetMeshComp::sendData(cp);
@@ -476,7 +476,7 @@ int XC::Set::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::Set::recvData(const CommParameters &cp)
   {
     ID tmp;
@@ -497,7 +497,7 @@ int XC::Set::recvData(const CommParameters &cp)
 XC::Set::~Set(void)
   { clearAll(); }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Set::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -511,7 +511,7 @@ int XC::Set::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Set::recvSelf(const CommParameters &cp)
   {
     inicComm(19);

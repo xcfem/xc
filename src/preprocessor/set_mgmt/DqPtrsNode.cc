@@ -116,14 +116,14 @@ bool XC::DqPtrsNode::push_front(Node *n)
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 XC::Node *XC::DqPtrsNode::getNearestNode(const Pos3d &p)
   {
     Node *retval= const_cast<Node *>(kdtreeNodos.getNearestNode(p));
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::DqPtrsNode::getNearestNode(const Pos3d &p) const
   {
     DqPtrsNode *this_no_const= const_cast<DqPtrsNode *>(this);

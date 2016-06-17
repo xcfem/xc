@@ -247,7 +247,7 @@ void XC::Body::add_to_sets(std::set<SetBase *> &sets)
       }
   }
 
-//! @brief Actualiza la topología de la superficie que se pasa como parámetro.
+//! @brief Actualiza la topología de la superficie being passed as parameter.
 void XC::Body::set_surf(Face *s)
   {
     if(s)

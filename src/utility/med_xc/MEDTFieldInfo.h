@@ -143,7 +143,7 @@ void MEDTFieldInfo<T>::setGaussModel(const MEDGaussModel &gm)
   }
 
 //! @brief Define los modelos de integración de Gauss para los tipos de elemento
-//! del conjunto que se pasa como parámetro.
+//! del conjunto being passed as parameter.
 template <class T>
 void MEDTFieldInfo<T>::defineGaussModels(const Set &set)
   {

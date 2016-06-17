@@ -87,7 +87,7 @@ XC::StoFibras &XC::StoFibras::operator=(const StoFibras &otro)
     return *this;
   }
 
-//! @brief Copia las fibras del contenedor que se pasa como parámetro.
+//! @brief Copia las fibras del contenedor being passed as parameter.
 void XC::StoFibras::copia_fibras(const contenedor_fibras &fibers)
   {
     const size_t numFibers= fibers.size();

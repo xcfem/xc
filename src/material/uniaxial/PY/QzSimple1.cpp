@@ -571,7 +571,7 @@ int XC::QzSimple1::revertToStart(void)
 XC::UniaxialMaterial *XC::QzSimple1::getCopy(void) const
   { return new QzSimple1(*this); }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::QzSimple1::sendData(CommParameters &cp)
   {
     int res= PQyzBase::sendData(cp);
@@ -583,7 +583,7 @@ int XC::QzSimple1::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::QzSimple1::recvData(const CommParameters &cp)
   {
     int res= PQyzBase::recvData(cp);

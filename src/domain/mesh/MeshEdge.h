@@ -27,7 +27,6 @@
 #ifndef MeshEdge_h
 #define MeshEdge_h
 
-#include <cstdlib>
 #include "domain/mesh/element/Element.h"
 
 namespace XC {
@@ -43,10 +42,16 @@ class MeshEdge: public EntCmd
     NodesEdge nodes; //!< Nodes of a mesh edge.
     typedef std::set<const Element *> ElementConstPtrSet;
   public:
+    MeshEdge(void);
     MeshEdge(const NodesEdge &);
     NodesEdge getNodes(void) const;
     inline size_t size(void) const
       { return nodes.size(); }
+    const Node *getFirstNode(void) const;
+    const Node *getLastNode(void) const;
+    bool isConnected(const Node &) const;
+    bool isConnected(const MeshEdge &) const;
+    const MeshEdge *next(const std::deque<MeshEdge> &) const;
     ElementConstPtrSet getConnectedElements(void) const;
     bool operator==(const MeshEdge &) const;
   };

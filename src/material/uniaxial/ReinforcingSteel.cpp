@@ -397,7 +397,7 @@ int XC::ReinforcingSteel::revertToStart(void)
 XC::UniaxialMaterial * XC::ReinforcingSteel::getCopy(void) const
   { return new ReinforcingSteel(*this); }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ReinforcingSteel::sendData(CommParameters &cp)
   {
     int res= UniaxialMaterial::sendData(cp);
@@ -454,7 +454,7 @@ int XC::ReinforcingSteel::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ReinforcingSteel::recvData(const CommParameters &cp)
   {
     int res= UniaxialMaterial::recvData(cp);
@@ -510,7 +510,7 @@ int XC::ReinforcingSteel::recvData(const CommParameters &cp)
 
     return res;
   }
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ReinforcingSteel::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -524,7 +524,7 @@ int XC::ReinforcingSteel::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ReinforcingSteel::recvSelf(const CommParameters &cp)
   {
     inicComm(32);

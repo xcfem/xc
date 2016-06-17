@@ -276,7 +276,7 @@ int XC::CentralDifference::commit(void)
     return commitModel();
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::CentralDifference::sendData(CommParameters &cp)
   {
     int res= RayleighBase::sendData(cp);
@@ -288,7 +288,7 @@ int XC::CentralDifference::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::CentralDifference::recvData(const CommParameters &cp)
   {
     int res= RayleighBase::recvData(cp);
@@ -300,7 +300,7 @@ int XC::CentralDifference::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::CentralDifference::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -315,7 +315,7 @@ int XC::CentralDifference::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::CentralDifference::recvSelf(const CommParameters &cp)
   {
     inicComm(9);

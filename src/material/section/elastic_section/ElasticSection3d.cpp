@@ -124,7 +124,7 @@ const XC::ResponseId &XC::ElasticSection3d::getType(void) const
 int XC::ElasticSection3d::getOrder(void) const
   { return 4; }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ElasticSection3d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -138,7 +138,7 @@ int XC::ElasticSection3d::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ElasticSection3d::recvSelf(const CommParameters &cp)
   {
     inicComm(3);

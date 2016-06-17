@@ -163,7 +163,7 @@ XC::HingeRadauTwoBeamIntegration2d::getTangentDriftJ(double L, double LI,
 XC::BeamIntegration *XC::HingeRadauTwoBeamIntegration2d::getCopy(void) const
   { return new HingeRadauTwoBeamIntegration2d(*this); }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::HingeRadauTwoBeamIntegration2d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -177,7 +177,7 @@ int XC::HingeRadauTwoBeamIntegration2d::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::HingeRadauTwoBeamIntegration2d::recvSelf(const CommParameters &cp)
   {
     inicComm(3);

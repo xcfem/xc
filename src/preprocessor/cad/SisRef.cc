@@ -31,15 +31,15 @@
 
 
 //! @brief Devuelve el vector unitario I expresado en el sistema global
-//! en la posición que se pasa como parámetro.
+//! en la posición being passed as parameter.
 Vector3d XC::SisRef::GetI(const Pos3d &p) const
   { return GetVDirEje(1,p); }
 //! @brief Devuelve el vector unitario J expresado en el sistema global
-//! en la posición que se pasa como parámetro.
+//! en la posición being passed as parameter.
 Vector3d XC::SisRef::GetJ(const Pos3d &p) const
   { return GetVDirEje(2,p); }
 //! @brief Devuelve el vector unitario I expresado en el sistema global
-//! en la posición que se pasa como parámetro.
+//! en la posición being passed as parameter.
 Vector3d XC::SisRef::GetK(const Pos3d &p) const
   { return GetVDirEje(3,p); }
 

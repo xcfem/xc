@@ -143,7 +143,7 @@ int XC::BerkeleyDbDatastore::open(const DBTYPE &type)
   }
 
 //! @brief Devuelve el tipo de acceso a emplear a partir
-//! de la cadena de caracteres que se pasa como parámetro.
+//! de la cadena de caracteres being passed as parameter.
 DBTYPE XC::BerkeleyDbDatastore::get_type(const std::string &dbType)
   {
     // set the database storage type

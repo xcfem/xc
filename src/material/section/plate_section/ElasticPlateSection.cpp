@@ -134,7 +134,7 @@ void  XC::ElasticPlateSection::Print( std::ostream &s, int flag )
     return ;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ElasticPlateSection::sendSelf(CommParameters &cp) 
   {
     setDbTag(cp);
@@ -149,7 +149,7 @@ int XC::ElasticPlateSection::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ElasticPlateSection::recvSelf(const CommParameters &cp)
   {
     inicComm(8);

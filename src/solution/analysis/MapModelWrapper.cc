@@ -69,7 +69,7 @@ const XC::ModelWrapper *XC::MapModelWrapper::getModelWrapper(const std::string &
     return retval;
   }
 
-//! @brief Crea un nuevo método de solución con el código que se pasa como parámetro.
+//! @brief Crea un nuevo método de solución con el código being passed as parameter.
 //! @brief Si ya existe devuelve un puntero al mismo.
 XC::ModelWrapper &XC::MapModelWrapper::creaModelWrapper(const std::string &cod)
   {

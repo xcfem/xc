@@ -45,7 +45,7 @@ void XC::SisRefCartesianas3d::TresPuntos(const Pos3d &p1,const Pos3d &p2, const 
 
 //! @brief Devuelve el vector unitario en la dirección del eje que se
 //! pasa como parámetro expresado en el sistema global 
-//! para la posición que se pasa como parámetro.
+//! para la posición being passed as parameter.
 Vector3d XC::SisRefCartesianas3d::GetVDirEje(const size_t &i,const Pos3d &) const
   { return ref.GetVDirEje(i); }
 

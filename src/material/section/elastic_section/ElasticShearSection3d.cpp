@@ -100,7 +100,7 @@ const XC::ResponseId &XC::ElasticShearSection3d::getType(void) const
 int XC::ElasticShearSection3d::getOrder(void) const
   { return 6; }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ElasticShearSection3d::sendData(CommParameters &cp)
   {
     int res= BaseElasticSection3d::sendData(cp);
@@ -108,7 +108,7 @@ int XC::ElasticShearSection3d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::ElasticShearSection3d::recvData(const CommParameters &cp)
   {
     int res= BaseElasticSection3d::recvData(cp);

@@ -284,7 +284,7 @@ int XC::HHT1::commit(void)
     return commitModel();
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::HHT1::sendData(CommParameters &cp)
   {
     int res= DampingFactorsIntegrator::sendData(cp);
@@ -295,7 +295,7 @@ int XC::HHT1::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::HHT1::recvData(const CommParameters &cp)
   {
     int res= DampingFactorsIntegrator::recvData(cp);
@@ -306,7 +306,7 @@ int XC::HHT1::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::HHT1::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -320,7 +320,7 @@ int XC::HHT1::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::HHT1::recvSelf(const CommParameters &cp)
   {
     inicComm(27);

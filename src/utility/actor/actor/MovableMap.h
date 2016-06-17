@@ -76,7 +76,7 @@ XC::DbTagData &XC::MovableMap<T>::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 template <class T>
 int XC::MovableMap<T>::sendData(CommParameters &cp)
   {
@@ -102,7 +102,7 @@ int XC::MovableMap<T>::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 template <class T>
 int MovableMap<T>::recvData(const CommParameters &cp)
   {
@@ -136,7 +136,7 @@ int MovableMap<T>::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia el objeto por el canal que se pasa como parámetro.
+//! @brief Envia el objeto through the channel being passed as parameter.
 template <class T>
 int XC::MovableMap<T>::sendSelf(CommParameters &cp)
   {
@@ -150,7 +150,7 @@ int XC::MovableMap<T>::sendSelf(CommParameters &cp)
     return result;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 template <class T>
 int MovableMap<T>::recvSelf(const CommParameters &cp)
   {

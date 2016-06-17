@@ -331,7 +331,7 @@ void XC::PlateFiberMaterial::Print(std::ostream &s, int flag)
 }
 
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::PlateFiberMaterial::sendSelf(CommParameters &cp) 
   {
     setDbTag(cp);
@@ -345,7 +345,7 @@ int XC::PlateFiberMaterial::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::PlateFiberMaterial::recvSelf(const CommParameters &cp)
   {
     inicComm(6);

@@ -38,7 +38,7 @@ XC::RayleighBase::RayleighBase(SoluMethod *owr,int classTag,const RayleighDampin
 
 
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::RayleighBase::sendData(CommParameters &cp)
   {
     int res= DampingFactorsIntegrator::sendData(cp);
@@ -46,7 +46,7 @@ int XC::RayleighBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::RayleighBase::recvData(const CommParameters &cp)
   {
     int res= DampingFactorsIntegrator::recvData(cp);

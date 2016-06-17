@@ -335,7 +335,7 @@ void XC::PlaneStressMaterial::Print( std::ostream &s, int flag )
   return ;
 }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::PlaneStressMaterial::sendData(CommParameters &cp)
   {
     int res= NDAdaptorMaterial::sendData(cp);
@@ -343,7 +343,7 @@ int XC::PlaneStressMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::PlaneStressMaterial::recvData(const CommParameters &cp)
   {
     int res= NDAdaptorMaterial::recvData(cp);
@@ -351,7 +351,7 @@ int XC::PlaneStressMaterial::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::PlaneStressMaterial::sendSelf(CommParameters &cp) 
   {
     setDbTag(cp);
@@ -365,7 +365,7 @@ int XC::PlaneStressMaterial::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::PlaneStressMaterial::recvSelf(const CommParameters &cp)
   {
     inicComm(7);

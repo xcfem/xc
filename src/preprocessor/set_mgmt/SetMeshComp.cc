@@ -67,7 +67,7 @@ XC::SetMeshComp &XC::SetMeshComp::operator=(const SetMeshComp &otro)
 //! @brief Copia las listas de objetos del conjunto s.
 //!
 //! Copia en ESTE objeto las listas de objetos del conjunto
-//! que se pasa como parámetro.
+//! being passed as parameter.
 void XC::SetMeshComp::copia_listas(const SetMeshComp &otro)
   {
     nodos= otro.nodos;
@@ -79,7 +79,7 @@ void XC::SetMeshComp::copia_listas(const SetMeshComp &otro)
   }
 
 //! @brief Agrega a este conjunto los objetos del conjunto
-//! que se pasa como parámetro.
+//! being passed as parameter.
 void XC::SetMeshComp::agrega_listas(const SetMeshComp &otro)
   {
     nodos.agrega(otro.nodos);
@@ -88,7 +88,7 @@ void XC::SetMeshComp::agrega_listas(const SetMeshComp &otro)
   }
 
 // //! @brief Agrega a este conjunto los objetos del conjunto
-// //! que se pasa como parámetro que cumplen la condición.
+// //! being passed as parameter que cumplen la condición.
 // void XC::SetMeshComp::agrega_listas_cond(const SetMeshComp &otro,const std::string &cond)
 //   {
 //     nodos.agrega_cond(otro.nodos,cond);
@@ -114,11 +114,11 @@ void XC::SetMeshComp::clearAll(void)
     elementos.clearAll();
   }
 
-//! @brief Agrega el puntero a nodo que se pasa como parámetro.
+//! @brief Agrega el puntero a nodo being passed as parameter.
 void XC::SetMeshComp::agregaNodo(Node *nPtr)
   { nodos.push_back(nPtr); }
 
-//! @brief Agrega el elemento que se pasa como parámetro.
+//! @brief Agrega el elemento being passed as parameter.
 void XC::SetMeshComp::agregaElemento(Element *ePtr)
   { elementos.push_back(ePtr); }
 
@@ -352,11 +352,11 @@ bool XC::SetMeshComp::InNodeTags(const ID &tag_nodos) const
 std::set<int> XC::SetMeshComp::getNodeTags(void) const
   { return nodos.getTags(); }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p)
   { return nodos.getNearestNode(p); }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p) const
   {
     SetMeshComp *this_no_const= const_cast<SetMeshComp *>(this);
@@ -368,11 +368,11 @@ const XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p) const
 std::set<int> XC::SetMeshComp::getElementTags(void) const
   { return elementos.getTags(); }
 
-//! @brief Devuelve el elemento más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
 XC::Element *XC::SetMeshComp::getNearestElement(const Pos3d &p)
   { return elementos.getNearestElement(p); }
 
-//! @brief Devuelve el elemento más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
 const XC::Element *XC::SetMeshComp::getNearestElement(const Pos3d &p) const
   {
     SetMeshComp *this_no_const= const_cast<SetMeshComp *>(this);
@@ -389,7 +389,7 @@ std::set<int> XC::SetMeshComp::getConstraintTags(void) const
   }
 
 
-//! @brief Agrega al conjunto que se pasa como parámetro
+//! @brief Agrega al conjunto being passed as parameter
 //! los elementos que intervienen en la
 //! definición de los que ya están en el conjunto.
 void XC::SetMeshComp::CompletaHaciaAbajo(void)
@@ -475,7 +475,7 @@ XC::DbTagData &XC::SetMeshComp::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::SetMeshComp::sendData(CommParameters &cp)
   {
     int res= SetBase::sendData(cp);
@@ -485,7 +485,7 @@ int XC::SetMeshComp::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::SetMeshComp::recvData(const CommParameters &cp)
   {
     ID tmp;
@@ -503,7 +503,7 @@ int XC::SetMeshComp::recvData(const CommParameters &cp)
 XC::SetMeshComp::~SetMeshComp(void)
   { clearAll(); }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::SetMeshComp::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -517,7 +517,7 @@ int XC::SetMeshComp::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::SetMeshComp::recvSelf(const CommParameters &cp)
   {
     inicComm(19);

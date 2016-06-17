@@ -39,7 +39,7 @@ XC::beam2d::beam2d(int tag, int class_tag, double a, double e, double i, int Nd1
   :ProtoBeam2d(tag,class_tag,a,e,i,Nd1,Nd2), L(0)   
   {}
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::beam2d::sendData(CommParameters &cp)
   {
     int res= ProtoBeam2d::sendData(cp);
@@ -47,7 +47,7 @@ int XC::beam2d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::beam2d::recvData(const CommParameters &cp)
   {
     int res= ProtoBeam2d::recvData(cp);

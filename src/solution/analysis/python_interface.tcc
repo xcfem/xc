@@ -29,8 +29,8 @@
 #include "convergenceTest/python_interface.tcc"
 
 class_<XC::ModelWrapper, bases<EntCmd>, boost::noncopyable >("ModelWrapper", no_init)
-    .def("newNumberer", &XC::ModelWrapper::newNumberer,return_internal_reference<>(),"Crea un nuevo numerador del tipo que se pasa como parámetro.")
-    .def("newConstraintHandler", &XC::ModelWrapper::newConstraintHandler,return_internal_reference<>(),"Crea un nuevo manejador de coacciones del tipo que se pasa como parámetro.")
+    .def("newNumberer", &XC::ModelWrapper::newNumberer,return_internal_reference<>(),"Crea un nuevo numerador del tipo being passed as parameter.")
+    .def("newConstraintHandler", &XC::ModelWrapper::newConstraintHandler,return_internal_reference<>(),"Crea un nuevo manejador de coacciones del tipo being passed as parameter.")
     ;
 
 class_<XC::MapModelWrapper, bases<EntCmd>, boost::noncopyable >("MapModelWrapper", no_init)

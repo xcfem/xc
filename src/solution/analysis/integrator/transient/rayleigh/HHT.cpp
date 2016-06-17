@@ -301,14 +301,14 @@ int XC::HHT::commit(void)
     return commitModel();
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::HHT::sendData(CommParameters &cp)
   {
     int res= HHTBase::sendData(cp);
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::HHT::recvData(const CommParameters &cp)
   {
     int res= HHTBase::recvData(cp);

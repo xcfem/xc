@@ -183,11 +183,11 @@ XC::DbTagData &XC::GrupoCombinaciones::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::GrupoCombinaciones::sendData(CommParameters &cp)
   { return sendMap(*this,cp,getDbTagData(),CommMetaData(0)); }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::GrupoCombinaciones::recvData(const CommParameters &cp)
   {
     clear();
@@ -201,7 +201,7 @@ int XC::GrupoCombinaciones::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::GrupoCombinaciones::sendSelf(CommParameters &cp)
   {
     inicComm(1);
@@ -214,7 +214,7 @@ int XC::GrupoCombinaciones::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::GrupoCombinaciones::recvSelf(const CommParameters &cp)
   {
     int res= 0;
@@ -240,7 +240,7 @@ std::deque<std::string> XC::GrupoCombinaciones::getListaNombres(void) const
     return retval;
   }
 
-//! @brief Busca la combinación más próxima a la que se pasa como parámetro
+//! @brief Busca la combinación más próxima a la being passed as parameter
 //! de entre las que tienen sus coeficientes de ponderación iguales o menores
 //! que los de ésta.
 XC::GrupoCombinaciones::const_iterator XC::GrupoCombinaciones::buscaCombPrevia(const Combinacion &c) const

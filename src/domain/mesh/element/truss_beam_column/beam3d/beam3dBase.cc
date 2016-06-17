@@ -99,7 +99,7 @@ const XC::Matrix &XC::beam3dBase::getTangentStiff(void) const
 const XC::Matrix &XC::beam3dBase::getInitialStiff(void) const
   { return getStiff(); }
 
-//! @brief Agrega la carga que se pasa como parámetro.
+//! @brief Agrega la carga being passed as parameter.
 int XC::beam3dBase::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     std::cerr << "beam3dBase::addLoad() - beam " << this->getTag() << "load type unknown\n";
@@ -160,7 +160,7 @@ const XC::Vector &XC::beam3dBase::getResistingForce(void) const
     return rForce;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::beam3dBase::sendData(CommParameters &cp)
   {
     int res= ProtoBeam3d::sendData(cp);
@@ -171,7 +171,7 @@ int XC::beam3dBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::beam3dBase::recvData(const CommParameters &cp)
   {
     int res= ProtoBeam3d::recvData(cp);

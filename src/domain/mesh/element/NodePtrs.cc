@@ -355,7 +355,7 @@ bool XC::NodePtrs::Corta(const Plano3d &plano,bool initialGeometry) const
     return (!in && !out);
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry)
   {
     Node *retval= nullptr;
@@ -379,7 +379,7 @@ XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry)
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry) const
   {
     NodePtrs *this_no_const= const_cast<NodePtrs *>(this);
@@ -410,7 +410,7 @@ void XC::NodePtrs::resetTributarias(void) const
   }
 
 //! @brief Agrega al la magnitud tributaria de cada nodo i
-//! la componente i del vector que se pasa como parámetro.
+//! la componente i del vector being passed as parameter.
 void XC::NodePtrs::vuelcaTributarias(const std::vector<double> &t) const
   {
     const size_t sz= theNodes.size();
@@ -420,7 +420,7 @@ void XC::NodePtrs::vuelcaTributarias(const std::vector<double> &t) const
   }
 
 //! @brief Devuelve un vector que contiene los factores de distribución
-//! de cada nodo que corresponden al modo que se pasa como parámetro.
+//! de cada nodo que corresponden al modo being passed as parameter.
 XC::Vector XC::NodePtrs::getDistributionFactor(int mode) const
   {
     const int nrows= getTotalDOFs();

@@ -28,13 +28,13 @@
 
 #include "FVector.h"
 
-//! @brief Agrega la fuerza que se pasa como parámetro.
+//! @brief Agrega la fuerza being passed as parameter.
 void XC::FVector::addForce(const size_t &inod,const double &,const double &,const double &)
   {
     std::cerr << "addForce no implementada." << std::endl;
   }
 
-//! @brief Agrega el momento que se pasa como parámetro.
+//! @brief Agrega el momento being passed as parameter.
 void XC::FVector::addMoment(const size_t &inod,const double &,const double &,const double &)
   {
     std::cerr << "addMoment no implementada." << std::endl;

@@ -242,7 +242,7 @@ XC::FVectorShell &XC::FVectorShell::operator-=(const FVectorShell &otro)
     return *this;    
   }
 
-//! @brief Agrega la fuerza que se pasa como parámetro.
+//! @brief Agrega la fuerza being passed as parameter.
 void XC::FVectorShell::addForce(const size_t &inod,const double &P1,const double &P2,const double &P3)
   {
     if(inod>3)
@@ -254,7 +254,7 @@ void XC::FVectorShell::addForce(const size_t &inod,const double &P1,const double
     p[i+2]-= P3;
   }
 
-//! @brief Agrega el momento que se pasa como parámetro.
+//! @brief Agrega el momento being passed as parameter.
 void XC::FVectorShell::addMoment(const size_t &inod,const double &M1,const double &M2,const double &M3)
   {
     if(inod>3)

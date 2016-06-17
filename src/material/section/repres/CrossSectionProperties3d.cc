@@ -210,7 +210,7 @@ const XC::Matrix &XC::CrossSectionProperties3d::getInitialFlexibility6x6(void) c
 
 
 //! @brief Calcula el efecto de girar la sección en sentido
-//! antihorario el ángulo que se pasa como parámetro.
+//! antihorario el ángulo being passed as parameter.
 void XC::CrossSectionProperties3d::gira(const double &theta)
   {
     const double &iiy= Iy();
@@ -271,7 +271,7 @@ XC::DbTagData &XC::CrossSectionProperties3d::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::CrossSectionProperties3d::sendData(CommParameters &cp)
   {
     int res= CrossSectionProperties2d::sendData(cp);
@@ -279,7 +279,7 @@ int XC::CrossSectionProperties3d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::CrossSectionProperties3d::recvData(const CommParameters &cp)
   {
     int res= CrossSectionProperties2d::recvData(cp); 
@@ -287,7 +287,7 @@ int XC::CrossSectionProperties3d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::CrossSectionProperties3d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -301,7 +301,7 @@ int XC::CrossSectionProperties3d::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::CrossSectionProperties3d::recvSelf(const CommParameters &cp)
   {
     inicComm(2);

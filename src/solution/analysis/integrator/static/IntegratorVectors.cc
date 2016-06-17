@@ -141,7 +141,7 @@ void XC::IntegratorVectors::domainChanged(const size_t &sz,IncrementalIntegrator
       }
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::IntegratorVectors::sendData(CommParameters &cp)
   {
     int res= cp.sendDoubles(deltaLambdaStep,currentLambda,getDbTagData(),CommMetaData(1));
@@ -153,7 +153,7 @@ int XC::IntegratorVectors::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::IntegratorVectors::recvData(const CommParameters &cp)
   {
     int res= cp.receiveDoubles(deltaLambdaStep,currentLambda,getDbTagData(),CommMetaData(1));

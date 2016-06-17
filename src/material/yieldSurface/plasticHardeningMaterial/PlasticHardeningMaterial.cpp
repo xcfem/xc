@@ -102,13 +102,13 @@ const XC::Vector &XC::PlasticHardeningMaterial::getGeneralizedStrain(void) const
     return retval;
   }
 
-//! @brief Asigna a la deformación inicial el valor que se pasa como parámetro.
+//! @brief Asigna a la deformación inicial el valor being passed as parameter.
 void XC::PlasticHardeningMaterial::setInitialGeneralizedStrain(const Vector &)
   {
     std::cerr << "PlasticHardeningMaterial::setInitialGeneralizedStrain no implementada." << std::endl;
   }
 
-//! @brief Añade a la deformación inicial el valor que se pasa como parámetro.
+//! @brief Añade a la deformación inicial el valor being passed as parameter.
 const XC::Vector &XC::PlasticHardeningMaterial::getInitialGeneralizedStrain(void) const
   {
     static Vector retval;

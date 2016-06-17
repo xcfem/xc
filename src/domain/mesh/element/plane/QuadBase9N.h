@@ -82,7 +82,7 @@ XC::QuadBase9N<PhysProp>::QuadBase9N(int tag,int classTag,const PhysProp &pp)
   :ElemPlano<9,PhysProp>(tag,classTag,pp) {}
 
 
-//! @brief Coloca el elemento en la malla que se pasa como parámetro.
+//! @brief Coloca el elemento en la malla being passed as parameter.
 template <class PhysProp>
 XC::TritrizPtrElem XC::QuadBase9N<PhysProp>::coloca_en_malla(const TritrizPtrNod &nodos,dir_mallado dm) const
   { return coloca_quad9N_en_malla(*this,nodos,dm); }
@@ -125,7 +125,7 @@ int XC::QuadBase9N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
   }
 
 //! @brief Devuelve los índices locales de los nodos del elemento
-//! situados sobre el borde (o arista) que se pasa como parámetros.
+//! situados sobre el borde (o arista) being passed as parameters.
 template <class PhysProp>
 ID XC::QuadBase9N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
   {
@@ -134,7 +134,7 @@ ID XC::QuadBase9N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
     return retval;
   }
 
-//! @brief Añade al elemento la carga que se pasa como parámetro.
+//! @brief Añade al elemento la carga being passed as parameter.
 template <class PhysProp>
 int XC::QuadBase9N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
   {

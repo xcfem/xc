@@ -121,11 +121,11 @@ const XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_
       return nullptr;
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p)
   { return nodos.getNearestNode(p); }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p) const
   {
     EntMdlr *this_no_const= const_cast<EntMdlr *>(this);
@@ -158,11 +158,11 @@ const XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,cons
       return nullptr;
   }
 
-//! @brief Devuelve el elemento más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
 XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p)
   { return elementos.getNearestElement(p); }
 
-//! @brief Devuelve el elemento más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
 const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
   {
     EntMdlr *this_no_const= const_cast<EntMdlr *>(this);
@@ -227,7 +227,7 @@ XC::Vector XC::EntMdlr::getSimpsonWeights(const std::string &ijk,const std::stri
     return retval;
   }
 
-//! @brief Crea un nodos en la posición que se pasa como parámetro.
+//! @brief Crea un nodos en la posición being passed as parameter.
 XC::Node *XC::EntMdlr::crea_nodo(const Pos3d &pos,size_t i,size_t j, size_t k)
   {
     Node *retval= get_preprocessor()->getNodeLoader().nuevoNodo(pos);
@@ -305,7 +305,7 @@ void XC::EntMdlr::setGenMalla(bool m)
 const bool &XC::EntMdlr::getGenMalla(void) const
   { return genMalla; }
 
-//! @brief Crea un punto en la posición que se pasa como parámetro.
+//! @brief Crea un punto en la posición being passed as parameter.
 XC::Pnt *XC::EntMdlr::crea_punto(const Pos3d &pos)
   { return get_preprocessor()->getCad().getPuntos().Nuevo(pos); }
 
@@ -354,7 +354,7 @@ XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(size_t capa,size_t f,const RangoIndice 
 XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(const RangoTritriz &rango,const std::string &nmb)
   { return GetVarRefFilaK(rango.GetRangoCapas().Inf(),rango.GetRangoFilas().Inf(),rango.GetRangoCols(),nmb); }
 
-//! @brief Devuelve el cuadrado de la distancia a la posición que se pasa como parámetro.
+//! @brief Devuelve el cuadrado de la distancia a la posición being passed as parameter.
 double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
   {
     std::cerr << nombre_clase()
@@ -362,7 +362,7 @@ double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
     return 0.0;
   }
 
-//! @brief Devuelve la distancia a la posición que se pasa como parámetro.
+//! @brief Devuelve la distancia a la posición being passed as parameter.
 double XC::EntMdlr::DistanciaA(const Pos3d &pt) const
   { return sqrt(DistanciaA2(pt)); }
 

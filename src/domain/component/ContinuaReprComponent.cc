@@ -36,7 +36,7 @@ XC::ContinuaReprComponent::ContinuaReprComponent(int classTag)
 XC::ContinuaReprComponent::ContinuaReprComponent(int tag, int classTag)
   : DomainComponent(tag,classTag), dead(false){}
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::ContinuaReprComponent::sendData(CommParameters &cp)
   {
     setDbTagDataPos(0,getTag());
@@ -44,7 +44,7 @@ int XC::ContinuaReprComponent::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::ContinuaReprComponent::recvData(const CommParameters &cp)
   {
     setTag(getDbTagDataPos(0));

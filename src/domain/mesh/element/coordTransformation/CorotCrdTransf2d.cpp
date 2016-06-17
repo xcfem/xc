@@ -928,7 +928,7 @@ double XC::CorotCrdTransf2d::getDeformedLength(void) const
 XC::CrdTransf2d *XC::CorotCrdTransf2d::getCopy(void) const
   { return new CorotCrdTransf2d(*this); }
 
-//! @brief Envia los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Envia los miembros del objeto through the channel being passed as parameter.
 int XC::CorotCrdTransf2d::sendData(CommParameters &cp)
   {
     int res= CrdTransf2d::sendData(cp);
@@ -943,7 +943,7 @@ int XC::CorotCrdTransf2d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::CorotCrdTransf2d::recvData(const CommParameters &cp)
   {
     int res= CrdTransf2d::recvData(cp);
@@ -958,7 +958,7 @@ int XC::CorotCrdTransf2d::recvData(const CommParameters &cp)
     return res;    
   }
 
-//! @brief Envia el objeto a través del canal que se pasa como parámetro.
+//! @brief Envia el objeto through the channel being passed as parameter.
 int XC::CorotCrdTransf2d::sendSelf(CommParameters &cp)
   {
     static ID data(16);
@@ -972,7 +972,7 @@ int XC::CorotCrdTransf2d::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::CorotCrdTransf2d::recvSelf(const CommParameters &cp)
   {
     static ID data(16);

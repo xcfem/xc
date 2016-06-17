@@ -159,7 +159,7 @@ XC::DbTagData &XC::SP_Constraint::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 int XC::SP_Constraint::sendData(CommParameters &cp)
   {
     int res= Constraint::sendData(cp);
@@ -169,7 +169,7 @@ int XC::SP_Constraint::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::SP_Constraint::recvData(const CommParameters &cp)
   {
     int res= Constraint::recvData(cp);
@@ -179,7 +179,7 @@ int XC::SP_Constraint::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::SP_Constraint::sendSelf(CommParameters &cp)
   {
     inicComm(7);
@@ -191,7 +191,7 @@ int XC::SP_Constraint::sendSelf(CommParameters &cp)
     return result;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::SP_Constraint::recvSelf(const CommParameters &cp)
   {
     inicComm(7);

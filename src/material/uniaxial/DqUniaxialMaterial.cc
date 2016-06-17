@@ -34,7 +34,7 @@
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/MovableID.h"
 
-//! @brief Copia la lista que se pasa como parámetro.
+//! @brief Copia la lista being passed as parameter.
 void XC::DqUniaxialMaterial::copia_lista(const DqUniaxialMaterial &otro,SectionForceDeformation *s)
   {
     libera();
@@ -335,7 +335,7 @@ void XC::DqUniaxialMaterial::push_front(const UniaxialMaterial *t,SectionForceDe
       }
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::DqUniaxialMaterial::sendData(CommParameters &cp)
   {
     const size_t sz= size();
@@ -349,7 +349,7 @@ int XC::DqUniaxialMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::DqUniaxialMaterial::recvData(const CommParameters &cp)
   {
     const size_t sz= getDbTagDataPos(0);
@@ -368,7 +368,7 @@ int XC::DqUniaxialMaterial::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::DqUniaxialMaterial::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -382,7 +382,7 @@ int XC::DqUniaxialMaterial::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::DqUniaxialMaterial::recvSelf(const CommParameters &cp)
   {
     const int dataTag= getDbTag();

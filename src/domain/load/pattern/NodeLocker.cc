@@ -143,7 +143,7 @@ void XC::NodeLocker::setDomain(Domain *theDomain)
     ForceReprComponent::setDomain(theDomain);
   }
 
-//! @brief Agrega una la coacción mononodal que se pasa como parámetro.
+//! @brief Agrega una la coacción mononodal being passed as parameter.
 XC::SP_Constraint *XC::NodeLocker::addSP_Constraint(const int &tagNodo,const int &id_gdl,const double &valor)
   {
     SP_Constraint *theSPC= new SP_Constraint(nextTag,tagNodo,id_gdl,valor);
@@ -152,7 +152,7 @@ XC::SP_Constraint *XC::NodeLocker::addSP_Constraint(const int &tagNodo,const int
     return theSPC;
   }
 
-//! @brief Agrega una la coacción mononodal que se pasa como parámetro.
+//! @brief Agrega una la coacción mononodal being passed as parameter.
 bool XC::NodeLocker::addSP_Constraint(SP_Constraint *theSp)
   {
     Domain *theDomain= this->getDomain();
@@ -207,7 +207,7 @@ bool XC::NodeLocker::removeSP_Constraint(int tag)
     return retval;
   }
 
-//! @brief Aplica la carga en el instante que se pasa como parámetro.
+//! @brief Aplica la carga en el instante being passed as parameter.
 void XC::NodeLocker::applyLoad(const double &pseudoTime,const double &factor)
   {
     SP_Constraint *sp= nullptr;
@@ -224,7 +224,7 @@ XC::DbTagData &XC::NodeLocker::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::NodeLocker::sendData(CommParameters &cp)
   {
     setDbTagDataPos(0,getTag());
@@ -233,7 +233,7 @@ int XC::NodeLocker::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::NodeLocker::recvData(const CommParameters &cp)
   {
     setTag(getDbTagDataPos(0));
@@ -243,7 +243,7 @@ int XC::NodeLocker::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::NodeLocker::sendSelf(CommParameters &cp)
   {
     inicComm(3);
@@ -256,7 +256,7 @@ int XC::NodeLocker::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::NodeLocker::recvSelf(const CommParameters &cp)
   {
     inicComm(3);
@@ -317,7 +317,7 @@ std::deque<int> XC::NodeLocker::getTagsSPsNodo(int theNode) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si las SPs afectan al nodo que se pasa como parámetro.
+//! @brief Devuelve verdadero si las SPs afectan al nodo being passed as parameter.
 bool XC::NodeLocker::nodoAfectadoSPs(int tagNodo) const
   {
     bool retval= false;

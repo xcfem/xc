@@ -33,7 +33,7 @@
 
 //! @brief Devuelve el vector unitario en la dirección del eje que se
 //! pasa como parámetro expresado en el sistema global 
-//! para la posición que se pasa como parámetro.
+//! para la posición being passed as parameter.
 Vector2d XC::SisRefSccCartesianas2d::GetVDirEje(const size_t &i,const Pos2d &) const
   { return ref.GetVDirEje(i); }
 

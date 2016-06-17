@@ -138,7 +138,7 @@ void XC::Edge::SetNDiv(const size_t &nd)
   }
 
 //! @brief Calcula el número de divisiones para que
-//! el tamaño del elemento sea aproximadamente el que se pasa como parámetro.
+//! el tamaño del elemento sea aproximadamente el being passed as parameter.
 void XC::Edge::SetElemSize(const double &sz)
   {
     const double l= getLongitud();

@@ -123,7 +123,7 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::get_set_fibras(c
   { return sets_fibras.get_set_fibras(nmb_set); }
 
 
-// //! @brief Crea un conjunto de fibras que cumplen la condición que se pasa como parámetro.
+// //! @brief Crea un conjunto de fibras que cumplen la condición being passed as parameter.
 // XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel(const std::string &nmb_set,const std::string &cond)
 //   {
 //     set_fibras_iterator i= get_set_fibras(nmb_set);
@@ -131,7 +131,7 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::get_set_fibras(c
 //     return i;
 //   }
 
-// //! @brief Crea un conjunto de fibras que perteneciendo al conjunto nmb_set_org, cumplen la condición que se pasa como parámetro.
+// //! @brief Crea un conjunto de fibras que perteneciendo al conjunto nmb_set_org, cumplen la condición being passed as parameter.
 // XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond)
 //   {
 //     set_fibras_iterator i= sets_fibras.end();
@@ -150,7 +150,7 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::get_set_fibras(c
 //     return i;
 //   }
 
-//! @brief Crea un conjunto de fibras cuyo material tiene el tag que se pasa como parámetro.
+//! @brief Crea un conjunto de fibras cuyo material tiene el tag being passed as parameter.
 XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel_mat_tag(const std::string &nmb_set,const int &matTag)
   {
     set_fibras_iterator i= get_set_fibras(nmb_set);
@@ -158,7 +158,7 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel_mat_tag(cons
     return i;
   }
 
-//! @brief Crea un conjunto de fibras que perteneciendo al conjunto nmb_set_org, cumplen que el material tiene el tag que se pasa como parámetro.
+//! @brief Crea un conjunto de fibras que perteneciendo al conjunto nmb_set_org, cumplen que el material tiene el tag being passed as parameter.
 XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag)
   { return sets_fibras.resel_mat_tag(nmb_set,nmb_set_org,matTag); }
  
@@ -240,7 +240,7 @@ double XC::FiberSectionBase::getCantoMecanico(void) const
     return retval;
   }
 
-//! @brief Devuelve el canto desde la recta que se pasa como parámetro a la fibra más comprimida.
+//! @brief Devuelve el canto desde la recta being passed as parameter a la fibra más comprimida.
 double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(const Recta2d &r) const
   {
     double retval= 0.0;
@@ -323,7 +323,7 @@ double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(void) const
     return retval;
   }
 
-//! @brief Devuelve el canto desde la recta que se pasa como parámetro a la fibra más traccionada.
+//! @brief Devuelve el canto desde la recta being passed as parameter a la fibra más traccionada.
 double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(const Recta2d &r) const
   {
     double retval= 0.0;
@@ -649,7 +649,7 @@ void XC::FiberSectionBase::get_ptos_diag_interaccion_theta(NMyMzPointCloud &list
       }
   }
 
-//! @brief Devuelve los puntos que definen el diagrama de interacción en el plano definido por el ángulo que se pasa como parámetro.
+//! @brief Devuelve los puntos que definen el diagrama de interacción en el plano definido por el ángulo being passed as parameter.
 const XC::NMPointCloud &XC::FiberSectionBase::get_ptos_diag_interaccionPlano(const DatosDiagInteraccion &datos_diag, const double &theta)
   {
     static NMPointCloud retval;
@@ -863,7 +863,7 @@ double XC::FiberSectionBase::getAnchoBielaComprimida(void) const
     return retval;
   }
 
-//! @brief Devuelve el recubrimiento de la posición que se pasa como parámetro.
+//! @brief Devuelve el recubrimiento de la posición being passed as parameter.
 double XC::FiberSectionBase::getRecubrimiento(const Pos2d &p) const
   {
     double retval= 0.0;

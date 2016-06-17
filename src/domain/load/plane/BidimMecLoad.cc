@@ -50,7 +50,7 @@ void XC::BidimMecLoad::Print(std::ostream &s, int flag) const
     BidimLoad::Print(s,flag);
   }
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 int XC::BidimMecLoad::sendData(CommParameters &cp)
   {
     int res= BidimLoad::sendData(cp);
@@ -58,7 +58,7 @@ int XC::BidimMecLoad::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::BidimMecLoad::recvData(const CommParameters &cp)
   {
     int res= BidimLoad::recvData(cp);

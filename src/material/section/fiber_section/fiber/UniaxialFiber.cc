@@ -124,7 +124,7 @@ XC::UniaxialFiber &XC::UniaxialFiber::operator=(const UniaxialFiber &otra)
 XC::UniaxialFiber::~UniaxialFiber(void)
   { libera(); }
 
-//! @brief Asigna a la fibra el material que se pasa como parámetro.
+//! @brief Asigna a la fibra el material being passed as parameter.
 void XC::UniaxialFiber::setMaterial(const UniaxialMaterial *theMat)
   {
     if(theMat)
@@ -153,7 +153,7 @@ int XC::UniaxialFiber::revertToStart(void)
   { return theMaterial->revertToStart(); }
 
 
-//! @brief Envia los datos a través del canal que se pasa como parámetro.
+//! @brief Envia los datos through the channel being passed as parameter.
 int XC::UniaxialFiber::sendData(CommParameters &cp)
   {
     int res= Fiber::sendData(cp);
@@ -164,7 +164,7 @@ int XC::UniaxialFiber::sendData(CommParameters &cp)
   }
 
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::UniaxialFiber::recvData(const CommParameters &cp)
   {    
     int res= Fiber::recvData(cp);

@@ -346,7 +346,7 @@ XC::DefaultTag &XC::Node::getDefaultTag(void)
   { return defaultTag; }
 
 //! @brief Introduce en el nodo una constraint
-//! como la que se pasa como parámetro.
+//! como la being passed as parameter.
 XC::SP_Constraint *XC::Node::fix(const SP_Constraint &semilla)
   { return GetPreprocessor()->getConstraintLoader().addSP_Constraint(getTag(),semilla); }
 
@@ -884,7 +884,7 @@ const XC::Matrix &XC::Node::getDamp(void)
   }
 
 //! @brief Agrega a la magnitud tributaria la longitud,
-//! área o volumen que se pasa como parámetro.
+//! área o volumen being passed as parameter.
 void XC::Node::addTributaria(const double &t) const
   { tributaria+= t; }
 
@@ -1142,12 +1142,12 @@ XC::Vector XC::Node::getModalParticipationFactorsForGdls(const boost::python::li
   }
 
 //! @brief Devuelve el factor de distribución correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 XC::Vector XC::Node::getDistributionFactor(int mode) const
   { return getModalParticipationFactor(mode)*getEigenvector(mode); }
 
 //! @brief Devuelve el factor de distribución correspondiente al modo
-//! que se pasa como parámetro. Si el parámetro gdls
+//! being passed as parameter. Si el parámetro gdls
 //! no está vacío «proyecta» el modo i sobre
 //! los gdls indicados en el conjunto.
 XC::Vector XC::Node::getDistributionFactor(int mode,const std::set<int> &gdls) const
@@ -1200,7 +1200,7 @@ XC::Vector XC::Node::getEffectiveModalMasses(void) const
   }
 
 //! @brief Devuelve la fuerza estática equivalente para el modo
-//! que se pasa como parámetro y la aceleración correspondiente a dicho modo.
+//! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Node::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
     Vector retval= mass*getDistributionFactor(mode);
@@ -1209,21 +1209,21 @@ XC::Vector XC::Node::getEquivalentStaticLoad(int mode,const double &accel_mode) 
   }
 
 //! @brief Devuelve el desplazamiento modal máximo para el modo
-//! que se pasa como parámetro y la aceleración correspondiente a dicho modo.
+//! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Node::getMaxModalDisplacement(int mode,const double &accel_mode) const
   {
     return getMaxModalAcceleration(mode,accel_mode)/sqr(getPulsacion(mode));
   }
 
 //! @brief Devuelve la velocidad modal máxima para el modo
-//! que se pasa como parámetro y la aceleración correspondiente a dicho modo.
+//! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Node::getMaxModalVelocity(int mode,const double &accel_mode) const
   {
     return getMaxModalAcceleration(mode,accel_mode)/getPulsacion(mode);
   }
 
 //! @brief Devuelve la aceleración modal máxima para el modo
-//! que se pasa como parámetro y la aceleración correspondiente a dicho modo.
+//! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Node::getMaxModalAcceleration(int mode,const double &accel_mode) const
   {
     return accel_mode*getDistributionFactor(mode);
@@ -1278,7 +1278,7 @@ XC::DbTagData &XC::Node::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envia los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Envia los miembros del objeto through the channel being passed as parameter.
 int XC::Node::sendData(CommParameters &cp)
   {
     int res= MeshComponent::sendData(cp);
@@ -1298,7 +1298,7 @@ int XC::Node::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::Node::recvData(const CommParameters &cp)
   {
     int res= MeshComponent::recvData(cp);
@@ -1322,7 +1322,7 @@ int XC::Node::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia el objeto a través del canal que se pasa como parámetro.
+//! @brief Envia el objeto through the channel being passed as parameter.
 int XC::Node::sendSelf(CommParameters &cp)
   {
     inicComm(22);
@@ -1335,7 +1335,7 @@ int XC::Node::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Node::recvSelf(const CommParameters &cp)
   {
     const int dataTag= getDbTag();

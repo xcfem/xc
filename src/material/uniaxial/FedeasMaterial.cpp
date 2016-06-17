@@ -192,7 +192,7 @@ int XC::FedeasMaterial::revertToStart(void)
     return 0;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::FedeasMaterial::sendData(CommParameters &cp)
   {
     int res= UniaxialMaterial::sendData(cp);
@@ -205,7 +205,7 @@ int XC::FedeasMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::FedeasMaterial::recvData(const CommParameters &cp)
   {
     int res= UniaxialMaterial::recvData(cp);
@@ -218,7 +218,7 @@ int XC::FedeasMaterial::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::FedeasMaterial::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -232,7 +232,7 @@ int XC::FedeasMaterial::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::FedeasMaterial::recvSelf(const CommParameters &cp)
   {
     inicComm(10);

@@ -587,7 +587,7 @@ int XC::Muelle::getResponse(int responseID, Information &eleInfo)
       }
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::Muelle::sendData(CommParameters &cp)
   {
     int res= ProtoTruss::sendData(cp);
@@ -596,7 +596,7 @@ int XC::Muelle::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::Muelle::recvData(const CommParameters &cp)
   {
     int res= ProtoTruss::recvData(cp);

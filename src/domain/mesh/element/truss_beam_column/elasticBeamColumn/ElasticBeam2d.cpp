@@ -537,7 +537,7 @@ XC::DbTagData &XC::ElasticBeam2d::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::ElasticBeam2d::sendData(CommParameters &cp)
   {
     int res= ProtoBeam2d::sendData(cp);
@@ -546,7 +546,7 @@ int XC::ElasticBeam2d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::ElasticBeam2d::recvData(const CommParameters &cp)
   {
     int res= ProtoBeam2d::recvData(cp);

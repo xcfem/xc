@@ -75,7 +75,7 @@ int XC::ElementalLoad::setElementTags(const ID &theEleTags)
     return 0;
   }
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 int XC::ElementalLoad::sendData(CommParameters &cp)
   {
     int res= Load::sendData(cp);
@@ -83,7 +83,7 @@ int XC::ElementalLoad::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::ElementalLoad::recvData(const CommParameters &cp)
   {
     int res= Load::recvData(cp);

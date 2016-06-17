@@ -71,7 +71,7 @@ int XC::BandArpackppSOE::setSize(Graph &theGraph)
     return result;
   }
 
-//! @brief Ensambla en A la matriz que se pasa como parámetro multiplicada por el parámetro fact.
+//! @brief Ensambla en A la matriz being passed as parameter multiplicada por el parámetro fact.
 int XC::BandArpackppSOE::addToMatrix(msp_double &MT,const Matrix &m, const ID &id,const double &fact)
   {
     // check for a XC::quick return 
@@ -136,7 +136,7 @@ int XC::BandArpackppSOE::addToMatrix(msp_double &MT,const Matrix &m, const ID &i
     return 0;
   }
 
-//! @brief Ensambla en A la matriz que se pasa como parámetro multiplicada por el parámetro fact.
+//! @brief Ensambla en A la matriz being passed as parameter multiplicada por el parámetro fact.
 int XC::BandArpackppSOE::addA(const Matrix &a, const ID &id, double fact)
   { return addToMatrix(A,a,id,fact); }
 
@@ -145,7 +145,7 @@ int XC::BandArpackppSOE::addA(const Matrix &a, const ID &id, double fact)
 void XC::BandArpackppSOE::zeroA(void)
   { A.Anula(); }
 
-//! @brief Ensambla en M la matriz que se pasa como parámetro multiplicada por el parámetro fact.
+//! @brief Ensambla en M la matriz being passed as parameter multiplicada por el parámetro fact.
 int XC::BandArpackppSOE::addM(const Matrix &m, const ID &id, double fact)
   { 
     int retval= 0;

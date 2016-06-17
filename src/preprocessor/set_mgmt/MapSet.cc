@@ -326,7 +326,7 @@ XC::DbTagData &XC::MapSet::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los dbTags de los conjuntos través del canal que se pasa como parámetro.
+//! @brief Envía los dbTags de los conjuntos través del canal being passed as parameter.
 int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
   {
     const int size= sets.size();
@@ -341,7 +341,7 @@ int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
     return res;
   }
 
-//! @brief Envía los nombres de clase de los conjuntos través del canal que se pasa como parámetro.
+//! @brief Envía los nombres de clase de los conjuntos través del canal being passed as parameter.
 int XC::MapSet::sendSetsClassNames(int posDbTag,CommParameters &cp)
   {
     const int size= sets.size();
@@ -356,7 +356,7 @@ int XC::MapSet::sendSetsClassNames(int posDbTag,CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los dbTags de los conjuntos a través del canal que se pasa como parámetro.
+//! @brief Recibe los dbTags de los conjuntos through the channel being passed as parameter.
 int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const CommParameters &cp)
   {
     setsDbTags.resize(size);
@@ -368,7 +368,7 @@ int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const CommParameters &cp
     return res;
   }
 
-//! @brief Recibe los nombres de clase de los conjuntos a través del canal que se pasa como parámetro.
+//! @brief Recibe los nombres de clase de los conjuntos through the channel being passed as parameter.
 int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const CommParameters &cp)
   {
     setsClassNames.resize(size);
@@ -380,7 +380,7 @@ int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const CommParameters
     return res;
   }
 
-//! @brief Envía los conjuntos definidos por el canal que se pasa como parámetro.
+//! @brief Envía los conjuntos definidos through the channel being passed as parameter.
 int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,CommParameters &cp)
   {
     std::deque<std::string> nombres;
@@ -397,7 +397,7 @@ int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,CommParamet
     return res;
   }
 
-//! @brief Recibe los conjuntos definidos por el canal que se pasa como parámetro.
+//! @brief Recibe los conjuntos definidos through the channel being passed as parameter.
 int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const int &sz,const CommParameters &cp)
   {
     std::deque<std::string> nombres;
@@ -416,7 +416,7 @@ int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const in
       }
     return res;
   }
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::MapSet::sendAbiertos(int posDbTag1, int posDbTag2,CommParameters &cp)
   {
     const size_t sz= abiertos.size();
@@ -430,7 +430,7 @@ int XC::MapSet::sendAbiertos(int posDbTag1, int posDbTag2,CommParameters &cp)
       }
     return res;
   }
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::MapSet::receiveAbiertos(int posDbTag1, int posDbTag2,const CommParameters &cp)
   {
      int sz_abiertos= 0;
@@ -445,7 +445,7 @@ int XC::MapSet::receiveAbiertos(int posDbTag1, int posDbTag2,const CommParameter
     return res;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::MapSet::sendData(CommParameters &cp)
   {
     const size_t sz= sets.size();
@@ -459,7 +459,7 @@ int XC::MapSet::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::MapSet::recvData(const CommParameters &cp)
   {
     int sz= 0;
@@ -473,7 +473,7 @@ int XC::MapSet::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::MapSet::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -487,7 +487,7 @@ int XC::MapSet::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::MapSet::recvSelf(const CommParameters &cp)
   {
     inicComm(6);
@@ -507,7 +507,7 @@ int XC::MapSet::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Devuelve los conjuntos que contienen el puntero a nodo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
   {
     std::set<SetBase *> retval;
@@ -517,7 +517,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
   }
 
 //! @brief Devuelve los conjuntos que contienen el puntero a elemento
-//! que se pasa como parámetro.
+//! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
   {
     std::set<SetBase *> retval;
@@ -527,7 +527,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
   }
 
 //! @brief Devuelve los conjuntos que contienen el puntero a punto
-//! que se pasa como parámetro.
+//! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Pnt *p)
   {
     std::set<SetBase *> retval;
@@ -537,7 +537,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Pnt *p)
   }
 
 //! @brief Devuelve los conjuntos que contienen el puntero a «edge»
-//! que se pasa como parámetro.
+//! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Edge *e)
   {
     std::set<SetBase *> retval;
@@ -547,7 +547,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Edge *e)
   }
 
 //! @brief Devuelve los conjuntos que contienen el puntero a superficie
-//! que se pasa como parámetro.
+//! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Face *f)
   {
     std::set<SetBase *> retval;
@@ -557,7 +557,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Face *f)
   }
 
 //! @brief Devuelve los conjuntos que contienen el puntero a cuerpo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Body *b)
   {
     std::set<SetBase *> retval;
@@ -567,7 +567,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Body *b)
   }
 
 //! @brief Devuelve los conjuntos que contienen el puntero a «uniform grid»
-//! que se pasa como parámetro.
+//! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const UniformGrid *ug)
   {
     std::set<SetBase *> retval;

@@ -102,7 +102,7 @@ void XC::MatParameter::setDomain(Domain *theDomain)
     std::cerr << "MatParameter::setDomain(Domain *theDomain) - NO RESULT\n";
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::MatParameter::sendData(CommParameters &cp)
   {
     setDbTagDataPos(0,getTag());
@@ -112,7 +112,7 @@ int XC::MatParameter::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::MatParameter::recvData(const CommParameters &cp)
   {
     setTag(getDbTagDataPos(0));

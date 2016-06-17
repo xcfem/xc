@@ -192,7 +192,7 @@ const XC::Matrix &XC::PDeltaCrdTransf3d::getGlobalStiffMatrix(const XC::Matrix &
 XC::CrdTransf3d *XC::PDeltaCrdTransf3d::getCopy(void) const
   { return new PDeltaCrdTransf3d(*this); }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::PDeltaCrdTransf3d::sendData(CommParameters &cp)
   {
     int res= SmallDispCrdTransf3d::sendData(cp);
@@ -200,7 +200,7 @@ int XC::PDeltaCrdTransf3d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::PDeltaCrdTransf3d::recvData(const CommParameters &cp)
   {
     int res= SmallDispCrdTransf3d::recvData(cp);
@@ -208,7 +208,7 @@ int XC::PDeltaCrdTransf3d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::PDeltaCrdTransf3d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -223,7 +223,7 @@ int XC::PDeltaCrdTransf3d::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::PDeltaCrdTransf3d::recvSelf(const CommParameters &cp)
   {
     inicComm(11);

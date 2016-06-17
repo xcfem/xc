@@ -462,7 +462,7 @@ XC::DbTagData &XC::SmallDispCrdTransf3d::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envia los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Envia los miembros del objeto through the channel being passed as parameter.
 int XC::SmallDispCrdTransf3d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -477,7 +477,7 @@ int XC::SmallDispCrdTransf3d::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::SmallDispCrdTransf3d::recvSelf(const CommParameters &cp)
   {
     inicComm(10);

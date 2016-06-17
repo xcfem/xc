@@ -79,15 +79,15 @@ XC::DbTagData &XC::CFactorSeries::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::CFactorSeries::sendData(CommParameters &cp)
   { return cp.sendDouble(cFactor,getDbTagData(),CommMetaData(0)); }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::CFactorSeries::recvData(const CommParameters &cp)
   { return cp.receiveDouble(cFactor,getDbTagData(),CommMetaData(0)); }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::CFactorSeries::sendSelf(CommParameters &cp)
   {
     inicComm(1);
@@ -100,7 +100,7 @@ int XC::CFactorSeries::sendSelf(CommParameters &cp)
     return result;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::CFactorSeries::recvSelf(const CommParameters &cp)
   {
     inicComm(1);

@@ -629,7 +629,7 @@ XC::DbTagData &XC::Truss::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::Truss::sendData(CommParameters &cp)
   {
     int res= TrussBase::sendData(cp);
@@ -640,7 +640,7 @@ int XC::Truss::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::Truss::recvData(const CommParameters &cp)
   {
     int res= TrussBase::recvData(cp);
@@ -651,7 +651,7 @@ int XC::Truss::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Truss::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -665,7 +665,7 @@ int XC::Truss::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Truss::recvSelf(const CommParameters &cp)
   {
     inicComm(28);

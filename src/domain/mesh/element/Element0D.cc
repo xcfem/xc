@@ -367,7 +367,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
     return retval;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::Element0D::sendData(CommParameters &cp)
   {
     int res= ElementBase<2>::sendData(cp);
@@ -376,7 +376,7 @@ int XC::Element0D::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::Element0D::recvData(const CommParameters &cp)
   {
     int res= ElementBase<2>::recvData(cp);

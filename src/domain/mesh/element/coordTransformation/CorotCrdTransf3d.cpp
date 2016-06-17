@@ -1921,7 +1921,7 @@ const XC::Matrix &XC::CorotCrdTransf3d::getKs2Matrix(const Vector &ri, const Vec
 XC::CrdTransf3d *XC::CorotCrdTransf3d::getCopy(void) const
   { return new CorotCrdTransf3d(*this); }
 
-//! @brief Envia los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Envia los miembros del objeto through the channel being passed as parameter.
 int XC::CorotCrdTransf3d::sendData(CommParameters &cp)
   {
     int res= CrdTransf3d::sendData(cp);
@@ -1943,7 +1943,7 @@ int XC::CorotCrdTransf3d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::CorotCrdTransf3d::recvData(const CommParameters &cp)
   {
     int res= CrdTransf3d::recvData(cp);

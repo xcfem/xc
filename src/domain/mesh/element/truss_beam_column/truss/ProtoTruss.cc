@@ -127,7 +127,7 @@ void XC::ProtoTruss::setup_matrix_vector_ptrs(int dofNd1)
       }
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::ProtoTruss::sendData(CommParameters &cp)
   {
     int res= Element1D::sendData(cp);
@@ -137,7 +137,7 @@ int XC::ProtoTruss::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::ProtoTruss::recvData(const CommParameters &cp)
   {
     int res= Element1D::recvData(cp);

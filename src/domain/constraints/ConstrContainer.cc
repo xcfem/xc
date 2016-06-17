@@ -215,7 +215,7 @@ bool XC::ConstrContainer::addMRMP_Constraint(MRMP_Constraint *mrmpConstraint)
     return retval;
   }
 
-//! @brief Añade al modelo la hipótesis simple que se pasa como parámetro.
+//! @brief Añade al modelo la hipótesis simple being passed as parameter.
 bool XC::ConstrContainer::addLoadPattern(LoadPattern *load)
   {
     bool retval= true;
@@ -462,7 +462,7 @@ int XC::ConstrContainer::removeNLs(void)
     return numSPs;
   }
 
-//! @brief Elimina del dominio la carga sobre nodo que se pasa como parámetro.
+//! @brief Elimina del dominio la carga sobre nodo being passed as parameter.
 //!
 //! @param tag: Identificador de la carga sobre nodo a eliminar.
 //! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
@@ -478,7 +478,7 @@ bool XC::ConstrContainer::removeNodalLoad(int tag, int loadPattern)
     return retval;
   }
 
-//! @brief Elimina del dominio la carga sobre elementos que se pasa como parámetro.
+//! @brief Elimina del dominio la carga sobre elementos being passed as parameter.
 //!
 //! @param tag: Identificador de la carga sobre elementos a eliminar.
 //! @param loadPattern: Identificador de la hipótesis a la que pertenece la carga.
@@ -493,7 +493,7 @@ bool XC::ConstrContainer::removeElementalLoad(int tag, int loadPattern)
     return retval;
   }
 
-//! @brief Elimina del dominio la constraint monopunto que se pasa como parámetro.
+//! @brief Elimina del dominio la constraint monopunto being passed as parameter.
 //!
 //! @param tag: Identificador de la constraint monopunto a eliminar.
 //! @param loadPattern: Identificador de la hipótesis a la que pertenece la carga.
@@ -806,7 +806,7 @@ std::deque<int> XC::ConstrContainer::getTagsNLs(void) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si las SPs afectan al nodo que se pasa como parámetro.
+//! @brief Devuelve verdadero si las SPs afectan al nodo being passed as parameter.
 bool XC::ConstrContainer::nodoAfectadoSPs(int tagNodo) const
   {
     bool retval= false;
@@ -822,7 +822,7 @@ bool XC::ConstrContainer::nodoAfectadoSPs(int tagNodo) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si las MPs afectan al nodo que se pasa como parámetro.
+//! @brief Devuelve verdadero si las MPs afectan al nodo being passed as parameter.
 bool XC::ConstrContainer::nodoAfectadoMPs(int tagNodo) const
   {
     bool retval= false;
@@ -838,7 +838,7 @@ bool XC::ConstrContainer::nodoAfectadoMPs(int tagNodo) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si las MRMPs afectan al nodo que se pasa como parámetro.
+//! @brief Devuelve verdadero si las MRMPs afectan al nodo being passed as parameter.
 bool XC::ConstrContainer::nodoAfectadoMRMPs(int tagNodo) const
   {
     bool retval= false;
@@ -854,7 +854,7 @@ bool XC::ConstrContainer::nodoAfectadoMRMPs(int tagNodo) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si MPs o SPs afectan al nodo que se pasa como parámetro.
+//! @brief Devuelve verdadero si MPs o SPs afectan al nodo being passed as parameter.
 bool XC::ConstrContainer::nodoAfectadoSPsOMPs(int nodeTag) const
   {
     bool retval= nodoAfectadoSPs(nodeTag);
@@ -899,7 +899,7 @@ XC::DbTagData &XC::ConstrContainer::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los tags de los casos de carga activos por el canal que se pasa como parámetro.
+//! @brief Envía los tags de los casos de carga activos through the channel being passed as parameter.
 int XC::ConstrContainer::sendLPatternsTags(const int &posFlag,const int &posDbTag,CommParameters &cp)
   {
     int res= 0;
@@ -919,7 +919,7 @@ int XC::ConstrContainer::sendLPatternsTags(const int &posFlag,const int &posDbTa
     return res;
   }
 
-//! @brief Recibe los tags de los casos de carga activos por el canal que se pasa como parámetro.
+//! @brief Recibe los tags de los casos de carga activos through the channel being passed as parameter.
 int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTag,const CommParameters &cp)
   {
     Domain *dom= getDomain();
@@ -964,7 +964,7 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
     return res;
   }
 
-//! @brief Envía los tags de los bloqueadores de nodo activos por el canal que se pasa como parámetro.
+//! @brief Envía los tags de los bloqueadores de nodo activos through the channel being passed as parameter.
 int XC::ConstrContainer::sendNLockersTags(const int &posFlag,const int &posDbTag,CommParameters &cp)
   {
     int res= 0;
@@ -984,7 +984,7 @@ int XC::ConstrContainer::sendNLockersTags(const int &posFlag,const int &posDbTag
     return res;
   }
 
-//! @brief Recibe los tags de los casos de carga activos por el canal que se pasa como parámetro.
+//! @brief Recibe los tags de los casos de carga activos through the channel being passed as parameter.
 int XC::ConstrContainer::recvNLockersTags(const int &posFlag,const int &posDbTag,const CommParameters &cp)
   {
     Domain *dom= getDomain();
@@ -1015,7 +1015,7 @@ int XC::ConstrContainer::recvNLockersTags(const int &posFlag,const int &posDbTag
     return res;
   }
 
-//! @brief Envía los miembros del objeto por el canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ConstrContainer::sendData(CommParameters &cp)
   {
     int res= cp.sendMovable(*theSPs,getDbTagData(),CommMetaData(0));
@@ -1027,7 +1027,7 @@ int XC::ConstrContainer::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto por el canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::ConstrContainer::recvData(const CommParameters &cp)
   {
     int res= theSPs->recibe<SP_Constraint>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewSP);
@@ -1038,7 +1038,7 @@ int XC::ConstrContainer::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ConstrContainer::sendSelf(CommParameters &cp)
   {
     inicComm(7);

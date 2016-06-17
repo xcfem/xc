@@ -134,7 +134,7 @@ const XC::Matrix &XC::BeamIntegration::getIntegrPointLocalCoords(int nIP,const C
 const XC::Matrix &XC::BeamIntegration::getIntegrPointGlobalCoords(int nIP,const CrdTransf &trf) const
   { return trf.getPointsGlobalCoordFromLocal(getIntegrPointLocalCoords(nIP,trf)); }
 
-//! @brief Evalúa la expresión que se pasa como parámetro en los puntos de integración.
+//! @brief Evalúa la expresión being passed as parameter en los puntos de integración.
 const XC::Vector &XC::BeamIntegration::evalInIntegrPoints(const ExprAlgebra &expr,int nIP,const CrdTransf &trf) const
   {
     const IntegrationPointsCoords ipCoords(*this,nIP,trf);
@@ -155,7 +155,7 @@ double XC::BeamIntegration::getIntegral(const ExprAlgebra &expr,int nIP,const Cr
     return retval;
   }
 
-//! @brief Envía un puntero a material a través del canal que se pasa como parámetro.
+//! @brief Envía un puntero a material through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase del material.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTag,DbTagData &dt,CommParameters &cp)
@@ -172,7 +172,7 @@ int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTa
     return res;
   }
 
-//! @brief Recibe un puntero a material a través del canal que se pasa como parámetro.
+//! @brief Recibe un puntero a material through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase del material.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posClassTag, int posDbTag,DbTagData &dt,const CommParameters &cp)

@@ -88,7 +88,7 @@ void XC::BaseControl::setup_numIncr(const int &numIncr)
       }
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::BaseControl::sendData(CommParameters &cp)
   {
     int res= StaticIntegrator::sendData(cp);
@@ -96,7 +96,7 @@ int XC::BaseControl::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::BaseControl::recvData(const CommParameters &cp)
   {
     int res= StaticIntegrator::recvData(cp);

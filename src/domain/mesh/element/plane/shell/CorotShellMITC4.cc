@@ -70,7 +70,7 @@ XC::DbTagData &XC::CorotShellMITC4::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::CorotShellMITC4::sendSelf(CommParameters &cp)
   {
     inicComm(16);
@@ -83,7 +83,7 @@ int XC::CorotShellMITC4::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::CorotShellMITC4::recvSelf(const CommParameters &cp)
   {
     inicComm(16);

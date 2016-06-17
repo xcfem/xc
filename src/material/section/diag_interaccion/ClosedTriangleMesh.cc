@@ -153,7 +153,7 @@ double XC::ClosedTriangleMesh::Iy(void) const
 double XC::ClosedTriangleMesh::Iz(void) const
   { return 0.0; }
 
-//! @brief Busca el triedro que contiene al punto que se pasa como parámetro.
+//! @brief Busca el triedro que contiene al punto being passed as parameter.
 XC::ClosedTriangleMesh::const_iterator XC::ClosedTriangleMesh::BuscaTriedro(const Pos3d &p) const
   {
     XC::ClosedTriangleMesh::const_iterator retval= end();
@@ -168,7 +168,7 @@ XC::ClosedTriangleMesh::const_iterator XC::ClosedTriangleMesh::BuscaTriedro(cons
     return retval;
   }
 
-//! @brief Busca el triedro que contiene al punto que se pasa como parámetro.
+//! @brief Busca el triedro que contiene al punto being passed as parameter.
 const Triedro3d *XC::ClosedTriangleMesh::BuscaPtrTriedro(const Pos3d &p) const
   {
     const Triedro3d *retval= nullptr;
@@ -330,7 +330,7 @@ void XC::ClosedTriangleMesh::read(std::ifstream &is)
     setMatrizPosiciones(m);
   }
 
-//! @brief Envia los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Envia los miembros del objeto through the channel being passed as parameter.
 int XC::ClosedTriangleMesh::sendData(CommParameters &cp)
   {
     int res= 0; //MovableObject::sendData(cp);
@@ -341,7 +341,7 @@ int XC::ClosedTriangleMesh::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::ClosedTriangleMesh::recvData(const CommParameters &cp)
   {
     int res= 0;
@@ -352,7 +352,7 @@ int XC::ClosedTriangleMesh::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia el objeto a través del canal que se pasa como parámetro.
+//! @brief Envia el objeto through the channel being passed as parameter.
 int XC::ClosedTriangleMesh::sendSelf(CommParameters &cp)
   {
     inicComm(3);
@@ -365,7 +365,7 @@ int XC::ClosedTriangleMesh::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ClosedTriangleMesh::recvSelf(const CommParameters &cp)
   {
     const int dataTag= getDbTag();

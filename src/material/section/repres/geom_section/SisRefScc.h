@@ -54,7 +54,7 @@ class SisRefScc: public EntGeomSection
 
     //! @brief Devuelve el vector unitario en la dirección del eje que se
     //! pasa como parámetro expresado en el sistema global 
-    //! para la posición que se pasa como parámetro.
+    //! para la posición being passed as parameter.
     virtual Vector2d GetVDirEje(const size_t &,const Pos2d &) const= 0;
     Vector2d GetI(const Pos2d &) const;
     Vector2d GetJ(const Pos2d &) const;

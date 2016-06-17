@@ -614,7 +614,7 @@ const XC::Vector &XC::DispBeamColumn2d::getResistingForceIncInertia(void) const
     return P;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::DispBeamColumn2d::sendData(CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf2d::sendData(cp);
@@ -626,7 +626,7 @@ int XC::DispBeamColumn2d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::DispBeamColumn2d::recvData(const CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf2d::recvData(cp);

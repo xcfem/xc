@@ -444,7 +444,7 @@ const XC::Matrix &XC::PDeltaCrdTransf2d::getInitialGlobalStiffMatrix (const XC::
 XC::CrdTransf2d *XC::PDeltaCrdTransf2d::getCopy(void) const
   { return new PDeltaCrdTransf2d(*this); }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::PDeltaCrdTransf2d::sendData(CommParameters &cp)
   {
     int res= SmallDispCrdTransf2d::sendData(cp);
@@ -452,7 +452,7 @@ int XC::PDeltaCrdTransf2d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::PDeltaCrdTransf2d::recvData(const CommParameters &cp)
   {
     int res= SmallDispCrdTransf2d::recvData(cp);
@@ -460,7 +460,7 @@ int XC::PDeltaCrdTransf2d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::PDeltaCrdTransf2d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -475,7 +475,7 @@ int XC::PDeltaCrdTransf2d::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::PDeltaCrdTransf2d::recvSelf(const CommParameters &cp)
   {
     inicComm(11);

@@ -131,7 +131,7 @@ double XC::FiberSection2d::get_strain(const double &y) const
     return (def(0) + y*def(1));
   }
 
-//! @brief Devuelve la deformación correspondiente a la posición que se pasa como parámetro.
+//! @brief Devuelve la deformación correspondiente a la posición being passed as parameter.
 double XC::FiberSection2d::getStrain(const double &y,const double &) const
   { return get_strain(-y); } //XXX El cambio de signo de la y se debe al lío que produce
                              //el que la coordenada este cambiada de signo

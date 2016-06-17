@@ -805,7 +805,7 @@ void XC::ForceBeamColumn2d::zeroLoad(void)
     v0.zero();
   }
 
-//! @brief Calcula la respuesta del elemento a la carga que se pasa como parámetro.
+//! @brief Calcula la respuesta del elemento a la carga being passed as parameter.
 int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
@@ -905,7 +905,7 @@ const XC::Vector &XC::ForceBeamColumn2d::getResistingForceIncInertia(void) const
     return theVector;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::ForceBeamColumn2d::sendData(CommParameters &cp)
   {
     int res= NLForceBeamColumn2dBase::sendData(cp);
@@ -915,7 +915,7 @@ int XC::ForceBeamColumn2d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::ForceBeamColumn2d::recvData(const CommParameters &cp)
   {
     int res= NLForceBeamColumn2dBase::recvData(cp);
@@ -1122,7 +1122,7 @@ void XC::ForceBeamColumn2d::compSectionDisplacements(std::vector<Vector> &sectio
    return;
 }
 
-//! @brief Imprime el elemento en el stream que se pasa como parámetro.
+//! @brief Imprime el elemento en el stream being passed as parameter.
 void XC::ForceBeamColumn2d::Print(std::ostream &s, int flag)
   {
     const size_t numSections= getNumSections();

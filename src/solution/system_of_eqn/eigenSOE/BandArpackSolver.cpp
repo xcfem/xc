@@ -396,7 +396,7 @@ bool XC::BandArpackSolver::setEigenSOE(EigenSOE *soe)
 bool XC::BandArpackSolver::setEigenSOE(BandArpackSOE &theBandSOE)
   { return setEigenSOE(&theBandSOE); }
 
-//! @brief Devuelve el autovector correspondiente al modo que se pasa como parámetro.
+//! @brief Devuelve el autovector correspondiente al modo being passed as parameter.
 const XC::Vector &XC::BandArpackSolver::getEigenvector(int mode) const
   {
     if(mode <= 0 || mode > numModes)
@@ -423,7 +423,7 @@ const XC::Vector &XC::BandArpackSolver::getEigenvector(int mode) const
   }
 
 
-//! @brief Devuelve el autovalor correspondiente al modo que se pasa como parámetro.
+//! @brief Devuelve el autovalor correspondiente al modo being passed as parameter.
 const double &XC::BandArpackSolver::getEigenvalue(int mode) const
   {
     static double retval= 0.0;

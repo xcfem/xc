@@ -385,7 +385,7 @@ int XC::FluidSolidPorousMaterial::getOrder(void) const
 }
 
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::FluidSolidPorousMaterial::sendData(CommParameters &cp)
   {
     int res= NDMaterial::sendData(cp);
@@ -396,7 +396,7 @@ int XC::FluidSolidPorousMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::FluidSolidPorousMaterial::recvData(const CommParameters &cp)
   {
     int res= NDMaterial::recvData(cp);
@@ -407,7 +407,7 @@ int XC::FluidSolidPorousMaterial::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::FluidSolidPorousMaterial::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -421,7 +421,7 @@ int XC::FluidSolidPorousMaterial::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::FluidSolidPorousMaterial::recvSelf(const CommParameters &cp)    
   {
     inicComm(7);

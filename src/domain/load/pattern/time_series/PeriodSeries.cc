@@ -80,7 +80,7 @@ XC::PeriodSeries::PeriodSeries(int classTag,double startTime, double finishTime,
 XC::PeriodSeries::PeriodSeries(int classTag)
   : PulseBaseSeries(classTag,1.0), period(1.0),shift(0.0) {}
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::PeriodSeries::sendData(CommParameters &cp)
   {
     int res= PulseBaseSeries::sendData(cp);
@@ -88,7 +88,7 @@ int XC::PeriodSeries::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::PeriodSeries::recvData(const CommParameters &cp)
   {
     int res= PulseBaseSeries::recvData(cp);

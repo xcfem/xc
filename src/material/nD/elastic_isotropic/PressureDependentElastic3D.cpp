@@ -276,7 +276,7 @@ int XC::PressureDependentElastic3D::getOrder(void) const
     return 6;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::PressureDependentElastic3D::sendData(CommParameters &cp)
   {
     int res= ElasticIsotropicMaterial::sendData(cp);
@@ -287,7 +287,7 @@ int XC::PressureDependentElastic3D::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::PressureDependentElastic3D::recvData(const CommParameters &cp)
   {
     int res= ElasticIsotropicMaterial::recvData(cp);
@@ -298,7 +298,7 @@ int XC::PressureDependentElastic3D::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::PressureDependentElastic3D::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -312,7 +312,7 @@ int XC::PressureDependentElastic3D::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::PressureDependentElastic3D::recvSelf(const CommParameters &cp)
    {
     inicComm(7);

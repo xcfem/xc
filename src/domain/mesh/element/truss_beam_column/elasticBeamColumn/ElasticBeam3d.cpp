@@ -614,7 +614,7 @@ XC::DbTagData &XC::ElasticBeam3d::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::ElasticBeam3d::sendData(CommParameters &cp)
   {
     DbTagData &dt= getDbTagData();
@@ -629,7 +629,7 @@ int XC::ElasticBeam3d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::ElasticBeam3d::recvData(const CommParameters &cp)
   {
     DbTagData &dt= getDbTagData();
@@ -644,7 +644,7 @@ int XC::ElasticBeam3d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ElasticBeam3d::sendSelf(CommParameters &cp)
   {
     inicComm(17);
@@ -657,7 +657,7 @@ int XC::ElasticBeam3d::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ElasticBeam3d::recvSelf(const CommParameters &cp)
   {
     inicComm(17);

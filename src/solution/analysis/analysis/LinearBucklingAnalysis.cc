@@ -110,7 +110,7 @@ int XC::LinearBucklingAnalysis::setArpackSOE(ArpackSOE &theEigenSOE)
   { return linearBucklingEigenAnalysis.setEigenSOE(theEigenSOE); }
 
 
-//! @brief Devuelve el autovector que corresponde al modo que se pasa como parámetro.
+//! @brief Devuelve el autovector que corresponde al modo being passed as parameter.
 const XC::Vector &XC::LinearBucklingAnalysis::getEigenvector(int mode)
   {
     static Vector retval(1);
@@ -119,7 +119,7 @@ const XC::Vector &XC::LinearBucklingAnalysis::getEigenvector(int mode)
     return retval;
   }
 
-//! @brief Devuelve el autovalor que corresponde al modo que se pasa como parámetro.
+//! @brief Devuelve el autovalor que corresponde al modo being passed as parameter.
 const double &XC::LinearBucklingAnalysis::getEigenvalue(int mode) const
   {
     static double retval= 0.0;

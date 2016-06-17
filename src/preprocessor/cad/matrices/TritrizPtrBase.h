@@ -501,7 +501,7 @@ template <class MatrizPtr>
 typename TritrizPtrBase<MatrizPtr>::var_ref_fila_k TritrizPtrBase<MatrizPtr>::GetVarRefFilaK(const size_t &capa,const size_t &f,const RangoIndice &rcols)
   { return var_ref_fila_k(*this,capa,f,rcols); }
 
-//! @brief Coloca en la tritriz la que se pasa como parámetro.
+//! @brief Coloca en la tritriz la being passed as parameter.
 template <class MatrizPtr>
 void TritrizPtrBase<MatrizPtr>::PutCaja(size_t offset_capa,size_t offset_fila,size_t offset_col,const TritrizPtrBase<MatrizPtr> &otra)
   {

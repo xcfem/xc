@@ -111,7 +111,7 @@ std::string XC::SectionForceDeformation::getTypeString(void) const
   { return getType().getString(); }
 
 //! @brief Agrega al vector de deformaciones generalizadas inicial el
-//! que se pasa como parámetro.
+//! being passed as parameter.
 int XC::SectionForceDeformation::addInitialSectionDeformation(const Vector &def)
   { return setInitialSectionDeformation(getInitialSectionDeformation()+def); }
 
@@ -291,7 +291,7 @@ int XC::SectionForceDeformation::getResponse(int responseID, Information &secInf
       }
   }
 
-//! @brief Devuelve la deformación correspondiente a la posición que se pasa como parámetro.
+//! @brief Devuelve la deformación correspondiente a la posición being passed as parameter.
 double XC::SectionForceDeformation::getStrain(const double &,const double &) const
   {
     std::cerr << "No se ha implementado la funcion getStrain para la clase: "
@@ -300,7 +300,7 @@ double XC::SectionForceDeformation::getStrain(const double &,const double &) con
   }
 
 //! @brief Devuelve la componente del vector de deformaciones que
-//! corresponde al índice que se pasa como parámetro.
+//! corresponde al índice being passed as parameter.
 double XC::SectionForceDeformation::getSectionDeformation(const int &defID) const
   {
     double retval= 0.0;
@@ -314,7 +314,7 @@ double XC::SectionForceDeformation::getSectionDeformation(const int &defID) cons
   }
 
 //! @brief Devuelve la componente del vector resultante de tensiones que
-//! corresponde al índice que se pasa como parámetro.
+//! corresponde al índice being passed as parameter.
 double XC::SectionForceDeformation::getStressResultant(const int &defID) const
   {
     double retval= 0.0;

@@ -139,7 +139,7 @@ void XC::EigenSOE::resize_mass_matrix_if_needed(const size_t &sz)
       massMatrix= sparse_matrix(sz,sz,0.0);
   }
 
-//! @brief Resuelve el problema de autovalores con el número de modos que se pasa como parámetro.
+//! @brief Resuelve el problema de autovalores con el número de modos being passed as parameter.
 int XC::EigenSOE::solve(int numModes)
   { return (theSolver->solve(numModes)); }
 
@@ -161,11 +161,11 @@ void XC::EigenSOE::zeroM(void)
     return;
   }
 
-//! @brief Devuelve el autovector que corresponde al modo que se pasa como parámetro.
+//! @brief Devuelve el autovector que corresponde al modo being passed as parameter.
 const XC::Vector &XC::EigenSOE::getEigenvector(int mode) const
   { return theSolver->getEigenvector(mode); }
 
-//! @brief Devuelve el autovector que corresponde al modo que se pasa como parámetro
+//! @brief Devuelve el autovector que corresponde al modo being passed as parameter
 //! normalizado de modo que la componente máxima valga 1 (norma_infinito).
 XC::Vector XC::EigenSOE::getNormalizedEigenvector(int mode) const
   { return theSolver->getNormalizedEigenvector(mode); }
@@ -180,22 +180,22 @@ XC::Matrix XC::EigenSOE::getEigenvectors(void) const
 XC::Matrix XC::EigenSOE::getNormalizedEigenvectors(void) const
   { return theSolver->getNormalizedEigenvectors(); }
 
-//! @brief Devuelve el autovalor que corresponde al modo que se pasa como parámetro.
+//! @brief Devuelve el autovalor que corresponde al modo being passed as parameter.
 const double &XC::EigenSOE::getEigenvalue(int mode) const
   { return theSolver->getEigenvalue(mode); }
 
 //! @brief Devuelve la pulsación correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::EigenSOE::getPulsacion(int mode) const
   { return sqrt(getEigenvalue(mode)); }
 
 //! @brief Devuelve el período correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::EigenSOE::getPeriodo(int mode) const
   { return 2.0*M_PI/getPulsacion(mode); }
 
 //! @brief Devuelve la frecuencia correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::EigenSOE::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 
@@ -252,7 +252,7 @@ XC::Vector XC::EigenSOE::getModalParticipationFactors(void) const
   }
 
 //! @brief Devuelve el factor de distribución correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 XC::Vector XC::EigenSOE::getDistributionFactor(int mode) const
   { return getModalParticipationFactor(mode)*getEigenvector(mode); }
 
@@ -314,7 +314,7 @@ double XC::EigenSOE::getTotalMass(void) const
   }
 
 //! @brief Devuelve la fuerza estática equivalente para el modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 XC::Vector XC::EigenSOE::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
     Vector tmp= getDistributionFactor(mode);

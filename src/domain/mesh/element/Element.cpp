@@ -329,7 +329,7 @@ const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNo
   }
 
 //! @brief Devuelve la fuerza estática equivalente para el modo
-//! que se pasa como parámetro y la aceleración correspondiente a dicho modo.
+//! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Element::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
     const Matrix &matriz_masas= getMass();
@@ -340,7 +340,7 @@ XC::Vector XC::Element::getEquivalentStaticLoad(int mode,const double &accel_mod
   }
 
 //! @brief Devuelve la fuerza estática equivalente en cada nodo para el modo
-//! que se pasa como parámetro y la aceleración correspondiente a dicho modo.
+//! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Matrix XC::Element::getEquivalentStaticNodalLoads(int mode,const double &accel_mode) const
   {
     const Vector element_load= getEquivalentStaticLoad(mode,accel_mode);
@@ -643,7 +643,7 @@ int XC::Element::getEdgeNodes(const int &iN1,const int &iN2) const
   }
  
 //! @brief Devuelve los bordes del elemento
-//! que tienen por extremo el nodo que se pasa como parámetro.
+//! que tienen por extremo el nodo being passed as parameter.
 XC::ID XC::Element::getEdgesNode(const Node *) const
   {
     ID retval;
@@ -654,7 +654,7 @@ XC::ID XC::Element::getEdgesNode(const Node *) const
   }
 
 //! @brief Devuelve los bordes del elemento que tienen ambos extremos
-//! en el conjunto de nodos que se pasa como parámetro.
+//! en el conjunto de nodos being passed as parameter.
 std::set<int> XC::Element::getEdgesNodes(const NodePtrSet &nodos) const
   {
     std::set<int> retval;
@@ -683,7 +683,7 @@ XC::ID XC::Element::getEdgesNodeByTag(const int &iN) const
   }
  
 //! @brief Devuelve los índices locales de los nodos del elemento
-//! situados sobre el borde (o arista) que se pasa como parámetros.
+//! situados sobre el borde (o arista) being passed as parameters.
 XC::ID XC::Element::getLocalIndexNodesEdge(const size_t &i) const
   {
     ID retval;
@@ -791,7 +791,7 @@ void XC::Element::resetTributarias(void) const
   { getNodePtrs().resetTributarias(); }
 
 //! @brief Agrega al la magnitud tributaria de cada nodo i
-//! la componente i del vector que se pasa como parámetro.
+//! la componente i del vector being passed as parameter.
 void XC::Element::vuelcaTributarias(const std::vector<double> &t) const
   { getNodePtrs().vuelcaTributarias(t); }
 
@@ -929,7 +929,7 @@ XC::TritrizPtrElem XC::Element::cose(const SetEstruct &f1,const SetEstruct &f2) 
     return TritrizPtrElem();
   }
 
-//! @brief Envia los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Envia los miembros del objeto through the channel being passed as parameter.
 int XC::Element::sendData(CommParameters &cp)
   {
     int res= MeshComponent::sendData(cp);
@@ -938,7 +938,7 @@ int XC::Element::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::Element::recvData(const CommParameters &cp)
   {
     int res= MeshComponent::recvData(cp);

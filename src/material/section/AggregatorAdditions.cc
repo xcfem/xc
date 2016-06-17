@@ -134,7 +134,7 @@ void XC::AggregatorAdditions::Print(std::ostream &s, int flag) const
     s << "\tUniaxial codes " << *matCodes << std::endl;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::AggregatorAdditions::sendData(CommParameters &cp)
   {
     int res= DqUniaxialMaterial::sendData(cp);
@@ -142,7 +142,7 @@ int XC::AggregatorAdditions::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::AggregatorAdditions::recvData(const CommParameters &cp)
   {
     int res= DqUniaxialMaterial::recvData(cp);
@@ -151,7 +151,7 @@ int XC::AggregatorAdditions::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::AggregatorAdditions::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -165,7 +165,7 @@ int XC::AggregatorAdditions::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::AggregatorAdditions::recvSelf(const CommParameters &cp)
   {
     inicComm(3);

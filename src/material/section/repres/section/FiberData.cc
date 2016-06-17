@@ -109,7 +109,7 @@ size_t XC::FiberData::PutCells(const size_t &offset,const ListRegiones &regiones
     return k;
   }
 
-//! @brief Coloca las barras de la lista que se pasa como parámetro.
+//! @brief Coloca las barras de la lista being passed as parameter.
 size_t XC::FiberData::PutCapasArmadura(const size_t &offset,const ListReinfLayer &capas_armado)
   {
     Material *matPtr= nullptr;

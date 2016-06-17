@@ -37,11 +37,11 @@
 XC::Spot::Spot(const Pos2d &pto)
   : EntGeomSection(), p(pto) {}
 
-//! Inserta la línea que se pasa como parámetro en la lista
+//! Inserta la línea being passed as parameter en la lista
 //! de líneas que tocan al punto.
 void XC::Spot::inserta_linea(Eje *l)
   { ejes_pt.insert(l); }
-//! Borra la línea que se pasa como parámetro de la lista
+//! Borra la línea being passed as parameter de la lista
 //! de líneas que tocan al punto.
 void XC::Spot::borra_linea(Eje *l)
   {
@@ -71,7 +71,7 @@ bool XC::Spot::Toca(const Eje &l) const
   }
 
 
-//! @brief Devuelve la distancia a la posición que se pasa como parámetro.
+//! @brief Devuelve la distancia a la posición being passed as parameter.
 double XC::Spot::DistanciaA(const Pos2d &pt) const
   { return dist(p,pt);  }
 

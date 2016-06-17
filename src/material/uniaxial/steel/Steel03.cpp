@@ -274,7 +274,7 @@ int XC::Steel03::revertToLastCommit(void)
 XC::UniaxialMaterial* XC::Steel03::getCopy(void) const
   { return new Steel03(*this); }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::Steel03::sendData(CommParameters &cp)
   {
     int res= SteelBase0103::sendData(cp);
@@ -284,7 +284,7 @@ int XC::Steel03::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::Steel03::recvData(const CommParameters &cp)
   {
     int res= SteelBase0103::recvData(cp);
@@ -294,7 +294,7 @@ int XC::Steel03::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Steel03::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -308,7 +308,7 @@ int XC::Steel03::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Steel03::recvSelf(const CommParameters &cp)
   {
     inicComm(11);

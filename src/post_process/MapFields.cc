@@ -76,21 +76,21 @@ XC::FieldInfo &XC::MapFields::newField(const std::string &nmb_field)
 void XC::MapFields::clearAll(void)
   { clear(); }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::MapFields::sendData(CommParameters &cp)
   {
     std::cerr << "MapFields::sendData no se ha implementado." << std::endl;
     return 0;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::MapFields::recvData(const CommParameters &cp)
   {
     std::cerr << "MapFields::recvData no se ha implementado." << std::endl;
     return 0;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::MapFields::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -104,7 +104,7 @@ int XC::MapFields::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::MapFields::recvSelf(const CommParameters &cp)
   {
     inicComm(6);

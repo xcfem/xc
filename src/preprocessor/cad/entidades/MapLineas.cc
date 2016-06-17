@@ -208,8 +208,8 @@ XC::Edge *XC::MapLineas::LineSequence(void)
     return tmp;
   }
 
-//! @brief Crea una nueva línea, copia de la que se pasa como parámetro con
-//! el nombre que se pasa como parámetro.
+//! @brief Crea una nueva línea, copia de la being passed as parameter con
+//! el nombre being passed as parameter.
 XC::Edge *XC::MapLineas::Copia(const Edge *l)
   {
     Edge *retval= busca(getTag());

@@ -74,7 +74,7 @@
 XC::EigenIntegrator::EigenIntegrator(SoluMethod *owr)
   :Integrator(owr,EigenINTEGRATOR_TAGS_Eigen) {}
 
-//! @brief Solicita al elemento que se pasa como parámetro
+//! @brief Solicita al elemento being passed as parameter
 //! que forme su matriz de rigidez o de masas dependiendo
 //! del valor de flagK.
 int XC::EigenIntegrator::formEleTangent(FE_Element *theEle)
@@ -192,7 +192,7 @@ int XC::EigenIntegrator::formM(void)
     return result;    
   }
 
-//! @brief Solicita al elemento que se pasa como parámetro
+//! @brief Solicita al elemento being passed as parameter
 //! que forme su matriz de rigidez.
 int XC::EigenIntegrator::formEleTangK(FE_Element *theEle)
   {
@@ -201,7 +201,7 @@ int XC::EigenIntegrator::formEleTangK(FE_Element *theEle)
     return 0;
   }
 
-//! @brief Solicita al elemento que se pasa como parámetro
+//! @brief Solicita al elemento being passed as parameter
 //! que forme su matriz de masas.
 int XC::EigenIntegrator::formEleTangM(FE_Element *theEle)
   {

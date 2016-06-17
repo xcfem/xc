@@ -111,7 +111,7 @@ int XC::SymBandEigenSOE::setSize(Graph &theGraph)
     return result;
   }
 
-//! @brief Ensambla en A la matriz que se pasa como parámetro multiplicada por el parámetro fact.
+//! @brief Ensambla en A la matriz being passed as parameter multiplicada por el parámetro fact.
 int XC::SymBandEigenSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a XC::quick return 
@@ -176,7 +176,7 @@ void XC::SymBandEigenSOE::zeroA(void)
     factored = false;
   }
 
-//! @brief Ensambla en M la matriz que se pasa como parámetro multiplicada por el parámetro fact.
+//! @brief Ensambla en M la matriz being passed as parameter multiplicada por el parámetro fact.
 int XC::SymBandEigenSOE::addM(const Matrix &m, const ID &id, double fact)
   {
     // check for a XC::quick return 

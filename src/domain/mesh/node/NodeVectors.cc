@@ -154,7 +154,7 @@ int XC::NodeVectors::setTrialData(const size_t &nDOF,const double &value,const s
     return 0;
   }
 
-//! @brief Asigna el valor que se pasa como parámetro
+//! @brief Asigna el valor being passed as parameter
 int XC::NodeVectors::setTrialData(const size_t &nDOF,const Vector &newTrialData)
   {
     // check vector arg is of correct size
@@ -286,7 +286,7 @@ XC::DbTagData &XC::NodeVectors::getDbTagData(void) const
     static DbTagData retval(2);
     return retval;
   }
-//! @brief Envia los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Envia los miembros del objeto through the channel being passed as parameter.
 int XC::NodeVectors::sendData(CommParameters &cp)
   {
     int res= 0;
@@ -309,7 +309,7 @@ int XC::NodeVectors::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::NodeVectors::recvData(const CommParameters &cp)
   {
     ID datos(3);
@@ -343,7 +343,7 @@ int XC::NodeVectors::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia los vectores por el canal que se pasa como parámetro.E
+//! @brief Envia los vectores through the channel being passed as parameter.E
 int XC::NodeVectors::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);

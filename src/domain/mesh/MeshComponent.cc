@@ -63,7 +63,7 @@ XC::MeshComponent::MeshComponent(int classTag)
 XC::MeshComponent::MeshComponent(int tag, int classTag)
   : ContinuaReprComponent(tag,classTag), index(-1){}
 
-//! @brief Envía las etiquetas por el canal que se pasa como parámetro.
+//! @brief Send labelsthrough the channel being passed as parameter.
 int XC::MeshComponent::sendIdsEtiquetas(int posDbTag,CommParameters &cp)
   {
     int res= 0;
@@ -83,7 +83,7 @@ int XC::MeshComponent::sendIdsEtiquetas(int posDbTag,CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe las etiquetas por el canal que se pasa como parámetro.
+//! @brief Receive labels through the channel being passed as parameter.
 int XC::MeshComponent::recvIdsEtiquetas(int posDbTag,const CommParameters &cp)
   {
     int res= 0;
@@ -100,7 +100,7 @@ int XC::MeshComponent::recvIdsEtiquetas(int posDbTag,const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::MeshComponent::sendData(CommParameters &cp)
   {
     int res= ContinuaReprComponent::sendData(cp);
@@ -109,7 +109,7 @@ int XC::MeshComponent::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::MeshComponent::recvData(const CommParameters &cp)
   {
     int res= ContinuaReprComponent::recvData(cp);

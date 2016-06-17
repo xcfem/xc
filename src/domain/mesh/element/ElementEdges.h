@@ -41,19 +41,8 @@ class ID;
 //! @ingroup Elem
 //
 //! @brief Element edge container.
-class ElementEdges: public EntCmd
+ class ElementEdges: public EntCmd, public std::vector<ElementEdge>
   {
-  public:
-    typedef std::vector<ElementEdge> vector_edges;
-    typedef vector_edges::const_reference const_reference;
-    typedef vector_edges::reference reference;
-    typedef vector_edges::iterator iterator;
-    typedef vector_edges::const_iterator const_iterator;
-
-  private:
-    vector_edges theEdges; //!< conjunto de bordes.
-  protected:
-
   public:
     ElementEdges(void);
 
@@ -61,36 +50,12 @@ class ElementEdges: public EntCmd
 
     virtual size_t removeElement(const int &tag);
 
-    inline void push_back(const ElementEdge &ee)
-      { theEdges.push_back(ee); }
-    inline size_t size(void) const
-      { return theEdges.size(); }
-    inline const_reference front() const
-      { return theEdges.front(); }
-    inline reference front()
-      { return theEdges.front(); }
-    inline const_reference back() const
-      { return theEdges.back(); }
-    inline reference back()
-      { return theEdges.back(); }
-    inline const_iterator begin() const
-      { return theEdges.begin(); }
-    inline iterator begin()
-      { return theEdges.begin(); }
-    inline const_iterator end() const
-      { return theEdges.end(); }
-    inline iterator end()
-      { return theEdges.end(); }
     iterator find(const int &tag);
     const_iterator find(const int &tag) const;
     int getLocElement(const Element *) const;
 
     const_reference operator()(const size_t &i) const;
     reference operator()(const size_t &i);
-    const_reference operator[](const size_t &i) const;
-    reference operator[](const size_t &i);
-
-
   };
 } // end of XC namespace
 

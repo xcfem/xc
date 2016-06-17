@@ -122,7 +122,7 @@ void malla_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &no
       std::cerr << "malla_quad4N_bidimensional; existen punteros a nodo nulos." << std::endl;
   }
 
-//Coloca el elemento en la malla que se pasa como parámetro.
+//Coloca el elemento en la malla being passed as parameter.
 XC::TritrizPtrElem XC::coloca_quad4N_en_malla(const Element &e,const TritrizPtrNod &nodos,dir_mallado dm)
   {
     const size_t ncapas= nodos.GetCapas();
@@ -237,7 +237,7 @@ void malla_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &no
       std::cerr << "malla_quad9N_bidimensional; existen punteros a nodo nulos." << std::endl;
   }
 
-//Coloca el elemento en la malla que se pasa como parámetro.
+//Coloca el elemento en la malla being passed as parameter.
 XC::TritrizPtrElem XC::coloca_quad9N_en_malla(const Element &e,const TritrizPtrNod &nodos,dir_mallado dm)
   {
     const size_t ncapas= nodos.GetCapas();

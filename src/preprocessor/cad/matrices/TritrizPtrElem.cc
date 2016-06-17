@@ -76,7 +76,7 @@ const XC::Element *XC::TritrizPtrElem::buscaElemento(const int &tag) const
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 XC::Element *XC::TritrizPtrElem::getNearestElement(const Pos3d &p)
   {
     Element *retval= nullptr, *ptrElem= nullptr;
@@ -102,7 +102,7 @@ XC::Element *XC::TritrizPtrElem::getNearestElement(const Pos3d &p)
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 const XC::Element *XC::TritrizPtrElem::getNearestElement(const Pos3d &p) const
   {
     TritrizPtrElem *this_no_const= const_cast<TritrizPtrElem *>(this);

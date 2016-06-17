@@ -51,17 +51,17 @@ XC::EigenSolver::EigenSolver(const int &classTag,const int &nModes)
   :Solver(classTag), numModes(nModes) {}
 
 //! @brief Devuelve la pulsación correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::EigenSolver::getPulsacion(int mode) const
   { return sqrt(getEigenvalue(mode)); }
 
 //! @brief Devuelve el período correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::EigenSolver::getPeriodo(int mode) const
   { return 2.0*M_PI/getPulsacion(mode); }
 
 //! @brief Devuelve la frecuencia correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::EigenSolver::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 

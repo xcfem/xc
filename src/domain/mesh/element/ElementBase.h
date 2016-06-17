@@ -105,7 +105,7 @@ template <int NNODOS>
 XC::NodePtrsWithIDs &XC::ElementBase<NNODOS>::getNodePtrs(void)
   { return theNodes; }
 
-//! @brief Asigna el material al elemento a partir del puntero que se pasa como parámetro.
+//! @brief Asigna el material al elemento a partir del puntero being passed as parameter.
 template <int NNODOS> template <class TIPOMAT>
 TIPOMAT *ElementBase<NNODOS>::cast_material(const Material *ptr_mat)
   {
@@ -129,7 +129,7 @@ TIPOMAT *ElementBase<NNODOS>::cast_material(const Material *ptr_mat)
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 template <int NNODOS>
 int XC::ElementBase<NNODOS>::sendData(CommParameters &cp)
   {
@@ -138,7 +138,7 @@ int XC::ElementBase<NNODOS>::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 template <int NNODOS>
 int XC::ElementBase<NNODOS>::recvData(const CommParameters &cp)
   {

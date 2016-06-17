@@ -72,7 +72,7 @@ XC::LinearSeries::LinearSeries(double theFactor)
   :CFactorSeries(TSERIES_TAG_LinearSeries,theFactor)
   {}
 
-//! @brief Devuelve el valor de la función en el instante que se pasa como parámetro.
+//! @brief Devuelve el valor de la función en el instante being passed as parameter.
 double XC::LinearSeries::getFactor(double pseudoTime) const
   { return cFactor*pseudoTime; }
 

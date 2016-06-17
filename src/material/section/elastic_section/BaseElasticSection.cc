@@ -75,7 +75,7 @@ const XC::Vector &XC::BaseElasticSection::getSectionDeformation(void) const
     return retval;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::BaseElasticSection::sendData(CommParameters &cp)
   {
     int res= SeccionBarraPrismatica::sendData(cp);
@@ -85,7 +85,7 @@ int XC::BaseElasticSection::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::BaseElasticSection::recvData(const CommParameters &cp)
   {
     int res= SeccionBarraPrismatica::recvData(cp);

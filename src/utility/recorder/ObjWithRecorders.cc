@@ -174,7 +174,7 @@ int XC::ObjWithRecorders::addRecorder(Recorder &theRecorder)
     return 0;
   }
 
-//! @brief Ejecuta los recorders sobre el tag que se pasa como parámetro.
+//! @brief Ejecuta los recorders sobre el tag being passed as parameter.
 int XC::ObjWithRecorders::record(int cTag, double timeStamp)
   {
     for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)

@@ -47,7 +47,7 @@ double XC::ArcLengthBase::getDLambdaNewStep(void) const
     return retval;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ArcLengthBase::sendData(CommParameters &cp)
   {
     int res= ProtoArcLength::sendData(cp);
@@ -55,7 +55,7 @@ int XC::ArcLengthBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::ArcLengthBase::recvData(const CommParameters &cp)
   {
     int res= ProtoArcLength::recvData(cp);

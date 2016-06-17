@@ -180,7 +180,7 @@ const XC::Vector &XC::ConvergenceTest::getB(void) const
 double XC::ConvergenceTest::getNormB(void) const
  { return getLinearSOEPtr()->getB().pNorm(nType); }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ConvergenceTest::sendData(CommParameters &cp)
   {
     //setDbTagDataPos(0,getTag());
@@ -189,7 +189,7 @@ int XC::ConvergenceTest::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::ConvergenceTest::recvData(const CommParameters &cp)
   {
     //setTag(getDbTagDataPos(0));

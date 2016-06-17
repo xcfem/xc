@@ -60,7 +60,7 @@ void XC::Face::SetNDivI(const size_t &ndi)
 void XC::Face::SetNDivJ(const size_t &ndj)
   { ndivj= ndj; }
 
-//! @brief Inserta el cuerpo que se pasa como parámetro en la lista de los
+//! @brief Inserta el cuerpo being passed as parameter en la lista de los
 //! que tocan a esta superficie.
 void XC::Face::inserta_body(Body *b)
   { cuerpos_sup.insert(b); }

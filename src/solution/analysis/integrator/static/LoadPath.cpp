@@ -128,7 +128,7 @@ int XC::LoadPath::update(const XC::Vector &deltaU)
     return 0;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::LoadPath::sendData(CommParameters &cp)
   {
     int res= StaticIntegrator::sendData(cp);
@@ -137,7 +137,7 @@ int XC::LoadPath::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::LoadPath::recvData(const CommParameters &cp)
   {
     int res= StaticIntegrator::recvData(cp);

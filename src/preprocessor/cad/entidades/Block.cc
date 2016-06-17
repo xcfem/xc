@@ -215,7 +215,7 @@ size_t XC::Block::indice(Face *s) const
     return retval;
   }
 
-//! @brief Establece como límite del sólido la superficie que se pasa como parámetro.
+//! @brief Establece como límite del sólido la superficie being passed as parameter.
 void XC::Block::coloca(const size_t &i,Face *s)
   {
     size_t primero= 1;

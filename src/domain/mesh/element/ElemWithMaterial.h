@@ -111,7 +111,7 @@ void ElemWithMaterial<NNODOS, PhysProp>::setPhysicalProperties(const PhysProp &p
   { physicalProperties= physProp; }
 
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 template <int NNODOS,class PhysProp>
   int ElemWithMaterial<NNODOS, PhysProp>::sendData(CommParameters &cp)
   {
@@ -120,7 +120,7 @@ template <int NNODOS,class PhysProp>
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 template <int NNODOS,class PhysProp>
 int ElemWithMaterial<NNODOS, PhysProp>::recvData(const CommParameters &cp)
   {

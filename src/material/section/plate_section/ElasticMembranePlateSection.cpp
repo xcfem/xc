@@ -221,7 +221,7 @@ XC::DbTagData &XC::ElasticMembranePlateSection::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 int XC::ElasticMembranePlateSection::sendData(CommParameters &cp)
   {
     int res= ElasticPlateProto<8>::sendData(cp);
@@ -229,7 +229,7 @@ int XC::ElasticMembranePlateSection::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::ElasticMembranePlateSection::recvData(const CommParameters &cp)
   {
     int res= ElasticPlateProto<8>::recvData(cp);

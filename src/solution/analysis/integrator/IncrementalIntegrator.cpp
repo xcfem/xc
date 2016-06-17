@@ -136,7 +136,7 @@ int XC::IncrementalIntegrator::formUnbalance(void)
   }
   
 //! @brief Devuelve la respusta correspondiente a los grados de libertad de id en
-//! el vector result que se pasa como parámetro.  
+//! el vector result being passed as parameter.  
 int XC::IncrementalIntegrator::getLastResponse(Vector &result, const XC::ID &id)
   {
     LinearSOE *theSOE= getLinearSOEPtr();

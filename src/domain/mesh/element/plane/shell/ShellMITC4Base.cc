@@ -649,7 +649,7 @@ void XC::ShellMITC4Base::zeroLoad(void)
     p0.zero();
   }
 
-//! @brief Añade al elemento la carga que se pasa como parámetro.
+//! @brief Añade al elemento la carga being passed as parameter.
 int XC::ShellMITC4Base::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
@@ -1507,7 +1507,7 @@ void XC::ShellMITC4Base::shape2d(const double &ss, const double &tt,const double
     return;
   }
 
-//! @brief Envía la transformación de coordenadas a través del canal que se pasa como parámetro.
+//! @brief Envía la transformación de coordenadas through the channel being passed as parameter.
 int XC::ShellMITC4Base::sendCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,CommParameters &cp)
   {
     int retval= 0;
@@ -1523,7 +1523,7 @@ int XC::ShellMITC4Base::sendCoordTransf(int posFlag,const int &posClassTag,const
     return retval;
   }
 
-//! @brief Recibe la transformación de coordenadas a través del canal que se pasa como parámetro.
+//! @brief Recibe la transformación de coordenadas through the channel being passed as parameter.
 int XC::ShellMITC4Base::recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &cp)
   {
     int res= 0;
@@ -1548,7 +1548,7 @@ int XC::ShellMITC4Base::recvCoordTransf(int posFlag,const int &posClassTag,const
     return res;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::ShellMITC4Base::sendData(CommParameters &cp)
   {
     int res= QuadBase4N<SectionFDPhysicalProperties>::sendData(cp);
@@ -1561,7 +1561,7 @@ int XC::ShellMITC4Base::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::ShellMITC4Base::recvData(const CommParameters &cp)
   {
     int res= QuadBase4N<SectionFDPhysicalProperties>::recvData(cp);

@@ -86,14 +86,14 @@ void XC::ElementBodyLoad::Print(std::ostream &s, int flag) const
     s << "  Elementos sobre los que actúa: " << getElementTags();
   }
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 int XC::ElementBodyLoad::sendData(CommParameters &cp)
   {
     int res= ElementalLoad::sendData(cp);
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::ElementBodyLoad::recvData(const CommParameters &cp)
   {
     int res= ElementalLoad::recvData(cp);

@@ -166,7 +166,7 @@ int TaggedObjectStorage::createObjects(const CommParameters &cp,T *(FEM_ObjectBr
     return retval;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 template <class T>
 int TaggedObjectStorage::recibeDatos(const CommParameters &cp,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {
@@ -186,7 +186,7 @@ int TaggedObjectStorage::recibeDatos(const CommParameters &cp,T *(FEM_ObjectBrok
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 template <class T>
 int TaggedObjectStorage::recibe(int dbTag,const CommParameters &cp,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {

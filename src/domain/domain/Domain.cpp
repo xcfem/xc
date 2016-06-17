@@ -180,11 +180,11 @@ void XC::Domain::setDeadSRF(const double &d)
   { Element::setDeadSRF(d); }
 
 
-//! @brief Agrega al dominio el elemento que se pasa como parámetro.
+//! @brief Agrega al dominio el elemento being passed as parameter.
 bool XC::Domain::addElement(Element *element)
   { return mesh.addElement(element); }
 
-//! @brief Agrega al dominio el nodo que se pasa como parámetro.
+//! @brief Agrega al dominio el nodo being passed as parameter.
 bool XC::Domain::addNode(Node * node)
   { return mesh.addNode(node); }
 
@@ -240,7 +240,7 @@ bool XC::Domain::addSP_Constraint(SP_Constraint *spConstraint, int pattern)
     return true;
   }
 
-//! @brief Agrega al caso que se pasa como parámetro una carga sobre nodos.
+//! @brief Agrega al caso being passed as parameter una carga sobre nodos.
 bool XC::Domain::addNodalLoad(NodalLoad *load, int pattern)
   {
     bool result= constraints.addNodalLoad(load,pattern);
@@ -252,7 +252,7 @@ bool XC::Domain::addNodalLoad(NodalLoad *load, int pattern)
     return result;
   }
 
-//! @brief Agrega al caso que se pasa como parámetro una carga sobre elementos.
+//! @brief Agrega al caso being passed as parameter una carga sobre elementos.
 bool XC::Domain::addElementalLoad(ElementalLoad *load, int pattern)
   {
     bool result= constraints.addElementalLoad(load,pattern);
@@ -312,7 +312,7 @@ bool XC::Domain::removeMRMP_Constraint(int tag)
     return result;
   }
 
-//! @brief Añade al modelo la hipótesis simple que se pasa como parámetro.
+//! @brief Añade al modelo la hipótesis simple being passed as parameter.
 bool XC::Domain::addLoadPattern(LoadPattern *load)
   {
     bool result= constraints.addLoadPattern(load);
@@ -342,7 +342,7 @@ bool XC::Domain::addNodeLocker(NodeLocker *nl)
     return result;
   }
 
-//! @brief Añade al modelo la combinacion que se pasa como parámetro.
+//! @brief Añade al modelo la combinacion being passed as parameter.
 bool XC::Domain::addCombinacion(Combinacion *comb)
   {      
     bool retval= false;
@@ -393,7 +393,7 @@ bool XC::Domain::removeNodeLocker(int tag)
     return result;
   }
 
-//! @brief Elimina del dominio el caso de carga que se pasa como parámetro.
+//! @brief Elimina del dominio el caso de carga being passed as parameter.
 bool XC::Domain::removeLoadPattern(LoadPattern *lp)
   {
     bool retval= false;
@@ -402,7 +402,7 @@ bool XC::Domain::removeLoadPattern(LoadPattern *lp)
     return retval;
   }
 
-//! @brief Elimina del dominio el caso de carga que se pasa como parámetro.
+//! @brief Elimina del dominio el caso de carga being passed as parameter.
 bool XC::Domain::removeNodeLocker(NodeLocker *nl)
   {
     bool retval= false;
@@ -415,7 +415,7 @@ bool XC::Domain::removeNodeLocker(NodeLocker *nl)
 const std::string &XC::Domain::getNombreCombActual(void) const
   { return nmbCombActual; }
 
-//! @brief Elimina del dominio la combinación que se pasa como parámetro.
+//! @brief Elimina del dominio la combinación being passed as parameter.
 void XC::Domain::removeCombinacion(Combinacion *comb)
   {
     if(comb)
@@ -452,7 +452,7 @@ void XC::Domain::removeNLs(void)
       domainChange();
   }
 
-//! @brief Elimina del dominio la carga sobre nodo que se pasa como parámetro.
+//! @brief Elimina del dominio la carga sobre nodo being passed as parameter.
 //!
 //! @param tag: Identificador de la carga sobre nodo a eliminar.
 //! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
@@ -460,14 +460,14 @@ bool XC::Domain::removeNodalLoad(int tag, int loadPattern)
   { return constraints.removeNodalLoad(tag,loadPattern); }
 
 
-//! @brief Elimina del dominio la carga sobre elementos que se pasa como parámetro.
+//! @brief Elimina del dominio la carga sobre elementos being passed as parameter.
 //!
 //! @param tag: Identificador de la carga sobre elementos a eliminar.
 //! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
 bool XC::Domain::removeElementalLoad(int tag, int loadPattern)
   { return constraints.removeElementalLoad(tag,loadPattern); }
 
-//! @brief Elimina del dominio la constraint monopunto que se pasa como parámetro.
+//! @brief Elimina del dominio la constraint monopunto being passed as parameter.
 //!
 //! @param tag: Identificador de la constraint monopunto a eliminar.
 //! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
@@ -696,22 +696,22 @@ int XC::Domain::setEigenvalues(const Vector &theValues)
     return 0;
   }
 
-//! @brief Devuelve el autovalor que corresponde al modo que se pasa como parámetro.
+//! @brief Devuelve el autovalor que corresponde al modo being passed as parameter.
 const double &XC::Domain::getEigenvalue(int mode) const
   { return theEigenvalues(mode-1); }
 
 //! @brief Devuelve la pulsación correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::Domain::getPulsacion(int mode) const
   { return sqrt(getEigenvalue(mode)); }
 
 //! @brief Devuelve el período correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::Domain::getPeriodo(int mode) const
   { return 2.0*M_PI/getPulsacion(mode); }
 
 //! @brief Devuelve la frecuencia correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::Domain::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 
@@ -761,7 +761,7 @@ int XC::Domain::setModalParticipationFactors(const Vector &theValues)
   }
 
 //! @brief Devuelve el factor de participación modal
-//! que corresponde al modo que se pasa como parámetro.
+//! que corresponde al modo being passed as parameter.
 const double &XC::Domain::getModalParticipationFactor(int mode) const
   { return modalParticipationFactors(mode-1); }
 
@@ -770,7 +770,7 @@ const XC::Vector &XC::Domain::getModalParticipationFactors(void) const
   { return modalParticipationFactors; }
 
 //! @brief Devuelve la masa modal efectiva correspondiente
-//! al modo que se pasa como parámetro.
+//! al modo being passed as parameter.
 const double XC::Domain::getEffectiveModalMass(int mode) const
   { return mesh.getEffectiveModalMass(mode); }
 
@@ -882,7 +882,7 @@ XC::DbTagData &XC::Domain::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 int XC::Domain::sendData(CommParameters &cp)
   {
     int res= ObjWithRecorders::sendData(cp);
@@ -905,7 +905,7 @@ int XC::Domain::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::Domain::recvData(const CommParameters &cp)
   {
     int res= ObjWithRecorders::recvData(cp);
@@ -940,7 +940,7 @@ int XC::Domain::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Domain::sendSelf(CommParameters &cp)
   {
     // update the commitTag and currentGeoTag
@@ -959,7 +959,7 @@ int XC::Domain::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Domain::recvSelf(const CommParameters &cp)
   {
     // set the commitTag in the domain to cTag & update the getTag if needed
@@ -1022,7 +1022,7 @@ XC::Preprocessor *XC::Domain::GetPreprocessor(void)
     return retval;
   }
 
-//! @brief Envía el dominio por el canal especificado.
+//! @brief Envía el dominio through the channelespecificado.
 int XC::sendDomain(Domain &dom,int posDbTag,DbTagData &dt,CommParameters &cp)
   {
     int retval= dom.sendSelf(cp);
@@ -1030,7 +1030,7 @@ int XC::sendDomain(Domain &dom,int posDbTag,DbTagData &dt,CommParameters &cp)
     return retval;
   }
 
-//! @brief Recibe el dominio por el canal especificado.
+//! @brief Recibe el dominio through the channelespecificado.
 int XC::receiveDomain(Domain &dom,int posDbTag,DbTagData &dt,const CommParameters &cp)
   {
     int res= cp.receiveInt(dom.dbTag,dt,CommMetaData(posDbTag));

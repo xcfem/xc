@@ -37,22 +37,22 @@
 
 //! @brief Constructor.
 XC::ElementEdges::ElementEdges(void)
-  : theEdges(0) {}
+  : EntCmd() {}
 
 //! @brief Asigna los punteros a partir de los identificadores de elemento.
 void XC::ElementEdges::setPtrs(Domain *theDomain, const ID &theElementTags, const ID &theEdgesIndex)
   {
     size_t sz= theElementTags.Size();
-    theEdges.clear();
+    clear();
     if(theDomain)
       {
-        theEdges.resize(sz);
+        resize(sz);
         for(size_t i=0; i<sz; i++)
           {
             Element *tmp= theDomain->getElement(theElementTags(i));
             
             if(tmp)
-              theEdges[i]= ElementEdge(tmp,theEdgesIndex(i));
+              (*this)[i]= ElementEdge(tmp,theEdgesIndex(i));
             else
               {
                 std::cerr << "WARNING - XC::ElementEdges::setDomain - ele with tag "
@@ -89,9 +89,9 @@ XC::ElementEdges::const_iterator XC::ElementEdges::find(const int &tag) const
 int XC::ElementEdges::getLocElement(const Element *ptr) const
   {
     int retval= -1;
-    const size_t sz= theEdges.size();
+    const size_t sz= size();
     for(size_t i= 0;i<sz;i++)
-      if(theEdges[i].getElementPtr() == ptr)
+      if((*this)[i].getElementPtr() == ptr)
         { retval= i; break; }
     return retval;
   }
@@ -101,17 +101,13 @@ size_t XC::ElementEdges::removeElement(const int &tag)
   {
     iterator i= find(tag);
     if(i!=end())
-      theEdges.erase(i,i);
+      erase(i,i);
     return size();
   }
 
 
 
 XC::ElementEdges::const_reference XC::ElementEdges::operator()(const size_t &i) const
-  { return theEdges[i]; }
+  { return (*this)[i]; }
 XC::ElementEdges::reference XC::ElementEdges::operator()(const size_t &i)
-  { return theEdges[i]; }
-XC::ElementEdges::const_reference XC::ElementEdges::operator[](const size_t &i) const
-  { return theEdges[i]; }
-XC::ElementEdges::reference XC::ElementEdges::operator[](const size_t &i)
-  { return theEdges[i]; }
+  { return (*this)[i]; }

@@ -173,7 +173,7 @@ XC::DbTagData &XC::Preprocessor::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 int XC::Preprocessor::sendData(CommParameters &cp)
   {
     //res+= cp.sendMovable(materiales,getDbTagData(),CommMetaData(0));
@@ -190,7 +190,7 @@ int XC::Preprocessor::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::Preprocessor::recvData(const CommParameters &cp)
   {
     //res+= cp.receiveMovable(materiales,getDbTagData(),CommMetaData(0));
@@ -207,7 +207,7 @@ int XC::Preprocessor::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Preprocessor::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -221,7 +221,7 @@ int XC::Preprocessor::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Preprocessor::recvSelf(const CommParameters &cp)
   {
     inicComm(10);

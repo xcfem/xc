@@ -199,7 +199,7 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirEjeDebilGlobales(cons
       }
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::BeamColumnWithSectionFDTrf3d::sendData(CommParameters &cp)
   {
     int res= BeamColumnWithSectionFD::sendData(cp);
@@ -207,7 +207,7 @@ int XC::BeamColumnWithSectionFDTrf3d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::BeamColumnWithSectionFDTrf3d::recvData(const CommParameters &cp)
   {
     int res= BeamColumnWithSectionFD::recvData(cp);

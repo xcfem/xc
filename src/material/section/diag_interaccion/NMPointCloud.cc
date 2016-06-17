@@ -43,7 +43,7 @@ void XC::NMPointCloud::clear(void)
     lastInserted= nullptr;
   }
 
-//! @brief Inserta en la lista de esfuerzos que se pasa como parámetro
+//! @brief Inserta en la lista de esfuerzos being passed as parameter
 //! la resultante de tensiones normales en la sección.
 const Pos2d *XC::NMPointCloud::append(const Pos2d &NM)
   {

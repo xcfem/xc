@@ -67,14 +67,14 @@ XC::Node *XC::TritrizPtrNod::buscaNodo(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p) const
   {
     TritrizPtrNod *this_no_const= const_cast<TritrizPtrNod *>(this);
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
   {
     Node *retval= nullptr, *ptrNod= nullptr;
@@ -101,7 +101,7 @@ XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
   }
 
 //! @brief Devuelve los índices del nodo indicado por el puntero
-//! que se pasa como parámetro.
+//! being passed as parameter.
 XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
   {
     ID retval(3);

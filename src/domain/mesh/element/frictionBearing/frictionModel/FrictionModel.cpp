@@ -106,7 +106,7 @@ int XC::FrictionModel::revertToStart(void)
     return 0;
   }
 
-//! @brief Envia los datos a través del canal que se pasa como parámetro.
+//! @brief Envia los datos through the channel being passed as parameter.
 int XC::FrictionModel::sendData(CommParameters &cp)
   {
     setDbTagDataPos(0,getTag());
@@ -115,7 +115,7 @@ int XC::FrictionModel::sendData(CommParameters &cp)
   }
 
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::FrictionModel::recvData(const CommParameters &cp)
   {
     setTag(getDbTagDataPos(0));

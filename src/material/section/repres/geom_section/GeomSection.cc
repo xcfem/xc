@@ -266,7 +266,7 @@ Poligono2d XC::GeomSection::getContornoZonaComprimida(const Semiplano2d &sp_comp
   }
 
 //! @brief Devuelve el canto con el que trabaja la sección a partir de la posición
-//! del semiplano que se pasa como parámetro.
+//! del semiplano being passed as parameter.
 //! @param trazaPF: Intersección del plano de flexión con el plano de la sección.
 double XC::GeomSection::getCantoMecanico(const Recta2d &trazaPF) const
   {
@@ -286,7 +286,7 @@ double XC::GeomSection::getCantoMecanico(const Recta2d &trazaPF) const
     return dpos-dneg;
   }
 
-//! @brief Devuelve el canto desde el borde del semiplano que se pasa como parámetro
+//! @brief Devuelve el canto desde el borde del semiplano being passed as parameter
 //! a la fibra más comprimida.
 double XC::GeomSection::getCantoMecanicoZonaComprimida(const Semiplano2d &sp_compresiones) const
   {
@@ -302,7 +302,7 @@ double XC::GeomSection::getCantoMecanicoZonaComprimida(const Semiplano2d &sp_com
     return dneg;
   }
 
-//! @brief Devuelve el canto desde el borde del semiplano que se pasa como parámetro
+//! @brief Devuelve el canto desde el borde del semiplano being passed as parameter
 //! a la fibra más traccionada.
 double XC::GeomSection::getCantoMecanicoZonaTraccionada(const Semiplano2d &sp_compresiones) const
   {
@@ -319,7 +319,7 @@ double XC::GeomSection::getCantoMecanicoZonaTraccionada(const Semiplano2d &sp_co
   }
 
 //! @brief Devuelve la longitud del segmento que resulta
-//! de cortar la recta que se pasa como parámetro con el
+//! de cortar la recta being passed as parameter con el
 //! contorno de la sección.
 double XC::GeomSection::getLongCorte(const Recta2d &r) const
   {
@@ -331,7 +331,7 @@ double XC::GeomSection::getLongCorte(const Recta2d &r) const
   }
 
 //! @brief Devuelve las longitudes de los segmentos que resultan
-//! de cortar la recta que se pasa como parámetro con el
+//! de cortar la recta being passed as parameter con el
 //! contorno de la sección.
 std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr) const
   {
@@ -372,7 +372,7 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) con
   }
 
 //! @brief Devuelve el ancho «b0» de la biela comprimida
-//! correspondiente al brazo mecánico que se pasa como parámetro.
+//! correspondiente al brazo mecánico being passed as parameter.
 double XC::GeomSection::getAnchoBielaComprimida(const Segmento2d &brazo_mecanico) const
   {
     const Poligono2d contorno= agrega_puntos_medios(getContornoRegiones());
@@ -404,7 +404,7 @@ double XC::GeomSection::getAnchoBielaComprimida(const Segmento2d &brazo_mecanico
     return 2*sqrt(bmin2);
   }
 
-//! @brief Devuelve el recubrimiento de la posición que se pasa como parámetro.
+//! @brief Devuelve el recubrimiento de la posición being passed as parameter.
 double XC::GeomSection::getRecubrimiento(const Pos2d &p) const
   {
     const double retval= -getContornoRegiones().DistSigno(p);

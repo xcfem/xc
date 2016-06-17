@@ -313,7 +313,7 @@ const Vector &MaterialVector<MAT>::getMeanGeneralizedStrain(void) const
   }
 
 //! @brief Devuelve la componente del vector de deformaciones medias que
-//! corresponde al índice que se pasa como parámetro.
+//! corresponde al índice being passed as parameter.
 template <class MAT>
 double MaterialVector<MAT>::getMeanGeneralizedStrain(const int &defID) const
   {
@@ -328,7 +328,7 @@ double MaterialVector<MAT>::getMeanGeneralizedStrain(const int &defID) const
   }
 
 //! @brief Devuelve la componente del vector de deformaciones medias que
-//! corresponde al codigo que se pasa como parámetro.
+//! corresponde al codigo being passed as parameter.
 template <class MAT>
 double MaterialVector<MAT>::getMeanGeneralizedStrainByName(const std::string &cod) const
   {
@@ -355,7 +355,7 @@ double MaterialVector<MAT>::getMeanGeneralizedStrainByName(const std::string &co
   }
 
 //! @brief Devuelve la componente del vector resultante de tensiones que
-//! corresponde al índice que se pasa como parámetro.
+//! corresponde al índice being passed as parameter.
 template <class MAT>
 double MaterialVector<MAT>::getMeanGeneralizedStress(const int &defID) const
   {
@@ -370,7 +370,7 @@ double MaterialVector<MAT>::getMeanGeneralizedStress(const int &defID) const
   }
 
 //! @brief Devuelve la componente del vector resultante de tensiones que
-//! corresponde al código que se pasa como parámetro.
+//! corresponde al código being passed as parameter.
 template <class MAT>
 double MaterialVector<MAT>::getMeanGeneralizedStressByName(const std::string &cod) const
   {
@@ -480,7 +480,7 @@ XC::DbTagData &MaterialVector<MAT>::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 template <class MAT>
 int MaterialVector<MAT>::sendData(CommParameters &cp)
   {
@@ -500,7 +500,7 @@ int MaterialVector<MAT>::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 template <class MAT>
 int MaterialVector<MAT>::recvData(const CommParameters &cp)
   {
@@ -522,7 +522,7 @@ int MaterialVector<MAT>::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 template <class MAT>
 int MaterialVector<MAT>::sendSelf(CommParameters &cp)
   {
@@ -536,7 +536,7 @@ int MaterialVector<MAT>::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 template <class MAT>
 int MaterialVector<MAT>::recvSelf(const CommParameters &cp)
   {

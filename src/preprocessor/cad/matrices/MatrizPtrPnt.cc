@@ -156,7 +156,7 @@ const XC::Pnt *XC::MatrizPtrPnt::buscaPunto(const size_t &tag) const
     return retval;
   }
 
-//! @brief Devuelve el punto más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el punto más próximo al punto being passed as parameter.
 XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;
@@ -181,7 +181,7 @@ XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p)
     return retval;
   }
 
-//! @brief Devuelve el punto más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el punto más próximo al punto being passed as parameter.
 const XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p) const
   {
     MatrizPtrPnt *this_no_const= const_cast<MatrizPtrPnt *>(this);
@@ -229,7 +229,7 @@ Pos3d XC::MatrizPtrPnt::getCentroide(void) const
     return retval;
   }
 
-//! @brief Copia los puntos del rango que se pasa como parámetro, colocándolos
+//! @brief Copia los puntos del rango being passed as parameter, colocándolos
 //! en las posiciones de la matriz que resultan de sumar a los índices (i,j) del
 //! punto los valores del vector offsetIndices es decir (i,j)->(i+offsetIndices[0],j+offsetIndices[1])
 //! y desplazando su posición geométrica según el vector vectorOffset.

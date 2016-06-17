@@ -87,7 +87,7 @@ class DqPtrsElem: public DqPtrs<Element>
     const Element *buscaElemento(const int &tag) const;
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
-    Polilinea3d getContour(void) const;
+    std::deque<Polilinea3d> getContours(bool undeformedGeometry= true) const;
 
     void numera(void);
   };

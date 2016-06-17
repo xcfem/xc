@@ -178,7 +178,7 @@ const XC::Matrix &XC::ShellLinearCrdTransf3d::local_to_global_stiff_matrix(const
 const XC::Vector &XC::ShellLinearCrdTransf3d::getGlobalResistingForce(const Vector &p0) const
   { return local_to_global_resisting_force(p0); }
 
-//! @brief Envia el objeto a través del canal que se pasa como parámetro.
+//! @brief Envia el objeto through the channel being passed as parameter.
 int XC::ShellLinearCrdTransf3d::sendSelf(CommParameters &cp)
   {
     inicComm(3);
@@ -192,7 +192,7 @@ int XC::ShellLinearCrdTransf3d::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ShellLinearCrdTransf3d::recvSelf(const CommParameters &cp)
   {
     inicComm(3);

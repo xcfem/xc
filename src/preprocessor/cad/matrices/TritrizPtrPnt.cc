@@ -139,14 +139,14 @@ XC::Cad *XC::TritrizPtrPnt::getCad(void)
     return retval;
   }
 
-//! @brief Devuelve el punto más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el punto más próximo al punto being passed as parameter.
 const XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p) const
   {
     TritrizPtrPnt *this_no_const= const_cast<TritrizPtrPnt *>(this);
     return this_no_const->getNearestPnt(p);
   }
 
-//! @brief Devuelve el punto más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el punto más próximo al punto being passed as parameter.
 XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;
@@ -185,7 +185,7 @@ const XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag) const
     return retval;
   }
 
-//! @brief Copia los puntos del rango que se pasa como parámetro, colocándolos
+//! @brief Copia los puntos del rango being passed as parameter, colocándolos
 //! en las posiciones de la matriz que resultan de sumar a los índices (i,j) del
 //! punto los valores del vector offsetIndices es decir (i,j)->(i+offsetIndices[0],j+offsetIndices[1])
 //! y desplazando su posición geométrica según el vector vectorOffset.
@@ -211,7 +211,7 @@ std::deque<size_t> XC::TritrizPtrPnt::CopiaPuntos(const RangoTritriz &rango,cons
     return retval;
   }  
 
-//! @brief Devuelve los puntos del rango que se pasa como parámetro.
+//! @brief Devuelve los puntos del rango being passed as parameter.
 XC::TritrizPtrPnt XC::TritrizPtrPnt::getRangoPuntos(const RangoTritriz &rango)
   {
     TritrizPtrPnt retval(rango.NumCapas(),rango.NumFilas(),rango.NumCols());
@@ -313,7 +313,7 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t 
     return getPuntos(tmp);
   }
 
-// //! @brief Crea superficies cuadriláteras entre los los puntos del rango que se pasa como parámetro, colocándolos
+// //! @brief Crea superficies cuadriláteras entre los los puntos del rango being passed as parameter, colocándolos
 // //! entre las posiciones de la tritriz que resultan de sumar a los índices (i,j) del
 // //! punto los valores del vector offsetIndices es decir:
 // //! Punto 1: (i+offsetIndices[0,0],j+offsetIndices[0,1],k+offsetIndices[0,2])

@@ -418,7 +418,7 @@ const XC::Vector &XC::ZeroLengthSection::getVDirEjeDebilGlobales(void) const
     return retval;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::ZeroLengthSection::sendData(CommParameters &cp)
   {
 
@@ -432,7 +432,7 @@ int XC::ZeroLengthSection::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::ZeroLengthSection::recvData(const CommParameters &cp)
   {
     int res= Element0D::recvData(cp);
@@ -445,7 +445,7 @@ int XC::ZeroLengthSection::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ZeroLengthSection::sendSelf(CommParameters &cp)
   {
     inicComm(27);
@@ -459,7 +459,7 @@ int XC::ZeroLengthSection::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ZeroLengthSection::recvSelf(const CommParameters &cp)
   {
     inicComm(27);

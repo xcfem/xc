@@ -204,7 +204,7 @@ XC::DbTagData &XC::NodeLockers::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::NodeLockers::sendData(CommParameters &cp)
   {
     setDbTagDataPos(0,getTag());
@@ -228,7 +228,7 @@ int XC::NodeLockers::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::NodeLockers::recvData(const CommParameters &cp)
   {
     tag= getDbTagDataPos(0);
@@ -257,7 +257,7 @@ int XC::NodeLockers::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::NodeLockers::sendSelf(CommParameters &cp)
   {
     inicComm(5);
@@ -270,7 +270,7 @@ int XC::NodeLockers::sendSelf(CommParameters &cp)
     return result;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::NodeLockers::recvSelf(const CommParameters &cp)
   {
     inicComm(5);

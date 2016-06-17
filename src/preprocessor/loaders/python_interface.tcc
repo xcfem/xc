@@ -77,7 +77,7 @@ class_<XC::ProtoElementLoader, bases<XC::Loader>, boost::noncopyable >("ProtoEle
   .add_property("defaultMaterial", make_function( &XC::ProtoElementLoader::getDefaultMaterial, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultMaterial)
   .add_property("defaultTransformation", make_function( &XC::ProtoElementLoader::getDefaultTransf, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultTransf)
   .add_property("defaultIntegrator", make_function( &XC::ProtoElementLoader::getDefaultIntegrator, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultIntegrator)
-  .def("newElement", &XC::ProtoElementLoader::nuevoElemento,return_internal_reference<>(),"Crea un elemento del tipo que se pasa como parámetro.")
+  .def("newElement", &XC::ProtoElementLoader::nuevoElemento,return_internal_reference<>(),"Crea un elemento del tipo being passed as parameter.")
    ;
 
 class_<XC::ElementLoader::SeedElemLoader, bases<XC::ProtoElementLoader>, boost::noncopyable >("SeedElement", no_init)

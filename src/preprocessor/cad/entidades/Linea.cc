@@ -89,14 +89,14 @@ Segmento3d XC::Linea::getSegmento(void) const
   }
 
 //! @brief Devuelve el cuadrado de la distancia a
-//! la posición que se pasa como parámetro.
+//! la posición being passed as parameter.
 double XC::Linea::DistanciaA2(const Pos3d &pt) const
   {
     const double retval= getSegmento().dist2(pt);
     return retval;
   }
 
-//! @brief Divide la línea por el punto que se pasa como parámetro.
+//! @brief Divide la línea por el punto being passed as parameter.
 XC::Edge *XC::Linea::split_at(Pnt *p,const double &lambda,const double &longitud)
   {
     Cad &cad= get_preprocessor()->getCad();
@@ -124,7 +124,7 @@ XC::Edge *XC::Linea::split_at(Pnt *p,const double &lambda,const double &longitud
     return retval;
   }
 
-//! @brief Divide la línea por el punto que se pasa como parámetro.
+//! @brief Divide la línea por el punto being passed as parameter.
 XC::Edge *XC::Linea::splitAtPoint(Pnt *p)
   {
     Edge *retval= nullptr;

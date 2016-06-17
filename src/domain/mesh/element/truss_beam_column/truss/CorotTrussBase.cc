@@ -65,7 +65,7 @@ const double &XC::CorotTrussBase::getLo(void) const
 const double &XC::CorotTrussBase::getLn(void) const
   { return Ln; }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::CorotTrussBase::sendData(CommParameters &cp)
   {
     int res= ProtoTruss::sendData(cp);
@@ -74,7 +74,7 @@ int XC::CorotTrussBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::CorotTrussBase::recvData(const CommParameters &cp)
   {
     int res= ProtoTruss::recvData(cp);

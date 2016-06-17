@@ -743,7 +743,7 @@ void   XC::Twenty_Node_Brick::computeBasis(void) const
 
 }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::Twenty_Node_Brick::sendData(CommParameters &cp)
   {
     int res= Twenty_Node_Brick_Base::sendData(cp);
@@ -752,7 +752,7 @@ int XC::Twenty_Node_Brick::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::Twenty_Node_Brick::recvData(const CommParameters &cp)
   {
     int res= Twenty_Node_Brick_Base::recvData(cp);
@@ -761,7 +761,7 @@ int XC::Twenty_Node_Brick::recvData(const CommParameters &cp)
     return res;
   }//**********************************************************************
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Twenty_Node_Brick::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -775,7 +775,7 @@ int XC::Twenty_Node_Brick::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Twenty_Node_Brick::recvSelf(const CommParameters &cp)
   {
     inicComm(15);

@@ -1306,7 +1306,7 @@ const XC::Matrix &XC::EnhancedQuad::transpose(const XC::Matrix &M )
     return Mtran ;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::EnhancedQuad::sendData(CommParameters &cp)
   {
     int res= QuadBase4N<NDMaterialPhysicalProperties>::sendData(cp);
@@ -1315,7 +1315,7 @@ int XC::EnhancedQuad::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::EnhancedQuad::recvData(const CommParameters &cp)
   {
     int res= QuadBase4N<NDMaterialPhysicalProperties>::recvData(cp);
@@ -1324,7 +1324,7 @@ int XC::EnhancedQuad::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int  XC::EnhancedQuad::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -1338,7 +1338,7 @@ int  XC::EnhancedQuad::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::EnhancedQuad::recvSelf(const CommParameters &cp)
   {
     inicComm(15);

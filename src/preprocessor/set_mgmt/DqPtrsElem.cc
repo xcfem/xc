@@ -30,7 +30,7 @@
 #include "preprocessor/cad/trf/TrfGeom.h"
 #include "xc_utils/src/geom/d1/Polilinea3d.h"
 #include "domain/mesh/node/Node.h"
-#include "domain/mesh/MeshEdge.h"
+#include "domain/mesh/MeshEdges.h"
 
 void XC::DqPtrsElem::crea_arbol(void)
   {
@@ -118,14 +118,14 @@ bool XC::DqPtrsElem::push_front(Element *e)
     return retval;
   }
 
-//! @brief Devuelve el elemento más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
 XC::Element *XC::DqPtrsElem::getNearestElement(const Pos3d &p)
   {
     Element *retval= const_cast<Element *>(kdtreeElements.getNearestElement(p));
     return retval;
   }
 
-//! @brief Devuelve el elemento más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
 const XC::Element *XC::DqPtrsElem::getNearestElement(const Pos3d &p) const
   {
     DqPtrsElem *this_no_const= const_cast<DqPtrsElem *>(this);
@@ -259,12 +259,11 @@ std::set<int> XC::DqPtrsElem::getTags(void) const
   }
 
 //! @brief Returns the element set contour.
-Polilinea3d XC::DqPtrsElem::getContour(void) const
+std::deque<Polilinea3d> XC::DqPtrsElem::getContours(bool undeformedGeometry) const
   {
     typedef std::set<const Element *> ElementConstPtrSet;
-    Polilinea3d retval;
     const Element *elem= nullptr;
-    std::deque<MeshEdge> edgesContour;
+    MeshEdges edgesContour;
     for(const_iterator i= begin();i!=end();i++)
       {
         elem= *i;
@@ -277,7 +276,7 @@ Polilinea3d XC::DqPtrsElem::getContour(void) const
               if(find(edgesContour.begin(), edgesContour.end(), meshEdge) == edgesContour.end())
                 { edgesContour.push_back(meshEdge); }
             //XXX Continue here 2016.06.14 
-          }          
-      }    
-    return retval;
+          }
+      }
+    return edgesContour.getContours(undeformedGeometry);
   }

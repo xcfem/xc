@@ -85,7 +85,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
     return retval;
   }
 
-//! @brief Devuelve el lado homólogo al que se pasa como parámetro.
+//! @brief Devuelve el lado homólogo al being passed as parameter.
 const XC::Edge *XC::SupCuadrilatera::get_lado_homologo(const Edge *l) const
   {
     const Edge *retval= nullptr;   
@@ -185,7 +185,7 @@ bool XC::SupCuadrilatera::checkNDivs(void) const
   { return (checkNDivs(0,2) && checkNDivs(1,3)); }
 
 //! @brief Calcula el número de divisiones en el eje i para que
-//! el tamaño del lado I del elemento sea aproximadamente el que se pasa como parámetro.
+//! el tamaño del lado I del elemento sea aproximadamente el being passed as parameter.
 void XC::SupCuadrilatera::SetElemSizeI(const double &sz)
   {
     const double l1= lineas[0].getLongitud();
@@ -195,7 +195,7 @@ void XC::SupCuadrilatera::SetElemSizeI(const double &sz)
   }
 
 //! @brief Calcula el número de divisiones en el eje i para que
-//! el tamaño del lado I del elemento sea aproximadamente el que se pasa como parámetro.
+//! el tamaño del lado I del elemento sea aproximadamente el being passed as parameter.
 void XC::SupCuadrilatera::SetElemSizeJ(const double &sz)
   {
     const double l1= lineas[1].getLongitud();
@@ -206,7 +206,7 @@ void XC::SupCuadrilatera::SetElemSizeJ(const double &sz)
 
 
 //! @brief Calcula el número de divisiones en los ejes para que
-//! el tamaño de los lados del elemento sea aproximadamente el que se pasa como parámetro.
+//! el tamaño de los lados del elemento sea aproximadamente el being passed as parameter.
 void XC::SupCuadrilatera::SetElemSizeIJ(const double &szI,const double &szJ)
   {
     SetElemSizeI(szI);

@@ -150,7 +150,7 @@ XC::DbTagData &XC::Joint2DPhysicalProperties::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::Joint2DPhysicalProperties::sendData(CommParameters &cp)
   {
     int res= UniaxialMatPhysicalProperties::sendData(cp);
@@ -159,7 +159,7 @@ int XC::Joint2DPhysicalProperties::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::Joint2DPhysicalProperties::recvData(const CommParameters &cp)
   {
     int res= UniaxialMatPhysicalProperties::recvData(cp);

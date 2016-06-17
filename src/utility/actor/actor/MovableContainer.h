@@ -72,7 +72,7 @@ XC::DbTagData &XC::MovableContainer<C>::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 template <class C>
 int XC::MovableContainer<C>::sendData(CommParameters &cp)
   {
@@ -93,7 +93,7 @@ int XC::MovableContainer<C>::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 template <class C>
 int XC::MovableContainer<C>::recvData(const CommParameters &cp)
   {
@@ -110,7 +110,7 @@ int XC::MovableContainer<C>::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia el deque por el canal que se pasa como parámetro.
+//! @brief Envia el deque through the channel being passed as parameter.
 template <class C>
 int XC::MovableContainer<C>::sendSelf(CommParameters &cp)
   {
@@ -125,7 +125,7 @@ int XC::MovableContainer<C>::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el deque a través del canal que se pasa como parámetro.
+//! @brief Recibe el deque through the channel being passed as parameter.
 template <class C>
 int XC::MovableContainer<C>::recvSelf(const CommParameters &cp)
   {

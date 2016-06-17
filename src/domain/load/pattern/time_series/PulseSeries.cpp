@@ -75,7 +75,7 @@ XC::PulseSeries::PulseSeries(double startTime, double finishTime,
 XC::PulseSeries::PulseSeries(void)
   : PeriodSeries(TSERIES_TAG_PulseSeries),pWidth(0.5) {}
 
-//! @brief Devuelve el valor del factor para el instante que se pasa como parámetro.
+//! @brief Devuelve el valor del factor para el instante being passed as parameter.
 double XC::PulseSeries::getFactor(double pseudoTime) const
   {
     if(tStart <= pseudoTime && pseudoTime <= tFinish)
@@ -92,7 +92,7 @@ double XC::PulseSeries::getFactor(double pseudoTime) const
       return 0;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::PulseSeries::sendData(CommParameters &cp)
   {
     int res= PeriodSeries::sendData(cp);
@@ -100,7 +100,7 @@ int XC::PulseSeries::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::PulseSeries::recvData(const CommParameters &cp)
   {
     int res= PeriodSeries::recvData(cp);
@@ -108,7 +108,7 @@ int XC::PulseSeries::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::PulseSeries::sendSelf(CommParameters &cp)
   {
     static ID data(4);
@@ -123,7 +123,7 @@ int XC::PulseSeries::sendSelf(CommParameters &cp)
 
 
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::PulseSeries::recvSelf(const CommParameters &cp)
   {
     static ID data(4);

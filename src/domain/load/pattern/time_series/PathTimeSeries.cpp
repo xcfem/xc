@@ -211,7 +211,7 @@ double XC::PathTimeSeries::getTimeIncr(double pseudoTime) const
     return 1.0;
   }
 
-//! @brief Devuelve el valor correspondiente al instante que se pasa como parámetro.
+//! @brief Devuelve el valor correspondiente al instante being passed as parameter.
 double XC::PathTimeSeries::getFactor(double pseudoTime) const
   {
     // check for a XC::quick return
@@ -278,7 +278,7 @@ double XC::PathTimeSeries::getDuration(void) const
     return(time(lastIndex-1));
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::PathTimeSeries::sendData(CommParameters &cp)
   {
     int res= PathSeriesBase::sendData(cp);
@@ -287,7 +287,7 @@ int XC::PathTimeSeries::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::PathTimeSeries::recvData(const CommParameters &cp)
   {
     int res= PathSeriesBase::recvData(cp);
@@ -296,7 +296,7 @@ int XC::PathTimeSeries::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::PathTimeSeries::sendSelf(CommParameters &cp)
   {
     inicComm(9);
@@ -310,7 +310,7 @@ int XC::PathTimeSeries::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::PathTimeSeries::recvSelf(const CommParameters &cp)
   {
     inicComm(9);

@@ -74,7 +74,7 @@ XC::DqFibras &XC::DqFibras::operator=(const DqFibras &otro)
     return *this;
   }
 
-//! @brief Agrega al contenedor la fibra que se pasa como parámetro.
+//! @brief Agrega al contenedor la fibra being passed as parameter.
 XC::Fiber *XC::DqFibras::inserta(const Fiber &f)
   {
     Fiber *retval= f.getCopy();
@@ -82,7 +82,7 @@ XC::Fiber *XC::DqFibras::inserta(const Fiber &f)
     return retval;
   }
 
-//! @brief Agrega al contenedor el puntero a fibra que se pasa como parámetro.
+//! @brief Agrega al contenedor el puntero a fibra being passed as parameter.
 void XC::DqFibras::push_back(Fiber *f)
    { dq_ptr_fibras::push_back(f); }
 
@@ -528,7 +528,7 @@ double XC::DqFibras::getSyNeg(const double &zf,const double &z0,const double &fa
   }
 
 //! @brief Devuelve el momento estático de las áreas de las fibras situadas dentro
-//! del semiplano que se pasa como parámetro.
+//! del semiplano being passed as parameter.
 double XC::DqFibras::getSPosSeccHomogeneizada(const double &E0,const Semiplano2d &sp) const
   {
     if(fabs(E0)<1e-6)
@@ -552,7 +552,7 @@ double XC::DqFibras::getSPosSeccHomogeneizada(const double &E0,const Semiplano2d
 
 
 //! @brief Devuelve el momento estático de las áreas de las fibras situadas fuera
-//! del semiplano que se pasa como parámetro.
+//! del semiplano being passed as parameter.
 double XC::DqFibras::getSNegSeccHomogeneizada(const double &E0,const Semiplano2d &sp) const
   {
     if(fabs(E0)<1e-6)
@@ -779,7 +779,7 @@ const XC::Vector &XC::DqFibras::baricentroCompresiones(void) const
   }
 
 //! @brief Devuelve el baricentro de las fibras cuya deformacion es
-//! menor que la que se pasa como parámetro.
+//! menor que la being passed as parameter.
 const XC::Vector &XC::DqFibras::baricentroDefMenores(const double &defRef) const
   {
     static Vector retval(2);
@@ -879,7 +879,7 @@ const XC::Vector &XC::DqFibras::baricentroTracciones(void) const
   }
 
 //! @brief Devuelve el baricentro de las fibras cuya deformacion es
-//! mayor que la que se pasa como parámetro.
+//! mayor que la being passed as parameter.
 const XC::Vector &XC::DqFibras::baricentroDefMayores(const double &defRef) const
   {
     static Vector retval(2);
@@ -903,7 +903,7 @@ const XC::Vector &XC::DqFibras::baricentroDefMayores(const double &defRef) const
     return retval;
   }
 
-//! @brief Devuelve el índice de la fibra más proxima a la posición que se pasa como parámetro.
+//! @brief Devuelve el índice de la fibra más proxima a la posición being passed as parameter.
 size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
   {
     size_t retval= 0;
@@ -2125,7 +2125,7 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
 //   }
 
 // //! Devuelve el indice de la fibra que presenta el valor mínimo
-// //! en el conjunto de fibras de la propiedad que se pasa como parámetro.
+// //! en el conjunto de fibras de la propiedad being passed as parameter.
 // size_t XC::DqFibras::IMinProp(const std::string &nmb_prop) const
 //   {
 //     size_t retval= 0;
@@ -2167,7 +2167,7 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
 //   }
 
 //! @brief Devuelve el índice de la fibra cuya coordenada iCoo respecto al sistema
-//! de referencia que se pasa como parámetro es máxima.
+//! de referencia being passed as parameter es máxima.
 size_t XC::DqFibras::getFibraCooMax(const Ref3d3d &r,const size_t &iCoo) const
   {
     size_t retval= 0;
@@ -2197,7 +2197,7 @@ size_t XC::DqFibras::getFibraCooMax(const Ref3d3d &r,const size_t &iCoo) const
   }
 
 //! @brief Devuelve el índice de la fibra cuya coordenada iCoo respecto al sistema
-//! de referencia que se pasa como parámetro es mínima.
+//! de referencia being passed as parameter es mínima.
 size_t XC::DqFibras::getFibraCooMin(const Ref3d3d &r,const size_t &iCoo) const
   {
     size_t retval= 0;

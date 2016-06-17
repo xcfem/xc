@@ -106,7 +106,7 @@ int XC::MP_ConstraintBase::addResistingForceToNodalReaction(bool inclInertia)
 const XC::Matrix &XC::MP_ConstraintBase::getConstraint(void) const
   { return constraintMatrix; }
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 int XC::MP_ConstraintBase::sendData(CommParameters &cp)
   {
     int res= Constraint::sendData(cp);
@@ -115,7 +115,7 @@ int XC::MP_ConstraintBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::MP_ConstraintBase::recvData(const CommParameters &cp)
   {
     int res= Constraint::recvData(cp);

@@ -512,7 +512,7 @@ const XC::Vector &XC::ZeroLength::getResistingForceIncInertia(void) const
     return this->getResistingForce();
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::ZeroLength::sendData(CommParameters &cp)
   {
     int res= Element0D::sendData(cp);
@@ -524,7 +524,7 @@ int XC::ZeroLength::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::ZeroLength::recvData(const CommParameters &cp)
   {
     int res= Element0D::recvData(cp);
@@ -538,7 +538,7 @@ int XC::ZeroLength::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ZeroLength::sendSelf(CommParameters &cp)
   {
     inicComm(22);
@@ -552,7 +552,7 @@ int XC::ZeroLength::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ZeroLength::recvSelf(const CommParameters &cp)
   {
     inicComm(22);

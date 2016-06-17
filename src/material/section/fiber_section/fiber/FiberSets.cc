@@ -60,7 +60,7 @@ XC::FiberSets::iterator XC::FiberSets::get_set_fibras(const std::string &nmb_set
     return i;
   }
 
-//! @brief Crea un conjunto de fibras cuyo material tiene el tag que se pasa como parámetro.
+//! @brief Crea un conjunto de fibras cuyo material tiene el tag being passed as parameter.
 XC::FiberSets::iterator XC::FiberSets::sel_mat_tag(DqFibras &fibras, const std::string &nmb_set,const int &matTag)
   {
     iterator i= get_set_fibras(nmb_set);
@@ -68,7 +68,7 @@ XC::FiberSets::iterator XC::FiberSets::sel_mat_tag(DqFibras &fibras, const std::
     return i;
   }
 
-//! @brief Crea un conjunto de fibras que perteneciendo al conjunto nmb_set_org, cumplen que el material tiene el tag que se pasa como parámetro.
+//! @brief Crea un conjunto de fibras que perteneciendo al conjunto nmb_set_org, cumplen que el material tiene el tag being passed as parameter.
 XC::FiberSets::iterator XC::FiberSets::resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag)
   {
     iterator i= end();

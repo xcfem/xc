@@ -92,7 +92,7 @@ int XC::ImposedMotionSP1::applyConstraint(double time)
     return 0;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ImposedMotionSP1::sendData(CommParameters &cp)
   {
     int result= ImposedMotionBase::sendData(cp);
@@ -100,7 +100,7 @@ int XC::ImposedMotionSP1::sendData(CommParameters &cp)
     return result;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::ImposedMotionSP1::recvData(const CommParameters &cp)
   {
     int res= ImposedMotionBase::recvData(cp);
@@ -108,7 +108,7 @@ int XC::ImposedMotionSP1::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ImposedMotionSP1::sendSelf(CommParameters &cp)
   {
     static ID data(10);
@@ -120,7 +120,7 @@ int XC::ImposedMotionSP1::sendSelf(CommParameters &cp)
     return result;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ImposedMotionSP1::recvSelf(const CommParameters &cp)
   {
     static ID data(10);

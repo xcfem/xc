@@ -41,7 +41,7 @@
 XC::DispBase::DispBase(SoluMethod *owr,int classTag,const int &numIncr) 
   :BaseControl(owr,classTag,numIncr){}
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::DispBase::sendData(CommParameters &cp)
   {
     int res= BaseControl::sendData(cp);
@@ -49,7 +49,7 @@ int XC::DispBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::DispBase::recvData(const CommParameters &cp)
   {
     int res= BaseControl::recvData(cp);

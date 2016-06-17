@@ -379,7 +379,7 @@ int XC::J2PlateFiber::revertToStart( )
    return 0;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::J2PlateFiber::sendData(CommParameters &cp)
   {
     int res= J2Plasticity::sendData(cp);
@@ -387,7 +387,7 @@ int XC::J2PlateFiber::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::J2PlateFiber::recvData(const CommParameters &cp)
   {
     int res= J2Plasticity::recvData(cp);
@@ -395,7 +395,7 @@ int XC::J2PlateFiber::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::J2PlateFiber::sendSelf(CommParameters &cp)
    {
     setDbTag(cp);
@@ -409,7 +409,7 @@ int XC::J2PlateFiber::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::J2PlateFiber::recvSelf(const CommParameters &cp)
   {
     inicComm(89);

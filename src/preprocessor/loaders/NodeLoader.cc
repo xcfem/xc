@@ -157,15 +157,15 @@ XC::Node *XC::NodeLoader::nuevoNodo(const double &x)
     return retval;
   }
 
-//! @brief Crea un nodo en la posición que se pasa como parámetro.
+//! @brief Crea un nodo en la posición being passed as parameter.
 XC::Node *XC::NodeLoader::nuevoNodo(const Pos3d &p)
   { return nuevoNodo(p.x(),p.y(),p.z()); }
 
-//! @brief Crea un nodo en la posición que se pasa como parámetro.
+//! @brief Crea un nodo en la posición being passed as parameter.
 XC::Node *XC::NodeLoader::nuevoNodo(const Pos2d &p)
   { return nuevoNodo(p.x(),p.y()); }
 
-//! @brief Crea un nodo en la posición que se pasa como parámetro.
+//! @brief Crea un nodo en la posición being passed as parameter.
 XC::Node *XC::NodeLoader::nuevoNodo(const Vector &coo)
   {
     int sz= coo.Size();

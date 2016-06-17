@@ -126,7 +126,7 @@ void XC::Material::zeroInitialGeneralizedStrain(void)
   }
 
 
-//! @brief Envía un puntero a material a través del canal que se pasa como parámetro.
+//! @brief Envía un puntero a material through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase del material.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 int XC::sendMaterialPtr(Material *ptr,DbTagData &dt,CommParameters &cp,const BrokedPtrCommMetaData &md)
@@ -143,7 +143,7 @@ int XC::sendMaterialPtr(Material *ptr,DbTagData &dt,CommParameters &cp,const Bro
     return res;
   }
 
-//! @brief Recibe un puntero a material a través del canal que se pasa como parámetro.
+//! @brief Recibe un puntero a material through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase del material.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::Material *XC::receiveMaterialPtr(Material* ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)

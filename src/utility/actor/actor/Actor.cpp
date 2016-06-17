@@ -204,7 +204,7 @@ int XC::Actor::processMethod(int tag)
   }
 
 
-//! @brief Envía el objeto theObject a través del canal que se pasa como parámetro.
+//! @brief Sends object theObject through the channel being passed as parameter.
 int XC::Actor::sendObject(MovableObject &theObject, ChannelAddress *theAddress )
   {
     if(theAddress)
@@ -213,7 +213,7 @@ int XC::Actor::sendObject(MovableObject &theObject, ChannelAddress *theAddress )
       return theChannel->sendObj(commitTag, theObject,theAddress);	
   }
 
-//! @brief Recibe el objeto theObject a través del canal que se pasa como parámetro.
+//! @brief Receives object theObject through the channel being passed as parameter.
 int XC::Actor::recvObject(MovableObject &theObject, ChannelAddress *theAddress )
   {
     if(theAddress)
@@ -223,7 +223,7 @@ int XC::Actor::recvObject(MovableObject &theObject, ChannelAddress *theAddress )
   }
 
 
-//! @brief Recibe el mensaje a través del canal que se pasa como parámetro.
+//! @brief Recibe el mensaje through the channel being passed as parameter.
 int XC::Actor::recvMessage(Message &theMessage, ChannelAddress *theAddress )
   {
     if(theAddress)
@@ -232,7 +232,7 @@ int XC::Actor::recvMessage(Message &theMessage, ChannelAddress *theAddress )
       return theChannel->recvMsg(0, commitTag, theMessage,theAddress);	
   }
 
-//! @brief Envía el mensaje a través del canal que se pasa como parámetro.
+//! @brief Envía el mensaje through the channel being passed as parameter.
 int XC::Actor::sendMessage(const Message &theMessage, ChannelAddress *theAddress )
   {
     if(theAddress)
@@ -243,7 +243,7 @@ int XC::Actor::sendMessage(const Message &theMessage, ChannelAddress *theAddress
 
 
 
-//! @brief Envía la matriz a través del canal que se pasa como parámetro.
+//! @brief Envía la matriz through the channel being passed as parameter.
 int XC::Actor::sendMatrix(const Matrix &theMatrix, ChannelAddress *theAddress )
   {
     if(theAddress)    
@@ -252,7 +252,7 @@ int XC::Actor::sendMatrix(const Matrix &theMatrix, ChannelAddress *theAddress )
       return theChannel->sendMatrix(0, commitTag, theMatrix,theAddress);	
   }
 
-//! @brief Recibe la matriz a través del canal que se pasa como parámetro.
+//! @brief Recibe la matriz through the channel being passed as parameter.
 int XC::Actor::recvMatrix(Matrix &theMatrix, ChannelAddress *theAddress )
   {
     if(theAddress)
@@ -261,7 +261,7 @@ int XC::Actor::recvMatrix(Matrix &theMatrix, ChannelAddress *theAddress )
       return theChannel->recvMatrix(0, commitTag, theMatrix,theAddress);	
   }
 
-//! @brief Envía el vector a través del canal que se pasa como parámetro.
+//! @brief Envía el vector through the channel being passed as parameter.
 int XC::Actor::sendVector(const XC::Vector &theVector, ChannelAddress *theAddress )
   {
     if(theAddress)
@@ -270,7 +270,7 @@ int XC::Actor::sendVector(const XC::Vector &theVector, ChannelAddress *theAddres
       return theChannel->sendVector(0, commitTag, theVector,theAddress);	
   }
 
-//! @brief Recibe el vector a través del canal que se pasa como parámetro.
+//! @brief Recibe el vector through the channel being passed as parameter.
 int XC::Actor::recvVector(Vector &theVector, ChannelAddress *theAddress )
   {
     if(theAddress)
@@ -279,7 +279,7 @@ int XC::Actor::recvVector(Vector &theVector, ChannelAddress *theAddress )
       return theChannel->recvVector(0, commitTag, theVector,theAddress);	
   }
 
-//! @brief Envía el vector de enteros a través del canal que se pasa como parámetro.
+//! @brief Envía el vector de enteros through the channel being passed as parameter.
 int XC::Actor::sendID(const XC::ID &theID, ChannelAddress *theAddress )
   {
     if(theAddress)
@@ -288,7 +288,7 @@ int XC::Actor::sendID(const XC::ID &theID, ChannelAddress *theAddress )
       return theChannel->sendID(0, commitTag, theID,theAddress);	
   }
 
-//! @brief Recibe el vector de enteros a través del canal que se pasa como parámetro.
+//! @brief Recibe el vector de enteros through the channel being passed as parameter.
 int XC::Actor::recvID(ID &theID, ChannelAddress *theAddress )
   {
     if(theAddress)

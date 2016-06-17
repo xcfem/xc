@@ -83,7 +83,7 @@ double XC::NDAdaptorMaterial::getRho(void) const
 const XC::Vector& XC::NDAdaptorMaterial::getStrain(void)
   { return strain; }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::NDAdaptorMaterial::sendData(CommParameters &cp)
   {
     int res= NDMaterial::sendData(cp);
@@ -93,7 +93,7 @@ int XC::NDAdaptorMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::NDAdaptorMaterial::recvData(const CommParameters &cp)
   {
     int res= NDMaterial::recvData(cp);

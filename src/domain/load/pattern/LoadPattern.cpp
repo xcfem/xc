@@ -265,7 +265,7 @@ void XC::LoadPattern::removeFromDomain(void)
       std::cerr << "WARNING: LoadPattern::removeFromDomain() - null pointer to the domain\n";
   }
 
-//! @brief Agrega la carga sobre nodo que se pasa como parámetro.
+//! @brief Agrega la carga sobre nodo being passed as parameter.
 bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
   {
     Domain *theDomain = this->getDomain();
@@ -284,7 +284,7 @@ bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
     return result;
   }
 
-//! @brief Crea una carga sobre nodo que se pasa como parámetro.
+//! @brief Crea una carga sobre nodo being passed as parameter.
 XC::NodalLoad *XC::LoadPattern::newNodalLoad(const int &tag_nodo,const Vector &f)
   {
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
@@ -308,7 +308,7 @@ XC::ElementalLoad *XC::LoadPattern::newElementalLoad(const std::string &cmd)
     return retval;
   }
 
-//! @brief Agrega la carga sobre elemento que se pasa como parámetro.
+//! @brief Agrega la carga sobre elemento being passed as parameter.
 bool XC::LoadPattern::addElementalLoad(ElementalLoad *load)
   {
     Domain *theDomain= getDomain();
@@ -327,7 +327,7 @@ bool XC::LoadPattern::addElementalLoad(ElementalLoad *load)
     return result;
   }
 
-//! @brief Agrega la carga sobre elemento que se pasa como parámetro e incrementa el tag de cargas sobre elemento.
+//! @brief Agrega la carga sobre elemento being passed as parameter e incrementa el tag de cargas sobre elemento.
 bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
   {
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
@@ -344,7 +344,7 @@ bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
     return result;
   }
 
-// //! @brief Crea la carga sobre elemento que se pasa como parámetro.
+// //! @brief Crea la carga sobre elemento being passed as parameter.
 // XC::NodalLoad *XC::MapLoadPatterns::newElementLoad(const int &tag_elem,const Vector &f)
 //   {
 //     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(owner());
@@ -356,7 +356,7 @@ bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
 //     return retval;
 //   }
 
-//! @brief Agrega la coacción que se pasa como parámetro.
+//! @brief Agrega la coacción being passed as parameter.
 bool XC::LoadPattern::addSP_Constraint(SP_Constraint *theSp)
   { return NodeLocker::addSP_Constraint(theSp); }
 
@@ -421,7 +421,7 @@ bool XC::LoadPattern::removeElementalLoad(int tag)
     return result;
   }
 
-//! @brief Aplica la carga en el instante que se pasa como parámetro.
+//! @brief Aplica la carga en el instante being passed as parameter.
 void XC::LoadPattern::applyLoad(double pseudoTime)
   {
     assert(theSeries);
@@ -470,7 +470,7 @@ XC::DbTagData &XC::LoadPattern::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::LoadPattern::sendData(CommParameters &cp)
   {
     int res= NodeLocker::sendData(cp);
@@ -484,7 +484,7 @@ int XC::LoadPattern::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::LoadPattern::recvData(const CommParameters &cp)
   {
     int res= NodeLocker::recvData(cp);
@@ -502,7 +502,7 @@ int XC::LoadPattern::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::LoadPattern::sendSelf(CommParameters &cp)
   {
     inicComm(16);
@@ -515,7 +515,7 @@ int XC::LoadPattern::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::LoadPattern::recvSelf(const CommParameters &cp)
   {
     inicComm(16);

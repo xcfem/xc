@@ -225,7 +225,7 @@ int XC::MinUnbalDispNorm::domainChanged(void)
     return 0;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::MinUnbalDispNorm::sendData(CommParameters &cp)
   {
     int res= DispBase::sendData(cp);
@@ -234,7 +234,7 @@ int XC::MinUnbalDispNorm::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::MinUnbalDispNorm::recvData(const CommParameters &cp)
   {
     int res= DispBase::recvData(cp);

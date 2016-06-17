@@ -31,12 +31,12 @@
 
 
 //! @brief Devuelve el vector unitario I expresado en el sistema global
-//! en la posición que se pasa como parámetro.
+//! en la posición being passed as parameter.
 Vector2d XC::SisRefScc::GetI(const Pos2d &p) const
   { return GetVDirEje(1,p); }
 
 //! @brief Devuelve el vector unitario J expresado en el sistema global
-//! en la posición que se pasa como parámetro.
+//! en la posición being passed as parameter.
 Vector2d XC::SisRefScc::GetJ(const Pos2d &p) const
   { return GetVDirEje(2,p); }
 

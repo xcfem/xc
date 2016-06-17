@@ -86,7 +86,7 @@ XC::TriBase3N<PhysProp>::TriBase3N(int tag, int classTag, int node1, int node2, 
     this->theNodes.set_id_nodos(node1,node2,node3);
   }
 
-//! @brief Coloca el elemento en la malla que se pasa como parámetro.
+//! @brief Coloca el elemento en la malla being passed as parameter.
 template <class PhysProp>
 XC::TritrizPtrElem XC::TriBase3N<PhysProp>::coloca_en_malla(const XC::TritrizPtrNod &nodos,dir_mallado dm) const
   {
@@ -138,7 +138,7 @@ int XC::TriBase3N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
   }
 
 //! @brief Devuelve los índices locales de los nodos del elemento
-//! situados sobre el borde (o arista) que se pasa como parámetros.
+//! situados sobre el borde (o arista) being passed as parameters.
 template <class PhysProp>
 ID XC::TriBase3N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
   {
@@ -156,7 +156,7 @@ ID XC::TriBase3N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
     return retval;
   }
 
-//! @brief Añade al elemento la carga que se pasa como parámetro.
+//! @brief Añade al elemento la carga being passed as parameter.
 template <class PhysProp>
 int XC::TriBase3N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
   {

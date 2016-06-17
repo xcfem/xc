@@ -180,7 +180,7 @@ int XC::SymArpackSOE::setSize(Graph &theGraph)
     return result;
   }
 
-//! @brief Ensambla en A la matriz que se pasa como parámetro multiplicada por el parámetro fact.
+//! @brief Ensambla en A la matriz being passed as parameter multiplicada por el parámetro fact.
 int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a XC::quick return
@@ -298,7 +298,7 @@ int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, double fact)
     return 0;
   }
 
-//! @brief Ensambla en M la matriz que se pasa como parámetro multiplicada por el parámetro fact.    
+//! @brief Ensambla en M la matriz being passed as parameter multiplicada por el parámetro fact.    
 int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, double fact)
   { 
     //Añadido LCPT.

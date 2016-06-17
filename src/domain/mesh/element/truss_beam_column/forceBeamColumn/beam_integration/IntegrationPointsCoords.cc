@@ -91,7 +91,7 @@ MapValores XC::IntegrationPointsCoords::getMapValores(const size_t &i,const std:
     return retval;
   }
 
-//! @brief Evalúa la expresión que se pasa como parámetro en los puntos de integración.
+//! @brief Evalúa la expresión being passed as parameter en los puntos de integración.
 const XC::Vector &XC::IntegrationPointsCoords::eval(const ExprAlgebra &expr) const
   {
     const size_t nIP= rst.noRows();

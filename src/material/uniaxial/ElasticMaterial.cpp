@@ -123,7 +123,7 @@ int XC::ElasticMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::ElasticMaterial::getCopy(void) const
   { return new ElasticMaterial(*this); }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ElasticMaterial::sendData(CommParameters &cp)
   {
     int res= ElasticBaseMaterial::sendData(cp);
@@ -131,7 +131,7 @@ int XC::ElasticMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::ElasticMaterial::recvData(const CommParameters &cp)
   {
     int res= ElasticBaseMaterial::recvData(cp);

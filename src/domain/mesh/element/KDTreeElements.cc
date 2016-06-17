@@ -62,7 +62,7 @@ void XC::KDTreeElements::erase(const Element &n)
 void XC::KDTreeElements::clear(void)
   { tree_type::clear(); }
 
-//! @brief Devuelve el nodo más cercano a la posición que se pasa como parámetro.
+//! @brief Devuelve el nodo más cercano a la posición being passed as parameter.
 const XC::Element *XC::KDTreeElements::getNearestElement(const Pos3d &pos) const
   {
     const Element *retval= nullptr;

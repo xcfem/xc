@@ -24,27 +24,41 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//EPPBaseMaterial.cc
+//MeshEdges.cpp
 
-#include <material/uniaxial/EPPBaseMaterial.h>
-
+#include "MeshEdges.h"
+#include "xc_utils/src/geom/d1/Polilinea3d.h"
+#include "domain/mesh/node/Node.h"
+#include <set>
 
 //! @brief Constructor.
-XC::EPPBaseMaterial::EPPBaseMaterial(int tag, int classtag, double e,double e0)
-  :ElasticBaseMaterial(tag,classtag,e,e0), trialStress(0.0), trialTangent(e), commitStrain(0.0) {}
+XC::MeshEdges::MeshEdges(void)
+  : EntCmd() {}
 
-//! @brief Send members del objeto through the channel being passed as parameter.
-int XC::EPPBaseMaterial::sendData(CommParameters &cp)
+std::deque<Polilinea3d> XC::MeshEdges::getContours(bool undeformedGeometry) const
   {
-    int res= ElasticBaseMaterial::sendData(cp);
-    res+= cp.sendDoubles(trialStress,trialTangent,commitStrain,getDbTagData(),CommMetaData(3));
-    return res;
-  }
+    std::deque<Polilinea3d> retval;
+    if(!empty())
+      {
+        const size_t sz= size();
+        const_iterator i= begin();
+        const MeshEdge *first= &(*i); 
+        const Pos3d pt;
+        if(undeformedGeometry)
+          first->getFirstNode()->getPosInicial3d();
+        else
+          first->getFirstNode()->getPosFinal3d();
+        Polilinea3d pol;
+        pol.AgregaVertice(pt);
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
-int XC::EPPBaseMaterial::recvData(const CommParameters &cp)
-  {
-    int res= ElasticBaseMaterial::recvData(cp);
-    res+= cp.receiveDoubles(trialStress,trialTangent,commitStrain,getDbTagData(),CommMetaData(3));
-    return res;
+        std::set<const MeshEdge *> visitados;
+        visitados.insert(first);
+        i++;
+        do
+          {
+            const MeshEdge *next= first->next(*this);
+	  }
+        while(visitados.size()<sz);
+      }
+    return retval;
   }

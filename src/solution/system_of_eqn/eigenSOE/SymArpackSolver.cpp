@@ -315,7 +315,7 @@ void XC::SymArpackSolver::myCopy(int n, double *v, double *result)
       { result[i] = v[i]; }
   }
 
-//! @brief Devuelve el autovector correspondiente al modo que se pasa como parámetro.
+//! @brief Devuelve el autovector correspondiente al modo being passed as parameter.
 const XC::Vector &XC::SymArpackSolver::getEigenvector(int mode) const
   {
     int *invp = theSOE->invp;
@@ -333,7 +333,7 @@ const XC::Vector &XC::SymArpackSolver::getEigenvector(int mode) const
     return eigenV;
   }
 
-//! @brief Devuelve el autovalor correspondiente al modo que se pasa como parámetro.
+//! @brief Devuelve el autovalor correspondiente al modo being passed as parameter.
 const double &XC::SymArpackSolver::getEigenvalue(int mode) const
   {
     if(mode <= 0 || mode > numModes)

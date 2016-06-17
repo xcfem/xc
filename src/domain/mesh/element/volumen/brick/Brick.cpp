@@ -1086,7 +1086,7 @@ const XC::Matrix &XC::Brick::computeB( int node, const double shp[4][8]) const
   return Mtran;
 }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::Brick::sendData(CommParameters &cp)
   {
     int res= BrickBase::sendData(cp);
@@ -1095,7 +1095,7 @@ int XC::Brick::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::Brick::recvData(const CommParameters &cp)
   {
     int res= BrickBase::recvData(cp);
@@ -1104,7 +1104,7 @@ int XC::Brick::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Brick::sendSelf(CommParameters &cp)
   {
     inicComm(15);
@@ -1117,7 +1117,7 @@ int XC::Brick::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Brick::recvSelf(const CommParameters &cp)
   {
     const int dataTag= getDbTag();

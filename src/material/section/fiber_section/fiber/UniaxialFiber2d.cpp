@@ -152,7 +152,7 @@ int XC::UniaxialFiber2d::getOrder(void) const
 const XC::ResponseId &XC::UniaxialFiber2d::getType(void) const
   { return RespElasticSection2d; }
 
-//! @brief Envia los datos a través del canal que se pasa como parámetro.
+//! @brief Envia los datos through the channel being passed as parameter.
 int XC::UniaxialFiber2d::sendData(CommParameters &cp)
   {
     int res= UniaxialFiber::sendData(cp);
@@ -160,7 +160,7 @@ int XC::UniaxialFiber2d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::UniaxialFiber2d::recvData(const CommParameters &cp)
   {    
     int res= UniaxialFiber::recvData(cp);
@@ -168,7 +168,7 @@ int XC::UniaxialFiber2d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia el objeto a través del canal que se pasa como parámetro.
+//! @brief Envia el objeto through the channel being passed as parameter.
 int XC::UniaxialFiber2d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -183,7 +183,7 @@ int XC::UniaxialFiber2d::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::UniaxialFiber2d::recvSelf(const CommParameters &cp)
   {
     inicComm(3);

@@ -190,7 +190,7 @@ int XC::GenericSection1d::getOrder(void) const
 XC::SectionForceDeformation *XC::GenericSection1d::getCopy(void) const
   { return new GenericSection1d(*this); }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::GenericSection1d::sendData(CommParameters &cp)
   {
     int res= SeccionBarraPrismatica::sendData(cp);
@@ -199,7 +199,7 @@ int XC::GenericSection1d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::GenericSection1d::recvData(const CommParameters &cp)
   {
     int res= SeccionBarraPrismatica::recvData(cp);
@@ -208,7 +208,7 @@ int XC::GenericSection1d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Envia los miembros del objeto through the channel being passed as parameter.
 int XC::GenericSection1d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -222,7 +222,7 @@ int XC::GenericSection1d::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::GenericSection1d::recvSelf(const CommParameters &cp)
   {
     inicComm(9);

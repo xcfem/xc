@@ -53,7 +53,7 @@ XC::BrickBase::BrickBase(int tag, int classTag, int node1, int node2, int node3,
 size_t XC::BrickBase::getDimension(void) const
   { return 3; }
 
-//Coloca el elemento en la malla que se pasa como parámetro.
+//Coloca el elemento en la malla being passed as parameter.
 XC::TritrizPtrElem XC::BrickBase::coloca_en_malla(const XC::TritrizPtrNod &nodos,dir_mallado dm) const
   {
     const size_t ncapas= nodos.GetCapas();

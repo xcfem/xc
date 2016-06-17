@@ -216,7 +216,7 @@ void XC::Mesh::add_elements_to_domain(void)
       }
   }
 
-//! @brief Agrega al dominio el elemento que se pasa como parámetro.
+//! @brief Agrega al dominio el elemento being passed as parameter.
 bool XC::Mesh::addElement(Element *element)
   {
     if(!element)
@@ -294,7 +294,7 @@ void XC::Mesh::add_nodes_to_domain(void)
       }
   }
 
-//! @brief Agrega al dominio el nodo que se pasa como parámetro.
+//! @brief Agrega al dominio el nodo being passed as parameter.
 bool XC::Mesh::addNode(Node * node)
   {
     int nodTag = node->getTag();
@@ -403,14 +403,14 @@ const XC::Element *XC::Mesh::getElement(int tag) const
     return result;
   }
 
-//! @brief Devuelve el elemento más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
 XC::Element *XC::Mesh::getNearestElement(const Pos3d &p)
   {
     Element *retval= const_cast<Element *>(kdtreeElements.getNearestElement(p));
     return retval;
   }
 
-//! @brief Devuelve el elemento más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
 const XC::Element *XC::Mesh::getNearestElement(const Pos3d &p) const
   {
     Mesh *this_no_const= const_cast<Mesh *>(this);
@@ -444,14 +444,14 @@ const XC::Node *XC::Mesh::getNode(int tag) const
     return result;
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 XC::Node *XC::Mesh::getNearestNode(const Pos3d &p)
   {
     Node *retval= const_cast<Node *>(kdtreeNodos.getNearestNode(p));
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::Mesh::getNearestNode(const Pos3d &p) const
   {
     Mesh *this_no_const= const_cast<Mesh *>(this);
@@ -974,7 +974,7 @@ XC::DbTagData &XC::Mesh::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros del objeto por el canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::Mesh::sendData(CommParameters &cp)
   {
     int res=cp.sendMovable(*theNodes,getDbTagData(),CommMetaData(0));
@@ -985,7 +985,7 @@ int XC::Mesh::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto por el canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::Mesh::recvData(const CommParameters &cp)
   {
     int res= theNodes->recibe<Node>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewNode);
@@ -999,7 +999,7 @@ int XC::Mesh::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Mesh::sendSelf(CommParameters &cp)
   {
     inicComm(5); 
@@ -1012,7 +1012,7 @@ int XC::Mesh::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Mesh::recvSelf(const CommParameters &cp)
   {
     // first we get the data about the state of the mesh for this cTag

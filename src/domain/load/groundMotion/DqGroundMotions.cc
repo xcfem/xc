@@ -68,7 +68,7 @@ void XC::DqGroundMotions::clear(void)
 XC::DqGroundMotions::~DqGroundMotions(void)
   { clear(); }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::DqGroundMotions::sendData(CommParameters &cp)
   {
     const size_t sz= getNumGroundMotions();
@@ -81,7 +81,7 @@ int XC::DqGroundMotions::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::DqGroundMotions::recvData(const CommParameters &cp)
   {
     const size_t sz= getDbTagDataPos(0);
@@ -99,7 +99,7 @@ int XC::DqGroundMotions::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::DqGroundMotions::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -113,7 +113,7 @@ int XC::DqGroundMotions::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::DqGroundMotions::recvSelf(const CommParameters &cp)
   {
     const int dataTag= getDbTag();

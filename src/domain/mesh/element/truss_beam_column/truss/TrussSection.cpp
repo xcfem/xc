@@ -465,7 +465,7 @@ const XC::Vector &XC::TrussSection::getResistingForceIncInertia(void) const
     return *theVector;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::TrussSection::sendData(CommParameters &cp)
   {
     int res= TrussBase::sendData(cp);
@@ -473,7 +473,7 @@ int XC::TrussSection::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::TrussSection::recvData(const CommParameters &cp)
   {
     int res= TrussBase::recvData(cp);

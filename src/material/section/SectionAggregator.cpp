@@ -335,7 +335,7 @@ int XC::SectionAggregator::setTrialSectionDeformation(const Vector &def)
     return ret;
   }
 
-//! @brief Devuelve la deformación correspondiente a la posición que se pasa como parámetro.
+//! @brief Devuelve la deformación correspondiente a la posición being passed as parameter.
 double XC::SectionAggregator::getStrain(const double &y,const double &z) const
   {
     double retval= 0;
@@ -532,7 +532,7 @@ int XC::SectionAggregator::revertToStart(void)
     return err;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::SectionAggregator::sendData(CommParameters &cp)
   {
     int res= SeccionBarraPrismatica::sendData(cp);
@@ -547,7 +547,7 @@ int XC::SectionAggregator::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::SectionAggregator::recvData(const CommParameters &cp)
   {
     int res= SeccionBarraPrismatica::recvData(cp);
@@ -562,7 +562,7 @@ int XC::SectionAggregator::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::SectionAggregator::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -577,7 +577,7 @@ int XC::SectionAggregator::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::SectionAggregator::recvSelf(const CommParameters &cp)
   {
     inicComm(29);

@@ -183,7 +183,7 @@ int XC::MRMP_Constraint::addResistingForceToNodalReaction(bool inclInertia)
   }
 
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 int XC::MRMP_Constraint::sendData(CommParameters &cp)
   {
     int res= MP_ConstraintBase::sendData(cp);
@@ -191,7 +191,7 @@ int XC::MRMP_Constraint::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::MRMP_Constraint::recvData(const CommParameters &cp)
   {
     int res= MP_ConstraintBase::recvData(cp);
@@ -199,7 +199,7 @@ int XC::MRMP_Constraint::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::MRMP_Constraint::sendSelf(CommParameters &cp)
   {
     inicComm(10);
@@ -212,7 +212,7 @@ int XC::MRMP_Constraint::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::MRMP_Constraint::recvSelf(const CommParameters &cp)
   {
     inicComm(10);

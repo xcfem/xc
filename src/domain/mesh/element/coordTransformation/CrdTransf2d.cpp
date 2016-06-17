@@ -640,7 +640,7 @@ const XC::Vector &XC::CrdTransf2d::getCooPunto(const double &xrel) const
     return retval;
   }
 
-//! @brief Envia los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Envia los miembros del objeto through the channel being passed as parameter.
 int XC::CrdTransf2d::sendData(CommParameters &cp)
   {
     int res= CrdTransf::sendData(cp);
@@ -650,7 +650,7 @@ int XC::CrdTransf2d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::CrdTransf2d::recvData(const CommParameters &cp)
   {
     int res= CrdTransf::recvData(cp);

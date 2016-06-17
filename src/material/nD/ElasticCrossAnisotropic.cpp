@@ -260,7 +260,7 @@ const std::string &XC::ElasticCrossAnisotropic::getType(void) const
 int XC::ElasticCrossAnisotropic::getOrder(void) const
   { return 6; }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ElasticCrossAnisotropic::sendData(CommParameters &cp)
   {
     int res= NDMaterial::sendData(cp);
@@ -273,7 +273,7 @@ int XC::ElasticCrossAnisotropic::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::ElasticCrossAnisotropic::recvData(const CommParameters &cp)
   {
     int res= NDMaterial::recvData(cp);
@@ -286,7 +286,7 @@ int XC::ElasticCrossAnisotropic::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ElasticCrossAnisotropic::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -300,7 +300,7 @@ int XC::ElasticCrossAnisotropic::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ElasticCrossAnisotropic::recvSelf(const CommParameters &cp)
   {
     inicComm(7);

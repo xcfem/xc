@@ -165,7 +165,7 @@ const XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face) const
     return retval;
   }
 
-//! @brief Envía las etiquetas por el canal que se pasa como parámetro.
+//! @brief Send labels through the channel being passed as parameter.
 int XC::EntMdlrBase::sendIdsEtiquetas(const int &posSize,const int &posDbTag, CommParameters &cp)
   {
     int res= 0;
@@ -186,7 +186,7 @@ int XC::EntMdlrBase::sendIdsEtiquetas(const int &posSize,const int &posDbTag, Co
     return res;
   }
 
-//! @brief Recibe las etiquetas por el canal que se pasa como parámetro.
+//! @brief Receive labels through the channel being passed as parameter.
 int XC::EntMdlrBase::recvIdsEtiquetas(const int &posSize,const int &posDbTag,const CommParameters &cp)
   {
     int res= 0;
@@ -204,7 +204,7 @@ int XC::EntMdlrBase::recvIdsEtiquetas(const int &posSize,const int &posDbTag,con
     return res;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::EntMdlrBase::sendData(CommParameters &cp)
   {
     int res= cp.sendString(GetNombre(),getDbTagData(),CommMetaData(0));
@@ -212,7 +212,7 @@ int XC::EntMdlrBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::EntMdlrBase::recvData(const CommParameters &cp)
   {
     std::string tmp;
@@ -222,7 +222,7 @@ int XC::EntMdlrBase::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::EntMdlrBase::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -236,7 +236,7 @@ int XC::EntMdlrBase::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::EntMdlrBase::recvSelf(const CommParameters &cp)
   {
     inicComm(3);

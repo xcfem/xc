@@ -778,7 +778,7 @@ int XC::J2Plasticity::revertToStart( )
     return 0;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::J2Plasticity::sendData(CommParameters &cp)
   {
     int res= NDMaterial::sendData(cp);
@@ -796,7 +796,7 @@ int XC::J2Plasticity::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::J2Plasticity::recvData(const CommParameters &cp)
   {
     int res= NDMaterial::recvData(cp);
@@ -815,7 +815,7 @@ int XC::J2Plasticity::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::J2Plasticity::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -829,7 +829,7 @@ int XC::J2Plasticity::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::J2Plasticity::recvSelf(const CommParameters &cp)
   {
     inicComm(88);

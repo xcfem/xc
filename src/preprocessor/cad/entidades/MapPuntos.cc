@@ -131,7 +131,7 @@ XC::Pnt *XC::MapPuntos::Nuevo(void)
   }
 
 
-//! @brief Crea un nuevo punto en la posición que se pasa como parámetro.
+//! @brief Crea un nuevo punto en la posición being passed as parameter.
 XC::Pnt *XC::MapPuntos::Nuevo(const Pos3d &pos)
   {
     Pnt *retval= busca(getTag());
@@ -164,10 +164,10 @@ XC::Pnt *XC::MapPuntos::Nuevo(const size_t &tag,const Pos3d &pos)
     return retval;
   }
 
-//! @brief Crea un nuevo punto, copia del que se pasa como parámetro con
+//! @brief Crea un nuevo punto, copia del being passed as parameter con
 //! el nombre que le toca según el valor del tag. Las coordenadas del
 //! nuevo punto serán las que resulten de sumar a las del primitivo el
-//! vector que se pasa como parámetro.
+//! vector being passed as parameter.
 XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
   {
     Pnt *retval= busca(getTag());

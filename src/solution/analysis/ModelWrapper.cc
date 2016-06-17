@@ -115,7 +115,7 @@ void XC::ModelWrapper::copia_constraint_handler(const ConstraintHandler *ptr)
       std::cerr << "ModelWrapper::copia_constraint_handler; se pasó un puntero nulo." << std::endl;
   }
 
-//! @brief Crea un numerador del tipo que se pasa como parámetro.
+//! @brief Crea un numerador del tipo being passed as parameter.
 XC::ConstraintHandler &XC::ModelWrapper::newConstraintHandler(const std::string &nmb)
   {
     alloc_constraint_handler(nmb);
@@ -175,7 +175,7 @@ void XC::ModelWrapper::copia_numerador(const DOF_Numberer *dn)
      std::cerr << "ModelWrapper::copia_numerador; se pasó un puntero nulo." << std::endl;
   }
 
-//! @brief Crea un numerador del tipo que se pasa como parámetro.
+//! @brief Crea un numerador del tipo being passed as parameter.
 XC::DOF_Numberer &XC::ModelWrapper::newNumberer(const std::string &nmb)
   {
     alloc_numerador(nmb);

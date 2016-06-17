@@ -160,7 +160,7 @@ int XC::GenericSectionNd::getOrder(void) const
 XC::SectionForceDeformation *XC::GenericSectionNd::getCopy(void) const
   { return new XC::GenericSectionNd(*this); }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::GenericSectionNd::sendData(CommParameters &cp)
   {
     int res= SectionForceDeformation::sendData(cp);
@@ -170,7 +170,7 @@ int XC::GenericSectionNd::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::GenericSectionNd::recvData(const CommParameters &cp)
   {
     int res= SectionForceDeformation::recvData(cp);

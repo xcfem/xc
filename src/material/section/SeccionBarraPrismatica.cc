@@ -71,7 +71,7 @@ int XC::SeccionBarraPrismatica::setInitialDeformationPlane(const PlanoDeformacio
   { return setInitialSectionDeformation(getVectorDeformacion(plano)); }
 
 //! @brief Devuelve el vector de deformaciones generalizadas que corresponde
-//! al plano de deformaciones que se pasa como parámetro.
+//! al plano de deformaciones being passed as parameter.
 const XC::Vector &XC::SeccionBarraPrismatica::getVectorDeformacion(const PlanoDeformacion &plano) const
   {
     const int order= getOrder();

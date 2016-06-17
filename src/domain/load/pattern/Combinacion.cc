@@ -78,7 +78,7 @@ XC::Combinacion::sumando XC::Combinacion::sumando::getNeg(void) const
     return tmp;
   }
 
-//! @brief Suma a éste sumando el que se pasa como parámetro.
+//! @brief Suma a éste sumando el being passed as parameter.
 const XC::Combinacion::sumando &XC::Combinacion::sumando::suma(const sumando &otro)
   {
     if(lpattern==otro.lpattern)
@@ -88,7 +88,7 @@ const XC::Combinacion::sumando &XC::Combinacion::sumando::suma(const sumando &ot
     return *this;
   }
 
-//! @brief Resta a éste sumando el que se pasa como parámetro.
+//! @brief Resta a éste sumando el being passed as parameter.
 const XC::Combinacion::sumando &XC::Combinacion::sumando::resta(const sumando &otro)
   {
     if(lpattern==otro.lpattern)
@@ -98,14 +98,14 @@ const XC::Combinacion::sumando &XC::Combinacion::sumando::resta(const sumando &o
     return *this;
   }
 
-//! @brief Multiplica el sumando por el valor que se pasa como parámetro.
+//! @brief Multiplica el sumando por el valor being passed as parameter.
 const XC::Combinacion::sumando &XC::Combinacion::sumando::multiplica(const float &f)
   {
     factor*= f;
     return *this;
   }
 
-//! @brief Divide el sumando por el valor que se pasa como parámetro.
+//! @brief Divide el sumando por el valor being passed as parameter.
 const XC::Combinacion::sumando &XC::Combinacion::sumando::divide(const float &f)
   {
     factor/= f;
@@ -175,7 +175,7 @@ void XC::Combinacion::set_domain(void)
       }
   }
 
-//! @brief Añade al dominio que se pasa como parámetro las hipótesis de la combinacion.
+//! @brief Añade al dominio being passed as parameter las hipótesis de la combinacion.
 bool XC::Combinacion::addToDomain(void)
   {
     Domain *dom= getDomain();    
@@ -204,7 +204,7 @@ bool XC::Combinacion::addToDomain(void)
     return retval;
   }
 
-//! @brief Elimina del dominio que se pasa como parámetro las hipótesis de la combinacion.
+//! @brief Elimina del dominio being passed as parameter las hipótesis de la combinacion.
 void XC::Combinacion::removeFromDomain(void)
   {
     Domain *dom= getDomain();
@@ -233,7 +233,7 @@ void XC::Combinacion::agrega_sumando(const sumando &sum)
       }
   }
 
-//! @brief Obtiene la descomposición interpretando el string que se pasa como parámetro.
+//! @brief Obtiene la descomposición interpretando el string being passed as parameter.
 void XC::Combinacion::interpreta_descomp(const std::string &str_descomp)
   {
     clear();
@@ -266,7 +266,7 @@ void XC::Combinacion::interpreta_descomp(const std::string &str_descomp)
   }
 
 
-//! @brief Devuelve un iterador apuntando al caso que se pasa como parámetro.
+//! @brief Devuelve un iterador apuntando al caso being passed as parameter.
 XC::Combinacion::const_iterator XC::Combinacion::buscaCaso(const LoadPattern *lp) const
   {
     const_iterator retval= end();
@@ -279,7 +279,7 @@ XC::Combinacion::const_iterator XC::Combinacion::buscaCaso(const LoadPattern *lp
     return retval;
   }
 
-//! @brief Devuelve un iterador apuntando al caso que se pasa como parámetro.
+//! @brief Devuelve un iterador apuntando al caso being passed as parameter.
 XC::Combinacion::iterator XC::Combinacion::buscaCaso(const LoadPattern *lp)
   {
     iterator retval= end();
@@ -384,7 +384,7 @@ XC::DbTagData &XC::Combinacion::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::Combinacion::sendData(CommParameters &cp)
   {
     int res= ForceReprComponent::sendData(cp);
@@ -393,7 +393,7 @@ int XC::Combinacion::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros a través del canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::Combinacion::recvData(const CommParameters &cp)
   {
     int res= ForceReprComponent::recvData(cp);
@@ -422,7 +422,7 @@ int XC::Combinacion::recvDescomp(void)
     return 0;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Combinacion::sendSelf(CommParameters &cp)
   {
     inicComm(4);
@@ -434,7 +434,7 @@ int XC::Combinacion::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Combinacion::recvSelf(const CommParameters &cp)
   {
     inicComm(4);
@@ -447,7 +447,7 @@ int XC::Combinacion::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Suma a ésta la combinación que se pasa como parámetro.
+//! @brief Suma a ésta la combinación being passed as parameter.
 XC::Combinacion &XC::Combinacion::suma(const Combinacion &otro)
   {
     for(const_iterator i= otro.begin();i!=otro.end();i++)
@@ -479,7 +479,7 @@ XC::Combinacion &XC::Combinacion::suma(const std::string &nmbComb)
   }
 
 
-//! @brief Resta a ésta la combinación que se pasa como parámetro.
+//! @brief Resta a ésta la combinación being passed as parameter.
 XC::Combinacion &XC::Combinacion::resta(const Combinacion &otro)
   {
     for(const_iterator i= otro.begin();i!=otro.end();i++)
@@ -518,7 +518,7 @@ XC::Combinacion &XC::Combinacion::asigna(const std::string &nmbComb)
     return *this;
   }
 
-//! @brief Multiplica la combinación por el número que se pasa como parámetro.
+//! @brief Multiplica la combinación por el número being passed as parameter.
 XC::Combinacion &XC::Combinacion::multiplica(const float &f)
   {
     if(f!=0.0)
@@ -530,7 +530,7 @@ XC::Combinacion &XC::Combinacion::multiplica(const float &f)
   }
 
 
-//! @brief Divide la combinación por el número que se pasa como parámetro.
+//! @brief Divide la combinación por el número being passed as parameter.
 XC::Combinacion &XC::Combinacion::divide(const float &f)
   {
     for(iterator i= begin();i!=end();i++)
@@ -539,7 +539,7 @@ XC::Combinacion &XC::Combinacion::divide(const float &f)
   }
 
 //! @brief Devuelve el resultado de sumar ésta combinación con
-//! la que se pasa como parámetro.
+//! la being passed as parameter.
 XC::Combinacion XC::Combinacion::operator+(const Combinacion &c) const
   {
     Combinacion retval(*this);
@@ -548,7 +548,7 @@ XC::Combinacion XC::Combinacion::operator+(const Combinacion &c) const
   }
 
 //! @brief Devuelve el resultado de sumar ésta combinación con
-//! la que se pasa como parámetro.
+//! la being passed as parameter.
 XC::Combinacion XC::Combinacion::operator-(const Combinacion &c) const
   {
     Combinacion retval(*this);
@@ -557,7 +557,7 @@ XC::Combinacion XC::Combinacion::operator-(const Combinacion &c) const
   }
  
 //! @brief Devuelve el resultado de multiplicar ésta combinación por
-//! el factor que se pasa como parámetro.
+//! el factor being passed as parameter.
 XC::Combinacion XC::Combinacion::operator*(const float &fact) const
   {
     Combinacion retval(*this);
@@ -566,7 +566,7 @@ XC::Combinacion XC::Combinacion::operator*(const float &fact) const
   }
 
 //! @brief Devuelve el resultado de dividir ésta combinación por
-//! el factor que se pasa como parámetro.
+//! el factor being passed as parameter.
 XC::Combinacion XC::Combinacion::operator/(const float &fact) const
   {
     Combinacion retval(*this);
@@ -621,7 +621,7 @@ bool XC::Combinacion::operator==(const Combinacion &otra) const
 
 //! @brief Devuelve verdadero si los coeficientes que ponderan a todos
 //! los casos de carga de esta combinación son mayores que los correspondientes
-//! en la que se pasa como parámetro.
+//! en la being passed as parameter.
 bool XC::Combinacion::dominaA(const Combinacion &otra) const
   {
     bool retval= true;

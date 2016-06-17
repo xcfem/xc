@@ -87,7 +87,7 @@ int XC::PQyzBase::revertToLastCommit(void)
     return 0;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::PQyzBase::sendData(CommParameters &cp)
   {
     int res= PYBase::sendData(cp);
@@ -99,7 +99,7 @@ int XC::PQyzBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::PQyzBase::recvData(const CommParameters &cp)
   {
     int res= PYBase::recvData(cp);

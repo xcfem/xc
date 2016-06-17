@@ -39,7 +39,7 @@ XC::BeamStrainLoad::BeamStrainLoad(int tag, const XC::ID &theElementTags)
 XC::BeamStrainLoad::BeamStrainLoad(int tag)
   :BeamLoad(tag, LOAD_TAG_BeamStrainLoad) {}
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 int XC::BeamStrainLoad::sendData(CommParameters &cp)
   {
     int res= BeamLoad::sendData(cp);
@@ -48,7 +48,7 @@ int XC::BeamStrainLoad::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::BeamStrainLoad::recvData(const CommParameters &cp)
   {
     int res= BeamLoad::recvData(cp);

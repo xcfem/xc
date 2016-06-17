@@ -113,7 +113,7 @@ void XC::PathSeries::readFromFile(const std::string &fileName)
       }
   }
 
-//! @brief Devuelve el valor correspondiente al instante que se pasa como parámetro.
+//! @brief Devuelve el valor correspondiente al instante being passed as parameter.
 double XC::PathSeries::getFactor(double pseudoTime) const
   {
     double retval= 0.0;
@@ -155,7 +155,7 @@ int XC::PathSeries::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::PathSeries::sendSelf(CommParameters &cp)
   {
     inicComm(6);
@@ -168,7 +168,7 @@ int XC::PathSeries::sendSelf(CommParameters &cp)
     return result;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::PathSeries::recvSelf(const CommParameters &cp)
   {
     inicComm(6);

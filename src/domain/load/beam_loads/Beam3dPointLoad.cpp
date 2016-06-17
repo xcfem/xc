@@ -365,7 +365,7 @@ XC::DbTagData &XC::Beam3dPointLoad::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Beam3dPointLoad::sendSelf(CommParameters &cp)
   {
     inicComm(8);
@@ -379,7 +379,7 @@ int XC::Beam3dPointLoad::sendSelf(CommParameters &cp)
     return result;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Beam3dPointLoad::recvSelf(const CommParameters &cp)
   {
     inicComm(8);

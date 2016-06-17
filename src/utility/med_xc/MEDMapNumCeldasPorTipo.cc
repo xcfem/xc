@@ -24,7 +24,7 @@
 #include "MEDMapNumCeldasPorTipo.h"
 #include <iostream>
 
-//! @brief Agrega una celda del tipo que se pasa como parámetro.
+//! @brief Agrega una celda del tipo being passed as parameter.
 void XC::MEDMapNumCeldasPorTipo::agrega_celda(const MED_EN::medGeometryElement &tipo)
   {
     iterator i= tipos.find(tipo);

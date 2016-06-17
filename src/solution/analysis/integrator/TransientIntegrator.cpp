@@ -123,7 +123,7 @@ int XC::TransientIntegrator::formTangent(int statFlag)
     return result;
   }
 
-//! @brief Forma el vector residuo del elemento que se pasa como parámetro.    
+//! @brief Forma el vector residuo del elemento being passed as parameter.    
 int XC::TransientIntegrator::formEleResidual(FE_Element *theEle)
   {
     theEle->zeroResidual();
@@ -131,7 +131,7 @@ int XC::TransientIntegrator::formEleResidual(FE_Element *theEle)
     return 0;
   }
 
-//! @brief Forma el vector de cargas desequilibradas del nodo que se pasa como parámetro.
+//! @brief Forma el vector de cargas desequilibradas del nodo being passed as parameter.
 int XC::TransientIntegrator::formNodUnbalance(DOF_Group *theDof)
   {
     theDof->zeroUnbalance();

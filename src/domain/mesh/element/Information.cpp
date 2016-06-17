@@ -180,7 +180,7 @@ int XC::Information::setTensor(const Tensor &newTensor)
     return -1;
 }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::Information::sendData(CommParameters &cp)
   {
     //setDbTagDataPos(0,getTag());
@@ -194,7 +194,7 @@ int XC::Information::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::Information::recvData(const CommParameters &cp)
   {
     //setTag(getDbTagDataPos(0));
@@ -209,7 +209,7 @@ int XC::Information::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::Information::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -223,7 +223,7 @@ int XC::Information::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::Information::recvSelf(const CommParameters &cp)
   {
     inicComm(11);

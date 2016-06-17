@@ -74,16 +74,16 @@ XC::BrickSelfWeight::BrickSelfWeight(void)
 int XC::BrickSelfWeight::getType(void)
   { return LOAD_TAG_BrickSelfWeight; }
 
-//! @brief Envía los miembros del objeto a través del
-//! canal que se pasa como parámetro.
+//! @brief Send members del objeto a través del
+//! canal being passed as parameter.
 int XC::BrickSelfWeight::sendData(CommParameters &cp)
   {
     int res= ElementBodyLoad::sendData(cp);
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del
-//! canal que se pasa como parámetro.
+//! @brief Receives members del objeto a través del
+//! canal being passed as parameter.
 int XC::BrickSelfWeight::recvData(const CommParameters &cp)
   {        
     int res= ElementBodyLoad::recvData(cp);

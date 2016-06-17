@@ -82,7 +82,7 @@ const XC::Element *XC::MatrizPtrElem::buscaElemento(const int &tag) const
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 XC::Element *XC::MatrizPtrElem::getNearestElement(const Pos3d &p)
   {
     Element *retval= nullptr, *ptrElem= nullptr;
@@ -109,7 +109,7 @@ XC::Element *XC::MatrizPtrElem::getNearestElement(const Pos3d &p)
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto que se pasa como parámetro.
+//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
 const XC::Element *XC::MatrizPtrElem::getNearestElement(const Pos3d &p) const
   {
     MatrizPtrElem *this_no_const= const_cast<MatrizPtrElem *>(this);

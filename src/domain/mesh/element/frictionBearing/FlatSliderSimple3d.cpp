@@ -429,7 +429,7 @@ const XC::Vector& XC::FlatSliderSimple3d::getResistingForceIncInertia()
 	return theVector;
 }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::FlatSliderSimple3d::sendData(CommParameters &cp)
   {
     int res= ElemFriccionBase::sendData(cp);
@@ -438,7 +438,7 @@ int XC::FlatSliderSimple3d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::FlatSliderSimple3d::recvData(const CommParameters &cp)
   {
     int res= ElemFriccionBase::recvData(cp);

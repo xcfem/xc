@@ -313,14 +313,14 @@ int XC::NDMaterial::getResponse(int responseID, Information &matInfo)
       }
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::NDMaterial::sendData(CommParameters &cp)
   {
     setDbTagDataPos(0,getTag());
     return 0;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::NDMaterial::recvData(const CommParameters &cp)
   {
     setTag(getDbTagDataPos(0));
@@ -368,7 +368,7 @@ int XC::NDMaterial::commitSensitivity(XC::Vector & strainSensitivity, int gradNu
   { return 0; }
 // AddingSensitivity:END //////////////////////////////////////////
 
-//! @brief Recibe un puntero a material a través del canal que se pasa como parámetro.
+//! @brief Recibe un puntero a material through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase del material.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::NDMaterial *XC::receiveNDMaterialPtr(NDMaterial *ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)

@@ -238,7 +238,7 @@ int XC::NewmarkHybridSimulation::update(const XC::Vector &deltaU)
     return 0;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::NewmarkHybridSimulation::sendData(CommParameters &cp)
   {
     int res= NewmarkBase2::sendData(cp);
@@ -248,7 +248,7 @@ int XC::NewmarkHybridSimulation::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::NewmarkHybridSimulation::recvData(const CommParameters &cp)
   {
     int res= NewmarkBase2::recvData(cp);

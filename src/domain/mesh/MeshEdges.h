@@ -24,27 +24,35 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//EPPBaseMaterial.cc
+//MeshEdges.h
+                                                                        
+#ifndef MeshEdges_h
+#define MeshEdges_h
 
-#include <material/uniaxial/EPPBaseMaterial.h>
+#include "xc_utils/src/nucleo/EntCmd.h"
+#include "domain/mesh/MeshEdge.h"
+
+class Polilinea3d;
 
 
-//! @brief Constructor.
-XC::EPPBaseMaterial::EPPBaseMaterial(int tag, int classtag, double e,double e0)
-  :ElasticBaseMaterial(tag,classtag,e,e0), trialStress(0.0), trialTangent(e), commitStrain(0.0) {}
+namespace XC {
+class Element;
+class Domain;
+class ID;
+ 
 
-//! @brief Send members del objeto through the channel being passed as parameter.
-int XC::EPPBaseMaterial::sendData(CommParameters &cp)
+//! @ingroup Elem
+//
+//! @brief Element edge container.
+ class MeshEdges: public EntCmd, public std::deque<MeshEdge>
   {
-    int res= ElasticBaseMaterial::sendData(cp);
-    res+= cp.sendDoubles(trialStress,trialTangent,commitStrain,getDbTagData(),CommMetaData(3));
-    return res;
-  }
+  public:
+    MeshEdges(void);
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
-int XC::EPPBaseMaterial::recvData(const CommParameters &cp)
-  {
-    int res= ElasticBaseMaterial::recvData(cp);
-    res+= cp.receiveDoubles(trialStress,trialTangent,commitStrain,getDbTagData(),CommMetaData(3));
-    return res;
-  }
+    //! @brief returns closed contours from de edge set.
+    std::deque<Polilinea3d> getContours(bool undeformedGeometry) const;
+  };
+} // end of XC namespace
+
+#endif
+

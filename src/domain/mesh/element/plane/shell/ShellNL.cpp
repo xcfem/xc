@@ -1000,7 +1000,7 @@ XC::DbTagData &XC::ShellNL::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::ShellNL::sendData(CommParameters &cp)
   {
     int res= QuadBase9N<SectionFDPhysicalProperties>::sendData(cp);
@@ -1013,7 +1013,7 @@ int XC::ShellNL::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::ShellNL::recvData(const CommParameters &cp)
   {
     int res= QuadBase9N<SectionFDPhysicalProperties>::recvData(cp);

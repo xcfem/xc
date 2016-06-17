@@ -83,7 +83,7 @@ XC::DiagInteraccion &XC::DiagInteraccion::operator=(const DiagInteraccion &otro)
 XC::DiagInteraccion *XC::DiagInteraccion::clon(void) const
   { return new DiagInteraccion(*this); }
 
-//! @brief Busca el triedro que contiene al punto que se pasa como parámetro.
+//! @brief Busca el triedro que contiene al punto being passed as parameter.
 const Triedro3d *XC::DiagInteraccion::BuscaPtrTriedro(const Pos3d &p) const
   {
     const Triedro3d *retval= nullptr;

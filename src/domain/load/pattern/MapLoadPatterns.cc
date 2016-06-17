@@ -306,7 +306,7 @@ XC::DbTagData &XC::MapLoadPatterns::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::MapLoadPatterns::sendData(CommParameters &cp)
   {
     int res= sendMap(tseries,cp,getDbTagData(),CommMetaData(0));
@@ -317,7 +317,7 @@ int XC::MapLoadPatterns::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Envía los miembros a través del canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::MapLoadPatterns::recvData(const CommParameters &cp)
   {
     clear();
@@ -331,7 +331,7 @@ int XC::MapLoadPatterns::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::MapLoadPatterns::sendSelf(CommParameters &cp)
   {
     inicComm(5);
@@ -343,7 +343,7 @@ int XC::MapLoadPatterns::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::MapLoadPatterns::recvSelf(const CommParameters &cp)
   {
     inicComm(5);

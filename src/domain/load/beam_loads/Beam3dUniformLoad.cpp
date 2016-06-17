@@ -209,7 +209,7 @@ XC::DbTagData &XC::Beam3dUniformLoad::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los datos a través del canal que se pasa como parámetro.
+//! @brief Envía los datos through the channel being passed as parameter.
 int XC::Beam3dUniformLoad::sendData(CommParameters &cp)
   {
     int res= BeamUniformLoad::sendData(cp);
@@ -217,7 +217,7 @@ int XC::Beam3dUniformLoad::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos a través del canal que se pasa como parámetro.
+//! @brief Recibe los datos through the channel being passed as parameter.
 int XC::Beam3dUniformLoad::recvData(const CommParameters &cp)
   {
     int res= BeamUniformLoad::recvData(cp);

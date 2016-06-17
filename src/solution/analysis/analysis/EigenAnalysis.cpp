@@ -212,7 +212,7 @@ int XC::EigenAnalysis::setEigenSOE(EigenSOE &theSOE)
     return 0;
   }
 
-//! @brief Devuelve el autovector que corresponde al modo que se pasa como parámetro.
+//! @brief Devuelve el autovector que corresponde al modo being passed as parameter.
 const XC::Vector &XC::EigenAnalysis::getEigenvector(int mode) const
   {
     static Vector retval(1);
@@ -223,7 +223,7 @@ const XC::Vector &XC::EigenAnalysis::getEigenvector(int mode) const
     return retval;
   }
 
-//! @brief Devuelve el autovector que corresponde al modo que se pasa como parámetro
+//! @brief Devuelve el autovector que corresponde al modo being passed as parameter
 //! normalizado de modo que la componente máxima valga 1 (norma_infinito).
 XC::Vector XC::EigenAnalysis::getNormalizedEigenvector(int mode) const
   {
@@ -257,7 +257,7 @@ XC::Matrix XC::EigenAnalysis::getNormalizedEigenvectors(void) const
     return retval;
   }
 
-//! @brief Devuelve el autovalor que corresponde al modo que se pasa como parámetro.
+//! @brief Devuelve el autovalor que corresponde al modo being passed as parameter.
 const double &XC::EigenAnalysis::getEigenvalue(int mode) const
   {
     static double retval= 0.0;
@@ -268,17 +268,17 @@ const double &XC::EigenAnalysis::getEigenvalue(int mode) const
   }
 
 //! @brief Devuelve la pulsación correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::EigenAnalysis::getPulsacion(int mode) const
   { return sqrt(getEigenvalue(mode)); }
 
 //! @brief Devuelve el período correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::EigenAnalysis::getPeriodo(int mode) const
   { return 2.0*M_PI/getPulsacion(mode); }
 
 //! @brief Devuelve la frecuencia correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 double XC::EigenAnalysis::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 
@@ -359,7 +359,7 @@ XC::Vector XC::EigenAnalysis::getModalParticipationFactors(void) const
     return retval;
   }
 //! @brief Devuelve el factor de distribución correspondiente al modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 XC::Vector XC::EigenAnalysis::getDistributionFactor(int mode) const
   {
     Vector retval;
@@ -412,7 +412,7 @@ double XC::EigenAnalysis::getTotalMass(void) const
   }
 
 //! @brief Devuelve la fuerza estática equivalente para el modo
-//! que se pasa como parámetro.
+//! being passed as parameter.
 XC::Vector XC::EigenAnalysis::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
     Vector retval;

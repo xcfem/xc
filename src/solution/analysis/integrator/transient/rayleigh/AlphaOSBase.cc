@@ -99,7 +99,7 @@ int XC::AlphaOSBase::revertToLastStep(void)
     return 0;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::AlphaOSBase::sendData(CommParameters &cp)
   {
     int res= HHTBase::sendData(cp);
@@ -108,7 +108,7 @@ int XC::AlphaOSBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::AlphaOSBase::recvData(const CommParameters &cp)
   {
     int res= HHTBase::recvData(cp);

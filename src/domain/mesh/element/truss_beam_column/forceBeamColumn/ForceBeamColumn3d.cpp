@@ -987,7 +987,7 @@ const XC::Vector &XC::ForceBeamColumn3d::getResistingForceIncInertia(void) const
     return theVector;
   }
 
-//! @brief Envía los miembros por el canal que se pasa como parámetro.
+//! @brief Send members through the channel being passed as parameter.
 int XC::ForceBeamColumn3d::sendData(CommParameters &cp)
   {
     int res= NLForceBeamColumn3dBase::sendData(cp);
@@ -995,7 +995,7 @@ int XC::ForceBeamColumn3d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros por el canal que se pasa como parámetro.
+//! @brief Receives members through the channel being passed as parameter.
 int XC::ForceBeamColumn3d::recvData(const CommParameters &cp)
   {
     int res= NLForceBeamColumn3dBase::recvData(cp);
@@ -1003,7 +1003,7 @@ int XC::ForceBeamColumn3d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto por el canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ForceBeamColumn3d::sendSelf(CommParameters &cp)
   {
     inicComm(31);
@@ -1016,7 +1016,7 @@ int XC::ForceBeamColumn3d::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ForceBeamColumn3d::recvSelf(const CommParameters &cp)
   {
     inicComm(31);

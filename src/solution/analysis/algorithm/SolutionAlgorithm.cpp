@@ -190,13 +190,13 @@ XC::Domain *XC::SolutionAlgorithm::get_domain_ptr(void)
     return sm->getDomainPtr();
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::SolutionAlgorithm::sendData(CommParameters &cp)
   {
     return 0;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::SolutionAlgorithm::recvData(const CommParameters &cp)
   {
     return 0;

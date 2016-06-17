@@ -240,7 +240,7 @@ bool DqPtrs<T>::push_front(T *t)
   }
 
 /* //! @brief Ordena los elementos del contenedor por */
-/* //! el valor de la propiedad que se pasa como parámetro. */
+/* //! el valor de la propiedad being passed as parameter. */
 /* template <class T> */
 /* void DqPtrs<T>::sort_on_prop(const std::string &cod,const bool &ascending) */
 /*   { */
@@ -271,7 +271,7 @@ const ID &DqPtrs<T>::getTags(void) const
     return retval;
   }
 
-//! @brief Envía los dbTags de los conjuntos través del canal que se pasa como parámetro.
+//! @brief Envía los dbTags de los conjuntos través del canal being passed as parameter.
 template <class T>
 int DqPtrs<T>::sendTags(int posSz,int posDbTag,DbTagData &dt,CommParameters &cp)
   {
@@ -287,7 +287,7 @@ int DqPtrs<T>::sendTags(int posSz,int posDbTag,DbTagData &dt,CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los dbTags de los conjuntos a través del canal que se pasa como parámetro.
+//! @brief Recibe los dbTags de los conjuntos through the channel being passed as parameter.
 template <class T>
 const ID &DqPtrs<T>::receiveTags(int posSz,int posDbTag,DbTagData &dt,const CommParameters &cp)
   {

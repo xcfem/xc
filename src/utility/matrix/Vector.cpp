@@ -1243,7 +1243,7 @@ m_double XC::vector_to_m_double(const XC::Vector &v)
     return retval;
   }
 
-// //! @brief Convierte en vector la cadena de caracteres que se pasa como parámetro.
+// //! @brief Convierte en vector la cadena de caracteres being passed as parameter.
 // void XC::Vector::from_string(const std::string &str)
 //   {
 //     std::vector<double> tmp= crea_vector_double(str);

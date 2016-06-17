@@ -439,7 +439,7 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
 }
 
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::DOF_Numberer::sendData(CommParameters &cp)
   {
     //setDbTagDataPos(0,getTag());
@@ -448,7 +448,7 @@ int XC::DOF_Numberer::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::DOF_Numberer::recvData(const CommParameters &cp)
   {
     //setTag(getDbTagDataPos(0));
@@ -457,7 +457,7 @@ int XC::DOF_Numberer::recvData(const CommParameters &cp)
     return 0;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::DOF_Numberer::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -471,7 +471,7 @@ int XC::DOF_Numberer::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::DOF_Numberer::recvSelf(const CommParameters &cp)
   {
     inicComm(3);

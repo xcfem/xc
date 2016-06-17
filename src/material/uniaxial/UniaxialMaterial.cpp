@@ -186,7 +186,7 @@ int XC::UniaxialMaterial::setInitialStrain(double strain)
     return 0;
   }
 
-//! @brief Asigna a la deformación inicial el valor que se pasa como parámetro.
+//! @brief Asigna a la deformación inicial el valor being passed as parameter.
 void XC::UniaxialMaterial::setInitialGeneralizedStrain(const Vector &iS)
   { setInitialStrain(iS[0]); }
 
@@ -276,7 +276,7 @@ double XC::UniaxialMaterial::getInitialTangent(void) const
 
 // AddingSensitivity:END //////////////////////////////////////////
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::UniaxialMaterial::sendData(CommParameters &cp)
   {
     setDbTagDataPos(0,getTag());
@@ -284,7 +284,7 @@ int XC::UniaxialMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::UniaxialMaterial::recvData(const CommParameters &cp)
   {
     setTag(getDbTagDataPos(0));
@@ -292,7 +292,7 @@ int XC::UniaxialMaterial::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe un puntero a material a través del canal que se pasa como parámetro.
+//! @brief Recibe un puntero a material through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase del material.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::UniaxialMaterial *XC::receiveUniaxialMaterialPtr(UniaxialMaterial *ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)

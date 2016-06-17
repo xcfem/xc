@@ -72,7 +72,7 @@
 XC::StaticIntegrator::StaticIntegrator(SoluMethod *owr,int clasTag)
   :IncrementalIntegrator(owr,clasTag) {}
 
-//! @brief Solicita al elemento que se pasa como parámetro
+//! @brief Solicita al elemento being passed as parameter
 //! que forme su matriz de rigidez.
 int XC::StaticIntegrator::formEleTangent(FE_Element *theEle)
   {

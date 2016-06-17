@@ -81,7 +81,7 @@ void XC::ResponseQuantities::Zero(void)
     Rdotdot.Zero();
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ResponseQuantities::sendData(CommParameters &cp)
   {
     int res= 0;//MovableObject::sendData(cp);
@@ -91,7 +91,7 @@ int XC::ResponseQuantities::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::ResponseQuantities::recvData(const CommParameters &cp)
   {
     int res= 0;//MovableObject::receiveData(cp);
@@ -101,7 +101,7 @@ int XC::ResponseQuantities::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a través del canal que se pasa como parámetro.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ResponseQuantities::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -115,7 +115,7 @@ int XC::ResponseQuantities::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del canal que se pasa como parámetro.
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ResponseQuantities::recvSelf(const CommParameters &cp)
   {
     inicComm(27);

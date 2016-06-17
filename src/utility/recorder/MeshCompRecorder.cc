@@ -40,7 +40,7 @@ XC::MeshCompRecorder::MeshCompRecorder(int classTag,Domain &theDom,
    deltaT(dT), nextTimeStampToRecord(0.0) {}
 
 //! @brief Envia el objeto mediante el comunicador
-//! que se pasa como parámetro.
+//! being passed as parameter.
 int XC::MeshCompRecorder::sendData(CommParameters &cp)
   {
     int res= HandlerRecorder::sendData(cp);
@@ -48,7 +48,7 @@ int XC::MeshCompRecorder::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal definido en el parámetro.
+//! @brief Receives object through the channeldefinido en el parámetro.
 int XC::MeshCompRecorder::receiveData(const CommParameters &cp)
   {
     int res= HandlerRecorder::receiveData(cp);

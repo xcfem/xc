@@ -166,7 +166,7 @@ int XC::PeriodicNewton::solveCurrentStep(void)
     return result;
   }
 
-//! @brief Envía los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Send members del objeto through the channel being passed as parameter.
 int XC::PeriodicNewton::sendData(CommParameters &cp)
   {
     int res= NewtonBased::sendData(cp);
@@ -174,7 +174,7 @@ int XC::PeriodicNewton::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal que se pasa como parámetro.
+//! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::PeriodicNewton::recvData(const CommParameters &cp)
   {
     int res= NewtonBased::recvData(cp);
