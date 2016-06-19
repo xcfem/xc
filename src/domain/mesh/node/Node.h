@@ -85,7 +85,7 @@ class NodeLocker;
 class DefaultTag;
 class ElementEdges;
 class SetBase;
-
+class MeshEdge;
 
 class DOF_Group;
 
@@ -169,6 +169,7 @@ class Node: public MeshComponent
     void disconnect(ContinuaReprComponent *el) const;
     ElementConstPtrSet getConnectedElements(void) const;
     ElementPtrSet getConnectedElements(void);
+    const MeshEdge *next(const std::deque<MeshEdge> &, const std::set<const MeshEdge *> &) const;
 
     const bool isDead(void) const;
     const bool isAlive(void) const;

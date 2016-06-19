@@ -84,6 +84,7 @@
 #include "domain/load/pattern/NodeLocker.h"
 
 #include <domain/domain/Domain.h>
+#include "domain/mesh/MeshEdge.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/ElementIter.h"
 
@@ -1571,6 +1572,24 @@ std::set<XC::Element *> XC::Node::getConnectedElements(void)
       }
     return retval;
   }
+
+//! @brief Returns an edge that has its origin in this node (and is not in visited).
+const XC::MeshEdge *XC::Node::next(const std::deque<MeshEdge> &edges, const std::set<const MeshEdge *> &visited) const
+  {
+    const MeshEdge *retval= nullptr;
+    for(std::deque<MeshEdge>::const_iterator i= edges.begin();i!=edges.end();i++)
+      {
+        const MeshEdge &edge= *i;
+        if(visited.find(&edge)==visited.end()) //Not already visited.
+          if(edge.getFirstNode()==this) //Edge starts in this node.
+            {
+              retval= &edge;
+              break;
+            }
+      }
+    return retval;
+  }
+
 
 //! @brief Devuelve la acción de los elementos del conjunto sobre el nodo.
 const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &elementos,const bool &inc_inertia) const

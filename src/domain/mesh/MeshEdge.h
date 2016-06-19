@@ -51,10 +51,17 @@ class MeshEdge: public EntCmd
     const Node *getLastNode(void) const;
     bool isConnected(const Node &) const;
     bool isConnected(const MeshEdge &) const;
-    const MeshEdge *next(const std::deque<MeshEdge> &, const std::set<const MeshEdge *> &) const;
     ElementConstPtrSet getConnectedElements(void) const;
     bool operator==(const MeshEdge &) const;
+    void print(std::ostream &) const;
   };
+
+inline std::ostream &operator<<(std::ostream &os, const MeshEdge &me)
+  {
+    me.print(os);
+    return os;
+  }
+
 } // end of XC namespace
 
 #endif

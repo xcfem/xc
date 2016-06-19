@@ -52,7 +52,14 @@ class ID;
     std::deque<const MeshEdge *> getLoop(const MeshEdge *) const;
     //! @brief returns closed contours from de edge set.
     std::deque<Polilinea3d> getContours(bool undeformedGeometry) const;
+    void print(std::ostream &) const;
   };
+
+inline std::ostream &operator<<(std::ostream &os, const MeshEdges &me)
+  {
+    me.print(os);
+    return os;
+  }
 } // end of XC namespace
 
 #endif

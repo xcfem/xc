@@ -43,9 +43,11 @@ std::deque<const XC::MeshEdge *> XC::MeshEdges::getLoop(const MeshEdge *first) c
     visited.insert(first);
     std::deque<const MeshEdge *> retval;
     retval.push_back(first);
+    const size_t maxSizeLoop= 2*size()-1; //Max. loop size.
+    size_t count= 1;
     do
       {
-        const MeshEdge *next= first->next(*this,visited);
+        const MeshEdge *next= lastNode->next(*this,visited);
         if(next)
           {
             retval.push_back(next);
@@ -55,7 +57,15 @@ std::deque<const XC::MeshEdge *> XC::MeshEdges::getLoop(const MeshEdge *first) c
           }
         else
           {
-	    std::cerr << "MeshEdges::getLoop error; next edge not found." << std::endl;
+	    std::cerr << "MeshEdges::getLoop error; next edge not found." 
+                      << std::endl;
+            break;
+          }
+        count++;
+        if(count>maxSizeLoop) //Something goes wrong.
+          {
+	    std::cerr << "MeshEdges::getLoop error; error in loop finding." 
+                      << std::endl;
             break;
           }
       }
@@ -94,4 +104,11 @@ std::deque<Polilinea3d> XC::MeshEdges::getContours(bool undeformedGeometry) cons
         retval.push_back(getPolylineFromLoop(loop,undeformedGeometry));
       }
     return retval;
+  }
+
+//! @brief Prints edges information.
+void XC::MeshEdges::print(std::ostream &os) const
+  {
+    for(const_iterator i= begin();i!=end();i++)
+      os << *i << ' '; 
   }

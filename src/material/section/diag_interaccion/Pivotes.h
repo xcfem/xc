@@ -86,10 +86,10 @@ class Pivotes
     inline bool Ok(void) const
       { return ok; }
     bool checkPositions(void) const;
-    void print(std::ostream &os) const;
+    void print(std::ostream &) const;
   };
 
- inline std::ostream &operator<<(std::ostream &os, const Pivotes &p)
+inline std::ostream &operator<<(std::ostream &os, const Pivotes &p)
   {
     p.print(os);
     return os;
