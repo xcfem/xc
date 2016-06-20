@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2016, AOO and LCPT"
+__author__= "Ana Ortega (A_OO) "
+__copyright__= "Copyright 2016, A_OO"
 __license__= "GPL"
-__version__= "1.0"
-__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
+__version__= "3.0"
+__email__= "ana.Ortega.Ort@gmail.com "
 
 import math
 import ArchBridgeRoughModelBase as base
