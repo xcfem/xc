@@ -24,55 +24,22 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DiagInteraccion.h
+//InteractionDiagramData.cc
 
-#ifndef DIAG_INTERACCION_H
-#define DIAG_INTERACCION_H
+#include "InteractionDiagramData.h"
 
-#include "xc_utils/src/geom/d2/Triedro3d.h"
-#include <set>
-#include <deque>
-#include "ClosedTriangleMesh.h"
 
-class MallaTriang3d;
-
-namespace XC {
-
-class Vector;
-class FiberSectionBase;
-class DatosDiagInteraccion;
-
-//! \@ingroup MATSCCDiagInt
-//
-//! @brief Diagrama de interacción (N,Mx,My) de una sección.
-class DiagInteraccion: public ClosedTriangleMesh
+XC::InteractionDiagramData::InteractionDiagramData(void)
+  : umbral(10), inc_eps(0.0), inc_t(M_PI/4), agot_pivotes(),
+    nmb_set_hormigon("hormigon"), tag_hormigon(0),
+    nmb_set_armadura("armadura"), tag_armadura(0)
   {
-  protected:
-    typedef std::set<const Triedro3d *> set_ptr_triedros;
+    inc_eps= agot_pivotes.getIncEpsAB(); //Incremento de tensiones.
+    if(inc_eps<=1e-6)
+      std::cerr << "El incremento para deformaciones es muy pequeño o negativo: " << inc_eps << std::endl; 
+  }
 
-    
-    set_ptr_triedros triedros_cuadrante[8];
-
-    void clasifica_triedro(const Triedro3d &tdro);
-    void clasifica_triedros(void);
-    void setMatrizPosiciones(const Matrix &);
-    GeomObj::list_Pos3d get_interseccion(const Pos3d &p) const;
-  public:
-    DiagInteraccion(void);
-    DiagInteraccion(const Pos3d &org,const MallaTriang3d &mll);
-    DiagInteraccion(const DiagInteraccion &otro);
-    DiagInteraccion &operator=(const DiagInteraccion &otro);
-    virtual DiagInteraccion *clon(void) const;
-
-    const Triedro3d *BuscaPtrTriedro(const Pos3d &p) const;
-    double FactorCapacidad(const Pos3d &esf_d) const;
-    Vector FactorCapacidad(const GeomObj::list_Pos3d &lp) const;
-
-    void Print(std::ostream &os) const;
-  };
-
-DiagInteraccion calc_diag_interaccion(const FiberSectionBase &scc,const DatosDiagInteraccion &datos);
-
-} // end of XC namespace
-
-#endif
+XC::InteractionDiagramData::InteractionDiagramData(const double &u,const double &inc_e,const double &inc_theta,const DefAgotPivotes &agot)
+  : umbral(u), inc_eps(inc_e), inc_t(inc_theta), agot_pivotes(agot),
+    nmb_set_hormigon("hormigon"), tag_hormigon(0),
+    nmb_set_armadura("armadura"), tag_armadura(0) {}

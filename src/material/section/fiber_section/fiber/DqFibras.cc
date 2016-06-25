@@ -51,7 +51,7 @@
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
 #include "xc_utils/src/geom/listas/utils_list_pos2d.h"
-#include "material/section/diag_interaccion/PlanoDeformacion.h"
+#include "material/section/interaction_diagram/PlanoDeformacion.h"
 
 
 //! @brief Constructor.

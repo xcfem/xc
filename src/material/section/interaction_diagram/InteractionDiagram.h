@@ -24,41 +24,54 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DiagInteraccion.h
+//InteractionDiagram.h
 
-#ifndef DIAG_INTERACCION2D_H
-#define DIAG_INTERACCION2D_H
+#ifndef INTERACTION_DIAGRAM_H
+#define INTERACTION_DIAGRAM_H
 
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
+#include "xc_utils/src/geom/d2/Triedro3d.h"
+#include <set>
+#include <deque>
+#include "ClosedTriangleMesh.h"
+
+class MallaTriang3d;
 
 namespace XC {
 
 class Vector;
 class FiberSectionBase;
-class DatosDiagInteraccion;
+class InteractionDiagramData;
 
 //! \@ingroup MATSCCDiagInt
 //
-//! @brief Diagrama de interacción (N,My) de una sección.
-class DiagInteraccion2d: public Poligono2d
+//! @brief Diagrama de interacción (N,Mx,My) de una sección.
+class InteractionDiagram: public ClosedTriangleMesh
   {
   protected:
-    Pos2d get_interseccion(const Pos2d &p) const;
-  public:
-    DiagInteraccion2d(void);
-    DiagInteraccion2d(const Poligono2d &);
-    virtual DiagInteraccion2d *clon(void) const;
+    typedef std::set<const Triedro3d *> set_ptr_triedros;
 
-    void Simplify(void);
-    double FactorCapacidad(const Pos2d &esf_d) const;
-    Vector FactorCapacidad(const GeomObj::list_Pos2d &lp) const;
+    
+    set_ptr_triedros triedros_cuadrante[8];
+
+    void clasifica_triedro(const Triedro3d &tdro);
+    void clasifica_triedros(void);
+    void setMatrizPosiciones(const Matrix &);
+    GeomObj::list_Pos3d get_interseccion(const Pos3d &p) const;
+  public:
+    InteractionDiagram(void);
+    InteractionDiagram(const Pos3d &org,const MallaTriang3d &mll);
+    InteractionDiagram(const InteractionDiagram &otro);
+    InteractionDiagram &operator=(const InteractionDiagram &otro);
+    virtual InteractionDiagram *clon(void) const;
+
+    const Triedro3d *BuscaPtrTriedro(const Pos3d &p) const;
+    double FactorCapacidad(const Pos3d &esf_d) const;
+    Vector FactorCapacidad(const GeomObj::list_Pos3d &lp) const;
 
     void Print(std::ostream &os) const;
   };
 
-DiagInteraccion2d calc_diag_interaccionPlano(const FiberSectionBase &scc,const DatosDiagInteraccion &, const double &);
-DiagInteraccion2d calc_diag_interaccionNMy(const FiberSectionBase &scc,const DatosDiagInteraccion &);
-DiagInteraccion2d calc_diag_interaccionNMz(const FiberSectionBase &scc,const DatosDiagInteraccion &);
+InteractionDiagram calc_interaction_diagram(const FiberSectionBase &scc,const InteractionDiagramData &datos);
 
 } // end of XC namespace
 

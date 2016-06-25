@@ -102,12 +102,12 @@
 #include "material/section/plate_section/ElasticPlateSection.h"
 #include "material/section/plate_section/ElasticMembranePlateSection.h"
 #include "material/section/plate_section/MembranePlateFiberSection.h"
-#include "material/section/diag_interaccion/PlanoDeformacion.h"
+#include "material/section/interaction_diagram/PlanoDeformacion.h"
 #include "material/section/Bidirectional.h"
-#include "material/section/diag_interaccion/DatosDiagInteraccion.h"
-#include "material/section/diag_interaccion/DiagInteraccion.h"
-#include "material/section/diag_interaccion/DiagInteraccion2d.h"
-#include "material/section/diag_interaccion/CalcPivotes.h"
+#include "material/section/interaction_diagram/InteractionDiagramData.h"
+#include "material/section/interaction_diagram/InteractionDiagram.h"
+#include "material/section/interaction_diagram/InteractionDiagram2d.h"
+#include "material/section/interaction_diagram/CalcPivotes.h"
 
 // NDMaterials
 #include "material/nD/elastic_isotropic/ElasticIsotropicPlaneStrain2D.h"

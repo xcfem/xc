@@ -41,9 +41,9 @@ namespace XC {
 class Fiber;
 class Response;
 class FiberSectionRepr;
-class DatosDiagInteraccion;
-class DiagInteraccion;
-class DiagInteraccion2d;
+class InteractionDiagramData;
+class InteractionDiagram;
+class InteractionDiagram2d;
 class NMPointCloud;
 class NMyMzPointCloud;
 
@@ -80,9 +80,9 @@ class FiberSectionBase: public SeccionBarraPrismatica
     virtual double get_dist_to_neutral_axis(const double &,const double &) const;
     Pos3d Esf2Pos3d(void) const;
     Pos3d getNMyMz(const PlanoDeformacion &);
-    void get_ptos_diag_interaccion_theta(NMyMzPointCloud &lista_esfuerzos,const DatosDiagInteraccion &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
-    const NMyMzPointCloud &get_ptos_diag_interaccion(const DatosDiagInteraccion &);
-    const NMPointCloud &get_ptos_diag_interaccionPlano(const DatosDiagInteraccion &, const double &);
+    void getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
+    const NMyMzPointCloud &getInteractionDiagramPoints(const InteractionDiagramData &);
+    const NMPointCloud &getInteractionDiagramPointsForPlane(const InteractionDiagramData &, const double &);
   public:
     FiberSectionBase(int classTag,int dim,MaterialLoader *mat_ldr= nullptr); 
     FiberSectionBase(int tag, int classTag,int dim,MaterialLoader *mat_ldr= nullptr);
@@ -157,10 +157,10 @@ class FiberSectionBase: public SeccionBarraPrismatica
       { return fibras.getYCdg(); }
     double getArea(void) const;
 
-    DiagInteraccion GetDiagInteraccion(const DatosDiagInteraccion &);
-    DiagInteraccion2d GetDiagInteraccionPlano(const DatosDiagInteraccion &,const double &);
-    DiagInteraccion2d GetDiagInteraccionNMy(const DatosDiagInteraccion &);
-    DiagInteraccion2d GetDiagInteraccionNMz(const DatosDiagInteraccion &);
+    InteractionDiagram GetInteractionDiagram(const InteractionDiagramData &);
+    InteractionDiagram2d GetInteractionDiagramForPlane(const InteractionDiagramData &,const double &);
+    InteractionDiagram2d GetNMyInteractionDiagram(const InteractionDiagramData &);
+    InteractionDiagram2d GetNMzInteractionDiagram(const InteractionDiagramData &);
   };
 } // end of XC namespace
 

@@ -31,7 +31,7 @@
 
 
 #include <domain/load/beam_loads/BeamLoad.h>
-#include "material/section/diag_interaccion/PlanoDeformacion.h"
+#include "material/section/interaction_diagram/PlanoDeformacion.h"
 
 namespace XC {
 class Matrix;

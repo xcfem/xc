@@ -24,9 +24,9 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DiagInteraccion.cc
+//InteractionDiagram.cc
 
-#include "DiagInteraccion.h"
+#include "InteractionDiagram.h"
 #include "xc_utils/src/geom/d2/MallaTriang3d.h"
 #include "xc_utils/src/geom/d2/Plano3d.h"
 #include "xc_utils/src/geom/d2/Triangulo3d.h"
@@ -36,43 +36,43 @@
 #include "utility/matrix/Vector.h"
 
 #include "material/section/fiber_section/FiberSectionBase.h"
-#include "material/section/diag_interaccion/DatosDiagInteraccion.h"
+#include "material/section/interaction_diagram/InteractionDiagramData.h"
 
 
 
-void XC::DiagInteraccion::clasifica_triedro(const Triedro3d &tdro)
+void XC::InteractionDiagram::clasifica_triedro(const Triedro3d &tdro)
   {
     //Clasificamos el triedro por cuadrantes.
     for(int i= 0;i<8;i++)
       if(tdro.TocaCuadrante(i+1)) triedros_cuadrante[i].insert(&tdro);
   }
 
-void XC::DiagInteraccion::clasifica_triedros(void)
+void XC::InteractionDiagram::clasifica_triedros(void)
   {
     //Clasificamos los triedros por cuadrantes.
-    for(XC::DiagInteraccion::const_iterator i= begin();i!=end();i++)
+    for(XC::InteractionDiagram::const_iterator i= begin();i!=end();i++)
       clasifica_triedro(*i);
   }
 
 //! @brief Constructor por defecto.
-XC::DiagInteraccion::DiagInteraccion(void)
+XC::InteractionDiagram::InteractionDiagram(void)
   : ClosedTriangleMesh() {}
 
-XC::DiagInteraccion::DiagInteraccion(const Pos3d &org,const MallaTriang3d &mll)
+XC::InteractionDiagram::InteractionDiagram(const Pos3d &org,const MallaTriang3d &mll)
   : ClosedTriangleMesh(org,mll)
   {
     clasifica_triedros();
   }
 
 //! @brief Constructor de copia.
-XC::DiagInteraccion::DiagInteraccion(const DiagInteraccion &otro)
+XC::InteractionDiagram::InteractionDiagram(const InteractionDiagram &otro)
   : ClosedTriangleMesh(otro)
   {
     clasifica_triedros();
   }
 
 //! @brief Operador de asignación.
-XC::DiagInteraccion &XC::DiagInteraccion::operator=(const DiagInteraccion &otro)
+XC::InteractionDiagram &XC::InteractionDiagram::operator=(const InteractionDiagram &otro)
   {
     ClosedTriangleMesh::operator=(otro);
     clasifica_triedros();
@@ -80,16 +80,16 @@ XC::DiagInteraccion &XC::DiagInteraccion::operator=(const DiagInteraccion &otro)
   }
 
 //! @brief Constructor virtual.
-XC::DiagInteraccion *XC::DiagInteraccion::clon(void) const
-  { return new DiagInteraccion(*this); }
+XC::InteractionDiagram *XC::InteractionDiagram::clon(void) const
+  { return new InteractionDiagram(*this); }
 
 //! @brief Busca el triedro que contiene al punto being passed as parameter.
-const Triedro3d *XC::DiagInteraccion::BuscaPtrTriedro(const Pos3d &p) const
+const Triedro3d *XC::InteractionDiagram::BuscaPtrTriedro(const Pos3d &p) const
   {
     const Triedro3d *retval= nullptr;
     if(triedros.empty())
       {
-	std::cerr << "DiagInteraccion::BuscaPtrTriedro; la lista de triedros está vacía."
+	std::cerr << "InteractionDiagram::BuscaPtrTriedro; la lista de triedros está vacía."
                   << std::endl;
         return retval;
       }
@@ -103,7 +103,7 @@ const Triedro3d *XC::DiagInteraccion::BuscaPtrTriedro(const Pos3d &p) const
         }
     if(!retval) //No lo encuentra, lo intentamos por fuerza bruta.
       {
-        for(XC::DiagInteraccion::const_iterator i= begin();i!=end();i++)
+        for(XC::InteractionDiagram::const_iterator i= begin();i!=end();i++)
           {
             if((*i).In(p,tol))
               {
@@ -114,13 +114,13 @@ const Triedro3d *XC::DiagInteraccion::BuscaPtrTriedro(const Pos3d &p) const
       }
     // if(!retval) //No lo encuentra, lo intentamos por fuerza más bruta.
     //   {
-    // 	DiagInteraccion::const_iterator i= begin();
+    // 	InteractionDiagram::const_iterator i= begin();
     //     const Triedro3d *tr= &(*i);
     //     retval= tr;
     //     double distMin= tr->PseudoDist(p);
     //     double dist= distMin;
     //     i++;
-    //     for(XC::DiagInteraccion::const_iterator i= begin();i!=end();i++)
+    //     for(XC::InteractionDiagram::const_iterator i= begin();i!=end();i++)
     //       {
     //         tr= &(*i);
     //         dist= tr->PseudoDist(p);
@@ -135,7 +135,7 @@ const Triedro3d *XC::DiagInteraccion::BuscaPtrTriedro(const Pos3d &p) const
     //   }
     if(!retval) //Sigue sin encontrarlo, buscamos aquel cuyo eje está más próximo.
       {
-	DiagInteraccion::const_iterator i= begin();
+	InteractionDiagram::const_iterator i= begin();
         const Triedro3d *tr= &(*i);
         SemiRecta3d rayo(tr->Cuspide(),p);
         Recta3d eje= tr->Eje();
@@ -159,7 +159,7 @@ const Triedro3d *XC::DiagInteraccion::BuscaPtrTriedro(const Pos3d &p) const
 //       {
 //         const GEOM_FT denom= 100.0; //Abs(p.VectorPos())/100;
 //         const Pos3d perturb= Pos3d(p.x()/denom,p.y()/denom,p.z()/denom); // + Vector3d(tol/1e2,tol/1e2,tol/1e2);
-//         for(XC::DiagInteraccion::const_iterator i= begin();i!=end();i++)
+//         for(XC::InteractionDiagram::const_iterator i= begin();i!=end();i++)
 //           {
 //             if((*i).In(perturb,tol))
 //               {
@@ -173,7 +173,7 @@ const Triedro3d *XC::DiagInteraccion::BuscaPtrTriedro(const Pos3d &p) const
 
 //! @brief Devuelve la intersección de la semirrecta que une el origen (0,0,0) y el
 //! el punto p con el diagrama de interacción.
-GeomObj::list_Pos3d XC::DiagInteraccion::get_interseccion(const Pos3d &p) const
+GeomObj::list_Pos3d XC::InteractionDiagram::get_interseccion(const Pos3d &p) const
   {
     GeomObj::list_Pos3d lst_intersec;
     const Pos3d O= Pos3d(0.0,0.0,0.0);
@@ -181,7 +181,7 @@ GeomObj::list_Pos3d XC::DiagInteraccion::get_interseccion(const Pos3d &p) const
     const Triedro3d *i= BuscaPtrTriedro(p);
     if(!i)
       {
-	std::cerr << "DiagInteraccion::get_interseccion: no se encontró un triedro que contuviera a:"
+	std::cerr << "InteractionDiagram::get_interseccion: no se encontró un triedro que contuviera a:"
                   << p << " cuadrante: " << p.Cuadrante() << std::endl;
       }
     else
@@ -208,7 +208,7 @@ GeomObj::list_Pos3d XC::DiagInteraccion::get_interseccion(const Pos3d &p) const
   }
 
 //! @brief Devuelve el factor de capacidad para la terna de esfuerzos que se pasan como parámetro.
-double XC::DiagInteraccion::FactorCapacidad(const Pos3d &esf_d) const
+double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
   {
     double retval= 1e6;
     assert(rMax>0.0);
@@ -233,7 +233,7 @@ double XC::DiagInteraccion::FactorCapacidad(const Pos3d &esf_d) const
           }
         else
           {
-	    std::cerr << "DiagInteraccion::FactorCapacidad; no se encontró la intersección para la terna: "
+	    std::cerr << "InteractionDiagram::FactorCapacidad; no se encontró la intersección para la terna: "
                       << esf_d << std::endl;
             retval= d/rMin; //No ha encontrado la intersección.
           }
@@ -241,7 +241,7 @@ double XC::DiagInteraccion::FactorCapacidad(const Pos3d &esf_d) const
     return retval;
   }
 
-XC::Vector XC::DiagInteraccion::FactorCapacidad(const GeomObj::list_Pos3d &lp) const
+XC::Vector XC::InteractionDiagram::FactorCapacidad(const GeomObj::list_Pos3d &lp) const
   {
     Vector retval(lp.size());
     int i= 0;
@@ -251,28 +251,28 @@ XC::Vector XC::DiagInteraccion::FactorCapacidad(const GeomObj::list_Pos3d &lp) c
   }
 
 
-void XC::DiagInteraccion::Print(std::ostream &os) const
+void XC::InteractionDiagram::Print(std::ostream &os) const
   {
-    std::cerr << "DiagInteraccion::Print no implementada." << std::endl;
+    std::cerr << "InteractionDiagram::Print no implementada." << std::endl;
   }
 
-void XC::DiagInteraccion::setMatrizPosiciones(const Matrix &m)
+void XC::InteractionDiagram::setMatrizPosiciones(const Matrix &m)
   {
     ClosedTriangleMesh::setMatrizPosiciones(m);
     clasifica_triedros();   
   }
 
-XC::DiagInteraccion XC::calc_diag_interaccion(const FiberSectionBase &scc,const DatosDiagInteraccion &datos= DatosDiagInteraccion())
+XC::InteractionDiagram XC::calc_interaction_diagram(const FiberSectionBase &scc,const InteractionDiagramData &datos= InteractionDiagramData())
   {
-    DiagInteraccion retval;
+    InteractionDiagram retval;
     FiberSectionBase *tmp= dynamic_cast<FiberSectionBase *>(scc.getCopy());
     if(tmp)
       {
-        retval= tmp->GetDiagInteraccion(datos);
+        retval= tmp->GetInteractionDiagram(datos);
         delete tmp;
       }
     else
-      std::cerr << "XC::calc_diag_interaccion, no se pudo obtener una copia de la sección."
+      std::cerr << "XC::calcInteractionDiagram, no se pudo obtener una copia de la sección."
                 << std::endl;
     return retval;
   }

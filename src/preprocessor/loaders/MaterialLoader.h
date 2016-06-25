@@ -35,9 +35,9 @@
 namespace XC {
 class Material;
 class GeomSection;
-class DiagInteraccion;
-class DiagInteraccion2d;
-class DatosDiagInteraccion;
+class InteractionDiagram;
+class InteractionDiagram2d;
+class InteractionDiagramData;
 
 //!  \ingroup Ldrs
 //! 
@@ -53,19 +53,19 @@ class MaterialLoader: public Loader
     typedef map_geom_secc::const_iterator const_geom_secc_iterator;
     typedef map_geom_secc::iterator geom_secc_iterator;
 
-    typedef std::map<std::string,DiagInteraccion *> map_diag_interaccion;
-    typedef map_diag_interaccion::const_iterator const_diag_interacc_iterator;
-    typedef map_diag_interaccion::iterator diag_interacc_iterator;
+    typedef std::map<std::string,InteractionDiagram *> map_interaction_diagram;
+    typedef map_interaction_diagram::const_iterator const_diag_interacc_iterator;
+    typedef map_interaction_diagram::iterator diag_interacc_iterator;
 
-    typedef std::map<std::string,DiagInteraccion2d *> map_diag_interaccion2d;
-    typedef map_diag_interaccion2d::const_iterator const_diag_interacc2d_iterator;
-    typedef map_diag_interaccion2d::iterator diag_interacc2d_iterator;
+    typedef std::map<std::string,InteractionDiagram2d *> map_interaction_diagram2d;
+    typedef map_interaction_diagram2d::const_iterator const_diag_interacc2d_iterator;
+    typedef map_interaction_diagram2d::iterator diag_interacc2d_iterator;
   private:
     map_materials materials; //!< Material definitions.
     int tag_mat; //!< Tag por defecto para el material.
     map_geom_secc geom_secciones; //!< Geometrías de secciones.
-    map_diag_interaccion diagramas_interaccion; //!< Diagramas de interacción de secciones.
-    map_diag_interaccion2d diagramas_interaccion2d; //!< Diagramas de interacción de secciones.
+    map_interaction_diagram diagramas_interaccion; //!< Diagramas de interacción de secciones.
+    map_interaction_diagram2d diagramas_interaccion2d; //!< Diagramas de interacción de secciones.
   protected:
     friend class ElementLoader;
   public:
@@ -83,25 +83,25 @@ class MaterialLoader: public Loader
     const Material *find_ptr(const int &tag) const;
     GeomSection *find_ptr_geom_section(const std::string &nmb);
     const GeomSection *find_ptr_geom_section(const std::string &nmb) const;
-    DiagInteraccion *find_ptr_diag_interaccion(const std::string &nmb);
-    const DiagInteraccion *find_ptr_diag_interaccion(const std::string &nmb) const;
-    DiagInteraccion2d *find_ptr_diag_interaccion2d(const std::string &nmb);
-    const DiagInteraccion2d *find_ptr_diag_interaccion2d(const std::string &nmb) const;
+    InteractionDiagram *find_ptr_interaction_diagram(const std::string &nmb);
+    const InteractionDiagram *find_ptr_interaction_diagram(const std::string &nmb) const;
+    InteractionDiagram2d *find_ptr_interaction_diagram2d(const std::string &nmb);
+    const InteractionDiagram2d *find_ptr_interaction_diagram2d(const std::string &nmb) const;
     bool existeMaterial(const std::string &nmb) const;
     bool existeGeomSection(const std::string &nmb) const;
-    bool existeDiagInteraccion(const std::string &nmb) const;
-    bool existeDiagInteraccion2d(const std::string &nmb) const;
+    bool InteractionDiagramExists(const std::string &nmb) const;
+    bool InteractionDiagramExists2d(const std::string &nmb) const;
     Material *nuevoMaterial(const std::string &,const std::string &);
     Material &getMaterial(const std::string &);
     GeomSection *newSectionGeometry(const std::string &);
     GeomSection &getGeomSection(const std::string &);
-    DiagInteraccion *newInteractionDiagram(const std::string &);
-    DiagInteraccion *calcInteractionDiagram(const std::string &,const DatosDiagInteraccion &datos_diag);
-    DiagInteraccion &getDiagInteraccion(const std::string &);
-    DiagInteraccion2d *new2DInteractionDiagram(const std::string &);
-    DiagInteraccion2d *calcInteractionDiagramNMy(const std::string &,const DatosDiagInteraccion &datos_diag);
-    DiagInteraccion2d *calcInteractionDiagramNMz(const std::string &,const DatosDiagInteraccion &datos_diag);
-    DiagInteraccion2d &getDiagInteraccionNMz(const std::string &);
+    InteractionDiagram *newInteractionDiagram(const std::string &);
+    InteractionDiagram *calcInteractionDiagram(const std::string &,const InteractionDiagramData &datos_diag);
+    InteractionDiagram &getInteractionDiagram(const std::string &);
+    InteractionDiagram2d *new2DInteractionDiagram(const std::string &);
+    InteractionDiagram2d *calcInteractionDiagramNMy(const std::string &,const InteractionDiagramData &datos_diag);
+    InteractionDiagram2d *calcInteractionDiagramNMz(const std::string &,const InteractionDiagramData &datos_diag);
+    InteractionDiagram2d &getNMzInteractionDiagram(const std::string &);
     ~MaterialLoader(void);
     void clearAll(void);
 
