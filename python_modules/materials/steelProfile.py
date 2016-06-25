@@ -11,7 +11,14 @@ from postprocess import def_vars_control as vc
 
 
 class SteelProfile(sp.sectionProperties):
-  """Structural steel section properties"""
+  """Properties of a section in structural steel
+
+  :ivar steel:    steel object (e.g. S275JR)
+  :ivar table:    module containing a dictionary with mechanical characteristics
+                  of a series of profiles 
+                  (e.g. materials.perfiles_metalicos.arcelor.perfiles_he_arcelor)
+  :ivar name:     name identifying the section in the table
+  """
   def __init__(self,steel,name,table):
     self.steelType= steel
     self.profil= table[name]
@@ -19,20 +26,22 @@ class SteelProfile(sp.sectionProperties):
   def get(self,code):
     return self.profil[code]
   def A(self):
-    """ Section's area."""
+    """:returns: cross-sectional area of the section"""
     return self.get('A')
   def Iy(self):
+    """:returns: second moment of area about the local y-axis"""
     return self.get('Iy')
   def Iz(self):
+    """:returns: second moment of area about the local z-axis"""
     return self.get('Iz')
   def J(self):
-    ''' Torsional constant.'''
+    """:returns: torsional moment of inertia of the section"""
     return self.get('It')
   def It(self):
-    ''' Torsional constant.'''
+    ''':returns: torsional constant.'''
     return self.get('It')
   def Iw(self):
-    ''' Warping constant.'''
+    ''':returns: warping constant.'''
     return self.get('Iw')
   def EIy(self):
     return self.steelType.E*self.Iy()
@@ -41,6 +50,7 @@ class SteelProfile(sp.sectionProperties):
   def GJ(self):
     return self.steelType.G()*self.It()
   def getWz(self,sectionClass= 1):
+    """:returns: section modulus with respect to local z-axis"""
     if(sectionClass<3):
       return self.get('Wzpl')
     elif(sectionClass==3):
@@ -48,6 +58,7 @@ class SteelProfile(sp.sectionProperties):
     else:
       lmsg.warning('cross sections of class: '+ str(sectionClass) + ' not implemented.')
   def getWy(self,sectionClass= 1):
+    """:returns: section modulus with respect to local y-axis"""
     if(sectionClass<3):
       return self.get('Wypl')
     elif(sectionClass==3):
@@ -55,15 +66,16 @@ class SteelProfile(sp.sectionProperties):
     else:
       lmsg.warning('cross sections of class: '+ str(sectionClass) + ' not implemented.')
   def getAeff(self,sectionClass= 1):
-    '''Returns effective area depending of the cross-section class.'''
+    ''':returns: effective area depending of the cross-section class.'''
     if(sectionClass<3):
       return self.A()
     else:
       lmsg.warning('effective area for sections of class: '+ str(sectionClass) + ' not implemented.')
-      
   def alphaY(self):
+    """:returns: shear shape factor with respect to local y-axis"""
     return self.get('Avy')/self.A()
   def alphaZ(self):
+    """:returns: shear shape factor with respect to local z-axis"""
     return self.get('Avz')/self.A()
 
   def setupULSControlVars(self,elems):

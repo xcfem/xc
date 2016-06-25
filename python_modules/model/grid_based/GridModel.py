@@ -66,28 +66,25 @@ class DeckMaterialData(MaterialData):
     '''
     typical_materials.defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.getAreaDensity(),self.thickness)
 
-class BeamMaterialData(MaterialData):
+class BeamMaterialData(object):
   '''Constructs an elastic section appropiate for 3D beam analysis, including shear deformations.
   
-  :ivar name:         name identifying the section
-  :ivar E:            Young’s modulus of the material
-  :ivar nu:           Poisson’s ratio
+  :ivar section:      instance of a class that defines the geometric and
+                      mechanical characteristiscs of a section
+                      e.g: RectangularSection, CircularSection, ISection, ...
   :ivar rho:          mass density
-  :ivar b:            cross-section width (parallel to local z axis)
-  :ivar h:            cross-section height (parallel to local y axis)
   '''
-  def __init__(self,name,E,nu,rho,b,h):
-    super(BeamMaterialData,self).__init__(name,E,nu,rho)
-    self.b= b
-    self.h= h
+  def __init__(self,name,section,rho):
+    self.name=name
+    self.section=section
+    self.rho=rho
   def getLongitudinalDensity(self):
     ''':returns: the mass per unit length'''
-    return self.rho*self.b*self.h
+    return self.rho*self.section.A()
   def setup(self,preprocessor):
     ''':returns: the elastic section appropiate for 3D beam analysis
     '''
-    rs= parametrosSeccionRectangular.RectangularSection('',self.b,self.h,self.E,self.nu)
-    typical_materials.defElasticShearSection3d(preprocessor,self.name,rs.A(),rs.E,rs.G(),rs.Iz(),rs.Iy(),rs.J(),rs.alphaZ())
+    typical_materials.defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.section.E,self.section.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
 
 class MaterialDataMap(NamedObjectsMap):
   '''Material data dictionary.'''

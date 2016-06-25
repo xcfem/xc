@@ -1,27 +1,47 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (A_OO) "
+__copyright__= "Copyright 2016, LCPT, A_OO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com, ana.Ortega.Ort@gmail.com "
+
 
 import math
 from materials import typical_materials
 from materials import sectionProperties as sp
 
 class CircularSection(sp.sectionProperties):
-  """Circular section parameters"""
+  """Circular section parameters
+
+  :ivar name:      name identifying the section
+  :ivar r:         radius
+  :ivar E:         Young’s modulus of the material
+  :ivar nu:        Poisson’s ratio
+   """
   r= 0.0 # radius.
   def __init__(self,name,r,E,nu):
     super(CircularSection,self).__init__(name,E,nu)
     self.r= r
   def A(self):
-    """ Section's area."""
+    """:returns: cross-sectional area of the section"""
     return math.pi*self.r*self.r
   def Iy(self):
+    """:returns: second moment of area about the local y-axis"""
     return 1.0/4.0*math.pi*self.r**4
   def Iz(self):
+    """:returns: second moment of area about the local z-axis"""
     return self.Iy()
   def J(self):
+    """:returns: torsional moment of inertia of the section"""
     return 2*self.Iy()
   def alphaY(self):
+    """:returns: distorsion coefficient with respect to local Y axis
+     """
     return 6.0/7.0 #Coeficiente de distorsión, ver libro E. Oñate pág. 122.
   def alphaZ(self):
+    """:returns: distorsion coefficient with respect to local Z axis"""
     return self.alphaY()
 
 

@@ -30,6 +30,14 @@ cable_stayed_bridge_simple_model
     :undoc-members:
     :show-inheritance:
 
+T_beam_bridges_rough_calc
+-------------------------
+
+.. automodule:: rough_calculations.T_beam_bridges_rough_calc
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 flechas_vigas
 -------------
 

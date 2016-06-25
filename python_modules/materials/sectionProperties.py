@@ -11,27 +11,30 @@ class sectionProperties(object):
     self.E= E
     self.nu= nu
   def A(self):
-    """ Section's area."""
+    """cross-sectional area (abstract method)"""
     raise "Abstract method, please override"
     return 0.0
   def Iy(self):
+    """second moment of area about the local y-axis (abstract method)"""
     raise "Abstract method, please override"
     return 0.0    
   def Iz(self):
+    """second moment of area about the local z-axis (abstract method)"""
     raise "Abstract method, please override"
     return 0.0    
-
   def J(self):
+    """torsional moment of inertia of the section (abstract method)"""
     raise "Abstract method, please override"
     return 0.0    
-
   def G(self):
+    """shear modulus (abstract method)"""
     return self.E/(2*(1+self.nu))
   def Wyel(self):
+    """section modulus with respect to local y-axis (abstract method)"""
     raise "Abstract method, please override"
     return 0.0    
-
   def Wzel(self):
+    """section modulus with respect to local z-axis (abstract method)"""
     raise "Abstract method, please override"
     return 0.0    
 
