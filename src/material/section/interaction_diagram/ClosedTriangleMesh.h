@@ -35,6 +35,7 @@
 #include "utility/actor/actor/MovableObject.h"
 
 class MallaTriang3d;
+class TriangleMap;
 
 namespace XC {
 
@@ -82,6 +83,8 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
       { return 3; }
 
     size_t GetNumFacetas(void) const;
+
+    TriangleMap getTriangleMap(void) const;
 
     iterator begin(void);
     iterator end(void);

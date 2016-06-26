@@ -35,6 +35,7 @@
 #include "xc_utils/src/geom/d1/Segmento3d.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
+#include "xc_utils/src/gnu_gts/TriangleMap.h"
 
 XC::ClosedTriangleMesh::iterator XC::ClosedTriangleMesh::begin(void) { return triedros.begin(); }
 XC::ClosedTriangleMesh::iterator XC::ClosedTriangleMesh::end(void) { return triedros.end(); }
@@ -152,6 +153,49 @@ double XC::ClosedTriangleMesh::Iy(void) const
   { return 0.0; }
 double XC::ClosedTriangleMesh::Iz(void) const
   { return 0.0; }
+
+TriangleMap XC::ClosedTriangleMesh::getTriangleMap(void) const
+  {
+    TriangleMap retval;
+    const double tol= Bnd().Diagonal().GetModulus()/1.0e5;
+    VerticesKDTree kdtree;
+    VerticesMap vertices= retval.getVertices();
+    TriangleFaces faces= retval.getFaces();
+    //Vertices.
+    int counter= 0;
+    for(v_triedros::const_iterator i= triedros.begin();i!=triedros.end();i++)
+      {
+        const Pos3d p1= i->Vertice(1);
+        int nearest1= kdtree.getNearestBallPoint(p1,tol);
+        if(nearest1<0) //New vertex.
+          {
+            nearest1= counter;
+            kdtree.insert(nearest1,p1);
+            vertices.Inserta(nearest1,p1);
+            counter++;
+          }
+        const Pos3d p2= i->Vertice(2);
+        int nearest2= kdtree.getNearestBallPoint(p2,tol);
+        if(nearest2<0) //New vertex.
+          {
+            nearest2= counter;
+            kdtree.insert(nearest2,p2);
+            vertices.Inserta(nearest2,p2);
+            counter++;
+          }
+        const Pos3d p3= i->Vertice(3);
+        int nearest3= kdtree.getNearestBallPoint(p3,tol);
+        if(nearest3<0) //New vertex.
+          {
+            nearest3= counter;
+            kdtree.insert(nearest3,p3);
+            vertices.Inserta(nearest3,p3);
+            counter++;
+          }
+        faces.Append(nearest1,nearest2,nearest3);
+      }
+    return retval;
+  }
 
 //! @brief Busca el triedro que contiene al punto being passed as parameter.
 XC::ClosedTriangleMesh::const_iterator XC::ClosedTriangleMesh::BuscaTriedro(const Pos3d &p) const
