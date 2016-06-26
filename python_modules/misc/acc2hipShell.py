@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from materials import parametrosSeccionRectangular
+from materials import paramRectangularSection
 import sqlite3 as sqlite
 import os
 
@@ -12,7 +12,7 @@ def construyeModeloShell(preprocessor,nmbDB,pth, nmbTbEsf, nmbTbElem, offset):
   estado: "elu" para estados límite últimos ó "els" para estados límite de servicio.'''
   ansysToEsfShell(pth,nmbDB,nmbTbEsf)
   extractElemFromTable(nmbDB,nmbTbEsf,nmbTbElem)
-  seccPrueba= parametrosSeccionRectangular.RectangularSection()
+  seccPrueba= paramRectangularSection.RectangularSection()
   seccPrueba.nmb= "prueba" #Nombre para la sección.
   seccPrueba.b= .40 #Ancho de la sección expresado en m.
   seccPrueba.h= .60 #Canto de la sección expresado en m.

@@ -83,8 +83,6 @@ class ISection(sectionProperties.sectionProperties):
   :ivar hgWeb:        height of the web (parallel to local y-axis)
   :ivar wdBotFlange:  width of the bottom flange (parallel to local z-axis)
   :ivar thBotFlange:  thickness of the bottom flange (parallel to local y-axis)
-  :ivar E:            Young’s modulus of the material
-  :ivar nu:           Poisson’s ratio
  
          wdTopFlange
     --------------------- thTopFlange
@@ -101,8 +99,8 @@ class ISection(sectionProperties.sectionProperties):
          wdBotFlange
 
   """
-  def __init__(self,name,wdTopFlange,thTopFlange,thWeb,hgWeb,wdBotFlange,thBotFlange,E,nu):
-    super(ISection,self).__init__(name,E,nu)
+  def __init__(self,name,wdTopFlange,thTopFlange,thWeb,hgWeb,wdBotFlange,thBotFlange):
+    super(ISection,self).__init__(name)
     self.wTF= wdTopFlange
     self.tTF= thTopFlange
     self.tW=thWeb

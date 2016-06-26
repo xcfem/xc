@@ -8,7 +8,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
-from materials import parametrosSeccionRectangular
+from materials import paramRectangularSection
 from misc import banco_pruebas_scc3d
 
 prueba= xc.ProblemaEF()
@@ -16,10 +16,12 @@ prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
 
 # Definición de la sección rectangular
-scc10x20=  parametrosSeccionRectangular.RectangularSection("rectang",.10,.20,2.1e6, 0.3)
+scc10x20=  paramRectangularSection.RectangularSection(name="rectang",b=.10,h=.20)
+matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2500)
+
 
 # Materials definition
-matPoteau= scc10x20.defSeccElastica3d(preprocessor)
+matPoteau= scc10x20.defSeccElastica3d(preprocessor,matscc10x20)
 elemZLS= banco_pruebas_scc3d.modeloSecc3d(preprocessor, scc10x20.nmb)
 
 # Constraints

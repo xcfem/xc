@@ -24,14 +24,16 @@ import geom
 import xc
 from model import predefined_spaces
 from model import fix_node_6dof
-from materials import parametrosSeccionRectangular
+from materials import typical_materials
+from materials import paramRectangularSection
 from postprocess import ControlVars as cv
 from solution import predefined_solutions
 from solution import resuelve_combinacion
 from miscUtils import LogMessages as lmsg
 
 # Fake section (elements must have a stiffness)
-sccFICT= parametrosSeccionRectangular.RectangularSection("rectang",.40,40,2.1e6,0.3)
+sccFICT= paramRectangularSection.RectangularSection("rectang",b=.40,h=40)
+matSccFICT= typical_materials.MaterialData("mrectang",E=2.1e6,nu=0.3,rho=2500)
 
 class PhantomModel(object):
   def __init__(self,preprocessor, sectionNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
@@ -81,7 +83,7 @@ class PhantomModel(object):
     elements= self.preprocessor.getElementLoader
     coacciones= self.preprocessor.getConstraintLoader
     # Definimos materiales
-    fkSection= sccFICT.defSeccShElastica3d(self.preprocessor) # El problema es isóstático, así que la sección da igual
+    fkSection= sccFICT.defSeccShElastica3d(self.preprocessor,matSccFICT) # El problema es isóstático, así que la sección da igual
     elements.dimElem= 1
     self.tagsNodesToLoad1= {}
     self.tagsNodesToLoad2= {}

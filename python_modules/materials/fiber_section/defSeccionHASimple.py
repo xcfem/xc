@@ -10,7 +10,7 @@ __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 import xc_base
 import geom
 import xc
-from materials import parametrosSeccionRectangular
+from materials import paramRectangularSection
 from materials import typical_materials
 import math
 from materials.ehe import areaBarrasEHE
@@ -399,7 +399,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     self.coverMin= min(min(self.getCoverPos()),min(self.getCoverNeg()),min(self.getLatCoverPos()),min(self.getLatCoverNeg()))
 
   def getJTorsion(self):
-    return parametrosSeccionRectangular.getJTorsion(self.width,self.depth)
+    return paramRectangularSection.getJTorsion(self.width,self.depth)
 
   def getRespT(self,preprocessor,JTorsion):
     '''Material for modeling torsional response of section'''

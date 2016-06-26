@@ -10,7 +10,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_3dof
 from materials import typical_materials
-from materials import parametrosSeccionRectangular
+from materials import paramRectangularSection
 from materials import defSeccAggregation
 
 E= 2e9 # Módulo elástico
@@ -27,11 +27,12 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 nodos= preprocessor.getNodeLoader
 
-sccPrueba= parametrosSeccionRectangular.RectangularSection("prueba",b,h,E,0.3)
+sccPrueba= paramRectangularSection.RectangularSection("prueba",b,h)
+matSccPrueba=typical_materials.MaterialData(name='matSec',E=E,nu=0.3,rho=2500)
 
 predefined_spaces.gdls_resist_materiales2D(nodos)
 # Definimos el material
-defSeccAggregation.defSeccAggregation2d(preprocessor, sccPrueba)
+defSeccAggregation.defSeccAggregation2d(preprocessor, sccPrueba,matSccPrueba)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXY(0,0)
 nod= nodos.newNodeXY(L,0.0)

@@ -13,7 +13,7 @@ import geom
 import xc
 from miscUtils import LogMessages as lmsg
 from materials import typical_materials
-from materials import parametrosSeccionRectangular
+from materials import paramRectangularSection
 from model import predefined_spaces
 from model import ElasticFoundation as ef
 from xcVtk import vtk_grafico_base
@@ -31,20 +31,6 @@ class NamedObjectsMap(dict):
       self.add(o)
   def add(self,obj):
     self[obj.name]= obj
-
-class MaterialData(object):
-  '''Base class to construct some material definition classes
-  
-  :ivar name:         name identifying the material or section
-  :ivar E:            Young’s modulus of the material
-  :ivar nu:           Poisson’s ratio
-  :ivar rho:          mass density
-  '''
-  def __init__(self,name,E,nu,rho):
-    self.name= name
-    self.E= E
-    self.nu= nu
-    self.rho= rho
 
 class DeckMaterialData(MaterialData):
   '''Isotropic elastic section-material appropiate for plate and shell analysis

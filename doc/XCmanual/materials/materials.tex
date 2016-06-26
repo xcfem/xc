@@ -315,8 +315,8 @@ sectionProperties.defSeccShElastica2d(preprocessor,defSecc)
 \subsubsection{CircularSection}
 \noindent This subclass derived from superclass {\tt sectionProperties} is used to define the properties of a circular section.
 \begin{verbatim}
-from materials import parametrosSeccionCircular
-parametrosSeccionCircular.CircularSection(name,r,E,nu)
+from materials import paramCircularSection
+paramCircularSection.CircularSection(name,r,E,nu)
 \end{verbatim}
 \begin{paramClassTable}
 \name{section} \\
@@ -337,15 +337,15 @@ parametrosSeccionCircular.CircularSection(name,r,E,nu)
 \begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Functions for defining circular sections}} \\
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.setupSeccCircular(sectionName,r,E,nu)}} \\
+\multicolumn{2}{p{13cm}}{{\tt paramCircularSection.setupSeccCircular(sectionName,r,E,nu)}} \\
 & returns a circular section \\
-\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularElastica3d(preprocessor, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt paramCircularSection.defSeccCircularElastica3d(preprocessor, defSecc)}}\\
 & returns an elastic circular section appropiate for 3D beam analysis.\\
-\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularShElastica3d(preprocessor, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt paramCircularSection.defSeccCircularShElastica3d(preprocessor, defSecc)}}\\
 & returns an elastic circular section appropiate for 3D beam analysis, including shear deformations.\\
-\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularElastica2d(preprocessor, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt paramCircularSection.defSeccCircularElastica2d(preprocessor, defSecc)}}\\
 & returns an elastic circular section appropiate for 2D beam analysis.\\
-\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionCircular.defSeccCircularShElastica2d(preprocessor, defSecc)}}\\
+\multicolumn{2}{p{13cm}}{{\tt paramCircularSection.defSeccCircularShElastica2d(preprocessor, defSecc)}}\\
 & returns an elastic circular section appropiate for 2D beam analysis, including shear deformations.\\
 & {\tt preprocessor} : preprocessor name \\
 & {\tt defSecc} : name identifying an object of the class {\tt CircularSection} with the properties of the section. \\
@@ -355,8 +355,8 @@ parametrosSeccionCircular.CircularSection(name,r,E,nu)
 \subsubsection{RectangularSection}
 \noindent This subclass derived from superclass {\tt sectionProperties} is used to define the properties of a rectangular section.
 \begin{verbatim}
-from materials import parametrosSeccionRectangular
-parametrosSeccionRectangular.RectangularSection(,name,b,h,E,nu)
+from materials import paramRectangularSection
+paramRectangularSection.RectangularSection(,name,b,h,E,nu)
 \end{verbatim}
 \begin{paramClassTable}
 \name{section} \\
@@ -380,7 +380,7 @@ parametrosSeccionRectangular.RectangularSection(,name,b,h,E,nu)
 \begin{tabular}{p{3.5cm}p{9cm}}
 \multicolumn{2}{p{11cm}}{\color{grayText} \large{Functions for defining parameters of rectangular sections}} \\
 \multicolumn{2}{p{13cm}}{\color{grayLines} \rule{\linewidth}{0.25pt}} \\
-\multicolumn{2}{p{13cm}}{{\tt parametrosSeccionRectangular.getJTorsion( b, h)}} \\
+\multicolumn{2}{p{13cm}}{{\tt paramRectangularSection.getJTorsion( b, h)}} \\
 & returns the torsional moment of inertia of the rectangular section \\
 \end{tabular}
 \end{center}

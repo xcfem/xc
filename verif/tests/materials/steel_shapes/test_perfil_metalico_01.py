@@ -38,7 +38,8 @@ S275JR= steel.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
 HE400B= steelProfile.SteelProfile(S275JR,"HE_400_B",HE_profiles.perfilesHE)
-profil= HE400B.defSeccShElastica3d(preprocessor)
+matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850)
+profil= HE400B.defSeccShElastica3d(preprocessor,matHE400B)
 
 # Elements definition
 elements= preprocessor.getElementLoader

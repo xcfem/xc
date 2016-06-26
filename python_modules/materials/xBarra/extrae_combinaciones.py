@@ -7,11 +7,11 @@ import geom
 import xc
 from model import predefined_spaces
 from model import fix_node_6dof
-from materials import parametrosSeccionRectangular
+from materials import paramRectangularSection
 import math
 
 # Fake section (elements must have a stiffness)
-sccFICT= parametrosSeccionRectangular.RectangularSection("rectang",.40,40,2.1e6,0.3)
+sccFICT= paramRectangularSection.RectangularSection("rectang",.40,40,2.1e6,0.3)
 
 def extraeIdsElem(preprocessor,intForcCombFileName, diagIntScc):
   ''' Extrae los identificadores de elementos de un archivo de salida con resultados
