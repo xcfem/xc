@@ -24,22 +24,42 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DatosDiagInteraccion.cc
+//InteractionDiagram.h
 
-#include "DatosDiagInteraccion.h"
+#ifndef INTERACTION_DIAGRAM2D_H
+#define INTERACTION_DIAGRAM2D_H
 
+#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
-XC::DatosDiagInteraccion::DatosDiagInteraccion(void)
-  : umbral(10), inc_eps(0.0), inc_t(M_PI/4), agot_pivotes(),
-    nmb_set_hormigon("hormigon"), tag_hormigon(0),
-    nmb_set_armadura("armadura"), tag_armadura(0)
+namespace XC {
+
+class Vector;
+class FiberSectionBase;
+class InteractionDiagramData;
+
+//! \@ingroup MATSCCDiagInt
+//
+//! @brief Diagrama de interacción (N,My) de una sección.
+class InteractionDiagram2d: public Poligono2d
   {
-    inc_eps= agot_pivotes.getIncEpsAB(); //Incremento de tensiones.
-    if(inc_eps<=1e-6)
-      std::cerr << "El incremento para deformaciones es muy pequeño o negativo: " << inc_eps << std::endl; 
-  }
+  protected:
+    Pos2d get_interseccion(const Pos2d &p) const;
+  public:
+    InteractionDiagram2d(void);
+    InteractionDiagram2d(const Poligono2d &);
+    virtual InteractionDiagram2d *clon(void) const;
 
-XC::DatosDiagInteraccion::DatosDiagInteraccion(const double &u,const double &inc_e,const double &inc_theta,const DefAgotPivotes &agot)
-  : umbral(u), inc_eps(inc_e), inc_t(inc_theta), agot_pivotes(agot),
-    nmb_set_hormigon("hormigon"), tag_hormigon(0),
-    nmb_set_armadura("armadura"), tag_armadura(0) {}
+    void Simplify(void);
+    double FactorCapacidad(const Pos2d &esf_d) const;
+    Vector FactorCapacidad(const GeomObj::list_Pos2d &lp) const;
+
+    void Print(std::ostream &os) const;
+  };
+
+InteractionDiagram2d calcPlaneInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &, const double &);
+InteractionDiagram2d calcNMyInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &);
+InteractionDiagram2d calcNMzInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &);
+
+} // end of XC namespace
+
+#endif

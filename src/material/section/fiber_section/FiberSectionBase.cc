@@ -35,15 +35,15 @@
 #include "material/section/ResponseId.h"
 #include "material/section/repres/section/FiberSectionRepr.h"
 #include "material/section/repres/geom_section/GeomSection.h"
-#include "material/section/diag_interaccion/PlanoDeformacion.h"
-#include "material/section/diag_interaccion/ParamAgotTN.h"
-#include "material/section/diag_interaccion/DatosDiagInteraccion.h"
-#include "material/section/diag_interaccion/CalcPivotes.h"
-#include "material/section/diag_interaccion/Pivotes.h"
-#include "material/section/diag_interaccion/DiagInteraccion.h"
-#include "material/section/diag_interaccion/DiagInteraccion2d.h"
-#include "material/section/diag_interaccion/NMPointCloud.h"
-#include "material/section/diag_interaccion/NMyMzPointCloud.h"
+#include "material/section/interaction_diagram/PlanoDeformacion.h"
+#include "material/section/interaction_diagram/ParamAgotTN.h"
+#include "material/section/interaction_diagram/InteractionDiagramData.h"
+#include "material/section/interaction_diagram/CalcPivotes.h"
+#include "material/section/interaction_diagram/Pivotes.h"
+#include "material/section/interaction_diagram/InteractionDiagram.h"
+#include "material/section/interaction_diagram/InteractionDiagram2d.h"
+#include "material/section/interaction_diagram/NMPointCloud.h"
+#include "material/section/interaction_diagram/NMyMzPointCloud.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d2/MallaTriang3d.h"
 #include "xc_utils/src/geom/d3/ConvexHull3d.h"
@@ -591,7 +591,7 @@ Pos3d XC::FiberSectionBase::getNMyMz(const PlanoDeformacion &def)
 //    +------->y
 //
 //! @brief Devuelve los puntos que definen el diagrama de interacción de la sección para un ángulo theta (con el eje Z) dado.
-void XC::FiberSectionBase::get_ptos_diag_interaccion_theta(NMyMzPointCloud &lista_esfuerzos,const DatosDiagInteraccion &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
+void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
   {
     CalcPivotes cp(datos_diag.getDefsAgotPivotes(),fibras,fsC,fsS,theta);
     Pivotes pivotes(cp);
@@ -650,7 +650,7 @@ void XC::FiberSectionBase::get_ptos_diag_interaccion_theta(NMyMzPointCloud &list
   }
 
 //! @brief Devuelve los puntos que definen el diagrama de interacción en el plano definido por el ángulo being passed as parameter.
-const XC::NMPointCloud &XC::FiberSectionBase::get_ptos_diag_interaccionPlano(const DatosDiagInteraccion &datos_diag, const double &theta)
+const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlane(const InteractionDiagramData &datos_diag, const double &theta)
   {
     static NMPointCloud retval;
     retval.clear();
@@ -668,8 +668,8 @@ const XC::NMPointCloud &XC::FiberSectionBase::get_ptos_diag_interaccionPlano(con
         static NMyMzPointCloud tmp;
         tmp.clear();
         tmp.setUmbral(datos_diag.getUmbral());
-        get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,theta);
-        get_ptos_diag_interaccion_theta(tmp,datos_diag,fsC,fsS,theta+M_PI); //theta+M_PI
+        getInteractionDiagramPointsForTheta(tmp,datos_diag,fsC,fsS,theta);
+        getInteractionDiagramPointsForTheta(tmp,datos_diag,fsC,fsS,theta+M_PI); //theta+M_PI
         retval= tmp.getNM(theta);
         revertToStart();
       }
@@ -679,7 +679,7 @@ const XC::NMPointCloud &XC::FiberSectionBase::get_ptos_diag_interaccionPlano(con
   }
 
 //! @brief Devuelve los puntos que definen el diagrama de interacción de la sección.
-const XC::NMyMzPointCloud &XC::FiberSectionBase::get_ptos_diag_interaccion(const DatosDiagInteraccion &datos_diag)
+const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(const InteractionDiagramData &datos_diag)
   {
     static NMyMzPointCloud lista_esfuerzos;
     lista_esfuerzos.clear();
@@ -695,7 +695,7 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::get_ptos_diag_interaccion(const
     if(!fsC.empty() && !fsS.empty())
       {
         for(double theta= 0.0;theta<2*M_PI;theta+=datos_diag.getIncTheta())
-          get_ptos_diag_interaccion_theta(lista_esfuerzos,datos_diag,fsC,fsS,theta);
+          getInteractionDiagramPointsForTheta(lista_esfuerzos,datos_diag,fsC,fsS,theta);
         revertToStart();
       }
     else
@@ -704,44 +704,44 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::get_ptos_diag_interaccion(const
   }
 
 //! @brief Devuelve el diagrama de interacción.
-XC::DiagInteraccion XC::FiberSectionBase::GetDiagInteraccion(const DatosDiagInteraccion &datos_diag)
+XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const InteractionDiagramData &datos_diag)
   {
-    const NMyMzPointCloud lp= get_ptos_diag_interaccion(datos_diag);
-    DiagInteraccion retval;
+    const NMyMzPointCloud lp= getInteractionDiagramPoints(datos_diag);
+    InteractionDiagram retval;
     if(!lp.empty())
       {
-        retval= DiagInteraccion(Pos3d(0,0,0),MallaTriang3d(get_convex_hull(lp)));
+        retval= InteractionDiagram(Pos3d(0,0,0),MallaTriang3d(get_convex_hull(lp)));
         const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
-	  std::cerr << "FiberSectionBase::GetDiagInteraccion; el error en el cálculo del diagrama de interacción ("
+	  std::cerr << "FiberSectionBase::GetInteractionDiagram; el error en el cálculo del diagrama de interacción ("
                     << error << ") es grande." << std::endl;
       }
     return retval;
   }
 
 //! @brief Devuelve el diagrama de interacción.
-XC::DiagInteraccion2d XC::FiberSectionBase::GetDiagInteraccionPlano(const DatosDiagInteraccion &datos_diag, const double &theta)
+XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(const InteractionDiagramData &datos_diag, const double &theta)
   {
-    const NMPointCloud lp= get_ptos_diag_interaccionPlano(datos_diag, theta);
-    DiagInteraccion2d retval;
+    const NMPointCloud lp= getInteractionDiagramPointsForPlane(datos_diag, theta);
+    InteractionDiagram2d retval;
     if(!lp.empty())
       {
-        retval= DiagInteraccion2d(get_convex_hull2d(lp));
+        retval= InteractionDiagram2d(get_convex_hull2d(lp));
         const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
-	  std::cerr << "FiberSectionBase::GetDiagInteraccionPlano; el error en el cálculo del diagrama de interacción ("
+	  std::cerr << "FiberSectionBase::GetInteractionDiagramForPlane; el error en el cálculo del diagrama de interacción ("
                     << error << ") es grande." << std::endl;
       }
     return retval;
   }
 
 //! @brief Devuelve el diagrama de interacción en el plano N-My.
-XC::DiagInteraccion2d XC::FiberSectionBase::GetDiagInteraccionNMy(const DatosDiagInteraccion &datos_diag)
-  { return GetDiagInteraccionPlano(datos_diag,M_PI/2.0); }
+XC::InteractionDiagram2d XC::FiberSectionBase::GetNMyInteractionDiagram(const InteractionDiagramData &datos_diag)
+  { return GetInteractionDiagramForPlane(datos_diag,M_PI/2.0); }
 
 //! @brief Devuelve el diagrama de interacción en el plano N-Mz.
-XC::DiagInteraccion2d XC::FiberSectionBase::GetDiagInteraccionNMz(const DatosDiagInteraccion &datos_diag)
-  { return GetDiagInteraccionPlano(datos_diag,0.0); }
+XC::InteractionDiagram2d XC::FiberSectionBase::GetNMzInteractionDiagram(const InteractionDiagramData &datos_diag)
+  { return GetInteractionDiagramForPlane(datos_diag,0.0); }
 
 //! @brief Devuelve un vector orientado desde el centro de tracciones al de compresiones.
 XC::Vector XC::FiberSectionBase::getVectorBrazoMecanico(void) const

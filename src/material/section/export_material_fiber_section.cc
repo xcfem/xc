@@ -28,7 +28,7 @@ void export_material_fiber_section(void)
     using namespace boost::python;
     docstring_options doc_options;
 
-#include "diag_interaccion/python_interface.tcc"
+#include "interaction_diagram/python_interface.tcc"
 #include "fiber_section/python_interface.tcc"
 
   }

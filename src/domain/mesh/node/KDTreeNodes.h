@@ -28,7 +28,7 @@
 #ifndef KDTreeNodes_h
 #define KDTreeNodes_h
 
-#include "../KDTreePos.h"
+#include "xc_utils/src/geom/pos_vec/KDTreePos.h"
 #include "xc_basic/src/kdtree++/kdtree.hpp"
 
 class Pos3d;

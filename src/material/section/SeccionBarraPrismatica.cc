@@ -27,7 +27,7 @@
 //SeccionBarraPrismatica.cpp
 
 #include "SeccionBarraPrismatica.h"
-#include "material/section/diag_interaccion/PlanoDeformacion.h"
+#include "material/section/interaction_diagram/PlanoDeformacion.h"
 #include <domain/mesh/element/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <utility/matrix/Matrix.h>
@@ -38,7 +38,7 @@
 
 #include "material/section/ResponseId.h"
 #include "preprocessor/loaders/MaterialLoader.h"
-#include "material/section/diag_interaccion/DiagInteraccion.h"
+#include "material/section/interaction_diagram/InteractionDiagram.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
 #include "xc_utils/src/geom/d1/Recta2d.h"
 #include "xc_utils/src/geom/d2/Semiplano2d.h"

@@ -24,14 +24,14 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DiagInteraccion2d.cc
+//InteractionDiagram2d.cc
 
-#include "DiagInteraccion2d.h"
+#include "InteractionDiagram2d.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
 #include "utility/matrix/Vector.h"
 
 #include "material/section/fiber_section/FiberSectionBase.h"
-#include "material/section/diag_interaccion/DatosDiagInteraccion.h"
+#include "material/section/interaction_diagram/InteractionDiagramData.h"
 
 
 inline double angle(const Pos2d &p)
@@ -50,20 +50,20 @@ GeomObj::list_Pos2d sort_points(const GeomObj::list_Pos2d &pts)
   }
 
 //! @brief Constructor por defecto.
-XC::DiagInteraccion2d::DiagInteraccion2d(void)
+XC::InteractionDiagram2d::InteractionDiagram2d(void)
   : Poligono2d() {}
 
-XC::DiagInteraccion2d::DiagInteraccion2d(const Poligono2d &pts)
+XC::InteractionDiagram2d::InteractionDiagram2d(const Poligono2d &pts)
   : Poligono2d(pts) //sort_points(pts))
   { }
 
 //! @brief Constructor virtual.
-XC::DiagInteraccion2d *XC::DiagInteraccion2d::clon(void) const
-  { return new DiagInteraccion2d(*this); }
+XC::InteractionDiagram2d *XC::InteractionDiagram2d::clon(void) const
+  { return new InteractionDiagram2d(*this); }
 
 //! @brief Devuelve la intersección de la semirrecta que une el origen (0,0,0) y el
 //! el punto p con el diagrama de interacción.
-Pos2d XC::DiagInteraccion2d::get_interseccion(const Pos2d &p) const
+Pos2d XC::InteractionDiagram2d::get_interseccion(const Pos2d &p) const
   {
     const Pos2d O= Pos2d(0.0,0.0);
     //Buscamos el triedro que contiene a p.
@@ -79,7 +79,7 @@ Pos2d XC::DiagInteraccion2d::get_interseccion(const Pos2d &p) const
 
 //! @brief Convierte el diagrama en un rombo con vértices en los
 //! extremos del diagrama de interacción.
-void XC::DiagInteraccion2d::Simplify(void)
+void XC::InteractionDiagram2d::Simplify(void)
   {
     const double xMax= GetMax(1);
     const double xMin= GetMin(1);
@@ -99,7 +99,7 @@ void XC::DiagInteraccion2d::Simplify(void)
   }
 
 //! @brief Devuelve el factor de capacidad para la terna de esfuerzos que se pasan como parámetro.
-double XC::DiagInteraccion2d::FactorCapacidad(const Pos2d &esf_d) const
+double XC::InteractionDiagram2d::FactorCapacidad(const Pos2d &esf_d) const
   {
     double retval= 1e6;
     static const Pos2d O= Pos2d(0.0,0.0);
@@ -115,7 +115,7 @@ double XC::DiagInteraccion2d::FactorCapacidad(const Pos2d &esf_d) const
     return retval;
   }
 
-XC::Vector XC::DiagInteraccion2d::FactorCapacidad(const GeomObj::list_Pos2d &lp) const
+XC::Vector XC::InteractionDiagram2d::FactorCapacidad(const GeomObj::list_Pos2d &lp) const
   {
     Vector retval(lp.size());
     int i= 0;
@@ -125,52 +125,52 @@ XC::Vector XC::DiagInteraccion2d::FactorCapacidad(const GeomObj::list_Pos2d &lp)
   }
 
 
-void XC::DiagInteraccion2d::Print(std::ostream &os) const
+void XC::InteractionDiagram2d::Print(std::ostream &os) const
   {
-    std::cerr << "DiagInteraccion2d::Print no implementada." << std::endl;
+    std::cerr << "InteractionDiagram2d::Print no implementada." << std::endl;
   }
 
-XC::DiagInteraccion2d XC::calc_diag_interaccionPlano(const FiberSectionBase &scc,const DatosDiagInteraccion &datos, const double &theta)
+XC::InteractionDiagram2d XC::calcPlaneInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &datos, const double &theta)
   {
-    DiagInteraccion2d retval;
+    InteractionDiagram2d retval;
     FiberSectionBase *tmp= dynamic_cast<FiberSectionBase *>(scc.getCopy());
     if(tmp)
       {
-        retval= tmp->GetDiagInteraccionPlano(datos,theta);
+        retval= tmp->GetInteractionDiagramForPlane(datos,theta);
         delete tmp;
       }
     else
-      std::cerr << "XC::calc_diag_interaccionPlano, no se pudo obtener una copia de la sección."
+      std::cerr << "XC::calcPlaneInteractionDiagram, no se pudo obtener una copia de la sección."
                 << std::endl;
     return retval;
   }
 
-XC::DiagInteraccion2d XC::calc_diag_interaccionNMy(const FiberSectionBase &scc,const DatosDiagInteraccion &datos= DatosDiagInteraccion())
+XC::InteractionDiagram2d XC::calcNMyInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &datos= InteractionDiagramData())
   {
-    DiagInteraccion2d retval;
+    InteractionDiagram2d retval;
     FiberSectionBase *tmp= dynamic_cast<FiberSectionBase *>(scc.getCopy());
     if(tmp)
       {
-        retval= tmp->GetDiagInteraccionNMy(datos);
+        retval= tmp->GetNMyInteractionDiagram(datos);
         delete tmp;
       }
     else
-      std::cerr << "XC::calc_diag_interaccionNMy, no se pudo obtener una copia de la sección."
+      std::cerr << "XC::calcNMyInteractionDiagram, no se pudo obtener una copia de la sección."
                 << std::endl;
     return retval;
   }
 
-XC::DiagInteraccion2d XC::calc_diag_interaccionNMz(const FiberSectionBase &scc,const DatosDiagInteraccion &datos= DatosDiagInteraccion())
+XC::InteractionDiagram2d XC::calcNMzInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &datos= InteractionDiagramData())
   {
-    DiagInteraccion2d retval;
+    InteractionDiagram2d retval;
     FiberSectionBase *tmp= dynamic_cast<FiberSectionBase *>(scc.getCopy());
     if(tmp)
       {
-        retval= tmp->GetDiagInteraccionNMz(datos);
+        retval= tmp->GetNMzInteractionDiagram(datos);
         delete tmp;
       }
     else
-      std::cerr << "XC::calc_diag_interaccionNMz, no se pudo obtener una copia de la sección."
+      std::cerr << "XC::calcNMzInteractionDiagram, no se pudo obtener una copia de la sección."
                 << std::endl;
     return retval;
   }

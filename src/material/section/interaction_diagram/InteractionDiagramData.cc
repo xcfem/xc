@@ -24,30 +24,22 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//KDTreePos.h
-#ifndef KDTreePos_h
-#define KDTreePos_h
+//InteractionDiagramData.cc
 
-#include <cstdlib>
+#include "InteractionDiagramData.h"
 
-class Pos3d;
 
-namespace XC {
-
-//! \ingroup Mesh
-//
-//! @brief Classe base para posiciones en el KDTree.
-class KDTreePos
+XC::InteractionDiagramData::InteractionDiagramData(void)
+  : umbral(10), inc_eps(0.0), inc_t(M_PI/4), agot_pivotes(),
+    nmb_set_hormigon("hormigon"), tag_hormigon(0),
+    nmb_set_armadura("armadura"), tag_armadura(0)
   {
-  public:
-    typedef double value_type;
-  private:
-    value_type d[3];
-  public:
-    explicit KDTreePos(const Pos3d &p);
-    double distance_to(const KDTreePos &otra) const;
-    inline value_type operator[](const size_t &N) const { return d[N]; }
-  };
-} // end of XC namespace 
+    inc_eps= agot_pivotes.getIncEpsAB(); //Incremento de tensiones.
+    if(inc_eps<=1e-6)
+      std::cerr << "El incremento para deformaciones es muy pequeño o negativo: " << inc_eps << std::endl; 
+  }
 
-#endif
+XC::InteractionDiagramData::InteractionDiagramData(const double &u,const double &inc_e,const double &inc_theta,const DefAgotPivotes &agot)
+  : umbral(u), inc_eps(inc_e), inc_t(inc_theta), agot_pivotes(agot),
+    nmb_set_hormigon("hormigon"), tag_hormigon(0),
+    nmb_set_armadura("armadura"), tag_armadura(0) {}

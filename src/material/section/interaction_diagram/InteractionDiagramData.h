@@ -24,7 +24,7 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DatosDiagInteraccion
+//InteractionDiagramData
 
 #ifndef DATOSDIAGINTERACCION_H
 #define DATOSDIAGINTERACCION_H
@@ -38,7 +38,7 @@ namespace XC {
 //! \@ingroup MATSCCDiagInt
 //
 //! @brief Parámetros necesarios para la obtención del diagrama de interacción.
-class DatosDiagInteraccion: public EntCmd
+class InteractionDiagramData: public EntCmd
   {
     double umbral; //!< Distancia mínima entre puntos del diagrama.
     double inc_eps; //!< Tamaño del paso en deformaciones.
@@ -49,8 +49,8 @@ class DatosDiagInteraccion: public EntCmd
     std::string nmb_set_armadura; //!< Nombre del conjunto de fibras de armadura. 
     int tag_armadura; //!< Tag del material empleado para modelizar la armadura.
   public:
-    DatosDiagInteraccion(void);
-    DatosDiagInteraccion(const double &u,const double &inc_e,const double &inc_t= M_PI/4,const DefAgotPivotes &agot= DefAgotPivotes());
+    InteractionDiagramData(void);
+    InteractionDiagramData(const double &u,const double &inc_e,const double &inc_t= M_PI/4,const DefAgotPivotes &agot= DefAgotPivotes());
 
     inline const double &getUmbral(void) const
       { return umbral; }
