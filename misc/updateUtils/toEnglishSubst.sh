@@ -105,4 +105,9 @@ do
 # sed -i 's/nmbTipoEnt/entTypeName/g' $fl
 # sed -i 's/radio/radius/g' $fl
 # sed -i 's/creaEscalaColores/creaColorScaleBar/g' $fl
+# sed -i 's/parametrosSeccionRectangular/paramRectangularSection/g' $fl
+# sed -i 's/parametrosSeccionCircular/paramCircularSection/g' $fl
+# sed -i 's/parametrosSeccionDobleT/paramIsection/g' $fl
+# sed -i 's/parametrosPerfilMetalico/paramMetallicProfile/g' $fl
+
 done

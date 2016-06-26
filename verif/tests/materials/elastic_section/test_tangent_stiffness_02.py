@@ -9,7 +9,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
-from materials import parametrosSeccionRectangular
+from materials import paramRectangularSection
 from materials import defSeccAggregation
 
 
@@ -21,10 +21,11 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 nodos= preprocessor.getNodeLoader
 
-seccPrueba= parametrosSeccionRectangular.RectangularSection("prueba",b,h,E,0.3)
+seccPrueba= paramRectangularSection.RectangularSection("prueba",b,h)
+matseccPrueba=typical_materials.MaterialData(name='mt',E=E,nu=0.3,rho=2500)
 
 # Definimos materiales
-defSeccAggregation.defSeccAggregation2d(preprocessor, seccPrueba)
+defSeccAggregation.defSeccAggregation2d(preprocessor, seccPrueba,matseccPrueba)
 matPrueba= preprocessor.getMaterialLoader.getMaterial("prueba")
 tang= matPrueba.getTangentStiffness()
 EI= tang.at(1,1)
@@ -34,14 +35,14 @@ EA= tang.at(0,0)
 
 
 EITeor= (1/12.0*b*h**3*E)
-EITeor2= seccPrueba.E*seccPrueba.Iz()
+EITeor2= matseccPrueba.E*seccPrueba.Iz()
 ratio1= ((EI-EITeor)/EITeor)
 EATeor= (b*h*E)
 ratio2= ((EA-EATeor)/EATeor)
 
 ''' 
 print "EI= ",EI
-print "E= ", seccPrueba.E
+print "E= ", matseccPrueba.E
 print "I= ", seccPrueba.Iz()
 print "EITeor= ",EITeor
 print "EITeor2= ",EITeor2

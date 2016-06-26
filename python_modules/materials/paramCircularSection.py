@@ -13,41 +13,39 @@ from materials import typical_materials
 from materials import sectionProperties as sp
 
 class CircularSection(sp.sectionProperties):
-  """Circular section parameters
+  '''Circular section geometric parameters
 
   :ivar name:      name identifying the section
   :ivar r:         radius
-  :ivar E:         Young’s modulus of the material
-  :ivar nu:        Poisson’s ratio
-   """
+   '''
   r= 0.0 # radius.
-  def __init__(self,name,r,E,nu):
-    super(CircularSection,self).__init__(name,E,nu)
+  def __init__(self,name,r):
+    super(CircularSection,self).__init__(name)
     self.r= r
   def A(self):
-    """:returns: cross-sectional area of the section"""
+    ''':returns: cross-sectional area of the section'''
     return math.pi*self.r*self.r
   def Iy(self):
-    """:returns: second moment of area about the local y-axis"""
+    ''':returns: second moment of area about the local y-axis'''
     return 1.0/4.0*math.pi*self.r**4
   def Iz(self):
-    """:returns: second moment of area about the local z-axis"""
+    ''':returns: second moment of area about the local z-axis'''
     return self.Iy()
   def J(self):
-    """:returns: torsional moment of inertia of the section"""
+    ''':returns: torsional moment of inertia of the section'''
     return 2*self.Iy()
   def alphaY(self):
-    """:returns: distorsion coefficient with respect to local Y axis
-     """
+    ''':returns: distorsion coefficient with respect to local Y axis
+     '''
     return 6.0/7.0 #Coeficiente de distorsión, ver libro E. Oñate pág. 122.
   def alphaZ(self):
-    """:returns: distorsion coefficient with respect to local Z axis"""
+    ''':returns: distorsion coefficient with respect to local Z axis'''
     return self.alphaY()
 
 
 # Define las propiedades "derivadas" de una sección circular.
-def setupSeccCircular(sectionName,r,E,nu):
-  return CircularSection(sectionName,r,E,nu)
+def setupSeccCircular(sectionName,r):
+  return CircularSection(sectionName,r)
 
 # Define una sección elástica para elementos 3d a partir de los datos del registro.
 def defSeccCircularElastica3d(preprocessor, defSecc):

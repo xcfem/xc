@@ -69,40 +69,38 @@ def getJTorsion( b, h):
   return retval
 
 class RectangularSection(sp.sectionProperties):
-  """Rectangular section geometric parameters
+  '''Rectangular section geometric parameters
   
   :ivar name:         name identifying the section
   :ivar b:            cross-section width (parallel to local z-axis)
   :ivar h:            cross-section height (parallel to local y-axis)
-  :ivar E:            Young’s modulus of the material
-  :ivar nu:           Poisson’s ratio
-  """
-  def __init__(self,name,b,h,E,nu):
-    super(RectangularSection,self).__init__(name,E,nu)
+  '''
+  def __init__(self,name,b,h):
+    super(RectangularSection,self).__init__(name)
     self.b= b
     self.h= h
   def A(self):
-    """:returns: cross-sectional area of the section"""
+    ''':returns: cross-sectional area of the section'''
     return self.b*self.h
   def Iy(self):
-    """:returns: second moment of area about the local y-axis"""
+    ''':returns: second moment of area about the local y-axis'''
     return 1/12.0*self.h*self.b**3
   def Iz(self):
-    """:returns: second moment of area about the local z-axis"""
+    ''':returns: second moment of area about the local z-axis'''
     return 1/12.0*self.b*self.h**3
   def J(self):
-    """:returns: torsional moment of inertia of the section"""
+    ''':returns: torsional moment of inertia of the section'''
     return getJTorsion(self.b,self.h)
   def Wyel(self):
-    """:returns: section modulus with respect to local y-axis"""
+    ''':returns: section modulus with respect to local y-axis'''
     return self.Iy()/(self.b/2.0)
   def Wzel(self):
-    """:returns: section modulus with respect to local z-axis"""
+    ''':returns: section modulus with respect to local z-axis'''
     return self.Iz()/(self.h/2.0)
   def alphaY(self):
-    """:returns: shear shape factor with respect to local y-axis"""
+    ''':returns: shear shape factor with respect to local y-axis'''
     return 5.0/6.0 #Coeficiente de distorsión, ver libro E. Oñate pág. 122.
   def alphaZ(self):
-    """:returns: shear shape factor with respect to local z-axis"""
+    ''':returns: shear shape factor with respect to local z-axis'''
     return self.alphaY()
 

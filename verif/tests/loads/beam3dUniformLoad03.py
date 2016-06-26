@@ -8,7 +8,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
-from materials import parametrosSeccionRectangular
+from materials import paramRectangularSection
 from materials import defSeccAggregation
 
 L= 2 # Longitud de la barra.
@@ -19,13 +19,15 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 nodos= preprocessor.getNodeLoader
 
-seccPrueba= parametrosSeccionRectangular.RectangularSection("prueba",.20,.30,7E9, 0.3)
+seccPrueba= paramRectangularSection.RectangularSection("prueba",b=.20,h=.30)
+matSeccPrueba= typical_materials.MaterialData("matprueba",E=7E9,nu=0.3,rho=2500)
+
 
 
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
 # Definimos el material
-defSeccAggregation.defSeccAggregation3d(preprocessor, seccPrueba)
+defSeccAggregation.defSeccAggregation3d(preprocessor, seccPrueba,matSeccPrueba)
 nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXYZ(0,0,0)
 nod= nodos.newNodeXYZ(L/2,0,0)
@@ -90,10 +92,10 @@ N0= scc0.getStressResultantComponent("N")
 
 
 F= (n*L)
-delta0Teor= (n*L**2/2/seccPrueba.E/seccPrueba.A())
+delta0Teor= (n*L**2/2/matSeccPrueba.E/seccPrueba.A())
 ratio0= ((delta0-delta0Teor)/delta0Teor)
 Q= P*L
-delta1Teor= (-Q*L**3/8/seccPrueba.E/seccPrueba.Iz())
+delta1Teor= (-Q*L**3/8/matSeccPrueba.E/seccPrueba.Iz())
 ratio1= ((delta1-delta1Teor)/delta1Teor)
 ratio2= (abs((N0-F)/F))
 ratio3= (abs((RN+F)/F))

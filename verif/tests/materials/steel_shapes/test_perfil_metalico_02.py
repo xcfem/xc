@@ -10,7 +10,7 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 from materials.perfiles_metalicos.arcelor import perfiles_he_arcelor as HE_profiles
-from materials import parametrosPerfilMetalico
+from materials import paramMetallicProfile
 from materials import aceros_estructurales as steel
 from materials import steelProfile
 from materials import aceros_estructurales as steel
@@ -29,6 +29,7 @@ S275JR= steel.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
 HE400B= steelProfile.SteelProfile(S275JR,"HE_400_B",HE_profiles.perfilesHE)
+matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850)
 
 # Problem type
 prueba= xc.ProblemaEF()
@@ -43,7 +44,7 @@ nod= nodos.newNodeXYZ(L,0.0,0.0)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,0,1])
-profil= HE400B.defSeccShElastica3d(preprocessor)
+profil= HE400B.defSeccShElastica3d(preprocessor,matHE400B)
 
 # Elements definition
 elementos= preprocessor.getElementLoader

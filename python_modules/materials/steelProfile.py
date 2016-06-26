@@ -22,7 +22,8 @@ class SteelProfile(sp.sectionProperties):
   def __init__(self,steel,name,table):
     self.steelType= steel
     self.profil= table[name]
-    super(SteelProfile,self).__init__(name,self.profil['E'],self.profil['nu'])
+#    super(SteelProfile,self).__init__(name,self.profil['E'],self.profil['nu'])
+    super(SteelProfile,self).__init__(name)
   def get(self,code):
     return self.profil[code]
   def A(self):

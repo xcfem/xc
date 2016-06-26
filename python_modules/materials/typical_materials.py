@@ -351,3 +351,21 @@ def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
   retval.rho= rho
   retval.h= h
   return retval
+
+class MaterialData(object):
+  '''Base class to construct some material definition classes
+  
+  :ivar name:         name identifying the material
+  :ivar E:            Young’s modulus of the material
+  :ivar nu:           Poisson’s ratio
+  :ivar rho:          mass density
+  '''
+  def __init__(self,name,E,nu,rho):
+    self.name= name
+    self.E= E
+    self.nu= nu
+    self.rho= rho
+  def G(self):
+    '''shear modulus'''
+    return self.E/(2*(1+self.nu))
+
