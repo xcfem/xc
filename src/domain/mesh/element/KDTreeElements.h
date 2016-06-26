@@ -28,7 +28,7 @@
 #ifndef KDTreeElements_h
 #define KDTreeElements_h
 
-#include "../KDTreePos.h"
+#include "xc_utils/src/geom/pos_vec/KDTreePos.h"
 #include "xc_basic/src/kdtree++/kdtree.hpp"
 
 class Pos3d;
@@ -39,7 +39,7 @@ class Element;
 //! \ingroup Elem
 //
 //! @brief Posición de un elemento para el KDTree.
- class ElemPos: public KDTreePos
+class ElemPos: public KDTreePos
   {
   private:
     const Element *elemPtr;

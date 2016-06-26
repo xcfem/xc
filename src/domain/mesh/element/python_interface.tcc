@@ -24,7 +24,7 @@
 class_<XC::Information, boost::noncopyable >("Information", no_init);
 
 
-//class_<XC::ElemPos, bases<XC::KDTreePos>, boost::noncopyable >("ElemPos", no_init);
+//class_<XC::ElemPos, bases<KDTreePos>, boost::noncopyable >("ElemPos", no_init);
 
 class_<XC::ParticlePos3d>("ParticlePos3d")
   .def(init<Pos2d>())
