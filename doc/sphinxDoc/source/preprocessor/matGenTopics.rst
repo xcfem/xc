@@ -85,26 +85,26 @@ parametrosSeccionCajonMonocelular
     :undoc-members:
     :show-inheritance:
 
-parametrosSeccionCircular
--------------------------
+paramCircularSection
+--------------------
 
-.. automodule:: materials.parametrosSeccionCircular
+.. automodule:: materials.paramCircularSection
     :members:
     :undoc-members:
     :show-inheritance:
 
-parametrosSeccionDobleT
+paramIsection
+-------------
+
+.. automodule:: materials.paramIsection
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+paramRectangularSection
 -----------------------
 
-.. automodule:: materials.parametrosSeccionDobleT
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-parametrosSeccionRectangular
-----------------------------
-
-.. automodule:: materials.parametrosSeccionRectangular
+.. automodule:: materials.paramRectangularSection
     :members:
     :undoc-members:
     :show-inheritance:
@@ -133,10 +133,10 @@ materials.regimenSeccion
     :undoc-members:
     :show-inheritance:
 
-parametrosPerfilMetalico
-------------------------
+paramMetallicProfile
+--------------------
 
-.. automodule:: materials.parametrosPerfilMetalico
+.. automodule:: materials.paramMetallicProfile
     :members:
     :undoc-members:
     :show-inheritance:

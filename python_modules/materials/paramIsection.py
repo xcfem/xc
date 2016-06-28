@@ -54,7 +54,7 @@ def getMomentoAlabeoSeccDobleT(b1,b2,ef,ew,ht):
     :param ef: thickness of the top flange (parallel to local y-axis)
     :param ew: thickness of the web (parallel to local z-axis)
     :param ht: height of the profile (parallel to local y-axis)
-     '''
+    '''
     hPrf=ht-ef
     return ef*hPrf**2/12*b1**3*b2**3/(b1**3+b2**3)
   
@@ -68,13 +68,13 @@ def getMomentoModuloTorsionSeccDobleT(b1,b2,ef,ew,ht):
     :param ef: thickness of the top flange (parallel to local y-axis)
     :param ew: thickness of the web (parallel to local z-axis)
     :param ht: height of the profile (parallel to local y-axis)
-     '''
+    '''
     J=getInerciaTorsionSeccDobleT(b1,b2,ef,ew,ht)
     return J/max(ef,ew)
   
 
 class ISection(sectionProperties.sectionProperties):
-  """I section geometric parameters
+  '''I section geometric parameters
 
   :ivar name:         name identifying the section
   :ivar wdTopFlange:  width of the top flange (parallel to local z-axis)
@@ -98,7 +98,7 @@ class ISection(sectionProperties.sectionProperties):
          ----------- thBotFlange 
          wdBotFlange
 
-  """
+  '''
   def __init__(self,name,wdTopFlange,thTopFlange,thWeb,hgWeb,wdBotFlange,thBotFlange):
     super(ISection,self).__init__(name)
     self.wTF= wdTopFlange
@@ -113,7 +113,7 @@ class ISection(sectionProperties.sectionProperties):
     retval=self.tTF+self.hW+self.tBF
     return retval
   def A(self):
-    """:returns: cross-sectional area of the section"""
+    ''':returns: cross-sectional area of the section'''
     retval=self.wTF*self.tTF+self.tW*self.hW+self.wBF*self.tBF
     return retval
   def hCOG(self):
@@ -126,7 +126,7 @@ class ISection(sectionProperties.sectionProperties):
     retval=(ATF*(self.hTotal()-self.tTF/2.0)+AW*(self.tBF+self.hW/2.0)+ABF*self.tBF/2.0)/self.A()
     return retval
   def Iy(self):
-    '''    """:returns: second moment of area about the local y-axis"""
+    ''':returns: second moment of area about the local y-axis
     '''
     retval=1/12.0*self.tTF*self.wTF**3+1/12.0*self.hW*self.tW**3+1/12.0*self.tBF*self.wBF**3
     return retval
@@ -143,22 +143,22 @@ class ISection(sectionProperties.sectionProperties):
     retval=retval1+IW+AW*(self.tBF+self.hW/2-self.hCOG())**2+IBF+ABF*(self.tBF/2.0-self.hCOG())**2
     return retval
   def J(self):
-    """:returns: torsional moment of inertia of the section"""
+    ''':returns: torsional moment of inertia of the section'''
     hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
     retval=(self.wTF*self.tTF**3+self.wBF*self.tBF**3+hPrf*self.tW**3)/3.0
     return retval
   def Wyel(self):
-    """:returns: section modulus with respect to local y-axis"""
+    ''':returns: section modulus with respect to local y-axis'''
     zmax=max(self.wTF/2.0,self.wBF/2.0)
     return self.Iy()/zmax
   def Wzel(self):
-    """:returns: section modulus with respect to local z-axis"""
+    ''':returns: section modulus with respect to local z-axis'''
     ymax=max(self.hCOG(),self.hTotal()-self.hCOG())
     return self.Iz()/ymax
   def alphaY(self):
-    """:returns: shear shape factor with respect to local y-axis"""
+    ''':returns: shear shape factor with respect to local y-axis'''
     return 0.32 #Coeficiente de distorsión, ver libro E. Oñate pág. 122.
   def alphaZ(self):
-    """:returns: shear shape factor with respect to local z-axis"""
+    ''':returns: shear shape factor with respect to local z-axis'''
     return 0.69
 

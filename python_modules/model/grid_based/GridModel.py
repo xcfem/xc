@@ -32,45 +32,47 @@ class NamedObjectsMap(dict):
   def add(self,obj):
     self[obj.name]= obj
 
-class DeckMaterialData(MaterialData):
+class DeckMaterialData(object):
   '''Isotropic elastic section-material appropiate for plate and shell analysis
   
   :ivar name:         name identifying the section
-  :ivar E:            Young’s modulus of the material
-  :ivar nu:           Poisson’s ratio
-  :ivar rho:          mass density
   :ivar thickness:    overall depth of the section
+  :ivar material:     instance of a class that defines the elastic modulus, shear modulus
+                      and mass density of the material
   '''
-  def __init__(self,name,E,nu,rho,thickness):
-    super(DeckMaterialData,self).__init__(name,E,nu,rho)
+  def __init__(self,name,thickness,material):
+    self.name=name
     self.thickness= thickness
+    self.material=material
   def getAreaDensity(self):
     ''':returns: the mass per unit area'''
-    return self.rho*self.thickness
+    return self.material.rho*self.thickness
   def setup(self,preprocessor):
     ''':returns: the elastic isotropic section appropiate for plate and shell analysis
     '''
-    typical_materials.defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.getAreaDensity(),self.thickness)
+    typical_materials.defElasticMembranePlateSection(preprocessor,self.name,self.material.E,self.material.nu,self.getAreaDensity(),self.thickness)
 
 class BeamMaterialData(object):
   '''Constructs an elastic section appropiate for 3D beam analysis, including shear deformations.
   
+  :ivar name:         name identifying the section
   :ivar section:      instance of a class that defines the geometric and
                       mechanical characteristiscs of a section
                       e.g: RectangularSection, CircularSection, ISection, ...
-  :ivar rho:          mass density
+  :ivar material:     instance of a class that defines the elastic modulus, shear modulus
+                      and mass density of the material
   '''
-  def __init__(self,name,section,rho):
+  def __init__(self,name,section,material):
     self.name=name
     self.section=section
-    self.rho=rho
+    self.material=material
   def getLongitudinalDensity(self):
     ''':returns: the mass per unit length'''
-    return self.rho*self.section.A()
+    return self.material.rho*self.section.A()
   def setup(self,preprocessor):
     ''':returns: the elastic section appropiate for 3D beam analysis
     '''
-    typical_materials.defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.section.E,self.section.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
+    typical_materials.defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.material.E,self.material.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
 
 class MaterialDataMap(NamedObjectsMap):
   '''Material data dictionary.'''
