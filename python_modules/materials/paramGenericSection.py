@@ -15,33 +15,41 @@ class GenericSection(sp.sectionProperties):
   :ivar Jtors:        torsional moment of inertia of the section
   :ivar Wy:           section modulus with respect to local y-axis
   :ivar Wz:           section modulus with respect to local z-axis
-
+  :ivar alphY:        shear shape factor with respect to local y-axis
+  :ivar alphZ:        shear shape factor with respect to local z-axis
   '''
-  def __init__(self,name,area,Iy,Iz,Jtors,Wy,Wz):
+  def __init__(self,name,area,I_y,I_z,Jtors,W_y,W_z,alphY,alphZ):
     self.nmb= name
     self.area=area
-    self.Iy=Iy
-    self.Iz=Iz
+    self.I_y=I_y
+    self.I_z=I_z
     self.Jtors=Jtors
-    self.Wy=Wy
-    self.Wz=Wz
+    self.W_y=W_y
+    self.W_z=W_z
+    self.alphY=alphY
+    self.alphZ=alphZ
   def A(self):
-    '''cross-sectional area'''
+    ''':returns: cross-sectional area'''
     return self.area
   def Iy(self):
-    '''second moment of area about the local y-axis'''
-    raise "Abstract method, please override"
-    return self.Iy
+    ''':returns: second moment of area about the local y-axis'''
+    return self.I_y
   def Iz(self):
-    '''second moment of area about the local z-axis'''
-    return self.Iz
+    ''':returns: second moment of area about the local z-axis'''
+    return self.I_z
   def J(self):
-    '''torsional moment of inertia of the section'''
+    ''':returns: torsional moment of inertia of the section'''
     return self.Jtors
   def Wyel(self):
-    '''section modulus with respect to local y-axis'''
-    return self.Wy
+    ''':returns: section modulus with respect to local y-axis'''
+    return self.W_y
   def Wzel(self):
-    '''section modulus with respect to local z-axis'''
-    return self.Wz
+    ''':returns: section modulus with respect to local z-axis'''
+    return self.W_z
+  def alphaY(self):
+    ''':returns: shear shape factor with respect to local y-axis'''
+    return self.alphY #Coeficiente de distorsión, ver libro E. Oñate pág. 122.
+  def alphaZ(self):
+    ''':returns: shear shape factor with respect to local z-axis'''
+    return self.alphZ
 

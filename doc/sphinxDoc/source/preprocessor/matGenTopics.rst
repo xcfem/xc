@@ -141,10 +141,18 @@ paramMetallicProfile
     :undoc-members:
     :show-inheritance:
 
-materials.steelProfile
-----------------------
+paramMetallicProfile
+--------------------
 
-.. automodule:: materials.steelProfile
+.. automodule:: materials.paramMetallicProfile
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+paramGenericSection
+-------------------
+
+.. automodule:: materials.paramGenericSection
     :members:
     :undoc-members:
     :show-inheritance:
