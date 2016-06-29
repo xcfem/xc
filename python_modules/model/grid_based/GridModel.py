@@ -32,45 +32,47 @@ class NamedObjectsMap(dict):
   def add(self,obj):
     self[obj.name]= obj
 
-class DeckMaterialData(MaterialData):
+class DeckMaterialData(object):
   '''Isotropic elastic section-material appropiate for plate and shell analysis
   
   :ivar name:         name identifying the section
-  :ivar E:            Young’s modulus of the material
-  :ivar nu:           Poisson’s ratio
-  :ivar rho:          mass density
   :ivar thickness:    overall depth of the section
+  :ivar material:     instance of a class that defines the elastic modulus, shear modulus
+                      and mass density of the material
   '''
-  def __init__(self,name,E,nu,rho,thickness):
-    super(DeckMaterialData,self).__init__(name,E,nu,rho)
+  def __init__(self,name,thickness,material):
+    self.name=name
     self.thickness= thickness
+    self.material=material
   def getAreaDensity(self):
     ''':returns: the mass per unit area'''
-    return self.rho*self.thickness
+    return self.material.rho*self.thickness
   def setup(self,preprocessor):
     ''':returns: the elastic isotropic section appropiate for plate and shell analysis
     '''
-    typical_materials.defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.getAreaDensity(),self.thickness)
+    typical_materials.defElasticMembranePlateSection(preprocessor,self.name,self.material.E,self.material.nu,self.getAreaDensity(),self.thickness)
 
 class BeamMaterialData(object):
   '''Constructs an elastic section appropiate for 3D beam analysis, including shear deformations.
   
+  :ivar name:         name identifying the section
   :ivar section:      instance of a class that defines the geometric and
                       mechanical characteristiscs of a section
                       e.g: RectangularSection, CircularSection, ISection, ...
-  :ivar rho:          mass density
+  :ivar material:     instance of a class that defines the elastic modulus, shear modulus
+                      and mass density of the material
   '''
-  def __init__(self,name,section,rho):
+  def __init__(self,name,section,material):
     self.name=name
     self.section=section
-    self.rho=rho
+    self.material=material
   def getLongitudinalDensity(self):
     ''':returns: the mass per unit length'''
-    return self.rho*self.section.A()
+    return self.material.rho*self.section.A()
   def setup(self,preprocessor):
     ''':returns: the elastic section appropiate for 3D beam analysis
     '''
-    typical_materials.defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.section.E,self.section.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
+    typical_materials.defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.material.E,self.material.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
 
 class MaterialDataMap(NamedObjectsMap):
   '''Material data dictionary.'''
@@ -202,10 +204,18 @@ class MaterialSurface(MaterialBase):
     return self.getElements()
 
 class MaterialLine(MaterialBase):
-  '''Line defined by a range list, a material and an element type and size.'''
-  def __init__(self,name, grid, material,elemType,elemSize):
-    super(MaterialLine,self).__init__(name,grid,material,elemType,elemSize)
+  '''Line defined by a range list, a material and an element type, size and direction vector.
 
+  :ivar name:     name to identify the material-line
+  :ivar material: name of the material that makes up the line
+  :ivar elemType: element type to be used in the discretization
+  :ivar elemSize: mean size of the elements
+  :ivar vDirLAxY: direction vector for the element local axis Y 
+  :ivar ranges:   lists of grid ranges to delimit the lines of the type in question
+'''
+  def __init__(self,name, grid, material,elemType,elemSize,vDirLAxY):
+    super(MaterialLine,self).__init__(name,grid,material,elemType,elemSize)
+    self.vDirLAxY=vDirLAxY
   def generateLines(self, dicLin):
     self.lstLines= list()
     for ijkRange in self.ranges:
@@ -220,7 +230,7 @@ class MaterialLine(MaterialBase):
       l.genMesh(xc.meshDir.I)
 
   def getElements(self):
-    '''Return a list of the elements of the material line.'''
+    ''':returns: a list of the elements of the material line.'''
     retval= []
     for lin in self.lstLines:
       elLin= lin.getElements()
@@ -255,14 +265,13 @@ class MaterialLinesMap(NamedObjectsMap):
     for key in self:
       self[key].generateLines(dicLin)
   def generateMesh(self, preprocessor, dicLin):
-    # Definimos transformaciones geométricas (no está programado, estas líneas son para que funcione por el momento) Preguntar a Luis cómo plantear el asunto de las tranformaciones geométricas 
     trfs= preprocessor.getTransfCooLoader
     self.trYGlobal=trfs.newPDeltaCrdTransf3d('trYGlobal')
-    self.trYGlobal.xzVector=xc.Vector([0,1,0]) #dirección del eje Y local (el X local sigue siempre la dirección del eje de la barra)
     self.generateLines(dicLin)
     seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-    seedElemLoader.defaultTransformation= 'trYGlobal'
     for key in self:
+      self.trYGlobal.xzVector=self[key].vDirLAxY
+      seedElemLoader.defaultTransformation= 'trYGlobal'
       self[key].generateMesh(seedElemLoader)
 
 class ConstrainedRanges(IJKRangeList):
@@ -609,7 +618,7 @@ class GridModel(object):
     '''
     return MaterialSurface(name, self.grid, material,elemType,elemSize)
 
-  def newMaterialLine(self,name,material,elemType,elemSize):
+  def newMaterialLine(self,name,material,elemType,elemSize,vDirLAxY):
     ''':returns: a type of line to be discretized from the defined 
     material, type of element and size of the elements.
     
@@ -617,8 +626,9 @@ class GridModel(object):
     :param material: name of the material that makes up the surface
     :param elemType: element type be used in the discretization
     :param elemSize: mean size of the elements
+    :param vDirLAxY: direction vector for the element local axis Y 
     '''
-    return MaterialLine(name, self.grid, material,elemType,elemSize)
+    return MaterialLine(name, self.grid, material,elemType,elemSize,vDirLAxY)
 
   def setMaterials(self,materialDataList):
     ''':returns: the dictionary of materials contained in the list given as a parameter
@@ -635,7 +645,7 @@ class GridModel(object):
   def setMaterialLinesMap(self,materialLineList):
     ''':returns: the dictionary of the material-lines contained in the list given as a parameter
     '''
-    self.conjLin= MaterialLinesMap(materialLineList)
+    self.conjLin= MaterialLinesMap(materialLineList) 
     return self.conjLin
 
   def getElements(self, nombreConj):

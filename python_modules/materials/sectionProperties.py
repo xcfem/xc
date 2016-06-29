@@ -5,31 +5,31 @@ from materials import typical_materials
 
 
 class sectionProperties(object):
-  """Abstract section properties (area, moments of inertia,...)"""
+  '''Abstract section properties (area, moments of inertia,...)'''
   def __init__(self,name):
     self.nmb= name
   def A(self):
-    """cross-sectional area (abstract method)"""
+    '''cross-sectional area (abstract method)'''
     raise "Abstract method, please override"
     return 0.0
   def Iy(self):
-    """second moment of area about the local y-axis (abstract method)"""
+    '''second moment of area about the local y-axis (abstract method)'''
     raise "Abstract method, please override"
     return 0.0    
   def Iz(self):
-    """second moment of area about the local z-axis (abstract method)"""
+    '''second moment of area about the local z-axis (abstract method)'''
     raise "Abstract method, please override"
     return 0.0    
   def J(self):
-    """torsional moment of inertia of the section (abstract method)"""
+    '''torsional moment of inertia of the section (abstract method)'''
     raise "Abstract method, please override"
     return 0.0    
   def Wyel(self):
-    """section modulus with respect to local y-axis (abstract method)"""
+    '''section modulus with respect to local y-axis (abstract method)'''
     raise "Abstract method, please override"
     return 0.0    
   def Wzel(self):
-    """section modulus with respect to local z-axis (abstract method)"""
+    '''section modulus with respect to local z-axis (abstract method)'''
     raise "Abstract method, please override"
     return 0.0    
 

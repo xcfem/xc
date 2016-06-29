@@ -394,6 +394,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/parametrosSeccionDobleT.pyc
 /usr/local/lib/python2.7/dist-packages/materials/parametrosSeccionRectangular.py
 /usr/local/lib/python2.7/dist-packages/materials/parametrosSeccionRectangular.pyc
+/usr/local/lib/python2.7/dist-packages/materials/paramGenericSection.py
+/usr/local/lib/python2.7/dist-packages/materials/paramGenericSection.pyc
 /usr/local/lib/python2.7/dist-packages/materials/paramIsection.py
 /usr/local/lib/python2.7/dist-packages/materials/paramIsection.pyc
 /usr/local/lib/python2.7/dist-packages/materials/paramMetallicProfile.py

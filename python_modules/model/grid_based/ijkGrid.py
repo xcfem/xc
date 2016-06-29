@@ -229,7 +229,7 @@ class ijkGrid(object):
     'genera las líneas contenidas en un eje paralelo a uno de los globales, entre las coordenadas'
     'que corresponden a las posiciones en la rejilla posXYZmin=[posXmin,posYmin,posZmin] y'
     'posXYZmax=[posXmax,posYmax,posZmax]'
-    'también rellena el diccionario de líneas'
+    'también rellena el diccionario de líneas {line_id: xc_line, ...}'
     retval= list()
     lines= self.prep.getCad.getLines
     i=ijkRange.ijkMin[0]
