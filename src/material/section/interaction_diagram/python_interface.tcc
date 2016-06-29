@@ -50,20 +50,23 @@ class_<XC::InteractionDiagramData, bases<EntCmd>>("InteractionDiagramParameters"
   .add_property("tagArmadura",make_function(&XC::InteractionDiagramData::getTagArmadura,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setTagArmadura)
   ;
 
+class_<XC::ClosedTriangleMesh, bases<GeomObj3d>, boost::noncopyable >("ClosedTriangleMesh", no_init)
+  .def("getMax",&XC::ClosedTriangleMesh::GetMax)
+  .def("getMin",&XC::ClosedTriangleMesh::GetMin)
+  .def("getArea",&XC::ClosedTriangleMesh::Area)
+  .def("getVolume",&XC::ClosedTriangleMesh::Volumen)
+  .def("getIx",&XC::ClosedTriangleMesh::Ix)
+  .def("getIy",&XC::ClosedTriangleMesh::Iy)
+  .def("getIz",&XC::ClosedTriangleMesh::Iz)
+  .def("getDimension",&XC::ClosedTriangleMesh::Dimension)
+  .def("getNumFacetas",&XC::ClosedTriangleMesh::GetNumFacetas)
+  .def("getTriangleMap",&XC::ClosedTriangleMesh::getTriangleMap)
+  ;
 
 double (XC::InteractionDiagram::*getFactorCapacidad)(const Pos3d &esf_d) const= &XC::InteractionDiagram::FactorCapacidad;
-class_<XC::InteractionDiagram, bases<GeomObj3d>, boost::noncopyable >("InteractionDiagram", no_init)
-  .def("getMax",&XC::InteractionDiagram::GetMax)
-  .def("getMin",&XC::InteractionDiagram::GetMin)
+class_<XC::InteractionDiagram, bases<XC::ClosedTriangleMesh>, boost::noncopyable >("InteractionDiagram", no_init)
   .def("centroid",&XC::InteractionDiagram::Cdg)
   .def("getLength",&XC::InteractionDiagram::Longitud)
-  .def("getArea",&XC::InteractionDiagram::Area)
-  .def("getVolume",&XC::InteractionDiagram::Volumen)
-  .def("getIx",&XC::InteractionDiagram::Ix)
-  .def("getIy",&XC::InteractionDiagram::Iy)
-  .def("getIz",&XC::InteractionDiagram::Iz)
-  .def("getDimension",&XC::InteractionDiagram::Dimension)
-  .def("getNumFacetas",&XC::InteractionDiagram::GetNumFacetas)
   .def("getCapacityFactor",getFactorCapacidad)
   .def("writeTo",&XC::InteractionDiagram::writeTo)
   .def("readFrom",&XC::InteractionDiagram::readFrom)
