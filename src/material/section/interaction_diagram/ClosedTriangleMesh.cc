@@ -159,8 +159,8 @@ TriangleMap XC::ClosedTriangleMesh::getTriangleMap(void) const
     TriangleMap retval;
     const double tol= Bnd().Diagonal().GetModulus()/1.0e5;
     VerticesKDTree kdtree;
-    VerticesMap vertices= retval.getVertices();
-    TriangleFaces faces= retval.getFaces();
+    VerticesMap &vertices= retval.getVertices();
+    TriangleFaces &faces= retval.getFaces();
     //Vertices.
     int counter= 0;
     for(v_triedros::const_iterator i= triedros.begin();i!=triedros.end();i++)
