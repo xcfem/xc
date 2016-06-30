@@ -275,7 +275,11 @@ class MaterialLinesMap(NamedObjectsMap):
       self[key].generateMesh(seedElemLoader)
 
 class ConstrainedRanges(IJKRangeList):
-  '''Region of constrained nodes [uX, uY, uZ,rotX, rotY, rotZ], where
+  '''Constrains in the nodes belonging to the lines in a range-region
+
+  :ivar name:  name to identify the boundary condition
+  :ivar grid:  name of the grid-based model
+  :ivar constraints: constraint conditions, expressed as [uX, uY, uZ,rotX, rotY, rotZ], where:
 
        - uX, uY, uZ: translations in the X, Y and Z directions; 
        - rotX, rotY, rotZ: rotations about the X, Y and Z axis
