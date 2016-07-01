@@ -32,6 +32,8 @@
 /usr/local/lib/python2.7/dist-packages/actions/snow/snowSIA.pyc
 /usr/local/lib/python2.7/dist-packages/actions/utilsAcciones.py
 /usr/local/lib/python2.7/dist-packages/actions/utilsAcciones.pyc
+/usr/local/lib/python2.7/dist-packages/actions/utilsActions.py
+/usr/local/lib/python2.7/dist-packages/actions/utilsActions.pyc
 /usr/local/lib/python2.7/dist-packages/actions/weight/__init__.py
 /usr/local/lib/python2.7/dist-packages/actions/weight/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/actions/weight/peso_especifico_elementos_cobertura.py

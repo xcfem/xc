@@ -283,7 +283,7 @@ class ConstrainedRanges(IJKRangeList):
 
        - uX, uY, uZ: translations in the X, Y and Z directions; 
        - rotX, rotY, rotZ: rotations about the X, Y and Z axis
-       - free: means no constraint
+       - 'free': means no constraint
   '''
   def __init__(self,name, grid, constraints):
     super(ConstrainedRanges,self).__init__(name,grid,list())
@@ -703,6 +703,17 @@ class GridModel(object):
     return IJKRangeList(unique_name,self.grid,sf)
 
   def newConstrainedRanges(self,name,constraints):
+    '''Creates a new range-region of constained nodes (only those nodes
+    that belong to the lines contained in the region)
+
+    :param name:        name to identify the boundary condition
+    :param constraints: constraint conditions, expressed as [uX, uY, uZ,rotX, rotY, rotZ], where:
+
+                          - uX, uY, uZ: translations in the X, Y and Z directions; 
+                          - rotX, rotY, rotZ: rotations about the X, Y and Z axis
+                          - 'free': means no constraint
+  
+    '''
     return ConstrainedRanges(name, self.grid, constraints)
 
   def setConstrainedRangesMap(self,constrainedRangesList):

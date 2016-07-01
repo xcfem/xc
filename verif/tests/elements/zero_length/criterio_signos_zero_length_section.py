@@ -13,7 +13,6 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
-from actions import utilsAcciones
 
 # Propiedades del material
 E= 2.1e6 # Módulo elástico en Pa
