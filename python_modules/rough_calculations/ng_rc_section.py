@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 from rough_calculations import ng_rebar_def
 from materials.sia262 import concreteSIA262
 from materials.sia262 import steelSIA262

@@ -15,7 +15,7 @@ from postprocess.reports import draw_schema_armature_mur as draw_schema
 import math
 import scipy.interpolate
 import matplotlib
-matplotlib.use('PS')
+#matplotlib.use('PS')
 import matplotlib.pyplot as plt
 from materials.sia262 import concreteSIA262
 from materials.sia262 import steelSIA262
@@ -24,7 +24,7 @@ from rough_calculations import ng_rc_section
 import os
 from miscUtils import LogMessages as lmsg
 
-class EffortsMur(object):
+class InternalForces(object):
   '''Internal forces for a retaining wall obtained from
      Laryx (Cubus suite) software.'''
   y= [0,1]
@@ -78,33 +78,36 @@ class EffortsMur(object):
     plt.close()
 
 
+#     Stem |-------- Earth fill
+#          |
+#          |    
+#          |
+#          |
+#     Toe  |    Heel
+#       -------------- Footing
+#
+#
 class RetainingWall(object):
   '''Cantilever retaining wall.'''
-  name= "prb"
-  #Materials
-  beton= concreteSIA262.c25_30
-  acier= steelSIA262.B500B
-  exigeanceFisuration= "B"
-
   #Geometry
-  enrobage= 40e-3
   b= 1.0
-  hEncastrement= 0.25
-  hCouronnement= 0.25
-  hSemelle= 0.25
-  armatures= {}
 
-  def __init__(self,name,enrobage,hEncastrement,hCouronnement,hSemelle):
+  def __init__(self,name= 'prb',enrobage=40e-3,hEncastrement=0.25,hCouronnement=0.25,hSemelle= 0.25):
     '''Constructor '''
     self.name= name
     self.enrobage= enrobage
     self.hEncastrement= hEncastrement
     self.hCouronnement= hCouronnement
     self.hSemelle= hSemelle
+    #Materials.
+    self.beton= concreteSIA262.c25_30
+    self.acier= steelSIA262.B500B
+    self.exigeanceFisuration= "B"
     #Default reinforcement
     AdefA= ng_rebar_def.RebarFamily(self.acier,8e-3,0.15,enrobage)
     #AdefB= RebarFamily(self.acier,10e-3,0.30,enrobage)
     Adef= AdefA # DoubleRebarFamily(AdefA,AdefB)
+    self.armatures= {}
     for i in range(1,15):
       self.armatures[i]= Adef
     # #Armature de peau semelle
@@ -118,6 +121,15 @@ class RetainingWall(object):
     # ecart= R/(n-1)
     # self.armatures[13]= FamNBars(self.acier,n,8e-3,ecart,enrobage)
     
+  def defaultDimensions(self,totalHeight):
+    self.hCouronnement= max(totalHeight/24.0,0.15)
+    self.hSemelle= totalHeight/12.0
+    self.hauteurVoile= totalHeight-self.hSemelle
+    self.hEncastrement= max(self.hSemelle,self.hCouronnement+1.02*self.hauteurVoile)
+    bFooting= 1.15*(0.2+0.45*totalHeight)
+    self.bToe= totalHeight/8.0
+    self.bHeel= bFooting-self.bToe-self.hEncastrement
+
   def setArmature(self,index,armature):
     '''Assigns armature.'''
     self.armatures[index]= armature
@@ -335,4 +347,3 @@ class RetainingWall(object):
     outputFile.write("\\end{center}\n")
     outputFile.write("\\caption{Schéma armatures mur "+ self.name +"} \\label{fg_"+self.name+"}\n")
     outputFile.write("\\end{figure}\n")
-
