@@ -26,10 +26,10 @@ estadillo_cargas
     :undoc-members:
     :show-inheritance:
 
-utilsAcciones
--------------
+utilsActions
+------------
 
-.. automodule:: actions.utilsAcciones
+.. automodule:: actions.utilsActions
     :members:
     :undoc-members:
     :show-inheritance:
