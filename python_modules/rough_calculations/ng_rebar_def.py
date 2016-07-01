@@ -39,13 +39,13 @@ class RebarFamily(object):
     retval= minimal_reinforcement.AsMinTraction(beton,exigeanceFisuration,self.ecartement,epaisseur)
     return retval
   def getMR(self,beton,b,epaisseur):
-    return ng_simple_bending_reinforcement.Mu(self.getAs(),beton.fcd(),self.acier.fsd(),b,epaisseur-self.getEnrobageMec())
+    return ng_simple_bending_reinforcement.Mu(self.getAs(),beton.fcd(),self.acier.fyd(),b,epaisseur-self.getEnrobageMec())
   def getEnrobageMec(self):
     return self.enrobage+self.diam/2.0
   def d(self,epaisseur):
     return epaisseur-self.getEnrobageMec()
   def getT(self):
-    return self.getAs()*self.acier.fsd()
+    return self.getAs()*self.acier.fyd()
   def getVR(self,beton,Nd,Md,b,epaisseur):
     return shearSIA262.VuNoShearRebars(beton,self.acier,Nd,Md,self.getAs(),b,self.d(epaisseur))
   def getDefStr(self):
