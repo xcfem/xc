@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+
+'''Routines for cantilever retaining walls design.'''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import sys
 from postprocess.reports import common_formats as fmt
 from postprocess.reports import draw_schema_armature_mur as draw_schema
@@ -13,8 +22,11 @@ from materials.sia262 import steelSIA262
 from rough_calculations import ng_rebar_def
 from rough_calculations import ng_rc_section
 import os
+from miscUtils import LogMessages as lmsg
 
 class EffortsMur(object):
+  '''Internal forces for a retaining wall obtained from
+     Laryx (Cubus suite) software.'''
   y= [0,1]
   mdMax= [0,1]
   vdMax= [0,1]
@@ -33,17 +45,23 @@ class EffortsMur(object):
     self.MdSemelle= MdSemelle
     self.VdSemelle= VdSemelle
   def MdEncastrement(self):
+    '''Bending moment (envelope) at stem base.'''
     return self.mdMax[-1]
   def VdEncastrement(self,epaisseurEncastrement):
+    '''Shear force (envelope) at stem base.'''
     yV= self.hauteurVoile-epaisseurEncastrement
     return abs(self.vdMaxVoile(yV))
   def Vd(self, yCoupe):
+    '''Shear (envelope) at height yCoupe.'''
     return abs(self.vdMaxVoile(yCoupe))
   def Md(self, yCoupe):
+    '''Bending moment (envelope) at height yCoupe.'''
     return abs(self.mdMaxVoile(yCoupe))
   def getYVoile(self,hCoupe):
     return self.hauteurVoile-hCoupe
   def writeGraphic(self,fileName):
+    '''Draws a graphic of internal forces (envelopes) in
+       the wall stem.'''
     z= []
     for yi in self.y:
       z.append(self.hauteurVoile-yi)
@@ -61,13 +79,14 @@ class EffortsMur(object):
 
 
 class RetainingWall(object):
+  '''Cantilever retaining wall.'''
   name= "prb"
-  #Matériels
+  #Materials
   beton= concreteSIA262.c25_30
   acier= steelSIA262.B500B
   exigeanceFisuration= "B"
 
-  #Géométrie
+  #Geometry
   enrobage= 40e-3
   b= 1.0
   hEncastrement= 0.25
@@ -76,6 +95,7 @@ class RetainingWall(object):
   armatures= {}
 
   def __init__(self,name,enrobage,hEncastrement,hCouronnement,hSemelle):
+    '''Constructor '''
     self.name= name
     self.enrobage= enrobage
     self.hEncastrement= hEncastrement
@@ -99,33 +119,55 @@ class RetainingWall(object):
     # self.armatures[13]= FamNBars(self.acier,n,8e-3,ecart,enrobage)
     
   def setArmature(self,index,armature):
+    '''Assigns armature.'''
     self.armatures[index]= armature
+
   def getBasicAnchorageLength(self,index):
+    '''Returns basic anchorage length for the armatures at "index".''' 
     return self.armatures[index].getBasicAnchorageLength(self.beton)
 
-  def getDepth(self,hauteurVoile,y):
-    return (self.hEncastrement-self.hCouronnement)/hauteurVoile*y+self.hCouronnement
+  def getDepth(self,y):
+    '''Return sections depth for height "y")'''
+    return (self.hEncastrement-self.hCouronnement)/self.hauteurVoile*y+self.hCouronnement
   def getSection1(self):
+    '''Returns RC section for armature in position 1.'''
     return ng_rc_section.RCSection(self.armatures[1],self.beton,self.exigeanceFisuration,self.b,self.hEncastrement)
-  def getSection2(self,hauteurVoile,y):
-    c= self.getDepth(hauteurVoile,y)
+  def getSection2(self,y):
+    '''Returns RC section for armature in position 2.'''
+    c= self.getDepth(y)
     return ng_rc_section.RCSection(self.armatures[2],self.beton,self.exigeanceFisuration,self.b,c)
   def getSection3(self):
+    '''Returns RC section for armature in position 3.'''
     return ng_rc_section.RCSection(self.armatures[3],self.beton,self.exigeanceFisuration,self.b,self.hSemelle)
   def getSection4(self):
+    '''Returns RC section for armature in position 4.'''
     return ng_rc_section.RCSection(self.armatures[4],self.beton,self.exigeanceFisuration,self.b,self.hEncastrement)
   def getSection6(self):
+    '''Returns RC section for armature in position 6.'''
     return ng_rc_section.RCSection(self.armatures[6],self.beton,self.exigeanceFisuration,self.b,self.hCouronnement)
   def getSection7(self):
+    '''Returns RC section for armature in position 7.'''
     return ng_rc_section.RCSection(self.armatures[7],self.beton,self.exigeanceFisuration,self.b,self.hSemelle)
   def getSection8(self):
+    '''Returns RC section for armature in position 8.'''
     return ng_rc_section.RCSection(self.armatures[8],self.beton,self.exigeanceFisuration,self.b,self.hSemelle)
   def getSection11(self):
+    '''Returns RC section for armature in position 11.'''
     return ng_rc_section.RCSection(self.armatures[11],self.beton,self.exigeanceFisuration,self.b,self.hSemelle)
 
-  def writeDef(self,pth,outputFile,effortsMur):
+  def setInternalForcesEnvelope(self,effortsMur):
+    '''Assigns the infernal forces envelope for the stem.'''
+    if(hasattr(self,'hauteurVoile')):
+      if(self.hauteurVoile!=effortsMur.hauteurVoile):
+        lmsg.warning('stem height (' + str(self.hauteurVoile) + ' m) different from length of internal forces envelope law('+ str(effortsMur.hauteurVoile)+ ' m') 
+    else:
+      self.hauteurVoile= effortsMur.hauteurVoile
+    self.internalForces= effortsMur
+
+  def writeDef(self,pth,outputFile):
+    '''Write wall definition in LaTeX format.'''
     pathFiguraEPS= pth+self.name+".eps"
-    effortsMur.writeGraphic(pathFiguraEPS)
+    self.internalForces.writeGraphic(pathFiguraEPS)
     pathFiguraPDF= pth+self.name+".pdf"
     os.system("convert "+pathFiguraEPS+" "+pathFiguraPDF)
     outputFile.write("\\begin{table}\n")
@@ -147,7 +189,7 @@ class RetainingWall(object):
     outputFile.write("Épaisseur couronnement: \\\\\n")
     outputFile.write("$b_{couronn}= "+fmt.Longs.format(self.hCouronnement)+"\\ m$\\\\\n")
     outputFile.write("Hauteur voile: \\\\\n")
-    outputFile.write("$h_{voile}= "+fmt.Longs.format(effortsMur.hauteurVoile)+"\\ m$\\\\\n")
+    outputFile.write("$h_{voile}= "+fmt.Longs.format(self.hauteurVoile)+"\\ m$\\\\\n")
     outputFile.write("Épaisseur encastrement: \\\\\n")
     outputFile.write("$b_{encast.}= "+fmt.Longs.format(self.hEncastrement)+"\\ m$\\\\\n")
     outputFile.write("Épaisseur semelle: \\\\\n")
@@ -158,8 +200,8 @@ class RetainingWall(object):
     outputFile.write("\\hline\n")
     outputFile.write("\\begin{tabular}{llll}\n")
     outputFile.write("\\multicolumn{4}{c}{\\textsc{Matériels}}\\\\\n")
-    outputFile.write("  Béton: " + self.beton.name +" & ")
-    outputFile.write("  Acier: " + self.acier.name +" & ")
+    outputFile.write("  Béton: " + self.beton.materialName +" & ")
+    outputFile.write("  Acier: " + self.acier.materialName +" & ")
     outputFile.write("  Exigeance fisuration: " + self.exigeanceFisuration +" & ")
     outputFile.write("  Enrobage: "+ fmt.Diam.format(self.enrobage*1e3)+ " mm\\\\\n")
     outputFile.write("\\end{tabular} \\\\\n")
@@ -170,9 +212,10 @@ class RetainingWall(object):
     outputFile.write("\\end{table}\n")
 
 
-  def writeResult(self,pth,effortsMur):
+  def writeResult(self,pth):
+    '''Write reinforcement verification results in LaTeX format.'''
     outputFile= open(pth+self.name+".tex","w")
-    self.writeDef(pth,outputFile,effortsMur)
+    self.writeDef(pth,outputFile)
     outputFile.write("\\bottomcaption{Calcul armatures mur "+ self.name +"} \\label{tb_"+self.name+"}\n")
     outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{Armatures mur "+self.name+"}}\\\\\\hline\n}\n")
     outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" (suite)}}\\\\\\hline\n}\n")
@@ -184,26 +227,26 @@ class RetainingWall(object):
 
     #Coupe 1. Béton armé. Encastrement.
     C1= self.getSection1()
-    VdEncastrement= effortsMur.VdEncastrement(self.hEncastrement)
-    MdEncastrement= effortsMur.MdEncastrement()
+    VdEncastrement= self.internalForces.VdEncastrement(self.hEncastrement)
+    MdEncastrement= self.internalForces.MdEncastrement()
     outputFile.write("\\textbf{Armature 1 (armature extérieure en attente) :} \\\\\n")
     NdEncastrement= 0.0 #we neglect axial force
     C1.writeResultFlexion(outputFile,NdEncastrement, MdEncastrement,VdEncastrement)
 
     #Coupe 2. Béton armé. Voile
-    yCoupe2= effortsMur.getYVoile(self.getBasicAnchorageLength(1))
-    C2= self.getSection2(effortsMur.hauteurVoile,yCoupe2)
+    yCoupe2= self.internalForces.getYVoile(self.getBasicAnchorageLength(1))
+    C2= self.getSection2(yCoupe2)
     Nd2= 0.0 #we neglect axial force
-    Vd2= effortsMur.Vd(yCoupe2)
-    Md2= effortsMur.Md(yCoupe2)
+    Vd2= self.internalForces.Vd(yCoupe2)
+    Md2= self.internalForces.Md(yCoupe2)
     outputFile.write("\\textbf{Armature 2 (armature extériéure voile):}\\\\\n")
     C2.writeResultFlexion(outputFile,Nd2,Md2,Vd2)
 
     #Coupe 3. Béton armé. Semelle
     C3= self.getSection3()
     Nd3= 0.0 #we neglect axial force
-    Vd3= effortsMur.VdSemelle
-    Md3= effortsMur.MdSemelle
+    Vd3= self.internalForces.VdSemelle
+    Md3= self.internalForces.MdSemelle
     outputFile.write("\\textbf{Armature 3 (armature supérieure semelle):}\\\\\n")
     C3.writeResultFlexion(outputFile,Nd3,Md3,Vd3)
 
@@ -261,7 +304,8 @@ class RetainingWall(object):
     outputFile.write("\\end{center}\n")
     outputFile.close()
 
-  def drawSchema(self,pth,effortsMur):
+  def drawSchema(self,pth):
+    '''Retaining wall scheme drawing in LaTeX format.'''
     outputFile= open(pth+'schema_'+self.name+".tex","w")
     outputFile.write("\\begin{figure}\n")
     outputFile.write("\\begin{center}\n")
@@ -271,8 +315,8 @@ class RetainingWall(object):
 
     defStrings= {}
     defStrings[1]= self.getSection1().tensionRebars.getDefStrings()
-    yCoupe2= effortsMur.getYVoile(self.getBasicAnchorageLength(1))
-    defStrings[2]= self.getSection2(effortsMur.hauteurVoile,yCoupe2).tensionRebars.getDefStrings()
+    yCoupe2= self.internalForces.getYVoile(self.getBasicAnchorageLength(1))
+    defStrings[2]= self.getSection2(yCoupe2).tensionRebars.getDefStrings()
     defStrings[3]= self.getSection3().tensionRebars.getDefStrings()
     defStrings[4]= self.getSection4().tensionRebars.getDefStrings()
     defStrings[5]= self.getSection4().tensionRebars.getDefStrings() #C5==C4

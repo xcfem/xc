@@ -382,6 +382,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/LimitStateControllerBase.pyc
 /usr/local/lib/python2.7/dist-packages/materials/materialGraphics.py
 /usr/local/lib/python2.7/dist-packages/materials/materialGraphics.pyc
+/usr/local/lib/python2.7/dist-packages/materials/materialWithDKDiagrams.py
+/usr/local/lib/python2.7/dist-packages/materials/materialWithDKDiagrams.pyc
 /usr/local/lib/python2.7/dist-packages/materials/paramCircularSection.py
 /usr/local/lib/python2.7/dist-packages/materials/paramCircularSection.pyc
 /usr/local/lib/python2.7/dist-packages/materials/parametrosPerfilMetalico.py

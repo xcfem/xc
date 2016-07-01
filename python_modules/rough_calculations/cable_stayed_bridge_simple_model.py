@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
+
 ''' From the notes of María E. Moreyra Garlock in the context of
     the course 'The Art of Structural Engineering: Bridges'''
 
-from __future__ import division
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 
 import math
 

@@ -13,7 +13,7 @@ XXX: Crear una clase base en Python para los hormigones de EHE y del código ACI
 def setupHormigon(nmbHormigon, gammaC):
     \nmbHormigon
       {
-        nmbMaterial= nmbHormigon #Nombre del material.
+        materialName= nmbHormigon #Nombre del material.
         nmbDiagK= "dgK"+nmbHormigon #Nombre para el diagrama característico.
         matTagK= -1 #Tag del material uniaxial con el diagrama característico del material.
         nmbDiagD= "dgD"+nmbHormigon #Nombre para el diagrama de cálculo.
@@ -106,7 +106,7 @@ def tangDHormigon(eps,record mat):
 
 # Comprueba la corrección de los resultados del diagrama de cálculo del modelo de elementos finitos.
 def testDiagDHormigon(record mat):
-    tag= defDiagDHormigon(mat.nmbMaterial)
+    tag= defDiagDHormigon(mat.materialName)
     concrDiagName= mat.nmbDiagD
     incr= mat.epsilonU/20
     errMax= 0.0
@@ -126,7 +126,7 @@ def testDiagDHormigon(record mat):
     return errMax
 # Comprueba la corrección de los resultados de la tangente al diagrama de cálculo del modelo de elementos finitos.
 def testTangDHormigon(record mat):
-    tag= defDiagDHormigon(mat.nmbMaterial)
+    tag= defDiagDHormigon(mat.materialName)
     concrDiagName= mat.nmbDiagD
     incr= mat.epsilonU/20
     errMax= 0.0

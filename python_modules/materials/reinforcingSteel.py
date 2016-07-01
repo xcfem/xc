@@ -12,12 +12,12 @@ import xc_base
 import geom
 from materials import typical_materials
 from materials import materialGraphics as mg
+from materials import materialWithDKDiagrams as matWDKD
 import matplotlib.pyplot as plt
 
-class ReinforcingSteel(object):
+class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
   """Reinforcing steel parameters 
   Attributes:
-    nmbAcero: Name identifying the material.
     fyk:      Characteristic value of the yield strength.
     emax:     maximum strain in tension
     gammaS:   Partial factor for material.
@@ -29,21 +29,12 @@ class ReinforcingSteel(object):
   bsh= 0.0 # Ratio between post-yield tangent and initial elastic tangent
   k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
   def __init__(self,nmbAcero, fyk, emax, gammaS,k=1.05):
-    self.nmbMaterial= nmbAcero # Name identifying the material.
-    self.nmbDiagK= "dgK"+nmbAcero # Name identifying the characteristic stress-strain diagram.
-    self.matTagK= -1 # Tag of the uniaxial material with the characteristic stress-strain diagram.
-    self.steelDiagramK= None # Characteristic stress-strain diagram.
-    self.nmbDiagD= "dgD"+nmbAcero # Name identifying the design stress-strain diagram.
-    self.matTagD= -1 # Tag of the uniaxial material with the design stress-strain diagram .
-    self.steelDiagramD= None # Design stress-strain diagram.
+    super(ReinforcingSteel,self).__init__(nmbAcero)
     self.fyk= fyk # Characteristic value of the yield strength
     self.gammaS= gammaS
     self.emax= emax # Ultimate strain (rupture strain)
     self.k=k        # fmaxk/fyk ratio
  
-  def __repr__(self):
-    return self.nmbMaterial
-
   def fmaxk(self):
     """ Characteristic ultimate strength. """
     return self.k*self.fyk
@@ -64,24 +55,21 @@ class ReinforcingSteel(object):
     return self.Esh()/self.Es
   def defDiagK(self,preprocessor):
     """ Returns XC uniaxial material (characteristic values). """
-    self.steelDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
-    self.matTagK= self.steelDiagramK.tag
+    self.materialDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
+    self.matTagK= self.materialDiagramK.tag
     return self.matTagK
   def defDiagD(self,preprocessor):
     """ Returns XC uniaxial material (design values). """
-    self.steelDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
-    self.matTagD= self.steelDiagramD.tag
+    self.materialDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
+    self.matTagD= self.materialDiagramD.tag
     return self.matTagD
-  def getDiagK(self,preprocessor):
-    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagK)
-  def getDiagD(self,preprocessor):
-    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagD)
   def plotDesignStressStrainDiagram(self,preprocessor):
-    if self.steelDiagramD== None:
+    '''Draws the steel design diagram.'''
+    if self.materialDiagramD== None:
       self.defDiagD(preprocessor)
-    retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.nmbMaterial + ' design stress-strain diagram')
-    retval.setupGraphic(plt,self.steelDiagramD)
-    fileName= self.nmbMaterial+'_design_stress_strain_diagram'
+    retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.materialName + ' design stress-strain diagram')
+    retval.setupGraphic(plt,self.materialDiagramD)
+    fileName= self.materialName+'_design_stress_strain_diagram'
     retval.savefig(plt,fileName+'.jpeg')
     retval.savefig(plt,fileName+'.eps')
     return retval

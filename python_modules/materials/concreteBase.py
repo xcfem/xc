@@ -15,15 +15,12 @@ import scipy.interpolate
 
 from materials import typical_materials
 from materials import materialGraphics
+from materials import materialWithDKDiagrams as matWDKD
 import matplotlib.pyplot as plt
 
-class Concrete(object):
+class Concrete(matWDKD.MaterialWithDKDiagrams):
     """ Concrete model according to Eurocode 2 - Base class.
 
-    :ivar nmbMaterial: name of material
-    :ivar nmbDiagK: name of the characteristic diagram
-    :ivar matTagK:  tag of the uni-axial material in the characteristic diagram
-    :ivar nmbDiagD: name of the design diagram
     :ivar matTagD:  tag of the uni-axial material in the design diagram
     :ivar fck:       characteristic (5%) cylinder strength of the concrete [Pa]
     :ivar gmmC:      partial safety factor for concrete
@@ -36,13 +33,6 @@ class Concrete(object):
 
     :ivar alfacc:    factor which takes account of the fatigue in the concrete when it is subjected to high levels of compression stress due to long duration loads. Normally alfacc=1 (default value)
     """
-    nmbMaterial= "nil" #** Name of material.
-    nmbDiagK= "dgK"+nmbMaterial #** Name of characteristic diagram.
-    matTagK= -1 #** Tag of uni-axial material in the characteristic diagram.
-    nmbDiagD= "dgD"+nmbMaterial #** Name of the design diagram.
-    matTagD= -1 #** Tag of uni-axial material in the design diagram.
-    fck=-25e6 #** characteristic (5%) cylinder strength of the concrete [Pa]
-    gmmC= 1.5 #** Partial safety factor for concrete 
     nuc= 0.2 #** Poisson coefficient
     cemType='N'     #type of cement:
              #    = 0,20 for cement of strength Classes CEM 42,5 R, CEM 52,5 Nand CEM 52,5 R (Class R) 
@@ -55,18 +45,9 @@ class Concrete(object):
 
     # Definition of «derived» properties of the material.
     def __init__(self,nmbConcrete, fck, gammaC):
-        self.setupName(nmbConcrete)
+        super(Concrete,self).__init__(nmbConcrete)
         self.fck= fck #** characteristic (5%) cylinder strength of the concrete [Pa]
         self.gmmC= gammaC #** Partial safety factor for concrete 
-        self.concrDiagramK= None # Characteristic stress-strain diagram.
-        self.concrDiagramD= None # Design stress-strain diagram.
-
-    def setupName(self,nmbConcrete):
-        self.nmbMaterial= nmbConcrete #** Name of material
-        self.nmbDiagK= "dgK"+self.nmbMaterial #** Name of characteristic diagram.
-        self.matTagK= -1 #** Tag of uni-axial material in the characteristic diagram.
-        self.nmbDiagD= "dgD"+self.nmbMaterial #** Name of the design diagram.
-        self.matTagD= -1 #** Tag of uni-axial material in the characteristic diagram. 
 
     def fcd(self):
         '''design strength of the concrete [Pa][-]
@@ -143,21 +124,15 @@ class Concrete(object):
 
     def defDiagK(self,preprocessor):
         ''' Defines a ``Concrete01`` uniaxial material to represent the characteristic stress-strain diagram'''
-        self.concrDiagramK= typical_materials.defConcrete01(preprocessor,self.nmbDiagK,self.epsilon0(),self.fmaxK(),self.fmaxK(),self.epsilonU())
-        self.matTagK= self.concrDiagramK.tag
+        self.materialDiagramK= typical_materials.defConcrete01(preprocessor,self.nmbDiagK,self.epsilon0(),self.fmaxK(),self.fmaxK(),self.epsilonU())
+        self.matTagK= self.materialDiagramK.tag
         return self.matTagK
 
     def defDiagD(self,preprocessor):
         ''' Defines a ``Concrete01`` uniaxial material to represent the design stress-strain diagram'''
-        self.concrDiagramD= typical_materials.defConcrete01(preprocessor,self.nmbDiagD,self.epsilon0(),self.fmaxD(),self.fmaxD(),self.epsilonU())
-        self.matTagD= self.concrDiagramD.tag
+        self.materialDiagramD= typical_materials.defConcrete01(preprocessor,self.nmbDiagD,self.epsilon0(),self.fmaxD(),self.fmaxD(),self.epsilonU())
+        self.matTagD= self.materialDiagramD.tag
         return self.matTagD
-
-    def getDiagD(self,preprocessor):
-        return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagD)
-
-    def getDiagK(self,preprocessor):
-        return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagK)
 
     def sigmaPR(self,eps):
         """ stress as function of strain according to parabola-rectangle diagram"""
@@ -487,11 +462,11 @@ class Concrete(object):
           return 0.0 
 
     def plotDesignStressStrainDiagram(self,preprocessor):
-        if self.concrDiagramD== None:
+        if self.materialDiagramD== None:
           self.defDiagD(preprocessor)
-        retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.nmbMaterial + ' design stress-strain diagram')
-        retval.setupGraphic(plt,self.concrDiagramD)
-        fileName= self.nmbMaterial+'_design_stress_strain_diagram'
+        retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.materialName + ' design stress-strain diagram')
+        retval.setupGraphic(plt,self.materialDiagramD)
+        fileName= self.materialName+'_design_stress_strain_diagram'
         retval.savefig(plt,fileName+'.jpeg')
         retval.savefig(plt,fileName+'.eps')
         return retval

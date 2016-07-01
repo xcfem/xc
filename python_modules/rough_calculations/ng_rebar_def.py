@@ -31,7 +31,7 @@ class RebarFamily(object):
   def getAs(self):
     return self.getNumBarsPerMeter()*self.getBarArea()
   def getBasicAnchorageLength(self,beton):
-    return max(anchorage.getBasicAnchorageLength(self.getDiam(),beton.fck,self.acier.fsd()),self.minDiams*self.diam)
+    return max(anchorage.getBasicAnchorageLength(self.getDiam(),beton.fck,self.acier.fyd()),self.minDiams*self.diam)
   def getAsMinFlexion(self,beton,exigeanceFisuration,epaisseur):
     retval= minimal_reinforcement.AsMinFlexion(beton,self.getEnrobageMec(),exigeanceFisuration,self.ecartement,epaisseur)
     return retval
