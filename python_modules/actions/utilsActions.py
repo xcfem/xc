@@ -1,4 +1,13 @@
-# Devuelve una lista con los nombres de los patrones de carga
+# -*- coding: utf-8 -*-
+
+__author__= "Ana Ortega (A_OO) Luis C. Pérez Tato (LCPT) "
+__copyright__= "Copyright 2015, A_OO   LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= " ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
+
+from model.grid_based import ijkGrid
+
 def listaNombresLoadPatterns(preprocessor):
   ''':returns: list of load pattern names
 

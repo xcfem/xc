@@ -139,6 +139,12 @@ class IJKRangeList(object):
 
 
 def getIJKRangeListFromSurfaces(surfaces):
+  '''generates the list of ranges that delimite all the surfaces given as
+  a parameter
+
+  :param surfaces:  list of objects of type  ``MaterialSurface`` 
+  :returns: object of type ``IJKRangeList``
+  '''
   retval= None
   if(surfaces):
     retval= IJKRangeList(surfaces[0].name+'IJKRangeList',surfaces[0].grid)
