@@ -8,12 +8,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
-import xc_base
-import geom
-from materials import typical_materials
-from materials import materialGraphics as mg
-import matplotlib.pyplot as plt
-
 class MaterialWithDKDiagrams(object):
   """Base class for materials with characteristic (K) and design (D) diagrams 
   Attributes:

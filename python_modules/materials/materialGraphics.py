@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 import matplotlib.patches as patches
+from mayavi import mlab
 
 class MPLGraphicDecorations(object):
   ''' Matplotlib graphic decorations (title, labels,...)'''
@@ -113,3 +114,37 @@ class UniaxialMaterialDiagramGraphic:
     plt.show()
   def savefig(self,plt,fileName):
     plt.savefig(fileName)
+
+class InteractionDiagram3DGraphic:
+  def __init__(self,intDiagram3D, axialForceScaleFactor= 0.1,title= 'Interaction diagram.', fUnitConv= 1e-3, coloredBy= 0):
+    '''Creates a suitable triangle mesh suitable for displaying it
+       with mayavi.'''
+    self.triangleMap= intDiagram3D.getTriangleMap()
+    vertices= self.triangleMap.getVertices()
+    self.x= list()
+    self.y= list()
+    self.z= list()
+    self.scalars= list()
+    for v in vertices:
+      pos= v.data()
+      self.x.append(axialForceScaleFactor*fUnitConv*pos[0])
+      self.y.append(fUnitConv*pos[1])
+      self.z.append(fUnitConv*pos[2])
+      self.scalars.append(fUnitConv*pos[0]) #0->N, 1->My, 2->Mz
+
+    self.triangles= list()
+    faces= self.triangleMap.getFaces()
+    for f in faces:
+      self.triangles.append((f.getV1(), f.getV2(), f.getV3()))
+    self.title= title
+    self.axialForceLabel= 'N x '+str(axialForceScaleFactor)+' (kN)'
+    self.bendingMomentYLabel= 'My (kN m)' 
+    self.bendingMomentZLabel= 'Mz (kN m)' 
+  def show(self):
+    '''Show the 3D diagram in the screen.''' 
+    self.triangleMesh= mlab.triangular_mesh(self.x, self.y, self.z, self.triangles, scalars= self.scalars)
+    mlab.colorbar(self.triangleMesh, orientation='vertical')
+    mlab.outline(self.triangleMesh)
+    mlab.axes(self.triangleMesh, xlabel= self.axialForceLabel, ylabel= self.bendingMomentYLabel, zlabel= self.bendingMomentZLabel)
+    #mlab.title(self.title)
+    mlab.show()

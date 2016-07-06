@@ -7,20 +7,15 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from solution import resuelve_combinacion
-from postprocess.reports import listados_factor_capacidad
-
-
-
 import xc_base
 import geom
 import xc
-from materials.sia262 import normalStressesSIA262 as ns #Change SIA262->EHE
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import defSeccionHASimple
 from materials.xLamina import membranePlateRCSectionContainer as sc
 from solution import predefined_solutions
+from materials.sia262 import normalStressesSIA262 as ns #Change SIA262->EHE
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
