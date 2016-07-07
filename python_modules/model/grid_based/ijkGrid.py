@@ -63,8 +63,9 @@ class IJKRange(object):
 
 
 def getLin2Pts(lstLinBusq,tPto1,tPto2):
-    #Devuelve la línea que pertenene al conjunto lstLinBusq y tiene
-    #como extremos los puntos de tags tPto1 y tPto2
+    ''':returns: the line that belongs to the set `lstLinBusq` and whose
+    starting and ending points are those of tags `tPto1` and `tPto2`
+    '''
     broke_out= False
     for l in lstLinBusq:
         extr= l.getKPoints()
@@ -138,10 +139,12 @@ class ijkGrid(object):
 
 
   def getTagIndices(self,i,j,k):
-    'devuelve el tag del punto situado en las posiciones de la rejilla'
-    'posIJKrej=[posX,posY,posZ]'
-    'el origen de la rejilla está en las posiciones [0,0,0]'
-    #tagPto= posIJKrej[0]+1+posIJKrej[1]*len(rejIJK[0])+posIJKrej[2]*len(rejIJK[0])*len(rejIJK[1])
+    ''':returns: the tag of the point at `i,j,k` index of the grid
+
+    :param i: grid index that points to the global X coordinates    
+    :param j: grid index that points to the global Y coordinates    
+    :param k: grid index that points to the global Z coordinates    
+    '''
     tagPto= self.indices.getPnt(i+1,j+1,k+1).tag
     return tagPto
 
@@ -225,11 +228,13 @@ class ijkGrid(object):
             j+=1
     return retval
 
-  def generateLines(self,ijkRange,dicLin): #lines,rejXYZ,posXYZmin,posXYZmax,dicLin):
-    'genera las líneas contenidas en un eje paralelo a uno de los globales, entre las coordenadas'
-    'que corresponden a las posiciones en la rejilla posXYZmin=[posXmin,posYmin,posZmin] y'
-    'posXYZmax=[posXmax,posYmax,posZmax]'
-    'también rellena el diccionario de líneas {line_id: xc_line, ...}'
+  def generateLines(self,ijkRange,dicLin): 
+    '''generates the lines in an axe parallel to one of the global axes. The function also adds
+    the generated lines to the dictionary `dicLin={line_id: xc_line, ...}`
+
+    :param ijkRange: range where lines are included (only one coordinate varies)
+    :param dicLin: dictionary of lines `{line_id: xc_line, ...}`   
+    '''
     retval= list()
     lines= self.prep.getCad.getLines
     i=ijkRange.ijkMin[0]
