@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 '''ijkGrid.py: model generation based on a grid of 3D positions.'''
 
 __author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"
@@ -327,48 +328,49 @@ class ijkGrid(object):
     return retval
 
   def getLstLinRange(self,ijkRange):
-    '''devuelve una lista con las líneas contenidas en el segmento que va 
-    de ijkRange.ijkMin=[posXmin,posYmin,posZmin]
-    a ijkRange.ijkMax=[posXmax,posYmax,posZmax]
+    ''':returns: a list of the lines inside a range of index 
+
+    
     '''
     setLinBusq= self.prep.getSets["total"].getLines
     lstLinBusq= setLinBusq
-    #lstLinBusq= setLin2lstLin(setLinBusq)
+
     retval=[]
-    i= ijkRange.ijkMin[0]
-    j= ijkRange.ijkMin[1]
-    k= ijkRange.ijkMin[2]
-    tagPto1= self.getTagIndices(i,j,k)
-    if ijkRange.ijkMin[1]== ijkRange.ijkMax[1] and ijkRange.ijkMin[2]== ijkRange.ijkMax[2]:
-        'línea según el eje X'
-        i+=1
-        while i<= ijkRange.ijkMax[0]:
-            tagPto2= self.getTagIndices(i,j,k)
-            l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
-            retval.append(l)
-            tagPto1= tagPto2
-            i+=1
-            #print tagPto1,tagPto2,l.tag
-    elif ijkRange.ijkMin[0]== ijkRange.ijkMax[0] and ijkRange.ijkMin[2]== ijkRange.ijkMax[2]:
-        'línea según el eje Y'
-        j+=1
-        while j<= ijkRange.ijkMax[1]:
-            tagPto2= self.getTagIndices(i,j,k)
-            l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
-            retval.append(l)
-            tagPto1= tagPto2
-            j+=1
-            #print tagPto1,tagPto2,l.tag
-    elif ijkRange.ijkMin[0]== ijkRange.ijkMax[0] and ijkRange.ijkMin[1]== ijkRange.ijkMax[1]:
-        'línea según el eje Z'
-        k+=1
-        while k<= ijkRange.ijkMax[2]:
-            tagPto2= self.getTagIndices(i,j,k)
-            l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
-            retval.append(l)
-            tagPto1= tagPto2
-            k+=1
-            #print tagPto1,tagPto2,l.tag
+    
+    imin= ijkRange.ijkMin[0]
+    jmin= ijkRange.ijkMin[1]
+    kmin= ijkRange.ijkMin[2]
+    imax= ijkRange.ijkMax[0]
+    jmax= ijkRange.ijkMax[1]
+    kmax= ijkRange.ijkMax[2]
+
+    'Lines parallels to X axis'
+    for k in range(kmin,kmax+1):
+        for j in range(jmin,jmax+1):
+            for i in range(imin,imax):
+                tagPto1= self.getTagIndices(i,j,k)
+                tagPto2= self.getTagIndices(i+1,j,k)
+                l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
+                if l<> None:
+                    retval.append(l)
+    'Lines parallels to Y axis'
+    for k in range(kmin,kmax+1):
+        for i in range(imin,imax+1):
+            for j in range(jmin,jmax):
+                tagPto1= self.getTagIndices(i,j,k)
+                tagPto2= self.getTagIndices(i,j+1,k)
+                l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
+                if l<> None:
+                    retval.append(l)
+    'Lines parallels to Z axis'
+    for j in range(jmin,jmax+1):
+        for i in range(imin,imax+1):
+            for k in range(kmin,kmax):
+                tagPto1= self.getTagIndices(i,j,k)
+                tagPto2= self.getTagIndices(i,j,k+1)
+                l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
+                if l<> None:
+                    retval.append(l)
     return retval
 
   def getSetPtosRange(self,ijkRange,nombre):
