@@ -371,18 +371,19 @@ class LoadBase(object):
     self.name= name
 
 
-class LoadOnSurfaces(LoadBase):
-  '''Load over a list of surfaces (defined as range lists). 
+class LoadByLstGridRange(LoadBase):
+  '''Load over a list of entities (defined as range lists). 
   
   :ivar name:     name identifying the load
-  :ivar surfaces: list of names of material-surfaces sets, e.g. [deck,wall]'''
-  def __init__(self,name, surfaces):
-    super(LoadOnSurfaces,self).__init__(name)
-    self.surfaces= surfaces
+  :ivar lstGridRg:   list of grid ranges to delimit the entities to be loaded
+  '''
+  def __init__(self,name, lstGridRg):
+    super(LoadByLstGridRange,self).__init__(name)
+    self.lstGridRg= lstGridRg
 
 
 
-class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
+class InertialLoadOnMaterialSurfaces(LoadBase):
   '''Inertial load applied to the shell elements belonging to a list of 
   surfaces 
   
@@ -391,7 +392,8 @@ class InertialLoadOnMaterialSurfaces(LoadOnSurfaces):
   :ivar accel:    list with the three components of the acceleration vector [ax,ay,az]
   '''
   def __init__(self,name, surfaces, accel):
-    super(InertialLoadOnMaterialSurfaces,self).__init__(name, surfaces)
+    super(InertialLoadOnMaterialSurfaces,self).__init__(name)
+    self.surfaces=surfaces
     self.acceleration= accel
 
   def appendLoadToCurrentLoadPattern(self):
@@ -419,27 +421,30 @@ class LoadOnPoints(LoadBase):
        nod= nodes.getDomain.getMesh.getNearestNode(pos)
        loadPattern.newNodalLoad(nod.tag,self.loadVector)
 
-class PressureLoadOnSurfaces(LoadOnSurfaces):
+
+
+
+class PressureLoadOnSurfaces(LoadByLstGridRange):
   '''Uniform load applied to shell elements
     
   :ivar name:       name identifying the load
-  :ivar surfaces:   lists of grid ranges to delimit the surfaces to be loaded
+  :ivar lstGridRg:  lists of grid ranges to delimit the surfaces to be loaded
   :ivar loadVector: list with the three components of the load vector
   '''
-  def __init__(self,name, surfaces, loadVector):
-    super(PressureLoadOnSurfaces,self).__init__(name, surfaces)
+  def __init__(self,name, lstGridRg, loadVector):
+    super(PressureLoadOnSurfaces,self).__init__(name, lstGridRg)
     self.loadVector= loadVector
 
   def appendLoadToCurrentLoadPattern(self,dicGeomEnt):
     ''' Append load to the current load pattern.'''
     loadVector= xc.Vector(self.loadVector)
-    self.surfaces.appendLoadVectorToCurrentLoadPattern(dicGeomEnt,loadVector)
+    self.lstGridRg.appendLoadVectorToCurrentLoadPattern(dicGeomEnt,loadVector)
 
-class EarthPressureOnSurfaces(LoadOnSurfaces):
+class EarthPressureOnSurfaces(LoadByLstGridRange):
   '''Earth pressure applied to shell elements
     
   :ivar name:       name identifying the load
-  :ivar surfaces:   lists of grid ranges to delimit the surfaces to be loaded
+  :ivar lstGridRg:   lists of grid ranges to delimit the surfaces to be loaded
   :ivar earthPressure: instance of the class EarthPressure, with the following attributes:
 
                   - K:Coefficient of pressure
@@ -449,28 +454,28 @@ class EarthPressureOnSurfaces(LoadOnSurfaces):
                   - gammaWater: weight density of water
                   - vDir: unit vector defining pressures direction
    '''
-  def __init__(self,name, surfaces, earthPressure):
-    super(EarthPressureOnSurfaces,self).__init__(name, surfaces)
+  def __init__(self,name, lstGridRg, earthPressure):
+    super(EarthPressureOnSurfaces,self).__init__(name, lstGridRg)
     self.earthPressure= earthPressure
 
   def appendEarthPressureToCurrentLoadPattern(self,dicGeomEnt):
-    self.surfaces.appendEarthPressureToCurrentLoadPattern(dicGeomEnt,self.earthPressure)
+    self.lstGridRg.appendEarthPressureToCurrentLoadPattern(dicGeomEnt,self.earthPressure)
 
 
-class StrainLoadOnSurfaces(LoadOnSurfaces):
+class StrainLoadOnSurfaces(LoadByLstGridRange):
   '''Strain load over a list of surfaces (defined as range lists).'''
-  def __init__(self,name, surfaces, epsilon):
-    super(StrainLoadOnSurfaces,self).__init__(name, surfaces)
+  def __init__(self,name, lstGridRg, epsilon):
+    super(StrainLoadOnSurfaces,self).__init__(name, lstGridRg)
     self.epsilon= epsilon
 
 
 class StrainGradientLoadOnSurfaces(StrainLoadOnSurfaces):
   '''Strain gradient load over a list of surfaces (defined as range lists).'''
-  def __init__(self,name, surfaces,epsilon):
-    super(StrainGradientLoadOnSurfaces,self).__init__(name, surfaces, epsilon)
+  def __init__(self,name, lstGridRg,epsilon):
+    super(StrainGradientLoadOnSurfaces,self).__init__(name, lstGridRg, epsilon)
 
   def appendLoadToLoadPattern(self,lPattern):
-    for csup in self.surfaces:
+    for csup in self.lstGridRg:
       mat= csup.material
       esp= mat.thickness
       nabla= self.epsilon/esp
