@@ -1,11 +1,13 @@
 Finite element analysis program based on:
 
-- Python: programming language for users(interface with C++ kernel).
+- Python: user's programming language (boost.python interface with OpenSees based C++ kernel).
 - OpenSees: finite element analysis routines.
 - VTK: visualization routines.
 - CGAL: computational geometry routines.
-- NumPy: mathematical tools.
+- NumPy: numerical computation.
+- SciPy: scientific computing tools for Python.
 - LaTeX: document typesetting.
+- matplotlib: plotting all kind of math related figures...
 
 
 The main capabilities of the program:

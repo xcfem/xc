@@ -4,6 +4,7 @@ import geom
 import xc
 
 class DxfReader(object):
+  '''Reading of DXF entities for further processing.'''
   def __init__(self,tol= 1e-3):
     self.tol= tol
   def newKeyPoint(self,pt):
