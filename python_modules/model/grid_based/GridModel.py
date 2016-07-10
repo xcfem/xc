@@ -23,6 +23,7 @@ from xcVtk import LoadVectorField as lvf
 from xcVtk import LocalAxesVectorField as lavf
 from xcVtk.malla_ef import QuickGraphics as qg
 import ijkGrid as grid
+import math
 
 class NamedObjectsMap(dict):
   '''dictionary of objects which have a name.'''
@@ -422,6 +423,42 @@ class LoadOnPoints(LoadBase):
        loadPattern.newNodalLoad(nod.tag,self.loadVector)
 
 
+class UniformLoadOnLinesInRange(LoadByLstGridRange):
+  '''Uniform load applied to all the lines found in the list of grid ranges
+  passed as parameter.
+    
+  :ivar name:       name identifying the load
+  :ivar grid:  name of the grid-based model
+  :ivar lstGridRg:  lists of grid ranges to delimit the lines to be loaded
+  :ivar loadVector: xc.Vector with the six components of the load: xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
+  '''                            
+  def __init__(self,name, grid,lstGridRg, loadVector):
+    super(UniformLoadOnLinesInRange,self).__init__(name, lstGridRg)
+    self.loadVector= loadVector
+
+  def appendLoadToLoadPattern(self,loadPattern):
+    for rng in self.lstGridRg:
+      lstLin= self.grid.getLstLinRange(rng)
+      for l in lstLin:
+        setnod=l.getNodes()
+        sortNod=list()
+        for n in setnod:
+          pn=n.getInitialPos3d
+          ndistOrig=math.sqrt(pn.x**2+pn.y**2+pn.z**2)
+          sortNod.append([ndistOrig,n])
+          sortNod.sort()
+          #first and last item of the ordered list duplicated for 
+          #obtaining the contributing length of nodes
+          sortNod.insert(0,sortNod[0])
+          sortNod.append(sortNod[len(sortNod)-1])
+        for i in range(1,len(sortNod)-1):
+           nod=sortNod[i][1]
+           precNod=sortNod[i-1][1]
+           follwNod=sortNod[i+1][1]
+           p1=precNod.getInitialPos3d
+           p1=follwNod.getInitialPos3d
+           longInfl=(p1.distPos3d(p2))/2.0
+           loadPattern.newNodalLoad(nod.tag,longInfl*self.loadVector)
 
 
 class PressureLoadOnSurfaces(LoadByLstGridRange):
@@ -448,8 +485,8 @@ class EarthPressureOnSurfaces(LoadByLstGridRange):
   :ivar earthPressure: instance of the class EarthPressure, with the following attributes:
 
                   - K:Coefficient of pressure
-                  - zTerrain:global Z coordinate of ground level
-                  - gammaTerrain: weight density of soil 
+                  - zGround:global Z coordinate of ground level
+                  - gammaSoil: weight density of soil 
                   - zWater: global Z coordinate of groundwater level (if zGroundwater<minimum z of model => there is no groundwater)
                   - gammaWater: weight density of water
                   - vDir: unit vector defining pressures direction
@@ -494,11 +531,12 @@ class LoadState(object):
   :ivar unifPressLoad: list of pressures on surfaces
   :ivar unifVectLoad:  list of uniform loads on shell elements
   :ivar pointLoad:     list of point loads
+  :ivar unifLoadLinRng: list of uniform loads on the lines in a list of grid ranges
   :ivar earthPressLoad:list of earth pressure loads
   :ivar hydrThrustLoad:list of hydrostatic thrust on the walls that delimit a volume
   :ivar tempGrad:      list of temperature gradient loads
   '''
-  def __init__(self,name, inercLoad= None, unifPressLoad= None, unifVectLoad= None, pointLoad= None, earthPressLoad= None, hydrThrustLoad= None, tempGrad= None):
+  def __init__(self,name, inercLoad= None, unifPressLoad= None, unifVectLoad= None, pointLoad= None, unifLoadLinRng=None,earthPressLoad= None, hydrThrustLoad= None, tempGrad= None):
     self.name= name
     if(inercLoad):
       self.inercLoad= inercLoad
@@ -516,6 +554,10 @@ class LoadState(object):
       self.pointLoad= pointLoad
     else:
       self.pointLoad= list()
+    if(unifLoadLinRng):
+      self.unifLoadLinRng= unifLoadLinRng
+    else:
+      self.unifLoadLinRng= list()
     if(earthPressLoad):
       self.earthPressLoad= earthPressLoad
     else:
@@ -550,6 +592,12 @@ class LoadState(object):
       lmsg.log('pointLoad: '+ cpunt.name)
       cpunt.appendLoadToLoadPattern(nodes,self.lPattern)
 
+  def appendUniformLoadOnLinesInRangeToLoadPattern(self):
+    '''uniform loads on the lines in a list of grid ranges to the load pattern.'''
+    for unifLin in self.unifLoadLinRng:
+      lmsg.log('unifLoadLinRng: '+ unifLin.name)
+      unifLin.appendLoadToLoadPattern(self.lPattern)
+
   def appendEarthPressureLoadsToCurrentLoadPattern(self,dicGeomEnt):
     for ep in self.earthPressLoad:
       lmsg.log('earthPressLoad: '+ ep.name)
@@ -570,7 +618,10 @@ class LoadState(object):
     #Cargas lineales
     #Cargas puntuales
     self.appendPunctualLoadsToLoadPattern(nodes)
-  
+
+    #uniform loads on the lines in a list of grid ranges to the load pattern
+    self.appendUniformLoadOnLinesInRangeToLoadPattern()
+
     #Empuje de tierras
     self.appendEarthPressureLoadsToCurrentLoadPattern(dicGeomEnt)
   
