@@ -4,6 +4,7 @@ import scipy.interpolate
 import math
 
 class ConcreteSlab(object):
+  '''Concrete slab preliminary structural calculations'''
   def __init__(self,l,L,thickness):
     ''' Constructor
 
@@ -18,6 +19,7 @@ class ConcreteSlab(object):
     self.thickness= thickness
 
 class FourSidesPinnedConcreteSlab(ConcreteSlab):
+  '''Four sides pinned concrete slab preliminary structural calculations'''
   def __init__(self,l,L,thickness):
     ''' Constructor '''
     super(FourSidesPinnedConcreteSlab,self).__init__(l,L,thickness)
