@@ -74,7 +74,8 @@ def getLin2Pts(lstLinBusq,tPto1,tPto2):
             broke_out= True
             break
     if not broke_out:
-        print "Didn't find the line"
+#        print "Didn't find the line"
+        return
     else:
         return l
 
