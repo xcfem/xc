@@ -1188,7 +1188,7 @@ double XC::DqFibras::getNeutralAxisDepth(const FiberSectionBase &Section) const
     double yLoc= (*i)->getLocY();
     double zLoc= (*i)->getLocZ();
     retval= Section.get_dist_to_neutral_axis(yLoc,zLoc);
-    if(!isnan(retval))
+    if(!std::isnan(retval))
       {
         i++;
         double tmp;

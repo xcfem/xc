@@ -212,7 +212,11 @@ int XC::SuperLU::factoriza(void)
         int info= 0;
         SuperLUStat_t slu_stat;
         StatInit(&slu_stat);
-        dgstrf(&options, &AC, drop_tol, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &slu_stat, &info);
+
+
+        //Prior to Ubuntu 16: dgstrf(&options, &AC, drop_tol, relax, &panelSize,etree.getDataPtr(), 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &slu_stat, &info);
+	//it seems that argument 'drop_tol' is deprecated (or it was an error?)
+        dgstrf(&options, &AC, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &slu_stat, &info);
         if(info != 0)
           {        
              std::cerr << "WARNING XC::SuperLU::factorize(void)- ";

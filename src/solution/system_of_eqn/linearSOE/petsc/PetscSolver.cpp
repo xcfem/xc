@@ -219,7 +219,7 @@ int XC::PetscSolver::setSize()
       *  also serves as the preconditioning matrix.
       */
 
-     KSPSetOperators(ksp, theSOE->A, theSOE->A, DIFFERENT_NONZERO_PATTERN);
+    KSPSetOperators(ksp, theSOE->A, theSOE->A);//, DIFFERENT_NONZERO_PATTERN);
 
    /* 
     *  Set solution scheme & tolerances

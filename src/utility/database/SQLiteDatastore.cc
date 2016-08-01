@@ -291,7 +291,7 @@ int XC::SQLiteDatastore::insertData(const std::string &tableName,const std::vect
               {
                 std::cerr << "SQLiteDatastore::insertData() - failed to send the data to SQLite database";
                 std::cerr << query;
-                std::cerr << std::endl << db.getDefaultQuery()->GetError() << std::endl;
+                std::cerr << std::endl << db.getDefaultQuery()->getError() << std::endl;
                 return -3;
               }
           }
@@ -370,7 +370,7 @@ int XC::SQLiteDatastore::execute(const std::string &query)
     if(!tmp)
       {
         std::cerr << "SQLiteDatastore::execute() - could not execute command: " << query;
-        std::cerr << std::endl << db.getDefaultQuery()->GetError() << std::endl;
+        std::cerr << std::endl << db.getDefaultQuery()->getError() << std::endl;
         return -1;
       }
     else

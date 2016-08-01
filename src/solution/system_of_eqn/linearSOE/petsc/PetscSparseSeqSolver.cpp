@@ -143,7 +143,7 @@ int XC::PetscSparseSeqSolver::setSize()
      *  also serves as the preconditioning matrix.
      */
 
-    KSPSetOperators(ksp, A, A, DIFFERENT_NONZERO_PATTERN);
+    KSPSetOperators(ksp, A, A); //, DIFFERENT_NONZERO_PATTERN);
 
     /* 
      *  Set solution scheme & tolerances

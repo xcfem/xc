@@ -129,7 +129,7 @@ XC::ThreadedSuperLU::solve(void)
 
 	if (info != 0) {	
 	   std::cerr << "WARNING XC::ThreadedSuperLU::solve(void)- ";
-	   std::cerr << " Error " << info << " returned in factorization dgstrf()\n";
+	   std::cerr << " Error " << info << " returned in factorization pdgstrf()\n";
 	   return info;
 	}
 

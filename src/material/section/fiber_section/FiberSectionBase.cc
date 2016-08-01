@@ -383,7 +383,7 @@ Recta2d XC::FiberSectionBase::getRectaLimiteAcEficaz(const double &hEfMax) const
     if(fn.exists())
       {
         const double hef= getCantoMecanicoZonaTraccionada();
-        assert(!isnan(hef));
+        assert(!std::isnan(hef));
         if(hef<hEfMax)
           retval= fn;
         else

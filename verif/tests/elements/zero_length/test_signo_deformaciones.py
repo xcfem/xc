@@ -219,16 +219,15 @@ print "Qz= ",QzTot/1e3," kN"
 print "epsQz= ",epsQz
 print "Mx= ",MxTot/1e3," kN m"
 print "epsT= ",epsT
-
 print "ratio1= ",ratio1
 print "ratio2= ",ratio2
 print "ratio3= ",ratio3
 print "ratio4= ",ratio4
-   '''
+ '''
 
 import os
 fname= os.path.basename(__file__)
-if (ratio1 < 0.003) and (ratio2 < 0.003) and (ratio3 < 1e-4) and (ratio4 < 1e-3):
+if (ratio1 < 0.003) and (ratio2 < 0.003) and (ratio3 < 1e-4) and (ratio4 < 2e-3):
   print "test ",fname,": ok."
 else:
   print "test ",fname,": ERROR."

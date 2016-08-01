@@ -74,7 +74,11 @@ set(version_file "${DIR_FUENTES_XC}src/version.cc")
 enable_language(Fortran)
 INCLUDE(${DIR_FUENTES_XC}CMake/find_packages.cmake)
 
-#Biblioteca VTK
+#HDF5 library
+include_directories(${HDF5_HEADER_INCLUDE_DIR})
+
+
+#VTK library
 #vtk
 IF(USE_VTK_FILE)
   INCLUDE(${USE_VTK_FILE})
@@ -82,31 +86,33 @@ IF(USE_VTK_FILE)
   SET(VTK_FOUND 1)
   SET(VTK_BIB vtkRendering vtkIO vtkHybrid)
 ENDIF(USE_VTK_FILE)
+include_directories(${VTK_INCLUDE_DIRS})
 
-#Biblioteca CGAL
+#CGAL library
 IF(CGAL_USE_FILE)
   INCLUDE(${CGAL_USE_FILE})
   message(STATUS "cgal file: " ${CGAL_USE_FILE})
 ENDIF(CGAL_USE_FILE)
 
-#Biblioteca GLIB (para gts)
+#GLIB (para gts) library
 INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIRS})
 
-#Biblioteca CGAL
+#CGAL library
 INCLUDE_DIRECTORIES(${CGAL_INCL_DIR})
 INCLUDE_DIRECTORIES(${CGAL_INCL_CONF_DIR})
 
-#Biblioteca MySql++
+#MySql++ library
 INCLUDE_DIRECTORIES(${MYSQL_INCLUDE_DIRECTORIES})
 INCLUDE_DIRECTORIES(${MYSQLPP_INCL_DIR})
+message(STATUS "MySQL libraries: ${MYSQL_LIBRARY}")
 
-#Biblioteca SqLiteWrapped
+#SqLiteWrapped library
 INCLUDE_DIRECTORIES(${SQLITEWP_INCL_DIR})
 
-#Biblioteca MPI
+#MPI library
 INCLUDE_DIRECTORIES(${MPI_INCLUDE_PATH})
 
-#Biblioteca TCL
+#TCL library
 INCLUDE_DIRECTORIES(${TCL_INCLUDE_PATH})
 
 #Portable, Extensible Toolkit for Scientific Computation
@@ -119,7 +125,7 @@ INCLUDE_DIRECTORIES(${PETSC_INCLUDE_DIR})
 #Python
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS})
 
-#Biblioteca XC
+#XC library
 INCLUDE_DIRECTORIES(${LIBXC_SOURCE_DIR})
 
 #Para DEBUG
@@ -338,7 +344,7 @@ SET(solution solution/analysis/ModelWrapper solution/SoluMethod solution/MapSolu
 ADD_LIBRARY(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} ${post_process} version ProblemaEF)
 
 #Interfaz Python
-LINK_LIBRARIES(XcBib xc_utils xc_basic ${VTK_BIB} ${CGAL_LIBRARIES} ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${Boost_LIBRARIES}  ${PYTHON_LIBRARIES} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${MED_LIBRARIES} ${TCL_LIBRARY} ${Boost_LIBRARIES})
+LINK_LIBRARIES(XcBib xc_utils xc_basic ${VTK_BIB} ${CGAL_LIBRARIES} ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${Boost_LIBRARIES}  ${PYTHON_LIBRARIES} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${MED_LIBRARIES} ${TCL_LIBRARY} ${Boost_LIBRARIES})
 LINK_DIRECTORIES("/usr/lib/python2.6") # Not needed?
 ADD_DEFINITIONS(-fno-strict-aliasing)
 ADD_LIBRARY(xc SHARED utility/export_utility material/export_material_base material/uniaxial/export_material_uniaxial material/nD/export_material_nD material/section/export_material_section material/section/export_material_fiber_section domain/export_domain domain/mesh/export_domain_mesh preprocessor/export_preprocessor_loaders preprocessor/export_preprocessor_build_model  preprocessor/export_preprocessor_sets preprocessor/export_preprocessor_main solution/export_solution python_interface)

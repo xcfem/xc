@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import division
 # -*- coding: utf-8 -*-
 # home made test

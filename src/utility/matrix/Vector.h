@@ -65,6 +65,7 @@
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "xc_basic/src/matrices/m_double.h"
+#include <cmath>
 
 class Vector2d;
 class Vector3d;
@@ -228,7 +229,7 @@ inline bool Vector::isnan(void) const
   {
     bool retval= false;
     for(register int i=0; i<sz; i++)
-      if(::isnan(theData[i]))
+      if(std::isnan(theData[i]))
         {
           retval= true;
           break;
