@@ -434,6 +434,7 @@ class UniformLoadOnLinesInRange(LoadByLstGridRange):
   '''                            
   def __init__(self,name, grid,lstGridRg, loadVector):
     super(UniformLoadOnLinesInRange,self).__init__(name, lstGridRg)
+    self.grid=grid
     self.loadVector= loadVector
 
   def appendLoadToLoadPattern(self,loadPattern):
@@ -456,7 +457,7 @@ class UniformLoadOnLinesInRange(LoadByLstGridRange):
            precNod=sortNod[i-1][1]
            follwNod=sortNod[i+1][1]
            p1=precNod.getInitialPos3d
-           p1=follwNod.getInitialPos3d
+           p2=follwNod.getInitialPos3d
            longInfl=(p1.distPos3d(p2))/2.0
            loadPattern.newNodalLoad(nod.tag,longInfl*self.loadVector)
 
