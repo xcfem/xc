@@ -78,7 +78,7 @@ class SurfaceLoadRecord(ElementLoadRecord):
       retval.agregaVertice(geom.Pos2d(coords[0],coords[1]))
     return retval
   def searchLoadedElements(self,elemSet):
-    ''' Returns element which have his center inside the polygon'''
+    ''' Returns elements which have his center inside the polygon'''
     plg= self.get2DPolygon()
     self.tags= list()
     for e in elemSet.getElements:
@@ -180,6 +180,7 @@ class LoadComb(object):
     self.descomp= descomp
 
 class LoadData(object):
+  '''Container for load groups, cases and combinations.'''
   def __init__(self):
     self.loadGroups= {}
     self.loadCases= {}

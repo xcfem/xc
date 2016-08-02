@@ -119,7 +119,6 @@ class BlockData(object):
     self.points= PointDict()
     self.blocks= BlockDict()
     self.pointSupports= PointSupportDict()
-    print 'XXX add free loads.'
 
 
   def appendPoint(self,id,x,y,z):

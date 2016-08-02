@@ -17,6 +17,8 @@ from scia_loads import ElementLoadContainer as elc
 import sXMLBase as base
 
 class SXMLMesh(base.SXMLBase):
+  '''Export mesh (nodes, elements, supports and loads) to
+     SCIA XML.'''
   def __init__(self,xmlns, mesh,loadContainer):
     super(SXMLMesh,self).__init__(xmlns,mesh,loadContainer)
     self.nodeContainer= nCtr.NodeContainer(mesh.nodes)

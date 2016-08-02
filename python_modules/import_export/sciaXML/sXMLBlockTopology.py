@@ -17,6 +17,8 @@ from scia_loads import SurfacePressureFreeContainer as spf
 import sXMLBase as base
 
 class SXMLBlockTopology(base.SXMLBase):
+  '''Export block topology (kPoints, lines, surfaces, volumes), supports
+     and load to SCIA XML.'''
   def __init__(self,xmlns, blocks,loadContainer):
     super(SXMLBlockTopology,self).__init__(xmlns,blocks,loadContainer)
     self.pointContainer= nCtr.NodeContainer(blocks.points)

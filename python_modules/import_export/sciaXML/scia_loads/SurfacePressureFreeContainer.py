@@ -8,8 +8,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+from import_export.sciaXML.xml_basics import Container as ctr
 import SurfacePressureFreeProperties as spfp
 from import_export.sciaXML.xml_basics import Row as rw
+import LoadComponentBase as lcb
 
 class PolygonPointRow(rw.RowP0123):
   '''SCIA XML object for each of the points

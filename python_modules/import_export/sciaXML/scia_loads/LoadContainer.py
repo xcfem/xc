@@ -13,10 +13,11 @@ import geom
 import xc
 from import_export import NeutralLoadDescription as nld
 
-class LoadContainer(object):
+class LoadContainerBase(object):
+  '''Base for XML SCIA load containers.'''
   def __init__(self):
-    self.nodalLoadCounter= 1
-    self.elementalLoadCounter= 1
+    self.pointLoadCounter= 1
+    self.surfaceLoadCounter= 1
     #Loads
     self.loads= nld.LoadData()
     lg= self.loads.loadGroups
@@ -27,25 +28,62 @@ class LoadContainer(object):
     self.mapLoadCases= dict()
   def getLoadCombinationDict(self):
     return self.loads.loadCombs
-  def dumpNodalLoads(self, lp, destLoadCase):
+  def readLoadCombsFromXC(self,combContainer):
+    self.loads.readLoadCombsFromXC(combContainer,self.mapLoadCases)
+  def dumpLoadPattern(self, counter, lpName, loadPatterns,permanentLoadCaseNames):
+    loadCaseId= counter
+    loadCaseName= lpName
+    descr= ''#lp.description
+    newLoadCase= None
+    if(loadCaseName in permanentLoadCaseNames):
+      newLoadCase= nld.LoadCase(loadCaseId,loadCaseName, descr,0,1)
+    else:
+      newLoadCase= nld.LoadCase(loadCaseId,loadCaseName, descr,1,1)
+      newLoadCase.actionType= 'Variable'
+    self.loads.loadCases[loadCaseId]= newLoadCase
+    self.mapLoadCases[loadCaseName]= newLoadCase
+    return newLoadCase 
+  def loads2Neutral(self,preprocessor,permanentLoadCaseNames):
+    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
+    lc= self.loads.loadCases
+    counter= 1
+    for lpName in loadPatterns.getKeys():
+      newLoadCase= self.dumpLoadPattern(counter,lpName,loadPatterns, permanentLoadCaseNames)
+      counter+= 1
+      preprocessor.resetLoadCase()
+      loadPatterns.addToDomain(lpName)
+      lp= loadPatterns[lpName] #Load pattern from
+      self.dumpPointLoads(lp,newLoadCase) #Dump nodal loads
+      self.dumpSurfaceLoads(lp,newLoadCase) #Dump loads over elements
+      loadPatterns.removeFromDomain(lpName)
+  def readLoadsFromXC(self,preprocessor,permanentLoadCaseNames):
+    self.loads2Neutral(preprocessor,permanentLoadCaseNames)
+  def readFromXC(self,preprocessor,permanentLoadCaseNames,combContainer):
+    self.loads2Neutral(preprocessor,permanentLoadCaseNames)
+    self.loads.readLoadCombsFromXC(combContainer,self.mapLoadCases)
+
+
+class LoadContainer(LoadContainerBase):
+  '''Container for loads over mesh nodes and elements.'''
+  def dumpPointLoads(self, lp, destLoadCase):
     '''Dump loads over nodes.'''
     lIter= lp.getNodalLoadIter
     nl= lIter.next()
     while nl:
-      pLoad= nld.NodalLoadRecord(destLoadCase, self.nodalLoadCounter,None,1.0)
+      pLoad= nld.NodalLoadRecord(destLoadCase, self.pointLoadCounter,None,1.0)
       force= nl.getForce 
       pLoad.value= force.Norm()
       pLoad.vDir= force.Normalized()
       pLoad.tag= nl.getNodeTag
       destLoadCase.loads.punctualLoads.append(pLoad)
-      self.nodalLoadCounter+=1
+      self.pointLoadCounter+=1
       nl= lIter.next()
-  def dumpElementalLoads(self, lp, destLoadCase):
+  def dumpSurfaceLoads(self, lp, destLoadCase):
     '''Dump loads over elements.'''
     lIter= lp.getElementalLoadIter
     el= lIter.next()
     while el:
-      eLoad= nld.ElementLoadRecord(destLoadCase,self.elementalLoadCounter,1.0)
+      eLoad= nld.ElementLoadRecord(destLoadCase,self.surfaceLoadCounter,1.0)
       if(hasattr(el,"getGlobalForces")):
         eLoad.mode= False # Referred to local coordinate system.
         lf= xc.Vector([el.Wx,el.Wy,el.Wz])
@@ -58,36 +96,20 @@ class LoadContainer(object):
           destLoadCase.loads.surfaceLoads.append(eLoad)
         else:
           print "loads2Neutral: vDir vector very small: ", vDir, " load ignored."
-      self.elementalLoadCounter+=1
+      self.surfaceLoadCounter+=1
       el= lIter.next()
-  def loads2Neutral(self,preprocessor,permanentLoadCaseNames):
-    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
-    lc= self.loads.loadCases
-    counter= 1
-    for lpName in loadPatterns.getKeys():
-      loadCaseId= counter
-      loadCaseName= lpName
-      lp= loadPatterns[lpName] #Load pattern from
-      descr= ''#lp.description
-      newLoadCase= None
-      if(loadCaseName in permanentLoadCaseNames):
-        newLoadCase= nld.LoadCase(loadCaseId,loadCaseName, descr,0,1)
-      else:
-        newLoadCase= nld.LoadCase(loadCaseId,loadCaseName, descr,1,1)
-        newLoadCase.actionType= 'Variable'
-      lc[loadCaseId]= newLoadCase
-      self.mapLoadCases[loadCaseName]= newLoadCase
-      counter+= 1
     
-      preprocessor.resetLoadCase()
-      loadPatterns.addToDomain(lpName)
-      self.dumpNodalLoads(lp,newLoadCase) #Dump nodal loads
-      self.dumpElementalLoads(lp,newLoadCase) #Dump loads over elements
-      loadPatterns.removeFromDomain(lpName)
-  def readLoadsFromXC(self,preprocessor,permanentLoadCaseNames):
-    self.loads2Neutral(preprocessor,permanentLoadCaseNames)
-  def readLoadCombsFromXC(self,combContainer):
-    self.loads.readLoadCombsFromXC(combContainer,self.mapLoadCases)
-  def readFromXC(self,preprocessor,permanentLoadCaseNames,combContainer):
-    self.loads2Neutral(preprocessor,permanentLoadCaseNames)
-    self.loads.readLoadCombsFromXC(combContainer,self.mapLoadCases)
+
+
+class FreeLoadContainer(LoadContainerBase):
+  '''Container for free loads over mesh points and surfaces
+     (used for export a block model (kPoints, lines and surfaces)
+     into XML SCIA) .'''
+
+  def dumpPointLoads(self, lp, destLoadCase):
+    '''Dump free punctual loads.'''
+    print 'dumpPointLoads not implemented.'
+
+  def dumpSurfaceLoads(self, lp, destLoadCase):
+    '''Dump loads over elements.'''
+    print 'dumpSurfaceLoads not implemented.'
