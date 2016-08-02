@@ -296,7 +296,8 @@ class ijkGrid(object):
                 pto3= self.getTagIndices(i+1,j+1,k)
                 pto4= self.getTagIndices(i,j+1,k)
                 nmbrSup= getSupName(pto1,pto2,pto3,pto4)
-                retval.getSurfaces.append(dicGeomEnt[nmbrSup])
+                if nmbrSup in dicGeomEnt:
+                    retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 j+=1
             i+=1
     elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
@@ -309,7 +310,8 @@ class ijkGrid(object):
                 pto3= self.getTagIndices(i+1,j,k+1)
                 pto4= self.getTagIndices(i+1,j,k)
                 nmbrSup= getSupName(pto1,pto2,pto3,pto4)
-                retval.getSurfaces.append(dicGeomEnt[nmbrSup])
+                if nmbrSup in dicGeomEnt:
+                    retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 k+=1
             i+=1
     elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
@@ -322,7 +324,8 @@ class ijkGrid(object):
                 pto3= self.getTagIndices(i,j+1,k+1)
                 pto4= self.getTagIndices(i,j,k+1)
                 nmbrSup= getSupName(pto1,pto2,pto3,pto4)
-                retval.getSurfaces.append(dicGeomEnt[nmbrSup])
+                if nmbrSup in dicGeomEnt:
+                    retval.getSurfaces.append(dicGeomEnt[nmbrSup])
                 k+=1
             j+=1
     retval.fillDownwards()    
