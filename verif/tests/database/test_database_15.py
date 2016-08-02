@@ -10,10 +10,10 @@ from materials import typical_materials
 from model import fix_node_6dof
 
 E= 2.1e9 # Módulo de Young del acero.
-nu= 0.3 # Coeficiente de Poisson.
+nu= 0.3 # Poisson's ratio.
 h= .1 # Espesor.
 L= 1 # Lado.
-I= 1/12.0*L*h**3 # Momento de inercia de la sección expresada en m4
+I= 1/12.0*L*h**3 # Cross section moment of inertia (m4)
 dens= 1.33 # Densidad kg/m2.
 F= 1000 # Fuerza
 

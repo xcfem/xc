@@ -10,7 +10,7 @@ from materials import typical_materials
 import math
 
 E= 2.1e6 # Módulo de Young del acero en kg/cm2.
-nu= 0.3 # Coeficiente de Poisson.
+nu= 0.3 # Poisson's ratio.
 h= 0.1 # Espesor.
 dens= 1.33 # Densidad kg/m2.
 

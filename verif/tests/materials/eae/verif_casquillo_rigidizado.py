@@ -18,7 +18,7 @@ tRig= 8e-3 # Espesor del rigidizador.
 # DATOS mecánicos
 fy= 2600*9.81/1e-4 # Acero A42b
 fyd= fy/1.0 # Minoración límite elástico
-Es= 2.1e6*9.81/1e-4 # Módulo elástico del acero.
+Es= 2.1e6*9.81/1e-4 # Elastic modulus del acero.
 
 # Resultados parciales.
 c= comprobacion_casquillo_rigidizado.widthMax(tChapa,l,H)

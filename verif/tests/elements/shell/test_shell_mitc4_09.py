@@ -5,10 +5,10 @@ NumDivI= 32
 NumDivJ= 32
 CooMaxX= 10
 CooMaxY= 2
-E= 17472000 # Módulo elástico en lb/in2
+E= 17472000 # Elastic modulus en lb/in2
 nu= 0.3 # Coeficiente de Poison
 G= 6720000
-thickness= 0.0001 # Canto de la sección expresado en pulgadas.
+thickness= 0.0001 # Cross section heightexpresado en pulgadas.
 unifLoad= 0.0001 # Carga uniforme en lb/in2.
 ptLoad= 0.0004 # Carga puntual en lb.
 

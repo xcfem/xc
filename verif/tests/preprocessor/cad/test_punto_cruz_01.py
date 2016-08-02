@@ -13,11 +13,11 @@ from materials import typical_materials
 NumDiv= 10
 CooMax= 10
 
-b= 0.05 # Ancho de la sección en metros
-h= 0.10 # Canto de la sección en metros
-A= b*h # Área de la sección en m2
+b= 0.05 # Cross section width en metros
+h= 0.10 # Cross section heighten metros
+A= b*h # Cross section area en m2
 I= 1/12.0*b*h**3 # Momento de inercia en m4
-E=2.0E11 # Módulo elástico en N/m2
+E=2.0E11 # Elastic modulus en N/m2
 L=10 # Longitud de las barras
 
 
@@ -29,7 +29,7 @@ predefined_spaces.gdls_resist_materiales2D(nodos)
 
 nodos.defaultTag= 1
 nodos.newSeedNode()
-# Definimos transformaciones geométricas
+# Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 

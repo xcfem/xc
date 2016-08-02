@@ -31,18 +31,18 @@ from postprocess import prop_statistics
 
 
 
-# Propiedades del material
-E= 2.1e6 # Módulo elástico en Pa
+# Material properties
+E= 2.1e6 # Elastic modulus (Pa)
 epsilon= 3.5e-3
 sigma= E*epsilon
 
-# Propiedades de la sección
+# Cross section properties
 width= 4
 depth= 2
-fiberArea= 1e-4 # Área de cada fibra expresada en m2
-A= 4*fiberArea # Área de cada fibra expresada en m2
-Iy= 4*(fiberArea*(width/2.0)**2) # Momento de inercia de la sección expresada en m4
-Iz= 4*(fiberArea*(depth/2.0)**2) # Momento de inercia de la sección expresada en m4
+fiberArea= 1e-4 # Área de cada fibra (m2)
+A= 4*fiberArea # Área de cada fibra (m2)
+Iy= 4*(fiberArea*(width/2.0)**2) # Cross section moment of inertia (m4)
+Iz= 4*(fiberArea*(depth/2.0)**2) # Cross section moment of inertia (m4)
 
 F= sigma*fiberArea
 N= 4*F

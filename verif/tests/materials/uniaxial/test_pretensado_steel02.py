@@ -3,7 +3,7 @@
 # Comprobación pretensado en material de tipo steel02
 
 L= 1.0 # Bar length (m)
-E= 190e9 # Módulo elástico expresado en MPa
+E= 190e9 # Elastic modulus expresado en MPa
 A= 140e-6 # Área de la barra expresada en metros cuadrados
 fMax= 1860e6 # Carga unitaria máxima del material expresada en MPa.
 fy= 1171e6 # Tensión de límite elástico del material expresada en Pa.

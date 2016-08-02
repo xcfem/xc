@@ -21,7 +21,7 @@ l= 5.15925e-2 # Longitud de los cordones.
 fy= 275e6 # Acero S-275-JR
 fyd= fy/1.1 # Minoración límite elástico
 fu= 430e6 # Resistencia a tracción  del acero de las piezas a soldar S-275-JR (tabla 59.8.2 pág 304 EAE).
-Es= 2e11 # Módulo elástico del acero.
+Es= 2e11 # Elastic modulus del acero.
 
 # DATOS seguridad
 betaW= 0.8 # Coeficiente de correlación para S-275 (tabla 59.8.2 pág 304 EAE).

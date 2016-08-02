@@ -17,8 +17,8 @@ from model import fix_node_6dof
 from materials import typical_materials
 
 scc10x20= sccRectg.sccRectang()
-scc10x20.b= 10 # Ancho de la sección expresado en cm.
-scc10x20.h= 20 # Canto de la sección expresado en cm.
+scc10x20.b= 10 # Cross section width expresado en cm.
+scc10x20.h= 20 # Cross section heightexpresado en cm.
 scc10x20.nDivIJ= 32
 scc10x20.nDivJK= 32
 

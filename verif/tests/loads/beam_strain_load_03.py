@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Referencia:  Cálculo de estructuras por el método de los elementos finitos. E. Oñate, pg. 165, ejemplo 5.3
+# Reference:  Cálculo de estructuras por el método de los elementos finitos. E. Oñate, pg. 165, ejemplo 5.3
 
 
 L= 1.0 # Bar length (m)
-E= 2.1e6*9.81/1e-4 # Módulo elástico
-nu= 0.3 # Coeficiente de Poisson
-G= E/(2.0*(1+nu)) # Módulo de elasticidad a cortante
+E= 2.1e6*9.81/1e-4 # Elastic modulus
+nu= 0.3 # Poisson's ratio
+G= E/(2.0*(1+nu)) # Shear modulus
 alpha= 1.2e-5 # Coeficiente de dilatación del acero
 A= 4e-4 # Área de la barra expresada en metros cuadrados
-I= (2e-2)**4/12.0 # Momento de inercia de la sección expresada en m4
+I= (2e-2)**4/12.0 # Cross section moment of inertia (m4)
 AT= 10 # Incremento de temperatura expresado en grados centígrados
 
 import xc_base
@@ -30,7 +30,7 @@ nod= nodos.newNodeXY(0.0,0.0)
 nod= nodos.newNodeXY(L,0.0)
 
 
-# Definimos transformaciones geométricas
+# Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 

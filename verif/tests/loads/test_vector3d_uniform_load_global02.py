@@ -23,15 +23,15 @@ nDivJK= 10
 y0= 0
 z0= 0
 L= 1.5 # Bar length (m)
-Iy= width*depth**3/12 # Momento de inercia de la sección expresada en m4
-Iz= depth*width**3/12 # Momento de inercia de la sección expresada en m4
+Iy= width*depth**3/12 # Cross section moment of inertia (m4)
+Iz= depth*width**3/12 # Cross section moment of inertia (m4)
 E= 210e9 # Módulo de Young del acero.
-nu= 0.3 # Coeficiente de Poisson
-G= E/(2*(1+nu)) # Módulo de elasticidad a cortante
-J= .2e-1 # Momento de inercia a torsión expresado en m4
+nu= 0.3 # Poisson's ratio
+G= E/(2*(1+nu)) # Shear modulus
+J= .2e-1 # Cross section torsion constant (m4)
 
 # Load
-f= 1.5e3 # Magnitud de la carga en N/m.
+f= 1.5e3 # Load magnitude en N/m.
 
 # Problem type
 prueba= xc.ProblemaEF()
@@ -43,7 +43,7 @@ nod= nodos.newNodeXYZ(0,0.0,0.0)
 nod= nodos.newNodeXYZ(L*math.sqrt(2)/2,L*math.sqrt(2)/2,0.0)
 
 
-# Definimos transformaciones geométricas
+# Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newCorotCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])

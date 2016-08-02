@@ -15,7 +15,7 @@ from materials import defSeccAggregation
 
 h= 0.30 # Canto de la viga.
 b= 0.2 # Ancho de la viga.
-E= 2e6 # Módulo elástico
+E= 2e6 # Elastic modulus
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   

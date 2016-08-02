@@ -21,10 +21,10 @@ xMidL= xMidP
 yMidL= CooMaxY
 NumDivI= int(math.ceil(CooMaxX/0.25))
 NumDivJ= int(math.ceil(CooMaxY/0.25))
-E= 2.1e10 # Módulo elástico en N/m2
+E= 2.1e10 # Elastic modulus en N/m2
 nu= 0.0 # Coeficiente de Poison
 G= E/2/(1+nu)
-thickness= 0.2 # Canto de la sección expresado en metros.
+thickness= 0.2 # Cross section heightexpresado en metros.
 unifLoad= 20e3 # Carga uniforme en N/m2.
 nLoad= unifLoad*CooMaxX*CooMaxY/NumDivI/NumDivJ # Carga tributaria para cada nodo
 

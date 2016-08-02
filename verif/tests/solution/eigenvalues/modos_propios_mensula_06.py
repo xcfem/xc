@@ -13,10 +13,10 @@ import math
 L= 16 # Longitud de la ménsula en pulgadas.
 b= 4 # Ancho de la ménsula en pulgadas.
 h= 1 # Espesor de la ménsula en pulgadas.
-nuMat= 0 # Coeficiente de Poisson.
+nuMat= 0 # Poisson's ratio.
 EMat= 30E6 # Módulo de Young en psi.
 espChapa= h # Espesor en m.
-area= b*espChapa # Área de la sección en m2
+area= b*espChapa # Cross section area en m2
 inercia1= 1/12.0*espChapa*b**3 # Momento de inercia en m4
 inercia2= 1/12.0*b*espChapa**3 # Momento de inercia en m4
 dens= 0.000728 # Densidad del material en lb-sec2/in4

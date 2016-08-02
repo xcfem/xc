@@ -4,9 +4,9 @@
 L= 2.0 # Lado del elemento.
 t= 0.2 # Canto del elemento.
 E= 2.1e6 # Módulo de Young del acero.
-nu= 0.3 # Coeficiente de Poisson.
+nu= 0.3 # Poisson's ratio.
 # Load
-F= 10 # Magnitud de la carga
+F= 10 # Load magnitude
 
 import xc_base
 import geom

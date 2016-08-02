@@ -8,8 +8,8 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 
-width= 0.2 # Ancho de la sección expresado en metros.
-depth= 0.4 # Ancho de la sección expresado en metros.
+width= 0.2 # Cross section width expresado en metros.
+depth= 0.4 # Cross section width expresado en metros.
 E= 2.1e6 # Módulo de Young del material en kp/cm2.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor

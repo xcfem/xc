@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Referencia:  Expresiones de la flecha el el Prontuario de
+# Reference:  Expresiones de la flecha el el Prontuario de
 # Estructuras Metálicas del CEDEX. Apartado 3.3 Carga puntual sobre ménsula.
 #  Se comprueba el funcionamiento del comando vector2d_point_load_global.
 
@@ -13,11 +13,11 @@ from model import fix_node_3dof
 from materials import typical_materials
 import math
 
-E= 2e6 # Módulo elástico
-L= 20 # Longitud de la barra.
+E= 2e6 # Elastic modulus
+L= 20 # Bar length.
 h= 0.30 # Canto de la viga.
 b= 0.2 # Ancho de la viga.
-A= b*h # Área de la sección.
+A= b*h # Cross section area.
 I= b*h**3/12 # Inercia de la viga en pulgadas a la cuarta
 x= 0.5 # Abcisa relativa en la que se aplica la carga puntual.
 P= 1e3 # Carga transversal.
@@ -41,7 +41,7 @@ nodos.defaultTag= 1 #First node number.
 nod= nodos.newNodeXY(1,2)
 nod= nodos.newNodeXY(1+L*math.sqrt(2)/2,2+L*math.sqrt(2)/2)
     
-# Definimos transformaciones geométricas
+# Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
