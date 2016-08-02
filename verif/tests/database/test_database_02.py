@@ -10,22 +10,22 @@ from solution import predefined_solutions
 from materials import typical_materials
 from model import fix_node_6dof
 
-# Propiedades del material
-E= 2.1e6*9.81/1e-4 # Módulo elástico en Pa
-nu= 0.3 # Coeficiente de Poisson
-G= E/(2*(1+nu)) # Módulo de elasticidad a cortante
+# Material properties
+E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)
+nu= 0.3 # Poisson's ratio
+G= E/(2*(1+nu)) # Shear modulus
 
-# Propiedades de la sección (IPE-80)
-A= 7.64e-4 # Área de la sección expresada en m2
-Iy= 80.1e-8 # Momento de inercia de la sección expresada en m4
-Iz= 8.49e-8 # Momento de inercia de la sección expresada en m4
-J= 0.721e-8 # Momento de inercia a torsión expresado en m4
+# Cross section properties (IPE-80)
+A= 7.64e-4 # Cross section area (m2)
+Iy= 80.1e-8 # Cross section moment of inertia (m4)
+Iz= 8.49e-8 # Cross section moment of inertia (m4)
+J= 0.721e-8 # Cross section torsion constant (m4)
 
 # Geometry
 L= 1.5 # Bar length (m)
 
 # Load
-F= 1.5e3 # Magnitud de la carga en kN
+F= 1.5e3 # Load magnitude en kN
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   

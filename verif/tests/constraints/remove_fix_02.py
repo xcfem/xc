@@ -18,10 +18,10 @@ nDivJK= 10
 y0= 0
 z0= 0
 L= 1.5 # Bar length (m)
-Iy= width*depth**3/12 # Momento de inercia de la sección expresada en m4
+Iy= width*depth**3/12 # Cross section moment of inertia (m4)
 
 # Load
-F= 1.5e3 # Magnitud de la carga en N
+F= 1.5e3 # Load magnitude en N
 
 # Problem type
 prueba= xc.ProblemaEF()

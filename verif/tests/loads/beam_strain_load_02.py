@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Referencia:  Cálculo de estructuras por el método de los elementos finitos. E. Oñate, pg. 165, ejemplo 5.3
+# Reference:  Cálculo de estructuras por el método de los elementos finitos. E. Oñate, pg. 165, ejemplo 5.3
 
 import xc_base
 import geom
@@ -11,14 +11,14 @@ from model import fix_node_6dof
 from materials import typical_materials
 
 L= 1.0 # Bar length (m)
-E= 2.1e6*9.81/1e-4 # Módulo elástico
-nu= 0.3 # Coeficiente de Poisson
-G= E/(2*(1+nu)) # Módulo de elasticidad a cortante
+E= 2.1e6*9.81/1e-4 # Elastic modulus
+nu= 0.3 # Poisson's ratio
+G= E/(2*(1+nu)) # Shear modulus
 alpha= 1.2e-5 # Coeficiente de dilatación del acero
 A= 4e-4 # Área de la barra expresada en metros cuadrados
-Iy= 80.1e-8 # Momento de inercia de la sección expresada en m4
-Iz= 8.49e-8 # Momento de inercia de la sección expresada en m4
-J= 0.721e-8 # Momento de inercia a torsión expresado en m4
+Iy= 80.1e-8 # Cross section moment of inertia (m4)
+Iz= 8.49e-8 # Cross section moment of inertia (m4)
+J= 0.721e-8 # Cross section torsion constant (m4)
 AT= 10 # Incremento de temperatura expresado en grados centígrados
 
 prueba= xc.ProblemaEF()

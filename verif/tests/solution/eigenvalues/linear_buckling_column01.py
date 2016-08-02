@@ -19,11 +19,11 @@ from materials import typical_materials
 import math
 
 L= 4.0 # Longitud de la columna en metros
-b= 0.2 # Ancho de la sección en metros
-h= 0.2 # Canto de la sección en metros
-A= b*h # Área de la sección en m2
+b= 0.2 # Cross section width en metros
+h= 0.2 # Cross section heighten metros
+A= b*h # Cross section area en m2
 I= 1/12.0*b*h**3 # Momento de inercia en m4
-E=30E9 # Módulo elástico en N/m2
+E=30E9 # Elastic modulus en N/m2
 P= -100 # Carga vertical sobre la columna.
 
 NumDiv= 4
@@ -39,7 +39,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 nodos.newSeedNode()
-# Definimos transformaciones geométricas
+# Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newPDeltaCrdTransf2d("lin")
 

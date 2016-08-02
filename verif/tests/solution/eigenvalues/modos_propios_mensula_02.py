@@ -12,15 +12,15 @@ import math
 
 
 L= 1 # Longitud de la ménsula en metros
-b= 0.05 # Ancho de la sección en metros
-h= 0.10 # Canto de la sección en metros
-A= b*h # Área de la sección en m2
+b= 0.05 # Cross section width en metros
+h= 0.10 # Cross section heighten metros
+A= b*h # Cross section area en m2
 I= 1/12.0*b*h**3 # Momento de inercia en m4
-J= 10*I # Momento de inercia a torsión
+J= 10*I # Cross section torsion constant
 theta= math.radians(30)
-E=2.0E11 # Módulo elástico en N/m2
-nu= 0.3 # Coeficiente de Poisson
-G= E/(2*(1+nu)) # Módulo de elasticidad a cortante
+E=2.0E11 # Elastic modulus en N/m2
+nu= 0.3 # Poisson's ratio
+G= E/(2*(1+nu)) # Shear modulus
 dens= 7800 # Densidad del acero en kg/m3
 m= A*dens
 
@@ -37,7 +37,7 @@ scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,I,I,J)
 
 nodos.newSeedNode()
 
-# Definimos transformaciones geométricas
+# Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,0,1])

@@ -18,15 +18,15 @@ from materials import typical_materials
 import math
 
 L= 10 # Longitud de la columna en metros
-b= 0.2 # Ancho de la sección en metros
-h= 0.2 # Canto de la sección en metros
-A= b*h # Área de la sección en m2
+b= 0.2 # Cross section width en metros
+h= 0.2 # Cross section heighten metros
+A= b*h # Cross section area en m2
 Iz= 1/12.0*b*h**3 # Momento de inercia en m4
 Iy= Iz # Momento de inercia en m4
-E=1e4/Iz # Módulo elástico en N/m2
-nu= 0.3 # Coeficiente de Poisson
-G= E/(2*(1+nu)) # Módulo de elasticidad a cortante
-J= 0.001 # Momento de inercia a torsión expresado en m4 (ES IRRELEVANTE)
+E=1e4/Iz # Elastic modulus en N/m2
+nu= 0.3 # Poisson's ratio
+G= E/(2*(1+nu)) # Shear modulus
+J= 0.001 # Cross section torsion constant (m4) (ES IRRELEVANTE)
 P= -100 # Carga vertical sobre la columna.
 
 NumDiv= 4
@@ -41,7 +41,7 @@ predefined_spaces.gdls_resist_materiales3D(nodos)
 scc= typical_materials.defElasticShearSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J,1)
 
 nodos.newSeedNode()
-# Definimos transformaciones geométricas
+# Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newPDeltaCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])

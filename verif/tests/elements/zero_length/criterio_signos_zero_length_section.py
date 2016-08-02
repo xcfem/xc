@@ -14,27 +14,27 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
-# Propiedades del material
-E= 2.1e6 # Módulo elástico en Pa
-nu= 0.3 # Coeficiente de Poisson
-G= E/(2.0*(1+nu)) # Módulo de elasticidad a cortante
+# Material properties
+E= 2.1e6 # Elastic modulus (Pa)
+nu= 0.3 # Poisson's ratio
+G= E/(2.0*(1+nu)) # Shear modulus
 
-# Propiedades de la sección
+# Cross section properties
 y0= 0
 z0= 0
 width= 1
 depth= 1
 nDivIJ= 20
 nDivJK= 20
-A= width*depth # Área de la sección expresada en m2
-Iy= 1/12.0*width*depth**3 # Momento de inercia de la sección expresada en m4
-Iz= 1/12.0*depth*width**3 # Momento de inercia de la sección expresada en m4
+A= width*depth # Cross section area (m2)
+Iy= 1/12.0*width*depth**3 # Cross section moment of inertia (m4)
+Iz= 1/12.0*depth*width**3 # Cross section moment of inertia (m4)
 
 # Geometry
 L= 0 # Longitud expresada en metros
 
 # Load
-F= 1e3 # Magnitud de la carga en kN
+F= 1e3 # Load magnitude en kN
 
 # Problem type
 prueba= xc.ProblemaEF()

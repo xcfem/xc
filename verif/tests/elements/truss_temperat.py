@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Referencia:  Cálculo de estructuras por el método de los elementos finitos. E. Oñate, pg. 165, ejemplo 5.3
+# Reference:  Cálculo de estructuras por el método de los elementos finitos. E. Oñate, pg. 165, ejemplo 5.3
 import xc_base
 import geom
 import xc
@@ -11,7 +11,7 @@ from materials import typical_materials
 
 
 L= 1.0 # Bar length (m)
-E= 2.1e6*9.81/1e-4 # Módulo elástico
+E= 2.1e6*9.81/1e-4 # Elastic modulus
 alpha= 1.2e-5 # Coeficiente de dilatación del acero
 A= 4e-4 # Área de la barra expresada en metros cuadrados
 AT= 10 # Incremento de temperatura expresado en grados centígrados

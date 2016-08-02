@@ -4,14 +4,14 @@
 #    la resultante de fuerzas al cortar un subconjunto del modelo por un plano.
 
 Ec= 2e5*9.81/1e-4 # Módulo de Young del hormigón en Pa.
-nuC= 0.2 # Coeficiente de Poisson del hormigón EHE-08.
+nuC= 0.2 # Poisson's ratio del hormigón EHE-08.
 hLosa= 0.2 # Espesor.
 densLosa= 2500*hLosa # Densidad de la losa kg/m2.
 # Load
-F= 5.5e4 # Magnitud de la carga en N
+F= 5.5e4 # Load magnitude en N
 
 # Armadura activa
-Ep= 190e9 # Módulo elástico expresado en MPa
+Ep= 190e9 # Elastic modulus expresado en MPa
 Ap= 140e-6 # Área de la barra expresada en metros cuadrados
 fMax= 1860e6 # Carga unitaria máxima del material expresada en MPa.
 fy= 1171e6 # Tensión de límite elástico del material expresada en Pa.

@@ -22,9 +22,9 @@ matrizMasasNodo= xc.Matrix([[masaExtremo,0,0,0,0,0],
                                          [0,0,0,0,0,0],
                                          [0,0,0,0,0,0],
                                          [0,0,0,0,0,0]])
-EMat= 1 # Módulo elástico.
-nuMat= 0 # Coeficiente de Poisson.
-GMat= EMat/(2.0*(1+nuMat)) # Módulo de elasticidad a cortante.
+EMat= 1 # Elastic modulus.
+nuMat= 0 # Poisson's ratio.
+GMat= EMat/(2.0*(1+nuMat)) # Shear modulus.
 
 Iyy= 1 # Inercia a flexión eje y.
 Izz= 1 # Inercia a flexión eje z.
@@ -52,7 +52,7 @@ nod0.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0]))
 # Materials definition
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",area,EMat,GMat,Izz,Iyy,Ir)
 
-# Definimos transformaciones geométricas
+# Geometric transformation(s)
 linX= preprocessor.getTransfCooLoader.newLinearCrdTransf3d("linX")
 linX.xzVector= xc.Vector([1,0,0])
 linY= preprocessor.getTransfCooLoader.newLinearCrdTransf3d("linY")

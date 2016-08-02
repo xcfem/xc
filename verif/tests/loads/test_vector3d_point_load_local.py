@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Referencia:  Expresiones de la flecha el el Prontuario de
+# Reference:  Expresiones de la flecha el el Prontuario de
 # Estructuras Metálicas del CEDEX. Apartado 3.3 Carga puntual sobre ménsula.
 # Comprobamos el funcionamient del comando vector3d_point_load_local.
 
@@ -12,16 +12,16 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
-E= 2e6 # Módulo elástico
-nu= 0.3 # Coeficiente de Poisson
-G= E/(2*(1+nu)) # Módulo de elasticidad a cortante
-L= 20 # Longitud de la barra.
-h= 0.30 # Canto de la sección.
-b= 0.2 # Ancho de la sección.
-A= b*h # Área de la sección.
-Iz= b*h**3/12 # Inercia de la sección
-Iy= h*b**3/12 # Inercia de la sección
-J= 1e-8 # Inercia a torsión de la sección
+E= 2e6 # Elastic modulus
+nu= 0.3 # Poisson's ratio
+G= E/(2*(1+nu)) # Shear modulus
+L= 20 # Bar length.
+h= 0.30 # Cross section height
+b= 0.2 # Cross section width.
+A= b*h # Cross section area.
+Iz= b*h**3/12 # Cross section moment of inertia
+Iy= h*b**3/12 # Cross section moment of inertia
+J= 1e-8 # Cross section torsion constant
 x= 0.5 # Abcisa relativa en la que se aplica la carga puntual.
 P= 1e3 # Carga puntual.
 n= 1e6 # Carga uniforme axial.
@@ -37,7 +37,7 @@ nod= nodos.newNodeXYZ(0,0,0)
 nod= nodos.newNodeXYZ(L,0,0)
 
     
-# Definimos transformaciones geométricas
+# Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,0,1])

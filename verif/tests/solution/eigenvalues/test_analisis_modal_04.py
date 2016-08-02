@@ -17,16 +17,16 @@ masaPorPlanta= 134.4e3
 matrizMasasNodo= xc.Matrix([[masaPorPlanta,0,0],
                             [0,masaPorPlanta,0],
                             [0,0,0]])
-Ehorm= 200000*1e5 # Módulo elástico del hormigón.
+Ehorm= 200000*1e5 # Elastic modulus del hormigón.
 
 Bbaja= 0.45 # Escuadría de los pilares.
-Ibaja= 1/12.0*Bbaja**4 # Inercia de la sección.
+Ibaja= 1/12.0*Bbaja**4 # Cross section moment of inertia.
 Hbaja= 4 # Altura de la planta baja.
 B1a= 0.40 # Escuadría de los pilares.
-I1a= 1/12.0*B1a**4 # Inercia de la sección.
+I1a= 1/12.0*B1a**4 # Cross section moment of inertia.
 H= 3 # Altura del resto de plantas.
 B3a= 0.35 # Escuadría de los pilares.
-I3a= 1/12.0*B3a**4 # Inercia de la sección.
+I3a= 1/12.0*B3a**4 # Cross section moment of inertia.
 
 
 kPlBaja= 20*12*Ehorm*Ibaja/(Hbaja**3)
@@ -72,7 +72,7 @@ sccPl2a= typical_materials.defElasticSection2d(preprocessor, "sccPl2a",20*B1a*B1
 sccPl3a= typical_materials.defElasticSection2d(preprocessor, "sccPl3a",20*B3a*B3a,Ehorm,20*I3a) 
 sccPl4a= typical_materials.defElasticSection2d(preprocessor, "sccPl4a",20*B3a*B3a,Ehorm,20*I3a)
 
-# Definimos transformaciones geométricas
+# Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 

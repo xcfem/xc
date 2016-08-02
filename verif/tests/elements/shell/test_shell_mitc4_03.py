@@ -5,9 +5,9 @@ L= 6.0 # Longitud de la viga expresada en pulgadas.
 h= 0.8 # Canto de la viga expresado en pulgadas.
 t= 1 # Ancho de la viga expresado en pulgadas.
 E= 30000 # Módulo de Young del material expresado en ksi.
-nu= 0.3 # Coeficiente de Poisson.
+nu= 0.3 # Poisson's ratio.
 # Load
-F= 10 # Magnitud de la carga en kips
+F= 10 # Load magnitude en kips
 
 import xc_base
 import geom

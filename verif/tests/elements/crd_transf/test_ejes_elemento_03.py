@@ -11,14 +11,14 @@ import math
 b= 0.4
 h= 0.8
 A= b*h
-E= 200000*9.81/1e-4 # Módulo elástico aproximado del hormigón.
-nu= 0.3 # Coeficiente de Poisson
-G= E/(2*(1+nu)) # Módulo de elasticidad a cortante
-Iy= (1/12.0*h*b**3) # Momento de inercia de la sección expresado en m4
-Iz= (1/12.0*b*h**3) # Momento de inercia de la sección expresado en m4
-J= 0.721e-8 # Momento de inercia a torsión expresado en m4
+E= 200000*9.81/1e-4 # Elastic modulus aproximado del hormigón.
+nu= 0.3 # Poisson's ratio
+G= E/(2*(1+nu)) # Shear modulus
+Iy= (1/12.0*h*b**3) # Cross section moment of inertia (m4)
+Iz= (1/12.0*b*h**3) # Cross section moment of inertia (m4)
+J= 0.721e-8 # Cross section torsion constant (m4)
 L= 1 # Longitud del elmento expresada en metros.
-F= 1.0e3 # Magnitud de la carga en kN
+F= 1.0e3 # Load magnitude en kN
 
 # Problem type
 prueba= xc.ProblemaEF()

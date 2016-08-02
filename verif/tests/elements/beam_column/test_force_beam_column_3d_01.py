@@ -20,7 +20,7 @@ z0= 0
 L= 1.5 # Bar length (m)
 
 # Load
-F= 1.5e3 # Magnitud de la carga en N
+F= 1.5e3 # Load magnitude en N
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
