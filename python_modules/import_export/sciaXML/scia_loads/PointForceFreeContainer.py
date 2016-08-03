@@ -74,16 +74,16 @@ def getPointForceFreeComponents(pointForceFree):
   '''get PointForceFreeComponent objects from the 3D pointForceFree argument.'''
   retval= list()
   vDir= pointForceFree.vDir
-  posistion= pointForceFree.position
+  position= pointForceFree.pos
   loadCaseId= pointForceFree.loadCaseId
   loadCaseName= pointForceFree.loadCaseName
   value= pointForceFree.value
   if(vDir[0]!=0.0):
-    retval.append(PointForceFreeComponent(loadCaseId, loadCaseName, 'X',value*vDir[0]),position.x,position.y,position.z) #X component.
+    retval.append(PointForceFreeComponent(loadCaseId, loadCaseName, 'X',value*vDir[0],position.x,position.y,position.z)) #X component.
   if(vDir[1]!=0.0):
-    retval.append(PointForceFreeComponent(loadCaseId, loadCaseName, 'Y',value*vDir[1]),position.x,position.y,position.z) #Y component.
+    retval.append(PointForceFreeComponent(loadCaseId, loadCaseName, 'Y',value*vDir[1],position.x,position.y,position.z)) #Y component.
   if(vDir[2]!=0.0):
-    retval.append(PointForceFreeComponent(loadCaseId, loadCaseName, 'Z',value*vDir[2]),position.x,position.y,position.z) #Z component.
+    retval.append(PointForceFreeComponent(loadCaseId, loadCaseName, 'Z',value*vDir[2],position.x,position.y,position.z)) #Z component.
   return retval
   
 def getPointForceFreeObjects(nl):

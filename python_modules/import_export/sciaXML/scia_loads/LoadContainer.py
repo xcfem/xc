@@ -107,8 +107,19 @@ class FreeLoadContainer(LoadContainerBase):
      into XML SCIA) .'''
 
   def dumpPointLoads(self, lp, destLoadCase):
-    '''Dump free punctual loads.'''
-    print 'dumpPointLoads not implemented.'
+    '''Dump loads over nodes as free punctual loads.'''
+    lIter= lp.getNodalLoadIter
+    nl= lIter.next()
+    while nl:
+      node= nl.getNode
+      pLoad= nld.PointForceRecord(destLoadCase, self.pointLoadCounter,node.getInitialPos3d,1.0)
+      force= nl.getForce 
+      pLoad.value= force.Norm()
+      pLoad.vDir= force.Normalized()
+      pLoad.tag= nl.getNodeTag
+      destLoadCase.loads.punctualLoads.append(pLoad)
+      self.pointLoadCounter+=1
+      nl= lIter.next()
 
   def dumpSurfaceLoads(self, lp, destLoadCase):
     '''Dump loads over elements.'''

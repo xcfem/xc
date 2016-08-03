@@ -29,10 +29,10 @@ class SXMLBlockTopology(base.SXMLBase):
     self.surfacePressureFreeContainers= list()
     for key in sorted(loads.loadCases):
       lc= loads.loadCases[key]
-      pl= lc.loads.freePunctualLoads
+      pl= lc.loads.punctualLoads
       if(pl):
         self.pointForceFreeContainers.append(pffc.PointForceFreeContainer(pl))
-      sl= lc.loads.freeSurfaceLoads
+      sl= lc.loads.surfaceLoads
       if(sl):
         self.surfacePressureFreeContainers.append(elc.ElementLoadContainer(sl))
 

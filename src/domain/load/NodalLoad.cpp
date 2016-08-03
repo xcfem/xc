@@ -220,11 +220,10 @@ const XC::Vector &XC::NodalLoad::getMoment(void) const
     return retval;
   }
 
-//! @brief Devuelve el puntero a nodo que corresponde al tag
-//! que se guarda en myNode.
-XC::Node *XC::NodalLoad::get_node_ptr(void)
+//! @brief Returns a pointer to the loaded node.
+const XC::Node *XC::NodalLoad::get_node_ptr(void) const
   {
-    Node *retval= nullptr;
+    const Node *retval= nullptr;
     Domain *theDomain= getDomain();
     if(!theDomain)
       std::cerr << "NodalLoad::get_node_ptr(), puntero a dominio nulo.";
@@ -239,6 +238,13 @@ XC::Node *XC::NodalLoad::get_node_ptr(void)
       }
     return retval;
   }
+
+//! @brief Returns a pointer to the loaded node.
+XC::Node *XC::NodalLoad::get_node_ptr(void)
+  {
+    return const_cast<Node *>(static_cast<const NodalLoad*>(this)->getNode());
+  }
+
 
 void XC::NodalLoad::applyLoad(double loadFactor)
   {
