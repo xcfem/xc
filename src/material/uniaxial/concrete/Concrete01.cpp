@@ -156,16 +156,18 @@ XC::Concrete01 &XC::Concrete01::operator=(const Concrete01 &otro)
     return *this;
   }
 
+//! @brief Assigns concrete compressive strenght.
 void XC::Concrete01::setFpcu(const double &d)
   {
     fpcu= d;
     if(fpcu > 0.0)
       {
         fpcu= -fpcu;
-        std::clog << "!Ojo!, los parámetros del hormigón deben ser negativos." << std::endl;
+        std::clog << "Warning!, compressive strength must be negative." << std::endl;
       }
   }
 
+//! @brief Returns concrete compressive strenght.
 double XC::Concrete01::getFpcu(void) const
   { return fpcu; }
 

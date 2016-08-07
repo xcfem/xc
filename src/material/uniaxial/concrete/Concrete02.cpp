@@ -88,13 +88,67 @@ XC::Concrete02::Concrete02(void):
   {}
 
 XC::UniaxialMaterial* XC::Concrete02::getCopy(void) const
+  { return new Concrete02(*this); }
+
+//! @brief Assigns concrete compressive strenght.
+void XC::Concrete02::setFpcu(const double &d)
   {
-    Concrete02 *theCopy = new Concrete02(this->getTag(), fc, epsc0, fcu, epscu, rat, ft, Ets);
-    return theCopy;
+    fcu= d;
+    if(fcu > 0.0)
+      {
+        fcu= -fcu;
+        std::clog << "Warning!, compressive strength must be negative." << std::endl;
+      }
   }
 
+//! @brief Returns concrete compressive strenght.
+double XC::Concrete02::getFpcu(void) const
+  { return fcu; }
+
+//! @brief Assigns concrete tensile strenght.
+void XC::Concrete02::setFt(const double &d)
+  {
+    ft= d;
+    if(ft < 0.0)
+      {
+        ft= -ft;
+        std::clog << "Warning!, tensile strength must be positive." << std::endl;
+      }
+  }
+
+//! @brief Returns concrete tensile strenght.
+double XC::Concrete02::getFt(void) const
+  { return ft; }
+
+
+//! @brief tension softening stiffness (absolute value) (slope of the linear tension softening branch).
+void XC::Concrete02::setEts(const double &d)
+  {
+    Ets= d;
+    if(Ets < 0.0)
+      {
+        Ets= -Ets;
+        std::clog << "Warning!, tensile softening stiffness must be positive (absolute value)." << std::endl;
+      }
+  }
+
+//! @brief Returns concrete tensile strenght.
+double XC::Concrete02::getEts(void) const
+  { return Ets; }
+
+//! @brief ratio between unloading slope at $epscu and initial slope
+void XC::Concrete02::setLambda(const double &d)
+  { rat= d; }
+
+//! @brief Returns concrete tensile strenght.
+double XC::Concrete02::getLambda(void) const
+  { return rat; }
+
+
+
+
 int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
-{
+  {
   double         ec0 = fc * 2. / epsc0;
 
   // retrieve concrete hitory variables

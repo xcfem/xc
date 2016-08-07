@@ -77,20 +77,20 @@ class Concrete02: public UniaxialMaterial
   private:
 
     // matpar : Concrete FIXED PROPERTIES
-    double fc;    // concrete compression strength           : mp(1)
-    double epsc0; // strain at compression strength          : mp(2)
-    double fcu;   // stress at ultimate (crushing) strain    : mp(3)
-    double epscu; // ultimate (crushing) strain              : mp(4)       
-    double rat;   // ratio between unloading slope at epscu and original slope : mp(5)
-    double ft;    // concrete tensile strength               : mp(6)
-    double Ets;   // tension stiffening slope                : mp(7)
+    double fc;    //!< concrete compression strength           : mp(1)
+    double epsc0; //!< strain at compression strength          : mp(2)
+    double fcu;   //!< stress at ultimate (crushing) strain    : mp(3)
+    double epscu; //!< ultimate (crushing) strain              : mp(4)       
+    double rat;   //!< ratio between unloading slope at epscu and original slope : mp(5)
+    double ft;    //!< concrete tensile strength               : mp(6)
+    double Ets;   //!< tension stiffening slope                : mp(7)
 
     // hstvP : Concrete HISTORY VARIABLES last committed step
-    double ecminP;  //  hstP(1)
-    double deptP;   //  hstP(2)
-    double epsP;  //  = strain at previous converged step
-    double sigP;  //  = stress at previous converged step
-    double eP;    //   stiffness modulus at last converged step;
+    double ecminP;  //!<  hstP(1)
+    double deptP;   //!<  hstP(2)
+    double epsP;  //!< = strain at previous converged step
+    double sigP;  //!< = stress at previous converged step
+    double eP;    //!< stiffness modulus at last converged step;
 
     // hstv : Concrete HISTORY VARIABLES  current step
     double ecmin;  
@@ -109,6 +109,17 @@ class Concrete02: public UniaxialMaterial
 	     double _epscu, double _rat, double _ft, double _Ets);
 
     Concrete02(void);
+
+
+
+    void setFpcu(const double &);
+    double getFpcu(void) const;
+    void setFt(const double &);
+    double getFt(void) const;
+    void setEts(const double &);
+    double getEts(void) const;
+    void setLambda(const double &);
+    double getLambda(void) const;
 
     inline double getInitialTangent(void) const
       { return 2.0*fc/epsc0; }
