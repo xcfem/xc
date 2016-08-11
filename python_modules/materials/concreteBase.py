@@ -32,6 +32,11 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
       - ``S``  for cement of strength Classes CEM 32,5 N (Class S) [cementos de endurecimiento lento en EHE]
 
     :ivar alfacc:    factor which takes account of the fatigue in the concrete when it is subjected to high levels of compression stress due to long duration loads. Normally alfacc=1 (default value)
+
+    :ivar tensionStiff: variable to determine the behaviour of concrete under tension. 
+
+      - If tensionStiff='N' (default value) no tensile strength is considered; the stress strain relationship corresponds to a concrete01 material (zero tensile strength).
+      - If tensionStiff='Y' tension stiffeness of concrete is considered in the constitutive model to take into account the tensile capacity of the intact concrete between cracks. The stress strain relationship corresponds to a concrete02 material (linear tension softening).
     """
     nuc= 0.2 #** Poisson coefficient
     cemType='N'     #type of cement:
@@ -42,6 +47,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
              #    = 0,38 for cement of strength Classes CEM 32,5 N (Class S) 
              #           [cementos de endurecimiento lento en EHE]
     alfacc=1
+    tensionStiff='N'
 
     # Definition of «derived» properties of the material.
     def __init__(self,nmbConcrete, fck, gammaC):
@@ -123,14 +129,29 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return 1.3*self.getFctm()
 
     def defDiagK(self,preprocessor):
-        ''' Defines a ``Concrete01`` uniaxial material to represent the characteristic stress-strain diagram'''
-        self.materialDiagramK= typical_materials.defConcrete01(preprocessor,self.nmbDiagK,self.epsilon0(),self.fmaxK(),self.fmaxK(),self.epsilonU())
+        ''' Defines a uniaxial material to represent the characteristic stress-strain diagram
+
+          - If tensionStiff='N' (default value) no tensile strength is considered; the stress strain relationship corresponds to a concrete01 material (zero tensile strength).
+          - If tensionStiff='Y' tension stiffeness of concrete is considered in the constitutive model to take into account the tensile capacity of the intact concrete between cracks. The stress strain relationship corresponds to a concrete02 material (linear tension softening). The diagram of Schnobrich is adopted in tension, where the maximum strain is 20 times the strain corresponding to the tensile strength '''
+        if self.tensionStiff=='N':
+            self.materialDiagramK= typical_materials.defConcrete01(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=self.fmaxK(),epscu=self.epsilonU())
+        else:
+            E0=2*self.fmaxK()/self.epsilon0()
+            self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=self.fctk(),Ets=E0/19.0)
         self.matTagK= self.materialDiagramK.tag
         return self.matTagK
 
     def defDiagD(self,preprocessor):
-        ''' Defines a ``Concrete01`` uniaxial material to represent the design stress-strain diagram'''
-        self.materialDiagramD= typical_materials.defConcrete01(preprocessor,self.nmbDiagD,self.epsilon0(),self.fmaxD(),self.fmaxD(),self.epsilonU())
+        ''' Defines a uniaxial material to represent the design stress-strain diagram
+
+          - If tensionStiff='N' (default value) no tensile strength is considered; the stress strain relationship corresponds to a concrete01 material (zero tensile strength).
+          - If tensionStiff='Y' tension stiffeness of concrete is considered in the constitutive model to take into account the tensile capacity of the intact concrete between cracks. The stress strain relationship corresponds to a concrete02 material (linear tension softening). The diagram of Schnobrich is adopted in tension, where the maximum strain is 20 times the strain corresponding to the tensile strength            
+        '''
+        if self.tensionStiff=='N':
+            self.materialDiagramD= typical_materials.defConcrete01(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU())
+        else:
+            E0=2*self.fmaxD()/self.epsilon0()
+            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=self.fctd(),Ets=E0/19.0)
         self.matTagD= self.materialDiagramD.tag
         return self.matTagD
 

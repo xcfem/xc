@@ -35,6 +35,7 @@
 //#include "material/uniaxial/BoucWenMaterial.h"
 #include "material/uniaxial/CableMaterial.h"
 #include "material/uniaxial/concrete/Concrete01.h"
+#include "material/uniaxial/concrete/Concrete02.h"
 #include "material/uniaxial/concrete/Concrete04.h"
 #include "material/uniaxial/ENTMaterial.h"
 #include "material/uniaxial/EPPGapMaterial.h"
@@ -218,6 +219,7 @@ XC::Material *load_uniaxial_fedeas_material(int tag_mat,const std::string &cmd)
 //! - epp_gap_material: Define una material uniaxial elastoplástico perfecto con «gap».
 //! - cable_material: Define un material uniaxial de tipo «cable» sin resistencia a compresión.
 //! - concrete01_material: Define un material uniaxial para representar el comportamiento del hormigón.
+//! - concrete02_material: Uniaxial material for concrete with tension stiffeness.
 //! - concrete04_material: Define un material uniaxial para representar el comportamiento del hormigón.
 //! - steel01: Define un material uniaxial para representar el comportamiento del acero.
 //! - steel02: Define un material uniaxial para representar el comportamiento del acero.
@@ -231,6 +233,8 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
       retval= new XC::CableMaterial(tag_mat);
     else if(cmd == "concrete01_material")
       retval= new XC::Concrete01(tag_mat);
+    else if(cmd == "concrete02_material")
+      retval= new XC::Concrete02(tag_mat);
     else if(cmd == "concrete04_material")
       retval= new XC::Concrete04(tag_mat);
     else if(cmd == "elast_no_trac_material")

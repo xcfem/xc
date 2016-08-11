@@ -67,25 +67,33 @@
 #include <cfloat>
 #include <utility/matrix/Vector.h>
 
-XC::Concrete02::Concrete02(int tag, double _fc, double _epsc0, double _fcu,
-                       double _epscu, double _rat, double _ft, double _Ets):
-  UniaxialMaterial(tag, MAT_TAG_Concrete02),
-  fc(_fc), epsc0(_epsc0), fcu(_fcu), epscu(_epscu), rat(_rat), ft(_ft), Ets(_Ets)
-{
-  ecminP = 0.0;
-  deptP = 0.0;
+void XC::Concrete02::setup_parameters(void)
+  {
+    ecminP= 0.0;
+    deptP= 0.0;
 
-  eP = 2.0*fc/epsc0;
-  epsP = 0.0;
-  sigP = 0.0;
-  eps = 0.0;
-  sig = 0.0;
-  e = 2.0*fc/epsc0;
-}
+    eP= 2.0*fpc/epsc0;
+    epsP= 0.0;
+    sigP= 0.0;
+    eps= 0.0;
+    sig= 0.0;
+    e= 2.0*fpc/epsc0;
+  }
 
-XC::Concrete02::Concrete02(void):
-  UniaxialMaterial(0, MAT_TAG_Concrete02)
-  {}
+XC::Concrete02::Concrete02(int tag, double _fpc, double _epsc0, double _fpcu,
+                       double _epscu, double _rat, double _ft, double _Ets)
+  :  RawConcrete(tag, MAT_TAG_Concrete02,_fpc,_epsc0,_epscu),
+     fpcu(_fpcu), rat(_rat), ft(_ft), Ets(_Ets)
+  {
+    setup_parameters();
+  }
+
+XC::Concrete02::Concrete02(int tag):
+  RawConcrete(tag, MAT_TAG_Concrete02),
+  fpcu(0.0), rat(0.0), ft(0.0), Ets(0.0)
+  {
+    setup_parameters();
+  }
 
 XC::UniaxialMaterial* XC::Concrete02::getCopy(void) const
   { return new Concrete02(*this); }
@@ -93,17 +101,17 @@ XC::UniaxialMaterial* XC::Concrete02::getCopy(void) const
 //! @brief Assigns concrete compressive strenght.
 void XC::Concrete02::setFpcu(const double &d)
   {
-    fcu= d;
-    if(fcu > 0.0)
+    fpcu= d;
+    if(fpcu > 0.0)
       {
-        fcu= -fcu;
+        fpcu= -fpcu;
         std::clog << "Warning!, compressive strength must be negative." << std::endl;
       }
   }
 
 //! @brief Returns concrete compressive strenght.
 double XC::Concrete02::getFpcu(void) const
-  { return fcu; }
+  { return fpcu; }
 
 //! @brief Assigns concrete tensile strenght.
 void XC::Concrete02::setFt(const double &d)
@@ -149,7 +157,7 @@ double XC::Concrete02::getLambda(void) const
 
 int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
   {
-  double         ec0 = fc * 2. / epsc0;
+  double         ec0 = fpc * 2. / epsc0;
 
   // retrieve concrete hitory variables
 
@@ -178,7 +186,7 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
     // (corresponding equations are 2.31 and 2.32 
     // the strain of point R is epsR and the stress is sigmR 
     
-    double epsr = (fcu - rat * ec0 * epscu) / (ec0 * (1.0 - rat));
+    double epsr = (fpcu - rat * ec0 * epscu) / (ec0 * (1.0 - rat));
     double sigmr = ec0 * epsr;
     
     // calculate the previous minimum stress sigmm from the minimum 
@@ -256,48 +264,38 @@ double XC::Concrete02::getTangent(void) const
   { return e; }
 
 int XC::Concrete02::commitState(void)
-{
-  ecminP = ecmin;
-  deptP = dept;
+  {
+    ecminP = ecmin;
+    deptP = dept;
   
-  eP = e;
-  sigP = sig;
-  epsP = eps;
-  return 0;
-}
+    eP = e;
+    sigP = sig;
+    epsP = eps;
+    return 0;
+  }
 
-int 
-XC::Concrete02::revertToLastCommit(void)
-{
-  ecmin = ecminP;
-  dept = deptP;
+int XC::Concrete02::revertToLastCommit(void)
+  {
+    ecmin = ecminP;
+    dept = deptP;
   
-  e = eP;
-  sig = sigP;
-  eps = epsP;
-  return 0;
-}
+    e = eP;
+    sig = sigP;
+    eps = epsP;
+    return 0;
+  }
 
 int XC::Concrete02::revertToStart(void)
   {
-  ecminP = 0.0;
-  deptP = 0.0;
-
-  eP = 2.0*fc/epsc0;
-  epsP = 0.0;
-  sigP = 0.0;
-  eps = 0.0;
-  sig = 0.0;
-  e = 2.0*fc/epsc0;
-
-  return 0;
-}
+    setup_parameters();
+    return 0;
+  }
 
 //! @brief Send members del objeto through the channel being passed as parameter.
 int XC::Concrete02::sendData(CommParameters &cp)
   {
-    int res= UniaxialMaterial::sendData(cp);
-    res+= cp.sendDoubles(fc,epsc0,fcu,epscu,getDbTagData(),CommMetaData(2));
+    int res= RawConcrete::sendData(cp);
+    res+= cp.sendDoubles(fpc,epsc0,fpcu,epscu,getDbTagData(),CommMetaData(2));
     res+= cp.sendDoubles(rat,ft,Ets,ecminP,deptP,getDbTagData(),CommMetaData(3));
     res+= cp.sendDoubles(epsP,sigP,eP,ecmin,dept,sig,getDbTagData(),CommMetaData(4));
     res+= cp.sendDoubles(e,eps,getDbTagData(),CommMetaData(5));
@@ -307,8 +305,8 @@ int XC::Concrete02::sendData(CommParameters &cp)
 //! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::Concrete02::recvData(const CommParameters &cp)
   {
-    int res= UniaxialMaterial::recvData(cp);
-    res+= cp.receiveDoubles(fc,epsc0,fcu,epscu,getDbTagData(),CommMetaData(2));
+    int res= RawConcrete::recvData(cp);
+    res+= cp.receiveDoubles(fpc,epsc0,fpcu,epscu,getDbTagData(),CommMetaData(2));
     res+= cp.receiveDoubles(rat,ft,Ets,ecminP,deptP,getDbTagData(),CommMetaData(3));
     res+= cp.receiveDoubles(epsP,sigP,eP,ecmin,dept,sig,getDbTagData(),CommMetaData(4));
     res+= cp.receiveDoubles(e,eps,getDbTagData(),CommMetaData(5));
@@ -352,8 +350,7 @@ void XC::Concrete02::Print(std::ostream &s, int flag)
 }
 
 
-void
-XC::Concrete02::Tens_Envlp (double epsc, double &sigc, double &Ect)
+void XC::Concrete02::Tens_Envlp(double epsc, double &sigc, double &Ect)
 {
 /*-----------------------------------------------------------------------
 ! monotonic envelope of concrete in tension (positive envelope)
@@ -368,7 +365,7 @@ XC::Concrete02::Tens_Envlp (double epsc, double &sigc, double &Ect)
 !    Ect  = tangent concrete modulus
 !-----------------------------------------------------------------------*/
   
-  double Ec0  = 2.0*fc/epsc0;
+  double Ec0  = 2.0*fpc/epsc0;
 
   double eps0 = ft/Ec0;
   double epsu = ft*(1.0/Ets+1.0/Ec0);
@@ -395,9 +392,9 @@ XC::Concrete02::Compr_Envlp (double epsc, double &sigc, double &Ect)
 /*-----------------------------------------------------------------------
 ! monotonic envelope of concrete in compression (negative envelope)
 !
-!   fc    = concrete compressive strength
+!   fpc    = concrete compressive strength
 !   epsc0 = strain at concrete compressive strength
-!   fcu   = stress at ultimate (crushing) strain 
+!   fpcu   = stress at ultimate (crushing) strain 
 !   epscu = ultimate (crushing) strain
 !   Ec0   = initial concrete tangent modulus
 !   epsc  = strain
@@ -407,23 +404,23 @@ XC::Concrete02::Compr_Envlp (double epsc, double &sigc, double &Ect)
 !   Ect   = tangent concrete modulus
 -----------------------------------------------------------------------*/
 
-  double Ec0  = 2.0*fc/epsc0;
+  double Ec0  = 2.0*fpc/epsc0;
 
   double ratLocal = epsc/epsc0;
   if (epsc>=epsc0) {
-    sigc = fc*ratLocal*(2.0-ratLocal);
+    sigc = fpc*ratLocal*(2.0-ratLocal);
     Ect  = Ec0*(1.0-ratLocal);
   } else {
     
     //   linear descending branch between epsc0 and epscu
     if (epsc>epscu) {
-      sigc = (fcu-fc)*(epsc-epsc0)/(epscu-epsc0)+fc;
-      Ect  = (fcu-fc)/(epscu-epsc0);
+      sigc = (fpcu-fpc)*(epsc-epsc0)/(epscu-epsc0)+fpc;
+      Ect  = (fpcu-fpc)/(epscu-epsc0);
     } else {
            
       // flat friction branch for strains larger than epscu
       
-      sigc = fcu;
+      sigc = fpcu;
       Ect  = 1.0e-10;
       //       Ect  = 0.0
     }
