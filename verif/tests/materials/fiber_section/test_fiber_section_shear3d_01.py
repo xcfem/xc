@@ -29,10 +29,10 @@ from materials import typical_materials
 
 # Definición de la sección rectangular
 scc10x20= sccRectg.sccRectang()
-scc10x20.b= 10 # Cross section width expresado en cm.
-scc10x20.h= 20 # Cross section heightexpresado en cm.
-scc10x20.nDivIJ= 32
-scc10x20.nDivJK= 32
+scc10x20.b= 10 # Cross-section width(cm)
+scc10x20.h= 20 # cross-section depth (cm)
+scc10x20.nDivIJ= 32 #number of cells in IJ (width) direction
+scc10x20.nDivJK= 32 #number of cells in JK (height) direction
 
 import os
 pth= os.path.dirname(__file__)
@@ -43,13 +43,13 @@ execfile(pth+"/macros_test_fiber_section.py")
 
 
 fy= 2600 # Tensión de cedencia del material expresada en kp/cm2.
-E= 2.1e6 # Módulo de Young del material en kp/cm2.
+E= 2.1e6 # Young’s modulus of the material (kp/cm2).
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy) 
+epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy) #elastic perfectly-plastic uniaxial material
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respuesta de la sección a cortante según y.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Respuesta de la sección a cortante según y.

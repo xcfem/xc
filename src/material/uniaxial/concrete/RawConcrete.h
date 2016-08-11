@@ -24,13 +24,13 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ConcreteBase.h
+//RawConcrete.h
                                               
-#ifndef ConcreteBase_h
-#define ConcreteBase_h
+#ifndef RawConcrete_h
+#define RawConcrete_h
 
 
-#include "material/uniaxial/concrete/RawConcrete.h"
+#include "material/uniaxial/UniaxialMaterial.h"
 #include "material/uniaxial/UniaxialStateVars.h"
 #include "material/uniaxial/UniaxialHistoryVars.h"
 
@@ -38,46 +38,26 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Clase base para los materiales de tipo hormigón.
-class ConcreteBase: public RawConcrete
+class RawConcrete: public UniaxialMaterial
   {
   protected:
-    UniaxialHistoryVars convergedHistory; //!< CONVERGED history Variables
-    UniaxialStateVars convergedState; //!< CONVERGED state Variables
+    double fpc; //!< Resistencia a compresión
+    double epsc0; //!< Deformación cuando se alcanza la resistencia a compresión
+    double epscu; //!< Strain at crushing strength
 
-    UniaxialHistoryVars trialHistory; //!< TRIAL history Variables
-    UniaxialStateVars trialState;//!< TRIAL state Variables
+    virtual void setup_parameters(void)= 0;
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
-
-    void commit_to_trial_history(void);
-    void commit_to_trial_state(void);
-    void commit_to_trial(void);
   public:
-    ConcreteBase(int tag, int classTag, double fpc, double eco, double ecu);
-    ConcreteBase(int tag, int classTag);
+    RawConcrete(int tag, int classTag, double fpc, double eco, double ecu);
+    RawConcrete(int tag, int classTag);
 
-    double getStrain(void) const;      
-    double getStress(void) const;
-    double getTangent(void) const;
+    void setFpc(const double &);
+    double getFpc(void) const;
+    void setEpsc0(const double &);
+    double getEpsc0(void) const;
+    void setEpscu(const double &);
+    double getEpscu(void) const;
   };
-
-//! @brief Reset trial history variables to last committed state
-inline void ConcreteBase::commit_to_trial_history(void)
-  { trialHistory= convergedHistory; }
-
-//! @brief Reset trial state variables to last committed state
-inline void ConcreteBase::commit_to_trial_state(void)
-  { trialState= convergedState; }
-
-//! @brief Reset trial state and history variables to last committed state
-inline void ConcreteBase::commit_to_trial(void)
-  {
-    // Reset trial history variables to last committed state
-    commit_to_trial_history();
-    // Reset trial state variables to last committed state
-    commit_to_trial_state();
-  }
 
 } // end of XC namespace
 

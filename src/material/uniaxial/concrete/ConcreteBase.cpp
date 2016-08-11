@@ -37,52 +37,11 @@
 
 //! @brief Constructor.
 XC::ConcreteBase::ConcreteBase(int tag, int classTag, double FPC, double EPSC0, double EPSCU)
-  :UniaxialMaterial(tag, classTag), fpc(FPC), epsc0(EPSC0), epscu(EPSCU) {}
+  :RawConcrete(tag, classTag,FPC,EPSC0,EPSCU) {}
 
 //! @brief Constructor
 XC::ConcreteBase::ConcreteBase(int tag, int classTag)
-  :UniaxialMaterial(tag, classTag), fpc(0.0), epsc0(0.0), epscu(0.0) {}
-
-void XC::ConcreteBase::setFpc(const double &d)
-  {
-    fpc= d;
-    if(fpc > 0.0)
-      {
-        fpc= -fpc;
-        std::clog << "!Ojo!, los parámetros del hormigón deben ser negativos." << std::endl;
-      }
-    setup_parameters();
-  }
-
-double XC::ConcreteBase::getFpc(void) const
-  { return fpc; }
-
-void XC::ConcreteBase::setEpsc0(const double &d)
-  {
-    epsc0= d;
-    if(epsc0 > 0.0)
-      {
-        epsc0= -epsc0;
-        std::clog << "!Ojo!, los parámetros del hormigón deben ser negativos." << std::endl;
-      }
-    setup_parameters();
-  }
-
-double XC::ConcreteBase::getEpsc0(void) const
-  { return epsc0; }
-
-void XC::ConcreteBase::setEpscu(const double &d)
-  {
-    epscu= d;
-    if(epscu > 0.0)
-      {
-        epscu= -epscu;
-        std::clog << "!Ojo!, los parámetros del hormigón deben ser negativos." << std::endl;
-      }
-  }
-
-double XC::ConcreteBase::getEpscu(void) const
-  { return epscu; }
+  :RawConcrete(tag, classTag) {}
 
 //! @brief Devuelve la tensión en el material.
 double XC::ConcreteBase::getStress(void) const
@@ -99,7 +58,7 @@ double XC::ConcreteBase::getTangent(void) const
 //! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ConcreteBase::sendData(CommParameters &cp)
   {
-    int res= UniaxialMaterial::sendData(cp);
+    int res= RawConcrete::sendData(cp);
     res+= cp.sendMovable(convergedState,getDbTagData(),CommMetaData(2));
     res+= cp.sendMovable(trialState,getDbTagData(),CommMetaData(3));
     res+= cp.sendMovable(convergedHistory,getDbTagData(),CommMetaData(4));
@@ -111,7 +70,7 @@ int XC::ConcreteBase::sendData(CommParameters &cp)
 //! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::ConcreteBase::recvData(const CommParameters &cp)
   {
-    int res= UniaxialMaterial::recvData(cp);
+    int res= RawConcrete::recvData(cp);
     res+= cp.receiveMovable(convergedState,getDbTagData(),CommMetaData(2));
     res+= cp.receiveMovable(trialState,getDbTagData(),CommMetaData(3));
     res+= cp.receiveMovable(convergedHistory,getDbTagData(),CommMetaData(4));

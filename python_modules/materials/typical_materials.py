@@ -119,9 +119,10 @@ def defSteel02(preprocessor,name,E,fy,b,initialStress):
   retval.initialStress= initialStress
   return retval
 
+
 #Concrete 01.
 def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
-  '''Constructs a uniaxial Kent-Scott-Park concrete material object 
+  ''''Constructs an uniaxial Kent-Scott-Park concrete material object 
   with degraded linear unloading/reloading stiffness according to 
   the work of Karsan-Jirsa and no tensile strength
 
@@ -141,6 +142,35 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
   retval.epscu= epscu
   return retval
 
+
+#Concrete 02.
+def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope,ft,Ets):
+  ''''Constructs an uniaxial concrete material with linear tension
+  softening. Compressive concrete parameters should be input as negative values.
+  The initial slope for this model is (2*fpc/epsc0) 
+
+  :param preprocessor: preprocessor name
+  :param name:         name identifying the material
+  :param epsc0:        concrete strain at maximum strength 
+  :param fpc:          concrete compressive strength at 28 days (compression is negative)
+  :param fpcu:         concrete crushing strength 
+  :param epscu:        concrete strain at crushing strength 
+  :param ratioSlope:   ratio between unloading slope at epscu and initial slope 
+  :param ft:           tensile strength
+  :param Ets:          tension softening stiffness (absolute value) (slope of the linear tension softening branch) 
+
+  '''
+  materiales= preprocessor.getMaterialLoader
+  materiales.newMaterial("concrete02_material",name)
+  retval= materiales.getMaterial(name)
+  retval.epsc0= epsc0
+  retval.fpc= fpc
+  retval.fpcu= fpcu
+  retval.epscu= epscu
+  retval.ratioSlope=ratioSlope
+  retval.ft=ft
+  retval.Ets=Ets
+  return retval
 
 #Elastic section 2d.
 def defElasticSection2d(preprocessor,name,A,E,I):

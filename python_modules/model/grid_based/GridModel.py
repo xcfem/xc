@@ -579,9 +579,11 @@ class LoadState(object):
       pp.appendLoadToCurrentLoadPattern()
 
   def appendUniformLoadsToCurrentLoadPattern(self,dicGeomEnt):
+#    print 'antes: self.unifPressLoad=', len(self.unifPressLoad)
     for load in self.unifPressLoad:
       lmsg.log('unifPressLoad: '+ load.name)
       load.appendLoadToCurrentLoadPattern(dicGeomEnt)
+#    print 'despues: self.unifPressLoad=', len(self.unifPressLoad)
     for load in self.unifVectLoad:
       lmsg.log('unifVectLoad: '+ load.name)
       load.appendLoadToCurrentLoadPattern(dicGeomEnt)

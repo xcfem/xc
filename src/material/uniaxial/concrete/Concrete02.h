@@ -66,21 +66,18 @@
 #ifndef Concrete02_h
 #define Concrete02_h
 
-#include <material/uniaxial/UniaxialMaterial.h>
+#include <material/uniaxial/concrete/RawConcrete.h>
 
 namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Modelización 1D del hormigón con módulo de daño.
-class Concrete02: public UniaxialMaterial
+class Concrete02: public RawConcrete
   {
   private:
 
     // matpar : Concrete FIXED PROPERTIES
-    double fc;    //!< concrete compression strength           : mp(1)
-    double epsc0; //!< strain at compression strength          : mp(2)
-    double fcu;   //!< stress at ultimate (crushing) strain    : mp(3)
-    double epscu; //!< ultimate (crushing) strain              : mp(4)       
+    double fpcu;   //!< stress at ultimate (crushing) strain    : mp(3)
     double rat;   //!< ratio between unloading slope at epscu and original slope : mp(5)
     double ft;    //!< concrete tensile strength               : mp(6)
     double Ets;   //!< tension stiffening slope                : mp(7)
@@ -104,14 +101,12 @@ class Concrete02: public UniaxialMaterial
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
+    void setup_parameters(void);
   public:
-    Concrete02(int tag, double _fc, double _epsc0, double _fcu,
+    Concrete02(int tag, double _fpc, double _epsc0, double _fpcu,
 	     double _epscu, double _rat, double _ft, double _Ets);
-
-    Concrete02(void);
-
-
-
+    Concrete02(int tag= 0);
+ 
     void setFpcu(const double &);
     double getFpcu(void) const;
     void setFt(const double &);
@@ -122,7 +117,7 @@ class Concrete02: public UniaxialMaterial
     double getLambda(void) const;
 
     inline double getInitialTangent(void) const
-      { return 2.0*fc/epsc0; }
+      { return 2.0*fpc/epsc0; }
     UniaxialMaterial *getCopy(void) const;
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
