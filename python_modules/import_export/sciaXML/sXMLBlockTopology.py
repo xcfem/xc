@@ -39,5 +39,7 @@ class SXMLBlockTopology(base.SXMLBase):
   def getContainers(self):
     retval= [self.pointContainer,self.blockContainer,self.pointSupportContainer]
     retval.extend(super(SXMLBlockTopology,self).getContainers())
+    retval.extend(self.pointForceFreeContainers)
+    retval.extend(self.surfacePressureFreeContainers)
     return retval
 

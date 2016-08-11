@@ -125,10 +125,13 @@ class RetainingWall(object):
     self.hCouronnement= max(totalHeight/24.0,0.15)
     self.hSemelle= totalHeight/12.0
     self.hauteurVoile= totalHeight-self.hSemelle
-    self.hEncastrement= max(self.hSemelle,self.hCouronnement+1.02*self.hauteurVoile)
+    self.hEncastrement= max(self.hSemelle,self.hCouronnement+0.02*self.hauteurVoile)
     bFooting= 1.15*(0.2+0.45*totalHeight)
     self.bToe= totalHeight/8.0
     self.bHeel= bFooting-self.bToe-self.hEncastrement
+
+  def getFootingWidth(self):
+    return self.bToe+self.hEncastrement+self.bHeel
 
   def setArmature(self,index,armature):
     '''Assigns armature.'''
@@ -179,8 +182,8 @@ class RetainingWall(object):
   def writeDef(self,pth,outputFile):
     '''Write wall definition in LaTeX format.'''
     pathFiguraEPS= pth+self.name+".eps"
-    self.internalForces.writeGraphic(pathFiguraEPS)
     pathFiguraPDF= pth+self.name+".pdf"
+    self.internalForces.writeGraphic(pathFiguraEPS)
     os.system("convert "+pathFiguraEPS+" "+pathFiguraPDF)
     outputFile.write("\\begin{table}\n")
     outputFile.write("\\begin{center}\n")
