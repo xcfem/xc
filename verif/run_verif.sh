@@ -136,8 +136,8 @@ python tests/elements/volume/test_brick_00.py
 python tests/elements/volume/test_brick_01.py
 
 echo "$BLEU" "  Misc elements tests." "$NORMAL"
-python tests/elements/muelle_test_01.py
-python tests/elements/muelle_test_02.py
+python tests/elements/spring_test_01.py
+python tests/elements/spring_test_02.py
 python tests/elements/test_coloca_apoyo_elastico_01.py
 python tests/elements/test_coloca_apoyo_pot_01.py
 python tests/elements/test_coloca_apoyo_pot_02.py

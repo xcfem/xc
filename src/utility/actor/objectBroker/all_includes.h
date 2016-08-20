@@ -150,7 +150,7 @@
 #include "domain/mesh/element/truss_beam_column/beam3d/beam3d01.h"
 #include "domain/mesh/element/truss_beam_column/beam3d/beam3d02.h"
 #include "domain/mesh/element/truss_beam_column/truss/Truss.h"
-#include "domain/mesh/element/truss_beam_column/truss/Muelle.h"
+#include "domain/mesh/element/truss_beam_column/truss/Spring.h"
 #include "domain/mesh/element/truss_beam_column/truss/TrussSection.h"
 #include "domain/mesh/element/truss_beam_column/truss/CorotTruss.h"
 #include "domain/mesh/element/truss_beam_column/truss/CorotTrussSection.h"

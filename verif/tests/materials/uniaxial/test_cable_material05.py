@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Test tomado del manual de Ansys
-# Referencia:  Strength of Material, Part I, Elementary Theory and Problems, pg. 26, problem 10
+# Test from Ansys manual
+# Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 26, problem 10
 
 import math
 import xc_base
@@ -15,10 +15,10 @@ from materials import typical_materials
 
 NumDiv= 100
 E= 30e6 # Young modulus (psi)
-lng= 10 # Longitud del cable en pulgadas
-sigmaPret= 1500 # Magnitud del pretensado en libras
+lng= 10 # Cable length in inches
+sigmaPret= 1500 # Prestressing force (pounds)
 area= 2.0
-fPret= sigmaPret*area # Magnitud del pretensado en libras
+fPret= sigmaPret*area # Prestressing force (pounds)
 F= 100/NumDiv # Carga vertical
 
 prueba= xc.ProblemaEF()
@@ -28,7 +28,7 @@ nodos= preprocessor.getNodeLoader
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
 
-# Definición del modelo
+# Model definition
 nodos.newSeedNode()
 
     

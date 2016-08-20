@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ''' home made test. Verifica el buen comportamiento del
  elemento «ZeroLength» cuando no está alineado con los ejes globales. '''
-K= 1000 # Constante del muelle
-F= 1 # Magnitud de la fuerza
+K= 1000 # Spring constant
+F= 1 # Force magnitude
 
 import xc_base
 import geom

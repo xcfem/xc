@@ -25,9 +25,9 @@ J= 0.721e-8 # Cross section torsion constant (m4)
 L= 1.5 # Bar length (m)
 
 # Load
-F= 1.5e3 # Load magnitude en kN
-Q1= 1.2e2 # Load magnitude en kN
-Q2= 0.9e2 # Load magnitude en kN
+F= 1.5e3 # Load magnitude (kN)
+Q1= 1.2e2 # Load magnitude (kN)
+Q2= 0.9e2 # Load magnitude (kN)
 
 # Problem type
 prueba= xc.ProblemaEF()

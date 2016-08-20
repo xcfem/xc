@@ -3,7 +3,7 @@
 #    a cortante y torsion. Elaboración propia.
 
 
-# Definición de la sección rectangular
+# Rectangular cross-section definition
 nmbSecc= "scc1x1"
 from materials import sccRectg
 from misc import banco_pruebas_scc3d

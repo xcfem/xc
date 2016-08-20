@@ -16,7 +16,7 @@ As= 1.0/nRebars
 areaTeor= nRebars*As
 iyTeor= nRebars*As*(width/2.0)**2
 izTeor= nRebars*As*(depth/2.0)**2
-F= 1000.0 # Magnitud de la fuerza
+F= 1000.0 # Force magnitude
 
 # Problem type
 prueba= xc.ProblemaEF()

@@ -21,7 +21,7 @@ y_modelo= [0,509.052149658,1009.3942759,1492.46538622,1950,2374.16957313,2600,26
 
 
 
-# Definición del modelo
+# Model definition
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 preprocessor=  prueba.getPreprocessor

@@ -25,9 +25,9 @@ J= 0.721e-8 # Cross section torsion constant (m4)
 L= 1.5 # Bar length (m)
 
 # Load
-F= 1.5e3 # Load magnitude en kN
+F= 1.5e3 # Load magnitude (kN)
 GF= 1.33 # Coeficiente de ponderación de la hipótesis.
-M= 1.5e3 # Magnitud del momento en kN m
+M= 1.5e3 # Moment magnitude (kN m)
 GM= 1.5 # Coeficiente de ponderación de la hipótesis.
 
 # Problem type

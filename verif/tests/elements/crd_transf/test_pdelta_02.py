@@ -8,15 +8,15 @@ from __future__ import division
 # consecutivos: es decir un análisis de segundo orden.
 
 
-B= 100 # Ancho del pórtico expresado en pulgadas
-H= 100 # Altura del pórtico expresado en pulgadas
+B= 100 # Ancho del pórtico expresado in inches
+H= 100 # Altura del pórtico expresado in inches
 # Propiedades de la sección (IPE-80)
 Es= 29e6 # Young modulus (psi)
 area= 1 # Área de la sección expresada en in2
 Iz= 1/12 # Momento de inercia de la sección expresada en in4
-P= 1000 # Carga en libras-fuerza.
-nDivLineas= 8 # Carga en libras-fuerza.
-offset= 2*B # Carga en libras-fuerza.
+P= 1000 # Carga (pounds)-fuerza.
+nDivLineas= 8 # Carga (pounds)-fuerza.
+offset= 2*B # Carga (pounds)-fuerza.
 
 import xc_base
 import geom

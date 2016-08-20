@@ -29,7 +29,7 @@ J= 0.721e-8 # Cross section torsion constant (m4)
 L= 1 # Bar length (m)
 
 # Load
-F= 1e3 # Load magnitude en kN
+F= 1e3 # Load magnitude (kN)
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   

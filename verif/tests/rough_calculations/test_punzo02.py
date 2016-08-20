@@ -4,7 +4,7 @@ import rough_calculations.ng_punzonamiento
 
 #CASO 2
 
-qk=7e3        #N/m2
+qk=7e3    #N/m2
 A=6*6     #m2
 
 Vd=rough_calculations.ng_punzonamiento.esfuerzoPunzonamiento(qk,A)

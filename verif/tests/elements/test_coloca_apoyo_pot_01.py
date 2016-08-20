@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Home made test
-FX= 1.0 # Magnitud de la fuerza
+FX= 1.0 # Force magnitude
 FY= 2.0 
 FZ= 3.0
 MX= 4.0
@@ -22,7 +22,7 @@ diamPot= 993e-3
 
 
 # Problem type
-# Definición del modelo
+# Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 

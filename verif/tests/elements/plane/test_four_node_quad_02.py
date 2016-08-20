@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # Tomado de la página 114 del artículo Development of Membrane, Plate and
 # Flat Shell Elements in Java
-L= 6.0 # Longitud de la viga expresada en pulgadas.
-h= 0.8 # Canto de la viga expresado en pulgadas.
-t= 1 # Ancho de la viga expresado en pulgadas. En el artículo pone (erróneamente) t= 0.2.
+L= 6.0 # Longitud de la viga expresada in inches.
+h= 0.8 # Canto de la viga expresado in inches.
+t= 1 # Ancho de la viga expresado in inches. En el artículo pone (erróneamente) t= 0.2.
 E= 30000 # Módulo de Young del material expresado en ksi.
 nu= 0.3 # Poisson's ratio.
 # Load

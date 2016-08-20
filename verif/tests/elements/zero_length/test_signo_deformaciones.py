@@ -37,7 +37,7 @@ Iz= 1/12.0*depth*width**3 # Cross section moment of inertia (m4)
 L= 0 # Longitud expresada en metros
 
 # Load
-F= 1e3 # Load magnitude en kN
+F= 1e3 # Load magnitude (kN)
 
 # Problem type
 prueba= xc.ProblemaEF()

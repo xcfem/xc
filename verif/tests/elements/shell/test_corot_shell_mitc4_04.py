@@ -8,9 +8,9 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-L= 6.0 # Longitud de la viga expresada en pulgadas.
-h= 0.8 # Canto de la viga expresado en pulgadas.
-t= 1 # Ancho de la viga expresado en pulgadas.
+L= 6.0 # Longitud de la viga expresada in inches.
+h= 0.8 # Canto de la viga expresado in inches.
+t= 1 # Ancho de la viga expresado in inches.
 E= 30000 # Módulo de Young del material expresado en ksi.
 nu= 0.3 # Poisson's ratio.
 # Load

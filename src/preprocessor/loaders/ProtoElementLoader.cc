@@ -33,7 +33,7 @@
 #include "domain/mesh/element/truss_beam_column/truss/CorotTrussSection.h"
 #include "domain/mesh/element/truss_beam_column/truss/Truss.h"
 #include "domain/mesh/element/truss_beam_column/truss/TrussSection.h"
-#include "domain/mesh/element/truss_beam_column/truss/Muelle.h"
+#include "domain/mesh/element/truss_beam_column/truss/Spring.h"
 
 #include "domain/mesh/element/truss_beam_column/beam2d/beam2d02.h"
 #include "domain/mesh/element/truss_beam_column/beam2d/beam2d03.h"
@@ -215,7 +215,12 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
     else if(cmd == "corot_truss_section")
       retval= nuevo_elemento_dim_gen_mat<CorotTrussSection>(tag_elem, dim_elem, get_ptr_material());
     else if(cmd == "muelle")
-      retval= nuevo_elemento_dim_gen_mat<Muelle>(tag_elem, dim_elem, get_ptr_material());
+      {
+        std::cerr << "ProtoElementLoader::crea_elemento; 'muelle' is DEPRECATED use 'spring'" << std::endl;
+        retval= nuevo_elemento_dim_gen_mat<Spring>(tag_elem, dim_elem, get_ptr_material());
+      }
+    else if(cmd == "spring")
+      retval= nuevo_elemento_dim_gen_mat<Spring>(tag_elem, dim_elem, get_ptr_material());
     else if(cmd == "beam2d_02")
       retval= nuevo_elemento<beam2d02>(tag_elem);
     else if(cmd == "beam2d_03")

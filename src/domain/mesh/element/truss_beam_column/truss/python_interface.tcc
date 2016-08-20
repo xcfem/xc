@@ -32,14 +32,14 @@ class_<XC::TrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("TrussBase", n
 
 class_<XC::TrussSection , bases<XC::TrussBase>, boost::noncopyable >("TrussSection", no_init);
 
-class_<XC::Muelle , bases<XC::ProtoTruss>, boost::noncopyable >("Muelle", no_init)
-  .def("getN", &XC::Muelle::getAxil,"Returns N internal force.")
+class_<XC::Spring , bases<XC::ProtoTruss>, boost::noncopyable >("Spring", no_init)
+  .def("getN", &XC::Spring::getAxil,"Returns axial (N) internal force.")
   ;
 
 
 class_<XC::Truss, bases<XC::TrussBase>, boost::noncopyable >("Truss")
   .add_property("area", make_function( &XC::Truss::getArea, return_value_policy<copy_const_reference>() ), &XC::Truss::setArea)
-  .def("getN", &XC::Truss::getAxil,"Returns N internal force.")
+  .def("getN", &XC::Truss::getAxil,"Returns axial (N) internal force.")
    ;
 
 class_<XC::CorotTrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("CorotTrussBase", no_init);

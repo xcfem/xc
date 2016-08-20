@@ -11,7 +11,7 @@ from materials import typical_materials
 from materials import paramRectangularSection
 from materials import defSeccAggregation
 
-L= 2 # Longitud de la barra.
+L= 2 # Bar length.
 P= 10e3 # Carga uniforme transversal.
 n= 1e6 # Carga uniforme axial.
 

@@ -14,13 +14,13 @@ from model import cargas_nodo
 
 NumDiv= 100
 E= 30e6 # Young modulus (psi)
-lng= 10 # Longitud del cable en pulgadas
-sigmaPret= 1500 # Magnitud del pretensado en libras
+lng= 10 # Cable length in inches
+sigmaPret= 1500 # Prestressing force (pounds)
 area= 2
-fPret= sigmaPret*area # Magnitud del pretensado en libras
+fPret= sigmaPret*area # Prestressing force (pounds)
 F= 100/NumDiv # Carga vertical
 
-# Definición del modelo
+# Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodos= preprocessor.getNodeLoader

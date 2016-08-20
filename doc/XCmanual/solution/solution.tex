@@ -1,0 +1,235 @@
+\chapter{Solution}
+
+\section{Analysis and its components}
+
+In XC (just like in OpenSees) an analysis is an object which is composed by the aggregation of component objects. It is the component objects which define the type of analysis that is performed on the model. The component classes consist of the following:
+
+\begin{description}
+\item{Constraint Handler} : determines how the constraint equations are enforced in the analysis : how it handles the boundary conditions/imposed displacements
+\item{DOF\_Numberer}: determines the mapping between equation numbers and degrees-of-freedom
+\item{Integrator}: determines the predictive step for time t+dt
+\item{SolutionAlgorithm} : determines the sequence of steps taken to solve the non-linear equation at the current time step
+\item{SystemOfEqn/Solver}: within the solution algorithm, it specifies how to store and solve the system of equations in the analysis
+\item{Convergence Test}: determines when convergence has been achieved. 
+\end{description}
+
+\subsection{Constraint handlers}
+The ConstraintHandler objects determine how the constraint equations are enforced in the analysis. Constraint equations enforce a specified value for a DOF, or a relationship between DOFs.
+
+\subsubsection{Constraint types}
+
+\paragraph{Single-point constraints.}
+A single-point constraint (SPC) enforces a single degree of freedom (normally associated with a node) to a specified value. In structural analysis we use single-point constraints to:
+
+\begin{itemize}
+  \item Constrain or enforce translations and/or rotations of nodes that correspond to structure supports.
+  \item Impose constraints for displacements that correspond to symmetric or antisymmetric boundary conditions.
+  \item Removal of DOFs that correspond to frozen nodes in evolutive problems wher some parts of the mesh are deactivated.
+\end{itemize}
+
+\paragraph{Multipoint constraints.}
+Multipoint constraints are used to impose linear relationships between some of the degrees of freedom of the model as in:
+
+\begin{equation}
+  \sum_{i} A_i u_i= 0
+\end{equation}
+
+\noindent where $A_i$ are constant factors and $u_i$ are degrees of freedom of the model.
+
+This type of constraint allows considerable freedom in describing relations between degrees of freedom. They are used for example to create rigid elements and to link a node to an element.
+
+\subsubsection{Constraint handler types}
+
+The available constraint handler types are the following:
+
+\begin{itemize}
+\item Plain Constraints
+\item Lagrange Multipliers
+\item Penalty Method
+\item Transformation Method
+\end{itemize}
+
+\subsubsection{Plain Constraints}
+A plain constraint handler can only enforce homogeneous single point constraints (fix command) and multi-point constraints constructed where the constraint matrix is equal to the identity (equalDOF command).
+
+\subsubsection{Lagrange multipliers}
+A Lagrange multiplier constraint handler enforces the constraints by introducing Lagrange multipliers to the system of equations.
+
+In an object of this type the following parameters can be defined:
+
+\begin{description}
+  \item{$\alpha_S$}: factor on single point, optional, default = 1.0
+  \item{$\alpha_M$}: factor on multi-points, optional default = 1.0 
+\end{description}
+
+The Lagrange multiplier method introduces new unknowns to the system of equations. The diagonal part of the system corresponding to these new unknowns is 0.0. This ensure that the system IS NOT symmetric positive definite.
+
+\input{solution/analysis_components/LagrangeMP_FE.tex}
+
+\subsubsection{Penalty method}
+A penalty constraint handler enforces the constraints using the penalty method. These handlers allows the user to choose the penalty factors:
+
+\begin{description}
+  \item{$\alpha_S$}: penalty factor on single point constraints
+  \item{$\alpha_M$}: penalty factor on multimple point constraints
+\end{description}
+
+The degree to which the constraints are enforced is dependent on the penalty values chosen. Problems can arise if these values are too small (constraint not enforced strongly enough) or too large (problems associated with conditioning of the system of equations).
+
+\subsubsection{Transformation method}
+A transformation constraint handler enforces the constraints using the transformation method.
+
+The single-point constraints when using the transformation method are done directly. The matrix equation is not manipulated to enforce them, rather the trial displacements are set directly at the nodes at the start of each analysis step.
+
+Great care must be taken when multiple constraints are being enforced as the transformation method does not follow constraints: 
+
+\begin{enumerate}
+\item If a node is fixed, constrain it with the fix command and not equalDOF or other type of constraint.
+\item If multiple nodes are constrained, make sure that the retained node is not constrained in any other constraint.
+\end{enumerate}
+
+And remember if a node is constrained to multiple nodes in your model it probably means you have messed up. 
+
+\subsection{DOF\_Numberer: mapping between equation numbers and degrees of freedom}
+The DOF\_Numberer object determines the mapping between equation numbers and degrees of freedom i.e. how degrees of freedom are numbered.
+
+\subsubsection{Plain Numberers}
+WIP Work in progress...
+
+\subsubsection{Reverse Cuthill-McKee Numberers}
+WIP Work in progress...
+
+%%\subsubsection{Alternative Minimum Degree Numberers} 
+
+
+\subsection{System of equation and its solution}
+This objects are used to construct the LinearSOE and LinearSolver objects to store and solve the system of equations in the analysis.
+
+\subsubsection{Band general system of equations}
+BandGeneralSOE WIP Work in progress...
+
+\subsubsection{Band symmetric positive definite system of equations}
+BandSPDSOE WIP Work in progress...
+
+\subsubsection{Profile symmetric positive definite system of equations}
+ProfileSPDSOE WIP Work in progress...
+
+\subsubsection{Sparse general linear system of equations (SuperLU)}
+SuperLUSOE WIP Work in progress...
+
+\subsubsection{Sparse general linear system of equations (UmfPack)}
+UmfPackSOE WIP Work in progress...
+
+\subsubsection{Full general linear system of equations}
+UmfPackSOE WIP Work in progress...
+
+\subsubsection{Sparse symmetric system of equations}
+SparseSYM WIP Work in progress...
+
+\subsection{Integrator}
+The Integrator object determines the meaning of the terms in the system of equation object Ax=B. The Integrator object is used for the following:
+\begin{itemize}
+\item determine the predictive step for time t+dt
+\item specify the tangent matrix and residual vector at any iteration
+\item determine the corrective step based on the displacement increment dU
+\end{itemize}
+
+\subsubsection{Static integrators}
+
+\paragraph{Load Control}
+WIP Work in progress...
+
+\paragraph{Displacement Control}
+WIP Work in progress...
+
+\paragraph{Minimum Unbalanced Displacement Norm}
+WIP Work in progress...
+
+\paragraph{Arc-Length Control}
+    
+\subsubsection{Transient integrators}
+
+\paragraph{Central Difference}
+WIP Work in progress...
+
+\paragraph{Newmark Method}
+WIP Work in progress...
+
+\paragraph{Hilber-Hughes-Taylor Method}
+WIP Work in progress...
+
+\paragraph{Generalized Alpha Method}
+WIP Work in progress...
+
+\paragraph{TRBDF2}
+    
+\subsection{Convergence test}
+The convergence tests are used to allow certain SolutionAlgorithm objects to determine if convergence has been achieved at the end of an iteration step. The convergence test is applied to the matrix equation, AX=B stored in the LinearSOE.
+
+
+
+\subsubsection{Norm Unbalance Test}
+WIP Work in progress...
+
+\subsubsection{Norm Displacement Increment Test}
+WIP Work in progress...
+
+\subsubsection{Energy Increment Test}
+WIP Work in progress...
+
+\subsubsection{Relative Norm Unbalance Test}
+WIP Work in progress...
+
+\subsubsection{Relative Norm Displacement Increment Test}
+WIP Work in progress...
+
+\subsubsection{Total Relative Norm Displacement Increment Test}
+WIP Work in progress...
+
+\subsubsection{Relative Energy Increment Test}
+WIP Work in progress...
+
+\subsubsection{Fixed Number of Iterations}
+WIP Work in progress...
+    
+\subsection{Solution algorithm}
+A SolutionAlgorithm object is used to determine the sequence of steps taken to solve the non-linear equation.
+
+\subsubsection{Linear Algorithm}
+WIP Work in progress...
+
+\subsubsection{Newton Algorithm}
+WIP Work in progress...
+
+\subsubsection{Newton with Line Search Algorithm}
+WIP Work in progress...
+
+\subsubsection{Modified Newton Algorithm}
+WIP Work in progress...
+
+\subsubsection{Krylov-Newton Algorithm}
+WIP Work in progress...
+
+\subsubsection{Secant Newton Algorithm}
+WIP Work in progress...
+
+\subsubsection{BFGS Algorithm}
+WIP Work in progress...
+
+\subsubsection{Broyden Algorithm}
+WIP Work in progress...
+
+
+\subsection{Analyze method}
+All analysis objects have an 'analyze' method that is used to perform the analysis. This command can receive one or more of the following parameters:
+
+\begin{description}
+  \item{numSteps}: number of analysis steps to perform.
+  \item{dt}: time-step increment. Required if transient or variable transient analysis
+  \item{dtMin,dtMax}: minimum and maximum time steps. Required if a variable time step transient analysis was specified.
+  \item{Jd}: number of iterations user would like performed at each step. The variable transient analysis will change current time step if last analysis step took more or less iterations than this to converge. Required if a variable time step transient analysis was specified.
+\end{description}
+
+This command returns a zero if successful or a negative value otherwise.
+
+%%  LocalWords:  XC OpenSees

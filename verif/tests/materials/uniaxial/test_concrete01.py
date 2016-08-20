@@ -68,8 +68,8 @@ print "TunloadSlope= ",TunloadSlope
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "horm"
 elementos.dimElem= 2
-#  sintaxis: muelle[<tag>] 
-muelle= elementos.newElement("muelle",xc.ID([1,2]));
+#  sintaxis: spring[<tag>] 
+spring= elementos.newElement("spring",xc.ID([1,2]));
     
 # Constraints
 coacciones= preprocessor.getConstraintLoader

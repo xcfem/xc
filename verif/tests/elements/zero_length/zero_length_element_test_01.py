@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # home made test
-K= 1000 # Constante del muelle
+K= 1000 # Spring constant
 l= 1e-7 # Distancia entre nodos
-F= 1 # Magnitud de la fuerza
+F= 1 # Force magnitude
 
 import xc_base
 import geom

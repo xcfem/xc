@@ -10,9 +10,9 @@ from solution import predefined_solutions
 from materials import typical_materials
 import math
 
-L= 16 # Longitud de la ménsula en pulgadas.
-b= 4 # Ancho de la ménsula en pulgadas.
-h= 1 # Espesor de la ménsula en pulgadas.
+L= 16 # Longitud de la ménsula in inches.
+b= 4 # Ancho de la ménsula in inches.
+h= 1 # Espesor de la ménsula in inches.
 nuMat= 0 # Poisson's ratio.
 EMat= 30E6 # Módulo de Young en psi.
 espChapa= h # Espesor en m.

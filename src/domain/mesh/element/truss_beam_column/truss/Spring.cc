@@ -24,9 +24,9 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Muelle.cpp
+//Spring.cpp
 
-#include "domain/mesh/element/truss_beam_column/truss/Muelle.h"
+#include "domain/mesh/element/truss_beam_column/truss/Spring.h"
 #include <domain/mesh/element/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include <domain/domain/Domain.h>
@@ -38,7 +38,7 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Pone a cero los punteros a nodo y los cosenos directores.
-void XC::Muelle::inicializa(void)
+void XC::Spring::inicializa(void)
   {
     // set node pointers to nullptr
     theNodes.inic();
@@ -49,15 +49,15 @@ void XC::Muelle::inicializa(void)
 
 //! @brief constructor:
 //!  responsible for allocating the necessary space needed by each object
-//!  and storing the tags of the Muelle end nodes.
-XC::Muelle::Muelle(int tag,int dim,int Nd1, int Nd2, UniaxialMaterial &theMat,double a)
-  :ProtoTruss(tag,ELE_TAG_Muelle,Nd1,Nd2,0,dim), theMaterial(nullptr)
+//!  and storing the tags of the Spring end nodes.
+XC::Spring::Spring(int tag,int dim,int Nd1, int Nd2, UniaxialMaterial &theMat,double a)
+  :ProtoTruss(tag,ELE_TAG_Spring,Nd1,Nd2,0,dim), theMaterial(nullptr)
   {
     // get a copy of the material and check we obtained a valid copy
     theMaterial= theMat.getCopy();
     if(!theMaterial)
       {
-        std::cerr << "FATAL XC::Muelle::Muelle - " << tag <<
+        std::cerr << "FATAL XC::Spring::Spring - " << tag <<
           "failed to get a copy of material with tag " << theMat.getTag() << std::endl;
         exit(-1);
       }
@@ -68,8 +68,8 @@ XC::Muelle::Muelle(int tag,int dim,int Nd1, int Nd2, UniaxialMaterial &theMat,do
 //! @brief constructor:
 //!  responsible for allocating the necessary space needed by each object
 //!  and storing the tags of the truss end nodes.
-XC::Muelle::Muelle(int tag,int dim,const Material *ptr_mat)
-  :ProtoTruss(tag,ELE_TAG_Muelle,0,0,0,dim), theMaterial(nullptr)
+XC::Spring::Spring(int tag,int dim,const Material *ptr_mat)
+  :ProtoTruss(tag,ELE_TAG_Spring,0,0,0,dim), theMaterial(nullptr)
   {
     theMaterial= cast_material<UniaxialMaterial>(ptr_mat);
     inicializa();
@@ -79,15 +79,15 @@ XC::Muelle::Muelle(int tag,int dim,const Material *ptr_mat)
 //! constructor:
 //!   invoked by a FEM_ObjectBroker - blank object that recvSelf needs
 //!   to be invoked upon
-XC::Muelle::Muelle(void)
-  :ProtoTruss(0,ELE_TAG_Muelle,0,0,0,0),
+XC::Spring::Spring(void)
+  :ProtoTruss(0,ELE_TAG_Spring,0,0,0,0),
    theMaterial(nullptr)
   {
     inicializa();
   }
 
 //! @brief Constructor de copia.
-XC::Muelle::Muelle(const Muelle &otro)
+XC::Spring::Spring(const Spring &otro)
   :ProtoTruss(otro), theMaterial(nullptr)
   {
     if(otro.theMaterial)
@@ -95,7 +95,7 @@ XC::Muelle::Muelle(const Muelle &otro)
   }
 
 //! @brief Operador asignación.
-XC::Muelle &XC::Muelle::operator=(const Muelle &otro)
+XC::Spring &XC::Spring::operator=(const Spring &otro)
   {
     ProtoTruss::operator=(otro);
     if(theMaterial) delete theMaterial;
@@ -107,13 +107,13 @@ XC::Muelle &XC::Muelle::operator=(const Muelle &otro)
 
 
 //! @brief Constructor virtual.
-XC::Element* XC::Muelle::getCopy(void) const
-  { return new Muelle(*this); }
+XC::Element* XC::Spring::getCopy(void) const
+  { return new Spring(*this); }
 
 //!  destructor
 //!     delete must be invoked on any objects created by the object
 //!     and on the matertial object.
-XC::Muelle::~Muelle(void)
+XC::Spring::~Spring(void)
   {
     // invoke the destructor on any objects created by the object
     // that the object still holds a pointer to
@@ -123,10 +123,10 @@ XC::Muelle::~Muelle(void)
 //! method: setDomain()
 //!    to set a link to the enclosing XC::Domain and to set the node pointers.
 //!    also determines the number of dof associated
-//!    with the Muelle element, we set matrix and vector pointers,
+//!    with the Spring element, we set matrix and vector pointers,
 //!    allocate space for t matrix, determine the length
 //!    and set the transformation matrix.
-void XC::Muelle::setDomain(Domain *theDomain)
+void XC::Spring::setDomain(Domain *theDomain)
   {
     // check XC::Domain is not null - invoked when object removed from a domain
     ProtoTruss::setDomain(theDomain);
@@ -149,9 +149,9 @@ void XC::Muelle::setDomain(Domain *theDomain)
         // if differing dof at the ends - print a warning message
         if(dofNd1 != dofNd2)
           {
-            std::cerr <<"WARNING XC::Muelle::setDomain(): nodes " << theNodes[0]->getTag()
+            std::cerr <<"WARNING XC::Spring::setDomain(): nodes " << theNodes[0]->getTag()
                       << " and " <<  theNodes[1]->getTag()
-                      << "have differing dof at ends for Muelle " << this->getTag() << std::endl;
+                      << "have differing dof at ends for Spring " << this->getTag() << std::endl;
 
             // fill this in so don't segment fault later
             numDOF= 2;
@@ -193,7 +193,7 @@ void XC::Muelle::setDomain(Domain *theDomain)
           }
         else
           {
-            std::cerr <<"WARNING XC::Muelle::setDomain cannot handle " << getNumDIM() << " dofs at nodes in " <<
+            std::cerr <<"WARNING XC::Spring::setDomain cannot handle " << getNumDIM() << " dofs at nodes in " <<
               dofNd1  << " problem\n";
 
             numDOF= 2;
@@ -225,7 +225,7 @@ void XC::Muelle::setDomain(Domain *theDomain)
 
             if(L == 0.0)
               {
-                std::cerr <<"WARNING XC::Muelle::setDomain() - Muelle "
+                std::cerr <<"WARNING XC::Spring::setDomain() - Spring "
                           << this->getTag() << " has zero length\n";
                 return;
               }
@@ -241,7 +241,7 @@ void XC::Muelle::setDomain(Domain *theDomain)
 
             if(L == 0.0)
               {
-                std::cerr <<"WARNING XC::Muelle::setDomain() - Muelle "
+                std::cerr <<"WARNING XC::Spring::setDomain() - Spring "
                           << this->getTag() << " has zero length\n";
                 return;
               }
@@ -253,26 +253,26 @@ void XC::Muelle::setDomain(Domain *theDomain)
   }
 
 //! @brief Consuma el estado del elemento.
-int XC::Muelle::commitState(void)
+int XC::Spring::commitState(void)
   {
     int retVal= 0;
     // call element commitState to do any base class stuff
     if((retVal= this->XC::ProtoTruss::commitState()) != 0)
-      { std::cerr << "XC::Muelle::commitState () - failed in base class"; }
+      { std::cerr << "XC::Spring::commitState () - failed in base class"; }
     retVal= theMaterial->commitState();
     return retVal;
   }
 
 //! @brief Devuelve el estado del elemento al último consumado.
-int XC::Muelle::revertToLastCommit(void)
+int XC::Spring::revertToLastCommit(void)
   { return theMaterial->revertToLastCommit(); }
 
 //! @brief Devuelve el estado del elemento al inicial.
-int XC::Muelle::revertToStart(void)
+int XC::Spring::revertToStart(void)
   { return theMaterial->revertToStart(); }
 
 //! @brief Calcula la deformación actual a partir de los desplazamientos de prueba en los nodos.
-int XC::Muelle::update(void)
+int XC::Spring::update(void)
   {
     double strain= this->computeCurrentStrain();
     double rate= this->computeCurrentStrainRate();
@@ -280,7 +280,7 @@ int XC::Muelle::update(void)
   }
 
 //! @brief Devuelve la matriz de rigidez tangente.
-const XC::Matrix &XC::Muelle::getTangentStiff(void) const
+const XC::Matrix &XC::Spring::getTangentStiff(void) const
   {
     const double K= theMaterial->getTangent();
 
@@ -306,7 +306,7 @@ const XC::Matrix &XC::Muelle::getTangentStiff(void) const
   }
 
 //! @brief Devuelve la matriz de rigidez inicial.
-const XC::Matrix &XC::Muelle::getInitialStiff(void) const
+const XC::Matrix &XC::Spring::getInitialStiff(void) const
   {
     const double K= theMaterial->getInitialTangent();
 
@@ -332,7 +332,7 @@ const XC::Matrix &XC::Muelle::getInitialStiff(void) const
   }
 
 //! @brief Devuelve la matriz de amortiguamiento.
-const XC::Matrix &XC::Muelle::getDamp(void) const
+const XC::Matrix &XC::Spring::getDamp(void) const
   {
     const double eta= theMaterial->getDampTangent();
 
@@ -358,16 +358,16 @@ const XC::Matrix &XC::Muelle::getDamp(void) const
     return damp;
   }
 
-const XC::Material *XC::Muelle::getMaterial(void) const
+const XC::Material *XC::Spring::getMaterial(void) const
   { return theMaterial; }
-XC::Material *XC::Muelle::getMaterial(void)
+XC::Material *XC::Spring::getMaterial(void)
   { return theMaterial; }
 //! @brief Devuelve la densidad del material.
-double XC::Muelle::getRho(void) const
+double XC::Spring::getRho(void) const
   { return theMaterial->getRho(); }
 
 //! @brief Devuelve la matriz de masas.
-const XC::Matrix &XC::Muelle::getMass(void) const
+const XC::Matrix &XC::Spring::getMass(void) const
   {
     // zero the matrix
     Matrix &mass= *theMatrix;
@@ -389,14 +389,14 @@ const XC::Matrix &XC::Muelle::getMass(void) const
   }
 
 //! @brief Añade una carga.
-int XC::Muelle::addLoad(ElementalLoad *theLoad, double loadFactor)
+int XC::Spring::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr <<"XC::Muelle::addLoad - load type unknown for Muelle with tag: " << this->getTag() << std::endl;
+    std::cerr <<"XC::Spring::addLoad - load type unknown for Spring with tag: " << this->getTag() << std::endl;
     return -1;
   }
 
 //! @brief Añade las fuerzas de inercia.
-int XC::Muelle::addInertiaLoadToUnbalance(const XC::Vector &accel)
+int XC::Spring::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
     const double M= getRho(); //Aqui rho es la masa concentrada.
     // check for a quick return
@@ -411,7 +411,7 @@ int XC::Muelle::addInertiaLoadToUnbalance(const XC::Vector &accel)
 #ifdef _G3DEBUG
     if(nodalDOF != Raccel1.Size() || nodalDOF != Raccel2.Size())
       {
-        std::cerr <<"XC::Muelle::addInertiaLoadToUnbalance " <<
+        std::cerr <<"XC::Spring::addInertiaLoadToUnbalance " <<
           "matrix and vector sizes are incompatable\n";
         return -1;
       }
@@ -432,7 +432,7 @@ int XC::Muelle::addInertiaLoadToUnbalance(const XC::Vector &accel)
   }
 
 //! @brief Devuelve la reacción del elemento.
-const XC::Vector &XC::Muelle::getResistingForce(void) const
+const XC::Vector &XC::Spring::getResistingForce(void) const
   {
     // R= Ku - Pext
     // Ku= F * transformation
@@ -454,7 +454,7 @@ const XC::Vector &XC::Muelle::getResistingForce(void) const
   }
 
 //! @brief Devuelve la reacción del elemento incluyendo fuerzas de inercia.
-const XC::Vector &XC::Muelle::getResistingForceIncInertia(void) const
+const XC::Vector &XC::Spring::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();
 
@@ -489,7 +489,7 @@ const XC::Vector &XC::Muelle::getResistingForceIncInertia(void) const
   }
 
 
-void XC::Muelle::Print(std::ostream &s, int flag)
+void XC::Spring::Print(std::ostream &s, int flag)
   {
     // compute the strain and axial force in the member
     const double strain= theMaterial->getStrain();
@@ -498,7 +498,7 @@ void XC::Muelle::Print(std::ostream &s, int flag)
     if(flag == 0)
       { // print everything
         s << "Element: " << this->getTag();
-        s << " type: Muelle  iNode: " << theNodes.getTagNode(0);
+        s << " type: Spring  iNode: " << theNodes.getTagNode(0);
         s << " jNode: " << theNodes.getTagNode(1);
 
         s << " \n\t strain: " << strain;
@@ -523,10 +523,10 @@ void XC::Muelle::Print(std::ostream &s, int flag)
        }
   }
 
-double XC::Muelle::getAxil(void) const
+double XC::Spring::getAxil(void) const
   { return theMaterial->getStress(); }
 
-double XC::Muelle::computeCurrentStrain(void) const
+double XC::Spring::computeCurrentStrain(void) const
   {
     // determine the strain
     const Vector &disp1= theNodes[0]->getTrialDisp();
@@ -538,7 +538,7 @@ double XC::Muelle::computeCurrentStrain(void) const
     return dLength;
   }
 
-double XC::Muelle::computeCurrentStrainRate(void) const
+double XC::Spring::computeCurrentStrainRate(void) const
   {
     // determine the strain
     const XC::Vector &vel1= theNodes[0]->getTrialVel();
@@ -550,10 +550,10 @@ double XC::Muelle::computeCurrentStrainRate(void) const
     return dLength;
   }
 
-XC::Response *XC::Muelle::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
+XC::Response *XC::Spring::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
   {
     //
-    // we compare argv[0] for known response types for the XC::Muelle
+    // we compare argv[0] for known response types for the XC::Spring
     //
 
     if(argv[0] == "force" || argv[0] == "forces" || argv[0] == "axialForce")
@@ -572,7 +572,7 @@ XC::Response *XC::Muelle::setResponse(const std::vector<std::string> &argv, Info
       return 0;
   }
 
-int XC::Muelle::getResponse(int responseID, Information &eleInfo)
+int XC::Spring::getResponse(int responseID, Information &eleInfo)
   {
     switch (responseID)
       {
@@ -588,7 +588,7 @@ int XC::Muelle::getResponse(int responseID, Information &eleInfo)
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::Muelle::sendData(CommParameters &cp)
+int XC::Spring::sendData(CommParameters &cp)
   {
     int res= ProtoTruss::sendData(cp);
     res+= cp.sendBrokedPtr(theMaterial,getDbTagData(),BrokedPtrCommMetaData(16,17,18));
@@ -597,7 +597,7 @@ int XC::Muelle::sendData(CommParameters &cp)
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::Muelle::recvData(const CommParameters &cp)
+int XC::Spring::recvData(const CommParameters &cp)
   {
     int res= ProtoTruss::recvData(cp);
     theMaterial= cp.getBrokedMaterial(theMaterial,getDbTagData(),BrokedPtrCommMetaData(16,17,18));
@@ -605,7 +605,7 @@ int XC::Muelle::recvData(const CommParameters &cp)
     return res;
   }
 
-int XC::Muelle::sendSelf(CommParameters &cp)
+int XC::Spring::sendSelf(CommParameters &cp)
   {
     inicComm(21);
     int res= sendData(cp);
@@ -613,17 +613,17 @@ int XC::Muelle::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "Muelle::sendSelf -- failed to send ID data\n";
+      std::cerr << "Spring::sendSelf -- failed to send ID data\n";
     return res;
   }
 
-int XC::Muelle::recvSelf(const CommParameters &cp)
+int XC::Spring::recvSelf(const CommParameters &cp)
   {
     inicComm(21);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "Muelle::recvSelf() - failed to recv ID data";
+      std::cerr << "Spring::recvSelf() - failed to recv ID data";
     else
       res+= recvData(cp);
     return res;

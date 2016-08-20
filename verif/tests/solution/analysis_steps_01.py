@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 # home made test
 
-fy= 2600 # Tensión de cedencia del acero.
-E= 2.1e6 # Módulo de Young del acero.
+E= 2.1e9 # Módulo de Young del acero.
 l= 1 # Distancia entre nodos
-epsy= fy/E # Deformación para la que se produce la cedencia
-D= 1.5*epsy # Displacement magnitude impuesto
-F= 1.05*E*epsy # Fuerza a aplicar.
 Nsteps= 10 # Número de pasos para el análisis.
-
+F= 1e3
 
 import math
 import xc_base
@@ -20,11 +16,6 @@ from model import fix_node_6dof
 from model import fija_nodos_lineas
 from model import cargas_nodo
 from materials import typical_materials
-
-# Puntos de la función tensión - deformación
-x_modelo= [0.0002,0.0004,0.0006,0.0008,0.001,0.0012,0.0014,0.0016,0.0014,0.0012,0.001,0.0008,0.0006,0.0004,0.0002,8.13152e-20,-0.0002,-0.0004,-0.0006,-0.0008,-0.001,-0.0012,-0.0014,-0.0016,-0.0014,-0.0012,-0.001,-0.0008,-0.0006,-0.0004,-0.0002,-8.13152e-20,0.0002,0.0004,0.0006,0.0008,0.001,0.0012,0.0014,0.0016]
-y_modelo= [420,840,1260,1680,2100,2520,2600.34,2600.76,2180.76,1760.76,1340.76,920.76,500.76,80.76,-339.24,-759.24,-1179.24,-1599.24,-2019.24,-2439.24,-2599.5,-2599.92,-2600.34,-2600.76,-2180.76,-1760.76,-1340.76,-920.76,-500.76,-80.76,339.24,759.24,1179.24,1599.24,2019.24,2439.24,2599.5,2599.92,2600.34,2600.76]
-
 
 # Model definition
 prueba= xc.ProblemaEF()
@@ -40,7 +31,7 @@ nod= nodos.newNodeXY(0,0)
 nod= nodos.newNodeXY(l,0.0)
 
 # Materials definition
-acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
+elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",E)
     
 ''' Se definen nodos en los puntos de aplicación de
     la carga. Puesto que no se van a determinar tensiones
@@ -48,7 +39,7 @@ acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
     
 # Elements definition
 elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "acero"
+elementos.defaultMaterial= "elast0"
 elementos.dimElem= 2
 elementos.defaultTag= 1 #Tag for the next element.
 spring= elementos.newElement("spring",xc.ID([1,2]));
@@ -85,21 +76,7 @@ recorder.setElements(xc.ID([1]))
 recorder.callbackRecord= "x.append(self.getMaterial().getStrain()); y.append(self.getN())"
 recorder.callbackRestart= "print \"Restart method called.\""
 
-''' 
-\prop_recorder
 
-nodos= preprocessor.getNodeLoader{2}
-            \callback_record
-
-                
-d= .getDisp[0]
-print (d*1000)
-
-\callback_restart{print("Se llamó al método restart."}
-
-
-
-'''
 # Procedimiento de solución
 solu= prueba.getSoluProc
 solCtrl= solu.getSoluControl
@@ -124,65 +101,3 @@ solver= soe.newSolver("band_spd_lin_lapack_solver")
 analysis= solu.newAnalysis("static_analysis","ldctrl","")
 result= analysis.analyze(8)
 
-integ.dU1= -0.0002 #Unload
-result= analysis.analyze(16)
-
-integ.dU1= 0.0002 #Reload
-result= analysis.analyze(16)
-
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-nod2= nodos.getNode(2)
-deltax= nod2.getDisp[0] 
-deltay= nod2.getDisp[1] 
-nod1= nodos.getNode(1)
-R= nod1.getReaction[0] 
-
-elementos= preprocessor.getElementLoader
-
-elem1= elementos.getElement(1)
-elem1.getResistingForce()
-Ax= elem1.getMaterial().getStrain() # Spring elongation
-
-
-
-ratio1= abs((F+R)/F)
-ratio2= abs((deltax-Ax)/Ax)
-#resta= ley-ley_modelo
-resta_x= []
-resta_y= []
-def substract(x,y): return x-y
-resta_x= map(substract,x,x_modelo)
-resta_y= map(substract,y,y_modelo)
-
-ratio3= 0
-for d in resta_x:
-  ratio3= ratio3+d**2
-ratio3= math.sqrt(ratio3)
-ratio4= 0
-for d in resta_y:
-  ratio4= ratio4+d**2
-ratio4= math.sqrt(ratio4)
-
-''' 
-print "R= ",R
-print "dx= ",deltax
-print "dy= ",deltay
-print "Ax= ",Ax
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "x= ",x
-print "resta_x= ",resta_x
-print "ratio3= ",ratio3
-print "y= ",y
-print "y_modelo= ",y_modelo
-print "resta_y= ",resta_y
-print "ratio4= ",ratio4
-'''
-
-import os
-fname= os.path.basename(__file__)
-if((ratio3<1e-12) & (ratio4<1e-11)):
-  print "test ",fname,": ok."
-else:
-  print "test ",fname,": ERROR."

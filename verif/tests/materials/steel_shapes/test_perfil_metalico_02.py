@@ -22,7 +22,7 @@ from postprocess import callback_controls as cc
 L= 10 # Bar length (m)
 
 # Load
-F= 50e3 # Magnitud de la carga en kN
+F= 50e3 # Load magnitude (kN)
 
 # Perfil que forma la ménsula
 S275JR= steel.S275JR

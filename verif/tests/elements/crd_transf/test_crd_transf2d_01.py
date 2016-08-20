@@ -11,7 +11,7 @@ import math
 from materials import typical_materials
 
 
-L= 20 # Longitud de la barra.
+L= 20 # Bar length.
 
 # Problem type
 

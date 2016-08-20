@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-FX= 1.0 # Magnitud de la fuerza
+FX= 1.0 # Force magnitude
 FY= 2.0 
 FZ= 3.0
 MX= 4.0

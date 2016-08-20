@@ -12,7 +12,7 @@ from materials import typical_materials
 from model import fix_node_6dof
 import math
 
-L= 20 # Longitud de la barra.
+L= 20 # Bar length.
 
 # Problem type
 

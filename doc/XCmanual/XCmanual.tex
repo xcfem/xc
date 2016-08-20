@@ -20,6 +20,15 @@
 \usepackage{lastpage}
 \usepackage{fancyhdr,lipsum}
 \usepackage{titlesec}
+%% 20.08.2016 LP
+%%Workaround to fix a bug in titlesec in Ubuntu 16, erase when not needed. 
+\usepackage{etoolbox}
+
+\makeatletter
+\patchcmd{\ttlh@hang}{\parindent\z@}{\parindent\z@\leavevmode}{}{}
+\patchcmd{\ttlh@hang}{\noindent}{}{}{}
+\makeatother
+%%End of the workaround.
 \usepackage{pdfpages}
 \usepackage{draftwatermark}
 \usepackage{hyperref}
@@ -55,19 +64,16 @@
 \section{Constraints}
 \input{model_components/mp_constraints.tex}
 
-\chapter{Solver components}
-
-\section{Analysis components}
-\subsection{Constraints}
-
-\input{solver_components/LagrangeMP_FE.tex}
 
 \input{materials/materials}
 
 \input{model_components/elements}
 
-\input{materials/verificationSections.tex}
 %\input{model/model}
+
+\input{solution/solution.tex}
+
+\input{materials/verificationSections.tex}
 
 \input{roughCalculations/roughCalculations.tex}
 

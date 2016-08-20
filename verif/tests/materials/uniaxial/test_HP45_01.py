@@ -10,7 +10,7 @@ from materials import concreteBase
 from materials.ehe import EHE_concrete
 
 
-# Definición del modelo
+# Model definition
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor

@@ -46,19 +46,19 @@
                                                                         
 // $Revision: 1.13 $
 // $Date: 2003/03/17 19:19:49 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/truss/Muelle.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/truss/Spring.h,v $
                                                                         
                                                                         
-#ifndef Muelle_h
-#define Muelle_h
+#ifndef Spring_h
+#define Spring_h
 
-// File: ~/element/truss/Muelle.h
+// File: ~/element/truss/Spring.h
 // 
 // Written: fmk 
 // Created: 07/98
 // Revision: A
 //
-// Description: This file contains the class definition for Muelle. A Muelle object
+// Description: This file contains the class definition for Spring. A Spring object
 // provides the abstraction of the small deformation bar element. Each truss
 // object is assocaited with a material object. This Truss element will work
 // in 1d, 2d or 3d problems.
@@ -72,7 +72,7 @@ namespace XC {
 class Channel;
 class UniaxialMaterial;
 
-class Muelle : public ProtoTruss
+class Spring : public ProtoTruss
   {
   private:
     // private attributes - a copy for each object of the class
@@ -88,13 +88,13 @@ class Muelle : public ProtoTruss
   protected:
 
   public:
-    Muelle(int tag, int dimension, int Nd1, int Nd2, UniaxialMaterial &theMaterial, double A);
-    Muelle(int tag,int dimension,const Material *ptr_mat);
-    Muelle(void);
-    Muelle(const Muelle &);
-    Muelle &operator=(const Muelle &);
+    Spring(int tag, int dimension, int Nd1, int Nd2, UniaxialMaterial &theMaterial, double A);
+    Spring(int tag,int dimension,const Material *ptr_mat);
+    Spring(void);
+    Spring(const Spring &);
+    Spring &operator=(const Spring &);
     Element *getCopy(void) const;
-    ~Muelle(void);
+    ~Spring(void);
 
     // public methods to obtain inforrmation about dof & connectivity    
     void setDomain(Domain *theDomain);

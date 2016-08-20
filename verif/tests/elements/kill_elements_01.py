@@ -11,10 +11,10 @@ from materials import typical_materials
 from model import fix_node_6dof
 
 E= 30e6 # Young modulus (psi)
-l= 20*12 # Longitud de la barra en pulgadas
-h= 30 # Canto de la viga en pulgadas.
-A= 50.65 # Área de la viga en pulgadas cuadradas
-I= 7892 # Inercia de la viga en pulgadas a la cuarta
+l= 20*12 # Bar length in inches
+h= 30 # Canto de la viga in inches.
+A= 50.65 # Área de la viga in inches cuadradas
+I= 7892 # Inercia de la viga in inches a la cuarta
 F= 1000 # Fuerza
 
 # Problem type

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # Home made test
-KX= 1000 # Constante del muelle
-KY= 2000 # Constante del muelle
-KZ= 3000 # Constante del muelle
-FX= 1 # Magnitud de la fuerza
+KX= 1000 # Spring constant
+KY= 2000 # Spring constant
+KZ= 3000 # Spring constant
+FX= 1 # Force magnitude
 FY= 2 
 FZ= 3
 
@@ -16,7 +16,7 @@ from model import define_apoyos
 from materials import typical_materials
 
 
-# Definición del modelo
+# Model definition
 
 # Problem type
 prueba= xc.ProblemaEF()

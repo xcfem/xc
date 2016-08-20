@@ -5,7 +5,7 @@ fy= 2600 # Tensión de cedencia del acero.
 E= 2.1e6 # Módulo de Young del acero.
 l= 1 # Distancia entre nodos
 epsy= fy/E # Deformación para la que se produce la cedencia
-D= 1.5*epsy # Magnitud del desplazamiento impuesto
+D= 1.5*epsy # Displacement magnitude impuesto
 F= 1.05*E*epsy # Fuerza a aplicar.
 Nsteps= 10 # Número de pasos para el análisis.
 
@@ -50,7 +50,7 @@ elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "acero"
 elementos.dimElem= 2
 elementos.defaultTag= 1 #Tag for the next element.
-muelle= elementos.newElement("muelle",xc.ID([1,2]));
+spring= elementos.newElement("spring",xc.ID([1,2]));
     
 # Constraints
 coacciones= preprocessor.getConstraintLoader

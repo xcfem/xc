@@ -13,7 +13,7 @@ class ShellElementSectionMap(dict):
     '''Assigns the sections sectionName+'1' and sectionName+'2'
        to the elements of the set.'''
     propName= 'sectionName'
-    s2= sectionName+"2"
+    s2= sectionName+"2" #Section name for directions 1 and 2.
     s1= sectionName+"1"
     for e in elemSet:
       if(not e.hasProp(propName)):

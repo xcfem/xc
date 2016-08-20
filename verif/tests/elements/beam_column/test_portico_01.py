@@ -18,13 +18,13 @@ from model import predefined_spaces
 from materials import typical_materials
 from model import fix_node_3dof
 
-B= 100 # Ancho del pórtico expresado en pulgadas
-H= 100 # Altura del pórtico expresado en pulgadas
+B= 100 # Ancho del pórtico expresado in inches
+H= 100 # Altura del pórtico expresado in inches
 # Propiedades de la sección (IPE-80)
 Es= 29e6 # Young modulus (psi)
 area= 1 # Área de la sección expresada en in2
 Iz= 1/12.0 # Momento de inercia de la sección expresada en in4
-P= 1000 # Carga en libras-fuerza.
+P= 1000 # Carga (pounds)-fuerza.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor

@@ -16,7 +16,7 @@ import math
 L= 15 # Bar length (m)
 
 # Load
-F= 1.5e3 # Magnitud de la carga en kN
+F= 1.5e3 # Load magnitude (kN)
 
 # Problem type
 prueba= xc.ProblemaEF()

@@ -11,7 +11,7 @@ from materials import reinforcingSteelTest
 
 
 
-# Definición del modelo
+# Model definition
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor

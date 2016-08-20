@@ -16,7 +16,7 @@ prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
 
 
-# Definición de la sección rectangular
+# Rectangular cross-section definition
 scc10x20=  paramRectangularSection.RectangularSection(name="rectang",b=.10,h=.20)
 matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2500)
 

@@ -18,7 +18,7 @@ iyTeor= 1/12.0*width*depth**3
 izTeor= 1/12.0*depth*width**3
 y0= 0
 z0= 0
-F= 1000 # Magnitud de la fuerza
+F= 1000 # Force magnitude
 
 # Problem type
 prueba= xc.ProblemaEF()

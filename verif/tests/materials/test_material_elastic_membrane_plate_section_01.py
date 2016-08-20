@@ -11,7 +11,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 
-# Definición del modelo
+# Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Definimos materiales

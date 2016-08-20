@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-#Test tomado del manual de Ansys
-#Referencia:  Strength of Materials, Part I, Elementary Theory and Problems, pg. 26, problem 10
+#Test from Ansys manual
+#Reference:  Strength of Materials, Part I, Elementary Theory and Problems, pg. 26, problem 10
 
 import xc_base
 import geom
@@ -11,11 +11,11 @@ from model import predefined_spaces
 from materials import typical_materials
 
 E= 30e6 #Young modulus (psi)
-l= 10 #Longitud de la barra en pulgadas
+l= 10 #Bar length in inches
 a= 0.3*l #Longitud del tramo a
 b= 0.3*l #Longitud del tramo b
-F1= 1000 #Magnitud de la fuerza 1 en libras
-F2= 1000/2 #Magnitud de la fuerza 2 en libras
+F1= 1000 #Force magnitude 1 (pounds)
+F2= 1000/2 #Force magnitude 2 (pounds)
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor

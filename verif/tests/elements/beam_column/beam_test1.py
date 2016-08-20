@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Test tomado del manual de Ansys VM2
-# Referencia:  Strength of Material, Part I, Elementary Theory and Problems, pg. 98, problem 4
+# Test from Ansys manual VM2
+# Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 98, problem 4
 import xc_base
 import geom
 import xc
@@ -10,12 +10,12 @@ from materials import typical_materials
 
 
 E= 30e6 # Young modulus (psi)
-l= 20*12 # Longitud de la barra en pulgadas
+l= 20*12 # Bar length in inches
 a= 10*12 # Longitud del voladizo
-h= 30 # Canto de la viga en pulgadas.
-A= 50.65 # Área de la viga en pulgadas cuadradas
-I= 7892 # Inercia de la viga en pulgadas a la cuarta
-w= 10000/12.0 # Carga por unidad de longitud en libras/pulgada.
+h= 30 # Canto de la viga in inches.
+A= 50.65 # Área de la viga in inches cuadradas
+I= 7892 # Inercia de la viga in inches a la cuarta
+w= 10000/12.0 # Carga por unidad de longitud (pounds)/pulgada.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   

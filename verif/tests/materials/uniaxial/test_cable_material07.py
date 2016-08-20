@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Test tomado del manual de Ansys
-# Referencia:  Strength of Material, Part I, Elementary Theory and Problems, pg. 26, problem 10
+# Test from Ansys manual
+# Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 26, problem 10
 
 import xc_base
 import geom
@@ -11,12 +11,12 @@ from materials import typical_materials
 from model import fix_node_6dof
 
 E= 30e6 # Young modulus (psi)
-l= 10 # Longitud del cable en pulgadas
-sigmaPret= 1000 # Magnitud del pretensado final en libras
-sigmaPretA= sigmaPret/2 # Magnitud del pretensado parcial en libras
+l= 10 # Cable length in inches
+sigmaPret= 1000 # Prestressing force final (pounds)
+sigmaPretA= sigmaPret/2 # Prestressing force parcial (pounds)
 area= 2
-fPret= sigmaPret*area # Magnitud de la fuerza de tesado final
-fPretA= fPret/2 # Magnitud de la fuerza de tesado parcial
+fPret= sigmaPret*area # Force magnitude de tesado final
+fPretA= fPret/2 # Force magnitude de tesado parcial
 
 # Model definition
 prueba= xc.ProblemaEF()

@@ -17,7 +17,7 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
-# Definición del modelo
+# Model definition
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 preprocessor=  prueba.getPreprocessor

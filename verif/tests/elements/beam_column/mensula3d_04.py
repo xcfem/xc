@@ -25,7 +25,7 @@ J= 0.721e-8 # Cross section torsion constant (m4)
 L= 1.5 # Bar length (m)
 
 # Load
-M= 1.5e3 # Magnitud del momento en kN m
+M= 1.5e3 # Moment magnitude (kN m)
 
 # Problem type
 prueba= xc.ProblemaEF()

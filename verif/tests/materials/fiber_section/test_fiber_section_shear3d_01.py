@@ -27,7 +27,7 @@ from model import fix_node_6dof
 from materials import typical_materials
 
 
-# Definición de la sección rectangular
+# Rectangular cross-section definition
 scc10x20= sccRectg.sccRectang()
 scc10x20.b= 10 # Cross-section width(cm)
 scc10x20.h= 20 # cross-section depth (cm)

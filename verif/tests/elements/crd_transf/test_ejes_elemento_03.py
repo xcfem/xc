@@ -18,7 +18,7 @@ Iy= (1/12.0*h*b**3) # Cross section moment of inertia (m4)
 Iz= (1/12.0*b*h**3) # Cross section moment of inertia (m4)
 J= 0.721e-8 # Cross section torsion constant (m4)
 L= 1 # Longitud del elmento expresada en metros.
-F= 1.0e3 # Load magnitude en kN
+F= 1.0e3 # Load magnitude (kN)
 
 # Problem type
 prueba= xc.ProblemaEF()

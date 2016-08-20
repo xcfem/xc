@@ -15,7 +15,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 
-# Definición de la sección rectangular
+# Rectangular cross-section definition
 scc10x20= sccRectg.sccRectang()
 scc10x20.b= 10 # Cross section width expresado en cm.
 scc10x20.h= 20 # Cross section heightexpresado en cm.

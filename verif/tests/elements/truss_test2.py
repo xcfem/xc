@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# Test tomado del manual de Ansys
-# Referencia:  Strength of Material, Part I, Elementary Theory and Problems, pg. 10, problem 2
+# Test from Ansys manual
+# Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 10, problem 2
 
 import xc_base
 import geom
@@ -13,10 +13,10 @@ import math
 
 
 E= 30e6 #Young modulus (psi)
-l= 15*12 #Longitud de la barra (15 pies) expresada en pulgadas}
+l= 15*12 #Bar length (15 pies) expresada in inches}
 theta= math.radians(30) #angle between bars
-F= 5000 #Magnitud de la fuerza en libras}
-A= 0.5 #Área en pulgadas cuadradas}
+F= 5000 #Force magnitude (pounds)}
+A= 0.5 #Área in inches cuadradas}
 a= 2*l*math.cos(theta) #Distancia entre nodos extremos}
 b= l*math.sin(theta) #Distancia entre nodos extremos}
 

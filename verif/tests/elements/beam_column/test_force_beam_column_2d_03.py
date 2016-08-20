@@ -21,7 +21,7 @@ G= E/(2*(1+nu))
 L= 1.5 # Bar length (m)
 
 # Load
-M= 1.5e3 # Magnitud de la carga en N m
+M= 1.5e3 # Load magnitude en N m
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   

@@ -4,7 +4,7 @@
 #    página 26 y siguientes.
 
 
-# Definición de la sección rectangular
+# Rectangular cross-section definition
 nmbSecc= "scc10x20"
 from materials import sccRectg
 from misc import banco_pruebas_scc3d

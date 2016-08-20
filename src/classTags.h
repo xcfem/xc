@@ -200,7 +200,7 @@
 #define ELE_TAG_TrussSection    4005
 #define ELE_TAG_CorotTruss    	4003
 #define ELE_TAG_CorotTrussSection    	4004
-#define ELE_TAG_Muelle    	4006
+#define ELE_TAG_Spring    	4006
 #define ELE_TAG_fElmt05	           5
 #define ELE_TAG_fElmt02	           2
 #define ELE_TAG_MyTruss    	 4002

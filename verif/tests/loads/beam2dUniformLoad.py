@@ -16,7 +16,7 @@ L= 20 # Bar length.
 h= 0.30 # Canto de la viga.
 b= 0.2 # Ancho de la viga.
 A= b*h # Cross section area.
-I= b*h**3/12 # Inercia de la viga en pulgadas a la cuarta
+I= b*h**3/12 # Inercia de la viga in inches a la cuarta
 P= 1e3 # Carga uniforme transversal.
 n= 1e6 # Carga uniforme axial.
 

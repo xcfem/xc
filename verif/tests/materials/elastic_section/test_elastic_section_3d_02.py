@@ -15,7 +15,7 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 preprocessor=  prueba.getPreprocessor
 
-# Definición de la sección rectangular
+# Rectangular cross-section definition
 #XXX No es una seccion rectangular así que NO PARECE QUE EL
 # TEST TENGA DEMASIADO SENTIDO. Cuando menos habría que 
 # crear una clase para este tipo de perfiles que sea coherente con
