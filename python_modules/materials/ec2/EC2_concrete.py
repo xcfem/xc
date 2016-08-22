@@ -25,6 +25,9 @@ class EC2Concrete(concreteBase.Concrete):
     """
     typeAggregate='Q'
 
+    def __init__(self,nmbConcrete, fck, gammaC):
+        super(EC2Concrete,self).__init__(nmbConcrete,fck, gammaC)
+    
     def getEcm(self):
         """
         Ecm: approximate value of the modulus of elasticity [Pa][+] secant value between sigma_c=0 and 0,4fcm, at age 28 days (table 3.1 EC2)

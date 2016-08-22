@@ -136,8 +136,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         if self.tensionStiff=='N':
             self.materialDiagramK= typical_materials.defConcrete01(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=self.fmaxK(),epscu=self.epsilonU())
         else:
-            E0=2*self.fmaxK()/self.epsilon0()
-            self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=self.fctk(),Ets=E0/19.0)
+           self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=self.fctk(),Ets=self.E0()/19.0)
         self.matTagK= self.materialDiagramK.tag
         return self.matTagK
 
@@ -150,8 +149,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         if self.tensionStiff=='N':
             self.materialDiagramD= typical_materials.defConcrete01(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU())
         else:
-            E0=2*self.fmaxD()/self.epsilon0()
-            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=self.fctd(),Ets=E0/19.0)
+            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=self.fctd(),Ets=self.E0()/19.0)
         self.matTagD= self.materialDiagramD.tag
         return self.matTagD
 
@@ -480,12 +478,21 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
           else:
             return 0.0
         else:
-          return 0.0 
+          return 0.0
 
+    def E0(self):
+        ''' Tangent in the origin point of concrete01 and concrete02 diagrams
+        '''
+        return 2*self.fmaxK()/self.epsilon0()
+        
     def plotDesignStressStrainDiagram(self,preprocessor):
         if self.materialDiagramD== None:
           self.defDiagD(preprocessor)
-        retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.materialName + ' design stress-strain diagram')
+        if self.tensionStiff=='N':
+            retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.materialName + ' design stress-strain diagram')
+        else:
+            retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.materialName + ' design stress-strain diagram')
+            retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=20*self.fctd()/self.E0(),title=self.materialName + ' design stress-strain diagram')
         retval.setupGraphic(plt,self.materialDiagramD)
         fileName= self.materialName+'_design_stress_strain_diagram'
         retval.savefig(plt,fileName+'.jpeg')
