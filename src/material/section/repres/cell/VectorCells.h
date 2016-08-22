@@ -38,7 +38,7 @@ namespace XC {
 
 //! @ingroup MATSCCCell
 //
-//! @brief Vector de celdas.
+//! @brief Cells vector
 class VectorCells: protected std::vector<Cell *>
   {
   public:
