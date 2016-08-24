@@ -491,7 +491,6 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         if self.tensionStiff=='N':
             retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.materialName + ' design stress-strain diagram')
         else:
-            retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.materialName + ' design stress-strain diagram')
             retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=20*self.fctd()/self.E0(),title=self.materialName + ' design stress-strain diagram')
         retval.setupGraphic(plt,self.materialDiagramD)
         fileName= self.materialName+'_design_stress_strain_diagram'
