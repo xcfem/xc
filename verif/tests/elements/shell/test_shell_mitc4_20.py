@@ -34,10 +34,10 @@ tagElemLado= 0
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.newSeedNode()
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.newSeedNode()
 
 
 # Definimos materiales
@@ -91,9 +91,9 @@ f1= preprocessor.getSets.getSet("f1")
 
 tagElemCentro= f1.getNearestElement(geom.Pos3d(xMidP,yMidP,0.0)).tag
 tagElemLado= f1.getNearestElement(geom.Pos3d(xMidL,yMidL,0.0)).tag
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-nNodos= f1.getNumNodes
+nNodes= f1.getNumNodes
 
 nElems= f1.getNumElements
 #We add the load case to domain.
@@ -108,7 +108,7 @@ m1Centro= 0.0
 m2CentroLado= 0.0
 f1= preprocessor.getSets.getSet("f1")
 
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 nodo= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 
@@ -137,7 +137,7 @@ print "tagElemLado= ",tagElemLado
 print "UZ= ",UZ
 print "m1Centro= ",m1Centro/1e3," kN \n"
 print "m2CentroLado= ",m2CentroLado/1e3," kN \n"
-print "Num. nodos: ",nNodos
+print "Num. nodos: ",nNodes
 print "Num. elem: ",nElems
 print "ratio1: ",ratio1
 print "ratio2: ",ratio2

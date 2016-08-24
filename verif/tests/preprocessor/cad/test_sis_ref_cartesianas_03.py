@@ -19,9 +19,9 @@ rs= geom.Ref3d3d(pt1.getPos,pt2.getPos,pt3.getPos)
 
 p= rs.getPosGlobal(geom.Pos3d(7, 0, 0))
 
-nodos= preprocessor.getNodeLoader
-nodos.defaultTag= 1 #First node number.
-nod1= nodos.newNodeXYZ(p.x,p.y,p.z)
+nodes= preprocessor.getNodeLoader
+nodes.defaultTag= 1 #First node number.
+nod1= nodes.newNodeXYZ(p.x,p.y,p.z)
 coord= nod1.getCoo
 
 ratio1= (coord[0]-5.9497475)

@@ -19,9 +19,9 @@ preprocessor=  prueba.getPreprocessor
 # Definimos materiales
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodos)
-nodos.newSeedNode()
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_elasticidad3D(nodes)
+nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast"
 seedElemLoader.dimElem= 3
@@ -52,10 +52,10 @@ r= l.getRadio()
 l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
 
-nnodos= l1.getNumNodes
+nnodes= l1.getNumNodes
 '''
 print "núm. nodos: ", nnod
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 for_each
   print "  nodo: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
@@ -63,7 +63,7 @@ for_each
 '''
 
 nnodteor= NumDiv+1
-ratio1= (nnodteor/nnodos)
+ratio1= (nnodteor/nnodes)
 
 ''' 
 print "ratio1= ",(ratio1)

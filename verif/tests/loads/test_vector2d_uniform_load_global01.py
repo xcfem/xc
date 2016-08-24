@@ -33,14 +33,14 @@ p= 1000 # Carga uniforme transversal.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_resist_materiales2D(nodos)
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0.0)
-nod= nodos.newNodeXY(L*math.sqrt(2)/2,L*math.sqrt(2)/2)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0.0)
+nod= nodes.newNodeXY(L*math.sqrt(2)/2,L*math.sqrt(2)/2)
 
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
@@ -112,12 +112,12 @@ cargas.addToDomain("0") # Añadimos la hipótesis al dominio
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 result= analisis.analyze(1)
 
-nodos.calculateNodalReactions(True) 
-nod2= nodos.getNode(2)
+nodes.calculateNodalReactions(True) 
+nod2= nodes.getNode(2)
 vDisp= xc.Vector([nod2.getDisp[0],nod2.getDisp[1]])
-nod1= nodos.getNode(1)
+nod1= nodes.getNode(1)
 vReac1= xc.Vector([nod1.getReaction[0],nod1.getReaction[1]])
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 vReac2= xc.Vector([nod2.getReaction[0],nod2.getReaction[1]])
 
 elementos= preprocessor.getElementLoader

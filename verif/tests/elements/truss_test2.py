@@ -22,15 +22,15 @@ b= l*math.sin(theta) #Distancia entre nodos extremos}
 
 prb= xc.ProblemaEF()
 preprocessor=  prb.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_elasticidad2D(nodos)
+predefined_spaces.gdls_elasticidad2D(nodes)
 
-nodos.defaultTag= 1 #First node number.
-nodos.newNodeXYZ(0,0,0)
-nodos.newNodeXYZ(a/2,-b,0)
-nodos.newNodeXYZ(a,0,0)
+nodes.defaultTag= 1 #First node number.
+nodes.newNodeXYZ(0,0,0)
+nodes.newNodeXYZ(a/2,-b,0)
+nodes.newNodeXYZ(a,0,0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
@@ -71,7 +71,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
-delta= nodos.getNode(2).getDisp[1]
+delta= nodes.getNode(2).getDisp[1]
 stress= elementos.getElement(1).getMaterial().getStress()
 
 ratio1= delta/(-0.12)

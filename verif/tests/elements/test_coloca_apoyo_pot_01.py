@@ -28,11 +28,11 @@ preprocessor=  prueba.getPreprocessor
 
 apoyosPot.defineMaterialesTeflon(preprocessor, diamPot,"teflonKX","teflonKY")
 
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(1,1,1)
-nod= nodos.newNodeXYZ(1,1,1)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(1,1,1)
+nod= nodes.newNodeXYZ(1,1,1)
 
 
 

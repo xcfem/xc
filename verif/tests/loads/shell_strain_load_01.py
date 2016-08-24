@@ -20,14 +20,14 @@ AT= 10 # Incremento de temperatura expresado en grados centígrados
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-nodos.dimEspace= 2 # coord. for each node (x,y).
-nodos.numGdls= 6 # DOF for each node (Ux,Uy).
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0.0,0.0)
-nod= nodos.newNodeXY(L,0.0)
-nod= nodos.newNodeXY(L,h)
-nod= nodos.newNodeXY(0,h)
+nodes= preprocessor.getNodeLoader
+nodes.dimEspace= 2 # coord. for each node (x,y).
+nodes.numGdls= 6 # DOF for each node (Ux,Uy).
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0.0,0.0)
+nod= nodes.newNodeXY(L,0.0)
+nod= nodes.newNodeXY(L,h)
+nod= nodes.newNodeXY(0,h)
 
 
 # Materials definition

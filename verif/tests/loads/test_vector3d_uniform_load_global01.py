@@ -35,11 +35,11 @@ f= 1.5e3 # Load magnitude en N/m.
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0,0.0,0.0)
-nod= nodos.newNodeXYZ(L*math.sqrt(2)/2,L*math.sqrt(2)/2,0.0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0,0.0,0.0)
+nod= nodes.newNodeXYZ(L*math.sqrt(2)/2,L*math.sqrt(2)/2,0.0)
 
 
 trfs= preprocessor.getTransfCooLoader

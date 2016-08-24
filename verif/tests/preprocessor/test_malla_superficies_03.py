@@ -13,19 +13,19 @@ nu= 0.3 # Coeficiente de Poison
 rho= 0.0 # Densidad
 # nverborrea= 0
 
-numNodos= 0
+numNodes= 0
 numElem= 0
 
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_resist_materiales3D(nodos)
+predefined_spaces.gdls_resist_materiales3D(nodes)
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 # Materials definition
 matPrb= typical_materials.defElasticMembranePlateSection(preprocessor, "matPrb",E,nu,rho,0.25)
 
@@ -71,7 +71,7 @@ setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
 
-numNodos= setTotal.getNodes.size
+numNodes= setTotal.getNodes.size
 numElem= setTotal.getElements.size
 
 
@@ -121,12 +121,12 @@ execfile("vtk/vtk_muestra_ventana.lcmm")
   }}
 
 print "Area total: ",areaTotal
-print "Número de nodos: ",numNodos
+print "Número de nodos: ",numNodes
 print "Número de elementos: ",numElem
 '''
 
 
-ratio1= abs(numNodos-40)
+ratio1= abs(numNodes-40)
 ratio2= abs(numElem-32)
 ratio3= abs(areaTotal-4)
 

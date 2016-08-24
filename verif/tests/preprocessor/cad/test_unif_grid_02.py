@@ -17,11 +17,11 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",30e6,0.3,0.0)
 
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-nodos.dimEspace= 3 # Dimensiones de los nodos
-nodos.numGdls= 2 # Grados de libertad de los nodos
-nodos.newSeedNode()
+nodes.dimEspace= 3 # Dimensiones de los nodos
+nodes.numGdls= 2 # Grados de libertad de los nodos
+nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast2d"
 seedElemLoader.dimElem= 3
@@ -41,15 +41,15 @@ uGrid.nDivZ= 0
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
-numNodos= setTotal.getNodes.size
+numNodes= setTotal.getNodes.size
 numElem= setTotal.getElements.size
 
-numNodosTeor= (ndivX+1)*(ndivY+1)
+numNodesTeor= (ndivX+1)*(ndivY+1)
 numElemTeor= ndivX*ndivY
 
 import os
 fname= os.path.basename(__file__)
-if (abs(numNodosTeor-numNodos)<1e-15) & (abs(numElemTeor-numElem)<1e-15):
+if (abs(numNodesTeor-numNodes)<1e-15) & (abs(numElemTeor-numElem)<1e-15):
   print "test ",fname,": ok."
 else:
   print "test ",fname,": ERROR."

@@ -23,8 +23,8 @@ preprocessor=  prueba.getPreprocessor
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 matPrb= typical_materials.defElasticMembranePlateSection(preprocessor, "matPrb",E,nu,rho,0.25)
 
-nodos= preprocessor.getNodeLoader
-nodos.newSeedNode()
+nodes= preprocessor.getNodeLoader
+nodes.newSeedNode()
 
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "matPrb"

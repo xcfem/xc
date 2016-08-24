@@ -87,10 +87,10 @@ if(analOk!=0):
   print "Error!; failed to converge."
   exit()
 
-nodos= preprocessor.getNodeLoader
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-n1= nodos.getNode(1)
+nodes= preprocessor.getNodeLoader
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+n1= nodes.getNode(1)
 reacN1= n1.getReaction
 
 elementos= preprocessor.getElementLoader

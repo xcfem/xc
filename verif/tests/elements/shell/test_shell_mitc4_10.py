@@ -26,10 +26,10 @@ from materials import typical_materials
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.newSeedNode()
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.newSeedNode()
 
 # Definimos materiales
 nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
@@ -64,7 +64,7 @@ lados= s.getEdges
 #Edge iterator
 for l in lados:
   vTang= l.getEdge.getTang(0)
-  listTagNodos= l.getEdge.getNodeTags()
+  listTagNodes= l.getEdge.getNodeTags()
   if(abs(vTang[1])<1e-6) & (abs(vTang[2])<1e-6):
     fix_node_6dof.Nodo6DOFGirosYZLibresLista(coacciones,l.getEdge.getNodeTags()) # Borde paralelo al eje X
   if(abs(vTang[0])<1e-6) & (abs(vTang[2])<1e-6):
@@ -82,7 +82,7 @@ lp0= casos.newLoadPattern("default","0")
 
 
 f1= preprocessor.getSets.getSet("f1")
-nNodos= f1.getNumNodes
+nNodes= f1.getNumNodes
  
 nodo= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 # print "Nodo central: ",nodo.tag
@@ -102,7 +102,7 @@ analOk= analisis.analyze(1)
 
 f1= preprocessor.getSets.getSet("f1")
 
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 nodo= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 # print "Nodo central: ",nodo.tag
@@ -117,7 +117,7 @@ ratio2= (abs((nElems-64)/64))
 
 ''' 
 print "UZ= ",UZ
-print "Num. nodos: ",nNodos
+print "Num. nodos: ",nNodes
 print "Num. elem: ",nElems
 print "ratio1: ",ratio1
 print "ratio2: ",ratio2

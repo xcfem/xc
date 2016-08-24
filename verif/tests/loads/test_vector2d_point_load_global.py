@@ -25,10 +25,10 @@ n= 1e6 # Carga axial.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_resist_materiales2D(nodos)
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
 vDisp= [0,0]
 vReac1= [0,0]
@@ -37,9 +37,9 @@ vReac2= [0,0]
 ptoAplic=  geom.Pos2d(1+x*L*math.sqrt(2)/2,2+x*L*math.sqrt(2)/2) # Punto de aplicación de la carga.
 
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(1,2)
-nod= nodos.newNodeXY(1+L*math.sqrt(2)/2,2+L*math.sqrt(2)/2)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(1,2)
+nod= nodes.newNodeXY(1+L*math.sqrt(2)/2,2+L*math.sqrt(2)/2)
     
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
@@ -90,7 +90,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 vDisp= nod2.getDisp
 
 a= x*L

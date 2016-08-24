@@ -19,7 +19,7 @@ E= 2e6 # Elastic modulus
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 seccPrueba= paramRectangularSection.RectangularSection("prueba",b,h)
 matseccPrueba=typical_materials.MaterialData(name='mt',E=E,nu=0.3,rho=2500)

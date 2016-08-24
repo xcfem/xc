@@ -14,15 +14,15 @@ E= 30e6 # Young modulus (psi)
 nu= 0.3 # Coeficiente de Poison
 rho= 0.0 # Densidad
 
-nNodos= 0
+nNodes= 0
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 prueba= typical_materials.defElasticMembranePlateSection(preprocessor, "prueba",E,nu,rho,0.25)
 
-nodos= preprocessor.getNodeLoader
-nodos.newSeedNode()
+nodes= preprocessor.getNodeLoader
+nodes.newSeedNode()
 
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "prueba"
@@ -62,12 +62,12 @@ Z1.genMesh(xc.meshDir.I)
 Z2.genMesh(xc.meshDir.I)
 
 
-nNodos= preprocessor.getSets.getSet("total").getNodes.size
+nNodes= preprocessor.getSets.getSet("total").getNodes.size
 
-ratio1= (nNodos-18)/18
+ratio1= (nNodes-18)/18
 
 ''' 
-print "nNod= ",nNodos
+print "nNod= ",nNodes
 print "ratio1= ",ratio1
    '''
 

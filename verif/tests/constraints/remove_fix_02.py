@@ -26,12 +26,12 @@ F= 1.5e3 # Load magnitude en N
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0,0.0,0.0)
-nod= nodos.newNodeXYZ(L,0.0,0.0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0,0.0,0.0)
+nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 trfs= preprocessor.getTransfCooLoader
@@ -101,9 +101,9 @@ analisis= predefined_solutions.simple_static_modified_newton(prueba)
 result= analisis.analyze(10)
 
 
-nodos= preprocessor.getNodeLoader 
-nod2= nodos.getNode(2)
-delta0= nod2.getDisp[1]  # Desplazamiento del nodo 2 según y
+nodes= preprocessor.getNodeLoader 
+nod2= nodes.getNode(2)
+delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 
 
 
@@ -115,10 +115,10 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos.calculateNodalReactions(True) 
-nod2= nodos.getNode(2)
-delta= nod2.getDisp[1]  # Desplazamiento del nodo 2 según x
-nod1= nodos.getNode(1)
+nodes.calculateNodalReactions(True) 
+nod2= nodes.getNode(2)
+delta= nod2.getDisp[1]  # Node 2 xAxis displacement
+nod1= nodes.getNode(1)
 Ry= nod1.getReaction[1] 
 RMz= nod1.getReaction[5] 
 

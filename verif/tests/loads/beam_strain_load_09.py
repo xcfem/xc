@@ -25,12 +25,12 @@ gammaF= 1.5
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0.0,0.0,0.0)
-nod= nodos.newNodeXYZ(L/2,0.0,0.0)
-nod= nodos.newNodeXYZ(L,0.0,0.0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0.0,0.0,0.0)
+nod= nodes.newNodeXYZ(L/2,0.0,0.0)
+nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 trfs= preprocessor.getTransfCooLoader
@@ -77,9 +77,9 @@ analisis= predefined_solutions.simple_static_modified_newton(prueba)
 result= analisis.analyze(1)
 
 
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 dX= nod2.getDisp[0] 
 dY= nod2.getDisp[1] 
 dZ= nod2.getDisp[2] 

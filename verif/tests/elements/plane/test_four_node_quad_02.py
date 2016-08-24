@@ -20,18 +20,18 @@ from model import fix_node_6dof
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_elasticidad2D(nodos)
+predefined_spaces.gdls_elasticidad2D(nodes)
 
-nodos.defaultTag= 1; nodos.newNodeXY(0,0)
-nodos.defaultTag= 2; nodos.newNodeXY(L/3,0)
-nodos.defaultTag= 3; nodos.newNodeXY(2*L/3,0)
-nodos.defaultTag= 4; nodos.newNodeXY(L,0)
-nodos.defaultTag= 5; nodos.newNodeXY(0,h)
-nodos.defaultTag= 6; nodos.newNodeXY(L/3,h)
-nodos.defaultTag= 7; nodos.newNodeXY(2*L/3,h)
-nodos.defaultTag= 8; nodos.newNodeXY(L,h)
+nodes.defaultTag= 1; nodes.newNodeXY(0,0)
+nodes.defaultTag= 2; nodes.newNodeXY(L/3,0)
+nodes.defaultTag= 3; nodes.newNodeXY(2*L/3,0)
+nodes.defaultTag= 4; nodes.newNodeXY(L,0)
+nodes.defaultTag= 5; nodes.newNodeXY(0,h)
+nodes.defaultTag= 6; nodes.newNodeXY(L/3,h)
+nodes.defaultTag= 7; nodes.newNodeXY(2*L/3,h)
+nodes.defaultTag= 8; nodes.newNodeXY(L,h)
 
 
 # Materials definition
@@ -75,10 +75,10 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 analOk= analisis.analyze(1)
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
  
-nod1= nodos.getNode(1)
+nod1= nodes.getNode(1)
 
 
 # print "reac nodo 1: ",reac
@@ -87,13 +87,13 @@ Fy= nod1.getReaction[1]
 # \print{"Fx= ",Fx
 #print "Fy= ",Fy}
 
-nod3= nodos.getNode(3)
+nod3= nodes.getNode(3)
 disp= nod3.getDisp
-UX3= disp[0] # Desplazamiento del nodo 3 según x
-UY3= disp[1] # Desplazamiento del nodo 3 según y
+UX3= disp[0] # Node 3 xAxis displacement
+UY3= disp[1] # Node 3 yAxis displacement
 
 
-nod5= nodos.getNode(5)
+nod5= nodes.getNode(5)
 
 
 # print "reac nodo 5: ",reac
@@ -102,12 +102,12 @@ Fy= (Fy+nod5.getReaction[1])
 # \print{"Fx= ",Fx
 #print "Fy= ",Fy}
 
-nod8= nodos.getNode(8)
+nod8= nodes.getNode(8)
 
 # print .getDisp
                      
-UX8= nod8.getDisp[0] # Desplazamiento del nodo 8 según x
-UY8= nod8.getDisp[1] # Desplazamiento del nodo 8 según y
+UX8= nod8.getDisp[0] # Node 8 xAxis displacement
+UY8= nod8.getDisp[1] # Node 8 yAxis displacement
 
 
 UX8SP2K= 0.016110

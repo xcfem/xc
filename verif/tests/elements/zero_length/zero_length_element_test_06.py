@@ -16,13 +16,13 @@ import math
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
 # Model definition
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(1,1)
-nod= nodos.newNodeXY(1,1)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(1,1)
+nod= nodes.newNodeXY(1,1)
 
 # Materials definition
 k= typical_materials.defElasticMaterial(preprocessor, "k",K)
@@ -72,13 +72,13 @@ result= analisis.analyze(1)
 
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-nod2= nodos.getNode(2)
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0]
 deltay= nod2.getDisp[1]
 deltat= nod2.getDisp[2] 
-nod1= nodos.getNode(1)
+nod1= nodes.getNode(1)
 RX= nod1.getReaction[0]
 RY= nod1.getReaction[1]
 RT= nod1.getReaction[2] 

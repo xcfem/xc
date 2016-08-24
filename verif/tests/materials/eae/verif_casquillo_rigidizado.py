@@ -8,14 +8,14 @@ from materials.eae import comprobacion_casquillo_rigidizado
 import math
 
 
-# DATOS geométricos.
+# Geometry
 H= 0.2
 l= 0.2
 d= 0.2
 tChapa= 8e-3 # Espesor de la chapa sobre la que apoya la carga.
 tRig= 8e-3 # Espesor del rigidizador.
 
-# DATOS mecánicos
+# Material properties
 fy= 2600*9.81/1e-4 # Acero A42b
 fyd= fy/1.0 # Minoración límite elástico
 Es= 2.1e6*9.81/1e-4 # Elastic modulus del acero.

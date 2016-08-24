@@ -11,16 +11,16 @@ from materials import typical_materials
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0,0,0)
-nod= nodos.newNodeXYZ(5,5,5)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0,0,0)
+nod= nodes.newNodeXYZ(5,5,5)
 
 # Materials
 seccion= typical_materials.defElasticSection3d(preprocessor, "seccion",1,1,1,1,1,1)
 
-# Definimos transformaciones geométricas
+# Geometric transformations
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newCorotCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])

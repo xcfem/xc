@@ -29,21 +29,21 @@ from solution import database_helper as dbHelper
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0,0,0)
-nod= nodos.newNodeXYZ(1,0,0)
-nod= nodos.newNodeXYZ(2,0,0)
-nod= nodos.newNodeXYZ(3,0,0)
-nod= nodos.newNodeXYZ(0,1,0)
-nod= nodos.newNodeXYZ(1,1,0)
-nod= nodos.newNodeXYZ(2,1,0)
-nod= nodos.newNodeXYZ(3,1,0)
-nod= nodos.newNodeXYZ(0,2,0)
-nod= nodos.newNodeXYZ(1,2,0)
-nod= nodos.newNodeXYZ(2,2,0)
-nod= nodos.newNodeXYZ(3,2,0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0,0,0)
+nod= nodes.newNodeXYZ(1,0,0)
+nod= nodes.newNodeXYZ(2,0,0)
+nod= nodes.newNodeXYZ(3,0,0)
+nod= nodes.newNodeXYZ(0,1,0)
+nod= nodes.newNodeXYZ(1,1,0)
+nod= nodes.newNodeXYZ(2,1,0)
+nod= nodes.newNodeXYZ(3,1,0)
+nod= nodes.newNodeXYZ(0,2,0)
+nod= nodes.newNodeXYZ(1,2,0)
+nod= nodes.newNodeXYZ(2,2,0)
+nod= nodes.newNodeXYZ(3,2,0)
 
 
 # Materials definition
@@ -208,10 +208,10 @@ dXMin=1e9
 dXMax=-1e9
 
 def procesResultVerif(comb):
-  nodos= preprocessor.getNodeLoader
-  nod8= nodos.getNode(8)
+  nodes= preprocessor.getNodeLoader
+  nod8= nodes.getNode(8)
 
-  deltaX= nod8.getDisp[0] # Desplazamiento del nodo 2 según z
+  deltaX= nod8.getDisp[0] # Desplazamiento del node 2 según z
   global dXMin
   dXMin=min(dXMin,deltaX)
   global dXMax

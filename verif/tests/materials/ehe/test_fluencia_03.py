@@ -49,21 +49,21 @@ from solution import database_helper as dbHelper
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0,0,0)
-nod= nodos.newNodeXYZ(1,0,0)
-nod= nodos.newNodeXYZ(2,0,0)
-nod= nodos.newNodeXYZ(3,0,0)
-nod= nodos.newNodeXYZ(0,1,0)
-nod= nodos.newNodeXYZ(1,1,0)
-nod= nodos.newNodeXYZ(2,1,0)
-nod= nodos.newNodeXYZ(3,1,0)
-nod= nodos.newNodeXYZ(0,2,0)
-nod= nodos.newNodeXYZ(1,2,0)
-nod= nodos.newNodeXYZ(2,2,0)
-nod= nodos.newNodeXYZ(3,2,0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0,0,0)
+nod= nodes.newNodeXYZ(1,0,0)
+nod= nodes.newNodeXYZ(2,0,0)
+nod= nodes.newNodeXYZ(3,0,0)
+nod= nodes.newNodeXYZ(0,1,0)
+nod= nodes.newNodeXYZ(1,1,0)
+nod= nodes.newNodeXYZ(2,1,0)
+nod= nodes.newNodeXYZ(3,1,0)
+nod= nodes.newNodeXYZ(0,2,0)
+nod= nodes.newNodeXYZ(1,2,0)
+nod= nodes.newNodeXYZ(2,2,0)
+nod= nodes.newNodeXYZ(3,2,0)
 
 
 # Materials definition
@@ -130,9 +130,9 @@ lpSC= casos.newLoadPattern("default","SC")
 lpVT= casos.newLoadPattern("default","VT")
 lpNV= casos.newLoadPattern("default","NV")
 
-nod4= nodos.getNode(4)
-nod8= nodos.getNode(8)
-nod12= nodos.getNode(12)
+nod4= nodes.getNode(4)
+nod8= nodes.getNode(8)
+nod12= nodes.getNode(12)
 lpG.newNodalLoad(nod4.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpG.newNodalLoad(nod8.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpG.newNodalLoad(nod12.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
@@ -214,8 +214,8 @@ dYMax=-1e9
 def procesResultVerif(preprocessor,  comb):
   tagComb= comb.tag
   nmbComb= comb.getName
-  nodos= preprocessor.getNodeLoader
-  nod8= nodos.getNode(8)
+  nodes= preprocessor.getNodeLoader
+  nod8= nodes.getNode(8)
   global deltaX
   deltaX= nod8.getDisp[0]
   global deltaY

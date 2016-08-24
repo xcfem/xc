@@ -25,14 +25,14 @@ F= 1.5e3 # Load magnitude en N
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0.0)
-nod= nodos.newNodeXY(L,0.0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0.0)
+nod= nodes.newNodeXY(L,0.0)
 
 
-# Definimos transformaciones geométricas
+# Geometric transformations
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
@@ -68,9 +68,9 @@ analisis= predefined_solutions.simple_static_modified_newton(prueba)
 result= analisis.analyze(10)
 
 
-nodos= preprocessor.getNodeLoader 
-nod2= nodos.getNode(2)
-delta= nod2.getDisp[0]  # Desplazamiento del nodo 2 según x
+nodes= preprocessor.getNodeLoader 
+nod2= nodes.getNode(2)
+delta= nod2.getDisp[0]  # Node 2 xAxis displacement
 
 elementos= preprocessor.getElementLoader
 

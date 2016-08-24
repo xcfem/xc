@@ -72,12 +72,12 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 
-nodos= preprocessor.getNodeLoader
-nodos.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+nodes.calculateNodalReactions(True)
 
-RN= nodos.getNode(1).getReaction[0] 
-RM= nodos.getNode(1).getReaction[5] 
-RN2= nodos.getNode(2).getReaction[0] 
+RN= nodes.getNode(1).getReaction[0] 
+RM= nodes.getNode(1).getReaction[5] 
+RN2= nodes.getNode(2).getReaction[0] 
 
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)

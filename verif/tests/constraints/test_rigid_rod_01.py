@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Home made test
-# Barra rígida entre dos nodos.
+# Barra rígida entre dos nodes.
 
 import xc_base
 import geom
@@ -21,11 +21,11 @@ F= 1.5e3 # Load magnitude (kN)
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0,0.0,0.0)
-nod= nodos.newNodeXYZ(L,0.0,0.0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_elasticidad3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0,0.0,0.0)
+nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 # Constraints
@@ -55,12 +55,12 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
  
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 deltaX= nod2.getDisp[0]
 deltaY= nod2.getDisp[0]
-deltaZ= nod2.getDisp[0]  # Desplazamiento del nodo 2
+deltaZ= nod2.getDisp[0]  # Node 2 displacement
 
 
 ratio1= math.sqrt(deltaX**2+deltaY**2+deltaZ**2)

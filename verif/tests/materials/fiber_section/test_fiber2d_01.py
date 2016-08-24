@@ -20,13 +20,13 @@ eps= F/(Area*Es)
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
 # Definimos nodos
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(1,0)
-nod= nodos.newNodeXY(1,0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(1,0)
+nod= nodes.newNodeXY(1,0)
 
 
 # Definimos materiales

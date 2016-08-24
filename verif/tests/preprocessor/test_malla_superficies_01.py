@@ -16,19 +16,19 @@ nu= 0.3 # Coeficiente de Poison
 rho= 0.0 # Densidad
 old_stderr= sys.stderr
 
-numNodos= 0
+numNodes= 0
 numElem= 0
 # Problem type
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 prueba.errFileName= "/tmp/borrar.err" # Para no imprimir mensajes de advertencia.
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_elasticidad2D(nodos)# Materials definition
+predefined_spaces.gdls_elasticidad2D(nodes)# Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
@@ -71,17 +71,17 @@ f2= preprocessor.getSets.getSet("f2")
 s2.genMesh(xc.meshDir.I)
 
 total= preprocessor.getSets.getSet("total")
-numNodos= total.getNodes.size
+numNodes= total.getNodes.size
 numElem= total.getElements.size
 
 
 
 ''' 
-print "Número de nodos: ",numNodos
+print "Número de nodos: ",numNodes
 print "Número de elementos: ",numElem
    '''
 
-ratio1= abs(numNodos-8)
+ratio1= abs(numNodes-8)
 ratio2= abs(numElem-3)
 
 import os

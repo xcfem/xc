@@ -28,21 +28,21 @@ from materials import typical_materials
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod1= nodos.newNodeXYZ(0,0,0)
-nod2= nodos.newNodeXYZ(1,0,0)
-nod3= nodos.newNodeXYZ(2,0,0)
-nod4= nodos.newNodeXYZ(3,0,0)
-nod5= nodos.newNodeXYZ(0,1,0)
-nod6= nodos.newNodeXYZ(1,1,0)
-nod7= nodos.newNodeXYZ(2,1,0)
-nod8= nodos.newNodeXYZ(3,1,0)
-nod9= nodos.newNodeXYZ(0,2,0)
-nod10= nodos.newNodeXYZ(1,2,0)
-nod11= nodos.newNodeXYZ(2,2,0)
-nod12= nodos.newNodeXYZ(3,2,0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod1= nodes.newNodeXYZ(0,0,0)
+nod2= nodes.newNodeXYZ(1,0,0)
+nod3= nodes.newNodeXYZ(2,0,0)
+nod4= nodes.newNodeXYZ(3,0,0)
+nod5= nodes.newNodeXYZ(0,1,0)
+nod6= nodes.newNodeXYZ(1,1,0)
+nod7= nodes.newNodeXYZ(2,1,0)
+nod8= nodes.newNodeXYZ(3,1,0)
+nod9= nodes.newNodeXYZ(0,2,0)
+nod10= nodes.newNodeXYZ(1,2,0)
+nod11= nodes.newNodeXYZ(2,2,0)
+nod12= nodes.newNodeXYZ(3,2,0)
 
 
 # Materials definition

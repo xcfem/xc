@@ -38,12 +38,12 @@ Lz= 1
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nod0= nodos.newNodeIDXYZ(0,0,0,0)
-nod1= nodos.newNodeXYZ(0,-Ly,0)
-nod2= nodos.newNodeXYZ(0,-Ly,-Lz)
-nod3= nodos.newNodeXYZ(Lx,-Ly,-Lz)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nod0= nodes.newNodeIDXYZ(0,0,0,0)
+nod1= nodes.newNodeXYZ(0,-Ly,0)
+nod2= nodes.newNodeXYZ(0,-Ly,-Lz)
+nod3= nodes.newNodeXYZ(Lx,-Ly,-Lz)
 nod3.mass= matrizMasasNodo
 
 coacciones= preprocessor.getConstraintLoader

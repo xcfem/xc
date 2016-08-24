@@ -13,12 +13,12 @@ ndivZ= 500
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_elasticidad3D(nodes)
 # Definimos materiales
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast"
 seedElemLoader.dimElem= 3
@@ -39,15 +39,15 @@ uGrid.nDivZ= ndivZ
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
-numNodos= setTotal.getNodes.size
+numNodes= setTotal.getNodes.size
 numElem= setTotal.getElements.size
 
-numNodosTeor= ndivZ+1
+numNodesTeor= ndivZ+1
 numElemTeor= ndivZ
 
 import os
 fname= os.path.basename(__file__)
-if (abs(numNodosTeor-numNodos)<1e-15) & (abs(numElemTeor-numElem)<1e-15):
+if (abs(numNodesTeor-numNodes)<1e-15) & (abs(numElemTeor-numElem)<1e-15):
   print "test ",fname,": ok."
 else:
   print "test ",fname,": ERROR."

@@ -23,14 +23,14 @@ F= 1000 # Force magnitude
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
 # Node definition
 
-nodos.defaultTag= 1 #First node number.
-nod1= nodos.newNodeXY(1,0)
-nod2= nodos.newNodeXY(1,0)
+nodes.defaultTag= 1 #First node number.
+nod1= nodes.newNodeXY(1,0)
+nod2= nodes.newNodeXY(1,0)
 
 # Materials definition
 fy= 2600 # Yield stress.
@@ -98,10 +98,10 @@ result= analisis.analyze(1)
 
 
 
-nodos.calculateNodalReactions(True)
-nod2= nodos.getNode(2)
+nodes.calculateNodalReactions(True)
+nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0] 
-nod1= nodos.getNode(1)
+nod1= nodes.getNode(1)
 R= nod1.getReaction[0] 
 
 elementos= preprocessor.getElementLoader

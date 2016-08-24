@@ -24,11 +24,11 @@ AT= 10 # Incremento de temperatura expresado en grados centígrados
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0.0,0.0,0.0)
-nod= nodos.newNodeXYZ(L,0.0,0.0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0.0,0.0,0.0)
+nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 trfs= preprocessor.getTransfCooLoader

@@ -50,11 +50,11 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-nodos= preprocessor.getNodeLoader
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
 
-RM= nodos.getNode(1).getReaction[5] 
+RM= nodes.getNode(1).getReaction[5] 
 
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)

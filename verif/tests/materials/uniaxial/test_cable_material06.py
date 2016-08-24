@@ -23,12 +23,12 @@ F= 100/NumDiv # Carga vertical
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodos)
+predefined_spaces.gdls_resist_materiales3D(nodes)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 
 # Definimos materiales
 typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
@@ -105,14 +105,14 @@ tagN2= l.lastNode.tag
 index= int(NumDiv/2)+1
 tagN3= l.getNodeI(index).tag
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-R1X= nodos.getNode(tagN2).getReaction[0]
-R1Y= nodos.getNode(tagN2).getReaction[1] 
-R2X= nodos.getNode(tagN1).getReaction[0]
-R2Y= nodos.getNode(tagN1).getReaction[1] 
-deltaX= nodos.getNode(tagN3).getDisp[0]
-deltaY= nodos.getNode(tagN3).getDisp[1]  
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+R1X= nodes.getNode(tagN2).getReaction[0]
+R1Y= nodes.getNode(tagN2).getReaction[1] 
+R2X= nodes.getNode(tagN1).getReaction[0]
+R2Y= nodes.getNode(tagN1).getReaction[1] 
+deltaX= nodes.getNode(tagN3).getDisp[0]
+deltaY= nodes.getNode(tagN3).getDisp[1]  
 
 
 alpha= -math.atan2(deltaY,lng/2)

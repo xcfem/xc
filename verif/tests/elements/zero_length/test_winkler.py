@@ -29,13 +29,13 @@ A= h # Suponemos width unidad
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
 # Definimos materiales
 kY= typical_materials.defElasticMaterial(preprocessor, "kY",k*L/numDiv)
-nodos.newSeedNode()
-# Definimos transformaciones geométricas
+nodes.newSeedNode()
+# Geometric transformations
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 

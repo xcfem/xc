@@ -15,7 +15,7 @@ import math
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 
 delta= 10.1
@@ -25,11 +25,11 @@ p3= geom.Pos3d(1+delta,1+delta,5.0)
 p4= geom.Pos3d(0+delta,1+delta,-5.0)
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.newNodeIDXYZ(1,p1.x,p1.y,p1.z)
-nodos.newNodeIDXYZ(2,p2.x,p2.y,p2.z)
-nodos.newNodeIDXYZ(3,p3.x,p3.y,p3.z)
-nodos.newNodeIDXYZ(4,p4.x,p4.y,p4.z)
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.newNodeIDXYZ(1,p1.x,p1.y,p1.z)
+nodes.newNodeIDXYZ(2,p2.x,p2.y,p2.z)
+nodes.newNodeIDXYZ(3,p3.x,p3.y,p3.z)
+nodes.newNodeIDXYZ(4,p4.x,p4.y,p4.z)
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)

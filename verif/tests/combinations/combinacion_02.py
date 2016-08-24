@@ -29,13 +29,13 @@ f= 1.5e3 # Load magnitude (kN/m)
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nodos.newNodeXYZ(0,0.0,0.0)
-nodos.newNodeXYZ(L,0.0,0.0)
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nodes.newNodeXYZ(0,0.0,0.0)
+nodes.newNodeXYZ(L,0.0,0.0)
 
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
@@ -86,8 +86,8 @@ result= analisis.analyze(1)
 
 lpA.removeFromDomain() # Quitamos la carga del dominio
 
-nodos= preprocessor.getNodeLoader
-nod2= nodos.getNode(2)
+nodes= preprocessor.getNodeLoader
+nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0]
 elementos= preprocessor.getElementLoader
 elem1= elementos.getElement(1)
@@ -120,7 +120,7 @@ cargas.addToDomain("COMB")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0]
 deltay= nod2.getDisp[2] 
 

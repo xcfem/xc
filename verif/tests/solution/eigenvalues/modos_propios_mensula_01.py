@@ -24,14 +24,14 @@ NumDiv= 10
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
 # Definimos materiales
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader

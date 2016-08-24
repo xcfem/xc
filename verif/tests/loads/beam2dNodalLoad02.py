@@ -25,17 +25,17 @@ P= 1e3 # Carga puntual.
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 sccPrueba= paramRectangularSection.RectangularSection("prueba",b,h)
 matSccPrueba=typical_materials.MaterialData(name='matSec',E=E,nu=0.3,rho=2500)
 
-predefined_spaces.gdls_resist_materiales2D(nodos)
+predefined_spaces.gdls_resist_materiales2D(nodes)
 # Definimos el material
 defSeccAggregation.defSeccAggregation2d(preprocessor, sccPrueba,matSccPrueba)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0)
-nod= nodos.newNodeXY(L,0.0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0)
+nod= nodes.newNodeXY(L,0.0)
 
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
@@ -75,7 +75,7 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 delta= nod2.getDisp[1] 
 
 

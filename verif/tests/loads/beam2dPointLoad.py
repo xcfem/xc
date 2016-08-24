@@ -24,13 +24,13 @@ n= 1e6 # Carga axial.
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_resist_materiales2D(nodos)
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0)
-nod= nodos.newNodeXY(L,0.0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0)
+nod= nodes.newNodeXY(L,0.0)
 
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
@@ -77,8 +77,8 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos= preprocessor.getNodeLoader
-nod2= nodos.getNode(2)
+nodes= preprocessor.getNodeLoader
+nod2= nodes.getNode(2)
 delta0= nod.getDisp[0] 
 delta1= nod2.getDisp[1] 
 

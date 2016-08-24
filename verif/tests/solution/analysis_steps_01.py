@@ -20,15 +20,15 @@ from materials import typical_materials
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_elasticidad2D(nodos)
+predefined_spaces.gdls_elasticidad2D(nodes)
 
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0)
-nod= nodos.newNodeXY(l,0.0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0)
+nod= nodes.newNodeXY(l,0.0)
 
 # Materials definition
 elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",E)

@@ -13,31 +13,31 @@ preprocessor=  prueba.getPreprocessor
 # Materials definition
 elast= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",200000,0.3,0.0)
 
-nodos= preprocessor.getNodeLoader 
-predefined_spaces.gdls_elasticidad3D(nodos)
-nodos.defaultTag= 1 #Next node number.
-nod1= nodos.newNodeXYZ(100,0,100)
-nod2= nodos.newNodeXYZ(0,0,100)
-nod3= nodos.newNodeXYZ(0,0,200)
-nod4= nodos.newNodeXYZ(100,0,200)
-nod5= nodos.newNodeXYZ(100,100,100)
-nod6= nodos.newNodeXYZ(0,100,100)
-nod7= nodos.newNodeXYZ(0,100,200)
-nod8= nodos.newNodeXYZ(100,100,200)
+nodes= preprocessor.getNodeLoader 
+predefined_spaces.gdls_elasticidad3D(nodes)
+nodes.defaultTag= 1 #Next node number.
+nod1= nodes.newNodeXYZ(100,0,100)
+nod2= nodes.newNodeXYZ(0,0,100)
+nod3= nodes.newNodeXYZ(0,0,200)
+nod4= nodes.newNodeXYZ(100,0,200)
+nod5= nodes.newNodeXYZ(100,100,100)
+nod6= nodes.newNodeXYZ(0,100,100)
+nod7= nodes.newNodeXYZ(0,100,200)
+nod8= nodes.newNodeXYZ(100,100,200)
 
-nod9= nodos.newNodeXYZ(100,200,100)
-nod10= nodos.newNodeXYZ(0,200,100)
-nod11= nodos.newNodeXYZ(0,200,200)
-nod12= nodos.newNodeXYZ(100,200,200)
-nod13= nodos.newNodeXYZ(100,300,100)
-nod14= nodos.newNodeXYZ(0,300,100)
-nod15= nodos.newNodeXYZ(0,300,200)
+nod9= nodes.newNodeXYZ(100,200,100)
+nod10= nodes.newNodeXYZ(0,200,100)
+nod11= nodes.newNodeXYZ(0,200,200)
+nod12= nodes.newNodeXYZ(100,200,200)
+nod13= nodes.newNodeXYZ(100,300,100)
+nod14= nodes.newNodeXYZ(0,300,100)
+nod15= nodes.newNodeXYZ(0,300,200)
 
-nod16= nodos.newNodeXYZ(100,300,200)
-nod17= nodos.newNodeXYZ(100,200,0)
-nod18= nodos.newNodeXYZ(100,300,0)
-nod19= nodos.newNodeXYZ(0,300,0)
-nod20= nodos.newNodeXYZ(0,200,0)
+nod16= nodes.newNodeXYZ(100,300,200)
+nod17= nodes.newNodeXYZ(100,200,0)
+nod18= nodes.newNodeXYZ(100,300,0)
+nod19= nodes.newNodeXYZ(0,300,0)
+nod20= nodes.newNodeXYZ(0,200,0)
 
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast3d"
@@ -70,8 +70,8 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 dN1Teor= xc.Vector([-2.1569e-2,-3.7891e-3,-4.0982e-1])
-nodos= preprocessor.getNodeLoader
-dN1= nodos.getNode(1).getDisp
+nodes= preprocessor.getNodeLoader
+dN1= nodes.getNode(1).getDisp
 
 ratio= (dN1-dN1Teor).Norm()
 

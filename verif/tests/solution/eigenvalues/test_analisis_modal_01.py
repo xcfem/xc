@@ -35,32 +35,32 @@ kPl4a= kPl3a
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
-nodos= preprocessor.getNodeLoader
-nodos.defaultTag= 0; 
-nod0= nodos.newNodeXY(0,0) 
+nodes= preprocessor.getNodeLoader
+nodes.defaultTag= 0; 
+nod0= nodes.newNodeXY(0,0) 
 nod0.mass= matrizMasasNodo
 nod0.setProp("gdlsCoartados",xc.ID([0,1,2]))
-nod1= nodos.newNodeXY(0,4)
+nod1= nodes.newNodeXY(0,4)
 nod1.mass= matrizMasasNodo
 nod1.setProp("gdlsCoartados",xc.ID([1,2]))
-nod2= nodos.newNodeXY(0,4+3)
+nod2= nodes.newNodeXY(0,4+3)
 nod2.mass= matrizMasasNodo
 nod2.setProp("gdlsCoartados",xc.ID([1,2]))
-nod3= nodos.newNodeXY(0,4+3+3)
+nod3= nodes.newNodeXY(0,4+3+3)
 nod3.mass= matrizMasasNodo
 nod3.setProp("gdlsCoartados",xc.ID([1,2]))
-nod4= nodos.newNodeXY(0,4+3+3+3)
+nod4= nodes.newNodeXY(0,4+3+3+3)
 nod4.mass= matrizMasasNodo
 nod4.setProp("gdlsCoartados",xc.ID([1,2]))
-nod5= nodos.newNodeXY(0,4+3+3+3+3)
+nod5= nodes.newNodeXY(0,4+3+3+3+3)
 nod5.mass= matrizMasasNodo
 nod5.setProp("gdlsCoartados",xc.ID([1,2]))
 setTotal= preprocessor.getSets.getSet("total")
-nodos= setTotal.getNodes
-for n in nodos:
+nodes= setTotal.getNodes
+for n in nodes:
   n.fix(n.getProp("gdlsCoartados"),xc.Vector([0,0,0]))
 
 # Materials definition

@@ -11,15 +11,15 @@ CooMax= 10
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_elasticidad3D(nodos)
+predefined_spaces.gdls_elasticidad3D(nodes)
 
 # Definimos materiales
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.dimElem= 3 #Las barras se definen e un espacio tridimensional.
 seedElemLoader.defaultMaterial= "elast"

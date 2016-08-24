@@ -13,7 +13,7 @@ from model import cargas_nodo
 from materials import typical_materials
 
 fc= -250 # Resistencia a compresión del hormigón.
-l= 1 # Distancia entre nodos
+l= 1 # Distancia entre nodes
 epsc0= -2e-3 # Deformación para tensión máxima.
 fcu= fc/1.2 # Deformación para compresión de rotura.
 epsU= -3.5e-3 # Deformación para tensión máxima.
@@ -27,15 +27,15 @@ y_modelo= [-29.1, -56.4, -81.9, -105.6, -127.5, -147.6, -165.9, -182.4, -197.1, 
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_elasticidad2D(nodos)
+predefined_spaces.gdls_elasticidad2D(nodes)
 
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0)
-nod= nodos.newNodeXY(l,0.0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0)
+nod= nodes.newNodeXY(l,0.0)
 
 # Materials definition
 horm= typical_materials.defConcrete01(preprocessor, "horm",epsc0,fc,fcu,epsU)
@@ -60,7 +60,7 @@ print "TunloadSlope= ",TunloadSlope
  '''
 
 
-''' Se definen nodos en los puntos de aplicación de
+''' Se definen nodes en los puntos de aplicación de
     la carga. Puesto que no se van a determinar tensiones
     se emplea una sección arbitraria de área unidad '''
     
@@ -74,9 +74,9 @@ spring= elementos.newElement("spring",xc.ID([1,2]));
 # Constraints
 coacciones= preprocessor.getConstraintLoader
 #
-spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
+spc= coacciones.newSPConstraint(1,0,0.0) # Node 1
 spc= coacciones.newSPConstraint(1,1,0.0)
-spc= coacciones.newSPConstraint(2,1,0.0) # Nodo 2
+spc= coacciones.newSPConstraint(2,1,0.0) # Node 2
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -104,7 +104,7 @@ recorder.callbackRestart= "print \"Restart method called.\""
 '''
         \prop_recorder
 
-nodos= preprocessor.getNodeLoader{2}
+nodes= preprocessor.getNodeLoader{2}
             \callback_record
 
                 

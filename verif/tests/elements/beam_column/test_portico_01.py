@@ -28,17 +28,17 @@ P= 1000 # Carga (pounds)-fuerza.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
-nodos.defaultTag= 1
-nodos.newNodeXY(0,0) # Primer pórtico.
-nod= nodos.newNodeXY(0,H)
-nod= nodos.newNodeXY(B,0)
-nod= nodos.newNodeXY(B,H)
-nod= nodos.newNodeXY(2*B,0) # Segundo pórtico.
-nod= nodos.newNodeXY(2*B,H)
-nod= nodos.newNodeXY(2*B+B,0)
-nod= nodos.newNodeXY(2*B+B,H)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
+nodes.defaultTag= 1
+nodes.newNodeXY(0,0) # Primer pórtico.
+nod= nodes.newNodeXY(0,H)
+nod= nodes.newNodeXY(B,0)
+nod= nodes.newNodeXY(B,H)
+nod= nodes.newNodeXY(2*B,0) # Segundo pórtico.
+nod= nodes.newNodeXY(2*B,H)
+nod= nodes.newNodeXY(2*B+B,0)
+nod= nodes.newNodeXY(2*B+B,H)
 
 
 trfs= preprocessor.getTransfCooLoader
@@ -130,14 +130,14 @@ M52Teor= -5580.4 # Valor teórico del momento frontal en elemento 5
 ratioM52= 0.0
 
 
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 theta2= nod2.getDisp[2]
-nod6= nodos.getNode(6)
+nod6= nodes.getNode(6)
 delta6= nod6.getDisp[0]
 theta6= nod6.getDisp[2]
-nod8= nodos.getNode(8)
+nod8= nodes.getNode(8)
 theta8= nod8.getDisp[2]
 
 elementos= preprocessor.getElementLoader

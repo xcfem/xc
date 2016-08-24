@@ -22,16 +22,16 @@ from model import fix_node_6dof
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.newNodeIDXYZ(1,0,0,0)
-nodos.newNodeIDXYZ(2,L/3,0,0)
-nodos.newNodeIDXYZ(3,2*L/3,0,0)
-nodos.newNodeIDXYZ(4,L,0,0)
-nodos.newNodeIDXYZ(5,0,h,0)
-nodos.newNodeIDXYZ(6,L/3,h,0)
-nodos.newNodeIDXYZ(7,2*L/3,h,0)
-nodos.newNodeIDXYZ(8,L,h,0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.newNodeIDXYZ(1,0,0,0)
+nodes.newNodeIDXYZ(2,L/3,0,0)
+nodes.newNodeIDXYZ(3,2*L/3,0,0)
+nodes.newNodeIDXYZ(4,L,0,0)
+nodes.newNodeIDXYZ(5,0,h,0)
+nodes.newNodeIDXYZ(6,L/3,h,0)
+nodes.newNodeIDXYZ(7,2*L/3,h,0)
+nodes.newNodeIDXYZ(8,L,h,0)
 
 
 # Materials definition
@@ -93,14 +93,14 @@ mat= ele1.getVectorMaterials[0]
 K11D= mat.getTangentStiffness().at(1,1)
 
 
-nodos= preprocessor.getNodeLoader
-nod8= nodos.getNode(8)
-UX8= nod8.getDisp[0] # Desplazamiento del nodo 8 según x
-UY8= nod8.getDisp[1] # Desplazamiento del nodo 8 según y
+nodes= preprocessor.getNodeLoader
+nod8= nodes.getNode(8)
+UX8= nod8.getDisp[0] # Node 8 xAxis displacement
+UY8= nod8.getDisp[1] # Node 8 yAxis displacement
 
-nod3= nodos.getNode(3)
-UX3= nod3.getDisp[0] # Desplazamiento del nodo 3 según x
-UY3= nod3.getDisp[1] # Desplazamiento del nodo 3 según y
+nod3= nodes.getNode(3)
+UX3= nod3.getDisp[0] # Node 3 xAxis displacement
+UY3= nod3.getDisp[1] # Node 3 yAxis displacement
 
 UX8SP2K= 0.016110
 UY8SP2K= -0.162735

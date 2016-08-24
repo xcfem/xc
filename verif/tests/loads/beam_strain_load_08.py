@@ -22,12 +22,12 @@ gammaF= 1.5
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0.0,0.0)
-nod= nodos.newNodeXY(L,0.0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0.0,0.0)
+nod= nodes.newNodeXY(L,0.0)
 
 
 # Geometric transformation(s)

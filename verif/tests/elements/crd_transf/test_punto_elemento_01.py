@@ -22,11 +22,11 @@ L= 5 # Longitud del elmento expresada en metros.
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(1.0,2.0,0.0)
-nod= nodos.newNodeXYZ(1.0,2.0,L)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(1.0,2.0,0.0)
+nod= nodes.newNodeXYZ(1.0,2.0,L)
 
 
 trfs= preprocessor.getTransfCooLoader

@@ -19,12 +19,12 @@ from solution import predefined_solutions
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.newNodeIDXYZ(1,0,0,0)
-nodos.newNodeIDXYZ(2,L,0,0)
-nodos.newNodeIDXYZ(3,L,L,0)
-nodos.newNodeIDXYZ(4,0,L,0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.newNodeIDXYZ(1,0,0,0)
+nodes.newNodeIDXYZ(2,L,0,0)
+nodes.newNodeIDXYZ(3,L,L,0)
+nodes.newNodeIDXYZ(4,0,L,0)
 
 
 # Materials definition

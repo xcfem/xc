@@ -17,21 +17,21 @@ n= 1e6 # Carga uniforme axial.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 seccPrueba= paramRectangularSection.RectangularSection("prueba",b=.20,h=.30)
 matSeccPrueba= typical_materials.MaterialData("matprueba",E=7E9,nu=0.3,rho=2500)
 
 
 # Problem type
-predefined_spaces.gdls_resist_materiales2D(nodos)
+predefined_spaces.gdls_resist_materiales2D(nodes)
 # Definimos el material
 defSeccAggregation.defSeccAggregation2d(preprocessor, seccPrueba,matSeccPrueba)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0)
-nod= nodos.newNodeXY(L,0.0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0)
+nod= nodes.newNodeXY(L,0.0)
 
-# Definimos transformaciones geométricas
+# Geometric transformations
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
@@ -73,13 +73,13 @@ analisis= predefined_solutions.simple_static_modified_newton(prueba)
 result= analisis.analyze(1)
 
 
-nodos.calculateNodalReactions(True)
-nod2= nodos.getNode(2)
+nodes.calculateNodalReactions(True)
+nod2= nodes.getNode(2)
 delta0= nod2.getDisp[0] 
 delta1= nod2.getDisp[1] 
-nod1= nodos.getNode(1)
+nod1= nodes.getNode(1)
 RN= nod1.getReaction[0] 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 RN2= nod2.getReaction[0] 
 
 elem1= elementos.getElement(1)

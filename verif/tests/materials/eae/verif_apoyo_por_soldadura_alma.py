@@ -8,16 +8,16 @@ from materials.eae import apoyo_por_soldadura_alma
 import math
 
 
-# DATOS acciones
+# Loads
 Vd= 8585*9.81 # Valor de cálculo de la carga
 
-# DATOS geométricos
+# Geometry
 h= 270e-3 # Canto de la viga expresado en metros.
 tw= 6.6e-3 # Espesor del alma expresado en metros.
 a= 4e-3 # Espesor de garganta expresado en metros.
 l= 5.15925e-2 # Longitud de los cordones.
 
-# DATOS mecánicos
+# Material properties
 fy= 275e6 # Acero S-275-JR
 fyd= fy/1.1 # Minoración límite elástico
 fu= 430e6 # Resistencia a tracción  del acero de las piezas a soldar S-275-JR (tabla 59.8.2 pág 304 EAE).

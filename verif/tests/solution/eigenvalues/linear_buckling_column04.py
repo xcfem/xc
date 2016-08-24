@@ -32,13 +32,13 @@ NumDiv= 4
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
 # Materials definition
 scc= typical_materials.defElasticShearSection2d(preprocessor, "scc",A,E,G,I,1.0)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newPDeltaCrdTransf2d("lin")
@@ -98,7 +98,7 @@ execfile(pth+"/solu_linear_buckling.py")
 
 eig1= analysis.getEigenvalue(1)
 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 deltay= nod2.getDisp[1] 
  
 

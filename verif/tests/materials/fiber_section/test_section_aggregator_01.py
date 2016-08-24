@@ -102,13 +102,13 @@ analysis= solution.simpleNewtonRaphsonBandGen(prueba)
 
 analOk= analysis.analyze(1)
 
-nodos= preprocessor.getNodeLoader
-nodos.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+nodes.calculateNodalReactions(True)
 
-RVy= nodos.getNode(1).getReaction[1] 
-RVz= nodos.getNode(1).getReaction[2] 
-RMx= nodos.getNode(1).getReaction[3] 
-RMz= nodos.getNode(1).getReaction[5] 
+RVy= nodes.getNode(1).getReaction[1] 
+RVz= nodes.getNode(1).getReaction[2] 
+RMx= nodes.getNode(1).getReaction[3] 
+RMz= nodes.getNode(1).getReaction[5] 
 
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)

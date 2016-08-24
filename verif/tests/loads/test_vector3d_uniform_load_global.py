@@ -2,12 +2,12 @@
 
 import numpy
 
-movN2= movs_nodo_6gdl.vectorMovUVW(preprocessor, 2) # Desplazamiento del nodo 2
+movN2= movs_nodo_6gdl.vectorMovUVW(preprocessor, 2) # Node 2 displacement
 vI= element_vectors.getVectorIElem(preprocessor, 1) # Vector I del elemento 1
 vProj= movN2.dot(vI)
 delta= abs(vProj)
 
-nodos.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True)
 reacN1= nodalReactions.vectorReacUVW(preprocessor, 1) # Reacción del nodo 1
 vReacProj= reacN1.dot(vI)
 RN= abs(vReacProj)

@@ -10,13 +10,13 @@ import integra_simpson as isimp
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_elasticidad3D(nodes)
 
 # Definimos materiales
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast"
 seedElemLoader.dimElem= 3

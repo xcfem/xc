@@ -17,12 +17,12 @@ cooCentroElemTeor= xc.Vector([-1.36603,1.36603,0])
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_elasticidad3D(nodes)
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast"
 seedElemLoader.dimElem= 3
@@ -52,7 +52,7 @@ r= l.getRadio()
 l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
 
-nnodos= l1.getNumNodes
+nnodes= l1.getNumNodes
 
 elementos= preprocessor.getElementLoader
 ele2= elementos.getElement(2)
@@ -60,12 +60,12 @@ puntos= ele2.getCooPuntos(2) #Two divisions-> Three points.
 cooCentroElem= puntos.getRow(1)
 
 nnodteor= NumDiv+1
-ratio1= (nnodteor/nnodos)
+ratio1= (nnodteor/nnodes)
 ratio2= (cooCentroElem-cooCentroElemTeor).Norm()
 
 
 ''' 
-print "nnodos= ",(nnodos)
+print "nnodes= ",(nnodes)
 print "nnodteor= ",(nnodteor)
 print "ratio1= ",(ratio1)
 print "theta1= ",(rad2deg(th1))

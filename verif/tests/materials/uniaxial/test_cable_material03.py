@@ -21,16 +21,16 @@ F= 100 # Prestressing force (pounds)
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_elasticidad2D(nodos)
+predefined_spaces.gdls_elasticidad2D(nodes)
 
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0)
-nod= nodos.newNodeXY(l/2,0.0)
-nod= nodos.newNodeXY(l,0.0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0)
+nod= nodes.newNodeXY(l/2,0.0)
+nod= nodes.newNodeXY(l,0.0)
 
 # Materials definition
 mat= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
@@ -74,15 +74,15 @@ analisis= predefined_solutions.simple_newton_raphson(prueba)
 result= analisis.analyze(10)
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-nod3= nodos.getNode(3)
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+nod3= nodes.getNode(3)
 R1X= nod3.getReaction[0]
 R1Y= nod3.getReaction[1] 
-nod1= nodos.getNode(1)
+nod1= nodes.getNode(1)
 R2X= nod1.getReaction[0]
 R2Y= nod1.getReaction[1] 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 deltaX= nod2.getDisp[0]
 deltaY= nod2.getDisp[1]  
 

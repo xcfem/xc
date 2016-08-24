@@ -13,16 +13,16 @@ preprocessor=  prueba.getPreprocessor
 # Materials definition
 elast= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",1e6,0.25,0.0)
 
-nodos= preprocessor.getNodeLoader 
-predefined_spaces.gdls_elasticidad3D(nodos)
-nod9= nodos.newNodeIDXYZ(9,0,0,0)
-nod10= nodos.newNodeIDXYZ(10,1,0,0)
-nod11= nodos.newNodeIDXYZ(11,1,1,0)
-nod12= nodos.newNodeIDXYZ(12,0,1,0)
-nod13= nodos.newNodeIDXYZ(13,0,0,1)
-nod14= nodos.newNodeIDXYZ(14,1,0,1)
-nod15= nodos.newNodeIDXYZ(15,1,1,1)
-nod16= nodos.newNodeIDXYZ(16,0,1,1)
+nodes= preprocessor.getNodeLoader 
+predefined_spaces.gdls_elasticidad3D(nodes)
+nod9= nodes.newNodeIDXYZ(9,0,0,0)
+nod10= nodes.newNodeIDXYZ(10,1,0,0)
+nod11= nodes.newNodeIDXYZ(11,1,1,0)
+nod12= nodes.newNodeIDXYZ(12,0,1,0)
+nod13= nodes.newNodeIDXYZ(13,0,0,1)
+nod14= nodes.newNodeIDXYZ(14,1,0,1)
+nod15= nodes.newNodeIDXYZ(15,1,1,1)
+nod16= nodes.newNodeIDXYZ(16,0,1,1)
 
 
 elementos= preprocessor.getElementLoader
@@ -58,8 +58,8 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader 
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader 
 R9= nod9.getReaction
 R10= nod10.getReaction
 R11= nod11.getReaction

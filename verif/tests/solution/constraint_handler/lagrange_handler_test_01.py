@@ -20,17 +20,17 @@ from model import fix_node_6dof
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_elasticidad2D(nodos)
+predefined_spaces.gdls_elasticidad2D(nodes)
 
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0)
-nod= nodos.newNodeXY(0.0,l-a-b)
-nod= nodos.newNodeXY(0.0,l-a)
-nod= nodos.newNodeXY(0.0,l)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0)
+nod= nodes.newNodeXY(0.0,l-a-b)
+nod= nodes.newNodeXY(0.0,l-a)
+nod= nodes.newNodeXY(0.0,l)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
@@ -83,10 +83,10 @@ prbSolver= predefined_solutions.SolutionProcedure()
 analisis= prbSolver.simpleLagrangeStaticLinear(prueba)
 result= analisis.analyze(1)
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-R1= nodos.getNode(4).getReaction[1] 
-R2= nodos.getNode(1).getReaction[1] 
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+R1= nodes.getNode(4).getReaction[1] 
+R2= nodes.getNode(1).getReaction[1] 
 
 
 ratio1= (R1-900)/900.0

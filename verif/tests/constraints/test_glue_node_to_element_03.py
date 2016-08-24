@@ -18,7 +18,7 @@ from solution import predefined_solutions
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 
 p1= geom.Pos3d(0,0,0)
@@ -27,14 +27,14 @@ p3= geom.Pos3d(1,1,0)
 p4= geom.Pos3d(0,1,0)
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.newNodeIDXYZ(1,p1.x,p1.y,p1.z)
-nodos.newNodeIDXYZ(2,p2.x,p2.y,p2.z)
-nodos.newNodeIDXYZ(3,p3.x,p3.y,p3.z)
-nodos.newNodeIDXYZ(4,p4.x,p4.y,p4.z)
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.newNodeIDXYZ(1,p1.x,p1.y,p1.z)
+nodes.newNodeIDXYZ(2,p2.x,p2.y,p2.z)
+nodes.newNodeIDXYZ(3,p3.x,p3.y,p3.z)
+nodes.newNodeIDXYZ(4,p4.x,p4.y,p4.z)
 
 p10= geom.Pos3d(p1.x,p1.y,p1.z)
-n10= nodos.newNodeIDXYZ(10,p10.x,p10.y,p10.z)
+n10= nodes.newNodeIDXYZ(10,p10.x,p10.y,p10.z)
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
@@ -85,11 +85,11 @@ prbSolver= predefined_solutions.SolutionProcedure()
 analisis= prbSolver.simpleLagrangeStaticLinear(prueba)
 # analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
-nodos.calculateNodalReactions(False)
+nodes.calculateNodalReactions(False)
 
-reactionNode10= nodos.getNode(10).getReaction
+reactionNode10= nodes.getNode(10).getReaction
 ratio1= reactionNode10.Norm()
-svdReactionNodes= nodalReactions.getReactionFromNodes(nodos,"UVWRxRyRz",[1,2,3,4])
+svdReactionNodes= nodalReactions.getReactionFromNodes(nodes,"UVWRxRyRz",[1,2,3,4])
 actionNode10= xc.Vector(loadOnDOFs)
 actionNode10Norm= actionNode10.Norm()
 svdAction= nodalReactions.getSVDfromVDesliz("UVWRxRyRz",n10.get3dCoo,actionNode10)

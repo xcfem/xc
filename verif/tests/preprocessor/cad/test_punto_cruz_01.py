@@ -24,11 +24,11 @@ L=10 # Longitud de las barras
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
-nodos.defaultTag= 1
-nodos.newSeedNode()
+nodes.defaultTag= 1
+nodes.newSeedNode()
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
@@ -92,8 +92,8 @@ lp0= casos.newLoadPattern("default","0")
 
 l2= preprocessor.getSets.getSet("l2")
 
-nNodos= l2.getNumNodes
-for i in range(1,nNodos+1):
+nNodes= l2.getNumNodes
+for i in range(1,nNodes+1):
   n= l2.getNodeI(i)
   tagNodo= n.tag
   xNod= n.getCoo[0]
@@ -114,10 +114,10 @@ for nl in nodalLoads:
 analisis= predefined_solutions.simple_static_linear(prueba)
 analOk= analisis.analyze(1)
 
-nNodos= l2.getNumNodes
+nNodes= l2.getNumNodes
 # print "size= ",size
 errDisp= 0.0
-for i in range(1,nNodos+1):
+for i in range(1,nNodes+1):
   n= l2.getNodeI(i)
   F= (100*n.getCoo[0]+10)
   vTeor= (F*L/E/A)
@@ -127,7 +127,7 @@ errDisp= math.sqrt(errDisp)
 
 constraints= preprocessor.getConstraintLoader
 numSPs= constraints.getNumSPs
-nNodos= setTotal.getNumNodes
+nNodes= setTotal.getNumNodes
 elementos= setTotal.getElements
 nElem= elementos.size
 cumple= 1
@@ -141,7 +141,7 @@ for e in elementos:
   # print "cumple: ",(cumple)
 
 nNodTeor= 2*(NumDiv+1)
-ratio1= (nNodos-nNodTeor)
+ratio1= (nNodes-nNodTeor)
 nElemTeor= nNodTeor/2
 ratio2= (nElem-nElemTeor)
 nSPTeor= 3*nElemTeor
@@ -150,7 +150,7 @@ ratio4= (nCargasNod-nElem)
 ratio5= (errDisp)
 
 ''' 
-print "núm. nodos: ",nNodos
+print "núm. nodos: ",nNodes
 print "núm. condiciones de contorno: ",numSPs
 print "núm. cargas en nodos: ",nCargasNod
 print "núm. elementos: ",nElem

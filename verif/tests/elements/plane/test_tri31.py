@@ -23,14 +23,14 @@ F=1000
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_elasticidad2D(nodes)
 
 
-n1= nodos.newNodeIDXY(1,0,0)
-n2= nodos.newNodeIDXY(2,1,0)
-n3= nodos.newNodeIDXY(3,1,1)
-n4= nodos.newNodeIDXY(4,0,1)
+n1= nodes.newNodeIDXY(1,0,0)
+n2= nodes.newNodeIDXY(2,1,0)
+n3= nodes.newNodeIDXY(3,1,1)
+n4= nodes.newNodeIDXY(4,0,1)
 
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
@@ -71,8 +71,8 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 analOk= analisis.analyze(1)
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
  
 # print "reac nodo 1: ",reac
 R1x= n1.getReaction[0]

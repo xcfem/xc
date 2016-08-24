@@ -21,14 +21,14 @@ fPretA= fPret/2 # Force magnitude de tesado parcial
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 # Problem type
-predefined_spaces.gdls_elasticidad2D(nodos)
+predefined_spaces.gdls_elasticidad2D(nodes)
 
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0)
-nod= nodos.newNodeXY(l,0.0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0)
+nod= nodes.newNodeXY(l,0.0)
 
 # Materials definition
 mat= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPretA,0.0)
@@ -63,10 +63,10 @@ result= analisis.analyze(1)
 
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-R1A= nodos.getNode(2).getReaction[0] 
-R2A= nodos.getNode(1).getReaction[0] 
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+R1A= nodes.getNode(2).getReaction[0] 
+R2A= nodes.getNode(1).getReaction[0] 
 
 
 
@@ -88,9 +88,9 @@ result= analisis.analyze(1)
 
 
 
-nodos.calculateNodalReactions(True)
-R1B= nodos.getNode(2).getReaction[0] 
-R2B= nodos.getNode(1).getReaction[0]
+nodes.calculateNodalReactions(True)
+R1B= nodes.getNode(2).getReaction[0] 
+R2B= nodes.getNode(1).getReaction[0]
 
 
 

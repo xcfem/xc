@@ -24,11 +24,11 @@ eps= F/(Area*Es)
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1
-nod= nodos.newNodeXYZ(1,0,0)
-nod= nodos.newNodeXYZ(1,0,0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1
+nod= nodes.newNodeXYZ(1,0,0)
+nod= nodes.newNodeXYZ(1,0,0)
 
 # Materials definition
 A= 0.0
@@ -105,10 +105,10 @@ result= analisis.analyze(1)
 
 
 
-nodos.calculateNodalReactions(True)
-nod2= nodos.getNode(2)
+nodes.calculateNodalReactions(True)
+nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0] 
-nod1= nodos.getNode(1)
+nod1= nodes.getNode(1)
 Reac= nod1.getReaction 
 
 elementos= preprocessor.getElementLoader

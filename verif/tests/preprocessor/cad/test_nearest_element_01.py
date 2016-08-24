@@ -14,10 +14,10 @@ lapso= 0
 i= 1
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
-nodos.defaultTag= 1
+nodes= preprocessor.getNodeLoader
+nodes.defaultTag= 1
 for i in range(1,1001):
-  n= nodos.newNodeXYZ(i,0,0)
+  n= nodes.newNodeXYZ(i,0,0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",2.1e6)
@@ -31,7 +31,7 @@ for i in range(1,numElementos):
   truss.area= 1
 
 mesh= prueba.getDomain.getMesh
-# print "creados ",nnod," nodos.\n"
+# print "creados ",nnod," nodes.\n"
 start_time= time.time()
 tg= mesh.getNearestElement(geom.Pos3d(50.51,0,0)).tag
 lapso= time.time()-start_time

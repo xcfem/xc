@@ -22,14 +22,14 @@ from materials import typical_materials
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodos)
+predefined_spaces.gdls_resist_materiales3D(nodes)
 # Definimos materiales
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 
 # Definimos materiales
 nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
@@ -80,7 +80,7 @@ lp0= casos.newLoadPattern("default","0")
 
 
 f1= preprocessor.getSets.getSet("f1")
-nNodos= s.getNumNodes
+nNodes= s.getNumNodes
 
 nodo= s.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 # print "Nodo central: ",nodo.tag
@@ -111,7 +111,7 @@ ratio2= (abs((nElems-64)/64))
 
 ''' 
 print "UZ= ",UZ
-print "Num. nodos: ",nNodos
+print "Num. nodos: ",nNodes
 print "Num. elem: ",nElems
 print "ratio1: ",ratio1
    '''

@@ -19,12 +19,12 @@ AT= 10 # Incremento de temperatura expresado en grados centígrados
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_elasticidad2D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0.0,0.0)
-nod= nodos.newNodeXY(L,0.0)
+predefined_spaces.gdls_elasticidad2D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0.0,0.0)
+nod= nodes.newNodeXY(L,0.0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)

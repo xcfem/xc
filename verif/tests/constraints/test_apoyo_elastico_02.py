@@ -18,10 +18,10 @@ from materials import typical_materials
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(1,1,1)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(1,1,1)
 
     
 # Definimos materiales
@@ -60,16 +60,16 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
 
-nod1= nodos.getNode(1)
+nod1= nodes.getNode(1)
 deltax= nod1.getDisp[0]
 deltay= nod1.getDisp[1]
 deltaz= nod1.getDisp[2] 
 RZ= nod1.getReaction[2] 
-RX= nodos.getNode(tagNodoFijo).getReaction[0]
-RY= nodos.getNode(tagNodoFijo).getReaction[1] 
+RX= nodes.getNode(tagNodoFijo).getReaction[0]
+RY= nodes.getNode(tagNodoFijo).getReaction[1] 
 
 
 ratio1= -RX/FX

@@ -28,9 +28,9 @@ from materials import typical_materials
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
-nodos.newSeedNode()
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
+nodes.newSeedNode()
 
 trfs= preprocessor.getTransfCooLoader
 pd= trfs.newPDeltaCrdTransf2d("pd")
@@ -162,13 +162,13 @@ M52Teor= -6153.0 # Valor teórico del momento frontal en elemento 5
 ratioM52= 0.0
 
 
-nodos= preprocessor.getNodeLoader
-nodT2= nodos.getNode(tagNodo2)
+nodes= preprocessor.getNodeLoader
+nodT2= nodes.getNode(tagNodo2)
 theta2= nodT2.getDisp[2]
-nodT6= nodos.getNode(tagNodo6)
+nodT6= nodes.getNode(tagNodo6)
 delta6= nodT6.getDisp[0]
 theta6= nodT6.getDisp[2]
-nodT8= nodos.getNode(tagNodo8)
+nodT8= nodes.getNode(tagNodo8)
 theta8= nodT8.getDisp[2]
 
 elementos= preprocessor.getElementLoader

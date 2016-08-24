@@ -15,16 +15,16 @@ nu= 0.3 # Coeficiente de Poison
 rho= 0.0 # Densidad
 #prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 
-numNodos= 0
+numNodes= 0
 numElem= 0
 
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_elasticidad2D(nodos)
-nodos.newSeedNode()
+predefined_spaces.gdls_elasticidad2D(nodes)
+nodes.newSeedNode()
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
@@ -83,7 +83,7 @@ s2.nverborrea= 5
 total= preprocessor.getSets.getSet("total")
 total.genMesh(xc.meshDir.I)
 
-numNodos= total.getNodes.size
+numNodes= total.getNodes.size
 numElem= total.getElements.size
 
 
@@ -118,11 +118,11 @@ execfile("vtk/vtk_muestra_ventana.lcmm")
 \preprocessor.{\for_each_edge
     print "linea: ",nombre," p1: ",getTagP1," p2: ",getTagP2, " ndiv: ",ndiv
   }}}
-print "Número de nodos: ",numNodos
+print "Número de nodos: ",numNodes
 print "Número de elementos: ",numElem
 '''
 
-ratio1= abs(numNodos-54)
+ratio1= abs(numNodes-54)
 ratio2= abs(numElem-40)
 
 import os

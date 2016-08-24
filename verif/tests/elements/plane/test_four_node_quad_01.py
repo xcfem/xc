@@ -21,16 +21,16 @@ rho= 0.0 # Densidad
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_elasticidad2D(nodes)
 
 
-n1= nodos.newNodeIDXY(1,0,0)
-n2= nodos.newNodeIDXY(2,2,0)
+n1= nodes.newNodeIDXY(1,0,0)
+n2= nodes.newNodeIDXY(2,2,0)
 n2.setTrialDisp(xc.Vector([0.002,0.003]))
-n3= nodos.newNodeIDXY(3,2,1)
+n3= nodes.newNodeIDXY(3,2,1)
 n3.setTrialDisp(xc.Vector([0.006,0.0032]))
-n4= nodos.newNodeIDXY(4,0,1)
+n4= nodes.newNodeIDXY(4,0,1)
 
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)

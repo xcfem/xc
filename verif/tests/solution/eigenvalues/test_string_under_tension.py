@@ -27,10 +27,10 @@ fPret= sigmaPret*area # Prestressing force (pounds)
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 # Problem type
-predefined_spaces.gdls_resist_materiales2D(nodos)
-nodos.newSeedNode()
+predefined_spaces.gdls_resist_materiales2D(nodes)
+nodes.newSeedNode()
 
 # Materials definition
 typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,Mass)

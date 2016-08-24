@@ -41,12 +41,12 @@ KTHX= materiales.getMaterial("neopTHX").E
 KTHY= materiales.getMaterial("neopTHY").E
 KTHZ= materiales.getMaterial("neopTHZ").E
 
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(1,1,1)
-nod= nodos.newNodeXYZ(1,1,1)
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(1,1,1)
+nod= nodes.newNodeXYZ(1,1,1)
 
 
 
@@ -85,13 +85,13 @@ result= analisis.analyze(1)
 
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-nod2= nodos.getNode(2)
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0]
 deltay= nod2.getDisp[1]
 deltaz= nod2.getDisp[2] 
-nod1= nodos.getNode(1)
+nod1= nodes.getNode(1)
 RX= nod1.getReaction[0]
 RY= nod1.getReaction[1]
 RZ= nod1.getReaction[2] 

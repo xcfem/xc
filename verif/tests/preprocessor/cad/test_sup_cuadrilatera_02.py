@@ -21,14 +21,14 @@ rho= 0.0 # Densidad
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_elasticidad2D(nodos)# Materials definition
+predefined_spaces.gdls_elasticidad2D(nodes)# Materials definition
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast2d"
@@ -94,7 +94,7 @@ nnodDom= mesh.getNumNodes()
 
 ''' 
 print "núm. nodos: ",nnod
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 for_each
   print "  nodo: ",tag," x= ",coord[0],", y= ",coord[1]

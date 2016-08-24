@@ -21,12 +21,12 @@ sin675= math.sin(math.radians(67.5))
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_elasticidad3D(nodes)
 # Definimos materiales
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast"
@@ -67,18 +67,18 @@ l2= preprocessor.getSets.getSet("l2")
 l2.genMesh(xc.meshDir.I)
 
 
-nnodos= l1.getNumNodes+l2.getNumNodes-1
-nodos= preprocessor.getNodeLoader
-nod3= nodos.getNode(3)
+nnodes= l1.getNumNodes+l2.getNumNodes-1
+nodes= preprocessor.getNodeLoader
+nod3= nodes.getNode(3)
 x3= nod3.get3dCoo[0]
 y3= nod3.get3dCoo[1]
-nod5= nodos.getNode(5)
+nod5= nodes.getNode(5)
 x5= nod5.get3dCoo[0]
 y5= nod5.get3dCoo[1]
 
 
 nnodteor= 2*NumDiv+1
-ratio1= (nnodteor/nnodos)
+ratio1= (nnodteor/nnodes)
 ratio2= (y5-x3)**2+(y3-x5)**2
 
 ''' 

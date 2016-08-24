@@ -21,12 +21,12 @@ C= xc.Vector([1,0.5,0.5])
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.newNodeIDXYZ(1,0,0,0)
-nodos.newNodeIDXYZ(2,2,0,0)
-nodos.newNodeIDXYZ(3,2,1,1)
-nodos.newNodeIDXYZ(4,0,1,1)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.newNodeIDXYZ(1,0,0,0)
+nodes.newNodeIDXYZ(2,2,0,0)
+nodes.newNodeIDXYZ(3,2,1,1)
+nodes.newNodeIDXYZ(4,0,1,1)
 
 
 # Materials definition

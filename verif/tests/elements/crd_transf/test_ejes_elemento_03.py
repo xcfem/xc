@@ -23,11 +23,11 @@ F= 1.0e3 # Load magnitude (kN)
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0.0,0.0,0.0)
-nod= nodos.newNodeXYZ(L,0.0,0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0.0,0.0,0.0)
+nod= nodes.newNodeXYZ(L,0.0,0)
 
 # Materials
 caracMecSeccion= xc.CrossSectionProperties3d()
@@ -81,11 +81,11 @@ result= analisis.analyze(1)
 deltaYTeor= (-F*L**3/(3*E*Iz))
 deltaZTeor= (F*L**3/(3*E*Iy))
 
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 deltaY= nod2.getDisp[1]
-deltaZ= nod2.getDisp[2] # Desplazamiento del nodo 2 según y
+deltaZ= nod2.getDisp[2] # Node 2 yAxis displacement
 
 
 

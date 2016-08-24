@@ -30,11 +30,11 @@ f= 1.5e3 # Load magnitude (kN/m)
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0,0.0,0.0)
-nod= nodos.newNodeXYZ(L,0.0,0.0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0,0.0,0.0)
+nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 # Geometric transformation(s)
@@ -81,9 +81,9 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos= preprocessor.getNodeLoader 
-nod2= nodos.getNode(2)
-delta= nod2.getDisp[2]  # Desplazamiento del nodo 2 según z global
+nodes= preprocessor.getNodeLoader 
+nod2= nodes.getNode(2)
+delta= nod2.getDisp[2]  # Node 2 displacement según z global
 
 elementos= preprocessor.getElementLoader
 

@@ -18,11 +18,11 @@ preprocessor=  prueba.getPreprocessor
 # Definimos materiales
 elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",30e6,0.3,0.0)
 
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_elasticidad3D(nodes)
 
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast3d"
 seedElemLoader.dimElem= 3
@@ -43,15 +43,15 @@ uGrid.nDivZ= ndivZ
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
-numNodos= setTotal.getNodes.size
+numNodes= setTotal.getNodes.size
 numElem= setTotal.getElements.size
 
-numNodosTeor= (ndivX+1)*(ndivY+1)*(ndivZ+1)
+numNodesTeor= (ndivX+1)*(ndivY+1)*(ndivZ+1)
 numElemTeor= ndivX*ndivY*ndivZ
 
 import os
 fname= os.path.basename(__file__)
-if (abs(numNodosTeor-numNodos)<1e-15) & (abs(numElemTeor-numElem)<1e-15):
+if (abs(numNodesTeor-numNodes)<1e-15) & (abs(numElemTeor-numElem)<1e-15):
   print "test ",fname,": ok."
 else:
   print "test ",fname,": ERROR."

@@ -19,16 +19,16 @@ F= 1000.0 # Fuerza
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_resist_materiales2D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0)
-nod= nodos.newNodeXY(l,0.0)
-nod= nodos.newNodeXY(2*l,0.0)
-nod= nodos.newNodeXY(3*l,0.0)
+predefined_spaces.gdls_resist_materiales2D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0)
+nod= nodes.newNodeXY(l,0.0)
+nod= nodes.newNodeXY(2*l,0.0)
+nod= nodes.newNodeXY(3*l,0.0)
 
-# Definimos transformaciones geométricas
+# Geometric transformations
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
@@ -93,12 +93,12 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-nod1= nodos.getNode(1)
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+nod1= nodes.getNode(1)
 deltax1= nod1.getDisp[0] 
 deltay1= nod1.getDisp[1] 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 deltax2= nod2.getDisp[0] 
 deltay2= nod2.getDisp[1] 
 R1= nod1.getReaction[0] 
@@ -120,16 +120,16 @@ prueba.clearAll()
 db.restore(105)
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-nod1= nodos.getNode(1)
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+nod1= nodes.getNode(1)
 deltaxB1= nod1.getDisp[0] 
 deltayB1= nod1.getDisp[1] 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 deltaxB2= nod2.getDisp[0] 
 deltayB2= nod2.getDisp[1] 
 RB1= nod1.getReaction[0] 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 RB2= nod2.getReaction[0] 
 
 

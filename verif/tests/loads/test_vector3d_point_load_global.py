@@ -35,12 +35,12 @@ ptoAplic= xc.Vector([1+x*L*math.sqrt(2)/2.0,3+x*L*math.sqrt(2)/2.0,0])
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(1,3,0)
-nod= nodos.newNodeXYZ(1+L*math.sqrt(2)/2.0,3+L*math.sqrt(2)/2.0,0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(1,3,0)
+nod= nodes.newNodeXYZ(1+L*math.sqrt(2)/2.0,3+L*math.sqrt(2)/2.0,0)
 
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
@@ -95,8 +95,8 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos= preprocessor.getNodeLoader
-nod2= nodos.getNode(2)
+nodes= preprocessor.getNodeLoader
+nod2= nodes.getNode(2)
 tmp= nod2.getDisp
 vDispUVW= xc.Vector([tmp[0],tmp[1],tmp[2]])
 a= x*L

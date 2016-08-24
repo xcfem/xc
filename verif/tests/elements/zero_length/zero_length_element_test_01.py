@@ -16,13 +16,13 @@ from materials import typical_materials
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-nodos.dimEspace= 1
-nodos.numGdls= 1
+nodes= preprocessor.getNodeLoader
+nodes.dimEspace= 1
+nodes.numGdls= 1
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(1,0)
-nod= nodos.newNodeXY(1.0+l,0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(1,0)
+nod= nodes.newNodeXY(1.0+l,0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
@@ -68,11 +68,11 @@ result= analisis.analyze(1)
 
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-nod2= nodos.getNode(2)
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0] 
-nod1= nodos.getNode(1)
+nod1= nodes.getNode(1)
 R= nod1.getReaction[0] 
 
 elementos= preprocessor.getElementLoader

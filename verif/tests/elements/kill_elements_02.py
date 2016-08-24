@@ -21,19 +21,19 @@ F= 1000 # Fuerza
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0,0,0)
-nod= nodos.newNodeXYZ(L,0,0)
-nod= nodos.newNodeXYZ(L,L,0)
-nod= nodos.newNodeXYZ(0,L,0)
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0,0,0)
+nod= nodes.newNodeXYZ(L,0,0)
+nod= nodes.newNodeXYZ(L,L,0)
+nod= nodes.newNodeXYZ(0,L,0)
 
-nod= nodos.newNodeXYZ(0,0,L)
-nod= nodos.newNodeXYZ(L,0,L)
-nod= nodos.newNodeXYZ(L,L,L)
-nod= nodos.newNodeXYZ(0,L,L)
+nod= nodes.newNodeXYZ(0,0,L)
+nod= nodes.newNodeXYZ(L,0,L)
+nod= nodes.newNodeXYZ(L,L,L)
+nod= nodes.newNodeXYZ(0,L,L)
 
 # Materials definition
 
@@ -82,19 +82,19 @@ result= analisis.analyze(1)
 
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-nod1= nodos.getNode(1)
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+nod1= nodes.getNode(1)
 deltax1= nod1.getDisp[0] 
 deltay1= nod1.getDisp[1] 
 deltaz1= nod1.getDisp[2] 
 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 deltax2= nod2.getDisp[0] 
 deltay2= nod2.getDisp[1] 
 deltaz2= nod2.getDisp[2] 
 
-nod3= nodos.getNode(3)
+nod3= nodes.getNode(3)
 deltax3= nod3.getDisp[0] 
 deltay3= nod3.getDisp[1] 
 deltaz3= nod3.getDisp[2] 
@@ -113,19 +113,19 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
-nod1= nodos.getNode(1)
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
+nod1= nodes.getNode(1)
 deltaxB1= nod1.getDisp[0] 
 deltayB1= nod1.getDisp[1] 
 deltazB1= nod1.getDisp[2] 
 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 deltaxB2= nod2.getDisp[0] 
 deltayB2= nod2.getDisp[1]
 deltazB2= nod2.getDisp[2] 
 
-nod3= nodos.getNode(3)
+nod3= nodes.getNode(3)
 deltaxB3= nod3.getDisp[0] 
 deltayB3= nod3.getDisp[1]
 deltazB3= nod3.getDisp[2] 

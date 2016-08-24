@@ -30,11 +30,11 @@ M= 1.5e3 # Moment magnitude (kN m)
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0,0.0,0.0)
-nod= nodos.newNodeXYZ(L,0.0,0.0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0,0.0,0.0)
+nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 trfs= preprocessor.getTransfCooLoader
@@ -77,8 +77,8 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos= preprocessor.getNodeLoader 
-nod2= nodos.getNode(2)
+nodes= preprocessor.getNodeLoader 
+nod2= nodes.getNode(2)
 theta= nod2.getDisp[3] # Giro del nodo según x
 
 elementos= preprocessor.getElementLoader

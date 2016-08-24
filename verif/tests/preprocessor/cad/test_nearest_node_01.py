@@ -11,11 +11,11 @@ tg= 0
 lapso= 0
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 for i in range(1,1000):
-  n= nodos.newNodeXYZ(i,0,0)
+  n= nodes.newNodeXYZ(i,0,0)
 
-# print "creados ",nnod," nodos.\n"
+# print "creados ",nnod," nodes.\n"
 mesh= prueba.getDomain.getMesh
 # crono= 1
 # \crono{\start{}}

@@ -22,28 +22,28 @@ numeroTiposCelda= None
 tiposCelda= None
 nombresTiposCelda= None
 numeroCeldasTipo= None
-numNodosCeldaTipo= None
+numNodesCeldaTipo= None
 conectividad= None
-numGruposNodos= None
+numGruposNodes= None
 numGruposElementos= None
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_elasticidad2D(nodes)
 
 
-nodos.defaultTag= 101
-nodos.newNodeXY(0,0)
-nodos.defaultTag= 102 
-nod2= nodos.newNodeXY(2,0)
+nodes.defaultTag= 101
+nodes.newNodeXY(0,0)
+nodes.defaultTag= 102 
+nod2= nodes.newNodeXY(2,0)
 nod2.setTrialDisp(xc.Vector([0.002,0.003]))
-nodos.defaultTag= 103
-nod3= nodos.newNodeXY(2,1) 
+nodes.defaultTag= 103
+nod3= nodes.newNodeXY(2,1) 
 nod3.setTrialDisp(xc.Vector([0.006,0.0032]))
-nodos.defaultTag= 104
-nod4= nodos.newNodeXY(0,1)
+nodes.defaultTag= 104
+nod4= nodes.newNodeXY(0,1)
 
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
@@ -104,9 +104,9 @@ numeroTiposCelda= med_import.getNumberOfCellTypes()
 tiposCelda= med_import.getCellTypes()
 nombresTiposCelda= med_import.getCellTypeNames
 numeroCeldasTipo= med_import.getNumCellsOfType(tiposCelda[0])
-numNodosCeldaTipo= tiposCelda[0]%100
+numNodesCeldaTipo= tiposCelda[0]%100
 conectividad= med_import.getConnectivityCellsOfType(tiposCelda[0])
-numGruposNodos= med_import.getNumberOfGroups(xc.MED_NODE)
+numGruposNodes= med_import.getNumberOfGroups(xc.MED_NODE)
 numGruposElementos= med_import.getNumberOfGroups(xc.MED_CELL)
 
 
@@ -121,9 +121,9 @@ print "numeroTiposCelda= ",numeroTiposCelda
 print "tiposCelda= ",tiposCelda
 print "nombresTiposCelda= ",nombresTiposCelda
 print "numeroCeldasTipo(",tiposCelda[0],")= ",numeroCeldasTipo
-print "numeroNodosCeldaTipo(",tiposCelda[0],")= ",numNodosCeldaTipo
+print "numeroNodosCeldaTipo(",tiposCelda[0],")= ",numNodesCeldaTipo
 print "conectividad= ",conectividad
-print "numGruposNodos= ",numGruposNodos
+print "numGruposNodes= ",numGruposNodos
 print "numGruposElementos= ",numGruposElementos
    '''
 

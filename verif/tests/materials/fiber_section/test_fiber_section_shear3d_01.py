@@ -102,9 +102,9 @@ if(analOk!=0):
 
 
 
-nodos= preprocessor.getNodeLoader
-nodos.calculateNodalReactions(True)
-n1= nodos.getNode(1)
+nodes= preprocessor.getNodeLoader
+nodes.calculateNodalReactions(True)
+n1= nodes.getNode(1)
 RVy= n1.getReaction[1] 
 RVz= n1.getReaction[2] 
 RMx= n1.getReaction[3] 

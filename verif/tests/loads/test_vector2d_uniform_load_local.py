@@ -33,12 +33,12 @@ p= 1000 # Carga uniforme transversal.
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
 
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0.0)
-nod= nodos.newNodeXY(L,0.0)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0.0)
+nod= nodes.newNodeXY(L,0.0)
 
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
@@ -106,13 +106,13 @@ analisis= predefined_solutions.simple_newton_raphson(prueba)
 result= analisis.analyze(1)
 
 
-nodos.calculateNodalReactions(True) 
-nod2= nodos.getNode(2)
-delta0= nod2.getDisp[0]  # Desplazamiento del nodo 2 según x
+nodes.calculateNodalReactions(True) 
+nod2= nodes.getNode(2)
+delta0= nod2.getDisp[0]  # Node 2 xAxis displacement
 delta1= nod2.getDisp[1] 
-nod1= nodos.getNode(1)
+nod1= nodes.getNode(1)
 RN= nod1.getReaction[0] 
-nod2= nodos.getNode(2)
+nod2= nodes.getNode(2)
 RN2= nod2.getReaction[0] 
 
 elementos= preprocessor.getElementLoader

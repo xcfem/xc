@@ -21,16 +21,16 @@ from model import fix_node_6dof
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXY(0,0)
-nod= nodos.newNodeXY(a,0.0)
-nod= nodos.newNodeXY(a+(l/2),0.0)
-nod= nodos.newNodeXY(a+l,0.0)
-nod= nodos.newNodeXY(2*a+l,0.0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales2D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXY(0,0)
+nod= nodes.newNodeXY(a,0.0)
+nod= nodes.newNodeXY(a+(l/2),0.0)
+nod= nodes.newNodeXY(a+l,0.0)
+nod= nodes.newNodeXY(2*a+l,0.0)
 
-# Definimos transformaciones geométricas
+# Geometric transformations
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
@@ -90,7 +90,7 @@ if(not pth):
 execfile(pth+"/solu_transf_handler2.py")
     
 
-nod3= nodos.getNode(3)
+nod3= nodes.getNode(3)
 delta= nod3.getDisp[1] 
 
 elem2= elementos.getElement(2)

@@ -22,14 +22,14 @@ rotacion= xc.Matrix([[1,0,0],[0,math.cos(angRotacion),math.sin(angRotacion)],[0,
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nod1= nodos.newNodeIDXYZ(1,0,0,0)
-nod2= nodos.newNodeIDXYZ(2,2,0,0)
-nod3= nodos.newNodeIDXYZ(3,2,1,1)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nod1= nodes.newNodeIDXYZ(1,0,0,0)
+nod2= nodes.newNodeIDXYZ(2,2,0,0)
+nod3= nodes.newNodeIDXYZ(3,2,1,1)
 p= nod3.getInitialPos3d
 vPosN3= xc.Vector([p.x,p.y,p.z])
-nod4= nodos.newNodeIDXYZ(4,0,1,1)
+nod4= nodes.newNodeIDXYZ(4,0,1,1)
 p= nod4.getInitialPos3d
 vPosN4= xc.Vector([p.x,p.y,p.z])
 

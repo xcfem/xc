@@ -29,13 +29,13 @@ f= 1.5e3 # Load magnitude (kN/m)
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor  
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nodos.newNodeXYZ(0,0.0,0.0)
-nodos.newNodeXYZ(L,0.0,0.0)
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nodes.newNodeXYZ(0,0.0,0.0)
+nodes.newNodeXYZ(L,0.0,0.0)
 
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
@@ -81,8 +81,8 @@ cargas.addToDomain("COMB")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-deltax= nodos.getNode(2).getDisp[0]
-deltay= nodos.getNode(2).getDisp[2]
+deltax= nodes.getNode(2).getDisp[0]
+deltay= nodes.getNode(2).getDisp[2]
 
 elem1= elementos.getElement(1)
 elem1.getResistingForce()

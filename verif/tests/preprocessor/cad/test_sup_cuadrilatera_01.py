@@ -10,7 +10,7 @@ from materials import typical_materials
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 prueba.logFileName= "/tmp/borrar.log" # Nicely avoid warning messages.
 NumDivI= 3
@@ -21,9 +21,9 @@ nu= 0.3 # Coeficiente de Poison
 rho= 0.0 # Densidad
 
 # Problem type
-predefined_spaces.gdls_elasticidad2D(nodos)
+predefined_spaces.gdls_elasticidad2D(nodes)
 
-nodos.newSeedNode()
+nodes.newSeedNode()
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)

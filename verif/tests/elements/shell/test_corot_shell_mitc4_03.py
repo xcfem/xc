@@ -17,12 +17,12 @@ mov= xc.Vector([1,1,1,0,0,0])
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.newNodeIDXYZ(1,0,0,0)
-nodos.newNodeIDXYZ(2,2,0,0)
-nodos.newNodeIDXYZ(3,2,1,1)
-nodos.newNodeIDXYZ(4,0,1,1)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.newNodeIDXYZ(1,0,0,0)
+nodes.newNodeIDXYZ(2,2,0,0)
+nodes.newNodeIDXYZ(3,2,1,1)
+nodes.newNodeIDXYZ(4,0,1,1)
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
@@ -31,8 +31,8 @@ elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("corot_shell_mitc4",xc.ID([1,2,3,4]))
 
-nodos= preprocessor.getSets.getSet("total").getNodes
-for n in nodos:
+nodes= preprocessor.getSets.getSet("total").getNodes
+for n in nodes:
   n.setTrialDisp(mov)
 
 movLocalN1= None

@@ -81,11 +81,11 @@ RR= fourFibersSection.getStressResultant()
 R0= xc.Vector([RR[0],RR[2],RR[1]])
 
 fourFibersSection.revertToStart()
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0.0,0.0,0.0)
-nod= nodos.newNodeXYZ(0.0,0.0,0.0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0.0,0.0,0.0)
+nod= nodes.newNodeXYZ(0.0,0.0,0.0)
 
 # Elements definition
 elementos= preprocessor.getElementLoader

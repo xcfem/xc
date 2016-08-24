@@ -27,13 +27,13 @@ n= 1e6 # Carga uniforme axial.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nodos.newNodeXYZ(0,0,0)
-nodos.newNodeXYZ(L,0,0)
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nodes.newNodeXYZ(0,0,0)
+nodes.newNodeXYZ(L,0,0)
     
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
@@ -74,8 +74,8 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-delta0= nodos.getNode(2).getDisp[0] #x displacement of node 2.
-delta1= nodos.getNode(2).getDisp[1] #y displacement of node 2.
+delta0= nodes.getNode(2).getDisp[0] #xAxis displacement of node 2.
+delta1= nodes.getNode(2).getDisp[1] #yAxis displacement of node 2.
 
 delta0Teor= (n*L**2/2/E/A)
 ratio0= ((delta0-delta0Teor)/delta0Teor)

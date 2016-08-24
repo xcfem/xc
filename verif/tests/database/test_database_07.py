@@ -18,12 +18,12 @@ q= -2
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.newNodeIDXYZ(1,0,0,0)
-nodos.newNodeIDXYZ(2,1,0,0)
-nodos.newNodeIDXYZ(3,1,1,0)
-nodos.newNodeIDXYZ(4,0,1,0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.newNodeIDXYZ(1,0,0,0)
+nodes.newNodeIDXYZ(2,1,0,0)
+nodes.newNodeIDXYZ(3,1,1,0)
+nodes.newNodeIDXYZ(4,0,1,0)
 
 
 # Materials definition
@@ -73,13 +73,13 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
+nodes.calculateNodalReactions(True)
+nodes= preprocessor.getNodeLoader
 
-RN1= nodos.getNode(1).getReaction[2] 
-RN2= nodos.getNode(2).getReaction[2] 
-RN3= nodos.getNode(3).getReaction[2] 
-RN4= nodos.getNode(4).getReaction[2] 
+RN1= nodes.getNode(1).getReaction[2] 
+RN2= nodes.getNode(2).getReaction[2] 
+RN3= nodes.getNode(3).getReaction[2] 
+RN4= nodes.getNode(4).getReaction[2] 
 
 
 
@@ -96,12 +96,12 @@ elementos= preprocessor.getElementLoader
             print "G3= ",getCoordTransf.getG3Vector
 
 
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 
-             \nodo[1]{print "reac= ",reac} 
-             \nodo[2]{print "reac= ",reac} 
-             \nodo[3]{print "reac= ",reac} 
-             \nodo[4]{print "reac= ",reac} 
+             \node[1]{print "reac= ",reac} 
+             \node[2]{print "reac= ",reac} 
+             \node[3]{print "reac= ",reac} 
+             \node[4]{print "reac= ",reac} 
 '''
 
 

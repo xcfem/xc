@@ -29,12 +29,12 @@ F= 1.5e3 # Load magnitude (kN)
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nodos.newNodeXYZ(0,0.0,0.0)
-nodos.newNodeXYZ(L,0.0,0.0)
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nodes.newNodeXYZ(0,0.0,0.0)
+nodes.newNodeXYZ(L,0.0,0.0)
 
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
@@ -72,7 +72,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-delta= nodos.getNode(2).getDisp[1] #ydisplacement of node 2.
+delta= nodes.getNode(2).getDisp[1] #ydisplacement of node 2.
 elementos.getElement(1).getResistingForce()
 M= elementos.getElement(1).getMy1
 V= elementos.getElement(1).getVz

@@ -28,23 +28,23 @@ numeroTiposCelda= None
 tiposCelda= None
 nombresTiposCelda= None
 numeroCeldasTipo= None
-numNodosCeldaTipo= None
+numNodesCeldaTipo= None
 conectividad= None
-numGruposNodos= None
+numGruposNodes= None
 numGruposElementos= None
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
 
-nodos.newNodeIDXYZ(1,0,0,0)
-nodos.newNodeIDXYZ(2,2,0,0)
-nodos.newNodeIDXYZ(3,2,1,0)
-nodos.newNodeIDXYZ(4,0,1,0)
-nodos.newNodeIDXYZ(5,3,0,0)
-nodos.newNodeIDXYZ(6,3,1,0)
+nodes.newNodeIDXYZ(1,0,0,0)
+nodes.newNodeIDXYZ(2,2,0,0)
+nodes.newNodeIDXYZ(3,2,1,0)
+nodes.newNodeIDXYZ(4,0,1,0)
+nodes.newNodeIDXYZ(5,3,0,0)
+nodes.newNodeIDXYZ(6,3,1,0)
 
 
 # Materials definition
@@ -85,9 +85,9 @@ numeroTiposCelda= med_import.getNumberOfCellTypes()
 tiposCelda= med_import.getCellTypes()
 nombresTiposCelda= med_import.getCellTypeNames
 numeroCeldasTipo= med_import.getNumCellsOfType(tiposCelda[0])
-numNodosCeldaTipo= tiposCelda[0]%100
+numNodesCeldaTipo= tiposCelda[0]%100
 conectividad= med_import.getConnectivityCellsOfType(tiposCelda[0])
-numGruposNodos= med_import.getNumberOfGroups(xc.MED_NODE)
+numGruposNodes= med_import.getNumberOfGroups(xc.MED_NODE)
 numGruposElementos= med_import.getNumberOfGroups(xc.MED_CELL)
 
 
@@ -105,9 +105,9 @@ print "numeroTiposCelda= ",numeroTiposCelda
 print "tiposCelda= ",tiposCelda
 print "nombresTiposCelda= ",nombresTiposCelda
 print "numeroCeldasTipo(",tiposCelda[0],")= ",numeroCeldasTipo
-print "numeroNodosCeldaTipo(",tiposCelda[0],")= ",numNodosCeldaTipo
+print "numeroNodosCeldaTipo(",tiposCelda[0],")= ",numNodesCeldaTipo
 print "conectividad= ",conectividad
-print "numGruposNodos= ",numGruposNodos
+print "numGruposNodes= ",numGruposNodos
 print "numGruposElementos= ",numGruposElementos
    '''
 

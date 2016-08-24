@@ -20,13 +20,13 @@ from model import fix_node_6dof
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-nodos= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodos)
-nodos.defaultTag= 1 #First node number.
-nod= nodos.newNodeXYZ(0,0,0)
-nod= nodos.newNodeXYZ(L,0,0)
-nod= nodos.newNodeXYZ(L,L,0)
-nod= nodos.newNodeXYZ(0,L,0)
+nodes= preprocessor.getNodeLoader
+predefined_spaces.gdls_resist_materiales3D(nodes)
+nodes.defaultTag= 1 #First node number.
+nod= nodes.newNodeXYZ(0,0,0)
+nod= nodes.newNodeXYZ(L,0,0)
+nod= nodes.newNodeXYZ(L,L,0)
+nod= nodes.newNodeXYZ(0,L,0)
 
 
 # Materials definition
