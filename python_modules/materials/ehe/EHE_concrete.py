@@ -25,6 +25,9 @@ class EHEConcrete(concreteBase.Concrete):
     """
     typeAggregate='cuarcita'
 
+    def __init__(self,nmbConcrete, fck, gammaC):
+        super(EHEConcrete,self).__init__(nmbConcrete,fck, gammaC)
+
     def getAlphaEcm(self):
         '''Coeficiente corrector del módulo de deformación
         longitudinal del hormigón en función de la naturaleza
