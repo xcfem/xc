@@ -2,7 +2,7 @@
 
 # home made test
 K= 1000 # Spring constant
-l= 1e-7 # Distancia entre nodos
+l= 1e-7 # Distance between nodes
 F= 1 # Force magnitude
 
 import xc_base
@@ -27,10 +27,6 @@ nod= nodos.newNodeXY(1.0+l,0)
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
 
-''' Se definen nodos en los puntos de aplicación de
-    la carga. Puesto que no se van a determinar tensiones
-    se emplea una sección arbitraria de área unidad '''
-    
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast"

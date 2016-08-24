@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento del comando reg_cuad
+# Testing fiber section model of Steel01 uniaxial material.
 
 import xc_base
 import geom
@@ -26,15 +26,15 @@ preprocessor=  prueba.getPreprocessor
 nodos= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodos)
 
-# Definimos nodos
+# Node definition
 
 nodos.defaultTag= 1 #First node number.
 nod1= nodos.newNodeXY(1,0)
 nod2= nodos.newNodeXY(1,0)
 
 # Materials definition
-fy= 2600 # Tensión de cedencia del acero.
-E= 2.1e6 # Módulo de Young del acero.
+fy= 2600 # Yield stress.
+E= 2.1e6 # Young modulus.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 # Secciones
