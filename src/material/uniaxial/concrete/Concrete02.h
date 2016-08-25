@@ -69,6 +69,51 @@
 #include <material/uniaxial/concrete/RawConcrete.h>
 
 namespace XC {
+
+//! @ingroup MatUnx
+//
+//! @brief Concrete02 history variables.
+struct Conc02HistoryVars
+  {
+    double ecmin;  //!<  hstP(1)
+    double dept;   //!<  hstP(2)
+    double eps;  //!< strain
+    double sig;  //!< stress
+    double e;    //!< stiffness modulus
+    inline Conc02HistoryVars(void)
+      : ecmin(0.0), dept(0.0), eps(0.0), sig(0.0), e(0.0) {}
+    inline void setup_parameters(const double &initialTangent)
+      {
+	e= initialTangent;
+        eps= 0.0;
+        sig= 0.0;
+      }
+    inline double getStrain(void) const
+      { return eps; }
+    inline double getStress(void) const
+      { return sig; }
+    inline double getTangent(void) const
+      { return e; }
+    void cutStress(const double &sigmin,const double &sigmax,const double &er)
+      {
+        if(sig <= sigmin)
+          {
+            sig= sigmin;
+            e= er;
+          }
+        else if(sig >= sigmax)
+	  {
+            sig= sigmax;
+            e= 0.5 * er;
+          }
+      }
+    void Print(std::ostream &os)
+      {
+        os << "Concrete02:(strain, stress, tangent) " << eps
+	  << " " << sig << " " << e << std::endl;
+      }
+  };
+
 //! @ingroup MatUnx
 //
 //! @brief Modelización 1D del hormigón con módulo de daño.
@@ -83,18 +128,9 @@ class Concrete02: public RawConcrete
     double Ets;   //!< tension stiffening slope                : mp(7)
 
     // hstvP : Concrete HISTORY VARIABLES last committed step
-    double ecminP;  //!<  hstP(1)
-    double deptP;   //!<  hstP(2)
-    double epsP;  //!< = strain at previous converged step
-    double sigP;  //!< = stress at previous converged step
-    double eP;    //!< stiffness modulus at last converged step;
-
+    Conc02HistoryVars hstvP; //!< = values at previous converged step
     // hstv : Concrete HISTORY VARIABLES  current step
-    double ecmin;  
-    double dept;   
-    double sig;   
-    double e;     
-    double eps;
+    Conc02HistoryVars hstv; //!< = values at current step (trial values)
 
     void Tens_Envlp(double epsc, double &sigc, double &Ect);
     void Compr_Envlp(double epsc, double &sigc, double &Ect);
@@ -121,13 +157,16 @@ class Concrete02: public RawConcrete
     UniaxialMaterial *getCopy(void) const;
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
-    double getStrain(void) const;      
-    double getStress(void) const;
-    double getTangent(void) const;
+    inline double getStrain(void) const
+      { return hstv.getStrain(); }
+    inline double getStress(void) const
+      { return hstv.getStress(); }
+    inline double getTangent(void) const
+      { return hstv.getTangent(); }
     
     int commitState(void);
     int revertToLastCommit(void);    
-    int revertToStart(void);        
+    int revertToStart(void);
     
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);    

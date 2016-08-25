@@ -63,21 +63,16 @@
 
 
 #include <material/uniaxial/concrete/Concrete02.h>
-
 #include <cfloat>
-#include <utility/matrix/Vector.h>
 
 void XC::Concrete02::setup_parameters(void)
   {
-    ecminP= 0.0;
-    deptP= 0.0;
+    hstvP.ecmin= 0.0;
+    hstvP.dept= 0.0;
 
-    eP= 2.0*fpc/epsc0;
-    epsP= 0.0;
-    sigP= 0.0;
-    eps= 0.0;
-    sig= 0.0;
-    e= 2.0*fpc/epsc0;
+    const double initTang= getInitialTangent();
+    hstvP.setup_parameters(initTang);
+    hstv.setup_parameters(initTang);
   }
 
 XC::Concrete02::Concrete02(int tag, double _fpc, double _epsc0, double _fpcu,
@@ -153,135 +148,107 @@ double XC::Concrete02::getLambda(void) const
   { return rat; }
 
 
-
-
 int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
   {
-  double         ec0 = fpc * 2. / epsc0;
+    const double ec0= getInitialTangent();
 
-  // retrieve concrete hitory variables
+    // retrieve commited history variables
+    hstv.ecmin= hstvP.ecmin;
+    hstv.dept= hstvP.dept;
 
-  ecmin = ecminP;
-  dept = deptP;
+    // calculate current strain
+    hstv.eps= trialStrain;
+    const double deps= hstv.eps - hstvP.eps;
 
-  // calculate current strain
-
-  eps = trialStrain;
-  double deps = eps - epsP;
-
-  // if the current strain is less than the smallest previous strain 
-  // call the monotonic envelope in compression and reset minimum strain 
-
-  if (eps < ecmin) {
-    this->Compr_Envlp(eps, sig, e);
-    ecmin = eps;
-  } else {;
-
-    // else, if the current strain is between the minimum strain and ept 
-    // (which corresponds to zero stress) the material is in the unloading- 
-    // reloading branch and the stress remains between sigmin and sigmax 
-    
-    // calculate strain-stress coordinates of point R that determines 
-    // the reloading slope according to Fig.2.11 in EERC Report 
-    // (corresponding equations are 2.31 and 2.32 
-    // the strain of point R is epsR and the stress is sigmR 
-    
-    double epsr = (fpcu - rat * ec0 * epscu) / (ec0 * (1.0 - rat));
-    double sigmr = ec0 * epsr;
-    
-    // calculate the previous minimum stress sigmm from the minimum 
-    // previous strain ecmin and the monotonic envelope in compression 
-    
-    double sigmm;
-    double dumy;
-    this->Compr_Envlp(ecmin, sigmm, dumy);
-    
-    // calculate current reloading slope Er (Eq. 2.35 in EERC Report) 
-    // calculate the intersection of the current reloading slope Er 
-    // with the zero stress axis (variable ept) (Eq. 2.36 in EERC Report) 
-    
-    double er = (sigmm - sigmr) / (ecmin - epsr);
-    double ept = ecmin - sigmm / er;
-    
-    if (eps <= ept) {
-      double sigmin = sigmm + er * (eps - ecmin);
-      double sigmax = er * .5f * (eps - ept);
-      sig = sigP + ec0 * deps;
-      e = ec0;
-      if (sig <= sigmin) {
-        sig = sigmin;
-        e = er;
+    // if the current strain is less than the smallest previous strain 
+    // call the monotonic envelope in compression and reset minimum strain 
+    if(hstv.eps < hstv.ecmin)
+      {
+        this->Compr_Envlp(hstv.eps, hstv.sig, hstv.e);
+        hstv.ecmin= hstv.eps;
       }
-      if (sig >= sigmax) {
-        sig = sigmax;
-        e = 0.5 * er;
+    else
+      {
+        // else, if the current strain is between the minimum strain and ept 
+        // (which corresponds to zero stress) the material is in the unloading- 
+        // reloading branch and the stress remains between sigmin and sigmax 
+    
+        // calculate strain-stress coordinates of point R that determines 
+        // the reloading slope according to Fig.2.11 in EERC Report 
+        // (corresponding equations are 2.31 and 2.32 
+        // the strain of point R is epsR and the stress is sigmR 
+    
+        const double epsr= (fpcu - rat * ec0 * epscu) / (ec0 * (1.0 - rat));
+        const double sigmr= ec0 * epsr;
+    
+        // calculate the previous minimum stress sigmm from the minimum 
+        // previous strain hstv.ecmin and the monotonic envelope in compression 
+    
+        double sigmm;
+        double dumy;
+        this->Compr_Envlp(hstv.ecmin, sigmm, dumy);
+    
+        // calculate current reloading slope Er (Eq. 2.35 in EERC Report) 
+        // calculate the intersection of the current reloading slope Er 
+        // with the zero stress axis (variable ept) (Eq. 2.36 in EERC Report) 
+    
+        const double er= (sigmm - sigmr) / (hstv.ecmin - epsr);
+        const double ept= hstv.ecmin - sigmm / er;
+    
+        if(hstv.eps <= ept)
+          {
+            const double sigmin= sigmm + er * (hstv.eps - hstv.ecmin);
+            const double sigmax= er * .5f * (hstv.eps - ept);
+            hstv.sig= hstvP.sig + ec0 * deps;
+            hstv.e= ec0;
+	    hstv.cutStress(sigmin,sigmax,er);
+          }
+        else
+          {
+            // else, if the current strain is between ept and epn 
+            // (which corresponds to maximum remaining tensile strength) 
+            // the response corresponds to the reloading branch in tension 
+            // Since it is not saved, calculate the maximum remaining tensile 
+            // strength sicn (Eq. 2.43 in EERC Report) 
+      
+            // calculate first the strain at the peak of the tensile stress-strain 
+            // relation epn (Eq. 2.42 in EERC Report) 
+      
+            const double epn= ept + hstv.dept;
+            double sicn;
+            if(hstv.eps <= epn)
+              {
+                this->Tens_Envlp(hstv.dept, sicn, hstv.e);
+                if(hstv.dept != 0.0)
+                  { hstv.e= sicn / hstv.dept; }
+                else
+                  { hstv.e= ec0; }
+                hstv.sig= hstv.e * (hstv.eps - ept);
+              }
+            else
+              {
+                // else, if the current strain is larger than epn the response 
+                // corresponds to the tensile envelope curve shifted by ept 
+                const double epstmp= hstv.eps - ept;
+                this->Tens_Envlp(epstmp, hstv.sig, hstv.e);
+                hstv.dept= hstv.eps - ept;
+              }
+          }
       }
-    } else {
-      
-      // else, if the current strain is between ept and epn 
-      // (which corresponds to maximum remaining tensile strength) 
-      // the response corresponds to the reloading branch in tension 
-      // Since it is not saved, calculate the maximum remaining tensile 
-      // strength sicn (Eq. 2.43 in EERC Report) 
-      
-      // calculate first the strain at the peak of the tensile stress-strain 
-      // relation epn (Eq. 2.42 in EERC Report) 
-      
-      double epn = ept + dept;
-      double sicn;
-      if (eps <= epn) {
-        this->Tens_Envlp(dept, sicn, e);
-        if (dept != 0.0) {
-          e = sicn / dept;
-        } else {
-          e = ec0;
-        }
-        sig = e * (eps - ept);
-      } else {
-        
-        // else, if the current strain is larger than epn the response 
-        // corresponds to the tensile envelope curve shifted by ept 
-        
-        double epstmp = eps - ept;
-        this->Tens_Envlp(epstmp, sig, e);
-        dept = eps - ept;
-      }
-    }
+    return 0;
   }
 
-  return 0;
-}
 
-
-
-double XC::Concrete02::getStrain(void) const
-  { return eps; }
-
-double XC::Concrete02::getStress(void) const
-  { return sig; }
-
-double XC::Concrete02::getTangent(void) const
-  { return e; }
 
 int XC::Concrete02::commitState(void)
   {
-    ecminP = ecmin;
-    deptP = dept;
-  
-    eP = e;
-    sigP = sig;
-    epsP = eps;
+    hstvP= hstv;
     return 0;
   }
 
 int XC::Concrete02::revertToLastCommit(void)
   {
-    ecmin = ecminP;
-    dept = deptP;
-  
-    e = eP;
-    sig = sigP;
-    eps = epsP;
+    hstv= hstvP;
     return 0;
   }
 
@@ -296,9 +263,9 @@ int XC::Concrete02::sendData(CommParameters &cp)
   {
     int res= RawConcrete::sendData(cp);
     res+= cp.sendDoubles(fpc,epsc0,fpcu,epscu,getDbTagData(),CommMetaData(2));
-    res+= cp.sendDoubles(rat,ft,Ets,ecminP,deptP,getDbTagData(),CommMetaData(3));
-    res+= cp.sendDoubles(epsP,sigP,eP,ecmin,dept,sig,getDbTagData(),CommMetaData(4));
-    res+= cp.sendDoubles(e,eps,getDbTagData(),CommMetaData(5));
+    res+= cp.sendDoubles(rat,ft,Ets,hstvP.ecmin,hstvP.dept,getDbTagData(),CommMetaData(3));
+    res+= cp.sendDoubles(hstvP.eps,hstvP.sig,hstvP.e,hstv.ecmin,hstv.dept,hstv.sig,getDbTagData(),CommMetaData(4));
+    res+= cp.sendDoubles(hstv.e,hstv.eps,getDbTagData(),CommMetaData(5));
     return res;
   }
 
@@ -307,9 +274,9 @@ int XC::Concrete02::recvData(const CommParameters &cp)
   {
     int res= RawConcrete::recvData(cp);
     res+= cp.receiveDoubles(fpc,epsc0,fpcu,epscu,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveDoubles(rat,ft,Ets,ecminP,deptP,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveDoubles(epsP,sigP,eP,ecmin,dept,sig,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveDoubles(e,eps,getDbTagData(),CommMetaData(5));
+    res+= cp.receiveDoubles(rat,ft,Ets,hstvP.ecmin,hstvP.dept,getDbTagData(),CommMetaData(3));
+    res+= cp.receiveDoubles(hstvP.eps,hstvP.sig,hstvP.e,hstv.ecmin,hstv.dept,hstv.sig,getDbTagData(),CommMetaData(4));
+    res+= cp.receiveDoubles(hstv.e,hstv.eps,getDbTagData(),CommMetaData(5));
     return res;
   }
 
@@ -345,85 +312,93 @@ int XC::Concrete02::recvSelf(const CommParameters &cp)
   }
 
 void XC::Concrete02::Print(std::ostream &s, int flag)
-{
-  s << "Concrete02:(strain, stress, tangent) " << eps << " " << sig << " " << e << std::endl;
-}
+  {
+    hstv.Print(s);
+  }
 
 
 void XC::Concrete02::Tens_Envlp(double epsc, double &sigc, double &Ect)
-{
-/*-----------------------------------------------------------------------
-! monotonic envelope of concrete in tension (positive envelope)
-!
-!   ft    = concrete tensile strength
-!   Ec0   = initial tangent modulus of concrete 
-!   Ets   = tension softening modulus
-!   eps   = strain
-!
-!   returned variables
-!    sigc  = stress corresponding to eps
-!    Ect  = tangent concrete modulus
-!-----------------------------------------------------------------------*/
+  {
+    /*-----------------------------------------------------------------------
+    ! monotonic envelope of concrete in tension (positive envelope)
+    !
+    !   ft = concrete tensile strength
+    !   Ec0= initial tangent modulus of concrete 
+    !   Ets= tension softening modulus
+    !   hstv.eps= strain
+    !
+    !   returned variables
+    !    sigc= stress corresponding to hstv.eps
+    !    Ect= tangent concrete modulus
+    !-----------------------------------------------------------------------*/
   
-  double Ec0  = 2.0*fpc/epsc0;
+    const double Ec0= getInitialTangent();
 
-  double eps0 = ft/Ec0;
-  double epsu = ft*(1.0/Ets+1.0/Ec0);
-  if (epsc<=eps0) {
-    sigc = epsc*Ec0;
-    Ect  = Ec0;
-  } else {
-    if (epsc<=epsu) {
-      Ect  = -Ets;
-      sigc = ft-Ets*(epsc-eps0);
-    } else {
-      //      Ect  = 0.0
-      Ect  = 1.0e-10;
-      sigc = 0.0;
-    }
+    const double eps0= ft/Ec0;
+    const double epsu= ft*(1.0/Ets+1.0/Ec0);
+    if(epsc<=eps0)
+      {
+        sigc= epsc*Ec0;
+        Ect= Ec0;
+      }
+    else
+      {
+        if(epsc<=epsu)
+	  {
+            Ect= -Ets;
+            sigc= ft-Ets*(epsc-eps0);
+          }
+	else
+	  {
+            // Ect= 0.0
+            Ect= 1.0e-10;
+            sigc= 0.0;
+          }
+      }
+    return;
   }
-  return;
-}
 
   
-void
-XC::Concrete02::Compr_Envlp (double epsc, double &sigc, double &Ect) 
-{
-/*-----------------------------------------------------------------------
-! monotonic envelope of concrete in compression (negative envelope)
-!
-!   fpc    = concrete compressive strength
-!   epsc0 = strain at concrete compressive strength
-!   fpcu   = stress at ultimate (crushing) strain 
-!   epscu = ultimate (crushing) strain
-!   Ec0   = initial concrete tangent modulus
-!   epsc  = strain
-!
-!   returned variables
-!   sigc  = current stress
-!   Ect   = tangent concrete modulus
------------------------------------------------------------------------*/
+void XC::Concrete02::Compr_Envlp(double epsc, double &sigc, double &Ect) 
+  {
+    /*-----------------------------------------------------------------------
+    ! monotonic envelope of concrete in compression (negative envelope)
+    !
+    !   fpc= concrete compressive strength
+    !   epsc0= strain at concrete compressive strength
+    !   fpcu= stress at ultimate (crushing) strain 
+    !   epscu= ultimate (crushing) strain
+    !   Ec0= initial concrete tangent modulus
+    !   epsc= strain
+    !
+    !   returned variables
+    !   sigc= current stress
+    !   Ect= tangent concrete modulus
+    -----------------------------------------------------------------------*/
 
-  double Ec0  = 2.0*fpc/epsc0;
+    const double Ec0= getInitialTangent();
 
-  double ratLocal = epsc/epsc0;
-  if (epsc>=epsc0) {
-    sigc = fpc*ratLocal*(2.0-ratLocal);
-    Ect  = Ec0*(1.0-ratLocal);
-  } else {
-    
-    //   linear descending branch between epsc0 and epscu
-    if (epsc>epscu) {
-      sigc = (fpcu-fpc)*(epsc-epsc0)/(epscu-epsc0)+fpc;
-      Ect  = (fpcu-fpc)/(epscu-epsc0);
-    } else {
-           
-      // flat friction branch for strains larger than epscu
-      
-      sigc = fpcu;
-      Ect  = 1.0e-10;
-      //       Ect  = 0.0
-    }
+    const double ratLocal= epsc/epsc0;
+    if(epsc>=epsc0)
+      {
+        sigc= fpc*ratLocal*(2.0-ratLocal);
+        Ect= Ec0*(1.0-ratLocal);
+      }
+    else
+      {
+        //   linear descending branch between epsc0 and epscu
+        if(epsc>epscu)
+	  {
+            sigc= (fpcu-fpc)*(epsc-epsc0)/(epscu-epsc0)+fpc;
+            Ect= (fpcu-fpc)/(epscu-epsc0);
+          }
+	else
+	  {
+            // flat friction branch for strains larger than epscu
+            sigc= fpcu;
+            Ect= 1.0e-10;
+            //       Ect= 0.0
+          }
+      }
+    return;
   }
-  return;
-}
