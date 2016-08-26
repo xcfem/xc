@@ -224,7 +224,7 @@ def plotStressStrainFibSet(fiberSet,title,fileName=None,nContours=100):
 
   :param fiberSet: set of fibers to be represented
   :param title:    general title for the graphic
-  :param fileName: name of the graphic file
+  :param fileName: name of the graphic file (defaults to None: no file generated)
   :param nContours: number of contours to be generated (defaults to 100)
   '''
   lsXcoo=list()
