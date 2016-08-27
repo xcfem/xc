@@ -145,8 +145,9 @@ class LoadPattern: public NodeLocker
     int getNumElementalLoads(void) const;
     int getNumLoads(void) const;
 
-    // methods to remove loads
+    // methods to remove things (loads, time_series,...)
     virtual void clearAll(void);
+    virtual void clearLoads(void);
     virtual bool removeNodalLoad(int tag);
     virtual bool removeElementalLoad(int tag);
 

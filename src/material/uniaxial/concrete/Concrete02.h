@@ -107,12 +107,18 @@ struct Conc02HistoryVars
             e= 0.5 * er;
           }
       }
-    void Print(std::ostream &os)
+    void Print(std::ostream &os) const
       {
         os << "Concrete02:(strain, stress, tangent) " << eps
-	  << " " << sig << " " << e << std::endl;
+	  << ", " << sig << ", " << e << std::endl;
       }
   };
+
+inline std::ostream &operator<<(std::ostream &os,const Conc02HistoryVars &hv)
+   {
+     hv.Print(os);
+     return os;
+   }
 
 //! @ingroup MatUnx
 //

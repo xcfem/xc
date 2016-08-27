@@ -396,12 +396,19 @@ int XC::LoadPattern::getNumElementalLoads(void) const
 int XC::LoadPattern::getNumLoads(void) const
   { return getNumNodalLoads()+getNumElementalLoads(); }
 
-//! @brief Borra todas las cargas y coacciones.
-void XC::LoadPattern::clearAll(void)
+
+//! @brief Deletes all loads.
+void XC::LoadPattern::clearLoads(void)
   {
-    NodeLocker::clearAll();
     theElementalLoads->clearAll();
     theNodalLoads->clearAll();
+  }
+
+//! @brief Deletes all loads, constraints AND pointer to time series.
+void XC::LoadPattern::clearAll(void)
+  {
+    clearLoads();
+    NodeLocker::clearAll();
     setTimeSeries(nullptr);
   }
 
@@ -424,10 +431,14 @@ bool XC::LoadPattern::removeElementalLoad(int tag)
 //! @brief Aplica la carga en el instante being passed as parameter.
 void XC::LoadPattern::applyLoad(double pseudoTime)
   {
-    assert(theSeries);
-    // first determine the load factor
-    if(isConstant != 0)
-      loadFactor= theSeries->getFactor(pseudoTime);
+    if(theSeries)  // first determine the load factor
+      {
+        if(isConstant != 0)
+          loadFactor= theSeries->getFactor(pseudoTime);
+      }
+    else
+      std::cerr << "ERROR in applyLoad: Time series not defined. Using load factor: "
+	        << loadFactor << std::endl;
     const double factor= loadFactor*gamma_f; //Ponderación de la hipótesis.
 
     NodalLoad *nodLoad= nullptr;

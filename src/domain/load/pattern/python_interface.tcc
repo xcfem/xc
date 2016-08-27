@@ -25,6 +25,7 @@
 class_<XC::NodeLocker,XC::NodeLocker *, bases<XC::ForceReprComponent>, boost::noncopyable >("NodeLocker", no_init)
   .def("newSPConstraint", &XC::NodeLocker::newSPConstraint,return_internal_reference<>(),"Crea una nueva condición de contorno monopunto.")
   .def("removeSPConstraint", &XC::NodeLocker::removeSP_Constraint,"Crea una nueva condición de contorno monopunto.")
+  .def("clearAll",&XC::NodeLocker::clearAll)
   ;
 
 double &(XC::LoadPattern::*getGammaFRef)(void)= &XC::LoadPattern::GammaF;
@@ -40,7 +41,10 @@ class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern
   .def("newElementalLoad", make_function(defElementalLoad,return_internal_reference<>()),"Crea una carga sobre elemento.")
   .add_property("getNodalLoadIter", make_function( &XC::LoadPattern::getNodalLoads, return_internal_reference<>() ))
   .add_property("getElementalLoadIter", make_function( &XC::LoadPattern::getElementalLoads, return_internal_reference<>() ))
-   .def("addToDomain", &XC::LoadPattern::addToDomain,"Add combination to the domain.")
+  .def("removeNodalLoad",&XC::LoadPattern::removeNodalLoad,"removes the nodal load with the tag passed as parameter.")
+  .def("removeElementalLoad",&XC::LoadPattern::removeElementalLoad,"removes the elemental load with the tag passed as parameter.")
+  .def("clearLoads",&XC::LoadPattern::clearLoads,"Deletes the pattern loads.")
+  .def("addToDomain", &XC::LoadPattern::addToDomain,"Add combination to the domain.")
    .def("removeFromDomain", &XC::LoadPattern::removeFromDomain,"Eliminates combination from domain.")
   ;
 
