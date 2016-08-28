@@ -150,7 +150,6 @@ double XC::Concrete02::getLambda(void) const
 
 int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
   {
-    std::cout << "setTrialStrain begins; trialStrain= " << trialStrain << std::endl;
     const double ec0= getInitialTangent();
 
     // retrieve commited history variables
@@ -236,7 +235,6 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
               }
           }
       }
-    std::cout << "setTrialStrain ends; trialStrain= " << hstv << std::endl;
     return 0;
   }
 
