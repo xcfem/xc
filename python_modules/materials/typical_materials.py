@@ -9,6 +9,7 @@ __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 import xc_base
 import geom
 import xc
+from miscUtils import LogMessages as lmsg
 
 # Typical material definition.
 
@@ -170,6 +171,8 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope,ft,Ets):
   retval.ratioSlope=ratioSlope
   retval.ft=ft
   retval.Ets=Ets
+  if fpc==fpcu:
+    lmsg.warning("concrete02 compressive strength fpc is equal to crushing strength fpcu => the solver can return wrong stresses or have convergence problems ")
   return retval
 
 #Elastic section 2d.
