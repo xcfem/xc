@@ -183,22 +183,22 @@ class EHEConcrete(concreteBase.Concrete):
  
 
 # EHE concretes
-HA20= EHEConcrete("HA20",-20e6,1.5)
-HA25= EHEConcrete("HA25",-25e6,1.5)
-HA30= EHEConcrete("HA30",-30e6,1.5)
-HA35= EHEConcrete("HA35",-35e6,1.5)
-HA40= EHEConcrete("HA40",-40e6,1.5)
-HA45= EHEConcrete("HA45",-45e6,1.5)
-HA50= EHEConcrete("HA50",-50e6,1.5)
-HA55= EHEConcrete("HA55",-55e6,1.5)
-HA60= EHEConcrete("HA60",-60e6,1.5)
-HA70= EHEConcrete("HA70",-70e6,1.5)
-HA80= EHEConcrete("HA80",-80e6,1.5)
-HA90= EHEConcrete("HA90",-90e6,1.5)
-HA100= EHEConcrete("HA100",-100e6,1.5)
+HA20= EHEConcrete(nmbConcrete="HA20",fck=-20e6,gammaC=1.5)
+HA25= EHEConcrete(nmbConcrete="HA25",fck=-25e6,gammaC=1.5)
+HA30= EHEConcrete(nmbConcrete="HA30",fck=-30e6,gammaC=1.5)
+HA35= EHEConcrete(nmbConcrete="HA35",fck=-35e6,gammaC=1.5)
+HA40= EHEConcrete(nmbConcrete="HA40",fck=-40e6,gammaC=1.5)
+HA45= EHEConcrete(nmbConcrete="HA45",fck=-45e6,gammaC=1.5)
+HA50= EHEConcrete(nmbConcrete="HA50",fck=-50e6,gammaC=1.5)
+HA55= EHEConcrete(nmbConcrete="HA55",fck=-55e6,gammaC=1.5)
+HA60= EHEConcrete(nmbConcrete="HA60",fck=-60e6,gammaC=1.5)
+HA70= EHEConcrete(nmbConcrete="HA70",fck=-70e6,gammaC=1.5)
+HA80= EHEConcrete(nmbConcrete="HA80",fck=-80e6,gammaC=1.5)
+HA90= EHEConcrete(nmbConcrete="HA90",fck=-90e6,gammaC=1.5)
+HA100= EHEConcrete(nmbConcrete="HA100",fck=-100e6,gammaC=1.5)
 
-HP45= EHEConcrete("HP45",-55e6,1.5)
-HP50= EHEConcrete("HP50",-50e6,1.5)
+HP45= EHEConcrete(nmbConcrete="HP45",fck=-55e6,gammaC=1.5)
+HP50= EHEConcrete(nmbConcrete="HP50",fck=-50e6,gammaC=1.5)
 
 
 '''

@@ -149,7 +149,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         if self.tensionStiff=='N':
             self.materialDiagramD= typical_materials.defConcrete01(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU())
         else:
-            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=self.fctd(),Ets=self.E0()/19.0)
+            self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=self.fctd(),Ets=self.E0()/19.0)
         self.matTagD= self.materialDiagramD.tag
         return self.matTagD
 
