@@ -185,7 +185,7 @@ def simple_newton_raphson(prb):
 
 def simple_newton_raphson_band_gen(prb):
   solution= SolutionProcedure()
-  return solution.simpleNewtonRaphsonBandGeh(prb)
+  return solution.simpleNewtonRaphsonBandGen(prb)
 
 def simple_static_modified_newton(prb):
   solution= SolutionProcedure()
