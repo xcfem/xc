@@ -4,7 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 import matplotlib.patches as patches
-from mayavi import mlab
+#from mayavi import mlab Some strange error messages if we do like that
+import mayavi # This way we haven't error messages.
 
 class MPLGraphicDecorations(object):
   ''' Matplotlib graphic decorations (title, labels,...)'''
@@ -142,9 +143,9 @@ class InteractionDiagram3DGraphic:
     self.bendingMomentZLabel= 'Mz (kN m)' 
   def show(self):
     '''Show the 3D diagram in the screen.''' 
-    self.triangleMesh= mlab.triangular_mesh(self.x, self.y, self.z, self.triangles, scalars= self.scalars)
-    mlab.colorbar(self.triangleMesh, orientation='vertical')
-    mlab.outline(self.triangleMesh)
-    mlab.axes(self.triangleMesh, xlabel= self.axialForceLabel, ylabel= self.bendingMomentYLabel, zlabel= self.bendingMomentZLabel)
-    #mlab.title(self.title)
-    mlab.show()
+    self.triangleMesh= mayavi.mlab.triangular_mesh(self.x, self.y, self.z, self.triangles, scalars= self.scalars)
+    mayavi.mlab.colorbar(self.triangleMesh, orientation='vertical')
+    mayavi.mlab.outline(self.triangleMesh)
+    mayavi.mlab.axes(self.triangleMesh, xlabel= self.axialForceLabel, ylabel= self.bendingMomentYLabel, zlabel= self.bendingMomentZLabel)
+    #mayavi.mlab.title(self.title)
+    mayavi.mlab.show()
