@@ -37,7 +37,7 @@ class PolygonPointRow(rw.RowP0123):
     return oo
 
 
-idSurfacePressureFreeContainer= "{3E5FFA16-D1A4-4589-AD5A-4A0FC555E8B8}"
+idSurfacePressureFreeContainer= spfp.containerId
 tSurfacePressureFreeContainer= spfp.tbName
 idSurfacePressureFreeContainerTb= "86992DFB-7866-48EE-8654-6036B052AB9F"
 tSurfacePressureFreeContainerTb= spfp.tbName

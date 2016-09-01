@@ -26,7 +26,7 @@ containerId= "{3E5FFA16-D1A4-4589-AD5A-4A0FC555E8B8}"
 containerClsId= containerId
 tbName= "DataAddLoad.EP_SurfaceForceFree.1"
 tbProgId= tbName
-tbId= "B5824C72-5E74-4E14-89BD-2D8E5AD1FFA3"
+tbId= "4DD6C19E-7578-4591-A547-7B0362419697"
 tbClsId= containerClsId
 
 idLoadCase= nlp.idLoadCase
@@ -78,11 +78,11 @@ class SurfacePressureFreeProperties(ctr.PropertiesContainer):
     propUniqueID= prop.Property('2','UniqueID','string',idUniqueId)
     propDirection= prop.Property("3","Direction","enum",idDirection,"262144")
     propDirection.value= enum.Enum([eI.EnumItem("0","X"),eI.EnumItem("1","Y"),eI.EnumItem("2","Z")])
-    propType= prop.Property("4","Type","enum",idType)
+    propType= prop.Property("4","Type","enum",idType,"262144")
     propType.value= enum.Enum([eI.EnumItem("0","Force")])
-    propDistribution= prop.Property('5','Distribution','enum')
+    propDistribution= prop.Property('5','Distribution','enum',idDistribution)
     propDistribution.value= enum.Enum([eI.EnumItem("0","Uniform"),eI.EnumItem("1","Dir X"),eI.EnumItem("2","Dir Y"),eI.EnumItem("3","3 points")])
-    propQ= prop.Property('6','q','param',"33619968")
+    propQ= prop.Property('6','q','param',idQ,"33619968")
     propValidity= prop.Property('7',"Validity","enum",idValidity,"262144")
     propValidity.value= enum.Enum([eI.EnumItem("0","Tout"), eI.EnumItem("1", "-Z"), eI.EnumItem("2", "+Z"), eI.EnumItem("3", "Intervalle"), eI.EnumItem("4", "Z=0"), eI.EnumItem("5", "-Z (yc. 0)"), eI.EnumItem("6", "+Z (yc. 0)")])
     propSelect= prop.Property('8',"Select","enum",idSelect)
@@ -94,7 +94,7 @@ class SurfacePressureFreeProperties(ctr.PropertiesContainer):
     propTableOfGeometry= prop.Property("11","Table of geometry","table",idTableOfGeometry)
     propTableOfGeometry.value= propSubTable.PropertiesSubTable('','',"vertical",'','')
     propTableOfGeometry.value.properties.append(prop.Property("0","Node","string",idNode))
-    propPointDefinition= prop.Property("1","Point definition","enum",idNode)
+    propPointDefinition= prop.Property("1","Point definition","enum",idPointDefinition)
     propPointDefinition.value= enum.Enum([eI.EnumItem("0","Standard"),eI.EnumItem("1","Linear Combination"),eI.EnumItem("2","Distance from node")])
     propTableOfGeometry.value.properties.append(propPointDefinition)
     propTableOfGeometry.value.properties.append(prop.Property("2","Coord X","param",idCoordXA))
@@ -109,9 +109,9 @@ class SurfacePressureFreeProperties(ctr.PropertiesContainer):
     propTableOfGeometry.value.properties.append(prop.Property("11","Coord Z","param",idCoordZC))
     propTableOfGeometry.value.properties.append(prop.Property("12","Second point weight","real",idSecondPointWeight))
     propTableOfGeometry.value.properties.append(prop.Property("13","Distance","real",idDistance))
-    propTableOfGeometry.value.properties.append(prop.Property("14","Vector X","param",idVectorX))
-    propTableOfGeometry.value.properties.append(prop.Property("15","Vector Y","param",idVectorY))
-    propTableOfGeometry.value.properties.append(prop.Property("16","Vector Z","param",idVectorZ))
+    propTableOfGeometry.value.properties.append(prop.Property("14","Vector X","real",idVectorX))
+    propTableOfGeometry.value.properties.append(prop.Property("15","Vector Y","real",idVectorY))
+    propTableOfGeometry.value.properties.append(prop.Property("16","Vector Z","real",idVectorZ))
     propReferencedEntityA= prop.Property("17","Referenced Entity","enum",idReferencedEntityA)
     propReferencedEntityA.value= enum.Enum([eI.EnumItem("0","Existing Node"),eI.EnumItem("1","New Point")])
     propTableOfGeometry.value.properties.append(propReferencedEntityA)
