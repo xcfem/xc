@@ -85,8 +85,8 @@ int XC::BFGS::solveCurrentStep(void)
     theTest->set_owner(getSoluMethod());
     if(theTest->start() < 0)
       {
-        std::cerr << "XC::BFGS::solveCurrentStep() -";
-        std::cerr << "the ConvergenceTest object failed in start()\n";
+        std::cerr << "XC::BFGS::solveCurrentStep() -"
+                  << "the ConvergenceTest object failed in start()\n";
         return -3;
       }
 
@@ -229,8 +229,8 @@ int XC::BFGS::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << "XC::BFGS::solveCurrentStep() -";
-        std::cerr << "the XC::ConvergenceTest object failed in test()\n";
+        std::cerr << "XC::BFGS::solveCurrentStep() -"
+                  << "the XC::ConvergenceTest object failed in test()\n";
         return -3;
       }
     // note - if postive result we are returning what the convergence test returned
@@ -253,10 +253,8 @@ void  XC::BFGS::BFGSUpdate(IncrementalIntegrator *theIntegrator, LinearSOE *theS
 
 
     if(theSOE->solve() < 0)
-      {
-        std::cerr << "WARNING XC::BFGS::solveCurrentStep() -";
-        std::cerr << "the LinearSysOfEqn failed in solve()\n";	
-      }	    
+        std::cerr << "WARNING XC::BFGS::solveCurrentStep() -"
+                  << "the LinearSysOfEqn failed in solve()\n";	
   
     z[nBFGS]= theSOE->getX(); 
     //  z[nBFGS] *= (-1.0);
@@ -269,8 +267,8 @@ void  XC::BFGS::BFGSUpdate(IncrementalIntegrator *theIntegrator, LinearSOE *theS
           break; 
 
         double fact1 = 1.0 + ( rdotz[i] / sdotr[i] );
-        fact1 /= sdotr[i];
-        const double pdotb = (s[i]) ^ ( theSOE->getB() );
+        fact1/= sdotr[i];
+        const double pdotb= (s[i]) ^ ( theSOE->getB() );
         fact1*= pdotb;
 
         //    z[nBFGS] +=  fact1 * ( s[i] );
@@ -279,7 +277,7 @@ void  XC::BFGS::BFGSUpdate(IncrementalIntegrator *theIntegrator, LinearSOE *theS
         z[nBFGS]+= temp;
 
 
-        const double bdotz = (z[i]) ^ ( theSOE->getB() );  
+        const double bdotz= (z[i]) ^ ( theSOE->getB() );  
 
         //    z[nBFGS] -= (1.0/sdotr[i]) * 
         //             ( bdotz * (s[i])   +  pdotb * (z[i]) );   

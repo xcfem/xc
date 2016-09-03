@@ -34,7 +34,7 @@
 **                                                                    **
 ** Commercial use of this program without express permission of the   **
 ** University of California, Berkeley, is strictly prohibited.  See   **
-** file 'COPYRIGHT'  in XC::main directory for information on usage and   **
+** file 'COPYRIGHT'  in main directory for information on usage and   **
 ** redistribution,  and for a DISCLAIMER OF ALL WARRANTIES.           **
 **                                                                    **
 ** Developed by:                                                      **
@@ -89,15 +89,15 @@ int XC::NewtonRaphson::solveCurrentStep(void)
 
     if((theAnaModel == 0) || (theIntegrator == 0) || (theSOE == 0) || (theTest == 0))
       {
-        std::cerr << "WARNING NewtonRaphson::solveCurrentStep() - setLinks() has";
-        std::cerr << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
+        std::cerr << "WARNING NewtonRaphson::solveCurrentStep() - setLinks() has"
+                  << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
         return -5;
       }
 
     if(theIntegrator->formUnbalance() < 0)
       {
-        std::cerr << "WARNING NewtonRaphson::solveCurrentStep() -";
-        std::cerr << "the Integrator failed in formUnbalance()\n";
+        std::cerr << "WARNING NewtonRaphson::solveCurrentStep() -"
+                  << "the Integrator failed in formUnbalance()\n";
         return -2;
       }
 
@@ -105,8 +105,8 @@ int XC::NewtonRaphson::solveCurrentStep(void)
     theTest->set_owner(getSoluMethod());
     if(theTest->start() < 0)
       {
-        std::cerr << "NewtnRaphson::solveCurrentStep() -";
-        std::cerr << "the ConvergenceTest object failed in start()\n";
+        std::cerr << "NewtnRaphson::solveCurrentStep() -"
+                  << "the ConvergenceTest object failed in start()\n";
         return -3;
       }
 
@@ -172,8 +172,8 @@ int XC::NewtonRaphson::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << "NewtonRaphson::solveCurrentStep() -";
-        std::cerr << "the ConvergenceTest object failed in test()\n";
+        std::cerr << "NewtonRaphson::solveCurrentStep() -"
+                  << "the ConvergenceTest object failed in test()\n";
         return -3;
       }
 

@@ -84,8 +84,8 @@ int XC::Broyden::solveCurrentStep(void)
 
     if((!theModel) || (!theIntegrator) || (!theSysOfEqn) || (!theTest))
       {
-        std::cerr << "WARNING Broyden::solveCurrentStep() - ";
-        std::cerr << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
+        std::cerr << "WARNING Broyden::solveCurrentStep() - "
+                  << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
         return -5;
       }
 
@@ -93,8 +93,8 @@ int XC::Broyden::solveCurrentStep(void)
     theTest->set_owner(getSoluMethod()); //LCPT. Creo que esto no hace falta.
     if(theTest->start() < 0)
       {
-        std::cerr << "Broyden::solveCurrentStep() -";
-        std::cerr << "the ConvergenceTest object failed in start()\n";
+        std::cerr << "Broyden::solveCurrentStep() -"
+                  << "the ConvergenceTest object failed in start()\n";
         return -3;
       }
     localTest->set_owner(getSoluMethod());
@@ -223,8 +223,8 @@ int XC::Broyden::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << "XC::Broyden::solveCurrentStep() -";
-        std::cerr << "the XC::ConvergenceTest object failed in test()\n";
+        std::cerr << "XC::Broyden::solveCurrentStep() -"
+                  << "the XC::ConvergenceTest object failed in test()\n";
         return -3;
       }
     // note - if postive result we are returning what the convergence test returned
@@ -247,11 +247,8 @@ void  XC::Broyden::BroydenUpdate( IncrementalIntegrator *theIntegrator, LinearSO
     theSOE->setB(temp);
 
     if(theSOE->solve() < 0)
-      {
-        std::cerr << "WARNING Broyden::solveCurrentStep() -";
-        std::cerr << "the LinearSysOfEqn failed in solve()\n";
-      }
-
+      std::cerr << "WARNING Broyden::solveCurrentStep() -"
+                << "the LinearSysOfEqn failed in solve()\n";
  
     z[nBroyden]= theSOE->getX();
     z[nBroyden]*= (-1.0);

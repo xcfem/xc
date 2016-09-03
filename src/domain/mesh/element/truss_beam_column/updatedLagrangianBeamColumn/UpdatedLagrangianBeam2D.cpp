@@ -32,7 +32,7 @@
 ** (C) Copyright 1999, The Regents of the University of California    **
 ** All Rights Reserved.                                               **
 **                                                                    **
-** See file 'COPYRIGHT'  in XC::main directory for information on usage   **
+** See file 'COPYRIGHT'  in main directory for information on usage   **
 ** and redistribution of OpenSees, and for a DISCLAIMER OF ALL        **
 ** WARRANTIES.                                                        **
 **                                                                    **

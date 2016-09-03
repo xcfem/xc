@@ -34,7 +34,7 @@
 **                                                                    **
 ** Commercial use of this program without express permission of the   **
 ** University of California, Berkeley, is strictly prohibited.  See   **
-** file 'COPYRIGHT'  in XC::main directory for information on usage and   **
+** file 'COPYRIGHT'  in main directory for information on usage and   **
 ** redistribution,  and for a DISCLAIMER OF ALL WARRANTIES.           **
 **                                                                    **
 ** Developed by:                                                      **
@@ -124,7 +124,7 @@ int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
         result = this->domainChanged();
         if(result < 0)
           {
-            std::cerr << "XC::StaticDomainDecompositionAnalysis::analyze() - domainChanged failed";
+            std::cerr << "StaticDomainDecompositionAnalysis::analyze() - domainChanged failed";
             return -1;
           }
       }
@@ -132,7 +132,7 @@ int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
     // result =newStepDomain(theAnalysisModel);
     if(result < 0)
       {
-        std::cerr << "XC::StaticDomainDecompositionAnalysis::analyze() - the XC::AnalysisModel failed";
+        std::cerr << "StaticDomainDecompositionAnalysis::analyze() - the XC::AnalysisModel failed";
         std::cerr << " with domain at load factor ";
         std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
         the_Domain->revertToLastCommit();
@@ -145,7 +145,7 @@ int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
     result = getStaticIntegratorPtr()->newStep();
     if(result < 0)
       {
-        std::cerr << "XC::StaticDomainDecompositionAnalysis::analyze() - the XC::Integrator failed";
+        std::cerr << "XC::StaticDomainDecompositionAnalysis::analyze() - the Integrator failed";
         std::cerr << " with domain at load factor ";
         std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
         the_Domain->revertToLastCommit();
@@ -171,7 +171,7 @@ int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
     if(result < 0)
       {
         std::cerr << "XC::StaticDomainDecompositionAnalysis::analyze() - ";
-        std::cerr << "the XC::Integrator failed to commit";
+        std::cerr << "the Integrator failed to commit";
         std::cerr << " with domain at load factor ";
         std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
         the_Domain->revertToLastCommit();	    

@@ -34,7 +34,7 @@
 **                                                                    **
 ** Commercial use of this program without express permission of the   **
 ** University of California, Berkeley, is strictly prohibited.  See   **
-** file 'COPYRIGHT'  in XC::main directory for information on usage and   **
+** file 'COPYRIGHT'  in main directory for information on usage and   **
 ** redistribution,  and for a DISCLAIMER OF ALL WARRANTIES.           **
 **                                                                    **
 ** Developed by:                                                      **
@@ -80,11 +80,10 @@ int XC::PeriodicNewton::solveCurrentStep(void)
     LinearSOE *theSOE = getLinearSOEPtr();
     ConvergenceTest *theTest= getConvergenceTestPtr();
 
-    if((theAnalysisModel == 0) || (theIncIntegratorr == 0) || (theSOE == 0)
-        || (theTest == 0))
+    if(!theAnalysisModel || !theIncIntegratorr || !theSOE || !theTest)
       {
-        std::cerr << "WARNING PeriodicNewton::solveCurrentStep() - ";
-        std::cerr << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
+        std::cerr << "WARNING PeriodicNewton::solveCurrentStep() - "
+                  << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
         return -5;
       }
 
@@ -92,15 +91,15 @@ int XC::PeriodicNewton::solveCurrentStep(void)
 
     if(theIncIntegratorr->formUnbalance() < 0)
       {
-        std::cerr << "WARNING XC::PeriodicNewton::solveCurrentStep() -";
-        std::cerr << "the XC::Integrator failed in formUnbalance()\n";
+        std::cerr << "WARNING XC::PeriodicNewton::solveCurrentStep() -"
+                  << "the XC::Integrator failed in formUnbalance()\n";
         return -2;
       }
 
     if(theIncIntegratorr->formTangent(tangent) < 0)
       {
-        std::cerr << "WARNING XC::PeriodicNewton::solveCurrentStep() -";
-        std::cerr << "the XC::Integrator failed in formTangent()\n";
+        std::cerr << "WARNING XC::PeriodicNewton::solveCurrentStep() -"
+                  << "the XC::Integrator failed in formTangent()\n";
         return -1;
       }
 
@@ -108,8 +107,8 @@ int XC::PeriodicNewton::solveCurrentStep(void)
     theTest->set_owner(getSoluMethod());
     if(theTest->start() < 0)
       {
-        std::cerr << "XC::PeriodicNewton::solveCurrentStep() -";
-        std::cerr << "the XC::ConvergenceTest object failed in start()\n";
+        std::cerr << "XC::PeriodicNewton::solveCurrentStep() -"
+                  << "the XC::ConvergenceTest object failed in start()\n";
         return -3;
       }
 
@@ -148,8 +147,8 @@ int XC::PeriodicNewton::solveCurrentStep(void)
           {
             if(theIncIntegratorr->formTangent(tangent) < 0)
               {
-                std::cerr << "WARNING XC::PeriodicNewton::solveCurrentStep() -";
-                std::cerr << "the XC::Integrator failed in formTangent()\n";
+                std::cerr << "WARNING PeriodicNewton::solveCurrentStep() -"
+                          << "the XC::Integrator failed in formTangent()\n";
                 return -1;
               }
             iter = 0;
@@ -159,8 +158,9 @@ int XC::PeriodicNewton::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << "XC::PeriodicNewton::solveCurrentStep() -";
-        std::cerr << "the XC::ConvergenceTest object failed in test()\n";
+        std::cerr << "PeriodicNewton::solveCurrentStep() -"
+                  << "the ConvergenceTest object failed in test() at iter: "
+	          << iter << std::endl;
         return -3;
       }
     return result;

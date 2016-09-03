@@ -88,8 +88,8 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
     if((theAnaModel == 0) || (theIntegrator == 0) || (theSOE == 0) || (theTest == 0))
       {
-        std::cerr << "WARNING KrylovNewton::solveCurrentStep() - ";
-        std::cerr << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
+        std::cerr << "WARNING KrylovNewton::solveCurrentStep() - "
+                  << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
         return -5;
       }
 
@@ -120,8 +120,8 @@ int XC::KrylovNewton::solveCurrentStep(void)
     // Evaluate system residual R(y_0)
     if(theIntegrator->formUnbalance() < 0)
       {
-        std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -";
-        std::cerr << "the XC::Integrator failed in formUnbalance()\n";
+        std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -"
+                  << "the XC::Integrator failed in formUnbalance()\n";
         return -2;
       }
 
@@ -130,8 +130,8 @@ int XC::KrylovNewton::solveCurrentStep(void)
     theTest->set_owner(getSoluMethod());
     if(theTest->start() < 0)
       {
-        std::cerr << "KrylovNewton::solveCurrentStep() -";
-        std::cerr << "the XC::ConvergenceTest object failed in start()\n";
+        std::cerr << "KrylovNewton::solveCurrentStep() -"
+                  << "the XC::ConvergenceTest object failed in start()\n";
         return -3;
       }
 
@@ -139,8 +139,8 @@ int XC::KrylovNewton::solveCurrentStep(void)
     // Evaluate system Jacobian J = R'(y)|y_0
     if(theIntegrator->formTangent(tangent) < 0)
       {
-        std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -";
-        std::cerr << "the XC::Integrator failed in formTangent()\n";
+        std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -"
+                  << "the XC::Integrator failed in formTangent()\n";
         return -1;
       }
 
@@ -193,8 +193,8 @@ int XC::KrylovNewton::solveCurrentStep(void)
         // Evaluate system residual R(y_k)
         if(theIntegrator->formUnbalance() < 0)
           {
-            std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in formUnbalance()\n";
+            std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -"
+                      << "the Integrator failed in formUnbalance()\n";
             return -2;
           }
 
@@ -208,8 +208,8 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << "XC::KrylovNewton::solveCurrentStep() -";
-        std::cerr << "the XC::ConvergenceTest object failed in test()\n";
+        std::cerr << "XC::KrylovNewton::solveCurrentStep() -"
+                  << "the XC::ConvergenceTest object failed in test()\n";
         return -3;
       }
 

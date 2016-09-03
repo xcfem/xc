@@ -34,7 +34,7 @@
 **                                                                    **
 ** Commercial use of this program without express permission of the   **
 ** University of California, Berkeley, is strictly prohibited.  See   **
-** file 'COPYRIGHT'  in XC::main directory for information on usage and   **
+** file 'COPYRIGHT'  in main directory for information on usage and   **
 ** redistribution,  and for a DISCLAIMER OF ALL WARRANTIES.           **
 **                                                                    **
 ** Developed by:                                                      **
@@ -99,16 +99,16 @@ int XC::ModifiedNewton::solveCurrentStep(void)
 
     if(theIncIntegratorr->formUnbalance() < 0)
       {
-        std::cerr << "WARNING XC::ModifiedNewton::solveCurrentStep() -";
-        std::cerr << "the XC::Integrator failed in formUnbalance()\n";
+        std::cerr << "WARNING XC::ModifiedNewton::solveCurrentStep() -"
+                  << "the XC::Integrator failed in formUnbalance()\n";
         return -2;
       }
 
 
     if(theIncIntegratorr->formTangent(tangent) < 0)
       {
-        std::cerr << "WARNING XC::ModifiedNewton::solveCurrentStep() -";
-        std::cerr << "the XC::Integrator failed in formTangent()\n";
+        std::cerr << "WARNING XC::ModifiedNewton::solveCurrentStep() -"
+                  << "the Integrator failed in formTangent()\n";
         return -1;
       }
 
@@ -117,8 +117,8 @@ int XC::ModifiedNewton::solveCurrentStep(void)
     theTest->set_owner(getSoluMethod());
     if(theTest->start() < 0)
       {
-        std::cerr << "XC::ModifiedNewton::solveCurrentStep() -";
-        std::cerr << "the XC::ConvergenceTest object failed in start()\n";
+        std::cerr << "XC::ModifiedNewton::solveCurrentStep() -"
+                  << "the ConvergenceTest object failed in start()\n";
         return -3;
       }
 
@@ -141,14 +141,14 @@ int XC::ModifiedNewton::solveCurrentStep(void)
         if(theIncIntegratorr->update(theSOE->getX()) < 0)
           {
             std::cerr << "WARNING XC::ModifiedNewton::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in update()\n";
+            std::cerr << "the Integrator failed in update()\n";
             return -4;
           }
 
         if(theIncIntegratorr->formUnbalance() < 0)
           {
             std::cerr << "WARNING XC::ModifiedNewton::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in formUnbalance()\n";
+            std::cerr << "the Integrator failed in formUnbalance()\n";
             return -2;
           }
 
@@ -161,8 +161,8 @@ int XC::ModifiedNewton::solveCurrentStep(void)
     //std::cerr << "TIMER::solveCurrentStep - " << timer1;
     if(result == -2)
       {
-        std::cerr << "XC::ModifiedNewton::solveCurrentStep() -";
-        std::cerr << "the XC::ConvergenceTest object failed in test()\n";
+        std::cerr << "XC::ModifiedNewton::solveCurrentStep() -"
+                  << "the ConvergenceTest object failed in test()." << std::endl;
         return -3;
       }
 
