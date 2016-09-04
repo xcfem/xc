@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
