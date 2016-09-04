@@ -93,3 +93,44 @@ int XC::ConvergenceTestTol::recvSelf(const CommParameters &cp)
       }
     return res;
   }
+
+//! @brief Display current ratio and tolerance.
+std::string XC::ConvergenceTestTol::getRatioMessage(const std::string &ratioExpression) const
+  {
+    std::ostringstream retval; 
+    retval << " current ratio " << ratioExpression
+	   <<": " << lastRatio << " (max: " << tol
+	   << ", Norm deltaX: " << calculatedNormX << ")";
+    return retval.str();
+  }
+
+//! @brief Display current displacement increment and tolerance.
+std::string XC::ConvergenceTestTol::getDispIncrMessage(void) const
+  {
+    std::ostringstream retval; 
+    retval << " current |x|: " << calculatedNormX
+	   << " (max: " << tol << ", Norm deltaR: "
+	   << calculatedNormB << ")";
+    return retval.str();
+  }
+
+//! @brief Display current unbalance and tolerance.
+std::string XC::ConvergenceTestTol::getUnbalanceMessage(void) const
+  {
+    std::ostringstream retval; 
+    retval << " current |b|: " << calculatedNormB
+	   << " (max: " << tol << ", Norm deltaX: "
+	   << calculatedNormX << ")";
+    return retval.str();
+  }
+
+//! @brief Display current energy product and tolerance.
+std::string XC::ConvergenceTestTol::getEnergyProductMessage(void) const
+  {
+    std::ostringstream retval; 
+    calculatedNormX= getNormX(); //Update values.
+    calculatedNormB= getNormB();
+    retval << " current EnergyIncr: " << calculatedEnergyProduct
+	   << " (max: " << tol << getDeltaXRNormsMessage() << ")";
+    return retval.str();
+  }

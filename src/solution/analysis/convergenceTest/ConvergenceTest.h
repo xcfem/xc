@@ -83,6 +83,11 @@ class ConvergenceTest: public MovableObject, public EntWOwner
     int nType; //!< type of norm to use (1-norm, 2-norm, p-norm, max-norm)
     Vector norms; //!< vector to hold the norms
 
+    //Intermediate results:
+    mutable double lastRatio; //!< Last calculated ratio (if any).
+    mutable double calculatedNormX; //!< Last calculated |x|
+    mutable double calculatedNormB; //!< Last calculated |b|
+    mutable double calculatedEnergyProduct; //!< Last calculated |0.5*(x ^ b)|.
 
     bool hasLinearSOE(void) const;
     LinearSOE *getLinearSOEPtr(void);
@@ -91,6 +96,7 @@ class ConvergenceTest: public MovableObject, public EntWOwner
     double getNormX(void) const;
     const Vector &getB(void) const;
     double getNormB(void) const;
+    double getEnergyProduct(void) const;
 
   protected:
     int sendData(CommParameters &);
@@ -104,6 +110,7 @@ class ConvergenceTest: public MovableObject, public EntWOwner
     virtual ConvergenceTest *getCopy(void) const= 0;
     virtual ConvergenceTest *getCopy(int iterations) const;
 
+    virtual std::string getStatusMsg(const int &flag= 1) const= 0;
     virtual int start(void);
     virtual int test(void)= 0;
 
@@ -123,6 +130,10 @@ class ConvergenceTest: public MovableObject, public EntWOwner
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
+    std::string getTestIterationMessage(void) const;
+    std::string getFailedToConvergeMessage(void) const;
+    std::string getDeltaXRMessage(void) const;
+    std::string getDeltaXRNormsMessage(void) const;
   };
 } // end of XC namespace
 

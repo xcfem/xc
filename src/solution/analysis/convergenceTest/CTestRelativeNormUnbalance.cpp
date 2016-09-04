@@ -64,13 +64,25 @@ XC::CTestRelativeNormUnbalance::CTestRelativeNormUnbalance(EntCmd *owr,double th
 XC::ConvergenceTest* XC::CTestRelativeNormUnbalance::getCopy(void) const
   { return new CTestRelativeNormUnbalance(*this); }
 
+//! @brief Returns a message showing the values of the principal parameters.
+std::string XC::CTestRelativeNormUnbalance::getStatusMsg(const int &flag) const
+  {
+    std::string retval= getTestIterationMessage();
+    retval+= getRatioMessage("(|dR|/|dR0|)");
+    if(flag>=4)
+      {
+	retval+= getDeltaXRNormsMessage();
+        retval+= getDeltaXRMessage();
+      }
+    return retval;
+  }
+
 //! @brief Comprueba si se ha producido la convergencia.
 int XC::CTestRelativeNormUnbalance::test(void)
   {
     // check to ensure the SOE has been set - this should not happen if the 
     // return from start() is checked
-    LinearSOE *theSOE= getLinearSOEPtr();
-    if(!theSOE) return -2;
+    if(!hasLinearSOE()) return -2;
     
     // check to ensure the algo does invoke start() - this is needed otherwise
     // may never get convergence later on in analysis!
@@ -81,28 +93,19 @@ int XC::CTestRelativeNormUnbalance::test(void)
       }
     
     // get the B vector & determine it's norm & save the value in norms vector
-    const XC::Vector &x = theSOE->getB();
-    double norm = x.pNorm(nType);
+    calculatedNormX= getNormX();
+    calculatedNormB = getNormB();
+    lastRatio= calculatedNormB;
     if(currentIter <= maxNumIter) 
-      norms(currentIter) = norm;
+      norms(currentIter)= calculatedNormB;
     
     // determine the ratio
     if(norm0 != 0.0)
-      norm /= norm0;
+      lastRatio/= norm0;
     
     // print the data if required
-    if(printFlag == 1)
-      {
-        std::clog << "XC::CTestRelativeNormUnbalance::test() - iteration: " << currentIter;
-        std::clog << " current Ratio (|dR|/|dR0|): " << norm << " (max: " << tol << ")\n";
-      }
-    if(printFlag == 4)
-      {
-        std::clog << "XC::CTestRelativeNormUnbalance::test() - iteration: " << currentIter;
-        std::clog << " current Ratio (|dR|/|dR0|): " << norm << " (max: " << tol << ")\n";
-        std::clog << "\tNorm deltaX: " << theSOE->getX().pNorm(nType) << ", Norm deltaR: " << norm << std::endl;
-        std::clog << "\tdeltaX: " << theSOE->getX() << "\tdeltaR: " << x;
-      }
+    if(printFlag)
+      std::clog << getStatusMsg(printFlag);
     
     //
     // check if the algorithm converged
@@ -110,7 +113,7 @@ int XC::CTestRelativeNormUnbalance::test(void)
     
     // if converged - print & return ok
     
-    if(norm <= tol)
+    if(lastRatio <= tol)
       { // the algorithm converged  
         // do some printing first
         if(printFlag != 0)
@@ -119,8 +122,8 @@ int XC::CTestRelativeNormUnbalance::test(void)
               std::cerr << std::endl;
             else if(printFlag == 2 || printFlag == 6)
               {
-                std::cerr << "XC::CTestRelativeNormUnbalance::test() - iteration: " << currentIter;
-                std::cerr << " current Ratio (|dR|/|dR0|): " << norm << " (max: " << tol << ")\n";
+                std::cerr << getTestIterationMessage();
+                std::cerr << getRatioMessage("(|dR|/|dR0|)");
               }
           }
         // return the number of times test has been called
@@ -130,16 +133,14 @@ int XC::CTestRelativeNormUnbalance::test(void)
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
         std::cerr << "WARNING: XC::CTestRelativeNormUnbalance::test() - failed to converge but going on -";
-        std::cerr << " current Ratio (dR/dR0): " << norm << " (max: " << tol;
-        std::cerr << ", Norm deltaX: " << theSOE->getX().pNorm(nType) << ")\n";
+        std::cerr << getRatioMessage("(dR/dR0)");
         return currentIter;
       }
     
     // algo failed to converged after specified number of iterations - return FAILURE -2
     else if(currentIter >= maxNumIter)
       { // the algorithm failed to converge
-        std::cerr << "WARNING: XC::CTestRelativeNormUnbalance::test() - failed to converge \n";
-        std::cerr << "after: " << currentIter << " iterations\n";	
+        std::cerr << getFailedToConvergeMessage();
         currentIter++;  // we increment in case analysis does not check for convergence
         return -2;
       } 
@@ -157,10 +158,9 @@ int XC::CTestRelativeNormUnbalance::start(void)
     ConvergenceTestNorm::start();
     
     // determine the initial norm .. the the norm of the initial unbalance
-    const Vector &x= getB();
-    double norm = x.pNorm(nType);
+    calculatedNormB= getNormB();
     if(currentIter <= maxNumIter) 
-      norms(0) = norm;
-    norm0 = norm;
+      norms(0)= calculatedNormB;
+    norm0= calculatedNormB;
     return 0;
   }

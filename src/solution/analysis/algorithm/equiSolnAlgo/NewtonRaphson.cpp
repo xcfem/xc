@@ -173,7 +173,9 @@ int XC::NewtonRaphson::solveCurrentStep(void)
     if(result == -2)
       {
         std::cerr << "NewtonRaphson::solveCurrentStep() -"
-                  << "the ConvergenceTest object failed in test()\n";
+                  << "the ConvergenceTest object failed in test()\n"
+                  << "convergence test message: "
+		  << theTest->getStatusMsg(1) << std::endl;
         return -3;
       }
 

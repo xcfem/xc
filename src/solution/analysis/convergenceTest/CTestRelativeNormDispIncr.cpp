@@ -64,7 +64,19 @@ XC::CTestRelativeNormDispIncr::CTestRelativeNormDispIncr(EntCmd *owr,double theT
 XC::ConvergenceTest* XC::CTestRelativeNormDispIncr::getCopy(void) const
   { return new CTestRelativeNormDispIncr(*this); }
 
-//! @brief Comprueba si se ha producido la convergencia.
+//! @brief Returns a message showing the values of the principal parameters.
+std::string XC::CTestRelativeNormDispIncr::getStatusMsg(const int &flag) const
+  {
+    std::string retval= getTestIterationMessage();
+    retval+= getRatioMessage("(|dR|/|dR1|)");
+    if(flag >= 4)
+      {
+        retval+= getDeltaXRNormsMessage() + "\n " + getDeltaXRMessage();
+      }
+    return retval;
+  }
+
+//! @brief Checks for convergence.
 int XC::CTestRelativeNormDispIncr::test(void)
   {
     // check to ensure the SOE has been set - this should not happen if the 
@@ -75,44 +87,34 @@ int XC::CTestRelativeNormDispIncr::test(void)
     // may never get convergence later on in analysis!
     if(currentIter == 0)
       {
-        std::cerr << "WARNING: XC::CTestRelativeNormDispIncr::test() - start() was never invoked.\n";	
+        std::cerr << "WARNING: CTestRelativeNormDispIncr::test() - start() was never invoked.\n";	
         return -2;
       }
     
-    // get the X vector & determine it's norm & save the value in norms vector
-    const XC::Vector &x= getX();
-    double norm = x.pNorm(nType);
+    // determine X vector's norm & save the value in norms vector
+    calculatedNormX= getNormX();
+    lastRatio= calculatedNormX;
     if(currentIter <= maxNumIter) 
-        norms(currentIter-1) = norm;
+      norms(currentIter-1)= calculatedNormX;
     
     // if first pass through .. set norm0
     if(currentIter == 1)
-      { norm0 = norm; }
+      norm0= calculatedNormX;
     
     // get ratio
     if(norm0 != 0.0)
-      norm/= norm0;
+      lastRatio/= norm0;
     
     // print the data if required
-    if(printFlag == 1)
-      {
-        std::clog << "XC::CTestRelativeNormDispIncr::test() - iteration: " << currentIter;
-        std::clog << " current Ratio (|dR|/|dR1|): " << norm << " (max: " << tol << ")\n";
-      } 
-    if(printFlag == 4)
-      {
-        std::clog << "XC::CTestRelativeNormDispIncr::test() - iteration: " << currentIter;
-        std::clog << " current Ratio (|dR|/|dR1|): " << norm << " (max: " << tol << ")\n";
-        std::clog << "\tNorm deltaX: " << norm << ", Norm deltaR: " << getB().pNorm(nType) << std::endl;
-        std::clog << "\tdeltaX: " << x << "\tdeltaR: " << getB();
-      } 
+    if(printFlag)
+      std::clog << getStatusMsg(printFlag);
     
     //
     // check if the algorithm converged
     //
     
     // if converged - print & return ok
-    if(norm <= tol)
+    if(lastRatio <= tol)
       {  
         // do some printing first
         if(printFlag != 0)
@@ -120,10 +122,7 @@ int XC::CTestRelativeNormDispIncr::test(void)
             if(printFlag == 1 || printFlag == 4) 
               std::clog << std::endl;
             else if(printFlag == 2 || printFlag == 6)
-              {
-                std::clog << "XC::CTestRelativeNormDispIncr::test() - iteration: " << currentIter;
-                std::clog << " current Ratio (|dR|/|dR1|): " << norm << " (max: " << tol << ")\n";
-              }
+              std::clog << getTestIterationMessage() << getRatioMessage("(|dR|/|dR1|)") << std::endl;
           }
         
         // return the number of times test has been called
@@ -133,16 +132,15 @@ int XC::CTestRelativeNormDispIncr::test(void)
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
         std::cerr << "WARNING: XC::CTestRelativeNormDispIncr::test() - failed to converge but going on -";
-        std::cerr << " current Ratio (|dR|/|dR1|): " << norm << " (max: " << tol;
-        std::cerr << ", Norm deltaR: " << getB().pNorm(nType) << ")\n";
+        std::cerr << getRatioMessage("(|dR|/|dR1|)");
+        std::cerr << ", Norm deltaR: " << getNormB() << ")\n";
         return currentIter;
       }
     
     // algo failed to converged after specified number of iterations - return FAILURE -2
     else if(currentIter >= maxNumIter)
       { // failes to converge
-        std::cerr << "WARNING: XC::CTestRelativeNormDispIncr::test() - failed to converge \n";
-        std::cerr << "after: " << currentIter << " iterations\n";	
+        std::cerr << getFailedToConvergeMessage();
         currentIter++;    
         return -2;
       } 

@@ -161,8 +161,11 @@ int XC::ModifiedNewton::solveCurrentStep(void)
     //std::cerr << "TIMER::solveCurrentStep - " << timer1;
     if(result == -2)
       {
-        std::cerr << "XC::ModifiedNewton::solveCurrentStep() -"
-                  << "the ConvergenceTest object failed in test()." << std::endl;
+        std::cerr << "ModifiedNewton::solveCurrentStep() -"
+                  << "the ConvergenceTest object failed in test()." << std::endl
+                  << "convergence test message: "
+		  << theTest->getStatusMsg(1) << std::endl;
+
         return -3;
       }
 

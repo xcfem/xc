@@ -73,6 +73,19 @@ XC::CTestRelativeTotalNormDispIncr::CTestRelativeTotalNormDispIncr(EntCmd *owr,d
 XC::ConvergenceTest* XC::CTestRelativeTotalNormDispIncr::getCopy(void) const
   { return new CTestRelativeTotalNormDispIncr(*this); }
 
+//! @brief Returns a message showing the values of the principal parameters.
+std::string XC::CTestRelativeTotalNormDispIncr::getStatusMsg(const int &flag) const
+  {
+    std::string retval= getTestIterationMessage();
+    retval+= getRatioMessage("(|dR|/|dRtot|)");
+    if(flag >= 4)
+      {
+        retval+= getDeltaXRNormsMessage();
+        retval+= "\n" + getDeltaXRMessage();
+      }
+    return retval;
+  }
+
 int XC::CTestRelativeTotalNormDispIncr::test(void)
   {
     // check to ensure the SOE has been set - this should not happen if the 
@@ -88,38 +101,28 @@ int XC::CTestRelativeTotalNormDispIncr::test(void)
       }
     
     // get the X vector & determine it's norm & save the value in norms vector
-    const Vector &x= getX();
-    double norm = x.pNorm(nType);
+    calculatedNormX= getNormX();
+    lastRatio= calculatedNormX;
     if(currentIter <= maxNumIter) 
-      norms(currentIter-1) = norm;
+      norms(currentIter-1)= calculatedNormX;
     
     // add current norm to total norm
-    norm0 += norm;
+    norm0+= calculatedNormX;
     
     // get ratio
     if(norm0 != 0.0)
-      norm /= norm0;
+      lastRatio/= norm0;
     
     // print the data if required
-    if(printFlag == 1)
-      {
-        std::clog << "XC::CTestRelativeTotalNormDispIncr::test() - iteration: " << currentIter;
-        std::clog << " current ratio (|dR|/|dRtot|): " << norm << " (max: " << tol << ")\n";
-      } 
-    if(printFlag == 4)
-      {
-        std::clog << "XC::CTestRelativeTotalNormDispIncr::test() - iteration: " << currentIter;
-        std::clog << " current ratio (|dR|/|dRtot|): " << norm << " (max: " << tol << ")\n";
-        std::clog << "\tNorm deltaX: " << norm << ", Norm deltaR: " << getB().pNorm(nType) << std::endl;
-        std::clog << "\tdeltaX: " << x << "\tdeltaR: " << getB();
-      } 
-    
+    if(printFlag)
+      std::clog << getStatusMsg(printFlag);
+
     //
     // check if the algorithm converged
     //
     
     // if converged - print & return ok
-    if(norm <= tol)
+    if(lastRatio <= tol)
       {         
         // do some printing first
         if(printFlag != 0)
@@ -128,8 +131,8 @@ int XC::CTestRelativeTotalNormDispIncr::test(void)
               std::clog << std::endl;
             else if(printFlag == 2 || printFlag == 6)
               {
-                std::clog << "XC::CTestRelativeTotalNormDispIncr::test() - iteration: " << currentIter;
-                std::clog << " current ratio (|dR|/|dRtot|): " << norm << " (max: " << tol << ")\n";
+                std::clog << getTestIterationMessage();
+                std::clog << getRatioMessage("(|dR|/|dRtot|)");
               }
           }
         // return the number of times test has been called
@@ -139,15 +142,14 @@ int XC::CTestRelativeTotalNormDispIncr::test(void)
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
         std::clog << "WARNING: XC::CTestRelativeTotalNormDispIncr::test() - failed to converge but going on -";
-        std::clog << " current ratio (|dR|/|dRtot|): " << norm << " (max: " << tol << ")\n";
-        std::clog << "\tNorm deltaX: " << norm << ", Norm deltaR: " << getB().pNorm(nType) << std::endl;
+        std::clog << getRatioMessage("(|dR|/|dRtot|)");
+        std::clog << getDeltaXRNormsMessage() << std::endl;
         return currentIter;
       }
     // algo failed to converged after specified number of iterations - return FAILURE -2
     else if(currentIter >= maxNumIter)
-      { // failes to converge
-        std::clog << "WARNING: XC::CTestRelativeTotalNormDispIncr::test() - failed to converge \n";
-        std::clog << "after: " << currentIter << " iterations\n";	
+      { // fails to converge
+        std::clog << getFailedToConvergeMessage();
         currentIter++;    
         return -2;
       } 

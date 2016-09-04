@@ -113,9 +113,10 @@ int XC::StaticAnalysis::new_domain_step(int num_step)
     int result= newStepDomain(am);
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::new_domain_step() - the AnalysisModel failed";
-        std::cerr << " at step: " << num_step << " with domain at load factor ";
-        std::cerr << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << "StaticAnalysis::new_domain_step() - the AnalysisModel failed"
+                  << " at step: " << num_step << " with domain at load factor "
+                  << getDomainPtr()->getTimeTracker().getCurrentTime()
+		  << " after " << getConvergenceTest()->getCurrentIter()-1 << " iterations." << std::endl;
         getDomainPtr()->revertToLastCommit();
         return -2;
       }
@@ -150,9 +151,9 @@ int XC::StaticAnalysis::new_integrator_step(int num_step)
     const int result= getStaticIntegratorPtr()->newStep();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::new_integrator_step() - the XC::Integrator failed";
-        std::cerr << " at step: " << num_step << " with domain at load factor ";
-        std::cerr << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << "StaticAnalysis::new_integrator_step() - the Integrator failed"
+                  << " at step: " << num_step << " with domain at load factor "
+                  << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
         getDomainPtr()->revertToLastCommit();
         return -2;
       }
@@ -165,9 +166,9 @@ int XC::StaticAnalysis::solve_current_step(int num_step)
     const int result= getEquiSolutionAlgorithmPtr()->solveCurrentStep();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::solve_current_step() - the Algorithm failed";
-        std::cerr << " at step: " << num_step << " with domain at load factor ";
-        std::cerr << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << "StaticAnalysis::new_domain_step() - the Algorithm failed"
+                  << " at step: " << num_step << " with domain at load factor "
+                  << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -3;
@@ -203,10 +204,10 @@ int XC::StaticAnalysis::commit_step(int num_step)
     int result= getStaticIntegratorPtr()->commit();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::commit_step() - ";
-        std::cerr << "the Integrator failed to commit";
-        std::cerr << " at step: " << num_step << " with domain at load factor ";
-        std::cerr << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << "StaticAnalysis::commit_step() - "
+                  << "the Integrator failed to commit"
+                  << " at step: " << num_step << " with domain at load factor "
+                  << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -4;
@@ -308,8 +309,8 @@ int XC::StaticAnalysis::domainChanged(void)
     int result= getConstraintHandlerPtr()->handle();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - ";
-        std::cerr << "ConstraintHandler::handle() failed." << std::endl;
+        std::cerr << "StaticAnalysis::domainChanged() - "
+                  << "ConstraintHandler::handle() failed." << std::endl;
         return -1;
       }
 
@@ -320,16 +321,16 @@ int XC::StaticAnalysis::domainChanged(void)
     result= getDOF_NumbererPtr()->numberDOF();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - ";
-        std::cerr << "DOF_Numberer::numberDOF() failed." << std::endl;
+        std::cerr << "StaticAnalysis::domainChanged() - "
+                  << "DOF_Numberer::numberDOF() failed." << std::endl;
         return -2;
       }
 
     result= getConstraintHandlerPtr()->doneNumberingDOF();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - ";
-        std::cerr << "ConstraintHandler::doneNumberingDOF() failed." << std::endl;
+        std::cerr << "StaticAnalysis::domainChanged() - "
+                  << "ConstraintHandler::doneNumberingDOF() failed." << std::endl;
         return -3;
       }
 
@@ -340,8 +341,8 @@ int XC::StaticAnalysis::domainChanged(void)
     result= getLinearSOEPtr()->setSize(theGraph);
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - ";
-        std::cerr << "LinearSOE::setSize() failed." << std::endl;
+        std::cerr << "StaticAnalysis::domainChanged() - "
+                  << "LinearSOE::setSize() failed." << std::endl;
         return -4;
       }
 
@@ -351,16 +352,16 @@ int XC::StaticAnalysis::domainChanged(void)
     result= getStaticIntegratorPtr()->domainChanged();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - ";
-        std::cerr << "fallo en Integrator::domainChanged()." << std::endl;
+        std::cerr << "StaticAnalysis::domainChanged() - "
+                  << "fallo en Integrator::domainChanged()." << std::endl;
         return -5;
       }
 
     result= getEquiSolutionAlgorithmPtr()->domainChanged();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - ";
-        std::cerr << "fallo en Algorithm::domainChanged()." << std::endl;
+        std::cerr << "StaticAnalysis::domainChanged() - "
+                  << "fallo en Algorithm::domainChanged()." << std::endl;
         return -6;
       }
 

@@ -107,7 +107,6 @@ class Vector: public EntCmd
     double *getDataPtr(void);
     bool Nulo(void) const;
     int Assemble(const Vector &V, const ID &l, double fact = 1.0);
-    //void from_string(const std::string &str);
     double Norm2(void) const;
     double Norm(void) const;
     double pNorm(int p) const;
@@ -176,7 +175,10 @@ class Vector: public EntCmd
 
     void write(std::ofstream &);
     void read(std::ifstream &);
-    friend std::ostream &operator<<(std::ostream &s, const Vector &V);
+    friend std::ostream &operator<<(std::ostream &s, const Vector &);
+    friend std::string to_string(const Vector &);
+    inline std::string toString(void) const
+      { return to_string(*this); }
     // friend istream &operator>>(istream &s, Vector &V);    
     friend Vector operator*(double a, const Vector &V);
     
@@ -191,8 +193,6 @@ class Vector: public EntCmd
 
 std::vector<double> vector_to_std_vector(const Vector &);
 m_double vector_to_m_double(const Vector &);
-//Vector interpreta_xc_vector(const std::string &str);
-//Vector convert_to_vector(const boost::any &);
 
 double dot(const Vector &a,const Vector &b);
 Matrix prod_tensor(const Vector &,const Vector &);

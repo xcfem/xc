@@ -1103,6 +1103,16 @@ void XC::Matrix::read(std::ifstream &is)
     data.read(is);
   }
 
+//! @brief Returns a string that represents the matrix.
+std::string to_string(const XC::Matrix &V)
+  {
+    //Doing this way clients will be able to manage the formatting
+    //with things like 'std::scientific << std::setprecision(10)' 
+    std::ostringstream ss; 
+    ss << V;
+    return ss.str();
+  }
+
 //! @brief Operador salida.
 std::ostream &XC::operator<<(std::ostream &s, const Matrix &m)
   {

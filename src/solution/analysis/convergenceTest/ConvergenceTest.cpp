@@ -67,13 +67,11 @@
 
 XC::ConvergenceTest::ConvergenceTest(EntCmd *owr,int clasTag)
   :MovableObject(clasTag), EntWOwner(owr), currentIter(0), maxNumIter(0),
-   printFlag(0), nType(2), norms(1)
-  {}
+   printFlag(0), nType(2), norms(1), lastRatio(0.0), calculatedNormX(0.0), calculatedNormB(0.0) {}
 
 XC::ConvergenceTest::ConvergenceTest(EntCmd *owr,int clasTag,int maxIter,int prtFlg, int normType, int sz_norms)
   :MovableObject(clasTag), EntWOwner(owr), currentIter(0), maxNumIter(maxIter),
-   printFlag(prtFlg), nType(normType), norms(sz_norms)
-  {}
+   printFlag(prtFlg), nType(normType), norms(sz_norms), lastRatio(0.0), calculatedNormX(0.0), calculatedNormB(0.0) {}
 
 XC::ConvergenceTest* XC::ConvergenceTest::getCopy(int iterations) const
   {
@@ -180,6 +178,19 @@ const XC::Vector &XC::ConvergenceTest::getB(void) const
 double XC::ConvergenceTest::getNormB(void) const
  { return getLinearSOEPtr()->getB().pNorm(nType); }
 
+//! @brief Returns the the energy increment,
+//! which is 0.5 times the absolute value of the product of the rhs and 
+//! the solution vector of the LinearSOE: |0.5*(x ^ b)|.
+double XC::ConvergenceTest::getEnergyProduct(void) const
+  {
+    double retval= getX() ^ getB();
+    if(retval < 0.0)
+      retval*= -0.5;
+    else
+      retval*= 0.5;
+    return retval;
+  }
+
 //! @brief Send members del objeto through the channel being passed as parameter.
 int XC::ConvergenceTest::sendData(CommParameters &cp)
   {
@@ -229,4 +240,37 @@ int XC::ConvergenceTest::recvSelf(const CommParameters &cp)
       }
     return res;
   }
+
+//! @brief Returns a string with the name of the class and the iteration number.
+std::string XC::ConvergenceTest::getTestIterationMessage(void) const
+  {
+    return nombre_clase() + "::test() - iteration: "+std::to_string(currentIter);
+  }
+
+//! @brief Returns a string with the proper failed to converge message.
+std::string XC::ConvergenceTest::getFailedToConvergeMessage(void) const
+  {
+    std::ostringstream retval; 
+    retval << "WARNING: " << nombre_clase()
+	   << "::test() - failed to converge \n"
+           << "after: " << currentIter << " iterations\n";	
+    return retval.str();
+  }
+
+//! @brief Returns a string with the values of x and b vectors.
+std::string XC::ConvergenceTest::getDeltaXRMessage(void) const
+  {
+    std::ostringstream retval; 
+    retval << "\tdeltaX: " << getX() << "\tdeltaR: " << getB();
+    return retval.str();    
+  }
+
+//! @brief Returns a string with the values of x and b vector norms.
+std::string XC::ConvergenceTest::getDeltaXRNormsMessage(void) const
+  {
+    std::ostringstream retval; 
+    retval << "\tNorm deltaX: " << calculatedNormX << "\tNorm deltaR: " << calculatedNormB;
+    return retval.str();    
+  }
+
 

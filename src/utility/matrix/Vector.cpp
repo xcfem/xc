@@ -1138,13 +1138,23 @@ XC::Matrix XC::prod_tensor(const Vector &u,const Vector &v)
     return retval;
   }
 
+//! @brief tensor product.
 XC::Matrix XC::operator&(const Vector &u,const Vector &v)
   { return prod_tensor(u,v); }
 
+//! @brief Returns a string that represents the vector.
+std::string XC::to_string(const XC::Vector &V)
+  {
+    //Doing this way clients will be able to manage the formatting
+    //with things like 'std::scientific << std::setprecision(10)' 
+    std::ostringstream ss; 
+    ss << V;
+    return ss.str();
+  }
 
 
 //! @brief A function is defined to allow user to print the vectors using std::ostream.
-std::ostream &XC::operator<<(std::ostream &s, const XC::Vector &V)
+std::ostream &XC::operator<<(std::ostream &s, const Vector &V)
   {
     for(int i=0; i<V.Size(); i++) 
         s << V(i) << " ";

@@ -230,7 +230,9 @@ int XC::BFGS::solveCurrentStep(void)
     if(result == -2)
       {
         std::cerr << "XC::BFGS::solveCurrentStep() -"
-                  << "the XC::ConvergenceTest object failed in test()\n";
+                  << "the XC::ConvergenceTest object failed in test()\n"
+                  << "convergence test message: "
+		  << theTest->getStatusMsg(1) << std::endl;	  
         return -3;
       }
     // note - if postive result we are returning what the convergence test returned

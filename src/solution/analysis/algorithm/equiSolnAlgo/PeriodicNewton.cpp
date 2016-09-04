@@ -160,7 +160,9 @@ int XC::PeriodicNewton::solveCurrentStep(void)
       {
         std::cerr << "PeriodicNewton::solveCurrentStep() -"
                   << "the ConvergenceTest object failed in test() at iter: "
-	          << iter << std::endl;
+	          << iter << std::endl
+                  << "convergence test message: "
+		  << theTest->getStatusMsg(1) << std::endl;
         return -3;
       }
     return result;

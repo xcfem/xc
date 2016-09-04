@@ -56,6 +56,11 @@ class ConvergenceTestTol: public ConvergenceTest
     double getTolerance(void) const;
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
+
+    std::string getRatioMessage(const std::string &) const;
+    std::string getDispIncrMessage(void) const;
+    std::string getUnbalanceMessage(void) const;
+    std::string getEnergyProductMessage(void) const;
   };
 } // end of XC namespace
 

@@ -63,15 +63,27 @@ XC::CTestNormDispIncr::CTestNormDispIncr(EntCmd *owr,double theTol, int maxIter,
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestNormDispIncr,theTol,maxIter,printIt,normType,maxIter)
   {}
 
+//! @brief Virtual constructor.
 XC::ConvergenceTest* XC::CTestNormDispIncr::getCopy(void) const
   { return new CTestNormDispIncr(*this); }
+
+//! @brief Returns a message showing the values of the principal parameters.
+std::string XC::CTestNormDispIncr::getStatusMsg(const int &flag) const
+  {
+    std::string retval= getTestIterationMessage();
+    retval+= getDispIncrMessage();
+    if(flag >= 4)
+      {
+        retval+= getDeltaXRNormsMessage() + "\n " + getDeltaXRMessage();
+      }
+    return retval;
+  }
 
 int XC::CTestNormDispIncr::test(void)
   {
     // check to ensure the SOE has been set - this should not happen if the 
     // return from start() is checked
-    LinearSOE *theSOE= getLinearSOEPtr();
-    if(!theSOE) return -2;
+    if(!hasLinearSOE()) return -2;
     
     // check to ensure the algo does invoke start() - this is needed otherwise
     // may never get convergence later on in analysis!
@@ -82,32 +94,20 @@ int XC::CTestNormDispIncr::test(void)
       }
     
     // get the X vector & determine it's norm & save the value in norms vector
-    const Vector &x = theSOE->getX();
-    double norm = x.pNorm(nType);
+    calculatedNormX= getNormX();
     if(currentIter <= maxNumIter) 
-      norms(currentIter-1) = norm;
+      norms(currentIter-1)= calculatedNormX;
     
     // print the data if required
-    if(printFlag == 1)
-      {
-        std::clog << "CTestNormDispIncr::test() - iteration: " << currentIter;
-        std::clog << " current Norm: " << norm << " (max: " << tol;
-        std::clog << ", Norm deltaR: " << theSOE->getB().pNorm(nType) << ")\n";
-      } 
-    if(printFlag == 4)
-      {
-        std::clog << "CTestNormDispIncr::test() - iteration: " << currentIter;
-        std::clog << " current Norm: " << norm << " (max: " << tol << ")\n";
-        std::clog << "\tNorm deltaX: " << norm << ", Norm deltaR: " << theSOE->getB().pNorm(nType) << std::endl;
-        std::clog << "\tdeltaX: " << x << "\tdeltaR: " << theSOE->getB();
-      } 
-    
+    if(printFlag)
+      std::clog << getStatusMsg(printFlag);
+
     //
     // check if the algorithm converged
     //
     
     // if converged - print & return ok
-    if(norm <= tol)
+    if(calculatedNormX <= tol)
       {   
         // do some printing first
         if(printFlag != 0)
@@ -115,11 +115,7 @@ int XC::CTestNormDispIncr::test(void)
             if(printFlag == 1 || printFlag == 4) 
               std::clog << std::endl;
             else if(printFlag == 2 || printFlag == 6)
-              {
-                std::clog << "XC::CTestNormDispIncr::test() - iteration: " << currentIter;
-                std::clog << " current Norm: " << norm << " (max: " << tol;
-                std::clog << ", Norm deltaR: " << theSOE->getB().pNorm(nType) << ")\n";
-              }
+              std::clog << getTestIterationMessage() << getDispIncrMessage();
           }
         // return the number of times test has been called
         return currentIter;
@@ -128,15 +124,13 @@ int XC::CTestNormDispIncr::test(void)
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
         std::cerr << "WARNING: XC::CTestNormDispIncr::test() - failed to converge but going on - ";
-        std::cerr << " current Norm: " << norm << " (max: " << tol;
-        std::cerr << ", Norm deltaR: " << theSOE->getB().pNorm(nType) << ")\n";
+        std::cerr << getDispIncrMessage() << std::endl;
         return currentIter;
       }
     // algo failed to converged after specified number of iterations - return FAILURE -2
     else if(currentIter >= maxNumIter)
       { // failes to converge
-        std::cerr << "WARNING: XC::CTestNormDispIncr::test() - failed to converge \n";
-        std::cerr << "after: " << currentIter << " iterations\n";	
+        std::cerr << getFailedToConvergeMessage();
         currentIter++;    
         return -2;
       }

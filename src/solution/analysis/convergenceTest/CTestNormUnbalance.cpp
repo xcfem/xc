@@ -67,6 +67,18 @@ XC::CTestNormUnbalance::CTestNormUnbalance(EntCmd *owr,double theTol, int maxIte
 XC::ConvergenceTest* XC::CTestNormUnbalance::getCopy(void) const
   { return new CTestNormUnbalance(*this); }
 
+//! @brief Returns a message showing the values of the principal parameters.
+std::string XC::CTestNormUnbalance::getStatusMsg(const int &flag) const
+  {
+    std::ostringstream retval; 
+    retval << getTestIterationMessage()
+           << getUnbalanceMessage()
+           << getDeltaXRNormsMessage();
+    if(flag>=4)
+      retval << getDeltaXRMessage();
+    return retval.str();
+  }
+
 //! @brief Comprueba si se ha producido la convergencia.
 int XC::CTestNormUnbalance::test(void)
   {
@@ -85,33 +97,20 @@ int XC::CTestNormUnbalance::test(void)
     else
       {
         // get the B vector & determine it's norm & save the value in norms vector
-        const double normB= getNormB();
-        const double normX= getNormX();
-        const Vector &b= getB();
-        const Vector &x= getX();
+        calculatedNormB= getNormB();
+        calculatedNormX= getNormX();
         if(currentIter <= maxNumIter) 
-          norms(currentIter-1)= normB;
+          norms(currentIter-1)= calculatedNormB;
     
         // print the data if required
-        if(printFlag == 1)
-          {
-            std::clog << "CTestNormUnbalance::test() - iteration: " << currentIter;
-            std::clog << " current Norm: " << normB << " (max: " << tol;
-            std::clog << ", Norm deltaX: " << normX << ")\n";
-          }
-        if(printFlag == 4)
-          {
-            std::clog << "CTestNormUnbalance::test() - iteration: " << currentIter;
-            std::clog << " current Norm: " << normB << " (max: " << tol << ")\n";
-            std::clog << "\tNorm deltaX: " << normX << ", Norm deltaR: " << normB << std::endl;
-            std::clog << "\tdeltaX: " << x << "\tdeltaR: " << b;
-          }
+	if(printFlag)
+          std::clog << getStatusMsg(printFlag) << std::endl;
     
         //if(Bloque().size()>0) EjecutaBloque(Bloque(),getNombre()); //DEPRECATED Informa de los resultados.
         //check if the algorithm converged
             
         // if converged - print & return ok
-        if(normB <= tol)
+        if(calculatedNormB <= tol)
           {  
             // do some printing first
             if(printFlag != 0)
@@ -120,9 +119,8 @@ int XC::CTestNormUnbalance::test(void)
                   std::clog << std::endl;
                 else if(printFlag == 2 || printFlag == 6)
                   {
-                    std::clog << "CTestNormUnbalance::test() - iteration: " << currentIter;
-                    std::clog << " current Norm: " << normB << " (max: " << tol;
-                    std::clog << ", Norm deltaX: " << x.pNorm(nType) << ")\n";
+                    std::clog << getTestIterationMessage();
+                    std::clog << getUnbalanceMessage();
                   }
               }
             retval= currentIter; // return the number of times test has been called
@@ -131,15 +129,13 @@ int XC::CTestNormUnbalance::test(void)
         else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
           {
             std::cerr << "WARNING: XC::CTestNormUnbalance::test() - failed to converge but going on -";
-            std::cerr << " current Norm: " << normB << " (max: " << tol;
-            std::cerr << ", Norm deltaX: " << x.pNorm(nType) << ")\n";
+            std::cerr << getUnbalanceMessage();
             retval= currentIter;
           }
         // algo failed to converged after specified number of iterations - return FAILURE -2
         else if(currentIter >= maxNumIter)
           { // the algorithm failed to converge
-            std::cerr << "WARNING: XC::CTestNormUnbalance::test() - failed to converge \n";
-            std::cerr << "after: " << currentIter << " iterations\n";	
+            std::cerr << getFailedToConvergeMessage();
             currentIter++;  // we increment in case analysis does not check for convergence
             retval= -2;
           }        

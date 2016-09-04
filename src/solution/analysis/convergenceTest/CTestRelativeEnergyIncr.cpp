@@ -56,18 +56,32 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/EquiSolnAlgo.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 
-
+//! @brief Constructor.
 XC::CTestRelativeEnergyIncr::CTestRelativeEnergyIncr(EntCmd *owr)	    	
   : ConvergenceTestNorm(owr,CONVERGENCE_TEST_CTestRelativeEnergyIncr)
   {}
 
 
+//! @brief Constructor.
 XC::CTestRelativeEnergyIncr::CTestRelativeEnergyIncr(EntCmd *owr,double theTol, int maxIter, int printIt, int normType)
   : ConvergenceTestNorm(owr,CONVERGENCE_TEST_CTestRelativeEnergyIncr,theTol,maxIter,printIt,normType,maxIter)
   {}
 
 XC::ConvergenceTest* XC::CTestRelativeEnergyIncr::getCopy(void) const
   { return new CTestRelativeEnergyIncr(*this); }
+
+//! @brief Returns a message showing the values of the principal parameters.
+std::string XC::CTestRelativeEnergyIncr::getStatusMsg(const int &flag) const
+  {
+    std::string retval= getTestIterationMessage();
+    retval+= getRatioMessage("(dX*dR/dX1*dR1)");
+    if(flag >= 4)
+      {
+        retval+= getDeltaXRNormsMessage();
+        retval+= getDeltaXRMessage();
+      }
+    return retval;
+  }
 
 //! @brief Comprueba si se ha producido la convergencia.
 int XC::CTestRelativeEnergyIncr::test(void)
@@ -80,51 +94,36 @@ int XC::CTestRelativeEnergyIncr::test(void)
     // may never get convergence later on in analysis!
     if(currentIter == 0)
       {
-        std::cerr << "WARNING: XC::CTestRelativeEnergyIncr::test() - start() was never invoked.\n";	
+        std::cerr << "WARNING: CTestRelativeEnergyIncr::test() - start() was never invoked.\n";	
         return -2;
       }
     
     
     // determine the energy & save value in norms vector
-    const Vector &b = getB();
-    const Vector &x = getX();    
-    double product = x ^ b;
-    if(product < 0.0)
-      product *= -0.5;
-    else
-      product *= 0.5;
+    calculatedEnergyProduct= getEnergyProduct();
+    lastRatio= calculatedEnergyProduct;
     
     if(currentIter <= maxNumIter) 
-      norms(currentIter-1) = product;
+      norms(currentIter-1) = calculatedEnergyProduct;
     
     // if first pass through .. set norm0
     if(currentIter == 1)
-      { norm0 = product; }
+      norm0 = calculatedEnergyProduct;
     
     // get ratio
     if(norm0 != 0.0)
-      product /= norm0;
+      lastRatio /= norm0;
     
     // print the data if required
-    if(printFlag == 1)
-      {
-        std::clog << "CTestRelativeEnergyIncr::test() - iteration: " << currentIter;
-        std::clog << " current Ratio (dX*dR/dX1*dR1): " << product << " (max: " << tol << ")\n";
-      }
-    if(printFlag == 4)
-      {
-        std::clog << "CTestRelativeEnergyIncr::test() - iteration: " << currentIter;
-        std::clog << " current Ratio (dX*dR/dX1*dR1): " << product << " (max: " << tol << ")\n";
-        std::clog << "\tNorm deltaX: " << x.pNorm(nType) << ", Norm deltaR: " << b.pNorm(nType) << std::endl;
-        std::clog << "\tdeltaX: " << x << "\tdeltaR: " << b;
-      }
+    if(printFlag)
+      std::clog << getStatusMsg(printFlag);
     
     //
     // check if the algorithm converged
     //
     
     // if converged - print & return ok
-    if(product <= tol)
+    if(lastRatio <= tol)
       {  
         // do some printing first
         if(printFlag != 0)
@@ -133,8 +132,8 @@ int XC::CTestRelativeEnergyIncr::test(void)
               std::clog << std::endl;
             else if(printFlag == 2 || printFlag == 6)
               {
-                std::clog << "CTestRelativeEnergyIncr::test() - iteration: " << currentIter;
-                std::clog << " last Ratio (dX*dR/dX1*dR1): " << product << " (max: " << tol << ")\n";
+                std::clog << getTestIterationMessage();
+                std::clog << getRatioMessage("(dX*dR/dX1*dR1)");
               }
           }
         
@@ -145,15 +144,16 @@ int XC::CTestRelativeEnergyIncr::test(void)
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
         std::cerr << "WARNING: XC::CTestRelativeEnergyIncr::test() - failed to converge but goin on -";
-        std::cerr << " current Ratio (dX*dR/dX1*dR1): " << product << " (max: " << tol << ")\n";
-        std::cerr << "\tNorm deltaX: " << x.pNorm(nType) << ", Norm deltaR: " << b.pNorm(nType) << std::endl;
+        std::cerr << getRatioMessage("(dX*dR/dX1*dR1)");
+        calculatedNormX= getNormX(); //Update values.
+        calculatedNormB= getNormB();
+        std::cerr << getDeltaXRNormsMessage() << std::endl;
         return currentIter;
       }
     // algo failed to converged after specified number of iterations - return FAILURE -2
     else if(currentIter >= maxNumIter)
       { // >= in case algorithm does not check
-        std::cerr << "WARNING: XC::CTestRelativeEnergyIncr::test() - failed to converge \n";
-        std::cerr << "after: " << currentIter << " iterations\n";	
+        std::cerr << getFailedToConvergeMessage();
         currentIter++;    
         return -2;
       } 

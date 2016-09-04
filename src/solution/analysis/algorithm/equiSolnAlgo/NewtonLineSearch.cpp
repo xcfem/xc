@@ -222,7 +222,10 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
     if(result == -2)
       {
         std::cerr << "XC::NewtonLineSearch::solveCurrentStep() -";
-        std::cerr << "the XC::ConvergenceTest object failed in test()\n";
+        std::cerr << "the ConvergenceTest object failed in test()\n"
+                  << "convergence test message: "
+		  << theTest->getStatusMsg(1) << std::endl;
+
         return -3;
       }
     // note - if postive result we are returning what the convergence test returned
