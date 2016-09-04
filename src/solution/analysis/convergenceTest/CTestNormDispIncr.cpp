@@ -73,9 +73,7 @@ std::string XC::CTestNormDispIncr::getStatusMsg(const int &flag) const
     std::string retval= getTestIterationMessage();
     retval+= getDispIncrMessage();
     if(flag >= 4)
-      {
-        retval+= getDeltaXRNormsMessage() + "\n " + getDeltaXRMessage();
-      }
+      retval+= '\n'+getDeltaXRNormsMessage() + '\n' + getDeltaXRMessage();
     return retval;
   }
 

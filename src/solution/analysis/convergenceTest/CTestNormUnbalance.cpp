@@ -72,10 +72,10 @@ std::string XC::CTestNormUnbalance::getStatusMsg(const int &flag) const
   {
     std::ostringstream retval; 
     retval << getTestIterationMessage()
-           << getUnbalanceMessage()
+           << getUnbalanceMessage() << std::endl
            << getDeltaXRNormsMessage();
     if(flag>=4)
-      retval << getDeltaXRMessage();
+      retval << std::endl << getDeltaXRMessage();
     return retval.str();
   }
 

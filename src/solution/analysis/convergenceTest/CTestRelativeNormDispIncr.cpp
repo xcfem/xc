@@ -70,9 +70,7 @@ std::string XC::CTestRelativeNormDispIncr::getStatusMsg(const int &flag) const
     std::string retval= getTestIterationMessage();
     retval+= getRatioMessage("(|dR|/|dR1|)");
     if(flag >= 4)
-      {
-        retval+= getDeltaXRNormsMessage() + "\n " + getDeltaXRMessage();
-      }
+      retval+= + "\n " + getDeltaXRNormsMessage() + "\n " + getDeltaXRMessage();
     return retval;
   }
 

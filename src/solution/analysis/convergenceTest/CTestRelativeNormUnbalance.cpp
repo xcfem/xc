@@ -71,8 +71,8 @@ std::string XC::CTestRelativeNormUnbalance::getStatusMsg(const int &flag) const
     retval+= getRatioMessage("(|dR|/|dR0|)");
     if(flag>=4)
       {
-	retval+= getDeltaXRNormsMessage();
-        retval+= getDeltaXRMessage();
+	retval+= '\n'+getDeltaXRNormsMessage();
+        retval+= '\n'+getDeltaXRMessage();
       }
     return retval;
   }

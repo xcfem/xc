@@ -80,7 +80,7 @@ std::string XC::CTestRelativeTotalNormDispIncr::getStatusMsg(const int &flag) co
     retval+= getRatioMessage("(|dR|/|dRtot|)");
     if(flag >= 4)
       {
-        retval+= getDeltaXRNormsMessage();
+        retval+= "\n" + getDeltaXRNormsMessage();
         retval+= "\n" + getDeltaXRMessage();
       }
     return retval;

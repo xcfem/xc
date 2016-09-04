@@ -83,7 +83,8 @@ std::string XC::CTestFixedNumIter::getStatusMsg(const int &flag) const
     retval+= getEnergyProductMessage();
     if(flag >= 4)
       {
-        retval+= getDeltaXRMessage();
+        retval+= '\n'+getDeltaXRNormsMessage();
+        retval+= '\n'+getDeltaXRMessage();
       }
     return retval;
   }

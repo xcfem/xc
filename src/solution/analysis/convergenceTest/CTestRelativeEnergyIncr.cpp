@@ -77,8 +77,8 @@ std::string XC::CTestRelativeEnergyIncr::getStatusMsg(const int &flag) const
     retval+= getRatioMessage("(dX*dR/dX1*dR1)");
     if(flag >= 4)
       {
-        retval+= getDeltaXRNormsMessage();
-        retval+= getDeltaXRMessage();
+        retval+= '\n'+getDeltaXRNormsMessage();
+        retval+= '\n'+getDeltaXRMessage();
       }
     return retval;
   }

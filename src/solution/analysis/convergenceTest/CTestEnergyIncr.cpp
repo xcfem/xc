@@ -77,10 +77,10 @@ XC::ConvergenceTest* XC::CTestEnergyIncr::getCopy(void) const
 std::string XC::CTestEnergyIncr::getStatusMsg(const int &flag) const
   {
     std::string retval= getTestIterationMessage();
-    retval+= " current EnergyIncr: " + std::to_string(getEnergyProduct()) + " (max: " + std::to_string(tol) + ")";
+    retval+= getEnergyProductMessage();
     if(flag >= 4)
       {
-        retval+= getDeltaXRNormsMessage() + getDeltaXRMessage();
+        retval+= '\n'+getDeltaXRNormsMessage() + '\n'+getDeltaXRMessage();
       }
     return retval;
   }
