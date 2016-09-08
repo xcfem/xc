@@ -534,41 +534,38 @@ class paramTensStiffenes(object):
     :ivar nPoints: number of (strain,stress) pairs of values to approximate the exponential decay curve adopted 
     for the post-cracking range (defaults to 50)
     :ivar diagType: type of diagram: 'K' or 'k' for characteristic, 'D' or 'd' for design (defaults to characteristic)
+    :ivar E_c: concrete elastic modulus [Pa] [+] (defaults to concrMat.Ecm())
+    :ivar f_ct: concrete tensile strength [Pa][+] (defaults to concrMat.fctd() or concrMat.fctk())
+    :ivar E_ct: concrete elastic modulus [Pa] [+] in the tensile linear-elastic range (defaults to concrMat.Ect())
+    :ivar E_s: steel elastic modulus [Pa] [+] (defaults to reinfMat.Es)
+    :ivar eps_y: reinforcing steel strain at yield point  [Pa][+] (defaults to reinfMat.eyd() or reinfMat.eyk())
     '''
-
-    nPoints=50
 
     def __init__(self,concrMat,reinfMat,reinfRatio,diagType):
         self.concrMat=concrMat
         self.reinfMat=reinfMat
         self.ro=reinfRatio
         self.diagType=diagType
+        self.nPoints=50
+        self.E_c=concrMat.Ecm()
+        if self.diagType in ['d','D']:
+            self.f_ct=self.concrMat.fctd()
+        else:
+            self.f_ct=self.concrMat.fctk()
+        self.E_ct=self.concrMat.Ect()       
+        self.E_s=self.reinfMat.Es
+        '''Reinforcing steel strain at yield point  [Pa][+]'''
+        if self.diagType in ['d','D']:
+            self.eps_y=self.reinfMat.eyd()
+        else:
+            self.eps_y=self.reinfMat.eyk()
 
     def nu(self):
         ''':returns: steel-to-concrete elastic modulus ratio nu = Es/Ec
         '''
-        retval=self.reinfMat.Es/self.concrMat.Ecm()
+        retval=self.E_s/self.E_c
         return retval
 
-    def fct(self):
-        '''concrete tensile strength [Pa][+]
-        '''
-        if self.diagType in ['d','D']:
-            retval=self.concrMat.fctd()
-        else:
-            retval=self.concrMat.fctk()
-        return retval
-
-
-    def eps_y(self):
-        '''Reinforcing steel strain at yield point  [Pa][+]
-        '''
-        if self.diagType in ['d','D']:
-            retval=self.reinfMat.eyd()
-        else:
-            retval=self.reinfMat.eyk()
-        return retval
-       
     def alfa(self):
         ''':returns: the parameter for the exponential decay curve adopted for the post-cracking range, 
         until yielding of reinforcement takes place
@@ -581,12 +578,12 @@ class paramTensStiffenes(object):
         decay curve adopted for the post-cracking range, until yielding of reinforcement takes place
 
         '''
-        eps_cr=self.fct()/self.concrMat.Ect()           #strain corresponding to concrete tensile strength
-        incr=(self.eps_y()-eps_cr)/(self.nPoints)
-        strainPts=np.arange(eps_cr,self.eps_y()+incr/2,incr).tolist()
+        eps_cr=self.f_ct/self.E_ct           #strain corresponding to concrete tensile strength
+        incr=(self.eps_y-eps_cr)/(self.nPoints)
+        strainPts=np.arange(eps_cr,self.eps_y+incr/2,incr).tolist()
         stressPts=list()
         for eps in strainPts:
-            stress=self.fct()*math.exp(-self.alfa()*eps/eps_cr)
+            stress=self.f_ct*math.exp(-self.alfa()*eps/eps_cr)
             stressPts.append(stress)
         return {'strainPts':strainPts , 'stressPts':stressPts }
 
@@ -608,7 +605,7 @@ class paramTensStiffenes(object):
         '''
         rgLin=self.regresLine()
         r1=geom.Recta2d(geom.Pos2d(rgLin['interceptX'],0.),geom.Pos2d(0,rgLin['interceptY']))
-        r2=geom.Recta2d(geom.Pos2d(0.,0.),geom.Pos2d(self.fct()/self.concrMat.Ect(),self.fct()))
+        r2=geom.Recta2d(geom.Pos2d(0.,0.),geom.Pos2d(self.f_ct/self.E_ct,self.f_ct))
         pInt=r1.getIntersectionWithLine(r2)[0]
         return {'eps_ct':pInt.x, 'ft':pInt.y}
 
