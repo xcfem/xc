@@ -71,10 +71,25 @@ XC::CTestFixedNumIter::CTestFixedNumIter(EntCmd *owr,int maxIter, int printIt, i
   : ConvergenceTest(owr,CONVERGENCE_TEST_CTestFixedNumIter,maxIter,printIt,normType,maxIter)
   {}
 
+//! @brief Virtual constructor.
 XC::ConvergenceTest* XC::CTestFixedNumIter::getCopy(void) const
   { return new CTestFixedNumIter(*this); }
 
-//! @brief Comprueba si se ha producido la convergencia.
+
+//! @brief Returns a message showing the values of the principal parameters.
+std::string XC::CTestFixedNumIter::getStatusMsg(const int &flag) const
+  {
+    std::string retval= getTestIterationMessage();
+    retval+= getEnergyProductMessage();
+    if(flag >= 4)
+      {
+        retval+= '\n'+getDeltaXRNormsMessage();
+        retval+= '\n'+getDeltaXRMessage();
+      }
+    return retval;
+  }
+
+//! @brief Check for convergence.
 int XC::CTestFixedNumIter::test(void)
   {
     // check to ensure the SOE has been set - this should not happen if the 
@@ -85,37 +100,20 @@ int XC::CTestFixedNumIter::test(void)
     // may never get convergence later on in analysis!
     if(currentIter == 0)
       {
-        std::cerr << "WARNING: XC::CTestFixedNumIter::test() - start() was never invoked.\n";	
+        std::cerr << "WARNING: CTestFixedNumIter::test() - start() was never invoked.\n";	
         return -2;
       }
         
     // determine the energy & save value in norms vector
-    const Vector &b= getB();
-    const Vector &x= getX();    
-    double product = x ^ b;
-    if(product < 0.0)
-      product *= -0.5;
-    else
-      product *= 0.5;
+    calculatedEnergyProduct= getEnergyProduct();
     
     if(currentIter <= maxNumIter) 
-      norms(currentIter-1)= product;
+      norms(currentIter-1)= calculatedEnergyProduct;
 
     // print the data if required
-    if(printFlag == 1)
-      {
-        std::clog << "XC::CTestFixedNumIter::test() - iteration: " << currentIter;
-        std::clog << " current EnergyIncr: " << product;
-        std::clog << " (Norm deltaX: " << x.pNorm(nType) << ", Norm deltaR: " << b.pNorm(nType) << ")\n";
-      } 
-    if(printFlag == 4)
-      {
-        std::clog << "XC::CTestFixedNumIter::test() - iteration: " << currentIter;
-        std::clog << " current EnergyIncr: " << product;
-        std::clog << " (Norm deltaX: " << x.pNorm(nType) << ", Norm deltaR: " << b.pNorm(nType) << ")\n";
-        std::clog << "\tdeltaX: " << x << "\tdeltaR: " << b;
-      } 
-    
+    if(printFlag)
+      std::clog << getStatusMsg(printFlag);
+
     //
     // check if the algorithm converged
     //
@@ -130,9 +128,11 @@ int XC::CTestFixedNumIter::test(void)
               std::clog << std::endl;
             else if(printFlag == 2 || printFlag == 6)
               {
-                std::clog << "XC::CTestFixedNumIter::test() - iteration: " << currentIter;
-                std::clog << " last EnergyIncr: " << product;
-                std::clog << " (Norm deltaX: " << x.pNorm(nType) << ", Norm deltaR: " << b.pNorm(nType) << ")\n";
+                std::clog << getTestIterationMessage();
+                std::clog << " last EnergyIncr: " << calculatedEnergyProduct;
+		calculatedNormX= getNormX(); //Update values.
+		calculatedNormB= getNormB();
+                std::clog << " (" << getDeltaXRNormsMessage() << ")\n";
               }
           }
         // return the number of times test has been called
@@ -147,3 +147,13 @@ int XC::CTestFixedNumIter::test(void)
   }
 
 
+//! @brief Display current energy product and tolerance.
+std::string XC::CTestFixedNumIter::getEnergyProductMessage(void) const
+  {
+    std::ostringstream retval; 
+    calculatedNormX= getNormX(); //Update values.
+    calculatedNormB= getNormB();
+    retval << " current EnergyIncr: " << calculatedEnergyProduct
+	   << " (" << getDeltaXRNormsMessage() << ")";
+    return retval.str();
+  }

@@ -200,6 +200,9 @@ class Matrix: public EntCmd
 
 
     friend std::ostream &operator<<(std::ostream &s, const Matrix &M);
+    friend std::string to_string(const Matrix &);
+    inline std::string toString(void) const
+      { return to_string(*this); }
     //    friend istream &operator>>(istream &s, Matrix &M);    
     friend Matrix operator*(double a,const Matrix &M);    
     
@@ -207,7 +210,6 @@ class Matrix: public EntCmd
 
 Matrix m_double_to_matrix(const m_double &m);
 m_double matrix_to_m_double(const Matrix &m);
-//Matrix interpreta_xc_matriz(const std::string &str);
 Matrix identity(const Matrix &m);
 
 

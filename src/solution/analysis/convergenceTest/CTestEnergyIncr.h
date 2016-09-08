@@ -78,6 +78,7 @@ class CTestEnergyIncr: public ConvergenceTestTol
     CTestEnergyIncr(EntCmd *owr,double tol, int maxNumIter, int printFlag, int normType =2);
 
     ConvergenceTest *getCopy(void) const;
+    virtual std::string getStatusMsg(const int &flag= 1) const;
     int test(void);
   };
 } // end of XC namespace

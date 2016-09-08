@@ -77,6 +77,7 @@ class CTestNormDispIncr: public ConvergenceTestTol
 
     ConvergenceTest *getCopy(void) const;
     
+    virtual std::string getStatusMsg(const int &flag= 1) const;
     int test(void);
   };
 } // end of XC namespace

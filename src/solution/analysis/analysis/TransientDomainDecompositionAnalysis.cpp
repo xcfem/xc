@@ -158,8 +158,8 @@ int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
     result = getTransientIntegratorPtr()->commit();
     if(result < 0)
       {
-        std::cerr << "XC::TransientDomainDecompositionAnalysis::analyze() - ";
-        std::cerr << "the XC::Integrator failed to commit";
+        std::cerr << "TransientDomainDecompositionAnalysis::analyze() - ";
+        std::cerr << "the Integrator failed to commit";
         std::cerr << " with domain at load factor ";
         std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
         the_Domain->revertToLastCommit();	    

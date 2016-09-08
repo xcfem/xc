@@ -56,9 +56,9 @@
 // Revised:
 //
 // Purpose: This file contains the class implementation for XC::CTestEnergyIncr.
-// A XC::CTestEnergyIncr object tests for convergence using the energy increment,
+// A CTestEnergyIncr object tests for convergence using the energy increment,
 // which is 0.5 times the absolute value of the product of the rhs and 
-// the solution vector of the XC::LinearSOE.
+// the solution vector of the LinearSOE.
 
 #include <solution/analysis/convergenceTest/CTestEnergyIncr.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/EquiSolnAlgo.h>
@@ -72,6 +72,18 @@ XC::CTestEnergyIncr::CTestEnergyIncr(EntCmd *owr,double theTol, int maxIter, int
 
 XC::ConvergenceTest* XC::CTestEnergyIncr::getCopy(void) const
   { return new CTestEnergyIncr(*this); }
+
+//! @brief Returns a message showing the values of the principal parameters.
+std::string XC::CTestEnergyIncr::getStatusMsg(const int &flag) const
+  {
+    std::string retval= getTestIterationMessage();
+    retval+= getEnergyProductMessage();
+    if(flag >= 4)
+      {
+        retval+= '\n'+getDeltaXRNormsMessage() + '\n'+getDeltaXRMessage();
+      }
+    return retval;
+  }
 
 //! @brief Comprueba si se ha producido la convergencia.
 int XC::CTestEnergyIncr::test(void)
@@ -89,37 +101,21 @@ int XC::CTestEnergyIncr::test(void)
       }
     
     // determine the energy & save value in norms vector
-    const Vector &b= getB();
-    const Vector &x= getX();
-    double product = x ^ b;
-    if(product < 0.0)
-      product *= -0.5;
-    else
-      product *= 0.5;
+    calculatedEnergyProduct= getEnergyProduct();
     
     if(currentIter <= maxNumIter) 
-      norms(currentIter-1) = product;
+      norms(currentIter-1)= calculatedEnergyProduct;
     
     // print the data if required
-    if(printFlag == 1)
-      {
-        std::clog << "XC::CTestEnergyIncr::test() - iteration: " << currentIter;
-        std::clog << " current EnergyIncr: " << product << " (max: " << tol << ")\n";
-      }
-    if(printFlag == 4)
-      {
-        std::clog << "XC::CTestEnergyIncr::test() - iteration: " << currentIter;
-        std::clog << " current EnergyIncr: " << product << " (max: " << tol << ")\n";
-        std::clog << "\tNorm deltaX: " << x.pNorm(nType) << ", Norm deltaR: " << b.pNorm(nType) << std::endl;
-        std::clog << "\tdeltaX: " << x << "\tdeltaR: " << b;
-      }
+    if(printFlag)
+      std::clog << getStatusMsg(printFlag);
     
     //
     // check if the algorithm converged
     //
     
     // if converged - print & return ok
-    if(product <= tol)
+    if(calculatedEnergyProduct <= tol)
       {
         // do some printing first
         if(printFlag != 0)
@@ -128,8 +124,8 @@ int XC::CTestEnergyIncr::test(void)
               std::clog << std::endl;
             else if(printFlag == 2 || printFlag == 6)
               {
-                std::clog << "XC::CTestEnergyIncr::test() - iteration: " << currentIter;
-                std::clog << " last EnergyIncr: " << product << " (max: " << tol << ")\n";
+                std::clog << getTestIterationMessage();
+                std::clog << getEnergyProductMessage();
               }
           }
         // return the number of times test has been called - SUCCESSFULL
@@ -138,17 +134,18 @@ int XC::CTestEnergyIncr::test(void)
     // algo failed to converged after specified number of iterations - but RETURN OK
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
-        std::cerr << "WARNING: XC::CTestEnergyIncr::test() - failed to converge but goin on -";
-        std::cerr << " current EnergyIncr: " << product << " (max: " << tol << ")\n";
-        std::cerr << "\tNorm deltaX: " << x.pNorm(nType) << ", Norm deltaR: " << b.pNorm(nType) << std::endl;
+        std::cerr << "WARNING: CTestEnergyIncr::test() - failed to converge but goin on -";
+        std::cerr << getEnergyProductMessage();
+        calculatedNormX= getNormX(); //Update values.
+	calculatedNormB= getNormB();
+        std::cerr << getDeltaXRNormsMessage() << std::endl;
         return currentIter;
       }
     // algo failed to converged after specified number of iterations - return FAILURE -2
     else if(currentIter >= maxNumIter)
       { // >= in case algorithm does not check
-        std::cerr << "WARNING: XC::CTestEnergyIncr::test() - failed to converge \n";
-        std::cerr << "after: " << currentIter << " iterations\n";	
-        currentIter++;    
+        std::cerr << getFailedToConvergeMessage();
+        currentIter++;
         return -2;
       } 
     // algorithm not yet converged - increment counter and return -1

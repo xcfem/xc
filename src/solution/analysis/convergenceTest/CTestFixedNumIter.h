@@ -78,6 +78,8 @@ class CTestFixedNumIter: public ConvergenceTest
     
     ConvergenceTest *getCopy(void) const;
     
+    virtual std::string getStatusMsg(const int &flag= 1) const;
+    std::string getEnergyProductMessage(void) const;
     int test(void);
   };
 } // end of XC namespace
