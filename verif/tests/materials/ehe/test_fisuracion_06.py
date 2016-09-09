@@ -16,8 +16,6 @@ from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 from materials.fiber_section import defSeccionHASimple
 from materials.ehe import areaBarrasEHE
-# from materials import paramRectangularSection
-
 
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
