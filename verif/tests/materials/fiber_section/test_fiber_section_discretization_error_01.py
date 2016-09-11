@@ -26,10 +26,12 @@ preprocessor=  prueba.getPreprocessor
 E= 2.1e6 # Módulo de Young del acero.
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
-# Section
+# Section geometry
+# setting up
 geomSCC= preprocessor.getMaterialLoader.newSectionGeometry("geomSCC")
 y1= width/2.0
 z1= depth/2.0
+#filling with regions
 regiones= geomSCC.getRegions
 rg= regiones.newQuadRegion("elast")
 rg.nDivIJ= 1

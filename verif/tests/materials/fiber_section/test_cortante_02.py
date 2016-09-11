@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de la comprobación a cortante de una sección de hormigón armado.
-   Algunos resultados se comparan con los obtenidos del ejercicio ER-CA-02 de
-   www.areadecalculo.com. Los cálculos se hacen según la norma EHE-08. '''
-
-# Macros
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__cppyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
+''' Test for checking the shear-strength verificacion of a reinforced concrete section.
+   Some comparison values are obtained from example ER-CA-02 of
+   www.areadecalculo.com. Calculation is carried on according to EHE-08 standard. '''
+
+
 import xc_base
 import geom
 import xc
@@ -24,18 +31,19 @@ from materials import typical_materials
 from model import fix_node_6dof
 import math
 
-# Coeficientes de seguridad.
-gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
+# Data
 
-width= 0.4 # Ancho de la sección expresado en metros.
-depth= 0.6 # Canto de la sección expresado en metros.
-cover= 0.05 # Recubrimiento de la sección expresado en metros.
+gammac= 1.5  # Concrete safety coefficient
+gammas= 1.15 # Steel safety coefficient
 
-NDato= 0 # Axil para comprobar el cortante.
+width= 0.4  # Cross-section width [m]
+depth= 0.6  # Cross-section depth [m]
+cover= 0.05 # Cover [m]
+
+NDato= 0         # Axil para comprobar el cortante.
 MyDato= 1.9606e5 # Momento para comprobar el cortante su valor se fuerza para obtener Vcu aproximadamente igual a 82.607 kN.
-MzDato= 0 # Momento para comprobar el cortante.
-VDato= 125e3 # Momento para comprobar el cortante.
+MzDato= 0        # Momento para comprobar el cortante.
+VDato= 125e3     # Momento para comprobar el cortante.
 
 # Armadura longitudinal
 areaBarra= areaBarrasEHE.Fi20
@@ -50,6 +58,7 @@ preprocessor=  prueba.getPreprocessor
 # Materials definition
 materiales= preprocessor.getMaterialLoader
 
+# Materials definition
 concr= EHE_concrete.HA30
 concr.alfacc=0.85    # f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
 concrMatTag30= concr.defDiagD(preprocessor)
@@ -59,9 +68,14 @@ tagB500S= B500S.defDiagD(preprocessor)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respuesta de la sección a cortante según y.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Respuesta de la sección a cortante según y.
+
+
+# Section geometry
+# setting up
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
-rg= regiones.newQuadRegion(concr.nmbDiagD)
+#filling with regions
+rg= regiones.newQuadRegion(concr.nmbDiagD)  #the name assigned to the region is the string concr.nmbDiagD
 rg.nDivIJ= 10
 rg.nDivJK= 10
 rg.pMin= geom.Pos2d(-width/2.0,-depth/2.0)

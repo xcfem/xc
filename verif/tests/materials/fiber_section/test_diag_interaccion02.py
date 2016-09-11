@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento del cálculo del diagrama de interacción.
-   Elaboración propia. '''
 
-# Macros
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__cppyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
+# Test for checking the interaction diagram
+
 import xc_base
 import geom
 import xc
@@ -11,20 +16,20 @@ nmbHorm= "HA25"
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 
-# Coeficientes de seguridad.
-gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
+# Data
+gammac= 1.5  # Concrete safety coefficient
+gammas= 1.15 # Steel safety coefficient
 
-width= 0.5 # Ancho de la sección expresado en metros.
-depth= 0.75 # Ancho de la sección expresado en metros.
-cover= 0.06 # Recubrimiento de la sección expresado en metros.
-diam= 20e-3 # Diámetro de las barras expresado en metros.
-areaFi20= 3.14e-4 # Área de las barras expresado en metros cuadrados.
+width= 0.5  # Cross-section width [m]
+depth= 0.75 # Cross-section depth [m]
+cover= 0.06 # Cover [m]
+diam= 20e-3 # Diameter of rebars [m]
+areaFi20= 3.14e-4 # Rebars cross-section area [m2]
 
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-# Definimos materiales
+# Materials definition
 concr=EHE_concrete.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
 concrMatTag25= concr.defDiagD(preprocessor)
@@ -32,13 +37,21 @@ Ec= concr.getDiagD(preprocessor).getTangent
 tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 Es= EHE_reinforcing_steel.B500S.getDiagD(preprocessor).getTangent
 
+# Section geometry
+# setting up
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
+#filling with regions
 regiones= geomSecHA.getRegions
-hormigon= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagD)
+
+#generation of a quadrilateral region with the specified sizes and number of
+#divisions for the cells (fibers) generation
+hormigon= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagD)  #name of the region: EHE_concrete.HA25.nmbDiagD
 hormigon.nDivIJ= 10
 hormigon.nDivJK= 10
 hormigon.pMin= geom.Pos2d(-depth/2.0,-width/2.0)
 hormigon.pMax= geom.Pos2d(depth/2.0,width/2.0)
+
+#generation of reinforcement layers 
 reinforcement= geomSecHA.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 reinforcementInf.numReinfBars= 6

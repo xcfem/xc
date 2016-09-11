@@ -43,4 +43,4 @@ def gmSecHA01(nmbGeomSecc,defSec,concrDiagName,nmbDiagAceroArmar):
   return geomSecc
 
 
-geomSecHormigon01= gmSecHA01("geomSecHormigon01",defSec,EHE_concrete.HA25.nmbDiagD,EHE_reinforcing_steel.B500S.nmbDiagD)
+geomSecHormigon01= gmSecHA01(nmbGeomSecc="geomSecHormigon01",defSec=defSec,concrDiagName=EHE_concrete.HA25.nmbDiagD,nmbDiagAceroArmar=EHE_reinforcing_steel.B500S.nmbDiagD)

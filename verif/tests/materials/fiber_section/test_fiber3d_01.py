@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__cppyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
 # Testing fiber section model of Steel01 uniaxial material.
 
 import xc_base
@@ -32,10 +39,11 @@ nodes.defaultTag= 1 #First node number.
 nod1= nodes.newNodeXY(1,0)
 nod2= nodes.newNodeXY(1,0)
 
-# Materials definition
+# Materials definition: uniaxial bilinear steel
 fy= 2600 # Yield stress.
 E= 2.1e6 # Young modulus.
-acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
+b=0.001    # strain-hardening ratio: ratio between post-yield tangent and initial elastic tangent
+acero= typical_materials.defSteel01(preprocessor=preprocessor,name="acero",E=E,fy=fy,b=b)
 
 # Secciones
 import os
