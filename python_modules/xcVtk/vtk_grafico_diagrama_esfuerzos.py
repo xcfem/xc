@@ -3,6 +3,12 @@
 ''' Representación de diagramas de esfuerzos (o de otras magnitudes)
    sobre elementos lineales. '''
 
+__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, AOO and LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
+
 import geom
 import vtk
 from xcVtk import ColoredDiagram as cd
@@ -10,6 +16,14 @@ from xcVtk import ColoredDiagram as cd
 class RecordDefDiagramaEsf(cd.ColoredDiagram):
   '''Diagram of internal forces (N,My,Mz,T,Vy,Vz)'''
   def __init__(self,scale,fUnitConv,sets,component):
+    ''' Diagram constructor
+
+        :param scale: scale factor for the diagram (can be negative too).
+        :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3.
+        :param sets: list of element sets where the diagram will be displayed.
+        :param component: magnitude to display (N, My, Vz,...)
+    '''
+
     super(RecordDefDiagramaEsf,self).__init__(scale,fUnitConv)
     self.conjuntos= sets
     self.component= component
