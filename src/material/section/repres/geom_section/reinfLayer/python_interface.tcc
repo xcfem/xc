@@ -22,7 +22,7 @@
 //python_interface.tcc
 XC::VectorReinfBar &(XC::ReinfLayer::*getReinfBarsRef)(void)= &XC::ReinfLayer::getReinfBars;
 class_<XC::ReinfLayer,XC::ReinfLayer *, bases<XC::DiscretBase>, boost::noncopyable >("ReinfLayer", no_init)
-  .add_property("numReinfBars",&XC::ReinfLayer::getNumReinfBars,&XC::ReinfLayer::setNumReinfBars,"Number of bars.")
+  .add_property("numReinfBars",&XC::ReinfLayer::getNumReinfBars,&XC::ReinfLayer::setNumReinfBars,"Number of bars along layer guideline.")
   .add_property("barDiameter",make_function(&XC::ReinfLayer::getReinfBarDiameter, return_value_policy<return_by_value>()),&XC::ReinfLayer::setReinfBarDiameter,"Diameter of bars.")
   .add_property("barArea",make_function(&XC::ReinfLayer::getReinfBarArea, return_value_policy<return_by_value>()),&XC::ReinfLayer::setReinfBarArea,"Area of bars.")
   .add_property("getReinfBars",make_function(getReinfBarsRef,return_internal_reference<>()),"Returns reinforcement bars.")

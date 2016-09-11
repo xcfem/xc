@@ -49,8 +49,8 @@ class ListReinfLayer;
 class FiberData
   {
     std::vector<Material *> fibersMaterial; //!< Material pointers for cells and rebars.
-    Matrix fibersPosition; //! Cell and rebar positions.
-    Vector fibersArea; //! Cell and rebar areas.
+    Matrix fibersPosition; //!< Cell and rebar positions.
+    Vector fibersArea; //!< Cell and rebar areas.
     size_t put_cells(const size_t &,const VectorCells &,Material *);
     size_t put_reinf_bars(const size_t &,const VectorReinfBar &,Material *);
 

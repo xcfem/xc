@@ -67,8 +67,6 @@
 #include <iostream>
 #include "xc_basic/src/matrices/m_double.h"
 
-//#include "xc_utils/src/nucleo/MatrizAny.h"
-
 //#include <boost/any.hpp>
 
 #include "AuxMatrix.h"

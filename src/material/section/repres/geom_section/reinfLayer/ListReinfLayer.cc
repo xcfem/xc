@@ -77,7 +77,11 @@ XC::ListReinfLayer &XC::ListReinfLayer::operator=(const ListReinfLayer &otro)
 
 XC::StraightReinfLayer *XC::ListReinfLayer::newStraightReinfLayer(const std::string &cod_mat)
   {
-    StraightReinfLayer tmp(this,material_loader->find_ptr(cod_mat));
+    XC::Material *materialPtr= material_loader->find_ptr(cod_mat);
+    if(!materialPtr)
+      std::clog << "ListReinfLayer::newStraightReinfLayer WARNING; material: '"
+	        << cod_mat << "' not found." << std::endl;
+    StraightReinfLayer tmp(this, materialPtr);
     ReinfLayer *ptr= push_back(tmp);
     ptr->set_owner(this);
     return dynamic_cast<StraightReinfLayer *>(ptr);

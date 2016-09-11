@@ -28,7 +28,6 @@
 
 #include "FiberSectionBase.h"
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/nucleo/CmdParser.h"
 
 
 

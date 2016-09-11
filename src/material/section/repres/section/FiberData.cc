@@ -156,7 +156,7 @@ void XC::FiberData::getFibras2d(contenedor_fibras &retval) const
               retval.push_back(tmp_fiber);
           }
         else
-	  std::cerr << "La fibra: " << k << " no tiene asignado material." << std::endl;
+	  std::cerr << "FiberData::getFibras2d; material for fiber: " << k << " is not defined." << std::endl;
       }
   }
 
@@ -194,7 +194,7 @@ void XC::FiberData::getFibras3d(contenedor_fibras &retval) const
               retval.push_back(tmp_fiber);
           }
         else
-	  std::cerr << "La fibra: " << k << " no tiene asignado material." << std::endl;
+	  std::cerr << "FiberData::getFibras3d; material for fiber: " << k << " is not defined." << std::endl;
         //std::cerr << *retval[k];
       }
   }
