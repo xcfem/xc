@@ -33,7 +33,6 @@
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
 #include "xc_utils/src/geom/d2/SectorCircular3d.h"
-#include "xc_utils/src/nucleo/CmdParser.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"

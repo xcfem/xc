@@ -50,8 +50,6 @@
 #include "xc_utils/src/geom/d2/Plano3d.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
 
-#include "xc_utils/src/nucleo/CmdParser.h"
-
 #include "boost/lexical_cast.hpp"
 
 
