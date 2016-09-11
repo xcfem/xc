@@ -125,7 +125,7 @@ double XC::StraightReinfLayer::getMinZ(void) const
     return retval;
   }
 
-//! @brief Devuelve un array de barras de refuerzo.
+//! @brief Returns an array of reinforcement bars.
 const XC::VectorReinfBar &XC::StraightReinfLayer::getReinfBars(void) const
   {
     Vector barPosit(2);
