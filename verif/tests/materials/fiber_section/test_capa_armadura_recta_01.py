@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento del comando capa_reinforcement_recta
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__cppyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
+# Test for checking the straight reinforcement layer
 import xc_base
 import geom
 import xc
@@ -28,10 +35,12 @@ nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(1,0)
 nod= nodes.newNodeXY(1,0)
 
-# Materials definition
-fy= 2600 # Tensión de cedencia del acero.
-E= 2.1e6 # Módulo de Young del acero.
-acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
+# Materials definition: uniaxial bilinear steel
+fy= 2600   # yield strength
+E= 2.1e6   # initial elastic tangent
+b=0.001    # strain-hardening ratio: ratio between post-yield tangent and initial elastic tangent
+acero= typical_materials.defSteel01(preprocessor=preprocessor,name="acero",E=E,fy=fy,b=b)
+
 
 geomCuadFibras= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibras")
 y1= width/2.0

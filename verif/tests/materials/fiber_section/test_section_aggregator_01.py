@@ -16,11 +16,13 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
+# Section geometry
+# creation
 scc10x20= sccRectg.sccRectang()
-scc10x20.b= 10 # Cross section width expresado en cm.
-scc10x20.h= 20 # Cross section heightexpresado en cm.
-scc10x20.nDivIJ= 32
-scc10x20.nDivJK= 32
+scc10x20.b= 10 # Cross-section width [cm]
+scc10x20.h= 20 # Cross-section height [cm]
+scc10x20.nDivIJ= 32 # number of cells in IJ direction  
+scc10x20.nDivJK= 32 # number of cells in JK direction
 
 import os
 pth= os.path.dirname(__file__)
@@ -30,19 +32,22 @@ if(not pth):
 execfile(pth+"/macros_test_fiber_section.py")
 
 
-fy= 2600 # Tensión de cedencia del material expresada en kp/cm2.
-E= 2.1e6 # Módulo de Young del material en kp/cm2.
+fy= 2600 # yield stress [kp/cm2]
+E= 2.1e6 # initial elastic tangent [kp/cm2.
 
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # No warning messages
 preprocessor=  prueba.getPreprocessor
 # Materials definition
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respuesta de la sección a cortante según y.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Respuesta de la sección a cortante según y.
-# Secciones
+
+# Section geometry
+#creation
 geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
+
 reg= scc10x20.discretization(geomRectang,"epp")
 rectang= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()

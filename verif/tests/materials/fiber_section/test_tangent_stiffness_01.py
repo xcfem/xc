@@ -16,8 +16,14 @@ preprocessor=  prueba.getPreprocessor
 # Definimos materiales
 
 ela= typical_materials.defElasticMaterial(preprocessor, "ela",E)
+
+# Section geometry
+# setting up
 geomScc= preprocessor.getMaterialLoader.newSectionGeometry("geomScc")
+#filling with regions
 regiones= geomScc.getRegions
+#generation of a quadrilateral region with the specified size and number of
+#divisions for the cells (fibers) generation
 regEla= regiones.newQuadRegion("ela")
 regEla.nDivIJ= 11
 regEla.nDivJK= 11

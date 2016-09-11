@@ -53,6 +53,13 @@ class sccRectang(object):
     return 2*self.S2PosG()*fy
 
   def discretization(self,gm,nmbMat):
+    '''generation of a quadrilateral region from the rectangular section 
+    geometry (sizes and number of divisions for the cells)
+    made of the specified material
+   
+    :param gm: object of type section_geometry
+    :param nmbMat: name of the material (string)
+    '''
     regiones= gm.getRegions
     reg= regiones.newQuadRegion(nmbMat)
     reg.nDivIJ= self.nDivIJ

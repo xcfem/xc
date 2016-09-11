@@ -60,13 +60,20 @@ tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
 dgDB500S= EHE_reinforcing_steel.B500S.getDiagD(preprocessor)
 #Es= dgDB500S.getTangent
 
+# Section geometry
+#creation
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
+#filling with regions
 regiones= geomSecHA.getRegions
-rg= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagD)
+#generation of a quadrilateral region of the specified sizes and number of
+#divisions for the cells (fibers) generation
+rg= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagD)  #name of the quadrilateral region ==(EHE_concrete.HA25.nmbDiagD
 rg.nDivIJ= 10
 rg.nDivJK= 10
 rg.pMin= geom.Pos2d(-depth/2,-width/2)
 rg.pMax= geom.Pos2d(depth/2,width/2)
+
+
 reinforcement= geomSecHA.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
 reinforcementInf.numReinfBars= 2

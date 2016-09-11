@@ -53,9 +53,12 @@ epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy) #elast
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respuesta de la sección a cortante según y.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Respuesta de la sección a cortante según y.
-# Secciones
+# Section geometry
+#creation
 geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
-reg= scc10x20.discretization(geomRectang,"epp")
+#generation of a quadrilateral region of the scc10x20 sizes and number of
+#divisions made of material nmbMat
+reg= scc10x20.discretization(gm=geomRectang,nmbMat="epp")
 sa= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d","sa")
 fiberSectionRepr= sa.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")

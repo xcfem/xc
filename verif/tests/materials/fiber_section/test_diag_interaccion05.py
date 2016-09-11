@@ -19,8 +19,8 @@ from materials.ehe import EHE_reinforcing_steel
 import math
 
 # Coeficientes de seguridad.
-gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
+gammac= 1.5  # concrete safety coefficient
+gammas= 1.15 # reinforcement steel safety coefficient
 
 radius= 0.75/2.0 # Radio de la sección expresado en metros.
 diam= 20e-3 # Diámetro de las barras expresado en metros.
@@ -30,7 +30,7 @@ areaFi20= math.pi*(diam/2.0)**2 # Área de las barras expresado en metros cuadra
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-# Definimos materiales
+# Materials definition
 concr=EHE_concrete.HA30
 concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
 concrMatTag30= concr.defDiagD(preprocessor)
