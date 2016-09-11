@@ -23,7 +23,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 
 # Materials definition
-E= 2.1e6 # Módulo de Young del acero.
+E= 2.1e6 # Elastic modulus
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
 # Section geometry
@@ -33,6 +33,8 @@ y1= width/2.0
 z1= depth/2.0
 #filling with regions
 regiones= geomSCC.getRegions
+#generation of a quadrilateral region of the specified sizes and number of
+#divisions for the cells (fibers) generation
 rg= regiones.newQuadRegion("elast")
 rg.nDivIJ= 1
 rg.nDivJK= 23

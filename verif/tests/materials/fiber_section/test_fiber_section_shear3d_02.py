@@ -28,8 +28,8 @@ if(not pth):
 #print "pth= ", pth
 execfile(pth+"/macros_test_fiber_section.py")
 
-fy= 2600 # Tensión de cedencia del material expresada en kp/cm2.
-E= 1e6 # Módulo de Young del material en kp/cm2.
+fy= 2600 # yield strength [kp/cm2].
+E= 1e6   # elastic moculus [kp/cm2].
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
@@ -39,7 +39,9 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e6) # Respuesta de la sección a torsión.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respuesta de la sección a cortante según y.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e6) # Respuesta de la sección a cortante según y.
-# Secciones
+
+# Section geometry
+#creation
 geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
 reg= scc1x1.discretization(geomRectang,"elast")
 sa= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d","sa")

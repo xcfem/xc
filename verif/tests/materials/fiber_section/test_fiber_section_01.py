@@ -17,8 +17,8 @@ prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 
 # Rectangular cross-section definition
 scc10x20= sccRectg.sccRectang()
-scc10x20.b= 10 # Cross section width expresado en cm.
-scc10x20.h= 20 # Cross section heightexpresado en cm.
+scc10x20.b= 10 # Cross section width  [cm]
+scc10x20.h= 20 # Cross section height [cm]
 scc10x20.nDivIJ= 32
 scc10x20.nDivJK= 32
 
@@ -32,10 +32,15 @@ execfile(pth+"/macros_test_fiber_section.py")
 fy= 2600 # Tensión de cedencia del material expresada en kp/cm2.
 E= 2.1e6 # Módulo de Young del material en kp/cm2.
 
-# Definimos materiales
+# Materials definition:
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
+
+# Section geometry
+# creation
 geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
-reg= scc10x20.discretization(geomRectang,"epp")
+#generation of a quadrilateral region of the scc10x20 sizes and number of
+#divisions made of material nmbMat
+reg= scc10x20.discretization(gm=geomRectang,nmbMat="epp")
 rectang= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")

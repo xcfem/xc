@@ -13,10 +13,10 @@ import geom
 import xc
 from materials import typical_materials
 
-width= 10
-depth= 20
-nDivIJ= 32
-nDivJK= 32
+width= 10 # Cross-section width [cm]
+depth= 20 # Cross-section height [cm]
+nDivIJ= 32 # number of cells in IJ direction
+nDivJK= 32 # number of cells in JK direction
 nFibTeor= nDivIJ*nDivJK
 areaTeor= width*depth
 iyTeor= 1/12.0*width*depth**3
@@ -34,7 +34,7 @@ b=0.001    # strain-hardening ratio: ratio between post-yield tangent and initia
 acero= typical_materials.defSteel01(preprocessor=preprocessor,name="acero",E=E,fy=fy,b=b)
 
 # Section geometry
-#creation
+# creation
 geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
 y1= width/2.0
 z1= depth/2.0
