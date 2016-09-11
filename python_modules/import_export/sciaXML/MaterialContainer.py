@@ -22,6 +22,11 @@ idMaterialContainer= mp.containerId
 tMaterialContainer= mp.containerProgId
 
 class MaterialTable(tb.TableXMLNodes):
+  '''Material XML table
+  Attributes:
+    tableId:      Table identifier.
+    tableProgId:  Another identifier (redundant?).
+  '''
   def __init__(self,matProperties):
     tableId= matProperties.TableId
     tableProgId= matProperties.TableProgId
@@ -32,6 +37,12 @@ class MaterialTable(tb.TableXMLNodes):
     
 
 class MaterialContainer(ctr.Container):
+  '''Material container
+  Attributes:
+    tableGeneric:      Table containing generic materials.
+    tableSteelSIA:     Table containing steel material as defined in SIA code.
+    tableConcreteSIA:  Table containing concrete material as defined in SIA code.
+  '''
   def __init__(self):
     super(MaterialContainer,self).__init__(idMaterialContainer,tMaterialContainer)
     self.tableGeneric= MaterialTable(mp.MaterialProperties.tableGeneric)
