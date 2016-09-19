@@ -86,8 +86,6 @@ class Vector: public EntCmd
     int fromFree;
     void libera(void);
     void alloc(const size_t &sz);
-  protected:
-
   public:
     // constructors and destructor
     Vector();
@@ -297,7 +295,7 @@ Vector & Vector::operator=(const TNSR &V)
       {
         if(sz != 1)
            {
-             std::cerr << "XC::Vector::operator=() - Vector size must be 1\n"; 
+             std::cerr << "Vector::operator=() - Vector size must be 1\n"; 
              return *this;
            }
         theData[0]= V.cval(1,1);
@@ -306,7 +304,7 @@ Vector & Vector::operator=(const TNSR &V)
       {
         if(sz != 3)
           {
-            std::cerr << "XC::Vector::operator=() - Vector size must be 3\n"; 
+            std::cerr << "Vector::operator=() - Vector size must be 3\n"; 
             return *this;
           }
         theData[0]= V.cval(1,1);
@@ -317,7 +315,7 @@ Vector & Vector::operator=(const TNSR &V)
       {
         if(sz != 6)
           {
-            std::cerr << "XC::Vector::operator=() - Vector size must be 6\n"; 
+            std::cerr << "Vector::operator=() - Vector size must be 6\n"; 
             return *this;
           }      
         theData[0]= V.cval(1,1);

@@ -22,7 +22,8 @@
 //python_interface.tcc
 
 class_<XC::DomainComponent, bases<XC::TaggedObject>, boost::noncopyable >("DomainComponent", no_init)
-  .add_property("getIdx", &XC::DomainComponent::getIdx)
+  .add_property("getIdx", &XC::DomainComponent::getIdx,"Returns an index for use in VTK arrays.")
+  .add_property("getDomain", make_function( &XC::DomainComponent::getDomain, return_internal_reference<>() ),"Returns a reference to the domain.")
   ;
 
 class_<XC::ContinuaReprComponent, bases<XC::DomainComponent>, boost::noncopyable >("ContinuaReprComponent", no_init)

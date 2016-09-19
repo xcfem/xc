@@ -123,4 +123,29 @@ class FreeLoadContainer(LoadContainerBase):
 
   def dumpSurfaceLoads(self, lp, destLoadCase):
     '''Dump loads over elements.'''
-    print 'dumpSurfaceLoads not implemented.'
+    print '******** continue implementation of dumpSurfaceLoads. ********'
+    domain= lp.getDomain
+    preprocessor= lp.getDomain.getPreprocessor
+    lIter= lp.getElementalLoadIter
+    el= lIter.next()
+    while el:
+      setName= 'surfaceLoadSet'+str(el.tag)
+      surfaceLoadSet= preprocessor.getSets.defSet(setName)
+      print 'setName= ', setName
+      elemTags= el.elementTags
+      print 'len(elemTags)= ', len(elemTags)
+      print 'elemTags= ', elemTags
+      for tag in range(0,len(elemTags)):
+        print 'tag= ', tag
+      # for tag in elemTags:
+      #   print 'tag= ', tag
+      #   elem= domain.getMesh.getElement(tag)
+      #   if(elem):
+      #     surfaceLoadSet.getElements.append(elem)
+      #   else:
+      #     print 'element: ', tag, ' not found.'
+
+      # for i in range(0,len(tags)):
+      #   eLoad.tags.append(tags[i])
+      el= lIter.next()
+

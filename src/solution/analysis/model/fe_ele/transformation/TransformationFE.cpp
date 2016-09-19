@@ -64,6 +64,7 @@
 #include <solution/analysis/integrator/Integrator.h>
 #include "domain/domain/subdomain/Subdomain.h"
 #include <solution/analysis/model/AnalysisModel.h>
+#include <utility/matrix/IntPtrWrapper.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <solution/analysis/handler/TransformationConstraintHandler.h>
@@ -193,7 +194,7 @@ const XC::Matrix &XC::TransformationFE::getTangent(Integrator *theNewIntegrator)
   {
     const Matrix &theTangent = this->FE_Element::getTangent(theNewIntegrator);
 
-    static ID numDOFs(dofData.getDataPtr(), 1);
+    static IntPtrWrapper numDOFs(dofData.getDataPtr(), 1);
     numDOFs.setData(dofData.getDataPtr(), numGroups);
     
     // DO THE SP STUFF TO THE TANGENT 
@@ -355,7 +356,7 @@ const XC::Vector &XC::TransformationFE::getK_Force(const XC::Vector &accel, doub
   this->FE_Element::addKtToTang();    
   const Matrix &theTangent = this->XC::FE_Element::getTangent(0);
 
-  static ID numDOFs(dofData.getDataPtr(), 1);
+  static IntPtrWrapper numDOFs(dofData.getDataPtr(), 1);
   numDOFs.setData(dofData.getDataPtr(), numGroups);
     
   // DO THE SP STUFF TO THE TANGENT 
@@ -467,7 +468,7 @@ const XC::Vector &XC::TransformationFE::getM_Force(const Vector &accel, double f
     this->FE_Element::addMtoTang();    
     const Matrix &theTangent = this->FE_Element::getTangent(0);
 
-    static ID numDOFs(dofData.getDataPtr(), 1);
+    static IntPtrWrapper numDOFs(dofData.getDataPtr(), 1);
     numDOFs.setData(dofData.getDataPtr(), numGroups);
     
     // DO THE SP STUFF TO THE TANGENT 
@@ -580,7 +581,7 @@ const XC::Vector &XC::TransformationFE::getC_Force(const XC::Vector &accel, doub
   this->FE_Element::addCtoTang();    
   const Matrix &theTangent = this->XC::FE_Element::getTangent(0);
 
-  static ID numDOFs(dofData.getDataPtr(), 1);
+  static IntPtrWrapper numDOFs(dofData.getDataPtr(), 1);
   numDOFs.setData(dofData.getDataPtr(), numGroups);
     
   // DO THE SP STUFF TO THE TANGENT 

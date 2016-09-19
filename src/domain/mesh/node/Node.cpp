@@ -379,9 +379,8 @@ void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &val
 //! que se pasan como parámetro.
 void XC::Node::fix(const ID &idGdls,const Vector &valores)
   {
-    std::vector<int> ids= id_to_std_vector(idGdls);
     std::vector<double> vs= vector_to_std_vector(valores);
-    fix(ids,vs);
+    fix(idGdls,vs);
   }
 
 //! @brief Devuelve el número de grados de libertad del nodo.

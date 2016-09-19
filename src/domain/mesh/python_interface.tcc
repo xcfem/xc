@@ -30,22 +30,26 @@
 class_<XC::MeshComponentContainer, bases<EntCmd>, boost::noncopyable >("MeshComponentContainer", no_init)
   ;
 
+XC::Node *(XC::Mesh::*getNodePtr)(int tag)= &XC::Mesh::getNode;
 XC::Node *(XC::Mesh::*getNearestNodePtrMesh)(const Pos3d &)= &XC::Mesh::getNearestNode;
 XC::Element *(XC::Mesh::*getNearestElementPtrMesh)(const Pos3d &)= &XC::Mesh::getNearestElement;
+XC::Element *(XC::Mesh::*getElementPtr)(int tag)= &XC::Mesh::getElement;
 class_<XC::Mesh, bases<XC::MeshComponentContainer>, boost::noncopyable >("Mesh", no_init)
   .add_property("getNodeIter", make_function( &XC::Mesh::getNodes, return_internal_reference<>() ))
   .def("getNumNodes", &XC::Mesh::getNumNodes,"Returns the number of nodes.")
+  .def("getNode", make_function(getNodePtr, return_internal_reference<>() ),"Returns a node from its identifier.")
+  .def("getNearestNode",make_function(getNearestNodePtrMesh, return_internal_reference<>() ),"Returns nearest node.")
   .def("getNumLiveNodes", &XC::Mesh::getNumLiveNodes,"Returns the number of live nodes.")
   .def("getNumDeadNodes", &XC::Mesh::getNumDeadNodes,"Returns the number of dead nodes.")
   .def("getNumFrozenNodes", &XC::Mesh::getNumFrozenNodes,"Returns the number of frozen nodes.")
   .def("getNumFreeNodes", &XC::Mesh::getNumFreeNodes,"Returns the number of free nodes.")
   .def("freezeDeadNodes",&XC::Mesh::freeze_dead_nodes,"Restrain movement of dead nodes.")
   .def("meltAliveNodes",&XC::Mesh::melt_alive_nodes,"Allows movement of melted nodes.")
-  .add_property("getElementIter", make_function( &XC::Mesh::getElements, return_internal_reference<>() ))
+  .add_property("getElementIter", make_function( &XC::Mesh::getElements, return_internal_reference<>() ),"returns an iterator over the elements of the mesh.")
+  .def("getElement", make_function(getElementPtr, return_internal_reference<>() ),"Returns an element from its identifier.")
   .def("getNumElements", &XC::Mesh::getNumElements,"Returns the number of elements.")
   .def("getNumLiveElements", &XC::Mesh::getNumLiveElements,"Returns the number of live elements.")
   .def("getNumDeadElements", &XC::Mesh::getNumDeadElements,"Returns the number of dead elements.")
-  .def("getNearestNode",make_function(getNearestNodePtrMesh, return_internal_reference<>() ),"Returns nearest node.")
   .def("getNearestElement",make_function(getNearestElementPtrMesh, return_internal_reference<>() ),"Returns nearest node.")
   .def("setDeadSRF",XC::Mesh::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .staticmethod("setDeadSRF")

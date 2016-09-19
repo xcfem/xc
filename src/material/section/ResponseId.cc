@@ -48,11 +48,8 @@ XC::ResponseId::ResponseId(const std::vector<std::string> &indices)
       (*this)[i]= StringToRespId(indices[i]);
   }
 
-XC::ResponseId::ResponseId(const ResponseId &otro)
-  : ID(otro) {}
-
-XC::ResponseId::ResponseId(int *data, int size, bool cleanIt)
-  : ID(data,size,cleanIt) {}
+// XC::ResponseId::ResponseId(int *data, int size, bool cleanIt)
+//   : ID(data,size,cleanIt) {}
 
 XC::ResponseId::ResponseId(const ID &otro)
   : ID(otro) {}

@@ -16,21 +16,17 @@ import xml.etree.cElementTree as ET
 class Project:    
     
   def __init__(self,xmlns, defn, containers):
+    ''' Constructor:
+
+        :param xmlns:  attribute that defines the XML namespace. 
+        :param defn:   definition file name (i.e.: 'foo.def')
+        :param containers:   
+    '''
     self.xmlns= xmlns
     self.defn= defn
     self.containers= containers
     self.fileName= ''
     self.uuid= ''
-
-  # def __init__(self, sumarioDados, fileName):
-  #   if(sumarioDados != None):
-  #     self.uuid= sumarioDados.getSiglaProjeto()
-  #     self.xmlns= SciaXMLConstantes.XMLNS
-  #     self.defn= df.Definition(fileName+SciaXMLConstantes.DEF)
-  #     self.containers= list()
-  #     self.containers.append(getContainerNos(sumarioDados))
-  #     self.containers.append(getContainerPecas(sumarioDados))
-  #     self.containers.append(getContainerCamadas(sumarioDados))
 
   def getContainerNos(self, sumarioDados):
     nos= sumarioDados.getListaDeNos()

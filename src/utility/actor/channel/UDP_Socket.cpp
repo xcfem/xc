@@ -593,10 +593,9 @@ int XC::UDP_Socket::recvID(int dbTag, int commitTag, ID &theID, ChannelAddress *
 
     // if o.k. get a ponter to the data in the message and 
     // place the incoming data there
-    int size;
-    int *data = theID.data;
+    int *data = theID.getDataPtr();
     char *gMsg = (char *)data;;
-    size =  theID.sz * sizeof(int);
+    int size=  theID.Size() * sizeof(int);
 
     while (size > 0) {
 	if (size <= MAX_UDP_DATAGRAM) {
@@ -662,11 +661,10 @@ int XC::UDP_Socket::sendID(int dbTag, int commitTag, const XC::ID &theID, Channe
 	}		    	    	    	    
     }
     
-    // send the data
-    int size; 
-    int *data = theID.data;
+    // send the data 
+    const int *data = theID.getDataPtr();
     char *gMsg = (char *)data;;
-    size =  theID.sz * sizeof(int);
+    int size =  theID.Size() * sizeof(int);
 
     while (size > 0) {
 	if (size <= MAX_UDP_DATAGRAM) {

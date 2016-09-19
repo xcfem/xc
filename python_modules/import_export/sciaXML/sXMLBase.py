@@ -23,6 +23,12 @@ import xml.etree.cElementTree as ET
 
 class SXMLBase(object):
   def __init__(self,xmlns, mesh,loadContainer):
+    ''' Constructor:
+
+        :param xmlns:  attribute that defines the XML namespace. 
+        :param mesh:   finite element mesh or block topology (points,lines, surfaces,...).
+        :param loadContainer:   contains loads obtained from the XC model.
+    '''
     self.xmlns= xmlns
     self.uuid= ''
     self.defn= df.Definition(mesh.name)

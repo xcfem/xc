@@ -637,10 +637,10 @@ int XC::TCP_Socket::recvID(int dbTag, int commitTag,ID &theID, ChannelAddress *t
 
     // if o.k. get a ponter to the data in the XC::ID and 
     // place the incoming data there
-    int nleft,nread;
-    int *data = theID.data;
+    int nread;
+    int *data = theID.getDataPtr();
     char *gMsg = (char *)data;;
-    nleft =  theID.sz * sizeof(int);
+    int nleft =  theID.Size() * sizeof(int);
 
     while (nleft > 0) {
 	nread = recv(sockfd,gMsg,nleft,0);
@@ -681,9 +681,9 @@ int XC::TCP_Socket::sendID(int dbTag, int commitTag,const ID &theID, ChannelAddr
     // if o.k. get a ponter to the data in the XC::ID and 
     // place the incoming data there
     int nwrite;    
-    int *data = theID.data;
+    const int *data = theID.getDataPtr();
     char *gMsg = (char *)data;
-    int nleft =  theID.sz * sizeof(int);
+    int nleft=  theID.Size() * sizeof(int);
     
     while(nleft > 0)
       {

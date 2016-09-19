@@ -78,7 +78,8 @@ const size_t maxOrder= 10;
 // Assumes section order is less than or equal to maxOrder.
 // Can increase if needed!!!
 double XC::SectionAggregator::workArea[2*maxOrder*(maxOrder+1)];
-int    XC::SectionAggregator::codeArea[maxOrder];
+//int    XC::SectionAggregator::codeArea[maxOrder]; Not sharing area anymore
+//                                                  LCPT 19/09/2016
 
 //! @brief Comprueba que los punteros no sean nulos.
 void XC::SectionAggregator::check_ptrs(void) const
@@ -96,10 +97,12 @@ void XC::SectionAggregator::alloc_storage_ptrs(void)
     const size_t order= getOrder();
     if(order > maxOrder)
       {
-        std::cerr << "XC::SectionAggregator::alloc_storage_ptrs -- order too big, need to modify the maxOrder value in XC::SectionAggregator.cpp to %d\n";
+        std::cerr << "SectionAggregator::alloc_storage_ptrs -- order too big, need to modify the maxOrder value in XC::SectionAggregator.cpp to %d\n";
         exit(-1);
       }
-    theCode= new ResponseId(codeArea, order);
+    //theCode= new ResponseId(codeArea, order); Not sharing area anymore
+    //                                          LCPT 19/09/2016
+    theCode= new ResponseId(order);
     def= new Vector(workArea, order);
     defzero= new Vector(workArea, order);
     s= new Vector(&workArea[maxOrder], order);

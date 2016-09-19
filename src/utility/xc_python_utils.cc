@@ -85,7 +85,7 @@ std::vector<int> XC::vector_int_from_py_object(const boost::python::object &o)
 	  {
             boost::python::extract<XC::ID > vt(o);
             if(vt.check())
-              retval= id_to_std_vector(vt());
+              retval= vt();
             else
               {
                 boost::python::extract<boost::python::list> l(o);

@@ -190,7 +190,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     //create a DOF_Group for each XC::Node and add it to the XC::AnalysisModel.
     //    :must of course set the initial IDs
     NodeIter &theNod= theDomain->getNodes();
-    Node *nodPtr;
+    Node *nodPtr= nullptr;
 
     int numDofGrp= 0;
     int count3= 0;
@@ -294,9 +294,9 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
         if(flag == 0)
           {
             const ID &nodes= elePtr->getNodePtrs().getExternalNodes();
-            int nodesSize= nodes.Size();
+            const size_t nodesSize= nodes.Size();
             int isConstrainedNode= 0;
-            for(int i=0; i<nodesSize; i++)
+            for(size_t i=0; i<nodesSize; i++)
               {
                 int nodeTag= nodes(i);
                 if(numMPConstraints != 0)

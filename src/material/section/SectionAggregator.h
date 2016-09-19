@@ -88,7 +88,7 @@ class SectionAggregator : public SeccionBarraPrismatica
     ResponseId *theCode; //!< GDLs a los que éste material agrega rigidez.
 
     static double workArea[];
-    static int codeArea[];
+    //static int codeArea[];
 
     void copia_seccion(const SectionForceDeformation *);
     void check_ptrs(void) const;

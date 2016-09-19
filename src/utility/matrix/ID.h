@@ -64,54 +64,55 @@
 #define ID_h
 
 #include "xc_utils/src/nucleo/EntCmd.h"
+#include <vector>
 #include <boost/python/list.hpp>
 
 namespace XC {
-class ID: public EntCmd
+class ID: public EntCmd, public std::vector<int>
   {
+  public:
+    typedef std::vector<int> v_int;
   private:
     static int ID_NOT_VALID_ENTRY;
-    int sz;
-    int *data;
-    int arraySize;
-    int fromFree;
-    void libera(void);
-    void check_sizes(void);
-    void alloc(const size_t &);
   public:
     // constructors and destructor
     ID(void);
-    explicit ID(int);
-    ID(int size, int arraySize);
+    explicit ID(const int &);
     ID(const int *data, int size);
-    ID(int *data, int size, bool cleanIt = false);
-    explicit ID(const std::vector<int> &);
+    ID(const int &,const int &);
+    explicit ID(const v_int &);
     ID(const boost::python::list &);
     explicit ID(const std::set<int> &);
-    ID(const ID &);
-    virtual ~ID();
+    template <class InputIterator>
+    inline ID(InputIterator first, InputIterator last)
+      : EntCmd(), std::vector<int>(first,last) {}
+    inline virtual ~ID(){}
  
     // utility methods
-    int Size(void) const;
+    inline int Size(void) const
+      { return size(); }
     void Zero(void);
-    const int *getDataPtr(void) const;
-    int *getDataPtr(void);
-    bool Nulo(void) const;
-    int resize(int newSize);
+    inline const int *getDataPtr(void) const
+      { return &(*this)[0]; }
+    inline int *getDataPtr(void)
+      { return &(*this)[0]; }
+    inline bool Nulo(void) const
+      { return empty(); }
+    int resize(const int &newSize);
     const int &max(void) const;
     const int &min(void) const;
-    
-    // overloaded operators
-    inline int &operator()(const int &);
-    inline const int &operator()(const int &) const;
-    int &operator[](int);    	    
-    
-    ID &operator=(const ID  &V);
 
-    int setData(int *newData, int size, bool cleanIt = false);
-    int getLocation(int value) const;
-    int getLocationOrdered(int value) const; // for when insert was used to add elements
-    int removeValue(int value);
+    bool checkRange(const int &) const;
+    int &operator()(const int &);
+    const int &operator()(const int &) const;
+    int &operator[](const int &i);
+    const int &operator[](const int &i) const
+      { return this->at(i); }
+  
+
+    int getLocation(const int &) const;
+    int getLocationOrdered(const int &) const; // for when insert was used to add elements
+    int removeValue(const int &);
 
     friend std::ostream &operator<<(std::ostream &, const ID &);
     //    friend istream &operator>>(istream &s, ID &V);    
@@ -125,44 +126,41 @@ class ID: public EntCmd
 
 std::ostream &operator<<(std::ostream &, const ID &);
 
-std::vector<int> id_to_std_vector(const ID &);
-
-inline int ID::Size(void)  const
-   {return sz;}
-
-inline const int *ID::getDataPtr(void) const
-  { return data; }
-inline int *ID::getDataPtr(void)
-  { return data; }
-
-inline bool ID::Nulo(void) const
-  { return (data==NULL); }
-
-inline int &ID::operator()(const int &x) 
+//! @brief check if argument is inside range [0,sz-1]
+inline bool ID::checkRange(const int &i) const
+  {
+    const int sz= Size();
+    if((i < 0) || (i >= sz)) //Range checking.
+      {
+        std::cerr << "ID::(loc) - loc "
+		  << i << " outside range 0 - " <<  sz-1 << std::endl;
+        return false;
+      }
+    else
+      return true;
+  }
+ 
+inline int &ID::operator()(const int &i) 
   {
 #ifdef _G3DEBUG
     // check if it is inside range [0,sz-1]
-    if(x < 0 || x >= sz)
-      {
-        std::cerr << "ID::(loc) - loc " << x << " outside range 0 - " <<  sz-1 << endln;
-        return ID_NOT_VALID_ENTRY;
-      }
+    if(!checkRange(i))
+      return ID_NOT_VALID_ENTRY;
 #endif
-    return data[x];
+    return (*this)[i];
   }
 
-inline const int &ID::operator()(const int &x) const 
+inline const int &ID::operator()(const int &i) const 
   {
 #ifdef _G3DEBUG
-  // check if it is inside range [0,sz-1]
-  if (x < 0 || x >= sz) {
-    std::cerr << "ID::(loc) - loc " << x << " outside range 0 - " <<  sz-1 << endln;
-    return ID_NOT_VALID_ENTRY;
-  }
+    // check if it is inside range [0,sz-1]
+    if(!checkRange(i))
+      return ID_NOT_VALID_ENTRY;
 #endif
 
-  return data[x];
+    return (*this)[i];
   }
+
 } // end of XC namespace
 
 #endif

@@ -20,6 +20,12 @@ class SXMLBlockTopology(base.SXMLBase):
   '''Export block topology (kPoints, lines, surfaces, volumes), supports
      and load to SCIA XML.'''
   def __init__(self,xmlns, blocks,loadContainer):
+    ''' Constructor:
+
+        :param xmlns:           attribute that defines the XML namespace. 
+        :param blocks:          block topology definition (points,lines, surfaces,...).
+        :param loadContainer:   contains loads obtained from the XC model.
+    '''
     super(SXMLBlockTopology,self).__init__(xmlns,blocks,loadContainer)
     self.pointContainer= nCtr.NodeContainer(blocks.points)
     self.blockContainer= eppc.EPPlaneContainer(blocks.blocks)
@@ -37,6 +43,7 @@ class SXMLBlockTopology(base.SXMLBase):
         self.surfacePressureFreeContainers.append(elc.ElementLoadContainer(sl))
 
   def getContainers(self):
+    '''Returns object containers in a list.'''
     retval= [self.pointContainer,self.blockContainer,self.pointSupportContainer]
     retval.extend(super(SXMLBlockTopology,self).getContainers())
     retval.extend(self.pointForceFreeContainers)

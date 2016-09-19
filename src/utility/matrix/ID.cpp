@@ -62,231 +62,80 @@
 
 #include <boost/python/extract.hpp>
 
-int XC::ID::ID_NOT_VALID_ENTRY = 0;
+int XC::ID::ID_NOT_VALID_ENTRY= 0;
 
-void XC::ID::libera(void)
-  {
-    if(data && (fromFree==0))
-      {
-        delete [] data;
-        data= nullptr;
-      }
-  }
-
-void XC::ID::check_sizes(void)
-  {
-#ifdef _G3DEBUG
-    if(sz<0)
-      {
-        std::cerr << "alloc - size " << size << " specified < 0\n";
-        sz = 0;
-      }
-    if(arraySize <= 0)
-      {
-        std::cerr << "alloc - arraySize " << arraySize << " specified < 0\n";
-        if(sz!=0) 
-          arraySize= sz;
-        else
-          arraySize= 1;
-      }
-    if(arraySize<sz)
-      {
-        std::cerr << "alloc - arraySize " << arraySize << " specified < " << size << std::endl;
-        arraySize = sz;
-      }
-#endif
-  }
-
-void XC::ID::alloc(const size_t &arrSize)
-  {
-    libera();
-
-    if(arrSize>0)
-      {
-        // create the space
-        data=new int[arrSize];
-        fromFree= 0;
-        if(!data)
-          std::cerr << "alloc: ran out of memory with arraySize: " << arraySize << std::endl;
-      }
-  }
-
-// ID():
-//	Standard constructor, sets size = 0;
-
+//! @brief Standard constructor, sets size = 0;
 XC::ID::ID(void)
-  :sz(0), data(nullptr), arraySize(0), fromFree(0) {}
+  :EntCmd(), std::vector<int>(0) {}
 
 
-// ID(int size):
-//	Constructor used to allocate a ID of size size.
+//! @brief Constructor used to allocate a ID of size size.
+XC::ID::ID(const int &size)
+  :EntCmd(), std::vector<int>(size,0) {}
 
-XC::ID::ID(int size)
-  :sz(size), data(nullptr), arraySize(size), fromFree(0)
+
+//! @brief Constructor used to allocate a ID of size size and
+//! reserve nReserve positions.
+XC::ID::ID(const int &size,const int &nReserve)
+  :EntCmd(), std::vector<int>(size,0)
   {
-    check_sizes();
-    alloc(arraySize);
-    // zero the data
-    for(int i=0; i<size; i++)
-      data[i] = 0;
-  }
-
-
-// ID(int size):
-//	Constructor used to allocate a XC::ID of size size.
-
-XC::ID::ID(int size, int arraySz)
-  :sz(size), data(nullptr), arraySize(arraySz), fromFree(0)
-  {
-    check_sizes();
-    alloc(arraySize);
-    // zero the data
-    for(int i=0; i<arraySize; i++)
-      data[i] = 0;
-  }
-
-XC::ID::ID(int *d, int size, bool cleanIt)
-  :sz(size), data(d), arraySize(size), fromFree(1)
-  {
-    if(!d)
-      {
-        std::cerr << "ID; se pasó un puntero nulo." << std::endl;
-        sz = 0;
-        data = 0;
-        arraySize = size;
-        fromFree = 0;
-
-        // create the space
-        if(arraySize!=0)
-          {
-	    std::cerr << "IDWrapper; llama a malloc" << std::endl;
-            data =  (int *)malloc(arraySize*sizeof(int));
-            if(!data)
-              {
-	        std::cerr << "ID(int*,int): ran out of memory with arraySize "
-                          << arraySize << std::endl;
-	        exit(-1);
-              }
-          }
-        // zero the data
-        for(int i=0; i<arraySize; i++)
-          data[i] = 0;
-       }
-    if(cleanIt==true)
-      fromFree=0;
+    std::vector<int>::reserve(nReserve);
   }
 
 XC::ID::ID(const int *d, int size)
-  :sz(size), data(nullptr), arraySize(size), fromFree(0)
+  : EntCmd (), std::vector<int>(d,d+size)
   {
-    if(d)
+    if(!d)
       {
-        check_sizes();
-        alloc(arraySize);
-        if(arraySize!=0)
-          {
-            for(int i=0; i<arraySize; i++)
-              data[i]= d[i];
-          }
-      }
-    else
-      {
-        sz= 0;
-        data= nullptr;
-        arraySize= 0;
-        fromFree= 0;
+	std::cerr << "ID constructor can't copy from null pointer."
+	          << std::endl;
       }
   }
 
 //! @brief Constructor.
 XC::ID::ID(const std::vector<int> &v)
-  :sz(v.size()), data(nullptr), arraySize(v.size()), fromFree(0)
-  {
-    check_sizes();
-    alloc(arraySize);
-    // copy the data
-    for(int i=0; i<sz; i++)
-      data[i]= v[i];
-  }
+  : EntCmd(), std::vector<int>(v)
+  {}
 
 //! @brief Constructor (interfaz Python).
 XC::ID::ID(const boost::python::list &l)
-  :sz(len(l)), data(nullptr), arraySize(len(l)), fromFree(0)
+  : EntCmd(), std::vector<int>(len(l))
   {
-    check_sizes();
-    alloc(arraySize);
     // copy the data
-    for(int i=0; i<sz; i++)
-      data[i]= boost::python::extract<int>(l[i]);
+    const size_t sz= size();
+    for(size_t i=0; i<sz; i++)
+      (*this)[i]= boost::python::extract<int>(l[i]);
   }
 
 XC::ID::ID(const std::set<int> &setInt)
-  :sz(setInt.size()), data(nullptr), arraySize(setInt.size()), fromFree(0)
+  : EntCmd(), std::vector<int>(setInt.size())
   {
-    check_sizes();
-    alloc(arraySize);
     // copy the data
     int count= 0;
     for(std::set<int>::const_iterator i= setInt.begin();i!=setInt.end();i++,count++)
-      data[count]= *i;
-  }
-
-
-//! @brief Constructor de copia.
-XC::ID::ID(const ID &other)
-  :sz(other.sz), data(nullptr), arraySize(other.arraySize), fromFree(0)
-  {
-    alloc(arraySize);
-    // copy the data 
-    for(int i=0; i<sz; i++)
-      data[i] = other.data[i];
-  }	
-
-// ~ID():
-// 	destructor, deletes the [] data
-
-XC::ID::~ID(void)
- { libera(); }
-
-int XC::ID::setData(int *newData, int size, bool cleanIt)
-  {
-    libera();
-    sz = size;
-    data = newData;
-  
-    if(cleanIt == false)
-      fromFree= 1;
-    else
-      fromFree= 0;
-
-    if(sz <= 0)
-      {
-        std::cerr << "XC::ID::ID(int *, size) - size " << size << " specified <= 0\n";
-        sz= 0;
-      }
-    return 0;
+      (*this)[count]= *i;
   }
 
 
 void XC::ID::Zero(void)
-  {
-    for(int i=0; i<sz; i++)
-      data[i]=0;
-  }
+  { std::fill(begin(),end(),0); }
 
-int XC::ID::getLocation(int value) const
+//! @brief Returns the position of 'value' in the vector.
+int XC::ID::getLocation(const int &value) const
   {
+    const size_t sz= size();
     // search through ID for the value
-    for(int i=0; i<sz; i++)
-      if(data[i] == value)
+    for(size_t i=0; i<sz; i++)
+      if((*this)[i] == value)
         return i;
     // if we get here the value is not in the array
     return -1;
   }
 
 
-int XC::ID::getLocationOrdered(int value) const
+int XC::ID::getLocationOrdered(const int &value) const
   {
+    const size_t sz= size();    
     int middle = 0;
     int left = 0;
     int right = sz-1;
@@ -295,13 +144,13 @@ int XC::ID::getLocationOrdered(int value) const
         while(left <= right)
           {
             middle = (left + right)/2;
-            double dataMiddle = data[middle];
+            double dataMiddle = (*this)[middle];
             if(value == dataMiddle)
-	      return middle;   // already there
+              return middle;   // already there
             else if(value>dataMiddle)
-	      left = middle + 1;
+              left = middle + 1;
             else 
-	      right = middle-1;
+              right = middle-1;
           }
       }
     // if we get here the value is not in the array
@@ -309,72 +158,18 @@ int XC::ID::getLocationOrdered(int value) const
   }
 
 
-int XC::ID::removeValue(int value)
+int XC::ID::removeValue(const int &value)
   {
     int place = -1;
-    for(int i=0; i<sz; i++)
-    if(data[i] == value)
-      {
-        place = i;
-        // copy the rest of the components down one in XC::ID
-        for(int j=i; j<sz-1; j++)
-	  data[j] = data[j+1];		
-        sz--;
-      }
+    auto it = std::find(begin(), end(), value);
+    if(it != end())
+      place= std::distance(begin(), it);
+      erase(it);
     return place;
   }    
 
 
-int &XC::ID::operator[](int x) 
-  {
-#ifdef _G3DEBUG
-    // check if it is inside range [0,sz-1]
-    if(x < 0)
-      {
-        std::cerr << "XC::ID::[] - location " << x << " < 0\n";
-        return ID_NOT_VALID_ENTRY;
-      }
-#endif
-
-    // see if XC::quick return
-    if(x<sz)
-      return data[x];
-
-    //otherwise we have to enlarge the order of the XC::ID
-    
-    // see if we can just enlarge the array
-    // without having to go get more space
-
-    if(x<arraySize)
-      {
-        for(int i=sz; i<x; i++)
-          data[i] = 0;
-        sz= x+1;
-        return data[x];
-      }
-
-    // otherwise we go get more space
-    if(x>=arraySize)
-      {
-	std::cerr << "ID::operator[] aumenta el tamaño del vector." << std::endl;
-        int newArraySize= arraySize * 2;
-        if(newArraySize < x) 
-          newArraySize= x;
-        resize(newArraySize);
-        return data[x];
-      }
-    else
-      {
-        // we could not allocate more mem .. leave the current size
-        std::cerr << "ID::[]): ran out of memory with arraySize " << arraySize << std::endl;
-        return ID_NOT_VALID_ENTRY;
-      }
-    // we should never get here, but some compilers need this line
-    return ID_NOT_VALID_ENTRY;	
-  }
-    
-
-int XC::ID::resize(int newSize)
+int XC::ID::resize(const int &newSize)
   {
     int retval= 0;
     if(newSize<0) // first check that newSize is valid
@@ -383,127 +178,62 @@ int XC::ID::resize(int newSize)
         retval= -1;
       }
     else if(newSize==0)
-      {
-        libera();
-        sz= 0;
-        arraySize= newSize;
-      }
+      clear();
     else
-      { 
-        if(sz > newSize)
-          {
-            // is size smaller than current, simply reset sz
-            sz = newSize;
-          }
-        else if(newSize <= arraySize) //Corregido LCPT.
-          {
-            // see if we can just enlarge the array
-            // without having to go get more space
-            for(int i=sz; i<newSize; i++)
-              data[i] = 0;
-            sz = newSize;
-          }
-        else if(newSize > arraySize)
-          {
-           // otherwise we go get more space
-    
-           int *newData= new int[newSize];
-           if(newData)
-             {
-               // copy the old
-               for(int i=0; i<sz; i++)
-	         newData[i] = data[i];
-               // zero the new
-               for(int j=sz; j<newSize; j++)
- 	         newData[j]= 0;
-      
-               libera();
-               sz= newSize;
-               arraySize = newSize;
-               data = newData;
-             }
-           else
-             {
-               std::cerr << "ID::resize() - out of memory creating ID of size " << newSize << "\n";
-               retval= -1;      
-             }
-          }
-      }
+      std::vector<int>::resize(newSize,0);
     return retval;
   }
 
 //! @brief Devuelve el máximo de las componentes del vector.
 const int &XC::ID::max(void) const
-  { return *std::max_element(data,data+Size()); }
+  { return *std::max_element(begin(),end()); }
 
 //! @brief Devuelve el mínimo de las componentes del vector.
 const int &XC::ID::min(void) const
-  { return *std::min_element(data,data+Size()); }
+  { return *std::min_element(begin(),end()); }
 
-// ID &operator=(const ID  &V):
-//	the assignment operator, This is assigned to be a copy of V. if sizes
-//	are not compatable this.data [] is deleted. The data pointers will not
-//	point to the same area in mem after the assignment.
-//
-
-XC::ID &XC::ID::operator=(const ID &V) 
+int &XC::ID::operator[](const int &i) 
   {
-    // first check we are not trying v = v
-    if(this != &V)
+#ifdef _G3DEBUG
+    // check if it is inside range [0,sz-1]
+    if(i < 0)
       {
-	// check size compatability, if different delete
-	// old and make room for new.
-	if(sz != V.sz)
-          {
-	    if(arraySize < V.sz)
-              {
-		arraySize= V.sz;
-                check_sizes();
-                alloc(arraySize);
-              }
-	    sz = V.sz;
-	  }
-	// copy the data
-	for(int i=0; i<sz; i++)
-	    data[i] = V(i);
+        std::cerr << "ID::[] - location " << i << " < 0\n";
+        return ID_NOT_VALID_ENTRY;
       }
-    return *this;
+#endif
+    const int sz= Size();
+    // see if quick return
+    if(i>=sz) //we have to enlarge the order of the ID
+      {
+        int newArraySize= std::max(i+1,sz*2);
+        resize(newArraySize);
+      }       
+    return v_int::operator[](i);
   }
-
-
-
-
 
 //! @brief A function is defined to allow user to print the IDs using streams.
 std::ostream &XC::operator<<(std::ostream &s, const XC::ID &V)
   {
-    for(int i=0; i<V.Size();i++) 
+    const size_t sz= V.size();
+    for(size_t i=0; i<sz;i++) 
       s << V(i) << " ";
     return s;
   }
 
 // friend istream &operator>>(istream &s, ID &V)
-//	A function is defined to allow user to input the data into a XC::ID which has already
-//	been constructed with data, i.e. ID(int) or XC::ID(const XC::ID &) constructors.
+//        A function is defined to allow user to input the data into a XC::ID which has already
+//        been constructed with data, i.e. ID(int) or XC::ID(const XC::ID &) constructors.
 
 /*
 istream &operator>>(istream &s, ID &V)
 {
-    for(int i=0; i<V.Size(); i++) 
-	s >> V(i);
+    for(size_t i=0; i<V.Size(); i++) 
+        s >> V(i);
 
     return s;
 }
 */
 
 
-//! @brief Convierte el vector en un std::vector<double>.
-std::vector<int> XC::id_to_std_vector(const ID &v)
-  {
-    const size_t sz= v.Size();
-    std::vector<int> retval(sz,0);
-    for(register size_t i=0;i<sz;i++)
-      retval[i]= v(i);
-    return retval;
-  }
 
