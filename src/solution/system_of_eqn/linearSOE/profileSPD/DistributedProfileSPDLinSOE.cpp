@@ -175,7 +175,7 @@ int XC::DistributedProfileSPDLinSOE::setSize(Graph &theGraph)
     static ID data(1);
     data(0)= size;
 
-    ID iLoc(iDiagLoc.getDataPtr(), size);
+    ID iLoc= getIDFromIntPtr(iDiagLoc.getDataPtr(), size);
 
     // to each distributed soe send the size data
     // and merge them into master graph

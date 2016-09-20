@@ -24,51 +24,31 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MovableString.cc
+                                                                        
+                                                                        
+// Description: This file contains the class definition for IDVarSize.
+// IDVarSize integer array with variable size (see [] operators).
 
-#include "MovableString.h"
-#include "utility/actor/channel/Channel.h"
-#include "utility/actor/objectBroker/FEM_ObjectBroker.h"
-#include "utility/matrix/ID.h"
+#ifndef IDVarSize_h
+#define IDVarSize_h
 
-//! @brief Envía la cadena de caracteres through the channel being passed as parameter.
-const XC::ID &stringToId(const std::string &str)
+#include "ID.h"
+
+namespace XC {
+class IDVarSize: public ID
   {
-    static XC::ID retval;
-    static const int ratio= sizeof(int)/sizeof(char);
-    const int *intPtr= reinterpret_cast<const int *>(str.c_str());
-    const size_t sz= str.size()/ratio;
-    retval= XC::getIDFromIntPtr(intPtr,sz+1);
-    return retval;
-  }
+  public:
+    // constructors and destructor
+    IDVarSize(const int &,const int &);
 
-//! @brief Recibe la cadena de caracteres through the channel being passed as parameter.
-const std::string &idToString(const XC::ID &id)
-  {
-    static std::string retval;
-    const size_t sz= id.Size();
-    if(sz>0)
-      {
-        const char *charPtr= reinterpret_cast<const char *>(id.getDataPtr());
-        retval= std::string(charPtr);
-      }
-    else
-      retval= "";
-    return retval;
-  }
+    int &operator[](const int &i);
+    const int &operator[](const int &i) const
+      { return this->at(i); }
+  };
 
-//! @brief Constructor.
-XC::MovableString::MovableString(const std::string &v)
-  :MovableID(1) 
-  { setString(v); }
+} // end of XC namespace
 
-//! @brief Asigna la cadena de caracteres.
-void XC::MovableString::setString(const std::string &v)
-  { setID(stringToId(v)); }
-
-const std::string &XC::MovableString::getString(void)
-  { return idToString(*this); }
-
+#endif
 
 
 

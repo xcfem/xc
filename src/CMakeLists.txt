@@ -162,7 +162,7 @@ SET(tagged utility/tagged/storage/TaggedObjectStorage utility/tagged/storage/Arr
 
 SET(nDarray utility/matrix/nDarray/basics utility/matrix/nDarray/BJtensor utility/matrix/nDarray/Cosseratstresst utility/matrix/nDarray/stresst utility/matrix/nDarray/BJvector utility/matrix/nDarray/nDarray utility/matrix/nDarray/BJmatrix utility/matrix/nDarray/Cosseratstraint utility/matrix/nDarray/straint)
 
-SET(matrix utility/matrix/ID utility/matrix/IntPtrWrapper utility/matrix/AuxMatrix utility/matrix/Matrix utility/matrix/DqMatrices utility/matrix/Vector utility/matrix/DqVectors utility/matrix/util_matrix ${nDarray})
+SET(matrix utility/matrix/ID utility/matrix/IDVarSize utility/matrix/IntPtrWrapper utility/matrix/AuxMatrix utility/matrix/Matrix utility/matrix/DqMatrices utility/matrix/Vector utility/matrix/DqVectors utility/matrix/util_matrix ${nDarray})
 
 SET(med_xc utility/med_xc/MEDObject utility/med_xc/MEDMapIndices utility/med_xc/MEDMapNumCeldasPorTipo utility/med_xc/MEDMapConectividad utility/med_xc/MEDBaseInfo utility/med_xc/MEDVertexInfo utility/med_xc/MEDCellBaseInfo utility/med_xc/MEDCellInfo utility/med_xc/MEDGroupInfo utility/med_xc/MEDGaussModel utility/med_xc/MEDFieldInfo utility/med_xc/MEDDblFieldInfo utility/med_xc/MEDIntFieldInfo utility/med_xc/MEDMeshing utility/med_xc/MEDMesh)
 

@@ -74,24 +74,6 @@ XC::ID::ID(const int &size)
   :EntCmd(), std::vector<int>(size,0) {}
 
 
-//! @brief Constructor used to allocate a ID of size size and
-//! reserve nReserve positions.
-XC::ID::ID(const int &size,const int &nReserve)
-  :EntCmd(), std::vector<int>(size,0)
-  {
-    std::vector<int>::reserve(nReserve);
-  }
-
-XC::ID::ID(const int *d, int size)
-  : EntCmd (), std::vector<int>(d,d+size)
-  {
-    if(!d)
-      {
-	std::cerr << "ID constructor can't copy from null pointer."
-	          << std::endl;
-      }
-  }
-
 //! @brief Constructor.
 XC::ID::ID(const std::vector<int> &v)
   : EntCmd(), std::vector<int>(v)
@@ -192,26 +174,6 @@ const int &XC::ID::max(void) const
 const int &XC::ID::min(void) const
   { return *std::min_element(begin(),end()); }
 
-int &XC::ID::operator[](const int &i) 
-  {
-#ifdef _G3DEBUG
-    // check if it is inside range [0,sz-1]
-    if(i < 0)
-      {
-        std::cerr << "ID::[] - location " << i << " < 0\n";
-        return ID_NOT_VALID_ENTRY;
-      }
-#endif
-    const int sz= Size();
-    // see if quick return
-    if(i>=sz) //we have to enlarge the order of the ID
-      {
-        int newArraySize= std::max(i+1,sz*2);
-        resize(newArraySize);
-      }       
-    return v_int::operator[](i);
-  }
-
 //! @brief A function is defined to allow user to print the IDs using streams.
 std::ostream &XC::operator<<(std::ostream &s, const XC::ID &V)
   {
@@ -219,6 +181,17 @@ std::ostream &XC::operator<<(std::ostream &s, const XC::ID &V)
     for(size_t i=0; i<sz;i++) 
       s << V(i) << " ";
     return s;
+  }
+
+XC::ID XC::getIDFromIntPtr(const int *d,const int &size)
+  {
+    ID retval(std::vector<int>(d,d+size));
+    if(!d)
+      {
+	std::cerr << "getIDFromIntPtr constructor can't copy from null pointer."
+	          << std::endl;
+      }
+    return retval;
   }
 
 // friend istream &operator>>(istream &s, ID &V)
