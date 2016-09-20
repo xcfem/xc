@@ -286,6 +286,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/eae/resistencia_cordon_soldadura.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.py
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_reinforcing_steel.py
+/usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_reinforcing_steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/__init__.py
 /usr/local/lib/python2.7/dist-packages/materials/ec2/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/rebarsEC2.py

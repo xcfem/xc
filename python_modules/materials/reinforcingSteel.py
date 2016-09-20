@@ -2,8 +2,8 @@
 
 '''reinforcingSteel.py: reinforcing steel mechanical properties.'''
 
-__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT AOO"
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"

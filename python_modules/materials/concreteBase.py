@@ -3,8 +3,8 @@
 
 from __future__ import division
 
-__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, AOO and LCPT"
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, AO_O and LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
@@ -147,11 +147,23 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             self.materialDiagramK= typical_materials.defConcrete01(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=self.fmaxK(),epscu=self.epsilonU())
         else:
             self.tensionStiffparam.diagType='K'
-            ftdiag=self.tensionStiffparam.pointOnsetCracking()['ft']
-            ectdiag=self.tensionStiffparam.pointOnsetCracking()['eps_ct']
-            eydiag=self.tensionStiffparam.eps_y()
-            Etsdiag=ftdiag/(eydiag-ectdiag)
+            '''
+            Approximation of the exponential decay curve in the post-cracking range by means of
+            its regression line
+            '''
+            ftdiag=self.tensionStiffparam.pointOnsetCracking()['ft']       #stress at the adopted point for concrete onset cracking
+            ectdiag=self.tensionStiffparam.pointOnsetCracking()['eps_ct']  #strain at the adopted point for concrete onset cracking
+            #eydiag=self.tensionStiffparam.eps_y()                          #reinforcing steel strain at yield point
+            Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
             self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            '''
+            Approximation of the exponential decay curve in the post-cracking range by means of
+            a regression line that passes through the point (eps_ct,f_ct) where cracking starts.
+            This approximation produces a less conservative result 
+            '''
+            # ftdiag=self.tensionStiffparam.f_ct
+            # Etsdiag=-self.tensionStiffparam.slopeRegresLineFixedPoint()
+            # self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
         self.matTagK= self.materialDiagramK.tag
         return self.matTagK
 
@@ -168,7 +180,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             ftdiag=self.tensionStiffparam.pointOnsetCracking()['ft']
             ectdiag=self.tensionStiffparam.pointOnsetCracking()['eps_ct']
             eydiag=self.tensionStiffparam.eps_y()
-            Etsdiag=ftdiag/(eydiag-ectdiag)
+            Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
             self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
         self.matTagD= self.materialDiagramD.tag
         return self.matTagD
@@ -609,6 +621,18 @@ class paramTensStiffenes(object):
         pInt=r1.getIntersectionWithLine(r2)[0]
         return {'eps_ct':pInt.x, 'ft':pInt.y}
 
+    def slopeRegresLineFixedPoint(self):
+        ''':returns: the slope of the regression line that approaches the exponential decay curve adopted for the 
+        post-cracking range, passings through the point (eps_ct,f_ct) [point of concrete onset cracking]
+ 
+        '''
+        strainPts=np.array(self.ptosExpCurvPostCracking()['strainPts'])
+        stressPts=np.array(self.ptosExpCurvPostCracking()['stressPts'])
+        x=strainPts-strainPts[0]
+        y=stressPts-stressPts[0]
+        x = x[:,np.newaxis]
+        slope, _, _, _ = np.linalg.lstsq(x, y)
+        return slope[0]
 
 def defDiagKConcrete(preprocessor, concreteRecord):
   print 'defDiagKConcrete deprecated; use concreteRecord.defDiagK(preproccesor)'
