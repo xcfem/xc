@@ -80,8 +80,8 @@ class LoadContainer(LoadContainerBase):
       nl= lIter.next()
   def dumpSurfaceLoads(self, lp, destLoadCase):
     '''Dump loads over elements.'''
-    lIter= lp.getElementalLoadIter
-    el= lIter.next()
+    eLoadIter= lp.getElementalLoadIter
+    el= eLoadIter.next()
     while el:
       eLoad= nld.ElementLoadRecord(destLoadCase,self.surfaceLoadCounter,1.0)
       if(hasattr(el,"getGlobalForces")):
@@ -97,7 +97,7 @@ class LoadContainer(LoadContainerBase):
         else:
           print "loads2Neutral: vDir vector very small: ", vDir, " load ignored."
       self.surfaceLoadCounter+=1
-      el= lIter.next()
+      el= eLoadIter.next()
     
 
 
@@ -126,26 +126,20 @@ class FreeLoadContainer(LoadContainerBase):
     print '******** continue implementation of dumpSurfaceLoads. ********'
     domain= lp.getDomain
     preprocessor= lp.getDomain.getPreprocessor
-    lIter= lp.getElementalLoadIter
-    el= lIter.next()
+    eLoadIter= lp.getElementalLoadIter
+    el= eLoadIter.next()
     while el:
       setName= 'surfaceLoadSet'+str(el.tag)
       surfaceLoadSet= preprocessor.getSets.defSet(setName)
+      surfaceLoadSet.elementalLoad= el
       print 'setName= ', setName
       elemTags= el.elementTags
-      print 'len(elemTags)= ', len(elemTags)
-      print 'elemTags= ', elemTags
-      for tag in range(0,len(elemTags)):
+      for tag in elemTags:
         print 'tag= ', tag
-      # for tag in elemTags:
-      #   print 'tag= ', tag
-      #   elem= domain.getMesh.getElement(tag)
-      #   if(elem):
-      #     surfaceLoadSet.getElements.append(elem)
-      #   else:
-      #     print 'element: ', tag, ' not found.'
-
-      # for i in range(0,len(tags)):
-      #   eLoad.tags.append(tags[i])
-      el= lIter.next()
+        elem= domain.getMesh.getElement(tag)
+        if(elem):
+          surfaceLoadSet.getElements.append(elem)
+        else:
+          print 'element: ', tag, ' not found.'
+      el= eLoadIter.next()
 

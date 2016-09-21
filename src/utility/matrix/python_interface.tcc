@@ -21,15 +21,14 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-
 //const int &(XC::ID::*getItemID)(const int &) const= &XC::ID::at;
 class_<XC::ID, bases<EntCmd> >("ID")
-  .def(vector_indexing_suite<XC::ID>())
+  .def(vector_indexing_suite<XC::ID>() )  
   .def(init<boost::python::list>())
   .def(init<std::set<int> >())
   .def(init<std::vector<int> >())
+  .def(self_ns::str(self_ns::self))
   // .def("__getitem__",getItemID, return_value_policy<return_by_value>())
-  // .def(self_ns::str(self_ns::self))
   // .def("size",&XC::ID::Size,"returns the size of the array.")
   // .def("__len__",&XC::ID::Size,"returns the size of the array.")
   // .def(self + self)
