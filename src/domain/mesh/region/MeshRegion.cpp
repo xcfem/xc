@@ -65,7 +65,7 @@
 
 #include <domain/mesh/element/Element.h>
 #include <domain/mesh/node/Node.h>
-#include <utility/matrix/ID.h>
+#include "utility/matrix/IDVarSize.h"
 #include <domain/domain/Domain.h>
 #include <utility/recorder/NodeRecorder.h>
 #include <utility/recorder/ElementRecorder.h>
@@ -93,7 +93,7 @@ void XC::MeshRegion::copia(const MeshRegion &otra)
     if(otra.theNodes)
       {
         size_t numNodes = otra.theNodes->Size();
-        theNodes = new XC::ID(0, numNodes);
+        theNodes = new IDVarSize(0, numNodes);
         for(size_t i=0;i<numNodes;i++)
           theNodes[i]= otra.theNodes[i];
       }

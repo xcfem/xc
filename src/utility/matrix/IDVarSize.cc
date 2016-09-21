@@ -46,125 +46,43 @@
                                                                         
 // $Revision: 1.10 $
 // $Date: 2005/11/23 22:37:43 $
-// $Source: /usr/local/cvs/OpenSees/SRC/utility/matrix/ID.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/matrix/IDVarSize.cpp,v $
                                                                         
                                                                         
 // Written: fmk 
 // Revision: A
 //
-// Description: This file contains the class definition for ID.
-// ID is a concrete class implementing the integer array abstraction.
-// ID objects are Vectors of integers which only need a few
-// operators defined on them.
+// Description: This file contains the class implementation for XC::IDVarSize.
 //
-// What: "@(#) ID.h, revA"
+// What: "@(#) IDVarSize.C, revA"
 
+#include "IDVarSize.h"
 
-#ifndef ID_h
-#define ID_h
-
-#include "xc_utils/src/nucleo/EntCmd.h"
-#include <vector>
-#include <boost/python/list.hpp>
-
-namespace XC {
-class ID: public EntCmd, public std::vector<int>
+//! @brief Constructor used to allocate a IDVarSize of size size and
+//! reserve nReserve positions.
+XC::IDVarSize::IDVarSize(const int &size,const int &nReserve)
+  :ID()
   {
-  public:
-    typedef std::vector<int> v_int;
-  private:
-    static int ID_NOT_VALID_ENTRY;
-  public:
-    // constructors and destructor
-    ID(void);
-    explicit ID(const int &);
-    explicit ID(const v_int &);
-    ID(const boost::python::list &);
-    explicit ID(const std::set<int> &);
-    template <class InputIterator>
-    inline ID(InputIterator first, InputIterator last)
-      : EntCmd(), std::vector<int>(first,last) {}
-    inline virtual ~ID(){}
- 
-    // utility methods
-    inline int Size(void) const
-      { return size(); }
-    void Zero(void);
-    inline const int *getDataPtr(void) const
-      { return &(*this)[0]; }
-    inline int *getDataPtr(void)
-      { return &(*this)[0]; }
-    inline bool Nulo(void) const
-      { return empty(); }
-    int resize(const int &newSize);
-    const int &max(void) const;
-    const int &min(void) const;
+    reserve(nReserve);
+  }
 
-    bool checkRange(const int &) const;
-    int &operator()(const int &);
-    const int &operator()(const int &) const;
-    inline int &operator[](const int &i)
-      { return this->at(i); }
-    inline const int &operator[](const int &i) const
-      { return this->at(i); }
-  
-
-    int getLocation(const int &) const;
-    int getLocationOrdered(const int &) const; // for when insert was used to add elements
-    int removeValue(const int &);
-
-    friend std::ostream &operator<<(std::ostream &, const ID &);
-    //    friend istream &operator>>(istream &s, ID &V);    
-
-
-    friend class UDP_Socket;
-    friend class TCP_Socket;
-    friend class TCP_SocketNoDelay;
-    friend class MPI_Channel;
-  };
-
-ID getIDFromIntPtr(const int *, const int &);
-
-std::ostream &operator<<(std::ostream &, const ID &);
-
-//! @brief check if argument is inside range [0,sz-1]
-inline bool ID::checkRange(const int &i) const
+int &XC::IDVarSize::operator[](const int &i) 
   {
-    const int sz= Size();
-    if((i < 0) || (i >= sz)) //Range checking.
+#ifdef _G3DEBUG
+    // check if it is inside range [0,sz-1]
+    if(i < 0)
       {
-        std::cerr << "ID::(loc) - loc "
-		  << i << " outside range 0 - " <<  sz-1 << std::endl;
-        return false;
+        std::cerr << "IDVarSize::[] - location " << i << " < 0\n";
+        return ID_NOT_VALID_ENTRY;
       }
-    else
-      return true;
-  }
- 
-inline int &ID::operator()(const int &i) 
-  {
-#ifdef _G3DEBUG
-    // check if it is inside range [0,sz-1]
-    if(!checkRange(i))
-      return ID_NOT_VALID_ENTRY;
 #endif
-    return (*this)[i];
+    const int sz= Size();
+    // see if quick return
+    if(i>=sz) //we have to enlarge the order of the IDVarSize
+      {
+        int newArraySize= std::max(i+1,sz*2);
+        resize(newArraySize);
+      }       
+    return v_int::operator[](i);
   }
-
-inline const int &ID::operator()(const int &i) const 
-  {
-#ifdef _G3DEBUG
-    // check if it is inside range [0,sz-1]
-    if(!checkRange(i))
-      return ID_NOT_VALID_ENTRY;
-#endif
-
-    return (*this)[i];
-  }
-
-} // end of XC namespace
-
-#endif
-
-
 

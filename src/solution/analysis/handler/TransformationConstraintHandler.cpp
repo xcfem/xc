@@ -74,7 +74,7 @@
 #include <domain/constraints/MRMP_ConstraintIter.h>
 #include <domain/constraints/MRMP_Constraint.h>
 #include <solution/analysis/integrator/Integrator.h>
-#include <utility/matrix/ID.h>
+#include "utility/matrix/IDVarSize.h"
 #include "domain/domain/subdomain/Subdomain.h"
 #include <solution/analysis/model/dof_grp/TransformationDOF_Group.h>
 #include <solution/analysis/model/fe_ele/transformation/TransformationFE.h>
@@ -124,7 +124,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     int i= -1;
 
     // create an ID of constrained node tags in MP_Constraints
-    ID constrainedNodesMP(0, numMPConstraints);
+    IDVarSize constrainedNodesMP(0, numMPConstraints);
     std::vector<MP_Constraint *> mps(numMPConstraints,static_cast<MP_Constraint *>(nullptr));
     if(numMPConstraints != 0)
       {
@@ -143,7 +143,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 
     int numMRMPConstraints= theDomain->getConstraints().getNumMRMPs();
     // create an ID of constrained node tags in MRMP_Constraints
-    ID constrainedNodesMRMP(0, numMRMPConstraints);
+    IDVarSize constrainedNodesMRMP(0, numMRMPConstraints);
     std::vector<MRMP_Constraint *> mrmps(numMRMPConstraints,static_cast<MRMP_Constraint *>(nullptr));
     if(numMRMPConstraints != 0)
       {
@@ -161,7 +161,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
       }
 
     // create an ID of constrained node tags in SP_Constraints
-    ID constrainedNodesSP(0, numSPConstraints);
+    IDVarSize constrainedNodesSP(0, numSPConstraints);
     std::vector<SP_Constraint *> sps(numSPConstraints,static_cast<SP_Constraint *>(nullptr));
     if(numSPConstraints != 0)
       {
