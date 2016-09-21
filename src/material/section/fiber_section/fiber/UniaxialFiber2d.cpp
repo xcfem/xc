@@ -84,11 +84,11 @@ XC::UniaxialFiber2d::UniaxialFiber2d(void)
 
 //! @brief Constructor.
 XC::UniaxialFiber2d::UniaxialFiber2d(int tag, UniaxialMaterial &theMat,const double &Area,const double &position)
-  : UniaxialFiber(tag, FIBER_TAG_Uniaxial2d,theMat,Area), y(-position) //XXX signo de la y.
+  : UniaxialFiber(tag, FIBER_TAG_Uniaxial2d,theMat,Area), y(-position) //Sign of Y coordinate is changed.
   {}
 //! @brief Constructor.
 XC::UniaxialFiber2d::UniaxialFiber2d(int tag,const MaterialLoader &ldr,const std::string &nmbMat, const double &Area,const double &position)
-  : UniaxialFiber(tag, FIBER_TAG_Uniaxial2d,ldr,nmbMat,Area), y(-position) //XXX signo de la y.
+  : UniaxialFiber(tag, FIBER_TAG_Uniaxial2d,ldr,nmbMat,Area), y(-position) //Sign of Y coordinate is changed.
   {}
 
 //! @brief Asigna la deformación a la fibra.
@@ -96,7 +96,7 @@ int XC::UniaxialFiber2d::setTrialFiberStrain(const Vector &vs)
   {
     // Use the section kinematic matrix to get the fiber strain
     // eps = as * vs;
-    const double strain = vs(0) + y*vs(1); // fiber strain
+    const double strain = vs(0) + y*vs(1); // fiber strain (sign of Y coordinate is changed).
     return theMaterial->setTrialStrain(strain);
   }
 
@@ -110,7 +110,7 @@ XC::Vector &XC::UniaxialFiber2d::getFiberStressResultants(void)
       {
         const double df = theMaterial->getStress() * area;
         fs(0)= df;
-        fs(1)= y * df;
+        fs(1)= y * df; //Sign of Y coordinate is changed.
       }
     else
       fs.Zero();
@@ -129,11 +129,11 @@ XC::Matrix &XC::UniaxialFiber2d::getFiberTangentStiffContr(void)
         // tangent stiffness matrix
         // ks = (as^as) * area * Et;
         const double value= theMaterial->getTangent() * area;
-        const double value_as1= value*y;
+        const double value_as1= value*y; //Sign of Y coordinate is changed.
         ks(0,0)= value;
         ks(0,1)= value_as1;
         ks(1,0)= value_as1;
-        ks(1,1)= value_as1 * y;
+        ks(1,1)= value_as1 * y; //Sign of Y coordinate is changed.
       }
     else
       ks.Zero();
@@ -207,7 +207,7 @@ void XC::UniaxialFiber2d::Print(std::ostream &s, int flag)
   {
     s << "\nUniaxialFiber2d, tag: " << this->getTag() << std::endl;
     s << "\tArea: " << area << std::endl; 
-    s << "\tMatrix as: " << 1.0 << " " << y << std::endl; 
+    s << "\tMatrix as: " << 1.0 << " " << -y << std::endl; //Sign of Y coordinate is changed. 
     s << "\tMaterial, tag: " << theMaterial->getTag() << std::endl;
   }
 

@@ -79,7 +79,7 @@ XC::Vector XC::UniaxialFiber3d::fs(3);
 
 void XC::UniaxialFiber3d::set_position(const Vector &position)
   {
-    as[0]= -position(0);
+    as[0]= -position(0); //Sign of Y coordinate changed.
     as[1]=  position(1);
   }
 
@@ -105,6 +105,7 @@ XC::UniaxialFiber3d::UniaxialFiber3d(int tag,const MaterialLoader &ldr,const std
 //! @brief Asigna la deformación de prueba para la fibra.
 int XC::UniaxialFiber3d::setTrialFiberStrain(const Vector &vs)
   {
+    //Sign of Y coordinate is changed.
     const double strain= vs(0) + as[0]*vs(1) + as[1]*vs(2);
     if(theMaterial)
       return theMaterial->setTrialStrain(strain);
@@ -120,11 +121,11 @@ XC::Vector &XC::UniaxialFiber3d::getFiberStressResultants(void)
   {
     if(isAlive())
       {
-        const double df = theMaterial->getStress() * area;
-        // fs = as^ df;
-        fs(0) = df;
-        fs(1) = as[0]*df;
-        fs(2) = as[1]*df;
+        const double df= theMaterial->getStress() * area;
+        // fs= as^ df;
+        fs(0)= df;
+        fs(1)= as[0]*df; //Sign of Y coordinate is changed.
+        fs(2)= as[1]*df;
       }
     else
       fs.Zero();
@@ -136,26 +137,26 @@ XC::Matrix &XC::UniaxialFiber3d::getFiberTangentStiffContr(void)
   {
     if(isAlive())
       {
-        // ks = (as^as) * area * Et;
-        const double value = theMaterial->getTangent() * area;
+        // ks= (as^as) * area * Et;
+        const double value= theMaterial->getTangent() * area;
 
-        const double as1 = as[0];
-        const double as2 = as[1];
-        const double vas1 = as1*value;
-        const double vas2 = as2*value;
-        const double vas1as2 = vas1*as2;
+        const double as1= as[0]; //Sign of Y coordinate is changed.
+        const double as2= as[1];
+        const double vas1= as1*value;
+        const double vas2= as2*value;
+        const double vas1as2= vas1*as2;
 
-        ks(0,0) = value;
-        ks(0,1) = vas1;
-        ks(0,2) = vas2;
+        ks(0,0)= value;
+        ks(0,1)= vas1;
+        ks(0,2)= vas2;
     
-        ks(1,0) = vas1;
-        ks(1,1) = vas1*as1;
-        ks(1,2) = vas1as2;
+        ks(1,0)= vas1;
+        ks(1,1)= vas1*as1;
+        ks(1,2)= vas1as2;
     
-        ks(2,0) = vas2;
-        ks(2,1) = vas1as2;
-        ks(2,2) = vas2*as2;
+        ks(2,0)= vas2;
+        ks(2,1)= vas1as2;
+        ks(2,2)= vas2*as2;
       }
     else
       ks.Zero();
@@ -226,8 +227,9 @@ int XC::UniaxialFiber3d::recvSelf(const CommParameters &cp)
 void XC::UniaxialFiber3d::Print(std::ostream &s, int flag)
   {
     s << "\nUniaxialFiber3d, tag: " << this->getTag() << std::endl;
-    s << "\tArea: " << area << std::endl; 
-    s << "\tMatrix as: " << 1.0 << " " << as[0] << " " << as[1] << std::endl; 
+    s << "\tArea: " << area << std::endl;
+    //Sign of Y coordinate is changed.
+    s << "\tMatrix as: " << 1.0 << " " << -as[0] << " " << as[1] << std::endl; 
     s << "\tMaterial, tag: " << theMaterial->getTag() << std::endl;
   }
 
@@ -256,6 +258,6 @@ int XC::UniaxialFiber3d::getResponse(int responseID, Information &fibInfo)
 //! @brief Devuelve la posición de la fibra.
 void XC::UniaxialFiber3d::getFiberLocation(double &yLoc, double &zLoc) const
   {
-    yLoc = -as[0];
-    zLoc = as[1];
+    yLoc= -as[0]; //Sign of Y coordinate is changed.
+    zLoc= as[1];
   }

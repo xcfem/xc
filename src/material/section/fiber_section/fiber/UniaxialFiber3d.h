@@ -81,7 +81,7 @@ class Response;
 class UniaxialFiber3d: public UniaxialFiber
   {
   private:
-    double as[2]; //!< posición de la fibra en la sección.
+    double as[2]; //!< position of the fiber (Y has its sign changed).
     static Matrix ks; //! static class wide matrix object for returns
     static Vector fs; //! static class wide vector object for returns
 
@@ -112,7 +112,7 @@ class UniaxialFiber3d: public UniaxialFiber
 
     void getFiberLocation(double &y, double &z) const;
     inline virtual double getLocY(void) const
-      { return -as[0]; }
+      { return -as[0]; } //XXX sign of y 
     inline virtual double getLocZ(void) const
       { return as[1]; }
   };

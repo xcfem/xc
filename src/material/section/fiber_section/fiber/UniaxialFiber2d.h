@@ -107,7 +107,7 @@ class UniaxialFiber2d: public UniaxialFiber
 	
     void getFiberLocation(double &y, double &z) const;
     virtual double getLocY(void) const
-      { return -y; }
+      { return -y; } //Sign of Y coordinate is changed.
   };
 } // end of XC namespace
 
