@@ -11,6 +11,7 @@ CYAN="\\033[1;36m"
 
 echo ""
 
+START=$(date +%s.%N)
 
 #Test de combinaciones.
 echo "$BLEU" "Load combination tests." "$NORMAL"
@@ -504,3 +505,11 @@ python tests/postprocess/test_export_shell_internal_forces.py
 
 #VTK tests
 ##python tests/vtk/dibuja_edges.py
+
+END=$(date +%s.%N)
+DIFF=$(echo "$END - $START" | bc)
+echo $DIFF seconds
+NT=$(grep -c '^python' $0)
+echo ${NT} tests
+Q=$(echo "$DIFF / $NT" | bc -l)
+echo $Q seconds/test
