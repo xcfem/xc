@@ -76,6 +76,7 @@ python tests/elements/beam_column/plastic_hinge_on_cantilever.py
 python tests/elements/beam_column/test_giro_crdTransf_01.py
 python tests/elements/beam_column/test_portico_01.py
 python tests/elements/beam_column/test_integration_options_01.py
+python tests/elements/beam_column/test_signo_deformaciones01.py
 echo "$BLEU" "  Zero length elements tests." "$NORMAL"
 python tests/elements/zero_length/zero_length_element_test_01.py
 python tests/elements/zero_length/zero_length_element_test_02.py

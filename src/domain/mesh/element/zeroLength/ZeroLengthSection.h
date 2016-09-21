@@ -147,7 +147,7 @@ class ZeroLengthSection: public Element0D
     const Vector &getVDirEjeDebilGlobales(void) const;
 
     inline SectionForceDeformation *getSection(void)
-      { return theSection; }            
+      { return theSection; }
 
     // public methods for element output
     int sendSelf(CommParameters &);

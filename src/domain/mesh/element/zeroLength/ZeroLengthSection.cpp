@@ -280,7 +280,7 @@ const XC::Matrix &XC::ZeroLengthSection::getTangentStiff(void) const
     theSection->setTrialSectionDeformation(v);
 
     // Get section tangent stiffness, the element basic stiffness
-    const XC::Matrix &kb = theSection->getSectionTangent();
+    const Matrix &kb = theSection->getSectionTangent();
 
     // Compute element stiffness ... K = A^*kb*A
     K->addMatrixTripleProduct(0.0,A, kb, 1.0);
@@ -293,7 +293,7 @@ const XC::Matrix &XC::ZeroLengthSection::getTangentStiff(void) const
 const XC::Matrix &XC::ZeroLengthSection::getInitialStiff(void) const
   {
     // Get section tangent stiffness, the element basic stiffness
-    const XC::Matrix &kb = theSection->getInitialTangent();
+    const Matrix &kb = theSection->getInitialTangent();
     // Compute element stiffness ... K = A^*kb*A
     K->addMatrixTripleProduct(0.0,A, kb, 1.0);
     if(isDead())
@@ -324,7 +324,7 @@ const XC::Vector &XC::ZeroLengthSection::getResistingForce(void) const
     theSection->setTrialSectionDeformation(v);
 
     // Get section stress resultants, the element basic forces
-    const XC::Vector &q = theSection->getStressResultant();
+    const Vector &q = theSection->getStressResultant();
 
     // Compute element resisting force ... P = A^*q
     P->addMatrixTransposeVector(0.0,A, q, 1.0);
