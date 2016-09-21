@@ -77,7 +77,8 @@ class UniaxialMaterial;
 class UniaxialFiber2d: public UniaxialFiber
   {
   private:
-    double y; //!< posición de la fibra.
+    double y; //!< Position of the fiber
+              //(its sign is changed -see comments along the file-). 
 
     static Matrix ks; //!< static class wide matrix object for returns
     static Vector fs; //!< static class wide vector object for returns
