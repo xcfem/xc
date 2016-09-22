@@ -64,6 +64,10 @@ class SeccionBarraPrismatica: public SectionForceDeformation
     virtual const Vector &getVectorDeformacion(const PlanoDeformacion &) const;
     PlanoDeformacion getPlanoDeformacion(void) const;
 
+    double getN(void) const;
+    double getMy(void) const;
+    double getMz(void) const;
+
     virtual double getCdgY(void) const;
     virtual double getCdgZ(void) const;
     Pos2d getCdg(void) const;

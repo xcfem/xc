@@ -401,18 +401,18 @@ const XC::Matrix &XC::NLBeamColumn2d::getInitialStiff(void) const
 /********* NEWTON , SUBDIVIDE AND INITIAL ITERATIONS ********************
  */
 int XC::NLBeamColumn2d::update()
-{
-  // if have completed a recvSelf() - do a revertToLastCommit
-  // to get Ssr, etc. set correctly
-  if(initialFlag == 2)
-    this->revertToLastCommit();
+  {
+    // if have completed a recvSelf() - do a revertToLastCommit
+    // to get Ssr, etc. set correctly
+    if(initialFlag == 2)
+      this->revertToLastCommit();
 
   // update the transformation
   theCoordTransf->update();
 
   // get basic displacements and increments
-  const XC::Vector &v = theCoordTransf->getBasicTrialDisp();
-  static XC::Vector dv(NEBD);
+  const Vector &v = theCoordTransf->getBasicTrialDisp();
+  static Vector dv(NEBD);
   dv = theCoordTransf->getBasicIncrDeltaDisp();
 
   static XC::Vector vin(NEBD);

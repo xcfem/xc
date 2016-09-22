@@ -109,6 +109,18 @@ bool XC::SeccionBarraPrismatica::hayAxil(const double &tol) const
     return retval;
   }
 
+//! @brief Returns internal axial force.
+double XC::SeccionBarraPrismatica::getN(void) const
+  { return getStressResultant(SECTION_RESPONSE_P); }
+
+//! @brief Returns internal bending moment around y axis.
+double XC::SeccionBarraPrismatica::getMy(void) const
+  { return getStressResultant(SECTION_RESPONSE_MY); }
+
+//! @brief Returns internal bending moment around z axis.
+double XC::SeccionBarraPrismatica::getMz(void) const
+  { return getStressResultant(SECTION_RESPONSE_MZ); }
+
 //! @brief Devuelve la rigidez a tracción de la sección.
 const double &XC::SeccionBarraPrismatica::EA(void) const
   { return getSectionTangent()(0,0); }

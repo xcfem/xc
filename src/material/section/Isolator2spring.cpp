@@ -293,8 +293,8 @@ const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
     feq(0,2) = feq(1,2) = feq(2,0) = feq(2,1) = 0.0;
     feq(2,2) = 1.0/kvo;
 
-    static XC::Matrix ftot(2,2);
-    static XC::Matrix ktot(2,2);
+    static Matrix ftot(2,2);
+    static Matrix ktot(2,2);
     ftot.Zero();
     ftot.addMatrixTripleProduct(0.0,fkin,feq,1.0);
     ftot.Invert(ktot);
