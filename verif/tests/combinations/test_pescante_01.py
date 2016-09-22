@@ -113,7 +113,7 @@ pth= os.path.dirname(__file__)
 #print "pth= ", pth
 if(not pth):
   pth= "."
-execfile(pth+"/def_hip_elu.py")
+execfile(pth+"/../aux/def_hip_elu.py")
 
 NMin1= 6.023e23
 NMin2= 6.023e23

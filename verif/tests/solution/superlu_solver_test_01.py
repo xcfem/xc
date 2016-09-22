@@ -81,7 +81,7 @@ pth= os.path.dirname(__file__)
 #print "pth= ", pth
 if(not pth):
   pth= "."
-execfile(pth+"/sol_superlu.py")
+execfile(pth+"/../aux/sol_superlu.py")
 
 
 

@@ -9,7 +9,7 @@ pth= os.path.dirname(__file__)
 #print "pth= ", pth
 if(not pth):
   pth= "."
-fNameIn= pth+"/pilares.lst"
+fNameIn= pth+"/../aux/pilares.lst"
 dbName= "/tmp/pilares.db"
 tbName= "esfPilares"
 os.system("rm -f " + dbName)

@@ -75,7 +75,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print "pth= ", pth
-execfile(pth+"/sol_modos_propios.py")
+execfile(pth+"/../../aux/sol_eigenmodes.py")
 
 
 omega= eig1**0.5

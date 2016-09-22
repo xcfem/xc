@@ -94,7 +94,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print "pth= ", pth
-execfile(pth+"/solu_linear_buckling.py")
+execfile(pth+"/../../aux/solu_linear_buckling.py")
 
 
 

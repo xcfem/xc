@@ -77,7 +77,7 @@ pth= os.path.dirname(__file__)
 #print "pth= ", pth
 if(not pth):
   pth= "."
-execfile(pth+"/arpackpp_solver.py")
+execfile(pth+"/../../aux/arpackpp_solver.py")
 
 
 omega= eig1**0.5
