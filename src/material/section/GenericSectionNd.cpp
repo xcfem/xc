@@ -133,6 +133,15 @@ const XC::Vector &XC::GenericSectionNd::getInitialSectionDeformation(void) const
 const XC::Vector &XC::GenericSectionNd::getSectionDeformation(void) const
   { return theModel->getStrain(); }
 
+
+//! @brief Returns strain at position being passed as parameter.
+double XC::GenericSectionNd::getStrain(const double &,const double &) const
+  {
+    std::cerr << "getStrain not implemented for class: "
+              << nombre_clase() << std::endl;
+    return 0.0;
+  }
+
 const XC::Vector &XC::GenericSectionNd::getStressResultant(void) const
   { return theModel->getStress(); }
 

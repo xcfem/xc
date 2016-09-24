@@ -97,7 +97,7 @@ const double  XC::MembranePlateFiberSection::wg[] = { 0.1,
 
 
 XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag)
-  : XC::SectionForceDeformation( 0, SEC_TAG_MembranePlateFiberSection ), strainResultant(8) 
+  : XC::PlateBase( 0, SEC_TAG_MembranePlateFiberSection ), strainResultant(8) 
   { 
     for(int i= 0;i<5;i++ )
       theFibers[i]= nullptr;
@@ -105,8 +105,7 @@ XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag)
 
 //! @brief null constructor
 XC::MembranePlateFiberSection::MembranePlateFiberSection(void)
-  : XC::SectionForceDeformation(0, SEC_TAG_MembranePlateFiberSection ), 
-    strainResultant(8) 
+  : XC::PlateBase(0, SEC_TAG_MembranePlateFiberSection ), strainResultant(8) 
   { 
     for(int i= 0;i<5;i++)
       theFibers[i]= nullptr;
@@ -116,9 +115,8 @@ XC::MembranePlateFiberSection::MembranePlateFiberSection(void)
 
 //! @brief full constructor
 XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag, double thickness, XC::NDMaterial &Afiber )
-  : XC::SectionForceDeformation( tag, SEC_TAG_MembranePlateFiberSection), strainResultant(8)
+  : XC::PlateBase( tag, SEC_TAG_MembranePlateFiberSection,thickness), strainResultant(8)
   {
-    this->h= thickness;
     for(int i= 0; i < 5; i++)
       theFibers[i]= Afiber.getCopy("PlateFiber");
   }
@@ -424,7 +422,6 @@ const XC::Matrix&  XC::MembranePlateFiberSection::getSectionTangent(void) const
   return this->tangent;
 }
 
-
 //print out data
 void  XC::MembranePlateFiberSection::Print( std::ostream &s, int flag )
   {
@@ -437,7 +434,7 @@ void  XC::MembranePlateFiberSection::Print( std::ostream &s, int flag )
 //! @brief Send members del objeto through the channel being passed as parameter.
 int XC::MembranePlateFiberSection::sendData(CommParameters &cp)
   {
-    int res= SectionForceDeformation::sendData(cp);
+    int res= PlateBase::sendData(cp);
     res+= cp.sendDouble(h,getDbTagData(),CommMetaData(6));
     res+= cp.sendBrokedPtr(theFibers[0],getDbTagData(),BrokedPtrCommMetaData(7,8,9));
     res+= cp.sendBrokedPtr(theFibers[1],getDbTagData(),BrokedPtrCommMetaData(10,11,12));
@@ -451,7 +448,7 @@ int XC::MembranePlateFiberSection::sendData(CommParameters &cp)
 //! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::MembranePlateFiberSection::recvData(const CommParameters &cp)
   {
-    int res= SectionForceDeformation::recvData(cp);
+    int res= PlateBase::recvData(cp);
     res+= cp.receiveDouble(h,getDbTagData(),CommMetaData(6));
     theFibers[0]= cp.getBrokedMaterial(theFibers[0],getDbTagData(),BrokedPtrCommMetaData(7,8,9));
     theFibers[1]= cp.getBrokedMaterial(theFibers[1],getDbTagData(),BrokedPtrCommMetaData(10,11,12));

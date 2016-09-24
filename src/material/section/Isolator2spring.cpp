@@ -71,37 +71,37 @@ XC::Isolator2spring::Isolator2spring(int tag, double tol_in, double k1_in, doubl
   : SectionForceDeformation(tag, SEC_TAG_Isolator2spring), tol(tol_in), k1(k1_in), Fyo(Fy_in), kbo(kb_in), kvo(kvo_in), h(hb_in), Pe(Pe_in), po(po_in), x0(5), ks(3,3)
   {
     this->revertToStart();
-    pcr = sqrt(Pe*kbo*h);
-    H = k1*kbo/(k1 - kbo);
+    pcr= sqrt(Pe*kbo*h);
+    H= k1*kbo/(k1 - kbo);
   }
 
 XC::Isolator2spring::Isolator2spring(int tag)
   :SectionForceDeformation(tag, SEC_TAG_Isolator2spring), tol(1.0e-12), k1(0.0), Fyo(0.0), kbo(0.0), kvo(0.0), h(0.0), Pe(0.0), po(0.0)
   {
     this->revertToStart();
-    pcr = sqrt(Pe*kbo*h);
-    H = k1*kbo/(k1 - kbo);
+    pcr= sqrt(Pe*kbo*h);
+    H= k1*kbo/(k1 - kbo);
   }
 
 XC::Isolator2spring::Isolator2spring(void)
   :SectionForceDeformation(0, SEC_TAG_Isolator2spring), tol(1.0e-12), k1(0.0), Fyo(0.0), kbo(0.0), kvo(0.0), h(0.0), Pe(0.0), po(0.0)
   {
     this->revertToStart();
-    pcr = sqrt(Pe*kbo*h);
-    H = k1*kbo/(k1 - kbo);
+    pcr= sqrt(Pe*kbo*h);
+    H= k1*kbo/(k1 - kbo);
   }
 
-int XC::Isolator2spring::setInitialSectionDeformation(const XC::Vector &e)
+int XC::Isolator2spring::setInitialSectionDeformation(const Vector &e)
   {
-    utptInic[0] = e(0);
-    utptInic[1] = e(1);
+    utptInic[0]= e(0);
+    utptInic[1]= e(1);
     return 0;
   }
 
-int XC::Isolator2spring::setTrialSectionDeformation(const XC::Vector &e)
+int XC::Isolator2spring::setTrialSectionDeformation(const Vector &e)
   {
-    utptTrial[0] = e(0);
-    utptTrial[1] = e(1);
+    utptTrial[0]= e(0);
+    utptTrial[1]= e(1);
     return 0;
   }
 
@@ -116,10 +116,10 @@ const XC::Matrix &XC::Isolator2spring::getSectionTangent(void) const
 const XC::Matrix &XC::Isolator2spring::getInitialTangent(void) const
   {
     // Intial tangent uses nominal properties of the isolator.
-    ks(0,0) = k1;
-    ks(1,1) = kvo;
-    ks(0,1) = ks(1,0) = 0.0;
-    ks(0,2) = ks(1,2) = ks(2,2) = ks(2,1) = ks(2,0) = 0.0;
+    ks(0,0)= k1;
+    ks(1,1)= kvo;
+    ks(0,1)= ks(1,0)= 0.0;
+    ks(0,2)= ks(1,2)= ks(2,2)= ks(2,1)= ks(2,0)= 0.0;
     return ks;
   }
 
@@ -130,24 +130,24 @@ const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
     if(po < 1.0e-10)
       {
         // No strength degradation
-        Fy = Fyo;
+        Fy= Fyo;
       }
     else
       {
         // Strength degradation based on bearing axial load
-        double p2 = x0(1)/po;
+        double p2= x0(1)/po;
         if(p2<0)
-          { p2 = 0.0; }
-        Fy = Fyo*(1-exp(-p2));
+          { p2= 0.0; }
+        Fy= Fyo*(1-exp(-p2));
       }
     // Material stresses using rate independent plasticity, return mapping algorithm
 
     // Compute trial stress using elastic tangent
-    double fb_try = k1*(x0(2)-sP_n);
-    double xi_try = fb_try - q_n;
+    double fb_try= k1*(x0(2)-sP_n);
+    double xi_try= fb_try - q_n;
 
     // Yield function
-    double Phi_try = fabs(xi_try) - Fy;
+    double Phi_try= fabs(xi_try) - Fy;
 
     double fspr;
     double dfsds;
@@ -158,36 +158,36 @@ const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
     if(Phi_try <= 0.0)
       {
         // Stress and tangent, update plastic deformation and back stress
-        fspr = fb_try;
-        dfsds = k1;
-        sP_n1 = sP_n;
-        q_n1 = q_n;
+        fspr= fb_try;
+        dfsds= k1;
+        sP_n1= sP_n;
+        q_n1= q_n;
       }
     // Plastic step
     else
       {
         // Consistency parameter
-        del_gam = Phi_try/(k1+H);
+        del_gam= Phi_try/(k1+H);
 
-        sign = (xi_try < 0) ? -1 : 1;
+        sign= (xi_try < 0) ? -1 : 1;
         // Return stress to yield surface
-        fspr = fb_try - del_gam*k1*sign;
-        dfsds = kbo;
+        fspr= fb_try - del_gam*k1*sign;
+        dfsds= kbo;
         // Update plastic deformation and back stress
-        sP_n1 = sP_n + del_gam*sign;
-        q_n1 = q_n + del_gam*H*sign;
+        sP_n1= sP_n + del_gam*sign;
+        q_n1= q_n + del_gam*H*sign;
       }
 
     // Nonlinear equilibrium and kinematic equations; want to find the
     // zeros of these equations.
-    f0(0) = x0(0) - fspr + x0(1)*x0(3);
-    f0(1) = x0(0)*h - Pe*h*x0(3) + x0(1)*(x0(2)+h*x0(3));
-    f0(2) = x0(1) - kvo*x0(4);
-    f0(3) = getSectionDeformation()[0] - x0(2) - h*x0(3);
-    f0(4) = -getSectionDeformation()[1] - x0(2)*x0(3) - h/2.0*x0(3)*x0(3) - x0(4);
+    f0(0)= x0(0) - fspr + x0(1)*x0(3);
+    f0(1)= x0(0)*h - Pe*h*x0(3) + x0(1)*(x0(2)+h*x0(3));
+    f0(2)= x0(1) - kvo*x0(4);
+    f0(3)= getSectionDeformation()[0] - x0(2) - h*x0(3);
+    f0(4)= -getSectionDeformation()[1] - x0(2)*x0(3) - h/2.0*x0(3)*x0(3) - x0(4);
 
-    int iter = 0;
-    double normf0 = f0.Norm();
+    int iter= 0;
+    double normf0= f0.Norm();
     static XC::Matrix dfinverse(5,5);
 
     // Solve nonlinear equations using Newton's method
@@ -196,35 +196,35 @@ const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
         iter += 1;
 
         // Formulate Jacobian of nonlinear equations
-        df(0,0) = 1.0;
-        df(0,1) = x0(3);
-        df(0,2) = -dfsds;
-        df(0,3) = x0(1);
-        df(0,4) = 0.0;
+        df(0,0)= 1.0;
+        df(0,1)= x0(3);
+        df(0,2)= -dfsds;
+        df(0,3)= x0(1);
+        df(0,4)= 0.0;
 
-        df(1,0) = h;
-        df(1,1) = x0(2) + h*x0(3);
-        df(1,2) = x0(1);
-        df(1,3) = (x0(1) - Pe)*h;
-        df(1,4) = 0.0;
+        df(1,0)= h;
+        df(1,1)= x0(2) + h*x0(3);
+        df(1,2)= x0(1);
+        df(1,3)= (x0(1) - Pe)*h;
+        df(1,4)= 0.0;
 
-        df(2,0) = 0.0;
-        df(2,1) = 1.0;
-        df(2,2) = 0.0;
-        df(2,3) = 0.0;
-        df(2,4) = -kvo;
+        df(2,0)= 0.0;
+        df(2,1)= 1.0;
+        df(2,2)= 0.0;
+        df(2,3)= 0.0;
+        df(2,4)= -kvo;
 
-        df(3,0) = 0.0;
-        df(3,1) = 0.0;
-        df(3,2) = -1.0;
-        df(3,3) = -h;
-        df(3,4) = 0.0;
+        df(3,0)= 0.0;
+        df(3,1)= 0.0;
+        df(3,2)= -1.0;
+        df(3,3)= -h;
+        df(3,4)= 0.0;
 
-        df(4,0) = 0.0;
-        df(4,1) = 0.0;
-        df(4,2) = -x0(3);
-        df(4,3) = -(x0(2) + h*x0(3));
-        df(4,4) = -1.0;
+        df(4,0)= 0.0;
+        df(4,1)= 0.0;
+        df(4,2)= -x0(3);
+        df(4,3)= -(x0(2) + h*x0(3));
+        df(4,4)= -1.0;
 
         df.Invert(dfinverse);
         // Compute improved estimate of solution x0
@@ -232,44 +232,44 @@ const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
 
         if(po > 1.0e-10)
           { // Update strength according to axial load
-            double p2 = x0(1)/po;
+            double p2= x0(1)/po;
             if(p2<0)
-             { p2 = 0.0; }
-            Fy = Fyo*(1-exp(-p2));
+             { p2= 0.0; }
+            Fy= Fyo*(1-exp(-p2));
           }
 
         // Apply plasticity theory again, return mapping algorithm
-        fb_try = k1*(x0(2) - sP_n);
-        xi_try = fb_try - q_n;
+        fb_try= k1*(x0(2) - sP_n);
+        xi_try= fb_try - q_n;
 
-        Phi_try = fabs(xi_try) - Fy;
+        Phi_try= fabs(xi_try) - Fy;
         // Elastic step
         if(Phi_try <= 0.0)
           {
-            fspr = fb_try;
-            dfsds = k1;
-            sP_n1 = sP_n;
-            q_n1 = q_n;
+            fspr= fb_try;
+            dfsds= k1;
+            sP_n1= sP_n;
+            q_n1= q_n;
           }
         // Plastic step
         else
           {
-            del_gam = Phi_try/(k1+H);
-            sign = (xi_try < 0) ? -1 : 1;
-            fspr = fb_try - del_gam*k1*sign;
-            dfsds = kbo;
-            sP_n1 = sP_n + del_gam*sign;
-            q_n1 = q_n + del_gam*H*sign;
+            del_gam= Phi_try/(k1+H);
+            sign= (xi_try < 0) ? -1 : 1;
+            fspr= fb_try - del_gam*k1*sign;
+            dfsds= kbo;
+            sP_n1= sP_n + del_gam*sign;
+            q_n1= q_n + del_gam*H*sign;
           }
 
         // Estimate the residual
-        f0(0) = x0(0) - fspr + x0(1)*x0(3);
-        f0(1) = x0(0)*h - Pe*h*x0(3) + x0(1)*(x0(2)+h*x0(3));
-        f0(2) = x0(1) - kvo*x0(4);
-        f0(3) = getSectionDeformation()[0] - x0(2) - h*x0(3);
-        f0(4) = -getSectionDeformation()[1] - x0(2)*x0(3) - h/2.0*x0(3)*x0(3) - x0(4);
+        f0(0)= x0(0) - fspr + x0(1)*x0(3);
+        f0(1)= x0(0)*h - Pe*h*x0(3) + x0(1)*(x0(2)+h*x0(3));
+        f0(2)= x0(1) - kvo*x0(4);
+        f0(3)= getSectionDeformation()[0] - x0(2) - h*x0(3);
+        f0(4)= -getSectionDeformation()[1] - x0(2)*x0(3) - h/2.0*x0(3)*x0(3) - x0(4);
 
-        normf0 = f0.Norm();
+        normf0= f0.Norm();
         if(iter > 19)
           {
               std::cerr << "WARNING! Iso2spring: Newton iteration failed. Norm Resid: " << normf0  << std::endl;
@@ -277,21 +277,21 @@ const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
           }
       }
     // Compute stiffness matrix by three step process
-    double denom = h*dfsds*(Pe - x0(1)) - x0(1)*x0(1);
-    static XC::Matrix fkin(3,2);
-    fkin(0,0) = 1.0;
-    fkin(1,0) = h;
-    fkin(2,0) = 0.0;
-    fkin(0,1) = -x0(3);
-    fkin(1,1) = -(x0(2) + h*x0(3));
-    fkin(2,1) = -1.0;
+    const double denom= h*dfsds*(Pe - x0(1)) - x0(1)*x0(1);
+    static Matrix fkin(3,2);
+    fkin(0,0)= 1.0;
+    fkin(1,0)= h;
+    fkin(2,0)= 0.0;
+    fkin(0,1)= -x0(3);
+    fkin(1,1)= -(x0(2) + h*x0(3));
+    fkin(2,1)= -1.0;
 
-    static XC::Matrix feq(3,3);
-    feq(0,0) = (Pe-x0(1))*h/denom;
-    feq(0,1) = feq(1,0) = x0(1)/denom;
-    feq(1,1) = dfsds/denom;
-    feq(0,2) = feq(1,2) = feq(2,0) = feq(2,1) = 0.0;
-    feq(2,2) = 1.0/kvo;
+    static Matrix feq(3,3);
+    feq(0,0)= (Pe-x0(1))*h/denom;
+    feq(0,1)= feq(1,0)= x0(1)/denom;
+    feq(1,1)= dfsds/denom;
+    feq(0,2)= feq(1,2)= feq(2,0)= feq(2,1)= 0.0;
+    feq(2,2)= 1.0/kvo;
 
     static Matrix ftot(2,2);
     static Matrix ktot(2,2);
@@ -299,17 +299,17 @@ const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
     ftot.addMatrixTripleProduct(0.0,fkin,feq,1.0);
     ftot.Invert(ktot);
 
-    ks(0,0) = ktot(0,0);
-    ks(1,0) = ktot(1,0);
-    ks(0,1) = ktot(0,1);
-    ks(1,1) = ktot(1,1);
-    ks(0,2) = ks(1,2) = ks(2,2) = ks(2,1) = ks(2,0) = 0.0;
+    ks(0,0)= ktot(0,0);
+    ks(1,0)= ktot(1,0);
+    ks(0,1)= ktot(0,1);
+    ks(1,1)= ktot(1,1);
+    ks(0,2)= ks(1,2)= ks(2,2)= ks(2,1)= ks(2,0)= 0.0;
 
 
     // Compute force vector
-    s3(0) = x0(0);
-    s3(1) = -x0(1);
-    s3(2) = (x0(1)*getSectionDeformation()[0] + x0(0)*h)/2.0;
+    s3(0)= x0(0);
+    s3(1)= -x0(1);
+    s3(2)= (x0(1)*getSectionDeformation()[0] + x0(0)*h)/2.0;
     return s3;
   }
 
@@ -317,8 +317,8 @@ const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
 const XC::Vector &XC::Isolator2spring::getInitialSectionDeformation(void) const
   {
     // Write to static variable for return
-    s(0) = utptInic[0];
-    s(1) = utptInic[1];
+    s(0)= utptInic[0];
+    s(1)= utptInic[1];
     return s;
   }
 
@@ -326,15 +326,23 @@ const XC::Vector &XC::Isolator2spring::getInitialSectionDeformation(void) const
 const XC::Vector &XC::Isolator2spring::getSectionDeformation(void) const
   {
     // Write to static variable for return
-    s(0) = utptTrial[0]-utptInic[0];
-    s(1) = utptTrial[1]-utptInic[1];
+    s(0)= utptTrial[0]-utptInic[0];
+    s(1)= utptTrial[1]-utptInic[1];
     return s;
+  }
+
+//! @brief Returns strain at position being passed as parameter.
+double XC::Isolator2spring::getStrain(const double &,const double &) const
+  {
+    std::cerr << "getStrain not implemented for class: "
+              << nombre_clase() << std::endl;
+    return 0.0;
   }
 
 int XC::Isolator2spring::commitState(void)
   {
-    sP_n = sP_n1;
-    q_n = q_n1;
+    sP_n= sP_n1;
+    q_n= q_n1;
     return 0;
   }
 
@@ -343,14 +351,14 @@ int XC::Isolator2spring::revertToLastCommit(void)
 
 int XC::Isolator2spring::revertToStart(void)
   {
-    for(int i = 0; i < 2; i++)
+    for(int i= 0; i < 2; i++)
       { utptInic[i]= 0.0; }
-    for(int i = 0; i < 2; i++)
+    for(int i= 0; i < 2; i++)
       { utptTrial[i]= 0.0; }
     sP_n= 0.0;
     sP_n1= 0.0;
     q_n= 0.0;
-    q_n1 = 0.0;
+    q_n1= 0.0;
     x0.Zero();
     ks.Zero();
     return 0;

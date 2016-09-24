@@ -147,9 +147,9 @@ int XC::FiberSection3dBase::updateParameter(int parameterID, Information &info)
      }
   }
 
-//! @brief Devuelve la deformación correspondiente a la posición being passed as parameter.
+//! @brief Returns strain at position being passed as parameter.
 double XC::FiberSection3dBase::getStrain(const double &y,const double &z) const
   { return get_strain(-y,z); } //XXX El cambio de signo de la y se debe al lío que produce
-                                         //el que la coordenada este cambiada de signo
-                                         //ver constructor UniaxialFiber3d y otras líneas.
+                               //el que la coordenada este cambiada de signo
+                               //ver constructor UniaxialFiber3d y otras líneas.
 

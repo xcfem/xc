@@ -24,61 +24,26 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ElasticPlateBase.h
+//PlateBase.cc
 
-#ifndef ElasticPlateBase_h
-#define ElasticPlateBase_h
+#include <material/section/plate_section/PlateBase.h>
 
-#include "PlateBase.h"
-#include <utility/matrix/Vector.h>
-#include <utility/matrix/Matrix.h>
+//! @brief Constuctor.
+XC::PlateBase::PlateBase(int tag,int classTag)
+  : XC::SectionForceDeformation(tag, classTag), h(0.0) {}
 
-namespace XC {
+//null constructor
+XC::PlateBase::PlateBase(int classTag)
+  :XC::SectionForceDeformation( 0, classTag), h(0.0) { }
 
-//! @ingroup MATPLAC
-//
-//! @brief Clase base para para materiales bidimensionales
-//! (como los de placas).
-class ElasticPlateBase: public PlateBase
+//full constructor
+XC::PlateBase::PlateBase(int tag, int classTag, double thickness)
+  :XC::SectionForceDeformation(tag,classTag), h(thickness) {}
+
+//! @brief Returns strain at position being passed as parameter.
+double XC::PlateBase::getStrain(const double &,const double &) const
   {
-  protected:
-    double E;  // elastic modulus
-    double nu; // poisson ratio
-
-    static const double five6; // =5/6 = shear correction factor
-
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
-
-  public : 
-
-    ElasticPlateBase(int tag,int classTag);
-    ElasticPlateBase(int classTag);
-    ElasticPlateBase(int tag,int classTag, double E, double nu, double h);
-
-    int commitState(void); 
-    int revertToLastCommit(void);
-    int revertToStart(void);
-
-    inline double getE(void) const
-      { return E; }
-    void setE(const double &d)
-      { E= d; }
-    inline double getnu(void) const
-      { return nu; }
-    void setnu(const double &d)
-      { nu= d; }
-
-    inline double membraneModulus(void) const
-      { return (E/(1.0-nu*nu)*h); }
-    inline double shearModulus(void) const
-      { return (0.5*E/(1.0+nu)*h); }
-    inline double bendingModulus(void) const
-      { return (E*(h*h*h)/12.0/( 1.0 - nu*nu )); }
-
-
-  }; //end of ElasticPlateBase declarations
-
-} // end of XC namespace
-
-#endif
+    std::cerr << "getStrain not implemented for class: "
+              << nombre_clase() << std::endl;
+    return 0.0;
+  }

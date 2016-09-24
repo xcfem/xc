@@ -24,60 +24,44 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ElasticPlateBase.h
+//PlateBase.h
 
-#ifndef ElasticPlateBase_h
-#define ElasticPlateBase_h
+#ifndef PlateBase_h
+#define PlateBase_h
 
-#include "PlateBase.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 
+#include "material/section/SectionForceDeformation.h"
+
+
 namespace XC {
 
+//! \ingroup MATSCC
+//!  @defgroup MATPLAC Materiales para elementos bidimensionales (placas,...).
+//
 //! @ingroup MATPLAC
 //
-//! @brief Clase base para para materiales bidimensionales
-//! (como los de placas).
-class ElasticPlateBase: public PlateBase
+//! @brief Base class for bidimensional membrane/plate/shell materials.
+class PlateBase: public SectionForceDeformation
   {
   protected:
-    double E;  // elastic modulus
-    double nu; // poisson ratio
+    double h; // plate thickness
 
-    static const double five6; // =5/6 = shear correction factor
+  public: 
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    PlateBase(int tag,int classTag);
+    PlateBase(int classTag);
+    PlateBase(int tag,int classTag, double h);
 
-  public : 
+    double getStrain(const double &y,const double &z) const;
 
-    ElasticPlateBase(int tag,int classTag);
-    ElasticPlateBase(int classTag);
-    ElasticPlateBase(int tag,int classTag, double E, double nu, double h);
+    inline double getH(void) const
+      { return h; }
+    void setH(const double &d)
+      { h= d; }
 
-    int commitState(void); 
-    int revertToLastCommit(void);
-    int revertToStart(void);
-
-    inline double getE(void) const
-      { return E; }
-    void setE(const double &d)
-      { E= d; }
-    inline double getnu(void) const
-      { return nu; }
-    void setnu(const double &d)
-      { nu= d; }
-
-    inline double membraneModulus(void) const
-      { return (E/(1.0-nu*nu)*h); }
-    inline double shearModulus(void) const
-      { return (0.5*E/(1.0+nu)*h); }
-    inline double bendingModulus(void) const
-      { return (E*(h*h*h)/12.0/( 1.0 - nu*nu )); }
-
-
-  }; //end of ElasticPlateBase declarations
+  }; //end of PlateBase declarations
 
 } // end of XC namespace
 

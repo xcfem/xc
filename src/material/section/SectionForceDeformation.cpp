@@ -291,21 +291,12 @@ int XC::SectionForceDeformation::getResponse(int responseID, Information &secInf
       }
   }
 
-//! @brief Devuelve la deformación correspondiente a la posición being passed as parameter.
-double XC::SectionForceDeformation::getStrain(const double &,const double &) const
-  {
-    std::cerr << "No se ha implementado la funcion getStrain para la clase: "
-              << nombre_clase() << std::endl;
-    return 0.0;
-  }
-
-//! @brief Devuelve la componente del vector de deformaciones que
-//! corresponde al índice being passed as parameter.
+//! @brief Returns 'defID' component of the generalized strain vector.
 double XC::SectionForceDeformation::getSectionDeformation(const int &defID) const
   {
     double retval= 0.0;
     const int order= getOrder();
-    const Vector &e= getSectionDeformation(); //Vector de deformaciones.
+    const Vector &e= getSectionDeformation(); //Generalized strain vector.
     const ResponseId &code= getType();
     for(register int i= 0;i<order;i++)
       if(code(i) == defID)
@@ -313,8 +304,7 @@ double XC::SectionForceDeformation::getSectionDeformation(const int &defID) cons
     return retval;
   }
 
-//! @brief Devuelve la componente del vector resultante de tensiones que
-//! corresponde al índice being passed as parameter.
+//! @brief Returns 'defID' component of the generalized stress vector.
 double XC::SectionForceDeformation::getStressResultant(const int &defID) const
   {
     double retval= 0.0;

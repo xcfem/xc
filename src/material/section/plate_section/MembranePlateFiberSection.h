@@ -58,7 +58,7 @@
 
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
-#include <material/section/SectionForceDeformation.h>
+#include "PlateBase.h"
 
 
 namespace XC {
@@ -69,13 +69,12 @@ class NDMaterial;
 //
 //! @brief Sección modelizada mediante fibras para materiales capaces de
 //! trabajar como placa y como membrana.
-class MembranePlateFiberSection: public SectionForceDeformation
+class MembranePlateFiberSection: public PlateBase
   {
   private:
     //quadrature data
     static const double sg[5];
     static const double wg[5];
-    double h; //plate thickness
     NDMaterial *theFibers[5];  //pointers to five materials (fibers)
     static const double root56; // =sqrt(5/6) 
     Vector strainResultant;
@@ -95,29 +94,18 @@ class MembranePlateFiberSection: public SectionForceDeformation
     int getOrder(void) const;
     const ResponseId &getType(void) const;
 
-    //swap history variables
-    int commitState(void); 
-
-    //revert to last saved state
-    int revertToLastCommit(void);
-
-    //revert to start
-    int revertToStart(void);
+    
+    int commitState(void); //swap history variables
+    int revertToLastCommit(void); //revert to last saved state
+    int revertToStart(void); //revert to start
 
     int setInitialSectionDeformation(const Vector &strain_from_element);
     int setTrialSectionDeformation(const Vector &strain_from_element);
     const Vector &getInitialSectionDeformation(void) const;
-
-    //send back the strain
-    const Vector& getSectionDeformation(void) const;
-
-    //send back the stress 
-    const Vector &getStressResultant(void) const;
-
-    //send back the tangent 
-    const Matrix &getSectionTangent(void) const;
-    //send back the initial tangent 
-    const Matrix &getInitialTangent(void) const
+    const Vector& getSectionDeformation(void) const; //send back the strain
+    const Vector &getStressResultant(void) const; //send back the stress 
+    const Matrix &getSectionTangent(void) const; //send back the tangent 
+    const Matrix &getInitialTangent(void) const //send back the initial tangent 
       {return this->getSectionTangent();}
 
     //print out data

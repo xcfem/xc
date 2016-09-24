@@ -254,7 +254,7 @@ SET(geom_section_repres material/section/repres/SeccionInerte material/section/r
 
 SET(section_material_repres material/section/repres/cell/VectorCells material/section/repres/cell/Cell material/section/repres/cell/QuadCell material/section/repres/cell/TriangCell material/section/repres/DiscretBase material/section/repres/section/FiberSectionRepr material/section/repres/section/FiberData material/section/repres/section/SectionRepres material/section/repres/CrossSectionProperties2d material/section/repres/CrossSectionProperties3d ${geom_section_repres})
 
-SET(section_plate_material material/section/plate_section/ElasticPlateBase material/section/plate_section/ElasticPlateProto material/section/plate_section/ElasticMembranePlateSection material/section/plate_section/ElasticPlateSection material/section/plate_section/MembranePlateFiberSection)
+SET(section_plate_material material/section/plate_section/PlateBase material/section/plate_section/ElasticPlateBase material/section/plate_section/ElasticPlateProto material/section/plate_section/ElasticMembranePlateSection material/section/plate_section/ElasticPlateSection material/section/plate_section/MembranePlateFiberSection)
 
 SET(fiber_section_material material/section/fiber_section/FiberSectionBase material/section/fiber_section/FiberSection2d material/section/fiber_section/FiberSection3dBase material/section/fiber_section/FiberSection3d material/section/fiber_section/FiberSectionGJ material/section/fiber_section/FiberSectionShear3d)
 

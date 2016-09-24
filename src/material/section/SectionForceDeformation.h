@@ -115,7 +115,7 @@ class SectionForceDeformation: public Material
     virtual const Vector &getSectionDeformation(void) const= 0;
     double getSectionDeformation(const int &) const;
     double getSectionDeformationByName(const std::string &) const;
-    virtual double getStrain(const double &y,const double &z= 0) const;
+    virtual double getStrain(const double &y,const double &z= 0) const= 0;
 
     virtual const Vector &getStressResultant(void) const= 0;
     double getStressResultant(const int &) const;

@@ -64,6 +64,12 @@ void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
 const XC::CrossSectionProperties3d &XC::BaseElasticSection3d::getCrossSectionProperties(void) const
   { return ctes_scc; }
 
+//! @brief Returns strain at position being passed as parameter.
+double XC::BaseElasticSection3d::getStrain(const double &y,const double &z) const
+  {
+    const Vector &def= getSectionDeformation();
+    return (def(0) + y*def(1) + z*def(2));
+  }
 
 void XC::BaseElasticSection3d::setCrossSectionProperties(const CrossSectionProperties3d &cs)  
   { ctes_scc= cs; }

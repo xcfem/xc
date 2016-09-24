@@ -118,6 +118,7 @@ class Isolator2spring : public SectionForceDeformation
     const Vector &getStressResultant(void) const;
     const Vector &getInitialSectionDeformation(void) const;
     const Vector &getSectionDeformation(void) const;
+    double getStrain(const double &,const double &) const;
 
     int commitState(void);
     int revertToLastCommit(void);

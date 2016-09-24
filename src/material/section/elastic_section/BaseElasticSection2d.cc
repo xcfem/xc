@@ -63,6 +63,12 @@ void XC::BaseElasticSection2d::sectionGeometry(const std::string &cod_geom)
       std::cerr << "El puntero al cargador de materiales es nulo." << std::endl;
   }
 
+//! brief Returns strain at position being passed as parameter.
+double XC::BaseElasticSection2d::getStrain(const double &y,const double &z) const
+  {
+    const Vector &def= getSectionDeformation();
+    return (def(0) + y*def(1));
+  }
 
 //! @brief Send members del objeto through the channel being passed as parameter.
 int XC::BaseElasticSection2d::sendData(CommParameters &cp)

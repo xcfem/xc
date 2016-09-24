@@ -58,6 +58,7 @@ class BaseElasticSection2d: public BaseElasticSection
     void setCrossSectionProperties(const CrossSectionProperties2d &);  
     void sectionGeometry(const std::string &);
 
+    double getStrain(const double &y,const double &z= 0) const;
 
     void Print(std::ostream &s, int flag =0) const;
   };

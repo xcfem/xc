@@ -86,6 +86,14 @@ XC::PlanoDeformacion XC::SeccionBarraPrismatica::getPlanoDeformacion(void) const
     return retval;
   }
 
+//! @brief Returns strain at postion being passed as parameter.
+double XC::SeccionBarraPrismatica::getStrain(const double &y,const double &z) const
+  {
+    std::cerr << "getStrain not implemented for class: "
+              << nombre_clase() << std::endl;
+    return 0.0;
+  }
+
 //! @brief Devuelve la coordenada «y» del centro de gravedad de la sección.
 double XC::SeccionBarraPrismatica::getCdgY(void) const
   { return 0.0; }

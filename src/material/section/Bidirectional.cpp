@@ -272,6 +272,14 @@ const XC::Vector &XC::Bidirectional::getSectionDeformation(void) const
     return s;
   }
 
+//! @brief Returns strain at the position being passed as parameter.
+double XC::Bidirectional::getStrain(const double &,const double &) const
+  {
+    std::cerr << "getStrain not implemented in class: "
+              << nombre_clase() << std::endl;
+    return 0.0;
+  }
+
 int XC::Bidirectional::commitState(void)
   {
         eP_n[0] = eP_n1[0];

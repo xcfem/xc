@@ -36,19 +36,19 @@ const double XC::ElasticPlateBase::five6 = 5.0/6.0 ; //shear correction
 
 //! @brief Constuctor.
 XC::ElasticPlateBase::ElasticPlateBase(int tag,int classTag)
-  : XC::SectionForceDeformation(tag, classTag), E(0.0), nu(0.0), h(0.0) {}
+  : XC::PlateBase(tag, classTag), E(0.0), nu(0.0) {}
 
 //null constructor
 XC::ElasticPlateBase::ElasticPlateBase(int classTag)
-  :XC::SectionForceDeformation( 0, classTag),
-   E(0.0), nu(0.0), h(0.0) { }
+  :XC::PlateBase( 0, classTag),
+   E(0.0), nu(0.0) { }
 
 //full constructor
 XC::ElasticPlateBase::ElasticPlateBase(int tag, int classTag,
                                            double young,
                                            double poisson,
                                            double thickness)
-  :XC::SectionForceDeformation(tag,classTag), E(young), nu(poisson),h(thickness) {}
+  :XC::PlateBase(tag,classTag,h), E(young), nu(poisson) {}
 
 //swap history variables
 int XC::ElasticPlateBase::commitState(void) 
@@ -65,7 +65,7 @@ int XC::ElasticPlateBase::revertToStart(void)
 //! @brief Envía los datos through the channel being passed as parameter.
 int XC::ElasticPlateBase::sendData(CommParameters &cp)
   {
-    int res= SectionForceDeformation::sendData(cp);
+    int res= PlateBase::sendData(cp);
     res+= cp.sendDoubles(E,nu,h,getDbTagData(),CommMetaData(5));
     return res;
   }
@@ -73,7 +73,7 @@ int XC::ElasticPlateBase::sendData(CommParameters &cp)
 //! @brief Recibe los datos through the channel being passed as parameter.
 int XC::ElasticPlateBase::recvData(const CommParameters &cp)
   {
-    int res= SectionForceDeformation::recvData(cp);
+    int res= PlateBase::recvData(cp);
     res+= cp.receiveDoubles(E,nu,h,getDbTagData(),CommMetaData(5));
     return res;
   }

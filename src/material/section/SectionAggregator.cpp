@@ -338,7 +338,7 @@ int XC::SectionAggregator::setTrialSectionDeformation(const Vector &def)
     return ret;
   }
 
-//! @brief Devuelve la deformación correspondiente a la posición being passed as parameter.
+//! @brief Returns strain at position being passed as parameter.
 double XC::SectionAggregator::getStrain(const double &y,const double &z) const
   {
     double retval= 0;
