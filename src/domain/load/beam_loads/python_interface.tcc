@@ -31,8 +31,8 @@ class_<XC::BeamLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("BeamLoad"
   ;
 
 class_<XC::BeamStrainLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamStrainLoad", no_init)
-  .add_property("planoDeformacionDorsal", make_function( &XC::BeamStrainLoad::getPlanoDeformacion1, return_internal_reference<>() ),&XC::BeamStrainLoad::setPlanoDeformacion1)
-  .add_property("planoDeformacionFrontal", make_function( &XC::BeamStrainLoad::getPlanoDeformacion2, return_internal_reference<>() ),&XC::BeamStrainLoad::setPlanoDeformacion2)
+  .add_property("planoDeformacionDorsal", make_function( &XC::BeamStrainLoad::getDeformationPlane1, return_internal_reference<>() ),&XC::BeamStrainLoad::setDeformationPlane1)
+  .add_property("planoDeformacionFrontal", make_function( &XC::BeamStrainLoad::getDeformationPlane2, return_internal_reference<>() ),&XC::BeamStrainLoad::setDeformationPlane2)
   ;
 
 class_<XC::BeamMecLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamMecLoad", no_init)

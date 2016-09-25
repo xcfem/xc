@@ -56,7 +56,7 @@ epsilon= 3.5e-3
 p1= geom.Pos3d(-epsilon,width/2.0,zsup)
 p2= geom.Pos3d(-epsilon,-width/2.0,zsup)
 p3= geom.Pos3d(epsilon,width/2.0,zinf)
-fiberModel.setTrialDeformationPlane(xc.PlanoDeformacion(p1,p2,p3))
+fiberModel.setTrialDeformationPlane(xc.DeformationPlane(p1,p2,p3))
 
 N= fiberModel.getStressResultantComponent("N")
 Mz= fiberModel.getStressResultantComponent("Mz")

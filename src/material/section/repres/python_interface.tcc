@@ -52,11 +52,13 @@ class_<XC::CrossSectionProperties3d, bases<XC::CrossSectionProperties2d> >("Cros
   .def("getVDirEjeDebil",&XC::CrossSectionProperties3d::getVDirEjeDebil)
   ;
 
+XC::Material *(XC::DiscretBase::*getMaterialPtr)(void) const= &XC::DiscretBase::getMaterialPtr;
 class_<XC::DiscretBase, bases<EntConNmb>, boost::noncopyable >("DiscretBase", no_init)
   .def("getMaxY",&XC::DiscretBase::getMaxY,"Returns y coordinate maximum value.")
   .def("getMaxZ",&XC::DiscretBase::getMaxZ,"Returns z coordinate maximum value.")
   .def("getMinY",&XC::DiscretBase::getMinY,"Returns y coordinate minimum value.")
   .def("getMinZ",&XC::DiscretBase::getMinZ,"Returns z coordinate minimum value.")
+  .def("getMaterial",make_function(getMaterialPtr,return_internal_reference<>()), "returns a pointer to the material.")
   ;
 
 class_<XC::SeccionInerte, bases<EntCmd>, boost::noncopyable >("SeccionInerte", no_init)

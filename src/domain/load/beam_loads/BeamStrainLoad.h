@@ -31,7 +31,7 @@
 
 
 #include <domain/load/beam_loads/BeamLoad.h>
-#include "material/section/interaction_diagram/PlanoDeformacion.h"
+#include "material/section/interaction_diagram/DeformationPlane.h"
 
 namespace XC {
 class Matrix;
@@ -43,8 +43,8 @@ class CrossSectionProperties3d;
 //! @brief Carga debida a deformaciones impuestas sobre elementos de tipo viga.
 class BeamStrainLoad : public BeamLoad
   {
-    PlanoDeformacion planoDefDorsal; //!< Deformaciones impuestas en el extremo dorsal.
-    PlanoDeformacion planoDefFrontal; //!< Deformaciones impuestas en el extremo frontal.
+    DeformationPlane planoDefDorsal; //!< Deformaciones impuestas en el extremo dorsal.
+    DeformationPlane planoDefFrontal; //!< Deformaciones impuestas en el extremo frontal.
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
@@ -53,13 +53,13 @@ class BeamStrainLoad : public BeamLoad
     BeamStrainLoad(int tag, const ID &theElementTags);
     BeamStrainLoad(int tag= 0);
 
-    inline const PlanoDeformacion &getPlanoDeformacion1(void) const
+    inline const DeformationPlane &getDeformationPlane1(void) const
       { return planoDefDorsal; }
-    inline void setPlanoDeformacion1(const PlanoDeformacion &p)
+    inline void setDeformationPlane1(const DeformationPlane &p)
       { planoDefDorsal= p; }
-    inline const PlanoDeformacion &getPlanoDeformacion2(void) const
+    inline const DeformationPlane &getDeformationPlane2(void) const
       { return planoDefFrontal; }
-    inline void setPlanoDeformacion2(const PlanoDeformacion &p)
+    inline void setDeformationPlane2(const DeformationPlane &p)
       { planoDefFrontal= p; }
     const Vector &getSection1Deformation(const size_t &order,const ResponseId &code) const;
     const Vector &getSection2Deformation(const size_t &order,const ResponseId &code) const;

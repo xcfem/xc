@@ -22,16 +22,19 @@
 //python_interface.tcc
 
 const XC::Vector &(XC::SectionForceDeformation::*getStressResultantVector)(void) const= &XC::SectionForceDeformation::getStressResultant;
+const XC::Vector &(XC::SectionForceDeformation::*getSectionDeformationConstVector)(void) const= &XC::SectionForceDeformation::getSectionDeformation;
 class_<XC::SectionForceDeformation, XC::SectionForceDeformation *, bases<XC::Material>, boost::noncopyable >("SectionForceDeformation", no_init)
   .add_property("getType",make_function(&XC::SectionForceDeformation::getType, return_internal_reference<>()),"Returns section type.")
   .def("getStressResultantComponent",&XC::SectionForceDeformation::getStressResultantByName)
   .def("getStressResultant",make_function(getStressResultantVector, return_internal_reference<>()))
   .def("getSectionDeformationByName",&XC::SectionForceDeformation::getSectionDeformationByName)
+  .add_property("sectionDeformation", make_function( getSectionDeformationConstVector, return_internal_reference<>() ), &XC::SectionForceDeformation::setTrialSectionDeformation,"section deformation vector (generalized strains).")
+  .add_property("initialSectionDeformation", make_function( &XC::SectionForceDeformation::getInitialSectionDeformation, return_internal_reference<>() ), &XC::SectionForceDeformation::setInitialSectionDeformation,"section initial deformation vector (generalized strains).")
   .def("getTangentStiffness", make_function(&XC::SectionForceDeformation::getSectionTangent, return_internal_reference<>()))
   .def("getInitialTangentStiffness", make_function(&XC::SectionForceDeformation::getInitialTangent, return_internal_reference<>()))
   .def("getFlexibility", make_function(&XC::SectionForceDeformation::getSectionFlexibility, return_internal_reference<>()))
   .def("getInitialFlexibility", make_function(&XC::SectionForceDeformation::getInitialFlexibility, return_internal_reference<>()))
-  .def("getStrain",&XC::SectionForceDeformation::getStrain,"Returns strain at (y,z) position.")
+  .def("getStrain",&XC::SectionForceDeformation::getStrain,"Returns strain at position being passed as parameter.")
    ;
 
 class_<XC::Bidirectional, bases<XC::SectionForceDeformation>, boost::noncopyable >("Bidirectional", no_init);
@@ -59,6 +62,8 @@ class_<XC::SeccionBarraPrismatica, XC::SeccionBarraPrismatica *, bases<XC::Secti
   .def("getPuntoSemiplanoCompresiones",&XC::SeccionBarraPrismatica::getPuntoSemiplanoCompresiones)
   .def("setTrialDeformationPlane",&XC::SeccionBarraPrismatica::setTrialDeformationPlane,"trial deformations are calculated whith the deformation plane passed as argument.")
   .def("setInitialDeformationPlane",&XC::SeccionBarraPrismatica::setInitialDeformationPlane,"initial deformations are calculated whith the deformation plane passed as argument.")
+  .add_property("deformationPlane", &XC::SeccionBarraPrismatica::getDeformationPlane, &XC::SeccionBarraPrismatica::setTrialDeformationPlane,"section deformation plane.")
+  .add_property("initialDeformationPlane", &XC::SeccionBarraPrismatica::getInitialDeformationPlane, &XC::SeccionBarraPrismatica::setInitialDeformationPlane,"initial section deformation plane.")
 //.def("getTractionHalfPlane",getSemiplanoTracciones)
 //  .def("getTractionHalfPlaneFromLine",getSemiplanoTraccionesRecta)
 //  .def("getSemiplanoCompresiones",&XC::SeccionBarraPrismatica::getSemiplanoCompresiones)

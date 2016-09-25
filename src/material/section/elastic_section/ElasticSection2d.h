@@ -81,10 +81,6 @@ class ElasticSection2d: public BaseElasticSection2d
   {
   private:
     static Vector s;
-
-  protected:
-
-
   public:
     ElasticSection2d(int tag, double E, double A, double I);
     ElasticSection2d(int tag, double EA, double EI);

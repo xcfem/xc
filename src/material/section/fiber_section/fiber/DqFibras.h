@@ -55,7 +55,7 @@ class Parameter;
 class Information;
 class KRSeccion;
 class GeomSection;
-class PlanoDeformacion;
+class DeformationPlane;
 
 enum ClaseEsfuerzo {TRACCION_SIMPLE,TRACCION_COMPUESTA,FLEXION_SIMPLE,FLEXION_COMPUESTA,COMPRESION_SIMPLE,COMPRESION_COMPUESTA,ERROR};
 
@@ -139,7 +139,7 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     double getStressMin(void) const;
     double getStressMax(void) const;
     double getStressMed(void) const;
-    PlanoDeformacion getPlanoDeformacion(void) const;
+    DeformationPlane getDeformationPlane(void) const;
     const Vector &getDeformation(void) const;
     ClaseEsfuerzo getClaseEsfuerzo(const double &tol= 1e-4) const;
     bool enTraccion(void) const;

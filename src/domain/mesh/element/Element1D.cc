@@ -256,7 +256,7 @@ void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
     vector3dPointByRelDistLoadLocal(x,v);
   }
 
-void XC::Element1D::strainLoad(const PlanoDeformacion &p1,const PlanoDeformacion &p2)
+void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane &p2)
   {
     Preprocessor *preprocessor= GetPreprocessor();
     MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
@@ -265,8 +265,8 @@ void XC::Element1D::strainLoad(const PlanoDeformacion &p1,const PlanoDeformacion
     const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
 
     BeamStrainLoad *tmp= new BeamStrainLoad(loadTag,eTags);
-    tmp->setPlanoDeformacion1(p1);
-    tmp->setPlanoDeformacion2(p2);
+    tmp->setDeformationPlane1(p1);
+    tmp->setDeformationPlane2(p2);
     LoadPattern *lp= casos.getCurrentLoadPatternPtr();
     if(lp)
       {

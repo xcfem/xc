@@ -41,7 +41,7 @@ sigma= E*epsilon
 F= sigma*fiberArea
 N= 0.0
 My= 0.0
-Mz= -4*F*depth/2.0 #Mz positive is in the opposite direction with respecto to the positive y-axis.
+Mz= -4*F*depthOverY/2.0 #Mz positive is in the opposite direction with respecto to the positive y-axis.
 
 fourFibersSection.revertToStart()
 nodes= preprocessor.getNodeLoader

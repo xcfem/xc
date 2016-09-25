@@ -41,7 +41,7 @@ class Vector2d;
 
 namespace XC {
 
-class PlanoDeformacion;
+class DeformationPlane;
 
 //! \ingroup Mat
 //!
@@ -59,10 +59,11 @@ class SeccionBarraPrismatica: public SectionForceDeformation
     SeccionBarraPrismatica(const SeccionBarraPrismatica &otro);
     SeccionBarraPrismatica &operator=(const SeccionBarraPrismatica &otro);
 
-    int setTrialDeformationPlane(const PlanoDeformacion &);
-    int setInitialDeformationPlane(const PlanoDeformacion &);
-    virtual const Vector &getVectorDeformacion(const PlanoDeformacion &) const;
-    PlanoDeformacion getPlanoDeformacion(void) const;
+    int setTrialDeformationPlane(const DeformationPlane &);
+    int setInitialDeformationPlane(const DeformationPlane &);
+    virtual const Vector &getVectorDeformacion(const DeformationPlane &) const;
+    DeformationPlane getDeformationPlane(void) const;
+    DeformationPlane getInitialDeformationPlane(void) const;
     virtual double getStrain(const double &y,const double &z= 0) const;
 
     double getN(void) const;

@@ -68,7 +68,7 @@ Mz1= fourFibersSection.getFibers().getMz(0.0)
 fourFibersSection.setupFibers()
 RR= fourFibersSection.getStressResultant()
 R1= xc.Vector([RR[0],RR[2],RR[1]]) # N= RR[0], My= RR[2], Mz= RR[1]
-deformationPlane1= fourFibersSection.getFibers().getPlanoDeformacion()
+deformationPlane1= fourFibersSection.getFibers().getDeformationPlane()
 fourFibersSection.setTrialDeformationPlane(deformationPlane1)
 DD= fourFibersSection.getSectionDeformation()
 D1= xc.Vector([DD[0],DD[2],DD[1]]) # epsilon= DD[0], Ky= DD[2], Kz= DD[1]
@@ -77,10 +77,10 @@ My1S= fourFibersSection.getMy()
 Mz1S= fourFibersSection.getMz()
 
 N1Teor= 0.0
-My1Teor= 2*F*width
+My1Teor= 2*F*widthOverZ
 Mz1Teor= 0.0
 R1Teor=xc.Vector([N1Teor,My1Teor,Mz1Teor])
-Ky1Teor= 2*epsilon/width
+Ky1Teor= 2*epsilon/widthOverZ
 D1Teor=xc.Vector([0.0,Ky1Teor,0.0])
 
 ratioN1= abs(N1-N1Teor)
@@ -105,7 +105,7 @@ f4.getMaterial().setTrialStrain(epsilon4,0.0)
 N2= fourFibersSection.getFibers().getResultant()
 My2= fourFibersSection.getFibers().getMy(0.0)
 Mz2= fourFibersSection.getFibers().getMz(0.0)
-deformationPlane2= fourFibersSection.getFibers().getPlanoDeformacion()
+deformationPlane2= fourFibersSection.getFibers().getDeformationPlane()
 
 fourFibersSection.setupFibers()
 RR= fourFibersSection.getStressResultant()
@@ -119,9 +119,9 @@ Mz2S= fourFibersSection.getMz()
 
 N2Teor= 0.0
 My2Teor= 0.0
-Mz2Teor= -4*F*depth/2.0 #Mz positive is in the opposite direction with respecto to the positive y-axis. ???
+Mz2Teor= -4*F*depthOverY/2.0 #Mz positive is in the opposite direction with respecto to the positive y-axis. ???
 R2Teor=xc.Vector([N2Teor,My2Teor,Mz2Teor])
-Kz2Teor= 2*epsilon/depth
+Kz2Teor= 2*epsilon/depthOverY
 D2Teor=xc.Vector([0.0,0.0,-Kz2Teor]) #Negative ???
 
 ratioN2= abs(N2-N2Teor)
@@ -147,7 +147,7 @@ f4.getMaterial().setTrialStrain(epsilon4,0.0)
 N3= fourFibersSection.getFibers().getResultant()
 My3= fourFibersSection.getFibers().getMy(0.0)
 Mz3= fourFibersSection.getFibers().getMz(0.0)
-deformationPlane3= fourFibersSection.getFibers().getPlanoDeformacion()
+deformationPlane3= fourFibersSection.getFibers().getDeformationPlane()
 
 fourFibersSection.setupFibers()
 RR= fourFibersSection.getStressResultant()
@@ -160,11 +160,11 @@ My3S= fourFibersSection.getMy()
 Mz3S= fourFibersSection.getMz()
 
 N3Teor= 0.0
-My3Teor= -2*F*width/2.0
-Mz3Teor= -2*F*depth/2.0
+My3Teor= -2*F*widthOverZ/2.0
+Mz3Teor= -2*F*depthOverY/2.0
 R3Teor=xc.Vector([N3Teor,My3Teor,Mz3Teor])
-Ky3Teor= -epsilon/width
-Kz3Teor= epsilon/depth
+Ky3Teor= -epsilon/widthOverZ
+Kz3Teor= epsilon/depthOverY
 D3Teor=xc.Vector([0.0,Ky3Teor,-Kz3Teor]) #Negative ???
 
 ratioN3= abs(N3-N3Teor)

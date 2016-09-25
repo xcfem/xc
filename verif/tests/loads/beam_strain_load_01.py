@@ -65,7 +65,7 @@ lp0= casos.newLoadPattern("default","0")
 #\set_current_load_pattern{"0"}
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([1])
-defTermica= xc.PlanoDeformacion(alpha*AT)
+defTermica= xc.DeformationPlane(alpha*AT)
 eleLoad.planoDeformacionDorsal= defTermica
 eleLoad.planoDeformacionFrontal= defTermica
 

@@ -266,8 +266,8 @@ void XC::VectorSeccionesBarraPrismatica::addInitialSectionDeformations(const Bea
       std::cerr << "Error en VectorSeccionesBarraPrismatica::setInitialSectionDeformations" << std::endl;
     if(nSections>0)
       {
-        const Vector e1= (*this)[0]->getVectorDeformacion(strainLoad.getPlanoDeformacion1())*loadFactor;
-        const Vector e2= (*this)[nSections-1]->getVectorDeformacion(strainLoad.getPlanoDeformacion1())*loadFactor;
+        const Vector e1= (*this)[0]->getVectorDeformacion(strainLoad.getDeformationPlane1())*loadFactor;
+        const Vector e2= (*this)[nSections-1]->getVectorDeformacion(strainLoad.getDeformationPlane1())*loadFactor;
         const Vector a= (e2-e1)/L;
         Vector tmp;
         for(size_t i= 0;i<nSections;i++)

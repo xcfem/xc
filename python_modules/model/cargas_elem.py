@@ -22,7 +22,7 @@ def vector3dUniformLoadLocalSetElementos(preprocessor,setNameElem, cargaUnif):
     vector3d_uniform_load_local(e.tag,cargaUnif)
 
 def beamStrainLoadSetLineas(preprocessor,setNameLineas, strain):
-  pDef= xc.PlanoDeformacion(strain)
+  pDef= xc.DeformationPlane(strain)
   st= preprocessor.getSets.getSet(setNameLineas)
   lines= st.getLines()
   for l in lines:

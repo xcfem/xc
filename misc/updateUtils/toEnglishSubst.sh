@@ -109,5 +109,7 @@ do
 # sed -i 's/parametrosSeccionCircular/paramCircularSection/g' $fl
 # sed -i 's/parametrosSeccionDobleT/paramIsection/g' $fl
 # sed -i 's/parametrosPerfilMetalico/paramMetallicProfile/g' $fl
+#20160925 LCPT
+# sed -i 's/PlanoDeformacion/DeformationPlane/g' $fl
 
 done

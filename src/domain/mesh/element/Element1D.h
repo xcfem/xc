@@ -40,7 +40,7 @@ class Domain;
 class CrdTransf;
 class CrdTransf2d;
 class CrdTransf3d;
- class PlanoDeformacion;
+class DeformationPlane;
 
 //! \ingroup Elem
 //
@@ -94,7 +94,7 @@ class Element1D : public ElementBase<2>
     void vector3dPointByRelDistLoadLocal(const double &,const Vector &);
     void vector3dPointLoadGlobal(const Vector &,const Vector &);
     void vector3dPointLoadLocal(const Vector &,const Vector &);
-    void strainLoad(const PlanoDeformacion &p1, const PlanoDeformacion &p2);
+    void strainLoad(const DeformationPlane &p1, const DeformationPlane &p2);
 
 
   };

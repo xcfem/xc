@@ -50,7 +50,7 @@
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
 #include "xc_utils/src/geom/listas/utils_list_pos2d.h"
-#include "material/section/interaction_diagram/PlanoDeformacion.h"
+#include "material/section/interaction_diagram/DeformationPlane.h"
 
 
 //! @brief Constructor.
@@ -1024,7 +1024,7 @@ double XC::DqFibras::getStrainMed(void) const
   }
 
 //! @brief Devuelve el plano de deformaciones ajustado por mínimos cuadrados.
-XC::PlanoDeformacion XC::DqFibras::getPlanoDeformacion(void) const
+XC::DeformationPlane XC::DqFibras::getDeformationPlane(void) const
   {
     GeomObj::list_Pos3d puntos;
     if(!empty())
@@ -1035,7 +1035,7 @@ XC::PlanoDeformacion XC::DqFibras::getPlanoDeformacion(void) const
           else
             std::cerr << "DqFibras::getDeformationPlane; Puntero a fibra nulo." << std::endl;
       }
-    PlanoDeformacion retval;
+    DeformationPlane retval;
     retval.AjusteMinimosCuadrados(puntos);
     return retval;
   }
@@ -1043,7 +1043,7 @@ XC::PlanoDeformacion XC::DqFibras::getPlanoDeformacion(void) const
 //! @brief Devuelve el vector de deformaciones.
 const XC::Vector &XC::DqFibras::getDeformation(void) const
   {
-    const PlanoDeformacion pDef= getPlanoDeformacion();
+    const DeformationPlane pDef= getDeformationPlane();
     return pDef.getDeformation();
   }
 

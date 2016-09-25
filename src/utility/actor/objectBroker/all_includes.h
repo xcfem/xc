@@ -102,7 +102,7 @@
 #include "material/section/plate_section/ElasticPlateSection.h"
 #include "material/section/plate_section/ElasticMembranePlateSection.h"
 #include "material/section/plate_section/MembranePlateFiberSection.h"
-#include "material/section/interaction_diagram/PlanoDeformacion.h"
+#include "material/section/interaction_diagram/DeformationPlane.h"
 #include "material/section/Bidirectional.h"
 #include "material/section/interaction_diagram/InteractionDiagramData.h"
 #include "material/section/interaction_diagram/InteractionDiagram.h"

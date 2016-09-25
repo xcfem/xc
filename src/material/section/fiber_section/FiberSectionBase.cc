@@ -34,7 +34,7 @@
 #include "material/section/ResponseId.h"
 #include "material/section/repres/section/FiberSectionRepr.h"
 #include "material/section/repres/geom_section/GeomSection.h"
-#include "material/section/interaction_diagram/PlanoDeformacion.h"
+#include "material/section/interaction_diagram/DeformationPlane.h"
 #include "material/section/interaction_diagram/ParamAgotTN.h"
 #include "material/section/interaction_diagram/InteractionDiagramData.h"
 #include "material/section/interaction_diagram/CalcPivotes.h"
@@ -577,7 +577,7 @@ Pos3d XC::FiberSectionBase::Esf2Pos3d(void) const
   { return Pos3d(getStressResultant(XC::SECTION_RESPONSE_P),getStressResultant(XC::SECTION_RESPONSE_MY),getStressResultant(XC::SECTION_RESPONSE_MZ)); }
 
 //! @brief Devuelve la resultante de tensiones normales en la sección para el plano de deformación.
-Pos3d XC::FiberSectionBase::getNMyMz(const PlanoDeformacion &def)
+Pos3d XC::FiberSectionBase::getNMyMz(const DeformationPlane &def)
   {
     setTrialDeformationPlane(def);
     return Esf2Pos3d();
@@ -600,14 +600,14 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
         Pos3d P1= pivotes.getPivoteA(); //Pivote.
         Pos3d P2= P1+100.0*cp.GetK(); //Flexión en torno al eje Z local.
         Pos3d P3;
-        PlanoDeformacion def;
+        DeformationPlane def;
         const double inc_eps_B= datos_diag.getIncEps();
         const double eps_agot_A= datos_diag.getDefsAgotPivotes().getDefAgotPivoteA();
         const double eps_agot_B= datos_diag.getDefsAgotPivotes().getDefAgotPivoteB();
         for(double e= eps_agot_A;e>=eps_agot_B;e-=inc_eps_B)
           {
             P3= pivotes.getPuntoB(e);
-            lista_esfuerzos.append(getNMyMz(PlanoDeformacion(P1,P2,P3)));
+            lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
           }
         //Dominios 3 y 4
         P1= pivotes.getPivoteB(); //Pivote
@@ -616,13 +616,13 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
         for(double e= eps_agot_A;e>=0.0;e-=inc_eps_A)
           {
             P3= pivotes.getPuntoA(e);
-            lista_esfuerzos.append(getNMyMz(PlanoDeformacion(P1,P2,P3)));
+            lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
           }
         //Dominio 4a
         //Calculamos la deformación en D cuando el pivote es B
         //y la deformación en A es nula (inicio del dominio 4a).
         const Pos3d PA0= pivotes.getPuntoA(0.0); //Deformación nula en la armadura.
-        const PlanoDeformacion def_lim_4a= PlanoDeformacion(P1,P2,PA0);
+        const DeformationPlane def_lim_4a= DeformationPlane(P1,P2,PA0);
         const Pos2d PD= pivotes.getPosPuntoD();
         const double eps_D4a= def_lim_4a.Deformacion(PD);
         const double recorr_eps_D4a= eps_D4a;
@@ -632,7 +632,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
             for(double e= eps_D4a;e>=0.0;e-=inc_eps_D4a)
               {
                 P3= pivotes.getPuntoD(e);
-                lista_esfuerzos.append(getNMyMz(PlanoDeformacion(P1,P2,P3)));
+                lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
               }
           }
         //Dominio 5
@@ -643,7 +643,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
         for(double e= 0.0;e>=eps_agot_C;e-=inc_eps_D)
           {
             P3= pivotes.getPuntoD(e);
-            lista_esfuerzos.append(getNMyMz(PlanoDeformacion(P1,P2,P3)));
+            lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
           }
       }
   }

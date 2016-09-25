@@ -24,13 +24,13 @@ G= E/(2*(1+nu)) # Shear modulus
 # Cross section properties
 y0= 0
 z0= 0
-width= 2
-depth= 1
+widthOverZ= 2
+depthOverY= 1
 nDivIJ= 20
 nDivJK= 20
-A= width*depth # Cross section area (m2)
-Iy= 1/12.0*width*depth**3 # Cross section moment of inertia (m4)
-Iz= 1/12.0*depth*width**3 # Cross section moment of inertia (m4)
+A= widthOverZ*depthOverY # Cross section area (m2)
+Iy= 1/12.0*widthOverZ*depthOverY**3 # Cross section moment of inertia (m4)
+Iz= 1/12.0*depthOverY*widthOverZ**3 # Cross section moment of inertia (m4)
 
 
 # Geometry
@@ -55,8 +55,8 @@ respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",E) # Respues
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",E) # Respuesta de la sección a cortante según y.
 # Secciones
 geomCuadFibrasTN= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibrasTN")
-y1= width/2.0
-z1= depth/2.0
+y1= widthOverZ/2.0
+z1= depthOverY/2.0
 regiones= geomCuadFibrasTN.getRegions
 elast= regiones.newQuadRegion("elast")
 elast.nDivIJ= nDivIJ

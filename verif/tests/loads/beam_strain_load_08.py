@@ -70,7 +70,7 @@ lp0.gammaF= gammaF
 #casos.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([1])
-defTermica= xc.PlanoDeformacion(alpha*AT)
+defTermica= xc.DeformationPlane(alpha*AT)
 eleLoad.planoDeformacionDorsal= defTermica
 eleLoad.planoDeformacionFrontal= defTermica
 #We add the load case to domain.

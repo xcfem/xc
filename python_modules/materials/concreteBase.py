@@ -165,7 +165,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             # Etsdiag=-self.tensionStiffparam.slopeRegresLineFixedPoint()
             # self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
         self.matTagK= self.materialDiagramK.tag
-        return self.matTagK
+        return self.materialDiagramK #30160925 was 'return self.matTagK'
 
     def defDiagD(self,preprocessor):
         ''' Defines a uniaxial material to represent the design stress-strain diagram
@@ -183,7 +183,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
             self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
         self.matTagD= self.materialDiagramD.tag
-        return self.matTagD
+        return self.materialDiagramD #30160925 was 'return self.matTagD'
 
     def sigmaPR(self,eps):
         """ stress as function of strain according to parabola-rectangle diagram"""

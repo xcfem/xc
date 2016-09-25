@@ -79,7 +79,7 @@ class FiberSectionBase: public SeccionBarraPrismatica
     set_fibras_iterator get_set_fibras(const std::string &nmb_set);
     virtual double get_dist_to_neutral_axis(const double &,const double &) const;
     Pos3d Esf2Pos3d(void) const;
-    Pos3d getNMyMz(const PlanoDeformacion &);
+    Pos3d getNMyMz(const DeformationPlane &);
     void getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
     const NMyMzPointCloud &getInteractionDiagramPoints(const InteractionDiagramData &);
     const NMPointCloud &getInteractionDiagramPointsForPlane(const InteractionDiagramData &, const double &);

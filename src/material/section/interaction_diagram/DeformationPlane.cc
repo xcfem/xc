@@ -24,9 +24,9 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//PlanoDeformacion.cc
+//DeformationPlane.cc
 
-#include "PlanoDeformacion.h"
+#include "DeformationPlane.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/d2/EcuacionGeneralPlano3d.h"
@@ -37,7 +37,7 @@
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
 #include "utility/actor/actor/MovableVector.h"
 
-bool XC::PlanoDeformacion::check_positions(const Pos3d &pA,const Pos3d &pB, const Pos3d &pC)
+bool XC::DeformationPlane::check_positions(const Pos3d &pA,const Pos3d &pB, const Pos3d &pC)
   {
     const Pos2d p1= Pos2d(pA.y(),pA.z());
     const Pos2d p2= Pos2d(pB.y(),pB.z());
@@ -45,7 +45,7 @@ bool XC::PlanoDeformacion::check_positions(const Pos3d &pA,const Pos3d &pB, cons
     return check_positions(p1,p2,p3);
   }
 
-bool XC::PlanoDeformacion::check_positions(const Pos2d &p1,const Pos2d &p2, const Pos2d &p3)
+bool XC::DeformationPlane::check_positions(const Pos2d &p1,const Pos2d &p2, const Pos2d &p3)
   {
     bool retval= true;
     const GEOM_FT tol2= 1e-3;
@@ -53,34 +53,34 @@ bool XC::PlanoDeformacion::check_positions(const Pos2d &p1,const Pos2d &p2, cons
     if(d12<tol2)
       {
         retval= false;
-        std::clog << "PlanoDeformacion; points p1= " << p1 << " and p2= " 
+        std::clog << "DeformationPlane; points p1= " << p1 << " and p2= " 
                   << p2 << " are too close d= " << sqrt(d12) << std::endl;
       }
     const GEOM_FT d13= p1.dist2(p3);
     if(d13<tol2)
       {
         retval= false;
-        std::clog << "PlanoDeformacion; points p1= " << p1 << " and p3= " 
+        std::clog << "DeformationPlane; points p1= " << p1 << " and p3= " 
                   << p3 << " are too close d= " << sqrt(d13) << std::endl;
       }
     const GEOM_FT d23= p2.dist2(p3);
     if(d23<tol2)
       {
         retval= false;
-        std::clog << "PlanoDeformacion; points p2= " << p2 << " and p3= " 
+        std::clog << "DeformationPlane; points p2= " << p2 << " and p3= " 
                   << p3 << " are too close d= " << sqrt(d23) << std::endl;
       }
     return retval;
   }
 
-XC::PlanoDeformacion::PlanoDeformacion(const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)
+XC::DeformationPlane::DeformationPlane(const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)
   : Plano3d(p1,p2,p3), MovableObject(0) { check_positions(p1,p2,p3); }
 
-XC::PlanoDeformacion::PlanoDeformacion(const Plano3d &p)
+XC::DeformationPlane::DeformationPlane(const Plano3d &p)
   : Plano3d(p), MovableObject(0) {}
 
 
-XC::PlanoDeformacion::PlanoDeformacion( const Pos2d &yz1, const double &e_1, //Deformaciones en tres fibras de la sección.
+XC::DeformationPlane::DeformationPlane( const Pos2d &yz1, const double &e_1, //Deformaciones en tres fibras de la sección.
                   const Pos2d &yz2, const double &e_2,
                   const Pos2d &yz3, const double &e_3)
   : Plano3d(), MovableObject(0)
@@ -91,10 +91,10 @@ XC::PlanoDeformacion::PlanoDeformacion( const Pos2d &yz1, const double &e_1, //D
     check_positions(p1,p2,p3);
     TresPuntos(p1,p2,p3);
   }
-XC::PlanoDeformacion::PlanoDeformacion(const double &eps) //Deformación constante en toda la sección.
+XC::DeformationPlane::DeformationPlane(const double &eps) //Deformación constante en toda la sección.
   :Plano3d(Pos3d(eps,100,0),Pos3d(eps,0,100),Pos3d(eps,100,100)), MovableObject(0) {}
 
-XC::PlanoDeformacion::PlanoDeformacion(const Vector &e)
+XC::DeformationPlane::DeformationPlane(const Vector &e)
   : Plano3d(), MovableObject(0)
   {
     const double e_1= e(0); //Deformación en (0,0)
@@ -109,7 +109,7 @@ XC::PlanoDeformacion::PlanoDeformacion(const Vector &e)
     TresPuntos(p1,p2,p3);
   }
 
-void XC::PlanoDeformacion::ConstantStrain(const double &e)
+void XC::DeformationPlane::ConstantStrain(const double &e)
   {
     const Pos3d p1(e,0.0,0.0);
     const Pos3d p2(e,100.0,0.0);
@@ -119,11 +119,11 @@ void XC::PlanoDeformacion::ConstantStrain(const double &e)
 
 //! @brief Devuelve la deformación que corresponde a la
 //! fibra de posición "p"
-double XC::PlanoDeformacion::Deformacion(const Pos2d &p) const
+double XC::DeformationPlane::Deformacion(const Pos2d &p) const
   { return Plano3d::x(p); }
 
 //! @brief Devuelve el vector de deformaciones.
-const XC::Vector &XC::PlanoDeformacion::getDeformation(void) const
+const XC::Vector &XC::DeformationPlane::getDeformation(void) const
   {
     static Vector retval(3);
     retval(0)= Deformacion(Pos2d(0,0));
@@ -133,7 +133,7 @@ const XC::Vector &XC::PlanoDeformacion::getDeformation(void) const
   }
 
 //! @brief Devuelve el vector de deformaciones.
-const XC::Vector &XC::PlanoDeformacion::getDeformation(const size_t &order,const ResponseId &code) const
+const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const ResponseId &code) const
   {
     static Vector retval;
     retval.resize(order);
@@ -152,7 +152,7 @@ const XC::Vector &XC::PlanoDeformacion::getDeformation(const size_t &order,const
   }
 
 //! @brief Devuelve la fibra neutra.
-Recta2d XC::PlanoDeformacion::getFibraNeutra(void)const
+Recta2d XC::DeformationPlane::getFibraNeutra(void)const
   {
     const double a= angulo(*this,PlanoYZ3d);
     Recta2d retval;
@@ -169,7 +169,7 @@ Recta2d XC::PlanoDeformacion::getFibraNeutra(void)const
 
 
 //! @brief Devuelve (si puede) un punto en el que las tensiones son de tracción.
-Pos2d XC::PlanoDeformacion::getPuntoSemiplanoTracciones(void) const
+Pos2d XC::DeformationPlane::getPuntoSemiplanoTracciones(void) const
   {
     Pos2d retval(0,0);
     const Recta2d fn(getFibraNeutra());
@@ -190,7 +190,7 @@ Pos2d XC::PlanoDeformacion::getPuntoSemiplanoTracciones(void) const
   }
 
 //! @brief Devuelve (si puede) un punto en el que las tensiones son de compresion.
-Pos2d XC::PlanoDeformacion::getPuntoSemiplanoCompresiones(void) const
+Pos2d XC::DeformationPlane::getPuntoSemiplanoCompresiones(void) const
   {
     Pos2d retval(0,0);
     const Recta2d fn(getFibraNeutra());
@@ -212,7 +212,7 @@ Pos2d XC::PlanoDeformacion::getPuntoSemiplanoCompresiones(void) const
 
 //! @brief Devuelve el semiplano cuyo borde es la recta que se pasa
 //! como parámetro y que está contenido en el semiplano de tracción.
-Semiplano2d XC::PlanoDeformacion::getSemiplanoTracciones(const Recta2d &r) const
+Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(const Recta2d &r) const
   {
     const Semiplano2d spt= getSemiplanoTracciones();
     assert(spt.exists());
@@ -229,7 +229,7 @@ Semiplano2d XC::PlanoDeformacion::getSemiplanoTracciones(const Recta2d &r) const
         if(spt.In(p))
           retval= Semiplano2d(r,p);
         else
-	  std::cerr << "PlanoDeformacion::getSemiplanoTracciones; no se pudo encontrar"
+	  std::cerr << "DeformationPlane::getSemiplanoTracciones; no se pudo encontrar"
                     << " el semiplano traccionado cuyo borde es r= " << r << std::endl;
       }
     return retval;
@@ -237,7 +237,7 @@ Semiplano2d XC::PlanoDeformacion::getSemiplanoTracciones(const Recta2d &r) const
 
 //! @brief Devuelve el semiplano cuyo borde es la fibra neutra
 //! y en el que las tensiones son de tracción.
-Semiplano2d XC::PlanoDeformacion::getSemiplanoTracciones(void) const
+Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(void) const
   {
     const Recta2d fn= getFibraNeutra();
     bool exists= fn.exists();
@@ -262,7 +262,7 @@ Semiplano2d XC::PlanoDeformacion::getSemiplanoTracciones(void) const
 
 //! @brief Devuelve el semiplano cuyo borde es la recta que se pasa
 //! como parámetro y en el que las tensiones son de compresión.
-Semiplano2d XC::PlanoDeformacion::getSemiplanoCompresiones(const Recta2d &r) const
+Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(const Recta2d &r) const
   {
     const Recta2d fn= getFibraNeutra();
     bool exists= fn.exists();
@@ -287,7 +287,7 @@ Semiplano2d XC::PlanoDeformacion::getSemiplanoCompresiones(const Recta2d &r) con
 
 //! @brief Devuelve el semiplano cuyo borde es la fibra neutra
 //! y en el que las tensiones son de compresión.
-Semiplano2d XC::PlanoDeformacion::getSemiplanoCompresiones(void) const
+Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(void) const
   {
     const Recta2d fn= getFibraNeutra();
     bool exists= fn.exists();
@@ -298,7 +298,7 @@ Semiplano2d XC::PlanoDeformacion::getSemiplanoCompresiones(void) const
   }
 
 //! @brief Send members del objeto through the channel being passed as parameter.
-int XC::PlanoDeformacion::sendData(CommParameters &cp)
+int XC::DeformationPlane::sendData(CommParameters &cp)
   {
     //setDbTagDataPos(0,getTag());
     Vector ec_gen(4);
@@ -309,7 +309,7 @@ int XC::PlanoDeformacion::sendData(CommParameters &cp)
   }
 
 //! @brief Receives members del objeto through the channel being passed as parameter.
-int XC::PlanoDeformacion::recvData(const CommParameters &cp)
+int XC::DeformationPlane::recvData(const CommParameters &cp)
   {
     //setTag(getDbTagDataPos(0));
     Vector ec_gen(4);
@@ -320,7 +320,7 @@ int XC::PlanoDeformacion::recvData(const CommParameters &cp)
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::PlanoDeformacion::sendSelf(CommParameters &cp)
+int XC::DeformationPlane::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
     const int dataTag= getDbTag();
@@ -334,7 +334,7 @@ int XC::PlanoDeformacion::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PlanoDeformacion::recvSelf(const CommParameters &cp)
+int XC::DeformationPlane::recvSelf(const CommParameters &cp)
   {
     inicComm(3);
     const int dataTag= getDbTag();

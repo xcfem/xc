@@ -24,10 +24,10 @@
 // junto a este programa. 
 // En caso contrario, consulte <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//PlanoDeformacion
+//DeformationPlane
 
-#ifndef PLANO_DEFORMACION_H
-#define PLANO_DEFORMACION_H
+#ifndef DEFORMATION_PLANE_H
+#define DEFORMATION_PLANE_H
 
 #include <iostream>
 #include "xc_utils/src/geom/d2/Plano3d.h"
@@ -50,7 +50,7 @@ class ResponseId;
 //! @ingroup MATSCCDiagInt
 //
 //! @brief Plano de deformación de una sección.
-class PlanoDeformacion: public Plano3d, public MovableObject
+class DeformationPlane: public Plano3d, public MovableObject
   {
   protected:
     bool check_positions(const Pos2d &,const Pos2d &, const Pos2d &);
@@ -62,13 +62,13 @@ class PlanoDeformacion: public Plano3d, public MovableObject
     friend class FiberSectionBase; //Borrar esta línea.
     const Vector &getDeformation(void) const;
   public:
-    PlanoDeformacion( const Pos3d &p1,const Pos3d &p2, const Pos3d &p3);
-    explicit PlanoDeformacion(const Plano3d &);
-    PlanoDeformacion( const Pos2d &yz1, const double &e_1, //Deformaciones en tres fibras de la sección.
+    DeformationPlane( const Pos3d &p1,const Pos3d &p2, const Pos3d &p3);
+    explicit DeformationPlane(const Plano3d &);
+    DeformationPlane( const Pos2d &yz1, const double &e_1, //Deformaciones en tres fibras de la sección.
                       const Pos2d &yz2, const double &e_2,
                       const Pos2d &yz3, const double &e_3);
-    explicit PlanoDeformacion(const double &eps= 0.0);
-    PlanoDeformacion(const Vector &e);
+    explicit DeformationPlane(const double &eps= 0.0);
+    DeformationPlane(const Vector &e);
 
     double Deformacion(const Pos2d &p) const;
     const Vector &getDeformation(const size_t &order,const ResponseId &code) const;

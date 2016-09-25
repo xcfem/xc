@@ -27,7 +27,7 @@
 //SeccionBarraPrismatica.cpp
 
 #include "SeccionBarraPrismatica.h"
-#include "material/section/interaction_diagram/PlanoDeformacion.h"
+#include "material/section/interaction_diagram/DeformationPlane.h"
 #include <domain/mesh/element/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <utility/matrix/Matrix.h>
@@ -63,16 +63,21 @@ XC::SeccionBarraPrismatica &XC::SeccionBarraPrismatica::operator=(const SeccionB
   }
 
 //! @brief Establece el plano de deformaciones de la sección.
-int XC::SeccionBarraPrismatica::setTrialDeformationPlane(const PlanoDeformacion &plano)
+int XC::SeccionBarraPrismatica::setTrialDeformationPlane(const DeformationPlane &plano)
   { return setTrialSectionDeformation(getVectorDeformacion(plano)); }
 
 //! @brief Establece el plano de deformaciones iniciales de la sección.
-int XC::SeccionBarraPrismatica::setInitialDeformationPlane(const PlanoDeformacion &plano)
+int XC::SeccionBarraPrismatica::setInitialDeformationPlane(const DeformationPlane &plano)
   { return setInitialSectionDeformation(getVectorDeformacion(plano)); }
+
+//! @brief Returns initial deformation plane.
+XC::DeformationPlane XC::SeccionBarraPrismatica::getInitialDeformationPlane(void) const
+  { return DeformationPlane(getInitialSectionDeformation()); }
+
 
 //! @brief Devuelve el vector de deformaciones generalizadas que corresponde
 //! al plano de deformaciones being passed as parameter.
-const XC::Vector &XC::SeccionBarraPrismatica::getVectorDeformacion(const PlanoDeformacion &plano) const
+const XC::Vector &XC::SeccionBarraPrismatica::getVectorDeformacion(const DeformationPlane &plano) const
   {
     const int order= getOrder();
     const ResponseId &code= getType();
@@ -80,9 +85,9 @@ const XC::Vector &XC::SeccionBarraPrismatica::getVectorDeformacion(const PlanoDe
   }
 
 //! @brief Devuelve el vector de deformaciones de la sección.
-XC::PlanoDeformacion XC::SeccionBarraPrismatica::getPlanoDeformacion(void) const
+XC::DeformationPlane XC::SeccionBarraPrismatica::getDeformationPlane(void) const
   {
-    PlanoDeformacion retval= PlanoDeformacion(getSectionDeformation());
+    DeformationPlane retval= DeformationPlane(getSectionDeformation());
     return retval;
   }
 
@@ -212,7 +217,7 @@ bool XC::SeccionBarraPrismatica::hayTorsor(const double &tol) const
 
 //! @brief Devuelve la fibra neutra.
 Recta2d XC::SeccionBarraPrismatica::getFibraNeutra(void) const
-  { return getPlanoDeformacion().getFibraNeutra(); }
+  { return getDeformationPlane().getFibraNeutra(); }
 
 //! @brief Devuelve el eje alienado con los esfuerzos que
 //! actúan sobre la sección.
@@ -243,29 +248,29 @@ Recta2d XC::SeccionBarraPrismatica::getEjeEsfuerzos(void) const
 
 //! @brief Devuelve (si puede) un punto en el que las tensiones son de tracción.
 Pos2d XC::SeccionBarraPrismatica::getPuntoSemiplanoTracciones(void) const
-  { return getPlanoDeformacion().getPuntoSemiplanoTracciones(); }
+  { return getDeformationPlane().getPuntoSemiplanoTracciones(); }
 
 //! @brief Devuelve (si puede) un punto en el que las tensiones son de compresion.
 Pos2d XC::SeccionBarraPrismatica::getPuntoSemiplanoCompresiones(void) const
-  { return getPlanoDeformacion().getPuntoSemiplanoCompresiones(); }
+  { return getDeformationPlane().getPuntoSemiplanoCompresiones(); }
 
 //! @brief Devuelve el semiplano cuyo borde es la recta que se pasa
 //! como parámetro y en el que las tensiones son de tracción.
 Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoTracciones(const Recta2d &r) const
-  { return getPlanoDeformacion().getSemiplanoTracciones(r); }
+  { return getDeformationPlane().getSemiplanoTracciones(r); }
 
 //! @brief Devuelve el semiplano cuyo borde es la fibra neutra
 //! y en el que las tensiones son de tracción.
 Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoTracciones(void) const
-  { return getPlanoDeformacion().getSemiplanoTracciones(); }
+  { return getDeformationPlane().getSemiplanoTracciones(); }
 
 //! @brief Devuelve el semiplano cuyo borde es la recta que se pasa
 //! como parámetro y en el que las tensiones son de compresión.
 Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoCompresiones(const Recta2d &r) const
-  { return getPlanoDeformacion().getSemiplanoCompresiones(r); }
+  { return getDeformationPlane().getSemiplanoCompresiones(r); }
 
 //! @brief Devuelve el semiplano cuyo borde es la fibra neutra
 //! y en el que las tensiones son de compresión.
 Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoCompresiones(void) const
-  { return getPlanoDeformacion().getSemiplanoCompresiones(); }
+  { return getDeformationPlane().getSemiplanoCompresiones(); }
 

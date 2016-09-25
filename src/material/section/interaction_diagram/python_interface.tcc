@@ -21,13 +21,13 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::PlanoDeformacion, bases<Plano3d> >("PlanoDeformacion")
+class_<XC::DeformationPlane, bases<Plano3d> >("DeformationPlane")
   .def(init<const double&>())
   .def(init<Plano3d>())
   .def(init<Pos2d,double,Pos2d,double,Pos2d,double>())
   .def(init<Pos3d,Pos3d,Pos3d>())
-  .def("constantStrain",&XC::PlanoDeformacion::ConstantStrain)
-  .def("getDeformation",&XC::PlanoDeformacion::Deformacion)
+  .def("constantStrain",&XC::DeformationPlane::ConstantStrain)
+  .def("getDeformation",&XC::DeformationPlane::Deformacion)
   ;
 
 class_<XC::CalcPivotes, bases<Ref3d3d>, boost::noncopyable >("CalcPivotes", no_init)

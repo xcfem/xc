@@ -7,11 +7,11 @@
 #             ^
 #             |
 #             |
-#       o 3   |     o 2   -
-#             |           ^
-# z<----------+           | depthOverY
-#                         |
-#       o 4         o 1   -
+#     3 +-----|-----+ 2   -
+#       |     |     |     ^
+# z<----|-----+     |     | depthOverY
+#       |           |     |
+#     4 +-----------+ 1   -
 #
 #       |<--------->|
 #          widthOverZ 
@@ -22,22 +22,21 @@ E= 2.1e6 # Elastic modulus (Pa)
 # Cross section properties
 widthOverZ= 4
 depthOverY= 2
-fiberArea= 1e-4 # Area of each fiber (m2)
-A= 4*fiberArea # Total area (m2)
-Iy= 4*(fiberArea*(widthOverZ/2.0)**2) # Cross section moment of inertia (m4)
-Iz= 4*(fiberArea*(depthOverY/2.0)**2) # Cross section moment of inertia (m4)
+A= widthOverZ*depthOverY # Area (m2)
+Iy= 1/12.0*dephtOverY*widthOverZ**3 # Cross section moment of inertia (m4)
+Iz= 1/12.0*widthOverZ*dephtOverY**3 # Cross section moment of inertia (m4)
 # Materials definition
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
+elasticSection2d= typical_materials.defElasticSection2d(preprocessor,"elasticSection2d",A,E,Iz)
 
-# Fibers
 y1= -depthOverY/2.0
 z1= -widthOverZ/2.0
-fourFibersSection= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","fourFibersSection")
+p1= geom.Pos3d([y1,z1,epsilon1]))
+p2= geom.Pos3d([-y1,z1,epsilon2]))
+p3= geom.Pos3d([-y1,-z1,epsilon3]))
+p4= geom.Pos3d([y1,-z1,epsilon4]))
 
-f1= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([y1,z1]))
-f2= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([-y1,z1]))
-f3= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([-y1,-z1]))
-f4= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([y1,-z1]))
+elasticSection2d.sectionDeformation= xc.Vector([epsilon
+
 
 
 f1.getMaterial().setTrialStrain(epsilon1,0.0)

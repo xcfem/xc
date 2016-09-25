@@ -26,7 +26,7 @@ class_<XC::BaseElasticSection, bases<XC::SeccionBarraPrismatica>, boost::noncopy
   ;
 
 class_<XC::BaseElasticSection2d, bases<XC::BaseElasticSection>, boost::noncopyable >("BaseElasticSection2d", no_init)
-  .add_property("sectionProperties", make_function( &XC::BaseElasticSection2d::getCrossSectionProperties, return_internal_reference<>() ), &XC::BaseElasticSection2d::setCrossSectionProperties)
+  .add_property("sectionProperties", make_function( &XC::BaseElasticSection2d::getCrossSectionProperties, return_internal_reference<>() ), &XC::BaseElasticSection2d::setCrossSectionProperties,"Returns section mechanical properties (area, inertia,...)")
   ;
 
 class_<XC::ElasticSection2d, bases<XC::BaseElasticSection2d>, boost::noncopyable >("ElasticSection2d")

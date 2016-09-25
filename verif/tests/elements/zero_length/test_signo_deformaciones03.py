@@ -40,7 +40,7 @@ execfile(pth+"/../../aux/four_fiber_section.py")
 sigma= E*epsilon
 F= sigma*fiberArea
 N= 0.0
-My= 4*F*width/2.0
+My= 4*F*widthOverZ/2.0
 Mz= 0.0
 
 
