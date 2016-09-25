@@ -1,0 +1,2 @@
+Francisco Xavier Tsao Santín: Thanks for help us with debugging of MED libraries.
+Guillem González:             Thanks for help us to detect some bugs in the installation scripts.
