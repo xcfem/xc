@@ -352,6 +352,7 @@ python tests/materials/steel_shapes/test_perfil_metalico_02.py
 
 #Secciones transversales. Modelo de fibras.
 echo "$BLEU" "  Elastic section tests." "$NORMAL"
+python tests/materials/elastic_section/test_elastic_section_2d_sign_convention_01.py
 python tests/materials/elastic_section/test_elastic_section_2d_01.py
 python tests/materials/elastic_section/test_elastic_shear_section_2d_01.py
 python tests/materials/elastic_section/test_elastic_section_3d_01.py
