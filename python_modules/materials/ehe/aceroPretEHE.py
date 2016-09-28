@@ -33,13 +33,13 @@ class AceroPretEHE(matWDKD.MaterialWithDKDiagrams):
     # Diagrama tensión-deformación característico.
     acero= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
     self.matTagK= acero.tag
-    return self.matTagK
+    return acero #30160925 was 'return self.matTagK'
 
   def defDiagD(self,preprocessor,initialStress):
     # Diagrama tensión-deformación de cálculo.
     acero= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
     self.matTagD= acero.tag
-    return self.matTagD
+    return acero #30160925 was 'self.matTagD'
 
  
 Y1860S7= AceroPretEHE("Y1860S7",fpk= 1171e6,fmax= 1860e6)

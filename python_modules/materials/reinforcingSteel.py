@@ -57,12 +57,14 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     """ Returns XC uniaxial material (characteristic values). """
     self.materialDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
     self.matTagK= self.materialDiagramK.tag
-    return self.matTagK
+    return self.materialDiagramK #30160925 was 'return self.matTagK'
+
   def defDiagD(self,preprocessor):
     """ Returns XC uniaxial material (design values). """
     self.materialDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
     self.matTagD= self.materialDiagramD.tag
-    return self.matTagD
+    return self.materialDiagramD #30160925 was 'return self.matTagD'
+
   def plotDesignStressStrainDiagram(self,preprocessor):
     '''Draws the steel design diagram.'''
     if self.materialDiagramD== None:

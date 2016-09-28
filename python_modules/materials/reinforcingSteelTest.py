@@ -28,8 +28,10 @@ def sigmaDAceroArmar(eps,matRecord):
 
 # Checking of characteristic stress-strain diagram
 def testDiagKAceroArmar(preprocessor, matRecord):
-  tag= reinforcingSteel.defDiagKAcero(preprocessor, matRecord)
-  diagAcero= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagK)
+  diagAcero= reinforcingSteel.defDiagKAcero(preprocessor, matRecord)
+  ##30160925 was:
+#  tag= reinforcingSteel.defDiagKAcero(preprocessor, matRecord)
+#  diagAcero= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagK)
   incr= matRecord.emax/20
   errMax= 0.0
   e= 0.1e-8
@@ -46,8 +48,10 @@ def testDiagKAceroArmar(preprocessor, matRecord):
 
 # Checking of design stress-strain diagram
 def testDiagDAceroArmar(preprocessor, matRecord):
-  tag= reinforcingSteel.defDiagDAcero(preprocessor, matRecord)
-  diagAcero= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagD)
+  diagAcero= reinforcingSteel.defDiagDAcero(preprocessor, matRecord)
+  ##30160925 was:
+#  tag= reinforcingSteel.defDiagDAcero(preprocessor, matRecord)
+#  diagAcero= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagD)
   incr= matRecord.emax/20
   errMax= 0.0
   e= 0.1e-8
