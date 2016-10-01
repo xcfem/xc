@@ -35,6 +35,7 @@
 XC::MeshEdges::MeshEdges(void)
   : EntCmd() {}
 
+//! @brief returns the loop that starts in vertex passed as parameter.
 std::deque<const XC::MeshEdge *> XC::MeshEdges::getLoop(const MeshEdge *first) const
   {
     const Node *firstNode= first->getFirstNode();
@@ -90,18 +91,46 @@ Polilinea3d getPolylineFromLoop(const std::deque<const XC::MeshEdge *> &loop,boo
     return retval;
   } 
 
+
+//! @brief returns closed contours from de edge set.
 std::deque<Polilinea3d> XC::MeshEdges::getContours(bool undeformedGeometry) const
+  { return XC::getContours(*this,undeformedGeometry); }
+
+//! @brief returns closed contours from de edge set.
+std::deque<Polilinea3d> XC::getContours(MeshEdges edges, bool undeformedGeometry)
   {
+    const size_t max_iter= 100;
+    size_t iter= 0;
     std::deque<Polilinea3d> retval;
-    if(!empty())
+    do
       {
-        const_iterator i= begin();
+	MeshEdges::const_iterator i= edges.begin();
         const MeshEdge *first= &(*i);
-        std::deque<const MeshEdge *> loop= getLoop(first);
-        if(loop.size()!=size())
-	  std::cerr << "MeshEdges::getContours error; contour with more than a loop not implemented."
-                    << std::endl;
+        std::deque<const MeshEdge *> loop= edges.getLoop(first);
         retval.push_back(getPolylineFromLoop(loop,undeformedGeometry));
+	edges= edges.getEdgesNotInLoop(loop);
+	iter++;
+	if(iter>max_iter)
+	  {
+	    std::cerr << "getContours error; " << edges.size()
+	              << " left, after " << iter << " iterations." << std::endl;
+	    break;
+	  }
+      }
+    while(!edges.empty());
+    return retval;
+  }
+
+//! @brief Returns the edges that result from removing the edges from the loop passed as parameter.
+XC::MeshEdges XC::MeshEdges::getEdgesNotInLoop(const std::deque<const MeshEdge *> &loop) const
+  {
+    MeshEdges retval;
+    for(MeshEdges::const_iterator i= begin();i!=end();i++)
+      {
+	const MeshEdge *edgePtr= &(*i);
+        std::deque<const MeshEdge *>::const_iterator j= find(loop.begin(),loop.end(),edgePtr);
+	if(j==loop.end()) //Not found.
+	  retval.push_back(*edgePtr);
       }
     return retval;
   }

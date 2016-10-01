@@ -44,16 +44,18 @@ class ID;
 //! @ingroup Elem
 //
 //! @brief Element edge container.
- class MeshEdges: public EntCmd, public std::deque<MeshEdge>
+class MeshEdges: public EntCmd, public std::deque<MeshEdge>
   {
   public:
     MeshEdges(void);
 
     std::deque<const MeshEdge *> getLoop(const MeshEdge *) const;
-    //! @brief returns closed contours from de edge set.
+    MeshEdges getEdgesNotInLoop(const std::deque<const MeshEdge *> &) const;
     std::deque<Polilinea3d> getContours(bool undeformedGeometry) const;
     void print(std::ostream &) const;
   };
+
+std::deque<Polilinea3d> getContours(MeshEdges edges,bool undeformedGeometry);
 
 inline std::ostream &operator<<(std::ostream &os, const MeshEdges &me)
   {
