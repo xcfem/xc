@@ -23,7 +23,7 @@ class PolygonPointRow(rw.RowP0123):
   '''SCIA XML object for each of the points
      that define the polygon in which the load acts.'''
   def __init__(self, id, x, y, z):
-    p0= oI.ObjectItem('','','','Debut') #Node
+    p0= oI.ObjectItem('','','','Head') #Node
     p1= oI.ObjectItem('0','','','Standard') #Point definition
     p2= oI.ObjectItem(str(x),'','','') #X coordinate.
     p3= oI.ObjectItem(str(y),'','','') #Y coordinate.
@@ -45,7 +45,7 @@ class PolygonPointRow(rw.RowP0123):
 
 idSurfacePressureFreeContainer= spfp.containerId
 tSurfacePressureFreeContainer= spfp.tbName
-idSurfacePressureFreeContainerTb= "86992DFB-7866-48EE-8654-6036B052AB9F"
+idSurfacePressureFreeContainerTb= spfp.tbId
 tSurfacePressureFreeContainerTb= spfp.tbName
 surfacePressureFreePrefix= 'SF'
 class SurfacePressureFreeComponent(lcb.LoadComponentBase):
@@ -78,7 +78,7 @@ class SurfacePressureFreeComponent(lcb.LoadComponentBase):
     retval.setP2(oI.ObjectItem('{'+str(uuid.uuid4())+'}')) #Unique id
     retval.setP3(self.getDirectionObjectItem()) #Direction X, Y or Z
     retval.setP4(oI.ObjectItem('0','','','Force')) #Type 0 -> Force.
-    retval.setP5(oI.ObjectItem('0','','',self.distribution)) #Distribution (uniform,...)
+    retval.setP5(self.getDistributionObjectItem()) #Distribution (uniform,...)
     retval.setP6(self.getValueObjectItem()) #Value
     retval.setP7(oI.ObjectItem('4','','','Z= 0')) #Validity
     retval.setP8(oI.ObjectItem('0','','','Auto')) #Select
@@ -127,7 +127,7 @@ class SurfacePressureFreeContainer(ctr.Container):
       compObjects= getSurfacePressureFreeObjects(el)
       for c in compObjects:
         surfacePressureFrees.append(c)
-    self.appendTable(tb.TableXMLNodes(idSurfacePressureFreeContainerTb,tSurfacePressureFreeContainerTb, 'Forces on surface', None,surfacePressureFrees))
+    self.appendTable(tb.TableXMLNodes(idSurfacePressureFreeContainerTb,tSurfacePressureFreeContainerTb, 'Free surface load', None,surfacePressureFrees))
 
   def __len__(self):
     return len(self.table)
