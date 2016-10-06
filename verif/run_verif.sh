@@ -429,6 +429,10 @@ python tests/materials/ec2/test_EC2creep.py
 python tests/materials/ec2/test_EC2shrinkage.py
 python tests/materials/ec2/test_smearedCracking_01.py
 python tests/materials/ec2/test_smearedCracking_02.py
+python tests/materials/ec2/test_smearedCracking_03.py
+python tests/materials/ec2/test_smearedCracking_04.py
+python tests/materials/ec2/test_smearedCracking_05.py
+python tests/materials/ec2/test_smearedCracking_06.py
 echo "$BLEU" "   EC3 tests." "$NORMAL"
 python tests/materials/ec3/test_lateral_torsional_buckling00.py
 python tests/materials/ec3/test_lateral_torsional_buckling01.py
