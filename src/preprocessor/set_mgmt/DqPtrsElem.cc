@@ -14,7 +14,7 @@
 //  por la Fundación para el Software Libre, ya sea la versión 3 
 //  de la Licencia, o (a su elección) cualquier versión posterior.
 //
-//  Este software se distribuye con la esperanza de que sea útil, pero 
+//  Este software se distribuye con la esperanza de que sea útil pero 
 //  SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita
 //  MERCANTIL o de APTITUD PARA UN PROPÓSITO DETERMINADO. 
 //  Consulte los detalles de la Licencia Pública General GNU para obtener 
@@ -271,7 +271,7 @@ std::deque<Polilinea3d> XC::DqPtrsElem::getContours(bool undeformedGeometry) con
         for(int j= 0;j<numEdges;j++)
           {
 	    MeshEdge meshEdge(elem->getNodesEdge(j));
-            ElementConstPtrSet elementsShared= meshEdge.getConnectedElements();
+            ElementConstPtrSet elementsShared= meshEdge.getConnectedElements(*this);
             if(elementsShared.size()==1) //border element.
               if(find(edgesContour.begin(), edgesContour.end(), meshEdge) == edgesContour.end())
                 { edgesContour.push_back(meshEdge); }

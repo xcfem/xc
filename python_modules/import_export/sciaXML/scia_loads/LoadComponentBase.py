@@ -56,6 +56,18 @@ class LoadComponentBase(object):
       dirId= '2'
     return oI.ObjectItem(dirId,'','',self.direction) #Direction X, Y or Z
 
+  def getDistributionObjectItem(self):
+    '''returns an item which represents the surface
+       load distribution: uniform, Dir X, Dir Y, 3 points.'''
+    distributionId= '0'
+    if(self.distribution=='Dir X'):
+      distributionId= '1'
+    elif(self.distribution=='Dir Y'):
+      distributionId= '2'
+    elif(self.distribution=='3 points'):
+      distributionId= '3'
+    return oI.ObjectItem(distributionId,'','',self.distribution) #Distribution
+  
   def getValueObjectItem(self):
     '''returns an ObjectItem which represents the value of the load component.'''
     return oI.ObjectItem(str(self.value))

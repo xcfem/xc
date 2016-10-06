@@ -12,6 +12,7 @@ import xc_base
 import geom
 import xc
 from import_export import NeutralLoadDescription as nld
+from miscUtils import LogMessages as lmsg
 
 class LoadContainerBase(object):
   '''Base for XML SCIA load containers.'''
@@ -95,7 +96,7 @@ class LoadContainer(LoadContainerBase):
             eLoad.tags.append(tags[i])
           destLoadCase.loads.surfaceLoads.append(eLoad)
         else:
-          print "loads2Neutral: vDir vector very small: ", vDir, " load ignored."
+          lmsg.warning('loads2Neutral: vDir vector very small: "+ str(vDir) + " load ignored.')
       self.surfaceLoadCounter+=1
       el= eLoadIter.next()
     
@@ -127,19 +128,30 @@ class FreeLoadContainer(LoadContainerBase):
     domain= lp.getDomain
     preprocessor= lp.getDomain.getPreprocessor
     eLoadIter= lp.getElementalLoadIter
-    el= eLoadIter.next()
-    while el:
-      setName= 'surfaceLoadSet'+str(el.tag)
+    eLoad= eLoadIter.next()
+    loadSets= []
+    while eLoad:
+      setName= 'surfaceLoadSet'+str(eLoad.tag)
       surfaceLoadSet= preprocessor.getSets.defSet(setName)
-      surfaceLoadSet.elementalLoad= el
+      surfaceLoadSet.elementalLoad= eLoad
       print 'setName= ', setName
-      elemTags= el.elementTags
+      elemTags= eLoad.elementTags
       for tag in elemTags:
-        print 'tag= ', tag
         elem= domain.getMesh.getElement(tag)
         if(elem):
           surfaceLoadSet.getElements.append(elem)
         else:
-          print 'element: ', tag, ' not found.'
-      el= eLoadIter.next()
+          lmsg.error('element: '+ str(tag) + ' not found.')
+      elementContours= surfaceLoadSet.getElements.getContours(True)
+      if(len(elementContours)>1):
+        lmsg.error('surface load set: '+ setName + ' has more than one contour.  Contours others than first are ignored.')
+      surfaceLoadSet.polygon= elementContours[0]
+      loadSets.append(surfaceLoadSet)
+      eLoad= eLoadIter.next()
+    for s in loadSets:
+      sLoad= nld.SurfaceLoadRecord(destLoadCase, self.surfaceLoadCounter)
+      sLoad.polygon= s.polygon
+      destLoadCase.loads.surfaceLoads.append(sLoad)
+      self.surfaceLoadCounter+=1
+      
 

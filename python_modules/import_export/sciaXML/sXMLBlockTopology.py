@@ -13,7 +13,7 @@ import NodeContainer as nCtr
 import EPPlaneContainer as eppc
 import NodeSupportContainer as nsc
 from scia_loads import PointForceFreeContainer as pffc
-from scia_loads import SurfacePressureFreeContainer as spf
+from scia_loads import SurfacePressureFreeContainer as spfc
 import sXMLBase as base
 
 class SXMLBlockTopology(base.SXMLBase):
@@ -40,7 +40,7 @@ class SXMLBlockTopology(base.SXMLBase):
         self.pointForceFreeContainers.append(pffc.PointForceFreeContainer(pl))
       sl= lc.loads.surfaceLoads
       if(sl):
-        self.surfacePressureFreeContainers.append(elc.ElementLoadContainer(sl))
+        self.surfacePressureFreeContainers.append(spfc.SurfacePressureFreeContainer(sl))
 
   def getContainers(self):
     '''Returns object containers in a list.'''

@@ -27,6 +27,7 @@
 
 #include "MeshEdge.h"
 #include "domain/mesh/node/Node.h"
+#include "preprocessor/set_mgmt/DqPtrsElem.h"
 #include <iostream>
 
 //! @brief Constructor.
@@ -80,6 +81,20 @@ XC::MeshEdge::ElementConstPtrSet XC::MeshEdge::getConnectedElements(void) const
     ElementConstPtrSet elementsNode0= getFirstNode()->getConnectedElements();
     ElementConstPtrSet elementsNode1= getLastNode()->getConnectedElements();
     set_intersection(elementsNode0.begin(),elementsNode0.end(),elementsNode1.begin(),elementsNode1.end(),std::inserter(retval,retval.begin()));
+    return retval;
+  }
+
+//! @brief Returns a deque<Element *> with the elements from the set that share the edge.
+XC::MeshEdge::ElementConstPtrSet XC::MeshEdge::getConnectedElements(const DqPtrsElem &elemSet) const
+  {
+    ElementConstPtrSet retval;
+    ElementConstPtrSet tmp= getConnectedElements();
+    for(ElementConstPtrSet::const_iterator i= tmp.begin();i!=tmp.end();i++)
+      {
+	const Element *elemPtr= elemSet.buscaElemento((*i)->getTag());
+	if(elemPtr)
+	  retval.insert(elemPtr);
+      }
     return retval;
   }
 

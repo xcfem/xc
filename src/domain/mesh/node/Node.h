@@ -86,8 +86,8 @@ class DefaultTag;
 class ElementEdges;
 class SetBase;
 class MeshEdge;
-
 class DOF_Group;
+class DqPtrsElem;
 
 //! \ingroup Mesh
 //!

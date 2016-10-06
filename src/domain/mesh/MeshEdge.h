@@ -31,6 +31,8 @@
 
 namespace XC {
 
+class DqPtrsElem;
+  
 //! \ingroup Mesh
 //
 //! @brief Mesh edge.
@@ -52,6 +54,7 @@ class MeshEdge: public EntCmd
     bool isConnected(const Node &) const;
     bool isConnected(const MeshEdge &) const;
     ElementConstPtrSet getConnectedElements(void) const;
+    ElementConstPtrSet getConnectedElements(const DqPtrsElem &) const;
     bool operator==(const MeshEdge &) const;
     void print(std::ostream &) const;
   };
