@@ -300,6 +300,7 @@ python tests/materials/uniaxial/test_steel02.py
 python tests/materials/uniaxial/test_pretensado_steel02.py
 python tests/materials/uniaxial/test_concrete01.py
 python tests/materials/uniaxial/test_concrete02_01.py
+python tests/materials/uniaxial/test_concrete02_02.py
 python tests/materials/uniaxial/test_HA25_01.py
 python tests/materials/uniaxial/test_HA25_02.py
 python tests/materials/uniaxial/test_HP45_01.py
