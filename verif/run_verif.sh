@@ -301,6 +301,7 @@ python tests/materials/uniaxial/test_steel02.py
 python tests/materials/uniaxial/test_pretensado_steel02.py
 python tests/materials/uniaxial/test_concrete01.py
 python tests/materials/uniaxial/test_concrete02_01.py
+python tests/materials/uniaxial/test_concrete02_02.py
 python tests/materials/uniaxial/test_HA25_01.py
 python tests/materials/uniaxial/test_HA25_02.py
 python tests/materials/uniaxial/test_HP45_01.py
@@ -426,6 +427,12 @@ echo "$BLEU" "   EC2 tests." "$NORMAL"
 python tests/materials/ec2/test_EC2Concrete.py
 python tests/materials/ec2/test_EC2creep.py
 python tests/materials/ec2/test_EC2shrinkage.py
+python tests/materials/ec2/test_smearedCracking_01.py
+python tests/materials/ec2/test_smearedCracking_02.py
+python tests/materials/ec2/test_smearedCracking_03.py
+python tests/materials/ec2/test_smearedCracking_04.py
+python tests/materials/ec2/test_smearedCracking_05.py
+python tests/materials/ec2/test_smearedCracking_06.py
 echo "$BLEU" "   EC3 tests." "$NORMAL"
 python tests/materials/ec3/test_lateral_torsional_buckling00.py
 python tests/materials/ec3/test_lateral_torsional_buckling01.py
