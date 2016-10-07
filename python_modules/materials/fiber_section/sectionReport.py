@@ -221,6 +221,7 @@ class SectionInfoHASimple(SectionInfo):
   :ivar sectHASimple: fiber section defined as a HASimple
   '''
   def __init__(self,preprocessor,sectHASimple):
+    self.scc= sectHASimple
     sectName=sectHASimple.gmSectionName()
     sectDescr=sectHASimple.sectionDescr
     concrete=sectHASimple.concrType

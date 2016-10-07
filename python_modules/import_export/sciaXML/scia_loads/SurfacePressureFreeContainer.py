@@ -23,13 +23,13 @@ class PolygonPointRow(rw.RowP0123):
   '''SCIA XML object for each of the points
      that define the polygon in which the load acts.'''
   def __init__(self, id, x, y, z):
-    p0= oI.ObjectItem('','','','Head') #Node
+    p0= oI.ObjectItem(v= 'Head') #Node
     p1= oI.ObjectItem('0','','','Standard') #Point definition
     p2= oI.ObjectItem(str(x),'','','') #X coordinate.
     p3= oI.ObjectItem(str(y),'','','') #Y coordinate.
     super(PolygonPointRow,self).__init__(id,p0,p1,p2,p3)
     self.p4= oI.ObjectItem(str(z),'','','') #Z coordinate.
-    self.p22= oI.ObjectItem('','','','Ligne') #Edge
+    self.p22= oI.ObjectItem(v= 'Ligne') #Edge
 
   def populateXMLElement(self,xmlElement):
     super(PolygonPointRow,self).populateXMLElement(xmlElement)
