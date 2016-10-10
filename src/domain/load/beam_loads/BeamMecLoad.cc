@@ -141,11 +141,11 @@ const XC::Matrix &XC::BeamMecLoad::getGlobalVectors(const Matrix &localVectors) 
     return retval;
   }
 
-//! @brief Devuelve la fuerza expresada en coordenadas globales.
+//! @brief Returns force vector(s) in global coordinates.
 const XC::Matrix &XC::BeamMecLoad::getGlobalForces(void) const
   { return getGlobalVectors(getLocalForces()); }
 
-//! @brief Devuelve el momento expresado en coordenadas globales.
+//! @brief Returns moment vector(s) in global coordinates.
 const XC::Matrix &XC::BeamMecLoad::getGlobalMoments(void) const
   { return getGlobalVectors(getLocalMoments()); }
 

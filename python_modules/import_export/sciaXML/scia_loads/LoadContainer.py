@@ -136,8 +136,11 @@ class FreeLoadContainer(LoadContainerBase):
       surfaceLoadSet.elementalLoad= eLoad
       print 'setName= ', setName
       elemTags= eLoad.elementTags
+      globalForce= eLoad.getGlobalForces().getRow(0) #We assume is constant through the elements.
       for tag in elemTags:
         elem= domain.getMesh.getElement(tag)
+        loadPos= elem.getPosCentroid(True)+geom.Vector3d(globalForce[0],globalForce[1],globalForce[2])
+        print 'globalForces= ', globalForce, ' loadPos= ', loadPos
         if(elem):
           surfaceLoadSet.getElements.append(elem)
         else:

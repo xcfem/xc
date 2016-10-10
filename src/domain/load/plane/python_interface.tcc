@@ -39,8 +39,8 @@ class_<XC::ShellMecLoad, bases<XC::BidimMecLoad>, boost::noncopyable >("ShellMec
   .def("getLocalForces",make_function(&XC::ShellMecLoad::getLocalForces, return_internal_reference<>() ))
   .def("getLocalMoments",make_function(&XC::ShellMecLoad::getLocalMoments, return_internal_reference<>() ))
   .def("getGlobalVectors",make_function(&XC::ShellMecLoad::getGlobalVectors, return_internal_reference<>() ))
-  .def("getGlobalForces",make_function(&XC::ShellMecLoad::getGlobalForces, return_internal_reference<>() ))
-  .def("getGlobalMoments",make_function(&XC::ShellMecLoad::getGlobalMoments, return_internal_reference<>() ))
+  .def("getGlobalForces",make_function(&XC::ShellMecLoad::getGlobalForces, return_internal_reference<>() ),"Returns force vector(s) in global coordinates.")
+  .def("getGlobalMoments",make_function(&XC::ShellMecLoad::getGlobalMoments, return_internal_reference<>() ),"Returns force vector(s) in global coordinates.")
   ;
 
 class_<XC::ShellUniformLoad, bases<XC::ShellMecLoad>, boost::noncopyable >("ShellUniformLoad", no_init)

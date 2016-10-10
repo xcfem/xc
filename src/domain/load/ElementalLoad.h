@@ -84,8 +84,6 @@ class ElementalLoad: public Load
     int numElements(void) const;
     int setElementTags(const ID &theEleTags);
     virtual const ID &getElementTags(void) const;
-
-
   };
 } // end of XC namespace
 
