@@ -2,11 +2,11 @@
 
 '''gridModelData.py: model generation based on a grid of 3D positions. Data structures.'''
 
-__author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, A_OO and LCPT"
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, AO_O and LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
+__email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
 import uuid
 import geom
@@ -668,7 +668,9 @@ class GridModel(object):
   '''
   def __init__(self,FEProblem):
     self.FEProblem= FEProblem
-
+    self.dicGeomEnt= dict() #Surfaces dictionary.
+    self.dicLin= dict() #Lines dictionary.
+    
   def getFEProblem(self):
     ''':returns: the FE problem linked with the grid model'''
     return self.FEProblem
@@ -691,11 +693,11 @@ class GridModel(object):
     ''':returns: a type of line to be discretized from the defined 
     material, type of element and size of the elements.
     
-    :param name:     name to identify the surface
-    :param material: name of the material that makes up the surface
+    :param name:     name to identify the line
+    :param material: name of the material that makes up the line
     :param elemType: element type be used in the discretization
     :param elemSize: mean size of the elements
-    :param vDirLAxY: direction vector for the element local axis Y 
+    :param vDirLAxY: direction vector for the element local axis Y (width, nDivIJ)
     '''
     return MaterialLine(name, self.grid, material,elemType,elemSize,vDirLAxY)
 
@@ -811,9 +813,10 @@ class GridModel(object):
     nodes= self.getPreprocessor().getNodeLoader
     predefined_spaces.gdls_resist_materiales3D(nodes)
     nodes.newSeedNode()
-    self.dicGeomEnt= dict() #Surfaces dictionary.
-    self.conjSup.generateMesh(self.getPreprocessor(),self.dicGeomEnt)
-    self.dicLin= dict() #Lines dictionary.
+#    self.dicGeomEnt= dict() #Surfaces dictionary.
+    if(hasattr(self,'conjSup')):
+      self.conjSup.generateMesh(self.getPreprocessor(),self.dicGeomEnt)
+#    self.dicLin= dict() #Lines dictionary.
     if(hasattr(self,'conjLin')):
       self.conjLin.generateMesh(self.getPreprocessor(),self.dicGeomEnt)
     if(hasattr(self,'constrainedRanges')):

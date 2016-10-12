@@ -682,3 +682,87 @@ def loadMainRefPropertyIntoElements(elemSet, sectionContainer, code):
     else:
       sys.stderr.write("element: "+ str(e.tag) + " section undefined.\n")
       e.setProp(code,0.0)
+
+class RecordRCBeamSection(RecordRCSimpleSection):
+  '''This class is used to define the variables that make up a reinforced concrete beam 
+  section with several reinforcement layers in the top and bottom faces
+  
+  :ivar name:    basic name to form the RC sections in direction 1 (name+'1') 
+             and direction 2(name+'1') 
+  :ivar sectionDescr:    section description
+  :ivar depth:           cross-section depth (width=1.0)
+
+  '''
+  def __init__(self,name,sectionDescr,width,depth,concrType,reinfSteelType):
+    super(RecordRCBeamSection,self).__init__()
+    self.name= name
+    self.sectionName= name
+    self.sectionDescr= sectionDescr
+    self.concrType= concrType
+    self.depth= depth
+    self.width= 1.0
+    self.reinfSteelType= reinfSteelType
+    self.positvRebarRows=[]
+    self.negatvRebarRows=[]
+
+  def setShearReinf(self,nShReinfBranches,areaShReinfBranch,spacing):
+    self.shReinfZ.nShReinfBranches= nShReinfBranches # Número de ramas eficaces frente al cortante.
+    self.shReinfZ.areaShReinfBranch= areaShReinfBranch # Área de cada barra.
+    self.shReinfZ.shReinfSpacing= spacing
+    
+  def getReinfArea(self,code):
+    '''get steel area.
+    code='As+' for positive face
+    code='As-' for negative face
+    '''
+    if(code=='As-'):
+      return self.getAsNeg()
+    elif(code=='As1+'):
+      return self.getAsPos()
+    else:
+      sys.stderr.write("code: "+ code + " unknown.\n")
+      return None
+
+  def getS(self,code):
+    '''list of distances between bars
+    code='s+' for positive face
+    code='s-' for  negative face
+    '''
+    if(code=='s-'):
+      return self.getSNeg()
+    elif(code=='s+'):
+      return self.getSPos()
+    else:
+      sys.stderr.write("code: "+ code + " unknown.\n")
+      return None
+
+  def getDiam(self,code):
+    '''list of bar diameter.'''
+    if(code=='d-'):
+      return self.getDiamNeg()
+    elif(code=='d+'):
+      return self.getDiamPos()
+    else:
+      sys.stderr.write("code: "+ code + " unknown.\n")
+      return None
+
+  def getNBar(self,code):
+    '''list of number of bars.'''
+    if(code=='nBars-'):
+      return self.getNBarNeg()
+    elif(code=='nBars+'):
+      return self.getNBarPos()
+    else:
+      sys.stderr.write("getNBar; code: "+ code + " unknown.\n")
+      return None
+
+  def getMainReinfProperty(self,code):
+    if('As' in code):
+      return self.getReinfArea(code)
+    elif('nBar' in code):
+      return self.getNBar(code)
+    elif('s' in code):
+      return self.getS(code)
+    elif('d' in code):
+      return self.getDiam(code)
+

@@ -231,6 +231,6 @@ class SectionInfoHASimple(SectionInfo):
     geomSection= preprocessor.getMaterialLoader.getSectionGeometry(sectName)
     width=sectHASimple.width
     depth=sectHASimple.depth
-    super(SectionInfoHASimple,self). __init__(preprocessor,sectName,sectDescr,concrete,rfSteel,concrDiag,rfStDiag,geomSection,width,depth)
+    super(SectionInfoHASimple,self).__init__(preprocessor,sectName,sectDescr,concrete,rfSteel,concrDiag,rfStDiag,geomSection,width,depth)
     self.shReinfZ=sectHASimple.shReinfZ
     self.shReinfY=sectHASimple.shReinfY
