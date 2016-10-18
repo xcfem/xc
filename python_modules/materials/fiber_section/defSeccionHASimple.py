@@ -120,18 +120,18 @@ class BasicRecordRCSection(object):
   :ivar shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement()
                      defining the shear reinforcement in Y direction
   '''
-  def __init__(self):
+  def __init__(self,width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
     self.sectionName= "noName"
     self.sectionDescr= "Text describing the position of the section in the structure."
-    self.concrType= None
+    self.concrType= concrType
     self.concrDiagName= None
-    self.depth= 0.25
-    self.width= 0.25
+    self.depth= depth
+    self.width= width
     self.nDivIJ= 10
     self.nDivJK= 10
     self.fiberSectionRepr= None
 
-    self.reinfSteelType= None
+    self.reinfSteelType= reinfSteelType
     self.reinfDiagName= None # Name of the uniaxial material
 
     # Transverse reinforcement (z direction)
@@ -219,8 +219,8 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   :ivar negatvRebarRows:       layers of main rebars in the local negative face of the section
   :ivar positvRebarRows:       layers of main rebars in the local positive face of the section
   '''
-  def __init__(self):
-    super(RecordRCSimpleSection,self).__init__()
+  def __init__(self,width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
+    super(RecordRCSimpleSection,self).__init__(width,depth,concrType,reinfSteelType)
 
     # Longitudinal reinforcement
     self.coverMin= 0.0 
@@ -476,6 +476,25 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     Es= self.reinfSteelType.Es
     return sc.StressCalc(self.width,self.depth,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
 
+class setRCSections2SetElVerif(object):
+  '''This class defines the set of reinforced concrete sections that are going to
+  be associated to a set of elements in order to carry out the verifications of the
+  limit states.
+  :ivar name:       name given to the list of reinforced concrete sections
+  :ivar lstRCSects: list of reinforced concrete sections that will be associated to
+                    a set of elements in order to carry out their LS verifications.
+                    The items of the list are instances of the object RecordRCSimpleSection
+  ''' 
+  def __init__(self,name,lstRCSects=[]):
+    self.lstRCSects=lstRCSects
+    self.name=name
+
+  def append_section(self,RCSimplSect):
+    self.lstRCSects.append(RCSimplSect)
+#  def append_to_sect_container(
+
+
+  
 class RecordRCSlabSection(object):
   '''This class is used to define the variables that make up a reinforced concrete slab 
   section with several reinforcement layers in the top and bottom faces

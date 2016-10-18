@@ -13,7 +13,7 @@ import xc
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import defSeccionHASimple
-from materials.xLamina import membranePlateRCSectionContainer as sc
+from materials.xLamina import RCsectionsContainer as sc
 from solution import predefined_solutions
 from materials.sia262 import normalStressesSIA262 as ns #Change SIA262->EHE
 
@@ -50,18 +50,21 @@ sepT= 1.0/numReinfBarsT
 numReinfBarsL= 7
 sepL= 1.0/numReinfBarsL
 
-deckSections= defSeccionHASimple.RecordRCSlabSection("deck","RC deck.",0.3,concrete, reinfSteel)
-deckSections.D2Section.positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
-deckSections.D2Section.negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
-deckSections.D1Section.positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
-deckSections.D1Section.negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+sections= sc.SectionContainer()
 
+deckSectionsAux= defSeccionHASimple.RecordRCSlabSection("deck","RC deck.",0.3,concrete, reinfSteel)
+deckSectionsAux.D2Section.positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSectionsAux.D2Section.negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSectionsAux.D1Section.positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+deckSectionsAux.D1Section.negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+deckSections=defSeccionHASimple.setRCSections2SetElVerif(name='deckSections')
+deckSections.append_section(RCSimplSect=deckSectionsAux.D1Section)
+deckSections.append_section(RCSimplSect=deckSectionsAux.D2Section)
 #deckSections.setMainReinf2pos(12e-3,areaFi12,sepT)
 #deckSections.setMainReinf2neg(12e-3,areaFi12,sepT)
 #deckSections.setMainReinf1neg(20e-3,areaFi20,sepL)
 #deckSections.setMainReinf1pos(20e-3,areaFi20,sepL)
 
-sections= sc.SectionContainer()
 sections.append(deckSections)
 
 

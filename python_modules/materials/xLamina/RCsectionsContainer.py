@@ -4,9 +4,6 @@ import xc_base
 import geom
 import xc
 # Macros
-#from materials.sia262 import fatigueControlSIA262 as fc
-#from materials.sia262 import shearSIA262
-#from materials.sia262 import crackControlSIA262 as cc
 from solution import predefined_solutions
 from postprocess import PhantomModel as phm
 
@@ -20,8 +17,8 @@ class SectionContainer(object):
 
   def append(self, deckSections):
     self.sections.append(deckSections)
-    self.mapSections[deckSections.D2Section.sectionName]= deckSections.D2Section
-    self.mapSections[deckSections.D1Section.sectionName]= deckSections.D1Section
+    self.mapSections[deckSections.lstRCSects[1].sectionName]= deckSections.lstRCSects[1]
+    self.mapSections[deckSections.lstRCSects[0].sectionName]= deckSections.lstRCSects[0]
 
   def search(self,nmb):
     ''' Returnrs section named nmb (if founded) '''
@@ -36,8 +33,8 @@ class SectionContainer(object):
   #   for s in self.sections:
   #     diag2= s.D2Section.defInteractionDiagram(preprocessor,matDiagType)
   #     mapInteractionDiagrams[s.D2Section.sectionName]= diag2
-  #     diag1= s.D1Section.defInteractionDiagram(preprocessor,matDiagType)
-  #     mapInteractionDiagrams[s.D1Section.sectionName]= diag1
+  #     diag1= s.lstRCSects[0].defInteractionDiagram(preprocessor,matDiagType)
+  #     mapInteractionDiagrams[s.lstRCSects[0].sectionName]= diag1
   #   return mapInteractionDiagrams
 
   def getInteractionDiagrams(self,preprocessor,matDiagType):
@@ -47,12 +44,12 @@ class SectionContainer(object):
     '''
     mapInteractionDiagrams= {}
     for s in self.sections:
-      s.D2Section.defRCSimpleSection(preprocessor,matDiagType)
-      diag2= s.D2Section.defInteractionDiagram(preprocessor)
-      mapInteractionDiagrams[s.D2Section.sectionName]= diag2
-      s.D1Section.defRCSimpleSection(preprocessor,matDiagType)
-      diag1= s.D1Section.defInteractionDiagram(preprocessor)
-      mapInteractionDiagrams[s.D1Section.sectionName]= diag1
+      s.lstRCSects[1].defRCSimpleSection(preprocessor,matDiagType)
+      diag2= s.lstRCSects[1].defInteractionDiagram(preprocessor)
+      mapInteractionDiagrams[s.lstRCSects[1].sectionName]= diag2
+      s.lstRCSects[0].defRCSimpleSection(preprocessor,matDiagType)
+      diag1= s.lstRCSects[0].defInteractionDiagram(preprocessor)
+      mapInteractionDiagrams[s.lstRCSects[0].sectionName]= diag1
     return mapInteractionDiagrams
 
   def getInteractionDiagramsNMy(self,preprocessor,matDiagType):
@@ -62,14 +59,14 @@ class SectionContainer(object):
     '''
     mapInteractionDiagrams= {}
     for s in self.sections:
-      diag2= s.D2Section.defInteractionDiagramNMy(preprocessor,matDiagType)
+      diag2= s.lstRCSects[1].defInteractionDiagramNMy(preprocessor,matDiagType)
       diag2.simplify() #Hasta corregir la obtención de diagramas NMy
       print "area diag2= ", diag2.getArea()
-      mapInteractionDiagrams[s.D2Section.sectionName]= diag2
-      diag1= s.D1Section.defInteractionDiagramNMy(preprocessor,matDiagType)
+      mapInteractionDiagrams[s.lstRCSects[1].sectionName]= diag2
+      diag1= s.lstRCSects[0].defInteractionDiagramNMy(preprocessor,matDiagType)
       diag1.simplify() #Hasta corregir la obtención de diagramas NMy
       print "area diag1= ", diag1.getArea()
-      mapInteractionDiagrams[s.D1Section.sectionName]= diag1
+      mapInteractionDiagrams[s.lstRCSects[0].sectionName]= diag1
     return mapInteractionDiagrams
 
   def crackControl(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
