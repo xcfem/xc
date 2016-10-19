@@ -485,12 +485,16 @@ class setRCSections2SetElVerif(object):
                     a set of elements in order to carry out their LS verifications.
                     The items of the list are instances of the object RecordRCSimpleSection
   ''' 
-  def __init__(self,name,lstRCSects=[]):
-    self.lstRCSects=lstRCSects
+  def __init__(self,name):
+    self.lstRCSects=[]
     self.name=name
+  # def __init__(self,name,lstRCSects=[]):
+  #   self.lstRCSects=lstRCSects
+  #   self.name=name
 
   def append_section(self,RCSimplSect):
     self.lstRCSects.append(RCSimplSect)
+    return
 #  def append_to_sect_container(
 
 

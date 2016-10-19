@@ -6,7 +6,7 @@
 # to check limit states is different from the model that we use for
 # the analysis. A typical example:
 #
-# - The internal forces under different load combinations are obtained using a linear elastic model for the materils.
+# - The internal forces under different load combinations are obtained using a linear elastic model for the materials.
 # - A "phantom model" with a more realistic representation of the cross sections
 #   (fiber models,...) is used for limit state checking at cross section 
 #   level (crack control, shear,...).
@@ -70,20 +70,19 @@ class PhantomModel(object):
     retval= []
     f= open(intForcCombFileName,"r")
     listado= csv.reader(f)
-    for lst in listado:
+    for lst in listado:    #lst: list of internal forces for a given combination and element 
       if(len(lst)>0):
         idComb= lst[0]
         self.idCombs.add(idComb)
         idElem= eval(lst[1])
         idElements.add(idElem)
     f.close()
-     
     nodes= self.preprocessor.getNodeLoader
     predefined_spaces.gdls_resist_materiales3D(nodes)
     elements= self.preprocessor.getElementLoader
     coacciones= self.preprocessor.getConstraintLoader
     # Definimos materiales
-    fkSection= sccFICT.defSeccShElastica3d(self.preprocessor,matSccFICT) # El problema es isóstático, así que la sección da igual
+    fkSection= sccFICT.defSeccShElastica3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
     elements.dimElem= 1
     self.tagsNodesToLoad1= {}
     self.tagsNodesToLoad2= {}
@@ -107,7 +106,6 @@ class PhantomModel(object):
       if(self.mapInteractionDiagrams != None):
         diagIntScc1= self.mapInteractionDiagrams[nmbScc1]
         e1.setProp("diagInt",diagIntScc1) 
-
       nmbScc2= self.sectionsNamesForEveryElement[tagElem][1]
       n2= nodes.newNodeIDXYZ(tagElem*10+2,0,0,0)
       n4= nodes.newNodeIDXYZ(tagElem*10+4,0,0,0)

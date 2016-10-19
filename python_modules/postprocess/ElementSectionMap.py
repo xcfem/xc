@@ -19,6 +19,7 @@ class ShellElementSectionMap(dict):
       if(not e.hasProp(propName)):
         self[e.tag]= [s1,s2]
         e.setProp(propName,setRCSEctsName)
+        # print 'tag=', e.tag,' [s1,s2]= [', s1,' , ',s2,' ]'
       else:
         sys.stderr.write("element: "+ str(e.tag) + " has already a section ("+e.getProp(propName)+")\n")
   def dump(self):

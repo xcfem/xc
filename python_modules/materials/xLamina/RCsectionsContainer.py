@@ -19,7 +19,8 @@ class SectionContainer(object):
     self.sections.append(deckSections)
     self.mapSections[deckSections.lstRCSects[1].sectionName]= deckSections.lstRCSects[1]
     self.mapSections[deckSections.lstRCSects[0].sectionName]= deckSections.lstRCSects[0]
-
+    return
+  
   def search(self,nmb):
     ''' Returnrs section named nmb (if founded) '''
     retval= None
