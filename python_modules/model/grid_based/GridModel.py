@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''gridModelData.py: model generation based on a grid of 3D positions. Data structures.'''
+'''GridModel.py: model generation based on a grid of 3D positions. Data structures.'''
 
 __author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, A_OO and LCPT"

@@ -428,7 +428,7 @@ bool XC::LoadPattern::removeElementalLoad(int tag)
     return result;
   }
 
-//! @brief Aplica la carga en el instante being passed as parameter.
+//! @brief Apply the load for pseudo-time being passed as parameter.
 void XC::LoadPattern::applyLoad(double pseudoTime)
   {
     if(theSeries)  // first determine the load factor

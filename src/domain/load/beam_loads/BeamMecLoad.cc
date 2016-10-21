@@ -36,13 +36,14 @@
 #include "utility/actor/actor/MovableID.h"
 #include "utility/actor/actor/MovableVector.h"
 
-XC::BeamMecLoad::BeamMecLoad(int tag,int classTag,const double &wt,const double &wa,const XC::ID &theElementTags)
+XC::BeamMecLoad::BeamMecLoad(int tag,int classTag,const double &wt,const double &wa,const ID &theElementTags)
   :BeamLoad(tag, classTag, theElementTags), Trans(wt), Axial(wa) {}
 
 XC::BeamMecLoad::BeamMecLoad(int tag,int classTag)
   :BeamLoad(tag, classTag), Trans(0.0), Axial(0.0) {}
 
-const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor)
+//! @brief Returns applied section forces due to this load (called in element's addLoad method). 
+const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const Matrix &xi,const double &loadFactor)
   {
     static Matrix retval;
     std::cerr << "getAppliedSectionForces no definida." << std::endl;

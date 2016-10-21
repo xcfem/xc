@@ -831,7 +831,7 @@ int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
         else if(BeamStrainLoad *strainLoad= dynamic_cast<BeamStrainLoad *>(theLoad)) //Deformaciones impuestas.
           {
             const size_t numSections= getNumSections();
-            const XC::Matrix &xi= beamIntegr->getIntegrPointCoords(numSections,L);
+            const Matrix &xi= beamIntegr->getIntegrPointCoords(numSections,L);
             theSections.addInitialSectionDeformations(*strainLoad,loadFactor,xi,L);
           }
         else
