@@ -36,9 +36,10 @@ class SectionContainer(object):
 
 
   def getInteractionDiagrams(self,preprocessor,matDiagType):
-    '''Returns 3D interaction diagrams.
+    '''Returns map of 3D interaction diagrams.
 
     :param preprocessor:    FEA problem preprocessor
+    :param matDiagType:     'k' for characteristic, 'd' for design
     '''
     mapInteractionDiagrams= {}
     for s in self.sections:
@@ -49,20 +50,18 @@ class SectionContainer(object):
     return mapInteractionDiagrams
 
   def getInteractionDiagramsNMy(self,preprocessor,matDiagType):
-    '''Returns 2D interaction diagrams in N-My plane.
+    '''Returns map of 2D interaction diagrams in N-My plane.
 
     :param preprocessor:    FEA problem preprocessor
+    :param matDiagType:     'k' for characteristic, 'd' for design
     '''
     mapInteractionDiagrams= {}
     for s in self.sections:
-      diag2= s.lstRCSects[1].defInteractionDiagramNMy(preprocessor,matDiagType)
-      diag2.simplify() #Hasta corregir la obtención de diagramas NMy
-      print "area diag2= ", diag2.getArea()
-      mapInteractionDiagrams[s.lstRCSects[1].sectionName]= diag2
-      diag1= s.lstRCSects[0].defInteractionDiagramNMy(preprocessor,matDiagType)
-      diag1.simplify() #Hasta corregir la obtención de diagramas NMy
-      print "area diag1= ", diag1.getArea()
-      mapInteractionDiagrams[s.lstRCSects[0].sectionName]= diag1
+      for i in range(len(s.lstRCSects)):
+        diag= s.lstRCSects[i].defInteractionDiagramNMy(preprocessor,matDiagType)
+        diag.simplify() #Hasta corregir la obtención de diagramas NMy
+        print "area diag= ", diag.getArea()
+        mapInteractionDiagrams[s.lstRCSects[i].sectionName]= diag
     return mapInteractionDiagrams
 
   def crackControl(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):

@@ -52,19 +52,11 @@ sepL= 1.0/numReinfBarsL
 
 sections= sc.SectionContainer()
 
-deckSectionsAux= defSeccionHASimple.RecordRCSlabSection("deck","RC deck.",0.3,concrete, reinfSteel)
-deckSectionsAux.D2Section.positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
-deckSectionsAux.D2Section.negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
-deckSectionsAux.D1Section.positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
-deckSectionsAux.D1Section.negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
-deckSections=defSeccionHASimple.setRCSections2SetElVerif(name='deckSections')
-deckSections.append_section(RCSimplSect=deckSectionsAux.D1Section)
-deckSections.append_section(RCSimplSect=deckSectionsAux.D2Section)
-#deckSections.setMainReinf2pos(12e-3,areaFi12,sepT)
-#deckSections.setMainReinf2neg(12e-3,areaFi12,sepT)
-#deckSections.setMainReinf1neg(20e-3,areaFi20,sepL)
-#deckSections.setMainReinf1pos(20e-3,areaFi20,sepL)
-
+deckSections= defSeccionHASimple.RecordRCSlabSection("deck","RC deck.",0.3,concrete, reinfSteel)
+deckSections.lstRCSects[1].positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSections.lstRCSects[1].negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSections.lstRCSects[0].positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+deckSections.lstRCSects[0].negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
 sections.append(deckSections)
 
 
