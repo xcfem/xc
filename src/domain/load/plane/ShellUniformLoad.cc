@@ -28,8 +28,13 @@
 
 #include "ShellUniformLoad.h"
 #include "domain/mesh/element/fvectors/FVectorShell.h"
+#include "domain/domain/Domain.h"
+#include "domain/mesh/element/Element.h"
+#include "domain/mesh/element/plane/shell/ShellMITC4Base.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
+#include "xc_utils/src/geom/pos_vec/SVD3d.h"
+#include "xc_utils/src/geom/pos_vec/VDesliz3d.h"
 
 
 
@@ -130,6 +135,35 @@ void XC::ShellUniformLoad::addReactionsInBasicSystem(const double &area,const do
 void XC::ShellUniformLoad::addFixedEndForcesInBasicSystem(const double &area,const double &loadFactor,FVectorShell &q0)
   {
     std::cerr << "ShellUniformLoad::addFixedEndForcesInBasicSystem no implementada." << std::endl;
+  }
+
+//! brief Returns load resultant (force and moment integration over the elements).
+SVD3d XC::ShellUniformLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
+  {
+    SVD3d retval(centro);
+    Matrix pressures= getGlobalPressures();
+    const Domain *ptrDom= getDomain();
+    if(ptrDom)
+      {
+        const size_t sz= pressures.noRows();
+        for(size_t i=0; i<sz; i++)
+          {
+            const size_t elemTag= getElementTags()(i);
+            const Element *ptrElem= ptrDom->getElement(elemTag);
+            if(const ShellMITC4Base *ptrShell= dynamic_cast<const ShellMITC4Base *>(ptrElem))
+	      {
+  	        const double area= ptrShell->getArea();
+		const Vector3d force(area*pressures(i,0),area*pressures(i,1),area*pressures(i,2));
+		retval+= VDesliz3d(ptrShell->getPosCdg(),force);
+              }
+            else
+	      std::cerr << "ShellMecLoad::getResultant; the element: "
+                        << elemTag << " is not a shell element." << std::endl;
+          }
+      }
+    else
+      std::cerr << "ShellUniformLoad::getResultant; no existe apuntador al dominio." << std::endl;
+    return retval;
   }
 
 //! @brief Devuelve un vector para almacenar los dbTags

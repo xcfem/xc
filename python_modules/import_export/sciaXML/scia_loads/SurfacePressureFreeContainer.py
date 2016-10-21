@@ -97,7 +97,7 @@ def getSurfacePressureFreeComponents(surfacePressureFree):
   else:
     loadCaseId= surfacePressureFree.loadCaseId
     loadCaseName= surfacePressureFree.loadCaseName
-    distrib= '3 points'
+    distrib= 'Uniform'
     value= surfacePressureFree.value
     polygon= surfacePressureFree.polygon
     globalCooSys= True #True if referred to global coordinate system.

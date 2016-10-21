@@ -201,6 +201,8 @@ void XC::Beam3dUniformLoad::addElasticDeformations(const double &L,const CrossSe
       }
   }
 
+
+
 //! @brief Devuelve un vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::Beam3dUniformLoad::getDbTagData(void) const
@@ -265,7 +267,7 @@ size_t XC::Beam3dUniformLoad::getDimVectorFuerza(void) const
 size_t XC::Beam3dUniformLoad::getDimVectorMomento(void) const
   { return 3; }
 
-//! @brief Devuelve las componentes de los vectores fuerza.
+//! @brief Returns distributed force vectors (one for each element) expressed in local coordinates.
 const XC::Matrix &XC::Beam3dUniformLoad::getLocalForces(void) const
   {
     static Matrix retval;
@@ -280,7 +282,7 @@ const XC::Matrix &XC::Beam3dUniformLoad::getLocalForces(void) const
     return retval;
   }
 
-//! @brief Devuelve las componentes de los vectores momento.
+//! @brief Returns distributed moment vectors (one for each element) expressed in local coordinates.
 const XC::Matrix &XC::Beam3dUniformLoad::getLocalMoments(void) const
   {
     static Matrix retval;

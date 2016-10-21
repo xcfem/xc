@@ -62,6 +62,21 @@ class ShellUniformLoad : public ShellMecLoad
     void addReactionsInBasicSystem(const double &,const double &,FVectorShell &);
     void addFixedEndForcesInBasicSystem(const double &,const double &loadFactor,FVectorShell &);
 
+    //! @brief Returns pressure vectors (one for each element) expressed in elemnt local coordinates. Is simply a convenience function that makes the distributedness more explicit.
+    inline const Matrix &getLocalPressures(void) const
+      { return getLocalForces(); }
+    //! @brief Returns distributed moments (one for each element) expressed in element local coordinates. Is simply a convenience function that makes the distributedness more explicit.
+    inline const Matrix &getDistributedLocalMoments(void) const
+      { return getLocalMoments(); }
+    //! @brief Returns pressure vectors (one for each element) expressed in global coordinates. Is simply a convenience function that makes the distributedness more explicit.
+    inline const Matrix &getGlobalPressures(void) const
+      { return getGlobalForces(); }
+    //! @brief Returns distributed moments (one for each element) expressed in global coordinates. Is simply a convenience function that makes the distributedness more explicit.
+    inline const Matrix &getDistributedGlobalMoments(void) const
+      { return getGlobalMoments(); }
+
+    virtual SVD3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
+
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0);

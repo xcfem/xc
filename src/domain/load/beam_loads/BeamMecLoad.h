@@ -31,6 +31,8 @@
 
 
 #include <domain/load/beam_loads/BeamLoad.h>
+#include "xc_utils/src/geom/pos_vec/Pos3d.h"
+class SVD3d;
 
 namespace XC {
 class Matrix;
@@ -75,6 +77,8 @@ class BeamMecLoad : public BeamLoad
     virtual const Matrix &getGlobalVectors(const Matrix &) const;
     virtual const Matrix &getGlobalForces(void) const;
     virtual const Matrix &getGlobalMoments(void) const;
+
+    virtual SVD3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
 
     void Print(std::ostream &s, int flag =0) const;
 

@@ -35,6 +35,7 @@
 #include "domain/mesh/element/coordTransformation/CrdTransf.h"
 #include "utility/actor/actor/MovableID.h"
 #include "utility/actor/actor/MovableVector.h"
+#include "xc_utils/src/geom/pos_vec/SVD3d.h"
 
 XC::BeamMecLoad::BeamMecLoad(int tag,int classTag,const double &wt,const double &wa,const ID &theElementTags)
   :BeamLoad(tag, classTag, theElementTags), Trans(wt), Axial(wa) {}
@@ -86,7 +87,7 @@ size_t XC::BeamMecLoad::getDimVectorFuerza(void) const
 size_t XC::BeamMecLoad::getDimVectorMomento(void) const
   { return 1; }
 
-//! @brief Devuelve las componentes de los vectores fuerza.
+//! @brief Returns punctual/distributed force vectors (one for each element) expressed in local coordinates.
 const XC::Matrix &XC::BeamMecLoad::getLocalForces(void) const
   {
     static Matrix retval;
@@ -100,7 +101,7 @@ const XC::Matrix &XC::BeamMecLoad::getLocalForces(void) const
     return retval;
   }
 
-//! @brief Devuelve las componentes de los vectores momento.
+//! @brief Returns puntual/distributed force moments (one for each element) expressed in local coordinates.
 const XC::Matrix &XC::BeamMecLoad::getLocalMoments(void) const
   {
     static Matrix retval;
@@ -142,13 +143,21 @@ const XC::Matrix &XC::BeamMecLoad::getGlobalVectors(const Matrix &localVectors) 
     return retval;
   }
 
-//! @brief Returns force vector(s) in global coordinates.
+//! @brief Returns punctual/distributed force vectors (one for each element) expressed in global coordinates.
 const XC::Matrix &XC::BeamMecLoad::getGlobalForces(void) const
   { return getGlobalVectors(getLocalForces()); }
 
-//! @brief Returns moment vector(s) in global coordinates.
+//! @brief Returns punctual/distributed moment vectors (one for each element) expressed in global coordinates.
 const XC::Matrix &XC::BeamMecLoad::getGlobalMoments(void) const
   { return getGlobalVectors(getLocalMoments()); }
+
+//! brief Returns load resultant (force and moment integration over the elements).
+SVD3d XC::BeamMecLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
+  {
+    std::cerr << nombre_clase()
+              << "::getResultant not yet implemented." << std::endl;
+    return SVD3d(centro);
+  }
 
 void XC::BeamMecLoad::Print(std::ostream &s, int flag) const
   {

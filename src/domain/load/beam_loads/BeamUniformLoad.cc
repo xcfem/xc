@@ -27,6 +27,10 @@
 //BeamUniformLoad.cpp
 
 #include "BeamUniformLoad.h"
+#include "domain/mesh/element/Element1D.h"
+#include "xc_utils/src/geom/pos_vec/SVD3d.h"
+#include "xc_utils/src/geom/pos_vec/VDesliz3d.h"
+#include "domain/mesh/element/coordTransformation/CrdTransf.h"
 
 //! @brief Constructor.
 XC::BeamUniformLoad::BeamUniformLoad(int tag,int classTag, double wt, double wa,const XC::ID &theElementTags)
@@ -43,4 +47,40 @@ XC::BeamUniformLoad::BeamUniformLoad(int classTag)
 std::string XC::BeamUniformLoad::Categoria(void) const
   { return "uniforme"; }
 
+//! brief Returns load resultant (force and moment integration over the elements).
+SVD3d XC::BeamUniformLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
+  {
+    SVD3d retval(centro);
+    Matrix uniformLoads= getDistributedGlobalForces();
+    const Domain *ptrDom= getDomain();
+    if(ptrDom)
+      {
+        const size_t sz= uniformLoads.noRows();
+        for(size_t i=0; i<sz; i++)
+          {
+            const size_t elemTag= getElementTags()(i);
+            const Element1D *ptrElem= dynamic_cast<const Element1D *>(ptrDom->getElement(elemTag));
+            if(ptrElem)
+              {
+                const CrdTransf *ptrTransf= ptrElem->getCoordTransf();
+                if(ptrTransf)
+		  {
+                    const double l= ptrTransf->getLength(initialGeometry);
+                    const Vector3d force(l*uniformLoads(i,0),l*uniformLoads(i,1),l*uniformLoads(i,2));
+		    retval+= VDesliz3d(ptrElem->getPosCdg(),force);
+		  }
+                else
+		  std::cerr << nombre_clase() << "::getResultant; el elemento: "
+                            << elemTag << " no tiene transformación de coordenadas." << std::endl;
+
+              }
+            else
+	      std::cerr << nombre_clase() << "::getResultant; the element: "
+                        << elemTag << " is not a 1D element." << std::endl;
+          }
+      }
+    else
+      std::cerr << nombre_clase() << "::getResultant; no existe apuntador al dominio." << std::endl;
+    return retval;
+  }
 

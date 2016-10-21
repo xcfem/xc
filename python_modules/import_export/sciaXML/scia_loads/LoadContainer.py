@@ -123,7 +123,7 @@ class FreeLoadContainer(LoadContainerBase):
       nl= lIter.next()
 
   def dumpSurfaceLoads(self, lp, destLoadCase):
-    '''Dump loads over elements.'''
+    '''Dump loads over surfaces as free surface loads.'''
     print '******** continue implementation of dumpSurfaceLoads. ********'
     domain= lp.getDomain
     preprocessor= lp.getDomain.getPreprocessor
@@ -136,24 +136,33 @@ class FreeLoadContainer(LoadContainerBase):
       surfaceLoadSet.elementalLoad= eLoad
       print 'setName= ', setName
       elemTags= eLoad.elementTags
-      globalForce= eLoad.getGlobalForces().getRow(0) #We assume is constant through the elements.
+      resultant= eLoad.getResultant(geom.Pos3d(0,0,0),True) #Total force over the elements.
+      #It seems there is a bug in 
+      totalForce= geom.Vector3d(resultant.x,resultant.y,resultant.z)
+      print "totalForce= ", totalForce
+      totalArea= 0.0
       for tag in elemTags:
         elem= domain.getMesh.getElement(tag)
-        loadPos= elem.getPosCentroid(True)+geom.Vector3d(globalForce[0],globalForce[1],globalForce[2])
-        print 'globalForces= ', globalForce, ' loadPos= ', loadPos
+        totalArea+= elem.getArea(True)
         if(elem):
           surfaceLoadSet.getElements.append(elem)
         else:
           lmsg.error('element: '+ str(tag) + ' not found.')
+      surfaceLoadSet.value= totalForce.getModulo()
+      surfaceLoadSet.vDir= [totalForce.x/surfaceLoadSet.value,totalForce.y/surfaceLoadSet.value,totalForce.z/surfaceLoadSet.value]
+      surfaceLoadSet.value/= totalArea
       elementContours= surfaceLoadSet.getElements.getContours(True)
       if(len(elementContours)>1):
         lmsg.error('surface load set: '+ setName + ' has more than one contour.  Contours others than first are ignored.')
       surfaceLoadSet.polygon= elementContours[0]
+      surfaceLoadSet.polygon.simplify(.01) #Deletes unnecesary vertices.
       loadSets.append(surfaceLoadSet)
       eLoad= eLoadIter.next()
     for s in loadSets:
       sLoad= nld.SurfaceLoadRecord(destLoadCase, self.surfaceLoadCounter)
       sLoad.polygon= s.polygon
+      sLoad.value= s.value
+      sLoad.vDir= s.vDir
       destLoadCase.loads.surfaceLoads.append(sLoad)
       self.surfaceLoadCounter+=1
       

@@ -44,6 +44,19 @@ class BeamUniformLoad : public BeamMecLoad
     BeamUniformLoad(int classTag);
 
     std::string Categoria(void) const;
+    //! @brief Returns distributed force vectors (one for each element) expressed in elemnt local coordinates. Is simply a convenience function that makes the distributedness more explicit.
+    inline const Matrix &getDistributedLocalForces(void) const
+      { return getLocalForces(); }
+    //! @brief Returns distributed moments (one for each element) expressed in element local coordinates. Is simply a convenience function that makes the distributedness more explicit.
+    inline const Matrix &getDistributedLocalMoments(void) const
+      { return getLocalMoments(); }
+    //! @brief Returns distributed force vectors (one for each element) expressed in global coordinates. Is simply a convenience function that makes the distributedness more explicit.
+    inline const Matrix &getDistributedGlobalForces(void) const
+      { return getGlobalForces(); }
+    //! @brief Returns distributed moments (one for each element) expressed in global coordinates. Is simply a convenience function that makes the distributedness more explicit.
+    inline const Matrix &getDistributedGlobalMoments(void) const
+      { return getGlobalMoments(); }
+    virtual SVD3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
   };
 } // end of XC namespace
 
