@@ -111,11 +111,11 @@ const XC::Matrix &XC::Beam2dUniformLoad::getLocalMoments(void) const
   }
 
 //! @brief Applied section forces due to element uniform load
-const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L,const XC::Matrix &xi_pt,const double &loadFactor)
+const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L,const Matrix &xi_pt,const double &loadFactor)
   {
     const size_t nSections= xi_pt.noRows();
-    static Matrix retval(3,1); //Sólo se ejecuta una vez.
-    retval.resize(3,nSections);
+    static Matrix retval(3,1); //Compile time definition.
+    retval.resize(3,nSections); //Resize.
     retval.Zero();
     const double wa= WAxial()*loadFactor;  // Axial
     const double wy= WTrans()*loadFactor;  // Transverse

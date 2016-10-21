@@ -454,10 +454,10 @@ int XC::BeamWithHinges2d::addLoad(ElementalLoad *theLoad, double loadFactor)
 
             if(!sp)
               {
-                sp= new XC::Matrix(3,2);
+                sp= new Matrix(3,2);
                 if(!sp)
                   {
-                    std::cerr << "XC::BeamWithHinges2d::addLoad  -- out of memory\n";
+                    std::cerr << "BeamWithHinges2d::addLoad  -- out of memory\n";
                     exit(-1);
                   }
               }

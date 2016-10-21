@@ -62,7 +62,7 @@ class BeamMecLoad : public BeamLoad
     inline void setAxialComponent(const double &a)
       { Axial= a; }
 
-    virtual const Matrix &getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor);
+    virtual const Matrix &getAppliedSectionForces(const double &L,const Matrix &xi,const double &loadFactor);
     virtual void addReactionsInBasicSystem(const double &,const double &,FVector &);
     virtual void addFixedEndForcesInBasicSystem(const double &,const double &,FVector &);
     void addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);

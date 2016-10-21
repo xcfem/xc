@@ -71,7 +71,7 @@ size_t XC::ShellMecLoad::getDimVectorMomento(void) const
 //! @brief Returns force expressed in local coordinates.
 XC::Vector XC::ShellMecLoad::getLocalForce(void) const
   {
-    XC::Vector retval(3);
+    Vector retval(3);
     retval(0)= Axial1;
     retval(1)= Axial2;
     retval(2)= Trans;
@@ -81,7 +81,7 @@ XC::Vector XC::ShellMecLoad::getLocalForce(void) const
 //! @brief Returns moment expressed in local coordinates.
 XC::Vector XC::ShellMecLoad::getLocalMoment(void) const
   {
-    XC::Vector retval(3);
+    Vector retval(3);
     retval(0)= 0.0;
     retval(1)= 0.0;
     retval(2)= 0.0;
