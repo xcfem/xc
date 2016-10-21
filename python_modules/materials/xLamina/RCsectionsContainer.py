@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import xc_base
 import geom
@@ -17,8 +22,8 @@ class SectionContainer(object):
 
   def append(self, deckSections):
     self.sections.append(deckSections)
-    self.mapSections[deckSections.lstRCSects[1].sectionName]= deckSections.lstRCSects[1]
-    self.mapSections[deckSections.lstRCSects[0].sectionName]= deckSections.lstRCSects[0]
+    for i in range(len(deckSections.lstRCSects)):
+      self.mapSections[deckSections.lstRCSects[i].sectionName]= deckSections.lstRCSects[i]
     return
   
   def search(self,nmb):
@@ -29,14 +34,6 @@ class SectionContainer(object):
         retval= s
     return retval
 
-  # def getInteractionDiagrams(self,preprocessor,matDiagType):
-  #   mapInteractionDiagrams= {}
-  #   for s in self.sections:
-  #     diag2= s.D2Section.defInteractionDiagram(preprocessor,matDiagType)
-  #     mapInteractionDiagrams[s.D2Section.sectionName]= diag2
-  #     diag1= s.lstRCSects[0].defInteractionDiagram(preprocessor,matDiagType)
-  #     mapInteractionDiagrams[s.lstRCSects[0].sectionName]= diag1
-  #   return mapInteractionDiagrams
 
   def getInteractionDiagrams(self,preprocessor,matDiagType):
     '''Returns 3D interaction diagrams.
@@ -45,12 +42,10 @@ class SectionContainer(object):
     '''
     mapInteractionDiagrams= {}
     for s in self.sections:
-      s.lstRCSects[1].defRCSimpleSection(preprocessor,matDiagType)
-      diag2= s.lstRCSects[1].defInteractionDiagram(preprocessor)
-      mapInteractionDiagrams[s.lstRCSects[1].sectionName]= diag2
-      s.lstRCSects[0].defRCSimpleSection(preprocessor,matDiagType)
-      diag1= s.lstRCSects[0].defInteractionDiagram(preprocessor)
-      mapInteractionDiagrams[s.lstRCSects[0].sectionName]= diag1
+      for i in range(len(s.lstRCSects)):
+        s.lstRCSects[i].defRCSimpleSection(preprocessor,matDiagType)
+        diag= s.lstRCSects[i].defInteractionDiagram(preprocessor)
+        mapInteractionDiagrams[s.lstRCSects[i].sectionName]= diag
     return mapInteractionDiagrams
 
   def getInteractionDiagramsNMy(self,preprocessor,matDiagType):
