@@ -526,6 +526,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/xLamina/membranePlateRCSectionContainer.pyc
 /usr/local/lib/python2.7/dist-packages/materials/xLamina/modelo.py
 /usr/local/lib/python2.7/dist-packages/materials/xLamina/modelo.pyc
+/usr/local/lib/python2.7/dist-packages/materials/xLamina/RCsectionsContainer.py
+/usr/local/lib/python2.7/dist-packages/materials/xLamina/RCsectionsContainer.pyc
 /usr/local/lib/python2.7/dist-packages/materials/xLamina/seccion_ficticia_elementos.py
 /usr/local/lib/python2.7/dist-packages/materials/xLamina/seccion_ficticia_elementos.pyc
 /usr/local/lib/python2.7/dist-packages/misc/acc2hipShell.py

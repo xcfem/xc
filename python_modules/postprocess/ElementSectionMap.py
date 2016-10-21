@@ -9,16 +9,17 @@ class ShellElementSectionMap(dict):
   '''Map with asssings to each shell element two
      reinforced concrete section names. This map that will be readed to
      create fiber section models during reinforcement verification.'''
-  def assign(self,elemSet,sectionName):
-    '''Assigns the sections sectionName+'1' and sectionName+'2'
+  def assign(self,elemSet,setRCSEctsName):
+    '''Assigns the sections setRCSEctsName+'1' and setRCSEctsName+'2'
        to the elements of the set.'''
     propName= 'sectionName'
-    s2= sectionName+"2" #Section name for directions 1 and 2.
-    s1= sectionName+"1"
+    s2= setRCSEctsName+"2" #Section name for directions 1 and 2.
+    s1= setRCSEctsName+"1"
     for e in elemSet:
       if(not e.hasProp(propName)):
         self[e.tag]= [s1,s2]
-        e.setProp(propName,sectionName)
+        e.setProp(propName,setRCSEctsName)
+        # print 'tag=', e.tag,' [s1,s2]= [', s1,' , ',s2,' ]'
       else:
         sys.stderr.write("element: "+ str(e.tag) + " has already a section ("+e.getProp(propName)+")\n")
   def dump(self):

@@ -4,11 +4,11 @@
    display results (internal forces, displacements) of an user-defined
    load case.'''
 
-__author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2016 A_OO LCPT"
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016 AO_O LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
+__email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
 from miscUtils import LogMessages as lmsg
 from solution import predefined_solutions
@@ -75,7 +75,7 @@ class QuickGraphics(object):
     '''displays the component of the displacement or rotations in the 
     set of entities.
     
-    :param itemToDisp: component of the displacement ('uX', 'uY' or 'uZ') or the 
+    :param itemToDisp:  component of the displacement ('uX', 'uY' or 'uZ') or the 
                   rotation ('rotX', rotY', 'rotZ') to be depicted 
     :param setToDisplay:   set of entities to be represented (default to all entities)
     :param fConvUnits:     factor of conversion to be applied to the results (defalts to 1)
@@ -97,10 +97,10 @@ class QuickGraphics(object):
     '''displays the component of internal forces in the 
     set of entities.
     
-    :param itemToDisp: component of the internal forces ('N1', 'N2', 'N12', 'M1', 'M2', 'M12', 'Q1', 'Q2')
-                  to be depicted 
-    :param setToDisplay:   set of entities to be represented (default to all entities)
-    :param fConvUnits:     factor of conversion to be applied to the results (defalts to 1)
+    :param itemToDisp:   component of the internal forces ('N1', 'N2', 'N12', 'M1', 'M2', 'M12', 'Q1', 'Q2')
+                         to be depicted 
+    :param setToDisplay: set of entities to be represented (default to all entities)
+    :param fConvUnits:   factor of conversion to be applied to the results (defalts to 1)
     :param unitDescription: string like '[kN/m] or [kN m/m]'
     '''
     if(setToDisplay):
