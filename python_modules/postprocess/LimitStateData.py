@@ -26,8 +26,10 @@ class LimitStateData(object):
     self.outputDataBaseFileName= outputDataBaseFileName
     self.controller= None
   def getInternalForcesFileName(self):
+    '''Returns the file name to read: combination name, element number and internal forces.'''
     return self.internal_forces_results_directory+'intForce_'+ self.label +'.csv'
   def getDisplacementsFileName(self):
+    '''Returns the file name to read: combination name, node number and displacements (ux,uy,uz,rotX,rotY,rotZ).'''
     return self.internal_forces_results_directory+'displ_'+ self.label +'.csv'
   def getOutputDataBaseFileName(self):
     '''Returns the output file name without extension.'''
@@ -36,47 +38,55 @@ class LimitStateData(object):
     '''Returns the Python executable file name.'''
     return self.getOutputDataBaseFileName() + '.py'
   def loadPickleObject(objName):
+    '''reads a Python object from a pickle file.'''
     with open(name + '.pkl', 'r') as f:
       return pickle.load(f)
-  def saveAll(self,model,combContainer,setCalc,fConvIntForc= 1.0):
+  def saveAll(self,feProblem,combContainer,setCalc,fConvIntForc= 1.0):
     '''Writes internal forces, displacements, .., for each combination
-    Parameters:
-      setCalc:      set of entities for which the analysis is going to be performed
-      fConvIntForc: conversion factor between the unit of force in which the calculation
-                    is performed and that one desired for the displaying of internal forces
-                    (The use of this factor won't be allowed in future versions)
+     
+      :param feProblem: XC finite element problem to deal with.
+      :param setCalc: set of entities for which the verification is 
+                      going to be performed
+      :param fConvIntForc: conversion factor between the unit of force 
+                           in which the calculation is performed and that 
+                           one desired for the displaying of internal forces
+                           (The use of this factor won't be allowed in
+                            future versions)
     '''
     if fConvIntForc != 1.0:
       lmsg.warning('fConvIntForc= ' + fConvIntForc + 'In future versions only the value 1.0 will be allowed as conversion factor between units' )
-    feProblem= model.getFEProblem()
-    preprocessor= model.getPreprocessor()
+    preprocessor= feProblem.getPreprocessor
     loadCombinations= preprocessor.getLoadLoader.getLoadCombinations
+    #Putting combinations inside XC.
     loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
     elemSet= setCalc.getElements
-    nodSet=setCalc.getNodes
+    nodSet= setCalc.getNodes
     fNameInfForc= self.getInternalForcesFileName()
-    fNameDispl=self.getDisplacementsFileName()
-    os.system("rm -f " + fNameInfForc)
+    fNameDispl= self.getDisplacementsFileName()
+    os.system("rm -f " + fNameInfForc) #Clear obsolete files.
     os.system("rm -f " + fNameDispl)
     for key in loadCombinations.getKeys():
       comb= loadCombinations[key]
       feProblem.getPreprocessor.resetLoadCase()
-      comb.addToDomain()
-      #Solución
+      comb.addToDomain() #Combination to analyze.
+      #Solution
+      # XXX use always a simple static linear analysis is not a good idea.     
       analisis= predefined_solutions.simple_static_linear(feProblem)
-      result= analisis.analyze(1)
+      result= analisis.analyze(1) #Same with the number of steps.
+      #Writing results.
       fIntF= open(fNameInfForc,"a")
       fDisp= open(fNameDispl,"a")
+      # XXX MUST be general exportInternalForces (not only ShellInternalForces).
       eif.exportShellInternalForces(comb.getName,elemSet,fIntF,fConvIntForc)
-      edisp.exportShellDisplacements(comb.getName,nodSet,fDisp)
+      edisp.exportDisplacements(comb.getName,nodSet,fDisp)
       fIntF.close()
       fDisp.close()
-      comb.removeFromDomain()
+      comb.removeFromDomain() #Remove combination from the model.
 
 class NormalStressesRCLimitStateData(LimitStateData):
-  ''' Reinforced concrete normal stresses limit state data.'''
+  ''' Reinforced concrete normal stresses data for limit state checking.'''
   def __init__(self):
-    '''Limit state data constructor '''
+    '''Constructor '''
     super(NormalStressesRCLimitStateData,self).__init__('ULS_normalStressesResistance','verifRsl_normStrsULS')
 
   def dumpCombinations(self,combContainer,loadCombinations):

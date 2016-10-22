@@ -12,7 +12,7 @@ import math
 
 
 # Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
-def exportShellDisplacements(combNm, nodSet, fDesc):
+def exportDisplacements(combNm, nodSet, fDesc):
   '''
   Parameters:
     combNM: name of the combination
@@ -20,6 +20,6 @@ def exportShellDisplacements(combNm, nodSet, fDesc):
     fDesc:  name of the file to save the displacements
   '''
   for n in nodSet:
-    vDisp= n.getDisp  #displacement vector [ux,uy,uz,rotx,roty,rotz]
-    fDesc.write(combNm+", "+str(n.tag)+", " + str(vDisp[0])+", "+str(vDisp[1])+", "+str(vDisp[2])+", "+str(vDisp[3])+", "+str(vDisp[4])+", "+str(vDisp[5])+'\n')
-  return
+    strDisp= str(n.getDisp).rstrip().replace(' ',', ') #displacement vector [ux,uy,uz,rotx,roty,rotz]
+    fDesc.write(combNm+", "+str(n.tag)+", " + strDisp+'\n')
+    #fDesc.write(combNm+", "+str(n.tag)+", " + str(vDisp[0])+", "+str(vDisp[1])+", "+str(vDisp[2])+", "+str(vDisp[3])+", "+str(vDisp[4])+", "+str(vDisp[5])+'\n')
