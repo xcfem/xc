@@ -23,11 +23,12 @@ class RecordShearReinforcement(object):
   
   :ivar familyName:        name identifying the family of shear reinforcing bars
   :ivar nShReinfBranches:  number of effective branches 
-  :ivar shReinfSpacing:    longitudinal distance between transverse reinforcements
-  :ivar angAlphaShReinf:   angle between the shear reinforcing bars and the axis 
-                       of the member
+  :ivar shReinfSpacing:    longitudinal distance between transverse 
+                           reinforcements
+  :ivar angAlphaShReinf:   angle between the shear reinforcing bars and the 
+                           axis of the member
   :ivar angThetaConcrStruts: angle between the concrete's compression struts 
-                         and the axis of the member
+                           and the axis of the member
   '''
   def __init__(self):
     self.familyName= "noName" # name identifying the family of shear reinforcing bars
@@ -106,15 +107,16 @@ class BasicRecordRCSection(object):
   :ivar sectionName:     name identifying the section
   :ivar sectionDescr:    section description
   :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
-  :ivar concrDiagName:   name identifying the characteristic stress-strain diagram of the concrete material
+  :ivar concrDiagName:   name identifying the characteristic stress-strain 
+                         diagram of the concrete material
   :ivar depth:           cross-section depth
   :ivar width:           cross-section width
   :ivar nDivIJ:          number of cells in IJ (width) direction
   :ivar nDivJK:          number of cells in JK  (height) direction
   :ivar fiberSectionRepr: fiber model of the section.
   :ivar reinfSteelType:  type of reinforcement steel
-  :ivar reinfDiagName:   name identifying the characteristic stress-strain diagram
-                     of the reinforcing steel material
+  :ivar reinfDiagName:   name identifying the characteristic stress-strain 
+                         diagram of the reinforcing steel material
   :ivar shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
                       defining the shear reinforcement in Z direction
   :ivar shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement()
@@ -201,23 +203,26 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   :ivar sectionName:     name identifying the section
   :ivar sectionDescr:    section description
   :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
-  :ivar concrDiagName:   name identifying the characteristic stress-strain diagram of the concrete material
+  :ivar concrDiagName:   name identifying the characteristic stress-strain 
+                         diagram of the concrete material
   :ivar depth:           cross-section depth
   :ivar width:           cross-section width
   :ivar nDivIJ:          number of cells in IJ (width) direction
   :ivar nDivJK:          number of cells in JK  (height) direction
   :ivar fiberSectionRepr: fiber model of the section
   :ivar reinfSteelType:  type of reinforcement steel
-  :ivar reinfDiagName:   name identifying the characteristic stress-strain diagram of
-                     the reinforcing steel material
+  :ivar reinfDiagName:   name identifying the characteristic stress-strain 
+                         diagram of the reinforcing steel material
   :ivar shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
                      defining the shear reinforcement in Z direction
   :ivar shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement() 
-                     defining the shear reinforcement in Y direction
-  :ivar coverMin:        minimum value of end or clear concrete cover of main bars from
-                     both the positive and negative faces
-  :ivar negatvRebarRows:       layers of main rebars in the local negative face of the section
-  :ivar positvRebarRows:       layers of main rebars in the local positive face of the section
+                         defining the shear reinforcement in Y direction
+  :ivar coverMin:        minimum value of end or clear concrete cover of main 
+                         bars from both the positive and negative faces
+  :ivar negatvRebarRows: layers of main rebars in the local negative face of 
+                         the section
+  :ivar positvRebarRows: layers of main rebars in the local positive face of 
+                         the section
   '''
   def __init__(self,width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
     super(RecordRCSimpleSection,self).__init__(width,depth,concrType,reinfSteelType)
@@ -237,7 +242,8 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     return retval
 
   def getAsNegRows(self):
-    '''returns a list with the cross-sectional area of the rebars in each row of the negative face'''
+    '''returns a list with the cross-sectional area of the rebars in each row 
+       of the negative face'''
     retval=[]
     for rbRow in self.negatvRebarRows:
       retval.append(rbRow.getAs())
@@ -285,11 +291,13 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     '''returns the cross-sectional area of the section'''
     return self.width*self.depth
   def getI(self):
-    '''returns the second moment of area about the middle axis parallel to the width '''
+    '''returns the second moment of area about the middle axis parallel to 
+    the width '''
     return 1/12.0*self.width*self.depth**3
 
   def getSPos(self):
-    '''returns a list with the distance between bars for each row of bars in local positive face.'''
+    '''returns a list with the distance between bars for each row of bars in 
+    local positive face.'''
     retval=[]
     for rbRow in self.positvRebarRows:
       retval.append(rbRow.rebarsSpacing)
@@ -303,42 +311,48 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     return retval
 
   def getDiamPos(self):
-    '''returns a list with the bar diameter for each row of bars in local positive face.'''
+    '''returns a list with the bar diameter for each row of bars in local 
+    positive face.'''
     retval=[]
     for rbRow in self.positvRebarRows:
       retval.append(rbRow.rebarsDiam)
     return retval
 
   def getDiamNeg(self):
-    '''returns a list with the bar diameter for each row of bars in local negative face.'''
+    '''returns a list with the bar diameter for each row of bars in local 
+    negative face.'''
     retval=[]
     for rbRow in self.negatvRebarRows:
       retval.append(rbRow.rebarsDiam)
     return retval
 
   def getNBarPos(self):
-    '''returns a list with the number of bars for each row of bars in local positive face.'''
+    '''returns a list with the number of bars for each row of bars in local 
+    positive face.'''
     retval=[]
     for rbRow in self.positvRebarRows:
       retval.append(rbRow.nRebars)
     return retval
 
   def getNBarNeg(self):
-    '''returns a list with the number of bars for each row of bars in local negative face.'''
+    '''returns a list with the number of bars for each row of bars in local 
+    negative face.'''
     retval=[]
     for rbRow in self.negatvRebarRows:
       retval.append(rbRow.nRebars)
     return retval
 
   def getCoverPos(self):
-    '''returns a list with the cover of bars for each row of bars in local positive face.'''
+    '''returns a list with the cover of bars for each row of bars in local 
+    positive face.'''
     retval=[]
     for rbRow in self.positvRebarRows:
       retval.append(rbRow.cover)
     return retval
 
   def getCoverNeg(self):
-    '''returns a list with the cover of bars for each row of bars in local negative face.'''
+    '''returns a list with the cover of bars for each row of bars in local 
+    negative face.'''
     retval=[]
     for rbRow in self.negatvRebarRows:
       retval.append(rbRow.cover)
@@ -352,7 +366,8 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     return retval
 
   def getLatCoverNeg(self):
-    '''returns a list with the lateral cover of bars for each row of bars in local negative face.'''
+    '''returns a list with the lateral cover of bars for each row of bars in 
+    local negative face.'''
     retval=[]
     for rbRow in self.negatvRebarRows:
       retval.append(rbRow.coverLat)
@@ -364,7 +379,8 @@ class RecordRCSimpleSection(BasicRecordRCSection):
       rbRow.centerRebars(self.width)
 
   def centerRebarsNeg(self):
-    '''centers in the width of the section the rebars placed in the negative face''' 
+    '''centers in the width of the section the rebars placed in the negative 
+    face''' 
     for rbRow in self.negatvRebarRows:
       rbRow.centerRebars(self.width)
 
@@ -428,7 +444,8 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     '''
     Definition of a reinforced concrete section with several
     top and bottom reinforcement layers.
-    matDiagType: type of stress-strain diagram (="k" for characteristic diagrama, 
+    matDiagType: type of stress-strain diagram 
+                (="k" for characteristic diagrama, 
                  ="d" for design diagram)
      '''
     self.JTorsion= self.getJTorsion()
@@ -477,13 +494,16 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     return sc.StressCalc(self.width,self.depth,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
 
 class setRCSections2SetElVerif(object):
-  '''This class defines the set of reinforced concrete sections that are going to
-  be associated to a set of elements in order to carry out the verifications of the
-  limit states.
+  '''This class defines the set of reinforced concrete sections that are going 
+  to be associated to a set of elements in order to carry out the verifications 
+  of the limit states.
+
   :ivar name:       name given to the list of reinforced concrete sections
-  :ivar lstRCSects: list of reinforced concrete sections that will be associated to
-                    a set of elements in order to carry out their LS verifications.
-                    The items of the list are instances of the object RecordRCSimpleSection
+  :ivar lstRCSects: list of reinforced concrete sections that will be 
+                    associated to a set of elements in order to carry out their
+                    LS verifications.
+                    The items of the list are instances of the object 
+                    RecordRCSimpleSection
                     lstRCSects[0]=section in 1 direction
                     lstRCSects[1]=section in 2 direction ...
 
@@ -497,10 +517,12 @@ class setRCSections2SetElVerif(object):
     return
 
   def setShearReinf(self,sectNmb,nShReinfBranches,areaShReinfBranch,spacing):
-    '''sets parameters of the shear reinforcement of the simple section identified by the sectNmb
+    '''sets parameters of the shear reinforcement of the simple section 
+    identified by the sectNmb
 
-    :param sectNmb: integer number identifying the section (1 correponds to the section stored
-                    in  lstRCSects[0] ...)
+    :param sectNmb: integer number identifying the section 
+                     (1 correponds to the section stored
+                      in  lstRCSects[0] ...)
     :param nShReinfBranches: number of shear reinforcing branches
     :param areaShReinfBranch: area of the cross-section of each stirrup
     :param spacing:        spacing of the stirrups
@@ -514,64 +536,77 @@ class setRCSections2SetElVerif(object):
   def getAsneg(self,sectNmb):
     '''Steel area in local negative face of the simple section identified by the sectNmb
 
-    :param sectNmb: integer number identifying the section (1 correponds to the section stored
-                    in  lstRCSects[0] ...)
+     :param sectNmb: integer number identifying the section 
+                     (1 correponds to the section stored
+                      in  lstRCSects[0] ...)
+
     '''
     return self.lstRCSects[sectNmb-1].getAsNeg()
 
   def getAspos(self,sectNmb):
     '''Steel area in local positive face of the simple section identified by the sectNmb
 
-    :param sectNmb: integer number identifying the section (1 correponds to the section stored
-                    in  lstRCSects[0] ...)
+     :param sectNmb: integer number identifying the section 
+                     (1 correponds to the section stored
+                      in  lstRCSects[0] ...)
+
     '''
     return self.lstRCSects[sectNmb-1].getAsPos()
 
   def getSpos(self,sectNmb):
     '''list of distances between bars of rows the in local positive face of the simple section identified by the sectNmb
 
-     :param sectNmb: integer number identifying the section (1 correponds to the section stored
-                    in  lstRCSects[0] ...)
+      :param sectNmb: integer number identifying the section 
+                     (1 correponds to the section stored
+                      in  lstRCSects[0] ...)
+
     '''
     return self.lstRCSects[sectNmb-1].getSPos()
 
   def getSneg(self,sectNmb):
     '''list of distances between bars of rows  in the local negative face of the simple section identified by the sectNmb
 
-     :param sectNmb: integer number identifying the section (1 correponds to the section stored
-                    in  lstRCSects[0] ...)
+     :param sectNmb: integer number identifying the section 
+                     (1 correponds to the section stored
+                      in  lstRCSects[0] ...)
+
     '''
     return self.lstRCSects[sectNmb-1].getSNeg()
 
   def getDiamneg(self,sectNmb):
     '''list of bar diameter in rows of the local negative face  of the simple section identified by the sectNmb
 
-     :param sectNmb: integer number identifying the section (1 correponds to the section stored
-                    in  lstRCSects[0] ...)
+     :param sectNmb: integer number identifying the section 
+                     (1 correponds to the section stored
+                      in  lstRCSects[0] ...)
     '''
     return self.lstRCSects[sectNmb-1].getDiamNeg()
 
   def getDiampos(self,sectNmb):
     '''list of bar diameter in rows of the local positive face of the simple section identified by the sectNmb
 
-     :param sectNmb: integer number identifying the section (1 correponds to the section stored
-                    in  lstRCSects[0] ...)
+     :param sectNmb: integer number identifying the section 
+                     (1 correponds to the section stored
+                      in  lstRCSects[0] ...)
+
     '''
     return self.lstRCSects[sectNmb-1].getDiamPos()
   
   def getNBarpos(self,sectNmb):
     '''list of number of bars in rows of the local positive face of the simple section identified by the sectNmb
 
-     :param sectNmb: integer number identifying the section (1 correponds to the section stored
-                    in  lstRCSects[0] ...)
+     :param sectNmb: integer number identifying the section 
+                     (1 correponds to the section stored
+                      in  lstRCSects[0] ...)
     '''
     return self.lstRCSects[sectNmb-1].getNBarPos()
 
   def getNBarneg(self,sectNmb):
     '''list of number of bars in rows of the local negative face of the simple section identified by the sectNmb
 
-     :param sectNmb: integer number identifying the section (1 correponds to the section stored
-                    in  lstRCSects[0] ...)
+     :param sectNmb: integer number identifying the section 
+                     (1 correponds to the section stored
+                      in  lstRCSects[0] ...)
     '''
     return self.lstRCSects[sectNmb-1].getNBarNeg()
 
@@ -579,8 +614,9 @@ class setRCSections2SetElVerif(object):
 
 
 class RecordRCSlabSection(setRCSections2SetElVerif):
-  '''This class is used to define the variables that make up a reinforced concrete slab 
-  section with several reinforcement layers in the top and bottom faces
+  '''This class is used to define the variables that make up the two 
+  reinforced concrete sections that define the two reinforcement directions
+  of a slab
   
   :ivar name:    basic name to form the RC sections in direction 1 (name+'1') 
              and direction 2(name+'1') 
@@ -758,3 +794,63 @@ def loadMainRefPropertyIntoElements(elemSet, sectionContainer, code):
       sys.stderr.write("element: "+ str(e.tag) + " section undefined.\n")
       e.setProp(code,0.0)
 
+class RecordRCBeamSection(setRCSections2SetElVerif):
+  '''This class is used to define the variables that make up a reinforced 
+  concrete beam section with several reinforcement layers in the top and 
+  bottom faces
+  
+  :ivar name:    basic name to form the RC sections in direction 1 (name+'1') 
+             and direction 2(name+'1') 
+  :ivar sectionDescr:    section description
+  :ivar depth:           cross-section depth
+  :ivar width:           cross-section width
+  :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
+  :ivar reinfSteelType:  type of reinforcement steel
+  :ivar posMainRebarRows: layers of main rebars in direction 1 in the local 
+                        positive face of the section (list of MainReinfLayer)
+  :ivar negMainRebarRows: layers of main rebars in direction 1 in the local 
+                        negative face of the section (list of MainReinfLayer)
+
+  '''
+  def __init__(self,name,sectionDescr,width,depth,concrType,reinfSteelType):
+    super(RecordRCBeamSection,self).__init__(name)
+    sSect= RecordRCSimpleSection()
+    sSect.sectionName= name + "1"
+    sSect.sectionDescr= sectionDescr + ". 1 direction."
+    sSect.concrType= concrType
+    sSect.depth= depth
+    sSect.width= 1.0
+    sSect.reinfSteelType= reinfSteelType
+    sSect.positvRebarRows=[]
+    sSect.negatvRebarRows=[]
+    self.append_section(sSect)
+
+  def setShearReinf(self,nShReinfBranches,areaShReinfBranch,spacing):
+    self.lstRCSects[0].shReinfZ.nShReinfBranches= nShReinfBranches
+    self.lstRCSects[0].shReinfZ.areaShReinfBranch= areaShReinfBranch
+    self.lstRCSects[0].shReinfZ.shReinfSpacing= spacing
+
+  def getAsneg(self):
+    '''Steel area in local negative face.'''
+    return self.lstRCSects[0].getAsNeg()
+  def getAspos(self):
+    '''Steel area in local positive face.'''
+    return self.lstRCSects[0].getAsPos()
+  def getSpos(self):
+    '''list of distances between bars of rows the in local positive face.'''
+    return self.lstRCSects[0].getSPos()
+  def getSneg(self):
+    '''list of distances between bars of rows  in the local negative face.'''
+    return self.lstRCSects[0].getSNeg()
+  def getDiamneg(self):
+    '''list of bar diameter in rows of the local negative face.'''
+    return self.lstRCSects[0].getDiamNeg()
+  def getDiampos(self):
+    '''list of bar diameter in rows of the local positive face.'''
+    return self.lstRCSects[0].getDiamPos()
+  def getNBarpos(self):
+    '''list of number of bars in rows of the local positive face.'''
+    return self.lstRCSects[0].getNBarPos()
+  def getNBarneg(self):
+    '''list of number of bars in rows of the local negative face.'''
+    return self.lstRCSects[0].getNBarNeg()
