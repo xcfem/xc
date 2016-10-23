@@ -90,15 +90,29 @@ class NormalStressesRCLimitStateData(LimitStateData):
     super(NormalStressesRCLimitStateData,self).__init__('ULS_normalStressesResistance','verifRsl_normStrsULS')
 
   def dumpCombinations(self,combContainer,loadCombinations):
-    '''Load into the solver the combinations needed for this limit state.'''
+    '''Load into the solver the combinations needed for this limit state.
+
+    :param combContainer: container with the definition of the different
+                          combination families (ULS, fatigue, SLS,...)
+                          see actions/CombContainer module.
+    :param loadCombinations: load combination handler inside the XC solver.
+    '''
     loadCombinations.clear()
     combContainer.ULS.dumpCombinations(loadCombinations)
     return loadCombinations
 
   def check(self,sections,sectionsNamesForEveryElement):
+    '''Checking of normal stresses in ultimate limit states
+       (see self.dumpCombinations).
+     
+      :param sections: Container with the section definitions 
+                       (see RCsectionsContainer module).
+      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
+                                           to each element number.
+    '''
     intForcCombFileName= self.getInternalForcesFileName()
-    out= self.getOutputDataBaseFileName()
-    return sections.verifyNormalStresses(intForcCombFileName,out,sectionsNamesForEveryElement, "d",self.controller)
+    outputFileName= self.getOutputDataBaseFileName()
+    return sections.verifyNormalStresses(intForcCombFileName,outputFileName,sectionsNamesForEveryElement, "d",self.controller)
 
 class ShearResistanceRCLimitStateData(LimitStateData):
   ''' Reinforced concrete shear resistance limit state data.'''
@@ -106,11 +120,25 @@ class ShearResistanceRCLimitStateData(LimitStateData):
     '''Limit state data constructor '''
     super(ShearResistanceRCLimitStateData,self).__init__('ULS_shearResistance','verifRsl_shearULS')
   def dumpCombinations(self,combContainer,loadCombinations):
-    '''Load into the solver the combinations needed for this limit state.'''
+    '''Load into the solver the combinations needed for this limit state.
+
+    :param combContainer: container with the definition of the different
+                          combination families (ULS, fatigue, SLS,...)
+                          see actions/CombContainer module.
+    :param loadCombinations: load combination handler inside the XC solver.
+    '''
     loadCombinations.clear()
     combContainer.ULS.dumpCombinations(loadCombinations)
     return loadCombinations
   def check(self,sections,sectionsNamesForEveryElement):
+    '''Checking of shear resistance in ultimate limit states 
+       (see self.dumpCombinations).
+     
+      :param sections: Container with the section definitions 
+                       (see RCsectionsContainer module).
+      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
+                                           to each element number.
+    '''
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
     return sections.shearVerification(intForcCombFileName,out,sectionsNamesForEveryElement, "d",self.controller)
@@ -121,11 +149,25 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
     '''Limit state data constructor '''
     super(FreqLoadsCrackControlRCLimitStateData,self).__init__('SLS_frequentLoadsCrackControl','verifRsl_crackingSLS_freq')
   def dumpCombinations(self,combContainer,loadCombinations):
-    '''Load into the solver the combinations needed for this limit state.'''
+    '''Load into the solver the combinations needed for this limit state.
+
+    :param combContainer: container with the definition of the different
+                          combination families (ULS, fatigue, SLS,...)
+                          see actions/CombContainer module.
+    :param loadCombinations: load combination handler inside the XC solver.
+    '''
     loadCombinations.clear()
     combContainer.SLS.freq.dumpCombinations(loadCombinations)
     return loadCombinations
   def check(self,sections,sectionsNamesForEveryElement):
+    '''Checking of crack width under frequent loads in serviceability limit states 
+       (see self.dumpCombinations).
+     
+      :param sections: Container with the section definitions 
+                       (see RCsectionsContainer module).
+      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
+                                           to each element number.
+    '''
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
     return sections.crackControl(intForcCombFileName,out,sectionsNamesForEveryElement, "k", self.controller)
@@ -136,11 +178,25 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
     '''Limit state data constructor '''
     super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsLoadsCrackControl','verifRsl_crackingSLS_qperm')
   def dumpCombinations(self,combContainer,loadCombinations):
-    '''Load into the solver the combinations needed for this limit state.'''
+    '''Load into the solver the combinations needed for this limit state.
+
+    :param combContainer: container with the definition of the different
+                          combination families (ULS, fatigue, SLS,...)
+                          see actions/CombContainer module.
+    :param loadCombinations: load combination handler inside the XC solver.
+    '''
     loadCombinations.clear()
     combContainer.SLS.qp.dumpCombinations(loadCombinations)
     return loadCombinations
   def check(self,sections,sectionsNamesForEveryElement):
+    '''Checking of crack width under quasi-permanent loads in
+       serviceability limit states (see self.dumpCombinations).
+     
+      :param sections: Container with the section definitions 
+                       (see RCsectionsContainer module).
+      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
+                                           to each element number.
+    '''
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
     return sections.crackControl(intForcCombFileName,out,sectionsNamesForEveryElement, "k",self.controller)
@@ -151,11 +207,25 @@ class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
     '''Limit state data constructor '''
     super(FreqLoadsDisplacementControlLimitStateData,self).__init__('SLS_frequentLoadsDisplacementControl','')
   def dumpCombinations(self,combContainer,loadCombinations):
-    '''Load into the solver the combinations needed for this limit state.'''
+    '''Load into the solver the combinations needed for this limit state.
+
+    :param combContainer: container with the definition of the different
+                          combination families (ULS, fatigue, SLS,...)
+                          see actions/CombContainer module.
+    :param loadCombinations: load combination handler inside the XC solver.
+    '''
     loadCombinations.clear()
     combContainer.SLS.freq.dumpCombinations(loadCombinations)
     return loadCombinations
   def check(self,sections,sectionsNamesForEveryElement):
+    '''Checking of displacements under frequent loads in
+       serviceability limit states (see self.dumpCombinations).
+     
+      :param sections: Container with the section definitions 
+                       (see RCsectionsContainer module).
+      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
+                                           to each element number.
+    '''
     print 'FreqLoadsDisplacementControlLimitStateData.check() not implemented.'
 
 
@@ -165,11 +235,25 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
     '''Limit state data constructor '''
     super(FatigueResistanceRCLimitStateData,self).__init__('ULS_fatigueResistance','verifRsl_fatigueULS')
   def dumpCombinations(self,combContainer,loadCombinations):
-    '''Load into the solver the combinations needed for this limit state.'''
+    '''Load into the solver the combinations needed for this limit state.
+
+    :param combContainer: container with the definition of the different
+                          combination families (ULS, fatigue, SLS,...)
+                          see actions/CombContainer module.
+    :param loadCombinations: load combination handler inside the XC solver.
+    '''
     loadCombinations.clear()
     combContainer.ULS.fatigue.dumpCombinations(loadCombinations)
     return loadCombinations
   def check(self,sections,sectionsNamesForEveryElement):
+    '''Checking of fatigue under fatigue combinations loads in
+       ultimate limit states (see self.dumpCombinations).
+     
+      :param sections: Container with the section definitions 
+                       (see RCsectionsContainer module).
+      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
+                                           to each element number.
+    '''
     intForcCombFileName= self.getInternalForcesFileName()
     out= self.getOutputDataBaseFileName()
     return sections.fatigueVerification(intForcCombFileName,out,sectionsNamesForEveryElement, "d",self.controller)
