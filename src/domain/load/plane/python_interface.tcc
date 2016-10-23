@@ -29,6 +29,7 @@ class_<XC::BidimMecLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimMecLoa
   .add_property("axial1Component", &XC::BidimMecLoad::getAxial1Component, &XC::BidimMecLoad::setAxial1Component)
   .add_property("axial2Component", &XC::BidimMecLoad::getAxial2Component, &XC::BidimMecLoad::setAxial2Component)
   .add_property("transComponent", &XC::BidimMecLoad::getTransComponent, &XC::BidimMecLoad::setTransComponent)
+  .def("getResultant", &XC::BidimMecLoad::getResultant,"Returns load resultant (force and moment integration over the elements).")
   ;
 
 class_<XC::ShellMecLoad, bases<XC::BidimMecLoad>, boost::noncopyable >("ShellMecLoad", no_init)
@@ -47,11 +48,16 @@ class_<XC::ShellUniformLoad, bases<XC::ShellMecLoad>, boost::noncopyable >("Shel
   .add_property("Wx",make_function(&XC::ShellUniformLoad::Wx, return_value_policy <copy_const_reference> ()))
   .add_property("Wy",make_function(&XC::ShellUniformLoad::Wy, return_value_policy <copy_const_reference> ()))
   .add_property("Wz",make_function(&XC::ShellUniformLoad::Wz, return_value_policy <copy_const_reference> ()))
+  .def("getLocalPressures",make_function(&XC::ShellUniformLoad::getLocalPressures, return_internal_reference<>() ),"Returns pressure vectors (one for each element) expressed in element local coordinates.")
+  .def("getDistributedLocalMoments",make_function(&XC::ShellUniformLoad::getDistributedLocalMoments, return_internal_reference<>() ),"Returns distributed moment vectors (one for each element) expressed in element local coordinates.")
+  .def("getGlobalPressures",make_function(&XC::ShellUniformLoad::getGlobalPressures, return_internal_reference<>() ),"Returns pressure vectors (one for each element) expressed in global coordinates.")
+  .def("getDistributedGlobalMoments",make_function(&XC::ShellUniformLoad::getDistributedGlobalMoments, return_internal_reference<>() ),"Returns distributed moment vectors (one for each element) expressed in global coordinates.")
+  .def("getResultant",&XC::ShellUniformLoad::getResultant,"Returns the load resultant (integration of the pressures over the elements).")
   ;
 
 class_<XC::BidimStrainLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimStrainLoad", no_init)
   .def("getStrain",make_function(&XC::BidimStrainLoad::getDeformacion, return_internal_reference<>() ))
-.def("setStrainComp",&XC::BidimStrainLoad::setStrainComp)
+  .def("setStrainComp",&XC::BidimStrainLoad::setStrainComp)
   ;
 
 class_<XC::ShellStrainLoad, bases<XC::BidimStrainLoad>, boost::noncopyable >("ShellStrainLoad", no_init)

@@ -109,6 +109,7 @@ class CrdTransf: public TaggedObject, public MovableObject
     virtual int update(void) = 0;
     virtual double getInitialLength(void) const= 0;
     virtual double getDeformedLength(void) const= 0;
+    double getLength(bool initialGeometry= true) const;
     
     virtual int commitState(void) = 0;
     virtual int revertToLastCommit(void) = 0;        

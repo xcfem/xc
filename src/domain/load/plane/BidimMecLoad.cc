@@ -34,6 +34,7 @@
 #include "domain/mesh/element/coordTransformation/CrdTransf.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "domain/mesh/node/Node.h"
+#include "xc_utils/src/geom/pos_vec/SVD3d.h"
 
 XC::BidimMecLoad::BidimMecLoad(int tag,int classTag,const double &wt,const double &wa1,const double &wa2,const ID &theElementTags)
   :BidimLoad(tag, classTag, theElementTags), Trans(wt), Axial1(wa1), Axial2(wa2) {}
@@ -48,6 +49,14 @@ void XC::BidimMecLoad::Print(std::ostream &s, int flag) const
     s << "  Axial1:      " << Axial1 << std::endl;
     s << "  Axial2:      " << Axial2 << std::endl;
     BidimLoad::Print(s,flag);
+  }
+
+//! brief Returns load resultant (force and moment integration over the elements).
+SVD3d XC::BidimMecLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
+  {
+    std::cerr << nombre_clase()
+              << "::getResultant not yet implemented." << std::endl;
+    return SVD3d(centro);
   }
 
 //! @brief Envía los datos through the channel being passed as parameter.

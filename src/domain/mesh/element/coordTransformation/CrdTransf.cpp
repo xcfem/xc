@@ -97,6 +97,15 @@ int XC::CrdTransf::set_ptr_nodos(Node *nodeIPointer, Node *nodeJPointer)
     return 0;
   }
 
+//@brief Returns element length.
+double XC::CrdTransf::getLength(bool initialGeometry) const
+  {
+    if(initialGeometry)
+      return getInitialLength();
+    else
+      return getDeformedLength();
+  }
+
 const XC::Matrix &XC::CrdTransf::getPointsGlobalCoordFromLocal(const Matrix &localCoords) const
   {
     static Matrix retval;

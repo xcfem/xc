@@ -38,11 +38,11 @@ class_<XC::BeamStrainLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamStrain
 class_<XC::BeamMecLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamMecLoad", no_init)
   .add_property("axialComponent", &XC::BeamMecLoad::getAxialComponent, &XC::BeamMecLoad::setAxialComponent)
   .add_property("transComponent", &XC::BeamMecLoad::getTransComponent, &XC::BeamMecLoad::setTransComponent)
-  .def("getLocalForces",make_function(&XC::BeamMecLoad::getLocalForces, return_internal_reference<>() ))
-  .def("getLocalMoments",make_function(&XC::BeamMecLoad::getLocalMoments, return_internal_reference<>() ))
+  .def("getLocalForces",make_function(&XC::BeamMecLoad::getLocalForces, return_internal_reference<>() ),"Returns punctual/distributed force vectors (one for each element) expressed in element local coordinates.")
+  .def("getLocalMoments",make_function(&XC::BeamMecLoad::getLocalMoments, return_internal_reference<>() ),"Returns puntual/distributed force moments (one for each element) expressed in element local coordinates." )
   .def("getGlobalVectors",make_function(&XC::BeamMecLoad::getGlobalVectors, return_internal_reference<>() ))
-  .def("getGlobalForces",make_function(&XC::BeamMecLoad::getGlobalForces, return_internal_reference<>() ),"Returns force vector(s) in global coordinates.")
-  .def("getGlobalMoments",make_function(&XC::BeamMecLoad::getGlobalMoments, return_internal_reference<>() ),"Returns force vector(s) in global coordinates.")
+  .def("getGlobalForces",make_function(&XC::BeamMecLoad::getGlobalForces, return_internal_reference<>() ),"Returns punctual/distributed force vectors (one for each element) expressed in global coordinates.")
+  .def("getGlobalMoments",make_function(&XC::BeamMecLoad::getGlobalMoments, return_internal_reference<>() ),"Returns punctual/distributed moment vectors (one for each element) expressed in global coordinates.")
   ;
 
 class_<XC::BeamPointLoad, bases<XC::BeamMecLoad>, boost::noncopyable >("BeamPointLoad", no_init)
@@ -50,6 +50,11 @@ class_<XC::BeamPointLoad, bases<XC::BeamMecLoad>, boost::noncopyable >("BeamPoin
   ;
 
 class_<XC::BeamUniformLoad, bases<XC::BeamMecLoad>, boost::noncopyable >("BeamUniformLoad", no_init)
+  .def("getDistributedLocalForces",make_function(&XC::BeamUniformLoad::getDistributedLocalForces, return_internal_reference<>() ),"Returns distributed force vectors (one for each element) expressed in element local coordinates.")
+  .def("getDistributedLocalMoments",make_function(&XC::BeamUniformLoad::getDistributedLocalMoments, return_internal_reference<>() ),"Returns distributed moment vectors (one for each element) expressed in element local coordinates.")
+  .def("getDistributedGlobalForces",make_function(&XC::BeamUniformLoad::getDistributedGlobalForces, return_internal_reference<>() ),"Returns distributed force vectors (one for each element) expressed in global coordinates.")
+  .def("getDistributedGlobalMoments",make_function(&XC::BeamUniformLoad::getDistributedGlobalMoments, return_internal_reference<>() ),"Returns distributed moment vectors (one for each element) expressed in global coordinates.")
+  .def("getResultant",&XC::BeamUniformLoad::getResultant,"Returns the load resultant (load integrated over the elements).")
   ;
 
 class_<XC::Beam2dPointLoad, bases<XC::BeamPointLoad>, boost::noncopyable >("Beam2dPointLoad", no_init)
