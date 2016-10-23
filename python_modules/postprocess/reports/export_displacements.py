@@ -13,11 +13,11 @@ import math
 
 # Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
 def exportDisplacements(combNm, nodSet, fDesc):
-  '''
-  Parameters:
-    combNM: name of the combination
-    nodSet: set of nodes
-    fDesc:  name of the file to save the displacements
+  '''Prints the specified file the resuls of displacements in a combination and set of nodes given as parameters 
+
+  :param combNM: name of the combination
+  :param  nodSet: set of nodes
+  :param  fDesc:  name of the file to save the displacements
   '''
   for n in nodSet:
     strDisp= str(n.getDisp).rstrip().replace(' ',', ') #displacement vector [ux,uy,uz,rotx,roty,rotz]
