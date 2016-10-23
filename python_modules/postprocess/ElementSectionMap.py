@@ -1,17 +1,26 @@
 # -*- coding: utf-8 -*-
 
-import pickle
-import sys
+from miscUtils import LogMessages as lmsg
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2016, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
 class ElementSectionMap(dict):
-  mapSectionsFileName= './mapSectionsReinforcement.pkl'
-  '''Map with asssings to each shell element two
-     reinforced concrete section names. This map that will be readed to
-     create fiber section models during reinforcement verification.'''
+  '''dictionary that stores a section name(s)
+     for each element number. This way it defines
+     a spatial distribution of the sections over
+     the structure.'''
   def assign(self,elemSet,setRCSects):
-    '''Assigns the sections setRCSEctsName+'1', setRCSEctsName+'2', ...
-       to the elements of the set.'''
+    '''Assigns the sections names: setRCSectsName+'1', setRCSectsName+'2', ...
+       to the elements of the set.
+
+       :param elemSet: set of elements that receive the section name property.
+       :param setRCSects: RC section definition, name, concrete type,
+                          rebar positions,...
+    '''
     propName= 'sectionName'
     for e in elemSet:
       if(not e.hasProp(propName)):
@@ -21,11 +30,8 @@ class ElementSectionMap(dict):
           self[e.tag].append(sname)
         e.setProp(propName,setRCSects.name)
       else:
-        sys.stderr.write("element: "+ str(e.tag) + " has already a section ("+e.getProp(propName)+")\n")
-  def dump(self):
-    with open(self.mapSectionsFileName, 'wb') as f:
-      pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
+        lmsg.error("element: "+ str(e.tag) + " has already a section ("+e.getProp(propName)+")\n")
 
 def loadElementSectionMap():
-  with open(ElementSectionMap.mapSectionsFileName, 'r') as f:
-    return pickle.load(f)
+  lmsg.error('loadElementSectionMap DEPRECATED use loadRCMaterialDistribution' )
+

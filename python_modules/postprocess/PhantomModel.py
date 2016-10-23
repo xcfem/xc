@@ -36,25 +36,21 @@ sccFICT= paramRectangularSection.RectangularSection("rectang",b=.40,h=40)
 matSccFICT= typical_materials.MaterialData("mrectang",E=2.1e6,nu=0.3,rho=2500)
 
 class PhantomModel(object):
-  def __init__(self,preprocessor, sectionNamesForEveryElement, mapSectionsDefinition, mapInteractionDiagrams):
-    ''' Extrae los identificadores de elementos de un archivo de salida con resultados
-    de combinaciones generado en XC 
+  def __init__(self,preprocessor, sectionDistribution, mapInteractionDiagrams):
+    ''' Extrae los identificadores de elementos de un archivo de salida 
+        con resultados de combinaciones generado en XC 
     
-    :ivar preprocessor:        preprocessor name
-    :ivar    sectionsNamesForEveryElement:  file containing a dictionary  such that
-                                       for each shell element of the model stores 
-                                       two names (for the sections 1 and 2) to 
-                                       be employed in verifications
-     :ivar   mapSectionsDefinition:      file containing a dictionary with the two 
-                                    sections associated with each elements to be
-                                    used in the verification
-     :ivar   mapInteractionDiagrams:     file containing a dictionary such that
-                                    associates each element with the two interactions
-                                    diagrams of materials to be used in the verification  
+    :ivar preprocessor:        preprocessor object
+    :ivar    sectionsDistribution:  file containing the section definition for
+                                    each element (this section will be 
+                                       be employed in verifications).
+     :ivar   mapInteractionDiagrams:  file containing a dictionary such that
+                                      associates each element with the two 
+                                      interactions diagrams of materials 
+                                      to be used in the verification  
     '''
     self.preprocessor= preprocessor
-    self.sectionsNamesForEveryElement= sectionNamesForEveryElement
-    self.mapSectionsDefinition= mapSectionsDefinition
+    self.sectionsDistribution= sectionDistribution
     self.mapInteractionDiagrams= mapInteractionDiagrams
 
   def createElements(self,intForcCombFileName,controller,fakeSection= True):
@@ -89,7 +85,9 @@ class PhantomModel(object):
     if(fakeSection):
       elements.defaultMaterial= sccFICT.nmb
     for tagElem in idElements:
-      nmbScc1= self.sectionsNamesForEveryElement[tagElem][0]
+      elementSectionNames= self.sectionsDistribution.getSectionNamesForElement(tagElem)
+      elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)
+      nmbScc1= elementSectionNames[0]
       n1= nodes.newNodeXYZ(0,0,0)
       n3= nodes.newNodeXYZ(0,0,0)
       fix_node_6dof.fixNode6DOF(coacciones,n1.tag)
@@ -102,11 +100,11 @@ class PhantomModel(object):
       e1.setProp("dir",1)
       e1.setProp("idSection", nmbScc1) #Section to verify
       scc= e1.getSection()
-      scc.setProp("datosSecc", self.mapSectionsDefinition[nmbScc1]) #Section definition (XXX duplicated)
+      scc.setProp("datosSecc", elementSectionDefinitions[0]) #Section definition (XXX duplicated)
       if(self.mapInteractionDiagrams != None):
         diagIntScc1= self.mapInteractionDiagrams[nmbScc1]
         e1.setProp("diagInt",diagIntScc1) 
-      nmbScc2= self.sectionsNamesForEveryElement[tagElem][1]
+      nmbScc2= elementSectionNames[1]
       n2= nodes.newNodeIDXYZ(tagElem*10+2,0,0,0)
       n4= nodes.newNodeIDXYZ(tagElem*10+4,0,0,0)
       fix_node_6dof.fixNode6DOF(coacciones,n2.tag)
@@ -119,7 +117,7 @@ class PhantomModel(object):
       e2.setProp("dir",2)
       e2.setProp("idSection", nmbScc2) #Section to verify
       scc= e2.getSection()
-      scc.setProp("datosSecc",  self.mapSectionsDefinition[nmbScc2]) #Section definition.
+      scc.setProp("datosSecc",  elementSectionDefinitions[1]) #Section definition.
       if(self.mapInteractionDiagrams != None):
         diagIntScc2= self.mapInteractionDiagrams[nmbScc2]
         e2.setProp("diagInt",diagIntScc2)

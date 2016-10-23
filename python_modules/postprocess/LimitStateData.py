@@ -101,18 +101,15 @@ class NormalStressesRCLimitStateData(LimitStateData):
     combContainer.ULS.dumpCombinations(loadCombinations)
     return loadCombinations
 
-  def check(self,sections,sectionsNamesForEveryElement):
+  def check(self,reinfConcreteSections):
     '''Checking of normal stresses in ultimate limit states
        (see self.dumpCombinations).
      
-      :param sections: Container with the section definitions 
-                       (see RCsectionsContainer module).
-      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
-                                           to each element number.
+      :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     intForcCombFileName= self.getInternalForcesFileName()
     outputFileName= self.getOutputDataBaseFileName()
-    return sections.verifyNormalStresses(intForcCombFileName,outputFileName,sectionsNamesForEveryElement, "d",self.controller)
+    return reinfConcreteSections.verifyNormalStresses(intForcCombFileName,outputFileName, "d",self.controller)
 
 class ShearResistanceRCLimitStateData(LimitStateData):
   ''' Reinforced concrete shear resistance limit state data.'''
@@ -130,18 +127,15 @@ class ShearResistanceRCLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.ULS.dumpCombinations(loadCombinations)
     return loadCombinations
-  def check(self,sections,sectionsNamesForEveryElement):
+  def check(self,reinfConcreteSections):
     '''Checking of shear resistance in ultimate limit states 
        (see self.dumpCombinations).
      
-      :param sections: Container with the section definitions 
-                       (see RCsectionsContainer module).
-      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
-                                           to each element number.
+      :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     intForcCombFileName= self.getInternalForcesFileName()
-    out= self.getOutputDataBaseFileName()
-    return sections.shearVerification(intForcCombFileName,out,sectionsNamesForEveryElement, "d",self.controller)
+    outputFileName= self.getOutputDataBaseFileName()
+    return reinfConcreteSections.shearVerification(intForcCombFileName,outputFileName, "d",self.controller)
 
 class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -159,18 +153,15 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.SLS.freq.dumpCombinations(loadCombinations)
     return loadCombinations
-  def check(self,sections,sectionsNamesForEveryElement):
+  def check(self,reinfConcreteSections):
     '''Checking of crack width under frequent loads in serviceability limit states 
        (see self.dumpCombinations).
      
-      :param sections: Container with the section definitions 
-                       (see RCsectionsContainer module).
-      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
-                                           to each element number.
+      :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     intForcCombFileName= self.getInternalForcesFileName()
-    out= self.getOutputDataBaseFileName()
-    return sections.crackControl(intForcCombFileName,out,sectionsNamesForEveryElement, "k", self.controller)
+    outputFileName= self.getOutputDataBaseFileName()
+    return reinfConcreteSections.crackControl(intForcCombFileName,outputFileName, "k", self.controller)
 
 class QPLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
@@ -188,18 +179,15 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.SLS.qp.dumpCombinations(loadCombinations)
     return loadCombinations
-  def check(self,sections,sectionsNamesForEveryElement):
+  def check(self,reinfConcreteSections):
     '''Checking of crack width under quasi-permanent loads in
        serviceability limit states (see self.dumpCombinations).
      
-      :param sections: Container with the section definitions 
-                       (see RCsectionsContainer module).
-      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
-                                           to each element number.
+      :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     intForcCombFileName= self.getInternalForcesFileName()
-    out= self.getOutputDataBaseFileName()
-    return sections.crackControl(intForcCombFileName,out,sectionsNamesForEveryElement, "k",self.controller)
+    outputFileName= self.getOutputDataBaseFileName()
+    return reinfConcreteSections.crackControl(intForcCombFileName,outputFileName, "k",self.controller)
 
 class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
   ''' Displacement control under frequent loads limit state data.'''
@@ -217,14 +205,11 @@ class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.SLS.freq.dumpCombinations(loadCombinations)
     return loadCombinations
-  def check(self,sections,sectionsNamesForEveryElement):
+  def check(self,reinfConcreteSections):
     '''Checking of displacements under frequent loads in
        serviceability limit states (see self.dumpCombinations).
      
-      :param sections: Container with the section definitions 
-                       (see RCsectionsContainer module).
-      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
-                                           to each element number.
+      :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     print 'FreqLoadsDisplacementControlLimitStateData.check() not implemented.'
 
@@ -245,18 +230,15 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.ULS.fatigue.dumpCombinations(loadCombinations)
     return loadCombinations
-  def check(self,sections,sectionsNamesForEveryElement):
+  def check(self,reinfConcreteSections):
     '''Checking of fatigue under fatigue combinations loads in
        ultimate limit states (see self.dumpCombinations).
      
-      :param sections: Container with the section definitions 
-                       (see RCsectionsContainer module).
-      :param sectionsNamesForEveryElement: dictionary that assigns section name(s)
-                                           to each element number.
+      :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     intForcCombFileName= self.getInternalForcesFileName()
-    out= self.getOutputDataBaseFileName()
-    return sections.fatigueVerification(intForcCombFileName,out,sectionsNamesForEveryElement, "d",self.controller)
+    outputFileName= self.getOutputDataBaseFileName()
+    return reinfConcreteSections.fatigueVerification(intForcCombFileName,outputFileName, "d",self.controller)
 
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()

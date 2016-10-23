@@ -17,13 +17,18 @@ from postprocess import PhantomModel as phm
 # in a file to use them as needed.
 
 class SectionContainer(object):
-  sections= []
-  mapSections= {}
 
-  def append(self, deckSections):
-    self.sections.append(deckSections)
-    for i in range(len(deckSections.lstRCSects)):
-      self.mapSections[deckSections.lstRCSects[i].sectionName]= deckSections.lstRCSects[i]
+  def __init__(self):
+    ''' Container for the reinforced concrete definitions (name, concrete
+        type, rebar positions,...).'''
+    self.sections= [] # List with the section definitions.
+    self.mapSections= {} # Dictionary with pairs (sectionName, reference to
+                         # section definition.
+
+  def append(self, RCSections):
+    self.sections.append(RCSections)
+    for i in range(len(RCSections.lstRCSects)):
+      self.mapSections[RCSections.lstRCSects[i].sectionName]= RCSections.lstRCSects[i]
     return
   
   def search(self,nmb):
@@ -64,109 +69,6 @@ class SectionContainer(object):
         mapInteractionDiagrams[s.lstRCSects[i].sectionName]= diag
     return mapInteractionDiagrams
 
-  def crackControl(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
-    '''
 
-    :param intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
-    :param outputFileName:  name of the output file containing the results of the 
-                     verification 
-    :param sectionsNamesForEveryElement: file containing a dictionary  such that for each 
-                                element of the model stores two names 
-                                (for the sections 1 and 2) to be employed 
-                                in verifications
-    :param controller: object that controls crack limit state.
-    '''
-    tmp= xc.ProblemaEF()
-    preprocessor= tmp.getPreprocessor
-    mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
-    analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,sectionsNamesForEveryElement,self.mapSections, mapID)
-    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
-    tmp.clearAll()
-    return retval
 
-  def verifyNormalStresses(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
-    '''
 
-    :param intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
-    :param outputFileName:  name of the output file containing the results of the 
-                     verification 
-    :param sectionsNamesForEveryElement: file containing a dictionary  such that for each
-                                element of the model stores two names 
-                                (for the sections 1 and 2) to be employed 
-                                in verifications
-    :param controller: object that controls normal stresses limit state on elements.
-    '''
-    tmp= xc.ProblemaEF()
-    preprocessor= tmp.getPreprocessor
-    mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
-    analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,sectionsNamesForEveryElement,self.mapSections, mapID)
-    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
-    tmp.clearAll()
-    return retval
-
-  def verifyNormalStresses2d(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
-    '''
-
-    :param intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
-    :param outputFileName:  name of the output file containing the results of the 
-                     verification 
-    :param sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
-                                (for the sections 1 and 2) to be employed 
-                                in verifications
-    :param controller: object that controls normal stresses limit state on elements.
-    '''
-    tmp= xc.ProblemaEF()
-    preprocessor= tmp.getPreprocessor
-    mapID= self.getInteractionDiagramsNMy(preprocessor,matDiagType)
-    analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,sectionsNamesForEveryElement,self.mapSections, mapID)
-    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
-    tmp.clearAll()
-    return retval
-
-  def shearVerification(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
-    '''
-
-    :param intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
-    :param outputFileName:  name of the output file containing the results of the 
-                     verification 
-    :param sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
-                                (for the sections 1 and 2) to be employed 
-                                in verifications
-    :param controller: object that controls shear limit state.
-    '''
-    tmp= xc.ProblemaEF()
-    preprocessor= tmp.getPreprocessor
-    mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
-    analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,sectionsNamesForEveryElement,self.mapSections, mapID)
-    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
-    tmp.clearAll()
-    return retval
-
-  def fatigueVerification(self,intForcCombFileName,outputFileName,sectionsNamesForEveryElement, matDiagType,controller):
-    '''
-
-    :param intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
-    :param outputFileName:  name of the output file containing the results of the 
-                     verification 
-    :param sectionsNamesForEveryElement: file containing a dictionary  such that for each                                element of the model stores two names 
-                                (for the sections 1 and 2) to be employed 
-                                in verifications
-    :param controller: object that controls fatigue limit state
-    '''
-    tmp= xc.ProblemaEF()
-    preprocessor= tmp.getPreprocessor
-    mapID= self.getInteractionDiagrams(preprocessor,matDiagType)
-    analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,sectionsNamesForEveryElement,self.mapSections, mapID)
-    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
-    tmp.clearAll()
-    return retval

@@ -13,6 +13,7 @@ import xc
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import defSeccionHASimple
+from postprocess import RCMaterialDistribution
 from materials.xLamina import RCsectionsContainer as sc
 from solution import predefined_solutions
 from materials.sia262 import normalStressesSIA262 as ns #Change SIA262->EHE
@@ -30,9 +31,11 @@ intForcCombFileName= pth+"/esf_test_xLamina.csv"
 
 
 elementTags= [2524,2527]
-mapSectionsForEveryElement= {}
+#Reinforced concrete sections on each element.
+reinfConcreteSections= RCMaterialDistribution.RCMaterialDistribution()
+
 for eTag in elementTags:
-  mapSectionsForEveryElement[eTag]= ["deck2","deck1"]
+  reinfConcreteSections.sectionDistribution[eTag]= ["deck2","deck1"]
 
 # deck.
 concrete= EHE_concrete.HA30
@@ -50,7 +53,7 @@ sepT= 1.0/numReinfBarsT
 numReinfBarsL= 7
 sepL= 1.0/numReinfBarsL
 
-sections= sc.SectionContainer()
+sections= reinfConcreteSections.sectionDefinition
 
 deckSections= defSeccionHASimple.RecordRCSlabSection("deck","RC deck.",0.3,concrete, reinfSteel)
 deckSections.lstRCSects[1].positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
@@ -62,7 +65,7 @@ sections.append(deckSections)
 
 
 controller= ns.BiaxialBendingNormalStressController('ULS_normalStress')
-meanFCs= sections.verifyNormalStresses(intForcCombFileName,"/tmp/ppTN",mapSectionsForEveryElement, "d",controller)
+meanFCs= reinfConcreteSections.verifyNormalStresses(intForcCombFileName,"/tmp/ppTN", "d",controller)
 
 
 #print "mean FCs: ", meanFCs

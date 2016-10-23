@@ -662,6 +662,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/PhantomModel.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.py
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/RCMaterialDistribution.py
+/usr/local/lib/python2.7/dist-packages/postprocess/RCMaterialDistribution.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/recorders.py
 /usr/local/lib/python2.7/dist-packages/postprocess/recorders.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/common_formats.py
