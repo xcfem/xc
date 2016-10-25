@@ -24,7 +24,11 @@ from postprocess import extrapolate_elem_attr as ext
 
 
 class ControlVarsBase(object):
-  '''Base class for control variables.'''
+  '''Base class for the control of variables (internal forces, 
+   strains, stresses,...) calculated in the analysis.
+
+  :ivar combName: name of the load combination to deal with
+  '''
   def __init__(self,combName= 'nil'):
     self.combName= combName #Name of the corresponding load combination
   def getCF(self):
@@ -53,25 +57,29 @@ class ControlVarsBase(object):
     return retval
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
-        factor: factor for units (default 1e-3 -> kN)'''
+
+    :param factor: factor for units (default 1e-3 -> kN)'''
     return self.combName
   def getLaTeXString(self,eTag,factor= 1e-3):
     ''' Returns a string that we can insert in a LaTeX table.
 
-    :param eTag: element identifier.
+    :param eTag:   element identifier.
     :param factor: factor for units (default 1e-3 -> kN)'''
     return str(eTag)+" & "+self.getLaTeXFields(factor)+" & "+fmt.Esf.format(self.getCF())+"\\\\\n"
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
     ''' Returns a string to represent fields in ANSYS (R).
 
-    :param eTag: element identifier.
-    :param axis: section 1 or 2
+    :param eTag:   element identifier.
+    :param axis:   section 1 or 2
     :param factor: factor for units (default 1e-3 -> kN)'''
     retval= []
     retval.append("detab,"+str(eTag)+",CF" +axis+","+str(self.getCF())+"\n")
     return retval
   def getStrArguments(self,factor):
-    '''Returns a string for a 'copy' (kind of) constructor.'''
+    '''Returns a string for a 'copy' (kind of) constructor.
+
+    :param factor: factor for units (default 1e-3 -> kN)
+    '''
     retval= 'combName= "' + self.combName 
     retval+= '", CF=' + str(self.getCF())
     return retval
@@ -80,7 +88,12 @@ class ControlVarsBase(object):
     retval+= '(' + self.getStrArguments(factor) + ')'
     return retval
   def strElementProp(self,eTag,nmbProp,factor= 1e-3):
-    '''Write a string that will serve to read the element property from file.'''
+    '''Writes a string that will serve to read the element property from a file.
+
+    :param eTag:    element identifier.
+    :param nmbProp: name of the element property
+    :param factor:  factor for units (default 1e-3 -> kN)
+    '''
     retval= 'preprocessor.getElementLoader.getElement('
     retval+= str(eTag)
     retval+= ").setProp("
@@ -90,7 +103,12 @@ class ControlVarsBase(object):
     return retval
 
 class NMy(ControlVarsBase):
-  '''Uniaxial bending. Internal forces for a combination.'''
+  '''Uniaxial bending. Internal forces [N,My] for a combination.
+
+  :ivar combName: name of the load combinations to deal with
+  :ivar N:        axial force (defaults to 0.0)
+  :ivar My:       bending moment about Y axis (defaults to 0.0)
+  '''
   def __init__(self,combName= 'nil',N= 0.0,My= 0.0):
     super(NMy,self).__init__(combName)
     self.N= N # Axial force.
@@ -120,7 +138,13 @@ class NMy(ControlVarsBase):
     return retval
 
 class NMyMz(NMy):
-  '''Uniaxial bending. Internal forces for a combination.'''
+  '''Biaxial bending. Internal forces [N,My,Mz] for a combination.
+
+  :ivar combName: name of the load combinations to deal with
+  :ivar N:        axial force (defaults to 0.0)
+  :ivar My:       bending moment about Y axis (defaults to 0.0)
+  :ivar Mz:       bending moment about Z axis (defaults to 0.0)
+  '''
   def __init__(self,combName= 'nil',N= 0.0,My= 0.0, Mz= 0.0):
     super(NMyMz,self).__init__(combName,N,My)
     self.Mz= Mz #Bending moment about z axis.
@@ -156,7 +180,14 @@ class CFNMy(NMy):
     return self.CF
 
 class UniaxialBendingControlVars(CFNMy):
-  '''Uniaxial bending. Normal stresses limit state variables.'''
+  '''Uniaxial bending. Normal stresses limit state variables [CF,N,My].
+
+  :ivar idSection:section identifier
+  :ivar combName: name of the load combinations to deal with
+  :ivar CF:       capacity factor (efficiency) (defaults to -1)
+  :ivar N:        axial force (defaults to 0.0)
+  :ivar My:       bending moment about Y axis (defaults to 0.0)
+  '''
   def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0):
     super(UniaxialBendingControlVars,self).__init__(combName,CF,N,My)
     self.idSection= idSection #Reinforced concrete section identifier.
@@ -174,7 +205,14 @@ class UniaxialBendingControlVars(CFNMy):
     return retval
 
 class CFNMyMz(CFNMy):
-  '''Biaxial bending. Normal stresses limit state variables.'''
+  '''Biaxial bending. Normal stresses limit state variables. [CF,N,My,Mz].
+
+  :ivar combName: name of the load combinations to deal with
+  :ivar CF:       capacity factor (efficiency) (defaults to -1)
+  :ivar N:        axial force (defaults to 0.0)
+  :ivar My:       bending moment about Y axis (defaults to 0.0)
+  :ivar Mz:       bending moment about Y axis (defaults to 0.0)
+  '''
   def __init__(self,combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0):
     super(CFNMyMz,self).__init__(combName,CF,N,My)
     self.Mz= Mz #Bending moment about z axis.
@@ -200,7 +238,15 @@ class CFNMyMz(CFNMy):
     return retval
 
 class BiaxialBendingControlVars(UniaxialBendingControlVars):
-  '''Biaxial bending. Normal stresses limit state variables.'''
+  '''Biaxial bending. Normal stresses limit state variables. [CF,N,My,Mz].
+
+  :ivar idSection:section identifier
+  :ivar combName: name of the load combinations to deal with
+  :ivar CF:       capacity factor (efficiency) (defaults to -1)
+  :ivar N:        axial force (defaults to 0.0)
+  :ivar My:       bending moment about Y axis (defaults to 0.0)
+  :ivar Mz:       bending moment about Z axis (defaults to 0.0)
+  '''
   def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0):
     super(BiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My)
     self.Mz= Mz #Bending moment about z axis.
@@ -226,8 +272,23 @@ class BiaxialBendingControlVars(UniaxialBendingControlVars):
     return retval
 
 class RCShearControlVars(BiaxialBendingControlVars):
-  '''Control variables for biaxial bending shear limit state
-     verification.'''
+  '''Control variables for biaxial bending shear limit state verification.
+
+  :ivar idSection:section identifier
+  :ivar combName: name of the load combinations to deal with
+  :ivar CF:       capacity factor (efficiency)
+  :ivar N:        axial force
+  :ivar My:       bending moment about Y axis
+  :ivar Mz:       bending moment about Y axis
+  :ivar Mu:       ultimate bending moment
+  :ivar Vy:       shear force parallel to the y axis
+  :ivar Vz:       shear force parallel to the z axis
+  :ivar theta:    angle between the concrete compression struts and the beam axis
+  :ivar Vcu:      Vcu component of the shear resistance (defined in the codes)
+  :ivar Vsu:      Vsu component of the shear resistance (defined in the codes)
+  :ivar Vu:       shear resistance
+  
+  '''
   def __init__(self,idSection=-1,combName= 'nil',CF= -1.0,N= 0.0, My= 0.0, Mz= 0.0, Mu= 0.0, Vy= 0.0, Vz= 0.0, theta= 0.0, Vcu= 0.0, Vsu= 0.0, Vu= 0.0):
     super(RCShearControlVars,self).__init__(idSection,combName,CF,N,My,Mz)
     self.Mu= Mu #Ultimate bending moment.
@@ -270,7 +331,15 @@ class RCShearControlVars(BiaxialBendingControlVars):
     return retval
 
 class CrackControlBaseVars(CFNMyMz):
-  '''Biaxial bending. Normal stresses limit state variables.'''
+  '''Biaxial bending. Cracking serviceability limit state variables.
+
+  :ivar combName: name of the load combinations to deal with
+  :ivar CF:       capacity factor (efficiency)
+  :ivar N:        axial force
+  :ivar My:       bending moment about Y axis
+  :ivar Mz:       bending moment about Z axis
+  :ivar steelStress: maximum stress in the reinforcement bars
+  '''
   def __init__(self,combName= 'nil',CF= -1.0,N= 0.0, My= 0.0, Mz= 0.0, steelStress= 0.0):
     super(CrackControlBaseVars,self).__init__(combName,CF,N,My)
     self.steelStress= steelStress #Stress in rebars.
@@ -297,7 +366,8 @@ class CrackControlBaseVars(CFNMyMz):
 
 
 class CrackControlVars(ControlVarsBase):
-  '''Crack limit state control variables.'''
+  '''Cracking serviceability limit state control variables.
+  '''
   def __init__(self,idSection= 'nil',crackControlBaseVarsPos= CrackControlBaseVars(), crackControlBaseVarsNeg= CrackControlBaseVars()):
     self.idSection= idSection #Reinforced concrete section identifier.
     self.crackControlVarsPos= crackControlBaseVarsPos #Cracks in + face.

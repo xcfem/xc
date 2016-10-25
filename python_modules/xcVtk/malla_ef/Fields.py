@@ -90,5 +90,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
     self.display(defDisplay,fName,caption)
 
 def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv):
+  '''
+  '''
   nodePropName= cv.extrapolate_control_var(xcSet.getElements,attributeName,argument)
   return ExtrapolatedScalarField(nodePropName,"getProp",xcSet,component,fUnitConv)
