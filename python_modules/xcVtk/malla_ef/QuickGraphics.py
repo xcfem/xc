@@ -71,7 +71,7 @@ class QuickGraphics(object):
       return 'N1'
 
 
-  def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= ''):
+  def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',fileName=None):
     '''displays the component of the displacement or rotations in the 
     set of entities.
     
@@ -80,6 +80,8 @@ class QuickGraphics(object):
     :param setToDisplay:   set of entities to be represented (default to all entities)
     :param fConvUnits:     factor of conversion to be applied to the results (defalts to 1)
     :param unitDescription: string describing units like '[mm] or [cm]'
+    :param fileName:        name of the file to plot the graphic. Defaults to None,
+                            in that case an screen display is generated
     '''
     if(setToDisplay):
       self.xcSet= setToDisplay
@@ -91,9 +93,9 @@ class QuickGraphics(object):
       n.setProp('propToDisp',n.getDisp[vCompDisp])
     field= Fields.ScalarField('propToDisp',"getProp",None,fConvUnits)
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.displayMesh(self.xcSet,field,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.name)
+    defDisplay.displayMesh(xcSet=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.name)
 
-  def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= ''):
+  def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',fileName=None):
     '''displays the component of internal forces in the 
     set of entities.
     
@@ -102,6 +104,8 @@ class QuickGraphics(object):
     :param setToDisplay: set of entities to be represented (default to all entities)
     :param fConvUnits:   factor of conversion to be applied to the results (defalts to 1)
     :param unitDescription: string like '[kN/m] or [kN m/m]'
+    :param fileName:        name of the file to plot the graphic. Defaults to None,
+                            in that case an screen display is generated
     '''
     if(setToDisplay):
       self.xcSet= setToDisplay
@@ -116,4 +120,4 @@ class QuickGraphics(object):
       e.setProp(propName,mat.getMeanGeneralizedStressByName(vCompDisp))
     field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    field.display(defDisplay,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name)
+    field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name)
