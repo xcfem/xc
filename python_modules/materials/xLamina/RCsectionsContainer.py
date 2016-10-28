@@ -11,6 +11,7 @@ import xc
 # Macros
 from solution import predefined_solutions
 from postprocess import PhantomModel as phm
+from miscUtils import LogMessages as lmsg
 
 # TO ENHANCE: Interactions diagrams ("d" and "k") are calculated each time we call
 # the check routines. Maybe it's a good idea to calculate them once and write them
@@ -20,10 +21,16 @@ class SectionContainer(object):
 
   def __init__(self):
     ''' Container for the reinforced concrete definitions (name, concrete
-        type, rebar positions,...).'''
+        type, rebar positions,...).
+    :ivar   mapInteractionDiagrams:  file containing a dictionary such that
+                                     associates each element with the two 
+                                     interactions diagrams of materials 
+                                     to be used in the verification  
+    '''
     self.sections= [] # List with the section definitions.
     self.mapSections= {} # Dictionary with pairs (sectionName, reference to
                          # section definition.
+    self.mapInteractionDiagrams= None
 
   def append(self, RCSections):
     self.sections.append(RCSections)
@@ -40,35 +47,27 @@ class SectionContainer(object):
     return retval
 
 
-  def getInteractionDiagrams(self,preprocessor,matDiagType):
-    '''Returns map of 3D interaction diagrams.
+  def calcInteractionDiagrams(self,preprocessor,matDiagType, diagramType= 'NMyMz'):
+    '''Calculates 3D interaction diagrams for each section.
 
     :param preprocessor:    FEA problem preprocessor
     :param matDiagType:     'k' for characteristic, 'd' for design
+    :param diagramType:    three dimensional diagram: NMyMz
+                           bi-dimensional diagram: NMy
+                           bi-dimensional diagram: NMz
     '''
-    mapInteractionDiagrams= {}
+    self.mapInteractionDiagrams= {}
     for s in self.sections:
       for i in range(len(s.lstRCSects)):
         s.lstRCSects[i].defRCSimpleSection(preprocessor,matDiagType)
-        diag= s.lstRCSects[i].defInteractionDiagram(preprocessor)
-        mapInteractionDiagrams[s.lstRCSects[i].sectionName]= diag
-    return mapInteractionDiagrams
-
-  def getInteractionDiagramsNMy(self,preprocessor,matDiagType):
-    '''Returns map of 2D interaction diagrams in N-My plane.
-
-    :param preprocessor:    FEA problem preprocessor
-    :param matDiagType:     'k' for characteristic, 'd' for design
-    '''
-    mapInteractionDiagrams= {}
-    for s in self.sections:
-      for i in range(len(s.lstRCSects)):
-        diag= s.lstRCSects[i].defInteractionDiagramNMy(preprocessor,matDiagType)
-        diag.simplify() #Hasta corregir la obtención de diagramas NMy
-        print "area diag= ", diag.getArea()
-        mapInteractionDiagrams[s.lstRCSects[i].sectionName]= diag
-    return mapInteractionDiagrams
-
-
-
+        diag= None
+        if(diagramType=='NMyMz'):
+          diag= s.lstRCSects[i].defInteractionDiagram(preprocessor)
+        elif(diagramType=='NMy'):
+          diag= s.lstRCSects[i].defInteractionDiagramNMy(preprocessor,matDiagType)
+        elif(diagramType=='NMz'):
+          diag= s.lstRCSects[i].defInteractionDiagramNMz(preprocessor,matDiagType)
+        else:
+          lmsg.error("calcInteractionDiagrams; interaction diagram type: " + diagramType + "' unknown.")
+        self.mapInteractionDiagrams[s.lstRCSects[i].sectionName]= diag
 

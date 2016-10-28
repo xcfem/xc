@@ -462,6 +462,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/sccRectg.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sectionProperties.py
 /usr/local/lib/python2.7/dist-packages/materials/sectionProperties.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ShellInternalForces.py
+/usr/local/lib/python2.7/dist-packages/materials/ShellInternalForces.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia262/anchorage.py
 /usr/local/lib/python2.7/dist-packages/materials/sia262/anchorage.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia262/betonSIA262.py

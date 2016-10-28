@@ -30,49 +30,87 @@ from postprocess import ControlVars as cv
 from solution import predefined_solutions
 from solution import resuelve_combinacion
 from miscUtils import LogMessages as lmsg
+from materials import ShellInternalForces as sif
 
 # Fake section (elements must have a stiffness)
 sccFICT= paramRectangularSection.RectangularSection("rectang",b=.40,h=40)
 matSccFICT= typical_materials.MaterialData("mrectang",E=2.1e6,nu=0.3,rho=2500)
 
 class PhantomModel(object):
-  def __init__(self,preprocessor, sectionDistribution, mapInteractionDiagrams):
+  def __init__(self,preprocessor, sectionDistribution):
     ''' Extrae los identificadores de elementos de un archivo de salida 
         con resultados de combinaciones generado en XC 
     
-    :ivar preprocessor:        preprocessor object
+    :ivar preprocessor: preprocessor object (access to FE model -nodes, 
+                        elements, loads,...)
     :ivar    sectionsDistribution:  file containing the section definition for
                                     each element (this section will be 
-                                       be employed in verifications).
-     :ivar   mapInteractionDiagrams:  file containing a dictionary such that
-                                      associates each element with the two 
-                                      interactions diagrams of materials 
-                                      to be used in the verification  
+                                    be employed in verifications).
     '''
     self.preprocessor= preprocessor
     self.sectionsDistribution= sectionDistribution
-    self.mapInteractionDiagrams= mapInteractionDiagrams
 
-  def createElements(self,intForcCombFileName,controller,fakeSection= True):
-    '''Creates the phantom model elements from the data read on the file.
+  def extractElementsAndCombinations(self,intForcCombFileName):
+    '''Extracts element and combination identifiers from the internal
+       forces listing file.
     
-    :param   intForcCombFileName: name of the file containing the forces and bending moments 
-                           obtained for each element for the combinations analyzed
-    :param   controller:     object that takes the results and checks the limit state.
-    :param   fakeSection:  true if a fiber section model of the section is not needed for control.
+    :param   intForcCombFileName: name of the file containing the internal
+                                  forces obtained for each element for 
+                                  the combinations analyzed
     '''
-    idElements= set()
+    self.elementTags= set()
     self.idCombs= set()
-    retval= []
     f= open(intForcCombFileName,"r")
-    listado= csv.reader(f)
-    for lst in listado:    #lst: list of internal forces for a given combination and element 
+    internalForcesListing= csv.reader(f)
+    for lst in internalForcesListing:    #lst: list of internal forces for each combination and element 
       if(len(lst)>0):
         idComb= lst[0]
         self.idCombs.add(idComb)
         idElem= eval(lst[1])
-        idElements.add(idElem)
+        self.elementTags.add(idElem)
     f.close()
+
+  def createPhantomElement(self,tagElem,sectionName,sectionDefinition,sectionIndex,interactionDiagram,fakeSection):
+    '''Creates a phantom element (that represents a section to check) and assigns
+       it the following properties:
+
+       idElem: identifier of the element in the "true" model from which
+               this phantom element procedes -tagElem-.
+       idSection: name of the section assigned to the phantom element
+                  (the section to check) -sectionName-.
+       dir: index of the section in the "true" model element -sectionIndex-. To
+            be renamed as sectionIndex.
+       interactionDiagram: interaction diagram that corresponds to the section to check.
+    '''
+    nA= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
+    nB= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
+    fix_node_6dof.fixNode6DOF(self.preprocessor.getConstraintLoader,nA.tag)
+    if(not fakeSection):
+      elements.defaultMaterial= sectionName
+    phantomElement= self.preprocessor.getElementLoader.newElement("zero_length_section",xc.ID([nA.tag,nB.tag]))
+    phantomElement.setProp("idElem", tagElem) #Element to check
+    phantomElement.setProp("idSection", sectionName) #Section to check
+    phantomElement.setProp("dir",sectionIndex) #Section index in the element.
+    scc= phantomElement.getSection()
+    scc.setProp("datosSecc", sectionDefinition) #Section definition
+    phantomElement.setProp("diagInt",interactionDiagram)
+    return phantomElement
+      
+
+  def createElements(self,intForcCombFileName,controller,fakeSection= True):
+    '''Creates the phantom model elements from the data read on the file.
+    
+    :param   intForcCombFileName: name of the file containing the internal
+                                  forces obtained for each element for 
+                                  the combinations analyzed
+    :param   controller:   object that takes the internal forces and the
+                           section definition and checks the limit state.
+    :param   fakeSection:  true if a fiber section model of the section 
+                           is not needed for control.
+    '''
+    self.extractElementsAndCombinations(intForcCombFileName)
+
+    retval= []
     nodes= self.preprocessor.getNodeLoader
     predefined_spaces.gdls_resist_materiales3D(nodes)
     elements= self.preprocessor.getElementLoader
@@ -84,43 +122,25 @@ class PhantomModel(object):
     self.tagsNodesToLoad2= {}
     if(fakeSection):
       elements.defaultMaterial= sccFICT.nmb
-    for tagElem in idElements:
+    for tagElem in self.elementTags:
       elementSectionNames= self.sectionsDistribution.getSectionNamesForElement(tagElem)
       elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)
-      nmbScc1= elementSectionNames[0]
-      n1= nodes.newNodeXYZ(0,0,0)
-      n3= nodes.newNodeXYZ(0,0,0)
-      fix_node_6dof.fixNode6DOF(coacciones,n1.tag)
-      self.tagsNodesToLoad1[tagElem]= n3.tag
-      if(not fakeSection):
-        elements.defaultMaterial= nmbScc1
-      e1= elements.newElement("zero_length_section",xc.ID([n1.tag,n3.tag]))
-      retval.append(e1)
-      e1.setProp("idElem", tagElem) #Elemento que se comprueba
-      e1.setProp("dir",1)
-      e1.setProp("idSection", nmbScc1) #Section to verify
-      scc= e1.getSection()
-      scc.setProp("datosSecc", elementSectionDefinitions[0]) #Section definition (XXX duplicated)
-      if(self.mapInteractionDiagrams != None):
-        diagIntScc1= self.mapInteractionDiagrams[nmbScc1]
-        e1.setProp("diagInt",diagIntScc1) 
-      nmbScc2= elementSectionNames[1]
-      n2= nodes.newNodeIDXYZ(tagElem*10+2,0,0,0)
-      n4= nodes.newNodeIDXYZ(tagElem*10+4,0,0,0)
-      fix_node_6dof.fixNode6DOF(coacciones,n2.tag)
-      self.tagsNodesToLoad2[tagElem]= n4.tag
-      if(not fakeSection):
-        elements.defaultMaterial= nmbScc2
-      e2= elements.newElement("zero_length_section",xc.ID([n2.tag,n4.tag])) 
-      retval.append(e2)
-      e2.setProp("idElem", tagElem) #Elemento que se comprueba
-      e2.setProp("dir",2)
-      e2.setProp("idSection", nmbScc2) #Section to verify
-      scc= e2.getSection()
-      scc.setProp("datosSecc",  elementSectionDefinitions[1]) #Section definition.
-      if(self.mapInteractionDiagrams != None):
-        diagIntScc2= self.mapInteractionDiagrams[nmbScc2]
-        e2.setProp("diagInt",diagIntScc2)
+      mapInteractionDiagrams= self.sectionsDistribution.sectionDefinition.mapInteractionDiagrams
+
+      sz= len(elementSectionNames)
+      for i in range(0,sz):
+        sectionName= elementSectionNames[i]
+        diagInt= None
+        if(mapInteractionDiagrams != None):
+          diagInt= mapInteractionDiagrams[sectionName]
+        phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt,fakeSection)
+        retval.append(phantomElem)
+        if(i==0):
+          self.tagsNodesToLoad1[tagElem]= phantomElem.getNodes[1].tag
+        elif(i==1):
+          self.tagsNodesToLoad2[tagElem]= phantomElem.getNodes[1].tag
+        else:
+          lmsg.error('i out of range.')
     controller.initControlVars(retval)
     return retval
 
@@ -142,38 +162,20 @@ class PhantomModel(object):
       mapCombs[comb]= casos.newLoadPattern("default",comb)
 
     f= open(intForcCombFileName,"r")
-    listado= csv.reader(f)
-    for lst in listado:
+    internalForcesListing= csv.reader(f)
+    for lst in internalForcesListing:
       if(len(lst)>0):
         nmbComb= lst[0]
         idElem= eval(lst[1])
         lp= mapCombs[nmbComb]
         tagNode3= self.tagsNodesToLoad1[idElem]
         '''Adoptamos el método de Wood para evaluar los momentos para dimensionar a flexión'''
-        # AXIL_X,Q_X,RASANTE,TORSOR=0,MOM_X*,0.0
-        #      2,  8,      4,     7,    5,0.0
-        N= eval(lst[2])
-        Qx= eval(lst[8])
-        R= eval(lst[4])
-        T= 0.0
-        Mx= eval(lst[5])
-        s= float(numpy.sign(Mx))
-        Mx+= s*abs(eval(lst[7]))
-        My= 0.0
-        lp.newNodalLoad(tagNode3,xc.Vector([N,Qx,R,T,Mx,My]))
+        internalForces= sif.ShellElementInternalForces()
+        internalForces.setFromCSVString(lst,2)
+        lp.newNodalLoad(tagNode3,xc.Vector(internalForces.getWoodArcher1()))
    
         tagNode4= self.tagsNodesToLoad2[idElem]
-        # AXIL_Y,Q_Y,RASANTE,TORSOR=0,MOM_Y*,0.0
-        #      3,  9,      4,     7,    6,0.0
-        N= eval(lst[3])
-        Qx= eval(lst[9])
-        R= eval(lst[4])
-        T= 0.0
-        Mx= eval(lst[6])
-        s= float(numpy.sign(Mx))
-        Mx+= s*abs(eval(lst[7]))
-        My= 0.0
-        lp.newNodalLoad(tagNode4,xc.Vector([N,Qx,R,T,Mx,My]))
+        lp.newNodalLoad(tagNode4,xc.Vector(internalForces.getWoodArcher2()))
 
     f.close()
 

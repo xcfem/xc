@@ -89,9 +89,9 @@ class RCMaterialDistribution(object):
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
-    mapID= self.sectionDefinition.getInteractionDiagrams(preprocessor,matDiagType)
+    self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,self, mapID)
+    phantomModel= phm.PhantomModel(preprocessor,self)
     retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
     tmp.clearAll()
     return retval
@@ -110,9 +110,9 @@ class RCMaterialDistribution(object):
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
-    mapID= self.sectionDefinition.getInteractionDiagramsNMy(preprocessor,matDiagType)
+    self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType,'NMy')
     analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,self, mapID)
+    phantomModel= phm.PhantomModel(preprocessor,self)
     retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
     tmp.clearAll()
     return retval
@@ -128,9 +128,9 @@ class RCMaterialDistribution(object):
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
-    mapID= self.sectionDefinition.getInteractionDiagrams(preprocessor,matDiagType)
+    self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,self, mapID)
+    phantomModel= phm.PhantomModel(preprocessor,self)
     retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
     tmp.clearAll()
     return retval
@@ -139,17 +139,18 @@ class RCMaterialDistribution(object):
   def crackControl(self,intForcCombFileName,outputFileName,matDiagType,controller):
     '''
 
-    :param intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
-    :param outputFileName:  name of the output file containing the results of the 
-                     verification 
+    :param intForcCombFileName: name of the file containing the forces and 
+                                bending moments obtained for each element for
+                                the combinations analyzed
+    :param outputFileName:  name of the output file containing the results 
+                            of the verification 
     :param controller: object that controls crack limit state.
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
-    mapID= self.sectionDefinition.getInteractionDiagrams(preprocessor,matDiagType)
+    self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,self,mapID)
+    phantomModel= phm.PhantomModel(preprocessor,self)
     retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
     tmp.clearAll()
     return retval
@@ -166,9 +167,9 @@ class RCMaterialDistribution(object):
     '''
     tmp= xc.ProblemaEF()
     preprocessor= tmp.getPreprocessor
-    mapID= self.sectionDefinition.getInteractionDiagrams(preprocessor,matDiagType)
+    self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
     analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,self, mapID)
+    phantomModel= phm.PhantomModel(preprocessor,self)
     retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
     tmp.clearAll()
     return retval
