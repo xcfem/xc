@@ -24,6 +24,7 @@ from xcVtk import LocalAxesVectorField as lavf
 from xcVtk.malla_ef import QuickGraphics as qg
 import ijkGrid as grid
 import math
+from postprocess import utils_display
 
 class NamedObjectsMap(dict):
   '''dictionary of objects which have a name.'''
@@ -750,6 +751,20 @@ class GridModel(object):
       st.getElements.append(e)
     st.fillDownwards()
     return st
+
+  def getSetForDisplay(self,setName,parts,setGenDescr,setSectDescr):
+    '''Returns an instance of the object setToDisplay that defines the 
+    descriptions of a set of elements to be used in the graphics
+    and reports associated with the calculation
+
+    :ivar elSet:    set of elements
+    :ivar genDescr: general description
+    :ivar sectDescr:ordered list with the descriptions that apply to each of the                    sections that configures the element.
+    '''
+    st=self.getSetFromParts(setName,parts)
+    retval=utils_display.setToDisplay(elSet=st,genDescr=setGenDescr,sectDescr=setSectDescr)
+    return retval
+                                      
 
   def setGrid(self,xList,yList,zList):
     ''':Returns: the grid of coordinates in the three axes
