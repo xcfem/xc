@@ -65,13 +65,13 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     self.matTagD= self.materialDiagramD.tag
     return self.materialDiagramD #30160925 was 'return self.matTagD'
 
-  def plotDesignStressStrainDiagram(self,preprocessor):
+  def plotDesignStressStrainDiagram(self,preprocessor,path=''):
     '''Draws the steel design diagram.'''
     if self.materialDiagramD== None:
       self.defDiagD(preprocessor)
     retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.materialName + ' design stress-strain diagram')
     retval.setupGraphic(plt,self.materialDiagramD)
-    fileName= self.materialName+'_design_stress_strain_diagram'
+    fileName= path+self.materialName+'_design_stress_strain_diagram'
     retval.savefig(plt,fileName+'.jpeg')
     retval.savefig(plt,fileName+'.eps')
     return retval

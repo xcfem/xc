@@ -22,6 +22,21 @@ from matplotlib.ticker import MultipleLocator
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
+class setToDisplay(object):
+  '''Defines the description of a set of elements to be used in the graphics
+  and reports associated with the calculation
+
+  :ivar elSet:    set of elements
+  :ivar genDescr: general description
+  :ivar sectDescr:ordered list with the descriptions that apply to each of the 
+                  sections that configures the element.
+  '''
+  def __init__(self,elSet,genDescr='',sectDescr=[]):
+    self.elSet=elSet
+    self.elSet.fillDownwards()
+    self.genDescr=genDescr
+    self.sectDescr=sectDescr
+
 class FigureBase(object):
   def __init__(self,pLabel,limitStateLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
     ''' Figure base constructor.
@@ -51,7 +66,7 @@ class FigureBase(object):
     return su.slugify(self.partLabel+self.limitStateLabel+self.attributeName)
   def insertIntoLatex(self, fichLatexFigs, fichLatexList, fichFig, labelText):
     #fichLatexFigs: fichero latex donde insertar el gráfico
-    #fichFig: nombre del fichero que contiene el gráfico (sin extensión y con path completo)
+    #fichFig: nombre del fichero que contiene el gráfico (sin extensión y sin path)
     fichLatexFigs.write('\\begin{figure}\n' )
     fichLatexFigs.write('\\centering\n' )
     fichLatexFigs.write('\\includegraphics[width=' + self.figSize + ']{' + fichFig + '}\n' )
