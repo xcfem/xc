@@ -19,6 +19,8 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
+from materials import ShellInternalForces as sif
+from materials import CrossSectionInternalForces as csif
 
 # Problem type
 prueba= xc.ProblemaEF()
@@ -103,32 +105,38 @@ from postprocess.reports import export_internal_forces
 setTotal= preprocessor.getSets["total"]
 fName= "/tmp/test_export_shell_internal_forces.txt"
 f= open(fName,"w")
-export_internal_forces.exportaEsfuerzosShellSet(preprocessor, "prueba",setTotal,f)
+export_internal_forces.exportInternalForces("prueba",setTotal.getElements,f)
 f.close()
 
 
-mean=[0,0,0,0,0,0,0,0,0]
+mean= [csif.CrossSectionInternalForces(),csif.CrossSectionInternalForces()]
 nCols= len(mean)
 nRows= 0
 import csv
 cr = csv.reader(open(fName,"rb"))
 for row in cr:
   nRows+= 1
-  for i in range(1,nCols):
-    mean[i]+= eval(row[i])
+  sectionIndex= eval(row[2])
+  mean[sectionIndex]+= csif.CrossSectionInternalForces(eval(row[3]),eval(row[4]),eval(row[5]),eval(row[6]),eval(row[7]),eval(row[8]))
 
-for i in range(0,nCols):
-  mean[i]/= nRows
+for m in mean:
+  m*= 1.0/nRows
 
-meanRef= [0, 32, 0.0, 0.0, 0.0, -0.755991356310675, -2.4972837939920614, -1.4220260169048315e-13, -3.033006243120112e-08]
+meanRef= [csif.CrossSectionInternalForces(0.0, -1.4141789118e-08, 0.0, 0.0, -0.377847769601, 0.0),csif.CrossSectionInternalForces(0.0, 3.746624204e-08, 0.0, 0.0, -1.6862614343, 0.0)]
+#sif.ShellElementInternalForces(0.0,0.0,0.0,-0.755991356310675,-2.4972837939920614,-1.4220260169048315e-13, -3.033006243120112e-08).getWoodArmer()
 
 ratio1= 0.0
-for i in range(0,nCols):
-  ratio1+= (meanRef[i]-mean[i])**2
+for i in range(0,2):
+  ratio1+= (meanRef[i]-mean[i]).getModulus()
 
 
-#print mean
-#print ratio1
+# print "mean[0]= ", mean[0]
+# print "meanRef[0]= ", meanRef[0]
+# print "diff[0]= ", mean[0]-meanRef[0]
+# print "mean[1]= ", mean[1]
+# print "meanRef[1]= ", meanRef[1]
+# print "diff[1]= ", mean[1]-meanRef[1]
+# print "ratio1= ",ratio1
 
 import os
 fname= os.path.basename(__file__)

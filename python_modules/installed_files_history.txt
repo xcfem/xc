@@ -268,6 +268,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/concreteBase.pyc
 /usr/local/lib/python2.7/dist-packages/materials/crack_control_base.py
 /usr/local/lib/python2.7/dist-packages/materials/crack_control_base.pyc
+/usr/local/lib/python2.7/dist-packages/materials/CrossSectionInternalForces.py
+/usr/local/lib/python2.7/dist-packages/materials/CrossSectionInternalForces.pyc
 /usr/local/lib/python2.7/dist-packages/materials/defSeccAggregation.py
 /usr/local/lib/python2.7/dist-packages/materials/defSeccAggregation.pyc
 /usr/local/lib/python2.7/dist-packages/materials/diagMomCurvatura.py

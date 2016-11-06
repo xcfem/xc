@@ -8,41 +8,66 @@ __email__= "l.pereztato@gmail.com"
 
 import math
 from materials import ShellInternalForces as sif
+from materials import CrossSectionInternalForces as csif
+from miscUtils import LogMessages as lmsg
 
-  
+def exportInternalForces(nmbComb, elems, fDesc):
+  '''Writes a comma separated values file with the element's internal forces.
 
-# Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
+  :param nmbComb: combination name.
+  :param elems: element set.
+  :param fDesc: file descriptor to write internal forces on.'''
+  for e in elems:
+    elementType= e.type()
+    if('Shell' in elementType):
+      internalForces= sif.ShellElementInternalForces()
+      internalForces.setFromAverageInShellElement(e)
+      strEsf= internalForces.getCSVString()
+      forcesOnNodes= internalForces.getWoodArmer()
+      sz= len(forcesOnNodes)
+      for i in range(0,sz):
+        force= forcesOnNodes[i]
+        outStr= nmbComb+", "+str(e.tag)+", "+str(i)+", "+force.getCSVString()+'\n'
+        fDesc.write(outStr)
+    elif('Beam' in elementType):
+      e.getResistingForce()
+      internalForces= csif.CrossSectionElementInternalForces(e.getN1,e.getVy1,e.getVz1,e.getT1,e.getMy1,e.getMz1) # Internal forces at the origin of the bar.
+      fName.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString())
+      internalForces= csif.CrossSectionElementInternalForces(e.getN2,e.getVy2,e.getVz2,e.getT2,e.getMy2,e.getMz2) # Internal forces at the end of the bar.
+      fName.write(nmbComb+", "+str(e.tag)+", 2, "+internalForces.getCSVString())
+    else:
+      lmsg.error("exportInternalForces error; element type: '"+elementType+"' unknown.")
+      
+
 def exportShellInternalForces(nmbComb, elems, fDesc,fConv= 1.0):
+  '''Writes a comma separated values file with the element's internal forces.'''
+  errMsg= 'exportShellInternalForces deprecated use exportInternalForces'
+  errMsg+= 'with apropriate arguments'
+  lmsg.error(errMsg)
   internalForces= sif.ShellElementInternalForces()
   for e in elems:
     internalForces.setFromAverageInShellElement(e)
     strEsf= internalForces.getCSVString()
-    fDesc.write(nmbComb+", "+str(e.tag)+", "+strEsf+'\n')
+    forcesOnNodes= internalForces.getWoodArmer()
+    sz= len(forcesOnNodes)
+    for i in range(0,sz):
+      force= forcesOnNodes[i]
+      outStr= nmbComb+", "+str(e.tag)+", "+str(i)+", "+force.getCSVString()+'\n'
+      fDesc.write(outStr)
 
-# Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
 def exportaEsfuerzosShellSet(preprocessor,nmbComb, st, fName):
+  '''Writes a comma separated values file with the element's internal forces.'''
+  errMsg= 'exportaEsfuerzosShellSet deprecated use exportInternalForces'
+  errMsg+= 'with apropriate arguments'
+  lmsg.error(errMsg)
   elems= st.getElements
   exportShellInternalForces(nmbComb,elems,fName)
 
-# Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
 def exportBeamInternalForces(nmbComb, elems, fName):
+  '''Writes a comma separated values file with the element's internal forces.'''
   for e in elems:
     e.getResistingForce()
-    N1= str(e.getN1)
-    Qy1= str(e.getVy1)
-    Qz1= str(e.getVz1)
-    T1= str(e.getT1)
-    My1= str(e.getMy1) # Momento en el extremo dorsal de la barra
-    Mz1= str(e.getMz1) # Momento en el extremo dorsal de la barra
-    fName.write(nmbComb+", "+str(e.tag*10+1)+",")
-    fName.write(N1+", "+Qy1+", "+Qz1+", ")
-    fName.write(T1+", "+My1+", "+Mz1+"\n")
-    N2= str(e.getN2)
-    Qy2= str(e.getVy2)
-    Qz2= str(e.getVz2)
-    T2= str(e.getT2)
-    My2= str(e.getMy2) # Momento en el extremo frontal de la barra
-    Mz2= str(e.getMz2) # Momento en el extremo frontal de la barra
-    fName.write(nmbComb+", "+str(e.tag*10+2)+",")
-    fName.write(N2+", "+Qy2+", "+Qz2+", ")
-    fName.write(T2+", "+My2+", "+Mz2+"\n")
+    internalForces= csif.CrossSectionElementInternalForces(e.getN1,e.getVy1,e.getVz1,e.getT1,e.getMy1,e.getMz1) # Internal forces at the origin of the bar.
+    fName.write(nmbComb+", "+str(e.tag*10+1)+","+internalForces.getCSVString())
+    internalForces= csif.CrossSectionElementInternalForces(e.getN2,e.getVy2,e.getVz2,e.getT2,e.getMy2,e.getMz2) # Internal forces at the end of the bar.
+    fName.write(nmbComb+", "+str(e.tag*10+2)+","+internalForces.getCSVString())

@@ -9,7 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
-import numpy
+from materials import CrossSectionInternalForces as csif
 
 def transformInternalForces(iForces,theta):
   cos2T= math.cos(2*theta)
@@ -89,17 +89,23 @@ class ShellElementInternalForces:
     self.q13= eval(csvStr[6+offset])
     self.q23= eval(csvStr[7+offset])
     
-  def getWoodArcher1(self):
+  def getWoodArmer1(self):
     '''returns wood-archer method internal forces for axis 1.'''
     T= 0.0
     Mx= self.m1+ math.copysign(self.m12,self.m1)
     My= 0.0
-    return [self.n1,self.q13,self.n12,T,Mx,My]
+    return csif.CrossSectionInternalForces(self.n1,self.q13,self.n12,T,Mx,My)
 
-  def getWoodArcher2(self):
+  def getWoodArmer2(self):
     '''returns wood-archer method internal forces for axis 2.'''
     T= 0.0
     Mx= self.m2+ math.copysign(self.m12,self.m2)
     My= 0.0
-    return [self.n2,self.q23,self.n12,T,Mx,My]
+    return csif.CrossSectionInternalForces(self.n2,self.q23,self.n12,T,Mx,My)
+
+  def getWoodArmer(self):
+    '''returns wood-archer method internal forces.'''
+    return [self.getWoodArmer1(),self.getWoodArmer2()]
+
+    
 

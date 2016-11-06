@@ -54,7 +54,7 @@ class LimitStateData(object):
                             future versions)
     '''
     if fConvIntForc != 1.0:
-      lmsg.warning('fConvIntForc= ' + fConvIntForc + 'In future versions only the value 1.0 will be allowed as conversion factor between units' )
+      lmsg.warning('fConvIntForc= ' + fConvIntForc + 'conversion factor between units is DEPRECATED' )
     preprocessor= feProblem.getPreprocessor
     loadCombinations= preprocessor.getLoadLoader.getLoadCombinations
     #Putting combinations inside XC.
@@ -76,8 +76,7 @@ class LimitStateData(object):
       #Writing results.
       fIntF= open(fNameInfForc,"a")
       fDisp= open(fNameDispl,"a")
-      # XXX MUST be general exportInternalForces (not only ShellInternalForces).
-      eif.exportShellInternalForces(comb.getName,elemSet,fIntF,fConvIntForc)
+      eif.exportInternalForces(comb.getName,elemSet,fIntF)
       edisp.exportDisplacements(comb.getName,nodSet,fDisp)
       fIntF.close()
       fDisp.close()

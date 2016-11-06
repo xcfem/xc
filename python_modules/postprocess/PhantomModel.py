@@ -30,7 +30,8 @@ from postprocess import ControlVars as cv
 from solution import predefined_solutions
 from solution import resuelve_combinacion
 from miscUtils import LogMessages as lmsg
-from materials import ShellInternalForces as sif
+from materials import CrossSectionInternalForces as csif
+from collections import defaultdict
 
 # Fake section (elements must have a stiffness)
 sccFICT= paramRectangularSection.RectangularSection("rectang",b=.40,h=40)
@@ -50,7 +51,7 @@ class PhantomModel(object):
     self.preprocessor= preprocessor
     self.sectionsDistribution= sectionDistribution
 
-  def extractElementsAndCombinations(self,intForcCombFileName):
+  def setupForElementsAndCombinations(self,intForcCombFileName):
     '''Extracts element and combination identifiers from the internal
        forces listing file.
     
@@ -61,26 +62,34 @@ class PhantomModel(object):
     self.elementTags= set()
     self.idCombs= set()
     f= open(intForcCombFileName,"r")
+    self.internalForcesValues= defaultdict(list)
     internalForcesListing= csv.reader(f)
     for lst in internalForcesListing:    #lst: list of internal forces for each combination and element 
       if(len(lst)>0):
         idComb= lst[0]
         self.idCombs.add(idComb)
-        idElem= eval(lst[1])
-        self.elementTags.add(idElem)
+        tagElem= eval(lst[1])
+        idSection= eval(lst[2])
+        self.elementTags.add(tagElem)
+        crossSectionInternalForces= csif.CrossSectionInternalForces()
+        crossSectionInternalForces.setFromCSVString(lst,3)
+        crossSectionInternalForces.idComb= idComb
+        crossSectionInternalForces.tagElem= tagElem
+        crossSectionInternalForces.idSection= idSection
+        self.internalForcesValues[tagElem].append(crossSectionInternalForces)
     f.close()
 
-  def createPhantomElement(self,tagElem,sectionName,sectionDefinition,sectionIndex,interactionDiagram,fakeSection):
+  def createPhantomElement(self,idElem,sectionName,sectionDefinition,sectionIndex,interactionDiagram,fakeSection):
     '''Creates a phantom element (that represents a section to check) and assigns
        it the following properties:
 
-       idElem: identifier of the element in the "true" model from which
-               this phantom element procedes -tagElem-.
-       idSection: name of the section assigned to the phantom element
+       :param idElem: identifier of the element in the "true" model from which
+               this phantom element procedes -idElem-.
+       :param idSection: name of the section assigned to the phantom element
                   (the section to check) -sectionName-.
-       dir: index of the section in the "true" model element -sectionIndex-. To
+       :param dir: index of the section in the "true" model element -sectionIndex-. To
             be renamed as sectionIndex.
-       interactionDiagram: interaction diagram that corresponds to the section to check.
+       :param interactionDiagram: interaction diagram that corresponds to the section to check.
     '''
     nA= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
     nB= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
@@ -88,7 +97,7 @@ class PhantomModel(object):
     if(not fakeSection):
       elements.defaultMaterial= sectionName
     phantomElement= self.preprocessor.getElementLoader.newElement("zero_length_section",xc.ID([nA.tag,nB.tag]))
-    phantomElement.setProp("idElem", tagElem) #Element to check
+    phantomElement.setProp("idElem", idElem) #Element to check
     phantomElement.setProp("idSection", sectionName) #Section to check
     phantomElement.setProp("dir",sectionIndex) #Section index in the element.
     scc= phantomElement.getSection()
@@ -108,7 +117,7 @@ class PhantomModel(object):
     :param   fakeSection:  true if a fiber section model of the section 
                            is not needed for control.
     '''
-    self.extractElementsAndCombinations(intForcCombFileName)
+    self.setupForElementsAndCombinations(intForcCombFileName)
 
     retval= []
     nodes= self.preprocessor.getNodeLoader
@@ -118,8 +127,7 @@ class PhantomModel(object):
     # Definimos materiales
     fkSection= sccFICT.defSeccShElastica3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
     elements.dimElem= 1
-    self.tagsNodesToLoad1= {}
-    self.tagsNodesToLoad2= {}
+    self.tagsNodesToLoad= defaultdict(list)
     if(fakeSection):
       elements.defaultMaterial= sccFICT.nmb
     for tagElem in self.elementTags:
@@ -135,21 +143,17 @@ class PhantomModel(object):
           diagInt= mapInteractionDiagrams[sectionName]
         phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt,fakeSection)
         retval.append(phantomElem)
-        if(i==0):
-          self.tagsNodesToLoad1[tagElem]= phantomElem.getNodes[1].tag
-        elif(i==1):
-          self.tagsNodesToLoad2[tagElem]= phantomElem.getNodes[1].tag
-        else:
-          lmsg.error('i out of range.')
+        self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load
+                                                                          #for this element
     controller.initControlVars(retval)
     return retval
 
   def createLoads(self,intForcCombFileName,controller):
     '''Creates the loads from the data readed on the file.
-    Parameters:
-       intForcCombFileName: name of the file containing the forces and bending moments 
+
+       :param intForcCombFileName: name of the file containing the forces and bending moments 
                            obtained for each element for the combinations analyzed
-       controller:     object that takes the results and checks the limit state.
+       :param controller:     object that takes the results and checks the limit state.
     '''
     cargas= self.preprocessor.getLoadLoader
     casos= cargas.getLoadPatterns
@@ -161,23 +165,12 @@ class PhantomModel(object):
     for comb in self.idCombs:
       mapCombs[comb]= casos.newLoadPattern("default",comb)
 
-    f= open(intForcCombFileName,"r")
-    internalForcesListing= csv.reader(f)
-    for lst in internalForcesListing:
-      if(len(lst)>0):
-        nmbComb= lst[0]
-        idElem= eval(lst[1])
-        lp= mapCombs[nmbComb]
-        tagNode3= self.tagsNodesToLoad1[idElem]
-        '''Adoptamos el método de Wood para evaluar los momentos para dimensionar a flexión'''
-        internalForces= sif.ShellElementInternalForces()
-        internalForces.setFromCSVString(lst,2)
-        lp.newNodalLoad(tagNode3,xc.Vector(internalForces.getWoodArcher1()))
-   
-        tagNode4= self.tagsNodesToLoad2[idElem]
-        lp.newNodalLoad(tagNode4,xc.Vector(internalForces.getWoodArcher2()))
-
-    f.close()
+    for key in self.internalForcesValues:
+      internalForcesElem= self.internalForcesValues[key]
+      for iforce in internalForcesElem:
+        lp= mapCombs[iforce.idComb]
+        nodeTag= self.tagsNodesToLoad[iforce.tagElem][iforce.idSection]
+        lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
 
   def build(self,intForcCombFileName,controller,fakeSection= True):
     '''Builds the phantom model from the data readed from the file.
