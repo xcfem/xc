@@ -31,6 +31,7 @@ def reportConcrete02(concrDiag,paramTensStiffening,grTitle,grFileName,texFileNam
     grph.savefig(plt,grFileName+'.jpeg')
     grph.savefig(plt,grFileName+'.eps')
     concrRep=materialReports.concreteReport(concrDiag)
+    grFileNameNoPath=grFileName.split('/')[grFileName.count('/')]
     f=open(texFileName,'w')
     f.write('\\documentclass{article} \n')
     f.write('\\usepackage{graphicx} \n')
@@ -44,7 +45,7 @@ def reportConcrete02(concrDiag,paramTensStiffening,grTitle,grFileName,texFileNam
     f.write('\\begin{minipage}{95mm} \n')
     f.write('\\vspace{2mm} \n')
     f.write('\\begin{center} \n')
-    f.write('\\includegraphics[width=90mm]{'+grFileName+'} \n')
+    f.write('\\includegraphics[width=90mm]{'+grFileNameNoPath+'} \n')
     f.write('\\end{center} \n')
     f.write('\\vspace{1pt} \n')
     f.write('\\end{minipage} &  \n')

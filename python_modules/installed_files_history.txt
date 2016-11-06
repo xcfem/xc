@@ -680,6 +680,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/export_displacements.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/export_internal_forces.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/export_internal_forces.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/graphical_reports.py
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/graphical_reports.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/graphLoadCase.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/graphLoadCase.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/__init__.py

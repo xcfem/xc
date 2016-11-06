@@ -70,6 +70,7 @@ class ExtrapolatedScalarField(ScalarField):
 
   def display(self,defDisplay,fName= None,caption= ''):
     defDisplay.displayMesh(self.xcSet,self,None,fName,caption)
+    
   def plot(self,defDisplay,fName= None,caption= ''):
     lmsg.warning('ExtrapolatedScalarField.plot is DEPRECATED use display.')
     self.display(defDisplay,fName,caption)

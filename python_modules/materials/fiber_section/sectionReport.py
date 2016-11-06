@@ -2,11 +2,11 @@
 
 '''sectionReport.py: report describing RC cross sections mechanical properties.'''
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
-__copyright__= "Copyright 2015, LCPT and A_OO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
+__email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
 
 import sys
@@ -154,9 +154,12 @@ class SectionInfo(object):
     fileHandler.write('\\begin{minipage}{85mm}\n')
     fileHandler.write('\\vspace{2mm}\n')
     fileHandler.write('\\begin{center}\n')
-    #name without extension to allow pdfLatex process the file
+    #  name without extension to allow pdfLatex process the file
     nameWOExt= os.path.splitext(pathFigura)[0]
     fileHandler.write('\\includegraphics[width=80mm]{'+nameWOExt+'}\n')
+    # name without extension and without path
+    # nameWOExt= os.path.splitext(pathFigura)[0]
+    # fileHandler.write('\\includegraphics[width=80mm]{'+self.sectName[4:]+'}\n')
     fileHandler.write('\\end{center}\n')
     fileHandler.write('\\vspace{1pt}\n')
     fileHandler.write('\\end{minipage} & \n')
