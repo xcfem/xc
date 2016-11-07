@@ -39,14 +39,14 @@ matSccFICT= typical_materials.MaterialData("mrectang",E=2.1e6,nu=0.3,rho=2500)
 
 class PhantomModel(object):
   def __init__(self,preprocessor, sectionDistribution):
-    ''' Extrae los identificadores de elementos de un archivo de salida 
-        con resultados de combinaciones generado en XC 
+    '''Extracts the element identifiers from a XC output file generated
+    with the results for each conbination analyzed 
     
     :ivar preprocessor: preprocessor object (access to FE model -nodes, 
                         elements, loads,...)
-    :ivar    sectionsDistribution:  file containing the section definition for
-                                    each element (this section will be 
-                                    be employed in verifications).
+    :ivar sectionsDistribution:  file containing the section definition for
+                                 each element (this section will be 
+                                 be employed in verifications).
     '''
     self.preprocessor= preprocessor
     self.sectionsDistribution= sectionDistribution
@@ -80,16 +80,17 @@ class PhantomModel(object):
     f.close()
 
   def createPhantomElement(self,idElem,sectionName,sectionDefinition,sectionIndex,interactionDiagram,fakeSection):
-    '''Creates a phantom element (that represents a section to check) and assigns
-       it the following properties:
+    '''Creates a phantom element (that represents a section to check) and 
+       assigns to it the following properties:
 
        :param idElem: identifier of the element in the "true" model from which
                this phantom element procedes -idElem-.
        :param idSection: name of the section assigned to the phantom element
                   (the section to check) -sectionName-.
-       :param dir: index of the section in the "true" model element -sectionIndex-. To
-            be renamed as sectionIndex.
-       :param interactionDiagram: interaction diagram that corresponds to the section to check.
+       :param dir: index of the section in the "true" model element 
+                 -sectionIndex-. To be renamed as sectionIndex.
+       :param interactionDiagram: interaction diagram that corresponds to 
+                                  the section to check.
     '''
     nA= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
     nB= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
@@ -149,11 +150,14 @@ class PhantomModel(object):
     return retval
 
   def createLoads(self,intForcCombFileName,controller):
-    '''Creates the loads from the data readed on the file.
+    '''Creates the loads from the data read from the file.
 
-       :param intForcCombFileName: name of the file containing the forces and bending moments 
-                           obtained for each element for the combinations analyzed
-       :param controller:     object that takes the results and checks the limit state.
+       :param intForcCombFileName: name of the file containing the forces and 
+                           bending moments obtained for each element for all 
+                           the combinations analyzed
+       :param controller:  object that takes the internal forces and the
+                           section definition and checks the limit state.
+
     '''
     cargas= self.preprocessor.getLoadLoader
     casos= cargas.getLoadPatterns
@@ -173,24 +177,27 @@ class PhantomModel(object):
         lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
 
   def build(self,intForcCombFileName,controller,fakeSection= True):
-    '''Builds the phantom model from the data readed from the file.
-    Parameters:
-       intForcCombFileName: name of the file containing the forces and bending moments 
-                           obtained for each element for the combinations analyzed
-       controller:     object that takes the results and checks the limit state.
-       fakeSection:  true if a fiber section model of the section is not needed for control.
+    '''Builds the phantom model from the data read from the file.
+
+    :param intForcCombFileName: name of the file containing the forces and 
+                           bending moments obtained for each element for all 
+                           the combinations analyzed
+    :param controller:     object that takes the internal forces and the
+                           section definition and checks the limit state.
+    :param fakeSection:    true if a fiber section model of the section is not 
+                           needed for control.
     '''
     retval= self.createElements(intForcCombFileName,controller)
     self.createLoads(intForcCombFileName,controller)
     return retval
 
   def check(self, analysis, controller):
-    '''
-    Lanza el análisis (lineal) y la comprobación en las combinaciones que se pasan como parámetros
-    Parameters:
-      elements: elements to check
-      analysis: type of analysis
-      controller: object that controls limit state in elements.
+    '''Runs the analysis (linear) and checking of combinations passed as
+    parameters
+
+    :param elements: elements to check
+    :param analysis: type of analysis
+    :param controller: object that controls limit state in elements.
     '''
     combs= self.preprocessor.getLoadLoader.getLoadPatterns #Here each load pattern represents a combination.
     elements= self.preprocessor.getSets.getSet("total").getElements
@@ -201,22 +208,22 @@ class PhantomModel(object):
       controller.check(elements,key)
 
   def write(self,controller,outputFileName):
-    '''
-    Writes results into the file
-    Parameters:
-      controller: object that controls limit state in elements.
-      outputFileName: base name of output file (extensions .py and .tex)
+    '''Writes results into the output file
+
+    :param controller:     object that controls limit state in elements
+    :param outputFileName: base name of output file (extensions .py and .tex)
     '''
     return cv.writeControlVarsFromElements(controller.limitStateLabel,self.preprocessor,outputFileName)
 
   def runChecking(self,intForcCombFileName,analysis,controller,outputFileName):
-    '''Run the analysis, check the results and write them into a file)
-    Parameters:
-      intForcCombFileName: name of the file containing the forces and bending moments 
-                           obtained for each element for the combinations analyzed
-      analysis: type of analysis
-      controller: object that controls limit state in elements.
-      outputFileName: base name of output file (extensions .py and .tex)
+    '''Run the analysis, check the results and write them into a file
+
+    :param intForcCombFileName: name of the file containing the forces 
+                           and bending moments obtained for each element 
+                           for the combinations analyzed
+      analysis:            type of analysis
+      controller:          object that controls limit state in elements.
+      outputFileName:      base name of output file (extensions .py and .tex)
     '''
     meanCFs= -1.0 
     if(controller):
