@@ -613,17 +613,18 @@ class setRCSections2SetElVerif(object):
 
 
 
-class RecordRCSlabSection(setRCSections2SetElVerif):
+class RecordRCSlabBeamSection(setRCSections2SetElVerif):
   '''This class is used to define the variables that make up the two 
   reinforced concrete sections that define the two reinforcement directions
-  of a slab
+  of a slab or the front and back ending sections of a beam element
   
   :ivar name:    basic name to form the RC sections in direction 1 (name+'1') 
              and direction 2(name+'1') 
   :ivar sectionDescr:    section description
-  :ivar depth:           cross-section depth (width=1.0)
   :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
   :ivar reinfSteelType:  type of reinforcement steel
+  :ivar depth:           cross-section depth
+  :ivar width:           cross-section width (defaults to 1.0)
   :ivar posMainRebarRowsD1: layers of main rebars in direction 1 in the local 
                         positive face of the section (list of MainReinfLayer)
   :ivar negMainRebarRowsD1: layers of main rebars in direction 1 in the local 
@@ -634,14 +635,14 @@ class RecordRCSlabSection(setRCSections2SetElVerif):
                         negative face of the section (list of MainReinfLayer)
 
   '''
-  def __init__(self,name,sectionDescr,depth,concrType,reinfSteelType):
-    super(RecordRCSlabSection,self).__init__(name)
+  def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0):
+    super(RecordRCSlabBeamSection,self).__init__(name)
     sSect1= RecordRCSimpleSection()
     sSect1.sectionName= name + "1"
     sSect1.sectionDescr= sectionDescr + ". 1 direction."
     sSect1.concrType= concrType
     sSect1.depth= depth
-    sSect1.width= 1.0
+    sSect1.width= width
     sSect1.reinfSteelType= reinfSteelType
     sSect1.positvRebarRows=[]
     sSect1.negatvRebarRows=[]
@@ -652,7 +653,7 @@ class RecordRCSlabSection(setRCSections2SetElVerif):
     sSect2.sectionDescr= sectionDescr + ". 2 direction."
     sSect2.concrType= concrType
     sSect2.depth= depth
-    sSect2.width= 1.0
+    sSect2.width= width
     sSect2.reinfSteelType= reinfSteelType
     sSect2.positvRebarRows=[]
     sSect2.negatvRebarRows=[]
@@ -794,63 +795,5 @@ def loadMainRefPropertyIntoElements(elemSet, sectionContainer, code):
       sys.stderr.write("element: "+ str(e.tag) + " section undefined.\n")
       e.setProp(code,0.0)
 
-class RecordRCBeamSection(setRCSections2SetElVerif):
-  '''This class is used to define the variables that make up a reinforced 
-  concrete beam section with several reinforcement layers in the top and 
-  bottom faces
-  
-  :ivar name:    basic name to form the RC sections in direction 1 (name+'1') 
-             and direction 2(name+'1') 
-  :ivar sectionDescr:    section description
-  :ivar depth:           cross-section depth
-  :ivar width:           cross-section width
-  :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
-  :ivar reinfSteelType:  type of reinforcement steel
-  :ivar posMainRebarRows: layers of main rebars in direction 1 in the local 
-                        positive face of the section (list of MainReinfLayer)
-  :ivar negMainRebarRows: layers of main rebars in direction 1 in the local 
-                        negative face of the section (list of MainReinfLayer)
 
-  '''
-  def __init__(self,name,sectionDescr,width,depth,concrType,reinfSteelType):
-    super(RecordRCBeamSection,self).__init__(name)
-    sSect= RecordRCSimpleSection()
-    sSect.sectionName= name + "1"
-    sSect.sectionDescr= sectionDescr + ". 1 direction."
-    sSect.concrType= concrType
-    sSect.depth= depth
-    sSect.width= 1.0
-    sSect.reinfSteelType= reinfSteelType
-    sSect.positvRebarRows=[]
-    sSect.negatvRebarRows=[]
-    self.append_section(sSect)
 
-  def setShearReinf(self,nShReinfBranches,areaShReinfBranch,spacing):
-    self.lstRCSects[0].shReinfZ.nShReinfBranches= nShReinfBranches
-    self.lstRCSects[0].shReinfZ.areaShReinfBranch= areaShReinfBranch
-    self.lstRCSects[0].shReinfZ.shReinfSpacing= spacing
-
-  def getAsneg(self):
-    '''Steel area in local negative face.'''
-    return self.lstRCSects[0].getAsNeg()
-  def getAspos(self):
-    '''Steel area in local positive face.'''
-    return self.lstRCSects[0].getAsPos()
-  def getSpos(self):
-    '''list of distances between bars of rows the in local positive face.'''
-    return self.lstRCSects[0].getSPos()
-  def getSneg(self):
-    '''list of distances between bars of rows  in the local negative face.'''
-    return self.lstRCSects[0].getSNeg()
-  def getDiamneg(self):
-    '''list of bar diameter in rows of the local negative face.'''
-    return self.lstRCSects[0].getDiamNeg()
-  def getDiampos(self):
-    '''list of bar diameter in rows of the local positive face.'''
-    return self.lstRCSects[0].getDiamPos()
-  def getNBarpos(self):
-    '''list of number of bars in rows of the local positive face.'''
-    return self.lstRCSects[0].getNBarPos()
-  def getNBarneg(self):
-    '''list of number of bars in rows of the local negative face.'''
-    return self.lstRCSects[0].getNBarNeg()
