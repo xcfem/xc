@@ -12,6 +12,7 @@ import xc
 from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk.malla_ef import Fields
 from postprocess import utils_display
+from model.grid_based import GridModel
 
 class RecordLoadCaseDisp(object):
   '''Generation of graphic files and adding to report-tex files for a load case
@@ -96,14 +97,54 @@ class RecordLoadCaseDisp(object):
       capt=self.loadCaseDescr + ', ' + st.genDescr + ', '  + self.unitsLoads
       gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,caption= capt,fileName=grfname+'.jpg')
       gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,caption= capt,fileName=grfname+'.eps')
-      texFile.write('\\begin{center}\n')
-      texFile.write('\includegraphics[width='+grWdt+']{'+grfname+'}\n')
-      texFile.write('\caption{'+capt+'}\n')
-      texFile.write('\end{center}\n')
+      insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt) 
     return
 
+  def simplLCReports(self,gridmodl,pathGr,texFile,grWdt,capStdTexts):
+    '''Creates the graphics files of displacements and internal forces 
+    calculated for a simple load case and insert them in a LaTex file
+    
+    :param gridmodl:   object of type GridModel
+    :param pathGr:     directory to place figures (ex: 'text/graphics/loads/')
+    :param texFile:    laTex file where to include the graphics 
+                       (e.g.:'text/report_loads.tex')
+    :param grWdt:      width to be applied to graphics
+    :param capStdTexts:dictionary with the standard captions
+    '''
+    lcs=GridModel.QuickGraphics(gridmodl)
+    #solve for load case
+    lcs.solve(loadCaseName=self.loadCaseName,loadCaseExpr=self.loadCaseExpr)
+    #Displacements and rotations displays
+    for st in self.setsToDispDspRot:
+        for arg in self.listDspRot:
+            if arg[0]=='u':
+                fcUn=self.unitsScaleDispl
+                unDesc=self.unitsDispl
+            else:
+                fcUn=1.0
+                unDesc=''
+            grfname=pathGr+self.loadCaseName+st.elSet.name+arg
+            lcs.displayDispRot(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits=fcUn,unitDescription=unDesc,fileName=grfname+'.jpg')
+            lcs.displayDispRot(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits=fcUn,unitDescription=unDesc,fileName=grfname+'.eps')
+            capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
+            insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
+    #Internal forces displays
+    for st in self.setsToDispIntForc:
+        for arg in self.listIntForc:
+            if arg[0]=='M':
+                fcUn=self.unitsScaleMom
+                unDesc=self.unitsMom
+            else:
+                fcUn=self.unitsScaleForc
+                unDesc=self.unitsForc
+            grfname=pathGr+self.loadCaseName+st.elSet.name+arg
+            lcs.displayIntForc(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,unitDescription=unDesc,fileName=grfname+'.jpg')
+            lcs.displayIntForc(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,unitDescription=unDesc,fileName=grfname+'.eps')
+            capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
+            insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
+    return
 
-def checksReports(limitStateLabel,setsToReport,argsToReport,capTexts,pathGr,texReportFile):
+def checksReports(limitStateLabel,setsToReport,argsToReport,capTexts,pathGr,texReportFile,grWdt):
     report=open(texReportFile,'w')    #report latex file
     dfDisp= vtk_grafico_ef.RecordDefDisplayEF()
     for st in setsToReport:
@@ -113,23 +154,30 @@ def checksReports(limitStateLabel,setsToReport,argsToReport,capTexts,pathGr,texR
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.genDescr.capitalize() + ', ' + st.sectDescr[0]
             grFileNm=pathGr+st.elSet.name+arg+'Dir1'
             field.display(defDisplay=dfDisp,caption=capt,fName=grFileNm+'.jpg')
-            report.write('\\begin{figure}[h]\n')
-            report.write('\\begin{center}\n')
-            report.write('\\includegraphics[width=120mm]{'+grFileNm+'}\n')
-            report.write('\\caption{'+capt+'}\n')
-            report.write('\\end{center}\n')
-            report.write('\\end{figure}\n')
+            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
 
             attributeName= limitStateLabel + 'Dir2'
             field= Fields.getScalarFieldFromControlVar(attributeName,arg,st.elSet,None,1.0)
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.genDescr.capitalize() + ', ' + st.sectDescr[1]
             grFileNm=pathGr+st.elSet.name+arg+'Dir2'
             field.display(defDisplay=dfDisp,caption=capt,fName=grFileNm+'.jpg')
-            report.write('\\begin{figure}[h]\n')
-            report.write('\\begin{center}\n')
-            report.write('\\includegraphics[width=120mm]{'+grFileNm+'}\n')
-            report.write('\\caption{'+capt+'}\n')
-            report.write('\\end{center}\n')
-            report.write('\\end{figure}\n')
+            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
     report.close()
     return
+
+def insertGrInTex(texFile,grFileNm,grWdt,capText):
+    '''Include a graphic in a LaTeX file
+    :param texFile:    laTex file where to include the graphics 
+                       (e.g.:'text/report_loads.tex')
+    :param grFileNm:   name of the graphic file with path and without extension
+    :param grWdt:      width to be applied to graphics
+    :param capText:    text for the caption
+    '''
+    texFile.write('\\begin{figure}[h]\n')
+    texFile.write('\\begin{center}\n')
+    texFile.write('\\includegraphics[width='+grWdt+']{'+grFileNm+'}\n')
+    texFile.write('\\caption{'+capText+'}\n')
+    texFile.write('\\end{center}\n')
+    texFile.write('\\end{figure}\n')
+    return
+  
