@@ -25,7 +25,7 @@ class RecordLoadCaseDisp(object):
   :ivar unitsScaleLoads: factor to apply to loads if we want to change
                    the units (defaults to 1).
   :ivar unitsLoads: text to especify the units in which loads are 
-                   represented (defaults to 'units:[kN,m]')
+                   represented (defaults to 'units:[m,kN]')
   :ivar vectorScaleLoads: factor to apply to the vectors length in the 
                    representation of loads (defaults to 1).
   :ivar multByElemAreaLoads: boolean value that must be True if we want to 
@@ -67,7 +67,7 @@ class RecordLoadCaseDisp(object):
     self.loadCaseExpr=loadCaseExpr
     self.setsToDispLoads=setsToDispLoads
     self.unitsScaleLoads=1.0
-    self.unitsLoads='units:[kN,m]'
+    self.unitsLoads='units:[m,kN]'
     self.vectorScaleLoads=1.0
     self.multByElemAreaLoads=False
     self.listDspRot=['uX', 'uY', 'uZ']
@@ -92,12 +92,13 @@ class RecordLoadCaseDisp(object):
                        (e.g.:'text/report_loads.tex')
     :param grWdt:      width to be applied to graphics
     '''
+    labl=self.loadCaseName
     for st in self.setsToDispLoads:
       grfname=pathGr+self.loadCaseName+st.elSet.name
       capt=self.loadCaseDescr + ', ' + st.genDescr + ', '  + self.unitsLoads
       gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,caption= capt,fileName=grfname+'.jpg')
       gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,caption= capt,fileName=grfname+'.eps')
-      insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt) 
+      insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
     return
 
   def simplLCReports(self,gridmodl,pathGr,texFile,grWdt,capStdTexts):
@@ -142,6 +143,7 @@ class RecordLoadCaseDisp(object):
             lcs.displayIntForc(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,unitDescription=unDesc,fileName=grfname+'.eps')
             capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
+    texFile.write('\\clearpage\n')
     return
 
 def checksReports(limitStateLabel,setsToReport,argsToReport,capTexts,pathGr,texReportFile,grWdt):
@@ -165,18 +167,21 @@ def checksReports(limitStateLabel,setsToReport,argsToReport,capTexts,pathGr,texR
     report.close()
     return
 
-def insertGrInTex(texFile,grFileNm,grWdt,capText):
+def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
     '''Include a graphic in a LaTeX file
     :param texFile:    laTex file where to include the graphics 
                        (e.g.:'text/report_loads.tex')
     :param grFileNm:   name of the graphic file with path and without extension
     :param grWdt:      width to be applied to graphics
     :param capText:    text for the caption
+    :param labl:       label
     '''
-    texFile.write('\\begin{figure}[h]\n')
+    texFile.write('\\begin{figure}\n')
     texFile.write('\\begin{center}\n')
     texFile.write('\\includegraphics[width='+grWdt+']{'+grFileNm+'}\n')
     texFile.write('\\caption{'+capText+'}\n')
+    if labl<>'':
+      texFile.write('\\label{'+labl+'}\n')
     texFile.write('\\end{center}\n')
     texFile.write('\\end{figure}\n')
     return
