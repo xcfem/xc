@@ -29,6 +29,12 @@ def exportInternalForces(nmbComb, elems, fDesc):
         force= forcesOnNodes[i]
         outStr= nmbComb+", "+str(e.tag)+", "+str(i)+", "+force.getCSVString()+'\n'
         fDesc.write(outStr)
+    elif('Beam2d' in elementType):
+      e.getResistingForce()
+      internalForces= csif.CrossSectionInternalForces(-e.getN1,-e.getV1,0.0,0.0,0.0,-e.getM1) # Internal forces at the origin of the bar.
+      fDesc.write(nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()+'\n')
+      internalForces= csif.CrossSectionInternalForces(e.getN2,e.getV2,0.0,0.0,0.0,e.getM2) # Internal forces at the end of the bar.
+      fDesc.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()+'\n')
     elif('Beam' in elementType):
       e.getResistingForce()
       internalForces= csif.CrossSectionInternalForces(e.getN1,e.getVy1,e.getVz1,e.getT1,e.getMy1,e.getMz1) # Internal forces at the origin of the bar.
