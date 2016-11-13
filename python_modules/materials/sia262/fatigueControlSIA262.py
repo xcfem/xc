@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 '''
-Funciones para comprobación de una sección a fisuración según el
-artículo 49.2.4 de la EHE-08.
+Control of fatigue limit state according to SIA 262.
 '''
+
+__author__= "Luis C. Pérez Tato (LCPT), Ana Ortega(AO_O)"
+__copyright__= "Copyright 2016,LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
+
 import math
 from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils

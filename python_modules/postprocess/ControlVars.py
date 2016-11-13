@@ -172,7 +172,14 @@ class NMyMz(NMy):
 
 
 class CFNMy(NMy):
-  '''Uniaxial bending. Normal stresses limit state variables.'''
+  '''Uniaxial bending. Normal stresses limit state variables.
+
+  :ivar combName: name of the load combinations to deal with
+  :ivar CF:       capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
+  :ivar N:        axial force (defaults to 0.0)
+  :ivar My:       bending moment about Y axis (defaults to 0.0)
+  :ivar Mz:       bending moment about Z axis (defaults to 0.0)
+  '''
   def __init__(self,combName= 'nil',CF= -1.0,N= 0.0,My= 0.0):
     super(CFNMy,self).__init__(combName,N,My)
     self.CF= CF # Capacity factor or efficiency
@@ -184,7 +191,7 @@ class UniaxialBendingControlVars(CFNMy):
 
   :ivar idSection:section identifier
   :ivar combName: name of the load combinations to deal with
-  :ivar CF:       capacity factor (efficiency) (defaults to -1)
+  :ivar CF:       capacity factor (efficiency) (defaults to -1; CF<1.0 -> Ok; CF>1.0 -> KO)
   :ivar N:        axial force (defaults to 0.0)
   :ivar My:       bending moment about Y axis (defaults to 0.0)
   '''
@@ -199,7 +206,10 @@ class UniaxialBendingControlVars(CFNMy):
     retval+= super(UniaxialBendingControlVars,self).getLaTeXFields(factor)
     return retval
   def getStrArguments(self,factor):
-    '''Returns a string for a 'copy' (kind of) constructor.'''
+    '''Returns a string for a 'copy' (kind of) constructor.
+
+    :param factor: factor for units (default 1e-3 -> kN)
+    '''
     retval= 'idSection= "' + self.idSection +'", ' 
     retval+= super(UniaxialBendingControlVars,self).getStrArguments(factor)
     return retval
@@ -367,11 +377,21 @@ class CrackControlBaseVars(CFNMyMz):
 
 class CrackControlVars(ControlVarsBase):
   '''Cracking serviceability limit state control variables.
+
+  :ivar idSection:section identifier
+  :ivar crackControlVarsPos:     Crack control in + face.
+  :ivar crackControlVarsNeg:     Crack control in - face.
   '''
-  def __init__(self,idSection= 'nil',crackControlBaseVarsPos= CrackControlBaseVars(), crackControlBaseVarsNeg= CrackControlBaseVars()):
+  def __init__(self,idSection= 'nil', crackControlBaseVarsPos= None ,crackControlBaseVarsNeg= None):
     self.idSection= idSection #Reinforced concrete section identifier.
-    self.crackControlVarsPos= crackControlBaseVarsPos #Cracks in + face.
-    self.crackControlVarsNeg= crackControlBaseVarsNeg #Cracks in - face.
+    if(crackControlBaseVarsPos):
+      self.crackControlVarsPos= crackControlBaseVarsPos #Cracks in + face.
+    else:
+      self.crackControlVarsPos= CrackControlBaseVars()
+    if(crackControlBaseVarsNeg):
+      self.crackControlVarsNeg= crackControlBaseVarsNeg #Cracks in - face.
+    else:
+      self.crackControlVarsNeg= CrackControlBaseVars()
   def getCF(self):
     return max(self.crackControlVarsPos.getCF(),self.crackControlVarsNeg.getCF())
   def getMaxSteelStress(self):
@@ -392,13 +412,23 @@ class CrackControlVars(ControlVarsBase):
     return retval
 
 class FatigueControlBaseVars(NMyMz):
-  '''Biaxial bending. Normal stresses limit state variables.'''
+  '''Biaxial bending. Fatigue limit state variables.
+
+  :ivar combName: name of the load combinations to deal with
+  :ivar N:        axial force (defaults to 0.0)
+  :ivar My:       bending moment about Y axis (defaults to 0.0)
+  :ivar Mz:       bending moment about Z axis (defaults to 0.0)
+  :ivar Vy:       shear force parallel to Y axis.
+  :ivar posSteelStress: traction stress in rebars.
+  :ivar negSteelStress: compression stress in rebars.
+  :ivar concreteStress: compression stress in concrete.
+  '''
   def __init__(self,combName= 'nil',N= 0.0, My= 0.0, Mz= 0.0, Vy= 0.0, posSteelStress= 0.0, negSteelStress= 0.0, concreteStress= 0.0):
     super(FatigueControlBaseVars,self).__init__(combName,N,My,Mz)
     self.Vy= Vy #Shear.
     self.posSteelStress= posSteelStress #traction stress in rebars.
-    self.negSteelStress= negSteelStress #negative stress in rebars.
-    self.concreteStress= concreteStress #negative stress in concrete.
+    self.negSteelStress= negSteelStress #compression stress in rebars.
+    self.concreteStress= concreteStress #compression stress in concrete.
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
 
@@ -427,11 +457,29 @@ class FatigueControlBaseVars(NMyMz):
     return retval
 
 class FatigueControlVars(ControlVarsBase):
-  '''Fatigue limit state control variables.'''
-  def __init__(self,idSection= 'nil',state0= FatigueControlBaseVars(), state1= FatigueControlBaseVars()):
+  '''Fatigue limit state control variables.
+
+  :ivar idSection: section identifier
+  :ivar combName:  name of the load combinations to deal with
+  :ivar state0:    Fatigue values (FatigueControlBaseVars) under permanent load.
+  :ivar state1:    Fatigue values (FatigueControlBaseVars) under fatigue load.
+  :ivar concreteLimitStress: limit for the concrete stress as specified in SIA 262(2013)  4.3.8.3.1
+  :ivar concreteBendingCF:   concrete capacity factor under fatigue due to normal stresses.
+  :ivar shearLimit:        limit for the shear force as sepecified in SIA 262(2013)  4.3.8.3.2
+  :ivar concreteShearCF:   concrete capacity factor under fatigue due to shear forces.
+  :ivar Mu:        ultimate bending moment
+  :ivar Vu:        ultimate shear force  
+  '''
+  def __init__(self,idSection= 'nil',state0= None, state1= None):
     self.idSection= idSection #Reinforced concrete section identifier.
-    self.state0= state0 #Under permanent loads.
-    self.state1= state1 #Under fatigue loads.
+    if(state0):
+      self.state0= state0 #Under permanent loads.
+    else:
+      self.state0= FatigueControlBaseVars()
+    if(state1):
+      self.state1= state1 #Under fatigue loads.
+    else:
+      self.state1= FatigueControlBaseVars()
     self.concreteLimitStress= 0.0 #SIA 262(2013)  4.3.8.3.1
     self.concreteBendingCF= -1.0 #Concrete capacity factor.
     self.shearLimit= 0.0 #SIA 262(2013)  4.3.8.3.2
