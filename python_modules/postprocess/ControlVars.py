@@ -6,11 +6,12 @@ from __future__ import division
    IN def_vars_control.py WICH MUST DISSAPEAR.
 '''
 
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014 LCPT"
+__author__= "Luis C. Pérez Tato (LCPT), Ana Ortega(AO_O)"
+__copyright__= "Copyright 2016,LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
+
 
 import os
 import scipy
@@ -289,7 +290,7 @@ class RCShearControlVars(BiaxialBendingControlVars):
   :ivar CF:       capacity factor (efficiency)
   :ivar N:        axial force
   :ivar My:       bending moment about Y axis
-  :ivar Mz:       bending moment about Y axis
+  :ivar Mz:       bending moment about Z axis
   :ivar Mu:       ultimate bending moment
   :ivar Vy:       shear force parallel to the y axis
   :ivar Vz:       shear force parallel to the z axis
@@ -423,7 +424,10 @@ class FatigueControlBaseVars(NMyMz):
   :ivar negSteelStress: compression stress in rebars.
   :ivar concreteStress: compression stress in concrete.
   '''
-  def __init__(self,combName= 'nil',N= 0.0, My= 0.0, Mz= 0.0, Vy= 0.0, posSteelStress= 0.0, negSteelStress= 0.0, concreteStress= 0.0):
+  def __init__(self,combName= 'nil',CF=-1.0,N= 0.0, My= 0.0, Mz= 0.0, Vy= 0.0, posSteelStress= 0.0, negSteelStress= 0.0, concreteStress= 0.0):
+    #Note: Currently, CF attribute  has no sense in fatigue verification. Perhaps, in the future, the maximum value
+    #of the CF calculated can be represented by CF. For now, this attribute remains in this class only for a purpose
+    #of compatibility with the parent classes
     super(FatigueControlBaseVars,self).__init__(combName,N,My,Mz)
     self.Vy= Vy #Shear.
     self.posSteelStress= posSteelStress #traction stress in rebars.
@@ -470,22 +474,22 @@ class FatigueControlVars(ControlVarsBase):
   :ivar Mu:        ultimate bending moment
   :ivar Vu:        ultimate shear force  
   '''
-  def __init__(self,idSection= 'nil',state0= None, state1= None):
+  def __init__(self,idSection= 'nil', controlBaseVars0= None, controlBaseVars1= None, concreteLimitStress= 0.0,concreteBendingCF=-1.0,shearLimit=0.0,concreteShearCF=-1.0,Mu=0.0,Vu=0.0):
     self.idSection= idSection #Reinforced concrete section identifier.
-    if(state0):
-      self.state0= state0 #Under permanent loads.
+    if(controlBaseVars0):
+      self.state0=  controlBaseVars0 #Under permanent loads.
     else:
       self.state0= FatigueControlBaseVars()
-    if(state1):
-      self.state1= state1 #Under fatigue loads.
+    if(controlBaseVars1):
+      self.state1= controlBaseVars1 #Under fatigue loads.
     else:
       self.state1= FatigueControlBaseVars()
-    self.concreteLimitStress= 0.0 #SIA 262(2013)  4.3.8.3.1
-    self.concreteBendingCF= -1.0 #Concrete capacity factor.
-    self.shearLimit= 0.0 #SIA 262(2013)  4.3.8.3.2
-    self.concreteShearCF= -1.0 #Concrete shear factor.
-    self.Mu= 0.0 #Ultimate bending moment.
-    self.Vu= 0.0 #Ultimate shear.
+    self.concreteLimitStress= concreteLimitStress #SIA 262(2013)  4.3.8.3.1
+    self.concreteBendingCF= concreteBendingCF #Concrete capacity factor.
+    self.shearLimit=shearLimit #SIA 262(2013)  4.3.8.3.2
+    self.concreteShearCF= concreteShearCF #Concrete shear factor.
+    self.Mu= Mu #Ultimate bending moment.
+    self.Vu= Vu #Ultimate shear.
   def getSteelPosStressIncrement(self):
     '''Returns positive stress increment in rebars.'''
     return self.state1.posSteelStress-self.state0.posSteelStress

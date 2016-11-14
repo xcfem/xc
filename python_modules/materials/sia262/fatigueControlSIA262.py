@@ -115,15 +115,18 @@ class FatigueController(lsc.LimitStateControllerBase):
 
   def check(self,elements, combNm):
     '''
-    Checks fatigue limit state.
-    Parameters:
-      elements:    elements to check
-      combNm: combination name i.e.:
-        ELUF0: unloaded structure.
-        ELUF1: fatigue load in position 1.
-        ELUF2: fatigue load in position 2 (XXX not yet implemented!!!).
-        ELUF3: fatigue load in position 3 (XXX not yet implemented!!!).
-        ...
+    Checks the fatigue limit state for all the elements in the given set and
+    for the  combination passed as a parameter. The verification is carried out
+    following the procedure proposed in the standard SIA262 (art. 4.3.8)
+
+    :param elements:  xc set of elements to be checked
+    :param combNm:    combination name e.g.:
+
+        - ELUF0: unloaded structure (permanent loads)
+        - ELUF1: fatigue load in position 1.
+        - ELUF2: fatigue load in position 2 (XXX not yet implemented!!!).
+        - ELUF3: fatigue load in position 3 (XXX not yet implemented!!!).
+        - ...
     '''
     print 'Controlling limit state: ',self.limitStateLabel, ' for load combination: ',combNm,"\n"
 
