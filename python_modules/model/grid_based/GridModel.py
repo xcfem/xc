@@ -283,7 +283,7 @@ class MaterialLinesMap(NamedObjectsMap):
       self[key].generateMesh(seedElemLoader)
 
 class ConstrainedRanges(IJKRangeList):
-  '''Constrains in the nodes belonging to the lines in a range-region
+  '''Constraints in the nodes belonging to the lines in a range-region
 
   :ivar name:  name to identify the boundary condition
   :ivar grid:  name of the grid-based model
@@ -297,7 +297,7 @@ class ConstrainedRanges(IJKRangeList):
     super(ConstrainedRanges,self).__init__(name,grid,list())
     self.constraints= constraints
   def generateContraintsInLines(self):
-    constraints= self.grid.prep.getConstraintLoader
+    constrLoader= self.grid.prep.getConstraintLoader
     for rng in self.ranges:
       lstLin= self.grid.getLstLinRange(rng)
       for l in lstLin:
@@ -306,7 +306,7 @@ class ConstrainedRanges(IJKRangeList):
           for i in range(0,6):
             coac= self.constraints[i]
             if(coac <> 'free'):
-              constraints.newSPConstraint(n.tag,i,coac) 
+              constrLoader.newSPConstraint(n.tag,i,coac) 
 
 
 class ConstrainedRangesMap(NamedObjectsMap):
