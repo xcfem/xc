@@ -853,9 +853,17 @@ class GridModel(object):
         self.lPatterns[nbrset]= grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[cs].lstSup,nbrset)
     return self.dicGeomEnt
 
-  def displayMesh(self,partToDisplay,caption= ''):
+  def displayMesh(self,partToDisplay,caption= '',viewNm='XYZPos'):
+    ''':returns: a graphical representation of the mesh
+
+    :param partToDisplay: XC set of elements to be displayed
+    :param caption:       text to write in the graphic
+    :param viewNm:        name of the view to use
+           predefined view names: 'XYZPos','XNeg','XPos','YNeg','YPos',
+           'ZNeg','ZPos'  (defaults to 'XYZPos')
+    '''
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.grafico_mef(partToDisplay,caption)
+    defDisplay.grafico_mef(partToDisplay,caption,viewNm)
     return defDisplay
 
   def displayLocalAxes(self,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",caption= '',fileName=None):

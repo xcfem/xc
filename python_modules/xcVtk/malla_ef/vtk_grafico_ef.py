@@ -131,11 +131,16 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     # else:
     #   print "Entity: ", self.gridRecord.entToLabel, " unknown."
 
-  def grafico_mef(self,xcSet,caption= ''):
-    ''' Parameters:
-       xcSet:   set to be represented
-       caption: text to display in the graphic.
+  def grafico_mef(self,xcSet,caption= '',viewNm='XYZPos'):
+    ''' :returs: a graphic of the FE mesh
+
+    :param xcSet:   XC set of elements to be displayed
+    :param caption: text to write in the graphic
+    :param viewNm:  name of the view to use for the representation
+                    predefined view names: 'XYZPos','XNeg','XPos','YNeg','YPos',
+                    'ZNeg','ZPos'  (defaults to 'XYZPos')
     '''
+    self.viewName=viewNm
     self.setupGrid(xcSet)
     self.displayGrid(caption)
 
