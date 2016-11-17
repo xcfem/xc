@@ -18,10 +18,11 @@ class RecordDefDiagramaEsf(cd.ColoredDiagram):
   def __init__(self,scale,fUnitConv,sets,component):
     ''' Diagram constructor
 
-        :param scale: scale factor for the diagram (can be negative too).
-        :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3.
-        :param sets: list of element sets where the diagram will be displayed.
-        :param component: magnitude to display (N, My, Vz,...)
+        :ivar scale:     scale factor for the diagram (can be negative too).
+        :ivar fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3.
+        :ivar sets:      list of element sets for which the diagram will be displayed.
+        :ivar component: property to be displayed 
+                         (possible arguments: 'N', 'My', 'Mz'Vz,...)
     '''
 
     super(RecordDefDiagramaEsf,self).__init__(scale,fUnitConv)

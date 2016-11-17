@@ -838,9 +838,10 @@ class GridModel(object):
       self.constrainedRanges.generateContraintsInLines()
     if(hasattr(self,'elasticFoundationRanges')):
       self.elasticFoundationRanges.generateSprings(self.getPreprocessor(),self.dicGeomEnt)
-    for setName in self.conjSup: #???
-      #vars()[setName]= 
-      grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[setName].lstSup,setName)
+    if(hasattr(self,'conjSup')):
+      for setName in self.conjSup: #???
+        #vars()[setName]= 
+        grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[setName].lstSup,setName)
 
   def generateLoads(self):
     '''Append the loads for each load state into corresponding load patterns and :returns: a dictionary with identifiers and the geometric entities (lines and surfaces) generated.
