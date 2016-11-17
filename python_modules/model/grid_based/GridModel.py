@@ -838,9 +838,10 @@ class GridModel(object):
       self.constrainedRanges.generateContraintsInLines()
     if(hasattr(self,'elasticFoundationRanges')):
       self.elasticFoundationRanges.generateSprings(self.getPreprocessor(),self.dicGeomEnt)
-    for setName in self.conjSup: #???
-      #vars()[setName]= 
-      grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[setName].lstSup,setName)
+    if(hasattr(self,'conjSup')):
+      for setName in self.conjSup: #???
+        #vars()[setName]= 
+        grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[setName].lstSup,setName)
 
   def generateLoads(self):
     '''Append the loads for each load state into corresponding load patterns and :returns: a dictionary with identifiers and the geometric entities (lines and surfaces) generated.
@@ -852,9 +853,17 @@ class GridModel(object):
         self.lPatterns[nbrset]= grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[cs].lstSup,nbrset)
     return self.dicGeomEnt
 
-  def displayMesh(self,partToDisplay,caption= ''):
+  def displayMesh(self,partToDisplay,caption= '',viewNm='XYZPos'):
+    ''':returns: a graphical representation of the mesh
+
+    :param partToDisplay: XC set of elements to be displayed
+    :param caption:       text to write in the graphic
+    :param viewNm:        name of the view to use
+           predefined view names: 'XYZPos','XNeg','XPos','YNeg','YPos',
+           'ZNeg','ZPos'  (defaults to 'XYZPos')
+    '''
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.grafico_mef(partToDisplay,caption)
+    defDisplay.grafico_mef(partToDisplay,caption,viewNm)
     return defDisplay
 
   def displayLocalAxes(self,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",caption= '',fileName=None):
