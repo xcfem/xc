@@ -723,17 +723,18 @@ class GridModel(object):
   def getElements(self, nombreConj):
     ''':returns: a list of the elements of the material surfaces or lines.'''
     retval= list()
-    keys= self.conjSup.keys()
-    if(nombreConj in keys):
-      sup= self.conjSup[nombreConj]
-      retval= sup.getElements()
-    else:
+    if(hasattr(self,'conjSup')):
+      keys= self.conjSup.keys()
+      if(nombreConj in keys):
+        sup= self.conjSup[nombreConj]
+        retval+= sup.getElements()
+    if(hasattr(self,'conjLin')):
       keys= self.conjLin.keys()
       if(nombreConj in keys):
         lin= self.conjLin[nombreConj]
-        retval= lin.getElements()
-      else:
-        lmsg.warning('part: '+ nombreConj+ ' not found.')
+        retval+= lin.getElements()
+    if len(retval)==0:
+      lmsg.warning('part: '+ nombreConj+ ' not found or it contains no elements.')
     return retval
 
   def getElementsFromParts(self, parts):
