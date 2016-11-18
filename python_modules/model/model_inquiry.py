@@ -28,3 +28,27 @@ def getTagsElementosSet(preprocessor,setName):
   for n in elems:
     retvalTagsElementosSet.append(n.tag)
   return retvalTagsElementosSet
+
+def getNodesInCoordinateRegion(xmin,xmax,ymin,ymax,zmin,zmax,xcSet):
+  ''':returns: a list with the the nodes in a cubic region defined by 2 points
+  with coordinates (xmin,ymin,zmin) and (xmax,ymax,zmax)
+
+  :param xmin,ymin,zmin,xmax,ymax,zmax: coordinates delimiting the region
+  :param xcSet:   xc set of nodes to which restrict the search 
+
+  '''
+  retval=list()
+  setNodes=xcSet.getNodes
+  for n in setNodes:
+    vCoord=n.getCoo
+    xNod=vCoord[0]
+    if xNod >= xmin:
+      if xNod <= xmax:
+        yNod=vCoord[1]
+        if yNod >= ymin:
+          if yNod <= ymax:
+            zNod=vCoord[2]
+            if zNod >= zmin:
+              if zNod <= zmax:
+                retval.append(n)
+  return retval
