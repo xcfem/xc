@@ -516,4 +516,4 @@ def lstUnionSetsSurf(setSurf1,setSurf2):
     retval= list(set(retval))       #elimina tags repetidos
     return retval
 
-def 
+

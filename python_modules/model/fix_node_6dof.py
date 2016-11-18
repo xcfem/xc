@@ -149,3 +149,22 @@ def Nodo6DOFGirosImpedidos(coacciones, idNodo):
   coacciones.newSPConstraint(idNodo,4,0.0)
   coacciones.newSPConstraint(idNodo,5,0.0)
 
+def LstNodes6DOFConstr(preprocessor,lstNodes,constrCond):
+  '''Constraints the nodes in the list passed as parameter 
+  according to given 6-values set of constraints conditions
+
+  :param preprocessor: preprocessor
+  :param lstNodes:     list of nodes to which apply the 
+                       constraints
+  :param constrCond:   list of constraint conditions, expressed as 
+               [uX, uY, uZ,rotX, rotY, rotZ], where:
+
+             - uX, uY, uZ: translations in the X, Y and Z directions; 
+             - rotX, rotY, rotZ: rotations about the X, Y and Z axis
+             - 'free': means no constraint values 
+  '''
+  constrLoader=preprocessor.getConstraintLoader
+  for n in lstNodes:
+    for i in range(0,6):
+      if(constrCond[i] <> 'free'):
+        constrLoader.newSPConstraint(n.tag,i,constrCond[i]) 
