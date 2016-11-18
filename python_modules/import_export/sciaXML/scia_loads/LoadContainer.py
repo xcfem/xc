@@ -159,8 +159,6 @@ class FreeLoadContainer(LoadContainerBase):
         loadSets.append(surfaceLoadSet)
       else:
         elem= domain.getMesh.getElement(elemTags[0]) #Only one element...
-        # p= elem.getPosCentroid(True)
-        # pLoad= nld.PointForceRecord(destLoadCase, self.pointLoadCounter,geom.Pos3d(p.x,p.y,p.z),1.0)
         pLoad= nld.PointForceRecord(destLoadCase, self.pointLoadCounter,elem.getPosCentroid(True),1.0)
         pLoad.value= totalForceModulus
         pLoad.vDir= [totalForce.x/pLoad.value,totalForce.y/pLoad.value,totalForce.z/pLoad.value]
