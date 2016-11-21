@@ -97,7 +97,7 @@ class NormalStressesRCLimitStateData(LimitStateData):
     :param loadCombinations: load combination handler inside the XC solver.
     '''
     loadCombinations.clear()
-    combContainer.ULS.dumpCombinations(loadCombinations)
+    combContainer.ULS.perm.dumpCombinations(loadCombinations)
     return loadCombinations
 
   def check(self,reinfConcreteSections):
@@ -124,7 +124,7 @@ class ShearResistanceRCLimitStateData(LimitStateData):
     :param loadCombinations: load combination handler inside the XC solver.
     '''
     loadCombinations.clear()
-    combContainer.ULS.dumpCombinations(loadCombinations)
+    combContainer.ULS.perm.dumpCombinations(loadCombinations)
     return loadCombinations
   def check(self,reinfConcreteSections):
     '''Checking of shear resistance in ultimate limit states 

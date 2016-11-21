@@ -295,11 +295,11 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_interseccion(const Pos3d &p) con
         if(lst_intersec.empty())
           {
             
-	    std::cerr << "No intersecan. " << std::endl
-                      << " Area triangulo: " << triang.Area() << std::endl
-                      << " vértice 1: " << i->Vertice(1)
-                      << " vertice 2: " << i->Vertice(2)
-                      << " vertice 3: " << i->Vertice(3) << std::endl
+	    std::cerr << "Doesn't intersect. " << std::endl
+                      << " Triangle area: " << triang.Area() << std::endl
+                      << " vertex 1: " << i->Vertice(1)
+                      << " vertex 2: " << i->Vertice(2)
+                      << " vertex 3: " << i->Vertice(3) << std::endl
                       << " terna: " << p << std::endl;
             exit(-1);
           }
