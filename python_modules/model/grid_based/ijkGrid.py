@@ -3,11 +3,11 @@
 
 '''ijkGrid.py: model generation based on a grid of 3D positions.'''
 
-__author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, A_OO and LCPT"
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, AO_O and LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "ana.Ortega.Ort@gmail.com l.pereztato@gmail.com" 
+__email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es" 
 
 import xc_base
 import geom
@@ -189,7 +189,7 @@ class ijkGrid(object):
     retval.nDivJ=1 #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
     return retval
 
-  def generateAreas(self,ijkRange,dicGeomEnt):
+  def generateAreas(self,ijkRange,dicQuadSurf):
     'genera las superficies contenidas en un rectángulo comprendido entre las coordenadas'
     'que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
     'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
@@ -205,7 +205,7 @@ class ijkGrid(object):
             while j<= ijkRange.ijkMax[1]-1:
                 a= self.newQuadSurfaceConstK(i,j,k)
                 retval.append(a)
-                dicGeomEnt[a.name]= a
+                dicQuadSurf[a.name]= a
                 j+=1
             i+=1
     elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
@@ -215,7 +215,7 @@ class ijkGrid(object):
             while k<= ijkRange.ijkMax[2]-1:
                 a= self.newQuadSurfaceConstJ(i,j,k)
                 retval.append(a)
-                dicGeomEnt[a.name]= a
+                dicQuadSurf[a.name]= a
                 k+=1
             i+=1
     elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
@@ -225,9 +225,10 @@ class ijkGrid(object):
             while k<= ijkRange.ijkMax[2]-1:
                 a= self.newQuadSurfaceConstI(i,j,k)
                 retval.append(a)
-                dicGeomEnt[a.name]= a
+                dicQuadSurf[a.name]= a
                 k+=1
             j+=1
+#    print dicQuadSurf
     return retval
 
   def generateLines(self,ijkRange,dicLin): 
@@ -275,9 +276,10 @@ class ijkGrid(object):
             nmbrLin='l'+'%04.0f' % pto1 +'%04.0f' % pto2 
             dicLin[nmbrLin]=l
             k+=1
+#    print dicLin
     return retval
 
-  def getSetInRange(self,ijkRange,dicGeomEnt,nmbrSet):
+  def getSetInRange(self,ijkRange,dicQuadSurf,nmbrSet):
     'devuelve el set de entidades (superficies y todas las asociadas a estas superficies)'
     'contenidas en un rectángulo comprendido entre las coordenadas'
     'que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
@@ -296,8 +298,8 @@ class ijkGrid(object):
                 pto3= self.getTagIndices(i+1,j+1,k)
                 pto4= self.getTagIndices(i,j+1,k)
                 nmbrSup= getSupName(pto1,pto2,pto3,pto4)
-                if nmbrSup in dicGeomEnt:
-                    retval.getSurfaces.append(dicGeomEnt[nmbrSup])
+                if nmbrSup in dicQuadSurf:
+                    retval.getSurfaces.append(dicQuadSurf[nmbrSup])
                 j+=1
             i+=1
     elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
@@ -310,8 +312,8 @@ class ijkGrid(object):
                 pto3= self.getTagIndices(i+1,j,k+1)
                 pto4= self.getTagIndices(i+1,j,k)
                 nmbrSup= getSupName(pto1,pto2,pto3,pto4)
-                if nmbrSup in dicGeomEnt:
-                    retval.getSurfaces.append(dicGeomEnt[nmbrSup])
+                if nmbrSup in dicQuadSurf:
+                    retval.getSurfaces.append(dicQuadSurf[nmbrSup])
                 k+=1
             i+=1
     elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
@@ -324,8 +326,8 @@ class ijkGrid(object):
                 pto3= self.getTagIndices(i,j+1,k+1)
                 pto4= self.getTagIndices(i,j,k+1)
                 nmbrSup= getSupName(pto1,pto2,pto3,pto4)
-                if nmbrSup in dicGeomEnt:
-                    retval.getSurfaces.append(dicGeomEnt[nmbrSup])
+                if nmbrSup in dicQuadSurf:
+                    retval.getSurfaces.append(dicQuadSurf[nmbrSup])
                 k+=1
             j+=1
     retval.fillDownwards()    
@@ -419,15 +421,26 @@ class ijkGrid(object):
             j+=1
     return retval
 
-  def appendLoadInRangeToCurrentLoadPattern(self,ijkRange,dicGeomEnt,nmbrSet,loadVector):
-    s= self.getSetInRange(ijkRange,dicGeomEnt,nmbrSet)
+  def appendLoadInRangeToCurrentLoadPattern(self,ijkRange,dicQuadSurf,nmbrSet,loadVector):
+    s= self.getSetInRange(ijkRange,dicQuadSurf,nmbrSet)
     sElem=s.getElements
     for e in sElem:
       #print e.tag
       e.vector3dUniformLoadGlobal(loadVector)
 
-  def appendEarthPressureToCurrentLoadPattern(self,ijkRange,dicGeomEnt,nmbrSet,earthPressLoadressure):
-    s= self.getSetInRange(ijkRange,dicGeomEnt,nmbrSet)
+  def appendLoadBeamsInRangeToCurrentLoadPattern(self,ijkRange,loadVector,refSystem):
+    lstLinRg=self.getLstLinRange(ijkRange)
+    for l in lstLinRg:
+      lElem=l.getElements()
+      for e in lElem:
+        if refSystem=='Local':
+          e.vector3dUniformLoadLocal(loadVector)
+        else:
+          e.vector3dUniformLoadGlobal(loadVector)
+        
+
+  def appendEarthPressureToCurrentLoadPattern(self,ijkRange,dicQuadSurf,nmbrSet,earthPressLoadressure):
+    s= self.getSetInRange(ijkRange,dicQuadSurf,nmbrSet)
     sElem=s.getElements
     for e in sElem:
       zElem=e.getCooCentroid(False)[2]
