@@ -211,8 +211,8 @@ class Element: public MeshComponent
     virtual Matrix getLocalAxes(bool initialGeometry= true) const;
     Pos3d getPosNodo(const size_t &i,bool initialGeometry= true) const;
     std::list<Pos3d> getPosNodos(bool initialGeometry= true) const;
-    virtual const Pos3d &getPosCdg(bool initialGeometry= true) const;
-    const Vector &getCooCdg(bool initialGeometry= true) const;
+    virtual Pos3d getPosCdg(bool initialGeometry= true) const;
+    Vector getCooCdg(bool initialGeometry= true) const;
     TritrizPos3d getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry= true);
     virtual double getDist2(const Pos2d &p,bool initialGeometry= true) const;
     virtual double getDist(const Pos2d &p,bool initialGeometry= true) const;

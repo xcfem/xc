@@ -105,11 +105,13 @@ class PointSupportDict(dict):
     for k in points:
       p= preprocessor.getCad.getPoints.get(k)
       pointTag= p.tag
-      nodeTag= p.getNode().tag
-      if(nodeTag in nodeSupportsTags):
-        psr= PointSupportRecord(supportId,pointTag,nodeSupports[nodeTag])
-        self.append(psr)
-        supportId+= 1
+      node= p.getNode()
+      if(node):
+        nodeTag= node.tag
+        if(nodeTag in nodeSupportsTags):
+          psr= PointSupportRecord(supportId,pointTag,nodeSupports[nodeTag])
+          self.append(psr)
+          supportId+= 1
 
 class BlockData(object):
   '''Block topology entities: points, lines, faces, solids,... '''

@@ -21,12 +21,13 @@ import xml.etree.cElementTree as ET
 import LoadCaseProperties as lcp
 import NodeLoadProperties as nlp
 import PointForceFreeProperties as pffp
+import uuid
 
 containerId= "{3E5FFA16-D1A4-4589-AD5A-4A0FC555E8B8}"
 containerClsId= containerId
 tbName= "DataAddLoad.EP_SurfaceForceFree.1"
 tbProgId= tbName
-tbId= "4DD6C19E-7578-4591-A547-7B0362419697"
+tbId= str(uuid.uuid4()) #"4DD6C19E-7578-4591-A547-7B0362419697"
 tbClsId= containerClsId
 
 idLoadCase= nlp.idLoadCase

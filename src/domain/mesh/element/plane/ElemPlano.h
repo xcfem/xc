@@ -61,7 +61,7 @@ class ElemPlano : public ElemWithMaterial<NNODOS, PhysProp>
 
     virtual Poligono3d getPoligono(bool initialGeometry= true) const;
     virtual Segmento3d getLado(const size_t &i,bool initialGeometry= true) const;
-    const Pos3d &getPosCdg(bool initialGeometry= true) const;
+    Pos3d getPosCdg(bool initialGeometry= true) const;
     double getPerimetro(bool initialGeometry= true) const;
     double getArea(bool initialGeometry= true) const;
     virtual void calculaAreasTributarias(bool initialGeometry= true) const;
@@ -119,12 +119,8 @@ void XC::ElemPlano<NNODOS, PhysProp>::setDomain(Domain *theDomain)
 
 //! @brief Devuelve la posición del centro de gravedad del elemento.
 template <int NNODOS,class PhysProp>
-const Pos3d &XC::ElemPlano<NNODOS, PhysProp>::getPosCdg(bool initialGeometry) const
-  {
-    static Pos3d retval;
-    retval= getPoligono(initialGeometry).Cdg();
-    return retval;
-  }
+Pos3d XC::ElemPlano<NNODOS, PhysProp>::getPosCdg(bool initialGeometry) const
+  { return getPoligono(initialGeometry).Cdg(); }
 
 //! @brief Devuelve la dimensión del elemento.
 template <int NNODOS,class PhysProp>
