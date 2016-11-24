@@ -31,7 +31,9 @@ def exportInternalForces(nmbComb, elems, fDesc):
         fDesc.write(outStr)
     elif('Beam2d' in elementType):
       e.getResistingForce()
-      internalForces= csif.CrossSectionInternalForces(-e.getN1,-e.getV1,0.0,0.0,0.0,-e.getM1) # Internal forces at the origin of the bar.
+      # Internal forces at the origin of the bar. MAYBE THERE IS A PROBLEM WITH THE SIGNS;
+      # SEE THE 3D BEAM A FEW LINES FORWARD
+      internalForces= csif.CrossSectionInternalForces(-e.getN1,-e.getV1,0.0,0.0,0.0,-e.getM1) 
       fDesc.write(nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()+'\n')
       internalForces= csif.CrossSectionInternalForces(e.getN2,e.getV2,0.0,0.0,0.0,e.getM2) # Internal forces at the end of the bar.
       fDesc.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()+'\n')
