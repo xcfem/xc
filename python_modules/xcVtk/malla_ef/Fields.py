@@ -91,7 +91,16 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
     self.display(defDisplay,fName,caption)
 
 def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv):
-  '''
+  ''':returns: an scalar field that represents the control var over the 
+               elements in the set.
+
+     :param attributeName: name of the element's property that has the 
+                           control var in it for example as in 
+                           elem.getProp(attributeName).eval(argument).
+     :param argument: name of the control var to represent.
+     :param xcSet: represent the field over those elements.
+     :param component: component of the control var to represent.
+     :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
   '''
   nodePropName= cv.extrapolate_control_var(xcSet.getElements,attributeName,argument)
   return ExtrapolatedScalarField(nodePropName,"getProp",xcSet,component,fUnitConv)

@@ -1,4 +1,4 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 ''' Representación de diagramas de esfuerzos (o de otras magnitudes)
    sobre elementos lineales. '''
@@ -12,6 +12,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import geom
 import vtk
 from xcVtk import ColoredDiagram as cd
+from postprocess import ControlVars as cv
 
 class RecordDefDiagramaEsf(cd.ColoredDiagram):
   '''Diagram of internal forces (N,My,Mz,T,Vy,Vz)'''
@@ -19,7 +20,7 @@ class RecordDefDiagramaEsf(cd.ColoredDiagram):
     ''' Diagram constructor
 
         :ivar scale:     scale factor for the diagram (can be negative too).
-        :ivar fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3.
+        :ivar fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
         :ivar sets:      list of element sets for which the diagram will be displayed.
         :ivar component: property to be displayed 
                          (possible arguments: 'N', 'My', 'Mz'Vz,...)
@@ -28,18 +29,18 @@ class RecordDefDiagramaEsf(cd.ColoredDiagram):
     super(RecordDefDiagramaEsf,self).__init__(scale,fUnitConv)
     self.conjuntos= sets
     self.component= component
-    if(self.component == "N"):
-      self.nmbRutinaDiagrama= self.agregaDatosADiagramaAxiles
-    elif(self.component == "Qy"): 
-      self.nmbRutinaDiagrama= self.agregaDatosADiagramaVY
-    elif(self.component == "Qz"): 
-      self.nmbRutinaDiagrama= self.agregaDatosADiagramaVZ
-    elif(self.component == "T"): 
-      self.nmbRutinaDiagrama= self.agregaDatosADiagramaT
-    elif(self.component == "My"): 
-      self.nmbRutinaDiagrama= self.agregaDatosADiagramaMomEjeY
-    elif(self.component == "Mz"): 
-      self.nmbRutinaDiagrama= self.agregaDatosADiagramaMomEjeZ
+    if((self.component == 'N') or (self.component.endswith('_N'))):
+      self.diagramRoutineName= self.agregaDatosADiagramaAxiles
+    elif((self.component == 'Qy') or (self.component.endswith('_Qy'))): 
+      self.diagramRoutineName= self.agregaDatosADiagramaVY
+    elif((self.component == 'Qz') or (self.component.endswith('_Qz'))): 
+      self.diagramRoutineName= self.agregaDatosADiagramaVZ
+    elif((self.component == 'T') or (self.component.endswith('_T'))): 
+      self.diagramRoutineName= self.agregaDatosADiagramaT
+    elif((self.component == 'My') or (self.component.endswith('_My'))): 
+      self.diagramRoutineName= self.agregaDatosADiagramaMomEjeY
+    elif((self.component == 'Mz') or (self.component.endswith('_Mz'))): 
+      self.diagramRoutineName= self.agregaDatosADiagramaMomEjeZ
     else:
       print "component :'", self.component, "' unknown."
 
@@ -109,7 +110,26 @@ class RecordDefDiagramaEsf(cd.ColoredDiagram):
     indiceSet= 0
     numSetsDiagrama= len(self.conjuntos)
     for s in self.conjuntos:
-      self.nmbRutinaDiagrama(s,indxDiagrama)
+      self.diagramRoutineName(s,indxDiagrama)
 
     self.updateLookUpTable()
     self.updateActorDiagrama()
+
+
+def getDiagramFromControlVar(attributeName,argument,xcSet,component,scaleFactor,fUnitConv):
+  ''':returns: a diagram that represents the control var over the elements in the set
+
+     :param attributeName: name of the element's property that has the 
+                           control var in it for example as in 
+                           elem.getProp(attributeName).eval(argument).
+     :param argument: name of the control var to represent.
+     :param xcSet: represent the field over those element sets.
+     :param component: (FUTURE USE!) component of the control var to represent.
+     :param scaleFactor: scale factor (size of the diagram).
+     :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
+  '''
+  if(component):
+    lmsg.warning('component not yet in use. Ignored.')
+  nodePropName= cv.extrapolate_control_var(xcSet.getElements,attributeName,argument)
+  return RecordDefDiagramaEsf(scaleFactor,fUnitConv,[xcSet],nodePropName)
+
