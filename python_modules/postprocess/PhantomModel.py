@@ -221,9 +221,9 @@ class PhantomModel(object):
     :param intForcCombFileName: name of the file containing the forces 
                            and bending moments obtained for each element 
                            for the combinations analyzed
-      analysis:            type of analysis
-      controller:          object that controls limit state in elements.
-      outputFileName:      base name of output file (extensions .py and .tex)
+    :param analysis:       type of analysis
+    :param controller:     object that controls limit state in elements.
+    :param outputFileName: base name of output file (extensions .py and .tex)
     '''
     meanCFs= -1.0 
     if(controller):

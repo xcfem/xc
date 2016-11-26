@@ -55,7 +55,7 @@ class ShearController(lsc.LimitStateControllerBase):
     self.AsTrsv= rcSection.shReinfZ.getAs()
     self.s= rcSection.shReinfZ.shReinfSpacing
     self.Vcu= 0.0 # Contribución del hormigón a la resistencia al esfuerzo cortante.
-    self.Vsu= 0.0 # Contribución de las reinforcement a cortante a la resistencia al esfuerzo cortante.
+    self.Vsu= 0.0 # Contribución de las aramaduras a cortante a la resistencia al esfuerzo cortante.
 
   def calcVcu(self, Nd, Md, Mu):
     ''' Calcula el cortante último de la sección sin reinforcement de cortante.'''
