@@ -23,6 +23,7 @@ class RecordShearReinforcement(object):
   
   :ivar familyName:        name identifying the family of shear reinforcing bars
   :ivar nShReinfBranches:  number of effective branches 
+  :ivar areaShReinfBranch: area of the shear reinforcing bar
   :ivar shReinfSpacing:    longitudinal distance between transverse 
                            reinforcements
   :ivar angAlphaShReinf:   angle between the shear reinforcing bars and the 
@@ -30,13 +31,13 @@ class RecordShearReinforcement(object):
   :ivar angThetaConcrStruts: angle between the concrete's compression struts 
                            and the axis of the member
   '''
-  def __init__(self):
-    self.familyName= "noName" # name identifying the family of shear reinforcing bars
-    self.nShReinfBranches= 0.0 # Number of effective branches
-    self.areaShReinfBranch= 0.0 # Area of the shear reinforcing bar
-    self.shReinfSpacing= 0.2 # longitudinal distance between transverse reinforcements
-    self.angAlphaShReinf= math.pi/2.0 # angle between the shear reinforcing bars and the axis of the member.
-    self.angThetaConcrStruts= math.pi/4.0 # angle between the concrete's compression struts and the axis of the member
+  def __init__(self,familyName= "noName",nShReinfBranches= 0.0,areaShReinfBranch= 0.0,shReinfSpacing= 0.2,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0):
+    self.familyName= familyName # name identifying the family of shear reinforcing bars
+    self.nShReinfBranches= nShReinfBranches # Number of effective branches
+    self.areaShReinfBranch= areaShReinfBranch # Area of the shear reinforcing bar
+    self.shReinfSpacing= shReinfSpacing # longitudinal distance between transverse reinforcements
+    self.angAlphaShReinf= angAlphaShReinf # angle between the shear reinforcing bars and the axis of the member.
+    self.angThetaConcrStruts= angThetaConcrStruts # angle between the concrete's compression struts and the axis of the member
     
   def getAs(self):
     '''returns the area per unit length of the family of shear reinforcements
@@ -52,7 +53,7 @@ class MainReinfLayer(object):
   :ivar rebarsSpacing: spacing between bars
   :ivar nRebars:       number of rebars to be placed in the row
   :ivar areaRebar:     cross-sectional area of the bar
-  :ivar nominalCover:    clear cover 
+  :ivar nominalCover:  clear cover 
   :ivar cover:         effective cover (nominalCover+fi/2)
   '''
   def __init__(self,rebarsDiam=10e-3,areaRebar= areaBarrasEHE.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03):
@@ -117,10 +118,12 @@ class BasicRecordRCSection(object):
   :ivar reinfSteelType:  type of reinforcement steel
   :ivar reinfDiagName:   name identifying the characteristic stress-strain 
                          diagram of the reinforcing steel material
-  :ivar shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
-                      defining the shear reinforcement in Z direction
-  :ivar shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement()
-                     defining the shear reinforcement in Y direction
+  :ivar shReinfZ:        record of type 
+                         defRCSimpleSection.RecordShearReinforcement()
+                         defining the shear reinforcement in Z direction
+  :ivar shReinfY:        record of type 
+                         defRCSimpleSection.RecordShearReinforcement()
+                         defining the shear reinforcement in Y direction
   '''
   def __init__(self,width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
     self.sectionName= "noName"
@@ -213,9 +216,11 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   :ivar reinfSteelType:  type of reinforcement steel
   :ivar reinfDiagName:   name identifying the characteristic stress-strain 
                          diagram of the reinforcing steel material
-  :ivar shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
-                     defining the shear reinforcement in Z direction
-  :ivar shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement() 
+  :ivar shReinfZ:        record of type 
+                         defRCSimpleSection.RecordShearReinforcement()
+                         defining the shear reinforcement in Z direction
+  :ivar shReinfY:        record of type 
+                         defRCSimpleSection.RecordShearReinforcement() 
                          defining the shear reinforcement in Y direction
   :ivar coverMin:        minimum value of end or clear concrete cover of main 
                          bars from both the positive and negative faces
