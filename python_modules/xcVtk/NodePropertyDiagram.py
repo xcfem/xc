@@ -36,3 +36,4 @@ class NodePropertyDiagram(cd.ColoredDiagram):
 
     self.updateLookUpTable()
     self.updateActorDiagrama()
+

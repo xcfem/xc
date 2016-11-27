@@ -65,8 +65,9 @@ class InteractionDiagram: public ClosedTriangleMesh
     virtual InteractionDiagram *clon(void) const;
 
     const Triedro3d *BuscaPtrTriedro(const Pos3d &p) const;
-    double FactorCapacidad(const Pos3d &esf_d) const;
-    Vector FactorCapacidad(const GeomObj::list_Pos3d &lp) const;
+    Pos3d getIntersection(const Pos3d &) const;
+    double FactorCapacidad(const Pos3d &) const;
+    Vector FactorCapacidad(const GeomObj::list_Pos3d &) const;
 
     void Print(std::ostream &os) const;
   };

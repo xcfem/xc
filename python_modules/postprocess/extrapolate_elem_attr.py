@@ -26,9 +26,17 @@ def flatten_attribute(elemSet,attributeName, treshold, limit):
   if(flattened>0):
     print "flattened ", flattened, 'values over', len(elemSet)
 
-def create_attribute_at_nodes(elemSet,attributeName,initialValue):
+def create_attribute_at_nodes(xcSet,attributeName,initialValue):
+  ''' Creates an attribute on the nodes of the set being
+      passed as parameter.
+
+     :param xcSet: nodes that will receive the attribute.
+     :param attributeName: name of the attribute to define.
+     :param initialValue: initial value to assign to the attribute.
+     :returns: tags of the affected nodes.
+  '''
   nodeTags= {}
-  for e in elemSet:
+  for e in xcSet:
     elemNodes= e.getNodes
     sz= len(elemNodes)
     for i in range(0,sz):
@@ -45,6 +53,7 @@ def create_attribute_at_nodes(elemSet,attributeName,initialValue):
 
 def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,initialValue= 0.0):
   '''Extrapolates element's function values to the nodes.
+
      elemSet: set of elements.
      attributeName: name of the property which will be defined at the nodes.
      function: name of the function to call for each element.

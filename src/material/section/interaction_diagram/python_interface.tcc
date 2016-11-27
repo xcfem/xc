@@ -67,6 +67,7 @@ double (XC::InteractionDiagram::*getFactorCapacidad)(const Pos3d &esf_d) const= 
 class_<XC::InteractionDiagram, bases<XC::ClosedTriangleMesh>, boost::noncopyable >("InteractionDiagram", no_init)
   .def("centroid",&XC::InteractionDiagram::Cdg)
   .def("getLength",&XC::InteractionDiagram::Longitud)
+  .def("getIntersection",&XC::InteractionDiagram::getIntersection,"Returns the intersection of the ray O->point(N,My,Mz) with the interaction diagram.")
   .def("getCapacityFactor",getFactorCapacidad)
   .def("writeTo",&XC::InteractionDiagram::writeTo)
   .def("readFrom",&XC::InteractionDiagram::readFrom)

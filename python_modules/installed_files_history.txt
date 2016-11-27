@@ -788,6 +788,8 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/cadMesh.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/ColoredDiagram.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/ColoredDiagram.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/ControlVarDiagram.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/ControlVarDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/creaArraySetData.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/creaArraySetData.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/DirectionFieldData.py
@@ -878,6 +880,8 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_grafico_base.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_grafico_diagrama_esfuerzos.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_grafico_diagrama_esfuerzos.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/vtkInternalForceDiagram.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/vtkInternalForceDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_cells.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_cells.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/vtk_load_dblprop_cells.py

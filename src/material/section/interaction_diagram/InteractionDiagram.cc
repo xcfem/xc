@@ -232,6 +232,22 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_interseccion(const Pos3d &p) con
     return lst_intersec;
   }
 
+//! @brief Returns the intersection of the ray O->esf_d with the
+//! interaction diagram.
+Pos3d XC::InteractionDiagram::getIntersection(const Pos3d &esf_d) const
+  {
+    Pos3d retval;
+    const GeomObj::list_Pos3d lst_intersec= get_interseccion(esf_d);
+    if(!lst_intersec.empty())
+      retval= *(lst_intersec.begin());
+    else
+      {
+       std::cerr << "InteractionDiagram::FactorCapacidad; no se encontró la intersección para la terna: "
+                 << esf_d << std::endl;
+      }
+    return retval;    
+  }
+
 //! @brief Devuelve el factor de capacidad para la terna de esfuerzos que se pasan como parámetro.
 double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
   {

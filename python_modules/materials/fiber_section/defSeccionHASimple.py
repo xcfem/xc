@@ -290,6 +290,11 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   def getAc(self):
     '''returns the cross-sectional area of the section'''
     return self.width*self.depth
+  def getRoughVcuEstimation(self):
+    '''returns a minimal value (normally shear strength will be greater)
+       of the shear strength of the concrete section Vcu expressed
+       in newtons.'''
+    return 500*self.getAc()
   def getI(self):
     '''returns the second moment of area about the middle axis parallel to 
     the width '''

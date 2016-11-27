@@ -151,17 +151,17 @@ def checksReports(limitStateLabel,setsToReport,argsToReport,capTexts,pathGr,texR
     dfDisp= vtk_grafico_ef.RecordDefDisplayEF()
     for st in setsToReport:
         for arg in argsToReport:
-            attributeName= limitStateLabel + 'Dir1'
+            attributeName= limitStateLabel + 'Sect1'
             field= Fields.getScalarFieldFromControlVar(attributeName,arg,st.elSet,None,1.0)
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.genDescr.capitalize() + ', ' + st.sectDescr[0]
-            grFileNm=pathGr+st.elSet.name+arg+'Dir1'
+            grFileNm=pathGr+st.elSet.name+arg+'Sect1'
             field.display(defDisplay=dfDisp,caption=capt,fName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
 
-            attributeName= limitStateLabel + 'Dir2'
+            attributeName= limitStateLabel + 'Sect2'
             field= Fields.getScalarFieldFromControlVar(attributeName,arg,st.elSet,None,1.0)
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.genDescr.capitalize() + ', ' + st.sectDescr[1]
-            grFileNm=pathGr+st.elSet.name+arg+'Dir2'
+            grFileNm=pathGr+st.elSet.name+arg+'Sect2'
             field.display(defDisplay=dfDisp,caption=capt,fName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
     report.close()

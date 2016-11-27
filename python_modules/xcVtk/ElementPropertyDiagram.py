@@ -19,8 +19,15 @@ class ElementPropertyDiagram(cd.ColoredDiagram):
   '''Diagram of element properties'''
   envelopes= set(['N+','N-','My+','My-','Mz+','Mz-','Vy+','Vy-','Vz+','Vz-','T+','T-'])
 
-  def __init__(self,scale,fUnitConv,sets,propertyName):
-    super(ElementPropertyDiagram,self).__init__(scale,fUnitConv)
+  def __init__(self,scaleFactor,fUnitConv,sets,propertyName):
+    '''Diagram that represents a property value over several sets of elements.
+
+       :param scaleFactor: scale factor (size of the diagram).
+       :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
+       :param propertyName: name of the element's property to represent.
+       :param sets: represent the field over those element sets.
+    '''
+    super(ElementPropertyDiagram,self).__init__(scaleFactor,fUnitConv)
     self.conjuntos= sets
     self.propertyName= propertyName
 
@@ -109,3 +116,4 @@ class ElementPropertyDiagram(cd.ColoredDiagram):
 
     self.updateLookUpTable()
     self.updateActorDiagrama()
+

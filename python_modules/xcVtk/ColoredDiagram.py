@@ -14,7 +14,8 @@ from xcVtk import vtk_lut_field
 ''' Define las variables que se emplean para definir
    un diagrama de esfuerzos. '''
 class ColoredDiagram(vtk_lut_field.LUTField):
-  ''' Colored diagram of a function over a linear domain (set of 1D elments for example). '''
+  ''' Colored diagram of a function over a linear domain (set of 1D 
+      elements for example). '''
   def __init__(self,scale,fUnitConv):
     super(ColoredDiagram,self).__init__(fUnitConv)
     self.vDir= [0,0,1]
@@ -139,11 +140,13 @@ class ColoredDiagram(vtk_lut_field.LUTField):
 
   def creaTramoDiagrama(self, offset,org, valOrg, dest, valDest):
     ''' Crea un tramo de diagrama.
-       offset: Offset para el índice de los valores a insertar.
-       org: Extremo dorsal del elemento lineal.
-       dest: Extremo frontal del elemento lineal.
-       valOrg: Valor del campo escalar en el extremo dorsal.
-       valDest: Valor del campo escalar en el extremo frontal.'''
+
+       :param offset: index-counter for the values to insert.
+       :param org: Extremo dorsal del elemento lineal.
+       :param dest: Extremo frontal del elemento lineal.
+       :param valOrg: Valor del campo escalar en el extremo dorsal.
+       :param valDest: Valor del campo escalar en el extremo frontal.
+    '''
     vOrg= valOrg*self.fUnitConv
     vDest= valDest*self.fUnitConv
 
@@ -151,8 +154,6 @@ class ColoredDiagram(vtk_lut_field.LUTField):
       return self.creaTramoDiagramaSignoCte(offset,org,vOrg,dest,vDest)
     else:
       return self.creaTramoDiagramaCambioSigno(offset,org,vOrg,dest,vDest)
-
-
 
   def creaActorDiagrama(self):
     # Crea el actor para el diagrama.
@@ -179,9 +180,37 @@ class ColoredDiagram(vtk_lut_field.LUTField):
     recordDisplay.renderer.AddActor2D(self.scalarBar)
 
   def agregaDatosADiagrama(self, elem,indxDiagrama,v0,v1):
-    # Agrega a el diagrama los valores para el elemento que se pasa como parámetro.
-      posNodo0= elem.getNodes[0].getInitialPos3d
-      posNodo1= elem.getNodes[1].getInitialPos3d
-      return self.creaTramoDiagrama(indxDiagrama,posNodo0,v0,posNodo1,v1)
+    ''' Appends to the diagram the values being passed as parameter.
+
+                   ___----* value2
+       value1  *---       |
+               |          |
+               |          |
+             1 +----------+ 2
+
+       :param elem: element over which diagram is represented.
+       :param indxDiagrama: index-counter for the values to insert.
+       :param v0: value at the start node.
+       :param v1: value at the end node. 
+    '''
+    posNodo0= elem.getNodes[0].getInitialPos3d
+    posNodo1= elem.getNodes[1].getInitialPos3d
+    return self.creaTramoDiagrama(indxDiagrama,posNodo0,v0,posNodo1,v1)
 
 
+  def appendDataFromElementEnds(self,vDir,elem,indxDiagram,value1,value2):
+    '''Append to the diagram the data from the element ends as follows:
+
+                   ___----* value2
+       value1  *---       |
+               |          |
+               |          |
+             1 +----------+ 2
+
+       :param elem: element over which diagram is represented.
+       :param indxDiagrama: index-counter for the values to insert.
+       :param value1: value at the start node.
+       :param value2: value at the end node. 
+    '''
+    self.vDir= vDir
+    return self.agregaDatosADiagrama(elem,indxDiagram,value1,value2)

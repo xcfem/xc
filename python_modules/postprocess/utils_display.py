@@ -13,7 +13,7 @@ from miscUtils import string_utils as su
 from xcVtk import vtk_grafico_base
 from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk.malla_ef import Fields
-from xcVtk import vtk_grafico_diagrama_esfuerzos as gde
+#from xcVtk import vtkInternalForceDiagram as ifd
 from postprocess.ControlVars import *
 
 import matplotlib.pyplot as plt

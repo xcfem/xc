@@ -3,7 +3,6 @@
 # execfile("vtk/vtk_crea_array_set_data.xcm")
 # execfile("vtk/malla_ef/vtk_define_malla_elementos.xcm")
 # execfile("vtk/malla_ef/vtk_grafico_ef.xcm")
-# execfile("vtk/vtk_grafico_diagrama_esfuerzos.xcm")
 # execfile("vtk/utilsVtk.lcmm")
 # execfile("vtk/vtk_cargas.xcm")
 

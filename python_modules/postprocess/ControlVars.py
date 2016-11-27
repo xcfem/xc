@@ -568,11 +568,11 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName):
     if(e.getProp("dir")==1):
       fcs1.append(controlVar.getCF())
       texOutput1.write(outStr)
-      xcOutput.write(controlVar.strElementProp(eTag,controlVarName+'Dir1',1e-3))
+      xcOutput.write(controlVar.strElementProp(eTag,controlVarName+'Sect1',1e-3))
     else:
       fcs2.append(controlVar.getCF())
       texOutput2.write(outStr)
-      xcOutput.write(controlVar.strElementProp(eTag,controlVarName+'Dir2',1e-3))
+      xcOutput.write(controlVar.strElementProp(eTag,controlVarName+'Sect2',1e-3))
 
   #printCierreListadoFactorCapacidad("texOutput1")
   #printCierreListadoFactorCapacidad("texOutput2")

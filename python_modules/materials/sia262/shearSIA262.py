@@ -106,22 +106,28 @@ class ShearController(lsc.LimitStateControllerBase):
       alpha= section.shReinfY.angAlphaShReinf
       theta= section.shReinfY.angThetaConcrStruts
 
+      VuTmp= section.getRoughVcuEstimation() 
       NTmp= scc.getStressResultantComponent("N")
       MyTmp= scc.getStressResultantComponent("My")
+      momentThreshold= VuTmp/1000.0
+      if(abs(MyTmp)<momentThreshold): #Too small moment.
+        MyTmp= momentThreshold
       MzTmp= scc.getStressResultantComponent("Mz")
-      posEsf= geom.Pos3d(NTmp,MyTmp,MzTmp)
-      diagInt= e.getProp("diagInt")
-      FCflex= diagInt.getCapacityFactor(posEsf)
-
+      if(abs(MzTmp)<momentThreshold): #Too small moment.
+        MzTmp= momentThreshold
       VyTmp= scc.getStressResultantComponent("Vy")
-      VzTmp= scc.getStressResultantComponent("Vz")
-      Mu= MyTmp/FCflex
-      VuTmp= self.calcVu(NTmp,MyTmp, Mu, VyTmp)
+      if(abs(VyTmp)>VuTmp/5.0): #We "eliminate" very small shear forces.
+        posEsf= geom.Pos3d(NTmp,MyTmp,MzTmp)
+        diagInt= e.getProp("diagInt")
+        intersection= diagInt.getIntersection(posEsf)
 
+        Mu= intersection.z
+        VuTmp= self.calcVu(NTmp,MzTmp, Mu, VyTmp) #Mz associated with Vy
       if(VuTmp!=0.0):
         FCtmp= abs(VyTmp)/VuTmp
       else:
         FCtmp= 10
       if(FCtmp>=e.getProp(self.limitStateLabel).CF):
+        VzTmp= scc.getStressResultantComponent("Vz")
         e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
 
