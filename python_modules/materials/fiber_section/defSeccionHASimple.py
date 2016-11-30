@@ -47,7 +47,7 @@ class RecordShearReinforcement(object):
 
 class MainReinfLayer(object):
   ''' Definition of the variables that make up a family (row) of main 
-  (longitudinal) reinforcing bars
+  (longitudinal) reinforcing bars.
   
   :ivar rebarsDiam:    diameter of the bars
   :ivar rebarsSpacing: spacing between bars
@@ -55,6 +55,9 @@ class MainReinfLayer(object):
   :ivar areaRebar:     cross-sectional area of the bar
   :ivar nominalCover:  clear cover 
   :ivar cover:         effective cover (nominalCover+fi/2)
+
+  Note: If we define the instance variable 'nRebars' that value overrides the 
+  'rebarsSpacing'
   '''
   def __init__(self,rebarsDiam=10e-3,areaRebar= areaBarrasEHE.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03):
     self.rebarsDiam= rebarsDiam
@@ -432,7 +435,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     return typical_materials.defElasticMaterial(preprocessor,self.respTName(),self.concrType.Gcm()*JTorsion) # Respuesta de la sección a torsión.
 
   def getRespVy(self,preprocessor):
-    '''Material for modeling z shear response of section'''
+    '''Material for modeling Y shear response of section'''
     return typical_materials.defElasticMaterial(preprocessor,self.respVyName(),5/6.0*self.width*self.depth*self.concrType.Gcm())
 
   def getRespVz(self,preprocessor):
