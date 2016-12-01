@@ -157,18 +157,25 @@ class ElasticBeam2d: public ProtoBeam2d
     int recvSelf(const CommParameters &);
     
     void Print(std::ostream &s, int flag = 0);
-    inline double getV(void) //Shear force in the middle.
+    //! @brief Internal shear force in the middle of the element.
+    inline double getV(void) 
       { return (q(1)+q(2))/theCoordTransf->getInitialLength(); }
-    inline double getV1(void) //Shear force in the back end.
+    //! @brief Internal shear force at the back end.   
+    inline double getV1(void) 
       { return  (q(1)+q(2))/theCoordTransf->getInitialLength()+p0[1]; }
-    inline double getV2(void) //Shear force in the front end.
+    //! @brief Internal shear force at the front end.   
+    inline double getV2(void) 
       { return -(q(1)+q(2))/theCoordTransf->getInitialLength()+p0[2]; }
-    inline double getN1(void) //Axial force.
+    //! @brief Internal axial force at the back end.   
+    inline double getN1(void)
       { return -q(0)+p0[0]; }
+    //! @brief Internal axial force at the front end.   
     inline double getN2(void)
       { return q(0); }
+    //! @brief Internal bending moment at the back end.   
     inline double getM1(void)
       { return q(1); }
+    //! @brief Internal bending moment at the front end.   
     inline double getM2(void)
       { return q(2); }
 
