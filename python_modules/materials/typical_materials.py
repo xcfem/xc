@@ -258,8 +258,8 @@ def defElasticSectionFromMechProp3d(preprocessor,name,mechProp3d):
 
   :param preprocessor: preprocessor name
   :param name:         name identifying the section
-  :param mechProp2d:   instance of the class MechProp3d that contains the mechanical 
-                  properties of the section
+  :param mechProp2d:   instance of the class MechProp3d that contains the 
+                       mechanical properties of the section
   '''  
   return defElasticSection3d(preprocessor,name,mechProp3d.A,mechProp3d.E,mechProp3d.G,mechProp3d.Iz,mechProp3d.Iy,mechProp3d.J)
 

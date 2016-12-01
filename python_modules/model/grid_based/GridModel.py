@@ -227,12 +227,17 @@ class MaterialLine(MaterialBase):
   :ivar material: name of the material that makes up the line
   :ivar elemType: element type to be used in the discretization
   :ivar elemSize: mean size of the elements
-  :ivar vDirLAxY: direction vector for the element local axis Y 
+  :ivar vDirLAxZ: direction vector for the element local axis Z 
+             defined as xc.Vector([x,y,z]). This is the direction in which
+             the Z local axis of the reinforced concrete sections will be
+             oriented (i.e. in the case of rectangular sections this Z local 
+             axis of the RC section is parallel to the dimension defined as 
+             width of the rectangle)
   :ivar ranges:   lists of grid ranges to delimit the lines of the type in question
 '''
-  def __init__(self,name, grid, material,elemType,elemSize,vDirLAxY):
+  def __init__(self,name, grid, material,elemType,elemSize,vDirLAxZ):
     super(MaterialLine,self).__init__(name,grid,material,elemType,elemSize)
-    self.vDirLAxY=vDirLAxY
+    self.vDirLAxZ=vDirLAxZ
   def generateLines(self, dicLin):
     self.lstLines= list()
     for ijkRange in self.ranges:
@@ -299,7 +304,7 @@ class MaterialLinesMap(NamedObjectsMap):
     self.generateLines(dicLin)
     seedElemLoader= preprocessor.getElementLoader.seedElemLoader
     for key in self:
-      self.trYGlobal.xzVector=self[key].vDirLAxY
+      self.trYGlobal.xzVector=self[key].vDirLAxZ
       seedElemLoader.defaultTransformation= 'trYGlobal'
       self[key].generateMesh(seedElemLoader)
 
@@ -769,7 +774,7 @@ class GridModel(object):
     '''
     return MaterialSurface(name, self.grid, material,elemType,elemSize)
 
-  def newMaterialLine(self,name,material,elemType,elemSize,vDirLAxY):
+  def newMaterialLine(self,name,material,elemType,elemSize,vDirLAxZ):
     ''':returns: a type of line to be discretized from the defined 
     material, type of element and size of the elements.
     
@@ -777,9 +782,14 @@ class GridModel(object):
     :param material: name of the material that makes up the line
     :param elemType: element type be used in the discretization
     :param elemSize: mean size of the elements
-    :param vDirLAxY: direction vector for the element local axis Y (width, nDivIJ)
+    :param vDirLAxZ: direction vector for the element local axis Z 
+             defined as xc.Vector([x,y,z]). This is the direction in which
+             the Z local axis of the reinforced concrete sections will be
+             oriented (i.e. in the case of rectangular sections this Z local 
+             axis of the RC section is parallel to the dimension defined as 
+             width of the rectangle)
     '''
-    return MaterialLine(name, self.grid, material,elemType,elemSize,vDirLAxY)
+    return MaterialLine(name, self.grid, material,elemType,elemSize,vDirLAxZ)
 
   def setMaterials(self,materialDataList):
     ''':returns: the dictionary of materials contained in the list given as a parameter
