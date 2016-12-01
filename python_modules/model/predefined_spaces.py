@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (A_OO) "
-__copyright__= "Copyright 2016, LCPT, A_OO"
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com, ana.Ortega.Ort@gmail.com "
+__email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
 import xc
 
@@ -35,9 +35,9 @@ def gdls_elasticidad3D(nodos):
   nodos.numGdls= 3 #three DOF for each node (Ux,Uy,Uz).
 
 def gdls_resist_materiales3D(nodos):
-  '''Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
+  '''Defines the dimension of the space: nodes by three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
   :param nodos: nodes loader
   '''
-  nodos.dimEspace= 3 #two coord. for each node (x,y,z).
-  nodos.numGdls= 6 #three DOF for each node (ux,uy,uz,thetaX,thetaY,thetaZ)
+  nodos.dimEspace= 3 #three coord. for each node (x,y,z).
+  nodos.numGdls= 6 #six DOF for each node (ux,uy,uz,thetaX,thetaY,thetaZ)
