@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import division
 import xc_base
 import geom
@@ -7,6 +8,12 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 b= 0.4
 h= 0.8

@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 # Test tomado del ejemplo 9-1 del libro: Introducción Al Estudio Del Elemento Finito en Ingeniería. Segunda Edición. Tirupathi R. Chandrupatla, Ashok D. Belegundu. Pearson Educación, 1999
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import xc_base
 import geom
 import xc

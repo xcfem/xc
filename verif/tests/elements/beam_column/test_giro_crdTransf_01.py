@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
-
 # home made test
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 ''' Verificación del funcionamiento del comando «gira» para una sección elástica en 3d.
    Ménsula sometida a carga vertical en su extremo con la sección y la carga inclinadas
    45 grados. '''

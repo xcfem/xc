@@ -4,6 +4,12 @@
 # cuando el "aspect ratio" está lejos del cuadrado ver comentarios página EXAMPLE 2-005 - 7
 # del manual de SAP 2000.
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # nverborrea= 0
 NumDivI= 32
 NumDivJ= 32

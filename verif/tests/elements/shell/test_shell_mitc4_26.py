@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 # home made test
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 L= 2.0 # Lado del elemento.
 t= 0.2 # Canto del elemento.
 E= 2.1e6 # Módulo de Young del acero.

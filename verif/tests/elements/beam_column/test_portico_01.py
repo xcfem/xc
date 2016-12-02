@@ -2,6 +2,12 @@
 # Análisis de un pórtico.
 # Tomado del ejemplo «PDelta-3 del manual de verificación de Ansys.
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 #           P             P
 #          |             |
 #     2____v___4      6__v______8

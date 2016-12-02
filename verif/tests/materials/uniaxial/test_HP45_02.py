@@ -2,7 +2,7 @@
 # Home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__cppyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"

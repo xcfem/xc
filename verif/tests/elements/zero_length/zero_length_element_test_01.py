@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
-
 # home made test
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 K= 1000 # Spring constant
 l= 1e-7 # Distance between nodes
 F= 1 # Force magnitude
