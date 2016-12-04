@@ -46,21 +46,21 @@ class InternalForceDiagram(cd.ColoredDiagram):
     elif(self.component == 'Qy'):
       elemVDir= elem.getCoordTransf.getJVector
       value1= elem.getVy1
-      value2= -elem.getVy2
+      value2= elem.getVy2
     elif(self.component == 'Qz'):
       elemVDir= elem.getCoordTransf.getKVector
       value1= elem.getVz1
-      value2= -elem.getVz2
+      value2= elem.getVz2
     elif(self.component == 'T'):
       value1= elem.getT1
-      value2= -elem.getT2
+      value2= elem.getT2
     elif(self.component == 'My'):
       elemVDir= elem.getCoordTransf.getKVector
       value1= elem.getMy1
-      value2= -elem.getMy2
+      value2= elem.getMy2
     elif(self.component == 'Mz'):
       elemVDir= elem.getCoordTransf.getJVector
-      value1= -elem.getMz1
+      value1= elem.getMz1
       value2= elem.getMz2
     else:
       lmsg.warning("'component :'"+ self.component+ "' unknown.")

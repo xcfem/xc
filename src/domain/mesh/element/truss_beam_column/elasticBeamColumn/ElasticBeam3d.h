@@ -191,7 +191,7 @@ class ElasticBeam3d : public ProtoBeam3d
     //! @brief Internal bending moment at the front end.
     inline double getMz2(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return -q.Mz2(); //Momento z en su extremo frontal.
+        return q.Mz2(); //Momento z en su extremo frontal.
       }
     //! @brief Internal shear force in the middle of the element.
     inline double getVy(void)
@@ -237,12 +237,12 @@ class ElasticBeam3d : public ProtoBeam3d
     //! @brief Internal shear force at the front end.
     inline double getVz2(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.Vz(theCoordTransf->getInitialLength())-p0[4]; //Cortante z en su extremo frontal.
+        return p0[4]-q.Vz(theCoordTransf->getInitialLength()); //Cortante z en su extremo frontal.
       }
     //! @brief Internal bending moment at the back end.   
     inline double getMy1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.My1(); //Momento y en el extremo dorsal.
+        return -q.My1(); //Momento y en el extremo dorsal.
       }
     //! @brief Internal bending moment at the front end.   
     inline double getMy2(void)
@@ -257,7 +257,7 @@ class ElasticBeam3d : public ProtoBeam3d
     //! @brief Internal torsional force at the back end.   
     inline double getT1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.T1(); //+p0[0]; //Torsor en el extremo dorsal.
+        return -q.T1(); //+p0[0]; //Torsor en el extremo dorsal.
       }
     //! @brief Internal torsional force at the front end.
     inline double getT2(void)

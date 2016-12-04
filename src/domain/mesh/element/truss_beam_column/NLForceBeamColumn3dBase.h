@@ -165,11 +165,11 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
         return Secommit.Vz(theCoordTransf->getInitialLength()); //Cortante z.
       }
     inline double getAVz1(void)
-      {                 //¡Warning! call "calc_resisting_force" before calling this method.
+      { //¡Warning! call "calc_resisting_force" before calling this method.
         return Secommit.Vz(theCoordTransf->getInitialLength())+p0[3]; //Cortante z que se ejerce sobre la barra en su extremo dorsal.
       }
     inline double getAVz2(void)
-      {                 //¡Warning! call "calc_resisting_force" before calling this method.
+      { //¡Warning! call "calc_resisting_force" before calling this method.
         return -Secommit.Vz(theCoordTransf->getInitialLength())+p0[4]; //Cortante z que se ejerce sobre la barra en su extremo frontal.
       }
     inline double getVz1(void)

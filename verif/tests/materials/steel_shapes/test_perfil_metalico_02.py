@@ -97,7 +97,7 @@ FC= elem0.getProp("FCTN")
 EI=  HE400B.EIy()
 deltateor= F*L**3/3/EI
 ratio1= (abs(delta+deltateor)/deltateor)
-ratio2= ((M+F*L)/(F*L))
+ratio2= ((M-F*L)/(F*L))
 ratio3= ((F-V)/F)
 ratio4= ((FC-2.64674)/2.64674)
 

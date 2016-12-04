@@ -90,11 +90,12 @@ elementos= preprocessor.getElementLoader
 elem1= elementos.getElement(1)
 elem1.getResistingForce()
 M= elem1.getMy1
+MTeor= F*L
 V= elem1.getVz
 
 deltateor= (-F*L**3/(3*E*Iy))
 ratio1= abs(delta-deltateor)/deltateor
-ratio2= abs((F*L)+M)/(F*L)
+ratio2= abs((M-MTeor)/MTeor)
 ratio3= abs(V-F)/F
 
 ''' 
