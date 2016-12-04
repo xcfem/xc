@@ -2,6 +2,12 @@
 # home made test
 # Ménsula sometida a carga uniforme horizontal según el eje z local.
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import xc_base
 import geom
 import xc
@@ -97,11 +103,11 @@ Vz2= elem1.getVz2 # Cortante en el extremo frontal de la barra
 
 deltateor= (-f*L**4/(8*E*Iy))
 ratio1= (-delta/deltateor)
-My1teor= (-f*L*L/2)
-ratio2= (My1/My1teor)
+My1teor= f*L*L/2
+ratio2= abs((My1-My1teor)/My1teor)
 ratio3= (abs(My2)<1e-3)
 Vz1teor= (-f*L)
-ratio4= (Vz1/Vz1teor)
+ratio4= abs((Vz1-Vz1teor)/Vz1teor)
 ratio5= (abs(Vz2)<1e-3)
 
 '''
@@ -124,7 +130,7 @@ print "ratio5= ",ratio5}
 
 import os
 fname= os.path.basename(__file__)
-if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3-1.0)<1e-5) & (abs(ratio4-1.0)<1e-5) & (abs(ratio5-1.0)<1e-5):
+if (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & ratio3 & (ratio4<1e-5) & (abs(ratio5-1.0)<1e-5):
   print "test ",fname,": ok."
 else:
   print "test ",fname,": ERROR."

@@ -3,6 +3,13 @@
 # El error obtenido es próximo al 18% (muy alto) parece que el elemento funciona mal
 # cuando el "aspect ratio" está lejos del cuadrado.
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+
 # nverborrea= 0
 NumDivI= 8
 NumDivJ= 8

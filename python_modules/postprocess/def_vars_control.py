@@ -119,11 +119,11 @@ def updateEnvelopeInternalForcesBeamElem2D(beamElem2D):
   '''Update values for extreme values of internal forces in 2D elements.'''
   beamElem2D.getResistingForce()
   N1= beamElem2D.getN1
-  M1= -beamElem2D.getM1
+  M1= beamElem2D.getM1
   V1= beamElem2D.getV1
   N2= beamElem2D.getN2
   M2= beamElem2D.getM2
-  V2= -beamElem2D.getV2
+  V2= beamElem2D.getV2
   maxN= beamElem2D.getProp('N+') # [back node value, front node value]
   maxM= beamElem2D.getProp('Mz+')
   maxV= beamElem2D.getProp('Vy+')
@@ -167,12 +167,12 @@ def updateEnvelopeInternalForcesBeamElem(beamElem):
   beamElem.getResistingForce()
   N1= beamElem.getN1
   My1= beamElem.getMy1
-  Mz1= -beamElem.getMz1
+  Mz1= beamElem.getMz1
   Vy1= beamElem.getVy1
   N2= beamElem.getN2
-  My2= -beamElem.getMy2
+  My2= beamElem.getMy2
   Mz2= beamElem.getMz2
-  Vy2= -beamElem.getVy2
+  Vy2= beamElem.getVy2
   maxN= beamElem.getProp('N+') # [back node value, front node value]
   maxMy= beamElem.getProp('My+')
   maxMz= beamElem.getProp('Mz+')

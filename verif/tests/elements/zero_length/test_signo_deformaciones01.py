@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 # home made test
+
 # Criterio de signos elementos ZeroLengthSection.
 
 #     El axil y los cortantes tienen la misma direccion y sentido que los ejes locales.
 #     El torsor Mx y el flector My tienen las direcciones y sentido de los ejes X e Y locales.
 #     El flector Mz tiene la misma dirección y sentido CONTRARIO al del eje Z local.
 #     Section's y axis is element z axis.
+
 
 from __future__ import division
 import xc_base
@@ -17,6 +19,11 @@ from model import fix_node_6dof
 from materials import typical_materials
 from postprocess import prop_statistics
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Problem type
 prueba= xc.ProblemaEF()

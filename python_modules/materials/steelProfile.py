@@ -93,12 +93,12 @@ class SteelProfile(sp.sectionProperties):
     sectionClass= elem.getProp('sectionClass')
     chiLT= elem.getProp('chiLT')
     N1= elem.getN1
-    M1= -elem.getM1
+    M1= elem.getM1
     V1= elem.getV1
     FCTN1= self.getZBendingEfficiency(sectionClass,M1,V1,chiLT)
     N2= elem.getN2
     M2= elem.getM2
-    V2= -elem.getV2
+    V2= elem.getV2
     FCTN2= self.getZBendingEfficiency(sectionClass,M2,V2,chiLT)
 
     fctn= elem.getProp("FCTNCP")
@@ -119,13 +119,13 @@ class SteelProfile(sp.sectionProperties):
     chiLT= elem.getProp('chiLT')
     N1= elem.getN1
     My1= elem.getMy1
-    Mz1= -elem.getMz1
+    Mz1= elem.getMz1
     Vy1= elem.getVy1
     FCTN1= self.getBiaxialBendingEfficiency(sectionClass,N1,My1,Mz1,Vy1,chiLT)
     N2= elem.getN2
-    My2= -elem.getMy2
+    My2= elem.getMy2
     Mz2= elem.getMz2
-    Vy2= -elem.getVy2
+    Vy2= elem.getVy2
     FCTN2= self.getBiaxialBendingEfficiency(sectionClass,N2,My2,Mz2,Vy2,chiLT)
 
     fctn= elem.getProp("FCTNCP")

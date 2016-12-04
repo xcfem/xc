@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 # Test tomado del ejemplo 5-001 del manual de verificación de SAP2000.
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import xc_base
 import geom
 import xc

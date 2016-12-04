@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 # home made test
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Ménsula sometida a carga horizontal en su extremo.
 
 # Material properties
@@ -94,19 +101,21 @@ V= elem1.getVz
 deltateor= (M*L**2/(2*E*Iy))
 thetateor= (M*L/(E*Iy))
 ratio1= (delta/deltateor)
-ratio2= (M1/M)
+ratio2= abs((M1+M)/M)
 ratio3= (theta/thetateor)
+
 ''' 
 print "delta prog.= ", delta
 print "delta teor.= ", deltateor
 print ratio1
+print "M= ",M
 print "M1= ",M1
 print ratio2
 print "theta prog.= ", theta
 print "theta teor.= ", thetateor
 print ratio3
  '''
-cumple= (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3-1.0)<1e-5)
+cumple= (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5)
 import os
 fname= os.path.basename(__file__)
 if cumple:

@@ -4,6 +4,7 @@
 #    «Vigas sobre fundaciones bi-paramétricas del tipo Cuasi-Winker»
 #    Departamento de Ingeniería Mecánica. Universidad del Bío-Bío.
 #    Casilla 5-C. Concepción. Chile.
+
 from __future__ import division
 import xc_base
 import geom
@@ -16,6 +17,12 @@ from model import fix_node_3dof
 from model import define_apoyos
 from model import line_utils
 import math
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 numDiv= 30
 L= 5500

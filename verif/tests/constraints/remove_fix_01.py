@@ -104,11 +104,12 @@ delta= nod2.getDisp[1]  # Node 2 yAxis displacement
 elem1= elementos.getElement(1)
 elem1.getResistingForce()
 M= elem1.getMy1
+MTeor= F*L
 V= elem1.getVz
 
 deltateor= (-F*L**3/(3*E*Iy))
 ratio1= ((delta-deltateor)/deltateor)
-ratio2= (-M/(F*L))
+ratio2= abs((M-MTeor)/MTeor)
 ratio3= (V/F)
 
 ''' 
@@ -124,7 +125,7 @@ print "ratio3= ",ratio3
 
 import os
 fname= os.path.basename(__file__)
-if (abs(delta0)<1e-11) & (abs(ratio1)<1e-9) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3-1.0)<1e-5):
+if (abs(delta0)<1e-11) & (abs(ratio1)<1e-9) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5):
   print "test ",fname,": ok."
 else:
   print "test ",fname,": ERROR."

@@ -9,6 +9,13 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
+from miscUtils import LogMessages as lmsg
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Material properties
 E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)
@@ -84,11 +91,14 @@ comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
 cargas.addToDomain("COMB")
 
 import os
+fname= os.path.basename(__file__)
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 os.system("rm -f /tmp/combinacion04.db")
+lmsg.error(fname+' test in QUARANTINE; SQLite interface debugging needed.')
+exit(-1)
 db= prueba.newDatabase("SQLite","/tmp/combinacion04.db")
 db.save(100)
 prueba.clearAll()
@@ -154,7 +164,6 @@ print "Vy2= ",Vy2
 print "Vy2teor= ",0
 print "ratio8= ",ratio8 '''
 
-fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3-1.0)<1e-5) & (abs(ratio4-1.0)<1e-5) & (abs(ratio5-1.0)<1e-5) & (abs(ratio6-1.0)<1e-5) & (abs(ratio7-1.0)<1e-5) & (abs(ratio8-1.0)<1e-5) :
   print "test ",fname,": ok."
 else:

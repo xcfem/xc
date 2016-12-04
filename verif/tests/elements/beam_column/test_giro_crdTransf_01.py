@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
-
 # home made test
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 ''' Verificación del funcionamiento del comando «gira» para una sección elástica en 3d.
    Ménsula sometida a carga vertical en su extremo con la sección y la carga inclinadas
    45 grados. '''
@@ -84,11 +90,12 @@ elementos= preprocessor.getElementLoader
 elem1= elementos.getElement(1)
 elem1.getResistingForce()
 M= elem1.getMy1
+MTeor= F*L
 V= elem1.getVz
 
 deltateor= (-F*L**3/(3*E*Iy))
 ratio1= abs(delta-deltateor)/deltateor
-ratio2= abs((F*L)+M)/(F*L)
+ratio2= abs((M-MTeor)/MTeor)
 ratio3= abs(V-F)/F
 
 ''' 

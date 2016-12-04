@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 # Tomado de la página 114 del artículo Development of Membrane, Plate and
 # Flat Shell Elements in Java
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 L= 6.0 # Longitud de la viga expresada in inches.
 h= 0.8 # Canto de la viga expresado in inches.
 t= 1 # Ancho de la viga expresado in inches. En el artículo pone (erróneamente) t= 0.2.

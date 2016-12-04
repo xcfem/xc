@@ -1,5 +1,12 @@
 # Home made test
 # -*- coding: utf-8 -*-
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Ménsula sometida a carga vertical en su extremo.
 
 import xc_base
@@ -75,11 +82,12 @@ result= analisis.analyze(1)
 delta= nodes.getNode(2).getDisp[1] #ydisplacement of node 2.
 elementos.getElement(1).getResistingForce()
 M= elementos.getElement(1).getMy1
+MTeor= F*L
 V= elementos.getElement(1).getVz
 
 deltateor= (-F*L**3/(3*E*Iy))
 ratio1= (delta/deltateor)
-ratio2= (-M/(F*L))
+ratio2= abs((M-MTeor)/MTeor)
 ratio3= (V/F)
 
 # print delta
@@ -92,7 +100,7 @@ ratio3= (V/F)
 
 import os
 fname= os.path.basename(__file__)
-if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3-1.0)<1e-5):
+if (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5):
   print "test ",fname,": ok."
 else:
   print "test ",fname,": ERROR."

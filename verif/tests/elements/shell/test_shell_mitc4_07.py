@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 # Tomado del example 2-005 del manual de verificación de SAP 2000
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # nverborrea= 0
 NumDivI= 32
 NumDivJ= 32

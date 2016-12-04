@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Análisis del efecto P-Delta en un pórtico.
 # Tomado del ejemplo «PDelta-3» del manual de verificación de Ansys.
 
@@ -139,13 +146,13 @@ theta2= 0.0 # Giro del nodo 2
 theta2Teor= -0.09192 # Valor teórico del giro del nodo 2
 ratioTheta2= 0.0
 M12= 0.0 # Flector en arranque de elemento 1
-M12Teor= -4606.6 # Valor teórico del flector en arranque de elemento 1
+M12Teor= 4606.6 # Valor teórico del flector en arranque de elemento 1
 ratioM12= 0.0
 M21= 0.0 # Momento dorsal en elemento 2
-M21Teor= 8254.0 # Valor teórico del momento dorsal en elemento 2
+M21Teor= -8254.0 # Valor teórico del momento dorsal en elemento 2
 ratioM21= 0.0
 Q= 0.0 # Cortante en elemento 1
-QTeor= -128.6 # Valor teórico del cortante en elemento 1
+QTeor= 128.6 # Valor teórico del cortante en elemento 1
 ratioQ= 0.0
 delta6= 0.0 # Desplazamiento horizontal del nodo 6
 delta6Teor= 1.893 # Valor teórico del desplazamiento horizontal del nodo 6
@@ -157,13 +164,13 @@ theta8= 0.0 # Giro del nodo 6
 theta8Teor= 0.0367 # Valor teórico del giro del nodo 6
 ratioTheta8= 0.0
 M61= 0.0 # Flector en arranque de elemento 4
-M61Teor= -2544.9 # Valor teórico del flector en arranque de elemento 4
+M61Teor= 2544.9 # Valor teórico del flector en arranque de elemento 4
 ratioM61= 0.0
 Q4= 0.0 # Cortante en elemento 1
-Q4Teor= -101.4 # Valor teórico del cortante en elemento 1
+Q4Teor= 101.4 # Valor teórico del cortante en elemento 1
 ratioQ4= 0.0
 M51= 0.0 # Momento dorsal en elemento 5
-M51Teor= 6088.6 # Valor teórico del momento dorsal en elemento 5
+M51Teor= -6088.6 # Valor teórico del momento dorsal en elemento 5
 ratioM51= 0.0
 M71= 0.0 # Flector en arranque de elemento 6
 M71Teor= 4456.9 # Valor teórico del flector en arranque de elemento 6
