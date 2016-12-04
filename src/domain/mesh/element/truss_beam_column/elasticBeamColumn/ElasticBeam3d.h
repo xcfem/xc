@@ -214,7 +214,7 @@ class ElasticBeam3d : public ProtoBeam3d
     //! @brief Internal shear force at the front end.
     inline double getVy2(void)
       {  //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.Vy(theCoordTransf->getInitialLength())-p0[2]; //Cortante y en su extremo frontal.
+        return p0[2]-q.Vy(theCoordTransf->getInitialLength()); //Cortante y en su extremo frontal.
       }
     //! @brief Internal shear force in the middle of the element.
     inline double getVz(void)

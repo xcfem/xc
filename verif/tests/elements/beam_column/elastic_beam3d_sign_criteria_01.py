@@ -17,6 +17,27 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
+def getInternalForcesBeginNode(elemTag):
+  return (elementos.getElement(elemTag).getN1,elementos.getElement(elemTag).getVy1,elementos.getElement(elemTag).getVz1,elementos.getElement(elemTag).getT1,elementos.getElement(elemTag).getMy1,elementos.getElement(elemTag).getMz1)
+
+def getInternalForcesEndNode(elemTag):
+  return (elementos.getElement(elemTag).getN2,elementos.getElement(elemTag).getVy2,elementos.getElement(elemTag).getVz2,elementos.getElement(elemTag).getT2,elementos.getElement(elemTag).getMy2,elementos.getElement(elemTag).getMz2)
+
+def printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,phase):
+  ratioMsg= 'ratio'+str(phase)
+  print 'N1= ', N1, ' N2= ', N2 
+  print ratioMsg+'0= ', phaseRatios[0]
+  print 'Vy1= ',Vy1, 'Vy2= ',Vy2 
+  print ratioMsg+'1= ', phaseRatios[1]
+  print 'Vz1= ',Vz1, 'Vz2= ',Vz2
+  print ratioMsg+'2= ', phaseRatios[2]
+  print 'T1= ',T1, 'T2= ', T2
+  print ratioMsg+'3= ', phaseRatios[3]
+  print 'My1= ',My1, 'My2= ', My2
+  print ratioMsg+'4= ', phaseRatios[4]
+  print 'Mz1= ',Mz1, 'Mz2= ', Mz2
+  print ratioMsg+'5= ', phaseRatios[5]
+                     
 # Material properties
 E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)
 nu= 0.3 # Poisson's ratio
@@ -45,7 +66,7 @@ nodes.newNodeXYZ(L,0.0,0.0)
 
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
-lin.xzVector= xc.Vector([0,1,0])
+lin.xzVector= xc.Vector([0,0,1])
 
 # Materials
 caracMecSeccion= xc.CrossSectionProperties3d()
@@ -80,39 +101,27 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 RF= elementos.getElement(1).getResistingForce()
-N1= elementos.getElement(1).getN1
-N1Teor= F
-Vy1= elementos.getElement(1).getVy
-Vz1= elementos.getElement(1).getVz
-T1= elementos.getElement(1).getT1
-My1= elementos.getElement(1).getMy1
-Mz1= elementos.getElement(1).getMz1
+(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
+NTeor= F
+(N2,Vy2,Vz2,T2,My2,Mz2)= getInternalForcesEndNode(1)
 
 ratios= list()
-ratio0= abs((N1-N1Teor)/N1Teor)
+ratio0= abs((N1-NTeor)/NTeor)+abs((N2-NTeor)/NTeor)
 ratio1= abs(Vy1)
 ratio2= abs(Vz1)
 ratio3= abs(T1)
 ratio4= abs(My1)
 ratio5= abs(Mz1)
+phaseRatios= [ratio0,ratio1,ratio2,ratio3,ratio4,ratio5]
+ratios.extend(phaseRatios)
 
-ratios.extend([ratio0,ratio1,ratio2,ratio3,ratio4,ratio5])
+# print 'RF= ',RF
+#printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'')
 
-# print "RF= ",RF
-# print "N1= ",N1
-# print  'ratio0= ',ratio0
-# print "My1= ",My1
-# print  'ratio1= ',ratio1
-# print "Vz1= ",Vz1
-# print 'ratio2= ', ratio2
-# print "Vy1= ",Vy1
-# print  'ratio3= ',ratio3
-# print "T1= ",T1
-# print  'ratio4= ',ratio4
 
 lp0.removeFromDomain()
 lp1= casos.newLoadPattern("default","1")
-lp1.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
+lp1.newNodalLoad(2,xc.Vector([0,F,0,0,0,0]))
 #We add the load case to domain.
 casos.addToDomain("1")
 
@@ -121,34 +130,22 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 RF= elementos.getElement(1).getResistingForce()
-N1= elementos.getElement(1).getN1
-Vy1= elementos.getElement(1).getVy
-Vz1= elementos.getElement(1).getVz
-T1= elementos.getElement(1).getT1
-My1= elementos.getElement(1).getMy1
-My1Teor= -F*L
-Mz1= elementos.getElement(1).getMz1
+(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
+Mz1Teor= F*L
+(N2,Vy2,Vz2,T2,My2,Mz2)= getInternalForcesEndNode(1)
 
 ratio10= abs(N1)
-ratio11= abs(Vy1)
-ratio12= abs((Vz1-F)/F)
+ratio11= abs((Vy1-F)/F)+abs((Vy2-F)/F)
+ratio12= abs(Vz1)
 ratio13= abs(T1)
-ratio14= abs((My1Teor-My1)/My1Teor)
-ratio15= abs(Mz1)
+ratio14= abs(My1)
+ratio15= abs((Mz1Teor-Mz1)/Mz1Teor)
 
-ratios.extend([ratio10,ratio11,ratio12,ratio13,ratio14,ratio15])
+phaseRatios= [ratio10,ratio11,ratio12,ratio13,ratio14,ratio15]
+ratios.extend(phaseRatios)
 
 # print "RF= ",RF
-# print "N1= ",N1
-# print  'ratio10= ',ratio10
-# print "My1= ",My1
-# print  'ratio11= ',ratio11
-# print "Vz1= ",Vz1
-# print 'ratio12= ', ratio12
-# print "Vy1= ",Vy1
-# print  'ratio13= ',ratio13
-# print "T1= ",T1
-# print  'ratio14= ',ratio14
+printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'1')
 
 lp1.removeFromDomain()
 lp2= casos.newLoadPattern("default","2")
@@ -161,20 +158,15 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 RF= elementos.getElement(1).getResistingForce()
-N1= elementos.getElement(1).getN1
-Vy1= elementos.getElement(1).getVy
-Vz1= elementos.getElement(1).getVz
-T1= elementos.getElement(1).getT1
-My1= elementos.getElement(1).getMy1
-Mz1= elementos.getElement(1).getMz1
-Mz1Teor= -F*L
+(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
+My1Teor= -F*L
 
 ratio20= abs(N1)
-ratio21= abs((Vy1-F)/F)
-ratio22= abs(Vz1)
+ratio21= abs(Vy1)
+ratio22= abs((Vz1-F)/F)
 ratio23= abs(T1)
-ratio24= abs(My1)
-ratio25= abs((Mz1Teor-Mz1)/Mz1Teor)
+ratio24= abs((My1Teor-My1)/My1Teor)
+ratio25= abs(Mz1)
 
 ratios.extend([ratio20,ratio21,ratio22,ratio23,ratio24,ratio25])
 
@@ -201,12 +193,7 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 RF= elementos.getElement(1).getResistingForce()
-N1= elementos.getElement(1).getN1
-Vy1= elementos.getElement(1).getVy
-Vz1= elementos.getElement(1).getVz
-T1= elementos.getElement(1).getT1
-My1= elementos.getElement(1).getMy1
-Mz1= elementos.getElement(1).getMz1
+(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
 
 ratio30= abs(N1)
 ratio31= abs(Vy1)
