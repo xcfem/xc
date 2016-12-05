@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 # Home made test
 # Sign criteria for the internal forces o a elastic beam 2d element.
+# 2D cantilever beam, start node  with all its 3DOF fixed, point loads on the 
+# end node (L)
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 import xc_base

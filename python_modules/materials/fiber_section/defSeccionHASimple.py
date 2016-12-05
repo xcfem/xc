@@ -308,6 +308,16 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     the width '''
     return 1/12.0*self.width*self.depth**3
 
+  def getIz_RClocalZax(self):
+    '''returns the second moment of area about the middle axis parallel to 
+    the width (RClocalZaxis)'''
+    return 1/12.0*self.width*self.depth**3
+
+  def getIy_RClocalYax(self):
+    '''returns the second moment of area about the middle axis parallel to 
+    the depth (RClocalYaxis)'''
+    return 1/12.0*self.depth*self.width**3
+
   def getSPos(self):
     '''returns a list with the distance between bars for each row of bars in 
     local positive face.'''
