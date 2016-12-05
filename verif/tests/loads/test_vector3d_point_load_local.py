@@ -4,6 +4,12 @@
 # Estructuras Metálicas del CEDEX. Apartado 3.3 Carga puntual sobre ménsula.
 # Comprobamos el funcionamient del comando vector3d_point_load_local.
 
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
+
 import xc_base
 import geom
 import xc
@@ -72,7 +78,7 @@ mesh= prueba.getDomain.getMesh
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-  elem.vector2dPointByRelDistLoadLocal(x,xc.Vector([n,-P,0]))
+  elem.vector3dPointByRelDistLoadLocal(x,xc.Vector([n,-P,0]))
   elem= eIter.next()
 
 cargas= preprocessor.getLoadLoader
