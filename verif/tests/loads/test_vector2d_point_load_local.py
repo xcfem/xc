@@ -18,7 +18,8 @@ h= 0.30 # Canto de la viga.
 b= 0.2 # Ancho de la viga.
 A= b*h # Cross section area.
 I= b*h**3/12 # Inercia de la viga in inches a la cuarta
-x= 0.5 # Abcisa relativa en la que se aplica la carga puntual.
+xRelPtoAplic= 0.5 # x relative (compared to the total length) of the
+                  # point on which the load is applied
 P= 1e3 # Carga transversal.
 n= 1e6 # Carga axial.
 
@@ -71,7 +72,7 @@ mesh= prueba.getDomain.getMesh
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-  elem.vector2dPointByRelDistLoadLocal(x,xc.Vector([n,-P]))
+  elem.vector2dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([n,-P]))
   elem= eIter.next()
 
 cargas= preprocessor.getLoadLoader
@@ -87,7 +88,7 @@ nod2= nodes.getNode(2)
 delta0= nod2.getDisp[0]
 delta1= nod2.getDisp[1]
 
-a= x*L
+a= xRelPtoAplic*L
 delta0Teor= (n*a/E/A)
 ratio0= ((delta0-delta0Teor)/delta0Teor)
 delta1Teor= (-P*a**2*(3*L-a)/6/E/I)
