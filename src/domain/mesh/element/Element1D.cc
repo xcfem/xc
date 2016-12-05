@@ -79,6 +79,8 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
     const size_t sz= v.Size();
     if(sz>1)
       {
+        if(sz>2)
+	  std::cerr << __FUNCTION__ << ": WARNING a vector of dimension 2 was expected instead of: " << v << std::endl;
         Beam2dUniformLoad *tmp= new Beam2dUniformLoad(loadTag,v[1],v[0],eTags);
         LoadPattern *lp= casos.getCurrentLoadPatternPtr();
         if(lp)
@@ -91,7 +93,7 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
                     << std::endl; 
       }
     else
-      std::cerr << "vector2dUniformLoadLocal; el vector debe ser de dimensión 2" << std::endl;
+      std::cerr << __FUNCTION__ << ": ERROR a vector of dimension 2 was expected instead of: " << v << std::endl;
   }
 
 void XC::Element1D::vector2dPointByRelDistLoadGlobal(const double &x,const Vector &v)
@@ -104,7 +106,7 @@ void XC::Element1D::vector2dPointByRelDistLoadGlobal(const double &x,const Vecto
         vector2dPointByRelDistLoadLocal(x,vTrf);
       }
     else
-      std::cerr << "vector2dPointByRelDistLoadGlobal; el vector debe ser de dimensión 2" << std::endl;
+      std::cerr << __FUNCTION__ << "; ERROR a vector of dimension 2 was expected instead of: " << v << std::endl;
   }
 
 void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector &v)
@@ -118,6 +120,8 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
         eTags[0]= getTag(); //Carga para éste elemento.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
 
+	if(sz>2)
+	  std::cerr << __FUNCTION__ << ": WARNING a vector of dimension 2 was expected instead of: " << v << std::endl;
         Beam2dPointLoad *tmp= new Beam2dPointLoad(loadTag,v[1],x,eTags,v[0]);
         LoadPattern *lp= casos.getCurrentLoadPatternPtr();
         if(lp)
@@ -130,7 +134,7 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
                     << std::endl; 
       }
     else
-      std::cerr << "vector2dPointByRelDistLoadLocal; el vector debe ser de dimensión 2" << std::endl;
+      std::cerr << __FUNCTION__ << ": ERROR a vector of dimension 2 was expected instead of: " << v << std::endl;
   }
 
 void XC::Element1D::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
@@ -165,7 +169,7 @@ void XC::Element1D::vector3dUniformLoadGlobal(const Vector &v)
         vector3dUniformLoadLocal(vTrf);
       }
     else
-      std::cerr  << "vector3dUniformLoadGlobal; el vector debe ser de dimensión 3" << std::endl;
+      std::cerr << __FUNCTION__ << ": ERROR a vector of dimension 3 was expected instead of: " << v << std::endl;
   }
 
 void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
@@ -191,7 +195,7 @@ void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
                     << std::endl; 
       }
     else
-      std::cerr << "vector3dUniformLoadLocal; el vector debe ser de dimensión 3" << std::endl;
+      std::cerr << __FUNCTION__ << ": ERROR a vector of dimension 3 was expected instead of: " << v << std::endl;
   }
 
 void XC::Element1D::vector3dPointByRelDistLoadGlobal(const double &x,const Vector &v)
@@ -204,7 +208,7 @@ void XC::Element1D::vector3dPointByRelDistLoadGlobal(const double &x,const Vecto
         vector3dPointByRelDistLoadLocal(x,vTrf);
       }
     else
-      std::cerr << "vector3dPointByRelDistLoadGlobal; el vector debe ser de dimensión 2" << std::endl;
+      std::cerr << __FUNCTION__ << ": ERROR a vector of dimension 3 was expected instead of: " << v << std::endl;
   }
 
 void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector &v)
@@ -231,7 +235,7 @@ void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector
 
       }
     else
-      std::cerr << "vector3dPointByRelDistLoadLocal; el vector debe ser de dimensión 3" << std::endl;
+      std::cerr << __FUNCTION__ << ": ERROR a vector of dimension 3 was expected instead of: " << v << std::endl;
   }
 
 void XC::Element1D::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
