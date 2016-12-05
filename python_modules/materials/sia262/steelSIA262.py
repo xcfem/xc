@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+'''reinforcing steel material according to SIA 262 standard (Switzerland).'''
 
 import math
 import scipy.interpolate

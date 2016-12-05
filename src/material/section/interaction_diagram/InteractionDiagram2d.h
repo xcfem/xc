@@ -50,6 +50,7 @@ class InteractionDiagram2d: public Poligono2d
     virtual InteractionDiagram2d *clon(void) const;
 
     void Simplify(void);
+    Pos2d getIntersection(const Pos2d &) const;
     double FactorCapacidad(const Pos2d &esf_d) const;
     Vector FactorCapacidad(const GeomObj::list_Pos2d &lp) const;
 
