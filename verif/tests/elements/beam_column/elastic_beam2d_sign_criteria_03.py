@@ -118,8 +118,8 @@ ratio2= abs(M1)+abs(M2)
 phaseRatios= [ratio0,ratio1,ratio2]
 ratios.extend(phaseRatios)
 
-print 'RF= ',RF
-printResults(N1,V1,M1,N2,V2,M2,phaseRatios,'')
+#print 'RF= ',RF
+#printResults(N1,V1,M1,N2,V2,M2,phaseRatios,'')
 
 
 lp0.removeFromDomain()
@@ -148,9 +148,9 @@ ratio12= abs(M1)+abs((M2Teor-M2)/M2)
 phaseRatios= [ratio10,ratio11,ratio12]
 ratios.extend(phaseRatios)
 
-print "RF= ",RF
-printResults(N1,V1,M1,N2,V2,M2,phaseRatios,'1')
-quit()
+#print "RF= ",RF
+#printResults(N1,V1,M1,N2,V2,M2,phaseRatios,'1')
+
 result= 0.0
 for r in ratios:
   result+= r*r
