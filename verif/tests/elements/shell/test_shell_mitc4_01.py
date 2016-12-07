@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 # home made test
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT  AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@ciccp.es ana.Ortega@ciccp.es"
 
-E= 2.1e6 # Módulo de Young del acero en kg/cm2.
+E= 2.1e6 # Steel Young's modulus [kg/cm2].
 nu= 0.3 # Poisson's ratio.
-h= 0.1 # Espesor.
-dens= 1.33 # Densidad kg/m2.
+h= 0.1 # thickness.
+dens= 1.33 # specific mass [kg/m2].
 
 import xc_base
 import geom
