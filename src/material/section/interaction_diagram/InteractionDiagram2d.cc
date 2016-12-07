@@ -98,6 +98,11 @@ void XC::InteractionDiagram2d::Simplify(void)
     push_back(p4);
   }
 
+//! @brief Returns the intersection of the ray O->esf_d with the
+//! interaction diagram.
+Pos2d XC::InteractionDiagram2d::getIntersection(const Pos2d &esf_d) const
+  { return get_interseccion(esf_d); }
+
 //! @brief Devuelve el factor de capacidad para la terna de esfuerzos que se pasan como parámetro.
 double XC::InteractionDiagram2d::FactorCapacidad(const Pos2d &esf_d) const
   {

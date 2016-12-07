@@ -508,13 +508,13 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForce(void) const
     const double EI4= 2.0*EI2; // 4EI
 
     // determine q = kv + q0
-    q(0) = EA*v(0);
-    q(1) = EI4*v(1) + EI2*v(2);
-    q(2) = EI2*v(1) + EI4*v(2);
+    q(0)= EA*v(0);
+    q(1)= EI4*v(1) + EI2*v(2);
+    q(2)= EI2*v(1) + EI4*v(2);
 
-    q(0) += q0[0];
-    q(1) += q0[1];
-    q(2) += q0[2];
+    q(0)+= q0[0];
+    q(1)+= q0[1];
+    q(2)+= q0[2];
 
     // Vector for reactions in basic system
     Vector p0Vec= p0.getVector();

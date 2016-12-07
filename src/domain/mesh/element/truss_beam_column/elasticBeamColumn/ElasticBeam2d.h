@@ -161,14 +161,14 @@ class ElasticBeam2d: public ProtoBeam2d
     inline double getV(void) 
       { return (q(1)+q(2))/theCoordTransf->getInitialLength(); }
     //! @brief Internal shear force at the back end.   
-    inline double getV1(void) 
-      { return -(q(1)+q(2))/theCoordTransf->getInitialLength()+p0[1]; }
+    inline double getV1(void)
+      { return -getV()-p0[1]; }
     //! @brief Internal shear force at the front end.   
     inline double getV2(void) 
-      { return -(q(1)+q(2))/theCoordTransf->getInitialLength()+p0[2]; }
+      { return -getV()+p0[2]; }
     //! @brief Internal axial force at the back end.   
     inline double getN1(void)
-      { return q(0)+p0[0]; }
+      { return q(0)-p0[0]; }
     //! @brief Internal axial force at the front end.   
     inline double getN2(void)
       { return q(0); }

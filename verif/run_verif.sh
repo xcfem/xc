@@ -64,6 +64,8 @@ python tests/elements/beam_column/mensula3d_08.py
 python tests/elements/beam_column/mensula3d_09.py
 python tests/elements/beam_column/mensula3d_10.py
 python tests/elements/beam_column/elastic_beam2d_sign_criteria_01.py
+python tests/elements/beam_column/elastic_beam2d_sign_criteria_02.py
+python tests/elements/beam_column/elastic_beam2d_sign_criteria_03.py
 python tests/elements/beam_column/elastic_beam3d_sign_criteria_01.py
 python tests/elements/beam_column/elastic_beam3d_sign_criteria_02.py
 python tests/elements/beam_column/elastic_beam3d_sign_criteria_03.py
