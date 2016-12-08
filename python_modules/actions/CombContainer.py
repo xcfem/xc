@@ -9,6 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 from import_export import NeutralLoadDescription as nld
+from postprocess.reports import graphical_reports
 
 
 class CombinationRecord(object):
@@ -17,8 +18,18 @@ class CombinationRecord(object):
     self.name= name
     self.expr= expr
   def createCombination(self,xcCombLoader):
-    '''Introduce the combination into the XC combination loader.'''
+    '''Introduces the combination into the XC combination loader.'''
     xcCombLoader.newLoadCombination(self.name,self.expr)
+  def getRecordLoadCaseDisp(self,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
+    '''Returns a suitable RecordLoadCaseDisp for the combination.
+
+    :ivar setsToDispLoads: ordered list of sets of elements to display loads.
+    :ivar setsToDispDspRot: ordered list of sets of elements to display 
+                            displacements. 
+    :ivar setsToDispIntForc: ordered list of sets of elements to display 
+                             internal forces.
+    '''
+    return graphical_reports.RecordLoadCaseDisp(self.name,self.expr,self.expr,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
 
 class SituationCombs(dict):
   '''Combinations for a situation (frequent, rare, persistent,...).'''
@@ -40,20 +51,63 @@ class SituationCombs(dict):
     '''Introduces the combinations into the XC combination loader.'''
     for key in self:
       self[key].createCombination(xcCombLoader)
+  def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
+    '''Returns a suitable RecordLoadCaseDisp for the combination.
 
+    :ivar setsToDispLoads: ordered list of sets of elements to display loads.
+    :ivar setsToDispDspRot: ordered list of sets of elements to display 
+                            displacements. 
+    :ivar setsToDispIntForc: ordered list of sets of elements to display 
+                             internal forces.
+    '''
+    comb= self[combName]
+    return comb.getRecordLoadCaseDisp(setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
 
+class SituationsSet(object):
+  '''Set of situations as used in limit states
+  
+  :ivar name:        name to identify the situation set
+  :ivar situations:  set of situations
+  '''
+  def __init__(self,name):
+    self.name= name
+    self.situations= None
+  def getNames(self):
+    '''returns a list of the combination names.'''
+    retval= list()
+    for s in self.situations:
+      retval.extend(s.getNames())
+    return retval
+  def dumpCombinations(self,xcCombLoader):
+    '''Introduces the combinations into the XC combination loader.'''
+    for s in self.situations:
+      s.dumpCombinations(xcCombLoader)
+  def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
+    '''Returns a suitable RecordLoadCaseDisp for the combination.
 
-class SLSCombinations(object):
+    :ivar setsToDispLoads: ordered list of sets of elements to display loads.
+    :ivar setsToDispDspRot: ordered list of sets of elements to display 
+                            displacements. 
+    :ivar setsToDispIntForc: ordered list of sets of elements to display 
+                             internal forces.
+    '''
+    for s in self.situations:
+      if combName in s:
+        comb= s[combName]
+        return comb.getRecordLoadCaseDisp(setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+  
+
+class SLSCombinations(SituationsSet):
   '''Combinations of actions for serviceability limit states
   
-  :ivar name:        name to identify the combination
+  :ivar name:        name to identify the limit state (serviceability, ultimate,...)
   :ivar rare:        combination for a rare design situation
   :ivar freq:        combination for a frequent design situation
   :ivar qp:          combination for a quasi-permanent design situation
   :ivar earthquake:  combination for a earthquake design situation
   '''
   def __init__(self):
-    self.name= "Service limit states."
+    super(SLSCombinations,self).__init__("Serviceability limit states.")
     self.rare= SituationCombs('Rare situations.')
     self.freq= SituationCombs('Frequent situations.')
     self.qp= SituationCombs('Quasi-permanent situations.')
@@ -65,50 +119,29 @@ class SLSCombinations(object):
     retval.update(self.qp.getNeutralFormat(counter+len(retval),'SLSQP', mapLoadCases))
     retval.update(self.earthquake.getNeutralFormat(counter+len(retval),'SLSS', mapLoadCases))
     return retval
-  def getNames(self):
-    '''returns a list of the combination names.'''
-    retval= list()
-    for s in self.situations:
-      retval.extend(s.getNames())
-    return retval
-  def dumpCombinations(self,xcCombLoader):
-    '''Introduces the combinations into the XC combination loader.'''
-    for s in self.situations:
-      s.dumpCombinations(xcCombLoader)
-    
 
-class ULSCombinations(object):
+class ULSCombinations(SituationsSet):
   '''Combinations of actions for ultimate limit states
   
-  :ivar name:        name to identify the combination
+  :ivar name:        name to identify the limit state (ultimate,...)
   :ivar perm:        combination for a persistent or transient design situation
   :ivar acc:         combination for a accidental design situation
   :ivar fatigue:     combination for a fatigue design situation
   :ivar earthquake:  combination for a seismic design situation
   '''
   def __init__(self):
-    self.name= "Ultimate limit states."
+    super(ULSCombinations,self).__init__("Ultimate limit states.")
     self.perm= SituationCombs('Persistent or transient situations.')
     self.acc= SituationCombs('Exceptional (accidental) situations.')
     self.fatigue= SituationCombs('Fatigue situations.')
     self.earthquake= SituationCombs('Earthquake situations for ULS.')
     self.situations= [self.perm,self.acc,self.fatigue,self.earthquake]
-  def getNames(self):
-    '''returns a list of the combination names.'''
-    retval= list()
-    for s in self.situations:
-      retval.extend(s.getNames())
-    return retval
   def getNeutralFormat(self, counter, mapLoadCases):
     retval= self.perm.getNeutralFormat(counter,'ULST2', mapLoadCases)
     retval.update(self.acc.getNeutralFormat(counter+len(retval),'ULST2A', mapLoadCases))
     retval.update(self.fatigue.getNeutralFormat(counter+len(retval),'ULSF', mapLoadCases))
     retval.update(self.earthquake.getNeutralFormat(counter+len(retval),'ULSS', mapLoadCases))
     return retval
-  def dumpCombinations(self,xcCombLoader):
-    '''Introduces the combinations into the XC combination loader.'''
-    for s in self.situations:
-      s.dumpCombinations(xcCombLoader)
 
 class CombContainer(object):
   '''Container of load combinations
@@ -135,3 +168,16 @@ class CombContainer(object):
     xcCombLoader= preprocessor.getLoadLoader.getLoadCombinations
     for ls in self.limitStates:
       ls.dumpCombinations(xcCombLoader)
+  def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
+    '''Returns a suitable RecordLoadCaseDisp for the combination.
+
+    :ivar setsToDispLoads: ordered list of sets of elements to display loads.
+    :ivar setsToDispDspRot: ordered list of sets of elements to display 
+                            displacements. 
+    :ivar setsToDispIntForc: ordered list of sets of elements to display 
+                             internal forces.
+    '''
+    retval= self.SLS.getRecordLoadCaseDisp(combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+    if not retval:
+      retval= self.ULS.getRecordLoadCaseDisp(combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+    return retval
