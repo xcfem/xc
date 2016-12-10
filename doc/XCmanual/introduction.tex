@@ -1,0 +1,67 @@
+\chapter{Introduction}
+
+The ``Finite Element Analysis (FEA)'' or ``Finite Element Method (FEM)'' is a numerical method for solving problems of engineering and mathematical physics. This method has proven to be useful to solve problems with one of more of the following characteristics:
+
+\begin{itemize}
+\item complicated geometries
+\item complicated load patterns (in space and/or in time).
+\item complicated material properties.
+\end{itemize}
+
+\section{So\ldots what's XC?}
+XC is a finite element analysis program based on:
+
+\begin{itemize}
+  \item \href{https://www.python.org/}{Python}: user's programming language (\href{https://wiki.python.org/moin/boost.python}{boost.python} interface with OpenSees based C++ kernel).
+  \item \href{http://opensees.berkeley.edu}{OpenSees}: finite element analysis kernel.
+  \item \href{http://www.vtk.org/}{VTK}: visualization routines.
+  \item \href{http://www.cgal.org/}{CGAL}: computational geometry algorithms library.
+  \item \href{http://www.numpy.org/}{NumPy}: numerical computation.
+  \item \href{https://www.scipy.org/}{SciPy}: scientific computing tools for Python.
+  \item \href{https://www.latex-project.org/}{LaTeX}: document typesetting.
+  \item \href{http://matplotlib.org/}{matplotlib}: plotting all kind of math related figures...
+\end{itemize}
+
+\subsection{Capabilities}
+The main capabilities of the program are:
+
+\begin{itemize}
+  \item Geometry modeling and mesh generation tools.
+  \item OD, 1D, 2D and 3D elements.
+  \item Linear and non-linear analysis, static and dynamic.
+  \item Fiber section models (modelization of RC members,...).
+  \item Activation an deactivation of elements (construction phases,...).
+  \item Tools for implementing structural codes (Eurocodes, ACI, AISC,...) verifications (in progress...).
+  \item Interfaces with Salome and SCIA (in progress...).
+\end{itemize}
+
+XC inherits from OpenSees its advanced capabilities for modeling and analyzing the nonlinear response of systems using a wide range of material models, elements, and solution algorithms. The analysis kernel is designed for parallel computing\footnote{The Python interface and verifications tests for these capabilities are not yet implemented.} to allow scalable simulations on high-end computers or for parameter studies.
+
+\subsection{Model components}
+
+The programs allows the creation of bi or three-dimensional models with 2,3 or 6 degrees of freedom. The finite element library provides 1D elements (truss and beam-column elements), 2D and 3D elements for continuum mechanics and 2D shell elements.
+
+\subsection{Analysis}
+Nonlinear analysis requires a wide range of algorithms and solution methods. XC provides nonlinear static and dynamic methods, equation solvers, and methods for handling constraints.
+
+\section{Open source}
+XC is open-source. This manual provides information about the software architecture, access to the source code, and the development process. The \href{https://opensource.org/}{open-source}\footnote{See also \href{http://www.unterstein.net/su/docs/CathBaz.pdf}{The Cathedral and the Bazaar} by Eric Raymond, which inspired Netscape's decision to release it's browser as open-source software.} movement allows researchers and users to build upon each others accomplishments using XC as community-based software.
+
+\section{Getting started}
+
+The natural way to get started is to download the software, compile it\footnote{Yes, for the time being there is no DEB nor RPM binary packages available.} and run some examples.
+
+\begin{itemize}
+\item Primo. Go to \href{https://github.com/lcpt/xc_basic}{xc\_basic} repository, dowload the code and follow the instructions on \href{https://github.com/lcpt/xc_basic/blob/master/install.txt}{install.txt}.
+\item Secondo. Go to \href{https://github.com/lcpt/xc_utils}{xc\_utils} repository, dowload the code and follow the instructions on \href{https://github.com/lcpt/xc_utils/blob/master/install.txt}{install.txt}.
+\item Tertio. Go to \href{https://github.com/lcpt/xc}{xc} repository, dowload the code and follow the instructions on \href{https://github.com/lcpt/xc/blob/master/install.txt}{install.txt}.
+\item You can test some of the examples in \href{https://github.com/lcpt/xc/tree/master/verif/tests}{tests}.
+\end{itemize}
+
+
+
+
+
+
+%%  LocalWords:  FEA XC OpenSees VTK CGAL NumPy SciPy LaTeX Eurocodes
+%%  LocalWords:  matplotlib modelization

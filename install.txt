@@ -19,8 +19,8 @@ XC installation.
       to use it with other Unix flavors.
     - Libraries needed:
 
-         -xc_basic: basic routines (must be previously installed xc_basic.tar.gz).
-         -xc_util: utilities (must be previously installed xc_utils.tar.gz).
+         -xc_basic: basic routines (must be previously installed; download it from https://github.com/lcpt/xc_basic).
+         -xc_util: utilities (must be previously installed; download it from https://github.com/lcpt/xc_utils).
          -VTK Visualization ToolKit (<http://www.vtk.org>, ).
          -Boost c++ libraries (<http://www.boost.org>).
          -f2c Fortran to C translator (paquete Debian: libf2c2-dev)
@@ -34,7 +34,7 @@ XC installation.
          -X11 (libX11-dev)
          -TCL Tcl/Tk development support (tcl-dev).
          -Arpack Fortran77 subroutines to solve large scale eigenvalue problems (paquete Debian: libarcpack2-dev).
-         -Arpack++ Interfaz C++ para la biblioteca Arpack (paquete Debian: libarcpack++2-dev).
+         -Arpack++ C++ interface for the Arpack library (Debian package: libarcpack++2-dev).
          -Lapack (Library of linear algebra routines; liblapack-dev).
          -SuperLU (Direct solution of large, sparse systems of linear equations libsuperlu3-dev).
          -Suitesparse (collection of libraries for computations for sparse matrices).
