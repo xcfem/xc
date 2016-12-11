@@ -33,7 +33,6 @@ class_<XC::NodeLoader, bases<XC::Loader>, boost::noncopyable >("NodeLoader", no_
   .add_property("defaultTag", &XC::NodeLoader::getDefaultTag, &XC::NodeLoader::setDefaultTag)
   .def("calculateNodalReactions", &XC::NodeLoader::calculateNodalReactions,"Calcula las reacciones en los nodos.")
   .def("getNode", &XC::NodeLoader::getNode,return_internal_reference<>(),"Devuelve el nodo cuyo identificador se pasa como parámetro.")
-  .def("__getitem__",&XC::NodeLoader::getNode, return_value_policy<reference_existing_object>())
   .def("newNodeXYZ", nuevoNodoFromXYZ,return_internal_reference<>(),"Crea un nodo con las coordenadas que se pasan como parámetro.")
   .def("newNodeFromVector", nuevoNodoFromVector,return_internal_reference<>(),"Crea un nodo con las coordenadas que se pasan como parámetro.")
   .def("newNodeIDXYZ", &XC::NodeLoader::newNodeIDXYZ,return_internal_reference<>(),"Crea un nodo con el tag y las coordenadas que se pasan como parámetro.")
@@ -47,7 +46,7 @@ class_<XC::NodeLoader, bases<XC::Loader>, boost::noncopyable >("NodeLoader", no_
 class_<XC::MaterialLoader, bases<XC::Loader>, boost::noncopyable >("MaterialLoader", no_init)
   .def("newMaterial", &XC::MaterialLoader::nuevoMaterial,return_internal_reference<>(),"Crea un material.")
   .def("getMaterial", &XC::MaterialLoader::getMaterial,return_internal_reference<>(),"Devuelve el material cuyo nombre se pasa como parámetro.")
-  .def("__getitem__",&XC::MaterialLoader::getMaterial, return_value_policy<reference_existing_object>())
+//.def("__getitem__",&XC::MaterialLoader::getMaterial, return_value_policy<reference_existing_object>())
   .def("materialExists",&XC::MaterialLoader::existeMaterial,"True if material is already defined.")
   .def("newSectionGeometry", &XC::MaterialLoader::newSectionGeometry,return_internal_reference<>())
   .def("getSectionGeometry", &XC::MaterialLoader::getGeomSection,return_internal_reference<>(),"Returns section geometry whose name is given.")
@@ -64,7 +63,7 @@ class_<XC::MaterialLoader, bases<XC::Loader>, boost::noncopyable >("MaterialLoad
 class_<XC::BeamIntegratorLoader, bases<XC::Loader>, boost::noncopyable >("BeamIntegratorLoader", no_init)
   .def("newBeamIntegrator", &XC::BeamIntegratorLoader::newBI,return_internal_reference<>(),"Creates a new integration scheme.")
   .def("get", &XC::BeamIntegratorLoader::get,return_internal_reference<>(),"Retunrs the integrator.")
-  .def("__getitem__",&XC::BeamIntegratorLoader::get, return_value_policy<reference_existing_object>())
+//.def("__getitem__",&XC::BeamIntegratorLoader::get, return_value_policy<reference_existing_object>())
   .def("exists",&XC::BeamIntegratorLoader::exists,"True if integrator is already defined.")
   .add_property("size", &XC::BeamIntegratorLoader::size, "Returns container's size (number of defined integration schemes).")
   .def("__len__",&XC::BeamIntegratorLoader::size, "Returns container's size (number of defined integration schemes).")
@@ -87,7 +86,6 @@ class_<XC::ElementLoader::SeedElemLoader, bases<XC::ProtoElementLoader>, boost::
 class_<XC::ElementLoader, bases<XC::ProtoElementLoader>, boost::noncopyable >("ElementLoader", no_init)
   .add_property("seedElemLoader", make_function( &XC::ElementLoader::getSeedElemLoader, return_internal_reference<>() ))
   .def("getElement", &XC::ElementLoader::getElement,return_internal_reference<>(),"Devuelve el elemento cuyo identificador se pasa como parámetro.")
-  .def("__getitem__",&XC::ElementLoader::getElement, return_value_policy<reference_existing_object>())
   .add_property("defaultTag", &XC::ElementLoader::getDefaultTag, &XC::ElementLoader::setDefaultTag)
    ;
 

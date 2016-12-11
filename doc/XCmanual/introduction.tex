@@ -1,5 +1,6 @@
 \chapter{Introduction}
 
+\section{So\ldots what's XC?}
 The ``Finite Element Analysis (FEA)'' or ``Finite Element Method (FEM)'' is a numerical method for solving problems of engineering and mathematical physics. This method has proven to be useful to solve problems with one of more of the following characteristics:
 
 \begin{itemize}
@@ -8,10 +9,12 @@ The ``Finite Element Analysis (FEA)'' or ``Finite Element Method (FEM)'' is a nu
 \item complicated material properties.
 \end{itemize}
 
+XC is an open source FEA program designed to solve structural analysis problems. The program can solve various types of problems, from simple linear analysis to complex nonlinear simulations. It has a library of finite elements which allows to model various geometries, and multiple material models, allowing its application in various areas of structural analysis.
+
 \section{Motivation}
 Someone said that, when the French climber Lionel Terray was asked about his reason to climb a mountain, he simply said ``because it's there''.
 
-Something similar happens with the development of this program. Since I began the study of the finite element method, after studying the analytical solutions to elastic problems (so limited), the scope of their employment to meet structural problems brought on me a great attraction. This, coupled with my love with computer science, made me decide to develop a finite element program that would be useful to calculate structures and that could be modified an expanded in any way the user wanted (a bit optimistic, yeah\ldots). So, first I wrote a Pascal version of the program which could only work with bar-type elements. Afterwards, I wrote a C++ version ``from scratch'' that was never be able to solve any nontrivial problem. Finally I've discovered the possibilities offered by the calculation core of \emph{Opensees} and I decided to modify it so it was able to be used in a "engineering office environment" (as opposed to academic use) so to speak.
+Something similar happens with the development of this program. Since I began the study of the finite element method, after studying the analytic solutions to elastic problems (so limited), the scope of their employment to meet structural problems brought on me a great attraction. This, coupled with my love with computer science, made me decide to develop a finite element program that would be useful to calculate structures and that could be modified an expanded in any way the user wanted (a bit optimistic, yeah\ldots). So, first I wrote a Pascal version of the program which could only work with bar-type elements. Afterwards, I wrote a C++ version ``from scratch'' that was never be able to solve any nontrivial problem. Finally I've discovered the possibilities offered by the calculation core of \emph{Opensees} and I decided to modify it so it was able to be used in a "engineering office environment" (as opposed to academic use) so to speak.
 
 To achieve this objective, the main modifications made to the original code were as follows:
 
@@ -20,31 +23,23 @@ To achieve this objective, the main modifications made to the original code were
 
 \item Generating graphics using \href{http://www.vtk.org}{VTK} library. This is an open source library for generating graphics for scientific use. 
 
-\item At first I've used a macro language, built from the ground, which served to expose all the values from the model (displacements, internal forces, strains, stresses,\ldots) in a way that allows the user to formulate a sentence like ``get the ratio between the vertical displacement of the node closest to the center of the beam an the total span of the beam''.
+\item At first I've used a macro language, built from the ground, which served to expose all the values from the model (displacements, internal forces, strains, stresses,\ldots) in a way that allows the user to formulate a sentence like ``get the ratio between the vertical displacement of the node closest to the center of the beam an the total span of the beam''. In 2013 we stopped the development of that custom language and start the migration to Python which was finished in 2015. 
 
-\item Utilities for the construction and calculation of design load
-combinations prescribed by the building codes (EHE, ACI 318, EAE,
-Eurocodes ,\ldots) so as to facilitate the verification of design 
-requirements on each of them.
+\item Utilities for the construction and calculation of design load combinations prescribed by the building codes (EHE, ACI 318, EAE, Eurocodes ,\ldots) so as to facilitate the verification of design requirements on each of them.
 
-\item Ability to activate and deactivate elements to enable the analysis
-of structures built in phases, of geotechnical problems and the
-strengthening of existing structures.
+\item Ability to activate and deactivate elements to enable the analysis of structures built in phases, of geotechnical engineering problems and the strengthening of existing structures.
 
-\item Writing macros to verify the structure and its elements according
-the criteria prescribed by building codes (axial and bending capacity,
-shear reinforcement,\ldots).
+\item Writing macros to verify the structure and its elements according the criteria prescribed by building codes (axial and bending capacity, shear reinforcement,\ldots).
 
-\item Changing the code so it's linked with ``standard'' linear algebra
-libraries (BLAS, Arpack, LAPACK, SuperLU ,...). This eliminates the need
-to include in the program ``ad-hoc'' versions of these libraries.
+\item Changing the code so it's linked with ``standard'' linear algebra libraries (BLAS, Arpack, LAPACK, SuperLU ,...). This eliminates the need to include in the program ``ad-hoc'' versions of these libraries.
 
-\item Modification of the material models so that support prescribed
-strains. That makes possible to solve problems involving thermal and
-rheological actions.
+\item Modification of the material models so that support prescribed strains. That makes possible to solve problems involving thermal and rheological actions.
+
+\item Implementation of MP constraints that allows to fix a node to an arbitrary position of an element (the code mostly based on the article \href{http://www.code-aster.org/V2/doc/v10/fr/man_r/r7/r7.01.02.pdf}{Modélisation des câbles de précontrainte}. This way we can attach the linear elements, used to model steel cables, to bi-dimensional o three-dimensional elements.
+
 \end{enumerate}
 
-\section{So\ldots what's XC?}
+\section{XC foundations}
 XC is a finite element analysis program based on:
 
 \begin{itemize}
@@ -88,9 +83,9 @@ XC is open-source. This manual provides information about the software architect
 The natural way to get started is to download the software, compile it\footnote{Yes, for the time being there is no DEB nor RPM binary packages available.} and run some examples.
 
 \begin{itemize}
-\item Primo. Go to \href{https://github.com/lcpt/xc_basic}{xc\_basic} repository, dowload the code and follow the instructions on \href{https://github.com/lcpt/xc_basic/blob/master/install.txt}{install.txt}.
-\item Secondo. Go to \href{https://github.com/lcpt/xc_utils}{xc\_utils} repository, dowload the code and follow the instructions on \href{https://github.com/lcpt/xc_utils/blob/master/install.txt}{install.txt}.
-\item Tertio. Go to \href{https://github.com/lcpt/xc}{xc} repository, dowload the code and follow the instructions on \href{https://github.com/lcpt/xc/blob/master/install.txt}{install.txt}.
+\item Primo. Go to \href{https://github.com/lcpt/xc_basic}{xc\_basic} repository, download the code and follow the instructions on \href{https://github.com/lcpt/xc_basic/blob/master/install.txt}{install.txt}.
+\item Secondo. Go to \href{https://github.com/lcpt/xc_utils}{xc\_utils} repository, download the code and follow the instructions on \href{https://github.com/lcpt/xc_utils/blob/master/install.txt}{install.txt}.
+\item Tertio. Go to \href{https://github.com/lcpt/xc}{xc} repository, download the code and follow the instructions on \href{https://github.com/lcpt/xc/blob/master/install.txt}{install.txt}.
 \item You can test some of the examples in \href{https://github.com/lcpt/xc/tree/master/verif/tests}{tests}.
 \end{itemize}
 
@@ -100,4 +95,5 @@ The natural way to get started is to download the software, compile it\footnote{
 
 
 %%  LocalWords:  FEA XC OpenSees VTK CGAL NumPy SciPy LaTeX Eurocodes
-%%  LocalWords:  matplotlib modelization
+%%  LocalWords:  matplotlib modelization Terray Opensees EHE ACI EAE
+%%  LocalWords:  BLAS Arpack LAPACK SuperLU AISC

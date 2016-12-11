@@ -384,22 +384,24 @@ bool XC::Mesh::existElement(int tag)
 //! @brief Devuelve un puntero al elemento cuyo tag se pasa como parámetro.
 XC::Element *XC::Mesh::getElement(int tag)
   {
+    Element *result= nullptr;
     TaggedObject *mc = theElements->getComponentPtr(tag);
 
     // if not there return 0 otherwise perform a cast and return that
-    if(!mc) return nullptr;
-    Element *result= dynamic_cast<Element *>(mc);
+    if(mc)
+      result= dynamic_cast<Element *>(mc);
     return result;
   }
 
 //! @brief Devuelve un puntero al elemento cuyo tag se pasa como parámetro.
 const XC::Element *XC::Mesh::getElement(int tag) const
   {
+    const Element *result= nullptr;
     const TaggedObject *mc = theElements->getComponentPtr(tag);
 
     // if not there return 0 otherwise perform a cast and return that
-    if(!mc) return nullptr;
-    const Element *result= dynamic_cast<const Element *>(mc);
+    if(mc)
+      result= dynamic_cast<const Element *>(mc);
     return result;
   }
 
