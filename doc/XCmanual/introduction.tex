@@ -8,6 +8,42 @@ The ``Finite Element Analysis (FEA)'' or ``Finite Element Method (FEM)'' is a nu
 \item complicated material properties.
 \end{itemize}
 
+\section{Motivation}
+Someone said that, when the French climber Lionel Terray was asked about his reason to climb a mountain, he simply said ``because it's there''.
+
+Something similar happens with the development of this program. Since I began the study of the finite element method, after studying the analytical solutions to elastic problems (so limited), the scope of their employment to meet structural problems brought on me a great attraction. This, coupled with my love with computer science, made me decide to develop a finite element program that would be useful to calculate structures and that could be modified an expanded in any way the user wanted (a bit optimistic, yeah\ldots). So, first I wrote a Pascal version of the program which could only work with bar-type elements. Afterwards, I wrote a C++ version ``from scratch'' that was never be able to solve any nontrivial problem. Finally I've discovered the possibilities offered by the calculation core of \emph{Opensees} and I decided to modify it so it was able to be used in a "engineering office environment" (as opposed to academic use) so to speak.
+
+To achieve this objective, the main modifications made to the original code were as follows:
+
+\begin{enumerate}
+\item Incorporation of some simple algorithms for generation of the finite element mesh. The modeler is able to create structured grids from the description of geometry by means of points, lines, surfaces and solids.
+
+\item Generating graphics using \href{http://www.vtk.org}{VTK} library. This is an open source library for generating graphics for scientific use. 
+
+\item At first I've used a macro language, built from the ground, which served to expose all the values from the model (displacements, internal forces, strains, stresses,\ldots) in a way that allows the user to formulate a sentence like ``get the ratio between the vertical displacement of the node closest to the center of the beam an the total span of the beam''.
+
+\item Utilities for the construction and calculation of design load
+combinations prescribed by the building codes (EHE, ACI 318, EAE,
+Eurocodes ,\ldots) so as to facilitate the verification of design 
+requirements on each of them.
+
+\item Ability to activate and deactivate elements to enable the analysis
+of structures built in phases, of geotechnical problems and the
+strengthening of existing structures.
+
+\item Writing macros to verify the structure and its elements according
+the criteria prescribed by building codes (axial and bending capacity,
+shear reinforcement,\ldots).
+
+\item Changing the code so it's linked with ``standard'' linear algebra
+libraries (BLAS, Arpack, LAPACK, SuperLU ,...). This eliminates the need
+to include in the program ``ad-hoc'' versions of these libraries.
+
+\item Modification of the material models so that support prescribed
+strains. That makes possible to solve problems involving thermal and
+rheological actions.
+\end{enumerate}
+
 \section{So\ldots what's XC?}
 XC is a finite element analysis program based on:
 
