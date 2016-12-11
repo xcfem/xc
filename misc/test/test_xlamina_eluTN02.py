@@ -85,7 +85,7 @@ sections= sc.SectionContainer()
 sections.append(datosGenericPiles)
 
 
-meanFCs= sections.verifyNormalStresses(mdlr,analysis,csvFile,outputFileName,mapSectionsForEveryElement, "d")
+meanFCs= sections.internalForcesVerification3D(mdlr,analysis,csvFile,outputFileName,mapSectionsForEveryElement, "d")
 
 
 print "mean FCs: ", meanFCs

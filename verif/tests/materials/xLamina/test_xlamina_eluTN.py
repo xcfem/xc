@@ -65,7 +65,7 @@ sections.append(deckSections)
 
 
 controller= ns.BiaxialBendingNormalStressController('ULS_normalStress')
-meanFCs= reinfConcreteSections.verifyNormalStresses(intForcCombFileName,"/tmp/ppTN", "d",controller)
+meanFCs= reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,"/tmp/ppTN", "d",controller)
 
 
 #print "mean FCs: ", meanFCs

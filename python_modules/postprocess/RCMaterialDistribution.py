@@ -81,103 +81,56 @@ class RCMaterialDistribution(object):
       self.sectionDefinition= pickle.load(f)
     f.close()
 
-  def verifyNormalStresses(self,intForcCombFileName,outputFileName, matDiagType,controller):
-    '''
+  def runChecking(self,intForcCombFileName,outputFileName, matDiagType,limitStateController,threeDim= True):
+    '''Creates the phantom model and runs the verification on it.
 
     :param intForcCombFileName: name of the file containing the forces
                                 and bending moments obtained for each 
                                 element for the combinations analyzed
     :param outputFileName:  name of the output file containing the results 
                             of the verification 
-    :param controller: object that controls normal stresses limit state 
-                       on elements.
+    :param limitStateController: object that controls the limit state on elements.
+    :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) false if it's 2D (Fx,Fy,Mz).
     '''
-    tmp= xc.ProblemaEF()
-    preprocessor= tmp.getPreprocessor
-    self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
-    analysis= predefined_solutions.simple_static_linear(tmp)
+    feProblem= xc.ProblemaEF()
+    preprocessor= feProblem.getPreprocessor
+    if(threeDim):
+      self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
+    else:
+      self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType,'NMy')
+    analysis= predefined_solutions.simple_static_linear(feProblem)
     phantomModel= phm.PhantomModel(preprocessor,self)
-    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
-    tmp.clearAll()
-    return retval
+    result= phantomModel.runChecking(intForcCombFileName,analysis,limitStateController,outputFileName)
+    return (feProblem, result)
 
-
-  def verifyNormalStresses2d(self,intForcCombFileName,outputFileName, matDiagType,controller):
-    '''
+  def internalForcesVerification3D(self,intForcCombFileName,outputFileName, matDiagType,limitStateController):
+    '''Limit state verification based on internal force (Fx,Fy,Fz,Mx,My,Mz) values.
 
     :param intForcCombFileName: name of the file containing the forces
                                 and bending moments obtained for each 
                                 element for the combinations analyzed
     :param outputFileName:  name of the output file containing the results 
                             of the verification 
-    :param controller: object that controls normal stresses limit state 
-                       on elements.
+    :param limitStateController: object that controls the limit state on elements.
     '''
-    tmp= xc.ProblemaEF()
-    preprocessor= tmp.getPreprocessor
-    self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType,'NMy')
-    analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,self)
-    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
-    tmp.clearAll()
+    (tmp, retval)= self.runChecking(intForcCombFileName,outputFileName, matDiagType,limitStateController,True)
+    tmp.clearAll() #Free memory.
     return retval
 
-  def shearVerification(self,intForcCombFileName,outputFileName, matDiagType,controller):
-    '''
+  def internalForcesVerification2D(self,intForcCombFileName,outputFileName, matDiagType,limitStateController):
+    '''Limit state verification based on internal force (Fx,Fy,Mz) values.
 
-    :param intForcCombFileName: name of the file containing the forces and bending moments 
-                     obtained for each element for the combinations analyzed
+    :param intForcCombFileName: name of the file containing the forces
+                                and bending moments obtained for each 
+                                element for the combinations analyzed
     :param outputFileName:  name of the output file containing the results 
                             of the verification 
-    :param controller: object that controls shear limit state.
+    :param limitStateController: object that controls the limit state on elements.
     '''
-    tmp= xc.ProblemaEF()
-    preprocessor= tmp.getPreprocessor
-    self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
-    analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,self)
-    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
-    tmp.clearAll()
+    (tmp, retval)= self.runChecking(intForcCombFileName,outputFileName, matDiagType,limitStateController,False)
+    tmp.clearAll() #Free memory.
     return retval
 
-
-  def crackControl(self,intForcCombFileName,outputFileName,matDiagType,controller):
-    '''
-
-    :param intForcCombFileName: name of the file containing the forces and 
-                                bending moments obtained for each element for
-                                the combinations analyzed
-    :param outputFileName:  name of the output file containing the results 
-                            of the verification 
-    :param controller: object that controls crack limit state.
-    '''
-    tmp= xc.ProblemaEF()
-    preprocessor= tmp.getPreprocessor
-    self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
-    analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,self)
-    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
-    tmp.clearAll()
-    return retval
-  
-  def fatigueVerification(self,intForcCombFileName,outputFileName, matDiagType,controller):
-    '''
-
-    :param intForcCombFileName: name of the file containing the forces and
-                                bending moments. 
-                     obtained for each element for the combinations analyzed
-    :param outputFileName:  name of the output file containing the results of
-                            the verification. 
-    :param controller: object that controls fatigue limit state
-    '''
-    tmp= xc.ProblemaEF()
-    preprocessor= tmp.getPreprocessor
-    self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
-    analysis= predefined_solutions.simple_static_linear(tmp)
-    phantomModel= phm.PhantomModel(preprocessor,self)
-    retval= phantomModel.runChecking(intForcCombFileName,analysis,controller,outputFileName)
-    tmp.clearAll()
-    return retval
 
 def loadRCMaterialDistribution():
   '''Load the reinforced concrete sections on each element from file.'''

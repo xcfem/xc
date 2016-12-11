@@ -108,7 +108,7 @@ class NormalStressesRCLimitStateData(LimitStateData):
     '''
     intForcCombFileName= self.getInternalForcesFileName()
     outputFileName= self.getOutputDataBaseFileName()
-    return reinfConcreteSections.verifyNormalStresses(intForcCombFileName,outputFileName, "d",self.controller)
+    return reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,outputFileName, "d",self.controller)
 
 class ShearResistanceRCLimitStateData(LimitStateData):
   ''' Reinforced concrete shear resistance limit state data.'''
@@ -134,7 +134,7 @@ class ShearResistanceRCLimitStateData(LimitStateData):
     '''
     intForcCombFileName= self.getInternalForcesFileName()
     outputFileName= self.getOutputDataBaseFileName()
-    return reinfConcreteSections.shearVerification(intForcCombFileName,outputFileName, "d",self.controller)
+    return reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,outputFileName, "d",self.controller)
 
 class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -160,7 +160,7 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
     '''
     intForcCombFileName= self.getInternalForcesFileName()
     outputFileName= self.getOutputDataBaseFileName()
-    return reinfConcreteSections.crackControl(intForcCombFileName,outputFileName, "k", self.controller)
+    return reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,outputFileName, "k", self.controller)
 
 class QPLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
@@ -178,6 +178,7 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.SLS.qp.dumpCombinations(loadCombinations)
     return loadCombinations
+  
   def check(self,reinfConcreteSections):
     '''Checking of crack width under quasi-permanent loads in
        serviceability limit states (see self.dumpCombinations).
@@ -186,7 +187,7 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
     '''
     intForcCombFileName= self.getInternalForcesFileName()
     outputFileName= self.getOutputDataBaseFileName()
-    return reinfConcreteSections.crackControl(intForcCombFileName,outputFileName, "k",self.controller)
+    return reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,outputFileName, "k",self.controller)
 
 class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
   ''' Displacement control under frequent loads limit state data.'''
@@ -237,7 +238,7 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
     '''
     intForcCombFileName= self.getInternalForcesFileName()
     outputFileName= self.getOutputDataBaseFileName()
-    return reinfConcreteSections.fatigueVerification(intForcCombFileName,outputFileName, "d",self.controller)
+    return reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,outputFileName, "d",self.controller)
 
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()
