@@ -13,30 +13,13 @@ In XC (just like in OpenSees) an analysis is an object which is composed by the 
 \item{Convergence Test}: determines when convergence has been achieved. 
 \end{description}
 
-\subsection{Constraint handlers}
+\subsection{Constraint handlers}\label{sc_constraint_handlers}
 The ConstraintHandler objects determine how the constraint equations are enforced in the analysis. Constraint equations enforce a specified value for a DOF, or a relationship between DOFs.
+%%See
+%% /documentacion/informatica/software/desarrollo/documentacion/elementos_finitos/felippa_ifem/IFEM.Ch08.pdf \S 8.1.2
 
 \subsubsection{Constraint types}
-
-\paragraph{Single-point constraints.}
-A single-point constraint (SPC) enforces a single degree of freedom (normally associated with a node) to a specified value. In structural analysis we use single-point constraints to:
-
-\begin{itemize}
-  \item Constrain or enforce translations and/or rotations of nodes that correspond to structure supports.
-  \item Impose constraints for displacements that correspond to symmetric or antisymmetric boundary conditions.
-  \item Removal of DOFs that correspond to frozen nodes in evolutive problems wher some parts of the mesh are deactivated.
-\end{itemize}
-
-\paragraph{Multipoint constraints.}
-Multipoint constraints are used to impose linear relationships between some of the degrees of freedom of the model as in:
-
-\begin{equation}
-  \sum_{i} A_i u_i= 0
-\end{equation}
-
-\noindent where $A_i$ are constant factors and $u_i$ are degrees of freedom of the model.
-
-This type of constraint allows considerable freedom in describing relations between degrees of freedom. They are used for example to create rigid elements and to link a node to an element.
+The types of constraints supported by the software are defined in \ref{sc_sp_constraints} and \ref{sc_mp_constraints}.
 
 \subsubsection{Constraint handler types}
 

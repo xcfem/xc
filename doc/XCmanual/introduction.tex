@@ -35,12 +35,12 @@ To achieve this objective, the main modifications made to the original code were
 
 \item Modification of the material models so that support prescribed strains. That makes possible to solve problems involving thermal and rheological actions.
 
-\item Implementation of MP constraints that allows to fix a node to an arbitrary position of an element (the code mostly based on the article \href{http://www.code-aster.org/V2/doc/v10/fr/man_r/r7/r7.01.02.pdf}{Modélisation des câbles de précontrainte}. This way we can attach the linear elements, used to model steel cables, to bi-dimensional o three-dimensional elements.
+\item Implementation of MP constraints that allows to fix a node to an arbitrary position of an element (the code is based mostly on the article \href{http://www.code-aster.org/V2/doc/v10/fr/man_r/r7/r7.01.02.pdf}{Modélisation des câbles de précontrainte}. This way we can attach the linear elements, used to model steel cables, to bi-dimensional o three-dimensional elements.
 
 \end{enumerate}
 
-\section{XC foundations}
-XC is a finite element analysis program based on:
+\section{XC foundations (on the shoulders of giants)}
+The libraries and programs on which XC relies are the following:
 
 \begin{itemize}
   \item \href{https://www.python.org/}{Python}: user's programming language (\href{https://wiki.python.org/moin/boost.python}{boost.python} interface with OpenSees based C++ kernel).
