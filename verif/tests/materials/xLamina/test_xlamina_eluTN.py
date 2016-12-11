@@ -14,7 +14,7 @@ from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import defSeccionHASimple
 from postprocess import RCMaterialDistribution
-from materials.xLamina import RCsectionsContainer as sc
+from materials import RCsectionsContainer as sc
 from solution import predefined_solutions
 from materials.sia262 import normalStressesSIA262 as ns #Change SIA262->EHE
 

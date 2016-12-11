@@ -9,7 +9,7 @@ import xc
 # Macros
 from solution import predefined_solutions
 from postprocess import PhantomModel as phm
-from materials.xLamina import RCsectionsContainer as sc
+from materials import RCsectionsContainer as sc
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT and AO_O"

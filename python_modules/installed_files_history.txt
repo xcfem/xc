@@ -452,6 +452,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/pernos_anclaje/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/plotParabDiagram.py
 /usr/local/lib/python2.7/dist-packages/materials/plotParabDiagram.pyc
+/usr/local/lib/python2.7/dist-packages/materials/RCsectionsContainer.py
+/usr/local/lib/python2.7/dist-packages/materials/RCsectionsContainer.pyc
 /usr/local/lib/python2.7/dist-packages/materials/rebarsEC2.py
 /usr/local/lib/python2.7/dist-packages/materials/rebarsEC2.pyc
 /usr/local/lib/python2.7/dist-packages/materials/regimenSeccion.py

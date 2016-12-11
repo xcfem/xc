@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+# ************** DEPRECATED 11/12/2016 ******************
 
 from materials.xLamina import modelo
 #from materials.xLamina import postproceso_xLamina
