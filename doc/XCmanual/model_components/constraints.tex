@@ -1,13 +1,59 @@
-\section{Constraints}
-In a finite element problem, the boundary conditions are the specified values of the field variables (displacement, rotations, pore pressures,\ldots).
+\section{Boundary conditions}
+In a finite element problem, the boundary conditions\footnote{The following explanation is based on the \href{http://www.colorado.edu/engineering/CAS/courses.d/IFEM.d/}{IFEM courses} of the Department of Aerospace Engineering Sciences
+University of Colorado at Boulder.} are the specified values of the field variables (displacement, rotations, pore pressures,\ldots).
 
 \subsection{Essential and natural boundary conditions}
-Essential boundary conditions are conditions that are imposed explicitly on the solution and natural boundary conditions are those that automatically will be satisfied after solution of the problem.
+Essential boundary conditions are conditions that are imposed explicitly on the solution and natural boundary conditions are those that automatically will be satisfied after solution of the problem. Otherwise stated if boundary condition directly involves he nodal freedoms, such as displacements or rotations, it is essential.
 
-The former class of boundary conditions involve one or more degrees of freedom and are imposed by manipulating the left hand side (LHS) of the system of equations (the side of the stiffness matrix).
+This class of boundary conditions involve one or more degrees of freedom and are imposed by manipulating the left hand side (LHS) of the system of equations (the side of the stiffness matrix).
 
-The natural boundary conditions are imposed by manipulating the right hand side (RHS) of the system of equations (the side of the force vector).
+The natural boundary conditions are imposed by manipulating the right hand side (RHS) of the system of equations (the side of the force vector). Conditions involving applied loads are natural. This kind of constraints are treated in chapter \ref{ch_loads}.
 
+\subsection{Constraints}
 
+\subsubsection{Classification of Constraint Conditions}
+In the previous  description we have said that an essential boundary condition can involve one or more degrees of freedom.
+
+\paragraph{Single-freedom constraints.}
+When there is only one condition involved we call them \emph{single-freedom constraints}. These conditions are mathematically expressable as constraints on individual degrees of freedom:
+
+\begin{center}
+  \fbox{nodal degree of fredom= prescribed value}
+\end{center}
+
+\noindent For example:
+
+\begin{equation}
+  u_{x4}= 0, u_{y9}= 0.6
+\end{equation}
+
+\noindent These are two single-freedom constraints.  The first one is homogeneous while the second one is non-homogeneous.
+
+\paragraph{Multi-freedom constraints}
+The next step up in complexity involves multifreedom equality constraints, or multifreedom constraints for short,  the last name being acronymed to MFC. These are functional equations that connect two or more displacement components:
+
+\begin{center}
+  \fbox{f(nodal degrees of fredom)= prescribed value}
+\end{center}
+
+\noindent or with a more formal mathematical notation:
+
+\begin{equation}\label{eq_multi_freedom_constraints}
+f(u_{x4}, u_{y9}, u_{y109})= p
+\end{equation}
+
+Equation \ref{eq_multi_freedom_constraints}, in which all displacement components are in the left-hand side, is called the canonical form of the constraint.
+
+An MFC of this form is called \emph{multipoint} or \emph{multinode} if it involves displacement components at different nodes.  The constraint is called \emph{linear} if all displacement components appear linearly on the left-hand-side, and \emph{nonlinear} otherwise
+
+The constraint is called \emph{homogeneous} if, upon transfering all terms that depend on displacement components to the left-hand side, the right-hand side — the ``prescribed value'' in (8.3) — is zero. It is called \emph{non-homogeneous} otherwise.
+
+\subsubsection{Methods for imposing the constraints}
+The methods for imposing the constraints are described in \ref{sc_constraint_handlers}.
+
+\input{model_components/sp_constraints.tex}
 
 \input{model_components/mp_constraints.tex}
+
+%%See
+%% /documentacion/informatica/software/desarrollo/documentacion/elementos_finitos/felippa_ifem/IFEM.Ch08.pdf

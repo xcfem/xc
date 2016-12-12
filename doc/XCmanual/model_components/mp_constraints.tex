@@ -1,6 +1,16 @@
-\subsection{MP constraints}
+\subsubsection{Multi-point constraints}\label{sc_mp_constraints}
 
-\subsubsection{Description}
+Multipoint constraints are used to impose linear relationships between some of the degrees of freedom of the model as in:
+
+\begin{equation}
+  \sum_{i} A_i u_i= 0
+\end{equation}
+
+\noindent where $A_i$ are constant factors and $u_i$ are degrees of freedom of the model.
+
+This type of constraint allows considerable freedom in describing relations between degrees of freedom. They are used for example to create rigid elements and to link a node to an element.
+
+\paragraph{Description}
 An MP\_Constraint represents a multiple point constraint in the domain. A multiple point constraint imposes a relationship between the displacement for certain dof at two nodes in the model, typically called the {\em retained} node and the {\em constrained} node:
 
 \begin{equation}
