@@ -62,18 +62,18 @@ def getNodesInCoordinateRegion(xmin,xmax,ymin,ymax,zmin,zmax,xcSet):
 def get_attached_PhModElems(elemTag,setElPhMod):
   '''This function returns an ordered (by number of section) list with the 
   elements of the phantom model (or a set of its elements) that are associated 
-  with the element of the general model whose tag is passed as a parameter
+  with the element of the actual model whose tag is passed as a parameter
 
   :param elemTag:   tag of the element for which the function returns the 
                     Phantom Model elements associated   
   :param selElPhMod: set of elements of the phantom model to which limit
                     the search
   '''
-  #notation: GM general model, PM phantom model
+  #notation: AM actual model, PM phantom model
   retval=list()
   tmpSectList=list()
   for e in setElPhMod:
-    tgElass=e.getProp("idElem") #tag of the GM element associated 
+    tgElass=e.getProp("idElem") #tag of the AM element associated 
     if tgElass==elemTag:
       tmpSectList.append(e.getProp("dir")) #number of section
       retval.append(e)
