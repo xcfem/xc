@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+__author__= "Ana Ortega (AO_O), Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, AO_O, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
+
 # Devuelve los identificadores de las lineas de un conjunto.
 def getIdsLineasSet(preprocessor, setName):
   retvalIdsLineasSet= [] 
@@ -52,3 +58,26 @@ def getNodesInCoordinateRegion(xmin,xmax,ymin,ymax,zmin,zmax,xcSet):
               if zNod <= zmax:
                 retval.append(n)
   return retval
+
+def get_attached_PhModElems(elemTag,setElPhMod):
+  '''This function returns an ordered (by number of section) list with the 
+  elements of the phantom model (or a set of its elements) that are associated 
+  with the element of the actual model whose tag is passed as a parameter
+
+  :param elemTag:   tag of the element for which the function returns the 
+                    Phantom Model elements associated   
+  :param selElPhMod: set of elements of the phantom model to which limit
+                    the search
+  '''
+  #notation: AM actual model, PM phantom model
+  retval=list()
+  tmpSectList=list()
+  for e in setElPhMod:
+    tgElass=e.getProp("idElem") #tag of the AM element associated 
+    if tgElass==elemTag:
+      tmpSectList.append(e.getProp("dir")) #number of section
+      retval.append(e)
+  #sorting list of elements by number of section
+  tmpSectList,retval=zip(*sorted(zip(tmpSectList,retval)))
+  return retval
+  

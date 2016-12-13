@@ -3,11 +3,12 @@
 ''' Representación de diagramas de esfuerzos (o de otras magnitudes)
    sobre elementos lineales. '''
 
-__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, AOO and LCPT"
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
+
 
 import geom
 import vtk
