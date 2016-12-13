@@ -742,6 +742,8 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_encepados.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_esf_pilares.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_esf_pilares.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_isolated_footing.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_isolated_footing.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_min_dim_of_abutement_support.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_min_dim_of_abutement_support.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_min_dim_of_abutment_support.py
