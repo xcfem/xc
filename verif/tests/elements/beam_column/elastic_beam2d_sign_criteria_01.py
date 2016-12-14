@@ -46,7 +46,6 @@ G= E/(2*(1+nu)) # Shear modulus
 A= 7.64e-4 # Cross section area (m2)
 Iy= 80.1e-8 # Cross section moment of inertia (m4)
 Iz= 8.49e-8 # Cross section moment of inertia (m4)
-J= 0.721e-8 # Cross section torsion constant (m4)
 
 # Geometry
 L= 1.5 # Bar length (m)
@@ -60,12 +59,11 @@ nodes= preprocessor.getNodeLoader
 # Problem type
 predefined_spaces.gdls_resist_materiales2D(nodes)
 nodes.defaultTag= 1 #First node number.
-nodes.newNodeXYZ(0,0.0,0.0)
-nodes.newNodeXYZ(L,0.0,0.0)
+nodes.newNodeXY(0,0.0)
+nodes.newNodeXY(L,0.0)
 
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
-lin.xzVector= xc.Vector([0,0,1])
 
 # Materials
 caracMecSeccion= xc.CrossSectionProperties2d()

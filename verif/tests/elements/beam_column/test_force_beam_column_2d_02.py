@@ -78,7 +78,6 @@ nod2= nodes.getNode(2)
 delta= nod2.getDisp[1]  # Node 2 xAxis displacement
 nod1= nodes.getNode(1)
 Ry= nod1.getReaction[1] 
-nod1= nodes.getNode(1)
 RMz= nod1.getReaction[2] 
 
 elementos= preprocessor.getElementLoader

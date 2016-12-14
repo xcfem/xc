@@ -48,6 +48,7 @@ from misc import matrixUtils
 from postprocess.ControlVars import *
 
 
+
 hbeam=0.5     #heigh of the rectangular RC section (in Y local axis direction)
 wbeam=0.25    #width of the rectangular RC section (in Z local axis direction)
 Lbeam=1.00    #length of the beams
@@ -91,6 +92,7 @@ beamRCsect.lstRCSects[1].negatvRebarRows=[fi16s75r30]
 sections.append(beamRCsect)
 
 test= xc.ProblemaEF()
+test.errFileName= "/tmp/borrar.err" # Don't print errors.
 preprocessor=  test.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 # Problem type
