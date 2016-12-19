@@ -58,7 +58,7 @@
 
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <domain/mesh/element/Information.h>
-#include <domain/constraints/MP_Joint2D.h>
+#include <domain/constraints/MFreedom_Joint2D.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <domain/mesh/element/joint/Joint2D.h>
@@ -176,29 +176,29 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
     int startMPtag = getDomain()->getConstraints().getNumMPs();
     for( i=0 ; i<4 ; i++ ) InternalConstraints(i) = startMPtag + i ;
 
-    // create MP_Joint constraint node 1
-    if(addMP_Joint(getDomain(), InternalConstraints(0), theNodes.getTagNode(4), theNodes.getTagNode(0), 2, physicalProperties.getFixedEndInfo()(0), LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 1
+    if(addMFreedom_Joint(getDomain(), InternalConstraints(0), theNodes.getTagNode(4), theNodes.getTagNode(0), 2, physicalProperties.getFixedEndInfo()(0), LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 1\n";
         return;
       }
 
-    // create MP_Joint constraint node 2
-    if(addMP_Joint(getDomain(), InternalConstraints(1), theNodes.getTagNode(4), theNodes.getTagNode(1), 3, physicalProperties.getFixedEndInfo()(1), LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 2
+    if(addMFreedom_Joint(getDomain(), InternalConstraints(1), theNodes.getTagNode(4), theNodes.getTagNode(1), 3, physicalProperties.getFixedEndInfo()(1), LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 2\n";
         return;
       }
 
-    // create MP_Joint constraint node 3
-    if( addMP_Joint(getDomain(), InternalConstraints(2), theNodes.getTagNode(4), theNodes.getTagNode(2), 2, physicalProperties.getFixedEndInfo()(2), LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 3
+    if( addMFreedom_Joint(getDomain(), InternalConstraints(2), theNodes.getTagNode(4), theNodes.getTagNode(2), 2, physicalProperties.getFixedEndInfo()(2), LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 3\n";
         return;
       }
 
-    // create MP_Joint constraint node 4
-    if(addMP_Joint(getDomain(), InternalConstraints(3), theNodes.getTagNode(4), theNodes.getTagNode(3), 3, physicalProperties.getFixedEndInfo()(3), LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 4
+    if(addMFreedom_Joint(getDomain(), InternalConstraints(3), theNodes.getTagNode(4), theNodes.getTagNode(3), 3, physicalProperties.getFixedEndInfo()(3), LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 4\n";
         return;
@@ -304,29 +304,29 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
     for(int i=0 ; i<4 ; i++ )
       InternalConstraints(i) = startMPtag + i ;
 
-    // create MP_Joint constraint node 1
-    if( addMP_Joint(getDomain(), InternalConstraints(0), theNodes.getTagNode(4), theNodes.getTagNode(0), 2, physicalProperties.getFixedEndInfo()(0), LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 1
+    if( addMFreedom_Joint(getDomain(), InternalConstraints(0), theNodes.getTagNode(4), theNodes.getTagNode(0), 2, physicalProperties.getFixedEndInfo()(0), LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 1\n";
         return;
       }
 
-    // create MP_Joint constraint node 2
-    if( addMP_Joint( getDomain(), InternalConstraints(1), theNodes.getTagNode(4), theNodes.getTagNode(1), 3, physicalProperties.getFixedEndInfo()(1), LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 2
+    if( addMFreedom_Joint( getDomain(), InternalConstraints(1), theNodes.getTagNode(4), theNodes.getTagNode(1), 3, physicalProperties.getFixedEndInfo()(1), LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 2\n";
                 return;
       }
 
-    // create MP_Joint constraint node 3
-    if( addMP_Joint( getDomain(), InternalConstraints(2), theNodes.getTagNode(4), theNodes.getTagNode(2), 2, physicalProperties.getFixedEndInfo()(2), LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 3
+    if( addMFreedom_Joint( getDomain(), InternalConstraints(2), theNodes.getTagNode(4), theNodes.getTagNode(2), 2, physicalProperties.getFixedEndInfo()(2), LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 3\n";
         return;
       }
 
-    // create MP_Joint constraint node 4
-    if( addMP_Joint( getDomain(), InternalConstraints(3), theNodes.getTagNode(4), theNodes.getTagNode(3), 3, physicalProperties.getFixedEndInfo()(3), LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 4
+    if( addMFreedom_Joint( getDomain(), InternalConstraints(3), theNodes.getTagNode(4), theNodes.getTagNode(3), 3, physicalProperties.getFixedEndInfo()(3), LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 4\n";
         return;
@@ -342,14 +342,14 @@ XC::Joint2D::~Joint2D(void)
   {
     if(getDomain())
       {
-        MP_Constraint *Temp_MP;
+        MFreedom_Constraint *Temp_MF;
         for(int i=0;i<4;i++ )
           {
-            Temp_MP= getDomain()->getConstraints().getMP_Constraint( InternalConstraints(i) );
-            if(Temp_MP)
+            Temp_MF= getDomain()->getConstraints().getMFreedom_Constraint( InternalConstraints(i) );
+            if(Temp_MF)
               {
-                getDomain()->removeMP_Constraint( InternalConstraints(i) );
-                delete Temp_MP;
+                getDomain()->removeMFreedom_Constraint( InternalConstraints(i) );
+                delete Temp_MF;
               }
           }
         if(theNodes[4])
@@ -374,25 +374,24 @@ void XC::Joint2D::setDomain(Domain *theDomain)
   }
 
 
-int XC::Joint2D::addMP_Joint(Domain *theDomain, int mpNum,
+int XC::Joint2D::addMFreedom_Joint(Domain *theDomain, int mpNum,
                                   int RnodeID, int CnodeID,
                                   int MainDOF, int FixedEnd, int LrgDispFlag )
   {
-    MP_Constraint *Temp_MP;
 
-    // create MP_ForJoint constraint
-    Temp_MP= new XC::MP_Joint2D(getDomain(), mpNum, RnodeID, CnodeID, MainDOF, FixedEnd, LrgDispFlag );
+    // create MFreedom_ForJoint constraint
+    MFreedom_Constraint *Temp_MF= new XC::MFreedom_Joint2D(getDomain(), mpNum, RnodeID, CnodeID, MainDOF, FixedEnd, LrgDispFlag );
 
-    if(Temp_MP == nullptr)
+    if(Temp_MF == nullptr)
       {
-        std::cerr << "XC::Joint2D::addMP_Joint - WARNING ran out of memory for ForJoint XC::MP_Constraint ";
+        std::cerr << "XC::Joint2D::addMFreedom_Joint - WARNING ran out of memory for ForJoint XC::MFreedom_Constraint ";
         return -1;
       }
     // Add the multi-point constraint to the domain
-    if(getDomain()->addMP_Constraint(Temp_MP) == false)
+    if(getDomain()->addMFreedom_Constraint(Temp_MF) == false)
       {
-        std::cerr << "XC::Joint2D::addMP_Joint - WARNING could not add equalDOF XC::MP_Constraint to domain ";
-        delete Temp_MP;
+        std::cerr << "XC::Joint2D::addMFreedom_Joint - WARNING could not add equalDOF XC::MFreedom_Constraint to domain ";
+        delete Temp_MF;
         return -2;
       }
     return 0;

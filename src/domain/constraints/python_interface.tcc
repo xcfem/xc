@@ -29,55 +29,55 @@ class_<XC::Constraint, bases<XC::ContinuaReprComponent>, boost::noncopyable >("C
   .add_property("getMEDCellType",&XC::Constraint::getMEDCellType,"Returns cell type for MED fichier.")
   ;
 
-class_<XC::SP_Constraint, XC::SP_Constraint *, bases<XC::Constraint>, boost::noncopyable >("SPConstraint", no_init)
-  .add_property("getDOFNumber", &XC::SP_Constraint::getDOF_Number,"return DOF's number.")
-  .add_property("getValue", &XC::SP_Constraint::getValue,"returns imposed value for DOF.")
-  .add_property("isHomogeneous", &XC::SP_Constraint::isHomogeneous,"true if it's an homogeneous boundary condition.")
-  .add_property("loadPatternTag", &XC::SP_Constraint::getLoadPatternTag,&XC::SP_Constraint::setLoadPatternTag,"assigns/retrieves load pattern tag.") 
-  .add_property("getVtkCellType", &XC::SP_Constraint::getVtkCellType, "returns VTK cell type")
+class_<XC::SFreedom_Constraint, XC::SFreedom_Constraint *, bases<XC::Constraint>, boost::noncopyable >("SPConstraint", no_init)
+  .add_property("getDOFNumber", &XC::SFreedom_Constraint::getDOF_Number,"return DOF's number.")
+  .add_property("getValue", &XC::SFreedom_Constraint::getValue,"returns imposed value for DOF.")
+  .add_property("isHomogeneous", &XC::SFreedom_Constraint::isHomogeneous,"true if it's an homogeneous boundary condition.")
+  .add_property("loadPatternTag", &XC::SFreedom_Constraint::getLoadPatternTag,&XC::SFreedom_Constraint::setLoadPatternTag,"assigns/retrieves load pattern tag.") 
+  .add_property("getVtkCellType", &XC::SFreedom_Constraint::getVtkCellType, "returns VTK cell type")
   ;
 
-class_<XC::SP_ConstraintIter, boost::noncopyable >("SP_ConstraintIter", no_init)
-  .def("next", &XC::SP_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
+class_<XC::SFreedom_ConstraintIter, boost::noncopyable >("SFreedom_ConstraintIter", no_init)
+  .def("next", &XC::SFreedom_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
    ;
 
-class_<XC::ImposedMotionBase , bases<XC::SP_Constraint>, boost::noncopyable >("ImposedMotionBase", no_init);
+class_<XC::ImposedMotionBase , bases<XC::SFreedom_Constraint>, boost::noncopyable >("ImposedMotionBase", no_init);
 
 class_<XC::ImposedMotionSP , bases<XC::ImposedMotionBase>, boost::noncopyable >("ImposedMotionSP", no_init);
 
 class_<XC::ImposedMotionSP1 , bases<XC::ImposedMotionBase>, boost::noncopyable >("ImposedMotionSP1", no_init);
 
-class_<XC::MP_ConstraintBase, bases<XC::Constraint>, boost::noncopyable >("MP_ConstraintBase", no_init);
+class_<XC::MFreedom_ConstraintBase, bases<XC::Constraint>, boost::noncopyable >("MFreedom_ConstraintBase", no_init);
 
 
-class_<XC::MP_Constraint, bases<XC::MP_ConstraintBase>, boost::noncopyable >("MP_Constraint", no_init);
+class_<XC::MFreedom_Constraint, bases<XC::MFreedom_ConstraintBase>, boost::noncopyable >("MFreedom_Constraint", no_init);
 
-class_<XC::MP_ConstraintIter, boost::noncopyable >("MP_ConstraintIter", no_init)
-  .def("next", &XC::MP_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
+class_<XC::MFreedom_ConstraintIter, boost::noncopyable >("MFreedom_ConstraintIter", no_init)
+  .def("next", &XC::MFreedom_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
    ;
 
-class_<XC::EqualDOF, bases<XC::MP_Constraint>, boost::noncopyable >("EqualDOF", no_init);
+class_<XC::EqualDOF, bases<XC::MFreedom_Constraint>, boost::noncopyable >("EqualDOF", no_init);
 
-class_<XC::MP_Joint2D , bases<XC::MP_Constraint>, boost::noncopyable >("MP_Joint2D", no_init);
+class_<XC::MFreedom_Joint2D , bases<XC::MFreedom_Constraint>, boost::noncopyable >("MFreedom_Joint2D", no_init);
 
-class_<XC::MP_Joint3D, bases<XC::MP_Constraint>, boost::noncopyable >("MP_Joint3D", no_init);
+class_<XC::MFreedom_Joint3D, bases<XC::MFreedom_Constraint>, boost::noncopyable >("MFreedom_Joint3D", no_init);
 
-class_<XC::RigidDiaphragm, bases<XC::MP_Constraint>, boost::noncopyable >("RigidDiaphragm", no_init);
+class_<XC::RigidDiaphragm, bases<XC::MFreedom_Constraint>, boost::noncopyable >("RigidDiaphragm", no_init);
 
-class_<XC::RigidBase, bases<XC::MP_Constraint>, boost::noncopyable >("RigidBase", no_init);
+class_<XC::RigidBase, bases<XC::MFreedom_Constraint>, boost::noncopyable >("RigidBase", no_init);
 
 class_<XC::RigidBeam, bases<XC::RigidBase>, boost::noncopyable >("RigidBeam", no_init);
 
 class_<XC::RigidRod, bases<XC::RigidBase>, boost::noncopyable >("RigidRod", no_init);
 
-class_<XC::MRMP_Constraint, bases<XC::MP_ConstraintBase>, boost::noncopyable >("MRMP_Constraint", no_init);
+class_<XC::MRMFreedom_Constraint, bases<XC::MFreedom_ConstraintBase>, boost::noncopyable >("MRMFreedom_Constraint", no_init);
 
-class_<XC::MRMP_ConstraintIter, boost::noncopyable >("MRMP_ConstraintIter", no_init)
-  .def("next", &XC::MRMP_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
+class_<XC::MRMFreedom_ConstraintIter, boost::noncopyable >("MRMFreedom_ConstraintIter", no_init)
+  .def("next", &XC::MRMFreedom_ConstraintIter::operator(), return_internal_reference<>(),"Returns next node.")
    ;
 
 
-class_<XC::GlueNodeToElement, bases<XC::MRMP_Constraint>, boost::noncopyable >("GlueNodeToElement", no_init);
+class_<XC::GlueNodeToElement, bases<XC::MRMFreedom_Constraint>, boost::noncopyable >("GlueNodeToElement", no_init);
 
 //class_<XC::MapCasosActivos, bases<EntCmd>, boost::noncopyable >("MapCasosActivos", no_init);
 

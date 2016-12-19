@@ -31,7 +31,7 @@
 
 
 //Constraints.
-#include <domain/constraints/SP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
 
 
 

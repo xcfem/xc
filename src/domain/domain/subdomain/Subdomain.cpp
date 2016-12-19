@@ -54,8 +54,8 @@
 //
 // Description: This file contains the class definition for XC::Subdomain.
 // Subdomain is a container class. The class is responsible for holding
-// and providing access to the Elements, Nodes, LoadCases, SP_Constraints
-// and MP_Constraints that have been added to the subdomain.
+// and providing access to the Elements, Nodes, LoadCases, SFreedom_Constraints
+// and MFreedom_Constraints that have been added to the subdomain.
 //
 // What: "@(#) Subdomain.C, revA"
 
@@ -66,8 +66,8 @@
 #include <domain/mesh/element/Element.h>
 #include "domain/mesh/element/NodePtrsWithIDs.h"
 #include <domain/mesh/node/Node.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/MP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/MFreedom_Constraint.h>
 #include <utility/tagged/storage/ArrayOfTaggedObjects.h>
 #include <solution/analysis/analysis/DomainDecompositionAnalysis.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>

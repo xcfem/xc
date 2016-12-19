@@ -59,8 +59,8 @@
 
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <domain/domain/Domain.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/SP_ConstraintIter.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/SFreedom_ConstraintIter.h>
 #include <cstdlib>
 #include <utility/handler/ErrorHandler.h>
 
@@ -81,8 +81,8 @@ XC::MultiSupportPattern::MultiSupportPattern(void)
 
 void  XC::MultiSupportPattern::applyLoad(double time)
   {
-    SP_Constraint *sp;
-    SP_ConstraintIter &theIter = this->getSPs();
+    SFreedom_Constraint *sp;
+    SFreedom_ConstraintIter &theIter = this->getSPs();
     while ((sp = theIter()) != 0)
       sp->applyConstraint(time);
   }
@@ -179,8 +179,8 @@ int XC::MultiSupportPattern::recvSelf(const CommParameters &cp)
 void XC::MultiSupportPattern::Print(std::ostream &s, int flag)
   {
     s << "MultiSupportPattern  tag: " << this->getTag() << std::endl;
-    SP_Constraint *sp;
-    SP_ConstraintIter &theIter = this->getSPs();
+    SFreedom_Constraint *sp;
+    SFreedom_ConstraintIter &theIter = this->getSPs();
     while ((sp = theIter()) != 0)
       sp->Print(s, flag);
   }

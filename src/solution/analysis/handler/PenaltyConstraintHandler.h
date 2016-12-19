@@ -57,8 +57,8 @@
 // PenaltyConstraintHandler. PenaltyConstraintHandler is a 
 // constraint handler for handling constraints using the penalty method.
 // for each element and degree-of-freedom at a node it constructs regular
-// FE_Element and DOF_Groups; for each SP_Constraint and MP_Constraint
-// PenaltySP_FE and PenaltyMP_FE elements are created.
+// FE_Element and DOF_Groups; for each SFreedom_Constraint and MFreedom_Constraint
+// PenaltySFreedom_FE and PenaltyMFreedom_FE elements are created.
 //
 // What: "@(#) PenaltyConstraintHandler.h, revA"
 
@@ -78,8 +78,8 @@ class DOF_Group;
 //! @brief PenaltyConstraintHandler is a 
 //! constraint handler for handling constraints using the penalty method.
 //! for each element and degree-of-freedom at a node it constructs regular
-//! FE_Element and DOF_Groups; for each SP_Constraint and MP_Constraint
-//! PenaltySP_FE and PenaltyMP_FE elements are created.
+//! FE_Element and DOF_Groups; for each SFreedom_Constraint and MFreedom_Constraint
+//! PenaltySFreedom_FE and PenaltyMFreedom_FE elements are created.
 class PenaltyConstraintHandler : public FactorsConstraintHandler
   {
     friend class ModelWrapper;

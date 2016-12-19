@@ -29,7 +29,7 @@
 #include "MPBase_FE.h"
 #include <domain/mesh/node/Node.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
-#include <domain/constraints/MP_ConstraintBase.h>
+#include <domain/constraints/MFreedom_ConstraintBase.h>
 
 //! @brief Constructor.
 XC::MPBase_FE::MPBase_FE(int tag, int numDOF_Group, int ndof,const double &Alpha)
@@ -39,7 +39,7 @@ XC::MPBase_FE::MPBase_FE(int tag, int numDOF_Group, int ndof,const double &Alpha
 //! @brief determine the IDs in myID for those DOFs marked
 //! as constrained DOFs, this is obtained from the DOF_Group
 //! associated with the constrained node.
-int XC::MPBase_FE::determineConstrainedDOFsIDs(const MP_ConstraintBase &theMP,const int &offset)
+int XC::MPBase_FE::determineConstrainedDOFsIDs(const MFreedom_ConstraintBase &theMP,const int &offset)
   {
     int retval= offset;
     DOF_Group *theConstrainedNodesDOFs = theConstrainedNode->getDOF_GroupPtr();

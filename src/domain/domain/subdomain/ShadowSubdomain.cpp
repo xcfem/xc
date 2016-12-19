@@ -53,8 +53,8 @@
 //
 // Description: This file contains the class definition for XC::ShadowSubdomain.
 // ShadowSubdomain is a container class. The class is responsible for holding
-// and providing access to the Elements, Nodes, LoadCases, SP_Constraints
-// and MP_Constraints that have been added to the XC::ShadowSubdomain.
+// and providing access to the Elements, Nodes, LoadCases, SFreedom_Constraints
+// and MFreedom_Constraints that have been added to the XC::ShadowSubdomain.
 //
 // What: "@(#) ShadowSubdomain.C, revA"
 
@@ -64,8 +64,8 @@
 
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/Element.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/MP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/MFreedom_Constraint.h>
 #include <solution/analysis/analysis/DomainDecompositionAnalysis.h>
 #include <domain/load/NodalLoad.h>
 #include <domain/load/ElementalLoad.h>
@@ -339,13 +339,13 @@ bool XC::ShadowSubdomain::addExternalNode(Node *theNode)
     return true;
   }
 
-bool XC::ShadowSubdomain::addSP_Constraint(SP_Constraint *theSP)
+bool XC::ShadowSubdomain::addSFreedom_Constraint(SFreedom_Constraint *theSP)
   {
 
 #ifdef _G3DEBUG
         // do all the checking stuff
 #endif
-    msgData(0) = ShadowActorSubdomain_addSP_Constraint;
+    msgData(0) = ShadowActorSubdomain_addSFreedom_Constraint;
     msgData(1) = theSP->getClassTag();
     msgData(2) = theSP->getDbTag();
     this->sendID(msgData);
@@ -358,12 +358,12 @@ bool XC::ShadowSubdomain::addSP_Constraint(SP_Constraint *theSP)
     return true;
   }
 
-bool XC::ShadowSubdomain::addMP_Constraint(MP_Constraint *theMP)
+bool XC::ShadowSubdomain::addMFreedom_Constraint(MFreedom_Constraint *theMP)
   {
 #ifdef _G3DEBUG
         // do all the checking stuff
 #endif
-    msgData(0) = ShadowActorSubdomain_addMP_Constraint;
+    msgData(0) = ShadowActorSubdomain_addMFreedom_Constraint;
     msgData(1) = theMP->getClassTag();
     msgData(2) = theMP->getDbTag();
     this->sendID(msgData);
@@ -397,7 +397,7 @@ bool XC::ShadowSubdomain::addLoadPattern(LoadPattern *thePattern)
 
 
 
-bool XC::ShadowSubdomain::addSP_Constraint(SP_Constraint *theSP, int loadPattern)
+bool XC::ShadowSubdomain::addSFreedom_Constraint(SFreedom_Constraint *theSP, int loadPattern)
   {
 #ifdef _G3DEBUG
         // do all the checking stuff
@@ -405,13 +405,13 @@ bool XC::ShadowSubdomain::addSP_Constraint(SP_Constraint *theSP, int loadPattern
 
   /*
   LoadPattern *thePattern = this->XC::Subdomain::getLoadPattern(loadPattern);
-  if((thePattern == 0) || (thePattern->addSP_Constraint(theSP) == false)) {
-    std::cerr << "XC::ShadowSubdomain::addSP_Constraint() - could not add XC::SP_Constraint: " << *theSP;
+  if((thePattern == 0) || (thePattern->addSFreedom_Constraint(theSP) == false)) {
+    std::cerr << "XC::ShadowSubdomain::addSFreedom_Constraint() - could not add XC::SFreedom_Constraint: " << *theSP;
     return false;
   }
   */
 
-  msgData(0) = ShadowActorSubdomain_addSP_ConstraintToPattern;
+  msgData(0) = ShadowActorSubdomain_addSFreedom_ConstraintToPattern;
   msgData(1) = theSP->getClassTag();
   msgData(2) = theSP->getDbTag();
   msgData(3) = loadPattern;
@@ -557,12 +557,12 @@ bool XC::ShadowSubdomain::removeNode(int tag)
     return retval;
   }
 
-bool XC::ShadowSubdomain::removeSP_Constraint(int tag)
+bool XC::ShadowSubdomain::removeSFreedom_Constraint(int tag)
   {
     bool retval= theShadowSPs->removeComponent(tag);
     if(retval)
       {
-        msgData(0) = ShadowActorSubdomain_removeSP_Constraint;
+        msgData(0) = ShadowActorSubdomain_removeSFreedom_Constraint;
         msgData(1) = tag;
         this->sendID(msgData);
         numSPs--;
@@ -570,12 +570,12 @@ bool XC::ShadowSubdomain::removeSP_Constraint(int tag)
     return retval;
   }
 
-bool XC::ShadowSubdomain::removeMP_Constraint(int tag)
+bool XC::ShadowSubdomain::removeMFreedom_Constraint(int tag)
   {
     bool retval= theShadowMPs->removeComponent(tag);
     if(retval)
       {
-        msgData(0) = ShadowActorSubdomain_removeMP_Constraint;
+        msgData(0) = ShadowActorSubdomain_removeMFreedom_Constraint;
         msgData(1) = tag;
         this->sendID(msgData);
         numMPs--;
@@ -637,7 +637,7 @@ bool XC::ShadowSubdomain::removeElementalLoad(int loadTag, int loadPattern)
     return res;
   }
 
-bool XC::ShadowSubdomain::removeSP_Constraint(int loadTag, int loadPattern)
+bool XC::ShadowSubdomain::removeSFreedom_Constraint(int loadTag, int loadPattern)
   {
     bool retval= false;
     // remove the object from the container
@@ -645,10 +645,10 @@ bool XC::ShadowSubdomain::removeSP_Constraint(int loadTag, int loadPattern)
     if(mc)
       {
         LoadPattern *theLoadPattern = dynamic_cast<LoadPattern *>(mc);
-        retval= theLoadPattern->removeSP_Constraint(loadTag);
+        retval= theLoadPattern->removeSFreedom_Constraint(loadTag);
         if(retval)
           {
-            msgData(0) = ShadowActorSubdomain_removeSP_ConstraintFromPattern;
+            msgData(0) = ShadowActorSubdomain_removeSFreedom_ConstraintFromPattern;
             msgData(1) = loadTag;
             msgData(2) = loadPattern;
             this->sendID(msgData);

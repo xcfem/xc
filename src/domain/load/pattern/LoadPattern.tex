@@ -15,7 +15,7 @@
 
 \noindent {\bf Description} \\ 
 \indent The LoadPattern class is a concrete base class. A
-LoadPattern is a container class for Load and SP\_Constraint
+LoadPattern is a container class for Load and SFreedom\_Constraint
 objects. Each LoadPattern object is assocaited with a TimeSeries
 object which, for a given pseudo time, will return the appropriate
 load factor to be applied to th load in the LoadPattern. \\
@@ -32,14 +32,14 @@ load factor to be applied to th load in the LoadPattern. \\
 \indent {\em  // Public Methods to add loads}\\
 \indent {\em  virtual bool addNodalLoad(NodalLoad *);}\\
 \indent {\em  virtual bool addElementalLoad(ElementalLoad *);}\\
-\indent {\em  virtual bool addSP\_Constraint(SP\_Constraint *);}\\ 
+\indent {\em  virtual bool addSFreedom\_Constraint(SFreedom\_Constraint *);}\\ 
 \indent {\em  virtual NodalLoadIter     \&getNodalLoads(void);}\\
 \indent {\em  virtual ElementalLoadIter \&getElementalLoads(void);}\\
-\indent {\em  virtual SP\_ConstraintIter \&getSPs(void);}\\ \\
+\indent {\em  virtual SFreedom\_ConstraintIter \&getSPs(void);}\\ \\
 \indent {\em  // Public Methods to remove loads}\\
 \indent {\em  virtual NodalLoad *removeNodalLoad(int tag);}\\
 \indent {\em  virtual ElementalLoad *removeElementalLoad(int tag);}\\
-\indent {\em  virtual SP\_Constraint *removeSP\_Constraint(int tag);}\\ \\
+\indent {\em  virtual SFreedom\_Constraint *removeSFreedom\_Constraint(int tag);}\\ \\
 \indent {\em  // Public Methods to apply loads}\\
 \indent {\em  virtual void applyLoad(double pseudoTime = 0.0);}\\
 \indent {\em  virtual void setLoadConstant(void);}\\ \\
@@ -54,7 +54,7 @@ FEM\_ObjectBroker \&theBroker);}\\
 \indent {\em LoadPattern(int tag);}\\ 
 The integer {\em tag} is passed to the DomainComponent classes
 constructor. Creates three ArrayOftaggedObjects objects to store
-pointers to the NodalLoad, ElementalLoad and SP\_Constraints and three
+pointers to the NodalLoad, ElementalLoad and SFreedom\_Constraints and three
 iters. If not enough memory is available for these objects an error
 message is printed and the program is terminated. \\  
 
@@ -93,8 +93,8 @@ LoadPattern. If the LoadPattern could add the pointer to its storage
 object for elemental loads, it will invoke {\em setDomain()}
 and {\em setLoadPattern()} on the load object if a Domain has been set. \\
 
-\indent {\em  virtual bool addSP\_Constraint(SP\_Constraint *theSp);}\\ 
-Adds the SP\_Constraint pointed to by {\em theSp} to the
+\indent {\em  virtual bool addSFreedom\_Constraint(SFreedom\_Constraint *theSp);}\\ 
+Adds the SFreedom\_Constraint pointed to by {\em theSp} to the
 LoadPattern. If the LoadPattern could add the pointer to its storage
 object for single-point constraints, it will invoke {\em setDomain()}
 and {\em setLoadPattern()} on the constraint object if a Domain has
@@ -106,7 +106,7 @@ Returns an iter to the nodal loads in the LoadPattern. \\
 \indent {\em  virtual ElementalLoadIter \&getElementalLoads(void);}\\
 Returns an iter to the elemental loads in the LoadPattern. \\
 
-\indent {\em  virtual SP\_ConstraintIter \&getSPs(void);}\\ 
+\indent {\em  virtual SFreedom\_ConstraintIter \&getSPs(void);}\\ 
 Returns an iter to the single-point constraints in the LoadPattern. \\
     
 \indent {\em  virtual NodalLoad *removeNodalLoad(int tag);}\\
@@ -121,7 +121,7 @@ the LoadPattern and set the loads associated Domain object to
 $0$. Returns a pointer to the load if succesfully removed, otherwise
 $0$ is returned. \\ 
 
-\indent {\em  virtual SP\_Constraint *removeSP\_Constraint(int tag);}\\ 
+\indent {\em  virtual SFreedom\_Constraint *removeSFreedom\_Constraint(int tag);}\\ 
 To remove the single-point constraint whose identifier is given by {\em tag} from
 the LoadPattern and st its associated Doman object to $0$. Returns a
 pointer to the load if succesfully removed, otherwise $0$ is
@@ -155,4 +155,4 @@ Does the mirror image of {\em sendSelf()}. \\
 
 \indent {\em  virtual void Print(std::ostream \&s, int flag =0);}\\
 Invokes {\em Print(s, flag)} on the TimeSeries, NodalLoads,
-ElementalLoads and SP\_Constraints. 
+ElementalLoads and SFreedom\_Constraints. 

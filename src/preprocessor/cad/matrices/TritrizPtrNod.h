@@ -69,7 +69,7 @@ class TritrizPtrNod: public TritrizPtrBase<MatrizPtrNod>
     Vector IntegSimpsonFilaJ(const size_t &,const size_t &,const ExprAlgebra &,const size_t &n= 10) const;
     Vector IntegSimpsonFilaK(const size_t &,const size_t &,const ExprAlgebra &,const size_t &n= 10) const;
 
-    void fix(const SP_Constraint &) const;
+    void fix(const SFreedom_Constraint &) const;
 
     std::vector<int> getTags(void) const;
 
@@ -107,9 +107,9 @@ std::deque<double> TritrizPtrNod::IntegSimpsonFila(const F &f,const std::string 
     return retval;
   }
 
-inline void fix(const TritrizPtrNod &ttz,const SP_Constraint &spc)
+inline void fix(const TritrizPtrNod &ttz,const SFreedom_Constraint &spc)
   { ttz.fix(spc); }
-void fix(const TritrizPtrNod::var_ref_caja &ref_caja,const SP_Constraint &spc);
+void fix(const TritrizPtrNod::var_ref_caja &ref_caja,const SFreedom_Constraint &spc);
 
 std::vector<int> getIdNodosQuad4N(const TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k);
 std::vector<int> getIdNodosQuad9N(const TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k);

@@ -55,8 +55,8 @@
 //
 // Description: This file contains the class definition for PartitionedDomain.
 // PartitionedDomain is an abstract class. The class is responsible for holding
-// and providing access to the Elements, Nodes, SP_Constraints 
-// and MP_Constraints just like a normal domain. In addition the domain provides
+// and providing access to the Elements, Nodes, SFreedom_Constraints 
+// and MFreedom_Constraints just like a normal domain. In addition the domain provides
 // a method to partition the domain into Subdomains.
 //
 // ModelBuilder. There are no partitions in a PartitionedDomain.
@@ -113,8 +113,8 @@ class PartitionedDomain: public Domain
     virtual  bool addNode(Node *nodePtr);
 
     virtual  bool addLoadPattern(LoadPattern *);            
-    virtual  bool addSP_Constraint(SP_Constraint *); 
-    virtual  bool addSP_Constraint(SP_Constraint *, int loadPatternTag); 
+    virtual  bool addSFreedom_Constraint(SFreedom_Constraint *); 
+    virtual  bool addSFreedom_Constraint(SFreedom_Constraint *, int loadPatternTag); 
     virtual  bool addNodalLoad(NodalLoad *, int loadPatternTag);
     virtual  bool addElementalLoad(ElementalLoad *, int loadPatternTag);
 
@@ -122,8 +122,8 @@ class PartitionedDomain: public Domain
     virtual void clearAll(void);
     virtual bool removeElement(int tag);
     virtual bool removeNode(int tag);        
-    virtual bool removeSP_Constraint(int tag);
-    virtual bool removeMP_Constraint(int tag);
+    virtual bool removeSFreedom_Constraint(int tag);
+    virtual bool removeMFreedom_Constraint(int tag);
     virtual bool removeLoadPattern(int loadTag);
     
     // methods to access the elements

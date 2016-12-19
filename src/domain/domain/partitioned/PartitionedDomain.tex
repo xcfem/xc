@@ -46,7 +46,7 @@ rewritten \\
 \indent\indent {\em virtual bool addElement(Element *theElementPtr, bool
 check = false);}  \\
 \indent\indent {\em virtual bool addNode(Node *theNodePtr, bool check = false);}  \\
-\indent\indent {\em virtual bool addSP\_Constraint(SP\_Constraint *theSPptr, bool
+\indent\indent {\em virtual bool addSFreedom\_Constraint(SFreedom\_Constraint *theSPptr, bool
 check = false);}  \\
 \indent\indent {\em virtual bool addMP(MP\_Constraint *theMPptr, bool check = false);}  \\
 \indent\indent {\em virtual bool addLoadCase(LoadCase *theLCptr);}  \\
@@ -70,7 +70,7 @@ double loadFactor = 1.0);} \\
 \indent\indent {\em virtual Node *removeNode(int tag, bool checkNeeded
 = true);}\\ 
 \indent\indent {\em virtual LoadCase *removeLoadCase(int tag);}\\        
-\indent\indent {\em virtual SP\_Constraint *removeSP\_Constraint(int
+\indent\indent {\em virtual SFreedom\_Constraint *removeSFreedom\_Constraint(int
 tag);}\\ 
 \indent\indent {\em virtual MP\_Constraint *removeMP\_Constraint(int
 tag);} \\ \\
@@ -157,12 +157,12 @@ node by invoking {\em Domain::addNode}. The call returns {\em false} if
 the node was not added, otherwise {\em true} is returned. \\  
 
 
-{\em virtual bool addSP\_Constraint(SP\_Constraint *theSPptr, bool
+{\em virtual bool addSFreedom\_Constraint(SFreedom\_Constraint *theSPptr, bool
 check = false);}  \\
 Adds the single point constraint pointed to by theSPptr to the 
 domain. The domain performs some checks is {\em check} is true. If
 successful the domain adds the constraint using {\em
-Domain::addSP\_Constraint()}. The call returns {\em false} if
+Domain::addSFreedom\_Constraint()}. The call returns {\em false} if
 the constraint was not added, otherwise {\em true} is returned. \\  
 
 {\em virtual bool addMP(MP\_Constraint *theMPptr, bool check = false);}  \\
@@ -247,7 +247,7 @@ Returns the number of nodes in the domain.
 This number is obtained by summing the contributions from each subdomain. \\
 
 {\em virtual int getNumSPs(void) const;}\\
-Returns the number of SP\_Constraints in the domain. 
+Returns the number of SFreedom\_Constraints in the domain. 
 This number is obtained by summing the contributions from each subdomain. \\
 
 {\em virtual int getNumMPs(void) const;}\\
@@ -285,8 +285,8 @@ Returns $0$ if the load case was not in the domain, otherwise
 returns a pointer to the load case that was removed. Invokes {\em
 setDomain(0)} on the load case before it is returned.\\
 
-{\em virtual SP\_Constraint *removeSP\_Constraint(int tag);}\\
-To remove the SP\_Constraint whose tag is given by {\em tag} from the
+{\em virtual SFreedom\_Constraint *removeSFreedom\_Constraint(int tag);}\\
+To remove the SFreedom\_Constraint whose tag is given by {\em tag} from the
 domain. Returns $0$ if the constraint was not in the domain, otherwise
 the domain invokes {\em setDomain(0)} on the constraint and {\em
 setDomainChange(true,false,false)} on itself before a pointer to the

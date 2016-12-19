@@ -30,7 +30,7 @@
 #include "TritrizPtrPnt.h"
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "domain/domain/Domain.h"
-#include "domain/constraints/SP_Constraint.h"
+#include "domain/constraints/SFreedom_Constraint.h"
 
 
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"

@@ -569,8 +569,7 @@ void XC::ReinforcingSteel::Print(std::ostream &s, int flag)
 /*****************************************************************************************/
 /*************************     Base Menegotto-Pinto Equation       ***********************/
 /*****************************************************************************************/
-double
-XC::ReinforcingSteel::MPfunc(double a)
+double XC::ReinforcingSteel::MPfunc(double a)
 {
   if(a>=1.0)
     std::cerr << "a is one in XC::ReinforcingSteel::MPfunc()\n";
@@ -582,8 +581,7 @@ XC::ReinforcingSteel::MPfunc(double a)
   return TEb-TEsec*(1-pow(a,TR+1))/(1-a)+TEa*a*(1-pow(a,TR))/(1-a);
 }
 
-int
-XC::ReinforcingSteel::SetMP()
+int XC::ReinforcingSteel::SetMP()
 {
   double Rmin;
   double a=0.01;

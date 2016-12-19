@@ -67,12 +67,12 @@
 #include <domain/domain/SubdomainIter.h>
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/Element.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/MP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/MFreedom_Constraint.h>
 #include "domain/mesh/node/NodeIter.h"
 #include "domain/mesh/element/ElementIter.h"
-#include <domain/constraints/MP_ConstraintIter.h>
-#include <domain/constraints/SP_ConstraintIter.h>
+#include <domain/constraints/MFreedom_ConstraintIter.h>
+#include <domain/constraints/SFreedom_ConstraintIter.h>
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
 #include "solution/graph/graph/Graph.h"
@@ -239,10 +239,10 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
           }
       }
 
-    // now go through the MP_Constraints and ensure the retained node is in every
+    // now go through the MFreedom_Constraints and ensure the retained node is in every
     // partition the constrained node is in
-    MP_ConstraintIter &theMPs = myDomain->getConstraints().getMPs();
-    MP_Constraint *mpPtr;
+    MFreedom_ConstraintIter &theMPs = myDomain->getConstraints().getMPs();
+    MFreedom_Constraint *mpPtr;
     while((mpPtr = theMPs()) != 0)
       {
         int retained = mpPtr->getNodeRetained();
@@ -316,7 +316,7 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
     // now we go through the load patterns and move NodalLoad
     // 1) make sure each subdomain has a copy of the partitioneddomains load patterns.
     // 2) move nodal loads
-    // 3) move SP_Constraints
+    // 3) move SFreedom_Constraints
 
     std::map<int,LoadPattern *> &theLoadPatterns = myDomain->getConstraints().getLoadPatterns();
     for(std::map<int,LoadPattern *>::iterator theLoadPattern= theLoadPatterns.begin();
@@ -380,8 +380,8 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
                   }
               }
          }
-        SP_ConstraintIter &theSPs = theLoadPattern->second->getSPs();
-        SP_Constraint *spPtr;
+        SFreedom_ConstraintIter &theSPs = theLoadPattern->second->getSPs();
+        SFreedom_Constraint *spPtr;
         while ((spPtr = theSPs()) != 0)
           {
             int nodeTag = spPtr->getNodeTag();
@@ -404,8 +404,8 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
                   {
                     Subdomain *theSubdomain = myDomain->getSubdomainPtr(partition);
                     if(numPartitions == 1)
-                      theLoadPattern->second->removeSP_Constraint(spPtr->getTag());
-                    int res = theSubdomain->addSP_Constraint(spPtr, loadPatternTag);
+                      theLoadPattern->second->removeSFreedom_Constraint(spPtr->getTag());
+                    int res = theSubdomain->addSFreedom_Constraint(spPtr, loadPatternTag);
                     if(res < 0)
                       std::cerr << "XC::DomainPartitioner::partition() - failed to add SP Constraint\n";
                   }
@@ -424,8 +424,8 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
       }
 
     // add the single point constraints,
-    SP_ConstraintIter &theDomainSP = myDomain->getConstraints().getSPs();
-    SP_Constraint *spPtr;
+    SFreedom_ConstraintIter &theDomainSP = myDomain->getConstraints().getSPs();
+    SFreedom_Constraint *spPtr;
     while((spPtr = theDomainSP()) != 0)
       {
         int nodeTag = spPtr->getNodeTag();
@@ -448,16 +448,16 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
               {
                 Subdomain *theSubdomain = myDomain->getSubdomainPtr(partition);
                 if(numPartitions == 1)
-                  { myDomain->removeSP_Constraint(spPtr->getTag()); }
-                int res = theSubdomain->addSP_Constraint(spPtr);
+                  { myDomain->removeSFreedom_Constraint(spPtr->getTag()); }
+                int res = theSubdomain->addSFreedom_Constraint(spPtr);
                 if(res < 0)
                   std::cerr << "XC::DomainPartitioner::partition() - failed to add SP Constraint\n";
               }
           }
       }
 
-    // move MP_Constraints - add an XC::MP_Constraint to every partition a constrained node is in
-    MP_ConstraintIter &moreMPs = myDomain->getConstraints().getMPs();
+    // move MFreedom_Constraints - add an XC::MFreedom_Constraint to every partition a constrained node is in
+    MFreedom_ConstraintIter &moreMPs = myDomain->getConstraints().getMPs();
     while((mpPtr = moreMPs()) != 0)
       {
         int constrained = mpPtr->getNodeConstrained();
@@ -471,8 +471,8 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
               {
                 Subdomain *theSubdomain = myDomain->getSubdomainPtr(partition);
                 if(numPartitions == 1)
-                  myDomain->removeMP_Constraint(mpPtr->getTag());
-                int res = theSubdomain->addMP_Constraint(mpPtr);
+                  myDomain->removeMFreedom_Constraint(mpPtr->getTag());
+                int res = theSubdomain->addMFreedom_Constraint(mpPtr);
                 if(res < 0)
                   std::cerr << "XC::DomainPartitioner::partition() - failed to add MP Constraint\n";
               }
@@ -779,10 +779,10 @@ int XC::DomainPartitioner::swapVertex(int from, int to, int vertexTag, bool adja
     }
 
 
-    // now remove any SP_Constraints that may have been external to
+    // now remove any SFreedom_Constraints that may have been external to
     // PartitionedDomain and are now internal to toSubdomain
-    SP_ConstraintIter &theSPs = myDomain->getSPs();
-    SP_Constraint *spPtr;
+    SFreedom_ConstraintIter &theSPs = myDomain->getSPs();
+    SFreedom_Constraint *spPtr;
     while ((spPtr = theSPs()) != 0) {
   int nodeTag = spPtr->getNodeTag();
   for (int i=0; i<nodesSize; i++) {
@@ -797,8 +797,8 @@ int XC::DomainPartitioner::swapVertex(int from, int to, int vertexTag, bool adja
       }
         }
     if (internal == 0) { // add to toSubdomain if inteernal
-        myDomain->removeSP_Constraint(spPtr->getTag());
-        toSubdomain->addSP_Constraint(spPtr);
+        myDomain->removeSFreedom_Constraint(spPtr->getTag());
+        toSubdomain->addSFreedom_Constraint(spPtr);
     }
       }
   }
@@ -806,14 +806,14 @@ int XC::DomainPartitioner::swapVertex(int from, int to, int vertexTag, bool adja
 
 
 
-    // now remove any SP_Constraints that may have been internal to fromSubdomain
+    // now remove any SFreedom_Constraints that may have been internal to fromSubdomain
     // and are now external to XC::PartitionedDomain or internal to toSubdomain
-    SP_ConstraintIter &theSPs2 = fromSubdomain->getSPs();
+    SFreedom_ConstraintIter &theSPs2 = fromSubdomain->getSPs();
     while ((spPtr = theSPs2()) != 0) {
   int nodeTag = spPtr->getNodeTag();
   for (int i=0; i<nodesSize; i++) {
       if (nodeTag == nodes(i)) {
-    fromSubdomain->removeSP_Constraint(spPtr->getTag());
+    fromSubdomain->removeSFreedom_Constraint(spPtr->getTag());
     int internal = 0;
     for (int j=1; j<=numPartitions; j++)
         if (j != to) {
@@ -824,9 +824,9 @@ int XC::DomainPartitioner::swapVertex(int from, int to, int vertexTag, bool adja
       }
         }
     if (internal == 0)
-        toSubdomain->addSP_Constraint(spPtr);
+        toSubdomain->addSFreedom_Constraint(spPtr);
     else
-        myDomain->addSP_Constraint(spPtr);
+        myDomain->addSFreedom_Constraint(spPtr);
       }
   }
     }
@@ -1173,10 +1173,10 @@ XC::DomainPartitioner::swapBoundary(int from, int to, bool adjacentVertexNotInOt
         }
     }
 
-    // now remove any SP_Constraints that may have been external to
+    // now remove any SFreedom_Constraints that may have been external to
     // PartitionedDomain and are now internal to toSubdomain
-    SP_ConstraintIter &theSPs = myDomain->getSPs();
-    SP_Constraint *spPtr;
+    SFreedom_ConstraintIter &theSPs = myDomain->getSPs();
+    SFreedom_Constraint *spPtr;
     while ((spPtr = theSPs()) != 0) {
   int nodeTag = spPtr->getNodeTag();
   int loc = nodesToRemove.getLocation(nodeTag);
@@ -1191,21 +1191,21 @@ XC::DomainPartitioner::swapBoundary(int from, int to, bool adjacentVertexNotInOt
         }
     }
       if (internal == 0) { // add to toSubdomain if inteernal
-    myDomain->removeSP_Constraint(spPtr->getTag());
-    toSubdomain->addSP_Constraint(spPtr);
+    myDomain->removeSFreedom_Constraint(spPtr->getTag());
+    toSubdomain->addSFreedom_Constraint(spPtr);
       }
   }
     }
 
 
-    // now remove any SP_Constraints that may have been internal to fromSubdomain
+    // now remove any SFreedom_Constraints that may have been internal to fromSubdomain
     // and are now external to XC::PartitionedDomain or internal to toSubdomain
-    SP_ConstraintIter &theSPs2 = fromSubdomain->getSPs();
+    SFreedom_ConstraintIter &theSPs2 = fromSubdomain->getSPs();
     while ((spPtr = theSPs2()) != 0) {
   int nodeTag = spPtr->getNodeTag();
   int loc = nodesToRemove.getLocation(nodeTag);
   if (loc >= 0) {
-      fromSubdomain->removeSP_Constraint(spPtr->getTag());
+      fromSubdomain->removeSFreedom_Constraint(spPtr->getTag());
       int internal = 0;
       for (int j=1; j<=numPartitions; j++)
     if (j != to) {
@@ -1216,9 +1216,9 @@ XC::DomainPartitioner::swapBoundary(int from, int to, bool adjacentVertexNotInOt
         }
     }
       if (internal == 0)
-    toSubdomain->addSP_Constraint(spPtr);
+    toSubdomain->addSFreedom_Constraint(spPtr);
       else
-    myDomain->addSP_Constraint(spPtr);
+    myDomain->addSFreedom_Constraint(spPtr);
   }
     }
 

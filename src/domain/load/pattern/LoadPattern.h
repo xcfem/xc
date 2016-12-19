@@ -137,7 +137,7 @@ class LoadPattern: public NodeLocker
     virtual bool addElementalLoad(ElementalLoad *);
     bool newElementalLoad(ElementalLoad *);
     ElementalLoad *newElementalLoad(const std::string &);
-    virtual bool addSP_Constraint(SP_Constraint *theSp);
+    virtual bool addSFreedom_Constraint(SFreedom_Constraint *theSp);
 
     virtual NodalLoadIter &getNodalLoads(void);
     virtual ElementalLoadIter &getElementalLoads(void);

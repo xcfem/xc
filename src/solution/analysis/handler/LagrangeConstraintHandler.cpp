@@ -65,19 +65,19 @@
 #include <domain/mesh/element/Element.h>
 #include "domain/mesh/node/NodeIter.h"
 #include "domain/mesh/element/ElementIter.h"
-#include <domain/constraints/SP_ConstraintIter.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/MP_ConstraintIter.h>
-#include <domain/constraints/MP_Constraint.h>
-#include <domain/constraints/MRMP_ConstraintIter.h>
-#include <domain/constraints/MRMP_Constraint.h>
+#include <domain/constraints/SFreedom_ConstraintIter.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/MFreedom_ConstraintIter.h>
+#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/MRMFreedom_ConstraintIter.h>
+#include <domain/constraints/MRMFreedom_Constraint.h>
 #include <solution/analysis/integrator/Integrator.h>
 #include <utility/matrix/ID.h>
 #include "domain/domain/subdomain/Subdomain.h"
 #include <solution/analysis/model/dof_grp/LagrangeDOF_Group.h>
-#include <solution/analysis/model/fe_ele/lagrange/LagrangeSP_FE.h>
-#include <solution/analysis/model/fe_ele/lagrange/LagrangeMP_FE.h>
-#include <solution/analysis/model/fe_ele/lagrange/LagrangeMRMP_FE.h>
+#include <solution/analysis/model/fe_ele/lagrange/LagrangeSFreedom_FE.h>
+#include <solution/analysis/model/fe_ele/lagrange/LagrangeMFreedom_FE.h>
+#include <solution/analysis/model/fe_ele/lagrange/LagrangeMRMFreedom_FE.h>
 
 
 //! @brief Constructor.
@@ -107,8 +107,8 @@ int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
     // and init the theFEs and theDOFs arrays
 
     int numConstraints = 0;
-    SP_ConstraintIter &theSPss= theDomain->getConstraints().getDomainAndLoadPatternSPs();
-    SP_Constraint *spPtr;
+    SFreedom_ConstraintIter &theSPss= theDomain->getConstraints().getDomainAndLoadPatternSPs();
+    SFreedom_Constraint *spPtr;
     while((spPtr = theSPss()) != 0)
       numConstraints++;
 
@@ -139,39 +139,39 @@ int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
     while((elePtr = theEle()) != nullptr)
       { fePtr= theModel->createFE_Element(numFeEle++, elePtr); }
 
-    // create the LagrangeSP_FE for the SP_Constraints and
+    // create the LagrangeSFreedom_FE for the SFreedom_Constraints and
     // add to the AnalysisModel
-    SP_ConstraintIter &theSPs = theDomain->getConstraints().getDomainAndLoadPatternSPs();
+    SFreedom_ConstraintIter &theSPs = theDomain->getConstraints().getDomainAndLoadPatternSPs();
     while((spPtr = theSPs()) != nullptr)
       {
         dofPtr= theModel->createLagrangeDOF_Group(numDofGrp++, spPtr);
 	// initially set all the ID value to -2
         countDOF+= dofPtr->inicID(-2);
-        fePtr= theModel->createLagrangeSP_FE(numFeEle++, *spPtr,*dofPtr, alphaSP);
+        fePtr= theModel->createLagrangeSFreedom_FE(numFeEle++, *spPtr,*dofPtr, alphaSP);
       }
 
-    // create the LagrangeMP_FE for the MP_Constraints and
+    // create the LagrangeMFreedom_FE for the MFreedom_Constraints and
     // add to the AnalysisModel
-    MP_ConstraintIter &theMPs = theDomain->getConstraints().getMPs();
-    MP_Constraint *mpPtr;
+    MFreedom_ConstraintIter &theMPs = theDomain->getConstraints().getMPs();
+    MFreedom_Constraint *mpPtr;
     while((mpPtr = theMPs()) != nullptr)
       {
         dofPtr= theModel->createLagrangeDOF_Group(numDofGrp++, mpPtr);
 	// initially set all the ID value to -2
         countDOF+= dofPtr->inicID(-2);
-        fePtr= theModel->createLagrangeMP_FE(numFeEle++, *mpPtr, *dofPtr, alphaMP);
+        fePtr= theModel->createLagrangeMFreedom_FE(numFeEle++, *mpPtr, *dofPtr, alphaMP);
       }
 
-    // create the LagrangeMRMP_FE for the MRMP_Constraints and
+    // create the LagrangeMRMFreedom_FE for the MRMFreedom_Constraints and
     // add to the AnalysisModel
-    MRMP_ConstraintIter &theMRMPs = theDomain->getConstraints().getMRMPs();
-    MRMP_Constraint *mrmpPtr;
+    MRMFreedom_ConstraintIter &theMRMPs = theDomain->getConstraints().getMRMPs();
+    MRMFreedom_Constraint *mrmpPtr;
     while((mrmpPtr = theMRMPs()) != nullptr)
       {
         dofPtr= theModel->createLagrangeDOF_Group(numDofGrp++, mrmpPtr);
 	// initially set all the ID value to -2
         countDOF+= dofPtr->inicID(-2);
-        fePtr= theModel->createLagrangeMRMP_FE(numFeEle++, *mrmpPtr, *dofPtr, alphaMP);
+        fePtr= theModel->createLagrangeMRMFreedom_FE(numFeEle++, *mrmpPtr, *dofPtr, alphaMP);
       }
 
     theModel->setNumEqn(countDOF); // set the number of eqn in the model

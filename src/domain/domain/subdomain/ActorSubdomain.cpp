@@ -54,8 +54,8 @@
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
-#include "domain/constraints/SP_Constraint.h"
-#include "domain/constraints/MP_Constraint.h"
+#include "domain/constraints/SFreedom_Constraint.h"
+#include "domain/constraints/MFreedom_Constraint.h"
 #include "domain/load/ElementalLoad.h"
 #include "domain/load/NodalLoad.h"
 #include "domain/load/pattern/LoadPattern.h"
@@ -91,8 +91,8 @@ int XC::ActorSubdomain::run(void)
 	int theType, theOtherType, tag, dbTag, loadPatternTag;
 	Element *theEle= nullptr;
 	Node *theNod= nullptr;
-        SP_Constraint *theSP= nullptr;
-	MP_Constraint *theMP= nullptr;
+        SFreedom_Constraint *theSP= nullptr;
+	MFreedom_Constraint *theMP= nullptr;
 	LoadPattern *theLoadPattern;
 	NodalLoad *theNodalLoad;
 	ElementalLoad *theElementalLoad;
@@ -259,7 +259,7 @@ int XC::ActorSubdomain::run(void)
 	    break;	    
 
 	    
-	  case ShadowActorSubdomain_addSP_Constraint:
+	  case ShadowActorSubdomain_addSFreedom_Constraint:
 	    theType = msgData(1);
 	    dbTag = msgData(2);
 	    
@@ -269,7 +269,7 @@ int XC::ActorSubdomain::run(void)
               {
 		theSP->setDbTag(dbTag);
 		this->recvObject(*theSP);
-		bool result = this->addSP_Constraint(theSP);
+		bool result = this->addSFreedom_Constraint(theSP);
 		if(result == true)
 		    msgData(0) = 0;
 		else
@@ -279,7 +279,7 @@ int XC::ActorSubdomain::run(void)
 	      msgData(0) = -1;
 	    break;	    
 	    
-	  case ShadowActorSubdomain_addMP_Constraint:
+	  case ShadowActorSubdomain_addMFreedom_Constraint:
 	    theType = msgData(1);
 	    dbTag = msgData(2);
 	    theMP = theBroker->getNewMP(theType);
@@ -287,7 +287,7 @@ int XC::ActorSubdomain::run(void)
 	    if(theMP != 0) {
 		theMP->setDbTag(dbTag);
 		this->recvObject(*theMP);
-		bool result = this->addMP_Constraint(theMP);
+		bool result = this->addMFreedom_Constraint(theMP);
 		if(result == true)
 		    msgData(0) = 0;
 		else
@@ -359,7 +359,7 @@ int XC::ActorSubdomain::run(void)
 
 	    break;	    	    
 	    
-	  case ShadowActorSubdomain_addSP_ConstraintToPattern:
+	  case ShadowActorSubdomain_addSFreedom_ConstraintToPattern:
 	    theType = msgData(1);
 	    dbTag = msgData(2);
 	    loadPatternTag = msgData(3);
@@ -370,7 +370,7 @@ int XC::ActorSubdomain::run(void)
               {
 		theSP->setDbTag(dbTag);
 		this->recvObject(*theSP);
-		bool result = this->addSP_Constraint(theSP, loadPatternTag);
+		bool result = this->addSFreedom_Constraint(theSP, loadPatternTag);
 
 		if(result == true)
 		    msgData(0) = 0;
@@ -422,17 +422,17 @@ int XC::ActorSubdomain::run(void)
 
 	    break;
 
-	  case ShadowActorSubdomain_removeSP_Constraint:
+	  case ShadowActorSubdomain_removeSFreedom_Constraint:
 	    tag = msgData(1);
 
-	    this->removeSP_Constraint(tag);
+	    this->removeSFreedom_Constraint(tag);
 
 	    break;	    
 	    
-	  case ShadowActorSubdomain_removeMP_Constraint:
+	  case ShadowActorSubdomain_removeMFreedom_Constraint:
 	    tag = msgData(1);
 
-	    this->removeMP_Constraint(tag);
+	    this->removeMFreedom_Constraint(tag);
 
 	    break;	    	    
 
@@ -459,11 +459,11 @@ int XC::ActorSubdomain::run(void)
 
 	    break;
    	    	    
-	  case ShadowActorSubdomain_removeSP_ConstraintFromPattern:
+	  case ShadowActorSubdomain_removeSFreedom_ConstraintFromPattern:
 	    tag = msgData(1);
 	    theType = msgData(2);
 
-	    this->removeSP_Constraint(tag, theType);
+	    this->removeSFreedom_Constraint(tag, theType);
 
 	    break;	    	    	    
 	    

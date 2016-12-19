@@ -38,7 +38,7 @@ class Pos3d;
 
 namespace XC{
 class Node;
-class SP_Constraint;
+class SFreedom_Constraint;
 
 //! \ingroup CadMR
 //! 
@@ -52,7 +52,7 @@ class MatrizPtrNod: public MatrizPtrBase<Node>
     MatrizPtrNod(const size_t &f=0,const size_t &c=0)
       : MatrizPtrBase<Node>(f,c) {}
     m_int getTags(void) const;
-    void fix(const SP_Constraint &) const;
+    void fix(const SFreedom_Constraint &) const;
 
     Node *buscaNodo(const int &tag);
     const Node *buscaNodo(const int &tag) const;

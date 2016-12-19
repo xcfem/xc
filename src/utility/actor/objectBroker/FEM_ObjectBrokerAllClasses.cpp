@@ -221,38 +221,38 @@ XC::Node *XC::FEM_ObjectBrokerAllClasses::getNewNode(int classTag)
   }
 
 
-XC::MP_Constraint *XC::FEM_ObjectBrokerAllClasses::getNewMP(int classTag)
+XC::MFreedom_Constraint *XC::FEM_ObjectBrokerAllClasses::getNewMP(int classTag)
   {
     switch(classTag)
       {
-      case CNSTRNT_TAG_MP_Constraint:
-        return new MP_Constraint(classTag);
+      case CNSTRNT_TAG_MFreedom_Constraint:
+        return new MFreedom_Constraint(classTag);
 
-      case CNSTRNT_TAG_MP_Joint2D:                        // Arash
-        return new MP_Joint2D();                        // Arash
+      case CNSTRNT_TAG_MFreedom_Joint2D:                        // Arash
+        return new MFreedom_Joint2D();                        // Arash
 
       default:
         std::cerr << "FEM_ObjectBrokerAllClasses::getNewMP - ";
-        std::cerr << " - no MP_Constraint type exists for class tag ";
+        std::cerr << " - no MFreedom_Constraint type exists for class tag ";
         std::cerr << classTag << std::endl;
         return 0;
       }
   }
 
 
-XC::SP_Constraint *XC::FEM_ObjectBrokerAllClasses::getNewSP(int classTag)
+XC::SFreedom_Constraint *XC::FEM_ObjectBrokerAllClasses::getNewSP(int classTag)
   {
     switch(classTag)
       {
-      case CNSTRNT_TAG_SP_Constraint:
-        return new SP_Constraint(classTag);
+      case CNSTRNT_TAG_SFreedom_Constraint:
+        return new SFreedom_Constraint(classTag);
       case CNSTRNT_TAG_ImposedMotionSP:
         return new ImposedMotionSP();
       case CNSTRNT_TAG_ImposedMotionSP1:
         return new ImposedMotionSP1();
       default:
         std::cerr << "FEM_ObjectBrokerAllClasses::getNewSP - ";
-        std::cerr << " - no SP_Constraint type exists for class tag ";
+        std::cerr << " - no SFreedom_Constraint type exists for class tag ";
         std::cerr << classTag << std::endl;
         return 0;
       }

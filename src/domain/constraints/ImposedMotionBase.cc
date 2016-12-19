@@ -34,12 +34,12 @@
 
 //! @brief Constructor.
 XC::ImposedMotionBase::ImposedMotionBase(int classTag)
-:SP_Constraint(classTag), groundMotionTag(0), patternTag(0),
+:SFreedom_Constraint(classTag), groundMotionTag(0), patternTag(0),
  theGroundMotion(nullptr), theNode(nullptr), theGroundMotionResponse(3) {}
 
 // constructor for a subclass to use
 XC::ImposedMotionBase::ImposedMotionBase(int classTag,int tag, int node, int ndof, int pattern, int motion)
-:SP_Constraint(tag, node, ndof, classTag),
+:SFreedom_Constraint(tag, node, ndof, classTag),
  groundMotionTag(motion), patternTag(pattern), theGroundMotion(nullptr), theNode(nullptr), theGroundMotionResponse(3) {}
 
 XC::ImposedMotionBase::~ImposedMotionBase(void)
@@ -56,7 +56,7 @@ void XC::ImposedMotionBase::setDomain(Domain *theDomain)
         std::cerr << "Domain = 0\n";
         return;
       }
-    SP_Constraint::setDomain(theDomain);
+    SFreedom_Constraint::setDomain(theDomain);
 
     if(theDomain)
       {
@@ -105,7 +105,7 @@ int XC::ImposedMotionBase::getMotion(void)
 //! @brief Envía los miembreos del objeto through the channel being passed as parameter.
 int XC::ImposedMotionBase::sendData(CommParameters &cp)
   {
-    int result= SP_Constraint::sendData(cp);
+    int result= SFreedom_Constraint::sendData(cp);
     result+= cp.sendInts(groundMotionTag,patternTag,getDbTagData(),CommMetaData(7));
     return result;
   }
@@ -113,7 +113,7 @@ int XC::ImposedMotionBase::sendData(CommParameters &cp)
 //! @brief Receives object through the channel being passed as parameter.
 int XC::ImposedMotionBase::recvData(const CommParameters &cp)
   {
-    int res= SP_Constraint::recvData(cp);
+    int res= SFreedom_Constraint::recvData(cp);
     res+= cp.receiveInts(groundMotionTag,patternTag,getDbTagData(),CommMetaData(7));
     return res;
   }

@@ -34,7 +34,7 @@
 
 namespace XC {
 class Node;
-class MP_ConstraintBase;
+class MFreedom_ConstraintBase;
 class DOF_Group;
 
 //! @ingroup AnalisisFE
@@ -46,7 +46,7 @@ class MPBase_FE: public MPSPBaseFE
     Node *theConstrainedNode;
 
     MPBase_FE(int tag, int numDOF_Group, int ndof, const double &alpha= 1.0);
-    int determineConstrainedDOFsIDs(const MP_ConstraintBase &,const int &);
+    int determineConstrainedDOFsIDs(const MFreedom_ConstraintBase &,const int &);
     DOF_Group *determineConstrainedNodeDofGrpPtr(void);
   };
 } // end of XC namespace

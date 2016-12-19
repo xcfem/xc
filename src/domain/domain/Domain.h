@@ -54,8 +54,8 @@
 //
 // Description: This file contains the class definition for Domain.
 // Domain is a container class. The class is responsible for holding
-// and providing access to the Elements, Nodes, SP_Constraints
-// MP_Constraints, and LoadPatterns.
+// and providing access to the Elements, Nodes, SFreedom_Constraints
+// MFreedom_Constraints, and LoadPatterns.
 //
 // What: "@(#) Domain.h, revA"
 
@@ -134,9 +134,9 @@ class Domain: public ObjWithRecorders, public DistributedBase
     // methods to populate a domain
     virtual bool addElement(Element *);
     virtual bool addNode(Node *);
-    virtual bool addSP_Constraint(SP_Constraint *);
-    virtual bool addMP_Constraint(MP_Constraint *);
-    virtual bool addMRMP_Constraint(MRMP_Constraint *);
+    virtual bool addSFreedom_Constraint(SFreedom_Constraint *);
+    virtual bool addMFreedom_Constraint(MFreedom_Constraint *);
+    virtual bool addMRMFreedom_Constraint(MRMFreedom_Constraint *);
     virtual bool addLoadPattern(LoadPattern *);
     virtual bool addNodeLocker(NodeLocker *);
     virtual bool addCombinacion(Combinacion *);
@@ -145,7 +145,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     void checkNodalReactions(const double &);
 
     // methods to add components to a LoadPattern object
-    virtual bool addSP_Constraint(SP_Constraint *, int loadPatternTag);
+    virtual bool addSFreedom_Constraint(SFreedom_Constraint *, int loadPatternTag);
     virtual bool addNodalLoad(NodalLoad *, int loadPatternTag);
     virtual bool addElementalLoad(ElementalLoad *, int loadPatternTag);
 
@@ -153,10 +153,10 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual void clearAll(void);
     virtual bool removeElement(int tag);
     virtual bool removeNode(int tag);
-    virtual bool removeSP_Constraint(int theNode, int theDOF, int loadPatternTag);
-    virtual bool removeSP_Constraint(int tag);
-    virtual bool removeMP_Constraint(int tag);
-    virtual bool removeMRMP_Constraint(int tag);
+    virtual bool removeSFreedom_Constraint(int theNode, int theDOF, int loadPatternTag);
+    virtual bool removeSFreedom_Constraint(int tag);
+    virtual bool removeMFreedom_Constraint(int tag);
+    virtual bool removeMRMFreedom_Constraint(int tag);
     virtual bool removeLoadPattern(int loadTag);
     virtual bool removeNodeLocker(int nlTag);
     bool removeLoadPattern(LoadPattern *lp);
@@ -167,7 +167,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
 
     virtual bool removeNodalLoad(int tag, int loadPattern);
     virtual bool removeElementalLoad(int tag, int loadPattern);
-    virtual bool removeSP_Constraint(int tag, int loadPattern);
+    virtual bool removeSFreedom_Constraint(int tag, int loadPattern);
 
     virtual void clearDOF_GroupPtr(void);
 

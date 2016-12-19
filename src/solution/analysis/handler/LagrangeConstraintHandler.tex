@@ -18,7 +18,7 @@
 both single and multi point constraints using the Lagrange
 method. This is done by, in addition to creating a DOF\_Group object
 for each Node and an FE\_Element for each Element in the Domain,
-creating a LagrangeDOF\_Group object and either a LagrangeSP\_FE or a
+creating a LagrangeDOF\_Group object and either a LagrangeSFreedom\_FE or a
 LagrangeMP\_FE object for each constraint in the Domain. It is these
 objects that enforce the constraints by modifying the tangent matrix
 and residual vector. \\ 
@@ -44,7 +44,7 @@ alphaMP);}\\  \\
 The integer {\em HANDLER\_TAG\_LagrangeConstraintHandler} (defined in
 $<$classTags.h$>$) is passed to the LagrangeConstraintHandler
 constructor. Stores {\em alphaSP} and {\em alphaMP} which are needed
-to construct the LagrangeSP\_FE and LagrangeMP\_FE objects in {\em
+to construct the LagrangeSFreedom\_FE and LagrangeMP\_FE objects in {\em
 handle()}. \\
 
 \noindent {\bf Destructor} \\
@@ -56,7 +56,7 @@ clearAll()} is rewritten. \\
 \indent {\em virtual int handle(const ID *nodeToBeNumberedLast =0) =0;} \\
 Determines the number of FE\_Elements and DOF\_Groups needed from the
 Domain (a one to one mappinging between Elements and FE\_Elements,
-SP\_Constraints and LagrangeSP\_FEs, MP\_Constraints and LagrangeMP\_FEs and
+SFreedom\_Constraints and LagrangeSFreedom\_FEs, MP\_Constraints and LagrangeMP\_FEs and
 Nodes and DOF\_Groups). Creates two arrays of pointers to store the
 FE\_Elements and DOF\_Groups, returning a warning message and a $-2$
 or $-3$ if not enough memory is available for these arrays. Then the
@@ -69,8 +69,8 @@ is a Subdomain {\em setFE\_ElementPtr()} is invoked on the Subdomain
 with the new FE\_Element as the argument. If not enough memory is
 available for any DOF\_Group or FE\_element a warning message is
 printed and a $-4$ or $-5$ is returned. 
-The object then iterates through the SP\_Constraints
-of the Domain creating a LagrangeSP\_FE for each constraint, using the
+The object then iterates through the SFreedom\_Constraints
+of the Domain creating a LagrangeSFreedom\_FE for each constraint, using the
 Domain, the constraint and {\em alphaSP} as the arguments in the
 constructor.
 The object then iterates through the MP\_Constraints

@@ -44,7 +44,7 @@
 // as pure virtual, which will allow subclasses for time varying constraints.
 //
 
-#include "MRMP_Constraint.h"
+#include "MRMFreedom_Constraint.h"
 
 
 namespace XC {
@@ -55,7 +55,7 @@ namespace XC {
 //! @ingroup CContMP
 //
 //! @brief Glue a node to an element.
-class GlueNodeToElement: public MRMP_Constraint
+class GlueNodeToElement: public MRMFreedom_Constraint
   {
 
   public:

@@ -32,9 +32,9 @@
 #include "domain/component/ForceReprComponent.h"
 
 namespace XC {
-class SP_Constraint;
-class SingleDomSP_Iter;
-class SP_ConstraintIter;
+class SFreedom_Constraint;
+class SingleDomSFreedom_Iter;
+class SFreedom_ConstraintIter;
 class TaggedObjectStorage;
 
 //! @ingroup LPatterns
@@ -55,7 +55,7 @@ class NodeLocker: public ForceReprComponent
     // storage objects for the constraints
     TaggedObjectStorage  *theSPs; //!< Almacenamiento de condiciones de contorno mononodales.	
     // iterator objects for the objects added to the storage objects
-    SingleDomSP_Iter *theSpIter; //!< Iterador sobre condiciones de contorno mononodales.
+    SingleDomSFreedom_Iter *theSpIter; //!< Iterador sobre condiciones de contorno mononodales.
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
@@ -67,7 +67,7 @@ class NodeLocker: public ForceReprComponent
     NodeLocker(void);
     NodeLocker(int tag);
     NodeLocker(int tag, int classTag);
-    virtual bool addSP_Constraint(SP_Constraint *theSp);
+    virtual bool addSFreedom_Constraint(SFreedom_Constraint *theSp);
   public:
     virtual ~NodeLocker(void);
 
@@ -75,15 +75,15 @@ class NodeLocker: public ForceReprComponent
     virtual void setDomain(Domain *theDomain);
 
     // methods to add loads
-    virtual SP_Constraint *addSP_Constraint(const int &tagNodo,const int &id_gdl,const double &valor);
+    virtual SFreedom_Constraint *addSFreedom_Constraint(const int &tagNodo,const int &id_gdl,const double &valor);
 
-    virtual SP_ConstraintIter &getSPs(void);
+    virtual SFreedom_ConstraintIter &getSPs(void);
     int getNumSPs(void) const;
 
     // methods to remove loads
     virtual void clearAll(void);
-    SP_Constraint *newSPConstraint(const int &,const int &,const double &);
-    virtual bool removeSP_Constraint(int tag);
+    SFreedom_Constraint *newSPConstraint(const int &,const int &,const double &);
+    virtual bool removeSFreedom_Constraint(int tag);
 
     // methods to apply loads
     virtual void applyLoad(const double &pseudoTime= 0.0,const double &factor= 1.0);

@@ -29,7 +29,7 @@
 #include "MatrizPtrNod.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/domain/Domain.h"
-#include "domain/constraints/SP_Constraint.h"
+#include "domain/constraints/SFreedom_Constraint.h"
 
 
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
@@ -119,7 +119,7 @@ const XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p) const
   }
 
 //! @brief Impone desplazamiento nulo en los nodos de este conjunto.
-void XC::MatrizPtrNod::fix(const SP_Constraint &semilla) const
+void XC::MatrizPtrNod::fix(const SFreedom_Constraint &semilla) const
   {
     if(Null()) return;
     const size_t nfilas= getNumFilas();

@@ -32,8 +32,8 @@
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 #include "preprocessor/cad/trf/TrfGeom.h"
-#include "domain/constraints/SP_Constraint.h"
-#include "domain/constraints/MP_Constraint.h"
+#include "domain/constraints/SFreedom_Constraint.h"
+#include "domain/constraints/MFreedom_Constraint.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/NodePtrsWithIDs.h"
@@ -155,13 +155,13 @@ void XC::SetMeshComp::Transforma(const size_t &indice_trf)
   }
 
 //! @brief Impone desplazamiento nulo en los nodos de este conjunto.
-void XC::SetMeshComp::fix(const SP_Constraint &spc)
+void XC::SetMeshComp::fix(const SFreedom_Constraint &spc)
   {
     ConstraintLoader &cl= GetPreprocessor()->getConstraintLoader();
     for(nod_const_iterator i= nodos_begin();i!=nodos_end();i++)
       {
         const int tag_nod= (*i)->getTag();
-        cl.addSP_Constraint(tag_nod,spc);
+        cl.addSFreedom_Constraint(tag_nod,spc);
       }
   }
 
@@ -453,9 +453,9 @@ void XC::SetMeshComp::sel_constraints_lista(const ID &tags)
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             {
-              if((tmp= preprocessor->GetDominio()->getConstraints().getSP_Constraint(tags(i))))
+              if((tmp= preprocessor->GetDominio()->getConstraints().getSFreedom_Constraint(tags(i))))
                 constraints.push_back(tmp);
-              else if((tmp=preprocessor->GetDominio()->getConstraints().getMP_Constraint(tags(i))))
+              else if((tmp=preprocessor->GetDominio()->getConstraints().getMFreedom_Constraint(tags(i))))
                 constraints.push_back(tmp);
               else
 		std::cerr << "SetMeshComp::sel_constraints_lista;no se encontró la coacción de tag: "

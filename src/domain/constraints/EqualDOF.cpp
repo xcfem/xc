@@ -33,10 +33,10 @@
 #include <domain/domain/Domain.h>
 
 XC::EqualDOF::EqualDOF(int tag)
-  : MP_Constraint(tag) {}
+  : MFreedom_Constraint(tag) {}
 
 XC::EqualDOF::EqualDOF(int tag,const int &masterNode,const int &slaveNode,const ID &dofs)
-  : MP_Constraint(tag,masterNode,slaveNode,0)
+  : MFreedom_Constraint(tag,masterNode,slaveNode,0)
   { setDofs(dofs); }
 
 void XC::EqualDOF::setDofs(const ID &dofs)

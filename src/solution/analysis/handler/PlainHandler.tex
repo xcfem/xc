@@ -53,8 +53,8 @@ FE\_elements and DOF\_Groups, returning a warning message and a $-2$
 or $-3$ if not enough memory is available for these arrays. Then the
 object will iterate through the Nodes of the Domain, creating a
 DOF\_Group for each node and setting the initial id for each dof to
-$-2$ if no SP\_Constraint exists for the dof, or $-1$ if a
-SP\_Constraint exists or $-3$ if the node identifier is in {\em
+$-2$ if no SFreedom\_Constraint exists for the dof, or $-1$ if a
+SFreedom\_Constraint exists or $-3$ if the node identifier is in {\em
 nodesToBeNumberedLast}. The object then iterates through the Elements
 of the Domain creating a FE\_Element for each Element, if the Element
 is a Subdomain {\em setFE\_ElementPtr()} is invoked on the Subdomain

@@ -19,7 +19,7 @@ multi-point constraints into the system of equation.
 
 \noindent {\bf Class Interface}  \\
 \indent // Constructors  \\
-\indent {\em LagrangeDOF\_Group(int tag, SP\_Constraint \&spPtr);}  \\
+\indent {\em LagrangeDOF\_Group(int tag, SFreedom\_Constraint \&spPtr);}  \\
 \indent {\em LagrangeDOF\_Group(int tag, MP\_Constraint \&mpPtr);}  \\ \\
 \indent // Destructor  \\
 \indent {\em virtual~ $\tilde{}$LagrangeDOF\_Group();}  \\\\
@@ -35,7 +35,7 @@ multi-point constraints into the system of equation.
 \indent {\em virtual int incrNodeAccel(const Vector \&$\ddot u$);}\\
 
 \noindent {\bf Constructors}  \\
-\indent {\em LagrangeDOF\_Group(int tag, SP\_Constraint \&spPtr);}  \\
+\indent {\em LagrangeDOF\_Group(int tag, SFreedom\_Constraint \&spPtr);}  \\
 Invokes the DOF\_Group constructor with {\em tag) and the integer $1$. \\
 
 \indent {\em LagrangeDOF\_Group(int tag, MP\_Constraint \&mpPtr);}  \\ \\
@@ -51,13 +51,13 @@ Does nothing. \\
 \indent {\em virtual const Matrix \&getTangent(Integrator
 *theIntegrator)} \\
 Invokes {\em zero{}) on the tangent matrix and returns this matrix. 
-The LagrangeMP\_FE and LagrangeSP\_FE objects add to the tangent. \\
+The LagrangeMP\_FE and LagrangeSFreedom\_FE objects add to the tangent. \\
 
 
 \indent {\em virtual const Vector \&getUnbalance(Integrator
 *theIntegrator); }\\
 Invokes {\em zero{}) on the residual vector and returns this vector. 
-The LagrangeMP\_FE and LagrangeSP\_FE objects add to the residual. \\
+The LagrangeMP\_FE and LagrangeSFreedom\_FE objects add to the residual. \\
 
 \indent {\em virtual int setNodeDisp(const Vector \&u);} \\
 Does nothing. The lagrange multipliers are associated with no Nodes

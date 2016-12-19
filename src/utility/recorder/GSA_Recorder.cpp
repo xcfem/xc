@@ -59,10 +59,10 @@
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/Element.h>
-#include <domain/constraints/SP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
 #include "domain/mesh/node/NodeIter.h"
 #include "domain/mesh/element/ElementIter.h"
-#include <domain/constraints/SP_ConstraintIter.h>
+#include <domain/constraints/SFreedom_ConstraintIter.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
 #include <utility/matrix/Matrix.h>
@@ -165,8 +165,8 @@ XC::GSA_Recorder::GSA_Recorder(Domain &theDom,
       }
         
     // open file and spit out the initial data
-    SP_ConstraintIter &theSPs = theDomain->getConstraints().getSPs();
-    SP_Constraint *theSP;
+    SFreedom_ConstraintIter &theSPs = theDomain->getConstraints().getSPs();
+    SFreedom_Constraint *theSP;
     ID theConstrainedNodes(0,6);
     ID theSpMatrix(0, 6*ndf);
     int numNodesWithSP = 0;

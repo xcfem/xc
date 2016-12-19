@@ -55,14 +55,14 @@
 // Revised:
 //
 // Purpose: This file contains the class definition for RigidDiaphragm.
-// RigidDiaphragm is a class which constructs MP_Constraint objects
+// RigidDiaphragm is a class which constructs MFreedom_Constraint objects
 // for a 3d Frame with a rigid diaphragm .. suitable for small
 // displacement problems only.
 
 #ifndef RigidDiaphragm_h
 #define RigidDiaphragm_h
 
-#include "MP_Constraint.h"
+#include "MFreedom_Constraint.h"
 
 namespace XC {
 class Domain;
@@ -72,7 +72,7 @@ class ID;
 //
 //! @brief Impone la condición de movimiento de sólido rígido
 //! a los nodos sobre los que actúa.
-class RigidDiaphragm: public MP_Constraint
+class RigidDiaphragm: public MFreedom_Constraint
   {
     //XXX Colocar aquí NodePtrsWithIDS para facilitar el tratamiento de la desconexión.
   public:

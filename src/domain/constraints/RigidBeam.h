@@ -55,7 +55,7 @@
 // Revised:
 //
 // Purpose: This file contains the class definition for RigidBeam.
-// RigidBeam is a class which constructs an MP_Constraint object
+// RigidBeam is a class which constructs an MFreedom_Constraint object
 // between two nodes which is similar to rigid beam
 
 #ifndef RigidBeam_h

@@ -79,12 +79,12 @@ namespace XC {
 class Domain;
 class Graph;
 class FE_Element;
-class LagrangeSP_FE;
-class LagrangeMP_FE;
-class LagrangeMRMP_FE;
-class PenaltySP_FE;
-class PenaltyMP_FE;
-class PenaltyMRMP_FE;
+class LagrangeSFreedom_FE;
+class LagrangeMFreedom_FE;
+class LagrangeMRMFreedom_FE;
+class PenaltySFreedom_FE;
+class PenaltyMFreedom_FE;
+class PenaltyMRMFreedom_FE;
 class TransformationFE;
 class DOF_Group;
 class LagrangeDOF_Group;
@@ -159,19 +159,19 @@ class AnalysisModel: public MovableObject, public EntCmd
 
     // methods to populate/depopulate the AnalysisModel
     virtual DOF_Group *createDOF_Group(const int &, Node *);
-    virtual LagrangeDOF_Group *createLagrangeDOF_Group(const int &, SP_Constraint *);
-    virtual LagrangeDOF_Group *createLagrangeDOF_Group(const int &, MP_Constraint *);
-    virtual LagrangeDOF_Group *createLagrangeDOF_Group(const int &, MRMP_Constraint *);
-    virtual TransformationDOF_Group *createTransformationDOF_Group(const int &, Node *, MP_Constraint *, TransformationConstraintHandler*);
-    virtual TransformationDOF_Group *createTransformationDOF_Group(const int &, Node *, MRMP_Constraint *, TransformationConstraintHandler*);
+    virtual LagrangeDOF_Group *createLagrangeDOF_Group(const int &, SFreedom_Constraint *);
+    virtual LagrangeDOF_Group *createLagrangeDOF_Group(const int &, MFreedom_Constraint *);
+    virtual LagrangeDOF_Group *createLagrangeDOF_Group(const int &, MRMFreedom_Constraint *);
+    virtual TransformationDOF_Group *createTransformationDOF_Group(const int &, Node *, MFreedom_Constraint *, TransformationConstraintHandler*);
+    virtual TransformationDOF_Group *createTransformationDOF_Group(const int &, Node *, MRMFreedom_Constraint *, TransformationConstraintHandler*);
     virtual TransformationDOF_Group *createTransformationDOF_Group(const int &, Node *, TransformationConstraintHandler*);
     virtual FE_Element *createFE_Element(const int &, Element *);
-    virtual LagrangeSP_FE *createLagrangeSP_FE(const int &, SP_Constraint &, DOF_Group &,const double &);
-    virtual LagrangeMP_FE *createLagrangeMP_FE(const int &, MP_Constraint &, DOF_Group &,const double &);
-    virtual LagrangeMRMP_FE *createLagrangeMRMP_FE(const int &,MRMP_Constraint &,DOF_Group &,const double &);
-    virtual PenaltySP_FE *createPenaltySP_FE(const int &, SP_Constraint &, const double &);
-    virtual PenaltyMP_FE *createPenaltyMP_FE(const int &, MP_Constraint &, const double &);
-    virtual PenaltyMRMP_FE *createPenaltyMRMP_FE(const int &, MRMP_Constraint &, const double &);
+    virtual LagrangeSFreedom_FE *createLagrangeSFreedom_FE(const int &, SFreedom_Constraint &, DOF_Group &,const double &);
+    virtual LagrangeMFreedom_FE *createLagrangeMFreedom_FE(const int &, MFreedom_Constraint &, DOF_Group &,const double &);
+    virtual LagrangeMRMFreedom_FE *createLagrangeMRMFreedom_FE(const int &,MRMFreedom_Constraint &,DOF_Group &,const double &);
+    virtual PenaltySFreedom_FE *createPenaltySFreedom_FE(const int &, SFreedom_Constraint &, const double &);
+    virtual PenaltyMFreedom_FE *createPenaltyMFreedom_FE(const int &, MFreedom_Constraint &, const double &);
+    virtual PenaltyMRMFreedom_FE *createPenaltyMRMFreedom_FE(const int &, MRMFreedom_Constraint &, const double &);
     virtual FE_Element *createTransformationFE(const int &, Element *, const std::set<int> &,std::set<FE_Element *> &);
     virtual void clearAll(void);
 

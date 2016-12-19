@@ -73,11 +73,11 @@
 #include <utility/matrix/ID.h>
 
 #include <domain/domain/Domain.h>
-#include <domain/constraints/MP_Constraint.h>
-#include <domain/constraints/MRMP_Constraint.h>
+#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/MRMFreedom_Constraint.h>
 #include <domain/mesh/node/Node.h>
-#include <domain/constraints/MP_ConstraintIter.h>
-#include <domain/constraints/MRMP_ConstraintIter.h>
+#include <domain/constraints/MFreedom_ConstraintIter.h>
+#include <domain/constraints/MRMFreedom_ConstraintIter.h>
 
 
 XC::PlainNumberer::PlainNumberer(ModelWrapper *owr) 
@@ -152,11 +152,11 @@ int XC::PlainNumberer::numberDOF(int lastDOF)
         if(have4s)
           {
             const int nodeID= dofGroupPtr->getNodeTag();
-            // loop through the MP_Constraints to see if any of the
+            // loop through the MFreedom_Constraints to see if any of the
             // DOFs are constrained, note constraint matrix must be diagonal
             // with 1's on the diagonal
-            MP_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
-            MP_Constraint *mpPtr= nullptr;
+            MFreedom_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
+            MFreedom_Constraint *mpPtr= nullptr;
             while((mpPtr= theMPs()) != 0 )
               {
                 // note keep looping over all in case multiple constraints
@@ -178,11 +178,11 @@ int XC::PlainNumberer::numberDOF(int lastDOF)
                       }
                   }
               }
-            MRMP_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
-            MRMP_Constraint *mrmpPtr;
+            MRMFreedom_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
+            MRMFreedom_Constraint *mrmpPtr;
             while((mrmpPtr= theMRMPs()) != 0 )
               {
-                std::cerr << "PlainNumberer::numberDOF(int) write code loop through the MRMP_Constraints." << std::endl;
+                std::cerr << "PlainNumberer::numberDOF(int) write code loop through the MRMFreedom_Constraints." << std::endl;
               }
           }        
       }
@@ -265,11 +265,11 @@ int XC::PlainNumberer::numberDOF(ID &lastDOFs)
         if(have4s)
           {
             int nodeID= dofGroupPtr->getNodeTag();
-            // loop through the MP_Constraints to see if any of the
+            // loop through the MFreedom_Constraints to see if any of the
             // DOFs are constrained, note constraint matrix must be diagonal
             // with 1's on the diagonal
-            MP_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
-            MP_Constraint *mpPtr= nullptr;
+            MFreedom_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
+            MFreedom_Constraint *mpPtr= nullptr;
             while((mpPtr= theMPs()) != 0 )
               {
                 // note keep looping over all in case multiple constraints
@@ -291,11 +291,11 @@ int XC::PlainNumberer::numberDOF(ID &lastDOFs)
                       }
                   }
               }
-            MRMP_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
-            MRMP_Constraint *mrmpPtr;
+            MRMFreedom_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
+            MRMFreedom_Constraint *mrmpPtr;
             while((mrmpPtr= theMRMPs()) != 0 )
               {
-                 std::cerr << "PlainNumberer::numberDOF(ID) write code loop through the MRMP_Constraints." << std::endl;
+                 std::cerr << "PlainNumberer::numberDOF(ID) write code loop through the MRMFreedom_Constraints." << std::endl;
               }
 
           }        

@@ -60,9 +60,9 @@
 #include "NodeLocker.h"
 #include <cstdlib>
 #include <utility/matrix/ID.h>
-#include <domain/constraints/SP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
 #include <utility/tagged/storage/ArrayOfTaggedObjects.h>
-#include <domain/domain/single/SingleDomSP_Iter.h>
+#include <domain/domain/single/SingleDomSFreedom_Iter.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
 
@@ -82,7 +82,7 @@ void XC::NodeLocker::alloc_contenedores(void)
 //! @brief Reserva memoria para almacenar los iteradores.
 void XC::NodeLocker::alloc_iteradores(void)
   {
-    theSpIter= new SingleDomSP_Iter(theSPs);
+    theSpIter= new SingleDomSFreedom_Iter(theSPs);
 
     if(theSpIter == 0)
       {
@@ -133,8 +133,8 @@ void XC::NodeLocker::setDomain(Domain *theDomain)
   {
     if(theSPs)
       {
-        SP_Constraint *theSP= nullptr;
-        SP_ConstraintIter &theSpConstraints= getSPs();
+        SFreedom_Constraint *theSP= nullptr;
+        SFreedom_ConstraintIter &theSpConstraints= getSPs();
         while((theSP = theSpConstraints()) != 0)
           theSP->setDomain(theDomain);
       }
@@ -144,16 +144,16 @@ void XC::NodeLocker::setDomain(Domain *theDomain)
   }
 
 //! @brief Agrega una la coacción mononodal being passed as parameter.
-XC::SP_Constraint *XC::NodeLocker::addSP_Constraint(const int &tagNodo,const int &id_gdl,const double &valor)
+XC::SFreedom_Constraint *XC::NodeLocker::addSFreedom_Constraint(const int &tagNodo,const int &id_gdl,const double &valor)
   {
-    SP_Constraint *theSPC= new SP_Constraint(nextTag,tagNodo,id_gdl,valor);
+    SFreedom_Constraint *theSPC= new SFreedom_Constraint(nextTag,tagNodo,id_gdl,valor);
     if(theSPC)
-      addSP_Constraint(theSPC);
+      addSFreedom_Constraint(theSPC);
     return theSPC;
   }
 
 //! @brief Agrega una la coacción mononodal being passed as parameter.
-bool XC::NodeLocker::addSP_Constraint(SP_Constraint *theSp)
+bool XC::NodeLocker::addSFreedom_Constraint(SFreedom_Constraint *theSp)
   {
     Domain *theDomain= this->getDomain();
 
@@ -167,12 +167,12 @@ bool XC::NodeLocker::addSP_Constraint(SP_Constraint *theSp)
         currentGeoTag++;
       }
     else
-      std::cerr << "WARNING: XC::NodeLocker::addSP_Constraint() - load could not be added\n";
+      std::cerr << "WARNING: XC::NodeLocker::addSFreedom_Constraint() - load could not be added\n";
     return result;
   }
 
 //! @brief Devuelve un iterador a las coacciones mononodales.
-XC::SP_ConstraintIter &XC::NodeLocker::getSPs(void)
+XC::SFreedom_ConstraintIter &XC::NodeLocker::getSPs(void)
   {
     theSpIter->reset();
     return *theSpIter;
@@ -194,15 +194,15 @@ void XC::NodeLocker::clearAll(void)
     currentGeoTag++;
   }
 
-XC::SP_Constraint *XC::NodeLocker::newSPConstraint(const int &tag_nod,const int &id_gdl,const double &valor)
-  { return addSP_Constraint(tag_nod,id_gdl,valor); }
+XC::SFreedom_Constraint *XC::NodeLocker::newSPConstraint(const int &tag_nod,const int &id_gdl,const double &valor)
+  { return addSFreedom_Constraint(tag_nod,id_gdl,valor); }
 
 //! @brief Elimina la coacción mononodal cuyo tag se pasa como parámetro.
-bool XC::NodeLocker::removeSP_Constraint(int tag)
+bool XC::NodeLocker::removeSFreedom_Constraint(int tag)
   {
     const bool retval= theSPs->removeComponent(tag);
     if(!retval)
-      std::cerr << "NodeLocker::removeSP_Constraint; no se pudo eliminar la coaccion: "
+      std::cerr << "NodeLocker::removeSFreedom_Constraint; no se pudo eliminar la coaccion: "
                 << tag << std::endl;
     return retval;
   }
@@ -210,8 +210,8 @@ bool XC::NodeLocker::removeSP_Constraint(int tag)
 //! @brief Aplica la carga en el instante being passed as parameter.
 void XC::NodeLocker::applyLoad(const double &pseudoTime,const double &factor)
   {
-    SP_Constraint *sp= nullptr;
-    SP_ConstraintIter &theIter = this->getSPs();
+    SFreedom_Constraint *sp= nullptr;
+    SFreedom_ConstraintIter &theIter = this->getSPs();
     while((sp = theIter()) != 0)
       sp->applyConstraint(factor);
   }
@@ -239,7 +239,7 @@ int XC::NodeLocker::recvData(const CommParameters &cp)
     setTag(getDbTagDataPos(0));
     int res= cp.receiveInts(nextTag,currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(1));
     const int dbTagSPs= getDbTagDataPos(2);
-    res+= theSPs->recibe<SP_Constraint>(dbTagSPs,cp,&FEM_ObjectBroker::getNewSP);
+    res+= theSPs->recibe<SFreedom_Constraint>(dbTagSPs,cp,&FEM_ObjectBroker::getNewSP);
     return res;
   }
 
@@ -286,8 +286,8 @@ std::deque<int> XC::NodeLocker::getTagsSPsNodo(int theNode, int theDOF) const
     int nodeTag= 0;
     int dof= 0;
     NodeLocker *this_no_const= const_cast<NodeLocker *>(this);
-    SP_ConstraintIter &theSPs = this_no_const->getSPs();
-    SP_Constraint *theSP;
+    SFreedom_ConstraintIter &theSPs = this_no_const->getSPs();
+    SFreedom_Constraint *theSP;
     while(((theSP = theSPs()) != 0))
       {
         nodeTag = theSP->getNodeTag();
@@ -306,8 +306,8 @@ std::deque<int> XC::NodeLocker::getTagsSPsNodo(int theNode) const
 
     int nodeTag= 0;
     NodeLocker *this_no_const= const_cast<NodeLocker *>(this);
-    SP_ConstraintIter &theSPs = this_no_const->getSPs();
-    SP_Constraint *theSP;
+    SFreedom_ConstraintIter &theSPs = this_no_const->getSPs();
+    SFreedom_Constraint *theSP;
     while(((theSP = theSPs()) != 0))
       {
         nodeTag = theSP->getNodeTag();
@@ -322,8 +322,8 @@ bool XC::NodeLocker::nodoAfectadoSPs(int tagNodo) const
   {
     bool retval= false;
     NodeLocker *this_no_const= const_cast<NodeLocker *>(this);
-    SP_ConstraintIter &theSPs = this_no_const->getSPs();
-    SP_Constraint *theSP;
+    SFreedom_ConstraintIter &theSPs = this_no_const->getSPs();
+    SFreedom_Constraint *theSP;
     while((theSP = theSPs()) != 0)
       if(theSP->getNodeTag() == tagNodo)
         {

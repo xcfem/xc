@@ -32,9 +32,9 @@
 #include <domain/domain/Domain.h>
 #include <domain/load/ElementalLoadIter.h>
 #include <domain/load/NodalLoadIter.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/MP_Constraint.h>
-#include <domain/constraints/MRMP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/MRMFreedom_Constraint.h>
 #include <domain/mesh/node/Node.h>
 #include "domain/mesh/element/Element.h"
 #include <domain/load/NodalLoad.h>
@@ -45,12 +45,12 @@
 #include <utility/tagged/storage/MapOfTaggedObjects.h>
 #include <utility/tagged/storage/MapOfTaggedObjectsIter.h>
 
-#include <domain/domain/single/SingleDomSP_Iter.h>
-#include <domain/domain/single/SingleDomMP_Iter.h>
-#include <domain/domain/single/SingleDomMRMP_Iter.h>
+#include <domain/domain/single/SingleDomSFreedom_Iter.h>
+#include <domain/domain/single/SingleDomMFreedom_Iter.h>
+#include <domain/domain/single/SingleDomMRMFreedom_Iter.h>
 #include <domain/load/pattern/LoadPatternIter.h>
 #include <domain/load/pattern/NodeLockerIter.h>
-#include <domain/domain/single/SingleDomAllSP_Iter.h>
+#include <domain/domain/single/SingleDomAllSFreedom_Iter.h>
 #include "utility/matrix/ID.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
@@ -72,14 +72,14 @@ void XC::ConstrContainer::libera(void)
     theSPs= nullptr;
     if(theMPs) delete theMPs;
     theMPs= nullptr;
-    if(theSP_Iter) delete theSP_Iter;
-    theSP_Iter= nullptr;
-    if(theMP_Iter) delete theMP_Iter;
-    theMP_Iter= nullptr;
-    if(theMRMP_Iter) delete theMRMP_Iter;
-    theMRMP_Iter= nullptr;
-    if(allSP_Iter) delete allSP_Iter;
-    allSP_Iter= nullptr;
+    if(theSFreedom_Iter) delete theSFreedom_Iter;
+    theSFreedom_Iter= nullptr;
+    if(theMFreedom_Iter) delete theMFreedom_Iter;
+    theMFreedom_Iter= nullptr;
+    if(theMRMFreedom_Iter) delete theMRMFreedom_Iter;
+    theMRMFreedom_Iter= nullptr;
+    if(allSFreedom_Iter) delete allSFreedom_Iter;
+    allSFreedom_Iter= nullptr;
   }
 
 //! @brief Reserva memoria para los contenedores.
@@ -95,10 +95,10 @@ void XC::ConstrContainer::alloc_contenedores(int numSPs, int numMPs,int numNodeL
 void XC::ConstrContainer::alloc_iters(void)
   {
     // init the iters
-    theSP_Iter= new SingleDomSP_Iter(theSPs);
-    theMP_Iter= new SingleDomMP_Iter(theMPs);
-    theMRMP_Iter= new SingleDomMRMP_Iter(theMRMPs);
-    allSP_Iter= new SingleDomAllSP_Iter(*getDomain());
+    theSFreedom_Iter= new SingleDomSFreedom_Iter(theSPs);
+    theMFreedom_Iter= new SingleDomMFreedom_Iter(theMPs);
+    theMRMFreedom_Iter= new SingleDomMRMFreedom_Iter(theMRMPs);
+    allSFreedom_Iter= new SingleDomAllSFreedom_Iter(*getDomain());
   }
 
 //! @brief Comprueba que se ha podido reservar memoria para los contenedores.
@@ -106,7 +106,7 @@ bool XC::ConstrContainer::check_contenedores(void) const
   {
     // check that there was space to create the data structures
     if((theSPs == 0) || (theMPs == 0) || (theMRMPs == 0) ||
-       (theMP_Iter == 0) || (theSP_Iter == 0) || (theMRMP_Iter == 0))
+       (theMFreedom_Iter == 0) || (theSFreedom_Iter == 0) || (theMRMFreedom_Iter == 0))
       {
         std::cerr << "ConstrContainer::ConstrContainer() - out of memory\n";
         return false;
@@ -160,7 +160,7 @@ XC::ConstrContainer::~ConstrContainer(void)
 
 
 //! @brief Agrega una constraint monopunto.
-bool XC::ConstrContainer::addSP_Constraint(SP_Constraint *spConstraint)
+bool XC::ConstrContainer::addSFreedom_Constraint(SFreedom_Constraint *spConstraint)
   {
     bool retval= false;
 
@@ -169,7 +169,7 @@ bool XC::ConstrContainer::addSP_Constraint(SP_Constraint *spConstraint)
     TaggedObject *other= theSPs->getComponentPtr(tag);
     if(other)
       {
-        std::clog << "ConstrContainer::addSP_Constraint - cannot add a constraint with tag "
+        std::clog << "ConstrContainer::addSFreedom_Constraint - cannot add a constraint with tag "
                   << tag << " already exists in model\n";
         retval= false;
       }
@@ -180,7 +180,7 @@ bool XC::ConstrContainer::addSP_Constraint(SP_Constraint *spConstraint)
 
 
 //! @brief Agrega al dominio una constraint multipunto.
-bool XC::ConstrContainer::addMP_Constraint(MP_Constraint *mpConstraint)
+bool XC::ConstrContainer::addMFreedom_Constraint(MFreedom_Constraint *mpConstraint)
   {
     bool retval= false;
 
@@ -189,7 +189,7 @@ bool XC::ConstrContainer::addMP_Constraint(MP_Constraint *mpConstraint)
     TaggedObject *other= theMPs->getComponentPtr(tag);
     if(other)
       {
-        std::clog << "ConstrContainer::addMP_Constraint - cannot add as constraint with tag "
+        std::clog << "ConstrContainer::addMFreedom_Constraint - cannot add as constraint with tag "
                   << tag << " already exists in model";
       }
     else
@@ -198,7 +198,7 @@ bool XC::ConstrContainer::addMP_Constraint(MP_Constraint *mpConstraint)
   }
 
 //! @brief Agrega al dominio una constraint multi retained nodes.
-bool XC::ConstrContainer::addMRMP_Constraint(MRMP_Constraint *mrmpConstraint)
+bool XC::ConstrContainer::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmpConstraint)
   {
     bool retval= false;
 
@@ -207,7 +207,7 @@ bool XC::ConstrContainer::addMRMP_Constraint(MRMP_Constraint *mrmpConstraint)
     TaggedObject *other= theMRMPs->getComponentPtr(tag);
     if(other)
       {
-        std::clog << "ConstrContainer::addMRMP_Constraint - cannot add as constraint with tag "
+        std::clog << "ConstrContainer::addMRMFreedom_Constraint - cannot add as constraint with tag "
                   << tag << " already exists in model";
       }
     else
@@ -253,15 +253,15 @@ bool XC::ConstrContainer::addNodeLocker(NodeLocker *nl)
   }
 
 //! @brief Agraga al caso de carga una constraint monopunto.
-bool XC::ConstrContainer::addSP_Constraint(SP_Constraint *spConstraint, int pattern)
+bool XC::ConstrContainer::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int pattern)
   {
     bool retval= false;
     // now add it to the pattern
     LoadPattern *caso= getLoadPattern(pattern);
     if(caso)
-      retval= caso->addSP_Constraint(spConstraint);
+      retval= caso->addSFreedom_Constraint(spConstraint);
     else
-      std::cerr << "ConstrContainer::addSP_Constraint - cannot add as pattern with tag "
+      std::cerr << "ConstrContainer::addSFreedom_Constraint - cannot add as pattern with tag "
                 << pattern << " does not exist in domain\n";
     return retval;
   }
@@ -311,15 +311,15 @@ bool XC::ConstrContainer::addElementalLoad(ElementalLoad *load, int pattern)
   }
 
 
-bool XC::ConstrContainer::removeSP_Constraint(int theNode, int theDOF, int loadPatternTag)
+bool XC::ConstrContainer::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatternTag)
   {
-    SP_Constraint *theSP =nullptr;
+    SFreedom_Constraint *theSP =nullptr;
     bool found= false;
     int spTag= 0;
 
     if(loadPatternTag == -1)
       {
-        SP_ConstraintIter &theSPs= getSPs();
+        SFreedom_ConstraintIter &theSPs= getSPs();
         while((found == false) && ((theSP= theSPs()) != 0))
           {
             int nodeTag= theSP->getNodeTag();
@@ -331,14 +331,14 @@ bool XC::ConstrContainer::removeSP_Constraint(int theNode, int theDOF, int loadP
               }
           }
         if(found == true)
-          return this->removeSP_Constraint(spTag);
+          return this->removeSFreedom_Constraint(spTag);
       }
     else
       {
         LoadPattern *thePattern= this->getLoadPattern(loadPatternTag);
         if(thePattern)
           {
-            SP_ConstraintIter &theSPs= thePattern->getSPs();
+            SFreedom_ConstraintIter &theSPs= thePattern->getSPs();
             while((found == false) && ((theSP= theSPs()) != 0))
               {
 	        int nodeTag= theSP->getNodeTag();
@@ -350,34 +350,34 @@ bool XC::ConstrContainer::removeSP_Constraint(int theNode, int theDOF, int loadP
 	          }
               }
             if(found == true)
-	      return thePattern->removeSP_Constraint(spTag);
+	      return thePattern->removeSFreedom_Constraint(spTag);
           }
       }
     return 0;
   }
 
 //! @brief Elimina del dominio la constraint monopunto cuyo tag se pasa como parámetro.
-bool XC::ConstrContainer::removeSP_Constraint(int tag)
+bool XC::ConstrContainer::removeSFreedom_Constraint(int tag)
   {
-    SP_Constraint *theSP= dynamic_cast<SP_Constraint *>(theSPs->getComponentPtr(tag));
+    SFreedom_Constraint *theSP= dynamic_cast<SFreedom_Constraint *>(theSPs->getComponentPtr(tag));
     if(theSP)
       theSP->setDomain(nullptr);
     return theSPs->removeComponent(tag);
   }
 
 //! @brief Elimina del dominio la constraint multipunto cuyo tag se pasa como parámetro.
-bool XC::ConstrContainer::removeMP_Constraint(int tag)
+bool XC::ConstrContainer::removeMFreedom_Constraint(int tag)
   {
-    MP_Constraint *theMP= dynamic_cast<MP_Constraint *>(theMPs->getComponentPtr(tag));
+    MFreedom_Constraint *theMP= dynamic_cast<MFreedom_Constraint *>(theMPs->getComponentPtr(tag));
     if(theMP)
       theMP->setDomain(nullptr);
     return theMPs->removeComponent(tag);
   }
 
 //! @brief Elimina del dominio la constraint multi retained nodes cuyo tag se pasa como parámetro.
-bool XC::ConstrContainer::removeMRMP_Constraint(int tag)
+bool XC::ConstrContainer::removeMRMFreedom_Constraint(int tag)
   {
-    MRMP_Constraint *theMRMP= dynamic_cast<MRMP_Constraint *>(theMRMPs->getComponentPtr(tag));
+    MRMFreedom_Constraint *theMRMP= dynamic_cast<MRMFreedom_Constraint *>(theMRMPs->getComponentPtr(tag));
     if(theMRMP)
       theMRMP->setDomain(nullptr);
     return theMRMPs->removeComponent(tag);
@@ -497,41 +497,41 @@ bool XC::ConstrContainer::removeElementalLoad(int tag, int loadPattern)
 //!
 //! @param tag: Identificador de la constraint monopunto a eliminar.
 //! @param loadPattern: Identificador de la hipótesis a la que pertenece la carga.
-bool XC::ConstrContainer::removeSP_Constraint(int tag, int loadPattern)
+bool XC::ConstrContainer::removeSFreedom_Constraint(int tag, int loadPattern)
   {
     bool retval= false;
     LoadPattern *theLoadPattern= this->getLoadPattern(loadPattern);// remove the object from the container
     if(theLoadPattern)
-      retval= theLoadPattern->removeSP_Constraint(tag);
+      retval= theLoadPattern->removeSFreedom_Constraint(tag);
     return retval;
   }
 
 //! @brief Domain single point constraints iterator.
-XC::SP_ConstraintIter &XC::ConstrContainer::getSPs(void)
+XC::SFreedom_ConstraintIter &XC::ConstrContainer::getSPs(void)
   {
-    theSP_Iter->reset();
-    return *theSP_Iter;
+    theSFreedom_Iter->reset();
+    return *theSFreedom_Iter;
   }
 
 //! @brief All (domain and load cases) single point constraints iterator.
-XC::SP_ConstraintIter &XC::ConstrContainer::getDomainAndLoadPatternSPs(void)
+XC::SFreedom_ConstraintIter &XC::ConstrContainer::getDomainAndLoadPatternSPs(void)
   {
-    allSP_Iter->reset();
-    return *allSP_Iter;
+    allSFreedom_Iter->reset();
+    return *allSFreedom_Iter;
   }
 
 //! @brief Domain multi-point constraints iterator.
-XC::MP_ConstraintIter &XC::ConstrContainer::getMPs(void)
+XC::MFreedom_ConstraintIter &XC::ConstrContainer::getMPs(void)
   {
-    theMP_Iter->reset();
-    return *theMP_Iter;
+    theMFreedom_Iter->reset();
+    return *theMFreedom_Iter;
   }
 
 //! @brief Domain multi-row multi-point constraints iterator.
-XC::MRMP_ConstraintIter &XC::ConstrContainer::getMRMPs(void)
+XC::MRMFreedom_ConstraintIter &XC::ConstrContainer::getMRMPs(void)
   {
-    theMRMP_Iter->reset();
-    return *theMRMP_Iter;
+    theMRMFreedom_Iter->reset();
+    return *theMRMFreedom_Iter;
   }
 
 
@@ -559,32 +559,32 @@ const std::map<int,XC::NodeLocker *> &XC::ConstrContainer::getNodeLockers(void) 
 */
 
 //! @brief Devuelve un puntero a la constraint monopunto cuyo tag se pasa como parámetro.
-XC::SP_Constraint *XC::ConstrContainer::getSP_Constraint(int tag)
+XC::SFreedom_Constraint *XC::ConstrContainer::getSFreedom_Constraint(int tag)
   {
     TaggedObject *mc= theSPs->getComponentPtr(tag);
     // if not there return 0 otherwise perform a cast and return that
     if(!mc) return nullptr;
-    SP_Constraint *result= dynamic_cast<SP_Constraint *>(mc);
+    SFreedom_Constraint *result= dynamic_cast<SFreedom_Constraint *>(mc);
     return result;
   }
 
 //! @brief Devuelve un puntero a la constraint multipunto cuyo tag se pasa como parámetro.
-XC::MP_Constraint *XC::ConstrContainer::getMP_Constraint(int tag)
+XC::MFreedom_Constraint *XC::ConstrContainer::getMFreedom_Constraint(int tag)
   {
     TaggedObject *mc= theMPs->getComponentPtr(tag);
     // if not there return 0 otherwise perform a cast and return that
     if(!mc) return nullptr;
-    MP_Constraint *result= dynamic_cast<MP_Constraint *>(mc);
+    MFreedom_Constraint *result= dynamic_cast<MFreedom_Constraint *>(mc);
     return result;
   }
 
 //! @brief Devuelve un puntero a la constraint multi retained node cuyo tag se pasa como parámetro.
-XC::MRMP_Constraint *XC::ConstrContainer::getMRMP_Constraint(int tag)
+XC::MRMFreedom_Constraint *XC::ConstrContainer::getMRMFreedom_Constraint(int tag)
   {
     TaggedObject *mc= theMRMPs->getComponentPtr(tag);
     // if not there return 0 otherwise perform a cast and return that
     if(!mc) return nullptr;
-    MRMP_Constraint *result= dynamic_cast<MRMP_Constraint *>(mc);
+    MRMFreedom_Constraint *result= dynamic_cast<MRMFreedom_Constraint *>(mc);
     return result;
   }
 
@@ -676,21 +676,21 @@ void XC::ConstrContainer::applyLoad(double timeStep)
       i->second->applyLoad(timeStep);
 
     //
-    // finally loop over the MP_Constraints and SP_Constraints of the domain
+    // finally loop over the MFreedom_Constraints and SFreedom_Constraints of the domain
     //
 
-    MP_ConstraintIter &theMPs= getMPs();
-    MP_Constraint *theMP;
+    MFreedom_ConstraintIter &theMPs= getMPs();
+    MFreedom_Constraint *theMP;
     while((theMP= theMPs()) != 0)
         theMP->applyConstraint(timeStep);
 
-    MRMP_ConstraintIter &theMRMPs= getMRMPs();
-    MRMP_Constraint *theMRMP;
+    MRMFreedom_ConstraintIter &theMRMPs= getMRMPs();
+    MRMFreedom_Constraint *theMRMP;
     while((theMRMP= theMRMPs()) != 0)
         theMRMP->applyConstraint(timeStep);
 
-    SP_ConstraintIter &theSPs= getSPs();
-    SP_Constraint *theSP;
+    SFreedom_ConstraintIter &theSPs= getSPs();
+    SFreedom_Constraint *theSP;
     while((theSP= theSPs()) != 0)
       theSP->applyConstraint(timeStep);
   }
@@ -704,8 +704,8 @@ std::deque<int> XC::ConstrContainer::getTagsSPsNodo(int theNode, int theDOF) con
     int nodeTag= 0;
     int dof= 0;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
-    SP_ConstraintIter &theSPs= this_no_const->getSPs();
-    SP_Constraint *theSP;
+    SFreedom_ConstraintIter &theSPs= this_no_const->getSPs();
+    SFreedom_Constraint *theSP;
     while(((theSP= theSPs()) != 0))
       {
         nodeTag= theSP->getNodeTag();
@@ -724,8 +724,8 @@ std::deque<int> XC::ConstrContainer::getTagsSPsNodo(int theNode) const
 
     int nodeTag= 0;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
-    SP_ConstraintIter &theSPs= this_no_const->getSPs();
-    SP_Constraint *theSP;
+    SFreedom_ConstraintIter &theSPs= this_no_const->getSPs();
+    SFreedom_Constraint *theSP;
     while(((theSP= theSPs()) != 0))
       {
         nodeTag= theSP->getNodeTag();
@@ -811,8 +811,8 @@ bool XC::ConstrContainer::nodoAfectadoSPs(int tagNodo) const
   {
     bool retval= false;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
-    SP_ConstraintIter &theSPs= this_no_const->getDomainAndLoadPatternSPs();
-    SP_Constraint *theSP;
+    SFreedom_ConstraintIter &theSPs= this_no_const->getDomainAndLoadPatternSPs();
+    SFreedom_Constraint *theSP;
     while((theSP= theSPs()) != 0)
       if(theSP->getNodeTag() == tagNodo)
         {
@@ -827,8 +827,8 @@ bool XC::ConstrContainer::nodoAfectadoMPs(int tagNodo) const
   {
     bool retval= false;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
-    MP_ConstraintIter &theMPs= this_no_const->getMPs();
-    MP_Constraint *theMP;
+    MFreedom_ConstraintIter &theMPs= this_no_const->getMPs();
+    MFreedom_Constraint *theMP;
     while((theMP= theMPs()) != 0)
       if(theMP->afectaANodo(tagNodo))
         {
@@ -843,8 +843,8 @@ bool XC::ConstrContainer::nodoAfectadoMRMPs(int tagNodo) const
   {
     bool retval= false;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
-    MRMP_ConstraintIter &theMRMPs= this_no_const->getMRMPs();
-    MRMP_Constraint *theMRMP;
+    MRMFreedom_ConstraintIter &theMRMPs= this_no_const->getMRMPs();
+    MRMFreedom_Constraint *theMRMP;
     while((theMRMP= theMRMPs()) != 0)
       if(theMRMP->afectaANodo(tagNodo))
         {
@@ -878,13 +878,13 @@ void XC::ConstrContainer::setLoadConstant(void)
 //! @brief Reactions due to constraints.
 int XC::ConstrContainer::calculateNodalReactions(bool inclInertia, const double &tol)
   {
-    MP_ConstraintIter &theMPs= this->getMPs();
-    MP_Constraint *theMP;
+    MFreedom_ConstraintIter &theMPs= this->getMPs();
+    MFreedom_Constraint *theMP;
     while((theMP= theMPs()) != 0)
       theMP->addResistingForceToNodalReaction(inclInertia);
 
-    MRMP_ConstraintIter &theMRMPs= this->getMRMPs();
-    MRMP_Constraint *theMRMP;
+    MRMFreedom_ConstraintIter &theMRMPs= this->getMRMPs();
+    MRMFreedom_Constraint *theMRMP;
     while((theMRMP= theMRMPs()) != 0)
       theMRMP->addResistingForceToNodalReaction(inclInertia);
 
@@ -1030,9 +1030,9 @@ int XC::ConstrContainer::sendData(CommParameters &cp)
 //! @brief Receives members del objeto through the channel being passed as parameter.
 int XC::ConstrContainer::recvData(const CommParameters &cp)
   {
-    int res= theSPs->recibe<SP_Constraint>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewSP);
-    res+= theMPs->recibe<MP_Constraint>(getDbTagDataPos(1),cp,&FEM_ObjectBroker::getNewMP);
-    res+= theMRMPs->recibe<MRMP_Constraint>(getDbTagDataPos(2),cp,&FEM_ObjectBroker::getNewMRMP);
+    int res= theSPs->recibe<SFreedom_Constraint>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewSP);
+    res+= theMPs->recibe<MFreedom_Constraint>(getDbTagDataPos(1),cp,&FEM_ObjectBroker::getNewMP);
+    res+= theMRMPs->recibe<MRMFreedom_Constraint>(getDbTagDataPos(2),cp,&FEM_ObjectBroker::getNewMRMP);
     res+= recvNLockersTags(3,4,cp);
     res+= recvLPatternsTags(5,6,cp);
     return res;
@@ -1070,15 +1070,15 @@ void XC::ConstrContainer::Print(std::ostream &s, int flag)
 
     s << "Current ConstrContainer Information\n";
 
-    s << "\nSP_Constraints: numConstraints: ";
+    s << "\nSFreedom_Constraints: numConstraints: ";
     s << theSPs->getNumComponents() << "\n";
     theSPs->Print(s, flag);
 
-    s << "\nMP_Constraints: numConstraints: ";
+    s << "\nMFreedom_Constraints: numConstraints: ";
     s << theMPs->getNumComponents() << "\n";
     theMPs->Print(s, flag);
 
-    s << "\nMRMP_Constraints: numConstraints: ";
+    s << "\nMRMFreedom_Constraints: numConstraints: ";
     s << theMRMPs->getNumComponents() << "\n";
     theMRMPs->Print(s, flag);
 

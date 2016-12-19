@@ -67,12 +67,12 @@
 #include <domain/mesh/element/Element.h>
 #include "domain/mesh/node/NodeIter.h"
 #include "domain/mesh/element/ElementIter.h"
-#include <domain/constraints/SP_ConstraintIter.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/MP_ConstraintIter.h>
-#include <domain/constraints/MP_Constraint.h>
-#include <domain/constraints/MRMP_ConstraintIter.h>
-#include <domain/constraints/MRMP_Constraint.h>
+#include <domain/constraints/SFreedom_ConstraintIter.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/MFreedom_ConstraintIter.h>
+#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/MRMFreedom_ConstraintIter.h>
+#include <domain/constraints/MRMFreedom_Constraint.h>
 #include <solution/analysis/integrator/Integrator.h>
 #include "utility/matrix/IDVarSize.h"
 #include "domain/domain/subdomain/Subdomain.h"
@@ -113,8 +113,8 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 
     //    int numSPConstraints= theDomain->getConstraints().getNumSPs();
     int numSPConstraints= 0;
-    SP_ConstraintIter &theSP1s= theDomain->getConstraints().getDomainAndLoadPatternSPs();
-    SP_Constraint *theSP1;
+    SFreedom_ConstraintIter &theSP1s= theDomain->getConstraints().getDomainAndLoadPatternSPs();
+    SFreedom_Constraint *theSP1;
     while((theSP1= theSP1s()) != 0)
         numSPConstraints++;
 
@@ -123,13 +123,13 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 
     int i= -1;
 
-    // create an ID of constrained node tags in MP_Constraints
+    // create an ID of constrained node tags in MFreedom_Constraints
     IDVarSize constrainedNodesMP(0, numMPConstraints);
-    std::vector<MP_Constraint *> mps(numMPConstraints,static_cast<MP_Constraint *>(nullptr));
+    std::vector<MFreedom_Constraint *> mps(numMPConstraints,static_cast<MFreedom_Constraint *>(nullptr));
     if(numMPConstraints != 0)
       {
-        MP_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
-        MP_Constraint *theMP= nullptr;
+        MFreedom_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
+        MFreedom_Constraint *theMP= nullptr;
         int index= 0;
         while((theMP= theMPs()) != 0)
           {
@@ -142,13 +142,13 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
       }
 
     int numMRMPConstraints= theDomain->getConstraints().getNumMRMPs();
-    // create an ID of constrained node tags in MRMP_Constraints
+    // create an ID of constrained node tags in MRMFreedom_Constraints
     IDVarSize constrainedNodesMRMP(0, numMRMPConstraints);
-    std::vector<MRMP_Constraint *> mrmps(numMRMPConstraints,static_cast<MRMP_Constraint *>(nullptr));
+    std::vector<MRMFreedom_Constraint *> mrmps(numMRMPConstraints,static_cast<MRMFreedom_Constraint *>(nullptr));
     if(numMRMPConstraints != 0)
       {
-        MRMP_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
-        MRMP_Constraint *theMRMP= nullptr;
+        MRMFreedom_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
+        MRMFreedom_Constraint *theMRMP= nullptr;
         int index= 0;
         while((theMRMP= theMRMPs()) != 0)
           {
@@ -160,13 +160,13 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
           }
       }
 
-    // create an ID of constrained node tags in SP_Constraints
+    // create an ID of constrained node tags in SFreedom_Constraints
     IDVarSize constrainedNodesSP(0, numSPConstraints);
-    std::vector<SP_Constraint *> sps(numSPConstraints,static_cast<SP_Constraint *>(nullptr));
+    std::vector<SFreedom_Constraint *> sps(numSPConstraints,static_cast<SFreedom_Constraint *>(nullptr));
     if(numSPConstraints != 0)
       {
-        SP_ConstraintIter &theSPs= theDomain->getConstraints().getDomainAndLoadPatternSPs();
-        SP_Constraint *theSP;
+        SFreedom_ConstraintIter &theSPs= theDomain->getConstraints().getDomainAndLoadPatternSPs();
+        SFreedom_Constraint *theSP;
         int index= 0;
         while((theSP= theSPs()) != 0)
           {
@@ -221,11 +221,11 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
                 loc= constrainedNodesSP.getLocation(nodeTag);
                 if(loc >= 0)
                   {
-                    tDofPtr->addSP_Constraint(*(sps[loc]));
+                    tDofPtr->addSFreedom_Constraint(*(sps[loc]));
                     for(int i= loc+1; i<numSPConstraints; i++)
                       {
                         if(constrainedNodesSP(i) == nodeTag)
-                          tDofPtr->addSP_Constraint(*(sps[i]));
+                          tDofPtr->addSFreedom_Constraint(*(sps[i]));
                       }
                   }
                 // add the DOF to the array
@@ -243,14 +243,14 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
                 int numSPs= 1;
                 createdDOF= 1;
                 dofPtr= tDofPtr;
-                tDofPtr->addSP_Constraint(*(sps[loc]));
+                tDofPtr->addSFreedom_Constraint(*(sps[loc]));
 
-                // check for more SP_constraints acting on node and add them
+                // check for more SFreedom_constraints acting on node and add them
                 for(int i= loc+1; i<numSPConstraints; i++)
                   {
                     if(constrainedNodesSP(i) == nodeTag)
                       {
-                        tDofPtr->addSP_Constraint(*(sps[i]));
+                        tDofPtr->addSFreedom_Constraint(*(sps[i]));
                         numSPs++;
                       }
                   }

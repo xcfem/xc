@@ -59,7 +59,7 @@
 #include <domain/mesh/element/joint/Joint3D.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <domain/mesh/element/Information.h>
-#include <domain/constraints/MP_Joint3D.h>
+#include <domain/constraints/MFreedom_Joint3D.h>
 #include <domain/mesh/node/Node.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include <material/uniaxial/UniaxialMaterial.h>
@@ -194,43 +194,43 @@ XC::Joint3D::Joint3D(int tag, int nd1, int nd2, int nd3, int nd4, int nd5, int n
     for(i=0;i<6;i++)
       InternalConstraints(i) = startMPtag + i ;
 
-    // create MP_Joint constraint node 1
-    if(addMP_Joint(getDomain(), InternalConstraints(0), theNodes.getTagNode(6), theNodes.getTagNode(0), theNodes.getTagNode(5), 8, theNodes.getTagNode(3), 7, LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 1
+    if(addMFreedom_Joint(getDomain(), InternalConstraints(0), theNodes.getTagNode(6), theNodes.getTagNode(0), theNodes.getTagNode(5), 8, theNodes.getTagNode(3), 7, LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint3D::Joint3D(): can not generate ForJoint MP at node 1\n";
         return;
       }
 
-    // create MP_Joint constraint node 2
-    if(addMP_Joint(getDomain(), InternalConstraints(1), theNodes.getTagNode(6), theNodes.getTagNode(1), theNodes.getTagNode(5), 8, theNodes.getTagNode(3), 7, LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 2
+    if(addMFreedom_Joint(getDomain(), InternalConstraints(1), theNodes.getTagNode(6), theNodes.getTagNode(1), theNodes.getTagNode(5), 8, theNodes.getTagNode(3), 7, LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint3D::Joint3D(): can not generate ForJoint MP at node 2\n";
         return;
       }
 
-    // create MP_Joint constraint node 3
-    if(addMP_Joint(getDomain(), InternalConstraints(2), theNodes.getTagNode(6), theNodes.getTagNode(2), theNodes.getTagNode(1), 6, theNodes.getTagNode(5), 8, LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 3
+    if(addMFreedom_Joint(getDomain(), InternalConstraints(2), theNodes.getTagNode(6), theNodes.getTagNode(2), theNodes.getTagNode(1), 6, theNodes.getTagNode(5), 8, LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint3D::Joint3D(): can not generate ForJoint MP at node 3\n";
         return;
       }
 
-    // create MP_Joint constraint node 4
-    if(addMP_Joint(getDomain(), InternalConstraints(3), theNodes.getTagNode(6), theNodes.getTagNode(3), theNodes.getTagNode(1), 6, theNodes.getTagNode(5), 8, LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 4
+    if(addMFreedom_Joint(getDomain(), InternalConstraints(3), theNodes.getTagNode(6), theNodes.getTagNode(3), theNodes.getTagNode(1), 6, theNodes.getTagNode(5), 8, LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint3D::Joint3D(): can not generate ForJoint MP at node 4\n";
         return;
       }
 
-    // create MP_Joint constraint node 5
-    if(addMP_Joint(getDomain(), InternalConstraints(4), theNodes.getTagNode(6), theNodes.getTagNode(4), theNodes.getTagNode(3), 7, theNodes.getTagNode(1), 6, LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 5
+    if(addMFreedom_Joint(getDomain(), InternalConstraints(4), theNodes.getTagNode(6), theNodes.getTagNode(4), theNodes.getTagNode(3), 7, theNodes.getTagNode(1), 6, LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint3D::Joint3D(): can not generate ForJoint MP at node 3\n";
         return;
       }
 
-    // create MP_Joint constraint node 6
-    if(addMP_Joint(getDomain(), InternalConstraints(5), theNodes.getTagNode(6), theNodes.getTagNode(5), theNodes.getTagNode(3), 7, theNodes.getTagNode(1), 6, LrgDisp ) != 0)
+    // create MFreedom_Joint constraint node 6
+    if(addMFreedom_Joint(getDomain(), InternalConstraints(5), theNodes.getTagNode(6), theNodes.getTagNode(5), theNodes.getTagNode(3), 7, theNodes.getTagNode(1), 6, LrgDisp ) != 0)
       {
         std::cerr << "WARNING XC::Joint3D::Joint3D(): can not generate ForJoint MP at node 3\n";
         return;
@@ -246,15 +246,15 @@ XC::Joint3D::~Joint3D(void)
 
     if(getDomain())
       {
-        MP_Constraint *Temp_MP;
+        MFreedom_Constraint *Temp_MF;
         for(int i=0 ; i < 6 ; i++ )
           {
-            Temp_MP = getDomain()->getConstraints().getMP_Constraint(InternalConstraints(i) );
+            Temp_MF = getDomain()->getConstraints().getMFreedom_Constraint(InternalConstraints(i) );
 
-            if(Temp_MP != nullptr )
+            if(Temp_MF != nullptr )
               {
-                getDomain()->removeMP_Constraint( InternalConstraints(i) );
-                delete Temp_MP;
+                getDomain()->removeMFreedom_Constraint( InternalConstraints(i) );
+                delete Temp_MF;
               }
           }
         if(theNodes[7])
@@ -280,23 +280,21 @@ void XC::Joint3D::setDomain(Domain *TheDomain)
   }
 
 
-int XC::Joint3D::addMP_Joint(Domain *theDomain, int mpNum, int RetNodeID, int ConNodeID, int RotNodeID, int Rdof, int DspNodeID, int Ddof, int LrgDispFlag )
+int XC::Joint3D::addMFreedom_Joint(Domain *theDomain, int mpNum, int RetNodeID, int ConNodeID, int RotNodeID, int Rdof, int DspNodeID, int Ddof, int LrgDispFlag )
   {
-    MP_Constraint *Temp_MP;
+    // create MFreedom_ForJoint constraint
+    MFreedom_Constraint *Temp_MF= new XC::MFreedom_Joint3D( theDomain, mpNum, RetNodeID, ConNodeID, RotNodeID, Rdof, DspNodeID, Ddof, LrgDispFlag );
 
-    // create MP_ForJoint constraint
-    Temp_MP = new XC::MP_Joint3D( theDomain, mpNum, RetNodeID, ConNodeID, RotNodeID, Rdof, DspNodeID, Ddof, LrgDispFlag );
-
-    if(Temp_MP == nullptr)
+    if(Temp_MF == nullptr)
       {
-        std::cerr << "XC::Joint3D::addMP_Joint - WARNING ran out of memory for XC::MP_Joint3D XC::MP_Constraint ";
+        std::cerr << "XC::Joint3D::addMFreedom_Joint - WARNING ran out of memory for XC::MFreedom_Joint3D XC::MFreedom_Constraint ";
         return -1;
       }
     // Add the multi-point constraint to the domain
-    if(theDomain->addMP_Constraint(Temp_MP) == false)
+    if(theDomain->addMFreedom_Constraint(Temp_MF) == false)
       {
-        std::cerr << "XC::Joint3D::addMP_Joint - WARNING could not add equalDOF XC::MP_Constraint to domain ";
-        delete Temp_MP;
+        std::cerr << "XC::Joint3D::addMFreedom_Joint - WARNING could not add equalDOF XC::MFreedom_Constraint to domain ";
+        delete Temp_MF;
         return -2;
       }
     return 0;

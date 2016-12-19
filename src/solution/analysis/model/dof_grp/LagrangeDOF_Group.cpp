@@ -65,18 +65,18 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include <solution/analysis/integrator/TransientIntegrator.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/MP_Constraint.h>
-#include <domain/constraints/MRMP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/MRMFreedom_Constraint.h>
 
-XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, SP_Constraint &spPtr)
+XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, SFreedom_Constraint &spPtr)
   :DOF_Group(tag, 1) {}
 
-XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, MP_Constraint &mpPtr)
+XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, MFreedom_Constraint &mpPtr)
   :DOF_Group(tag, (mpPtr.getRetainedDOFs()).Size())
   {}
 
-XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, MRMP_Constraint &mrmpPtr)
+XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, MRMFreedom_Constraint &mrmpPtr)
   :DOF_Group(tag, mrmpPtr.getRetainedDOFs().Size())
   { }
 

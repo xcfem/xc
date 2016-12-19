@@ -34,23 +34,23 @@
 #include <deque>
 
 namespace XC {
-class SP_Constraint;
-class MP_Constraint;
-class MRMP_Constraint;
+class SFreedom_Constraint;
+class MFreedom_Constraint;
+class MRMFreedom_Constraint;
 class NodalLoad;
 class ElementalLoad;
 class LoadPattern;
  class NodeLocker;
-class SP_ConstraintIter;
-class MP_ConstraintIter;
-class MRMP_ConstraintIter;
+class SFreedom_ConstraintIter;
+class MFreedom_ConstraintIter;
+class MRMFreedom_ConstraintIter;
 class LoadPatternIter;
 class NodeLockerIter;
 
-class SingleDomSP_Iter;
-class SingleDomMP_Iter;
-class SingleDomMRMP_Iter;
-class SingleDomAllSP_Iter;
+class SingleDomSFreedom_Iter;
+class SingleDomMFreedom_Iter;
+class SingleDomMRMFreedom_Iter;
+class SingleDomAllSFreedom_Iter;
 class FEM_ObjectBroker;
 
 class TaggedObjectStorage;
@@ -67,10 +67,10 @@ class ConstrContainer: public MeshComponentContainer
     MapCasosActivos<NodeLocker> activeNodeLockers; //!< Bloqueadores de nodo activos.
     MapCasosActivos<LoadPattern> activeLoadPatterns; //!< Casos de carga activos.
 
-    SingleDomSP_Iter *theSP_Iter;
-    SingleDomMP_Iter *theMP_Iter;
-    SingleDomMRMP_Iter *theMRMP_Iter;
-    SingleDomAllSP_Iter *allSP_Iter;
+    SingleDomSFreedom_Iter *theSFreedom_Iter;
+    SingleDomMFreedom_Iter *theMFreedom_Iter;
+    SingleDomMRMFreedom_Iter *theMRMFreedom_Iter;
+    SingleDomAllSFreedom_Iter *allSFreedom_Iter;
 
     void alloc_contenedores(int numSPs= 256, int numMPs= 256,int numNodeLockers= 16,int numLoadPatterns= 32);
     void alloc_iters(void);
@@ -78,23 +78,23 @@ class ConstrContainer: public MeshComponentContainer
   protected:
     friend class Domain;
     // methods to populate containers
-    virtual bool addSP_Constraint(SP_Constraint *);
-    virtual bool addMP_Constraint(MP_Constraint *);
-    virtual bool addMRMP_Constraint(MRMP_Constraint *);
+    virtual bool addSFreedom_Constraint(SFreedom_Constraint *);
+    virtual bool addMFreedom_Constraint(MFreedom_Constraint *);
+    virtual bool addMRMFreedom_Constraint(MRMFreedom_Constraint *);
     virtual bool addLoadPattern(LoadPattern *);
     virtual bool addNodeLocker(NodeLocker *);
 
     // methods to add components to a LoadPattern object
-    virtual bool addSP_Constraint(SP_Constraint *, int loadPatternTag);
+    virtual bool addSFreedom_Constraint(SFreedom_Constraint *, int loadPatternTag);
     virtual bool addNodalLoad(NodalLoad *, int loadPatternTag);
     virtual bool addElementalLoad(ElementalLoad *, int loadPatternTag);
 
     // methods to remove the components
     virtual void clearAll(void);
-    virtual bool removeSP_Constraint(int theNode, int theDOF, int loadPatternTag);
-    virtual bool removeSP_Constraint(int tag);
-    virtual bool removeMP_Constraint(int tag);
-    virtual bool removeMRMP_Constraint(int tag);
+    virtual bool removeSFreedom_Constraint(int theNode, int theDOF, int loadPatternTag);
+    virtual bool removeSFreedom_Constraint(int tag);
+    virtual bool removeMFreedom_Constraint(int tag);
+    virtual bool removeMRMFreedom_Constraint(int tag);
     virtual bool removeLoadPattern(int loadTag,int &numSPs);
     virtual bool removeNodeLocker(int spcpTag,int &numSPs);
     int removeLPs(void);
@@ -102,7 +102,7 @@ class ConstrContainer: public MeshComponentContainer
 
     virtual bool removeNodalLoad(int tag, int loadPattern);
     virtual bool removeElementalLoad(int tag, int loadPattern);
-    virtual bool removeSP_Constraint(int tag, int loadPattern);
+    virtual bool removeSFreedom_Constraint(int tag, int loadPattern);
 
     void libera(void);
     DbTagData &getDbTagData(void) const;
@@ -119,18 +119,18 @@ class ConstrContainer: public MeshComponentContainer
     virtual ~ConstrContainer(void);
 
      // methods to access the components
-    virtual SP_ConstraintIter &getSPs();
-    virtual MP_ConstraintIter &getMPs();
-    virtual MRMP_ConstraintIter &getMRMPs();
+    virtual SFreedom_ConstraintIter &getSPs();
+    virtual MFreedom_ConstraintIter &getMPs();
+    virtual MRMFreedom_ConstraintIter &getMRMPs();
     const std::map<int,LoadPattern *> &getLoadPatterns(void) const;
     const std::map<int,NodeLocker *> &getNodeLockers(void) const;
     std::map<int,LoadPattern *> &getLoadPatterns(void);
     std::map<int,NodeLocker *> &getNodeLockers(void);
-    virtual SP_ConstraintIter &getDomainAndLoadPatternSPs();
+    virtual SFreedom_ConstraintIter &getDomainAndLoadPatternSPs();
 
-    virtual SP_Constraint *getSP_Constraint(int tag);
-    virtual MP_Constraint *getMP_Constraint(int tag);
-    virtual MRMP_Constraint *getMRMP_Constraint(int tag);
+    virtual SFreedom_Constraint *getSFreedom_Constraint(int tag);
+    virtual MFreedom_Constraint *getMFreedom_Constraint(int tag);
+    virtual MRMFreedom_Constraint *getMRMFreedom_Constraint(int tag);
     LoadPattern *getLoadPattern(const int &);
     const LoadPattern *getLoadPattern(const int &) const;
     NodeLocker *getNodeLocker(const int &);

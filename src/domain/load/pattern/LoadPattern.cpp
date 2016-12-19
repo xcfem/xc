@@ -60,7 +60,7 @@
 #include <cstdlib>
 #include <utility/matrix/ID.h>
 #include "domain/domain/Domain.h"
-#include <domain/constraints/SP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
 #include <domain/load/pattern/TimeSeries.h>
 #include <utility/tagged/storage/ArrayOfTaggedObjects.h>
 #include <domain/load/ElementalLoadIter.h>
@@ -357,8 +357,8 @@ bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
 //   }
 
 //! @brief Agrega la coacción being passed as parameter.
-bool XC::LoadPattern::addSP_Constraint(SP_Constraint *theSp)
-  { return NodeLocker::addSP_Constraint(theSp); }
+bool XC::LoadPattern::addSFreedom_Constraint(SFreedom_Constraint *theSp)
+  { return NodeLocker::addSFreedom_Constraint(theSp); }
 
 //! @brief Devuelve un iterador a las cargas sobre nodo.
 XC::NodalLoadIter &XC::LoadPattern::getNodalLoads(void)
@@ -583,8 +583,8 @@ void XC::LoadPattern::applyLoadSensitivity(double pseudoTime)
       while((eleLoad = theElementalIter()) != 0)
       eleLoad->applyLoad(factor);
 
-      SP_Constraint *sp;
-      SP_ConstraintIter &theIter = this->getSPs();
+      SFreedom_Constraint *sp;
+      SFreedom_ConstraintIter &theIter = this->getSPs();
       while((sp = theIter()) != 0)
       sp->applyConstraint(factor);
     */

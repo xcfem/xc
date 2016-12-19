@@ -29,7 +29,7 @@
 #ifndef RigidBase_h
 #define RigidBase_h
 
-#include "MP_Constraint.h"
+#include "MFreedom_Constraint.h"
 
 namespace XC {
 class Domain;
@@ -39,7 +39,7 @@ class Node;
 //
 //! @brief Clase base para las condiciones de contorno de tipo
 //! «movimiento de sólido rígido».
-class RigidBase: public MP_Constraint
+class RigidBase: public MFreedom_Constraint
   {
   protected:
     Node *nodeR; //!< Pointer to retained node.

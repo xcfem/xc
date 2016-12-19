@@ -28,9 +28,9 @@
 
 #include "ConstraintLoader.h"
 #include "domain/domain/Domain.h"
-#include "domain/constraints/SP_Constraint.h"
-#include "domain/constraints/MP_Constraint.h"
-#include "domain/constraints/MRMP_Constraint.h"
+#include "domain/constraints/SFreedom_Constraint.h"
+#include "domain/constraints/MFreedom_Constraint.h"
+#include "domain/constraints/MRMFreedom_Constraint.h"
 #include "domain/constraints/EqualDOF.h"
 #include "domain/constraints/RigidBeam.h"
 #include "domain/constraints/RigidRod.h"
@@ -48,48 +48,48 @@ XC::ConstraintLoader::ConstraintLoader(Preprocessor *owr)
   : Loader(owr), tag_sp_constraint(0), tag_mp_constraint(0) {}
 
 //! @grief Agrega al modelo una condición de contorno monopunto.
-XC::SP_Constraint *XC::ConstraintLoader::addSP_Constraint(const int &tag_nod,const SP_Constraint &semilla)
+XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int &tag_nod,const SFreedom_Constraint &semilla)
   {
-    SP_Constraint *sp= semilla.getCopy(tag_sp_constraint);
+    SFreedom_Constraint *sp= semilla.getCopy(tag_sp_constraint);
     tag_sp_constraint++;
     if(sp)
       {
         sp->setNodeTag(tag_nod);
-        getDomain()->addSP_Constraint(sp);
+        getDomain()->addSFreedom_Constraint(sp);
         preprocessor->UpdateSets(sp);
       }
     else
-      std::cerr << "ConstraintLoader::addSP_Constraint; se produjo un error al crear la coacción." << std::endl;
+      std::cerr << "ConstraintLoader::addSFreedom_Constraint; se produjo un error al crear la coacción." << std::endl;
     return sp;    
   }
 
 //! @grief Agrega al modelo una condición de contorno monopunto.
-XC::SP_Constraint *XC::ConstraintLoader::addSP_Constraint(const int &tag_nod,const int &id_gdl,const double &valor)
+XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int &tag_nod,const int &id_gdl,const double &valor)
   {
-    SP_Constraint *sp= new SP_Constraint(tag_sp_constraint,tag_nod,id_gdl, valor);
+    SFreedom_Constraint *sp= new SFreedom_Constraint(tag_sp_constraint,tag_nod,id_gdl, valor);
     tag_sp_constraint++;
     if(sp)
       {
-        getDomain()->addSP_Constraint(sp);
+        getDomain()->addSFreedom_Constraint(sp);
         preprocessor->UpdateSets(sp);
       }
     else
-      std::cerr << "ConstraintLoader::addSP_Constraint; se produjo un error al crear la coacción." << std::endl;
+      std::cerr << "ConstraintLoader::addSFreedom_Constraint; se produjo un error al crear la coacción." << std::endl;
     return sp;    
   }
 
 //! @grief Define una condición de contorno monopunto.
-XC::SP_Constraint *XC::ConstraintLoader::newSPConstraint(const int &tag_nod,const int &id_gdl,const double &valor)
-  { return addSP_Constraint(tag_nod,id_gdl,valor); }
+XC::SFreedom_Constraint *XC::ConstraintLoader::newSPConstraint(const int &tag_nod,const int &id_gdl,const double &valor)
+  { return addSFreedom_Constraint(tag_nod,id_gdl,valor); }
 
 //! @grief Agrega al modelo una condición de contorno multipunto.
-XC::MP_Constraint *XC::ConstraintLoader::newMPConstraint(const int &masterNode, const int &slaveNode, const ID &constrainedDOF, const ID &retainedDOF)
+XC::MFreedom_Constraint *XC::ConstraintLoader::newMPConstraint(const int &masterNode, const int &slaveNode, const ID &constrainedDOF, const ID &retainedDOF)
   {
-    MP_Constraint *mp= new MP_Constraint(tag_mp_constraint,masterNode,slaveNode,constrainedDOF,retainedDOF);
+    MFreedom_Constraint *mp= new MFreedom_Constraint(tag_mp_constraint,masterNode,slaveNode,constrainedDOF,retainedDOF);
     tag_mp_constraint++;
     if(mp)
       {
-        getDomain()->addMP_Constraint(mp);
+        getDomain()->addMFreedom_Constraint(mp);
         preprocessor->UpdateSets(mp);
       }
     else
@@ -97,29 +97,29 @@ XC::MP_Constraint *XC::ConstraintLoader::newMPConstraint(const int &masterNode, 
     return mp;
   }
 
-XC::MP_Constraint *XC::ConstraintLoader::newEqualDOF(const int &masterNode, const int &slaveNode, const ID &dofs)
+XC::MFreedom_Constraint *XC::ConstraintLoader::newEqualDOF(const int &masterNode, const int &slaveNode, const ID &dofs)
   {
     EqualDOF *mp= new EqualDOF(tag_mp_constraint,masterNode,slaveNode,dofs);
     tag_mp_constraint++;
     if(mp)
       {
         mp->setup(getDomain());
-        getDomain()->addMP_Constraint(mp);
+        getDomain()->addMFreedom_Constraint(mp);
         preprocessor->UpdateSets(mp);
       }
     else
-      std::cerr << "ConstraintLoader::addMP_Constraint; se produjo un error al crear la coacción." << std::endl;
+      std::cerr << "ConstraintLoader::addMFreedom_Constraint; se produjo un error al crear la coacción." << std::endl;
     return mp;
   }
 
-XC::MP_Constraint *XC::ConstraintLoader::newRigidBeam(const int &masterNode, const int &slaveNode)
+XC::MFreedom_Constraint *XC::ConstraintLoader::newRigidBeam(const int &masterNode, const int &slaveNode)
   {
     RigidBeam *mp= new RigidBeam(tag_mp_constraint,masterNode,slaveNode);
     tag_mp_constraint++;
     if(mp)
       {
         mp->setup(getDomain());
-        getDomain()->addMP_Constraint(mp);
+        getDomain()->addMFreedom_Constraint(mp);
         preprocessor->UpdateSets(mp);
       }
     else
@@ -127,14 +127,14 @@ XC::MP_Constraint *XC::ConstraintLoader::newRigidBeam(const int &masterNode, con
     return mp;
   }
 
-XC::MP_Constraint *XC::ConstraintLoader::newRigidRod(const int &masterNode, const int &slaveNode)
+XC::MFreedom_Constraint *XC::ConstraintLoader::newRigidRod(const int &masterNode, const int &slaveNode)
   {
     RigidRod *mp= new RigidRod(tag_mp_constraint,masterNode,slaveNode);
     tag_mp_constraint++;
     if(mp)
       {
         mp->setup(getDomain());
-        getDomain()->addMP_Constraint(mp);
+        getDomain()->addMFreedom_Constraint(mp);
         preprocessor->UpdateSets(mp);
       }
     else
@@ -143,13 +143,13 @@ XC::MP_Constraint *XC::ConstraintLoader::newRigidRod(const int &masterNode, cons
   }
 
 //! @grief Agrega al modelo una condición de contorno multipunto.
-XC::MRMP_Constraint *XC::ConstraintLoader::newMRMPConstraint(const ID &retainedNodes, const int &constrainedNode, const ID &constrainedDOF)
+XC::MRMFreedom_Constraint *XC::ConstraintLoader::newMRMPConstraint(const ID &retainedNodes, const int &constrainedNode, const ID &constrainedDOF)
   {
-    MRMP_Constraint *mrmp= new MRMP_Constraint(tag_mrmp_constraint,retainedNodes,constrainedNode,constrainedDOF);
+    MRMFreedom_Constraint *mrmp= new MRMFreedom_Constraint(tag_mrmp_constraint,retainedNodes,constrainedNode,constrainedDOF);
     tag_mrmp_constraint++;
     if(mrmp)
       {
-        getDomain()->addMRMP_Constraint(mrmp);
+        getDomain()->addMRMFreedom_Constraint(mrmp);
         preprocessor->UpdateSets(mrmp);
       }
     else
@@ -157,13 +157,13 @@ XC::MRMP_Constraint *XC::ConstraintLoader::newMRMPConstraint(const ID &retainedN
     return mrmp;
   }
 
-XC::MRMP_Constraint *XC::ConstraintLoader::newGlueNodeToElement(const Node &constrainedNode, const Element &e, const ID &constrainedDOF)
+XC::MRMFreedom_Constraint *XC::ConstraintLoader::newGlueNodeToElement(const Node &constrainedNode, const Element &e, const ID &constrainedDOF)
   {
     GlueNodeToElement *mrmp= new GlueNodeToElement(tag_mrmp_constraint,constrainedNode,e,constrainedDOF);
     tag_mrmp_constraint++;
     if(mrmp)
       {
-        getDomain()->addMRMP_Constraint(mrmp);
+        getDomain()->addMRMFreedom_Constraint(mrmp);
         preprocessor->UpdateSets(mrmp);
       }
     else
@@ -175,7 +175,7 @@ XC::MRMP_Constraint *XC::ConstraintLoader::newGlueNodeToElement(const Node &cons
 //! @brief Elimina la coacción del dominio.
 void XC::ConstraintLoader::removeSPConstraint(const int &tagC)
   {
-    bool sp= getDomain()->removeSP_Constraint(tagC);
+    bool sp= getDomain()->removeSFreedom_Constraint(tagC);
     if(!sp)
       std::cerr << "ConstraintLoader::removeSPConstraint; se produjo un error al borrar la coacción." << std::endl;
   }

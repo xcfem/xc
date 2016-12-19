@@ -180,7 +180,7 @@ class Node: public MeshComponent
     void freeze_if_dead(NodeLocker *locker);
     void melt_if_alive(NodeLocker *locker);
 
-    SP_Constraint *fix(const SP_Constraint &);
+    SFreedom_Constraint *fix(const SFreedom_Constraint &);
     void fix(const std::vector<int> &, const std::vector<double> &);
     void fix(const ID &, const Vector &);
 

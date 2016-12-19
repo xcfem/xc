@@ -57,8 +57,8 @@
 // Revision: A
 //
 // Description: This file contains the class definition for TransformationFE.
-// TransformationFE objects handle MP_Constraints using the transformation
-// method T^t K T. SP_Constraints are handled by the TransformationConstraintHandler.
+// TransformationFE objects handle MFreedom_Constraints using the transformation
+// method T^t K T. SFreedom_Constraints are handled by the TransformationConstraintHandler.
 //
 // What: "@(#) TransformationFE.h, revA"
 
@@ -66,14 +66,14 @@
 #include "solution/analysis/UnbalAndTangent.h"
 
 namespace XC {
-class SP_Constraint;
+class SFreedom_Constraint;
 class DOF_Group;
 class TransformationConstraintHandler;
 
 //! @ingroup AnalisisFE
 //
-//! @brief TransformationFE objects handle MP_Constraints using
-//! the transformation method T^t K T. SP_Constraints are
+//! @brief TransformationFE objects handle MFreedom_Constraints using
+//! the transformation method T^t K T. SFreedom_Constraints are
 //! handled by the TransformationConstraintHandler.
 class TransformationFE: public FE_Element
   {
@@ -81,7 +81,7 @@ class TransformationFE: public FE_Element
     // private variables - a copy for each object of the class        
     std::vector<DOF_Group *> theDOFs;
     //int numSPs;
-    //std::vector<SP_Constraint *> theSPs;
+    //std::vector<SFreedom_Constraint *> theSPs;
     ID modID;
     int numGroups;
     int numTransformedDOF;
@@ -125,7 +125,7 @@ class TransformationFE: public FE_Element
     virtual void  addM_Force(const Vector &accel, double fact = 1.0);    
     
     const Vector &getLastResponse(void);
-    int addSP(SP_Constraint &theSP);
+    int addSP(SFreedom_Constraint &theSP);
 
     // AddingSensitivity:BEGIN ////////////////////////////////////
     virtual void addM_ForceSensitivity(int gradNumber, const Vector &vect, double fact = 1.0);

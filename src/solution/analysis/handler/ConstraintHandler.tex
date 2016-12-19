@@ -61,7 +61,7 @@ the FE\_Element and DOF\_Group objects. \\
 
 \indent {\em virtual int handle(const ID *nodesToBeNumberedLast =0) =0;} \\
 Invoked to handle the constraints imposed on the domain by the
-SP\_Constraints and MP\_Constraints. The ConstraintHandler object does
+SFreedom\_Constraints and MP\_Constraints. The ConstraintHandler object does
 this by instantiating the appropriate FE\_ELement and DOF\_Group objects 
 and adding them to the AnalysisModel. For all the dofs in each
 DOF\_Group the ConstraintHandler sets initial equation numbers as

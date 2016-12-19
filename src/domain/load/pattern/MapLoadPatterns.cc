@@ -52,7 +52,7 @@
 #include "domain/load/NodalLoad.h"
 #include "domain/load/elem_load.h"
 //Constraints.
-#include "domain/constraints/SP_Constraint.h"
+#include "domain/constraints/SFreedom_Constraint.h"
 
 #include "domain/domain/Domain.h"
 

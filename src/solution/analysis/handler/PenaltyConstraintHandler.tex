@@ -18,7 +18,7 @@
 both single and multi point constraints using the penalty method. 
 This is done by, in addition to creating a DOF\_Group object
 for each Node and an FE\_Element for each Element in the Domain,
-creating either a PenaltySP\_FE or a PenaltyMP\_FE object for each
+creating either a PenaltySFreedom\_FE or a PenaltyMP\_FE object for each
 constraint in the Domain. It is these objects that enforce the
 constraints by moifying the tangent matrix and residual vector. \\ 
 
@@ -43,7 +43,7 @@ alphaMP);}\\  \\
 The integer {\em HANDLER\_TAG\_PenaltyConstraintHandler} (defined in
 $<$classTags.h$>$) is passed to the PenaltyConstraintHandler
 constructor. Stores {\em alphaSP} and {\em alphaMP} which are needed
-to construct the PenaltySP\_FE and PenaltyMP\_FE objects in {\em
+to construct the PenaltySFreedom\_FE and PenaltyMP\_FE objects in {\em
 handle()}. \\
 
 \noindent {\bf Destructor} \\
@@ -55,7 +55,7 @@ clearAll()} is rewritten. \\
 \indent {\em virtual int handle(const ID *nodeToBeNumberedLast =0) =0;} \\
 Determines the number of FE\_Elements and DOF\_Groups needed from the
 Domain (a one to one mapping between Elements and FE\_Elements,
-SP\_Constraints and PenaltySP\_FEs, MP\_Constraints and PenaltyMP\_FEs and
+SFreedom\_Constraints and PenaltySFreedom\_FEs, MP\_Constraints and PenaltyMP\_FEs and
 Nodes and DOF\_Groups). Creates two arrays of pointers to store the
 FE\_Elements and DOF\_Groups, returning a warning message and a $-2$
 or $-3$ if not enough memory is available for these arrays. Then the
@@ -68,8 +68,8 @@ is a Subdomain {\em setFE\_ElementPtr()} is invoked on the Subdomain
 with the new FE\_Element as the argument. If not enough memory is
 available for any DOF\_Group or FE\_element a warning message is
 printed and a $-4$ or $-5$ is returned. 
-The object then iterates through the SP\_Constraints
-of the Domain creating a PenaltySP\_FE for each constraint, using the
+The object then iterates through the SFreedom\_Constraints
+of the Domain creating a PenaltySFreedom\_FE for each constraint, using the
 Domain, the constraint and {\em alphaSP} as the arguments in the
 constructor.
 The object then iterates through the MP\_Constraints

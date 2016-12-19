@@ -57,8 +57,8 @@
 // LagrangeConstraintHandler. LagrangeConstraintHandler is a 
 // constraint handler for handling constraints using the Lagrange method.
 // for each element and degree-of-freedom at a node it constructs regular
-// FE_Element and DOF_Groups; for each SP_Constraint and MP_Constraint
-// LagrangeSP_FE and LagrangeMP_FE elements are created.
+// FE_Element and DOF_Groups; for each SFreedom_Constraint and MFreedom_Constraint
+// LagrangeSFreedom_FE and LagrangeMFreedom_FE elements are created.
 //
 // What: "@(#) LagrangeConstraintHandler.h, revA"
 
@@ -76,8 +76,8 @@ class DOF_Group;
 //! @brief LagrangeConstraintHandler is a 
 //! constraint handler for handling constraints using the Lagrange method.
 //! for each element and degree-of-freedom at a node it constructs regular
-//! FE_Element and DOF_Groups; for each SP_Constraint and MP_Constraint
-//! LagrangeSP_FE and LagrangeMP_FE elements are created.
+//! FE_Element and DOF_Groups; for each SFreedom_Constraint and MFreedom_Constraint
+//! LagrangeSFreedom_FE and LagrangeMFreedom_FE elements are created.
 class LagrangeConstraintHandler : public FactorsConstraintHandler
   {
   protected:

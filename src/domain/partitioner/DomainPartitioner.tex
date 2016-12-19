@@ -93,7 +93,7 @@ the PartionedDomain using {\em removeNode()}.
 result of element connectivity or MP\_Constraints are added to those
 Subdomains whose elements reference them. They are added using the
 {\em addExternalNode()} command. 
-\item SP\_Constraints whose node is interior to a Subdomain are removed
+\item SFreedom\_Constraints whose node is interior to a Subdomain are removed
 from the PartitionedDomain and added to the Subdomain. 
 \item MP\_Constraints whose two nodes are interior to a Subdomain are
 removed from the PartitionedDomain and added to the Subdomain.
@@ -166,7 +166,7 @@ $-3$ if {\em to Subdomain} does not exist, $-4$ if a vertex given by
 true and the vertex was adjacent to a vertex in another partition, and
 returns $-6$ if no Element with a tag similar to {\em tag} exists
 (this should not happen if element graph is built correctly). \\
-The Element, Nodes, NodalLoads, SP\_Constraints and MP\_Constraints
+The Element, Nodes, NodalLoads, SFreedom\_Constraints and MP\_Constraints
 that need to be moved between the two Subdomains, or between the
 PartitionedDomain and Subdomains are also moved. NO ELEMENTAL LOADS 
 are moved yet. \\
@@ -181,7 +181,7 @@ to} and place them in subdomain {\em to}. If {\em adjacentVertexOther} is
 than {\em to} and {\em from} are moved. Returns $0$ if successfull, returns 
 an error message and $-1$ if PartitionedDomain has not been partitioned, $-2$ 
 if {\em from} Subdomain does not exist, $-3$ if {\em to Subdomain}
-does not exist. \\ The Elements, Nodes, NodalLoads, SP\_Constraints
+does not exist. \\ The Elements, Nodes, NodalLoads, SFreedom\_Constraints
 and MP\_Constraints that need to be moved between the two Subdomains,
 or between the PartitionedDomain and Subdomains are also moved. NO
 ELEMENTAL LOADS are moved yet. It performs the operation by creating

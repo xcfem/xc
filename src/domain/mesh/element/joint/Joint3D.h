@@ -88,7 +88,7 @@ class Joint3D: public ElemWithMaterial<7,Joint3DPhysicalProperties>
     static Matrix K;
     static Vector V;
   protected:
-   int addMP_Joint(Domain *theDomain, int mpNum, int RetNodeID, int ConNodeID,
+   int addMFreedom_Joint(Domain *theDomain, int mpNum, int RetNodeID, int ConNodeID,
                     int RotNodeID, int Rdof, int DspNodeID, int Ddof, 
                     int LrgDispFlag );   
   public:

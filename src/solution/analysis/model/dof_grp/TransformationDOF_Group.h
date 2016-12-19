@@ -59,8 +59,8 @@
 // Description: This file contains the class definition for 
 // TransformationDOF_Group. A TransformationDOF_Group object is 
 // instantiated by the TransformationConstraintHandler for 
-// every node in the domain which is constrained by an MP_Constraint
-// or an SP_Constrant.
+// every node in the domain which is constrained by an MFreedom_Constraint
+// or an SFreedom_Constrant.
 //
 // What: "@(#) TransformationDOF_Group.h, revA"
 
@@ -69,29 +69,29 @@
 #include "solution/analysis/UnbalAndTangent.h"
 
 namespace XC {
-class MP_Constraint;
-class MRMP_Constraint;
-class SP_Constraint;
+class MFreedom_Constraint;
+class MRMFreedom_Constraint;
+class SFreedom_Constraint;
 class TransformationConstraintHandler;
 
 //! @ingroup AnalisisDOF
 //
 //! @brief A TransformationDOF_Group object is 
 //! instantiated by the TransformationConstraintHandler for 
-//! every node in the domain which is constrained by an MP_Constraint
-//! or an SP_Constrant.
+//! every node in the domain which is constrained by an MFreedom_Constraint
+//! or an SFreedom_Constrant.
 class TransformationDOF_Group: public DOF_Group
   {
   private:
-    MP_Constraint *theMP;
-    MRMP_Constraint *theMRMP;
+    MFreedom_Constraint *theMP;
+    MRMFreedom_Constraint *theMRMP;
     
     Matrix Trans;
     ID modID;
     int modNumDOF;
     UnbalAndTangent unbalAndTangentMod;
     
-    std::vector<SP_Constraint *> theSPs;
+    std::vector<SFreedom_Constraint *> theSPs;
     
     // static variables - single copy for all objects of the class	    
     static UnbalAndTangentStorage unbalAndTangentArrayMod; //!< array of class wide vectors and matrices
@@ -100,8 +100,8 @@ class TransformationDOF_Group: public DOF_Group
 
   protected:
     friend class AnalysisModel;
-    TransformationDOF_Group(int tag, Node *myNode, MP_Constraint *, TransformationConstraintHandler*);
-    TransformationDOF_Group(int tag, Node *myNode, MRMP_Constraint *, TransformationConstraintHandler*);
+    TransformationDOF_Group(int tag, Node *myNode, MFreedom_Constraint *, TransformationConstraintHandler*);
+    TransformationDOF_Group(int tag, Node *myNode, MRMFreedom_Constraint *, TransformationConstraintHandler*);
     TransformationDOF_Group(int tag, Node *myNode, TransformationConstraintHandler *);    
   public:
     ~TransformationDOF_Group();    
@@ -142,7 +142,7 @@ class TransformationDOF_Group: public DOF_Group
 
     virtual void setEigenvector(int mode, const Vector &eigenvalue);
 
-    int addSP_Constraint(SP_Constraint &theSP);
+    int addSFreedom_Constraint(SFreedom_Constraint &theSP);
     int enforceSPs(void);
 
 // AddingSensitivity:BEGIN ////////////////////////////////////

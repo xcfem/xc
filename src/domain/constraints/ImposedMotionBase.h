@@ -29,7 +29,7 @@
 #ifndef ImposedMotionBase_h
 #define ImposedMotionBase_h
 
-#include <domain/constraints/SP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
 #include <utility/matrix/Vector.h>
 
 namespace XC {
@@ -40,7 +40,7 @@ class LoadPattern;
 //! @ingroup CContSP
 //
 //! @brief Clase base para los movimientos impuestos sobre nodo.
-class ImposedMotionBase : public SP_Constraint
+class ImposedMotionBase : public SFreedom_Constraint
   {
   private:
     int groundMotionTag;

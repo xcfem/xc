@@ -69,7 +69,7 @@
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include <cstring>
 #include <domain/mesh/element/Information.h>
-#include "domain/constraints/SP_Constraint.h"
+#include "domain/constraints/SFreedom_Constraint.h"
 
 
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
@@ -282,7 +282,7 @@ void XC::Node::freeze_if_dead(NodeLocker *locker)
         const size_t tag_nodo= getTag();
         for(int id_gdl= 0;id_gdl<numberDOF;id_gdl++)
           {
-            SP_Constraint *sp= locker->addSP_Constraint(tag_nodo,id_gdl,0.0);
+            SFreedom_Constraint *sp= locker->addSFreedom_Constraint(tag_nodo,id_gdl,0.0);
             if(sp)
               coacciones_freeze.insert(sp->getTag());
           }
@@ -316,7 +316,7 @@ void XC::Node::melt_if_alive(NodeLocker *locker)
         if(!coacciones_freeze.empty())
           {
             for(std::set<int>::const_iterator i= coacciones_freeze.begin();i!=coacciones_freeze.end();i++)
-              locker->removeSP_Constraint(*i);
+              locker->removeSFreedom_Constraint(*i);
             coacciones_freeze.clear();
 	    reaction.Zero();
           }
@@ -346,8 +346,8 @@ XC::DefaultTag &XC::Node::getDefaultTag(void)
 
 //! @brief Introduce en el nodo una constraint
 //! como la being passed as parameter.
-XC::SP_Constraint *XC::Node::fix(const SP_Constraint &semilla)
-  { return GetPreprocessor()->getConstraintLoader().addSP_Constraint(getTag(),semilla); }
+XC::SFreedom_Constraint *XC::Node::fix(const SFreedom_Constraint &semilla)
+  { return GetPreprocessor()->getConstraintLoader().addSFreedom_Constraint(getTag(),semilla); }
 
 //! @brief Impone desplazamientos prescritos en los grados de libertad
 //! que se pasan como parámetro.
@@ -364,7 +364,7 @@ void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &val
         if(sz)
           {
             for(int i= 0;i<sz;i++)
-              cl.addSP_Constraint(getTag(),idGdls[i],valores[i]);
+              cl.addSFreedom_Constraint(getTag(),idGdls[i],valores[i]);
           }
         else
           std::cerr << "Node::coarta_movs; "

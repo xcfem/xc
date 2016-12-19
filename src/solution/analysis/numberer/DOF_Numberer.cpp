@@ -73,11 +73,11 @@
 #include "solution/graph/graph/Graph.h"
 
 #include <domain/domain/Domain.h>
-#include <domain/constraints/MP_Constraint.h>
-#include <domain/constraints/MRMP_Constraint.h>
+#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/MRMFreedom_Constraint.h>
 #include <domain/mesh/node/Node.h>
-#include <domain/constraints/MP_ConstraintIter.h>
-#include <domain/constraints/MRMP_ConstraintIter.h>
+#include <domain/constraints/MFreedom_ConstraintIter.h>
+#include <domain/constraints/MRMFreedom_ConstraintIter.h>
 #include <solution/analysis/model/DOF_GrpIter.h>
 
 //! @brief Crea el numerador de grafos que se le solicita. 
@@ -237,11 +237,11 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
         if(have4s)
           {
             int nodeID= dofGroupPtr->getNodeTag();
-            // loop through the MP_Constraints to see if any of the
+            // loop through the MFreedom_Constraints to see if any of the
             // DOFs are constrained, note constraint matrix must be diagonal
             // with 1's on the diagonal
-            MP_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
-            MP_Constraint *mpPtr;
+            MFreedom_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
+            MFreedom_Constraint *mpPtr;
             while((mpPtr= theMPs()) != 0 )
               {
                 // note keep looping over all in case multiple constraints
@@ -263,11 +263,11 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
                       }
                   }
               }
-            MRMP_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
-            MRMP_Constraint *mrmpPtr;
+            MRMFreedom_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
+            MRMFreedom_Constraint *mrmpPtr;
             while((mrmpPtr= theMRMPs()) != 0 )
               {
-	        std::cerr << "DOF_Numberer::numberDOF(int) code loop through the MRMP_Constraints." << std::endl;
+	        std::cerr << "DOF_Numberer::numberDOF(int) code loop through the MRMFreedom_Constraints." << std::endl;
               }
           }        
       }
@@ -385,11 +385,11 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
         if(have4s)
           {
             int nodeID= dofGroupPtr->getNodeTag();
-            // loop through the MP_Constraints to see if any of the
+            // loop through the MFreedom_Constraints to see if any of the
             // DOFs are constrained, note constraint matrix must be diagonal
             // with 1's on the diagonal
-            MP_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
-            MP_Constraint *mpPtr;
+            MFreedom_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
+            MFreedom_Constraint *mpPtr;
             while((mpPtr= theMPs()) != 0 )
               {
                 // note keep looping over all in case multiple constraints
@@ -411,11 +411,11 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
                       }
                   }
               }
-            MRMP_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
-            MRMP_Constraint *mrmpPtr;
+            MRMFreedom_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
+            MRMFreedom_Constraint *mrmpPtr;
             while((mrmpPtr= theMRMPs()) != 0 )
               {
-                 std::cerr << "DOF_Numberer::numberDOF(ID) code loop through the MRMP_Constraints." << std::endl;
+                 std::cerr << "DOF_Numberer::numberDOF(ID) code loop through the MRMFreedom_Constraints." << std::endl;
               }
 	  }
       }

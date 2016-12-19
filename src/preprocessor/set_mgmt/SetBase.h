@@ -39,7 +39,7 @@
 class Lista;
 
 namespace XC {
-class SP_Constraint;
+class SFreedom_Constraint;
 class Face;
 class Body;
 class UniformGrid;
@@ -54,7 +54,7 @@ class SetBase: public EntMdlrBase
     inline virtual ~SetBase(void)
       {}
     virtual void Malla(dir_mallado dm);
-    virtual void fix(const SP_Constraint &);
+    virtual void fix(const SFreedom_Constraint &);
 
     virtual std::set<int> getNodeTags(void) const= 0;
     virtual std::set<int> getElementTags(void) const= 0;

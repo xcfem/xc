@@ -58,8 +58,8 @@
 //
 // Description: This file contains the class definition for PlainHandler.
 // PlainHandler is a simple ConstraintHandler; simple in that it can only
-// handle 0 boundary constraints, i.e. no non-zero SP_Constraints and no 
-// MP_Constraints can be handled by this type of ConstraintHandler.
+// handle 0 boundary constraints, i.e. no non-zero SFreedom_Constraints and no 
+// MFreedom_Constraints can be handled by this type of ConstraintHandler.
 //
 // What: "@(#) PlainHandler.h, revA"
 

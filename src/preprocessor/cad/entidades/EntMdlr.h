@@ -136,7 +136,7 @@ class EntMdlr: public SetEstruct
     SetFilaK GetVarRefFilaK(size_t capa,size_t f,const RangoIndice &rango_cols,const std::string &nmb="tmp");
     SetFilaK GetVarRefFilaK(const RangoTritriz &rango,const std::string &nmb="tmp");
 
-    void fix(const SP_Constraint &);
+    void fix(const SFreedom_Constraint &);
 
     virtual int getMEDCellType(void) const;
     virtual int getVtkCellType(void) const;

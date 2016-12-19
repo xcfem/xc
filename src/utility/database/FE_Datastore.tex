@@ -80,7 +80,7 @@ message is printed. \\
 \indent {\em virtual int validateBaseRelationsWrite(int commitTag)=0;}\\
 This method is invoked before the information can be sent to the
 database. It is required to ensure that: \begin{enumerate} 
-\item Each Node, Element, SP\_Constraint, MP\_Constraint, NodalLoad and
+\item Each Node, Element, SFreedom\_Constraint, MP\_Constraint, NodalLoad and
 ElementalLoad which is to save information in the database has a
 database tag.
 \item That the information in the base tables is up to date so that a

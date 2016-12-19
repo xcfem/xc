@@ -57,7 +57,7 @@
 // TransformationConstraintHandler. TransformationConstraintHandler is a 
 // constraint handler for handling constraints using the Transformation method.
 // for each element and degree-of-freedom at a node it constructs regular
-// FE_Element and DOF_Groups if there is no SP_Constraint or MP_Constraint
+// FE_Element and DOF_Groups if there is no SFreedom_Constraint or MFreedom_Constraint
 // constraining an elements node or the node; otherwise a TransformationFE
 // element and a TransformationDOF_Group are created. 
 //
@@ -77,7 +77,7 @@ class DOF_Group;
 //! @brief TransformationConstraintHandler is a constraint handler
 //! for handling constraints using the Transformation method.
 //! For each element and degree-of-freedom at a node it constructs regular
-//! FE_Element and DOF_Groups if there is no SP_Constraint or MP_Constraint
+//! FE_Element and DOF_Groups if there is no SFreedom_Constraint or MFreedom_Constraint
 //! constraining an elements node or the node; otherwise a TransformationFE
 //! element and a TransformationDOF_Group are created.
 class TransformationConstraintHandler : public ConstraintHandler

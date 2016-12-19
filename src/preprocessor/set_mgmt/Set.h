@@ -42,7 +42,7 @@ class Face;
 class Body;
 class UniformGrid;
 class TrfGeom;
-class SP_Constraint;
+class SFreedom_Constraint;
 class ID;
 class Element;
 class Node;

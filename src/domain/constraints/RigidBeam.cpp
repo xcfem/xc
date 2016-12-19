@@ -60,7 +60,7 @@
 #include "RigidBeam.h"
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>
-#include <domain/constraints/MP_Constraint.h>
+#include <domain/constraints/MFreedom_Constraint.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/ID.h>
 

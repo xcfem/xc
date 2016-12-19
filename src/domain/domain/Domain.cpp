@@ -52,8 +52,8 @@
 //
 // Purpose: This file contains the class definition for Domain
 // Domain is a container class. The class is responsible for holding
-// and providing access to the Elements, Nodes, LoadCases, SP_Constraints
-// and MP_Constraints. These objects are all added to the Domain by a
+// and providing access to the Elements, Nodes, LoadCases, SFreedom_Constraints
+// and MFreedom_Constraints. These objects are all added to the Domain by a
 // ModelBuilder.
 //
 // What: "@(#) Domain.C, revA"
@@ -71,9 +71,9 @@
 #include <domain/mesh/element/Element.h>
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFD.h>
 #include <domain/mesh/node/Node.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/MP_Constraint.h>
-#include <domain/constraints/MRMP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/MRMFreedom_Constraint.h>
 #include <domain/load/NodalLoad.h>
 #include <domain/load/ElementalLoad.h>
 #include <domain/load/pattern/LoadPattern.h>
@@ -84,12 +84,12 @@
 
 #include <domain/domain/single/SingleDomEleIter.h>
 #include <domain/domain/single/SingleDomNodIter.h>
-#include <domain/domain/single/SingleDomSP_Iter.h>
-#include <domain/domain/single/SingleDomMP_Iter.h>
-#include <domain/domain/single/SingleDomMRMP_Iter.h>
+#include <domain/domain/single/SingleDomSFreedom_Iter.h>
+#include <domain/domain/single/SingleDomMFreedom_Iter.h>
+#include <domain/domain/single/SingleDomMRMFreedom_Iter.h>
 #include <domain/load/pattern/LoadPatternIter.h>
 #include <domain/load/pattern/NodeLockerIter.h>
-#include <domain/domain/single/SingleDomAllSP_Iter.h>
+#include <domain/domain/single/SingleDomAllSFreedom_Iter.h>
 
 #include <solution/graph/graph/Vertex.h>
 #include "solution/graph/graph/Graph.h"
@@ -189,9 +189,9 @@ bool XC::Domain::addNode(Node * node)
   { return mesh.addNode(node); }
 
 //! @brief Agrega al dominio una constraint monopunto.
-bool XC::Domain::addSP_Constraint(SP_Constraint *spConstraint)
+bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint)
   {
-    bool result= constraints.addSP_Constraint(spConstraint);
+    bool result= constraints.addSFreedom_Constraint(spConstraint);
     if(result)
       {
         spConstraint->setDomain(this);
@@ -201,9 +201,9 @@ bool XC::Domain::addSP_Constraint(SP_Constraint *spConstraint)
   }
 
 //! @brief Agrega al dominio una constraint multipunto.
-bool XC::Domain::addMP_Constraint(MP_Constraint *mpConstraint)
+bool XC::Domain::addMFreedom_Constraint(MFreedom_Constraint *mpConstraint)
   {
-    bool result= constraints.addMP_Constraint(mpConstraint);
+    bool result= constraints.addMFreedom_Constraint(mpConstraint);
     if(result)
       {
         mpConstraint->setDomain(this);
@@ -213,9 +213,9 @@ bool XC::Domain::addMP_Constraint(MP_Constraint *mpConstraint)
   }
 
 //! @brief Agrega al dominio una constraint multi retained node.
-bool XC::Domain::addMRMP_Constraint(MRMP_Constraint *mrmpConstraint)
+bool XC::Domain::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmpConstraint)
   {
-    bool result= constraints.addMRMP_Constraint(mrmpConstraint);
+    bool result= constraints.addMRMFreedom_Constraint(mrmpConstraint);
     if(result)
       {
         mrmpConstraint->setDomain(this);
@@ -225,13 +225,13 @@ bool XC::Domain::addMRMP_Constraint(MRMP_Constraint *mrmpConstraint)
   }
 
 //! @brief Agrega al dominio una constraint monopunto.
-bool XC::Domain::addSP_Constraint(SP_Constraint *spConstraint, int pattern)
+bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int pattern)
   {
-    bool result= constraints.addSP_Constraint(spConstraint,pattern);
+    bool result= constraints.addSFreedom_Constraint(spConstraint,pattern);
     if(!result)
       {
-        std::cerr << "Domain::addSP_Constraint - " << pattern
-                  << " pattern could not add the XC::SP_Constraint\n";
+        std::cerr << "Domain::addSFreedom_Constraint - " << pattern
+                  << " pattern could not add the XC::SFreedom_Constraint\n";
         return false;
       }
 
@@ -276,27 +276,27 @@ bool XC::Domain::removeElement(int tag)
 bool XC::Domain::removeNode(int tag)
   { return mesh.removeNode(tag); }
 
-bool XC::Domain::removeSP_Constraint(int theNode, int theDOF, int loadPatternTag)
+bool XC::Domain::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatternTag)
   {
-    bool retval= constraints.removeSP_Constraint(theNode,theDOF,loadPatternTag);
+    bool retval= constraints.removeSFreedom_Constraint(theNode,theDOF,loadPatternTag);
     if(retval)
       domainChange();
     return retval;
   }
 
 //! @brief Elimina del dominio la constraint monopunto cuyo tag se pasa como parámetro.
-bool XC::Domain::removeSP_Constraint(int tag)
+bool XC::Domain::removeSFreedom_Constraint(int tag)
   {
-    bool retval= constraints.removeSP_Constraint(tag);
+    bool retval= constraints.removeSFreedom_Constraint(tag);
     if(retval)
       domainChange();
     return retval;
   }
 
 //! @brief Elimina del dominio la constraint multipunto cuyo tag se pasa como parámetro.
-bool XC::Domain::removeMP_Constraint(int tag)
+bool XC::Domain::removeMFreedom_Constraint(int tag)
   {
-    bool result = constraints.removeMP_Constraint(tag);
+    bool result = constraints.removeMFreedom_Constraint(tag);
     if(result)
       domainChange();
     return result;
@@ -304,9 +304,9 @@ bool XC::Domain::removeMP_Constraint(int tag)
 
 
 //! @brief Elimina del dominio la constraint multi retained node cuyo tag se pasa como parámetro.
-bool XC::Domain::removeMRMP_Constraint(int tag)
+bool XC::Domain::removeMRMFreedom_Constraint(int tag)
   {
-    bool result = constraints.removeMRMP_Constraint(tag);
+    bool result = constraints.removeMRMFreedom_Constraint(tag);
     if(result)
       domainChange();
     return result;
@@ -471,9 +471,9 @@ bool XC::Domain::removeElementalLoad(int tag, int loadPattern)
 //!
 //! @param tag: Identificador de la constraint monopunto a eliminar.
 //! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
-bool XC::Domain::removeSP_Constraint(int tag, int loadPattern)
+bool XC::Domain::removeSFreedom_Constraint(int tag, int loadPattern)
   {
-    bool removed= constraints.removeSP_Constraint(tag,loadPattern);
+    bool removed= constraints.removeSFreedom_Constraint(tag,loadPattern);
     if(removed)
       this->domainChange();
     return removed;

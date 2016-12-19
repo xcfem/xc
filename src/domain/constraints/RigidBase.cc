@@ -39,7 +39,7 @@ void XC::RigidBase::setDomain(Domain *theDomain)
         std::cerr << "Domain = 0\n";
         return;
       }
-    MP_Constraint::setDomain(theDomain);
+    MFreedom_Constraint::setDomain(theDomain);
 
     if(theDomain)
       {
@@ -62,10 +62,10 @@ void XC::RigidBase::setDomain(Domain *theDomain)
   }
 
 XC::RigidBase::RigidBase(int mPtag)
-  : MP_Constraint(mPtag), nodeR(nullptr), nodeC(nullptr) {}
+  : MFreedom_Constraint(mPtag), nodeR(nullptr), nodeC(nullptr) {}
 
 XC::RigidBase::RigidBase(int mPtag,const int &masterNode, const int &slaveNode, int classTag)
-  : MP_Constraint(mPtag,masterNode,slaveNode,classTag), nodeR(nullptr), nodeC(nullptr) {}
+  : MFreedom_Constraint(mPtag,masterNode,slaveNode,classTag), nodeR(nullptr), nodeC(nullptr) {}
 
 XC::RigidBase::~RigidBase(void)
   {

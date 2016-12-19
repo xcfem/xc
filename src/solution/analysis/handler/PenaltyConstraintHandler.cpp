@@ -65,18 +65,18 @@
 #include <domain/mesh/element/Element.h>
 #include "domain/mesh/node/NodeIter.h"
 #include "domain/mesh/element/ElementIter.h"
-#include <domain/constraints/SP_ConstraintIter.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/MP_ConstraintIter.h>
-#include <domain/constraints/MP_Constraint.h>
-#include <domain/constraints/MRMP_ConstraintIter.h>
-#include <domain/constraints/MRMP_Constraint.h>
+#include <domain/constraints/SFreedom_ConstraintIter.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/MFreedom_ConstraintIter.h>
+#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/MRMFreedom_ConstraintIter.h>
+#include <domain/constraints/MRMFreedom_Constraint.h>
 #include <solution/analysis/integrator/Integrator.h>
 #include <utility/matrix/ID.h>
 #include "domain/domain/subdomain/Subdomain.h"
-#include <solution/analysis/model/fe_ele/penalty/PenaltySP_FE.h>
-#include <solution/analysis/model/fe_ele/penalty/PenaltyMP_FE.h>
-#include <solution/analysis/model/fe_ele/penalty/PenaltyMRMP_FE.h>
+#include <solution/analysis/model/fe_ele/penalty/PenaltySFreedom_FE.h>
+#include <solution/analysis/model/fe_ele/penalty/PenaltyMFreedom_FE.h>
+#include <solution/analysis/model/fe_ele/penalty/PenaltyMRMFreedom_FE.h>
 
 
 //! @brief Constructor.
@@ -105,8 +105,8 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
     // get number ofelements and nodes in the domain
     // and init the theFEs and theDOFs arrays
     int numSPs = 0;
-    SP_ConstraintIter &theSPs = theDomain->getConstraints().getDomainAndLoadPatternSPs();
-    SP_Constraint *spPtr;
+    SFreedom_ConstraintIter &theSPs = theDomain->getConstraints().getDomainAndLoadPatternSPs();
+    SFreedom_Constraint *spPtr;
     while((spPtr = theSPs()) != 0)
       numSPs++;
 
@@ -166,32 +166,32 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
     while((elePtr = theEle()) != 0)
       { fePtr= theModel->createFE_Element(numFeEle++, elePtr); }
 
-    // create the PenaltySP_FE for the SP_Constraints and
+    // create the PenaltySFreedom_FE for the SFreedom_Constraints and
     // add to the AnalysisModel
-    SP_ConstraintIter &theSPss = theDomain->getConstraints().getDomainAndLoadPatternSPs();
+    SFreedom_ConstraintIter &theSPss = theDomain->getConstraints().getDomainAndLoadPatternSPs();
     while((spPtr = theSPss()) != 0)
       {
-        fePtr= theModel->createPenaltySP_FE(numFeEle, *spPtr, alphaSP);
+        fePtr= theModel->createPenaltySFreedom_FE(numFeEle, *spPtr, alphaSP);
         numFeEle++;
       }
 
-    // create the PenaltyMP_FE for the MP_Constraints and
+    // create the PenaltyMFreedom_FE for the MFreedom_Constraints and
     // add to the AnalysisModel
-    MP_ConstraintIter &theMPs = theDomain->getConstraints().getMPs();
-    MP_Constraint *mpPtr;
+    MFreedom_ConstraintIter &theMPs = theDomain->getConstraints().getMPs();
+    MFreedom_Constraint *mpPtr;
     while((mpPtr = theMPs()) != 0)
       {
-	fePtr= theModel->createPenaltyMP_FE(numFeEle, *mpPtr, alphaMP);
+	fePtr= theModel->createPenaltyMFreedom_FE(numFeEle, *mpPtr, alphaMP);
         numFeEle++;
       }
 
-    // create the PenaltyMRMP_FE for the MRMP_Constraints and
+    // create the PenaltyMRMFreedom_FE for the MRMFreedom_Constraints and
     // add to the AnalysisModel
-    MRMP_ConstraintIter &theMRMPs = theDomain->getConstraints().getMRMPs();
-    MRMP_Constraint *mrmpPtr;
+    MRMFreedom_ConstraintIter &theMRMPs = theDomain->getConstraints().getMRMPs();
+    MRMFreedom_Constraint *mrmpPtr;
     while((mrmpPtr = theMRMPs()) != 0)
       {
-	fePtr= theModel->createPenaltyMRMP_FE(numFeEle, *mrmpPtr, alphaMP);
+	fePtr= theModel->createPenaltyMRMFreedom_FE(numFeEle, *mrmpPtr, alphaMP);
         numFeEle++;
       }
     return count3;

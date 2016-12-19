@@ -81,8 +81,8 @@ class FEM_ObjectBrokerAllClasses: public FEM_ObjectBroker
     // methods to get new modelling class objects
     Element *getNewElement(int classTag);
     Node *getNewNode(int classTag);
-    MP_Constraint *getNewMP(int classTag);
-    SP_Constraint *getNewSP(int classTag);
+    MFreedom_Constraint *getNewMP(int classTag);
+    SFreedom_Constraint *getNewSP(int classTag);
     NodalLoad *getNewNodalLoad(int classTag);
     
     BeamIntegration *getNewBeamIntegration(int classTag);

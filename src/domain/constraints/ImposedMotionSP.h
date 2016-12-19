@@ -48,8 +48,8 @@
 // $Date: 2005/11/22 19:41:17 $
 // $Source: /usr/local/cvs/OpenSees/SRC/domain/constraints/ImposedMotionSP.h,v $
                                                                         
-#ifndef ImposedMotionSP_h
-#define ImposedMotionSP_h
+#ifndef ImposedMotionSFreedom_h
+#define ImposedMotionSFreedom_h
 
 // File: ~/domain/constraints/ImposedMotionSP.h
 //

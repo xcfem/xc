@@ -55,7 +55,7 @@
 // Revised:
 //
 // Purpose: This file contains the class definition for RigidRod.
-// RigidRod is a class which constructs MP_Constraint objects
+// RigidRod is a class which constructs MFreedom_Constraint objects
 // for a rigid rod, all translational dof are constrained to be equal
 // at the retained and constarined nodes.
 

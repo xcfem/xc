@@ -146,7 +146,7 @@ class Joint2D : public ElemWithMaterial<5,Joint2DPhysicalProperties>
     // AddingSensitivity:END ///////////////////////////////////////////
 
  protected:
-  int 	addMP_Joint(Domain *theDomain, int mpNum, int RnodeID, int CnodeID, int MainDOF, int FixedEnd, int LrgDispFlag );
+  int 	addMFreedom_Joint(Domain *theDomain, int mpNum, int RnodeID, int CnodeID, int MainDOF, int FixedEnd, int LrgDispFlag );
 };
 } // end of XC namespace
 

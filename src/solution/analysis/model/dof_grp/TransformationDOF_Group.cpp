@@ -65,10 +65,10 @@
 #include <domain/mesh/node/Node.h>
 #include <utility/matrix/Vector.h>
 #include <solution/analysis/integrator/TransientIntegrator.h>
-#include <domain/constraints/MP_Constraint.h>
-#include <domain/constraints/MRMP_Constraint.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/SP_ConstraintIter.h>
+#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/MRMFreedom_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/SFreedom_ConstraintIter.h>
 #include <solution/analysis/handler/TransformationConstraintHandler.h>
 
 const int MAX_NUM_DOF= 16;
@@ -78,7 +78,7 @@ XC::UnbalAndTangentStorage XC::TransformationDOF_Group::unbalAndTangentArrayMod(
 int XC::TransformationDOF_Group::numTransDOFs(0);     // number of objects
 XC::TransformationConstraintHandler *XC::TransformationDOF_Group::theHandler= nullptr;     // number of objects
 
-XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MP_Constraint *mp, TransformationConstraintHandler *theTHandler)  
+XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MFreedom_Constraint *mp, TransformationConstraintHandler *theTHandler)  
   :DOF_Group(tag,node), theMP(mp), theMRMP(nullptr), unbalAndTangentMod(0,unbalAndTangentArrayMod),theSPs()
   {
     // determine the number of DOF 
@@ -92,17 +92,17 @@ XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MP_Con
     modNumDOF= numConstrainedNodeRetainedDOF + numRetainedNodeDOF;
     unbalAndTangentMod= UnbalAndTangent(modNumDOF,unbalAndTangentArrayMod);
 
-    // create space for the XC::SP_Constraint array
-    theSPs= std::vector<SP_Constraint *>(numNodalDOF,static_cast<SP_Constraint *>(nullptr));
+    // create space for the XC::SFreedom_Constraint array
+    theSPs= std::vector<SFreedom_Constraint *>(numNodalDOF,static_cast<SFreedom_Constraint *>(nullptr));
     for(int ii=0; ii<numNodalDOF; ii++) 
       theSPs[ii]= 0;
 
     /***********************
-    // set the XC::SP_Constraint corresponding to the dof in modID
+    // set the XC::SFreedom_Constraint corresponding to the dof in modID
     Domain *theDomain=node->getDomain();
     int nodeTag= node->getTag();    
-    SP_ConstraintIter &theSPIter= theDomain->getSPs();
-    SP_Constraint *sp;
+    SFreedom_ConstraintIter &theSPIter= theDomain->getSPs();
+    SFreedom_Constraint *sp;
     while ((sp= theSPIter()) != 0) {
         if(sp->getNodeTag() == nodeTag) {
             int dof= sp->getDOF_Number();
@@ -136,7 +136,7 @@ XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MP_Con
     theHandler= theTHandler;
   }
 
-XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MRMP_Constraint *mrmp, TransformationConstraintHandler *theTHandler)  
+XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MRMFreedom_Constraint *mrmp, TransformationConstraintHandler *theTHandler)  
   :DOF_Group(tag,node), theMRMP(mrmp),unbalAndTangentMod(0,unbalAndTangentArrayMod),theSPs()
   {
     std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
@@ -160,16 +160,16 @@ XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, Transf
   :DOF_Group(tag,node), theMP(nullptr), theMRMP(nullptr), modNumDOF(node->getNumberDOF()),
    unbalAndTangentMod(node->getNumberDOF(),unbalAndTangentArrayMod),theSPs() 
   {
-    // create space for the SP_Constraint array
-    theSPs= std::vector<SP_Constraint *>(modNumDOF,static_cast<SP_Constraint *>(nullptr));
+    // create space for the SFreedom_Constraint array
+    theSPs= std::vector<SFreedom_Constraint *>(modNumDOF,static_cast<SFreedom_Constraint *>(nullptr));
     for(int i=0; i<modNumDOF; i++) 
       theSPs[i]= 0;
 
-    // set the SP_Constraint corresponding to the dof in myID
+    // set the SFreedom_Constraint corresponding to the dof in myID
     Domain *theDomain=node->getDomain();
     int nodeTag= node->getTag();
-    SP_ConstraintIter &theSPIter= theDomain->getConstraints().getSPs();
-    SP_Constraint *sp;
+    SFreedom_ConstraintIter &theSPIter= theDomain->getConstraints().getSPs();
+    SFreedom_Constraint *sp;
     while ((sp= theSPIter()) != 0) {
         if(sp->getNodeTag() == nodeTag) {
             int dof= sp->getDOF_Number();
@@ -382,7 +382,7 @@ void XC::TransformationDOF_Group::setNodeDisp(const Vector &u)
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0)
       {
         this->DOF_Group::setNodeDisp(u);
@@ -416,7 +416,7 @@ void XC::TransformationDOF_Group::setNodeVel(const XC::Vector &u)
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0)
       {
         this->DOF_Group::setNodeVel(u);
@@ -451,7 +451,7 @@ void XC::TransformationDOF_Group::setNodeAccel(const Vector &u)
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0)
       {
         this->DOF_Group::setNodeAccel(u);
@@ -489,7 +489,7 @@ void XC::TransformationDOF_Group::incrNodeDisp(const XC::Vector &u)
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0)
       {
         this->DOF_Group::incrNodeDisp(u);
@@ -525,7 +525,7 @@ void XC::TransformationDOF_Group::incrNodeVel(const Vector &u)
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0)
       {
         this->DOF_Group::incrNodeVel(u);
@@ -559,7 +559,7 @@ void XC::TransformationDOF_Group::incrNodeAccel(const XC::Vector &u)
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0)
       {
         this->DOF_Group::incrNodeAccel(u);
@@ -593,7 +593,7 @@ void XC::TransformationDOF_Group::setEigenvector(int mode, const Vector &u)
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0)
       {
         this->DOF_Group::setEigenvector(mode, u);
@@ -718,9 +718,9 @@ int XC::TransformationDOF_Group::doneID(void)
     return 0;
   }
 
-int XC::TransformationDOF_Group::addSP_Constraint(SP_Constraint &theSP)
+int XC::TransformationDOF_Group::addSFreedom_Constraint(SFreedom_Constraint &theSP)
   {
-    // add the XC::SP_Constraint
+    // add the XC::SFreedom_Constraint
     int dof= theSP.getDOF_Number();
     theSPs[dof]= &theSP;
 
@@ -762,7 +762,7 @@ void XC::TransformationDOF_Group::addM_Force(const XC::Vector &Udotdot, double f
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0 || modID.Nulo())
       {
         this->DOF_Group::addM_Force(Udotdot, fact);
@@ -791,7 +791,7 @@ const XC::Vector &XC::TransformationDOF_Group::getM_Force(const XC::Vector &Udot
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0 || modID.Nulo())
       { return this->DOF_Group::getM_Force(Udotdot, fact); }
 
@@ -893,7 +893,7 @@ int XC::TransformationDOF_Group::saveSensitivity(Vector *u,Vector *udot,Vector *
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0)
       {
         return this->DOF_Group::saveSensitivity(u, udot, udotdot, gradNum, numGrads);
@@ -968,7 +968,7 @@ void XC::TransformationDOF_Group::addM_ForceSensitivity(const XC::Vector &Udotdo
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0 || modID.Nulo())
       {
         this->DOF_Group::addM_ForceSensitivity(Udotdot, fact);
@@ -996,7 +996,7 @@ void XC::TransformationDOF_Group::addD_Force(const XC::Vector &Udot, double fact
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0 || modID.Nulo())
       {
         this->DOF_Group::addD_Force(Udot, fact);
@@ -1024,7 +1024,7 @@ void XC::TransformationDOF_Group::addD_ForceSensitivity(const XC::Vector &Udot, 
       std::cerr << "TransformationDOF_Group is not implemented for multi retained nodes constraints."
                 << std::endl;
 
-    // call base class method and return if no MP_Constraint
+    // call base class method and return if no MFreedom_Constraint
     if(theMP == 0 || modID.Nulo())
       {
         this->DOF_Group::addD_ForceSensitivity(Udot, fact);

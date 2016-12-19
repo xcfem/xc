@@ -333,14 +333,14 @@
 #define LOAD_TAG_SingleExcitation 	3
 #define LOAD_TAG_RectPulseNodalLoad 	4
 
-#define CNSTRNT_TAG_SP_Constraint 	1
-#define CNSTRNT_TAG_MP_Constraint 	2
+#define CNSTRNT_TAG_SFreedom_Constraint 	1
+#define CNSTRNT_TAG_MFreedom_Constraint 	2
 #define CNSTRNT_TAG_ImposedMotionSP	3
 #define CNSTRNT_TAG_ImposedMotionSP1	4
-#define CNSTRNT_TAG_MP_Joint2D          5
-#define CNSTRNT_TAG_MP_SimpleJoint2D    6
-#define CNSTRNT_TAG_MP_Joint3D          7
-#define CNSTRNT_TAG_MRMP_Constraint 	8
+#define CNSTRNT_TAG_MFreedom_Joint2D          5
+#define CNSTRNT_TAG_MFreedom_SimpleJoint2D    6
+#define CNSTRNT_TAG_MFreedom_Joint3D          7
+#define CNSTRNT_TAG_MRMFreedom_Constraint 	8
 #define CNSTRNT_TAG_GlueNodeToElement 	9
 
 #define DOMAIN_TAG_Mesh      	1

@@ -93,7 +93,7 @@ class EarthquakePattern : public EQBasePattern
     virtual ~EarthquakePattern(void);
 
     virtual void applyLoad(double time);
-    virtual bool addSP_Constraint(SP_Constraint *);
+    virtual bool addSFreedom_Constraint(SFreedom_Constraint *);
     virtual bool addNodalLoad(NodalLoad *);
     virtual bool addElementalLoad(ElementalLoad *);
 

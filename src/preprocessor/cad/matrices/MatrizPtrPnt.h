@@ -40,7 +40,7 @@ class Vector3d;
 
 namespace XC{
 class Pnt;
-class SP_Constraint;
+class SFreedom_Constraint;
 class Cad;
 
 //! \ingroup CadMR

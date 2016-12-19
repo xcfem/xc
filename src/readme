@@ -20,7 +20,7 @@ domain: - contains the classes for the domain. all in subdirectores:
                 for Domain, partitioned contains the PartitionedDomain
                 class and the iters for this class.
         node - the Node and NodalLoad classes.
-        constraints - the SP_Constraint and MP_Constraint classes.
+        constraints - the SFreedom_Constraint and MFreedom_Constraint classes.
         subdomain - the Subdomain, ActorSubdomain and ShadowSubdomain
                 classes.
         pattern - the abstact classes LoadPattern and TimeSeries and some
@@ -37,7 +37,7 @@ analysis: - contains the classes for the analysis. again the classes in
                 domainDecompAlgo - DomainDecompAlgo
         dof_grp - DOF_Group
         fe_ele - FE_Element class and subdirectory penalty containing
-                PenaltySP_FE and PenaltyMP_FE
+                PenaltySFreedom_FE and PenaltyMFreedom_FE
         penalty - ConstraintHandler, PenaltyConstraintHandler and
                 PlainHandler
         integrator - Integrator, IncrementalIntegrator, LoadControl,

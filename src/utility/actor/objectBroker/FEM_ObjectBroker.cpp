@@ -264,43 +264,43 @@ XC::Node *XC::FEM_ObjectBroker::getNewNode(int classTag)
       }
   }
 
-XC::MP_Constraint *XC::FEM_ObjectBroker::getNewMP(int classTag)
+XC::MFreedom_Constraint *XC::FEM_ObjectBroker::getNewMP(int classTag)
   {
     switch(classTag)
       {
-      case CNSTRNT_TAG_MP_Constraint:
-        return new MP_Constraint(0,classTag);
-      case CNSTRNT_TAG_MP_Joint2D:
-        return new MP_Joint2D();
+      case CNSTRNT_TAG_MFreedom_Constraint:
+        return new MFreedom_Constraint(0,classTag);
+      case CNSTRNT_TAG_MFreedom_Joint2D:
+        return new MFreedom_Joint2D();
       default:
         std::cerr << "FEM_ObjectBroker::getNewMP - ";
-        std::cerr << " - no MP_Constraint type exists for class tag ";
+        std::cerr << " - no MFreedom_Constraint type exists for class tag ";
         std::cerr << classTag << std::endl;
         return nullptr;
       }
   }
 
-XC::MRMP_Constraint *XC::FEM_ObjectBroker::getNewMRMP(int classTag)
+XC::MRMFreedom_Constraint *XC::FEM_ObjectBroker::getNewMRMP(int classTag)
   {
     switch(classTag)
       {
-      case CNSTRNT_TAG_MRMP_Constraint:
-        return new MRMP_Constraint(0,classTag);
+      case CNSTRNT_TAG_MRMFreedom_Constraint:
+        return new MRMFreedom_Constraint(0,classTag);
       default:
         std::cerr << "FEM_ObjectBroker::getNewMRMP - ";
-        std::cerr << " - no MRMP_Constraint type exists for class tag ";
+        std::cerr << " - no MRMFreedom_Constraint type exists for class tag ";
         std::cerr << classTag << std::endl;
         return nullptr;
       }
   }
 
 
-XC::SP_Constraint *XC::FEM_ObjectBroker::getNewSP(int classTag)
+XC::SFreedom_Constraint *XC::FEM_ObjectBroker::getNewSP(int classTag)
   {
     switch(classTag)
       {
-      case CNSTRNT_TAG_SP_Constraint:
-        return new SP_Constraint(classTag);
+      case CNSTRNT_TAG_SFreedom_Constraint:
+        return new SFreedom_Constraint(classTag);
       case CNSTRNT_TAG_ImposedMotionSP:
         return new ImposedMotionSP();
 
@@ -309,7 +309,7 @@ XC::SP_Constraint *XC::FEM_ObjectBroker::getNewSP(int classTag)
 
         default:
              std::cerr << "FEM_ObjectBroker::getNewSP - ";
-             std::cerr << " - no XC::SP_Constraint type exists for class tag ";
+             std::cerr << " - no XC::SFreedom_Constraint type exists for class tag ";
              std::cerr << classTag << std::endl;
              return nullptr;
 

@@ -26,14 +26,14 @@
 //----------------------------------------------------------------------------
 //EqualDOF.h
 
-// Este objeto construye un objeto MP_Constraint que impone
+// Este objeto construye un objeto MFreedom_Constraint que impone
 // igualdad de movimientos en los grados de libertad que
 // se le indiquen.
 
 #ifndef EqualDOF_h
 #define EqualDOF_h
 
-#include "MP_Constraint.h"
+#include "MFreedom_Constraint.h"
 
 namespace XC {
 class Domain;
@@ -42,7 +42,7 @@ class ID;
 //! @ingroup CContMP
 //
 //! @brief Impone la igualdad de desplazamientos a varios nodos.
-class EqualDOF: public MP_Constraint
+class EqualDOF: public MFreedom_Constraint
   {
     void setup_matrix(void);
   public:

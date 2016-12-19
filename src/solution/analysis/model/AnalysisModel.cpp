@@ -57,8 +57,8 @@
 //
 // Purpose: This file contains the class definition for XC::AnalysisModel
 // AnalysisModel is a container class. The class is responsible for holding
-// and providing access to the Elements, Nodes, LoadCases, SP_Constraints 
-// and MP_Constraints. These objects are all added to the XC::AnalysisModel by a 
+// and providing access to the Elements, Nodes, LoadCases, SFreedom_Constraints 
+// and MFreedom_Constraints. These objects are all added to the XC::AnalysisModel by a 
 // ModelBuilder.
 //
 // What: "@(#) AnalysisModel.C, revA"
@@ -70,17 +70,17 @@
 #include <utility/tagged/storage/ArrayOfTaggedObjects.h>
 #include <domain/domain/Domain.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>
-#include <solution/analysis/model/fe_ele/lagrange/LagrangeSP_FE.h>
-#include <solution/analysis/model/fe_ele/lagrange/LagrangeMP_FE.h>
-#include <solution/analysis/model/fe_ele/lagrange/LagrangeMRMP_FE.h>
-#include <solution/analysis/model/fe_ele/penalty/PenaltySP_FE.h>
-#include <solution/analysis/model/fe_ele/penalty/PenaltyMP_FE.h>
-#include <solution/analysis/model/fe_ele/penalty/PenaltyMRMP_FE.h>
+#include <solution/analysis/model/fe_ele/lagrange/LagrangeSFreedom_FE.h>
+#include <solution/analysis/model/fe_ele/lagrange/LagrangeMFreedom_FE.h>
+#include <solution/analysis/model/fe_ele/lagrange/LagrangeMRMFreedom_FE.h>
+#include <solution/analysis/model/fe_ele/penalty/PenaltySFreedom_FE.h>
+#include <solution/analysis/model/fe_ele/penalty/PenaltyMFreedom_FE.h>
+#include <solution/analysis/model/fe_ele/penalty/PenaltyMRMFreedom_FE.h>
 #include <solution/analysis/model/fe_ele/transformation/TransformationFE.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include "solution/analysis/model/dof_grp/LagrangeDOF_Group.h"
 #include "solution/analysis/model/dof_grp/TransformationDOF_Group.h"
-#include "domain/constraints/SP_Constraint.h"
+#include "domain/constraints/SFreedom_Constraint.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/domain/subdomain/Subdomain.h"
@@ -195,10 +195,10 @@ XC::FE_Element *XC::AnalysisModel::createFE_Element(const int &tag, Element *ele
     return retval;
   }
 
-//! @brief Método para crear un objeto LagrangeSP_FE y agregarlo al modelo.
-XC::LagrangeSP_FE *XC::AnalysisModel::createLagrangeSP_FE(const int &tag, SP_Constraint &theSP, DOF_Group &theDofGrp,const double &alpha)
+//! @brief Método para crear un objeto LagrangeSFreedom_FE y agregarlo al modelo.
+XC::LagrangeSFreedom_FE *XC::AnalysisModel::createLagrangeSFreedom_FE(const int &tag, SFreedom_Constraint &theSP, DOF_Group &theDofGrp,const double &alpha)
   {
-    LagrangeSP_FE *retval=new LagrangeSP_FE(tag,*getDomainPtr(),theSP,theDofGrp,alpha);
+    LagrangeSFreedom_FE *retval=new LagrangeSFreedom_FE(tag,*getDomainPtr(),theSP,theDofGrp,alpha);
     if(retval)
       addFE_Element(retval);
     else
@@ -208,10 +208,10 @@ XC::LagrangeSP_FE *XC::AnalysisModel::createLagrangeSP_FE(const int &tag, SP_Con
     return retval;    
   }
 
-//! @brief Método para crear un objeto LagrangeMP_FE y agregarlo al modelo.
-XC::LagrangeMP_FE *XC::AnalysisModel::createLagrangeMP_FE(const int &tag,MP_Constraint &theMP,DOF_Group &theDofGrp,const double &alpha)
+//! @brief Método para crear un objeto LagrangeMFreedom_FE y agregarlo al modelo.
+XC::LagrangeMFreedom_FE *XC::AnalysisModel::createLagrangeMFreedom_FE(const int &tag,MFreedom_Constraint &theMP,DOF_Group &theDofGrp,const double &alpha)
   {
-    LagrangeMP_FE *retval=new LagrangeMP_FE(tag,*getDomainPtr(),theMP,theDofGrp,alpha);
+    LagrangeMFreedom_FE *retval=new LagrangeMFreedom_FE(tag,*getDomainPtr(),theMP,theDofGrp,alpha);
     if(retval)
       addFE_Element(retval);
     else
@@ -221,10 +221,10 @@ XC::LagrangeMP_FE *XC::AnalysisModel::createLagrangeMP_FE(const int &tag,MP_Cons
     return retval;    
   }
 
-//! @brief Método para crear un objeto LagrangeMRMP_FE y agregarlo al modelo.
-XC::LagrangeMRMP_FE *XC::AnalysisModel::createLagrangeMRMP_FE(const int &tag,MRMP_Constraint &theMRMP,DOF_Group &theDofGrp,const double &alpha)
+//! @brief Método para crear un objeto LagrangeMRMFreedom_FE y agregarlo al modelo.
+XC::LagrangeMRMFreedom_FE *XC::AnalysisModel::createLagrangeMRMFreedom_FE(const int &tag,MRMFreedom_Constraint &theMRMP,DOF_Group &theDofGrp,const double &alpha)
   {
-    LagrangeMRMP_FE *retval=new LagrangeMRMP_FE(tag,*getDomainPtr(),theMRMP,theDofGrp,alpha);
+    LagrangeMRMFreedom_FE *retval=new LagrangeMRMFreedom_FE(tag,*getDomainPtr(),theMRMP,theDofGrp,alpha);
     if(retval)
       addFE_Element(retval);
     else
@@ -234,10 +234,10 @@ XC::LagrangeMRMP_FE *XC::AnalysisModel::createLagrangeMRMP_FE(const int &tag,MRM
     return retval;
   }
 
-//! @brief Método para crear un objeto PenaltySP_FE y agregarlo al modelo.
-XC::PenaltySP_FE *XC::AnalysisModel::createPenaltySP_FE(const int &tag, SP_Constraint &theSP, const double &alpha)
+//! @brief Método para crear un objeto PenaltySFreedom_FE y agregarlo al modelo.
+XC::PenaltySFreedom_FE *XC::AnalysisModel::createPenaltySFreedom_FE(const int &tag, SFreedom_Constraint &theSP, const double &alpha)
   {
-    PenaltySP_FE *retval=new PenaltySP_FE(tag,*getDomainPtr(),theSP,alpha);
+    PenaltySFreedom_FE *retval=new PenaltySFreedom_FE(tag,*getDomainPtr(),theSP,alpha);
     if(retval)
       addFE_Element(retval);
     else
@@ -247,10 +247,10 @@ XC::PenaltySP_FE *XC::AnalysisModel::createPenaltySP_FE(const int &tag, SP_Const
     return retval;    
   }
 
-//! @brief Método para crear un objeto PenaltyMP_FE y agregarlo al modelo.
-XC::PenaltyMP_FE *XC::AnalysisModel::createPenaltyMP_FE(const int &tag, MP_Constraint &theMP, const double &alpha)
+//! @brief Método para crear un objeto PenaltyMFreedom_FE y agregarlo al modelo.
+XC::PenaltyMFreedom_FE *XC::AnalysisModel::createPenaltyMFreedom_FE(const int &tag, MFreedom_Constraint &theMP, const double &alpha)
   {
-    PenaltyMP_FE *retval=new PenaltyMP_FE(tag,*getDomainPtr(),theMP,alpha);
+    PenaltyMFreedom_FE *retval=new PenaltyMFreedom_FE(tag,*getDomainPtr(),theMP,alpha);
     if(retval)
       addFE_Element(retval);
     else
@@ -260,10 +260,10 @@ XC::PenaltyMP_FE *XC::AnalysisModel::createPenaltyMP_FE(const int &tag, MP_Const
     return retval;    
   }
 
-//! @brief Método para crear un objeto PenaltyMRMP_FE y agregarlo al modelo.
-XC::PenaltyMRMP_FE *XC::AnalysisModel::createPenaltyMRMP_FE(const int &tag, MRMP_Constraint &theMRMP, const double &alpha)
+//! @brief Método para crear un objeto PenaltyMRMFreedom_FE y agregarlo al modelo.
+XC::PenaltyMRMFreedom_FE *XC::AnalysisModel::createPenaltyMRMFreedom_FE(const int &tag, MRMFreedom_Constraint &theMRMP, const double &alpha)
   {
-    PenaltyMRMP_FE *retval=new PenaltyMRMP_FE(tag,*getDomainPtr(),theMRMP,alpha);
+    PenaltyMRMFreedom_FE *retval=new PenaltyMRMFreedom_FE(tag,*getDomainPtr(),theMRMP,alpha);
     if(retval)
       addFE_Element(retval);
     else
@@ -363,7 +363,7 @@ XC::DOF_Group *XC::AnalysisModel::createDOF_Group(const int &tag, Node *myNode)
 
 //! @brief Añade al modelo la representación mediante multiplicadores
 //! de Lagrange de una condición de contorno monopunto.
-XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag, SP_Constraint *spPtr)
+XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag, SFreedom_Constraint *spPtr)
   {
     assert(spPtr);
     LagrangeDOF_Group *dofPtr=new LagrangeDOF_Group(tag,*spPtr);
@@ -381,7 +381,7 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
 
 //! @brief Añade al modelo la representación mediante multiplicadores
 //! de Lagrange de una condición de contorno multipunto.
-XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag, MP_Constraint *mpPtr)
+XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag, MFreedom_Constraint *mpPtr)
   {
     assert(mpPtr);
     LagrangeDOF_Group *dofPtr=new LagrangeDOF_Group(tag,*mpPtr);
@@ -401,7 +401,7 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
 //! @brief Añade al modelo los grupos de grados de libertad para la
 //! representación mediante multiplicadores
 //! de Lagrange de una condición de contorno multiple retained nodes.
-XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag, MRMP_Constraint *mrmpPtr)
+XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag, MRMFreedom_Constraint *mrmpPtr)
   {
     assert(mrmpPtr);
     LagrangeDOF_Group *dofPtr=new LagrangeDOF_Group(tag,*mrmpPtr);
@@ -417,7 +417,7 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
     return dofPtr;
   }
 
-XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(const int &tag, Node *myNode, MP_Constraint *mp, TransformationConstraintHandler *handler)
+XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(const int &tag, Node *myNode, MFreedom_Constraint *mp, TransformationConstraintHandler *handler)
   {
     assert(mp);
     assert(handler);
@@ -434,7 +434,7 @@ XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(co
     return dofPtr;
   }
 
-XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(const int &tag, Node *myNode, MRMP_Constraint *mrmp, TransformationConstraintHandler *handler)
+XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(const int &tag, Node *myNode, MRMFreedom_Constraint *mrmp, TransformationConstraintHandler *handler)
   {
     assert(mrmp);
     assert(handler);

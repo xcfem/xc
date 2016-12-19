@@ -36,10 +36,10 @@
 
 // constructor for FEM_ObjectBroker
 XC::GlueNodeToElement::GlueNodeToElement(int tag)		
- : MRMP_Constraint(tag,CNSTRNT_TAG_GlueNodeToElement) {}
+ : MRMFreedom_Constraint(tag,CNSTRNT_TAG_GlueNodeToElement) {}
 
 XC::GlueNodeToElement::GlueNodeToElement(int tag, const Node &node,const Element &elem, const ID &constrainedDOF)
-  : MRMP_Constraint(tag, elem, node, constrainedDOF) {}
+  : MRMFreedom_Constraint(tag, elem, node, constrainedDOF) {}
 
 
 

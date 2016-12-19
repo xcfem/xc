@@ -32,7 +32,7 @@
 
 #include <boost/any.hpp>
 #include "domain/domain/Domain.h"
-#include "domain/constraints/SP_Constraint.h"
+#include "domain/constraints/SFreedom_Constraint.h"
 
 
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
@@ -175,7 +175,7 @@ XC::Vector XC::TritrizPtrNod::IntegSimpsonFilaK(const size_t &capa,const size_t 
   }
 
 //! @brief Impone desplazamiento nulo en los nodos de este conjunto.
-void XC::TritrizPtrNod::fix(const SP_Constraint &spc) const
+void XC::TritrizPtrNod::fix(const SFreedom_Constraint &spc) const
   {
     if(Null()) return;
     const size_t ncapas= GetCapas();
@@ -223,7 +223,7 @@ std::ostream &XC::operator<<(std::ostream &os, const TritrizPtrNod &t)
     return os;
   }
 
-void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SP_Constraint &spc)
+void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SFreedom_Constraint &spc)
   {
     if(ref_caja.Empty()) return;
     const size_t ncapas= ref_caja.GetCapas();
@@ -244,9 +244,9 @@ void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SP_Constr
                 if(nod)
                   {
                     const int tag_nod= nod->getTag();
-                    SP_Constraint *sp= spc.getCopy();
+                    SFreedom_Constraint *sp= spc.getCopy();
                     sp->setNodeTag(tag_nod); 
-                    dom->addSP_Constraint(sp);
+                    dom->addSFreedom_Constraint(sp);
                   }
               }
       } 

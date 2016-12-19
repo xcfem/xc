@@ -61,8 +61,8 @@
 //
 // Description: This file contains the class definition for Subdomain.
 // Subdomain is a container class. The class is responsible for holding
-// and providing access to the Elements, Nodes, LoadCases, SP_Constraints
-// and MP_Constraints that have been added to the subdomain.
+// and providing access to the Elements, Nodes, LoadCases, SFreedom_Constraints
+// and MFreedom_Constraints that have been added to the subdomain.
 //
 // What: "@(#) Subdomain.h, revA"
 

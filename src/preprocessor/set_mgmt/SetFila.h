@@ -34,7 +34,7 @@
 
 namespace XC {
 
-class SP_Constraint;
+class SFreedom_Constraint;
 
 //!  \ingroup Set
 //! 
@@ -96,7 +96,7 @@ class SetFila: public SetEstruct
     virtual const Element *GetElemento(const size_t &i=1,const size_t &j=1,const size_t &k=1) const
       { return fila_elem(i,j,k); }
 
-    //void fix(int &tag_fix,const SP_Constraint &);
+    //void fix(int &tag_fix,const SFreedom_Constraint &);
 
   };
 
@@ -126,7 +126,7 @@ SetEstruct *XC::SetFila<FILATTZNOD,FILATTZELEM>::getCopy(void) const
 
 /* //! @brief Impone desplazamiento nulo en los nodos de este conjunto. */
 /* template <class FILATTZNOD,class FILATTZELEM> */
-/* void XC::SetFila<FILATTZNOD,FILATTZELEM>::fix(const SP_Constraint &spc) */
+/* void XC::SetFila<FILATTZNOD,FILATTZELEM>::fix(const SFreedom_Constraint &spc) */
 /*   { fix(fila_nod,spc); } */
 
 

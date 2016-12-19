@@ -42,7 +42,7 @@ class Plano3d;
 
 namespace XC {
 class TrfGeom;
-class SP_Constraint;
+class SFreedom_Constraint;
 class ID;
 class Element;
 class Node;
@@ -152,7 +152,7 @@ class SetMeshComp: public SetBase
 
     void clear(void);
 
-    void fix(const SP_Constraint &);
+    void fix(const SFreedom_Constraint &);
 
     //nod_iterator nodos_begin(void);
     nod_const_iterator nodos_begin(void) const;

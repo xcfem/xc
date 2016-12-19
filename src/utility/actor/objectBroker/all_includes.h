@@ -265,23 +265,23 @@
 
 
 // sp_constraint header files
-#include "domain/constraints/SP_Constraint.h"
-#include "domain/constraints/SP_ConstraintIter.h"
+#include "domain/constraints/SFreedom_Constraint.h"
+#include "domain/constraints/SFreedom_ConstraintIter.h"
 #include "domain/constraints/ImposedMotionSP.h"
 #include "domain/constraints/ImposedMotionSP1.h"
 
 // mp_constraint header files
-#include "domain/constraints/MP_Constraint.h"
-#include "domain/constraints/MP_ConstraintIter.h"
-#include "domain/constraints/MP_Joint2D.h"
-#include "domain/constraints/MP_Joint3D.h"
+#include "domain/constraints/MFreedom_Constraint.h"
+#include "domain/constraints/MFreedom_ConstraintIter.h"
+#include "domain/constraints/MFreedom_Joint2D.h"
+#include "domain/constraints/MFreedom_Joint3D.h"
 #include "domain/constraints/RigidBase.h"
 #include "domain/constraints/RigidBeam.h"
 #include "domain/constraints/RigidRod.h"
 #include "domain/constraints/RigidDiaphragm.h"
 #include "domain/constraints/EqualDOF.h"
-#include "domain/constraints/MRMP_Constraint.h"
-#include "domain/constraints/MRMP_ConstraintIter.h"
+#include "domain/constraints/MRMFreedom_Constraint.h"
+#include "domain/constraints/MRMFreedom_ConstraintIter.h"
 #include "domain/constraints/GlueNodeToElement.h"
 
 #include "domain/constraints/MapCasosActivos.h"

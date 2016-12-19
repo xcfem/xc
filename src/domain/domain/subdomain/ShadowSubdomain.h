@@ -57,8 +57,8 @@
 //
 // Description: This file contains the class definition for ShadowSubdomain.
 // ShadowSubdomain is a container class. The class is responsible for holding
-// and providing access to the Elements, Nodes, LoadCases, SP_Constraints 
-// and MP_Constraints that have been added to the ShadowSubdomain.
+// and providing access to the Elements, Nodes, LoadCases, SFreedom_Constraints 
+// and MFreedom_Constraints that have been added to the ShadowSubdomain.
 //
 // What: "@(#) ShadowSubdomain.h, revA"
 
@@ -128,12 +128,12 @@ class ShadowSubdomain: public Shadow, public Subdomain
     virtual  bool addElement(Element *);
     virtual  bool addNode(Node *);
     virtual  bool addExternalNode(Node *);
-    virtual  bool addSP_Constraint(SP_Constraint *);
-    virtual  bool addMP_Constraint(MP_Constraint *);    
+    virtual  bool addSFreedom_Constraint(SFreedom_Constraint *);
+    virtual  bool addMFreedom_Constraint(MFreedom_Constraint *);    
     virtual  bool addLoadPattern(LoadPattern *);            
     virtual  bool addNodalLoad(NodalLoad *, int loadPattern);
     virtual  bool addElementalLoad(ElementalLoad *, int loadPattern);
-    virtual  bool addSP_Constraint(SP_Constraint *, int loadPattern);    
+    virtual  bool addSFreedom_Constraint(SFreedom_Constraint *, int loadPattern);    
 
 
     virtual bool hasNode(int tag);
@@ -142,12 +142,12 @@ class ShadowSubdomain: public Shadow, public Subdomain
     virtual void clearAll(void);	
     virtual bool removeElement(int tag);
     virtual bool removeNode(int tag);    
-    virtual bool removeSP_Constraint(int tag);
-    virtual bool removeMP_Constraint(int tag);
+    virtual bool removeSFreedom_Constraint(int tag);
+    virtual bool removeMFreedom_Constraint(int tag);
     virtual bool removeLoadPattern(int tag);
     virtual bool removeNodalLoad(int tag, int loadPattern);
     virtual bool removeElementalLoad(int tag, int loadPattern);
-    virtual bool removeSP_Constraint(int tag, int loadPattern);
+    virtual bool removeSFreedom_Constraint(int tag, int loadPattern);
     
     virtual  ElementIter       &getElements();
     virtual  NodeIter          &getNodes();

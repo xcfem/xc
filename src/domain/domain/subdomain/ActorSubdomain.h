@@ -57,8 +57,8 @@
 //
 // Description: This file contains the class definition for ActorSubdomain.
 // ActorSubdomain is a container class. The class is responsible for holding
-// and providing access to the Elements, Nodes, LoadCases, SP_Constraints 
-// and MP_Constraints that have been added to the ActorSubdomain.
+// and providing access to the Elements, Nodes, LoadCases, SFreedom_Constraints 
+// and MFreedom_Constraints that have been added to the ActorSubdomain.
 //
 // What: "@(#) ActorSubdomain.h, revA"
 

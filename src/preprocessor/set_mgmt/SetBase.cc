@@ -29,7 +29,7 @@
 #include "SetBase.h"
 
 #include <boost/any.hpp>
-#include "domain/constraints/SP_Constraint.h"
+#include "domain/constraints/SFreedom_Constraint.h"
 
 
 #include "utility/matrix/ID.h"
@@ -49,7 +49,7 @@ void XC::SetBase::Malla(dir_mallado dm)
   }
 
 //! @brief Impone desplazamiento nulo en los nodos de este conjunto.
-void XC::SetBase::fix(const SP_Constraint &)
+void XC::SetBase::fix(const SFreedom_Constraint &)
   {
     std::cerr << "Método fix() no implementado." << std::endl;
   }

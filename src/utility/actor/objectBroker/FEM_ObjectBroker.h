@@ -73,9 +73,9 @@ class Vertex;
 
 class Element;
 class Node;
-class MP_Constraint;
-class MRMP_Constraint;
-class SP_Constraint;
+class MFreedom_Constraint;
+class MRMFreedom_Constraint;
+class SFreedom_Constraint;
 class NodeLocker;
 class NodalLoad;
 class ElementalLoad;
@@ -151,9 +151,9 @@ class FEM_ObjectBroker
     // methods to get new modelling class objects
     virtual Element *getNewElement(int classTag);
     virtual Node *getNewNode(int classTag);
-    virtual MP_Constraint *getNewMP(int classTag);
-    virtual MRMP_Constraint *getNewMRMP(int classTag);
-    virtual SP_Constraint *getNewSP(int classTag);
+    virtual MFreedom_Constraint *getNewMP(int classTag);
+    virtual MRMFreedom_Constraint *getNewMRMP(int classTag);
+    virtual SFreedom_Constraint *getNewSP(int classTag);
     virtual NodalLoad     *getNewNodalLoad(int classTag);
     virtual ElementalLoad *getNewElementalLoad(int classTag);
 

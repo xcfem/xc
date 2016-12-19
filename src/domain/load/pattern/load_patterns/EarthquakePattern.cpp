@@ -202,9 +202,9 @@ int XC::EarthquakePattern::addMotion(GroundMotion &theMotion)
   }
 
 
-bool XC::EarthquakePattern::addSP_Constraint(SP_Constraint *)
+bool XC::EarthquakePattern::addSFreedom_Constraint(SFreedom_Constraint *)
   {
-    std::cerr << "XC::EarthquakePattern::addSP_Constraint() - cannot add XC::SP_Constraint to EQ pattern\n";
+    std::cerr << "XC::EarthquakePattern::addSFreedom_Constraint() - cannot add XC::SFreedom_Constraint to EQ pattern\n";
     return false;
   }
 

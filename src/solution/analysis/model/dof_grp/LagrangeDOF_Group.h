@@ -66,9 +66,9 @@
 
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 namespace XC {
-class SP_Constraint;
-class MP_Constraint;
-class MRMP_Constraint;
+class SFreedom_Constraint;
+class MFreedom_Constraint;
+class MRMFreedom_Constraint;
 
 //! @ingroup AnalisisDOF
 //
@@ -79,9 +79,9 @@ class LagrangeDOF_Group: public DOF_Group
   {
   protected:
     friend class AnalysisModel;
-    LagrangeDOF_Group(int tag, SP_Constraint &);    
-    LagrangeDOF_Group(int tag, MP_Constraint &);        
-    LagrangeDOF_Group(int tag, MRMP_Constraint &);        
+    LagrangeDOF_Group(int tag, SFreedom_Constraint &);    
+    LagrangeDOF_Group(int tag, MFreedom_Constraint &);        
+    LagrangeDOF_Group(int tag, MRMFreedom_Constraint &);        
   public:
     // methods to form the tangent
     virtual const Matrix &getTangent(Integrator *theIntegrator);

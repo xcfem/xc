@@ -67,12 +67,12 @@
 #include <domain/mesh/element/Element.h>
 #include "domain/mesh/node/NodeIter.h"
 #include "domain/mesh/element/ElementIter.h"
-#include <domain/constraints/SP_ConstraintIter.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/MP_ConstraintIter.h>
-#include <domain/constraints/MP_Constraint.h>
-#include <domain/constraints/MRMP_ConstraintIter.h>
-#include <domain/constraints/MRMP_Constraint.h>
+#include <domain/constraints/SFreedom_ConstraintIter.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/MFreedom_ConstraintIter.h>
+#include <domain/constraints/MFreedom_Constraint.h>
+#include <domain/constraints/MRMFreedom_ConstraintIter.h>
+#include <domain/constraints/MRMFreedom_Constraint.h>
 #include <solution/analysis/integrator/Integrator.h>
 #include <utility/matrix/ID.h>
 #include "utility/matrix/Matrix.h"
@@ -105,7 +105,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
     //    : must of course set the initial IDs
     NodeIter &theNod = theDomain->getNodes();
     Node *nodPtr= nullptr;
-    SP_Constraint *spPtr= nullptr;
+    SFreedom_Constraint *spPtr= nullptr;
     DOF_Group *dofPtr= nullptr;
 
     int numDOF = 0;
@@ -117,10 +117,10 @@ int XC::PlainHandler::handle(const ID *nodesLast)
         // initially set all the ID value to -2
         countDOF+= dofPtr->inicID(-2);
 
-        // loop through the SP_Constraints to see if any of the
+        // loop through the SFreedom_Constraints to see if any of the
         // DOFs are constrained, if so set initial XC::ID value to -1
         int nodeID = nodPtr->getTag();
-        SP_ConstraintIter &theSPs = theDomain->getConstraints().getDomainAndLoadPatternSPs();
+        SFreedom_ConstraintIter &theSPs = theDomain->getConstraints().getDomainAndLoadPatternSPs();
         while((spPtr = theSPs()) != 0)
             if(spPtr->getNodeTag() == nodeID) {
                 if(spPtr->isHomogeneous() == false) {
@@ -141,11 +141,11 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                 }
             }
 
-        // loop through the MP_Constraints to see if any of the
+        // loop through the MFreedom_Constraints to see if any of the
         // DOFs are constrained, note constraint matrix must be diagonal
         // with 1's on the diagonal
-        MP_ConstraintIter &theMPs = theDomain->getConstraints().getMPs();
-        MP_Constraint *mpPtr;
+        MFreedom_ConstraintIter &theMPs = theDomain->getConstraints().getMPs();
+        MFreedom_Constraint *mpPtr;
         while((mpPtr = theMPs()) != 0)
           {
             if(mpPtr->getNodeConstrained() == nodeID)
@@ -201,7 +201,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                               {
                                 std::cerr << "WARNING XC::PlainHandler::handle() - ";
                                 std::cerr << " constraint at dof " << dof << " already specified for constrained node";
-                                std::cerr << " in MP_Constraint at node " << nodeID << std::endl;
+                                std::cerr << " in MFreedom_Constraint at node " << nodeID << std::endl;
                               }
                                         
 			  }
@@ -209,14 +209,14 @@ int XC::PlainHandler::handle(const ID *nodesLast)
 		  }
 	      }
 	  }
-        // loop through the MP_Constraints to see if any of the
+        // loop through the MFreedom_Constraints to see if any of the
         // DOFs are constrained, note constraint matrix must be diagonal
         // with 1's on the diagonal
-        MRMP_ConstraintIter &theMRMPs = theDomain->getConstraints().getMRMPs();
-        MRMP_Constraint *mrmpPtr;
+        MRMFreedom_ConstraintIter &theMRMPs = theDomain->getConstraints().getMRMPs();
+        MRMFreedom_Constraint *mrmpPtr;
         while((mrmpPtr = theMRMPs()) != 0)
           {
-	    std::cerr << "PlainHandler::handle loop through the MRMP_Constraints." << std::endl;
+	    std::cerr << "PlainHandler::handle loop through the MRMFreedom_Constraints." << std::endl;
           }
       }
 

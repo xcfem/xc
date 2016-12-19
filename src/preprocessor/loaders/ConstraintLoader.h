@@ -35,9 +35,9 @@
 
 namespace XC {
 
-class SP_Constraint;
-class MP_Constraint;
-class MRMP_Constraint;
+class SFreedom_Constraint;
+class MFreedom_Constraint;
+class MRMFreedom_Constraint;
 
 //! \ingroup Ldrs
 //! 
@@ -52,8 +52,8 @@ class ConstraintLoader: public Loader
 
     friend class Node;
     friend class SetMeshComp;
-    SP_Constraint *addSP_Constraint(const int &,const SP_Constraint &);
-    SP_Constraint *addSP_Constraint(const int &,const int &,const double &valor);
+    SFreedom_Constraint *addSFreedom_Constraint(const int &,const SFreedom_Constraint &);
+    SFreedom_Constraint *addSFreedom_Constraint(const int &,const int &,const double &valor);
   public:
     ConstraintLoader(Preprocessor *owr);
     virtual ~ConstraintLoader(void);
@@ -67,15 +67,15 @@ class ConstraintLoader: public Loader
     int getNumMPs(void) const;
     int getNumMRMPs(void) const;
     int getNumLPs(void) const;
-    SP_Constraint *newSPConstraint(const int &,const int &,const double &valor);
+    SFreedom_Constraint *newSPConstraint(const int &,const int &,const double &);
     void removeSPConstraint(const int &tagC);
-    MP_Constraint *newMPConstraint(const int &, const int &, const ID &, const ID &);
-    MP_Constraint *newEqualDOF(const int &, const int &, const ID &);
-    MP_Constraint *newRigidBeam(const int &, const int &);
-    MP_Constraint *newRigidRod(const int &, const int &);
-    //MP_Constraint *newRigidDiaphragm(void);
-    MRMP_Constraint *newMRMPConstraint(const ID &, const int &, const ID &);
-    MRMP_Constraint *newGlueNodeToElement(const Node &, const Element &, const ID &);
+    MFreedom_Constraint *newMPConstraint(const int &, const int &, const ID &, const ID &);
+    MFreedom_Constraint *newEqualDOF(const int &, const int &, const ID &);
+    MFreedom_Constraint *newRigidBeam(const int &, const int &);
+    MFreedom_Constraint *newRigidRod(const int &, const int &);
+    //MFreedom_Constraint *newRigidDiaphragm(void);
+    MRMFreedom_Constraint *newMRMPConstraint(const ID &, const int &, const ID &);
+    MRMFreedom_Constraint *newGlueNodeToElement(const Node &, const Element &, const ID &);
     void clearAll(void);
   };
 

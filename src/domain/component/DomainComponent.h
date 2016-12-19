@@ -58,7 +58,7 @@
 //
 // Description: This file contains the class definition for DomainComponent.
 // The DomainComponent class is an abstract class, example subclasses include
-// Element, Node, SP_Constraint, MP_Constraint, NodalLoad, ElementalLoad. 
+// Element, Node, SFreedom_Constraint, MFreedom_Constraint, NodalLoad, ElementalLoad. 
 // Each of these objects forms part of Domain and has methods to set and obtain
 // the associated Domain object.
 //

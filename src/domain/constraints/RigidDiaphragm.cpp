@@ -61,13 +61,13 @@
 #include <cstdlib>
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>
-#include <domain/constraints/MP_Constraint.h>
+#include <domain/constraints/MFreedom_Constraint.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/ID.h>
 
 
 XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPlaneConstrained, int startMPtag)
-  : MP_Constraint(startMPtag)
+  : MFreedom_Constraint(startMPtag)
   {
     setDomain(&theDomain);
 
@@ -107,7 +107,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
       }
 
     //
-    // create some objects which will be passed to the MP_Constraint
+    // create some objects which will be passed to the MFreedom_Constraint
     // constructor, elements of objects are filled in later
     //
 
@@ -123,7 +123,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
     // now for each of the specified constrained dof we:
     // 1. check it's in the plane of the retained node,
     // 2. set the ID and transformation matrix,
-    // 3. create the MP_Constrainet and add it to the domain
+    // 3. create the MFreedom_Constrainet and add it to the domain
 
     for(int i=0; i<nC.Size(); i++)
       {
@@ -194,8 +194,8 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
 		      std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - ignoring constrained XC::Node " 
                                 << ndC << ", not in xz plane\n";
                   }
-              // create the XC::MP_Constraint
-              MP_Constraint *newC = new XC::MP_Constraint(startMPtag+i, nR, ndC,mat, id, id);
+              // create the XC::MFreedom_Constraint
+              MFreedom_Constraint *newC = new XC::MFreedom_Constraint(startMPtag+i, nR, ndC,mat, id, id);
               if(newC == 0)
                 {
                   std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - ignoring constrained XC::Node " << ndC <<
@@ -204,7 +204,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
               else
                 {
                   // add the constraint to the domain
-                 if(theDomain.addMP_Constraint(newC) == false)
+                 if(theDomain.addMFreedom_Constraint(newC) == false)
                    {
                      std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - ignoring constrained XC::Node " << ndC <<
                      ", failed to add\n";

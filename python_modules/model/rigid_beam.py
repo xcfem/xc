@@ -52,7 +52,7 @@ def putHuge3DBarBetweenNodes(preprocessor,tagNodA, tagNodB, nmbTransf):
   Creates a very stiff bar between the two nodes being passed as parameters.
   (it's a workaround to the problem with the reactions values in nodes when
   using multipoint constraints. This problem will be solved with the
-  implementation of MP_ConstraintBase::addResistingForceToNodalReaction).
+  implementation of MFreedom_ConstraintBase::addResistingForceToNodalReaction).
 
   :param   tagNodA: tag of bar's from node.
   :param   tagNodB: tag of bar's to node.
@@ -88,7 +88,7 @@ def creaBarraGordaPuntos(idPointA, idPointB, nmbTransf):
   Creates a very stiff bar between the nodes on the two points being passed
   as parameters. (it's a workaround to the problem with the reactions values
   in nodes when using multipoint constraints. This problem will be solved with the
-  implementation of MP_ConstraintBase::addResistingForceToNodalReaction).
+  implementation of MFreedom_ConstraintBase::addResistingForceToNodalReaction).
 
   :param   tagNodA: tag of bar's from node.
   :param   tagNodB: tag of bar's to node.

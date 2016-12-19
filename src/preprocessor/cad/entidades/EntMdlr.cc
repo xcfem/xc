@@ -367,7 +367,7 @@ double XC::EntMdlr::DistanciaA(const Pos3d &pt) const
   { return sqrt(DistanciaA2(pt)); }
 
 //! @brief Impone desplazamiento nulo en los nodos de este conjunto.
-void XC::EntMdlr::fix(const SP_Constraint &spc)
+void XC::EntMdlr::fix(const SFreedom_Constraint &spc)
   { nodos.fix(spc); }
 
 //! @brief Destructor.

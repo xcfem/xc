@@ -54,8 +54,8 @@
 //
 // Description: This file contains the class definition for XC::PartitionedDomain.
 // PartitionedDomain is an abstract class. The class is responsible for holding
-// and providing access to the Elements, Nodes, LoadCases, SP_Constraints
-// and MP_Constraints just like a normal domain. In addition the domain provides
+// and providing access to the Elements, Nodes, LoadCases, SFreedom_Constraints
+// and MFreedom_Constraints just like a normal domain. In addition the domain provides
 // a method to partition the domain into Subdomains.
 //
 // ModelBuilder. There are no partitions in a XC::PartitionedDomain.
@@ -68,8 +68,8 @@
 #include <domain/partitioner/DomainPartitioner.h>
 #include <domain/mesh/element/Element.h>
 #include <domain/mesh/node/Node.h>
-#include <domain/constraints/SP_Constraint.h>
-#include <domain/constraints/MP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
+#include <domain/constraints/MFreedom_Constraint.h>
 #include <utility/tagged/storage/ArrayOfTaggedObjects.h>
 #include <utility/tagged/storage/ArrayOfTaggedObjectsIter.h>
 #include "domain/domain/subdomain/Subdomain.h"
@@ -82,7 +82,7 @@
 #include <domain/load/pattern/LoadPattern.h>
 #include <domain/load/NodalLoad.h>
 #include <domain/load/ElementalLoad.h>
-#include <domain/constraints/SP_Constraint.h>
+#include <domain/constraints/SFreedom_Constraint.h>
 #include <utility/recorder/Recorder.h>
 #include "domain/mesh/element/NodePtrsWithIDs.h"
 
@@ -228,7 +228,7 @@ bool XC::PartitionedDomain::addNode(Node *nodePtr)
 
 
 
-bool XC::PartitionedDomain::addSP_Constraint(SP_Constraint *load)
+bool XC::PartitionedDomain::addSFreedom_Constraint(SFreedom_Constraint *load)
   {
     int nodeTag= load->getNodeTag();
 
@@ -237,7 +237,7 @@ bool XC::PartitionedDomain::addSP_Constraint(SP_Constraint *load)
     // if in XC::Domain add it as external .. ignore Subdomains
     Node *nodePtr= this->getNode(nodeTag);
     if(nodePtr)
-      { return (Domain::addSP_Constraint(load)); }
+      { return (Domain::addSFreedom_Constraint(load)); }
 
     // find subdomain with node and add it .. break if find as internal node
     SubdomainIter &theSubdomains= this->getSubdomains();
@@ -246,17 +246,17 @@ bool XC::PartitionedDomain::addSP_Constraint(SP_Constraint *load)
       {
         bool res= theSub->hasNode(nodeTag);
         if(res)
-          return theSub->addSP_Constraint(load);
+          return theSub->addSFreedom_Constraint(load);
       }
 
 
     // if no subdomain .. node not in model .. error message and return failure
-    std::cerr << "XC::PartitionedDomain::addSP_Constraint - cannot add as node with tag" <<
+    std::cerr << "XC::PartitionedDomain::addSFreedom_Constraint - cannot add as node with tag" <<
       nodeTag << "does not exist in model\n";
     return false;
   }
 
-bool XC::PartitionedDomain::addSP_Constraint(SP_Constraint *load, int pattern)
+bool XC::PartitionedDomain::addSFreedom_Constraint(SFreedom_Constraint *load, int pattern)
   {
     int nodeTag= load->getNodeTag();
 
@@ -265,7 +265,7 @@ bool XC::PartitionedDomain::addSP_Constraint(SP_Constraint *load, int pattern)
     // if in XC::Domain add it as external .. ignore Subdomains
     Node *nodePtr= this->getNode(nodeTag);
     if(nodePtr)
-      { return (Domain::addSP_Constraint(load, pattern)); }
+      { return (Domain::addSFreedom_Constraint(load, pattern)); }
 
     // find subdomain with node and add it .. break if find as internal node
     SubdomainIter &theSubdomains= this->getSubdomains();
@@ -274,11 +274,11 @@ bool XC::PartitionedDomain::addSP_Constraint(SP_Constraint *load, int pattern)
       {
         bool res= theSub->hasNode(nodeTag);
         if(res == true)
-          return theSub->addSP_Constraint(load, pattern);
+          return theSub->addSFreedom_Constraint(load, pattern);
       }
 
     // if no subdomain .. node not in model .. error message and return failure
-    std::cerr << "XC::PartitionedDomain::addSP_Constraint - cannot add as node with tag" <<
+    std::cerr << "XC::PartitionedDomain::addSFreedom_Constraint - cannot add as node with tag" <<
                  nodeTag << "does not exist in model\n";
     return false;
   }
@@ -397,10 +397,10 @@ bool XC::PartitionedDomain::removeNode(int tag)
     return result;
   }
 
-bool XC::PartitionedDomain::removeSP_Constraint(int tag)
+bool XC::PartitionedDomain::removeSFreedom_Constraint(int tag)
   {
     // we first see if its in the original domain
-    bool retval= this->Domain::removeSP_Constraint(tag);
+    bool retval= this->Domain::removeSFreedom_Constraint(tag);
     if(retval)
       this->domainChange();
     else if(theSubdomains)  // if not there we must check all the other subdomains
@@ -410,7 +410,7 @@ bool XC::PartitionedDomain::removeSP_Constraint(int tag)
         while((theObject= theSubsIter()) != 0)
           {
             Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
-            retval= theSub->removeSP_Constraint(tag);
+            retval= theSub->removeSFreedom_Constraint(tag);
             if(retval)
               break;
           }
@@ -419,10 +419,10 @@ bool XC::PartitionedDomain::removeSP_Constraint(int tag)
   }
 
 
-bool XC::PartitionedDomain::removeMP_Constraint(int tag)
+bool XC::PartitionedDomain::removeMFreedom_Constraint(int tag)
   {
     // we first see if its in the original domain
-    bool result= this->XC::Domain::removeMP_Constraint(tag);
+    bool result= this->XC::Domain::removeMFreedom_Constraint(tag);
     if(result)
       {
         this->domainChange();
@@ -437,7 +437,7 @@ bool XC::PartitionedDomain::removeMP_Constraint(int tag)
             while((theObject= theSubsIter()) != 0)
               {
                 Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
-                result= theSub->removeMP_Constraint(tag);
+                result= theSub->removeMFreedom_Constraint(tag);
                 if(result) break;
               }
           }
