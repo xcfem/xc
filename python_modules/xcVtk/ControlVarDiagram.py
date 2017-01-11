@@ -46,10 +46,10 @@ class ControlVarDiagram(cd.ColoredDiagram):
                          Valid components are: 'N', 'Qy', 'Vy', 'Qz', 'Vz', 'My', 'Mz', 'T'
                                
     '''
+    elemVDir= elem.getVDirEjeDebilGlobales() # default values.
     if self.attributeName <> "intForce":
       attributeNameSect1= self.attributeName + 'Sect1' # Values in the start node.
       attributeNameSect2= self.attributeName + 'Sect2' # Values in the end node.
-      elemVDir= elem.getVDirEjeDebilGlobales() # default values.
       value1= getattr(elem.getProp(attributeNameSect1), self.component)
       value2= getattr(elem.getProp(attributeNameSect2), self.component)
     else:
