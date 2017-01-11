@@ -43,10 +43,17 @@ class RecordLoadCaseDisp(object):
   :ivar unitsDispl: text to especify the units in which displacements are 
                    represented (defaults to '[m]'
   :ivar listIntForc: ordered list of internal forces to be displayed
+                   as scalar field over «shell» elements
                    available components: 'N1', 'N2', 'M1', 'M2', 'Q1', 'Q2'
                    (defaults to ['N1', 'N2', 'M1', 'M2', 'Q1', 'Q2'])
-  :ivar setsToDispIntForc: ordered list of sets of elements to display internal      
-                   forces
+  :ivar setsToDispIntForc: ordered list of sets of elements  (of type «shell»)
+                   to display internal forces
+  listBeamIntForc: ordered list of internal forces to be displayed 
+                 as diagrams on lines for «beam» elements
+                 available components: 'N', 'My', 'Mz', 'Qy', 'Qz','T'
+                 (defaults to ['N', 'My', 'Mz', 'Qy', 'Qz','T'])
+  setsToDispBeamIntForc: ordered list of sets of elements (of type «beam»)to 
+                    display internal forces (defaults to [])
   :ivar unitsScaleForc: factor to apply to internal forces if we want to change
                    the units (defaults to 1).
   :ivar unitsForc: text to especify the units in which forces are 
@@ -76,6 +83,8 @@ class RecordLoadCaseDisp(object):
     self.unitsDispl='[m]'
     self.listIntForc=['N1', 'N2', 'M1', 'M2', 'Q1', 'Q2']
     self.setsToDispIntForc=setsToDispIntForc
+    self.listBeamIntForc=['N', 'My', 'Mz', 'Qy', 'Qz','T']
+    self.setsToDispBeamIntForc=[]
     self.unitsScaleForc=1.0
     self.unitsForc='[kN/m]'
     self.unitsScaleMom=1.0
