@@ -14,6 +14,8 @@ from miscUtils import LogMessages as lmsg
 from solution import predefined_solutions
 from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk.malla_ef import Fields
+from xcVtk import ControlVarDiagram as cvd
+
 
 class QuickGraphics(object):
   '''This class is aimed at providing the user with a quick and easy way to 
@@ -97,7 +99,7 @@ class QuickGraphics(object):
 
   def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',fileName=None):
     '''displays the component of internal forces in the 
-    set of entities.
+    set of entities as a scalar field (i.e. appropiated for shell elements).
     
     :param itemToDisp:   component of the internal forces ('N1', 'N2', 'N12', 'M1', 'M2', 'M12', 'Q1', 'Q2')
                          to be depicted 
@@ -121,3 +123,35 @@ class QuickGraphics(object):
     field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
     field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name)
+
+  def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',fileName=None):
+    '''displays the component of internal forces in the 
+    set of entities as a diagram over lines (i.e. appropiated for beam elements).
+    
+    :param itemToDisp:   component of the internal forces ('N', 'Qy' (or 'Vy'), 'Qz' (or 'Vz'), 
+                         'My', 'Mz', 'T') to be depicted 
+    :param setToDisplay: set of entities (elements of type beam) to be represented
+    :param fConvUnits:   factor of conversion to be applied to the results (defalts to 1)
+    :param scaleFactor:  factor of scale to apply to the diagram display
+    :param unitDescription: string like '[kN/m] or [kN m/m]'
+    :param viewName:     name of the view  that contains the renderer (possible
+                         options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
+                         "ZPos", "ZNeg") (defaults to "XYZPos")
+    :param fileName:     name of the file to plot the graphic. Defaults to None,
+                         in that case an screen display is generated
+    '''
+    if(setToDisplay):
+      self.xcSet= setToDisplay
+    else:
+      lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
+    diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
+    diagram.agregaDiagrama()
+    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay.viewName=viewName
+    defDisplay.setupGrid(self.xcSet)
+    defDisplay.defineEscenaMalla(None)
+    defDisplay.appendDiagram(diagram) #Append diagram to the scene.
+
+    caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
+    defDisplay.displayScene(caption=caption,fName=fileName)
+

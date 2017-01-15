@@ -42,13 +42,35 @@ class ControlVarDiagram(cd.ColoredDiagram):
     '''Returns the data to use to represent the diagram over the element
  
        :param elem: element to deal with.
-       :param component: component to represent:
+       :param component: component to depict. 
+                         Valid components are: 'N', 'Qy', 'Vy', 'Qz', 'Vz', 'My', 'Mz', 'T'
+                               
     '''
-    attributeNameSect1= self.attributeName + 'Sect1' # Values in the start node.
-    attributeNameSect2= self.attributeName + 'Sect2' # Values in the end node.
     elemVDir= elem.getVDirEjeDebilGlobales() # default values.
-    value1= getattr(elem.getProp(attributeNameSect1), self.component)
-    value2= getattr(elem.getProp(attributeNameSect2), self.component)
+    if self.attributeName <> "intForce":
+      attributeNameSect1= self.attributeName + 'Sect1' # Values in the start node.
+      attributeNameSect2= self.attributeName + 'Sect2' # Values in the end node.
+      value1= getattr(elem.getProp(attributeNameSect1), self.component)
+      value2= getattr(elem.getProp(attributeNameSect2), self.component)
+    else:
+      if(self.component == 'N'):
+        value1=elem.getN1
+        value2=elem.getN2
+      elif((self.component == 'Qy') or (self.component == 'Vy')):
+        value1=elem.getVy1
+        value2=elem.getVy2
+      elif((self.component == 'Qz') or (self.component == 'Vz')):
+        value1=elem.getVz1
+        value2=elem.getVz2
+      elif(self.component == 'My'):
+        value1=elem.getMy1
+        value2=elem.getMy2
+      elif(self.component == 'Mz'):
+        value1=elem.getMz1
+        value2=elem.getMz2
+      elif(self.component == 'T'):
+        value1=elem.getT1
+        value2=elem.getT2
     if((self.component == 'Qy') or (self.component == 'Vy')):
       elemVDir= elem.getCoordTransf.getJVector
     elif((self.component == 'Qz') or (self.component == 'Vz')):

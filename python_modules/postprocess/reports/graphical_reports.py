@@ -43,10 +43,19 @@ class RecordLoadCaseDisp(object):
   :ivar unitsDispl: text to especify the units in which displacements are 
                    represented (defaults to '[m]'
   :ivar listIntForc: ordered list of internal forces to be displayed
+                   as scalar field over «shell» elements
                    available components: 'N1', 'N2', 'M1', 'M2', 'Q1', 'Q2'
                    (defaults to ['N1', 'N2', 'M1', 'M2', 'Q1', 'Q2'])
-  :ivar setsToDispIntForc: ordered list of sets of elements to display internal      
-                   forces
+  :ivar setsToDispIntForc: ordered list of sets of elements  (of type «shell»)
+                   to display internal forces
+  :ivar listBeamIntForc: ordered list of internal forces to be displayed 
+                 as diagrams on lines for «beam» elements
+                 available components: 'N', 'My', 'Mz', 'Qy', 'Qz','T'
+                 (defaults to ['N', 'My', 'Mz', 'Qy', 'Qz','T'])
+  :ivar setsToDispBeamIntForc: ordered list of sets of elements (of type «beam»)
+                    to display internal forces (defaults to [])
+  :ivar scaleDispBeamIntForc: scale to apply to displays of beam  internal 
+                   forces (defaults to 1.0)
   :ivar unitsScaleForc: factor to apply to internal forces if we want to change
                    the units (defaults to 1).
   :ivar unitsForc: text to especify the units in which forces are 
@@ -76,6 +85,9 @@ class RecordLoadCaseDisp(object):
     self.unitsDispl='[m]'
     self.listIntForc=['N1', 'N2', 'M1', 'M2', 'Q1', 'Q2']
     self.setsToDispIntForc=setsToDispIntForc
+    self.listBeamIntForc=['N', 'My', 'Mz', 'Qy', 'Qz','T']
+    self.setsToDispBeamIntForc=[]
+    self.scaleDispBeamIntForc=1.0
     self.unitsScaleForc=1.0
     self.unitsForc='[kN/m]'
     self.unitsScaleMom=1.0
@@ -129,7 +141,7 @@ class RecordLoadCaseDisp(object):
             lcs.displayDispRot(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits=fcUn,unitDescription=unDesc,fileName=grfname+'.eps')
             capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
-    #Internal forces displays
+    #Internal forces displays on sets of «shell» elements
     for st in self.setsToDispIntForc:
         for arg in self.listIntForc:
             if arg[0]=='M':
@@ -141,6 +153,20 @@ class RecordLoadCaseDisp(object):
             grfname=pathGr+self.loadCaseName+st.elSet.name+arg
             lcs.displayIntForc(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,unitDescription=unDesc,fileName=grfname+'.jpg')
             lcs.displayIntForc(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,unitDescription=unDesc,fileName=grfname+'.eps')
+            capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
+            insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
+    #Internal forces displays on sets of «beam» elements
+    for st in self.setsToDispBeamIntForc:
+        for arg in self.listBeamIntForc:
+            if arg[0]=='M':
+                fcUn=self.unitsScaleMom
+                unDesc=self.unitsMom
+            else:
+                fcUn=self.unitsScaleForc
+                unDesc=self.unitsForc
+            grfname=pathGr+self.loadCaseName+st.elSet.name+arg
+            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=self.scaleDispBeamIntForc,unitDescription=unDesc,viewName=self.viewName,fileName=grfname+'.jpg')
+            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=self.scaleDispBeamIntForc,unitDescription=unDesc,viewName=self.viewName,fileName=grfname+'.eps')
             capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     texFile.write('\\clearpage\n')
