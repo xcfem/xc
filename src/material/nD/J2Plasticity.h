@@ -1,28 +1,28 @@
 //----------------------------------------------------------------------------
-//  programa XC; cálculo mediante el método de los elementos finitos orientado
-//  a la solución de problemas estructurales.
+//  XC program; finite element analysis code
+//  for structural analysis and design.
 //
 //  Copyright (C)  Luis Claudio Pérez Tato
 //
-//  El programa deriva del denominado OpenSees <http://opensees.berkeley.edu>
-//  desarrollado por el «Pacific earthquake engineering research center».
+//  This program derives from OpenSees <http://opensees.berkeley.edu>
+//  developed by the  «Pacific earthquake engineering research center».
 //
-//  Salvo las restricciones que puedan derivarse del copyright del
-//  programa original (ver archivo copyright_opensees.txt) este
+//  Except for the restrictions that may arise from the copyright
+//  of the original program (see copyright_opensees.txt)
 //  software es libre: usted puede redistribuirlo y/o modificarlo
 //  bajo los términos de la Licencia Pública General GNU publicada
-//  por la Fundación para el Software Libre, ya sea la versión 3
-//  de la Licencia, o (a su elección) cualquier versión posterior.
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
 //
-//  Este software se distribuye con la esperanza de que sea útil, pero
-//  SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita
+//  This software is distributed in the hope that it will be useful, but
+//  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCANTIL o de APTITUD PARA UN PROPÓSITO DETERMINADO.
-//  Consulte los detalles de la Licencia Pública General GNU para obtener
+//  GNU General Public License for more details.
 //  una información más detallada.
 //
-// Debería haber recibido una copia de la Licencia Pública General GNU
+// You should have received a copy of the GNU General Public License
 // junto a este programa.
-// En caso contrario, consulte <http://www.gnu.org/licenses/>.
+// If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 /* ****************************************************************** **
 **    OpenSees - Open System for Earthquake Engineering Simulation    **

@@ -1,28 +1,28 @@
 //----------------------------------------------------------------------------
-//  programa XC; cálculo mediante el método de los elementos finitos orientado
-//  a la solución de problemas estructurales.
+//  XC program; finite element analysis code
+//  for structural analysis and design.
 //
 //  Copyright (C)  Luis Claudio Pérez Tato
 //
-//  El programa deriva del denominado OpenSees <http://opensees.berkeley.edu>
-//  desarrollado por el «Pacific earthquake engineering research center».
+//  This program derives from OpenSees <http://opensees.berkeley.edu>
+//  developed by the  «Pacific earthquake engineering research center».
 //
-//  Salvo las restricciones que puedan derivarse del copyright del
-//  programa original (ver archivo copyright_opensees.txt) este
-//  software es libre: usted puede redistribuirlo y/o modificarlo 
-//  bajo los términos de la Licencia Pública General GNU publicada 
-//  por la Fundación para el Software Libre, ya sea la versión 3 
-//  de la Licencia, o (a su elección) cualquier versión posterior.
+//  Except for the restrictions that may arise from the copyright
+//  of the original program (see copyright_opensees.txt)
+//  XC is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or 
+//  (at your option) any later version.
 //
-//  Este software se distribuye con la esperanza de que sea útil, pero 
-//  SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita
-//  MERCANTIL o de APTITUD PARA UN PROPÓSITO DETERMINADO. 
-//  Consulte los detalles de la Licencia Pública General GNU para obtener 
-//  una información más detallada. 
+//  This software is distributed in the hope that it will be useful, but 
+//  WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details. 
 //
-// Debería haber recibido una copia de la Licencia Pública General GNU 
-// junto a este programa. 
-// En caso contrario, consulte <http://www.gnu.org/licenses/>.
+//
+// You should have received a copy of the GNU General Public License 
+// along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //ConstrContainer.cc
 
@@ -60,6 +60,7 @@
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/loaders/LoadLoader.h"
 
+//@brief Frees memory.
 void XC::ConstrContainer::libera(void)
   {
     //delete the objects in the domain
@@ -82,8 +83,8 @@ void XC::ConstrContainer::libera(void)
     allSFreedom_Iter= nullptr;
   }
 
-//! @brief Reserva memoria para los contenedores.
-void XC::ConstrContainer::alloc_contenedores(int numSPs, int numMPs,int numNodeLockers,int numLoadPatterns)
+//! @brief Allocates memory for constraint containers.
+void XC::ConstrContainer::alloc_contenedores(void)
   {
     // init the arrays for storing the constraints components
     theSPs= new MapOfTaggedObjects(this,"SPs");
@@ -91,7 +92,7 @@ void XC::ConstrContainer::alloc_contenedores(int numSPs, int numMPs,int numNodeL
     theMRMPs= new MapOfTaggedObjects(this,"MRMPs");
   }
 
-//! @brief Reserva memoria para los iteradores.
+//! @brief Allocates memory for constraint iterators.
 void XC::ConstrContainer::alloc_iters(void)
   {
     // init the iters
@@ -101,12 +102,12 @@ void XC::ConstrContainer::alloc_iters(void)
     allSFreedom_Iter= new SingleDomAllSFreedom_Iter(*getDomain());
   }
 
-//! @brief Comprueba que se ha podido reservar memoria para los contenedores.
+//! @brief Check that pointers are not null.
 bool XC::ConstrContainer::check_contenedores(void) const
   {
     // check that there was space to create the data structures
-    if((theSPs == 0) || (theMPs == 0) || (theMRMPs == 0) ||
-       (theMFreedom_Iter == 0) || (theSFreedom_Iter == 0) || (theMRMFreedom_Iter == 0))
+    if((theSPs == nullptr) || (theMPs == nullptr) || (theMRMPs == nullptr) ||
+       (theMFreedom_Iter == nullptr) || (theSFreedom_Iter == nullptr) || (theMRMFreedom_Iter == nullptr))
       {
         std::cerr << "ConstrContainer::ConstrContainer() - out of memory\n";
         return false;
@@ -116,6 +117,7 @@ bool XC::ConstrContainer::check_contenedores(void) const
   }
 
 //! @brief Constructor.
+//! @param owr: domain that owns the container.
 XC::ConstrContainer::ConstrContainer(Domain *owr)
   :MeshComponentContainer(owr,DOMAIN_TAG_ConstrContainer), activeNodeLockers(this), activeLoadPatterns(this)
   {
@@ -126,16 +128,7 @@ XC::ConstrContainer::ConstrContainer(Domain *owr)
       { exit(-1); }
   }
 
-//! @brief Constructor.
-XC::ConstrContainer::ConstrContainer(Domain *owr,int numSPs, int numMPs, int numNodeLockers, int numLoadPatterns)
-  :MeshComponentContainer(owr,DOMAIN_TAG_ConstrContainer), activeNodeLockers(this), activeLoadPatterns(this)
-  {
-    alloc_contenedores(numSPs,numMPs,numNodeLockers,numLoadPatterns);
-    alloc_iters();
-    check_contenedores();
-  }
-
-//! @brief Elimina del dominio todos los componentes
+//! @brief Deletes all the members of the container
 void XC::ConstrContainer::clearAll(void)
   {
     // clear the loads and constraints from any load pattern
@@ -159,7 +152,8 @@ XC::ConstrContainer::~ConstrContainer(void)
   { libera(); }
 
 
-//! @brief Agrega una constraint monopunto.
+//! @brief Appends a single freedom constraint.
+//! @param spConstraint: pointer to the single freedom constraint to append.
 bool XC::ConstrContainer::addSFreedom_Constraint(SFreedom_Constraint *spConstraint)
   {
     bool retval= false;
@@ -179,13 +173,14 @@ bool XC::ConstrContainer::addSFreedom_Constraint(SFreedom_Constraint *spConstrai
   }
 
 
-//! @brief Agrega al dominio una constraint multipunto.
-bool XC::ConstrContainer::addMFreedom_Constraint(MFreedom_Constraint *mpConstraint)
+//! @brief Appends a multiple freedom constraint.
+//! @param mfConstraint: pointer to the multi-freedom constraint to append.
+bool XC::ConstrContainer::addMFreedom_Constraint(MFreedom_Constraint *mfConstraint)
   {
     bool retval= false;
 
     // check that no other object with similar tag exists in model
-    const int tag= mpConstraint->getTag();
+    const int tag= mfConstraint->getTag();
     TaggedObject *other= theMPs->getComponentPtr(tag);
     if(other)
       {
@@ -193,17 +188,18 @@ bool XC::ConstrContainer::addMFreedom_Constraint(MFreedom_Constraint *mpConstrai
                   << tag << " already exists in model";
       }
     else
-      retval= theMPs->addComponent(mpConstraint);
+      retval= theMPs->addComponent(mfConstraint);
     return retval;
   }
 
-//! @brief Agrega al dominio una constraint multi retained nodes.
-bool XC::ConstrContainer::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmpConstraint)
+//! @brief Appends a multi-retained nodes constraint.
+//! @param mrmfConstraint: pointer to the multi-retained nodes constraint to append.
+bool XC::ConstrContainer::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmfConstraint)
   {
     bool retval= false;
 
     // check that no other object with similar tag exists in model
-    const int tag= mrmpConstraint->getTag();
+    const int tag= mrmfConstraint->getTag();
     TaggedObject *other= theMRMPs->getComponentPtr(tag);
     if(other)
       {
@@ -211,11 +207,12 @@ bool XC::ConstrContainer::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmpCo
                   << tag << " already exists in model";
       }
     else
-      retval= theMRMPs->addComponent(mrmpConstraint);
+      retval= theMRMPs->addComponent(mrmfConstraint);
     return retval;
   }
 
-//! @brief Añade al modelo la hipótesis simple being passed as parameter.
+//! @brief Appends a load pattern.
+//! @param load: pointer to the load pattern to append.
 bool XC::ConstrContainer::addLoadPattern(LoadPattern *load)
   {
     bool retval= true;
@@ -234,7 +231,8 @@ bool XC::ConstrContainer::addLoadPattern(LoadPattern *load)
     return retval;
   }
 
-//! @brief Añade al modelo
+//! @brief Appends a node locker.
+//! @param nl: pointer to the node locker to append.
 bool XC::ConstrContainer::addNodeLocker(NodeLocker *nl)
   {
     bool retval= true;
@@ -252,27 +250,31 @@ bool XC::ConstrContainer::addNodeLocker(NodeLocker *nl)
     return retval;
   }
 
-//! @brief Agraga al caso de carga una constraint monopunto.
-bool XC::ConstrContainer::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int pattern)
+//! @brief Appends a single freedom constraint to a load pattern.
+//! @param spConstraint: pointer to the single freedom constraint to append.
+//! @param loadPatternTag: load pattern identifier.
+bool XC::ConstrContainer::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int loadPatternTag)
   {
     bool retval= false;
     // now add it to the pattern
-    LoadPattern *caso= getLoadPattern(pattern);
+    LoadPattern *caso= getLoadPattern(loadPatternTag);
     if(caso)
       retval= caso->addSFreedom_Constraint(spConstraint);
     else
       std::cerr << "ConstrContainer::addSFreedom_Constraint - cannot add as pattern with tag "
-                << pattern << " does not exist in domain\n";
+                << loadPatternTag << " does not exist in domain\n";
     return retval;
   }
 
-//! @brief Agrega al dominio una carga sobre nodo.
-bool XC::ConstrContainer::addNodalLoad(NodalLoad *load, int pattern)
+//! @brief Appends a nodal load to a load pattern.
+//! @param load: pointer to the nodal load to append.
+//! @param loadPatternTag: load pattern identifier.
+bool XC::ConstrContainer::addNodalLoad(NodalLoad *load, int loadPatternTag)
   {
     bool retval= false;
     int nodTag= load->getNodeTag();
     const Node *res= getDomain()->getNode(nodTag);
-    if(res == 0)
+    if(res == nullptr)
       {
         std::cerr << "ConstrContainer::addNodalLoad() HI - no node with tag " << nodTag <<
           " exists in  the model, not adding the nodal load"  << *load << std::endl;
@@ -280,47 +282,51 @@ bool XC::ConstrContainer::addNodalLoad(NodalLoad *load, int pattern)
     else
       {
         // now add it to the pattern
-        LoadPattern *caso= getLoadPattern(pattern);
+        LoadPattern *caso= getLoadPattern(loadPatternTag);
         if(caso)
           retval= caso->addNodalLoad(load);
         else
           {
             std::cerr << "ConstrContainer::addNodalLoad() - no pattern with tag " <<
-            pattern << " in  the model, not adding the nodal load"  << *load << std::endl;
+            loadPatternTag << " in  the model, not adding the nodal load"  << *load << std::endl;
           }
       }
     return retval;
   }
 
-//! @brief Agrega al dominio una carga sobre elementos.
-bool XC::ConstrContainer::addElementalLoad(ElementalLoad *load, int pattern)
+//! @brief Appends an elemental load to a load pattern.
+//! @param load: pointer to the elemental load to append.
+//! @param loadPatternTag: load pattern identifier.
+bool XC::ConstrContainer::addElementalLoad(ElementalLoad *load, int loadPatternTag)
   {
     bool retval= false;
     // now add it to the pattern
-    LoadPattern *caso= getLoadPattern(pattern);
+    LoadPattern *caso= getLoadPattern(loadPatternTag);
     if(caso)
       retval= caso->addElementalLoad(load);
     else
       {
-        std::cerr << "ConstrContainer::addElementalLoad() - no pattern with tag " << pattern <<
+        std::cerr << "ConstrContainer::addElementalLoad() - no pattern with tag " << loadPatternTag <<
         "exits in  the model, not adding the ele load " << *load << std::endl;
       }
-    // load->setDomain(this); // done in LoadPattern::addElementalLoad()
-    //this->domainChange();
     return retval;
   }
 
 
+//! @brief Removes a single freedom constraint from the domain or from a load pattern.
+//! @param theNode: node tag.
+//! @param theDOF: degree of freedom identifier.
+//! @param loadPatternTag: load pattern identifier (if -1 then remove from domain).
 bool XC::ConstrContainer::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatternTag)
   {
-    SFreedom_Constraint *theSP =nullptr;
+    SFreedom_Constraint *theSP= nullptr;
     bool found= false;
     int spTag= 0;
 
     if(loadPatternTag == -1)
       {
         SFreedom_ConstraintIter &theSPs= getSPs();
-        while((found == false) && ((theSP= theSPs()) != 0))
+        while((found == false) && ((theSP= theSPs()) != nullptr))
           {
             int nodeTag= theSP->getNodeTag();
             int dof= theSP->getDOF_Number();

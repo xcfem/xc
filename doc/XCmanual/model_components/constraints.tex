@@ -1,6 +1,5 @@
 \section{Boundary conditions}
-In a finite element problem, the boundary conditions\footnote{The following explanation is based on the \href{http://www.colorado.edu/engineering/CAS/courses.d/IFEM.d/}{IFEM courses} of the Department of Aerospace Engineering Sciences
-University of Colorado at Boulder.} are the specified values of the field variables (displacement, rotations, pore pressures,\ldots).
+In a finite element problem, the boundary conditions\footnote{The following explanation is based on the reference \cite{asen5007}.} are the specified values of the field variables (displacement, rotations, pore pressures,\ldots).
 
 \subsection{Essential and natural boundary conditions}
 Essential boundary conditions are conditions that are imposed explicitly on the solution and natural boundary conditions are those that automatically will be satisfied after solution of the problem. Otherwise stated if boundary condition directly involves he nodal freedoms, such as displacements or rotations, it is essential.
@@ -10,8 +9,9 @@ This class of boundary conditions involve one or more degrees of freedom and are
 The natural boundary conditions are imposed by manipulating the right hand side (RHS) of the system of equations (the side of the force vector). Conditions involving applied loads are natural. This kind of constraints are treated in chapter \ref{ch_loads}.
 
 \subsection{Constraints}
+In XC all the classes that represent model constraints inherits from \href{https://github.com/lcpt/xc/blob/master/src/domain/constraints/Constraint.h}{Constraint} class 
 
-\subsubsection{Classification of Constraint Conditions}
+\subsubsection{Classification of constraint conditions}
 In the previous  description we have said that an essential boundary condition can involve one or more degrees of freedom.
 
 \paragraph{Single-freedom constraints.}
@@ -27,7 +27,7 @@ When there is only one condition involved we call them \emph{single-freedom cons
   u_{x4}= 0, u_{y9}= 0.6
 \end{equation}
 
-\noindent These are two single-freedom constraints.  The first one is homogeneous while the second one is non-homogeneous.
+\noindent These are two single-freedom constraints. The first one is homogeneous while the second one is non-homogeneous.
 
 \paragraph{Multi-freedom constraints}
 The next step up in complexity involves multifreedom equality constraints, or multifreedom constraints for short,  the last name being acronymed to MFC. These are functional equations that connect two or more displacement components:
