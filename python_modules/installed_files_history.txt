@@ -298,6 +298,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/rebarsEC2.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/acerosEC3.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/acerosEC3.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/column_buckling.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/column_buckling.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3Beam.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3Beam.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_callback_controls.py

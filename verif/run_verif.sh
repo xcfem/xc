@@ -441,6 +441,7 @@ python tests/materials/ec2/test_smearedCracking_04.py
 python tests/materials/ec2/test_smearedCracking_05.py
 python tests/materials/ec2/test_smearedCracking_06.py
 echo "$BLEU" "   EC3 tests." "$NORMAL"
+python tests/materials/ec3/test_buckling_resistance_01.py
 python tests/materials/ec3/test_lateral_torsional_buckling00.py
 python tests/materials/ec3/test_lateral_torsional_buckling01.py
 python tests/materials/ec3/test_lateral_torsional_buckling02.py

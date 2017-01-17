@@ -186,3 +186,66 @@ for item in perfilesHE:
   perfil['AreaQy']= A-2*b*tf+(tw+2*r)*tf
   perfil['AreaQz']= A-hi*tw
 
+import math
+import xc_base
+import geom
+from materials import steelProfile as sp
+
+class HEProfile(sp.SteelProfile):
+  def __init__(self,steel,name):
+    super(HEProfile,self).__init__(steel,name,perfilesHE)
+    self.bHalf= self.get('b')/2.0 #Half flange width
+    self.hHalf= self.get('h')/2.0 #Half section height
+    self.hiHalf= self.get('hi')/2.0 #Half section interior height.
+    self.twHalf= self.get('tw')/2.0 #Half web thickness
+    self.tileSize= 0.01 #Size of tiles
+  def b(self):
+    return self.get('b')
+  def h(self):
+    return self.get('h')
+  def tf(self):
+    return self.get('tf')
+  def tw(self):
+    return self.get('tw')
+  def hw(self):
+    return self.h()-2*self.tf()
+  def getRho(self):
+    ''' Returns mass per unit lenght. '''
+    return self.get('P')
+  def getProfileRegions(self):
+    ''' Returns regions valid for fiber section model creation. '''
+    retval= list()
+    #Lower flange
+    p0= geom.Pos2d(-self.hHalf,-self.bHalf)
+    p1= geom.Pos2d(-self.hiHalf,self.bHalf)
+    retval.append([p0,p1])
+    #Web
+    p2= geom.Pos2d(-self.hiHalf,-self.twHalf)
+    p3= geom.Pos2d(self.hiHalf,self.twHalf)
+    retval.append([p2,p3])
+    #Upper flange
+    p4= geom.Pos2d(self.hiHalf,-self.bHalf,)
+    p5= geom.Pos2d(self.hHalf,self.bHalf)
+    retval.append([p4,p5])
+    return retval
+
+  def discretization(self,preprocessor,matModelName):
+    self.sectionGeometryName= 'gm'+self.get('nmb')
+    self.gm= preprocessor.getMaterialLoader.newSectionGeometry(self.sectionGeometryName)
+    regions= self.gm.getRegions
+    for r in self.getProfileRegions():
+      reg= regions.newQuadRegion(matModelName)
+      reg.pMin= r[0]
+      reg.pMax= r[1]
+      numberOfTiles= reg.setTileSize(self.tileSize,self.tileSize)
+    return self.gm
+
+  def getFiberSection3d(self,preprocessor,matModelName):
+    reg= self.discretization(preprocessor,matModelName)
+    self.fiberSection3dName= 'fs3d'+self.get('nmb')
+    self.fiberSection3d= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d",self.fiberSection3dName)
+    fiberSectionRepr= self.fiberSection3d.getFiberSectionRepr()
+    fiberSectionRepr.setGeomNamed(self.sectionGeometryName)
+    self.fiberSection3d.setupFibers()
+    fibras= self.fiberSection3d.getFibers()
+    return self.fiberSection3d

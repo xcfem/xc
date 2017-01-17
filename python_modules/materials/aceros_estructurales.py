@@ -66,7 +66,11 @@ class EC3Steel(object):
     return self.fy/self.gammaM
   def fydV(self):
     return self.fyd()/math.sqrt(3)
-
+  def getLambda1(self):
+    '''
+       :returns: lambda_1 value as specified in EC3 part 1 5.5.1.2
+    '''
+    return math.pi*math.sqrt(self.E/self.fy)
   def getDesignElasticPerfectlyPlasticMaterial(self,preprocessor,name):
     return typical_materials.defElasticPPMaterial(preprocessor, name,self.E,self.fyd(),-self.fyd())
 
