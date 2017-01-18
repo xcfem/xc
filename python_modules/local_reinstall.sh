@@ -3,8 +3,8 @@
 #This is to solve the problem of zombie modules: Python files that has been
 #deleted or replaced but which remains installed in the machine.
 
-echo "Uninstalling modlules."
+echo "Uninstalling modules."
 sudo bash ./uninstall
-echo "Reinstalling modlules."
+echo "Reinstalling modules."
 sh ./local_install.sh
 

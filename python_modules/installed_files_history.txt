@@ -732,6 +732,8 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/masonry_bridge.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/masonry_bridge.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/masonryVault.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/masonryVault.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/nb_poussee_terres.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/nb_poussee_terres.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_beam.py

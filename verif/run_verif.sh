@@ -517,6 +517,8 @@ python tests/rough_calculations/test_cable_stayed_bridge_simple_model.py
 python tests/rough_calculations/test_arch_bridge_simple_model.py
 python tests/rough_calculations/test_tied_arch_simple_model.py
 python tests/rough_calculations/test_footing_near_slope01.py
+python tests/rough_calculations/masonry_bridge_verif_01.py
+python tests/rough_calculations/masonryBridgeVerif_test01_minim.py
 
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing,...)." "$NORMAL"
