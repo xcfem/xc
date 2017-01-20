@@ -133,7 +133,7 @@ class CrossSectionProperties2d: public EntCmd, public MovableObject
     const Matrix& getInitialTangentSensitivity3x3(int gradIndex);
 
 
-    void Print (std::ostream &s, int flag = 0) const;
+    virtual void Print (std::ostream &s, int flag = 0) const;
   };
 
 std::ostream &operator<<(std::ostream &os,const CrossSectionProperties2d &c);

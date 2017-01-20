@@ -286,7 +286,7 @@ void XC::CrossSectionProperties2d::Print(std::ostream &s, int flag) const
         s << "CrossSectionProperties2d, E: " << E() << std::endl;
         s << "\t G: " << G() << std::endl;
         s << "\t A: " << A() << std::endl;
-        s << "\tI: " << I() << std::endl;
+        s << "\tI: " << I();
       }
   }
 

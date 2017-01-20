@@ -27,11 +27,12 @@ const double &(XC::CrossSectionProperties2d::*getA)(void) const= &XC::CrossSecti
 const double &(XC::CrossSectionProperties2d::*getAlpha)(void) const= &XC::CrossSectionProperties2d::Alpha;
 const double &(XC::CrossSectionProperties2d::*getI)(void) const= &XC::CrossSectionProperties2d::I;
 class_<XC::CrossSectionProperties2d, bases<EntCmd> >("CrossSectionProperties2d")
-.add_property("E", make_function( getE, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setE,"Elastic modulus.")
+  .add_property("E", make_function( getE, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setE,"Elastic modulus.")
   .add_property("G", make_function( getG, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setG,"Shear modulus.")
   .add_property("A", make_function( getA, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setA,"Area.")
   .add_property("Alpha", make_function( getAlpha, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setAlpha," Shear reduction factor.")
   .add_property("I", make_function( getI, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setI, "Moment of inertia.")
+  .def(self_ns::str(self_ns::self))
   ;
 
 const double &(XC::CrossSectionProperties3d::*getIz)(void) const= &XC::CrossSectionProperties3d::Iz;

@@ -121,6 +121,7 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
 
     void Print (std::ostream &s, int flag = 0) const;
   };
+
 } // end of XC namespace
 
 #endif

@@ -35,7 +35,7 @@ class_<XC::ProtoBeam3d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam3d"
   .add_property("sectionProperties", &XC::ProtoBeam3d::getSectionProperties, &XC::ProtoBeam3d::setSectionProperties)
   .def("getVDirEjeFuerteLocales",&XC::ProtoBeam3d::getVDirEjeFuerteLocales,"Returns the direction vector of element strong axis expressed in the local coordinate system.")
   .def("getVDirEjeDebilLocales",&XC::ProtoBeam3d::getVDirEjeDebilLocales,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
-.def("getAnguloEjeFuerte",&XC::ProtoBeam3d::getAnguloEjeFuerte,"Returns the angle between element strong axis and local XZ plane.")
+  .def("getAnguloEjeFuerte",&XC::ProtoBeam3d::getAnguloEjeFuerte,"Returns the angle between element strong axis and local XZ plane.")
   .def("getAnguloEjeDebil",&XC::ProtoBeam3d::getAnguloEjeDebil,"Returns the angle between element weak axis and local XZ plane.")
    ;
 

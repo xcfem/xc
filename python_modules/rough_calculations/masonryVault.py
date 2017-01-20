@@ -1,6 +1,9 @@
 #-*- coding: utf-8 -*-
 from __future__ import division
 
+'''Based on the thesis: Capacité portante de ponts en arc en maçonnerie de pierre naturelle - Modèle d'évaluation intégrant le niveau d'endommagement. Alix Grandjean (2010). documenturl: https://infoscience.epfl.ch/record/142552/files/EPFL_TH4596.pdf
+'''
+
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2017, AOO and LCPT"
 __license__= "GPL"
@@ -10,6 +13,7 @@ __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 import math
 import sys
 from scipy.optimize import minimize
+from miscUtils import LogMessages as lmsg
 
 #Basic functions.
 def yAxis(f,j,k,r,x):
@@ -44,7 +48,7 @@ def lQtrans(a,delta,hRcle):
 
 def diagInteraction(N,d,v,alpha,beta):
   "Moment de flexion qui correspond au axil N au diagramme d'interaction."
-  return -N/2*(-3*d*1000*beta**2*v*1000+math.sqrt(3)*beta**2*d*1000*v*1000-2*alpha*N-2*math.sqrt(3)*alpha*N)/(beta**2*v*1000*(-3+math.sqrt(3)))/1000
+  return -N/2*(-3*d*1e3*beta**2*v*1e3+math.sqrt(3)*beta**2*d*1e3*v*1e3-2*alpha*N-2*math.sqrt(3)*alpha*N)/(beta**2*v*1e3*(-3+math.sqrt(3)))/1e3
 
 def calcE6p27(X,qrep,L,LR,v,l,a,b,hA,hB,hC,hD,xA):
   "Grandeur E pour le changement de variable selon l'equation 6.27"
@@ -143,25 +147,26 @@ def calcH6p30(LR,a,eta,psi,phiS,etaW,MA,MB,MC,RzB,hA,hB,hC,hD,gammaD):
 
 def calcn6p32(alpha,beta,d,v,E,F,G,H):
   "Multiplicateur de la charge utile."
-  dM= d*1000 #Units 
-  vM= v*1000
-  EM= E*1000
-  FM= F*1000
-  fact= 1.0/2.0/G/G/alpha/(6+4*math.sqrt(3))
+  dM= d*1e3 #Units 
+  vM= v*1e3
+  EM= E*1e3
+  FM= F*1e3
+  root3= math.sqrt(3.0)
   sum= -3*G*dM*beta*beta*vM
   sum-= 12*G*alpha*H
-  sum-= 8*math.sqrt(3)*G*alpha*H
+  sum-= 8*root3*G*alpha*H
   sum-= 6*EM*beta*beta*vM
   radicand= 9*(G*dM*beta*beta*vM)**2
   radicand+= 36*G*dM*pow(beta,4)*vM*vM*EM
   radicand+= 144*G*alpha*H*EM*beta*beta*vM
-  radicand+= 96*G*alpha*H*math.sqrt(3)*EM*beta*beta*vM
+  radicand+= 96*G*alpha*root3*beta*beta*vM*(H*EM-G*FM)
   radicand+= 36*EM*EM*pow(beta,4)*vM*vM
   radicand-= 144*G*G*alpha*FM*beta*beta*vM
-  pp= 96*G*G*alpha*math.sqrt(3)*FM*beta*beta*vM
-  radicand-= 96*G*G*alpha*math.sqrt(3)*FM*beta*beta*vM
-  #print "radicand= ",radicand
-  sum+= math.sqrt(radicand)
+  if(radicand>0):
+    sum+= math.sqrt(radicand)
+  else:
+    lmsg.error('calcn6p32 square root of negative number: '+str(radicand)+'\n')
+    exit(-1)
   # print "======================="
   # print "alpha= ", alpha
   # print "beta= ", beta
@@ -174,6 +179,7 @@ def calcn6p32(alpha,beta,d,v,E,F,G,H):
   # print "sum= ", sum
   # print "fact= ", fact
   # print "n= ",fact*sum
+  fact= 1.0/2.0/G/G/alpha/(6+4*root3)
   return fact*sum 
 
 class archGeometry(object):
@@ -184,11 +190,6 @@ class archGeometry(object):
    arcThick: arch thickness [m]
    arcSpan: arch span [m]
   """
-  coefPolArch=[0,0,0,0] #[f,j,k,r] coefficients of polynomial y=fx^4+jx^3+kx^2+rx+u (u=0)
-  XRot=[0,0,0,0]        #[xA,xB,xC,xD] X coordinates rotules
-  arcThick=0            #arch thickness (m)
-  arcSpan=15            #arch span [m]
-  arcEffL=4             #arch effective length [m]
   def __init__(self,coefPolArch=[0,0,0,0],XRot=[0,0,0,0],arcThick=0,arcSpan=15,arcEffL=4):
     self.coefPolArch=coefPolArch
     self.XRot=XRot
@@ -215,28 +216,31 @@ class archGeometry(object):
     """Y coordinate in keystone of arch (at arcSpan/2)""" 
     x=self.arcSpan/2
     return yAxis(self.coefPolArch[0],self.coefPolArch[1],self.coefPolArch[2],self.coefPolArch[3],x)
-  def printResults(self):
-    print "Overture de la voûte L= ", self.arcSpan," m"
-    print "Paramètres de l'équation polynomiale: "
-    print "  f= ", self.coefPolArch[0]
-    print "  j= ", self.coefPolArch[1]
-    print "  k= ", self.coefPolArch[2]
-    print "  r= ", self.coefPolArch[3]
-    print "  u= ", 0
-    print "Distance séparant les rotules A et C; a= ",self.getDistxAC()," m"
-    print "Distance séparant les rotules D et B; b= ",self.getDistxBD()," m"
-    print "Angle determiné par la perpendiculaire à la tangente à l'axe en D et la verticale (voir 6.2 et A 10.3); gammaD= ",self.getGammaD(), " rad"
-    print "Hauteur des rotules: "
-    print "  hA= ",self.getYRot()[0], " m"
-    print "  hB= ",self.getYRot()[1], " m"
-    print "  hC= ",self.getYRot()[2], " m"
-    print "  hD= ",self.getYRot()[3], " m"
-    print "  LR= ",self.getDistxAB(), " m"
-    print "Épaisseur de l'arc d= ",self.arcThick, " m"
-    print "Largueur efficace de l'arc; v= ",self.arcEffL, " m"
-    print "Flèche: h(L/2)= ",self.getYKeystone(), " m"
+  def __str__(self):
+    retval= "Overture de la voûte L= " + str(self.arcSpan) +" m\n"
+    retval+= "Paramètres de l'équation polynomiale: \n"
+    retval+= "  f= " + str(self.coefPolArch[0]) + '\n'
+    retval+= "  j= " + str(self.coefPolArch[1]) + '\n'
+    retval+= "  k= " + str(self.coefPolArch[2]) + '\n'
+    retval+= "  r= " + str(self.coefPolArch[3]) + '\n'
+    retval+= "  u= 0\n"
+    retval+= "Distance séparant les rotules A et C; a= " +str(self.getDistxAC()) +" m\n"
+    retval+= "Distance séparant les rotules D et B; b= " +str(self.getDistxBD()) +" m\n"
+    retval+= "Angle determiné par la perpendiculaire à la tangente à l'axe en D et la verticale (voir 6.2 et A 10.3); gammaD= " +str(self.getGammaD()) + " rad\n"
+    retval+= "Hauteur des rotules: \n"
+    retval+= "  hA= " +str(self.getYRot()[0]) + " m\n"
+    retval+= "  hB= " +str(self.getYRot()[1]) + " m\n"
+    retval+= "  hC= " +str(self.getYRot()[2]) + " m\n"
+    retval+= "  hD= " +str(self.getYRot()[3]) + " m\n"
+    retval+= "  LR= " +str(self.getDistxAB()) + " m\n"
+    retval+= "Épaisseur de l'arc d= " +str(self.arcThick) + " m\n"
+    retval+= "Largueur efficace de l'arc; v= " +str(self.arcEffL) + " m\n"
+    retval+= "Flèche: h(L/2)= " +str(self.getYKeystone()) + " m\n"
+    return retval
   
-
+  def printResults(self):
+    print str(self)
+    
 class FillingCharacteristics(object): 
   angPhi= math.radians(30)   #angle de frottement interne
   cohesion= 0                #cohésion
@@ -264,13 +268,17 @@ class FillingCharacteristics(object):
     return pow(math.tan(math.pi/4+self.angPhi/2),2)
   def getKc(self):
     return 2*math.sqrt(self.getKp())
+  def __str__(self):
+    retval= "Hauteur de remplissage à la naissance de l'arc; hR= "+str(self.fillThick)+ " m\n"
+    retval+= "Hauteur équivalente de la voie de roulement; hS= "+str(self.eqThickRoad)+ " m\n"
+    retval+= "Premier paramètre de la courbe contrainte - déformation parabolique; alpha= "+str(self.alpha) +'\n'
+    retval+= "Second paramètre de la courbe contrainte - déformation parabolique; beta= "+str(self.beta) +'\n'
+    retval+= "Poids propre du matériau de remplissage; PPR= "+str(self.swFill/1e3)+" kN/m3\n"
+    retval+= "Poids propre de la voie de roulement; PPS= "+str(self.swSupStr/1e3)+" kN/m3\n"
+    return retval
+    
   def printResults(self):
-    print "Hauteur de remplissage à la naissance de l'arc; hR= ",self.fillThick, " m"
-    print "Hauteur équivalente de la voie de roulement; hS= ",self.eqThickRoad, " m"
-    print "Premier paramètre de la courbe contrainte - déformation parabolique; alpha= ",self.alpha
-    print "Second paramètre de la courbe contrainte - déformation parabolique; beta= ",self.beta
-    print "Poids propre du matériau de remplissage; PPR= ",self.swFill/1000," kN/m3"
-    print "Poids propre de la voie de roulement; PPS= ",self.swSupStr/1000," kN/m3"
+    print str(self)
 
 class trafficLoad(object):
   delta= math.radians(30)
@@ -282,7 +290,13 @@ class trafficLoad(object):
     self.fillThickKeys=fillThickKeys
     self.Q=Q
     self.qrep=qrep
+  def __str__(self):
+    retval= "Punctual load Q= "+ str(self.Q/1e3) +" kN\n"
+    retval+= "Uniform load q= "+ str(self.qrep/1e3) +" kN/m\n"
+    return retval
 
+
+    
 class permLoadResult(object):
   """Permanent load resultants"""
   gm= archGeometry()
@@ -326,21 +340,24 @@ class permLoadResult(object):
     """moment de flexion induit par la résultant de la poussée laterale entre les rotules B et D, par rapport à la rotule D [Nm]"""
     return self.gm.arcEffL*(self.fc.getKp()*self.fc.mp*(self.fc.eqThickRoad*self.fc.swSupStr*(self.gm.getYRot()[3]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])-self.gm.getYRot()[3]*self.gm.getYRot()[3]/2+self.gm.getYRot()[1]*self.gm.getYRot()[1]/2))+self.fc.swFill*(self.fc.fillThick*self.gm.getYRot()[3]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])-self.fc.fillThick*(self.gm.getYRot()[3]*self.gm.getYRot()[3]/2-self.gm.getYRot()[1]*self.gm.getYRot()[1]/2)-self.gm.getYRot()[3]*(self.gm.getYRot()[3]*self.gm.getYRot()[3]/2-self.gm.getYRot()[1]*self.gm.getYRot()[1]/2)+pow(self.gm.getYRot()[3],3)/3-pow(self.gm.getYRot()[1],3)/3)+self.fc.cohesion*self.fc.mc*self.fc.getKc()*(self.gm.getYRot()[3]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])-self.gm.getYRot()[3]*self.gm.getYRot()[3]/2+self.gm.getYRot()[1]*self.gm.getYRot()[1]/2))
 
+  def __str__(self,fillChar):
+    retval= "Résultante de la charge permanente (voir 6.3 et A 11.1); eta= "+ str(self.getEta()) +" N\n"
+    retval+= "Moment de flexion induit par la resultante de la charge permanente, par rapport à la rotule B  (voir 6.4 et A 11.2); etaW= "+ str(self.getEtaW()) +" N.m\n"
+    retval+= "Résultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules A et C (voir 6.5 et A 11.3); phi= "+ str(self.getPhi()) +" N\n"
+    retval+= "Moment de flexion induit par la resultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules A et C, par rapport à la rotule C (voir 6.6 et A 11.4); phiS= "+ str(self.getPhiS()) +" Nm\n"
+    retval+= "Résultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules D et B (voir 6.7 et A 11.5); psi= "+ str(self.getPsi) +" N\n"
+    retval+= "Moment de flexion induit  par la resultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules B et D, par rapport à la rotule D (voir 6.8 et A 11.6); psiT= "+ str(self.getPsiT()) +" Nm\n"
+    retval+= "Facteur de correction; mp= "+ str(fillChar.mp) +'\n'
+    retval+= "Coefficient de pousée des terres (voir 6.10); Kp= "+fillChar.getKp()
+    retval+= "Facteur de correction; mc= "+ str(fillChar.mc) +'\n'
+    retval+= "Coefficient de pousée des terres (voir 6.11); Kc= "+fillChar.getKc()
+    retval+= "Resultante de la force horizontale (voir 6.12 et A 12.1); R= "+ str(self.getR()/1e3) + " kN\n"
+    retval+= "Moment de flexion induit par la résultante de la force horizontale R para rapport a la rotule B (voir 6.13 et A 12.2); RzB= "+ self.getRzB()+ " N\n"
+    retval+= "Moment de flexion induit par la résultante de la force horizontale R para rapport a la rotule D (voir 6.14 et A 12.3); RzD= "+ self.getRzD()+ " N\n"
+    return retval
+  
   def printResults(self,fillChar):
-    print "Résultante de la charge permanente (voir 6.3 et A 11.1); eta= ",self.getEta()," N"
-    print "Moment de flexion induit par la resultante de la charge permanente, par rapport à la rotule B  (voir 6.4 et A 11.2); etaW= ",self.getEtaW()," N.m"
-    print "Résultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules A et C (voir 6.5 et A 11.3); phi= ",self.getPhi()," N"
-    print "Moment de flexion induit par la resultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules A et C, par rapport à la rotule C (voir 6.6 et A 11.4); phiS= ",self.getPhiS()," Nm"
-    print "Résultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules D et B (voir 6.7 et A 11.5); psi= ",self.getPsi," N"
-    print "Moment de flexion induit  par la resultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules B et D, par rapport à la rotule D (voir 6.8 et A 11.6); psiT= ",self.getPsiT()," Nm"
-    print "Facteur de correction; mp= ",fillChar.mp
-    print "Coefficient de pousée des terres (voir 6.10); Kp= ",fillChar.getKp()
-    print "Facteur de correction; mc= ",fillChar.mc
-    print "Coefficient de pousée des terres (voir 6.11); Kc= ",fillChar.getKc()
-    print "Resultante de la force horizontale (voir 6.12 et A 12.1); R= ",self.getR()/1e3, " kN"
-    print "Moment de flexion induit par la résultante de la force horizontale R para rapport a la rotule B (voir 6.13 et A 12.2); RzB= ", self.getRzB(), " N"
-    print "Moment de flexion induit par la résultante de la force horizontale R para rapport a la rotule D (voir 6.14 et A 12.3); RzD= ", self.getRzD(), " N"
-    
+    print str(self)
 
 class trafficLoadResult(object):
   """Traffic load resultants"""
@@ -371,12 +388,6 @@ class trafficLoadResult(object):
     print "Charge de trafic ponctuelle aprés diffusion longitudinale et transversale (void 6.18); X= ",self.getX()/1e6," MPa"
 
 class resistance(object):
-  Nadmis=0    #Effort axial admisible [N]
-  gm= archGeometry()
-  fc= FillingCharacteristics()
-  tl=trafficLoad()
-  plR= permLoadResult(gm,fc)
-  tlR= trafficLoadResult(gm,tl)
   def __init__(self,Nadmis,gm,fc,tl,plR,tlR):
     self.Nadmis=Nadmis
     self.gm= gm
@@ -384,6 +395,7 @@ class resistance(object):
     self.tl= tl
     self.plR= plR
     self.tlR= tlR
+    self.verbose= False
 
   def getMadmis(self):
     """Moment de flexion admis (voir 5.17 et A 7.15) [Nm]"""
@@ -401,7 +413,10 @@ class resistance(object):
     return calcn6p32(self.fc.alpha,self.fc.beta,self.gm.arcThick,self.gm.arcEffL,self.getE(),self.getF(),self.getG(),self.getH())
   def getMinimFunc(self,x):
     self.gm.XRot=x
-    return self.getSafCoef()
+    retval= self.getSafCoef()
+    if(self.verbose):
+      print 'n= ', retval, 'x= ', x
+    return retval
 
   def minimize(self):
     L= self.gm.arcSpan

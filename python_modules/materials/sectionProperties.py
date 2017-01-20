@@ -2,6 +2,7 @@
 from __future__ import division
 import sys
 from materials import typical_materials
+from miscUtils import LogMessages as lmsg
 
 
 class sectionProperties(object):
@@ -44,7 +45,7 @@ class sectionProperties(object):
       sys.stderr.write("Section: "+self.nmb+" is already defined.")
     else:
       retval= typical_materials.defElasticSection3d(preprocessor,self.nmb,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J())
-      return retval;
+      return retval
   def defSeccShElastica3d(self,preprocessor,material):
     '''elastic section appropiate for 3D beam analysis, including shear deformations
 
@@ -56,7 +57,7 @@ class sectionProperties(object):
       sys.stderr.write("Section: "+self.nmb+" is already defined.")
     else:
       retval= typical_materials.defElasticShearSection3d(preprocessor,self.nmb,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(),self.alphaY())
-      return retval;
+      return retval
   def defSeccElastica2d(self,preprocessor,material):
     '''elastic section appropiate for 2D beam analysis, including shear deformations
 
@@ -69,7 +70,7 @@ class sectionProperties(object):
       sys.stderr.write("Section: "+self.nmb+" is already defined.")
     else:
       retval= typical_materials.defElasticSection2d(preprocessor,self.nmb,self.A(),material.E,self.Iz())
-      return retval;
+      return retval
   def defSeccShElastica2d(self,preprocessor,material):
     '''elastic section appropiate for 2D beam analysis, including shear deformations
 
@@ -81,24 +82,24 @@ class sectionProperties(object):
       sys.stderr.write("Section: "+self.nmb+" is already defined.")
     else:
       retval= typical_materials.defElasticShearSection2d(preprocessor,self.nmb,self.A(),material.E,material.G(),self.Iz(),self.alphaY())
-      return retval;
+      return retval
 
 
 def defSeccElastica3d(preprocessor,defSecc):
-  print "DEPRECATED; use object's method defSeccElastica3d"
+  lmsg.warning('DEPRECATED; use object\'s method defSeccElastica3d')
   return defSecc.defSeccElastica3d(preprocessor)
 
 def defSeccShElastica3d(preprocessor,defSecc):
-  print "DEPRECATED; use object's method defSeccShElastica3d"
+  lmsg.warning('DEPRECATED; use object\'s method defSeccShElastica3d')
   return defSecc.defSeccShElastica3d(preprocessor)
 
 # Define una sección elástica para elementos 2d a partir de los datos del registro.
 def defSeccElastica2d(preprocessor,defSecc):
-  print "DEPRECATED; use object's method defSeccElastica2d"
+  lmsg.warning('DEPRECATED; use object\'s method defSeccElastica2d')
   return defSecc.defSeccElastica2d(preprocessor)
 
 # Define una sección elástica para elementos 2d a partir de los datos del registro.
 def defSeccShElastica2d(preprocessor,defSecc):
-  print "DEPRECATED; use object's method defSeccShElastica2d"
+  lmsg.warning('DEPRECATED; use object\'s method defSeccShElastica2d')
   return defSecc.defSeccShElastica2d(preprocessor)
 

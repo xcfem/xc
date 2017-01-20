@@ -328,10 +328,10 @@ void XC::CrossSectionProperties3d::Print(std::ostream &s, int flag) const
       {
         s << "CrossSectionProperties3d, E: " << E() << std::endl;
         s << "\t A: " << A() << std::endl;
-        s << "\tIz: " << Iz() << std::endl;
-        s << "\tIy: " << Iy() << std::endl;
-        s << "\tIyz: " << Iyz() << std::endl;
-        s << "\t J: " << J() << std::endl;
+        s << "\t Iz: " << Iz() << std::endl;
+        s << "\t Iy: " << Iy() << std::endl;
+        s << "\t Iyz: " << Iyz() << std::endl;
+        s << "\t J: " << J();
       }
   }
 
