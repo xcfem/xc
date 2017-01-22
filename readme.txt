@@ -1,4 +1,4 @@
-Finite element analysis program based on:
+Open source finite element analysis program designed to solve structural analysis problems. The program is based on:
 
 - Python: user's programming language (boost.python interface with OpenSees based C++ kernel).
 - OpenSees: finite element analysis routines.

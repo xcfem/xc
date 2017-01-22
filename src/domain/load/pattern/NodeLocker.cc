@@ -279,7 +279,7 @@ void XC::NodeLocker::Print(std::ostream &s, int flag)
 
 //! @brief Devuelve las coacciones correspondientes al nodo
 //! y grado de libertad que se pasan como parámetro.
-std::deque<int> XC::NodeLocker::getTagsSPsNodo(int theNode, int theDOF) const
+std::deque<int> XC::NodeLocker::getTagsSPsNode(int theNode, int theDOF) const
   {
     std::deque<int> retval; 
 
@@ -300,7 +300,7 @@ std::deque<int> XC::NodeLocker::getTagsSPsNodo(int theNode, int theDOF) const
 
 //! @brief Devuelve las coacciones correspondientes al nodo
 //! y grado de libertad que se pasan como parámetro.
-std::deque<int> XC::NodeLocker::getTagsSPsNodo(int theNode) const
+std::deque<int> XC::NodeLocker::getTagsSPsNode(int theNode) const
   {
     std::deque<int> retval; 
 
@@ -318,7 +318,7 @@ std::deque<int> XC::NodeLocker::getTagsSPsNodo(int theNode) const
   }
 
 //! @brief Devuelve verdadero si las SPs afectan al nodo being passed as parameter.
-bool XC::NodeLocker::nodoAfectadoSPs(int tagNodo) const
+bool XC::NodeLocker::nodeAffectedBySPs(int tagNodo) const
   {
     bool retval= false;
     NodeLocker *this_no_const= const_cast<NodeLocker *>(this);

@@ -36,6 +36,7 @@
 #include "post_process/MapFields.h"
 #include "utility/handler/DataOutputHandler.h"
 
+//! @brief Open source finite element program for structural analysis
 namespace XC {
 class Domain;
 class FE_Datastore;
@@ -43,45 +44,43 @@ class FEM_ObjectBrokerAllClasses;
 class MEDMesh;
 class MEDMeshing;
 
-//! @mainpage XC programa de elementos finitos de fuente abierta.
-//! @author Luis C. Pérez Tato/Ana Isabel Ortega Ortega.
+//! @mainpage XC Open source finite element analysis program.
+//! @author Luis C. Pérez Tato/Ana Ortega.
 //!
-//! XC es un código de elementos finitos, destinado a resolver
-//! problemas de análisis estructural y permitir la comprobación
-//! de los resultados obtenidos de acuerdo con los criterios
-//! establecidos por las normas (EHE, eurocódigos, CTE,...).
+//! XC is a finite element analysis code designed to solve
+//! structural problems and to allow the checking of the results
+//! following structural codes (Eurocodes, ACI, EHE, SIA,...).
 //!
-//! La aplicación puede resolver varios tipos de problemas, desde un simple
-//! análisis lineal hasta simulaciones complejas no lineales. Posee
-//! una biblioteca de elementos finitos que permite modelar distintas
-//! geometrías, así como múltiples modelos de material, permitiendo
-//! su aplicación en distintas áreas del análisis de estructuras.
+//! The program can solve various types of problems, from simple
+//! linear static analysis to complex nonlinear simulations. It
+//! has a library of finite elements which allows to model
+//! various geometries, and multiple material models, allowing
+//! its application in various areas of structural analysis.
 //!
-//! El programa está basado en el núcleo de cálculo de
-//! <a href="http://opensees.berkeley.edu"target="_new">OpenSees.</a>.
-//! Para su desarrollo se han empleado las siguientes bibliotecas:
+//! The program is based on:
 //! <ul>
+//! <li> <a href="http://www.python.org/" target="_new">Python.</a>. </li>
+//! <li> <a href="http://opensees.berkeley.edu" target="_new">OpenSees.</a>. </li>
 //! <li> <a href="http://www.vtk.org" target="_new">Visualization ToolKit.</a> </li>
 //! <li> <a href="http://www.boost.org" target="_new">Boost c++ libraries.</a> </li>
 //! <li> <a href="http://www.cgal.org" target="_new">Computational geometry algorithms library.</a> </li>
-//! <li> GNU plotutils libraries (libplot).</a> </li>
-//! <li> GNU plotutils libraries (libplot).</li>
-//! <li> Multiple precision floating-point computation developers tools (libmpfr).</li>
-//! <li> Multiprecision arithmetic library developers tools (libgmp).</li>
-//! <li> MySQL C++ library bindings (libmysql++).</li>
+//! <li> <a href="http://matplotlib.org/" target="_new">Matplotlib.</a> </li>
+//! <li> <a href="http://http://www.mpfr.org/" target="_new">libmpfr.</a> Multiple precision floating-point computation developers tools (libmpfr).</li>
+//! <li> <a href="https://gmplib.org/" target="_new">libgmp.</a> Multiple precision arithmetic library developers tools (libgmp).</li>
+//! <li> <a href="https://dev.mysql.com/downloads/connector/cpp/" target="_new">libmysql++.</a> MySQL C++ library bindings.</li>
 //! <li> Berkeley Database Libraries for C++ (libdb,libdb-dev).</li>
 //! <li> SQLite 3 development files (libsqlite3).</li>
 //! <li> X11 (libxt-dev, libsm-dev,etc.)</li>
-//! <li> OpenGL (archivos de cabecera para OpenGL).</li>
+//! <li> OpenGL.</li>
 //! <li> Arpack (Fortran77 subroutines to solve large scale eigenvalue problems; libarcpack2-dev).</li>
 //! <li> Lapack (Library of linear algebra routines; liblapack-dev).</li>
 //! <li> SuperLU (Direct solution of large, sparse systems of linear equations libsuperlu3-dev).</li>
 //! <li> Suitesparse (collection of libraries for computations for sparse matrices).</li>
 //! </ul>
 //! 
-//! El programa puede descargarse en la dirección url: <a href="http://www.xcingenieria.com" target="_new">http://www.xcingenieria.com</a>. 
+//! The program can be downloaded here: <a href="https://github.com/lcpt/xc" target="_new"> GitHub repo</a>. 
 
-//! @brief Problema de elementos finitos.
+//! @brief Finite element problem.
 class ProblemaEF: public EntCmd
   {
     mutable DataOutputHandler::map_output_handlers output_handlers; //Manejadores para salida de resultados.

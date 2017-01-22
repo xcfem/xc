@@ -64,6 +64,8 @@
 #ifndef SFreedom_ConstraintIter_h
 #define SFreedom_ConstraintIter_h
 
+#include <deque>
+
 namespace XC {
 class SFreedom_Constraint;
 
@@ -77,6 +79,8 @@ class SFreedom_ConstraintIter
     virtual ~SFreedom_ConstraintIter() {};  
     virtual SFreedom_Constraint *operator()(void) =0;
     virtual SFreedom_Constraint *search(int theNode, int theDOF);
+    std::deque<int> searchAll(int theNode, int theDOF) const;
+    std::deque<int> searchAll(int theNode) const;
   };
 } // end of XC namespace
 

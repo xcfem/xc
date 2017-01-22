@@ -33,15 +33,13 @@
 
 #define DISPLAY_YS 2745
 
-/**Inelastic Element - concentrated hinge model, Fi - Fj interaction
-   at each ends using yield surfaces
-  *@author rkaul
-  */
-
 namespace XC {
+
 //! \ingroup ElemBarra
 //
-//! @brief ??.
+//! @brief Inelastic Element - concentrated hinge model, Fi - Fj interaction
+//!  at each ends using yield surfaces
+//!  *@author rkaul.
 class InelasticYS2DGNL : public UpdatedLagrangianBeam2D
 {
  protected:

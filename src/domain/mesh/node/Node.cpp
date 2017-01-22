@@ -1672,7 +1672,7 @@ void XC::Node::checkReactionForce(const double &tol)
     const double norm2= reaction.Norm2();
     if(norm2>tol)
       {
-        if(!cc.nodoAfectadoSPsOMPs(getTag()) && !isFrozen())
+        if(!cc.nodeAffectedBySPsOMPs(getTag()) && !isFrozen())
           std::cerr << "Node::checkReactionForce el nodo: " << getTag()
                     << " no esta sujeto a constraints y sin embargo"
                     << " tiene una reacción de valor: " << reaction 

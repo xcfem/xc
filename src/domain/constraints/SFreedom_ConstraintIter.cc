@@ -52,3 +52,38 @@ XC::SFreedom_Constraint *XC::SFreedom_ConstraintIter::search(int theNode, int th
   }
 
 
+//! @brief Search on the container all the constraints with the node and degree of freedom being passed as parameter.
+std::deque<int> XC::SFreedom_ConstraintIter::searchAll(int theNode, int theDOF) const  
+  {
+    std::deque<int> retval;
+
+    int nodeTag= 0;
+    int dof= 0;
+    SFreedom_Constraint *theSP= nullptr;
+    SFreedom_ConstraintIter *this_no_const= const_cast<SFreedom_ConstraintIter *>(this);
+    while(((theSP= (*this_no_const)()) != nullptr))
+      {
+        nodeTag= theSP->getNodeTag();
+        dof= theSP->getDOF_Number();
+        if(nodeTag == theNode && dof == theDOF)
+          retval.push_back(theSP->getTag());
+      }
+    return retval;
+  }
+
+//! @brief Search on the container all the constraints that affect the node being passed as parameter.
+std::deque<int> XC::SFreedom_ConstraintIter::searchAll(int theNode) const
+  {
+    std::deque<int> retval;
+
+    int nodeTag= 0;
+    SFreedom_Constraint *theSP= nullptr;
+    SFreedom_ConstraintIter *this_no_const= const_cast<SFreedom_ConstraintIter *>(this);
+    while(((theSP= (*this_no_const)()) != nullptr))
+      {
+        nodeTag= theSP->getNodeTag();
+        if(nodeTag == theNode)
+          retval.push_back(theSP->getTag());
+      }
+    return retval;
+  }

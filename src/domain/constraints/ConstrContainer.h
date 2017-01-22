@@ -64,8 +64,8 @@ class ConstrContainer: public MeshComponentContainer
     TaggedObjectStorage *theSPs;//!< Single freedomt constraints.
     TaggedObjectStorage *theMPs;//!< Multi-freedom constraints.
     TaggedObjectStorage *theMRMPs;//!< Multi-row multi-freedom constraints.
-    MapCasosActivos<NodeLocker> activeNodeLockers; //!< Bloqueadores de nodo activos.
-    MapCasosActivos<LoadPattern> activeLoadPatterns; //!< Casos de carga activos.
+    MapCasosActivos<NodeLocker> activeNodeLockers; //!< active node lockers.
+    MapCasosActivos<LoadPattern> activeLoadPatterns; //!< active load patterns.
 
     SingleDomSFreedom_Iter *theSFreedom_Iter;
     SingleDomMFreedom_Iter *theMFreedom_Iter;
@@ -146,17 +146,17 @@ class ConstrContainer: public MeshComponentContainer
     virtual int getNumLoadPatterns(void) const;
     virtual int getNumNodeLockers(void) const;
 
-    std::deque<int> getTagsSPsNodo(int theNode, int theDOF) const;
-    std::deque<int> getTagsSPsNodo(int theNode) const;
-    std::deque<int> getTagsMPsNodo(int theNode, int theDOF) const;
-    std::deque<int> getTagsMPsNodo(int theNode) const;
+    std::deque<int> getTagsSPsNode(int theNode, int theDOF) const;
+    std::deque<int> getTagsSPsNode(int theNode) const;
+    std::deque<int> getTagsMPsNode(int theNode, int theDOF) const;
+    std::deque<int> getTagsMPsNode(int theNode) const;
     std::deque<int> getTagsLPs(void) const;
     std::deque<int> getTagsNLs(void) const;
-    bool nodoAfectadoSPs(int nodeTag) const;
-    bool nodoAfectadoMPs(int nodeTag) const;
-    bool nodoAfectadoMRMPs(int tagNodo) const;
-    bool nodoAfectadoSPsOMPs(int nodeTag) const;
-    std::string getNombresLPs(void) const;
+    bool nodeAffectedBySPs(int nodeTag) const;
+    bool nodeAffectedByMPs(int nodeTag) const;
+    bool nodeAffectedByMRMPs(int tagNodo) const;
+    bool nodeAffectedBySPsOMPs(int nodeTag) const;
+    std::string getLoadPatternsNames(void) const;
 
     virtual int calculateNodalReactions(bool inclInertia, const double &);
 

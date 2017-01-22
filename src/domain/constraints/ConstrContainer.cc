@@ -693,70 +693,41 @@ void XC::ConstrContainer::applyLoad(double timeStep)
       theSP->applyConstraint(timeStep);
   }
 
-//! @brief Devuelve las coacciones correspondientes al nodo
-//! y grado de libertad que se pasan como parámetro.
-std::deque<int> XC::ConstrContainer::getTagsSPsNodo(int theNode, int theDOF) const
+//! @brief Search on the container all the single freedom constraints with the node and degree of freedom being passed as parameter.
+std::deque<int> XC::ConstrContainer::getTagsSPsNode(int theNode, int theDOF) const
   {
-    std::deque<int> retval; 
-
-    int nodeTag= 0;
-    int dof= 0;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
-    SFreedom_ConstraintIter &theSPs= this_no_const->getSPs();
-    SFreedom_Constraint *theSP;
-    while(((theSP= theSPs()) != 0))
-      {
-        nodeTag= theSP->getNodeTag();
-        dof= theSP->getDOF_Number();
-        if(nodeTag == theNode && dof == theDOF)
-          retval.push_back(theSP->getTag());
-      }
-    return retval;
+    return this_no_const->getSPs().searchAll(theNode,theDOF); 
   }
 
-//! @brief Devuelve las coacciones correspondientes al nodo
-//! que se pasan como parámetro.
-std::deque<int> XC::ConstrContainer::getTagsSPsNodo(int theNode) const
+//! @brief Search on the container all the single freedom constraints that affect the node whose tag is being passed as parameter.
+std::deque<int> XC::ConstrContainer::getTagsSPsNode(int theNode) const
   {
-    std::deque<int> retval; 
-
-    int nodeTag= 0;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
-    SFreedom_ConstraintIter &theSPs= this_no_const->getSPs();
-    SFreedom_Constraint *theSP;
-    while(((theSP= theSPs()) != 0))
-      {
-        nodeTag= theSP->getNodeTag();
-        if(nodeTag == theNode)
-          retval.push_back(theSP->getTag());
-      }
-    return retval;
+    return this_no_const->getSPs().searchAll(theNode); 
   }
 
-//! @brief Devuelve las coacciones correspondientes al nodo
-//! y grado de libertad que se pasan como parámetro.
-std::deque<int> XC::ConstrContainer::getTagsMPsNodo(int theNode, int theDOF) const
+//! @brief Search on the container all the multi-freedom constraints with the node and degree of freedom being passed as parameter.
+std::deque<int> XC::ConstrContainer::getTagsMPsNode(int theNode, int theDOF) const
   {
     std::deque<int> retval; 
 
-    std::cerr << "XC::ConstrContainer::getTagsMPsNodo no está implementada." << std::endl;
+    std::cerr << "XC::ConstrContainer::getTagsMPsNode no está implementada." << std::endl;
     return retval;
   }
 
-//! @brief Devuelve las coacciones correspondientes al nodo
-//! y grado de libertad que se pasan como parámetro.
-std::deque<int> XC::ConstrContainer::getTagsMPsNodo(int theNode) const
+//! @brief Search on the container all the multi-freedom constraints that affect the node whose tag is being passed as parameter.
+std::deque<int> XC::ConstrContainer::getTagsMPsNode(int theNode) const
   {
     std::deque<int> retval; 
 
-    std::cerr << "XC::ConstrContainer::getTagsMPsNodo no está implementada." << std::endl;
+    std::cerr << "XC::ConstrContainer::getTagsMPsNode no está implementada." << std::endl;
     return retval;
   }
 
+//! @brief Loop over all the load patterns that are currently added to the domain getting their tag.
 std::deque<int> XC::ConstrContainer::getTagsLPs(void) const
   {
-    // loop over all the load patterns that are currently added to the domain
-    // getting their tag
     std::deque<int> retval;   
     for(MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.begin();
         i!= activeLoadPatterns.end();i++)
@@ -764,10 +735,9 @@ std::deque<int> XC::ConstrContainer::getTagsLPs(void) const
     return retval;
   }
 
-std::string XC::ConstrContainer::getNombresLPs(void) const
+//! @brief Loop over all the load patterns that are currently added to the domain getting their names.
+std::string XC::ConstrContainer::getLoadPatternsNames(void) const
   {
-    // loop over all the load patterns that are currently added to the domain
-    // getting their name.
     std::string retval;
     const size_t sz= activeLoadPatterns.size();
     if(sz>0)
@@ -785,17 +755,20 @@ std::string XC::ConstrContainer::getNombresLPs(void) const
                   retval+= casos.getNombreLoadPattern((*i).second) + " ";
               }
             else
-	      std::cerr << "ConstrContainer::getNombresLPs; necesito un preprocesador." << std::endl;
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		        << " preprocessor not defined." << std::endl;
           }
         else
-          std::cerr << "ConstrContainer::getNombresLPs; necesito un dominio." << std::endl;
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		        << " domain not defined." << std::endl;
       }
     return retval;
   }
 
+//! @brief Loop over all the load patterns that are currently added to the domain getting their tag.
 std::deque<int> XC::ConstrContainer::getTagsNLs(void) const
   {
-    // loop over all the load patterns that are currently added to the domain
+    // loop over all the nodel lockers that are currently added to the domain
     // getting theit tag
     std::deque<int> retval;   
     for(MapCasosActivos<NodeLocker>::const_iterator i= activeNodeLockers.begin();
@@ -804,8 +777,8 @@ std::deque<int> XC::ConstrContainer::getTagsNLs(void) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si las SPs afectan al nodo being passed as parameter.
-bool XC::ConstrContainer::nodoAfectadoSPs(int tagNodo) const
+//! @brief Returns true if the node is affected by one or more single freedom constraints.
+bool XC::ConstrContainer::nodeAffectedBySPs(int tagNodo) const
   {
     bool retval= false;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
@@ -820,8 +793,8 @@ bool XC::ConstrContainer::nodoAfectadoSPs(int tagNodo) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si las MPs afectan al nodo being passed as parameter.
-bool XC::ConstrContainer::nodoAfectadoMPs(int tagNodo) const
+//! @brief Returns true if the node is affected by one or more multi-freedom constraints.
+bool XC::ConstrContainer::nodeAffectedByMPs(int tagNodo) const
   {
     bool retval= false;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
@@ -836,8 +809,8 @@ bool XC::ConstrContainer::nodoAfectadoMPs(int tagNodo) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si las MRMPs afectan al nodo being passed as parameter.
-bool XC::ConstrContainer::nodoAfectadoMRMPs(int tagNodo) const
+//! @brief Returns true if the node is affected by one or more multi-row multi-freedom constraints.
+bool XC::ConstrContainer::nodeAffectedByMRMPs(int tagNodo) const
   {
     bool retval= false;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
@@ -852,25 +825,22 @@ bool XC::ConstrContainer::nodoAfectadoMRMPs(int tagNodo) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si MPs o SPs afectan al nodo being passed as parameter.
-bool XC::ConstrContainer::nodoAfectadoSPsOMPs(int nodeTag) const
+//! @brief Returns true if the node is affected by any constraint.
+bool XC::ConstrContainer::nodeAffectedBySPsOMPs(int nodeTag) const
   {
-    bool retval= nodoAfectadoSPs(nodeTag);
+    bool retval= nodeAffectedBySPs(nodeTag);
     if(!retval)
-      retval= nodoAfectadoMPs(nodeTag);
+      retval= nodeAffectedByMPs(nodeTag);
     if(!retval)
-      retval= nodoAfectadoMRMPs(nodeTag);
+      retval= nodeAffectedByMRMPs(nodeTag);
     return retval;
   }
 
-//! @brief Establece como constantes todas las cargas del dominio.
+//! @brief Set as constant all the active load patterns (used in pushover analysis).
 void XC::ConstrContainer::setLoadConstant(void)
   {
-    // loop over all the load patterns that are currently added to the domain
-    // getting them to set their loads as now constant
-    for(MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.begin();
-        i!= activeLoadPatterns.end();i++)
-      i->second->setLoadConstant();
+    for(MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.begin();i!= activeLoadPatterns.end();i++)
+      i->second->setLoadConstant(); //set load as constant.
   }
 
 //! @brief Reactions due to constraints.
@@ -889,15 +859,14 @@ int XC::ConstrContainer::calculateNodalReactions(bool inclInertia, const double 
     return 0;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags of class members.
 XC::DbTagData &XC::ConstrContainer::getDbTagData(void) const
   {
     static DbTagData retval(7);
     return retval;
   }
 
-//! @brief Envía los tags de los casos de carga activos through the channel being passed as parameter.
+//! @brief Send the active load patterns tags through the channel being passed as parameter.
 int XC::ConstrContainer::sendLPatternsTags(const int &posFlag,const int &posDbTag,CommParameters &cp)
   {
     int res= 0;
@@ -917,7 +886,7 @@ int XC::ConstrContainer::sendLPatternsTags(const int &posFlag,const int &posDbTa
     return res;
   }
 
-//! @brief Recibe los tags de los casos de carga activos through the channel being passed as parameter.
+//! @brief Receives the active load patterns tags through the channel being passed as parameter.
 int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTag,const CommParameters &cp)
   {
     Domain *dom= getDomain();
@@ -962,7 +931,7 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
     return res;
   }
 
-//! @brief Envía los tags de los bloqueadores de nodo activos through the channel being passed as parameter.
+//! @brief Send the node lockers tags through the channel being passed as parameter.
 int XC::ConstrContainer::sendNLockersTags(const int &posFlag,const int &posDbTag,CommParameters &cp)
   {
     int res= 0;
@@ -982,7 +951,7 @@ int XC::ConstrContainer::sendNLockersTags(const int &posFlag,const int &posDbTag
     return res;
   }
 
-//! @brief Recibe los tags de los casos de carga activos through the channel being passed as parameter.
+//! @brief Receives the node lockers tags through the channel being passed as parameter.
 int XC::ConstrContainer::recvNLockersTags(const int &posFlag,const int &posDbTag,const CommParameters &cp)
   {
     Domain *dom= getDomain();
@@ -1013,7 +982,7 @@ int XC::ConstrContainer::recvNLockersTags(const int &posFlag,const int &posDbTag
     return res;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::ConstrContainer::sendData(CommParameters &cp)
   {
     int res= cp.sendMovable(*theSPs,getDbTagData(),CommMetaData(0));
@@ -1025,7 +994,7 @@ int XC::ConstrContainer::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::ConstrContainer::recvData(const CommParameters &cp)
   {
     int res= theSPs->recibe<SFreedom_Constraint>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewSP);
@@ -1051,6 +1020,7 @@ int XC::ConstrContainer::sendSelf(CommParameters &cp)
   }
 
 
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ConstrContainer::recvSelf(const CommParameters &cp)
   {
     // first we get the data about the state of the cc for this cTag
@@ -1064,7 +1034,7 @@ int XC::ConstrContainer::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Imprime el dominio.
+//! @brief Prints object information.
 void XC::ConstrContainer::Print(std::ostream &s, int flag)
   {
 
@@ -1091,9 +1061,9 @@ void XC::ConstrContainer::Print(std::ostream &s, int flag)
     activeNodeLockers.Print(s, flag);
   }
 
-std::ostream &XC::operator<<(std::ostream &s, XC::ConstrContainer &M)
+std::ostream &XC::operator<<(std::ostream &s, XC::ConstrContainer &o)
   {
-    M.Print(s);
+    o.Print(s);
     return s;
   }
 
