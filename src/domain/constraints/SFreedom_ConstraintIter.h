@@ -69,13 +69,14 @@ class SFreedom_Constraint;
 
 //! @ingroup CContSP
 //
-//! @brief Iterador sobre el conjunto de condiciones de contorno mononodales.
+//! @brief Iterator over single freedom constraints.
 class SFreedom_ConstraintIter
   {
   public:
     SFreedom_ConstraintIter() {};
     virtual ~SFreedom_ConstraintIter() {};  
     virtual SFreedom_Constraint *operator()(void) =0;
+    virtual SFreedom_Constraint *search(int theNode, int theDOF);
   };
 } // end of XC namespace
 

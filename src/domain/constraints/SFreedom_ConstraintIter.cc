@@ -24,51 +24,31 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Constraint.h                                                                        
-                                                                        
-#ifndef Constraint_h
-#define Constraint_h
-
-#include "domain/component/ContinuaReprComponent.h"
+//SFreedom_ConstraintIter.cc
 
 
-namespace XC {
-//! \ingroup Dom
-//!
-//!
-//! @defgroup CCont Essential boundary conditions.
-//
-//! @ingroup CCont
-//
-//! @brief Base class for model constraints.
-class Constraint: public ContinuaReprComponent
+#include "SFreedom_ConstraintIter.h"
+#include <domain/constraints/SFreedom_Constraint.h>
+
+//! @brief Search on the container the constraint with the node and degree of freedom being passed as parameter.
+XC::SFreedom_Constraint *XC::SFreedom_ConstraintIter::search(int theNode, int theDOF)
   {
-  protected:
-    int constrNodeTag; //!< constrained node tag
-
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
-  public:
-    // constructors
-    Constraint(int classTag);        
-    Constraint(int spTag, int nodeTag, int classTag);
-    ~Constraint(void);
-
-    void setNodeTag(const int &nt);
-    virtual int getNodeTag(void) const;
-    virtual const Node *getNode(void) const;
-    virtual int getNodeIdx(void) const;
-    virtual int applyConstraint(double loadFactor)= 0;    
-
-    void setDomain(Domain *);
-
-    virtual int getVtkCellType(void) const;
-    virtual int getMEDCellType(void) const;
-
-    virtual void Print(std::ostream &s, int flag =0);
-  };
-} // end of XC namespace
-
-#endif
+    SFreedom_Constraint *retval= nullptr;
+    SFreedom_Constraint *theSP= nullptr;
+    bool found= false;
+    int spTag= 0;
+    while((found == false) && ((theSP= (*this)()) != nullptr))
+      {
+        int nodeTag= theSP->getNodeTag();
+        int dof= theSP->getDOF_Number();
+        if(nodeTag == theNode && dof == theDOF)
+          {
+            spTag= theSP->getTag();
+	    retval= theSP;
+            found= true;
+          }
+      }
+    return retval;
+  }
 
 

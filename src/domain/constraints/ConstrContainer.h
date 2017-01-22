@@ -40,7 +40,7 @@ class MRMFreedom_Constraint;
 class NodalLoad;
 class ElementalLoad;
 class LoadPattern;
- class NodeLocker;
+class NodeLocker;
 class SFreedom_ConstraintIter;
 class MFreedom_ConstraintIter;
 class MRMFreedom_ConstraintIter;
@@ -57,13 +57,13 @@ class TaggedObjectStorage;
 
 //! @ingroup CCont
 //
-//! @brief Constraint container.
+//! @brief Constraint (essential and natural boundary conditions) container.
 class ConstrContainer: public MeshComponentContainer
   {
   private:
-    TaggedObjectStorage *theSPs;//!< Single point constraints.
-    TaggedObjectStorage *theMPs;//!< Multi-point constraints.
-    TaggedObjectStorage *theMRMPs;//!< Multi-row multi-point constraints.
+    TaggedObjectStorage *theSPs;//!< Single freedomt constraints.
+    TaggedObjectStorage *theMPs;//!< Multi-freedom constraints.
+    TaggedObjectStorage *theMRMPs;//!< Multi-row multi-freedom constraints.
     MapCasosActivos<NodeLocker> activeNodeLockers; //!< Bloqueadores de nodo activos.
     MapCasosActivos<LoadPattern> activeLoadPatterns; //!< Casos de carga activos.
 
