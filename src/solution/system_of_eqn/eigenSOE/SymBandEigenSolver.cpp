@@ -201,7 +201,7 @@ int XC::SymBandEigenSolver::solve(int nModes)
           }
       }
 
-    // Llama a la subrutina LAPACK que calcula eigenvalues y autovectores
+    // Llama a la subrutina LAPACK que calcula eigenvalues y eigenvectors
     // de la matriz A transformada previamente.
     dsbevx_(jobz, range, uplo, &n, &kd, ab, &ldab,
 	    &q[0], &ldq, &vl, &vu, &il, &iu, &abstol, &m,
@@ -311,7 +311,7 @@ int XC::SymBandEigenSolver::setSize(void)
     return 0;
   }
 
-//! @brief Devuelve la dimensión de los autovectores.
+//! @brief Devuelve la dimensión de los eigenvectors.
 const int &XC::SymBandEigenSolver::getSize(void) const
   { return theSOE->size; }
 

@@ -109,7 +109,7 @@ XC::Vector XC::EigenSolver::getFrecuencias(void) const
 XC::Vector XC::EigenSolver::getNormalizedEigenvector(int mode) const
   { return normalize_inf(getEigenvector(mode)); }
 
-//! @brief Devuelve una matriz con los autovectores calculados colocados
+//! @brief Devuelve una matriz con los eigenvectors calculados colocados
 //! por columnas.
 XC::Matrix XC::EigenSolver::getEigenvectors(void) const
   {
@@ -124,7 +124,7 @@ XC::Matrix XC::EigenSolver::getEigenvectors(void) const
     return retval;
   }
 
-//! @brief Devuelve una matriz con los autovectores normalizados colocados
+//! @brief Devuelve una matriz con los eigenvectors normalizados colocados
 //! por columnas (norma_infinito).
 XC::Matrix XC::EigenSolver::getNormalizedEigenvectors(void) const
   {

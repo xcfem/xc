@@ -78,7 +78,7 @@ int XC::LinearBucklingAlgo::solveCurrentStep(int numModes)
         return -4;
       }
 
-    eigen_to_model(numModes); //Envia autovectores (modos) y eigenvalues al modelo.
+    eigen_to_model(numModes); //Envia eigenvectors (modos) y eigenvalues al modelo.
     return 0;
   }
 

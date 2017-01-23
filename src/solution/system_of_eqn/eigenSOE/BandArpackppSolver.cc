@@ -34,12 +34,12 @@
 //! @brief Constructor.
 XC::BandArpackppSolver::BandArpackppSolver(void)
 :EigenSolver(EigenSOLVER_TAGS_BandArpackppSolver),
- theSOE(nullptr), eigenvalues(1), autovectores(1,Vector()) {}
+ theSOE(nullptr), eigenvalues(1), eigenvectors(1,Vector()) {}
 
 //! @brief Constructor.
 XC::BandArpackppSolver::BandArpackppSolver(const int &nModes)
  :EigenSolver(EigenSOLVER_TAGS_BandArpackppSolver,nModes),
- theSOE(nullptr), eigenvalues(nModes), autovectores(nModes,Vector()) {}
+ theSOE(nullptr), eigenvalues(nModes), eigenvectors(nModes,Vector()) {}
 
 //! @brief Resuelve para todos los eigenvalues del problema.
 int XC::BandArpackppSolver::solve(void)
@@ -64,10 +64,10 @@ void XC::BandArpackppSolver::setup_autos(const size_t &nmodos,const size_t &n)
   {
     if(eigenvalues.size()!=nmodos)
       eigenvalues.resize(nmodos);
-    if(autovectores.size()!=nmodos)
-      autovectores.resize(nmodos);
+    if(eigenvectors.size()!=nmodos)
+      eigenvectors.resize(nmodos);
     for(size_t i=0;i<nmodos;i++)
-      autovectores[i].resize(n);
+      eigenvectors[i].resize(n);
   }
 
 ARluNonSymGenEig<double> getEigenProblem(const int &nmodes,ARbdNonSymMatrix<double, double> &ak,ARbdNonSymMatrix<double, double> &am,const double &shift)
@@ -125,7 +125,7 @@ int XC::BandArpackppSolver::solve(int nModes)
 
                 for(size_t i=0; i<nconv; i++)
                   for(int j=0; j<n;j++)
-                    autovectores[i](j)= dprob.RawEigenvector(i)[j];
+                    eigenvectors[i](j)= dprob.RawEigenvector(i)[j];
                }
             else
               retval= -3;
@@ -162,7 +162,7 @@ const XC::Vector &XC::BandArpackppSolver::getEigenvector(int mode) const
 	          << numModes << ")\n";
       }
     else
-      retval= autovectores[mode-1];
+      retval= eigenvectors[mode-1];
     return retval;
   }
 
@@ -183,7 +183,7 @@ int XC::BandArpackppSolver::setSize(void)
     return 0;
   }
 
-//! @brief Devuelve la dimensión de los autovectores.
+//! @brief Devuelve la dimensión de los eigenvectors.
 const int &XC::BandArpackppSolver::getSize(void) const
   { return theSOE->size; }
 

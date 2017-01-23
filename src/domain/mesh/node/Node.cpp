@@ -566,11 +566,11 @@ XC::Vector XC::Node::getDispXYZ(void) const
 XC::Vector XC::Node::getRotXYZ(void) const
   { return extrae_rotacion(getDisp(),getDim(),numberDOF); }
 
-//! @brief Devuelve las componentes XYZ de la velocidad de traslación del nodo
+//! @brief Devuelve las componentes XYZ de la velocity de traslación del nodo
 XC::Vector XC::Node::getVelXYZ(void) const
   { return extrae_traslacion(getVel(),getDim(),numberDOF); }
 
-//! @brief Devuelve las componentes XYZ de la velocidad de rotación del nodo
+//! @brief Devuelve las componentes XYZ de la velocity de rotación del nodo
 XC::Vector XC::Node::getOmegaXYZ(void) const
   { return extrae_rotacion(getVel(),getDim(),numberDOF); }
 
@@ -976,7 +976,7 @@ const XC::Vector &XC::Node::getRV(const Vector &V)
   }
 
 
-//! @brief Dimensiona la matriz que contiene a los autovectores.
+//! @brief Dimensiona la matriz que contiene a los eigenvectors.
 int XC::Node::setNumEigenvectors(int numVectorsToStore)
   {
     // ensure a positive number of vectors
@@ -1034,7 +1034,7 @@ XC::Vector XC::Node::getPulsaciones(void) const
     return retval;
   }
 
-//! @brief Devuelve los autovectores correspondientes al nodo.
+//! @brief Devuelve los eigenvectors correspondientes al nodo.
 const XC::Matrix &XC::Node::getEigenvectors(void)
   { return theEigenvectors; }
 
@@ -1047,7 +1047,7 @@ XC::Vector XC::Node::getEigenvector(int mode) const
 XC::Vector XC::Node::getNormalizedEigenvector(int mode) const
   { return normalize_inf(getEigenvector(mode)); }
 
-//! @brief Devuelve una matriz con los autovectores normalizados colocados
+//! @brief Devuelve una matriz con los eigenvectors normalizados colocados
 //! por columnas (norma_infinito).
 XC::Matrix XC::Node::getNormalizedEigenvectors(void) const
   {
@@ -1213,7 +1213,7 @@ XC::Vector XC::Node::getMaxModalDisplacement(int mode,const double &accel_mode) 
     return getMaxModalAcceleration(mode,accel_mode)/sqr(getPulsacion(mode));
   }
 
-//! @brief Devuelve la velocidad modal máxima para el modo
+//! @brief Devuelve la velocity modal máxima para el modo
 //! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Node::getMaxModalVelocity(int mode,const double &accel_mode) const
   {
@@ -1241,7 +1241,7 @@ XC::Vector XC::Node::getMaxModalDisplacementForGdls(int mode,const double &accel
   }
 
 
-//! @brief Devuelve al velocidad modal máxima en los gdls y modo que se pasan
+//! @brief Devuelve al velocity modal máxima en los gdls y modo que se pasan
 //! como parámetro y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Node::getMaxModalVelocityForGdls(int mode,const double &accel_mode,const std::set<int> &gdls) const
   {

@@ -45,7 +45,7 @@ class BandArpackppSolver : public EigenSolver
   private:
     BandArpackppSOE *theSOE;
     std::vector<double> eigenvalues;
-    std::vector<Vector> autovectores;
+    std::vector<Vector> eigenvectors;
 
     void setup_autos(const size_t &nmodos,const size_t &n);
 

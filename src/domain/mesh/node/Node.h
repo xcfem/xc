@@ -92,22 +92,22 @@ class DqPtrsElem;
 //! \ingroup Mesh
 //!
 //!
-//! @defgroup Nod Nodos de la malla de elementos finitos.
+//! @defgroup Nod Mesh nodes.
 //!
 //! \ingroup Nod
 //
-//! @brief Nodos de la malla de elementos finitos.
+//! @brief Mesh node.
 class Node: public MeshComponent
   {
   private:
     // private data associated with each node object
-    int numberDOF; // number of dof at Node
+    int numberDOF; //!< number of dof at Node
     DOF_Group *theDOF_GroupPtr; //!< pointer to associated DOF_Group
     Vector Crd; //!< original nodal coords
     
-    NodeDispVectors disp; //! Vectores desplazamiento (commited,trial,...)
-    NodeVelVectors vel; //! Vectores velocidad (commited,trial,...)
-    NodeAccelVectors accel; //! Vectores aceleración (commited,trial,...)
+    NodeDispVectors disp; //! Displacement vectors (commited,trial,...)
+    NodeVelVectors vel; //! Velocity vectors (commited,trial,...)
+    NodeAccelVectors accel; //! Acceleration vectors (commited,trial,...)
 
     Matrix R; //!< nodal (modal?) participation matrix
     Matrix mass; //!< mass matrix
@@ -115,9 +115,9 @@ class Node: public MeshComponent
     Vector unbalLoadWithInertia;       
     mutable Vector reaction;
     double alphaM; //!< rayleigh damping factor
-    mutable double tributaria; //!< longitud, area o volumen tributario.
+    mutable double tributaria; //!< Tributary length, area or volume.
     
-    Matrix theEigenvectors; //Matriz de autovectores.
+    Matrix theEigenvectors; //Eigenvectors matrix.
 
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     Matrix dispSensitivity;
@@ -130,11 +130,11 @@ class Node: public MeshComponent
 
     mutable std::set<ContinuaReprComponent *> connected; //!< Components (elements, contraints,...) that are connected with this node.
 
-    std::set<int> coacciones_freeze;//!< Tags de las coacciones introducidas por el método freeze():
+    std::set<int> coacciones_freeze;//!< Tags of the constraints created by freeze() method.
     const ID &get_id_coacciones(void) const;
     void set_id_coacciones(const ID &);
 
-    static DefaultTag defaultTag; //<! tag para el nuevo nodo.
+    static DefaultTag defaultTag; //<! tag for next new node.
   protected:
 
     DbTagData &getDbTagData(void) const;

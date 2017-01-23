@@ -108,7 +108,7 @@ int XC::FrequencyAlgo::solveCurrentStep(int nModes)
         return -4;
       }
 
-    eigen_to_model(nModes); //Envia autovectores (modos) y eigenvalues al modelo.
+    eigen_to_model(nModes); //Envia eigenvectors (modos) y eigenvalues al modelo.
     return 0;
   }
 

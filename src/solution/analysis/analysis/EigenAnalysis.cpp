@@ -235,7 +235,7 @@ XC::Vector XC::EigenAnalysis::getNormalizedEigenvector(int mode) const
     return retval;
   }
 
-//! @brief Devuelve una matriz con los autovectores calculados colocados
+//! @brief Devuelve una matriz con los eigenvectors calculados colocados
 //! por columnas.
 XC::Matrix XC::EigenAnalysis::getEigenvectors(void) const
   {
@@ -246,7 +246,7 @@ XC::Matrix XC::EigenAnalysis::getEigenvectors(void) const
     return retval;
   }
 
-//! @brief Devuelve una matriz con los autovectores normalizados colocados
+//! @brief Devuelve una matriz con los eigenvectors normalizados colocados
 //! por columnas (norma_infinito).
 XC::Matrix XC::EigenAnalysis::getNormalizedEigenvectors(void) const
   {

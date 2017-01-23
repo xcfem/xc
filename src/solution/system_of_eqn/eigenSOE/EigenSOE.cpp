@@ -170,12 +170,12 @@ const XC::Vector &XC::EigenSOE::getEigenvector(int mode) const
 XC::Vector XC::EigenSOE::getNormalizedEigenvector(int mode) const
   { return theSolver->getNormalizedEigenvector(mode); }
 
-//! @brief Devuelve una matriz con los autovectores calculados colocados
+//! @brief Devuelve una matriz con los eigenvectors calculados colocados
 //! por columnas.
 XC::Matrix XC::EigenSOE::getEigenvectors(void) const
   { return theSolver->getEigenvectors(); }
 
-//! @brief Devuelve una matriz con los autovectores normalizados colocados
+//! @brief Devuelve una matriz con los eigenvectors normalizados colocados
 //! por columnas (norma_infinito).
 XC::Matrix XC::EigenSOE::getNormalizedEigenvectors(void) const
   { return theSolver->getNormalizedEigenvectors(); }
