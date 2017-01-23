@@ -84,7 +84,7 @@ void XC::EigenSOE::copia(const EigenSolver *newSolver)
       }
   }
 
-//! @brief Asigna el solver que se empleará para resolver el problema de autovalores.
+//! @brief Asigna el solver que se empleará para resolver el problema de eigenvalues.
 bool XC::EigenSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;
@@ -139,7 +139,7 @@ void XC::EigenSOE::resize_mass_matrix_if_needed(const size_t &sz)
       massMatrix= sparse_matrix(sz,sz,0.0);
   }
 
-//! @brief Resuelve el problema de autovalores con el número de modos being passed as parameter.
+//! @brief Resuelve el problema de eigenvalues con el número de modos being passed as parameter.
 int XC::EigenSOE::solve(int numModes)
   { return (theSolver->solve(numModes)); }
 
@@ -150,7 +150,7 @@ int XC::EigenSOE::solve(void)
     return -1;
   }
 
-//! @brief Devuelve un puntero al solver que se emplea para resolver el problema de autovalores.
+//! @brief Devuelve un puntero al solver que se emplea para resolver el problema de eigenvalues.
 XC::EigenSolver *XC::EigenSOE::getSolver(void)
   { return theSolver; }
 
@@ -199,7 +199,7 @@ double XC::EigenSOE::getPeriodo(int mode) const
 double XC::EigenSOE::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 
-//! @brief Devuelve un vector con los autovalores calculados.
+//! @brief Devuelve un vector con los eigenvalues calculados.
 XC::Vector XC::EigenSOE::getEigenvalues(void) const
   { return theSolver->getEigenvalues(); }
 
@@ -216,7 +216,7 @@ XC::Vector XC::EigenSOE::getPeriodos(void) const
 XC::Vector XC::EigenSOE::getFrecuencias(void) const
   { return theSolver->getFrecuencias(); }
 
-//! @brief Devuelve el número de autovalores que se han calculado.
+//! @brief Devuelve el número de eigenvalues que se han calculado.
 const int &XC::EigenSOE::getNumModes(void) const
   { return theSolver->getNumModes(); }
 

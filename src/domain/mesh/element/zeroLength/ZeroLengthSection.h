@@ -69,7 +69,7 @@ class Response;
 
 //! \ingroup Elem
 //
-//! @defgroup ElemZL Elementos de longitud 0.
+//! @defgroup ElemZL Zero length elements.
 //!
 //! \ingroup ElemZL
 //

@@ -78,7 +78,7 @@ class SoluMethod;
 
 //! @ingroup Analisis
 //
-//! @defgroup AnalAlgo Algoritmos a emplear para el análisis.
+//! @defgroup AnalAlgo Analysis algorithms.
 //
 //! @ingroup AnalAlgo
 //

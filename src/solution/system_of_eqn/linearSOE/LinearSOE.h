@@ -77,7 +77,7 @@ class ID;
 //! @ingroup LinearSOE
 //
 //! @brief Objetos que se encargan de obtener la solución
-//! de problemas de autovalores.
+//! de problemas de eigenvalues.
 //! @brief Sistema de ecuaciones lineal.
 //!
 //! This is the class definition for LinearSOE.

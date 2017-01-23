@@ -40,7 +40,7 @@ class BandArpackppSolver;
 //! @ingroup EigenSOE
 //
 //! @brief Sistema de ecuaciones correspondiente
-//! a un problema de autovalores con matriz en banda
+//! a un problema de eigenvalues con matriz en banda
 //! en cuya solución se empleará la biblioteca
 //! ArPack++.
 class BandArpackppSOE : public ArpackSOE

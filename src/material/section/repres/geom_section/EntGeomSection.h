@@ -39,7 +39,7 @@ class Eje;
 
 //! @ingroup MATSCCRepresGeom
 //
-//! @defgroup MATSCCEntGeom Entidades geométricas.
+//! @defgroup MATSCCEntGeom Geometric entities.
 //
 //! @ingroup MATSCCEntGeom
 //

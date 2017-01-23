@@ -41,7 +41,7 @@ class TrfGeom;
 
 //! @ingroup Cad
 //
-//! @defgroup CadEnt Entidades geométricas.
+//! @defgroup CadEnt Geometric entities.
 //
 //! @ingroup CadEnt
 //!

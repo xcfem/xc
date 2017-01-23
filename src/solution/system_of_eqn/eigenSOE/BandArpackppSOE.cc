@@ -38,7 +38,7 @@
 XC::BandArpackppSOE::BandArpackppSOE(SoluMethod *owr,const double &shift)
   :ArpackSOE(owr,EigenSOE_TAGS_BandArpackppSOE,shift), A(), M() {}
 
-//! @brief Asigna el solver que se empleará en la solución del problema de autovalores.
+//! @brief Asigna el solver que se empleará en la solución del problema de eigenvalues.
 bool XC::BandArpackppSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;

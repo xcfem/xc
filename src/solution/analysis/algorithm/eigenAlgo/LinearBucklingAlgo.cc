@@ -51,7 +51,7 @@ XC::LinearBucklingIntegrator *XC::LinearBucklingAlgo::getLinearBucklingIntegrato
 XC::LinearBucklingAlgo::LinearBucklingAlgo(SoluMethod *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_LinearBuckling) {}
 
-//! @brief Obtiene los autovalores para el paso actual.
+//! @brief Obtiene los eigenvalues para el paso actual.
 int XC::LinearBucklingAlgo::solveCurrentStep(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();
@@ -78,11 +78,11 @@ int XC::LinearBucklingAlgo::solveCurrentStep(int numModes)
         return -4;
       }
 
-    eigen_to_model(numModes); //Envia autovectores (modos) y autovalores al modelo.
+    eigen_to_model(numModes); //Envia autovectores (modos) y eigenvalues al modelo.
     return 0;
   }
 
-//! @brief Vuelca los autovalores en el modelo (ver Finite Element Procedures. Klaus Jurgen Bathe página 632).
+//! @brief Vuelca los eigenvalues en el modelo (ver Finite Element Procedures. Klaus Jurgen Bathe página 632).
 void XC::LinearBucklingAlgo::eigen_to_model(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();

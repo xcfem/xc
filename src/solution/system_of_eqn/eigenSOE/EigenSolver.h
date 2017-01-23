@@ -51,16 +51,16 @@ class Vector;
 
 //!  @ingroup Solver
 //! 
-//! \defgroup EigenSolver Solución de problemas de autovalores.
+//! \defgroup EigenSolver Solvers for eigenvalue problems.
 //
 //! @ingroup EigenSolver
 //
 //! @brief Objetos que se encargan de obtener la solución
-//! de problemas de autovalores.
+//! de problemas de eigenvalues.
 class EigenSolver : public Solver
   {
   protected:
-    int numModes; //! @brief Número de autovalores a obtener.
+    int numModes; //! @brief Número de eigenvalues a obtener.
 
     friend class EigenSOE;
     virtual EigenSolver *getCopy(void) const= 0;

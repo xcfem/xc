@@ -652,7 +652,7 @@ void XC::AnalysisModel::setNumEigenvectors(int numEigenvectors)
         theNode->setNumEigenvectors(numEigenvectors);
   }
 
-//! @brief Comunica al dominio el valor de los autovalores obtenidos.
+//! @brief Comunica al dominio el valor de los eigenvalues obtenidos.
 void XC::AnalysisModel::setEigenvalues(const Vector &eigenvalues)
   { getDomainPtr()->setEigenvalues(eigenvalues); }        
 

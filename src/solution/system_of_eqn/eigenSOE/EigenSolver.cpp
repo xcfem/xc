@@ -65,7 +65,7 @@ double XC::EigenSolver::getPeriodo(int mode) const
 double XC::EigenSolver::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 
-//! @brief Devuelve un vector con los autovalores calculados.
+//! @brief Devuelve un vector con los eigenvalues calculados.
 XC::Vector XC::EigenSolver::getEigenvalues(void) const
   {
     Vector retval(numModes);

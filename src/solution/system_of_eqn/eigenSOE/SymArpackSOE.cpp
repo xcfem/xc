@@ -52,7 +52,7 @@ XC::SymArpackSOE::SymArpackSOE(SoluMethod *owr,double theShift)
    nblks(0), xblk(0), invp(0), diag(0), penv(0), rowblks(0),
    begblk(0), first(0) {}
 
-//! @brief Asigna el solver que se empleará para resolver el problema de autovalores.
+//! @brief Asigna el solver que se empleará para resolver el problema de eigenvalues.
 bool XC::SymArpackSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;

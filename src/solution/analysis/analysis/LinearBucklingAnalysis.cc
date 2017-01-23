@@ -96,16 +96,16 @@ int XC::LinearBucklingAnalysis::domainChanged(void)
     return retval;
   }
 
-//! @brief Asigna el algoritmo de solución a emplear en el análisis de autovalores.
+//! @brief Asigna el algoritmo de solución a emplear en el análisis de eigenvalues.
 int XC::LinearBucklingAnalysis::setLinearBucklingAlgorithm(LinearBucklingAlgo &theLinearBucklingAlgorithm)
   { return linearBucklingEigenAnalysis.setAlgorithm(theLinearBucklingAlgorithm); }
 
 
-//! @brief Asigna el integrador a emplear en el análisis de autovalores.
+//! @brief Asigna el integrador a emplear en el análisis de eigenvalues.
 int XC::LinearBucklingAnalysis::setLinearBucklingIntegrator(LinearBucklingIntegrator &theLinearBucklingIntegrator)
   { return linearBucklingEigenAnalysis.setIntegrator(theLinearBucklingIntegrator); }
 
-//! @brief Asigna el sistema de ecuaciones lineal a emplear en el análisis de autovalores.
+//! @brief Asigna el sistema de ecuaciones lineal a emplear en el análisis de eigenvalues.
 int XC::LinearBucklingAnalysis::setArpackSOE(ArpackSOE &theEigenSOE)
   { return linearBucklingEigenAnalysis.setEigenSOE(theEigenSOE); }
 

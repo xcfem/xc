@@ -38,7 +38,7 @@ class Matrix;
 
 //! @ingroup TipoAnalisis
 //
-//! @brief Análisis de autovalores y vectores propios.
+//! @brief Análisis de eigenvalues y vectores propios.
 class ModalAnalysis : public EigenAnalysis
   {
   protected:

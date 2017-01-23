@@ -49,7 +49,7 @@ class NMyMzPointCloud;
 
 //! \ingroup MATSCC
 //
-//! @defgroup MATSCCModeloFibras Modelo de fibras de una sección.
+//! @defgroup MATSCCModeloFibras Fiber model for cross-sections.
 //
 //! \ingroup MATSCCModeloFibras
 //

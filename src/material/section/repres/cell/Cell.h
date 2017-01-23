@@ -66,7 +66,7 @@ namespace XC {
 
 //! @ingroup MATSCCRepres
 //
-//! @defgroup MATSCCCell Teselas para discretización de secciones.
+//! @defgroup MATSCCCell Cells for cross-section discretization.
 //
 //! @ingroup MATSCCCell
 //

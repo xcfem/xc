@@ -74,7 +74,7 @@ class LinearSOE;
 
 //!  \ingroup Solver
 //! 
-//! \defgroup LinearSolver Solución de sistemas de ecuaciones lineales.
+//! \defgroup LinearSolver Solvers for linear equation systems.
 //
 //! @ingroup LinearSolver
 //

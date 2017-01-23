@@ -45,7 +45,7 @@ class ResponseId;
 
 //! \ingroup MATSCC
 //
-//! @defgroup MATSCCDiagInt Diagrama de interacción de una sección.
+//! @defgroup MATSCCDiagInt Iteraction diagram for a cross-section.
 //
 //! @ingroup MATSCCDiagInt
 //

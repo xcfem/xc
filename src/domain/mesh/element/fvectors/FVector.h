@@ -37,7 +37,7 @@ class Vector;
 
 //! \ingroup Elem
 //
-//! @defgroup ElemFV Esfuerzos en elementos.
+//! @defgroup ElemFV Element internal forces.
 //!
 //! \ingroup ElemFV
 //

@@ -202,7 +202,7 @@ int XC::IncrementalIntegrator::revertToStart()
     return 0;
   }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones de autovalores.
+//! @brief Devuelve un puntero al sistema de ecuaciones de eigenvalues.
 XC::LinearSOE *XC::IncrementalIntegrator::getLinearSOEPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -210,7 +210,7 @@ XC::LinearSOE *XC::IncrementalIntegrator::getLinearSOEPtr(void)
     return sm->getLinearSOEPtr();
   }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones de autovalores.
+//! @brief Devuelve un puntero al sistema de ecuaciones de eigenvalues.
 const XC::LinearSOE *XC::IncrementalIntegrator::getLinearSOEPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();

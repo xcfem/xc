@@ -44,10 +44,10 @@ class ID;
 //! \ingroup Mat
 //!
 //!
-//! \defgroup MATYS Superficies de fluencia.
+//! \defgroup MATYS Yield surfaces.
 //!
 //! \ingroup MATYS
-//! @brief Superficie de fluencia.
+//! @brief Yield surface.
 class YieldSurface_BC: public TaggedObject, public MovableObject
   {
   private:

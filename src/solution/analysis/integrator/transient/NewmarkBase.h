@@ -38,7 +38,7 @@ class ID;
 
 //! @ingroup TransientIntegrator
 //
-//! @defgroup NewmarkIntegrator Integración del sistema de ecuaciones dinámico mediante el método de Newmark.
+//! @defgroup NewmarkIntegrator Newmark method for the numerical integration of the equation.
 //
 //! @ingroup NewmarkIntegrator
 //

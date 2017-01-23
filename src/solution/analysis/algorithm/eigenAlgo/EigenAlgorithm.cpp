@@ -77,7 +77,7 @@ XC::EigenAlgorithm::EigenAlgorithm(SoluMethod *owr,int classTag)
 XC::EigenIntegrator *XC::EigenAlgorithm::getEigenIntegratorPtr()
   { return dynamic_cast<EigenIntegrator *>(getIntegratorPtr()); }
 
-//! @brief Vuelca los autovalores en el modelo.
+//! @brief Vuelca los eigenvalues en el modelo.
 void XC::EigenAlgorithm::eigen_to_model(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();

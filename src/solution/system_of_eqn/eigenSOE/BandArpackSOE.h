@@ -46,7 +46,7 @@ class BandArpackSolver;
 //! @ingroup EigenSOE
 //
 //! @brief Sistema de ecuaciones correspondiente
-//! a un problema de autovalores con matriz en banda
+//! a un problema de eigenvalues con matriz en banda
 //! en cuya solución se empleará la biblioteca
 //! ArPack (http://www.caam.rice.edu/software/ARPACK)
 //! Description: This file contains the class definition for BandArpackSOE

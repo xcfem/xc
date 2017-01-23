@@ -67,7 +67,7 @@ class SymBandEigenSolver;
 //! @ingroup EigenSOE
 //
 //! @brief Sistema de ecuaciones correspondiente a
-//! un problema de autovalores con matriz en banda
+//! un problema de eigenvalues con matriz en banda
 //! simémtrica.
 class SymBandEigenSOE : public EigenSOE
   {

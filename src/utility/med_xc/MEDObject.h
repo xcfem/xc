@@ -29,7 +29,7 @@
 #include "xc_utils/src/utils/ObjMap.h"
 
 namespace XC {
-//! @defgroup MED Interfaz con la biblioteca MED.
+//! @defgroup MED-Fichier interface.
 //
 //! @ingroup MED
 //

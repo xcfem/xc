@@ -201,7 +201,7 @@ int XC::SymBandEigenSolver::solve(int nModes)
           }
       }
 
-    // Llama a la subrutina LAPACK que calcula autovalores y autovectores
+    // Llama a la subrutina LAPACK que calcula eigenvalues y autovectores
     // de la matriz A transformada previamente.
     dsbevx_(jobz, range, uplo, &n, &kd, ab, &ldab,
 	    &q[0], &ldq, &vl, &vu, &il, &iu, &abstol, &m,
@@ -245,7 +245,7 @@ int XC::SymBandEigenSolver::solve(int nModes)
     return 0;
   }
 
-//! @brief Asigna el problema de autovalores a resolver.
+//! @brief Asigna el problema de eigenvalues a resolver.
 bool XC::SymBandEigenSolver::setEigenSOE(EigenSOE *soe)
   {
     bool retval= false;
@@ -260,7 +260,7 @@ bool XC::SymBandEigenSolver::setEigenSOE(EigenSOE *soe)
     return retval;
   }
 
-//! @brief Asigna el problema de autovalores a resolver.
+//! @brief Asigna el problema de eigenvalues a resolver.
 bool XC::SymBandEigenSolver::setEigenSOE(SymBandEigenSOE &theBandSOE)
   { return setEigenSOE(&theBandSOE); }
 

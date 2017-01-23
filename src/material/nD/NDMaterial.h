@@ -83,7 +83,7 @@ class Response;
 
 //! @ingroup Mat
 //
-//! @defgroup NDMat Materiales n dimensionales.
+//! @defgroup NDMat n-dimensional materials.
 //
 //! @ingroup NDMat
 //

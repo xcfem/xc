@@ -134,7 +134,7 @@ XC::LinearSOE *XC::Analysis::getLinearSOEPtr(void) const
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones de autovalores.
+//! @brief Devuelve un puntero al sistema de ecuaciones de eigenvalues.
 XC::EigenSOE *XC::Analysis::getEigenSOEPtr(void) const
   {
     if(metodo_solu)
@@ -207,7 +207,7 @@ XC::StaticIntegrator *XC::Analysis::getStaticIntegratorPtr(void)
   }
 
 //! @brief Devuelve, si es posible, un puntero al algoritmo de solución del sistema de 
-//! autovalores, en otro caso devuelve nullptr.
+//! eigenvalues, en otro caso devuelve nullptr.
 XC::EigenAlgorithm *XC::Analysis::getEigenSolutionAlgorithmPtr(void)
   {
     if(metodo_solu)
@@ -310,7 +310,7 @@ int XC::Analysis::setLinearSOE(LinearSOE &theNewSOE)
       return 0;
   }
 
-//! @brief Establece el sistema de autovalores a emplear en el análisis.
+//! @brief Establece el sistema de eigenvalues a emplear en el análisis.
 int XC::Analysis::setEigenSOE(EigenSOE &theSOE)
   {
     if(metodo_solu)

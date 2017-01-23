@@ -58,7 +58,7 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @defgroup FDEVNDMat Ley de evolución.
+//! @defgroup FDEVNDMat Evolution law.
 //
 //! @ingroup FDEVNDMat
 //

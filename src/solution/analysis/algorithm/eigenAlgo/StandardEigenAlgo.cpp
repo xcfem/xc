@@ -66,7 +66,7 @@
 XC::StandardEigenAlgo::StandardEigenAlgo(SoluMethod *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_Standard) {}
 
-//! @brief Obtiene los autovalores para el paso actual.
+//! @brief Obtiene los eigenvalues para el paso actual.
 int XC::StandardEigenAlgo::solveCurrentStep(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();

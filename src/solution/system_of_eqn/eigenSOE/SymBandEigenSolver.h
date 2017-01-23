@@ -68,7 +68,7 @@ class SymBandEigenSOE;
 //! @ingroup EigenSolver
 //
 //! @brief Objetos que se encargan de la solución
-//! de problemas de autovalores l sistema de ecuaciones.
+//! de problemas de eigenvalues l sistema de ecuaciones.
 class SymBandEigenSolver : public EigenSolver
   {
   private:

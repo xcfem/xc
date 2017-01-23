@@ -54,7 +54,7 @@ class ArpackSolver;
 class LinearBucklingAnalysis: public StaticAnalysis
   {
   private:
-    SoluMethod *eigen_solu; //!< Estrategia de solución para el problema de autovalores.
+    SoluMethod *eigen_solu; //!< Estrategia de solución para el problema de eigenvalues.
     LinearBucklingEigenAnalysis linearBucklingEigenAnalysis;
     int numModes;
     int linear_buckling_analysis_step; //!Paso en el que se inicia el linear buckling analysis.

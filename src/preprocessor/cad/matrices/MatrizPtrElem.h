@@ -41,7 +41,7 @@ namespace XC{
 
 //! \ingroup Cad
 //! 
-//! \defgroup CadMR Referencias a nodos y elementos.
+//! \defgroup CadMR References to nodes and elements.
 //
 //! @ingroup CadMR
 //

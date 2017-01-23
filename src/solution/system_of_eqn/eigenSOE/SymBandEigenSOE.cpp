@@ -69,7 +69,7 @@
 XC::SymBandEigenSOE::SymBandEigenSOE(SoluMethod *owr)
   :EigenSOE(owr,EigenSOE_TAGS_SymBandEigenSOE), numSuperD(0) {}
 
-//! @brief Asigna el solver que se empleará en la solución del problema de autovalores.
+//! @brief Asigna el solver que se empleará en la solución del problema de eigenvalues.
 bool XC::SymBandEigenSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;

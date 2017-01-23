@@ -99,7 +99,7 @@ class ModelWrapper;
 
 //!  @ingroup Solu
 //! 
-//! @defgroup Analisis Procedimientos de análisis del problema.
+//! @defgroup Analisis Problem analysis procedures.
 //
 //! @ingroup Analisis
 //

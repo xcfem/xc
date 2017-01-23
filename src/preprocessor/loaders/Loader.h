@@ -41,7 +41,7 @@ class FEM_ObjectBroker;
 
 //! \ingroup Preprocessor
 //
-//! @defgroup Ldrs Definición del modelo.
+//! @defgroup Ldrs Model definition.
 //
 //! \ingroup Ldrs
 //! 

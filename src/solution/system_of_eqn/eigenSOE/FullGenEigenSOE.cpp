@@ -67,7 +67,7 @@
 XC::FullGenEigenSOE::FullGenEigenSOE(SoluMethod *owr)
   : EigenSOE(owr,EigenSOE_TAGS_FullGenEigenSOE) {}
 
-//! @brief Asigna el solver que se empleará para resolver el problema de autovalores.
+//! @brief Asigna el solver que se empleará para resolver el problema de eigenvalues.
 bool XC::FullGenEigenSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;

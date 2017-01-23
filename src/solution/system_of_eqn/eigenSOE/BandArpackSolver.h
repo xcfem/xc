@@ -53,7 +53,7 @@ class BandArpackSolver : public EigenSolver
     BandArpackSOE *theSOE;
     Vector value;
     Vector eigenvector;
-    double tol; //!< Tolerancia para los autovalores obtenidos.
+    double tol; //!< Tolerancia para los eigenvalues obtenidos.
     int maxitr; //!< Número máximo de iteraciones.
     ID iPiv;
     mutable Vector eigenV;

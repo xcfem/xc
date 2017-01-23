@@ -74,7 +74,7 @@ class UniaxialMaterial;
 //! \ingroup Elem
 //!
 //!
-//! @defgroup fElem Interfaz con los elementos de FEAP.
+//! @defgroup fElem Interface with FEAP elements.
 //!
 //! \ingroup fElem
 //

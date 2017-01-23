@@ -50,7 +50,7 @@ class ProblemaEF;
 //! @brief Procedimiento de solución del problema de elementos finitos.
 //!
 //! La definición del análisis que se pretende realizar (problema estático,
-//! dinámico, de autovalores,...) se hace mediante el objeto theAnalysis
+//! dinámico, de eigenvalues,...) se hace mediante el objeto theAnalysis
 //! de la clase Analysis. La definición de los algoritmos a emplear para
 //! realizar el análisis se hace mediante el objeto solu_control
 class ProcSolu: public EntCmd

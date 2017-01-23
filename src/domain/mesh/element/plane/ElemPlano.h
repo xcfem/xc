@@ -40,7 +40,7 @@
 namespace XC {
 //! \ingroup Elem
 //
-//! @defgroup ElemPlanos Elementos bidimensionales (problemas planos, láminas,...).
+//! @defgroup ElemPlanos Bidimensional elements (plane problems, shells,...).
 //!
 //! \ingroup ElemPlanos
 //

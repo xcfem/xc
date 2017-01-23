@@ -129,7 +129,7 @@ void XC::BandArpackSolver::print_err_info(int info)
        }
   }
 
-//! @brief Resuelve el problema de autovalores.
+//! @brief Resuelve el problema de eigenvalues.
 int XC::BandArpackSolver::solve(void)
   {
     if(theSOE == 0)
@@ -377,7 +377,7 @@ void XC::BandArpackSolver::myCopy(int n, double *v, double *result)
       { result[i] = v[i]; }
   }
 
-//! @brief Asigna el problema de autovalores a resolver.
+//! @brief Asigna el problema de eigenvalues a resolver.
 bool XC::BandArpackSolver::setEigenSOE(EigenSOE *soe)
   {
     bool retval= false;
@@ -392,7 +392,7 @@ bool XC::BandArpackSolver::setEigenSOE(EigenSOE *soe)
     return retval;
   }
 
-//! @brief Asigna el problema de autovalores a resolver.
+//! @brief Asigna el problema de eigenvalues a resolver.
 bool XC::BandArpackSolver::setEigenSOE(BandArpackSOE &theBandSOE)
   { return setEigenSOE(&theBandSOE); }
 

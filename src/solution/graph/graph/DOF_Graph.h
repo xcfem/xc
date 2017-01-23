@@ -71,7 +71,7 @@ class AnalysisModel;
 
 //!  \ingroup Solu
 //! 
-//! \defgroup Graph Grafo de los grados de libertad del problema.
+//! \defgroup Graph Graph of the model degrees of freedom.
 //
 //! @ingroup Graph
 //

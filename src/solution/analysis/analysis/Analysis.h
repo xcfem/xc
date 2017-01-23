@@ -101,7 +101,7 @@ class CommParameters;
 
 //! @ingroup Analisis
 //
-//! @defgroup TipoAnalisis Análisis a realizar (estático, dinámico, autovalores,...).
+//! @defgroup TipoAnalisis Analysis type (static, dynamic, eigenvalues,...).
 //
 //! @ingroup TipoAnalisis
 //

@@ -686,7 +686,7 @@ int XC::Domain::newStep(double dT)
   { return 0; }
 
 
-//! @brief Establece el valor del vector de autovalores.
+//! @brief Establece el valor del vector de eigenvalues.
 int XC::Domain::setEigenvalues(const Vector &theValues)
   {
     theEigenvalues= theValues;
@@ -716,7 +716,7 @@ double XC::Domain::getPeriodo(int mode) const
 double XC::Domain::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 
-//! @brief Devuelve el vector de autovalores.
+//! @brief Devuelve el vector de eigenvalues.
 const XC::Vector &XC::Domain::getEigenvalues(void) const
   { return theEigenvalues; }
 
@@ -750,11 +750,11 @@ XC::Vector XC::Domain::getFrecuencias(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de autovalores que se han calculado.
+//! @brief Devuelve el número de eigenvalues que se han calculado.
 int XC::Domain::getNumModes(void) const
   { return getEigenvalues().Size(); }
 
-//! @brief Establece el valor del vector de autovalores.
+//! @brief Establece el valor del vector de eigenvalues.
 int XC::Domain::setModalParticipationFactors(const Vector &theValues)
   {
     modalParticipationFactors= theValues;

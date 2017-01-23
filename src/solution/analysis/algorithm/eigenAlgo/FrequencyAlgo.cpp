@@ -73,7 +73,7 @@
 XC::FrequencyAlgo::FrequencyAlgo(SoluMethod *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_Frequency) {}
 
-//! @brief Obtiene los autovalores para el paso actual.
+//! @brief Obtiene los eigenvalues para el paso actual.
 int XC::FrequencyAlgo::solveCurrentStep(int nModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();
@@ -108,7 +108,7 @@ int XC::FrequencyAlgo::solveCurrentStep(int nModes)
         return -4;
       }
 
-    eigen_to_model(nModes); //Envia autovectores (modos) y autovalores al modelo.
+    eigen_to_model(nModes); //Envia autovectores (modos) y eigenvalues al modelo.
     return 0;
   }
 

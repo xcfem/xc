@@ -76,7 +76,7 @@ class ModelWrapper;
 
 //! @ingroup Analisis
 //
-//! @defgroup Numerador Numeración de grados de libertad.
+//! @defgroup Numerador DOF numbering.
 //
 //! @ingroup Numerador
 //

@@ -71,7 +71,7 @@ class FullGenEigenSOE;
 //
 //! @brief Objetos que se encargan de obtener la solución
 //! de sistemas de ecuaciones correspondientes a problemas
-//! de autovalores con matriz densa.
+//! de eigenvalues con matriz densa.
 class FullGenEigenSolver: public EigenSolver
   {
   private:

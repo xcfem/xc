@@ -62,7 +62,7 @@ namespace XC {
 
 //! @ingroup FDNDMat
 //
-//! @defgroup FDFlowNDMat Flujo.
+//! @defgroup FDFlowNDMat Flow.
 //
 //! @ingroup FDFlowNDMat
 //

@@ -205,7 +205,7 @@ int XC::EigenAnalysis::setIntegrator(EigenIntegrator &theIntegrator)
     return 0;
   }
 
-//! @brief Asigna el sistema de autovalores a emplear en el análisis.
+//! @brief Asigna el sistema de eigenvalues a emplear en el análisis.
 int XC::EigenAnalysis::setEigenSOE(EigenSOE &theSOE)
   {
     Analysis::setEigenSOE(theSOE);
@@ -282,7 +282,7 @@ double XC::EigenAnalysis::getPeriodo(int mode) const
 double XC::EigenAnalysis::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 
-//! @brief Devuelve un vector con los autovalores calculados.
+//! @brief Devuelve un vector con los eigenvalues calculados.
 XC::Vector XC::EigenAnalysis::getEigenvalues(void) const
   {
     Vector retval;
@@ -322,7 +322,7 @@ XC::Vector XC::EigenAnalysis::getFrecuencias(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de autovalores que se han calculado.
+//! @brief Devuelve el número de eigenvalues que se han calculado.
 int XC::EigenAnalysis::getNumModes(void) const
   {
     int retval= 0;

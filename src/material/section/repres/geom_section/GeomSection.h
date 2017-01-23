@@ -54,7 +54,7 @@ class CrossSectionProperties2d;
 
 //! @ingroup MATSCCRepres
 //
-//! @defgroup MATSCCRepresGeom Representación de la geometría de una sección.
+//! @defgroup MATSCCRepresGeom Geometric representation of a cross-section.
 //
 //! @ingroup MATSCCRepresGeom
 //

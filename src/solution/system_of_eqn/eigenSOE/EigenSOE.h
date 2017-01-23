@@ -56,12 +56,12 @@ class ID;
 
 //!  @ingroup SOE
 //! 
-//! @defgroup EigenSOE Sistemas de ecuaciones para problemas de autovalores.
+//! @defgroup EigenSOE Sistemas de ecuaciones para problemas de eigenvalues.
 //
 //! @ingroup EigenSOE
 //
 //! @brief Sistema de ecuaciones correspondiente
-//! a un problema de autovalores.
+//! a un problema de eigenvalues.
 class EigenSOE : public SystemOfEqn
   {
   public:
@@ -102,7 +102,7 @@ class EigenSOE : public SystemOfEqn
     Matrix getEigenvectors(void) const;
     Matrix getNormalizedEigenvectors(void) const;
 
-    //Autovalores
+    //Eigenvalues
     virtual const double &getEigenvalue(int mode) const;
     double getPulsacion(int mode) const;
     double getPeriodo(int mode) const;

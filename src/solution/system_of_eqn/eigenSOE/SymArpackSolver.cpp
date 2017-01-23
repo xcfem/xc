@@ -75,7 +75,7 @@ theSOE(nullptr), factored(false)
     // nothing to do.
   }
 
-//! @brief Resuelve el problema de autovalores.
+//! @brief Resuelve el problema de eigenvalues.
 int XC::SymArpackSolver::solve(void)
   {
     if(!theSOE)
@@ -232,7 +232,7 @@ int XC::SymArpackSolver::setSize(void)
 const int &XC::SymArpackSolver::getSize(void) const
   { return theSOE->size; }
 
-//! @brief Asigna el problema de autovalores a resolver.
+//! @brief Asigna el problema de eigenvalues a resolver.
 bool XC::SymArpackSolver::setEigenSOE(EigenSOE *soe)
   {
     bool retval= false;

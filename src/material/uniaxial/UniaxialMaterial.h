@@ -80,7 +80,7 @@ class SectionForceDeformation;
 
 //! @ingroup Mat
 //
-//! @defgroup MatUnx Modelos unidimensionales de un material.
+//! @defgroup MatUnx Uniaxial material models.
 //
 //! @ingroup MatUnx
 //

@@ -79,7 +79,7 @@ class ModelWrapper;
 //! @ingroup Analisis
 //
 //
-//! @defgroup AnalisisCH Gestores de coacciones para el análisis.
+//! @defgroup AnalisisCH Analysis constraint handlers.
 //
 //! @ingroup AnalisisCH
 //! @brief ConstraintHandlers enforce the single and multi point 

@@ -577,7 +577,7 @@ const XC::LinearSOE *XC::SoluMethod::getLinearSOEPtr(void) const
     return ptr;
   }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones de autovalores.
+//! @brief Devuelve un puntero al sistema de ecuaciones de eigenvalues.
 XC::EigenSOE *XC::SoluMethod::getEigenSOEPtr(void)
   {
     EigenSOE *ptr= dynamic_cast<EigenSOE *>(theSOE);
@@ -586,7 +586,7 @@ XC::EigenSOE *XC::SoluMethod::getEigenSOEPtr(void)
     return ptr;
   }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones de autovalores.
+//! @brief Devuelve un puntero al sistema de ecuaciones de eigenvalues.
 const XC::EigenSOE *XC::SoluMethod::getEigenSOEPtr(void) const
   {
     const EigenSOE *ptr= dynamic_cast<const EigenSOE *>(theSOE);
@@ -609,7 +609,7 @@ XC::EigenIntegrator *XC::SoluMethod::getEigenIntegratorPtr(void)
   {
     EigenIntegrator *ptr= dynamic_cast<EigenIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; el integrador no es de tipo autovalores." << std::endl;
+      std::cerr << "SoluMethod; el integrador no es de tipo eigenvalues." << std::endl;
     return ptr;
   }
 
@@ -641,12 +641,12 @@ XC::StaticIntegrator *XC::SoluMethod::getStaticIntegratorPtr(void)
   }
 
 //! @brief Devuelve, si es posible, un puntero al algoritmo de solución del sistema de 
-//! autovalores, en otro caso devuelve nullptr.
+//! eigenvalues, en otro caso devuelve nullptr.
 XC::EigenAlgorithm *XC::SoluMethod::getEigenSolutionAlgorithmPtr(void)
   {
     EigenAlgorithm *ptr= dynamic_cast<EigenAlgorithm *>(theSolnAlgo);
     if(!ptr)
-      std::clog << "SoluMethod; el algoritmo no sirve para obtener autovalores." << std::endl;
+      std::clog << "SoluMethod; el algoritmo no sirve para obtener eigenvalues." << std::endl;
     return ptr;
   }
 
@@ -685,7 +685,7 @@ int XC::SoluMethod::setLinearSOE(LinearSOE &theNewSOE)
     return 0;
   }
 
-//! @brief Establece el sistema de autovalores a emplear en el análisis.
+//! @brief Establece el sistema de eigenvalues a emplear en el análisis.
 int XC::SoluMethod::setEigenSOE(EigenSOE &theSOE)
   {
     std::cerr << "SoluMethod::setEigenSOE() - does nothing yet\n";    

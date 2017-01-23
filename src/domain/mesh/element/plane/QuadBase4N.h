@@ -41,8 +41,6 @@
 namespace XC {
 //! \ingroup Elem
 //
-//! @defgroup ElemPlanos Elementos bidimensionales (problemas planos, láminas,...).
-//!
 //! \ingroup ElemPlanos
 //
 //! @brief Clase base para los cuadriláteros de cuatro nodos.

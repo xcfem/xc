@@ -65,7 +65,7 @@ namespace XC {
 
 //! @ingroup EigenAlgo
 //
-//! @brief Obtención de autovalores estándar.
+//! @brief Obtención de eigenvalues estándar.
 class StandardEigenAlgo : public EigenAlgorithm
   {
   protected:

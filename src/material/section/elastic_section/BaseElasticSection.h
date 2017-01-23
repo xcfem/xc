@@ -36,7 +36,7 @@ namespace XC {
 
 //! \ingroup MATSCC
 //
-//! @defgroup MATSCCElastica Secciones de material elástico.
+//! @defgroup MATSCCElastica Elastic material cross sections.
 //
 //! \ingroup MATSCCElastica
 //

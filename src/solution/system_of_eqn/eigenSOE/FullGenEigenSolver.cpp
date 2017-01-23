@@ -242,7 +242,7 @@ int XC::FullGenEigenSolver::setSize(void)
 const int &XC::FullGenEigenSolver::getSize(void) const
   { return theSOE->size; }
 
-//! @brief Asigna el problema de autovalores a resolver.
+//! @brief Asigna el problema de eigenvalues a resolver.
 bool XC::FullGenEigenSolver::setEigenSOE(EigenSOE *soe)
   {
     bool retval= false;
@@ -257,7 +257,7 @@ bool XC::FullGenEigenSolver::setEigenSOE(EigenSOE *soe)
     return retval;
   }
 
-//! @brief Asigna el problema de autovalores a resolver.
+//! @brief Asigna el problema de eigenvalues a resolver.
 bool XC::FullGenEigenSolver::setEigenSOE(FullGenEigenSOE &thesoe)
   { return setEigenSOE(&thesoe); }
 

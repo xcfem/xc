@@ -34,14 +34,14 @@
 //! @brief Constructor.
 XC::BandArpackppSolver::BandArpackppSolver(void)
 :EigenSolver(EigenSOLVER_TAGS_BandArpackppSolver),
- theSOE(nullptr), autovalores(1), autovectores(1,Vector()) {}
+ theSOE(nullptr), eigenvalues(1), autovectores(1,Vector()) {}
 
 //! @brief Constructor.
 XC::BandArpackppSolver::BandArpackppSolver(const int &nModes)
  :EigenSolver(EigenSOLVER_TAGS_BandArpackppSolver,nModes),
- theSOE(nullptr), autovalores(nModes), autovectores(nModes,Vector()) {}
+ theSOE(nullptr), eigenvalues(nModes), autovectores(nModes,Vector()) {}
 
-//! @brief Resuelve para todos los autovalores del problema.
+//! @brief Resuelve para todos los eigenvalues del problema.
 int XC::BandArpackppSolver::solve(void)
   {return solve(theSOE->size);}
 
@@ -62,8 +62,8 @@ ARbdNonSymMatrix<double, double> creaARbdNonSymMatrix(const msp_double &m,XC::Ve
 
 void XC::BandArpackppSolver::setup_autos(const size_t &nmodos,const size_t &n)
   {
-    if(autovalores.size()!=nmodos)
-      autovalores.resize(nmodos);
+    if(eigenvalues.size()!=nmodos)
+      eigenvalues.resize(nmodos);
     if(autovectores.size()!=nmodos)
       autovectores.resize(nmodos);
     for(size_t i=0;i<nmodos;i++)
@@ -73,9 +73,9 @@ void XC::BandArpackppSolver::setup_autos(const size_t &nmodos,const size_t &n)
 ARluNonSymGenEig<double> getEigenProblem(const int &nmodes,ARbdNonSymMatrix<double, double> &ak,ARbdNonSymMatrix<double, double> &am,const double &shift)
   {
     if(shift<0.0)
-      return ARluNonSymGenEig<double>(nmodes, ak, am); //Los autovalores más grandes.
+      return ARluNonSymGenEig<double>(nmodes, ak, am); //Los eigenvalues más grandes.
     else
-      return ARluNonSymGenEig<double>(nmodes, ak, am,shift); //Los autovalores más proximos a shift.
+      return ARluNonSymGenEig<double>(nmodes, ak, am,shift); //Los eigenvalues más proximos a shift.
   }
 
 
@@ -121,7 +121,7 @@ int XC::BandArpackppSolver::solve(int nModes)
               {
                 setup_autos(nconv,n);
                 for(size_t i=0; i<nconv; i++)
-                  autovalores[i]= dprob.EigenvalueReal(i);
+                  eigenvalues[i]= dprob.EigenvalueReal(i);
 
                 for(size_t i=0; i<nconv; i++)
                   for(int j=0; j<n;j++)
@@ -134,7 +134,7 @@ int XC::BandArpackppSolver::solve(int nModes)
     return retval;
   }
 
-//! @brief Asigna el problema de autovalores a resolver.
+//! @brief Asigna el problema de eigenvalues a resolver.
 bool XC::BandArpackppSolver::setEigenSOE(EigenSOE *soe)
   {
     bool retval= false;
@@ -149,7 +149,7 @@ bool XC::BandArpackppSolver::setEigenSOE(EigenSOE *soe)
     return retval;
   }
 
-//! @brief Asigna el problema de autovalores a resolver.
+//! @brief Asigna el problema de eigenvalues a resolver.
 bool XC::BandArpackppSolver::setEigenSOE(BandArpackppSOE &theBandSOE)
   { return setEigenSOE(&theBandSOE); }
 
@@ -173,7 +173,7 @@ const double &XC::BandArpackppSolver::getEigenvalue(int mode) const
         std::cerr << "BandArpackppSolver::getEigenvalue() -- mode " 
                   << mode << " is out of range (1 - " << numModes << ")\n";
     else
-      retval= autovalores[mode-1];
+      retval= eigenvalues[mode-1];
     return retval;
   }
 

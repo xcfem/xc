@@ -74,7 +74,7 @@ namespace XC {
 
 //! @ingroup TipoAnalisis
 //
-//! @brief Análisis de autovalores y vectores propios.
+//! @brief Análisis de eigenvalues y vectores propios.
 class EigenAnalysis : public Analysis
   {
   protected:
@@ -99,7 +99,7 @@ class EigenAnalysis : public Analysis
     Matrix getEigenvectors(void) const;
     Matrix getNormalizedEigenvectors(void) const;
 
-    //Autovalores.
+    //Eigenvalues.
     virtual const double &getEigenvalue(int mode) const;
     double getPulsacion(int mode) const;
     double getPeriodo(int mode) const;
