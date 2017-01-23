@@ -35,7 +35,7 @@
 
 namespace XC {
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Inelastic Element - concentrated hinge model, Fi - Fj interaction
 //!  at each ends using yield surfaces

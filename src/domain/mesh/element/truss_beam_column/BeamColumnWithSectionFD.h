@@ -36,9 +36,9 @@
 
 namespace XC {
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra con material SeccionBarraPrismatica
+//! @brief Beam-column element with SeccionBarraPrismatica material
 class BeamColumnWithSectionFD : public Element1D
   {
   protected:

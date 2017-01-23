@@ -57,7 +57,7 @@ class SisRef;
 
 //! \ingroup Preprocessor
 //
-//! \defgroup Cad Generación de la geometría del modelo.
+//! @defgroup Cad Model geometry (block topology).
 //
 //! @ingroup Cad
 //

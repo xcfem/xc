@@ -32,7 +32,7 @@
 namespace XC {
 class Set;
 
-//! @defgroup POST_PROCESS Clases para el post-proceso.
+//! @defgroup POST_PROCESS Post processing.
 //
 //! @ingroup POST_PROCESS
 //

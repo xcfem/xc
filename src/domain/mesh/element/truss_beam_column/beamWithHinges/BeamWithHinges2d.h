@@ -67,7 +67,7 @@ class CrdTransf2d;
 class Response;
 class Renderer;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Barra con rótulas en los extremos para problemas bidimensionales.
 class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d

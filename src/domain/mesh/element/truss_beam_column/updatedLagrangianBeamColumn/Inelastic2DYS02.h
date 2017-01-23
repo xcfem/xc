@@ -32,7 +32,7 @@
 namespace XC {
 class CyclicModel;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief ??.
 class Inelastic2DYS02 : public InelasticYS2DGNL

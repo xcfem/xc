@@ -51,9 +51,9 @@ class Constraint;
 class ProblemaEF;
 class FE_Datastore;
 
-//!  @defgroup Mdlr Preprocessor.
+//!  @defgroup Preprocessor Preprocessor.
 
-//!  \ingroup Mdlr
+//!  \ingroup Preprocessor
 //! 
 //!  \brief Finite element model generation.
 //!  

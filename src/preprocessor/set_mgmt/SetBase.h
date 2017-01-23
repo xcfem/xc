@@ -31,7 +31,7 @@
 
 //!  \ingroup Preprocessor
 //! 
-//!  \defgroup Set Manejo de conjuntos.
+//!  \defgroup Set Set management.
 
 #include "preprocessor/EntMdlrBase.h"
 #include "preprocessor/ParamMallado.h"

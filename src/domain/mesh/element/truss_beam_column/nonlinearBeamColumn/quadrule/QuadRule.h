@@ -70,9 +70,9 @@ namespace XC {
 class Vector;
 class Matrix;
 
-//! \ingroup ElemBarraNL
+//! \ingroup OneDimensionalElemNL
 //
-//! @defgroup Cuadratura Integración de campos en barras NL.
+//! @defgroup Cuadratura Function integration over the element domain.
 //!
 //! \ingroup Cuadratura
 //

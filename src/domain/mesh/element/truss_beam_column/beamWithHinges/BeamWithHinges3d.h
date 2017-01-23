@@ -67,7 +67,7 @@ class SeccionBarraPrismatica;
 class Response;
 class Renderer;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Barra con rótulas en los extremos para problemas tridimensionales.
 class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d

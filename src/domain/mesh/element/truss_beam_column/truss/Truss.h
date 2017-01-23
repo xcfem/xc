@@ -71,7 +71,7 @@ namespace XC {
 class Channel;
 class UniaxialMaterial;
 
-//! \ingroup ElemBarraArt
+//! \ingroup OneDimensionalElemArt
 //
 //! @brief Barra articulada.
 class Truss : public TrussBase

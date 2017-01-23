@@ -67,7 +67,7 @@ namespace XC {
 class Channel;
 class UniaxialMaterial;
 
-//! \ingroup ElemBarraArt
+//! \ingroup OneDimensionalElemArt
 //
 //! @brief Elemento de tipo barra articulada con formulación corrotacional.
 class CorotTruss: public CorotTrussBase

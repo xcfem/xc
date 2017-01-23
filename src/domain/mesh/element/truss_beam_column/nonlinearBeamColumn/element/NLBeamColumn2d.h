@@ -82,13 +82,13 @@ namespace XC {
 class Response;
 class CrdTransf2d;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
-//! @defgroup ElemBarraNL Elementos barra no lineales NL.
+//! @defgroup OneDimensionalElemNL Nonlinear beam-column bidimensional elements.
 //!
-//! \ingroup ElemBarraNL
+//! \ingroup OneDimensionalElemNL
 //
-//! @brief Elemento barra no lineal para problemas bidimensionales.
+//! @brief Nonlinear beam-column bidimensional elements.
 class NLBeamColumn2d: public NLForceBeamColumn2dBase
   {
     int maxSubdivisions;

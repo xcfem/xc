@@ -67,7 +67,7 @@
 namespace XC {
 class CrdTransf2d;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Elemento barra 02 para problemas bidimensionales.
 class beam2d02 : public beam2d

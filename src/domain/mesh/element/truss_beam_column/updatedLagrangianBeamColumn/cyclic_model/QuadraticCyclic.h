@@ -32,7 +32,7 @@
 #include <utility/matrix/Matrix.h>
 
 namespace XC {
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief ??.
 class QuadraticCyclic : public CyclicModel

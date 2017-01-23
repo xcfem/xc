@@ -64,9 +64,9 @@ class FVector;
 class CrdTransf;
 class Vector;
 
-//! \ingroup ElemBarraF
+//! \ingroup OneDimensionalElemF
 //
-//! @defgroup BeamInteg Integración de campos en elementos barra.
+//! @defgroup BeamInteg Function integration over the element domain.
 //!
 //! \ingroup BeamInteg
 //

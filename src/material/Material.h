@@ -77,7 +77,7 @@ class Response;
 class MaterialLoader;
 class ID;
 
-//!  @defgroup Mat Modelización de materiales.
+//!  @defgroup Mat Material models (constitutive equations).
 
 //! @ingroup Mat
 //

@@ -35,13 +35,13 @@ namespace XC {
 class Node;
 class Material;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
-//! @defgroup ElemBarraArt Elementos de tipo barra articulada.
+//! @defOneDimensionalElemArt Truss elements.
 //!
-//! \ingroup ElemBarraArt
+//! \ingroup OneDimensionalElemArt
 //
-//! @brief Clase base para los elementos de tipo barra articulada.
+//! @brief Base class for truss elements.
 class ProtoTruss : public Element1D
   {
   protected:

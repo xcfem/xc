@@ -70,7 +70,7 @@ class CrdTransf2d;
 class Response;
 class GaussQuadRule1d01;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Elemento barra con material de tipo SeccionBarraPrismatica para problemas bidimensionales.
 class DispBeamColumn2d : public BeamColumnWithSectionFDTrf2d

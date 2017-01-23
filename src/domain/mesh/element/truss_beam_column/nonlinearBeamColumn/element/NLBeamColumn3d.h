@@ -77,7 +77,7 @@ namespace XC {
 class Response;
 class GaussLobattoQuadRule1d01;
 
-//! \ingroup ElemBarraNL
+//! \ingroup OneDimensionalElemNL
 //
 //! @brief Elemento barra no lineal para problemas tridimensionales.
 class NLBeamColumn3d: public  NLForceBeamColumn3dBase

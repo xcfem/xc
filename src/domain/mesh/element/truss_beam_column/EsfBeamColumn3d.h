@@ -39,7 +39,7 @@ class DbTagData;
 class FEM_ObjectBroker;
 class CommParameters;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Esfuerzos en un elemento barra tridimensional.
 class EsfBeamColumn3d: public Vector

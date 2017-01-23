@@ -67,7 +67,7 @@
 namespace XC {
 class Channel;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Elemento barra 03 para problemas bidimensionales.
 class beam2d03 : public beam2d

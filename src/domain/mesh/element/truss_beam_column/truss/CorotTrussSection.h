@@ -67,7 +67,7 @@ namespace XC {
 class Channel;
 class SectionForceDeformation;
 
-//! \ingroup ElemBarraArt
+//! \ingroup OneDimensionalElemArt
 //
 //! @brief Elemento de tipo barra articulada con material de tipo SectionForceDeformation
 //! y formulación corrotacional.

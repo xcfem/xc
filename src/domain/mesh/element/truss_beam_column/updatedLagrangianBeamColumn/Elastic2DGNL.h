@@ -64,7 +64,7 @@
 #include "domain/mesh/element/truss_beam_column/updatedLagrangianBeamColumn/UpdatedLagrangianBeam2D.h"
 
 namespace XC {
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Elemento barra con formulación lagrangiana para problemas bidimensionales.
 class Elastic2dGNL : public UpdatedLagrangianBeam2D  

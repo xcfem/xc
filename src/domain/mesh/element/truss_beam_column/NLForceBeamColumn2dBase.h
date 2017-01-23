@@ -37,9 +37,9 @@
 
 namespace XC {
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem Nonlinear beam-column bidimensional elements.
 //
-//! @brief Elemento barra no lineal con material de tipo SeccionBarraPrismatica para problemas bidimensionales.
+//! @brief Nonlinear beam-column bidimensional elements.
 class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
   {
     NLForceBeamColumn2dBase &operator=(const NLForceBeamColumn2dBase &);

@@ -72,7 +72,7 @@ class Information;
 class Response;
 class CrossSectionProperties3d;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Elemento barra para problemas bidimensionales.
 class ElasticBeam2d: public ProtoBeam2d

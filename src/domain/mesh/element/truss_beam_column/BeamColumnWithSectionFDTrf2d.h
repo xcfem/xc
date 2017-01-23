@@ -37,7 +37,7 @@ class Node;
 class CrdTransf;
 class CrdTransf2d;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Elemento barra con material de tipo SectionForceDeformation  para problemas bidimensionales.
 class BeamColumnWithSectionFDTrf2d: public BeamColumnWithSectionFD

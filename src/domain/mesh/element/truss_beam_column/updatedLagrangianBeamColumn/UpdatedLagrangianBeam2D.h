@@ -69,7 +69,7 @@
 namespace XC {
 class Response;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Elemento barra con formulación lagrangiana para problemas bidimensionales.
 class UpdatedLagrangianBeam2D : public Element1D

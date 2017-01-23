@@ -33,7 +33,7 @@
 #include "material/section/repres/CrossSectionProperties3d.h"
 
 namespace XC {
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Clase base para elementos viga en
 //! problemas tridimensionales.

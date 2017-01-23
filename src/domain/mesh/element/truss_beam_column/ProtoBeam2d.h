@@ -34,7 +34,7 @@
 namespace XC {
 class CrdTransf2d;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Clase base para elementos barra en problemas bidimensionales.
 class ProtoBeam2d : public Element1D

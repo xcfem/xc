@@ -30,7 +30,7 @@
 #include "CyclicModel.h"
 
 namespace XC {
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief ??.
 class LinearCyclic : public CyclicModel

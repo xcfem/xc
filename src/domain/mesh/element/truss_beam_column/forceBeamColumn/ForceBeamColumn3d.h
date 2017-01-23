@@ -61,7 +61,7 @@ class ElementalLoad;
 class CrdTransf3d;
 class BeamIntegration;
 
-//! \ingroup ElemBarraF
+//! \ingroup OneDimensionalElemF
 //
 //! @brief Elemento barra no lineal con material de tipo SeccionBarraPrismatica para problemas tridimensionales.
 class ForceBeamColumn3d: public NLForceBeamColumn3dBase

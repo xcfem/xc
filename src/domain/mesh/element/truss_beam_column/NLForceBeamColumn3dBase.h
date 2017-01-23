@@ -38,7 +38,7 @@
 
 namespace XC {
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Elemento barra no lineal con material de tipo SeccionBarraPrismatica para problemas tridimensionales.
 class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d

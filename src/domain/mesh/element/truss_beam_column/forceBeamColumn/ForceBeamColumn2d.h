@@ -61,11 +61,11 @@ class ElementalLoad;
 class BeamIntegration;
 class SeccionBarraPrismatica;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
-//! @defgroup ElemBarraF Elementos barra no lineales F.
+//! @defgroup OneDimensionalElemF Force based nonlinear beam-column element.
 //!
-//! \ingroup ElemBarraF
+//! \ingroup OneDimensionalElemF
 //
 //! @brief Elemento barra no lineal con material de tipo SeccionBarraPrismatica para problemas bidimensionales.
 class ForceBeamColumn2d: public NLForceBeamColumn2dBase

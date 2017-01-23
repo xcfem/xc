@@ -72,7 +72,7 @@ class Information;
 class Response;
 class SectionForceDeformation;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Elemento barra para problemas tridimensionales.
 class ElasticBeam3d : public ProtoBeam3d

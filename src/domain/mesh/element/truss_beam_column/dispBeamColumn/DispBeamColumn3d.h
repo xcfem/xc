@@ -70,7 +70,7 @@ class SeccionBarraPrismatica;
 class CrdTransf3d;
 class Response;
 
-//! \ingroup ElemBarra
+//! \ingroup OneDimensionalElem
 //
 //! @brief Elemento barra con material de tipo SeccionBarraPrismatica  para problemas tridimensionales.
 class DispBeamColumn3d : public BeamColumnWithSectionFDTrf3d
