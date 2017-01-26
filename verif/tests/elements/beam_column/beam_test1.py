@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # Test from Ansys manual VM2
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 # Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 98, problem 4
 import xc_base

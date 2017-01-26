@@ -352,7 +352,8 @@ class CrackControlBaseVars(CFNMyMz):
   :ivar steelStress: maximum stress in the reinforcement bars
   '''
   def __init__(self,combName= 'nil',CF= -1.0,N= 0.0, My= 0.0, Mz= 0.0, steelStress= 0.0):
-    super(CrackControlBaseVars,self).__init__(combName,CF,N,My)
+#    super(CrackControlBaseVars,self).__init__(combName,CF,N,My) #Jan 26th 2017
+    super(CrackControlBaseVars,self).__init__(combName,CF,N,My,Mz)
     self.steelStress= steelStress #Stress in rebars.
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.

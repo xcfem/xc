@@ -13,21 +13,22 @@ from materials import typical_materials
 from materials import sectionProperties as sp
 
 class CircularSection(sp.sectionProperties):
-  '''Circular section geometric parameters
+  '''Geometric parameters of a circular or circular hollow section
 
   :ivar name:      name identifying the section
-  :ivar r:         radius
+  :ivar Rext:      external radius
+  :ivar Rint:      internal radius
    '''
   r= 0.0 # radius.
-  def __init__(self,name,r):
+  def __init__(self,name,Rext):
     super(CircularSection,self).__init__(name)
-    self.r= r
+    self.Rext= Rext
   def A(self):
     ''':returns: cross-sectional area of the section'''
-    return math.pi*self.r*self.r
+    return math.pi*self.Rext*self.Rext
   def Iy(self):
     ''':returns: second moment of area about the local y-axis'''
-    return 1.0/4.0*math.pi*self.r**4
+    return 1.0/4.0*math.pi*self.Rext**4
   def Iz(self):
     ''':returns: second moment of area about the local z-axis'''
     return self.Iy()
