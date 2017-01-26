@@ -50,8 +50,18 @@ class ControlVarDiagram(cd.ColoredDiagram):
     if self.attributeName <> "intForce":
       attributeNameSect1= self.attributeName + 'Sect1' # Values in the start node.
       attributeNameSect2= self.attributeName + 'Sect2' # Values in the end node.
-      value1= getattr(elem.getProp(attributeNameSect1), self.component)
-      value2= getattr(elem.getProp(attributeNameSect2), self.component)
+      if ('crack' in self.attributeName.lower()):
+        if (self.component == 'CF'):
+          value1=elem.getProp(attributeNameSect1).getCF()
+          value2=elem.getProp(attributeNameSect2).getCF()
+        elif (self.component == 'MaxSteelStress'):
+          value1=elem.getProp(attributeNameSect1).getMaxSteelStress()
+          value2=elem.getProp(attributeNameSect2).getMaxSteelStress()
+        else:
+          print 'component ',self.component,' not implemented'
+      else:
+        value1= getattr(elem.getProp(attributeNameSect1), self.component)
+        value2= getattr(elem.getProp(attributeNameSect2), self.component)
     else:
       if(self.component == 'N'):
         value1=elem.getN1
