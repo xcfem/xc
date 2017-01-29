@@ -25,15 +25,15 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 
-#include "aux_mallado.h"
+#include "aux_meshing.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/NodePtrsWithIDs.h"
 #include <domain/mesh/node/Node.h>
 #include "preprocessor/cad/matrices/TritrizPtrNod.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 
-//! @ brief Malla una capa (i= cte).
-void malla_quad4N_en_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,XC::TritrizPtrElem::var_ref_capa_i_cte &elementos)
+//! @ brief Meshes one layer (i= constant).
+void meshing_quad4N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,XC::TritrizPtrElem::var_ref_capa_i_cte &elementos)
   {
     const size_t nfilas= nodos.getNumFilas();
     const size_t ncols= nodos.getNumCols();
@@ -54,8 +54,8 @@ void malla_quad4N_en_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_
         }
   }
 
-//! @ brief Malla una fila (j= cte).
-void malla_quad4N_en_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodos,XC::TritrizPtrElem::var_ref_capa_j_cte &elementos)
+//! @ brief Meshes one row (j= constant).
+void meshing_quad4N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodos,XC::TritrizPtrElem::var_ref_capa_j_cte &elementos)
   {
     const size_t ncapas= nodos.GetCapas();
     const size_t ncols= nodos.getNumCols();
@@ -73,8 +73,8 @@ void malla_quad4N_en_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_
         }
   }
 
-//! @ brief Malla una columna (k= cte).
-void malla_quad4N_en_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodos,XC::TritrizPtrElem::var_ref_capa_k_cte &elementos)
+//! @ brief Meshes one column (k= constant).
+void meshing_quad4N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodos,XC::TritrizPtrElem::var_ref_capa_k_cte &elementos)
   {
     const size_t ncapas= nodos.GetCapas();
     const size_t nfilas= nodos.getNumFilas();
@@ -92,7 +92,7 @@ void malla_quad4N_en_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_
         }
   }
 
-void malla_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elementos)
+void meshing_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elementos)
   {
     const size_t ncapas= nodos.GetCapas();
     const size_t nfilas= nodos.getNumFilas();
@@ -103,41 +103,41 @@ void malla_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &no
           {
             elementos= XC::TritrizPtrElem(ncapas,XC::MatrizPtrElem(nfilas-1,ncols-1));
             XC::TritrizPtrElem::var_ref_capa_i_cte capa_elem= elementos.GetVarRefCapaICte(1);
-            malla_quad4N_en_jk(e,nodos.GetConstRefCapaICte(1),capa_elem);
+            meshing_quad4N_on_jk(e,nodos.GetConstRefCapaICte(1),capa_elem);
           }
         else if(nodos.EsCapaJCte())
           {
             elementos= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas,ncols-1));
             XC::TritrizPtrElem::var_ref_capa_j_cte capa_elem= elementos.GetVarRefCapaJCte(1);
-            malla_quad4N_en_ik(e,nodos.GetConstRefCapaJCte(1),capa_elem);
+            meshing_quad4N_on_ik(e,nodos.GetConstRefCapaJCte(1),capa_elem);
           }
         else if(nodos.EsCapaKCte())
           {
             elementos= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas-1,ncols));
             XC::TritrizPtrElem::var_ref_capa_k_cte capa_elem= elementos.GetVarRefCapaKCte(1);
-            malla_quad4N_en_ij(e,nodos.GetConstRefCapaKCte(1),capa_elem);
+            meshing_quad4N_on_ij(e,nodos.GetConstRefCapaKCte(1),capa_elem);
           }
       }
     else  //Hay punteros nulos.
-      std::cerr << "malla_quad4N_bidimensional; existen punteros a nodo nulos." << std::endl;
+      std::cerr << "meshing_quad4N_bidimensional; existen punteros a nodo nulos." << std::endl;
   }
 
-//Coloca el elemento en la malla being passed as parameter.
-XC::TritrizPtrElem XC::coloca_quad4N_en_malla(const Element &e,const TritrizPtrNod &nodos,dir_mallado dm)
+//! @brief Places the element on the mesh being passed as parameter.
+XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &nodos,meshing_dir dm)
   {
     const size_t ncapas= nodos.GetCapas();
     const size_t nfilas= nodos.getNumFilas();
     const size_t ncols= nodos.getNumCols();
-    const size_t dim_malla= nodos.GetDim();
+    const size_t mesh_dim= nodos.GetDim();
 
 
     TritrizPtrElem retval;
-    if(dim_malla<2 && (e.GetNivelVerborrea() > 4))
-      std::cerr << "coloca_quad4N_en_malla; se necesita una malla bidimensional, no se pudieron crear elementos." << std::endl;
+    if(mesh_dim<2 && (e.GetNivelVerborrea() > 4))
+      std::cerr << "put_quad4N_on_mesh; bidimensional mesh needed, no se pudieron crear elementos." << std::endl;
     else
       {
-        if(dim_malla<3) //Malla bidimensional
-          malla_quad4N_bidimensional(e,nodos,retval);
+        if(mesh_dim<3) //Bidimensional mesh
+          meshing_quad4N_bidimensional(e,nodos,retval);
         else
           {
             switch(dm)
@@ -151,7 +151,7 @@ XC::TritrizPtrElem XC::coloca_quad4N_en_malla(const Element &e,const TritrizPtrN
                     for(size_t i=1;i<=ncapas;i++)
                       {
                         TritrizPtrElem::var_ref_capa_i_cte capa_elem= retval.GetVarRefCapaICte(i);
-                        malla_quad4N_en_jk(e,nodos.GetConstRefCapaICte(i),capa_elem);
+                        meshing_quad4N_on_jk(e,nodos.GetConstRefCapaICte(i),capa_elem);
                       }
                   }
                 break;
@@ -164,7 +164,7 @@ XC::TritrizPtrElem XC::coloca_quad4N_en_malla(const Element &e,const TritrizPtrN
                     for(size_t j=1;j<=nfilas;j++)
                       {
                         TritrizPtrElem::var_ref_capa_j_cte capa_elem= retval.GetVarRefCapaJCte(j);
-                        malla_quad4N_en_ik(e,nodos.GetConstRefCapaJCte(j),capa_elem);
+                        meshing_quad4N_on_ik(e,nodos.GetConstRefCapaJCte(j),capa_elem);
                       }
                   }
                 break;
@@ -177,7 +177,7 @@ XC::TritrizPtrElem XC::coloca_quad4N_en_malla(const Element &e,const TritrizPtrN
                     for(size_t k=1;k<=ncols;k++)
                       {
                         TritrizPtrElem::var_ref_capa_k_cte capa_elem= retval.GetVarRefCapaKCte(k);
-                        malla_quad4N_en_ij(e,nodos.GetConstRefCapaKCte(k),capa_elem);
+                        meshing_quad4N_on_ij(e,nodos.GetConstRefCapaKCte(k),capa_elem);
                       }
                   }
                 break;
@@ -189,25 +189,25 @@ XC::TritrizPtrElem XC::coloca_quad4N_en_malla(const Element &e,const TritrizPtrN
     return retval;
   }
 
-//! @ brief Malla una capa (i= cte).
-void malla_quad9N_en_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,XC::TritrizPtrElem::var_ref_capa_i_cte &elementos)
+//! @ brief Meshes one layer (i= constant).
+void meshing_quad9N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,XC::TritrizPtrElem::var_ref_capa_i_cte &elementos)
   {
-    std::cerr << "malla_quad9N_en_jk no implementada." << std::endl;
+    std::cerr << "meshing_quad9N_on_jk no implementada." << std::endl;
   }
 
-//! @ brief Malla una fila (j= cte).
-void malla_quad9N_en_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodos,XC::TritrizPtrElem::var_ref_capa_j_cte &elementos)
+//! @ brief Meshes one row (j= constant).
+void meshing_quad9N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodos,XC::TritrizPtrElem::var_ref_capa_j_cte &elementos)
   {
-    std::cerr << "malla_quad9N_en_ik no implementada." << std::endl;
+    std::cerr << "meshing_quad9N_on_ik no implementada." << std::endl;
   }
 
-//! @ brief Malla una columna (k= cte).
-void malla_quad9N_en_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodos,XC::TritrizPtrElem::var_ref_capa_k_cte &elementos)
+//! @ brief Meshes one column (k= constant).
+void meshing_quad9N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodos,XC::TritrizPtrElem::var_ref_capa_k_cte &elementos)
   {
-    std::cerr << "malla_quad9N_en_ij no implementada." << std::endl;
+    std::cerr << "meshing_quad9N_on_ij no implementada." << std::endl;
   }
 
-void malla_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elementos)
+void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elementos)
   {
     const size_t ncapas= nodos.GetCapas();
     const size_t nfilas= nodos.getNumFilas();
@@ -218,41 +218,41 @@ void malla_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &no
           {
             elementos= XC::TritrizPtrElem(ncapas,XC::MatrizPtrElem(nfilas-1,ncols-1));
             XC::TritrizPtrElem::var_ref_capa_i_cte capa_elem= elementos.GetVarRefCapaICte(1);
-            malla_quad9N_en_jk(e,nodos.GetConstRefCapaICte(1),capa_elem);
+            meshing_quad9N_on_jk(e,nodos.GetConstRefCapaICte(1),capa_elem);
           }
         else if(nodos.EsCapaJCte())
           {
             elementos= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas,ncols-1));
             XC::TritrizPtrElem::var_ref_capa_j_cte capa_elem= elementos.GetVarRefCapaJCte(1);
-            malla_quad9N_en_ik(e,nodos.GetConstRefCapaJCte(1),capa_elem);
+            meshing_quad9N_on_ik(e,nodos.GetConstRefCapaJCte(1),capa_elem);
           }
         else if(nodos.EsCapaKCte())
           {
             elementos= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas-1,ncols));
             XC::TritrizPtrElem::var_ref_capa_k_cte capa_elem= elementos.GetVarRefCapaKCte(1);
-            malla_quad9N_en_ij(e,nodos.GetConstRefCapaKCte(1),capa_elem);
+            meshing_quad9N_on_ij(e,nodos.GetConstRefCapaKCte(1),capa_elem);
           }
       }
     else  //Hay punteros nulos.
-      std::cerr << "malla_quad9N_bidimensional; existen punteros a nodo nulos." << std::endl;
+      std::cerr << "meshing_quad9N_bidimensional; existen punteros a nodo nulos." << std::endl;
   }
 
-//Coloca el elemento en la malla being passed as parameter.
-XC::TritrizPtrElem XC::coloca_quad9N_en_malla(const Element &e,const TritrizPtrNod &nodos,dir_mallado dm)
+//! @brief Places the element on the mesh being passed as parameter.
+XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &nodos,meshing_dir dm)
   {
     const size_t ncapas= nodos.GetCapas();
     const size_t nfilas= nodos.getNumFilas();
     const size_t ncols= nodos.getNumCols();
-    const size_t dim_malla= nodos.GetDim();
+    const size_t mesh_dim= nodos.GetDim();
 
 
     TritrizPtrElem retval;
-    if(dim_malla<2 && (e.GetNivelVerborrea() > 4))
-      std::cerr << "coloca_quad9N_en_malla; se necesita una malla bidimensional, no se pudieron crear elementos." << std::endl;
+    if(mesh_dim<2 && (e.GetNivelVerborrea() > 4))
+      std::cerr << "put_quad9N_on_mesh; bidimensional mesh needed, can't create elements." << std::endl;
     else
       {
-        if(dim_malla<3) //Malla bidimensional
-          malla_quad9N_bidimensional(e,nodos,retval);
+        if(mesh_dim<3) //Bidimensional mesh
+          meshing_quad9N_bidimensional(e,nodos,retval);
         else
           {
             switch(dm)
@@ -266,7 +266,7 @@ XC::TritrizPtrElem XC::coloca_quad9N_en_malla(const Element &e,const TritrizPtrN
                     for(size_t i=1;i<=ncapas;i++)
                       {
                         TritrizPtrElem::var_ref_capa_i_cte capa_elem= retval.GetVarRefCapaICte(i);
-                        malla_quad9N_en_jk(e,nodos.GetConstRefCapaICte(i),capa_elem);
+                        meshing_quad9N_on_jk(e,nodos.GetConstRefCapaICte(i),capa_elem);
                       }
                   }
                 break;
@@ -279,7 +279,7 @@ XC::TritrizPtrElem XC::coloca_quad9N_en_malla(const Element &e,const TritrizPtrN
                     for(size_t j=1;j<=nfilas;j++)
                       {
                         TritrizPtrElem::var_ref_capa_j_cte capa_elem= retval.GetVarRefCapaJCte(j);
-                        malla_quad9N_en_ik(e,nodos.GetConstRefCapaJCte(j),capa_elem);
+                        meshing_quad9N_on_ik(e,nodos.GetConstRefCapaJCte(j),capa_elem);
                       }
                   }
                 break;
@@ -292,7 +292,7 @@ XC::TritrizPtrElem XC::coloca_quad9N_en_malla(const Element &e,const TritrizPtrN
                     for(size_t k=1;k<=ncols;k++)
                       {
                         TritrizPtrElem::var_ref_capa_k_cte capa_elem= retval.GetVarRefCapaKCte(k);
-                        malla_quad9N_en_ij(e,nodos.GetConstRefCapaKCte(k),capa_elem);
+                        meshing_quad9N_on_ij(e,nodos.GetConstRefCapaKCte(k),capa_elem);
                       }
                   }
                 break;

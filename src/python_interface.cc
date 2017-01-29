@@ -53,14 +53,14 @@ BOOST_PYTHON_MODULE(xc)
     class_<XC::MeshComponent, bases<XC::ContinuaReprComponent>, boost::noncopyable >("MeshComponent", no_init)
        ;
 
-    export_material_base(); //Exposición de los materiales.
-    export_material_uniaxial(); //Exposición de los materiales.
-    export_material_nD(); //Exposición de los materiales.
-    export_material_section(); //Exposición de los materiales.
-    export_material_fiber_section(); //Exposición de los materiales.
-    export_domain_mesh(); //Exposición de la malla.
-    export_domain(); //Exposición del dominio.
-    export_preprocessor_loaders();//Exposicion del preprocessor.
+    export_material_base(); //Materials exposition.
+    export_material_uniaxial(); //Materials exposition.
+    export_material_nD(); //Materials exposition.
+    export_material_section(); //Materials exposition.
+    export_material_fiber_section(); //Materials exposition.
+    export_domain_mesh(); //Mesh exposition.
+    export_domain(); //Domain exposition.
+    export_preprocessor_loaders();//Preprocessor exposition.
     export_preprocessor_build_model();
     export_preprocessor_sets();
     export_preprocessor_main();

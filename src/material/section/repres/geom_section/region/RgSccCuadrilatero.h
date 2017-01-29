@@ -67,7 +67,7 @@ class RgSccCuadrilatero: public RgQuadCell
     int setTileSizeJK(const double &size);
     int setTileSize(const double &sizeIJ, const double &sizeJK);
     
-    const Rejilla2d &Malla(void) const;
+    const Rejilla2d &getMesh(void) const;
     const VectorCells &getCells(void) const;
     RegionSecc *getCopy(void) const;
 

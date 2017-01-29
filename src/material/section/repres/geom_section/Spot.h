@@ -25,7 +25,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //Spot.h
-//Objeto punto de la representación de secciones
 
 #ifndef SPOT_H
 #define SPOT_H
@@ -40,7 +39,7 @@ class Eje;
 
 //! @ingroup MATSCCEntGeom
 //
-//! @brief Punto en un espacio bidimensional.
+//! @brief Point object for section geometry definition.
 class Spot: public EntGeomSection
   {
   private:

@@ -33,7 +33,7 @@
 #include "preprocessor/set_mgmt/SetEstruct.h"
 #include "preprocessor/cad/matrices/TritrizPtrNod.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
-#include "preprocessor/ParamMallado.h"
+#include "preprocessor/MeshingParams.h"
 
 class BND3d;
 class Pos3d;
@@ -54,7 +54,7 @@ class EntMdlr: public SetEstruct
   {
   private:
     size_t idx; //!< @brief Índice del objeto (se emplea sólo para numerar entidades para VTK).
-    bool genMalla; //!< Verdadero si el punto ha de mallarse (crear un nodo). Por ejemplo es falso cuando es un punto intermedio de una línea.
+    bool doGenMesh; //!< True if the point must be meshed (node will be created). Por ejemplo es falso cuando es un punto intermedio de una línea.
   protected:
     TritrizPtrNod nodos;
     TritrizPtrElem elementos;
@@ -64,7 +64,7 @@ class EntMdlr: public SetEstruct
     virtual void actualiza_topologia(void)= 0;
     void crea_nodos(const TritrizPos3d &);
     Node *crea_nodo(const Pos3d &pos,size_t i=1,size_t j=1, size_t k=1);
-    bool crea_elementos(dir_mallado dm);
+    bool crea_elementos(meshing_dir dm);
     Pnt *crea_punto(const Pos3d &);
     void crea_puntos(const MatrizPos3d &);
     SetEstruct *crea_set_fila(const RangoTritriz &,const std::string &);
@@ -141,8 +141,8 @@ class EntMdlr: public SetEstruct
     virtual int getMEDCellType(void) const;
     virtual int getVtkCellType(void) const;
 
-    void setGenMalla(bool m);
-    const bool &getGenMalla(void) const;
+    void setGenMesh(bool m);
+    const bool &getGenMesh(void) const;
 
     virtual std::set<SetBase *> get_sets(void) const= 0;
 

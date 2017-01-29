@@ -32,7 +32,7 @@
 #define QuadBase4N_h
 
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
-#include "preprocessor/cad/aux_mallado.h"
+#include "preprocessor/cad/aux_meshing.h"
 #include "preprocessor/loaders/LoadLoader.h"
 #include "domain/load/plane/BidimStrainLoad.h"
 #include "med.h"
@@ -48,7 +48,7 @@ template <class PhysProp>
 class QuadBase4N : public ElemPlano<4,PhysProp>
   {
   protected:
-    TritrizPtrElem coloca_en_malla(const TritrizPtrNod &,dir_mallado dm) const;
+    TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
   public:
 
     QuadBase4N(int classTag,const PhysProp &pp);
@@ -85,10 +85,10 @@ XC::QuadBase4N<PhysProp>::QuadBase4N(int tag, int classTag, int node1, int node2
   }
 
 
-//! @brief Coloca el elemento en la malla being passed as parameter.
+//! @brief Put the element on the mesh being passed as parameter.
 template <class PhysProp>
-XC::TritrizPtrElem XC::QuadBase4N<PhysProp>::coloca_en_malla(const XC::TritrizPtrNod &nodos,dir_mallado dm) const
-  { return coloca_quad4N_en_malla(*this,nodos,dm); }
+XC::TritrizPtrElem XC::QuadBase4N<PhysProp>::put_on_mesh(const XC::TritrizPtrNod &nodos,meshing_dir dm) const
+  { return put_quad4N_on_mesh(*this,nodos,dm); }
 
 //! @brief Devuelve los nodos de un lado del elemento.
 template <class PhysProp>

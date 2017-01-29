@@ -20,7 +20,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDGaussModel.h
-//Información sobre la integración de Gauss de las celdas de la malla (para exportar archivos a «salome»).
 
 #ifndef MEDGAUSSMODEL_H
 #define MEDGAUSSMODEL_H
@@ -35,20 +34,20 @@ class MEDMeshing;
 
 //! @ingroup MED
 //
-//!  @brief Información sobre conjuntos de nodos y elementos.
+//!  @brief Information about Gauss model.
 class MEDGaussModel: public MEDObject
   {
   public:
     typedef MEDMEM::GAUSS_LOCALIZATION<> med_gauss_model;
   private:
-    std::string nombre; //!< nombre del conjunto.
+    std::string nombre; //!< set name.
     MED_EN::medGeometryElement tipo; //!< Tipo de celda (MED_TRIA3,MED_QUAD4,MED_POINT1,...).
     int num_nodos;
     std::vector<double> coo_nodos_ref; //!< Coordenadas de los nodos de referencia.
     int num_gauss_pt;
     std::vector<double> coo_gauss_pt; //!< Coordenadas de los puntos de gauss.
     std::vector<double> gauss_weights; //!< Coordenadas de los puntos de gauss.
-    mutable med_gauss_model *model; //!< Definición del modelo de Gauss en MEDMEM.
+    mutable med_gauss_model *model; //!< Definition of the Gauss model in MEDMEM.
   public:
     MEDGaussModel(const std::string &,const MED_EN::medGeometryElement &, const GaussModel &);
 

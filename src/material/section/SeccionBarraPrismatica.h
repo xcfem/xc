@@ -43,15 +43,10 @@ namespace XC {
 
 class DeformationPlane;
 
-//! \ingroup Mat
-//!
-//!
-//! \defgroup MATSCC Modelización de una sección transversal.
-//!
 //! \ingroup MATSCC
 //
-//! @brief Clase base para las secciones de barras prismáticas.
-//! Representa las ecuaciones consititutivas de la sección.
+//! @brief Base class for beam-column cross sections.
+//! Constitutive equations of the section.
 class SeccionBarraPrismatica: public SectionForceDeformation
   {
   public:

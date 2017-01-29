@@ -49,7 +49,7 @@ class ResponseId;
 //
 //! @ingroup MATSCCDiagInt
 //
-//! @brief Plano de deformación de una sección.
+//! @brief Deformation plane for a cross-section.
 class DeformationPlane: public Plano3d, public MovableObject
   {
   protected:

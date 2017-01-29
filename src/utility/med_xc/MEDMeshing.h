@@ -54,14 +54,14 @@ class MEDMeshing: public MEDObject
     static const std::string str_grupo_nodos;
     static const std::string str_grupo_elementos;
 
-    mutable MEDMEM::MESHING malla;
+    mutable MEDMEM::MESHING mesh;
     MEDMeshing(const MEDMeshing &);
     MEDMeshing &operator=(const MEDMeshing &);
   protected:
     void nuevo_nodo(size_t i,const std::vector<double> &coo);
 
     friend class MEDGroupInfo;
-    MEDMEM::MESHING &getMallaMED(void) const;
+    MEDMEM::MESHING &getMEDMesh(void) const;
     MEDGroupInfo *getGroupInfo(const std::string &) const;
     MEDGroupInfo *getGroupInfo(const Set &,const FieldInfo &) const;
 
@@ -80,9 +80,9 @@ class MEDMeshing: public MEDObject
     void write(const std::string &);
 
     inline const std::string getMeshName(void) const
-      { return malla.getName(); }
+      { return mesh.getName(); }
     inline void setMeshName(const std::string &str) const
-      { return malla.setName(str); }
+      { return mesh.setName(str); }
     inline MEDVertexInfo &getVertices(void)
       { return vertices; }
     inline void setVertices(const MEDVertexInfo &vtx)

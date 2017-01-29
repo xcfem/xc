@@ -27,7 +27,7 @@
 //ClosedTriangleMesh.cc
 
 #include "ClosedTriangleMesh.h"
-#include "xc_utils/src/geom/d2/MallaTriang3d.h"
+#include "xc_utils/src/geom/d2/Triang3dMesh.h"
 #include "xc_utils/src/geom/d2/Plano3d.h"
 #include "xc_utils/src/geom/d2/Triangulo3d.h"
 #include "xc_basic/src/util/mchne_eps.h"
@@ -50,21 +50,21 @@ size_t XC::ClosedTriangleMesh::GetNumFacetas(void) const { return size(); }
 XC::ClosedTriangleMesh::ClosedTriangleMesh(void)
   : GeomObj3d(), MovableObject(0), triedros(0), tol(0.0), rMax(0.0),rMin(0.0) {}
 
-XC::ClosedTriangleMesh::ClosedTriangleMesh(const Pos3d &org,const MallaTriang3d &mll)
+XC::ClosedTriangleMesh::ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &mll)
   : GeomObj3d(), MovableObject(0), triedros(mll.GetNumCaras(),Triedro3d()), tol(0.0), rMax(0.0), rMin(0.0)
   {
     const size_t nf= mll.GetNumCaras();
     static const Pos3d org3d;
     if(nf<4) return;
-    for(MallaTriang3d::Point_const_iterator i= mll.points_begin();i!=mll.points_end();i++)
+    for(Triang3dMesh::Point_const_iterator i= mll.points_begin();i!=mll.points_end();i++)
       rMax= std::max(rMax,dist(Pos3d(*i),org3d));
     rMin= 10*rMax;
-    for(MallaTriang3d::Point_const_iterator i= mll.points_begin();i!=mll.points_end();i++)
+    for(Triang3dMesh::Point_const_iterator i= mll.points_begin();i!=mll.points_end();i++)
       rMin= std::min(rMin,dist(Pos3d(*i),org3d));
     rMin/=3; //Radio de la esfera inscrita en el tetraedro cuya
              //esfera circunscrita pasa por el punto más cercano al origen.
     size_t cont= 0;
-    for(MallaTriang3d::Facet_const_iterator i= mll.facets_begin();i!=mll.facets_end();i++)
+    for(Triang3dMesh::Facet_const_iterator i= mll.facets_begin();i!=mll.facets_end();i++)
       {
         const Triangulo3d tf= mll.GetTrianguloCara(i);
         triedros[cont]= Triedro3d(org,tf);

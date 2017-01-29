@@ -52,9 +52,6 @@ namespace XC {
 class Matrix;
 class ID;
 
-//! @ingroup CCont
-//! @defgroup CContMP Condiciones de contorno multinodales.
-//
 //! @ingroup CContMP
 //
 //! @brief Multiple retained nodes constraint.

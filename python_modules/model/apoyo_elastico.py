@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, AO_O and LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
+
 # Define un apoyo elástico para el nodo cuyo tag se pasa como parámetro.
 def apoyoElasticoXYZ(iNod, iElem, matKX, matKY, matKZ):
   lmsg.error("apoyoElasticoXYZ obsoleto, emplear defApoyoXYZ.\n")

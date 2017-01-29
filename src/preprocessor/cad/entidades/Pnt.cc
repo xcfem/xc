@@ -141,10 +141,10 @@ bool XC::Pnt::Toca(const Body &b) const
 double XC::Pnt::DistanciaA2(const Pos3d &pt) const
   { return dist2(p,pt);  }
 
-//! @brief Crea los nodos de la malla.
+//! @brief Creates nodes.
 void XC::Pnt::crea_nodos(void)
   {
-    if(getGenMalla() && (NumNodos()==0))
+    if(getGenMesh() && (NumNodos()==0))
       {
         MatrizPos3d tmp(1,1,GetPos());
         TritrizPos3d ptos(1,tmp);
@@ -152,13 +152,13 @@ void XC::Pnt::crea_nodos(void)
       }
   }
 
-//! @brief Crea la malla.
-void XC::Pnt::Malla(dir_mallado dm)
+//! @brief Creates mesh.
+void XC::Pnt::genMesh(meshing_dir dm)
   {
     crea_nodos();
   }
 
-//! @brief Devuelve verdadero si el punto posee nodo (se ha mallado).
+//! @brief Returns true if the point owns a node (is meshed).
 bool XC::Pnt::tieneNodo(void) const
   {
     bool retval= false;
@@ -175,8 +175,8 @@ int XC::Pnt::getTagNode(void) const
     if(nod)
       retval= nod->getTag();
     else
-      std::cerr << "Pnt::getTagNode; el punto: '" << GetNombre()
-                << "' no posee nodo (no se ha mallado)." << std::endl;
+      std::cerr << "Pnt::getTagNode; the point: '" << GetNombre()
+                << "' has not a node (is not meshed)." << std::endl;
     return retval;
   }
 
@@ -186,8 +186,8 @@ XC::Node *XC::Pnt::getNode(void)
   {
     Node *nod= GetNodo();
     if(!nod)
-      std::cerr << "Pnt::getNode; el punto: '" << GetNombre()
-                << "' no posee nodo (no se ha mallado)." << std::endl;
+      std::cerr << "Pnt::getTagNode; the point: '" << GetNombre()
+                << "' has not a node (is not meshed)." << std::endl;
     return nod;
   }
 

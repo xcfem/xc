@@ -57,7 +57,7 @@ void XC::UniformGrid::actualiza_topologia(void)
   {
   }
 
-//! @brief Devuelve la dimensión (1,2 ó 3) de la malla.
+//! @brief Returns mesh dimension (1,2 ó 3).
 unsigned short int XC::UniformGrid::GetDimension(void) const
   {
     unsigned short int retval= 0;
@@ -67,14 +67,14 @@ unsigned short int XC::UniformGrid::GetDimension(void) const
     return retval;
   }
 
-//! @brief Devuelve el BND de la malla.
+//! @brief Returns mesh BND.
 BND3d XC::UniformGrid::Bnd(void) const
   {
     Vector3d v(Lx,Ly,Lz);
     return BND3d(org,org+v);
   }
 
-//! @brief Devuelve el centro de la malla.
+//! @brief Returns mesh centroid.
 Pos3d XC::UniformGrid::GetCentro(void) const
   { return Pos3d(org.x()+Lx/2,org.y()+Ly/2,org.z()+Lz/2); }
 
@@ -103,15 +103,15 @@ void XC::UniformGrid::add_to_sets(std::set<SetBase *> &sets)
       }
   }
 
-//! @brief Crea los nodos de la malla.
+//! @brief Creates mesh nodes.
 void XC::UniformGrid::crea_nodos(void)
   {
     TritrizPos3d ptos= crea_uniform_grid(Bnd(),ndiv_x,ndiv_y,ndiv_z);
     EntMdlr::crea_nodos(ptos);
   }
 
-//! @brief Crea la malla.
-void XC::UniformGrid::Malla(dir_mallado dm)
+//! @brief Triggers mesh creation.
+void XC::UniformGrid::genMesh(meshing_dir dm)
   {
     crea_nodos();
     crea_elementos(dm);

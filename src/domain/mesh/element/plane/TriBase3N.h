@@ -32,7 +32,7 @@
 #define TriBase3N_h
 
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
-#include "preprocessor/cad/aux_mallado.h"
+#include "preprocessor/cad/aux_meshing.h"
 #include "preprocessor/loaders/LoadLoader.h"
 #include "domain/load/plane/BidimStrainLoad.h"
 #include "med.h"
@@ -50,7 +50,7 @@ template <class PhysProp> //3 Gauss point by default.
 class TriBase3N: public ElemPlano<3,PhysProp>
   {
   protected:
-    TritrizPtrElem coloca_en_malla(const TritrizPtrNod &,dir_mallado dm) const;
+    TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
   public:
 
     TriBase3N(int classTag,const PhysProp &);
@@ -86,11 +86,11 @@ XC::TriBase3N<PhysProp>::TriBase3N(int tag, int classTag, int node1, int node2, 
     this->theNodes.set_id_nodos(node1,node2,node3);
   }
 
-//! @brief Coloca el elemento en la malla being passed as parameter.
+//! @brief Put the element on the mesh being passed as parameter.
 template <class PhysProp>
-XC::TritrizPtrElem XC::TriBase3N<PhysProp>::coloca_en_malla(const XC::TritrizPtrNod &nodos,dir_mallado dm) const
+XC::TritrizPtrElem XC::TriBase3N<PhysProp>::put_on_mesh(const XC::TritrizPtrNod &nodos,meshing_dir dm) const
   {
-    std::cerr << "TritrizPtrElem XC::TriBase3N<PhysProp>::coloca_en_malla not implemented" << std::endl; 
+    std::cerr << "TritrizPtrElem XC::TriBase3N<PhysProp>::put_on_mesh not implemented" << std::endl; 
     TritrizPtrElem retval;
     return retval;
   }

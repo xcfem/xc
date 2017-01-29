@@ -20,7 +20,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDFieldInfo.h
-//Información sobre las celdas de la malla (para exportar archivos a «salome»).
 
 #ifndef MEDFIELDINFO_H
 #define MEDFIELDINFO_H
@@ -35,8 +34,7 @@ class GaussModel;
 
 //! @ingroup MED
 //
-//! @brief Información sobre un campo definido sobre un
-//! subconjunto de la malla.
+//! @brief Information about a field defined over a mesh subset.
 class MEDFieldInfo: public MEDObject
   {
     const FieldInfo &field_info;

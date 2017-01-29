@@ -89,8 +89,8 @@ class ListRegiones: protected std::list<RegionSecc *>, public SeccionInerte
 
     size_t getNumCells(void) const;
 
-    std::list<Poligono2d> getContornosRegiones(void) const;
-    std::list<Poligono2d> getContorno(void) const;
+    std::list<Poligono2d> getRegionsContours(void) const;
+    std::list<Poligono2d> getContours(void) const;
     BND2d getBnd(void) const;
     ListRegiones Interseccion(const Semiplano2d &) const;
 

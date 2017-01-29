@@ -47,7 +47,7 @@
 XC::ConstraintLoader::ConstraintLoader(Preprocessor *owr)
   : Loader(owr), tag_sp_constraint(0), tag_mp_constraint(0) {}
 
-//! @grief Agrega al modelo una condición de contorno monopunto.
+//! @grief Appends a single freedom constraint to the model.
 XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int &tag_nod,const SFreedom_Constraint &semilla)
   {
     SFreedom_Constraint *sp= semilla.getCopy(tag_sp_constraint);
@@ -63,7 +63,7 @@ XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int 
     return sp;    
   }
 
-//! @grief Agrega al modelo una condición de contorno monopunto.
+//! @grief Appends a single freedom constraint to the model.
 XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int &tag_nod,const int &id_gdl,const double &valor)
   {
     SFreedom_Constraint *sp= new SFreedom_Constraint(tag_sp_constraint,tag_nod,id_gdl, valor);
@@ -78,11 +78,11 @@ XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int 
     return sp;    
   }
 
-//! @grief Define una condición de contorno monopunto.
+//! @grief Defines a single freedom constraint.
 XC::SFreedom_Constraint *XC::ConstraintLoader::newSPConstraint(const int &tag_nod,const int &id_gdl,const double &valor)
   { return addSFreedom_Constraint(tag_nod,id_gdl,valor); }
 
-//! @grief Agrega al modelo una condición de contorno multipunto.
+//! @grief Appends a multi-freedom constraint to the model.
 XC::MFreedom_Constraint *XC::ConstraintLoader::newMPConstraint(const int &masterNode, const int &slaveNode, const ID &constrainedDOF, const ID &retainedDOF)
   {
     MFreedom_Constraint *mp= new MFreedom_Constraint(tag_mp_constraint,masterNode,slaveNode,constrainedDOF,retainedDOF);
@@ -142,7 +142,7 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newRigidRod(const int &masterNode
     return mp;
   }
 
-//! @grief Agrega al modelo una condición de contorno multipunto.
+//! @grief Appends a multi-row, multi-freedom constraint to the model.
 XC::MRMFreedom_Constraint *XC::ConstraintLoader::newMRMPConstraint(const ID &retainedNodes, const int &constrainedNode, const ID &constrainedDOF)
   {
     MRMFreedom_Constraint *mrmp= new MRMFreedom_Constraint(tag_mrmp_constraint,retainedNodes,constrainedNode,constrainedDOF);

@@ -69,7 +69,7 @@ class SupCuadrilatera: public Face
     bool checkNDivs(const size_t &i,const size_t &j) const;
     bool checkNDivs(void) const;
     void crea_nodos(void);
-    void Malla(dir_mallado dm);
+    void genMesh(meshing_dir dm);
   };
 
 } //end of XC namespace

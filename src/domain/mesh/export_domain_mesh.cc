@@ -28,7 +28,7 @@ void export_domain_mesh(void)
     using namespace boost::python;
     docstring_options doc_options;
 
-//Exposición de la malla.
+//Mesh expositon to Python.
 #include "domain/mesh/python_interface.tcc"
 
   }

@@ -53,7 +53,7 @@
 
 #include "utility/actor/actor/MovableVector.h"
 
-//! @brief Libera la memoria ocupada por los objetos de la malla.
+//! @brief Frees memory occupied by mesh components.
 //! this calls delete on all components of the model,
 //! i.e. calls delete on all that is added to the model.
 //! WARNING: if 3rd constructor, TaggedObjectStorage objects passed
@@ -158,7 +158,7 @@ XC::Mesh::Mesh(EntCmd *owr,TaggedObjectStorage &theStorage)
   }
 
 
-//! @brief Elimina del dominio todos los componentes (nodos, elementos, cargas y condiciones de contorno).
+//! @brief Deletes from domain all its components (nodes, elements, loads and constraints).
 //! GENERAL NOTE ON REMOVAL OF COMPONENTS:
 //!   downward casts (while bad) are o.k. as only the type
 //!  of components can be added to the storage objects, e.g.
@@ -189,7 +189,7 @@ XC::Mesh::~Mesh(void)
 void XC::Mesh::setDeadSRF(const double &d)
   { Element::setDeadSRF(d); }
 
-//! @brief Añade un elemento a la malla.
+//! @brief Appends an element to the mesh.
 void XC::Mesh::add_element_to_domain(Element *element)
   {
     Domain *dom= getDomain();
@@ -375,8 +375,7 @@ XC::NodeIter &XC::Mesh::getNodes()
     return *theNodIter;
   }
 
-//! @brief Devuelve verdadero si el nodo cuyo tag se pasa como parámetro
-//! ya existe en la malla.
+//! @brief Returns true if the mesh has an element with the tag being passed as parameter.
 bool XC::Mesh::existElement(int tag)
  { return theElements->existComponent(tag); }
 
@@ -419,8 +418,7 @@ const XC::Element *XC::Mesh::getNearestElement(const Pos3d &p) const
     return this_no_const->getNearestElement(p);
   }
 
-//! @brief Devuelve verdadero si el nodo cuyo tag se pasa como parámetro
-//! ya existe en la malla.
+//! @brief Returns true if the mesh has a node with the tag being passed as parameter.
 bool XC::Mesh::existNode(int tag)
  { return theNodes->existComponent(tag); }
 
@@ -507,7 +505,7 @@ int XC::Mesh::getNumElements(void) const
 int XC::Mesh::getNumNodes(void) const
   { return theNodes->getNumComponents(); }
 
-//! @brief Devuelve el número de elementos de la malla que están activos.
+//! @brief Returns the number of active elements on the mesh.
 size_t XC::Mesh::getNumLiveElements(void) const
   {
     size_t retval= 0;
@@ -522,7 +520,7 @@ size_t XC::Mesh::getNumLiveElements(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de elementos de la malla que están inactivos.
+//! @brief Returns the number of inactive elements on the mesh.
 size_t XC::Mesh::getNumDeadElements(void) const
   {
     size_t retval= 0;
@@ -537,7 +535,7 @@ size_t XC::Mesh::getNumDeadElements(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de nodos de la malla que están activos.
+//! @brief Returns the number of active nodes on the mesh.
 size_t XC::Mesh::getNumLiveNodes(void) const
   {
     size_t retval= 0;
@@ -552,7 +550,7 @@ size_t XC::Mesh::getNumLiveNodes(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de nodos de la malla que están inactivos.
+//! @brief Returns the number of inactive nodes on the mesh.
 size_t XC::Mesh::getNumDeadNodes(void) const
   {
     size_t retval= 0;
@@ -567,7 +565,7 @@ size_t XC::Mesh::getNumDeadNodes(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de nodos de la malla que están inactivos.
+//! @brief Returns the number of frozen nodes on the mesh.
 size_t XC::Mesh::getNumFrozenNodes(void) const
   {
     size_t retval= 0;
@@ -582,7 +580,7 @@ size_t XC::Mesh::getNumFrozenNodes(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de nodos de la malla que están libres.
+//! @brief Returns the number of free nodes on the mesh.
 size_t XC::Mesh::getNumFreeNodes(void) const
   {
     size_t retval= 0;
@@ -737,7 +735,7 @@ int XC::Mesh::revertToLastCommit(void)
     return update();
   }
 
-//! @brief Devuelve el estado de la mallaal inicial del cálculo.
+//! @brief Return the mesh into its initial state.
 int XC::Mesh::revertToStart(void)
   {
     //

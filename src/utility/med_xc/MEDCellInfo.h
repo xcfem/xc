@@ -20,7 +20,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDCellInfo.h
-//Información sobre las celdas de la malla (para exportar archivos a «salome»).
 
 #ifndef MEDCELLINFO_H
 #define MEDCELLINFO_H
@@ -34,7 +33,7 @@ class ID;
 
 //! @ingroup MED
 //
-//!  @brief Información sobre las celdas de la malla (conectividad,...).
+//!  @brief Information about mesh cells (conectivity,...).
 class MEDCellInfo: public MEDCellBaseInfo
   {
   private:

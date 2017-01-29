@@ -212,80 +212,78 @@ void XC::Set::crea_copia(const std::string &nombre,const Vector3d &v= Vector3d()
       }
   }
 
-//! @brief Crea nodos y, en su caso, elementos en los puntos del conjunto.
-void XC::Set::malla_puntos(dir_mallado dm)
+//! @brief Create nodes and, where appropriate, elements on set points.
+void XC::Set::point_meshing(meshing_dir dm)
   {
     if(verborrea>2)
-      std::clog << "Mallando puntos...";
+      std::clog << "Meshing points...";
     for(lst_ptr_puntos::iterator i= puntos.begin();i!=puntos.end();i++)
-      (*i)->Malla(dm);
+      (*i)->genMesh(dm);
     if(verborrea>2)
       std::clog << "hecho." << std::endl;
   }
 
-//! @brief Crea nodos y, en su caso, elementos en las líneas del conjunto.
-void XC::Set::malla_lineas(dir_mallado dm)
+//! @brief Create nodes and, where appropriate, elements on set lines.
+void XC::Set::line_meshing(meshing_dir dm)
   {
     if(verborrea>2)
-      std::clog << "Mallando lineas...";
+      std::clog << "Meshing lines...";
     for(lst_ptr_lineas::iterator i= lineas.begin();i!=lineas.end();i++)
-      (*i)->Malla(dm);
+      (*i)->genMesh(dm);
     if(verborrea>2)
       std::clog << "hecho." << std::endl;
   }
 
-//! @brief Crea nodos y, en su caso, elementos en las superficies del conjunto.
-void XC::Set::malla_superficies(dir_mallado dm)
+//! @brief Create nodes and, where appropriate, elements on set surfaces.
+void XC::Set::surface_meshing(meshing_dir dm)
   {
     if(verborrea>2)
-      std::clog << "Mallando superficies...";
+      std::clog << "Meshing surfaces...";
     for(lst_ptr_superficies::iterator i= superficies.begin();i!=superficies.end();i++)
-      (*i)->Malla(dm);
+      (*i)->genMesh(dm);
     if(verborrea>2)
       std::clog << "hecho." << std::endl;
   }
 
-//! @brief Crea nodos y, en su caso, elementos en los cuerpos del conjunto.
-void XC::Set::malla_cuerpos(dir_mallado dm)
+//! @brief Create nodes and, where appropriate, elements on set bodies.
+void XC::Set::body_meshing(meshing_dir dm)
   {
     if(verborrea>2)
-      std::clog << "Mallando cuerpos...";
+      std::clog << "Meshing bodies...";
     for(lst_ptr_cuerpos::iterator i= cuerpos.begin();i!=cuerpos.end();i++)
-      (*i)->Malla(dm);
+      (*i)->genMesh(dm);
     if(verborrea>2)
       std::clog << "hecho." << std::endl;
   }
 
 //! @brief Crea nodos y, en su caso, elementos en los puntos del conjunto.
-void XC::Set::malla_uniform_grids(dir_mallado dm)
+void XC::Set::uniform_grid_meshing(meshing_dir dm)
   {
     if(verborrea>2)
-      std::clog << "Mallando uniform grids...";
+      std::clog << "Meshing uniform grids...";
     for(lst_ptr_uniform_grids::iterator i= uniform_grids.begin();i!=uniform_grids.end();i++)
-      (*i)->Malla(dm);
+      (*i)->genMesh(dm);
     if(verborrea>2)
       std::clog << "hecho." << std::endl;
   }
 
-//!  \brief Genera una malla a partir de los objetos del conjunto.
+//!  \brief Triggers mesh generation from set components.
 //!
-//! @param nodo_semilla: Nodo a copiar en las posiciones de la malla.
-//! @param elemento_semilla: Elemento a copiar en las posiciones de la malla.
-void XC::Set::Malla(dir_mallado dm)
+//! @param dm: Meshing direction.
+void XC::Set::genMesh(meshing_dir dm)
   {
     Preprocessor *mdl= get_preprocessor();
     assert(mdl);
     mdl->get_sets().abre_set(GetNombre()); //Para que nodos y elementos entren en ESTE conjunto.
 
     if(verborrea>1)
-      std::clog << "Iniciando mallado conjunto (" << GetNombre() << ")...";
+      std::clog << "Meshing set: " << GetNombre() << " ...";
 
-    //malla_cuerpos(dm);
-    malla_superficies(dm);
-    malla_lineas(dm);
-    malla_puntos(dm);
-
-    malla_uniform_grids(dm);
+    //body_meshing(dm);
+    surface_meshing(dm);
+    line_meshing(dm);
+    point_meshing(dm);
+    uniform_grid_meshing(dm);
 
     mdl->get_sets().cierra_set(GetNombre()); //Cerramos.
 

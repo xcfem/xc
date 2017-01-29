@@ -361,8 +361,10 @@ XC::DOF_Group *XC::AnalysisModel::createDOF_Group(const int &tag, Node *myNode)
     return dofPtr;
   }
 
-//! @brief Añade al modelo la representación mediante multiplicadores
-//! de Lagrange de una condición de contorno monopunto.
+//! @brief Appends to the model the Lagrange DOFs for the single freedom 
+//! constraint being passed as parameter.
+//! @param tag: identifier for the new Lagrange DOFs group.
+//! @param spPtr: single freedom constraint to introduce.
 XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag, SFreedom_Constraint *spPtr)
   {
     assert(spPtr);
@@ -379,8 +381,10 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
     return dofPtr;
   }
 
-//! @brief Añade al modelo la representación mediante multiplicadores
-//! de Lagrange de una condición de contorno multipunto.
+//! @brief Appends to the model the Lagrange DOFs for the multi-freedom 
+//! constraint being passed as parameter.
+//! @param tag: identifier for the new Lagrange DOFs group.
+//! @param mpPtr: multi-freedom constraint to introduce.
 XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag, MFreedom_Constraint *mpPtr)
   {
     assert(mpPtr);
@@ -398,9 +402,10 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
   }
 
 
-//! @brief Añade al modelo los grupos de grados de libertad para la
-//! representación mediante multiplicadores
-//! de Lagrange de una condición de contorno multiple retained nodes.
+//! @brief Appends to the model the Lagrange DOFs for the multi-freedom 
+//! constraint being passed as parameter.
+//! @param tag: identifier for the new Lagrange DOFs group.
+//! @param mrmpPtr: multi-row, multi-freedom constraint to introduce.
 XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag, MRMFreedom_Constraint *mrmpPtr)
   {
     assert(mrmpPtr);

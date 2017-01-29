@@ -68,7 +68,7 @@ class Pnt: public EntMdlr
     bool tieneNodo(void) const;
     int getTagNode(void) const;
     Node *getNode(void);
-    virtual void Malla(dir_mallado dm);
+    virtual void genMesh(meshing_dir dm);
 
     //! @brief Devuelve la posición del objeto.
     const Pos3d &GetPos(void) const

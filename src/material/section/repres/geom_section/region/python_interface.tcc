@@ -39,7 +39,7 @@ class_<XC::RgQuadCell, bases<XC::RegionSecc>, boost::noncopyable >("RgQuadCell",
   .add_property("nDivCirc",&XC::RgQuadCell::getNDivIJ,&XC::RgQuadCell::setNDivIJ,"Number of divisions of I->J side.")
   .add_property("nDivRad",&XC::RgQuadCell::getNDivJK,&XC::RgQuadCell::setNDivJK,"Number of divisions of J->K side.")
   .add_property("getNumCells",&XC::RgQuadCell::getNumCells)
-  .def("genGrid",make_function(&XC::RgQuadCell::Malla,return_internal_reference<>()))
+  .def("genGrid",make_function(&XC::RgQuadCell::getMesh,return_internal_reference<>()))
   .def("getCdgRejilla",&XC::RgQuadCell::getCdgRejilla)
   .def("getVertCoords",&XC::RgQuadCell::getVertCoords)
   .def("getCellVertCoords",&XC::RgQuadCell::getCellVertCoords)

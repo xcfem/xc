@@ -35,8 +35,8 @@
 namespace XC {
 //! \ingroup MATSCCYS
 //
-//! @brief Sección transversal con superficie de fluencia
-//! en un problema bidimensional (tres esfuerzos por sección).
+//! @brief Cross section with yield surface
+//! fro bi-dimensional problem (three degrees of freedom in each section).
 class YS_Section2D02: public YieldSurfaceSection2d
   {
   private:

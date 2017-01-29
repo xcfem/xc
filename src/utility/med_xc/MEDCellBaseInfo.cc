@@ -49,13 +49,13 @@ void XC::MEDCellBaseInfo::to_support_med(MEDMEM::SUPPORT &supp) const
     supp.setNumberOfElements(&numberOfElements[0]);
   }
 
-//! @brief Vuelca la las celdas en la malla MEDMEM.
-void XC::MEDCellBaseInfo::to_malla_med(MEDMEM::MESHING &malla) const
+//! @brief Dumps information on MED mesh.
+void XC::MEDCellBaseInfo::to_med_mesh(MEDMEM::MESHING &mesh) const
   {
     const int NumberOfTypes= cell_types.getNumberOfTypes();
-    malla.setNumberOfTypes(NumberOfTypes,MED_EN::MED_CELL);
+    mesh.setNumberOfTypes(NumberOfTypes,MED_EN::MED_CELL);
     XC::MEDMapNumCeldasPorTipo::vector_tipos tipos= cell_types.getTipos();
-    malla.setTypes(&tipos[0],MED_EN::MED_CELL);
+    mesh.setTypes(&tipos[0],MED_EN::MED_CELL);
     const std::vector<int> numberOfElements= cell_types.getNumCeldasPorTipo();
-    malla.setNumberOfElements(&numberOfElements[0],MED_EN::MED_CELL);
+    mesh.setNumberOfElements(&numberOfElements[0],MED_EN::MED_CELL);
   }

@@ -38,7 +38,7 @@ class_<XC::MapSet, bases<EntCmd>, boost::noncopyable >("MapSet", no_init)
    ;
 
 
-enum_<XC::dir_mallado>("meshDir")
+enum_<XC::meshing_dir>("meshDir")
   .value("I", XC::dirm_i)
   .value("J", XC::dirm_j)
   .value("K", XC::dirm_k)

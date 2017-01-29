@@ -1,69 +1,20 @@
-# def CondContornoNodosLinea(setLinea, condContorno):
-#     \sets
-#       {
-#         \setLinea
-#           {
-#             \for_each_nod
-#               {
-#                 tagNodo= tag
-#                 \preprocessor{\constraints{\condContorno(tagNodo){}}}
-#               }
-#           }
-#       }
-#   }
 
-def CondContornoNodosInterioresLinea(setLinea, constraints, condContorno):
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, AO_O and LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
+
+def ConstraintsForLineInteriorNodes(setLinea, constraints, constraint):
+  '''Aplying constraint on the interior nodes of a model line.'''
   tags= setLinea.getNodeLayers.getLayer(0).getTagsInteriorNodes()
   for i in tags:
-    condContorno(constraints,i)
+    constraint(constraints,i)
 
-# def CondContornoNodoDorsalLinea(setLinea, condContorno):
-#     \sets
-#       {
-#         \setLinea
-#           {
-#             \primer_nodo
-#               {
-#                 tagNodo= tag
-#                 \preprocessor{\constraints{\condContorno(tagNodo){}}}
-#               }
-#           }
-#       }
-#   }
-
-# def CondContornoNodoFrontalLinea(setLinea, condContorno):
-#     \sets
-#       {
-#         \setLinea
-#           {
-#             \ultimo_nodo
-#               {
-#                 tagNodo= tag
-#                 \preprocessor{\constraints{\condContorno(tagNodo){}}}
-#               }
-#           }
-#       }
-#   }
-
-def CondContornoNodosExtremosLinea(setLinea, constraints, condContorno):
+def ConstraintsForLineExtremeNodes(setLinea, constraints, constraint):
+  '''Aplying constraint on the extreme nodes of a model line.'''
   fN= setLinea.firstNode.tag
   lN= setLinea.lastNode.tag
-  condContorno(constraints,fN)
-  condContorno(constraints,lN)
+  constraint(constraints,fN)
+  constraint(constraints,lN)
 
-# def CondContornoNodosInterioresSetLineas(setNameLineas, condContorno):
-#     \setNameLineas
-#       {
-#         \lineas
-#           {
-#             \for_each
-#               {
-#                 \for_each_interior_nod
-#                   {
-#                     tagNodo= tag
-#                     \preprocessor{\constraints{\condContorno(tagNodo){}}}
-#                   }
-#               }
-#           }
-#       }
-#   }

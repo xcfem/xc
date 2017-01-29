@@ -25,7 +25,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //UniformGrid.h
-//Malla con los nodos equiespaciados en x, y, y z.
 
 #ifndef UNIFORMGRID_H
 #define UNIFORMGRID_H
@@ -37,17 +36,17 @@ namespace XC {
 
 //!  @ingroup CadEnt
 //!
-//!  @brief Malla con los nodos equiespaciados en x, y, y z.
+//!  @brief Uniform mesh. Uniform node distributionn on x, y and z.
 class UniformGrid: public EntMdlr
   {
   private:
-    Pos3d org; //!< Posición del origen de la malla.
-    double Lx; //!< Dimensión de la malla paralela al eje x.
-    double Ly; //!< Dimensión de la malla paralela al eje y.
-    double Lz; //!< Dimensión de la malla paralela al eje z.
-    size_t ndiv_x; //! Número de divisiones en el eje x.
-    size_t ndiv_y; //! Número de divisiones en el eje y.
-    size_t ndiv_z; //! Número de divisiones en el eje z.
+    Pos3d org; //!< Grid origin.
+    double Lx; //!< Grid spacing on x axis.
+    double Ly; //!< Grid spacing on y axis.
+    double Lz; //!< Grid spacing on z axis.
+    size_t ndiv_x; //! Number of divisions on x axis.
+    size_t ndiv_y; //! Number of divisions on y axis.
+    size_t ndiv_z; //! Number of divisions on z axis.
   protected:
 
     void actualiza_topologia(void);
@@ -96,7 +95,7 @@ class UniformGrid: public EntMdlr
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
 
-    virtual void Malla(dir_mallado dm);
+    virtual void genMesh(meshing_dir dm);
   };
 
 } //end of XC namespace

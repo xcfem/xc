@@ -94,7 +94,7 @@ class RayleighDampingFactors;
 
 //! @ingroup Dom
 //
-//! @brief Dominio del problema de elementos finitos.
+//! @brief Domain (mesh and boundary conditions) of the finite element model.
 class Domain: public ObjWithRecorders, public DistributedBase
   {
   private:
@@ -107,10 +107,10 @@ class Domain: public ObjWithRecorders, public DistributedBase
     int commitTag;
     Mesh mesh; //!< Nodes and elements.
     ConstrContainer constraints;//!< Constraint container.
-    Vector theEigenvalues; //!< Autovalores.
-    Vector modalParticipationFactors; //!< Factores de participación modal.
+    Vector theEigenvalues; //!< Eigenvalues.
+    Vector modalParticipationFactors; //!< Modal participation factors.
     DqMeshRegion *theRegions;
-    std::string nmbCombActual;//!< Combinación de cálculo actual.
+    std::string nmbCombActual;//!< Current load combination.
 
     int lastChannel;
     int lastGeoSendTag; //!< the value of currentGeoTag when sendSelf was last invoked

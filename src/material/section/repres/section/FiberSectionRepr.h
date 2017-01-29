@@ -74,12 +74,12 @@ class FiberData;
 
 //! @ingroup MATSCCRepresGeom
 //
-//! @brief Representación de una sección formada por fibras
+//! @brief Fiber section representation.
 class FiberSectionRepr: public SectionRepres
   {
   private:
     int sectID;
-    contenedor_fibras fibras; //!< Punteros a fibras sueltas de la sección.
+    contenedor_fibras fibras; //!< Pointer to isolated fibers.
 
   protected:
     void vacia_fibras(void);

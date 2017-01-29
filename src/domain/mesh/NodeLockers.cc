@@ -180,7 +180,7 @@ XC::Domain *XC::NodeLockers::getDomain(void)
     if(mesh)
       retval= mesh->getDomain();
     else
-      std::cerr << "(NodeLockers) necesito una malla." << std::endl;
+      std::cerr << "(NodeLockers) mesh needed." << std::endl;
     return retval;
   }
 
@@ -192,7 +192,7 @@ const XC::Domain *XC::NodeLockers::getDomain(void) const
     if(mesh)
       retval= mesh->getDomain();
     else
-      std::cerr << "(NodeLockers) necesito una malla." << std::endl;
+      std::cerr << "(NodeLockers) mesh needed." << std::endl;
     return retval;
   }
 

@@ -27,7 +27,7 @@
 //InteractionDiagram.cc
 
 #include "InteractionDiagram.h"
-#include "xc_utils/src/geom/d2/MallaTriang3d.h"
+#include "xc_utils/src/geom/d2/Triang3dMesh.h"
 #include "xc_utils/src/geom/d2/Plano3d.h"
 #include "xc_utils/src/geom/d2/Triangulo3d.h"
 #include "xc_basic/src/util/mchne_eps.h"
@@ -58,7 +58,7 @@ void XC::InteractionDiagram::clasifica_triedros(void)
 XC::InteractionDiagram::InteractionDiagram(void)
   : ClosedTriangleMesh() {}
 
-XC::InteractionDiagram::InteractionDiagram(const Pos3d &org,const MallaTriang3d &mll)
+XC::InteractionDiagram::InteractionDiagram(const Pos3d &org,const Triang3dMesh &mll)
   : ClosedTriangleMesh(org,mll)
   {
     clasifica_triedros();

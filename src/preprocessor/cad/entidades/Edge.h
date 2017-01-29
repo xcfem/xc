@@ -94,7 +94,7 @@ class Edge: public EntMdlr
     bool Extremo(const Pnt &) const;
     virtual BND3d Bnd(void) const= 0;
     virtual void crea_nodos(void);
-    virtual void Malla(dir_mallado dm);
+    virtual void genMesh(meshing_dir dm);
 
     virtual MatrizPos3d get_posiciones(void) const= 0;
     virtual MatrizPos3d get_pos_nodos(void) const;

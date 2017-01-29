@@ -51,11 +51,6 @@
 // Written: MHS
 // Created: Aug 2001
 //
-// Description: This file contains the class definition of BeamFiberMaterial.
-// The BeamFiberMaterial class is a wrapper class that performs static
-// condensation on a three-dimensional material model to give the 11, 12, and 13
-// stress components which can then be integrated over an area to model a
-// shear flexible 3D beam.
 
 #include <utility/matrix/Matrix.h>
 #include <material/nD/NDAdaptorMaterial.h>
@@ -63,7 +58,10 @@
 namespace XC {
 //! @ingroup NDMat
 //
-//! @brief Material para fibras una sección.
+//! @brief BeamFiberMaterial class is a wrapper class that performs static
+//! condensation on a three-dimensional material model to give the 11, 12, and 13
+//! stress components which can then be integrated over an area to model a
+//! shear flexible 3D beam.
 class BeamFiberMaterial: public NDAdaptorMaterial
   {
   private:

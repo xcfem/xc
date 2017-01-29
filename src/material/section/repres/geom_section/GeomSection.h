@@ -58,7 +58,7 @@ class CrossSectionProperties2d;
 //
 //! @ingroup MATSCCRepresGeom
 //
-//! @brief Representación de la geometría de una sección.
+//! @brief Cross section geometry.
 class GeomSection: public SeccionInerte
   {
   public:
@@ -120,8 +120,8 @@ class GeomSection: public SeccionInerte
     
     // Section inquiring functions
     double DistSpots(const size_t &i,const size_t &j) const;
-    Poligono2d getContornoRegiones(void) const;
-    Poligono2d getContornoZonaComprimida(const Semiplano2d &) const;
+    Poligono2d getRegionsContour(void) const;
+    Poligono2d getCompressedZoneContour(const Semiplano2d &) const;
     double getLongCorte(const Recta2d &r) const;
     std::vector<double> getLongsCorte(const std::list<Recta2d> &lr) const;
     double getCantoMecanicoZonaComprimida(const Semiplano2d &) const;

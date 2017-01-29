@@ -48,11 +48,11 @@ XC::MEDMeshing::MEDMeshing(const ProblemaEF &prb)
 XC::MEDMeshing::MEDMeshing(const Mesh &mesh,const MapSet &s, const MapFields &f)
   : sets(s), fields(f), vertices(mesh), cells(mesh,vertices.getMapIndices()) {} 
 
-//! Devuelve una referencia a la malla de MEDMEM.
-MEDMEM::MESHING &XC::MEDMeshing::getMallaMED(void) const
-  { return malla; }
+//! Devuelve una referencia a la mesh de MEDMEM.
+MEDMEM::MESHING &XC::MEDMeshing::getMEDMesh(void) const
+  { return mesh; }
 
-//! Borra la malla.
+//! Borra la mesh.
 void XC::MEDMeshing::clear(void)
   {
     vertices.clear();
@@ -61,7 +61,7 @@ void XC::MEDMeshing::clear(void)
     for(std::deque<MEDFieldInfo *>::iterator i= med_fields.begin();i!=med_fields.end();i++)
       delete *i;
     med_fields.clear();
-    //malla= MEDMEM::MESHING(); //Da problemas 2012/10/03
+    //mesh= MEDMEM::MESHING(); //Da problemas 2012/10/03
   }
 //! Constructor.
 XC::MEDMeshing::~MEDMeshing(void)
@@ -207,11 +207,11 @@ void XC::MEDMeshing::defineMEDFields(void) const
   }
 
 //! @brief Vuelca la definición de vértices y celdas en la
-//! malla MED
+//! mesh MED
 void XC::MEDMeshing::to_med(void)
   {
-    vertices.to_med(malla);
-    cells.to_med(malla);
+    vertices.to_med(mesh);
+    cells.to_med(mesh);
     defineMEDGroups();
     for(std::deque<MEDGroupInfo>::const_iterator i=med_groups.begin();i!=med_groups.end();i++)
       i->to_med();
@@ -221,8 +221,8 @@ void XC::MEDMeshing::to_med(void)
 void XC::MEDMeshing::write(const std::string &fileName)
   {
     to_med();
-    const int id= malla.addDriver(MEDMEM::MED_DRIVER,fileName,malla.getName());
-    malla.write(id);
+    const int id= mesh.addDriver(MEDMEM::MED_DRIVER,fileName,mesh.getName());
+    mesh.write(id);
     for(std::deque<MEDFieldInfo *>::iterator i= med_fields.begin();i!=med_fields.end();i++)
       (*i)->write(fileName);
   }

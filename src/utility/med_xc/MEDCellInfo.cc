@@ -54,14 +54,13 @@ void XC::MEDCellInfo::nueva_celda(size_t tag,const MED_EN::medGeometryElement &t
     med_cell_connectivity.nueva_celda(tipo,conex,map_indices_vertices);
   }
 
-//! @brief Vuelca la definición de las celdas en la
-//! malla MED
-void XC::MEDCellInfo::to_med(MEDMEM::MESHING &malla) const
+//! @brief Dumps cells definition on MED mesh.
+void XC::MEDCellInfo::to_med(MEDMEM::MESHING &mesh) const
   {
-    MEDCellBaseInfo::to_malla_med(malla);
+    MEDCellBaseInfo::to_med_mesh(mesh);
     for(MEDMapNumCeldasPorTipo::const_iterator i= cell_types.begin();i!=cell_types.end();i++)
       {
         const std::vector<int> &conn= med_cell_connectivity.getConnectivity(i->first);
-        malla.setConnectivity(MED_EN::MED_CELL,i->first,&conn[0]);
+        mesh.setConnectivity(MED_EN::MED_CELL,i->first,&conn[0]);
       }
   }

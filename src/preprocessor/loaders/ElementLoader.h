@@ -60,7 +60,7 @@ class ElementLoader: public ProtoElementLoader
         ~SeedElemLoader(void);
       };
   private:
-    SeedElemLoader seed_elem_loader; //!< Elemento patrón para el mallado semi-automático.
+    SeedElemLoader seed_elem_loader; //!< Seed element for meshing.
   protected:
     virtual void agrega(Element *);
   public:

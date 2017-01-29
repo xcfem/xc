@@ -51,11 +51,7 @@
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
 
-
-
-
 #include "boost/lexical_cast.hpp"
-
 
 XC::GeomSection::GeomSection(MaterialLoader *ml)
   : SeccionInerte(),material_loader(ml), regiones(ml), capas_armado(this,ml), tag_sis_ref(0),tag_spot(0) {}
@@ -234,31 +230,31 @@ double XC::GeomSection::DistSpots(const size_t &i,const size_t &j) const
     return retval;
   }
 
-//! @brief Devuelve el contorno de las regiones definidas.
-Poligono2d XC::GeomSection::getContornoRegiones(void) const
+//! @brief Return the contour of the regions.
+Poligono2d XC::GeomSection::getRegionsContour(void) const
   {
     Poligono2d retval;
-    const std::list<Poligono2d> tmp= regiones.getContorno();
+    const std::list<Poligono2d> tmp= regiones.getContours();
     if(!tmp.empty())
       {
         if(tmp.size()>1)
-	  std::cerr << "GeomSection::getContornoRegiones; la sección no es simplemente conexa."
+	  std::cerr << "GeomSection::getRegionsContour; la sección no es simplemente conexa."
                     << std::endl;
         retval= *tmp.begin();
       }
     return retval;
   }
 
-//! @brief Devuelve el contorno de la parte comprimida de las regiones definidas.
-Poligono2d XC::GeomSection::getContornoZonaComprimida(const Semiplano2d &sp_compresiones) const
+//! @brief Returns the contour of the compressed part of the regions.
+Poligono2d XC::GeomSection::getCompressedZoneContour(const Semiplano2d &sp_compresiones) const
   {
     Poligono2d retval;
-    Poligono2d tmp= getContornoRegiones();
+    Poligono2d tmp= getRegionsContour();
     if(!tmp.empty())
       {
 	std::list<Poligono2d> tmpList= tmp.Interseccion(sp_compresiones);
         if(tmpList.size()>1)
-	  std::cerr << "GeomSection::getContornoZonaComprimida; la sección no es simplemente conexa."
+	  std::cerr << "GeomSection::getCompressedZoneContour; la sección no es simplemente conexa."
                     << std::endl;
         retval= *tmpList.begin();
       }
@@ -270,14 +266,14 @@ Poligono2d XC::GeomSection::getContornoZonaComprimida(const Semiplano2d &sp_comp
 //! @param trazaPF: Intersección del plano de flexión con el plano de la sección.
 double XC::GeomSection::getCantoMecanico(const Recta2d &trazaPF) const
   {
-    Poligono2d contorno= getContornoRegiones();
-    Pos2d C= contorno.Cdg();
+    Poligono2d contour= getRegionsContour();
+    Pos2d C= contour.Cdg();
     Semiplano2d sp(trazaPF.Perpendicular(C));
-    const size_t num_vertices= contorno.GetNumVertices();
+    const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dpos= 0.0,dneg=0.0;    
     for(register size_t i=1;i<=num_vertices;i++)
       {
-        d= sp.DistSigno(contorno.Vertice(i));
+        d= sp.DistSigno(contour.Vertice(i));
         if(d<dneg) dneg= d;
         if(d>dpos) dpos= d;
       }
@@ -290,12 +286,12 @@ double XC::GeomSection::getCantoMecanico(const Recta2d &trazaPF) const
 //! a la fibra más comprimida.
 double XC::GeomSection::getCantoMecanicoZonaComprimida(const Semiplano2d &sp_compresiones) const
   {
-    Poligono2d contorno= getContornoRegiones();
-    const size_t num_vertices= contorno.GetNumVertices();
+    Poligono2d contour= getRegionsContour();
+    const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dneg= 0.0;    
     for(register size_t i=1;i<=num_vertices;i++)
       {
-        d= sp_compresiones.DistSigno(contorno.Vertice(i));
+        d= sp_compresiones.DistSigno(contour.Vertice(i));
         if(d<dneg) dneg= d;
       }
     assert(dneg<=0);
@@ -306,12 +302,12 @@ double XC::GeomSection::getCantoMecanicoZonaComprimida(const Semiplano2d &sp_com
 //! a la fibra más traccionada.
 double XC::GeomSection::getCantoMecanicoZonaTraccionada(const Semiplano2d &sp_compresiones) const
   {
-    Poligono2d contorno= getContornoRegiones();
-    const size_t num_vertices= contorno.GetNumVertices();
+    Poligono2d contour= getRegionsContour();
+    const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dpos=0.0;    
     for(register size_t i=1;i<=num_vertices;i++)
       {
-        d= sp_compresiones.DistSigno(contorno.Vertice(i));
+        d= sp_compresiones.DistSigno(contour.Vertice(i));
         if(d>dpos) dpos= d;
       }
     assert(dpos>=0);
@@ -320,32 +316,32 @@ double XC::GeomSection::getCantoMecanicoZonaTraccionada(const Semiplano2d &sp_co
 
 //! @brief Devuelve la longitud del segmento que resulta
 //! de cortar la recta being passed as parameter con el
-//! contorno de la sección.
+//! contour de la sección.
 double XC::GeomSection::getLongCorte(const Recta2d &r) const
   {
     double retval= 0.0;
-    Poligono2d contorno= agrega_puntos_medios(getContornoRegiones());
-    if(contorno.Overlap(r))
-      retval= contorno.Clip(r).Longitud();
+    Poligono2d contour= agrega_puntos_medios(getRegionsContour());
+    if(contour.Overlap(r))
+      retval= contour.Clip(r).Longitud();
     return retval;
   }
 
 //! @brief Devuelve las longitudes de los segmentos que resultan
 //! de cortar la recta being passed as parameter con el
-//! contorno de la sección.
+//! contour de la sección.
 std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr) const
   {
     const size_t sz= lr.size();
     std::vector<double> retval;
     if(sz>0)
       {
-        Poligono2d contorno= agrega_puntos_medios(getContornoRegiones());
+        Poligono2d contour= agrega_puntos_medios(getRegionsContour());
         int conta= 0;
         for(std::list<Recta2d>::const_iterator i= lr.begin();i!=lr.end();i++,conta++)
           {
             const Recta2d &r= *i;
-            if(contorno.Overlap(r))
-              retval[conta]= contorno.Clip(r).Longitud();
+            if(contour.Overlap(r))
+              retval[conta]= contour.Clip(r).Longitud();
           }
       }
     return retval;
@@ -354,15 +350,15 @@ std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr)
 //! @brief Devuelve el ancho de la sección para el plano de flexión.
 double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) const
   {
-    const Poligono2d contorno= agrega_puntos_medios(getContornoRegiones());
-    const size_t num_vertices= contorno.GetNumVertices();
+    const Poligono2d contour= agrega_puntos_medios(getRegionsContour());
+    const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dmax= 0.0;
     Recta2d perp;
     Segmento2d ancho;
     for(register size_t i=1;i<=num_vertices;i++)
       {
-        perp= traza_plano_flexion.Perpendicular(contorno.Vertice(i));
-        ancho= contorno.Clip(perp);
+        perp= traza_plano_flexion.Perpendicular(contour.Vertice(i));
+        ancho= contour.Clip(perp);
         d= ancho.Longitud();
         if(d>dmax)
           dmax= d;
@@ -375,10 +371,10 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) con
 //! correspondiente al brazo mecánico being passed as parameter.
 double XC::GeomSection::getAnchoBielaComprimida(const Segmento2d &brazo_mecanico) const
   {
-    const Poligono2d contorno= agrega_puntos_medios(getContornoRegiones());
-    const size_t num_vertices= contorno.GetNumVertices();
+    const Poligono2d contour= agrega_puntos_medios(getRegionsContour());
+    const size_t num_vertices= contour.GetNumVertices();
     Recta2d perp= brazo_mecanico.Mediatriz();
-    Segmento2d ancho= contorno.Clip(perp);
+    Segmento2d ancho= contour.Clip(perp);
     Pos2d p= punto_interseccion(ancho,brazo_mecanico);
     assert(p.exists());
     double b2= std::min(dist2(p,ancho.Origen()),dist2(p,ancho.Destino()));
@@ -386,11 +382,11 @@ double XC::GeomSection::getAnchoBielaComprimida(const Segmento2d &brazo_mecanico
     bool intersecaBrazo= false;
     for(register size_t i=1;i<=num_vertices;i++)
       {
-        perp= brazo_mecanico.Perpendicular(contorno.Vertice(i));
+        perp= brazo_mecanico.Perpendicular(contour.Vertice(i));
         intersecaBrazo= brazo_mecanico.Interseca(perp);
         if(intersecaBrazo)
           {
-            ancho= contorno.Clip(perp);
+            ancho= contour.Clip(perp);
             p= punto_interseccion(ancho,brazo_mecanico);
             if(p.exists())
               {
@@ -407,7 +403,7 @@ double XC::GeomSection::getAnchoBielaComprimida(const Segmento2d &brazo_mecanico
 //! @brief Devuelve el recubrimiento de la posición being passed as parameter.
 double XC::GeomSection::getRecubrimiento(const Pos2d &p) const
   {
-    const double retval= -getContornoRegiones().DistSigno(p);
+    const double retval= -getRegionsContour().DistSigno(p);
     if(retval<0)
       std::clog << "¡Ojo! la posición: " << p
                 << " está fuera de la sección." << std::endl;

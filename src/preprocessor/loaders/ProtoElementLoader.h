@@ -40,22 +40,22 @@ class Element;
 
 //!  \ingroup Ldrs
 //! 
-//! @brief Objeto encargado de leer elementos finitos desde el archivo de entrada.
+//! @brief Finite element creation.
 //!
-//! Se emplea tanto para cargar directamente los elementos del dominio como
-//! para cargar la definición del elemento semilla que se empleará en las rutinas
-//! de mallado semi-automático. Con este fin se redefine el método agrega en las
-//! clases hijas.
+//! This objetct allows the creation of finite element obbjets. It can be done
+//! directly (specifiying the finite element type, material, nodes,...) creating
+//! one element after another or you can specify a "seed element" that will be
+//! used by the meshing routines.
 class ProtoElementLoader: public Loader
   {
     Element *crea_elemento(const std::string &cmd,int tag_elem);
 
     std::string nmb_mat; //!< En su caso, nombre del material para el nuevo elemento.
-    int num_sec; //!< En su caso, número de secciones (puntos de integración) en elementos lineales.
-    int dim_elem; //!< Dimensión, en su caso, para el nuevo elemento. 
+    int num_sec; //!< When appropriate, number of sections (integration points) on one-dimensional elements.
+    int dim_elem; //!< If required, dimension of the new element (0,1,2 or 3)
     std::string nmb_transf; //!< En su caso, nombre de la transformación para el nuevo elemento.
     std::string nmb_integ; //!< En su caso, nombre del integrador para el nuevo elemento.
-    int dir; //!< En su caso (elementos de longitud cero), dirección en la que actúa el material del elemento.
+    int dir; //!< If required (i.e. for zero length elements), direction of the element material.
   protected:
     virtual void agrega(Element *)= 0;
     MaterialLoader &get_material_loader(void) const;

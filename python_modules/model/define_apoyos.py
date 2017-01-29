@@ -21,7 +21,7 @@ def defApoyoX(preprocessor,iNod, iElem, matKX):
   zl.clearMaterials()
   zl.setMaterial(0,matKX)
   # fin de la definición de elementos
-  # Condiciones de contorno
+  # Boundary conditions
   coacciones= preprocessor.getConstraintLoader
   numGdls= preprocessor.getNodeLoader.numGdls
   for i in range(0,numGdls):
@@ -48,7 +48,7 @@ def defApoyoXY(preprocessor,iNod, iElem, matKX, matKY):
   zl.setMaterial(0,matKX)
   zl.setMaterial(1,matKY)
   # fin de la definición de elementos
-  # Condiciones de contorno
+  # Boundary conditions
   coacciones= preprocessor.getConstraintLoader
   numGdls= preprocessor.getNodeLoader.numGdls
   for i in range(0,numGdls):
@@ -76,7 +76,7 @@ def defApoyoXYZ(preprocessor,iNod, iElem, matKXName, matKYName, matKZName):
   zl.setMaterial(1,matKYName)
   zl.setMaterial(2,matKZName)
   # fin de la definición de elementos
-  # Condiciones de contorno
+  # Boundary conditions
   coacciones= preprocessor.getConstraintLoader
   numGdls= preprocessor.getNodeLoader.numGdls
   for i in range(0,numGdls):
@@ -104,7 +104,7 @@ def defApoyoUniaxialProb2D(preprocessor, iNod, iElem, nmbMat, dir):
   zl.clearMaterials()
   zl.setMaterial(0,nmbMat)
   # fin de la definición de elementos
-  # Condiciones de contorno
+  # Boundary conditions
   coacciones= preprocessor.getConstraintLoader
   spc= coacciones.newSPConstraint(retvalNodTag,0,0.0)
   spc= coacciones.newSPConstraint(retvalNodTag,1,0.0)
@@ -150,7 +150,7 @@ def defApoyoXYRigZ(preprocessor,iNod, iElem, matKX, matKY):
   zl.setMaterial(0,matKX)
   zl.setMaterial(1,matKY)
   # fin de la definición de elementos
-  # Condiciones de contorno
+  # Boundary conditions
   coacciones= preprocessor.getConstraintLoader
   numGdls= preprocessor.getNodeLoader.numGdls
   for i in range(0,numGdls):

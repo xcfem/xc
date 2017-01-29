@@ -37,7 +37,7 @@ namespace XC {
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Matrices para cada una de las secciones (se usa en BeamColumnWithSectionFD)
+//! @brief Matrices for each section (used in BeamColumnWithSectionFD)
 class SectionMatrices: public MovableObject
   {
   private:

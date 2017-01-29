@@ -53,7 +53,7 @@ class NMyMzPointCloud;
 //
 //! \ingroup MATSCCModeloFibras
 //
-//! @brief Clase base para las secciones discretizadas en fibras.
+//! @brief Base class for fiber sections.
 class FiberSectionBase: public SeccionBarraPrismatica
   {
   public:
@@ -64,13 +64,13 @@ class FiberSectionBase: public SeccionBarraPrismatica
     Vector eInic; //!< initial section deformations 
     Vector eCommit; //!< committed section deformations 
   protected:
-    KRSeccion kr; //!< Rigidez y resultante en la sección.
+    KRSeccion kr; //!< Stiffness and internal forces resultant on the section.
     StoFibras fibras; //!< Cola de punteros a fibras.
     int tag_fibra; //!< Tag para la próxima fibra.
     FiberSets sets_fibras;//!< Conjuntos de fibras.
     friend class DqFibras;
     friend class StoFibras;
-    FiberSectionRepr *section_repres; //! Representación de la sección.
+    FiberSectionRepr *section_repres; //! Section representation.
 
     void setup_repres(void);
     inline void alloc_fibers(int numFibras,const Fiber *muestra= nullptr)
@@ -106,7 +106,7 @@ class FiberSectionBase: public SeccionBarraPrismatica
     const Vector &getSectionDeformation(void) const;
 
     FiberSectionRepr *getFiberSectionRepr(void);
-    Poligono2d getContornoRegiones(void) const;
+    Poligono2d getRegionsContour(void) const;
     double getCantoMecanicoZonaComprimida(const Recta2d &) const;
     double getCantoMecanicoZonaComprimida(void) const;
     double getCantoMecanicoZonaTraccionada(const Recta2d &) const;
@@ -130,7 +130,7 @@ class FiberSectionBase: public SeccionBarraPrismatica
     double getAcEficazBruta(const double &) const;
     double getAcEficazNeta(const double &,const std::string &,const double &factor= 15) const;
     double calcAcEficazFibras(const double &hEfMax,const std::string &,const double &factor= 15) const;
-    std::list<Poligono2d> getContornoAcEficazBruta(const double &) const;
+    std::list<Poligono2d> getContourAcEficazBruta(const double &) const;
     void calcRecubrimientos(const std::string &) const;
     void calcSeparaciones(const std::string &) const;
     int updateCDG(void);

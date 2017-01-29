@@ -162,12 +162,9 @@ Pos2d XC::RgSccCuadrilatero::getKVertex(void) const
 Pos2d XC::RgSccCuadrilatero::getLVertex(void) const
   { return Pos2d(vertCoord(L,Y),vertCoord(L,Z)); }
 
+//! @brief Returns a quadrilateral object (geometry).
 Cuadrilatero2d XC::RgSccCuadrilatero::getCuadrilatero(void) const
-  {
-    Cuadrilatero2d retval= Cuadrilatero2d( getIVertex(),getJVertex(),
-                                           getKVertex(),getLVertex());
-    return retval;
-  }
+  { return Cuadrilatero2d( getIVertex(),getJVertex(), getKVertex(),getLVertex()); }
 
 void XC::RgSccCuadrilatero::swap(void)
   {
@@ -201,8 +198,8 @@ void XC::RgSccCuadrilatero::setVertCoords(const XC::Matrix &vertexCoords)
 const XC::Matrix &XC::RgSccCuadrilatero::getVertCoords(void) const
   { return vertCoord; }
 
-const Rejilla2d &XC::RgSccCuadrilatero::Malla(void) const
-  { return alloc(Rejilla2d(getCuadrilatero().MallaBilin(nDivIJ,nDivJK))); }
+const Rejilla2d &XC::RgSccCuadrilatero::getMesh(void) const
+  { return alloc(Rejilla2d(getCuadrilatero().genBilinMesh(nDivIJ,nDivJK))); }
 
 const XC::VectorCells &XC::RgSccCuadrilatero::getCells(void) const
   {

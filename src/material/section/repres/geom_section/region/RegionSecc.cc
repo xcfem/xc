@@ -67,11 +67,11 @@ const XC::Vector &XC::RegionSecc::Cdg(void) const
     return retval;
   }
 
-//! @brief Devuelve la longitud del contorno de la región.
+//! @brief Returns the region contour lenght.
 double XC::RegionSecc::Longitud(void) const
   { return getPoligono().Longitud(); }
 
-//! @brief Devuelve el área de la región.
+//! @brief Returns the region area.
 double XC::RegionSecc::Area(void) const
   { return getPoligono().Area(); }
 

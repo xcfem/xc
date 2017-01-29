@@ -39,7 +39,7 @@ class InteractionDiagramData;
 
 //! \@ingroup MATSCCDiagInt
 //
-//! @brief Diagrama de interacción (N,My) de una sección.
+//! @brief Interaction diagram (N,My) for an RC section.
 class InteractionDiagram2d: public Poligono2d
   {
   protected:

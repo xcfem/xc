@@ -20,7 +20,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDGroupInfo.h
-//Información sobre las celdas de la malla (para exportar archivos a «salome»).
 
 #ifndef MEDGROUPINFO_H
 #define MEDGROUPINFO_H
@@ -33,7 +32,7 @@ class MEDMeshing;
 
 //! @ingroup MED
 //
-//!  @brief Información sobre conjuntos de nodos y elementos.
+//!  @brief Information about node and element sets.
 class MEDGroupInfo: public MEDCellBaseInfo
   {
   public:
@@ -46,14 +45,14 @@ class MEDGroupInfo: public MEDCellBaseInfo
   protected:
     friend class MEDMeshing;
     friend class MEDFieldInfo;
-    MEDGroupInfo(MEDMeshing *malla,const std::string &);
-    MEDGroupInfo(MEDMeshing *malla,const Set &);
+    MEDGroupInfo(MEDMeshing *mesh,const std::string &);
+    MEDGroupInfo(MEDMeshing *mesh,const Set &);
 
     std::vector<int> &getIndicesElementosTipo(const MED_EN::medGeometryElement &);
     std::vector<int> getVectorIndicesTipos(void) const;
     std::vector<int> getIndicesElementos(void) const;
 
-    const MEDMeshing &getMalla(void) const;
+    const MEDMeshing &getMesh(void) const;
     MEDMEM::GROUP *getGrupoMED(void) const;
   public:
     ~MEDGroupInfo(void);

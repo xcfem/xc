@@ -127,7 +127,7 @@ class_<XC::DqFibras, bases<EntCmd,dq_ptr_fibras>, boost::noncopyable >("DqFibras
   .def("getTrazaPlanoTraccion",&XC::DqFibras::getTrazaPlanoTraccion)
   .def("getTrazaPlanoCompresion",&XC::DqFibras::getTrazaPlanoCompresion)
   .def("calcAcEficazFibras",&XC::DqFibras::calcAcEficazFibras)
-   //.def("getContornoAcEficazFibra",&XC::DqFibras::getContornoAcEficazFibra)
+   //.def("getContourAcEficazFibra",&XC::DqFibras::getContourAcEficazFibra)
   .def("getAcEficazFibra",&XC::DqFibras::getAcEficazFibra)
   .def("getAcEficazFibras",&XC::DqFibras::getAcEficazFibras)
   .def("calcRecubrimientos",&XC::DqFibras::calcRecubrimientos)

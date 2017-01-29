@@ -156,7 +156,7 @@ double XC::ElemPlano<NNODOS, PhysProp>::getAreaTributaria(const Node *nod) const
     return retval;
   }
 
-//! @brief Devuelve el polígono que forma el contorno del elemento.
+//! @brief Returns the element contour as a polygon.
 template <int NNODOS,class PhysProp>
 Poligono3d XC::ElemPlano<NNODOS, PhysProp>::getPoligono(bool initialGeometry) const
   {

@@ -148,14 +148,14 @@ SectorAnilloCircular2d &XC::RgSccCirc::getSector(void) const
   }
 
 //! @brief Devuelve la rejilla que corresponde a la discretización.
-const Rejilla2d &XC::RgSccCirc::Malla(void) const
-  { return alloc(Rejilla2d(getSector().Malla(nDivRad(),nDivCirc()))); }
+const Rejilla2d &XC::RgSccCirc::getMesh(void) const
+  { return alloc(Rejilla2d(getSector().genMesh(nDivRad(),nDivCirc()))); }
 
 const XC::VectorCells &XC::RgSccCirc::getCells(void) const
   {
     if(nDivRad() > 0  && nDivCirc() > 0)
       {
-        Malla();
+        getMesh();
         int numCells  = this->getNumCells();
 
         cells.resize(numCells);

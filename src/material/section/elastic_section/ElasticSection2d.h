@@ -74,9 +74,9 @@ class Information;
 
 //! \ingroup MATSCCElastica
 //
-//! @brief Sección transversal formada
-//! por un material elástico lineal en un problema bidimensional
-//! (3 esfuerzos por sección).
+//! @brief Cross section with linear elastic material
+//! for bi-dimensional problesm
+//! (3 degrees of freedom in each section).
 class ElasticSection2d: public BaseElasticSection2d
   {
   private:

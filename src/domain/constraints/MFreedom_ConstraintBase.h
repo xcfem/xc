@@ -49,11 +49,11 @@ class Matrix;
 class ID;
 
 //! @ingroup CCont
-//! @defgroup CContMP Condiciones de contorno multinodales.
+//! @defgroup CContMP Multi-freedom constraints.
 //
 //! @ingroup CContMP
 //
-//! @brief Condición de contorno multinodal.
+//! @brief Base class for mult-freedom constraints.
 class MFreedom_ConstraintBase: public Constraint
   {
   protected:

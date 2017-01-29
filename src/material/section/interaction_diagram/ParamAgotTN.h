@@ -35,8 +35,8 @@ class DefAgotPivotes;
 
 //! @ingroup MATSCCDiagInt
 //
-//! @brief Parámetros que definen el agotamiento de una sección 
-//! en tensiones normales.
+//! @brief Parameter that define the ultimate limit states of a RC
+//! section under normal stresses.
 class ParamAgotTN
   {
     const DefAgotPivotes &agot_pivotes; //!< Deformaciones de agotamiento en pivotes.

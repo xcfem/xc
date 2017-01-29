@@ -21,14 +21,14 @@ class TorsionParameters(object):
   c= 0.0  # Longitudinal reinforcement concrete cover.
 
   seccionHuecaEficaz= 0.0 # Cross section contour.
-  contornoSecc= geom.Poligono2d()  # Cross section contour.
+  crossSectionContour= geom.Poligono2d()  # Cross section contour.
   lineaMedia=  geom.Poligono2d() # Polygon defined by the midline of the effective hollow section.
   lineaInt=  geom.Poligono2d() # Polygon defined by the interior contour of the effective hollow section.
   seccionHuecaEficaz= geom.PoligonoConAgujeros2d() # Effective hollow section contour
   def A(self):
-    return self.contornoSecc.getArea()
+    return self.crossSectionContour.getArea()
   def u(self):
-    return self.contornoSecc.getPerimetro()
+    return self.crossSectionContour.getPerimetro()
   def he(self):
     return max(2*self.c,min(self.A()/self.u(),self.h0))
   def Ae(self):
@@ -49,10 +49,10 @@ def calcParamsSeccionHuecaEficaz(geomSeccion, h0, c):
   retval= TorsionParameters()
   retval.h0= h0
   retval.c= c
-  retval.contornoSecc= geomSeccion.getContornoRegiones()
+  retval.crossSectionContour= geomSeccion.getRegionsContour()
   he= retval.he()
-  retval.lineaMedia= retval.contornoSecc.offset(-he/2)
-  retval.lineaInt= retval.contornoSecc.offset(-he)
-  retval.seccionHuecaEficaz.contorno(retval.contornoSecc)
+  retval.lineaMedia= retval.crossSectionContour.offset(-he/2)
+  retval.lineaInt= retval.crossSectionContour.offset(-he)
+  retval.seccionHuecaEficaz.contour(retval.crossSectionContour)
   retval.seccionHuecaEficaz.addHole(retval.lineaInt)
   return retval

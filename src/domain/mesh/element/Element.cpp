@@ -917,9 +917,9 @@ XC::Vector XC::Element::getCooCdg(bool initialGeometry) const
     return retval;
   }
 
-XC::TritrizPtrElem XC::Element::coloca_en_malla(const XC::TritrizPtrNod &,dir_mallado) const
+XC::TritrizPtrElem XC::Element::put_on_mesh(const XC::TritrizPtrNod &,meshing_dir) const
   {
-    std::cerr << "Método coloca_en_malla no implementado" << std::endl;
+    std::cerr << "Método put_on_mesh no implementado" << std::endl;
     return TritrizPtrElem();
   }
 

@@ -46,26 +46,26 @@
 
 //! @brief Constructor.
 XC::EntMdlr::EntMdlr(Preprocessor *m,const size_t &i)
-  : SetEstruct("",m), idx(i), genMalla(true), nodos(), elementos() {}
+  : SetEstruct("",m), idx(i), doGenMesh(true), nodos(), elementos() {}
 
 //! @brief Constructor.
 //! @param nombre: Identificador del objeto.
 //! @param i: Índice para gráficos.
 //! @param m: Apuntador al preprocesador.
 XC::EntMdlr::EntMdlr(const std::string &nombre,const size_t &i,Preprocessor *m)
-  : SetEstruct(nombre,m), idx(i), genMalla(true), nodos(), elementos() {}
+  : SetEstruct(nombre,m), idx(i), doGenMesh(true), nodos(), elementos() {}
 
 
 //! @brief Constructor de copia.
 XC::EntMdlr::EntMdlr(const EntMdlr &otro)
-  : SetEstruct(otro), idx(otro.idx), genMalla(true), nodos(otro.nodos), elementos(otro.elementos) {}
+  : SetEstruct(otro), idx(otro.idx), doGenMesh(true), nodos(otro.nodos), elementos(otro.elementos) {}
 
 //! @brief Operador asignación.
 XC::EntMdlr &XC::EntMdlr::operator=(const EntMdlr &otro)
   {
     SetEstruct::operator=(otro);
     idx= otro.idx;
-    genMalla= otro.genMalla;
+    doGenMesh= otro.doGenMesh;
     nodos= otro.nodos;
     elementos= otro.elementos;
     return *this;
@@ -260,7 +260,7 @@ void XC::EntMdlr::crea_nodos(const TritrizPos3d &posiciones)
   }
 
 //! @brief Crea los elementos en los nodos que se crearon en crea_nodos.
-bool XC::EntMdlr::crea_elementos(dir_mallado dm)
+bool XC::EntMdlr::crea_elementos(meshing_dir dm)
   {
     bool retval= false;
     if(!nodos.empty())
@@ -278,7 +278,7 @@ bool XC::EntMdlr::crea_elementos(dir_mallado dm)
                   const Element *smll= get_preprocessor()->getElementLoader().get_elemento_semilla();
                   if(smll)
                     {
-                      elementos= smll->coloca_en_malla(nodos,dm);
+                      elementos= smll->put_on_mesh(nodos,dm);
                       agrega_elementos(elementos);
                       retval= true;
                     }
@@ -298,12 +298,12 @@ bool XC::EntMdlr::crea_elementos(dir_mallado dm)
   }
 
 //! @brief Devuelve verdadero si el punto toca a la línea.
-void XC::EntMdlr::setGenMalla(bool m)
-  { genMalla= m; }
+void XC::EntMdlr::setGenMesh(bool m)
+  { doGenMesh= m; }
 
 //! @brief Devuelve verdadero si el punto toca a la línea.
-const bool &XC::EntMdlr::getGenMalla(void) const
-  { return genMalla; }
+const bool &XC::EntMdlr::getGenMesh(void) const
+  { return doGenMesh; }
 
 //! @brief Crea un punto en la posición being passed as parameter.
 XC::Pnt *XC::EntMdlr::crea_punto(const Pos3d &pos)

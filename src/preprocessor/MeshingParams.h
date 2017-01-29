@@ -24,17 +24,17 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ParamMallado.h 
+//MeshingParams.h 
 
-#ifndef ParamMallado_h
-#define ParamMallado_h
+#ifndef MeshingParams_h
+#define MeshingParams_h
 
 #include <string>
 
 namespace XC
 {
-enum dir_mallado {dirm_i,dirm_j,dirm_k}; //Dirección de mallado.
+enum meshing_dir {dirm_i,dirm_j,dirm_k}; //Meshing direction.
 
- dir_mallado str_to_dir_mallado(const std::string &);
+ meshing_dir str_to_meshing_dir(const std::string &);
 } //end of XC namespace
 #endif

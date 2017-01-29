@@ -42,13 +42,12 @@ class YieldSurface_BC;
 
 //! \ingroup MATSCC
 //
-//! @defroup MATSCCYS Secciones con superficie de fluencia.
+//! @defroup MATSCCYS Cross sections with yield surface.
 //
 //! \ingroup MATSCCYS
 //
-//! @brief Clase base para las secciones transversales con
-//! superficie de fluencia definidas en un problema bidimensional
-//! (tres esfuerzos por sección).
+//! @brief Base class for cross sections with yield surface
+//! on a bi-dimensional space (three DOFs for each section).
 class YieldSurfaceSection2d: public SeccionBarraPrismatica
   {
   protected:

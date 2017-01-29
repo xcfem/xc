@@ -71,7 +71,7 @@ class Block: public Body
     size_t NDivK(void) const;
     bool checkNDivs(void) const;
     void crea_nodos(void);
-    void Malla(dir_mallado dm);
+    void genMesh(meshing_dir dm);
 
 
   };

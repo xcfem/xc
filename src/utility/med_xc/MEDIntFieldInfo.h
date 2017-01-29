@@ -20,7 +20,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDIntFieldInfo.h
-//Información sobre las celdas de la malla (para exportar archivos a «salome»).
 
 #ifndef MEDINTFIELDINFO_H
 #define MEDINTFIELDINFO_H
@@ -33,8 +32,7 @@ class MEDGroupInfo;
 
 //! @ingroup MED
 //
-//! @brief Información sobre un campo definido sobre un
-//! subconjunto de la malla.
+//! @brief Information about field defined over a mesh subset.
 class MEDIntFieldInfo: public MEDTFieldInfo<int>
   {
   protected:

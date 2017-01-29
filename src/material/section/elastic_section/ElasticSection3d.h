@@ -72,9 +72,8 @@ class Information;
 
 //! \ingroup MATSCCElastica
 //
-//! @brief Sección transversale formadas
-//! por un material elástico lineal en un problema tridimensional
-//! (6 esfuerzos por sección).
+//! @brief Cross section with linear elastic material
+//! in three-dimensional problems (6 degrees of freedom in each section).
 class ElasticSection3d: public BaseElasticSection3d
   {
   private:   

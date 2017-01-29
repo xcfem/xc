@@ -37,10 +37,10 @@ namespace XC {
 
 class Mesh;
 
-//! @brief Contenedor de grupos de condiciones de contorno mononodales.
+//! @brief NodeLocker container.
 class NodeLockers: public EntCmd, public MovableObject
   {
-    typedef std::map<std::string,NodeLocker *> map_node_lockers; //!< Bloqueo de nodos.
+    typedef std::map<std::string,NodeLocker *> map_node_lockers; //!< NodeLocker container.
     map_node_lockers node_lockers;
     int tag; //!< Identificador por defecto.
     std::string code; //!< Identificador del pattern para las nuevas coacciones.

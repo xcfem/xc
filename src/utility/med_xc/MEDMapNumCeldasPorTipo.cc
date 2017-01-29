@@ -61,7 +61,7 @@ std::vector<int> XC::MEDMapNumCeldasPorTipo::getNumCeldasPorTipo(void) const
     return retval; 
   }
 
-//! @brief Devuelve los tipos de elemento de la malla.
+//! @brief Returns elements types of the mesh.
 XC::MEDMapNumCeldasPorTipo::vector_tipos XC::MEDMapNumCeldasPorTipo::getTipos(void) const
   {
     const size_t sz= getNumberOfTypes();

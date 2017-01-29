@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 # Características mecánicas de distintos tipos de acero.
 
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, AO_O and LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
+
 import math
 from materials import typical_materials
 

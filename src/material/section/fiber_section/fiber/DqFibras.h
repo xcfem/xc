@@ -154,7 +154,7 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     Recta2d getTrazaPlanoTraccion(void) const;
     Recta2d getTrazaPlanoCompresion(void) const;
     double calcAcEficazFibras(const std::list<Poligono2d> &,const double &factor= 15) const;
-    const std::list<Poligono2d> &getContornoAcEficazFibra(const size_t &i) const;
+    const std::list<Poligono2d> &getContourAcEficazFibra(const size_t &i) const;
     double getAcEficazFibra(const size_t &i) const;
     double getAcEficazFibras(void) const;
     void calcRecubrimientos(const GeomSection &) const;

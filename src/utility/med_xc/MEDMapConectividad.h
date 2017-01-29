@@ -20,7 +20,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDMapConectividad.h
-//Información sobre las celdas de la malla (para exportar archivos a «salome»).
 
 #ifndef MEDMAPCONECTIVIDAD_H
 #define MEDMAPCONECTIVIDAD_H
@@ -36,7 +35,7 @@ class MEDMapIndices;
 
 //! @ingroup MED
 //
-//!  @brief Información sobre la conectividad de las celdas de la malla.
+//!  @brief Information about mesh cells connectivity.
 class MEDMapConectividad
   {
   public:

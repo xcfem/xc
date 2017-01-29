@@ -47,17 +47,17 @@ class ProblemaEF;
 
 //!  \ingroup Solu
 //! 
-//! @brief Procedimiento de solución del problema de elementos finitos.
+//! @brief Solution procedure for the finite element problem.
 //!
-//! La definición del análisis que se pretende realizar (problema estático,
-//! dinámico, de eigenvalues,...) se hace mediante el objeto theAnalysis
-//! de la clase Analysis. La definición de los algoritmos a emplear para
-//! realizar el análisis se hace mediante el objeto solu_control
+//! This objects allows the definition of the problem to analyza by
+//! specifiying:.
+//! - The type of the analysis: static, dynamic, eigenvalues,...
+//! - The parameters that control the solution procedure.
 class ProcSolu: public EntCmd
   {
   private:
-    ProcSoluControl solu_control;//!< Modo de realizar el análisis.
-    Analysis *theAnalysis; //! Análisis a realizar (estático, dinámico,...).
+    ProcSoluControl solu_control;//!< Control of the solution procedure.
+    Analysis *theAnalysis; //! Analysis type (static, dynamic, eigenvalues,...).
   protected:
     friend class ProblemaEF;
 

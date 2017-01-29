@@ -492,11 +492,11 @@ XC::ElementIter &XC::Domain::getElements()
 XC::NodeIter &XC::Domain::getNodes()
   { return mesh.getNodes(); }
 
-//! @brief Devuelve la malla del dominio.
+//! @brief Returns a reference to the domain mesh.
 const XC::Mesh &XC::Domain::getMesh(void) const
   { return mesh; }
 
-//! @brief Devuelve la malla del dominio.
+//! @brief Returns a reference to the domain mesh.
 XC::Mesh &XC::Domain::getMesh(void)
   { return mesh; }
 
@@ -529,8 +529,7 @@ const XC::Element *XC::Domain::getElement(int tag) const
   { return mesh.getElement(tag); }
 
 
-//! @brief Devuelve verdadero si el nodo cuyo tag se pasa como parámetro
-//! ya existe en la malla.
+//! @brief Returns true if the mesh has a node with the tag being passed as parameter.
 bool XC::Domain::existNode(int tag)
  { return mesh.existNode(tag); }
 

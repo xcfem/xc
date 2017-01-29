@@ -70,7 +70,7 @@ class AnalysisModel;
 
 //! @ingroup AnalisisModel
 //
-//! @brief Iterador sobre los grados de libertad del modelo a analizar.
+//! @brief Iterator over the degrees of freedom of the analysis model.
 class SimpleDOF_Iter: public DOF_GrpIter
   {
   public:

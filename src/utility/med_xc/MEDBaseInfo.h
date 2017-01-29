@@ -33,7 +33,7 @@ namespace XC {
 class Mesh;
 //! @ingroup MED
 //
-//!  @brief Información sobre los vértices (nodos) de la malla.
+//!  @brief Base class for infomation objects.
 class MEDBaseInfo: public MEDObject
   {
   protected:

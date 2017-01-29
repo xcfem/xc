@@ -79,7 +79,7 @@ class Vector;
 
 //! @ingroup EQSolAlgo
 //
-//! @brief Algoritmo de solución por el método de bisección.
+//! @brief Bisection line search solution algorithm.
 class BisectionLineSearch: public LineSearch
   {
     friend class NewtonLineSearch;

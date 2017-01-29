@@ -13,7 +13,7 @@ def esfuerzoPunzonamiento(qk,A):
 
 def punzMaximo(fck,d,a,b):
     #Estimación de la resistencia de las bielas en la sección de
-    #intersección del contorno del pilar con el forjado (HL.3 números gordos)
+    #intersección del support contour with the forjado (HL.3 números gordos)
     #(Interpreto que este es el punzonamiento máximo si no vamos a disponer
     #reinforcement de punzonamiento)
     #Si el esfuerzo de punzonamiento es mayor habrá que:

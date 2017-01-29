@@ -35,7 +35,7 @@ namespace XC {
 
 //! @ingroup MATSCCCell
 //
-//! @brief Tesela en forma de triángulo empleada para discretizar una sección.
+//! @brief Triangle shaped cell for section discretization.
 class TriangCell: public Cell
   {
   public:

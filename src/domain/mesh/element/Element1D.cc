@@ -286,7 +286,7 @@ void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane
 size_t XC::Element1D::getDimension(void) const
   { return 1; }
 
-void malla_en_i(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_i &nodos,XC::TritrizPtrElem::var_ref_fila_i &elementos)
+void meshing_on_i(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_i &nodos,XC::TritrizPtrElem::var_ref_fila_i &elementos)
   {
     const size_t ncapas= nodos.GetCapas();
     for(size_t i=1;i<ncapas;i++)
@@ -299,7 +299,7 @@ void malla_en_i(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_i
       }
   }
 
-void malla_en_j(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_j &nodos,XC::TritrizPtrElem::var_ref_fila_j &elementos)
+void meshing_on_j(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_j &nodos,XC::TritrizPtrElem::var_ref_fila_j &elementos)
   {
     const size_t nfilas= nodos.getNumFilas();
     for(size_t j=1;j<nfilas;j++)
@@ -312,7 +312,7 @@ void malla_en_j(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_j
       }
   }
 
-void malla_en_k(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_k &nodos,XC::TritrizPtrElem::var_ref_fila_k &elementos)
+void meshing_on_k(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_k &nodos,XC::TritrizPtrElem::var_ref_fila_k &elementos)
   {
     const size_t ncols= nodos.getNumCols();
     for(size_t k=1;k<ncols;k++)
@@ -325,7 +325,7 @@ void malla_en_k(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_k
       }
   }
 
-void XC::Element1D::malla_unidimensional(const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elementos) const
+void XC::Element1D::unidimensional_meshing(const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elementos) const
   {
     const size_t ncapas= nodos.GetCapas();
     const size_t nfilas= nodos.getNumFilas();
@@ -334,42 +334,42 @@ void XC::Element1D::malla_unidimensional(const XC::TritrizPtrNod &nodos,XC::Trit
       {
         elementos= TritrizPtrElem(ncapas-1,MatrizPtrElem(1,1));
         TritrizPtrElem::var_ref_fila_i fila_elem= elementos.GetVarRefFilaI(1,1);
-        malla_en_i(*this,nodos.GetConstRefFilaI(1,1),fila_elem);
+        meshing_on_i(*this,nodos.GetConstRefFilaI(1,1),fila_elem);
       }
     else if(nodos.EsFilaJ())
       {
         elementos= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas-1,ncols));
         TritrizPtrElem::var_ref_fila_j fila_elem= elementos.GetVarRefFilaJ(1,1);
-        malla_en_j(*this,nodos.GetConstRefFilaJ(1,1),fila_elem);
+        meshing_on_j(*this,nodos.GetConstRefFilaJ(1,1),fila_elem);
       }
     else if(nodos.EsFilaK())
       {
         elementos= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas,ncols-1));
         TritrizPtrElem::var_ref_fila_k fila_elem= elementos.GetVarRefFilaK(1,1);
-        malla_en_k(*this,nodos.GetConstRefFilaK(1,1),fila_elem);
+        meshing_on_k(*this,nodos.GetConstRefFilaK(1,1),fila_elem);
       }
   }
 
-XC::TritrizPtrElem XC::Element1D::coloca_en_malla(const TritrizPtrNod &nodos,dir_mallado dm) const
+XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing_dir dm) const
   {
     const size_t ncapas= nodos.GetCapas();
     const size_t nfilas= nodos.getNumFilas();
     const size_t ncols= nodos.getNumCols();
-    const size_t dim_malla= nodos.GetDim();
+    const size_t mesh_dim= nodos.GetDim();
     TritrizPtrElem retval;
-    if(dim_malla<1)
+    if(mesh_dim<1)
       std::cerr << "Existe un sólo nodo, no se pudieron crear elementos." << std::endl;
     else
       {
-       if(dim_malla<2) //Malla unidimensional
-          malla_unidimensional(nodos,retval);
+       if(mesh_dim<2) //Bidimensional mesh
+          unidimensional_meshing(nodos,retval);
         else
           {
             switch(dm)
               {
               case dirm_i:
                 if(ncapas<2)
-		  std::cerr << "Element1D::coloca_en_malla; número insuficiente de nodos en dirección i. No se crean elementos." << std::endl;
+		  std::cerr << "Element1D::put_on_mesh; número insuficiente de nodos en dirección i. No se crean elementos." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas-1,MatrizPtrElem(nfilas,ncols));
@@ -377,13 +377,13 @@ XC::TritrizPtrElem XC::Element1D::coloca_en_malla(const TritrizPtrNod &nodos,dir
                       for(size_t k=1;k<=ncols;k++)
                         {
                           TritrizPtrElem::var_ref_fila_i fila_elem= retval.GetVarRefFilaI(j,k);
-                          malla_en_i(*this,nodos.GetConstRefFilaI(j,k),fila_elem);
+                          meshing_on_i(*this,nodos.GetConstRefFilaI(j,k),fila_elem);
                         }
                   }
                 break;
               case dirm_j:
                 if(nfilas<2)
-		  std::cerr << "Element1D::coloca_en_malla; número insuficiente de nodos en dirección j. No se crean elementos." << std::endl;
+		  std::cerr << "Element1D::put_on_mesh; número insuficiente de nodos en dirección j. No se crean elementos." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas-1,ncols));
@@ -391,13 +391,13 @@ XC::TritrizPtrElem XC::Element1D::coloca_en_malla(const TritrizPtrNod &nodos,dir
                       for(size_t k=1;k<=ncols;k++)
                         {
                           XC::TritrizPtrElem::var_ref_fila_j fila_elem= retval.GetVarRefFilaJ(i,k);
-                          malla_en_j(*this,nodos.GetConstRefFilaJ(i,k),fila_elem);
+                          meshing_on_j(*this,nodos.GetConstRefFilaJ(i,k),fila_elem);
                         }
                   }
                 break;
               case dirm_k:
                 if(ncols<2)
-		  std::cerr << "Element1D::coloca_en_malla; número insuficiente de nodos en dirección k. No se crean elementos." << std::endl;
+		  std::cerr << "Element1D::put_on_mesh; número insuficiente de nodos en dirección k. No se crean elementos." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas,ncols-1));
@@ -405,7 +405,7 @@ XC::TritrizPtrElem XC::Element1D::coloca_en_malla(const TritrizPtrNod &nodos,dir
 	              for(size_t j=1;j<=nfilas;j++)
                         {
                           XC::TritrizPtrElem::var_ref_fila_k fila_elem= retval.GetVarRefFilaK(i,j);
-                          malla_en_k(*this,nodos.GetConstRefFilaK(i,j),fila_elem);
+                          meshing_on_k(*this,nodos.GetConstRefFilaK(i,j),fila_elem);
                         }
                   }
                 break;

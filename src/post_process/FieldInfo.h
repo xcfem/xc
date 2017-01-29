@@ -20,7 +20,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //FieldInfo.h
-//Información sobre las celdas de la malla (para exportar archivos a «salome»).
 
 #ifndef FIELDINFO_H
 #define FIELDINFO_H

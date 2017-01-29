@@ -150,10 +150,10 @@ ratio4= (nCargasNod-nElem)
 ratio5= (errDisp)
 
 ''' 
-print "núm. nodos: ",nNodes
-print "núm. condiciones de contorno: ",numSPs
-print "núm. cargas en nodos: ",nCargasNod
-print "núm. elementos: ",nElem
+print "number of nodes: ",nNodes
+print "number of boundary conditions: ",numSPs
+print "number of loads on nodes: ",nCargasNod
+print "number of elements: ",nElem
 print "ratio1= ",ratio1
 print "ratio2= ",ratio2
 print "ratio3= ",ratio3

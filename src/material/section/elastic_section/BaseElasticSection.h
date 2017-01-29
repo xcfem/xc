@@ -40,8 +40,7 @@ namespace XC {
 //
 //! \ingroup MATSCCElastica
 //
-//! @brief Clase base para las secciones transversales formadas
-//! por un material elástico lineal.
+//! @brief Base class for cross sections with linear elastic material.
 class BaseElasticSection: public SeccionBarraPrismatica
   {
   protected:

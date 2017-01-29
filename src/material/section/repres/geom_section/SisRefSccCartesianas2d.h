@@ -37,10 +37,10 @@ namespace XC {
 
 //! @ingroup MATSCCEntGeom
 //
-//! @brief Sistema de referencia bidimensional para una sección.
+//! @brief Bidimensional reference system for a section.
 class SisRefSccCartesianas2d: public SisRefScc
   {
-    Ref2d2d ref;//!< Sistema de referencia.
+    Ref2d2d ref;//!< Reference system.
   protected:
 
   public:

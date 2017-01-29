@@ -20,7 +20,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDTFieldInfo.h
-//Información sobre las celdas de la malla (para exportar archivos a «salome»).
 
 #ifndef MEDTFIELDINFO_H
 #define MEDTFIELDINFO_H
@@ -38,8 +37,7 @@ class MEDGroupInfo;
 
 //! @ingroup MED
 //
-//! @brief Información sobre un campo definido sobre un
-//! subconjunto de la malla.
+//! @brief Iformation about a field defined over a mesh subset.
 template <class T>
 class MEDTFieldInfo: public MEDFieldInfo
   {

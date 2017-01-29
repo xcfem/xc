@@ -49,9 +49,6 @@
 
 namespace XC {
 
-//! @ingroup CCont
-//! @defgroup CContMP Condiciones de contorno multinodales.
-//
 //! @ingroup CContMP
 //
 //! @brief Glue a node to an element.

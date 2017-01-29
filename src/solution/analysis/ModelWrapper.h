@@ -45,17 +45,18 @@ class Integrator;
 
 //! @ingroup Analisis
 //
-//! @brief Envoltorio para el modelo de elementos finitos «visto» desde el «solver».
-//! Queda definido por el dominio a analizar, el modelo de análisis
-//! y el manejador de coacciones a emplear y el numerador de grados
-//! de libertad.
-//! Este objeto se encarga de crear, alojar y borrar el modelo de análisis,
-//! el gestor de coacciones y el numerador de grados de libertad.
+//! @brief Wrapper for the finite element model "seen" from the solver.
+//! The model wrapper is definied by:
+//! - Domein of the finite element model.
+//! - Analysis model.
+//! - Constraint handler.
+//! - DOF numberer.
+//! This object is a container for those entities.
 class ModelWrapper: public EntCmd
   {
-    AnalysisModel *theModel; //!< Modelo de análisis
-    ConstraintHandler *theHandler; //!< Manejador de coacciones.
-    DOF_Numberer *theDOFNumberer;  //!< Numerador de grados de libertad.
+    AnalysisModel *theModel; //!< Analisis model
+    ConstraintHandler *theHandler; //!< Constrainnt handler.
+    DOF_Numberer *theDOFNumberer;  //!< DOF numberer.
 
     void libera_analysis_model(void);
     void alloc_analysis_model(void);

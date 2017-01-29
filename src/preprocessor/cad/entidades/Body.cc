@@ -149,9 +149,11 @@ MatrizPos3d XC::Body::Cara::get_posiciones(void) const
         std::cerr << "El puntero a superficie es nulo." << std::endl;
         return MatrizPos3d(); 
       }
-    if(superficie->NumEdges()!=4)
+    const int numEdges= superficie->NumEdges();
+    if(numEdges!=4)
       {
-        std::cerr << "No se pueden mallar superficies con un número de lados distinto de 4" << std::endl;
+        std::cerr << "Can't mesh " << numEdges
+	          << " edges surfaces." << std::endl;
         return MatrizPos3d();
       }
     const CmbEdge::Lado *l1= GetLado(1);
@@ -162,12 +164,12 @@ MatrizPos3d XC::Body::Cara::get_posiciones(void) const
     //Columnas de puntos cuasi paralelas a l1 y l3 y con indice creciente desde l1 hasta l3.
     if(l1->NDiv()!=l3->NDiv())
       {
-        std::cerr << "Las líneas 1 y 3 tienen distinto número de divisiones. No se pudo mallar" << std::endl;
+        std::cerr << "Lines 1 and 3 have different number of divisions. Can't generate mesh." << std::endl;
         return MatrizPos3d();
       }
     if(l2->NDiv()!=l4->NDiv())
       {
-        std::cerr << "Las líneas 2 y 4 tienen distinto número de divisiones. No se pudo mallar" << std::endl;
+        std::cerr << "Lines 2 and 4 have different number of divisions. Can't generate mesh." << std::endl;
         return MatrizPos3d();
       }
     MatrizPos3d ptos_l1= l1->GetPosNodosDir();

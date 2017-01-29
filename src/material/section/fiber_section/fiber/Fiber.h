@@ -81,11 +81,11 @@ class Response;
 
 //! @ingroup MATSCCModeloFibras
 //
-//! @defgroup MATSCCFibras Clases que definen la representación de las fibras de la sección.
+//! @defgroup MATSCCFibras Classes for fiber section representation.
 //
 //! @ingroup MATSCCFibras
 //
-//! @brief Representa una fibra de una sección.
+//! @brief Section fiber.
 class Fiber: public TaggedObject, public MovableObject
   {
     bool dead; //!< Verdadero si la fibra está desactivada.

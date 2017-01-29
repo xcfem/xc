@@ -462,17 +462,17 @@ void XC::Block::crea_nodos(void)
         std::clog << "Block::crea_nodos; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
   }
 
-//! @brief Crea la malla de elementos finitos interior al bloque.
-void XC::Block::Malla(dir_mallado dm)
+//! @brief Triggers mesh generation.
+void XC::Block::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
-      std::clog << "Mallando Block...(" << GetNombre() << ")...";
+      std::clog << "Mesing Block...(" << GetNombre() << ")...";
     crea_nodos();
     if(elementos.Null())
       crea_elementos(dm);
     else
       if(verborrea>2)
-        std::clog << "Block::Malla; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
+        std::clog << "Block::genMesh; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
     if(verborrea>3)
       std::clog << "hecho." << std::endl;
   }

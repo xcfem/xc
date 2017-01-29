@@ -141,8 +141,8 @@ size_t XC::ListRegiones::getNumCells(void) const
     return ncells;
   }
 
-//! @brief Devuelve una lista con los contornos de las regiones.
-std::list<Poligono2d> XC::ListRegiones::getContornosRegiones(void) const
+//! @brief Returns a list with the regions contours.
+std::list<Poligono2d> XC::ListRegiones::getRegionsContours(void) const
   {
     std::list<Poligono2d> retval;
     for(const_iterator i= begin();i!=end();i++)
@@ -150,10 +150,10 @@ std::list<Poligono2d> XC::ListRegiones::getContornosRegiones(void) const
     return retval;
   }
 
-//! @brief Devuelve el contorno de las regiones.
-std::list<Poligono2d> XC::ListRegiones::getContorno(void) const
+//! @brief Return the regions contours.
+std::list<Poligono2d> XC::ListRegiones::getContours(void) const
   {
-    std::list<Poligono2d> retval= join(getContornosRegiones());
+    std::list<Poligono2d> retval= join(getRegionsContours());
     return retval;
   }
 
