@@ -13,6 +13,7 @@ from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk.malla_ef import Fields
 from postprocess import utils_display
 from model.grid_based import GridModel
+from xcVtk import ControlVarDiagram as cvd
 
 class RecordLoadCaseDisp(object):
   '''Generation of graphic files and adding to report-tex files for a load case
@@ -172,11 +173,29 @@ class RecordLoadCaseDisp(object):
     texFile.write('\\clearpage\n')
     return
 
-def checksReports(limitStateLabel,setsToReport,argsToReport,capTexts,pathGr,texReportFile,grWdt):
+def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFile,grWdt,setsBmElView=[],argsBmElScale=[]):
+    '''Create a LaTeX report including the desired graphical results obtained in the
+    verification of a limit state.
+
+    :param limitStateLabel:limit state
+    :param setsShEl:   Ordered list of sets of shell elements (defined in model_data.py 
+                       as instances of utils_display.setToDisplay) to be included in the report
+    :param argsShEl:   Ordered list of arguments to be included in the report for shell elements
+     :param capTexts:  dictionary from wich to read the texts for captions
+    :param pathGr:     width to be applied to graphics 
+    :param texReportFile:laTex file where to include the graphics
+    :param grWdt:      width of the graphics for the tex file
+    :param setsBmView: Ordered list of lists [set of beam elements, view to represent this set]
+                       to be included in the report. The set has been defined in model_data.py 
+                       as instances of utils_display.setToDisplay and the possible views are 
+                       'XYZPos','XNeg','XPos','YNeg','YPos','ZNeg','ZPos'  (defaults to 'XYZPos')
+    :param argsShEl:   Ordered list of lists [arguments, scale to represent the argument] 
+                       to be included in the report for beam elements
+    '''
     report=open(texReportFile,'w')    #report latex file
     dfDisp= vtk_grafico_ef.RecordDefDisplayEF()
-    for st in setsToReport:
-        for arg in argsToReport:
+    for st in setsShEl:
+        for arg in argsShEl:
             attributeName= limitStateLabel + 'Sect1'
             field= Fields.getScalarFieldFromControlVar(attributeName,arg,st.elSet,None,1.0)
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.genDescr.capitalize() + ', ' + st.sectDescr[0]

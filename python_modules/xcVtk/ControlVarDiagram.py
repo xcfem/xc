@@ -51,10 +51,10 @@ class ControlVarDiagram(cd.ColoredDiagram):
       attributeNameSect1= self.attributeName + 'Sect1' # Values in the start node.
       attributeNameSect2= self.attributeName + 'Sect2' # Values in the end node.
       if ('crack' in self.attributeName.lower()):
-        if (self.component == 'CF'):
+        if (self.component == 'getCF'):
           value1=elem.getProp(attributeNameSect1).getCF()
           value2=elem.getProp(attributeNameSect2).getCF()
-        elif (self.component == 'MaxSteelStress'):
+        elif (self.component == 'getMaxSteelStress'):
           value1=elem.getProp(attributeNameSect1).getMaxSteelStress()
           value2=elem.getProp(attributeNameSect2).getMaxSteelStress()
         else:
