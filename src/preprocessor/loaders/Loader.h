@@ -45,12 +45,12 @@ class FEM_ObjectBroker;
 //
 //! \ingroup Ldrs
 //! 
-//! @brief Objetos encargado de agregar al dominio los nodos,
-//! elementos, cargas, etc. leídos desde archivo.
+//! @brief Base class for the preprocessor objects that
+//! create model entities: nodes, elements, loads, etc.
 class Loader: public EntCmd,public MovableObject
   {
   protected:
-    Preprocessor *preprocessor; //!< Puntero al preprocesador.
+    Preprocessor *preprocessor; //!< Pointer to preprocessor.
 
     friend class Preprocessor;    
     void set_preprocessor(Preprocessor *preprocessor);

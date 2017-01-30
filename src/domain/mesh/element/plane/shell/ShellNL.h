@@ -107,8 +107,6 @@ class ShellNL : public QuadBase9N<SectionFDPhysicalProperties>
 
     const GaussModel &getGaussModel(void) const;
 
-    //Métodos para definir cargas.
-
     // methods for applying loads
     void zeroLoad(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);

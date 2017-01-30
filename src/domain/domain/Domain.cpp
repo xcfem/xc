@@ -591,7 +591,7 @@ void XC::Domain::applyLoad(double timeStep)
     constraints.applyLoad(timeStep);
   }
 
-//! @brief Establece como constantes todas las cargas del dominio.
+//! @brief Set all the loads as constant.
 void XC::Domain::setLoadConstant(void)
   { constraints.setLoadConstant(); }
 

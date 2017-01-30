@@ -68,18 +68,18 @@ class Vector;
 
 //! \ingroup Loads
 //
-//! @defgroup NodeLoads Cargas sobre nodos.
+//! @defgroup NodeLoads Loads over nodes.
 //
 //! @ingroup NodeLoads
 //
-//! @brief Carga en un nodo.
+//! @brief Load over a node.
 class NodalLoad : public Load
   {
   private:
-    int  myNode; //!< tag of node on which load acts.
-    mutable Node *myNodePtr; //!< pointer to node object on which load acts
-    Vector load;       //!< the reference load
-    bool  konstant;     //!< true if load is load factor independent
+    int  myNode; //!< tag of loaded node.
+    mutable Node *myNodePtr; //!< pointer to the loaded node
+    Vector load;  //!< load vector.
+    bool  konstant; //!< true if load is load factor independent (pushover analysis).
     // AddingSensitivity:BEGIN /////////////////////////////////////
     int parameterID;
     static Vector gradientVector;
