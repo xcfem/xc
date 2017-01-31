@@ -25,6 +25,9 @@ class RecordLoadCaseDisp(object):
   :ivar setsToDispLoads: ordered list of sets of shell elements to display loads
   :ivar setsToDispBeamLoads: ordered list of sets of beam elements to display 
                    loads (defaults to [])
+  :ivar compElLoad: component of load on beam elements to be represented
+                   available components: 'axialComponent', 'transComponent', 
+                   'transYComponent','transZComponent' (defaults to 'transComponent')
   :ivar unitsScaleLoads: factor to apply to loads if we want to change
                    the units (defaults to 1).
   :ivar unitsLoads: text to especify the units in which loads are 
@@ -81,6 +84,7 @@ class RecordLoadCaseDisp(object):
     self.loadCaseExpr=loadCaseExpr
     self.setsToDispLoads=setsToDispLoads
     self.setsToDispBeamLoads=[]
+    self.compElLoad='transComponent'
     self.unitsScaleLoads=1.0
     self.unitsLoads='units:[m,kN]'
     self.vectorScaleLoads=1.0
@@ -117,6 +121,13 @@ class RecordLoadCaseDisp(object):
       capt=self.loadCaseDescr + ', ' + st.genDescr + ', '  + self.unitsLoads
       gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,caption= capt,fileName=grfname+'.jpg')
       gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,caption= capt,fileName=grfname+'.eps')
+      insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
+    for st in self.setsToDispBeamLoads:
+      grfname=pathGr+self.loadCaseName+st.elSet.name
+      capt=self.loadCaseDescr + ', ' + st.genDescr + ', '  + self.unitsLoads
+      lcs=GridModel.QuickGraphics(gridmodl)
+      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st.elSet,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,caption= capt,fileName=grfname+'.jpg')
+      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st.elSet,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,caption= capt,fileName=grfname+'.eps')
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
     return
 
