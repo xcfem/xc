@@ -22,13 +22,17 @@ class RecordLoadCaseDisp(object):
   :ivar loadCaseDescr: description text of the load case
   :ivar loadCaseExpr:  mathematical expression to define the load case (ex:
                    '1.0*GselfWeight+1.0*DeadLoad')
-  :ivar setsToDispLoads: ordered list of sets of elements to display loads
+  :ivar setsToDispLoads: ordered list of sets of shell elements to display loads
+  :ivar setsToDispBeamLoads: ordered list of sets of beam elements to display 
+                   loads (defaults to [])
   :ivar unitsScaleLoads: factor to apply to loads if we want to change
                    the units (defaults to 1).
   :ivar unitsLoads: text to especify the units in which loads are 
                    represented (defaults to 'units:[m,kN]')
   :ivar vectorScaleLoads: factor to apply to the vectors length in the 
-                   representation of loads (defaults to 1).
+                   representation of element loads (defaults to 1).
+  :ivar vectorScalePointLoads: factor to apply to the vectors length in the 
+                   representation of nodal loads (defaults to 1).
   :ivar multByElemAreaLoads: boolean value that must be True if we want to 
                    represent the total load on each element 
                    (=load multiplied by element area) and False if we 
@@ -76,9 +80,11 @@ class RecordLoadCaseDisp(object):
     self.loadCaseDescr=loadCaseDescr
     self.loadCaseExpr=loadCaseExpr
     self.setsToDispLoads=setsToDispLoads
+    self.setsToDispBeamLoads=[]
     self.unitsScaleLoads=1.0
     self.unitsLoads='units:[m,kN]'
     self.vectorScaleLoads=1.0
+    self.vectorScalePointLoads=1.0
     self.multByElemAreaLoads=False
     self.listDspRot=['uX', 'uY', 'uZ']
     self.setsToDispDspRot=setsToDispDspRot
