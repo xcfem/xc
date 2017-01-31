@@ -61,8 +61,8 @@ l1.genMesh(xc.meshDir.I)
     
 # Constraints
 coacciones= preprocessor.getConstraintLoader
-fija_nodos_lineas.CondContornoNodosExtremosLinea(l,coacciones,fix_node_6dof.fixNode6DOF)
-fija_nodos_lineas.CondContornoNodosInterioresLinea(l,coacciones,fix_node_6dof.Nodo6DOFGirosImpedidos)
+fija_nodos_lineas.ConstraintsForLineExtremeNodes(l,coacciones,fix_node_6dof.fixNode6DOF)
+fija_nodos_lineas.ConstraintsForLineInteriorNodes(l,coacciones,fix_node_6dof.Nodo6DOFGirosImpedidos)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

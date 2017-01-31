@@ -28,7 +28,7 @@ void export_domain(void)
     using namespace boost::python;
     docstring_options doc_options;
 
-//Exposición de las condiciones de contorno en desplazamientos.
+//Exposing essential (displacements) boundary conditions.
 #include "domain/constraints/python_interface.tcc"
 
 //Exposición de las cargas.

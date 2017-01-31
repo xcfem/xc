@@ -41,7 +41,7 @@ class FVector;
 class HingeBeamIntegration3d: public PlasticLengthsBeamIntegration
   {
   protected:
-    CrossSectionProperties3d ctes_scc; //Características de la seccion E,A,Iy,...
+    CrossSectionProperties3d ctes_scc; //!< Mechanical properties of the section E,A,Iy,...
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

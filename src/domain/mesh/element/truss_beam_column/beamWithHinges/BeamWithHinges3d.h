@@ -73,7 +73,7 @@ class Renderer;
 class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
   {
   private:
-    CrossSectionProperties3d ctes_scc; //Características de la seccion E,A,Iy,...
+    CrossSectionProperties3d ctes_scc; //Mechanical properties of the section E,A,Iy,...
     double beta1, beta2;
     double rho;
 

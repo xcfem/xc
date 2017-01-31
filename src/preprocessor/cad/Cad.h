@@ -85,11 +85,9 @@ class Cad: public EntCmd
     MapLineas edges; //!< Lista de edges.
     MapSuperficies faces; //!< Lista de superficies.
     MapCuerpos cuerpos; //!< Lista de cuerpos.
-    MapUniformGrids unif_grid; //!< Lista de mallas uniformes.
-
-    MapEsquemas2d esquemas2d; //!< Lista de esquemas bidimensionales.
-
-    MapEsquemas3d esquemas3d; //!< Lista de esquemas tridimensionales.
+    MapUniformGrids unif_grid; //!< Uniform grid container.
+    MapEsquemas2d esquemas2d; //!< Bi-dimensional scheme container.
+    MapEsquemas3d esquemas3d; //!< Three-dimensional scheme container.
 
   protected:
 

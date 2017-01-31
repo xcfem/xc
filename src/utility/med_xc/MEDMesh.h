@@ -36,7 +36,7 @@ namespace XC {
 class MEDMesh: public MEDObject
   {
     std::string meshName;
-    mutable MEDMEM::MESH *malla;
+    mutable MEDMEM::MESH *mesh;
     void libera(void) const;
     void alloc(const std::string &) const;
     void alloc(const MEDMesh &) const;

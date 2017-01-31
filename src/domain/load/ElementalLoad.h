@@ -65,15 +65,15 @@ namespace XC {
 //! \ingroup Loads
 //!
 //!
-//! @defgroup ElemLoads Cargas sobre elementos.
+//! @defgroup ElemLoads Loads overt elements.
 //
 //! @ingroup ElemLoads
 //
-//! @brief Carga sobre elementos (clase abstracta).
+//! @brief Base class for loads over elements.
 class ElementalLoad: public Load
   {
   protected:
-    ID elemTags; //!< Tags de los elementos.
+    ID elemTags; //!< Tags of loaded elements.
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);

@@ -56,11 +56,11 @@ class RayleighDampingFactors;
 
 //! \ingroup Dom
 //
-//! \defgroup Mesh Malla del modelo de elementos finitos.
+//! \defgroup Mesh Finite element mesh.
 //
 //! \ingroup Mesh
 //
-//! @brief Nodos y elementos de la malla de elementos finitos.
+//! @brief Finite element mesh.
 class Mesh: public MeshComponentContainer
   {
   private:
@@ -78,7 +78,7 @@ class Mesh: public MeshComponentContainer
 
     TaggedObjectStorage *theElements;
     SingleDomEleIter *theEleIter;
-    KDTreeElements kdtreeElements; //!< KDTree para acelerar la búsqueda de elementos por coordenadas.
+    KDTreeElements kdtreeElements; //!< KDTree search finite element by its position (x,y,x).
 
     Vector theBounds;
     int tagNodeCheckReactionException;//!< excepción para comprobación de reacciones (ver Domain::checkNodalReactions).

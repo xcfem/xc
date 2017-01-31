@@ -57,9 +57,9 @@ double XC::RgSccPoligono::getMinZ(void) const
 Poligono2d XC::RgSccPoligono::getPoligono(void) const
   { return plg; }
 
-const Rejilla2d &XC::RgSccPoligono::Malla(void) const
+const Rejilla2d &XC::RgSccPoligono::getMesh(void) const
   {
-    std::cerr << "RgSccPoligono::Malla no implementada." << std::endl;
+    std::cerr << "RgSccPoligono::getMesh no implementada." << std::endl;
     static Rejilla2d retval;
     return retval;
   }

@@ -79,12 +79,12 @@ class MaterialLoader;
 //! \ingroup Mat
 //!
 //!
-//! \defgroup MATSCC Modelización de una sección transversal.
+//! \defgroup MATSCC Force deformation section model.
 //!
 //! \ingroup MATSCC
 //
-//! @brief Clase base para las secciones transversales. Representa
-//! las ecuaciones consititutivas de la sección.
+//! @brief Base class for force deformation section models. Constitutive
+//! equations of the section.
 class SectionForceDeformation: public Material
   {
   protected:

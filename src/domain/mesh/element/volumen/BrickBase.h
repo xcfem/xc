@@ -45,7 +45,7 @@ class NDMaterial;
 class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
   {
   protected:
-    TritrizPtrElem coloca_en_malla(const TritrizPtrNod &,dir_mallado dm) const;
+    TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
   public:
     BrickBase(int classTag);
     BrickBase(int tag,int classTag,const NDMaterialPhysicalProperties &);

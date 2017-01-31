@@ -42,10 +42,10 @@
 XC::SetBase::SetBase(const std::string &nmb,Preprocessor *md)
   : EntMdlrBase(nmb,md) {}
 
-//! @brief Genera la malla a partir de los objetos del conjunto.
-void XC::SetBase::Malla(dir_mallado dm)
+//! @brief Generates a finite element mesh from the set components.
+void XC::SetBase::genMesh(meshing_dir dm)
   {
-    std::cerr << "Método Malla() no implementado." << std::endl;
+    std::cerr << "Método genMesh() no implementado." << std::endl;
   }
 
 //! @brief Impone desplazamiento nulo en los nodos de este conjunto.

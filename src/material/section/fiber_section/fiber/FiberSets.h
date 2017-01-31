@@ -37,7 +37,7 @@ namespace XC {
 
 //! \ingroup MATSCCFibras
 //
-//! @brief Clase base para las secciones discretizadas en fibras.
+//! @brief Fiber sets container.
 class FiberSets: public std::map<std::string,DqFibras>, public EntCmd
   {
   public:

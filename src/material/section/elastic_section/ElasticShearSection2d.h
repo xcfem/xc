@@ -62,9 +62,8 @@ class ResponseId;
 
 //! \ingroup MATSCCElastica
 //
-//! @brief Clase base para las secciones transversales formadas
-//! por un material elástico lineal con rigidez a cortante en un
-//! espacio bidimensional (3 esfuerzos por sección).
+//! @brief Base clas for cross sections with linear elastic material
+//! with shear stiffness on a bi-dimensional space (3 DOF on each section).
 class ElasticShearSection2d: public BaseElasticSection2d
   {
   private:

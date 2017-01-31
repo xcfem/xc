@@ -78,12 +78,9 @@ namespace XC {
 class Matrix;
 class ID;
 
-//! @ingroup CCont
-//! @defgroup CContMP Condiciones de contorno multinodales.
-//
 //! @ingroup CContMP
 //
-//! @brief Condición de contorno multinodal.
+//! @brief Multi-freedom constraint.
 class MFreedom_Constraint: public MFreedom_ConstraintBase
   {
   protected:

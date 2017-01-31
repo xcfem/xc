@@ -70,7 +70,7 @@ class AnalysisModel;
 
 //! @ingroup AnalisisModel
 //
-//! @brief Iterador sobre los elementos del modelo a analizar.
+//! @brief Iterator over the model finite elements.
 class SimpleFE_Iter: public FE_EleIter
   {
   private:

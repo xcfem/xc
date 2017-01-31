@@ -39,14 +39,12 @@ class Spot;
 
 //! @ingroup MATSCCEntGeom
 //
-//! @brief Clase base para los objetos unidimensionales empleados para representar una sección.
+//! @brief Base class for 1D entities in section definition.
 class Eje: public EntGeomSection
   {
     friend class CmbEje;
   protected:
-    size_t ndiv; //!< Número de divisiones
-
-
+    size_t ndiv; //!< Number of divisions.
 
     friend class GeomSection;
     Eje(GeomSection *sr,const size_t &nd= 4);

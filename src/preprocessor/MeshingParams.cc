@@ -24,14 +24,14 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ParamMallado.cc
+//MeshingParams.cc
 
-#include "ParamMallado.h"
+#include "MeshingParams.h"
 
-//! @brief Devuelve la dirección de mallado a partir de una cadena de caracteres.
-XC::dir_mallado XC::str_to_dir_mallado(const std::string &str)
+//! @brief Returns mesh direction from the string being passed as parameter (i, j or k).
+XC::meshing_dir XC::str_to_meshing_dir(const std::string &str)
   {
-    dir_mallado retval= dirm_i;
+    meshing_dir retval= dirm_i;
     if(str=="i")
       retval= dirm_i;
     else if(str=="j")

@@ -67,10 +67,8 @@ class FiberSectionRepr;
 
 //! \ingroup MATSCCModeloFibras
 //
-//! @brief Esta clase modeliza el comportamiento de la sección
-//! discretizando la misma en un conjunto de fibras. La rigidez
-//! de la sección y las resultantes de esfuerzos se obtienen sumando
-//! las contribuciones de cada fibra.
+//! @brief Fiber section model in a three-dimensional space. Sections stiffness
+//! and internal forces are obtained by addition of the fibers contribution.
 class FiberSection3d: public FiberSection3dBase
   {
   private:

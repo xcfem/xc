@@ -25,8 +25,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //Preprocessor.h
-//Objeto encargado de interpretar la entrada de datos
-//del preproceso y generar la malla de elementos finitos.
 
 #ifndef PREPROCESSOR_H
 #define PREPROCESSOR_H
@@ -55,7 +53,7 @@ class FE_Datastore;
 
 //!  \ingroup Preprocessor
 //! 
-//!  \brief Finite element model generation.
+//!  \brief Finite element model generation tools.
 //!  
 class Preprocessor: public EntCmd, public MovableObject
   {
@@ -64,13 +62,13 @@ class Preprocessor: public EntCmd, public MovableObject
 
     Domain *dominio; //!< Dominio del problema.
 
-    MaterialLoader materiales; //!< Materiales para el problema.
-    TransfCooLoader transf; //!< Transformaciones de coordenadas.
+    MaterialLoader materiales; //!< Material creation tools.
+    TransfCooLoader transf; //!< Coordinate transformation.
     BeamIntegratorLoader beamIntegrators; //!< Beam integrator schemes.
-    NodeLoader nodos; //! Cargador de nodos.
-    ElementLoader elementos; //!< Cargador de elementos.
-    LoadLoader loads; //!< Cargador de cargas.
-    ConstraintLoader constraints; //! Cargador de coacciones.
+    NodeLoader nodes; //! Node creation tools.
+    ElementLoader elements; //!< Element creation tools.
+    LoadLoader loads; //!< Load creation tools.
+    ConstraintLoader constraints; //! Constraint creation tools.
 
     Cad cad; //!< Entidades de tipo CAD: puntos, lineas,...
 
@@ -117,13 +115,13 @@ class Preprocessor: public EntCmd, public MovableObject
     const MaterialLoader &getMaterialLoader(void) const
       { return materiales; }
     inline NodeLoader &getNodeLoader(void)
-      { return nodos; }
+      { return nodes; }
     inline const NodeLoader &getNodeLoader(void) const
-      { return nodos; }
+      { return nodes; }
     ElementLoader &getElementLoader(void)
-      { return elementos; }
+      { return elements; }
     const ElementLoader &getElementLoader(void) const
-      { return elementos; }
+      { return elements; }
     LoadLoader &getLoadLoader(void)
       { return loads; }
     const LoadLoader &getLoadLoader(void) const

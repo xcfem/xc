@@ -44,17 +44,15 @@ namespace XC {
 
 //!  \ingroup Set
 //! 
-//!  \brief Contenedor de punteros a objetos (nodos, elementos, puntos, lineas,...).
+//!  \brief Pointer to (nodes, elements, points, lines,...) container.
 //! 
-//!  Un objeto DqPtrs contiene un conjunto de 0 o más punteros a objetos de UNO de estos tipos:
-//!  - Nodos.
-//!  - Elementos finitos.
-//!  - Bordes/aristas de elementos finitos.
-//!  - Caras de elementos finitos.
-//!  - Puntos.
-//!  - Líneas.
-//!  - Superficies.
-//!  - Cuerpos.
+//!  This obnect contains 0 o more pointers to objects of ONE of this types:
+//!  - Nodde.
+//!  - Finite elements.
+//!  - Point.
+//!  - Líne.
+//!  - Suprface.
+//!  - Bodiy.
 template <class T>
 class DqPtrs: public EntCmd, protected std::deque<T *>
   {
@@ -146,28 +144,14 @@ DqPtrs<T> &DqPtrs<T>::operator=(const DqPtrs &otro)
     return *this;
   }
 
-//! @brief Agrega a ésta lista los elementos de la que se le pasa como parámetro.
+//! @brief Appends to this lists the pointers from the list
+//! being passed as parameter.
 template <class T>
 void DqPtrs<T>::agrega(const DqPtrs &otro)
   {
     for(register const_iterator i= otro.begin();i!=otro.end();i++)
       push_back(*i);
   }
-
-/* //! @brief Agrega a ésta lista los elementos de la que se le pasa como parámetro, */
-/* //! si cumplen la condición. */
-/* template <class T> */
-/* void DqPtrs<T>::agrega_cond(const DqPtrs &otro,const std::string &cond) */
-/*   { */
-/*     bool result= false; */
-/*     for(register const_iterator i= otro.begin();i!=otro.end();i++) */
-/*       { */
-/*         result= (*i)->interpretaBool(cond); */
-/*         if(result) */
-/* 	  push_back(*i); */
-/*       } */
-/*   } */
-
 
 //! @brief Vacía la lista de punteros.
 template<class T>
@@ -238,18 +222,6 @@ bool DqPtrs<T>::push_front(T *t)
       std::cerr << "DqPtrs::push_front; se intentó insertar un puntero nulo." << std::endl;
     return retval;
   }
-
-/* //! @brief Ordena los elementos del contenedor por */
-/* //! el valor de la propiedad being passed as parameter. */
-/* template <class T> */
-/* void DqPtrs<T>::sort_on_prop(const std::string &cod,const bool &ascending) */
-/*   { */
-/*     EntProp::set_sorter_cod(cod); */
-/*     if(ascending) */
-/*       std::sort(begin(),end(),EntProp::menor_ent_prop); */
-/*     else */
-/*       std::sort(begin(),end(),EntProp::mayor_ent_prop); */
-/*   } */
 
 //! @brief Devuelve los Tags de los objetos.
 template <class T>

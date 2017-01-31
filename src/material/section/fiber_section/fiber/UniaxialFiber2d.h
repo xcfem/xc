@@ -73,7 +73,7 @@ class UniaxialMaterial;
 
 //! \ingroup MATSCCFibras
 //
-//! @brief Representa una fibra de material uniaxial en un espacio bidimensional (en el que las secciones tienen 1 dimensión).
+//! @brief Uniaxial fiber on a bi-dimensional space.
 class UniaxialFiber2d: public UniaxialFiber
   {
   private:

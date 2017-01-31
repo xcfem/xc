@@ -37,7 +37,7 @@ class FE_Element;
 
 //! @ingroup AnalisisModel
 //
-//! @brief Iterador sobre los elementos del modelo a analizar.
+//! @brief Iterator overt the model finite elements.
 class FE_EleConstIter 
   {
   private:

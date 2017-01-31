@@ -37,6 +37,8 @@ class BlockRecord(me.CellRecord):
     strCommand= None
     if(self.cellType=='line'):
       strCommand= 'l' + strId + '= ' + loaderName + '.newLine(' + str(self.nodeIds[0]) + ',' + str(self.nodeIds[1]) +')'
+    elif(self.cellType=='face'):
+      strCommand= 'f' + strId + '= ' + loaderName + '.newQuadSurfacePts(' + str(self.nodeIds[0]) + ',' + str(self.nodeIds[1]) + ',' + str(self.nodeIds[2]) + ',' + str(self.nodeIds[3])  +')'
     else:
       lmsg.error('BlockRecord::getStrXCCommand not implemented for blocks of type: '+ self.cellType)
     return strCommand

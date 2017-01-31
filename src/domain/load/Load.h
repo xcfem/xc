@@ -71,11 +71,11 @@ namespace XC {
 //! \ingroup Dom
 //!
 //!
-//! @defgroup Loads Condiciones de contorno en fuerzas.
+//! @defgroup Loads Natural boundary conditions (forces).
 //
 //! @ingroup Loads
 //
-//! @brief Carga sobre nodos o elementos (clase base abstracta).
+//! @brief Base class for loads over nodes or elements.
 class Load: public DomainComponent
   {
   private:

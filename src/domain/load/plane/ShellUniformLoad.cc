@@ -97,7 +97,7 @@ const XC::Matrix &XC::ShellUniformLoad::getLocalMoments(void) const
 //! @param p0 Vector de cargas del elemento.
 void XC::ShellUniformLoad::addReactionsInBasicSystem(const double &area,const double &loadFactor,FVectorShell &p0)
   {
-    //Cargas sobre nodos.
+    //Loads over nodes.
     const double Px= Wx()*loadFactor*area/4;
     const double Py= Wy()*loadFactor*area/4;
     const double Pz= Wz()*loadFactor*area/4; //Axil.

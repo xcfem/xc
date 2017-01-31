@@ -30,7 +30,7 @@
 #include "domain/mesh/node/Node.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 
-//! Borra la malla.
+//! Indices deletion.
 void XC::MEDBaseInfo::clear(void)
   { indices.clear(); }
 

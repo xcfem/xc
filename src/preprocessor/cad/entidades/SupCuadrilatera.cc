@@ -55,32 +55,32 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
         else
 	  std::cerr << "calc_ndiv, los lados: "
                     << edgeA->GetNombre() << " y " << edgeB->GetNombre() 
-                    << " ya están mallados y tienen distinto número de divisiones ("
+                    << " are already meshed, and they have different number of divisions ("
                     << ndA << " y " << ndB << std::endl;
       }
-    else if(edgeA->TieneNodos()) //El borde A está mallado.
+    else if(edgeA->TieneNodos()) //A edge already meshed.
       {
         if(ndA!=ndj)
           {
 	    std::clog << "calc_ndiv, el borde: "
                       << edgeA->GetNombre()
-                      << " ya está mallado y no se puede cambiar el número de divisiones."
-                      << " a " << ndj << " se adopta NDiv= " << ndA << std::endl;
+                      << " is already meshed, division number can't be changed."
+                      << " to " << ndj << " keeping NDiv= " << ndA << std::endl;
             retval= ndA;
           }
       }
-    else if(edgeB->TieneNodos()) //El borde B está mallado.
+    else if(edgeB->TieneNodos()) //B edge already meshed.
       {
         if(ndB!=ndj)
           {
 	    std::clog << "calc_ndiv, el borde: "
                       << edgeB->GetNombre()
-                      << " ya está mallado y no se puede cambiar el número de divisiones."
-                      << " a " << ndj << " se adopta NDiv= " << ndB << std::endl;
+                      << " is already meshed, division number can't be changed."
+                      << " to " << ndj << " keeping NDiv= " << ndB << std::endl;
             retval= ndB;
           }
       }
-    else //Ni A ni B están mallados.
+    else //Nor A nor B are meshed.
       retval= ndj;
     return retval;
   }
@@ -349,9 +349,11 @@ void XC::SupCuadrilatera::defGridPoints(const boost::python::list &l)
 MatrizPos3d XC::SupCuadrilatera::get_posiciones(void) const
   {
     MatrizPos3d retval;
-    if(NumEdges()!=4)
+    const int numEdges= NumEdges();
+    if(numEdges!=4)
       {
-        std::cerr << "No se pueden mallar superficies con un número de lados distinto de 4" << std::endl;
+        std::cerr << "Can't mesh surfaces with: "
+	          << numEdges << " edges." << std::endl;
         return retval;
       }
 
@@ -436,17 +438,17 @@ void XC::SupCuadrilatera::crea_nodos(void)
         std::clog << "SupCuadrilatera::crea_nodos; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
   }
 
-//! @brief Crea la malla.
-void XC::SupCuadrilatera::Malla(dir_mallado dm)
+//! @brief Triggers mesh creation.
+void XC::SupCuadrilatera::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
-      std::clog << "Mallando SupCuadrilátera...(" << GetNombre() << ")...";
+      std::clog << "Meshing SupCuadrilátera...(" << GetNombre() << ")...";
     crea_nodos();
     if(elementos.Null())
       crea_elementos(dm);
     else
       if(verborrea>2)
-        std::clog << "SupCuadrilatera::Malla; los elementos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
+        std::clog << "SupCuadrilatera::genMesh; los elementos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
     if(verborrea>3)
       std::clog << "hecho." << std::endl;
   }

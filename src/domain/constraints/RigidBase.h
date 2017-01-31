@@ -37,8 +37,7 @@ class Node;
 
 //! @ingroup CContMP
 //
-//! @brief Clase base para las condiciones de contorno de tipo
-//! «movimiento de sólido rígido».
+//! @brief Base class for the "rigid body motion" conditions.
 class RigidBase: public MFreedom_Constraint
   {
   protected:

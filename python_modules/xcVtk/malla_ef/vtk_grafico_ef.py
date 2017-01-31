@@ -106,7 +106,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       if(e.getVtkCellType!= vtk.VTK_VERTEX):
         self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
  
-    #Cargamos las condiciones de contorno en vtk XXX FALLA
+    #Cargamos constraint on XXX FALLA
     setConstraints= eSet.getConstraints
     for c in setConstraints:
       vtx= vtk.vtkIdList()

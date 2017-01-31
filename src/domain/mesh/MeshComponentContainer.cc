@@ -35,7 +35,7 @@
 XC::MeshComponentContainer::MeshComponentContainer(EntCmd *owr,int classTag, int dbTag)
   :EntCmd(owr), MovableObject(classTag, dbTag) {}
 
-//! @brief Devuelve un puntero al dominio en el que se define la malla.
+//! @brief Returns a pointer to the mesh domain.
 const XC::Domain *XC::MeshComponentContainer::getDomain(void) const
   {
     const Domain *retval= nullptr;
@@ -45,7 +45,7 @@ const XC::Domain *XC::MeshComponentContainer::getDomain(void) const
     return retval;
   }
 
-//! @brief Devuelve un puntero al dominio en el que se define la malla.
+//! @brief Returns a pointer to the mesh domain.
 XC::Domain *XC::MeshComponentContainer::getDomain(void)
   {
     Domain *retval= nullptr;

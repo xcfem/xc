@@ -81,7 +81,7 @@ class RgSccCirc: public RgQuadCell
     void setAngles(double initialAngle, double finalAngle);
 
     //inquiring functions
-    const Rejilla2d &Malla(void) const;
+    const Rejilla2d &getMesh(void) const;
     const VectorCells &getCells(void) const;
     RegionSecc *getCopy(void) const;
 

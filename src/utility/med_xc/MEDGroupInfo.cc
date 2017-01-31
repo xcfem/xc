@@ -30,27 +30,27 @@
 #include "xc_basic/src/med_xc/MEDMEM_Group.hxx"
 
 //! @brief Constructor.
-XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *malla,const std::string &nmb)
+XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const std::string &nmb)
   : nombre(nmb), med_group(nullptr)
   {
-    assert(malla);
-    set_owner(malla);
-    indices= malla->getMapIndicesCeldas();
+    assert(mesh);
+    set_owner(mesh);
+    indices= mesh->getMapIndicesCeldas();
   }
 
 //! Constructor.
-XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *malla,const Set &set)
+XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const Set &set)
   : nombre(set.GetNombre()), med_group(nullptr)
   { 
-    set_owner(malla);
-    indices= malla->getMapIndicesCeldas();
+    set_owner(mesh);
+    indices= mesh->getMapIndicesCeldas();
     const size_t numNodos= set.NumNodos();
     const size_t numElementos= set.NumElementos();
     if(numElementos==0) //Conjunto de nodos.
       {
         tipo_entidad= MED_EN::MED_NODE;
 	const DqPtrsNode nodos= set.GetNodos();
-        const MEDMapIndices &indices_nodos= malla->getMapIndicesVertices();
+        const MEDMapIndices &indices_nodos= mesh->getMapIndicesVertices();
         for(Set::nod_const_iterator i= nodos.begin();i!=nodos.end();i++)
           nuevo_vertice((*i)->getTag(),indices_nodos);
       }
@@ -75,7 +75,7 @@ XC::MEDGroupInfo::~MEDGroupInfo(void)
       }
   } 
 
-const XC::MEDMeshing &XC::MEDGroupInfo::getMalla(void) const
+const XC::MEDMeshing &XC::MEDGroupInfo::getMesh(void) const
   { 
     const MEDMeshing *retval= dynamic_cast<const MEDMeshing *>(Owner());
     return *retval;
@@ -144,19 +144,18 @@ std::vector<int> XC::MEDGroupInfo::getIndicesElementos(void) const
     return retval;
   }
 
-//! @brief Vuelca la definición del grupo en MEDMEM
-//! malla MED
+//! @brief Dumps group definition on mesh MED.
 void XC::MEDGroupInfo::to_med(void) const
   {
     med_group= new MEDMEM::GROUP;
     med_group->setName(nombre);
-    const MEDMeshing &malla= getMalla();
-    med_group->setMesh(&malla.getMallaMED());
+    const MEDMeshing &mesh= getMesh();
+    med_group->setMesh(&mesh.getMEDMesh());
     med_group->setEntity(tipo_entidad);
     MEDCellBaseInfo::to_support_med(*med_group);
     const std::vector<int> index= getVectorIndicesTipos();
     const std::vector<int> value= getIndicesElementos();
     med_group->setNumber(&index[0],&value[0]);
-    malla.getMallaMED().addGroup(*med_group);
+    mesh.getMEDMesh().addGroup(*med_group);
   }
 

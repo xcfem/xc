@@ -40,8 +40,7 @@ class ModelWrapper;
 
 //!  \ingroup Solu
 //! 
-//! @brief Contenedor de objetos SoluMethod para el control del 
-//! procedimiento de solución del problema de elementos finitos.
+//! @brief Solution methods container.
 class MapSoluMethod: public EntCmd
   {
   private:

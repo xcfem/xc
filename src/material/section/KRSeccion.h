@@ -25,7 +25,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //KRSeccion.h
-//Matriz de rigidez y vector resultante de tensiones de una sección.
 
 #ifndef KRSECCION_H
 #define KRSECCION_H
@@ -37,8 +36,7 @@ namespace XC {
 
 //! \ingroup MATSCC
 //
-//! @brief Objetos encargados de guardar el valor del vector resultante
-//! de tensiones y de la matriz de rigidez de una sección.
+//! @brief Stiffness matrix and resultant vector for a section.
 class KRSeccion: public EntCmd
   {
     friend class DqFibras;

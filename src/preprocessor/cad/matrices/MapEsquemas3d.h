@@ -38,12 +38,9 @@ class TritrizPtrPnt;
 
 //! @ingroup Cad
 //
-//! @brief Contenedor de puntos del modelo.
+//! @brief Three dimensional scheme container.
 class MapEsquemas3d: public MapCadMember<TritrizPtrPnt>
   {
-  protected:
-
-
   public:
     MapEsquemas3d(Cad *cad= NULL);
 

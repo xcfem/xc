@@ -44,7 +44,7 @@
 #include "material/section/interaction_diagram/NMPointCloud.h"
 #include "material/section/interaction_diagram/NMyMzPointCloud.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d2/MallaTriang3d.h"
+#include "xc_utils/src/geom/d2/Triang3dMesh.h"
 #include "xc_utils/src/geom/d3/ConvexHull3d.h"
 #include "xc_utils/src/geom/d2/ConvexHull2d.h"
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
@@ -201,21 +201,21 @@ const XC::Vector &XC::FiberSectionBase::getSectionDeformation(void) const
     return retval;
   }
 
-//! @brief Devuelve el contorno de la sección.
-Poligono2d XC::FiberSectionBase::getContornoRegiones(void) const
+//! @brief Returns cross section contour.
+Poligono2d XC::FiberSectionBase::getRegionsContour(void) const
   {
     Poligono2d retval;
     if(section_repres)
       {
         const GeomSection *geom= section_repres->getGeom();
         if(geom)
-          retval= geom->getContornoRegiones();
+          retval= geom->getRegionsContour();
         else
-	  std::cerr << "FiberSectionBase::getContornoRegiones; no se ha definido la geometría de la sección."
+	  std::cerr << "FiberSectionBase::getRegionsContour; no se ha definido la geometría de la sección."
                     << std::endl;
       }
     else
-      std::cerr << "FiberSectionBase::getContornoRegiones; no se ha definido la representación de la sección."
+      std::cerr << "FiberSectionBase::getRegionsContour; no se ha definido la representación de la sección."
                 << std::endl;
     return retval;
   }
@@ -395,19 +395,19 @@ Recta2d XC::FiberSectionBase::getRectaLimiteAcEficaz(const double &hEfMax) const
     return retval;
   }
 
-//! @brief Devuelve la el contorno que limita el área eficaz de hormigón Ac,ef
+//! @brief Devuelve the contours that limits el área eficaz de hormigón Ac,ef
 //! según el artículo 49.2.4 de la EHE-08 (área rallada figura 49.2.4b).
 //! Ver también figuras 47.5 y 47.6 del tomo II del libro "Proyecto y cálculo de estructuras
 //! de hormigón" de Calavera.
-std::list<Poligono2d> XC::FiberSectionBase::getContornoAcEficazBruta(const double &hEfMax) const
+std::list<Poligono2d> XC::FiberSectionBase::getContourAcEficazBruta(const double &hEfMax) const
   {
     std::list<Poligono2d> retval;
-    Poligono2d contorno= getContornoRegiones();
+    Poligono2d contour= getRegionsContour();
 
     const double epsMin= fibras.getStrainMin();
     const double epsMax= fibras.getStrainMax();
     if(epsMin>0) //Toda la sección en tracción.
-      retval.push_back(contorno);
+      retval.push_back(contour);
     else if(epsMax>0) //Flexión.
       {
         if(hEfMax>1e-6)
@@ -417,17 +417,17 @@ std::list<Poligono2d> XC::FiberSectionBase::getContornoAcEficazBruta(const doubl
               {
                 const Semiplano2d areaTracciones= getSemiplanoTracciones(limite);
                 assert(areaTracciones.exists());
-                retval= contorno.Interseccion(areaTracciones);
+                retval= contour.Interseccion(areaTracciones);
               }
             else
-              retval.push_back(contorno);
+              retval.push_back(contour);
           }
         else
-          std::cerr << "FiberSectionBase::getContornoAcEficazBruta; la altura eficaz máxima es nula." << std::endl;
+          std::cerr << "FiberSectionBase::getContourAcEficazBruta; la altura eficaz máxima es nula." << std::endl;
       }
     if(retval.empty())
       {
-        std::cerr << "FiberSectionBase::getContornoAcEficazBruta; no se pudo determinar el contorno del área eficaz bruta."
+        std::cerr << "FiberSectionBase::getContourAcEficazBruta; no se pudo determinar el contour del área eficaz bruta."
                   << std::endl;
       }
     return retval;
@@ -435,7 +435,7 @@ std::list<Poligono2d> XC::FiberSectionBase::getContornoAcEficazBruta(const doubl
 
 double XC::FiberSectionBase::getAcEficazBruta(const double &hEfMax) const
   {
-    std::list<Poligono2d> tmp= getContornoAcEficazBruta(hEfMax);
+    std::list<Poligono2d> tmp= getContourAcEficazBruta(hEfMax);
     return area(tmp.begin(),tmp.end());
   }
 
@@ -443,14 +443,14 @@ double XC::FiberSectionBase::getAcEficazBruta(const double &hEfMax) const
 double XC::FiberSectionBase::getAcEficazNeta(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
   {
     double retval= 0.0;
-    std::list<Poligono2d> contornoAcEficazBruta= getContornoAcEficazBruta(hEfMax);
-    if(!contornoAcEficazBruta.empty())
+    std::list<Poligono2d> contourAcEficazBruta= getContourAcEficazBruta(hEfMax);
+    if(!contourAcEficazBruta.empty())
       {
         set_fibras_const_iterator i= sets_fibras.find(nmbSetArmaduras);
         if(i!=sets_fibras.end())
           {
             const DqFibras &armaduras= (*i).second; //Armaduras.
-            retval= armaduras.calcAcEficazFibras(contornoAcEficazBruta,factor);
+            retval= armaduras.calcAcEficazFibras(contourAcEficazBruta,factor);
           }
         else
           std::cerr << "No se encotró el conjunto de fibras: "
@@ -465,14 +465,14 @@ double XC::FiberSectionBase::getAcEficazNeta(const double &hEfMax,const std::str
 double XC::FiberSectionBase::calcAcEficazFibras(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
   {
     double retval= 0;
-    std::list<Poligono2d> contornoAcEficazBruta= getContornoAcEficazBruta(hEfMax);
-    if(!contornoAcEficazBruta.empty())
+    std::list<Poligono2d> contourAcEficazBruta= getContourAcEficazBruta(hEfMax);
+    if(!contourAcEficazBruta.empty())
       {
         set_fibras_const_iterator i= sets_fibras.find(nmbSetArmaduras);
         if(i!=sets_fibras.end())
           {
             const DqFibras &armaduras= (*i).second; //Armaduras.
-            retval= armaduras.calcAcEficazFibras(contornoAcEficazBruta,factor);
+            retval= armaduras.calcAcEficazFibras(contourAcEficazBruta,factor);
           }
         else
           std::cerr << "FiberSectionBase::calcAcEficazFibras; no se encotró el conjunto de fibras: "
@@ -709,7 +709,7 @@ XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const Interac
     InteractionDiagram retval;
     if(!lp.empty())
       {
-        retval= InteractionDiagram(Pos3d(0,0,0),MallaTriang3d(get_convex_hull(lp)));
+        retval= InteractionDiagram(Pos3d(0,0,0),Triang3dMesh(get_convex_hull(lp)));
         const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
 	  std::cerr << "FiberSectionBase::GetInteractionDiagram; el error en el cálculo del diagrama de interacción ("
@@ -770,8 +770,8 @@ Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
         const Recta2d ejeX= getEjeEsfuerzos();
         const Pos2d cdg= getCdg();
         const Recta2d ejeY= ejeX.Perpendicular(cdg);
-        const Poligono2d contorno= getContornoRegiones();
-        retval= contorno.Clip(ejeY);
+        const Poligono2d contour= getRegionsContour();
+        retval= contour.Clip(ejeY);
         Pos2d org= retval.Origen()+0.1*retval.GetVector();
         Pos2d dest= retval.Destino()-0.1*retval.GetVector();
         retval= Segmento2d(org,dest);
@@ -786,8 +786,8 @@ Segmento2d XC::FiberSectionBase::getSegmentoCantoUtil(void) const
     Segmento2d retval;
     const Segmento2d bm= getSegmentoBrazoMecanico();
     const SemiRecta2d sr(bm.Origen(),bm.Destino());
-    const Poligono2d contorno= getContornoRegiones();
-    retval= contorno.Clip(sr);
+    const Poligono2d contour= getRegionsContour();
+    retval= contour.Clip(sr);
     return retval;
   }
 

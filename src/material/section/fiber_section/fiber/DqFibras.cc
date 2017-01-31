@@ -1291,8 +1291,8 @@ double XC::DqFibras::getDistMediaFibras(void) const
 //! de hormigón" de Calavera.
 //En lugar de un cuadrado se considera un dodecágono del mismo área
 //en torno al eje de la fibra. Creo que esto es menos anisótropo.
-//! @param contornoAcEficazBruta: Contorno del área eficaz bruta obtenido de la sección.
-double XC::DqFibras::calcAcEficazFibras(const std::list<Poligono2d> &contornoAcEficazBruta,const double &factor) const
+//! @param contourAcEficazBruta: Contour of the área eficaz bruta obtenido de la sección.
+double XC::DqFibras::calcAcEficazFibras(const std::list<Poligono2d> &contourAcEficazBruta,const double &factor) const
   {
     double retval= 0.0;
     const size_t n= 12;
@@ -1308,8 +1308,8 @@ double XC::DqFibras::calcAcEficazFibras(const std::list<Poligono2d> &contornoAcE
         R= L*sqrt(2/(n*sin(2*M_PI/n)));
         const Pos2d pos= (*this)[i]->getPos();
         tmp= Circulo2d(pos,R).getPoligonoInscrito(n);
-        if(tmp.Overlap(contornoAcEficazBruta))
-          for(std::list<Poligono2d>::const_iterator j= contornoAcEficazBruta.begin();j!=contornoAcEficazBruta.end();j++)
+        if(tmp.Overlap(contourAcEficazBruta))
+          for(std::list<Poligono2d>::const_iterator j= contourAcEficazBruta.begin();j!=contourAcEficazBruta.end();j++)
             {
               if((*j).In(tmp))
                 dq_ac_eficaz[i].push_back(tmp);
@@ -1342,16 +1342,16 @@ double XC::DqFibras::calcAcEficazFibras(const std::list<Poligono2d> &contornoAcE
         if(!dq_ac_eficaz[i].empty())
           retval+= area(dq_ac_eficaz[i].begin(),dq_ac_eficaz[i].end());
       }
-    const double area_contorno= area(contornoAcEficazBruta.begin(),contornoAcEficazBruta.end());
-    if(retval>1.01*area_contorno)
+    const double area_contour= area(contourAcEficazBruta.begin(),contourAcEficazBruta.end());
+    if(retval>1.01*area_contour)
       std::cerr << "El área eficaz: " << retval
-                << " es mayor que la máxima: " << area_contorno << std::endl;
+                << " es mayor que la máxima: " << area_contour << std::endl;
     return retval;
   }
 
-//! @brief Devuelve los contornos del área eficaz de la fibra cuyo índice
+//! @brief Returns the contours of the área eficaz de la fibra cuyo índice
 //! se pasa como parámetro.
-const std::list<Poligono2d> &XC::DqFibras::getContornoAcEficazFibra(const size_t &i) const
+const std::list<Poligono2d> &XC::DqFibras::getContourAcEficazFibra(const size_t &i) const
   { return dq_ac_eficaz[i]; }
 
 //! @brief Devuelve el valor del área eficaz de la fibra cuyo índice
@@ -1381,8 +1381,8 @@ double XC::DqFibras::getAcEficazFibras(void) const
 void XC::DqFibras::calcRecubrimientos(const GeomSection &g) const
   {
     const GeomObj::list_Pos2d posiciones= getPosiciones();
-    const Poligono2d contorno= g.getContornoRegiones();
-    recubs= getRecubrimientos(posiciones,contorno);
+    const Poligono2d contour= g.getRegionsContour();
+    recubs= getRecubrimientos(posiciones,contour);
     const size_t sz= recubs.size();
     for(size_t i= 0;i<sz;i++)
       if(recubs[i]<0)

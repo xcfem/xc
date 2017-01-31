@@ -40,13 +40,12 @@ class Domain;
 
 //!  \ingroup Solu
 //! 
-//! @brief Contenedor de objetos para el control del 
-//! procedimiento de solución del problema de elementos finitos.
+//! @brief Container for the objects that control the solution procedure.
 class ProcSoluControl: public EntCmd
   {
   private:
-    MapModelWrapper solu_models; //!< Modelos para la solución.
-    MapSoluMethod solu_methods; //!< Métodos para la solución.
+    MapModelWrapper solu_models; //!< Wrapper for the finite elment model
+    MapSoluMethod solu_methods; //!< Solution methods.
 
     ProcSolu *getProcSolu(void);
     const ProcSolu *getProcSolu(void) const;

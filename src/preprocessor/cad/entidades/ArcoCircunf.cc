@@ -76,7 +76,7 @@ void XC::ArcoCircunf::SetVertice(const size_t &i,Pnt *p)
         p3= p;
         if(p3)
           {
-            p3->setGenMalla(false); //Punto intermedio de la línea.
+            p3->setGenMesh(false); //Punto intermedio de la línea.
             p3->inserta_linea(this);
           }
       }

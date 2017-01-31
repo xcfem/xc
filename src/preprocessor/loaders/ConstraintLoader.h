@@ -25,8 +25,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //ConstraintLoader.h
-//Objeto encargado de interpretar la entrada de datos
-//del preproceso y generar la malla de elementos finitos.
 
 #ifndef CONSTRAINTLOADER_H
 #define CONSTRAINTLOADER_H
@@ -41,13 +39,13 @@ class MRMFreedom_Constraint;
 
 //! \ingroup Ldrs
 //! 
-//! @brief Cargador de condiciones de contorno.
+//! @brief Constraint cration tools
 //!  
 class ConstraintLoader: public Loader
   {
-    int tag_sp_constraint; //!< Tag por defecto para el constraint.
-    int tag_mp_constraint; //!< Tag por defecto para el constraint.
-    int tag_mrmp_constraint; //!< Tag por defecto para el constraint.
+    int tag_sp_constraint; //!< Default value for next single freedom constraint tag.
+    int tag_mp_constraint; //!< Default value for next multiple freedom constraint tag.
+    int tag_mrmp_constraint; //!< Default value for next multi-row multi-freedom constraint tag.
   protected:
 
     friend class Node;

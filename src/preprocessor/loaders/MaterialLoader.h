@@ -63,9 +63,9 @@ class MaterialLoader: public Loader
   private:
     map_materials materials; //!< Material definitions.
     int tag_mat; //!< Tag por defecto para el material.
-    map_geom_secc geom_secciones; //!< Geometrías de secciones.
-    map_interaction_diagram diagramas_interaccion; //!< Diagramas de interacción de secciones.
-    map_interaction_diagram2d diagramas_interaccion2d; //!< Diagramas de interacción de secciones.
+    map_geom_secc geom_secciones; //!< Section geometries.
+    map_interaction_diagram diagramas_interaccion; //!< 3D interaction diagrams.
+    map_interaction_diagram2d diagramas_interaccion2d; //!< 2D interaction diagrams.
   protected:
     friend class ElementLoader;
   public:

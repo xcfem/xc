@@ -42,14 +42,14 @@
 //! @brief Constructor por defecto.
 XC::Preprocessor::Preprocessor(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
   : EntCmd(owr), MovableObject(0), dominio(nullptr), materiales(this), transf(this), beamIntegrators(this), 
-    nodos(this), elementos(this), loads(this), constraints(this),
+    nodes(this), elements(this), loads(this), constraints(this),
     cad(this),sets(this)
   { dominio= new Domain(this,oh); }
 
 //! @brief Constructor de copia (prohibida).
 XC::Preprocessor::Preprocessor(const Preprocessor &otro)
   : EntCmd(otro), MovableObject(otro), dominio(nullptr), materiales(this), transf(this), beamIntegrators(this),
-    nodos(this), elementos(this), loads(this), constraints(this),
+    nodes(this), elements(this), loads(this), constraints(this),
     cad(this),sets(this)
   {
     std::cerr << "No se puede copiar un objeto de clase Preprocessor." << std::endl;
@@ -146,8 +146,8 @@ void XC::Preprocessor::clearAll(void)
     cad.clearAll();
     transf.clearAll();
     beamIntegrators.clearAll();
-    nodos.clearAll();
-    elementos.clearAll();
+    nodes.clearAll();
+    elements.clearAll();
     if(dominio)
       dominio->clearAll();
     loads.clearAll();
@@ -179,8 +179,8 @@ int XC::Preprocessor::sendData(CommParameters &cp)
     //res+= cp.sendMovable(materiales,getDbTagData(),CommMetaData(0));
     //res+= cp.sendMovable(transf,getDbTagData(),CommMetaData(1));
     //res+= cp.sendMovable(beamIntegrators,getDbTagData(),CommMetaData(2));
-    //res+= cp.sendMovable(nodos,getDbTagData(),CommMetaData(3));
-    //res+= cp.sendMovable(elementos,getDbTagData(),CommMetaData(4));
+    //res+= cp.sendMovable(nodes,getDbTagData(),CommMetaData(3));
+    //res+= cp.sendMovable(elements,getDbTagData(),CommMetaData(4));
     int res= cp.sendMovable(loads,getDbTagData(),CommMetaData(5));
     //res+= cp.sendMovable(constraints,getDbTagData(),CommMetaData(6));
     //res+= cp.sendMovable(cad,getDbTagData(),CommMetaData(7));
@@ -196,8 +196,8 @@ int XC::Preprocessor::recvData(const CommParameters &cp)
     //res+= cp.receiveMovable(materiales,getDbTagData(),CommMetaData(0));
     //res+= cp.receiveMovable(transf,getDbTagData(),CommMetaData(1));
     //res+= cp.receiveMovable(beamIntegrators,getDbTagData(),CommMetaData(2));
-    //res+= cp.receiveMovable(nodos,getDbTagData(),CommMetaData(3));
-    //res+= cp.receiveMovable(elementos,getDbTagData(),CommMetaData(4));
+    //res+= cp.receiveMovable(nodes,getDbTagData(),CommMetaData(3));
+    //res+= cp.receiveMovable(elements,getDbTagData(),CommMetaData(4));
     int res= cp.receiveMovable(loads,getDbTagData(),CommMetaData(5));
     //res+= cp.receiveMovable(constraints,getDbTagData(),CommMetaData(6));
     //res+= cp.receiveMovable(cad,getDbTagData(),CommMetaData(7));

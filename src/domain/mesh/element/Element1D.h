@@ -51,11 +51,11 @@ class DeformationPlane;
 //! @brief Elemento unidimensional (beam,truss,...)
 class Element1D : public ElementBase<2>
   {
-    void malla_unidimensional(const TritrizPtrNod &,TritrizPtrElem &) const;
+    void unidimensional_meshing(const TritrizPtrNod &,TritrizPtrElem &) const;
   protected:
     mutable std::vector<double> longsTributarias;
 
-    TritrizPtrElem coloca_en_malla(const TritrizPtrNod &,dir_mallado dm) const;
+    TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
     TritrizPtrElem cose(const SetEstruct &f1,const SetEstruct &f2) const;
 
     int sendCoordTransf(int posFlag,const int &,const int &,CommParameters &);

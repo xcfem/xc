@@ -69,7 +69,7 @@ class MFreedom_Constraint;
 
 //! @ingroup CContMP
 //
-//! @brief Iterador sobre las condiciones de contorno multinodales.
+//! @brief Iterator over multi-freedom constraints.
 class MFreedom_ConstraintIter
   {
   public:

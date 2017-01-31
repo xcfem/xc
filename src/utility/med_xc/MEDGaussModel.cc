@@ -74,8 +74,7 @@ const std::string &XC::MEDGaussModel::getNombre(void) const
 const MED_EN::medGeometryElement &XC::MEDGaussModel::getTipo(void) const
   { return tipo; }
 
-//! @brief Vuelca la definición del modelo en MEDMEM
-//! malla MED
+//! @brief Dumps the gauss model into MED.
 void XC::MEDGaussModel::to_med(void) const
   {
     model= new med_gauss_model(nombre,tipo,num_gauss_pt,&coo_nodos_ref[0],&coo_gauss_pt[0],&gauss_weights[0]);

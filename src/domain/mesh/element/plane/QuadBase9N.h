@@ -32,7 +32,7 @@
 #define QuadBase9N_h
 
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
-#include "preprocessor/cad/aux_mallado.h"
+#include "preprocessor/cad/aux_meshing.h"
 #include "preprocessor/loaders/LoadLoader.h"
 #include "domain/load/plane/BidimStrainLoad.h"
 #include "med.h"
@@ -50,7 +50,7 @@ template <class PhysProp>
 class QuadBase9N : public ElemPlano<9,PhysProp>
   {
   protected:
-    TritrizPtrElem coloca_en_malla(const TritrizPtrNod &,dir_mallado dm) const;
+    TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
 
   public:
 
@@ -82,12 +82,12 @@ XC::QuadBase9N<PhysProp>::QuadBase9N(int tag,int classTag,const PhysProp &pp)
   :ElemPlano<9,PhysProp>(tag,classTag,pp) {}
 
 
-//! @brief Coloca el elemento en la malla being passed as parameter.
+//! @brief Put the element on the mesh being passed as parameter.
 template <class PhysProp>
-XC::TritrizPtrElem XC::QuadBase9N<PhysProp>::coloca_en_malla(const TritrizPtrNod &nodos,dir_mallado dm) const
-  { return coloca_quad9N_en_malla(*this,nodos,dm); }
+XC::TritrizPtrElem XC::QuadBase9N<PhysProp>::put_on_mesh(const TritrizPtrNod &nodos,meshing_dir dm) const
+  { return put_quad9N_on_mesh(*this,nodos,dm); }
 
-//! @brief Devuelve el polígono que forma el contorno del elemento.
+//! @brief Returns the element contour as a polygon.
 template <class PhysProp>
 Poligono3d XC::QuadBase9N<PhysProp>::getPoligono(bool initialGeometry) const
   {

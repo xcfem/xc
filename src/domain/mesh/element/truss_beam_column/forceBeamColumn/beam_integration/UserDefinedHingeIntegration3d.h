@@ -64,7 +64,7 @@ namespace XC {
 class UserDefinedHingeIntegration3d : public UserDefinedHingeIntegrationBase
   {
   protected:
-    CrossSectionProperties3d ctes_scc; //Características de la seccion E,A,Iy,...
+    CrossSectionProperties3d ctes_scc; //Mechanical properties of the section E,A,Iy,...
   public:
     UserDefinedHingeIntegration3d(int npL, const Vector &ptL, const Vector &wtL,
 				int npR, const Vector &ptR, const Vector &wtR,

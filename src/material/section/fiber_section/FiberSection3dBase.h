@@ -68,8 +68,8 @@ class FiberSectionRepr;
 
 //! \ingroup MATSCCModeloFibras
 //
-//! @brief Clase base para las secciones representadas mediante
-//! un modelo de fibras, empleadas en problemas tridimensionales.
+//! @brief Base class for fiber sections
+//! on three-dimensional problems.
 class FiberSection3dBase : public FiberSectionBase
   {
   protected:

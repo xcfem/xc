@@ -61,9 +61,9 @@ class Parameter;
 
 //! \ingroup MATSCCElastica
 //
-//! @brief Clase base para las secciones transversales formadas
-//! por un material elástico lineal con rigidez a cortante en un
-//! espacio tridimensional (6 esfuerzos por sección).
+//! @brief Base class for cross sections with linear elastic material
+//! and shear stiffness on a three-dimensional space
+//! (6 degrees of freedom in each section).
 class ElasticShearSection3d : public BaseElasticSection3d
   {
   private:

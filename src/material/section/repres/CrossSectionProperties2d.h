@@ -47,8 +47,8 @@ class SectionForceDeformation;
 
 //! @ingroup MATSCCRepres
 //
-//! @brief Propiedades mecánicas de una sección (area, inercias,...)
-//! en un problema bidimensional (tres grados de libertad por sección).
+//! @brief Mechanical properties of a cross section (area, moments of inertia,...)
+//! for a bi-dimensional problem (three DOB for each section).
 class CrossSectionProperties2d: public EntCmd, public MovableObject
   {
   private:

@@ -64,7 +64,7 @@
 #define Element_h
 
 #include "domain/mesh/MeshComponent.h"
-#include "preprocessor/ParamMallado.h"
+#include "preprocessor/MeshingParams.h"
 #include "RayleighDampingFactors.h"
 #include "utility/matrix/Matrix.h"
 #include "domain/mesh/node/NodeTopology.h"
@@ -97,16 +97,16 @@ class ParticlePos3d;
 
 //! \ingroup Mesh
 //
-//! @defgroup Elem Elementos de la malla de elementos finitos.
+//! @defgroup Elem Finite elements.
 //!
 //! \ingroup Elem
 //
-//! @brief Elementos de la malla de elementos finitos.
+//! @brief Base calass for the finite elements.
 class Element: public MeshComponent
   {
   public:
-    static double dead_srf;//!< Factor de reducción de la rigidez para elementos desactivados.
-    typedef std::vector<const Node *> NodesEdge; //!< Nodos de un borde del elemento.
+    static double dead_srf;//!< Stress reduction factor for foozen elements.
+    typedef std::vector<const Node *> NodesEdge; //!< Nodes on an element edge.
     //! @brief Assigns Stress Reduction Factor for element deactivation.
     inline static void setDeadSRF(const double &d)
       { dead_srf= d; }
@@ -122,7 +122,7 @@ class Element: public MeshComponent
   protected:
     friend class EntMdlr;
     friend class Preprocessor;
-    virtual TritrizPtrElem coloca_en_malla(const TritrizPtrNod &,dir_mallado) const;
+    virtual TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir) const;
     virtual TritrizPtrElem cose(const SetEstruct &f1,const SetEstruct &f2) const;
 
     const Vector &getRayleighDampingForces(void) const;

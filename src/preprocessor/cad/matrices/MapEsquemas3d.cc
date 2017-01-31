@@ -45,7 +45,7 @@ XC::MapEsquemas3d::MapEsquemas3d(Cad *cad)
 XC::TritrizPtrPnt *XC::MapEsquemas3d::makeNew(void)
   {
     TritrizPtrPnt *retval= busca(getTag());
-    if(!retval) //La malla es nueva.
+    if(!retval) //New grid.
       {
         retval= new TritrizPtrPnt();
         retval->set_owner(this);

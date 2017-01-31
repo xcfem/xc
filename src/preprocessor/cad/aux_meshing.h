@@ -24,12 +24,12 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Aux_Mallado.h
+//aux_meshing.h
                                                                         
-#ifndef Aux_Mallado_h
-#define Aux_Mallado_h
+#ifndef aux_meshing_h
+#define aux_meshing_h
 
-#include "preprocessor/ParamMallado.h"
+#include "preprocessor/MeshingParams.h"
 
 namespace XC {
 
@@ -37,9 +37,9 @@ class Element;
 class TritrizPtrNod;
 class TritrizPtrElem;
 
-//void malla_quad4N_bidimensional(const Element &e,const TritrizPtrNod &nodos,TritrizPtrElem &elementos);
-TritrizPtrElem coloca_quad4N_en_malla(const Element &e,const TritrizPtrNod &,dir_mallado dm);
-TritrizPtrElem coloca_quad9N_en_malla(const Element &e,const TritrizPtrNod &,dir_mallado dm);
+//void mesh_quad4N_bidimensional(const Element &e,const TritrizPtrNod &nodos,TritrizPtrElem &elementos);
+TritrizPtrElem put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &,meshing_dir dm);
+TritrizPtrElem put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &,meshing_dir dm);
 
 } // end of XC namespace
 #endif

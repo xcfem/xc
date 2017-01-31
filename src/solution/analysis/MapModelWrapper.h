@@ -40,17 +40,16 @@ class Domain;
 
 //!  \ingroup Solu
 //! 
-//! @brief Contenedor de objetos ModelWrapper para el control del 
-//! procedimiento de solución del problema de elementos finitos.
+//! @brief Finite element model wrappers container.
 class MapModelWrapper: public EntCmd
   {
   public:
-    typedef std::map<std::string,ModelWrapper> map_solu_model;
-    typedef map_solu_model::iterator iterator;
-    typedef map_solu_model::const_iterator const_iterator;
+    typedef std::map<std::string,ModelWrapper> map_model_wrapper;
+    typedef map_model_wrapper::iterator iterator;
+    typedef map_model_wrapper::const_iterator const_iterator;
 
   private:
-    map_solu_model solu_models; //!< Métodos para la solución.
+    map_model_wrapper solu_models; //!< Métodos para la solución.
   protected:
 
   public:

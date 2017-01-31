@@ -195,9 +195,9 @@ const XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i) const
       return edge->GetNodo(n-i);
   }
 
-//! @brief Genera la malla de la línea correspondiente.
-void XC::CmbEdge::Lado::Malla(dir_mallado dm)
-  { edge->Malla(dm); }
+//! @brief Genertes a mesh from the corresponding line.
+void XC::CmbEdge::Lado::genMesh(meshing_dir dm)
+  { edge->genMesh(dm); }
 
 //! @brief Asigna el número de divisiones de la línea.
 void XC::CmbEdge::Lado::SetNDiv(const size_t &nd)
@@ -379,19 +379,19 @@ void XC::CmbEdge::crea_nodos_lineas(void)
       (*i).Borde()->crea_nodos();
   }
 
-//! @brief Lanza el mallado de las líneas.
-void XC::CmbEdge::malla_lineas(dir_mallado dm)
+//! @brief Triggers meshing of lines.
+void XC::CmbEdge::line_meshing(meshing_dir dm)
   {
     for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
-      (*i).Malla(dm);
+      (*i).genMesh(dm);
   }
 
-//! @brief Crea la malla.
-void XC::CmbEdge::Malla(dir_mallado dm)
+//! @brief Creates the mesh.
+void XC::CmbEdge::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
-      std::clog << "Mallando CmbEdge...(" << GetNombre() << ")...";
-    malla_lineas(dm);
+      std::clog << "Meshing CmbEdge...(" << GetNombre() << ")...";
+    line_meshing(dm);
     
     //Punteros a nodos.
     nodos= TritrizPtrNod(1,NDiv()+1,1);

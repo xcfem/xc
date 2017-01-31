@@ -1,4 +1,4 @@
-Directorio para macros que faciliten la creación
-del modelo de elementos finitos y la obtención de resultados del
-mismo: aplicación de condiciones de contorno en nodos, obtención
-de reacciones, de movimientos, ...
+This directory contanins scripts to make easier
+finite element model generation and obtaning results from
+this model (appliying constraint to nodes, getting reactions,
+displacements and so on...).

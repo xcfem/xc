@@ -224,8 +224,8 @@ XC::Element *XC::SetMeshComp::buscaElemento(const int &tag)
 const XC::Element *XC::SetMeshComp::buscaElemento(const int &tag) const
   { return elementos.buscaElemento(tag); }
 
-//! @brief Devuelve, si lo encuentra, un puntero a la condicion
-//! de contorno cuyo tag se pasa como parámetro.
+//! @brief Returns, if it exists, a pointer to the constraint
+//! which tag is being passed as parameter.
 XC::Constraint *XC::SetMeshComp::buscaConstraint(const int &tag)
   {
     Constraint *retval= nullptr;
@@ -245,8 +245,8 @@ XC::Constraint *XC::SetMeshComp::buscaConstraint(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero a la condicion
-//! de contorno cuyo tag se pasa como parámetro.
+//! @brief Returns, if it exists, a pointer to the constraint
+//! which tag is being passed as parameter.
 const XC::Constraint *XC::SetMeshComp::buscaConstraint(const int &tag) const
   {
     const Constraint *retval= nullptr;

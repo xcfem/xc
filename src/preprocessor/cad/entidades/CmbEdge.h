@@ -86,7 +86,7 @@ class CmbEdge: public Edge
         Node *GetNodoInv(const size_t &i);
         Node *GetNodo(const size_t &i);
         const Node *GetNodo(const size_t &i) const;
-        void Malla(dir_mallado dm);
+        void genMesh(meshing_dir dm);
         friend bool operator==(const Lado &il1,const Lado &il2);
     
       };
@@ -106,7 +106,7 @@ class CmbEdge: public Edge
   protected:
 
     void crea_nodos_lineas(void);
-    void malla_lineas(dir_mallado dm);
+    void line_meshing(meshing_dir dm);
     Pnt *P1(void);
     Pnt *P2(void);
     void cierra(void); 
@@ -153,7 +153,7 @@ class CmbEdge: public Edge
     virtual ID getKPoints(void) const;
 
     BND3d Bnd(void) const;
-    void Malla(dir_mallado dm);
+    void genMesh(meshing_dir dm);
 
     friend bool operator==(const Lado &il1,const Lado &il2);
  

@@ -34,7 +34,7 @@
 #include <deque>
 #include "ClosedTriangleMesh.h"
 
-class MallaTriang3d;
+class Triang3dMesh;
 
 namespace XC {
 
@@ -44,7 +44,7 @@ class InteractionDiagramData;
 
 //! \@ingroup MATSCCDiagInt
 //
-//! @brief Diagrama de interacción (N,Mx,My) de una sección.
+//! @brief Interaction diagram (N,Mx,My) for a cross section.
 class InteractionDiagram: public ClosedTriangleMesh
   {
   protected:
@@ -59,7 +59,7 @@ class InteractionDiagram: public ClosedTriangleMesh
     GeomObj::list_Pos3d get_interseccion(const Pos3d &p) const;
   public:
     InteractionDiagram(void);
-    InteractionDiagram(const Pos3d &org,const MallaTriang3d &mll);
+    InteractionDiagram(const Pos3d &org,const Triang3dMesh &mll);
     InteractionDiagram(const InteractionDiagram &otro);
     InteractionDiagram &operator=(const InteractionDiagram &otro);
     virtual InteractionDiagram *clon(void) const;

@@ -38,7 +38,7 @@ namespace XC {
 
 //! @ingroup Cad
 //
-//! @brief Contenedor de puntos del modelo.
+//! @brief Teference system container.
 class MapSisRef: public MapCadMember<SisRef>
   {
   protected:

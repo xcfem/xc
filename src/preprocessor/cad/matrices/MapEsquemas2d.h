@@ -38,7 +38,7 @@ class MatrizPtrPnt;
 
 //! @ingroup Cad
 //
-//! @brief Contenedor de puntos del modelo.
+//! @brief Bidimensional scheme container.
 class MapEsquemas2d: public MapCadMember<MatrizPtrPnt>
   {
   protected:

@@ -23,8 +23,8 @@
 
 
 class_<XC::NodeLocker,XC::NodeLocker *, bases<XC::ForceReprComponent>, boost::noncopyable >("NodeLocker", no_init)
-  .def("newSPConstraint", &XC::NodeLocker::newSPConstraint,return_internal_reference<>(),"Crea una nueva condición de contorno monopunto.")
-  .def("removeSPConstraint", &XC::NodeLocker::removeSFreedom_Constraint,"Crea una nueva condición de contorno monopunto.")
+  .def("newSPConstraint", &XC::NodeLocker::newSPConstraint,return_internal_reference<>(),"Creates a new single freedom constraint.")
+  .def("removeSPConstraint", &XC::NodeLocker::removeSFreedom_Constraint,"Creates a new multi-freedom constraint.")
   .def("clearAll",&XC::NodeLocker::clearAll)
   ;
 

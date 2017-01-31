@@ -45,7 +45,7 @@ class NodeLoader: public Loader
   private:
     size_t ngdl_def_nodo; //!< Número de grados del libertad de un nodo por defecto.
     size_t ncoo_def_nodo; //!< Número de coordenadas de los nodos (1,2 ó 3).
-    Node *nodo_semilla; //!< Nodo patrón para el mallado semi-automático.
+    Node *nodo_semilla; //!< Seed node for semi-automatic meshing.
     void libera(void);
     Node *new_node(const int &tag,const size_t &dim,const int &ngdl,const double &x,const double &y=0.0,const double &z=0.0);
   public:

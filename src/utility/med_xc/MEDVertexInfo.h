@@ -33,11 +33,11 @@ namespace XC {
 class Mesh;
 //! @ingroup MED
 //
-//!  @brief Información sobre los vértices (nodos) de la malla.
+//!  @brief Information about mesh vertex.
 class MEDVertexInfo: public MEDBaseInfo
   {
     std::vector<double> coordenadas; //!< Coordenadas de los vértices.
-    size_t spaceDimension; //!< Dimensión del espacio en el que se define la malla.
+    size_t spaceDimension; //!< Mesh space dimension.
     std::string tipoCoordenadas; //!< "CARTESIAN", "CYLINDRICAL" or "SPHERICAL"
     std::vector<std::string> nombresCoordenadas; //!< Nombres de las coordenadas ("X","Y","Z",...).
     std::vector<std::string> nombresUnidades; //!< Nombres de las unidades ("cm","cm","cm",...).
@@ -69,7 +69,7 @@ class MEDVertexInfo: public MEDBaseInfo
     void setUnitNames(const boost::python::list &);
     void newVertex(const size_t &i,const boost::python::list &);
 
-    void to_med(MEDMEM::MESHING &malla) const;
+    void to_med(MEDMEM::MESHING &mesh) const;
     void clear(void);
 
   };

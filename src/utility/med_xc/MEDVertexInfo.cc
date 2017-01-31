@@ -52,7 +52,7 @@ XC::MEDVertexInfo::MEDVertexInfo(const Mesh &mesh)
       }
   }
 
-//! Borra la malla.
+//! Deletes mesh.
 void XC::MEDVertexInfo::clear(void)
   {
     coordenadas.clear();
@@ -105,25 +105,24 @@ void XC::MEDVertexInfo::setUnitNames(const boost::python::list &l)
       nombresUnidades.push_back(boost::python::extract<std::string>(l[i]));
   }
 
-//! @brief Vuelca la definición de las celdas en la
-//! malla MED
-void XC::MEDVertexInfo::to_med(MEDMEM::MESHING &malla) const
+//! @brief Dumps cells definition on MED mesh
+void XC::MEDVertexInfo::to_med(MEDMEM::MESHING &mesh) const
   {
     const int numNodos= getNumVertices();
     const std::vector<double> &coo= getCoordenadas();
     const size_t &sd= getSpaceDimension();
     if(sd>0)
       {
-        malla.setCoordinates(getSpaceDimension(),numNodos,&coo[0],getTipoCoordenadas(),::MED_FULL_INTERLACE);
+        mesh.setCoordinates(getSpaceDimension(),numNodos,&coo[0],getTipoCoordenadas(),::MED_FULL_INTERLACE);
         if(nombresCoordenadas.size()<sd)
           std::cerr << "No se han especificado los nombres de las coordenadas."
                     << std::endl;
         else 
-          malla.setCoordinatesNames(&nombresCoordenadas[0]);
+          mesh.setCoordinatesNames(&nombresCoordenadas[0]);
         if(nombresCoordenadas.size()<sd)
           std::cerr << "No se han especificado las unidades de las coordenadas."
                     << std::endl;
-        malla.setCoordinatesUnits(&nombresUnidades[0]);
+        mesh.setCoordinatesUnits(&nombresUnidades[0]);
       }
     else
       std::cerr << "Espacio de dimensión cero." << std::endl;

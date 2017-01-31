@@ -43,8 +43,7 @@ class Eje;
 //
 //! @ingroup MATSCCEntGeom
 //
-//! @brief Base de los objetos geométricos que se emplean
-//! para representar la sección.
+//! @brief Base class of section geometry representation classes.
 class EntGeomSection: public EntConNmb
   {
   private:

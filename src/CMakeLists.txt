@@ -331,13 +331,13 @@ SET(preprocessor_cad_entidades preprocessor/cad/entidades/EntMdlr preprocessor/c
 
 SET(preprocessor_cad_matrices preprocessor/cad/matrices/MatrizPtrPnt preprocessor/cad/matrices/MapEsquemas2d preprocessor/cad/matrices/TritrizPtrPnt preprocessor/cad/matrices/MapEsquemas3d preprocessor/cad/matrices/MatrizPtrNod preprocessor/cad/matrices/MatrizPtrElem preprocessor/cad/matrices/TritrizPtrNod preprocessor/cad/matrices/TritrizPtrElem)
 
-SET(preprocessor_cad preprocessor/cad/MapCadMemberBase preprocessor/cad/SisRef preprocessor/cad/MapSisRef preprocessor/cad/SisRefCartesianas3d preprocessor/cad/Cad preprocessor/cad/aux_mallado ${preprocessor_cad_trf} ${preprocessor_cad_entidades} ${preprocessor_cad_matrices} )
+SET(preprocessor_cad preprocessor/cad/MapCadMemberBase preprocessor/cad/SisRef preprocessor/cad/MapSisRef preprocessor/cad/SisRefCartesianas3d preprocessor/cad/Cad preprocessor/cad/aux_meshing ${preprocessor_cad_trf} ${preprocessor_cad_entidades} ${preprocessor_cad_matrices} )
 
 SET(preprocessor_loaders preprocessor/loaders/Loader preprocessor/loaders/NodeLoader preprocessor/loaders/ElementLoader preprocessor/loaders/ProtoElementLoader preprocessor/loaders/MaterialLoader preprocessor/loaders/BeamIntegratorLoader preprocessor/loaders/TransfCooLoader preprocessor/loaders/LoadLoaderMember preprocessor/loaders/LoadLoader preprocessor/loaders/ConstraintLoader)
 
 SET(preprocessor_set_mgmt preprocessor/set_mgmt/DqPtrsNode preprocessor/set_mgmt/DqPtrsElem preprocessor/set_mgmt/DqPtrsConstraint preprocessor/set_mgmt/SetMeshComp preprocessor/set_mgmt/SetBase preprocessor/set_mgmt/SetEstruct preprocessor/set_mgmt/Set preprocessor/set_mgmt/SetFilaI preprocessor/set_mgmt/SetFilaJ preprocessor/set_mgmt/SetFilaK preprocessor/set_mgmt/MapSet)
 
-SET(preprocessor preprocessor/EntMdlrBase preprocessor/ParamMallado ${preprocessor_cad} ${preprocessor_set_mgmt} ${preprocessor_loaders} preprocessor/Preprocessor)
+SET(preprocessor preprocessor/EntMdlrBase preprocessor/MeshingParams ${preprocessor_cad} ${preprocessor_set_mgmt} ${preprocessor_loaders} preprocessor/Preprocessor)
 
 SET(solution solution/analysis/ModelWrapper solution/SoluMethod solution/MapSoluMethod solution/analysis/MapModelWrapper solution/ProcSoluControl solution/ProcSolu)
 

@@ -34,7 +34,7 @@
 #include <deque>
 #include "utility/actor/actor/MovableObject.h"
 
-class MallaTriang3d;
+class Triang3dMesh;
 class TriangleMap;
 
 namespace XC {
@@ -44,7 +44,7 @@ class FiberSectionBase;
 
 //! \@ingroup MATSCCDiagInt
 //
-//! @brief Diagrama de interacción (N,Mx,My) de una sección.
+//! @brief Interaction diagram (N,Mx,My) of a section.
 class ClosedTriangleMesh: public GeomObj3d, public MovableObject
   {
   protected:
@@ -65,7 +65,7 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
     int recvData(const CommParameters &);
   public:
     ClosedTriangleMesh(void);
-    ClosedTriangleMesh(const Pos3d &org,const MallaTriang3d &mll);
+    ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &mll);
     ClosedTriangleMesh(const ClosedTriangleMesh &otro);
     ClosedTriangleMesh &operator=(const ClosedTriangleMesh &otro);
     virtual ClosedTriangleMesh *clon(void) const;

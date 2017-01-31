@@ -52,42 +52,40 @@ class Constraint;
 //! 
 //!  \brief Conjunto de objetos.
 //! 
-//!  Un objeto Set contiene un conjunto de 0 o más:
-//!  - Nodos.
-//!  - Elementos finitos.
-//!  - Bordes/aristas de elementos finitos.
-//!  - Caras de elementos finitos.
-//!  - Puntos.
-//!  - Líneas.
-//!  - Superficies.
-//!  - Cuerpos.
-//!  - Mallas uniformes.
+//!  A set object contains 0 or more:
+//!  - Nodes.
+//!  - Finite elements.
+//!  - Points.
+//!  - Línes.
+//!  - Surfaces.
+//!  - Bodies.
+//!  - Uniform meshes.
 class Set: public SetMeshComp
   {
   public:
     void numera(void);
-    typedef DqPtrsNmb<Pnt> lst_ptr_puntos; //!< Conjunto de puntos.
-    typedef lst_ptr_puntos::iterator pnt_iterator; //!< Iterador sobre el conjunto de puntos.
-    typedef lst_ptr_puntos::const_iterator pnt_const_iterator; //!< Iterador sobre el conjunto de puntos.
+    typedef DqPtrsNmb<Pnt> lst_ptr_puntos; //!< Point set.
+    typedef lst_ptr_puntos::iterator pnt_iterator; //!< point set iterator.
+    typedef lst_ptr_puntos::const_iterator pnt_const_iterator; //!< point set const iterator.
 
     typedef DqPtrsNmb<Edge> lst_ptr_lineas; //!< Conjunto de líneas.
-    typedef lst_ptr_lineas::iterator lin_iterator; //!< Iterador sobre el conjunto de lineas.
-    typedef lst_ptr_lineas::const_iterator lin_const_iterator; //!< Iterador sobre el conjunto de lineas.
+    typedef lst_ptr_lineas::iterator lin_iterator; //!< line set iterator.
+    typedef lst_ptr_lineas::const_iterator lin_const_iterator; //!< line set const iterator.
 
-    typedef DqPtrsNmb<Face> lst_ptr_superficies; //!< Conjunto de superficies.
-    typedef lst_ptr_superficies::iterator sup_iterator; //!< Iterador sobre el conjunto de superficies.
-    typedef lst_ptr_superficies::const_iterator sup_const_iterator; //!< Iterador sobre el conjunto de superficies.
+    typedef DqPtrsNmb<Face> lst_ptr_superficies; //!< surface set.
+    typedef lst_ptr_superficies::iterator sup_iterator; //!< surface set iterator.
+    typedef lst_ptr_superficies::const_iterator sup_const_iterator; //!< surface set const iterator.
 
-    typedef DqPtrsNmb<Body> lst_ptr_cuerpos; //!< Conjunto de cuerpos.
+    typedef DqPtrsNmb<Body> lst_ptr_cuerpos; //!< body set.
 
-    typedef DqPtrsNmb<UniformGrid> lst_ptr_uniform_grids; //!< Conjunto de mallas uniformes.
+    typedef DqPtrsNmb<UniformGrid> lst_ptr_uniform_grids; //!< Unifrom grid set.
 
   protected:
-    lst_ptr_puntos puntos; //!< Conjunto de puntos.
-    lst_ptr_lineas lineas; //!< Conjunto de líneas.
-    lst_ptr_superficies superficies; //!< Conjunto de superficies.
-    lst_ptr_cuerpos cuerpos; //!< Conjunto de cuerpos.
-    lst_ptr_uniform_grids uniform_grids; //! Conjunto de mallas uniformes.
+    lst_ptr_puntos puntos; //!< point set.
+    lst_ptr_lineas lineas; //!< line set.
+    lst_ptr_superficies superficies; //!< surface set.
+    lst_ptr_cuerpos cuerpos; //!< body set.
+    lst_ptr_uniform_grids uniform_grids; //! Uniform mesh set.
 
     void clearAll(void);
     void copia_listas(const Set &);
@@ -98,12 +96,12 @@ class Set: public SetMeshComp
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-
-    void malla_puntos(dir_mallado dm);
-    void malla_lineas(dir_mallado dm);
-    void malla_superficies(dir_mallado dm);
-    void malla_cuerpos(dir_mallado dm);
-    void malla_uniform_grids(dir_mallado dm);
+    //Mesh generation.
+    void point_meshing(meshing_dir dm);
+    void line_meshing(meshing_dir dm);
+    void surface_meshing(meshing_dir dm);
+    void body_meshing(meshing_dir dm);
+    void uniform_grid_meshing(meshing_dir dm);
 
     void mueve(const Vector3d &);
   public:
@@ -156,7 +154,7 @@ class Set: public SetMeshComp
       { return uniform_grids; }
     bool In(const UniformGrid *) const;
 
-    void Malla(dir_mallado dm);
+    void genMesh(meshing_dir dm);
 
     void agrega_listas(const Set &);
 

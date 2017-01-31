@@ -63,8 +63,7 @@
 namespace XC {
 //! @ingroup EINDMat
 //
-//! @brief Material elástico e isótropo para
-//! fibras de una sección.
+//! @brief Elastic isotropic material for beam fibers.
 class ElasticIsotropicBeamFiber : public ElasticIsotropicMaterial
   {
   private:

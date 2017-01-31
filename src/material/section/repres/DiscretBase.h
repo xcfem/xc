@@ -37,15 +37,15 @@ namespace XC {
 
 //! @ingroup MATSCC
 //
-//! @defgroup MATSCCRepres Representación de una sección.
+//! @defgroup MATSCCRepres Cross-section material representation.
 //
 //! @ingroup MATSCCRepres
 //!
-//! @brief Base para los objetos empleados para discretizar la sección.
+//! @brief Base class for section discretization.
 class DiscretBase: public EntConNmb
   {
   private:
-    Material *mat; //!< Puntero al material que constituye el elemento de la discretización.
+    Material *mat; //!< Pointer to the material constituye el elemento de la discretización.
   protected:
 
   public:

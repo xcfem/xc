@@ -39,8 +39,7 @@ namespace XC {
 
 //! @ingroup MATSCCRegiones
 //
-//! @brief Región de una sección que crea celdas de tipo
-//! cuadrilátero.
+//! @brief Region of a section that creates quadrilateral cells.
 //
 //         nDivIJ= 4
 // L +---+---+---+---+ K
@@ -50,7 +49,7 @@ namespace XC {
 // I +---+---+---+---+ J
 class RgQuadCell: public RegionSecc
   {
-    mutable Rejilla2d *rejilla; //!< Puntos de la malla.
+    mutable Rejilla2d *rejilla; //!< Grid points.
   protected:
     int nDivIJ, nDivJK; //!< Número de divisiones.
     void libera(void) const;
@@ -84,7 +83,7 @@ class RgQuadCell: public RegionSecc
       { return nDivJK; }
     int getNumCells(void) const;
     void getDiscretization(int &numSubdivIJ, int &numSubdivJK) const;
-    virtual const Rejilla2d &Malla(void) const=0;
+    virtual const Rejilla2d &getMesh(void) const=0;
     Vector getCdgRejilla(void) const;
     Vector getVertCoords(const size_t &,const size_t &) const;
     Matrix getCellVertCoords(const size_t &,const size_t &) const;

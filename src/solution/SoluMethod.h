@@ -66,17 +66,20 @@ class ID;
 
 //!  \ingroup Solu
 //! 
-//! @brief Procedimiento de solución del problema de elementos finitos. Queda
-//! definido a través de la especificación del modelo de solución (ModelWrapper),
-//! el algoritmo de solución (SolutionAlgorithm), el integrador (theIntegrator)
-//! el sistema de ecuaciones (SystemOfEqn) y el test de convergencia (ConvergenceTest)
+//! @brief Solution procedure for the finite element problem. The
+//! solution procedure is definde by specifiying:
+//! - Wrapper for the finite element model.
+//! - Solution algorithm.
+//! - Integration scheme.
+//! - Solver for the system of eauqtions.
+//  - Convergence test.
 class SoluMethod: public EntCmd
   {
-    ModelWrapper *base; //!< Modelo de solución.
-    SolutionAlgorithm *theSolnAlgo; //!< Algoritmo de solución.
-    Integrator *theIntegrator; //!< Integrador.
-    SystemOfEqn *theSOE; //!< Sistema de ecuaciones.
-    ConvergenceTest *theTest; //!< Criterio de convergencia.
+    ModelWrapper *base; //!< Wrapper for the finite elemnt model.
+    SolutionAlgorithm *theSolnAlgo; //!< Solution algorithm.
+    Integrator *theIntegrator; //!< Integration scheme.
+    SystemOfEqn *theSOE; //!< System of equations.
+    ConvergenceTest *theTest; //!< Convergence test.
 
     Analysis *getAnalysis(void);
     const Analysis *getAnalysis(void) const;    

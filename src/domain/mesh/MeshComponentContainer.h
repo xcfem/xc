@@ -36,7 +36,7 @@
 namespace XC {
 class Domain;
 
-//! @brief Clase base para las contenedoras de la malla y las condiciones de contorno.
+//! @brief Base class for the element and constraint containers.
 class MeshComponentContainer: public EntCmd, public MovableObject
   {
   public:

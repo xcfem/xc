@@ -77,7 +77,7 @@ class Response;
 
 //! \ingroup MATSCCFibras
 //
-//! @brief Representa una fibra de material uniaxial en un espacio tridimensional (en el que las secciones tienen 2 dimensiones).
+//! @brief Uniaxial fiber on a three-dimensional space.
 class UniaxialFiber3d: public UniaxialFiber
   {
   private:

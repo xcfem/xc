@@ -59,9 +59,9 @@ class LimiteElemento
 //!  \brief Conjunto de objetos.
 //! 
 //!  Un objeto SetMeshComp contiene un conjunto de 0 o más:
-//!  - Nodos.
-//!  - Elementos finitos.
-//!  - Condiciones de contorno en desplazamientos.
+//!  - Nodes.
+//!  - Finite elements.
+//!  - Essential boundary conditions (displacements).
 class SetMeshComp: public SetBase
   {
   protected:

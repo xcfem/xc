@@ -81,7 +81,7 @@ class ID;
 
 //! @ingroup Mat
 //
-//! @brief Clase base para los materiales del modelo.
+//! @brief Base class for materials.
 class Material: public TaggedObject, public MovableObject
   {
   public:

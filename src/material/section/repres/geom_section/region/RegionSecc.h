@@ -49,11 +49,11 @@ class RgSccPoligono;
 
 //! @ingroup MATSCCRepresGeom
 //
-//! @defgroup MATSCCRegiones Regiones de la sección ocupadas por un material.
+//! @defgroup MATSCCRegiones Material filled regions of a section.
 //
 //! @ingroup MATSCCRegiones
 //
-//! @brief Región de una sección correspondiente a un material.
+//! @brief Region of a section that corresponds with a material.
 class RegionSecc: public DiscretBase
   {
   protected:

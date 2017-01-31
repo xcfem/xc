@@ -40,7 +40,7 @@ class UniformGrid;
 
 //! @ingroup Cad
 //
-//! @brief Contenedor de puntos del modelo.
+//! @brief Uniform grid container.
 class MapUniformGrids: public MapEnt<UniformGrid>
   {
   private:

@@ -43,9 +43,8 @@ class BeamStrainLoad;
 
 //! \ingroup MATSCC
 //
-//! @brief Vector de punteros a SeccionBarraPrismaticaes.
-//! se emplea en los elementos para guardar las secciones
-//! en los puntos de integración.
+//! @brief Vector of pointers to SeccionBarraPrismaticaes.
+//! used to store the sections for each integration point.
 class VectorSeccionesBarraPrismatica: public EntCmd, public std::vector<SeccionBarraPrismatica *>, public MovableObject
   {
   protected:

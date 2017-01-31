@@ -47,7 +47,7 @@ class TrfGeom;
 
 //! @ingroup Cad
 //
-//! @brief Contenedor de puntos del modelo.
+//! @brief Point container.
 class MapPuntos: public MapEnt<Pnt>
   {
   private:

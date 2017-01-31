@@ -53,16 +53,16 @@ XC::BrickBase::BrickBase(int tag, int classTag, int node1, int node2, int node3,
 size_t XC::BrickBase::getDimension(void) const
   { return 3; }
 
-//Coloca el elemento en la malla being passed as parameter.
-XC::TritrizPtrElem XC::BrickBase::coloca_en_malla(const XC::TritrizPtrNod &nodos,dir_mallado dm) const
+//Put the element on the mesh being passed as parameter.
+XC::TritrizPtrElem XC::BrickBase::put_on_mesh(const XC::TritrizPtrNod &nodos,meshing_dir dm) const
   {
     const size_t ncapas= nodos.GetCapas();
     const size_t nfilas= nodos.getNumFilas();
     const size_t ncols= nodos.getNumCols();
-    const size_t dim_malla= nodos.GetDim();
+    const size_t mesh_dim= nodos.GetDim();
     TritrizPtrElem retval(ncapas-1,nfilas-1,ncols-1);
-    if(dim_malla<3)
-      std::cerr << "BrickBase::coloca_en_malla; se necesita una malla tridimensional, no se pudieron crear elementos." << std::endl;
+    if(mesh_dim<3)
+      std::cerr << "BrickBase::put_on_mesh; three-dimensional mesh needed, can't create elements." << std::endl;
     else
       {
         for(size_t i=1;i<ncapas;i++)

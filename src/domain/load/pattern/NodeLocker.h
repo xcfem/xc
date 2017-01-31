@@ -39,8 +39,8 @@ class TaggedObjectStorage;
 
 //! @ingroup LPatterns
 //
-//! @brief Condiciones de contorno mononodales
-//! que forman parte de un caso de carga.
+//! @brief Single freedom constraints
+//! that make part of a load pattern.
 class NodeLocker: public ForceReprComponent
   {
     void alloc_contenedores(void);
@@ -53,9 +53,9 @@ class NodeLocker: public ForceReprComponent
     int lastGeoSendTag;
 
     // storage objects for the constraints
-    TaggedObjectStorage  *theSPs; //!< Almacenamiento de condiciones de contorno mononodales.	
+    TaggedObjectStorage  *theSPs; //!< Constraint container.
     // iterator objects for the objects added to the storage objects
-    SingleDomSFreedom_Iter *theSpIter; //!< Iterador sobre condiciones de contorno mononodales.
+    SingleDomSFreedom_Iter *theSpIter; //!< Constraint iterator.
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);

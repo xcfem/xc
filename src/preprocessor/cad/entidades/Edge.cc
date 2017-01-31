@@ -114,7 +114,7 @@ void XC::Edge::SetNDiv(const size_t &nd)
   {
     if(ndiv!=nd) //Si cambia el número de divisiones
       {
-        if(nodos.empty()) //No se ha mallado.
+        if(nodos.empty()) //Not meshed.
           {
             const size_t ns= sups_linea.size();
             if(ns>1)
@@ -131,8 +131,8 @@ void XC::Edge::SetNDiv(const size_t &nd)
               ndiv= nd;
           }
         else
-          std::cerr << "Edge::SetNDiv; el borde: " << GetNombre()
-                    << " ya está mallado se mantiene su número de divisiones"
+          std::cerr << "Edge::SetNDiv; " << GetNombre()
+                    << " edge is already meshed and keeps its number of divisions"
                     << " ndiv= " << ndiv << ".\n";
       }
   }
@@ -327,9 +327,8 @@ std::set<const XC::Edge *> XC::Edge::GetLadosHomologos(const std::set<const XC::
     return retval;
   }
 
-//! @brief Calcula el número de divisiones de las líneas
-//! para que sea compatible con el mallado de las superficies
-//! adyacentes.
+//! @brief Computes number of divisions for each line
+//! to make it compatible with adjacent surface meshing.
 size_t XC::calcula_ndiv_lados(const std::set<const XC::Edge *> &lados)
   {
     size_t nd= 0;
@@ -444,11 +443,11 @@ void XC::Edge::crea_nodos(void)
       std::clog << "creados." << std::endl;
   }
 
-//! @brief Crea la malla.
-void XC::Edge::Malla(dir_mallado dm)
+//! @brief Triggers mesh generation.
+void XC::Edge::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
-      std::clog << "Mallando edge...(" << GetNombre() << ")...";   
+      std::clog << "Meshing edge...(" << GetNombre() << ")...";   
     crea_nodos();
     crea_elementos(dm);
     if(verborrea>3)

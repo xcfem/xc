@@ -36,7 +36,7 @@ namespace XC {
 
 //! @ingroup Cad
 //
-//! @brief Contenedor de puntos del modelo.
+//! @brief Body contaainer. 
 class MapCuerpos: public MapEnt<Body>
   {
   private:

@@ -76,15 +76,13 @@ class Material;
 
 //! @ingroup MATSCCRepresGeom
 //
-//! @brief Representación de la distribución de los distintos
-//! materiales en una sección.
+//! @brief Material distribution on a cross section.
 class SectionRepres: public TaggedObject
   {
 
   protected:
-    MaterialLoader *material_loader; //!< Gestor de materiales (búsqueda,...).
-    const GeomSection *gmSecc; //!< Geometría de la sección.
-
+    MaterialLoader *material_loader; //!< Material handler (searching,...).
+    const GeomSection *gmSecc; //!< Section geometry.
 
   public:
     //Constructores

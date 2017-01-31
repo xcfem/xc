@@ -73,7 +73,7 @@ namespace XC {
 
 //! @ingroup EigenAlgo
 //
-//! @brief Algoritmo para obtener los modos propios del modelo.
+//! @brief Algortihm to obtain the natural frequencies of the model.
 class FrequencyAlgo : public EigenAlgorithm
   {
     friend class SoluMethod;

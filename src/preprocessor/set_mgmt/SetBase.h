@@ -34,7 +34,7 @@
 //!  \defgroup Set Set management.
 
 #include "preprocessor/EntMdlrBase.h"
-#include "preprocessor/ParamMallado.h"
+#include "preprocessor/MeshingParams.h"
 
 class Lista;
 
@@ -53,7 +53,7 @@ class SetBase: public EntMdlrBase
     SetBase(const std::string &nmb="",Preprocessor *preprocessor= NULL);
     inline virtual ~SetBase(void)
       {}
-    virtual void Malla(dir_mallado dm);
+    virtual void genMesh(meshing_dir dm);
     virtual void fix(const SFreedom_Constraint &);
 
     virtual std::set<int> getNodeTags(void) const= 0;

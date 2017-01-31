@@ -50,7 +50,7 @@ class RgSccPoligono: public RgQuadCell
     RgSccPoligono(Material *);
     RgSccPoligono(Material *, int numSubdivIJ, int numSubdivJK, const Poligono2d &);
     
-    const Rejilla2d &Malla(void) const;
+    const Rejilla2d &getMesh(void) const;
     const VectorCells &getCells(void) const;
     RegionSecc *getCopy(void) const;
 

@@ -57,11 +57,11 @@ void XC::MapUniformGrids::UpdateSets(UniformGrid *nuevo_unif_grid) const
       }
   }
 
-//! @brief Crea una nueva malla uniforme.
+//! @brief New uniform grid.
 XC::UniformGrid *XC::MapUniformGrids::Nueva(void)
   {
     UniformGrid *retval= busca(getTag());
-    if(!retval) //La malla es nueva.
+    if(!retval) //new grid.
       {
         Preprocessor *preprocessor= getPreprocessor();
         retval= new UniformGrid(preprocessor);

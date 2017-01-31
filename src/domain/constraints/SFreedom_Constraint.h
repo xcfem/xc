@@ -71,11 +71,11 @@ namespace XC {
   class ID;
 
 //! @ingroup CCont
-//! @defgroup CContSP Condiciones de contorno mononodales.
+//! @defgroup CContSP Single freedom constraints.
 //
 //! @ingroup CContSP
 //
-//! @brief Coacción de uno o varios grados de libertad de un sólo nodo.
+//! @brief Single freedom constraint.
 class SFreedom_Constraint: public Constraint
   {
   protected:

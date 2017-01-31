@@ -37,13 +37,12 @@ namespace XC {
 
 //! \ingroup MATSCCElastica
 //
-//! @brief Clase base para las secciones transversales formadas
-//! por un material elástico lineal en un problema bidimensional
-//! (3 esfuerzos por sección).
+//! @brief Base class for cross sections with linear elastic material
+//! on a bi-dimensional problem (3 DOFs on each section).
 class BaseElasticSection2d: public BaseElasticSection
   {
   protected:
-    CrossSectionProperties2d ctes_scc; //!< Características mecánicas de la seccion E,A,I.
+    CrossSectionProperties2d ctes_scc; //!< Mechanical properties of the section.
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

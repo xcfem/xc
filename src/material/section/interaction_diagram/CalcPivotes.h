@@ -42,14 +42,14 @@ class Fiber;
 
 //! @ingroup MATSCCDiagInt
 //
-//! @brief Calcula la posición de los pivotes en la sección
-//! para un plano de flexión determinado.
+//! @brief Given a bending plane, computes the "pivots" position
+//! on the section.
 class CalcPivotes: public Ref3d3d
   {
     const DefAgotPivotes &agot_pivotes; //!< Deformaciones de agotamiento en pivotes.
-    const StoFibras &fibras;//!< Fibras de la sección.
-    const DqFibras &fibrasC; //!< Fibras de hormigón (u otro material comprimido).
-    const DqFibras &fibrasS; //!< Fibras de acero (u otro material a tracción). 
+    const StoFibras &fibras;//!< Section fibers.
+    const DqFibras &fibrasC; //!< Concrete fibers (u otro material comprimido).
+    const DqFibras &fibrasS; //!< Steel fibers (u otro material a tracción). 
   public:
     CalcPivotes(const DefAgotPivotes &ap,const StoFibras &fs,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
     const Fiber *getFiberCMinY(void) const;

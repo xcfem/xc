@@ -20,7 +20,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDCellBaseInfo.h
-//Información sobre las celdas de la malla (para exportar archivos a «salome»).
 
 #ifndef MEDCELLBASEINFO_H
 #define MEDCELLBASEINFO_H
@@ -36,7 +35,7 @@ class ID;
 
 //! @ingroup MED
 //
-//!  @brief Información básica sobre las celdas de la malla.
+//!  @brief Basic information about mesh cells.
 class MEDCellBaseInfo: public MEDBaseInfo
   {
   protected:
@@ -47,7 +46,7 @@ class MEDCellBaseInfo: public MEDBaseInfo
 
     const MEDMapNumCeldasPorTipo &getMapCellTypes(void) const;
     void to_support_med(MEDMEM::SUPPORT &supp) const;
-    void to_malla_med(MEDMEM::MESHING &) const;
+    void to_med_mesh(MEDMEM::MESHING &) const;
   };
 } // end of XC namespace
 #endif

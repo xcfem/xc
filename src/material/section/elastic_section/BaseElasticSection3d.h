@@ -37,13 +37,12 @@ namespace XC {
 
 //! \ingroup MATSCCElastica
 //
-//! @brief Clase base para las secciones transversales formadas
-//! por un material elástico lineal en un problema tridimensional
-//! (6 esfuerzos por sección).
+//! @brief Base class for cross sections with linear elastic material
+//! on a three-dimensional problem (6 DOFs on each section).
 class BaseElasticSection3d: public BaseElasticSection
   {
   protected:
-    CrossSectionProperties3d ctes_scc; //!< Características mecánicas de la seccion E,A,I.
+    CrossSectionProperties3d ctes_scc; //!< Mechanical properties of the section.
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
