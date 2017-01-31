@@ -6,8 +6,8 @@ The objective is to develop a robust structural analysis tool, which is owned by
 
 The program is based on:
 <ul>
-<li> <a href="http://www.python.org/" target="_new">Python.</a>. </li>
-<li> <a href="http://opensees.berkeley.edu" target="_new">OpenSees.</a>. </li>
+<li> <a href="http://www.python.org/" target="_new">Python.</a> </li>
+<li> <a href="http://opensees.berkeley.edu" target="_new">OpenSees.</a> </li>
 <li> <a href="http://www.vtk.org" target="_new">Visualization ToolKit (VTK).</a> </li>
 <li> <a href="http://www.boost.org" target="_new">Boost c++ libraries.</a> </li>
 <li> <a href="http://www.cgal.org" target="_new">Computational geometry algorithms library (CGAL).</a> </li>

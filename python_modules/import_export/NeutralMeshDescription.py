@@ -62,6 +62,8 @@ class XCImportExportData(object):
     self.cellLoaderName= "elements"
     self.setLoaderName= "groups"
     self.pointLoaderName= "points"
+    self.lineLoaderName= "lines"
+    self.surfaceLoaderName= "surfaces"
     self.cellConversion= {}
     self.outputFile= None
     self.meshDesc= None
@@ -120,6 +122,10 @@ class XCImportExportData(object):
     strCommand= self.cellLoaderName + '= preprocessor.getElementLoader'
     self.outputFile.write(strCommand+'\n')
     strCommand= self.pointLoaderName + '= preprocessor.getCad.getPoints'
+    self.outputFile.write(strCommand+'\n')
+    strCommand= self.lineLoaderName + '= preprocessor.getCad.getLines'
+    self.outputFile.write(strCommand+'\n')
+    strCommand= self.surfaceLoaderName + '= preprocessor.getCad.getSurfaces'
     self.outputFile.write(strCommand+'\n')
     #strCommand= self.lineLoaderName + '= preprocessor.getCad.getLines'
     #self.outputFile.write(strCommand+'\n')
