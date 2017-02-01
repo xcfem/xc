@@ -18,14 +18,12 @@ The program is based on:
 <li> <a href="http://www.mpfr.org/" target="_new">libmpfr.</a> Multiple precision floating-point computation developers tools (libmpfr).</li>
 <li> <a href="https://gmplib.org/" target="_new">libgmp.</a> Multiple precision arithmetic library developers tools (libgmp).</li>
 <li> <a href="https://dev.mysql.com/downloads/connector/cpp/" target="_new">libmysql++.</a> MySQL C++ library bindings.</li>
-<li> Berkeley Database Libraries for C++ (libdb,libdb-dev).</li>
+<li> <a href="https://code.launchpad.net/~bdb/berkeley-db/trunk" target="_new"> Berkeley DB.</a> Berkeley database libraries for C++ (libdb,libdb-dev).</li>
 <li> SQLite 3 development files (libsqlite3).</li>
-<li> X11 (libxt-dev, libsm-dev,etc.)</li>
-<li> OpenGL.</li>
-<li> Arpack (Fortran77 subroutines to solve large scale eigenvalue problems; libarcpack2-dev).</li>
-<li> Lapack (Library of linear algebra routines; liblapack-dev).</li>
-<li> SuperLU (Direct solution of large, sparse systems of linear equations libsuperlu3-dev).</li>
-<li> Suitesparse (collection of libraries for computations for sparse matrices).</li>
+<li> <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack</a> (Fortran77 subroutines to solve large scale eigenvalue problems; libarcpack2-dev).</li>
+<li> <a href="http://http://www.netlib.org/lapack/" target="_new"> Lapack</a> Library of linear algebra routines; (liblapack-dev).</li>
+<li> <a href="https://launchpad.net/ubuntu/+source/superlu" target="_new"> SuperLU</a> (Direct solution of large, sparse systems of linear equations libsuperlu3-dev).</li>
+<li> <a href="http://faculty.cse.tamu.edu/davis/suitesparse.html" target="_new"> Suitesparse</a> (collection of libraries for computations for sparse matrices).</li>
 </ul>
 
 The main capabilities of the program:
@@ -38,4 +36,6 @@ The main capabilities of the program:
 - Tools for implementing structural codes (Eurocodes, ACI, AISC,...) verifications (in progress...).
 - Interface with Salome (in progress...).
 - Interface with SCIA Engineering (in progress...).
+
+You can take a look to the project <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">home</a>, to the <a href="https://lcpt.github.io/XCmanual/" target="_new">Python documentation</a> or the <a href="https://codedocs.xyz/lcpt/xc/index.html" target="_new">C++ API documentation</a> (all of them are work in progress ;-). 
 
