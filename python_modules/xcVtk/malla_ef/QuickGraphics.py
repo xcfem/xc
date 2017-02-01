@@ -15,7 +15,8 @@ from solution import predefined_solutions
 from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk.malla_ef import Fields
 from xcVtk import ControlVarDiagram as cvd
-
+from xcVtk import LinearLoadDiagram as lld
+from xcVtk import LoadVectorField as lvf
 
 class QuickGraphics(object):
   '''This class is aimed at providing the user with a quick and easy way to 
@@ -155,3 +156,45 @@ class QuickGraphics(object):
     caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
     defDisplay.displayScene(caption=caption,fName=fileName)
 
+  def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewName='XYZPos',caption='',fileName=None):
+    '''displays the loads applied on beam elements and nodes for a given load case
+    :param setToDisplay:    set of beam elements to be represented
+    :param fUnitConv:       factor of conversion to be applied to the results (defaults to 1)
+    :param elLoadComp:      component of the loads on elements to be depicted
+                            [possible components: 'axialComponent', 'transComponent', 'transYComponent',
+                             'transZComponent']
+    :param elLoadScaleF:    factor of scale to apply to the diagram display of element loads (defaults to 1)
+    :param nodLoadScaleF:   factor of scale to apply to the vector display of nodal loads (defaults to 1)
+    :param viewName:        name of the view  that contains the renderer (possible
+                            options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
+                            "ZPos", "ZNeg") (defaults to "XYZPos")
+    :param caption:         caption for the graphic
+    :param fileName:        name of the file to plot the graphic. Defaults to None,
+                            in that case an screen display is generated
+    '''
+    preprocessor= self.feProblem.getPreprocessor
+    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
+    loadPatterns.addToDomain(loadCaseName)
+    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay.viewName=viewName
+    defDisplay.setupGrid(self.xcSet)
+    defDisplay.defineEscenaMalla(None)
+    orNodalLBar='H'  #default orientation of scale bar for nodal loads
+    # element loads
+    diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
+    diagram.agregaDiagrama(preprocessor)
+    if (diagram.valMax > -1e+99) or (diagram.valMin<1e+99):
+      defDisplay.appendDiagram(diagram)
+      orNodalLBar='V'
+    # nodal loads
+    vField=lvf.LoadVectorField(loadPatternName=loadCaseName,fUnitConv=fUnitConv,scaleFactor=nodLoadScaleF,showPushing= True)
+#    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
+    count=vField.dumpNodalLoads(preprocessor,lp=loadPatterns[loadCaseName])
+    if count >0:
+      vField.setupActor()
+      defDisplay.renderer.AddActor(vField.actor)
+      vField.creaColorScaleBar(orientation=orNodalLBar)
+      defDisplay.renderer.AddActor2D(vField.scalarBar)
+    defDisplay.displayScene(caption=caption,fName=fileName)
+
+ 

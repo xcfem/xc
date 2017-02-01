@@ -54,7 +54,7 @@ class LUTField(object):
     self.lookUpTable= vtk.vtkLookupTable()
     self.lookUpTable.SetNumberOfTableValues(1024)
     self.lookUpTable.SetHueRange(0.667,0)
-    # self.lookUpTable.SetTableRange(valMin,valMax)
+    # self.lookUpTable.SetTableRange(self.valMin,self.valMax)
     self.lookUpTable.Build()
 
 
@@ -71,7 +71,32 @@ class LUTField(object):
     '''
     self.mapper.SetScalarRange(self.valMin,self.valMax)
 
-  def creaColorScaleBar(self):
+  def creaColorScaleBar(self,orientation='H'):
+    '''Creates the scalar bar that indicates to the viewer the correspondence
+    between color values and data values
+
+    :param orientation: 'H' for horizontal bar, 'V' for vertical bar (defaults to 'H')
+    '''
+
+    self.scalarBar= vtk.vtkScalarBarActor()
+
+    pos= self.scalarBar.GetPositionCoordinate()
+    pos.SetCoordinateSystemToNormalizedViewport()
+    if orientation=='H':
+      pos.SetValue(0.1,0.1)        
+      self.scalarBar.SetOrientationToHorizontal()
+      self.scalarBar.SetWidth(0.8)
+      self.scalarBar.SetHeight(0.125)
+    else:
+      pos.SetValue(0.85,0.25)     
+      self.scalarBar.SetOrientationToVertical()
+      self.scalarBar.SetWidth(0.1)
+      self.scalarBar.SetHeight(0.7)
+    self.scalarBar.SetLookupTable(self.lookUpTable)
+    self.scalarBar.Modified()
+    return self.scalarBar
+
+  def creaVertColorScaleBar(self):
     '''Creates the scalar bar that indicates to the viewer the correspondence
     between color values and data values
     '''
@@ -80,12 +105,13 @@ class LUTField(object):
 
     pos= self.scalarBar.GetPositionCoordinate()
     pos.SetCoordinateSystemToNormalizedViewport()
-    pos.SetValue(0.1,0.1)        
+    pos.SetValue(0.85,0.25)        
 
-    self.scalarBar.SetOrientationToHorizontal()
-    self.scalarBar.SetWidth(0.8)
-    self.scalarBar.SetHeight(0.125)
+    self.scalarBar.SetOrientationToVertical()
+    self.scalarBar.SetWidth(0.1)
+    self.scalarBar.SetHeight(0.7)
     self.scalarBar.SetLookupTable(self.lookUpTable)
     self.scalarBar.Modified()
     return self.scalarBar
+
 

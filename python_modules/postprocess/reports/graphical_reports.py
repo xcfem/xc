@@ -22,13 +22,20 @@ class RecordLoadCaseDisp(object):
   :ivar loadCaseDescr: description text of the load case
   :ivar loadCaseExpr:  mathematical expression to define the load case (ex:
                    '1.0*GselfWeight+1.0*DeadLoad')
-  :ivar setsToDispLoads: ordered list of sets of elements to display loads
+  :ivar setsToDispLoads: ordered list of sets of shell elements to display loads
+  :ivar setsToDispBeamLoads: ordered list of sets of beam elements to display 
+                   loads (defaults to [])
+  :ivar compElLoad: component of load on beam elements to be represented
+                   available components: 'axialComponent', 'transComponent', 
+                   'transYComponent','transZComponent' (defaults to 'transComponent')
   :ivar unitsScaleLoads: factor to apply to loads if we want to change
                    the units (defaults to 1).
   :ivar unitsLoads: text to especify the units in which loads are 
                    represented (defaults to 'units:[m,kN]')
   :ivar vectorScaleLoads: factor to apply to the vectors length in the 
-                   representation of loads (defaults to 1).
+                   representation of element loads (defaults to 1).
+  :ivar vectorScalePointLoads: factor to apply to the vectors length in the 
+                   representation of nodal loads (defaults to 1).
   :ivar multByElemAreaLoads: boolean value that must be True if we want to 
                    represent the total load on each element 
                    (=load multiplied by element area) and False if we 
@@ -76,9 +83,12 @@ class RecordLoadCaseDisp(object):
     self.loadCaseDescr=loadCaseDescr
     self.loadCaseExpr=loadCaseExpr
     self.setsToDispLoads=setsToDispLoads
+    self.setsToDispBeamLoads=[]
+    self.compElLoad='transComponent'
     self.unitsScaleLoads=1.0
     self.unitsLoads='units:[m,kN]'
     self.vectorScaleLoads=1.0
+    self.vectorScalePointLoads=1.0
     self.multByElemAreaLoads=False
     self.listDspRot=['uX', 'uY', 'uZ']
     self.setsToDispDspRot=setsToDispDspRot
@@ -111,6 +121,13 @@ class RecordLoadCaseDisp(object):
       capt=self.loadCaseDescr + ', ' + st.genDescr + ', '  + self.unitsLoads
       gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,caption= capt,fileName=grfname+'.jpg')
       gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,caption= capt,fileName=grfname+'.eps')
+      insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
+    for st in self.setsToDispBeamLoads:
+      grfname=pathGr+self.loadCaseName+st.elSet.name
+      capt=self.loadCaseDescr + ', ' + st.genDescr + ', '  + self.unitsLoads
+      lcs=GridModel.QuickGraphics(gridmodl)
+      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st.elSet,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,caption= capt,fileName=grfname+'.jpg')
+      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st.elSet,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,caption= capt,fileName=grfname+'.eps')
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
     return
 
@@ -174,23 +191,27 @@ class RecordLoadCaseDisp(object):
     return
 
 def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFile,grWdt,setsBmElView=[],argsBmElScale=[]):
-    '''Create a LaTeX report including the desired graphical results obtained in the
-    verification of a limit state.
+    '''Create a LaTeX report including the desired graphical results obtained in
+    the verification of a limit state.
 
     :param limitStateLabel:limit state
-    :param setsShEl:   Ordered list of sets of shell elements (defined in model_data.py 
-                       as instances of utils_display.setToDisplay) to be included in the report
-    :param argsShEl:   Ordered list of arguments to be included in the report for shell elements
+    :param setsShEl:   Ordered list of sets of shell elements (defined in 
+                       model_data.py as instances of utils_display.setToDisplay)
+                       to be included in the report
+    :param argsShEl:   Ordered list of arguments to be included in the report   
+                       for shell elements
      :param capTexts:  dictionary from wich to read the texts for captions
     :param pathGr:     width to be applied to graphics 
     :param texReportFile:laTex file where to include the graphics
     :param grWdt:      width of the graphics for the tex file
-    :param setsBmView: Ordered list of lists [set of beam elements, view to represent this set]
-                       to be included in the report. The set has been defined in model_data.py 
-                       as instances of utils_display.setToDisplay and the possible views are 
-                       'XYZPos','XNeg','XPos','YNeg','YPos','ZNeg','ZPos'  (defaults to 'XYZPos')
-    :param argsShEl:   Ordered list of lists [arguments, scale to represent the argument] 
-                       to be included in the report for beam elements
+    :param setsBmView: Ordered list of lists [set of beam elements, view to 
+                       represent this set] to be included in the report. 
+                       The sets have been defined in model_data.py 
+                       as instances of utils_display.setToDisplay and the 
+                       possible views are: 'XYZPos','XNeg','XPos','YNeg','YPos',
+                       'ZNeg','ZPos'  (defaults to 'XYZPos')
+    :param argsShEl:   Ordered list of lists [arguments, scale to represent the 
+                       argument] to be included in the report for beam elements
     '''
     report=open(texReportFile,'w')    #report latex file
     dfDisp= vtk_grafico_ef.RecordDefDisplayEF()
@@ -208,6 +229,18 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.genDescr.capitalize() + ', ' + st.sectDescr[1]
             grFileNm=pathGr+st.elSet.name+arg+'Sect2'
             field.display(defDisplay=dfDisp,caption=capt,fName=grFileNm+'.jpg')
+            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
+    for stV in setsBmElView:
+        for argS in argsBmElScale:
+            diagram= cvd.ControlVarDiagram(scaleFactor=argS[1],fUnitConv=1,sets=[stV[0].elSet],attributeName= limitStateLabel,component= argS[0])
+            diagram.agregaDiagrama()
+            dfDisp.viewName= stV[1]
+            dfDisp.setupGrid(stV[0].elSet)
+            dfDisp.defineEscenaMalla(None)
+            dfDisp.appendDiagram(diagram)
+            capt= capTexts[limitStateLabel] + ', ' + capTexts[argS[0]] + '. '+ stV[0].genDescr.capitalize() + ', ' + stV[0].sectDescr[0]
+            grFileNm=pathGr+stV[0].elSet.name+argS[0]
+            dfDisp.displayScene(caption=capt,fName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
     report.close()
     return

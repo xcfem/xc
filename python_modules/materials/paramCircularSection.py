@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
-__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (A_OO) "
-__copyright__= "Copyright 2016, LCPT, A_OO"
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com, ana.Ortega.Ort@gmail.com "
-
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 from materials import typical_materials
@@ -17,18 +16,19 @@ class CircularSection(sp.sectionProperties):
 
   :ivar name:      name identifying the section
   :ivar Rext:      external radius
-  :ivar Rint:      internal radius
+  :ivar Rint:      internal radius (defaults to 0)
    '''
   r= 0.0 # radius.
-  def __init__(self,name,Rext):
+  def __init__(self,name,Rext,Rint=0):
     super(CircularSection,self).__init__(name)
     self.Rext= Rext
+    self.Rint=Rint
   def A(self):
     ''':returns: cross-sectional area of the section'''
-    return math.pi*self.Rext*self.Rext
+    return math.pi*(self.Rext*self.Rext-self.Rint*self.Rint)
   def Iy(self):
     ''':returns: second moment of area about the local y-axis'''
-    return 1.0/4.0*math.pi*self.Rext**4
+    return 1.0/4.0*math.pi*(self.Rext**4-self.Rint**4)
   def Iz(self):
     ''':returns: second moment of area about the local z-axis'''
     return self.Iy()
@@ -37,8 +37,16 @@ class CircularSection(sp.sectionProperties):
     return 2*self.Iy()
   def alphaY(self):
     ''':returns: distorsion coefficient with respect to local Y axis
+       (see Oñate, Cálculo de estructuras por el MEF pág. 122)
      '''
-    return 6.0/7.0 #Coeficiente de distorsión, ver libro E. Oñate pág. 122.
+    if self.Rint==0:
+      alpha=6.0/7.0
+    else:
+      c=self.Rint/self.Rext
+      K=c/(1+c**2)
+      alpha=6/(7+20*K**2)
+    return alpha
+  
   def alphaZ(self):
     ''':returns: distorsion coefficient with respect to local Z axis'''
     return self.alphaY()
