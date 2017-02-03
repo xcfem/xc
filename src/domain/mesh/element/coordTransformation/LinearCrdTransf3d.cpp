@@ -93,7 +93,7 @@ XC::LinearCrdTransf3d::LinearCrdTransf3d(void)
   : XC::SmallDispCrdTransf3d(0, CRDTR_TAG_LinearCrdTransf3d) {}
 
 
-//! @brief Consuma la transformación de coordenadas de acuerdo con el estado actual.
+//! @brief Consuma la coordinate transformation de acuerdo con el estado actual.
 int XC::LinearCrdTransf3d::commitState(void)
   { return 0; }
 

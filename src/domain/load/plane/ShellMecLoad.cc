@@ -138,7 +138,7 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
                   retval= ptrTransf->getVectorGlobalCoordFromLocal(localVectors);
                 else
 		  std::cerr << "ShellMecLoad::getGlobalVectors; el elemento: "
-                        << elemTag << " no tiene transformación de coordenadas." << std::endl;
+                        << elemTag << " no tiene coordinate transformation." << std::endl;
               }
             else if(const ShellNL *ptrShell= dynamic_cast<const ShellNL *>(ptrElem))
               {
@@ -147,7 +147,7 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
                   retval= ptrTransf->getVectorGlobalCoordFromLocal(localVectors);
                 else
 		  std::cerr << "ShellMecLoad::getGlobalVectors; el elemento: "
-                        << elemTag << " no tiene transformación de coordenadas." << std::endl;
+                        << elemTag << " no tiene coordinate transformation." << std::endl;
               }
             else
 	      std::cerr << "ShellMecLoad::getGlobalVectors; the element: "

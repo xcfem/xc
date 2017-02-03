@@ -1045,7 +1045,7 @@ int XC::ForceBeamColumn2d::getInitialFlexibility(Matrix &fe) const
     return 0;
   }
 
-//! @brief Calcula los movimientos de las secciones.
+//! @brief Computes displacements at section(s).
 void XC::ForceBeamColumn2d::compSectionDisplacements(std::vector<Vector> &sectionCoords,std::vector<Vector> &sectionDispls) const
   {
     // get basic displacements and increments

@@ -68,8 +68,8 @@ class ID;
 
 //! @ingroup CContMP
 //
-//! @brief Impone la condición de movimiento de sólido rígido
-//! a los nodos sobre los que actúa.
+//! @brief Imposes a rigid body motion to the
+//! nodes of the rigid beam.
 class RigidBeam: public RigidBase
   {
     Matrix setup_matrix(int numDOF,const Vector &crdR,const Vector &crdC,ID &id);

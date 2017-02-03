@@ -212,13 +212,13 @@ void XC::MapLoadPatterns::removeAllFromDomain(void)
 //! @brief Define un objeto TimeSeries con el tipo y el nombre que se pasan como parámetro.
 //! Interpreta los siguientes tipos:
 //!
-//! - constant_ts: Define una modulación temporal de tipo ConstantSeries.
-//! - linear_ts: Define una modulación temporal de tipo LinearSeries.
-//! - path_ts: Define una modulación temporal de tipo PathSeries.
-//! - pulse_ts: Define una modulación temporal de tipo PulseSeries.
-//! - rectangular_ts: Define una modulación temporal de tipo RectangularSeries.
-//! - triangular_ts: Define una modulación temporal de tipo TriangleSeries.
-//! - trig_ts: Define una modulación temporal de tipo TrigSeries.
+//! - constant_ts: Defines a constant time series (ConstantSeries).
+//! - linear_ts: Defines a linear time series (LinearSeries).
+//! - path_ts: Defines a path time series (PathSeries).
+//! - pulse_ts: Defines a pulse time series (PulseSeries).
+//! - rectangular_ts: Defines a rectangular time series (RectangularSeries).
+//! - triangular_ts: Defines a triangular time series (TriangleSeries).
+//! - trig_ts: Defines a trigonometric time series (TrigSeries).
 XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &tipo, const std::string &cod_ts)
   {
     TimeSeries *ts= nullptr;

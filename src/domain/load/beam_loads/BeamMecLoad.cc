@@ -131,7 +131,7 @@ const XC::Matrix &XC::BeamMecLoad::getGlobalVectors(const Matrix &localVectors) 
                   retval= ptrTransf->getVectorGlobalCoordFromLocal(localVectors);
                 else
 		  std::cerr << "BeamMecLoad::getGlobalVectors; el elemento: "
-                        << elemTag << " no tiene transformación de coordenadas." << std::endl;
+                        << elemTag << " no tiene coordinate transformation." << std::endl;
               }
             else
 	      std::cerr << "BeamMecLoad::getGlobalVectors; el elemento: "

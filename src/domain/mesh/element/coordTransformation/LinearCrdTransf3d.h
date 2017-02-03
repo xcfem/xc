@@ -68,7 +68,7 @@ namespace XC {
 
 //! \ingroup ElemCT
 //
-//! @brief Transformación de coordenadas lineal.
+//! @brief Coordinate transformation lineal.
 //! este objeto realiza una transformación geométrica lineal de la
 //! rigidez y de la respuesta en fuerzas de un elemento desde el sistema local
 //! al sistema global.

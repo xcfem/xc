@@ -283,9 +283,9 @@ void XC::ShellMITC4Base::alive(void)
       {
         QuadBase4N<SectionFDPhysicalProperties>::alive();
         Ki.Zero();
-        revertToStart(); //Eliminamos deformaciones y tensiones que
-	                 //hubiera adquirido.
-        capturaInicDisp(); //Movimientos de los nodos al activar el elemento.
+        revertToStart(); //Eliminate possible strains and stresses
+	                 //on the element (melt and then solidify).
+        capturaInicDisp(); //Node displacements at element activation.
       }
     else
       std::cerr << "Se intentó reactivar un elemento activo."
@@ -738,7 +738,7 @@ double XC::ShellMITC4Base::getMeanInternalForce(const std::string &code) const
 double XC::ShellMITC4Base::getMeanInternalDeformation(const std::string &code) const
   { return physicalProperties.getMeanInternalDeformation(code); }
 
-//! @brief Consuma la transformación de coordenadas de acuerdo con el estado actual.
+//! @brief Consuma la coordinate transformation de acuerdo con el estado actual.
 int XC::ShellMITC4Base::commitState(void)
   {
     int retval= theCoordTransf->commitState();
@@ -1507,7 +1507,7 @@ void XC::ShellMITC4Base::shape2d(const double &ss, const double &tt,const double
     return;
   }
 
-//! @brief Envía la transformación de coordenadas through the channel being passed as parameter.
+//! @brief Envía la coordinate transformation through the channel being passed as parameter.
 int XC::ShellMITC4Base::sendCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,CommParameters &cp)
   {
     int retval= 0;
@@ -1523,7 +1523,7 @@ int XC::ShellMITC4Base::sendCoordTransf(int posFlag,const int &posClassTag,const
     return retval;
   }
 
-//! @brief Recibe la transformación de coordenadas through the channel being passed as parameter.
+//! @brief Recibe la coordinate transformation through the channel being passed as parameter.
 int XC::ShellMITC4Base::recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &cp)
   {
     int res= 0;
@@ -1579,11 +1579,11 @@ int XC::ShellMITC4Base::recvData(const CommParameters &cp)
 XC::Matrix XC::ShellMITC4Base::getLocalAxes(bool initialGeometry) const
   { return theCoordTransf->getLocalAxes(initialGeometry); }
 
-//! @brief Devuelve un apuntador a la transformación de coordenadas.
+//! @brief Devuelve un apuntador a la coordinate transformation.
 XC::ShellCrdTransf3dBase *XC::ShellMITC4Base::getCoordTransf(void)
   { return theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 const XC::ShellCrdTransf3dBase *XC::ShellMITC4Base::getCoordTransf(void) const
   { return theCoordTransf; }
 

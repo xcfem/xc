@@ -178,7 +178,7 @@ void XC::ForceBeamColumn3d::setDomain(Domain *theDomain)
       this->initializeSectionHistoryVariables();
   }
 
-//! @brief Consuma la transformación de coordenadas de acuerdo con el estado actual.
+//! @brief Consuma la coordinate transformation de acuerdo con el estado actual.
 int XC::ForceBeamColumn3d::commitState(void)
   {
     int err = 0;

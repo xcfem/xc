@@ -199,11 +199,11 @@ XC::Element* XC::ElasticBeam2d::getCopy(void) const
 XC::ElasticBeam2d::~ElasticBeam2d(void)
   { if(theCoordTransf) delete theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 XC::CrdTransf *XC::ElasticBeam2d::getCoordTransf(void)
   { return theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 const XC::CrdTransf *XC::ElasticBeam2d::getCoordTransf(void) const
   { return theCoordTransf; }
 
@@ -243,7 +243,7 @@ void XC::ElasticBeam2d::setDomain(Domain *theDomain)
           }
       }
     else
-      std::cerr << "XC::ElasticBeam2d::setDomain -- El elemento no tiene transformación de coordenadas." << std::endl;
+      std::cerr << "XC::ElasticBeam2d::setDomain -- El elemento no tiene coordinate transformation." << std::endl;
    }
 
 int XC::ElasticBeam2d::setInitialSectionDeformation(const Vector &def)
@@ -297,7 +297,7 @@ const XC::Vector &XC::ElasticBeam2d::getVDirEjeFuerteGlobales(void) const
       }
     else
       {
-        std::cerr << "ElasticBeam2d::getVDirEjeFuerteGlobales; no se ha asignado una transformación de coordenadas."
+        std::cerr << "ElasticBeam2d::getVDirEjeFuerteGlobales; no se ha asignado una coordinate transformation."
                   << std::endl;
         return P;
       }
@@ -314,7 +314,7 @@ const XC::Vector &XC::ElasticBeam2d::getVDirEjeDebilGlobales(void) const
       }
     else
       {
-        std::cerr << "ElasticBeam2d::getVDirEjeDebilGlobales; no se ha asignado una transformación de coordenadas."
+        std::cerr << "ElasticBeam2d::getVDirEjeDebilGlobales; no se ha asignado una coordinate transformation."
                   << std::endl;
         return P;
       }

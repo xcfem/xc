@@ -45,7 +45,7 @@ class CorotCrdTransf3d;
 
 //! @ingroup Ldrs
 //! 
-//! @brief Cargador de transformaciones de coordenadas.
+//! @brief Manager for the creation/deletion of coordinate transformations
 class TransfCooLoader: public Loader
   {
   public:
@@ -53,8 +53,8 @@ class TransfCooLoader: public Loader
     typedef map_transfcoo::const_iterator const_iterator;
     typedef map_transfcoo::iterator iterator;
   private:
-    map_transfcoo transfcoo; //!< Transformaciones de coordenadas para el problema.
-    int tag_trf; //!< Tag de la transformación de coordenadas.
+    map_transfcoo transfcoo; //!< Coordinate transformation container.
+    int tag_trf; //!< Tag de la coordinate transformation.
   protected:
     void libera(void);
     TransfCooLoader(const TransfCooLoader &otro);

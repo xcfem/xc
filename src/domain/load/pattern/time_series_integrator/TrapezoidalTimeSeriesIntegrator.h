@@ -55,10 +55,6 @@
 // Created: 10/99
 // Revision: A
 //
-// Description: This file contains the class definition for 
-// a TrapezoidalTimeSeriesIntegrator, which integrates a
-// ground motion TimeSeries using the trapezoidal rule.
-//
 // What: "@(#) TrapezoidalTimeSeriesIntegrator.h, revA"
 
 #ifndef TrapezoidalTimeSeriesIntegrator_h
@@ -71,8 +67,7 @@ namespace XC {
 
 //! @ingroup TSeries
 //
-//! @brief Integración en el tiempo de una serie temporal
-//! mediante la regla del trapecio.
+//! @brief integrates a ground motion TimeSeries using the trapezoidal rule.
 class TrapezoidalTimeSeriesIntegrator : public TimeSeriesIntegrator
   {
    public:

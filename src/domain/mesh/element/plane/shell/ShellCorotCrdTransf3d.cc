@@ -197,7 +197,7 @@ const XC::Vector &XC::ShellCorotCrdTransf3d::local_to_global_resisting_force(con
     return pg;
   }
 
-//! @brief Consuma la transformación de coordenadas de acuerdo con el estado actual.
+//! @brief Consuma la coordinate transformation de acuerdo con el estado actual.
 int XC::ShellCorotCrdTransf3d::commitState(void)
   {
     g1commit= g1trial;

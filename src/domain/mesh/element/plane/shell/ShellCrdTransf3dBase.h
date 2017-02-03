@@ -44,7 +44,7 @@ class NodePtrs;
 
 //! \ingroup ElemPlanos
 //
-//! @brief Clase base para las transformaciones de coordenadas en 3d.
+//! @brief Base class for 3D coordinate transformations.
 class ShellCrdTransf3dBase: public EntCmd, public MovableObject
   {
   protected:

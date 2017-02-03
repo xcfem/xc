@@ -35,7 +35,7 @@ namespace XC {
 
 //! \ingroup ElemCT
 //
-//! @brief Clase base para las transformaciones de coordenadas en 2d.
+//! @brief Base class for small displacements 2D coordinate transformations.
 class SmallDispCrdTransf2d: public CrdTransf2d
   {
   protected:

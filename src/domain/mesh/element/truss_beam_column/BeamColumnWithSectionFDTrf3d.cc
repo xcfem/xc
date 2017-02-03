@@ -98,11 +98,11 @@ void XC::BeamColumnWithSectionFDTrf3d::initialize_trf(void)
       }
   }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 XC::CrdTransf *XC::BeamColumnWithSectionFDTrf3d::getCoordTransf(void)
   { return theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 const XC::CrdTransf *XC::BeamColumnWithSectionFDTrf3d::getCoordTransf(void) const
   { return theCoordTransf; }
 
@@ -174,7 +174,7 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirEjeFuerteGlobales(con
       }
     else
       {
-        std::cerr << "BeamColumnWithSectionFDTrf3d::getVDirEjeFuerte; no se ha asignado una transformación de coordenadas."
+        std::cerr << "BeamColumnWithSectionFDTrf3d::getVDirEjeFuerte; no se ha asignado una coordinate transformation."
                   << std::endl;
         static Vector tmp(3);
         return tmp;
@@ -192,7 +192,7 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirEjeDebilGlobales(cons
       }
     else
       {
-        std::cerr << "XC::BeamColumnWithSectionFDTrf3d::getVDirEjeDebil; no se ha asignado una transformación de coordenadas."
+        std::cerr << "XC::BeamColumnWithSectionFDTrf3d::getVDirEjeDebil; no se ha asignado una coordinate transformation."
                   << std::endl;
         static Vector tmp(3);
         return tmp;

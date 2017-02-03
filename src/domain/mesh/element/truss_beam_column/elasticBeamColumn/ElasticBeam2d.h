@@ -92,7 +92,7 @@ class ElasticBeam2d: public ProtoBeam2d
     FVectorBeamColumn2d q0;  // Fixed end forces in basic system
     FVectorBeamColumn2d p0;  // Reactions in basic system
     
-    CrdTransf2d *theCoordTransf; //!< Transformación de coordenadas.
+    CrdTransf2d *theCoordTransf; //!< Coordinate transformation.
 
     void set_transf(const CrdTransf *trf);
   protected:

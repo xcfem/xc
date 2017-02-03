@@ -213,11 +213,11 @@ XC::Element* XC::ElasticBeam3d::getCopy(void) const
 XC::ElasticBeam3d::~ElasticBeam3d(void)
   { if(theCoordTransf) delete theCoordTransf;  }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 XC::CrdTransf *XC::ElasticBeam3d::getCoordTransf(void)
   { return theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 const XC::CrdTransf *XC::ElasticBeam3d::getCoordTransf(void) const
   { return theCoordTransf; }
 
@@ -583,7 +583,7 @@ const XC::Vector &XC::ElasticBeam3d::getVDirEjeFuerteGlobales(void) const
       }
     else
       {
-        std::cerr << "ElasticBeam3d::getVDirEjeFuerteGlobales; no se ha asignado una transformación de coordenadas."
+        std::cerr << "ElasticBeam3d::getVDirEjeFuerteGlobales; no se ha asignado una coordinate transformation."
                   << std::endl;
         return P;
       }
@@ -600,7 +600,7 @@ const XC::Vector &XC::ElasticBeam3d::getVDirEjeDebilGlobales(void) const
       }
     else
       {
-        std::cerr << "ElasticBeam3d::getVDirEjeDebilGlobales; no se ha asignado una transformación de coordenadas."
+        std::cerr << "ElasticBeam3d::getVDirEjeDebilGlobales; no se ha asignado una coordinate transformation."
                   << std::endl;
         return P;
       }

@@ -73,7 +73,7 @@ class Ref2d2d;
 namespace XC {
 //! \ingroup ElemCT
 //
-//! @brief Clase base para las transformaciones de coordenadas en 3d.
+//! @brief Base class for 2D coordinate transformation.
 class CrdTransf2d: public CrdTransf
   {
   protected:

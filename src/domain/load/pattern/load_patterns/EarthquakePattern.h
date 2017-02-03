@@ -68,12 +68,12 @@ class Vector;
 
 //! @ingroup LPatterns
 //
-//! @brief Pauta de cargas correspondiente a un terremoto.
+//! @brief Earthquake load pattern.
 class EarthquakePattern : public EQBasePattern
   {
   private:
-    Vector *uDotG; //!< Velocidades.
-    Vector *uDotDotG; //!< Aceleraciones.
+    Vector *uDotG; //!< Velocities.
+    Vector *uDotDotG; //!< Accelerations.
     double currentTime;
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////

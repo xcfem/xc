@@ -193,7 +193,7 @@
 
 #include "domain/mesh/element/joint/Joint2D.h"                // Arash
 
-//Transformaciones de coordenadas.
+//Coordinate transformation.
 #include "domain/mesh/element/coordTransformation/LinearCrdTransf2d.h"
 #include "domain/mesh/element/coordTransformation/LinearCrdTransf3d.h"
 #include "domain/mesh/element/coordTransformation/PDeltaCrdTransf2d.h"

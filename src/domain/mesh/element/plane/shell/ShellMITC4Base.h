@@ -45,14 +45,14 @@ class ShellUniformLoad;
 
 //! \ingroup ElemPlanos
 //
-//! @brief Clase base para los elementos shell MIT C4.
+//! @brief Base class for MIT C4 shell elements.
 class ShellMITC4Base : public QuadBase4N<SectionFDPhysicalProperties>
   {
   protected:
     double Ktt; //!<drilling stiffness
     mutable double xl[2][4]; //!< local nodal coordinates, two coordinates for each of four nodes
 
-    ShellCrdTransf3dBase *theCoordTransf; //!< Transformación de coordenadas.
+    ShellCrdTransf3dBase *theCoordTransf; //!< Coordinate transformation.
 
     FVectorShell p0; //!< Reactions in the basic system due to element loads
 

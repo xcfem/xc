@@ -35,7 +35,7 @@ namespace XC {
 
 //! \ingroup ElemPlanos
 //
-//! @brief Clase base para las transformaciones de coordenadas en 3d.
+//! @brief Base class for 3D coordinate transformation.
 class ShellCorotCrdTransf3d: public ShellCrdTransf3dBase
   {
   protected:

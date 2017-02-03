@@ -70,11 +70,11 @@ class ID;
 
 //! @ingroup CContMP
 //
-//! @brief Impone la condición de movimiento de sólido rígido
-//! a los nodos sobre los que actúa.
+//! @brief Imposes a rigid body motion to the nodes
+//! on included in the diaphragm .
 class RigidDiaphragm: public MFreedom_Constraint
   {
-    //XXX Colocar aquí NodePtrsWithIDS para facilitar el tratamiento de la desconexión.
+    //XXX Put NodePtrsWithIDS to make easier to deal with la desconexión.
   public:
     RigidDiaphragm(Domain &theDomain, int nodeR, ID &nodeC, int perpDirnToPlaneConstrained, int startMPtag);
     virtual ~RigidDiaphragm();

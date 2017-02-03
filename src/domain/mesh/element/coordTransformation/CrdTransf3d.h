@@ -76,7 +76,7 @@ class Vector;
 
 //! \ingroup ElemCT
 //
-//! @brief Clase base para las transformaciones de coordenadas en 3d.
+//! @brief Base class for 3D coordinate transformation.
 class CrdTransf3d: public CrdTransf
   {
   protected:

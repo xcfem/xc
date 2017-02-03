@@ -66,8 +66,8 @@
 namespace XC {
 //! @ingroup LPatterns
 //
-//! @brief Pauta de carga correspondiente a un terremoto
-//! en el que la excitación es igual en todos los apoyos.
+//! @brief Load pattern for a earthquake with a similar
+//! excitation for all supports.
 class UniformExcitation: public EarthquakePattern
   {
   private:

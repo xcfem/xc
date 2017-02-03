@@ -398,8 +398,7 @@ int XC::Combinacion::recvData(const CommParameters &cp)
   {
     int res= ForceReprComponent::recvData(cp);
     res+= cp.receiveString(nombre,getDbTagData(),CommMetaData(2));
-    //Almacenamos temporalmente el string correspondiente a la
-    //descomposicion.
+    //Teporary storage for decomposition.
     std::string tmp;
     res+= cp.receiveString(tmp,getDbTagData(),CommMetaData(3));
     map_str_descomp[getDbTag()]= tmp;

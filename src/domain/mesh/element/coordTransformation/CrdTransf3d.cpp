@@ -124,7 +124,7 @@ void XC::CrdTransf3d::modif_ug_init_disp(double *ug) const
       }
   }
 
-//! @brief Devuelve los movimientos de los nodos en corrdenadas locales.
+//! @brief Returns node displacements expressed in local coordinates.
 void XC::CrdTransf3d::global_to_local(const double *ug,double *ul) const
   {
     ul[0]  = R(0,0)*ug[0] + R(0,1)*ug[1] + R(0,2)*ug[2];
@@ -482,7 +482,7 @@ const XC::Vector &XC::CrdTransf3d::getCooPunto(const double &xrel) const
     return retval;
   }
 
-//! @brief Hace girar el la transformación de coordenadas en sentido
+//! @brief Hace girar el la coordinate transformation en sentido
 //! antihorario el ángulo being passed as parameter.
 void XC::CrdTransf3d::gira(const double &theta)
   { set_xz_vector(m_double_to_matrix(GiroX(-theta))*get_xz_vector()); }

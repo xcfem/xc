@@ -54,8 +54,7 @@
 //
 // Description: This file contains the class definition for TimeSeriesIntegrator.
 // TimeSeriesIntegrator is an abstract base class, i.e. no objects of it's
-// type can be created. A TimeSeriesIntegrator describes the numerical integration
-// of a ground motion record used in a dynamic analysis.
+// type can be created. 
 //
 // What: "@(#) TimeSeries.h, revA"
 
@@ -69,7 +68,9 @@ class TimeSeries;
 
 //! @ingroup TSeries
 //
-//! @brief Integración en el tiempo de una serie temporal.
+//! @brief Time integration of time series. A TimeSeriesIntegrator
+//! describes the numerical integration of a ground motion record
+//! used in a dynamic analysis.
 class TimeSeriesIntegrator : public MovableObject
   {
   public:

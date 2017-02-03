@@ -1102,7 +1102,7 @@ const XC::Vector &XC::CorotCrdTransf3d::getGlobalResistingForce(const Vector &pb
     if(p0.Norm2()>1e-6)
       {
         if(verborrea>0)
-          std::cerr << "El empleo de cargas en los elementos con transformación de coordenadas corotacional no se ha implementado."
+          std::cerr << "El empleo de cargas en los elementos con coordinate transformation corotacional no se ha implementado."
                     << " Se emplea una aproximación." << std::endl;
         const Vector &pl2= basic_to_local_element_force(p0);
         pg+= local_to_global_element_force(pl2);

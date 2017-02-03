@@ -71,7 +71,7 @@ SVD3d XC::BeamUniformLoad::getResultant(const Pos3d &centro, bool initialGeometr
 		  }
                 else
 		  std::cerr << nombre_clase() << "::getResultant; el elemento: "
-                            << elemTag << " no tiene transformación de coordenadas." << std::endl;
+                            << elemTag << " no tiene coordinate transformation." << std::endl;
 
               }
             else

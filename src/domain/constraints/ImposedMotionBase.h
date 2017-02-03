@@ -39,7 +39,7 @@ class LoadPattern;
 
 //! @ingroup CContSP
 //
-//! @brief Clase base para los movimientos impuestos sobre nodo.
+//! @brief Base class for prescribed displacements at the nodes.
 class ImposedMotionBase : public SFreedom_Constraint
   {
   private:
@@ -49,7 +49,7 @@ class ImposedMotionBase : public SFreedom_Constraint
   protected:
     GroundMotion *theGroundMotion;  // pointer to ground motion
     Node *theNode; //!< pointer to node being constrained
-    Vector theGroundMotionResponse; // the GMotions response
+    Vector theGroundMotionResponse; // the ground motions response
   public:
     // constructors    
     ImposedMotionBase(int classTag);        

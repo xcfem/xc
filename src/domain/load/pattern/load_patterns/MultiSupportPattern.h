@@ -66,8 +66,9 @@ class Vector;
 
 //! @ingroup LPatterns
 //
-//! @brief Pauta de cargas correspondiente a un terremoto.
-//! El movimiento sísmico es distinto en cada apoyo.
+//! @brief The Multi-Support pattern allows similar or
+//! different prescribed ground motions to be input at
+//! various supports in the structure.
 class MultiSupportPattern: public EQBasePattern
   {
   private:

@@ -127,7 +127,7 @@ int XC::ShellLinearCrdTransf3d::initialize(const NodePtrs &ptrs)
 int XC::ShellLinearCrdTransf3d::update(void)
   { return 0; }
 
-//! @brief Consuma la transformación de coordenadas de acuerdo con el estado actual.
+//! @brief Consuma la coordinate transformation de acuerdo con el estado actual.
 int XC::ShellLinearCrdTransf3d::commitState(void)
   { return 0; }
 

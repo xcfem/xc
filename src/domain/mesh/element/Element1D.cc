@@ -442,11 +442,11 @@ void XC::Element1D::setDomain(Domain *theDomain)
     ElementBase<2>::setDomain(theDomain);
   }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 XC::CrdTransf *XC::Element1D::getCoordTransf(void)
   { return nullptr; }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 const XC::CrdTransf *XC::Element1D::getCoordTransf(void) const
   { return nullptr; }
 
@@ -538,7 +538,7 @@ double XC::Element1D::getDist(const Pos3d &p,bool initialGeometry) const
     return sg.dist(p);
   }
 
-//! @brief Envía la transformación de coordenadas through the channel being passed as parameter.
+//! @brief Envía la coordinate transformation through the channel being passed as parameter.
 int XC::Element1D::sendCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,CommParameters &cp)
   {
     int retval= 0;
@@ -555,7 +555,7 @@ int XC::Element1D::sendCoordTransf(int posFlag,const int &posClassTag,const int 
     return retval;
   }
 
-//! @brief Recibe la transformación de coordenadas through the channel being passed as parameter.
+//! @brief Recibe la coordinate transformation through the channel being passed as parameter.
 XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &cp)
   {
     CrdTransf *ptr= getCoordTransf();
@@ -580,7 +580,7 @@ XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag
     return ptr;
   }
 
-//! @brief Recibe una transformación de coordenadas 2d through the channel being passed as parameter.
+//! @brief Recibe una coordinate transformation 2d through the channel being passed as parameter.
 XC::CrdTransf2d *XC::Element1D::recvCoordTransf2d(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &cp)
   {
     CrdTransf2d *retval= nullptr;
@@ -598,7 +598,7 @@ XC::CrdTransf2d *XC::Element1D::recvCoordTransf2d(int posFlag,const int &posClas
     return retval;
   }
 
-//! @brief Recibe una transformación de coordenadas 3d through the channel being passed as parameter.
+//! @brief Recibe una coordinate transformation 3d through the channel being passed as parameter.
 XC::CrdTransf3d *XC::Element1D::recvCoordTransf3d(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &cp)
   {
     CrdTransf3d *retval= nullptr;

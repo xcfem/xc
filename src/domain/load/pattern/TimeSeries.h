@@ -57,9 +57,7 @@
 // Revision: A
 //
 // Purpose: This file contains the class definition for TimeSeries.
-// TimeSeries is an abstract class. A TimeSeries object is used to
-// determine the load factor to be applied to the loads in a pettern.
-// to the model. 
+// TimeSeries is an abstract class. 
 //
 // What: "@(#) TimeSeries.h, revA"
 
@@ -73,11 +71,13 @@ namespace XC {
 //! \ingroup Loads
 //!
 //!
-//! @defgroup TSeries Serie temporal.
+//! @defgroup TSeries Time series.
 //
 //! @ingroup TSeries
 //
-//! @brief Función que modula en el tiempo el valor de otra.
+//! @brief Time variation of loads.A TimeSeries object is used to
+//! determine the load factor to be applied to the loads in a pettern.
+//! to the model. 
 class TimeSeries: public MovableObject, public EntCmd
   {
   protected:

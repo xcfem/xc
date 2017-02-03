@@ -92,11 +92,11 @@ XC::Element* XC::beam2d02::getCopy(void) const
 XC::beam2d02::~beam2d02(void)
   { if(theCoordTransf) delete theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 XC::CrdTransf *XC::beam2d02::getCoordTransf(void)
   { return theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 const XC::CrdTransf *XC::beam2d02::getCoordTransf(void) const
   { return theCoordTransf; }
 

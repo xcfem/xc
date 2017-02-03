@@ -71,7 +71,7 @@ class Node;
 
 //! @ingroup CContSP
 //
-//! @brief Movimiento impuesto sobre un nodo.
+//! @brief Prescribed value for a single degree of freedom.
 class ImposedMotionSP : public ImposedMotionBase
   {
   private:

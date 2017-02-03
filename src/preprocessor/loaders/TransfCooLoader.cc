@@ -35,7 +35,7 @@
 #include "domain/mesh/element/coordTransformation/CorotCrdTransf3d.h"
 #include "boost/any.hpp"
 
-//! @brief Libera la memoria ocupada por las transformaciones de coordenadas.
+//! @brief Frees memory.
 void XC::TransfCooLoader::libera(void)
   {
     for(iterator i= begin();i!=end();i++)
@@ -112,7 +112,7 @@ XC::CorotCrdTransf3d *XC::TransfCooLoader::newCorotCrdTransf3d(const std::string
     return retval;
   }
 
-//! @brief Devuelve una referencia al mapa de transformaciones de coordenadas.
+//! @brief Returns a reference to the coordinate transformation map (container).
 const XC::TransfCooLoader::map_transfcoo &XC::TransfCooLoader::Map(void) const
   { return transfcoo; }
 
@@ -129,16 +129,15 @@ XC::TransfCooLoader::iterator XC::TransfCooLoader::begin(void)
 XC::TransfCooLoader::iterator XC::TransfCooLoader::end(void)
   { return transfcoo.end(); }
 
-//! @brief Si encuentra la transformacion cuyo nombre se pasa como parámetro devuelve un iterador apuntando al mismo.
+//! @brief Returns an iterator to the transformation with the name being passed as parameter.
 XC::TransfCooLoader::const_iterator XC::TransfCooLoader::find(const std::string &nmb) const
   { return transfcoo.find(nmb); }
 
-//! @brief Si encuentra la transformacion cuyo nombre se pasa como parámetro devuelve un iterador apuntando al mismo.
+//! @brief Returns an iterator to the transformation with the name being passed as parameter.
 XC::TransfCooLoader::iterator XC::TransfCooLoader::find(const std::string &nmb)
   { return transfcoo.find(nmb); }
 
-//! @brief Si encuentra la transformacion cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
-//! en otro caso devuelve nullptr.
+//! @brief Returns a pointer to the transformation with the name being passed as parameter (returns nullptr if not found).
 XC::CrdTransf *XC::TransfCooLoader::find_ptr(const std::string &nmb)
   {
     XC::TransfCooLoader::iterator i= find(nmb);
@@ -148,6 +147,7 @@ XC::CrdTransf *XC::TransfCooLoader::find_ptr(const std::string &nmb)
       return nullptr; 
   }
 
+//! @brief Deletes all members.
 void XC::TransfCooLoader::clearAll(void)
   {
     libera();

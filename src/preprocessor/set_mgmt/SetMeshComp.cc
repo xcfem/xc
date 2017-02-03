@@ -146,7 +146,7 @@ void XC::SetMeshComp::mueve(const Vector3d &desplaz)
 void XC::SetMeshComp::Transforma(const TrfGeom &trf)
   { nodos.transforma(trf); }
 
-//! @brief Aplica al conjunto la transformación cuyo índice se pasa como parámetro.
+//! @brief Applies to the set the transformation with the identifier being passed as parameter.
 void XC::SetMeshComp::Transforma(const size_t &indice_trf)
   {
     TrfGeom *trf= get_preprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);

@@ -35,7 +35,7 @@ namespace XC {
 
 //! \ingroup ElemCT
 //
-//! @brief Clase base para las transformaciones de coordenadas en 3d.
+//! @brief Base class for small displacements 3D coordinate transformations.
 class SmallDispCrdTransf3d: public CrdTransf3d
   {
     const Matrix &computeRW(const Vector &nodeOffset) const;

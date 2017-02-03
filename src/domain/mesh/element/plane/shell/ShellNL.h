@@ -38,7 +38,7 @@ class ShellNL : public QuadBase9N<SectionFDPhysicalProperties>
   {
   private : 
     double Ktt;//!< drilling stiffness
-    ShellLinearCrdTransf3d theCoordTransf; //!< Transformación de coordenadas.
+    ShellLinearCrdTransf3d theCoordTransf; //!< Coordinate transformation.
     mutable Matrix *Ki;
     //local nodal coordinates, two coordinates for each of nine nodes
     double xl[2][9];

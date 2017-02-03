@@ -37,7 +37,7 @@ class Matrix;
 
 //! \ingroup ElemPlanos
 //
-//! @brief Clase base para las transformaciones de coordenadas en 3d.
+//! @brief Base class for small displacement 3D coordinate transformations.
 class ShellLinearCrdTransf3d: public ShellCrdTransf3dBase
   {
   protected:

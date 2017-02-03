@@ -76,7 +76,7 @@ class Node;
 //! \ingroup Elem
 //!
 //!
-//! @defgroup ElemCT Transformaciones de coordenadas de los elementos.
+//! @defgroup ElemCT Element coordinate transformations.
 //!
 //! \ingroup ElemCT
 //
@@ -90,8 +90,8 @@ class CrdTransf: public TaggedObject, public MovableObject
     Node *nodeIPtr, *nodeJPtr; //!< punteros a los nodos extremos del elemento.
     mutable double L; //!< element length
     Vector nodeIOffset,nodeJOffset; //!< rigid joint offsets
-    std::vector<double> nodeIInitialDisp; //!< Desplazamientos inicial nodo I.
-    std::vector<double> nodeJInitialDisp; //!< Desplazamientos inicial nodo J.
+    std::vector<double> nodeIInitialDisp; //!< Initial displacement for I node.
+    std::vector<double> nodeJInitialDisp; //!< Initial displacement for J node.
     bool initialDispChecked;
 
     int set_ptr_nodos(Node *nodeIPointer, Node *nodeJPointer);

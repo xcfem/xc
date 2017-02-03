@@ -75,11 +75,11 @@ namespace XC {
 //! \ingroup Loads
 //!
 //!
-//! @defgroup GMotions Movimientos del terreno (terremotos).
+//! @defgroup GMotions Ground motions (earthquake simulation).
 //
 //! @ingroup GMotion
 //
-//! @brief Clase base para la definición de sismos.
+//! @brief Base class for ground motions.
 class GroundMotion: public MovableObject, public EntCmd
   {
   protected:

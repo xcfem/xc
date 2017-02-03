@@ -57,10 +57,7 @@
 // Revision: A
 //
 // Purpose: This file contains the class definition for LoadPattern.
-// LoadPattern is a concrete class. A LoadPattern object is used to 
-// to store reference loads and single point constraints and a TimeSeries function
-// which is used to determine the load factor given the pseudo-time
-// to the model. 
+// LoadPattern is a concrete class
 //
 // What: "@(#) LoadPattern.h, revA"
 
@@ -79,30 +76,30 @@ class Vector;
 //! \ingroup Loads
 //!
 //!
-//! @defgroup LPatterns Pautas (casos) de carga.
+//! @defgroup LPatterns Load patterns.
 //
 //! @ingroup LPatterns
 //
-//! @brief Contiene las cargas que actúan sobre la estructura
-//! en determinado caso o hipótesis simple. Además define la
-//! variación en el tiempo de dichas cargas (constante, lineal,
-//! acelerograma,...).
+//! @brief A LoadPattern object is used to 
+//! to store reference loads and single point constraints
+//! and a TimeSeries function which is used to determine
+//! the load factor given the pseudo-time to the model. 
 class LoadPattern: public NodeLocker
   {
   private:
     std::string description; //!< Load description (self weight, wind,...)
-    double loadFactor; //!< factor de ponderación obtenido del TimeSeries (ver applyLoad).
-    double gamma_f; //!< Factor de ponderación impuesto por la combinación de hipótesis.
+    double loadFactor; //!< Load factor obtained from TimeSeries (see applyLoad).
+    double gamma_f; //!< Load factor imposed from current load combination.
 
-    TimeSeries *theSeries; //!< puntero a la función de variación en el tiempo.
+    TimeSeries *theSeries; //!< load variation in time.
 
     // storage objects for the loads.
-    TaggedObjectStorage  *theNodalLoads; //!< Almacenamiento de cargas nodales.
-    TaggedObjectStorage  *theElementalLoads; //!< Almacenamiento de cargas sobre elementos.
+    TaggedObjectStorage  *theNodalLoads; //!< Nodal load container.
+    TaggedObjectStorage  *theElementalLoads; //!< Elemental load container.
 
     // iterator objects for the objects added to the storage objects
-    NodalLoadIter       *theNodIter; //!< Iterador sobre cargas nodales.
-    ElementalLoadIter   *theEleIter; //!< Iterador sobre cargas sobre elementos.
+    NodalLoadIter       *theNodIter; //!< Iterator over nodal loads.
+    ElementalLoadIter   *theEleIter; //!< Iterator over elemental loads.
 
     // AddingSensitivity:BEGIN //////////////////////////////////////
     Vector *randomLoads;

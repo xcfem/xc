@@ -26,10 +26,6 @@
 //----------------------------------------------------------------------------
 //EqualDOF.h
 
-// Este objeto construye un objeto MFreedom_Constraint que impone
-// igualdad de movimientos en los grados de libertad que
-// se le indiquen.
-
 #ifndef EqualDOF_h
 #define EqualDOF_h
 
@@ -41,7 +37,7 @@ class ID;
 
 //! @ingroup CContMP
 //
-//! @brief Impone la igualdad de desplazamientos a varios nodos.
+//! @brief Impose the values of many degrees of freedom to be the same.
 class EqualDOF: public MFreedom_Constraint
   {
     void setup_matrix(void);

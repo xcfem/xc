@@ -138,15 +138,15 @@ XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void) const
     return retval;
   }
 
-//! @brief Devuelve una referencia al cargador de transformaciones de coordenadas.
+//! @brief Returns a reference to the coordinate transformation loader.
 XC::TransfCooLoader &XC::ProtoElementLoader::get_transf_coo_loader(void) const
   { return preprocessor->getTransfCooLoader(); }
 
-//! @brief Devuelve un iterador a la transformacion que se especifica en nmb_transf.
+//! @brief Returns an iterator to the coordinate transformation with the name being passed as parameter.
 XC::TransfCooLoader::const_iterator XC::ProtoElementLoader::get_iter_transf_coo(void) const
   { return preprocessor->getTransfCooLoader().find(nmb_transf); }
 
-//! @brief Devuelve un apuntador a la transformación que se especifica en nmb_transf.
+//! @brief Returns a pointer to the coordinate transformation with the name being passed as parameter (nullptr if not found).
 XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
   {
     CrdTransf *retval= nullptr;
@@ -155,7 +155,7 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
       retval= itrf->second;
     else
       if(verborrea>0)
-        std::cerr << "ProtoElementLoader::get_ptr_transf_coo - no se encontró la transformación de coordenadas: '" 
+        std::cerr << "ProtoElementLoader::get_ptr_transf_coo - no se encontró la coordinate transformation: '" 
                   << nmb_transf << "'.\n";
     return retval;
   }

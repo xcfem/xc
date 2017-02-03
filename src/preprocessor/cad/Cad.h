@@ -79,7 +79,7 @@ class Cad: public EntCmd
     void numera(void);
   private:
     MapSisRef sistemas_referencia; //!< Lista de sistemas de referencia.
-    MapTrfGeom transformaciones_geometricas; //!< Lista de transformaciones geométricas.
+    MapTrfGeom transformaciones_geometricas; //!< Geometric transformation container.
 
     MapPuntos puntos; //!< Lista de puntos.
     MapLineas edges; //!< Lista de edges.

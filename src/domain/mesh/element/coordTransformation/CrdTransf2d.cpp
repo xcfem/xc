@@ -137,8 +137,8 @@ void XC::CrdTransf2d::disp_init_nodos(void)
       }
   }
 
-//! @brief Asigna valores iniciales los movimientos a partir
-//! de los movimientos de los nodos.
+//! @brief Calculates initial displecements from those
+//! of the nodes.
 int XC::CrdTransf2d::initialize(Node *nodeIPointer, Node *nodeJPointer)
   {
     set_ptr_nodos(nodeIPointer,nodeJPointer);

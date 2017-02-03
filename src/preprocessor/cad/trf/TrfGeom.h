@@ -25,8 +25,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //TrfGeom.h
-//Transformaciones geométricas susceptibles de aplicarse
-//sobre un conjunto de puntos.
 
 #ifndef TRFGEOM_H
 #define TRFGEOM_H
@@ -43,16 +41,13 @@ namespace XC {
 
 //! @ingroup Cad
 //
-//! @defgroup CadTrf Transformaciónes geométricas.
+//! @defgroup CadTrf Geometric transformations.
 //
 //!  \ingroup CadTrf
 //! 
-//!  Transformaciones geométricas susceptibles de aplicarse
-//!  sobre objetos del cad.
+//!  Geometric transformation that can be applied to the components of a set.
 class TrfGeom: public EntMdlrBase
   {
-  protected:
-
   public:
     //! @brief Constructor.
     TrfGeom(Preprocessor *m)

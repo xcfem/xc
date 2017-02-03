@@ -85,7 +85,7 @@ class ElasticBeam3d : public ProtoBeam3d
     FVectorBeamColumn3d q0;  //!< Fixed end forces in basic system (no torsion)
     FVectorBeamColumn3d p0;  //!< Reactions in basic system (no torsion)
  
-    CrdTransf3d *theCoordTransf; //!< Transformación de coordenadas.
+    CrdTransf3d *theCoordTransf; //!< Coordinate transformation.
 
     static Matrix K;
     static Vector P;

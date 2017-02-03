@@ -67,7 +67,7 @@
 namespace XC {
 //! \ingroup ElemCT
 //
-//! @brief Transformación de coordenadas corrotacional en 3d.
+//! @brief Coordinate transformation corrotacional en 3d.
 class CorotCrdTransf2d: public CrdTransf2d
   {
   private:

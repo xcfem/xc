@@ -38,7 +38,7 @@ class Vector;
 
 //! @ingroup LPatterns
 //
-//! @brief Pauta de cargas correspondiente a un terremoto.
+//! @brief Earthquake load pattern.
 class EQBasePattern: public LoadPattern
   {
   protected:

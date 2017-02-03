@@ -1026,11 +1026,11 @@ int XC::ShellNL::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Devuelve un apuntador a la transformación de coordenadas.
+//! @brief Devuelve un apuntador a la coordinate transformation.
 XC::ShellCrdTransf3dBase *XC::ShellNL::getCoordTransf(void)
   { return &theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 const XC::ShellCrdTransf3dBase *XC::ShellNL::getCoordTransf(void) const
   { return &theCoordTransf; }
 

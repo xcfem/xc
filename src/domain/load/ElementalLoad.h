@@ -65,7 +65,7 @@ namespace XC {
 //! \ingroup Loads
 //!
 //!
-//! @defgroup ElemLoads Loads overt elements.
+//! @defgroup ElemLoads Loads over elements.
 //
 //! @ingroup ElemLoads
 //

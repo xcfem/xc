@@ -30,7 +30,7 @@
 #include <domain/mesh/element/coordTransformation/CrdTransf2d.h>
 
 
-//! @brief Asigna la transformación de coordenadas.
+//! @brief Asigna la coordinate transformation.
 void XC::BeamColumnWithSectionFDTrf2d::set_transf(const CrdTransf *trf)
   {
     if(theCoordTransf)
@@ -94,11 +94,11 @@ void XC::BeamColumnWithSectionFDTrf2d::initialize_trf(void)
       }
   }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 XC::CrdTransf *XC::BeamColumnWithSectionFDTrf2d::getCoordTransf(void)
   { return theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la transformación de coordenadas.
+//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
 const XC::CrdTransf *XC::BeamColumnWithSectionFDTrf2d::getCoordTransf(void) const
   { return theCoordTransf; }
 
