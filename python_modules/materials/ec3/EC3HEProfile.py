@@ -32,16 +32,16 @@ So:
 
 '''
 
-from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as ipe
+from materials.perfiles_metalicos.arcelor import perfiles_he_arcelor as he
 import EC3Profile as EC3prof
 
-class EC3IPEProfile(EC3prof.EC3Profile,ipe.IPEProfile):
-  """IPE profile with Eurocode 3 verification routines."""
+class EC3HEProfile(EC3prof.EC3Profile,he.HEProfile):
+  """HE profile with Eurocode 3 verification routines."""
   def __init__(self,steel,name):
     ''' Constructor.
 
     :param steel: steel material.
-    :param name: shape name (i.e. IPE_600)
+    :param name: shape name (i.e. HE_600_A)
     '''
     EC3prof.EC3Profile.__init__(self,'rolled')
-    ipe.IPEProfile.__init__(self,steel,name)
+    he.HEProfile.__init__(self,steel,name)

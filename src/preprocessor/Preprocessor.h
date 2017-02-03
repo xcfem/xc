@@ -60,7 +60,7 @@ class Preprocessor: public EntCmd, public MovableObject
   private:
     static const int theDbTag= 0; //!< the Preprocessor unique database tag == 0
 
-    Domain *dominio; //!< Dominio del problema.
+    Domain *dominio; //!< Proble domain.
 
     MaterialLoader materiales; //!< Material creation tools.
     TransfCooLoader transf; //!< Coordinate transformation.
@@ -70,7 +70,7 @@ class Preprocessor: public EntCmd, public MovableObject
     LoadLoader loads; //!< Load creation tools.
     ConstraintLoader constraints; //! Constraint creation tools.
 
-    Cad cad; //!< Entidades de tipo CAD: puntos, lineas,...
+    Cad cad; //!< Geometric entities: points, lines,...
 
     MapSet sets; //!< Conjuntos de entidades.
 

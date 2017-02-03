@@ -304,8 +304,12 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3Beam.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_callback_controls.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_callback_controls.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3HEProfile.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3HEProfile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3Profile.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3Profile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.py

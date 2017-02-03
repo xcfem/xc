@@ -30,7 +30,7 @@ def caseASampleMoments(L,M,FF):
   return [x,M]
 
 
-k1= 1.0; k2= 1.0
+supportCoefs= ltb.SupportCoefficients(k1= 1.0,k2= 1.0)
 nDiv= 20
 step= 2/nDiv
 psi=list()
@@ -40,7 +40,7 @@ C1i= 0.0
 for i in range(1,nDiv+2): 
   mD= caseASampleMoments(5.0,10.0,psii)
   mgf= ltb.MomentGradientFactorC1(mD[0],mD[1])
-  C1i= mgf.getC1(k1,k2)
+  C1i= mgf.getC1(supportCoefs)
   psi.append(psii)
   c1.append(C1i)
   psii+= step
