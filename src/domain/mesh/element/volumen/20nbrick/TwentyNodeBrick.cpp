@@ -59,7 +59,7 @@
 #include "utility/matrix/nDarray/BJmatrix.h"
 #include <domain/domain/Domain.h>
 #include <cstring>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include <domain/mesh/node/Node.h>
@@ -73,7 +73,7 @@
 #include <utility/recorder/response/ElementResponse.h>
 
 #include <material/nD/NDMaterial.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/quadrule/GaussQuadRule1d.h>
 
 #include <utility/matrix/nDarray/straint.h>

@@ -27,7 +27,7 @@
 //HingeBeamIntegration2d.cc
 
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/HingeBeamIntegration2d.h>
-#include "domain/mesh/element/fvectors/FVector.h"
+#include "domain/mesh/element/utils/fvectors/FVector.h"
 #include "domain/load/beam_loads/BeamMecLoad.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
 

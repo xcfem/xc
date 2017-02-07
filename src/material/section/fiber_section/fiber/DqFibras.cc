@@ -37,7 +37,7 @@
 #include "material/section/repres/geom_section/GeomSection.h"
 #include "material/uniaxial/UniaxialMaterial.h"
 
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/matrix/Vector.h>
 #include "xc_utils/src/geom/sis_ref/Ref3d3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"

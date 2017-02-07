@@ -52,7 +52,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 XC::HingeRadauBeamIntegration3d::HingeRadauBeamIntegration3d(double e,
 							 double a,

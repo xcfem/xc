@@ -34,7 +34,7 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
-//! \ingroup OneDimensionalElemArt
+//! \ingroup TrussElem
 //
 //! @brief Clase base para los elementos
 //! de tipo barra articulada con formulación corrotacional.

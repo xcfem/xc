@@ -84,7 +84,7 @@
 #include <domain/load/ElementalLoad.h>
 #include <domain/constraints/SFreedom_Constraint.h>
 #include <utility/recorder/Recorder.h>
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 
 void XC::PartitionedDomain::libera(void)
   {

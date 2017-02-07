@@ -43,7 +43,7 @@
 #include "domain/domain/Domain.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "med.h"

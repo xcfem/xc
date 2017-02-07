@@ -135,15 +135,15 @@
 #include "material/section/fiber_section/fiber/UniaxialFiber3d.h"
 
 // friction models
-#include "domain/mesh/element/frictionBearing/frictionModel/CoulombFriction.h"
-#include "domain/mesh/element/frictionBearing/frictionModel/VDependentFriction.h"
-#include "domain/mesh/element/frictionBearing/frictionModel/VPDependentFriction.h"
+#include "domain/mesh/element/special/frictionBearing/frictionModel/CoulombFriction.h"
+#include "domain/mesh/element/special/frictionBearing/frictionModel/VDependentFriction.h"
+#include "domain/mesh/element/special/frictionBearing/frictionModel/VPDependentFriction.h"
 
 // element header files
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/ElementIter.h"
-#include "domain/mesh/element/ParticlePos3d.h"
-#include "domain/mesh/element/gauss_models/GaussPoint.h"
+#include "domain/mesh/element/utils/ParticlePos3d.h"
+#include "domain/mesh/element/utils/gauss_models/GaussPoint.h"
 #include "domain/mesh/element/truss_beam_column/beam2d/beam2d02.h"
 #include "domain/mesh/element/truss_beam_column/beam2d/beam2d03.h"
 #include "domain/mesh/element/truss_beam_column/beam2d/beam2d04.h"
@@ -191,19 +191,19 @@
 #include "domain/mesh/element/volumen/upU/TwentyNodeBrick_u_p_U.h"
 #include "domain/mesh/element/volumen/UP-ucsd/TwentyEightNodeBrickUP.h"
 
-#include "domain/mesh/element/joint/Joint2D.h"                // Arash
+#include "domain/mesh/element/special/joint/Joint2D.h"                // Arash
 
 //Coordinate transformation.
-#include "domain/mesh/element/coordTransformation/LinearCrdTransf2d.h"
-#include "domain/mesh/element/coordTransformation/LinearCrdTransf3d.h"
-#include "domain/mesh/element/coordTransformation/PDeltaCrdTransf2d.h"
-#include "domain/mesh/element/coordTransformation/PDeltaCrdTransf3d.h"
-#include "domain/mesh/element/coordTransformation/CorotCrdTransf2d.h"
-#include "domain/mesh/element/coordTransformation/CorotCrdTransf3d.h"
+#include "domain/mesh/element/utils/coordTransformation/LinearCrdTransf2d.h"
+#include "domain/mesh/element/utils/coordTransformation/LinearCrdTransf3d.h"
+#include "domain/mesh/element/utils/coordTransformation/PDeltaCrdTransf2d.h"
+#include "domain/mesh/element/utils/coordTransformation/PDeltaCrdTransf3d.h"
+#include "domain/mesh/element/utils/coordTransformation/CorotCrdTransf2d.h"
+#include "domain/mesh/element/utils/coordTransformation/CorotCrdTransf3d.h"
 
-#include "domain/mesh/element/fvectors/FVectorBeamColumn2d.h"
-#include "domain/mesh/element/fvectors/FVectorBeamColumn3d.h"
-#include "domain/mesh/element/fvectors/FVectorShell.h"
+#include "domain/mesh/element/utils/fvectors/FVectorBeamColumn2d.h"
+#include "domain/mesh/element/utils/fvectors/FVectorBeamColumn3d.h"
+#include "domain/mesh/element/utils/fvectors/FVectorShell.h"
 
 
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/HingeMidpointBeamIntegration.h"

@@ -57,7 +57,7 @@
 // What: "@(#) ElementRecorder.C, revA"
 
 #include <utility/recorder/DamageRecorder.h>
-#include "domain/mesh/element/Information.h"
+#include "domain/mesh/element/utils/Information.h"
 #include <domain/domain/Domain.h>
 #include <domain/mesh/element/Element.h>
 #include <utility/matrix/Matrix.h>

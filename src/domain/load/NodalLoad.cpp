@@ -60,7 +60,7 @@
 #include <domain/mesh/node/Node.h>
 #include <cstdlib>
 #include <domain/domain/Domain.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include "utility/matrix/ID.h"
 #include "utility/matrix/Matrix.h"
 

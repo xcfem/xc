@@ -29,7 +29,7 @@
 #include "PressureMultiYieldBase.h"
 #include <cmath>
 #include <cstdlib>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/matrix/ID.h>
 #include <utility/recorder/response/MaterialResponse.h>
 

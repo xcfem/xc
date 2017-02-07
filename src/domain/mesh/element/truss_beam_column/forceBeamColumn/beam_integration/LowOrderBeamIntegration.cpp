@@ -53,7 +53,7 @@
 #include "utility/matrix/ID.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/Vector.h"
-#include "domain/mesh/element/Information.h"
+#include "domain/mesh/element/utils/Information.h"
 #include "domain/component/Parameter.h"
 
 XC::LowOrderBeamIntegration::LowOrderBeamIntegration(int nIP, const Vector &pt, int nc, const Vector &wc)

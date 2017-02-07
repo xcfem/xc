@@ -24,7 +24,7 @@
 #include "MEDGaussModel.h"
 #include "MEDMeshing.h"
 
-#include "domain/mesh/element/gauss_models/GaussModel.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "xc_basic/src/med_xc/MEDMEM_GaussLocalization.hxx"

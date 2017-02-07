@@ -48,7 +48,7 @@
 // 9-node lagrandian shell element with membrane and drill
 
 #include "ShellNL.h"
-#include "domain/mesh/element/gauss_models/GaussModel.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "domain/mesh/element/plane/shell/R3vectors.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/load/plane/ShellUniformLoad.h"

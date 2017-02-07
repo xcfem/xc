@@ -49,7 +49,7 @@
 // $Source: /usr/local/cvs/OpenSees/SRC/element/fourNodeQuad/EnhancedQuad.h,v $
                                                                         
 #include "domain/mesh/element/plane/QuadBase4N.h"
-#include "domain/mesh/element/physical_properties/NDMaterialPhysicalProperties.h"
+#include "domain/mesh/element/utils/physical_properties/NDMaterialPhysicalProperties.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 

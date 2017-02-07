@@ -53,7 +53,7 @@
 
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf2d.h>
 #include "material/section/repres/CrossSectionProperties2d.h"
-#include "domain/mesh/element/fvectors/FVectorBeamColumn2d.h"
+#include "domain/mesh/element/utils/fvectors/FVectorBeamColumn2d.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 

@@ -53,7 +53,7 @@
 #define TWENTYNODEBRICK_H
 
 #include <domain/mesh/element/ElementBase.h>
-#include "domain/mesh/element/body_forces/BodyForces3D.h"
+#include "domain/mesh/element/utils/body_forces/BodyForces3D.h"
 
 
 

@@ -60,7 +60,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "boost/lexical_cast.hpp"
 
-#include "domain/mesh/element/fvectors/FVector.h"
+#include "domain/mesh/element/utils/fvectors/FVector.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "domain/mesh/element/Element1D.h"
 

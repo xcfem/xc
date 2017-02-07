@@ -60,7 +60,7 @@
 #include <material/section/fiber_section/fiber/Fiber.h>
 #include "classTags.h"
 #include <material/section/fiber_section/FiberSection3d.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/MaterialResponse.h>
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <material/section/repres/section/FiberSectionRepr.h>

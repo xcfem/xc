@@ -60,7 +60,7 @@
 // What: "@(#) SectionForceDeformation.C, revA"
 
 #include <material/section/SectionForceDeformation.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>

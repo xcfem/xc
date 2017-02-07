@@ -67,8 +67,8 @@
 #include <domain/domain/Domain.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-#include <domain/mesh/element/coordTransformation/CrdTransf2d.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include <domain/mesh/node/Node.h>
 

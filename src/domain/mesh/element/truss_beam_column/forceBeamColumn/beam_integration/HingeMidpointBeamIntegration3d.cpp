@@ -53,7 +53,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 XC::HingeMidpointBeamIntegration3d::HingeMidpointBeamIntegration3d(double e,double a,double iz,double iy,
 							           double g,double j,double lpi,double lpj)

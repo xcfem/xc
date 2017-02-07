@@ -27,7 +27,7 @@
 //ShellUniformLoad.cpp
 
 #include "ShellUniformLoad.h"
-#include "domain/mesh/element/fvectors/FVectorShell.h"
+#include "domain/mesh/element/utils/fvectors/FVectorShell.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/plane/shell/ShellMITC4Base.h"

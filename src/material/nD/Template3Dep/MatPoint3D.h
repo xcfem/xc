@@ -53,7 +53,7 @@
 #define MATPOINT3D_H
 
 #include <string>
-#include "domain/mesh/element/gauss_models/GaussPoint.h"
+#include "domain/mesh/element/utils/gauss_models/GaussPoint.h"
 
 namespace XC {
   class NDMaterial;

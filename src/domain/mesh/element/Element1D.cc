@@ -41,8 +41,8 @@
 
 #include "utility/matrix/Matrix.h"
 #include "xc_basic/src/matrices/m_int.h"
-#include "domain/mesh/element/coordTransformation/CrdTransf2d.h"
-#include "domain/mesh/element/coordTransformation/CrdTransf3d.h"
+#include "domain/mesh/element/utils/coordTransformation/CrdTransf2d.h"
+#include "domain/mesh/element/utils/coordTransformation/CrdTransf3d.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"

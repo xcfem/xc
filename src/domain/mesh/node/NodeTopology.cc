@@ -27,7 +27,7 @@
 
 #include "NodeTopology.h"
 #include "Node.h"
-#include "domain/mesh/element/ElementEdges.h"
+#include "domain/mesh/element/utils/ElementEdges.h"
 #include "domain/mesh/element/Element.h"
 
 //! @brief Returns the elements that are connected to both nodes.

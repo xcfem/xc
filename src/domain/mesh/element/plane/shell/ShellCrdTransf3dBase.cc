@@ -34,7 +34,7 @@
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
 #include "domain/mesh/element/plane/shell/R3vectors.h"
-#include "domain/mesh/element/NodePtrs.h"
+#include "domain/mesh/element/utils/NodePtrs.h"
 
 
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"

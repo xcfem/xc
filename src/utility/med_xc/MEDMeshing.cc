@@ -32,7 +32,7 @@
 #include "preprocessor/set_mgmt/Set.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/element/Element.h"
-#include "domain/mesh/element/gauss_models/GaussModel.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "domain/mesh/node/Node.h"
 #include "ProblemaEF.h"
 

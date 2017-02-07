@@ -56,12 +56,12 @@
 #include <domain/mesh/element/truss_beam_column/dispBeamColumn/DispBeamColumn3d.h>
 #include <domain/mesh/node/Node.h>
 #include <material/section/SeccionBarraPrismatica.h>
-#include <domain/mesh/element/coordTransformation/CrdTransf3d.h>
+#include <domain/mesh/element/utils/coordTransformation/CrdTransf3d.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
 #include <domain/domain/Domain.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include "domain/load/beam_loads/BeamMecLoad.h"

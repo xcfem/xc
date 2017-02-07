@@ -37,7 +37,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <material/nD/soil/FluidSolidPorousMaterial.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/MaterialResponse.h>
 #include <utility/matrix/ID.h>
 

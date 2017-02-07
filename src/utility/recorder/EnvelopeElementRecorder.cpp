@@ -66,7 +66,7 @@
 #include <cstring>
 #include <utility/recorder/response/Response.h>
 #include <utility/database/FE_Datastore.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/handler/DataOutputHandler.h>
 #include <cstdlib>
 

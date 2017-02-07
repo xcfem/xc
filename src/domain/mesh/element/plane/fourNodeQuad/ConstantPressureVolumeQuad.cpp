@@ -65,7 +65,7 @@
 #include <utility/handler/ErrorHandler.h>
 
 #include "utility/actor/actor/ArrayCommMetaData.h"
-#include "domain/mesh/element/gauss_models/GaussModel.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 
 //static data
 double XC::ConstantPressureVolumeQuad::matrixData[64];

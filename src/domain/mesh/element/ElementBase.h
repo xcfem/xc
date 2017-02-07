@@ -30,7 +30,7 @@
 #define ElementBase_h
 
 #include "Element.h"
-#include "NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include "material/Material.h"
 #include "domain/domain/Domain.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"

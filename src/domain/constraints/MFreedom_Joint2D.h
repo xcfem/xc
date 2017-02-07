@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.4 $
 // $Date: 2004/09/01 04:01:27 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/joint/MFreedom_Joint2D.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/special/joint/MFreedom_Joint2D.h,v $
                                                                         
 #ifndef MFreedom_Joint2D_h
 #define MFreedom_Joint2D_h

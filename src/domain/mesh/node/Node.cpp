@@ -68,7 +68,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 #include <cstring>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include "domain/constraints/SFreedom_Constraint.h"
 
 
@@ -1022,7 +1022,7 @@ double XC::Node::getPulsacion(int mode) const
     return dom->getPulsacion(mode);
   }
 
-//! @brief Devuelve las pulsaciones obtenidas en el análisis modal.
+//! @brief Returns the angular frequencies from the modal analysis.
 XC::Vector XC::Node::getPulsaciones(void) const
   {
     const Domain *dom= getDomain();

@@ -31,7 +31,7 @@
 #include "domain/domain/Domain.h"
 #include "utility/recorder/Recorder.h"
 #include <cstdlib>
-#include "domain/mesh/element/RayleighDampingFactors.h"
+#include "domain/mesh/element/utils/RayleighDampingFactors.h"
 
 #include <domain/mesh/element/Element.h>
 #include <domain/mesh/node/Node.h>
@@ -47,7 +47,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
 
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include <climits>
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 
@@ -81,8 +81,8 @@ void XC::Mesh::libera(void)
 void XC::Mesh::alloc_contenedores(void)
   {
     // init the arrays for storing the mesh components
-    theNodes= new MapOfTaggedObjects(this,"nodo");
-    theElements= new MapOfTaggedObjects(this,"elemento");
+    theNodes= new MapOfTaggedObjects(this,"node");
+    theElements= new MapOfTaggedObjects(this,"element");
   }
 
 //! @brief Reserva memoria para los iteradores.
@@ -216,12 +216,12 @@ void XC::Mesh::add_elements_to_domain(void)
       }
   }
 
-//! @brief Agrega al dominio el elemento being passed as parameter.
+//! @brief Appends to the domain the element being passed as parameter.
 bool XC::Mesh::addElement(Element *element)
   {
     if(!element)
       {
-        std::cerr << "WARNING XC::Mesh::addElement, el puntero al elemento es nulo." << std::endl;
+        std::cerr << "WARNING XC::Mesh::addElement, pointer to element is null." << std::endl;
         return false;
       }
     const int eleTag = element->getTag();
@@ -314,7 +314,7 @@ bool XC::Mesh::addNode(Node * node)
   }
 
 
-//! @brief Borra el elemento cuyo identificador se pasa como parámetro.
+//! @brief Deletes the element identified by the tag being passed as parameter.
 bool XC::Mesh::removeElement(int tag)
   {
     // remove the object from the container
@@ -361,7 +361,7 @@ void XC::Mesh::clearDOF_GroupPtr(void)
       nodePtr->setDOF_GroupPtr(nullptr);
   }
 
-//! @brief Devuelve un iterador a los elementos del dominio.
+//! @brief Returns an iterator to the mesh elements.
 XC::ElementIter &XC::Mesh::getElements()
   {
     theEleIter->reset();
@@ -380,7 +380,7 @@ bool XC::Mesh::existElement(int tag)
  { return theElements->existComponent(tag); }
 
 
-//! @brief Devuelve un puntero al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the element identified by the tag being passed as parameter.
 XC::Element *XC::Mesh::getElement(int tag)
   {
     Element *result= nullptr;
@@ -392,7 +392,7 @@ XC::Element *XC::Mesh::getElement(int tag)
     return result;
   }
 
-//! @brief Devuelve un puntero al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the element identified by the tag being passed as parameter.
 const XC::Element *XC::Mesh::getElement(int tag) const
   {
     const Element *result= nullptr;
@@ -404,14 +404,14 @@ const XC::Element *XC::Mesh::getElement(int tag) const
     return result;
   }
 
-//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
+//! @brief Returns a pointer to the nearest element to the point being passed as parameter.
 XC::Element *XC::Mesh::getNearestElement(const Pos3d &p)
   {
     Element *retval= const_cast<Element *>(kdtreeElements.getNearestElement(p));
     return retval;
   }
 
-//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
+//! @brief Returns a pointer to the nearest element to the point being passed as parameter.
 const XC::Element *XC::Mesh::getNearestElement(const Pos3d &p) const
   {
     Mesh *this_no_const= const_cast<Mesh *>(this);
@@ -497,7 +497,7 @@ void XC::Mesh::melt_alive_nodes(const std::string &nmbLocker)
 		<< nmbLocker << "'\n";
   }
 
-//! @brief Devuelve el número de elementos.
+//! @brief Returns the number of elements.
 int XC::Mesh::getNumElements(void) const
   { return theElements->getNumComponents(); }
 
@@ -599,7 +599,7 @@ size_t XC::Mesh::getNumFreeNodes(void) const
 const XC::Vector &XC::Mesh::getPhysicalBounds(void)
   { return theBounds; }
 
-//! @brief Construye (si es necesario) el grafo de elementos del dominio y devuelve una referencia al mismo.
+//! @brief Builds the elements graph of the mesh (if not builded yet) and returns a reference to it.
 XC::Graph &XC::Mesh::getElementGraph(void)
   {
     if(!eleGraphBuiltFlag)
@@ -756,7 +756,7 @@ int XC::Mesh::revertToStart(void)
     return update();
   }
 
-//! @brief Actualiza el estado de los elementos del modelo.
+//! @brief Update the element's state.
 int XC::Mesh::update(void)
   {
     int ok = 0;
@@ -800,7 +800,7 @@ std::ostream &XC::operator<<(std::ostream &s, Mesh &M)
     return s;
   }
 
-//! @brief Construye el grafo de elementos.
+//! @brief Builds the element's graph.
 int XC::Mesh::buildEleGraph(Graph &theEleGraph)
   {
     int numVertex = this->getNumElements();

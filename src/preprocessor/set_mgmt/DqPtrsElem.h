@@ -32,7 +32,7 @@
 #define DQPTRSELEM_H
 
 #include "DqPtrs.h"
-#include "domain/mesh/element/KDTreeElements.h"
+#include "domain/mesh/element/utils/KDTreeElements.h"
 
 class Polilinea3d;
 

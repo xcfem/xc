@@ -56,7 +56,7 @@
 #ifndef Response_h
 #define Response_h
 
-#include "domain/mesh/element/Information.h"
+#include "domain/mesh/element/utils/Information.h"
 #include <fstream>
 
 namespace XC {

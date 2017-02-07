@@ -34,7 +34,7 @@
 #include "NodeLockers.h"
 #include "solution/graph/graph/Graph.h"
 #include "node/KDTreeNodes.h"
-#include "element/KDTreeElements.h"
+#include "element/utils/KDTreeElements.h"
 
 class Pos3d;
 

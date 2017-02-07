@@ -62,7 +62,7 @@
 #include <solution/analysis/integrator/Integrator.h>
 #include "solution/SoluMethod.h"
 #include "solution/analysis/model/AnalysisModel.h"
-#include "domain/mesh/element/RayleighDampingFactors.h"
+#include "domain/mesh/element/utils/RayleighDampingFactors.h"
 
 //! @brief Constructor.
 XC::Integrator::Integrator(SoluMethod *owr,int clasTag)

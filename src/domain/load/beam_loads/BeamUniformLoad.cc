@@ -30,7 +30,7 @@
 #include "domain/mesh/element/Element1D.h"
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/pos_vec/VDesliz3d.h"
-#include "domain/mesh/element/coordTransformation/CrdTransf.h"
+#include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 
 //! @brief Constructor.
 XC::BeamUniformLoad::BeamUniformLoad(int tag,int classTag, double wt, double wa,const XC::ID &theElementTags)

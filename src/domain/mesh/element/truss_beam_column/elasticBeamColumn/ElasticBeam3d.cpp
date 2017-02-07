@@ -62,8 +62,8 @@
 #include <domain/domain/Domain.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-#include <domain/mesh/element/coordTransformation/CrdTransf3d.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/coordTransformation/CrdTransf3d.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include "domain/load/beam_loads/BeamMecLoad.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"

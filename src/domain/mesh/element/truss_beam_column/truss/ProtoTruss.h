@@ -37,9 +37,9 @@ class Material;
 
 //! \ingroup OneDimensionalElem
 //
-//! @defOneDimensionalElemArt Truss elements.
+//! @defgroup TrussElem Truss elements.
 //!
-//! \ingroup OneDimensionalElemArt
+//! \ingroup TrussElem
 //
 //! @brief Base class for truss elements.
 class ProtoTruss : public Element1D

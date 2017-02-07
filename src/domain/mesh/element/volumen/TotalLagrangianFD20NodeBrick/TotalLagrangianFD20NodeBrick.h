@@ -54,8 +54,8 @@
 #define TOTALLAGRANGIANFD20BRICK_H
 
 #include <domain/mesh/element/ElemWithMaterial.h>
-#include "domain/mesh/element/physical_properties/NDMaterialPhysicalProperties.h"
-#include "domain/mesh/element/body_forces/BodyForces3D.h"
+#include "domain/mesh/element/utils/physical_properties/NDMaterialPhysicalProperties.h"
+#include "domain/mesh/element/utils/body_forces/BodyForces3D.h"
 
 namespace XC {
   class BJtensor;

@@ -60,7 +60,7 @@
 #include <cstdlib>
 
 #include "domain/mesh/element/Element.h"
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>

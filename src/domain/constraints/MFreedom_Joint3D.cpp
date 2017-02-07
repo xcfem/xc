@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.2 $
 // $Date: 2004/09/01 04:01:27 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/joint/MFreedom_Joint3D.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/special/joint/MFreedom_Joint3D.cpp,v $
 
 // Written: Arash Altoontash, Gregory Deierlein
 // Created: 04/03

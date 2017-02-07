@@ -27,12 +27,12 @@
 //HingeBeamIntegration3d.cc
 
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/HingeBeamIntegration3d.h>
-#include "domain/mesh/element/fvectors/FVector.h"
+#include "domain/mesh/element/utils/fvectors/FVector.h"
 #include "domain/load/beam_loads/BeamMecLoad.h"
 #include "domain/component/Parameter.h"
 
 #include <utility/matrix/Vector.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include "utility/matrix/ID.h"
 
 XC::HingeBeamIntegration3d::HingeBeamIntegration3d(int classTag,double e,double a,double iz,double iy,double g,double j,double lpi,double lpj)

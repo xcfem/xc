@@ -64,7 +64,7 @@
 #include <utility/matrix/Vector.h>
 #include <reliability/domain/filter/Filter.h>
 #include <classTags.h>
-#include "domain/mesh/element/Information.h"
+#include "domain/mesh/element/utils/Information.h"
 
 
 XC::DiscretizedRandomProcessSeries::DiscretizedRandomProcessSeries(int num, const std::vector<ModulatingFunction *> &theModFuncs,

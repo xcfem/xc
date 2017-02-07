@@ -62,7 +62,7 @@
 #include <cstdlib>
 
 #include "Element.h"
-#include "NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include "utility/recorder/response/ElementResponse.h"
 #include <utility/matrix/Vector.h>
 #include "domain/mesh/node/Node.h"
@@ -81,7 +81,7 @@
 #include "utility/matrix/DqVectors.h"
 #include "utility/tagged/DefaultTag.h"
 #include "med.h"
-#include "domain/mesh/element/gauss_models/GaussModel.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "utility/med_xc/MEDGaussModel.h"
 #include "utility/actor/actor/CommMetaData.h"
 #include "vtkCellType.h"

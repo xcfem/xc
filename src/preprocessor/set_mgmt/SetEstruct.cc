@@ -31,7 +31,7 @@
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "domain/mesh/element/ElementEdges.h"
+#include "domain/mesh/element/utils/ElementEdges.h"
 
 
 

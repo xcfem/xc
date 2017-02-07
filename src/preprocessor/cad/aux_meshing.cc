@@ -27,7 +27,7 @@
 
 #include "aux_meshing.h"
 #include "domain/mesh/element/Element.h"
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include <domain/mesh/node/Node.h>
 #include "preprocessor/cad/matrices/TritrizPtrNod.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"

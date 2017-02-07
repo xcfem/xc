@@ -56,7 +56,7 @@
 #ifndef DamageResponse_h
 #define DamageResponse_h
 
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/Response.h>
 
 namespace XC {

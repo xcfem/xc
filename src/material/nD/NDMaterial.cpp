@@ -63,7 +63,7 @@
 // What: "@(#) XC::NDMaterial.C, revA"
 
 #include <material/nD/NDMaterial.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/nDarray/stresst.h>

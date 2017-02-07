@@ -51,7 +51,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <material/nD/soil/PressureDependMultiYield.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/matrix/ID.h>
 #include <utility/recorder/response/MaterialResponse.h>
 

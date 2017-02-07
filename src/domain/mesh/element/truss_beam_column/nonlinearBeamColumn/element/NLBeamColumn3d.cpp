@@ -71,13 +71,13 @@
 #include <cstring>
 #include <cfloat>
 
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/element/NLBeamColumn3d.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <domain/domain/Domain.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <utility/recorder/response/ElementResponse.h>
-#include <domain/mesh/element/coordTransformation/CrdTransf3d.h>
+#include <domain/mesh/element/utils/coordTransformation/CrdTransf3d.h>
 #include <domain/mesh/node/Node.h>
 
 #include <material/section/SeccionBarraPrismatica.h>

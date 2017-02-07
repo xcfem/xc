@@ -50,7 +50,7 @@
 
 #include "BeamIntegration.h"
 #include "utility/matrix/Matrix.h"
-#include "domain/mesh/element/coordTransformation/CrdTransf.h"
+#include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 #include "IntegrationPointsCoords.h"
 
 #include "utility/matrix/ID.h"

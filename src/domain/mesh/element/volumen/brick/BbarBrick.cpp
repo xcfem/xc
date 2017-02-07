@@ -67,7 +67,7 @@
 
 
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "domain/mesh/element/gauss_models/GaussModel.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 
 //static data
 double  XC::BbarBrick::xl[3][8] ;

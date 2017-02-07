@@ -58,7 +58,7 @@
 #include "utility/matrix/ID.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-#include "domain/mesh/element/fvectors/FVector.h"
+#include "domain/mesh/element/utils/fvectors/FVector.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "utility/actor/actor/MovableVector.h"
 

@@ -56,13 +56,13 @@
 // What: "@(#) NewElement.cpp, revA"
 
 #include "domain/mesh/element/NewElement.h"
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
 
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 
 
 

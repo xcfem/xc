@@ -67,7 +67,7 @@
 #include <cstdlib>
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <material/section/SectionForceDeformation.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/FiberResponse.h>
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"

@@ -27,7 +27,7 @@
 //BeamColumnWithSectionFDTrf2d.cpp
 
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf2d.h>
-#include <domain/mesh/element/coordTransformation/CrdTransf2d.h>
+#include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
 
 
 //! @brief Asigna la coordinate transformation.

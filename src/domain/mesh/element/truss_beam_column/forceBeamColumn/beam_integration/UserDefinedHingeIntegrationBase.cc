@@ -29,7 +29,7 @@
 
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 XC::UserDefinedHingeIntegrationBase::UserDefinedHingeIntegrationBase(int classTag, const Vector &ptL, const Vector &wtL, const Vector &ptR, const Vector &wtR)
   : UserDefinedBeamIntegrationBase(classTag,ptL,wtL), ptsR(ptR), wtsR(wtR)

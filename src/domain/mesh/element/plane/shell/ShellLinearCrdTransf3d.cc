@@ -33,7 +33,7 @@
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
-#include "domain/mesh/element/NodePtrs.h"
+#include "domain/mesh/element/utils/NodePtrs.h"
 #include "domain/mesh/element/plane/shell/R3vectors.h"
 
 //! @brief Constructor por defecto

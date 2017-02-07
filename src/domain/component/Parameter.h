@@ -52,7 +52,7 @@
 #define Parameter_h
 
 #include "utility/tagged/TaggedObject.h"
-#include "domain/mesh/element/Information.h"
+#include "domain/mesh/element/utils/Information.h"
 #include "utility/actor/actor/MovableObject.h"
 
 namespace XC {

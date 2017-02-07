@@ -72,7 +72,7 @@
 #include "domain/mesh/node/NodeIter.h"
 #include "domain/mesh/element/ElementIter.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 

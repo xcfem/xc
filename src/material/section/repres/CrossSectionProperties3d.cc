@@ -29,7 +29,7 @@
 #include <material/section/repres/CrossSectionProperties3d.h>
 #include "xc_basic/src/util/inercia.h"
 #include "xc_utils/src/geom/sis_ref/EjesPrincInercia2d.h"
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>

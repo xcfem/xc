@@ -59,7 +59,7 @@
 #include <utility/matrix/ID.h>
 #include <domain/domain/Domain.h>
 #include <cstring>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <utility/recorder/response/ElementResponse.h>
 

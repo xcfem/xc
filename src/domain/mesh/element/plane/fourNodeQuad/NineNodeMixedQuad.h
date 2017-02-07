@@ -57,7 +57,7 @@
 #include <domain/mesh/element/ElemWithMaterial.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
-#include "domain/mesh/element/physical_properties/NDMaterialPhysicalProperties.h"
+#include "domain/mesh/element/utils/physical_properties/NDMaterialPhysicalProperties.h"
 
 namespace XC {
 

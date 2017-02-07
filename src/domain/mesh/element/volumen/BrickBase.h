@@ -30,18 +30,18 @@
 #define BrickBase_h
 
 #include <domain/mesh/element/ElemWithMaterial.h>
-#include "domain/mesh/element/physical_properties/NDMaterialPhysicalProperties.h"
+#include "domain/mesh/element/utils/physical_properties/NDMaterialPhysicalProperties.h"
 
 namespace XC {
 class NDMaterial;
 
 //! \ingroup Elem
 //
-//! @defgroup ElemVol Elementos para el análisis de sólidos.
+//! @defgroup ElemVol Three-dimensional elements.
 //!
 //! \ingroup ElemVol
 //
-//! @brief Clase base para los hexaedros.
+//! @brief Base class for hexahedra.
 class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
   {
   protected:

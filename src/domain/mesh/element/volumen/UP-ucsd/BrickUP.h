@@ -65,7 +65,7 @@
 //
 
 #include <domain/mesh/element/volumen/BrickBase.h>
-#include "domain/mesh/element/body_forces/BodyForces3D.h"
+#include "domain/mesh/element/utils/body_forces/BodyForces3D.h"
 
 namespace XC{
 class NDMaterial;

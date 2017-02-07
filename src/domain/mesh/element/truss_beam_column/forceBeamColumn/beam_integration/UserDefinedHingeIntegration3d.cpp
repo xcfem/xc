@@ -51,7 +51,7 @@
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/Vector.h"
 #include "UserDefinedHingeIntegration3d.h"
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 XC::UserDefinedHingeIntegration3d::UserDefinedHingeIntegration3d(int npL,
                                                              const XC::Vector &ptL,

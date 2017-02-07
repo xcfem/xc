@@ -26,7 +26,7 @@
 #include "domain/mesh/Mesh.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/ElementIter.h"
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include "MEDMapIndices.h"
 
 //! @brief Constructor.

@@ -30,7 +30,7 @@
 #define Positioner_h
 
 #include <reliability/domain/components/ReliabilityDomainComponent.h>
-#include "domain/mesh/element/Information.h"
+#include "domain/mesh/element/utils/Information.h"
 #include "domain/component/Parameter.h"
 
 namespace XC {

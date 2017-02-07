@@ -60,7 +60,7 @@
 // What: "@(#) TrussSection.C, revA"
 
 #include <domain/mesh/element/truss_beam_column/truss/TrussSection.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>

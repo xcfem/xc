@@ -62,7 +62,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/quadrule/GaussQuadRule1d01.h>
-#include "domain/mesh/element/fvectors/FVectorBeamColumn3d.h"
+#include "domain/mesh/element/utils/fvectors/FVectorBeamColumn3d.h"
 
 namespace XC {
 class Node;

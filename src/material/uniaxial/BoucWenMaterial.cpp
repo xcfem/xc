@@ -63,7 +63,7 @@
 #include <utility/matrix/Vector.h>
 
 #include <cmath>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 XC::BoucWenMaterial::BoucWenMaterial(int tag,
                                         double p_alpha,

@@ -72,10 +72,10 @@
 #include "domain/mesh/element/volumen/UP-ucsd/BrickUP.h"
 #include "domain/mesh/element/volumen/UP-ucsd/TwentyEightNodeBrickUP.h"
 
-#include "domain/mesh/element/joint/BeamColumnJoint2d.h"
-#include "domain/mesh/element/joint/BeamColumnJoint3d.h"
-#include "domain/mesh/element/joint/Joint2D.h"
-#include "domain/mesh/element/joint/Joint3D.h"
+#include "domain/mesh/element/special/joint/BeamColumnJoint2d.h"
+#include "domain/mesh/element/special/joint/BeamColumnJoint3d.h"
+#include "domain/mesh/element/special/joint/Joint2D.h"
+#include "domain/mesh/element/special/joint/Joint3D.h"
 
 #include "domain/mesh/element/plane/shell/ShellMITC4.h"
 #include "domain/mesh/element/plane/shell/CorotShellMITC4.h"

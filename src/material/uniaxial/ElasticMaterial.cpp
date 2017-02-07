@@ -64,7 +64,7 @@
 #include "domain/component/Parameter.h"
 #include <utility/matrix/Vector.h>
 
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 
 //! @brief Constructor.

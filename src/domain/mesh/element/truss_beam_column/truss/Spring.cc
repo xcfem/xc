@@ -27,7 +27,7 @@
 //Spring.cpp
 
 #include "domain/mesh/element/truss_beam_column/truss/Spring.h"
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>

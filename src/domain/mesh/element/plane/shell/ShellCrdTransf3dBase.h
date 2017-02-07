@@ -32,7 +32,7 @@
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "utility/actor/actor/MovableObject.h"
 #include "utility/matrix/Vector.h"
-#include "domain/mesh/element/ParticlePos3d.h"
+#include "domain/mesh/element/utils/ParticlePos3d.h"
 
 class Plano3d;
 class Ref2d3d;

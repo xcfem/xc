@@ -63,7 +63,7 @@
 
 #include <material/nD/NDMaterial.h>
 
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include <domain/load/ElementalLoad.h>

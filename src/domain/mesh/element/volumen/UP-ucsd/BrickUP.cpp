@@ -75,7 +75,7 @@
 #include <domain/mesh/element/volumen/brick/shp3d.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "domain/mesh/element/gauss_models/GaussModel.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 
 namespace XC{
 //static data

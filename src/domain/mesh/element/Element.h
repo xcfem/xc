@@ -65,7 +65,7 @@
 
 #include "domain/mesh/MeshComponent.h"
 #include "preprocessor/MeshingParams.h"
-#include "RayleighDampingFactors.h"
+#include "domain/mesh/element/utils/RayleighDampingFactors.h"
 #include "utility/matrix/Matrix.h"
 #include "domain/mesh/node/NodeTopology.h"
 

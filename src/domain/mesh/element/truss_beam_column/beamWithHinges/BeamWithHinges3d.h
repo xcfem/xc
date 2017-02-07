@@ -55,7 +55,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include "material/section/repres/CrossSectionProperties3d.h"
-#include "domain/mesh/element/fvectors/FVectorBeamColumn3d.h"
+#include "domain/mesh/element/utils/fvectors/FVectorBeamColumn3d.h"
 
 namespace XC {
 class Node;

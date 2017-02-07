@@ -61,13 +61,13 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
 #include <domain/domain/Domain.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
 
 
 #include "domain/component/Parameter.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "domain/mesh/element/gauss_models/GaussModel.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 
 
 

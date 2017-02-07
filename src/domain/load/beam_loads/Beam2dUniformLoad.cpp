@@ -60,7 +60,7 @@
 #include "boost/any.hpp"
 #include "utility/matrix/ID.h"
 
-#include "domain/mesh/element/fvectors/FVector.h"
+#include "domain/mesh/element/utils/fvectors/FVector.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 
 XC::Vector XC::Beam2dUniformLoad::data(2);

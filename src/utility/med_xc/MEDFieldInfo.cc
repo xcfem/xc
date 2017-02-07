@@ -27,7 +27,7 @@
 #include "xc_basic/src/med_xc/MEDMEM_Group.hxx"
 #include "xc_basic/src/med_xc/MEDMEM_Field.hxx"
 
-#include "domain/mesh/element/gauss_models/GaussModel.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 
 //! @brief Constructor.
 XC::MEDFieldInfo::MEDFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)

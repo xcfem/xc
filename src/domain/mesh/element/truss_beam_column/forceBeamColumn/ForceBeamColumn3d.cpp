@@ -50,13 +50,13 @@
 
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/ForceBeamColumn3d.h>
 #include "domain/component/Parameter.h"
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <domain/domain/Domain.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
 #include <utility/recorder/response/ElementResponse.h>
-#include <domain/mesh/element/coordTransformation/CrdTransf3d.h>
+#include <domain/mesh/element/utils/coordTransformation/CrdTransf3d.h>
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
 #include <material/section/SeccionBarraPrismatica.h>

@@ -77,7 +77,7 @@
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/loaders/LoadLoader.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "domain/mesh/element/gauss_models/GaussModel.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 
 XC::ShellLinearCrdTransf3d XC::ShellMITC4::linear_trf;
 

@@ -25,7 +25,7 @@
 #include "MEDGroupInfo.h"
 #include "xc_basic/src/med_xc/MEDMEM_Group.hxx"
 #include "domain/mesh/node/Node.h"
-#include "domain/mesh/element/gauss_models/GaussModel.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "utility/xc_python_utils.h"
 #include "xc_utils/src/nucleo/python_utils.h"
 

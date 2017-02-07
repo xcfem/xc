@@ -63,7 +63,7 @@
 #include <material/uniaxial/ENTMaterial.h>
 #include "domain/component/Parameter.h"
 #include <utility/matrix/Vector.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 
 XC::ENTMaterial::ENTMaterial(int tag, const double &e,const double &A,const double &B)

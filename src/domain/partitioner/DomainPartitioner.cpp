@@ -87,7 +87,7 @@
 #include <utility/Timer.h>
 
 #include <utility/tagged/storage/MapOfTaggedObjects.h>
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include "NodeLocations.h"
 
 

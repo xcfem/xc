@@ -73,14 +73,14 @@
 #include <cstring>
 #include <cfloat>
 
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/element/NLBeamColumn2d.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <domain/domain/Domain.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include "domain/load/beam_loads/BeamMecLoad.h"
-#include <domain/mesh/element/coordTransformation/CrdTransf2d.h>
+#include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
 #include <domain/mesh/node/Node.h>
 #include "domain/component/Parameter.h"
 #include "material/section/ResponseId.h"

@@ -27,12 +27,12 @@
 //TrasfCooLoader.cc
 
 #include "TransfCooLoader.h"
-#include "domain/mesh/element/coordTransformation/LinearCrdTransf2d.h"
-#include "domain/mesh/element/coordTransformation/LinearCrdTransf3d.h"
-#include "domain/mesh/element/coordTransformation/PDeltaCrdTransf2d.h"
-#include "domain/mesh/element/coordTransformation/PDeltaCrdTransf3d.h"
-#include "domain/mesh/element/coordTransformation/CorotCrdTransf2d.h"
-#include "domain/mesh/element/coordTransformation/CorotCrdTransf3d.h"
+#include "domain/mesh/element/utils/coordTransformation/LinearCrdTransf2d.h"
+#include "domain/mesh/element/utils/coordTransformation/LinearCrdTransf3d.h"
+#include "domain/mesh/element/utils/coordTransformation/PDeltaCrdTransf2d.h"
+#include "domain/mesh/element/utils/coordTransformation/PDeltaCrdTransf3d.h"
+#include "domain/mesh/element/utils/coordTransformation/CorotCrdTransf2d.h"
+#include "domain/mesh/element/utils/coordTransformation/CorotCrdTransf3d.h"
 #include "boost/any.hpp"
 
 //! @brief Frees memory.

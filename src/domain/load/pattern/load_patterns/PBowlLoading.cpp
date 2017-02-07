@@ -77,7 +77,7 @@
 #include <cmath>
 #include <iomanip>
 #include <fstream>
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 
 XC::PBowlLoading::PBowlLoading(void)
   :LoadPattern(0, PATTERN_TAG_PBowlLoading),

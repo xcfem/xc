@@ -42,8 +42,8 @@
 #define FourNodeQuadUP_h
 
 #include "domain/mesh/element/plane/QuadBase4N.h"
-#include "domain/mesh/element/physical_properties/SolidMech2D.h"
-#include "domain/mesh/element/body_forces/BodyForces2D.h"
+#include "domain/mesh/element/utils/physical_properties/SolidMech2D.h"
+#include "domain/mesh/element/utils/body_forces/BodyForces2D.h"
 
 namespace XC {
 class Node;

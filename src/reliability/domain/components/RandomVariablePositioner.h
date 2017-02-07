@@ -61,7 +61,7 @@
 #define RandomVariablePositioner_h
 
 #include <reliability/domain/components/Positioner.h>
-#include "domain/mesh/element/Information.h"
+#include "domain/mesh/element/utils/Information.h"
 
 namespace XC {
 

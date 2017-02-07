@@ -30,7 +30,7 @@
 #define DampingFactorsIntegrator_h
 
 #include <solution/analysis/integrator/TransientIntegrator.h>
-#include "domain/mesh/element/RayleighDampingFactors.h"
+#include "domain/mesh/element/utils/RayleighDampingFactors.h"
 
 namespace XC {
 

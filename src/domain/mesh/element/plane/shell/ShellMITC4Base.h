@@ -30,12 +30,12 @@
 #define ShellMITC4Base_h
 
 #include "domain/mesh/element/plane/QuadBase4N.h"
-#include "domain/mesh/element/physical_properties/SectionFDPhysicalProperties.h"
+#include "domain/mesh/element/utils/physical_properties/SectionFDPhysicalProperties.h"
 #include "ShellCrdTransf3dBase.h"
 #include "ShellBData.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
-#include "domain/mesh/element/fvectors/FVectorShell.h"
+#include "domain/mesh/element/utils/fvectors/FVectorShell.h"
 
 class Poligono3d;
 

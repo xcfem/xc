@@ -58,13 +58,13 @@
 #include "domain/component/Parameter.h"
 #include <domain/mesh/node/Node.h>
 #include <material/section/SeccionBarraPrismatica.h>
-#include <domain/mesh/element/coordTransformation/CrdTransf2d.h>
+#include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
 #include <domain/domain/Domain.h>
 #include <cstring>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include "domain/load/beam_loads/BeamMecLoad.h"

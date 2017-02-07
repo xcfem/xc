@@ -85,7 +85,7 @@ Journal of Structural Engineering, Approved for publication, February 2007.
  */
 
 
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include "domain/component/Parameter.h"
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/ForceBeamColumn2d.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
@@ -95,7 +95,7 @@ Journal of Structural Engineering, Approved for publication, February 2007.
 #include <utility/recorder/response/ElementResponse.h>
 #include "domain/load/beam_loads/BeamMecLoad.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
-#include <domain/mesh/element/coordTransformation/CrdTransf2d.h>
+#include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
 #include <material/section/SeccionBarraPrismatica.h>

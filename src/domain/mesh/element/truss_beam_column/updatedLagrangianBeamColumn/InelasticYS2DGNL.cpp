@@ -33,7 +33,7 @@
 #include <cmath>
 #include <cstdlib>
 
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include <cstring>
 #include "material/yieldSurface/evolution/YS_Evolution.h"

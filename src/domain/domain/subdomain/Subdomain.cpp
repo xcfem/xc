@@ -64,7 +64,7 @@
 
 #include <domain/component/DomainComponent.h>
 #include <domain/mesh/element/Element.h>
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include <domain/mesh/node/Node.h>
 #include <domain/constraints/SFreedom_Constraint.h>
 #include <domain/constraints/MFreedom_Constraint.h>

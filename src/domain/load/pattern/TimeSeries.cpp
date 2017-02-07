@@ -61,7 +61,7 @@
 // What: "@(#) TimeSeries.C, revA"
 
 #include <domain/load/pattern/TimeSeries.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 
 #include "utility/matrix/Vector.h"

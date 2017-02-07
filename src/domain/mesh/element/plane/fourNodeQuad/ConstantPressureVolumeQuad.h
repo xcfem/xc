@@ -54,7 +54,7 @@
 // Plane Strain (NOT PLANE STRESS)
 
 #include "domain/mesh/element/plane/QuadBase4N.h"
-#include "domain/mesh/element/physical_properties/NDMaterialPhysicalProperties.h"
+#include "domain/mesh/element/utils/physical_properties/NDMaterialPhysicalProperties.h"
 
 namespace XC{
 //! \ingroup ElemPlanos

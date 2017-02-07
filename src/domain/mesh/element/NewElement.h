@@ -59,7 +59,7 @@
 // What: "@(#) NewElement.h, revA"
 
 #include <domain/mesh/element/Element.h>
-#include "domain/mesh/element/NodePtrs.h"
+#include "domain/mesh/element/utils/NodePtrs.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 

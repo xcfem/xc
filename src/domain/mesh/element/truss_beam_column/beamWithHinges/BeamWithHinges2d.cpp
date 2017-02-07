@@ -60,10 +60,10 @@
 #include <cstring>
 
 #include <material/section/SeccionBarraPrismatica.h>
-#include <domain/mesh/element/coordTransformation/CrdTransf2d.h>
+#include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
 #include "domain/load/beam_loads/BeamMecLoad.h"
 
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include "material/section/repres/CrossSectionProperties2d.h"
 #include "material/section/ResponseId.h"

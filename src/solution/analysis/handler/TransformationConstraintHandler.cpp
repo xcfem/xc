@@ -78,7 +78,7 @@
 #include "domain/domain/subdomain/Subdomain.h"
 #include <solution/analysis/model/dof_grp/TransformationDOF_Group.h>
 #include <solution/analysis/model/fe_ele/transformation/TransformationFE.h>
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 
 
 //! @brief Constructor.

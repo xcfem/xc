@@ -63,7 +63,7 @@
 #include <material/nD/NDMaterial.h>
 #include "utility/actor/actor/MovableID.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>

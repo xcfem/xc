@@ -61,7 +61,7 @@
 
 #include "GenericSection1d.h"
 #include <material/uniaxial/UniaxialMaterial.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>

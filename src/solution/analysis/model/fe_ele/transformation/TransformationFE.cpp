@@ -68,7 +68,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <solution/analysis/handler/TransformationConstraintHandler.h>
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 
 const int MAX_NUM_DOF= 64;
 

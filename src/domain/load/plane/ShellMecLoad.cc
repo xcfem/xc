@@ -33,7 +33,7 @@
 
 #include "domain/mesh/element/plane/shell/ShellMITC4Base.h"
 #include "domain/mesh/element/plane/shell/ShellNL.h"
-#include "domain/mesh/element/coordTransformation/CrdTransf.h"
+#include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 #include "domain/mesh/node/Node.h"
 
 XC::ShellMecLoad::ShellMecLoad(int tag,int classTag,const double &wt,const double &wa1,const double &wa2,const ID &theElementTags)

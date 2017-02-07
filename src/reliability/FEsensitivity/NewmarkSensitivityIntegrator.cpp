@@ -62,7 +62,7 @@
 #include <reliability/FEsensitivity/NewmarkSensitivityIntegrator.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <solution/analysis/model/DOF_GrpIter.h>
 #include <solution/analysis/model/FE_EleIter.h>
 #include <domain/load/pattern/LoadPattern.h>

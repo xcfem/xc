@@ -104,7 +104,7 @@
 #include <material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticity3D.h> 
 #include <material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticityAxiSymm.h>
 #include <material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticityPlaneStrain.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include "material/nD/TipoMaterialND.h"
 
 //this is mike's problem

@@ -35,7 +35,7 @@ namespace XC {
 class Channel;
 class UniaxialMaterial;
 
-//! \ingroup OneDimensionalElemArt
+//! \ingroup TrussElem
 //
 //! @brief Clase base para la barra articulada.
 class TrussBase : public ProtoTruss

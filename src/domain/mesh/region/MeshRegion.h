@@ -62,7 +62,7 @@
 #define MeshRegion_h
 
 #include "domain/component/ContinuaReprComponent.h"
-#include "domain/mesh/element/RayleighDampingFactors.h"
+#include "domain/mesh/element/utils/RayleighDampingFactors.h"
 
 namespace XC {
 class Element;

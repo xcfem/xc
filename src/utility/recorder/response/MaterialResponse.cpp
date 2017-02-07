@@ -54,7 +54,7 @@
 // Description: This file contains the XC::MaterialResponse class implementation
 
 #include <utility/recorder/response/MaterialResponse.h>
-#include "domain/mesh/element/Information.h"
+#include "domain/mesh/element/utils/Information.h"
 #include <material/Material.h>
 
 XC::MaterialResponse::MaterialResponse(Material *mat, int id)

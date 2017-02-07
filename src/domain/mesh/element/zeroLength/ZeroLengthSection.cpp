@@ -55,7 +55,7 @@
 // ZeroLengthSection class.
 
 #include <domain/mesh/element/zeroLength/ZeroLengthSection.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 
 #include "material/section/SeccionBarraPrismatica.h"
 #include <domain/domain/Domain.h>

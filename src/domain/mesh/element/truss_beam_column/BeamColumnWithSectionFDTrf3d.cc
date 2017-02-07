@@ -27,7 +27,7 @@
 //BeamColumnWithSectionFDTrf3d.cpp
 
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf3d.h>
-#include <domain/mesh/element/coordTransformation/CrdTransf3d.h>
+#include <domain/mesh/element/utils/coordTransformation/CrdTransf3d.h>
 #include "material/section/SeccionBarraPrismatica.h"
 
 

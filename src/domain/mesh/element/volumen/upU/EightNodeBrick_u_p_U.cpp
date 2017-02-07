@@ -69,7 +69,7 @@
 #include <utility/matrix/nDarray/stresst.h>
 #include <utility/matrix/nDarray/straint.h>
 #include <utility/matrix/nDarray/BJtensor.h>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include <domain/load/ElementalLoad.h>
 #include <domain/domain/Domain.h>

@@ -63,8 +63,8 @@
 #include <domain/mesh/element/truss_beam_column/ProtoBeam3d.h>
 #include <utility/matrix/Matrix.h>
 #include "domain/mesh/element/truss_beam_column/EsfBeamColumn3d.h"
-#include "domain/mesh/element/fvectors/FVectorBeamColumn3d.h"
-#include "domain/mesh/element/coordTransformation/CrdTransf3d.h"
+#include "domain/mesh/element/utils/fvectors/FVectorBeamColumn3d.h"
+#include "domain/mesh/element/utils/coordTransformation/CrdTransf3d.h"
 
 namespace XC {
 class Channel;

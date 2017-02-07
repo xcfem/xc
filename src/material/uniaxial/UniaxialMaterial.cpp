@@ -62,7 +62,7 @@
 
 #include <material/uniaxial/UniaxialMaterial.h>
 #include <cstring>
-#include <domain/mesh/element/Information.h>
+#include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/MaterialResponse.h>
 #include <cfloat>
 #include <utility/matrix/Vector.h>

@@ -37,8 +37,8 @@ class_<XC::ParticlePos3d>("ParticlePos3d")
 
 class_<XC::RayleighDampingFactors, bases<EntCmd>, boost::noncopyable >("RayleighDampingFactors", no_init);
 
-#include "fvectors/python_interface.tcc"
-#include "physical_properties/python_interface.tcc"
+#include "utils/fvectors/python_interface.tcc"
+#include "utils/physical_properties/python_interface.tcc"
 
 XC::Node *(XC::NodePtrs::*getNearestNodePtr)(const Pos3d &,bool initialGeometry)= &XC::NodePtrs::getNearestNode;
 class_<XC::NodePtrs, bases<EntCmd>, boost::noncopyable >("NodePtrs", no_init)
@@ -138,7 +138,7 @@ class_<XC::Element1D, bases<XC::ElementBase<2> >, boost::noncopyable >("Element1
 
 
 #include "truss_beam_column/python_interface.tcc"
-#include "coordTransformation/python_interface.tcc"
+#include "utils/coordTransformation/python_interface.tcc"
 
 
 #include "plane/python_interface.tcc"

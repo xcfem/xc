@@ -36,7 +36,7 @@
 #include "domain/constraints/MFreedom_Constraint.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
-#include "domain/mesh/element/NodePtrsWithIDs.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include "solution/graph/graph/Graph.h"
 #include "solution/graph/graph/Vertex.h"
 #include "utility/matrix/ID.h"
