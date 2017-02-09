@@ -44,10 +44,10 @@ class FEM_ObjectBrokerAllClasses;
 class MEDMesh;
 class MEDMeshing;
 
-//! @mainpage XC Open source finite element analysis program.
+//! @mainpage <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">XC</a> Open source finite element analysis program.
 //! @author Luis C. Pérez Tato/Ana Ortega.
 //!
-//! XC is a finite element analysis code designed to solve
+//! <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">XC</a>  is a finite element analysis code designed to solve
 //! structural problems and to allow the checking of the results
 //! following structural codes (Eurocodes, ACI, EHE, SIA,...).
 //!
