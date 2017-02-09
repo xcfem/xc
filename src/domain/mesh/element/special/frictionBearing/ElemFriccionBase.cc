@@ -113,7 +113,7 @@ XC::ElemFriccionBase::~ElemFriccionBase()
 int XC::ElemFriccionBase::sendData(CommParameters &cp)
   {
     int res= Element0D::sendData(cp);
-    std::cerr<< "ElemFriccionBase::sendData incompleta (falta modelo friccion y materiales)" << std::endl;
+    std::cerr<< "ElemFriccionBase::sendData incomplete (materials and friction model undefined)." << std::endl;
     res+= cp.sendDoubles(uy,mass,tol,L,getDbTagData(),CommMetaData(9));
     res+= cp.sendVector(x,getDbTagData(),CommMetaData(10));
     res+= cp.sendVector(y,getDbTagData(),CommMetaData(11));
@@ -131,7 +131,7 @@ int XC::ElemFriccionBase::sendData(CommParameters &cp)
 int XC::ElemFriccionBase::recvData(const CommParameters &cp)
   {
     int res= Element0D::recvData(cp);
-    std::cerr<< "ElemFriccionBase::recvData incompleta (falta modelo friccion y materiales)" << std::endl;
+    std::cerr<< "ElemFriccionBase::recvData incomplete (materials and friction model undefined)." << std::endl;
     res+= cp.receiveDoubles(uy,mass,tol,L,getDbTagData(),CommMetaData(9));
     res+= cp.receiveVector(x,getDbTagData(),CommMetaData(10));
     res+= cp.receiveVector(y,getDbTagData(),CommMetaData(11));

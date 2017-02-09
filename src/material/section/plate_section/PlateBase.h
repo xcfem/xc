@@ -38,7 +38,7 @@
 namespace XC {
 
 //! \ingroup MATSCC
-//!  @defgroup MATPLAC Materiales para elementos bidimensionales (placas,...).
+//!  @defgroup MATPLAC Materials for bidimensional materials (plates, membranes, shells,...).
 //
 //! @ingroup MATPLAC
 //

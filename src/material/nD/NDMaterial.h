@@ -87,7 +87,7 @@ class Response;
 //
 //! @ingroup NDMat
 //
-//! @brief Clase base para los materiales en dos y tres dimensiones.
+//! @brief Base class for 2D and 3D materials.
 class NDMaterial: public Material
   {
   private:

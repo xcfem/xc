@@ -32,8 +32,8 @@
 #include "material/section/fiber_section/FiberSection3d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
-//! @brief Reserva memoria para los materiales (uno por fibra) y para sus
-//! datos dos (yLoc,Area) para secciones en 2D (getOrder()= 2) e (yLoc,zLoc,Area) para secciones en 3D (getOrder()= 3).
+//! @brief Allocates memory for each fiber material and for its data;
+//! two (yLoc,Area) for 2D sections (getOrder()= 2) and three (yLoc,zLoc,Area) for 3D sections (getOrder()= 3).
 void XC::StoFibras::allocFibers(int numFibras,const Fiber *muestra)
   {
     libera();

@@ -146,7 +146,7 @@ XC::contenedor_fibras XC::FiberSectionRepr::getFibras2d(void) const
     contenedor_fibras retval;
     if(!material_loader)
       {
-        std::cerr << "XC::FiberSectionRepr::getFibras2d; el puntero a materiales es nulo.\n";
+        std::cerr << "XC::FiberSectionRepr::getFibras2d; material handler not defined.\n";
         return retval;
       }
     for(contenedor_fibras::const_iterator i= fibras.begin();i!=fibras.end();i++)
@@ -162,7 +162,7 @@ XC::contenedor_fibras XC::FiberSectionRepr::getFibras3d(void) const
     contenedor_fibras retval;
     if(!material_loader)
       {
-        std::cerr << "XC::FiberSectionRepr::getFibras2d; el puntero a materiales es nulo.\n";
+        std::cerr << "XC::FiberSectionRepr::getFibras2d; material handler not defined.\n";
         return retval;
       }
     for(contenedor_fibras::const_iterator i= fibras.begin();i!=fibras.end();i++)

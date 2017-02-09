@@ -37,7 +37,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Clase base para los materiales de tipo hormigón.
+//! @brief Base class for concrete materials.
 class RawConcrete: public UniaxialMaterial
   {
   protected:

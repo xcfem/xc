@@ -34,8 +34,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Clase base para los materiales elasto-plásticos
-//! perfectos. 
+//! @brief Base class for elastic perfectly plastic materials.
 class EPPBaseMaterial : public ElasticBaseMaterial
   {
   protected:

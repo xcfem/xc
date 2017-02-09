@@ -88,8 +88,8 @@ class MaterialLoader;
 class SectionForceDeformation: public Material
   {
   protected:
-    mutable Matrix *fDefault; //!< Matriz de flexibilidad por defecto.
-    MaterialLoader *material_loader; //!< Gestor de materiales (búsqueda,...).
+    mutable Matrix *fDefault; //!< Default flexibility matrix.
+    MaterialLoader *material_loader; //!< Material definition handler (search,...).
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);

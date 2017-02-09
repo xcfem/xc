@@ -34,7 +34,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Clase base para los materiales elásticos uniaxiales.
+//! @brief Base class for uniaxial elastic materials.
 class ElasticBaseMaterial: public UniaxialMaterial
   {
   protected:

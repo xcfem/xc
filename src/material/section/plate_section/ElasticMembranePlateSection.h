@@ -49,9 +49,6 @@
 // $Source: /usr/local/cvs/OpenSees/SRC/material/section/ElasticMembranePlateSection.h,v $
 
 // Ed "C++" Love
-//
-//  Elastic Plate Section with membrane
-//
 
 
 
@@ -64,8 +61,7 @@
 namespace XC {
 //! \ingroup MATPLAC
 //
-//! @brief Sección elástica para materiales capaces de
-//! trabajar como placa y como membrana.
+//! @brief Elastic section for membrane/plate materials.
 class ElasticMembranePlateSection : public ElasticPlateProto<8>
   {
   private:
@@ -96,8 +92,6 @@ class ElasticMembranePlateSection : public ElasticPlateProto<8>
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-
-
   };
 
 } // end of XC namespace

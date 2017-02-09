@@ -37,13 +37,12 @@ namespace XC {
 
 //! @ingroup MATPLAC
 //
-//! @brief Clase base para para materiales bidimensionales
-//! (como los de placas).
+//! @brief Base class for elastic plate materials.
 class ElasticPlateBase: public PlateBase
   {
   protected:
-    double E;  // elastic modulus
-    double nu; // poisson ratio
+    double E;  //!< elastic modulus
+    double nu; //!< poisson ratio
 
     static const double five6; // =5/6 = shear correction factor
 

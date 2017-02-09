@@ -62,11 +62,11 @@
 namespace XC {
 //! @ingroup NDMat
 //
-//! @defgroup FeapNDMat Materiales n dimensionales que llaman a rutinas de FEAP.
+//! @defgroup FeapNDMat Wrappers for FEAP material subroutine.
 //
 //! @ingroup FeapNDMat
 //
-//! @brief Clase base para los materiales FEAP en dos y tres dimensiones.
+//! @brief Base class for 2D and 3D FEAP materials.
 class FeapMaterial : public NDMaterial
   {
   public:

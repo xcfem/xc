@@ -62,7 +62,7 @@ class Preprocessor: public EntCmd, public MovableObject
 
     Domain *dominio; //!< Proble domain.
 
-    MaterialLoader materiales; //!< Material creation tools.
+    MaterialLoader materialHandler; //!< Material creation tools.
     TransfCooLoader transf; //!< Coordinate transformation.
     BeamIntegratorLoader beamIntegrators; //!< Beam integrator schemes.
     NodeLoader nodes; //! Node creation tools.
@@ -111,9 +111,9 @@ class Preprocessor: public EntCmd, public MovableObject
     const MapSet &get_sets(void) const
       { return sets; }
     MaterialLoader &getMaterialLoader(void)
-      { return materiales; }
+      { return materialHandler; }
     const MaterialLoader &getMaterialLoader(void) const
-      { return materiales; }
+      { return materialHandler; }
     inline NodeLoader &getNodeLoader(void)
       { return nodes; }
     inline const NodeLoader &getNodeLoader(void) const

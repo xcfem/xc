@@ -41,7 +41,7 @@ class InteractionDiagramData;
 
 //!  \ingroup Ldrs
 //! 
-//! @brief Objeto encargado de la definición de materiales.
+//! @brief Material handler (definition, searching,...).
 class MaterialLoader: public Loader
   {
   public:

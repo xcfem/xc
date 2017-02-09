@@ -67,8 +67,7 @@
 namespace XC {
 //! @ingroup NDMat
 //
-//! @brief Clase base para los materiales elásticos, anisótropos para
-//! problemas axil-simétricos.
+//! @brief Base class for elastic isotropic axisymmetric materials.
 class ElasticIsotropicAxiSymm : public ElasticIsotropicMaterial
   {
   private:

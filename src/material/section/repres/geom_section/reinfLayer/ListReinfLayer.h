@@ -64,7 +64,7 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SeccionInerte
     void copia(const ListReinfLayer &otra);
   protected:
 
-    MaterialLoader *material_loader; //!< Gestor de materiales (búsqueda,...).
+    MaterialLoader *material_loader; //!< Material definition handler (searching,...).
 
     friend class GeomSection;
     ListReinfLayer(GeomSection *,MaterialLoader *ml);

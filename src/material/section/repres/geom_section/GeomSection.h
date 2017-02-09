@@ -68,18 +68,18 @@ class GeomSection: public SeccionInerte
     typedef std::map<size_t,Eje *> lst_ejes; //!< Contenedor de líneas. 
 
   protected:
-    MaterialLoader *material_loader; //!< Gestor de materiales (búsqueda,...).
+    MaterialLoader *material_loader; //!< Material handler (searching,...).
 
-    ListRegiones regiones; //!< Contenedor de regiones.
-    ListReinfLayer capas_armado; //!< Contenedor de capas de armadura.
+    ListRegiones regiones; //!< Region container.
+    ListReinfLayer capas_armado; //!< Rebar layers container.
 
-    lst_sis_ref sistemas_referencia; //!< Lista de sistemas de referencia.
-    size_t tag_sis_ref; //!< Identificador por defecto para el próximo sistema de referencia.
+    lst_sis_ref sistemas_referencia; //!< Spatial reference systems.
+    size_t tag_sis_ref; //!< Default identifier for next spatial reference system.
 
-    lst_spots spots; //!< Lista de puntos.
-    size_t tag_spot; //!< Identificador por defecto para el próximo punto.
-    lst_ejes ejes; //!< Lista de ejes.
-    size_t tag_eje; //!< Identificador por defecto para el próximo eje.
+    lst_spots spots; //!< Point container.
+    size_t tag_spot; //!< Default identifier for next point.
+    lst_ejes ejes; //!< Axis container.
+    size_t tag_eje; //!< Default identifier for next axis.
 
   public:
     //Constructores

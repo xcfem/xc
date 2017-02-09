@@ -46,7 +46,7 @@ class Response;
 
 //! @ingroup NDMat
 //
-//! @defgroup SoilNDMat Materiales para modelizar suelos.
+//! @defgroup SoilNDMat Constitutive models for soil materials.
 //
 //! @ingroup SoilNDMat
 //

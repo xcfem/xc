@@ -271,8 +271,8 @@ void XC::SectionAggregator::setAddtions(const std::vector<std::string> &response
     theAdditions.putMatCodes(codes);
     const size_t n= nmbMats.size();
     if(n!= responseCodes.size())
-      std::cerr << "Error en el número de materiales; número de índices: " << responseCodes.size()
-                << " número de materiales: " << n << std::endl;
+      std::cerr << "Error in number of materials; index number: " << responseCodes.size()
+                << " number of materials: " << n << std::endl;
     for(size_t i= 0;i<n;i++)
       {
         const Material *ptr_mat= material_loader->find_ptr(nmbMats[i]);
@@ -502,7 +502,7 @@ int XC::SectionAggregator::getOrder(void) const
     return order;
   }
 
-//! @brief Consuma el estado de los materiales tras alcanzar la convergencia.
+//! @brief Commits material state after convergence.
 int XC::SectionAggregator::commitState(void)
   {
     int err= 0;
@@ -512,7 +512,7 @@ int XC::SectionAggregator::commitState(void)
     return err;
   }
 
-//! @brief Devuelve el estado de la sección al último consumado.
+//! @brief Returns the material to the las commited state.
 int XC::SectionAggregator::revertToLastCommit(void)
   {
     int err= 0;

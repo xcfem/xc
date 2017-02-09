@@ -63,7 +63,7 @@ class ListRegiones: protected std::list<RegionSecc *>, public SeccionInerte
     void copia(const ListRegiones &otra);
   protected:
 
-    MaterialLoader *material_loader; //!< Gestor de materiales (búsqueda,...).
+    MaterialLoader *material_loader; //!< Material definition handler (searching,...).
   public:
 
     ListRegiones(MaterialLoader *ml);

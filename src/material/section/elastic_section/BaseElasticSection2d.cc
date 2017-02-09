@@ -60,7 +60,7 @@ void XC::BaseElasticSection2d::sectionGeometry(const std::string &cod_geom)
                         << cod_geom << "'" << std::endl;
       }
     else
-      std::cerr << "El puntero al cargador de materiales es nulo." << std::endl;
+      std::cerr << "Null pointer to matrix handler." << std::endl;
   }
 
 //! brief Returns strain at position being passed as parameter.

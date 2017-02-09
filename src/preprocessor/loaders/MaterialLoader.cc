@@ -210,20 +210,20 @@ XC::Material *load_uniaxial_fedeas_material(int tag_mat,const std::string &cmd)
     return retval;
   }
 
-//! @brief Procesa los comandos que se emplean para definir
-//! materiales uniaxiales para su empleo en el modelo de
-//! elementos finitos. Interpreta los siguientes comandos:
+//! @brief Process the commands used to define uniaxial materials
+//! to be used in the finite element model.
+//! Interprets the following commands:
 //!
-//! - elastic_material: Define un material uniaxial elástico lineal.
-//! - elasticpp_material: Define un material uniaxial elastoplástico perfecto.
-//! - epp_gap_material: Define una material uniaxial elastoplástico perfecto con «gap».
-//! - cable_material: Define un material uniaxial de tipo «cable» sin resistencia a compresión.
-//! - concrete01_material: Define un material uniaxial para representar el comportamiento del hormigón.
-//! - concrete02_material: Uniaxial material for concrete with tension stiffeness.
-//! - concrete04_material: Define un material uniaxial para representar el comportamiento del hormigón.
-//! - steel01: Define un material uniaxial para representar el comportamiento del acero.
-//! - steel02: Define un material uniaxial para representar el comportamiento del acero.
-//! - steel03: Define un material uniaxial para representar el comportamiento del acero.
+//! - elastic_material: Linear elastic uniaxial material (ElasticMaterial).
+//! - elasticpp_material: Elastic perfectly plastic uniaxial material (ElasticPPMaterial).
+//! - epp_gap_material: Elastic perfectly plastic uniaxial material with "gap"(EPPGapMaterial).
+//! - cable_material: CableMaterial (no compression).
+//! - concrete01_material: Concrete01 uniaxial material.
+//! - concrete02_material: Concrete02 uniaxial material.
+//! - concrete04_material: Concrete04 uniaxial material.
+//! - steel01: Steel01 material.
+//! - steel02: Steel02 material.
+//! - steel03: Steel03 material.
 XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
@@ -274,16 +274,14 @@ XC::Material *load_uniaxial_material(int tag_mat,const std::string &cmd)
     return retval;
   }
 
-//! @brief Procesa los comandos que se emplean para definir
-//! materiales nD para su empleo en el modelo de
-//! elementos finitos. Interpreta los siguientes comandos:
+//! @brief Process the commands used to define nD materials to
+//! be used in the finite element model.
+//! Interprets the following commands:
 //!
-//! - elastic_cross_anisotropic: Define un material elástico anisótropo.
-//! - elastic_isotropic_3d: Define un material elástico isótropo.
-//! - elastic_isotropic_plane_stress_2d: Define un material
-//!   elástico isótropo para problemas de tensión plana.
-//! - elastic_isotropic_plane_strain_2d: Define un material
-//!   elástico isótropo para problemas de deformación plana.
+//! - elastic_cross_anisotropic: ElasticCrossAnisotropic material.
+//! - elastic_isotropic_3d: ElasticIsotropic3D material.
+//! - elastic_isotropic_plane_stress_2d: ElasticIsotropicPlaneStress material.
+//! - elastic_isotropic_plane_strain_2d: ElasticIsotropicPlaneStrain material.
 XC::Material *load_nD_material(int tag_mat,const std::string &cmd)
   {
     XC::Material *retval= nullptr;
@@ -358,9 +356,9 @@ XC::Material *load_nD_soil_material(int tag_mat,const std::string &cmd)
     return retval;
   }
 
-//! @brief Procesa los comandos que se emplean para definir
-//! materiales para láminas. Interpreta los siguientes comandos:
-//!
+//! @brief Process the commands used to define membrane/plate/shell materials to
+//! be used in the finite element model.
+//! Interprets the following commands:
 //! - elastic_membrane_plate_section: Define un material elástico para problemas de láminas.
 //! - elastic_plate_section: Define un material elástico para problemas de placas.
 XC::Material *load_plate_section_material(int tag_mat,const std::string &cmd,XC::MaterialLoader *mloader)
@@ -375,9 +373,9 @@ XC::Material *load_plate_section_material(int tag_mat,const std::string &cmd,XC:
     return retval;
   }
 
-//! @brief Procesa los comandos que se emplean para definir
-//! materiales de tipo sección para su empleo en el modelo de
-//! elementos finitos. Interpreta los siguientes comandos:
+//! @brief Process the commands used to define cross section materials to
+//! be used in the finite element model.
+//! Interprets the following commands:
 //!
 //! - elastic_section_2d: Define una sección de material elástico para problemas planos.
 //! - elastic_shear_section_2d: Define una sección de material elástico

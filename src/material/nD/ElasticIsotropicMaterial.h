@@ -75,7 +75,7 @@ namespace XC {
 //
 //! @ingroup EINDMat
 //
-//! @brief Clase base para los materiales elásticos e isótropos.
+//! @brief Base class for elastic isotropic materials.
 class ElasticIsotropicMaterial : public NDMaterial
   {
   protected:

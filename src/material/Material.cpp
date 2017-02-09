@@ -76,16 +76,16 @@ const XC::MaterialLoader *XC::Material::GetMaterialLoader(void) const
   {
     const XC::MaterialLoader *retval= dynamic_cast<const MaterialLoader *>(Owner());
     if(!retval)
-      std::cerr << "Material::GetMaterialLoader; el puntero al cargador de materiales es nulo." << std::endl;
+      std::cerr << "Material::GetMaterialLoader; material handler not defined." << std::endl;
     return retval;
   }
 
-//! @brief Devuelve (si puede) un puntero al cargador de materiales.
+//! @brief Returs a pointer to the material handler (if possible).
 XC::MaterialLoader *XC::Material::GetMaterialLoader(void)
   {
     XC::MaterialLoader *retval= dynamic_cast<MaterialLoader *>(Owner());
     if(!retval)
-      std::cerr << "Material::GetMaterialLoader; el puntero al cargador de materiales es nulo." << std::endl;
+      std::cerr << "Material::GetMaterialLoader; material handler not defined." << std::endl;
     return retval;
   }
 

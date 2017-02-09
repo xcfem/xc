@@ -47,8 +47,8 @@ XC::Matrix XC::FiberSectionShear3d::ks(6,6);
 XC::Matrix XC::FiberSectionShear3d::fs(6,6);
 
 
-//! @brief Libera la memoria ocupada por los materiales
-//! que definen las resputestas a cortante y torsión.
+//! @brief Frees memory occupied by materials that define
+//! shear and torsion responses.
 void XC::FiberSectionShear3d::liberaRespVyVzT(void)
   {
     if(respVy)
@@ -348,7 +348,7 @@ const XC::ResponseId &XC::FiberSectionShear3d::getType(void) const
 int XC::FiberSectionShear3d::getOrder(void) const
   { return 6; }
 
-//! @brief Consuma el estado de los materiales tras alcanzar la convergencia.
+//! @brief Commit material state (normally after convergence is achieved).
 int XC::FiberSectionShear3d::commitState(void)
   {
     int err= FiberSection3d::commitState();
@@ -358,7 +358,7 @@ int XC::FiberSectionShear3d::commitState(void)
     return err;
   }
 
-//! @brief Devuelve el estado de la sección al último consumado.
+//! @brief Returns the material to the last commited state.
 int XC::FiberSectionShear3d::revertToLastCommit(void)
   {
     int err= FiberSection3d::revertToLastCommit();

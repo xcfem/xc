@@ -46,7 +46,7 @@ class TrfGeom;
 //! 
 class DqPtrsNode: public DqPtrs<Node>
   {
-    KDTreeNodes kdtreeNodos; //!< KDTree para acelerar la búsqueda de nodos por coordenadas.
+    KDTreeNodes kdtreeNodos; //!< space-partitioning data structure for organizing nodes.
   protected:
     void crea_arbol(void);
   public:

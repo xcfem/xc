@@ -150,7 +150,7 @@ void XC::DqUniaxialMaterial::clearAll(void)
     EntCmd::clearPyProps();
   }
 
-//! @brief Consuma el estado de los materiales tras alcanzar la convergencia.
+//! @brief Commit materials state (normally when convergence is achieved).
 int XC::DqUniaxialMaterial::commitState(void)
   {
     int err = 0;

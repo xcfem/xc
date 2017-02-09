@@ -146,8 +146,8 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
   {
     const size_t n= nmbMats.size();
     if(n!= dirs.size())
-    std::cerr << "Error en el número de materiales; número de direcciones: " << dirs.size()
-              << " número de materiales: " << n << std::endl;
+    std::cerr << "Error in number of materials; number of directions: " << dirs.size()
+              << " number of materials: " << n << std::endl;
     Preprocessor *preprocessor= GetPreprocessor();
     if(preprocessor)
       {

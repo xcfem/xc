@@ -45,7 +45,7 @@ class TrfGeom;
 //! 
 class DqPtrsElem: public DqPtrs<Element>
   {
-    KDTreeElements kdtreeElements; //!< KDTree para acelerar la búsqueda de elementos por coordenadas.
+    KDTreeElements kdtreeElements; //!< space-partitioning data structure for organizing elements (element centroids).
     inline iterator begin(void)
       { return DqPtrs<Element>::begin(); }
     inline iterator end(void)

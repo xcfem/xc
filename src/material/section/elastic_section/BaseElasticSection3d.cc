@@ -57,7 +57,7 @@ void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
                         << cod_geom << "'" << std::endl;
       }
     else
-      std::cerr << "El puntero al cargador de materiales es nulo." << std::endl;
+      std::cerr << "Material handler not defined." << std::endl;
   }
 
 //! \brief Devuelve los parámetros estáticos de la sección.

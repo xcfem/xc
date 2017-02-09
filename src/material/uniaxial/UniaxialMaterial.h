@@ -84,11 +84,11 @@ class SectionForceDeformation;
 //
 //! @ingroup MatUnx
 //
-//! @brief Clase base para los materiales unidimensionales.
+//! @brief Base class for uniaxial materials.
 class UniaxialMaterial : public Material
   {
   private:
-    double rho; //!< Masa por unidad de longitud.
+    double rho; //!< Linear mass density.
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

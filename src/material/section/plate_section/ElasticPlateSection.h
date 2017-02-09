@@ -62,8 +62,7 @@
 namespace XC {
 //! \ingroup MATPLAC
 //
-//! @brief Sección elástica para materiales bidimensionales
-//! (como los de placas).
+//! @brief Bidimensional elastic section for plate modellings.
 class ElasticPlateSection: public ElasticPlateProto<5>
   {
   public: 

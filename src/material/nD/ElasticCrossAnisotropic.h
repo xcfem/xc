@@ -63,7 +63,7 @@
 namespace XC {
 //! @ingroup NDMat
 //
-//! @brief Clase base para los materiales elásticos y anisótropos.
+//! @brief Base class for elastic anisotropic materials.
 class ElasticCrossAnisotropic : public NDMaterial
   {
   private:

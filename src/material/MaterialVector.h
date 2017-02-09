@@ -38,16 +38,15 @@
 
 namespace XC {
 
-//! @ingroup MatUnx
+//! @ingroup Mat
 //
-//! @brief Vector de punteros a materiales.
-//! se emplea en los elementos para guardar los materiales
-//! en los puntos de integración.
+//! @brief Material pointer container. It's used by
+//! elements to store materials for each integration point.
 template <class MAT>
 class MaterialVector: public std::vector<MAT *>, public EntCmd, public MovableObject
   {
   protected:
-    void borra_materiales(void);
+    void clear_materials(void);
     void clearAll(void);
     void alloc(const std::vector<MAT *> &mats);
 
@@ -112,7 +111,7 @@ MaterialVector<MAT>::MaterialVector(const size_t &nMat,const MAT *matModel)
       }
   }
 
-//! @brief Copia los materiales.
+//! @brief Copy materials from another vector.
 template <class MAT>
 void MaterialVector<MAT>::alloc(const std::vector<MAT *> &mats)
   {
@@ -147,7 +146,7 @@ MaterialVector<MAT> &MaterialVector<MAT>::operator=(const MaterialVector<MAT> &o
 template <class MAT>
 void MaterialVector<MAT>::setMaterial(const MAT *nuevo_mat)
   {
-    borra_materiales();
+    clear_materials();
     if(nuevo_mat)
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
@@ -162,7 +161,7 @@ void MaterialVector<MAT>::setMaterial(const MAT *nuevo_mat)
 template <class MAT>
 void MaterialVector<MAT>::setMaterial(const MAT *nuevo_mat, const std::string &tipo)
   {
-    borra_materiales();
+    clear_materials();
     if(nuevo_mat)
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
@@ -183,7 +182,7 @@ void MaterialVector<MAT>::setMaterial(size_t i,MAT *nuevo_mat)
   }
 
 template <class MAT>
-void MaterialVector<MAT>::borra_materiales(void)
+void MaterialVector<MAT>::clear_materials(void)
   {
     for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
       {
@@ -205,12 +204,12 @@ bool MaterialVector<MAT>::empty(void) const
 template <class MAT>
 void MaterialVector<MAT>::clearAll(void)
   {
-    borra_materiales();
+    clear_materials();
     std::vector<MAT *>::clear();
   }
 
 
-//! @brief Consuma el estado de los materiales.
+//! @brief Commits materials state (normally after convergence).
 template <class MAT>
 int MaterialVector<MAT>::commitState(void)
   {
@@ -221,7 +220,7 @@ int MaterialVector<MAT>::commitState(void)
     return retVal;
   }
 
-//! @brief Devuelve el estado de los materiales al del último commit.
+//! @brief Returns materials to its last commited state.
 template <class MAT>
 int MaterialVector<MAT>::revertToLastCommit(void)
   {
@@ -233,7 +232,7 @@ int MaterialVector<MAT>::revertToLastCommit(void)
   }
 
 
-//! @brief Devuelve el estado de los materiales al inicial.
+//! @brief Return materials to its initial state.
 template <class MAT>
 int MaterialVector<MAT>::revertToStart(void)
   {
@@ -432,8 +431,7 @@ m_double MaterialVector<MAT>::getGeneralizedStrain(const int &defID) const
     return retval;
   }
 
-//! \brief Asigna valores a las deformaciones iniciales de los
-//! materiales de este contenedor.
+//! \brief Assigns initial values to materials initial deformations.
 template <class MAT>
 void MaterialVector<MAT>::setInitialGeneralizedStrains(const std::vector<Vector> &iS)
   {
@@ -447,8 +445,7 @@ void MaterialVector<MAT>::setInitialGeneralizedStrains(const std::vector<Vector>
       (*this)[i]->setInitialGeneralizedStrain(iS[i]);
   }
 
-//! \brief Añade los valores que se pasan como parámetro a las deformaciones iniciales de los
-//! materiales de este contenedor.
+//! \brief Adds to the materials initial deformations the values being passed as parameters.
 template <class MAT>
 void MaterialVector<MAT>::addInitialGeneralizedStrains(const std::vector<Vector> &iS)
   {

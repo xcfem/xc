@@ -94,7 +94,7 @@ XC::ProtoElementLoader::ProtoElementLoader(Preprocessor *preprocessor)
   : Loader(preprocessor), nmb_mat("nil"), num_sec(3), dim_elem(0), nmb_transf("nil"), nmb_integ("Lobatto"), dir(0)
  {}
 
-//! @brief Devuelve una referencia al cargador de materiales.
+//! @brief Returns a reference to the material handler.
 XC::MaterialLoader &XC::ProtoElementLoader::get_material_loader(void) const
   { return preprocessor->getMaterialLoader(); }
 

@@ -62,11 +62,11 @@ namespace XC {
   class fdEvolution_T;
 //! @ingroup NDMat
 //
-//! @defgroup FDNDMat Materiales con deformación finita.
+//! @defgroup FDNDMat Finite deformation materials.
 //
 //! @ingroup FDNDMat
 //
-//! @brief Material elastoplástico con deformación finita en tres dimensiones.
+//! @brief Finite deformation elasto-plastic 3D material.
 class FiniteDeformationEP3D: public NDMaterial
   {
 

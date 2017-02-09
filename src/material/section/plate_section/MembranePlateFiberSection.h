@@ -67,8 +67,7 @@ class NDMaterial;
 
 //! \ingroup MATPLAC
 //
-//! @brief Sección modelizada mediante fibras para materiales capaces de
-//! trabajar como placa y como membrana.
+//! @brief Fiber model for plate/membrane materials.
 class MembranePlateFiberSection: public PlateBase
   {
   private:

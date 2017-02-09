@@ -72,18 +72,18 @@ class Mesh: public MeshComponentContainer
 
     TaggedObjectStorage *theNodes; //!< Contenedor de nodos.
     SingleDomNodIter *theNodIter; //!< Iterador sobre nodos.
-    KDTreeNodes kdtreeNodos; //!< KDTree para acelerar la búsqueda de nodos por coordenadas.
-    std::vector<std::string> nombresCoordenadas; //!< Nombres de las coordenadas ("X","Y","Z",...).
-    std::string nombreUnidades; //!< Nombres de las unidades ("cm","m","in",...).
+    KDTreeNodes kdtreeNodos; //!< space-partitioning data structure for organizing nodes.
+    std::vector<std::string> nombresCoordenadas; //!< Coordinate names ("X","Y","Z",...).
+    std::string nombreUnidades; //!< Units names ("cm","m","in",...).
 
     TaggedObjectStorage *theElements;
     SingleDomEleIter *theEleIter;
-    KDTreeElements kdtreeElements; //!< KDTree search finite element by its position (x,y,x).
+    KDTreeElements kdtreeElements; //!< space-partitioning data structure for organizing nodes. Search finite element by its position (x,y,x).
 
     Vector theBounds;
     int tagNodeCheckReactionException;//!< excepción para comprobación de reacciones (ver Domain::checkNodalReactions).
 
-    NodeLockers lockers; //!< Para bloquear los nodos desactivados.
+    NodeLockers lockers; //!< To block deactivated (dead) nodes.
 
     void alloc_contenedores(void);
     void alloc_iters(void);
