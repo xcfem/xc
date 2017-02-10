@@ -10,4 +10,12 @@ utils_geom
     :undoc-members:
     :show-inheritance:
 
+tensegrity
+----------
+
+.. automodule:: model.geometry.tensegrity
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 

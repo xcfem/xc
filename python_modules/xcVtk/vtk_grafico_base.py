@@ -63,6 +63,8 @@ class RecordDefDisplay(object):
   :ivar bgRComp:     red component (defaults to 0.65)
   :ivar bgGComp:     green component (defaults to 0.65)
   :ivar bgBComp:     blue component (defaults to 0.65)
+  :ivar hCamFct:     factor that applies to the height of the camera position in order to
+                     change perspertive of isometric views (defaults to 1). Usual values 0.1 to 10
   '''
   def __init__(self):
     self.renderer= None
@@ -75,73 +77,19 @@ class RecordDefDisplay(object):
     self.bgRComp= 0.65
     self.bgGComp= 0.65
     self.bgBComp= 0.65
+    self.hCamFct=1.0
 
-  def ViewYNeg(self):
-    '''View from negative Y axis (Y-)'''
+  def setView(self,viewUpVc,posCVc):
+    '''Sets the view
+
+    :param viewUpVc: vector defined as [x,y,z] to orient the view. This vector of the
+                     model is placed in vertical orientation in the display
+    :param posCVc:    vector defined as [x,y,z] that points to the camera position
+    '''
     self.renderer.ResetCamera()
     cam= self.renderer.GetActiveCamera()
-    cam.SetViewUp(0,0,1)
-    cam.SetPosition(0,-100,0)
-    cam.SetParallelProjection(1)
-    cam.Zoom(self.zoom)
-    self.renderer.ResetCameraClippingRange()
-
-  def ViewYPos(self):
-    '''View from positive Y axis (Y+)'''
-    self.renderer.ResetCamera()
-    cam= self.renderer.GetActiveCamera()
-    cam.SetViewUp(0,0,1)
-    cam.SetPosition(0,100,0)
-    cam.SetParallelProjection(1)
-    cam.Zoom(self.zoom)
-    self.renderer.ResetCameraClippingRange()
-
-  def ViewXNeg(self):
-    '''View from negative X axis (X-)'''
-    self.renderer.ResetCamera()
-    cam= self.renderer.GetActiveCamera()
-    cam.SetViewUp(0,0,1)
-    cam.SetPosition(-100,0,0)
-    cam.SetParallelProjection(1)
-    cam.Zoom(self.zoom)
-    self.renderer.ResetCameraClippingRange()
-
-  def ViewXPos(self):
-    '''View from positive X axis (X+)'''
-    self.renderer.ResetCamera()
-    cam= self.renderer.GetActiveCamera()
-    cam.SetViewUp(0,0,1)
-    cam.SetPosition(100,0,0)
-    cam.SetParallelProjection(1)
-    cam.Zoom(self.zoom)
-    self.renderer.ResetCameraClippingRange()
-
-  def ViewZPos(self):
-    '''View from positive Z axis (Z+)'''
-    self.renderer.ResetCamera()
-    cam= self.renderer.GetActiveCamera()
-    cam.SetViewUp(0,1,0)
-    cam.SetPosition(0,0,100)
-    cam.SetParallelProjection(1)
-    cam.Zoom(self.zoom)
-    self.renderer.ResetCameraClippingRange()
-
-  def ViewZNeg(self):
-    '''View from negative Z axis (Z-)'''
-    self.renderer.ResetCamera()
-    cam= self.renderer.GetActiveCamera()
-    cam.SetViewUp(0,1,0)
-    cam.SetPosition(0,0,-100)
-    cam.SetParallelProjection(1)
-    cam.Zoom(self.zoom)
-    self.renderer.ResetCameraClippingRange()
-
-  def ViewXYZPos(self):
-    '''View from point (1,1,1)'''
-    self.renderer.ResetCamera()
-    cam= self.renderer.GetActiveCamera()
-    cam.SetViewUp(-1,-1,1)
-    cam.SetPosition(100,100,100)
+    cam.SetViewUp(viewUpVc[0],viewUpVc[1],viewUpVc[2])
+    cam.SetPosition(posCVc[0],posCVc[1],posCVc[2])
     cam.SetParallelProjection(1)
     cam.Zoom(self.zoom)
     self.renderer.ResetCameraClippingRange()
@@ -149,21 +97,31 @@ class RecordDefDisplay(object):
   def defineView(self):
     '''Sets the view for the following predefined viewNames:
     "ZPos","ZNeg","YPos","YNeg","XPos","XNeg","XYZPos"
+    Zpos: View from positive Z axis (Z+)
+    Zneg: View from negative Z axis (Z-)
+    Ypos: View from positive Y axis (Y+)
+    Yneg: View from negative Y axis (Y-)
+    Xpos: View from positive X axis (X+)
+    Xneg: View from negative X axis (X-)
+    XYZPos: View from point (1,1,1)
+    XYZNeg: View from point (-1,-1,-1)
     '''
     if(self.viewName=="ZPos"):
-      self.ViewZPos()
+      self.setView(viewUpVc=[0,1,0],posCVc=[0,0,100])
     elif(self.viewName=="ZNeg"):
-      self.ViewZNeg()
+      self.setView(viewUpVc=[0,1,0],posCVc=[0,0,-100])
     elif(self.viewName=="YPos"):
-      self.ViewYPos()
+      self.setView(viewUpVc=[0,0,1],posCVc=[0,100,0])
     elif(self.viewName=="YNeg"):
-      self.ViewYNeg()
+      self.setView(viewUpVc=[0,0,1],posCVc=[0,-100,0])
     elif(self.viewName=="XPos"):
-      self.ViewXPos()
+      self.setView(viewUpVc=[0,0,1],posCVc=[100,0,0])
     elif(self.viewName=="XNeg"):
-      self.ViewXNeg()
+      self.setView(viewUpVc=[0,0,1],posCVc=[-100,0,0])
     elif(self.viewName=="XYZPos"):
-      self.ViewXYZPos()
+      self.setView(viewUpVc=[-1,-1,1],posCVc=[100,100,self.hCamFct*100])
+    elif(self.viewName=="XYZNeg"):
+      self.setView(viewUpVc=[-1,-1,1],posCVc=[-100,-100,-1*self.hCamFct*100])
     else:
       sys.stderr.write("View name: '"+self.viewName+"' unknown.")
 
