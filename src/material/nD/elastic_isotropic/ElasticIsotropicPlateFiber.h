@@ -67,13 +67,12 @@
 namespace XC {
 //! @ingroup EINDMat
 //
-//! @brief Material elástico e isótropo para
-//! problemas de placas.
+//! @brief Elastic isotropic material for plate elements.
 class ElasticIsotropicPlateFiber : public ElasticIsotropicMaterial
   {
   private:
-    static Vector sigma;	// Stress vector ... class-wide for returns
-    static Matrix D;		// Elastic constants
+    static Vector sigma; //!< Stress vector ... class-wide for returns
+    static Matrix D; //!< Elastic constants
   public:
     ElasticIsotropicPlateFiber(int tag, double E, double nu, double rho);
     ElasticIsotropicPlateFiber(int tag);

@@ -41,10 +41,10 @@ reinforcementA.p1= geom.Pos2d(0.0,b/2-bw/2+0.05)
 reinforcementA.p2= geom.Pos2d(0.0,b/2+bw/2-0.05)
 
 
-area= geomPrueba.getAreaSeccHomogeneizada(Ec)
-G= geomPrueba.getCdgSeccHomogeneizada(Ec)
-Iy= geomPrueba.getIySeccHomogeneizada(Ec)
-Iz= geomPrueba.getIzSeccHomogeneizada(Ec)
+area= geomPrueba.getAreaHomogenizedSection(Ec)
+G= geomPrueba.getCdgHomogenizedSection(Ec)
+Iy= geomPrueba.getIyHomogenizedSection(Ec)
+Iz= geomPrueba.getIzHomogenizedSection(Ec)
 
 
 

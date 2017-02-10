@@ -273,7 +273,7 @@ double XC::DqFibras::getPyz(const double &factor,const double &y0,const double &
   }
 
 //! @brief Devuelve el área de la sección homogeneizada.
-double XC::DqFibras::getAreaSeccHomogeneizada(const double &E0) const
+double XC::DqFibras::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
@@ -285,13 +285,13 @@ double XC::DqFibras::getAreaSeccHomogeneizada(const double &E0) const
         if(mat)
           retval+= (*i)->getArea()*(mat->getTangent()/E0);
         else
-          std::cerr << "DqFibras::getIySeccHomogeneizada; puntero a material nulo." << std::endl;
+          std::cerr << "DqFibras::getIyHomogenizedSection; puntero a material nulo." << std::endl;
       }
     return retval;
   }
 
 //! @brief Devuelve las coordenadas del CDG de la sección homogeneizada.
-const XC::Vector &XC::DqFibras::getCdgSeccHomogeneizada(const double &E0) const
+const XC::Vector &XC::DqFibras::getCdgHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
@@ -313,7 +313,7 @@ const XC::Vector &XC::DqFibras::getCdgSeccHomogeneizada(const double &E0) const
             Qy+= zLoc*areaFibraPond;
           }
         else
-          std::cerr << "DqFibras::getIySeccHomogeneizada; puntero a material nulo." << std::endl;
+          std::cerr << "DqFibras::getIyHomogenizedSection; puntero a material nulo." << std::endl;
       }
     static Vector retval(2);
     retval[0]= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
@@ -321,14 +321,14 @@ const XC::Vector &XC::DqFibras::getCdgSeccHomogeneizada(const double &E0) const
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección homogeneizada respecto al eje paralelo al y por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::DqFibras::getIySeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to y passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::DqFibras::getIyHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
-    const Vector &cdg= getCdgSeccHomogeneizada(E0);
+    const Vector &cdg= getCdgHomogenizedSection(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
@@ -337,21 +337,21 @@ double XC::DqFibras::getIySeccHomogeneizada(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*sqr((*i)->getLocZ()-cdg[1])*(mat->getTangent()/E0);
           else
-	    std::cerr << "DqFibras::getIySeccHomogeneizada; puntero a material nulo." << std::endl;
+	    std::cerr << "DqFibras::getIyHomogenizedSection; puntero a material nulo." << std::endl;
         }
       else
-        std::cerr << "DqFibras::getIySeccHomogeneizada; puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getIyHomogenizedSection; puntero a fibra nulo." << std::endl;
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección homogeneizada respecto al eje paralelo al z por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::DqFibras::getIzSeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to z passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::DqFibras::getIzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
-    const Vector &cdg= getCdgSeccHomogeneizada(E0);
+    const Vector &cdg= getCdgHomogenizedSection(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
@@ -360,21 +360,21 @@ double XC::DqFibras::getIzSeccHomogeneizada(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*sqr((*i)->getLocY()-cdg[0])*(mat->getTangent()/E0);
           else
-	    std::cerr << "DqFibras::getIzSeccHomogeneizada; puntero a material nulo." << std::endl;
+	    std::cerr << "DqFibras::getIzHomogenizedSection; puntero a material nulo." << std::endl;
         }
       else
-        std::cerr << "DqFibras::getIzSeccHomogeneizada; puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getIzHomogenizedSection; puntero a fibra nulo." << std::endl;
     return retval;
   }
 
-//! @brief Devuelve el producto de inercia de la sección homogeneizada respecto a los ejes paralelos al y y al z por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::DqFibras::getPyzSeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized product of inertia of the cross-section with respecto to the axis parallel to y and z passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::DqFibras::getPyzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
-    const Vector &cdg= getCdgSeccHomogeneizada(E0);
+    const Vector &cdg= getCdgHomogenizedSection(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
@@ -383,66 +383,66 @@ double XC::DqFibras::getPyzSeccHomogeneizada(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*((*i)->getLocZ()-cdg[1])*((*i)->getLocY()-cdg[0])*(mat->getTangent()/E0);
           else
-	    std::cerr << "DqFibras::getPyzSeccHomogeneizada; puntero a material nulo." << std::endl;
+	    std::cerr << "DqFibras::getPyzHomogenizedSection; puntero a material nulo." << std::endl;
         }
       else
-        std::cerr << "DqFibras::getPyzSeccHomogeneizada; puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getPyzHomogenizedSection; puntero a fibra nulo." << std::endl;
     return retval;
   }
 
 //! @brief Devuelve la componente i,j del tensor de inercia calculado respecto al CDG.
-double XC::DqFibras::getISeccHomogeneizada(const double &E0,const unsigned short int &i,const unsigned short int &j) const
+double XC::DqFibras::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
     double retval= 0.0;
     switch(k)
       {
         case 1: //(1,1)
-          retval= getIySeccHomogeneizada(E0);
+          retval= getIyHomogenizedSection(E0);
           break;
         case 2: //(2,1)
         case 3: //(1,2)
-          retval= -getPyzSeccHomogeneizada(E0);
+          retval= -getPyzHomogenizedSection(E0);
           break;
 	case 4:
-          retval= getIzSeccHomogeneizada(E0);
+          retval= getIzHomogenizedSection(E0);
           break;
       }
     return retval;
   }
 
 //! @brief Devuelve el tensor de inercia calculado desde el centro de gravedad del objeto.
-XC::Matrix &XC::DqFibras::getISeccHomogeneizada(const double &E0) const
+XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0) const
   {
     static Matrix i(2,2);
-    i(0,0)= getIySeccHomogeneizada(E0); i(0,1)= -getPyzSeccHomogeneizada(E0);
-    i(1,0)= i(0,1);   i(1,1)= getIzSeccHomogeneizada(E0);
+    i(0,0)= getIyHomogenizedSection(E0); i(0,1)= -getPyzHomogenizedSection(E0);
+    i(1,0)= i(0,1);   i(1,1)= getIzHomogenizedSection(E0);
     return i;
   }
 
 //! @brief Devuelve el tensor de inercia respector al punto o.
-XC::Matrix &XC::DqFibras::getISeccHomogeneizada(const double &E0,const Pos2d &o) const
+XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0,const Pos2d &o) const
   {
     static Matrix retval(2,2);
-    const Matrix Ig= getISeccHomogeneizada(E0);
+    const Matrix Ig= getIHomogenizedSection(E0);
     Vector O(2); O[0]= o.x(); O[1]= o.y();
-    const Vector og= getCdgSeccHomogeneizada(E0) - O;
-    const double m= getAreaSeccHomogeneizada(E0);
+    const Vector og= getCdgHomogenizedSection(E0) - O;
+    const double m= getAreaHomogenizedSection(E0);
     retval= Ig+m*(og.Norm2()*identity(Ig)-(og & og));
     return retval;
   }
 
 //! @brief Devuelve el momento de inercia respecto al eje que pasa por O con dirección la de e.
-double XC::DqFibras::getISeccHomogeneizada(const double &E0,const Pos2d &O,const Vector &e) const
+double XC::DqFibras::getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const
   {
-    const Matrix Io(getISeccHomogeneizada(E0,O));
+    const Matrix Io(getIHomogenizedSection(E0,O));
     return dot(e,Io*e)/e.Norm2();
   }
 
 //! @brief Devuelve el momento de inercia respecto a la recta que se pasa
 //! como parámetro.
-double XC::DqFibras::getISeccHomogeneizada(const double &E0,const Recta2d &r) const
-  { return getISeccHomogeneizada(E0,r.Punto(),Vector(r.VDir()));  }
+double XC::DqFibras::getIHomogenizedSection(const double &E0,const Recta2d &r) const
+  { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir()));  }
 
 //! @brief Devuelve el momento estático de las áreas de las fibras situadas por encima de yf (y_fibra-yf > 0)
 //! respecto al eje paralelo al z cuya y se pasa como parámetro (brazo= y_fibra-y0).
@@ -528,7 +528,7 @@ double XC::DqFibras::getSyNeg(const double &zf,const double &z0,const double &fa
 
 //! @brief Devuelve el momento estático de las áreas de las fibras situadas dentro
 //! del semiplano being passed as parameter.
-double XC::DqFibras::getSPosSeccHomogeneizada(const double &E0,const Semiplano2d &sp) const
+double XC::DqFibras::getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
@@ -544,7 +544,7 @@ double XC::DqFibras::getSPosSeccHomogeneizada(const double &E0,const Semiplano2d
               retval+= (*i)->getArea()*(mat->getTangent()/E0)*d;
           }
         else
-          std::cerr << "DqFibras::getSPosSeccHomogeneizada; puntero a material nulo." << std::endl;
+          std::cerr << "DqFibras::getSPosHomogenizedSection; puntero a material nulo." << std::endl;
       }
     return retval;
   }
@@ -552,7 +552,7 @@ double XC::DqFibras::getSPosSeccHomogeneizada(const double &E0,const Semiplano2d
 
 //! @brief Devuelve el momento estático de las áreas de las fibras situadas fuera
 //! del semiplano being passed as parameter.
-double XC::DqFibras::getSNegSeccHomogeneizada(const double &E0,const Semiplano2d &sp) const
+double XC::DqFibras::getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
@@ -568,7 +568,7 @@ double XC::DqFibras::getSNegSeccHomogeneizada(const double &E0,const Semiplano2d
               retval+= (*i)->getArea()*(mat->getTangent()/E0)*d;
           }
         else
-          std::cerr << "DqFibras::getSNegSeccHomogeneizada; puntero a material nulo." << std::endl;
+          std::cerr << "DqFibras::getSNegHomogenizedSection; puntero a material nulo." << std::endl;
       }
     return retval;
   }

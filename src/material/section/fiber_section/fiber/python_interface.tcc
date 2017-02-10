@@ -65,10 +65,10 @@ class_<dq_ptr_fibras, boost::noncopyable >("dq_ptr_fibras", no_init)
   .def(vector_indexing_suite<dq_ptr_fibras>())
   ;
 
-XC::Matrix &(XC::DqFibras::*getHomogenizedSectionITensor)(const double &) const= &XC::DqFibras::getISeccHomogeneizada;
-XC::Matrix &(XC::DqFibras::*getHomogenizedSectionITensorRelToPoint)(const double &,const Pos2d &) const= &XC::DqFibras::getISeccHomogeneizada;
-double (XC::DqFibras::*getHomogenizedSectionIRelTo)(const double &,const Pos2d &,const XC::Vector &) const= &XC::DqFibras::getISeccHomogeneizada;
-double (XC::DqFibras::*getHomogenizedSectionIRelToLine)(const double &, const Recta2d &) const= &XC::DqFibras::getISeccHomogeneizada;
+XC::Matrix &(XC::DqFibras::*getHomogenizedSectionITensor)(const double &) const= &XC::DqFibras::getIHomogenizedSection;
+XC::Matrix &(XC::DqFibras::*getHomogenizedSectionITensorRelToPoint)(const double &,const Pos2d &) const= &XC::DqFibras::getIHomogenizedSection;
+double (XC::DqFibras::*getHomogenizedSectionIRelTo)(const double &,const Pos2d &,const XC::Vector &) const= &XC::DqFibras::getIHomogenizedSection;
+double (XC::DqFibras::*getHomogenizedSectionIRelToLine)(const double &, const Recta2d &) const= &XC::DqFibras::getIHomogenizedSection;
 class_<XC::DqFibras, bases<EntCmd,dq_ptr_fibras>, boost::noncopyable >("DqFibras", no_init)
   .def("__iter__", boost::python::iterator<XC::DqFibras >())
   .def("insert",&XC::DqFibras::push_back,"inserts fiber pointer.")
@@ -148,8 +148,8 @@ class_<XC::DqFibras, bases<EntCmd,dq_ptr_fibras>, boost::noncopyable >("DqFibras
 //.def("Bnd",&XC::DqFibras::Bnd)
   .def("getSumaAreas",&XC::DqFibras::getSumaAreas)
   .def("getArea",&XC::DqFibras::getSumaAreas)
-  .def("getAreaSeccHomogeneizada",&XC::DqFibras::getAreaSeccHomogeneizada)
-  .def("getCdgSeccHomogeneizada",make_function(&XC::DqFibras::getCdgSeccHomogeneizada,return_internal_reference<>()))
+  .def("getAreaHomogenizedSection",&XC::DqFibras::getAreaHomogenizedSection)
+  .def("getCdgHomogenizedSection",make_function(&XC::DqFibras::getCdgHomogenizedSection,return_internal_reference<>()))
   .def("getIz",&XC::DqFibras::getIz)
   .def("getIy",&XC::DqFibras::getIy)
   .def("getPyz",&XC::DqFibras::getPyz)
@@ -158,9 +158,9 @@ class_<XC::DqFibras, bases<EntCmd,dq_ptr_fibras>, boost::noncopyable >("DqFibras
   .def("getTh1",&XC::DqFibras::getTh1)
   .def("getEje1",&XC::DqFibras::getEje1)
   .def("getEje2",&XC::DqFibras::getEje2)
-  .def("getIySeccHomogeneizada",&XC::DqFibras::getIySeccHomogeneizada)
-  .def("getIzSeccHomogeneizada",&XC::DqFibras::getIzSeccHomogeneizada)
-  .def("getPyzSeccHomogeneizada",&XC::DqFibras::getPyzSeccHomogeneizada)
+  .def("getIyHomogenizedSection",&XC::DqFibras::getIyHomogenizedSection)
+  .def("getIzHomogenizedSection",&XC::DqFibras::getIzHomogenizedSection)
+  .def("getPyzHomogenizedSection",&XC::DqFibras::getPyzHomogenizedSection)
   .def("getHomogenizedSectionITensor",make_function(getHomogenizedSectionITensor,return_internal_reference<>()))
   .def("getHomogenizedSectionITensorRelToPoint",make_function(getHomogenizedSectionITensorRelToPoint,return_internal_reference<>()))
   .def("getHomogenizedSectionIRelTo",getHomogenizedSectionIRelTo)
@@ -169,8 +169,8 @@ class_<XC::DqFibras, bases<EntCmd,dq_ptr_fibras>, boost::noncopyable >("DqFibras
   .def("getSzNeg",&XC::DqFibras::getSzNeg)
   .def("getSyPos",&XC::DqFibras::getSyPos)
   .def("getSyNeg",&XC::DqFibras::getSyNeg)
-  .def("getSPosSeccHomogeneizada",&XC::DqFibras::getSPosSeccHomogeneizada)
-  .def("getSNegSeccHomogeneizada",&XC::DqFibras::getSNegSeccHomogeneizada)
+  .def("getSPosHomogenizedSection",&XC::DqFibras::getSPosHomogenizedSection)
+  .def("getSNegHomogenizedSection",&XC::DqFibras::getSNegHomogenizedSection)
 
   .def("getIpolar",&XC::DqFibras::getIpolar)
   .def("getiz",&XC::DqFibras::getiz)

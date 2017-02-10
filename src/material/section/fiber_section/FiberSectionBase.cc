@@ -899,7 +899,7 @@ double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     const Recta2d eje= getEjeEsfuerzos();
-    return fibras.getISeccHomogeneizada(E0,eje);
+    return fibras.getIHomogenizedSection(E0,eje);
   }
 
 //! @brief Static moment relative to bending axis of area that rests over this axis.
@@ -908,7 +908,7 @@ double XC::FiberSectionBase::getSPosHomogeneizada(const double &E0) const
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     const Recta2d eje= getEjeEsfuerzos();
-    return fibras.getSPosSeccHomogeneizada(E0,Semiplano2d(eje));
+    return fibras.getSPosHomogenizedSection(E0,Semiplano2d(eje));
   }
 
 std::string XC::FiberSectionBase::getStrClaseEsfuerzo(const double &tol) const

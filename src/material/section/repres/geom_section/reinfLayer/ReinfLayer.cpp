@@ -120,7 +120,7 @@ double XC::ReinfLayer::getRecubrimiento(void) const
 XC::Vector XC::ReinfLayer::getCdg(void) const
   {
     const VectorReinfBar &barras= getReinfBars();
-    return barras.getCdgSeccBruta();
+    return barras.getCdgGrossSection();
   }
 
 // //! @brief Devuelve el subconjunto de barras de ésta que cumplen la condición que se

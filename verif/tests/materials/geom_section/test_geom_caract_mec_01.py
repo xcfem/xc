@@ -23,11 +23,11 @@ hormigon= regiones.newQuadRegion("hormigon")
 hormigon.pMin= geom.Pos2d(0.0,0.0)
 hormigon.pMax= geom.Pos2d(1.0,1.0)
 
-area= geomPrueba.getAreaSeccHomogeneizada(Ec)
-G= geomPrueba.getCdgSeccHomogeneizada(Ec)
-Iy= geomPrueba.getIySeccHomogeneizada(Ec)
-Iz= geomPrueba.getIzSeccHomogeneizada(Ec)
-Pyz= geomPrueba.getPyzSeccHomogeneizada(Ec)
+area= geomPrueba.getAreaHomogenizedSection(Ec)
+G= geomPrueba.getCdgHomogenizedSection(Ec)
+Iy= geomPrueba.getIyHomogenizedSection(Ec)
+Iz= geomPrueba.getIzHomogenizedSection(Ec)
+Pyz= geomPrueba.getPyzHomogenizedSection(Ec)
 
 areaTeor= lado*lado
 yGTeor= lado/2.0

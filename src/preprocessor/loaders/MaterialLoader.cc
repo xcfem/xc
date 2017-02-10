@@ -359,8 +359,8 @@ XC::Material *load_nD_soil_material(int tag_mat,const std::string &cmd)
 //! @brief Process the commands used to define membrane/plate/shell materials to
 //! be used in the finite element model.
 //! Interprets the following commands:
-//! - elastic_membrane_plate_section: Define un material elástico para problemas de láminas.
-//! - elastic_plate_section: Define un material elástico para problemas de placas.
+//! - elastic_membrane_plate_section: Elastic material for membrane elements.
+//! - elastic_plate_section: Elastic material for plate elements.
 XC::Material *load_plate_section_material(int tag_mat,const std::string &cmd,XC::MaterialLoader *mloader)
   {
     XC::Material *retval= nullptr;
@@ -377,17 +377,15 @@ XC::Material *load_plate_section_material(int tag_mat,const std::string &cmd,XC:
 //! be used in the finite element model.
 //! Interprets the following commands:
 //!
-//! - elastic_section_2d: Define una sección de material elástico para problemas planos.
-//! - elastic_shear_section_2d: Define una sección de material elástico
-//!   con rigidez a cortante para problemas planos.
-//! - elastic_section_3d: Define una sección de material elástico para problemas tridimensionales.
-//! - elastic_shear_section_3d: Define una sección de material elástico
-//!   con rigidez a cortante para problemas tridimensionales.
-//! - fiber_section_2d: Define un modelo de fibras para una sección (problemas planos).
-//! - fiber_section_3d: Define un modelo de fibras para una sección (problemas tridimensionales).
-//! - fiber_section_GJ: Define un modelo de fibras para una sección con rigidez
+//! - elastic_section_2d: Elastic material for 1D elements in 2D problems.
+//! - elastic_shear_section_2d: Elastic material with shear stiffness for 1D elements in 2D problems.
+//! - elastic_section_3d: Elastic material for 1D elements in 3D problems.
+//! - elastic_shear_section_3d: Elastic material with shear stiffness for 1D elements in 2D problems.
+//! - fiber_section_2d: Cross-section fiber model for 1D elements in 2D problems.
+//! - fiber_section_3d: Cross-section fiber model for 1D elements in 3D problems.
+//! - fiber_section_GJ: Cross-section fiber model for 1D elements with shear and torsion stiffness.
 //!    a torsión (problemas tridimensionales).
-//! - section_aggregator: Agrega propiedades mecánicas a una sección.
+//! - section_aggregator: Agreggation of cross-section mechanical properties.
 XC::Material *load_section_material(int tag_mat,const std::string &cmd,XC::MaterialLoader *mloader)
   {
     XC::Material *retval= nullptr;

@@ -214,8 +214,8 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     Pos2d GetPMin(void) const;
     BND2d Bnd(void) const;
     double getSumaAreas(const double &factor= 1.0) const;
-    double getAreaSeccHomogeneizada(const double &E0) const;
-    const Vector &getCdgSeccHomogeneizada(const double &E0) const;
+    double getAreaHomogenizedSection(const double &E0) const;
+    const Vector &getCdgHomogenizedSection(const double &E0) const;
     //Momento de inercia.
     double getIz(const double &factor= 1.0,const double &y0= 0.0) const;
     double getIy(const double &factor= 1.0,const double &z0= 0.0) const;
@@ -225,21 +225,21 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     double getTh1(const double &y0= 0.0,const double &z0= 0.0) const;
     Vector getEje1(const double &y0= 0.0,const double &z0= 0.0) const;
     Vector getEje2(const double &y0= 0.0,const double &z0= 0.0) const;
-    double getIySeccHomogeneizada(const double &) const;
-    double getIzSeccHomogeneizada(const double &) const;
-    double getPyzSeccHomogeneizada(const double &) const;
-    double getISeccHomogeneizada(const double &,const unsigned short int &,const unsigned short int &) const;
-    Matrix &getISeccHomogeneizada(const double &E0) const;
-    Matrix &getISeccHomogeneizada(const double &E0,const Pos2d &o) const;
-    double getISeccHomogeneizada(const double &E0,const Pos2d &O,const Vector &e) const;
-    double getISeccHomogeneizada(const double &E0,const Recta2d &r) const;
+    double getIyHomogenizedSection(const double &) const;
+    double getIzHomogenizedSection(const double &) const;
+    double getPyzHomogenizedSection(const double &) const;
+    double getIHomogenizedSection(const double &,const unsigned short int &,const unsigned short int &) const;
+    Matrix &getIHomogenizedSection(const double &E0) const;
+    Matrix &getIHomogenizedSection(const double &E0,const Pos2d &o) const;
+    double getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const;
+    double getIHomogenizedSection(const double &E0,const Recta2d &r) const;
     //Momento estático.
     double getSzPos(const double &yf,const double &y0,const double &factor= 1.0) const;
     double getSzNeg(const double &yf,const double &y0,const double &factor= 1.0) const;
     double getSyPos(const double &zf,const double &z0,const double &factor= 1.0) const;
     double getSyNeg(const double &zf,const double &z0,const double &factor= 1.0) const;
-    double getSPosSeccHomogeneizada(const double &E0,const Semiplano2d &sp) const;
-    double getSNegSeccHomogeneizada(const double &E0,const Semiplano2d &sp) const;
+    double getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
+    double getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
     
     //! @brief Devuelve el momento de inercia polar respecto a G.
     inline double getIpolar(const double &factor= 1.0) const

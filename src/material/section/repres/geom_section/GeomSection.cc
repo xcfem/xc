@@ -411,180 +411,180 @@ double XC::GeomSection::getRecubrimiento(const Pos2d &p) const
   }
 
 //! @brief Devuelve el área homogeneizada de las regiones.
-double XC::GeomSection::getAreaSeccHomogeneizada(const double &E0) const
+double XC::GeomSection::getAreaHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     if(!regiones.empty())
-      retval+= regiones.getAreaSeccHomogeneizada(E0);
+      retval+= regiones.getAreaHomogenizedSection(E0);
     if(!capas_armado.empty())
-      retval+= capas_armado.getAreaSeccHomogeneizada(E0);
+      retval+= capas_armado.getAreaHomogenizedSection(E0);
     return retval;
   }
 
-XC::Vector XC::GeomSection::getCdgSeccHomogeneizada(const double &E0) const
+XC::Vector XC::GeomSection::getCdgHomogenizedSection(const double &E0) const
   {
     Vector retval(2);
     double peso= 0.0;
     double divisor= 0.0;
-    peso= regiones.getAreaSeccHomogeneizada(E0);
-    retval+= peso*regiones.getCdgSeccHomogeneizada(E0);
+    peso= regiones.getAreaHomogenizedSection(E0);
+    retval+= peso*regiones.getCdgHomogenizedSection(E0);
     divisor+= peso;
-    peso= capas_armado.getAreaSeccHomogeneizada(E0);
-    retval+= peso*capas_armado.getCdgSeccHomogeneizada(E0);
+    peso= capas_armado.getAreaHomogenizedSection(E0);
+    retval+= peso*capas_armado.getCdgHomogenizedSection(E0);
     divisor+= peso;
     retval/= divisor;
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección homogeneizada respecto al eje paralelo al y por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::GeomSection::getIySeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to y passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::GeomSection::getIyHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgSeccHomogeneizada(E0)[1];
+    const double zCdg= getCdgHomogenizedSection(E0)[1];
 
     if(!regiones.empty())
       {
-        d= regiones.getCdgSeccHomogeneizada(E0)[1]-zCdg;
-        retval+= regiones.getIySeccHomogeneizada(E0)+regiones.getAreaSeccHomogeneizada(E0)*sqr(d);
+        d= regiones.getCdgHomogenizedSection(E0)[1]-zCdg;
+        retval+= regiones.getIyHomogenizedSection(E0)+regiones.getAreaHomogenizedSection(E0)*sqr(d);
       }
     if(!capas_armado.empty())
       {
-        d= capas_armado.getCdgSeccHomogeneizada(E0)[1]-zCdg;
-        retval+= capas_armado.getIySeccHomogeneizada(E0)+capas_armado.getAreaSeccHomogeneizada(E0)*sqr(d);
+        d= capas_armado.getCdgHomogenizedSection(E0)[1]-zCdg;
+        retval+= capas_armado.getIyHomogenizedSection(E0)+capas_armado.getAreaHomogenizedSection(E0)*sqr(d);
       }
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección homogeneizada respecto al eje paralelo al z por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::GeomSection::getIzSeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to z passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::GeomSection::getIzHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgSeccHomogeneizada(E0)[0];
+    const double yCdg= getCdgHomogenizedSection(E0)[0];
 
     if(!regiones.empty())
       {
-        d= regiones.getCdgSeccHomogeneizada(E0)[0]-yCdg;
-        retval+= regiones.getIzSeccHomogeneizada(E0)+regiones.getAreaSeccHomogeneizada(E0)*sqr(d);
+        d= regiones.getCdgHomogenizedSection(E0)[0]-yCdg;
+        retval+= regiones.getIzHomogenizedSection(E0)+regiones.getAreaHomogenizedSection(E0)*sqr(d);
       }
     if(!capas_armado.empty())
       {
-        d= capas_armado.getCdgSeccHomogeneizada(E0)[0]-yCdg;
-        retval+= capas_armado.getIzSeccHomogeneizada(E0)+capas_armado.getAreaSeccHomogeneizada(E0)*sqr(d);
+        d= capas_armado.getCdgHomogenizedSection(E0)[0]-yCdg;
+        retval+= capas_armado.getIzHomogenizedSection(E0)+capas_armado.getAreaHomogenizedSection(E0)*sqr(d);
       }
     return retval;
   }
 
-//! @brief Devuelve el producto de inercia de la sección homogeneizada respecto a los ejes paralelos al y y al z por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::GeomSection::getPyzSeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized product of inertia of the cross-section with respecto to the axis parallel to y and z passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::GeomSection::getPyzHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double d2= 0.0;
-    const double zCdg= getCdgSeccHomogeneizada(E0)[0];
-    const double yCdg= getCdgSeccHomogeneizada(E0)[0];
+    const double zCdg= getCdgHomogenizedSection(E0)[0];
+    const double yCdg= getCdgHomogenizedSection(E0)[0];
 
     if(!regiones.empty())
       {
-        d2= (regiones.getCdgSeccHomogeneizada(E0)[0]-yCdg)*(regiones.getCdgSeccHomogeneizada(E0)[1]-zCdg);
-        retval+= regiones.getPyzSeccHomogeneizada(E0)+regiones.getAreaSeccHomogeneizada(E0)*d2;
+        d2= (regiones.getCdgHomogenizedSection(E0)[0]-yCdg)*(regiones.getCdgHomogenizedSection(E0)[1]-zCdg);
+        retval+= regiones.getPyzHomogenizedSection(E0)+regiones.getAreaHomogenizedSection(E0)*d2;
       }
     if(!capas_armado.empty())
       {
-        d2= (capas_armado.getCdgSeccHomogeneizada(E0)[0]-yCdg)*(capas_armado.getCdgSeccHomogeneizada(E0)[1]-zCdg);
-        retval+= capas_armado.getPyzSeccHomogeneizada(E0)+capas_armado.getAreaSeccHomogeneizada(E0)*d2;
+        d2= (capas_armado.getCdgHomogenizedSection(E0)[0]-yCdg)*(capas_armado.getCdgHomogenizedSection(E0)[1]-zCdg);
+        retval+= capas_armado.getPyzHomogenizedSection(E0)+capas_armado.getAreaHomogenizedSection(E0)*d2;
       }
     return retval;
   }
 
-//! @brief Returns region's gross section.
-double XC::GeomSection::getAreaSeccBruta(void) const
+//! @brief Returns region's gross section area.
+double XC::GeomSection::getAreaGrossSection(void) const
   {
     double retval= 0.0;
     if(!regiones.empty())
-      retval+= regiones.getAreaSeccBruta();
+      retval+= regiones.getAreaGrossSection();
     // if(!capas_armado.empty())
-    //   retval+= capas_armado.getAreaSeccBruta();
+    //   retval+= capas_armado.getAreaGrossSection();
     return retval;
   }
 
-//! @brief Returns center of gravity of gross section.
-XC::Vector XC::GeomSection::getCdgSeccBruta(void) const
+//! @brief Returns gross section centroid position.
+XC::Vector XC::GeomSection::getCdgGrossSection(void) const
   {
-    return regiones.getCdgSeccBruta();
+    return regiones.getCdgGrossSection();
     // Vector retval(2);
-    // double peso= regiones.getAreaSeccBruta();
+    // double peso= regiones.getAreaGrossSection();
     // double divisor= 0.0;
-    // retval+= peso*regiones.getCdgSeccBruta();
+    // retval+= peso*regiones.getCdgGrossSection();
     // divisor+= peso;
-    // peso= capas_armado.getAreaSeccBruta();
-    // retval+= peso*capas_armado.getCdgSeccBruta();
+    // peso= capas_armado.getAreaGrossSection();
+    // retval+= peso*capas_armado.getCdgGrossSection();
     // divisor+= peso;
     // retval/= divisor;
     // return retval;
   }
 
-//! @brief Inertia of the gross section about an axis parallel to y through his center of gravity.
-double XC::GeomSection::getIySeccBruta(void) const
+//! @brief Inertia of the gross section about an axis parallel to y through its centroid.
+double XC::GeomSection::getIyGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgSeccBruta()[1];
+    const double zCdg= getCdgGrossSection()[1];
 
     if(!regiones.empty())
       {
-        d= regiones.getCdgSeccBruta()[1]-zCdg;
-        retval+= regiones.getIySeccBruta()+regiones.getAreaSeccBruta()*sqr(d);
+        d= regiones.getCdgGrossSection()[1]-zCdg;
+        retval+= regiones.getIyGrossSection()+regiones.getAreaGrossSection()*sqr(d);
       }
     // if(!capas_armado.empty())
     //   {
-    //     d= capas_armado.getCdgSeccBruta()[1]-zCdg;
-    //     retval+= capas_armado.getIySeccBruta()+capas_armado.getAreaSeccBruta()*sqr(d);
+    //     d= capas_armado.getCdgGrossSection()[1]-zCdg;
+    //     retval+= capas_armado.getIyGrossSection()+capas_armado.getAreaGrossSection()*sqr(d);
     //   }
     return retval;
   }
 
-//! @brief Inertia of the gross section about an axis parallel to z through his center of gravity.
-double XC::GeomSection::getIzSeccBruta(void) const
+//! @brief Inertia of the gross section about an axis parallel to z through its centroid
+double XC::GeomSection::getIzGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgSeccBruta()[0];
+    const double yCdg= getCdgGrossSection()[0];
 
     if(!regiones.empty())
       {
-        d= regiones.getCdgSeccBruta()[0]-yCdg;
-        retval+= regiones.getIzSeccBruta()+regiones.getAreaSeccBruta()*sqr(d);
+        d= regiones.getCdgGrossSection()[0]-yCdg;
+        retval+= regiones.getIzGrossSection()+regiones.getAreaGrossSection()*sqr(d);
       }
     // if(!capas_armado.empty())
     //   {
-    //     d= capas_armado.getCdgSeccBruta()[0]-yCdg;
-    //     retval+= capas_armado.getIzSeccBruta()+capas_armado.getAreaSeccBruta()*sqr(d);
+    //     d= capas_armado.getCdgGrossSection()[0]-yCdg;
+    //     retval+= capas_armado.getIzGrossSection()+capas_armado.getAreaGrossSection()*sqr(d);
     //   }
     return retval;
   }
 
-//! @brief Product of inertia of the gross section about y and z axis through his center of gravity.
-double XC::GeomSection::getPyzSeccBruta(void) const
+//! @brief Product of inertia of the gross section about y and z axis through its centroid.
+double XC::GeomSection::getPyzGrossSection(void) const
   {
     double retval= 0.0;
     double d2= 0.0;
-    const Vector posCdg= getCdgSeccBruta();
+    const Vector posCdg= getCdgGrossSection();
     const double zCdg= posCdg[1];
     const double yCdg= posCdg[0];
 
     if(!regiones.empty())
       {
-        d2= (regiones.getCdgSeccBruta()[0]-yCdg)*(regiones.getCdgSeccBruta()[1]-zCdg);
-        retval+= regiones.getPyzSeccBruta()+regiones.getAreaSeccBruta()*d2;
+        d2= (regiones.getCdgGrossSection()[0]-yCdg)*(regiones.getCdgGrossSection()[1]-zCdg);
+        retval+= regiones.getPyzGrossSection()+regiones.getAreaGrossSection()*d2;
       }
     // if(!capas_armado.empty())
     //   {
-    //     d2= (capas_armado.getCdgSeccBruta()[0]-yCdg)*(capas_armado.getCdgSeccBruta()[1]-zCdg);
-    //     retval+= capas_armado.getPyzSeccBruta()+capas_armado.getAreaSeccBruta()*d2;
+    //     d2= (capas_armado.getCdgGrossSection()[0]-yCdg)*(capas_armado.getCdgGrossSection()[1]-zCdg);
+    //     retval+= capas_armado.getPyzGrossSection()+capas_armado.getAreaGrossSection()*d2;
     //   }
     return retval;
   }

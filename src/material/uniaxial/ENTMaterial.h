@@ -58,12 +58,6 @@
 // Created: 07/98
 // Revision: A
 //
-// Description: This file contains the class definition for 
-// ENTMaterial. ENTMaterial provides the abstraction
-// of an viscoelastic uniaxial material,
-// i.e. stress = E*strain + eta*strainrate
-//
-//
 // What: "@(#) ENTMaterial.h, revA"
 
 #include <material/uniaxial/ElasticBaseMaterial.h>
@@ -71,10 +65,12 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Material elástico bajo compresión y que
-//! bajo tracción exhibe el siguiente comportamiento:
-//! stress = a*(tanh(strain*b))
-//! tangent = a*(1-tanh(strain*b)*tanh(strain*b));
+//! @brief Elastic no traction material. ENTMaterial
+//! provides the abstraction of an elastic uniaxial
+//! material under compression i.e. stress = E*strain
+//! under tension however it exhbits the following
+//!     stress = a*(tanh(strain*b))
+//!     tangent = a*(1-tanh(strain*b)*tanh(strain*b));
 class ENTMaterial : public ElasticBaseMaterial
   {
     double a;

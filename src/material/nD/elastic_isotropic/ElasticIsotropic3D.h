@@ -65,7 +65,7 @@
 namespace XC {
 //! @ingroup NDMat
 //
-//! @brief Material elásticos e isótropos para problemas tridimensionales.
+//! @brief Elastic isotropic material for 3D elements.
 class ElasticIsotropic3D : public ElasticIsotropicMaterial
   {
   private:

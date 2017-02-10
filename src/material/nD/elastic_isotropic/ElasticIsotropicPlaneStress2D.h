@@ -68,12 +68,11 @@
 namespace XC {
 //! @ingroup EINDMat
 //
-//! @brief Material elástico e isótropo para
-//! problemas de tensión plana.
+//! @brief Elastic isotropic material for plane stress problems.
 class ElasticIsotropicPlaneStress2D : public ElasticIsotropic2D
   {
   private:
-    static Vector sigma;	// Stress vector ... class-wide for returns
+    static Vector sigma; //!< Stress vector ... class-wide for returns
   public:
     ElasticIsotropicPlaneStress2D(int tag, double E, double nu, double rho);
     ElasticIsotropicPlaneStress2D(int tag);

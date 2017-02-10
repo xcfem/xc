@@ -91,17 +91,17 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SeccionInerte
     void getBarrasIn(const Poligono2d &,ListReinfLayer &,bool );
     void getBarrasIn(const Semiplano2d &,ListReinfLayer &,bool );
 
-    double getAreaSeccBruta(void) const;
-    Vector getCdgSeccBruta(void) const;
-    double getIySeccBruta(void) const;
-    double getIzSeccBruta(void) const;
-    double getPyzSeccBruta(void) const;
+    double getAreaGrossSection(void) const;
+    Vector getCdgGrossSection(void) const;
+    double getIyGrossSection(void) const;
+    double getIzGrossSection(void) const;
+    double getPyzGrossSection(void) const;
 
-    Vector getCdgSeccHomogeneizada(const double &E0) const;
-    double getAreaSeccHomogeneizada(const double &E0) const;
-    double getIySeccHomogeneizada(const double &E0) const;
-    double getIzSeccHomogeneizada(const double &E0) const;
-    double getPyzSeccHomogeneizada(const double &E0) const;
+    Vector getCdgHomogenizedSection(const double &E0) const;
+    double getAreaHomogenizedSection(const double &E0) const;
+    double getIyHomogenizedSection(const double &E0) const;
+    double getIzHomogenizedSection(const double &E0) const;
+    double getPyzHomogenizedSection(const double &E0) const;
 
     void Print(std::ostream &s) const;
   };

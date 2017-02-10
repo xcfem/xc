@@ -43,20 +43,20 @@ XC::SeccionInerte::SeccionInerte(EntCmd *owr)
 
 //! @brief Inertia of the homogenized section about an axis parallel to x through his center of gravity.
 //! @param E0: Elastic modulus used as reference.
-double XC::SeccionInerte::getIxSeccHomogeneizada(const double &E0) const
-  { return getIySeccHomogeneizada(E0)+getIzSeccHomogeneizada(E0); }
+double XC::SeccionInerte::getIxHomogenizedSection(const double &E0) const
+  { return getIyHomogenizedSection(E0)+getIzHomogenizedSection(E0); }
 
 
 
 //! @brief Agle of the principal axis of inertia of the homogenized section with respect of current axis.
-double XC::SeccionInerte::getTheta_pSeccHomogeneizada(void) const
-  { return theta_inercia(getIySeccHomogeneizada(1.0),getIzSeccHomogeneizada(1.0),getPyzSeccHomogeneizada(1.0)); }
+double XC::SeccionInerte::getTheta_pHomogenizedSection(void) const
+  { return theta_inercia(getIyHomogenizedSection(1.0),getIzHomogenizedSection(1.0),getPyzHomogenizedSection(1.0)); }
 
 //! @brief Direction of a principal axis of inertia of the homogenized section with respect of current axis.
 //! @param E0: Elastic modulus used as reference.
-XC::Vector XC::SeccionInerte::getDirEjeI_aSeccHomogeneizada(void) const
+XC::Vector XC::SeccionInerte::getDirEjeI_aHomogenizedSection(void) const
   {
-    const Dir2d p(getTheta_pSeccHomogeneizada());
+    const Dir2d p(getTheta_pHomogenizedSection());
     Vector retval(2);
     retval[0]= p.dx();
     retval[1]= p.dy();
@@ -65,9 +65,9 @@ XC::Vector XC::SeccionInerte::getDirEjeI_aSeccHomogeneizada(void) const
 
 //! @brief Direction of the other axis of inertia of the homogenized section with respect of current axis.
 //! @param E0: Elastic modulus used as reference.
-XC::Vector XC::SeccionInerte::getDirEjeI_bSeccHomogeneizada(void) const
+XC::Vector XC::SeccionInerte::getDirEjeI_bHomogenizedSection(void) const
   {
-    const Dir2d p= Dir2d(getTheta_pSeccHomogeneizada()).Perpendicular();
+    const Dir2d p= Dir2d(getTheta_pHomogenizedSection()).Perpendicular();
     Vector retval(2);
     retval[0]= p.dx();
     retval[1]= p.dy();
@@ -75,110 +75,110 @@ XC::Vector XC::SeccionInerte::getDirEjeI_bSeccHomogeneizada(void) const
   }
 
 //! @brief Major principal moment of inertia of the homogenized section.
-double XC::SeccionInerte::getI1SeccHomogeneizada(const double &E0) const
+double XC::SeccionInerte::getI1HomogenizedSection(const double &E0) const
   { 
-    const double iy= getIySeccHomogeneizada(E0);
-    const double iz= getIzSeccHomogeneizada(E0);
-    const double pyz= getPyzSeccHomogeneizada(E0);
+    const double iy= getIyHomogenizedSection(E0);
+    const double iz= getIzHomogenizedSection(E0);
+    const double pyz= getPyzHomogenizedSection(E0);
     return I1_inercia(iy,iz,pyz);
   }
 
 //! @brief Minor principal moment of inertia of the homogenized section.
-double XC::SeccionInerte::getI2SeccHomogeneizada(const double &E0) const
+double XC::SeccionInerte::getI2HomogenizedSection(const double &E0) const
   {
-    const double iy= getIySeccHomogeneizada(E0);
-    const double iz= getIzSeccHomogeneizada(E0);
-    const double pyz= getPyzSeccHomogeneizada(E0);
+    const double iy= getIyHomogenizedSection(E0);
+    const double iz= getIzHomogenizedSection(E0);
+    const double pyz= getPyzHomogenizedSection(E0);
     return I2_inercia(iy,iz,pyz);
   }
 
 //! @brief Principal axis of inertia of the homogenized section.
-EjesPrincInercia2d XC::SeccionInerte::getEjesInerciaSeccHomogeneizada(const double &E0) const
+EjesPrincInercia2d XC::SeccionInerte::getEjesInerciaHomogenizedSection(const double &E0) const
   {
-    const Vector v= getCdgSeccHomogeneizada(E0);
+    const Vector v= getCdgHomogenizedSection(E0);
     const Pos2d cdg(v[0],v[1]);
-    return EjesPrincInercia2d(cdg,getIySeccHomogeneizada(E0),getIzSeccHomogeneizada(E0),getPyzSeccHomogeneizada(E0));
+    return EjesPrincInercia2d(cdg,getIyHomogenizedSection(E0),getIzHomogenizedSection(E0),getPyzHomogenizedSection(E0));
   }
 //! @brief Direction of the major principal axis of inertia of the homogenized section.
-Vector2d XC::SeccionInerte::getVDirEje1SeccHomogeneizada(const double &E0) const
-  { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje1(); }
+Vector2d XC::SeccionInerte::getVDirEje1HomogenizedSection(const double &E0) const
+  { return getEjesInerciaHomogenizedSection(E0).getVDirEje1(); }
 //! @brief Direction of the major principal axis of inertia of the homogenized section.
-Vector2d XC::SeccionInerte::getVDirEjeFuerteSeccHomogeneizada(const double &E0) const
-  { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje1(); }
+Vector2d XC::SeccionInerte::getVDirEjeFuerteHomogenizedSection(const double &E0) const
+  { return getEjesInerciaHomogenizedSection(E0).getVDirEje1(); }
 //! @brief Direction of the minor principal axis of inertia of the homogenized section.
-Vector2d XC::SeccionInerte::getVDirEje2SeccHomogeneizada(const double &E0) const
-  { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje2(); }
+Vector2d XC::SeccionInerte::getVDirEje2HomogenizedSection(const double &E0) const
+  { return getEjesInerciaHomogenizedSection(E0).getVDirEje2(); }
 //! @brief Direction of the minor principal axis of inertia of the homogenized section.
-Vector2d XC::SeccionInerte::getVDirEjeDebilSeccHomogeneizada(const double &E0) const
-  { return getEjesInerciaSeccHomogeneizada(E0).getVDirEje2(); }
+Vector2d XC::SeccionInerte::getVDirEjeDebilHomogenizedSection(const double &E0) const
+  { return getEjesInerciaHomogenizedSection(E0).getVDirEje2(); }
 
 //! @brief Inertia tensor (i,j) component of the homogenized section.
-double XC::SeccionInerte::getISeccHomogeneizada(const double &E0,const unsigned short int &i,const unsigned short int &j) const
+double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
     double retval= 0.0;
     switch(k)
       {
         case 1: //(1,1)
-          retval= getIySeccHomogeneizada(E0);
+          retval= getIyHomogenizedSection(E0);
           break;
         case 2: //(2,1)
         case 3: //(1,2)
-          retval= -getPyzSeccHomogeneizada(E0);
+          retval= -getPyzHomogenizedSection(E0);
           break;
 	case 4:
-          retval= getIzSeccHomogeneizada(E0);
+          retval= getIzHomogenizedSection(E0);
           break;
       }
     return retval;
   }
 
 //! @brief Devuelve el momento de inercia respecto al eje que pasa por O con dirección la de e.
-double XC::SeccionInerte::getISeccHomogeneizada(const double &E0,const Pos2d &O,const Vector &e) const
+double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const
   {
-    const Matrix Io(getISeccHomogeneizada(E0,O));
+    const Matrix Io(getIHomogenizedSection(E0,O));
     return dot(e,Io*e)/e.Norm2();
   }
 
 //! @brief Devuelve el momento de inercia respecto a la recta que se pasa
 //! como parámetro.
-double XC::SeccionInerte::getISeccHomogeneizada(const double &E0,const Recta2d &r) const
-  { return getISeccHomogeneizada(E0,r.Punto(),Vector(r.VDir()));  }
+double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const Recta2d &r) const
+  { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir()));  }
 
 //! @brief Devuelve la componente i,j del tensor de inercia calculado respecto al punto "o".
-double XC::SeccionInerte::getISeccHomogeneizada(const double &E0,const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
+double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
   {
-    const double Iij= getISeccHomogeneizada(E0,i,j);
-    const Vector cdg= getCdgSeccHomogeneizada(E0);
+    const double Iij= getIHomogenizedSection(E0,i,j);
+    const Vector cdg= getCdgHomogenizedSection(E0);
 
     Pos2d pp(cdg[0],cdg[1]);
     Ref2d2d ejes(pp);
     Pos2d pos_local= ejes.GetPosLocal(o);
-    return Iij + getAreaSeccHomogeneizada(E0) * pos_local(i) * pos_local(j);
+    return Iij + getAreaHomogenizedSection(E0) * pos_local(i) * pos_local(j);
   }
 
 //! @brief Devuelve el momento polar de inercia respecto al punto o.
-double XC::SeccionInerte::getIOSeccHomogeneizada(const double &E0,const Pos2d &o) const
-  { return (getISeccHomogeneizada(E0,1,1,o)+getISeccHomogeneizada(E0,2,2,o)+getISeccHomogeneizada(E0,3,3,o))/2; }
+double XC::SeccionInerte::getIOHomogenizedSection(const double &E0,const Pos2d &o) const
+  { return (getIHomogenizedSection(E0,1,1,o)+getIHomogenizedSection(E0,2,2,o)+getIHomogenizedSection(E0,3,3,o))/2; }
 
 
 //! @brief Devuelve el tensor de inercia calculado desde el centro de gravedad del objeto.
-XC::Matrix XC::SeccionInerte::getISeccHomogeneizada(const double &E0) const
+XC::Matrix XC::SeccionInerte::getIHomogenizedSection(const double &E0) const
   {
     Matrix i(2,2);
-    i(0,0)= getIySeccHomogeneizada(E0); i(0,1)= -getPyzSeccHomogeneizada(E0);
-    i(1,0)= i(0,1);   i(1,1)= getIzSeccHomogeneizada(E0);
+    i(0,0)= getIyHomogenizedSection(E0); i(0,1)= -getPyzHomogenizedSection(E0);
+    i(1,0)= i(0,1);   i(1,1)= getIzHomogenizedSection(E0);
     return i;
   }
 
 //! @brief Devuelve el tensor de inercia respector al punto o.
-XC::Matrix XC::SeccionInerte::getISeccHomogeneizada(const double &E0,const Pos2d &o) const
+XC::Matrix XC::SeccionInerte::getIHomogenizedSection(const double &E0,const Pos2d &o) const
   {
     Matrix retval(2,2);
-    const Matrix Ig= getISeccHomogeneizada(E0);
+    const Matrix Ig= getIHomogenizedSection(E0);
     Vector O(2); O[0]= o.x(); O[1]= o.y();
-    const Vector og= getCdgSeccHomogeneizada(E0) - O;
-    const double m= getAreaSeccHomogeneizada(E0);
+    const Vector og= getCdgHomogenizedSection(E0) - O;
+    const double m= getAreaHomogenizedSection(E0);
     retval= Ig+m*(og.Norm2()*identity(Ig)-(og & og));
     return retval;
   }
@@ -187,10 +187,10 @@ XC::CrossSectionProperties3d XC::SeccionInerte::getCrossSectionProperties3d(cons
   {
     CrossSectionProperties3d retval;
     retval= base; //Asignamos E, G y alpha.
-    retval.A()= getAreaSeccHomogeneizada(base.E()); 
-    retval.Iy()= getIySeccHomogeneizada(base.E());
-    retval.Iz()= getIzSeccHomogeneizada(base.E());
-    retval.J()= getIxSeccHomogeneizada(base.E());
+    retval.A()= getAreaHomogenizedSection(base.E()); 
+    retval.Iy()= getIyHomogenizedSection(base.E());
+    retval.Iz()= getIzHomogenizedSection(base.E());
+    retval.J()= getIxHomogenizedSection(base.E());
     return retval;
   }
 
@@ -198,23 +198,23 @@ XC::CrossSectionProperties2d XC::SeccionInerte::getCrossSectionProperties2d(cons
   {
     static CrossSectionProperties2d retval;
     retval= base; //Asignamos E, G y alpha.
-    retval.A()= getAreaSeccHomogeneizada(base.E()); 
-    retval.I()= getIzSeccHomogeneizada(base.E());
+    retval.A()= getAreaHomogenizedSection(base.E()); 
+    retval.I()= getIzHomogenizedSection(base.E());
     return retval;
   }
 
 //! @brief Inertia of the gross section about an axis parallel to x through his center of gravity.
-double XC::SeccionInerte::getIxSeccBruta(void) const
-  { return getIySeccBruta()+getIzSeccBruta(); }
+double XC::SeccionInerte::getIxGrossSection(void) const
+  { return getIyGrossSection()+getIzGrossSection(); }
 
 //! @brief Agle of the principal axis of inertia of the gross section with respect of current axis.
-double XC::SeccionInerte::getTheta_pSeccBruta(void) const
-  { return theta_inercia(getIySeccBruta(),getIzSeccBruta(),getPyzSeccBruta()); }
+double XC::SeccionInerte::getTheta_pGrossSection(void) const
+  { return theta_inercia(getIyGrossSection(),getIzGrossSection(),getPyzGrossSection()); }
 
 //! @brief Direction of a principal axis of inertia of the gross section with respect of current axis.
-XC::Vector XC::SeccionInerte::getDirEjeI_aSeccBruta(void) const
+XC::Vector XC::SeccionInerte::getDirEjeI_aGrossSection(void) const
   {
-    const Dir2d p(getTheta_pSeccBruta());
+    const Dir2d p(getTheta_pGrossSection());
     Vector retval(2);
     retval[0]= p.dx();
     retval[1]= p.dy();
@@ -222,9 +222,9 @@ XC::Vector XC::SeccionInerte::getDirEjeI_aSeccBruta(void) const
   }
 
 //! @brief Direction of the other principal axis of inertia of the gross section with respect of current axis.
-XC::Vector XC::SeccionInerte::getDirEjeI_bSeccBruta(void) const
+XC::Vector XC::SeccionInerte::getDirEjeI_bGrossSection(void) const
   {
-    const Dir2d p= Dir2d(getTheta_pSeccBruta()).Perpendicular();
+    const Dir2d p= Dir2d(getTheta_pGrossSection()).Perpendicular();
     Vector retval(2);
     retval[0]= p.dx();
     retval[1]= p.dy();
@@ -232,110 +232,110 @@ XC::Vector XC::SeccionInerte::getDirEjeI_bSeccBruta(void) const
   }
 
 //! @brief Major principal moment of inertia of the gross section.
-double XC::SeccionInerte::getI1SeccBruta(void) const
+double XC::SeccionInerte::getI1GrossSection(void) const
   {
-    const double iy= getIySeccBruta();
-    const double iz= getIzSeccBruta();
-    const double pyz= getPyzSeccBruta();
+    const double iy= getIyGrossSection();
+    const double iz= getIzGrossSection();
+    const double pyz= getPyzGrossSection();
     return I1_inercia(iy,iz,pyz);
   }
 
 //! @brief Minor principal moment of inertia of the gross section.
-double XC::SeccionInerte::getI2SeccBruta(void) const
+double XC::SeccionInerte::getI2GrossSection(void) const
   {
-    const double iy= getIySeccBruta();
-    const double iz= getIzSeccBruta();
-    const double pyz= getPyzSeccBruta();
+    const double iy= getIyGrossSection();
+    const double iz= getIzGrossSection();
+    const double pyz= getPyzGrossSection();
     return I2_inercia(iy,iz,pyz);
   }
 
 //! @brief Principal axis of inertia of the gross section.
-EjesPrincInercia2d XC::SeccionInerte::getEjesInerciaSeccBruta(void) const
+EjesPrincInercia2d XC::SeccionInerte::getEjesInerciaGrossSection(void) const
   {
-    const Vector v= getCdgSeccBruta();
+    const Vector v= getCdgGrossSection();
     const Pos2d cdg(v[0],v[1]);
-    return EjesPrincInercia2d(cdg,getIySeccBruta(),getIzSeccBruta(),getPyzSeccBruta());
+    return EjesPrincInercia2d(cdg,getIyGrossSection(),getIzGrossSection(),getPyzGrossSection());
   }
 //! @brief Direction of the major principal axis of inertia of the gross section.
-Vector2d XC::SeccionInerte::getVDirEje1SeccBruta(void) const
-  { return getEjesInerciaSeccBruta().getVDirEje1(); }
+Vector2d XC::SeccionInerte::getVDirEje1GrossSection(void) const
+  { return getEjesInerciaGrossSection().getVDirEje1(); }
 //! @brief Direction of the major principal axis of inertia of the gross section.
-Vector2d XC::SeccionInerte::getVDirEjeFuerteSeccBruta(void) const
-  { return getEjesInerciaSeccBruta().getVDirEje1(); }
+Vector2d XC::SeccionInerte::getVDirEjeFuerteGrossSection(void) const
+  { return getEjesInerciaGrossSection().getVDirEje1(); }
 //! @brief Direction of the minor principal axis of inertia of the gross section.
-Vector2d XC::SeccionInerte::getVDirEje2SeccBruta(void) const
-  { return getEjesInerciaSeccBruta().getVDirEje2(); }
+Vector2d XC::SeccionInerte::getVDirEje2GrossSection(void) const
+  { return getEjesInerciaGrossSection().getVDirEje2(); }
 //! @brief Direction of the minor principal axis of inertia of the gross section.
-Vector2d XC::SeccionInerte::getVDirEjeDebilSeccBruta(void) const
-  { return getEjesInerciaSeccBruta().getVDirEje2(); }
+Vector2d XC::SeccionInerte::getVDirEjeDebilGrossSection(void) const
+  { return getEjesInerciaGrossSection().getVDirEje2(); }
 
 //! @brief Devuelve la componente i,j del tensor de inercia calculado respecto al CDG.
-double XC::SeccionInerte::getISeccBruta(const unsigned short int &i,const unsigned short int &j) const
+double XC::SeccionInerte::getIGrossSection(const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
     double retval= 0.0;
     switch(k)
       {
         case 1: //(1,1)
-          retval= getIySeccBruta();
+          retval= getIyGrossSection();
           break;
         case 2: //(2,1)
         case 3: //(1,2)
-          retval= -getPyzSeccBruta();
+          retval= -getPyzGrossSection();
           break;
 	case 4:
-          retval= getIzSeccBruta();
+          retval= getIzGrossSection();
           break;
       }
     return retval;
   }
 
 //! @brief Devuelve el momento de inercia respecto al eje que pasa por O con dirección la de e.
-double XC::SeccionInerte::getISeccBruta(const Pos2d &O,const Vector &e) const
+double XC::SeccionInerte::getIGrossSection(const Pos2d &O,const Vector &e) const
   {
-    const Matrix Io(getISeccBruta(O));
+    const Matrix Io(getIGrossSection(O));
     return dot(e,Io*e)/e.Norm2();
   }
 
 //! @brief Devuelve el momento de inercia respecto a la recta que se pasa
 //! como parámetro.
-double XC::SeccionInerte::getISeccBruta(const Recta2d &r) const
-  { return getISeccBruta(r.Punto(),Vector(r.VDir()));  }
+double XC::SeccionInerte::getIGrossSection(const Recta2d &r) const
+  { return getIGrossSection(r.Punto(),Vector(r.VDir()));  }
 
 //! @brief Devuelve la componente i,j del tensor de inercia calculado respecto al punto "o".
-double XC::SeccionInerte::getISeccBruta(const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
+double XC::SeccionInerte::getIGrossSection(const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
   {
-    const double Iij= getISeccBruta(i,j);
-    const Vector cdg= getCdgSeccBruta();
+    const double Iij= getIGrossSection(i,j);
+    const Vector cdg= getCdgGrossSection();
 
     Pos2d pp(cdg[0],cdg[1]);
     Ref2d2d ejes(pp);
     Pos2d pos_local= ejes.GetPosLocal(o);
-    return Iij + getAreaSeccBruta() * pos_local(i) * pos_local(j);
+    return Iij + getAreaGrossSection() * pos_local(i) * pos_local(j);
   }
 
 //! @brief Devuelve el momento polar de inercia respecto al punto o.
-double XC::SeccionInerte::getIOSeccBruta(const Pos2d &o) const
-  { return (getISeccBruta(1,1,o)+getISeccBruta(2,2,o)+getISeccBruta(3,3,o))/2; }
+double XC::SeccionInerte::getIOGrossSection(const Pos2d &o) const
+  { return (getIGrossSection(1,1,o)+getIGrossSection(2,2,o)+getIGrossSection(3,3,o))/2; }
 
 
 //! @brief Devuelve el tensor de inercia calculado desde el centro de gravedad del objeto.
-XC::Matrix XC::SeccionInerte::getISeccBruta(void) const
+XC::Matrix XC::SeccionInerte::getIGrossSection(void) const
   {
     Matrix i(2,2);
-    i(0,0)= getIySeccBruta(); i(0,1)= -getPyzSeccBruta();
-    i(1,0)= i(0,1);   i(1,1)= getIzSeccBruta();
+    i(0,0)= getIyGrossSection(); i(0,1)= -getPyzGrossSection();
+    i(1,0)= i(0,1);   i(1,1)= getIzGrossSection();
     return i;
   }
 
 //! @brief Devuelve el tensor de inercia respector al punto o.
-XC::Matrix XC::SeccionInerte::getISeccBruta(const Pos2d &o) const
+XC::Matrix XC::SeccionInerte::getIGrossSection(const Pos2d &o) const
   {
     Matrix retval(2,2);
-    const Matrix Ig= getISeccBruta();
+    const Matrix Ig= getIGrossSection();
     Vector O(2); O[0]= o.x(); O[1]= o.y();
-    const Vector og= getCdgSeccBruta() - O;
-    const double m= getAreaSeccBruta();
+    const Vector og= getCdgGrossSection() - O;
+    const double m= getAreaGrossSection();
     retval= Ig+m*(og.Norm2()*identity(Ig)-(og & og));
     return retval;
   }

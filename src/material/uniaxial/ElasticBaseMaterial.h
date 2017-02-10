@@ -39,8 +39,8 @@ class ElasticBaseMaterial: public UniaxialMaterial
   {
   protected:
     double trialStrain;
-    double E; //!< Módulo elástico.
-    double ezero; //!< Deformación inicial.
+    double E; //!< Elastic modulus.
+    double ezero; //!< Initial deformation.
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

@@ -46,7 +46,7 @@ class RecordFamMainReinforcement(object):
 
 def writeMainReinforcement(listaFamMainReinforcement, areaHorm, archTex):
   archTex.write("\\begin{tabular}{ll}\n")
-  areaMainReinforcement= listaFamMainReinforcement.getAreaSeccBruta()
+  areaMainReinforcement= listaFamMainReinforcement.getAreaGrossSection()
   archTex.write("Total area $A_s="+fmt5_2f.format(areaMainReinforcement*1e4) +"\\ cm^2$ & Geometric quantity $\\rho= "+fmt4_2f.format(areaMainReinforcement/areaHorm*1e3) +"\\permil$\\\\\n")
   archTex.write("\\end{tabular} \\\\\n")
   archTex.write("\\hline\n")
@@ -111,24 +111,24 @@ class SectionInfo(object):
     self.Es= self.rfSteel.Es
     self.regions= self.geomSection.getRegions
     self.tangConcr= self.concrDiag.getTangent()
-    self.GB= self.geomSection.getCdgSeccBruta() 
-    self.AB= self.geomSection.getAreaSeccBruta() 
-    self.IyB= self.geomSection.getIySeccBruta() 
-    self.IzB= self.geomSection.getIzSeccBruta()
-    self.PyzB= self.geomSection.getPyzSeccBruta()
+    self.GB= self.geomSection.getCdgGrossSection() 
+    self.AB= self.geomSection.getAreaGrossSection() 
+    self.IyB= self.geomSection.getIyGrossSection() 
+    self.IzB= self.geomSection.getIzGrossSection()
+    self.PyzB= self.geomSection.getPyzGrossSection()
     self.reinforcement= self.geomSection.getReinfLayers  #ListReinfLayer
     self.tangSteel= self.rfStDiag.getTangent()
-    self.areaMainReinforcement= self.reinforcement.getAreaSeccBruta()
+    self.areaMainReinforcement= self.reinforcement.getAreaGrossSection()
     self.cover= self.reinforcement.getRecubrimiento
     self.lista_fams_reinforcement= []
     for f in self.reinforcement:
       datosFam= RecordFamMainReinforcement(f)
       self.lista_fams_reinforcement.append(datosFam)
-    self.GH= self.geomSection.getCdgSeccHomogeneizada(self.tangConcr) # Center of gravity of the homogenized section
-    self.AH= self.geomSection.getAreaSeccHomogeneizada(self.tangConcr) # Area of the homogenized section
-    self.IyH= self.geomSection.getIySeccHomogeneizada(self.tangConcr) # Tensor de inercia de la sección homogeneizada.
-    self.IzH=  self.geomSection.getIzSeccHomogeneizada(self.tangConcr)
-    self.PyzH= self.geomSection.getPyzSeccHomogeneizada(self.tangConcr)
+    self.GH= self.geomSection.getCdgHomogenizedSection(self.tangConcr) # Center of gravity of the homogenized section
+    self.AH= self.geomSection.getAreaHomogenizedSection(self.tangConcr) # Area of the homogenized section
+    self.IyH= self.geomSection.getIyHomogenizedSection(self.tangConcr) # Tensor de inercia de la sección homogeneizada.
+    self.IzH=  self.geomSection.getIzHomogenizedSection(self.tangConcr)
+    self.PyzH= self.geomSection.getPyzHomogenizedSection(self.tangConcr)
 
   def writeReport(self,archTex, pathFigura):
     if(self.geomSection):

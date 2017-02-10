@@ -35,7 +35,7 @@ Iz= acero.getIz()
 Pyz= acero.getPyz()
 
 
-G= geomTuberia.getCdgSeccHomogeneizada(Es)
+G= geomTuberia.getCdgHomogenizedSection(Es)
 
 
 

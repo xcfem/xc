@@ -52,12 +52,12 @@ void XC::BaseElasticSection2d::sectionGeometry(const std::string &cod_geom)
         if(geom)
           {
             if(ctes_scc.E()==0.0)
-               std::cerr << "El módulo elástico para homogeneización debe ser no nulo." << std::endl;
+               std::cerr << "Reference elastic modulus must not be zero." << std::endl;
             ctes_scc= geom->getCrossSectionProperties2d(ctes_scc);
           }
         else
-          std::cerr << "No se encontró la definición geométrica denominada: '"
-                        << cod_geom << "'" << std::endl;
+          std::cerr << "Section geometry called: '"
+                        << cod_geom << "' not found." << std::endl;
       }
     else
       std::cerr << "Null pointer to matrix handler." << std::endl;

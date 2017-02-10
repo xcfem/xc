@@ -72,7 +72,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Material uniaxial elástico lineal.
+//! @brief Linear elastic uniaxial material.
 class ElasticMaterial : public ElasticBaseMaterial
   {
   private:

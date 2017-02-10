@@ -75,7 +75,7 @@ int XC::ENTMaterial::setTrialStrain(double strain, double strainRate)
     return 0;
   }
 
-//! @brief Devuelve la tensión en el material.
+//! @brief Return stress.
 double XC::ENTMaterial::getStress(void) const
   {
     if(trialStrain<0.0)
@@ -86,7 +86,7 @@ double XC::ENTMaterial::getStress(void) const
       return a*E*tanh(trialStrain*b);
   }
 
-//! @brief Devuelve el módulo elástico tangente.
+//! @brief Returns elastic modulus.
 double XC::ENTMaterial::getTangent(void) const
   {
     if(trialStrain<=0.0)

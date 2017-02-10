@@ -98,7 +98,7 @@ XC::VectorReinfBar::~VectorReinfBar(void)
   { libera(); }
 
 //! @brief Devuelve el área homogeneizada de las regiones.
-double XC::VectorReinfBar::getAreaSeccHomogeneizada(const double &E0) const
+double XC::VectorReinfBar::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
@@ -114,12 +114,12 @@ double XC::VectorReinfBar::getAreaSeccHomogeneizada(const double &E0) const
             retval+= n*(*i)->getArea();
           }
         else
-	  std::cerr << "VectorReinfBar::getAreaSeccHomogeneizada; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << "VectorReinfBar::getAreaHomogenizedSection; no se pudo obtener el material la región." << std::endl; 
       }
     return retval;
   }
 
-XC::Vector XC::VectorReinfBar::getCdgSeccHomogeneizada(const double &E0) const
+XC::Vector XC::VectorReinfBar::getCdgHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
@@ -137,20 +137,20 @@ XC::Vector XC::VectorReinfBar::getCdgSeccHomogeneizada(const double &E0) const
             divisor+= peso;
           }
         else
-	  std::cerr << "VectorReinfBar::getCdgSeccHomogeneizada; no se pudo obtener el material la región." << std::endl;
+	  std::cerr << "VectorReinfBar::getCdgHomogenizedSection; region material undefined." << std::endl;
       }
     retval/= divisor;
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección homogeneizada respecto al eje paralelo al y por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::VectorReinfBar::getIySeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to y passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::VectorReinfBar::getIyHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgSeccHomogeneizada(E0)[1];
+    const double zCdg= getCdgHomogenizedSection(E0)[1];
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
@@ -161,19 +161,19 @@ double XC::VectorReinfBar::getIySeccHomogeneizada(const double &E0) const
             retval+= n*((*i)->Iy()+(*i)->getArea()*sqr(d));
           }
         else
-	  std::cerr << "VectorReinfBar::getIySeccHomogeneizada; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << "VectorReinfBar::getIyHomogenizedSection; region material undefined." << std::endl; 
       }
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección homogeneizada respecto al eje paralelo al z por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::VectorReinfBar::getIzSeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to z passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::VectorReinfBar::getIzHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgSeccHomogeneizada(E0)[0];
+    const double yCdg= getCdgHomogenizedSection(E0)[0];
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
@@ -184,20 +184,20 @@ double XC::VectorReinfBar::getIzSeccHomogeneizada(const double &E0) const
             retval+= n*((*i)->Iz()+(*i)->getArea()*sqr(d));
           }
         else
-	  std::cerr << "VectorReinfBar::getIySeccHomogeneizada; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << "VectorReinfBar::getIyHomogenizedSection; region material undefined." << std::endl; 
       }
     return retval;
   }
 
-//! @brief Devuelve el producto de inercia de la sección homogeneizada respecto a los ejes paralelos al y y al z por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::VectorReinfBar::getPyzSeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized product of inertia of the cross-section with respecto to the axis parallel to y and z passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::VectorReinfBar::getPyzHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double n= 0.0;
     double d2= 0.0;
-    const double zCdg= getCdgSeccHomogeneizada(E0)[0];
-    const double yCdg= getCdgSeccHomogeneizada(E0)[0];
+    const double zCdg= getCdgHomogenizedSection(E0)[0];
+    const double yCdg= getCdgHomogenizedSection(E0)[0];
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
@@ -208,14 +208,14 @@ double XC::VectorReinfBar::getPyzSeccHomogeneizada(const double &E0) const
             retval+= n*((*i)->Pyz()+(*i)->getArea()*d2);
           }
         else
-	  std::cerr << "VectorReinfBar::getIySeccHomogeneizada; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << "VectorReinfBar::getIyHomogenizedSection; region material not found." << std::endl; 
       }
     return retval;
   }
 
 
-//! @brief Devuelve el área bruta de las barras.
-double XC::VectorReinfBar::getAreaSeccBruta(void) const
+//! @brief Return gross area of rebars.
+double XC::VectorReinfBar::getAreaGrossSection(void) const
   {
     double retval= 0.0;
     for(const_iterator i= begin();i!=end();i++)
@@ -223,8 +223,8 @@ double XC::VectorReinfBar::getAreaSeccBruta(void) const
     return retval;
   }
 
-//! @brief Devuelve el centro de gravedad de la sección bruta.
-XC::Vector XC::VectorReinfBar::getCdgSeccBruta(void) const
+//! @brief Returns gross section centroid.
+XC::Vector XC::VectorReinfBar::getCdgGrossSection(void) const
   {
     Vector retval(2);
     double peso= 0.0;
@@ -239,13 +239,12 @@ XC::Vector XC::VectorReinfBar::getCdgSeccBruta(void) const
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección bruta respecto al eje paralelo al y por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::VectorReinfBar::getIySeccBruta(void) const
+//! @brief Inertia of the gross section about an axis parallel to y through his center of gravity.
+double XC::VectorReinfBar::getIyGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgSeccBruta()[1];
+    const double zCdg= getCdgGrossSection()[1];
     for(const_iterator i= begin();i!=end();i++)
       {
         d= (*i)->getPosition()[1]-zCdg;
@@ -254,13 +253,12 @@ double XC::VectorReinfBar::getIySeccBruta(void) const
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección bruta respecto al eje paralelo al z por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::VectorReinfBar::getIzSeccBruta(void) const
+//! @brief Inertia of the gross section about an axis parallel to z through his center of gravity.
+double XC::VectorReinfBar::getIzGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgSeccBruta()[0];
+    const double yCdg= getCdgGrossSection()[0];
     for(const_iterator i= begin();i!=end();i++)
       {
         d= (*i)->getPosition()[0]-yCdg;
@@ -269,13 +267,12 @@ double XC::VectorReinfBar::getIzSeccBruta(void) const
     return retval;
   }
 
-//! @brief Devuelve el producto de inercia de la sección bruta respecto a los ejes paralelos al y y al z por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::VectorReinfBar::getPyzSeccBruta(void) const
+//! @brief Product of inertia of the gross section about y and z axis through his center of gravity.
+double XC::VectorReinfBar::getPyzGrossSection(void) const
   {
     double retval= 0.0;
     double d2= 0.0;
-    const Vector posCdg= getCdgSeccBruta();
+    const Vector posCdg= getCdgGrossSection();
     const double zCdg= posCdg[1];
     const double yCdg= posCdg[0];
     for(const_iterator i= begin();i!=end();i++)
@@ -286,7 +283,7 @@ double XC::VectorReinfBar::getPyzSeccBruta(void) const
     return retval;
   }
 
-//! @brief Cambia tamaño.
+//! @brief Resizes vector.
 void XC::VectorReinfBar::resize(const size_t sz)
   {
     libera();

@@ -34,11 +34,11 @@ reinforcementB.p1= geom.Pos2d(0.95,0.95) # Armadura inferior.
 reinforcementB.p2= geom.Pos2d(0.95,0.05)
 
 nRebars= reinforcement.getNumReinfBars
-area= geomPrueba.getAreaSeccHomogeneizada(Ec)
-G= geomPrueba.getCdgSeccHomogeneizada(Ec)
-Iy= geomPrueba.getIySeccHomogeneizada(Ec)
-Iz= geomPrueba.getIzSeccHomogeneizada(Ec)
-Pyz= geomPrueba.getPyzSeccHomogeneizada(Ec)
+area= geomPrueba.getAreaHomogenizedSection(Ec)
+G= geomPrueba.getCdgHomogenizedSection(Ec)
+Iy= geomPrueba.getIyHomogenizedSection(Ec)
+Iz= geomPrueba.getIzHomogenizedSection(Ec)
+Pyz= geomPrueba.getPyzHomogenizedSection(Ec)
 
 areaTeor= (n*4*areaFi16)
 yGTeor= 0.5

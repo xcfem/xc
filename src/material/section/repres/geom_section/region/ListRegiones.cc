@@ -182,7 +182,7 @@ XC::ListRegiones XC::ListRegiones::Interseccion(const Semiplano2d &sp) const
   }
 
 //! @brief Devuelve el área de las regiones.
-double XC::ListRegiones::getAreaSeccBruta(void) const
+double XC::ListRegiones::getAreaGrossSection(void) const
   {
     double retval= 0.0;
     for(const_iterator i= begin();i!=end();i++)
@@ -191,7 +191,7 @@ double XC::ListRegiones::getAreaSeccBruta(void) const
   }
 
 //! @brief Devuelve el centro de gravedad de la sección bruta.
-XC::Vector XC::ListRegiones::getCdgSeccBruta(void) const
+XC::Vector XC::ListRegiones::getCdgGrossSection(void) const
   {
     Vector retval(2);
     double peso= 0.0;
@@ -205,7 +205,7 @@ XC::Vector XC::ListRegiones::getCdgSeccBruta(void) const
             divisor+= peso;
           }
         else
-          std::cerr << "ListRegiones::getCdgSeccBruta; la región: "
+          std::cerr << "ListRegiones::getCdgGrossSection; la región: "
                     << *i << " tiene peso nulo o negativo." 
                         << std::endl;
       }
@@ -213,12 +213,12 @@ XC::Vector XC::ListRegiones::getCdgSeccBruta(void) const
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección bruta respecto al eje paralelo al y por el CDG.
-double XC::ListRegiones::getIySeccBruta(void) const
+//! @brief Returns the moment of inertia of the gross cross-section with respecto to the axis parallel to y passing through the centroid.
+double XC::ListRegiones::getIyGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgSeccBruta()[1];
+    const double zCdg= getCdgGrossSection()[1];
     for(const_iterator i= begin();i!=end();i++)
       {
         d= (*i)->Cdg()[1]-zCdg;
@@ -228,11 +228,11 @@ double XC::ListRegiones::getIySeccBruta(void) const
   }
 
 //! @brief Devuelve el momento de inercia de la sección bruta respecto al eje paralelo al z por el CDG.
-double XC::ListRegiones::getIzSeccBruta(void) const
+double XC::ListRegiones::getIzGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgSeccBruta()[0];
+    const double yCdg= getCdgGrossSection()[0];
     for(const_iterator i= begin();i!=end();i++)
       {
         d= (*i)->Cdg()[0]-yCdg;
@@ -242,11 +242,11 @@ double XC::ListRegiones::getIzSeccBruta(void) const
   }
 
 //! @brief Devuelve el producto de inercia de la sección bruta respecto a los ejes paralelos al y y al z por el CDG.
-double XC::ListRegiones::getPyzSeccBruta(void) const
+double XC::ListRegiones::getPyzGrossSection(void) const
   {
     double retval= 0.0;
     double d2= 0.0;
-    const Vector cooCdg= getCdgSeccBruta();
+    const Vector cooCdg= getCdgGrossSection();
     const double zCdg= cooCdg[1];
     const double yCdg= cooCdg[0];
     for(const_iterator i= begin();i!=end();i++)
@@ -270,7 +270,7 @@ double XC::ListRegiones::getPyzSeccBruta(void) const
 
 
 //! @brief Devuelve el área homogeneizada de las regiones.
-double XC::ListRegiones::getAreaSeccHomogeneizada(const double &E0) const
+double XC::ListRegiones::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
@@ -285,12 +285,12 @@ double XC::ListRegiones::getAreaSeccHomogeneizada(const double &E0) const
             retval+= n*(*i)->Area();
           }
         else
-	  std::cerr << "ListRegiones::getAreaSeccHomogeneizada; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << "ListRegiones::getAreaHomogenizedSection; no se pudo obtener el material la región." << std::endl; 
       }
     return retval;
   }
 
-XC::Vector XC::ListRegiones::getCdgSeccHomogeneizada(const double &E0) const
+XC::Vector XC::ListRegiones::getCdgHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
@@ -309,27 +309,27 @@ XC::Vector XC::ListRegiones::getCdgSeccHomogeneizada(const double &E0) const
                 divisor+= peso;
               }
             else
-	      std::cerr << "ListRegiones::getCdgSeccHomogeneizada; la región: "
+	      std::cerr << "ListRegiones::getCdgHomogenizedSection; la región: "
                         << *i << " tiene peso nulo o negativo." 
                         << std::endl;
           }
         else
-	  std::cerr << "ListRegiones::getCdgSeccHomogeneizada; no se pudo obtener el material la región." << std::endl;
+	  std::cerr << "ListRegiones::getCdgHomogenizedSection; no se pudo obtener el material la región." << std::endl;
       }
     retval/= divisor;
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección homogeneizada respecto al eje paralelo al y por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::ListRegiones::getIySeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to y passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::ListRegiones::getIyHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgSeccHomogeneizada(E0)[1];
+    const double zCdg= getCdgHomogenizedSection(E0)[1];
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
@@ -340,21 +340,21 @@ double XC::ListRegiones::getIySeccHomogeneizada(const double &E0) const
             retval+= n*((*i)->Iy()+(*i)->Area()*sqr(d));
           }
         else
-	  std::cerr << "ListRegiones::getIySeccHomogeneizada; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << "ListRegiones::getIyHomogenizedSection; no se pudo obtener el material la región." << std::endl; 
       }
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección homogeneizada respecto al eje paralelo al z por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::ListRegiones::getIzSeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to z passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::ListRegiones::getIzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgSeccHomogeneizada(E0)[0];
+    const double yCdg= getCdgHomogenizedSection(E0)[0];
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
@@ -365,21 +365,21 @@ double XC::ListRegiones::getIzSeccHomogeneizada(const double &E0) const
             retval+= n*((*i)->Iz()+(*i)->Area()*sqr(d));
           }
         else
-	  std::cerr << "ListRegiones::getIySeccHomogeneizada; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << "ListRegiones::getIyHomogenizedSection; no se pudo obtener el material la región." << std::endl; 
       }
     return retval;
   }
 
-//! @brief Devuelve el producto de inercia de la sección homogeneizada respecto a los ejes paralelos al y y al z por el CDG.
-//! @param E0: Módulo elástico de referencia.
-double XC::ListRegiones::getPyzSeccHomogeneizada(const double &E0) const
+//! @brief Returns homogenized product of inertia of the cross-section with respecto to the axis parallel to y and z passing through the centroid.
+//! @param E0: Reference elastic modulus.
+double XC::ListRegiones::getPyzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d2= 0.0;
-    const Vector cooCdg= getCdgSeccHomogeneizada(E0);
+    const Vector cooCdg= getCdgHomogenizedSection(E0);
     const double zCdg= cooCdg[1];
     const double yCdg= cooCdg[0];
     for(const_iterator i= begin();i!=end();i++)
@@ -392,7 +392,7 @@ double XC::ListRegiones::getPyzSeccHomogeneizada(const double &E0) const
             retval+= n*((*i)->Pyz()+(*i)->Area()*d2);
           }
         else
-	  std::cerr << "ListRegiones::getIySeccHomogeneizada; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << "ListRegiones::getIyHomogenizedSection; no se pudo obtener el material la región." << std::endl; 
       }
     return retval;
   }

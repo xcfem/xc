@@ -77,17 +77,17 @@ class VectorReinfBar: public std::vector<ReinfBar *>, public SeccionInerte
     inline const_iterator end(void) const
       { return v_rfBar::end(); }
 
-    double getAreaSeccBruta(void) const;
-    Vector getCdgSeccBruta(void) const;
-    double getIySeccBruta(void) const;
-    double getIzSeccBruta(void) const;
-    double getPyzSeccBruta(void) const;
+    double getAreaGrossSection(void) const;
+    Vector getCdgGrossSection(void) const;
+    double getIyGrossSection(void) const;
+    double getIzGrossSection(void) const;
+    double getPyzGrossSection(void) const;
 
-    double getAreaSeccHomogeneizada(const double &E0) const;
-    Vector getCdgSeccHomogeneizada(const double &E0) const;
-    double getIySeccHomogeneizada(const double &E0) const;
-    double getIzSeccHomogeneizada(const double &E0) const;
-    double getPyzSeccHomogeneizada(const double &E0) const;
+    double getAreaHomogenizedSection(const double &E0) const;
+    Vector getCdgHomogenizedSection(const double &E0) const;
+    double getIyHomogenizedSection(const double &E0) const;
+    double getIzHomogenizedSection(const double &E0) const;
+    double getPyzHomogenizedSection(const double &E0) const;
 
     void resize(const size_t sz);
 

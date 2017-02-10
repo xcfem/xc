@@ -67,8 +67,7 @@
 namespace XC {
 //! @ingroup NDMat
 //
-//! @brief Material elástico e isótropo para problemas de
-//! deformación plana.
+//! @brief Elastic isotropic material for plane deformation problems.
 class ElasticIsotropicPlaneStrain2D : public ElasticIsotropic2D
   {
   private:
