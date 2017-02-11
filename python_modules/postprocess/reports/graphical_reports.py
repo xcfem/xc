@@ -73,8 +73,11 @@ class RecordLoadCaseDisp(object):
   :ivar unitsMom:  text to especify the units in which bending moments are 
                    represented (defaults to '[kN.m/m]')
   :ivar viewName:  name of the view  that contains the renderer (possible
-                   options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
+                   options: "XYZPos", ""XYZNeg",XPos", "XNeg","YPos", "YNeg",
                    "ZPos", "ZNeg") (defaults to "XYZPos")
+  :ivar hCamFct:   factor that applies to the height of the camera position 
+                   in order to change perspective of isometric views 
+                   (defaults to 1, usual values 0.1 to 10)
 
   '''
 
@@ -104,6 +107,7 @@ class RecordLoadCaseDisp(object):
     self.unitsScaleMom=1.0
     self.unitsMom='[kN.m/m]'
     self.viewName="XYZPos"
+    self.hCamFct=1.0
 
   def loadReports(self,gridmodl,pathGr,texFile,grWdt):
     '''Creates the graphics files of loads for the load case and insert them in
@@ -119,15 +123,15 @@ class RecordLoadCaseDisp(object):
     for st in self.setsToDispLoads:
       grfname=pathGr+self.loadCaseName+st.elSet.name
       capt=self.loadCaseDescr + ', ' + st.genDescr + ', '  + self.unitsLoads
-      gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,caption= capt,fileName=grfname+'.jpg')
-      gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,caption= capt,fileName=grfname+'.eps')
+      gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.jpg')
+      gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.eps')
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
     for st in self.setsToDispBeamLoads:
       grfname=pathGr+self.loadCaseName+st.elSet.name
       capt=self.loadCaseDescr + ', ' + st.genDescr + ', '  + self.unitsLoads
       lcs=GridModel.QuickGraphics(gridmodl)
-      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st.elSet,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,caption= capt,fileName=grfname+'.jpg')
-      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st.elSet,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,caption= capt,fileName=grfname+'.eps')
+      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st.elSet,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.jpg')
+      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st.elSet,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.eps')
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
     return
 
@@ -169,8 +173,8 @@ class RecordLoadCaseDisp(object):
                 fcUn=self.unitsScaleForc
                 unDesc=self.unitsForc
             grfname=pathGr+self.loadCaseName+st.elSet.name+arg
-            lcs.displayIntForc(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,unitDescription=unDesc,fileName=grfname+'.jpg')
-            lcs.displayIntForc(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,unitDescription=unDesc,fileName=grfname+'.eps')
+            lcs.displayIntForc(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.jpg')
+            lcs.displayIntForc(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.eps')
             capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     #Internal forces displays on sets of «beam» elements
@@ -183,8 +187,8 @@ class RecordLoadCaseDisp(object):
                 fcUn=self.unitsScaleForc
                 unDesc=self.unitsForc
             grfname=pathGr+self.loadCaseName+st.elSet.name+arg
-            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=self.scaleDispBeamIntForc,unitDescription=unDesc,viewName=self.viewName,fileName=grfname+'.jpg')
-            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=self.scaleDispBeamIntForc,unitDescription=unDesc,viewName=self.viewName,fileName=grfname+'.eps')
+            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=self.scaleDispBeamIntForc,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.jpg')
+            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=self.scaleDispBeamIntForc,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.eps')
             capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     texFile.write('\\clearpage\n')
