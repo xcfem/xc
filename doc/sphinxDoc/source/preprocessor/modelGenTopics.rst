@@ -25,6 +25,8 @@ element_vectors
     :undoc-members:
     :show-inheritance:
 
+
+
 line_utils
 ----------
 
@@ -59,7 +61,6 @@ apoyo_elastico
 
 ElasticFoundation
 -----------------
-
 
 .. automodule:: model.ElasticFoundation
     :members:
@@ -121,7 +122,6 @@ LoadCaseManager
     :members:
     :undoc-members:
     :show-inheritance:
-
 
 
 movs_nodo_3gdl
@@ -212,6 +212,7 @@ setMgmtUtils
     :members:
     :undoc-members:
     :show-inheritance:
+
 
 tensa_cables
 ------------
