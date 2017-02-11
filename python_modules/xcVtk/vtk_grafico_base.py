@@ -63,8 +63,9 @@ class RecordDefDisplay(object):
   :ivar bgRComp:     red component (defaults to 0.65)
   :ivar bgGComp:     green component (defaults to 0.65)
   :ivar bgBComp:     blue component (defaults to 0.65)
-  :ivar hCamFct:     factor that applies to the height of the camera position in order to
-                     change perspertive of isometric views (defaults to 1). Usual values 0.1 to 10
+  :ivar hCamFct:     factor that applies to the height of the camera position 
+                     in order to change perspective of isometric views 
+                     (defaults to 1, usual values 0.1 to 10)
   '''
   def __init__(self):
     self.renderer= None

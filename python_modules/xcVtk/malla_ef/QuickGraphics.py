@@ -98,7 +98,7 @@ class QuickGraphics(object):
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
     defDisplay.displayMesh(xcSet=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.name)
 
-  def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',fileName=None):
+  def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
     '''displays the component of internal forces in the 
     set of entities as a scalar field (i.e. appropiated for shell elements).
     
@@ -107,8 +107,14 @@ class QuickGraphics(object):
     :param setToDisplay: set of entities to be represented (default to all entities)
     :param fConvUnits:   factor of conversion to be applied to the results (defalts to 1)
     :param unitDescription: string like '[kN/m] or [kN m/m]'
-    :param fileName:        name of the file to plot the graphic. Defaults to None,
-                            in that case an screen display is generated
+    :param viewName:     name of the view  that contains the renderer (possible
+                         options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
+                         "ZPos", "ZNeg") (defaults to "XYZPos")
+    :param hCamFct:     factor that applies to the height of the camera position
+                        in order to change perspective of isometric views 
+                        (defaults to 1, usual values 0.1 to 10)
+    :param fileName:    name of the file to plot the graphic. Defaults to None,
+                        in that case an screen display is generated
     '''
     if(setToDisplay):
       self.xcSet= setToDisplay
@@ -123,9 +129,11 @@ class QuickGraphics(object):
       e.setProp(propName,mat.getMeanGeneralizedStressByName(vCompDisp))
     field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay.viewName=viewName
+    defDisplay.hCamFct=hCamFct
     field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name)
 
-  def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',fileName=None):
+  def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
     '''displays the component of internal forces in the 
     set of entities as a diagram over lines (i.e. appropiated for beam elements).
     
@@ -138,6 +146,9 @@ class QuickGraphics(object):
     :param viewName:     name of the view  that contains the renderer (possible
                          options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
                          "ZPos", "ZNeg") (defaults to "XYZPos")
+    :param hCamFct:     factor that applies to the height of the camera position
+                        in order to change perspective of isometric views 
+                        (defaults to 1, usual values 0.1 to 10)
     :param fileName:     name of the file to plot the graphic. Defaults to None,
                          in that case an screen display is generated
     '''
@@ -149,6 +160,7 @@ class QuickGraphics(object):
     diagram.agregaDiagrama()
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
     defDisplay.viewName=viewName
+    defDisplay.hCamFct=hCamFct
     defDisplay.setupGrid(self.xcSet)
     defDisplay.defineEscenaMalla(None)
     defDisplay.appendDiagram(diagram) #Append diagram to the scene.
@@ -156,7 +168,7 @@ class QuickGraphics(object):
     caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
     defDisplay.displayScene(caption=caption,fName=fileName)
 
-  def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewName='XYZPos',caption='',fileName=None):
+  def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewName='XYZPos',hCamFct=1.0,caption='',fileName=None):
     '''displays the loads applied on beam elements and nodes for a given load case
     :param setToDisplay:    set of beam elements to be represented
     :param fUnitConv:       factor of conversion to be applied to the results (defaults to 1)
@@ -168,6 +180,8 @@ class QuickGraphics(object):
     :param viewName:        name of the view  that contains the renderer (possible
                             options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
                             "ZPos", "ZNeg") (defaults to "XYZPos")
+    :param hCamFct:     factor that applies to the height of the camera position in order to
+                        change perspective of isometric views (defaults to 1). Usual values 0.1 to 10
     :param caption:         caption for the graphic
     :param fileName:        name of the file to plot the graphic. Defaults to None,
                             in that case an screen display is generated
@@ -177,6 +191,7 @@ class QuickGraphics(object):
     loadPatterns.addToDomain(loadCaseName)
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
     defDisplay.viewName=viewName
+    defDisplay.hCamFct=hCamFct
     defDisplay.setupGrid(self.xcSet)
     defDisplay.defineEscenaMalla(None)
     orNodalLBar='H'  #default orientation of scale bar for nodal loads
