@@ -73,7 +73,7 @@
 XC::EigenAlgorithm::EigenAlgorithm(SoluMethod *owr,int classTag)
   :SolutionAlgorithm(owr,classTag) {}
 
-//! @brief Devuelve un puntero al integrador.
+//! @brief Returns a pointer to the integrator.
 XC::EigenIntegrator *XC::EigenAlgorithm::getEigenIntegratorPtr()
   { return dynamic_cast<EigenIntegrator *>(getIntegratorPtr()); }
 

@@ -68,7 +68,7 @@ class Subdomain;
 
 //! @ingroup TipoAnalisis
 //
-//! @brief Análisis dinámico por descomposición del dominio.
+//! @brief Análisis dinámico por descomposición del domain.
 class TransientDomainDecompositionAnalysis: public DomainDecompositionAnalysis
   {
     friend class ProcSolu;

@@ -44,7 +44,7 @@ std::deque<std::string> XC::MapSet::setsClassNames;
 bool XC::MapSet::existe(const std::string &nmb) const
   { return (sets.find(nmb)!=sets.end()); }
 
-//! @brief Devuelve un puntero al conjunto cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the conjunto cuyo nombre se pasa como parámetro.
 XC::SetBase *XC::MapSet::busca_set(const std::string &nmb)
   {
     if(existe(nmb))
@@ -55,7 +55,7 @@ XC::SetBase *XC::MapSet::busca_set(const std::string &nmb)
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al conjunto cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the conjunto cuyo nombre se pasa como parámetro.
 const XC::SetBase *XC::MapSet::busca_set(const std::string &nmb) const
   {
     const_iterator i= sets.find(nmb);
@@ -194,7 +194,7 @@ XC::EntMdlr *XC::MapSet::inserta_ent_mdlr(EntMdlr *ent_mdlr)
       }
   }
 
-//! @brief Devuelve un puntero al conjunto estructurado cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the conjunto estructurado cuyo nombre se pasa como parámetro.
 XC::SetEstruct *XC::MapSet::busca_set_estruct(const std::string &nmb)
   {
     SetBase *set= busca_set(nmb);
@@ -211,7 +211,7 @@ void XC::MapSet::setup_total(void)
     total= crea_set(str_tot);
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::MapSet::MapSet(Preprocessor *m)
   : EntCmd(m), MovableObject(0), preprocessor(m),total(nullptr)
   { setup_total(); }
@@ -506,7 +506,7 @@ int XC::MapSet::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Devuelve los conjuntos que contienen el puntero a nodo
+//! @brief Devuelve los conjuntos que contienen the pointer a nodo
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
   {
@@ -516,7 +516,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen el puntero a elemento
+//! @brief Devuelve los conjuntos que contienen the pointer a elemento
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
   {
@@ -526,7 +526,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen el puntero a punto
+//! @brief Devuelve los conjuntos que contienen the pointer a punto
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Pnt *p)
   {
@@ -536,7 +536,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Pnt *p)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen el puntero a «edge»
+//! @brief Devuelve los conjuntos que contienen the pointer a «edge»
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Edge *e)
   {
@@ -546,7 +546,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Edge *e)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen el puntero a superficie
+//! @brief Devuelve los conjuntos que contienen the pointer a superficie
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Face *f)
   {
@@ -556,7 +556,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Face *f)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen el puntero a cuerpo
+//! @brief Devuelve los conjuntos que contienen the pointer a cuerpo
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Body *b)
   {
@@ -566,7 +566,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Body *b)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen el puntero a «uniform grid»
+//! @brief Devuelve los conjuntos que contienen the pointer a «uniform grid»
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const UniformGrid *ug)
   {

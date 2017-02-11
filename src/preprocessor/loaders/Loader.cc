@@ -34,16 +34,16 @@
 #include "domain/mesh/element/Element.h"
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::Loader::Loader(Preprocessor *owr)
   : EntCmd(owr), MovableObject(0), preprocessor(owr) 
   {}
 
-//! @brief Devuelve el dominio en el que se cargan los elementos.
+//! @brief Devuelve el domain en el que se cargan los elementos.
 XC::Domain *XC::Loader::getDomain(void) const
   {
     if(preprocessor)
-      return preprocessor->GetDominio();
+      return preprocessor->getDomain();
     else
       {
 	std::cerr << "(Loader) necesito un preprocesador." << std::endl;

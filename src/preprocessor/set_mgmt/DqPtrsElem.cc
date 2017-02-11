@@ -95,7 +95,7 @@ void XC::DqPtrsElem::agrega(const DqPtrsElem &otro)
 //       }
 //   }
 
-//! @brief Vacía la lista de punteros y elimina las propiedades que pudiera tener el objeto.
+//! @brief Vacía la lista de pointers y elimina las propiedades que pudiera tener el objeto.
 void XC::DqPtrsElem::clearAll(void)
   {
     DqPtrs<Element>::clear();
@@ -132,7 +132,7 @@ const XC::Element *XC::DqPtrsElem::getNearestElement(const Pos3d &p) const
     return this_no_const->getNearestElement(p);
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al elemento
+//! @brief Devuelve, si lo encuentra, a pointer al elemento
 //! cuyo tag se pasa como parámetro.
 XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag)
   {
@@ -153,7 +153,7 @@ XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al elemento
+//! @brief Devuelve, si lo encuentra, a pointer al elemento
 //! cuyo tag se pasa como parámetro.
 const XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag) const
   {

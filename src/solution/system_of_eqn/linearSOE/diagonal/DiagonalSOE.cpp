@@ -84,7 +84,7 @@ bool XC::DiagonalSOE::setSolver(LinearSOESolver *newSolver)
     if(tmp)
       retval= FactoredSOEBase::setSolver(tmp);
     else
-      std::cerr << "DiagonalSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
+      std::cerr << "DiagonalSOE::setSolver; solver incompatible con system of equations." << std::endl;
     return retval;
   }
     

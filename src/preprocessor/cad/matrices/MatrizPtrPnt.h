@@ -45,7 +45,7 @@ class Cad;
 
 //! \ingroup CadMR
 //! 
-//! @brief Matriz de punteros a puntos.
+//! @brief Matriz de pointers to puntos.
 class MatrizPtrPnt: public MatrizPtrBase<Pnt>
   {
   protected:

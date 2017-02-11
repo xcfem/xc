@@ -72,7 +72,7 @@
 XC::VariableTimeStepDirectIntegrationAnalysis::VariableTimeStepDirectIntegrationAnalysis(SoluMethod *metodo)
   :DirectIntegrationAnalysis(metodo) {}    
 
-//! @brief Ejecuta el análisis.
+//! @brief Performs the analysis.
 int XC::VariableTimeStepDirectIntegrationAnalysis::analyze(int numSteps, double dT, double dtMin, double dtMax, int Jd)
   {
     assert(metodo_solu);

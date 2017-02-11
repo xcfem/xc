@@ -166,7 +166,7 @@ void XC::Domain::clearAll(void)
 XC::Domain::~Domain(void)
   { libera(); }
 
-//! @brief Prepara el dominio para resolver un nuevo caso
+//! @brief Prepara el domain para resolver un nuevo caso
 //! de carga.
 void XC::Domain::resetLoadCase(void)
   {
@@ -181,15 +181,15 @@ void XC::Domain::setDeadSRF(const double &d)
   { Element::setDeadSRF(d); }
 
 
-//! @brief Agrega al dominio el elemento being passed as parameter.
+//! @brief Agrega al domain el elemento being passed as parameter.
 bool XC::Domain::addElement(Element *element)
   { return mesh.addElement(element); }
 
-//! @brief Agrega al dominio el nodo being passed as parameter.
+//! @brief Agrega al domain el nodo being passed as parameter.
 bool XC::Domain::addNode(Node * node)
   { return mesh.addNode(node); }
 
-//! @brief Agrega al dominio una constraint monopunto.
+//! @brief Agrega al domain una constraint monopunto.
 bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint)
   {
     bool result= constraints.addSFreedom_Constraint(spConstraint);
@@ -201,7 +201,7 @@ bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint)
     return true;
   }
 
-//! @brief Agrega al dominio una constraint multipunto.
+//! @brief Agrega al domain una constraint multipunto.
 bool XC::Domain::addMFreedom_Constraint(MFreedom_Constraint *mpConstraint)
   {
     bool result= constraints.addMFreedom_Constraint(mpConstraint);
@@ -213,7 +213,7 @@ bool XC::Domain::addMFreedom_Constraint(MFreedom_Constraint *mpConstraint)
     return result;
   }
 
-//! @brief Agrega al dominio una constraint multi retained node.
+//! @brief Agrega al domain una constraint multi retained node.
 bool XC::Domain::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmpConstraint)
   {
     bool result= constraints.addMRMFreedom_Constraint(mrmpConstraint);
@@ -225,7 +225,7 @@ bool XC::Domain::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmpConstraint)
     return result;
   }
 
-//! @brief Agrega al dominio una constraint monopunto.
+//! @brief Agrega al domain una constraint monopunto.
 bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int pattern)
   {
     bool result= constraints.addSFreedom_Constraint(spConstraint,pattern);
@@ -273,7 +273,7 @@ bool XC::Domain::addElementalLoad(ElementalLoad *load, int pattern)
 bool XC::Domain::removeElement(int tag)
   { return mesh.removeElement(tag); }
 
-//! @brief Elimina del dominio el nodo cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain el nodo cuyo tag se pasa como parámetro.
 bool XC::Domain::removeNode(int tag)
   { return mesh.removeNode(tag); }
 
@@ -285,7 +285,7 @@ bool XC::Domain::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatt
     return retval;
   }
 
-//! @brief Elimina del dominio la constraint monopunto cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain la constraint monopunto cuyo tag se pasa como parámetro.
 bool XC::Domain::removeSFreedom_Constraint(int tag)
   {
     bool retval= constraints.removeSFreedom_Constraint(tag);
@@ -294,7 +294,7 @@ bool XC::Domain::removeSFreedom_Constraint(int tag)
     return retval;
   }
 
-//! @brief Elimina del dominio la constraint multipunto cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain la constraint multipunto cuyo tag se pasa como parámetro.
 bool XC::Domain::removeMFreedom_Constraint(int tag)
   {
     bool result = constraints.removeMFreedom_Constraint(tag);
@@ -304,7 +304,7 @@ bool XC::Domain::removeMFreedom_Constraint(int tag)
   }
 
 
-//! @brief Elimina del dominio la constraint multi retained node cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain la constraint multi retained node cuyo tag se pasa como parámetro.
 bool XC::Domain::removeMRMFreedom_Constraint(int tag)
   {
     bool result = constraints.removeMRMFreedom_Constraint(tag);
@@ -362,7 +362,7 @@ bool XC::Domain::addCombinacion(Combinacion *comb)
     return retval;
   }
 
-//! @brief Elimina del dominio el caso de carga cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain el caso de carga cuyo tag se pasa como parámetro.
 bool XC::Domain::removeLoadPattern(int tag)
   {
     int numSPs= 0;
@@ -378,7 +378,7 @@ bool XC::Domain::removeLoadPattern(int tag)
     return result;
   }
 
-//! @brief Elimina del dominio el 
+//! @brief Elimina del domain el 
 bool XC::Domain::removeNodeLocker(int tag)
   {
     int numSPs= 0;
@@ -394,7 +394,7 @@ bool XC::Domain::removeNodeLocker(int tag)
     return result;
   }
 
-//! @brief Elimina del dominio el caso de carga being passed as parameter.
+//! @brief Elimina del domain el caso de carga being passed as parameter.
 bool XC::Domain::removeLoadPattern(LoadPattern *lp)
   {
     bool retval= false;
@@ -403,7 +403,7 @@ bool XC::Domain::removeLoadPattern(LoadPattern *lp)
     return retval;
   }
 
-//! @brief Elimina del dominio el caso de carga being passed as parameter.
+//! @brief Elimina del domain el caso de carga being passed as parameter.
 bool XC::Domain::removeNodeLocker(NodeLocker *nl)
   {
     bool retval= false;
@@ -416,7 +416,7 @@ bool XC::Domain::removeNodeLocker(NodeLocker *nl)
 const std::string &XC::Domain::getNombreCombActual(void) const
   { return nmbCombActual; }
 
-//! @brief Elimina del dominio la combinación being passed as parameter.
+//! @brief Elimina del domain la combinación being passed as parameter.
 void XC::Domain::removeCombinacion(Combinacion *comb)
   {
     if(comb)
@@ -433,7 +433,7 @@ void XC::Domain::removeCombinacion(Combinacion *comb)
       }
   }
 
-//! @brief Elimina del dominio todos los casos de carga.
+//! @brief Elimina del domain todos los casos de carga.
 void XC::Domain::removeLPs(void)
   {
     int numSPs= constraints.removeLPs();
@@ -443,7 +443,7 @@ void XC::Domain::removeLPs(void)
       domainChange();
   }
 
-//! @brief Elimina del dominio todos los bloqueos de nodos.
+//! @brief Elimina del domain todos los bloqueos de nodos.
 void XC::Domain::removeNLs(void)
   {
     int numSPs= constraints.removeNLs();
@@ -453,25 +453,25 @@ void XC::Domain::removeNLs(void)
       domainChange();
   }
 
-//! @brief Elimina del dominio la carga sobre nodo being passed as parameter.
+//! @brief Elimina del domain la carga sobre nodo being passed as parameter.
 //!
 //! @param tag: Identificador de la carga sobre nodo a eliminar.
-//! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
+//! @param loadPattern: Pointer to la hipótesis a la que pertenece la carga.
 bool XC::Domain::removeNodalLoad(int tag, int loadPattern)
   { return constraints.removeNodalLoad(tag,loadPattern); }
 
 
-//! @brief Elimina del dominio la carga sobre elementos being passed as parameter.
+//! @brief Elimina del domain la carga sobre elementos being passed as parameter.
 //!
 //! @param tag: Identificador de la carga sobre elementos a eliminar.
-//! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
+//! @param loadPattern: Pointer to la hipótesis a la que pertenece la carga.
 bool XC::Domain::removeElementalLoad(int tag, int loadPattern)
   { return constraints.removeElementalLoad(tag,loadPattern); }
 
-//! @brief Elimina del dominio la constraint monopunto being passed as parameter.
+//! @brief Elimina del domain la constraint monopunto being passed as parameter.
 //!
 //! @param tag: Identificador de la constraint monopunto a eliminar.
-//! @param loadPattern: Puntero a la hipótesis a la que pertenece la carga.
+//! @param loadPattern: Pointer to la hipótesis a la que pertenece la carga.
 bool XC::Domain::removeSFreedom_Constraint(int tag, int loadPattern)
   {
     bool removed= constraints.removeSFreedom_Constraint(tag,loadPattern);
@@ -480,15 +480,15 @@ bool XC::Domain::removeSFreedom_Constraint(int tag, int loadPattern)
     return removed;
   }
 
-//! @brief Anula los punteros a grupo de grados de libertad de los nodos.
+//! @brief Anula los pointers to grupo de grados de libertad de los nodos.
 void XC::Domain::clearDOF_GroupPtr(void)
   { mesh.clearDOF_GroupPtr(); }
 
-//! @brief Devuelve un iterador a los elementos del dominio.
+//! @brief Devuelve un iterador a los elementos del domain.
 XC::ElementIter &XC::Domain::getElements()
   { return mesh.getElements(); }
 
-//! @brief Devuelve un iterador a los nodos del dominio.
+//! @brief Devuelve un iterador a los nodos del domain.
 XC::NodeIter &XC::Domain::getNodes()
   { return mesh.getNodes(); }
 
@@ -516,15 +516,15 @@ XC::ConstrContainer &XC::Domain::getConstraints(void)
 */
 
 //! @brief Devuelve verdadero si el elemento cuyo tag se pasa como parámetro
-//! ya existe en el dominio.
+//! ya existe en el domain.
 bool XC::Domain::existElement(int tag)
  { return mesh.existElement(tag); }
 
-//! @brief Devuelve un puntero al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the elemento cuyo tag se pasa como parámetro.
 XC::Element *XC::Domain::getElement(int tag)
   { return mesh.getElement(tag); }
 
-//! @brief Devuelve un puntero al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the elemento cuyo tag se pasa como parámetro.
 const XC::Element *XC::Domain::getElement(int tag) const
   { return mesh.getElement(tag); }
 
@@ -534,11 +534,11 @@ bool XC::Domain::existNode(int tag)
  { return mesh.existNode(tag); }
 
 
-//! @brief Devuelve un puntero al nodo cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo tag se pasa como parámetro.
 XC::Node *XC::Domain::getNode(int tag)
   { return mesh.getNode(tag); }
 
-//! @brief Devuelve un puntero al nodo cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo tag se pasa como parámetro.
 const XC::Node *XC::Domain::getNode(int tag) const
   { return mesh.getNode(tag); }
 
@@ -675,7 +675,7 @@ int XC::Domain::update(void)
     return mesh.update();
   }
 
-//! @brief Actualiza el estado del dominio.
+//! @brief Actualiza el estado del domain.
 int XC::Domain::update(double newTime, double dT)
   {
     applyLoad(newTime);
@@ -820,7 +820,7 @@ int XC::Domain::hasDomainChanged(void)
     return currentGeoTag;
   }
 
-//! @brief Imprime el dominio.
+//! @brief Imprime el domain.
 void XC::Domain::Print(std::ostream &s, int flag)
   {
 
@@ -859,7 +859,7 @@ int XC::Domain::addRegion(MeshRegion &theRegion)
     return 0;
   }
 
-//! @brief Devuelve un puntero a la región cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the la región cuyo tag se pasa como parámetro.
 XC::MeshRegion *XC::Domain::getRegion(int tag)
   {
     MeshRegion *retval= nullptr;
@@ -996,7 +996,7 @@ void XC::Domain::setNodeReactionException(const int &n)
 void XC::Domain::checkNodalReactions(const double &tol)
   { mesh.checkNodalReactions(tol); }
 
-//! @brief Calcula las reacciones en los nodos del dominio.
+//! @brief Calcula las reacciones en los nodos del domain.
 int XC::Domain::calculateNodalReactions(bool inclInertia,const double &tol)
   {
     int retval= mesh.calculateNodalReactions(inclInertia,tol);
@@ -1004,7 +1004,7 @@ int XC::Domain::calculateNodalReactions(bool inclInertia,const double &tol)
     return retval;
   }
 
-//! @brief Devuelve (si puede) un puntero al preprocesador.
+//! @brief Devuelve (si puede) a pointer al preprocesador.
 const XC::Preprocessor *XC::Domain::GetPreprocessor(void) const
   {
     const Preprocessor *retval= nullptr;
@@ -1014,7 +1014,7 @@ const XC::Preprocessor *XC::Domain::GetPreprocessor(void) const
     return retval;
   }
 
-//! @brief Devuelve (si puede) un puntero al preprocesador.
+//! @brief Devuelve (si puede) a pointer al preprocesador.
 XC::Preprocessor *XC::Domain::GetPreprocessor(void)
   {
     Preprocessor *retval= nullptr;
@@ -1024,7 +1024,7 @@ XC::Preprocessor *XC::Domain::GetPreprocessor(void)
     return retval;
   }
 
-//! @brief Envía el dominio through the channelespecificado.
+//! @brief Envía el domain through the channelespecificado.
 int XC::sendDomain(Domain &dom,int posDbTag,DbTagData &dt,CommParameters &cp)
   {
     int retval= dom.sendSelf(cp);
@@ -1032,7 +1032,7 @@ int XC::sendDomain(Domain &dom,int posDbTag,DbTagData &dt,CommParameters &cp)
     return retval;
   }
 
-//! @brief Recibe el dominio through the channelespecificado.
+//! @brief Recibe el domain through the channelespecificado.
 int XC::receiveDomain(Domain &dom,int posDbTag,DbTagData &dt,const CommParameters &cp)
   {
     int res= cp.receiveInt(dom.dbTag,dt,CommMetaData(posDbTag));

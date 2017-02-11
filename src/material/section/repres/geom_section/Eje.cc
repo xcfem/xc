@@ -62,29 +62,29 @@ void XC::Eje::actualiza_topologia(void)
 //! @brief Devuelve un apuntador al punto inicial.
 XC::Spot *XC::Eje::P1(void)
   {
-    std::cerr << "Eje::P1; esta función debe redefinirse en las clases"
-              << " derivadas, se devuelve nullptr;" << std::endl;
+    std::cerr << "Eje::P1; this function must be redefined on derived"
+              << " classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 //! @brief Devuelve un apuntador (constante) al punto inicial.
 const XC::Spot *XC::Eje::P1(void) const
   {
-    std::cerr << "Eje::P1; esta función debe redefinirse en las clases"
-              << " derivadas, se devuelve nullptr;" << std::endl;
+    std::cerr << "Eje::P1; this function must be redefined on derived"
+              << " classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 //! @brief Devuelve un apuntador al punto final.
 XC::Spot *XC::Eje::P2(void)
   {
-    std::cerr << "Eje::P2; esta función debe redefinirse en las clases"
-              << " derivadas, se devuelve nullptr;" << std::endl;
+    std::cerr << "Eje::P2; this function must be redefined on derived"
+              << " classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 //! @brief Devuelve un apuntador (constante) al punto final.
 const XC::Spot *XC::Eje::P2(void) const
   {
-    std::cerr << "Eje::P2; esta función debe redefinirse en las clases"
-              << " derivadas, se devuelve nullptr;" << std::endl;
+    std::cerr << "Eje::P2; his function must be redefined on derived"
+              << " classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 

@@ -166,7 +166,7 @@ void XC::Element::setIdNodos(const std::vector<int> &inodos)
 void XC::Element::setIdNodos(const ID &inodos)
   { getNodePtrs().set_id_nodos(inodos); }
 
-//! @brief Asigna el dominio al elemento.
+//! @brief Asigna el domain al elemento.
 void XC::Element::setDomain(Domain *theDomain)
   {
     MeshComponent::setDomain(theDomain);
@@ -586,21 +586,21 @@ XC::Vector XC::Element::getInterpolationFactors(const Pos3d &) const
 //! @brief Interfaz con VTK.
 int XC::Element::getVtkCellType(void) const
   {
-    std::cerr << "Element::getVtkCellType: la función getVtkCellType debe definirse en las clases derivadas." << std::endl;
+    std::cerr << "Element::getVtkCellType: function getVtkCellType must be overloaded in derived classes." << std::endl;
     return VTK_EMPTY_CELL;
   }
 
 //! @brief Interfaz con el formato MED de Salome.
 int XC::Element::getMEDCellType(void) const
   {
-    std::cerr << "Element::getMEDCellType: la función getMEDCellType debe definirse en las clases derivadas." << std::endl;
+    std::cerr << "Element::getMEDCellType: function getMEDCellType must be overloaded in derived classes." << std::endl;
     return ::MED_NONE;
   }
 
 //! @brief Devuelve el modelo de integración por Gauss del elemento.
 const XC::GaussModel &XC::Element::getGaussModel(void) const
   {
-    std::cerr << "La función Element::getMEDCellType debe redefinirse en cada clase de elemento." << std::endl;
+    std::cerr << "Function Element::getMEDCellType must be overloaded in derived classes." << std::endl;
     return gauss_model_empty;
   }
 
@@ -781,7 +781,7 @@ Pos3d XC::Element::getPosNodo(const size_t &i,bool initialGeometry) const
 TritrizPos3d XC::Element::getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)
   {
     TritrizPos3d retval;
-    std::cerr << "La función getPuntos debe redefinirse en la clase hija."
+    std::cerr << "Function getPuntos must be implemented in derived classes."
               << std::endl;
     return retval;
   }
@@ -799,8 +799,8 @@ void XC::Element::vuelcaTributarias(const std::vector<double> &t) const
 //! nodo del elemento
 void XC::Element::calculaLongsTributarias(bool initialGeometry) const
   {
-    std::cerr << "La función calculaLongsTributarias "
-              << "debe redefinirse en la clase hija."
+    std::cerr << "Function calculaLongsTributarias "
+              << "must be overloaded in derived classes."
               << std::endl;
   }
 
@@ -821,8 +821,8 @@ double XC::Element::getLongTributariaByTag(const int &tag) const
 //! nodo del elemento
 void XC::Element::calculaAreasTributarias(bool initialGeometry) const
   {
-    std::cerr << "La función calculaAreasTributarias "
-              << "debe redefinirse en la clase hija."
+    std::cerr << "Function calculaAreasTributarias "
+              << "must be overloaded in derived classes."
               << std::endl;
   }
 
@@ -843,8 +843,8 @@ double XC::Element::getAreaTributariaByTag(const int &tag) const
 //! nodo del elemento
 void XC::Element::calculaVolsTributarios(bool initialGeometry) const
   {
-    std::cerr << "La función calculaVolsTributarios "
-              << "debe redefinirse en la clase hija."
+    std::cerr << "Function calculaVolsTributarios "
+              << "must be overloaded in derived classes."
               << std::endl;
   }
 
@@ -865,7 +865,7 @@ double XC::Element::getVolTributarioByTag(const int &tag) const
 //! se pasa como parámetro.
 double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
   {
-    std::cerr << "La función getDist2(Pos2d) no se ha definido para los elementos de clase: '"
+    std::cerr << "Function getDist2(Pos2d) is not defined for element of type: '"
               << nombre_clase() << "'" << std::endl;
     return 0.0;
   }
@@ -874,7 +874,7 @@ double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
 //! se pasa como parámetro.
 double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
   {
-    std::cerr << "La función getDist(Pos2d) no se ha definido para los elementos de clase: '"
+    std::cerr << "Function getDist(Pos2d) is not defined for element of type: '"
               << nombre_clase() << "'" << std::endl;
     return 0.0;
   }
@@ -883,7 +883,7 @@ double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
 //! se pasa como parámetro.
 double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
   {
-    std::cerr << "La función getDist2(Pos3d) no se ha definido para los elementos de clase: '"
+    std::cerr << "Function getDist2(Pos3d) is not defined for element of type: '"
               << nombre_clase() << "'" << std::endl;
     return 0.0;
   }
@@ -892,7 +892,7 @@ double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
 //! se pasa como parámetro.
 double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
   {
-    std::cerr << "La función getDist(Pos3d) no se ha definido para los elementos de clase: '"
+    std::cerr << "Function getDist(Pos3d) is not defined for element of type: '"
               << nombre_clase() << "'" << std::endl;
     return 0.0;
   }

@@ -89,7 +89,7 @@
 #include "preprocessor/Preprocessor.h"
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ProtoElementLoader::ProtoElementLoader(Preprocessor *preprocessor)
   : Loader(preprocessor), nmb_mat("nil"), num_sec(3), dim_elem(0), nmb_transf("nil"), nmb_integ("Lobatto"), dir(0)
  {}
@@ -119,12 +119,12 @@ XC::Material *XC::ProtoElementLoader::get_ptr_material(void) const
 XC::BeamIntegratorLoader &XC::ProtoElementLoader::get_beam_integrator_loader(void) const
   { return preprocessor->getBeamIntegratorLoader(); }
 
-//! @brief Devuelve un iterador al integrador que se especifica en nmb_integ.
+//! @brief Devuelve un iterador al integrator que se especifica en nmb_integ.
 XC::BeamIntegratorLoader::const_iterator XC::ProtoElementLoader::get_iter_beam_integrator(void) const
   { return preprocessor->getBeamIntegratorLoader().find(nmb_integ); }
 
 
-//! @brief Devuelve un apuntador al integrador que se especifica en nmb_integ.
+//! @brief Devuelve un apuntador al integrator que se especifica en nmb_integ.
 XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void) const
   {
     BeamIntegration *retval= nullptr;
@@ -133,7 +133,7 @@ XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void) const
       retval= iInteg->second;
     else
       if(verborrea>0)
-        std::cerr << "ProtoElementLoader - no se encontró el integrador: '" 
+        std::cerr << "ProtoElementLoader - no se encontró el integrator: '" 
                   << nmb_integ << "'.\n";
     return retval;
   }
@@ -161,48 +161,35 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
   }
 //! @brief Procesa los comandos que se emplean para definir
 //! los elementos del modelo de elementos finitos. Interpreta
-//! los siguientes comandos:
+//! los siguientes comandos (if the identifier (tag) is not
+//! specified a default value will be assigned):
 //!
-//! - truss[tag]: Define un elemento de tipo barra articulada (Truss). Si no
-//!   se especifica el identificador (tag) se le asignará uno por defecto.
-//! - truss_section[tag]: Define un elemento de tipo barra articulada (TrussSection) con material de
-//!   tipo sección. Si no se especifica el identificador (tag) se le asignará uno por defecto.
-//! - corot_truss[tag]: Define un elemento de tipo barra articulada (CorotTruss) con formulación
-//!   corrotacional. Si no se especifica el identificador (tag) se le asignará uno por defecto.
-//! - corot_truss_section[tag]: Define un elemento de tipo barra articulada (CorotTrussSection)
-//!   con formulación  corrotacional y material de tipo sección. Si no se especifica el
-//!   identificador (tag) se le asignará uno por defecto.
-//! - beam2d_02[tag]: Define un elemento de tipo barra (beam2d02) para problemas planos. Si no
-//!   se especifica el identificador (tag) se le asignará uno por defecto.
-//! - beam2d_03[tag]: Define un elemento de tipo barra (beam2d03) para problemas planos. Si no
-//!   se especifica el identificador (tag) se le asignará uno por defecto.
-//! - beam2d_04[tag]: Define un elemento de tipo barra (beam2d04) para problemas planos. Si no
-//!   se especifica el identificador (tag) se le asignará uno por defecto.
-//! - beam3d_01[tag]: Define un elemento de tipo barra (beam3d01) para problemas tridimensionales. Si no
-//!   se especifica el identificador (tag) se le asignará uno por defecto.
-//! - beam3d_02[tag]: Define un elemento de tipo barra (beam2d02) para problemas tridimensionales. Si no
-//!   se especifica el identificador (tag) se le asignará uno por defecto.
-//! - elastic_beam2d[tag]: Define un elemento de tipo barra (ElasticBeam2d) para problemas planos. Si no
-//!   se especifica el identificador (tag) se le asignará uno por defecto.
-//! - elastic_beam3d[tag]: Define un elemento de tipo barra (ElasticBeam3d) para problemas tridimensionales. Si no
-//!   se especifica el identificador (tag) se le asignará uno por defecto.
+//! - truss[tag]: Define un elemento de tipo barra articulada (Truss). 
+//! - truss_section[tag]: Define un elemento de tipo barra articulada (TrussSection) con material de  tipo sección.
+//! - corot_truss[tag]: Define un elemento de tipo barra articulada (CorotTruss) con formulación corrotacional. 
+//! - corot_truss_section[tag]: Define un elemento de tipo barra articulada (CorotTrussSection) con formulación  corrotacional y material de tipo sección.
+//! - beam2d_02[tag]: Define un elemento de tipo barra (beam2d02) para problemas planos. 
+//! - beam2d_03[tag]: Define un elemento de tipo barra (beam2d03) para problemas planos. 
+//! - beam2d_04[tag]: Define un elemento de tipo barra (beam2d04) para problemas planos.
+//! - beam3d_01[tag]: Define un elemento de tipo barra (beam3d01) para problemas tridimensionales.
+//! - beam3d_02[tag]: Define un elemento de tipo barra (beam2d02) para problemas tridimensionales.
+//! - elastic_beam2d[tag]: Define un elemento de tipo barra (ElasticBeam2d) para problemas planos.
+//! - elastic_beam3d[tag]: Define un elemento de tipo barra (ElasticBeam3d) para problemas tridimensionales.
 //! - force_beam_column_2d[tag]: Define un elemento de tipo barra (ForceBeamColumn2d) no lineal,
-//!   para problemas planos. Si no se especifica el identificador (tag) se le asignará uno por defecto.
+//!   para problemas planos.
 //! - force_beam_column_3d[tag]: Define un elemento de tipo barra (ForceBeamColumn3d) no lineal,
-//!   para problemas tridimensionales. Si no se especifica el identificador (tag) se le asignará uno por defecto.
+//!   para problemas tridimensionales.
 //! - shell_mitc4[tag]: Define un elemento de tipo shell (ShellMITC4),
 //! - corot_shell_mitc4[tag]: Define un elemento de tipo shell con formulación corrotacional (CorotShellMITC4),
 //! - shell_nl[tag]: Define un elemento de tipo shell (ShellNL),
-//!   para problemas de láminas. Si no se especifica el identificador (tag) se le asignará uno por defecto.
+//!   para problemas de láminas.
 //! - quad4n[tag]: Define un elemento cuadrilátero de cuatro nodos (FourNodeQuad),
 //! - tri31[tag]: Define un elemento triangular de tres nodos y un sólo punto de gauss (Tri31),
-//!   para problemas planos. Si no se especifica el identificador (tag) se le asignará uno por defecto.
+//!   para problemas planos.
 //! - brick[tag]: Define un elemento hexaédrico de ocho nodos (Brick),
-//!   para análisis de sólidos. Si no se especifica el identificador (tag) se le asignará uno por defecto.
+//!   para solid analysis.
 //! - zero_length[tag]: Define un elemento de dimensión cero (ZeroLength).
-//!   Si no se especifica el identificador (tag) se le asignará uno por defecto.
-//! - zero_length_section[tag]: Define un elemento de dimensión cero (ZeroLengthSection) con
-//!   material de tipo sección. Si no se especifica el identificador (tag) se le asignará uno por defecto.
+//! - zero_length_section[tag]: Define un elemento de dimensión cero (ZeroLengthSection) con material de tipo sección.
 XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int tag_elem)
   {
     Element *retval= nullptr;
@@ -310,7 +297,7 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
 XC::Element *XC::ProtoElementLoader::nuevoElemento(const std::string &tipo,const ID &iNodos)
   {
     const int tag_elem= getDefaultTag();
-    Element *retval= preprocessor->GetDominio()->getElement(tag_elem);
+    Element *retval= preprocessor->getDomain()->getElement(tag_elem);
     if(!retval) //no existe (efectivament es nuevo).
       {
         retval= crea_elemento(tipo,tag_elem);
@@ -326,51 +313,43 @@ XC::Element *XC::ProtoElementLoader::nuevoElemento(const std::string &tipo,const
     return retval;
   }
 
-//! @brief Especifica nombre del material que se asignará por defecto a los nuevos elementos.
+//! @brief Sets the default material name for new elements.
 void XC::ProtoElementLoader::setDefaultMaterial(const std::string &nmb)
   { nmb_mat= nmb; }
 
-//! @brief Devuelve el nombre del material que se asignará por defecto a los nuevos elementos.
+//! @brief Returns the default material name for new elements.
 const std::string &XC::ProtoElementLoader::getDefaultMaterial(void) const
   { return nmb_mat; }
 
-//! @brief Especifica el número de secciones que
-//! se asignará por defecto a los nuevos elementos que lo requieran.
+//! @brief Default number of sections for new elements.
 void XC::ProtoElementLoader::setNumSections(const int &ns)
   { num_sec= ns; }
 
-//! @brief Devuelve el número de secciones que
-//! se asignará por defecto a los nuevos elementos que lo requieran.
+//! @brief Returns the default number of sections for new elements.
 int XC::ProtoElementLoader::getNumSections(void) const
   { return num_sec; }
 
-//! @brief Especifica la dimensión que
-//! se asignará por defecto a los nuevos elementos que la requieran.
+//! @brief Sets the default dimension (0D,1D,2D or 3D) for new elements.
 void XC::ProtoElementLoader::setDimElem(const int &dim)
   { dim_elem= dim; }
 
-//! @brief Devuelve la dimensión que
-//! se asignará por defecto a los nuevos elementos que la requieran.
+//! @brief Returns the default dimension (0D,1D,2D or 3D) for new elements.
 int XC::ProtoElementLoader::getDimElem(void) const
   { return dim_elem; }
 
-//! @brief Especifica nombre de la transformación que
-//! se asignará por defecto a los nuevos elementos que la requieran.
+//! @brief Sets the name of the default coordinate transformation for new elements.
 void XC::ProtoElementLoader::setDefaultTransf(const std::string &nmb)
   { nmb_transf= nmb; }
 
-//! @brief Devuelve el nombre de la transformación que se asignará por defecto
-//! a los nuevos elementos que la requieran.
+//! @brief Returns the name of the default coordinate transformation for new elements.
 const std::string &XC::ProtoElementLoader::getDefaultTransf(void) const
   { return nmb_transf; }
 
-//! @brief Especifica nombre del integrador que se asignará por
-//! defecto a los nuevos elementos que lo requieran.
+//! @brief Sets the name of the default integrator for new elements.
 void XC::ProtoElementLoader::setDefaultIntegrator(const std::string &nmb)
   { nmb_integ= nmb; }
 
-//! @brief Devuelve el nombre del integrador que se
-//! asignará por defecto a los nuevos elementos que la requieran.
+//! @brief Returns the name of the default integrator for new elements.
 const std::string &XC::ProtoElementLoader::getDefaultIntegrator(void) const
   { return nmb_integ; }
 

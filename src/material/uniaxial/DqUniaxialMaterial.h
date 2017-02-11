@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //DqUniaxialMaterial.h
-//deque de punteros (se emplear en la clase Set).
+//deque de pointers (se emplear en la clase Set).
 
 
 #ifndef DQUNIAXIALMATERIAL_H
@@ -40,7 +40,7 @@ namespace XC {
 
 //! @ingroup MatUnx
 //
-//! @brief Contenedor de punteros a UniaxialMaterial.
+//! @brief Contenedor de pointers to UniaxialMaterial.
 class DqUniaxialMaterial: public EntCmd, public MovableObject, public std::deque<UniaxialMaterial *>
   {
     void libera(void);

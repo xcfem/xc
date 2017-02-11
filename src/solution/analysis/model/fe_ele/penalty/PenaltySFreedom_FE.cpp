@@ -83,7 +83,7 @@ XC::PenaltySFreedom_FE::PenaltySFreedom_FE(int tag, Domain &theDomain, SFreedom_
     if(!theNode)
       {
 	std::cerr << "Error en PenaltySFreedom_FE::PenaltySFreedom_FE() - no se encontró el nodo de tag: ";
-	std::cerr << theSP->getNodeTag() << " en el dominio.\n";
+	std::cerr << theSP->getNodeTag() << " en el domain.\n";
 	exit(-1);
       }
 

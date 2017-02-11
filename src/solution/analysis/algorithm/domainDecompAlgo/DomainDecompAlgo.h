@@ -79,7 +79,7 @@ class Subdomain;
 
 //! @ingroup AnalAlgo
 //
-//! @brief Algoritmo de solución por descomposición del dominio.
+//! @brief Solution algorithm for domain decomposition.
 class DomainDecompAlgo: public SolutionAlgorithm
   {
   protected:

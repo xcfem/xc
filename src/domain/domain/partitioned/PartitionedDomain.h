@@ -78,7 +78,7 @@ class PartitionedDomainSubIter;
 class PartitionedDomainEleIter;
 class SingleDomEleIter;
 
-//! @brief Dominio particionado.
+//! @brief Partitioned domain.
 class PartitionedDomain: public Domain
   {
   private:
@@ -90,7 +90,7 @@ class PartitionedDomain: public Domain
     PartitionedDomainSubIter   *theSubdomainIter;
     PartitionedDomainEleIter   *theEleIter;
     
-    Graph mySubdomainGraph; //! Grafo de conectividad de subdominios.
+    Graph mySubdomainGraph; //! Grafo de conectividad de subdomains.
     void alloc(void);
     void libera(void);
   protected:

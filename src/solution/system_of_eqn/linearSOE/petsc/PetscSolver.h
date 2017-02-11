@@ -70,10 +70,8 @@ class PetscSOE;
 
 //! @ingroup Solver
 //
-//! @brief Objeto encargado de la solución del
-//! sistema de ecuaciones basado en la biblioteca
-//! PETSC (http://www.mcs.anl.gov/petsc/petsc-as).
-class PetscSolver : public LinearSOESolver
+//! @brief <a href="http://www.mcs.anl.gov/petsc/petsc-as" target="_new"> PETSC</a> library based SOE solver.
+class PetscSolver: public LinearSOESolver
   {
   private:
     KSP ksp;                   

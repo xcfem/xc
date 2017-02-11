@@ -77,7 +77,7 @@ XC::SubstructuringAnalysis::SubstructuringAnalysis(Subdomain &the_Domain,DomainS
   :DomainDecompositionAnalysis(the_Domain,theSolver,s)
   {}
 
-//! @brief Ejecuta el análisis.
+//! @brief Performs the analysis.
 int XC::SubstructuringAnalysis::analyze(void)
   {
     std::cerr << "SubstructuringAnalysis::analyze(void)";

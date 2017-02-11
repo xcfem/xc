@@ -37,7 +37,7 @@ XC::PropRecorder::PropRecorder(int classTag,Domain *ptr_dom)
   :Recorder(classTag), CallbackRecord(), CallbackRestart(),
   lastCommitTag(-1),lastTimeStamp(-1.0),theDomain(ptr_dom) {}
 
-//! @brief Asigna el dominio al recorder.
+//! @brief Asigna el domain al recorder.
 int XC::PropRecorder::setDomain(Domain &theDom)
   {
     theDomain = &theDom;

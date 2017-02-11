@@ -76,7 +76,7 @@ XC::PeriodSeries::PeriodSeries(int classTag,double startTime, double finishTime,
       }
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::PeriodSeries::PeriodSeries(int classTag)
   : PulseBaseSeries(classTag,1.0), period(1.0),shift(0.0) {}
 

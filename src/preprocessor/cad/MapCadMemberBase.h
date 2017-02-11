@@ -45,7 +45,7 @@ class MapCadMemberBase: public EntCmd
     typedef size_t Indice;
 
   protected:
-    Indice tag; //! Identificador por defecto para el próximo punto.
+    Indice tag; //! Default identifier for new point.
 
 
 

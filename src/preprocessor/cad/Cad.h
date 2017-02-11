@@ -66,8 +66,8 @@ class SisRef;
 //! puntos, lineas, superficies, sólidos, etc.
 //!
 //! Mantiene las listas de estas entidades y crea, para
-//! cada una de ellas un conjunto destinado a alojar un puntero a la
-//! propia entidad, así como punteros a los nodos y elementos contenidos
+//! cada una de ellas un conjunto destinado a alojar a pointer a la
+//! propia entidad, así como pointers to los nodos y elementos contenidos
 //! en la entidad.
 class Cad: public EntCmd
   {

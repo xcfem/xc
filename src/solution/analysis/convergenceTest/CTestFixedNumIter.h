@@ -66,7 +66,7 @@ namespace XC {
 
 //! @ingroup CTest
 //
-//! @brief Test de convergencia con un número fijo de
+//! @brief convergence test con un número fijo de
 //! iteraciones.This test is useful for hybrid simulation where
 //! the residual error is corrected for.
 class CTestFixedNumIter: public ConvergenceTest

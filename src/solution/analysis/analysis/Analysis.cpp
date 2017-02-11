@@ -83,7 +83,7 @@ const XC::ProcSolu *XC::Analysis::getProcSolu(void) const
   { return dynamic_cast<const ProcSolu *>(Owner()); }
 
 
-//! @brief Devuelve un puntero al dominio.
+//! @brief Returns a pointer to the domain.
 XC::Domain *XC::Analysis::getDomainPtr(void)
   {
     ProcSolu *ps= getProcSolu();
@@ -91,7 +91,7 @@ XC::Domain *XC::Analysis::getDomainPtr(void)
     return ps->getDomainPtr();
   }
 
-//! @brief Devuelve un puntero al dominio.
+//! @brief Returns a pointer to the domain.
 const XC::Domain *XC::Analysis::getDomainPtr(void) const
   {
     const ProcSolu *ps= getProcSolu();
@@ -99,7 +99,7 @@ const XC::Domain *XC::Analysis::getDomainPtr(void) const
     return ps->getDomainPtr();
   }
 
-//! @brief Devuelve un puntero al gestor de coacciones.
+//! @brief Returns a pointer to the gestor de coacciones.
 XC::ConstraintHandler *XC::Analysis::getConstraintHandlerPtr(void)
   {
     if(metodo_solu)
@@ -108,7 +108,7 @@ XC::ConstraintHandler *XC::Analysis::getConstraintHandlerPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al numerador de grados de libertad.
+//! @brief Returns a pointer to the numerador de grados de libertad.
 XC::DOF_Numberer *XC::Analysis::getDOF_NumbererPtr(void) const
   {
     if(metodo_solu)
@@ -116,7 +116,7 @@ XC::DOF_Numberer *XC::Analysis::getDOF_NumbererPtr(void) const
     else
       return nullptr;
   }
-//! @brief Devuelve un puntero al modelo de análisis.
+//! @brief Returns a pointer to the analysis model.
 XC::AnalysisModel *XC::Analysis::getAnalysisModelPtr(void) const
   {
     if(metodo_solu)
@@ -125,7 +125,7 @@ XC::AnalysisModel *XC::Analysis::getAnalysisModelPtr(void) const
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones lineal.
+//! @brief Returns a pointer to the linear system of equations.
 XC::LinearSOE *XC::Analysis::getLinearSOEPtr(void) const
   {
     if(metodo_solu)
@@ -134,7 +134,7 @@ XC::LinearSOE *XC::Analysis::getLinearSOEPtr(void) const
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones de eigenvalues.
+//! @brief Returns a pointer to the system of equations de eigenvalues.
 XC::EigenSOE *XC::Analysis::getEigenSOEPtr(void) const
   {
     if(metodo_solu)
@@ -143,7 +143,7 @@ XC::EigenSOE *XC::Analysis::getEigenSOEPtr(void) const
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al integrador en otro caso devuelve nullptr.
+//! @brief Devuelve, si es posible, a pointer al integrator en otro caso devuelve nullptr.
 XC::Integrator *XC::Analysis::getIntegratorPtr(void)
   {
     if(metodo_solu)
@@ -152,7 +152,7 @@ XC::Integrator *XC::Analysis::getIntegratorPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al integrador en otro caso devuelve nullptr.
+//! @brief Devuelve, si es posible, a pointer al integrator en otro caso devuelve nullptr.
 const XC::Integrator *XC::Analysis::getIntegratorPtr(void) const
   {
     if(metodo_solu)
@@ -161,7 +161,7 @@ const XC::Integrator *XC::Analysis::getIntegratorPtr(void) const
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al integrador incremental en otro caso devuelve nullptr.
+//! @brief Devuelve, si es posible, a pointer al integrator incremental en otro caso devuelve nullptr.
 XC::IncrementalIntegrator *XC::Analysis::getIncrementalIntegratorPtr(void)
   {
     if(metodo_solu)
@@ -170,7 +170,7 @@ XC::IncrementalIntegrator *XC::Analysis::getIncrementalIntegratorPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al EigenIntegrator en otro caso devuelve nullptr.
+//! @brief Devuelve, si es posible, a pointer al EigenIntegrator en otro caso devuelve nullptr.
 XC::EigenIntegrator *XC::Analysis::getEigenIntegratorPtr(void)
   {
     if(metodo_solu)
@@ -179,7 +179,7 @@ XC::EigenIntegrator *XC::Analysis::getEigenIntegratorPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al LinearBucklingIntegrator en otro caso devuelve nullptr.
+//! @brief Devuelve, si es posible, a pointer al LinearBucklingIntegrator en otro caso devuelve nullptr.
 XC::LinearBucklingIntegrator *XC::Analysis::getLinearBucklingIntegratorPtr(void)
   {
     if(metodo_solu)
@@ -188,7 +188,7 @@ XC::LinearBucklingIntegrator *XC::Analysis::getLinearBucklingIntegratorPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al EigenIntegrator en otro caso devuelve nullptr.
+//! @brief Devuelve, si es posible, a pointer al EigenIntegrator en otro caso devuelve nullptr.
 XC::TransientIntegrator *XC::Analysis::getTransientIntegratorPtr(void)
   {
     if(metodo_solu)
@@ -197,7 +197,7 @@ XC::TransientIntegrator *XC::Analysis::getTransientIntegratorPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al StaticIntegrator en otro caso devuelve nullptr.
+//! @brief Devuelve, si es posible, a pointer al StaticIntegrator en otro caso devuelve nullptr.
 XC::StaticIntegrator *XC::Analysis::getStaticIntegratorPtr(void)
   {
     StaticIntegrator *retval= nullptr;
@@ -206,8 +206,8 @@ XC::StaticIntegrator *XC::Analysis::getStaticIntegratorPtr(void)
     return retval;
   }
 
-//! @brief Devuelve, si es posible, un puntero al algoritmo de solución del sistema de 
-//! eigenvalues, en otro caso devuelve nullptr.
+//! @brief Return a pointer to the eigenproblem solution
+//! algorithm (if it's not defined returns NULL).
 XC::EigenAlgorithm *XC::Analysis::getEigenSolutionAlgorithmPtr(void)
   {
     if(metodo_solu)
@@ -216,8 +216,8 @@ XC::EigenAlgorithm *XC::Analysis::getEigenSolutionAlgorithmPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al algoritmo de solución del sistema de 
-//! ecuaciones, en otro caso devuelve nullptr.
+//! @brief Return a pointer to the linear SOE solution
+//! algorithm (if it's not defined returns NULL).
 XC::EquiSolnAlgo *XC::Analysis::getEquiSolutionAlgorithmPtr(void)
   {
     if(metodo_solu)
@@ -226,8 +226,8 @@ XC::EquiSolnAlgo *XC::Analysis::getEquiSolutionAlgorithmPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al algoritmo de solución
-//! DomainDecomp , en otro caso devuelve nullptr.
+//! @brief Return a pointer to the domain decomposition solution
+//! algorithm (if it's not defined returns NULL).
 XC::DomainDecompAlgo *XC::Analysis::getDomainDecompSolutionAlgorithmPtr(void)
   {
     if(metodo_solu)
@@ -236,7 +236,7 @@ XC::DomainDecompAlgo *XC::Analysis::getDomainDecompSolutionAlgorithmPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al test de convergencia (sólo para los análisis que lo requieran).
+//! @brief Returns a pointer to the convergence test (only for suitable analysis).
 XC::ConvergenceTest *XC::Analysis::getConvergenceTestPtr(void)
   {
     if(metodo_solu)
@@ -245,7 +245,7 @@ XC::ConvergenceTest *XC::Analysis::getConvergenceTestPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al test de convergencia (sólo para los análisis que lo requieran).
+//! @brief Returns a pointer to the convergence test (only for suitable analysis).
 const XC::ConvergenceTest *XC::Analysis::getConvergenceTestPtr(void) const
   {
     if(metodo_solu)
@@ -254,45 +254,45 @@ const XC::ConvergenceTest *XC::Analysis::getConvergenceTestPtr(void) const
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al DomainSolver.
+//! @brief Returns a pointer to the DomainSolver.
 const XC::DomainSolver *XC::Analysis::getDomainSolver(void) const
   {
-    std::cerr << "Analysis::getDomainSolver debe redefinirse en la clase derivada."
+    std::cerr << "Analysis::getDomainSolver must be redefined in derived classes"
               << std::endl;
     return nullptr;
   }
 
-//! @brief Devuelve un puntero al DomainSolver.
+//! @brief Returns a pointer to the DomainSolver.
 XC::DomainSolver *XC::Analysis::getDomainSolver(void)
   {
-    std::cerr << "Analysis::getDomainSolver debe redefinirse en la clase derivada."
+    std::cerr << "Analysis::getDomainSolver must be redefined in derived classes"
               << std::endl;
     return nullptr;
   }
 
-//! @brief Devuelve un puntero al subdominio.
+//! @brief Returns a pointer to the subdomain.
 const XC::Subdomain *XC::Analysis::getSubdomain(void) const
   {
-    std::cerr << "Analysis::getSubdomain debe redefinirse en la clase derivada."
+    std::cerr << "Analysis::getSubdomain must be redefined in derived classes"
               << std::endl;
     return nullptr;
   }
 
-//! @brief Devuelve un puntero al subdominio.
+//! @brief Returns a pointer to the subdomain.
 XC::Subdomain *XC::Analysis::getSubdomain(void)
   {
-    std::cerr << "Analysis::getSubdomain debe redefinirse en la clase derivada."
+    std::cerr << "Analysis::getSubdomain must be redefined in derived classes"
               << std::endl;
     return nullptr;
   }
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, modelo de análisis,...).
+//! @brief Deletes all members (Constraint handler, analysis model,...).
 void XC::Analysis::clearAll(void)
   {
     std::cerr << "Analysis::clearAll() está obsoleta." << std::endl;
   }
 
-//! @brief Establece el renumerador a emplear en el análisis.
+//! @brief Sets the renumerador to use in the analysis.
 int XC::Analysis::setNumberer(DOF_Numberer &theNewNumberer) 
   {
     if(metodo_solu)
@@ -301,7 +301,7 @@ int XC::Analysis::setNumberer(DOF_Numberer &theNewNumberer)
     return 0;
   }
 
-//! @brief Establece el sistema de ecuaciones lineal a emplear en el análisis.
+//! @brief Sets the linear system of equations to use in the analysis.
 int XC::Analysis::setLinearSOE(LinearSOE &theNewSOE)
   {
     if(metodo_solu)
@@ -310,7 +310,7 @@ int XC::Analysis::setLinearSOE(LinearSOE &theNewSOE)
       return 0;
   }
 
-//! @brief Establece el sistema de eigenvalues a emplear en el análisis.
+//! @brief Sets the sistema de eigenvalues to use in the analysis.
 int XC::Analysis::setEigenSOE(EigenSOE &theSOE)
   {
     if(metodo_solu)
@@ -319,7 +319,7 @@ int XC::Analysis::setEigenSOE(EigenSOE &theSOE)
       return 0;
   }
 
-//! @brief Establece el integrador a emplear en el análisis.
+//! @brief Sets the integrator to use in the analysis.
 int XC::Analysis::setIntegrator(Integrator &theNewIntegrator)
   {
     if(metodo_solu)
@@ -328,7 +328,7 @@ int XC::Analysis::setIntegrator(Integrator &theNewIntegrator)
       return 0;
   }
 
-//! @brief Establece el algoritmo de solución a emplear en el análisis.
+//! @brief Set the solution algorithm to be used in the analysis.
 int XC::Analysis::setAlgorithm(SolutionAlgorithm &theNewAlgorithm) 
   {
     if(metodo_solu)

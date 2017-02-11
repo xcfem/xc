@@ -71,9 +71,7 @@ class UmfpackGenLinSOE;
 
 //! @ingroup Solver
 //
-//! @brief Objeto encargado de la solución del
-//! sistema de ecuaciones basado en la biblioteca
-//! UMFPACK (http://www.cise.ufl.edu/research/sparse/umfpack).
+//! @brief UMFPACK (<a href="http://faculty.cse.tamu.edu/davis/research.html" target="_new">) based sparse matrix linear SOE solver.
 class UmfpackGenLinSolver : public LinearSOESolver
 {
   private:

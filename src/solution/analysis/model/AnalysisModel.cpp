@@ -491,7 +491,7 @@ int XC::AnalysisModel::getNumDOF_Groups(void) const
   { return numDOF_Grp; }
 
 
-//! @brief Devuelve un puntero al grupo de grados de libertad
+//! @brief Returns a pointer to the grupo de grados de libertad
 //! cuyo tag se pasa como parámetro.
 XC::DOF_Group *XC::AnalysisModel::getDOF_GroupPtr(int tag)
   {
@@ -503,7 +503,7 @@ XC::DOF_Group *XC::AnalysisModel::getDOF_GroupPtr(int tag)
     return result;
   }
 
-//! @brief Devuelve un puntero al grupo de grados de libertad
+//! @brief Returns a pointer to the grupo de grados de libertad
 //! cuyo tag se pasa como parámetro.
 const XC::DOF_Group *XC::AnalysisModel::getDOF_GroupPtr(int tag) const
   {
@@ -657,11 +657,11 @@ void XC::AnalysisModel::setNumEigenvectors(int numEigenvectors)
         theNode->setNumEigenvectors(numEigenvectors);
   }
 
-//! @brief Comunica al dominio el valor de los eigenvalues obtenidos.
+//! @brief Comunica al domain el valor de los eigenvalues obtenidos.
 void XC::AnalysisModel::setEigenvalues(const Vector &eigenvalues)
   { getDomainPtr()->setEigenvalues(eigenvalues); }        
 
-//! @brief Comunica al dominio el valor de los factores
+//! @brief Comunica al domain el valor de los factores
 //! de participación modal obtenidos.
 void XC::AnalysisModel::setModalParticipationFactors(const Vector &values)
   { getDomainPtr()->setModalParticipationFactors(values); }        
@@ -740,7 +740,7 @@ int XC::AnalysisModel::newStepDomain(double dT)
   }
 
 
-//! @brief Consuma el estado del dominio.
+//! @brief Consuma el estado del domain.
 int XC::AnalysisModel::commitDomain(void)
   {
     // check to see there is a domain linked to the Model
@@ -760,7 +760,7 @@ int XC::AnalysisModel::commitDomain(void)
     return retval;
   }
 
-//! @brief Devuelve el estado del dominio al último consumado.
+//! @brief Devuelve el estado del domain al último consumado.
 int XC::AnalysisModel::revertDomainToLastCommit(void)
   {
     // check to see there is a XC::Domain linked to the Model

@@ -39,7 +39,7 @@
 XC::ElementEdges::ElementEdges(void)
   : EntCmd() {}
 
-//! @brief Asigna los punteros a partir de los identificadores de elemento.
+//! @brief Asigna los pointers to partir de los identificadores de elemento.
 void XC::ElementEdges::setPtrs(Domain *theDomain, const ID &theElementTags, const ID &theEdgesIndex)
   {
     size_t sz= theElementTags.Size();

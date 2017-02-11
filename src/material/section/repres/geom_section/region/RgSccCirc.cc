@@ -41,7 +41,7 @@
 const int I= 0, J=1, K= 2, L= 3; //Índices de los vértices.
 const int Y= 0, Z=1; //Índices de las coordenadas.
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::RgSccCirc::RgSccCirc(Material *mat)
   : RgQuadCell(mat), centerPosit(2),intRad(0.0), extRad(0.0), initAng(0.0), finalAng(360.0)
   {}

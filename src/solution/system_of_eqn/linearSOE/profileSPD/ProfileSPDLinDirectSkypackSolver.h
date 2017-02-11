@@ -74,8 +74,7 @@ class ProfileSPDLinSOE;
 
 //! @ingroup LinearSolver
 //
-//! @brief Objeto encargado de obtener la solución
-//! de un sistemas de ecuaciones lineal con matriz de perfil.
+//! @brief <a href="http://crd-legacy.lbl.gov/~osni/#Software" target="_new"> Skypakc</a> based linear SOE solver.
 class ProfileSPDLinDirectSkypackSolver : public ProfileSPDLinSolver
   {
   private:

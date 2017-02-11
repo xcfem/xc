@@ -225,7 +225,7 @@ void MEDTFieldInfo<T>::write(const std::string &filename) const
     if(campo)
       campo->write(MEDMEM::MED_DRIVER,filename.c_str());
     else
-      std::cerr << "El puntero al campo es nulo." << std::endl;
+      std::cerr << "the pointer al campo es nulo." << std::endl;
   }
 
 } // end of XC namespace

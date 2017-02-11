@@ -69,7 +69,7 @@ XC::ConnectedMaterial::ConnectedMaterial(int tag, int classTag,const DqUniaxialM
   { theModels.set_owner(this); }
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ConnectedMaterial::ConnectedMaterial(int tag, int classTag)
   :UniaxialMaterial(tag,classTag), theModels(this) {}
 

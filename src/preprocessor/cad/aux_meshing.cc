@@ -97,7 +97,7 @@ void meshing_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
     const size_t ncapas= nodos.GetCapas();
     const size_t nfilas= nodos.getNumFilas();
     const size_t ncols= nodos.getNumCols();
-    if(!nodos.HasNull()) //No hay punteros nulos.
+    if(!nodos.HasNull()) //No hay pointers nulos.
       {
         if(nodos.EsCapaICte())
           {
@@ -118,8 +118,8 @@ void meshing_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
             meshing_quad4N_on_ij(e,nodos.GetConstRefCapaKCte(1),capa_elem);
           }
       }
-    else  //Hay punteros nulos.
-      std::cerr << "meshing_quad4N_bidimensional; existen punteros a nodo nulos." << std::endl;
+    else  //Hay pointers nulos.
+      std::cerr << "meshing_quad4N_bidimensional; existen pointers to node nulos." << std::endl;
   }
 
 //! @brief Places the element on the mesh being passed as parameter.
@@ -212,7 +212,7 @@ void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
     const size_t ncapas= nodos.GetCapas();
     const size_t nfilas= nodos.getNumFilas();
     const size_t ncols= nodos.getNumCols();
-    if(!nodos.HasNull()) //No hay punteros nulos.
+    if(!nodos.HasNull()) //No hay pointers nulos.
       {
         if(nodos.EsCapaICte())
           {
@@ -233,8 +233,8 @@ void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
             meshing_quad9N_on_ij(e,nodos.GetConstRefCapaKCte(1),capa_elem);
           }
       }
-    else  //Hay punteros nulos.
-      std::cerr << "meshing_quad9N_bidimensional; existen punteros a nodo nulos." << std::endl;
+    else  //Hay pointers nulos.
+      std::cerr << "meshing_quad9N_bidimensional; existen pointers to node nulos." << std::endl;
   }
 
 //! @brief Places the element on the mesh being passed as parameter.

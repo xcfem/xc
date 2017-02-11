@@ -38,13 +38,13 @@ class Node;
 
 //!  \ingroup Lodrs
 //! 
-//! @brief Objeto encargado de agregar al dominio los nodos
+//! @brief Objeto encargado de agregar al domain los nodos
 //! leídos desde archivo.
 class NodeLoader: public Loader
   {
   private:
-    size_t ngdl_def_nodo; //!< Número de grados del libertad de un nodo por defecto.
-    size_t ncoo_def_nodo; //!< Número de coordenadas de los nodos (1,2 ó 3).
+    size_t ngdl_def_nodo; //!< Default number of DOFs for new nodes.
+    size_t ncoo_def_nodo; //!< Number of coordinates for new nodes (1,2 ó 3).
     Node *nodo_semilla; //!< Seed node for semi-automatic meshing.
     void libera(void);
     Node *new_node(const int &tag,const size_t &dim,const int &ngdl,const double &x,const double &y=0.0,const double &z=0.0);

@@ -105,12 +105,12 @@ class CommParameters;
 //
 //! @ingroup TipoAnalisis
 //
-//! @brief Clase Base para los objetos que realizan el análisis.
+//! @brief Clase Base para los objetos que realizan the analysis.
 class Analysis: public EntCmd
   {
   protected:
     int analysis_result; //!< igual a cero si se analizó con éxito.
-    SoluMethod *metodo_solu; //!< Estrategia de solución.
+    SoluMethod *metodo_solu; //!< Solution method.
 
     int newStepDomain(AnalysisModel *theModel,const double &dT =0.0);
     ProcSolu *getProcSolu(void);

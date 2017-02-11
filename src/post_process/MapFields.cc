@@ -41,7 +41,7 @@ bool XC::MapFields::existe(const std::string &nmb) const
     return (i!=end());
   }
 
-//! @brief Devuelve un puntero al conjunto cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the conjunto cuyo nombre se pasa como parámetro.
 XC::MapFields::iterator XC::MapFields::buscaField(const std::string &nmb)
   {
     iterator i=begin();
@@ -50,7 +50,7 @@ XC::MapFields::iterator XC::MapFields::buscaField(const std::string &nmb)
     return i;
   }
 
-//! @brief Devuelve un puntero al conjunto cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the conjunto cuyo nombre se pasa como parámetro.
 XC::MapFields::const_iterator XC::MapFields::buscaField(const std::string &nmb) const
   {
     const_iterator i=begin();
@@ -59,7 +59,7 @@ XC::MapFields::const_iterator XC::MapFields::buscaField(const std::string &nmb) 
     return i;
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::MapFields::MapFields(Preprocessor *m)
   : EntCmd(m), MovableObject(0), preprocessor(m) {}
 

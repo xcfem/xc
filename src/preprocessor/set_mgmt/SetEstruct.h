@@ -41,7 +41,7 @@ class Element;
 //!  \ingroup Set
 //! 
 //!  \brief Conjunto estructurado, es decir que puede devolver
-//!  un puntero a un nodo o a un elemento a partir de sus índices i,j y k.
+//!  a pointer a un nodo o a un elemento a partir de sus índices i,j y k.
 class SetEstruct: public SetBase
   {
   protected:

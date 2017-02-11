@@ -78,7 +78,7 @@ XC::ZeroLengthContact2D::ZeroLengthContact2D(int tag,int Nd1, int Nd2,double Kno
     ContactNormal(1) = normal(1)/normal.Norm();
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ZeroLengthContact2D::ZeroLengthContact2D(int tag)
   :ZeroLengthContact(tag,ELE_TAG_ZeroLengthContact2D,2), lambda(0.0), T(2*numNodos()), ContactNormal(2), stickPt(0.0), xi(0.0)
   {}

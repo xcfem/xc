@@ -134,19 +134,19 @@ int XC::ConvergenceTest::start(void)
     return retval;
   }
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a pointer to the solution method that owns this object.
 XC::SoluMethod *XC::ConvergenceTest::getSoluMethod(void)
   { return dynamic_cast<SoluMethod *>(Owner()); }
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a const pointer to the solution method that owns this object.
 const XC::SoluMethod *XC::ConvergenceTest::getSoluMethod(void) const
   { return dynamic_cast<const SoluMethod *>(Owner()); }
 
-//! @brief Devuelve verdadero si puede acceder al sistema de ecuaciones.
+//! @brief Devuelve verdadero si puede acceder al system of equations.
 bool XC::ConvergenceTest::hasLinearSOE(void) const
   { return (getLinearSOEPtr()!=nullptr); }
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a pointer to the system of equations.
 XC::LinearSOE *XC::ConvergenceTest::getLinearSOEPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -154,7 +154,7 @@ XC::LinearSOE *XC::ConvergenceTest::getLinearSOEPtr(void)
     return sm->getLinearSOEPtr();
   }
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a const pointer to the system of equations.
 const XC::LinearSOE *XC::ConvergenceTest::getLinearSOEPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();

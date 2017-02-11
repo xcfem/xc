@@ -76,7 +76,7 @@ class Vector;
 
 //! @ingroup AnalisisIntegrator
 //
-//! @defgroup TransientIntegrator Integración del sistema de ecuaciones dinámico.
+//! @defgroup TransientIntegrator Integración del system of equations dinámico.
 //
 //! @ingroup TransientIntegrator
 //

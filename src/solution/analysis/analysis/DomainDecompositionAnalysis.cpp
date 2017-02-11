@@ -81,7 +81,7 @@
 #include <utility/matrix/ID.h>
 #include <domain/mesh/node/Node.h>
 
-//! @brief Asigna los punteros al DomainDecompSolutionAlgorithm y al subdominio.
+//! @brief Sets los pointers tol DomainDecompSolutionAlgorithm y al subdomain.
 void XC::DomainDecompositionAnalysis::set_all_links(void)
   {
     theSubdomain->setDomainDecompAnalysis(*this);
@@ -128,40 +128,40 @@ XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(int clsTag, Subdoma
     domainStamp(0) {}
 
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, modelo de análisis,...).
+//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
 void XC::DomainDecompositionAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation
     Analysis::clearAll();
   }
 
-//! @brief Ejecuta el análisis.
+//! @brief Performs the analysis.
 int XC::DomainDecompositionAnalysis::analyze(double dT)
   { return 0; }
 
 int XC::DomainDecompositionAnalysis::initialize(void)
   { return 0; }
 
-//! @brief Devuelve un puntero al DomainSolver.
+//! @brief Returns a pointer to the DomainSolver.
 const XC::DomainSolver *XC::DomainDecompositionAnalysis::getDomainSolver(void) const
   { return theSolver; }
 
-//! @brief Devuelve un puntero al DomainSolver.
+//! @brief Returns a pointer to the DomainSolver.
 XC::DomainSolver *XC::DomainDecompositionAnalysis::getDomainSolver(void)
   { return theSolver; }
 
-//! @brief Devuelve un puntero al subdominio.
+//! @brief Returns a pointer to the subdomain.
 const XC::Subdomain *XC::DomainDecompositionAnalysis::getSubdomain(void) const
   { return theSubdomain; }
 
-//! @brief Devuelve un puntero al subdominio.
+//! @brief Returns a pointer to the subdomain.
 XC::Subdomain *XC::DomainDecompositionAnalysis::getSubdomain(void)
   { return theSubdomain; }
 
 bool XC::DomainDecompositionAnalysis::doesIndependentAnalysis(void)
   { return false; }
 
-//! @brief Ejecuta los cambios que implica un cambio en el dominio del problema.
+//! @brief Performs los cambios que implica un cambio en el domain del problema.
 int XC::DomainDecompositionAnalysis::domainChanged(void)
   {
     // remove existing FE_elements and DOF_Groups from the Analysis
@@ -528,7 +528,7 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
     return 0;
   }
 
-//! @brief Asigna el algoritmo de solución a emplear en el análisis.
+//! @brief Sets the solution algorithm to use in the analysis.
 int XC::DomainDecompositionAnalysis::setAlgorithm(EquiSolnAlgo &theAlgorithm)
   {
     Analysis::setAlgorithm(theAlgorithm);
@@ -536,7 +536,7 @@ int XC::DomainDecompositionAnalysis::setAlgorithm(EquiSolnAlgo &theAlgorithm)
     return -1;
   }
 
-//! @brief Asigna el integrador a emplear en el análisis.
+//! @brief Sets the integrator to use in the analysis.
 int XC::DomainDecompositionAnalysis::setIntegrator(IncrementalIntegrator &theIntegrator) 
   {
     Analysis::setIntegrator(theIntegrator);
@@ -545,7 +545,7 @@ int XC::DomainDecompositionAnalysis::setIntegrator(IncrementalIntegrator &theInt
   }
 
 
-//! @brief Asigna el sistema de ecuaciones a emplear en el análisis.
+//! @brief Sets the system of equations to use in the analysis.
 int XC::DomainDecompositionAnalysis::setLinearSOE(LinearSOE &theSOE)
   {
     Analysis::setLinearSOE(theSOE);
@@ -553,7 +553,7 @@ int XC::DomainDecompositionAnalysis::setLinearSOE(LinearSOE &theSOE)
     return -1;
   }
 
-//! @brief Asigna el test de convergencia a emplear en el análisis.
+//! @brief Sets the convergence test to use in the analysis.
 int XC::DomainDecompositionAnalysis::setConvergenceTest(ConvergenceTest &theTest)
   { return metodo_solu->setConvergenceTest(theTest); }
 

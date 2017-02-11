@@ -74,7 +74,7 @@ class LinearSOE;
 
 //! @ingroup AnalAlgo
 //
-//! @defgroup EQSolAlgo Algoritmos para la solución del sistema de ecuaciones.
+//! @defgroup EQSolAlgo Algorithms for solving system of equations.
 //
 //! @ingroup EQSolAlgo
 //

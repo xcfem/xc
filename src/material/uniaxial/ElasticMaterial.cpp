@@ -77,7 +77,7 @@ XC::ElasticMaterial::ElasticMaterial(int tag, int classtag)
   :ElasticBaseMaterial(tag,classtag,0.0),  trialStrainRate(0.0), eta(0.0)
   {}
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ElasticMaterial::ElasticMaterial(void)
   :ElasticBaseMaterial(0,MAT_TAG_ElasticMaterial,0.0),  trialStrainRate(0.0), eta(0.0)
   {}

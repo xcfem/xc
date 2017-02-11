@@ -35,7 +35,7 @@ namespace XC {
 
 //!  @ingroup Analisis
 //! 
-//! @defgroup CTest Test de convergencia.
+//! @defgroup CTest convergence test.
 //
 //! @ingroup CTest
 //

@@ -75,7 +75,7 @@ theSOE(nullptr), factored(false)
     // nothing to do.
   }
 
-//! @brief Resuelve el problema de eigenvalues.
+//! @brief Solves the eigenproblem.
 int XC::SymArpackSolver::solve(void)
   {
     if(!theSOE)
@@ -215,7 +215,7 @@ int XC::SymArpackSolver::solve(void)
     return 0;
   }
 
-//! @brief Asigna el tamaño del problema.
+//! @brief Sets the tamaño del problema.
 int XC::SymArpackSolver::setSize(void)
   {
     // nothing to do
@@ -232,7 +232,7 @@ int XC::SymArpackSolver::setSize(void)
 const int &XC::SymArpackSolver::getSize(void) const
   { return theSOE->size; }
 
-//! @brief Asigna el problema de eigenvalues a resolver.
+//! @brief Sets the eigenproblem to solve.
 bool XC::SymArpackSolver::setEigenSOE(EigenSOE *soe)
   {
     bool retval= false;
@@ -243,11 +243,11 @@ bool XC::SymArpackSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::setEigenSOE: el sistema de ecuaciones no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << nombre_clase() << "::setEigenSOE: the system of equations no es del tipo adecuado para este solver." << std::endl;
     return retval;
   }
 
-//! @brief Asigna el problema a resolver.
+//! @brief Sets the problema to solve.
 bool XC::SymArpackSolver::setEigenSOE(SymArpackSOE &theEigenSOE)
   { return setEigenSOE(&theEigenSOE); }
 
@@ -315,7 +315,7 @@ void XC::SymArpackSolver::myCopy(int n, double *v, double *result)
       { result[i] = v[i]; }
   }
 
-//! @brief Devuelve el autovector correspondiente al modo being passed as parameter.
+//! @brief Devuelve the autovector correspondiente al modo being passed as parameter.
 const XC::Vector &XC::SymArpackSolver::getEigenvector(int mode) const
   {
     int *invp = theSOE->invp;
@@ -333,7 +333,7 @@ const XC::Vector &XC::SymArpackSolver::getEigenvector(int mode) const
     return eigenV;
   }
 
-//! @brief Devuelve el autovalor correspondiente al modo being passed as parameter.
+//! @brief Devuelve the autovalor correspondiente al modo being passed as parameter.
 const double &XC::SymArpackSolver::getEigenvalue(int mode) const
   {
     if(mode <= 0 || mode > numModes)

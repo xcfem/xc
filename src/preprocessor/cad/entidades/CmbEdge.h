@@ -47,7 +47,7 @@ class CmbEdge: public Edge
     //!
     //! @brief Componente de una línea compuesta.
     //!
-    //! Una Edge compuesta es una secuencia de punteros a líneas (Linea) (que
+    //! Una Edge compuesta es una secuencia de pointers to líneas (Linea) (que
     //! aqui llamaremos lados), tal que el extremo de una de ellas es el
     //! origen de la siguiente. Como quiera que la orientación de la línea definida
     //! en el modelo, puede no coincidir con la necesaria para la secuencia, cada
@@ -55,7 +55,7 @@ class CmbEdge: public Edge
     //! interpretarse la línea con su sentido directo o con el inverso.
     class Lado: public EntCmd
       {
-        Edge *edge; //!< Puntero a línea.
+        Edge *edge; //!< Pointer to línea.
         bool directo; //!< true: directo (P1->P2), false: inverso (P2->P1)
       protected:
     

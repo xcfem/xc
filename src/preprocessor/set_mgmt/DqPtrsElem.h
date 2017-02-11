@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //DqPtrsElem.h
-//deque de punteros a elemento.
+//deque de pointers to elemento.
 
 
 #ifndef DQPTRSELEM_H
@@ -41,7 +41,7 @@ class TrfGeom;
 
 //!  \ingroup Set
 //! 
-//!  \brief Contenedor de punteros a elementos.
+//!  \brief Contenedor de pointers to elementos.
 //! 
 class DqPtrsElem: public DqPtrs<Element>
   {

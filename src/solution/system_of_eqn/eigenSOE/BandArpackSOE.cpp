@@ -48,7 +48,7 @@ XC::BandArpackSOE::BandArpackSOE(SoluMethod *owr, double theShift)
   :ArpackSOE(owr,EigenSOE_TAGS_BandArpackSOE,theShift),
    numSuperD(0), numSubD(0) {}
 
-//! @brief Asigna el solver que se empleará en la solución.
+//! @brief Sets the solver that will be used to compute the solution.
 bool XC::BandArpackSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;
@@ -59,7 +59,7 @@ bool XC::BandArpackSOE::setSolver(EigenSolver *newSolver)
         retval= ArpackSOE::setSolver(tmp);
       }
     else
-      std::cerr << "BandArpackSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
+      std::cerr << "BandArpackSOE::setSolver; incompatible solver." << std::endl;
     return retval;
   }
 

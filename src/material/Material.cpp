@@ -71,7 +71,7 @@ XC::Material::Material(int tag, int clasTag)
   :TaggedObject(tag), MovableObject(clasTag) {}
 
 
-//! @brief Devuelve (si puede) un puntero al preprocesador.
+//! @brief Devuelve (si puede) a pointer al preprocesador.
 const XC::MaterialLoader *XC::Material::GetMaterialLoader(void) const
   {
     const XC::MaterialLoader *retval= dynamic_cast<const MaterialLoader *>(Owner());
@@ -126,7 +126,7 @@ void XC::Material::zeroInitialGeneralizedStrain(void)
   }
 
 
-//! @brief Envía un puntero a material through the channel being passed as parameter.
+//! @brief Envía a pointer a material through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase del material.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 int XC::sendMaterialPtr(Material *ptr,DbTagData &dt,CommParameters &cp,const BrokedPtrCommMetaData &md)
@@ -143,7 +143,7 @@ int XC::sendMaterialPtr(Material *ptr,DbTagData &dt,CommParameters &cp,const Bro
     return res;
   }
 
-//! @brief Recibe un puntero a material through the channel being passed as parameter.
+//! @brief Recibe a pointer a material through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase del material.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::Material *XC::receiveMaterialPtr(Material* ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)

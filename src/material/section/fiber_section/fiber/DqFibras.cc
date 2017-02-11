@@ -81,7 +81,7 @@ XC::Fiber *XC::DqFibras::inserta(const Fiber &f)
     return retval;
   }
 
-//! @brief Agrega al contenedor el puntero a fibra being passed as parameter.
+//! @brief Agrega al contenedor the pointer a fibra being passed as parameter.
 void XC::DqFibras::push_back(Fiber *f)
    { dq_ptr_fibras::push_back(f); }
 
@@ -126,7 +126,7 @@ double XC::DqFibras::GetYMin(void) const
           if(*i)
             retval= std::min(retval,(*i)->getLocY());
           else
-            std::cerr << "DqFibras::GetYMin; Puntero a fibra nulo." << std::endl;
+            std::cerr << "DqFibras::GetYMin; Pointer to fiber is null." << std::endl;
       }
     else
       std::cerr << "DqFibras::GetYMin; el conjunto de fibras está vacío." << std::endl;
@@ -145,7 +145,7 @@ double XC::DqFibras::GetZMin(void) const
           if(*i)
             retval= std::min(retval,(*i)->getLocZ());
           else
-            std::cerr << "DqFibras::GetZMin; Puntero a fibra nulo." << std::endl;
+            std::cerr << "DqFibras::GetZMin; Pointer to fiber is null." << std::endl;
       }
     else
       std::cerr << "DqFibras::GetZMin; el conjunto de fibras está vacío." << std::endl;
@@ -164,7 +164,7 @@ double XC::DqFibras::GetYMax(void) const
           if(*i)
             retval= std::max(retval,(*i)->getLocY());
           else
-            std::cerr << "DqFibras::GetYMax; Puntero a fibra nulo." << std::endl;
+            std::cerr << "DqFibras::GetYMax; Pointer to fiber is null." << std::endl;
       }
     else
       std::cerr << "DqFibras::GetYMax; el conjunto de fibras está vacío." << std::endl;
@@ -183,7 +183,7 @@ double XC::DqFibras::GetZMax(void) const
           if(*i)
             retval= std::max(retval,(*i)->getLocZ());
           else
-            std::cerr << "DqFibras::GetZMax; Puntero a fibra nulo." << std::endl;
+            std::cerr << "DqFibras::GetZMax; Pointer to fiber is null." << std::endl;
       }
     else
       std::cerr << "DqFibras::GetZMax; el conjunto de fibras está vacío." << std::endl;
@@ -200,7 +200,7 @@ GeomObj::list_Pos2d XC::DqFibras::getPosiciones(void) const
           if(*i)
             retval.push_back(Pos2d((*i)->getLocY(),(*i)->getLocZ()));
           else
-            std::cerr << "DqFibras::GetYMax; Puntero a fibra nulo." << std::endl;
+            std::cerr << "DqFibras::GetYMax; Pointer to fiber is null." << std::endl;
       }
     return retval;
   }
@@ -237,7 +237,7 @@ double XC::DqFibras::getIz(const double &factor,const double &y0) const
       if(*i)
         retval+= (*i)->getArea()*sqr((*i)->getLocY()-y0);
       else
-        std::cerr << "DqFibras::getIz; Puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getIz; Pointer to fiber is null." << std::endl;
     retval*= factor;
     return retval;
   }
@@ -252,7 +252,7 @@ double XC::DqFibras::getIy(const double &factor,const double &z0) const
       if(*i)
         retval+= (*i)->getArea()*sqr((*i)->getLocZ()-z0);
       else
-        std::cerr << "DqFibras::getIy; Puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getIy; Pointer to fiber is null." << std::endl;
     retval*= factor;
     return retval;
   }
@@ -267,7 +267,7 @@ double XC::DqFibras::getPyz(const double &factor,const double &y0,const double &
       if(*i)
         retval+= (*i)->getArea()*((*i)->getLocZ()-z0)*((*i)->getLocY()-y0);
       else
-        std::cerr << "DqFibras::getPyz; Puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getPyz; Pointer to fiber is null." << std::endl;
     retval*= factor;
     return retval;
   }
@@ -285,7 +285,7 @@ double XC::DqFibras::getAreaHomogenizedSection(const double &E0) const
         if(mat)
           retval+= (*i)->getArea()*(mat->getTangent()/E0);
         else
-          std::cerr << "DqFibras::getIyHomogenizedSection; puntero a material nulo." << std::endl;
+          std::cerr << "DqFibras::getIyHomogenizedSection; pointer to material nulo." << std::endl;
       }
     return retval;
   }
@@ -313,7 +313,7 @@ const XC::Vector &XC::DqFibras::getCdgHomogenizedSection(const double &E0) const
             Qy+= zLoc*areaFibraPond;
           }
         else
-          std::cerr << "DqFibras::getIyHomogenizedSection; puntero a material nulo." << std::endl;
+          std::cerr << "DqFibras::getIyHomogenizedSection; pointer to material nulo." << std::endl;
       }
     static Vector retval(2);
     retval[0]= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
@@ -337,10 +337,10 @@ double XC::DqFibras::getIyHomogenizedSection(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*sqr((*i)->getLocZ()-cdg[1])*(mat->getTangent()/E0);
           else
-	    std::cerr << "DqFibras::getIyHomogenizedSection; puntero a material nulo." << std::endl;
+	    std::cerr << "DqFibras::getIyHomogenizedSection; pointer to material nulo." << std::endl;
         }
       else
-        std::cerr << "DqFibras::getIyHomogenizedSection; puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getIyHomogenizedSection; pointer to fibra nulo." << std::endl;
     return retval;
   }
 
@@ -360,10 +360,10 @@ double XC::DqFibras::getIzHomogenizedSection(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*sqr((*i)->getLocY()-cdg[0])*(mat->getTangent()/E0);
           else
-	    std::cerr << "DqFibras::getIzHomogenizedSection; puntero a material nulo." << std::endl;
+	    std::cerr << "DqFibras::getIzHomogenizedSection; pointer to material nulo." << std::endl;
         }
       else
-        std::cerr << "DqFibras::getIzHomogenizedSection; puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getIzHomogenizedSection; pointer to fibra nulo." << std::endl;
     return retval;
   }
 
@@ -383,10 +383,10 @@ double XC::DqFibras::getPyzHomogenizedSection(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*((*i)->getLocZ()-cdg[1])*((*i)->getLocY()-cdg[0])*(mat->getTangent()/E0);
           else
-	    std::cerr << "DqFibras::getPyzHomogenizedSection; puntero a material nulo." << std::endl;
+	    std::cerr << "DqFibras::getPyzHomogenizedSection; pointer to material nulo." << std::endl;
         }
       else
-        std::cerr << "DqFibras::getPyzHomogenizedSection; puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getPyzHomogenizedSection; pointer to fibra nulo." << std::endl;
     return retval;
   }
 
@@ -461,7 +461,7 @@ double XC::DqFibras::getSzPos(const double &yf,const double &y0,const double &fa
             }
         }
       else
-        std::cerr << "DqFibras::getSzPos; Puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getSzPos; Pointer to fiber is null." << std::endl;
     retval*= factor;
     return retval;
   }
@@ -483,7 +483,7 @@ double XC::DqFibras::getSzNeg(const double &yf,const double &y0,const double &fa
             }
         }
       else
-        std::cerr << "DqFibras::getSzNeg; Puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getSzNeg; Pointer to fiber is null." << std::endl;
     retval*= factor;
     return retval;
   }
@@ -502,7 +502,7 @@ double XC::DqFibras::getSyPos(const double &zf,const double &z0,const double &fa
             retval+= (*i)->getArea()*(z_fibra-z0);
         }
       else
-        std::cerr << "DqFibras::getSyPos; Puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getSyPos; Pointer to fiber is null." << std::endl;
     retval*= factor;
     return retval;
   }
@@ -521,7 +521,7 @@ double XC::DqFibras::getSyNeg(const double &zf,const double &z0,const double &fa
             retval+= (*i)->getArea()*(z_fibra-z0);
         }
       else
-        std::cerr << "DqFibras::getSyNeg; Puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::getSyNeg; Pointer to fiber is null." << std::endl;
     retval*= factor;
     return retval;
   }
@@ -544,7 +544,7 @@ double XC::DqFibras::getSPosHomogenizedSection(const double &E0,const Semiplano2
               retval+= (*i)->getArea()*(mat->getTangent()/E0)*d;
           }
         else
-          std::cerr << "DqFibras::getSPosHomogenizedSection; puntero a material nulo." << std::endl;
+          std::cerr << "DqFibras::getSPosHomogenizedSection; pointer to material nulo." << std::endl;
       }
     return retval;
   }
@@ -568,7 +568,7 @@ double XC::DqFibras::getSNegHomogenizedSection(const double &E0,const Semiplano2
               retval+= (*i)->getArea()*(mat->getTangent()/E0)*d;
           }
         else
-          std::cerr << "DqFibras::getSNegHomogenizedSection; puntero a material nulo." << std::endl;
+          std::cerr << "DqFibras::getSNegHomogenizedSection; pointer to material nulo." << std::endl;
       }
     return retval;
   }
@@ -737,7 +737,7 @@ double XC::DqFibras::ResultanteComp(void) const
           if(f<0.0) retval+= f;
         }
       else
-        std::cerr << "DqFibras::Resultante; Puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::Resultante; Pointer to fiber is null." << std::endl;
     return retval;
   }
 
@@ -826,7 +826,7 @@ double XC::DqFibras::ResultanteTracc(void) const
           if(f>0.0) retval+= f;
         }
       else
-        std::cerr << "DqFibras::Resultante; Puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::Resultante; Pointer to fiber is null." << std::endl;
     return retval;
   }
 
@@ -919,7 +919,7 @@ size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
     if(f)
       f->getFiberLocation(yf,zf);
     else
-      std::cerr << "DqFibras::nearest_fiber; Puntero a fibra nulo." << std::endl;
+      std::cerr << "DqFibras::nearest_fiber; Pointer to fiber is null." << std::endl;
     double d2= sqr(yf-y)+sqr(zf-z);
     i++;
     for(;i<nf;i++)
@@ -934,7 +934,7 @@ size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
             }
         }
       else
-        std::cerr << "DqFibras::nearest_fiber; Puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::nearest_fiber; Pointer to fiber is null." << std::endl;
     return retval;
   }
 
@@ -951,7 +951,7 @@ size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
 //             retval.push_back(*i);
 //         }
 //       else
-//         std::cerr << "DqFibras::Cumplen; Puntero a fibra nulo." << std::endl;
+//         std::cerr << "DqFibras::Cumplen; Pointer to fiber is null." << std::endl;
 //     retval.updateCDG();
 //   }
 
@@ -973,7 +973,7 @@ void XC::DqFibras::SelMatTag(const int &matTag,DqFibras &retval,bool clear)
             }
         }
       else
-        std::cerr << "DqFibras::SelMatTag; Puntero a fibra nulo." << std::endl;
+        std::cerr << "DqFibras::SelMatTag; Pointer to fiber is null." << std::endl;
   }
 
 //! @brief Devuelve la deformación mínima.
@@ -1033,7 +1033,7 @@ XC::DeformationPlane XC::DqFibras::getDeformationPlane(void) const
           if(*i)
             puntos.push_back(Pos3d((*i)->getMaterial()->getStrain(),(*i)->getLocY(),(*i)->getLocZ()));
           else
-            std::cerr << "DqFibras::getDeformationPlane; Puntero a fibra nulo." << std::endl;
+            std::cerr << "DqFibras::getDeformationPlane; Pointer to fiber is null." << std::endl;
       }
     DeformationPlane retval;
     retval.AjusteMinimosCuadrados(puntos);
@@ -2119,7 +2119,7 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
 //             }
 //         }
 //       else
-//         std::cerr << "DqFibras::IMaxProp; Puntero a fibra nulo." << std::endl;
+//         std::cerr << "DqFibras::IMaxProp; Pointer to fiber is null." << std::endl;
 //     return retval;
 //   }
 
@@ -2161,7 +2161,7 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
 //             }
 //         }
 //       else
-//         std::cerr << "DqFibras::IMinProp; Puntero a fibra nulo." << std::endl;
+//         std::cerr << "DqFibras::IMinProp; Pointer to fiber is null." << std::endl;
 //     return retval;
 //   }
 

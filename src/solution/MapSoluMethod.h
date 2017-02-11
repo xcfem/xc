@@ -48,7 +48,7 @@ class MapSoluMethod: public EntCmd
     typedef map_solu_method::iterator iterator;
     typedef map_solu_method::const_iterator const_iterator;
 
-    map_solu_method solu_methods; //!< Métodos para la solución.
+    map_solu_method solu_methods; //!< Solution method container.
   protected:
 
   public:

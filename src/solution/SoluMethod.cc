@@ -33,10 +33,10 @@
 //Gestor coacciones.
 #include <solution/analysis/handler/ConstraintHandler.h>
 
-//Integradores.
+//Integrators.
 #include "solution/analysis/integrator/integrators.h"
 
-//Algoritmo de solución.
+//Solution algorithm.
 #include "solution/analysis/algorithm/solution_algorithms.h"
 
 //Sistemas de ecuaciones
@@ -111,10 +111,10 @@ void XC::SoluMethod::copia_soln_algo(SolutionAlgorithm *ptr)
         theSolnAlgo->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_soln_algo; se pasó un puntero nulo." << std::endl;
+     std::cerr << "SoluMethod::copia_soln_algo; se pasó a null pointer." << std::endl;
   }
 
-//! @brief Define un nuevo algortitmo de solución.
+//! @brief Creates a new solution algorithm with the name being passed as parameter.
 XC::SolutionAlgorithm &XC::SoluMethod::newSolutionAlgorithm(const std::string &tipo)
   {
     alloc_soln_algo(tipo);
@@ -256,10 +256,10 @@ void XC::SoluMethod::copia_integrator(Integrator *ptr)
         theIntegrator->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_integrator; se pasó un puntero nulo." << std::endl;
+     std::cerr << "SoluMethod::copia_integrator; se pasó a null pointer." << std::endl;
   }
 
-//! @brief Define un nuevo integrador.
+//! @brief Define un nuevo integrator.
 XC::Integrator &XC::SoluMethod::newIntegrator(const std::string &tipo, const Vector &params)
   {
     if(alloc_integrator(tipo,params))
@@ -343,10 +343,10 @@ void XC::SoluMethod::copia_sistema_ecuaciones(SystemOfEqn *ptr)
         theSOE->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_sistema_ecuaciones; se pasó un puntero nulo." << std::endl;
+     std::cerr << "SoluMethod::copia_sistema_ecuaciones; se pasó a null pointer." << std::endl;
   }
 
-//! @brief Define el tipo de sistema de ecuaciones a emplear en la solución.
+//! @brief Sets the system of equations type to use.
 XC::SystemOfEqn &XC::SoluMethod::newSystemOfEqn(const std::string &tipo)
   {
     AnalysisModel *theModel= nullptr;
@@ -406,10 +406,10 @@ void XC::SoluMethod::copia_conv_test(ConvergenceTest *ptr)
         theTest->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_conv_test; se pasó un puntero nulo." << std::endl;
+     std::cerr << "SoluMethod::copia_conv_test; se pasó a null pointer." << std::endl;
   }
 
-//! @brief Define el test de convergencia a emplear en la solución.
+//! @brief Sets convergence test to use.
 XC::ConvergenceTest &XC::SoluMethod::newConvergenceTest(const std::string &cmd)
   {
     alloc_conv_test(cmd);
@@ -433,7 +433,7 @@ void XC::SoluMethod::copia(const SoluMethod &otro)
     if(otro.theTest) copia_conv_test(otro.theTest);
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::SoluMethod::SoluMethod(Analysis *owr,ModelWrapper *b)
   : EntCmd(owr), base(b), theSolnAlgo(nullptr),theIntegrator(nullptr),
     theSOE(nullptr), theTest(nullptr)
@@ -479,7 +479,7 @@ XC::Analysis *XC::SoluMethod::getAnalysis(void)
 const XC::Analysis *XC::SoluMethod::getAnalysis(void) const
   { return dynamic_cast<const Analysis *>(Owner()); }
 
-//! @brief Devuelve un puntero al dominio.
+//! @brief Returns a pointer to the domain.
 XC::Domain *XC::SoluMethod::getDomainPtr(void)
   {
     Domain *retval= nullptr;
@@ -489,7 +489,7 @@ XC::Domain *XC::SoluMethod::getDomainPtr(void)
     return retval;
   }
 
-//! @brief Devuelve un puntero al dominio.
+//! @brief Returns a pointer to the domain.
 const XC::Domain *XC::SoluMethod::getDomainPtr(void) const
   {
     const Domain *retval= nullptr;
@@ -500,7 +500,7 @@ const XC::Domain *XC::SoluMethod::getDomainPtr(void) const
     return retval;
   }
 
-//! @brief Devuelve un puntero al DomainSolver.
+//! @brief Returns a pointer to the DomainSolver.
 const XC::DomainSolver *XC::SoluMethod::getDomainSolverPtr(void) const
   {
     const Analysis *an= getAnalysis();
@@ -508,7 +508,7 @@ const XC::DomainSolver *XC::SoluMethod::getDomainSolverPtr(void) const
     return an->getDomainSolver();
   }
 
-//! @brief Devuelve un puntero al DomainSolver.
+//! @brief Returns a pointer to the DomainSolver.
 XC::DomainSolver *XC::SoluMethod::getDomainSolverPtr(void)
   {
     Analysis *an= getAnalysis();
@@ -516,7 +516,7 @@ XC::DomainSolver *XC::SoluMethod::getDomainSolverPtr(void)
     return an->getDomainSolver();
   }
 
-//! @brief Devuelve un puntero al subdominio.
+//! @brief Returns a pointer to the subdomain.
 const XC::Subdomain *XC::SoluMethod::getSubdomainPtr(void) const
   {
     const Analysis *an= getAnalysis();
@@ -524,7 +524,7 @@ const XC::Subdomain *XC::SoluMethod::getSubdomainPtr(void) const
     return an->getSubdomain();
   }
 
-//! @brief Devuelve un puntero al subdominio.
+//! @brief Returns a pointer to the subdomain.
 XC::Subdomain *XC::SoluMethod::getSubdomainPtr(void)
   {
     Analysis *an= getAnalysis();
@@ -532,7 +532,7 @@ XC::Subdomain *XC::SoluMethod::getSubdomainPtr(void)
     return an->getSubdomain();
   }
 
-//! @brief Devuelve un puntero al manejador de coacciones.
+//! @brief Returns a pointer to the manejador de coacciones.
 XC::ConstraintHandler *XC::SoluMethod::getConstraintHandlerPtr(void)
   {
     if(base)
@@ -541,7 +541,7 @@ XC::ConstraintHandler *XC::SoluMethod::getConstraintHandlerPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al renumerador.
+//! @brief Returns a pointer to the renumerador.
 XC::DOF_Numberer *XC::SoluMethod::getDOF_NumbererPtr(void) const
   {
     if(base)
@@ -549,7 +549,7 @@ XC::DOF_Numberer *XC::SoluMethod::getDOF_NumbererPtr(void) const
     else
       return nullptr;
   }
-//! @brief Devuelve un puntero al modelo de análisis.
+//! @brief Returns a pointer to the analysis model.
 XC::AnalysisModel *XC::SoluMethod::getAnalysisModelPtr(void) const
   {
     if(base)
@@ -559,88 +559,88 @@ XC::AnalysisModel *XC::SoluMethod::getAnalysisModelPtr(void) const
   }
 
 
-//! @brief Devuelve un puntero al sistema de ecuaciones lineal.
+//! @brief Returns a pointer to the linear system of equations.
 XC::LinearSOE *XC::SoluMethod::getLinearSOEPtr(void)
   {
     LinearSOE *ptr= dynamic_cast<LinearSOE *>(theSOE);
     if(!ptr)
-      std::cerr << "SoluMethod; el sistema de ecuaciones no es de tipo LinearSOE." << std::endl;
+      std::cerr << "SoluMethod; el system of equations no es de tipo LinearSOE." << std::endl;
     return ptr;
   }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones lineal.
+//! @brief Returns a pointer to the linear system of equations.
 const XC::LinearSOE *XC::SoluMethod::getLinearSOEPtr(void) const
   {
     const LinearSOE *ptr= dynamic_cast<const LinearSOE *>(theSOE);
     if(!ptr)
-      std::cerr << "SoluMethod; el sistema de ecuaciones no es de tipo LinearSOE." << std::endl;
+      std::cerr << "SoluMethod; el system of equations no es de tipo LinearSOE." << std::endl;
     return ptr;
   }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones de eigenvalues.
+//! @brief Returns a pointer to the system of equations de eigenvalues.
 XC::EigenSOE *XC::SoluMethod::getEigenSOEPtr(void)
   {
     EigenSOE *ptr= dynamic_cast<EigenSOE *>(theSOE);
     if(!ptr)
-      std::cerr << "SoluMethod; el sistema de ecuaciones no es de tipo EigenSOE." << std::endl;
+      std::cerr << "SoluMethod; el system of equations no es de tipo EigenSOE." << std::endl;
     return ptr;
   }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones de eigenvalues.
+//! @brief Returns a pointer to the system of equations de eigenvalues.
 const XC::EigenSOE *XC::SoluMethod::getEigenSOEPtr(void) const
   {
     const EigenSOE *ptr= dynamic_cast<const EigenSOE *>(theSOE);
     if(!ptr)
-      std::cerr << "SoluMethod; el sistema de ecuaciones no es de tipo EigenSOE." << std::endl;
+      std::cerr << "SoluMethod; el system of equations no es de tipo EigenSOE." << std::endl;
     return ptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al integrador incremental en otro caso devuelve nullptr.
+//! @brief Devuelve, if possible, a pointer al integrator incremental en otro caso devuelve nullptr.
 XC::IncrementalIntegrator *XC::SoluMethod::getIncrementalIntegratorPtr(void)
   {
     IncrementalIntegrator *ptr= dynamic_cast<IncrementalIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; el integrador no es de tipo incremental." << std::endl;
+      std::cerr << "SoluMethod; el integrator no es de tipo incremental." << std::endl;
     return ptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al EigenIntegrator en otro caso devuelve nullptr.
+//! @brief Devuelve, if possible, a pointer al EigenIntegrator en otro caso devuelve nullptr.
 XC::EigenIntegrator *XC::SoluMethod::getEigenIntegratorPtr(void)
   {
     EigenIntegrator *ptr= dynamic_cast<EigenIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; el integrador no es de tipo eigenvalues." << std::endl;
+      std::cerr << "SoluMethod; el integrator no es de tipo eigenvalues." << std::endl;
     return ptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al LinearBucklingIntegrator en otro caso devuelve nullptr.
+//! @brief Devuelve, if possible, a pointer al LinearBucklingIntegrator en otro caso devuelve nullptr.
 XC::LinearBucklingIntegrator *XC::SoluMethod::getLinearBucklingIntegratorPtr(void)
   {
     LinearBucklingIntegrator *ptr= dynamic_cast<LinearBucklingIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; el integrador no es de tipo linear buckling." << std::endl;
+      std::cerr << "SoluMethod; el integrator no es de tipo linear buckling." << std::endl;
     return ptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al EigenIntegrator en otro caso devuelve nullptr.
+//! @brief Devuelve, if possible, a pointer al EigenIntegrator en otro caso devuelve nullptr.
 XC::TransientIntegrator *XC::SoluMethod::getTransientIntegratorPtr(void)
   {
     TransientIntegrator *ptr= dynamic_cast<TransientIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; el integrador no es de tipo transitorio." << std::endl;
+      std::cerr << "SoluMethod; el integrator no es de tipo transitorio." << std::endl;
     return ptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al StaticIntegrator en otro caso devuelve nullptr.
+//! @brief Devuelve, if possible, a pointer al StaticIntegrator en otro caso devuelve nullptr.
 XC::StaticIntegrator *XC::SoluMethod::getStaticIntegratorPtr(void)
   {
     StaticIntegrator *ptr= dynamic_cast<StaticIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; el integrador no es de tipo estático." << std::endl;
+      std::cerr << "SoluMethod; el integrator no es de tipo estático." << std::endl;
     return ptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al algoritmo de solución del sistema de 
+//! @brief Devuelve, if possible, a pointer al solution algorithm del sistema de 
 //! eigenvalues, en otro caso devuelve nullptr.
 XC::EigenAlgorithm *XC::SoluMethod::getEigenSolutionAlgorithmPtr(void)
   {
@@ -650,63 +650,63 @@ XC::EigenAlgorithm *XC::SoluMethod::getEigenSolutionAlgorithmPtr(void)
     return ptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al algoritmo de solución del sistema de 
+//! @brief Devuelve, if possible, a pointer al solution algorithm del sistema de 
 //! ecuaciones, en otro caso devuelve nullptr.
 XC::EquiSolnAlgo *XC::SoluMethod::getEquiSolutionAlgorithmPtr(void)
   {
     EquiSolnAlgo *ptr= dynamic_cast<EquiSolnAlgo *>(theSolnAlgo);
     if(!ptr)
-      std::clog << "SoluMethod; el algortimo no sirve para obtener soluciones de equilibrio." << std::endl;
+      std::clog << "SoluMethod; the algorithm can't solve for equilibrium." << std::endl;
     return ptr;
   }
 
-//! @brief Devuelve, si es posible, un puntero al algoritmo de solución
+//! @brief Devuelve, if possible, a pointer al solution algorithm
 //! DomainDecomp , en otro caso devuelve nullptr.
 XC::DomainDecompAlgo *XC::SoluMethod::getDomainDecompSolutionAlgorithmPtr(void)
   {
     DomainDecompAlgo *ptr= dynamic_cast<DomainDecompAlgo *>(theSolnAlgo);
     if(!ptr)
-      std::cerr << "SoluMethod; el algortimo no sirve para descomposición de dominio." << std::endl;
+      std::cerr << "SoluMethod; el algortimo no sirve para descomposición de domain." << std::endl;
     return ptr;
   }
 
-//! @brief Devuelve un puntero al test de convergencia.
+//! @brief Returns a pointer to the convergence test.
 XC::ConvergenceTest *XC::SoluMethod::getConvergenceTestPtr(void)
   { return theTest; }
 
-//! @brief Devuelve un puntero al test de convergencia.
+//! @brief Returns a pointer to the convergence test.
 const XC::ConvergenceTest *XC::SoluMethod::getConvergenceTestPtr(void) const
   { return theTest; }
 
-//! @brief Establece el sistema de ecuaciones lineal a emplear en el análisis.
+//! @brief Sets the linear system of equations to use in the analysis.
 int XC::SoluMethod::setLinearSOE(LinearSOE &theNewSOE)
   {
     copia_sistema_ecuaciones(&theNewSOE);
     return 0;
   }
 
-//! @brief Establece el sistema de eigenvalues a emplear en el análisis.
+//! @brief Sets the eigenSOE to use in the analysis.
 int XC::SoluMethod::setEigenSOE(EigenSOE &theSOE)
   {
     std::cerr << "SoluMethod::setEigenSOE() - does nothing yet\n";    
     return 0;
   }
 
-//! @brief Establece el integrador a emplear en el análisis.
+//! @brief Sets the integrator to use in the analysis.
 int XC::SoluMethod::setIntegrator(Integrator &theNewIntegrator)
   {
     copia_integrator(&theNewIntegrator);
     return 0;
   }
 
-//! @brief Establece el algoritmo de solución a emplear en el análisis.
+//! @brief Sets the solution algorithm to use in the analysis.
 int XC::SoluMethod::setAlgorithm(SolutionAlgorithm &theNewAlgorithm) 
   {
     copia_soln_algo(&theNewAlgorithm);
     return 0;
   }
 
-//! @brief Establece el test de convergencia a emplear en el análisis.
+//! @brief Sets the convergence test to use in the analysis.
 int XC::SoluMethod::setConvergenceTest(ConvergenceTest &theNewTest)
   {
     copia_conv_test(&theNewTest);
@@ -755,7 +755,7 @@ void XC::SoluMethod::brokeEquiSolnAlgo(const CommParameters &cp,const ID &data)
     theSolnAlgo->set_owner(this);
   }
 
-//! @brief Verifica que los punteros no sean nulos.
+//! @brief Verifica que los pointers no sean nulos.
 bool XC::SoluMethod::CheckPointers(void)
   {
     if(!base)

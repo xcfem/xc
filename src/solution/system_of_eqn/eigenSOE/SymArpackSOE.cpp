@@ -52,7 +52,7 @@ XC::SymArpackSOE::SymArpackSOE(SoluMethod *owr,double theShift)
    nblks(0), xblk(0), invp(0), diag(0), penv(0), rowblks(0),
    begblk(0), first(0) {}
 
-//! @brief Asigna el solver que se empleará para resolver el problema de eigenvalues.
+//! @brief Sets the solver que se empleará para resolver the eigenproblem.
 bool XC::SymArpackSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;
@@ -63,7 +63,7 @@ bool XC::SymArpackSOE::setSolver(EigenSolver *newSolver)
         retval= ArpackSOE::setSolver(tmp);
       }
     else
-      std::cerr << "XC::BandArpackSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
+      std::cerr << "XC::BandArpackSOE::setSolver; solver incompatible con system of equations." << std::endl;
     return retval;
   }
 
@@ -88,15 +88,15 @@ XC::SymArpackSOE::~SymArpackSOE(void)
   }
 
 
-//! @brief Establece el tamaño del problema.				
+//! @brief Establece the tamaño del problema.				
 int XC::SymArpackSOE::setSize(Graph &theGraph)
   {
     int result = 0;
     //int oldSize = size;
     size = theGraph.getNumVertex();
     if(size==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; el modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie el gestor de coacciones." << std::endl;
+      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; the modelo no tiene ningún grado de libertad,"
+                << " agrege algún nodo o cambie the gestor de coacciones." << std::endl;
 
     // fist itearte through the vertices of the graph to get nnz
     Vertex *theVertex;
@@ -180,7 +180,7 @@ int XC::SymArpackSOE::setSize(Graph &theGraph)
     return result;
   }
 
-//! @brief Ensambla en A la matriz being passed as parameter multiplicada por el parámetro fact.
+//! @brief Ensambla en A la matriz being passed as parameter multiplicada por the parámetro fact.
 int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a XC::quick return
@@ -298,7 +298,7 @@ int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, double fact)
     return 0;
   }
 
-//! @brief Ensambla en M la matriz being passed as parameter multiplicada por el parámetro fact.    
+//! @brief Ensambla en M la matriz being passed as parameter multiplicada por the parámetro fact.    
 int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, double fact)
   { 
     //Añadido LCPT.

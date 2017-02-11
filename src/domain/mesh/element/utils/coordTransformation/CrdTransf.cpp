@@ -82,7 +82,7 @@ XC::CrdTransf::CrdTransf(int tag, int classTag, int dim_joint_offset)
 XC::CrdTransf::~CrdTransf(void)
   {}
 
-//! @brief Asigna los punteros a nodo dorsal y frontal.
+//! @brief Asigna los pointers to node dorsal y frontal.
 int XC::CrdTransf::set_ptr_nodos(Node *nodeIPointer, Node *nodeJPointer)
   {
     nodeIPtr = nodeIPointer;

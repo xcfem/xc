@@ -30,7 +30,7 @@
 #include "preprocessor/loaders/LoadLoader.h"
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::LoadLoaderMember::LoadLoaderMember(LoadLoader *owr)
   : EntCmd(owr), MovableObject(0) {}
 
@@ -53,7 +53,7 @@ XC::LoadLoader *XC::LoadLoaderMember::getLoadLoader(void)
     return loader;
   }
 
-//! @brief Devuelve el dominio en el que se cargan los elementos.
+//! @brief Devuelve el domain en el que se cargan los elementos.
 XC::Domain *XC::LoadLoaderMember::getDomain(void) const
   {
     Domain *retval= nullptr;

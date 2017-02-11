@@ -29,7 +29,7 @@
 #include "FVectorShell.h"
 #include <utility/matrix/Vector.h>
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::FVectorShell::FVectorShell(void)
   : FVectorData<24>() { zero(); }
 

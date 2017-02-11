@@ -52,7 +52,7 @@ XC::MotionHistory::MotionHistory(const MotionHistory &otro)
       theVelSeries= otro.theVelSeries->getCopy();
     if(otro.theDispSeries)
       theDispSeries= otro.theDispSeries->getCopy();
-    //No copiamos el integrador.
+    //No copiamos el integrator.
   }
 
 XC::MotionHistory &XC::MotionHistory::operator=(const MotionHistory &otro)
@@ -68,7 +68,7 @@ XC::MotionHistory &XC::MotionHistory::operator=(const MotionHistory &otro)
       theVelSeries= otro.theVelSeries->getCopy();
     if(otro.theDispSeries)
       theDispSeries= otro.theDispSeries->getCopy();
-    //No copiamos el integrador.
+    //No copiamos el integrator.
     return *this;
   }
 

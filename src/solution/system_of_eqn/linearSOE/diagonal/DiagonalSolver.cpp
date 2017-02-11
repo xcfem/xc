@@ -66,7 +66,7 @@
 XC::DiagonalSolver::DiagonalSolver(int theClassTag)    
 :LinearSOESolver(theClassTag), theSOE(nullptr) {}    
 
-//! @brief Asigna el sistema de ecuaciones a resolver.
+//! @brief Sets the system of equations to solve.
 bool XC::DiagonalSolver::setLinearSOE(LinearSOE *soe)
   {
     bool retval= false;
@@ -77,11 +77,11 @@ bool XC::DiagonalSolver::setLinearSOE(LinearSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::setLinearSOE: el sistema de ecuaciones no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << nombre_clase() << "::setLinearSOE: el system of equations no es del tipo adecuado para este solver." << std::endl;
     return retval;
   }
 
-//! @brief Asigna el sistema de ecuaciones a resolver.
+//! @brief Sets the system of equations to solve.
 bool XC::DiagonalSolver::setLinearSOE(DiagonalSOE &theProfileSPDSOE)
   { return setLinearSOE(&theProfileSPDSOE); }
 

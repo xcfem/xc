@@ -114,7 +114,7 @@ void XC::SetMeshComp::clearAll(void)
     elementos.clearAll();
   }
 
-//! @brief Agrega el puntero a nodo being passed as parameter.
+//! @brief Agrega the pointer a nodo being passed as parameter.
 void XC::SetMeshComp::agregaNodo(Node *nPtr)
   { nodos.push_back(nPtr); }
 
@@ -178,12 +178,12 @@ XC::SetMeshComp::nod_const_iterator XC::SetMeshComp::nodos_begin(void) const
 XC::SetMeshComp::nod_const_iterator XC::SetMeshComp::nodos_end(void) const
   { return nodos.end(); }
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 XC::Node *XC::SetMeshComp::buscaNodo(const int &tag)
   { return nodos.buscaNodo(tag); }
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 const XC::Node *XC::SetMeshComp::buscaNodo(const int &tag) const
   { return nodos.buscaNodo(tag); }
@@ -214,12 +214,12 @@ XC::SetMeshComp::constraint_iterator XC::SetMeshComp::constraints_end(void)
 XC::SetMeshComp::constraint_const_iterator XC::SetMeshComp::constraints_end(void) const
   { return constraints.end(); }
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 XC::Element *XC::SetMeshComp::buscaElemento(const int &tag)
   { return elementos.buscaElemento(tag); }
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 const XC::Element *XC::SetMeshComp::buscaElemento(const int &tag) const
   { return elementos.buscaElemento(tag); }
@@ -421,7 +421,7 @@ void XC::SetMeshComp::sel_nodos_lista(const ID &tags)
         Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
-            nodos.push_back(preprocessor->GetDominio()->getNode(tags(i)));
+            nodos.push_back(preprocessor->getDomain()->getNode(tags(i)));
         else
           std::cerr << "SetMeshComp::sel_nodos_lista; necesito un preprocesador." << std::endl;
       }
@@ -436,7 +436,7 @@ void XC::SetMeshComp::sel_elementos_lista(const ID &tags)
         Preprocessor *preprocessor= get_preprocessor();
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
-            elementos.push_back(preprocessor->GetDominio()->getElement(tags(i)));
+            elementos.push_back(preprocessor->getDomain()->getElement(tags(i)));
         else
           std::cerr << "SetMeshComp::sel_elementos_lista; necesito un preprocesador." << std::endl;
       }
@@ -453,9 +453,9 @@ void XC::SetMeshComp::sel_constraints_lista(const ID &tags)
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             {
-              if((tmp= preprocessor->GetDominio()->getConstraints().getSFreedom_Constraint(tags(i))))
+              if((tmp= preprocessor->getDomain()->getConstraints().getSFreedom_Constraint(tags(i))))
                 constraints.push_back(tmp);
-              else if((tmp=preprocessor->GetDominio()->getConstraints().getMFreedom_Constraint(tags(i))))
+              else if((tmp=preprocessor->getDomain()->getConstraints().getMFreedom_Constraint(tags(i))))
                 constraints.push_back(tmp);
               else
 		std::cerr << "SetMeshComp::sel_constraints_lista;no se encontró la coacción de tag: "

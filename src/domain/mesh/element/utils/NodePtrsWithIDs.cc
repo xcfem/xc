@@ -29,7 +29,7 @@
 #include "NodePtrsWithIDs.h"
 #include "domain/mesh/node/Node.h"
 
-//! @ brief Constructor por defecto.
+//! @ brief Default constructor.
 XC::NodePtrsWithIDs::NodePtrsWithIDs(Element *owr,size_t numNodos)
   : NodePtrs(owr,numNodos), MovableObject(0), connectedExternalNodes(numNodos)
   {
@@ -46,11 +46,11 @@ XC::NodePtrsWithIDs::NodePtrsWithIDs(Element *owr,size_t numNodos)
 int XC::NodePtrsWithIDs::getNumExternalNodes(void) const
   { return connectedExternalNodes.Size(); }
 
-//! @brief Devuelve un puntero al vector de nodos.
+//! @brief Returns a pointer to the vector de nodos.
 const XC::NodePtrs &XC::NodePtrsWithIDs::getNodePtrs(void) const
   { return *this; }
 
-//! @brief Devuelve un puntero al vector de nodos.
+//! @brief Returns a pointer to the vector de nodos.
 XC::NodePtrs &XC::NodePtrsWithIDs::getNodePtrs(void)
   { return *this; }
 
@@ -84,7 +84,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(const ID &inodos)
       connectedExternalNodes(i) = inodos(i);
   }
 
-//! @brief Asigna los punteros a los nodos.
+//! @brief Asigna los pointers to los nodos.
 void XC::NodePtrsWithIDs::set_ptr_nodos(Domain *domain)
   {
     if(domain)

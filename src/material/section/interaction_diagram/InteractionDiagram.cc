@@ -54,7 +54,7 @@ void XC::InteractionDiagram::clasifica_triedros(void)
       clasifica_triedro(*i);
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::InteractionDiagram::InteractionDiagram(void)
   : ClosedTriangleMesh() {}
 

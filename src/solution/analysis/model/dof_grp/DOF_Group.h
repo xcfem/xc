@@ -82,7 +82,7 @@ class Integrator;
 
 //! @ingroup Analisis
 //
-//! @defgroup AnalisisDOF Grupos de grados de libertad para el análisis.
+//! @defgroup AnalisisDOF Grupos de grados de libertad para the analysis.
 //
 //! @ingroup AnalisisDOF
 //! @brief A DOF_Group object is instantiated by the ConstraintHandler for 

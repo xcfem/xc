@@ -372,7 +372,7 @@ void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &val
       }
     else
       std::cerr << "Node::coarta_movs; "
-                << "el puntero al dominio es nulo. Se ignora la coacción." << std::endl;
+                << "the pointer al domain es nulo. Se ignora la coacción." << std::endl;
   }
 
 //! @brief Impone desplazamientos prescritos en los grados de libertad
@@ -1677,7 +1677,7 @@ void XC::Node::checkReactionForce(const double &tol)
                     << " no esta sujeto a constraints y sin embargo"
                     << " tiene una reacción de valor: " << reaction 
                     << " y norma: " << sqrt(norm2)
-                    << " el método de solución empleado no es adecuado al problema. "
+                    << " the solution method is not well suited to the problem. "
                     << std::endl;
       }
   }

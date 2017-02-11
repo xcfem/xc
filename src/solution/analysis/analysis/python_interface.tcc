@@ -26,8 +26,8 @@ class_<XC::Analysis, bases<EntCmd>, boost::noncopyable >("Analysis", no_init)
   ;
 
 class_<XC::StaticAnalysis, bases<XC::Analysis>, boost::noncopyable >("StaticAnalysis", no_init)
-  .def("analyze", &XC::StaticAnalysis::analyze,"Lanza el análisis definido.")
-  .def("initialize", &XC::StaticAnalysis::initialize,"Inicializa el análisis del problema.")
+  .def("analyze", &XC::StaticAnalysis::analyze,"Lanza the analysis definido.")
+  .def("initialize", &XC::StaticAnalysis::initialize,"Inicializa the analysis del problema.")
     ;
 
 class_<XC::EigenAnalysis , bases<XC::Analysis>, boost::noncopyable >("EigenAnalysis", no_init)
@@ -59,7 +59,7 @@ class_<XC::EigenAnalysis , bases<XC::Analysis>, boost::noncopyable >("EigenAnaly
   //Static equivalent load.
   .def("getEquivalentStaticLoad",&XC::EigenAnalysis::getEquivalentStaticLoad)
 
-  .def("analyze", &XC::EigenAnalysis::analyze,"Lanza el análisis definido.")
+  .def("analyze", &XC::EigenAnalysis::analyze,"Lanza the analysis definido.")
   ;
 
 class_<XC::LinearBucklingAnalysis, bases<XC::StaticAnalysis>, boost::noncopyable >("LinearBucklingAnalysis", no_init)

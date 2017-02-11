@@ -106,7 +106,7 @@ bool XC::Mesh::check_contenedores(void) const
       return true;
   }
 
-//! @brief Inicializa los el BND del dominio.
+//! @brief Inicializa los el BND del domain.
 void XC::Mesh::init_bounds(void)
   { theBounds.Zero(); }
 
@@ -245,7 +245,7 @@ bool XC::Mesh::addElement(Element *element)
     return result;
   }
 
-//! @brief Actualiza los límites del dominio.
+//! @brief Actualiza los límites del domain.
 void XC::Mesh::update_bounds(const Vector &crds)
   {
     const int dim = crds.Size();
@@ -269,7 +269,7 @@ void XC::Mesh::update_bounds(const Vector &crds)
       }
   }
 
-//! @brief Añade un nodo al dominio.
+//! @brief Añade un nodo al domain.
 void XC::Mesh::add_node_to_domain(Node *node)
   {
     Domain *dom= getDomain();
@@ -294,7 +294,7 @@ void XC::Mesh::add_nodes_to_domain(void)
       }
   }
 
-//! @brief Agrega al dominio el nodo being passed as parameter.
+//! @brief Agrega al domain el nodo being passed as parameter.
 bool XC::Mesh::addNode(Node * node)
   {
     int nodTag = node->getTag();
@@ -332,7 +332,7 @@ bool XC::Mesh::removeElement(int tag)
     return res;
   }
 
-//! @brief Elimina del dominio el nodo cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain el nodo cuyo tag se pasa como parámetro.
 bool XC::Mesh::removeNode(int tag)
   {
 
@@ -352,7 +352,7 @@ bool XC::Mesh::removeNode(int tag)
     return res;
   }
 
-//! @brief Anula los punteros a grupo de grados de libertad de los nodos.
+//! @brief Anula los pointers to grupo de grados de libertad de los nodos.
 void XC::Mesh::clearDOF_GroupPtr(void)
   {
     Node *nodePtr= nullptr;
@@ -368,7 +368,7 @@ XC::ElementIter &XC::Mesh::getElements()
     return *theEleIter;
   }
 
-//! @brief Devuelve un iterador a los nodos del dominio.
+//! @brief Devuelve un iterador a los nodos del domain.
 XC::NodeIter &XC::Mesh::getNodes()
   {
     theNodIter->reset();
@@ -422,7 +422,7 @@ const XC::Element *XC::Mesh::getNearestElement(const Pos3d &p) const
 bool XC::Mesh::existNode(int tag)
  { return theNodes->existComponent(tag); }
 
-//! @brief Devuelve un puntero al nodo cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo tag se pasa como parámetro.
 XC::Node *XC::Mesh::getNode(int tag)
   {
     TaggedObject *mc = theNodes->getComponentPtr(tag);
@@ -433,7 +433,7 @@ XC::Node *XC::Mesh::getNode(int tag)
     return result;
   }
 
-//! @brief Devuelve un puntero al nodo cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo tag se pasa como parámetro.
 const XC::Node *XC::Mesh::getNode(int tag) const
   {
     const TaggedObject *mc = theNodes->getComponentPtr(tag);
@@ -781,7 +781,7 @@ void XC::Mesh::setGraphBuiltFlags(const bool &f)
     eleGraphBuiltFlag= f;
   }
 
-//! @brief Imprime el dominio.
+//! @brief Imprime el domain.
 void XC::Mesh::Print(std::ostream &s, int flag)
   {
 
@@ -1075,7 +1075,7 @@ void XC::Mesh::checkNodalReactions(const double &tol)
         { theNode->checkReactionForce(max_norm_reac*tol); }
   }
 
-//! @brief Calcula las reacciones en los nodos del dominio.
+//! @brief Calcula las reacciones en los nodos del domain.
 int XC::Mesh::calculateNodalReactions(bool inclInertia, const double &tol)
   {
     Node *theNode= nullptr;

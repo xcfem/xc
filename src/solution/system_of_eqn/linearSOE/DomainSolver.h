@@ -74,8 +74,8 @@ class Vector;
 
 //! @ingroup LinearSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de sistemas de ecuaciones lineales.
+//! @brief used to solve a system of equations and to do static
+//! condensation operations on the linear system of equations.
 class DomainSolver: public virtual LinearSOESolver
   {
   protected:

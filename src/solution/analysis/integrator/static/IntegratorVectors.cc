@@ -69,8 +69,7 @@ void XC::IntegratorVectors::newStep(const double &dLambda,const Vector &dUhat)
     deltaUstep= deltaU;
   }
 
-//! @brief Obtiene la solución para el nuevo vector de cargas empleando
-//! procesamiento paralelo.
+//! @brief Computes the solution for the new load vector using parallel processing.
 void XC::IntegratorVectors::distribDetermineUhat(const int &pID,LinearSOE &theLinSOE)
   {
     if(pID == 0)
@@ -82,7 +81,7 @@ void XC::IntegratorVectors::distribDetermineUhat(const int &pID,LinearSOE &theLi
     deltaUhat= theLinSOE.getX();
   }
 
-//! @brief Obtiene la solución para el nuevo vector de cargas.
+//! @brief Computes the solution for the new load vector.
 void XC::IntegratorVectors::determineUhat(LinearSOE &theLinSOE)
   {
     // determine dUhat    
@@ -92,14 +91,14 @@ void XC::IntegratorVectors::determineUhat(LinearSOE &theLinSOE)
     deltaUhat= theLinSOE.getX();
   }
 
-//! @brief Obtiene la solución para el nuevo vector de cargas.
+//! @brief Computes the solution for the new load vector.
 void XC::IntegratorVectors::solve(const Vector &dU,LinearSOE &theLinSOE)
   {
     deltaUbar= dU; // have to do this as the SOE is gonna change
     determineUhat(theLinSOE);
   }
 
-//! @brief Actualiza los vectores.
+//! @brief Updates vectors.
 void XC::IntegratorVectors::update(const double &dLambda)
   {
     // determine delta U(i)
@@ -112,7 +111,7 @@ void XC::IntegratorVectors::update(const double &dLambda)
     currentLambda+= dLambda;
   }
 
-//! @brief Respuesta a un cambio en el dominio.
+//! @brief Respuesta a un cambio en el domain.
 void XC::IntegratorVectors::domainChanged(const size_t &sz,IncrementalIntegrator &I,LinearSOE &theLinSOE)
   {
     resize(sz);

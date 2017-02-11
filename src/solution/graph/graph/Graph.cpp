@@ -220,7 +220,7 @@ int XC::Graph::addEdge(int vertexTag, int otherVertexTag)
     return retval;
   }
 
-//! @brief Devuelve un puntero al vértice cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the vértice cuyo tag se pasa como parámetro.
 XC::Vertex *XC::Graph::getVertexPtr(int vertexTag)
   {
     TaggedObject *res = myVertices.getComponentPtr(vertexTag);
@@ -230,7 +230,7 @@ XC::Vertex *XC::Graph::getVertexPtr(int vertexTag)
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al vértice cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the vértice cuyo tag se pasa como parámetro.
 const XC::Vertex *XC::Graph::getVertexPtr(int vertexTag) const
   {
     const TaggedObject *res= myVertices.getComponentPtr(vertexTag);

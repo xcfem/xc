@@ -863,7 +863,7 @@ int XC::PartitionedDomain::setPartitioner(DomainPartitioner *thePartitioner)
 int XC::PartitionedDomain::partition(int numPartitions, bool usingMain, int mainPartitionID)
   {
     int result= 0;
-    // Necesitamos crear el grafo de elementos antes que los nuevos subdominios.
+    // Necesitamos crear el grafo de elementos antes que los nuevos subdomains.
     // DO NOT REMOVE THIS LINE __ EVEN IF COMPILER WARNS ABOUT UNUSED VARIABLE
     //const Graph &theEleGraph= getElementGraph();
     getElementGraph(); //Pero esto sí se puede hacer ¿NO?

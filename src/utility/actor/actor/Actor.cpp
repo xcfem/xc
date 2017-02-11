@@ -78,7 +78,7 @@ void XC::Actor::libera(void)
     actorMethods.clear();
   }
 
-//! @brief Reserva memoria para punteros a actores.
+//! @brief Reserva memoria para pointers to actores.
 void XC::Actor::alloc(const std::vector<ActorMethod *> &otro)
   {
     libera();
@@ -302,11 +302,11 @@ void XC::Actor::setCommitTag(int tag)
   { commitTag = tag; }
 
 
-//! @brief Devuelve un puntero al canal.
+//! @brief Returns a pointer to the canal.
 XC::Channel *XC::Actor::getChannelPtr(void) const
   { return theChannel; }
 
-//! @brief Devuelve un puntero al broker.
+//! @brief Returns a pointer to the broker.
 XC::FEM_ObjectBroker *XC::Actor::getObjectBrokerPtr(void) const
   { return theBroker; }
 

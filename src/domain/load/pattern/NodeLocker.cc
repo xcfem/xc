@@ -102,7 +102,7 @@ XC::NodeLocker::NodeLocker(int tag, int clasTag)
   }
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::NodeLocker::NodeLocker(void)
   :ForceReprComponent(0,PATTERN_TAG_NodeLocker), nextTag(0),currentGeoTag(0), lastGeoSendTag(-1),
    theSPs(nullptr), theSpIter(nullptr)
@@ -128,7 +128,7 @@ XC::NodeLocker::~NodeLocker(void)
   }
 
 
-//! @brief Establece el dominio para las cargas.
+//! @brief Establece el domain para las cargas.
 void XC::NodeLocker::setDomain(Domain *theDomain)
   {
     if(theSPs)

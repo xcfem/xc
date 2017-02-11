@@ -66,7 +66,7 @@ XC::NewUniaxialMaterial::NewUniaxialMaterial(int tag)
    Tstrain(0.0), Tstress(0.0), Ttangent(0.0)
   {}
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::NewUniaxialMaterial::NewUniaxialMaterial()
   :UniaxialMaterial(0,MAT_TAG_NewUniaxialMaterial),
    Tstrain(0.0), Tstress(0.0), Ttangent(0.0)

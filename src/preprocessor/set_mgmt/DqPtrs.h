@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //DqPtrs.h
-//deque de punteros (se emplear en la clase Set).
+//deque de pointers (se emplear en la clase Set).
 
 
 #ifndef DQPTRS_H
@@ -153,12 +153,12 @@ void DqPtrs<T>::agrega(const DqPtrs &otro)
       push_back(*i);
   }
 
-//! @brief Vacía la lista de punteros.
+//! @brief Vacía la lista de pointers.
 template<class T>
 void DqPtrs<T>::clear(void)
   { lst_ptr::clear(); }
 
-//! @brief Vacía la lista de punteros y elimina las propiedades que pudiera tener el objeto.
+//! @brief Vacía la lista de pointers y elimina las propiedades que pudiera tener el objeto.
 template<class T>
 void DqPtrs<T>::clearAll(void)
   {
@@ -174,7 +174,7 @@ const T &DqPtrs<T>::get(const size_t &i) const
     return *ptr; 
   }
 
-//! @brief Devuelve verdadero si el puntero está en el contenedor.
+//! @brief Devuelve verdadero si the pointer está en el contenedor.
 template<class T>
 bool DqPtrs<T>::in(const T *ptr) const
   {
@@ -202,7 +202,7 @@ bool DqPtrs<T>::push_back(T *t)
           }
       }
     else
-      std::cerr << "DqPtrs::push_back; se intentó insertar un puntero nulo." << std::endl;
+      std::cerr << "DqPtrs::push_back; se intentó insertar a null pointer." << std::endl;
     return retval;
   }
 
@@ -219,7 +219,7 @@ bool DqPtrs<T>::push_front(T *t)
           }
       }
     else
-      std::cerr << "DqPtrs::push_front; se intentó insertar un puntero nulo." << std::endl;
+      std::cerr << "DqPtrs::push_front; se intentó insertar a null pointer." << std::endl;
     return retval;
   }
 

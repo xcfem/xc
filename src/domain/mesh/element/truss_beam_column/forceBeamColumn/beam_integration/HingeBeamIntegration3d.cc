@@ -50,7 +50,7 @@ void XC::HingeBeamIntegration3d::addElasticDeformations(ElementalLoad *theLoad,d
 
 int XC::HingeBeamIntegration3d::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
-    std::cerr << "Se pasa un puntero nulo." << std::endl;
+    std::cerr << "Se pasa a null pointer." << std::endl;
     int tmp= ctes_scc.setParameter(argv,param, nullptr);
     if(tmp > 0)
       return tmp;

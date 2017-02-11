@@ -88,7 +88,7 @@ double XC::TimeSeries::getFactorSensitivity(double pseudoTime)
 
 // AddingSensitivity:END ////////////////////////////////////////////
 
-//! @brief Envía un puntero a la serie through the channel being passed as parameter.
+//! @brief Envía a pointer a la serie through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase de la serie.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 int XC::sendTimeSeriesPtr(TimeSeries *ptr,int posClassTag, int posDbTag,DbTagData &dt,CommParameters &cp)
@@ -105,7 +105,7 @@ int XC::sendTimeSeriesPtr(TimeSeries *ptr,int posClassTag, int posDbTag,DbTagDat
     return res;
   }
 
-//! @brief Recibe un puntero a la serie through the channel being passed as parameter.
+//! @brief Recibe a pointer a la serie through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase de la serie.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::TimeSeries *XC::receiveTimeSeriesPtr(TimeSeries* ptr,int posClassTag, int posDbTag,DbTagData &dt,const CommParameters &cp)

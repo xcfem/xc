@@ -111,7 +111,7 @@ bool XC::SetBase::In(const UniformGrid *) const
 void XC::SetBase::resetTributarias(void) const
   {
     const std::set<int> tmp= getElementTags();
-    const Domain *dom= GetPreprocessor()->GetDominio();
+    const Domain *dom= GetPreprocessor()->getDomain();
     if(dom)
       {
         for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
@@ -127,7 +127,7 @@ void XC::SetBase::resetTributarias(void) const
           }
       }
     else
-      std::cerr << "No se ha definido el dominio." << std::endl;    
+      std::cerr << "No se ha definido el domain." << std::endl;    
   }
  
 //! @brief Calcula las longitudes tributarias correspondientes a cada
@@ -135,7 +135,7 @@ void XC::SetBase::resetTributarias(void) const
 void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
-    const Domain *dom= GetPreprocessor()->GetDominio();
+    const Domain *dom= GetPreprocessor()->getDomain();
     if(dom)
       {
         for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
@@ -151,7 +151,7 @@ void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
           }
       }
     else
-      std::cerr << "No se ha definido el dominio." << std::endl;
+      std::cerr << "No se ha definido el domain." << std::endl;
   }
 
 //! @brief Calcula las áreas tributarias correspondientes a cada
@@ -159,7 +159,7 @@ void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
 void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
-    const Domain *dom= GetPreprocessor()->GetDominio();
+    const Domain *dom= GetPreprocessor()->getDomain();
     if(dom)
       {
         for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
@@ -175,7 +175,7 @@ void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
           }
       }
     else
-      std::cerr << "No se ha definido el dominio." << std::endl;
+      std::cerr << "No se ha definido el domain." << std::endl;
   }
 
 //! @brief Calcula los volúmenes tributarios correspondientes a cada
@@ -183,7 +183,7 @@ void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
 void XC::SetBase::calculaVolsTributarios(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
-    const Domain *dom= GetPreprocessor()->GetDominio();
+    const Domain *dom= GetPreprocessor()->getDomain();
     if(dom)
       {
         for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
@@ -199,7 +199,7 @@ void XC::SetBase::calculaVolsTributarios(bool initialGeometry) const
           }
       }
     else
-      std::cerr << "No se ha definido el dominio." << std::endl;
+      std::cerr << "No se ha definido el domain." << std::endl;
   }
 
 

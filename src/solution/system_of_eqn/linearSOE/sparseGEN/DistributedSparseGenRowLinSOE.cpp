@@ -79,7 +79,7 @@ bool XC::DistributedSparseGenRowLinSOE::setSolver(LinearSOESolver *newSolver)
     if(tmp)
       retval= SparseGenSOEBase::setSolver(tmp);
     else
-      std::cerr << "DistributedSparseGenRowLinSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
+      std::cerr << "DistributedSparseGenRowLinSOE::setSolver; solver incompatible con system of equations." << std::endl;
     return retval;
   }
 

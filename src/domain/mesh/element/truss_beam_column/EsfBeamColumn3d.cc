@@ -29,7 +29,7 @@
 #include "EsfBeamColumn3d.h"
 #include "utility/actor/actor/MovableVector.h"
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::EsfBeamColumn3d::EsfBeamColumn3d(void)
   : Vector(6) {}
 

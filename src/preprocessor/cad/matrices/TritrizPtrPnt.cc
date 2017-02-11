@@ -46,7 +46,7 @@
 #include "xc_basic/src/matrices/RangoMatriz.h"
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::TritrizPtrPnt::TritrizPtrPnt(const size_t capas)
   : TritrizPtrBase<MatrizPtrPnt>(capas) {}
 
@@ -98,7 +98,7 @@ Pos3d XC::TritrizPtrPnt::getCentroide(void) const
   }
 
 
-//! @brief Devuelve, si lo encuentra, un puntero al punto
+//! @brief Devuelve, si lo encuentra, a pointer al punto
 //! cuyo tag se pasa como parámetro.
 XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag)
   {
@@ -170,7 +170,7 @@ XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al punto
+//! @brief Devuelve, si lo encuentra, a pointer al punto
 //! cuyo tag se pasa como parámetro.
 const XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag) const
   {

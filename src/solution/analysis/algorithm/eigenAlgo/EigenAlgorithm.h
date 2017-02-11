@@ -75,11 +75,11 @@ class EigenIntegrator;
 
 //! @ingroup AnalAlgo
 //
-//! @defgroup EigenAlgo Algoritmos de solución para problemas de eigenvalues.
+//! @defgroup EigenAlgo Solution algoriths for eigenproblems.
 //
 //! @ingroup EigenAlgo
 //
-//! @brief Algoritmo de solución para problema de eigenvalues.
+//! @brief Solution algorithm for eigenproblem.
 class EigenAlgorithm : public SolutionAlgorithm
   {
   protected:

@@ -69,7 +69,7 @@
 XC::SymBandEigenSOE::SymBandEigenSOE(SoluMethod *owr)
   :EigenSOE(owr,EigenSOE_TAGS_SymBandEigenSOE), numSuperD(0) {}
 
-//! @brief Asigna el solver que se empleará en la solución del problema de eigenvalues.
+//! @brief Sets the solver that will be used to solve the eigenvalue problem.
 bool XC::SymBandEigenSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;
@@ -80,7 +80,7 @@ bool XC::SymBandEigenSOE::setSolver(EigenSolver *newSolver)
         retval= EigenSOE::setSolver(tmp);
       }
     else
-      std::cerr << "SymBandEigenSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
+      std::cerr << "SymBandEigenSOE::setSolver; incompatible solver." << std::endl;
     return retval;
   }
 

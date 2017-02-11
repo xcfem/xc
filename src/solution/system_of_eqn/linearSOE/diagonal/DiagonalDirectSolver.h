@@ -67,8 +67,7 @@ class DiagonalSOE;
 
 //! @ingroup Solver
 //
-//! @brief Objetos que se encargan de la solución
-//! de sistemas de ecuaciones con matriz diagonal.
+//! @brief Direct solver for diagonal matrix SOE.
 class DiagonalDirectSolver : public DiagonalSolver
   {
   protected:

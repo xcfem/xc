@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //AggregatorAdditions.h
-//deque de punteros (se emplear en la clase Set).
+//deque de pointers (se emplear en la clase Set).
 
 
 #ifndef AGGREGATORADDITIONS_H
@@ -39,7 +39,7 @@ class ResponseId;
 
 //! \ingroup MATSCC
 //
-//! @brief Punteros a UniaxialMaterial con grado de libertad asociado a
+//! @brief pointers to UniaxialMaterial con grado de libertad asociado a
 //! a cada uno de dichos grados de libertad (se emplea en SectionAggregator).
 class AggregatorAdditions: public DqUniaxialMaterial
   {

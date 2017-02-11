@@ -44,7 +44,7 @@ class Response;
 class DataOutputHandler;
 
 //! @brief Se emplea como base de los recorders que obtienen
-//! la respuesta de uno o más elementos durante el análisis.
+//! la respuesta de uno o más elementos during the analysis.
 class ElementRecorderBase: public MeshCompRecorder
   {
   protected:        

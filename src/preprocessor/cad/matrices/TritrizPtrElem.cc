@@ -35,7 +35,7 @@
 
 #include "boost/lexical_cast.hpp"
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::TritrizPtrElem::TritrizPtrElem(const size_t capas,const MatrizPtrElem &m)
   : TritrizPtrBase<MatrizPtrElem>(capas,m) {}
 //! @brief Constructor.
@@ -46,7 +46,7 @@ XC::TritrizPtrElem::TritrizPtrElem(const size_t capas,const size_t filas,const s
       (*this)[i]= MatrizPtrElem(filas,cols);
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 XC::Element *XC::TritrizPtrElem::buscaElemento(const int &tag)
   {
@@ -61,7 +61,7 @@ XC::Element *XC::TritrizPtrElem::buscaElemento(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 const XC::Element *XC::TritrizPtrElem::buscaElemento(const int &tag) const
   {

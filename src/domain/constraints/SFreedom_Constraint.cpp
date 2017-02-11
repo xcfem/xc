@@ -68,7 +68,7 @@
 #include "utility/actor/actor/MovableVector.h"
 #include "vtkCellType.h"
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::SFreedom_Constraint::SFreedom_Constraint(int clasTag)
   :Constraint(clasTag), dofNumber(0), valueR(0.0), valueC(0.0), isConstant(true), loadPatternTag(-1) {}
 

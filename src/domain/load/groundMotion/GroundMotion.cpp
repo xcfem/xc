@@ -140,7 +140,7 @@ int XC::GroundMotion::recvSelf(const CommParameters &cp)
     return 0;
   }
 
-//! @brief Envía un puntero al «ground motion» through the channel being passed as parameter.
+//! @brief Envía a pointer al «ground motion» through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase del objeto.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 int XC::sendGroundMotionPtr(GroundMotion *ptr,DbTagData &dt,CommParameters &cp,const BrokedPtrCommMetaData &md)
@@ -157,7 +157,7 @@ int XC::sendGroundMotionPtr(GroundMotion *ptr,DbTagData &dt,CommParameters &cp,c
     return res;
   }
 
-//! @brief Recibe un puntero a «ground motion» through the channel being passed as parameter.
+//! @brief Recibe a pointer a «ground motion» through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase del objeto.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::GroundMotion *XC::receiveGroundMotionPtr(GroundMotion* ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)

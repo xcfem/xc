@@ -47,9 +47,9 @@ class LoadLoader: public Loader
     map_ground_motions ground_motions; //!< Movimientos del terreno.
 
     MapLoadPatterns lpatterns; //!< Contenedor de hipótesis simples.
-    int tag_lp; //!< Identificador por defecto para hipótesis simples o combinaciones.
+    int tag_lp; //!< Default identifier for load patterns or load combinations.
 
-    GrupoCombinaciones combinaciones; //!< Contenedor de combinaciones.
+    GrupoCombinaciones combinaciones; //!< Load combination container.
 
   protected:
     friend class Combinacion;

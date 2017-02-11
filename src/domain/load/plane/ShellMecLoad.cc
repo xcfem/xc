@@ -155,7 +155,7 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
           }
       }
     else
-      std::cerr << "ShellMecLoad::getGlobalVectors; no existe apuntador al dominio." << std::endl;
+      std::cerr << "ShellMecLoad::getGlobalVectors; no existe apuntador al domain." << std::endl;
     return retval;
   }
 

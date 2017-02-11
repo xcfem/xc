@@ -88,7 +88,7 @@ void XC::ElemPlano<NNODOS, PhysProp>::checkElem(void)
   {
     if(this->getNodePtrs().hasNull())
       std::cerr << "El elemento: " << this->getTag()
-                << " tiene punteros a nodo, nulos." << std::endl;
+                << " tiene pointers to node, nulos." << std::endl;
     else
       {
         const double area= this->getArea();
@@ -106,7 +106,7 @@ void XC::ElemPlano<NNODOS, PhysProp>::checkElem(void)
       }
   }
 
-//! @brief Asigna el dominio al elemento.
+//! @brief Asigna el domain al elemento.
 template <int NNODOS,class PhysProp>
 void XC::ElemPlano<NNODOS, PhysProp>::setDomain(Domain *theDomain)
   {

@@ -34,10 +34,10 @@
 #include "med.h"
 #include "vtkCellType.h"
 
-//! @brief Devuelve un puntero al GeomSection.
+//! @brief Returns a pointer to the GeomSection.
 const XC::GeomSection *XC::EntGeomSection::getGeomSection(void) const
   { return sccGeom; }
-//! @brief Devuelve un puntero al GeomSection.
+//! @brief Returns a pointer to the GeomSection.
 XC::GeomSection *XC::EntGeomSection::getGeomSection(void)
   { return sccGeom; }
 
@@ -106,7 +106,7 @@ const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto) const
     return retval;
   }
 
-//! @brief Devuelve un puntero al Eje cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to the Eje cuyo índice se pasa como parámetro.
 XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje)
   {
     Eje *retval= nullptr;
@@ -121,7 +121,7 @@ XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje)
     return retval;
   }
 
-//! @brief Devuelve un puntero al Eje cuyo índice se pasa como parámetro
+//! @brief Returns a pointer to the Eje cuyo índice se pasa como parámetro
 const XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje) const
   {
     const Eje *retval= nullptr;
@@ -139,7 +139,7 @@ const XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje) const
 //! @brief Interfaz con VTK.
 int XC::EntGeomSection::getVtkCellType(void) const
   {
-    std::cerr << "EntGeomSection::getVtkCellType: la función getVtkCellType debe definirse en las clases derivadas." << std::endl;
+    std::cerr << "EntGeomSection::getVtkCellType: function getVtkCellType must be overloaded on derived classes." << std::endl;
     return VTK_EMPTY_CELL;
   } 
 

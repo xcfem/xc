@@ -70,10 +70,7 @@
 namespace XC {
 //! @ingroup Solver
 //
-//! @brief Objeto encargado de la solución de
-//! sistema de ecuaciones con matriz en banda
-//! no simétrica, basado en la biblioteca
-//! LAPACK (http://www.netlib.org/lapack).
+//! @brief <a href="http://http://www.netlib.org/lapack/" target="_new"> Lapack</a> based band matrix linear SOE solver.
 class BandSPDLinLapackSolver : public BandSPDLinSolver
   {
     friend class FEM_ObjectBroker;

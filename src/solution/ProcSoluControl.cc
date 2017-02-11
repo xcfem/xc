@@ -36,7 +36,7 @@
 #include "boost/any.hpp"
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ProcSoluControl::ProcSoluControl(ProcSolu *owr)
   : EntCmd(owr), solu_models(this), solu_methods(this) {}
 
@@ -47,8 +47,8 @@ XC::ProcSolu *XC::ProcSoluControl::getProcSolu(void)
 const XC::ProcSolu *XC::ProcSoluControl::getProcSolu(void) const
   { return dynamic_cast<const ProcSolu *>(Owner()); }
 
-//! @brief Devuelve un apuntador al dominio sobre el que operan
-//! los agloritmos de solución.
+//! @brief Returns a pointer to the domain on which
+//! the solution algortithm operates.
 XC::Domain *XC::ProcSoluControl::getDomain(void)
   {
     ProcSolu *ps= getProcSolu();
@@ -56,8 +56,8 @@ XC::Domain *XC::ProcSoluControl::getDomain(void)
     return ps->getDomainPtr();
   }
 
-//! @brief Devuelve un apuntador al dominio sobre el que operan
-//! los agloritmos de solución.
+//! @brief Returns a pointer to the domain on which
+//! the solution algortithm operates.
 const XC::Domain *XC::ProcSoluControl::getDomain(void) const
   {
     const ProcSolu *ps= getProcSolu();
@@ -65,7 +65,7 @@ const XC::Domain *XC::ProcSoluControl::getDomain(void) const
     return ps->getDomainPtr();
   }
 
-//! @brief Devuelve un puntero al integrador.
+//! @brief Returns a pointer to the integrator.
 XC::Integrator *XC::ProcSoluControl::getIntegratorPtr(void)
   {
     ProcSolu *ps= getProcSolu();
@@ -73,7 +73,7 @@ XC::Integrator *XC::ProcSoluControl::getIntegratorPtr(void)
     return ps->getIntegratorPtr();
   }
 
-//! @brief Devuelve un puntero al integrador.
+//! @brief Returns a const pointer to the integrator.
 const XC::Integrator *XC::ProcSoluControl::getIntegratorPtr(void) const
   {
     const ProcSolu *ps= getProcSolu();
@@ -94,18 +94,16 @@ XC::MapSoluMethod &XC::ProcSoluControl::getSoluMethodContainer(void)
 const XC::ModelWrapper *XC::ProcSoluControl::getModelWrapper(const std::string &cod) const
   { return solu_models.getModelWrapper(cod); }
 
-//! @brief Devuelve un apuntador al procedimiento
-//! de solución.
+//! @brief Returns a pointer to the model wrapper wich the identifier
+//! is being passed as parameter.
 XC::ModelWrapper *XC::ProcSoluControl::getModelWrapper(const std::string &cod)
   { return solu_models.getModelWrapper(cod); }
 
-//! @brief Devuelve un apuntador al método
-//! de solución.
+//! @brief Returns a const pointer to the solution method.
 const XC::SoluMethod *XC::ProcSoluControl::getSoluMethod(const std::string &cod) const
   { return solu_methods.getSoluMethod(cod); }
 
-//! @brief Devuelve un apuntador al método
-//! de solución.
+//! @brief Returns a const pointer to the solution method.
 XC::SoluMethod *XC::ProcSoluControl::getSoluMethod(const std::string &cod)
   { return solu_methods.getSoluMethod(cod); }
 

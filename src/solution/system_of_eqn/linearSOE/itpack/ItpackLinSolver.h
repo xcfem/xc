@@ -81,9 +81,7 @@ class ItpackLinSOE;
 
 //! @ingroup Solver
 //
-//! @brief Objeto encargado de la solución de
-//! sistema de ecuaciones basado en la biblioteca
-//! ITPACK (http://rene.ma.utexas.edu/CNA/ITPACK).
+//! @brief <a href="http://rene.ma.utexas.edu/CNA/ITPACK/" target="_new"> ITPACK</a> based linear SOE solver.
 class ItpackLinSolver : public LinearSOESolver
   {
   private:

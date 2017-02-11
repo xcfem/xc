@@ -162,7 +162,7 @@ SVD3d XC::ShellUniformLoad::getResultant(const Pos3d &centro, bool initialGeomet
           }
       }
     else
-      std::cerr << "ShellUniformLoad::getResultant; no existe apuntador al dominio." << std::endl;
+      std::cerr << "ShellUniformLoad::getResultant; no existe apuntador al domain." << std::endl;
     return retval;
   }
 

@@ -138,7 +138,7 @@ XC::Edge *XC::Linea::splitAtPoint(Pnt *p)
       }
     else
       {
-        std::cerr << "error Linea::splitAtPoint: se pasó un puntero nulo."
+        std::cerr << "error Linea::splitAtPoint: se pasó a null pointer."
                   << std::endl;
       }
     return retval;
@@ -193,7 +193,7 @@ const XC::Vector &XC::Linea::getVector(void) const
     if(p1 && p2)
       retval= (*p2)-(*p1);
     else
-      std::cerr << "Linea::getVector; alguno de los punteros a punto es nulo." << std::endl;
+      std::cerr << "Linea::getVector; alguno de los pointers to punto es nulo." << std::endl;
     return retval;
   }
 

@@ -173,7 +173,7 @@ XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
     Pnt *retval= busca(getTag());
     if(!p)
       {
-        std::cerr << "MapPuntos::CopiaPunto; el puntero al punto original es nulo." << std::endl;
+        std::cerr << "MapPuntos::CopiaPunto; the pointer al punto original es nulo." << std::endl;
         return retval;
       }
     if(retval)

@@ -44,7 +44,7 @@ XC::ElementPtrs::ElementPtrs(void)
 XC::ElementPtrs::~ElementPtrs(void)
   { theElements.clear(); }
 
-//! @brief Asigna los punteros a partir de los identificadores de elemento.
+//! @brief Asigna los pointers to partir de los identificadores de elemento.
 void XC::ElementPtrs::setPtrs(Domain *theDomain, const ID &theElementTags)
   {
     size_t sz= theElementTags.Size();

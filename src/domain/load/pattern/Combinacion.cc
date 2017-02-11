@@ -156,11 +156,11 @@ void XC::Combinacion::Combinacion::set_gamma_f(void)
         if(lp)
           lp->GammaF()= i->Factor();
         else
-	  std::cerr << "Combinacion::set_gamma_f; Se encontró un puntero nulo en la descomposición." << std::endl;
+	  std::cerr << "Combinacion::set_gamma_f; Se encontró a null pointer en la descomposición." << std::endl;
       }
   }
 
-//! @brief Asigna el dominio a cada caso de la combinación.
+//! @brief Asigna el domain a cada caso de la combinación.
 void XC::Combinacion::set_domain(void)
   {
     Domain *dom= getDomain();
@@ -171,11 +171,11 @@ void XC::Combinacion::set_domain(void)
         if(lp)
           lp->setDomain(dom);
         else
-	  std::cerr << "Combinacion::set_domain; Se encontró un puntero nulo en la descomposición." << std::endl;
+	  std::cerr << "Combinacion::set_domain; Se encontró a null pointer en la descomposición." << std::endl;
       }
   }
 
-//! @brief Añade al dominio being passed as parameter las hipótesis de la combinacion.
+//! @brief Añade al domain being passed as parameter las hipótesis de la combinacion.
 bool XC::Combinacion::addToDomain(void)
   {
     Domain *dom= getDomain();    
@@ -199,12 +199,12 @@ bool XC::Combinacion::addToDomain(void)
             retval= (retval && result);
           }
         else
-	  std::cerr << "Combinacion::addToDomain; Se encontró un puntero nulo en la descomposición." << std::endl;
+	  std::cerr << "Combinacion::addToDomain; Se encontró a null pointer en la descomposición." << std::endl;
       }
     return retval;
   }
 
-//! @brief Elimina del dominio being passed as parameter las hipótesis de la combinacion.
+//! @brief Elimina del domain being passed as parameter las hipótesis de la combinacion.
 void XC::Combinacion::removeFromDomain(void)
   {
     Domain *dom= getDomain();
@@ -215,7 +215,7 @@ void XC::Combinacion::removeFromDomain(void)
         if(lp)
           dom->removeLoadPattern(lp);
         else
-	  std::cerr << "Combinacion::removeFromDomain; Se encontró un puntero nulo en la descomposición." << std::endl;
+	  std::cerr << "Combinacion::removeFromDomain; Se encontró a null pointer en la descomposición." << std::endl;
       }
   }
 
@@ -315,7 +315,7 @@ const XC::GrupoCombinaciones *XC::Combinacion::getGrupo(void) const
 XC::GrupoCombinaciones *XC::Combinacion::getGrupo(void)
   { return dynamic_cast<GrupoCombinaciones *>(Owner()); }
 
-//! @brief Devuelve, si puede, un puntero a la combinación previa.
+//! @brief Devuelve, si puede, a pointer a la combinación previa.
 const XC::Combinacion *XC::Combinacion::getPtrCombPrevia(void) const
   {
     const Combinacion *retval= nullptr;
@@ -369,7 +369,7 @@ const std::string XC::Combinacion::getDescompRestoSobrePrevia(void) const
     return retval;
   }
 
-//! @brief Asigna el dominio a los casos de carga de la combinación.
+//! @brief Asigna el domain a los casos de carga de la combinación.
 void XC::Combinacion::Combinacion::setDomain(Domain *theDomain)
   {
     ForceReprComponent::setDomain(theDomain);

@@ -82,7 +82,7 @@ class ModelWrapper;
 //
 //! @brief Clase base para los numeradores de grados de libertad.
 //! Para realizar su función esta clase contiene un numerador de grafos
-//! y un apuntador al modelo de análisis.
+//! y un apuntador al analysis model.
 //! Este es el objeto encargado de crear, almacenar y destruir el
 //! numerador de grafos.
 class DOF_Numberer: public MovableObject, public EntCmd

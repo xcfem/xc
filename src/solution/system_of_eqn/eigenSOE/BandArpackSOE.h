@@ -45,21 +45,9 @@ class BandArpackSolver;
 
 //! @ingroup EigenSOE
 //
-//! @brief Sistema de ecuaciones correspondiente
-//! a un problema de eigenvalues con matriz en banda
-//! en cuya solución se empleará la biblioteca
-//! ArPack (http://www.caam.rice.edu/software/ARPACK)
-//! Description: This file contains the class definition for BandArpackSOE
-//! BandArpackSOE is a subclass of ArpackSOE. It uses the LAPACK storage
+//! @brief BandArpackSOE is a subclass of ArpackSOE. It uses the LAPACK storage
 //! scheme to store the components of the K, M matrix, which is a full matrix.
-//! It uses the ARPACK to do eigenvalue analysis.
-//! ARPACK is an eigen analysis package which was developed by 
-//! R.B.Lehoucq, D.C.Sorensen and C.Yang at Rice University. ARPACK is a
-//! collection of FORTRAN77 subroutines designed to solve large scale eigen
-//! problems. ARPACK is capable of solving large scale non-Hermitian standard 
-//! and generalized eigen problems. When the matrix <B>K</B> is symmetric, 
-//! the method is a variant of the Lanczos process called Implicitly Restarted
-//! Lanczos Method (IRLM).
+//! It uses the <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack</a> to do eigenvalue analysis.
 class BandArpackSOE: public ArpackSOE
   {
   private:

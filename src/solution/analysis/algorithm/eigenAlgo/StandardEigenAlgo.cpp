@@ -74,7 +74,7 @@ int XC::StandardEigenAlgo::solveCurrentStep(int numModes)
     EigenSOE *theSOE = getEigenSOEPtr();
     if((theModel == 0) || (theIntegrator == 0) || (theSOE == 0))
       {
-        std::cerr << "StandardEigenAlgo::solverCurrentStep() -- no se ha asignado dominio, modelo o integrador.\n";
+        std::cerr << "StandardEigenAlgo::solverCurrentStep() -- no se ha asignado domain, modelo o integrator.\n";
         return -1;
       }
   

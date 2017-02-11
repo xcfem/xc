@@ -67,7 +67,7 @@
 XC::FullGenEigenSOE::FullGenEigenSOE(SoluMethod *owr)
   : EigenSOE(owr,EigenSOE_TAGS_FullGenEigenSOE) {}
 
-//! @brief Asigna el solver que se empleará para resolver el problema de eigenvalues.
+//! @brief Sets the solver que se empleará parto solve the eigenproblem.
 bool XC::FullGenEigenSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;
@@ -78,7 +78,7 @@ bool XC::FullGenEigenSOE::setSolver(EigenSolver *newSolver)
         retval= EigenSOE::setSolver(tmp);
       }
     else
-      std::cerr << "BandArpackSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
+      std::cerr << "BandArpackSOE::setSolver; solver incompatible con system of equations." << std::endl;
     return retval;
   }
 
@@ -87,8 +87,8 @@ int XC::FullGenEigenSOE::setSize(Graph &theGraph)
     int result = 0;
     size = theGraph.getNumVertex();
     if(size==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; el modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie el gestor de coacciones." << std::endl;
+      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; the modelo no tiene ningún grado de libertad,"
+                << " agrege algún nodo o cambie the gestor de coacciones." << std::endl;
 
     int newSize = size*size;
 
@@ -115,7 +115,7 @@ int XC::FullGenEigenSOE::setSize(Graph &theGraph)
           }
       }
     else
-      std::cerr << "FullGenEigenSOE::setSize(); no se ha asignado el solver." << std::endl;
+      std::cerr << "FullGenEigenSOE::setSize(); no se ha asignado the solver." << std::endl;
     return result;
   }
 

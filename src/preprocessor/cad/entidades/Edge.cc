@@ -66,32 +66,32 @@ void XC::Edge::actualiza_topologia(void)
 //! @brief Devuelve un apuntador al punto inicial.
 XC::Pnt *XC::Edge::P1(void)
   {
-    std::cerr << "Edge::P1; esta función debe redefinirse en las clases"
-              << " derivadas, se devuelve nullptr;" << std::endl;
+    std::cerr << "Edge::P1; this function must be redefined on"
+              << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 
 //! @brief Devuelve un apuntador (constante) al punto inicial.
 const XC::Pnt *XC::Edge::P1(void) const
   {
-    std::cerr << "Edge::P1; esta función debe redefinirse en las clases"
-              << " derivadas, se devuelve nullptr;" << std::endl;
+    std::cerr << "Edge::P1; this function must be redefined on"
+              << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 
 //! @brief Devuelve un apuntador al punto inicial.
 XC::Pnt *XC::Edge::P2(void)
   {
-    std::cerr << "Edge::P2; esta función debe redefinirse en las clases"
-              << " derivadas, se devuelve nullptr;" << std::endl;
+    std::cerr << "Edge::P2; this function must be redefined on"
+              << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 
 //! @brief Devuelve un apuntador (constante) al punto final.
 const XC::Pnt *XC::Edge::P2(void) const
   {
-    std::cerr << "Edge::P2; esta función debe redefinirse en las clases"
-              << " derivadas, se devuelve nullptr;" << std::endl;
+    std::cerr << "Edge::P2; this function must be redefined on"
+              << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 

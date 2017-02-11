@@ -41,7 +41,7 @@ XC::BandArpackppSolver::BandArpackppSolver(const int &nModes)
  :EigenSolver(EigenSOLVER_TAGS_BandArpackppSolver,nModes),
  theSOE(nullptr), eigenvalues(nModes), eigenvectors(nModes,Vector()) {}
 
-//! @brief Resuelve para todos los eigenvalues del problema.
+//! @brief Solves para todos los eigenvalues del problema.
 int XC::BandArpackppSolver::solve(void)
   {return solve(theSOE->size);}
 
@@ -84,7 +84,7 @@ int XC::BandArpackppSolver::solve(int nModes)
     int retval= 0;
     if(!theSOE)
       {
-        std::cerr << "BandArpackppSolver::solve(); aún no se ha asignado el problema (EigenSOE).\n";
+        std::cerr << "BandArpackppSolver::solve(); aún no se ha asignado the problema (EigenSOE).\n";
         retval= -1;
       }
     else
@@ -96,7 +96,7 @@ int XC::BandArpackppSolver::solve(int nModes)
         if((numModes <= 1) || (numModes>=(n-1)))
           {
             numModes= 0;
-	    std::cerr << "BandArpackppSolver::solve(); el número de modos ha de"
+	    std::cerr << "BandArpackppSolver::solve(); the número de modos ha de"
                       << "estar comprendido entre: " << 2 << " y " << n-2 << ".\n";
             retval= -2;
           }
@@ -134,7 +134,7 @@ int XC::BandArpackppSolver::solve(int nModes)
     return retval;
   }
 
-//! @brief Asigna el problema de eigenvalues a resolver.
+//! @brief Sets the eigenproblem to solve.
 bool XC::BandArpackppSolver::setEigenSOE(EigenSOE *soe)
   {
     bool retval= false;
@@ -145,11 +145,11 @@ bool XC::BandArpackppSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::setEigenSOE: el sistema de ecuaciones no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << nombre_clase() << "::setEigenSOE: the system of equations no es del tipo adecuado para este solver." << std::endl;
     return retval;
   }
 
-//! @brief Asigna el problema de eigenvalues a resolver.
+//! @brief Sets the eigenproblem to solve.
 bool XC::BandArpackppSolver::setEigenSOE(BandArpackppSOE &theBandSOE)
   { return setEigenSOE(&theBandSOE); }
 

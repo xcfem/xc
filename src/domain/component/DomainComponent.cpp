@@ -76,7 +76,7 @@ XC::DomainComponent::DomainComponent(int tag, int classTag)
 XC::DomainComponent::~DomainComponent(void)
   { setDomain(nullptr); }
 
-//! @brief Asigna un puntero al dominio. 
+//! @brief Asigna a pointer al domain. 
 void XC::DomainComponent::setDomain(Domain *model)
   { theDomain = model; }
 
@@ -84,11 +84,11 @@ void XC::DomainComponent::setDomain(Domain *model)
 void XC::DomainComponent::set_indice(const size_t &i)
   { idx= i; }
 
-//! @brief Devuelve un puntero al dominio.
+//! @brief Returns a pointer to the domain.
 XC::Domain *XC::DomainComponent::getDomain(void) const
   { return theDomain; }
 
-//! @brief Devuelve (si puede) un puntero al preprocesador.
+//! @brief Devuelve (si puede) a pointer al preprocesador.
 const XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void) const
   {
     const Preprocessor *retval= nullptr;
@@ -97,7 +97,7 @@ const XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void) const
     return retval;
   }
 
-//! @brief Devuelve (si puede) un puntero al preprocesador.
+//! @brief Devuelve (si puede) a pointer al preprocesador.
 XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void)
   {
     Preprocessor *retval= nullptr;

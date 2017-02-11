@@ -88,7 +88,7 @@ XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2)
   : ElementBase<2>(tag,classTag),dimension(1), numDOF(0), transformation(3,3)
   {
     theNodes.set_id_nodos(Nd1,Nd2);
-    Vxy vxy; //Vectores por defecto.
+    Vxy vxy; //Default vectors.
     setUp(Nd1,Nd2,vxy.getX(),vxy.getY());
   }
 
@@ -97,7 +97,7 @@ XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2,int dim)
   : ElementBase<2>(tag,classTag),dimension(dim), numDOF(0), transformation(3,3)
   {
     theNodes.set_id_nodos(Nd1,Nd2);
-    Vxy vxy; //Vectores por defecto.
+    Vxy vxy; //Default vectors.
     setUp(Nd1,Nd2,vxy.getX(),vxy.getY());
   }
 

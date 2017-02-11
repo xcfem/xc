@@ -72,8 +72,7 @@ class BandSPDLinSOE;
 
 //! @ingroup Solver
 //
-//! @brief Objetos que se encargan de la solución
-//! de sistemas de ecuaciones con matriz en banda.
+//! @brief Solver for band matrix linear systems of equations.
 class BandSPDLinSolver : public LinearSOESolver
   {
   protected:

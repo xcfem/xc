@@ -35,7 +35,7 @@
 #include "boost/any.hpp"
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::MapModelWrapper::MapModelWrapper(ProcSoluControl *owr)
   : EntCmd(owr) {}
 
@@ -47,8 +47,7 @@ bool XC::MapModelWrapper::existeModelWrapper(const std::string &cod) const
     return (i != solu_models.end());
   }
 
-//! @brief Devuelve un apuntador al método
-//! de solución.
+//! @brief Returns a pointer to the solution method.
 XC::ModelWrapper *XC::MapModelWrapper::getModelWrapper(const std::string &cod)
   {
     ModelWrapper *retval= nullptr;
@@ -58,8 +57,7 @@ XC::ModelWrapper *XC::MapModelWrapper::getModelWrapper(const std::string &cod)
     return retval;
   }
 
-//! @brief Devuelve un apuntador al método
-//! de solución.
+//! @brief Returns a const pointer to the solution method.
 const XC::ModelWrapper *XC::MapModelWrapper::getModelWrapper(const std::string &cod) const
   {
     const ModelWrapper *retval= nullptr;
@@ -69,8 +67,7 @@ const XC::ModelWrapper *XC::MapModelWrapper::getModelWrapper(const std::string &
     return retval;
   }
 
-//! @brief Crea un nuevo método de solución con el código being passed as parameter.
-//! @brief Si ya existe devuelve un puntero al mismo.
+//! @brief Creates a new solution method with the identifier being passed as parameter (if already exists, it returns a pointer to it). 
 XC::ModelWrapper &XC::MapModelWrapper::creaModelWrapper(const std::string &cod)
   {
     ModelWrapper *retval= nullptr;

@@ -32,7 +32,7 @@
 
 
 
-//! @brief Inicializa los punteros a las matrices de cortante.
+//! @brief Inicializa los pointers to las matrices de cortante.
 void XC::ShellBData::shear_matrix_ptrs_setup(void)
   {
     //shear matrix pointers

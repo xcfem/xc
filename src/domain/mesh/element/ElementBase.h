@@ -40,12 +40,12 @@ class Node;
 
 //! \ingroup Elem
 //
-//! @brief Elemento con punteros a nodos
+//! @brief Elemento con pointers to nodes
 template <int NNODOS>
 class ElementBase: public Element
   {
   protected:
-    NodePtrsWithIDs theNodes;  //!< Punteros a nodo.
+    NodePtrsWithIDs theNodes;  //!< pointers to node.
 
     template <class TIPOMAT>
     TIPOMAT *cast_material(const Material *ptr_mat);
@@ -69,7 +69,7 @@ class ElementBase: public Element
 
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 template <int NNODOS>
 XC::ElementBase<NNODOS>::ElementBase(int tag, int classTag)
   : Element(tag,classTag), theNodes(this,NNODOS) {}
@@ -95,17 +95,17 @@ template <int NNODOS>
 int XC::ElementBase<NNODOS>::getNumExternalNodes(void) const
   { return theNodes.size(); }
 
-//! @brief Devuelve un puntero al vector de nodos.
+//! @brief Returns a pointer to the vector de nodos.
 template <int NNODOS>
 const XC::NodePtrsWithIDs &XC::ElementBase<NNODOS>::getNodePtrs(void) const
   { return theNodes; }
 
-//! @brief Devuelve un puntero al vector de nodos.
+//! @brief Returns a pointer to the vector de nodos.
 template <int NNODOS>
 XC::NodePtrsWithIDs &XC::ElementBase<NNODOS>::getNodePtrs(void)
   { return theNodes; }
 
-//! @brief Asigna el material al elemento a partir del puntero being passed as parameter.
+//! @brief Asigna el material al elemento a partir of the pointer being passed as parameter.
 template <int NNODOS> template <class TIPOMAT>
 TIPOMAT *ElementBase<NNODOS>::cast_material(const Material *ptr_mat)
   {

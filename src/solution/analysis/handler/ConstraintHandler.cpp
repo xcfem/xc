@@ -85,15 +85,15 @@ int XC::ConstraintHandler::update(void)
 int XC::ConstraintHandler::applyLoad(void)
   { return 0; }
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a pointer to the model wrapper.
 XC::ModelWrapper *XC::ConstraintHandler::getModelWrapper(void)
   { return dynamic_cast<ModelWrapper *>(Owner()); }
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a const pointer to the model wrapper.
 const XC::ModelWrapper *XC::ConstraintHandler::getModelWrapper(void) const
   { return dynamic_cast<const ModelWrapper *>(Owner()); }
 
-//! @brief Devuelve un puntero al dominio.
+//! @brief Returns a pointer to the domain.
 XC::Domain *XC::ConstraintHandler::getDomainPtr(void)
   {
     ModelWrapper *sm= getModelWrapper();
@@ -101,7 +101,7 @@ XC::Domain *XC::ConstraintHandler::getDomainPtr(void)
     return sm->getDomainPtr();
   }
 
-//! @brief Devuelve un puntero al dominio.
+//! @brief Returns a const pointer to the domain.
 const XC::Domain *XC::ConstraintHandler::getDomainPtr(void) const
   {
     const ModelWrapper *sm= getModelWrapper();
@@ -109,7 +109,7 @@ const XC::Domain *XC::ConstraintHandler::getDomainPtr(void) const
     return sm->getDomainPtr();
   }
 
-//! @brief Devuelve un puntero al modelo de análisis.
+//! @brief Returns a const pointer to the analysis model.
 const XC::AnalysisModel *XC::ConstraintHandler::getAnalysisModelPtr(void) const
   {
     const ModelWrapper *sm= getModelWrapper();
@@ -117,7 +117,7 @@ const XC::AnalysisModel *XC::ConstraintHandler::getAnalysisModelPtr(void) const
     return sm->getAnalysisModelPtr();
   }
 
-//! @brief Devuelve un puntero al modelo de análisis.
+//! @brief Returns a pointer to the analysis model.
 XC::AnalysisModel *XC::ConstraintHandler::getAnalysisModelPtr(void)
   {
     ModelWrapper *sm= getModelWrapper();
@@ -125,7 +125,7 @@ XC::AnalysisModel *XC::ConstraintHandler::getAnalysisModelPtr(void)
     return sm->getAnalysisModelPtr();
   }
 
-//! @brief Devuelve un puntero al integrador.
+//! @brief Returns a pointer to the integrator.
 const XC::Integrator *XC::ConstraintHandler::getIntegratorPtr(void) const
   {
     const ModelWrapper *sm= getModelWrapper();
@@ -133,7 +133,7 @@ const XC::Integrator *XC::ConstraintHandler::getIntegratorPtr(void) const
     return sm->getIntegratorPtr();
   }
 
-//! @brief Devuelve un puntero al integrador.
+//! @brief Returns a pointer to the integrator.
 XC::Integrator *XC::ConstraintHandler::getIntegratorPtr(void)
   {
     ModelWrapper *sm= getModelWrapper();

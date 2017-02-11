@@ -78,7 +78,7 @@ class Domain;
 //! @ingroup StaticIntegrator
 //
 //! @brief Especifica el incremento de desplazamiento a aplicar en un grado
-//! de libertad del dominio para cada paso del análisis.
+//! de libertad del domain para cada paso of the analysis.
 class DisplacementControl: public DispBase
   {
   protected:

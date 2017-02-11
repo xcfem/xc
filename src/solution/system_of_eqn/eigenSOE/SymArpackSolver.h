@@ -46,12 +46,9 @@
 namespace XC {
 class SymArpackSOE;
 
-//! @ingroup LinearSolver
+//! @ingroup EigenSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de sistemas de ecuaciones lineales con matriz simétrica
-//! empleando la biblioteca arcpack
-//! (http://www.caam.rice.edu/software/ARPACK).
+//! @brief <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack</a> based symmetric matrix eigenvalue SOE solver.
 class SymArpackSolver : public EigenSolver
   {
   private:

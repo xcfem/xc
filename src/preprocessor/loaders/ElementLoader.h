@@ -35,7 +35,7 @@ namespace XC {
 
 //!  \ingroup Ldrs
 //! 
-//! @brief Objeto encargado de agregar al dominio los elementos
+//! @brief Objeto encargado de agregar al domain los elementos
 //! finitos leídos desde archivo.
 class ElementLoader: public ProtoElementLoader
   {

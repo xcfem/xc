@@ -84,7 +84,7 @@
 // static UniaxialPackage *theUniaxialPackage = nullptr;
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::FEM_ObjectBrokerAllClasses::FEM_ObjectBrokerAllClasses(void)
   :lastDomainSolver(nullptr) {}
 

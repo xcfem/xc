@@ -42,16 +42,16 @@
 XC::CmbEdge::Lado::Lado(Edge *ptr,const bool &s)
   : edge(ptr), directo(s) {}
 
-//! @brief Devuelve un puntero a la linea.
+//! @brief Returns a pointer to the la linea.
 XC::Edge *XC::CmbEdge::Lado::Borde(void)
   { return edge; }
-//! @brief Devuelve un puntero constante a la linea.
+//! @brief Devuelve a pointer constante a la linea.
 const XC::Edge *XC::CmbEdge::Lado::Borde(void) const
   { return edge; }
 //! @brief Asigna la línea.
 void XC::CmbEdge::Lado::SetEdge(Edge *l)
   { edge= l; }
-//! @brief Devuelve un puntero (constante) al punto origen de la línea.
+//! @brief Devuelve a pointer (constante) al punto origen de la línea.
 const XC::Pnt *XC::CmbEdge::Lado::P1(void) const
   {
     if(!edge) return nullptr;
@@ -60,7 +60,7 @@ const XC::Pnt *XC::CmbEdge::Lado::P1(void) const
     else
       return edge->P2();
   }
-//! @brief Devuelve un puntero (constante) al punto destino de la línea.
+//! @brief Devuelve a pointer (constante) al punto destino de la línea.
 const XC::Pnt *XC::CmbEdge::Lado::P2(void) const
   {
     if(!edge) return nullptr;
@@ -239,7 +239,7 @@ XC::SetEstruct *XC::CmbEdge::getCopy(void) const
   { return new CmbEdge(*this); }
 
 
-//! @brief Devuelve un puntero al primer lado.
+//! @brief Returns a pointer to the primer lado.
 XC::CmbEdge::Lado *XC::CmbEdge::primera_linea(void)
   {
     if(lineas.empty())
@@ -247,7 +247,7 @@ XC::CmbEdge::Lado *XC::CmbEdge::primera_linea(void)
     else
       return &(*lineas.begin());
   }
-//! @brief Devuelve un puntero al primer lado.
+//! @brief Returns a pointer to the primer lado.
 const XC::CmbEdge::Lado *XC::CmbEdge::primera_linea(void) const
   {
     if(lineas.empty())
@@ -255,7 +255,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::primera_linea(void) const
     else
       return &(*lineas.begin());
   }
-//! @brief Devuelve un puntero al último lado.
+//! @brief Returns a pointer to the último lado.
 XC::CmbEdge::Lado *XC::CmbEdge::ultima_linea(void)
   {
     if(lineas.empty())
@@ -263,7 +263,7 @@ XC::CmbEdge::Lado *XC::CmbEdge::ultima_linea(void)
     else
       return &(*lineas.rbegin());
   }
-//! @brief Devuelve un puntero al último lado.
+//! @brief Returns a pointer to the último lado.
 const XC::CmbEdge::Lado *XC::CmbEdge::ultima_linea(void) const
   {
     if(lineas.empty())
@@ -272,7 +272,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::ultima_linea(void) const
       return &(*lineas.rbegin());
   }
 
-//! @brief Devuelve un puntero al primer punto.
+//! @brief Returns a pointer to the primer punto.
 const XC::Pnt *XC::CmbEdge::primer_punto(void) const
   {
     const Lado *pl= primera_linea();
@@ -282,7 +282,7 @@ const XC::Pnt *XC::CmbEdge::primer_punto(void) const
       return nullptr;
    }
 
-//! @brief Devuelve un puntero al último punto.
+//! @brief Returns a pointer to the último punto.
 const XC::Pnt *XC::CmbEdge::ultimo_punto(void) const
   {
     const Lado *ul= ultima_linea();
@@ -393,7 +393,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
       std::clog << "Meshing CmbEdge...(" << GetNombre() << ")...";
     line_meshing(dm);
     
-    //Punteros a nodos.
+    //pointers to nodes.
     nodos= TritrizPtrNod(1,NDiv()+1,1);
     size_t offset_j= 0;// Columna inicial.
     for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
@@ -401,7 +401,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
         nodos.PutCaja(0,offset_j,0,(*i).Borde()->GetTtzNodos());
         offset_j+= (*i).Borde()->GetNumFilasNodos()-1;
       }
-    //Punteros a elementos.
+    //pointers to elementos.
     elementos= TritrizPtrElem(1,NDiv(),1);
     offset_j= 0;// Columna inicial.
     for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)

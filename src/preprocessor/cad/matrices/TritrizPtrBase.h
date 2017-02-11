@@ -50,7 +50,7 @@ namespace XC{
 
 //! \ingroup CadMR
 //! 
-//! @brief "Tritriz" de punteros a objetos.
+//! @brief "Tritriz" de pointers to objetos.
 template <class MatrizPtr>
 class TritrizPtrBase: public std::vector<MatrizPtr>, public EntCmd
   {
@@ -165,7 +165,7 @@ class TritrizPtrBase: public std::vector<MatrizPtr>, public EntCmd
     std::vector<int> getTagsInteriorObjs(void);
   };
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 template <class MatrizPtr>
 TritrizPtrBase<MatrizPtr>::TritrizPtrBase(const size_t &capas)
   : std::vector<MatrizPtr>(capas), EntCmd() 
@@ -272,7 +272,7 @@ size_t TritrizPtrBase<MatrizPtr>::NumPtrs(void) const
       }
   }
 
-//! @brief Devuelve verdadero si está vacía o si los punteros son nulos.
+//! @brief Devuelve verdadero si está vacía o si los pointers son nulos.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::Null(void) const
   {
@@ -282,7 +282,7 @@ bool TritrizPtrBase<MatrizPtr>::Null(void) const
       return (*this)[0].Null();
   }
 
-//! @brief Devuelve verdadero si está vacía o si tiene algún puntero nulo.
+//! @brief Devuelve verdadero si está vacía o si tiene algún null pointer.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::HasNull(void) const
   {

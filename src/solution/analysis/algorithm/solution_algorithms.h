@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //solution_algorithms.h
 
-//Archivos de cabecera de los algoritmos de solución.
+//Headers for the solution algorithms.
 #include "solution/analysis/algorithm/equiSolnAlgo/EquiSolnAlgo.h"
 #include <solution/analysis/algorithm/equiSolnAlgo/BFGS.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/Broyden.h>

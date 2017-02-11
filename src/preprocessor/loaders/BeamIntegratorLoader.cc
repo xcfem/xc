@@ -57,7 +57,7 @@ void XC::BeamIntegratorLoader::libera(void)
     beam_integrators.erase(begin(),end());
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::BeamIntegratorLoader::BeamIntegratorLoader(Preprocessor *owr)
   : Loader(owr)
   {
@@ -108,7 +108,7 @@ XC::BeamIntegratorLoader::const_iterator XC::BeamIntegratorLoader::find(const st
 XC::BeamIntegratorLoader::iterator XC::BeamIntegratorLoader::find(const std::string &nmb)
   { return beam_integrators.find(nmb); }
 
-//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 XC::BeamIntegration *XC::BeamIntegratorLoader::find_ptr(const std::string &nmb)
   {
@@ -119,7 +119,7 @@ XC::BeamIntegration *XC::BeamIntegratorLoader::find_ptr(const std::string &nmb)
       return nullptr; 
   }
 
-//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 const XC::BeamIntegration *XC::BeamIntegratorLoader::find_ptr(const std::string &nmb) const
   {

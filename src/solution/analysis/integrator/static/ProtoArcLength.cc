@@ -110,7 +110,7 @@ int XC::ProtoArcLength::update(const Vector &dU)
     return 0;
   }
 
-//! @brief Respuesta a un cambio en el dominio.
+//! @brief Respuesta a un cambio en el domain.
 int XC::ProtoArcLength::domainChanged(void)
   {
     // we first create the Vectors needed

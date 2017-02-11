@@ -210,7 +210,7 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
     const Preprocessor *preprocessor= get_preprocessor();
     if(preprocessor)
       {
-        const Domain *dom= preprocessor->GetDominio();
+        const Domain *dom= preprocessor->getDomain();
         if(dom)
           {
             const int numNodos= dom->getNumNodes();

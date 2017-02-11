@@ -64,7 +64,7 @@ ELEM_LOAD *new_elem_load(LoadPattern *lp,int &tag_el)
           std::cerr << "new_elem_load: no se pudo crear la carga sobre elementos: " << tag_el << std::endl;
       }
     else
-       std::cerr << "new_elem_load: se paso un puntero nulo." << std::endl;
+       std::cerr << "new_elem_load: se paso a null pointer." << std::endl;
     return load;
   }
 

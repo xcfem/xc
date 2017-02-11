@@ -72,9 +72,7 @@ class Vector;
 
 //! @ingroup LinearSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de sistemas de ecuaciones lineales con matriz en banda
-//! mediante el procedimiento del gradiente conjugado.
+//! @brief Base class for conjugate gradient linear SOE solvers.
 class ConjugateGradientSolver : public LinearSOESolver
   {
   private:

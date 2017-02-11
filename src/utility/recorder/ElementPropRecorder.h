@@ -38,7 +38,7 @@ class Element;
 class ElementPropRecorder: public PropRecorder
   {
   public:
-    typedef std::deque<Element *> dq_elements; //Contenedor de punteros a elementos.
+    typedef std::deque<Element *> dq_elements; //Contenedor de pointers to elementos.
   private:
     dq_elements elements; //!< Elementos cuya(s) propiedad(es) se registran.
   public:

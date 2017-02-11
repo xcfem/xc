@@ -96,7 +96,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
     if((theDomain == 0) || (theModel == 0) || (theIntegrator == 0))
       {
         std::cerr << "WARNING PlainHandler::handle() - ";
-        std::cerr << " no se ha asignado dominio, modelo o integrador.\n";
+        std::cerr << " no se ha asignado domain, modelo o integrator.\n";
         return -1;
       }
 

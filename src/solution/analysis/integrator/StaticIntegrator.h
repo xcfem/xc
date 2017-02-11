@@ -75,7 +75,7 @@ class Vector;
 
 //! @ingroup AnalisisIntegrator
 //
-//! @defgroup StaticIntegrator Integración del sistema de ecuaciones estático.
+//! @defgroup StaticIntegrator Integración del system of equations estático.
 //
 //! @ingroup StaticIntegrator
 //

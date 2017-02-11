@@ -21,9 +21,14 @@ The program is based on:
 <li> <a href="https://code.launchpad.net/~bdb/berkeley-db/trunk" target="_new"> Berkeley DB.</a> Berkeley database libraries for C++ (libdb,libdb-dev).</li>
 <li> SQLite 3 development files (libsqlite3).</li>
 <li> <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack</a> (Fortran77 subroutines to solve large scale eigenvalue problems; libarcpack2-dev).</li>
+<li> <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack++</a> (object-oriented version of the ARPACK package).</li>
 <li> <a href="http://http://www.netlib.org/lapack/" target="_new"> Lapack</a> Library of linear algebra routines; (liblapack-dev).</li>
 <li> <a href="https://launchpad.net/ubuntu/+source/superlu" target="_new"> SuperLU</a> (Direct solution of large, sparse systems of linear equations libsuperlu3-dev).</li>
 <li> <a href="http://faculty.cse.tamu.edu/davis/suitesparse.html" target="_new"> Suitesparse</a> (collection of libraries for computations for sparse matrices).</li>
+<li> <a href="http://www.mcs.anl.gov/petsc/petsc-as" target="_new"> PETSC</a> (Portable, Extensible Toolkit for Scientific Computation).</li>
+<li> <a href="http://crd-legacy.lbl.gov/~osni/#Software" target="_new"> Skypakc</a> (SKYline PACKage).</li>
+<li> <a href="http://faculty.cse.tamu.edu/davis/research.html" target="_new"> SuiteSparse</a> (a suite of sparse matrix algorithms).</li>
+<li> <a href="http://rene.ma.utexas.edu/CNA/ITPACK/" target="_new"> ITPACK</a> (collection of subroutines for solving large sparse linear systems by adaptive accelerated iterative algorithms).</li>
 <li> <a href="https://github.com/lcpt/xc_basic" target="_new"> xc_basic</a> Basic routines for XC (that will be simplified...).</li>
 <li> <a href="https://github.com/lcpt/xc_utils" target="_new"> xc_utils</a> Utilities for XC (that will be simplified...).</li>
 </ul>

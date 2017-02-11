@@ -91,7 +91,7 @@ XC::ElementEdges XC::getElementEdgesEntreNodos(const NodePtrSet &nodos)
     return retval;
   }
 
-//! @brief Devuelve verdadero si los punteros a nodo del vector
+//! @brief Devuelve verdadero si los pointers to node del vector
 //! están contenidos en el conjunto being passed as parameter.
 bool XC::in(const NodePtrSet &nodos,const std::vector<const Node *> &nodos_edge)
   {

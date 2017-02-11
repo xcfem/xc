@@ -69,7 +69,7 @@ void XC::ModelWrapper::copia_analysis_model(AnalysisModel *ptr)
         theModel->set_owner(this);
       }
     else
-      std::cerr << "ModelWrapper::copia_analysis_model; se pasó un puntero nulo." << std::endl;
+      std::cerr << "ModelWrapper::copia_analysis_model; se pasó a null pointer." << std::endl;
   }
 
 void XC::ModelWrapper::libera_constraint_handler(void)
@@ -112,7 +112,7 @@ void XC::ModelWrapper::copia_constraint_handler(const ConstraintHandler *ptr)
         theHandler->set_owner(this);
       }
     else
-      std::cerr << "ModelWrapper::copia_constraint_handler; se pasó un puntero nulo." << std::endl;
+      std::cerr << "ModelWrapper::copia_constraint_handler; se pasó a null pointer." << std::endl;
   }
 
 //! @brief Crea un numerador del tipo being passed as parameter.
@@ -172,7 +172,7 @@ void XC::ModelWrapper::copia_numerador(const DOF_Numberer *dn)
         setup_numerador();
       }
     else
-     std::cerr << "ModelWrapper::copia_numerador; se pasó un puntero nulo." << std::endl;
+     std::cerr << "ModelWrapper::copia_numerador; se pasó a null pointer." << std::endl;
   }
 
 //! @brief Crea un numerador del tipo being passed as parameter.
@@ -204,7 +204,7 @@ const XC::SoluMethod *XC::ModelWrapper::getSoluMethod(void) const
   { return dynamic_cast<const SoluMethod *>(Owner()); }
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ModelWrapper::ModelWrapper(SoluMethod *owr)
   : EntCmd(owr), theModel(nullptr), theHandler(nullptr), theDOFNumberer(nullptr)
   { alloc_analysis_model(); }
@@ -229,7 +229,7 @@ XC::ModelWrapper::~ModelWrapper(void)
 void XC::ModelWrapper::clearAll(void)
   { libera(); }
 
-//! @brief Devuelve un puntero al dominio.
+//! @brief Returns a pointer to the domain.
 XC::Domain *XC::ModelWrapper::getDomainPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -237,7 +237,7 @@ XC::Domain *XC::ModelWrapper::getDomainPtr(void)
     return sm->getDomainPtr();
   }
 
-//! @brief Devuelve un puntero al dominio.
+//! @brief Returns a pointer to the domain.
 const XC::Domain *XC::ModelWrapper::getDomainPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -245,7 +245,7 @@ const XC::Domain *XC::ModelWrapper::getDomainPtr(void) const
     return sm->getDomainPtr();
   }
 
-//! @brief Devuelve un puntero al integrador.
+//! @brief Returns a pointer to the integrator.
 XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -253,7 +253,7 @@ XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void)
     return sm->getIntegratorPtr();
   }
 
-//! @brief Devuelve un puntero al integrador.
+//! @brief Returns a pointer to the integrator.
 const XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -279,19 +279,19 @@ void XC::ModelWrapper::brokeAnalysisModel(const CommParameters &cp,const ID &dat
     theModel->set_owner(this);
   }
 
-//! @brief Establece el renumerador a emplear en el análisis.
+//! @brief Sets the renumerador to use in the analysis.
 int XC::ModelWrapper::setNumberer(DOF_Numberer &theNewNumberer) 
   {
     copia_numerador(&theNewNumberer);
     return 0;
   }
 
-//! @brief Verifica que los punteros no sean nulos.
+//! @brief Verifica que los pointers no sean nulos.
 bool XC::ModelWrapper::CheckPointers(void)
   {
     if(!theModel)
       {
-        std::cerr << "ModelWrapper::check_pointers; error, no se ha establecido el modelo de análisis." << std::endl;
+        std::cerr << "ModelWrapper::check_pointers; error, no se ha establecido el analysis model." << std::endl;
         return false;
       }
     if(!theHandler)

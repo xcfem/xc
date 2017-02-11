@@ -178,7 +178,7 @@ int XC::UserDefinedHingeIntegration3d::recvSelf(const CommParameters &cp)
 
 int XC::UserDefinedHingeIntegration3d::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
-    std::cerr << "Se pasa un puntero nulo." << std::endl;
+    std::cerr << "Se pasa a null pointer." << std::endl;
     return ctes_scc.setParameter(argv,param,nullptr);
   }
 

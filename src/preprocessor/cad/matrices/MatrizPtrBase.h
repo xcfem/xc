@@ -44,7 +44,7 @@ namespace XC{
 
 //! @ingroup CadMR
 //
-//! @brief Base para las matrices de punteros a nodos, elementos y puntos.
+//! @brief Base para las matrices de pointers to nodes, elementos y puntos.
 template <class T>
 class MatrizPtrBase: public MatrizT<T *,std::vector<T *> >, public EntCmd
   {
@@ -80,7 +80,7 @@ template <class T>
 void XC::MatrizPtrBase<T>::dim(const size_t &nRows,const size_t &nCols)
   { this->resize(nRows,nCols,NULL); }
 
-//! @brief Devuelve verdadero si está vacía o si los punteros son nulos.
+//! @brief Devuelve verdadero si está vacía o si los pointers son nulos.
 template <class T>
 bool MatrizPtrBase<T>::Null(void) const
   {
@@ -90,7 +90,7 @@ bool MatrizPtrBase<T>::Null(void) const
       return (this->operator()(1,1)==NULL);
   }
 
-//! @brief Devuelve verdadero si está vacía o si algún puntero es nulo.
+//! @brief Devuelve verdadero si está vacía o si algún pointer is null.
 template <class T>
 bool MatrizPtrBase<T>::HasNull(void) const
   {

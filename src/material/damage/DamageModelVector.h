@@ -42,7 +42,7 @@ class DamageModel;
 
 //! @ingroup damage
 //
-//! @brief Vector de punteros a damage models.
+//! @brief Vector de pointers to damage models.
 //! se emplea en Joint2D
 class DamageModelVector: public std::vector<DamageModel *>, public EntCmd, public MovableObject
   {

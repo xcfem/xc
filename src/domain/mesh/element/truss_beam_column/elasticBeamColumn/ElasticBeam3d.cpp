@@ -97,10 +97,10 @@ void XC::ElasticBeam3d::set_transf(const CrdTransf *trf)
           }
       }
     else
-      std::cerr << "ElasticBeam3d::set_transf; se pasó un puntero nulo." << std::endl;
+      std::cerr << "ElasticBeam3d::set_transf; se pasó a null pointer." << std::endl;
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ElasticBeam3d::ElasticBeam3d(int tag)
   :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d), eInic(3), rho(0.0),
    sectionTag(0), q(), q0(), p0(), theCoordTransf(0)

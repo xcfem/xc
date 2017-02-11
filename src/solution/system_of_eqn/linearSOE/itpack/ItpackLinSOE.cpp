@@ -82,7 +82,7 @@ bool XC::ItpackLinSOE::setSolver(LinearSOESolver *newSolver)
     if(tmp)
       retval= LinearSOEData::setSolver(tmp);
     else
-      std::cerr << "BandGenLinSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
+      std::cerr << "BandGenLinSOE::setSolver; solver incompatible con system of equations." << std::endl;
     return retval;
   }
 

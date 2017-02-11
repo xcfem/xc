@@ -86,7 +86,7 @@ int XC::Linear::resuelve(void)
     if((!theAnalysisModel) || (!theIncIntegrator) || (!theSOE))
       {
 	std::cerr << "WARNING Linear::solveCurrentStep() -";
-	std::cerr << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
+	std::cerr << "no se ha asignado modelo, integrator o system of equations.\n";
 	return -5;
       }
 
@@ -130,7 +130,7 @@ int XC::Linear::solveCurrentStep(void)
     return resuelve();
   }
 
-//! @brief Asigna el test de convergencia a emplear en el análisis.
+//! @brief Sets the convergence test to use in the analysis.
 int XC::Linear::setConvergenceTest(ConvergenceTest *theNewTest)
   { return 0; }
 

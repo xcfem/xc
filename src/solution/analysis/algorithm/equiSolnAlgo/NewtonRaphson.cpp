@@ -90,7 +90,7 @@ int XC::NewtonRaphson::solveCurrentStep(void)
     if((theAnaModel == 0) || (theIntegrator == 0) || (theSOE == 0) || (theTest == 0))
       {
         std::cerr << "WARNING NewtonRaphson::solveCurrentStep() - setLinks() has"
-                  << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
+                  << "no se ha asignado modelo, integrator o system of equations.\n";
         return -5;
       }
 

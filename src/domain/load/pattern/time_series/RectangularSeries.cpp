@@ -67,7 +67,7 @@
 XC::RectangularSeries::RectangularSeries(double startTime, double finishTime,double theFactor)
   :PulseBaseSeries(TSERIES_TAG_RectangularSeries,startTime,finishTime,theFactor) {}
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::RectangularSeries::RectangularSeries(void)
   :PulseBaseSeries(TSERIES_TAG_RectangularSeries) {}
 

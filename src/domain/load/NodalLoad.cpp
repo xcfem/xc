@@ -178,7 +178,7 @@ const XC::Vector &XC::NodalLoad::getForce(void) const
         if(load.Nulo())
           std::cerr << "NodalLoad::getForce; no se ha definido la carga." << std::endl;
         if(!myNodePtr)
-          std::cerr << "NodalLoad::getForce; el puntero a nodo es nulo." << std::endl;
+          std::cerr << "NodalLoad::getForce; the pointer a nodo es nulo." << std::endl;
       }
     return retval;
   }
@@ -215,7 +215,7 @@ const XC::Vector &XC::NodalLoad::getMoment(void) const
         if(load.Nulo())
           std::cerr << "NodalLoad::getMoment; no se ha definido la carga." << std::endl;
         if(!myNodePtr)
-          std::cerr << "NodalLoad::getMoment; el puntero a nodo es nulo." << std::endl;
+          std::cerr << "NodalLoad::getMoment; the pointer a nodo es nulo." << std::endl;
       }
     return retval;
   }
@@ -226,7 +226,7 @@ const XC::Node *XC::NodalLoad::get_node_ptr(void) const
     const Node *retval= nullptr;
     Domain *theDomain= getDomain();
     if(!theDomain)
-      std::cerr << "NodalLoad::get_node_ptr(), puntero a dominio nulo.";
+      std::cerr << "NodalLoad::get_node_ptr(), pointer to domain nulo.";
     else
       {
         retval= theDomain->getNode(myNode);

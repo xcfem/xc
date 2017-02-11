@@ -82,12 +82,12 @@ void XC::ZeroLengthSection::setup_section(const Material *sec)
   {
     libera();
     if(!sec)
-      std::cerr << "ZeroLengthSection::setup_section; se pasó un puntero a material nulo." << std::endl;
+      std::cerr << "ZeroLengthSection::setup_section; se pasó a pointer a material nulo." << std::endl;
     else
       {
         const SectionForceDeformation *ptr= dynamic_cast<const SectionForceDeformation *>(sec);
         if(!ptr)
-          std::cerr << "ZeroLengthSection::setup_section; se pasó un puntero a material no válido."
+          std::cerr << "ZeroLengthSection::setup_section; se pasó a pointer a material no válido."
                     << std::endl;
         else
           {
@@ -156,7 +156,7 @@ XC::ZeroLengthSection &XC::ZeroLengthSection::operator=(const ZeroLengthSection 
     return *this;
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ZeroLengthSection::ZeroLengthSection(void)
   : XC::Element0D(0, ELE_TAG_ZeroLengthSection,0,0,0),
     K(nullptr), P(nullptr), theSection(nullptr), order(0) {}

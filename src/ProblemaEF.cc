@@ -53,7 +53,7 @@
 XC::FEM_ObjectBrokerAllClasses XC::ProblemaEF::theBroker;
 XC::Domain *XC::ProblemaEF::theActiveDomain= nullptr;
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ProblemaEF::ProblemaEF(void)
   : preprocessor(this,&output_handlers),proc_solu(this), dataBase(nullptr) {}
 

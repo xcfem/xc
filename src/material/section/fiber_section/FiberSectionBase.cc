@@ -596,7 +596,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
     Pivotes pivotes(cp);
     if(pivotes.Ok())
       {
-        //Dominios 1 y 2
+        //Domains 1 and 2
         Pos3d P1= pivotes.getPivoteA(); //Pivote.
         Pos3d P2= P1+100.0*cp.GetK(); //Flexión en torno al eje Z local.
         Pos3d P3;
@@ -609,7 +609,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
             P3= pivotes.getPuntoB(e);
             lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
           }
-        //Dominios 3 y 4
+        //Domains 3 and 4
         P1= pivotes.getPivoteB(); //Pivote
         P2= P1+100.0*cp.GetK(); 
         const double inc_eps_A= datos_diag.getIncEps();
@@ -618,9 +618,9 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
             P3= pivotes.getPuntoA(e);
             lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
           }
-        //Dominio 4a
+        //Domain 4a
         //Calculamos la deformación en D cuando el pivote es B
-        //y la deformación en A es nula (inicio del dominio 4a).
+        //y la deformación en A es nula (inicio del domain 4a).
         const Pos3d PA0= pivotes.getPuntoA(0.0); //Deformación nula en la armadura.
         const DeformationPlane def_lim_4a= DeformationPlane(P1,P2,PA0);
         const Pos2d PD= pivotes.getPosPuntoD();
@@ -628,14 +628,14 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
         const double recorr_eps_D4a= eps_D4a;
         if(recorr_eps_D4a>(eps_agot_A/200.0)) //Si el recorrido es positivo y "apreciable"
           {
-            const double inc_eps_D4a= datos_diag.getIncEps(); //recorr_eps_D4a/n_div_dominio; //Intervalos de cálculo.
+            const double inc_eps_D4a= datos_diag.getIncEps(); //recorr_eps_D4a/n_div_domain; //Intervalos de cálculo.
             for(double e= eps_D4a;e>=0.0;e-=inc_eps_D4a)
               {
                 P3= pivotes.getPuntoD(e);
                 lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
               }
           }
-        //Dominio 5
+        //Domain 5
         P1= pivotes.getPivoteC(); //Pivote
         P2= P1+100.0*cp.GetK(); 
         const double eps_agot_C= datos_diag.getDefsAgotPivotes().getDefAgotPivoteC();

@@ -66,15 +66,15 @@
 XC::SystemOfEqn::SystemOfEqn(SoluMethod *owr,int clasTag)
   : MovableObject(clasTag), EntCmd(owr) {}
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a pointer to the solution method that owns this object.
 XC::SoluMethod *XC::SystemOfEqn::getSoluMethod(void)
   { return dynamic_cast<SoluMethod *>(Owner()); }
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a const pointer to the solution method that owns this object.
 const XC::SoluMethod *XC::SystemOfEqn::getSoluMethod(void) const
   { return dynamic_cast<const SoluMethod *>(Owner()); }
 
-//! @brief Devuelve un puntero al modelo de análisis.
+//! @brief Returns a const pointer to the analysis model.
 const XC::AnalysisModel *XC::SystemOfEqn::getAnalysisModelPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -82,7 +82,7 @@ const XC::AnalysisModel *XC::SystemOfEqn::getAnalysisModelPtr(void) const
     return sm->getAnalysisModelPtr();
   }
 
-//! @brief Devuelve un puntero al modelo de análisis.
+//! @brief Returns a pointer to the analysis model.
 XC::AnalysisModel *XC::SystemOfEqn::getAnalysisModelPtr(void)
   {
     const SoluMethod *sm= getSoluMethod();

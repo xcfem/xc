@@ -75,9 +75,10 @@ namespace XC {
 
 //! @ingroup LinearSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de sistemas de ecuaciones lineales con matriz distribuida
-//! empleando la biblioteca SuperLU (http://crd.lbl.gov/~xiaoye/SuperLU).
+//! @brief <a href="https://launchpad.net/ubuntu/+source/superlu" target="_new"> SuperLU</a> based solver for distributed sparse matrix linear systems of equations. It uses Gaussian elimination with partial
+//! pivoting (GEPP). The columns of A may be preordered before
+//! factorization; the preordering for sparsity is completely separate
+//! from the factorization and a number of ordering schemes are provided.
 class DistributedSuperLU : public SparseGenColLinSolver
   {
   private:

@@ -65,7 +65,7 @@ class FiberSectionBase: public SeccionBarraPrismatica
     Vector eCommit; //!< committed section deformations 
   protected:
     KRSeccion kr; //!< Stiffness and internal forces resultant on the section.
-    StoFibras fibras; //!< Cola de punteros a fibras.
+    StoFibras fibras; //!< Cola de pointers to fibras.
     int tag_fibra; //!< Tag para la próxima fibra.
     FiberSets sets_fibras;//!< Conjuntos de fibras.
     friend class DqFibras;

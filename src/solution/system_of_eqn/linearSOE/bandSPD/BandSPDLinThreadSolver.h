@@ -69,9 +69,8 @@
 namespace XC {
 //! @ingroup LinearSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de sistemas de ecuaciones lineales con matriz en banda
-//! mediante programación multihilo.
+//! @brief Solves the BandSPDLinSOE in parallel
+//! using solaris threads.
 class BandSPDLinThreadSolver : public BandSPDLinSolver
   {
   private:

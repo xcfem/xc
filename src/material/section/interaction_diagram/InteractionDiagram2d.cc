@@ -49,7 +49,7 @@ GeomObj::list_Pos2d sort_points(const GeomObj::list_Pos2d &pts)
     return tmp;
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::InteractionDiagram2d::InteractionDiagram2d(void)
   : Poligono2d() {}
 

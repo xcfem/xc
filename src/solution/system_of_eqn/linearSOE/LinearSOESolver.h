@@ -74,12 +74,11 @@ class LinearSOE;
 
 //!  \ingroup Solver
 //! 
-//! \defgroup LinearSolver Solvers for linear equation systems.
+//! \defgroup LinearSolver Solvers for linear system of equations.
 //
 //! @ingroup LinearSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de sistemas de ecuaciones lineales.
+//! @brief Solution of the linear system of equations.
 class LinearSOESolver : public Solver
   {
   protected:

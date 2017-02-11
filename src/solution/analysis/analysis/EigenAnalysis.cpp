@@ -86,7 +86,7 @@ XC::EigenAnalysis::EigenAnalysis(SoluMethod *metodo)
 XC::Analysis *XC::EigenAnalysis::getCopy(void) const
   { return new EigenAnalysis(*this); }
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, modelo de análisis,...).
+//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
 void XC::EigenAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation
@@ -94,7 +94,7 @@ void XC::EigenAnalysis::clearAll(void)
     delete getEigenSolutionAlgorithmPtr();
   }
 
-//! @brief Ejecuta el análisis.
+//! @brief Performs the analysis.
 int XC::EigenAnalysis::analyze(int numModes)
   {
     int result= 0;
@@ -133,7 +133,7 @@ int XC::EigenAnalysis::analyze(int numModes)
     return 0;
   }
 
-//! @brief Hace los cambios necesarios como consecuencia de un cambio en el dominio.
+//! @brief Hace los cambios necesarios como consecuencia de un cambio en el domain.
 int XC::EigenAnalysis::domainChanged(void)
   {
     getAnalysisModelPtr()->clearAll();    
@@ -167,7 +167,7 @@ int XC::EigenAnalysis::domainChanged(void)
     if(result < 0)
       {
         std::cerr << "EigenAnalysis::domainChanged() - ";
-        std::cerr << "fallo al asingnar el tamaño del sistema de ecuaciones." << std::endl;
+        std::cerr << "fallo al asingnar el tamaño del system of equations." << std::endl;
         return -4;
       }
 
@@ -189,7 +189,7 @@ int XC::EigenAnalysis::domainChanged(void)
     return 0;
   }
 
-//! @brief Asigna el algoritmo a emplear en el análisis.
+//! @brief Sets the algoritmo to use in the analysis.
 int XC::EigenAnalysis::setAlgorithm(EigenAlgorithm &theAlgo)
   {
     Analysis::setAlgorithm(theAlgo);
@@ -197,7 +197,7 @@ int XC::EigenAnalysis::setAlgorithm(EigenAlgorithm &theAlgo)
     return 0;
   }
 
-//! @brief Asigna el integrador a emplear en el análisis.
+//! @brief Sets the integrator to use in the analysis.
 int XC::EigenAnalysis::setIntegrator(EigenIntegrator &theIntegrator)
   {
     Analysis::setIntegrator(theIntegrator);
@@ -205,7 +205,7 @@ int XC::EigenAnalysis::setIntegrator(EigenIntegrator &theIntegrator)
     return 0;
   }
 
-//! @brief Asigna el sistema de eigenvalues a emplear en el análisis.
+//! @brief Sets the sistema de eigenvalues to use in the analysis.
 int XC::EigenAnalysis::setEigenSOE(EigenSOE &theSOE)
   {
     Analysis::setEigenSOE(theSOE);
@@ -342,7 +342,7 @@ double XC::EigenAnalysis::getModalParticipationFactor(int mode) const
       retval= ptr_soe->getModalParticipationFactor(mode);
     else
       std::cerr << "EigenAnalysis::getModalParticipationFactor( " << mode
-                << "); el puntero al sistema de ecuaciones es nulo." << std::endl;
+                << "); the pointer al system of equations es nulo." << std::endl;
     return retval;
   }
 
@@ -355,7 +355,7 @@ XC::Vector XC::EigenAnalysis::getModalParticipationFactors(void) const
       retval= ptr_soe->getModalParticipationFactors();
     else
       std::cerr << "EigenAnalysis::getModalParticipationFactors; "
-                << "el puntero al sistema de ecuaciones es nulo." << std::endl;
+                << "the pointer al system of equations es nulo." << std::endl;
     return retval;
   }
 //! @brief Devuelve el factor de distribución correspondiente al modo

@@ -54,7 +54,7 @@ class ProtoElementLoader: public Loader
     int num_sec; //!< When appropriate, number of sections (integration points) on one-dimensional elements.
     int dim_elem; //!< If required, dimension of the new element (0,1,2 or 3)
     std::string nmb_transf; //!< En su caso, nombre de la transformación para el nuevo elemento.
-    std::string nmb_integ; //!< En su caso, nombre del integrador para el nuevo elemento.
+    std::string nmb_integ; //!< En su caso, nombre del integrator para el nuevo elemento.
     int dir; //!< If required (i.e. for zero length elements), direction of the element material.
   protected:
     virtual void agrega(Element *)= 0;

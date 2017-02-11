@@ -122,7 +122,7 @@ void XC::NewtonLineSearch::copia(LineSearch *ptr)
         theLineSearch->set_owner(this);
       }
     else
-     std::cerr << "NewtonLineSearch::copia; se pasó un puntero nulo." << std::endl;
+     std::cerr << "NewtonLineSearch::copia; se pasó a null pointer." << std::endl;
   }
 
 XC::NewtonLineSearch::~NewtonLineSearch(void)
@@ -131,7 +131,7 @@ XC::NewtonLineSearch::~NewtonLineSearch(void)
 //! @brief resuelve el paso actual.
 int XC::NewtonLineSearch::solveCurrentStep(void)
   {
-    // set up some pointers and check they are valid
+    // set up some pointers tond check they are valid
     // NOTE this could be taken away if we set Ptrs as protecetd in superclass
     AnalysisModel *theAnaModel= getAnalysisModelPtr();
     IncrementalIntegrator *theIntegrator= getIncrementalIntegratorPtr();
@@ -141,7 +141,7 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
     if((!theAnaModel) || (!theIntegrator) || (!theSOE) || (!theTest))
       {
         std::cerr << "WARNING XC::NewtonLineSearch::solveCurrentStep() - setLinks() has";
-        std::cerr << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
+        std::cerr << "no se ha asignado modelo, integrator o system of equations.\n";
         return -5;
       }
 

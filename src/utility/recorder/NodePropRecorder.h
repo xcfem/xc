@@ -38,7 +38,7 @@ class Node;
 class NodePropRecorder: public PropRecorder
   {
   public:
-    typedef std::deque<Node *> dq_nodes; //Contenedor de punteros a nodos.
+    typedef std::deque<Node *> dq_nodes; //Contenedor de pointers to nodes.
   private:
     dq_nodes nodes; //!< Ndos cuya(s) propiedad(es) se registran.
   public:

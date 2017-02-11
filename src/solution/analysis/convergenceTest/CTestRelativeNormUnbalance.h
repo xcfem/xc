@@ -67,7 +67,7 @@ namespace XC {
 
 //! @ingroup CTest
 //
-//! @brief Test de convergencia tests for convergence using the ratio of the 
+//! @brief convergence test tests for convergence using the ratio of the 
 //! current norm to the initial norm (the norm when start is invoked) of the 
 //! right hand side vector of the LinearSOE object passed in the constructor
 //! and a tolerance, set in the constructor.

@@ -74,7 +74,7 @@ XC::Broyden::Broyden(SoluMethod *owr,ConvergenceTest &theT, int theTangentToUse,
   :BFBRoydenBase(owr,EquiALGORITHM_TAGS_Broyden,theT,theTangentToUse,n)
   {}
 
-//! @brief Obtiene la solución para el paso actual.
+//! @brief Computes the solution for the current step.
 int XC::Broyden::solveCurrentStep(void)
   {
     AnalysisModel *theModel= getAnalysisModelPtr(); 
@@ -85,7 +85,7 @@ int XC::Broyden::solveCurrentStep(void)
     if((!theModel) || (!theIntegrator) || (!theSysOfEqn) || (!theTest))
       {
         std::cerr << "WARNING Broyden::solveCurrentStep() - "
-                  << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
+                  << "no se ha asignado modelo, integrator o system of equations.\n";
         return -5;
       }
 

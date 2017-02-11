@@ -70,7 +70,7 @@ void XC::StoFibras::libera(void)
     resize(0);
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::StoFibras::StoFibras(const size_t &num)
   : DqFibras(num) {}
 

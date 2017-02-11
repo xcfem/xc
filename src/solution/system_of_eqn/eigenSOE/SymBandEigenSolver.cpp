@@ -245,7 +245,7 @@ int XC::SymBandEigenSolver::solve(int nModes)
     return 0;
   }
 
-//! @brief Asigna el problema de eigenvalues a resolver.
+//! @brief Sets the eigenproblem to solve.
 bool XC::SymBandEigenSolver::setEigenSOE(EigenSOE *soe)
   {
     bool retval= false;
@@ -256,11 +256,11 @@ bool XC::SymBandEigenSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::setEigenSOE: el sistema de ecuaciones no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << nombre_clase() << "::setEigenSOE: the system of equations no es del tipo adecuado para este solver." << std::endl;
     return retval;
   }
 
-//! @brief Asigna el problema de eigenvalues a resolver.
+//! @brief Sets the eigenproblem to solve.
 bool XC::SymBandEigenSolver::setEigenSOE(SymBandEigenSOE &theBandSOE)
   { return setEigenSOE(&theBandSOE); }
 

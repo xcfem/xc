@@ -62,7 +62,7 @@ XC::BFBRoydenBase::BFBRoydenBase(SoluMethod *owr,int classTag,ConvergenceTest &t
 XC::BFBRoydenBase::~BFBRoydenBase(void)
   { libera(); }
 
-//! @brief Asigna el test de convergencia que empleará el algoritmo.
+//! @brief Asigna el convergence test que empleará el algoritmo.
 int XC::BFBRoydenBase::setConvergenceTest(ConvergenceTest *nwTest)
   {
     theTest= nwTest;

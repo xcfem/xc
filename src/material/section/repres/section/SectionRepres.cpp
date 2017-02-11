@@ -101,7 +101,7 @@ void XC::SectionRepres::setGeomNamed(const std::string &nmbGeom)
 void XC::SectionRepres::setGeom(const GeomSection *g)
   { gmSecc= g; }
 
-//! @brief Devuelve un puntero a la geometría de la sección.
+//! @brief Returns a pointer to the la geometría de la sección.
 const XC::GeomSection *XC::SectionRepres::getGeom(void) const
   { return gmSecc; }
 

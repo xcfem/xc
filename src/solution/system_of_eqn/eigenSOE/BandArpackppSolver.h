@@ -37,9 +37,7 @@ class BandArpackppSOE;
 
 //! @ingroup LinearSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de sistemas de ecuaciones lineales con matriz en banda
-//! empleando la biblioteca arcpack++
+//! @brief <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack++</a> based band matrix eigenproblem solver.
 class BandArpackppSolver : public EigenSolver
   {
   private:

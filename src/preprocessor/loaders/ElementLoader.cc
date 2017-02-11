@@ -84,15 +84,15 @@ XC::ElementLoader::ElementLoader(Preprocessor *preprocessor)
   : ProtoElementLoader(preprocessor), seed_elem_loader(preprocessor) 
   { seed_elem_loader.set_owner(this); }
 
-//! @brief Devuelve el tag por defecto para el siguiente elemento.
+//! @brief Returns the default tag for next element.
 int XC::ElementLoader::getDefaultTag(void) const
   { return Element::getDefaultTag().getTag(); }
 
-//! @brief Asigna el tag por defecto para el siguiente elemento.
+//! @brief Sets the default tag for next element.
 void XC::ElementLoader::setDefaultTag(const int &tag)
   { Element::getDefaultTag().setTag(tag); }
 
-//! @brief Devuelve un puntero al elemento cuyo tag se pasa como parametro.
+//! @brief Returns a pointer to the elemento cuyo tag se pasa como parametro.
 XC::Element *XC::ElementLoader::getElement(int tag)
   {
     Element *retval= nullptr;
@@ -100,7 +100,7 @@ XC::Element *XC::ElementLoader::getElement(int tag)
     if(tmp)
       retval= tmp->getElement(tag);
     else
-      std::cerr << "XC::ElementLoader::getElement; el puntero al dominio es nulo." << std::endl;
+      std::cerr << "XC::ElementLoader::getElement; the pointer al domain es nulo." << std::endl;
     return retval;
   }
 

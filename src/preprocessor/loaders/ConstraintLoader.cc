@@ -43,7 +43,7 @@
 #include "domain/mesh/element/Element.h"
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ConstraintLoader::ConstraintLoader(Preprocessor *owr)
   : Loader(owr), tag_sp_constraint(0), tag_mp_constraint(0) {}
 
@@ -172,7 +172,7 @@ XC::MRMFreedom_Constraint *XC::ConstraintLoader::newGlueNodeToElement(const Node
   }
 
 
-//! @brief Elimina la coacción del dominio.
+//! @brief Elimina la coacción del domain.
 void XC::ConstraintLoader::removeSPConstraint(const int &tagC)
   {
     bool sp= getDomain()->removeSFreedom_Constraint(tagC);

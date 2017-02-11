@@ -66,7 +66,7 @@
 #include <utility/matrix/Matrix.h>
 #include <domain/mesh/node/Node.h>
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::LinearCrdTransf3d::LinearCrdTransf3d(int tag)
   : XC::SmallDispCrdTransf3d(tag, CRDTR_TAG_LinearCrdTransf3d) {}
 

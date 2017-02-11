@@ -98,7 +98,7 @@ int XC::CommParameters::receiveID(ID &v,DbTagData &dt, const CommMetaData &meta)
     return res;
   }
 
-//! @brief Envía un puntero a ID through the channel being passed as parameter.
+//! @brief Envía a pointer a ID through the channel being passed as parameter.
 //! @param posFlag: Posición de ID en la que se guarda el flag.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 int XC::CommParameters::sendIDPtr(ID *ptr,DbTagData &dt, const ArrayCommMetaData &meta)
@@ -116,7 +116,7 @@ int XC::CommParameters::sendIDPtr(ID *ptr,DbTagData &dt, const ArrayCommMetaData
     return retval;
   }
 
-//! @brief Recibe un puntero a ID through the channel being passed as parameter.
+//! @brief Recibe a pointer a ID through the channel being passed as parameter.
 //! @param posFlag: Posición de ID en la que se guarda el flag.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::ID *XC::CommParameters::receiveIDPtr(ID* &ptr,DbTagData &dt, const ArrayCommMetaData &meta) const
@@ -144,27 +144,27 @@ XC::ID *XC::CommParameters::receiveIDPtr(ID* &ptr,DbTagData &dt, const ArrayComm
     return ptr;
   }
 
-//! @brief Envía un puntero a ID through the channel being passed as parameter.
+//! @brief Envía a pointer a ID through the channel being passed as parameter.
 //! @param posFlag: Posición de ID en la que se guarda el flag.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 int XC::CommParameters::sendMovableIDPtr(MovableID *ptr,DbTagData &dt, const PtrCommMetaData &meta)
   { return sendMovablePtr(ptr,dt,meta); }
 
 
-//! @brief Recibe un puntero a ID through the channel being passed as parameter.
+//! @brief Recibe a pointer a ID through the channel being passed as parameter.
 //! @param posFlag: Posición de ID en la que se guarda el flag.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::MovableID *XC::CommParameters::receiveMovableIDPtr(MovableID* &ptr,DbTagData &dt, const PtrCommMetaData &meta)
   { return receiveMovablePtr(ptr,dt,meta); }
 
-//! @brief Envía un puntero a vector through the channel being passed as parameter.
+//! @brief Envía a pointer a vector through the channel being passed as parameter.
 //! @param posFlag: Posición de ID en la que se guarda el flag.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 int XC::CommParameters::sendMovableVectorPtr(MovableVector *ptr,DbTagData &dt, const PtrCommMetaData &meta)
   { return sendMovablePtr(ptr,dt,meta); }
 
 
-//! @brief Recibe un puntero a vector through the channel being passed as parameter.
+//! @brief Recibe a pointer a vector through the channel being passed as parameter.
 //! @param posFlag: Posición de ID en la que se guarda el flag.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::MovableVector *XC::CommParameters::receiveMovableVectorPtr(MovableVector* &ptr,DbTagData &dt, const PtrCommMetaData &meta)
@@ -200,7 +200,7 @@ int XC::CommParameters::receiveMatrix(Matrix &m,DbTagData &dt, const CommMetaDat
     return res;
   }
 
-//! @brief Envía un puntero a la matriz through the channel being passed as parameter.
+//! @brief Envía a pointer a la matriz through the channel being passed as parameter.
 int XC::CommParameters::sendMatrixPtr(Matrix *ptr,DbTagData &dt, const MatrixCommMetaData &meta)
   {
     int retval= 0;
@@ -218,7 +218,7 @@ int XC::CommParameters::sendMatrixPtr(Matrix *ptr,DbTagData &dt, const MatrixCom
     return retval;
   }
 
-//! @brief Recibe un puntero a matriz through the channel being passed as parameter.
+//! @brief Recibe a pointer a matriz through the channel being passed as parameter.
 XC::Matrix *XC::CommParameters::receiveMatrixPtr(Matrix* &ptr,DbTagData &dt, const MatrixCommMetaData &meta) const
   {
     if(dt.getDbTagDataPos(meta.getPosFlag()) == 0)
@@ -245,7 +245,7 @@ XC::Matrix *XC::CommParameters::receiveMatrixPtr(Matrix* &ptr,DbTagData &dt, con
     return ptr;
   }
 
-//! @brief Envía un puntero al tensor through the channel being passed as parameter.
+//! @brief Envía a pointer al tensor through the channel being passed as parameter.
 int XC::CommParameters::sendTensorPtr(BJtensor *ptr,DbTagData &dt, const TensorCommMetaData &)
   {
     int retval= 0;
@@ -253,20 +253,20 @@ int XC::CommParameters::sendTensorPtr(BJtensor *ptr,DbTagData &dt, const TensorC
     return retval;
   }
 
-//! @brief Recibe un puntero a matriz through the channel being passed as parameter.
+//! @brief Recibe a pointer a matriz through the channel being passed as parameter.
 XC::BJtensor *XC::CommParameters::receiveTensorPtr(BJtensor* &ptr,DbTagData &dt, const TensorCommMetaData &) const
   {
     std::cerr << "CommParameters::receiveTensorPtr no implementada." << std::endl;
     return ptr;
   }
 
-//! @brief Envía un puntero a matriz through the channel being passed as parameter.
+//! @brief Envía a pointer a matriz through the channel being passed as parameter.
 //! @param posFlag: Posición de ID en la que se guarda el flag.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 int XC::CommParameters::sendMovableMatrixPtr(MovableMatrix *ptr,DbTagData &dt, const PtrCommMetaData &meta)
   { return sendMovablePtr(ptr,dt,meta); }
 
-//! @brief Recibe un puntero a matriz through the channel being passed as parameter.
+//! @brief Recibe a pointer a matriz through the channel being passed as parameter.
 //! @param posFlag: Posición de ID en la que se guarda el flag.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::MovableMatrix *XC::CommParameters::receiveMovableMatrixPtr(MovableMatrix* &ptr,DbTagData &dt, const PtrCommMetaData &meta)
@@ -433,7 +433,7 @@ int XC::CommParameters::receiveVectors(std::vector<Vector> &vectores,DbTagData &
     return res;
   }
 
-//! @brief Envía un puntero al vector through the channel being passed as parameter.
+//! @brief Envía a pointer al vector through the channel being passed as parameter.
 //! @param posFlag: Posición de ID en la que se guarda el flag.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 int XC::CommParameters::sendVectorPtr(Vector *ptr,DbTagData &dt, const ArrayCommMetaData &meta)
@@ -451,7 +451,7 @@ int XC::CommParameters::sendVectorPtr(Vector *ptr,DbTagData &dt, const ArrayComm
     return retval;
   }
 
-//! @brief Recibe un puntero a matriz through the channel being passed as parameter.
+//! @brief Recibe a pointer a matriz through the channel being passed as parameter.
 //! @param posFlag: Posición de ID en la que se guarda el flag.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::Vector *XC::CommParameters::receiveVectorPtr(Vector* &ptr,DbTagData &dt, const ArrayCommMetaData &meta) const
@@ -902,7 +902,7 @@ int XC::CommParameters::receiveMovable(MovableObject &mv,DbTagData &dt, const Co
     return res;
   }
 
-//! @brief Envía un puntero a un objeto móvil through the channel being passed as parameter.
+//! @brief Envía a pointer a un objeto móvil through the channel being passed as parameter.
 //! @param meta: Datos posiciones en las que se guardan el flag y el dbTag
 int XC::CommParameters::sendMovablePtr(MovableObject *ptr,DbTagData &dt, const PtrCommMetaData &meta)
   {
@@ -918,7 +918,7 @@ int XC::CommParameters::sendMovablePtr(MovableObject *ptr,DbTagData &dt, const P
   }
 
 
-//! @brief Envía un puntero a un objeto móvil through the channel being passed as parameter.
+//! @brief Envía a pointer a un objeto móvil through the channel being passed as parameter.
 //! @param meta: Datos posiciones en las que se guardan el flag, el dbTag y el classTag
 int XC::CommParameters::sendBrokedPtr(MovableObject *ptr,DbTagData &dt, const BrokedPtrCommMetaData &meta)
   {

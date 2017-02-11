@@ -83,7 +83,7 @@ int XC::PeriodicNewton::solveCurrentStep(void)
     if(!theAnalysisModel || !theIncIntegratorr || !theSOE || !theTest)
       {
         std::cerr << "WARNING PeriodicNewton::solveCurrentStep() - "
-                  << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
+                  << "no se ha asignado modelo, integrator o system of equations.\n";
         return -5;
       }
 

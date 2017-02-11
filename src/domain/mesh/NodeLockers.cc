@@ -39,11 +39,11 @@
 #include "utility/actor/actor/MovableID.h"
 #include "utility/matrix/ID.h"
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::NodeLockers::NodeLockers(Mesh *owr)
   : EntCmd(owr), MovableObject(0),  tag(0), code("nil") {}
 
-//! @brief Devuelve un puntero al bloqueador cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the bloqueador cuyo nombre se pasa como parámetro.
 XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb)
   {
     NodeLocker *retval= nullptr;
@@ -53,7 +53,7 @@ XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb)
     return retval;
   }
 
-//! @brief Devuelve un puntero al bloqueador cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the bloqueador cuyo nombre se pasa como parámetro.
 const XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb) const
   {
     const XC::NodeLocker *retval= nullptr;
@@ -63,7 +63,7 @@ const XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb)
     return retval;
   }
 
-//! @brief Devuelve un puntero al bloqueador cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the bloqueador cuyo tag se pasa como parámetro.
 XC::NodeLocker *XC::NodeLockers::buscaNodeLocker(const int &tag)
   {
     NodeLocker *retval= nullptr;
@@ -76,7 +76,7 @@ XC::NodeLocker *XC::NodeLockers::buscaNodeLocker(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve un puntero al bloqueador cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the bloqueador cuyo tag se pasa como parámetro.
 const XC::NodeLocker *XC::NodeLockers::buscaNodeLocker(const int &tag) const
   {
     NodeLocker *retval= nullptr;
@@ -172,7 +172,7 @@ XC::NodeLocker *XC::NodeLockers::getCurrentNodeLockerPtr(void)
 const XC::NodeLocker *XC::NodeLockers::getCurrentNodeLockerPtr(void) const
   { return busca_node_locker(code); }
 
-//! @brief Devuelve el dominio.
+//! @brief Devuelve el domain.
 XC::Domain *XC::NodeLockers::getDomain(void)
   {
     Domain *retval= nullptr;
@@ -184,7 +184,7 @@ XC::Domain *XC::NodeLockers::getDomain(void)
     return retval;
   }
 
-//! @brief Devuelve el dominio.
+//! @brief Devuelve el domain.
 const XC::Domain *XC::NodeLockers::getDomain(void) const
   {
     const Domain *retval= nullptr;

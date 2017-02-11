@@ -136,14 +136,14 @@ XC::DqUniaxialMaterial &XC::DqUniaxialMaterial::operator=(const DqUniaxialMateri
 XC::DqUniaxialMaterial::~DqUniaxialMaterial(void)
   { clearAll(); }
 
-//! @brief Vacía la lista de punteros.
+//! @brief Vacía la lista de pointers.
 void XC::DqUniaxialMaterial::clear(void)
   {
     libera();
     lst_ptr::clear();
   }
 
-//! @brief Vacía la lista de punteros y elimina las propiedades que pudiera tener el objeto.
+//! @brief Vacía la lista de pointers y elimina las propiedades que pudiera tener el objeto.
 void XC::DqUniaxialMaterial::clearAll(void)
   {
     clear();
@@ -302,7 +302,7 @@ void XC::DqUniaxialMaterial::getStress(Vector &s,const size_t &offset) const
 void XC::DqUniaxialMaterial::push_back(const UniaxialMaterial *t,SectionForceDeformation *s)
   {
     if(!t)
-      std::cerr << "DqUniaxialMaterial::push_back; se pasó un puntero a material nulo." << std::endl;
+      std::cerr << "DqUniaxialMaterial::push_back; se pasó a pointer a material nulo." << std::endl;
     else
       {
         UniaxialMaterial *tmp= nullptr;
@@ -321,7 +321,7 @@ void XC::DqUniaxialMaterial::push_front(const UniaxialMaterial *t,SectionForceDe
   {
     UniaxialMaterial *tmp= nullptr;
     if(!t)
-      std::cerr << "DqUniaxialMaterial::push_back; se pasó un puntero a material nulo." << std::endl;
+      std::cerr << "DqUniaxialMaterial::push_back; se pasó a pointer a material nulo." << std::endl;
     else
       {
         if(s)

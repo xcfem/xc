@@ -91,22 +91,22 @@ class ModelWrapper: public EntCmd
     Integrator *getIntegratorPtr(void);
     const Integrator *getIntegratorPtr(void) const;
 
-    //! @brief Devuelve un puntero al manejador de coacciones.
+    //! @brief Returns a pointer to the manejador de coacciones.
     inline ConstraintHandler *getConstraintHandlerPtr(void)
       { return theHandler; }
-    //! @brief Devuelve un puntero al manejador de coacciones.
+    //! @brief Returns a pointer to the manejador de coacciones.
     inline const ConstraintHandler *getConstraintHandlerPtr(void) const
       { return theHandler; }
-    //! @brief Devuelve un puntero al renumerador.
+    //! @brief Returns a pointer to the renumerador.
     inline DOF_Numberer *getDOF_NumbererPtr(void)
       { return theDOFNumberer; }
-    //! @brief Devuelve un puntero al renumerador.
+    //! @brief Returns a pointer to the renumerador.
     inline const DOF_Numberer *getDOF_NumbererPtr(void) const
       { return theDOFNumberer; }
-    //! @brief Devuelve un puntero al modelo de análisis.
+    //! @brief Returns a pointer to the analysis model.
     inline AnalysisModel *getAnalysisModelPtr(void)
       { return theModel; }
-    //! @brief Devuelve un puntero al modelo de análisis.
+    //! @brief Returns a pointer to the analysis model.
     inline const AnalysisModel *getAnalysisModelPtr(void) const
       { return theModel; }
     int setNumberer(DOF_Numberer &theNumberer);

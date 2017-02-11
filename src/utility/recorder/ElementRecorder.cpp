@@ -156,7 +156,7 @@ int XC::ElementRecorder::initialize(void)
     if(numEle == 0 || theDomain == 0)
       {
         if(!theDomain)
-	  std::cerr << "ElementRecorder::initialize(); no se asignó el dominio." << std::endl;
+	  std::cerr << "ElementRecorder::initialize(); no se asignó el domain." << std::endl;
         if(numEle == 0)
 	  std::cerr << "ElementRecorder::initialize(); no hay elementos." << std::endl;
         return -1;

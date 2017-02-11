@@ -128,7 +128,7 @@ void XC::LinearSOE::copia(const LinearSOESolver *newSolver)
       }
   }
 
-//! @brief Asigna el solver al sistema de ecuaciones.
+//! @brief Sets the solver al system of equations.
 bool XC::LinearSOE::setSolver(LinearSOESolver *newSolver)
   {
     bool retval= false;
@@ -146,7 +146,7 @@ bool XC::LinearSOE::setSolver(LinearSOESolver *newSolver)
         retval= true;
       }
     else
-      std::cerr << "LinearSOE::setSolver; se pasó un puntero nulo." << std::endl;
+      std::cerr << "LinearSOE::setSolver; se pasó a null pointer." << std::endl;
     return retval;
   }
 
@@ -195,7 +195,7 @@ XC::LinearSOESolver &XC::LinearSOE::newSolver(const std::string &tipo)
 XC::LinearSOE::~LinearSOE(void)
   { libera(); }
 
-//! @brief Resuelve el sistema de ecuaciones.
+//! @brief Resuelve el system of equations.
 int XC::LinearSOE::solve(void)
   { return (getSolver()->solve()); }
 
@@ -204,7 +204,7 @@ double XC::LinearSOE::getDeterminant(void)
   { return getSolver()->getDeterminant(); }
 
 
-//! @brief Devuelve un puntero al solver.
+//! @brief Returns a pointer to the solver.
 XC::LinearSOESolver *XC::LinearSOE::getSolver(void)
   { return theSolver; }
 

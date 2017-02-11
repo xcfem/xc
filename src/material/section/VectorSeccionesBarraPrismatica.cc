@@ -64,7 +64,7 @@ XC::VectorSeccionesBarraPrismatica::VectorSeccionesBarraPrismatica(const size_t 
   : std::vector<SeccionBarraPrismatica *>(sz,nullptr), MovableObject(0)
   {}
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::VectorSeccionesBarraPrismatica::VectorSeccionesBarraPrismatica(const size_t &sz,const SeccionBarraPrismatica *matModel)
   : std::vector<SeccionBarraPrismatica *>(sz,nullptr), MovableObject(0)
   {
@@ -131,12 +131,12 @@ void XC::VectorSeccionesBarraPrismatica::setSection(const SeccionBarraPrismatica
 void XC::VectorSeccionesBarraPrismatica::setupSection(const Material *sec)
   {
     if(!sec)
-      std::cerr << "XC::VectorSeccionesBarraPrismatica::setupSection; se pasó un puntero a material nulo." << std::endl;
+      std::cerr << "XC::VectorSeccionesBarraPrismatica::setupSection; se pasó a pointer a material nulo." << std::endl;
     else
       {
         const SeccionBarraPrismatica *ptr= dynamic_cast<const SeccionBarraPrismatica *>(sec);
         if(!ptr)
-          std::cerr << "XC::VectorSeccionesBarraPrismatica::setupSection; se pasó un puntero a material no válido." 
+          std::cerr << "XC::VectorSeccionesBarraPrismatica::setupSection; se pasó a pointer a material no válido." 
                     << std::endl;
         else
           setSection(ptr);

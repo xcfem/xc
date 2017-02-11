@@ -83,7 +83,7 @@ size_t XC::PathSeriesBase::load_vector_from_file(Vector &v,std::istream &is)
     return count;
   }
 
-//! @brief Devuelve el valor de pico de la función.
+//! @brief Returns the peak value of the factor.
 double XC::PathSeriesBase::getPeakFactor(void) const
   {
     double peak = fabs(thePath(0));

@@ -72,8 +72,8 @@ class ProfileSPDLinSOE;
 
 //! @ingroup Solver
 //
-//! @brief Objetos que se encargan de la solución
-//! de sistemas de ecuaciones con matriz en perfil.
+//! @brief solves a ProfileSPDLinSOE object using
+//! the LDL^t factorization.
 class ProfileSPDLinDirectBlockSolver: public ProfileSPDLinDirectBase
   {
   protected:

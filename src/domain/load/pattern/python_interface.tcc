@@ -103,7 +103,7 @@ class_<XC::MapLoadPatterns, bases<XC::LoadLoaderMember>, boost::noncopyable >("M
   .def("newTimeSeries", &XC::MapLoadPatterns::newTimeSeries,return_internal_reference<>(),"Crea una modulación de la carga en el tiempo.")
   .add_property("currentLoadPattern", make_function( &XC::MapLoadPatterns::getCurrentLoadPattern, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentLoadPattern)
   .def("newLoadPattern", &XC::MapLoadPatterns::newLoadPattern,return_internal_reference<>(),"Crea un nuevo caso de carga.")
-  .def("addToDomain", &XC::MapLoadPatterns::addToDomain,return_internal_reference<>(),"Agrega el caso de carga al dominio.")
+  .def("addToDomain", &XC::MapLoadPatterns::addToDomain,return_internal_reference<>(),"Agrega el caso de carga al domain.")
   .def("removeFromDomain", &XC::MapLoadPatterns::removeFromDomain,return_internal_reference<>(),"Eliminates load case from domain.")
   .def("removeAllFromDomain", &XC::MapLoadPatterns::removeAllFromDomain,return_internal_reference<>(),"Eliminates all loads cases from domain.")
   .def("getKeys", &XC::MapLoadPatterns::getKeys,"Returns load case names")

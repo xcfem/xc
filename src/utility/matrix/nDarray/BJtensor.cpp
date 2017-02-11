@@ -104,7 +104,7 @@
 #include "utility/matrix/nDarray/BJmatrix.h"
 #include <iostream>
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::BJtensor::BJtensor(int rank_of_BJtensor,const double &initval)
   : nDarray(rank_of_BJtensor, initval), indices1(""), indices2("") {}
 

@@ -71,7 +71,7 @@ class SoluMethod;
 
 //! @ingroup CTest
 //
-//! @brief Test de convergencia.
+//! @brief convergence test.
 class ConvergenceTest: public MovableObject, public EntWOwner
   {
     SoluMethod *getSoluMethod(void);

@@ -29,7 +29,7 @@
 #include "beam2d.h"
 #include "utility/actor/actor/MovableVector.h"
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::beam2d::beam2d(int tag,int class_tag)
   :ProtoBeam2d(tag,class_tag), L(0)
   {}

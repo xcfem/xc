@@ -115,7 +115,7 @@ int XC::DisplacementControl::commit(void)
     return DispBase::commit();
   }
 
-//! @brief Devuelve un puntero al dominio.
+//! @brief Returns a pointer to the domain.
 XC::Domain *XC::DisplacementControl::getDomainPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -123,7 +123,7 @@ XC::Domain *XC::DisplacementControl::getDomainPtr(void)
     return sm->getDomainPtr();
   }
 
-//! @brief Devuelve un puntero al dominio.
+//! @brief Returns a pointer to the domain.
 const XC::Domain *XC::DisplacementControl::getDomainPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -270,7 +270,7 @@ int XC::DisplacementControl::domainChanged(void)
         theDofID = theID(theDof);
       }
     else
-      std::cerr << "DisplacementControl::domainChanged; no se ha asignado el dominio." << std::endl;
+      std::cerr << "DisplacementControl::domainChanged; no se ha asignado el domain." << std::endl;
     
     return 0;
   }

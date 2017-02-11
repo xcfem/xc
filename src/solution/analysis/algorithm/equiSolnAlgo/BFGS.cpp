@@ -77,7 +77,7 @@ int XC::BFGS::solveCurrentStep(void)
     if((theModel == 0) || (theIntegrator == 0) || (theSysOfEqn == 0) || (theTest == 0))
       {
 	std::cerr << "WARNING XC::BFGS::solveCurrentStep() - setLinks() has";
-	std::cerr << "no se ha asignado modelo, integrador o sistema de ecuaciones.\n";
+	std::cerr << "no se ha asignado modelo, integrator o system of equations.\n";
 	return -5;
       }	
 

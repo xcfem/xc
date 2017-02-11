@@ -244,13 +244,13 @@ void XC::SupCuadrilatera::setPuntos(const MatrizPtrPnt &pntPtrs)
     const size_t nf= pntPtrs.getNumFilas(); //No. de filas de puntos.
     if(nf<2)
       {
-        std::cerr << "SupCuadrilatera::setPuntos; la matriz de punteros debe tener al menos dos filas." << std::endl;
+        std::cerr << "SupCuadrilatera::setPuntos; la matriz de pointers debe tener al menos dos filas." << std::endl;
         return;
       }
     const size_t nc= pntPtrs.getNumCols(); //No. de columnas de puntos.
     if(nc<2)
       {
-        std::cerr << "SupCuadrilatera::setPuntos; la matriz de punteros debe tener al menos dos columnas." << std::endl;
+        std::cerr << "SupCuadrilatera::setPuntos; la matriz de pointers debe tener al menos dos columnas." << std::endl;
         return;
       }
     if(nf==2)

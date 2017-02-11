@@ -62,11 +62,11 @@
 
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::MapLoadPatterns::MapLoadPatterns(LoadLoader *owr)
   : LoadLoaderMember(owr), nmb_ts("nil"), lpcode("nil"), tag_el(0), tag_nl(0), tag_spc(0) {}
 
-//! @brief Devuelve un puntero al TS cuyo dbTag se pasa como parámetro.
+//! @brief Returns a pointer to the TS cuyo dbTag se pasa como parámetro.
 //! se usa en LoadPattern::recvData.
 XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag)
   {
@@ -80,7 +80,7 @@ XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag)
     return retval;
   }
 
-//! @brief Devuelve un puntero al TS cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the TS cuyo nombre se pasa como parámetro.
 const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag) const
   {
     const TimeSeries *retval= nullptr;
@@ -93,7 +93,7 @@ const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag) const
     return retval;
   }
 
-//! @brief Devuelve un puntero al TimeSeries cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the TimeSeries cuyo nombre se pasa como parámetro.
 XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code)
   {
     TimeSeries *retval= nullptr;
@@ -103,7 +103,7 @@ XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code)
     return retval;
   }
 
-//! @brief Devuelve un puntero al TimeSeries cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the TimeSeries cuyo nombre se pasa como parámetro.
 const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code) const
   {
     const TimeSeries *retval= nullptr;
@@ -113,7 +113,7 @@ const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code) c
     return retval;
   }
 
-//! @brief Devuelve un puntero al caso de carga cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the caso de carga cuyo nombre se pasa como parámetro.
 XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_code)
   {
     LoadPattern *retval= nullptr;
@@ -123,7 +123,7 @@ XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_cod
     return retval;
   }
 
-//! @brief Devuelve un puntero al caso de carga cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the caso de carga cuyo nombre se pasa como parámetro.
 const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_code) const
   {
     const LoadPattern *retval= nullptr;
@@ -133,7 +133,7 @@ const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &
     return retval;
   }
 
-//! @brief Devuelve un puntero al caso cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the caso cuyo tag se pasa como parámetro.
 XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag)
   {
     LoadPattern *retval= nullptr;
@@ -146,7 +146,7 @@ XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve un puntero al caso cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the caso cuyo tag se pasa como parámetro.
 const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag) const
   {
     const LoadPattern *retval= nullptr;
@@ -174,7 +174,7 @@ const std::string &XC::MapLoadPatterns::getNombreLoadPattern(const LoadPattern *
     return retval;
   }
 
-//! @brief Agrega el caso de carga al dominio.
+//! @brief Agrega el caso de carga al domain.
 void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
   {
     LoadPattern *lp= buscaLoadPattern(lp_code);
@@ -190,7 +190,7 @@ void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
                 << lp_code << std::endl;
   }
 
-//! @brief Elimina el caso de carga del dominio.
+//! @brief Elimina el caso de carga del domain.
 void XC::MapLoadPatterns::removeFromDomain(const std::string &lp_code)
   {
     LoadPattern *lp= buscaLoadPattern(lp_code);
@@ -201,7 +201,7 @@ void XC::MapLoadPatterns::removeFromDomain(const std::string &lp_code)
                 << lp_code << std::endl;
   }
 
-//! @brief Elimina las loadpatterns del dominio.
+//! @brief Elimina las loadpatterns del domain.
 void XC::MapLoadPatterns::removeAllFromDomain(void)
   {
     Domain *dom= getDomain();

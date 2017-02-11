@@ -125,7 +125,7 @@ void XC::Truss::set_load_sens(const Vector &v)
       }
   }
 
-//! @brief Pone a cero los punteros a nodo, los cosenos directores y los parámetros de sensibilidad.
+//! @brief Pone a cero los pointers to node, los cosenos directores y los parámetros de sensibilidad.
 void XC::Truss::inicializa(void)
   {
     TrussBase::inicializa();

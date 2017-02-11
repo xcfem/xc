@@ -69,9 +69,8 @@ class DistributedSparseGenRowLinSOE;
 
 //! @ingroup LinearSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de sistemas de ecuaciones lineales con matriz dispersa
-//! distribuida no simétrica.
+//! @brief Base class for distributed (many processors) sparse general
+//! matrix linear based SOE solver.
 class DistributedSparseGenRowLinSolver : public LinearSOESolver
   {
   protected:

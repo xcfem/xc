@@ -61,7 +61,7 @@ class ID;
 //! @ingroup EigenSOE
 //
 //! @brief Sistema de ecuaciones correspondiente
-//! a un problema de eigenvalues.
+//! a un eigenproblem.
 class EigenSOE : public SystemOfEqn
   {
   public:

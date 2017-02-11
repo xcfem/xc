@@ -72,7 +72,7 @@
 #include "utility/matrix/ID.h"
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::PathTimeSeries::PathTimeSeries(void)
   :PathSeriesBase(TSERIES_TAG_PathTimeSeries), currentTimeLoc(0) {}
 
@@ -266,7 +266,7 @@ double XC::PathTimeSeries::getFactor(double pseudoTime) const
     return cFactor*(value1 + (value2-value1)*(pseudoTime-time1)/(time2 - time1));
   }
 
-//! @brief Devuelve la longitud del dominio de definición de la función.
+//! @brief Returns series duration.
 double XC::PathTimeSeries::getDuration(void) const
   {
     if(thePath.Size()<1)

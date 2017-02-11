@@ -101,7 +101,7 @@ bool XC::BandGenLinSOE::setSolver(LinearSOESolver *newSolver)
     if(tmp)
       retval= FactoredSOEBase::setSolver(tmp);
     else
-      std::cerr << "XC::BandGenLinSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
+      std::cerr << "XC::BandGenLinSOE::setSolver; solver incompatible con system of equations." << std::endl;
     return retval;
   }
 

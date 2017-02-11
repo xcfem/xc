@@ -32,7 +32,7 @@
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
 
-//! @brief Constructor por defecto
+//! @brief Default constructor
 XC::SmallDispCrdTransf3d::SmallDispCrdTransf3d(int tag, int classTag)
   : CrdTransf3d(tag, classTag) {}
 

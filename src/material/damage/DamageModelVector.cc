@@ -29,7 +29,7 @@
 #include "DamageModelVector.h"
 #include "DamageModel.h"
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::DamageModelVector::DamageModelVector(const size_t &nDamageModels,const DamageModel *dmgModel)
   : std::vector<DamageModel *>(nDamageModels,nullptr), MovableObject(0)
   {

@@ -62,7 +62,7 @@ class MaterialLoader: public Loader
     typedef map_interaction_diagram2d::iterator diag_interacc2d_iterator;
   private:
     map_materials materials; //!< Material definitions.
-    int tag_mat; //!< Tag por defecto para el material.
+    int tag_mat; //!< Default material tag.
     map_geom_secc geom_secciones; //!< Section geometries.
     map_interaction_diagram diagramas_interaccion; //!< 3D interaction diagrams.
     map_interaction_diagram2d diagramas_interaccion2d; //!< 2D interaction diagrams.

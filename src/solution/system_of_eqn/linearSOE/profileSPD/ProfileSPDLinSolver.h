@@ -72,8 +72,7 @@ class ProfileSPDLinSOE;
 
 //! @ingroup LinearSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de sistemas de ecuaciones lineales con matriz de perfil.
+//! @brief Base class for profile matrix linear SOE solvers.
 class ProfileSPDLinSolver: public virtual LinearSOESolver
   {
   protected:

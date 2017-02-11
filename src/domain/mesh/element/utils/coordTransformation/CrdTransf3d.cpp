@@ -164,8 +164,8 @@ void XC::CrdTransf3d::calc_Wu(const double *ug,double *ul,double *Wu) const
   }
 
 //! Sean dx1,dy1,dz1,gx1,gy1,gz1 los desplazamientos y giros del nodo dorsal y dx2,dy2,dz2,gx2,gy2,gz2
-//! los del nodo frontal expresados en coordenadas locales. Esta función recibe estos desplazamientos
-//! en el parámetro ul y devuelve las siguientes magnitudes en el vector ub:
+//! los del nodo frontal expresados en coordenadas locales. This function gets the following displacements
+//! on the ul parameter and returns the following magnitudes on the ub vector:
 //! -ub(0)= dx2-dx1: Elongación sufrida por el elemento.
 //! -ub(1)= (dy1-dy2)/L+gz1: Giro en torno a z del nodo 1.
 //! -ub(2)= (dy1-dy2)/L+gz2: Giro en torno a z del nodo 2.
@@ -187,7 +187,7 @@ const XC::Vector &XC::CrdTransf3d::calc_ub(const double *ul,Vector &ub) const
     return ub;
   }
 
-//! @brief Constructor por defecto
+//! @brief Default constructor
 XC::CrdTransf3d::CrdTransf3d(int tag, int classTag)
   : CrdTransf(tag, classTag,3), R(3,3)
   {

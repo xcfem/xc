@@ -118,7 +118,7 @@ bool XC::FourNodeQuad::check_material_type(const std::string &type) const
 int XC::FourNodeQuad::getNumDOF(void) const
   { return 8; }
 
-//! @brief Asigna el apuntador al dominio y calcula el vector de cargas consistentes debido al peso.
+//! @brief Asigna el apuntador al domain y calcula el vector de cargas consistentes debido al peso.
 void XC::FourNodeQuad::setDomain(Domain *theDomain)
   {
     QuadBase4N<SolidMech2D>::setDomain(theDomain);

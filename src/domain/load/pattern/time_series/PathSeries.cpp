@@ -137,7 +137,7 @@ double XC::PathSeries::getFactor(double pseudoTime) const
   }
 
 
-//! @brief Devuelve la longitud del dominio de definición de la función.
+//! @brief Returns series duration.
 double XC::PathSeries::getDuration(void) const
   { return thePath.Size() * pathTimeIncr; }
 

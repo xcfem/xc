@@ -45,10 +45,10 @@ void XC::ProtoBeam3d::set_material(const Material *m)
       }
     else
       if(verborrea>0)
-        std::cerr << "ProtoBeam3d::set_material; se pasó un puntero nulo." << std::endl;
+        std::cerr << "ProtoBeam3d::set_material; se pasó a null pointer." << std::endl;
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ProtoBeam3d::ProtoBeam3d(int tag,int class_tag,const Material *m)
   :Element1D(tag,class_tag,0,0)
   { set_material(m); }

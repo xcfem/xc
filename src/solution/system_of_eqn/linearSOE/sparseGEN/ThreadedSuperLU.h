@@ -71,9 +71,7 @@ namespace XC {
 
 //! @ingroup LinearSolver
 //
-//! @brief Objeto encargado de obtener la solución
-//! de un sistemas de ecuaciones lineal con matriz
-//! dispersa no simétrica, empleando programación multihilo.
+//! @brief Threaded <a href="https://launchpad.net/ubuntu/+source/superlu" target="_new"> SuperLU</a> based sparse general matrix linear SOE solver.
 class ThreadedSuperLU : public SparseGenColLinSolver
   {
   private:

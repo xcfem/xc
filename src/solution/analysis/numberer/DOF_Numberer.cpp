@@ -132,7 +132,7 @@ XC::DOF_Numberer &XC::DOF_Numberer::operator=(const DOF_Numberer &otro)
     return *this;
   }
 
-//! @brief Establece el algoritmo que se usará para numerar el grafo
+//! @brief Sets the algoritmo que se usará para numerar el grafo
 //! «Reverse Cuthill-Macgee» o simple.
 void XC::DOF_Numberer::useAlgorithm(const std::string &nmb)
   { alloc(nmb); }
@@ -490,15 +490,15 @@ int XC::DOF_Numberer::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a pointer to the model wrapper that owns this object.
 XC::ModelWrapper *XC::DOF_Numberer::getModelWrapper(void)
   { return dynamic_cast<ModelWrapper *>(Owner()); }
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a pointer to the model wrapper that owns this object.
 const XC::ModelWrapper *XC::DOF_Numberer::getModelWrapper(void) const
   { return dynamic_cast<const ModelWrapper *>(Owner()); }
 
-//! @brief Devuelve un puntero al modelo de análisis.
+//! @brief Returns a pointer to the analysis model.
 const XC::AnalysisModel *XC::DOF_Numberer::getAnalysisModelPtr(void) const
   {
     const ModelWrapper *sm= getModelWrapper();
@@ -506,7 +506,7 @@ const XC::AnalysisModel *XC::DOF_Numberer::getAnalysisModelPtr(void) const
     return sm->getAnalysisModelPtr();
   }
 
-//! @brief Devuelve un puntero al modelo de análisis.
+//! @brief Returns a pointer to the analysis model.
 XC::AnalysisModel *XC::DOF_Numberer::getAnalysisModelPtr(void)
   {
     ModelWrapper *sm= getModelWrapper();

@@ -71,7 +71,7 @@ XC::PulseSeries::PulseSeries(double startTime, double finishTime,
   : PeriodSeries(TSERIES_TAG_PulseSeries,startTime,finishTime,T,phi,theFactor), pWidth(pulseWidth) {}
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::PulseSeries::PulseSeries(void)
   : PeriodSeries(TSERIES_TAG_PulseSeries),pWidth(0.5) {}
 

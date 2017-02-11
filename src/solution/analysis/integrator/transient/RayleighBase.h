@@ -35,7 +35,7 @@ namespace XC {
 
 //! @ingroup TransientIntegrator
 //
-//! @defgroup RayleighIntegrator Integración del sistema de ecuaciones dinámico mediante el método de Rayleigh.
+//! @defgroup RayleighIntegrator Integración del system of equations dinámico mediante el método de Rayleigh.
 //
 //! @ingroup RayleighIntegrator
 //

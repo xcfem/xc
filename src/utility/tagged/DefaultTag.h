@@ -30,7 +30,7 @@
 
 
 namespace XC {
-//! @brief Tag por defecto.
+//! @brief Default tag
 class DefaultTag
   {
   private:

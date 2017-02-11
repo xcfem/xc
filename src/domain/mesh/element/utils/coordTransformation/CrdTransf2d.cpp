@@ -227,7 +227,7 @@ int XC::CrdTransf2d::computeElemtLengthAndOrient(void) const
         sinTheta= dx(1)/L;
       }
     else
-      std::cerr << "CrdTransf2d::computeElemtLengthAndOrient; puntero a nodo nulo." << std::endl;
+      std::cerr << "CrdTransf2d::computeElemtLengthAndOrient; pointer to nodo nulo." << std::endl;
     return 0;
   }
 

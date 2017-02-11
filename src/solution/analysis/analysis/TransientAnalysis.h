@@ -77,7 +77,7 @@ class TransientAnalysis: public Analysis
   protected:
     TransientAnalysis(SoluMethod *);
   public:
-    //! @brief Ejecuta el análisis.
+    //! @brief Performs the analysis.
     virtual int analyze(int numSteps, double dT) = 0;    
   };
 } // end of XC namespace

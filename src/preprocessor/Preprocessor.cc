@@ -39,16 +39,16 @@
 
 #include "utility/matrix/ID.h"
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::Preprocessor::Preprocessor(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
-  : EntCmd(owr), MovableObject(0), dominio(nullptr), materialHandler(this), transf(this), beamIntegrators(this), 
+  : EntCmd(owr), MovableObject(0), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this), 
     nodes(this), elements(this), loads(this), constraints(this),
     cad(this),sets(this)
-  { dominio= new Domain(this,oh); }
+  { domain= new Domain(this,oh); }
 
 //! @brief Constructor de copia (prohibida).
 XC::Preprocessor::Preprocessor(const Preprocessor &otro)
-  : EntCmd(otro), MovableObject(otro), dominio(nullptr), materialHandler(this), transf(this), beamIntegrators(this),
+  : EntCmd(otro), MovableObject(otro), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this),
     nodes(this), elements(this), loads(this), constraints(this),
     cad(this),sets(this)
   {
@@ -62,7 +62,7 @@ XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &otro)
     return *this;
   }
 
-//! @brief Inserta el puntero al nodo en el conjunto «total» y en los conjuntos
+//! @brief Inserta the pointer al nodo en el conjunto «total» y en los conjuntos
 //! que estén abiertos.
 void XC::Preprocessor::UpdateSets(Node *nuevo_nodo)
   {
@@ -76,7 +76,7 @@ void XC::Preprocessor::UpdateSets(Node *nuevo_nodo)
       }
   }
 
-//! @brief Inserta el puntero al elemento en el conjunto «total» y en los conjuntos
+//! @brief Inserta the pointer al elemento en el conjunto «total» y en los conjuntos
 //! que estén abiertos.
 void XC::Preprocessor::UpdateSets(Element *nuevo_elem)
   {
@@ -90,7 +90,7 @@ void XC::Preprocessor::UpdateSets(Element *nuevo_elem)
       }
   }
 
-//! @brief  Inserta el puntero a la coacción en el conjunto «total» y en los conjuntos
+//! @brief  Inserta the pointer a la coacción en el conjunto «total» y en los conjuntos
 //! que estén abiertos.
 void XC::Preprocessor::UpdateSets(Constraint *nuevo_constraint)
   {
@@ -108,8 +108,8 @@ void XC::Preprocessor::UpdateSets(Constraint *nuevo_constraint)
 XC::Preprocessor::~Preprocessor(void)
   {
     cad.clearAll();
-    if(dominio) delete dominio;
-    dominio= nullptr;
+    if(domain) delete domain;
+    domain= nullptr;
   }
 
 
@@ -126,13 +126,13 @@ XC::SetEstruct *XC::Preprocessor::busca_set_estruct(const std::string &nmb)
     return retval;
   }
 
-//! @brief Prepara el dominio para resolver un nuevo caso
+//! @brief Prepara el domain para resolver un nuevo caso
 //! de carga.
 void XC::Preprocessor::resetLoadCase(void)
   { 
     getLoadLoader().removeAllFromDomain();
-    if(dominio)
-      dominio->resetLoadCase();
+    if(domain)
+      domain->resetLoadCase();
     else
       std::cerr << "Preprocessor::resetLoadCase; domain not defined (null ptr)."
                 << std::endl;
@@ -148,14 +148,14 @@ void XC::Preprocessor::clearAll(void)
     beamIntegrators.clearAll();
     nodes.clearAll();
     elements.clearAll();
-    if(dominio)
-      dominio->clearAll();
+    if(domain)
+      domain->clearAll();
     loads.clearAll();
     constraints.clearAll();
     materialHandler.clearAll();
   }
 
-//! @brief Devuelve un puntero a la base de datos.
+//! @brief Returns a pointer to the la base de datos.
 XC::FE_Datastore *XC::Preprocessor::getDataBase(void)
   {
     FE_Datastore *retval= nullptr;
@@ -184,8 +184,8 @@ int XC::Preprocessor::sendData(CommParameters &cp)
     int res= cp.sendMovable(loads,getDbTagData(),CommMetaData(5));
     //res+= cp.sendMovable(constraints,getDbTagData(),CommMetaData(6));
     //res+= cp.sendMovable(cad,getDbTagData(),CommMetaData(7));
-    assert(dominio);
-    res+= sendDomain(*dominio,8,getDbTagData(),cp);
+    assert(domain);
+    res+= sendDomain(*domain,8,getDbTagData(),cp);
     res+= cp.sendMovable(sets,getDbTagData(),CommMetaData(9));
     return res;
   }
@@ -201,8 +201,8 @@ int XC::Preprocessor::recvData(const CommParameters &cp)
     int res= cp.receiveMovable(loads,getDbTagData(),CommMetaData(5));
     //res+= cp.receiveMovable(constraints,getDbTagData(),CommMetaData(6));
     //res+= cp.receiveMovable(cad,getDbTagData(),CommMetaData(7));
-    assert(dominio);
-    res+= receiveDomain(*dominio,8,getDbTagData(),cp);
+    assert(domain);
+    res+= receiveDomain(*domain,8,getDbTagData(),cp);
     res+= cp.receiveMovable(sets,getDbTagData(),CommMetaData(9));
     return res;
   }

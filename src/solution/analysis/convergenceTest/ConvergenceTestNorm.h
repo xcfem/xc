@@ -35,8 +35,8 @@ namespace XC {
 
 //! @ingroup CTest
 //
-//! @brief Test de convergencia que emplea el valor inicial
-//! de la norma de un vector (vector solución,...).
+//! @brief Convergence test that uses vector norm
+//! value (solution vector,...).
 class ConvergenceTestNorm: public ConvergenceTestTol
   {
   protected:

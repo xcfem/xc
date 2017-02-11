@@ -70,10 +70,7 @@ class SparseGenRowLinSOE;
 
 //! @ingroup Solver
 //
-//! @brief Objeto encargado de la solución de
-//! sistema de ecuaciones con matriz dispersa
-//! basado en la biblioteca
-//! PETSC (http://www.mcs.anl.gov/petsc/petsc-as).
+//! @brief <a href="http://www.mcs.anl.gov/petsc/petsc-as" target="_new"> PETSC</a> based sparse general matrix SOE solver.
 class PetscSparseSeqSolver: public SparseGenRowLinSolver
   {
   private:

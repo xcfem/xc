@@ -96,7 +96,7 @@ XC::DirectIntegrationAnalysis::~DirectIntegrationAnalysis(void)
     // clearAll() must be invoked if user wishes to invoke destructor
   }
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, modelo de análisis,...).
+//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
 void XC::DirectIntegrationAnalysis::clearAll(void)
   {
 // AddingSensitivity:BEGIN ////////////////////////////////////
@@ -132,7 +132,7 @@ int XC::DirectIntegrationAnalysis::initialize(void)
     return 0;
   }
 
-//! @brief Ejecuta el análisis.
+//! @brief Performs the analysis.
 int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
   {
     int result= 0;
@@ -215,7 +215,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
     return result;
   }
 
-//! @brief Ejecuta los cambios que implica un cambio en el dominio del problema.
+//! @brief Ejecuta los cambios que implica un cambio en el domain del problema.
 int XC::DirectIntegrationAnalysis::domainChanged(void)
   {
     assert(metodo_solu);
@@ -270,7 +270,7 @@ int XC::DirectIntegrationAnalysis::setSensitivityAlgorithm(SensitivityAlgorithm 
 #endif
 // AddingSensitivity:END ///////////////////////////////
 
-//! @brief Establece el renumerador a emplear en el análisis.
+//! @brief Sets the renumerador to use in the analysis.
 int XC::DirectIntegrationAnalysis::setNumberer(DOF_Numberer &theNewNumberer) 
   {
     int result= TransientAnalysis::setNumberer(theNewNumberer);
@@ -289,7 +289,7 @@ int XC::DirectIntegrationAnalysis::setNumberer(DOF_Numberer &theNewNumberer)
   }
 
 
-//! @brief Establece el algoritmo de solución a emplear en el análisis.
+//! @brief Sets the solutio algorithm to use in the analysis.
 int XC::DirectIntegrationAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm) 
   {
     // invoke the destructor on the old one
@@ -322,7 +322,7 @@ int XC::DirectIntegrationAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
     return 0;
   }
 
-//! @brief Establece el integrador a emplear en el análisis.
+//! @brief Sets the integrator to use in the analysis.
 int XC::DirectIntegrationAnalysis::setIntegrator(TransientIntegrator &theNewIntegrator)
   {
     // set the links needed by the other objects in the aggregation
@@ -352,7 +352,7 @@ int XC::DirectIntegrationAnalysis::setIntegrator(TransientIntegrator &theNewInte
     return 0;
   }
 
-//! @brief Establece el sistema de ecuaciones lineal a emplear en el análisis.
+//! @brief Sets the linear system of equations to use in the analysis.
 int XC::DirectIntegrationAnalysis::setLinearSOE(LinearSOE &theNewSOE)
   {
     // invoke the destructor on the old one
@@ -387,7 +387,7 @@ int XC::DirectIntegrationAnalysis::setLinearSOE(LinearSOE &theNewSOE)
     return 0;
   }
 
-//! @brief Establece el test de convergencia a emplear en el análisis.
+//! @brief Sets the convergence test to use in the analysis.
 int XC::DirectIntegrationAnalysis::setConvergenceTest(ConvergenceTest &theNewTest)
   {
     if(metodo_solu)
@@ -395,7 +395,7 @@ int XC::DirectIntegrationAnalysis::setConvergenceTest(ConvergenceTest &theNewTes
     return 0;
   }
 
-//! @brief Comprueba si el dominio ha cambiado.
+//! @brief Comprueba si el domain ha cambiado.
 int XC::DirectIntegrationAnalysis::checkDomainChange(void)
   {
     assert(metodo_solu);

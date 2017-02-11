@@ -66,8 +66,8 @@ class DistributedDiagonalSOE;
 
 //! @ingroup Solver
 //
-//! @brief Objetos que se encargan de la solución
-//! de sistemas de ecuaciones con matriz diagonal distribuída.
+//! @brief Base class for distributed (many processors) diagonal
+//! matrix linear SOE solvers.
 class DistributedDiagonalSolver : public LinearSOESolver
   {
   private:

@@ -91,7 +91,7 @@ XC::StaticAnalysis::~StaticAnalysis(void)
   // clearAll() must be invoked if user wishes to invoke destructor
   }
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, modelo de análisis,...).
+//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
 void XC::StaticAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation
@@ -105,7 +105,7 @@ void XC::StaticAnalysis::clearAll(void)
     // AddingSensitivity:END //////////////////////////////////////
   }
 
-//! @brief Solicita la dominio que avance un paso en el análisis.
+//! @brief Solicita la domain que avance un paso en the analysis.
 int XC::StaticAnalysis::new_domain_step(int num_step)
   {
     AnalysisModel *am= getAnalysisModelPtr();
@@ -123,8 +123,8 @@ int XC::StaticAnalysis::new_domain_step(int num_step)
     return result;
   }
 
-//! @brief Comprueba si se ha producido algún cambio en el dominio desde
-//! el último paso del análisis. Se utiliza en el método run_analysis_step.
+//! @brief Comprueba si se ha producido algún cambio en el domain desde
+//! el último paso of the analysis. Se utiliza en el método run_analysis_step.
 int XC::StaticAnalysis::check_domain_change(int num_step,int numSteps)
   {
     int result= 0;
@@ -145,7 +145,7 @@ int XC::StaticAnalysis::check_domain_change(int num_step,int numSteps)
     return result;
   }
 
-//! @brief Solicita al integrador que avance un paso en el análisis.
+//! @brief Solicita al integrator que avance un paso en the analysis.
 int XC::StaticAnalysis::new_integrator_step(int num_step)
   {
     const int result= getStaticIntegratorPtr()->newStep();
@@ -160,7 +160,7 @@ int XC::StaticAnalysis::new_integrator_step(int num_step)
     return result;
   }
 
-//! @brief Calcula la solución para el paso actual del análisis.
+//! @brief Solves for current step.
 int XC::StaticAnalysis::solve_current_step(int num_step)
   {
     const int result= getEquiSolutionAlgorithmPtr()->solveCurrentStep();
@@ -176,7 +176,7 @@ int XC::StaticAnalysis::solve_current_step(int num_step)
     return result;
   }
 
-//! @brief Calcula las sensibilidades para el paso actual del análisis.
+//! @brief Calcula las sensibilidades para el paso actual of the analysis.
 int XC::StaticAnalysis::compute_sensitivities_step(int num_step)
   {
     int result= 0;
@@ -215,7 +215,7 @@ int XC::StaticAnalysis::commit_step(int num_step)
     return result;
   }
 
-//! @brief Ejecuta un paso del análisis.
+//! @brief Performs un paso of the analysis.
 int XC::StaticAnalysis::run_analysis_step(int num_step,int numSteps)
   {
     int result= new_domain_step(num_step);
@@ -250,7 +250,7 @@ int XC::StaticAnalysis::run_analysis_step(int num_step,int numSteps)
     return result;
   }
 
-//! @brief Ejecuta el análisis.
+//! @brief Performs the analysis.
 int XC::StaticAnalysis::analyze(int numSteps)
   {
     assert(metodo_solu);
@@ -292,7 +292,7 @@ int XC::StaticAnalysis::initialize(void)
     return 0;
   }
 
-//! @brief Hace los cambios que sean necesarios tras un cambio en el dominio.
+//! @brief Hace los cambios que sean necesarios tras un cambio en el domain.
 int XC::StaticAnalysis::domainChanged(void)
   {
     Domain *the_Domain= this->getDomainPtr();
@@ -384,7 +384,7 @@ int XC::StaticAnalysis::setSensitivityAlgorithm(SensitivityAlgorithm *passedSens
 #endif
 // AddingSensitivity:END ///////////////////////////////
 
-//! @brief Asigna el renumerador a emplear en el análisis.
+//! @brief Sets the renumerador to use in the analysis.
 int XC::StaticAnalysis::setNumberer(DOF_Numberer &theNewNumberer)
   {
     Analysis::setNumberer(theNewNumberer);
@@ -394,7 +394,7 @@ int XC::StaticAnalysis::setNumberer(DOF_Numberer &theNewNumberer)
   }
 
 
-//! @brief Asigna el algoritmo de solución a emplear en el análisis.
+//! @brief Sets the solution algorithm to use in the analysis.
 int XC::StaticAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
   {
     Analysis::setAlgorithm(theNewAlgorithm);
@@ -404,7 +404,7 @@ int XC::StaticAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
     return 0;
   }
 
-//! @brief Asigna el integrador a emplear en el análisis.
+//! @brief Sets the integrator to use in the analysis.
 int XC::StaticAnalysis::setIntegrator(StaticIntegrator &theNewIntegrator)
   {
     Analysis::setIntegrator(theNewIntegrator);
@@ -413,7 +413,7 @@ int XC::StaticAnalysis::setIntegrator(StaticIntegrator &theNewIntegrator)
     return 0;
   }
 
-//! @brief Asigna el sistema de ecuaciones lineal a emplear en el análisis.
+//! @brief Sets the linear system of equations to use in the analysis.
 int XC::StaticAnalysis::setLinearSOE(LinearSOE &theNewSOE)
   {
     // invoke the destructor on the old one
@@ -423,7 +423,7 @@ int XC::StaticAnalysis::setLinearSOE(LinearSOE &theNewSOE)
     return 0;
   }
 
-//! @brief Asigna el test de convergencia a emplear en el análisis.
+//! @brief Sets the convergence test to use in the analysis.
 int XC::StaticAnalysis::setConvergenceTest(ConvergenceTest &theNewTest)
   { return metodo_solu->setConvergenceTest(theNewTest); }
 

@@ -75,11 +75,11 @@ class Subdomain;
 
 //! @ingroup TipoAnalisis
 //
-//! @brief Análisis por descomposición del dominio.
+//! @brief Análisis por descomposición del domain.
 class DomainDecompositionAnalysis: public Analysis, public MovableObject
   {
   private:
-    Subdomain *theSubdomain; //!< Apuntador al subdominio. 
+    Subdomain *theSubdomain; //!< Apuntador al subdomain. 
     DomainSolver *theSolver; //!< Apuntador al solver de tipo DomainSolver.
     Vector theResidual; //!< Vector residuo.
     int numEqn; //!< Número de ecuaciones.
@@ -94,7 +94,7 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
 	               // for same state of Subdomain.
   protected:
     int domainStamp;
-    //! @brief Devuelve un puntero al subdominio.
+    //! @brief Returns a pointer to the subdomain.
     inline Subdomain *getSubdomainPtr(void) const
       { return theSubdomain; }
 

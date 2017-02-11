@@ -82,7 +82,7 @@ class SoluMethod;
 //
 //! @ingroup AnalAlgo
 //
-//! @brief Clase base para los algoritmos de solución.
+//! @brief Base class for solution algorithms.
 class SolutionAlgorithm: public MovableObject, public ObjWithRecorders
   {
   protected:

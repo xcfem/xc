@@ -46,7 +46,7 @@ size_t XC::ClosedTriangleMesh::size(void) const { return triedros.size(); }
 size_t XC::ClosedTriangleMesh::GetNumFacetas(void) const { return size(); }
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ClosedTriangleMesh::ClosedTriangleMesh(void)
   : GeomObj3d(), MovableObject(0), triedros(0), tol(0.0), rMax(0.0),rMin(0.0) {}
 

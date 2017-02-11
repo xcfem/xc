@@ -75,7 +75,7 @@
 XC::EquiSolnAlgo::EquiSolnAlgo(SoluMethod *owr,int clasTag)
   :SolutionAlgorithm(owr,clasTag) {}
 
-//! @brief Devuelve un puntero al test de convergencia.
+//! @brief Returns a pointer to the convergence test.
 const XC::ConvergenceTest *XC::EquiSolnAlgo::getConvergenceTestPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -83,7 +83,7 @@ const XC::ConvergenceTest *XC::EquiSolnAlgo::getConvergenceTestPtr(void) const
     return sm->getConvergenceTestPtr();
   }
 
-//! @brief Devuelve un puntero al test de convergencia.
+//! @brief Returns a pointer to the convergence test.
 XC::ConvergenceTest *XC::EquiSolnAlgo::getConvergenceTestPtr(void)
   {
     SoluMethod *sm= getSoluMethod();

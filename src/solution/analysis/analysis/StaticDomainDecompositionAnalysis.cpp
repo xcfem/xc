@@ -89,7 +89,7 @@ XC::StaticDomainDecompositionAnalysis::~StaticDomainDecompositionAnalysis(void)
     // clearAll() must be invoked if user wishes to invoke destructor
   }    
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, modelo de análisis,...).
+//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
 void XC::StaticDomainDecompositionAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation
@@ -101,7 +101,7 @@ bool XC::StaticDomainDecompositionAnalysis::doesIndependentAnalysis(void)
   { return true; }
 
 
-//! @brief Ejecuta el análisis.
+//! @brief Performs the analysis.
 int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
   {
     assert(metodo_solu);
@@ -210,7 +210,7 @@ int XC::StaticDomainDecompositionAnalysis::initialize(void)
     return 0;
   }
 
-//! @brief Hace los cambios que sean necesarios como consecuencia de un cambio en el dominio.
+//! @brief Hace los cambios que sean necesarios como consecuencia de un cambio en el domain.
 int XC::StaticDomainDecompositionAnalysis::domainChanged(void)
   {
   Domain *the_Domain = this->getDomainPtr();
@@ -533,7 +533,7 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
 
     if(metodo_solu->getConvergenceTestPtr() == 0 || metodo_solu->getConvergenceTestPtr()->getClassTag() != data(7))
       {
-	std::cerr << "StaticDomainDecompositionAnalysis::recvSelf; falta implementar la lectura del test de convergencia." << std::endl;
+	std::cerr << "StaticDomainDecompositionAnalysis::recvSelf; falta implementar la lectura del convergence test." << std::endl;
 //         if(metodo_solu->getConvergenceTestPtr() != 0)
 //           delete metodo_solu->getConvergenceTestPtr();
     
@@ -558,7 +558,7 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
      return 0;
   }
 
-//! @brief Establece el algoritmo de solución a emplear en el análisis.
+//! @brief Sets the solution algorithm to use in the analysis.
 int XC::StaticDomainDecompositionAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
   {
     DomainDecompositionAnalysis::setAlgorithm(theNewAlgorithm);
@@ -566,7 +566,7 @@ int XC::StaticDomainDecompositionAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgo
     return 0;
   }
 
-//! @brief Establece el integrador a emplear en el análisis.
+//! @brief Sets the integrator to use in the analysis.
 int XC::StaticDomainDecompositionAnalysis::setIntegrator(IncrementalIntegrator &theNewIntegrator) 
   {
     DomainDecompositionAnalysis::setIntegrator(theNewIntegrator);
@@ -575,7 +575,7 @@ int XC::StaticDomainDecompositionAnalysis::setIntegrator(IncrementalIntegrator &
     return 0;
   }
 
-//! @brief Establece el sistema de ecuaciones lineal a emplear en el análisis.
+//! @brief Sets the linear system of equations to use in the analysis.
 int XC::StaticDomainDecompositionAnalysis::setLinearSOE(LinearSOE &theNewSOE)
   {
     DomainDecompositionAnalysis::setLinearSOE(theNewSOE);

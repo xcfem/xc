@@ -38,12 +38,12 @@
 
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::GrupoCombinaciones::GrupoCombinaciones(LoadLoader *owr)
   : LoadLoaderMember(owr) {}
 
 
-//! @brief Devuelve un puntero a la combinación cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the la combinación cuyo nombre se pasa como parámetro.
 XC::Combinacion *XC::GrupoCombinaciones::busca_combinacion(const std::string &comb_code)
   {
     Combinacion *retval= nullptr;
@@ -53,7 +53,7 @@ XC::Combinacion *XC::GrupoCombinaciones::busca_combinacion(const std::string &co
     return retval;
   }
 
-//! @brief Devuelve un puntero a la combinación cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the la combinación cuyo nombre se pasa como parámetro.
 const XC::Combinacion *XC::GrupoCombinaciones::buscaCombinacion(const std::string &comb_code) const
   {
     Combinacion *retval= nullptr;
@@ -77,7 +77,7 @@ const std::string &XC::GrupoCombinaciones::getNombreCombinacion(const Combinacio
     return retval;
   }
 
-//! @brief Elimina la combinación del dominio.
+//! @brief Elimina la combinación del domain.
 void XC::GrupoCombinaciones::remove(const std::string &comb_code)
   {
     Combinacion *comb= nullptr;
@@ -96,7 +96,7 @@ void XC::GrupoCombinaciones::remove(const std::string &comb_code)
                 << comb_code << std::endl;
   }
 
-//! @brief Agrega la combinación al dominio.
+//! @brief Agrega la combinación al domain.
 void XC::GrupoCombinaciones::addToDomain(const std::string &comb_code)
   {
     Combinacion *comb= busca_combinacion(comb_code);
@@ -107,7 +107,7 @@ void XC::GrupoCombinaciones::addToDomain(const std::string &comb_code)
                 << comb_code << std::endl;
   }
 
-//! @brief Elimina la combinación del dominio.
+//! @brief Elimina la combinación del domain.
 void XC::GrupoCombinaciones::removeFromDomain(const std::string &comb_code)
   {
     Combinacion *comb= busca_combinacion(comb_code);
@@ -118,7 +118,7 @@ void XC::GrupoCombinaciones::removeFromDomain(const std::string &comb_code)
                 << comb_code << std::endl;
   }
 
-//! @brief Elimina las combinaciones del dominio.
+//! @brief Elimina las combinaciones del domain.
 void XC::GrupoCombinaciones::removeAllFromDomain(void)
   {
     Domain *dom= getDomain();

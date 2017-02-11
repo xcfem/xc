@@ -165,7 +165,7 @@ XC::LoadPattern::LoadPattern(int tag, int clasTag)
   }
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::LoadPattern::LoadPattern(void)
   :NodeLocker(0,PATTERN_TAG_LoadPattern), loadFactor(0.0), gamma_f(1.0),
    theSeries(nullptr), theNodalLoads(nullptr), theElementalLoads(nullptr),
@@ -221,7 +221,7 @@ void XC::LoadPattern::setTimeSeries(TimeSeries *theTimeSeries)
   }
 
 
-//! @brief Establece el dominio para las cargas.
+//! @brief Establece el domain para las cargas.
 void XC::LoadPattern::setDomain(Domain *theDomain)
   {
     NodeLocker::setDomain(theDomain);
@@ -340,7 +340,7 @@ bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
           map->setCurrentElementLoadTag(++nextTag);
       }
     else
-      std::cerr  << "MapLoadPatterns::newElementalLoad; el puntero a la carga es nulo." << std::endl;
+      std::cerr  << "MapLoadPatterns::newElementalLoad; the pointer a la carga es nulo." << std::endl;
     return result;
   }
 

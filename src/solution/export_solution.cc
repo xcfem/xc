@@ -35,15 +35,15 @@ void export_solution(void)
 class_<XC::ConvergenceTest, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("ConvergenceTest", no_init);
 
 class_<XC::SoluMethod, bases<EntCmd>, boost::noncopyable >("SoluMethod", no_init)
-    .def("newSolutionAlgorithm", &XC::SoluMethod::newSolutionAlgorithm,return_internal_reference<>(),"Define el algoritmo de solución a emplear.")
-    .def("newIntegrator", &XC::SoluMethod::newIntegrator,return_internal_reference<>(),"Define el integrador a emplear.")
-    .def("newSystemOfEqn", &XC::SoluMethod::newSystemOfEqn,return_internal_reference<>(),"Define el sistema de ecuaciones a emplear.")
-    .def("newConvergenceTest", &XC::SoluMethod::newConvergenceTest,return_internal_reference<>(),"Define el criterio de convergencia a emplear.")
+    .def("newSolutionAlgorithm", &XC::SoluMethod::newSolutionAlgorithm,return_internal_reference<>(),"Defines the solution algorithm to use.")
+    .def("newIntegrator", &XC::SoluMethod::newIntegrator,return_internal_reference<>(),"Define el integrator to use.")
+    .def("newSystemOfEqn", &XC::SoluMethod::newSystemOfEqn,return_internal_reference<>(),"Define el system of equations to use.")
+    .def("newConvergenceTest", &XC::SoluMethod::newConvergenceTest,return_internal_reference<>(),"Define el criterio de convergencia to use.")
     ;
 
 class_<XC::MapSoluMethod, bases<EntCmd>, boost::noncopyable >("MapSoluMethod", no_init)
     .add_property("existeSoluMethod", &XC::MapSoluMethod::existeSoluMethod)
-    .def("newSoluMethod", &XC::MapSoluMethod::newSoluMethod,return_internal_reference<>(),"Crea un nuevo procedimiento de solución.")
+    .def("newSoluMethod", &XC::MapSoluMethod::newSoluMethod,return_internal_reference<>(),"Creates a new solution procedure.")
     ;
 
 XC::ModelWrapper *(XC::ProcSoluControl::*getModelWrapperPtr)(const std::string &)= &XC::ProcSoluControl::getModelWrapper;
@@ -57,7 +57,7 @@ XC::ProcSoluControl &(XC::ProcSolu::*getSoluControlRef)(void)= &XC::ProcSolu::ge
 class_<XC::ProcSolu, bases<EntCmd>, boost::noncopyable >("ProcSolu", no_init)
     .add_property("getSoluControl", make_function( getSoluControlRef, return_internal_reference<>() ))
     .add_property("getAnalysis", make_function( &XC::ProcSolu::getAnalysis, return_internal_reference<>() ))
-    .def("newAnalysis", &XC::ProcSolu::newAnalysis,return_internal_reference<>(),"Crea un nuevo análisis.")
+    .def("newAnalysis", &XC::ProcSolu::newAnalysis,return_internal_reference<>(),"Creates a new analysis.")
     ;
 
   }

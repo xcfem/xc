@@ -39,7 +39,7 @@ namespace XC{
 
 //! \ingroup CadMR
 //! 
-//! @brief "Tritriz" de punteros a elementos.
+//! @brief "Tritriz" de pointers to elementos.
 class TritrizPtrElem: public TritrizPtrBase<MatrizPtrElem>
   {
   protected:

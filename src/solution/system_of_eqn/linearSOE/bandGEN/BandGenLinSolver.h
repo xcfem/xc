@@ -72,9 +72,7 @@ class BandGenLinSOE;
 
 //! @ingroup Solver
 //
-//! @brief Objetos que se encargan de la solución
-//! de sistemas de ecuaciones con matriz en banda
-//! no simétrica.
+//! @brief Base class for band general linear SOE solvers.
 class BandGenLinSolver : public LinearSOESolver
   {
   protected:

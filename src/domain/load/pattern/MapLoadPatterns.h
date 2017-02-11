@@ -51,10 +51,9 @@ class MapLoadPatterns: public LoadLoaderMember
     typedef std::map<std::string,LoadPattern *> map_loadpatterns; //!< Casos de carga.
     map_loadpatterns loadpatterns; //!< Contenedor de casos de carga.
     std::string lpcode; //!< Identificador del load pattern para las nuevas cargas.
-    int tag_el; //!< Tag por defecto para la nueva carga sobre elemento.
-    int tag_nl; //!< Tag por defecto para la nueva carga sobre nodo.
-    int tag_eel; //!< OBSOLETO Tag por defecto para la nueva carga sobre borde de elemento.
-    int tag_spc; //!< Tag por defecto para el nuevo desplazamiento impuesto sobre nodo.
+    int tag_el; //!< Default tag for new elemental load.
+    int tag_nl; //!< Default tag for new nodal load.
+    int tag_spc; //!< Default tag for new imposed node displacement.
 
     template <class TS>
     TimeSeries *crea_time_series(const std::string &);
@@ -168,14 +167,15 @@ LoadPattern *XC::MapLoadPatterns::crea_load_pattern(const std::string &cod_lp)
                 lp->setTimeSeries(its->second);
                 lp->set_owner(this);
                 loadpatterns[cod_lp]= lp;
-                //Si no hay mas lo convertimos en el caso por defecto.
+                //If there is the only we make it the default case.
                 if(loadpatterns.empty())
                   lpcode= cod_lp;
               }
           }
         else
 	  std::cerr << "MapLoadPatterns; ERROR " 
-                    << ", no se encontró la función de modulación: " << nmb_ts << std::endl;
+                    << ", time series: " << nmb_ts
+		    << " not found." << std::endl;
       }
     return lp;
   }

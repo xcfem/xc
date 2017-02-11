@@ -220,7 +220,7 @@ int XC::EigenIntegrator::formNodTangM(DOF_Group *theDof)
 int XC::EigenIntegrator::update(const XC::Vector &deltaU)
   { return 0; }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones de eigenvalues.
+//! @brief Returns a pointer to the system of equations de eigenvalues.
 XC::EigenSOE *XC::EigenIntegrator::getEigenSOEPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -228,7 +228,7 @@ XC::EigenSOE *XC::EigenIntegrator::getEigenSOEPtr(void)
     return sm->getEigenSOEPtr();
   }
 
-//! @brief Devuelve un puntero al sistema de ecuaciones de eigenvalues.
+//! @brief Returns a pointer to the system of equations de eigenvalues.
 const XC::EigenSOE *XC::EigenIntegrator::getEigenSOEPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();

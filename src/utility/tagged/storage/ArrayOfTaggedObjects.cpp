@@ -279,7 +279,7 @@ bool XC::ArrayOfTaggedObjects::removeComponent(int tag)
 int XC::ArrayOfTaggedObjects::getNumComponents(void) const
   { return numComponents; }
 
-//! @brief Devuelve un puntero al objeto cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to the objeto cuyo índice se pasa como parámetro.
 XC::TaggedObject *XC::ArrayOfTaggedObjects::getComponentPtr(int tag)
   {
 
@@ -305,7 +305,7 @@ XC::TaggedObject *XC::ArrayOfTaggedObjects::getComponentPtr(int tag)
     return 0;
   }
 
-//! @brief Devuelve un puntero al objeto cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to the objeto cuyo índice se pasa como parámetro.
 const XC::TaggedObject *XC::ArrayOfTaggedObjects::getComponentPtr(int tag) const
   {
 

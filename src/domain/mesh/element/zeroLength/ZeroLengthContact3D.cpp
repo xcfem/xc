@@ -95,7 +95,7 @@ XC::ZeroLengthContact3D::ZeroLengthContact3D(int tag,int Nd1, int Nd2, int direc
   
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ZeroLengthContact3D::ZeroLengthContact3D(int tag)
   :ZeroLengthContact(ELE_TAG_ZeroLengthContact3D,3),     
   stickPt(2),  xi(2), origin(2) ,T1(3*numNodos()), T2(3*numNodos())

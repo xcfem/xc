@@ -45,7 +45,7 @@ namespace XC{
 //
 //! @ingroup CadMR
 //
-//! @brief Matriz de punteros a elementos.
+//! @brief Matriz de pointers to elementos.
 class MatrizPtrElem: public MatrizPtrBase<Element>
   {
   protected:

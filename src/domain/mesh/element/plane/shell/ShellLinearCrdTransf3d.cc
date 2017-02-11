@@ -36,7 +36,7 @@
 #include "domain/mesh/element/utils/NodePtrs.h"
 #include "domain/mesh/element/plane/shell/R3vectors.h"
 
-//! @brief Constructor por defecto
+//! @brief Default constructor
 XC::ShellLinearCrdTransf3d::ShellLinearCrdTransf3d(void)
   : ShellCrdTransf3dBase() {}
 

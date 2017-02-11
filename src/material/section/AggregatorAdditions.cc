@@ -33,7 +33,7 @@
 #include "utility/actor/actor/MovableID.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-//! @brief Comprueba que los punteros no sean nulos.
+//! @brief Comprueba que los pointers no sean nulos.
 bool XC::AggregatorAdditions::check_ptrs(void) const
   {
     if(!matCodes)
@@ -59,7 +59,7 @@ void XC::AggregatorAdditions::alloc_ptrs(const ResponseId *addCodes)
        alloc_ptrs(*addCodes);
      else
        std::cerr << "AggregatorAdditions::alloc_ptrs;"
-                 << " se pasó un puntero nulo." << std::endl;
+                 << " se pasó a null pointer." << std::endl;
   }
 
 //! @brief Libera memoria.

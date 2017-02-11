@@ -52,11 +52,11 @@ XC::NodeLoader::NodeLoader(Preprocessor *preprocessor)
 XC::NodeLoader::~NodeLoader(void)
   { libera(); }
 
-//! @brief Devuelve el tag por defecto para el siguiente nodo.
+//! @brief Returns the default value for next node.
 int XC::NodeLoader::getDefaultTag(void) const
   { return Node::getDefaultTag().getTag(); }
 
-//! @brief Asigna el tag por defecto para el siguiente nodo.
+//! @brief Sets the default value for next node.
 void XC::NodeLoader::setDefaultTag(const int &tag)
   { Node::getDefaultTag().setTag(tag); }
 

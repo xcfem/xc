@@ -99,7 +99,7 @@ void XC::ElasticBeam2d::set_transf(const CrdTransf *trf)
           }
       }
     else
-      std::cerr << "ElasticBeam2d::set_transf; se pasó un puntero nulo." << std::endl;
+      std::cerr << "ElasticBeam2d::set_transf; se pasó a null pointer." << std::endl;
   }
 
 XC::ElasticBeam2d::ElasticBeam2d(int tag)

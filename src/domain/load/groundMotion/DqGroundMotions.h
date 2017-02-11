@@ -50,7 +50,7 @@ namespace XC {
     typedef dq_ptr_GroundMotions::iterator iterator;
     typedef dq_ptr_GroundMotions::const_iterator const_iterator;
 
-    dq_ptr_GroundMotions gMotions; //!< Cola de punteros a GroundMotion.
+    dq_ptr_GroundMotions gMotions; //!< Cola de pointers to GroundMotion.
 
 
 

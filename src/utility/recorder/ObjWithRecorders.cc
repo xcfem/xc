@@ -198,7 +198,7 @@ int XC::ObjWithRecorders::removeRecorders(void)
     return 0;
   }
 
-//! @brief Asigna el dominio a los recorders.
+//! @brief Asigna el domain a los recorders.
 void XC::ObjWithRecorders::setLinks(Domain *ptr_dom)
   {
     if(ptr_dom)
@@ -211,7 +211,7 @@ void XC::ObjWithRecorders::setLinks(Domain *ptr_dom)
           }
       }
     else
-      std::cerr << "ObjWithRecorders::setLinks; el dominio no está asignado." << std::endl;
+      std::cerr << "ObjWithRecorders::setLinks; el domain no está asignado." << std::endl;
   }
 
 //! @brief Asigna el almacén de gestores de salida.

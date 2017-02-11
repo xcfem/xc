@@ -129,7 +129,7 @@ void XC::BandArpackSolver::print_err_info(int info)
        }
   }
 
-//! @brief Resuelve el problema de eigenvalues.
+//! @brief Solves the eigenproblem.
 int XC::BandArpackSolver::solve(void)
   {
     if(theSOE == 0)
@@ -159,7 +159,7 @@ int XC::BandArpackSolver::solve(void)
     int *iPIV = iPiv.getDataPtr(); //Índices de los pivotes.
 
     if(numModes==n)
-      std::cerr << "BandArpackSolver::solve; el número de modos a calcular ("
+      std::cerr << "BandArpackSolver::solve; the número de modos a calcular ("
                 << numModes << ") debe ser inferior a N= "
                 << n << ".\n" << std::endl;
     int nev= numModes;
@@ -377,7 +377,7 @@ void XC::BandArpackSolver::myCopy(int n, double *v, double *result)
       { result[i] = v[i]; }
   }
 
-//! @brief Asigna el problema de eigenvalues a resolver.
+//! @brief Sets the eigenproblem to solve.
 bool XC::BandArpackSolver::setEigenSOE(EigenSOE *soe)
   {
     bool retval= false;
@@ -388,15 +388,15 @@ bool XC::BandArpackSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::setEigenSOE: el sistema de ecuaciones no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << nombre_clase() << "::setEigenSOE: the system of equations no es del tipo adecuado para este solver." << std::endl;
     return retval;
   }
 
-//! @brief Asigna el problema de eigenvalues a resolver.
+//! @brief Sets the eigenproblem to solve.
 bool XC::BandArpackSolver::setEigenSOE(BandArpackSOE &theBandSOE)
   { return setEigenSOE(&theBandSOE); }
 
-//! @brief Devuelve el autovector correspondiente al modo being passed as parameter.
+//! @brief Devuelve the autovector correspondiente al modo being passed as parameter.
 const XC::Vector &XC::BandArpackSolver::getEigenvector(int mode) const
   {
     if(mode <= 0 || mode > numModes)
@@ -423,7 +423,7 @@ const XC::Vector &XC::BandArpackSolver::getEigenvector(int mode) const
   }
 
 
-//! @brief Devuelve el autovalor correspondiente al modo being passed as parameter.
+//! @brief Devuelve the autovalor correspondiente al modo being passed as parameter.
 const double &XC::BandArpackSolver::getEigenvalue(int mode) const
   {
     static double retval= 0.0;
@@ -442,7 +442,7 @@ const double &XC::BandArpackSolver::getEigenvalue(int mode) const
     return retval;
   }
 
-//! @brief Establece el tamaño del problema.
+//! @brief Establece the tamaño del problema.
 int XC::BandArpackSolver::setSize(void)
   {
     int size = theSOE->size;

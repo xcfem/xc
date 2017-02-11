@@ -79,9 +79,7 @@ namespace XC {
 
 //! @ingroup LinearSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de sistemas de ecuaciones lineales
-//! empleando la biblioteca SuperLU (http://crd.lbl.gov/~xiaoye/SuperLU).
+//! @brief <a href="https://launchpad.net/ubuntu/+source/superlu" target="_new"> SuperLU</a> based sparse general matrix linear SOE solver.
 class SuperLU : public SparseGenColLinSolver
   {
   private:

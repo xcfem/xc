@@ -35,10 +35,7 @@ namespace XC {
 
 //! @ingroup EigenSOE
 //
-//! @brief Sistema de ecuaciones correspondiente
-//! a un problema de eigenvalues en cuya solución
-//! se empleará la biblioteca
-//! ArPack (http://www.caam.rice.edu/software/ARPACK)
+//! @brief <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack++</a> based system of equations.
 class ArpackSOE : public EigenSOE
   {
   protected:

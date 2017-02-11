@@ -88,7 +88,7 @@ bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &cod_
 	  }
       }
     else
-      std::cerr << "ProcSolu::alloc_analysis; no se encontró el método de análisis: '"
+      std::cerr << "ProcSolu::alloc_analysis; no se encontró el analysis method: '"
                 << cod_solu_metodo << "' para el comando: " << nmb << std::endl;
     if(theAnalysis)
       theAnalysis->set_owner(this);
@@ -105,10 +105,10 @@ void XC::ProcSolu::copia_analysis(Analysis *ptr)
         theAnalysis->set_owner(this);
       }
     else
-     std::cerr << "ProcSolu::copia_analysis; se pasó un puntero nulo." << std::endl;
+     std::cerr << "ProcSolu::copia_analysis; se pasó a null pointer." << std::endl;
   }
 
-//! @brief Define el tipo de análisis (estático, dinámico,...)
+//! @brief Define el analysis type (estático, dinámico,...)
 XC::Analysis &XC::ProcSolu::newAnalysis(const std::string &nmb,const std::string &cod_solu_metodo,const std::string &cod_solu_eigenM)
   {
     alloc_analysis(nmb,cod_solu_metodo,cod_solu_eigenM);
@@ -121,7 +121,7 @@ void XC::ProcSolu::libera(void)
     libera_analysis();
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ProcSolu::ProcSolu(ProblemaEF *owr)
   : EntCmd(owr), solu_control(this), theAnalysis(nullptr) {}
 
@@ -173,7 +173,7 @@ const XC::Domain *XC::ProcSolu::getDomainPtr(void) const
     return prb->getDomain();
   }
 
-//! @brief Devuelve un puntero al integrador.
+//! @brief Returns a pointer to the integrator.
 XC::Integrator *XC::ProcSolu::getIntegratorPtr(void)
   {
     Integrator *retval= nullptr;
@@ -182,7 +182,7 @@ XC::Integrator *XC::ProcSolu::getIntegratorPtr(void)
     return retval;
   }
 
-//! @brief Devuelve un puntero al integrador.
+//! @brief Returns a pointer to the integrator.
 const XC::Integrator *XC::ProcSolu::getIntegratorPtr(void) const
   {
     const Integrator *retval= nullptr;
@@ -198,7 +198,7 @@ XC::DataOutputHandler::map_output_handlers *XC::ProcSolu::getOutputHandlers(void
     return prb->getOutputHandlers();
   }
 
-//! @brief Devuelve un puntero al DomainSolver.
+//! @brief Returns a pointer to the DomainSolver.
 const XC::DomainSolver *XC::ProcSolu::getDomainSolverPtr(void) const
   {
     const DomainSolver *retval= nullptr;
@@ -207,7 +207,7 @@ const XC::DomainSolver *XC::ProcSolu::getDomainSolverPtr(void) const
     return retval;
   }
 
-//! @brief Devuelve un puntero al DomainSolver.
+//! @brief Returns a pointer to the DomainSolver.
 XC::DomainSolver *XC::ProcSolu::getDomainSolverPtr(void)
   {
     DomainSolver *retval= nullptr;
@@ -216,7 +216,7 @@ XC::DomainSolver *XC::ProcSolu::getDomainSolverPtr(void)
     return retval;
   }
 
-//! @brief Devuelve un puntero al subdominio.
+//! @brief Returns a pointer to the subdomain.
 const XC::Subdomain *XC::ProcSolu::getSubdomainPtr(void) const
   {
     const Subdomain *retval= nullptr;
@@ -225,7 +225,7 @@ const XC::Subdomain *XC::ProcSolu::getSubdomainPtr(void) const
     return retval;
   }
 
-//! @brief Devuelve un puntero al subdominio.
+//! @brief Returns a pointer to the subdomain.
 XC::Subdomain *XC::ProcSolu::getSubdomainPtr(void)
   {
     Subdomain *retval= nullptr;
@@ -244,11 +244,11 @@ XC::ProcSoluControl &XC::ProcSolu::getSoluControl(void)
 const XC::ProcSoluControl &XC::ProcSolu::getSoluControl(void) const
   { return solu_control; }
 
-//! @brief Devuelve un puntero al análisis.
+//! @brief Returns a pointer to the analysis.
 XC::Analysis *XC::ProcSolu::getAnalysisPtr(void)
   { return theAnalysis; }
 
-//! @brief Devuelve un puntero al análisis.
+//! @brief Returns a pointer to the analysis.
 const XC::Analysis *XC::ProcSolu::getAnalysisPtr(void) const
   { return theAnalysis; }
 

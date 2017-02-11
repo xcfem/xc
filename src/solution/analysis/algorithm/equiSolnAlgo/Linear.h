@@ -72,7 +72,8 @@ namespace XC {
 
 //! @ingroup EQSolAlgo
 //
-//! @brief Emplea la solución obtenida en una sola iteración.
+//! @brief performs a linear solution algorihm
+//! to solve the equations.
 class Linear: public EquiSolnAlgo
   {
     int resuelve();

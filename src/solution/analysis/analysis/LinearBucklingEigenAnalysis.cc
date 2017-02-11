@@ -41,7 +41,7 @@
 XC::LinearBucklingEigenAnalysis::LinearBucklingEigenAnalysis(SoluMethod *metodo)
   :EigenAnalysis(metodo) {}
 
-//! @brief Ejecuta el análisis.
+//! @brief Performs the analysis.
 int XC::LinearBucklingEigenAnalysis::setupPreviousStep(void)
   {
     int result = 0;
@@ -65,15 +65,15 @@ int XC::LinearBucklingEigenAnalysis::setupPreviousStep(void)
     return result;
   }
 
-//! @brief Asigna el algoritmo a emplear en el análisis.
+//! @brief Asigna el algoritmo to use in the analysis.
 int XC::LinearBucklingEigenAnalysis::setAlgorithm(LinearBucklingAlgo &theAlgo)
   { return EigenAnalysis::setAlgorithm(theAlgo); }
 
-//! @brief Asigna el integrador a emplear en el análisis.
+//! @brief Asigna el integrator to use in the analysis.
 int XC::LinearBucklingEigenAnalysis::setIntegrator(LinearBucklingIntegrator &theIntegrator)
   { return EigenAnalysis::setIntegrator(theIntegrator); }
 
-//! @brief Asigna el sistema de eigenvalues a emplear en el análisis.
+//! @brief Asigna el sistema de eigenvalues to use in the analysis.
 int XC::LinearBucklingEigenAnalysis::setEigenSOE(ArpackSOE &theSOE)
   { return EigenAnalysis::setEigenSOE(theSOE); }
 

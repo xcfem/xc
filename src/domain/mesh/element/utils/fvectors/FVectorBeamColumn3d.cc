@@ -29,7 +29,7 @@
 #include "FVectorBeamColumn3d.h"
 #include <utility/matrix/Vector.h>
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::FVectorBeamColumn3d::FVectorBeamColumn3d(void)
   { zero(); }
 

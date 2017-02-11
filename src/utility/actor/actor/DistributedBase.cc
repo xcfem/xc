@@ -42,7 +42,7 @@ XC::DbTagData &XC::DistributedBase::getDbTagData(void) const
   {
     static DbTagData retval(0);
     std::string nmb= typeid(*this).name();
-    std::cerr << nmb << "; la función getDbTagData debe redefinirse en la clase."
+    std::cerr << nmb << "; function getDbTagData must be overloaded."
               << std::endl;
     return retval;
   }

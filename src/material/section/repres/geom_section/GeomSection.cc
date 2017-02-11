@@ -112,7 +112,7 @@ const XC::SisRefScc *XC::GeomSection::get_reference_system(const size_t &id) con
     return retval;
   }
 
-//! @brief Devuelve un puntero al punto cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the punto cuyo identificador se pasa como parámetro.
 XC::Spot *XC::GeomSection::busca_spot(const size_t &id)
   {
     Spot *retval= nullptr;
@@ -122,7 +122,7 @@ XC::Spot *XC::GeomSection::busca_spot(const size_t &id)
     return retval;
   }
 
-//! @brief Devuelve un puntero al punto cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the punto cuyo identificador se pasa como parámetro.
 const XC::Spot *XC::GeomSection::busca_spot(const size_t &id) const
   {
     Spot *retval= nullptr;
@@ -132,7 +132,7 @@ const XC::Spot *XC::GeomSection::busca_spot(const size_t &id) const
     return retval;
   }
 
-//! @brief Devuelve un puntero al eje cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the eje cuyo nombre se pasa como parámetro.
 XC::Eje *XC::GeomSection::busca_eje(const size_t &id)
   {
     Eje *retval= nullptr;
@@ -142,7 +142,7 @@ XC::Eje *XC::GeomSection::busca_eje(const size_t &id)
     return retval;
   }
 
-//! @brief Devuelve un puntero al eje cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the eje cuyo nombre se pasa como parámetro.
 const XC::Eje *XC::GeomSection::busca_eje(const size_t &id) const
   {
     const Eje *retval= nullptr;

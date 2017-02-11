@@ -93,7 +93,7 @@ void XC::DqPtrsNode::agrega(const DqPtrsNode &otro)
 //       }
 //   }
 
-//! @brief Vacía la lista de punteros y elimina las propiedades que pudiera tener el objeto.
+//! @brief Vacía la lista de pointers y elimina las propiedades que pudiera tener el objeto.
 void XC::DqPtrsNode::clearAll(void)
   {
     DqPtrs<Node>::clear();
@@ -147,7 +147,7 @@ void XC::DqPtrsNode::transforma(const TrfGeom &trf)
     crea_arbol();
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag)
   {
@@ -168,7 +168,7 @@ XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 const XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag) const
   {

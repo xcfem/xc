@@ -63,7 +63,7 @@ int mygenmmd_(int *neq, int *fxadj, int *adjncy, int *winvp,
 		     int *sibling, int *marker, int *maxint, int *nofsub,
 		     int *kdx)
   {
-    printf("No se encuentra la definición de esta función.\n");
+    printf("Function definition not found.\n");
     return 0;
   }
 void gennd(int neqns, int **padj, int *mask, int *perm, 
@@ -252,7 +252,7 @@ int XC::symFactorization(int *fxadj, int *adjncy, int neq, int LSPARSE,
 //    }
 
 //   return(nblks);
-  std::cerr << "XC::symFactorization; no funciona" << std::endl;
+  std::cerr << "XC::symFactorization; doesn't work." << std::endl;
   return 0;
 }
 

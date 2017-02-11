@@ -88,7 +88,7 @@ XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
             if(preprocessor)
               retval= &preprocessor->getMaterialLoader();
             else
-              std::cerr << "ZeroLengthMaterials::get_material_loader; el puntero al preprocesador es nulo." << std::endl;
+              std::cerr << "ZeroLengthMaterials::get_material_loader; the pointer al preprocesador es nulo." << std::endl;
           }
         else
           std::cerr << "ZeroLengthMaterials::get_material_loader; el propietario no es un elemento." << std::endl;
@@ -101,7 +101,7 @@ XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
 void XC::ZeroLengthMaterials::push_back(const int &dir,const UniaxialMaterial *t)
   {
     if(!t)
-      std::cerr << "XC::DqUniaxialMaterial::push_back; se pasó un puntero a material nulo." << std::endl;
+      std::cerr << "XC::DqUniaxialMaterial::push_back; se pasó a pointer a material nulo." << std::endl;
     else
       {
         UniaxialMaterial *tmp= nullptr;
@@ -119,7 +119,7 @@ void XC::ZeroLengthMaterials::push_back(const int &dir,const UniaxialMaterial *t
 void XC::ZeroLengthMaterials::push_front(const int &dir,const UniaxialMaterial *t)
   {
     if(!t)
-      std::cerr << "XC::DqUniaxialMaterial::push_front; se pasó un puntero a material nulo." << std::endl;
+      std::cerr << "XC::DqUniaxialMaterial::push_front; se pasó a pointer a material nulo." << std::endl;
     else
       {
         UniaxialMaterial *tmp= nullptr;

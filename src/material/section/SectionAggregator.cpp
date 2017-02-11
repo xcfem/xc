@@ -81,7 +81,7 @@ double XC::SectionAggregator::workArea[2*maxOrder*(maxOrder+1)];
 //int    XC::SectionAggregator::codeArea[maxOrder]; Not sharing area anymore
 //                                                  LCPT 19/09/2016
 
-//! @brief Comprueba que los punteros no sean nulos.
+//! @brief Comprueba que los pointers no sean nulos.
 void XC::SectionAggregator::check_ptrs(void) const
   {
     if(!theCode || !def || !defzero || !s || !ks || !fs )
@@ -216,7 +216,7 @@ XC::SectionAggregator::SectionAggregator(int tag,MaterialLoader *mat_ldr)
   : SeccionBarraPrismatica(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this), 
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr){}
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::SectionAggregator::SectionAggregator(MaterialLoader *mat_ldr)
   : SeccionBarraPrismatica(0, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr) {}
@@ -240,7 +240,7 @@ XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator 
         (*theCode)= (*otro.theCode);
       }
     else
-      std::cerr << "XC::SectionAggregator::operator=; puntero nulo en matCodes." << std::endl;
+      std::cerr << "XC::SectionAggregator::operator=; null pointer en matCodes." << std::endl;
     return *this;
   }
 

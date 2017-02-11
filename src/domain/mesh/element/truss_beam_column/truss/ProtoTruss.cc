@@ -43,7 +43,7 @@
  XC::Vector XC::ProtoTruss::trussV6(6);
  XC::Vector XC::ProtoTruss::trussV12(12);
 
-//! Constructor por defecto.
+//! Default constructor.
 XC::ProtoTruss::ProtoTruss(int tag, int classTag,int Nd1,int Nd2,int ndof,int ndim)
   : Element1D(tag,classTag,Nd1,Nd2),numDOF(ndof),dimSpace(ndim), theMatrix(nullptr), theVector(nullptr)
   {}

@@ -85,7 +85,7 @@ int XC::ImposedMotionBase::getMotion(void)
   {
     if(!theNode)
       {
-        std::cerr << "ImposedMotionBase::getMotion - puntero a nodo nulo."
+        std::cerr << "ImposedMotionBase::getMotion - pointer to nodo nulo."
                   <<  getNodeTag() <<  "\n";
       }
     if(!theGroundMotion)

@@ -76,7 +76,7 @@ class AnalysisModel;
 
 //! @ingroup Analisis
 //
-//! @defgroup AnalisisFE Coacciones para los grados de libertad del análisis.
+//! @defgroup AnalisisFE Coacciones para los grados de libertad of the analysis.
 //
 //! @ingroup AnalisisFE
 //

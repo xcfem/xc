@@ -65,7 +65,7 @@
 #include <utility/tagged/storage/TaggedObjectIter.h>
 #include <utility/tagged/storage/TaggedObjectStorage.h>
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::VertexIter::VertexIter(void)
   :myIter(nullptr) {}
 

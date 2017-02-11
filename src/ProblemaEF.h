@@ -85,7 +85,7 @@ class ProblemaEF: public EntCmd
   {
     mutable DataOutputHandler::map_output_handlers output_handlers; //Manejadores para salida de resultados.
     Preprocessor preprocessor; //!< Objeto encargado de crear el modelo.
-    ProcSolu proc_solu; //!< Procedimiento de solución.
+    ProcSolu proc_solu; //!< Solution procedure.
     MapFields fields; //!< Definición de campos para salida de resultados.
     FE_Datastore *dataBase; //!< Base de datos para salvar estados.
     static FEM_ObjectBrokerAllClasses theBroker;
@@ -107,9 +107,9 @@ class ProblemaEF: public EntCmd
     inline Preprocessor &getPreprocessor(void)
       { return preprocessor; }
     inline Domain *getDomain(void)
-      { return preprocessor.GetDominio(); }
+      { return preprocessor.getDomain(); }
     inline const Domain *getDomain(void) const
-      { return preprocessor.GetDominio(); }
+      { return preprocessor.getDomain(); }
     inline const ProcSolu &getSoluProc(void) const
       { return proc_solu; }
     inline ProcSolu &getSoluProc(void)

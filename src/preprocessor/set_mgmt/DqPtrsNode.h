@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //DqPtrsNode.h
-//deque de punteros a nodo.
+//deque de pointers to node.
 
 
 #ifndef DQPTRSNODE_H
@@ -42,7 +42,7 @@ class TrfGeom;
 
 //!  \ingroup Set
 //! 
-//!  \brief Contenedor de punteros a nodos.
+//!  \brief Contenedor de pointers to nodes.
 //! 
 class DqPtrsNode: public DqPtrs<Node>
   {

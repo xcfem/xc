@@ -95,7 +95,7 @@ class MaterialVector: public std::vector<MAT *>, public EntCmd, public MovableOb
     int recvSelf(const CommParameters &);
   };
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 template <class MAT>
 MaterialVector<MAT>::MaterialVector(const size_t &nMat,const MAT *matModel)
   : std::vector<MAT *>(nMat,nullptr), MovableObject(MAT_VECTOR_TAG)

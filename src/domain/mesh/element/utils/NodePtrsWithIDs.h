@@ -41,7 +41,7 @@ class FEM_ObjectBroker;
 
 //! \ingroup FEMisc
 //
-//! @brief Elemento con punteros a nodos
+//! @brief Elemento con pointers to nodes
 class NodePtrsWithIDs: public NodePtrs, public MovableObject
   {
   protected:

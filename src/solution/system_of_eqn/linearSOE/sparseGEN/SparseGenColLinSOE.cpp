@@ -77,7 +77,7 @@ bool XC::SparseGenColLinSOE::setSolver(LinearSOESolver *newSolver)
     if(tmp)
       retval= SparseGenSOEBase::setSolver(tmp);
     else
-      std::cerr << "SparseGenColLinSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
+      std::cerr << "SparseGenColLinSOE::setSolver; solver incompatible con system of equations." << std::endl;
     return retval;
   }
 

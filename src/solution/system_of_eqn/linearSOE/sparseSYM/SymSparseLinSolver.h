@@ -51,9 +51,7 @@ class SymSparseLinSOE;
 
 //! @ingroup Solver
 //
-//! @brief Objetos que se encargan de la solución
-//! de sistemas de ecuaciones con matriz dispersa
-//! simétrica.
+//! @brief Solver for symmetric sparse linear SOE.
 class SymSparseLinSolver : public LinearSOESolver
   {
   private:

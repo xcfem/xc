@@ -112,7 +112,7 @@ size_t XC::SetEstruct::Dimension(void) const
     return retval;
   }
 
-//! @brief Devuelve los punteros a los nodos del conjunto.
+//! @brief Devuelve los pointers to los nodos del conjunto.
 XC::NodePtrSet XC::SetEstruct::getNodePtrSet(void)
   {
     NodePtrSet retval;

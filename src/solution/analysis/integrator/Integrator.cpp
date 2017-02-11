@@ -89,16 +89,16 @@ void XC::Integrator::setRayleighDampingFactors(const RayleighDampingFactors &rF)
 int XC::Integrator::commitModel(void)
   { return getAnalysisModelPtr()->commitDomain(); }
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a pointer to the solution method that owns this object.
 XC::SoluMethod *XC::Integrator::getSoluMethod(void)
   { return dynamic_cast<SoluMethod *>(Owner()); }
 
-//! @brief Devuelve un puntero al modelo de solución al que pertenece.
+//! @brief Returns a const pointer to the solution method that owns this object.
 const XC::SoluMethod *XC::Integrator::getSoluMethod(void) const
   { return dynamic_cast<const SoluMethod *>(Owner()); }
 
 
-//! @brief Devuelve un puntero al modelo de análisis.
+//! @brief Returns a pointer to the analysis model.
 const XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -106,7 +106,7 @@ const XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void) const
     return sm->getAnalysisModelPtr();
   }
 
-//! @brief Devuelve un puntero al modelo de análisis.
+//! @brief Returns a pointer to the analysis model.
 XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void)
   {
     const SoluMethod *sm= getSoluMethod();
@@ -114,7 +114,7 @@ XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void)
     return sm->getAnalysisModelPtr();
   }
 
-//! @brief Hace los cambios oportunos cuando se ha producido un cambio en el dominio.
+//! @brief Hace los cambios oportunos cuando se ha producido un cambio en el domain.
 int XC::Integrator::domainChanged(void)
   { return 0; }
 

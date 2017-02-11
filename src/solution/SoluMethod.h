@@ -124,7 +124,7 @@ class SoluMethod: public EntCmd
     const EigenSOE *getEigenSOEPtr(void) const;
     Integrator &newIntegrator(const std::string &, const Vector &);
 
-    //! @brief Devuelve un puntero al integrador.
+    //! @brief Returns a pointer to the integrator.
     inline Integrator *getIntegratorPtr(void)
       { return theIntegrator; }
     inline const Integrator *getIntegratorPtr(void) const
@@ -136,7 +136,7 @@ class SoluMethod: public EntCmd
     StaticIntegrator *getStaticIntegratorPtr(void);
     SystemOfEqn &newSystemOfEqn(const std::string &);
 
-    //! @brief Devuelve un puntero al algoritmo de solución.
+    //! @brief Returns a pointer to the solution algorithm.
     inline SolutionAlgorithm *getSolutionAlgorithmPtr(void)
       { return theSolnAlgo; }
     inline const SolutionAlgorithm *getSolutionAlgorithmPtr(void) const

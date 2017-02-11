@@ -37,7 +37,7 @@
 
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-//! @brief Pone a cero los punteros a nodo y los cosenos directores.
+//! @brief Pone a cero los pointers to node y los cosenos directores.
 void XC::Spring::inicializa(void)
   {
     // set node pointers to nullptr

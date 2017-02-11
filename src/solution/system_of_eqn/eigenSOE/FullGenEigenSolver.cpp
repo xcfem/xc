@@ -109,9 +109,9 @@ int XC::FullGenEigenSolver::solve(int nEigen)
     numModes = nEigen;
     if(numModes > n)
       {
-	std::clog << "FullGenEigenSolver::solve; el número de modos: " << numModes
+	std::clog << "FullGenEigenSolver::solve; the número de modos: " << numModes
                   << " es superior al máximo: " << n 
-                  << " se adopta el máximo." << std::endl;
+                  << " se adopta the máximo." << std::endl;
         numModes = n;
       }
 
@@ -242,7 +242,7 @@ int XC::FullGenEigenSolver::setSize(void)
 const int &XC::FullGenEigenSolver::getSize(void) const
   { return theSOE->size; }
 
-//! @brief Asigna el problema de eigenvalues a resolver.
+//! @brief Sets the eigenproblem to solve.
 bool XC::FullGenEigenSolver::setEigenSOE(EigenSOE *soe)
   {
     bool retval= false;
@@ -253,11 +253,11 @@ bool XC::FullGenEigenSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::setEigenSOE: el sistema de ecuaciones no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << nombre_clase() << "::setEigenSOE: the system of equations no es del tipo adecuado para este solver." << std::endl;
     return retval;
   }
 
-//! @brief Asigna el problema de eigenvalues a resolver.
+//! @brief Sets the eigenproblem to solve.
 bool XC::FullGenEigenSolver::setEigenSOE(FullGenEigenSOE &thesoe)
   { return setEigenSOE(&thesoe); }
 

@@ -34,7 +34,7 @@
 
 #include "boost/lexical_cast.hpp"
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 XC::Element *XC::MatrizPtrElem::buscaElemento(const int &tag)
   {
@@ -58,7 +58,7 @@ XC::Element *XC::MatrizPtrElem::buscaElemento(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 const XC::Element *XC::MatrizPtrElem::buscaElemento(const int &tag) const
   {

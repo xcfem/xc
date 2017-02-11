@@ -148,7 +148,7 @@
 #include "material/yieldSurface/plasticHardeningMaterial/MultiLinearKp.h"
 #include "material/yieldSurface/plasticHardeningMaterial/NullPlasticMaterial.h"
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::MaterialLoader::MaterialLoader(Preprocessor *owr)
   : Loader(owr), tag_mat(0) {}
 
@@ -681,7 +681,7 @@ XC::MaterialLoader::const_iterator XC::MaterialLoader::find(const std::string &n
 XC::MaterialLoader::iterator XC::MaterialLoader::find(const std::string &nmb)
   { return materials.find(nmb); }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb)
   {
@@ -692,7 +692,7 @@ XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb)
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 const XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb) const
   {
@@ -703,7 +703,7 @@ const XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb) const
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 XC::Material *XC::MaterialLoader::find_ptr(const int &tag)
   {
@@ -718,7 +718,7 @@ XC::Material *XC::MaterialLoader::find_ptr(const int &tag)
     return retval;
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 const XC::Material *XC::MaterialLoader::find_ptr(const int &tag) const
   {
@@ -733,7 +733,7 @@ const XC::Material *XC::MaterialLoader::find_ptr(const int &tag) const
     return retval;
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nmb)
   {
@@ -744,7 +744,7 @@ XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nm
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 const XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nmb) const
   {
@@ -755,7 +755,7 @@ const XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::stri
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const std::string &nmb)
   {
@@ -766,7 +766,7 @@ XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const s
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 const XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const std::string &nmb) const
   {
@@ -777,7 +777,7 @@ const XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(c
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(const std::string &nmb)
   {
@@ -788,7 +788,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(con
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un puntero al mismo,
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
 //! en otro caso devuelve nullptr.
 const XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(const std::string &nmb) const
   {

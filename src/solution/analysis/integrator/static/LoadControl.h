@@ -71,7 +71,7 @@ namespace XC {
 //! @ingroup StaticIntegrator
 //
 //! @brief Especifica el factor incremental a aplicar a las cargas para cada
-//! paso del análisis.
+//! paso of the analysis.
 class LoadControl : public BaseControl
   {
   private:

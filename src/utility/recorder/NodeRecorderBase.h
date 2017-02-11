@@ -39,7 +39,7 @@ class DataOutputHandler;
  class ID;
 
 //! @brief Se emplea como base de los recorders que obtienen
-//! la respuesta de uno o más nodos durante el análisis.
+//! la respuesta de uno o más nodos during the analysis.
 class NodeRecorderBase: public MeshCompRecorder
   {
   protected:	

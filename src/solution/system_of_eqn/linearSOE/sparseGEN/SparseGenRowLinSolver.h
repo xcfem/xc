@@ -69,8 +69,8 @@ class SparseGenRowLinSOE;
 
 //! @ingroup LinearSolver
 //
-//! @brief Objeto encargado de obtener la solución
-//! de un sistemas de ecuaciones lineal con matriz dispersa no simétrica.
+//! @brief Base class for sparse general matrix
+//! linear SOE solvers.
 class SparseGenRowLinSolver : public LinearSOESolver
   {
   protected:

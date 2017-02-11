@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //DqPtrsNmb.h
-//deque de punteros (se emplear en la clase Set).
+//deque de pointers (se emplear en la clase Set).
 
 
 #ifndef DQPTRSNMB_H
@@ -59,7 +59,7 @@ class DqPtrsNmb: public DqPtrs<T>
 
   };
 
-//! @brief Devuelve un puntero al objeto cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the objeto cuyo nombre se pasa como parámetro.
 template <class T>
 T *DqPtrsNmb<T>::BuscaNmb(const std::string &nmb)
   {

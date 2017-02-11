@@ -78,14 +78,14 @@ void XC::EntMdlr::set_indice(const size_t &i)
 //! @brief Interfaz con VTK.
 int XC::EntMdlr::getVtkCellType(void) const
   {
-    std::cerr << "EntMdlr::getVtkCellType: la función getVtkCellType debe definirse en las clases derivadas." << std::endl;
+    std::cerr << "EntMdlr::getVtkCellType: function getVtkCellType must be overloaded in derived classes." << std::endl;
     return VTK_EMPTY_CELL;
   }
 
 //! @brief Interfaz con el formato MED de Salome.
 int XC::EntMdlr::getMEDCellType(void) const
   {
-    std::cerr << "EntMdlr::getMEDCellType: la función getMEDCellType debe definirse en las clases derivadas." << std::endl;
+    std::cerr << "EntMdlr::getMEDCellType: function getMEDCellType must be overloaded in derived classes." << std::endl;
     return MED_NONE;
   }
 
@@ -96,14 +96,14 @@ void XC::EntMdlr::clearAll(void)
     BorraPtrNodElem();
   }
 
-//! @brief Borra los punteros a nodos y elementos.
+//! @brief Borra los pointers to nodes y elementos.
 void XC::EntMdlr::BorraPtrNodElem(void)
   {
     nodos.clearAll();
     elementos.clearAll();
   }
 
-//! @brief Devuelve un puntero al nodo cuyos índices se pasan como parámetros.
+//! @brief Returns a pointer to the nodo cuyos índices se pasan como parámetros.
 XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   {
     if(!nodos.Null())
@@ -112,7 +112,7 @@ XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al nodo cuyos índices se pasan como parámetros.
+//! @brief Returns a pointer to the nodo cuyos índices se pasan como parámetros.
 const XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   {
     if(!nodos.Null())
@@ -140,7 +140,7 @@ XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
 std::vector<int> XC::EntMdlr::getTagsNodos(void) const
   { return nodos.getTags(); }
 
-//! @brief Devuelve un puntero al elemento cuyos índices se pasan como parámetros.
+//! @brief Returns a pointer to the elemento cuyos índices se pasan como parámetros.
 XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size_t &k)
   {
     if(!elementos.Null())
@@ -149,7 +149,7 @@ XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size
       return nullptr;
   }
 
-//! @brief Devuelve un puntero al elemento cuyos índices se pasan como parámetros.
+//! @brief Returns a pointer to the elemento cuyos índices se pasan como parámetros.
 const XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size_t &k) const
   {
     if(!elementos.Null())
@@ -169,16 +169,16 @@ const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
     return this_no_const->getNearestElement(p);
   }
 
-//! @brief Devuelve un puntero al nodo cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo identificador se pasa como parámetro.
 XC::Node *XC::EntMdlr::buscaNodo(const int &tag)
   { return nodos.buscaNodo(tag); }
-//! @brief Devuelve un puntero al nodo cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo identificador se pasa como parámetro.
 const XC::Node *XC::EntMdlr::buscaNodo(const int &tag) const
   { return nodos.buscaNodo(tag); }
-//! @brief Devuelve un puntero al elemento cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the elemento cuyo identificador se pasa como parámetro.
 XC::Element *XC::EntMdlr::buscaElemento(const int &tag)
   { return elementos.buscaElemento(tag); }
-//! @brief Devuelve un puntero al elemento cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the elemento cuyo identificador se pasa como parámetro.
 const XC::Element *XC::EntMdlr::buscaElemento(const int &tag) const
   { return elementos.buscaElemento(tag); }
 
@@ -207,7 +207,7 @@ XC::SetEstruct *XC::EntMdlr::crea_set_fila(const RangoTritriz &rango,const std::
       }
     else
       {
-	std::cerr << "EntMdlr::crea_set_fila; falta un puntero al preprocesador." << std::endl;
+	std::cerr << "EntMdlr::crea_set_fila; falta a pointer al preprocesador." << std::endl;
         return nullptr;
       }
     return retval;
@@ -266,7 +266,7 @@ bool XC::EntMdlr::crea_elementos(meshing_dir dm)
     if(!nodos.empty())
       {
         if(nodos.HasNull())
-          std::cerr << "EntMdlr::crea_elementos; existen punteros a nodo nulos."
+          std::cerr << "EntMdlr::crea_elementos; existen pointers to node nulos."
                     << " No se crean elementos." << std::endl;
         else
           if(elementos.Null())
@@ -288,7 +288,7 @@ bool XC::EntMdlr::crea_elementos(meshing_dir dm)
                     std::clog << "creados." << std::endl;
                 }
               else
-                std::cerr << "EntMdlr::crea_elementos; falta un puntero al preprocesador." << std::endl;
+                std::cerr << "EntMdlr::crea_elementos; falta a pointer al preprocesador." << std::endl;
             }
       }
     else
@@ -358,7 +358,7 @@ XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(const RangoTritriz &rango,const std::st
 double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
   {
     std::cerr << nombre_clase()
-              << " la función DistanciaA2 no está definida." << std::endl;
+              << " function DistanciaA2 not implemented." << std::endl;
     return 0.0;
   }
 

@@ -41,7 +41,7 @@
 
 #include "boost/lexical_cast.hpp"
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::TritrizPtrNod::TritrizPtrNod(const size_t capas)
   : TritrizPtrBase<MatrizPtrNod>(capas) {}
 //! @brief Constructor.
@@ -52,7 +52,7 @@ XC::TritrizPtrNod::TritrizPtrNod(const size_t capas,const size_t filas,const siz
       (*this)[i]= MatrizPtrNod(filas,cols);
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 XC::Node *XC::TritrizPtrNod::buscaNodo(const int &tag)
   {
@@ -100,7 +100,7 @@ XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
     return retval;
   }
 
-//! @brief Devuelve los índices del nodo indicado por el puntero
+//! @brief Devuelve los índices del nodo indicado por the pointer
 //! being passed as parameter.
 XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
   {
@@ -124,7 +124,7 @@ XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al nodo
+//! @brief Devuelve, si lo encuentra, a pointer al nodo
 //! cuyo tag se pasa como parámetro.
 const XC::Node *XC::TritrizPtrNod::buscaNodo(const int &tag) const
   {
@@ -230,7 +230,7 @@ void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SFreedom_
     const size_t nfilas= ref_caja.getNumFilas();
     const size_t ncols= ref_caja.getNumCols();
 
-    // Obtenemos el dominio.
+    // Obtenemos el domain.
     const Node *n= ref_caja(1,1,1);
     Domain *dom= nullptr;
     dom= n->getDomain();

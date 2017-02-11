@@ -72,7 +72,7 @@ XC::Pnt *XC::MatrizPtrPnt::getPnt(const size_t &j,const size_t &k)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al punto
+//! @brief Devuelve, si lo encuentra, a pointer al punto
 //! cuyo tag se pasa como parámetro.
 XC::Pnt *XC::MatrizPtrPnt::buscaPunto(const size_t &tag)
   {
@@ -132,7 +132,7 @@ XC::Cad *XC::MatrizPtrPnt::getCad(void)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, un puntero al punto
+//! @brief Devuelve, si lo encuentra, a pointer al punto
 //! cuyo tag se pasa como parámetro.
 const XC::Pnt *XC::MatrizPtrPnt::buscaPunto(const size_t &tag) const
   {

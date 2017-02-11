@@ -70,8 +70,7 @@ class FullGenLinSOE;
 
 //! @ingroup Solver
 //
-//! @brief Objetos que se encargan de la solución
-//! de sistemas de ecuaciones de matriz densa.
+//! @brief Base class for full (dense) general linear SOE solvers.
 class FullGenLinSolver : public LinearSOESolver
   {
   protected:

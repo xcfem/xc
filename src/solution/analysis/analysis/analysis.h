@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //analysis.h
 
-//Archivos de cabecera de los tipos de análisis.
+//Headers for the analysis type.
 #include "solution/analysis/analysis/StaticAnalysis.h"
 #include "solution/analysis/analysis/DomainDecompositionAnalysis.h"
 #include "solution/analysis/analysis/DirectIntegrationAnalysis.h"

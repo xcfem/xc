@@ -49,7 +49,7 @@ XC::LinearBucklingAnalysis::LinearBucklingAnalysis(SoluMethod *metodo,SoluMethod
   :StaticAnalysis(metodo), eigen_solu(esolu), linearBucklingEigenAnalysis(esolu),
    numModes(0),linear_buckling_analysis_step(0) {}
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, modelo de análisis,...).
+//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
 void XC::LinearBucklingAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation
@@ -57,7 +57,7 @@ void XC::LinearBucklingAnalysis::clearAll(void)
     linearBucklingEigenAnalysis.clearAll();
   }
 
-//! @brief Ejecuta el análisis.
+//! @brief Performs the analysis.
 int XC::LinearBucklingAnalysis::analyze(int numSteps)
   {
     assert(metodo_solu);
@@ -76,7 +76,7 @@ int XC::LinearBucklingAnalysis::analyze(int numSteps)
           linearBucklingEigenAnalysis.setupPreviousStep(); //Prepara el linear buckling Analysis.
 
         if(i == (linear_buckling_analysis_step+1))
-          linearBucklingEigenAnalysis.analyze(numModes); //Ejecuta el linear buckling Analysis.
+          linearBucklingEigenAnalysis.analyze(numModes); //Performs el linear buckling Analysis.
 
         result= run_analysis_step(i,numSteps);
 
@@ -88,7 +88,7 @@ int XC::LinearBucklingAnalysis::analyze(int numSteps)
     return result;
   }
 
-//! @brief Hace los cambios que sean necesarios tras un cambio en el dominio.
+//! @brief Hace los cambios que sean necesarios tras un cambio en el domain.
 int XC::LinearBucklingAnalysis::domainChanged(void)
   {
     int retval= StaticAnalysis::domainChanged();
@@ -96,16 +96,16 @@ int XC::LinearBucklingAnalysis::domainChanged(void)
     return retval;
   }
 
-//! @brief Asigna el algoritmo de solución a emplear en el análisis de eigenvalues.
+//! @brief Set the solution algorithm to use for linear buckling analysis.
 int XC::LinearBucklingAnalysis::setLinearBucklingAlgorithm(LinearBucklingAlgo &theLinearBucklingAlgorithm)
   { return linearBucklingEigenAnalysis.setAlgorithm(theLinearBucklingAlgorithm); }
 
 
-//! @brief Asigna el integrador a emplear en el análisis de eigenvalues.
+//! @briefSets the integrator to use in the analysis de eigenvalues.
 int XC::LinearBucklingAnalysis::setLinearBucklingIntegrator(LinearBucklingIntegrator &theLinearBucklingIntegrator)
   { return linearBucklingEigenAnalysis.setIntegrator(theLinearBucklingIntegrator); }
 
-//! @brief Asigna el sistema de ecuaciones lineal a emplear en el análisis de eigenvalues.
+//! @brief Sets the linear system of equations to use in the analysis de eigenvalues.
 int XC::LinearBucklingAnalysis::setArpackSOE(ArpackSOE &theEigenSOE)
   { return linearBucklingEigenAnalysis.setEigenSOE(theEigenSOE); }
 

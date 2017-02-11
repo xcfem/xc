@@ -42,7 +42,7 @@ class SFreedom_Constraint;
 
 //! \ingroup CadMR
 //! 
-//! @brief Matriz de punteros a nodos.
+//! @brief Matriz de pointers to nodes.
 class MatrizPtrNod: public MatrizPtrBase<Node>
   {
   protected:

@@ -55,12 +55,11 @@ class Vector;
 //
 //! @ingroup EigenSolver
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de problemas de eigenvalues.
+//! @brief Eigenvalue SOE solver.
 class EigenSolver : public Solver
   {
   protected:
-    int numModes; //! @brief Número de eigenvalues a obtener.
+    int numModes; //!< number of eigenvalues to compute.
 
     friend class EigenSOE;
     virtual EigenSolver *getCopy(void) const= 0;

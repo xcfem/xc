@@ -73,7 +73,7 @@ class Renderer;
 class Information;
 class Preprocessor;
 
-//! @brief Objeto que forma parte de un dominio.
+//! @brief Objeto que forma parte de un domain.
 class DomainComponent: public TaggedObject, public MovableObject
   {
   private:    

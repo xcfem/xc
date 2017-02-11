@@ -67,9 +67,10 @@ namespace XC {
 
 //! @ingroup CTest
 //
-//! @brief Test de convergencia que emplea el cociente entre
-//! la norma actual y la inicial del vector que se obtiene
-//! dividiendo por dos el producto del rhs y el vector solución.
+//! @brief Tests for convergence using the ratio of the 
+//! current norm to the initial norm (the norm when start is invoked) of the 
+//! which is 0.5 times the absolute value of the product of the rhs and 
+//! the solution vector of the LinearSOE.
 class CTestRelativeEnergyIncr: public ConvergenceTestNorm
   {
   public:

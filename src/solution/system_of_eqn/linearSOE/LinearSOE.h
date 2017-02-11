@@ -76,10 +76,7 @@ class ID;
 //
 //! @ingroup LinearSOE
 //
-//! @brief Objetos que se encargan de obtener la solución
-//! de problemas de eigenvalues.
 //! @brief Sistema de ecuaciones lineal.
-//!
 //! This is the class definition for LinearSOE.
 //! LinearSOE is an abstract base class and thus no objects of it's type
 //! can be instantiated. It has pure virtual functions which must be

@@ -70,7 +70,7 @@ bool XC::SymSparseLinSOE::setSolver(LinearSOESolver *newSolver)
     if(tmp)
       retval= SparseSOEBase::setSolver(tmp);
     else
-      std::cerr << "SymSparseLinSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
+      std::cerr << "SymSparseLinSOE::setSolver; solver incompatible con system of equations." << std::endl;
     return retval;
   }
 

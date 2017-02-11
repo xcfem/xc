@@ -95,7 +95,7 @@ void XC::NodePtrs::disconnect(void)
       }
   }
 
-//! @brief Pone a cero los punteros a nodo.
+//! @brief Pone a cero los pointers to node.
 void XC::NodePtrs::inic(void)
   {
     disconnect();
@@ -103,7 +103,7 @@ void XC::NodePtrs::inic(void)
       (*i)= nullptr;
   }
 
-//! @brief Devuelve verdadero si alguno de los punteros
+//! @brief Devuelve verdadero si alguno de los pointers
 //! es nulo.
 bool XC::NodePtrs::hasNull(void) const
   {
@@ -120,7 +120,7 @@ bool XC::NodePtrs::hasNull(void) const
     return retval;
   }
 
-//! @brief Asigna los punteros a partir de los identificadores de elemento.
+//! @brief Asigna los pointers to partir de los identificadores de elemento.
 void XC::NodePtrs::setPtrs(Domain *theDomain, const ID &theNodeTags)
   {
     inic();
@@ -189,7 +189,7 @@ XC::NodePtrs::const_reference XC::NodePtrs::operator()(const size_t &i) const
 XC::NodePtrs::const_reference XC::NodePtrs::operator[](const size_t &i) const
   { return theNodes[i]; }
 
-//!@brief Asigna el puntero al nodo i.
+//!@brief Asigna the pointer al nodo i.
 void XC::NodePtrs::set_node(const size_t &i,Node *n)
   {
     ContinuaReprComponent *owr= dynamic_cast<ContinuaReprComponent *>(Owner());
@@ -389,7 +389,7 @@ const XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry
     return this_no_const->getNearestNode(p,initialGeometry);
   }
 
-//! @brief Devuelve la posición del puntero a nodo en el array.
+//! @brief Devuelve la posición of the pointer a nodo en el array.
 int XC::NodePtrs::getIndiceNodo(const Node *ptrNod) const
   {
     int retval= -1;

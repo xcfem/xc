@@ -89,7 +89,7 @@ XC::TransientDomainDecompositionAnalysis::~TransientDomainDecompositionAnalysis(
     // clearAll() must be invoked if user wishes to invoke destructor
   }    
 
-//! Borra todos los miembros del objeto (Manejador coacciones, modelo de análisis,...).
+//! Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
 void XC::TransientDomainDecompositionAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation
@@ -100,7 +100,7 @@ void XC::TransientDomainDecompositionAnalysis::clearAll(void)
 bool XC::TransientDomainDecompositionAnalysis::doesIndependentAnalysis(void)
   { return true; }
 
-//! @brief Ejecuta el análisis.
+//! @brief Performs the analysis.
 int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
   {
     assert(metodo_solu);
@@ -193,7 +193,7 @@ int XC::TransientDomainDecompositionAnalysis::initialize(void)
     return 0;
   }
 
-//! @brief Hace los cambios que sean necesarios como consecuencia de un cambio en el dominio.
+//! @brief Hace los cambios que sean necesarios como consecuencia de un cambio en el domain.
 int XC::TransientDomainDecompositionAnalysis::domainChanged(void)
   {
 
@@ -523,7 +523,7 @@ int XC::TransientDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
 
     if(getConvergenceTestPtr() == 0 || getConvergenceTestPtr()->getClassTag() != data(7))
       {
-	std::cerr << "TransientDomainDecompositionAnalysis; falta implementar la lectura del test de convergencia." << std::endl;
+	std::cerr << "TransientDomainDecompositionAnalysis; falta implementar la lectura del convergence test." << std::endl;
 //         if(metodo_solu->getConvergenceTestPtr() != 0)
 //           delete metodo_solu->getConvergenceTestPtr();
     
@@ -548,7 +548,7 @@ int XC::TransientDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
     return 0;
   }
 
-//! @brief Asigna el algoritmo de solución que se empleará en el análisis.
+//! @brief Sets the solution algorithm que se empleará en the analysis.
 int XC::TransientDomainDecompositionAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
   {
     DomainDecompositionAnalysis::setAlgorithm(theNewAlgorithm);
@@ -558,7 +558,7 @@ int XC::TransientDomainDecompositionAnalysis::setAlgorithm(EquiSolnAlgo &theNewA
     return 0;
   }
 
-//! @brief Asigna el integrador que se empleará en el análisis.
+//! @brief Sets the integrator que se empleará en the analysis.
 int XC::TransientDomainDecompositionAnalysis::setIntegrator(IncrementalIntegrator &theNewIntegrator) 
   {
     DomainDecompositionAnalysis::setIntegrator(theNewIntegrator);
@@ -567,7 +567,7 @@ int XC::TransientDomainDecompositionAnalysis::setIntegrator(IncrementalIntegrato
     return 0;
   }
 
-//! @brief Asigna el sistema de ecuaciones lineal que se empleará en el análisis.
+//! @brief Sets the linear system of equations que se empleará en the analysis.
 int XC::TransientDomainDecompositionAnalysis::setLinearSOE(LinearSOE &theNewSOE)
   {
     DomainDecompositionAnalysis::setLinearSOE(theNewSOE);

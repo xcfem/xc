@@ -33,7 +33,7 @@
 
 namespace XC {
 
-//! @brief Datos a transmitir para un puntero «broked».
+//! @brief Datos a transmitir para a pointer «broked».
 class BrokedPtrCommMetaData: public PtrCommMetaData
   {
   private:

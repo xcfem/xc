@@ -355,7 +355,7 @@
 // system of eqn header files
 #include "solution/system_of_eqn/systems_of_equations.h"
 
-// Tipos de análisis.
+// Analysis types
 #include "solution/analysis/analysis/analysis.h"
 
 // load patterns

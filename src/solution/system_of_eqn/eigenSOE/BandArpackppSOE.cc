@@ -38,7 +38,7 @@
 XC::BandArpackppSOE::BandArpackppSOE(SoluMethod *owr,const double &shift)
   :ArpackSOE(owr,EigenSOE_TAGS_BandArpackppSOE,shift), A(), M() {}
 
-//! @brief Asigna el solver que se empleará en la solución del problema de eigenvalues.
+//! @brief Sets the solver to use.
 bool XC::BandArpackppSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;
@@ -49,18 +49,18 @@ bool XC::BandArpackppSOE::setSolver(EigenSolver *newSolver)
         retval= ArpackSOE::setSolver(tmp);
       }
     else
-      std::cerr << "BandArpackppSOE::setSolver; solver incompatible con sistema de ecuaciones." << std::endl;
+      std::cerr << "BandArpackppSOE::setSolver; incompatible solver." << std::endl;
     return retval;
   }
 
-//! @brief Asigna el tamaño del problema.
+//! @brief Sets the tamaño del problema.
 int XC::BandArpackppSOE::setSize(Graph &theGraph)
   {
     int result = 0;
     int newSize = theGraph.getNumVertex();
     if(newSize==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; el modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie el gestor de coacciones." << std::endl;
+      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; the modelo no tiene ningún grado de libertad,"
+                << " agrege algún nodo o cambie the gestor de coacciones." << std::endl;
     if(size!=newSize)
       {
         size= newSize;
@@ -71,7 +71,7 @@ int XC::BandArpackppSOE::setSize(Graph &theGraph)
     return result;
   }
 
-//! @brief Ensambla en A la matriz being passed as parameter multiplicada por el parámetro fact.
+//! @brief Ensambla en A la matriz being passed as parameter multiplicada por the parámetro fact.
 int XC::BandArpackppSOE::addToMatrix(msp_double &MT,const Matrix &m, const ID &id,const double &fact)
   {
     // check for a XC::quick return 
@@ -136,7 +136,7 @@ int XC::BandArpackppSOE::addToMatrix(msp_double &MT,const Matrix &m, const ID &i
     return 0;
   }
 
-//! @brief Ensambla en A la matriz being passed as parameter multiplicada por el parámetro fact.
+//! @brief Ensambla en A la matriz being passed as parameter multiplicada por the parámetro fact.
 int XC::BandArpackppSOE::addA(const Matrix &a, const ID &id, double fact)
   { return addToMatrix(A,a,id,fact); }
 
@@ -145,7 +145,7 @@ int XC::BandArpackppSOE::addA(const Matrix &a, const ID &id, double fact)
 void XC::BandArpackppSOE::zeroA(void)
   { A.Anula(); }
 
-//! @brief Ensambla en M la matriz being passed as parameter multiplicada por el parámetro fact.
+//! @brief Ensambla en M la matriz being passed as parameter multiplicada por the parámetro fact.
 int XC::BandArpackppSOE::addM(const Matrix &m, const ID &id, double fact)
   { 
     int retval= 0;

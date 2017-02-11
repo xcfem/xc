@@ -49,7 +49,7 @@ class MapModelWrapper: public EntCmd
     typedef map_model_wrapper::const_iterator const_iterator;
 
   private:
-    map_model_wrapper solu_models; //!< Métodos para la solución.
+    map_model_wrapper solu_models; //!< model wrapper container.
   protected:
 
   public:

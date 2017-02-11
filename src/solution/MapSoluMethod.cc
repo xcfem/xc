@@ -36,7 +36,7 @@
 #include "boost/any.hpp"
 
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::MapSoluMethod::MapSoluMethod(ProcSoluControl *owr)
   : EntCmd(owr) {}
 
@@ -48,8 +48,7 @@ bool XC::MapSoluMethod::existeSoluMethod(const std::string &cod) const
     return (i != solu_methods.end());
   }
 
-//! @brief Devuelve un apuntador al método
-//! de solución.
+//! @brief Returns a const pointer to the solution method.
 const XC::SoluMethod *XC::MapSoluMethod::getSoluMethod(const std::string &cod) const
   {
     const SoluMethod *retval= nullptr;
@@ -59,8 +58,7 @@ const XC::SoluMethod *XC::MapSoluMethod::getSoluMethod(const std::string &cod) c
     return retval;
   }
 
-//! @brief Devuelve un apuntador al método
-//! de solución.
+//! @brief Returns a pointer to the solution method.
 XC::SoluMethod *XC::MapSoluMethod::getSoluMethod(const std::string &cod)
   {
     SoluMethod *retval= nullptr;
@@ -70,8 +68,8 @@ XC::SoluMethod *XC::MapSoluMethod::getSoluMethod(const std::string &cod)
     return retval;
   }
 
-//! @brief Crea un nuevo método de solución con el código being passed as parameter.
-//! @brief Si ya existe devuelve un puntero al mismo.
+//! @brief Crea un nuevo solution method con el código being passed as parameter.
+//! @brief Si ya existe devuelve a pointer al mismo.
 XC::SoluMethod &XC::MapSoluMethod::creaSoluMethod(const std::string &cod,ModelWrapper *sm)
   {
     SoluMethod *retval= nullptr;
@@ -82,7 +80,7 @@ XC::SoluMethod &XC::MapSoluMethod::creaSoluMethod(const std::string &cod,ModelWr
     return *retval;
   }
 
-//! @brief Crea un nuevo método de solución con el código being passed as parameter.
+//! @brief Crea un nuevo solution method con el código being passed as parameter.
 XC::SoluMethod &XC::MapSoluMethod::newSoluMethod(const std::string &cod_solu_method,const std::string &cod_solu_model)
   {
     ProcSoluControl *sc= dynamic_cast<ProcSoluControl *>(Owner());

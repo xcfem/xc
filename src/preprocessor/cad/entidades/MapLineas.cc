@@ -137,7 +137,7 @@ XC::Edge *XC::MapLineas::Line(Pnt *pA,Pnt *pB)
                     << " y " << pB->GetNombre() << std::endl;
       }
     else
-      std::cerr << "MapLineas::Line; error, se pasó un puntero nulo." << std::endl;
+      std::cerr << "MapLineas::Line; error, se pasó a null pointer." << std::endl;
     return tmp;
   }
 
@@ -168,7 +168,7 @@ XC::Edge *XC::MapLineas::DividedLine(Pnt *pA,Pnt *pB)
                     << " y " << pB->GetNombre() << std::endl;
       }
     else
-      std::cerr << "MapLineas::DividedLine; error, se pasó un puntero nulo." << std::endl;
+      std::cerr << "MapLineas::DividedLine; error, se pasó a null pointer." << std::endl;
     return tmp;
   }
 
@@ -195,7 +195,7 @@ XC::Edge *XC::MapLineas::Arc(Pnt *pA,Pnt *pB,Pnt *pC)
                     << " y " << pC->GetNombre() << std::endl;
       }
     else
-      std::cerr << "MapLineas::Arc; error, se pasó un puntero nulo." << std::endl;
+      std::cerr << "MapLineas::Arc; error, se pasó a null pointer." << std::endl;
     return tmp;
   }
 

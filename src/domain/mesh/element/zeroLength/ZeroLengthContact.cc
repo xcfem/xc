@@ -48,7 +48,7 @@ XC::ZeroLengthContact::ZeroLengthContact(int tag, int classTag, int dim, int Nd1
     pressure=0; // add for augmented lagrange
   }
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::ZeroLengthContact::ZeroLengthContact(int tag,int classTag, int dim)
   :Element0D(tag,classTag,0,0,dim),
    N(dim*numNodos())

@@ -36,8 +36,7 @@ namespace XC {
 
 //! @ingroup Solver
 //
-//! @brief Objetos que se encargan de la solución
-//! de sistemas de ecuaciones con matriz en perfil.
+//! @brief Base class for profile matris linear SOE solvers.
 class ProfileSPDLinDirectBase: public ProfileSPDLinSolver
   {
   protected:

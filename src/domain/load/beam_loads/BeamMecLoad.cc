@@ -139,7 +139,7 @@ const XC::Matrix &XC::BeamMecLoad::getGlobalVectors(const Matrix &localVectors) 
           }
       }
     else
-      std::cerr << "BeamMecLoad::getGlobalVectors; no existe apuntador al dominio." << std::endl;
+      std::cerr << "BeamMecLoad::getGlobalVectors; no existe apuntador al domain." << std::endl;
     return retval;
   }
 

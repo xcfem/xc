@@ -97,15 +97,15 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     Domain *theDomain= this->getDomainPtr();
     if(!theDomain)
       std::cerr << "WARNING TransformationConstraintHandler::handle() - "
-                << " puntero a dominio nulo." << std::endl;
+                << " pointer to domain nulo." << std::endl;
     AnalysisModel *theModel= this->getAnalysisModelPtr();
     if(!theModel)
       std::cerr << "WARNING TransformationConstraintHandler::handle() - "
-                << " puntero a modelo de análisis nulo." << std::endl;
+                << " pointer to analysis model nulo." << std::endl;
     Integrator *theIntegrator= this->getIntegratorPtr();
     if(!theIntegrator)
       std::cerr << "WARNING TransformationConstraintHandler::handle() - "
-                << " puntero a integrador nulo." << std::endl;
+                << " pointer to integrator nulo." << std::endl;
 
     // get number of elements and nodes in the domain
     // and init the theFEs and theDOFs arrays

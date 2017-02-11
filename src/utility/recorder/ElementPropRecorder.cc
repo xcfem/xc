@@ -65,7 +65,7 @@ int XC::ElementPropRecorder::record(int commitTag, double timeStamp)
             EntCmd_exec(pyObj,CallbackRecord);
           }
         else
-	  std::cerr << "XC::ElementPropRecorder::record(); se intentó llamar a un puntero nulo." << std::endl;
+	  std::cerr << "XC::ElementPropRecorder::record(); se intentó llamar a a null pointer." << std::endl;
       }
     return 0;
   }
@@ -82,7 +82,7 @@ int XC::ElementPropRecorder::restart(void)
             EntCmd_exec(pyObj,CallbackRecord);
           }
         else
-	  std::cerr << "XC::ElementPropRecorder::restart(); se intentó llamar a un puntero nulo." << std::endl;
+	  std::cerr << "XC::ElementPropRecorder::restart(); se intentó llamar a a null pointer." << std::endl;
       }
     return 0;
   }

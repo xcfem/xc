@@ -117,7 +117,7 @@ XC::IntPtrWrapper::IntPtrWrapper(int *d, int size, bool cleanIt)
   {
     if(!d)
       {
-        std::cerr << "IntPtrWrapper; se pasó un puntero nulo." << std::endl;
+        std::cerr << "IntPtrWrapper; se pasó a null pointer." << std::endl;
         sz= 0;
         data= nullptr;
         fromFree = 0;

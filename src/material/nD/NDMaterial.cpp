@@ -368,7 +368,7 @@ int XC::NDMaterial::commitSensitivity(XC::Vector & strainSensitivity, int gradNu
   { return 0; }
 // AddingSensitivity:END //////////////////////////////////////////
 
-//! @brief Recibe un puntero a material through the channel being passed as parameter.
+//! @brief Recibe a pointer a material through the channel being passed as parameter.
 //! @param posClassTag: Posición de ID del identificador de la clase del material.
 //! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::NDMaterial *XC::receiveNDMaterialPtr(NDMaterial *ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)

@@ -118,7 +118,7 @@ XC::GFunVisualizationAnalysis::GFunVisualizationAnalysis(ReliabilityDomain *pass
 
 }
 
-//! @brief Lanza el análisis.
+//! @brief Lanza the analysis.
 int XC::GFunVisualizationAnalysis::analyze(void)
   {
         // Meaning of the tags

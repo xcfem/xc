@@ -40,11 +40,11 @@
 
 #include "utility/actor/actor/MovableMap.h"
 
-//! @brief Constructor por defecto.
+//! @brief Default constructor.
 XC::LoadLoader::LoadLoader(Preprocessor *owr)
   : Loader(owr), lpatterns(this), tag_lp(0), combinaciones(this) {}
 
-//! @brief Agrega el caso de carga al dominio.
+//! @brief Agrega el caso de carga al domain.
 void XC::LoadLoader::addToDomain(const std::string &lp_code)
   {
     LoadPattern *lp= lpatterns.buscaLoadPattern(lp_code);
@@ -59,7 +59,7 @@ void XC::LoadLoader::addToDomain(const std::string &lp_code)
       combinaciones.addToDomain(lp_code);
   }
 
-//! @brief Elimina el caso de carga del dominio.
+//! @brief Elimina el caso de carga del domain.
 void XC::LoadLoader::removeFromDomain(const std::string &lp_code)
   {
     LoadPattern *lp= lpatterns.buscaLoadPattern(lp_code);

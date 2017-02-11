@@ -32,7 +32,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include <utility/matrix/Vector.h>
 
-//! @brief Devuelve, si puede, un puntero al integrador adecuado.
+//! @brief Devuelve, si puede, a pointer al integrator adecuado.
 XC::LinearBucklingIntegrator *XC::LinearBucklingAlgo::getLinearBucklingIntegrator(void)
   {
     LinearBucklingIntegrator *retval= nullptr;
@@ -41,7 +41,7 @@ XC::LinearBucklingIntegrator *XC::LinearBucklingAlgo::getLinearBucklingIntegrato
       {
         retval= dynamic_cast<LinearBucklingIntegrator *>(theIntegrator);
         if(!retval)
-	  std::cerr << "LinearBucklingAlgo::getLinearBucklingIntegrator; el integrador"
+	  std::cerr << "LinearBucklingAlgo::getLinearBucklingIntegrator; el integrator"
                     << " no es del tipo adecuado." << std::endl;
       }
     return retval;
@@ -60,7 +60,7 @@ int XC::LinearBucklingAlgo::solveCurrentStep(int numModes)
     if((theModel == 0) || (theIntegrator == 0) || (theSOE == 0))
       {
         std::cerr << "WARNING LinearBucklingAlgo::solverCurrentStep() - ";
-        std::cerr << " no se ha asignado dominio, modelo o integrador.\n";
+        std::cerr << " no se ha asignado domain, modelo o integrator.\n";
         return -1;
       }
 
