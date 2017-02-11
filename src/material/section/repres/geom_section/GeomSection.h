@@ -63,9 +63,9 @@ class GeomSection: public SeccionInerte
   {
   public:
 
-    typedef std::map<size_t,SisRefScc *> lst_sis_ref;//!< Contenedor para sistemas de referencia.
-    typedef std::map<size_t,Spot *> lst_spots; //!< Contenedor para lista de puntos.
-    typedef std::map<size_t,Eje *> lst_ejes; //!< Contenedor de líneas. 
+    typedef std::map<size_t,SisRefScc *> lst_sis_ref;//!< reference systems container.
+    typedef std::map<size_t,Spot *> lst_spots; //!< point container.
+    typedef std::map<size_t,Eje *> lst_ejes; //!< line container.
 
   protected:
     MaterialLoader *material_loader; //!< Material handler (searching,...).
@@ -73,7 +73,7 @@ class GeomSection: public SeccionInerte
     ListRegiones regiones; //!< Region container.
     ListReinfLayer capas_armado; //!< Rebar layers container.
 
-    lst_sis_ref sistemas_referencia; //!< Spatial reference systems.
+    lst_sis_ref reference_systems; //!< Spatial reference systems.
     size_t tag_sis_ref; //!< Default identifier for next spatial reference system.
 
     lst_spots spots; //!< Point container.
@@ -90,12 +90,12 @@ class GeomSection: public SeccionInerte
       { return tag_sis_ref; }
     void setTagSisRef(int i)
       { tag_sis_ref= i; }
-    SisRefScc *busca_sistema_referencia(const size_t &id);
-    const SisRefScc *busca_sistema_referencia(const size_t &id) const;
-    inline SisRefScc *sistema_referencia_actual(void)
-      { return busca_sistema_referencia(tag_sis_ref); }
-    const SisRefScc *sistema_referencia_actual(void) const
-      { return busca_sistema_referencia(tag_sis_ref); }
+    SisRefScc *get_reference_system(const size_t &id);
+    const SisRefScc *get_reference_system(const size_t &id) const;
+    inline SisRefScc *current_reference_system(void)
+      { return get_reference_system(tag_sis_ref); }
+    const SisRefScc *current_reference_system(void) const
+      { return get_reference_system(tag_sis_ref); }
     SisRefScc *creaSisRef(const std::string &); 
 
     // Section edition functions

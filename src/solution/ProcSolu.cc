@@ -234,13 +234,13 @@ XC::Subdomain *XC::ProcSolu::getSubdomainPtr(void)
     return retval;
   }
 
-//! @brief Devuelve la referencia al objeto que controla
-//! el modo de obtener la solución.
+//! @brief Returns a reference to the objects
+//! that controls the solution procedure.
 XC::ProcSoluControl &XC::ProcSolu::getSoluControl(void)
   { return solu_control; }
 
-//! @brief Devuelve la referencia al objeto que controla
-//! el modo de obtener la solución.
+//! @brief Returns a reference to the objects
+//! that controls the solution procedure.
 const XC::ProcSoluControl &XC::ProcSolu::getSoluControl(void) const
   { return solu_control; }
 
@@ -252,10 +252,10 @@ XC::Analysis *XC::ProcSolu::getAnalysisPtr(void)
 const XC::Analysis *XC::ProcSolu::getAnalysisPtr(void) const
   { return theAnalysis; }
 
-//! @brief Devuelve una referencia al análisis.
+//! @brief Returns a reference to the analysis object.
 XC::Analysis &XC::ProcSolu::getAnalysis(void)
   {
     if(!theAnalysis)
-      std::cerr << "ProcSolu::getAnalysis; el análisis no se ha definido." << std::endl;
+      std::cerr << "ProcSolu::getAnalysis; analysis object is not defined." << std::endl;
     return *theAnalysis;
   }

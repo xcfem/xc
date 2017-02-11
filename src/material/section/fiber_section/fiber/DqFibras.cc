@@ -272,7 +272,7 @@ double XC::DqFibras::getPyz(const double &factor,const double &y0,const double &
     return retval;
   }
 
-//! @brief Devuelve el área de la sección homogeneizada.
+//! @brief Returns homogenized section area.
 double XC::DqFibras::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
@@ -290,7 +290,7 @@ double XC::DqFibras::getAreaHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Devuelve las coordenadas del CDG de la sección homogeneizada.
+//! @brief Returns the coordinates of the homogenized section centroid.
 const XC::Vector &XC::DqFibras::getCdgHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
@@ -2165,8 +2165,8 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
 //     return retval;
 //   }
 
-//! @brief Devuelve el índice de la fibra cuya coordenada iCoo respecto al sistema
-//! de referencia being passed as parameter es máxima.
+//! @brief Returns the identifier of the fiber with maximum value for the iCoo
+//! coordinate with respect to the system being passed as parameter.
 size_t XC::DqFibras::getFibraCooMax(const Ref3d3d &r,const size_t &iCoo) const
   {
     size_t retval= 0;
@@ -2195,8 +2195,8 @@ size_t XC::DqFibras::getFibraCooMax(const Ref3d3d &r,const size_t &iCoo) const
     return retval;
   }
 
-//! @brief Devuelve el índice de la fibra cuya coordenada iCoo respecto al sistema
-//! de referencia being passed as parameter es mínima.
+//! @brief Returns the identifier of the fiber with minimum value for the iCoo
+//! coordinate with respect to the system being passed as parameter.
 size_t XC::DqFibras::getFibraCooMin(const Ref3d3d &r,const size_t &iCoo) const
   {
     size_t retval= 0;

@@ -49,10 +49,10 @@ class ShellCrdTransf3dBase: public EntCmd, public MovableObject
   {
   protected:
     const NodePtrs *theNodes;
-    Vector vpos_centroide; //!< Vector de posición del centroide del elemento.
-    Vector g1; //!< Vector 1 del triedro de referencia.
-    Vector g2; //!< Vector 2 del triedro de referencia.
-    Vector g3; //!< Vector 3 del triedro de referencia.
+    Vector vpos_centroide; //!< Element centroid position.
+    Vector g1; //!< Vector 1 of the reference trihedron.
+    Vector g2; //!< Vector 2 of the reference trihedron.
+    Vector g3; //!< Vector 3 of the reference trihedron.
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

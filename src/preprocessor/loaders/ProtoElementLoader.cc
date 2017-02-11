@@ -115,7 +115,7 @@ XC::Material *XC::ProtoElementLoader::get_ptr_material(void) const
     return retval;
   }
 
-//! @brief Devuelve una referencia al cargador de integradores.
+//! @brief Returns a reference to de integrator handler.
 XC::BeamIntegratorLoader &XC::ProtoElementLoader::get_beam_integrator_loader(void) const
   { return preprocessor->getBeamIntegratorLoader(); }
 

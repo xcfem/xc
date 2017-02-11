@@ -40,8 +40,8 @@ namespace XC {
 class GaussModel
   {
   protected:
-    std::deque<Pos3d> coo_ref_nodes;//!< Coordenadas de los nodos de referencia.
-    std::deque<GaussPoint> gauss_points;//!< Puntos de Gauss.
+    std::deque<Pos3d> coo_ref_nodes;//!< Coordinates of the reference nodes.
+    std::deque<GaussPoint> gauss_points;//!< Gauss points.
   public:
     GaussModel(void);
     GaussModel(const Pos2d &n1,const Pos2d &n2,const Pos2d &n3,
@@ -55,9 +55,9 @@ class GaussModel
                const GaussPoint &p1,const GaussPoint &p2,const GaussPoint &p3,const GaussPoint &p4,
                const GaussPoint &p5,const GaussPoint &p6,const GaussPoint &p7,const GaussPoint &p8,const GaussPoint &p9);
 
-    inline size_t getNumNodosReferencia(void) const
+    inline size_t getNumberOfReferenceNodes(void) const
       { return coo_ref_nodes.size(); }
-    const std::deque<Pos3d> &getPosNodosReferencia(void) const
+    const std::deque<Pos3d> &getReferenceNodesPositions(void) const
       { return coo_ref_nodes; }
     inline size_t getNumGaussPoints(void) const
       { return gauss_points.size(); }

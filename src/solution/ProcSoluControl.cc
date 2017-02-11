@@ -81,16 +81,16 @@ const XC::Integrator *XC::ProcSoluControl::getIntegratorPtr(void) const
     return ps->getIntegratorPtr();
   }
 
-//! @bried Devuelve una referencia al contenedor de «ModelWrapper».
+//! @bried Returns a reference to the model wrapper container.
 XC::MapModelWrapper &XC::ProcSoluControl::getModelWrapperContainer(void)
   { return solu_models; }
 
-//! @bried Devuelve una referencia al contenedor de procedimientos de solución.
+//! @bried Return a reference to the solution procedures container.
 XC::MapSoluMethod &XC::ProcSoluControl::getSoluMethodContainer(void)
   { return solu_methods; }
 
-//! @brief Devuelve un apuntador al procedimiento
-//! de solución cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the model wrapper with the identifier
+//! being passed as parameter.
 const XC::ModelWrapper *XC::ProcSoluControl::getModelWrapper(const std::string &cod) const
   { return solu_models.getModelWrapper(cod); }
 

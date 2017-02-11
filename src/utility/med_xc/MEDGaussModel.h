@@ -43,10 +43,10 @@ class MEDGaussModel: public MEDObject
     std::string nombre; //!< set name.
     MED_EN::medGeometryElement tipo; //!< Tipo de celda (MED_TRIA3,MED_QUAD4,MED_POINT1,...).
     int num_nodos;
-    std::vector<double> coo_nodos_ref; //!< Coordenadas de los nodos de referencia.
+    std::vector<double> coo_nodos_ref; //!< Reference nodes coordinates.
     int num_gauss_pt;
-    std::vector<double> coo_gauss_pt; //!< Coordenadas de los puntos de gauss.
-    std::vector<double> gauss_weights; //!< Coordenadas de los puntos de gauss.
+    std::vector<double> coo_gauss_pt; //!< Gauss points coordinates.
+    std::vector<double> gauss_weights; //!< Gauss points weights.
     mutable med_gauss_model *model; //!< Definition of the Gauss model in MEDMEM.
   public:
     MEDGaussModel(const std::string &,const MED_EN::medGeometryElement &, const GaussModel &);

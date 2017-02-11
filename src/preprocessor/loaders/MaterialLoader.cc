@@ -656,7 +656,7 @@ void XC::MaterialLoader::clearAll(void)
 XC::MaterialLoader::~MaterialLoader(void)
   { clearAll(); }
 
-//! @brief Devuelve una referencia al mapa de materials.
+//! @brief Returns a reference to the material container.
 const XC::MaterialLoader::map_materials &XC::MaterialLoader::Map(void) const
   { return materials; }
 
@@ -799,7 +799,8 @@ const XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram
       return nullptr;
   }
 
-//! @brief Devuelve una referencia al material cuyo nombre se pasa como parámetro.
+//! @brief Returns a reference to the material which identifier
+//! is being passed as parameter.
 XC::Material &XC::MaterialLoader::getMaterial(const std::string &nmb)
   {
     Material *retval= find_ptr(nmb);
@@ -807,7 +808,8 @@ XC::Material &XC::MaterialLoader::getMaterial(const std::string &nmb)
     return *retval;
   }
 
-//! @brief Devuelve una referencia a la geometría de sección cuyo nombre se pasa como parámetro.
+//! @brief Returns a reference to the section geometry which identifier
+//! is being passed as parameter. 
 XC::GeomSection &XC::MaterialLoader::getGeomSection(const std::string &nmb)
   {
     GeomSection *retval= find_ptr_geom_section(nmb);
@@ -815,7 +817,8 @@ XC::GeomSection &XC::MaterialLoader::getGeomSection(const std::string &nmb)
     return *retval;
   }
 
-//! @brief Devuelve una referencia al diagrama de interacción cuyo nombre se pasa como parámetro.
+//! @brief Returns a reference to the interaction diagram which identifier
+//! is being passed as parameter.
 XC::InteractionDiagram &XC::MaterialLoader::getInteractionDiagram(const std::string &nmb)
   {
     InteractionDiagram *retval= find_ptr_interaction_diagram(nmb);

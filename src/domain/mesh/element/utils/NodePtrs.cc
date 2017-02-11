@@ -174,15 +174,18 @@ int XC::NodePtrs::find(const Node *nPtr) const
     return retval;
   }
 
-//! @brief Devuelve un puntero al nodo i.
+//! @brief Returns a pointer to the node at the position
+//! being passed as parameter.
 XC::Node *XC::NodePtrs::getNodePtr(const size_t &i)
   { return theNodes[i]; }
 
-//! @brief Devuelve una referencia al nodo i.
+//! @brief Returns a const reference to the node at the position
+//! being passed as parameter.
 XC::NodePtrs::const_reference XC::NodePtrs::operator()(const size_t &i) const
   { return theNodes[i]; }
 
-//! @brief Devuelve una referencia al nodo i.
+//! @brief Returns a const reference to the node at the position
+//! being passed as parameter.
 XC::NodePtrs::const_reference XC::NodePtrs::operator[](const size_t &i) const
   { return theNodes[i]; }
 

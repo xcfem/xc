@@ -83,7 +83,7 @@ XC::BeamIntegratorLoader &XC::BeamIntegratorLoader::operator=(const BeamIntegrat
 XC::BeamIntegratorLoader::~BeamIntegratorLoader(void)
   { libera(); }
 
-//! @brief Devuelve una referencia al mapa de beam_integrators.
+//! @brief Returns a reference to the beam integrator container.
 const XC::BeamIntegratorLoader::map_beam_integrators &XC::BeamIntegratorLoader::Map(void) const
   { return beam_integrators; }
 

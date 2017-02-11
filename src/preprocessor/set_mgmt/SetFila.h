@@ -40,15 +40,15 @@ class SFreedom_Constraint;
 //! 
 //!  \brief Conjunto de objetos.
 //! 
-//!  Un objeto SetFila contiene un conjunto de 0 o más:
-//!  - Nodos.
-//!  - Elementos finitos.
-//!  que corresponden a una fila_[ijk] de un objeto EntMdlr.
+//!  A SetFila object contains 0 or more:
+//!  - Nodes.
+//!  - Elements.
+//!  that correspond to a row_[ijk] of an EntMdlr object.
 template <class FILATTZNOD,class FILATTZELEM>
 class SetFila: public SetEstruct
   {
-    FILATTZNOD fila_nod; //!< Referencia a nodos de una fila.
-    FILATTZELEM fila_elem; //!< Referencia a elemento de una fila.
+    FILATTZNOD fila_nod; //!< Reference to the nodes of a row.
+    FILATTZELEM fila_elem; //!< Reference to the elements of a row.
   public:
     typedef typename FILATTZNOD::reference reference_nod;
     typedef typename FILATTZNOD::const_reference const_reference_nod; 

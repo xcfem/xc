@@ -25,7 +25,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //SisRefScc.h
-//Objeto sistema de referencia del GeomSection
 
 #ifndef SISREFSCC_H
 #define SISREFSCC_H
@@ -39,8 +38,7 @@ namespace XC {
 
 //! @ingroup MATSCCEntGeom
 //
-//! @brief Sistema de referencia empleado para definir
-//! las entidades geométricas.
+//! @brief Reference system used for make easier definining point positions.
 class SisRefScc: public EntGeomSection
   {
   protected:

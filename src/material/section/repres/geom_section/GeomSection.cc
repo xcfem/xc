@@ -86,27 +86,27 @@ XC::GeomSection XC::GeomSection::getSeccionFisurada(const Semiplano2d &sp_compre
 size_t XC::GeomSection::getNumFiberData(void) const
   { return (regiones.getNumCells() + capas_armado.getNumReinfBars()); }
 
-//! @brief Devuelve un puntero al sistema de referencia cuyo identificador se pasa como parámetro.
-XC::SisRefScc *XC::GeomSection::busca_sistema_referencia(const size_t &id)
+//! @brief Returns a pointer to the reference system which identifier is being passed as parameter.
+XC::SisRefScc *XC::GeomSection::get_reference_system(const size_t &id)
   {
     SisRefScc *retval= nullptr;
     if(id>0) //El 0 se reserva para el sistema de coordenadas universal.
       {
-        lst_sis_ref::iterator i= sistemas_referencia.find(id);
-        if(i!= sistemas_referencia.end()) //Reference system exists.
+        lst_sis_ref::iterator i= reference_systems.find(id);
+        if(i!= reference_systems.end()) //Reference system exists.
         retval= (*i).second;
       }
     return retval;
   }
 
-//! @brief Devuelve un puntero al sistema de referencia cuyo identificador se pasa como parámetro.
-const XC::SisRefScc *XC::GeomSection::busca_sistema_referencia(const size_t &id) const
+//! @brief Returns a const pointer to the reference system which identifier is being passed as parameter.
+const XC::SisRefScc *XC::GeomSection::get_reference_system(const size_t &id) const
   {
     SisRefScc *retval= nullptr;
     if(id>0) //El 0 se reserva para el sistema de coordenadas universal.
       {
-        lst_sis_ref::const_iterator i= sistemas_referencia.find(id);
-        if(i!= sistemas_referencia.end()) //Reference system exists.
+        lst_sis_ref::const_iterator i= reference_systems.find(id);
+        if(i!= reference_systems.end()) //Reference system exists.
           retval= (*i).second;
       }
     return retval;
@@ -152,21 +152,21 @@ const XC::Eje *XC::GeomSection::busca_eje(const size_t &id) const
     return retval;
   }
 
-//! @brief Crea un nuevo sistema de referencia.
+//! @brief Creates a new reference system of the type being passed as parameter.
 XC::SisRefScc *XC::GeomSection::creaSisRef(const std::string &tipo)
   {
-    SisRefScc *retval= busca_sistema_referencia(tag_sis_ref);
-    if(!retval) //El sistema de referencia es nuevo.
+    SisRefScc *retval= get_reference_system(tag_sis_ref);
+    if(!retval) //New reference system.
       {
         if(tipo == "cartesianas")
           {
             retval= new SisRefSccCartesianas2d("r"+boost::lexical_cast<std::string>(tag_sis_ref),this);
-            sistemas_referencia[tag_sis_ref]= retval;
+            reference_systems[tag_sis_ref]= retval;
             tag_sis_ref++;
           }
         else
-	  std::cerr << "XC::GeomSection::creaSisRef; el tipo de sistema de referencia: '" << tipo
-                    << "' es desconocido." << std::endl;
+	  std::cerr << "XC::GeomSection::creaSisRef; type: '" << tipo
+                    << "' unknown." << std::endl;
       }
     return retval;
   }
@@ -175,7 +175,7 @@ XC::SisRefScc *XC::GeomSection::creaSisRef(const std::string &tipo)
 XC::Spot *XC::GeomSection::creaSpot(const Pos2d &p)
   {
     Spot *retval= busca_spot(tag_spot);
-    if(!retval) //El punto es nuevo.
+    if(!retval) //New point.
       {
         retval= new Spot("p"+boost::lexical_cast<std::string>(tag_spot),this);
         spots[tag_spot]= retval;
@@ -191,11 +191,11 @@ XC::Spot *XC::GeomSection::newSpot(const Pos2d &p)
     Pos2d trfP(p);
     if(tag_sis_ref != 0) //El sistema de coordenadas no es el global.
       {
-        SisRefScc *sr= busca_sistema_referencia(tag_sis_ref);
+        SisRefScc *sr= get_reference_system(tag_sis_ref);
         if(sr)
           trfP= sr->GetPosGlobal(p); //Pasa a coordenadas globales.
         else
-	  std::cerr << "No se encontró el sistema de referencia de índice: " << tag_sis_ref << ".\n";
+	  std::cerr << "Reference system with identifier: " << tag_sis_ref << " not found.\n";
        }
     Spot *retval= creaSpot(trfP);
     return retval;

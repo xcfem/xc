@@ -59,7 +59,7 @@
 //! @brief Constructor.
 XC::Cad::Cad(Preprocessor *mod)
   : EntCmd(mod), preprocessor(mod),
-    sistemas_referencia(this), transformaciones_geometricas(this),
+    reference_systems(this), transformaciones_geometricas(this),
     puntos(this), edges(this), faces(this), cuerpos(this), unif_grid(this),
     esquemas2d(this), esquemas3d(this) {}
 
@@ -161,7 +161,7 @@ XC::SetEstruct *XC::Cad::busca_set_estruct(const MapUniformGrids::Indice &id)
 //! @brief Borra todas las entidades geométricas.
 void XC::Cad::clearAll(void)
   {
-    sistemas_referencia.clearAll();
+    reference_systems.clearAll();
 
     esquemas2d.clearAll();
     esquemas3d.clearAll();
