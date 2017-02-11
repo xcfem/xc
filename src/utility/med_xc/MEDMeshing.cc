@@ -48,7 +48,7 @@ XC::MEDMeshing::MEDMeshing(const ProblemaEF &prb)
 XC::MEDMeshing::MEDMeshing(const Mesh &mesh,const MapSet &s, const MapFields &f)
   : sets(s), fields(f), vertices(mesh), cells(mesh,vertices.getMapIndices()) {} 
 
-//! Devuelve una referencia a la mesh de MEDMEM.
+//! Returns a reference to the MEDMEM mesh.
 MEDMEM::MESHING &XC::MEDMeshing::getMEDMesh(void) const
   { return mesh; }
 

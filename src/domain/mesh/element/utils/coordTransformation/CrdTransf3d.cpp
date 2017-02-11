@@ -349,7 +349,7 @@ Pos3d XC::CrdTransf3d::getPosNodeJ(void) const
     return retval;
   }
 
-//! @brief Devuelve el sistema de referencia local.
+//! @brief Returns the local reference system.
 Ref3d3d XC::CrdTransf3d::getLocalReference(void) const
   {
     const Vector vI= getI();

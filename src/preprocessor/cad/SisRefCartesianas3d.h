@@ -37,10 +37,10 @@ namespace XC {
 
 //! @ingroup CadSR
 //!
-//! @brief Sistema de coordenadas cartesianas tridimensional.
+//! @brief Tridimensiona reference system.
 class SisRefCartesianas3d: public SisRef
   {
-    Ref3d3d ref;//!< Sistema de referencia.
+    Ref3d3d ref;//!< Reference system.
   protected:
 
   public:

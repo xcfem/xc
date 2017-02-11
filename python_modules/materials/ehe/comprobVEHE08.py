@@ -249,8 +249,8 @@ def getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     Ae: Área encerrada por la línea media de la sección hueca eficaz.
     ue: Perímetro de la línea media de la sección hueca eficaz.
 
-    Devuelve la el ángulo de referencia de inclinación de las fisuras a partir
-    de la deformación longitudinal en el alma de la sección
+    Returns the reference angle of inclination of cracks from
+    la deformación longitudinal en el alma de la sección
     expresado en radianes. Ver el artículo 44.2.3.2.2 de EHE-08.
     '''
     return math.radians(getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue)*7000+29) 
@@ -260,7 +260,7 @@ def getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
   
 def getBetaVcuEHE08(theta,thetaE):
     '''getBetaVcuEHE08(theta,thetaE) [uds: N, m, rad]
-    thetaE: Ángulo de referencia de inclinación de las fisuras.
+    thetaE: Reference angle of inclination of cracks.
     theta: Ángulo entre las bielas de compresión de hormigón y el eje
     de la pieza.
     

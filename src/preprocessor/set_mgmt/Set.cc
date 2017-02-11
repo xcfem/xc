@@ -358,8 +358,8 @@ void XC::Set::CompletaHaciaAbajo(void)
     SetMeshComp::CompletaHaciaAbajo();
   }
 
-//! @brief  Agrega a este conjunto los objetos que hacen referencia
-//! a uno o más de los que ya están en el conjunto.
+//! @brief  Appends to this set the objects that make reference
+//! to one or more of the objects that already make part of the set.
 void XC::Set::CompletaHaciaArriba(void)
   {
     SetMeshComp::CompletaHaciaArriba();

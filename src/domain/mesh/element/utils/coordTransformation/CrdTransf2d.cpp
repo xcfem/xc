@@ -527,7 +527,7 @@ Pos2d XC::CrdTransf2d::getPosNodeJ(void) const
     return retval;
   }
 
-//! @brief Devuelve el sistema de referencia local.
+//! @brief Returns the local reference system.
 Ref2d2d XC::CrdTransf2d::getLocalReference(void) const
   {
     const Vector vI= getI();

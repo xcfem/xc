@@ -78,7 +78,7 @@ class Cad: public EntCmd
     static void numera_lista(L &l);
     void numera(void);
   private:
-    MapSisRef sistemas_referencia; //!< Lista de sistemas de referencia.
+    MapSisRef reference_systems; //!< Reference systems container.
     MapTrfGeom transformaciones_geometricas; //!< Geometric transformation container.
 
     MapPuntos puntos; //!< Lista de puntos.
@@ -126,10 +126,10 @@ class Cad: public EntCmd
       { return transformaciones_geometricas; }
     inline MapTrfGeom &getTransformacionesGeometricas(void)
       { return transformaciones_geometricas; }
-    inline const MapSisRef &getSistemasReferencia(void) const
-      { return sistemas_referencia; }
-    inline MapSisRef &getSistemasReferencia(void)
-      { return sistemas_referencia; }
+    inline const MapSisRef &getReferenceSystems(void) const
+      { return reference_systems; }
+    inline MapSisRef &getReferenceSystems(void)
+      { return reference_systems; }
     inline const MapEsquemas2d &getEsquemas2d(void) const
       { return esquemas2d; }
     inline MapEsquemas2d &getEsquemas2d(void)

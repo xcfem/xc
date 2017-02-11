@@ -31,11 +31,11 @@
 
 //! Constructor.
 XC::MEDGaussModel::MEDGaussModel(const std::string &nmb,const MED_EN::medGeometryElement &tp,const GaussModel &gm)
-  : nombre(nmb),tipo(tp), num_nodos(gm.getNumNodosReferencia()),num_gauss_pt(gm.getNumGaussPoints()), model(nullptr)
+  : nombre(nmb),tipo(tp), num_nodos(gm.getNumberOfReferenceNodes()),num_gauss_pt(gm.getNumGaussPoints()), model(nullptr)
   { 
     const size_t dim= tp/100; //Dimensión del espacio en que se define el elemento.
     coo_nodos_ref.resize(num_nodos*dim,0);
-    const std::deque<Pos3d> &nodos= gm.getPosNodosReferencia(); size_t conta= 0;
+    const std::deque<Pos3d> &nodos= gm.getReferenceNodesPositions(); size_t conta= 0;
     for(std::deque<Pos3d>::const_iterator i=nodos.begin();i!=nodos.end();i++)
       {
         coo_nodos_ref[conta]= i->x(); conta++;

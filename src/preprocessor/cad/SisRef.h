@@ -25,7 +25,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //SisRef.h
-//Objeto sistema de referencia del preprocesador
 
 #ifndef SISREF_H
 #define SISREF_H
@@ -39,12 +38,12 @@ namespace XC {
 
 //! @ingroup Cad
 //
-//! @defgroup CadSR Sistemas de referencia.
+//! @defgroup CadSR Reference systems.
 //
 //! @ingroup CadSR
 //!
-//! @brief Sistema de referencia a emplear durante
-//! la definición de los objetos geométricos.
+//! @brief Reference system to be used for make easier to define
+//! point positions.
 class SisRef: public EntMdlrBase
   {
   protected:

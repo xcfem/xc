@@ -557,11 +557,13 @@ int XC::Domain::getNumNodes(void) const
 const XC::Vector &XC::Domain::getPhysicalBounds(void)
   { return mesh.getPhysicalBounds(); }
 
-//! @brief Construye (si es necesario) el grafo de elementos del dominio y devuelve una referencia al mismo.
-XC::Graph  &XC::Domain::getElementGraph(void)
+//! @brief Builds (if necessary) the domain elements graph and
+//! returns a reference to it.
+XC::Graph &XC::Domain::getElementGraph(void)
   { return mesh.getElementGraph(); }
 
-//! @brief Construye (si es necesario) el grafo de nodos del dominio y devuelve una referencia al mismo.
+//! @brief Builds (if necessary) the domain nodes graph and
+//! returns a reference to it.
 XC::Graph &XC::Domain::getNodeGraph(void)
   { return mesh.getNodeGraph(); }
 

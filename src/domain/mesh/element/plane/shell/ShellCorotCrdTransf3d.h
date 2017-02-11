@@ -42,13 +42,13 @@ class ShellCorotCrdTransf3d: public ShellCrdTransf3dBase
     Vector v130;
     Vector v240;
 
-    Vector g1trial; //!< Vector 1 del triedro de referencia.
-    Vector g2trial; //!< Vector 2 del triedro de referencia.
-    Vector g3trial; //!< Vector 3 del triedro de referencia.
+    Vector g1trial; //!< Vector 1 of the reference trihedron.
+    Vector g2trial; //!< Vector 2 of the reference trihedron.
+    Vector g3trial; //!< Vector 3 of the reference trihedron.
 
-    Vector g1commit; //!< Vector 1 del triedro de referencia.
-    Vector g2commit; //!< Vector 2 del triedro de referencia.
-    Vector g3commit; //!< Vector 3 del triedro de referencia.
+    Vector g1commit; //!< Vector 1 of the reference trihedron.
+    Vector g2commit; //!< Vector 2 of the reference trihedron.
+    Vector g3commit; //!< Vector 3 of the reference trihedron.
 
     Vector global_to_local(const Vector &,const Vector &) const;
     Vector global_to_local_disp_nod(const int &) const;

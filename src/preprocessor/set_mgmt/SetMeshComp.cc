@@ -405,11 +405,11 @@ void XC::SetMeshComp::CompletaHaciaAbajo(void)
       }
   }
 
-//! @brief  Agrega a este conjunto los objetos que hacen referencia
-//! a uno o más de los que ya están en el conjunto.
+//! @brief Appends to this set the objects that make reference to one
+//! or more of the objects that already are in the set.
 void XC::SetMeshComp::CompletaHaciaArriba(void)
   {
-    std::cerr << "SetMeshComp::CompletaHaciaArriba() está sin terminar." << std::endl;
+    std::cerr << "SetMeshComp::CompletaHaciaArriba() implementation pending." << std::endl;
   }
 
 //! @brief Selecciona los nodos cuyos tags se pasan como parámetro.

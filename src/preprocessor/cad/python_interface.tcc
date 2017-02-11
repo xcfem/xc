@@ -47,7 +47,7 @@ class_<XC::MapSisRef, bases<MapCadSisRef>, boost::noncopyable >("MapSisRef", no_
   ;
 
 
-XC::MapSisRef &(XC::Cad::*getReferenceSystems)(void)= &XC::Cad::getSistemasReferencia;
+XC::MapSisRef &(XC::Cad::*getReferenceSystems)(void)= &XC::Cad::getReferenceSystems;
 XC::MapTrfGeom &(XC::Cad::*getGeometricTransformations)(void)= &XC::Cad::getTransformacionesGeometricas;
 XC::MapPuntos &(XC::Cad::*getMapPuntosRef)(void)= &XC::Cad::getPuntos;
 XC::MapLineas &(XC::Cad::*getMapLineasRef)(void)= &XC::Cad::getLineas;

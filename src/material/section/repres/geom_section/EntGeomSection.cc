@@ -58,25 +58,25 @@ XC::EntGeomSection &XC::EntGeomSection::operator=(const EntGeomSection &otro)
     return *this;
   }
 
-//! @brief Devuelve el sistema de coordenadas activo.
+//! @brief Returns current reference system.
 XC::SisRefScc *XC::EntGeomSection::SisRefSccActual(void)
   {
     SisRefScc *retval= nullptr;
     if(sccGeom)
-      retval= getGeomSection()->sistema_referencia_actual();
+      retval= getGeomSection()->current_reference_system();
     return retval;
   }
 
-//! @brief Devuelve el sistema de coordenadas activo.
+//! @brief Returns current reference system.
 const XC::SisRefScc *XC::EntGeomSection::SisRefSccActual(void) const
   {
     const SisRefScc *retval= nullptr;
     if(sccGeom)
-      retval= getGeomSection()->sistema_referencia_actual();
+      retval= getGeomSection()->current_reference_system();
     return retval;
   }
 
-//! @brief Devuelve un puntero al punto cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to the point with the identifier being passed as parameter.
 XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto)
   {
     Spot *retval= nullptr;
@@ -91,7 +91,7 @@ XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto)
     return retval;
   }
 
-//! @brief Devuelve un puntero al punto cuyo índice se pasa como parámetro
+//! @brief Returns a const pointer to the point with the identifier being passed as parameter.
 const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto) const
   {
     const Spot *retval= nullptr;

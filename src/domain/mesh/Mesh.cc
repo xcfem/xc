@@ -618,12 +618,12 @@ XC::Graph &XC::Mesh::getElementGraph(void)
   }
 
 
-//! @brief Construye (si es necesario) el grafo de nodos del dominio y devuelve una referencia al mismo.
+//! @brief Builds (if needed) the graph of the domain nodes and
+//! returns a reference to it.
 XC::Graph &XC::Mesh::getNodeGraph(void)
   {
     if(!nodeGraphBuiltFlag)
-      {
-        // try to get a graph as big as we should need
+      { // try to get a graph as big as we should need
         theNodeGraph= Graph(this->getNumNodes()+START_VERTEX_NUM);
 
         // now build the graph

@@ -82,11 +82,11 @@ XC::ReinfLayer::ReinfLayer(ListReinfLayer *owr,Material *m,const int &numReinfBa
   { set_owner(owr); }
 
 
-//! @brief Establece el número de barras de la capa.
+//! @brief Set the number or rebars in the layer.
 void XC::ReinfLayer::setNumReinfBars(int numReinfBars)
   { nReinfBars= numReinfBars; }
 
-//! @brief Devuelve una referencia al objeto GeomSection propietario.
+//! @brief Returns a reference to the (GeomSection) owner object.
 const XC::GeomSection *XC::ReinfLayer::getGeomSection(void) const
   {
     const EntCmd *owr= Owner();
@@ -96,7 +96,7 @@ const XC::GeomSection *XC::ReinfLayer::getGeomSection(void) const
     return l->getGeomSection();
   }
 
-//! @brief Devuelve el valor mínimo del recubrimiento de las barras.
+//! @brief Returns the minimum value for rebar cover.
 double XC::ReinfLayer::getRecubrimiento(void) const
   {
     const VectorReinfBar &barras= getReinfBars();

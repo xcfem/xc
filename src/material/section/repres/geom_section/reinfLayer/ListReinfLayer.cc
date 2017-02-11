@@ -119,7 +119,8 @@ XC::ReinfLayer *XC::ListReinfLayer::push_back(const ReinfLayer &reg)
     return tmp;
   }
 
-//! @brief Devuelve una referencia al objeto propietario.
+//! @brief Returns a reference to the GeomSection object
+//! that owns this one.
 const XC::GeomSection *XC::ListReinfLayer::getGeomSection(void) const
   {
     const EntCmd *owr= Owner();
