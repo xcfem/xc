@@ -79,7 +79,7 @@ class Vector;
 #define CURRENT_SECANT  2
 #define INITIAL_THEN_CURRENT_TANGENT  3
 
-//! @ingroup AnalisisIntegrator
+//! @ingroup AnalysisIntegrator
 //
 //! @brief IncrementalIntegrator is an algorithmic class for setting up the finite 
 //! element equations in an incremental analysis and for updating the nodal

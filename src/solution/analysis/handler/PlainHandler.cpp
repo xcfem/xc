@@ -82,7 +82,7 @@
 XC::PlainHandler::PlainHandler(ModelWrapper *owr)
   :ConstraintHandler(owr,HANDLER_TAG_PlainHandler) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::ConstraintHandler *XC::PlainHandler::getCopy(void) const
   { return new PlainHandler(*this); }
 

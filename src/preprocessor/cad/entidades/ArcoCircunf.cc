@@ -47,7 +47,7 @@ XC::ArcoCircunf::ArcoCircunf(Preprocessor *m)
 XC::ArcoCircunf::ArcoCircunf(const std::string &nombre,Preprocessor *m)
   : LineaBase(nombre,m), p3(nullptr) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SetEstruct *XC::ArcoCircunf::getCopy(void) const
   { return new ArcoCircunf(*this); }
 

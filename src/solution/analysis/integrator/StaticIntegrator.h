@@ -73,7 +73,7 @@ class AnalysisModel;
 class FE_Element;
 class Vector;
 
-//! @ingroup AnalisisIntegrator
+//! @ingroup AnalysisIntegrator
 //
 //! @defgroup StaticIntegrator Integrators for static problems (Kx= F).
 //

@@ -43,7 +43,7 @@ XC::CorotShellMITC4::CorotShellMITC4(int tag,const SectionForceDeformation *ptr_
 XC::CorotShellMITC4::CorotShellMITC4(int tag,int node1,int node2,int node3,int node4,SectionForceDeformation &theMaterial )
   : ShellMITC4Base(tag,ELE_TAG_CorotShellMITC4,&theMaterial,&corot_trf) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::CorotShellMITC4::getCopy(void) const
   { return new CorotShellMITC4(*this); }
 

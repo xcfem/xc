@@ -77,7 +77,7 @@ XC::Inelastic2DYS02::Inelastic2DYS02(int tag, double a, double e, double iz,
 	cModel = cycModel->getCopy();
 }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::Inelastic2DYS02::getCopy(void) const
   { return new XC::Inelastic2DYS02(*this); }
 

@@ -178,7 +178,7 @@ XC::ForceBeamColumn2d::ForceBeamColumn2d (int tag, int nodeI, int nodeJ,
  }
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::ForceBeamColumn2d::getCopy(void) const
   { return new ForceBeamColumn2d(*this); }
 

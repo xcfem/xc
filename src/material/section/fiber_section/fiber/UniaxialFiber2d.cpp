@@ -141,7 +141,7 @@ XC::Matrix &XC::UniaxialFiber2d::getFiberTangentStiffContr(void)
     return ks;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Fiber *XC::UniaxialFiber2d::getCopy(void) const
   { return new UniaxialFiber2d(*this); }  
 

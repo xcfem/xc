@@ -49,7 +49,7 @@ XC::UniformGrid::UniformGrid(const std::string &nombre,Preprocessor *m,const siz
   : EntMdlr(nombre,i,m),Lx(0.0),Ly(0.0),Lz(0.0),ndiv_x(0),ndiv_y(0),ndiv_z(0)
   {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SetEstruct *XC::UniformGrid::getCopy(void) const
   { return new UniformGrid(*this); }
 

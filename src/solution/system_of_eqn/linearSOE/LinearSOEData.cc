@@ -44,8 +44,9 @@ void XC::LinearSOEData::inic(const size_t &sz)
         zero();
       }
     else
-      std::cerr << "¡OJO! LinearSOEData::inicBX el modelo no tiene ningún grado de libertad"
-                << " agrege algún nodo o cambie el gestor de coacciones." << std::endl;
+      std::cerr << "¡WARNING! " << nombre_clase() << __FUNCTION__
+	        << " model has zero DOFs"
+                << " add nodes or reduce constraints." << std::endl;
   }
 
 int XC::LinearSOEData::getNumEqn(void) const
@@ -74,7 +75,7 @@ void XC::LinearSOEData::setX(const Vector &x)
 
 int XC::LinearSOEData::setB(const Vector &v,const double &fact)
   {
-    // check for a XC::quick return
+    // check for a quick return
     if(fact == 0.0)  return 0;
 
     if(v.Size() != size)

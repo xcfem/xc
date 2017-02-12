@@ -65,7 +65,6 @@
 
 namespace XC {
 class LinearSOESolver;
-class Graph;
 class Matrix;
 class Vector;
 class ID;
@@ -101,7 +100,6 @@ class LinearSOE : public SystemOfEqn
 
     virtual int solve(void);    
 
-    // pure virtual functions
     virtual int setSize(Graph &theGraph) =0;    
     virtual int getNumEqn(void) const =0;
     

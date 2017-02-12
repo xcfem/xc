@@ -112,7 +112,7 @@ XC::CorotTruss &XC::CorotTruss::operator=(const CorotTruss &otro)
     return *this;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::CorotTruss::getCopy(void) const
   { return new CorotTruss(*this); }
 

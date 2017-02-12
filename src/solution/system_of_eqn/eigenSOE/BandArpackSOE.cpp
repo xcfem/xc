@@ -63,14 +63,11 @@ bool XC::BandArpackSOE::setSolver(EigenSolver *newSolver)
     return retval;
   }
 
-//! @brief Finds number of super and sub diagonals.
+//! @brief Sets the size of the system from the number of vertices in the graph.
 int XC::BandArpackSOE::setSize(Graph &theGraph)
   {
     int result = 0;
-    size = theGraph.getNumVertex();
-    if(size==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; el modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie el gestor de coacciones." << std::endl;
+    size= checkSize(theGraph);
 
     // determine the number of superdiagonals and subdiagonals
     theGraph.getBand(numSubD,numSuperD);

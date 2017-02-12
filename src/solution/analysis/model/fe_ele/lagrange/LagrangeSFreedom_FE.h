@@ -72,7 +72,7 @@ class AnalysisModel;
 class Domain;
 class DOF_Group;
 
-//! @ingroup AnalisisFE
+//! @ingroup AnalysisFE
 //
 //! @brief LagrangeSFreedom_FE is a subclass of SFreedom_FE
 //! which handles SFreedom_Constraints using the Lagrange method.

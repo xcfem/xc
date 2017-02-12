@@ -70,7 +70,7 @@ class TaggedObjectStorage;
 
 class FE_Element;
 
-//! @ingroup AnalisisModel
+//! @ingroup AnalysisModel
 //
 //! @brief Iterator over the finite elementos of the model.
 class FE_EleIter 

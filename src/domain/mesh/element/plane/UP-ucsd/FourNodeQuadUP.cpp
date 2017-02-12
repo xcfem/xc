@@ -106,7 +106,7 @@ XC::FourNodeQuadUP::FourNodeQuadUP(void)
      wts[3] = 1.0;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::FourNodeQuadUP::getCopy(void) const
   { return new XC::FourNodeQuadUP(*this); }
 

@@ -71,7 +71,7 @@ const XC::GaussModel &XC::ShellNL::getGaussModel(void) const
 XC::ShellNL::ShellNL(int tag,const SectionForceDeformation *ptr_mat)
   :QuadBase9N<SectionFDPhysicalProperties>(tag, ELE_TAG_ShellNL, SectionFDPhysicalProperties(9,ptr_mat)), Ktt(0.0),theCoordTransf(), Ki(nullptr) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::ShellNL::getCopy(void) const
   { return new ShellNL(*this); }
 

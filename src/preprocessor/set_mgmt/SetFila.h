@@ -118,7 +118,7 @@ SetFila<FILATTZNOD,FILATTZELEM> &XC::SetFila<FILATTZNOD,FILATTZELEM>::operator=(
     return *this;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 template <class FILATTZNOD,class FILATTZELEM>
 SetEstruct *XC::SetFila<FILATTZNOD,FILATTZELEM>::getCopy(void) const
   { return new SetFila<FILATTZNOD,FILATTZELEM>(*this); }

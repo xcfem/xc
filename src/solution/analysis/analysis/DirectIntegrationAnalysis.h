@@ -74,7 +74,7 @@ class SensitivityAlgorithm;
 #endif
 // AddingSensitivity:END ///////////////////////////////
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
 //! @brief Direct integration dynamic analysis.
 class DirectIntegrationAnalysis: public TransientAnalysis

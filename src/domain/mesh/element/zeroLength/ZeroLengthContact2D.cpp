@@ -83,7 +83,7 @@ XC::ZeroLengthContact2D::ZeroLengthContact2D(int tag)
   :ZeroLengthContact(tag,ELE_TAG_ZeroLengthContact2D,2), lambda(0.0), T(2*numNodos()), ContactNormal(2), stickPt(0.0), xi(0.0)
   {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::ZeroLengthContact2D::getCopy(void) const
   { return new ZeroLengthContact2D(*this); }
 

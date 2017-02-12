@@ -47,7 +47,7 @@ XC::Linea::Linea(Preprocessor *m,const size_t &nd)
 XC::Linea::Linea(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : LineaBase(nombre,m,nd) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SetEstruct *XC::Linea::getCopy(void) const
   { return new Linea(*this); }
 

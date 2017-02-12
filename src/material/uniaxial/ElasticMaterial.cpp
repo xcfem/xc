@@ -119,7 +119,7 @@ int XC::ElasticMaterial::revertToStart(void)
     return 0;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::ElasticMaterial::getCopy(void) const
   { return new ElasticMaterial(*this); }
 

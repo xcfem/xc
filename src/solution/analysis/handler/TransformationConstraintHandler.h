@@ -72,7 +72,7 @@ namespace XC {
 class FE_Element;
 class DOF_Group;
 
-//! @ingroup AnalisisCH
+//! @ingroup AnalysisCH
 //
 //! @brief TransformationConstraintHandler is a constraint handler
 //! for handling constraints using the Transformation method.

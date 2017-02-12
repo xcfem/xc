@@ -37,7 +37,7 @@ class Node;
 class MFreedom_ConstraintBase;
 class DOF_Group;
 
-//! @ingroup AnalisisFE
+//! @ingroup AnalysisFE
 //
 //! @brief ??
 class MPBase_FE: public MPSPBaseFE

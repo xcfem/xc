@@ -73,7 +73,7 @@ class DOF_Group;
 
  const double DefaultPenaltyFactor= 1e7; //10^(p/2) siendo p el número de dígitos decimales.
 
-//! @ingroup AnalisisCH
+//! @ingroup AnalysisCH
 //
 //! @brief PenaltyConstraintHandler is a 
 //! constraint handler for handling constraints using the penalty method.

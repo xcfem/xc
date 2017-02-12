@@ -80,11 +80,11 @@ class Matrix;
 class TransientIntegrator;
 class Integrator;
 
-//! @ingroup Analisis
+//! @ingroup Analysis
 //
-//! @defgroup AnalisisDOF Grupos de grados de libertad para the analysis.
+//! @defgroup AnalysisDOF DOF groups as seen by the analysis.
 //
-//! @ingroup AnalisisDOF
+//! @ingroup AnalysisDOF
 //! @brief A DOF_Group object is instantiated by the ConstraintHandler for 
 //! every unconstrained node in the domain. The constrained nodes require 
 //! specialised types of DOF_Group; which deal with the constraints. DOF_Group

@@ -83,7 +83,7 @@
 XC::PenaltyConstraintHandler::PenaltyConstraintHandler(ModelWrapper *owr,const double &sp, const double &mp)
   :FactorsConstraintHandler(owr,HANDLER_TAG_PenaltyConstraintHandler,sp,mp) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::ConstraintHandler *XC::PenaltyConstraintHandler::getCopy(void) const
   { return new PenaltyConstraintHandler(*this); }
 

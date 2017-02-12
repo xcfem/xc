@@ -93,7 +93,7 @@ XC::ShellMITC4::ShellMITC4(int tag,const SectionForceDeformation *ptr_mat)
 XC::ShellMITC4::ShellMITC4(int tag,int node1,int node2,int node3,int node4,const SectionForceDeformation &theMaterial )
   : ShellMITC4Base(tag,ELE_TAG_ShellMITC4,&theMaterial,&linear_trf) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::ShellMITC4::getCopy(void) const
   { return new ShellMITC4(*this); }
 

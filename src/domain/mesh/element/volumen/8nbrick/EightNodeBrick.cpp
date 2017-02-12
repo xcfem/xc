@@ -404,7 +404,7 @@ XC::EightNodeBrick::EightNodeBrick(void)
 
 //#############################################################################
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::EightNodeBrick::getCopy(void) const
   { return new XC::EightNodeBrick(*this); }
 

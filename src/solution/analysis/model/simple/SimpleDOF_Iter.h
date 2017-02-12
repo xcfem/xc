@@ -68,7 +68,7 @@
 namespace XC {
 class AnalysisModel;
 
-//! @ingroup AnalisisModel
+//! @ingroup AnalysisModel
 //
 //! @brief Iterator over the degrees of freedom of the analysis model.
 class SimpleDOF_Iter: public DOF_GrpIter

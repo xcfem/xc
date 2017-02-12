@@ -113,7 +113,7 @@ XC::Brick::Brick( int tag, int node1,int node2,int node3,int node4,int node5,int
 //******************************************************************
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::Brick::getCopy(void) const
   { return new Brick(*this); }
 

@@ -132,7 +132,7 @@ XC::BeamWithHinges3d::BeamWithHinges3d(const XC::BeamWithHinges3d &otro)
 //     return *this;
 //   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::BeamWithHinges3d::getCopy(void) const
   { return new XC::BeamWithHinges3d(*this); }
 
@@ -142,7 +142,7 @@ XC::BeamWithHinges3d::~BeamWithHinges3d(void)
     if(applied_sf) delete applied_sf;
   }
 
-//! @brief Devuelve el número de grados de libertad del elemento.
+//! @brief Return the number of element DOFs
 int XC::BeamWithHinges3d::getNumDOF(void) const
   { return 12; }
 

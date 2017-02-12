@@ -74,7 +74,7 @@ class MRMFreedom_Constraint;
 class SFreedom_Constraint;
 class TransformationConstraintHandler;
 
-//! @ingroup AnalisisDOF
+//! @ingroup AnalysisDOF
 //
 //! @brief A TransformationDOF_Group object is 
 //! instantiated by the TransformationConstraintHandler for 

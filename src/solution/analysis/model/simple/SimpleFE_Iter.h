@@ -68,7 +68,7 @@
 namespace XC {
 class AnalysisModel;
 
-//! @ingroup AnalisisModel
+//! @ingroup AnalysisModel
 //
 //! @brief Iterator over the model finite elements.
 class SimpleFE_Iter: public FE_EleIter

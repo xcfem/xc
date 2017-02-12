@@ -71,9 +71,10 @@ namespace XC {
 class TransientIntegrator;
 class ConvergenceTest;
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
-//! @brief Análisis con paso variable en el tiempo.
+//! @brief perform a dynamic analysis on the FE\_Model
+//! using a direct integration scheme.
 class VariableTimeStepDirectIntegrationAnalysis: public DirectIntegrationAnalysis
   {
   protected:

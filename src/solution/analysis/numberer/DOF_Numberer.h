@@ -74,13 +74,13 @@ class FEM_ObjectBroker;
 class ID;
 class ModelWrapper;
 
-//! @ingroup Analisis
+//! @ingroup Analysis
 //
 //! @defgroup Numerador DOF numbering.
 //
 //! @ingroup Numerador
 //
-//! @brief Clase base para los numeradores de grados de libertad.
+//! @brief Base class for DOF numbererers.
 //! Para realizar su función esta clase contiene un numerador de grafos
 //! y un apuntador al analysis model.
 //! Este es el objeto encargado de crear, almacenar y destruir el
@@ -91,7 +91,7 @@ class DOF_Numberer: public MovableObject, public EntCmd
     ModelWrapper *getModelWrapper(void);
     const ModelWrapper *getModelWrapper(void) const;
 
-    GraphNumberer *theGraphNumberer; //!< Numerador de grados de libertad.
+    GraphNumberer *theGraphNumberer; //!< DOF numberer.
   protected:
     AnalysisModel *getAnalysisModelPtr(void);
     GraphNumberer *getGraphNumbererPtr(void);

@@ -161,7 +161,7 @@ XC::ZeroLengthSection::ZeroLengthSection(void)
   : XC::Element0D(0, ELE_TAG_ZeroLengthSection,0,0,0),
     K(nullptr), P(nullptr), theSection(nullptr), order(0) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element *XC::ZeroLengthSection::getCopy(void) const
   { return new ZeroLengthSection(*this); }
 

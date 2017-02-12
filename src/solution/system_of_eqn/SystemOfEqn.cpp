@@ -62,6 +62,7 @@
 #include <solution/system_of_eqn/SystemOfEqn.h>
 #include <solution/analysis/model/AnalysisModel.h>
 #include "solution/SoluMethod.h"
+#include "solution/graph/graph/Graph.h"
 
 XC::SystemOfEqn::SystemOfEqn(SoluMethod *owr,int clasTag)
   : MovableObject(clasTag), EntCmd(owr) {}
@@ -89,3 +90,14 @@ XC::AnalysisModel *XC::SystemOfEqn::getAnalysisModelPtr(void)
     assert(sm);
     return sm->getAnalysisModelPtr();
   }
+
+//! @brief Check number of DOFs in the graph.
+int XC::SystemOfEqn::checkSize(Graph &theGraph) const
+  {
+    const int retval= theGraph.getNumVertex();
+    if(retval==0)
+      std::cerr << "WARNING! " << nombre_clase() << "::" << __FUNCTION__
+	        << "; model has zero DOFs, add nodes or reduce constraints." << std::endl;
+    return retval;
+  }
+

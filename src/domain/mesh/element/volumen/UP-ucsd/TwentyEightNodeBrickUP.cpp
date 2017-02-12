@@ -142,7 +142,7 @@ XC::TwentyEightNodeBrickUP::TwentyEightNodeBrickUP(int tag,
   }
 //******************************************************************
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::TwentyEightNodeBrickUP::getCopy(void) const
   { return new TwentyEightNodeBrickUP(*this); }
 
@@ -175,7 +175,7 @@ void  XC::TwentyEightNodeBrickUP::setDomain(Domain *theDomain )
       }
   }
 
-//! @brief Devuelve el número de grados de libertad del elemento.
+//! @brief Return the number of element DOFs.
 int  XC::TwentyEightNodeBrickUP::getNumDOF(void) const
   { return 68; }
 

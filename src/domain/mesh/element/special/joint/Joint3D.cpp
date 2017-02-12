@@ -237,7 +237,7 @@ XC::Joint3D::Joint3D(int tag, int nd1, int nd2, int nd3, int nd4, int nd5, int n
       }
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::Joint3D::getCopy(void) const
   { return new XC::Joint3D(*this); }
 

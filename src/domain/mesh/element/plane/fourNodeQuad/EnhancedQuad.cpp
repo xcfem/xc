@@ -112,7 +112,7 @@ XC::EnhancedQuad::EnhancedQuad(int tag, int node1,
     alpha.Zero( ) ;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::EnhancedQuad::getCopy(void) const
   { return new EnhancedQuad(*this); }
 

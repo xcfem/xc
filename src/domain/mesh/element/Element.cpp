@@ -287,7 +287,7 @@ const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
 const XC::Vector &XC::Element::getNodeResistingComponents(const size_t &iNod,const Vector &rf) const
   {
     static Vector retval;
-    const int ngdl= getNodePtrs()[iNod]->getNumberDOF(); //Grados de libertad del nodo.
+    const int ngdl= getNodePtrs()[iNod]->getNumberDOF(); // number of DOFs in the node.
     retval.resize(ngdl);
     for(int i=0;i<ngdl;i++)
       retval[i]= rf(iNod*ngdl+i);

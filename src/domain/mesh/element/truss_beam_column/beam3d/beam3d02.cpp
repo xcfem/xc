@@ -76,7 +76,7 @@ XC::beam3d02::beam3d02(int tag, double a, double e, double g,
 
   :beam3dBase(tag,ELE_TAG_beam3d02,a,e,g,jx,iy,iz,Nd1,Nd2,Theta) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::beam3d02::getCopy(void) const
   { return new XC::beam3d02(*this); }
 

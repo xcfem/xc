@@ -116,7 +116,7 @@ int XC::FiberSection3d::setTrialSectionDeformation(const Vector &deforms)
 const XC::Matrix &XC::FiberSection3d::getInitialTangent(void) const
   { return fibras.getInitialTangent(*this); }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::FiberSection3d::getCopy(void) const
   { return new FiberSection3d(*this); }
 

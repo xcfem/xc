@@ -141,7 +141,7 @@ XC::ForceBeamColumn3d::ForceBeamColumn3d (int tag, int nodeI, int nodeJ,
     this->setSectionPointers(sec);
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::ForceBeamColumn3d::getCopy(void) const
   { return new ForceBeamColumn3d(*this); }
 

@@ -108,7 +108,7 @@ XC::ConstraintHandler *XC::Analysis::getConstraintHandlerPtr(void)
       return nullptr;
   }
 
-//! @brief Returns a pointer to the numerador de grados de libertad.
+//! @brief Returns a pointer to the DOF numberer.
 XC::DOF_Numberer *XC::Analysis::getDOF_NumbererPtr(void) const
   {
     if(metodo_solu)

@@ -35,7 +35,7 @@ namespace XC {
 class FE_Element;
 class DOF_Group;
 
-//! @ingroup AnalisisCH
+//! @ingroup AnalysisCH
 //
 //! @brief ??.
 class FactorsConstraintHandler: public ConstraintHandler

@@ -118,7 +118,7 @@ XC::CorotTrussSection &XC::CorotTrussSection::operator=(const CorotTrussSection 
     return *this;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::CorotTrussSection::getCopy(void) const
   { return new XC::CorotTrussSection(*this); }
 

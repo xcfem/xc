@@ -273,8 +273,7 @@ const bool XC::Node::isAlive(void) const
     return retval;
   }
 
-//! @brief Impone valor nulo en todos los grados
-//! de libertad del nodo.
+//! @brief Imposes zero displacement (zero value for all node DOFs).
 void XC::Node::freeze_if_dead(NodeLocker *locker)
   {
     if(isDead())
@@ -307,8 +306,8 @@ void XC::Node::set_id_coacciones(const ID &coacciones)
       coacciones_freeze.insert(coacciones(i));
   }
 
-//! @brief Elimina las coacciones sobre los grados
-//! de libertad del nodo creadas por freeze.
+//! @brief Deletes the constraint over the node DOFs
+//! previously created by the freeze method.
 void XC::Node::melt_if_alive(NodeLocker *locker)
   {
     if(isAlive())
@@ -349,8 +348,7 @@ XC::DefaultTag &XC::Node::getDefaultTag(void)
 XC::SFreedom_Constraint *XC::Node::fix(const SFreedom_Constraint &semilla)
   { return GetPreprocessor()->getConstraintLoader().addSFreedom_Constraint(getTag(),semilla); }
 
-//! @brief Impone desplazamientos prescritos en los grados de libertad
-//! que se pasan como parámetro.
+//! @brief Sets prescribed displacements on the DOFs being passed as parameter.
 void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &valores)
   {
     if(getDomain())
@@ -368,22 +366,21 @@ void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &val
           }
         else
           std::cerr << "Node::coarta_movs; "
-                    << "la lista de grados de libertad está vacia." << std::endl;
+                    << "DOFs list is empty." << std::endl;
       }
     else
       std::cerr << "Node::coarta_movs; "
                 << "the pointer al domain es nulo. Se ignora la coacción." << std::endl;
   }
 
-//! @brief Impone desplazamientos prescritos en los grados de libertad
-//! que se pasan como parámetro.
+//! @brief Sets prescribed displacements on the DOFs being passed as parameter.
 void XC::Node::fix(const ID &idGdls,const Vector &valores)
   {
     std::vector<double> vs= vector_to_std_vector(valores);
     fix(idGdls,vs);
   }
 
-//! @brief Devuelve el número de grados de libertad del nodo.
+//! @brief Return the number of node DOFs.
 int XC::Node::getNumberDOF(void) const
   { return numberDOF; }
 

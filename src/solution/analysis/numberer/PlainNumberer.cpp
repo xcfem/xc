@@ -83,7 +83,7 @@
 XC::PlainNumberer::PlainNumberer(ModelWrapper *owr) 
   :DOF_Numberer(owr,NUMBERER_TAG_PlainNumberer) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::DOF_Numberer *XC::PlainNumberer::getCopy(void) const
   { return new PlainNumberer(*this);  }
 

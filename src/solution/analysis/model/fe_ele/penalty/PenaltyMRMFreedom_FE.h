@@ -71,7 +71,7 @@ class Integrator;
 class AnalysisModel;
 class Domain;
 
-//! @ingroup AnalisisFE
+//! @ingroup AnalysisFE
 //
 //! @brief PenaltyMRMFreedom_FE is a subclass of FE_Element which
 //! handles MRMFreedom_Constraints using the penalty method.

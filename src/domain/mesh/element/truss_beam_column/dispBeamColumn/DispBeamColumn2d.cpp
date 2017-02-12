@@ -136,7 +136,7 @@ XC::DispBeamColumn2d::DispBeamColumn2d(int tag)
 // AddingSensitivity:END //////////////////////////////////////
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::DispBeamColumn2d::getCopy(void) const
   { return new XC::DispBeamColumn2d(*this); }
 

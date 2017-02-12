@@ -88,17 +88,14 @@ XC::SymArpackSOE::~SymArpackSOE(void)
   }
 
 
-//! @brief Establece the tamaño del problema.				
+//! @brief Sets the size of the system from the number of vertices in the graph.
 int XC::SymArpackSOE::setSize(Graph &theGraph)
   {
     int result = 0;
     //int oldSize = size;
-    size = theGraph.getNumVertex();
-    if(size==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; the modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie the gestor de coacciones." << std::endl;
+    size= checkSize(theGraph);
 
-    // fist itearte through the vertices of the graph to get nnz
+    // fist iterate through the vertices of the graph to get nnz
     Vertex *theVertex;
     int newNNZ = 0;
     VertexIter &theVertices = theGraph.getVertices();

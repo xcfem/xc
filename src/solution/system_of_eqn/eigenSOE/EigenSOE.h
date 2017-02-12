@@ -49,7 +49,6 @@
 
 namespace XC {
 class EigenSolver;
-class Graph;
 class Matrix;
 class Vector;
 class ID;

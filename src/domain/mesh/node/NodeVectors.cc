@@ -84,7 +84,7 @@ XC::NodeVectors &XC::NodeVectors::operator=(const NodeVectors &otro)
 XC::NodeVectors::~NodeVectors(void)
   { libera(); }
 
-//! @brief Devuelve el número de grados de libertad del nodo.
+//! @brief Return the number of node DOFs.
 size_t XC::NodeVectors::getVectorsSize(void) const
   {
     if(commitData)

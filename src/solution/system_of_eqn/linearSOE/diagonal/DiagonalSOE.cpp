@@ -92,10 +92,7 @@ int XC::DiagonalSOE::setSize(Graph &theGraph)
   {
     const int oldSize = size;
     int result = 0;
-    size = theGraph.getNumVertex();
-    if(size==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; el modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie el gestor de coacciones." << std::endl;
+    size= checkSize(theGraph);
   
     // check we have enough space in iDiagLoc and iLastCol
     // if not delete old and create new

@@ -186,7 +186,7 @@ const XC::ResponseId &XC::GenericSection1d::getType(void) const
 int XC::GenericSection1d::getOrder(void) const
   { return 1; }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::GenericSection1d::getCopy(void) const
   { return new GenericSection1d(*this); }
 

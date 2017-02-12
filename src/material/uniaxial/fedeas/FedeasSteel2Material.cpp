@@ -149,7 +149,7 @@ XC::FedeasSteel2Material::FedeasSteel2Material(int tag)
  : XC::FedeasMaterial(tag, MAT_TAG_FedeasSteel2, 8, 10)
   {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::UniaxialMaterial* XC::FedeasSteel2Material::getCopy(void) const
   { return  new FedeasSteel2Material(*this); }
 

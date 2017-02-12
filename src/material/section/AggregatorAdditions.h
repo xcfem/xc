@@ -39,11 +39,11 @@ class ResponseId;
 
 //! \ingroup MATSCC
 //
-//! @brief pointers to UniaxialMaterial con grado de libertad asociado a
-//! a cada uno de dichos grados de libertad (se emplea en SectionAggregator).
+//! @brief pointers to UniaxialMaterial with the degree
+//! of freedom associated to each of them (used in SectionAggregator).
 class AggregatorAdditions: public DqUniaxialMaterial
   {
-    ResponseId *matCodes; //!< Esfuerzo para el que cada UniaxialMaterial proporciona una respuesta.
+    ResponseId *matCodes; //!< Response for each material.
   protected:
     void libera(void);
     void alloc_ptrs(const ResponseId &);

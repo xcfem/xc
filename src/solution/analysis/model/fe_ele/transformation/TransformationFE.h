@@ -70,7 +70,7 @@ class SFreedom_Constraint;
 class DOF_Group;
 class TransformationConstraintHandler;
 
-//! @ingroup AnalisisFE
+//! @ingroup AnalysisFE
 //
 //! @brief TransformationFE objects handle MFreedom_Constraints using
 //! the transformation method T^t K T. SFreedom_Constraints are

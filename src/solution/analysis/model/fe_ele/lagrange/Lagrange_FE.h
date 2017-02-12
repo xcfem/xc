@@ -45,7 +45,7 @@ namespace XC {
 class DOF_Group;
 class ID;
 
-//! @ingroup AnalisisFE
+//! @ingroup AnalysisFE
 //
 //! @brief Lagrange_FE is a subclass of FE_Element
 //! which handles _Constraints using the Lagrange method.

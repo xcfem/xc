@@ -49,7 +49,7 @@ XC::Pnt::Pnt(Preprocessor *m,const Pos3d &pto)
 XC::Pnt::Pnt(const std::string &nombre, Preprocessor *m,const Pos3d &pto)
   : EntMdlr(nombre,0,m), p(pto) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SetEstruct *XC::Pnt::getCopy(void) const
   { return new Pnt(*this); }
 

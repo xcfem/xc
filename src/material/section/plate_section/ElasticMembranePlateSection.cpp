@@ -103,8 +103,8 @@ void XC::ElasticMembranePlateSection::setRho(const double &r)
   { rhoH= r; }
 
 
-//! @brief Devuelve las etiquetas de los grados de libertad a los que el
-//! elemento aporta rigidez.
+//! @brief Returns the abels of the DOFs for which the elements
+//! adds stiffness.
 const XC::ResponseId &XC::ElasticMembranePlateSection::getType(void) const 
   { return RespShellMat; }
 

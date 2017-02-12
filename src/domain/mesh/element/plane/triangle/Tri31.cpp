@@ -93,7 +93,7 @@ XC::Tri31::Tri31(int tag,const NDMaterial *ptr_mat)
   :TriBase3N<SolidMech2D>(tag,ELE_TAG_Tri31,SolidMech2D(4,ptr_mat,1.0,0.0)), pressureLoad(8), pressure(0.0), Ki(nullptr)
   {load.reset(8);}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::Tri31::getCopy(void) const
   { return new Tri31(*this); }
 

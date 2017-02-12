@@ -141,7 +141,7 @@ void XC::DOF_Numberer::useAlgorithm(const std::string &nmb)
 XC::DOF_Numberer::~DOF_Numberer(void) 
   { libera(); }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::DOF_Numberer *XC::DOF_Numberer::getCopy(void) const
   { return new DOF_Numberer(*this);  }
 

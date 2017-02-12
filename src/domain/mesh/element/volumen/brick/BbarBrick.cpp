@@ -109,7 +109,7 @@ XC::BbarBrick::BbarBrick(  int tag,
   { }
 //******************************************************************
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::BbarBrick::getCopy(void) const
   { return new BbarBrick(*this); }
 

@@ -142,8 +142,8 @@ int XC::MembranePlateFiberSection::getOrder(void) const
   { return 8; }
 
 
-//! @brief Devuelve las etiquetas de los grados de libertad a los que el
-//! material aporta rigidez.
+//! @brief Returns the labels of the DOFs for wich the element
+//! adds (assembles) stiffness.
 const XC::ResponseId &XC::MembranePlateFiberSection::getType(void) const 
   { return RespShellMat; }
 

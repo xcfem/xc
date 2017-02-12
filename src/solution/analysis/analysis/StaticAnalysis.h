@@ -72,9 +72,9 @@ class SensitivityAlgorithm;
 #endif
 // AddingSensitivity:END ///////////////////////////////
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
-//! @brief Análisis estático.
+//! @brief performs a static analysis on the FE\_Model.
 class StaticAnalysis: public Analysis
   {
   protected:

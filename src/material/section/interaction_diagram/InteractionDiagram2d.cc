@@ -57,7 +57,7 @@ XC::InteractionDiagram2d::InteractionDiagram2d(const Poligono2d &pts)
   : Poligono2d(pts) //sort_points(pts))
   { }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::InteractionDiagram2d *XC::InteractionDiagram2d::clon(void) const
   { return new InteractionDiagram2d(*this); }
 

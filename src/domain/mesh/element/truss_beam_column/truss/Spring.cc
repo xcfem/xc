@@ -106,7 +106,7 @@ XC::Spring &XC::Spring::operator=(const Spring &otro)
   }
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::Spring::getCopy(void) const
   { return new Spring(*this); }
 

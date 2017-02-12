@@ -274,7 +274,7 @@ int XC::Steel01::revertToStart(void)
     return 0;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::UniaxialMaterial* XC::Steel01::getCopy(void) const
   { return new Steel01(*this); }
 

@@ -73,19 +73,19 @@ XC::SFreedom_Constraint::SFreedom_Constraint(int clasTag)
   :Constraint(clasTag), dofNumber(0), valueR(0.0), valueC(0.0), isConstant(true), loadPatternTag(-1) {}
 
 //! @brief Constructor.
-//! @param tag: Tag de la coacción.
-//! @param node: Tag del nodo cuyos grados de libertad se coaccionan.
-XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int node)
-  :Constraint(tag, node,CNSTRNT_TAG_SFreedom_Constraint),dofNumber(0), valueR(0.0), valueC(0.0), isConstant(true), 
+//! @param tag: Constraint identifier.
+//! @param nodeTag: identifier of the node to constraint tag.
+XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag)
+  :Constraint(tag, nodeTag,CNSTRNT_TAG_SFreedom_Constraint),dofNumber(0), valueR(0.0), valueC(0.0), isConstant(true), 
    loadPatternTag(-1) {}
 
 // constructor for a subclass to use
 //! @brief Constructor.
-//! @param tag: Identificador de la coacción.
-//! @param node: Identificador del nodo cuyos grados de libertad se coaccionan.
-//! @param ndof: Número del grado de libertad coaccionado.
-XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int node, int ndof, int clasTag)
-  :Constraint(tag, node,clasTag), dofNumber(ndof), valueR(0.0), valueC(0.0), isConstant(true), 
+//! @param tag: Constraint identifier.
+//! @param nodeTag: identifier of the node to constraint.
+//! @param ndof: DOF number to constraint.
+XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, int clasTag)
+  :Constraint(tag, nodeTag,clasTag), dofNumber(ndof), valueR(0.0), valueC(0.0), isConstant(true), 
    loadPatternTag(-1)
  // valueC is set to 1.0 so that homo will be false when recvSelf() invoked
  // should be ok as valueC cannot be used by subclasses and subclasses should
@@ -94,16 +94,16 @@ XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int node, int ndof, int cl
 
 // constructor for object of type XC::SFreedom_Constraint
 //! @brief Constructor.
-//! @param tag: Identificador de la coacción.
-//! @param node: Identificador del nodo cuyos grados de libertad se coaccionan.
-//! @param ndof: Número del grado de libertad coaccionado.
-//! @param value: Valor impuesto para el grado de libertad.
+//! @param tag: Constraint identifier.
+//! @param nodeTag: identifier of the node to constraint.
+//! @param ndof: DOF number to constraint.
+//! @param value: prescribed value for DOF.
 //! @param ISconstant: Verdadero si el valor impuesto no varía con el tiempo.
-XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int node, int ndof, double value, bool ISconstant)
-  :Constraint(tag, node, CNSTRNT_TAG_SFreedom_Constraint), dofNumber(ndof), valueR(value), valueC(value), isConstant(ISconstant),
+XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, double value, bool ISconstant)
+  :Constraint(tag, nodeTag, CNSTRNT_TAG_SFreedom_Constraint), dofNumber(ndof), valueR(value), valueC(value), isConstant(ISconstant),
  loadPatternTag(-1) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SFreedom_Constraint *XC::SFreedom_Constraint::getCopy(void) const
   { return new SFreedom_Constraint(*this); }
 
@@ -115,7 +115,7 @@ XC::SFreedom_Constraint *XC::SFreedom_Constraint::getCopy(const int &spTag) cons
     return retval;
   }
 
-//! @brief Devuelve el identificador del grado de libertad al que se impone la coacción.
+//! @brief Returns the constrained DOF number.
 int XC::SFreedom_Constraint::getDOF_Number(void) const
   { return dofNumber; }
 

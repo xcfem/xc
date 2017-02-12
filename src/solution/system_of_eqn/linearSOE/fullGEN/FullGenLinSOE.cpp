@@ -94,11 +94,7 @@ bool XC::FullGenLinSOE::setSolver(LinearSOESolver *newSolver)
 int XC::FullGenLinSOE::setSize(Graph &theGraph)
   {
     int result = 0;
-    size = theGraph.getNumVertex();
-    if(size==0)
-      std::cerr << "¡OJO! error en " << nombre_clase()
-                << "::setSize; el modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie el gestor de coacciones." << std::endl;
+    size= checkSize(theGraph);
 
     const int size2= size*size;
     A.resize(size2);

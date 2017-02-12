@@ -112,7 +112,7 @@ XC::Twenty_Node_Brick::Twenty_Node_Brick(int tag,int node1, int node2, int node3
   }
 //******************************************************************
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::Twenty_Node_Brick::getCopy(void) const
   { return new Twenty_Node_Brick(*this); }
 

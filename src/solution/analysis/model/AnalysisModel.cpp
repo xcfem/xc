@@ -128,7 +128,7 @@ XC::AnalysisModel &XC::AnalysisModel::operator=(const AnalysisModel &otro)
     return *this;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::AnalysisModel *XC::AnalysisModel::getCopy(void) const
   { return new AnalysisModel(*this); }
 
@@ -491,8 +491,8 @@ int XC::AnalysisModel::getNumDOF_Groups(void) const
   { return numDOF_Grp; }
 
 
-//! @brief Returns a pointer to the grupo de grados de libertad
-//! cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the DEF group with the tag
+//! beign passed as parameter.
 XC::DOF_Group *XC::AnalysisModel::getDOF_GroupPtr(int tag)
   {
     DOF_Group *result= nullptr;
@@ -503,8 +503,8 @@ XC::DOF_Group *XC::AnalysisModel::getDOF_GroupPtr(int tag)
     return result;
   }
 
-//! @brief Returns a pointer to the grupo de grados de libertad
-//! cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the DOF group which the tag
+//! being passed as parameter.
 const XC::DOF_Group *XC::AnalysisModel::getDOF_GroupPtr(int tag) const
   {
     const DOF_Group *result= nullptr;

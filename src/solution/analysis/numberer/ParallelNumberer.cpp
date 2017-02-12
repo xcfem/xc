@@ -83,7 +83,7 @@ XC::ParallelNumberer::~ParallelNumberer(void)
       delete theNumberer;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::DOF_Numberer *XC::ParallelNumberer::getCopy(void) const
   { return new ParallelNumberer(*this);  }
 

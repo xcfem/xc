@@ -72,9 +72,9 @@ namespace XC {
   class Vector;
   class Matrix;
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
-//! @brief Análisis de eigenvalues y vectores propios.
+//! @brief Eigenproblem analysis.
 class EigenAnalysis : public Analysis
   {
   protected:

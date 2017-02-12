@@ -352,7 +352,7 @@ bool XC::Mesh::removeNode(int tag)
     return res;
   }
 
-//! @brief Anula los pointers to grupo de grados de libertad de los nodos.
+//! @brief Clears the pointers to node DOF groups.
 void XC::Mesh::clearDOF_GroupPtr(void)
   {
     Node *nodePtr= nullptr;
@@ -458,8 +458,8 @@ const XC::Node *XC::Mesh::getNearestNode(const Pos3d &p) const
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Impone valor nulo en todos los grados
-//! de libertad de los nodos inactivos.
+//! @brief Freezes inactive nodes (prescribes zero displacement for all DOFs
+//! on inactive nodes).
 void XC::Mesh::freeze_dead_nodes(const std::string &nmbLocker)
   {
     NodeLocker *locker= lockers.busca_node_locker(nmbLocker);
@@ -478,8 +478,8 @@ void XC::Mesh::freeze_dead_nodes(const std::string &nmbLocker)
 		<< nmbLocker << "'\n";
   }
 
-//! @brief Elimina las coacciones sobre los grados
-//! de libertad de los nodo activos creadas por freeze.
+//! @brief Clears the constraints over activated nodes 
+//! previously created by the freeze method.
 void XC::Mesh::melt_alive_nodes(const std::string &nmbLocker)
   {
     NodeLocker *locker= lockers.busca_node_locker(nmbLocker);
@@ -1025,7 +1025,10 @@ int XC::Mesh::recvSelf(const CommParameters &cp)
     return res;
   }
   
-//! @brief Devuelve el desplazamiento en el grado de libertad dof del nodo cuyo tag se pasa como parámetro.
+//! @brief Returns the component of the displacement of the node wich the tag is being passed as parameter.
+//! @param nodeTag: node identifier.
+//! @param dof: degree of freedom component.
+//! @param errorFlag: error indicator.
 double XC::Mesh::getNodeDisp(int nodeTag, int dof,int &errorFlag)
   {
     double result = 0.0;

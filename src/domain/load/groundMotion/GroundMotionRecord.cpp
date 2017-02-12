@@ -81,7 +81,7 @@ XC::GroundMotionRecord::GroundMotionRecord(const std::string &fileNameAccel,cons
   :GroundMotion(GROUND_MOTION_TAG_GroundMotionRecord), history(dT)
   { history.loadAccelTimeFile(fileNameAccel, fileNameTime, theFactor); }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::GroundMotion *XC::GroundMotionRecord::getCopy(void) const
   { return new GroundMotionRecord(*this); }
 

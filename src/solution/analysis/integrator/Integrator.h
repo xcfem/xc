@@ -78,12 +78,12 @@ class FEM_ObjectBroker;
 class RayleighDampingFactors;
 class SoluMethod;
 
-//! @ingroup Analisis
+//! @ingroup Analysis
 //
-//! @defgroup AnalisisIntegrator Integration of physical
+//! @defgroup AnalysisIntegrator Integration of physical
 //! properties over the domain to form the system stiffness matrix.
 //
-//! @ingroup AnalisisIntegrator
+//! @ingroup AnalysisIntegrator
 //
 //! @brief Base class for the object that performs the
 //! integration of physical properties over the domain to

@@ -82,15 +82,13 @@ bool XC::FullGenEigenSOE::setSolver(EigenSolver *newSolver)
     return retval;
   }
 
+//! @brief Sets the size of the system from the number of vertices in the graph.
 int XC::FullGenEigenSOE::setSize(Graph &theGraph)
   {
     int result = 0;
-    size = theGraph.getNumVertex();
-    if(size==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; the modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie the gestor de coacciones." << std::endl;
+    size= checkSize(theGraph);
 
-    int newSize = size*size;
+    const int newSize= size*size;
 
     if(newSize > A.Size())
       A.resize(newSize);

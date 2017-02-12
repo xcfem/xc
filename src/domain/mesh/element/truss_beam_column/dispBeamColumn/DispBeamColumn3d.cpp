@@ -95,7 +95,7 @@ XC::DispBeamColumn3d::DispBeamColumn3d(int tag)
   :BeamColumnWithSectionFDTrf3d(tag, ELE_TAG_DispBeamColumn3d,0),
    q(6), q0(), p0(), rho(0.0) {load.reset(12);}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::DispBeamColumn3d::getCopy(void) const
   { return new XC::DispBeamColumn3d(*this); }
 

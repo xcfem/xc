@@ -77,8 +77,13 @@ class Domain;
 
 //! @ingroup StaticIntegrator
 //
-//! @brief Especifica el incremento de desplazamiento a aplicar en un grado
-//! de libertad del domain para cada paso of the analysis.
+//! @brief DisplacementControl is an algorithmic class for perfroming a static analysis
+//! using the arc length scheme, that is within a load step the follwing
+//! constraint is enforced: 
+//!  i=1        delta U^T delta U + alpha^2 delta lambda^2 = delta s^2
+//!  i>1        dU^T delta U + alpha^2 dLambda delta lambda = 0
+//! where dU is change in nodal displacements for step, dLambda is
+//! change in applied load and DisplacementControl is a control parameter.
 class DisplacementControl: public DispBase
   {
   protected:

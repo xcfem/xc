@@ -77,7 +77,7 @@ XC::FedeasBond1Material::FedeasBond1Material(int tag)
   : XC::FedeasBondMaterial(tag, MAT_TAG_FedeasBond1, 6, 12) {}
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::FedeasBond1Material::getCopy(void) const
   { return new FedeasBond1Material(*this); }
 

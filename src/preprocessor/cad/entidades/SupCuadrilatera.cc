@@ -39,7 +39,7 @@
 XC::SupCuadrilatera::SupCuadrilatera(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
   : Face(m,ndivI,ndivJ) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SetEstruct *XC::SupCuadrilatera::getCopy(void) const
   { return new SupCuadrilatera(*this); }
 

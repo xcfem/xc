@@ -132,12 +132,9 @@ XC::SymSparseLinSOE::~SymSparseLinSOE(void)
 int XC::SymSparseLinSOE::setSize(Graph &theGraph)
   {
     int result = 0;
-    size = theGraph.getNumVertex();
-    if(size==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; el modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie el gestor de coacciones." << std::endl;
+    size= checkSize(theGraph);
 
-    // first itearte through the vertices of the graph to get nnz
+    // first iterarte through the vertices of the graph to get nnz
     Vertex *theVertex;
     int newNNZ = 0;
     VertexIter &theVertices = theGraph.getVertices();

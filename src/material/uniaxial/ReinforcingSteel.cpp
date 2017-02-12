@@ -393,7 +393,7 @@ int XC::ReinforcingSteel::revertToStart(void)
   return 0;
 }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::UniaxialMaterial * XC::ReinforcingSteel::getCopy(void) const
   { return new ReinforcingSteel(*this); }
 

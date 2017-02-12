@@ -96,7 +96,7 @@ XC::FourNodeQuad::FourNodeQuad(void)
    pressureLoad(8), pressure(0.0), Ki(nullptr)
   {load.reset(8);}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::FourNodeQuad::getCopy(void) const
   { return new FourNodeQuad(*this); }
 
@@ -110,11 +110,11 @@ XC::FourNodeQuad::~FourNodeQuad(void)
       }
   }
 
-//! @brief Comprueba el tipo de material.
+//! @brief Checks the material type.
 bool XC::FourNodeQuad::check_material_type(const std::string &type) const
   { return physicalProperties.check_material_elast_plana(type); }
 
-//! @brief Devuelve el número de grados de libertad del elemento.
+//! @brief Return the number of element DOFs.
 int XC::FourNodeQuad::getNumDOF(void) const
   { return 8; }
 

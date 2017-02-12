@@ -277,8 +277,10 @@ void XC::NodeLocker::Print(std::ostream &s, int flag)
     theSPs->Print(s, flag);
   }
 
-//! @brief Devuelve las coacciones correspondientes al nodo
-//! y grado de libertad que se pasan como parámetro.
+//! @brief Returns the constraint that affect the node and DOF
+//! being passed as parameter.
+//! @param theNode: node identifier.
+//! @param theDOF: identifier or the degree of freedom.
 std::deque<int> XC::NodeLocker::getTagsSPsNode(int theNode, int theDOF) const
   {
     std::deque<int> retval; 
@@ -298,8 +300,9 @@ std::deque<int> XC::NodeLocker::getTagsSPsNode(int theNode, int theDOF) const
     return retval;
   }
 
-//! @brief Devuelve las coacciones correspondientes al nodo
-//! y grado de libertad que se pasan como parámetro.
+//! @brief Returns the constraint that affect the node
+//! being passed as parameter.
+//! @param theNode: node identifier.
 std::deque<int> XC::NodeLocker::getTagsSPsNode(int theNode) const
   {
     std::deque<int> retval; 

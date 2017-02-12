@@ -51,7 +51,7 @@ XC::ShellCorotCrdTransf3d::ShellCorotCrdTransf3d(const NodePtrs &theNodes)
   { initialize(theNodes); }
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::ShellCrdTransf3dBase *XC::ShellCorotCrdTransf3d::getCopy(void) const
   { return new ShellCorotCrdTransf3d(*this); }
 

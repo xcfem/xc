@@ -113,7 +113,7 @@ const XC::Matrix &XC::ElasticSection3d::getSectionFlexibility(void) const
 const XC::Matrix &XC::ElasticSection3d::getInitialFlexibility(void) const
   { return ctes_scc.getInitialFlexibility4x4(); }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::ElasticSection3d::getCopy(void) const
   { return new ElasticSection3d(*this); }
 

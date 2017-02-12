@@ -75,7 +75,7 @@ class AnalysisModel;
 //
 //! @ingroup Graph
 //
-//! @brief Grafo de los grados de libertad del modelo.
+//! @brief Degrees of freedom graph.
 class DOF_Graph: public ModelGraph
   {
   protected:

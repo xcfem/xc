@@ -147,7 +147,7 @@ double XC::HingeMidpointBeamIntegration2d::getTangentDriftJ(double L, double LI,
       return (L-LI-lpJ)/3*(L-LI-lpJ)*qq3/(E*I);
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::BeamIntegration *XC::HingeMidpointBeamIntegration2d::getCopy(void) const
   { return new HingeMidpointBeamIntegration2d(*this); }
 

@@ -124,7 +124,7 @@ XC::MeshRegion &XC::MeshRegion::operator=(const MeshRegion &otra)
     return *this;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::MeshRegion *XC::MeshRegion::getCopy(void) const
   { return new MeshRegion(*this); }
 

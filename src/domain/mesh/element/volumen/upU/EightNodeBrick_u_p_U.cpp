@@ -132,7 +132,7 @@ XC::EightNodeBrick_u_p_U::EightNodeBrick_u_p_U(void)
    eleQ(nullptr), Ki(nullptr)
   {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element *XC::EightNodeBrick_u_p_U::getCopy(void) const
   { return new XC::EightNodeBrick_u_p_U(*this); }
 

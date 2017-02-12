@@ -69,7 +69,7 @@ namespace XC {
 class FE_Element;
 class DOF_Group;
 
-//! @ingroup AnalisisCH
+//! @ingroup AnalysisCH
 //
 //! @brief Gestor de coacciones trivial.
 class PlainHandler : public ConstraintHandler

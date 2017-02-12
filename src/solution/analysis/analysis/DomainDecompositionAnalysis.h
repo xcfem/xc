@@ -73,7 +73,7 @@ class Subdomain;
  class Matrix;
  class DomainSolver;
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
 //! @brief Análisis por descomposición del domain.
 class DomainDecompositionAnalysis: public Analysis, public MovableObject

@@ -77,34 +77,32 @@ XC::DistributedDiagonalSOE::DistributedDiagonalSOE(SoluMethod *owr)
    myDOFs(0,32), myDOFsShared(0,16), numShared(0) {}
 
 
+//! @brief Sets the size of the system from the number of vertices in the graph.
 int XC::DistributedDiagonalSOE::setSize(Graph &theGraph)
   {
     int result = 0;
-    size = theGraph.getNumVertex();
-    if(size==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; el modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie el gestor de coacciones." << std::endl;
+    size= checkSize(theGraph);
+    //
+    // first we build an XC::ID containing all local DOFs
+    //
 
-  //
-  // first we build an XC::ID containing all local DOFs
-  //
+    myDOFs.resize(size);
 
-  myDOFs.resize(size);
+    int count = 0;
+    Vertex *theVertex;
+    VertexIter &theVertices = theGraph.getVertices();
+    while ((theVertex = theVertices()) != 0)
+      {
+        int vertexTag = theVertex->getTag();
+        myDOFs(count) = vertexTag;
+        count++;
+      }
 
-  int count = 0;
-  Vertex *theVertex;
-  VertexIter &theVertices = theGraph.getVertices();
-  while ((theVertex = theVertices()) != 0) {
-    int vertexTag = theVertex->getTag();
-    myDOFs(count) = vertexTag;
-    count++;
-  }
+    static ID otherSize(1);
+    ID otherDOFS(0, size/10);
 
-  static ID otherSize(1);
-  ID otherDOFS(0, size/10);
-
-  if(processID != 0)
-    {
+    if(processID != 0)
+      {
 
     //
     // each process send it's local and receives all other processes IDs (remote IDs).

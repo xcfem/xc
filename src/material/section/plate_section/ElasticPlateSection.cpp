@@ -76,7 +76,7 @@ XC::ElasticPlateSection::ElasticPlateSection(void)
 XC::ElasticPlateSection::ElasticPlateSection(  int    tag, double young,double poisson, double thickness)
   : XC::ElasticPlateProto<5>(tag, SEC_TAG_ElasticPlateSection,young,poisson,thickness) {}
 
-//! @brief Constructor virtual
+//! @brief Virtual constructor
 XC::SectionForceDeformation *XC::ElasticPlateSection::getCopy(void) const
   { return new ElasticPlateSection(*this); }
 
@@ -119,8 +119,8 @@ const XC::Matrix& XC::ElasticPlateSection::getSectionTangent(void) const
 const XC::Matrix& XC::ElasticPlateSection::getInitialTangent(void) const
   { return getSectionTangent(); }
 
-//! @brief Devuelve las etiquetas de los grados de libertad a los que el
-//! elemento aporta rigidez.
+//! @brief Returns the labels of the DOFs for wich the element
+//! adds (assembles) stiffness.
 const XC::ResponseId &XC::ElasticPlateSection::getType(void) const 
   { return RespPlateMat; }
 

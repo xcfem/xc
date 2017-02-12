@@ -74,7 +74,7 @@ namespace XC {
 
 //! @ingroup Numerador
 //
-//! @brief Numerador de grados de libertad trivial.
+//! @brief Trivial DOF numberer.
 class PlainNumberer: public DOF_Numberer
   {
   protected:

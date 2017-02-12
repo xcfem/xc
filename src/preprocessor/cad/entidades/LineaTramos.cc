@@ -38,7 +38,7 @@
 XC::LineaTramos::LineaTramos(Preprocessor *m,const size_t &nd)
   : Linea(m,nd), longs(nd,1.0){}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SetEstruct *XC::LineaTramos::getCopy(void) const
   { return new LineaTramos(*this); }
 

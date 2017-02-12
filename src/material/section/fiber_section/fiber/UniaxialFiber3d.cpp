@@ -163,7 +163,7 @@ XC::Matrix &XC::UniaxialFiber3d::getFiberTangentStiffContr(void)
     return ks;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Fiber *XC::UniaxialFiber3d::getCopy(void) const
   { return new UniaxialFiber3d(*this); }
 

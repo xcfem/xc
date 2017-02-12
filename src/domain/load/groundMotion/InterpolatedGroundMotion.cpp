@@ -106,7 +106,7 @@ XC::InterpolatedGroundMotion &XC::InterpolatedGroundMotion::operator=(const Inte
   }
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::GroundMotion *XC::InterpolatedGroundMotion::getCopy(void) const
   { return new InterpolatedGroundMotion(*this); }
 

@@ -480,7 +480,7 @@ bool XC::Domain::removeSFreedom_Constraint(int tag, int loadPattern)
     return removed;
   }
 
-//! @brief Anula los pointers to grupo de grados de libertad de los nodos.
+//! @brief Clears the pointers to DOF groups.
 void XC::Domain::clearDOF_GroupPtr(void)
   { mesh.clearDOF_GroupPtr(); }
 
@@ -981,7 +981,10 @@ int XC::Domain::recvSelf(const CommParameters &cp)
     return retval;
   }
   
-//! @brief Devuelve el desplazamiento en el grado de libertad dof del nodo cuyo tag se pasa como parámetro.
+//! @brief Returns the value of dof component of displacement for the node with the tag being passed as parameter.
+//! @param nodeTag: node identifier.
+//! @param dof: component of the displacement.
+//! @param errorFlag: error indicator.
 double XC::Domain::getNodeDisp(int nodeTag, int dof,int &errorFlag)
   { return mesh.getNodeDisp(nodeTag,dof,errorFlag); }
 

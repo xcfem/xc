@@ -146,7 +146,7 @@ XC::TwentyNodeBrick_u_p_U::TwentyNodeBrick_u_p_U(void)
    poro(0.0), alpha(1.0), rho_s(0.0),rho_f(0.0), ks(0.0), kf(0.0), pressure(0.0), eleQ(0), Ki(0)
   {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::TwentyNodeBrick_u_p_U::getCopy(void) const
   { return new TwentyNodeBrick_u_p_U(*this); }
 

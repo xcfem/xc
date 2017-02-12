@@ -114,7 +114,7 @@ XC::TrussSection::TrussSection(void)
     inicializa();
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::TrussSection::getCopy(void) const
   { return new XC::TrussSection(*this); }
 

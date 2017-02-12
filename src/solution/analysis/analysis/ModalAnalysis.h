@@ -36,7 +36,7 @@
 namespace XC {
 class Matrix;
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
 //! @brief Análisis de eigenvalues y vectores propios.
 class ModalAnalysis : public EigenAnalysis

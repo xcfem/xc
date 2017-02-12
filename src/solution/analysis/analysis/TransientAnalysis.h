@@ -69,7 +69,7 @@
 
 namespace XC {
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
 //! @brief Analysis of the time-dependent response of the model.
 class TransientAnalysis: public Analysis

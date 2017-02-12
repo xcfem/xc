@@ -93,7 +93,7 @@ XC::beam2d04::beam2d04(int tag, double a, double e, double i, int Nd1, int Nd2)
   :beam2d(tag,ELE_TAG_beam2d04,a,e,i,Nd1,Nd2),
    rForce(6), isStiffFormed(0) { load.reset(6); }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::beam2d04::getCopy(void) const
   { return new XC::beam2d04(*this); }
 

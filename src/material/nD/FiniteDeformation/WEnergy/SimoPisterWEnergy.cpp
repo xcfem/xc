@@ -66,7 +66,7 @@ XC::SimoPisterWEnergy::SimoPisterWEnergy(const double &K_in)
 
 
 //================================================================================
-//! @brief Constructor virtual
+//! @brief Virtual constructor
 //================================================================================
 XC::WEnergy *XC::SimoPisterWEnergy::getCopy(void) const
   { return new SimoPisterWEnergy(*this); }

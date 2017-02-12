@@ -205,7 +205,7 @@ XC::ElasticBeam3d &XC::ElasticBeam3d::operator=(const XC::ElasticBeam3d &otro)
     return *this;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::ElasticBeam3d::getCopy(void) const
   { return new ElasticBeam3d(*this); }
 

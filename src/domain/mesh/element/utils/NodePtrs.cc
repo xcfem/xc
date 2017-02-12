@@ -211,7 +211,7 @@ void XC::NodePtrs::set_node(const size_t &i,Node *n)
       }
   }
 
-//! @brief Devuelve un vector que contiene los grados de libertad de cada nodo.
+//! @brief Returns a vector with the number of DOFs for each node.
 XC::ID XC::NodePtrs::getNumDOFs(void) const
   {
     const int numNodes= size();
@@ -221,7 +221,7 @@ XC::ID XC::NodePtrs::getNumDOFs(void) const
     return retval;
   }
 
-//! @brief Devuelve el total de grados de libertad de los nodos.
+//! @brief Return the total number of DOFs.
 int XC::NodePtrs::getTotalDOFs(void) const
   {
     const int numNodes= size();

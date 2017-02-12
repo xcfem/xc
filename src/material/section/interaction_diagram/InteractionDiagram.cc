@@ -79,7 +79,7 @@ XC::InteractionDiagram &XC::InteractionDiagram::operator=(const InteractionDiagr
     return *this;
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::InteractionDiagram *XC::InteractionDiagram::clon(void) const
   { return new InteractionDiagram(*this); }
 

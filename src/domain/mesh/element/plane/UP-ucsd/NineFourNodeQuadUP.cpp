@@ -107,7 +107,7 @@ XC::NineFourNodeQuadUP::NineFourNodeQuadUP(void)
     this->shapeFunction(wp, nintp, nenu, 2);
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::NineFourNodeQuadUP::getCopy(void) const
   { return new XC::NineFourNodeQuadUP(*this); }
 

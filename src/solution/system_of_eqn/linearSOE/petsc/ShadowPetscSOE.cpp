@@ -174,12 +174,9 @@ int XC::ShadowPetscSOE::solve(void)
 
 int XC::ShadowPetscSOE::setSize(Graph &theGraph)
   {
-    int n = theGraph.getNumVertex();
+    int n= checkSize(theGraph);
     int size = n;
-    if(size==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; el modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie el gestor de coacciones." << std::endl;
-    int N = n;
+    const int N = n;
 
     // fist itearte through the vertices of the graph to get nnz,
     // the number of non-zeros.

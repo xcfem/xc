@@ -76,12 +76,12 @@ class Integrator;
 class FEM_ObjectBroker;
 class ModelWrapper;
 
-//! @ingroup Analisis
+//! @ingroup Analysis
 //
 //
-//! @defgroup AnalisisCH Analysis constraint handlers.
+//! @defgroup AnalysisCH Analysis constraint handlers.
 //
-//! @ingroup AnalisisCH
+//! @ingroup AnalysisCH
 //! @brief ConstraintHandlers enforce the single and multi point 
 //! constraints that exist in the domain by creating the appropriate FE_Element
 //! and DOF_Group objects.

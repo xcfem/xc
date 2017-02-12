@@ -101,7 +101,7 @@ XC::ZeroLengthContact3D::ZeroLengthContact3D(int tag)
   stickPt(2),  xi(2), origin(2) ,T1(3*numNodos()), T2(3*numNodos())
   {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::ZeroLengthContact3D::getCopy(void) const
   { return new ZeroLengthContact3D(*this); }
 

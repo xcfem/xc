@@ -82,7 +82,7 @@
 XC::EigenAnalysis::EigenAnalysis(SoluMethod *metodo)
   :Analysis(metodo), domainStamp(0) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Analysis *XC::EigenAnalysis::getCopy(void) const
   { return new EigenAnalysis(*this); }
 

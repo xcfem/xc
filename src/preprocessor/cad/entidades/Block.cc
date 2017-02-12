@@ -74,7 +74,7 @@
 XC::Block::Block(Preprocessor *m,const std::string &nombre)
   : Body(m,nombre) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SetEstruct *XC::Block::getCopy(void) const
   { return new Block(*this); }
 

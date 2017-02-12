@@ -74,7 +74,7 @@ class ObjectBroker;
 
 //! @ingroup Graph
 //
-//! @brief Numerador de los grados de libertad del problema.
+//! @brief Numberer for problem's degrees of freedom.
 class GraphNumberer : public MovableObject, public EntCmd
   {
   protected:

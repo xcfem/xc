@@ -87,7 +87,7 @@ XC::TransformationConstraintHandler::TransformationConstraintHandler(ModelWrappe
  theFEs(), theDOFs(),numDOF(0),numConstrainedNodes(0) {}
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::ConstraintHandler *XC::TransformationConstraintHandler::getCopy(void) const
   { return new TransformationConstraintHandler(*this); }
 

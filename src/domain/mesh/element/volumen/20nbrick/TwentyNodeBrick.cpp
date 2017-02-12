@@ -204,7 +204,7 @@ Ki(0), bf(), rho(0.0), pressure(0.0), mmodel(0)
 
 //#############################################################################
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::TwentyNodeBrick::getCopy(void) const
   { return new XC::TwentyNodeBrick(*this); }
 

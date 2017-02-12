@@ -84,7 +84,7 @@
 XC::LagrangeConstraintHandler::LagrangeConstraintHandler(ModelWrapper *owr,const double &sp,const double &mp)
   :FactorsConstraintHandler(owr,HANDLER_TAG_LagrangeConstraintHandler,sp,mp) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::ConstraintHandler *XC::LagrangeConstraintHandler::getCopy(void) const
   { return new LagrangeConstraintHandler(*this); }
 

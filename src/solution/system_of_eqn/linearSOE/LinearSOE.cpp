@@ -98,8 +98,6 @@
 
 #include "utility/matrix/Vector.h"
 
-
-
 //#include <solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSolver.h>
 
 //! @brief Constructor.

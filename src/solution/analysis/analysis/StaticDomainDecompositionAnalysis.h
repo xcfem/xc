@@ -67,7 +67,7 @@
 namespace XC {
 class Subdomain;
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
 //! @brief StaticDomainDecompositionAnalysis is a subclass 
 //! of DomainDecompositionAnalysis used to perform

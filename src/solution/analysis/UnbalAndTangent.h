@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! @ingroup Analisis
+//! @ingroup Analysis
 //
 //! @brief Vector de fuerza desequilibrada y matriz de rigidez tangente.
 class UnbalAndTangent

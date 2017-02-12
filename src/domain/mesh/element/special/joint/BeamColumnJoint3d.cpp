@@ -127,7 +127,7 @@ XC::BeamColumnJoint3d::BeamColumnJoint3d(void)
   BCJoint(13,16), dg_df(4,13), dDef_du(13,4), K(24,24), R(24)
   {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::BeamColumnJoint3d::getCopy(void) const
   { return new BeamColumnJoint3d(*this); }
 

@@ -36,7 +36,7 @@ namespace XC {
 class Node;
 class MFreedom_Constraint;
 
-//! @ingroup AnalisisFE
+//! @ingroup AnalysisFE
 //
 //! @brief ??
 class MFreedom_FE: public MPBase_FE

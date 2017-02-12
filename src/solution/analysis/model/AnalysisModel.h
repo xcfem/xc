@@ -99,13 +99,13 @@ class ModelWrapper;
 
 //!  @ingroup Solu
 //! 
-//! @defgroup Analisis Problem analysis procedures.
+//! @defgroup Analysis Problem analysis procedures.
 //
-//! @ingroup Analisis
+//! @ingroup Analysis
 //
-//! @defgroup AnalisisModel Modelo a analizar.
+//! @defgroup AnalysisModel Model as seen by the analysis.
 //
-//! @ingroup AnalisisModel
+//! @ingroup AnalysisModel
 //
 //! @brief Los objetos de esta clase, dan acceso a los
 //! objetos FE_Element y DOF_Group creados por el Constraint Handler.

@@ -112,8 +112,8 @@ int XC::PenaltySFreedom_FE::setID(void)
     int restrainedDOF = theSP->getDOF_Number();
     if(restrainedDOF < 0 || restrainedDOF >= theNode->getNumberDOF())
       {
-	std::cerr << "¡OJO! PenaltySFreedom_FE::setID(); - el nodo: "
-                  << theNode->getTag() << " no tiene grado de libertad de índice: "
+	std::cerr << "¡WARNING! PenaltySFreedom_FE::setID(); - node: "
+                  << theNode->getTag() << " has not a the DOF: "
 	          << restrainedDOF << std::endl;
 	return -3;
       }    	

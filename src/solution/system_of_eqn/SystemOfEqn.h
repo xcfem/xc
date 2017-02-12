@@ -94,6 +94,7 @@ class SystemOfEqn: public MovableObject, public EntCmd
     virtual SystemOfEqn *getCopy(void) const= 0;
   public:
     inline virtual ~SystemOfEqn(void) {}
+    int checkSize(Graph &theGraph) const;
     virtual int solve(void) = 0;
   };
 } // end of XC namespace

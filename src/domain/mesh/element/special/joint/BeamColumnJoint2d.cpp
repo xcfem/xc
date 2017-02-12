@@ -122,7 +122,7 @@ XC::BeamColumnJoint2d::BeamColumnJoint2d(void):
   BCJoint(13,16), dg_df(4,13), dDef_du(13,4), K(12,12), R(12)
   {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::BeamColumnJoint2d::getCopy(void) const
   { return new BeamColumnJoint2d(*this); }
 

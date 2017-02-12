@@ -70,7 +70,7 @@ XC::Elastic2dGNL::Elastic2dGNL(int tag, double a, double e, double i, int Nd1, i
 
 }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::Elastic2dGNL::getCopy(void) const
   { return new XC::Elastic2dGNL(*this); }
 

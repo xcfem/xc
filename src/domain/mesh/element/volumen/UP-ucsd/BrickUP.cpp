@@ -123,7 +123,7 @@ XC::BrickUP::BrickUP(int tag,
   }
 //******************************************************************
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::BrickUP::getCopy(void) const
   { return new XC::BrickUP(*this); }
 

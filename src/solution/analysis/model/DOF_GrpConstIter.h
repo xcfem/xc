@@ -35,9 +35,9 @@ class DOF_Group;
 class TaggedObjectStorage;
 class TaggedObjectIter;
 
-//! @ingroup AnalisisModel
+//! @ingroup AnalysisModel
 //
-//! @brief Iterador sobre los grupos de grados de libertad.
+//! @brief Iterator over DEF groups.
 class DOF_GrpConstIter 
   {
   private:

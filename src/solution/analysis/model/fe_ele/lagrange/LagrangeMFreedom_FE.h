@@ -77,7 +77,7 @@ class AnalysisModel;
 class Domain;
 class DOF_Group;
 
-//! @ingroup AnalisisFE
+//! @ingroup AnalysisFE
 //
 //! @brief LagrangeMFreedom_FE is a subclass of FE_Element
 //! which handles MFreedom_Constraints using the Lagrange method.

@@ -67,7 +67,7 @@
 namespace XC {
 class Domain;
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
 //! @brief ??
 class DomainUser

@@ -121,7 +121,7 @@ XC::NLBeamColumn3d::NLBeamColumn3d(int tag, int nodeI, int nodeJ,
   }
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::NLBeamColumn3d::getCopy(void) const
   { return new NLBeamColumn3d(*this); }
 

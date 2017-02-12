@@ -109,7 +109,7 @@ XC::TotalLagrangianFD20NodeBrick::TotalLagrangianFD20NodeBrick(void)
      bf(2) = 0.0;
      rho = 0.0;
   }
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::TotalLagrangianFD20NodeBrick::getCopy(void) const
   { return new XC::TotalLagrangianFD20NodeBrick(*this); }
 

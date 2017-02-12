@@ -116,7 +116,7 @@ int XC::NewUniaxialMaterial::revertToLastCommit(void)
 int XC::NewUniaxialMaterial::revertToStart(void)
   { return 0; }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::NewUniaxialMaterial::getCopy(void) const
   { return new XC::NewUniaxialMaterial(this->getTag()); }
 

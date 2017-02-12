@@ -74,13 +74,13 @@ class Matrix;
 class Integrator;
 class AnalysisModel;
 
-//! @ingroup Analisis
+//! @ingroup AnalysisModel
 //
-//! @defgroup AnalisisFE Coacciones para los grados de libertad of the analysis.
+//! @defgroup AnalysisFE Finite element and constraints as seen by the analysis.
 //
-//! @ingroup AnalisisFE
+//! @ingroup AnalysisFE
 //
-//! @brief ??.
+//! @brief Finite element as seen by analysis.
 class FE_Element: public TaggedObject
   {
   private:

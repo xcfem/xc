@@ -57,10 +57,7 @@ bool XC::BandArpackppSOE::setSolver(EigenSolver *newSolver)
 int XC::BandArpackppSOE::setSize(Graph &theGraph)
   {
     int result = 0;
-    int newSize = theGraph.getNumVertex();
-    if(newSize==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; the modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie the gestor de coacciones." << std::endl;
+    const int newSize= checkSize(theGraph);
     if(size!=newSize)
       {
         size= newSize;

@@ -195,8 +195,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(int nd1,int nd2,int nd3,int nd4,int nd5,i
     connectedExternalNodes(26)= nd27; 
   }
 
-//! @brief Devuelve verdadero si todos los nodos tienen
-//! el mismo número de grados de libertad.
+//! @brief True if all nodes has the same DOF number.
 bool XC::NodePtrsWithIDs::equalNumDOF(void)
   {
     const size_t numNodes= NodePtrs::size();
@@ -214,7 +213,7 @@ bool XC::NodePtrsWithIDs::equalNumDOF(void)
     return retval;
   }
 
-//! @brief Comprueba el número de grados de libertad de los nodos.
+//! @brief Check DOF number on nodes.
 bool XC::NodePtrsWithIDs::checkNumDOF(const size_t &numDOF, const size_t &elemTag)
   {
     bool retval= true;
@@ -225,8 +224,8 @@ bool XC::NodePtrsWithIDs::checkNumDOF(const size_t &numDOF, const size_t &elemTa
         const size_t dofNd1= (*this)[0]->getNumberDOF();
         if((dofNd1!=numDOF) || !equalNumDof)
           {
-            std::cerr << "Error en elemento (tag: " << elemTag 
-                      << "), tiene distinto número de grados de libertad en sus nodos." << std::endl;
+            std::cerr << "ERROR, element (tag: " << elemTag 
+                      << "), has a different number of DOFs in its nodes." << std::endl;
             retval= false;
           }
       }

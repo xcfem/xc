@@ -73,7 +73,7 @@ namespace XC {
 class Subdomain;
 class Vector;
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
 //! @brief SubdomainAnalysis is a subclass 
 //! of AnalysisAnalysis, it is used when performing a domain decomposition

@@ -76,7 +76,7 @@ class SystemOfEqn;
 class Recorder;
 class SoluMethod;
 
-//! @ingroup Analisis
+//! @ingroup Analysis
 //
 //! @defgroup AnalAlgo Analysis algorithms.
 //

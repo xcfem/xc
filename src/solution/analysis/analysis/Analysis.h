@@ -99,11 +99,11 @@ class ID;
 
 class CommParameters;
 
-//! @ingroup Analisis
+//! @ingroup Analysis
 //
-//! @defgroup TipoAnalisis Analysis type (static, dynamic, eigenvalues,...).
+//! @defgroup AnalysisType Analysis type (static, dynamic, eigenvalues, modal, ...).
 //
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
 //! @brief Clase Base para los objetos que realizan the analysis.
 class Analysis: public EntCmd

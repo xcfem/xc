@@ -188,7 +188,7 @@ const XC::Matrix &XC::PDeltaCrdTransf3d::getGlobalStiffMatrix(const XC::Matrix &
     return local_to_global_stiff_matrix(kl);
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::CrdTransf3d *XC::PDeltaCrdTransf3d::getCopy(void) const
   { return new PDeltaCrdTransf3d(*this); }
 

@@ -49,7 +49,7 @@ XC::Inelastic2DYS01::Inelastic2DYS01(int tag, double a, double e, double iz,
 
 }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::Inelastic2DYS01::getCopy(void) const
   { return new XC::Inelastic2DYS01(*this); }
 

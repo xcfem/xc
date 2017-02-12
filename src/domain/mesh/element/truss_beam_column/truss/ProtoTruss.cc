@@ -65,7 +65,7 @@ XC::ProtoTruss &XC::ProtoTruss::operator=(const ProtoTruss &otro)
     return *this;
   }
 
-//! @brief Devuelve el número de grados de libertad.
+//! @brief Returns the number of DOFs.
 int XC::ProtoTruss::getNumDOF(void) const 
   { return numDOF; }
 

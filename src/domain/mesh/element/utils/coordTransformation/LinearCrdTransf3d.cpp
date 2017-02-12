@@ -128,7 +128,7 @@ const XC::Matrix &XC::LinearCrdTransf3d::getGlobalStiffMatrix(const Matrix &KB, 
     return local_to_global_stiff_matrix(kl);
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::CrdTransf3d *XC::LinearCrdTransf3d::getCopy(void) const
   { return new LinearCrdTransf3d(*this); }
 

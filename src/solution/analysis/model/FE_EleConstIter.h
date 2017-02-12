@@ -35,7 +35,7 @@ class TaggedObjectStorage;
 
 class FE_Element;
 
-//! @ingroup AnalisisModel
+//! @ingroup AnalysisModel
 //
 //! @brief Const iterator over the finite elements of the model.
 class FE_EleConstIter 

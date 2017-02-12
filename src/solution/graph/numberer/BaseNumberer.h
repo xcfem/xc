@@ -34,7 +34,7 @@
 namespace XC {
 //! @ingroup Graph
 //
-//! @brief Numerador trivial para los grados de libertad del problema.
+//! @brief Base class for DOF numberers.
 class BaseNumberer: public GraphNumberer
   {
   protected:

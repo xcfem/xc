@@ -177,7 +177,7 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
       { std::cerr << "ZeroLength::set_materials; the pointer al preprocesador es nulo." << std::endl; }
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::ZeroLength::getCopy(void) const
   { return new ZeroLength(*this); }
 

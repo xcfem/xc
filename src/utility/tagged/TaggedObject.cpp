@@ -72,7 +72,7 @@
 XC::TaggedObject::TaggedObject(int tag,EntCmd *owr)
   : EntCmd(owr), theTag(tag) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::TaggedObject *XC::TaggedObject::getCopy(void) const
   {
     std::cerr << "No se ha definido getCopy para la clase: '"

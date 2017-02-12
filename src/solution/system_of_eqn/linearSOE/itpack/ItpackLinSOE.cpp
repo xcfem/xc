@@ -86,24 +86,22 @@ bool XC::ItpackLinSOE::setSolver(LinearSOESolver *newSolver)
     return retval;
   }
 
+//! @brief Sets the size of the system from the number of vertices in the graph.
 int XC::ItpackLinSOE::setSize(Graph &theGraph)
   {
     int result = 0;
-    size = theGraph.getNumVertex();
-    if(size==0)
-      std::cerr << "¡OJO! error en " << nombre_clase() << "::setSize; el modelo no tiene ningún grado de libertad,"
-                << " agrege algún nodo o cambie el gestor de coacciones." << std::endl;
+    size= checkSize(theGraph);
   
-  // fist itearte through the vertices of the graph to get nnz
-  Vertex *theVertex;
-  int newNNZ = 0;
-  VertexIter &theVertices = theGraph.getVertices();
-  while((theVertex = theVertices()) != 0)
-    {
-      const std::set<int> &theAdjacency = theVertex->getAdjacency();
-      newNNZ += theAdjacency.size() +1; // the +1 is for the diag entry
-    }
-  nnz = newNNZ;
+    // first iterate through the vertices of the graph to get nnz
+    Vertex *theVertex;
+    int newNNZ = 0;
+    VertexIter &theVertices = theGraph.getVertices();
+    while((theVertex = theVertices()) != 0)
+      {
+        const std::set<int> &theAdjacency = theVertex->getAdjacency();
+        newNNZ += theAdjacency.size() +1; // the +1 is for the diag entry
+      }
+    nnz = newNNZ;
   
     std::cerr << "ItpackLinSOE::setSize - n " << size << " nnz " << nnz << std::endl;
   

@@ -48,7 +48,7 @@ class Vector;
 class ArpackSOE;
 class ArpackSolver;
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
 //! @brief Linear buckling analysis.
 class LinearBucklingAnalysis: public StaticAnalysis

@@ -189,7 +189,7 @@ XC::Truss &XC::Truss::operator=(const Truss &otro)
   }
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::Truss::getCopy(void) const
   { return new Truss(*this); }
 

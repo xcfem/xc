@@ -191,7 +191,7 @@ XC::TwentySevenNodeBrick::TwentySevenNodeBrick ():ElementBase<27>(0, ELE_TAG_Twe
 
 //#############################################################################
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::TwentySevenNodeBrick::getCopy(void) const
   { return new TwentySevenNodeBrick(*this); }
 

@@ -60,7 +60,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("commitState", &XC::Element::commitState,"Consuma el estado del elemento.")
   .def("revertToLastCommit", &XC::Element::revertToLastCommit,"Devuelve el estado del elemento al último consumado.")
   .def("revertToStart", &XC::Element::revertToStart,"Devuelve el elemento a su estado inicial.")
-  .def("getNumDOF", &XC::Element::getNumDOF,"Devuelve el número de grados de libertad del elemento.")
+  .def("getNumDOF", &XC::Element::getNumDOF,"Returns the number of element DOFs.")
   .def("getResistingForce",make_function(getResistingForceRef, return_internal_reference<>() ),"Calculates element's resisting force.")
   .def("setDeadSRF",XC::Element::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .add_property("getVtkCellType",&XC::Element::getVtkCellType,"Returns cell type for Vtk graphics.")

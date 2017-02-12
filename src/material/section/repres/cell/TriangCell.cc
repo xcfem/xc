@@ -33,7 +33,7 @@ XC::TriangCell::TriangCell(void)
   : Cell(3) {}
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::TriangCell::TriangCell(const XC::Matrix &vertexCoords)
   : Cell(vertexCoords) {}
 

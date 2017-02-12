@@ -64,7 +64,7 @@ XC::OgdenWEnergy::OgdenWEnergy(int N_in, double  *cr_in, double *mur_in )
 XC::OgdenWEnergy::OgdenWEnergy(void)
   : OgdenWEnergyBase() {}
 
-//! @brier Constructor virtual.
+//! @brier Virtual constructor.
 XC::WEnergy * XC::OgdenWEnergy::getCopy(void) const
   { return new OgdenWEnergy(*this); }
 

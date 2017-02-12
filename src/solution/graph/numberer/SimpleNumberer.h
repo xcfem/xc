@@ -70,7 +70,7 @@
 namespace XC {
 //! @ingroup Graph
 //
-//! @brief Numerador trivial para los grados de libertad del problema.
+//! @brief Triviel DOF numberer.
 class SimpleNumberer: public BaseNumberer
   {
   protected:

@@ -66,9 +66,9 @@
 namespace XC {
 class Subdomain;
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
-//! @brief Análisis dinámico por descomposición del domain.
+//! @brief Transient analysis witn domain decomposition.
 class TransientDomainDecompositionAnalysis: public DomainDecompositionAnalysis
   {
     friend class ProcSolu;

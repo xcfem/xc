@@ -71,7 +71,7 @@ XC::ConstantSeries::ConstantSeries(double theFactor)
   :CFactorSeries(TSERIES_TAG_ConstantSeries,theFactor) {}
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::TimeSeries *XC::ConstantSeries::getCopy(void) const
   { return new ConstantSeries(*this); }
 

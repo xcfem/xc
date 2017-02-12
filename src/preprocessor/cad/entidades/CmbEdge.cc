@@ -234,7 +234,7 @@ XC::CmbEdge::CmbEdge(Preprocessor *m,const size_t &nd)
 XC::CmbEdge::CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : Edge(nombre,m,nd), lineas(0) {}
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::SetEstruct *XC::CmbEdge::getCopy(void) const
   { return new CmbEdge(*this); }
 

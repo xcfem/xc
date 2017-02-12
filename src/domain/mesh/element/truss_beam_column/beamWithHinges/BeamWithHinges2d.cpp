@@ -122,7 +122,7 @@ XC::BeamWithHinges2d::BeamWithHinges2d(int tag, int nodeI, int nodeJ,
     v0.zero();
   }
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::Element* XC::BeamWithHinges2d::getCopy(void) const
   { return new BeamWithHinges2d(*this); }
 

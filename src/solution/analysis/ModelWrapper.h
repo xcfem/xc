@@ -43,7 +43,7 @@ class CommParameters;
 class SoluMethod;
 class Integrator;
 
-//! @ingroup Analisis
+//! @ingroup Analysis
 //
 //! @brief Wrapper for the finite element model "seen" from the solver.
 //! The model wrapper is definied by:
@@ -54,7 +54,7 @@ class Integrator;
 //! This object is a container for those entities.
 class ModelWrapper: public EntCmd
   {
-    AnalysisModel *theModel; //!< Analisis model
+    AnalysisModel *theModel; //!< Analysis model
     ConstraintHandler *theHandler; //!< Constrainnt handler.
     DOF_Numberer *theDOFNumberer;  //!< DOF numberer.
 

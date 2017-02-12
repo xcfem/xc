@@ -37,7 +37,7 @@ namespace XC {
   class LinearBucklingAlgo;
   class ArpackSOE;
 
-//! @ingroup TipoAnalisis
+//! @ingroup AnalysisType
 //
 //! @brief Linear buckling analysis (used inside an StaticAnalysis).
 class LinearBucklingEigenAnalysis: public EigenAnalysis

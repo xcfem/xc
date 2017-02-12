@@ -112,7 +112,7 @@ void XC::ClosedTriangleMesh::readFrom(const std::string &fName)
   }
   
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::ClosedTriangleMesh *XC::ClosedTriangleMesh::clon(void) const
   { return new ClosedTriangleMesh(*this); }
 

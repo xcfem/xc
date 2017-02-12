@@ -50,7 +50,7 @@ XC::ShellLinearCrdTransf3d::ShellLinearCrdTransf3d(const NodePtrs &theNodes)
   { initialize(theNodes); }
 
 
-//! @brief Constructor virtual.
+//! @brief Virtual constructor.
 XC::ShellCrdTransf3dBase *XC::ShellLinearCrdTransf3d::getCopy(void) const
   { return new ShellLinearCrdTransf3d(*this); }
 

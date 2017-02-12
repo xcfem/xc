@@ -70,7 +70,7 @@ class SFreedom_Constraint;
 class MFreedom_Constraint;
 class MRMFreedom_Constraint;
 
-//! @ingroup AnalisisDOF
+//! @ingroup AnalysisDOF
 //
 //! @brief A LagrangeDOF_Group object is instantiated 
 //! by a LagrangeConstraintHandler for 
