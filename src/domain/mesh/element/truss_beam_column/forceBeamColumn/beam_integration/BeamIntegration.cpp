@@ -110,15 +110,15 @@ const XC::Matrix &XC::BeamIntegration::getIntegrPointLocalCoords(int numSections
     return retval;
   }
 
-//! @brief Devuelve las coordenadas naturales de los puntos de integración.
+//! @brief Returns a matrix with the natural coordinates for each integration point.
 const XC::Matrix &XC::BeamIntegration::getIntegrPointNaturalCoords(int nIP,const CrdTransf &trf) const
   { return getIntegrPointNaturalCoords(nIP,trf.getInitialLength()); }
 
-//! @brief Devuelve las coordenadas normalizadas de los puntos de integración.
+//! @brief Returns a matrix with the normalized coordinates for each integration point.
 const XC::Matrix &XC::BeamIntegration::getIntegrPointNormalizedCoords(int nIP,const CrdTransf &trf) const
   { return getIntegrPointCoords(nIP,trf.getInitialLength()); }
 
-//! @brief Devuelve las coordenadas locales de los puntos de integración.
+//! @brief Returns a matrix with the local coordinates for each integration point.
 const XC::Matrix &XC::BeamIntegration::getIntegrPointLocalCoords(int nIP,const CrdTransf &trf) const
   {
     const Matrix tmp= getIntegrPointLocalCoords(nIP,trf.getInitialLength());
@@ -130,18 +130,18 @@ const XC::Matrix &XC::BeamIntegration::getIntegrPointLocalCoords(int nIP,const C
     return retval;
   }
 
-//! @brief Devuelve las coordenadas globales de los puntos de integración.
+//! @brief Returns a matrix with the global coordinates for each integration point.
 const XC::Matrix &XC::BeamIntegration::getIntegrPointGlobalCoords(int nIP,const CrdTransf &trf) const
   { return trf.getPointsGlobalCoordFromLocal(getIntegrPointLocalCoords(nIP,trf)); }
 
-//! @brief Evalúa la expresión being passed as parameter en los puntos de integración.
+//! @brief Returns the values of the expresion being pased as parameter on each integration point.
 const XC::Vector &XC::BeamIntegration::evalInIntegrPoints(const ExprAlgebra &expr,int nIP,const CrdTransf &trf) const
   {
     const IntegrationPointsCoords ipCoords(*this,nIP,trf);
     return ipCoords.eval(expr);
   }
 
-//! @brief Integra la expresión.
+//! @brief Returns the integral of the expresion.
 double XC::BeamIntegration::getIntegral(const ExprAlgebra &expr,int nIP,const CrdTransf &trf) const
   {
     const double L= trf.getInitialLength();

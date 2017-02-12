@@ -128,8 +128,7 @@ typename MEDTFieldInfo<T>::ArrayGauss *MEDTFieldInfo<T>::getArrayGauss(void) con
     return retval;
   }
 
-//! @brief Asigna el modelo de integración de Gauss para el tipo de elemento que se pasa como
-//! parámetro.
+//! @brief Sets the Gauss integration model.
 template <class T>
 void MEDTFieldInfo<T>::setGaussModel(const MEDGaussModel &gm)
   {
@@ -140,8 +139,7 @@ void MEDTFieldInfo<T>::setGaussModel(const MEDGaussModel &gm)
     has_gauss_points= true;
   }
 
-//! @brief Define los modelos de integración de Gauss para los tipos de elemento
-//! del conjunto being passed as parameter.
+//! @brief Sets the Gauss integration model for the elements in the set.
 template <class T>
 void MEDTFieldInfo<T>::defineGaussModels(const Set &set)
   {

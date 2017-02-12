@@ -35,11 +35,12 @@ namespace XC {
 
 //! @ingroup TransientIntegrator
 //
-//! @defgroup RayleighIntegrator Integración del system of equations dinámico mediante el método de Rayleigh.
+//! @defgroup RayleighIntegrator Integration of the equations
+//! of motion by means of the Rayleigh method.
 //
 //! @ingroup RayleighIntegrator
 //
-//! @brief ??.
+//! @brief Base class for Rayleigh integrators.
 class RayleighBase : public DampingFactorsIntegrator
   {
   protected:

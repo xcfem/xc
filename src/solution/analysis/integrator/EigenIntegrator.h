@@ -77,12 +77,12 @@ class Vector;
 
 //! @ingroup AnalisisIntegrator
 //
-//! @defgroup EigenIntegrator Integración de problemas de eigenvalues.
+//! @defgroup EigenIntegrator Integrators for eigenproblems.
 //
 //! @ingroup EigenIntegrator
 //
-//! @brief Integrador para problemas de eigenvalues.
-class EigenIntegrator : public Integrator
+//! @brief Base class for eigenproblem integrators.
+class EigenIntegrator: public Integrator
   {
   protected:
     int flagK;

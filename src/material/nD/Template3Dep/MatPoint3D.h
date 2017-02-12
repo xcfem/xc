@@ -62,7 +62,7 @@ namespace XC {
 
 //! @ingroup NDMat
 //
-//! @brief Punto de integración.
+//! @brief Integration point on three-dimensional space.
 class MatPoint3D: public GaussPoint
   {
   private:

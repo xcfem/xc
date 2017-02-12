@@ -253,7 +253,7 @@ template <class MAT>
 size_t MaterialVector<MAT>::getGeneralizedStrainSize(void) const
   { return (*this)[0]->getGeneralizedStrain().Size(); }
 
-//! @brief Devuelve el valor de la tensión generalizada en cada punto de integración.
+//! @brief Returns generalized stress values on each integration point.
 template <class MAT>
 m_double MaterialVector<MAT>::getGeneralizedStresses(void) const
   {
@@ -269,7 +269,7 @@ m_double MaterialVector<MAT>::getGeneralizedStresses(void) const
     return retval;
   }
 
-//! @brief Devuelve el valor de la deformación generalizada en cada punto de integración.
+//! @brief Returns generalized strain values on each integration point.
 template <class MAT>
 m_double MaterialVector<MAT>::getGeneralizedStrains(void) const
   {
@@ -285,7 +285,7 @@ m_double MaterialVector<MAT>::getGeneralizedStrains(void) const
     return retval;
   }
 
-//! @brief Devuelve el valor medio de la resultante de tensiones en el elemento.
+//! @brief Returns average generalized stress values on element. In a future we can enhance this by providing an extrapolation of results in gauss points as described in 28.4 <a href="http://www.colorado.edu/engineering/cas/courses.d/IFEM.d/IFEM.Ch28.d/IFEM.Ch28.pdf">IFEM chapter 28.</a> 
 template <class MAT>
 const Vector &MaterialVector<MAT>::getMeanGeneralizedStress(void) const
   {
@@ -298,7 +298,7 @@ const Vector &MaterialVector<MAT>::getMeanGeneralizedStress(void) const
     return retval;
   }
 
-//! @brief Devuelve el valor medio de las deformaciones en el elemento.
+//! @brief Returns average generalized strain values on element.In a future we can enhance this by providing an extrapolation of results in gauss points as described in 28.4 <a href="http://www.colorado.edu/engineering/cas/courses.d/IFEM.d/IFEM.Ch28.d/IFEM.Ch28.pdf">IFEM chapter 28.</a> 
 template <class MAT>
 const Vector &MaterialVector<MAT>::getMeanGeneralizedStrain(void) const
   {
@@ -311,8 +311,8 @@ const Vector &MaterialVector<MAT>::getMeanGeneralizedStrain(void) const
     return retval;
   }
 
-//! @brief Devuelve la componente del vector de deformaciones medias que
-//! corresponde al índice being passed as parameter.
+//! @brief Returns the defID component of the average strain vector.
+//! @param defID component index.
 template <class MAT>
 double MaterialVector<MAT>::getMeanGeneralizedStrain(const int &defID) const
   {
@@ -326,8 +326,8 @@ double MaterialVector<MAT>::getMeanGeneralizedStrain(const int &defID) const
     return retval;
   }
 
-//! @brief Devuelve la componente del vector de deformaciones medias que
-//! corresponde al codigo being passed as parameter.
+//! @brief Returns the component of the average strain vector which has the code being passed as parameter.
+//! @param cod component code.
 template <class MAT>
 double MaterialVector<MAT>::getMeanGeneralizedStrainByName(const std::string &cod) const
   {
@@ -353,8 +353,8 @@ double MaterialVector<MAT>::getMeanGeneralizedStrainByName(const std::string &co
     return retval;
   }
 
-//! @brief Devuelve la componente del vector resultante de tensiones que
-//! corresponde al índice being passed as parameter.
+//! @brief Returns the defID component of the average generalized stress vector.
+//! @param defID component index.
 template <class MAT>
 double MaterialVector<MAT>::getMeanGeneralizedStress(const int &defID) const
   {
@@ -368,8 +368,8 @@ double MaterialVector<MAT>::getMeanGeneralizedStress(const int &defID) const
     return retval;
   }
 
-//! @brief Devuelve la componente del vector resultante de tensiones que
-//! corresponde al código being passed as parameter.
+//! @brief Returns the component of the average generalized stress vector which corresponds to the code being passed as parameter.
+//! @param cod component code (n1,n2,n12,m1,m2,m12,q13,q23)
 template <class MAT>
 double MaterialVector<MAT>::getMeanGeneralizedStressByName(const std::string &cod) const
   {
@@ -395,7 +395,8 @@ double MaterialVector<MAT>::getMeanGeneralizedStressByName(const std::string &co
     return retval;
   }
 
-//! @brief Devuelve el valor de la tensión generalizada en cada punto de integración.
+//! @brief Returns the defID component of generalized stress vector on each integration point.
+//! @param defID component index.
 template <class MAT>
 m_double MaterialVector<MAT>::getGeneralizedStress(const int &defID) const
   {
@@ -413,7 +414,8 @@ m_double MaterialVector<MAT>::getGeneralizedStress(const int &defID) const
     return retval;
   }
 
-//! @brief Devuelve el valor de la deformación generalizada en cada punto de integración.
+//! @brief Returns the defID component of generalized strain vector on each integration point.
+//! @param defID component index.
 template <class MAT>
 m_double MaterialVector<MAT>::getGeneralizedStrain(const int &defID) const
   {
@@ -431,7 +433,7 @@ m_double MaterialVector<MAT>::getGeneralizedStrain(const int &defID) const
     return retval;
   }
 
-//! \brief Assigns initial values to materials initial deformations.
+//! @brief Assigns initial values to materials initial deformations.
 template <class MAT>
 void MaterialVector<MAT>::setInitialGeneralizedStrains(const std::vector<Vector> &iS)
   {

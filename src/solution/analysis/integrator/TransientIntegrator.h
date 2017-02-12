@@ -76,11 +76,11 @@ class Vector;
 
 //! @ingroup AnalisisIntegrator
 //
-//! @defgroup TransientIntegrator Integración del system of equations dinámico.
+//! @defgroup TransientIntegrator Integration of the dynamic equations of motion.
 //
 //! @ingroup TransientIntegrator
 //
-//! @brief determine the next time step for an analysis including inertial effects
+//! @brief Base class for dynamic equations of motion integrators.
 class TransientIntegrator : public IncrementalIntegrator
   {
   protected:

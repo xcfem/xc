@@ -143,7 +143,7 @@ XC::TimeSeries *XC::MotionHistory::integrate(TimeSeries *theSeries) const
           std::cerr << "MotionHistory::integrate - no XC::TimeSeriesIntegrator failed to integrate\n";
       }
     else
-      std::cerr << "MotionHistory::integrate - el incremento para la integración no debe ser nulo, dT=" << delta << std::endl;
+      std::cerr << "MotionHistory::integrate - integration increment must not bue zero, dT=" << delta << std::endl;
     return retval;
   }
 

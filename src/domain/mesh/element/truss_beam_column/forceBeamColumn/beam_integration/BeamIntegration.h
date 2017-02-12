@@ -70,7 +70,7 @@ class Vector;
 //!
 //! \ingroup BeamInteg
 //
-//! @brief Integración de campos en elementos barra.
+//! @brief Base class for integration on beam elements.
 class BeamIntegration: public MovableObject, public EntCmd
   {
   public:

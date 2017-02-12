@@ -80,12 +80,14 @@ class SoluMethod;
 
 //! @ingroup Analisis
 //
-//! @defgroup AnalisisIntegrator Integración de las ecuaciones del sistema.
+//! @defgroup AnalisisIntegrator Integration of physical
+//! properties over the domain to form the system stiffness matrix.
 //
 //! @ingroup AnalisisIntegrator
 //
-//! @brief IncrementalIntegrator is an algorithmic class for setting up the finite 
-//! element equations in an analysis.
+//! @brief Base class for the object that performs the
+//! integration of physical properties over the domain to
+//! form the system stiffness matrix
 class Integrator: public MovableObject, public EntCmd
   {
   protected:

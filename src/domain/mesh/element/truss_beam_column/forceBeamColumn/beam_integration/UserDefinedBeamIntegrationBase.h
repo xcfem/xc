@@ -36,7 +36,7 @@ namespace XC {
 
 //! \ingroup BeamInteg
 //
-//! @brief Integración en la barra definida por el usuario.
+//! @brief Base class for user defined integration on beam elements.
 class UserDefinedBeamIntegrationBase : public BeamIntegration
   {
   protected:

@@ -131,13 +131,14 @@ XC::MEDGroupInfo *XC::MEDMeshing::getGroupInfo(const Set &set,const FieldInfo &f
     return retval;  
   }
 
-//! @brief Define los modelos de integración de Gauss de los elementos.
+//! @brief Set the integration Gauss model for the elements on the set.
+//! @param set: element set.
 void XC::MEDMeshing::defineMEDGaussModels(const Set &set,MEDFieldInfo &med_fi) const
   {
     med_fi.defineGaussModels(set);
   }
 
-//! @brief Define un campo sobre un conjunto.
+//! @brief Defines a field over an element set.
 void XC::MEDMeshing::defineMEDDblField(const Set &set,const FieldInfo &fi,MEDGroupInfo *grupo) const
   {
     MEDDblFieldInfo *med_fi= new MEDDblFieldInfo(fi,grupo);

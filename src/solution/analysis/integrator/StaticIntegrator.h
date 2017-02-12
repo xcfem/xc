@@ -75,11 +75,11 @@ class Vector;
 
 //! @ingroup AnalisisIntegrator
 //
-//! @defgroup StaticIntegrator Integración del system of equations estático.
+//! @defgroup StaticIntegrator Integrators for static problems (Kx= F).
 //
 //! @ingroup StaticIntegrator
 //
-//! @brief determine the next step for an analysis
+//! @brief Base class for static integrators.
 class StaticIntegrator: public IncrementalIntegrator
   {
   protected:

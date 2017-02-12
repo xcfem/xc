@@ -57,7 +57,7 @@ namespace XC {
 
 //! \ingroup BeamInteg
 //
-//! @brief Integración por el procedimiento de Radau.
+//! @brief Radau integration on 3D beams.
 class HingeRadauBeamIntegration3d : public HingeBeamIntegration3d
   {
   public:

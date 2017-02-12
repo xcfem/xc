@@ -60,7 +60,7 @@ namespace XC {
 
 //! \ingroup BeamInteg
 //
-//! @brief Integración en la barra definida por el usuario.
+//! @brief 3D hinge user defined integration.
 class UserDefinedHingeIntegration3d : public UserDefinedHingeIntegrationBase
   {
   protected:

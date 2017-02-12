@@ -597,14 +597,14 @@ int XC::Element::getMEDCellType(void) const
     return ::MED_NONE;
   }
 
-//! @brief Devuelve el modelo de integración por Gauss del elemento.
+//! @brief Returns the Gauss integration model of the element.
 const XC::GaussModel &XC::Element::getGaussModel(void) const
   {
     std::cerr << "Function Element::getMEDCellType must be overloaded in derived classes." << std::endl;
     return gauss_model_empty;
   }
 
-//! @brief Devuelve el modelo de integración por Gauss de la biblioteca MED.
+//! @brief Returns the Gauss integration model of the element for MED library.
 XC::MEDGaussModel XC::Element::getMEDGaussModel(void) const
   {
     MEDGaussModel retval(nombre_clase(),getMEDCellType(),getGaussModel());

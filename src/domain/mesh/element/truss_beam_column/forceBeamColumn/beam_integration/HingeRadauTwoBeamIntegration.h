@@ -59,7 +59,7 @@ class ElementalLoad;
 
 //! \ingroup BeamInteg
 //
-//! @brief Integración por el procedimiento de Radau.
+//! @brief Radau integration.
 class HingeRadauTwoBeamIntegration: public PlasticLengthsBeamIntegration
   {
   private:

@@ -57,7 +57,7 @@ namespace XC {
 
 //! \ingroup BeamInteg
 //
-//! @brief Integración en la barra definida por el usuario.
+//! @brief User defined integration over the beam.
 class UserDefinedBeamIntegration : public UserDefinedBeamIntegrationBase
  {
  public:

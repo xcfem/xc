@@ -76,7 +76,7 @@ class Matrix;
 //!
 //! \ingroup Cuadratura
 //
-//! @brief Regla de integración (cuadratura).
+//! @brief Integration rule (quadrature).
 class QuadRule
   {
   public:

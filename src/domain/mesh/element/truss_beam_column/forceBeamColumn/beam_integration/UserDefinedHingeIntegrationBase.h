@@ -59,7 +59,7 @@ class FEM_ObjectBroker;
 
 //! \ingroup BeamInteg
 //
-//! @brief Integración en la barra definida por el usuario.
+//! @brief Base class for hinge user defined integration.
 class UserDefinedHingeIntegrationBase : public UserDefinedBeamIntegrationBase
   {
   protected:

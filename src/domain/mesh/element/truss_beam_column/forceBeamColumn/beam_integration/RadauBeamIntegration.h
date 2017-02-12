@@ -61,7 +61,7 @@ class FEM_ObjectBroker;
 
 //! \ingroup BeamInteg
 //
-//! @brief Integración por el procedimiento de Radau.
+//! @brief Base class for Radau integration on beam elements.
 class RadauBeamIntegration : public BeamIntegration
   {
   public:
