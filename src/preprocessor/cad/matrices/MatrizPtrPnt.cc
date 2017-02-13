@@ -72,8 +72,8 @@ XC::Pnt *XC::MatrizPtrPnt::getPnt(const size_t &j,const size_t &k)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al punto
-//! cuyo tag se pasa como parámetro.
+//! @brief Returns (if it exists) a pointer to punto
+//! cuyo tag is being passed as parameter.
 XC::Pnt *XC::MatrizPtrPnt::buscaPunto(const size_t &tag)
   {
     Pnt *retval= nullptr;
@@ -96,7 +96,7 @@ XC::Pnt *XC::MatrizPtrPnt::buscaPunto(const size_t &tag)
     return retval;
   }
 
-//! @brief Devuelve un apuntador al objeto Cad.
+//! @brief Returns a pointer to objeto Cad.
 const XC::Cad *XC::MatrizPtrPnt::getCad(void) const
   {
     const Cad *retval= nullptr;
@@ -114,7 +114,7 @@ const XC::Cad *XC::MatrizPtrPnt::getCad(void) const
     return retval;
   }
 
-//! @brief Devuelve un apuntador al objeto Cad.
+//! @brief Returns a pointer to objeto Cad.
 XC::Cad *XC::MatrizPtrPnt::getCad(void)
   {
     Cad *retval= nullptr;
@@ -132,8 +132,8 @@ XC::Cad *XC::MatrizPtrPnt::getCad(void)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al punto
-//! cuyo tag se pasa como parámetro.
+//! @brief Returns (if it exists) a pointer to punto
+//! cuyo tag is being passed as parameter.
 const XC::Pnt *XC::MatrizPtrPnt::buscaPunto(const size_t &tag) const
   {
     const Pnt *retval= nullptr;
@@ -156,7 +156,7 @@ const XC::Pnt *XC::MatrizPtrPnt::buscaPunto(const size_t &tag) const
     return retval;
   }
 
-//! @brief Devuelve el punto más próximo al punto being passed as parameter.
+//! @brief Returns the punto más próximo al punto being passed as parameter.
 XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;
@@ -181,14 +181,14 @@ XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p)
     return retval;
   }
 
-//! @brief Devuelve el punto más próximo al punto being passed as parameter.
+//! @brief Returns the punto más próximo al punto being passed as parameter.
 const XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p) const
   {
     MatrizPtrPnt *this_no_const= const_cast<MatrizPtrPnt *>(this);
     return this_no_const->getNearestPnt(p);
   }
 
-//! @brief Devuelve una matriz con los identificadores de los puntos.
+//! @brief Returns a matriz con los identificadores de los puntos.
 m_int XC::MatrizPtrPnt::getTags(void) const
   {
     const size_t nfilas= getNumFilas();
@@ -204,7 +204,7 @@ m_int XC::MatrizPtrPnt::getTags(void) const
     return retval;
   }
 
-//! @brief Devuelve el centroide del esquema.
+//! @brief Returns the centroide del esquema.
 Pos3d XC::MatrizPtrPnt::getCentroide(void) const
   {
     Pos3d retval;

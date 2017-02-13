@@ -55,7 +55,7 @@ class Face: public CmbEdge
     Face(void);
     Face(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
     Face(const std::string &nombre,Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
-     //! @brief Devuelve la dimension del objeto.
+     //! @brief Return the dimension del objeto.
     inline virtual unsigned short int GetDimension(void) const
       { return 2; }
     void actualiza_topologia(void);
@@ -66,11 +66,11 @@ class Face: public CmbEdge
       { return ndivj; }
     virtual void SetNDivJ(const size_t &ndj);
     virtual void ConciliaNDivIJ(void)= 0;
-    //! @brief Devuelve el número de vértices.
+    //! @brief Returns the número de vértices.
     size_t NumVertices(void) const
       { return NumEdges(); }
     virtual const Pnt *GetVertice(const size_t &i) const;
-    //! @brief Devuelve la lista de cuerpos que tocan a la superficie.
+    //! @brief Return the lista de cuerpos que tocan a la superficie.
     const std::set<const Body *> &CuerposTocan(void) const
       { return cuerpos_sup; }
     size_t BordeComun(const Face &otra) const;

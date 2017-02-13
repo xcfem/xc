@@ -905,7 +905,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::dh_drst_at(double r1, double r2, double r
 //    return ( *(this+subscript) );
 //  }
 
-//! @brief Devuelve el tensor de rigidez.
+//! @brief Returns the tensor de rigidez.
 XC::BJtensor XC::TwentySevenNodeBrick::getStiffnessTensor(void) const
   {
     int K_dim[] = {27,3,3,27};
@@ -1193,7 +1193,7 @@ void XC::TwentySevenNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
       }
   }
 
-//! @brief Devuelve el tensor de masas.
+//! @brief Returns the tensor de masas.
 XC::BJtensor XC::TwentySevenNodeBrick::getMassTensor(void) const
   {
     //int M_dim[] = {8,3,3,8};
@@ -1294,7 +1294,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::getMassTensor(void) const
   }
 
 
-//! @brief Devuelve la matriz de rigidez.
+//! @brief Return the matriz de rigidez.
 XC::BJtensor XC::TwentySevenNodeBrick::stiffness_matrix(const XC::BJtensor & K)
   {
 //    int K_dim[] = {20,3,3,20};
@@ -1324,7 +1324,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::stiffness_matrix(const XC::BJtensor & K)
     return BJtensor(Kmatrix);
   }
 
-//! @brief Devuelve la matriz de masas.
+//! @brief Return the matriz de masas.
 XC::BJtensor XC::TwentySevenNodeBrick::mass_matrix(const XC::BJtensor & M)
   {
     //    int K_dim[] = {20,3,3,20};
@@ -1358,7 +1358,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::mass_matrix(const XC::BJtensor & M)
   }
 
 
-//! @brief Devuelve las coordenadas de los nodos.
+//! @brief Returns the coordenadas de los nodos.
 XC::BJtensor XC::TwentySevenNodeBrick::Nodal_Coordinates(void) const
   {
     const int dimensions[] = {27,3};

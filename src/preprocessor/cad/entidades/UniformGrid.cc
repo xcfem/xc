@@ -43,7 +43,7 @@ XC::UniformGrid::UniformGrid(Preprocessor *m,const size_t &i)
 
 //! @brief Constructor.
 //! @param nombre: Identificador del objeto.
-//! @param m: Apuntador al preprocesador.
+//! @param m: Pointer to preprocesador.
 //! @param i: Índice para gráficos.
 XC::UniformGrid::UniformGrid(const std::string &nombre,Preprocessor *m,const size_t &i)
   : EntMdlr(nombre,i,m),Lx(0.0),Ly(0.0),Lz(0.0),ndiv_x(0),ndiv_y(0),ndiv_z(0)
@@ -78,7 +78,7 @@ BND3d XC::UniformGrid::Bnd(void) const
 Pos3d XC::UniformGrid::GetCentro(void) const
   { return Pos3d(org.x()+Lx/2,org.y()+Ly/2,org.z()+Lz/2); }
 
-//! @brief Devuelve los conjuntos a los que pertenece este objeto.
+//! @brief Returns the conjuntos a los que pertenece este objeto.
 std::set<XC::SetBase *> XC::UniformGrid::get_sets(void) const
   {
     std::set<SetBase *> retval;

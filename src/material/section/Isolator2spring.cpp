@@ -105,14 +105,14 @@ int XC::Isolator2spring::setTrialSectionDeformation(const Vector &e)
     return 0;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::Isolator2spring::getSectionTangent(void) const
   {
     // ks is computed in getStressResultant
     return ks;
   }
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix &XC::Isolator2spring::getInitialTangent(void) const
   {
     // Intial tangent uses nominal properties of the isolator.
@@ -123,7 +123,7 @@ const XC::Matrix &XC::Isolator2spring::getInitialTangent(void) const
     return ks;
   }
 
-//! @brief Devuelve la resultante de tensiones.
+//! @brief Return the resultante de tensiones.
 const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
   {
     double Fy;
@@ -313,7 +313,7 @@ const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
     return s3;
   }
 
-//! @brief Devuelve la deformación inicial del material.
+//! @brief Return the initial deformation del material.
 const XC::Vector &XC::Isolator2spring::getInitialSectionDeformation(void) const
   {
     // Write to static variable for return

@@ -171,14 +171,14 @@ bool XC::NodeLocker::addSFreedom_Constraint(SFreedom_Constraint *theSp)
     return result;
   }
 
-//! @brief Devuelve un iterador a las coacciones mononodales.
+//! @brief Returns an iterator a las coacciones mononodales.
 XC::SFreedom_ConstraintIter &XC::NodeLocker::getSPs(void)
   {
     theSpIter->reset();
     return *theSpIter;
   }
 
-//! @brief Devuelve el número de coacciones monopunto.
+//! @brief Returns the número de coacciones monopunto.
 int XC::NodeLocker::getNumSPs(void) const
   {
     int retval= 0;
@@ -216,7 +216,7 @@ void XC::NodeLocker::applyLoad(const double &pseudoTime,const double &factor)
       sp->applyConstraint(factor);
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::NodeLocker::getDbTagData(void) const
   {
@@ -320,7 +320,7 @@ std::deque<int> XC::NodeLocker::getTagsSPsNode(int theNode) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si las SPs afectan al nodo being passed as parameter.
+//! @brief Returns true iflas SPs afectan to the node being passed as parameter.
 bool XC::NodeLocker::nodeAffectedBySPs(int tagNodo) const
   {
     bool retval= false;

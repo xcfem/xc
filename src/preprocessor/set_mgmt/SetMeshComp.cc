@@ -122,11 +122,11 @@ void XC::SetMeshComp::agregaNodo(Node *nPtr)
 void XC::SetMeshComp::agregaElemento(Element *ePtr)
   { elementos.push_back(ePtr); }
 
-//! @brief Devuelve verdadero si el nodo pertenece al conjunto.
+//! @brief Returns true ifel nodo pertenece al conjunto.
 bool XC::SetMeshComp::In(const Node *n) const
   { return nodos.in(n); }
 
-//! @brief Devuelve verdadero si el «edge» pertenece al conjunto.
+//! @brief Returns true ifel «edge» pertenece al conjunto.
 bool XC::SetMeshComp::In(const Element *e) const
   { return elementos.in(e); }
 
@@ -165,61 +165,61 @@ void XC::SetMeshComp::fix(const SFreedom_Constraint &spc)
       }
   }
 
-// //! @brief Devuelve un iterador apuntando al principio de la lista de nodos.
+// //! @brief Returns an iterator which points to principio de la lista de nodos.
 // XC::SetMeshComp::nod_iterator XC::SetMeshComp::nodos_begin(void)
 //   { return nodos.begin(); }
-//! @brief Devuelve un iterador apuntando al principio de la lista de nodos.
+//! @brief Returns an iterator which points to principio de la lista de nodos.
 XC::SetMeshComp::nod_const_iterator XC::SetMeshComp::nodos_begin(void) const
   { return nodos.begin(); }
-// //! @brief Devuelve un iterador apuntando tras el final de la lista de nodos.
+// //! @brief Returns an iterator apuntando tras el final de la lista de nodos.
 // XC::SetMeshComp::nod_iterator XC::SetMeshComp::nodos_end(void)
 //   { return nodos.end(); }
-//! @brief Devuelve un iterador apuntando tras el final de la lista de nodos.
+//! @brief Returns an iterator apuntando tras el final de la lista de nodos.
 XC::SetMeshComp::nod_const_iterator XC::SetMeshComp::nodos_end(void) const
   { return nodos.end(); }
 
-//! @brief Devuelve, si lo encuentra, a pointer al nodo
+//! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag se pasa como parámetro.
 XC::Node *XC::SetMeshComp::buscaNodo(const int &tag)
   { return nodos.buscaNodo(tag); }
 
-//! @brief Devuelve, si lo encuentra, a pointer al nodo
+//! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag se pasa como parámetro.
 const XC::Node *XC::SetMeshComp::buscaNodo(const int &tag) const
   { return nodos.buscaNodo(tag); }
 
-// //! @brief Devuelve un iterador apuntando al principio de la lista de elementos.
+// //! @brief Returns an iterator which points to principio de la lista de elementos.
 // XC::SetMeshComp::elem_iterator XC::SetMeshComp::elem_begin(void)
 //   { return elementos.begin(); }
-//! @brief Devuelve un iterador apuntando al principio de la lista de elementos.
+//! @brief Returns an iterator which points to principio de la lista de elementos.
 XC::SetMeshComp::elem_const_iterator XC::SetMeshComp::elem_begin(void) const
   { return elementos.begin(); }
-// //! @brief Devuelve un iterador apuntando tras el final de la lista de elementos.
+// //! @brief Returns an iterator apuntando tras el final de la lista de elementos.
 // XC::SetMeshComp::elem_iterator XC::SetMeshComp::elem_end(void)
 //   { return elementos.end(); }
-//! @brief Devuelve un iterador apuntando tras el final de la lista de elementos.
+//! @brief Returns an iterator apuntando tras el final de la lista de elementos.
 XC::SetMeshComp::elem_const_iterator XC::SetMeshComp::elem_end(void) const
   { return elementos.end(); }
 
-//! @brief Devuelve un iterador apuntando al principio de la lista de constraints.
+//! @brief Returns an iterator which points to principio de la lista de constraints.
 XC::SetMeshComp::constraint_iterator XC::SetMeshComp::constraints_begin(void)
   { return constraints.begin(); }
-//! @brief Devuelve un iterador apuntando al principio de la lista de constraints.
+//! @brief Returns an iterator which points to principio de la lista de constraints.
 XC::SetMeshComp::constraint_const_iterator XC::SetMeshComp::constraints_begin(void) const
   { return constraints.begin(); }
-//! @brief Devuelve un iterador apuntando tras el final de la lista de constraints.
+//! @brief Returns an iterator apuntando tras el final de la lista de constraints.
 XC::SetMeshComp::constraint_iterator XC::SetMeshComp::constraints_end(void)
   { return constraints.end(); }
-//! @brief Devuelve un iterador apuntando tras el final de la lista de constraints.
+//! @brief Returns an iterator apuntando tras el final de la lista de constraints.
 XC::SetMeshComp::constraint_const_iterator XC::SetMeshComp::constraints_end(void) const
   { return constraints.end(); }
 
-//! @brief Devuelve, si lo encuentra, a pointer al nodo
+//! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag se pasa como parámetro.
 XC::Element *XC::SetMeshComp::buscaElemento(const int &tag)
   { return elementos.buscaElemento(tag); }
 
-//! @brief Devuelve, si lo encuentra, a pointer al nodo
+//! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag se pasa como parámetro.
 const XC::Element *XC::SetMeshComp::buscaElemento(const int &tag) const
   { return elementos.buscaElemento(tag); }
@@ -266,20 +266,20 @@ const XC::Constraint *XC::SetMeshComp::buscaConstraint(const int &tag) const
     return retval;
   }
 
-//! @brief Devuelve el número de elementos del conjunto que están activos.
+//! @brief Returns the número de elementos del conjunto que están activos.
 size_t XC::SetMeshComp::getNumLiveElements(void) const
   { return elementos.getNumLiveElements(); }
 
-//! @brief Devuelve el número de elementos del conjunto que están inactivos.
+//! @brief Returns the número de elementos del conjunto que están inactivos.
 size_t XC::SetMeshComp::getNumDeadElements(void) const
   { return elementos.getNumDeadElements(); }
 
-//! @brief Devuelve el número de nods del conjunto que están activos.
+//! @brief Returns the número de nods del conjunto que están activos.
 size_t XC::SetMeshComp::getNumLiveNodes(void) const
   { return nodos.getNumLiveNodes(); }
 
 
-//! @brief Devuelve el número de nodos del conjunto que están inactivos.
+//! @brief Returns the número de nodos del conjunto que están inactivos.
 size_t XC::SetMeshComp::getNumDeadNodes(void) const
   { return nodos.getNumDeadNodes(); }
 
@@ -295,7 +295,7 @@ void XC::SetMeshComp::alive_elements(void)
 void XC::SetMeshComp::calc_resisting_force(void)
   { elementos.calc_resisting_force(); }
 
-//! @brief Devuelve la resultante de las fuerzas que ejercen sobre
+//! @brief Return the resultante de las fuerzas que ejercen sobre
 //! los nodos próximos al plano, los elementos situados tras el plano.
 SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centro,const double &tol,const bool &inc_inertia) const
   {
@@ -338,25 +338,25 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
     return retval;    
   }
 
-//! @brief Devuelve verdadero si el nodo, cuyo tag se
+//! @brief Returns true ifel nodo, cuyo tag se
 //! pasa como parámetro, pertenece al conjunto.
 bool XC::SetMeshComp::InNodeTag(const int tag_nodo) const
   { return nodos.InNodeTag(tag_nodo); }
 
-//! @brief Devuelve verdadero si todos los nodos, cuyos tags se
+//! @brief Returns true iftodos los nodos, cuyos tags se
 //! pasan como parámetro, pertenecen al conjunto.
 bool XC::SetMeshComp::InNodeTags(const ID &tag_nodos) const
   { return nodos.InNodeTags(tag_nodos); }
 
-//! @brief Devuelve los tags de los nodos.
+//! @brief Returns the tags de los nodos.
 std::set<int> XC::SetMeshComp::getNodeTags(void) const
   { return nodos.getTags(); }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p)
   { return nodos.getNearestNode(p); }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p) const
   {
     SetMeshComp *this_no_const= const_cast<SetMeshComp *>(this);
@@ -364,22 +364,22 @@ const XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p) const
   }
 
 
-//! @brief Devuelve los tags de los elementos.
+//! @brief Returns the tags de los elementos.
 std::set<int> XC::SetMeshComp::getElementTags(void) const
   { return elementos.getTags(); }
 
-//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
+//! @brief Returns the elemento más próximo al punto being passed as parameter.
 XC::Element *XC::SetMeshComp::getNearestElement(const Pos3d &p)
   { return elementos.getNearestElement(p); }
 
-//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
+//! @brief Returns the elemento más próximo al punto being passed as parameter.
 const XC::Element *XC::SetMeshComp::getNearestElement(const Pos3d &p) const
   {
     SetMeshComp *this_no_const= const_cast<SetMeshComp *>(this);
     return this_no_const->getNearestElement(p);
   }
 
-//! @brief Devuelve los tags de los constraints.
+//! @brief Returns the tags de los constraints.
 std::set<int> XC::SetMeshComp::getConstraintTags(void) const
   {
     std::set<int> retval;
@@ -467,7 +467,7 @@ void XC::SetMeshComp::sel_constraints_lista(const ID &tags)
       }
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::SetMeshComp::getDbTagData(void) const
   {

@@ -638,7 +638,7 @@ const XC::Matrix& XC::ShellMITC4Base::getMass(void) const
     return mass;
   }
 
-//! @brief Devuelve los puntos de Gauss del elemento.
+//! @brief Returns the puntos de Gauss del elemento.
 const XC::GaussModel &XC::ShellMITC4Base::getGaussModel(void) const
   { return gauss_model_quad4; }
 
@@ -746,7 +746,7 @@ int XC::ShellMITC4Base::commitState(void)
     return retval;
   }
 
-//! @brief Devuelve el estado de la transformación al último commit.
+//! @brief Returns the estado de la transformación al último commit.
 int XC::ShellMITC4Base::revertToLastCommit(void)
   {
     int retval= theCoordTransf->revertToLastCommit();
@@ -754,7 +754,7 @@ int XC::ShellMITC4Base::revertToLastCommit(void)
     return retval;
   }
 
-//! @brief Devuelve el estado de la transformación al inicial.
+//! @brief Returns the estado de la transformación al inicial.
 int XC::ShellMITC4Base::revertToStart(void)
   {
     zeroLoad();
@@ -1579,11 +1579,11 @@ int XC::ShellMITC4Base::recvData(const CommParameters &cp)
 XC::Matrix XC::ShellMITC4Base::getLocalAxes(bool initialGeometry) const
   { return theCoordTransf->getLocalAxes(initialGeometry); }
 
-//! @brief Devuelve un apuntador a la coordinate transformation.
+//! @brief Returns a pointer a la coordinate transformation.
 XC::ShellCrdTransf3dBase *XC::ShellMITC4Base::getCoordTransf(void)
   { return theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 const XC::ShellCrdTransf3dBase *XC::ShellMITC4Base::getCoordTransf(void) const
   { return theCoordTransf; }
 

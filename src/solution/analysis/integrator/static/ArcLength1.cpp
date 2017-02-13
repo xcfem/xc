@@ -73,7 +73,7 @@
 XC::ArcLength1::ArcLength1(SoluMethod *owr,double arcLength, double alpha)
   :ArcLengthBase(owr,INTEGRATOR_TAGS_ArcLength1,arcLength,alpha) {}
 
-//! @brief Devuelve el valor de dLambda.
+//! @brief Returns the valor de dLambda.
 double XC::ArcLength1::getDLambdaUpdate(void) const
   {
     // determine delta lambda(i)

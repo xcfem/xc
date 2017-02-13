@@ -197,7 +197,7 @@ XC::LinearSOE::~LinearSOE(void)
 int XC::LinearSOE::solve(void)
   { return (getSolver()->solve()); }
 
-//! @brief Devuelve el determinante de la matriz del sistema.
+//! @brief Returns the determinante de la matriz del sistema.
 double XC::LinearSOE::getDeterminant(void)
   { return getSolver()->getDeterminant(); }
 

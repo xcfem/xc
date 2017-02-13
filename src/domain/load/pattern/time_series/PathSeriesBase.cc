@@ -44,11 +44,11 @@ XC::PathSeriesBase::PathSeriesBase(int classTag,const Vector &theLoadPath,const 
   :CFactorSeries(classTag,theFactor), thePath(theLoadPath), lastSendCommitTag(-1)
   {}
 
-//! @brief Devuelve el número de puntos que definen el path.
+//! @brief Returns the número de puntos que definen el path.
 size_t XC::PathSeriesBase::getNumDataPoints(void) const
   { return thePath.Size(); }
 
-//! @brief Devuelve el número de datos en el archivo cuyo nombre se pasa como parámetro.
+//! @brief Returns the número de datos en el archivo cuyo nombre se pasa como parámetro.
 size_t XC::PathSeriesBase::getNumDataPointsOnFile(const std::string &fName) const
   {
     double dataPoint;

@@ -71,7 +71,7 @@ const XC::Fiber *XC::CalcPivotes::getFiberCMaxY(void) const
   }
 
 
-//! @brief Devuelve el punto que corresponde a deformación nula
+//! @brief Returns the punto que corresponde a deformación nula
 //! en la fibra más traccionada de hormigón.
 Pos3d XC::CalcPivotes::GetPuntoD(void) const
   {

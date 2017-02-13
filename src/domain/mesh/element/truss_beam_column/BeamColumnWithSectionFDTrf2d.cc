@@ -94,11 +94,11 @@ void XC::BeamColumnWithSectionFDTrf2d::initialize_trf(void)
       }
   }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 XC::CrdTransf *XC::BeamColumnWithSectionFDTrf2d::getCoordTransf(void)
   { return theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 const XC::CrdTransf *XC::BeamColumnWithSectionFDTrf2d::getCoordTransf(void) const
   { return theCoordTransf; }
 

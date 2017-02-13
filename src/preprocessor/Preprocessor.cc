@@ -62,7 +62,7 @@ XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &otro)
     return *this;
   }
 
-//! @brief Inserta the pointer al nodo en el conjunto «total» y en los conjuntos
+//! @brief Inserta the pointer to the node en el conjunto «total» y en los conjuntos
 //! que estén abiertos.
 void XC::Preprocessor::UpdateSets(Node *nuevo_nodo)
   {
@@ -165,7 +165,7 @@ XC::FE_Datastore *XC::Preprocessor::getDataBase(void)
     return retval;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::Preprocessor::getDbTagData(void) const
   {

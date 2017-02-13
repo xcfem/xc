@@ -72,20 +72,20 @@ const XC::Face *XC::Body::Cara::Superficie(void) const
 //! @brief Asigna la superficie que limita el sólido.
 void XC::Body::Cara::SetSurf(XC::Face *s)
   { superficie= s; }
-//! @brief Devuelve el nombre de la superficie que limita el sólido.
+//! @brief Returns the nombre de la superficie que limita el sólido.
 const std::string &XC::Body::Cara::GetNombre(void) const
   { return superficie->GetNombre(); }
-//! @brief Devuelve verdadero si la superficie no existe.
+//! @brief Returns true ifla superficie no existe.
 bool XC::Body::Cara::Vacia(void) const
   { return (superficie==nullptr); }
-//! @brief Devuelve el número de líneas de la superficie.
+//! @brief Returns the número de líneas de la superficie.
 size_t XC::Body::Cara::NumLineas(void) const
   { return superficie->NumEdges(); }
-//! @brief Devuelve el número de líneas de la superficie.
+//! @brief Returns the número de líneas de la superficie.
 size_t XC::Body::Cara::NumVertices(void) const
   { return superficie->NumVertices(); }
 
-//! @brief Devuelve the pointer al lado de la cara, cuyo índice se pasa como parámetro.
+//! @brief Returns the pointer al lado de la cara, cuyo índice se pasa como parámetro.
 const XC::CmbEdge::Lado *XC::Body::Cara::GetLado(const size_t &i) const
   {
     if(!superficie) return nullptr;
@@ -112,11 +112,11 @@ const XC::CmbEdge::Lado *XC::Body::Cara::GetLado(const size_t &i) const
     return retval;
   }
 
-//! @brief Devuelve the pointer al lado de la cara, cuyo índice se pasa como parámetro.
+//! @brief Returns the pointer al lado de la cara, cuyo índice se pasa como parámetro.
 XC::CmbEdge::Lado *XC::Body::Cara::GetLado(const size_t &i)
   { return const_cast<CmbEdge::Lado *>(static_cast<const Cara &>(*this).GetLado(i)); }
 
-//! @brief Devuelve the pointer al vértice de la cara, cuyo índice se pasa como parámetro.
+//! @brief Returns the pointer al vértice de la cara, cuyo índice se pasa como parámetro.
 const XC::Pnt *XC::Body::Cara::GetVertice(const size_t &i) const
   {
     const CmbEdge::Lado *l= GetLado(i);
@@ -130,18 +130,18 @@ const XC::Pnt *XC::Body::Cara::GetVertice(const size_t &i) const
     return nullptr;
   }
 
-//! @brief Devuelve the pointer al vértice de la cara, cuyo índice se pasa como parámetro.
+//! @brief Returns the pointer al vértice de la cara, cuyo índice se pasa como parámetro.
 XC::Pnt *XC::Body::Cara::GetVertice(const size_t &i)
   { return const_cast<Pnt *>(static_cast<const Cara &>(*this).GetVertice(i)); }
 
-//! @brief Devuelve the pointer al nodo de la cara, cuyos índices se pasan como parámetro.
+//! @brief Returns the pointer to the node de la cara, cuyos índices se pasan como parámetro.
 XC::Node *XC::Body::Cara::GetNodo(const size_t &i,const size_t &j)
   {
     assert(superficie);
     return superficie->GetNodo(i,j);
   }
 
-//! @brief Devuelve la posiciones para los nodos de la cara.
+//! @brief Return the posiciones para los nodos de la cara.
 MatrizPos3d XC::Body::Cara::get_posiciones(void) const
   {
     if(!superficie)
@@ -197,7 +197,7 @@ void XC::Body::Cara::crea_nodos(void)
 XC::Body::Body(Preprocessor *m,const std::string &nombre)
   : EntMdlr(nombre,0,m) {}
 
-//! @brief Devuelve el BND del objeto.
+//! @brief Returns the BND del objeto.
 BND3d XC::Body::Bnd(void) const
   { 
     BND3d retval;
@@ -219,12 +219,12 @@ BND3d XC::Body::Bnd(void) const
     return retval;
   }
 
-//! @brief Devuelve la lista de sólidos en contacto con la superficie que
+//! @brief Return the lista de sólidos en contacto con la superficie que
 //! pasa como parámetro.
 std::set<const XC::Body *> XC::GetCuerposTocan(const Face &s)
   { return s.CuerposTocan(); }
 
-//! @brief Devuelve los conjuntos a los que pertenece este cuerpo.
+//! @brief Returns the conjuntos a los que pertenece este cuerpo.
 std::set<XC::SetBase *> XC::Body::get_sets(void) const
   {
     std::set<SetBase *> retval;

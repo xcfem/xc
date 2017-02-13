@@ -50,23 +50,23 @@ class SisRefScc: public EntGeomSection
     SisRefScc(const std::string &nombre= "",GeomSection *m= NULL)
       : EntGeomSection(nombre,m) {}
 
-    //! @brief Devuelve el vector unitario en la dirección del eje que se
+    //! @brief Returns the vector unitario en la dirección del eje que se
     //! pasa como parámetro expresado en el sistema global 
     //! para la posición being passed as parameter.
     virtual Vector2d GetVDirEje(const size_t &,const Pos2d &) const= 0;
     Vector2d GetI(const Pos2d &) const;
     Vector2d GetJ(const Pos2d &) const;
 
-    //! @brief Devuelve la posicion del punto p expresado en locales
+    //! @brief Return the posicion del punto p expresado en locales
     //! expresada en coordenadas globales.
     virtual Pos2d GetPosGlobal(const Pos2d &p) const= 0;
-    //! @brief Devuelve el vector v expresado en locales
+    //! @brief Returns the vector v expresado en locales
     //! expresado en coordenadas globales.
     virtual Vector2d GetCooGlobales(const Vector2d &v) const= 0;
-    //! @brief Devuelve la posicion del punto p expresado en globales
+    //! @brief Return the posicion del punto p expresado en globales
     //! expresada en coordenadas locales.
     virtual Pos2d GetPosLocal(const Pos2d &p) const= 0;
-    //! @brief Devuelve el vector v expresado en globales
+    //! @brief Returns the vector v expresado en globales
     //! expresado en coordenadas locales.
     virtual Vector2d GetCooLocales(const Vector2d &v) const= 0;
 

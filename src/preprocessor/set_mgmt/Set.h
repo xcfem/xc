@@ -111,45 +111,45 @@ class Set: public SetMeshComp
 
     void clear(void);
 
-    //! @brief Devuelve la lista de puntos del conjunto.
+    //! @brief Return the lista de puntos del conjunto.
     virtual const lst_ptr_puntos &GetPuntos(void) const
       { return puntos; }
-    //! @brief Devuelve la lista de puntos del conjunto.
+    //! @brief Return the lista de puntos del conjunto.
     virtual lst_ptr_puntos &GetPuntos(void)
       { return puntos; }
     void sel_puntos_lista(const ID &);
     bool In(const Pnt *) const;
 
-    //! @brief Devuelve la lista de lineas del conjunto.
+    //! @brief Return the lista de lineas del conjunto.
     virtual const lst_ptr_lineas &GetLineas(void) const
       { return lineas; }
-    //! @brief Devuelve la lista de lineas del conjunto.
+    //! @brief Return the lista de lineas del conjunto.
     virtual lst_ptr_lineas &GetLineas(void)
       { return lineas; }
     void sel_lineas_lista(const ID &);
     bool In(const Edge *) const;
 
-    //! @brief Devuelve la lista de superficies del conjunto.
+    //! @brief Return the lista de superficies del conjunto.
     virtual const lst_ptr_superficies &GetSuperficies(void) const
       { return superficies; }
-    //! @brief Devuelve la lista de superficies del conjunto.
+    //! @brief Return the lista de superficies del conjunto.
     virtual lst_ptr_superficies &GetSuperficies(void)
       { return superficies; }
     void sel_superficies_lista(const ID &);
     bool In(const Face *) const;
 
-    //! @brief Devuelve la lista de cuerpos del conjunto.
+    //! @brief Return the lista de cuerpos del conjunto.
     virtual const lst_ptr_cuerpos &GetCuerpos(void) const
       { return cuerpos; }
-    //! @brief Devuelve la lista de cuerpos del conjunto.
+    //! @brief Return the lista de cuerpos del conjunto.
     virtual lst_ptr_cuerpos &GetCuerpos(void)
       { return cuerpos; }
     bool In(const Body *) const;
 
-    //! @brief Devuelve la lista de UniformGrids del conjunto.
+    //! @brief Return the lista de UniformGrids del conjunto.
     virtual const lst_ptr_uniform_grids &GetUniformGrids(void) const
       { return uniform_grids; }
-    //! @brief Devuelve la lista de UniformGrids del conjunto.
+    //! @brief Return the lista de UniformGrids del conjunto.
     virtual lst_ptr_uniform_grids &GetUniformGrids(void)
       { return uniform_grids; }
     bool In(const UniformGrid *) const;

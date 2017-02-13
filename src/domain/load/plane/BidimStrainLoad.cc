@@ -91,7 +91,7 @@ void XC::BidimStrainLoad::setDeformaciones(const Matrix &def)
   }
 
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::BidimStrainLoad::getDbTagData(void) const
   {

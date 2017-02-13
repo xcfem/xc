@@ -52,7 +52,7 @@ XC::TritrizPtrNod::TritrizPtrNod(const size_t capas,const size_t filas,const siz
       (*this)[i]= MatrizPtrNod(filas,cols);
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al nodo
+//! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag se pasa como parámetro.
 XC::Node *XC::TritrizPtrNod::buscaNodo(const int &tag)
   {
@@ -67,14 +67,14 @@ XC::Node *XC::TritrizPtrNod::buscaNodo(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p) const
   {
     TritrizPtrNod *this_no_const= const_cast<TritrizPtrNod *>(this);
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
   {
     Node *retval= nullptr, *ptrNod= nullptr;
@@ -100,7 +100,7 @@ XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
     return retval;
   }
 
-//! @brief Devuelve los índices del nodo indicado por the pointer
+//! @brief Returns the índices del nodo indicado por the pointer
 //! being passed as parameter.
 XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
   {
@@ -124,7 +124,7 @@ XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al nodo
+//! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag se pasa como parámetro.
 const XC::Node *XC::TritrizPtrNod::buscaNodo(const int &tag) const
   {
@@ -252,7 +252,7 @@ void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SFreedom_
       } 
   }
 
-//! @brief Devuelve los índices de los nodos (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
+//! @brief Returns the índices de los nodos (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
 std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(4,-1);
@@ -346,7 +346,7 @@ std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
     return retval;
   }
 
-//! @brief Devuelve los índices de los nodos (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
+//! @brief Returns the índices de los nodos (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
 std::vector<int> XC::getIdNodosQuad9N(const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(9,-1);

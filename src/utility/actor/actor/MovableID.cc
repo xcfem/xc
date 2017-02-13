@@ -45,7 +45,7 @@ XC::MovableID::MovableID(const ID &v)
 void XC::MovableID::setID(const ID &v)
   { ID::operator=(v); }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::MovableID::getDbTagData(void) const
   {

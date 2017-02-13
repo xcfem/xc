@@ -1,4 +1,6 @@
 # CodeDocs.xyz Configuration File
+# 20170213 LCPT REMOVED this file from project root directory after
+# four days CodeDocs not updating the documentation. 
 #
 # Rename this example to '.codedocs' and put it in the root directory of your
 # repository. This file is optional, documentation will still be generated

@@ -130,11 +130,11 @@ int XC::FiberSectionRepr::addFiber(Fiber &newFiber)
     return 0;
   }
 
-//! @brief Devuelve el número de fibras de la sección.
+//! @brief Returns the número de fibras de la sección.
 int XC::FiberSectionRepr::getNumFibers(void) const
   { return fibras.size(); }
 
-//! @brief Devuelve los datos de las fibras correspondientes a celdas y armaduras.
+//! @brief Returns the datos de las fibras correspondientes a celdas y armaduras.
 XC::FiberData XC::FiberSectionRepr::getFiberData(void) const
   {
     assert(gmSecc);

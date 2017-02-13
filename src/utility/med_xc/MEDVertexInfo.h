@@ -49,7 +49,7 @@ class MEDVertexInfo: public MEDBaseInfo
     MEDVertexInfo(void);
     MEDVertexInfo(const Mesh &);
 
-    //! @brief Devuelve el número de vertices.
+    //! @brief Returns the número de vertices.
     inline size_t getNumVertices(void) const
       { return coordenadas.size()/spaceDimension; }
     const std::vector<double> &getCoordenadas(void) const;

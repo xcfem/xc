@@ -77,7 +77,7 @@ class EntMdlr: public SetEstruct
     EntMdlr &operator=(const EntMdlr &otro);
 
     virtual void set_indice(const size_t &i);
-    //! @brief Devuelve el índice del objeto.
+    //! @brief Returns the índice del objeto.
     inline size_t getIdx(void) const
       { return idx; }
 
@@ -120,7 +120,7 @@ class EntMdlr: public SetEstruct
       { return elementos; }
     const TritrizPtrElem &GetTtzElementos(void) const
       { return elementos; }
-    //! @brief Devuelve la dimensión del objeto.
+    //! @brief Return the dimensión del objeto.
     virtual unsigned short int GetDimension(void) const= 0;
     virtual BND3d Bnd(void) const= 0;
 

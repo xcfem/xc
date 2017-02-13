@@ -227,7 +227,7 @@ int XC::FE_Element::setID(void)
     return 0;
   }
 
-//! @brief Devuelve la matriz tangente que le indica el objeto Integrator.
+//! @brief Return the matriz tangente que le indica el objeto Integrator.
 const XC::Matrix &XC::FE_Element::getTangent(Integrator *theNewIntegrator)
   {
     theIntegrator= theNewIntegrator;
@@ -254,7 +254,7 @@ const XC::Matrix &XC::FE_Element::getTangent(Integrator *theNewIntegrator)
       }
   }
 
-//! @brief Devuelve el vector residuo que le indica el objeto Integrator.
+//! @brief Returns the vector residuo que le indica el objeto Integrator.
 const XC::Vector &XC::FE_Element::getResidual(Integrator *theNewIntegrator)
   {
     theIntegrator= theNewIntegrator;

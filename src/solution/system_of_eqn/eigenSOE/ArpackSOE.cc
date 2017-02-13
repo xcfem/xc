@@ -43,7 +43,7 @@ XC::ArpackSOE::ArpackSOE(SoluMethod *owr,int classTag, double theShift)
   :EigenSOE(owr,classTag), shift(theShift) {}
 
 
-//! @brief Devuelve el valor del parámetro shift.
+//! @brief Returns the valor del parámetro shift.
 const double &XC::ArpackSOE::getShift(void) const
   { return shift; }
 

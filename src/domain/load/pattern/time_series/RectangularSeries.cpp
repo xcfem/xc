@@ -71,7 +71,7 @@ XC::RectangularSeries::RectangularSeries(double startTime, double finishTime,dou
 XC::RectangularSeries::RectangularSeries(void)
   :PulseBaseSeries(TSERIES_TAG_RectangularSeries) {}
 
-//! @brief Devuelve el valor del factor para el instante being passed as parameter.
+//! @brief Returns the valor del factor para el instante being passed as parameter.
 double XC::RectangularSeries::getFactor(double pseudoTime) const
   {	
     if(pseudoTime >= tStart && pseudoTime <= tFinish)

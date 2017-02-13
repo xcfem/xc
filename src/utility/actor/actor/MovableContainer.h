@@ -63,7 +63,7 @@ XC::MovableContainer<C>::MovableContainer(C &v)
   : MovableObject(0), contenedor(v) {}
 
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 template <class C>
 XC::DbTagData &XC::MovableContainer<C>::getDbTagData(void) const

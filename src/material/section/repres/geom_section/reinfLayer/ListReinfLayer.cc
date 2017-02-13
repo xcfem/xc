@@ -130,7 +130,7 @@ const XC::GeomSection *XC::ListReinfLayer::getGeomSection(void) const
     return retval;
   }
 
-//! @brief Devuelve el valor mínimo del recubrimiento de las barras.
+//! @brief Returns the valor mínimo del recubrimiento de las barras.
 double XC::ListReinfLayer::getRecubrimiento(void) const
   {
     double retval= 0;
@@ -142,7 +142,7 @@ double XC::ListReinfLayer::getRecubrimiento(void) const
     return retval;
   }
 
-//! @brief Devuelve el número total de celdas.
+//! @brief Returns the número total de celdas.
 size_t XC::ListReinfLayer::getNumReinfBars(void) const
   {
     int nbars= 0;
@@ -151,7 +151,7 @@ size_t XC::ListReinfLayer::getNumReinfBars(void) const
     return nbars;
   }
 
-// //! Devuelve el subconjunto de barras de ésta que cumplen la condición que se
+// //! Returns the subconjunto de barras de ésta que cumplen la condición que se
 // //! pasa como parámetro.
 // void XC::ListReinfLayer::Cumplen(const std::string &cond,ListReinfLayer &retval,bool clear)
 //   {
@@ -161,7 +161,7 @@ size_t XC::ListReinfLayer::getNumReinfBars(void) const
 //       (*i)->Cumplen(cond,retval,false);
 //   }
 
-//! Devuelve el subconjunto de barras cuyo centro esta contenido en el polígono.
+//! Returns the subconjunto de barras cuyo centro esta contenido en el polígono.
 void XC::ListReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
@@ -170,7 +170,7 @@ void XC::ListReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retva
       (*i)->getBarrasIn(plg,retval,false);
   }
 
-//! Devuelve el subconjunto de barras cuyo centro esta contenido en el semiplano.
+//! Returns the subconjunto de barras cuyo centro esta contenido en el semiplano.
 void XC::ListReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
@@ -179,7 +179,7 @@ void XC::ListReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retva
       (*i)->getBarrasIn(sp,retval,false);
   }
 
-//! @brief Devuelve el área homogeneizada de las regiones.
+//! @brief Returns the área homogeneizada de las regiones.
 double XC::ListReinfLayer::getAreaHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;

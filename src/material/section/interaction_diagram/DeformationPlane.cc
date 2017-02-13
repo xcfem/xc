@@ -117,12 +117,12 @@ void XC::DeformationPlane::ConstantStrain(const double &e)
     TresPuntos(p1,p2,p3);
   }
 
-//! @brief Devuelve la deformación que corresponde a la
+//! @brief Return the deformación que corresponde a la
 //! fibra de posición "p"
 double XC::DeformationPlane::Deformacion(const Pos2d &p) const
   { return Plano3d::x(p); }
 
-//! @brief Devuelve el vector de deformaciones.
+//! @brief Returns the vector de deformaciones.
 const XC::Vector &XC::DeformationPlane::getDeformation(void) const
   {
     static Vector retval(3);
@@ -132,7 +132,7 @@ const XC::Vector &XC::DeformationPlane::getDeformation(void) const
     return retval;
   }
 
-//! @brief Devuelve el vector de deformaciones.
+//! @brief Returns the vector de deformaciones.
 const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const ResponseId &code) const
   {
     static Vector retval;
@@ -151,7 +151,7 @@ const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const
     return retval;
   }
 
-//! @brief Devuelve la fibra neutra.
+//! @brief Return the fibra neutra.
 Recta2d XC::DeformationPlane::getFibraNeutra(void)const
   {
     const double a= angulo(*this,PlanoYZ3d);
@@ -168,7 +168,7 @@ Recta2d XC::DeformationPlane::getFibraNeutra(void)const
   }
 
 
-//! @brief Devuelve (si puede) un punto en el que las tensiones son de tracción.
+//! @brief Returns (if possible) un punto en el que las tensiones son de tracción.
 Pos2d XC::DeformationPlane::getPuntoSemiplanoTracciones(void) const
   {
     Pos2d retval(0,0);
@@ -189,7 +189,7 @@ Pos2d XC::DeformationPlane::getPuntoSemiplanoTracciones(void) const
     return retval;
   }
 
-//! @brief Devuelve (si puede) un punto en el que las tensiones son de compresion.
+//! @brief Returns (if possible) un punto en el que las tensiones son de compresion.
 Pos2d XC::DeformationPlane::getPuntoSemiplanoCompresiones(void) const
   {
     Pos2d retval(0,0);
@@ -210,7 +210,7 @@ Pos2d XC::DeformationPlane::getPuntoSemiplanoCompresiones(void) const
     return retval;
   }
 
-//! @brief Devuelve el semiplano cuyo borde es la recta que se pasa
+//! @brief Returns the semiplano cuyo borde es la recta que se pasa
 //! como parámetro y que está contenido en el semiplano de tracción.
 Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(const Recta2d &r) const
   {
@@ -235,7 +235,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(const Recta2d &r) const
     return retval;
   }
 
-//! @brief Devuelve el semiplano cuyo borde es la fibra neutra
+//! @brief Returns the semiplano cuyo borde es la fibra neutra
 //! y en el que las tensiones son de tracción.
 Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(void) const
   {
@@ -260,7 +260,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(void) const
     return retval;
   }
 
-//! @brief Devuelve el semiplano cuyo borde es la recta que se pasa
+//! @brief Returns the semiplano cuyo borde es la recta que se pasa
 //! como parámetro y en el que las tensiones son de compresión.
 Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(const Recta2d &r) const
   {
@@ -285,7 +285,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(const Recta2d &r) con
     return retval;
   }
 
-//! @brief Devuelve el semiplano cuyo borde es la fibra neutra
+//! @brief Returns the semiplano cuyo borde es la fibra neutra
 //! y en el que las tensiones son de compresión.
 Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(void) const
   {

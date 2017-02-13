@@ -217,12 +217,12 @@ XC::DamageModel *XC::ParkAng::getCopy(void) const
         return theCopy;
 }
 
-//! @brief Devuelve el identificador de la variable cuyo
+//! @brief Returns the identificador de la variable cuyo
 //! nombre se pasa como parámetro.
 int XC::ParkAng::setVariable(const std::string &argv)
   { return -1; }
 
-//! @brief Devuelve el valor de la variable cuyo
+//! @brief Returns the valor de la variable cuyo
 //! identificador se pasa como parámetro.
 int XC::ParkAng::getVariable(int variableID, double &info)
   { return -1; }

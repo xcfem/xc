@@ -75,12 +75,14 @@ class Subdomain;
 
 //! @ingroup AnalysisType
 //
-//! @brief Análisis por descomposición del domain.
+//! @brief Used when performing a domain decomposition
+//! analysis. It provides methods which can be invoked by a subdomain to
+//! perform the numerical computations required.
 class DomainDecompositionAnalysis: public Analysis, public MovableObject
   {
   private:
-    Subdomain *theSubdomain; //!< Apuntador al subdomain. 
-    DomainSolver *theSolver; //!< Apuntador al solver de tipo DomainSolver.
+    Subdomain *theSubdomain; //!< Pointer to subdomain. 
+    DomainSolver *theSolver; //!< Pointer to solver de tipo DomainSolver.
     Vector theResidual; //!< Vector residuo.
     int numEqn; //!< Número de ecuaciones.
     int numExtEqn; //!< Número de ecuaciones externas.

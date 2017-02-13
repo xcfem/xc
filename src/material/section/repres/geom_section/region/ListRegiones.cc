@@ -129,7 +129,7 @@ XC::ListRegiones::iterator XC::ListRegiones::begin(void)
 XC::ListRegiones::iterator XC::ListRegiones::end(void)
   { return l_reg::end(); }
 
-//! @brief Devuelve el número total de celdas.
+//! @brief Returns the número total de celdas.
 size_t XC::ListRegiones::getNumCells(void) const
   {
     size_t ncells= 0;
@@ -181,7 +181,7 @@ XC::ListRegiones XC::ListRegiones::Interseccion(const Semiplano2d &sp) const
     return retval;
   }
 
-//! @brief Devuelve el área de las regiones.
+//! @brief Returns the área de las regiones.
 double XC::ListRegiones::getAreaGrossSection(void) const
   {
     double retval= 0.0;
@@ -190,7 +190,7 @@ double XC::ListRegiones::getAreaGrossSection(void) const
     return retval;
   }
 
-//! @brief Devuelve el centro de gravedad de la sección bruta.
+//! @brief Returns the centro de gravedad de la sección bruta.
 XC::Vector XC::ListRegiones::getCdgGrossSection(void) const
   {
     Vector retval(2);
@@ -227,7 +227,7 @@ double XC::ListRegiones::getIyGrossSection(void) const
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia de la sección bruta respecto al eje paralelo al z por el CDG.
+//! @brief Returns the momento de inercia de la sección bruta respecto al eje paralelo al z por el CDG.
 double XC::ListRegiones::getIzGrossSection(void) const
   {
     double retval= 0.0;
@@ -241,7 +241,7 @@ double XC::ListRegiones::getIzGrossSection(void) const
     return retval;
   }
 
-//! @brief Devuelve el producto de inercia de la sección bruta respecto a los ejes paralelos al y y al z por el CDG.
+//! @brief Returns the producto de inercia de la sección bruta respecto a los ejes paralelos al y y al z por el CDG.
 double XC::ListRegiones::getPyzGrossSection(void) const
   {
     double retval= 0.0;
@@ -257,7 +257,7 @@ double XC::ListRegiones::getPyzGrossSection(void) const
     return retval;
   }
 
-// //! Devuelve el subconjunto de regiones de éste que cumplen la condición que se
+// //! Returns the subconjunto de regiones de éste que cumplen la condición que se
 // //! pasa como parámetro.
 // void XC::ListRegiones::Cumplen(const std::string &cond,ListRegiones &retval,bool clear)
 //   {
@@ -269,7 +269,7 @@ double XC::ListRegiones::getPyzGrossSection(void) const
 //   }
 
 
-//! @brief Devuelve el área homogeneizada de las regiones.
+//! @brief Returns the área homogeneizada de las regiones.
 double XC::ListRegiones::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)

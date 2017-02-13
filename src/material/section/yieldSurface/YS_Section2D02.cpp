@@ -101,7 +101,7 @@ void XC::YS_Section2D02::getSectionStiffness(XC::Matrix &Ks)
     Ks(1,0) = 0.0; Ks(1,1) = E*I*iFactor;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::YS_Section2D02::getInitialTangent(void) const
   {
     ks(0,0) = E*A; ks(0,1) = 0.0;

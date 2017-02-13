@@ -24,7 +24,7 @@
 #include "MEDCellBaseInfo.h"
 
 
-//! @brief Devuelve el número de elementos.
+//! @brief Returns the número de elementos.
 size_t XC::MEDCellBaseInfo::getNumeroElementos(void) const
   { return cell_types.getNumCeldas(); }
 

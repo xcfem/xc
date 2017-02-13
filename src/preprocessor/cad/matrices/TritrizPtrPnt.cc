@@ -78,7 +78,7 @@ void XC::TritrizPtrPnt::setPnt(const size_t &i,const size_t &j,const size_t &k,c
 XC::Pnt *XC::TritrizPtrPnt::getPnt(const size_t &i,const size_t &j,const size_t &k)
   { return getAtIJK(i,j,k); }
 
-//! @brief Devuelve el centroide del esquema.
+//! @brief Returns the centroide del esquema.
 Pos3d XC::TritrizPtrPnt::getCentroide(void) const
   {
     Pos3d retval;
@@ -98,8 +98,8 @@ Pos3d XC::TritrizPtrPnt::getCentroide(void) const
   }
 
 
-//! @brief Devuelve, si lo encuentra, a pointer al punto
-//! cuyo tag se pasa como parámetro.
+//! @brief Returns (if it exists) a pointer to punto
+//! cuyo tag is being passed as parameter.
 XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag)
   {
     Pnt *retval= nullptr;
@@ -113,7 +113,7 @@ XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve un apuntador al objeto Cad.
+//! @brief Returns a pointer to objeto Cad.
 const XC::Cad *XC::TritrizPtrPnt::getCad(void) const
   {
     const Cad *retval= nullptr;
@@ -126,7 +126,7 @@ const XC::Cad *XC::TritrizPtrPnt::getCad(void) const
     return retval;
   }
 
-//! @brief Devuelve un apuntador al objeto Cad.
+//! @brief Returns a pointer to objeto Cad.
 XC::Cad *XC::TritrizPtrPnt::getCad(void)
   {
     Cad *retval= nullptr;
@@ -139,14 +139,14 @@ XC::Cad *XC::TritrizPtrPnt::getCad(void)
     return retval;
   }
 
-//! @brief Devuelve el punto más próximo al punto being passed as parameter.
+//! @brief Returns the punto más próximo al punto being passed as parameter.
 const XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p) const
   {
     TritrizPtrPnt *this_no_const= const_cast<TritrizPtrPnt *>(this);
     return this_no_const->getNearestPnt(p);
   }
 
-//! @brief Devuelve el punto más próximo al punto being passed as parameter.
+//! @brief Returns the punto más próximo al punto being passed as parameter.
 XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;
@@ -170,8 +170,8 @@ XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al punto
-//! cuyo tag se pasa como parámetro.
+//! @brief Returns (if it exists) a pointer to punto
+//! cuyo tag is being passed as parameter.
 const XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag) const
   {
     const Pnt *retval= nullptr;
@@ -211,7 +211,7 @@ std::deque<size_t> XC::TritrizPtrPnt::CopiaPuntos(const RangoTritriz &rango,cons
     return retval;
   }  
 
-//! @brief Devuelve los puntos del rango being passed as parameter.
+//! @brief Returns the puntos del rango being passed as parameter.
 XC::TritrizPtrPnt XC::TritrizPtrPnt::getRangoPuntos(const RangoTritriz &rango)
   {
     TritrizPtrPnt retval(rango.NumCapas(),rango.NumFilas(),rango.NumCols());
@@ -232,7 +232,7 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getRangoPuntos(const RangoTritriz &rango)
     return retval;
   }
 
-//! @brief Devuelve los puntos cuyos índices se pasan como parámetro.
+//! @brief Returns the puntos cuyos índices se pasan como parámetro.
 XC::Pnt *XC::TritrizPtrPnt::getPunto(const VIndices &iPunto)
   {
     Pnt *retval= nullptr;
@@ -247,7 +247,7 @@ XC::Pnt *XC::TritrizPtrPnt::getPunto(const VIndices &iPunto)
     return retval;    
   }
 
-//! @brief Devuelve los puntos cuyos índices se pasan como parámetro.
+//! @brief Returns the puntos cuyos índices se pasan como parámetro.
 XC::TritrizPtrPnt XC::TritrizPtrPnt::getPuntos(const TritrizIndices &indices)
   {
     const size_t nCapas= indices.GetCapas();
@@ -268,7 +268,7 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getPuntos(const TritrizIndices &indices)
     return retval;
   }
 
-//! @brief Devuelve los puntos cuyos índices se pasan como parámetro.
+//! @brief Returns the puntos cuyos índices se pasan como parámetro.
 XC::MatrizPtrPnt XC::TritrizPtrPnt::getPuntos(const MatrizIndices &indices)
   {
     const size_t nFilas= indices.getNumFilas();
@@ -287,7 +287,7 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getPuntos(const MatrizIndices &indices)
     return retval;
   }
 
-//! @brief Devuelve la celda formada por los puntos que se obtienen de las
+//! @brief Return the celda formada por los puntos que se obtienen de las
 //! posiciones de la tritriz que resultan de sumar a los índices (i,j,k) del
 //! punto los valores del vector offsetIndices es decir:
 //! Punto (i,j,k): (i+offsetIndices(i,j,k)[0],j+offsetIndices(i,j,k)[1],k+offsetIndices(i,j,k)[2])
@@ -300,7 +300,7 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t
     return getPuntos(tmp);
   }
 
-//! @brief Devuelve la celda formada por los puntos que se obtienen de las
+//! @brief Return the celda formada por los puntos que se obtienen de las
 //! posiciones de la tritriz que resultan de sumar a los índices (i,j) del
 //! punto los valores del vector offsetIndices es decir:
 //! Punto (i,j): (i+offsetIndices(i,j)[0],j+offsetIndices(i,j)[1],k+offsetIndices(i,j)[2])
@@ -320,8 +320,8 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t 
 // //! Punto 2: (i+offsetIndices[1,0],j+offsetIndices[1,1],k+offsetIndices[1,2])
 // //! Punto 3: (i+offsetIndices[2,0],j+offsetIndices[2,1],k+offsetIndices[2,2])
 // //! ...
-// //! @param nf: Número de filas de la matriz de apuntadores a punto.
-// //! @param nc: Número de columnas de la matriz de apuntadores a punto.
+// //! @param nf: Number of rows of the matrix that holds the pointers to point.
+// //! @param nc: Number of columns of the matrix that holds the pointers to point.
 // std::deque<size_t> XC::TritrizPtrPnt::CreaCuadrilateros(const RangoTritriz &rango,const size_t &nf,const size_t &nc,const m_int &offsetIndices,const double &elemSizeI,const double &elemeSizeJ)
 //   {
 //     Cad *cad= getCad();
@@ -367,7 +367,7 @@ std::ostream &XC::operator<<(std::ostream &os, const TritrizPtrPnt &t)
     return os;
   }
 
-//! @brief Devuelve los índices de los puntos (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
+//! @brief Returns the índices de los puntos (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
 std::vector<size_t> XC::getIdPuntosQuad(const TritrizPtrPnt::const_ref_capa_i_cte &puntos,const size_t &j,const size_t &k)
   {
     std::vector<size_t> retval(4,-1);

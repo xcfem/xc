@@ -36,7 +36,7 @@
 
 #include "boost/lexical_cast.hpp"
 
-//! @brief Devuelve, si lo encuentra, a pointer al nodo
+//! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag se pasa como parámetro.
 XC::Node *XC::MatrizPtrNod::buscaNodo(const int &tag)
   {
@@ -60,7 +60,7 @@ XC::Node *XC::MatrizPtrNod::buscaNodo(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al nodo
+//! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag se pasa como parámetro.
 const XC::Node *XC::MatrizPtrNod::buscaNodo(const int &tag) const
   {
@@ -84,7 +84,7 @@ const XC::Node *XC::MatrizPtrNod::buscaNodo(const int &tag) const
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p)
   {
     Node *retval= nullptr, *ptrNod= nullptr;
@@ -111,7 +111,7 @@ XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p)
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p) const
   {
     MatrizPtrNod *this_no_const= const_cast<MatrizPtrNod *>(this);
@@ -129,7 +129,7 @@ void XC::MatrizPtrNod::fix(const SFreedom_Constraint &semilla) const
         operator()(j,k)->fix(semilla);
   }
 
-//! @brief Devuelve una matriz con los identificadores de los nodos.
+//! @brief Returns a matriz con los identificadores de los nodos.
 m_int XC::MatrizPtrNod::getTags(void) const
   {
     const size_t nfilas= getNumFilas();

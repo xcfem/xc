@@ -53,7 +53,7 @@ XC::IntegrationPointsCoords::IntegrationPointsCoords(const BeamIntegration &bInt
     //Las globales ya están listas.
   }
 
-//! @brief Devuelve el mapa de valores necesario para evaluar la expresión.
+//! @brief Returns the mapa de valores necesario para evaluar la expresión.
 MapValores XC::IntegrationPointsCoords::getMapValores(const size_t &i,const std::vector<std::string> &nombresVariables) const
   {
     MapValores retval;

@@ -38,7 +38,7 @@ namespace XC {
 class PtrCommMetaData: public CommMetaData
   {
   private:
-    int posFlag; //!< Posición de data en la que se guarda si el apuntador es NULL.
+    int posFlag; //!< Index on data to use when pointer is NULL.
   public:
     PtrCommMetaData(const int &pos,const int &flag);
 

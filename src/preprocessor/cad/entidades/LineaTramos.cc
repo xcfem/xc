@@ -48,7 +48,7 @@ void XC::LineaTramos::setLongs(const XC::Vector &ls)
     SetNDiv(longs.size());
   }
 
-//! @brief Devuelve ndiv+1 posiciones a lo largo de la línea espaciadas
+//! @brief Returns ndiv+1 posiciones a lo largo de la línea espaciadas
 //! según las longitudes que contenga el miembro longs.
 MatrizPos3d XC::LineaTramos::get_posiciones(void) const
   {

@@ -60,11 +60,11 @@ void XC::ShellMecLoad::addFixedEndForcesInBasicSystem(const double &,const doubl
     std::cerr << "addFixedEndForcesInBasicSystem no definida." << std::endl;
   }
 
-//! @brief Devuelve la dimension del vector fuerza.
+//! @brief Return the dimension del vector fuerza.
 size_t XC::ShellMecLoad::getDimVectorFuerza(void) const
   { return 3; }
 
-//! @brief Devuelve la dimension del vector momento.
+//! @brief Return the dimension del vector momento.
 size_t XC::ShellMecLoad::getDimVectorMomento(void) const
   { return 3; }
 
@@ -88,7 +88,7 @@ XC::Vector XC::ShellMecLoad::getLocalMoment(void) const
     return retval;
   }
 
-//! @brief Devuelve las componentes de los vectores fuerza.
+//! @brief Returns the componentes de los vectores fuerza.
 const XC::Matrix &XC::ShellMecLoad::getLocalForces(void) const
   {
     static Matrix retval;
@@ -103,7 +103,7 @@ const XC::Matrix &XC::ShellMecLoad::getLocalForces(void) const
     return retval;
   }
 
-//! @brief Devuelve las componentes de los vectores momento.
+//! @brief Returns the componentes de los vectores momento.
 const XC::Matrix &XC::ShellMecLoad::getLocalMoments(void) const
   {
     static Matrix retval;
@@ -155,14 +155,14 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
           }
       }
     else
-      std::cerr << "ShellMecLoad::getGlobalVectors; no existe apuntador al domain." << std::endl;
+      std::cerr << "ShellMecLoad::getGlobalVectors; pointer to domain is NULL." << std::endl;
     return retval;
   }
 
-//! @brief Devuelve la fuerza expresada en coordenadas globales.
+//! @brief Return the fuerza expresada en coordenadas globales.
 const XC::Matrix &XC::ShellMecLoad::getGlobalForces(void) const
   { return getGlobalVectors(getLocalForces()); }
 
-//! @brief Devuelve el momento expresado en coordenadas globales.
+//! @brief Returns the momento expresado en coordenadas globales.
 const XC::Matrix &XC::ShellMecLoad::getGlobalMoments(void) const
   { return getGlobalVectors(getLocalMoments()); }

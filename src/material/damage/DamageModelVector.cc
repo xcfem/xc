@@ -106,7 +106,7 @@ void XC::DamageModelVector::borra_dmg_models(void)
       }
   }
 
-//! @brief Devuelve verdadero si no se ha asignado damage model.
+//! @brief Returns true ifno se ha asignado damage model.
 bool XC::DamageModelVector::empty(void) const
   {
     if(dmg_model_vector::empty())
@@ -153,7 +153,7 @@ int XC::DamageModelVector::commitState(const material_vector &materials)
     return result;
   }
 
-//! @brief Devuelve el estado de los dmg_models al del último commit.
+//! @brief Returns the estado de los dmg_models al del último commit.
 int XC::DamageModelVector::revertToLastCommit(void)
   {
     int retVal= 0;
@@ -169,7 +169,7 @@ int XC::DamageModelVector::revertToLastCommit(void)
   }
 
 
-//! @brief Devuelve el estado de los dmg_models al inicial.
+//! @brief Returns the estado de los dmg_models al inicial.
 int XC::DamageModelVector::revertToStart(void)
   {
     int retVal = 0;
@@ -184,7 +184,7 @@ int XC::DamageModelVector::revertToStart(void)
     return retVal;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::DamageModelVector::getDbTagData(void) const
   {

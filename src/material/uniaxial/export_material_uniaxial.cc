@@ -37,8 +37,8 @@ class_<vectorUniaxialMaterial,boost::noncopyable>("vectorUniaxialMaterial")
 
 class_<material_vector_UMat,bases<vectorUniaxialMaterial,EntCmd>,boost::noncopyable>("MaterialVectorUMat", no_init)
         .def("commitState", &material_vector_UMat::commitState,"Commits materials state.")
-        .def("revertToLastCommit", &material_vector_UMat::revertToLastCommit,"Devuelve el estado del material al último consumado.")
-        .def("revertToStart", &material_vector_UMat::revertToStart,"Devuelve el material a su estado inicial.")
+        .def("revertToLastCommit", &material_vector_UMat::revertToLastCommit,"Returns the material state al último consumado.")
+        .def("revertToStart", &material_vector_UMat::revertToStart,"Returns the material a su estado inicial.")
       ;
 
   }

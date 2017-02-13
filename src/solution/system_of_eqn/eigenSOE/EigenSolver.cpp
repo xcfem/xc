@@ -50,22 +50,22 @@
 XC::EigenSolver::EigenSolver(const int &classTag,const int &nModes)
   :Solver(classTag), numModes(nModes) {}
 
-//! @brief Devuelve la pulsación correspondiente al modo
+//! @brief Return the pulsación correspondiente al modo
 //! being passed as parameter.
 double XC::EigenSolver::getPulsacion(int mode) const
   { return sqrt(getEigenvalue(mode)); }
 
-//! @brief Devuelve el período correspondiente al modo
+//! @brief Returns the período correspondiente al modo
 //! being passed as parameter.
 double XC::EigenSolver::getPeriodo(int mode) const
   { return 2.0*M_PI/getPulsacion(mode); }
 
-//! @brief Devuelve la frecuencia correspondiente al modo
+//! @brief Return the frecuencia correspondiente al modo
 //! being passed as parameter.
 double XC::EigenSolver::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 
-//! @brief Devuelve un vector con los eigenvalues calculados.
+//! @brief Returns a vector con los eigenvalues calculados.
 XC::Vector XC::EigenSolver::getEigenvalues(void) const
   {
     Vector retval(numModes);
@@ -74,7 +74,7 @@ XC::Vector XC::EigenSolver::getEigenvalues(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector con las pulsaciones calculadas.
+//! @brief Returns a vector con las pulsaciones calculadas.
 XC::Vector XC::EigenSolver::getPulsaciones(void) const
   {
     Vector retval= getEigenvalues();
@@ -84,7 +84,7 @@ XC::Vector XC::EigenSolver::getPulsaciones(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector con las periodos calculados.
+//! @brief Returns a vector con las periodos calculados.
 XC::Vector XC::EigenSolver::getPeriodos(void) const
   {
     Vector retval= getPulsaciones();
@@ -94,7 +94,7 @@ XC::Vector XC::EigenSolver::getPeriodos(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector con las frecuencias calculadas.
+//! @brief Returns a vector con las frecuencias calculadas.
 XC::Vector XC::EigenSolver::getFrecuencias(void) const
   {
     Vector retval= getPeriodos();
@@ -104,12 +104,12 @@ XC::Vector XC::EigenSolver::getFrecuencias(void) const
     return retval;
   }
 
-//! @brief Devuelve el autovector correspondiente al modo i
+//! @brief Returns the autovector correspondiente al modo i
 //! normalizado de modo que la componente máxima valga 1 (norma_infinito).
 XC::Vector XC::EigenSolver::getNormalizedEigenvector(int mode) const
   { return normalize_inf(getEigenvector(mode)); }
 
-//! @brief Devuelve una matriz con los eigenvectors calculados colocados
+//! @brief Returns a matriz con los eigenvectors calculados colocados
 //! por columnas.
 XC::Matrix XC::EigenSolver::getEigenvectors(void) const
   {
@@ -124,7 +124,7 @@ XC::Matrix XC::EigenSolver::getEigenvectors(void) const
     return retval;
   }
 
-//! @brief Devuelve una matriz con los eigenvectors normalizados colocados
+//! @brief Returns a matriz con los eigenvectors normalizados colocados
 //! por columnas (norma_infinito).
 XC::Matrix XC::EigenSolver::getNormalizedEigenvectors(void) const
   {

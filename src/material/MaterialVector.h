@@ -191,7 +191,7 @@ void MaterialVector<MAT>::clear_materials(void)
       }
   }
 
-//! @brief Devuelve verdadero si no se ha asignado material.
+//! @brief Returns true ifno se ha asignado material.
 template <class MAT>
 bool MaterialVector<MAT>::empty(void) const
   {
@@ -243,12 +243,12 @@ int MaterialVector<MAT>::revertToStart(void)
     return retVal;
   }
 
-//! @brief Devuelve el tamaño del vector de tensiones.
+//! @brief Returns the tamaño del vector de tensiones.
 template <class MAT>
 size_t MaterialVector<MAT>::getGeneralizedStressSize(void) const
   { return (*this)[0]->getGeneralizedStress().Size(); }
 
-//! @brief Devuelve el tamaño del vector de deformaciones.
+//! @brief Returns the tamaño del vector de deformaciones.
 template <class MAT>
 size_t MaterialVector<MAT>::getGeneralizedStrainSize(void) const
   { return (*this)[0]->getGeneralizedStrain().Size(); }
@@ -470,7 +470,7 @@ void MaterialVector<MAT>::zeroInitialGeneralizedStrains(void)
       (*this)[i]->zeroInitialGeneralizedStrain();
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 template <class MAT>
 XC::DbTagData &MaterialVector<MAT>::getDbTagData(void) const

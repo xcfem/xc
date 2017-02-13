@@ -219,7 +219,7 @@ void XC::FiberSectionShear3d::setRespVyVzTByName(const std::string &rvy,const st
 XC::FiberSectionShear3d::~FiberSectionShear3d(void)
   { libera(); }
 
-//! @brief Asigna la deformación inicial.
+//! @brief Asigna la initial deformation.
 int XC::FiberSectionShear3d::setInitialSectionDeformation(const Vector &def)
   {
     static Vector v(3);
@@ -243,7 +243,7 @@ int XC::FiberSectionShear3d::setTrialSectionDeformation(const Vector &def)
     return ret;
   }
 
-//! @brief Devuelve la deformación inicial de la sección.
+//! @brief Return the initial deformation de la sección.
 const XC::Vector &XC::FiberSectionShear3d::getInitialSectionDeformation(void) const
   {
     defzero.Zero();
@@ -267,7 +267,7 @@ const XC::Vector &XC::FiberSectionShear3d::getSectionDeformation(void) const
     return def;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::FiberSectionShear3d::getSectionTangent(void) const
   {
     // Zero before assembly
@@ -282,7 +282,7 @@ const XC::Matrix &XC::FiberSectionShear3d::getSectionTangent(void) const
     return ks;
   }
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix &XC::FiberSectionShear3d::getInitialTangent(void) const
   {
     // Zero before assembly
@@ -297,7 +297,7 @@ const XC::Matrix &XC::FiberSectionShear3d::getInitialTangent(void) const
     return ks;
   }
 
-//! @brief Devuelve la matriz de flexibilidad.
+//! @brief Return the matriz de flexibilidad.
 const XC::Matrix &XC::FiberSectionShear3d::getSectionFlexibility(void) const
   {
     fs.Zero(); // Zero before assembly
@@ -311,7 +311,7 @@ const XC::Matrix &XC::FiberSectionShear3d::getSectionFlexibility(void) const
     return fs;
   }
 
-//! @brief Devuelve la matriz de flexibilidad noval.
+//! @brief Return the matriz de flexibilidad noval.
 const XC::Matrix &XC::FiberSectionShear3d::getInitialFlexibility(void) const
   {
     fs.Zero(); // Zero before assembly
@@ -325,7 +325,7 @@ const XC::Matrix &XC::FiberSectionShear3d::getInitialFlexibility(void) const
     return fs;
   }
 
-//! @brief Devuelve la resultante de tensiones.
+//! @brief Return the resultante de tensiones.
 const XC::Vector &XC::FiberSectionShear3d::getStressResultant(void) const
   {
     s.Zero();
@@ -340,7 +340,7 @@ const XC::Vector &XC::FiberSectionShear3d::getStressResultant(void) const
 XC::SectionForceDeformation *XC::FiberSectionShear3d::getCopy(void) const
   { return new FiberSectionShear3d(*this); }
 
-//! @brief Devuelve los códigos de los esfuerzos para los que la
+//! @brief Returns the códigos de los esfuerzos para los que la
 //! sección aporta rigidez.
 const XC::ResponseId &XC::FiberSectionShear3d::getType(void) const
   { return RespFiberSectionSh3d; }
@@ -438,7 +438,7 @@ void XC::FiberSectionShear3d::Print(std::ostream &s, int flag) const
       }
   }
 
-//! @brief Devuelve el identificador de la variable cuyo nombre se pasa como parámetro.
+//! @brief Returns the identificador de la variable cuyo nombre se pasa como parámetro.
 int XC::FiberSectionShear3d::setVariable(const std::string &argv)
   {
     // Axial strain
@@ -452,7 +452,7 @@ int XC::FiberSectionShear3d::setVariable(const std::string &argv)
       return -1;
   }
 
-//! @brief Devuelve el valor de la variable cuyo nombre se pasa como parámetro.
+//! @brief Returns the valor de la variable cuyo nombre se pasa como parámetro.
 int XC::FiberSectionShear3d::getVariable(int variableID, double &info)
   {
     int i;

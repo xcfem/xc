@@ -263,11 +263,11 @@ int XC::Spring::commitState(void)
     return retVal;
   }
 
-//! @brief Devuelve el estado del elemento al último consumado.
+//! @brief Returns the estado del elemento al último consumado.
 int XC::Spring::revertToLastCommit(void)
   { return theMaterial->revertToLastCommit(); }
 
-//! @brief Devuelve el estado del elemento al inicial.
+//! @brief Returns the estado del elemento al inicial.
 int XC::Spring::revertToStart(void)
   { return theMaterial->revertToStart(); }
 
@@ -279,7 +279,7 @@ int XC::Spring::update(void)
     return theMaterial->setTrialStrain(strain, rate);
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::Spring::getTangentStiff(void) const
   {
     const double K= theMaterial->getTangent();
@@ -305,7 +305,7 @@ const XC::Matrix &XC::Spring::getTangentStiff(void) const
     return stiff;
   }
 
-//! @brief Devuelve la matriz de rigidez inicial.
+//! @brief Return the matriz de rigidez inicial.
 const XC::Matrix &XC::Spring::getInitialStiff(void) const
   {
     const double K= theMaterial->getInitialTangent();
@@ -331,7 +331,7 @@ const XC::Matrix &XC::Spring::getInitialStiff(void) const
     return *theMatrix;
   }
 
-//! @brief Devuelve la matriz de amortiguamiento.
+//! @brief Return the matriz de amortiguamiento.
 const XC::Matrix &XC::Spring::getDamp(void) const
   {
     const double eta= theMaterial->getDampTangent();
@@ -362,11 +362,11 @@ const XC::Material *XC::Spring::getMaterial(void) const
   { return theMaterial; }
 XC::Material *XC::Spring::getMaterial(void)
   { return theMaterial; }
-//! @brief Devuelve la densidad del material.
+//! @brief Return the densidad del material.
 double XC::Spring::getRho(void) const
   { return theMaterial->getRho(); }
 
-//! @brief Devuelve la matriz de masas.
+//! @brief Return the matriz de masas.
 const XC::Matrix &XC::Spring::getMass(void) const
   {
     // zero the matrix
@@ -431,7 +431,7 @@ int XC::Spring::addInertiaLoadToUnbalance(const XC::Vector &accel)
     return 0;
   }
 
-//! @brief Devuelve la reacción del elemento.
+//! @brief Return the reacción del elemento.
 const XC::Vector &XC::Spring::getResistingForce(void) const
   {
     // R= Ku - Pext
@@ -453,7 +453,7 @@ const XC::Vector &XC::Spring::getResistingForce(void) const
     return *theVector;
   }
 
-//! @brief Devuelve la reacción del elemento incluyendo fuerzas de inercia.
+//! @brief Return the reacción del elemento incluyendo fuerzas de inercia.
 const XC::Vector &XC::Spring::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();

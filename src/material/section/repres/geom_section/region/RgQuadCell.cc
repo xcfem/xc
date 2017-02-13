@@ -81,19 +81,19 @@ void XC::RgQuadCell::setDiscretization(int numSubdivIJ, int numSubdivJK)
     nDivJK = numSubdivJK;
   }
 
-//! @brief Devuelve el número de divisiones en cada dirección.
+//! @brief Returns the número de divisiones en cada dirección.
 void XC::RgQuadCell::getDiscretization(int &numSubdivIJ, int &numSubdivJK) const
   {
      numSubdivIJ = nDivIJ;
      numSubdivJK = nDivJK;
   }
 
-//! @brief Devuelve el número de celdas.
+//! @brief Returns the número de celdas.
 int XC::RgQuadCell::getNumCells (void) const
   { return nDivIJ * nDivJK; }
 
 
-//! @brief Devuelve el centro de gravedad de la rejilla.
+//! @brief Returns the centro de gravedad de la rejilla.
 XC::Vector XC::RgQuadCell::getCdgRejilla(void) const
   {
     Vector retval(2);
@@ -104,7 +104,7 @@ XC::Vector XC::RgQuadCell::getCdgRejilla(void) const
     return retval;
   }
 
-//! @brief Devuelve las coordenadas del punto i,j.
+//! @brief Returns the coordenadas del punto i,j.
 XC::Vector XC::RgQuadCell::getVertCoords(const size_t &i,const size_t &j) const
   {
     Vector retval(2);
@@ -114,7 +114,7 @@ XC::Vector XC::RgQuadCell::getVertCoords(const size_t &i,const size_t &j) const
     return retval;
   }
 
-//! @brief Devuelve las coordenadas de los vértices de la celda i,j.
+//! @brief Returns the coordenadas de los vértices de la celda i,j.
 //                                                                             i+1,j +---+ i+1,j+1
 //                                                                                   |   |
 //                                                                                   |   |

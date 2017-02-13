@@ -49,7 +49,7 @@ XC::DqPtrsConstraint::DqPtrsConstraint(const std::set<const Constraint *> &st)
       push_back(const_cast<Constraint *>(*k));
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al elemento
+//! @brief Returns (if it exists) a pointer al elemento
 //! cuyo tag se pasa como parámetro.
 XC::Constraint *XC::DqPtrsConstraint::buscaConstrainto(const int &tag)
   {
@@ -70,7 +70,7 @@ XC::Constraint *XC::DqPtrsConstraint::buscaConstrainto(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al elemento
+//! @brief Returns (if it exists) a pointer al elemento
 //! cuyo tag se pasa como parámetro.
 const XC::Constraint *XC::DqPtrsConstraint::buscaConstrainto(const int &tag) const
   {
@@ -102,7 +102,7 @@ void XC::DqPtrsConstraint::numera(void)
       }
   }
 
-//! @brief Devuelve los tags de los elementos.
+//! @brief Returns the tags de los elementos.
 std::set<int> XC::DqPtrsConstraint::getTags(void) const
   {
     std::set<int> retval;

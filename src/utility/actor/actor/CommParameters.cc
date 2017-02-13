@@ -59,7 +59,7 @@ int XC::CommParameters::getDbTag(void) const
     return canal->getDbTag();
   }
 
-//! @brief Devuelve verdadero si el canal es un data store.
+//! @brief Returns true ifel canal es un data store.
 bool XC::CommParameters::isDatastore(void) const
   {
     bool retval= false;

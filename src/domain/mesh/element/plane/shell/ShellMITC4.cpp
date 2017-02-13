@@ -98,7 +98,7 @@ XC::Element* XC::ShellMITC4::getCopy(void) const
   { return new ShellMITC4(*this); }
 
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::ShellMITC4::getDbTagData(void) const
   {

@@ -300,7 +300,7 @@ int XC::Steel02::revertToStart(void)
     return 0;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::Steel02::getDbTagData(void) const
   {

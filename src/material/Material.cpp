@@ -71,7 +71,7 @@ XC::Material::Material(int tag, int clasTag)
   :TaggedObject(tag), MovableObject(clasTag) {}
 
 
-//! @brief Devuelve (si puede) a pointer al preprocesador.
+//! @brief Returns (if possible) a pointer al preprocesador.
 const XC::MaterialLoader *XC::Material::GetMaterialLoader(void) const
   {
     const XC::MaterialLoader *retval= dynamic_cast<const MaterialLoader *>(Owner());
@@ -107,7 +107,7 @@ XC::Response* XC::Material::setResponse(const std::vector<std::string> &argv, In
 int XC::Material::getResponse(int responseID, Information &info)
   { return -1; }
 
-//! @brief Actualiza las variables de estado del material
+//! @brief Actualiza las variables de material state
 //! de acuerdo con los nuevos valores de los parámetros del
 //! mismo.
 void XC::Material::update(void)

@@ -228,7 +228,7 @@ int XC::SymArpackSolver::setSize(void)
     return 0;
   }
 
-//! @brief Devuelve la dimensión de los eigenvectors.
+//! @brief Return the dimensión de los eigenvectors.
 const int &XC::SymArpackSolver::getSize(void) const
   { return theSOE->size; }
 
@@ -315,7 +315,7 @@ void XC::SymArpackSolver::myCopy(int n, double *v, double *result)
       { result[i] = v[i]; }
   }
 
-//! @brief Devuelve the autovector correspondiente al modo being passed as parameter.
+//! @brief Returns the autovector correspondiente al modo being passed as parameter.
 const XC::Vector &XC::SymArpackSolver::getEigenvector(int mode) const
   {
     int *invp = theSOE->invp;
@@ -333,7 +333,7 @@ const XC::Vector &XC::SymArpackSolver::getEigenvector(int mode) const
     return eigenV;
   }
 
-//! @brief Devuelve the autovalor correspondiente al modo being passed as parameter.
+//! @brief Returns the autovalor correspondiente al modo being passed as parameter.
 const double &XC::SymArpackSolver::getEigenvalue(int mode) const
   {
     if(mode <= 0 || mode > numModes)

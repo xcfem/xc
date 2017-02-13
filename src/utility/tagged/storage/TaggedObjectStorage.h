@@ -105,7 +105,7 @@ class TaggedObjectStorage: public EntCmd, public MovableObject
     virtual int setSize(int newSize) =0;
     virtual bool addComponent(TaggedObject *newComponent) =0;
     virtual bool removeComponent(int tag) =0;
-    //! @brief Devuelve el número de componentes.
+    //! @brief Returns the número de componentes.
     virtual int getNumComponents(void) const =0;
 
     bool existComponent(int tag);

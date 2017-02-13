@@ -701,7 +701,7 @@ XC::Matrix XC::Matrix::operator()(const ID &rows, const ID & cols) const
     return result;
   }
 
-//! @brief Devuelve la fila cuyo índice se pasa como parámetro.
+//! @brief Return the fila cuyo índice se pasa como parámetro.
 XC::Vector XC::Matrix::getRow(int row) const
   {
     Vector retval(numCols);
@@ -710,7 +710,7 @@ XC::Vector XC::Matrix::getRow(int row) const
     return retval;
   }
 
-//! @brief Devuelve la columna cuyo índice se pasa como parámetro.
+//! @brief Return the columna cuyo índice se pasa como parámetro.
 XC::Vector XC::Matrix::getCol(int col) const
   {
     Vector retval(numRows);
@@ -1162,7 +1162,7 @@ int XC::Matrix::Assemble(const Matrix &V, int init_row, int init_col, double fac
   return res;
 }
 
-//! @brief Devuelve la transpuesta.
+//! @brief Return the transpuesta.
 XC::Matrix XC::Matrix::getTrn(void) const
   {
     Matrix retval(numCols,numRows);
@@ -1262,7 +1262,7 @@ XC::Matrix XC::operator*(double a, const Matrix &V)
 //       }
 //   }
 
-// //! @brief Devuelve la matriz que resulta de interpretar la cadena de caracteres being passed as parameter.
+// //! @brief Return the matriz que resulta de interpretar la cadena de caracteres being passed as parameter.
 // XC::Matrix XC::interpreta_xc_matriz(const std::string &str)
 //   {
 //     Matrix retval(1,1);
@@ -1293,7 +1293,7 @@ double XC::Matrix::columnSum(int j) const
     return sumac;
   }
 
-//! @brief Devuelve el cuadrado del módulo (norma euclídea) de la matriz.
+//! @brief Returns the cuadrado del módulo (norma euclídea) de la matriz.
 double XC::Matrix::Norm2(void) const
   {
     double r= 0.0;
@@ -1314,11 +1314,11 @@ double XC::Matrix::Norm2(void) const
 
 
 
-//! @brief Devuelve el módulo (norma euclídea) de la matriz.
+//! @brief Returns the módulo (norma euclídea) de la matriz.
 double XC::Matrix::Norm(void) const
   { return sqrt(Norm2()); }
 
-//! @brief Devuelve el valor máximo de los elementos del vector
+//! @brief Returns the valor máximo de los elementos del vector
 //! que resulta de sumar los elementos de las filas.
 double XC::Matrix::rowNorm(void) const
   {
@@ -1326,7 +1326,7 @@ double XC::Matrix::rowNorm(void) const
     for(register int i=1;i<this->noRows();i++) maximo= std::max(maximo,rowSum(i));
     return maximo;
   }
-//! @brief Devuelve el valor máximo de los elementos del vector
+//! @brief Returns the valor máximo de los elementos del vector
 //! que resulta de sumar los elementos de las columnas.
 double XC::Matrix::columnNorm(void) const
   {

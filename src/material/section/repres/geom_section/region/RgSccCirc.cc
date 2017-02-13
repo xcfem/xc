@@ -133,7 +133,7 @@ double XC::RgSccCirc::getMinZ(void) const
 const XC::Vector &XC::RgSccCirc::getCenterPosition(void) const
   { return centerPosit; }
 
-//! @brief Devuelve un poligono inscrito en el sector del anillo circular.
+//! @brief Returns a poligono inscrito en el sector del anillo circular.
 Poligono2d XC::RgSccCirc::getPoligono(void) const
   { return getSector().getPoligono2d(nDivCirc()); }
 
@@ -147,7 +147,7 @@ SectorAnilloCircular2d &XC::RgSccCirc::getSector(void) const
     return retval;
   }
 
-//! @brief Devuelve la rejilla que corresponde a la discretización.
+//! @brief Return the rejilla que corresponde a la discretización.
 const Rejilla2d &XC::RgSccCirc::getMesh(void) const
   { return alloc(Rejilla2d(getSector().genMesh(nDivRad(),nDivCirc()))); }
 

@@ -163,7 +163,7 @@ const XC::Vector &XC::StraightReinfLayer::getInitialPosition(void) const
 const XC::Vector &XC::StraightReinfLayer::getFinalPosition(void) const
   { return finalPosit; }
 
-//! @brief Devuelve el segmento que une los extremos.
+//! @brief Returns the segmento que une los extremos.
 Segmento2d XC::StraightReinfLayer::getSegmento(void) const
   { return Segmento2d(Pos2d(initPosit(0),initPosit(1)),Pos2d(finalPosit(0),finalPosit(1))); }
 

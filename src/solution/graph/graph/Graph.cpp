@@ -172,7 +172,7 @@ bool XC::Graph::addVertex(const Vertex &vrt, bool checkAdjacency)
 
 //! @brief Añade una arista al grafo. Previamente se comprueba que los
 //! vértices extremos de la arista (los que se pasan como parámetro) forman
-//! parte del grafo. Si no existieran se devuelve -1.
+//! parte del grafo. Si no existieran se returns -1.
 int XC::Graph::addEdge(int vertexTag, int otherVertexTag)
   {
     int retval= -1;
@@ -240,7 +240,7 @@ const XC::Vertex *XC::Graph::getVertexPtr(int vertexTag) const
       return nullptr;
   }
 
-//! @brief Devuelve un iterador a los vértices del grafo.
+//! @brief Returns an iterator a los vértices del grafo.
 XC::VertexIter &XC::Graph::getVertices(void)
   {
     // reset the iter and then return it
@@ -248,15 +248,15 @@ XC::VertexIter &XC::Graph::getVertices(void)
     return theVertexIter;
   }
 
-//! @brief Devuelve el número de vértices del grafo.
+//! @brief Returns the número de vértices del grafo.
 int XC::Graph::getNumVertex(void) const
   { return myVertices.getNumComponents(); }
 
-//! @brief Devuelve el número de aristas del grafo.
+//! @brief Returns the número de aristas del grafo.
 int XC::Graph::getNumEdge(void) const
   { return numEdge; }
 
-//! @brief Devuelve el siguiente identificador (tag) libre.
+//! @brief Returns the siguiente identificador (tag) libre.
 int XC::Graph::getFreeTag(void)
   { return nextFreeTag; }
 
@@ -323,7 +323,7 @@ int XC::Graph::merge(Graph &other)
     return result;
   }
 
-//! @brief Devuelve los extremos del ancho de banda.
+//! @brief Returns the extremos del ancho de banda.
 void XC::Graph::getBand(int &numSubD,int &numSuperD) const
   {
     numSubD = 0;
@@ -353,7 +353,7 @@ void XC::Graph::getBand(int &numSubD,int &numSuperD) const
     numSubD*= -1;
   }
 
-//! @brief Devuelve el máximo (positivo) de la diferencia entre índices de vértices.
+//! @brief Returns the máximo (positivo) de la diferencia entre índices de vértices.
 int XC::Graph::getVertexDiffMaxima(void) const
   {
     int retval = 0;
@@ -377,7 +377,7 @@ int XC::Graph::getVertexDiffMaxima(void) const
     return retval;
   }
 
-//! @brief Devuelve el máximo de la diferencia entre índices de vértices.
+//! @brief Returns the máximo de la diferencia entre índices de vértices.
 int XC::Graph::getVertexDiffExtrema(void) const
   {
     int retval = 0;

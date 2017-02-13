@@ -38,11 +38,11 @@ void XC::MEDMapNumCeldasPorTipo::agrega_celda(const MED_EN::medGeometryElement &
 void XC::MEDMapNumCeldasPorTipo::clear(void)
   { tipos.clear(); }
 
-//! @brief Devuelve el número de tipos de celda.
+//! @brief Returns the número de tipos de celda.
 size_t XC::MEDMapNumCeldasPorTipo::getNumberOfTypes(void) const
   { return tipos.size(); }
 
-//! @brief Devuelve el número total de elementos.
+//! @brief Returns the número total de elementos.
 size_t XC::MEDMapNumCeldasPorTipo::getNumCeldas(void) const
   {
     size_t retval= 0;
@@ -50,7 +50,7 @@ size_t XC::MEDMapNumCeldasPorTipo::getNumCeldas(void) const
       retval+= i->second;
     return retval;
   }
-//! @brief Devuelve el número de elementos por cada tipo de celda.
+//! @brief Returns the número de elementos por cada tipo de celda.
 std::vector<int> XC::MEDMapNumCeldasPorTipo::getNumCeldasPorTipo(void) const
   {
     const int numTipos= getNumberOfTypes();

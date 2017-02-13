@@ -77,11 +77,11 @@ XC::Beam2dUniformLoad::Beam2dUniformLoad(void)
 int XC::Beam2dUniformLoad::getType(void)
   { return LOAD_TAG_Beam2dUniformLoad; }
 
-//! @brief Devuelve la dimension del vector fuerza.
+//! @brief Return the dimension del vector fuerza.
 size_t XC::Beam2dUniformLoad::getDimVectorFuerza(void) const
   { return 2; }
 
-//! @brief Devuelve la dimension del vector momento.
+//! @brief Return the dimension del vector momento.
 size_t XC::Beam2dUniformLoad::getDimVectorMomento(void) const
   { return 1; }
 
@@ -133,7 +133,7 @@ const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L
     return retval;
   }
 
-//! @brief Devuelve el vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
+//! @brief Returns the vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
 //! @param L Longitud del borde del elemento.
 //! @param loadFactor Ponderación de la carga.
 //! @param p0 Vector de cargas del elemento.
@@ -152,7 +152,7 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
     p0[2]-= V; //Resta la reacción en el extremo frontal.
   }
 
-//! @brief Devuelve el vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
+//! @brief Returns the vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
 //! @param L Longitud del borde del elemento.
 //! @param loadFactor Ponderación de la carga.
 //! @param q0 ??.

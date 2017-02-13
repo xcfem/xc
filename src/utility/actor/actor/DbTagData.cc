@@ -54,7 +54,7 @@ void XC::DbTagData::inicComm(const int &sz)
     visitados.clear();
   }
 
-//! @brief Devuelve el entero en la posición que se pasa como
+//! @brief Returns the entero en la posición que se pasa como
 //! parámetro.
 const int &XC::DbTagData::getDbTagDataPos(const size_t &i) const
   {

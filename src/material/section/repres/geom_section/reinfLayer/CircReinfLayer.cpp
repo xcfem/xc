@@ -170,7 +170,7 @@ double XC::CircReinfLayer::getMinZ(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector con las barras de la capa de armadura.
+//! @brief Returns a vector con las barras de la capa de armadura.
 const XC::VectorReinfBar &XC::CircReinfLayer::getReinfBars(void) const
   {
     Vector barPosit(2);

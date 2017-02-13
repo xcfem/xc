@@ -96,13 +96,13 @@ class CrossSectionProperties2d: public EntCmd, public MovableObject
       { return i; }
     inline void setI(const double &ii)
       { i= ii; }
-    //! @brief Devuelve la rigidez a tracción.
+    //! @brief Return the rigidez a tracción.
     inline double EA(void) const
       { return e*a; }
-    //! @brief Devuelve la rigidez a flexión en z.
+    //! @brief Return the rigidez a flexión en z.
     inline double EI(void) const
       { return e*i; }
-    //! @brief Devuelve la rigidez a cortante.
+    //! @brief Return the rigidez a cortante.
     inline double GAAlpha(void) const
       { return g*a*alpha; }
 

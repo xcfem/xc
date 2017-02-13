@@ -31,7 +31,7 @@ XC::UniaxialHistoryVars::UniaxialHistoryVars(void)
   :MovableObject(0), minStrain(0.0), unloadSlope(0.0), endStrain(0.0) {}
 
 
-//! @brief Devuelve el estado del material al inicial.
+//! @brief Returns the initial material state.
 int XC::UniaxialHistoryVars::revertToStart(const double &E)
   {
     minStrain= 0.0;

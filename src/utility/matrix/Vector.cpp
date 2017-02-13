@@ -299,7 +299,7 @@ int XC::Vector::NormalizeInf(void)
     return 0;
   }
 
-//! @brief Devuelve el vector normalizado con la norma euclidea.
+//! @brief Returns the vector normalizado con la norma euclidea.
 XC::Vector XC::Vector::Normalized(void) const
   {
     Vector retval(*this);
@@ -307,7 +307,7 @@ XC::Vector XC::Vector::Normalized(void) const
     return retval;
   }
 
-//! @brief Devuelve el vector normalizado con la norma_infinito.
+//! @brief Returns the vector normalizado con la norma_infinito.
 XC::Vector XC::Vector::NormalizedInf(void) const
   {
     Vector retval(*this);
@@ -315,12 +315,12 @@ XC::Vector XC::Vector::NormalizedInf(void) const
     return retval;
   }
 
-//! @brief Devuelve el vector normalizado del que se pasa
+//! @brief Returns the vector normalizado del que se pasa
 //! como parámetro (norma euclídea).
 XC::Vector XC::normalize(const Vector &v)
   { return v.Normalized(); }
 
-//! @brief Devuelve el vector normalizado del que se pasa
+//! @brief Returns the vector normalizado del que se pasa
 //! como parámetro (norma_infinito).
 XC::Vector XC::normalize_inf(const Vector &v)
   { return v.NormalizedInf(); }
@@ -699,7 +699,7 @@ int XC::Vector::addMatrixTransposeVector(double thisFact, const XC::Matrix &m, c
 	
 	
 
-//! @brief Devuelve el cuadrado del módulo del vector.
+//! @brief Returns the cuadrado del módulo del vector.
 double XC::Vector::Norm2(void) const
   {
     double value= 0.0;
@@ -715,7 +715,7 @@ double XC::Vector::Norm2(void) const
 double XC::Vector::Norm(void) const
   { return sqrt(Norm2()); }
 
-//! @brief Devuelve el máximo de los valores absolutos de las componentes del vector (norma_infinito).
+//! @brief Returns the máximo de los valores absolutos de las componentes del vector (norma_infinito).
 double XC::Vector::NormInf(void) const
   {
     double retval= 0.0;
@@ -749,7 +749,7 @@ double XC::Vector::pNorm(int p) const
 }
 
 
-//! @brief Devuelve el elemento cuya fila se pasa como parámetro.
+//! @brief Returns the elemento cuya fila se pasa como parámetro.
 double &XC::Vector::at(const size_t &f)
   {
     if(CheckIndice0(f))
@@ -757,7 +757,7 @@ double &XC::Vector::at(const size_t &f)
     else
       return VECTOR_NOT_VALID_ENTRY;
   }
-//! @brief Devuelve el elemento cuya fila se pasa como parámetro.
+//! @brief Returns the elemento cuya fila se pasa como parámetro.
 const double &XC::Vector::at(const size_t &f) const
   {
     if(CheckIndice0(f))

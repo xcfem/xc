@@ -368,7 +368,7 @@ XC::ElementIter &XC::Mesh::getElements()
     return *theEleIter;
   }
 
-//! @brief Devuelve un iterador a los nodos del domain.
+//! @brief Returns an iterator a los nodos del domain.
 XC::NodeIter &XC::Mesh::getNodes()
   {
     theNodIter->reset();
@@ -444,14 +444,14 @@ const XC::Node *XC::Mesh::getNode(int tag) const
     return result;
   }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 XC::Node *XC::Mesh::getNearestNode(const Pos3d &p)
   {
     Node *retval= const_cast<Node *>(kdtreeNodos.getNearestNode(p));
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::Mesh::getNearestNode(const Pos3d &p) const
   {
     Mesh *this_no_const= const_cast<Mesh *>(this);
@@ -501,7 +501,7 @@ void XC::Mesh::melt_alive_nodes(const std::string &nmbLocker)
 int XC::Mesh::getNumElements(void) const
   { return theElements->getNumComponents(); }
 
-//! @brief Devuelve el número de nodos.
+//! @brief Returns the número de nodos.
 int XC::Mesh::getNumNodes(void) const
   { return theNodes->getNumComponents(); }
 
@@ -595,7 +595,7 @@ size_t XC::Mesh::getNumFreeNodes(void) const
     return retval;
   }
 
-//! @brief Devuelve el BND del modelo.
+//! @brief Returns the BND del modelo.
 const XC::Vector &XC::Mesh::getPhysicalBounds(void)
   { return theBounds; }
 
@@ -636,7 +636,7 @@ XC::Graph &XC::Mesh::getNodeGraph(void)
     return theNodeGraph;
   }
 
-//! @brief Devuelve la masa modal efectiva 
+//! @brief Return the masa modal efectiva 
 //! correspondiente al modo i.
 const double XC::Mesh::getEffectiveModalMass(int mode) const
   {
@@ -649,7 +649,7 @@ const double XC::Mesh::getEffectiveModalMass(int mode) const
     return retval;
   }
 
-//! @brief Devuelve las masas modales efectivas.
+//! @brief Returns the masas modales efectivas.
 XC::Vector XC::Mesh::getEffectiveModalMasses(const int &numModes) const
   {
     Vector retval(numModes);
@@ -715,7 +715,7 @@ int XC::Mesh::commit(void)
     return 0;
   }
 
-//! @brief Devuelve el estado del modelo al último consumado.
+//! @brief Returns the estado del modelo al último consumado.
 int XC::Mesh::revertToLastCommit(void)
   {
     //
@@ -774,7 +774,7 @@ int XC::Mesh::update(void)
 
 
 
-//! @brief Devuelve verdadero si el modelo ha cambiado.
+//! @brief Returns true ifel modelo ha cambiado.
 void XC::Mesh::setGraphBuiltFlags(const bool &f)
   {
     nodeGraphBuiltFlag= f;
@@ -966,7 +966,7 @@ int XC::Mesh::buildNodeGraph(Graph &theNodeGraph)
     return 0;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::Mesh::getDbTagData(void) const
   {

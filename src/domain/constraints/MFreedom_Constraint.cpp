@@ -141,7 +141,7 @@ XC::MFreedom_Constraint &XC::MFreedom_Constraint::operator=(const MFreedom_Const
     return *this;
   }
 
-//! @brief Devuelve verdadero si afecta al nodo cuyo tag se pasa como parámetro.
+//! @brief Returns true ifafecta to the node cuyo tag se pasa como parámetro.
 bool XC::MFreedom_Constraint::afectaANodo(int tagNodo) const
   { return ( (tagNodo== getNodeConstrained()) || (tagNodo== getNodeRetained()));}
 

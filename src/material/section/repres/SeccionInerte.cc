@@ -133,19 +133,19 @@ double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const unsigned
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia respecto al eje que pasa por O con dirección la de e.
+//! @brief Returns the momento de inercia respecto al eje que pasa por O con dirección la de e.
 double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const
   {
     const Matrix Io(getIHomogenizedSection(E0,O));
     return dot(e,Io*e)/e.Norm2();
   }
 
-//! @brief Devuelve el momento de inercia respecto a la recta que se pasa
+//! @brief Returns the momento de inercia respecto a la recta que se pasa
 //! como parámetro.
 double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const Recta2d &r) const
   { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir()));  }
 
-//! @brief Devuelve la componente i,j del tensor de inercia calculado respecto al punto "o".
+//! @brief Return the componente i,j del tensor de inercia calculado respecto al punto "o".
 double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
   {
     const double Iij= getIHomogenizedSection(E0,i,j);
@@ -157,12 +157,12 @@ double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const unsigned
     return Iij + getAreaHomogenizedSection(E0) * pos_local(i) * pos_local(j);
   }
 
-//! @brief Devuelve el momento polar de inercia respecto al punto o.
+//! @brief Returns the momento polar de inercia respecto al punto o.
 double XC::SeccionInerte::getIOHomogenizedSection(const double &E0,const Pos2d &o) const
   { return (getIHomogenizedSection(E0,1,1,o)+getIHomogenizedSection(E0,2,2,o)+getIHomogenizedSection(E0,3,3,o))/2; }
 
 
-//! @brief Devuelve el tensor de inercia calculado desde el centro de gravedad del objeto.
+//! @brief Returns the tensor de inercia calculado desde el centro de gravedad del objeto.
 XC::Matrix XC::SeccionInerte::getIHomogenizedSection(const double &E0) const
   {
     Matrix i(2,2);
@@ -171,7 +171,7 @@ XC::Matrix XC::SeccionInerte::getIHomogenizedSection(const double &E0) const
     return i;
   }
 
-//! @brief Devuelve el tensor de inercia respector al punto o.
+//! @brief Returns the tensor de inercia respector al punto o.
 XC::Matrix XC::SeccionInerte::getIHomogenizedSection(const double &E0,const Pos2d &o) const
   {
     Matrix retval(2,2);
@@ -269,7 +269,7 @@ Vector2d XC::SeccionInerte::getVDirEje2GrossSection(void) const
 Vector2d XC::SeccionInerte::getVDirEjeDebilGrossSection(void) const
   { return getEjesInerciaGrossSection().getVDirEje2(); }
 
-//! @brief Devuelve la componente i,j del tensor de inercia calculado respecto al CDG.
+//! @brief Return the componente i,j del tensor de inercia calculado respecto al CDG.
 double XC::SeccionInerte::getIGrossSection(const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
@@ -290,19 +290,19 @@ double XC::SeccionInerte::getIGrossSection(const unsigned short int &i,const uns
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia respecto al eje que pasa por O con dirección la de e.
+//! @brief Returns the momento de inercia respecto al eje que pasa por O con dirección la de e.
 double XC::SeccionInerte::getIGrossSection(const Pos2d &O,const Vector &e) const
   {
     const Matrix Io(getIGrossSection(O));
     return dot(e,Io*e)/e.Norm2();
   }
 
-//! @brief Devuelve el momento de inercia respecto a la recta que se pasa
+//! @brief Returns the momento de inercia respecto a la recta que se pasa
 //! como parámetro.
 double XC::SeccionInerte::getIGrossSection(const Recta2d &r) const
   { return getIGrossSection(r.Punto(),Vector(r.VDir()));  }
 
-//! @brief Devuelve la componente i,j del tensor de inercia calculado respecto al punto "o".
+//! @brief Return the componente i,j del tensor de inercia calculado respecto al punto "o".
 double XC::SeccionInerte::getIGrossSection(const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
   {
     const double Iij= getIGrossSection(i,j);
@@ -314,12 +314,12 @@ double XC::SeccionInerte::getIGrossSection(const unsigned short int &i,const uns
     return Iij + getAreaGrossSection() * pos_local(i) * pos_local(j);
   }
 
-//! @brief Devuelve el momento polar de inercia respecto al punto o.
+//! @brief Returns the momento polar de inercia respecto al punto o.
 double XC::SeccionInerte::getIOGrossSection(const Pos2d &o) const
   { return (getIGrossSection(1,1,o)+getIGrossSection(2,2,o)+getIGrossSection(3,3,o))/2; }
 
 
-//! @brief Devuelve el tensor de inercia calculado desde el centro de gravedad del objeto.
+//! @brief Returns the tensor de inercia calculado desde el centro de gravedad del objeto.
 XC::Matrix XC::SeccionInerte::getIGrossSection(void) const
   {
     Matrix i(2,2);
@@ -328,7 +328,7 @@ XC::Matrix XC::SeccionInerte::getIGrossSection(void) const
     return i;
   }
 
-//! @brief Devuelve el tensor de inercia respector al punto o.
+//! @brief Returns the tensor de inercia respector al punto o.
 XC::Matrix XC::SeccionInerte::getIGrossSection(const Pos2d &o) const
   {
     Matrix retval(2,2);

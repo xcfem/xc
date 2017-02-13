@@ -63,7 +63,7 @@ const XC::Combinacion *XC::GrupoCombinaciones::buscaCombinacion(const std::strin
     return retval;
   }
 
-//! @brief Devuelve el nombre de la combinación a la que apunta el parámetro.
+//! @brief Returns the nombre de la combinación a la que apunta el parámetro.
 const std::string &XC::GrupoCombinaciones::getNombreCombinacion(const Combinacion *ptr) const
   {
     static std::string retval;
@@ -175,7 +175,7 @@ void XC::GrupoCombinaciones::clear(void)
 XC::GrupoCombinaciones::~GrupoCombinaciones(void)
   { clear(); }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::GrupoCombinaciones::getDbTagData(void) const
   {

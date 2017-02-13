@@ -34,7 +34,7 @@
 #include "domain/mesh/node/Node.h"
 
 
-//! @brief Devuelve verdadero si el conjunto existe.
+//! @brief Returns true ifel conjunto existe.
 bool XC::MapFields::existe(const std::string &nmb) const
   {
     const_iterator i= buscaField(nmb);

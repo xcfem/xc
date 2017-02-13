@@ -73,11 +73,11 @@ XC::Beam3dPointLoad::Beam3dPointLoad(int tag)
 XC::Beam3dPointLoad::Beam3dPointLoad(void)
   :BeamPointLoad(0,LOAD_TAG_Beam3dPointLoad),Pz(0.0) {}
 
-//! @brief Devuelve la dimension del vector fuerza.
+//! @brief Return the dimension del vector fuerza.
 size_t XC::Beam3dPointLoad::getDimVectorFuerza(void) const
   { return 3; }
 
-//! @brief Devuelve la dimension del vector momento.
+//! @brief Return the dimension del vector momento.
 size_t XC::Beam3dPointLoad::getDimVectorMomento(void) const
   { return 3; }
 
@@ -357,7 +357,7 @@ void XC::Beam3dPointLoad::addElasticDeformations(const double &L,const CrossSect
       }
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::Beam3dPointLoad::getDbTagData(void) const
   {

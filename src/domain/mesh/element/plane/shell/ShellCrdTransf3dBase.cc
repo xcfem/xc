@@ -157,7 +157,7 @@ XC::ParticlePos3d XC::ShellCrdTransf3dBase::getNaturalCoordinates(const Pos3d &p
   }   
 
 
-//! @brief Devuelve la matriz de la transformación.
+//! @brief Return the matriz de la transformación.
 XC::Matrix XC::ShellCrdTransf3dBase::getTrfMatrix(void) const
   {
     Matrix R(3,3);
@@ -292,12 +292,12 @@ XC::Matrix XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Matri
     return retval;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente expresada en globales.
+//! @brief Return the tangent stiffness matrix expresada en globales.
 void XC::ShellCrdTransf3dBase::getGlobalTangent(Matrix &stiff) const
 { //Por defecto ya está en globales.
   }
 
-//! @brief Devuelve el vector residuo y la matriz de rigidez tangente expresados en globales.
+//! @brief Returns the vector residuo y la tangent stiffness matrix expresados en globales.
 void XC::ShellCrdTransf3dBase::getGlobalResidAndTangent(Vector &resid,Matrix &stiff) const
   { //Por defecto ya está en globales.
   }
@@ -331,7 +331,7 @@ const XC::Matrix &XC::ShellCrdTransf3dBase::getVectorGlobalCoordFromLocal(const 
     return retval;
   }
 
-//! @brief Devuelve el vector expresado en coordenadas locales.
+//! @brief Returns the vector expresado en coordenadas locales.
 const XC::Vector &XC::ShellCrdTransf3dBase::getVectorLocalCoordFromGlobal(const Vector &globalCoords) const
   {
     static Vector vectorCoo(3);
@@ -342,7 +342,7 @@ const XC::Vector &XC::ShellCrdTransf3dBase::getVectorLocalCoordFromGlobal(const 
     return vectorCoo;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::ShellCrdTransf3dBase::getDbTagData(void) const
   {

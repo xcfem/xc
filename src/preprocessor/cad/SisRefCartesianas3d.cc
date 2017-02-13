@@ -43,25 +43,25 @@ void XC::SisRefCartesianas3d::setOrg(const Pos3d &p)
 void XC::SisRefCartesianas3d::TresPuntos(const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)
   { ref= Ref3d3d(p1,p2,p3); }
 
-//! @brief Devuelve el vector unitario en la dirección del eje que se
+//! @brief Returns the vector unitario en la dirección del eje que se
 //! pasa como parámetro expresado en el sistema global 
 //! para la posición being passed as parameter.
 Vector3d XC::SisRefCartesianas3d::GetVDirEje(const size_t &i,const Pos3d &) const
   { return ref.GetVDirEje(i); }
 
-//! @brief Devuelve la posicion del punto p expresado en locales
+//! @brief Return the posicion del punto p expresado en locales
 //! expresada en coordenadas globales.
 Pos3d XC::SisRefCartesianas3d::GetPosGlobal(const Pos3d &p) const
   { return ref.GetPosGlobal(p); }
-//! @brief Devuelve el vector v expresado en locales
+//! @brief Returns the vector v expresado en locales
 //! expresado en coordenadas globales.
 Vector3d XC::SisRefCartesianas3d::GetCooGlobales(const Vector3d &v) const
   { return ref.GetCooGlobales(v); }
-//! @brief Devuelve la posicion del punto p expresado en globales
+//! @brief Return the posicion del punto p expresado en globales
 //! expresada en coordenadas locales.
 Pos3d XC::SisRefCartesianas3d::GetPosLocal(const Pos3d &p) const
   { return ref.GetPosLocal(p); }
-//! @brief Devuelve el vector v expresado en globales
+//! @brief Returns the vector v expresado en globales
 //! expresado en coordenadas locales.
 Vector3d XC::SisRefCartesianas3d::GetCooLocales(const Vector3d &v) const
   { return ref.GetCooLocales(v); }

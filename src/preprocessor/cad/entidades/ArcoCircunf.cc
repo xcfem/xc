@@ -51,11 +51,11 @@ XC::ArcoCircunf::ArcoCircunf(const std::string &nombre,Preprocessor *m)
 XC::SetEstruct *XC::ArcoCircunf::getCopy(void) const
   { return new ArcoCircunf(*this); }
 
-//! @brief Devuelve un apuntador (constante) al punto intermedio.
+//! @brief Returns a constant pointer to punto intermedio.
 const XC::Pnt *XC::ArcoCircunf::P3(void) const
   { return p3; }
 
-//! @brief Devuelve el vértice de índice i.
+//! @brief Returns the vértice de índice i.
 const XC::Pnt *XC::ArcoCircunf::GetVertice(const size_t &i) const
   {
     if(i<3)
@@ -82,7 +82,7 @@ void XC::ArcoCircunf::SetVertice(const size_t &i,Pnt *p)
       }
   }
 
-//! @brief Devuelve el sector circular definido por el arco.
+//! @brief Returns the sector circular definido por el arco.
 const SectorCircular3d XC::ArcoCircunf::get_sector_circular3d(void) const
   {
     SectorCircular3d retval;
@@ -94,7 +94,7 @@ const SectorCircular3d XC::ArcoCircunf::get_sector_circular3d(void) const
 
   }
 
-//! @brief Devuelve la longitud de la línea.
+//! @brief Return the longitud de la línea.
 double XC::ArcoCircunf::getLongitud(void) const
   {
     double retval= 0;
@@ -106,7 +106,7 @@ double XC::ArcoCircunf::getLongitud(void) const
     return retval;
   }
 
-//! @brief Devuelve el ángulo comprendido por el arco.
+//! @brief Returns the ángulo comprendido por el arco.
 double XC::ArcoCircunf::getAnguloComprendido(void) const
   {
     double retval= 0;
@@ -118,7 +118,7 @@ double XC::ArcoCircunf::getAnguloComprendido(void) const
     return retval;
   }
 
-//! @brief Devuelve el ángulo inicial.
+//! @brief Returns the ángulo inicial.
 double XC::ArcoCircunf::getTheta1(void) const
   {
     double retval= 0;
@@ -130,7 +130,7 @@ double XC::ArcoCircunf::getTheta1(void) const
     return retval;
   }
 
-//! @brief Devuelve el ángulo final.
+//! @brief Returns the ángulo final.
 double XC::ArcoCircunf::getTheta2(void) const
   {
     double retval= 0;
@@ -154,7 +154,7 @@ double XC::ArcoCircunf::getLambda(const Pos3d &p) const
     return retval;
   }
 
-//! @brief Devuelve el centro.
+//! @brief Returns the centro.
 Pos3d XC::ArcoCircunf::getCentro(void) const
   {
     Pos3d retval;
@@ -166,7 +166,7 @@ Pos3d XC::ArcoCircunf::getCentro(void) const
     return retval;
   }
 
-//! @brief Devuelve el punto inicial.
+//! @brief Returns the start point.
 Pos3d XC::ArcoCircunf::getPInic(void) const
   {
     Pos3d retval;
@@ -178,7 +178,7 @@ Pos3d XC::ArcoCircunf::getPInic(void) const
     return retval;
   }
 
-//! @brief Devuelve el punto final.
+//! @brief Returns the end point.
 Pos3d XC::ArcoCircunf::getPFin(void) const
   {
     Pos3d retval;
@@ -190,7 +190,7 @@ Pos3d XC::ArcoCircunf::getPFin(void) const
     return retval;
   }
 
-//! @brief Devuelve el punto medio.
+//! @brief Returns the punto medio.
 Pos3d XC::ArcoCircunf::getPMed(void) const
   {
     Pos3d retval;
@@ -202,7 +202,7 @@ Pos3d XC::ArcoCircunf::getPMed(void) const
     return retval;
   }
 
-//! @brief Devuelve el radio del arco.
+//! @brief Returns the radio del arco.
 double XC::ArcoCircunf::getRadio(void) const
   {
     double retval= 0;
@@ -223,7 +223,7 @@ void XC::ArcoCircunf::actualiza_topologia(void)
 BND3d XC::ArcoCircunf::Bnd(void) const
   { return get_sector_circular3d().Bnd(); }
 
-//! @brief Devuelve ndiv+1 posiciones equiespaciadas a lo largo del arco.
+//! @brief Returns ndiv+1 posiciones equiespaciadas a lo largo del arco.
 MatrizPos3d XC::ArcoCircunf::get_posiciones(void) const
 { return get_sector_circular3d().PuntosArco(NDiv()+1); }
 

@@ -85,7 +85,7 @@ class DomainComponent: public TaggedObject, public MovableObject
     int recvData(const CommParameters &);
   public:
     ~DomainComponent(void);
-    //! @brief Devuelve el índice (NO EL TAG) del objeto.
+    //! @brief Returns the índice (NO EL TAG) del objeto.
     inline size_t getIdx(void) const
       { return idx; }
     virtual void setDomain(Domain *theDomain);

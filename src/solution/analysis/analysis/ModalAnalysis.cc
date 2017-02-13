@@ -38,12 +38,12 @@
 XC::ModalAnalysis::ModalAnalysis(SoluMethod *metodo)
   :EigenAnalysis(metodo), espectro() {}
 
-//! @brief Devuelve la aceleración que corresponde al periodo
+//! @brief Return the aceleración que corresponde al periodo
 //! being passed as parameter.
 double XC::ModalAnalysis::getAcceleration(const double &T) const
   { return espectro(T); }
 
-//! @brief Devuelve las aceleraciones que corresponden a los periodos
+//! @brief Returns the aceleraciones que corresponden a los periodos
 //! que se pasan como parámetro.
 XC::Vector XC::ModalAnalysis::getAccelerations(const Vector &periodos) const
   {
@@ -54,12 +54,12 @@ XC::Vector XC::ModalAnalysis::getAccelerations(const Vector &periodos) const
     return retval;
   }
 
-//! @brief Devuelve las aceleraciones que corresponden a los modos
+//! @brief Returns the aceleraciones que corresponden a los modos
 //! calculados.
 XC::Vector XC::ModalAnalysis::getModalAccelerations(void) const
   { return getAccelerations(getPeriodos()); }
 
-//! @brief Devuelve la fuerzas estática equivalente para el modo
+//! @brief Return the fuerzas estática equivalente para el modo
 //! being passed as parameter.
 XC::Vector XC::ModalAnalysis::getEquivalentStaticLoad(int mode) const
   {
@@ -67,7 +67,7 @@ XC::Vector XC::ModalAnalysis::getEquivalentStaticLoad(int mode) const
     return EigenAnalysis::getEquivalentStaticLoad(mode,accel);
   }
 
-//! @brief Devuelve los coeficientes de correlación entre modos que
+//! @brief Returns the coeficientes de correlación entre modos que
 //! se emplean en el método CQC.
 //! @param zeta: Amortiguamiento en cada modo analizado.
 //! Ver expresión 26-107 del libro Dynamics of Structurs de Clough and Penzien

@@ -166,11 +166,11 @@ int XC::ID::resize(const int &newSize)
     return retval;
   }
 
-//! @brief Devuelve el máximo de las componentes del vector.
+//! @brief Returns the máximo de las componentes del vector.
 const int &XC::ID::max(void) const
   { return *std::max_element(begin(),end()); }
 
-//! @brief Devuelve el mínimo de las componentes del vector.
+//! @brief Returns the mínimo de las componentes del vector.
 const int &XC::ID::min(void) const
   { return *std::min_element(begin(),end()); }
 

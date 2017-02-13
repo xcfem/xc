@@ -174,7 +174,7 @@ const T &DqPtrs<T>::get(const size_t &i) const
     return *ptr; 
   }
 
-//! @brief Devuelve verdadero si the pointer está en el contenedor.
+//! @brief Returns true ifthe pointer está en el contenedor.
 template<class T>
 bool DqPtrs<T>::in(const T *ptr) const
   {
@@ -223,7 +223,7 @@ bool DqPtrs<T>::push_front(T *t)
     return retval;
   }
 
-//! @brief Devuelve los Tags de los objetos.
+//! @brief Returns the Tags de los objetos.
 template <class T>
 const ID &DqPtrs<T>::getTags(void) const
   {

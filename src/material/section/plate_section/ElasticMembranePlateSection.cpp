@@ -108,7 +108,7 @@ void XC::ElasticMembranePlateSection::setRho(const double &r)
 const XC::ResponseId &XC::ElasticMembranePlateSection::getType(void) const 
   { return RespShellMat; }
 
-//! @brief Devuelve la resultante de las tensiones en la sección.
+//! @brief Return the resultante de las tensiones en la sección.
 const XC::Vector &XC::ElasticMembranePlateSection::getStressResultant(void) const
   {
     const double M= membraneModulus(); //membrane modulus
@@ -131,7 +131,7 @@ const XC::Vector &XC::ElasticMembranePlateSection::getStressResultant(void) cons
   }
 
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::ElasticMembranePlateSection::getSectionTangent(void) const
   {
     const double M= membraneModulus(); //membrane modulus
@@ -169,7 +169,7 @@ const XC::Matrix &XC::ElasticMembranePlateSection::getSectionTangent(void) const
   }
 
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix &XC::ElasticMembranePlateSection::getInitialTangent(void) const
   {
     const double M= membraneModulus(); //membrane modulus
@@ -213,7 +213,7 @@ void  XC::ElasticMembranePlateSection::Print( std::ostream &s, int flag )
     return;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::ElasticMembranePlateSection::getDbTagData(void) const
   {

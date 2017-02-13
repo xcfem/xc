@@ -139,7 +139,7 @@ XC::ProcSolu &XC::ProcSolu::operator=(const ProcSolu &otro)
     return *this;
   }
 
-//! @brief Devuelve el modelo a su estado original.
+//! @brief Returns the modelo a su estado original.
 void XC::ProcSolu::revertToStart(void)
   { solu_control.revertToStart(); }
 

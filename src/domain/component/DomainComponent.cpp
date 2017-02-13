@@ -88,7 +88,7 @@ void XC::DomainComponent::set_indice(const size_t &i)
 XC::Domain *XC::DomainComponent::getDomain(void) const
   { return theDomain; }
 
-//! @brief Devuelve (si puede) a pointer al preprocesador.
+//! @brief Returns (if possible) a pointer al preprocesador.
 const XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void) const
   {
     const Preprocessor *retval= nullptr;
@@ -97,7 +97,7 @@ const XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void) const
     return retval;
   }
 
-//! @brief Devuelve (si puede) a pointer al preprocesador.
+//! @brief Returns (if possible) a pointer al preprocesador.
 XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void)
   {
     Preprocessor *retval= nullptr;

@@ -80,11 +80,11 @@ void XC::Vertex::setTmp(int newTmp)
 int XC::Vertex::getRef(void) const 
   { return myRef; }
 
-//! @brief Devuelve el peso del vértice en el grafo.
+//! @brief Returns the peso del vértice en el grafo.
 double XC::Vertex::getWeight(void) const 
   { return myWeight; }
 
-//! @brief Devuelve el color del vértice en el grafo.
+//! @brief Returns the color del vértice en el grafo.
 int XC::Vertex::getColor(void) const
   { return myColor; }
 
@@ -99,11 +99,11 @@ int XC::Vertex::addEdge(int otherTag)
     return 0;
   }
 
-//! @brief Devuelve el grado del vértice en el grafo.
+//! @brief Returns the grado del vértice en el grafo.
 int XC::Vertex::getDegree(void) const
   { return myDegree; }
 
-//! @brief Devuelve la lista de adyacencia del vértice en el grafo.
+//! @brief Return the lista de adyacencia del vértice en el grafo.
 const std::set<int> &XC::Vertex::getAdjacency(void) const
   { return myAdjacency; }
 

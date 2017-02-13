@@ -80,7 +80,7 @@ SVD3d XC::BeamUniformLoad::getResultant(const Pos3d &centro, bool initialGeometr
           }
       }
     else
-      std::cerr << nombre_clase() << "::getResultant; no existe apuntador al domain." << std::endl;
+      std::cerr << nombre_clase() << "::getResultant; pointer to domain is NULL." << std::endl;
     return retval;
   }
 

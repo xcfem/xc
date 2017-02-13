@@ -220,7 +220,7 @@ Poligono2d XC::FiberSectionBase::getRegionsContour(void) const
     return retval;
   }
 
-//! @brief Devuelve el canto con el que trabaja la sección a partir de la posición de la fibra neutra.
+//! @brief Returns the canto con el que trabaja la sección a partir de la posición de la fibra neutra.
 double XC::FiberSectionBase::getCantoMecanico(void) const
   {
     double retval= 0.0;
@@ -239,7 +239,7 @@ double XC::FiberSectionBase::getCantoMecanico(void) const
     return retval;
   }
 
-//! @brief Devuelve el canto desde la recta being passed as parameter a la fibra más comprimida.
+//! @brief Returns the canto desde la recta being passed as parameter a la fibra más comprimida.
 double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(const Recta2d &r) const
   {
     double retval= 0.0;
@@ -268,7 +268,7 @@ double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(const Recta2d &r) co
     return retval;
   }
 
-//! @brief Devuelve el canto desde la fibra neutra a la fibra más comprimida.
+//! @brief Returns the canto desde la fibra neutra a la fibra más comprimida.
 double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(void) const
   {
     double retval= 0.0;
@@ -297,7 +297,7 @@ double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(void) const
     return retval;
   }
 
-//! @brief Devuelve el canto desde la fibra neutra a la fibra más traccionada.
+//! @brief Returns the canto desde la fibra neutra a la fibra más traccionada.
 double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(void) const
   {
     double retval= 0.0;
@@ -322,7 +322,7 @@ double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(void) const
     return retval;
   }
 
-//! @brief Devuelve el canto desde la recta being passed as parameter a la fibra más traccionada.
+//! @brief Returns the canto desde la recta being passed as parameter a la fibra más traccionada.
 double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(const Recta2d &r) const
   {
     double retval= 0.0;
@@ -351,14 +351,14 @@ double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(const Recta2d &r) c
     return retval;
   }
 
-//! @brief Devuelve la profundidad de la fibra neutra.
+//! @brief Return the profundidad de la fibra neutra.
 double XC::FiberSectionBase::getNeutralAxisDepth(void) const
   {
     double retval= getCantoMecanicoZonaComprimida();
     return retval;
   }
 
-//! @brief Devuelve la distancia desde la fibra neutra
+//! @brief Return the distancia desde la fibra neutra
 //! hasta el punto cuyas coordenadas se pasan como parámetro.
 double XC::FiberSectionBase::getDistFibraNeutra(const double &y,const double &) const
   {
@@ -369,7 +369,7 @@ double XC::FiberSectionBase::getDistFibraNeutra(const double &y,const double &) 
     return retval;
   }
 
-//! @brief Devuelve la recta que limita el área eficaz de hormigón Ac,ef
+//! @brief Return the recta que limita el área eficaz de hormigón Ac,ef
 //! según el artículo 49.2.4 de la EHE-08 (área rallada figura 49.2.4b).
 //! Ver también figuras 47.5 y 47.6 del tomo II del libro "Proyecto y cálculo de estructuras
 //! de hormigón" de Calavera.
@@ -395,7 +395,7 @@ Recta2d XC::FiberSectionBase::getRectaLimiteAcEficaz(const double &hEfMax) const
     return retval;
   }
 
-//! @brief Devuelve the contours that limits el área eficaz de hormigón Ac,ef
+//! @brief Returns the contours that limits el área eficaz de hormigón Ac,ef
 //! según el artículo 49.2.4 de la EHE-08 (área rallada figura 49.2.4b).
 //! Ver también figuras 47.5 y 47.6 del tomo II del libro "Proyecto y cálculo de estructuras
 //! de hormigón" de Calavera.
@@ -439,7 +439,7 @@ double XC::FiberSectionBase::getAcEficazBruta(const double &hEfMax) const
     return area(tmp.begin(),tmp.end());
   }
 
-//! @brief Devuelve la suma de las áreas eficaces de las barras a tracción.
+//! @brief Return the suma de las áreas eficaces de las barras a tracción.
 double XC::FiberSectionBase::getAcEficazNeta(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
   {
     double retval= 0.0;
@@ -522,7 +522,7 @@ void XC::FiberSectionBase::calcSeparaciones(const std::string &nmbSetArmaduras) 
                 << nmbSetArmaduras << std::endl;
   }
 
-//! @brief Devuelve la distancia (con signo) desde la fibra neutra
+//! @brief Return the distancia (con signo) desde la fibra neutra
 //! hasta el punto cuyas coordenadas se pasan como parámetro.
 double XC::FiberSectionBase::get_dist_to_neutral_axis(const double &y,const double &z) const
   {
@@ -535,15 +535,15 @@ double XC::FiberSectionBase::get_dist_to_neutral_axis(const double &y,const doub
     return retval;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::FiberSectionBase::getSectionTangent(void) const
   { return kr.Rigidez(); }
 
-//! @brief Devuelve la resultante de las tensiones en la sección.
+//! @brief Return the resultante de las tensiones en la sección.
 const XC::Vector &XC::FiberSectionBase::getStressResultant(void) const
   { return kr.Resultante(); }
 
-//! @brief Devuelve la componente de la resultante de tensiones en la sección de índice i.
+//! @brief Return the componente de la resultante de tensiones en la sección de índice i.
 double XC::FiberSectionBase::getStressResultant(const int &i) const
   { return SeccionBarraPrismatica::getStressResultant(i); }
 
@@ -556,7 +556,7 @@ int XC::FiberSectionBase::commitState(void)
     return err;
   }
 
-//! @brief Devuelve el estado de la sección al último consumado
+//! @brief Returns the estado de la sección al último consumado
 int XC::FiberSectionBase::revertToLastCommit(void)
   {
     // Last committed section deformations
@@ -564,19 +564,19 @@ int XC::FiberSectionBase::revertToLastCommit(void)
     return 0;
   }
 
-//! @brief Devuelve la sección a su estado inicial.
+//! @brief Return the sección a su estado inicial.
 int XC::FiberSectionBase::revertToStart(void)
   {
     eCommit.Zero();
     return 0;
   }
 
-//! @brief Devuelve el punto que corresponde a la resultante
+//! @brief Returns the punto que corresponde a la resultante
 //! de tensiones normales en la sección.
 Pos3d XC::FiberSectionBase::Esf2Pos3d(void) const
   { return Pos3d(getStressResultant(XC::SECTION_RESPONSE_P),getStressResultant(XC::SECTION_RESPONSE_MY),getStressResultant(XC::SECTION_RESPONSE_MZ)); }
 
-//! @brief Devuelve la resultante de tensiones normales en la sección para el plano de deformación.
+//! @brief Return the resultante de tensiones normales en la sección para el plano de deformación.
 Pos3d XC::FiberSectionBase::getNMyMz(const DeformationPlane &def)
   {
     setTrialDeformationPlane(def);
@@ -589,7 +589,7 @@ Pos3d XC::FiberSectionBase::getNMyMz(const DeformationPlane &def)
 //    | / theta
 //    +------->y
 //
-//! @brief Devuelve los puntos que definen el diagrama de interacción de la sección para un ángulo theta (con el eje Z) dado.
+//! @brief Returns the puntos que definen el diagrama de interacción de la sección para un ángulo theta (con el eje Z) dado.
 void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
   {
     CalcPivotes cp(datos_diag.getDefsAgotPivotes(),fibras,fsC,fsS,theta);
@@ -648,7 +648,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
       }
   }
 
-//! @brief Devuelve los puntos que definen el diagrama de interacción en el plano definido por el ángulo being passed as parameter.
+//! @brief Returns the puntos que definen el diagrama de interacción en el plano definido por el ángulo being passed as parameter.
 const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlane(const InteractionDiagramData &datos_diag, const double &theta)
   {
     static NMPointCloud retval;
@@ -677,7 +677,7 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
     return retval;
   }
 
-//! @brief Devuelve los puntos que definen el diagrama de interacción de la sección.
+//! @brief Returns the puntos que definen el diagrama de interacción de la sección.
 const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(const InteractionDiagramData &datos_diag)
   {
     static NMyMzPointCloud lista_esfuerzos;
@@ -702,7 +702,7 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
     return lista_esfuerzos;
   }
 
-//! @brief Devuelve el diagrama de interacción.
+//! @brief Returns the diagrama de interacción.
 XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const InteractionDiagramData &datos_diag)
   {
     const NMyMzPointCloud lp= getInteractionDiagramPoints(datos_diag);
@@ -718,7 +718,7 @@ XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const Interac
     return retval;
   }
 
-//! @brief Devuelve el diagrama de interacción.
+//! @brief Returns the diagrama de interacción.
 XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(const InteractionDiagramData &datos_diag, const double &theta)
   {
     const NMPointCloud lp= getInteractionDiagramPointsForPlane(datos_diag, theta);
@@ -734,19 +734,19 @@ XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(con
     return retval;
   }
 
-//! @brief Devuelve el diagrama de interacción en el plano N-My.
+//! @brief Returns the diagrama de interacción en el plano N-My.
 XC::InteractionDiagram2d XC::FiberSectionBase::GetNMyInteractionDiagram(const InteractionDiagramData &datos_diag)
   { return GetInteractionDiagramForPlane(datos_diag,M_PI/2.0); }
 
-//! @brief Devuelve el diagrama de interacción en el plano N-Mz.
+//! @brief Returns the diagrama de interacción en el plano N-Mz.
 XC::InteractionDiagram2d XC::FiberSectionBase::GetNMzInteractionDiagram(const InteractionDiagramData &datos_diag)
   { return GetInteractionDiagramForPlane(datos_diag,0.0); }
 
-//! @brief Devuelve un vector orientado desde el centro de tracciones al de compresiones.
+//! @brief Returns a vector orientado desde el centro de tracciones al de compresiones.
 XC::Vector XC::FiberSectionBase::getVectorBrazoMecanico(void) const
   { return fibras.getVectorBrazoMecanico(); }
 
-//! @brief Devuelve un vector orientado desde el centro de tracciones a
+//! @brief Returns a vector orientado desde el centro de tracciones a
 //! la fibra más comprimida.
 XC::Vector XC::FiberSectionBase::getVectorCantoUtil(void) const
   {
@@ -759,7 +759,7 @@ XC::Vector XC::FiberSectionBase::getVectorCantoUtil(void) const
     return retval;
   }
 
-//! @brief Devuelve un segmento orientado desde el centro de tracciones al de compresiones.
+//! @brief Returns a segmento orientado desde el centro de tracciones al de compresiones.
 Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
   {
     Segmento2d retval= fibras.getSegmentoBrazoMecanico();
@@ -779,7 +779,7 @@ Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
     return retval;
   }
 
-//! @brief Devuelve el segmento definido por el canto útil con el que está trabajando la sección.
+//! @brief Returns the segmento definido por el canto útil con el que está trabajando la sección.
 //! el segmento se orienta desde el centro de tracciones hacia la fibra más comprimida.
 Segmento2d XC::FiberSectionBase::getSegmentoCantoUtil(void) const
   {
@@ -791,7 +791,7 @@ Segmento2d XC::FiberSectionBase::getSegmentoCantoUtil(void) const
     return retval;
   }
 
-//! @brief Devuelve la traza del plano de flexión en el plano de la sección.
+//! @brief Return the traza del plano de flexión en el plano de la sección.
 Recta2d XC::FiberSectionBase::getTrazaPlanoFlexion(void) const
   {
     Recta2d retval= fibras.getTrazaPlanoFlexion();
@@ -804,7 +804,7 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoFlexion(void) const
     return retval;
   }
 
-//! @brief Devuelve la traza de un plano perpendicular al de flexión
+//! @brief Return the traza de un plano perpendicular al de flexión
 //! que pasa por el baricentro de tracciones.
 Recta2d XC::FiberSectionBase::getTrazaPlanoTraccion(void) const
   {
@@ -814,7 +814,7 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoTraccion(void) const
     return retval;
   }
 
-//! @brief Devuelve la traza de un plano perpendicular al de flexión
+//! @brief Return the traza de un plano perpendicular al de flexión
 //! que pasa por el baricentro de compresiones.
 Recta2d XC::FiberSectionBase::getTrazaPlanoCompresion(void) const
   {
@@ -824,7 +824,7 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoCompresion(void) const
     return retval;
   }
 
-//! @brief Devuelve el ancho con el que trabaja la sección.
+//! @brief Returns the ancho con el que trabaja la sección.
 double XC::FiberSectionBase::getAnchoMecanico(void) const
   {
     double retval= 0.0;
@@ -843,7 +843,7 @@ double XC::FiberSectionBase::getAnchoMecanico(void) const
     return retval;
   }
 
-//! @brief Devuelve el ancho de la biela comprimida (en cortante).
+//! @brief Returns the ancho de la biela comprimida (en cortante).
 double XC::FiberSectionBase::getAnchoBielaComprimida(void) const
   {
     double retval= 0.0;
@@ -862,7 +862,7 @@ double XC::FiberSectionBase::getAnchoBielaComprimida(void) const
     return retval;
   }
 
-//! @brief Devuelve el recubrimiento de la posición being passed as parameter.
+//! @brief Returns the recubrimiento de la posición being passed as parameter.
 double XC::FiberSectionBase::getRecubrimiento(const Pos2d &p) const
   {
     double retval= 0.0;
@@ -881,15 +881,15 @@ double XC::FiberSectionBase::getRecubrimiento(const Pos2d &p) const
     return retval;
   }
 
-//! @brief Devuelve el brazo mecánico con el que está trabajando la sección.
+//! @brief Returns the brazo mecánico con el que está trabajando la sección.
 double XC::FiberSectionBase::getBrazoMecanico(void) const
   { return fibras.getBrazoMecanico(); }
 
-//! @brief Devuelve el canto útil con el que está trabajando la sección.
+//! @brief Returns the canto útil con el que está trabajando la sección.
 double XC::FiberSectionBase::getCantoUtil(void) const
   { return getVectorCantoUtil().Norm(); }
 
-//! @brief Devuelve el area.
+//! @brief Returns the area.
 double XC::FiberSectionBase::getArea(void) const
   { return fibras.getSumaAreas(); }
 

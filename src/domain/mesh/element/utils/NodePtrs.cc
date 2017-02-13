@@ -103,7 +103,7 @@ void XC::NodePtrs::inic(void)
       (*i)= nullptr;
   }
 
-//! @brief Devuelve verdadero si alguno de los pointers
+//! @brief Returns true ifalguno de los pointers
 //! es nulo.
 bool XC::NodePtrs::hasNull(void) const
   {
@@ -141,7 +141,7 @@ void XC::NodePtrs::setPtrs(Domain *theDomain, const ID &theNodeTags)
       }
   }
 
-//! @brief Devuelve un iterador al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns an iterator al elemento cuyo tag is being passed as parameter.
 XC::NodePtrs::iterator XC::NodePtrs::find(const int &tag)
   {
     iterator retval= end();
@@ -151,7 +151,7 @@ XC::NodePtrs::iterator XC::NodePtrs::find(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve un iterador al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns an iterator al elemento cuyo tag is being passed as parameter.
 XC::NodePtrs::const_iterator XC::NodePtrs::find(const int &tag) const
   {
     const_iterator retval= end();
@@ -161,7 +161,7 @@ XC::NodePtrs::const_iterator XC::NodePtrs::find(const int &tag) const
     return retval;
   }
 
-//! @brief Devuelve el índice del nodo cuyo apuntador se pasa como parámetro.
+//! @brief Returns the index of the node whose pointer is being passed as parameter.
 int XC::NodePtrs::find(const Node *nPtr) const
   {
     int retval= -1, conta=0;
@@ -189,7 +189,7 @@ XC::NodePtrs::const_reference XC::NodePtrs::operator()(const size_t &i) const
 XC::NodePtrs::const_reference XC::NodePtrs::operator[](const size_t &i) const
   { return theNodes[i]; }
 
-//!@brief Asigna the pointer al nodo i.
+//!@brief Asigna the pointer to nodo i.
 void XC::NodePtrs::set_node(const size_t &i,Node *n)
   {
     ContinuaReprComponent *owr= dynamic_cast<ContinuaReprComponent *>(Owner());
@@ -231,7 +231,7 @@ int XC::NodePtrs::getTotalDOFs(void) const
     return retval;
   }
 
-//! @brief Devuelve el valor máximo de la coordenada i de los nodos.
+//! @brief Returns the valor máximo de la coordenada i de los nodos.
 double XC::NodePtrs::MaxCooNod(int icoo) const
   {
     assert(!theNodes.empty());
@@ -243,7 +243,7 @@ double XC::NodePtrs::MaxCooNod(int icoo) const
     return retval;
   }
 
-//! @brief Devuelve el valor mínimo de la coordenada i de los nodos.
+//! @brief Returns the valor mínimo de la coordenada i de los nodos.
 double XC::NodePtrs::MinCooNod(int icoo) const
   {
     assert(!theNodes.empty());
@@ -255,7 +255,7 @@ double XC::NodePtrs::MinCooNod(int icoo) const
     return retval;
   }
 
-//! @brief Devuelve un vector con los tags de los nodos.
+//! @brief Returns a vector con los tags de los nodos.
 const std::vector<int> &XC::NodePtrs::getTags(void) const
   {
     static std::vector<int> retval;
@@ -276,7 +276,7 @@ std::vector<int> XC::NodePtrs::getIdx(void) const
     return retval;     
   }
 
-//! @brief Devuelve una matriz con las coordenadas de los nodos.
+//! @brief Returns a matriz con las coordenadas de los nodos.
 const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
   {
     static Matrix retval;
@@ -295,7 +295,7 @@ const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
     return retval;
   }
 
-//! @brief Devuelve la posición del nodo cuyo índice se
+//! @brief Return the posición del nodo cuyo índice se
 //! pasa como parámetro.
 Pos3d XC::NodePtrs::getPosNodo(const size_t &i,bool initialGeometry) const
   {
@@ -305,7 +305,7 @@ Pos3d XC::NodePtrs::getPosNodo(const size_t &i,bool initialGeometry) const
       return theNodes[i]->getPosFinal3d();
   }
 
-//! @brief Devuelve una matriz con las posiciones de los nodos.
+//! @brief Returns a matriz con las posiciones de los nodos.
 std::list<Pos3d> XC::NodePtrs::getPosiciones(bool initialGeometry) const
   {
     std::list<Pos3d> retval;
@@ -315,7 +315,7 @@ std::list<Pos3d> XC::NodePtrs::getPosiciones(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Devuelve el centro de gravedad de las posiciones de los nodos.
+//! @brief Returns the centro de gravedad de las posiciones de los nodos.
 Pos3d XC::NodePtrs::getPosCdg(bool initialGeometry) const
   {
     Pos3d retval;
@@ -331,7 +331,7 @@ Pos3d XC::NodePtrs::getPosCdg(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si los nodos están contenidos en el semiespacio.
+//! @brief Returns true iflos nodos están contenidos en el semiespacio.
 bool XC::NodePtrs::In(const SemiEspacio3d &semiEsp,const double &tol,bool initialGeometry) const
   {
     bool retval= true;
@@ -342,7 +342,7 @@ bool XC::NodePtrs::In(const SemiEspacio3d &semiEsp,const double &tol,bool initia
     return retval;
   }
 
-//! @brief Devuelve verdadero si los nodos están fuera en el semiespacio.
+//! @brief Returns true iflos nodos están fuera en el semiespacio.
 bool XC::NodePtrs::Out(const SemiEspacio3d &semiEsp,const double &tol,bool initialGeometry) const
   {
     SemiEspacio3d complementario(semiEsp);
@@ -350,7 +350,7 @@ bool XC::NodePtrs::Out(const SemiEspacio3d &semiEsp,const double &tol,bool initi
     return In(complementario,tol,initialGeometry);
   }
 
-//! @brief Devuelve verdadero si los nodos están a uno y otro lado del plano.
+//! @brief Returns true iflos nodos están a uno y otro lado del plano.
 bool XC::NodePtrs::Corta(const Plano3d &plano,bool initialGeometry) const
   {
     bool in= In(plano,0.0,initialGeometry);
@@ -358,7 +358,7 @@ bool XC::NodePtrs::Corta(const Plano3d &plano,bool initialGeometry) const
     return (!in && !out);
   }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry)
   {
     Node *retval= nullptr;
@@ -382,14 +382,14 @@ XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry)
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry) const
   {
     NodePtrs *this_no_const= const_cast<NodePtrs *>(this);
     return this_no_const->getNearestNode(p,initialGeometry);
   }
 
-//! @brief Devuelve la posición of the pointer a nodo en el array.
+//! @brief Return the posición of the pointer a nodo en el array.
 int XC::NodePtrs::getIndiceNodo(const Node *ptrNod) const
   {
     int retval= -1;
@@ -422,7 +422,7 @@ void XC::NodePtrs::vuelcaTributarias(const std::vector<double> &t) const
       theNodes[i]->addTributaria(t[i]);
   }
 
-//! @brief Devuelve un vector que contiene los factores de distribución
+//! @brief Returns a vector que contiene los factores de distribución
 //! de cada nodo que corresponden al modo being passed as parameter.
 XC::Vector XC::NodePtrs::getDistributionFactor(int mode) const
   {
@@ -440,7 +440,7 @@ XC::Vector XC::NodePtrs::getDistributionFactor(int mode) const
     return retval;
   }
 
-//! @brief Devuelve los vectores correspondientes a cada nodo colocados por filas.
+//! @brief Returns the vectores correspondientes a cada nodo colocados por filas.
 XC::Matrix XC::NodePtrs::getNodeVectors(const Vector &v) const
   {
     const int numNodes= size();

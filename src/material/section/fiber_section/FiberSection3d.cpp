@@ -112,7 +112,7 @@ int XC::FiberSection3d::setTrialSectionDeformation(const Vector &deforms)
     return fibras.setTrialSectionDeformation(*this,kr);
   }
 
-//! @brief Devuelve la matriz de rigidez tangente inicial.
+//! @brief Return the tangent stiffness matrix inicial.
 const XC::Matrix &XC::FiberSection3d::getInitialTangent(void) const
   { return fibras.getInitialTangent(*this); }
 
@@ -120,21 +120,21 @@ const XC::Matrix &XC::FiberSection3d::getInitialTangent(void) const
 XC::SectionForceDeformation *XC::FiberSection3d::getCopy(void) const
   { return new FiberSection3d(*this); }
 
-//! @brief Devuelve el tipo.
+//! @brief Returns the tipo.
 const XC::ResponseId &XC::FiberSection3d::getType(void) const
   { return RespFiberSection3d; }
 
 int XC::FiberSection3d::getOrder(void) const
   { return 3; }
 
-//! @brief Devuelve el estado de la sección al del último commit.
+//! @brief Returns the estado de la sección al del último commit.
 int XC::FiberSection3d::revertToLastCommit(void)
   {
     FiberSection3dBase::revertToLastCommit();
     return fibras.revertToLastCommit(*this,kr);
   }
 
-//! @brief Devuelve la sección a su estado inicial.
+//! @brief Return the sección a su estado inicial.
 int XC::FiberSection3d::revertToStart(void)
   { return fibras.revertToStart(*this,kr); }
 

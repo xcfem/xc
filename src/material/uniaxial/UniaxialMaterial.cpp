@@ -88,7 +88,7 @@ int XC::UniaxialMaterial::setTrial(double strain, double &stress, double &tangen
     return res;
   }
 
-//! @brief Devuelve la deformación inicial.
+//! @brief Return the initial deformation.
 double XC::UniaxialMaterial::getInitialStrain(void) const
   { return 0.0; }
 
@@ -97,7 +97,7 @@ double XC::UniaxialMaterial::getStrainRate(void) const
   { return 0.0; }
 
 
-//! @brief Devuelve la tensión generalizada.
+//! @brief Return the generalized stress.
 const XC::Vector &XC::UniaxialMaterial::getGeneralizedStress(void) const
   {
     static Vector retval(1);
@@ -105,7 +105,7 @@ const XC::Vector &XC::UniaxialMaterial::getGeneralizedStress(void) const
     return retval;
   }
 
-//! @brief Devuelve la deformación generalizada.
+//! @brief Return the deformación generalizada.
 const XC::Vector &XC::UniaxialMaterial::getGeneralizedStrain(void) const
   {
     static Vector retval(1);
@@ -136,7 +136,7 @@ double XC::UniaxialMaterial::getSecant(void) const
       return this->getTangent();
   }
 
-//! @brief Devuelve la inversa de la rigidez.
+//! @brief Return the inversa de la rigidez.
 double XC::UniaxialMaterial::getFlexibility(void) const
   {
     double retval;
@@ -151,7 +151,7 @@ double XC::UniaxialMaterial::getFlexibility(void) const
     return retval;
   }
 
-//! @brief Devuelve la inversa de la rigidez inicial.
+//! @brief Return the inversa de la rigidez inicial.
 double XC::UniaxialMaterial::getInitialFlexibility(void) const
   {
     double retval;
@@ -166,7 +166,7 @@ double XC::UniaxialMaterial::getInitialFlexibility(void) const
     return retval;
   }
 
-//! @brief Devuelve la densidad del material.
+//! @brief Return the densidad del material.
 double XC::UniaxialMaterial::getRho(void) const
   { return rho; }
 
@@ -174,11 +174,11 @@ double XC::UniaxialMaterial::getRho(void) const
 void XC::UniaxialMaterial::setRho(const double &r)
   { rho= r; }
 
-//! @brief Devuelve una copia del material.
+//! @brief Returns a copia del material.
 XC::UniaxialMaterial* XC::UniaxialMaterial::getCopy(SectionForceDeformation *s) const
   { return getCopy(); }
 
-//! @brief Establece el valor de la deformación inicial.
+//! @brief Establece el valor de la initial deformation.
 int XC::UniaxialMaterial::setInitialStrain(double strain)
   {
     std::clog << "El material: " << nombre_clase() 
@@ -186,7 +186,7 @@ int XC::UniaxialMaterial::setInitialStrain(double strain)
     return 0;
   }
 
-//! @brief Asigna a la deformación inicial el valor being passed as parameter.
+//! @brief Asigna a la initial deformation el valor being passed as parameter.
 void XC::UniaxialMaterial::setInitialGeneralizedStrain(const Vector &iS)
   { setInitialStrain(iS[0]); }
 

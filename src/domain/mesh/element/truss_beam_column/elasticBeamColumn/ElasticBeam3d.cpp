@@ -213,11 +213,11 @@ XC::Element* XC::ElasticBeam3d::getCopy(void) const
 XC::ElasticBeam3d::~ElasticBeam3d(void)
   { if(theCoordTransf) delete theCoordTransf;  }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 XC::CrdTransf *XC::ElasticBeam3d::getCoordTransf(void)
   { return theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 const XC::CrdTransf *XC::ElasticBeam3d::getCoordTransf(void) const
   { return theCoordTransf; }
 
@@ -262,7 +262,7 @@ int XC::ElasticBeam3d::setInitialSectionDeformation(const Vector &def)
     return 0;
   }
 
-//! @brief Devuelve la deformación de la sección del elemento.
+//! @brief Return the deformación de la sección del elemento.
 const XC::Vector &XC::ElasticBeam3d::getSectionDeformation(void) const
   {
     static Vector retval(5);
@@ -303,7 +303,7 @@ int XC::ElasticBeam3d::revertToStart()
 int XC::ElasticBeam3d::update(void)
   { return theCoordTransf->update(); }
 
-//! @brief Devuelve la matriz de rigidez tangente expresada en coordenadas globales.
+//! @brief Return the tangent stiffness matrix expresada en coordenadas globales.
 const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
   {
     const Vector &v= getSectionDeformation();
@@ -394,7 +394,7 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
     return retval;
   }
 
-//! @brief Devuelve la matriz de masas del elemento.
+//! @brief Return the matriz de masas del elemento.
 const XC::Matrix &XC::ElasticBeam3d::getMass(void) const
   {
     K.Zero();
@@ -606,7 +606,7 @@ const XC::Vector &XC::ElasticBeam3d::getVDirEjeDebilGlobales(void) const
       }
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::ElasticBeam3d::getDbTagData(void) const
   {

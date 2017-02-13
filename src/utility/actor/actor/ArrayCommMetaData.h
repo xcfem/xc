@@ -43,11 +43,11 @@ class ArrayCommMetaData: public PtrCommMetaData
   public:
     ArrayCommMetaData(const int &,const int &,const size_t &);
 
-    //! @brief Devuelve la posición del tamaño del array.
+    //! @brief Return the posición del tamaño del array.
     inline const std::size_t &getPosSize(void) const
       { return posSz; }
 
-    //! @brief Devuelve el tamaño del array.
+    //! @brief Returns the tamaño del array.
     inline const std::size_t &getSize(void) const
       { return posSz; }
   };

@@ -113,7 +113,7 @@ int XC::MRMFreedom_Constraint::getNumConstrainedDofs(void) const
   { return getConstrainedDOFs().Size();  }
 
 
-//! @brief Devuelve verdadero si afecta al nodo cuyo tag se pasa como parámetro.
+//! @brief Returns true ifafecta to the node cuyo tag se pasa como parámetro.
 bool XC::MRMFreedom_Constraint::afectaANodo(int tagNodo) const
   {
     bool retval= false;

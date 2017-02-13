@@ -47,7 +47,7 @@ XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
 
 //! @brief Constructor.
 //! @param nombre: Identificador del objeto.
-//! @param m: Apuntador al preprocesador.
+//! @param m: Pointer to preprocesador.
 //! @param nd: Número de divisiones.
 XC::Face::Face(const std::string &nombre,Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
   : CmbEdge(nombre,m,ndivI), ndivj(ndivJ) {}
@@ -72,7 +72,7 @@ void XC::Face::actualiza_topologia(void)
       (*i).Borde()->inserta_surf(this);
   }
 
-//! @brief Devuelve el índice en esta superficie del borde común con otra superficie si existe.
+//! @brief Returns the índice en esta superficie del borde común con otra superficie si existe.
 size_t XC::Face::BordeComun(const XC::Face &otra) const
   {
     size_t cont= 1;
@@ -85,7 +85,7 @@ size_t XC::Face::BordeComun(const XC::Face &otra) const
     return 0;
   }
 
-//! Devuelve:
+//! Returns:
 //! - 1 si la línea es común a ambas superficies y la orientación es la misma.
 //! - -1 si la línea es común a ambas superficies y la orientación es la contraria.
 //! - 0 si la línea no es común a ambas superficies.
@@ -115,22 +115,22 @@ int XC::Face::SentidoBorde(const XC::Edge *l,const XC::Face &otra) const
       return -1;
   }
 
-//! @brief Devuelve el vértice cuyo índice se pasa como parámetro.
+//! @brief Returns the vértice cuyo índice is being passed as parameter.
 const XC::Pnt *XC::Face::GetVertice(const size_t &i) const
   { return GetLado(i)->P1(); }
 
-//! @brief Devuelve la lista de superficies que tocan a la línea.
+//! @brief Return the lista de superficies que tocan a la línea.
 std::set<const XC::Face *> XC::GetSupsTocan(const Edge &p)
   { return p.SupsTocan(); }
 
-//! @brief Devuelve verdadero si la línea toca al cuerpo.
+//! @brief Returns true ifla línea toca al cuerpo.
 bool XC::Face::Toca(const XC::Body &b) const
   {
     std::set<const Body *>::const_iterator i= cuerpos_sup.find(&b);
     return (i!=cuerpos_sup.end());
   }
 
-//! @brief Devuelve los conjuntos a los que pertenece esta superficie.
+//! @brief Returns the conjuntos a los que pertenece esta superficie.
 std::set<XC::SetBase *> XC::Face::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -155,19 +155,19 @@ void XC::Face::add_to_sets(std::set<SetBase *> &sets)
       }
   }
 
-//! @brief Devuelve un apuntador al nodo cuyos índices se pasan como parámetro.
+//! @brief Returns a pointer to nodo cuyos índices se pasan como parámetro.
 XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   { return CmbEdge::GetNodo(i,j,k); }
 
-//! @brief Devuelve un apuntador al nodo cuyos índices se pasan como parámetro.
+//! @brief Returns a pointer to nodo cuyos índices se pasan como parámetro.
 const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   { return CmbEdge::GetNodo(i,j,k); }
 
-//! @brief Devuelve un apuntador al nodo cuyos índices se pasa como parámetro.
+//! @brief Returns a pointer to nodo cuyos índices is being passed as parameter.
 XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j)
   { return const_cast<Node *>(static_cast<const Face &>(*this).GetNodo(i,j)); }
 
-//! @brief Devuelve un apuntador al nodo cuyos índices se pasa como parámetro.
+//! @brief Returns a pointer to nodo cuyos índices is being passed as parameter.
 const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j) const
   {
     const Node *retval= nullptr;
@@ -182,14 +182,14 @@ const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j) const
     return retval;
   }
 
-//! @brief Devuelve un apuntador al nodo cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to nodo cuyo índice is being passed as parameter.
 XC::Node *XC::Face::GetNodo(const size_t &i)
   {
     std::cerr << "No debe llamarse a Face::GetNodo con un sólo índice." << std::endl; 
     return nullptr;
   }
 
-//! @brief Devuelve un apuntador al nodo cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to nodo cuyo índice is being passed as parameter.
 const XC::Node *XC::Face::GetNodo(const size_t &i) const
   { return const_cast<Node *>(static_cast<const Face &>(*this).GetNodo(i)); }
 

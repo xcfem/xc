@@ -80,7 +80,7 @@ void XC::BeamIntegration::getWeightsDeriv(int nIP, double L, double dLdh,double 
       dwtsdh[i] = 0.0;
   }
 
-//! @brief Devuelve las coordenadas normalizadas (entre 0 y 1).
+//! @brief Returns the coordenadas normalizadas (entre 0 y 1).
 const XC::Matrix &XC::BeamIntegration::getIntegrPointCoords(int numSections, double L) const
   {
     static Matrix retval;
@@ -90,7 +90,7 @@ const XC::Matrix &XC::BeamIntegration::getIntegrPointCoords(int numSections, dou
     return retval;
   }
 
-//! @brief Devuelve las coordenadas naturales (entre -1 y 1) a partir de las normalizadas.
+//! @brief Returns the coordenadas naturales (entre -1 y 1) a partir de las normalizadas.
 const XC::Matrix &XC::BeamIntegration::getIntegrPointNaturalCoords(int numSections, double L) const
   {
     static Matrix retval;
@@ -100,7 +100,7 @@ const XC::Matrix &XC::BeamIntegration::getIntegrPointNaturalCoords(int numSectio
     return retval;
   }
 
-//! @brief Devuelve las coordenadas locales (entre 0 y L) a partir de las normalizadas.
+//! @brief Returns the coordenadas locales (entre 0 y L) a partir de las normalizadas.
 const XC::Matrix &XC::BeamIntegration::getIntegrPointLocalCoords(int numSections, double L) const
   {
     static Matrix retval;

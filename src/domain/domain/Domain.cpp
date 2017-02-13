@@ -412,7 +412,7 @@ bool XC::Domain::removeNodeLocker(NodeLocker *nl)
     return retval;
   }
 
-//! @brief Devuelve el nombre de la combinación actual.
+//! @brief Returns the nombre de la combinación actual.
 const std::string &XC::Domain::getNombreCombActual(void) const
   { return nmbCombActual; }
 
@@ -484,11 +484,11 @@ bool XC::Domain::removeSFreedom_Constraint(int tag, int loadPattern)
 void XC::Domain::clearDOF_GroupPtr(void)
   { mesh.clearDOF_GroupPtr(); }
 
-//! @brief Devuelve un iterador a los elementos del domain.
+//! @brief Returns an iterator a los elementos del domain.
 XC::ElementIter &XC::Domain::getElements()
   { return mesh.getElements(); }
 
-//! @brief Devuelve un iterador a los nodos del domain.
+//! @brief Returns an iterator a los nodos del domain.
 XC::NodeIter &XC::Domain::getNodes()
   { return mesh.getNodes(); }
 
@@ -515,7 +515,7 @@ XC::ConstrContainer &XC::Domain::getConstraints(void)
 **   only elements can be added to theElements
 */
 
-//! @brief Devuelve verdadero si el elemento cuyo tag se pasa como parámetro
+//! @brief Returns true ifel elemento cuyo tag se pasa como parámetro
 //! ya existe en el domain.
 bool XC::Domain::existElement(int tag)
  { return mesh.existElement(tag); }
@@ -545,15 +545,15 @@ const XC::Node *XC::Domain::getNode(int tag) const
 int XC::Domain::getCommitTag(void) const
   { return commitTag; }
 
-//! @brief Devuelve el número de elementos.
+//! @brief Returns the número de elementos.
 int XC::Domain::getNumElements(void) const
   { return mesh.getNumElements(); }
 
-//! @brief Devuelve el número de nodos.
+//! @brief Returns the número de nodos.
 int XC::Domain::getNumNodes(void) const
   { return mesh.getNumNodes(); }
 
-//! @brief Devuelve el BND del modelo.
+//! @brief Returns the BND del modelo.
 const XC::Vector &XC::Domain::getPhysicalBounds(void)
   { return mesh.getPhysicalBounds(); }
 
@@ -626,7 +626,7 @@ int XC::Domain::commit(void)
     return 0;
   }
 
-//! @brief Devuelve el estado del modelo al último consumado.
+//! @brief Returns the estado del modelo al último consumado.
 int XC::Domain::revertToLastCommit(void)
   {
     //
@@ -643,7 +643,7 @@ int XC::Domain::revertToLastCommit(void)
     return update();
   }
 
-//! @brief Devuelve el estado del modelo al inicial del cálculo y llama
+//! @brief Returns the estado del modelo al inicial del cálculo y llama
 //! al método restart() de todos los recorders.
 int XC::Domain::revertToStart(void)
   {
@@ -698,30 +698,30 @@ int XC::Domain::setEigenvalues(const Vector &theValues)
     return 0;
   }
 
-//! @brief Devuelve el autovalor que corresponde al modo being passed as parameter.
+//! @brief Returns the autovalor que corresponde al modo being passed as parameter.
 const double &XC::Domain::getEigenvalue(int mode) const
   { return theEigenvalues(mode-1); }
 
-//! @brief Devuelve la pulsación correspondiente al modo
+//! @brief Return the pulsación correspondiente al modo
 //! being passed as parameter.
 double XC::Domain::getPulsacion(int mode) const
   { return sqrt(getEigenvalue(mode)); }
 
-//! @brief Devuelve el período correspondiente al modo
+//! @brief Returns the período correspondiente al modo
 //! being passed as parameter.
 double XC::Domain::getPeriodo(int mode) const
   { return 2.0*M_PI/getPulsacion(mode); }
 
-//! @brief Devuelve la frecuencia correspondiente al modo
+//! @brief Return the frecuencia correspondiente al modo
 //! being passed as parameter.
 double XC::Domain::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 
-//! @brief Devuelve el vector de eigenvalues.
+//! @brief Returns the vector de eigenvalues.
 const XC::Vector &XC::Domain::getEigenvalues(void) const
   { return theEigenvalues; }
 
-//! @brief Devuelve un vector con las pulsaciones calculadas.
+//! @brief Returns a vector con las pulsaciones calculadas.
 XC::Vector XC::Domain::getPulsaciones(void) const
   {
     Vector retval= getEigenvalues();
@@ -731,7 +731,7 @@ XC::Vector XC::Domain::getPulsaciones(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector con las periodos calculados.
+//! @brief Returns a vector con las periodos calculados.
 XC::Vector XC::Domain::getPeriodos(void) const
   {
     Vector retval= getPulsaciones();
@@ -741,7 +741,7 @@ XC::Vector XC::Domain::getPeriodos(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector con las frecuencias calculadas.
+//! @brief Returns a vector con las frecuencias calculadas.
 XC::Vector XC::Domain::getFrecuencias(void) const
   {
     Vector retval= getPeriodos();
@@ -751,7 +751,7 @@ XC::Vector XC::Domain::getFrecuencias(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de eigenvalues que se han calculado.
+//! @brief Returns the número de eigenvalues que se han calculado.
 int XC::Domain::getNumModes(void) const
   { return getEigenvalues().Size(); }
 
@@ -762,28 +762,28 @@ int XC::Domain::setModalParticipationFactors(const Vector &theValues)
     return 0;
   }
 
-//! @brief Devuelve el factor de participación modal
+//! @brief Returns the factor de participación modal
 //! que corresponde al modo being passed as parameter.
 const double &XC::Domain::getModalParticipationFactor(int mode) const
   { return modalParticipationFactors(mode-1); }
 
-//! @brief Devuelve el vector de factores de participación modal.
+//! @brief Returns the vector de factores de participación modal.
 const XC::Vector &XC::Domain::getModalParticipationFactors(void) const
   { return modalParticipationFactors; }
 
-//! @brief Devuelve la masa modal efectiva correspondiente
+//! @brief Return the masa modal efectiva correspondiente
 //! al modo being passed as parameter.
 const double XC::Domain::getEffectiveModalMass(int mode) const
   { return mesh.getEffectiveModalMass(mode); }
 
-//! @brief Devuelve las masas modales efectivas en cada modo.
+//! @brief Returns the masas modales efectivas en cada modo.
 XC::Vector XC::Domain::getEffectiveModalMasses(void) const
   {
     const int nm= getNumModes();
     return mesh.getEffectiveModalMasses(nm);
   }
 
-//! @brief Devuelve la masa total del nodo.
+//! @brief Return the masa total del nodo.
 double XC::Domain::getTotalMass(void) const
   {
     double retval= 0;
@@ -802,7 +802,7 @@ void XC::Domain::setDomainChangeStamp(int newStamp)
 void XC::Domain::domainChange(void)
   { hasDomainChangedFlag= true; }
 
-//! @brief Devuelve verdadero si el modelo ha cambiado.
+//! @brief Returns true ifel modelo ha cambiado.
 int XC::Domain::hasDomainChanged(void)
   {
     // if the flag indicating the domain has changed since the
@@ -876,7 +876,7 @@ int XC::Domain::buildEleGraph(Graph &theEleGraph)
 int XC::Domain::buildNodeGraph(Graph &theNodeGraph)
   { return mesh.buildNodeGraph(theNodeGraph); }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::Domain::getDbTagData(void) const
   {
@@ -1007,7 +1007,7 @@ int XC::Domain::calculateNodalReactions(bool inclInertia,const double &tol)
     return retval;
   }
 
-//! @brief Devuelve (si puede) a pointer al preprocesador.
+//! @brief Returns (if possible) a pointer al preprocesador.
 const XC::Preprocessor *XC::Domain::GetPreprocessor(void) const
   {
     const Preprocessor *retval= nullptr;
@@ -1017,7 +1017,7 @@ const XC::Preprocessor *XC::Domain::GetPreprocessor(void) const
     return retval;
   }
 
-//! @brief Devuelve (si puede) a pointer al preprocesador.
+//! @brief Returns (if possible) a pointer al preprocesador.
 XC::Preprocessor *XC::Domain::GetPreprocessor(void)
   {
     Preprocessor *retval= nullptr;

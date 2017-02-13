@@ -203,7 +203,7 @@ void XC::Beam3dUniformLoad::addElasticDeformations(const double &L,const CrossSe
 
 
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::Beam3dUniformLoad::getDbTagData(void) const
   {
@@ -259,11 +259,11 @@ void  XC::Beam3dUniformLoad::Print(std::ostream &s, int flag)
     s << "  Elements acted on: " << getElementTags();
   }
 
-//! @brief Devuelve la dimension del vector fuerza.
+//! @brief Return the dimension del vector fuerza.
 size_t XC::Beam3dUniformLoad::getDimVectorFuerza(void) const
   { return 3; }
 
-//! @brief Devuelve la dimension del vector momento.
+//! @brief Return the dimension del vector momento.
 size_t XC::Beam3dUniformLoad::getDimVectorMomento(void) const
   { return 3; }
 

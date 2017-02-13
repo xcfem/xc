@@ -93,27 +93,27 @@ bool XC::Block::checkNDivs(void) const
     return (sups[0].checkNDivs() && sups[1].checkNDivs() && sups[2].checkNDivs() && sups[3].checkNDivs() && sups[4].checkNDivs() && sups[5].checkNDivs());
   }
 
-//! @brief Devuelve el número de líneas del objeto.
+//! @brief Returns the número de líneas del objeto.
 size_t XC::Block::NumLineas(void) const
   { return 12; }
 
-//! @brief Devuelve el número de vértices del objeto.
+//! @brief Returns the número de vértices del objeto.
 size_t XC::Block::NumVertices(void) const
   { return 8; }
 
-//! @brief Devuelve el número de vértices del objeto.
+//! @brief Returns the número de vértices del objeto.
 size_t XC::Block::NumCaras(void) const
   { return 6; }
 
-//! @brief Devuelve la cara del sólido cuyo índice se pasa como parámetro.
+//! @brief Return the cara del sólido cuyo índice se pasa como parámetro.
 const XC::Block::Cara *XC::Block::GetCara(const size_t &i) const
   { return &sups[i-1]; }
 
-//! @brief Devuelve la cara del sólido cuyo índice se pasa como parámetro.
+//! @brief Return the cara del sólido cuyo índice se pasa como parámetro.
 XC::Block::Cara *XC::Block::GetCara(const size_t &i)
   { return &sups[i-1]; }
 
-//! @brief Devuelve la arista del sólido cuyo índice se pasa como parámetro.
+//! @brief Return the arista del sólido cuyo índice se pasa como parámetro.
 const XC::CmbEdge::Lado *XC::Block::GetArista(const size_t &i) const
   {
     const CmbEdge::Lado *retval(nullptr);
@@ -144,7 +144,7 @@ const XC::CmbEdge::Lado *XC::Block::GetArista(const size_t &i) const
     return retval;
   }
 
-//! @brief Devuelve el vértice del sólido cuyo índice se pasa como parámetro.
+//! @brief Returns the vértice del sólido cuyo índice se pasa como parámetro.
 const XC::Pnt *XC::Block::GetVertice(const size_t &i) const
   {
     if(i<=4)
@@ -155,7 +155,7 @@ const XC::Pnt *XC::Block::GetVertice(const size_t &i) const
       return nullptr;
   }
 
-//! @brief Devuelve el vértice del sólido cuyo índice se pasa como parámetro.
+//! @brief Returns the vértice del sólido cuyo índice se pasa como parámetro.
 XC::Pnt *XC::Block::GetVertice(const size_t &i)
   {
     if(i<=4)
@@ -166,7 +166,7 @@ XC::Pnt *XC::Block::GetVertice(const size_t &i)
       return nullptr;
   }
 
-//! @brief Devuelve las superficies que limitan el sólido.
+//! @brief Returns the superficies que limitan el sólido.
 std::set<const XC::Face *> XC::Block::GetSuperficies(void)
   {
     std::set<const Face *> retval;
@@ -190,7 +190,7 @@ void XC::Block::actualiza_topologia(void)
     if(!sups[5].Vacia()) set_surf(sups[5].Superficie());
   }
 
-//! Devuelve el índice que corresponde a la superficie que se pasa como
+//! Returns the índice que corresponde a la superficie que se pasa como
 //! parámetro de acuerdo con el siguiente criterio:
 //! - Si la superficie es la primera que define el sólido, entonces es
 //!  la base.
@@ -293,7 +293,7 @@ void XC::Block::crea_nodos_caras(void)
     sups[5].crea_nodos();
   }
 
-//! @brief Devuelve (ndivI+1)*(ndivJ+1)*(ndivK+1) posiciones para los nodos.
+//! @brief Returns (ndivI+1)*(ndivJ+1)*(ndivK+1) posiciones para los nodos.
 //!
 //! La "tritriz" de puntos devuelta esta organizada de la siguiente manera.
 //! - El punto de índices (0,1,1) (capa,fila,col) coincide con el vértice 1.
@@ -337,15 +337,15 @@ TritrizPos3d XC::Block::get_posiciones(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de divisiones según la arista 1->2.
+//! @brief Returns the número de divisiones según la arista 1->2.
 size_t XC::Block::NDivI(void) const
   { return GetArista(1)->NDiv(); }
 
-//! @brief Devuelve el número de divisiones según la arista 2->3.
+//! @brief Returns the número de divisiones según la arista 2->3.
 size_t XC::Block::NDivJ(void) const
   { return GetArista(2)->NDiv(); }
 
-//! @brief Devuelve el número de divisiones según la arista 1->5.
+//! @brief Returns the número de divisiones según la arista 1->5.
 size_t XC::Block::NDivK(void) const
   { return GetArista(5)->NDiv(); }
 

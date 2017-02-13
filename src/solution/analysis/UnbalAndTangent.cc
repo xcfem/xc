@@ -116,28 +116,28 @@ XC::UnbalAndTangent &XC::UnbalAndTangent::operator=(const UnbalAndTangent &otro)
 XC::UnbalAndTangent::~UnbalAndTangent(void)
   { libera(); }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::UnbalAndTangent::getTangent(void) const
   {
     assert(theTangent);
     return *theTangent;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 XC::Matrix &XC::UnbalAndTangent::getTangent(void)
   {
     assert(theTangent);
     return *theTangent;
   }
 
-//! @brief Devuelve el vector residuo.
+//! @brief Returns the vector residuo.
 const XC::Vector &XC::UnbalAndTangent::getResidual(void) const
   {
     assert(theResidual);
     return *theResidual;
   }
 
-//! @brief Devuelve el vector residuo.
+//! @brief Returns the vector residuo.
 XC::Vector &XC::UnbalAndTangent::getResidual(void)
   {
     assert(theResidual);

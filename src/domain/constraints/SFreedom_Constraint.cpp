@@ -120,7 +120,7 @@ int XC::SFreedom_Constraint::getDOF_Number(void) const
   { return dofNumber; }
 
 
-//! @brief Devuelve el valor del desplazamiento impuesto.
+//! @brief Returns the valor del desplazamiento impuesto.
 double XC::SFreedom_Constraint::getValue(void) const
   { return valueC; }
 
@@ -133,7 +133,7 @@ int XC::SFreedom_Constraint::applyConstraint(double loadFactor)
     return 0;
   }
 
-//! @brief Devuelve verdadero si se trata de una coacción homogénea (valor impuesto nulo).
+//! @brief Returns true ifse trata de una coacción homogénea (valor impuesto nulo).
 bool XC::SFreedom_Constraint::isHomogeneous(void) const
   {
     if(valueR == 0.0)
@@ -147,11 +147,11 @@ bool XC::SFreedom_Constraint::isHomogeneous(void) const
 void XC::SFreedom_Constraint::setLoadPatternTag(int tag)
   { loadPatternTag = tag; }
 
-//! @brief Devuelve el identificador del "patrón de carga" de la coacción.
+//! @brief Returns the identificador del "patrón de carga" de la coacción.
 int XC::SFreedom_Constraint::getLoadPatternTag(void) const
   { return loadPatternTag;  }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::SFreedom_Constraint::getDbTagData(void) const
   {

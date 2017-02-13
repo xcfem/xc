@@ -117,22 +117,22 @@ void XC::ElemPlano<NNODOS, PhysProp>::setDomain(Domain *theDomain)
       std::cerr << "ElemPlano::setDomain -- Domain is null\n";
   }
 
-//! @brief Devuelve la posición del centro de gravedad del elemento.
+//! @brief Return the posición del centro de gravedad del elemento.
 template <int NNODOS,class PhysProp>
 Pos3d XC::ElemPlano<NNODOS, PhysProp>::getPosCdg(bool initialGeometry) const
   { return getPoligono(initialGeometry).Cdg(); }
 
-//! @brief Devuelve la dimensión del elemento.
+//! @brief Return the dimensión del elemento.
 template <int NNODOS,class PhysProp>
 size_t XC::ElemPlano<NNODOS, PhysProp>::getDimension(void) const
   { return 2; }
 
-//! @brief Devuelve el perímetro del elemento.
+//! @brief Returns the perímetro del elemento.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getPerimetro(bool initialGeometry) const
   { return getPoligono(initialGeometry).Perimetro(); }
 
-//! @brief Devuelve el área del elemento.
+//! @brief Returns the área del elemento.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getArea(bool initialGeometry) const
   { return getPoligono(initialGeometry).Area(); }
@@ -145,7 +145,7 @@ void XC::ElemPlano<NNODOS, PhysProp>::calculaAreasTributarias(bool initialGeomet
     this->vuelcaTributarias(areasTributarias);
   }
 
-//! @brief Devuelve el área del elemento.
+//! @brief Returns the área del elemento.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getAreaTributaria(const Node *nod) const
   {
@@ -164,7 +164,7 @@ Poligono3d XC::ElemPlano<NNODOS, PhysProp>::getPoligono(bool initialGeometry) co
     return Poligono3d(posiciones.begin(),posiciones.end());
   }
 
-//! @brief Devuelve un lado del elemento. 
+//! @brief Returns a lado del elemento. 
 // Redefine for elements with more than two nodes by face.
 template <int NNODOS,class PhysProp>
 Segmento3d XC::ElemPlano<NNODOS, PhysProp>::getLado(const size_t &i,bool initialGeometry) const
@@ -183,25 +183,25 @@ Segmento3d XC::ElemPlano<NNODOS, PhysProp>::getLado(const size_t &i,bool initial
     return retval;
   }
 
-//! @brief Devuelve el cuadrado de la distancia desde el elemento al punto que
+//! @brief Returns the cuadrado de la distancia desde el elemento al punto que
 //! se pasa como parámetro.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getDist2(const Pos2d &p,bool initialGeometry) const
   { return getDist2(To3dXY2d(p),initialGeometry); }
 
-//! @brief Devuelve la distancia desde el elemento al punto que
+//! @brief Return the distancia desde el elemento al punto que
 //! se pasa como parámetro.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getDist(const Pos2d &p,bool initialGeometry) const
   { return getDist(To3dXY2d(p),initialGeometry); }
 
-//! @brief Devuelve el cuadrado de la distancia desde el elemento al punto que
+//! @brief Returns the cuadrado de la distancia desde el elemento al punto que
 //! se pasa como parámetro.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getDist2(const Pos3d &p,bool initialGeometry) const
   { return getPoligono(initialGeometry).dist2(p); }
 
-//! @brief Devuelve la distancia desde el elemento al punto que
+//! @brief Return the distancia desde el elemento al punto que
 //! se pasa como parámetro.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getDist(const Pos3d &p,bool initialGeometry) const

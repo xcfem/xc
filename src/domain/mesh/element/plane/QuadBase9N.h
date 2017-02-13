@@ -96,7 +96,7 @@ Poligono3d XC::QuadBase9N<PhysProp>::getPoligono(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Devuelve un lado del elemento.
+//! @brief Returns a lado del elemento.
 template <class PhysProp>
 Segmento3d XC::QuadBase9N<PhysProp>::getLado(const size_t &i,bool initialGeometry) const
   {
@@ -105,7 +105,7 @@ Segmento3d XC::QuadBase9N<PhysProp>::getLado(const size_t &i,bool initialGeometr
     return retval;
   }
 
-//! @brief Devuelve los nodos de un lado del elemento.
+//! @brief Returns the nodos de un lado del elemento.
 template <class PhysProp>
 XC::Element::NodesEdge XC::QuadBase9N<PhysProp>::getNodesEdge(const size_t &i) const
   {
@@ -114,7 +114,7 @@ XC::Element::NodesEdge XC::QuadBase9N<PhysProp>::getNodesEdge(const size_t &i) c
     return retval;    
   }
 
-//! @brief Devuelve el borde del elemento
+//! @brief Returns the borde del elemento
 //! que tiene por extremos los nodos que se pasan como parámetros.
 template <class PhysProp>
 int XC::QuadBase9N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
@@ -124,7 +124,7 @@ int XC::QuadBase9N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
     return retval;
   }
 
-//! @brief Devuelve los índices locales de los nodos del elemento
+//! @brief Returns the índices locales de los nodos del elemento
 //! situados sobre el borde (o arista) being passed as parameters.
 template <class PhysProp>
 ID XC::QuadBase9N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const

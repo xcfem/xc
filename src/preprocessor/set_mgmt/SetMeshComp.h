@@ -105,15 +105,15 @@ class SetMeshComp: public SetBase
     SetMeshComp(const SetMeshComp &otro);
     SetMeshComp &operator=(const SetMeshComp &otro);
 
-    //! @brief Devuelve el número de nodos del conjunto.
+    //! @brief Returns the número de nodos del conjunto.
     size_t NumNodos(void) const
       { return nodos.size(); }
     //! @brief Agrega un nodo a la lista de nodos del conjunto.
     void agregaNodo(Node *nPtr);
-    //! @brief Devuelve la lista de nodos del conjunto.
+    //! @brief Return the lista de nodos del conjunto.
     virtual const DqPtrsNode &GetNodos(void) const
       { return nodos; }
-    //! @brief Devuelve la lista de nodos del conjunto.
+    //! @brief Return the lista de nodos del conjunto.
     virtual DqPtrsNode &GetNodos(void)
       { return nodos; }
     //! @brief Borra la lista de nodos del conjunto.
@@ -122,15 +122,15 @@ class SetMeshComp: public SetBase
     void sel_nodos_lista(const ID &);
     bool In(const Node *) const;
 
-    //! @brief Devuelve el número de elementos del conjunto.
+    //! @brief Returns the número de elementos del conjunto.
     size_t NumElementos(void) const
       { return elementos.size(); }
     //! @brief Agrega un elemento la lista de elementos del conjunto.
     void agregaElemento(Element *ePtr);
-    //! @brief Devuelve la lista de elementos del conjunto.
+    //! @brief Return the lista de elementos del conjunto.
     virtual const DqPtrsElem &GetElementos(void) const
       { return elementos; }
-    //! @brief Devuelve la lista de elementos del conjunto.
+    //! @brief Return the lista de elementos del conjunto.
     virtual DqPtrsElem &GetElementos(void)
       { return elementos; }
     //! @brief Borra la lista de elementos del conjunto.
@@ -139,10 +139,10 @@ class SetMeshComp: public SetBase
     void sel_elementos_lista(const ID &tags);
     bool In(const Element *) const;
 
-    //! @brief Devuelve la lista de constraints del conjunto.
+    //! @brief Return the lista de constraints del conjunto.
     virtual const DqPtrsConstraint &GetConstraints(void) const
       { return constraints; }
-    //! @brief Devuelve la lista de constraints del conjunto.
+    //! @brief Return the lista de constraints del conjunto.
     virtual DqPtrsConstraint &GetConstraints(void)
       { return constraints; }
     //! @brief Borra la lista de constraints del conjunto.

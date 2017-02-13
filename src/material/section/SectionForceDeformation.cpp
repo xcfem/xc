@@ -105,7 +105,7 @@ XC::SectionForceDeformation::~SectionForceDeformation(void)
     fDefault= nullptr;
   }
 
-//! @brief Devuelve una cadena de caracteres con los nombres de los esfuerzos a los
+//! @brief Returns a cadena de caracteres con los nombres de los esfuerzos a los
 //! que la sección aporta rigidez separados por comas.
 std::string XC::SectionForceDeformation::getTypeString(void) const
   { return getType().getString(); }
@@ -117,7 +117,7 @@ int XC::SectionForceDeformation::addInitialSectionDeformation(const Vector &def)
 
 
 
-//! @brief Devuelve la matriz de flexibilidad tangente de la sección.
+//! @brief Return the matriz de flexibilidad tangente de la sección.
 const XC::Matrix &XC::SectionForceDeformation::getSectionFlexibility(void) const
   {
     int order = this->getOrder();
@@ -151,7 +151,7 @@ const XC::Matrix &XC::SectionForceDeformation::getSectionFlexibility(void) const
     return *fDefault;
   }
 
-//! @brief Devuelve la matriz de flexibilidad inicial de la sección.
+//! @brief Return the matriz de flexibilidad inicial de la sección.
 const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibility(void) const
   {
     int order = this->getOrder();
@@ -185,7 +185,7 @@ const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibility(void) const
     return *fDefault;
   }
 
-//! @brief Devuelve la densidad (masa por unidad de longitud/area/volumen)
+//! @brief Return the densidad (masa por unidad de longitud/area/volumen)
 //! de la sección.
 double XC::SectionForceDeformation::getRho(void) const
   { return 0.0; }
@@ -243,7 +243,7 @@ XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, I
 }
 */
 
-//! @brief Devuelve la respuesta de la sección
+//! @brief Return the respuesta de la sección
 XC::Response *XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, Information &sectInfo)
   {
     // deformations
@@ -262,7 +262,7 @@ XC::Response *XC::SectionForceDeformation::setResponse(const std::vector<std::st
       return 0;
   }
 
-//! @brief Devuelve la respuesta de la sección
+//! @brief Return the respuesta de la sección
 int XC::SectionForceDeformation::getResponse(int responseID, Information &secInfo)
   {
     switch (responseID)
@@ -317,7 +317,7 @@ double XC::SectionForceDeformation::getStressResultant(const int &defID) const
     return retval;
   }
 
-//! Devuelve los esfuerzos de la placa.
+//! Returns the esfuerzos de la placa.
 double XC::SectionForceDeformation::getStressResultantByName(const std::string &cod) const
   {
     double retval= 0.0;

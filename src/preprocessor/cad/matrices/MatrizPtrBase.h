@@ -80,7 +80,7 @@ template <class T>
 void XC::MatrizPtrBase<T>::dim(const size_t &nRows,const size_t &nCols)
   { this->resize(nRows,nCols,NULL); }
 
-//! @brief Devuelve verdadero si está vacía o si los pointers son nulos.
+//! @brief Returns true ifestá vacía o si los pointers son nulos.
 template <class T>
 bool MatrizPtrBase<T>::Null(void) const
   {
@@ -90,7 +90,7 @@ bool MatrizPtrBase<T>::Null(void) const
       return (this->operator()(1,1)==NULL);
   }
 
-//! @brief Devuelve verdadero si está vacía o si algún pointer is null.
+//! @brief Returns true ifestá vacía o si algún pointer is null.
 template <class T>
 bool MatrizPtrBase<T>::HasNull(void) const
   {

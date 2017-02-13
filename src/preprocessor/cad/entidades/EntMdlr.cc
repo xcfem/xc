@@ -51,7 +51,7 @@ XC::EntMdlr::EntMdlr(Preprocessor *m,const size_t &i)
 //! @brief Constructor.
 //! @param nombre: Identificador del objeto.
 //! @param i: Índice para gráficos.
-//! @param m: Apuntador al preprocesador.
+//! @param m: Pointer to preprocesador.
 XC::EntMdlr::EntMdlr(const std::string &nombre,const size_t &i,Preprocessor *m)
   : SetEstruct(nombre,m), idx(i), doGenMesh(true), nodos(), elementos() {}
 
@@ -121,22 +121,22 @@ const XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_
       return nullptr;
   }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p)
   { return nodos.getNearestNode(p); }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p) const
   {
     EntMdlr *this_no_const= const_cast<EntMdlr *>(this);
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Devuelve los índices del nodo que se paras como parámetro.
+//! @brief Returns the índices del nodo que se paras como parámetro.
 XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
   { return nodos.getNodeIndices(n); }
 
-//! @brief Devuelve los tags de los nodos.
+//! @brief Returns the tags de los nodos.
 std::vector<int> XC::EntMdlr::getTagsNodos(void) const
   { return nodos.getTags(); }
 
@@ -158,27 +158,27 @@ const XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,cons
       return nullptr;
   }
 
-//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
+//! @brief Returns the elemento más próximo al punto being passed as parameter.
 XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p)
   { return elementos.getNearestElement(p); }
 
-//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
+//! @brief Returns the elemento más próximo al punto being passed as parameter.
 const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
   {
     EntMdlr *this_no_const= const_cast<EntMdlr *>(this);
     return this_no_const->getNearestElement(p);
   }
 
-//! @brief Returns a pointer to the nodo cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo identificador is being passed as parameter.
 XC::Node *XC::EntMdlr::buscaNodo(const int &tag)
   { return nodos.buscaNodo(tag); }
-//! @brief Returns a pointer to the nodo cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo identificador is being passed as parameter.
 const XC::Node *XC::EntMdlr::buscaNodo(const int &tag) const
   { return nodos.buscaNodo(tag); }
-//! @brief Returns a pointer to the elemento cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the elemento cuyo identificador is being passed as parameter.
 XC::Element *XC::EntMdlr::buscaElemento(const int &tag)
   { return elementos.buscaElemento(tag); }
-//! @brief Returns a pointer to the elemento cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the elemento cuyo identificador is being passed as parameter.
 const XC::Element *XC::EntMdlr::buscaElemento(const int &tag) const
   { return elementos.buscaElemento(tag); }
 
@@ -207,7 +207,7 @@ XC::SetEstruct *XC::EntMdlr::crea_set_fila(const RangoTritriz &rango,const std::
       }
     else
       {
-	std::cerr << "EntMdlr::crea_set_fila; falta a pointer al preprocesador." << std::endl;
+	std::cerr << "EntMdlr::crea_set_fila; falta a pointer to preprocesador." << std::endl;
         return nullptr;
       }
     return retval;
@@ -288,7 +288,7 @@ bool XC::EntMdlr::crea_elementos(meshing_dir dm)
                     std::clog << "creados." << std::endl;
                 }
               else
-                std::cerr << "EntMdlr::crea_elementos; falta a pointer al preprocesador." << std::endl;
+                std::cerr << "EntMdlr::crea_elementos; falta a pointer to preprocesador." << std::endl;
             }
       }
     else
@@ -297,11 +297,11 @@ bool XC::EntMdlr::crea_elementos(meshing_dir dm)
     return retval;
   }
 
-//! @brief Devuelve verdadero si el punto toca a la línea.
+//! @brief Returns true ifel punto toca a la línea.
 void XC::EntMdlr::setGenMesh(bool m)
   { doGenMesh= m; }
 
-//! @brief Devuelve verdadero si el punto toca a la línea.
+//! @brief Returns true ifel punto toca a la línea.
 const bool &XC::EntMdlr::getGenMesh(void) const
   { return doGenMesh; }
 
@@ -354,7 +354,7 @@ XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(size_t capa,size_t f,const RangoIndice 
 XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(const RangoTritriz &rango,const std::string &nmb)
   { return GetVarRefFilaK(rango.GetRangoCapas().Inf(),rango.GetRangoFilas().Inf(),rango.GetRangoCols(),nmb); }
 
-//! @brief Devuelve el cuadrado de la distancia a la posición being passed as parameter.
+//! @brief Returns the cuadrado de la distancia a la posición being passed as parameter.
 double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
   {
     std::cerr << nombre_clase()
@@ -362,7 +362,7 @@ double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
     return 0.0;
   }
 
-//! @brief Devuelve la distancia a la posición being passed as parameter.
+//! @brief Return the distancia a la posición being passed as parameter.
 double XC::EntMdlr::DistanciaA(const Pos3d &pt) const
   { return sqrt(DistanciaA2(pt)); }
 

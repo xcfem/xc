@@ -212,7 +212,7 @@ int XC::EigenAnalysis::setEigenSOE(EigenSOE &theSOE)
     return 0;
   }
 
-//! @brief Devuelve el autovector que corresponde al modo being passed as parameter.
+//! @brief Returns the autovector que corresponde al modo being passed as parameter.
 const XC::Vector &XC::EigenAnalysis::getEigenvector(int mode) const
   {
     static Vector retval(1);
@@ -223,7 +223,7 @@ const XC::Vector &XC::EigenAnalysis::getEigenvector(int mode) const
     return retval;
   }
 
-//! @brief Devuelve el autovector que corresponde al modo being passed as parameter
+//! @brief Returns the autovector que corresponde al modo being passed as parameter
 //! normalizado de modo que la componente máxima valga 1 (norma_infinito).
 XC::Vector XC::EigenAnalysis::getNormalizedEigenvector(int mode) const
   {
@@ -235,7 +235,7 @@ XC::Vector XC::EigenAnalysis::getNormalizedEigenvector(int mode) const
     return retval;
   }
 
-//! @brief Devuelve una matriz con los eigenvectors calculados colocados
+//! @brief Returns a matriz con los eigenvectors calculados colocados
 //! por columnas.
 XC::Matrix XC::EigenAnalysis::getEigenvectors(void) const
   {
@@ -246,7 +246,7 @@ XC::Matrix XC::EigenAnalysis::getEigenvectors(void) const
     return retval;
   }
 
-//! @brief Devuelve una matriz con los eigenvectors normalizados colocados
+//! @brief Returns a matriz con los eigenvectors normalizados colocados
 //! por columnas (norma_infinito).
 XC::Matrix XC::EigenAnalysis::getNormalizedEigenvectors(void) const
   {
@@ -257,7 +257,7 @@ XC::Matrix XC::EigenAnalysis::getNormalizedEigenvectors(void) const
     return retval;
   }
 
-//! @brief Devuelve el autovalor que corresponde al modo being passed as parameter.
+//! @brief Returns the autovalor que corresponde al modo being passed as parameter.
 const double &XC::EigenAnalysis::getEigenvalue(int mode) const
   {
     static double retval= 0.0;
@@ -267,22 +267,22 @@ const double &XC::EigenAnalysis::getEigenvalue(int mode) const
     return retval;
   }
 
-//! @brief Devuelve la pulsación correspondiente al modo
+//! @brief Return the pulsación correspondiente al modo
 //! being passed as parameter.
 double XC::EigenAnalysis::getPulsacion(int mode) const
   { return sqrt(getEigenvalue(mode)); }
 
-//! @brief Devuelve el período correspondiente al modo
+//! @brief Returns the período correspondiente al modo
 //! being passed as parameter.
 double XC::EigenAnalysis::getPeriodo(int mode) const
   { return 2.0*M_PI/getPulsacion(mode); }
 
-//! @brief Devuelve la frecuencia correspondiente al modo
+//! @brief Return the frecuencia correspondiente al modo
 //! being passed as parameter.
 double XC::EigenAnalysis::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 
-//! @brief Devuelve un vector con los eigenvalues calculados.
+//! @brief Returns a vector con los eigenvalues calculados.
 XC::Vector XC::EigenAnalysis::getEigenvalues(void) const
   {
     Vector retval;
@@ -292,7 +292,7 @@ XC::Vector XC::EigenAnalysis::getEigenvalues(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector con las pulsaciones calculadas.
+//! @brief Returns a vector con las pulsaciones calculadas.
 XC::Vector XC::EigenAnalysis::getPulsaciones(void) const
   {
     Vector retval;
@@ -302,7 +302,7 @@ XC::Vector XC::EigenAnalysis::getPulsaciones(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector con las periodos calculados.
+//! @brief Returns a vector con las periodos calculados.
 XC::Vector XC::EigenAnalysis::getPeriodos(void) const
   {
     Vector retval;
@@ -312,7 +312,7 @@ XC::Vector XC::EigenAnalysis::getPeriodos(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector con las frecuencias calculadas.
+//! @brief Returns a vector con las frecuencias calculadas.
 XC::Vector XC::EigenAnalysis::getFrecuencias(void) const
   {
     Vector retval;
@@ -322,7 +322,7 @@ XC::Vector XC::EigenAnalysis::getFrecuencias(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de eigenvalues que se han calculado.
+//! @brief Returns the número de eigenvalues que se han calculado.
 int XC::EigenAnalysis::getNumModes(void) const
   {
     int retval= 0;
@@ -332,7 +332,7 @@ int XC::EigenAnalysis::getNumModes(void) const
     return retval;
   }
 
-//! @brief Devuelve el factor de participación modal
+//! @brief Returns the factor de participación modal
 //! correspondiente al modo i.
 double XC::EigenAnalysis::getModalParticipationFactor(int mode) const
   {
@@ -346,7 +346,7 @@ double XC::EigenAnalysis::getModalParticipationFactor(int mode) const
     return retval;
   }
 
-//! @brief Devuelve los factores de participación modal.
+//! @brief Returns the factores de participación modal.
 XC::Vector XC::EigenAnalysis::getModalParticipationFactors(void) const
   {
     Vector retval;
@@ -358,7 +358,7 @@ XC::Vector XC::EigenAnalysis::getModalParticipationFactors(void) const
                 << "the pointer al system of equations es nulo." << std::endl;
     return retval;
   }
-//! @brief Devuelve el factor de distribución correspondiente al modo
+//! @brief Returns the factor de distribución correspondiente al modo
 //! being passed as parameter.
 XC::Vector XC::EigenAnalysis::getDistributionFactor(int mode) const
   {
@@ -369,7 +369,7 @@ XC::Vector XC::EigenAnalysis::getDistributionFactor(int mode) const
     return retval;
   }
 
-//! @brief Devuelve una matriz con los factores de distribución
+//! @brief Returns a matriz con los factores de distribución
 //! calculados colocados por columnas.
 XC::Matrix XC::EigenAnalysis::getDistributionFactors(void) const
   {
@@ -380,7 +380,7 @@ XC::Matrix XC::EigenAnalysis::getDistributionFactors(void) const
     return retval;
   }
 
-//! @brief Devuelve la masa modal efectiva 
+//! @brief Return the masa modal efectiva 
 //! correspondiente al modo i.
 double XC::EigenAnalysis::getEffectiveModalMass(int mode) const
   {
@@ -391,7 +391,7 @@ double XC::EigenAnalysis::getEffectiveModalMass(int mode) const
     return retval;
   }
 
-//! @brief Devuelve las masas modales efectivas.
+//! @brief Returns the masas modales efectivas.
 XC::Vector XC::EigenAnalysis::getEffectiveModalMasses(void) const
   {
     Vector retval;
@@ -401,7 +401,7 @@ XC::Vector XC::EigenAnalysis::getEffectiveModalMasses(void) const
     return retval;
   }
 
-//! @brief Devuelve la masa total del modelo.
+//! @brief Return the masa total del modelo.
 double XC::EigenAnalysis::getTotalMass(void) const
   {
     double retval= 0.0;
@@ -411,7 +411,7 @@ double XC::EigenAnalysis::getTotalMass(void) const
     return retval;
   }
 
-//! @brief Devuelve la fuerza estática equivalente para el modo
+//! @brief Return the fuerza estática equivalente para el modo
 //! being passed as parameter.
 XC::Vector XC::EigenAnalysis::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {

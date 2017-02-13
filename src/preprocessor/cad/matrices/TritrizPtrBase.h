@@ -258,7 +258,7 @@ size_t TritrizPtrBase<MatrizPtr>::GetDim(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de elementos de la tritriz.
+//! @brief Returns the número de elementos de la tritriz.
 template <class MatrizPtr>
 size_t TritrizPtrBase<MatrizPtr>::NumPtrs(void) const
   {
@@ -272,7 +272,7 @@ size_t TritrizPtrBase<MatrizPtr>::NumPtrs(void) const
       }
   }
 
-//! @brief Devuelve verdadero si está vacía o si los pointers son nulos.
+//! @brief Returns true ifestá vacía o si los pointers son nulos.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::Null(void) const
   {
@@ -282,7 +282,7 @@ bool TritrizPtrBase<MatrizPtr>::Null(void) const
       return (*this)[0].Null();
   }
 
-//! @brief Devuelve verdadero si está vacía o si tiene algún null pointer.
+//! @brief Returns true ifestá vacía o si tiene algún null pointer.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::HasNull(void) const
   {
@@ -311,7 +311,7 @@ void TritrizPtrBase<MatrizPtr>::clearAll(void)
   }
 
 
-//! @brief Devuelve verdadero si el único índice que varía es el I.
+//! @brief Returns true ifel único índice que varía es el I.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsFilaI(void) const
   {
@@ -319,7 +319,7 @@ bool TritrizPtrBase<MatrizPtr>::EsFilaI(void) const
     return true;
   }
 
-//! @brief Devuelve verdadero si el único índice que varía es el J.
+//! @brief Returns true ifel único índice que varía es el J.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsFilaJ(void) const
   {
@@ -327,7 +327,7 @@ bool TritrizPtrBase<MatrizPtr>::EsFilaJ(void) const
     return true;
   }
 
-//! @brief Devuelve verdadero si el único índice que varía es el K.
+//! @brief Returns true ifel único índice que varía es el K.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsFilaK(void) const
   {
@@ -335,27 +335,27 @@ bool TritrizPtrBase<MatrizPtr>::EsFilaK(void) const
     return true;
   }
 
-//! @brief Devuelve verdadero si los indices que varían son los J y K.
+//! @brief Returns true iflos indices que varían son los J y K.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsCapaICte(void) const
   { return (this->GetCapas()==1); }
 
-//! @brief Devuelve verdadero si los indices que varían son los I y K.
+//! @brief Returns true iflos indices que varían son los I y K.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsCapaJCte(void) const
   { return (this->getNumFilas()==1); }
 
-//! @brief Devuelve verdadero si los indices que varían son los I y J.
+//! @brief Returns true iflos indices que varían son los I y J.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsCapaKCte(void) const
   { return (this->getNumCols()==1); }
 
-//! @brief Devuelve la capa cuyo índice se pasa como parámetro.
+//! @brief Return the capa cuyo índice se pasa como parámetro.
 template <class MatrizPtr>
 const MatrizPtr &TritrizPtrBase<MatrizPtr>::operator()(const size_t &capa) const
   { return (*this)[capa-1]; }
 
-//! @brief Devuelve la capa cuyo índice se pasa como parámetro.
+//! @brief Return the capa cuyo índice se pasa como parámetro.
 template <class MatrizPtr>
 MatrizPtr &TritrizPtrBase<MatrizPtr>::operator()(const size_t &capa)
   { return (*this)[capa-1]; }

@@ -171,7 +171,7 @@ const Triedro3d *XC::InteractionDiagram::BuscaPtrTriedro(const Pos3d &p) const
     return retval;
   }
 
-//! @brief Devuelve la intersección de la semirrecta que une el origen (0,0,0) y el
+//! @brief Return the intersección de la semirrecta que une el origen (0,0,0) y el
 //! el punto p con el diagrama de interacción.
 GeomObj::list_Pos3d XC::InteractionDiagram::get_interseccion(const Pos3d &p) const
   {
@@ -247,7 +247,7 @@ Pos3d XC::InteractionDiagram::getIntersection(const Pos3d &esf_d) const
     return retval;    
   }
 
-//! @brief Devuelve el factor de capacidad para la terna de esfuerzos que se pasan como parámetro.
+//! @brief Returns the factor de capacidad para la terna de esfuerzos que se pasan como parámetro.
 double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
   {
     double retval= 1e6;

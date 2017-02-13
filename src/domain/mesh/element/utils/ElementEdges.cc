@@ -62,7 +62,7 @@ void XC::ElementEdges::setPtrs(Domain *theDomain, const ID &theElementTags, cons
       }
   }
 
-//! @brief Devuelve un iterador al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns an iterator al elemento cuyo tag se pasa como parámetro.
 XC::ElementEdges::iterator XC::ElementEdges::find(const int &tag)
   {
     iterator retval= end();
@@ -72,7 +72,7 @@ XC::ElementEdges::iterator XC::ElementEdges::find(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve un iterador al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns an iterator al elemento cuyo tag se pasa como parámetro.
 XC::ElementEdges::const_iterator XC::ElementEdges::find(const int &tag) const
   {
     const_iterator retval= end();
@@ -83,8 +83,8 @@ XC::ElementEdges::const_iterator XC::ElementEdges::find(const int &tag) const
   }
 
 
-//! @brief Devuelve el índice el elemento en el vector,
-//! si no lo encuentra devuelve -1.
+//! @brief Returns the índice el elemento en el vector,
+//! si no lo encuentra returns -1.
 //XXX: Funciona mal si el elemento aparece más de una vez en el vector.
 int XC::ElementEdges::getLocElement(const Element *ptr) const
   {

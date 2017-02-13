@@ -61,7 +61,7 @@ XC::InteractionDiagram2d::InteractionDiagram2d(const Poligono2d &pts)
 XC::InteractionDiagram2d *XC::InteractionDiagram2d::clon(void) const
   { return new InteractionDiagram2d(*this); }
 
-//! @brief Devuelve la intersección de la semirrecta que une el origen (0,0,0) y el
+//! @brief Return the intersección de la semirrecta que une el origen (0,0,0) y el
 //! el punto p con el diagrama de interacción.
 Pos2d XC::InteractionDiagram2d::get_interseccion(const Pos2d &p) const
   {
@@ -103,7 +103,7 @@ void XC::InteractionDiagram2d::Simplify(void)
 Pos2d XC::InteractionDiagram2d::getIntersection(const Pos2d &esf_d) const
   { return get_interseccion(esf_d); }
 
-//! @brief Devuelve el factor de capacidad para la terna de esfuerzos que se pasan como parámetro.
+//! @brief Returns the factor de capacidad para la terna de esfuerzos que se pasan como parámetro.
 double XC::InteractionDiagram2d::FactorCapacidad(const Pos2d &esf_d) const
   {
     double retval= 1e6;

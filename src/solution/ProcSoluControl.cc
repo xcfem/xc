@@ -107,7 +107,7 @@ const XC::SoluMethod *XC::ProcSoluControl::getSoluMethod(const std::string &cod)
 XC::SoluMethod *XC::ProcSoluControl::getSoluMethod(const std::string &cod)
   { return solu_methods.getSoluMethod(cod); }
 
-//! @brief Devuelve todo a su estado original.
+//! @brief Returns todo a su estado original.
 void XC::ProcSoluControl::revertToStart(void)
   {
     getDomain()->revertToStart();

@@ -276,14 +276,14 @@ int XC::StaticDomainDecompositionAnalysis::domainChanged(void)
   return 0;
 }    
 
-//! @brief Devuelve el número de ecuaciones externas.
+//! @brief Returns the número de ecuaciones externas.
 int XC::StaticDomainDecompositionAnalysis::getNumExternalEqn(void)
   {
     std::cerr << "XC::StaticDomainDecompositionAnalysis::getNumExternalEqn() - should never be called\n";
     return 0;
   }
 
-//! @brief Devuelve el número de ecuaciones internas.
+//! @brief Returns the número de ecuaciones internas.
 int XC::StaticDomainDecompositionAnalysis::getNumInternalEqn(void)
   {
     std::cerr << "XC::StaticDomainDecompositionAnalysis::getNumInternalEqn() - should never be called\n";
@@ -304,7 +304,7 @@ int XC::StaticDomainDecompositionAnalysis::computeInternalResponse(void)
     return 0;
   }
 
-//! @brief Forma la matriz de rigidez tangente.
+//! @brief Forma la tangent stiffness matrix.
 int XC::StaticDomainDecompositionAnalysis::formTangent(void)
   {
     std::cerr << "XC::StaticDomainDecompositionAnalysis::formTangent() - should never be called\n";
@@ -324,7 +324,7 @@ int XC::StaticDomainDecompositionAnalysis::formTangVectProduct(Vector &force)
   return 0;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::StaticDomainDecompositionAnalysis::getTangent(void)
   {
     static XC::Matrix errMatrix;
@@ -332,7 +332,7 @@ const XC::Matrix &XC::StaticDomainDecompositionAnalysis::getTangent(void)
     return errMatrix;
   }
 
-//! @brief Devuelve el vector residuo.
+//! @brief Returns the vector residuo.
 const XC::Vector &XC::StaticDomainDecompositionAnalysis::getResidual(void)
   {
     static XC::Vector errVector;

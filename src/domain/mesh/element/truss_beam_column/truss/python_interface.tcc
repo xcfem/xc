@@ -22,12 +22,12 @@
 //python_interface.tcc
 
 class_<XC::ProtoTruss, bases<XC::Element1D>, boost::noncopyable >("ProtoTruss", no_init)
-  .def("getDim", &XC::ProtoTruss::getNumDIM,"Devuelve la dimensión del espacio en el que se define el elemento (1, 2 ó 3).")
+  .def("getDim", &XC::ProtoTruss::getNumDIM,"Return the dimensión del espacio en el que se define el elemento (1, 2 ó 3).")
   .def("getMaterial",&XC::ProtoTruss::getMaterialRef,return_internal_reference<>(),"Returns element's material")
   ;
 
 class_<XC::TrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("TrussBase", no_init)
-  .def("getL", &XC::TrussBase::getL, return_value_policy<copy_const_reference>(),"Devuelve la longitud del elemento.")
+  .def("getL", &XC::TrussBase::getL, return_value_policy<copy_const_reference>(),"Return the longitud del elemento.")
    ;
 
 class_<XC::TrussSection , bases<XC::TrussBase>, boost::noncopyable >("TrussSection", no_init);

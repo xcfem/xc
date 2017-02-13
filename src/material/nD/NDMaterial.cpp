@@ -136,34 +136,34 @@ int XC::NDMaterial::setTrialStrainIncr(const Vector &v, const Vector &r)
      return -1;    
   }
 
-//! @brief Asigna el valor de la deformación inicial.
+//! @brief Asigna el valor de la initial deformation.
 void XC::NDMaterial::setInitialGeneralizedStrain(const Vector &)
   {
      std::cerr << "XC::NDMaterial::setInitialGeneralizedStrain -- subclass responsibility\n";
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::NDMaterial::getTangent(void) const
   {
      std::cerr << "XC::NDMaterial::getTangent -- subclass responsibility\n";
      return errMatrix;    
   }
 
-//! @brief Devuelve la tensión.
+//! @brief Return the tensión.
 const XC::Vector &XC::NDMaterial::getStress(void) const
   {
     std::cerr << "XC::NDMaterial::getStress -- subclass responsibility\n";
     return errVector;    
   }
 
-//! @brief Devuelve la deformación.
+//! @brief Return the deformación.
 const XC::Vector &XC::NDMaterial::getStrain(void) const
   {
     std::cerr << "XC::NDMaterial::getStrain -- subclass responsibility\n";
     return errVector;    
   }
 
-//! @brief Devuelve la deformación inicial.
+//! @brief Return the initial deformation.
 const XC::Vector &XC::NDMaterial::getInitialGeneralizedStrain(void) const
   {
     std::cerr << "XC::NDMaterial::getStrain -- subclass responsibility\n";

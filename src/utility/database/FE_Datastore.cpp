@@ -129,7 +129,7 @@ int XC::FE_Datastore::commitState(int commitTag)
     return res;
   }
 
-//! @brief Devuelve verdadero si el estado se salvó
+//! @brief Returns true ifel estado se salvó
 //" con anterioridad en la base de datos.
 bool XC::FE_Datastore::isSaved(int commitTag) const
   { return (savedStates.count(commitTag)>0); }

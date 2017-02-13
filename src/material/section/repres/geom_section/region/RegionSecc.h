@@ -64,11 +64,11 @@ class RegionSecc: public DiscretBase
     virtual ~RegionSecc(void) {}
 
     // inquiring functions
-    //! @brief Devuelve el número de celdas de la región.
+    //! @brief Returns the número de celdas de la región.
     virtual int getNumCells(void) const= 0;
-    //! @brief Devuelve el contenedor de celdas.
+    //! @brief Returns the contenedor de celdas.
     virtual const VectorCells &getCells(void) const= 0;
-    //! @brief Devuelve una copia de la region.
+    //! @brief Returns a copia de la region.
     virtual RegionSecc *getCopy(void) const= 0;
 
     virtual Poligono2d getPoligono(void) const;

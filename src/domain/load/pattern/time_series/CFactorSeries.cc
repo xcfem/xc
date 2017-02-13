@@ -71,7 +71,7 @@
 XC::CFactorSeries::CFactorSeries(int classTag,double theFactor)
   :TimeSeries(classTag), cFactor(theFactor) {}
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::CFactorSeries::getDbTagData(void) const
   {

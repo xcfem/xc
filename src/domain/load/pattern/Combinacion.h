@@ -51,7 +51,7 @@ class Combinacion: public ForceReprComponent
         void neg(void);
       public:
         sumando(const float &f= 1.0,LoadPattern *lp= NULL);
-        //! @brief Devuelve el factor que multiplica al sumando.
+        //! @brief Returns the factor que multiplica al sumando.
         const float &Factor(void) const;
         const LoadPattern *Caso(void) const;
         LoadPattern *Caso(void);

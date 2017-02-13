@@ -130,7 +130,7 @@ void  XC::NodalLoad::setDomain(Domain *newDomain)
 int XC::NodalLoad::getNodeTag(void) const
   { return myNode; }
 
-//! @brief Devuelve las componentes del vector fuerza.
+//! @brief Returns the componentes del vector fuerza.
 const XC::Vector &XC::NodalLoad::getForce(void) const
   {
     static Vector retval(3);
@@ -183,7 +183,7 @@ const XC::Vector &XC::NodalLoad::getForce(void) const
     return retval;
   }
 
-//! @brief Devuelve las componentes del vector fuerza.
+//! @brief Returns the componentes del vector fuerza.
 const XC::Vector &XC::NodalLoad::getMoment(void) const
   {
     static Vector retval(3);
@@ -258,7 +258,7 @@ void XC::NodalLoad::applyLoad(double loadFactor)
       myNodePtr->addUnbalancedLoad(load,1.0);
   } 
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::NodalLoad::getDbTagData(void) const
   {

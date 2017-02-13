@@ -79,11 +79,11 @@ void XC::BeamMecLoad::addElasticDeformations(const double &L,const CrossSectionP
     std::cerr << "addElasticDeformations no definida para secciones 3d." << std::endl;
   }
 
-//! @brief Devuelve la dimension del vector fuerza.
+//! @brief Return the dimension del vector fuerza.
 size_t XC::BeamMecLoad::getDimVectorFuerza(void) const
   { return 2; }
 
-//! @brief Devuelve la dimension del vector momento.
+//! @brief Return the dimension del vector momento.
 size_t XC::BeamMecLoad::getDimVectorMomento(void) const
   { return 1; }
 
@@ -139,7 +139,7 @@ const XC::Matrix &XC::BeamMecLoad::getGlobalVectors(const Matrix &localVectors) 
           }
       }
     else
-      std::cerr << "BeamMecLoad::getGlobalVectors; no existe apuntador al domain." << std::endl;
+      std::cerr << "BeamMecLoad::getGlobalVectors; pointer to domain is NULL." << std::endl;
     return retval;
   }
 

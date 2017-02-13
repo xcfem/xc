@@ -241,13 +241,13 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     double getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
     double getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
     
-    //! @brief Devuelve el momento de inercia polar respecto a G.
+    //! @brief Returns the momento de inercia polar respecto a G.
     inline double getIpolar(const double &factor= 1.0) const
       { return getIz(factor,yCDG)+getIy(factor,zCDG); }
-    //! @brief Devuelve el radio de giro respecto al eje paralelo al z que pasa por el CDG.
+    //! @brief Returns the radio de giro respecto al eje paralelo al z que pasa por el CDG.
     inline double getiz(const double factor= 1.0) const
       { return getIz(factor,yCDG)/getSumaAreas(factor); }
-    //! @brief Devuelve el radio de giro respecto al eje paralelo al y que pasa por el CDG.
+    //! @brief Returns the radio de giro respecto al eje paralelo al y que pasa por el CDG.
     inline double getiy(const double factor= 1.0) const
       { return getIy(factor,zCDG)/getSumaAreas(factor); }
     size_t nearest_fiber(const double &y,const double &z) const;

@@ -231,7 +231,7 @@ int XC::CrdTransf2d::computeElemtLengthAndOrient(void) const
     return 0;
   }
 
-//! @brief Devuelve los desplazamientos expresados en el sistema básico.
+//! @brief Returns the desplazamientos expresados en el sistema básico.
 const XC::Vector &XC::CrdTransf2d::getBasicTrialDisp(void) const
   {
     // determine global displacements
@@ -284,7 +284,7 @@ const XC::Vector &XC::CrdTransf2d::getBasicTrialDisp(void) const
     return ub;
   }
 
-//! @brief Devuelve los incrementos de desplazamiento expresados en el sistema básico.
+//! @brief Returns the incrementos de desplazamiento expresados en el sistema básico.
 const XC::Vector &XC::CrdTransf2d::getBasicIncrDisp(void) const
   {
     // determine global displacements
@@ -434,7 +434,7 @@ const XC::Vector &XC::CrdTransf2d::getBasicTrialAccel(void) const
     return ab;
   }
 
-//! @brief Devuelve el vector unitario i de los ejes locales del elemento
+//! @brief Returns the vector unitario i de los ejes locales del elemento
 //! en su posición inicial.
 const XC::Vector &XC::CrdTransf2d::getInitialI(void) const
   {
@@ -445,13 +445,13 @@ const XC::Vector &XC::CrdTransf2d::getInitialI(void) const
     return vectorI;
   }
 
-//! @brief Devuelve el vector unitario i de los ejes locales del elemento
+//! @brief Returns the vector unitario i de los ejes locales del elemento
 //! en su posición actual.
 const XC::Vector &XC::CrdTransf2d::getI(void) const
   { return getInitialI(); }
 
 
-//! @brief Devuelve el vector unitario j de los ejes locales del elemento
+//! @brief Returns the vector unitario j de los ejes locales del elemento
 //! en su posición inicial.
 const XC::Vector &XC::CrdTransf2d::getInitialJ(void) const
   {
@@ -462,12 +462,12 @@ const XC::Vector &XC::CrdTransf2d::getInitialJ(void) const
     return vectorJ;
   }
 
-//! @brief Devuelve el vector unitario j de los ejes locales del elemento
+//! @brief Returns the vector unitario j de los ejes locales del elemento
 //! en su posición actual.
 const XC::Vector &XC::CrdTransf2d::getJ(void) const
   { return getInitialJ(); }
 
-//| @brief Devuelve los vectores dirección de los ejes locales en la posición
+//| @brief Returns the vectores dirección de los ejes locales en la posición
 //! inicial del elemento.
 int XC::CrdTransf2d::getInitialLocalAxes(Vector &XAxis, Vector &YAxis) const
   {
@@ -476,7 +476,7 @@ int XC::CrdTransf2d::getInitialLocalAxes(Vector &XAxis, Vector &YAxis) const
     return 0;
   }
 
-//| @brief Devuelve los vectores dirección de los ejes locales en la posición
+//| @brief Returns the vectores dirección de los ejes locales en la posición
 //! actual del elemento.
 int XC::CrdTransf2d::getLocalAxes(Vector &XAxis, Vector &YAxis) const
   { return getInitialLocalAxes(XAxis,YAxis); }
@@ -497,7 +497,7 @@ XC::Matrix XC::CrdTransf2d::getLocalAxes(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Devuelve el punto expresado en coordenadas globales.
+//! @brief Returns the punto expresado en coordenadas globales.
 const XC::Vector &XC::CrdTransf2d::getPointGlobalCoordFromBasic(const double &xi) const
   {
     static Vector local_coord(2),global_coord(2);
@@ -507,7 +507,7 @@ const XC::Vector &XC::CrdTransf2d::getPointGlobalCoordFromBasic(const double &xi
     return global_coord;
   }
 
-//! @brief Devuelve la posición del nodo I.
+//! @brief Return the posición del nodo I.
 Pos2d XC::CrdTransf2d::getPosNodeI(void) const
   {
     Pos2d retval= nodeIPtr->getPosFinal2d();
@@ -517,7 +517,7 @@ Pos2d XC::CrdTransf2d::getPosNodeI(void) const
     return retval;
   }
 
-//! @brief Devuelve la posición del nodo J.
+//! @brief Return the posición del nodo J.
 Pos2d XC::CrdTransf2d::getPosNodeJ(void) const
   {
     Pos2d retval= nodeJPtr->getPosFinal2d();
@@ -534,7 +534,7 @@ Ref2d2d XC::CrdTransf2d::getLocalReference(void) const
     return Ref2d2d(getPosNodeI(),Vector2d(vI[0],vI[1]));
   }
 
-//! @brief Devuelve las coordenadas locales del punto a partir de las globales.
+//! @brief Returns the coordenadas locales del punto a partir de las globales.
 XC::Vector XC::CrdTransf2d::getPointLocalCoordFromGlobal(const Vector &xg) const
   {
     Ref2d2d ref= getLocalReference();
@@ -544,7 +544,7 @@ XC::Vector XC::CrdTransf2d::getPointLocalCoordFromGlobal(const Vector &xg) const
     return retval;  
   }
 
-//! @brief Devuelve los puntos expresados en coordenadas globales.
+//! @brief Returns the puntos expresados en coordenadas globales.
 const XC::Matrix &XC::CrdTransf2d::getPointsGlobalCoordFromBasic(const Vector &basicCoords) const
   {
     static Matrix retval;
@@ -560,7 +560,7 @@ const XC::Matrix &XC::CrdTransf2d::getPointsGlobalCoordFromBasic(const Vector &b
     return retval;
   }
 
-//! @brief Devuelve el vector expresado en coordenadas globales.
+//! @brief Returns the vector expresado en coordenadas globales.
 const XC::Vector &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Vector &localCoords) const
   {
     static XC::Vector retval(2);
@@ -570,7 +570,7 @@ const XC::Vector &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Vector &l
     return retval;
   }
 
-//! @brief Devuelve los vectores expresados en coordenadas globales.
+//! @brief Returns the vectores expresados en coordenadas globales.
 const XC::Matrix &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Matrix &localCoords) const
   {
     static Matrix retval;
@@ -585,7 +585,7 @@ const XC::Matrix &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Matrix &l
     return retval;
   }
 
-//! @brief Devuelve el vector expresado en coordenadas locales.
+//! @brief Returns the vector expresado en coordenadas locales.
 const XC::Vector &XC::CrdTransf2d::getVectorLocalCoordFromGlobal(const Vector &globalCoords) const
   {
     static XC::Vector retval(2);
@@ -594,7 +594,7 @@ const XC::Vector &XC::CrdTransf2d::getVectorLocalCoordFromGlobal(const Vector &g
     return retval;
   }
 
-//! @brief Devuelve las coordenadas de los nodos.
+//! @brief Returns the coordenadas de los nodos.
 const XC::Matrix &XC::CrdTransf2d::getCooNodos(void) const
   {
     static Matrix retval;
@@ -609,7 +609,7 @@ const XC::Matrix &XC::CrdTransf2d::getCooNodos(void) const
     return retval;
   }
 
-//! @brief Devuelve puntos distribuidos entre los nodos extremos.
+//! @brief Returns puntos distribuidos entre los nodos extremos.
 const XC::Matrix &XC::CrdTransf2d::getCooPuntos(const size_t &ndiv) const
   {
     const Pos3d p0= nodeIPtr->getPosInicial3d();
@@ -627,7 +627,7 @@ const XC::Matrix &XC::CrdTransf2d::getCooPuntos(const size_t &ndiv) const
     return retval;
   }
 
-//! @brief Devuelve el punto correspondiente a la coordenada 0<=xrel<=1.
+//! @brief Returns the punto correspondiente a la coordenada 0<=xrel<=1.
 const XC::Vector &XC::CrdTransf2d::getCooPunto(const double &xrel) const
   {
     const Pos3d p0= nodeIPtr->getPosInicial3d();

@@ -150,7 +150,7 @@ int XC::Element::setRayleighDampingFactors(const RayleighDampingFactors &rF) con
     return 0;
   }
 
-//! @brief Devuelve la dimensión del elemento.
+//! @brief Return the dimensión del elemento.
 size_t XC::Element::getDimension(void) const
   {
     std::cerr << "Element::getDimension no implementada para '"
@@ -198,7 +198,7 @@ void XC::Element::compute_damping_matrix(Matrix &theMatrix) const
       theMatrix.addMatrix(1.0, Kc, rayFactors.getBetaKc());
   }
 
-//! @brief Devuelve la matriz de amortiguamiento.
+//! @brief Return the matriz de amortiguamiento.
 const XC::Matrix &XC::Element::getDamp(void) const
   {
     if(index == -1)
@@ -212,7 +212,7 @@ const XC::Matrix &XC::Element::getDamp(void) const
   }
 
 
-//! @brief Devuelve la matriz de masas.
+//! @brief Return the matriz de masas.
 const XC::Matrix &XC::Element::getMass(void) const
   {
     if(index  == -1)
@@ -224,7 +224,7 @@ const XC::Matrix &XC::Element::getMass(void) const
     return theMatrix;
   }
 
-//! @brief Devuelve la acción del elemento sobre los nodos Forma la matriz de amortiguamiento.
+//! @brief Return the acción del elemento sobre los nodos Forma la matriz de amortiguamiento.
 const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
   {
     if(index == -1)
@@ -282,7 +282,7 @@ const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
     return theVector;
   }
 
-//! @brief Devuelve la fuerza generalizada del elemento sobre el nodo cuyo
+//! @brief Return the fuerza generalizada del elemento sobre el nodo cuyo
 //! índice se pasa como parámetro.
 const XC::Vector &XC::Element::getNodeResistingComponents(const size_t &iNod,const Vector &rf) const
   {
@@ -294,7 +294,7 @@ const XC::Vector &XC::Element::getNodeResistingComponents(const size_t &iNod,con
     return retval; 
   }
 
-//! @brief Devuelve la fuerza generalizada del elemento sobre el nodo cuyo
+//! @brief Return the fuerza generalizada del elemento sobre el nodo cuyo
 //! índice se pasa como parámetro.
 const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
   {
@@ -302,7 +302,7 @@ const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
     return getNodeResistingComponents(iNod,rf);
   }
 
-//! @brief Devuelve la fuerza generalizada (incluyendo fuerzas de inercia)
+//! @brief Return the fuerza generalizada (incluyendo fuerzas de inercia)
 //! del elemento sobre el nodo cuyo índice se pasa como parámetro.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const size_t &iNod) const
   {
@@ -310,7 +310,7 @@ const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const size_t &iNo
     return getNodeResistingComponents(iNod,rf);
   }
 
-//! @brief Devuelve la fuerza generalizada del elemento sobre el nodo al
+//! @brief Return the fuerza generalizada del elemento sobre el nodo al
 //! que apunta el parámetro.
 const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
   {
@@ -319,7 +319,7 @@ const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
     return getNodeResistingForce(iNodo);
   }
 
-//! @brief Devuelve la fuerza generalizada (incluyendo fuerzas de inercia) del elemento sobre el nodo al
+//! @brief Return the fuerza generalizada (incluyendo fuerzas de inercia) del elemento sobre el nodo al
 //! que apunta el parámetro.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNod) const
   {
@@ -328,7 +328,7 @@ const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNo
     return getNodeResistingForceIncInertia(iNodo);
   }
 
-//! @brief Devuelve la fuerza estática equivalente para el modo
+//! @brief Return the fuerza estática equivalente para el modo
 //! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Element::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
@@ -339,7 +339,7 @@ XC::Vector XC::Element::getEquivalentStaticLoad(int mode,const double &accel_mod
     return retval;
   }
 
-//! @brief Devuelve la fuerza estática equivalente en cada nodo para el modo
+//! @brief Return the fuerza estática equivalente en cada nodo para el modo
 //! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Matrix XC::Element::getEquivalentStaticNodalLoads(int mode,const double &accel_mode) const
   {
@@ -611,7 +611,7 @@ XC::MEDGaussModel XC::Element::getMEDGaussModel(void) const
     return retval;
   }
 
-//! @brief Devuelve los nodos del borde (o arista) del elemento
+//! @brief Returns the nodos del borde (o arista) del elemento
 //! cuyo índice se pasa como parámetro.
 XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
   {
@@ -622,7 +622,7 @@ XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
     return retval;
   }
 
-//! @brief Devuelve el borde (o arista) del elemento
+//! @brief Returns the borde (o arista) del elemento
 //! que tiene por extremos los nodos que se pasan como parámetros.
 int XC::Element::getEdgeNodes(const Node *,const Node *) const
   {
@@ -632,7 +632,7 @@ int XC::Element::getEdgeNodes(const Node *,const Node *) const
     return -1;
   }
 
-//! @brief Devuelve el borde del elemento
+//! @brief Returns the borde del elemento
 //! que tiene por extremos los nodos que se pasan como parámetros.
 int XC::Element::getEdgeNodes(const int &iN1,const int &iN2) const
   {
@@ -642,7 +642,7 @@ int XC::Element::getEdgeNodes(const int &iN1,const int &iN2) const
     return getEdgeNodes(n1,n2);
   }
  
-//! @brief Devuelve los bordes del elemento
+//! @brief Returns the bordes del elemento
 //! que tienen por extremo el nodo being passed as parameter.
 XC::ID XC::Element::getEdgesNode(const Node *) const
   {
@@ -653,7 +653,7 @@ XC::ID XC::Element::getEdgesNode(const Node *) const
     return retval;
   }
 
-//! @brief Devuelve los bordes del elemento que tienen ambos extremos
+//! @brief Returns the bordes del elemento que tienen ambos extremos
 //! en el conjunto de nodos being passed as parameter.
 std::set<int> XC::Element::getEdgesNodes(const NodePtrSet &nodos) const
   {
@@ -673,7 +673,7 @@ std::set<int> XC::Element::getEdgesNodes(const NodePtrSet &nodos) const
     return retval;
   }
 
-//! @brief Devuelve los bordes del elemento
+//! @brief Returns the bordes del elemento
 //! que tienen por extremo el nodo cuyo tag se pasa como parámetro.
 XC::ID XC::Element::getEdgesNodeByTag(const int &iN) const
   {
@@ -682,7 +682,7 @@ XC::ID XC::Element::getEdgesNodeByTag(const int &iN) const
     return getEdgesNode(n);
   }
  
-//! @brief Devuelve los índices locales de los nodos del elemento
+//! @brief Returns the índices locales de los nodos del elemento
 //! situados sobre el borde (o arista) being passed as parameters.
 XC::ID XC::Element::getLocalIndexNodesEdge(const size_t &i) const
   {
@@ -693,7 +693,7 @@ XC::ID XC::Element::getLocalIndexNodesEdge(const size_t &i) const
     return retval;
   }
 
-//! @brief Devuelve los conjuntos a los que pertenece este elemento.
+//! @brief Returns the conjuntos a los que pertenece este elemento.
 std::set<XC::SetBase *> XC::Element::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -745,19 +745,19 @@ int XC::Element::setMaterialParameter(Material *theMaterial,const std::vector<st
 std::vector<int> XC::Element::getIdxNodes(void) const
   { return getNodePtrs().getIdx(); }
 
-//! @brief Devuelve el valor máximo de la coordenada i de los nodos del elemento.
+//! @brief Returns the valor máximo de la coordenada i de los nodos del elemento.
 double XC::Element::MaxCooNod(int icoo) const
   { return getNodePtrs().MaxCooNod(icoo); }
 
-//! @brief Devuelve el valor mínimo de la coordenada i de los nodos del elemento.
+//! @brief Returns the valor mínimo de la coordenada i de los nodos del elemento.
 double XC::Element::MinCooNod(int icoo) const
   { return getNodePtrs().MinCooNod(icoo); }
 
-//! @brief Devuelve las coordenadas de los nodos.
+//! @brief Returns the coordenadas de los nodos.
 const XC::Matrix &XC::Element::getCooNodos(void) const
   { return getNodePtrs().getCoordinates(); }
 
-//! @brief Devuelve las coordenadas de los nodos.
+//! @brief Returns the coordenadas de los nodos.
 std::list<Pos3d> XC::Element::getPosNodos(bool initialGeometry) const
   { return getNodePtrs().getPosiciones(initialGeometry); }
 
@@ -772,12 +772,12 @@ XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
   }
 
 
-//! @brief Devuelve la posición del nodo cuyo índice se
+//! @brief Return the posición del nodo cuyo índice se
 //! pasa como parámetro.
 Pos3d XC::Element::getPosNodo(const size_t &i,bool initialGeometry) const
   { return getNodePtrs().getPosNodo(i,initialGeometry); }
 
-//! @brief Devuelve puntos distribuidos en el elemento.
+//! @brief Returns puntos distribuidos en el elemento.
 TritrizPos3d XC::Element::getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)
   {
     TritrizPos3d retval;
@@ -804,12 +804,12 @@ void XC::Element::calculaLongsTributarias(bool initialGeometry) const
               << std::endl;
   }
 
-//! @brief Devuelve la longitud tributaria correspondiente al nodo que se pasa
+//! @brief Return the longitud tributaria correspondiente to the node que se pasa
 //! como parámetro.
 double XC::Element::getLongTributaria(const Node *) const
   { return 0; }
 
-//! @brief Devuelve la longitud tributaria correspondiente al nodo cuyo tag se pasa
+//! @brief Return the longitud tributaria correspondiente to the node cuyo tag se pasa
 //! como parámetro.
 double XC::Element::getLongTributariaByTag(const int &tag) const
   {
@@ -826,12 +826,12 @@ void XC::Element::calculaAreasTributarias(bool initialGeometry) const
               << std::endl;
   }
 
-//! @brief Devuelve el área tributaria correspondiente al nodo que se pasa
+//! @brief Returns the área tributaria correspondiente to the node que se pasa
 //! como parámetro.
 double XC::Element::getAreaTributaria(const Node *) const
   { return 0; }
 
-//! @brief Devuelve el área tributaria correspondiente al nodo cuyo tag se pasa
+//! @brief Returns the área tributaria correspondiente to the node cuyo tag se pasa
 //! como parámetro.
 double XC::Element::getAreaTributariaByTag(const int &tag) const
   {
@@ -848,12 +848,12 @@ void XC::Element::calculaVolsTributarios(bool initialGeometry) const
               << std::endl;
   }
 
-//! @brief Devuelve el volumen tributario correspondiente al nodo que se pasa
+//! @brief Returns the volumen tributario correspondiente to the node que se pasa
 //! como parámetro.
 double XC::Element::getVolTributario(const Node *) const
   { return 0; }
 
-//! @brief Devuelve el volumen tributario correspondiente al nodo cuyo tag se pasa
+//! @brief Returns the volumen tributario correspondiente to the node cuyo tag se pasa
 //! como parámetro.
 double XC::Element::getVolTributarioByTag(const int &tag) const
   {
@@ -861,7 +861,7 @@ double XC::Element::getVolTributarioByTag(const int &tag) const
     return getVolTributario(nod);
   }
 
-//! @brief Devuelve el cuadrado de la distancia desde el elemento al punto que
+//! @brief Returns the cuadrado de la distancia desde el elemento al punto que
 //! se pasa como parámetro.
 double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
   {
@@ -870,7 +870,7 @@ double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Devuelve la distancia desde el elemento al punto que
+//! @brief Return the distancia desde el elemento al punto que
 //! se pasa como parámetro.
 double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
   {
@@ -879,7 +879,7 @@ double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Devuelve el cuadrado de la distancia desde el elemento al punto que
+//! @brief Returns the cuadrado de la distancia desde el elemento al punto que
 //! se pasa como parámetro.
 double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
   {
@@ -888,7 +888,7 @@ double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Devuelve la distancia desde el elemento al punto que
+//! @brief Return the distancia desde el elemento al punto que
 //! se pasa como parámetro.
 double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
   {
@@ -897,7 +897,7 @@ double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Devuelve las coordenadas del centro de gravedad del elemento.
+//! @brief Returns the coordenadas del centro de gravedad del elemento.
 Pos3d XC::Element::getPosCdg(bool initialGeometry) const
   {
     std::cerr << "getPosCdg no implementada para los elementos de tipo: "
@@ -906,7 +906,7 @@ Pos3d XC::Element::getPosCdg(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Devuelve las coordenadas del centro de gravedad del elemento.
+//! @brief Returns the coordenadas del centro de gravedad del elemento.
 XC::Vector XC::Element::getCooCdg(bool initialGeometry) const
   {
     const Pos3d cdg= getPosCdg(initialGeometry);

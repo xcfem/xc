@@ -172,7 +172,7 @@ XC::NodeLocker *XC::NodeLockers::getCurrentNodeLockerPtr(void)
 const XC::NodeLocker *XC::NodeLockers::getCurrentNodeLockerPtr(void) const
   { return busca_node_locker(code); }
 
-//! @brief Devuelve el domain.
+//! @brief Returns the domain.
 XC::Domain *XC::NodeLockers::getDomain(void)
   {
     Domain *retval= nullptr;
@@ -184,7 +184,7 @@ XC::Domain *XC::NodeLockers::getDomain(void)
     return retval;
   }
 
-//! @brief Devuelve el domain.
+//! @brief Returns the domain.
 const XC::Domain *XC::NodeLockers::getDomain(void) const
   {
     const Domain *retval= nullptr;
@@ -196,7 +196,7 @@ const XC::Domain *XC::NodeLockers::getDomain(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::NodeLockers::getDbTagData(void) const
   {

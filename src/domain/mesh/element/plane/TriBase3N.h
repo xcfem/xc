@@ -95,7 +95,7 @@ XC::TritrizPtrElem XC::TriBase3N<PhysProp>::put_on_mesh(const XC::TritrizPtrNod 
     return retval;
   }
 
-//! @brief Devuelve los nodos de un lado del elemento.
+//! @brief Returns the nodos de un lado del elemento.
 template <class PhysProp>
 XC::Element::NodesEdge XC::TriBase3N<PhysProp>::getNodesEdge(const size_t &i) const
   {
@@ -113,7 +113,7 @@ XC::Element::NodesEdge XC::TriBase3N<PhysProp>::getNodesEdge(const size_t &i) co
     return retval;    
   }
 
-//! @brief Devuelve el borde del elemento
+//! @brief Returns the borde del elemento
 //! que tiene por extremos los nodos que se pasan como parámetros.
 template <class PhysProp>
 int XC::TriBase3N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
@@ -137,7 +137,7 @@ int XC::TriBase3N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
     return retval;
   }
 
-//! @brief Devuelve los índices locales de los nodos del elemento
+//! @brief Returns the índices locales de los nodos del elemento
 //! situados sobre el borde (o arista) being passed as parameters.
 template <class PhysProp>
 ID XC::TriBase3N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const

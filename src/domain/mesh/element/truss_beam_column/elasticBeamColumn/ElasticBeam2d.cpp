@@ -199,11 +199,11 @@ XC::Element* XC::ElasticBeam2d::getCopy(void) const
 XC::ElasticBeam2d::~ElasticBeam2d(void)
   { if(theCoordTransf) delete theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 XC::CrdTransf *XC::ElasticBeam2d::getCoordTransf(void)
   { return theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 const XC::CrdTransf *XC::ElasticBeam2d::getCoordTransf(void) const
   { return theCoordTransf; }
 
@@ -529,7 +529,7 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForce(void) const
     return P;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::ElasticBeam2d::getDbTagData(void) const
   {

@@ -106,7 +106,7 @@ bool XC::EigenSOE::setSolver(EigenSolver *newSolver)
     return retval;
   }
 
-//! @brief Devuelve the número de ecuaciones.
+//! @brief Returns the número de ecuaciones.
 int XC::EigenSOE::getNumEqn(void) const
   { return size; }
 
@@ -161,66 +161,66 @@ void XC::EigenSOE::zeroM(void)
     return;
   }
 
-//! @brief Devuelve the autovector que corresponde al modo being passed as parameter.
+//! @brief Returns the autovector que corresponde al modo being passed as parameter.
 const XC::Vector &XC::EigenSOE::getEigenvector(int mode) const
   { return theSolver->getEigenvector(mode); }
 
-//! @brief Devuelve the autovector que corresponde al modo being passed as parameter
+//! @brief Returns the autovector que corresponde al modo being passed as parameter
 //! normalizado de modo que la componente máxima valga 1 (norma_infinito).
 XC::Vector XC::EigenSOE::getNormalizedEigenvector(int mode) const
   { return theSolver->getNormalizedEigenvector(mode); }
 
-//! @brief Devuelve una matriz con los eigenvectors calculados colocados
+//! @brief Returns a matriz con los eigenvectors calculados colocados
 //! por columnas.
 XC::Matrix XC::EigenSOE::getEigenvectors(void) const
   { return theSolver->getEigenvectors(); }
 
-//! @brief Devuelve una matriz con los eigenvectors normalizados colocados
+//! @brief Returns a matriz con los eigenvectors normalizados colocados
 //! por columnas (norma_infinito).
 XC::Matrix XC::EigenSOE::getNormalizedEigenvectors(void) const
   { return theSolver->getNormalizedEigenvectors(); }
 
-//! @brief Devuelve the autovalor que corresponde al modo being passed as parameter.
+//! @brief Returns the autovalor que corresponde al modo being passed as parameter.
 const double &XC::EigenSOE::getEigenvalue(int mode) const
   { return theSolver->getEigenvalue(mode); }
 
-//! @brief Devuelve la pulsación correspondiente al modo
+//! @brief Return the pulsación correspondiente al modo
 //! being passed as parameter.
 double XC::EigenSOE::getPulsacion(int mode) const
   { return sqrt(getEigenvalue(mode)); }
 
-//! @brief Devuelve the período correspondiente al modo
+//! @brief Returns the período correspondiente al modo
 //! being passed as parameter.
 double XC::EigenSOE::getPeriodo(int mode) const
   { return 2.0*M_PI/getPulsacion(mode); }
 
-//! @brief Devuelve la frecuencia correspondiente al modo
+//! @brief Return the frecuencia correspondiente al modo
 //! being passed as parameter.
 double XC::EigenSOE::getFrecuencia(int mode) const
   { return 1./getPeriodo(mode); }
 
-//! @brief Devuelve un vector con los eigenvalues calculados.
+//! @brief Returns a vector con los eigenvalues calculados.
 XC::Vector XC::EigenSOE::getEigenvalues(void) const
   { return theSolver->getEigenvalues(); }
 
-//! @brief Devuelve un vector con las pulsaciones calculadas.
+//! @brief Returns a vector con las pulsaciones calculadas.
 XC::Vector XC::EigenSOE::getPulsaciones(void) const
   { return theSolver->getPulsaciones(); }
 
 
-//! @brief Devuelve un vector con las periodos calculados.
+//! @brief Returns a vector con las periodos calculados.
 XC::Vector XC::EigenSOE::getPeriodos(void) const
   { return theSolver->getPeriodos(); }
 
-//! @brief Devuelve un vector con las frecuencias calculadas.
+//! @brief Returns a vector con las frecuencias calculadas.
 XC::Vector XC::EigenSOE::getFrecuencias(void) const
   { return theSolver->getFrecuencias(); }
 
-//! @brief Devuelve the número de eigenvalues que se han calculado.
+//! @brief Returns the número de eigenvalues que se han calculado.
 const int &XC::EigenSOE::getNumModes(void) const
   { return theSolver->getNumModes(); }
 
-//! @brief Devuelve the factor de participación modal
+//! @brief Returns the factor de participación modal
 //! correspondiente al modo i.
 double XC::EigenSOE::getModalParticipationFactor(int mode) const
   {
@@ -241,7 +241,7 @@ double XC::EigenSOE::getModalParticipationFactor(int mode) const
     return num/denom;
   }
 
-//! @brief Devuelve los factores de participación modal.
+//! @brief Returns the factores de participación modal.
 XC::Vector XC::EigenSOE::getModalParticipationFactors(void) const
   {
     const int nm= getNumModes();
@@ -251,12 +251,12 @@ XC::Vector XC::EigenSOE::getModalParticipationFactors(void) const
     return retval;
   }
 
-//! @brief Devuelve the factor de distribución correspondiente al modo
+//! @brief Returns the factor de distribución correspondiente al modo
 //! being passed as parameter.
 XC::Vector XC::EigenSOE::getDistributionFactor(int mode) const
   { return getModalParticipationFactor(mode)*getEigenvector(mode); }
 
-//! @brief Devuelve una matriz con los factores de distribución
+//! @brief Returns a matriz con los factores de distribución
 //! calculados colocados por columnas.
 XC::Matrix XC::EigenSOE::getDistributionFactors(void) const
   {
@@ -279,7 +279,7 @@ XC::Matrix XC::EigenSOE::getDistributionFactors(void) const
     return retval;
   }
 
-//! @brief Devuelve la masa modal efectiva 
+//! @brief Return the masa modal efectiva 
 //! correspondiente al modo i.
 double XC::EigenSOE::getEffectiveModalMass(int mode) const
   {
@@ -294,7 +294,7 @@ double XC::EigenSOE::getEffectiveModalMass(int mode) const
     return tau*p;
   }
 
-//! @brief Devuelve las masas modales efectivas.
+//! @brief Returns the masas modales efectivas.
 XC::Vector XC::EigenSOE::getEffectiveModalMasses(void) const
   {
     const int nm= getNumModes();
@@ -304,7 +304,7 @@ XC::Vector XC::EigenSOE::getEffectiveModalMasses(void) const
     return retval;
   }
 
-//! @brief Devuelve la masa total del modelo.
+//! @brief Return the masa total del modelo.
 double XC::EigenSOE::getTotalMass(void) const
   {
     const size_t sz= massMatrix.size1();
@@ -313,7 +313,7 @@ double XC::EigenSOE::getTotalMass(void) const
     return retval;
   }
 
-//! @brief Devuelve la fuerza estática equivalente para the modo
+//! @brief Return the fuerza estática equivalente para the modo
 //! being passed as parameter.
 XC::Vector XC::EigenSOE::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {

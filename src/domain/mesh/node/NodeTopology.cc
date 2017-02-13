@@ -46,7 +46,7 @@ std::set<XC::Element *> XC::getElementosEntreNodos(Node &n1, Node &n2)
     return retval;
   }
 
-//! @brief Devuelve los bordes de elemento que tienen por extremos
+//! @brief Returns the bordes de elemento que tienen por extremos
 //! a ambos nodos.
 XC::ElementEdges XC::getElementEdgesEntreNodos(Node *n1, Node *n2)
   {
@@ -75,7 +75,7 @@ std::set<XC::Element *> XC::getConnectedElements(const NodePtrSet &nodos)
       }
     return retval;
   }
-//! @brief Devuelve los bordes de elemento que tienen ambos extremos
+//! @brief Returns the bordes de elemento que tienen ambos extremos
 //! en el conjunto de nodos being passed as parameter.
 XC::ElementEdges XC::getElementEdgesEntreNodos(const NodePtrSet &nodos)
   {
@@ -91,7 +91,7 @@ XC::ElementEdges XC::getElementEdgesEntreNodos(const NodePtrSet &nodos)
     return retval;
   }
 
-//! @brief Devuelve verdadero si los pointers to node del vector
+//! @brief Returns true iflos pointers to node del vector
 //! están contenidos en el conjunto being passed as parameter.
 bool XC::in(const NodePtrSet &nodos,const std::vector<const Node *> &nodos_edge)
   {

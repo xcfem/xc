@@ -48,7 +48,7 @@ XC::Edge::Edge(Preprocessor *m,const size_t &nd)
 //! @brief Constructor.
 //! @param nombre: Identificador del objeto.
 //! @param i: Índice para gráficos.
-//! @param m: Apuntador al preprocesador.
+//! @param m: Pointer to preprocesador.
 XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : EntMdlr(nombre,0,m), ndiv(nd) {}
 
@@ -63,7 +63,7 @@ void XC::Edge::actualiza_topologia(void)
     if(P2()) P2()->inserta_linea(this);
   }
 
-//! @brief Devuelve un apuntador al punto inicial.
+//! @brief Returns a pointer to start point.
 XC::Pnt *XC::Edge::P1(void)
   {
     std::cerr << "Edge::P1; this function must be redefined on"
@@ -71,7 +71,7 @@ XC::Pnt *XC::Edge::P1(void)
     return nullptr;
   }
 
-//! @brief Devuelve un apuntador (constante) al punto inicial.
+//! @brief Returns a constant pointer to start point.
 const XC::Pnt *XC::Edge::P1(void) const
   {
     std::cerr << "Edge::P1; this function must be redefined on"
@@ -79,7 +79,7 @@ const XC::Pnt *XC::Edge::P1(void) const
     return nullptr;
   }
 
-//! @brief Devuelve un apuntador al punto inicial.
+//! @brief Returns a pointer to start point.
 XC::Pnt *XC::Edge::P2(void)
   {
     std::cerr << "Edge::P2; this function must be redefined on"
@@ -87,7 +87,7 @@ XC::Pnt *XC::Edge::P2(void)
     return nullptr;
   }
 
-//! @brief Devuelve un apuntador (constante) al punto final.
+//! @brief Returns a constant pointer to end point.
 const XC::Pnt *XC::Edge::P2(void) const
   {
     std::cerr << "Edge::P2; this function must be redefined on"
@@ -95,7 +95,7 @@ const XC::Pnt *XC::Edge::P2(void) const
     return nullptr;
   }
 
-//! @brief Devuelve verdadero si los puntos que se pasan como parámetro
+//! @brief Returns true iflos puntos que se pasan como parámetro
 //! son los extremos de la línea.
 bool XC::Edge::ExtremosEn(const Pnt *p1,const Pnt *p2) const
   {
@@ -153,39 +153,39 @@ void XC::Edge::divide(void)
     crea_puntos(posiciones);
   }
 
-//! @brief Devuelve un apuntador al nodo cuyos índices se pasan como parámetro.
+//! @brief Returns a pointer to nodo cuyos índices se pasan como parámetro.
 XC::Node *XC::Edge::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   { return EntMdlr::GetNodo(i,j,k); }
 
-//! @brief Devuelve un apuntador al nodo cuyos índices se pasan como parámetro.
+//! @brief Returns a pointer to nodo cuyos índices se pasan como parámetro.
 const XC::Node *XC::Edge::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   { return EntMdlr::GetNodo(i,j,k); }
 
-//! @brief Devuelve un apuntador al nodo cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to nodo cuyo índice is being passed as parameter.
 XC::Node *XC::Edge::GetNodo(const size_t &i)
   {  return const_cast<Node *>(static_cast<const Edge &>(*this).GetNodo(i)); }
 
-//! @brief Devuelve un apuntador al nodo cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to nodo cuyo índice is being passed as parameter.
 const XC::Node *XC::Edge::GetNodo(const size_t &i) const
   { return nodos.getAtI(i); }
 
-//! @brief Devuelve el nodo cuyo índice se pasa como parámetro empezando por el principio.
+//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el principio.
 XC::Node *XC::Edge::GetNodoDir(const size_t &i)
   { return GetNodo(i); }
 
-//! @brief Devuelve el nodo cuyo índice se pasa como parámetro empezando por el principio.
+//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el principio.
 const XC::Node *XC::Edge::GetNodoDir(const size_t &i) const
   { return GetNodo(i); }
 
-//! @brief Devuelve el nodo cuyo índice se pasa como parámetro empezando por el final.
+//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el final.
 XC::Node *XC::Edge::GetNodoInv(const size_t &i)
   { return GetNodo(NumNodos()-i+1); }
 
-//! @brief Devuelve el nodo cuyo índice se pasa como parámetro empezando por el final.
+//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el final.
 const XC::Node *XC::Edge::GetNodoInv(const size_t &i) const
   { return GetNodo(NumNodos()-i+1); }
 
-//! @brief Devuelve el primer nodo de la línea.
+//! @brief Returns the primer nodo de la línea.
 const XC::Node *XC::Edge::GetPrimerNodo(void) const
   { 
     const Node *retval= GetNodo(1);
@@ -198,7 +198,7 @@ const XC::Node *XC::Edge::GetPrimerNodo(void) const
     return retval;
   }
 
-//! @brief Devuelve el primer nodo de la línea.
+//! @brief Returns the primer nodo de la línea.
 XC::Node *XC::Edge::GetPrimerNodo(void)
   { 
     Node *retval= GetNodo(1);
@@ -211,7 +211,7 @@ XC::Node *XC::Edge::GetPrimerNodo(void)
     return retval;
   }
 
-//! @brief Devuelve el último nodo de la línea.
+//! @brief Returns the último nodo de la línea.
 const XC::Node *XC::Edge::GetUltimoNodo(void) const
   { 
     const Node *retval= GetNodoInv(1);
@@ -224,7 +224,7 @@ const XC::Node *XC::Edge::GetUltimoNodo(void) const
     return retval;
   }
 
-//! @brief Devuelve el último nodo de la línea.
+//! @brief Returns the último nodo de la línea.
 XC::Node *XC::Edge::GetUltimoNodo(void)
   { 
     Node *retval= GetNodoInv(1);
@@ -237,7 +237,7 @@ XC::Node *XC::Edge::GetUltimoNodo(void)
     return retval;
   }
 
-//! @brief Devuelve los identificadores de los nodos en sentido directo.
+//! @brief Returns the identificadores de los nodos en sentido directo.
 std::vector<int> XC::Edge::GetTagsNodosDir(void) const
   {
     const size_t nn= NumNodos();
@@ -247,7 +247,7 @@ std::vector<int> XC::Edge::GetTagsNodosDir(void) const
     return retval;
   }
 
-//! @brief Devuelve los identificadores de los nodos en sentido directo.
+//! @brief Returns the identificadores de los nodos en sentido directo.
 std::vector<int> XC::Edge::GetTagsNodosInv(void) const
   {
     const size_t nn= NumNodos();
@@ -257,7 +257,7 @@ std::vector<int> XC::Edge::GetTagsNodosInv(void) const
     return retval;
   }
 
-//! @brief Devuelve las posiciones de los nodos en sentido directo.
+//! @brief Returns the posiciones de los nodos en sentido directo.
 MatrizPos3d XC::Edge::GetPosNodosDir(void) const
   {
     const size_t nn= NumNodos();
@@ -267,7 +267,7 @@ MatrizPos3d XC::Edge::GetPosNodosDir(void) const
     return retval;
   }
 
-//! @brief Devuelve las posiciones de los nodos en sentido inverso.
+//! @brief Returns the posiciones de los nodos en sentido inverso.
 MatrizPos3d XC::Edge::GetPosNodosInv(void) const
   {
     const size_t nn= NumNodos();
@@ -277,7 +277,7 @@ MatrizPos3d XC::Edge::GetPosNodosInv(void) const
     return retval;
   }
 
-//! @brief Devuelve los nombres de las superficies que tocan a a línea.
+//! @brief Returns the nombres de las superficies que tocan a a línea.
 const std::string &XC::Edge::NombresSupsTocan(void) const
   {
     static std::string retval;
@@ -293,7 +293,7 @@ const std::string &XC::Edge::NombresSupsTocan(void) const
     return retval;
   }
 
-//! @brief Devuelve los lados homólogos a éste.
+//! @brief Returns the lados homólogos a éste.
 std::set<const XC::Edge *> XC::Edge::GetLadosHomologos(const std::set<const XC::Edge *> &lh) const
   {
     std::set<const Edge *> retval;
@@ -337,14 +337,14 @@ size_t XC::calcula_ndiv_lados(const std::set<const XC::Edge *> &lados)
     return nd;
   }
 
-//! @brief Devuelve verdadero si la línea toca a la superficie.
+//! @brief Returns true ifla línea toca a la superficie.
 bool XC::Edge::Toca(const Face &s) const
   {
     std::set<const Face *>::const_iterator i= sups_linea.find(&s);
     return (i!=sups_linea.end());
   }
 
-//! @brief Devuelve verdadero si la línea toca al cuerpo.
+//! @brief Returns true ifla línea toca al cuerpo.
 bool XC::Edge::Toca(const Body &b) const
   {
     for(std::set<const Face *>::const_iterator i= sups_linea.begin(); i!=sups_linea.end();i++)
@@ -352,15 +352,15 @@ bool XC::Edge::Toca(const Body &b) const
     return false;
   }
 
-//! @brief Devuelve verdadero el punto es un extremo de la línea.
+//! @brief Returns verdadero el punto es un extremo de la línea.
 bool XC::Edge::Extremo(const Pnt &p) const
   { return ((&p == P1()) || (&p == P2()));  }
 
-//! @brief Devuelve la lista de líneas que tocan al punto.
+//! @brief Return the lista de líneas que tocan al punto.
 std::set<const XC::Edge *> XC::GetLineasTocan(const Pnt &p)
   { return p.EdgesTocan(); }
 
-//! @brief Devuelve posiciones de los nodos lo largo de la línea.
+//! @brief Returns posiciones de los nodos lo largo de la línea.
 MatrizPos3d XC::Edge::get_pos_nodos(void) const
   { return get_posiciones(); }
 
@@ -371,7 +371,7 @@ void XC::Edge::crea_nodos_en_extremos(void)
       std::clog << "Creando nodos en extremos linea: '" << GetNombre() << "'...";   
     if(!P1())
       {
-	std::cerr << "Edge::crea_nodos_en_extremos; no está definido el punto inicial." << std::endl;
+	std::cerr << "Edge::crea_nodos_en_extremos; no está definido el start point." << std::endl;
         return;
       }
     else
@@ -379,11 +379,11 @@ void XC::Edge::crea_nodos_en_extremos(void)
 
     Node *nodo_p1= P1()->GetNodo(1,1,1);
     assert(nodo_p1);
-    nodos(1,1,1)= nodo_p1; //Nodo del punto inicial.
+    nodos(1,1,1)= nodo_p1; //Nodo del start point.
       
     if(!P2())
       {
-	std::cerr << "Edge::crea_nodos_en_extremos; no está definido el punto final." << std::endl;
+	std::cerr << "Edge::crea_nodos_en_extremos; no está definido el end point." << std::endl;
         return;
       }
     else
@@ -393,7 +393,7 @@ void XC::Edge::crea_nodos_en_extremos(void)
     assert(nodo_p2);
     const size_t filas= nodos.getNumFilas();
     const size_t cols= nodos.getNumCols();
-    nodos(1,filas,cols)= nodo_p2; //Nodo del punto final.
+    nodos(1,filas,cols)= nodo_p2; //Nodo del end point.
 
     if(verborrea>4)
      std::cerr << "Edge::crea_nodos_en_extremos(); creados." << std::endl;
@@ -454,7 +454,7 @@ void XC::Edge::genMesh(meshing_dir dm)
       std::clog << "hecho." << std::endl;
   }
 
-//! @brief Devuelve un vector tangente a la línea en el punto s
+//! @brief Returns a vector tangente a la línea en el punto s
 const XC::Vector &XC::Edge::getTang(const double &s) const
   {
     static XC::Vector retval(1);
@@ -462,7 +462,7 @@ const XC::Vector &XC::Edge::getTang(const double &s) const
     return retval;
   }
 
-//! @brief Devuelve los conjuntos a los que pertenece este «edge».
+//! @brief Returns the conjuntos a los que pertenece este «edge».
 std::set<XC::SetBase *> XC::Edge::get_sets(void) const
   {
     std::set<SetBase *> retval;

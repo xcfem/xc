@@ -70,7 +70,7 @@ XC::HingeRadauTwoBeamIntegration3d::HingeRadauTwoBeamIntegration3d(double e,
 XC::HingeRadauTwoBeamIntegration3d::HingeRadauTwoBeamIntegration3d(const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
   : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeRadauTwo3d,cts,lpi,lpj) {}
 
-//! @brief Devuelve la posición de las secciones en el vector xi.
+//! @brief Return the posición de las secciones en el vector xi.
 void XC::HingeRadauTwoBeamIntegration3d::getSectionLocations(int numSections, double L, double *xi) const
   {
     const double two3oneOverL = (2.0/3.0)/L;
@@ -83,7 +83,7 @@ void XC::HingeRadauTwoBeamIntegration3d::getSectionLocations(int numSections, do
       xi[i] = 0.0;
   }
 
-//! @brief Devuelve los pesos correspondientes a cada sección.
+//! @brief Returns the pesos correspondientes a cada sección.
 void XC::HingeRadauTwoBeamIntegration3d::getSectionWeights(int numSections, double L, double *wt) const
   {
     const double oneOverL = 1.0/L;

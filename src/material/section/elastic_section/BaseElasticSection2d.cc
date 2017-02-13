@@ -86,7 +86,7 @@ int XC::BaseElasticSection2d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! \brief Devuelve los parámetros estáticos de la sección.
+//! \brief Returns the parámetros estáticos de la sección.
 const XC::CrossSectionProperties2d &XC::BaseElasticSection2d::getCrossSectionProperties(void) const
   { return ctes_scc; }
 

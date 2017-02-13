@@ -51,7 +51,7 @@ class Eje: public EntGeomSection
     Eje(const std::string &nombre= "",GeomSection *m= NULL,const size_t &nd= 4);
   public:
     ~Eje(void);
-    //! @brief Devuelve la dimensión del objeto.
+    //! @brief Return the dimensión del objeto.
     inline virtual unsigned short int GetDimension(void) const
       { return 1; }
 
@@ -59,7 +59,7 @@ class Eje: public EntGeomSection
     virtual const Spot *P1(void) const;
     virtual Spot *P2(void);
     virtual const Spot *P2(void) const;
-    //! @brief Devuelve el número de vértices.
+    //! @brief Returns the número de vértices.
     virtual size_t NumVertices(void) const= 0;
 
     virtual const Spot *GetVertice(const size_t &i) const= 0;

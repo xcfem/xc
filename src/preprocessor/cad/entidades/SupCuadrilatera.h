@@ -45,7 +45,7 @@ class SupCuadrilatera: public Face
   public:
     SupCuadrilatera(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
     virtual SetEstruct *getCopy(void) const;
-    //! @brief Devuelve el número de vértices.
+    //! @brief Returns the número de vértices.
     inline virtual size_t NumVertices(void) const
       { return 4; }
 

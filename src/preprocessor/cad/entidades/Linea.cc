@@ -51,7 +51,7 @@ XC::Linea::Linea(const std::string &nombre,Preprocessor *m,const size_t &nd)
 XC::SetEstruct *XC::Linea::getCopy(void) const
   { return new Linea(*this); }
 
-//! @brief Devuelve la longitud de la línea.
+//! @brief Return the longitud de la línea.
 double XC::Linea::getLongitud(void) const
   {
     double retval= 0;
@@ -75,7 +75,7 @@ double XC::Linea::getLambda(const Pos3d &p) const
     return retval;
   }
 
-//! @brief Devuelve el segmento que une los extremos
+//! @brief Returns the segmento que une los extremos
 //! de la línea.
 Segmento3d XC::Linea::getSegmento(void) const
   {
@@ -88,7 +88,7 @@ Segmento3d XC::Linea::getSegmento(void) const
     return retval;
   }
 
-//! @brief Devuelve el cuadrado de la distancia a
+//! @brief Returns the cuadrado de la distancia a
 //! la posición being passed as parameter.
 double XC::Linea::DistanciaA2(const Pos3d &pt) const
   {
@@ -175,7 +175,7 @@ BND3d XC::Linea::Bnd(void) const
     return retval;
   }
 
-//! @brief Devuelve ndiv+1 posiciones equiespaciadas a lo largo de la línea.
+//! @brief Returns ndiv+1 posiciones equiespaciadas a lo largo de la línea.
 MatrizPos3d XC::Linea::get_posiciones(void) const
   {
     MatrizPos3d retval;
@@ -186,7 +186,7 @@ MatrizPos3d XC::Linea::get_posiciones(void) const
     return retval;
   }
 
-//! @brief Devuelve el vector que une los extremos de la línea
+//! @brief Returns the vector que une los extremos de la línea
 const XC::Vector &XC::Linea::getVector(void) const
   {
     static XC::Vector retval(3);
@@ -197,7 +197,7 @@ const XC::Vector &XC::Linea::getVector(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector unitario tangente a la línea en el punto s
+//! @brief Returns a vector unitario tangente a la línea en el punto s
 const XC::Vector &XC::Linea::getTang(const double &s) const
   {
     static Vector retval(3);

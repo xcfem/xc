@@ -936,7 +936,7 @@ XC::DataOutputHandler *XC::FEM_ObjectBroker::getPtrNewDataOutputHandler(int clas
          }
   }
 
-//! @brief Devuelve un objeto de tipo Recorder.
+//! @brief Returns a objeto de tipo Recorder.
 XC::Recorder *XC::FEM_ObjectBroker::getPtrNewRecorder(int classTag)
   {
     switch(classTag)

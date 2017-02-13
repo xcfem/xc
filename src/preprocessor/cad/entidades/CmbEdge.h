@@ -51,7 +51,7 @@ class CmbEdge: public Edge
     //! aqui llamaremos lados), tal que el extremo de una de ellas es el
     //! origen de la siguiente. Como quiera que la orientación de la línea definida
     //! en el modelo, puede no coincidir con la necesaria para la secuencia, cada
-    //! apuntador a línea se acompaña de un valor booleano que indica si debe
+    //! puntero a línea se acompaña de un valor booleano que indica si debe
     //! interpretarse la línea con su sentido directo o con el inverso.
     class Lado: public EntCmd
       {
@@ -124,7 +124,7 @@ class CmbEdge: public Edge
     size_t NDiv(void) const;
     void SetNDiv(const size_t &nd);
 
-    //! @brief Devuelve el número de lados.
+    //! @brief Returns the número de lados.
     size_t NumEdges(void) const
       { return lineas.size(); }
     inline std::deque<Lado> &getLados(void)
@@ -133,7 +133,7 @@ class CmbEdge: public Edge
 
     double getLongitud(void) const;
 
-    //! @brief Devuelve el número de vértices.
+    //! @brief Returns the número de vértices.
     virtual size_t NumVertices(void) const
       { return NumEdges()+1; }
 

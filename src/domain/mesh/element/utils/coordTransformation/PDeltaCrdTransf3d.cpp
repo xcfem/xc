@@ -148,7 +148,7 @@ int XC::PDeltaCrdTransf3d::update(void)
     return 0;
   }
 
-//! @brief Devuelve el vector de cargas expresado en el sistema global del elemento.
+//! @brief Returns the vector de cargas expresado en el sistema global del elemento.
 const XC::Vector &XC::PDeltaCrdTransf3d::getGlobalResistingForce(const Vector &pb, const Vector &unifLoad) const
   {
     // transform resisting forces from the basic system to local coordinates
@@ -169,7 +169,7 @@ const XC::Vector &XC::PDeltaCrdTransf3d::getGlobalResistingForce(const Vector &p
     return local_to_global_resisting_force(pl);
   }
 
-//! @brief Devuelve la matriz de rigidez expresada en el sistema global del elemento.
+//! @brief Return the matriz de rigidez expresada en el sistema global del elemento.
 const XC::Matrix &XC::PDeltaCrdTransf3d::getGlobalStiffMatrix(const XC::Matrix &KB, const XC::Vector &pb) const
   {
     double oneOverL = 1.0/L;

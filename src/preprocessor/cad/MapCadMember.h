@@ -87,7 +87,7 @@ const T * MapCadMember<T>::busca(const Indice &id) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si la entidad ya está definida.
+//! @brief Returns true ifla entidad ya está definida.
 template <class T>
 bool MapCadMember<T>::existe(const Indice &id) const
   { return (busca(id)!=NULL); }

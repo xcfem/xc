@@ -56,7 +56,7 @@
 XC::GeomSection::GeomSection(MaterialLoader *ml)
   : SeccionInerte(),material_loader(ml), regiones(ml), capas_armado(this,ml), tag_sis_ref(0),tag_spot(0) {}
 
-//! @brief Devuelve una geometría que sólo contiene las regiones
+//! @brief Returns a geometría que sólo contiene las regiones
 //! definidas en ésta.
 XC::GeomSection XC::GeomSection::getGMRegiones(void) const
   {
@@ -65,7 +65,7 @@ XC::GeomSection XC::GeomSection::getGMRegiones(void) const
     return retval;
   }
 
-//! @brief Devuelve una geometría que sólo contiene las capas de
+//! @brief Returns a geometría que sólo contiene las capas de
 //! armado definidas en ésta.
 XC::GeomSection XC::GeomSection::getGMCapasArmado(void) const
   {
@@ -74,7 +74,7 @@ XC::GeomSection XC::GeomSection::getGMCapasArmado(void) const
     return retval;
   }
 
-//! @brief Devuelve la sección que tiene la misma armadura que ésta
+//! @brief Return the sección que tiene la misma armadura que ésta
 //! pero sólo las regiones comprimidas.
 XC::GeomSection XC::GeomSection::getSeccionFisurada(const Semiplano2d &sp_compresiones) const
   {
@@ -215,7 +215,7 @@ XC::Segment *XC::GeomSection::newSegment(size_t p1,size_t p2)
   }
 
 
-//! @brief Devuelve la distancia entre los puntos cuyos identificadores se pasan como parámetro.
+//! @brief Return the distancia entre los puntos cuyos identificadores se pasan como parámetro.
 double XC::GeomSection::DistSpots(const size_t &i,const size_t &j) const
   {
     double retval(-1.0);
@@ -261,7 +261,7 @@ Poligono2d XC::GeomSection::getCompressedZoneContour(const Semiplano2d &sp_compr
     return retval;
   }
 
-//! @brief Devuelve el canto con el que trabaja la sección a partir de la posición
+//! @brief Returns the canto con el que trabaja la sección a partir de la posición
 //! del semiplano being passed as parameter.
 //! @param trazaPF: Intersección del plano de flexión con el plano de la sección.
 double XC::GeomSection::getCantoMecanico(const Recta2d &trazaPF) const
@@ -282,7 +282,7 @@ double XC::GeomSection::getCantoMecanico(const Recta2d &trazaPF) const
     return dpos-dneg;
   }
 
-//! @brief Devuelve el canto desde el borde del semiplano being passed as parameter
+//! @brief Returns the canto desde el borde del semiplano being passed as parameter
 //! a la fibra más comprimida.
 double XC::GeomSection::getCantoMecanicoZonaComprimida(const Semiplano2d &sp_compresiones) const
   {
@@ -298,7 +298,7 @@ double XC::GeomSection::getCantoMecanicoZonaComprimida(const Semiplano2d &sp_com
     return dneg;
   }
 
-//! @brief Devuelve el canto desde el borde del semiplano being passed as parameter
+//! @brief Returns the canto desde el borde del semiplano being passed as parameter
 //! a la fibra más traccionada.
 double XC::GeomSection::getCantoMecanicoZonaTraccionada(const Semiplano2d &sp_compresiones) const
   {
@@ -314,7 +314,7 @@ double XC::GeomSection::getCantoMecanicoZonaTraccionada(const Semiplano2d &sp_co
     return dpos;
   }
 
-//! @brief Devuelve la longitud del segmento que resulta
+//! @brief Return the longitud del segmento que resulta
 //! de cortar la recta being passed as parameter con el
 //! contour de la sección.
 double XC::GeomSection::getLongCorte(const Recta2d &r) const
@@ -326,7 +326,7 @@ double XC::GeomSection::getLongCorte(const Recta2d &r) const
     return retval;
   }
 
-//! @brief Devuelve las longitudes de los segmentos que resultan
+//! @brief Returns the longitudes de los segmentos que resultan
 //! de cortar la recta being passed as parameter con el
 //! contour de la sección.
 std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr) const
@@ -347,7 +347,7 @@ std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr)
     return retval;
   }
 
-//! @brief Devuelve el ancho de la sección para el plano de flexión.
+//! @brief Returns the ancho de la sección para el plano de flexión.
 double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) const
   {
     const Poligono2d contour= agrega_puntos_medios(getRegionsContour());
@@ -367,7 +367,7 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) con
     return dmax;
   }
 
-//! @brief Devuelve el ancho «b0» de la biela comprimida
+//! @brief Returns the ancho «b0» de la biela comprimida
 //! correspondiente al brazo mecánico being passed as parameter.
 double XC::GeomSection::getAnchoBielaComprimida(const Segmento2d &brazo_mecanico) const
   {
@@ -400,7 +400,7 @@ double XC::GeomSection::getAnchoBielaComprimida(const Segmento2d &brazo_mecanico
     return 2*sqrt(bmin2);
   }
 
-//! @brief Devuelve el recubrimiento de la posición being passed as parameter.
+//! @brief Returns the recubrimiento de la posición being passed as parameter.
 double XC::GeomSection::getRecubrimiento(const Pos2d &p) const
   {
     const double retval= -getRegionsContour().DistSigno(p);
@@ -410,7 +410,7 @@ double XC::GeomSection::getRecubrimiento(const Pos2d &p) const
     return retval;
   }
 
-//! @brief Devuelve el área homogeneizada de las regiones.
+//! @brief Returns the área homogeneizada de las regiones.
 double XC::GeomSection::getAreaHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;

@@ -360,21 +360,21 @@ bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
 bool XC::LoadPattern::addSFreedom_Constraint(SFreedom_Constraint *theSp)
   { return NodeLocker::addSFreedom_Constraint(theSp); }
 
-//! @brief Devuelve un iterador a las cargas sobre nodo.
+//! @brief Returns an iterator a las cargas sobre nodo.
 XC::NodalLoadIter &XC::LoadPattern::getNodalLoads(void)
   {
     theNodIter->reset();
     return *theNodIter;
   }
 
-//! @brief Devuelve un iterador a las cargas sobre elemento.
+//! @brief Returns an iterator a las cargas sobre elemento.
 XC::ElementalLoadIter &XC::LoadPattern::getElementalLoads(void)
   {
     theEleIter->reset();
     return *theEleIter;
   }
 
-//! @brief Devuelve el número de cargas sobre nodos.
+//! @brief Returns the número de cargas sobre nodos.
 int XC::LoadPattern::getNumNodalLoads(void) const
   {
     int retval= 0;
@@ -383,7 +383,7 @@ int XC::LoadPattern::getNumNodalLoads(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de cargas sobre elementos.
+//! @brief Returns the número de cargas sobre elementos.
 int XC::LoadPattern::getNumElementalLoads(void) const
   {
     int retval= 0;
@@ -392,7 +392,7 @@ int XC::LoadPattern::getNumElementalLoads(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de cargas total.
+//! @brief Returns the número de cargas total.
 int XC::LoadPattern::getNumLoads(void) const
   { return getNumNodalLoads()+getNumElementalLoads(); }
 
@@ -457,14 +457,14 @@ void XC::LoadPattern::applyLoad(double pseudoTime)
 void XC::LoadPattern::setLoadConstant(void)
   { isConstant = 0; }
 
-//! @brief Devuelve el factor de ponderación obtenido del objeto TimeSeries.
+//! @brief Returns the factor de ponderación obtenido del objeto TimeSeries.
 const double &XC::LoadPattern::getLoadFactor(void) const
   { return loadFactor; }
 
-//! @brief Devuelve el factor de ponderación impuesto por la combinación de hipótesis.
+//! @brief Returns the factor de ponderación impuesto por la combinación de hipótesis.
 const double &XC::LoadPattern::GammaF(void) const
   { return gamma_f; }
-//! @brief Devuelve el factor de ponderación impuesto por la combinación de hipótesis.
+//! @brief Returns the factor de ponderación impuesto por la combinación de hipótesis.
 double &XC::LoadPattern::GammaF(void)
   { return gamma_f; }
 
@@ -473,7 +473,7 @@ void XC::LoadPattern::setGammaF(const double &g)
   { gamma_f= g; }
 
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::LoadPattern::getDbTagData(void) const
   {

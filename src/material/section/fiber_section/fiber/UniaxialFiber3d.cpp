@@ -116,7 +116,7 @@ int XC::UniaxialFiber3d::setTrialFiberStrain(const Vector &vs)
       }
   }
 
-//! @brief Devuelve la resultante de tensiones de la fibra. 
+//! @brief Return the resultante de tensiones de la fibra. 
 XC::Vector &XC::UniaxialFiber3d::getFiberStressResultants(void)
   {
     if(isAlive())
@@ -132,7 +132,7 @@ XC::Vector &XC::UniaxialFiber3d::getFiberStressResultants(void)
     return fs;
   }
 
-//! @brief Devuelve la contribución de la fibra a la rigidez de la sección.
+//! @brief Return the contribución de la fibra a la rigidez de la sección.
 XC::Matrix &XC::UniaxialFiber3d::getFiberTangentStiffContr(void) 
   {
     if(isAlive())
@@ -167,7 +167,7 @@ XC::Matrix &XC::UniaxialFiber3d::getFiberTangentStiffContr(void)
 XC::Fiber *XC::UniaxialFiber3d::getCopy(void) const
   { return new UniaxialFiber3d(*this); }
 
-//! @brief Devuelve la dimensión del vector resultante de tensiones.
+//! @brief Return the dimensión del vector resultante de tensiones.
 int XC::UniaxialFiber3d::getOrder(void) const
   { return 3; }
 
@@ -255,7 +255,7 @@ int XC::UniaxialFiber3d::getResponse(int responseID, Information &fibInfo)
       }
   }
 
-//! @brief Devuelve la posición de la fibra.
+//! @brief Return the posición de la fibra.
 void XC::UniaxialFiber3d::getFiberLocation(double &yLoc, double &zLoc) const
   {
     yLoc= -as[0]; //Sign of Y coordinate is changed.

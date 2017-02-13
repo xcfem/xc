@@ -58,7 +58,7 @@ double XC::BarraSuelta::getMinY(void) const
 double XC::BarraSuelta::getMinZ(void) const
   { return posit(1); }
 
-//! @brief Devuelve un array de barras de refuerzo.
+//! @brief Returns a array de barras de refuerzo.
 const XC::VectorReinfBar &XC::BarraSuelta::getReinfBars(void) const
   {
     reinfBars.resize(1);

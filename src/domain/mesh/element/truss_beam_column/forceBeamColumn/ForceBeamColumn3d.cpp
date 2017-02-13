@@ -212,7 +212,7 @@ int XC::ForceBeamColumn3d::commitState(void)
     return err;
   }
 
-//! @brief Devuelve el estado de la transformación al último commit.
+//! @brief Returns the estado de la transformación al último commit.
 int XC::ForceBeamColumn3d::revertToLastCommit(void)
   {
     int err;
@@ -247,7 +247,7 @@ int XC::ForceBeamColumn3d::revertToLastCommit(void)
     return err;
   }
 
-//! @brief Devuelve el estado de la transformación al inicial.
+//! @brief Returns the estado de la transformación al inicial.
 int XC::ForceBeamColumn3d::revertToStart(void)
   {
     // revert the sections state to start
@@ -1030,7 +1030,7 @@ int XC::ForceBeamColumn3d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Devuelve la matriz de flexibilidad de una sección.
+//! @brief Return the matriz de flexibilidad de una sección.
 int XC::ForceBeamColumn3d::getInitialFlexibility(Matrix &fe) const
   {
     fe.Zero();

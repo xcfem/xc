@@ -106,12 +106,12 @@ int XC::ShellCorotCrdTransf3d::update(void)
     return 0;
   }
 
-//! @brief Devuelve la matriz de transformación correspondiente
+//! @brief Return the matriz de transformación correspondiente
 //! a la configuración inicial del elemento.
 XC::Matrix XC::ShellCorotCrdTransf3d::getR0(void) const
   { return getTrfMatrix(); }
 
-//! @brief Devuelve la traspuesta de la matriz de transformación correspondiente
+//! @brief Return the traspuesta de la matriz de transformación correspondiente
 //! a la configuración inicial del elemento.
 XC::Matrix XC::ShellCorotCrdTransf3d::getR0T(void) const
   {
@@ -123,7 +123,7 @@ XC::Matrix XC::ShellCorotCrdTransf3d::getR0T(void) const
     return R;
   }
 
-//! @brief Devuelve la matriz de transformación correspondiente
+//! @brief Return the matriz de transformación correspondiente
 //! a la configuración actual del elemento.
 XC::Matrix XC::ShellCorotCrdTransf3d::getR(void) const
   {
@@ -135,7 +135,7 @@ XC::Matrix XC::ShellCorotCrdTransf3d::getR(void) const
     return retval;
   }
 
-//! @brief Devuelve el vector expresado en coordenadas
+//! @brief Returns the vector expresado en coordenadas
 //! locales a partir del desplazamiento expresado en globales.
 XC::Vector XC::ShellCorotCrdTransf3d::global_to_local(const Vector &di,const Vector &vi0) const
   {
@@ -156,7 +156,7 @@ XC::Vector XC::ShellCorotCrdTransf3d::global_to_local(const Vector &di,const Vec
     return retval;
   }
 
-//! @brief Devuelve la traslación del nodo expresada en coordenadas
+//! @brief Return the traslación del nodo expresada en coordenadas
 //! locales a partir del desplazamiento expresado en globales.
 XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_disp_nod(const int &i) const
   {
@@ -165,7 +165,7 @@ XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_disp_nod(const int &i) con
     return global_to_local(di,vi0);
   }
 
-//! @brief Devuelve las componentes traslacionales de la
+//! @brief Returns the componentes traslacionales de la
 //! velocidad del nodo expresada en coordenadas locales a
 //! partir del desplazamiento expresado en globales.
 XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_vel_nod(const int &i) const
@@ -175,7 +175,7 @@ XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_vel_nod(const int &i) cons
     return global_to_local(di,vi0);
   }
 
-//! @brief Devuelve las componentes traslacionales de la
+//! @brief Returns the componentes traslacionales de la
 //! aceleración del nodo expresada en coordenadas locales a
 //! partir del desplazamiento expresado en globales.
 XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_accel_nod(const int &i) const
@@ -207,7 +207,7 @@ int XC::ShellCorotCrdTransf3d::commitState(void)
   }
 
 
-//! @brief Devuelve el estado de la transformación al último consumado.
+//! @brief Returns the estado de la transformación al último consumado.
 int XC::ShellCorotCrdTransf3d::revertToLastCommit(void)
   { 
     g1trial= g1commit;
@@ -217,7 +217,7 @@ int XC::ShellCorotCrdTransf3d::revertToLastCommit(void)
   }
 
 
-//! @brief Devuelve el estado de la transformación al inicial.
+//! @brief Returns the estado de la transformación al inicial.
 int XC::ShellCorotCrdTransf3d::revertToStart(void)
   {
     g1trial= g1; g2trial= g2; g3trial= g3;
@@ -225,15 +225,15 @@ int XC::ShellCorotCrdTransf3d::revertToStart(void)
     return 0;
   }
 
-//! @brief Devuelve el vector de desplazamientos expresado en el sistema básico.
+//! @brief Returns the vector de desplazamientos expresado en el sistema básico.
 XC::Vector XC::ShellCorotCrdTransf3d::getBasicTrialDisp(const int &iNod) const
   { return global_to_local_disp_nod(iNod); }
 
-// ! @brief Devuelve el vector de velocidades expresado en el sistema básico.
+// ! @brief Returns the vector de velocidades expresado en el sistema básico.
 XC::Vector XC::ShellCorotCrdTransf3d::getBasicTrialVel(const int &iNod) const
   { return global_to_local_vel_nod(iNod); }
 
-//! @brief Devuelve el vector de aceleraciones expresado en el sistema básico.
+//! @brief Returns the vector de aceleraciones expresado en el sistema básico.
 XC::Vector XC::ShellCorotCrdTransf3d::getBasicTrialAccel(const int &iNod) const
   { return global_to_local_accel_nod(iNod); }
 
@@ -361,7 +361,7 @@ XC::Matrix XC::ShellCorotCrdTransf3d::local_to_global(const Matrix &R,const Matr
     return retval;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente expresada en globales.
+//! @brief Return the tangent stiffness matrix expresada en globales.
 void XC::ShellCorotCrdTransf3d::getGlobalTangent(Matrix &stiff) const
   {
     const Matrix R= getR();
@@ -369,7 +369,7 @@ void XC::ShellCorotCrdTransf3d::getGlobalTangent(Matrix &stiff) const
     stiff= local_to_global(R,Rd,stiff);
   }
 
-//! @brief Devuelve el vector residuo expresado en globales.
+//! @brief Returns the vector residuo expresado en globales.
 void XC::ShellCorotCrdTransf3d::getGlobalResidAndTangent(Vector &resid,Matrix &stiff) const
   {
     //std::cout << "antes resid= " << resid << std::endl;
@@ -382,7 +382,7 @@ void XC::ShellCorotCrdTransf3d::getGlobalResidAndTangent(Vector &resid,Matrix &s
     stiff= local_to_global(R,Rd,stiff);
   }
 
-//! @brief Devuelve el vector de cargas expresado en el sistema global del elemento.
+//! @brief Returns the vector de cargas expresado en el sistema global del elemento.
 const XC::Vector &XC::ShellCorotCrdTransf3d::getGlobalResistingForce(const Vector &p0) const
   { return local_to_global_resisting_force(p0); }
 

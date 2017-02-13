@@ -88,7 +88,7 @@ XC::ElasticSection2d::ElasticSection2d(int tag, double EA, double EI)
   :BaseElasticSection2d(tag, SEC_TAG_Elastic2d,2,1,EA,EI,0.0,0.0)
   {}
 
-//! @brief Devuelve la resultante de las tensiones en la sección.
+//! @brief Return the resultante de las tensiones en la sección.
 const XC::Vector &XC::ElasticSection2d::getStressResultant(void) const
   {
     const Vector &e= getSectionDeformation();
@@ -97,20 +97,20 @@ const XC::Vector &XC::ElasticSection2d::getStressResultant(void) const
     return s;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::ElasticSection2d::getSectionTangent(void) const
   { return ctes_scc.getSectionTangent2x2(); }
 
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix &XC::ElasticSection2d::getInitialTangent(void) const
   { return getSectionTangent(); }
 
-//! @brief Devuelve la matriz de flexibilidad.
+//! @brief Return the matriz de flexibilidad.
 const XC::Matrix &XC::ElasticSection2d::getSectionFlexibility(void) const
   { return ctes_scc.getSectionFlexibility2x2(); }
 
-//! @brief Devuelve la matriz de flexibilidad noval.
+//! @brief Return the matriz de flexibilidad noval.
 const XC::Matrix &XC::ElasticSection2d::getInitialFlexibility(void) const
   { return getSectionFlexibility(); }
 
@@ -118,7 +118,7 @@ const XC::Matrix &XC::ElasticSection2d::getInitialFlexibility(void) const
 XC::SectionForceDeformation *XC::ElasticSection2d::getCopy(void) const
   { return new XC::ElasticSection2d(*this); }
 
-//! @brief Devuelve los códigos de los esfuerzos para los que la
+//! @brief Returns the códigos de los esfuerzos para los que la
 //! sección aporta rigidez.
 const XC::ResponseId &XC::ElasticSection2d::getType(void) const
   { return RespElasticSection2d; }

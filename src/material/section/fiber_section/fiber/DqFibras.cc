@@ -114,7 +114,7 @@ XC::Fiber *XC::DqFibras::buscaFibra(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve el valor mínimo de la coordenada y de las teselas.
+//! @brief Returns the valor mínimo de la coordenada y de las teselas.
 double XC::DqFibras::GetYMin(void) const
   {
     double retval= 0.0;
@@ -133,7 +133,7 @@ double XC::DqFibras::GetYMin(void) const
     return retval;
   }
 
-//! @brief Devuelve el valor mínimo de la coordenada z de las teselas.
+//! @brief Returns the valor mínimo de la coordenada z de las teselas.
 double XC::DqFibras::GetZMin(void) const
   {
     double retval= 0.0;
@@ -152,7 +152,7 @@ double XC::DqFibras::GetZMin(void) const
     return retval;
   }
 
-//! @brief Devuelve el valor máximo de la coordenada y de las teselas.
+//! @brief Returns the valor máximo de la coordenada y de las teselas.
 double XC::DqFibras::GetYMax(void) const
   {
     double retval= 0.0;
@@ -171,7 +171,7 @@ double XC::DqFibras::GetYMax(void) const
     return retval;
   }
 
-//! @brief Devuelve el valor máximo de la coordenada z de las teselas.
+//! @brief Returns the valor máximo de la coordenada z de las teselas.
 double XC::DqFibras::GetZMax(void) const
   {
     double retval= 0.0;
@@ -190,7 +190,7 @@ double XC::DqFibras::GetZMax(void) const
     return retval;
   }
 
-//! @brief Devuelve las posiciones de las teselas.
+//! @brief Returns the posiciones de las teselas.
 GeomObj::list_Pos2d XC::DqFibras::getPosiciones(void) const
   {
     GeomObj::list_Pos2d retval;
@@ -205,19 +205,19 @@ GeomObj::list_Pos2d XC::DqFibras::getPosiciones(void) const
     return retval;
   }
 
-//! @brief Devuelve la esquina superior derecha del rectángulo envolvente. 
+//! @brief Return the esquina superior derecha del rectángulo envolvente. 
 Pos2d XC::DqFibras::GetPMax(void) const
   { return Pos2d(GetYMax(),GetZMax()); }
 
-//! @brief Devuelve la esquina inferior izquierda del rectángulo envolvente. 
+//! @brief Return the esquina inferior izquierda del rectángulo envolvente. 
 Pos2d XC::DqFibras::GetPMin(void) const
   { return Pos2d(GetYMin(),GetZMin()); }
 
-//! @brief Devuelve el rectángulo envolvente. 
+//! @brief Returns the rectángulo envolvente. 
 BND2d XC::DqFibras::Bnd(void) const
   { return BND2d(GetPMin(),GetPMax()); }
 
-//! @brief Devuelve las suma de las áreas de las teselas.
+//! @brief Returns the suma de las áreas de las teselas.
 double XC::DqFibras::getSumaAreas(const double &factor) const
   {
     double retval= 0.0;
@@ -227,7 +227,7 @@ double XC::DqFibras::getSumaAreas(const double &factor) const
     return factor*retval;
   }
 
-//! @brief Devuelve el momento de inercia respecto al paralelo al z a una
+//! @brief Returns the momento de inercia respecto al paralelo al z a una
 //! distancia y0 del origen.
 double XC::DqFibras::getIz(const double &factor,const double &y0) const
   {
@@ -242,7 +242,7 @@ double XC::DqFibras::getIz(const double &factor,const double &y0) const
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia respecto al eje paralelo al y a una
+//! @brief Returns the momento de inercia respecto al eje paralelo al y a una
 //! distancia z0 del origen.
 double XC::DqFibras::getIy(const double &factor,const double &z0) const
   {
@@ -257,7 +257,7 @@ double XC::DqFibras::getIy(const double &factor,const double &z0) const
     return retval;
   }
 
-//! @brief Devuelve el producto de inercia respecto a los ejes paralelos aa una
+//! @brief Returns the producto de inercia respecto a los ejes paralelos aa una
 //! distancias (y0,z0) del origen.
 double XC::DqFibras::getPyz(const double &factor,const double &y0,const double &z0) const
   {
@@ -390,7 +390,7 @@ double XC::DqFibras::getPyzHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Devuelve la componente i,j del tensor de inercia calculado respecto al CDG.
+//! @brief Return the componente i,j del tensor de inercia calculado respecto al CDG.
 double XC::DqFibras::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
@@ -411,7 +411,7 @@ double XC::DqFibras::getIHomogenizedSection(const double &E0,const unsigned shor
     return retval;
   }
 
-//! @brief Devuelve el tensor de inercia calculado desde el centro de gravedad del objeto.
+//! @brief Returns the tensor de inercia calculado desde el centro de gravedad del objeto.
 XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0) const
   {
     static Matrix i(2,2);
@@ -420,7 +420,7 @@ XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0) const
     return i;
   }
 
-//! @brief Devuelve el tensor de inercia respector al punto o.
+//! @brief Returns the tensor de inercia respector al punto o.
 XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0,const Pos2d &o) const
   {
     static Matrix retval(2,2);
@@ -432,19 +432,19 @@ XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0,const Pos2d &o
     return retval;
   }
 
-//! @brief Devuelve el momento de inercia respecto al eje que pasa por O con dirección la de e.
+//! @brief Returns the momento de inercia respecto al eje que pasa por O con dirección la de e.
 double XC::DqFibras::getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const
   {
     const Matrix Io(getIHomogenizedSection(E0,O));
     return dot(e,Io*e)/e.Norm2();
   }
 
-//! @brief Devuelve el momento de inercia respecto a la recta que se pasa
+//! @brief Returns the momento de inercia respecto a la recta que se pasa
 //! como parámetro.
 double XC::DqFibras::getIHomogenizedSection(const double &E0,const Recta2d &r) const
   { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir()));  }
 
-//! @brief Devuelve el momento estático de las áreas de las fibras situadas por encima de yf (y_fibra-yf > 0)
+//! @brief Returns the momento estático de las áreas de las fibras situadas por encima de yf (y_fibra-yf > 0)
 //! respecto al eje paralelo al z cuya y se pasa como parámetro (brazo= y_fibra-y0).
 double XC::DqFibras::getSzPos(const double &yf,const double &y0,const double &factor) const
   {
@@ -466,7 +466,7 @@ double XC::DqFibras::getSzPos(const double &yf,const double &y0,const double &fa
     return retval;
   }
 
-//! @brief Devuelve el momento estático de las áreas de las fibras situadas por debajo de yf (y_fibra-yf < 0)
+//! @brief Returns the momento estático de las áreas de las fibras situadas por debajo de yf (y_fibra-yf < 0)
 //! respecto al eje paralelo al z cuya y se pasa como parámetro (brazo= y_fibra-y0).
 double XC::DqFibras::getSzNeg(const double &yf,const double &y0,const double &factor) const
   {
@@ -488,7 +488,7 @@ double XC::DqFibras::getSzNeg(const double &yf,const double &y0,const double &fa
     return retval;
   }
 
-//! @brief Devuelve el momento estático de las áreas de las fibras situada por encima de zf (z_fibra-zf > 0)
+//! @brief Returns the momento estático de las áreas de las fibras situada por encima de zf (z_fibra-zf > 0)
 //! respecto al eje paralelo al y cuya z se pasa como parámetro (brazo= z_fibra-z0).
 double XC::DqFibras::getSyPos(const double &zf,const double &z0,const double &factor) const
   {
@@ -507,7 +507,7 @@ double XC::DqFibras::getSyPos(const double &zf,const double &z0,const double &fa
     return retval;
   }
 
-//! @brief Devuelve el momento estático de las áreas de las fibras situadas por debajo  de zf (z_fibra-zf < 0)
+//! @brief Returns the momento estático de las áreas de las fibras situadas por debajo  de zf (z_fibra-zf < 0)
 //! respecto al eje paralelo al y cuya z se pasa como parámetro (brazo= z_fibra-z0).
 double XC::DqFibras::getSyNeg(const double &zf,const double &z0,const double &factor) const
   {
@@ -526,7 +526,7 @@ double XC::DqFibras::getSyNeg(const double &zf,const double &z0,const double &fa
     return retval;
   }
 
-//! @brief Devuelve el momento estático de las áreas de las fibras situadas dentro
+//! @brief Returns the momento estático de las áreas de las fibras situadas dentro
 //! del semiplano being passed as parameter.
 double XC::DqFibras::getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const
   {
@@ -550,7 +550,7 @@ double XC::DqFibras::getSPosHomogenizedSection(const double &E0,const Semiplano2
   }
 
 
-//! @brief Devuelve el momento estático de las áreas de las fibras situadas fuera
+//! @brief Returns the momento estático de las áreas de las fibras situadas fuera
 //! del semiplano being passed as parameter.
 double XC::DqFibras::getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const
   {
@@ -577,7 +577,7 @@ double XC::DqFibras::getSNegHomogenizedSection(const double &E0,const Semiplano2
 inline double R(const double &Iy,const double &Iz,const double Pyz)
   { return sqrt(sqr((Iy-Iz)/2)+sqr(Pyz)); }
 
-//! @brief Devuelve el momento de inercia principal mayor.
+//! @brief Returns the momento de inercia principal mayor.
 double XC::DqFibras::getI1(const double &factor,const double &y0,const double &z0) const
   {
     const double iy= getIy(factor,z0);
@@ -588,7 +588,7 @@ double XC::DqFibras::getI1(const double &factor,const double &y0,const double &z
   }
 
 
-//! @brief Devuelve el momento de inercia principal menor.
+//! @brief Returns the momento de inercia principal menor.
 double XC::DqFibras::getI2(const double &factor,const double &y0,const double &z0) const
   {
     const double iy= getIy(factor,z0);
@@ -598,11 +598,11 @@ double XC::DqFibras::getI2(const double &factor,const double &y0,const double &z
     return suma-R(iy,iz,pyz);
   }
 
-//! @brief Devuelve el ángulo que define un eje principal de inercia.
+//! @brief Returns the ángulo que define un eje principal de inercia.
 inline double theta_p(const double &Iy,const double &Iz,const double &Pyz)
   { return (atan(-2*Pyz/(Iy-Iz)))/2.0; }
 
-//! @brief Devuelve el ángulo del eje del momento de inercia principal mayor con el eje y.
+//! @brief Returns the ángulo del eje del momento de inercia principal mayor con el eje y.
 double XC::DqFibras::getTh1(const double &y0,const double &z0) const
   {
     const double Iy= getIy(1.0,z0);
@@ -624,7 +624,7 @@ double XC::DqFibras::getTh1(const double &y0,const double &z0) const
     return th1;
   }
 
-//! @brief Devuelve la dirección del eje del momento de inercia principal mayor.
+//! @brief Return the dirección del eje del momento de inercia principal mayor.
 XC::Vector XC::DqFibras::getEje1(const double &y0,const double &z0) const
   {
     Vector retval(2);
@@ -634,7 +634,7 @@ XC::Vector XC::DqFibras::getEje1(const double &y0,const double &z0) const
     return retval;
   }
 
-//! @brief Devuelve la dirección del eje del momento de inercia principal menor.
+//! @brief Return the dirección del eje del momento de inercia principal menor.
 XC::Vector XC::DqFibras::getEje2(const double &y0,const double &z0) const
   {
     Vector retval(2);
@@ -644,7 +644,7 @@ XC::Vector XC::DqFibras::getEje2(const double &y0,const double &z0) const
     return retval;
   }
 
-//! @brief Devuelve la resultante de tensiones.
+//! @brief Return the resultante de tensiones.
 double XC::DqFibras::Resultante(void) const
   {
     register double retval= 0;
@@ -654,7 +654,7 @@ double XC::DqFibras::Resultante(void) const
     return retval;
   }
 
-//! @brief Devuelve el momento de la fuerza ejercida por las fibras
+//! @brief Returns the momento de la fuerza ejercida por las fibras
 //! respecto al eje paralelo al «z» que pasa por y0
 double XC::DqFibras::getMz(const double &y0) const
   {
@@ -665,7 +665,7 @@ double XC::DqFibras::getMz(const double &y0) const
     return retval;
   }
 
-//! @brief Devuelve el momento de la fuerza ejercida por las fibras
+//! @brief Returns the momento de la fuerza ejercida por las fibras
 //! respecto al eje  al eje paralelo al «y» que pasa por z0.
 double XC::DqFibras::getMy(const double &z0) const
   {
@@ -676,24 +676,24 @@ double XC::DqFibras::getMy(const double &z0) const
     return retval;
   }
 
-//! @brief Devuelve la excentricidad correspondiente al momento
+//! @brief Return the excentricidad correspondiente al momento
 //! de la fuerza ejercida por las fibras
 //! respecto al eje paralelo al «z» que pasa por y0
 double XC::DqFibras::getExcentricidadMz(const double &y0) const
   { return getMz(y0)/Resultante(); }
 
-//! @brief Devuelve la excentricidad correspondiente al momento
+//! @brief Return the excentricidad correspondiente al momento
 //! de la fuerza ejercida por las fibras
 //! respecto al eje  al eje paralelo al «y» que pasa por z0.
 double XC::DqFibras::getExcentricidadMy(const double &z0) const
   { return getMy(z0)/Resultante(); }
 
-//! @brief Devuelve el vector momento de la fuerza ejercida por las fibras
+//! @brief Returns the vector momento de la fuerza ejercida por las fibras
 //! respecto a los ejes que pasan por (y0,z0).
 Vector2d XC::DqFibras::getVectorMomento(const double &y0,const double &z0) const
   { return Vector2d(getMy(y0),getMz(y0)); }
 
-//! @brief Devuelve el vector momento de las excentricidades fuerza ejercida por las fibras
+//! @brief Returns the vector momento de las excentricidades fuerza ejercida por las fibras
 //! respecto a los ejes que pasan por (y0,z0).
 Pos2d XC::DqFibras::getPosResultante(const double &y0,const double &z0) const
   {
@@ -701,7 +701,7 @@ Pos2d XC::DqFibras::getPosResultante(const double &y0,const double &z0) const
     return Pos2d(getMz(y0)/R,getMy(z0)/R);
   }
 
-//! @brief Devuelve la fibra neutra.
+//! @brief Return the fibra neutra.
 Recta2d XC::DqFibras::getFibraNeutra(void) const
   {
     const double R= Resultante();
@@ -712,7 +712,7 @@ Recta2d XC::DqFibras::getFibraNeutra(void) const
     return Recta2d(org,v);
   }
 
-//! @brief Devuelve verdadero si la sección está sometida
+//! @brief Returns true ifla sección está sometida
 //! a momento flector.
 bool XC::DqFibras::hayMomento(const double &tol) const
   {
@@ -724,7 +724,7 @@ bool XC::DqFibras::hayMomento(const double &tol) const
       return false;
   }
 
-//! @brief Devuelve la resultante de las compresiones en las fibras.
+//! @brief Return the resultante de las compresiones en las fibras.
 double XC::DqFibras::ResultanteComp(void) const
   {
     register double retval= 0;
@@ -741,7 +741,7 @@ double XC::DqFibras::ResultanteComp(void) const
     return retval;
   }
 
-//! @brief Devuelve el momento de la compresión ejercida por las fibras
+//! @brief Returns the momento de la compresión ejercida por las fibras
 //! respecto al eje z.
 double XC::DqFibras::getMzComp(const double &y0) const
   {
@@ -752,8 +752,8 @@ double XC::DqFibras::getMzComp(const double &y0) const
     return retval;
   }
 
-//! @brief Devuelve el punto de paso de la resultante de tensiones menores
-//! que «ref» (por defecto cero) compresiones, si no hay devuelve (0,0).
+//! @brief Returns the punto de paso de la resultante de tensiones menores
+//! que «ref» (por defecto cero) compresiones, si no hay returns (0,0).
 const XC::Vector &XC::DqFibras::baricentroCompresiones(void) const
   {
     static Vector retval(2);
@@ -777,7 +777,7 @@ const XC::Vector &XC::DqFibras::baricentroCompresiones(void) const
     return retval;
   }
 
-//! @brief Devuelve el baricentro de las fibras cuya deformacion es
+//! @brief Returns the baricentro de las fibras cuya deformacion es
 //! menor que la being passed as parameter.
 const XC::Vector &XC::DqFibras::baricentroDefMenores(const double &defRef) const
   {
@@ -802,7 +802,7 @@ const XC::Vector &XC::DqFibras::baricentroDefMenores(const double &defRef) const
     return retval;
   }
 
-//! @brief Devuelve el momento de la compresión ejercida por las fibras
+//! @brief Returns the momento de la compresión ejercida por las fibras
 //! respecto al eje y.
 double XC::DqFibras::getMyComp(const double &z0) const
   {
@@ -813,7 +813,7 @@ double XC::DqFibras::getMyComp(const double &z0) const
     return retval;
   }
 
-//! @brief Devuelve la resultante de las tracciones en las fibras.
+//! @brief Return the resultante de las tracciones en las fibras.
 double XC::DqFibras::ResultanteTracc(void) const
   {
     register double retval= 0;
@@ -830,7 +830,7 @@ double XC::DqFibras::ResultanteTracc(void) const
     return retval;
   }
 
-//! @brief Devuelve el momento de la tracción ejercida por las fibras
+//! @brief Returns the momento de la tracción ejercida por las fibras
 //! respecto al eje z.
 double XC::DqFibras::getMzTracc(const double &y0) const
   {
@@ -841,7 +841,7 @@ double XC::DqFibras::getMzTracc(const double &y0) const
     return retval;
   }
 
-//! @brief Devuelve el momento de la tracción ejercida por las fibras
+//! @brief Returns the momento de la tracción ejercida por las fibras
 //! respecto al eje y.
 double XC::DqFibras::getMyTracc(const double &z0) const
   {
@@ -852,8 +852,8 @@ double XC::DqFibras::getMyTracc(const double &z0) const
     return retval;
   }
 
-//! @brief Devuelve el punto de paso de la resultante de tracciones, si
-//! no hay tracciones devuelve (0,0).
+//! @brief Returns the punto de paso de la resultante de tracciones, si
+//! no hay tracciones returns (0,0).
 const XC::Vector &XC::DqFibras::baricentroTracciones(void) const
   {
     static Vector retval(2);
@@ -877,7 +877,7 @@ const XC::Vector &XC::DqFibras::baricentroTracciones(void) const
     return retval;
   }
 
-//! @brief Devuelve el baricentro de las fibras cuya deformacion es
+//! @brief Returns the baricentro de las fibras cuya deformacion es
 //! mayor que la being passed as parameter.
 const XC::Vector &XC::DqFibras::baricentroDefMayores(const double &defRef) const
   {
@@ -902,7 +902,7 @@ const XC::Vector &XC::DqFibras::baricentroDefMayores(const double &defRef) const
     return retval;
   }
 
-//! @brief Devuelve el índice de la fibra más proxima a la posición being passed as parameter.
+//! @brief Returns the índice de la fibra más proxima a la posición being passed as parameter.
 size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
   {
     size_t retval= 0;
@@ -938,7 +938,7 @@ size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
     return retval;
   }
 
-// //! Devuelve el subconjunto de fibras de éste que cumplen la condición que se
+// //! Returns the subconjunto de fibras de éste que cumplen la condición que se
 // //! pasa como parámetro.
 // void XC::DqFibras::Cumplen(const std::string &cond,DqFibras &retval,bool clear)
 //   {
@@ -955,7 +955,7 @@ size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
 //     retval.updateCDG();
 //   }
 
-//! Devuelve el subconjunto de fibras de éste cuyo material tiene por tag el que se
+//! Returns the subconjunto de fibras de éste cuyo material tiene por tag el que se
 //! pasa como parámetro.
 void XC::DqFibras::SelMatTag(const int &matTag,DqFibras &retval,bool clear)
   {
@@ -976,7 +976,7 @@ void XC::DqFibras::SelMatTag(const int &matTag,DqFibras &retval,bool clear)
         std::cerr << "DqFibras::SelMatTag; Pointer to fiber is null." << std::endl;
   }
 
-//! @brief Devuelve la deformación mínima.
+//! @brief Return the deformación mínima.
 double XC::DqFibras::getStrainMin(void) const
   {
     double retval= 0.0;
@@ -991,7 +991,7 @@ double XC::DqFibras::getStrainMin(void) const
     return retval;
   }
 
-//! @brief Devuelve la deformación mínima.
+//! @brief Return the deformación mínima.
 double XC::DqFibras::getStrainMax(void) const
   {
     double retval= 0.0;
@@ -1006,7 +1006,7 @@ double XC::DqFibras::getStrainMax(void) const
     return retval;
   }
 
-//! @brief Devuelve la deformación media.
+//! @brief Return the deformación media.
 double XC::DqFibras::getStrainMed(void) const
   {
     double retval= 0.0;
@@ -1023,7 +1023,7 @@ double XC::DqFibras::getStrainMed(void) const
     return retval;
   }
 
-//! @brief Devuelve el plano de deformaciones ajustado por mínimos cuadrados.
+//! @brief Returns the plano de deformaciones ajustado por mínimos cuadrados.
 XC::DeformationPlane XC::DqFibras::getDeformationPlane(void) const
   {
     GeomObj::list_Pos3d puntos;
@@ -1040,14 +1040,14 @@ XC::DeformationPlane XC::DqFibras::getDeformationPlane(void) const
     return retval;
   }
 
-//! @brief Devuelve el vector de deformaciones.
+//! @brief Returns the vector de deformaciones.
 const XC::Vector &XC::DqFibras::getDeformation(void) const
   {
     const DeformationPlane pDef= getDeformationPlane();
     return pDef.getDeformation();
   }
 
-//! @brief Devuelve la tensión mínima.
+//! @brief Return the tensión mínima.
 double XC::DqFibras::getStressMin(void) const
   {
     double retval= 0.0;
@@ -1062,7 +1062,7 @@ double XC::DqFibras::getStressMin(void) const
     return retval;
   }
 
-//! @brief Devuelve la tensión mínima.
+//! @brief Return the tensión mínima.
 double XC::DqFibras::getStressMax(void) const
   {
     double retval= 0.0;
@@ -1077,7 +1077,7 @@ double XC::DqFibras::getStressMax(void) const
     return retval;
   }
 
-//! @brief Devuelve la tensión media.
+//! @brief Return the tensión media.
 double XC::DqFibras::getStressMed(void) const
   {
     double retval= 0.0;
@@ -1126,15 +1126,15 @@ XC::ClaseEsfuerzo XC::DqFibras::getClaseEsfuerzo(const double &tol) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si la sección está en tracción simple o compuesta.
+//! @brief Returns true ifla sección está en tracción simple o compuesta.
 bool XC::DqFibras::enTraccion(void) const
   { return ((getStrainMin()>=0) && (getStrainMax()>0)); }
 
-//! @brief Devuelve verdadero si la sección está en flexión simple o compuesta.
+//! @brief Returns true ifla sección está en flexión simple o compuesta.
 bool XC::DqFibras::enFlexion(void) const
   { return ((getStrainMin()<0) && (getStrainMax()>0)); }
 
-//! @brief Devuelve verdadero si la sección está en compresión simple o compuesta.
+//! @brief Returns true ifla sección está en compresión simple o compuesta.
 bool XC::DqFibras::enCompresion(void) const
   { return ((getStrainMin()<0) && (getStrainMax()<=0)); }
 
@@ -1169,13 +1169,13 @@ std::string XC::DqFibras::getStrClaseEsfuerzo(const double &tol) const
     return retval;
   }
 
-//! @brief Devuelve la posición del centro de gravedad.
+//! @brief Return the posición del centro de gravedad.
 Pos2d XC::DqFibras::getCdg(void) const
   { return Pos2d(getYCdg(),getZCdg()); }
 
-//! @brief Devuelve la profundidad de la fibra neutra, es decir la distancia desde
+//! @brief Return the profundidad de la fibra neutra, es decir la distancia desde
 //! la fibra mas comprimida a la fibra neutra.
-//! El algoritmo empleado se basa en que get_dist_to_neutral_axis devuelve distancias negativas
+//! El algoritmo empleado se basa en que get_dist_to_neutral_axis returns distancias negativas
 //! para fibras comprimidas (deformación negativa).
 double XC::DqFibras::getNeutralAxisDepth(const FiberSectionBase &Section) const
   {
@@ -1202,14 +1202,14 @@ double XC::DqFibras::getNeutralAxisDepth(const FiberSectionBase &Section) const
     return retval;
   }
 
-//! @brief Devuelve un vector orientado desde el centro de tracciones al de compresiones.
+//! @brief Returns a vector orientado desde el centro de tracciones al de compresiones.
 XC::Vector XC::DqFibras::getVectorBrazoMecanico(void) const
   {
     const Segmento2d &bm= getSegmentoBrazoMecanico();
     return Vector(bm.GetVector());
   }
 
-//! @brief Devuelve un segmento orientado desde el centro de tracciones al de compresiones.
+//! @brief Returns a segmento orientado desde el centro de tracciones al de compresiones.
 Segmento2d XC::DqFibras::getSegmentoBrazoMecanico(void) const
   {
     Segmento2d retval;
@@ -1233,11 +1233,11 @@ Segmento2d XC::DqFibras::getSegmentoBrazoMecanico(void) const
     return retval;
   }
 
-//! @brief Devuelve la traza del plano de flexión en el plano de la sección.
+//! @brief Return the traza del plano de flexión en el plano de la sección.
 Recta2d XC::DqFibras::getTrazaPlanoFlexion(void) const
   { return getSegmentoBrazoMecanico().RectaSoporte(); }
 
-//! @brief Devuelve la traza de un plano perpendicular al de flexión
+//! @brief Return the traza de un plano perpendicular al de flexión
 //! que pasa por el baricentro de tracciones.
 Recta2d XC::DqFibras::getTrazaPlanoTraccion(void) const
   { 
@@ -1252,7 +1252,7 @@ Recta2d XC::DqFibras::getTrazaPlanoTraccion(void) const
     return trazaFlexion.Perpendicular(pt);
   }
 
-//! @brief Devuelve la traza de un plano perpendicular al de flexión
+//! @brief Return the traza de un plano perpendicular al de flexión
 //! que pasa por el baricentro de compresiones.
 Recta2d XC::DqFibras::getTrazaPlanoCompresion(void) const
   { 
@@ -1267,11 +1267,11 @@ Recta2d XC::DqFibras::getTrazaPlanoCompresion(void) const
     return trazaFlexion.Perpendicular(pt);
   }
 
-//! @brief Devuelve el brazo mecánico con el que está trabajando la sección.
+//! @brief Returns the brazo mecánico con el que está trabajando la sección.
 double XC::DqFibras::getBrazoMecanico(void) const
   { return getVectorBrazoMecanico().Norm(); }
 
-//! @brief Devuelve la distancia media entre fibras.
+//! @brief Return the distancia media entre fibras.
 double XC::DqFibras::getDistMediaFibras(void) const
   {
     double retval= 0;
@@ -1354,7 +1354,7 @@ double XC::DqFibras::calcAcEficazFibras(const std::list<Poligono2d> &contourAcEf
 const std::list<Poligono2d> &XC::DqFibras::getContourAcEficazFibra(const size_t &i) const
   { return dq_ac_eficaz[i]; }
 
-//! @brief Devuelve el valor del área eficaz de la fibra cuyo índice
+//! @brief Returns the valor del área eficaz de la fibra cuyo índice
 //! se pasa como parámetro.
 double XC::DqFibras::getAcEficazFibra(const size_t &i) const
   {
@@ -1364,7 +1364,7 @@ double XC::DqFibras::getAcEficazFibra(const size_t &i) const
     return area(dq_ac_eficaz[i].begin(),dq_ac_eficaz[i].end());
   }
 
-//! @brief Devuelve la suma de las áreas eficaces de las fibras.
+//! @brief Return the suma de las áreas eficaces de las fibras.
 double XC::DqFibras::getAcEficazFibras(void) const
   {
     const size_t sz= dq_ac_eficaz.size();
@@ -1394,7 +1394,7 @@ void XC::DqFibras::calcRecubrimientos(const GeomSection &g) const
 void XC::DqFibras::calcSeparaciones(void) const
   { seps= getPosiciones().GetSeparaciones(); }
 
-//! @brief Devuelve el valor del recubrimiento de la fibra cuyo índice
+//! @brief Returns the valor del recubrimiento de la fibra cuyo índice
 //! se pasa como parámetro.
 const double &XC::DqFibras::getRecubrimientoFibra(const size_t &i) const
   {
@@ -1404,7 +1404,7 @@ const double &XC::DqFibras::getRecubrimientoFibra(const size_t &i) const
     return recubs[i];
   }
 
-//! @brief Devuelve el valor de la separación recubrimiento de la fibra cuyo índice
+//! @brief Returns the valor de la separación recubrimiento de la fibra cuyo índice
 //! se pasa como parámetro.
 const double &XC::DqFibras::getSeparacionFibra(const size_t &i) const
   {
@@ -1414,14 +1414,14 @@ const double &XC::DqFibras::getSeparacionFibra(const size_t &i) const
     return seps[i];
   }
 
-//! @brief Devuelve el valor del diámetro que tendría la fibra si
+//! @brief Returns the valor del diámetro que tendría la fibra si
 //! su área fuera circular.
 double XC::DqFibras::getDiamEqFibra(const size_t &i) const
   { return 2.0*sqrt((*this)[i]->getArea()/M_PI); }
 
 
 
-//! @brief Devuelve la tensión en la fibra i en el instante en el que
+//! @brief Return the tensión en la fibra i en el instante en el que
 //! se produce la fisuración de su área eficaz.
 double XC::DqFibras::getSigmaSRFibra(const size_t &i,const double &Ec,const double &Es,const double &fctm) const
   {
@@ -1561,7 +1561,7 @@ int XC::DqFibras::setTrialSectionDeformation(const FiberSection2d &Section2d,KRS
     return retval;
   }
 
-//! @brief Devuelve el estado de las fibras al del último commit.
+//! @brief Returns the estado de las fibras al del último commit.
 int XC::DqFibras::revertToLastCommit(FiberSection2d &Section2d,KRSeccion &kr2)
   {
     int err= 0;
@@ -1573,7 +1573,7 @@ int XC::DqFibras::revertToLastCommit(FiberSection2d &Section2d,KRSeccion &kr2)
     return err;
   }
 
-//! @brief Devuelve las fibras a su estado inicial.
+//! @brief Returns the fibras a su estado inicial.
 int XC::DqFibras::revertToStart(FiberSection2d &Section2d,KRSeccion &kr2)
   {
     int err= 0;
@@ -1585,7 +1585,7 @@ int XC::DqFibras::revertToStart(FiberSection2d &Section2d,KRSeccion &kr2)
     return err;
   }
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSection2d &Section2d) const
   {
     static double kInitial[4];
@@ -1750,7 +1750,7 @@ int XC::DqFibras::setTrialSectionDeformation(FiberSection3d &Section3d,KRSeccion
     return retval;
   }
 
-//! @brief Devuelve el estado de la sección al del último commit.
+//! @brief Returns the estado de la sección al del último commit.
 int XC::DqFibras::revertToLastCommit(FiberSection3d &Section3d,KRSeccion &kr3)
   {
     int err= 0;
@@ -1762,7 +1762,7 @@ int XC::DqFibras::revertToLastCommit(FiberSection3d &Section3d,KRSeccion &kr3)
     return err;
   }
 
-//! @brief Devuelve las fibras a su estado inicial.
+//! @brief Returns the fibras a su estado inicial.
 int XC::DqFibras::revertToStart(FiberSection3d &Section3d,KRSeccion &kr3)
   {
     // revert the fibers to start
@@ -1775,7 +1775,7 @@ int XC::DqFibras::revertToStart(FiberSection3d &Section3d,KRSeccion &kr3)
     return err;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente inicial.
+//! @brief Return the tangent stiffness matrix inicial.
 const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSection3d &Section3d) const
   {
     static double kInitialData[9];
@@ -1916,7 +1916,7 @@ int XC::DqFibras::setTrialSectionDeformation(FiberSectionGJ &SectionGJ,KRSeccion
     return retval;
   }
 
-//! @brief Devuelve el estado de la sección al del último commit.
+//! @brief Returns the estado de la sección al del último commit.
 int XC::DqFibras::revertToLastCommit(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
   {
     int err= 0;
@@ -1928,7 +1928,7 @@ int XC::DqFibras::revertToLastCommit(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
     return err;
   }
 
-//! @brief Devuelve las fibras a su estado inicial.
+//! @brief Returns the fibras a su estado inicial.
 int XC::DqFibras::revertToStart(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
   {
     // revert the fibers to start
@@ -1941,7 +1941,7 @@ int XC::DqFibras::revertToStart(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
     return err;
   }
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSectionGJ &SectionGJ) const
   {
     static double kInitialData[16];
@@ -2081,7 +2081,7 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
       return 0;
   }
 
-// //! Devuelve el valor máximo en el conjunto de fibras de la propiedad que se
+// //! Returns the valor máximo en el conjunto de fibras de la propiedad que se
 // //! pasa como parámetro.
 // size_t XC::DqFibras::IMaxProp(const std::string &nmb_prop) const
 //   {
@@ -2123,7 +2123,7 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
 //     return retval;
 //   }
 
-// //! Devuelve el indice de la fibra que presenta el valor mínimo
+// //! Returns the indice de la fibra que presenta el valor mínimo
 // //! en el conjunto de fibras de la propiedad being passed as parameter.
 // size_t XC::DqFibras::IMinProp(const std::string &nmb_prop) const
 //   {

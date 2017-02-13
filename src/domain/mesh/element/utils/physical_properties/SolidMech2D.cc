@@ -45,7 +45,7 @@ XC::Vector XC::SolidMech2D::getRhoi(void) const
   { return NDMaterialPhysicalProperties::getRhoi(rho); }
 
 #define DBTAGS_SIZE 3
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::SolidMech2D::getDbTagData(void) const
   {

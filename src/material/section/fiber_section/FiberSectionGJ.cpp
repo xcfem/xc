@@ -107,7 +107,7 @@ int XC::FiberSectionGJ::setTrialSectionDeformation(const XC::Vector &deforms)
     return fibras.setTrialSectionDeformation(*this,kr);
   }
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix &XC::FiberSectionGJ::getInitialTangent(void) const
   { return fibras.getInitialTangent(*this);  }
 
@@ -120,14 +120,14 @@ const XC::ResponseId &XC::FiberSectionGJ::getType(void) const
 int XC::FiberSectionGJ::getOrder(void) const
   { return kr.dim(); }
 
-//! @brief Devuelve el estado de la sección al del último commit.
+//! @brief Returns the estado de la sección al del último commit.
 int XC::FiberSectionGJ::revertToLastCommit(void)
   {
     FiberSection3dBase::revertToLastCommit();
     return fibras.revertToLastCommit(*this,kr);
   }
 
-//! @brief Devuelve la sección a su estado inicial.
+//! @brief Return the sección a su estado inicial.
 int XC::FiberSectionGJ::revertToStart(void)
   { return fibras.revertToStart(*this,kr); }
 

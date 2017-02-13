@@ -45,14 +45,14 @@ XC::LineaBase::LineaBase(Preprocessor *m,const size_t &nd)
 XC::LineaBase::LineaBase(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : Edge(nombre,m,nd), p1(nullptr), p2(nullptr) {}
 
-//! @brief Devuelve un apuntador (constante) al punto inicial.
+//! @brief Returns a constant pointer to start point.
 const XC::Pnt *XC::LineaBase::P1(void) const
   { return p1; }
-//! @brief Devuelve un apuntador (constante) al punto final.
+//! @brief Returns a constant pointer to end point.
 const XC::Pnt *XC::LineaBase::P2(void) const
   { return p2; }
 
-//! @brief Devuelve el vértice de índice i.
+//! @brief Returns the vértice de índice i.
 const XC::Pnt *XC::LineaBase::GetVertice(const size_t &i) const
   {
     if(i==1)

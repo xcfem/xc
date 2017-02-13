@@ -131,7 +131,7 @@ double XC::FiberSection2d::get_strain(const double &y) const
     return (def(0) + y*def(1));
   }
 
-//! @brief Devuelve la deformación correspondiente a la posición being passed as parameter.
+//! @brief Return the deformación correspondiente a la posición being passed as parameter.
 double XC::FiberSection2d::getStrain(const double &y,const double &) const
   { return get_strain(-y); } //XXX El cambio de signo de la y se debe al lío
                              // que produce el que la coordenada este cambiada
@@ -152,7 +152,7 @@ int XC::FiberSection2d::setTrialSectionDeformation(const Vector &deforms)
     return fibras.setTrialSectionDeformation(*this,kr);
   }
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix &XC::FiberSection2d::getInitialTangent(void) const
   { return fibras.getInitialTangent(*this); }
 
@@ -172,7 +172,7 @@ int XC::FiberSection2d::revertToLastCommit(void)
     return fibras.revertToLastCommit(*this,kr);
   }
 
-//! @brief Devuelve la sección a su estado inicial.
+//! @brief Return the sección a su estado inicial.
 int XC::FiberSection2d::revertToStart(void)
   {
     FiberSectionBase::revertToStart();

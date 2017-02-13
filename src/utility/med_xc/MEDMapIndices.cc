@@ -34,7 +34,7 @@ void XC::MEDMapIndices::nuevo_tag(size_t i)
     indices[i]= numVertices;
   }
 
-//! @brief Devuelve el índice correspondiente al que
+//! @brief Returns the índice correspondiente al que
 //! se pasa como parámetro.
 int XC::MEDMapIndices::getMEDIndice(const size_t &i) const
   {
@@ -49,7 +49,7 @@ int XC::MEDMapIndices::getMEDIndice(const size_t &i) const
       }
   }
 
-//! @brief Devuelve los índices correspondientes a los que
+//! @brief Returns the índices correspondientes a los que
 //! se pasan como parámetro.
 std::vector<int> XC::MEDMapIndices::getMEDIndices(const std::vector<int> &idx) const
   {

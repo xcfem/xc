@@ -135,12 +135,12 @@ class Fiber: public TaggedObject, public MovableObject
     double getMy(const double &z0= 0.0) const;
   };
 
-//! @brief Devuelve el momento de la fuerza ejercida por la fibra
+//! @brief Returns the momento de la fuerza ejercida por la fibra
 //! respecto al eje paralelo al «z» que pasa por y0.
 inline double Fiber::getMz(const double &y0) const
   { return getFuerza()*(getLocY() - y0); }
 
-//! @brief Devuelve el momento de la fuerza ejercida por la fibra
+//! @brief Returns the momento de la fuerza ejercida por la fibra
 //! respecto al eje paralelo al «y» que pasa por z0.
 inline double Fiber::getMy(const double &z0) const
   { return getFuerza()*(getLocZ() - z0); }

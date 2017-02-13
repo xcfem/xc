@@ -116,14 +116,14 @@ bool XC::DqPtrsNode::push_front(Node *n)
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 XC::Node *XC::DqPtrsNode::getNearestNode(const Pos3d &p)
   {
     Node *retval= const_cast<Node *>(kdtreeNodos.getNearestNode(p));
     return retval;
   }
 
-//! @brief Devuelve el nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo más próximo al punto being passed as parameter.
 const XC::Node *XC::DqPtrsNode::getNearestNode(const Pos3d &p) const
   {
     DqPtrsNode *this_no_const= const_cast<DqPtrsNode *>(this);
@@ -147,7 +147,7 @@ void XC::DqPtrsNode::transforma(const TrfGeom &trf)
     crea_arbol();
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al nodo
+//! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag se pasa como parámetro.
 XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag)
   {
@@ -168,7 +168,7 @@ XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al nodo
+//! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag se pasa como parámetro.
 const XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag) const
   {
@@ -189,7 +189,7 @@ const XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag) const
     return retval;
   }
 
-//! @brief Devuelve el número de nods del conjunto que están activos.
+//! @brief Returns the número de nods del conjunto que están activos.
 size_t XC::DqPtrsNode::getNumLiveNodes(void) const
   {
     size_t retval= 0;
@@ -203,7 +203,7 @@ size_t XC::DqPtrsNode::getNumLiveNodes(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de nodos del conjunto que están inactivos.
+//! @brief Returns the número de nodos del conjunto que están inactivos.
 size_t XC::DqPtrsNode::getNumDeadNodes(void) const
   {
     size_t retval= 0;
@@ -228,7 +228,7 @@ void XC::DqPtrsNode::numera(void)
       }
   }
 
-//! @brief Devuelve verdadero si el nodo, cuyo tag se
+//! @brief Returns true ifel nodo, cuyo tag se
 //! pasa como parámetro, pertenece al conjunto.
 bool XC::DqPtrsNode::InNodeTag(const int tag_nodo) const
   {
@@ -237,7 +237,7 @@ bool XC::DqPtrsNode::InNodeTag(const int tag_nodo) const
     return false;
   }
 
-//! @brief Devuelve verdadero si todos los nodos, cuyos tags se
+//! @brief Returns true iftodos los nodos, cuyos tags se
 //! pasan como parámetro, pertenecen al conjunto.
 bool XC::DqPtrsNode::InNodeTags(const ID &tag_nodos) const
   {
@@ -247,7 +247,7 @@ bool XC::DqPtrsNode::InNodeTags(const ID &tag_nodos) const
     return true;
   }
 
-//! @brief Devuelve los tags de los nodos.
+//! @brief Returns the tags de los nodos.
 std::set<int> XC::DqPtrsNode::getTags(void) const
   {
     std::set<int> retval;

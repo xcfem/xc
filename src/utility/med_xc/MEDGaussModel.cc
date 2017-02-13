@@ -66,11 +66,11 @@ XC::MEDGaussModel::med_gauss_model *XC::MEDGaussModel::getGaussModelMED(void) co
     return model;
   }
 
-//! @brief Devuelve el nombre del model.
+//! @brief Returns the nombre del model.
 const std::string &XC::MEDGaussModel::getNombre(void) const
   { return nombre; }
 
-//! @brief Devuelve el tipo del elemento al que se refiere el modelo.
+//! @brief Returns the tipo del elemento al que se refiere el modelo.
 const MED_EN::medGeometryElement &XC::MEDGaussModel::getTipo(void) const
   { return tipo; }
 

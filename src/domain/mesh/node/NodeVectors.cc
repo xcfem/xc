@@ -93,7 +93,7 @@ size_t XC::NodeVectors::getVectorsSize(void) const
       return 0;
   }
 
-//! @brief Devuelve el vector de datos.
+//! @brief Returns the vector de datos.
 const XC::Vector &XC::NodeVectors::getData(const size_t &nDOF) const
   {
     if(!commitData)
@@ -109,14 +109,14 @@ const XC::Vector &XC::NodeVectors::getData(const size_t &nDOF) const
     return *commitData;
   }
   
-//! @brief Devuelve los valores "consumados"
+//! @brief Returns the valores "consumados"
 const XC::Vector &XC::NodeVectors::getCommitData(void) const
   {
     assert(commitData);
     return *commitData;
   }
 
-//! @brief Devuelve el vector de datos de prueba.
+//! @brief Returns the vector de datos de prueba.
 const XC::Vector &XC::NodeVectors::getTrialData(const size_t &nDOF) const
   {
     if(!trialData)
@@ -131,7 +131,7 @@ const XC::Vector &XC::NodeVectors::getTrialData(const size_t &nDOF) const
     return *trialData;
   }
 
-//! @brief Devuelve los valores de prueba
+//! @brief Returns the valores de prueba
 const XC::Vector &XC::NodeVectors::getTrialData(void) const
   {
     assert(trialData);
@@ -220,7 +220,7 @@ int XC::NodeVectors::commitState(const size_t &nDOF)
   }
 
 
-//! @brief Devuelve los vectores al estado correspondiente al último commit.
+//! @brief Returns the vectores al estado correspondiente al último commit.
 int XC::NodeVectors::revertToLastCommit(const size_t &nDOF)
   {
     // check data exists, if does set trial = last commit, incr = 0
@@ -233,7 +233,7 @@ int XC::NodeVectors::revertToLastCommit(const size_t &nDOF)
   }
 
 
-//! @brief Devuelve el nodo a su estado inicial.
+//! @brief Returns the nodo a su estado inicial.
 int XC::NodeVectors::revertToStart(const size_t &nDOF)
   {
     // check data exists, if does set all to zero
@@ -279,7 +279,7 @@ int XC::NodeVectors::createData(const size_t &nDOF)
       }
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::NodeVectors::getDbTagData(void) const
   {

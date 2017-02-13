@@ -238,13 +238,13 @@ XC::DamageModel *XC::HystereticEnergy::getCopy(void) const
 }
 
 
-//! @brief Devuelve el identificador de la variable cuyo nombre
+//! @brief Returns the identificador de la variable cuyo nombre
 //! se pasa como parámetro.
 int XC::HystereticEnergy::setVariable(const std::string &argv)
   { return -1; }
 
 
-//! @brief Devuelve el valor de la variable cuyo nombre
+//! @brief Returns the valor de la variable cuyo nombre
 //! se pasa como parámetro.
 int XC::HystereticEnergy::getVariable(int variableID, double &info)
   { return -1; }

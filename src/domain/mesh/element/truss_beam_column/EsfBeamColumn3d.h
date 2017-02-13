@@ -49,58 +49,58 @@ class EsfBeamColumn3d: public Vector
     explicit EsfBeamColumn3d(const Vector &);
     EsfBeamColumn3d(const EsfBeamColumn3d &otro);
     EsfBeamColumn3d &operator=(const EsfBeamColumn3d &otro);
-    //! @brief Devuelve el axil.
+    //! @brief Returns the axil.
     inline const double &N(void) const
       { return (*this)[0]; }
-    //! @brief Devuelve el axil.
+    //! @brief Returns the axil.
     inline double &N(void)
       { return (*this)[0]; }
-    //! @brief Devuelve la fuerza axil que se ejerce sobre la barra en el extremo dorsal.
+    //! @brief Return the fuerza axil que se ejerce sobre la barra en el extremo dorsal.
     inline double AN1(void) const
       { return -N(); }
-    //! @brief Devuelve la fuerza axil que se ejerce sobre la barra en el extremo frontal.
+    //! @brief Return the fuerza axil que se ejerce sobre la barra en el extremo frontal.
     inline double AN2(void) const
       { return N(); }
-    //! @brief Devuelve el momento z en el extremo dorsal.
+    //! @brief Returns the momento z en el extremo dorsal.
     inline const double &Mz1(void) const
       { return (*this)[1]; }
-    //! @brief Devuelve el momento z en el extremo dorsal.
+    //! @brief Returns the momento z en el extremo dorsal.
     inline double &Mz1(void)
       { return (*this)[1]; }
-    //! @brief Devuelve el momento z en el extremo frontal.
+    //! @brief Returns the momento z en el extremo frontal.
     inline const double &Mz2(void) const
       { return (*this)[2]; }
-    //! @brief Devuelve el momento z en el extremo frontal.
+    //! @brief Returns the momento z en el extremo frontal.
     inline double &Mz2(void)
       { return (*this)[2]; }
-    //! @brief Devuelve el cortante Vy.
+    //! @brief Returns the cortante Vy.
     inline double Vy(const double &L) const
       { return (Mz1()+Mz2())/L; }
-    //! @brief Devuelve el momento y en el extremo dorsal.
+    //! @brief Returns the momento y en el extremo dorsal.
     inline const double &My1(void) const
       { return (*this)[3]; }
-    //! @brief Devuelve el momento y en el extremo dorsal.
+    //! @brief Returns the momento y en el extremo dorsal.
     inline double &My1(void)
       { return (*this)[3]; }
-    //! @brief Devuelve el momento y en el extremo frontal.
+    //! @brief Returns the momento y en el extremo frontal.
     inline const double &My2(void) const
       { return (*this)[4]; }
-    //! @brief Devuelve el momento y en el extremo frontal.
+    //! @brief Returns the momento y en el extremo frontal.
     inline double &My2(void)
       { return (*this)[4]; }
-    //! @brief Devuelve el cortante Vy.
+    //! @brief Returns the cortante Vy.
     inline double Vz(const double &L) const
       { return -((My1()+My2())/L); }
-    //! @brief Devuelve el torsor.
+    //! @brief Returns the torsor.
     inline const double &T(void) const
       { return (*this)[5]; }
-    //! @brief Devuelve el torsor.
+    //! @brief Returns the torsor.
     inline double &T(void)
       { return (*this)[5]; }
-    //! @brief Devuelve el torsor en el extremo dorsal.
+    //! @brief Returns the torsor en el extremo dorsal.
     inline double T1(void) const
       { return -T(); }
-    //! @brief Devuelve el torsor en el extremo frontal.
+    //! @brief Returns the torsor en el extremo frontal.
     inline double T2(void) const
       { return T(); }
   };

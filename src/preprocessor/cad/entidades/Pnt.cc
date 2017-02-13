@@ -66,7 +66,7 @@ void XC::Pnt::borra_linea(Edge *l) const
     if(i!= lineas_pt.end()) //La ha encontrado.
       lineas_pt.erase(i);
   }
-//! Devuelve el vector de posición del punto.
+//! Returns the vector de posición del punto.
 Vector3d XC::Pnt::VectorPos(void) const
   { return p.VectorPos();  }
 
@@ -74,11 +74,11 @@ Vector3d XC::Pnt::VectorPos(void) const
 void XC::Pnt::actualiza_topologia(void)
   {}
 
-//! @brief Devuelve el BND del objeto.
+//! @brief Returns the BND del objeto.
 BND3d XC::Pnt::Bnd(void) const
   { return BND3d(p,p);  }
 
-//! @brief Devuelve las líneas que comienzan o acaban en este punto.
+//! @brief Returns the líneas que comienzan o acaban en este punto.
 std::set<const XC::Edge *> XC::Pnt::EdgesExtremo(void) const
   {
     std::set<const Edge *> retval;
@@ -95,7 +95,7 @@ std::set<const XC::Edge *> XC::Pnt::EdgesExtremo(void) const
     return retval;
   }
 
-//! @brief Devuelve los nombres de las lineas que tocan al punto.
+//! @brief Returns the nombres de las lineas que tocan al punto.
 const std::string &XC::Pnt::NombresEdgesTocan(void) const
   {
     static std::string retval;
@@ -110,18 +110,18 @@ const std::string &XC::Pnt::NombresEdgesTocan(void) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si el punto toca a la línea.
+//! @brief Returns true ifel punto toca a la línea.
 bool XC::Pnt::Toca(const Edge &l) const
   {
     std::set<const Edge *>::const_iterator i= lineas_pt.find(&l);
     return (i!=lineas_pt.end());
   }
 
-//! @brief Devuelve verdadero si el punto es un extremo de la línea.
+//! @brief Returns true ifel punto es un extremo de la línea.
 bool XC::Pnt::Extremo(const Edge &l) const
   { return l.Extremo(*this); }
 
-//! @brief Devuelve verdadero si el punto toca a la superficie.
+//! @brief Returns true ifel punto toca a la superficie.
 bool XC::Pnt::Toca(const Face &s) const
   {
     for(std::set<const Edge *>::const_iterator i= lineas_pt.begin(); i!=lineas_pt.end();i++)
@@ -129,7 +129,7 @@ bool XC::Pnt::Toca(const Face &s) const
     return false;
   }
 
-//! @brief Devuelve verdadero si el punto toca al cuerpo.
+//! @brief Returns true ifel punto toca al cuerpo.
 bool XC::Pnt::Toca(const Body &b) const
   {
     for(std::set<const Edge *>::const_iterator i= lineas_pt.begin(); i!=lineas_pt.end();i++)
@@ -137,7 +137,7 @@ bool XC::Pnt::Toca(const Body &b) const
     return false;
   }
 
-//! @brief Devuelve el cuadrado de la distancia a la posición being passed as parameter.
+//! @brief Returns the cuadrado de la distancia a la posición being passed as parameter.
 double XC::Pnt::DistanciaA2(const Pos3d &pt) const
   { return dist2(p,pt);  }
 
@@ -191,7 +191,7 @@ XC::Node *XC::Pnt::getNode(void)
     return nod;
   }
 
-//! @brief Devuelve los conjuntos a los que pertenece este punto.
+//! @brief Returns the conjuntos a los que pertenece este punto.
 std::set<XC::SetBase *> XC::Pnt::get_sets(void) const
   {
     std::set<SetBase *> retval;

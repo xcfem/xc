@@ -53,7 +53,7 @@ class Segment: public Eje
     void setEndPoints(size_t, size_t);
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
-    //! @brief Devuelve el número de vértices.
+    //! @brief Returns the número de vértices.
     inline virtual size_t NumVertices(void) const
       { return 2; }
     virtual const Spot *GetVertice(const size_t &i) const;

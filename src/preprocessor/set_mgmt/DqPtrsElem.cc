@@ -118,21 +118,21 @@ bool XC::DqPtrsElem::push_front(Element *e)
     return retval;
   }
 
-//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
+//! @brief Returns the elemento más próximo al punto being passed as parameter.
 XC::Element *XC::DqPtrsElem::getNearestElement(const Pos3d &p)
   {
     Element *retval= const_cast<Element *>(kdtreeElements.getNearestElement(p));
     return retval;
   }
 
-//! @brief Devuelve el elemento más próximo al punto being passed as parameter.
+//! @brief Returns the elemento más próximo al punto being passed as parameter.
 const XC::Element *XC::DqPtrsElem::getNearestElement(const Pos3d &p) const
   {
     DqPtrsElem *this_no_const= const_cast<DqPtrsElem *>(this);
     return this_no_const->getNearestElement(p);
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al elemento
+//! @brief Returns (if it exists) a pointer al elemento
 //! cuyo tag se pasa como parámetro.
 XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag)
   {
@@ -153,7 +153,7 @@ XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve, si lo encuentra, a pointer al elemento
+//! @brief Returns (if it exists) a pointer al elemento
 //! cuyo tag se pasa como parámetro.
 const XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag) const
   {
@@ -174,7 +174,7 @@ const XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag) const
     return retval;
   }
 
-//! @brief Devuelve el número de elementos del conjunto que están activos.
+//! @brief Returns the número de elementos del conjunto que están activos.
 size_t XC::DqPtrsElem::getNumLiveElements(void) const
   {
     size_t retval= 0;
@@ -188,7 +188,7 @@ size_t XC::DqPtrsElem::getNumLiveElements(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de elementos del conjunto que están inactivos.
+//! @brief Returns the número de elementos del conjunto que están inactivos.
 size_t XC::DqPtrsElem::getNumDeadElements(void) const
   {
     size_t retval= 0;
@@ -249,7 +249,7 @@ void XC::DqPtrsElem::calc_resisting_force(void)
       }
   }
 
-//! @brief Devuelve los tags de los elementos.
+//! @brief Returns the tags de los elementos.
 std::set<int> XC::DqPtrsElem::getTags(void) const
   {
     std::set<int> retval;

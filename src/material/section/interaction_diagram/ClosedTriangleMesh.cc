@@ -271,7 +271,7 @@ const Triedro3d *XC::ClosedTriangleMesh::BuscaPtrTriedro(const Pos3d &p) const
     return retval;
   }
 
-//! @brief Devuelve la intersección de la semirrecta que une el origen (0,0,0) y el
+//! @brief Return the intersección de la semirrecta que une el origen (0,0,0) y el
 //! el punto p con la superficie.
 GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_interseccion(const Pos3d &p) const
   {
@@ -312,7 +312,7 @@ void XC::ClosedTriangleMesh::Print(std::ostream &os) const
     std::cerr << "ClosedTriangleMesh::Print no implementada." << std::endl;
   }
 
-//! @brief Devuelve una matriz con las coordenadas de los puntos
+//! @brief Returns a matriz con las coordenadas de los puntos
 //! que definen cada uno de los triedros.
 void XC::ClosedTriangleMesh::getMatrizPosiciones(Matrix &m)
   {

@@ -142,7 +142,7 @@ XC::SoluMethod *XC::ConvergenceTest::getSoluMethod(void)
 const XC::SoluMethod *XC::ConvergenceTest::getSoluMethod(void) const
   { return dynamic_cast<const SoluMethod *>(Owner()); }
 
-//! @brief Devuelve verdadero si puede acceder al system of equations.
+//! @brief Returns true ifpuede acceder al system of equations.
 bool XC::ConvergenceTest::hasLinearSOE(void) const
   { return (getLinearSOEPtr()!=nullptr); }
 
@@ -162,19 +162,19 @@ const XC::LinearSOE *XC::ConvergenceTest::getLinearSOEPtr(void) const
     return sm->getLinearSOEPtr();
   }
 
-//! @brief Devuelve el vector de incógnitas.
+//! @brief Returns the vector de incógnitas.
 const XC::Vector &XC::ConvergenceTest::getX(void) const
   { return getLinearSOEPtr()->getX(); }
 
-//! @brief Devuelve la norma del vector de incógnitas.
+//! @brief Return the norma del vector de incógnitas.
 double XC::ConvergenceTest::getNormX(void) const
   { return getLinearSOEPtr()->getX().pNorm(nType); }
 
-//! @brief Devuelve el vector de términos independientes.
+//! @brief Returns the vector de términos independientes.
 const XC::Vector &XC::ConvergenceTest::getB(void) const
   { return getLinearSOEPtr()->getB(); }
 
-//! @brief Devuelve la norma del vector de términos independientes.
+//! @brief Return the norma del vector de términos independientes.
 double XC::ConvergenceTest::getNormB(void) const
  { return getLinearSOEPtr()->getB().pNorm(nType); }
 

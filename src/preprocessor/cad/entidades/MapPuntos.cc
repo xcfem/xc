@@ -60,7 +60,7 @@ void XC::MapPuntos::UpdateSets(Pnt *nuevo_punto) const
       }
   }
 
-//! @brief Devuelve el vector definido por los puntos cuyos índices se pasan como parámetro.
+//! @brief Returns the vector definido por los puntos cuyos índices se pasan como parámetro.
 Vector3d XC::MapPuntos::getVector(const Indice &i,const Indice &j) const
   {
     Vector3d retval;
@@ -75,7 +75,7 @@ Vector3d XC::MapPuntos::getVector(const Indice &i,const Indice &j) const
     return retval;
   }
 
-//! @brief Devuelve la recta que pasa por los puntos cuyos índices se pasan como parámetro.
+//! @brief Return the recta que pasa por los puntos cuyos índices se pasan como parámetro.
 Recta3d XC::MapPuntos::getRecta(const Indice &i,const Indice &j) const
   {
     Recta3d retval;
@@ -90,7 +90,7 @@ Recta3d XC::MapPuntos::getRecta(const Indice &i,const Indice &j) const
     return retval;
   }
 
-//! @brief Devuelve el plano que pasa por los puntos cuyos índices se pasan como parámetro.
+//! @brief Returns the plano que pasa por los puntos cuyos índices se pasan como parámetro.
 Plano3d XC::MapPuntos::getPlano(const Indice &i,const Indice &j,const Indice &k) const
   {
     Plano3d retval;
@@ -223,7 +223,7 @@ void XC::MapPuntos::Transforma(const TrfGeom &trf,const std::vector<Indice> &ind
       }
   }
 
-//! @brief Devuelve la distancia entre los puntos cuyos identificadores se pasan como parámetro.
+//! @brief Return the distancia entre los puntos cuyos identificadores se pasan como parámetro.
 double XC::MapPuntos::Dist(const Indice &i,const Indice &j) const
   {
     double retval(-1.0);

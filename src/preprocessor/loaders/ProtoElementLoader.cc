@@ -98,11 +98,11 @@ XC::ProtoElementLoader::ProtoElementLoader(Preprocessor *preprocessor)
 XC::MaterialLoader &XC::ProtoElementLoader::get_material_loader(void) const
   { return preprocessor->getMaterialLoader(); }
 
-//! @brief Devuelve un iterador al material que se especifica en nmb_mat.
+//! @brief Returns an iterator al material que se especifica en nmb_mat.
 XC::MaterialLoader::const_iterator XC::ProtoElementLoader::get_iter_material(void) const
   { return preprocessor->getMaterialLoader().find(nmb_mat); }
 
-//! @brief Devuelve un apuntador al material que se especifica en nmb_mat.
+//! @brief Returns a pointer to material que se especifica en nmb_mat.
 XC::Material *XC::ProtoElementLoader::get_ptr_material(void) const
   {
     Material *retval= nullptr;
@@ -119,12 +119,12 @@ XC::Material *XC::ProtoElementLoader::get_ptr_material(void) const
 XC::BeamIntegratorLoader &XC::ProtoElementLoader::get_beam_integrator_loader(void) const
   { return preprocessor->getBeamIntegratorLoader(); }
 
-//! @brief Devuelve un iterador al integrator que se especifica en nmb_integ.
+//! @brief Returns an iterator al integrator que se especifica en nmb_integ.
 XC::BeamIntegratorLoader::const_iterator XC::ProtoElementLoader::get_iter_beam_integrator(void) const
   { return preprocessor->getBeamIntegratorLoader().find(nmb_integ); }
 
 
-//! @brief Devuelve un apuntador al integrator que se especifica en nmb_integ.
+//! @brief Returns a pointer to integrator que se especifica en nmb_integ.
 XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void) const
   {
     BeamIntegration *retval= nullptr;

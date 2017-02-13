@@ -38,7 +38,7 @@ class Matrix;
 
 //! @ingroup AnalysisType
 //
-//! @brief Análisis de eigenvalues y vectores propios.
+//! @brief Modal analysis.
 class ModalAnalysis : public EigenAnalysis
   {
   protected:

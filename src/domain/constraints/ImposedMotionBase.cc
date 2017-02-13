@@ -74,7 +74,7 @@ void XC::ImposedMotionBase::setDomain(Domain *theDomain)
 bool XC::ImposedMotionBase::isHomogeneous(void) const
   { return true; }
 
-//! @brief Devuelve el valor impuesto.
+//! @brief Returns the valor impuesto.
 double XC::ImposedMotionBase::getValue(void) const
   {
     // always return 0.0 - applyConstraint() sets the values at XC::Node 

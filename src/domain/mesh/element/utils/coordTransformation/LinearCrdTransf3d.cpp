@@ -98,11 +98,11 @@ int XC::LinearCrdTransf3d::commitState(void)
   { return 0; }
 
 
-//! @brief Devuelve el estado de la transformación al último consumado.
+//! @brief Returns the estado de la transformación al último consumado.
 int XC::LinearCrdTransf3d::revertToLastCommit(void)
   { return 0; }
 
-//! @brief Devuelve el estado de la transformación al inicial.
+//! @brief Returns the estado de la transformación al inicial.
 int XC::LinearCrdTransf3d::revertToStart(void)
   { return 0; }
 
@@ -113,7 +113,7 @@ int XC::LinearCrdTransf3d::revertToStart(void)
 int XC::LinearCrdTransf3d::update(void)
   { return 0; }
 
-//! @brief Devuelve el vector de cargas expresado en el sistema global del elemento.
+//! @brief Returns the vector de cargas expresado en el sistema global del elemento.
 const XC::Vector &XC::LinearCrdTransf3d::getGlobalResistingForce(const Vector &pb, const Vector &p0) const
   {
     // transform resisting forces from the basic system to local coordinates
@@ -121,7 +121,7 @@ const XC::Vector &XC::LinearCrdTransf3d::getGlobalResistingForce(const Vector &p
     return local_to_global_resisting_force(pl);
   }
 
-//! @brief Devuelve la matriz de rigidez expresada en el sistema global del elemento.
+//! @brief Return the matriz de rigidez expresada en el sistema global del elemento.
 const XC::Matrix &XC::LinearCrdTransf3d::getGlobalStiffMatrix(const Matrix &KB, const Vector &pb) const
   {
     const Matrix &kl= basic_to_local_stiff_matrix(KB); // Local stiffness

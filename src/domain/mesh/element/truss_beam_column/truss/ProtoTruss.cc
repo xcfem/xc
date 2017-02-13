@@ -69,7 +69,7 @@ XC::ProtoTruss &XC::ProtoTruss::operator=(const ProtoTruss &otro)
 int XC::ProtoTruss::getNumDOF(void) const 
   { return numDOF; }
 
-//! @brief Devuelve la dimensión del espacio en el que se define el elemento (2D ó 3D).
+//! @brief Return the dimensión del espacio en el que se define el elemento (2D ó 3D).
 int XC::ProtoTruss::getNumDIM(void) const 
   { return dimSpace; }
 

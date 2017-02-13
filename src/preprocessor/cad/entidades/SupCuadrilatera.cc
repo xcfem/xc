@@ -85,7 +85,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
     return retval;
   }
 
-//! @brief Devuelve el lado homólogo al being passed as parameter.
+//! @brief Returns the lado homólogo al being passed as parameter.
 const XC::Edge *XC::SupCuadrilatera::get_lado_homologo(const Edge *l) const
   {
     const Edge *retval= nullptr;   
@@ -345,7 +345,7 @@ void XC::SupCuadrilatera::defGridPoints(const boost::python::list &l)
     setPuntos(tmp);
   }
 
-//! @brief Devuelve (ndivI+1)*(ndivJ+1) posiciones para los nodos.
+//! @brief Returns (ndivI+1)*(ndivJ+1) posiciones para los nodos.
 MatrizPos3d XC::SupCuadrilatera::get_posiciones(void) const
   {
     MatrizPos3d retval;

@@ -199,7 +199,7 @@ int XC::CableMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::CableMaterial::getCopy(void) const
   { return new CableMaterial(*this); }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::CableMaterial::getDbTagData(void) const
   {

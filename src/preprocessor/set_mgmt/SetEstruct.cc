@@ -57,40 +57,40 @@ size_t XC::SetEstruct::NumNodos(void) const
 size_t XC::SetEstruct::NumElementos(void) const
   { return GetNumCapasElementos()*GetNumFilasElementos()*GetNumColsElementos(); }
 
-//! @brief Devuelve verdadero si el único índice que varía es el I.
+//! @brief Returns true ifel único índice que varía es el I.
 bool XC::SetEstruct::EsFilaI(void) const
   {
     if((GetNumFilasNodos()>1) || (GetNumColsNodos()>1)) return false;
     return true;
   }
 
-//! @brief Devuelve verdadero si el único índice que varía es el J.
+//! @brief Returns true ifel único índice que varía es el J.
 bool XC::SetEstruct::EsFilaJ(void) const
   {
     if((GetNumCapasNodos()>1) || (GetNumColsNodos()>1)) return false;
     return true;
   }
 
-//! @brief Devuelve verdadero si el único índice que varía es el K.
+//! @brief Returns true ifel único índice que varía es el K.
 bool XC::SetEstruct::EsFilaK(void) const
   {
     if((GetNumCapasNodos()>1) || (GetNumFilasNodos()>1)) return false;
     return true;
   }
 
-//! @brief Devuelve verdadero si los indices que varían son los J y K.
+//! @brief Returns true iflos indices que varían son los J y K.
 bool XC::SetEstruct::EsCapaICte(void) const
   { return (GetNumCapasNodos()==1); }
 
-//! @brief Devuelve verdadero si los indices que varían son los I y K.
+//! @brief Returns true iflos indices que varían son los I y K.
 bool XC::SetEstruct::EsCapaJCte(void) const
   { return (GetNumFilasNodos()==1); }
 
-//! @brief Devuelve verdadero si los indices que varían son los I y J.
+//! @brief Returns true iflos indices que varían son los I y J.
 bool XC::SetEstruct::EsCapaKCte(void) const
   { return (GetNumColsNodos()==1); }
 
-//! @brief Devuelve el tipo del conjunto filaI,filaJ,filaK,capaICte,...
+//! @brief Returns the tipo del conjunto filaI,filaJ,filaK,capaICte,...
 std::string XC::SetEstruct::GetStrTipo(void) const
   {
     if(EsFilaI()) return "filaI";
@@ -102,7 +102,7 @@ std::string XC::SetEstruct::GetStrTipo(void) const
     return "bloqueIJK";
   }
 
-//! @brief Devuelve la dimensión del rango (0,1,2 ó 3).
+//! @brief Return the dimensión del rango (0,1,2 ó 3).
 size_t XC::SetEstruct::Dimension(void) const
   {
     size_t retval= 0;
@@ -112,7 +112,7 @@ size_t XC::SetEstruct::Dimension(void) const
     return retval;
   }
 
-//! @brief Devuelve los pointers to los nodos del conjunto.
+//! @brief Returns the pointers to los nodos del conjunto.
 XC::NodePtrSet XC::SetEstruct::getNodePtrSet(void)
   {
     NodePtrSet retval;
@@ -126,7 +126,7 @@ XC::NodePtrSet XC::SetEstruct::getNodePtrSet(void)
     return retval;    
   }
 
-//! @brief Devuelve los bordes de elemento que cuyos dos extremos
+//! @brief Returns the bordes de elemento que cuyos dos extremos
 //! están entre los nodos del conjunto.
 XC::ElementEdges XC::SetEstruct::getElementEdges(void)
   {
@@ -147,7 +147,7 @@ void XC::SetEstruct::agrega_elementos(const TritrizPtrElem &elementos)
           get_preprocessor()->getElementLoader().Agrega(elementos(i,j,k));
   }
 
-//! @brief Devuelve los tags de los nodos.
+//! @brief Returns the tags de los nodos.
 std::set<int> XC::SetEstruct::getNodeTags(void) const
   {
     std::set<int> retval;
@@ -185,7 +185,7 @@ boost::python::list XC::SetEstruct::getNodes(void)
   }
 
 
-//! @brief Devuelve los tags de los elementos.
+//! @brief Returns the tags de los elementos.
 std::set<int> XC::SetEstruct::getElementTags(void) const
   {
     std::set<int> retval;
@@ -222,7 +222,7 @@ boost::python::list XC::SetEstruct::getElements(void)
     return retval;
   }
 
-//! @brief Devuelve verdadero si el nodo está en el conjunto.
+//! @brief Returns true ifel nodo está en el conjunto.
 bool XC::SetEstruct::In(const Node *n) const
   {
     bool retval= false;
@@ -243,7 +243,7 @@ bool XC::SetEstruct::In(const Node *n) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si el elemento está en el conjunto.
+//! @brief Returns true ifel elemento está en el conjunto.
 bool XC::SetEstruct::In(const Element *e) const
   {
     bool retval= false;

@@ -63,7 +63,7 @@ XC::ShellNL::ShellNL(void)
   :QuadBase9N<SectionFDPhysicalProperties>( 0, ELE_TAG_ShellNL, SectionFDPhysicalProperties(9,nullptr)), Ktt(0.0),theCoordTransf(), Ki(nullptr)
   { }
 
-//! @brief Devuelve los puntos de Gauss del elemento.
+//! @brief Returns the puntos de Gauss del elemento.
 const XC::GaussModel &XC::ShellNL::getGaussModel(void) const
   { return gauss_model_quad9; }
 
@@ -992,7 +992,7 @@ XC::Matrix XC::ShellNL::transpose( int dim1,int dim2,const Matrix &M )
     return Mtran;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::ShellNL::getDbTagData(void) const
   {
@@ -1026,11 +1026,11 @@ int XC::ShellNL::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Devuelve un apuntador a la coordinate transformation.
+//! @brief Returns a pointer a la coordinate transformation.
 XC::ShellCrdTransf3dBase *XC::ShellNL::getCoordTransf(void)
   { return &theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 const XC::ShellCrdTransf3dBase *XC::ShellNL::getCoordTransf(void) const
   { return &theCoordTransf; }
 

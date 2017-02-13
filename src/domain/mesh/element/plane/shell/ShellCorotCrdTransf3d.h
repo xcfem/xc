@@ -63,13 +63,13 @@ class ShellCorotCrdTransf3d: public ShellCrdTransf3dBase
     ShellCorotCrdTransf3d(const NodePtrs &t);
     virtual ShellCrdTransf3dBase *getCopy(void) const;
 
-    //! @brief Devuelve el eje 1 local (contenido en el plano del elemento)
+    //! @brief Returns the eje 1 local (contenido en el plano del elemento)
     inline const Vector &G1trial(void) const
       { return g1trial; }
-    //! @brief Devuelve el eje 2 local (contenido en el plano del elemento)
+    //! @brief Returns the eje 2 local (contenido en el plano del elemento)
     inline const Vector &G2trial(void) const
       { return g2trial; }
-    //! @brief Devuelve el eje 3 local (normal al plano del elemento)
+    //! @brief Returns the eje 3 local (normal al plano del elemento)
     inline const Vector &G3trial(void) const
       { return g3trial; }
 

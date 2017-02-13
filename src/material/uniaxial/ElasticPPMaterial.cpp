@@ -175,12 +175,12 @@ int XC::ElasticPPMaterial::commitState(void)
     return 0;
   }        
 
-//! @brief Devuelve el estado del material al del último commit.
+//! @brief Returns the material state al del último commit.
 int XC::ElasticPPMaterial::revertToLastCommit(void)
   { return 0; }
 
 
-//! @brief Devuelve el material a su estado inicial.
+//! @brief Returns the material a su estado inicial.
 int XC::ElasticPPMaterial::revertToStart(void)
   {
     commitStrain= 0.0;

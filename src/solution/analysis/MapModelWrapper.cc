@@ -39,7 +39,7 @@
 XC::MapModelWrapper::MapModelWrapper(ProcSoluControl *owr)
   : EntCmd(owr) {}
 
-//! @brief Devuelve verdadero si existe el método cuyo nombre
+//! @brief Returns true ifexiste el método cuyo nombre
 //! se pasa como parámetro.
 bool XC::MapModelWrapper::existeModelWrapper(const std::string &cod) const
   { 

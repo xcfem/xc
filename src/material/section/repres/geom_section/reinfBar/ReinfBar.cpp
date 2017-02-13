@@ -99,27 +99,27 @@ double XC::ReinfBar::getDiameter(void) const
 double XC::ReinfBar::getArea (void) const
   { return area; }
 
-//! @brief Devuelve el momento de inercia respecto al eje paralelo al y por el CDG.
+//! @brief Returns the momento de inercia respecto al eje paralelo al y por el CDG.
 double XC::ReinfBar::Iy(void) const
   { return M_PI/4.0*pow((diameter/2.0),4.0); }
 
-//! @brief Devuelve el momento de inercia respecto al eje paralelo al z por el CDG.
+//! @brief Returns the momento de inercia respecto al eje paralelo al z por el CDG.
 double XC::ReinfBar::Iz(void) const
   { return Iy(); }
 
-//! @brief Devuelve el producto de inercia respecto a los ejes paralelos por el CDG.
+//! @brief Returns the producto de inercia respecto a los ejes paralelos por el CDG.
 double XC::ReinfBar::Pyz(void) const
   { return 0.0; }
 
-//! @brief Devuelve el momento de inercia polar respecto al CDG en ejes locales.
+//! @brief Returns the momento de inercia polar respecto al CDG en ejes locales.
 double XC::ReinfBar::Ix(void) const
   { return Iy()+Iz(); }
 
-//! @brief Devuelve el ángulo que define un eje principal de inercia.
+//! @brief Returns the ángulo que define un eje principal de inercia.
 double XC::ReinfBar::Theta_p(void) const
   { return 0.0; }
 
-//! @brief Devuelve la dirección de un eje principal de inercia (no sabemos si
+//! @brief Return the dirección de un eje principal de inercia (no sabemos si
 //! el mayor o el menor
 const XC::Vector &XC::ReinfBar::DirEjeI_a(void) const
   {
@@ -129,7 +129,7 @@ const XC::Vector &XC::ReinfBar::DirEjeI_a(void) const
     return retval;
   }
 
-//! @brief Devuelve la dirección del otro eje principal de inercia (no sabemos si
+//! @brief Return the dirección del otro eje principal de inercia (no sabemos si
 //!     //el mayor o el menor
 const XC::Vector &XC::ReinfBar::DirEjeI_b(void) const
   {
@@ -140,26 +140,26 @@ const XC::Vector &XC::ReinfBar::DirEjeI_b(void) const
   }
 
 //     Recta2d EjeI_a(void) const;
-//     //Devuelve un eje principal de inercia (no sabemos si
+//     //Returns a eje principal de inercia (no sabemos si
 //     //el mayor o el menor).
 //     Recta2d EjeI_b(void) const;
-//     //Devuelve el otro eje principal de inercia (no sabemos si
+//     //Returns the otro eje principal de inercia (no sabemos si
 //     //el mayor o el menor).
 //     Ref2d2d EjesPrincipalesInercia(void) const;
-//     //Devuelve los ejes principales de inercia.
+//     //Returns the ejes principales de inercia.
 
-//! @brief Devuelve el momento de inercia principal mayor.
+//! @brief Returns the momento de inercia principal mayor.
 double XC::ReinfBar::getI1(void) const
   { return Iy(); }
 
-//! @brief Devuelve el momento de inercia principal menor.
+//! @brief Returns the momento de inercia principal menor.
 double XC::ReinfBar::getI2(void) const
   { return Iz(); }
 
 //     inline EjesPrincInercia2d Inercia(void)
 //       { return EjesPrincInercia2d(Cdg(),Iy(),Iz(),Pyz()); }
 
-//! @brief Devuelve la componente i,j del tensor de inercia calculado respecto al CDG.
+//! @brief Return the componente i,j del tensor de inercia calculado respecto al CDG.
 double XC::ReinfBar::getI(const unsigned short int &i,const unsigned short int &j) const
   {
     if(i!=j)
@@ -168,14 +168,14 @@ double XC::ReinfBar::getI(const unsigned short int &i,const unsigned short int &
       return Iy();
   }
 
-//! @brief Devuelve el momento de inercia respecto al eje que pasa por O con dirección la de e.
+//! @brief Returns the momento de inercia respecto al eje que pasa por O con dirección la de e.
 double XC::ReinfBar::getI(const Pos2d &O,const Vector &e) const
   {
     const Matrix Io(getI(O));
     return dot(e,Io*e)/e.Norm2();
   }
 
-//! @brief Devuelve la componente i,j del tensor de inercia calculado respecto al punto "o".
+//! @brief Return the componente i,j del tensor de inercia calculado respecto al punto "o".
 double XC::ReinfBar::getI(const unsigned short int i,const unsigned short int j,const Pos2d &o) const
   {
     const double Iij= getI(i,j);
@@ -187,11 +187,11 @@ double XC::ReinfBar::getI(const unsigned short int i,const unsigned short int j,
     return Iij + getArea() * pos_local(i) * pos_local(j);
   }
 
-//! @brief Devuelve el momento polar de inercia respecto al punto o.
+//! @brief Returns the momento polar de inercia respecto al punto o.
 double XC::ReinfBar::getIO(const Pos2d &o) const
   { return (getI(1,1,o)+getI(2,2,o)+getI(3,3,o))/2; }
 
-//! @brief Devuelve el tensor de inercia calculado desde el centro de gravedad del objeto.
+//! @brief Returns the tensor de inercia calculado desde el centro de gravedad del objeto.
 XC::Matrix &XC::ReinfBar::getI(void) const
   {
     static Matrix i(2,2);
@@ -200,7 +200,7 @@ XC::Matrix &XC::ReinfBar::getI(void) const
     return i;
   }
 
-//! @brief Devuelve el tensor de inercia respector al punto o.
+//! @brief Returns the tensor de inercia respector al punto o.
 XC::Matrix &XC::ReinfBar::getI(const Pos2d &o) const
   {
     static Matrix retval(2,2);

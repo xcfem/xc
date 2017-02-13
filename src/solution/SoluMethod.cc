@@ -595,7 +595,7 @@ const XC::EigenSOE *XC::SoluMethod::getEigenSOEPtr(void) const
     return ptr;
   }
 
-//! @brief Devuelve, if possible, a pointer al integrator incremental en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al integrator incremental otherwise it returns nullptr.
 XC::IncrementalIntegrator *XC::SoluMethod::getIncrementalIntegratorPtr(void)
   {
     IncrementalIntegrator *ptr= dynamic_cast<IncrementalIntegrator *>(theIntegrator);
@@ -604,7 +604,7 @@ XC::IncrementalIntegrator *XC::SoluMethod::getIncrementalIntegratorPtr(void)
     return ptr;
   }
 
-//! @brief Devuelve, if possible, a pointer al EigenIntegrator en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al EigenIntegrator otherwise it returns nullptr.
 XC::EigenIntegrator *XC::SoluMethod::getEigenIntegratorPtr(void)
   {
     EigenIntegrator *ptr= dynamic_cast<EigenIntegrator *>(theIntegrator);
@@ -613,7 +613,7 @@ XC::EigenIntegrator *XC::SoluMethod::getEigenIntegratorPtr(void)
     return ptr;
   }
 
-//! @brief Devuelve, if possible, a pointer al LinearBucklingIntegrator en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al LinearBucklingIntegrator otherwise it returns nullptr.
 XC::LinearBucklingIntegrator *XC::SoluMethod::getLinearBucklingIntegratorPtr(void)
   {
     LinearBucklingIntegrator *ptr= dynamic_cast<LinearBucklingIntegrator *>(theIntegrator);
@@ -622,7 +622,7 @@ XC::LinearBucklingIntegrator *XC::SoluMethod::getLinearBucklingIntegratorPtr(voi
     return ptr;
   }
 
-//! @brief Devuelve, if possible, a pointer al EigenIntegrator en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al EigenIntegrator otherwise it returns nullptr.
 XC::TransientIntegrator *XC::SoluMethod::getTransientIntegratorPtr(void)
   {
     TransientIntegrator *ptr= dynamic_cast<TransientIntegrator *>(theIntegrator);
@@ -631,7 +631,7 @@ XC::TransientIntegrator *XC::SoluMethod::getTransientIntegratorPtr(void)
     return ptr;
   }
 
-//! @brief Devuelve, if possible, a pointer al StaticIntegrator en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al StaticIntegrator otherwise it returns nullptr.
 XC::StaticIntegrator *XC::SoluMethod::getStaticIntegratorPtr(void)
   {
     StaticIntegrator *ptr= dynamic_cast<StaticIntegrator *>(theIntegrator);
@@ -640,8 +640,8 @@ XC::StaticIntegrator *XC::SoluMethod::getStaticIntegratorPtr(void)
     return ptr;
   }
 
-//! @brief Devuelve, if possible, a pointer al solution algorithm del sistema de 
-//! eigenvalues, en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al solution algorithm del sistema de 
+//! eigenvalues, otherwise it returns nullptr.
 XC::EigenAlgorithm *XC::SoluMethod::getEigenSolutionAlgorithmPtr(void)
   {
     EigenAlgorithm *ptr= dynamic_cast<EigenAlgorithm *>(theSolnAlgo);
@@ -650,8 +650,8 @@ XC::EigenAlgorithm *XC::SoluMethod::getEigenSolutionAlgorithmPtr(void)
     return ptr;
   }
 
-//! @brief Devuelve, if possible, a pointer al solution algorithm del sistema de 
-//! ecuaciones, en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al solution algorithm del sistema de 
+//! ecuaciones, otherwise it returns nullptr.
 XC::EquiSolnAlgo *XC::SoluMethod::getEquiSolutionAlgorithmPtr(void)
   {
     EquiSolnAlgo *ptr= dynamic_cast<EquiSolnAlgo *>(theSolnAlgo);
@@ -660,8 +660,8 @@ XC::EquiSolnAlgo *XC::SoluMethod::getEquiSolutionAlgorithmPtr(void)
     return ptr;
   }
 
-//! @brief Devuelve, if possible, a pointer al solution algorithm
-//! DomainDecomp , en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al solution algorithm
+//! DomainDecomp , otherwise it returns nullptr.
 XC::DomainDecompAlgo *XC::SoluMethod::getDomainDecompSolutionAlgorithmPtr(void)
   {
     DomainDecompAlgo *ptr= dynamic_cast<DomainDecompAlgo *>(theSolnAlgo);
@@ -785,7 +785,7 @@ bool XC::SoluMethod::CheckPointers(void)
     return true;
   }
 
-//! @brief Devuelve el modelo a su estado original.
+//! @brief Returns the modelo a su estado original.
 void XC::SoluMethod::revertToStart(void)
   {
 // AddingSensitivity:BEGIN ////////////////////////////////////

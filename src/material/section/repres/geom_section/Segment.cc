@@ -42,16 +42,16 @@ XC::Segment::Segment(GeomSection *m,const size_t &ndiv)
 XC::Segment::Segment(const std::string &nombre,GeomSection *m,const size_t &ndiv)
   : Eje(nombre,m,ndiv), p1(nullptr), p2(nullptr) {}
 
-//! @brief Devuelve un apuntador al punto inicial.
+//! @brief Returns a pointer to start point.
 XC::Spot *XC::Segment::P1(void)
   { return p1; }
-//! @brief Devuelve un apuntador (constante) al punto inicial.
+//! @brief Returns a constant pointer to start point.
 const XC::Spot *XC::Segment::P1(void) const
   { return p1; }
-//! @brief Devuelve un apuntador al punto final.
+//! @brief Returns a pointer to end point.
 XC::Spot *XC::Segment::P2(void)
   { return p2; }
-//! @brief Devuelve un apuntador (constante) al punto final.
+//! @brief Returns a constant pointer to end point.
 const XC::Spot *XC::Segment::P2(void) const
   { return p2; }
 
@@ -71,7 +71,7 @@ void XC::Segment::setEndPoints(size_t idP1, size_t idP2)
     actualiza_topologia();
   }
 
-//! @brief Devuelve el vértice de índice i.
+//! @brief Returns the vértice de índice i.
 const XC::Spot *XC::Segment::GetVertice(const size_t &i) const
   {
     if(i==1)
@@ -80,7 +80,7 @@ const XC::Spot *XC::Segment::GetVertice(const size_t &i) const
       return p2;
   }
 
-//! @brief Devuelve el vértice de índice i.
+//! @brief Returns the vértice de índice i.
 XC::Spot *XC::Segment::GetVertice(const size_t &i)
   {
     if(i==1)
@@ -98,7 +98,7 @@ void XC::Segment::SetVertice(const size_t &i,Spot *p)
       p2= p;    
   }
 
-//! @brief Devuelve el intervalo 2D ocupado por el segmento.
+//! @brief Returns the intervalo 2D ocupado por el segmento.
 BND2d XC::Segment::Bnd(void) const
   {
     BND2d retval;

@@ -30,8 +30,8 @@ void export_material_base(void)
 
     class_<XC::Material, bases<XC::MovableObject,XC::TaggedObject>, boost::noncopyable >("Material", no_init)
         .def("commitState", &XC::Material::commitState,"Commits material's state.")
-        .def("revertToLastCommit", &XC::Material::revertToLastCommit,"Devuelve el estado del material al último consumado.")
-        .def("revertToStart", &XC::Material::revertToStart,"Devuelve el material a su estado inicial.")
+        .def("revertToLastCommit", &XC::Material::revertToLastCommit,"Returns the material state al último consumado.")
+        .def("revertToStart", &XC::Material::revertToStart,"Returns the material a su estado inicial.")
        ;
   }
 

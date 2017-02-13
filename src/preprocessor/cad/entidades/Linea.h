@@ -56,7 +56,7 @@ class Linea: public LineaBase
 
     double getLambda(const Pos3d &) const;
     
-    //! @brief Devuelve el número de vértices.
+    //! @brief Returns the número de vértices.
     inline virtual size_t NumVertices(void) const
       { return 2; }
     virtual BND3d Bnd(void) const;

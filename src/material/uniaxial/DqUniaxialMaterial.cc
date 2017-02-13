@@ -168,7 +168,7 @@ int XC::DqUniaxialMaterial::commitState(void)
     return err;
   }
 
-//! @brief Devuelve el estado de la sección al último consumado.
+//! @brief Returns the estado de la sección al último consumado.
 int XC::DqUniaxialMaterial::revertToLastCommit(void)
   {
     int err = 0;
@@ -204,7 +204,7 @@ int XC::DqUniaxialMaterial::revertToStart(void)
   }
 
 
-//! @brief Asigna la deformación inicial.
+//! @brief Asigna la initial deformation.
 int XC::DqUniaxialMaterial::setInitialStrain(const Vector &def,const size_t &offset)
   {
     int err= 0;
@@ -236,7 +236,7 @@ int XC::DqUniaxialMaterial::setTrialStrain(const double &strain,const double &st
   }
 
 
-//! @brief Devuelve las deformaciones iniciales.
+//! @brief Returns the deformaciones iniciales.
 void XC::DqUniaxialMaterial::getInitialStrain(Vector &def,const size_t &offset) const
   {
     size_t j= offset;
@@ -245,7 +245,7 @@ void XC::DqUniaxialMaterial::getInitialStrain(Vector &def,const size_t &offset) 
       def(j)= (*i)->getInitialStrain();
   }
 
-//! @brief Devuelve las deformaciones.
+//! @brief Returns the deformaciones.
 void XC::DqUniaxialMaterial::getStrain(Vector &def,const size_t &offset) const
   {
     size_t j= offset;
@@ -254,7 +254,7 @@ void XC::DqUniaxialMaterial::getStrain(Vector &def,const size_t &offset) const
       def(j)= (*i)->getStrain();
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 void XC::DqUniaxialMaterial::getTangent(Matrix &k,const size_t &offset) const
   {
     size_t j= offset;
@@ -263,7 +263,7 @@ void XC::DqUniaxialMaterial::getTangent(Matrix &k,const size_t &offset) const
       k(j,j)= (*i)->getTangent();
   }
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 void XC::DqUniaxialMaterial::getInitialTangent(Matrix &k,const size_t &offset) const
   {
     size_t j= offset;
@@ -272,7 +272,7 @@ void XC::DqUniaxialMaterial::getInitialTangent(Matrix &k,const size_t &offset) c
       k(j,j)= (*i)->getInitialTangent();
   }
 
-//! @brief Devuelve la matriz de flexibilidad.
+//! @brief Return the matriz de flexibilidad.
 void XC::DqUniaxialMaterial::getFlexibility(Matrix &f,const size_t &offset) const
   {
     size_t j= offset;
@@ -281,7 +281,7 @@ void XC::DqUniaxialMaterial::getFlexibility(Matrix &f,const size_t &offset) cons
       f(j,j)= (*i)->getFlexibility();
   }
 
-//! @brief Devuelve la matriz de flexibilidad noval.
+//! @brief Return the matriz de flexibilidad noval.
 void XC::DqUniaxialMaterial::getInitialFlexibility(Matrix &f,const size_t &offset) const
   {
     size_t j= offset;
@@ -290,7 +290,7 @@ void XC::DqUniaxialMaterial::getInitialFlexibility(Matrix &f,const size_t &offse
       f(j,j)= (*i)->getInitialFlexibility();
   }
 
-//! @brief Devuelve las tensiones.
+//! @brief Returns the tensiones.
 void XC::DqUniaxialMaterial::getStress(Vector &s,const size_t &offset) const
   {
     size_t j= offset;

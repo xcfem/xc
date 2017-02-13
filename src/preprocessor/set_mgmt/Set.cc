@@ -291,23 +291,23 @@ void XC::Set::genMesh(meshing_dir dm)
       std::clog << "hecho." << std::endl;
   }
 
-//! @brief Devuelve verdadero si el punto pertenece al conjunto.
+//! @brief Returns true ifel punto pertenece al conjunto.
 bool XC::Set::In(const Pnt *p) const
   { return puntos.in(p); }
 
-//! @brief Devuelve verdadero si el «edge» pertenece al conjunto.
+//! @brief Returns true ifel «edge» pertenece al conjunto.
 bool XC::Set::In(const Edge *e) const
   { return lineas.in(e); }
 
-//! @brief Devuelve verdadero si la superficie pertenece al conjunto.
+//! @brief Returns true ifla superficie pertenece al conjunto.
 bool XC::Set::In(const Face *f) const
   { return superficies.in(f); }
 
-//! @brief Devuelve verdadero si el cuerpo pertenece al conjunto.
+//! @brief Returns true ifel cuerpo pertenece al conjunto.
 bool XC::Set::In(const Body *b) const
   { return cuerpos.in(b); }
 
-//! @brief Devuelve verdadero si la «uniform grid» pertenece al conjunto.
+//! @brief Returns true ifla «uniform grid» pertenece al conjunto.
 bool XC::Set::In(const UniformGrid *ug) const
   { return uniform_grids.in(ug); }
 
@@ -454,7 +454,7 @@ void XC::Set::sel_superficies_lista(const ID &tags)
       }
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::Set::getDbTagData(void) const
   {

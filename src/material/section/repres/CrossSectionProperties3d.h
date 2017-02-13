@@ -78,17 +78,17 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
       { return j; }
     inline void setJ(const double &i)
       { j= i; }
-    //! @brief Devuelve la rigidez a flexión en z.
+    //! @brief Return the rigidez a flexión en z.
     inline double EIz(void) const
       { return CrossSectionProperties2d::EI(); }
-    //! @brief Devuelve la rigidez a flexión en y.
+    //! @brief Return the rigidez a flexión en y.
     inline double EIy(void) const
       { return E()*iy; }
-    //! @brief Devuelve la colaboración del producto
+    //! @brief Return the colaboración del producto
     //! de inercia a la rigidez a flexión.
     inline double EIyz(void) const
       { return E()*iyz; }
-    //! @brief Devuelve la rigidez a torsión.
+    //! @brief Return the rigidez a torsión.
     inline double GJ(void) const
       { return G()*j; }
 

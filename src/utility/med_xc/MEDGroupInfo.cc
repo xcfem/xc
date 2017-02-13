@@ -84,7 +84,7 @@ const XC::MEDMeshing &XC::MEDGroupInfo::getMesh(void) const
 MEDMEM::GROUP *XC::MEDGroupInfo::getGrupoMED(void) const
   { return med_group; }
 
-//! @brief Devuelve el vector con los índices de los elementos que se pasan como
+//! @brief Returns the vector con los índices de los elementos que se pasan como
 //! parámetro.
 std::vector<int> &XC::MEDGroupInfo::getIndicesElementosTipo(const MED_EN::medGeometryElement &tipo)
   {
@@ -115,11 +115,11 @@ void XC::MEDGroupInfo::nueva_celda(size_t tag,const MED_EN::medGeometryElement &
     MEDCellBaseInfo::new_cell(tag,tipo);
   }
 
-//! @brief Devuelve el nombre del grupo.
+//! @brief Returns the nombre del grupo.
 const std::string &XC::MEDGroupInfo::getNombre(void) const
   { return nombre; }
 
-//! @brief Devuelve el vector con las posiciones de los distintos
+//! @brief Returns the vector con las posiciones de los distintos
 //! tipos de elemento en el vector de indices de elementos.
 std::vector<int> XC::MEDGroupInfo::getVectorIndicesTipos(void) const
   {
@@ -134,7 +134,7 @@ std::vector<int> XC::MEDGroupInfo::getVectorIndicesTipos(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector con los índices de los elementos ordenados
+//! @brief Returns a vector con los índices de los elementos ordenados
 //! por tipo.
 std::vector<int> XC::MEDGroupInfo::getIndicesElementos(void) const
   {

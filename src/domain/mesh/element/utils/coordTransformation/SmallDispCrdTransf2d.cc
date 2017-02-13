@@ -91,7 +91,7 @@ const XC::Vector &XC::SmallDispCrdTransf2d::local_to_global_resisting_force(cons
     return pg;
   }
 
-//! @brief Devuelve las coordenadas globales del punto a partir de las locales.
+//! @brief Returns the coordenadas globales del punto a partir de las locales.
 const XC::Vector &XC::SmallDispCrdTransf2d::getPointGlobalCoordFromLocal(const XC::Vector &xl) const
   {
     static Vector xg(2);
@@ -110,7 +110,7 @@ const XC::Vector &XC::SmallDispCrdTransf2d::getPointGlobalCoordFromLocal(const X
     return xg;  
   }
 
-//! @brief Devuelve el vector desplazamiento expresado en coordenadas globales
+//! @brief Returns the vector desplazamiento expresado en coordenadas globales
 const XC::Vector &XC::SmallDispCrdTransf2d::getPointGlobalDisplFromBasic(double xi, const Vector &uxb) const
   {
     // determine global displacements
@@ -172,7 +172,7 @@ const XC::Vector &XC::SmallDispCrdTransf2d::getPointGlobalDisplFromBasic(double 
     
     return uxg;
   }
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::SmallDispCrdTransf2d::getDbTagData(void) const
   {

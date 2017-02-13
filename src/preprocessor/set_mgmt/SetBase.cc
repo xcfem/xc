@@ -54,7 +54,7 @@ void XC::SetBase::fix(const SFreedom_Constraint &)
     std::cerr << "Método fix() no implementado." << std::endl;
   }
 
-//! @brief Devuelve los tags de los nodos en un vector de enteros.
+//! @brief Returns the tags de los nodos en un vector de enteros.
 const XC::ID &XC::SetBase::getIdNodeTags(void) const
   {
     static ID retval;
@@ -70,7 +70,7 @@ const XC::ID &XC::SetBase::getIdNodeTags(void) const
     return retval;
   }
 
-//! @brief Devuelve los tags de los elementos en un vector de enteros.
+//! @brief Returns the tags de los elementos en un vector de enteros.
 const XC::ID &XC::SetBase::getIdElementTags(void) const
   {
     static ID retval;
@@ -86,23 +86,23 @@ const XC::ID &XC::SetBase::getIdElementTags(void) const
     return retval;
   }
 
-//! @brief Devuelve verdadero si el punto pertenece al conjunto.
+//! @brief Returns true ifel punto pertenece al conjunto.
 bool XC::SetBase::In(const Pnt *) const
   { return false; }
 
-//! @brief Devuelve verdadero si el «edge» pertenece al conjunto.
+//! @brief Returns true ifel «edge» pertenece al conjunto.
 bool XC::SetBase::In(const Edge *) const
   { return false; }
 
-//! @brief Devuelve verdadero si la superficie pertenece al conjunto.
+//! @brief Returns true ifla superficie pertenece al conjunto.
 bool XC::SetBase::In(const Face *) const
   { return false; }
 
-//! @brief Devuelve verdadero si el cuerpo pertenece al conjunto.
+//! @brief Returns true ifel cuerpo pertenece al conjunto.
 bool XC::SetBase::In(const Body *) const
   { return false; }
 
-//! @brief Devuelve verdadero si la «uniform grid» pertenece al conjunto.
+//! @brief Returns true ifla «uniform grid» pertenece al conjunto.
 bool XC::SetBase::In(const UniformGrid *) const
   { return false; }
 

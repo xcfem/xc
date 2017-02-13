@@ -41,7 +41,7 @@ XC::Eje::Eje(GeomSection *sr,const size_t &nd)
 //! @brief Constructor.
 //! @param nombre: Identificador del objeto.
 //! @param i: Índice para gráficos.
-//! @param m: Apuntador a la representación de la sección.
+//! @param m: Pointer to la representación de la sección.
 XC::Eje::Eje(const std::string &nombre,GeomSection *sr,const size_t &nd)
   : EntGeomSection(nombre,sr), ndiv(nd) {}
 
@@ -59,28 +59,28 @@ void XC::Eje::actualiza_topologia(void)
     if(P2()) P2()->inserta_linea(this);
   }
 
-//! @brief Devuelve un apuntador al punto inicial.
+//! @brief Returns a pointer to start point.
 XC::Spot *XC::Eje::P1(void)
   {
     std::cerr << "Eje::P1; this function must be redefined on derived"
               << " classes, nullptr returned;" << std::endl;
     return nullptr;
   }
-//! @brief Devuelve un apuntador (constante) al punto inicial.
+//! @brief Returns a constant pointer to start point.
 const XC::Spot *XC::Eje::P1(void) const
   {
     std::cerr << "Eje::P1; this function must be redefined on derived"
               << " classes, nullptr returned;" << std::endl;
     return nullptr;
   }
-//! @brief Devuelve un apuntador al punto final.
+//! @brief Returns a pointer to end point.
 XC::Spot *XC::Eje::P2(void)
   {
     std::cerr << "Eje::P2; this function must be redefined on derived"
               << " classes, nullptr returned;" << std::endl;
     return nullptr;
   }
-//! @brief Devuelve un apuntador (constante) al punto final.
+//! @brief Returns a constant pointer to end point.
 const XC::Spot *XC::Eje::P2(void) const
   {
     std::cerr << "Eje::P2; his function must be redefined on derived"
@@ -88,7 +88,7 @@ const XC::Spot *XC::Eje::P2(void) const
     return nullptr;
   }
 
-//! @brief Devuelve el conjunto de líneas que tocan al punto.
+//! @brief Returns the set of lines that touch the point being passed as parameter.
 std::set<const XC::Eje *> XC::GetLineasTocan(const XC::Spot &p)
   {
     std::set<const Eje *> retval;

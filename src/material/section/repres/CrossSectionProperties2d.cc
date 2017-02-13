@@ -122,7 +122,7 @@ Vector2d XC::CrossSectionProperties2d::getVDirEje2(void) const
 Vector2d XC::CrossSectionProperties2d::getVDirEjeDebil(void) const
   { return getEjesInercia().getVDirEje2(); }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionTangent2x2(void) const
   {
     ks2(0,0) = EA(); //Rigidez frente al esfuerzo axil.
@@ -130,11 +130,11 @@ const XC::Matrix &XC::CrossSectionProperties2d::getSectionTangent2x2(void) const
     return ks2;
   }
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix &XC::CrossSectionProperties2d::getInitialTangent2x2(void) const
   { return getSectionTangent2x2(); }
 
-//! @brief Devuelve la matriz de flexibilidad.
+//! @brief Return the matriz de flexibilidad.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionFlexibility2x2(void) const
   {
     ks2(0,0) = 1.0/(EA());
@@ -142,11 +142,11 @@ const XC::Matrix &XC::CrossSectionProperties2d::getSectionFlexibility2x2(void) c
     return ks2;
   }
 
-//! @brief Devuelve la matriz de flexibilidad noval.
+//! @brief Return the matriz de flexibilidad noval.
 const XC::Matrix &XC::CrossSectionProperties2d::getInitialFlexibility2x2(void) const
   { return getSectionFlexibility2x2(); }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionTangent3x3(void) const
   {
     ks3(0,0)= EA(); //Rigidez frente al esfuerzo axil.
@@ -155,11 +155,11 @@ const XC::Matrix &XC::CrossSectionProperties2d::getSectionTangent3x3(void) const
     return ks3;
   }
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix &XC::CrossSectionProperties2d::getInitialTangent3x3(void) const
   { return getSectionTangent3x3(); }
 
-//! @brief Devuelve la matriz de flexibilidad.
+//! @brief Return the matriz de flexibilidad.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionFlexibility3x3(void) const
   {
     ks3(0,0)= 1.0/(EA());
@@ -168,7 +168,7 @@ const XC::Matrix &XC::CrossSectionProperties2d::getSectionFlexibility3x3(void) c
     return ks3;
   }
 
-//! @brief Devuelve la matriz de flexibilidad noval.
+//! @brief Return the matriz de flexibilidad noval.
 const XC::Matrix &XC::CrossSectionProperties2d::getInitialFlexibility3x3(void) const
   { return getSectionFlexibility3x3(); }
 
@@ -221,7 +221,7 @@ int XC::CrossSectionProperties2d::updateParameter(int paramID, Information &info
     return 0;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::CrossSectionProperties2d::getDbTagData(void) const
   {

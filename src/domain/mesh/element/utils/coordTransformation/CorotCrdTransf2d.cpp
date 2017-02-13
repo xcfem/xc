@@ -1002,7 +1002,7 @@ const XC::Vector &XC::CorotCrdTransf2d::getPointGlobalDisplFromBasic(double xi, 
     return uxg;  
   }
 
-//! @brief Devuelve el vector unitario i de los ejes locales del elemento en su posición actual.
+//! @brief Returns the vector unitario i de los ejes locales del elemento en su posición actual.
 const XC::Vector &XC::CorotCrdTransf2d::getI(void)
   {
     static Vector vectorI(2);
@@ -1011,7 +1011,7 @@ const XC::Vector &XC::CorotCrdTransf2d::getI(void)
     return vectorI;
   }
 
-//! @brief Devuelve el vector unitario j de los ejes locales del elemento en su posición actual.
+//! @brief Returns the vector unitario j de los ejes locales del elemento en su posición actual.
 const XC::Vector &XC::CorotCrdTransf2d::getJ(void)
   {
     static Vector vectorJ(2);
@@ -1020,7 +1020,7 @@ const XC::Vector &XC::CorotCrdTransf2d::getJ(void)
     return vectorJ;
   }
 
-//| @brief Devuelve los vectores dirección de los ejes locales en la posición
+//| @brief Returns the vectores dirección de los ejes locales en la posición
 //! actual del elemento.
 int XC::CorotCrdTransf2d::getLocalAxes(Vector &XAxis, Vector &YAxis) const
   {

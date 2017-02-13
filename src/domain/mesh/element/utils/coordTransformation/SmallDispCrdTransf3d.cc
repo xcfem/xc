@@ -135,17 +135,17 @@ int XC::SmallDispCrdTransf3d::calculaEjesLocales(void) const
     return 0;
   }
 
-//! @brief Devuelve la longitud inicial del elemento.
+//! @brief Return the longitud inicial del elemento.
 double  XC::SmallDispCrdTransf3d::getInitialLength(void) const
   { return L; }
 
 
-//! @brief Devuelve la longitud del elemento deformado.
+//! @brief Return the longitud del elemento deformado.
 double XC::SmallDispCrdTransf3d::getDeformedLength(void) const
   { return L; }
 
-//! @brief Devuelve los desplazamientos del elemento al que pertenece la transformación
-//! Devuelve las siguientes magnitudes en el vector ub (ver calc_ub):
+//! @brief Returns the desplazamientos del elemento al que pertenece la transformación
+//! Returns the siguientes magnitudes en el vector ub (ver calc_ub):
 //! -ub(0)= dx2-dx1: Elongación sufrida por el elemento.
 //! -ub(1)= (dy1-dy2)/L+gz1: Giro en torno a z del nodo 1.
 //! -ub(2)= (dy1-dy2)/L+gz2: Giro en torno a z del nodo 2.
@@ -454,7 +454,7 @@ const XC::Matrix &XC::SmallDispCrdTransf3d::getInitialGlobalStiffMatrix(const XC
     return local_to_global_stiff_matrix(kl);
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::SmallDispCrdTransf3d::getDbTagData(void) const
   {

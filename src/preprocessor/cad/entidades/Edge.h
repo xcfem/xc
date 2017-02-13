@@ -60,14 +60,14 @@ class Edge: public EntMdlr
   public:
     Edge(Preprocessor *m,const size_t &nd= 4);
     Edge(const std::string &nombre= "",Preprocessor *m= NULL,const size_t &nd= 4);
-    //! @brief Devuelve la dimensión del objeto.
+    //! @brief Return the dimensión del objeto.
     inline virtual unsigned short int GetDimension(void) const
       { return 1; }
 
     virtual const Pnt *P1(void) const;
     virtual const Pnt *P2(void) const;
     bool ExtremosEn(const Pnt *,const Pnt *) const;
-    //! @brief Devuelve el número de vértices.
+    //! @brief Returns the número de vértices.
     virtual size_t NumVertices(void) const= 0;
 
     virtual double getLongitud(void) const= 0;
@@ -84,10 +84,10 @@ class Edge: public EntMdlr
     std::set<const XC::Edge *> GetLadosHomologos(const std::set<const XC::Edge *> &) const;
     void actualiza_topologia(void);
 
-    //! @brief Devuelve la lista de superficies que tocan a a línea.
+    //! @brief Return the lista de superficies que tocan a a línea.
     const std::set<const Face *> &SupsTocan(void) const
       { return sups_linea; }
-    //! @brief Devuelve los nombres de las superficies que tocan a a línea.
+    //! @brief Returns the nombres de las superficies que tocan a a línea.
     const std::string &NombresSupsTocan(void) const;
     bool Toca(const Face &s) const;
     bool Toca(const Body &b) const;

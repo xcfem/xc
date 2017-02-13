@@ -139,7 +139,7 @@ void XC::TrussBase::setup_L_cos_dir(void)
       }
   }
 
-//! @brief Devuelve la longitud del elemento.
+//! @brief Return the longitud del elemento.
 const double &XC::TrussBase::getL(void) const
   { return L; }
 

@@ -77,7 +77,7 @@ XC::SectionRepres &XC::SectionRepres::operator=(const SectionRepres &otro)
     return *this;
   }
 
-//! @brief Devuelve el número total de celdas.
+//! @brief Returns the número total de celdas.
 int XC::SectionRepres::getNumCells(void) const
   {
     int ncells= 0;

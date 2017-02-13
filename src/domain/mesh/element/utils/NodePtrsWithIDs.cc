@@ -58,7 +58,7 @@ XC::NodePtrs &XC::NodePtrsWithIDs::getNodePtrs(void)
 const XC::ID &XC::NodePtrsWithIDs::getExternalNodes(void) const
   { return connectedExternalNodes; }
 
-//! @brief Devuelve el tag del nodo cuyo índice se pasa como parámetro.
+//! @brief Returns the tag del nodo cuyo índice se pasa como parámetro.
 int XC::NodePtrsWithIDs::getTagNode(const int &i) const
   { return connectedExternalNodes(i); }
 
@@ -248,7 +248,7 @@ std::ostream &XC::operator<<(std::ostream &os,const XC::NodePtrsWithIDs &nodePtr
     return os;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::NodePtrsWithIDs::getDbTagData(void) const
   {

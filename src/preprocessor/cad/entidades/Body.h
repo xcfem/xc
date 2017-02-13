@@ -53,7 +53,7 @@ struct SecuenciaLados
     bool dirt; //!< Directo o inverso.
 
     SecuenciaLados(const size_t primero= 1,const bool &directo= true);
-    //! @brief Devuelve verdadero si la secuencia de lados es directa.
+    //! @brief Returns true ifla secuencia de lados es directa.
     const bool &Directo(void) const
       { return dirt; }
   };
@@ -96,14 +96,14 @@ class Body: public EntMdlr
     virtual Cara *GetCara(const size_t &i)= 0;
   public:
     Body(Preprocessor *m,const std::string &nombre= "");
-    //! @brief Devuelve la dimensión del objeto
+    //! @brief Return the dimensión del objeto
     inline virtual unsigned short int GetDimension(void) const
       { return 3; }
-    //! @brief Devuelve el número de líneas del objeto.
+    //! @brief Returns the número de líneas del objeto.
     virtual size_t NumLineas(void) const= 0;
-    //! @brief Devuelve el número de vértices del objeto.
+    //! @brief Returns the número de vértices del objeto.
     virtual size_t NumVertices(void) const= 0;
-    //! @brief Devuelve el número de vértices del objeto.
+    //! @brief Returns the número de vértices del objeto.
     virtual size_t NumCaras(void) const= 0;
     virtual std::set<const Face *> GetSuperficies(void)= 0;
     virtual const Cara *GetCara(const size_t &i) const= 0;

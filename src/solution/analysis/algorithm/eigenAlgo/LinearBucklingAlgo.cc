@@ -32,7 +32,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include <utility/matrix/Vector.h>
 
-//! @brief Devuelve, si puede, a pointer al integrator adecuado.
+//! @brief Returns, si puede, a pointer al integrator adecuado.
 XC::LinearBucklingIntegrator *XC::LinearBucklingAlgo::getLinearBucklingIntegrator(void)
   {
     LinearBucklingIntegrator *retval= nullptr;

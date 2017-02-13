@@ -660,29 +660,29 @@ XC::MaterialLoader::~MaterialLoader(void)
 const XC::MaterialLoader::map_materials &XC::MaterialLoader::Map(void) const
   { return materials; }
 
-//! @brief Devuelve un iterador apuntando al principio de la lista.
+//! @brief Returns an iterator which points to principio de la lista.
 XC::MaterialLoader::const_iterator XC::MaterialLoader::begin(void) const
   { return materials.begin(); }
-//! @brief Devuelve un iterador apuntando después del final de la lista.
+//! @brief Returns an iterator apuntando después del final de la lista.
 XC::MaterialLoader::const_iterator XC::MaterialLoader::end(void) const
   { return materials.end(); }
-//! @brief Devuelve un iterador apuntando al principio de la lista.
+//! @brief Returns an iterator which points to principio de la lista.
 XC::MaterialLoader::iterator XC::MaterialLoader::begin(void)
   { return materials.begin(); }
-//! @brief Devuelve un iterador apuntando después del final de la lista.
+//! @brief Returns an iterator apuntando después del final de la lista.
 XC::MaterialLoader::iterator XC::MaterialLoader::end(void)
   { return materials.end(); }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un iterador apuntando al mismo.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns an iterator which points to mismo.
 XC::MaterialLoader::const_iterator XC::MaterialLoader::find(const std::string &nmb) const
   { return materials.find(nmb); }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve un iterador apuntando al mismo.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns an iterator which points to mismo.
 XC::MaterialLoader::iterator XC::MaterialLoader::find(const std::string &nmb)
   { return materials.find(nmb); }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
-//! en otro caso devuelve nullptr.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! otherwise it returns nullptr.
 XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb)
   {
     XC::MaterialLoader::iterator i= find(nmb);
@@ -692,8 +692,8 @@ XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb)
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
-//! en otro caso devuelve nullptr.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! otherwise it returns nullptr.
 const XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb) const
   {
     XC::MaterialLoader::const_iterator i= find(nmb);
@@ -703,8 +703,8 @@ const XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb) const
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
-//! en otro caso devuelve nullptr.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! otherwise it returns nullptr.
 XC::Material *XC::MaterialLoader::find_ptr(const int &tag)
   {
     Material *retval= nullptr;
@@ -718,8 +718,8 @@ XC::Material *XC::MaterialLoader::find_ptr(const int &tag)
     return retval;
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
-//! en otro caso devuelve nullptr.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! otherwise it returns nullptr.
 const XC::Material *XC::MaterialLoader::find_ptr(const int &tag) const
   {
     const Material *retval= nullptr;
@@ -733,8 +733,8 @@ const XC::Material *XC::MaterialLoader::find_ptr(const int &tag) const
     return retval;
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
-//! en otro caso devuelve nullptr.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! otherwise it returns nullptr.
 XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nmb)
   {
     geom_secc_iterator i= geom_secciones.find(nmb);
@@ -744,8 +744,8 @@ XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nm
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
-//! en otro caso devuelve nullptr.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! otherwise it returns nullptr.
 const XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nmb) const
   {
     const_geom_secc_iterator i= geom_secciones.find(nmb);
@@ -755,8 +755,8 @@ const XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::stri
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
-//! en otro caso devuelve nullptr.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! otherwise it returns nullptr.
 XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const std::string &nmb)
   {
     diag_interacc_iterator i= diagramas_interaccion.find(nmb);
@@ -766,8 +766,8 @@ XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const s
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
-//! en otro caso devuelve nullptr.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! otherwise it returns nullptr.
 const XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const std::string &nmb) const
   {
     const_diag_interacc_iterator i= diagramas_interaccion.find(nmb);
@@ -777,8 +777,8 @@ const XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(c
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
-//! en otro caso devuelve nullptr.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! otherwise it returns nullptr.
 XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(const std::string &nmb)
   {
     diag_interacc2d_iterator i= diagramas_interaccion2d.find(nmb);
@@ -788,8 +788,8 @@ XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(con
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa como parámetro devuelve a pointer al mismo,
-//! en otro caso devuelve nullptr.
+//! @brief Si encuentra el material cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! otherwise it returns nullptr.
 const XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(const std::string &nmb) const
   {
     const_diag_interacc2d_iterator i= diagramas_interaccion2d.find(nmb);
@@ -830,15 +830,15 @@ XC::InteractionDiagram &XC::MaterialLoader::getInteractionDiagram(const std::str
 bool XC::MaterialLoader::existeMaterial(const std::string &nmb) const
   { return (materials.find(nmb)!=materials.end()); }
 
-//! @brief Devuelve verdadero si existe la geometría de la sección cuyo código se pasa como parámetro.
+//! @brief Returns true ifexiste la geometría de la sección cuyo código se pasa como parámetro.
 bool XC::MaterialLoader::existeGeomSection(const std::string &nmb) const
   { return (geom_secciones.find(nmb)!=geom_secciones.end()); }
 
-//! @brief Devuelve verdadero si existe el diagrama de interacción cuyo código se pasa como parámetro.
+//! @brief Returns true ifexiste el diagrama de interacción cuyo código se pasa como parámetro.
 bool XC::MaterialLoader::InteractionDiagramExists(const std::string &nmb) const
   { return (diagramas_interaccion.find(nmb)!=diagramas_interaccion.end()); }
 
-//! @brief Devuelve verdadero si existe el diagrama de interacción cuyo código se pasa como parámetro.
+//! @brief Returns true ifexiste el diagrama de interacción cuyo código se pasa como parámetro.
 bool XC::MaterialLoader::InteractionDiagramExists2d(const std::string &nmb) const
   { return (diagramas_interaccion2d.find(nmb)!=diagramas_interaccion2d.end()); }
 

@@ -34,7 +34,7 @@ XC::MEDFieldInfo::MEDFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)
   : field_info(fi) 
   { set_owner(grp); }
 
-//! @brief Devuelve el grupo sobre el que está definido el campo.
+//! @brief Returns the grupo sobre el que está definido el campo.
 const XC::MEDGroupInfo &XC::MEDFieldInfo::getGrupo(void) const
   { 
     const MEDGroupInfo *retval= dynamic_cast<const MEDGroupInfo *>(Owner());

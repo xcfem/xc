@@ -100,7 +100,7 @@ XC::GenericSection1d::GenericSection1d()
 XC::GenericSection1d::~GenericSection1d(void)
   { if (theModel) delete theModel; }
 
-//! @brief Asigna la deformación inicial (axial y curvaturas) de la sección.
+//! @brief Asigna la initial deformation (axial y curvaturas) de la sección.
 int XC::GenericSection1d::setInitialSectionDeformation(const Vector &def)
   { return theModel->setInitialStrain(def(0)); }
 
@@ -108,7 +108,7 @@ int XC::GenericSection1d::setInitialSectionDeformation(const Vector &def)
 int XC::GenericSection1d::setTrialSectionDeformation(const Vector &def)
   { return theModel->setTrialStrain(def(0)); }
 
-//! @brief Devuelve la deformación inicial (axial y curvaturas) de la sección.
+//! @brief Return the initial deformation (axial y curvaturas) de la sección.
 const XC::Vector &XC::GenericSection1d::getInitialSectionDeformation(void) const
   {
     static Vector e(1); // static for class-wide returns
@@ -124,28 +124,28 @@ const XC::Vector &XC::GenericSection1d::getSectionDeformation(void) const
     return e;
   }
 
-//! @brief Devuelve la resultante del campo de tensiones sobre la sección.
+//! @brief Return the resultante del campo de tensiones sobre la sección.
 const XC::Vector &XC::GenericSection1d::getStressResultant(void) const
   {
     s(0) = theModel->getStress();
     return s;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::GenericSection1d::getSectionTangent(void) const
   {
     ks(0,0) = theModel->getTangent();
     return ks;
   }
 
-//! @brief Devuelve el valor inicial de la matriz de rigidez tangente.
+//! @brief Returns the valor inicial de la tangent stiffness matrix.
 const XC::Matrix &XC::GenericSection1d::getInitialTangent(void) const
   {
     ks(0,0) = theModel->getInitialTangent();
     return ks;
   }
 
-//! @brief Devuelve la matriz de flexibilidad.
+//! @brief Return the matriz de flexibilidad.
 const XC::Matrix &XC::GenericSection1d::getSectionFlexibility(void) const
   {
     double tangent = theModel->getTangent();
@@ -156,7 +156,7 @@ const XC::Matrix &XC::GenericSection1d::getSectionFlexibility(void) const
     return ks;
   }
 
-//! @brief Devuelve el valor inicial la matriz de flexibilidad.
+//! @brief Returns the valor inicial la matriz de flexibilidad.
 const XC::Matrix &XC::GenericSection1d::getInitialFlexibility(void) const
   {
     double tangent = theModel->getInitialTangent();
@@ -164,19 +164,19 @@ const XC::Matrix &XC::GenericSection1d::getInitialFlexibility(void) const
     return ks;
   }
 
-//! @brief Devuelve el índice del estado consumado.
+//! @brief Returns the índice del estado consumado.
 int XC::GenericSection1d::commitState(void)
   { return theModel->commitState(); }
 
-//! @brief Devuelve el estado de la sección al último consumado.
+//! @brief Returns the estado de la sección al último consumado.
 int XC::GenericSection1d::revertToLastCommit ()
   { return theModel->revertToLastCommit(); }
 
-//! @brief Devuelve el estado de la sección al inicial.
+//! @brief Returns the estado de la sección al inicial.
 int XC::GenericSection1d::revertToStart ()
   { return theModel->revertToStart(); }
 
-//! @brief Devuelve el tipo de respuesta.
+//! @brief Returns the tipo de respuesta.
 const XC::ResponseId &XC::GenericSection1d::getType(void) const
   {
     c(0)= code;

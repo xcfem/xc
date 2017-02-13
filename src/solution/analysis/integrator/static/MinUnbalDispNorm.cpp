@@ -71,7 +71,7 @@ XC::MinUnbalDispNorm::MinUnbalDispNorm(SoluMethod *owr,double lambda1, int specN
  dLambda1min(min), dLambda1max(max), signLastDeterminant(1), signFirstStepMethod(signFirstStep)
   {}
 
-//! @brief Devuelve el valor de dLambda para el método newStep
+//! @brief Returns the valor de dLambda para el método newStep
 double XC::MinUnbalDispNorm::getDLambdaNewStep(void) const
   {
     // determine delta lambda(1) == dlambda
@@ -153,7 +153,7 @@ int XC::MinUnbalDispNorm::newStep(void)
     return 0;
   }
 
-//! @brief Devuelve el valor de dLambda para el método update.
+//! @brief Returns the valor de dLambda para el método update.
 double XC::MinUnbalDispNorm::getDLambdaUpdate(void) const
   {
     const Vector &dUhat= vectores.getDeltaUhat();

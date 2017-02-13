@@ -53,15 +53,15 @@ std::string XC::ShellUniformLoad::Categoria(void) const
 int XC::ShellUniformLoad::getType(void)
   { return LOAD_TAG_ShellUniformLoad; }
 
-//! @brief Devuelve la dimension del vector fuerza.
+//! @brief Return the dimension del vector fuerza.
 size_t XC::ShellUniformLoad::getDimVectorFuerza(void) const
   { return 3; }
 
-//! @brief Devuelve la dimension del vector momento.
+//! @brief Return the dimension del vector momento.
 size_t XC::ShellUniformLoad::getDimVectorMomento(void) const
   { return 3; }
 
-//! @brief Devuelve las componentes de los vectores fuerza.
+//! @brief Returns the componentes de los vectores fuerza.
 const XC::Matrix &XC::ShellUniformLoad::getLocalForces(void) const
   {
     static Matrix retval;
@@ -76,7 +76,7 @@ const XC::Matrix &XC::ShellUniformLoad::getLocalForces(void) const
     return retval;
   }
 
-//! @brief Devuelve las componentes de los vectores momento.
+//! @brief Returns the componentes de los vectores momento.
 const XC::Matrix &XC::ShellUniformLoad::getLocalMoments(void) const
   {
     static Matrix retval;
@@ -162,11 +162,11 @@ SVD3d XC::ShellUniformLoad::getResultant(const Pos3d &centro, bool initialGeomet
           }
       }
     else
-      std::cerr << "ShellUniformLoad::getResultant; no existe apuntador al domain." << std::endl;
+      std::cerr << "ShellUniformLoad::getResultant; pointer to domain is NULL." << std::endl;
     return retval;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::ShellUniformLoad::getDbTagData(void) const
   {

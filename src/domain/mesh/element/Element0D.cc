@@ -109,14 +109,14 @@ XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2,int dim, const Ve
     setUp(Nd1,Nd2,x,yprime);
   }
 
-//! @brief Devuelve la dimensión del elemento.
+//! @brief Return the dimensión del elemento.
 size_t XC::Element0D::getDimension(void) const
   { return 0; }
 
 int XC::Element0D::getNumDOF(void) const
   { return numDOF; }
 
-//! @brief Devuelve el vector dirección del eje X local (primera fila de la transformación).
+//! @brief Returns the vector dirección del eje X local (primera fila de la transformación).
 const XC::Vector &XC::Element0D::getX(void) const
   {
     static Vector retval(3);
@@ -126,7 +126,7 @@ const XC::Vector &XC::Element0D::getX(void) const
     return retval;
   }
 
-//! @brief Devuelve el vector dirección del eje Y local (segunda fila de la transformación).
+//! @brief Returns the vector dirección del eje Y local (segunda fila de la transformación).
 const XC::Vector &XC::Element0D::getY(void) const
   {
     static Vector retval(3);
@@ -136,7 +136,7 @@ const XC::Vector &XC::Element0D::getY(void) const
     return retval;
   }
 
-//! @brief Devuelve el vector dirección del eje Z local (tercera fila de la transformación).
+//! @brief Returns the vector dirección del eje Z local (tercera fila de la transformación).
 const XC::Vector &XC::Element0D::getZ(void) const
   {
     static Vector retval(3);

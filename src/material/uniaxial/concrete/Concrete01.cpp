@@ -375,7 +375,7 @@ void XC::Concrete01::unload(void)
       }
   }
 
-//! @brief Consuma el estado del material.
+//! @brief Consuma el material state.
 int XC::Concrete01::commitState(void)
   {
     convergedHistory= trialHistory;// History variables
@@ -383,14 +383,14 @@ int XC::Concrete01::commitState(void)
     return 0;
   }
 
-//! @brief Devuelve el estado del material al último consumado.
+//! @brief Returns the material state al último consumado.
 int XC::Concrete01::revertToLastCommit(void)
   {
     commit_to_trial();
     return 0;
   }
 
-//! @brief Devuelve el estado del material al inicial.
+//! @brief Returns the material state al inicial.
 int XC::Concrete01::revertToStart(void)
   {
     const double Ec0= 2.0*fpc/epsc0;
@@ -403,7 +403,7 @@ int XC::Concrete01::revertToStart(void)
     return 0;
   }
 
-//! @brief Devuelve una copia del material.
+//! @brief Returns a copia del material.
 XC::UniaxialMaterial* XC::Concrete01::getCopy(void) const
   { return new Concrete01(*this); }
 

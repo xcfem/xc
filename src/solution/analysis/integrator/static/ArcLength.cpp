@@ -74,7 +74,7 @@
 XC::ArcLength::ArcLength(SoluMethod *owr,double arcLength, double alpha)
   :ArcLengthBase(owr,INTEGRATOR_TAGS_ArcLength,arcLength,alpha) {}
 
-//! @brief Devuelve el valor de dLambda para el método update.
+//! @brief Returns the valor de dLambda para el método update.
 double XC::ArcLength::getDLambdaUpdate(void) const
   {
     const double &dLStep= vectores.getDeltaLambdaStep();

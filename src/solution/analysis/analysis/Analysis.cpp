@@ -143,7 +143,7 @@ XC::EigenSOE *XC::Analysis::getEigenSOEPtr(void) const
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, a pointer al integrator en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al integrator otherwise it returns nullptr.
 XC::Integrator *XC::Analysis::getIntegratorPtr(void)
   {
     if(metodo_solu)
@@ -152,7 +152,7 @@ XC::Integrator *XC::Analysis::getIntegratorPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, a pointer al integrator en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al integrator otherwise it returns nullptr.
 const XC::Integrator *XC::Analysis::getIntegratorPtr(void) const
   {
     if(metodo_solu)
@@ -161,7 +161,7 @@ const XC::Integrator *XC::Analysis::getIntegratorPtr(void) const
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, a pointer al integrator incremental en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al integrator incremental otherwise it returns nullptr.
 XC::IncrementalIntegrator *XC::Analysis::getIncrementalIntegratorPtr(void)
   {
     if(metodo_solu)
@@ -170,7 +170,7 @@ XC::IncrementalIntegrator *XC::Analysis::getIncrementalIntegratorPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, a pointer al EigenIntegrator en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al EigenIntegrator otherwise it returns nullptr.
 XC::EigenIntegrator *XC::Analysis::getEigenIntegratorPtr(void)
   {
     if(metodo_solu)
@@ -179,7 +179,7 @@ XC::EigenIntegrator *XC::Analysis::getEigenIntegratorPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, a pointer al LinearBucklingIntegrator en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al LinearBucklingIntegrator otherwise it returns nullptr.
 XC::LinearBucklingIntegrator *XC::Analysis::getLinearBucklingIntegratorPtr(void)
   {
     if(metodo_solu)
@@ -188,7 +188,7 @@ XC::LinearBucklingIntegrator *XC::Analysis::getLinearBucklingIntegratorPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, a pointer al EigenIntegrator en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al EigenIntegrator otherwise it returns nullptr.
 XC::TransientIntegrator *XC::Analysis::getTransientIntegratorPtr(void)
   {
     if(metodo_solu)
@@ -197,7 +197,7 @@ XC::TransientIntegrator *XC::Analysis::getTransientIntegratorPtr(void)
       return nullptr;
   }
 
-//! @brief Devuelve, si es posible, a pointer al StaticIntegrator en otro caso devuelve nullptr.
+//! @brief Returns, if possible, a pointer al StaticIntegrator otherwise it returns nullptr.
 XC::StaticIntegrator *XC::Analysis::getStaticIntegratorPtr(void)
   {
     StaticIntegrator *retval= nullptr;

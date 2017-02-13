@@ -82,7 +82,7 @@ bool XC::Channel::isDatastore(void) const
 int XC::Channel::getDbTag(void) const
   { return 0; }
 
-//! @brief Devuelve la lista de dbTags usados.
+//! @brief Return the lista de dbTags usados.
 const XC::ID &XC::Channel::getUsedTags(void) const
   {
     static ID retval;

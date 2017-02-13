@@ -84,15 +84,15 @@ XC::MovableObject &XC::MovableObject::operator=(const MovableObject &otro)
     return *this;
   }
 
-//! @brief Devuelve el tag de la clase.
+//! @brief Returns the tag de la clase.
 int XC::MovableObject::getClassTag(void) const
   { return classTag; }
 
-//! @brief Devuelve el tag para la base de datos.
+//! @brief Returns the tag para la base de datos.
 int XC::MovableObject::getDbTag(void) const
   { return dbTag; }
 
-//! @brief Devuelve el tag para la base de datos.
+//! @brief Returns the tag para la base de datos.
 int XC::MovableObject::getDbTag(CommParameters &cp)
   {
     if(dbTag==0)
@@ -120,7 +120,7 @@ int XC::MovableObject::updateParameter(int parameterID, Information &info)
 int XC::MovableObject::activateParameter(int parameterID)
   { return 0; }
 
-//! @brief Devuelve el identificador de la variable cuyo
+//! @brief Returns the identificador de la variable cuyo
 //! nombre se pasa como parámetro.
 int XC::MovableObject::setVariable(const std::string &variable, Information &theInfo)
   { return -1; }

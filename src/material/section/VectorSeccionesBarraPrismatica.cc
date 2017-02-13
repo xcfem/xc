@@ -178,7 +178,7 @@ int XC::VectorSeccionesBarraPrismatica::commitState(void)
     return retVal;
   }
 
-//! @brief Devuelve el estado de los secciones al del último consumado.
+//! @brief Returns the estado de los secciones al del último consumado.
 int XC::VectorSeccionesBarraPrismatica::revertToLastCommit(void)
   {
     int retVal= 0;
@@ -189,7 +189,7 @@ int XC::VectorSeccionesBarraPrismatica::revertToLastCommit(void)
   }
 
 
-//! @brief Devuelve el estado de los secciones al inicial.
+//! @brief Returns the estado de los secciones al inicial.
 int XC::VectorSeccionesBarraPrismatica::revertToStart(void)
   {
     int retVal = 0;
@@ -199,7 +199,7 @@ int XC::VectorSeccionesBarraPrismatica::revertToStart(void)
     return retVal;
   }
 
-//! @brief Devuelve verdadero si las secciones tienen rigidez a torsión.
+//! @brief Returns true iflas secciones tienen rigidez a torsión.
 bool XC::VectorSeccionesBarraPrismatica::isTorsion(void) const
   {
     bool isTorsion= false;

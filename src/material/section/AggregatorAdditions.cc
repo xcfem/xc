@@ -118,7 +118,7 @@ XC::AggregatorAdditions::~AggregatorAdditions(void)
 void XC::AggregatorAdditions::putMatCodes(const ResponseId &codes)
   { alloc_ptrs(codes); }
 
-//! @brief Devuelve los códigos de los esfuerzos para los que la
+//! @brief Returns the códigos de los esfuerzos para los que la
 //! sección aporta rigidez.
 void XC::AggregatorAdditions::getType(ResponseId &retval,const size_t &offset) const
   {

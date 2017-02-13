@@ -60,7 +60,7 @@ bool XC::NDMaterialPhysicalProperties::check_material_elast_plana(const std::str
       return true;
   }
 
-//! @brief devuelve los vectores con la deformación de cada uno de los
+//! @brief returns los vectores con la deformación de cada uno de los
 //! puntos de Gauss.
 XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStrain(void) const
   {
@@ -76,7 +76,7 @@ XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStrain(void) const
     return retval;
   }   
 
-//! @brief devuelve los vectores con la deformación de cada uno de los
+//! @brief returns los vectores con la deformación de cada uno de los
 //! puntos de Gauss.
 XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStress(void) const
   {
@@ -93,7 +93,7 @@ XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStress(void) const
   }   
 
 
-//! @brief Devuelve la tensión media en el elemento.
+//! @brief Return the tensión media en el elemento.
 XC::Vector XC::NDMaterialPhysicalProperties::getCommittedAvgStress(void) const
   {
     const size_t numMaterials= theMaterial.size();
@@ -104,7 +104,7 @@ XC::Vector XC::NDMaterialPhysicalProperties::getCommittedAvgStress(void) const
     return retval;
   }
 
-//! @brief Devuelve la tensión media en el elemento.
+//! @brief Return the tensión media en el elemento.
 XC::Vector XC::NDMaterialPhysicalProperties::getCommittedAvgStrain(void) const
   {
     const size_t numMaterials= theMaterial.size();
@@ -115,7 +115,7 @@ XC::Vector XC::NDMaterialPhysicalProperties::getCommittedAvgStrain(void) const
     return retval;
   }
 
-//! @brief Devuelve la componente iComp de la tensión media en el elemento.
+//! @brief Return the componente iComp de la tensión media en el elemento.
 double XC::NDMaterialPhysicalProperties::getCommittedAvgStress(const size_t &iComp) const
   {
     const size_t numMaterials= theMaterial.size();
@@ -126,7 +126,7 @@ double XC::NDMaterialPhysicalProperties::getCommittedAvgStress(const size_t &iCo
     return retval;
   }
 
-//! @brief Devuelve la componente iComp de la deformación media en el elemento.
+//! @brief Return the componente iComp de la deformación media en el elemento.
 double XC::NDMaterialPhysicalProperties::getCommittedAvgStrain(const size_t &iComp) const
   {
     const size_t numMaterials= theMaterial.size();

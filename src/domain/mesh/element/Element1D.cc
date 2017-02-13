@@ -282,7 +282,7 @@ void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane
                 << std::endl; 
   }
 
-//! @brief Devuelve la dimensión del elemento.
+//! @brief Return the dimensión del elemento.
 size_t XC::Element1D::getDimension(void) const
   { return 1; }
 
@@ -442,11 +442,11 @@ void XC::Element1D::setDomain(Domain *theDomain)
     ElementBase<2>::setDomain(theDomain);
   }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 XC::CrdTransf *XC::Element1D::getCoordTransf(void)
   { return nullptr; }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 const XC::CrdTransf *XC::Element1D::getCoordTransf(void) const
   { return nullptr; }
 
@@ -457,7 +457,7 @@ XC::Matrix XC::Element1D::getLocalAxes(bool initialGeometry) const
     return getCoordTransf()->getLocalAxes(initialGeometry);
   }
 
-//! @brief Devuelve puntos distribuidos entre los nodos extremos.
+//! @brief Returns puntos distribuidos entre los nodos extremos.
 const XC::Matrix &XC::Element1D::getCooPuntos(const size_t &ndiv) const
   {
     static Matrix retval;
@@ -482,7 +482,7 @@ const XC::Matrix &XC::Element1D::getCooPuntos(const size_t &ndiv) const
     return retval;
   }
 
-//! @brief Devuelve el punto correspondiente a la coordenada 0<=xrel<=1.
+//! @brief Returns the punto correspondiente a la coordenada 0<=xrel<=1.
 const XC::Vector &XC::Element1D::getCooPunto(const double &xrel) const
   {
     static Vector retval;
@@ -503,7 +503,7 @@ const XC::Vector &XC::Element1D::getCooPunto(const double &xrel) const
     return retval;
   }
 
-//! @brief Devuelve el segmento definido por el elemento.
+//! @brief Returns the segmento definido por el elemento.
 Segmento3d XC::Element1D::getSegmento(bool initialGeometry) const
   {
     if(initialGeometry)
@@ -512,26 +512,26 @@ Segmento3d XC::Element1D::getSegmento(bool initialGeometry) const
       return Segmento3d(theNodes[0]->getPosFinal3d(),theNodes[1]->getPosFinal3d());
   }
 
-//! @brief Devuelve el cuadrado de la distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! @brief Returns the cuadrado de la distancia desde el elemento al punto que
+//! is being passed as parameter.
 double XC::Element1D::getDist2(const Pos2d &p,bool initialGeometry) const
   { return getDist2(To3dXY2d(p),initialGeometry); }
 
-//! @brief Devuelve la distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! @brief Return the distancia desde el elemento al punto que
+//! is being passed as parameter.
 double XC::Element1D::getDist(const Pos2d &p,bool initialGeometry) const
   { return getDist(To3dXY2d(p),initialGeometry); }
 
-//! @brief Devuelve el cuadrado de la distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! @brief Returns the cuadrado de la distancia desde el elemento al punto que
+//! is being passed as parameter.
 double XC::Element1D::getDist2(const Pos3d &p,bool initialGeometry) const
   {
     const Segmento3d sg(getSegmento(initialGeometry));
     return sg.dist2(p);
   }
 
-//! @brief Devuelve la distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! @brief Return the distancia desde el elemento al punto que
+//! is being passed as parameter.
 double XC::Element1D::getDist(const Pos3d &p,bool initialGeometry) const
   {
     const Segmento3d sg(getSegmento(initialGeometry));
@@ -636,7 +636,7 @@ void XC::Element1D::calculaLongsTributarias(bool initialGeometry) const
     vuelcaTributarias(longsTributarias);
   }
 
-//! @brief Devuelve la longitud tributaria correspondiente al nodo que se pasa
+//! @brief Return the longitud tributaria correspondiente to the node que se pasa
 //! como parámetro.
 double XC::Element1D::getLongTributaria(const Node *nod) const
   {

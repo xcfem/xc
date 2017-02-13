@@ -31,25 +31,25 @@
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 
 
-//! @brief Devuelve el vector unitario en la dirección del eje que se
+//! @brief Returns the vector unitario en la dirección del eje que se
 //! pasa como parámetro expresado en el sistema global 
 //! para la posición being passed as parameter.
 Vector2d XC::SisRefSccCartesianas2d::GetVDirEje(const size_t &i,const Pos2d &) const
   { return ref.GetVDirEje(i); }
 
-//! @brief Devuelve la posicion del punto p expresado en locales
+//! @brief Return the posicion del punto p expresado en locales
 //! expresada en coordenadas globales.
 Pos2d XC::SisRefSccCartesianas2d::GetPosGlobal(const Pos2d &p) const
   { return ref.GetPosGlobal(p); }
-//! @brief Devuelve el vector v expresado en locales
+//! @brief Returns the vector v expresado en locales
 //! expresado en coordenadas globales.
 Vector2d XC::SisRefSccCartesianas2d::GetCooGlobales(const Vector2d &v) const
   { return ref.GetCooGlobales(v); }
-//! @brief Devuelve la posicion del punto p expresado en globales
+//! @brief Return the posicion del punto p expresado en globales
 //! expresada en coordenadas locales.
 Pos2d XC::SisRefSccCartesianas2d::GetPosLocal(const Pos2d &p) const
   { return ref.GetPosLocal(p); }
-//! @brief Devuelve el vector v expresado en globales
+//! @brief Returns the vector v expresado en globales
 //! expresado en coordenadas locales.
 Vector2d XC::SisRefSccCartesianas2d::GetCooLocales(const Vector2d &v) const
   { return ref.GetCooLocales(v); }

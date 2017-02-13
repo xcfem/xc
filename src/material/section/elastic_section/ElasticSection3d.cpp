@@ -86,7 +86,7 @@ XC::ElasticSection3d::ElasticSection3d(int tag, double EA_in, double EIz_in, dou
   :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,4,CrossSectionProperties3d(1,EA_in,EIz_in,EIy_in,1,GJ_in)) {}
 
 
-//! @brief Devuelve el valor de la resultante de tensiones.
+//! @brief Returns the valor de la resultante de tensiones.
 const XC::Vector &XC::ElasticSection3d::getStressResultant(void) const
   {
     const Vector &e= getSectionDeformation();
@@ -97,19 +97,19 @@ const XC::Vector &XC::ElasticSection3d::getStressResultant(void) const
     return s;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::ElasticSection3d::getSectionTangent(void) const
   { return ctes_scc.getSectionTangent4x4(); }
 
-//! @brief Devuelve la matriz de rigidez tangente en el estado inicial.
+//! @brief Return the tangent stiffness matrix en el estado inicial.
 const XC::Matrix &XC::ElasticSection3d::getInitialTangent(void) const
   { return ctes_scc.getInitialTangent4x4(); }
 
-//! @brief Devuelve la matriz de flexibilidad.
+//! @brief Return the matriz de flexibilidad.
 const XC::Matrix &XC::ElasticSection3d::getSectionFlexibility(void) const
   { return ctes_scc.getSectionFlexibility4x4(); }
 
-//! @brief Devuelve la matriz de flexibilidad en el estado inicial.
+//! @brief Return the matriz de flexibilidad en el estado inicial.
 const XC::Matrix &XC::ElasticSection3d::getInitialFlexibility(void) const
   { return ctes_scc.getInitialFlexibility4x4(); }
 
@@ -117,7 +117,7 @@ const XC::Matrix &XC::ElasticSection3d::getInitialFlexibility(void) const
 XC::SectionForceDeformation *XC::ElasticSection3d::getCopy(void) const
   { return new ElasticSection3d(*this); }
 
-//! @brief Devuelve los GDL a los que la sección aporta rigidez.
+//! @brief Returns the GDL a los que la sección aporta rigidez.
 const XC::ResponseId &XC::ElasticSection3d::getType(void) const
   { return RespElasticSection3d; }
 

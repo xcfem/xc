@@ -844,7 +844,7 @@ int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
     return 0;
   }
 
-//! @brief Devuelve las cargas debidas a la inercia
+//! @brief Returns the cargas debidas a la inercia
 //! al vector de cargas desequilibradas.
 int XC::ForceBeamColumn2d::addInertiaLoadToUnbalance(const Vector &accel)
   {
@@ -869,7 +869,7 @@ int XC::ForceBeamColumn2d::addInertiaLoadToUnbalance(const Vector &accel)
     return 0;
   }
 
-//! @brief Devuelve las acciones del elemento sobre los nodos incluidas
+//! @brief Returns the acciones del elemento sobre los nodos incluidas
 //! las de inercia.
 const XC::Vector &XC::ForceBeamColumn2d::getResistingForceIncInertia(void) const
   {

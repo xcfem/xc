@@ -116,16 +116,16 @@ XC::CorotCrdTransf3d *XC::TransfCooLoader::newCorotCrdTransf3d(const std::string
 const XC::TransfCooLoader::map_transfcoo &XC::TransfCooLoader::Map(void) const
   { return transfcoo; }
 
-//! @brief Devuelve un iterador apuntando al principio de la lista.
+//! @brief Returns an iterator which points to principio de la lista.
 XC::TransfCooLoader::const_iterator XC::TransfCooLoader::begin(void) const
   { return transfcoo.begin(); }
-//! @brief Devuelve un iterador apuntando después del final de la lista.
+//! @brief Returns an iterator apuntando después del final de la lista.
 XC::TransfCooLoader::const_iterator XC::TransfCooLoader::end(void) const
   { return transfcoo.end(); }
-//! @brief Devuelve un iterador apuntando al principio de la lista.
+//! @brief Returns an iterator which points to principio de la lista.
 XC::TransfCooLoader::iterator XC::TransfCooLoader::begin(void)
   { return transfcoo.begin(); }
-//! @brief Devuelve un iterador apuntando después del final de la lista.
+//! @brief Returns an iterator apuntando después del final de la lista.
 XC::TransfCooLoader::iterator XC::TransfCooLoader::end(void)
   { return transfcoo.end(); }
 

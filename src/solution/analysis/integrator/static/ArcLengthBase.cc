@@ -36,7 +36,7 @@
 XC::ArcLengthBase::ArcLengthBase(SoluMethod *owr,int classTag,double arcLength, double alpha)
   :ProtoArcLength(owr,classTag,arcLength), alpha2(alpha*alpha) {}
 
-//! @brief Devuelve el valor de dLambda para el método newStep.
+//! @brief Returns the valor de dLambda para el método newStep.
 double XC::ArcLengthBase::getDLambdaNewStep(void) const
   {
     const Vector &dUhat= vectores.getDeltaUhat();

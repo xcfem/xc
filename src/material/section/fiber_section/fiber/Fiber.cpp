@@ -77,7 +77,7 @@ XC::Response *XC::Fiber::setResponse(const std::vector<std::string> &argv, Infor
 int XC::Fiber::getResponse(int responseID, Information &info)
   { return -1; }
 
-//! @brief Devuelve la fuerza con la que actúa la fibra.
+//! @brief Return the fuerza con la que actúa la fibra.
 double XC::Fiber::getFuerza(void) const
   { 
     double retval= 0.0;
@@ -86,11 +86,11 @@ double XC::Fiber::getFuerza(void) const
     return retval;
   }
 
-//! @brief Devuelve la fuerza con la que actúa la fibra.
+//! @brief Return the fuerza con la que actúa la fibra.
 double XC::Fiber::getDeformacion(void) const
   { return getMaterial()->getStrain(); }
 
-//! @brief Devuelve la posición de la fibra.
+//! @brief Return the posición de la fibra.
 Pos2d XC::Fiber::getPos(void) const
   { return Pos2d(getLocY(),getLocZ()); }
 

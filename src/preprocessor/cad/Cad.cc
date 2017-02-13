@@ -72,7 +72,7 @@ void XC::Cad::numera(void)
     cuerpos.numera();
   }
 
-//! @brief Devuelve el «edge» que tiene por extremos los puntos
+//! @brief Returns the «edge» que tiene por extremos los puntos
 //! cuyos índices se pasan como parámetro.
 XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPuntos::Indice &pB)
   {
@@ -93,7 +93,7 @@ XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPunt
     return retval;
   }
 
-//! @brief Devuelve el «edge» que tiene por extremos los puntos
+//! @brief Returns the «edge» que tiene por extremos los puntos
 //! cuyos índices se pasan como parámetro.
 const XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPuntos::Indice &pB) const
   {

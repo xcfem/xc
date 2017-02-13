@@ -118,7 +118,7 @@ bool XC::FourNodeQuad::check_material_type(const std::string &type) const
 int XC::FourNodeQuad::getNumDOF(void) const
   { return 8; }
 
-//! @brief Asigna el apuntador al domain y calcula el vector de cargas consistentes debido al peso.
+//! @brief Sets domain pointer and computes the consistent load vector due to pressure.
 void XC::FourNodeQuad::setDomain(Domain *theDomain)
   {
     QuadBase4N<SolidMech2D>::setDomain(theDomain);
@@ -176,7 +176,7 @@ int XC::FourNodeQuad::update(void)
     return ret;
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::FourNodeQuad::getTangentStiff(void) const
   {
     K.Zero();
@@ -234,7 +234,7 @@ const XC::Matrix &XC::FourNodeQuad::getTangentStiff(void) const
     return K;
   }
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix &XC::FourNodeQuad::getInitialStiff(void) const
   {
     if(!Ki)
@@ -288,7 +288,7 @@ const XC::Matrix &XC::FourNodeQuad::getInitialStiff(void) const
     return K;
   }
 
-//! @brief Devuelve la matriz de masas.
+//! @brief Return the matriz de masas.
 const XC::Matrix &XC::FourNodeQuad::getMass(void) const
   {
     K.Zero();
@@ -328,7 +328,7 @@ const XC::Matrix &XC::FourNodeQuad::getMass(void) const
     return K;
   }
 
-//! @brief Devuelve los puntos de Gauss del elemento.
+//! @brief Returns the puntos de Gauss del elemento.
 const XC::GaussModel &XC::FourNodeQuad::getGaussModel(void) const
   { return gauss_model_quad4; }
 
@@ -384,7 +384,7 @@ int XC::FourNodeQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
     return 0;
   }
 
-//! @brief Devuelve la fuerza de respuesta del elemento.
+//! @brief Return the fuerza de respuesta del elemento.
 const XC::Vector &XC::FourNodeQuad::getResistingForce(void) const
   {
     P.Zero();
@@ -434,7 +434,7 @@ const XC::Vector &XC::FourNodeQuad::getResistingForce(void) const
     return P;
   }
 
-//! @brief Devuelve la fuerza de respuesta del elemento incluyendo la debida a la inercia.
+//! @brief Return the fuerza de respuesta del elemento incluyendo la debida a la inercia.
 const XC::Vector &XC::FourNodeQuad::getResistingForceIncInertia(void) const
   {
     static Vector rhoi(4);
@@ -688,7 +688,7 @@ int XC::FourNodeQuad::updateParameter(int parameterID, Information &info)
       }
   }
 
-//! @brief Devuelve el determinante del jacobiano en las coordenadas que se pasan como parámetro.
+//! @brief Returns the determinante del jacobiano en las coordenadas que se pasan como parámetro.
 double XC::FourNodeQuad::shapeFunction(const GaussPoint &gp) const
   {
     const double &xi= gp.r_coordinate();

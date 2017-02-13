@@ -64,7 +64,7 @@ void XC::ElementPtrs::setPtrs(Domain *theDomain, const ID &theElementTags)
       }
   }
 
-//! @brief Devuelve un iterador al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns an iterator al elemento cuyo tag se pasa como parámetro.
 XC::ElementPtrs::iterator XC::ElementPtrs::find(const int &tag)
   {
     iterator retval= end();
@@ -74,7 +74,7 @@ XC::ElementPtrs::iterator XC::ElementPtrs::find(const int &tag)
     return retval;
   }
 
-//! @brief Devuelve un iterador al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns an iterator al elemento cuyo tag se pasa como parámetro.
 XC::ElementPtrs::const_iterator XC::ElementPtrs::find(const int &tag) const
   {
     const_iterator retval= end();

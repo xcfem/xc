@@ -63,22 +63,22 @@ class Spot: public EntGeomSection
       : EntGeomSection(nombre,m) {}
 
   public:
-    //! @brief Devuelve la dimensión del objeto.
+    //! @brief Return the dimensión del objeto.
     inline virtual unsigned short int GetDimension(void) const
       { return 0; }
     BND2d Bnd(void) const;
 
-    //! @brief Devuelve la posición del objeto.
+    //! @brief Return the posición del objeto.
     const Pos2d &GetPos(void) const
       { return p; }
-    //! @brief Devuelve la posición del objeto.
+    //! @brief Return the posición del objeto.
     Pos2d &GetPos(void)
       { return p; }
     inline void setPos(const Pos2d &pos)
       { p= pos; }
     Vector2d VectorPos(void) const;
 
-    //! @brief Devuelve la lista de líneas que tocan al punto.
+    //! @brief Return the lista de líneas que tocan al punto.
     const std::set<const Eje *> &EjesTocan(void) const
       { return ejes_pt; }
     bool Toca(const Eje &l) const;

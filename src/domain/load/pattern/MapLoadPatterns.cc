@@ -159,7 +159,7 @@ const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag) con
     return retval;
   }
 
-//! @brief Devuelve el nombre del caso al que apunta el parámetro.
+//! @brief Returns the nombre del caso al que apunta el parámetro.
 const std::string &XC::MapLoadPatterns::getNombreLoadPattern(const LoadPattern *ptr) const
   {
     static std::string retval;
@@ -298,7 +298,7 @@ XC::LoadPattern *XC::MapLoadPatterns::getCurrentLoadPatternPtr(void)
 const XC::LoadPattern *XC::MapLoadPatterns::getCurrentLoadPatternPtr(void) const
   { return buscaLoadPattern(lpcode); }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::MapLoadPatterns::getDbTagData(void) const
   {
@@ -361,7 +361,7 @@ int XC::MapLoadPatterns::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Devuelve los nombres de los casos de carga.
+//! @brief Returns the nombres de los casos de carga.
 std::deque<std::string> XC::MapLoadPatterns::getListaNombres(void) const
   {
     std::deque<std::string> retval;

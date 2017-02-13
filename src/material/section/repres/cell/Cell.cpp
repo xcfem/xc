@@ -63,7 +63,7 @@ XC::Cell::Cell(int numVert)
 XC::Cell::Cell(const XC::Matrix &vertexCoords)
   : vertCoord(vertexCoords), Centroid(2) {}
 
-//! @brief Devuelve las coordenadas de los vértices.
+//! @brief Returns the coordenadas de los vértices.
 const XC::Matrix &XC::Cell::getVertCoords(void) const
   { return vertCoord; }
 

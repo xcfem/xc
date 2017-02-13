@@ -57,12 +57,12 @@ void XC::TaggedObjectStorage::copia(const TaggedObjectStorage &otro)
       addComponent(ptr->getCopy());
   }
 
-//! @brief Devuelve verdadero si existe la componente
+//! @brief Returns true ifexiste la componente
 //! cuyo tag se pasa como parámetro.
 bool XC::TaggedObjectStorage::existComponent(int tag)
   { return (getComponentPtr(tag)!=nullptr); }
 
-//! @brief Devuelve los DBTags de los objetos.
+//! @brief Returns the DBTags de los objetos.
 const XC::ID &XC::TaggedObjectStorage::getDBTags(CommParameters &cp)
   {
     static ID retval;
@@ -84,7 +84,7 @@ const XC::ID &XC::TaggedObjectStorage::getDBTags(CommParameters &cp)
     return retval;
   }
 
-//! @brief Devuelve los classTags de los objetos.
+//! @brief Returns the classTags de los objetos.
 const XC::ID &XC::TaggedObjectStorage::getClassTags(void) const
   {
     static ID retval;
@@ -107,7 +107,7 @@ const XC::ID &XC::TaggedObjectStorage::getClassTags(void) const
     return retval;
   }
 
-//! @brief Devuelve los tags de los objetos.
+//! @brief Returns the tags de los objetos.
 const XC::ID &XC::TaggedObjectStorage::getObjTags(void) const
   {
     static ID retval;
@@ -130,7 +130,7 @@ const XC::ID &XC::TaggedObjectStorage::getObjTags(void) const
     return retval;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::TaggedObjectStorage::getDbTagData(void) const
   {
@@ -138,7 +138,7 @@ XC::DbTagData &XC::TaggedObjectStorage::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Devuelve los dbTags y classTags de los objetos through the channel being passed as parameter.
+//! @brief Returns the dbTags y classTags de los objetos through the channel being passed as parameter.
 int XC::TaggedObjectStorage::sendObjectTags(CommParameters &cp)
   {
     const int size= getNumComponents();

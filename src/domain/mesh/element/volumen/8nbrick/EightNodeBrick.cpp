@@ -1071,7 +1071,7 @@ void XC::EightNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
   }
 
 
-//! @brief Devuelve el tensor de masas.
+//! @brief Returns the tensor de masas.
 XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
   {
     //int M_dim[] = {8,3,3,8};

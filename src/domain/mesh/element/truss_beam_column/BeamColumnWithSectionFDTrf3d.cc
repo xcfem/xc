@@ -98,16 +98,16 @@ void XC::BeamColumnWithSectionFDTrf3d::initialize_trf(void)
       }
   }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 XC::CrdTransf *XC::BeamColumnWithSectionFDTrf3d::getCoordTransf(void)
   { return theCoordTransf; }
 
-//! @brief Devuelve (si puede) un apuntador a la coordinate transformation.
+//! @brief Returns (if possible) a pointer to the coordinate transformation.
 const XC::CrdTransf *XC::BeamColumnWithSectionFDTrf3d::getCoordTransf(void) const
   { return theCoordTransf; }
 
-//! @brief Devuelve el vector dirección del eje fuerte (mayor inercia) de la sección 
-//! del elemento cuyo índice se pasa como parámetro expresado en coordenadas locales.
+//! @brief Returns the vector dirección del eje fuerte (mayor inercia) de la sección 
+//! del elemento cuyo índice is being passed as parameter expresado en coordenadas locales.
 XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirEjeFuerteLocales(const size_t &i) const
   {
     Vector retval(3);
@@ -121,13 +121,13 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirEjeFuerteLocales(const size_
     else
       {
         std::cerr << "BeamColumnWithSectionFDTrf3d::getVDirEjeFuerte; la sección: "
-                  << i << " no devuelve ejes principales." << std::endl;
+                  << i << " doesn't returnsejes principales." << std::endl;
       }
     return retval;
   }
 
-//! @brief Devuelve el vector dirección del eje débil (menor inercia) de la sección 
-//! del elemento cuyo índice se pasa como parámetro expresado en coordenadas locales.
+//! @brief Returns the vector dirección del eje débil (menor inercia) de la sección 
+//! del elemento cuyo índice is being passed as parameter expresado en coordenadas locales.
 XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirEjeDebilLocales(const size_t &i) const
   {
     Vector retval(3);
@@ -141,13 +141,13 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirEjeDebilLocales(const size_t
     else
       {
         std::cerr << "BeamColumnWithSectionFDTrf3d::getVDirEjeDebil; la sección: "
-                  << i << " no devuelve ejes principales." << std::endl;
+                  << i << " doesn't returnsejes principales." << std::endl;
         return retval;
       }
     return retval;
   }
 
-//! @brief Devuelve el ángulo del eje fuerte (mayor inercia) del elemento
+//! @brief Returns the ángulo del eje fuerte (mayor inercia) del elemento
 //! con su plano XZ.
 double XC::BeamColumnWithSectionFDTrf3d::getAnguloEjeFuerte(const size_t &i) const
   {
@@ -155,7 +155,7 @@ double XC::BeamColumnWithSectionFDTrf3d::getAnguloEjeFuerte(const size_t &i) con
     return atan2(eF(2),eF(1));
   }
 
-//! @brief Devuelve el ángulo del eje débil (menor inercia) del elemento
+//! @brief Returns the ángulo del eje débil (menor inercia) del elemento
 //! con su plano XZ.
 double XC::BeamColumnWithSectionFDTrf3d::getAnguloEjeDebil(const size_t &i) const
   {
@@ -163,8 +163,8 @@ double XC::BeamColumnWithSectionFDTrf3d::getAnguloEjeDebil(const size_t &i) cons
     return atan2(eD(2),eD(1));
   }
 
-//! @brief Devuelve el vector dirección del eje fuerte (mayor inercia) de la sección 
-//! del elemento cuyo índice se pasa como parámetro.
+//! @brief Returns the vector dirección del eje fuerte (mayor inercia) de la sección 
+//! del elemento cuyo índice is being passed as parameter.
 const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirEjeFuerteGlobales(const size_t &i) const
   {
     if(theCoordTransf)
@@ -181,8 +181,8 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirEjeFuerteGlobales(con
       }
   }
 
-//! @brief Devuelve el vector dirección del eje débil (menor inercia) de la sección 
-//! del elemento cuyo índice se pasa como parámetro.
+//! @brief Returns the vector dirección del eje débil (menor inercia) de la sección 
+//! del elemento cuyo índice is being passed as parameter.
 const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirEjeDebilGlobales(const size_t &i) const
   {
     if(theCoordTransf)

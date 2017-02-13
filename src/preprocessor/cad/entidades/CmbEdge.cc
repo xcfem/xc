@@ -45,13 +45,13 @@ XC::CmbEdge::Lado::Lado(Edge *ptr,const bool &s)
 //! @brief Returns a pointer to the la linea.
 XC::Edge *XC::CmbEdge::Lado::Borde(void)
   { return edge; }
-//! @brief Devuelve a pointer constante a la linea.
+//! @brief Returns a pointer constante a la linea.
 const XC::Edge *XC::CmbEdge::Lado::Borde(void) const
   { return edge; }
 //! @brief Asigna la línea.
 void XC::CmbEdge::Lado::SetEdge(Edge *l)
   { edge= l; }
-//! @brief Devuelve a pointer (constante) al punto origen de la línea.
+//! @brief Returns a constant pointer to punto origen de la línea.
 const XC::Pnt *XC::CmbEdge::Lado::P1(void) const
   {
     if(!edge) return nullptr;
@@ -60,7 +60,7 @@ const XC::Pnt *XC::CmbEdge::Lado::P1(void) const
     else
       return edge->P2();
   }
-//! @brief Devuelve a pointer (constante) al punto destino de la línea.
+//! @brief Returns a constant pointer to punto destino de la línea.
 const XC::Pnt *XC::CmbEdge::Lado::P2(void) const
   {
     if(!edge) return nullptr;
@@ -71,7 +71,7 @@ const XC::Pnt *XC::CmbEdge::Lado::P2(void) const
   }
 
 
-//! @brief Devuelve verdadero si los puntos que se pasan como parámetro
+//! @brief Returns true iflos puntos que se pasan como parámetro
 //! son los extremos del lado.
 bool XC::CmbEdge::Lado::ExtremosEn(const Pnt *p1,const Pnt *p2) const
   {
@@ -87,19 +87,19 @@ bool XC::CmbEdge::Lado::ExtremosEn(const Pnt *p1,const Pnt *p2) const
     return retval;
   }
 
-//! @brief Devuelve el nombre de la línea.
+//! @brief Returns the nombre de la línea.
 const std::string &XC::CmbEdge::Lado::GetNombre(void) const
   { return edge->GetNombre(); }
 
-//! @brief Devuelve la longitud del lado.
+//! @brief Return the longitud del lado.
 double XC::CmbEdge::Lado::getLongitud(void) const
   { return edge->getLongitud(); }
 
-//! @brief Devuelve un vector tangente al lado en el punto s
+//! @brief Returns a vector tangente al lado en el punto s
 const XC::Vector &XC::CmbEdge::Lado::getTang(const double &s) const
   { return edge->getTang(s); }
 
-//! @brief Devuelve las posiciones de la linea.
+//! @brief Returns the posiciones de la linea.
 MatrizPos3d XC::CmbEdge::Lado::get_posiciones(void) const
   {
     if(edge)
@@ -108,7 +108,7 @@ MatrizPos3d XC::CmbEdge::Lado::get_posiciones(void) const
       return MatrizPos3d();
   }
 
-//! @brief Devuelve los identificadores de los nodos en sentido directo.
+//! @brief Returns the identificadores de los nodos en sentido directo.
 std::vector<int> XC::CmbEdge::Lado::GetTagsNodosDir(void) const
   {
     if(directo)
@@ -125,7 +125,7 @@ std::vector<int> XC::CmbEdge::Lado::GetTagsNodosInv(void) const
       return edge->GetTagsNodosDir();
   }
 
-//! @brief Devuelve las posiciones de los nodos en sentido directo.
+//! @brief Returns the posiciones de los nodos en sentido directo.
 MatrizPos3d XC::CmbEdge::Lado::GetPosNodosDir(void) const
   {
     if(directo)
@@ -134,7 +134,7 @@ MatrizPos3d XC::CmbEdge::Lado::GetPosNodosDir(void) const
       return edge->GetPosNodosInv();
   }
 
-//! @brief Devuelve las posiciones de los nodos en sentido inverso.
+//! @brief Returns the posiciones de los nodos en sentido inverso.
 MatrizPos3d XC::CmbEdge::Lado::GetPosNodosInv(void) const
   {
     if(directo)
@@ -143,7 +143,7 @@ MatrizPos3d XC::CmbEdge::Lado::GetPosNodosInv(void) const
       return edge->GetPosNodosDir();
   }
 
-//! @brief Devuelve el nodo cuyo índice se pasa como parámetro empezando por el principio.
+//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el principio.
 XC::Node *XC::CmbEdge::Lado::GetNodoDir(const size_t &i)
   {
     if(!edge)
@@ -155,7 +155,7 @@ XC::Node *XC::CmbEdge::Lado::GetNodoDir(const size_t &i)
         return edge->GetNodoInv(i);
   }
 
-//! @brief Devuelve el nodo cuyo índice se pasa como parámetro empezando por el final.
+//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el final.
 XC::Node *XC::CmbEdge::Lado::GetNodoInv(const size_t &i)
   {
     if(!edge)
@@ -167,7 +167,7 @@ XC::Node *XC::CmbEdge::Lado::GetNodoInv(const size_t &i)
         return edge->GetNodoDir(i);
   }
 
-//! @brief Devuelve el nodo cuyo índice se pasa como parámetro.
+//! @brief Returns the nodo cuyo índice is being passed as parameter.
 XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i)
   {
     XC::Node *retval= nullptr;
@@ -184,7 +184,7 @@ XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i)
     return retval;
   }
 
-//! @brief Devuelve el nodo cuyo índice se pasa como parámetro.
+//! @brief Returns the nodo cuyo índice is being passed as parameter.
 const XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i) const
   {
     if(!edge) return nullptr;
@@ -203,11 +203,11 @@ void XC::CmbEdge::Lado::genMesh(meshing_dir dm)
 void XC::CmbEdge::Lado::SetNDiv(const size_t &nd)
   { edge->SetNDiv(nd); }
 
-//! @brief Devuelve el número de divisiones de la línea.
+//! @brief Returns the número de divisiones de la línea.
 size_t XC::CmbEdge::Lado::NDiv(void) const
   { return edge->NDiv(); }
 
-//! @brief Devuelve el identificador de la línea.
+//! @brief Returns the identificador de la línea.
 size_t XC::CmbEdge::Lado::GetTag(void) const
   { return edge->GetTag(); }
 
@@ -229,7 +229,7 @@ XC::CmbEdge::CmbEdge(Preprocessor *m,const size_t &nd)
 
 //! @brief Constructor.
 //! @param nombre: Identificador del objeto.
-//! @param m: Apuntador al preprocesador.
+//! @param m: Pointer to preprocesador.
 //! @param nd: Número de divisiones.
 XC::CmbEdge::CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : Edge(nombre,m,nd), lineas(0) {}
@@ -292,10 +292,10 @@ const XC::Pnt *XC::CmbEdge::ultimo_punto(void) const
       return nullptr;
    }
 
-//! @brief Devuelve un apuntador (constante) al punto inicial.
+//! @brief Returns a constant pointer to start point.
 const XC::Pnt *XC::CmbEdge::P1(void) const
   { return primer_punto(); }
-//! @brief Devuelve un apuntador (constante) al punto final.
+//! @brief Returns a constant pointer to end point.
 const XC::Pnt *XC::CmbEdge::P2(void) const
   { return ultimo_punto(); }
 
@@ -310,7 +310,7 @@ void XC::CmbEdge::reverse(void)
       (*i).reverse();
   }
 
-//! @brief Devuelve la longitud de la línea.
+//! @brief Return the longitud de la línea.
 double XC::CmbEdge::getLongitud(void) const
   {
     double retval= 0;
@@ -319,7 +319,7 @@ double XC::CmbEdge::getLongitud(void) const
     return retval;
   }
 
-//! @brief Devuelve el número de divisiones total.
+//! @brief Returns the número de divisiones total.
 size_t XC::CmbEdge::NDiv(void) const
   {
     size_t &nd= const_cast<size_t &>(ndiv);
@@ -503,7 +503,7 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
     return retval;
   }
 
-//! @brief Inserta (si la encuentra) la línea cuyo índice se pasa como parámetro.
+//! @brief Inserta (si la encuentra) la línea cuyo índice is being passed as parameter.
 void XC::CmbEdge::inserta(const size_t &i)
   {
     Edge *tmp= BuscaEdge(i);
@@ -514,7 +514,7 @@ void XC::CmbEdge::inserta(const size_t &i)
       inserta(tmp);
   }
 
-//! @brief Inserta la línea cuyo apuntador se pasa como parámetro.
+//! @brief Inserts the line which pointer is being passed as parameter.
 void XC::CmbEdge::inserta(Edge *l)
   {
     if(IndiceEdge(l)!= 0) //La línea ya pertenece al conjunto.
@@ -560,15 +560,15 @@ size_t XC::CmbEdge::IndiceEdge(const Edge *l) const
     return 0; //No la encuentra.
   }
 
-//! @brief Devuelve un lado de la línea compuesta.
+//! @brief Returns a lado de la línea compuesta.
 const XC::CmbEdge::Lado *XC::CmbEdge::GetLado(const size_t &i) const
   { return &lineas[i-1]; }
 
-//! @brief Devuelve un lado de la línea compuesta.
+//! @brief Returns a lado de la línea compuesta.
 XC::CmbEdge::Lado *XC::CmbEdge::GetLado(const size_t &i)
   { return &lineas[i-1]; }
 
-//! @brief Devuelve el lado que tiene por extremos los puntos
+//! @brief Returns the lado que tiene por extremos los puntos
 //! que se pasan como parámetros.
 const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *p2) const
   {
@@ -582,7 +582,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *
     return retval; //No la encuentra.
   }
 
-//! @brief Devuelve el lado que tiene por extremos los puntos
+//! @brief Returns the lado que tiene por extremos los puntos
 //! que se pasan como parámetros.
 XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *p2)
   {
@@ -596,7 +596,7 @@ XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *p2)
     return retval;
   }
 
-//! @brief Devuelve el lado que tiene por extremos los puntos
+//! @brief Returns the lado que tiene por extremos los puntos
 //! que se pasan como parámetros.
 const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const size_t &idP1,const size_t &idP2) const
   {
@@ -605,7 +605,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const size_t &idP1,const 
     return GetLadoPorPuntos(p1,p2);
   }
 
-//! @brief Devuelve el lado que tiene por extremos los puntos
+//! @brief Returns the lado que tiene por extremos los puntos
 //! que se pasan como parámetros.
 XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const size_t &idP1,const size_t &idP2)
   {
@@ -614,7 +614,7 @@ XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const size_t &idP1,const size_t
     return GetLadoPorPuntos(p1,p2);
   }
 
-//! @brief Devuelve la lista de líneas que definen los lados.
+//! @brief Return the lista de líneas que definen los lados.
 std::deque<XC::Edge *> XC::CmbEdge::GetEdges(void)
   {
     std::deque<XC::Edge *> retval;
@@ -623,7 +623,7 @@ std::deque<XC::Edge *> XC::CmbEdge::GetEdges(void)
     return retval;
   }
 
-//! @brief Devuelve el vértice cuyo índice se pasa como parámetro.
+//! @brief Returns the vértice cuyo índice is being passed as parameter.
 const XC::Pnt *XC::CmbEdge::GetVertice(const size_t &i) const
   {
     if(i<NumVertices())
@@ -649,7 +649,7 @@ XC::ID XC::CmbEdge::getKPoints(void) const
   }
 
 
-//! @brief Devuelve el BND del objeto.
+//! @brief Returns the BND del objeto.
 BND3d XC::CmbEdge::Bnd(void) const
   { 
     BND3d retval;

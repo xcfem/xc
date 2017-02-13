@@ -831,7 +831,7 @@ int XC::MultiaxialCyclicPlasticity::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Devuelve la densidad del material.
+//! @brief Return the densidad del material.
 double XC::MultiaxialCyclicPlasticity::getRho(void) const
   { return density; }
 

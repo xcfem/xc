@@ -84,34 +84,34 @@ int XC::NewUniaxialMaterial::setTrialStrain(double strain, double strainRate)
     return 0;
   }
 
-//! @brief Devuelve la tensión del material.
+//! @brief Return the tensión del material.
 double XC::NewUniaxialMaterial::getStress(void) const
   { return Tstress; }
 
-//! @brief Devuelve el módulo de rigidez tangente del material.
+//! @brief Returns the módulo de rigidez tangente del material.
 double XC::NewUniaxialMaterial::getTangent(void) const
   { return Ttangent; }
 
-//! @brief Devuelve el módulo de rigidez tangente inicial del material.
+//! @brief Returns the módulo de rigidez tangente inicial del material.
 double XC::NewUniaxialMaterial::getInitialTangent(void) const
   {
     // return the initial tangent
     return 0.0;
   }
 
-//! @brief Devuelve la deformación del material.
+//! @brief Return the deformación del material.
 double XC::NewUniaxialMaterial::getStrain(void) const
   { return Tstrain; }
 
-//! @brief Consuma los valores de las variables de estado del material.
+//! @brief Consuma los valores de las variables de material state.
 int XC::NewUniaxialMaterial::commitState(void)
   { return 0; }
 
-//! @brief Devuelve el estado del material al último consolidado.
+//! @brief Returns the material state al último consolidado.
 int XC::NewUniaxialMaterial::revertToLastCommit(void)
   { return 0; }
 
-//! @brief Devuelve los valores de las variables de estado del material al
+//! @brief Returns the valores de las variables de material state al
 //! los del estado inicial.
 int XC::NewUniaxialMaterial::revertToStart(void)
   { return 0; }

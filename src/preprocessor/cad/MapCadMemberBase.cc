@@ -36,25 +36,25 @@
 XC::MapCadMemberBase::MapCadMemberBase(Cad *cad)
   : EntCmd(cad), tag(0) {}
 
-//! @brief Devuelve un apuntador al objeto Cad.
+//! @brief Returns a pointer to objeto Cad.
 const XC::Cad *XC::MapCadMemberBase::getCad(void) const
   {
     const Cad *retval= dynamic_cast<const Cad *>(Owner());
     return retval;
   }
 
-//! @brief Devuelve un apuntador al objeto Cad.
+//! @brief Returns a pointer to objeto Cad.
 XC::Cad *XC::MapCadMemberBase::getCad(void)
   { 
     Cad *retval= const_cast<Cad *>(dynamic_cast<const Cad *>(Owner()));
     return retval;
   }
 
-//! @brief Devuelve un apuntador al preprocesador.
+//! @brief Returns a pointer to preprocesador.
 const XC::Preprocessor *XC::MapCadMemberBase::getPreprocessor(void) const
   { return getCad()->getPreprocessor(); }
 
-//! @brief Devuelve un apuntador al preprocesador.
+//! @brief Returns a pointer to preprocesador.
 XC::Preprocessor *XC::MapCadMemberBase::getPreprocessor(void)
   { return getCad()->getPreprocessor(); }
 

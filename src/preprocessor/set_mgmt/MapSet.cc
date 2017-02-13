@@ -40,7 +40,7 @@
 XC::ID XC::MapSet::setsDbTags;
 std::deque<std::string> XC::MapSet::setsClassNames;
 
-//! @brief Devuelve verdadero si el conjunto existe.
+//! @brief Returns true ifel conjunto existe.
 bool XC::MapSet::existe(const std::string &nmb) const
   { return (sets.find(nmb)!=sets.end()); }
 
@@ -71,7 +71,7 @@ const XC::SetBase *XC::MapSet::busca_set(const std::string &nmb) const
       }
   }
 
-//! @brief Devuelve el conjunto cuyo nombre se pasa como parámetro.
+//! @brief Returns the conjunto cuyo nombre se pasa como parámetro.
 XC::SetBase &XC::MapSet::getSet(const std::string &nmb)
   {
     SetBase *retval= busca_set(nmb);
@@ -281,7 +281,7 @@ void XC::MapSet::reset(void)
 XC::MapSet::~MapSet(void)
   { clearAll(); }
 
-//! @brief Devuelve los DBTags de los conjuntos.
+//! @brief Returns the DBTags de los conjuntos.
 const XC::ID &XC::MapSet::getSetsDBTags(CommParameters &cp)
   {
     static ID retval;
@@ -300,7 +300,7 @@ const XC::ID &XC::MapSet::getSetsDBTags(CommParameters &cp)
     return retval;
   }
 
-//! @brief Devuelve los nombres de clase de los conjuntos.
+//! @brief Returns the nombres de clase de los conjuntos.
 const std::deque<std::string> &XC::MapSet::getSetsClassNames(void)
   {
     const int size= sets.size();
@@ -318,7 +318,7 @@ const std::deque<std::string> &XC::MapSet::getSetsClassNames(void)
     return setsClassNames;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::MapSet::getDbTagData(void) const
   {
@@ -506,7 +506,7 @@ int XC::MapSet::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Devuelve los conjuntos que contienen the pointer a nodo
+//! @brief Returns the conjuntos que contienen the pointer a nodo
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
   {
@@ -516,7 +516,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen the pointer a elemento
+//! @brief Returns the conjuntos que contienen the pointer a elemento
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
   {
@@ -526,7 +526,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen the pointer a punto
+//! @brief Returns the conjuntos que contienen the pointer a punto
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Pnt *p)
   {
@@ -536,7 +536,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Pnt *p)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen the pointer a «edge»
+//! @brief Returns the conjuntos que contienen the pointer a «edge»
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Edge *e)
   {
@@ -546,7 +546,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Edge *e)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen the pointer a superficie
+//! @brief Returns the conjuntos que contienen the pointer a superficie
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Face *f)
   {
@@ -556,7 +556,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Face *f)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen the pointer a cuerpo
+//! @brief Returns the conjuntos que contienen the pointer a cuerpo
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Body *b)
   {
@@ -566,7 +566,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Body *b)
     return retval;
   }
 
-//! @brief Devuelve los conjuntos que contienen the pointer a «uniform grid»
+//! @brief Returns the conjuntos que contienen the pointer a «uniform grid»
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const UniformGrid *ug)
   {

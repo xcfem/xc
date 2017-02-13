@@ -211,7 +211,7 @@ double XC::PathTimeSeries::getTimeIncr(double pseudoTime) const
     return 1.0;
   }
 
-//! @brief Devuelve el valor correspondiente al instante being passed as parameter.
+//! @brief Returns the valor correspondiente al instante being passed as parameter.
 double XC::PathTimeSeries::getFactor(double pseudoTime) const
   {
     // check for a XC::quick return

@@ -37,8 +37,8 @@ class_<vectorNDMaterial,boost::noncopyable>("vectorNDMaterial")
 
 class_<material_vector_NDMat,bases<vectorNDMaterial,EntCmd>,boost::noncopyable>("MaterialVectorUMat", no_init)
   .def("commitState", &material_vector_NDMat::commitState,"Commits materials state.")
-  .def("revertToLastCommit", &material_vector_NDMat::revertToLastCommit,"Devuelve el estado del material al último consumado.")
-  .def("revertToStart", &material_vector_NDMat::revertToStart,"Devuelve el material a su estado inicial.")
+  .def("revertToLastCommit", &material_vector_NDMat::revertToLastCommit,"Returns the material state al último consumado.")
+  .def("revertToStart", &material_vector_NDMat::revertToStart,"Returns the material a su estado inicial.")
   ;
 
   }

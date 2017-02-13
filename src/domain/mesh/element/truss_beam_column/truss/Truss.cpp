@@ -264,11 +264,11 @@ int XC::Truss::commitState()
     return retVal;
   }
 
-//! @brief Devuelve el estado del elemento al último consumado.
+//! @brief Returns the estado del elemento al último consumado.
 int XC::Truss::revertToLastCommit()
   { return theMaterial->revertToLastCommit(); }
 
-//! @brief Devuelve el estado del elemento al inicial.
+//! @brief Returns the estado del elemento al inicial.
 int XC::Truss::revertToStart()
   { return theMaterial->revertToStart(); }
 
@@ -280,7 +280,7 @@ int XC::Truss::update(void)
     return theMaterial->setTrialStrain(strain, rate);
   }
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::Truss::getTangentStiff(void) const
   {
     if(L == 0.0)
@@ -313,7 +313,7 @@ const XC::Matrix &XC::Truss::getTangentStiff(void) const
     return stiff;
   }
 
-//! @brief Devuelve la matriz de rigidez inicial.
+//! @brief Return the matriz de rigidez inicial.
 const XC::Matrix &XC::Truss::getInitialStiff(void) const
   {
     if(L == 0.0)
@@ -345,7 +345,7 @@ const XC::Matrix &XC::Truss::getInitialStiff(void) const
     return *theMatrix;
   }
 
-//! @brief Devuelve la matriz de amortiguamiento.
+//! @brief Return the matriz de amortiguamiento.
 const XC::Matrix &XC::Truss::getDamp(void) const
   {
     if(L == 0.0) { // - problem in setDomain() no further warnings
@@ -381,11 +381,11 @@ const XC::Material *XC::Truss::getMaterial(void) const
   { return theMaterial; }
 XC::Material *XC::Truss::getMaterial(void)
   { return theMaterial; }
-//! @brief Devuelve la densidad del material.
+//! @brief Return the densidad del material.
 double XC::Truss::getRho(void) const
   { return theMaterial->getRho(); }
 
-//! @brief Devuelve la matriz de masas.
+//! @brief Return the matriz de masas.
 const XC::Matrix &XC::Truss::getMass(void) const
   {
     // zero the matrix
@@ -556,7 +556,7 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
   return 0;
 }
 
-//! @brief Devuelve la reacción del elemento.
+//! @brief Return the reacción del elemento.
 const XC::Vector &XC::Truss::getResistingForce(void) const
   {
     if(L == 0.0)
@@ -585,7 +585,7 @@ const XC::Vector &XC::Truss::getResistingForce(void) const
     return *theVector;
   }
 
-//! @brief Devuelve la reacción del elemento incluyendo fuerzas de inercia.
+//! @brief Return the reacción del elemento incluyendo fuerzas de inercia.
 const XC::Vector &XC::Truss::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();
@@ -621,7 +621,7 @@ const XC::Vector &XC::Truss::getResistingForceIncInertia(void) const
     return *theVector;
   }
 
-//! @brief Devuelve un vector para almacenar los dbTags
+//! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
 XC::DbTagData &XC::Truss::getDbTagData(void) const
   {

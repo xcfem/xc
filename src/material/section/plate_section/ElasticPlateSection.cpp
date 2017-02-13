@@ -82,7 +82,7 @@ XC::SectionForceDeformation *XC::ElasticPlateSection::getCopy(void) const
 
 
 
-//! @brief Devuelve la resultante de las tensiones en la sección.
+//! @brief Return the resultante de las tensiones en la sección.
 const XC::Vector& XC::ElasticPlateSection::getStressResultant(void) const
   {
     const Vector &strain= getSectionDeformation();
@@ -99,7 +99,7 @@ const XC::Vector& XC::ElasticPlateSection::getStressResultant(void) const
   }
 
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix& XC::ElasticPlateSection::getSectionTangent(void) const
   {
     const double D= E * (h*h*h) / 12.0 / ( 1.0 - nu*nu ) ;
@@ -115,7 +115,7 @@ const XC::Matrix& XC::ElasticPlateSection::getSectionTangent(void) const
     return tangent;
   }
 
-//! @brief Devuelve la matriz de rigidez noval.
+//! @brief Return the matriz de rigidez noval.
 const XC::Matrix& XC::ElasticPlateSection::getInitialTangent(void) const
   { return getSectionTangent(); }
 

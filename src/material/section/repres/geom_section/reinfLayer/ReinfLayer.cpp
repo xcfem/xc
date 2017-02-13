@@ -116,14 +116,14 @@ double XC::ReinfLayer::getRecubrimiento(void) const
     return retval;
   }
 
-//! @brief Devuelve el centro de gravedad de las armaduras.
+//! @brief Returns the centro de gravedad de las armaduras.
 XC::Vector XC::ReinfLayer::getCdg(void) const
   {
     const VectorReinfBar &barras= getReinfBars();
     return barras.getCdgGrossSection();
   }
 
-// //! @brief Devuelve el subconjunto de barras de ésta que cumplen la condición que se
+// //! @brief Returns the subconjunto de barras de ésta que cumplen la condición que se
 // //! pasa como parámetro.
 // void XC::ReinfLayer::Cumplen(const std::string &cond,ListReinfLayer &retval,bool clear)
 //   {
@@ -136,7 +136,7 @@ XC::Vector XC::ReinfLayer::getCdg(void) const
 //         retval.push_back(BarraSuelta(**i));
 //   }
 
-//! @brief Devuelve las barras contenidas total o parcialmente en el polígono.
+//! @brief Returns the barras contenidas total o parcialmente en el polígono.
 void XC::ReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
@@ -148,7 +148,7 @@ void XC::ReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bo
         retval.push_back(BarraSuelta(**i));
   }
 
-//! @brief Devuelve las barras contenidas total o parcialmente en el semiplano.
+//! @brief Returns the barras contenidas total o parcialmente en el semiplano.
 void XC::ReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
@@ -160,14 +160,14 @@ void XC::ReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bo
         retval.push_back(BarraSuelta(**i));
   }
 
-//! @brief Devuelve un vector con las barras de la capa de armadura.
+//! @brief Returns a vector con las barras de la capa de armadura.
 XC::VectorReinfBar &XC::ReinfLayer::getReinfBars(void)
   {
     //Evitamos duplicar el método.
     return const_cast<VectorReinfBar&>(const_cast<const ReinfLayer&>(*this).getReinfBars());
   } 
 
-//! @brief Devuelve el número de barras de la capa.
+//! @brief Returns the número de barras de la capa.
 int XC::ReinfLayer::getNumReinfBars(void) const
   { return nReinfBars; }
 
@@ -182,11 +182,11 @@ void XC::ReinfLayer::setReinfBarDiameter(double reinfBarDiameter)
 void XC::ReinfLayer::setReinfBarArea(double reinfBarArea)
   { area = reinfBarArea; }
 
-//! @brief Devuelve el diámetro de las barras.
+//! @brief Returns the diámetro de las barras.
 const double &XC::ReinfLayer::getReinfBarDiameter(void) const
   { return barDiam; }
 
-//! @brief Devuelve el área de las barras.
+//! @brief Returns the área de las barras.
 const double &XC::ReinfLayer::getReinfBarArea(void) const
   { return area; }
 

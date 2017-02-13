@@ -266,7 +266,7 @@ const XC::Vector&  XC::MembranePlateFiberSection::getStressResultant(void) const
   }
 
 
-//! @brief Devuelve la matriz de rigidez tangente.
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix&  XC::MembranePlateFiberSection::getSectionTangent(void) const
   {
     static XC::Matrix dd(5,5);

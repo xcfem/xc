@@ -61,7 +61,7 @@ class Pnt: public EntMdlr
     Pnt(const std::string &nombre= "",Preprocessor *m= NULL,const Pos3d &pto= Pos3d());
 
     SetEstruct *getCopy(void) const;
-    //! @brief Devuelve la dimensión del objeto.
+    //! @brief Return the dimensión del objeto.
     inline virtual unsigned short int GetDimension(void) const
       { return 0; }
     BND3d Bnd(void) const;
@@ -70,10 +70,10 @@ class Pnt: public EntMdlr
     Node *getNode(void);
     virtual void genMesh(meshing_dir dm);
 
-    //! @brief Devuelve la posición del objeto.
+    //! @brief Return the posición del objeto.
     const Pos3d &GetPos(void) const
       { return p; }
-    //! @brief Devuelve la posición del objeto.
+    //! @brief Return the posición del objeto.
     Pos3d &Pos(void)
       { return p; }
     //! @brief Asigna la posición del objeto.
@@ -84,13 +84,13 @@ class Pnt: public EntMdlr
     void inserta_linea(Edge *l) const;
     void borra_linea(Edge *l) const;
 
-    //! @brief Devuelve la lista de líneas que tocan al punto.
+    //! @brief Return the lista de líneas que tocan al punto.
     const std::set<const Edge *> &EdgesTocan(void) const
       { return lineas_pt; }
     const size_t getNLines(void) const
       { return EdgesTocan().size(); }
     std::set<const Edge *> EdgesExtremo(void) const;
-    //! @brief Devuelve los nombres de las superficies que tocan a a línea.
+    //! @brief Returns the nombres de las superficies que tocan a a línea.
     const std::string &NombresEdgesTocan(void) const;
     bool Toca(const Edge &l) const;
     bool Extremo(const Edge &l) const;

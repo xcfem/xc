@@ -97,7 +97,7 @@ XC::VectorReinfBar &XC::VectorReinfBar::operator=(const VectorReinfBar &otro)
 XC::VectorReinfBar::~VectorReinfBar(void)
   { libera(); }
 
-//! @brief Devuelve el área homogeneizada de las regiones.
+//! @brief Returns the área homogeneizada de las regiones.
 double XC::VectorReinfBar::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)

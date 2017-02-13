@@ -760,7 +760,7 @@ int XC::AnalysisModel::commitDomain(void)
     return retval;
   }
 
-//! @brief Devuelve el estado del domain al último consumado.
+//! @brief Returns the estado del domain al último consumado.
 int XC::AnalysisModel::revertDomainToLastCommit(void)
   {
     // check to see there is a XC::Domain linked to the Model

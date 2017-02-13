@@ -51,7 +51,7 @@ void XC::MEDDblFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
                 valor= vector_double_from_py_object(tmp);
                 if(valor.size()!=dim)
 	          std::cerr << "La propiedad: '" << nmb_prop
-                            << "' devuelve un vector de dimensión: "
+                            << "' returns un vector de dimensión: "
                             << valor.size() << " se esperaba uno de dimensión "
                             << dim << std::endl;
                 for(size_t k= 1;k<=dim;k++)
@@ -88,7 +88,7 @@ void XC::MEDDblFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
                 valor= vector_double_from_py_object(tmp);
                 if(valor.size()!=dim)
                   std::cerr << "La propiedad: '" << nmb_prop
-                            << "' devuelve un vector de dimensión: "
+                            << "' returns un vector de dimensión: "
                             << valor.size() << " se esperaba uno de dimensión "
                             << dim << std::endl;
                 for(size_t k= 1;k<=dim;k++)

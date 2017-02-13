@@ -59,7 +59,7 @@ template <class T>
 MapEnt<T>::MapEnt(Cad *cad)
   : MapCadMember<T>(cad) {}
 
-//! @brief Devuelve el objeto más cercano a la posición being passed as parameter.
+//! @brief Returns the objeto más cercano a la posición being passed as parameter.
 template <class T>
 T *MapEnt<T>::getNearest(const Pos3d &p)
   {
@@ -87,7 +87,7 @@ T *MapEnt<T>::getNearest(const Pos3d &p)
     return retval;
   }
 
-//! @brief Devuelve el objeto más cercano a la posición being passed as parameter.
+//! @brief Returns the objeto más cercano a la posición being passed as parameter.
 template <class T>
 const T *MapEnt<T>::getNearest(const Pos3d &p) const
   {

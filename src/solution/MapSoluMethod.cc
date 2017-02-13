@@ -40,7 +40,7 @@
 XC::MapSoluMethod::MapSoluMethod(ProcSoluControl *owr)
   : EntCmd(owr) {}
 
-//! @brief Devuelve verdadero si existe el método cuyo nombre
+//! @brief Returns true ifexiste el método cuyo nombre
 //! se pasa como parámetro.
 bool XC::MapSoluMethod::existeSoluMethod(const std::string &cod) const
   { 
@@ -69,7 +69,7 @@ XC::SoluMethod *XC::MapSoluMethod::getSoluMethod(const std::string &cod)
   }
 
 //! @brief Crea un nuevo solution method con el código being passed as parameter.
-//! @brief Si ya existe devuelve a pointer al mismo.
+//! @brief Si ya existe returns a pointer al mismo.
 XC::SoluMethod &XC::MapSoluMethod::creaSoluMethod(const std::string &cod,ModelWrapper *sm)
   {
     SoluMethod *retval= nullptr;
@@ -89,7 +89,7 @@ XC::SoluMethod &XC::MapSoluMethod::newSoluMethod(const std::string &cod_solu_met
     return retval;
   }
 
-//! @brief Devuelve todo a su estado original.
+//! @brief Returns todo a su estado original.
 void XC::MapSoluMethod::revertToStart(void)
   {
     for(iterator i= solu_methods.begin();i!=solu_methods.end();i++)
