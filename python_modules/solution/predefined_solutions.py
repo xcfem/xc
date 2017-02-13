@@ -5,6 +5,41 @@ import geom
 import xc
 
 class SolutionProcedure(object):
+  '''
+  :ivar solu:
+  :ivar solCtrl:
+  :ivar sm:
+  :ivar numberer:  DOF numberer. Determines the mapping between equation 
+                   numbers and degrees of freedom (how DOF are numbered)
+  :ivar cHandler:  constraint handler. Determines how the constraint equations 
+                   are enforced in the analysis, how it handles the boundary
+                   conditions/imposed displacements 
+  :ivar smt:
+  :ivar solAlgo: solution algorithm, which determines the sequence of steps
+                 taken to solve the non-linear equation:
+
+                 - linear
+                 - Newton Raphson (the tangent is updated at each iteration)
+                 - Newton with Line Search
+                 - Modified Newton Raphson (the tangent is not updated at 
+                 each iteration)
+                 - Kyrlov-Newton
+                 - BFGS, for symetric systems
+                 - Broyden
+  :ivar integ:   integrator, used to:
+
+                 - determine the predictive step for time t+dt
+                 - specify the tangent matrix and residual vectir at any
+                   iteration
+                 - determine the corrective step based on the displacement 
+                   increment
+  :ivar soe:       sparse system of equations: band general, band SPD, 
+                   profile SPD, sparse general, umfPack, sparse SPD
+  :ivar solver:
+  :ivar analysis:  determines what type of analysis is to be performed
+  :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
+  :ivar maxNumIter: maximum number of iterations (defauts to 10)
+  '''
   solu= None
   solCtrl= None
   sm= None
