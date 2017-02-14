@@ -73,8 +73,7 @@ class FullGenLinSolver;
 
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! con matriz densa.
+//! @brief Base class for dense unsymmetric matrix systems of equations.
 class FullGenLinSOE : public FactoredSOEBase
   {
   private:

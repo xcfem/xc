@@ -70,8 +70,7 @@ class DistributedDiagonalSolver;
 
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! con matriz diagonal distribuída.
+//! @brief Diagonal matrix distributed systems of equations.
 class DistributedDiagonalSOE : public FactoredSOEBase, public DistributedLinSOE
   {
   private:

@@ -93,9 +93,9 @@ class SoluMethod: public EntCmd
     bool alloc_integrator(const std::string &,const Vector &);
     void copia_integrator(Integrator *);
 
-    void libera_sistema_ecuaciones(void);
-    bool alloc_sistema_ecuaciones(const std::string &,AnalysisModel *);
-    void copia_sistema_ecuaciones(SystemOfEqn *);
+    void libera_system_of_equations(void);
+    bool alloc_system_of_equations(const std::string &,AnalysisModel *);
+    void copia_system_of_equations(SystemOfEqn *);
 
     void libera_conv_test(void);
     bool alloc_conv_test(const std::string &);

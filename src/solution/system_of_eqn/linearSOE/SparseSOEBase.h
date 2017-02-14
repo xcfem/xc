@@ -36,7 +36,7 @@ namespace XC {
 
 //! @ingroup LinearSOE
 //
-//! @brief Sistema de ecuaciones lineal con matriz dispersa.
+//! @brief Base class for sparse matrix systems of equations.
 class SparseSOEBase : public FactoredSOEBase
   {
   protected:

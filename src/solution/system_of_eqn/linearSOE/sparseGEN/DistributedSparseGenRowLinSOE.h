@@ -71,36 +71,37 @@ class DistributedSparseGenRowLinSolver;
 
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! con matriz dispersa no simétrica distribuída.
+//! @brief Sparse nonsymmetric matrix distributed systems of equations.
  class DistributedSparseGenRowLinSOE : public SparseGenSOEBase, public DistributedLinSOE
   {
   private:
     ID colA;
-    ID rowStartA; // int arrays containing info about coeficientss in A
+    ID rowStartA; //!< int arrays containing info about coeficients in A
 
-    int numP;                // numProcesses involved in computation
-    int rank;                // rank of current process
-    int startRow;            // start row number of rows assigned to current process
-    int endRow;              // end row number of rows assigned to current
-    int numRows;             // number of rows asigned to Process, 
-                             //  first rows will be startRow through endRow; after that
-                             //  come all rows not yet accounted for in rows that are in graph passed in setGraph
-    ID rows;                 // the rows of A
-    std::vector<ID *> otherProcessesRows; // the rows & row location of data that will be sent by the processes for rows
-                             // not assigned to them yet for which they have data.
+    int numP; //!< numProcesses involved in computation
+    int rank; //!< rank of current process
+    int startRow; //!< start row number of rows assigned to current process
+    int endRow; //!< end row number of rows assigned to current
+    int numRows; //!< number of rows asigned to Process, 
+                 //  first rows will be startRow through endRow; after that
+                 //  come all rows not yet accounted for in rows that are in graph passed in setGraph
+    ID rows; //!< the rows of A
+    std::vector<ID *> otherProcessesRows; //!< the rows & row location of data
+                                          // that will be sent by the processes
+                                          // for rows not assigned to
+                                          // them yet for which they have data.
     std::vector<ID *> otherProcessesRowStart;
     int remoteDataLoc;
   protected:
     virtual bool setSolver(LinearSOESolver *);
 
     friend class SoluMethod;
-    DistributedSparseGenRowLinSOE(SoluMethod *);        
+    DistributedSparseGenRowLinSOE(SoluMethod *); 
     SystemOfEqn *getCopy(void) const;
   public:
     int setSize(Graph &theGraph);
     int addA(const Matrix &, const ID &, double fact = 1.0);
-    int addB(const Vector &, const ID &, double fact = 1.0);    
+    int addB(const Vector &, const ID &, double fact = 1.0);
     
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

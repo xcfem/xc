@@ -75,8 +75,7 @@ class BandSPDLinSolver;
 
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! con matriz en banda.
+//! @brief Base class for band matrix system of equations.
 class BandSPDLinSOE: public FactoredSOEBase
   {
   protected:

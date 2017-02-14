@@ -68,8 +68,7 @@ class FullGenEigenSolver;
 
 //! @ingroup EigenSOE
 //
-//! @brief Sistema de ecuaciones correspondiente
-//! a un eigenproblem con matriz densa no simétrica.
+//! @brief Dense matrix eigenproblem system of equations.
 class FullGenEigenSOE : public EigenSOE
   {
   private:

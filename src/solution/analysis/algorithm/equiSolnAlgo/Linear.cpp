@@ -104,10 +104,10 @@ int XC::Linear::resuelve(void)
 	return -2;
       }
 
-    if(theSOE->solve() < 0) //Resuelve el sist. de ecuaciones.
+    if(theSOE->solve() < 0) //launches SOE solution.
       {
 	std::cerr << "WARNING XC::Linear::solveCurrentStep() -";
-	std::cerr << "the XC::LinearSOE failed in solve()\n";	
+	std::cerr << "the " << nombre_clase() << " failed in solve()\n";	
 	return -3;
       }
 

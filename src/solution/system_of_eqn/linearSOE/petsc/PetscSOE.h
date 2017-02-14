@@ -80,9 +80,7 @@ class PetscSolver;
 
 //! @ingroup SOE
 //
-//! @brief Sistema de ecuaciones que hace
-//! uso de la biblioteca «Portable, Extensible Toolkit for
-//! Scientific Computation»: PetSC (http://www.mcs.anl.gov/petsc/petsc-as).
+//! @brief <a href="http://www.mcs.anl.gov/petsc/petsc-as" target="_new"> PETSC</a> based system of equations.
 class PetscSOE: public FactoredSOEBase, public DistributedLinSOE
   {
   private:

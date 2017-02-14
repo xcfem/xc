@@ -255,14 +255,14 @@ int XC::TransientDomainDecompositionAnalysis::domainChanged(void)
   return 0;
 }    
 
-//! @brief Returns the número de ecuaciones externas.
+//! @brief Returns the number of external equations.
 int XC::TransientDomainDecompositionAnalysis::getNumExternalEqn(void)
   {
     std::cerr << "XC::TransientDomainDecompositionAnalysis::getNumExternalEqn() - should never be called\n";
     return 0;
   }
 
-//! @brief Returns the número de ecuaciones internas.
+//! @brief Returns the number of equations internas.
 int XC::TransientDomainDecompositionAnalysis::getNumInternalEqn(void)
   {
     std::cerr << "XC::TransientDomainDecompositionAnalysis::getNumInternalEqn() - should never be called\n";

@@ -226,11 +226,11 @@ int XC::DomainDecompositionAnalysis::domainChanged(void)
     return 0;
   }
 
-//! @brief Returns the número de ecuaciones externas.
+//! @brief Returns the number of external equations.
 int XC::DomainDecompositionAnalysis::getNumExternalEqn(void)
   { return numExtEqn; }
 
-//! @brief Returns the númer de ecuaciones internas.
+//! @brief Returns the number of internal equations.
 int XC::DomainDecompositionAnalysis::getNumInternalEqn(void)
   { return numEqn-numExtEqn; }
 

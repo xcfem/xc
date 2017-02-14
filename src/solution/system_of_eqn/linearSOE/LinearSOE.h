@@ -71,11 +71,11 @@ class ID;
 
 //!  @ingroup SOE
 //! 
-//! @defgroup LinearSOE Sistemas de ecuaciones lineales.
+//! @defgroup LinearSOE linear systems of equations.
 //
 //! @ingroup LinearSOE
 //
-//! @brief Sistema de ecuaciones lineal.
+//! @brief Linea system of equations.
 //! This is the class definition for LinearSOE.
 //! LinearSOE is an abstract base class and thus no objects of it's type
 //! can be instantiated. It has pure virtual functions which must be

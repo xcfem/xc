@@ -73,9 +73,7 @@ class UmfpackGenLinSolver;
 
 //! @ingroup SOE
 //
-//! @brief Sistemas de ecuaciones que hacen uso
-//! de la biblioteca
-//! Umf Pack (http://www.cise.ufl.edu/research/sparse/umfpack).
+//! @brief UMFPACK (see <a href="http://faculty.cse.tamu.edu/davis/research.html" target="_new"> SuiteSparse</a>) based systems of equations.
 class UmfpackGenLinSOE : public FactoredSOEBase
   {
   private:

@@ -68,8 +68,7 @@ class DistributedProfileSPDLinSolver;
 
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! con matriz de perfil superior distribuida.
+//! @brief Profile matrix distributed systems of equations.
 class DistributedProfileSPDLinSOE: public ProfileSPDLinSOE, public DistributedBandLinSOE
   {
   private:

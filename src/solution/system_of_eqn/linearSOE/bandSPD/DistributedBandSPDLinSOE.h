@@ -69,8 +69,7 @@ class DistributedBandSPDLinSolver;
 
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! con matriz en banda distribuída.
+//! @brief Base class for band matrix distributed systems of equations.
 class DistributedBandSPDLinSOE: public BandSPDLinSOE, public DistributedBandLinSOE
   {
   protected:

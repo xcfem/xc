@@ -84,8 +84,8 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
     Subdomain *theSubdomain; //!< Pointer to subdomain. 
     DomainSolver *theSolver; //!< Pointer to solver de tipo DomainSolver.
     Vector theResidual; //!< Vector residuo.
-    int numEqn; //!< Número de ecuaciones.
-    int numExtEqn; //!< Número de ecuaciones externas.
+    int numEqn; //!< number of equations.
+    int numExtEqn; //!< number of external equations.
 
     // the following 2 variables are used to allow formResidual()
     // and formTangVectProduct() to be called before formTangent()

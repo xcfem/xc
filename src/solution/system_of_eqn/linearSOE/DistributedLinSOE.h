@@ -42,8 +42,7 @@ class CommParameters;
 
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! distribuidos con matriz en banda
+//! @brief Base class for distributed systems of equations.
 class DistributedLinSOE: public DistributedObj
   {
   protected:

@@ -55,10 +55,7 @@
 // Written: fmk 
 //
 // Description: This file contains the class definition for BandGenLinSOE
-// BandGenLinSOE is a subclass of LinearSOE. It uses the LAPACK storage
-// scheme to store the components of the A matrix, which is a banded 
-// unsymmetric matrix.
-//
+// BandGenLinSOE is a subclass of LinearSOE. 
 // What: "@(#) BandGenLinSOE.h, revA"
 
 
@@ -70,8 +67,9 @@ class BandGenLinSolver;
 
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! con matriz en banda no simétrica.
+//! @brief Uses the LAPACK storage
+//! scheme to store the components of the A matrix, which is a banded 
+//! unsymmetric matrix.
 class BandGenLinSOE : public FactoredSOEBase
   {
   protected:
@@ -87,8 +85,6 @@ class BandGenLinSOE : public FactoredSOEBase
     BandGenLinSOE(SoluMethod *,int N, int numSuperDiagonals, int numSubDiagonal,BandGenLinSolver *theSolver= NULL);        
     SystemOfEqn *getCopy(void) const;
   public:
-
-    
     virtual int setSize(Graph &theGraph);
     
     virtual int addA(const Matrix &, const ID &, double fact = 1.0);

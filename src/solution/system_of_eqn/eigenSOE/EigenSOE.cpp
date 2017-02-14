@@ -106,7 +106,7 @@ bool XC::EigenSOE::setSolver(EigenSolver *newSolver)
     return retval;
   }
 
-//! @brief Returns the número de ecuaciones.
+//! @brief Returns the number of equations.
 int XC::EigenSOE::getNumEqn(void) const
   { return size; }
 
@@ -139,7 +139,7 @@ void XC::EigenSOE::resize_mass_matrix_if_needed(const size_t &sz)
       massMatrix= sparse_matrix(sz,sz,0.0);
   }
 
-//! @brief Solves the eigenproblem con the número de modos being passed as parameter.
+//! @brief Solves the eigenproblem con the number of modos being passed as parameter.
 int XC::EigenSOE::solve(int numModes)
   { return (theSolver->solve(numModes)); }
 
@@ -180,7 +180,7 @@ XC::Matrix XC::EigenSOE::getEigenvectors(void) const
 XC::Matrix XC::EigenSOE::getNormalizedEigenvectors(void) const
   { return theSolver->getNormalizedEigenvectors(); }
 
-//! @brief Returns the autovalor que corresponde al modo being passed as parameter.
+//! @brief Returns the eigenvalue of the mode being passed as parameter.
 const double &XC::EigenSOE::getEigenvalue(int mode) const
   { return theSolver->getEigenvalue(mode); }
 
@@ -216,7 +216,7 @@ XC::Vector XC::EigenSOE::getPeriodos(void) const
 XC::Vector XC::EigenSOE::getFrecuencias(void) const
   { return theSolver->getFrecuencias(); }
 
-//! @brief Returns the número de eigenvalues que se han calculado.
+//! @brief Returns the number of eigenvalues que se han calculado.
 const int &XC::EigenSOE::getNumModes(void) const
   { return theSolver->getNumModes(); }
 

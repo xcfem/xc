@@ -69,8 +69,7 @@ class DistributedSparseGenColLinSolver;
 
 //! @ingroup LinearSOE
 //
-//! @brief Sistema de ecuaciones con matriz dispersa
-//! no simétrica distribuida.
+//! @brief Sparse nonsymmetric matrix distributed system of equations.
 class DistributedSparseGenColLinSOE : public SparseGenColLinSOE, public DistributedBandLinSOE
   {
   protected:

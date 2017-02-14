@@ -36,8 +36,7 @@ namespace XC {
 
 //! @ingroup LinearSOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! de tipo «factored».
+//! @brief Base class for factored systems of equations.
 class FactoredSOEBase: public LinearSOEData
   {
   protected:

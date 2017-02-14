@@ -70,8 +70,7 @@ class ProfileSPDLinSolver;
 
 //! @ingroup SOE
 //
-//! @brief Sistemas de ecuaciones con matriz
-//! de tipo «perfil superior».
+//! @brief Profile matrix system of equations.
 class ProfileSPDLinSOE : public FactoredSOEBase
   {
   protected:

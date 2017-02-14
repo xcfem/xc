@@ -29,7 +29,7 @@
 #include "DeformationPlane.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/d2/EcuacionGeneralPlano3d.h"
+#include "xc_utils/src/geom/d2/GeneralEquationOfPlane.h"
 #include "utility/matrix/Vector.h"
 #include "material/section/ResponseId.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
@@ -302,7 +302,7 @@ int XC::DeformationPlane::sendData(CommParameters &cp)
   {
     //setDbTagDataPos(0,getTag());
     Vector ec_gen(4);
-    EcuacionGeneralPlano3d ec= GetEcuacionGeneral();
+    GeneralEquationOfPlane ec= getGeneralEquation();
     ec_gen(0)= ec.a(); ec_gen(1)= ec.b(); ec_gen(2)= ec.c(); ec_gen(3)= ec.d(); 
     int res= cp.sendVector(ec_gen,getDbTagData(),CommMetaData(1));
     return res;
@@ -314,8 +314,8 @@ int XC::DeformationPlane::recvData(const CommParameters &cp)
     //setTag(getDbTagDataPos(0));
     Vector ec_gen(4);
     int res= cp.receiveVector(ec_gen,getDbTagData(),CommMetaData(1));
-    EcuacionGeneralPlano3d ec(ec_gen(0),ec_gen(1),ec_gen(2),ec_gen(3));
-    EcuacionGeneral(ec);
+    GeneralEquationOfPlane ec(ec_gen(0),ec_gen(1),ec_gen(2),ec_gen(3));
+    GeneralEquation(ec);
     return res;
   }
 

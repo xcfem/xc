@@ -37,7 +37,7 @@ namespace XC {
 
 //! @ingroup LinearSOE
 //
-//! @brief Sistema de ecuaciones de matriz dispersa no simétrica.
+//! @brief Sparse unsymmetric matris system of equations.
 class SparseGenSOEBase: public SparseSOEBase
   {
   protected:

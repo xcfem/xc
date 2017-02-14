@@ -69,7 +69,7 @@ class DiagonalSolver;
 
 //! @ingroup SOE
 //
-//! @brief Sistema de ecuaciones de matriz diagonal.
+//! @brief Diagonal matrix system of equations.
 class DiagonalSOE : public FactoredSOEBase
   {
   private:

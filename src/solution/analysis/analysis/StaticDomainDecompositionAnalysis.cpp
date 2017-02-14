@@ -276,14 +276,14 @@ int XC::StaticDomainDecompositionAnalysis::domainChanged(void)
   return 0;
 }    
 
-//! @brief Returns the número de ecuaciones externas.
+//! @brief Returns the number of external equations.
 int XC::StaticDomainDecompositionAnalysis::getNumExternalEqn(void)
   {
     std::cerr << "XC::StaticDomainDecompositionAnalysis::getNumExternalEqn() - should never be called\n";
     return 0;
   }
 
-//! @brief Returns the número de ecuaciones internas.
+//! @brief Returns the number of equations internas.
 int XC::StaticDomainDecompositionAnalysis::getNumInternalEqn(void)
   {
     std::cerr << "XC::StaticDomainDecompositionAnalysis::getNumInternalEqn() - should never be called\n";

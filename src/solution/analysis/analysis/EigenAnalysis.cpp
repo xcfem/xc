@@ -151,7 +151,7 @@ int XC::EigenAnalysis::domainChanged(void)
     if(result < 0)
       {
         std::cerr << "EigenAnalysis::domainChanged() - ";
-        std::cerr << "fallo al numerar las ecuaciones." << std::endl;
+        std::cerr << "failed in equation numbering." << std::endl;
         return -2;
       }
     result= getConstraintHandlerPtr()->doneNumberingDOF();
@@ -257,7 +257,7 @@ XC::Matrix XC::EigenAnalysis::getNormalizedEigenvectors(void) const
     return retval;
   }
 
-//! @brief Returns the autovalor que corresponde al modo being passed as parameter.
+//! @brief Returns the eigenvalue que corresponde al modo being passed as parameter.
 const double &XC::EigenAnalysis::getEigenvalue(int mode) const
   {
     static double retval= 0.0;
@@ -322,7 +322,7 @@ XC::Vector XC::EigenAnalysis::getFrecuencias(void) const
     return retval;
   }
 
-//! @brief Returns the número de eigenvalues que se han calculado.
+//! @brief Returns the number of eigenvalues que se han calculado.
 int XC::EigenAnalysis::getNumModes(void) const
   {
     int retval= 0;

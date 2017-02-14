@@ -70,8 +70,7 @@ class SparseGenColLinSolver;
 
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! con matriz dispersa por columnas.
+//! @brief Sparse nonsymmetric matrix linear system of equations.
 class SparseGenColLinSOE : public SparseGenSOEBase
   {
   protected:

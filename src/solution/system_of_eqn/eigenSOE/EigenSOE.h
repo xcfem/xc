@@ -55,12 +55,11 @@ class ID;
 
 //!  @ingroup SOE
 //! 
-//! @defgroup EigenSOE Sistemas de ecuaciones para problemas de eigenvalues.
+//! @defgroup EigenSOE Eigenproblem systems of equations.
 //
 //! @ingroup EigenSOE
 //
-//! @brief Sistema de ecuaciones correspondiente
-//! a un eigenproblem.
+//! @brief Base class for eigenproblem systems of equations.
 class EigenSOE : public SystemOfEqn
   {
   public:

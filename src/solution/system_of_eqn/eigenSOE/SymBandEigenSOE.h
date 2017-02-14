@@ -66,9 +66,7 @@ class SymBandEigenSolver;
 
 //! @ingroup EigenSOE
 //
-//! @brief Sistema de ecuaciones correspondiente a
-//! un eigenproblem con matriz en banda
-//! simémtrica.
+//! @brief Band symmetric matrix eigenvaules system of equations.
 class SymBandEigenSOE : public EigenSOE
   {
   private:

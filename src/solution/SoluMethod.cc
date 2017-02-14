@@ -30,7 +30,7 @@
 #include "analysis/ModelWrapper.h"
 
 
-//Gestor coacciones.
+//Constraint handler.
 #include <solution/analysis/handler/ConstraintHandler.h>
 
 //Integrators.
@@ -39,7 +39,7 @@
 //Solution algorithm.
 #include "solution/analysis/algorithm/solution_algorithms.h"
 
-//Sistemas de ecuaciones
+//systems of equations
 #include "solution/system_of_eqn/systems_of_equations.h"
 
 //Criterios de convergencia.
@@ -272,7 +272,7 @@ XC::Integrator &XC::SoluMethod::newIntegrator(const std::string &tipo, const Vec
     return *theIntegrator;
   }
 
-void XC::SoluMethod::libera_sistema_ecuaciones(void)
+void XC::SoluMethod::libera_system_of_equations(void)
   {
     if(theSOE)
       {
@@ -280,9 +280,9 @@ void XC::SoluMethod::libera_sistema_ecuaciones(void)
         theSOE= nullptr;
       }
   }
-bool XC::SoluMethod::alloc_sistema_ecuaciones(const std::string &nmb,AnalysisModel *theModel)
+bool XC::SoluMethod::alloc_system_of_equations(const std::string &nmb,AnalysisModel *theModel)
   {
-    libera_sistema_ecuaciones();
+    libera_system_of_equations();
     if(nmb=="band_arpack_soe")
       theSOE=new BandArpackSOE(this);
     else if(nmb=="band_arpackpp_soe")
@@ -334,16 +334,16 @@ bool XC::SoluMethod::alloc_sistema_ecuaciones(const std::string &nmb,AnalysisMod
     return (theSOE!=nullptr);
   }
 
-void XC::SoluMethod::copia_sistema_ecuaciones(SystemOfEqn *ptr)
+void XC::SoluMethod::copia_system_of_equations(SystemOfEqn *ptr)
   {
     if(ptr)
       {
-        libera_sistema_ecuaciones();
+        libera_system_of_equations();
         theSOE= ptr->getCopy();
         theSOE->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_sistema_ecuaciones; se pasó a null pointer." << std::endl;
+     std::cerr << "SoluMethod::copia_system_of_equations; se pasó a null pointer." << std::endl;
   }
 
 //! @brief Sets the system of equations type to use.
@@ -353,7 +353,7 @@ XC::SystemOfEqn &XC::SoluMethod::newSystemOfEqn(const std::string &tipo)
     if(base)
       {
         theModel= base->getAnalysisModelPtr();
-        alloc_sistema_ecuaciones(tipo,theModel);
+        alloc_system_of_equations(tipo,theModel);
       }
     else
       std::cerr << "No está definido el modelo de cálculo." << std::endl;
@@ -421,7 +421,7 @@ void XC::SoluMethod::libera(void)
   {
     libera_soln_algo();
     libera_integrator();
-    libera_sistema_ecuaciones();
+    libera_system_of_equations();
     libera_conv_test();
   }
 
@@ -429,7 +429,7 @@ void XC::SoluMethod::copia(const SoluMethod &otro)
   {
     if(otro.theSolnAlgo) copia_soln_algo(otro.theSolnAlgo);
     if(otro.theIntegrator) copia_integrator(otro.theIntegrator);
-    if(otro.theSOE) copia_sistema_ecuaciones(otro.theSOE);
+    if(otro.theSOE) copia_system_of_equations(otro.theSOE);
     if(otro.theTest) copia_conv_test(otro.theTest);
   }
 
@@ -650,8 +650,8 @@ XC::EigenAlgorithm *XC::SoluMethod::getEigenSolutionAlgorithmPtr(void)
     return ptr;
   }
 
-//! @brief Returns, if possible, a pointer al solution algorithm del sistema de 
-//! ecuaciones, otherwise it returns nullptr.
+//! @brief Returns, if possible, a pointer to the system of equations
+//! solution algorithm, otherwise it returns nullptr.
 XC::EquiSolnAlgo *XC::SoluMethod::getEquiSolutionAlgorithmPtr(void)
   {
     EquiSolnAlgo *ptr= dynamic_cast<EquiSolnAlgo *>(theSolnAlgo);
@@ -681,7 +681,7 @@ const XC::ConvergenceTest *XC::SoluMethod::getConvergenceTestPtr(void) const
 //! @brief Sets the linear system of equations to use in the analysis.
 int XC::SoluMethod::setLinearSOE(LinearSOE &theNewSOE)
   {
-    copia_sistema_ecuaciones(&theNewSOE);
+    copia_system_of_equations(&theNewSOE);
     return 0;
   }
 

@@ -45,8 +45,7 @@ class Vector;
 
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! distribuidos con matriz en banda
+//! @brief Base class for band matrix distributed systems of equations.
 class DistributedBandLinSOE: public DistributedLinSOE
   {
   protected:

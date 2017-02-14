@@ -26,8 +26,7 @@
 //----------------------------------------------------------------------------
 //systems_of_equations.h
 
-//Archivos de cabecera de los sistemas de ecuaciones.
-//Sistemas de ecuaciones
+//Systems of equations
 #include <solution/system_of_eqn/SystemOfEqn.h>
 
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>

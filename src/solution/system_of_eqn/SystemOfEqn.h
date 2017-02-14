@@ -80,7 +80,7 @@ class SoluMethod;
 //
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones.
+//! @brief System of equations base class.
 class SystemOfEqn: public MovableObject, public EntCmd
   {
     SoluMethod *getSoluMethod(void);

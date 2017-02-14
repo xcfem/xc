@@ -69,13 +69,12 @@ class SparseGenRowLinSolver;
 
 //! @ingroup SOE
 //
-//! @brief Clase base para los sistemas de ecuaciones
-//! con matriz dispersa por filas.
+//! @brief Sparse nonsymmetric matrix linear system of equations.
 class SparseGenRowLinSOE : public SparseGenSOEBase
   {
   private:
     ID colA;
-    ID rowStartA; // int arrays containing info about coeficientss in A
+    ID rowStartA; //!< int arrays containing info about coeficientss in A
   protected:
     virtual bool setSolver(LinearSOESolver *);
 

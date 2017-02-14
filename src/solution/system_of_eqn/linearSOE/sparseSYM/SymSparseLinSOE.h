@@ -34,7 +34,7 @@
 //
 // Description: This file contains the class definition for 
 // SymSparseLinSOE.h. It stores the sparse matrix A in a fashion
-// that only store the none zero entries.
+// that only store the non zero entries.
 //
 // What: "@(#) SymSparseLinSOE.h, revA"
 //
@@ -56,7 +56,7 @@ class SymSparseLinSolver;
 
 //! @ingroup SOE
 //
-//! @brief Sistemas de ecuaciones con matriz dispersa simétrica.
+//! @brief Sparse symmetric matrix systems of equations.
 class SymSparseLinSOE : public SparseSOEBase
   {
   private:
