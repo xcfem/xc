@@ -31,7 +31,7 @@ void export_domain(void)
 //Exposing essential (displacements) boundary conditions.
 #include "domain/constraints/python_interface.tcc"
 
-//Exposición de las cargas.
+//Loads exposed to Python:
 #include "domain/load/python_interface.tcc"
 
 //Domain

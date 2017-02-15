@@ -30,7 +30,7 @@
 #include "boost/any.hpp"
 #include "utility/matrix/Vector.h"
 
-//! @brief Crea una nueva carga sobre elemento
+//! @brief Crea una nueva load over element
 XC::ElementalLoad *XC::procesa_element_load(XC::LoadPattern *lp,int &tag_el,const std::string &cmd)
   {
     ElementalLoad *retval= nullptr;

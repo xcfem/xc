@@ -39,11 +39,11 @@ class Element;
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga sobre cuerpo de elementos (clase abstracta).
+//! @brief Base class for body loads over elements.
 class ElementBodyLoad: public ElementalLoad
   {
   private:
-    ElementPtrs theElements; //!< elementos afectados por la carga.
+    ElementPtrs theElements; //!< Loaded elements.
   protected:
 
     int sendData(CommParameters &cp);

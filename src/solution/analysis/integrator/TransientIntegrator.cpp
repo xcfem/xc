@@ -131,7 +131,7 @@ int XC::TransientIntegrator::formEleResidual(FE_Element *theEle)
     return 0;
   }
 
-//! @brief Forma el vector de cargas desequilibradas del nodo being passed as parameter.
+//! @brief Forma el unbalanced load vector del nodo being passed as parameter.
 int XC::TransientIntegrator::formNodUnbalance(DOF_Group *theDof)
   {
     theDof->zeroUnbalance();

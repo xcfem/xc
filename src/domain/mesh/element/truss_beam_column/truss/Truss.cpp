@@ -411,14 +411,13 @@ const XC::Matrix &XC::Truss::getMass(void) const
     return mass;
   }
 
-//! @brief Añade una carga.
+//! @brief Adds a load.
 int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
       std::cerr << nombre_clase() 
-                << "; se intentó cargar el elemento "
-                << getTag() << " que está desactivado." 
-                << std::endl;
+                << "; load over inactive element: "
+                << getTag() << std::endl;
     else
       {
         if(TrussStrainLoad *trsLoad= dynamic_cast<TrussStrainLoad *>(theLoad))

@@ -308,7 +308,7 @@ const XC::Matrix &XC::ShellNL::getMass(void) const
     return mass;
   }
 
-//! @brief Anula el vector de cargas del elemento.
+//! @brief Anula el element load vector.
 void XC::ShellNL::zeroLoad(void)
   {
     QuadBase9N<SectionFDPhysicalProperties>::zeroLoad();
@@ -319,9 +319,8 @@ int XC::ShellNL::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
       std::cerr << nombre_clase() 
-                << "; se intentó cargar el elemento "
-                << getTag() << " que está desactivado." 
-                << std::endl;
+                << "; load over inactive element: "
+                << getTag() << std::endl;
     else
       {
         const double area= getPoligono().Area();

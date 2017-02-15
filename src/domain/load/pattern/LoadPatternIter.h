@@ -70,7 +70,7 @@ class TaggedObjectIter;
 
 //! @ingroup LPatterns
 //
-//! @brief Iterador sobre el conjunto de pautas de carga.
+//! @brief Load pattern iterator.
 class LoadPatternIter
   {
   private:

@@ -63,7 +63,7 @@ class FVector;
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga puntual sobre elementos barra de tres dimensiones.
+//! @brief Punctual load over 3D beams.
 class Beam3dPointLoad : public BeamPointLoad
   {
   private:

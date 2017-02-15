@@ -68,7 +68,7 @@ class LinearSOE;
 
 //! @ingroup CTest
 //
-//! @brief Especifica una tolerancia para la norma de la carga no equilibrada
+//! @brief Especifica una tolerancia para la norma de the load no equilibrada
 //! en la iteración actual.
 class CTestNormUnbalance: public ConvergenceTestTol
   {

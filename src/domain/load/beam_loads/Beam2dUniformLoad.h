@@ -62,7 +62,7 @@ class FVector;
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga uniforme sobre elementos barra de dos dimensiones.
+//! @brief Uniform load over 2D beam elements.
 class Beam2dUniformLoad : public BeamUniformLoad
   {
   private:

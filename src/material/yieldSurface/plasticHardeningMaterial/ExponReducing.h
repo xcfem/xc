@@ -35,7 +35,7 @@
 #include "material/yieldSurface/plasticHardeningMaterial/PlasticHardeningMaterial.h"
 
 namespace XC {
-//! @ingroup Mat
+//! @ingroup MATYS
 //
 //! @brief XXX??
 class ExponReducing : public PlasticHardeningMaterial

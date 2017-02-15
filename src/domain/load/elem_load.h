@@ -43,7 +43,7 @@
 
 namespace XC {
 
-//! @brief Añade una carga sobre elementos.
+//! @brief Añade una load over elements.
 template <class ELEM_LOAD>
 ELEM_LOAD *new_elem_load(LoadPattern *lp,int &tag_el)
   {
@@ -57,11 +57,11 @@ ELEM_LOAD *new_elem_load(LoadPattern *lp,int &tag_el)
             if(!lp->addElementalLoad(load))
               {
                 delete load;
-                std::cerr << "LoadLoader::new_elem_load; no se agregó la carga sobre el elemento." << std::endl;
+                std::cerr << "LoadLoader::new_elem_load; no se agregó the load sobre el elemento." << std::endl;
               }
           }
         else
-          std::cerr << "new_elem_load: no se pudo crear la carga sobre elementos: " << tag_el << std::endl;
+          std::cerr << "new_elem_load: no se pudo crear the load over elements: " << tag_el << std::endl;
       }
     else
        std::cerr << "new_elem_load: se paso a null pointer." << std::endl;

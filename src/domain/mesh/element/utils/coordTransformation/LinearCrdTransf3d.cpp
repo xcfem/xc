@@ -113,7 +113,7 @@ int XC::LinearCrdTransf3d::revertToStart(void)
 int XC::LinearCrdTransf3d::update(void)
   { return 0; }
 
-//! @brief Returns the vector de cargas expresado en el sistema global del elemento.
+//! @brief Returns the load vector expresado en el sistema global del elemento.
 const XC::Vector &XC::LinearCrdTransf3d::getGlobalResistingForce(const Vector &pb, const Vector &p0) const
   {
     // transform resisting forces from the basic system to local coordinates

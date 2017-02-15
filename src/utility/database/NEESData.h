@@ -80,6 +80,8 @@ class NEES_table
 
 class FEM_ObjectBroker;
 
+//! @ingroup Database
+//
 class NEESData: public FE_Datastore
   {
   private:

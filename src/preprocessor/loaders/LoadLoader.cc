@@ -44,7 +44,7 @@
 XC::LoadLoader::LoadLoader(Preprocessor *owr)
   : Loader(owr), lpatterns(this), tag_lp(0), combinaciones(this) {}
 
-//! @brief Agrega el caso de carga al domain.
+//! @brief Agrega el load pattern al domain.
 void XC::LoadLoader::addToDomain(const std::string &lp_code)
   {
     LoadPattern *lp= lpatterns.buscaLoadPattern(lp_code);
@@ -59,7 +59,7 @@ void XC::LoadLoader::addToDomain(const std::string &lp_code)
       combinaciones.addToDomain(lp_code);
   }
 
-//! @brief Elimina el caso de carga del domain.
+//! @brief Elimina el load pattern del domain.
 void XC::LoadLoader::removeFromDomain(const std::string &lp_code)
   {
     LoadPattern *lp= lpatterns.buscaLoadPattern(lp_code);

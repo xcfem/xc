@@ -388,7 +388,7 @@ const XC::Matrix &XC::Spring::getMass(void) const
     return mass;
   }
 
-//! @brief Añade una carga.
+//! @brief Adds a load.
 int XC::Spring::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     std::cerr <<"XC::Spring::addLoad - load type unknown for Spring with tag: " << this->getTag() << std::endl;

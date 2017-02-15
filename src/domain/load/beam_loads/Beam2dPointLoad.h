@@ -63,7 +63,7 @@ class FVector;
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga puntual sobre elementos barra de dos dimensiones.
+//! @brief Punctual load over 2D beam elements.
 class Beam2dPointLoad: public BeamPointLoad
   {
   private:

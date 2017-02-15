@@ -79,7 +79,7 @@ namespace XC {
 class Load: public DomainComponent
   {
   private:
-    int loadPatternTag; //!< Identificador de la hipótesis a la que pertenece la carga.
+    int loadPatternTag; //!< Pattern identifier for the load.
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);

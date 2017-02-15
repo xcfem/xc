@@ -176,9 +176,9 @@ const XC::Vector &XC::NodalLoad::getForce(void) const
     else
       {
         if(load.Nulo())
-          std::cerr << "NodalLoad::getForce; no se ha definido la carga." << std::endl;
+          std::cerr << "NodalLoad::getForce; load not defined." << std::endl;
         if(!myNodePtr)
-          std::cerr << "NodalLoad::getForce; the pointer a nodo es nulo." << std::endl;
+          std::cerr << "NodalLoad::getForce; pointer to node is NULL." << std::endl;
       }
     return retval;
   }
@@ -213,9 +213,9 @@ const XC::Vector &XC::NodalLoad::getMoment(void) const
     else
       {
         if(load.Nulo())
-          std::cerr << "NodalLoad::getMoment; no se ha definido la carga." << std::endl;
+          std::cerr << "NodalLoad::getMoment; load not defined." << std::endl;
         if(!myNodePtr)
-          std::cerr << "NodalLoad::getMoment; the pointer a nodo es nulo." << std::endl;
+          std::cerr << "NodalLoad::getMoment; the pointer to node is NULL." << std::endl;
       }
     return retval;
   }

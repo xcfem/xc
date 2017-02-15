@@ -39,14 +39,14 @@ class Combinacion;
 
 //!  \ingroup Ldrs
 //! 
-//! @brief Lee casos de carga desde archivo.
-//! Se encarga del mantenimiento de la lista de timeseries.
+//! @brief Lee load patterns desde archivo.
+//! Load definition manager.
 class LoadLoader: public Loader
   {
     typedef std::map<std::string,GroundMotion *> map_ground_motions;
     map_ground_motions ground_motions; //!< Movimientos del terreno.
 
-    MapLoadPatterns lpatterns; //!< Contenedor de hipótesis simples.
+    MapLoadPatterns lpatterns; //!< Load patterns container.
     int tag_lp; //!< Default identifier for load patterns or load combinations.
 
     GrupoCombinaciones combinaciones; //!< Load combination container.

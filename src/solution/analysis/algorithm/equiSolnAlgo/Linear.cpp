@@ -97,7 +97,7 @@ int XC::Linear::resuelve(void)
 	return -1;
       }
     
-    if(theIncIntegrator->formUnbalance()<0) //Forma el vector de cargas.
+    if(theIncIntegrator->formUnbalance()<0) //Forma el load vector.
       {
 	std::cerr << "WARNING XC::Linear::solveCurrentStep() -";
 	std::cerr << "the XC::Integrator failed in formUnbalance()\n";	

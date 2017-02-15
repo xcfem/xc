@@ -38,8 +38,7 @@ class Node;
 
 //!  \ingroup Lodrs
 //! 
-//! @brief Objeto encargado de agregar al domain los nodos
-//! leídos desde archivo.
+//! @brief Node creation manager.
 class NodeLoader: public Loader
   {
   private:

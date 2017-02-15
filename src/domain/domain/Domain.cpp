@@ -166,8 +166,7 @@ void XC::Domain::clearAll(void)
 XC::Domain::~Domain(void)
   { libera(); }
 
-//! @brief Prepara el domain para resolver un nuevo caso
-//! de carga.
+//! @brief Prepares the domain to solve for a new load pattern.
 void XC::Domain::resetLoadCase(void)
   {
     nmbCombActual= "";
@@ -241,7 +240,7 @@ bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int p
     return true;
   }
 
-//! @brief Agrega al caso being passed as parameter una carga sobre nodos.
+//! @brief Appends a nodal load to the pattern being passed as parameter.
 bool XC::Domain::addNodalLoad(NodalLoad *load, int pattern)
   {
     bool result= constraints.addNodalLoad(load,pattern);
@@ -253,7 +252,7 @@ bool XC::Domain::addNodalLoad(NodalLoad *load, int pattern)
     return result;
   }
 
-//! @brief Agrega al caso being passed as parameter una carga sobre elementos.
+//! @brief Agrega al caso being passed as parameter una load over elements.
 bool XC::Domain::addElementalLoad(ElementalLoad *load, int pattern)
   {
     bool result= constraints.addElementalLoad(load,pattern);
@@ -362,7 +361,7 @@ bool XC::Domain::addCombinacion(Combinacion *comb)
     return retval;
   }
 
-//! @brief Elimina del domain el caso de carga cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain el load pattern cuyo tag se pasa como parámetro.
 bool XC::Domain::removeLoadPattern(int tag)
   {
     int numSPs= 0;
@@ -394,7 +393,7 @@ bool XC::Domain::removeNodeLocker(int tag)
     return result;
   }
 
-//! @brief Elimina del domain el caso de carga being passed as parameter.
+//! @brief Elimina del domain el load pattern being passed as parameter.
 bool XC::Domain::removeLoadPattern(LoadPattern *lp)
   {
     bool retval= false;
@@ -403,7 +402,7 @@ bool XC::Domain::removeLoadPattern(LoadPattern *lp)
     return retval;
   }
 
-//! @brief Elimina del domain el caso de carga being passed as parameter.
+//! @brief Elimina del domain el load pattern being passed as parameter.
 bool XC::Domain::removeNodeLocker(NodeLocker *nl)
   {
     bool retval= false;
@@ -433,7 +432,7 @@ void XC::Domain::removeCombinacion(Combinacion *comb)
       }
   }
 
-//! @brief Elimina del domain todos los casos de carga.
+//! @brief Elimina del domain todos los load patterns.
 void XC::Domain::removeLPs(void)
   {
     int numSPs= constraints.removeLPs();
@@ -453,28 +452,25 @@ void XC::Domain::removeNLs(void)
       domainChange();
   }
 
-//! @brief Elimina del domain la carga sobre nodo being passed as parameter.
-//!
-//! @param tag: Identificador de la carga sobre nodo a eliminar.
-//! @param loadPattern: Pointer to la hipótesis a la que pertenece la carga.
-bool XC::Domain::removeNodalLoad(int tag, int loadPattern)
-  { return constraints.removeNodalLoad(tag,loadPattern); }
+//! @brief Removes from domain the nodal load being passed as parameter.
+//! @param nodalLoadTag: Nodal load identifier.
+//! @param loadPattern: Load pattern identifier.
+bool XC::Domain::removeNodalLoad(int nodalLoadTag, int loadPattern)
+  { return constraints.removeNodalLoad(nodalLoadTag,loadPattern); }
 
 
-//! @brief Elimina del domain la carga sobre elementos being passed as parameter.
-//!
-//! @param tag: Identificador de la carga sobre elementos a eliminar.
-//! @param loadPattern: Pointer to la hipótesis a la que pertenece la carga.
-bool XC::Domain::removeElementalLoad(int tag, int loadPattern)
-  { return constraints.removeElementalLoad(tag,loadPattern); }
+//! @brief Removes from domain the elemental load being passed as parameter.
+//! @param elemLoadTag: Identificador de the load over elements a eliminar.
+//! @param loadPattern: Load pattern identifier.
+bool XC::Domain::removeElementalLoad(int elemLoadTag, int loadPattern)
+  { return constraints.removeElementalLoad(elemLoadTag,loadPattern); }
 
-//! @brief Elimina del domain la constraint monopunto being passed as parameter.
-//!
-//! @param tag: Identificador de la constraint monopunto a eliminar.
-//! @param loadPattern: Pointer to la hipótesis a la que pertenece la carga.
-bool XC::Domain::removeSFreedom_Constraint(int tag, int loadPattern)
+//! @brief Removes from domain the single freedom constraint being passed as parameter.
+///! @param singleFreedomTag: Single freedom identifier.
+//! @param loadPattern: Load pattern identifier.
+bool XC::Domain::removeSFreedom_Constraint(int singleFreedomTag, int loadPattern)
   {
-    bool removed= constraints.removeSFreedom_Constraint(tag,loadPattern);
+    bool removed= constraints.removeSFreedom_Constraint(singleFreedomTag,loadPattern);
     if(removed)
       this->domainChange();
     return removed;

@@ -59,9 +59,8 @@ int XC::ZeroLengthContact::addLoad(ElementalLoad *theLoad, double loadFactor)
     // meaningless to addLoad to a contact !
     if(isDead())
       std::cerr << nombre_clase() 
-                << "; se intentó cargar el elemento "
-                << getTag() << " que está desactivado." 
-                << std::endl;
+                << "; load over inactive element: "
+                << getTag() << std::endl;
     return 0;
   }
 

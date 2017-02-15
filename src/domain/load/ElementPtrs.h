@@ -39,8 +39,7 @@ class ID;
 
 //! @ingroup ElemLoads
 //
-//! @brief Punteros al conjunto de elementos que
-//! recibirán la carga.
+//! @brief Pointers to the elements affected by the load.
 class ElementPtrs: public EntCmd
   {
   public:

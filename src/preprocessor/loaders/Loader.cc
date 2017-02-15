@@ -39,7 +39,7 @@ XC::Loader::Loader(Preprocessor *owr)
   : EntCmd(owr), MovableObject(0), preprocessor(owr) 
   {}
 
-//! @brief Returns the domain en el que se cargan los elementos.
+//! @brief Returns the domain.
 XC::Domain *XC::Loader::getDomain(void) const
   {
     if(preprocessor)

@@ -39,13 +39,13 @@ class Matrix;
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga de tipo mecánico (fuerzas) sobre elementos bidimensionales.
+//! @brief Mechanical load (forces) over bidimensional elements.
 class BidimMecLoad : public BidimLoad
   {
   protected:
     double Trans; //!< Transverse load.
-    double Axial1; //!< Axial según el eje 1.
-    double Axial2; //!< Axial según el eje 2.
+    double Axial1; //!< Axial load on axis 1.
+    double Axial2; //!< Axial load on axis 2.
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);

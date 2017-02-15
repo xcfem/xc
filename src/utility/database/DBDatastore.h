@@ -33,6 +33,8 @@
 #include "FE_Datastore.h"
 
 namespace XC {
+//! @ingroup Database
+//
 class DBDatastore: public FE_Datastore
   {
   protected:

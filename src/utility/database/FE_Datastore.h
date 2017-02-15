@@ -71,6 +71,8 @@ namespace XC {
 class Preprocessor;
 class FEM_ObjectBroker;
 
+//! @ingroup Database
+//
 class FE_Datastore: public Channel
   {
   private:

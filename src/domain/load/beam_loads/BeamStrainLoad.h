@@ -40,11 +40,11 @@ class CrossSectionProperties3d;
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga debida a deformaciones impuestas sobre elementos de tipo viga.
+//! @brief Load due to restricted material expansion or contraction on beam elements.
 class BeamStrainLoad : public BeamLoad
   {
-    DeformationPlane planoDefDorsal; //!< Deformaciones impuestas en el extremo dorsal.
-    DeformationPlane planoDefFrontal; //!< Deformaciones impuestas en el extremo frontal.
+    DeformationPlane planoDefDorsal; //!< Restricted generalized strains at element first node.
+    DeformationPlane planoDefFrontal; //!< Restricted generalized strains at element last node.
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);

@@ -153,7 +153,7 @@ XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialVel(const int &i) const
 XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialAccel(const int &i) const
   { return (*theNodes)[i]->getTrialAccel(); }
 
-//! @brief Transformación a globales del vector de cargas.
+//! @brief Transformación a globales del load vector.
 const XC::Vector &XC::ShellLinearCrdTransf3d::local_to_global_resisting_force(const Vector &pl) const
   {
     // transform resisting forces  from local to global coordinates
@@ -174,7 +174,7 @@ const XC::Matrix &XC::ShellLinearCrdTransf3d::local_to_global_stiff_matrix(const
     return kg;
   }
 
-//! @brief Returns the vector de cargas expresado en el sistema global del elemento.
+//! @brief Returns the load vector expresado en el sistema global del elemento.
 const XC::Vector &XC::ShellLinearCrdTransf3d::getGlobalResistingForce(const Vector &p0) const
   { return local_to_global_resisting_force(p0); }
 

@@ -156,9 +156,8 @@ int XC::NewElement::addLoad(const Vector &addP)
   {
     if(isDead())
       std::cerr << nombre_clase() 
-                << "; se intentó cargar el elemento "
-                << getTag() << " que está desactivado." 
-                << std::endl;
+                << "; load over inactive element: "
+                << getTag() << std::endl;
     return 0;
   }
 

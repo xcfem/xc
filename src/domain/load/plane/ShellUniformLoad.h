@@ -35,7 +35,7 @@ namespace XC {
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga uniforme sobre elementos shell.
+//! @brief Uniform load over shell elements.
 class ShellUniformLoad : public ShellMecLoad
   {
   protected:

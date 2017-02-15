@@ -29,6 +29,8 @@
 #include "xc_utils/src/utils/ObjMap.h"
 
 namespace XC {
+//! @ingroup Utils
+//
 //! @defgroup MED MED-Fichier interface.
 //
 //! @ingroup MED

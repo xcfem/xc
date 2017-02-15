@@ -105,7 +105,7 @@ int XC::IncrementalIntegrator::formTangent(int statFlag)
     return result;
   }
 
-//! @brief Forma el vector de cargas no equilibradas (el lado derecho de la ecuación).
+//! @brief Forma el load vector no equilibradas (el lado derecho de la ecuación).
 int XC::IncrementalIntegrator::formUnbalance(void)
   {
     AnalysisModel *mdl= getAnalysisModelPtr();
@@ -219,7 +219,7 @@ const XC::LinearSOE *XC::IncrementalIntegrator::getLinearSOEPtr(void) const
     return sm->getLinearSOEPtr();
   }
 
-//! @brief Forma el vector de cargas no equilibradas en los nodos.
+//! @brief Forma el load vector no equilibradas en los nodos.
 int XC::IncrementalIntegrator::formNodalUnbalance(void)
   {
     // loop through the DOF_Groups and add the unbalance

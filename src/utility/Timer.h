@@ -81,6 +81,10 @@
 #include <iostream>
 
 namespace XC {
+//!  @defgroup Utils Utilities.
+
+//! @ingroup Utils
+//
 class Timer
   {
   private:

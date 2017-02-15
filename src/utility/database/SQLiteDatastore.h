@@ -33,6 +33,12 @@
 #include "xc_utils/src/sqlite/SqLiteDatabase.h"
 
 namespace XC {
+//! @ingroup Utils
+//
+//! @defgroup Database Database utilities.
+//
+//! @ingroup Database
+//
 class SQLiteDatastore: public DBDatastore
   {
   private:

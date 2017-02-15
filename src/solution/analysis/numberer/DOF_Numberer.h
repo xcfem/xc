@@ -81,17 +81,13 @@ class ModelWrapper;
 //! @ingroup Numerador
 //
 //! @brief Base class for DOF numbererers.
-//! Para realizar su función esta clase contiene un numerador de grafos
-//! y a pointer to analysis model.
-//! Este es el objeto encargado de crear, almacenar y destruir el
-//! numerador de grafos.
 class DOF_Numberer: public MovableObject, public EntCmd
   {
   private:
     ModelWrapper *getModelWrapper(void);
     const ModelWrapper *getModelWrapper(void) const;
 
-    GraphNumberer *theGraphNumberer; //!< DOF numberer.
+    GraphNumberer *theGraphNumberer; //!< Graph (DOF) numberer.
   protected:
     AnalysisModel *getAnalysisModelPtr(void);
     GraphNumberer *getGraphNumbererPtr(void);

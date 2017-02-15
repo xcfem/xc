@@ -39,19 +39,19 @@ class GrupoCombinaciones;
 
 //! @ingroup LPatterns
 //
-//! @brief Combinación de pautas (casos) de carga (1.5*PP+1.0*CP+1.6*SC ...).
+//! @brief Load pattern combination (1.5*PP+1.0*CP+1.6*SC ...).
 class Combinacion: public ForceReprComponent
   {
     LoadLoader *loader; //!< Puntero al objeto que conoce los nombres de las combinaciones.
-    //! @brief Sumando de una combinación de casos de carga.
+    //! @brief Each of the terms (factor*LoadPattern) of the combination.
     class sumando: public EntCmd
       {
-        float factor; //!< Factor de ponderación del caso de carga.
-        LoadPattern *lpattern; //!< Caso de carga.
+        float factor; //!< Factor that multiplies the load pattern effect.
+        LoadPattern *lpattern; //!< Load pattern.
         void neg(void);
       public:
         sumando(const float &f= 1.0,LoadPattern *lp= NULL);
-        //! @brief Returns the factor que multiplica al sumando.
+        //! @brief Returns the factor that multiplies the load pattern.
         const float &Factor(void) const;
         const LoadPattern *Caso(void) const;
         LoadPattern *Caso(void);

@@ -697,7 +697,9 @@ int XC::Node::incrTrialAccel(const Vector &incrAccel)
 void XC::Node::zeroUnbalancedLoad(void)
   { unbalLoad.Zero(); }
 
-//! @brief Añade al vector de carga desequilibrada el que se para 
+//! @brief Adds vector to unbalanced load.
+//! @param add: vector to add.
+//! @param fact: multiplying factor.
 int XC::Node::addUnbalancedLoad(const Vector &add, double fact)
   {
     int retval= -1;
@@ -712,8 +714,8 @@ int XC::Node::addUnbalancedLoad(const Vector &add, double fact)
         if(isDead())
           {
             std::cerr << nombre_clase() 
-                      << "; se intentó cargar el nodo "
-                      << getTag() << " que está desactivado." 
+                      << "; load over node: "
+                      << getTag()  
                       << std::endl;
           }
         else // add fact*add to the unbalanced load
@@ -725,9 +727,7 @@ int XC::Node::addUnbalancedLoad(const Vector &add, double fact)
     return retval;
   }
 
-
-
-//! @brief Añade la fuerza de inercia al vector de carga desequilibrada.
+//! @brief Adds inertial loads to unbalanced load vector.
 int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
   {
     // simply return if node has no mass or R matrix
@@ -783,12 +783,12 @@ int XC::Node::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accelG, dou
   }
 
 
-//! @brief Crea el vector de carga desequilibrada.
+//! @brief Returns unbalanced load vector.
 const XC::Vector &XC::Node::getUnbalancedLoad(void)
   { return unbalLoad; }
 
 
-//! @brief Return the carga no equilibrada incluyendo las fuerzas de inercia.
+//! @brief Returns unbalanced load vector including inertial forces.
 const XC::Vector &XC::Node::getUnbalancedLoadIncInertia(void)
   {
     unbalLoadWithInertia= this->getUnbalancedLoad();

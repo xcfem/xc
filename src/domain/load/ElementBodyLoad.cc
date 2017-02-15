@@ -66,9 +66,8 @@ void XC::ElementBodyLoad::applyLoad(double loadFactor)
         theElements[i]->addLoad(this, loadFactor);
   }
 
-//! @brief Elimina el elemento cuyo tag se pasa como parámetro
-//! de la lista de elementos afectados por la carga. Si falla
-//! returns -1.
+//! @brief Removes the element from those affected by
+//! the load. If it fails returns -1.
 int XC::ElementBodyLoad::removeElement(int tag) 
   {
     int loc = elemTags.getLocation(tag);

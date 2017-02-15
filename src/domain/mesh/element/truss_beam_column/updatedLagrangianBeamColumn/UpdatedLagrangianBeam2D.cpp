@@ -412,8 +412,8 @@ int XC::UpdatedLagrangianBeam2D::addLoad(const XC::Vector &moreLoad)
   {
     if(isDead())
       std::cerr << nombre_clase() 
-                << "; se intentó cargar el elemento "
-                << getTag() << " que está desactivado." 
+                << "; load over inactive element: "
+                << getTag()  
                 << std::endl;
     else
       {

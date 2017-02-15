@@ -41,11 +41,6 @@ class Response;
 class YS_Evolution;
 class ID;
 
-//! \ingroup Mat
-//!
-//!
-//! \defgroup MATYS Yield surfaces.
-//!
 //! \ingroup MATYS
 //! @brief Yield surface.
 class YieldSurface_BC: public TaggedObject, public MovableObject

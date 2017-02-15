@@ -41,16 +41,16 @@ class Domain;
 
 //! @ingroup LPatterns
 //
-//! @brief Contenedor de pautas de carga.
+//! @brief Load pattern container.
 class MapLoadPatterns: public LoadLoaderMember
   {
     typedef std::map<std::string,TimeSeries *> map_timeseries;
-    map_timeseries tseries; //!< Modulación de cargas/desplaz. en el tiempo.
-    std::string nmb_ts; //!< Identificacor del TimeSeries para los nuevos load pattern.
+    map_timeseries tseries; //!< Load/displacement time variation.
+    std::string nmb_ts; //!< Time series identifier for news load patterns.
 
-    typedef std::map<std::string,LoadPattern *> map_loadpatterns; //!< Casos de carga.
-    map_loadpatterns loadpatterns; //!< Contenedor de casos de carga.
-    std::string lpcode; //!< Identificador del load pattern para las nuevas cargas.
+    typedef std::map<std::string,LoadPattern *> map_loadpatterns; //!< Load pattern container type.
+    map_loadpatterns loadpatterns; //!< Load pattern container.
+    std::string lpcode; //!< Load pattern identifier for new loads.
     int tag_el; //!< Default tag for new elemental load.
     int tag_nl; //!< Default tag for new nodal load.
     int tag_spc; //!< Default tag for new imposed node displacement.
@@ -149,7 +149,7 @@ TimeSeries *XC::MapLoadPatterns::crea_time_series(const std::string &cod_ts)
     return ts;
   }
 
-//! @brief Carga un objeto LoadPattern desde archivo
+//! @brief Creates a new load pattern.
 template <class LP>
 LoadPattern *XC::MapLoadPatterns::crea_load_pattern(const std::string &cod_lp)
   {
