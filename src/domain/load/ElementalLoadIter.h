@@ -71,7 +71,7 @@ class TaggedObjectIter;
 
 //! @ingroup LPatterns
 //
-//! @brief Iterador sobre las cargas sobre elemento.
+//! @brief Iterador sobre las elemental loads.
 class ElementalLoadIter
   {
   private:

@@ -62,7 +62,7 @@ class FVector;
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga uniforme sobre elementos barra de tres dimensiones.
+//! @brief Uniform load over 3D beams.
 class Beam3dUniformLoad: public BeamUniformLoad
   {
   private:

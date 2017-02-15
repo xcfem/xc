@@ -180,7 +180,7 @@ void XC::Element::setDomain(Domain *theDomain)
   }
 
 
-//! @brief Anula el vector de cargas aplicadas del elemento.
+//! @brief Anula el load vector aplicadas del elemento.
 void XC::Element::zeroLoad(void)
   { load.Zero(); }
 

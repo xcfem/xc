@@ -37,7 +37,7 @@ class FVectorShell;
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga de tipo mecánico (fuerzas) sobre elementos de tipo viga.
+//! @brief Mechanical load (forces) over shell elements.
 class ShellMecLoad: public BidimMecLoad
   {
   public:

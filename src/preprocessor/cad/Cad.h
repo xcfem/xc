@@ -61,9 +61,9 @@ class SisRef;
 //
 //! @ingroup Cad
 //
-//! @brief Objeto encargado de generar la geometría del
-//! modelo y gestionar las entidades de tipo CAD:
-//! puntos, lineas, superficies, sólidos, etc.
+//! @brief Model geometry manager.
+//! Management of geometry entities:
+//! points, lines, surfaces, bodies, etc.
 //!
 //! Mantiene las listas de estas entidades y crea, para
 //! cada una de ellas un conjunto destinado a alojar a pointer a la

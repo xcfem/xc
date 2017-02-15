@@ -35,7 +35,7 @@ namespace XC {
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga uniforme sobre elementos barra.
+//! @brief Uniform load over beam elements.
 class BeamUniformLoad : public BeamMecLoad
   {
   public:

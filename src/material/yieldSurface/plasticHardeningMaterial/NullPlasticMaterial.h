@@ -35,7 +35,7 @@
   */
 
 namespace XC {
-//! @ingroup Mat
+//! @ingroup MATYS
 //
 class NullPlasticMaterial: public PlasticHardeningMaterial
   {

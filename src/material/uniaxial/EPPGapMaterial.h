@@ -81,7 +81,8 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Material elastoplástico perfecto con un «gap» inicial.EPPGapMaterial//! provides the abstraction of an elastic perfectly
+//! @brief Elastic perfectly plastic material with initial "gap".
+//! provides the abstraction of an elastic perfectly
 //! plastic (tension only) path dependent uniaxial 
 //! material, with an initial gap offset (force-displacement units)
 //! For compression only behavior, enter negative gap and ep

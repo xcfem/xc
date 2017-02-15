@@ -429,13 +429,13 @@ void  XC::BeamWithHinges2d::zeroLoad(void)
     BeamColumnWithSectionFDTrf2d::zeroLoad();
   }
 
-//! @brief Introduce el efecto de las cargas sobre el elemento.
+//! @brief Effect of the load over the element.
 int XC::BeamWithHinges2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
       std::cerr << nombre_clase() 
-                << "; se intentó cargar el elemento "
-                << getTag() << " que está desactivado." 
+                << "; load over inactive element: "
+                << getTag()  
                 << std::endl;
     else
       {

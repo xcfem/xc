@@ -107,7 +107,7 @@ const XC::Matrix &XC::Beam2dPointLoad::getLocalMoments(void) const
     return retval;
   }
 
-//! @brief Fuerzas aplicadas sobre las secciones de un elemento debidas a esta carga actuando sobre el mismo.
+//! @brief Forces over element sections obtained from the load acting over the element.
 const XC::Matrix &XC::Beam2dPointLoad::getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor)
   {
     const size_t nSections= xi.noCols();
@@ -117,38 +117,38 @@ const XC::Matrix &XC::Beam2dPointLoad::getAppliedSectionForces(const double &L,c
     const double aOverL= X();
 
 
-    if(aOverL > 0.0 && aOverL < 1.0) //Carga dentro del elemento.
+    if(aOverL > 0.0 && aOverL < 1.0) //Load inside the element.
       {
-        const double a = aOverL*L; //Abcisa de la carga.
+        const double a = aOverL*L; //Load abscissa.
         const double P= pTrans()*loadFactor;
         const double N= pAxial()*loadFactor;
-        const double V1 = P*(1.0-aOverL); //Reacción en extremo dorsal.
-        const double V2 = P*aOverL; //Reacción en extremo frontal.
+        const double V1 = P*(1.0-aOverL); //Back end reaction.
+        const double V2 = P*aOverL; //Front end reaction.
 
         // Accumulate applied section forces due to element loads
         for(size_t i=0;i<nSections;i++)
           {
-            const double x= xi(i,0)*L; //Abcisa de la sección.
-            if(x<=a) //Abcisa menor que la de la carga.
+            const double x= xi(i,0)*L; //Section abscissa.
+            if(x<=a) //Abscissa lesser or equal than the load's one.
               {
                 retval(0,i)= N;
-                retval(1,i)= -x*V1; //Momento para x<=a.
-                retval(2,i)= -V1; //Cortante para x<=a.
+                retval(1,i)= -x*V1; //Moment for x<=a.
+                retval(2,i)= -V1; //Shear for x<=a.
               }
-            else //Abcisa mayor que la de la carga.
+            else //Abscissa greater than the load's one.
               {
-                retval(1,i)= -(L-x)*V2; //Momento para x>=a.
-                retval(2,i)= V2; //Cortante para x>=a.
+                retval(1,i)= -(L-x)*V2; //Moment for x>=a.
+                retval(2,i)= V2; //Shear for x>=a.
               }
           }
       }
     return retval;
   }
 
-//! @brief Añade la carga al vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
-//! @param L Longitud del elemento.
-//! @param loadFactor Ponderación de la carga.
-//! @param p0 Vector de cargas del elemento.
+//! @brief Adds the load to the consistent load vector (see page 108 Eugenio Oñate's book).
+//! @param L Element lenght.
+//! @param loadFactor Load factor.
+//! @param p0 element load vector.
 void XC::Beam2dPointLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0)
   {
     const double aOverL= X();
@@ -156,27 +156,27 @@ void XC::Beam2dPointLoad::addReactionsInBasicSystem(const double &L,const double
     if(aOverL < 0.0 || aOverL > 1.0)
       {
         std::cerr << "XC::Beam2dPointLoad::addReactionsInBasicSystem; el valor de x ("
-                  << aOverL << ") es incorrecto, debe estar entre 0 y 1. Se ignora la carga."
+                  << aOverL << ") es incorrecto, debe estar entre 0 y 1. Load ignored."
                   << std::endl;
         return;
       }
     else
       {
-        const double P= pTrans()*loadFactor; //Carga transversal ponderada.
-        const double N= pAxial()*loadFactor; //Carga axial ponderada.
-        const double V2= P*aOverL; //Reacción en extremo dorsal.
-        const double V1= P-V2; //Reacción en extremo frontal.
+        const double P= pTrans()*loadFactor; //Factored transverse load.
+        const double N= pAxial()*loadFactor; //Factored axial load.
+        const double V2= P*aOverL; //Back end reaction.
+        const double V1= P-V2; //Front end reaction.
 
         // Accumulate reactions in basic system
-        p0[0]-= N; //Resta el axil.
-        p0[1]-= V1; //Resta la reacción en el extremo dorsal.
-        p0[2]-= V2; //Resta la reacción en el extremo frontal.
+        p0[0]-= N; //Substracts axial load.
+        p0[1]-= V1; //Substracts back end reaction.
+        p0[2]-= V2; //Substracts front end reaction.
       }
   }
 
 //! @brief ??
 //! @param L Longitud del elemento.
-//! @param loadFactor Ponderación de la carga.
+//! @param loadFactor Load factor.
 //! @param q0 ??
 void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0)
   {
@@ -185,7 +185,7 @@ void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const d
     if(aOverL < 0.0 || aOverL > 1.0)
       {
         std::cerr << "XC::Beam2dPointLoad::fixedEndForcesInBasicSystem; el valor de x ("
-                  << aOverL << ") es incorrecto, debe estar entre 0 y 1. Se ignora la carga." << std::endl;
+                  << aOverL << ") es incorrecto, debe estar entre 0 y 1. Load ignored." << std::endl;
       }
     else
       {

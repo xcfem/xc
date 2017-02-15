@@ -34,7 +34,7 @@
 namespace XC {
 //! @ingroup ElemLoads
 //
-//! @brief Carga debida a deformación impuesta en un elemento Truss.
+//! @brief Load due to restricted material expansion or contraction on Shell elements.
 class ShellStrainLoad : public BidimStrainLoad
   {
   public:

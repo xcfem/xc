@@ -105,7 +105,7 @@ void XC::LoadPattern::libera_iteradores(void)
       }
   }
 
-//! @brief Reserva memoria para almacenar las cargas.
+//! @brief Memory allocation.
 void XC::LoadPattern::alloc_contenedores(void)
   {
     libera_contenedores();
@@ -221,7 +221,7 @@ void XC::LoadPattern::setTimeSeries(TimeSeries *theTimeSeries)
   }
 
 
-//! @brief Establece el domain para las cargas.
+//! @brief Set the domain for the pattern loads.
 void XC::LoadPattern::setDomain(Domain *theDomain)
   {
     NodeLocker::setDomain(theDomain);
@@ -265,7 +265,7 @@ void XC::LoadPattern::removeFromDomain(void)
       std::cerr << "WARNING: LoadPattern::removeFromDomain() - null pointer to the domain\n";
   }
 
-//! @brief Agrega la carga sobre nodo being passed as parameter.
+//! @brief Agrega the load sobre nodo being passed as parameter.
 bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
   {
     Domain *theDomain = this->getDomain();
@@ -284,7 +284,9 @@ bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
     return result;
   }
 
-//! @brief Crea una carga sobre nodo being passed as parameter.
+//! @brief Creates a nodal load.
+//! @param tag_nodo: node identifier.
+//! @param f: load vector.
 XC::NodalLoad *XC::LoadPattern::newNodalLoad(const int &tag_nodo,const Vector &f)
   {
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
@@ -296,7 +298,7 @@ XC::NodalLoad *XC::LoadPattern::newNodalLoad(const int &tag_nodo,const Vector &f
     return retval;
   }
 
-//! @brief Crea una carga sobre elementos.
+//! @brief Crea una load over elements.
 XC::ElementalLoad *XC::LoadPattern::newElementalLoad(const std::string &cmd)
   {
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
@@ -308,7 +310,7 @@ XC::ElementalLoad *XC::LoadPattern::newElementalLoad(const std::string &cmd)
     return retval;
   }
 
-//! @brief Agrega la carga sobre elemento being passed as parameter.
+//! @brief Agrega the load over element being passed as parameter.
 bool XC::LoadPattern::addElementalLoad(ElementalLoad *load)
   {
     Domain *theDomain= getDomain();
@@ -327,7 +329,7 @@ bool XC::LoadPattern::addElementalLoad(ElementalLoad *load)
     return result;
   }
 
-//! @brief Agrega la carga sobre elemento being passed as parameter e incrementa el tag de cargas sobre elemento.
+//! @brief Appends the elemental load being passed as parameter.
 bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
   {
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
@@ -337,14 +339,14 @@ bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
       {
         result= addElementalLoad(load);
         if(result)
-          map->setCurrentElementLoadTag(++nextTag);
+          map->setCurrentElementLoadTag(++nextTag); //increments by one the corresponding tag
       }
     else
-      std::cerr  << "MapLoadPatterns::newElementalLoad; the pointer a la carga es nulo." << std::endl;
+      std::cerr  << "MapLoadPatterns::newElementalLoad; the pointer a the load es nulo." << std::endl;
     return result;
   }
 
-// //! @brief Crea la carga sobre elemento being passed as parameter.
+// //! @brief Crea the load over element being passed as parameter.
 // XC::NodalLoad *XC::MapLoadPatterns::newElementLoad(const int &tag_elem,const Vector &f)
 //   {
 //     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(owner());
@@ -360,21 +362,21 @@ bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
 bool XC::LoadPattern::addSFreedom_Constraint(SFreedom_Constraint *theSp)
   { return NodeLocker::addSFreedom_Constraint(theSp); }
 
-//! @brief Returns an iterator a las cargas sobre nodo.
+//! @brief Returns an iterator a las nodal loads.
 XC::NodalLoadIter &XC::LoadPattern::getNodalLoads(void)
   {
     theNodIter->reset();
     return *theNodIter;
   }
 
-//! @brief Returns an iterator a las cargas sobre elemento.
+//! @brief Returns an iterator a las elemental loads.
 XC::ElementalLoadIter &XC::LoadPattern::getElementalLoads(void)
   {
     theEleIter->reset();
     return *theEleIter;
   }
 
-//! @brief Returns the número de cargas sobre nodos.
+//! @brief Returns the número de nodal loadss.
 int XC::LoadPattern::getNumNodalLoads(void) const
   {
     int retval= 0;
@@ -383,7 +385,7 @@ int XC::LoadPattern::getNumNodalLoads(void) const
     return retval;
   }
 
-//! @brief Returns the número de cargas sobre elementos.
+//! @brief Returns the número de elemental loadss.
 int XC::LoadPattern::getNumElementalLoads(void) const
   {
     int retval= 0;
@@ -392,7 +394,7 @@ int XC::LoadPattern::getNumElementalLoads(void) const
     return retval;
   }
 
-//! @brief Returns the número de cargas total.
+//! @brief Returns the total number of loads.
 int XC::LoadPattern::getNumLoads(void) const
   { return getNumNodalLoads()+getNumElementalLoads(); }
 
@@ -412,7 +414,7 @@ void XC::LoadPattern::clearAll(void)
     setTimeSeries(nullptr);
   }
 
-//! @brief Elimina la carga sobre nodo cuyo tag se pasa como parámetro.
+//! @brief Elimina the load sobre nodo cuyo tag se pasa como parámetro.
 bool XC::LoadPattern::removeNodalLoad(int tag)
   {
     bool result= theNodalLoads->removeComponent(tag);
@@ -420,7 +422,7 @@ bool XC::LoadPattern::removeNodalLoad(int tag)
     return result;
   }
 
-//! @brief Elimina la carga sobre elemento cuyo tag se pasa como parámetro.
+//! @brief Elimina the load over element cuyo tag se pasa como parámetro.
 bool XC::LoadPattern::removeElementalLoad(int tag)
   {
     bool result= theElementalLoads->removeComponent(tag);
@@ -539,7 +541,7 @@ int XC::LoadPattern::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Imprime el caso de carga.
+//! @brief Prints load pattern information.
 void XC::LoadPattern::Print(std::ostream &s, int flag)
   {
     s << "Load Pattern: " << this->getTag() << "\n";

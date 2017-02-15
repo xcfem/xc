@@ -870,8 +870,8 @@ int XC::NLBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
       std::cerr << nombre_clase() 
-                << "; se intentó cargar el elemento "
-                << getTag() << " que está desactivado." 
+                << "; load over inactive element: "
+                << getTag()  
                 << std::endl;
     else
       {

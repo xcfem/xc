@@ -126,8 +126,7 @@ XC::SetEstruct *XC::Preprocessor::busca_set_estruct(const std::string &nmb)
     return retval;
   }
 
-//! @brief Prepara el domain para resolver un nuevo caso
-//! de carga.
+//! @brief Domain setup to solve for a new load pattern.
 void XC::Preprocessor::resetLoadCase(void)
   { 
     getLoadLoader().removeAllFromDomain();

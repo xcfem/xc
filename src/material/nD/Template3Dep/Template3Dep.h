@@ -69,7 +69,7 @@ class EPState;
 
 //! @ingroup NDMat
 //
-//! @defgroup 3DEPMat Material elastoplástico 3d.
+//! @defgroup 3DEPMat Three-dimensional elasto-plastic material.
 //
 //! @ingroup 3DEPMat
 //

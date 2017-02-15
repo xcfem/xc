@@ -38,7 +38,7 @@ class CrossSectionProperties3d;
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga sobre elementos de tipo viga.
+//! @brief Load over beam elements.
 class BeamLoad : public ElementBodyLoad
   {
   protected:

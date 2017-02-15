@@ -35,7 +35,7 @@
 #include <material/uniaxial/UniaxialMaterial.h>
 
 namespace XC {
-//! @ingroup Mat
+//! @ingroup MATYS
 //
 //! @brief XXX??
 class Hajjar2D : public YieldSurface_BC2D

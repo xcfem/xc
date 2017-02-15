@@ -73,8 +73,8 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
     Preprocessor *preprocessor= GetPreprocessor();
     MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
     static ID eTags(1);
-    eTags[0]= getTag(); //Carga para éste elemento.
-    const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
+    eTags[0]= getTag(); //Load for this element.
+    const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
 
     const size_t sz= v.Size();
     if(sz>1)
@@ -117,8 +117,8 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
         Preprocessor *preprocessor= GetPreprocessor();
         MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
-        eTags[0]= getTag(); //Carga para éste elemento.
-        const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
+        eTags[0]= getTag(); //Load for this element.
+        const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
 
 	if(sz>2)
 	  std::cerr << __FUNCTION__ << ": WARNING a vector of dimension 2 was expected instead of: " << v << std::endl;
@@ -180,8 +180,8 @@ void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
         Preprocessor *preprocessor= GetPreprocessor();
         MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
-        eTags[0]= getTag(); //Carga para éste elemento.
-        const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
+        eTags[0]= getTag(); //Load for this element.
+        const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
 
         LoadPattern *lp= casos.getCurrentLoadPatternPtr();
         if(lp)
@@ -219,8 +219,8 @@ void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector
         Preprocessor *preprocessor= GetPreprocessor();
         MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
-        eTags[0]= getTag(); //Carga para éste elemento.
-        const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
+        eTags[0]= getTag(); //Load for this element.
+        const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
 
         Beam3dPointLoad *tmp= new Beam3dPointLoad(loadTag,v[1],v[2],x,eTags,v[0]);
         LoadPattern *lp= casos.getCurrentLoadPatternPtr();
@@ -265,8 +265,8 @@ void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane
     Preprocessor *preprocessor= GetPreprocessor();
     MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
     static ID eTags(1);
-    eTags[0]= getTag(); //Carga para éste elemento.
-    const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
+    eTags[0]= getTag(); //Load for this element.
+    const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
 
     BeamStrainLoad *tmp= new BeamStrainLoad(loadTag,eTags);
     tmp->setDeformationPlane1(p1);

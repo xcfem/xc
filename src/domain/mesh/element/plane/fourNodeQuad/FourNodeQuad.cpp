@@ -332,14 +332,14 @@ const XC::Matrix &XC::FourNodeQuad::getMass(void) const
 const XC::GaussModel &XC::FourNodeQuad::getGaussModel(void) const
   { return gauss_model_quad4; }
 
-//! @brief Agrega una carga sobre el elemento.
+//! @brief Adds a load over element.
 int XC::FourNodeQuad::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     std::cerr << "XC::FourNodeQuad::addLoad - load type unknown for ele with tag: " << this->getTag() << std::endl;
     return -1;
   }
 
-//! @brief Agrega las cargas debidas a fuerzas de inercia.
+//! @brief Adds inertia loads.
 int XC::FourNodeQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
     static Vector rhoi(4);

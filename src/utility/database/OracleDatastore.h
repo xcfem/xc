@@ -49,6 +49,8 @@ namespace XC {
 class FEM_ObjectBroker;
 
 
+//! @ingroup Database
+//
 class OracleDatastore: public DBDatastore
   {
   private:

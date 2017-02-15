@@ -118,7 +118,7 @@ class ShellMITC4Base : public QuadBase4N<SectionFDPhysicalProperties>
     Vector getInterpolatedDisplacements(const ParticlePos3d &) const;
     Vector getInterpolatedDisplacements(const Pos3d &) const;
 
-    //Métodos para definir cargas.
+    //Load definition methods.
     const ShellUniformLoad *vector3dUniformLoadLocal(const Vector &);
     const ShellUniformLoad *vector3dUniformLoadGlobal(const Vector &);
     void strainLoad(const Matrix &);

@@ -36,7 +36,7 @@ namespace XC {
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga sobre elementos bidimensionales.
+//! @brief Load over bidimensional elements.
 class BidimLoad : public ElementBodyLoad
   {
   protected:

@@ -148,8 +148,8 @@ const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadLocal(const V
       {
         MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
-        eTags[0]= getTag(); //Carga para éste elemento.
-        const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
+        eTags[0]= getTag(); //Load for this element.
+        const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
 
         const size_t sz= v.Size();
         if(sz>2)
@@ -198,8 +198,8 @@ void XC::ShellMITC4Base::strainLoad(const Matrix &deformaciones)
       {
         MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
-        eTags[0]= getTag(); //Carga para éste elemento.
-        const int &loadTag= casos.getCurrentElementLoadTag(); //Identificador de la carga.
+        eTags[0]= getTag(); //Load for this element.
+        const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
         LoadPattern *lp= casos.getCurrentLoadPatternPtr();
         if(lp)
           {
@@ -211,7 +211,7 @@ void XC::ShellMITC4Base::strainLoad(const Matrix &deformaciones)
                 lp->addElementalLoad(tmp);
               }
             else
-              std::cerr << "ShellMITC4Base::strainLoad; no se pudo crear la carga." << std::endl;
+              std::cerr << "ShellMITC4Base::strainLoad; can't create load." << std::endl;
           }
         else
 	  std::cerr << "ShellMITC4Base::vector3dUniformLoadLocal; "
@@ -638,25 +638,24 @@ const XC::Matrix& XC::ShellMITC4Base::getMass(void) const
     return mass;
   }
 
-//! @brief Returns the puntos de Gauss del elemento.
+//! @brief Returns the element Gauss points.
 const XC::GaussModel &XC::ShellMITC4Base::getGaussModel(void) const
   { return gauss_model_quad4; }
 
-//! @brief Anula el vector de cargas del elemento.
+//! @brief Anula el element load vector.
 void XC::ShellMITC4Base::zeroLoad(void)
   {
     QuadBase4N<SectionFDPhysicalProperties>::zeroLoad();
     p0.zero();
   }
 
-//! @brief Añade al elemento la carga being passed as parameter.
+//! @brief Applies on the element the load being passed as parameter.
 int XC::ShellMITC4Base::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
       std::cerr << nombre_clase() 
-                << "; se intentó cargar el elemento "
-                << getTag() << " que está desactivado." 
-                << std::endl;
+                << "; load over inactive element: "
+                << getTag() << std::endl;
     else
       {
         const double area= getPoligono().Area();

@@ -42,10 +42,10 @@ XC::ShellMecLoad::ShellMecLoad(int tag,int classTag,const double &wt,const doubl
 XC::ShellMecLoad::ShellMecLoad(int tag,int classTag)
   :BidimMecLoad(tag, classTag) {}
 
-//! @brief Añade la carga al vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
+//! @brief Añade the load al consistent load vector (ver página 108 libro Eugenio Oñate).
 //! @param area Area del elemento.
-//! @param loadFactor Ponderación de la carga.
-//! @param p0 Vector de cargas del elemento.
+//! @param loadFactor Load factor.
+//! @param p0 element load vector.
 void XC::ShellMecLoad::addReactionsInBasicSystem(const double &,const double &,FVectorShell &)
   {
     std::cerr << "addReactionsInBasicSystem no definida." << std::endl;
@@ -53,7 +53,7 @@ void XC::ShellMecLoad::addReactionsInBasicSystem(const double &,const double &,F
 
 //! @brief ??
 //! @param area Area del elemento.
-//! @param loadFactor Ponderación de la carga.
+//! @param loadFactor Load factor.
 //! @param q0 
 void XC::ShellMecLoad::addFixedEndForcesInBasicSystem(const double &,const double &loadFactor,FVectorShell &)
   {

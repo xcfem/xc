@@ -120,8 +120,7 @@ const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L
     const double wa= WAxial()*loadFactor;  // Axial
     const double wy= WTrans()*loadFactor;  // Transverse
 
-    //Calcula las fuerzas aplicadas sobre las secciones
-    //debidas a esta carga.
+    //Computes effect of the loads over the sections.
     for(size_t i = 0; i < nSections; i++)
       {
         const double x= xi_pt(i,0)*L;
@@ -133,10 +132,10 @@ const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L
     return retval;
   }
 
-//! @brief Returns the vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
+//! @brief Returns the consistent load vector (ver página 108 libro Eugenio Oñate).
 //! @param L Longitud del borde del elemento.
-//! @param loadFactor Ponderación de la carga.
-//! @param p0 Vector de cargas del elemento.
+//! @param loadFactor Load factor.
+//! @param p0 element load vector.
 void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0)
   {
     const double wa= WAxial()*loadFactor;  // Axial
@@ -152,9 +151,9 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
     p0[2]-= V; //Resta la reacción en el extremo frontal.
   }
 
-//! @brief Returns the vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
+//! @brief Returns the consistent load vector (ver página 108 libro Eugenio Oñate).
 //! @param L Longitud del borde del elemento.
-//! @param loadFactor Ponderación de la carga.
+//! @param loadFactor Load factor.
 //! @param q0 ??.
 void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0)
   {

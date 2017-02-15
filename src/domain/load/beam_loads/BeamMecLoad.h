@@ -42,7 +42,7 @@ class CrossSectionProperties3d;
 
 //! @ingroup ElemLoads
 //
-//! @brief Carga de tipo mecánico (fuerzas) sobre elementos de tipo viga.
+//! @brief Mechanical loads (forces) over beam elements.
 class BeamMecLoad : public BeamLoad
   {
   protected:

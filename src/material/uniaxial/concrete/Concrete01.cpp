@@ -180,7 +180,7 @@ void XC::Concrete01::calcula_trial_state(const double &dStrain)
   {
     trialHistory.UnloadSlope()= convergedHistory.getUnloadSlope(); //Reset unload slope.
   
-    const double unloadStress= convergedState.getStress() + trialHistory.getUnloadSlope()*dStrain; //Tensión en descarga.
+    const double unloadStress= convergedState.getStress() + trialHistory.getUnloadSlope()*dStrain; //Stress when unloading.
   
     if(dStrain <= 0.0) // Material goes further into compression
       {

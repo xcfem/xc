@@ -185,7 +185,7 @@ XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_accel_nod(const int &i) co
     return global_to_local(di,vi0);
   }
 
-//! @brief Transformación a globales del vector de cargas.
+//! @brief Transformación a globales del load vector.
 const XC::Vector &XC::ShellCorotCrdTransf3d::local_to_global_resisting_force(const Vector &pl) const
   {
     // transform resisting forces  from local to global coordinates
@@ -382,7 +382,7 @@ void XC::ShellCorotCrdTransf3d::getGlobalResidAndTangent(Vector &resid,Matrix &s
     stiff= local_to_global(R,Rd,stiff);
   }
 
-//! @brief Returns the vector de cargas expresado en el sistema global del elemento.
+//! @brief Returns the load vector expresado en el sistema global del elemento.
 const XC::Vector &XC::ShellCorotCrdTransf3d::getGlobalResistingForce(const Vector &p0) const
   { return local_to_global_resisting_force(p0); }
 

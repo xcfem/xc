@@ -113,7 +113,7 @@ const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code) c
     return retval;
   }
 
-//! @brief Returns a pointer to the caso de carga cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the load pattern cuyo nombre se pasa como parámetro.
 XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_code)
   {
     LoadPattern *retval= nullptr;
@@ -123,7 +123,7 @@ XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_cod
     return retval;
   }
 
-//! @brief Returns a pointer to the caso de carga cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the load pattern cuyo nombre se pasa como parámetro.
 const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_code) const
   {
     const LoadPattern *retval= nullptr;
@@ -174,7 +174,7 @@ const std::string &XC::MapLoadPatterns::getNombreLoadPattern(const LoadPattern *
     return retval;
   }
 
-//! @brief Agrega el caso de carga al domain.
+//! @brief Agrega el load pattern al domain.
 void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
   {
     LoadPattern *lp= buscaLoadPattern(lp_code);
@@ -186,18 +186,18 @@ void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
                     << lp_code << "'\n";
       }
     else
-      std::cerr << "MapLoadPatterns::addToDomain: no se encontró el caso de carga: " 
+      std::cerr << "MapLoadPatterns::addToDomain: no se encontró el load pattern: " 
                 << lp_code << std::endl;
   }
 
-//! @brief Elimina el caso de carga del domain.
+//! @brief Elimina el load pattern del domain.
 void XC::MapLoadPatterns::removeFromDomain(const std::string &lp_code)
   {
     LoadPattern *lp= buscaLoadPattern(lp_code);
     if(lp)
       getDomain()->removeLoadPattern(lp);
     else
-      std::cerr << "MapLoadPatterns::removeFromDomain: no se encontró el caso de carga: " 
+      std::cerr << "MapLoadPatterns::removeFromDomain: no se encontró el load pattern: " 
                 << lp_code << std::endl;
   }
 
@@ -262,7 +262,7 @@ XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &tipo,con
     return retval;
   }
 
-//! @brief Borra todos los casos de carga.
+//! @brief Borra todos los load patterns.
 void XC::MapLoadPatterns::clear_time_series(void)
   {
     //Borramos la lista de timeseries.
@@ -361,7 +361,7 @@ int XC::MapLoadPatterns::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Returns the nombres de los casos de carga.
+//! @brief Returns the nombres de los load patterns.
 std::deque<std::string> XC::MapLoadPatterns::getListaNombres(void) const
   {
     std::deque<std::string> retval;

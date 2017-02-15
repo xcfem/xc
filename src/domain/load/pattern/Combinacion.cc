@@ -112,10 +112,9 @@ const XC::Combinacion::sumando &XC::Combinacion::sumando::divide(const float &f)
     return *this;
   }
 
-//! @brief Returns a cadena de caracteres que representa al caso como puede ser
-//! «1.35*G1».
-//! @arg \c casos: Contenedor de los casos de carga.
-//! @arg \c fmt: Formato para el factor que multiplica a la hipótesis.
+//! @brief Returns a string representation of the combination i.e. "1.35*G1".
+//! @arg \c casos: Load pattern container.
+//! @arg \c fmt: Format for the factor.
 std::string XC::Combinacion::sumando::getString(const MapLoadPatterns &casos,const std::string &fmt) const
   {
     std::string retval= "";
@@ -369,7 +368,7 @@ const std::string XC::Combinacion::getDescompRestoSobrePrevia(void) const
     return retval;
   }
 
-//! @brief Asigna el domain a los casos de carga de la combinación.
+//! @brief Assigns the domain to the combination load patterns.
 void XC::Combinacion::Combinacion::setDomain(Domain *theDomain)
   {
     ForceReprComponent::setDomain(theDomain);
@@ -619,7 +618,7 @@ bool XC::Combinacion::operator==(const Combinacion &otra) const
   }
 
 //! @brief Returns true iflos coeficientes que ponderan a todos
-//! los casos de carga de esta combinación son mayores que los correspondientes
+//! los load patterns de esta combinación son mayores que los correspondientes
 //! en la being passed as parameter.
 bool XC::Combinacion::dominaA(const Combinacion &otra) const
   {

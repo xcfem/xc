@@ -67,7 +67,7 @@
 
 
 
-//! @brief Reserva memoria para almacenar las cargas.
+//! @brief Allocates memory.
 void XC::NodeLocker::alloc_contenedores(void)
   {
     theSPs= new ArrayOfTaggedObjects(this,32,"SPs");
@@ -128,7 +128,7 @@ XC::NodeLocker::~NodeLocker(void)
   }
 
 
-//! @brief Establece el domain para las cargas.
+//! @brief Set the domain for the constraints.
 void XC::NodeLocker::setDomain(Domain *theDomain)
   {
     if(theSPs)
@@ -187,7 +187,7 @@ int XC::NodeLocker::getNumSPs(void) const
     return retval;
   }
 
-//! @brief Borra todas las cargas y coacciones.
+//! @brief Deletes all constraints.
 void XC::NodeLocker::clearAll(void)
   {
     theSPs->clearAll();
@@ -207,7 +207,7 @@ bool XC::NodeLocker::removeSFreedom_Constraint(int tag)
     return retval;
   }
 
-//! @brief Aplica la carga en el instante being passed as parameter.
+//! @brief Aplica the load en el instante being passed as parameter.
 void XC::NodeLocker::applyLoad(const double &pseudoTime,const double &factor)
   {
     SFreedom_Constraint *sp= nullptr;
@@ -269,7 +269,7 @@ int XC::NodeLocker::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Imprime el caso de carga.
+//! @brief Imprime el load pattern.
 void XC::NodeLocker::Print(std::ostream &s, int flag)
   {
     s << "SPC Pattern: " << this->getTag() << "\n";

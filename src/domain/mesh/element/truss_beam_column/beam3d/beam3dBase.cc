@@ -99,7 +99,7 @@ const XC::Matrix &XC::beam3dBase::getTangentStiff(void) const
 const XC::Matrix &XC::beam3dBase::getInitialStiff(void) const
   { return getStiff(); }
 
-//! @brief Agrega la carga being passed as parameter.
+//! @brief Agrega the load being passed as parameter.
 int XC::beam3dBase::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     std::cerr << "beam3dBase::addLoad() - beam " << this->getTag() << "load type unknown\n";

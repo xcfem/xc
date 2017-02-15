@@ -66,6 +66,8 @@
 #include <mysql.h>
 
 namespace XC {
+//! @ingroup Database
+//
 class MySqlDatastore: public DBDatastore
   {
   private:

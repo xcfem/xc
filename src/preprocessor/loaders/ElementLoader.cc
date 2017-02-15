@@ -54,7 +54,7 @@ XC::ElementLoader::SeedElemLoader &XC::ElementLoader::SeedElemLoader::operator=(
     return *this;
   }
 
-//! @brief Método agrega para la clase encargada de leer el elemento semilla.
+//! @brief Defines seed element.
 void XC::ElementLoader::SeedElemLoader::agrega(XC::Element *e)
   {
     libera();
@@ -62,7 +62,7 @@ void XC::ElementLoader::SeedElemLoader::agrega(XC::Element *e)
     semilla= e;
   }
 
-//! @brief Destructor de la clase encargada de leer el elemento semilla.
+//! @brief Destructor.
 XC::ElementLoader::SeedElemLoader::~SeedElemLoader(void)
   { libera(); }
 

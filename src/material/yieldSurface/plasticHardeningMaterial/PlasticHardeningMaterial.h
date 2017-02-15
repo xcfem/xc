@@ -35,6 +35,9 @@ class Response;
 
 //! @ingroup Mat
 //
+//! @defgroup MATYS Yield surface materials.
+//!
+//
 //! @brief Material plástico con endurecimiento por deformación.
 class PlasticHardeningMaterial : public Material
   {

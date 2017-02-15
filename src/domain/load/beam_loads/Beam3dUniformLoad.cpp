@@ -109,10 +109,10 @@ const XC::Matrix &XC::Beam3dUniformLoad::getAppliedSectionForces(const double &L
     return retval;
   }
 
-//! @brief Añade la carga al vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
+//! @brief Añade the load al consistent load vector (ver página 108 libro Eugenio Oñate).
 //! @param L Longitud del elemento.
-//! @param loadFactor Ponderación de la carga.
-//! @param p0 Vector de cargas del elemento.
+//! @param loadFactor Load factor.
+//! @param p0 element load vector.
 void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0)
   {
     const double wy= Wy()*loadFactor;  // Transverse
@@ -135,7 +135,7 @@ void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
 
 //! @brief ??
 //! @param L Longitud del elemento.
-//! @param loadFactor Ponderación de la carga.
+//! @param loadFactor Load factor.
 //! @param q0 ??
 void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0)
   {

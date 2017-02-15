@@ -34,11 +34,11 @@
 namespace XC {
 //! @ingroup ElemLoads
 //
-//! @brief Carga debida a deformación inicial en un elemento Truss.
+//! @brief Load due to restricted material expansion or contraction on bidimensional elements.
 class BidimStrainLoad: public BidimLoad
   {
   private:
-    std::vector<Vector> deformaciones; //!< Deformaciones impuestas en cada punto de Gauss 1.	
+    std::vector<Vector> deformaciones; //!< Restricted strains on each Gauss point.	
   protected:
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);

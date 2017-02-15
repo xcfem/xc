@@ -34,7 +34,7 @@
 namespace XC {
 //! @ingroup ElemLoads
 //
-//! @brief Carga puntual sobre elementos barra.
+//! @brief Punctual load over beam elements.
 class BeamPointLoad: public BeamMecLoad
   {
   protected:

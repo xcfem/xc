@@ -483,14 +483,13 @@ void XC::BeamWithHinges3d::zeroLoad(void)
     BeamColumnWithSectionFDTrf3d::zeroLoad();
   }
 
-//! @brief Introduce el efecto de las cargas sobre el elemento.
+//! @brief Effect of the load on the element.
 int XC::BeamWithHinges3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
       std::cerr << nombre_clase() 
-                << "; se intentó cargar el elemento "
-                << getTag() << " que está desactivado." 
-                << std::endl;
+                << "; load over inactive element: "
+                << getTag() << std::endl;
     else
       {
         if(BeamMecLoad *beamMecLoad= dynamic_cast<BeamMecLoad *>(theLoad))

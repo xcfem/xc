@@ -101,6 +101,8 @@ typedef struct doubleData
   } DoubleData;
 
 
+//! @ingroup Database
+//
 class FileDatastore: public FE_Datastore
   {
   private:

@@ -66,6 +66,8 @@
 #include <db.h>
 
 namespace XC {
+//! @ingroup Database
+//
 class BerkeleyDbDatastore: public DBDatastore
   {
   private:

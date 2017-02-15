@@ -35,25 +35,25 @@ XC::LoadLoaderMember::LoadLoaderMember(LoadLoader *owr)
   : EntCmd(owr), MovableObject(0) {}
 
 
-//! @brief Returns the cargador propietario.
+//! @brief Returns the owner.
 const XC::LoadLoader *XC::LoadLoaderMember::getLoadLoader(void) const
   {
     const LoadLoader *loader= dynamic_cast<const LoadLoader *>(Owner());
     if(!loader)
-      std::cerr << "(LoadLoaderMember) necesito un propietario." << std::endl;
+      std::cerr << "(LoadLoaderMember) need an owner." << std::endl;
     return loader;
   }
 
-//! @brief Returns the cargador propietario.
+//! @brief Returns the owner.
 XC::LoadLoader *XC::LoadLoaderMember::getLoadLoader(void)
   {
     LoadLoader *loader= dynamic_cast<LoadLoader *>(Owner());
     if(!loader)
-      std::cerr << "(LoadLoaderMember) necesito un propietario." << std::endl;
+      std::cerr << "(LoadLoaderMember) need an owner." << std::endl;
     return loader;
   }
 
-//! @brief Returns the domain en el que se cargan los elementos.
+//! @brief Returns the domain.
 XC::Domain *XC::LoadLoaderMember::getDomain(void) const
   {
     Domain *retval= nullptr;
@@ -63,11 +63,11 @@ XC::Domain *XC::LoadLoaderMember::getDomain(void) const
     return retval;
   }
 
-//! @brief Returns the tag para el siguiente caso de carga.
+//! @brief Returns the tag para el siguiente load pattern.
 int &XC::LoadLoaderMember::getTagLP(void)
   { return getLoadLoader()->getTagLP(); }
 
-//! @brief Returns the tag para el siguiente caso de carga.
+//! @brief Returns the tag para el siguiente load pattern.
 const int &XC::LoadLoaderMember::getTagLP(void) const
   { return getLoadLoader()->getTagLP(); }
 

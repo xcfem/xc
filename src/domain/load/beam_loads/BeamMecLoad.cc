@@ -51,10 +51,10 @@ const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const
     return retval;
   }
 
-//! @brief Añade la carga al vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
+//! @brief Añade the load al consistent load vector (ver página 108 libro Eugenio Oñate).
 //! @param L Longitud del elemento.
-//! @param loadFactor Ponderación de la carga.
-//! @param p0 Vector de cargas del elemento.
+//! @param loadFactor Load factor.
+//! @param p0 element load vector.
 void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FVector &)
   {
     std::cerr << "addReactionsInBasicSystem no definida." << std::endl;
@@ -62,7 +62,7 @@ void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FV
 
 //! @brief ??
 //! @param L Longitud del elemento.
-//! @param loadFactor Ponderación de la carga.
+//! @param loadFactor Load factor.
 //! @param q0 ??
 void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &)
   {

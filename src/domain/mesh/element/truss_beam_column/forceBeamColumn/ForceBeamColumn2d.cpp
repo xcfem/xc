@@ -805,13 +805,13 @@ void XC::ForceBeamColumn2d::zeroLoad(void)
     v0.zero();
   }
 
-//! @brief Calcula la respuesta del elemento a la carga being passed as parameter.
+//! @brief Calcula la respuesta del elemento a the load being passed as parameter.
 int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
       std::cerr << nombre_clase() 
-                << "; se intentó cargar el elemento "
-                << getTag() << " que está desactivado." 
+                << "; load over inactive element: "
+                << getTag()  
                 << std::endl;
     else
       {
@@ -844,8 +844,7 @@ int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
     return 0;
   }
 
-//! @brief Returns the cargas debidas a la inercia
-//! al vector de cargas desequilibradas.
+//! @brief Add the inertial loads to the unbalanced load vector.
 int XC::ForceBeamColumn2d::addInertiaLoadToUnbalance(const Vector &accel)
   {
     // Check for a XC::quick return

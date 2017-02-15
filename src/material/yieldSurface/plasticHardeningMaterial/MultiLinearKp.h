@@ -39,7 +39,7 @@
 
 namespace XC {
 
-//! @ingroup Mat
+//! @ingroup MATYS
 //
 //! @brief XXX??.
 class MultiLinearKp : public PlasticHardeningMaterial

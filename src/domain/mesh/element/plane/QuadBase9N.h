@@ -134,15 +134,14 @@ ID XC::QuadBase9N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
     return retval;
   }
 
-//! @brief Añade al elemento la carga being passed as parameter.
+//! @brief Añade al elemento the load being passed as parameter.
 template <class PhysProp>
 int XC::QuadBase9N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(this->isDead())
       std::cerr << this->nombre_clase() 
-                << "; se intentó cargar el elemento "
-                << this->getTag() << " que está desactivado." 
-                << std::endl;
+                << "; load over inactive elements: "
+                << this->getTag() << std::endl;
     else
       {
         if(BidimStrainLoad *strainLoad= dynamic_cast<BidimStrainLoad *>(theLoad)) //Deformaciones impuestas.

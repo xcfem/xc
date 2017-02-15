@@ -923,8 +923,9 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
                       }
                   }
                 else
-	          std::cerr << "ConstrContainer::recvLPatternsTags; no se encontró el caso de carga de tag: "
-                            << loadPatternsTags[i] << std::endl;
+	          std::cerr << "ConstrContainer::recvLPatternsTags;"
+		            << " load with tag: " << loadPatternsTags[i]
+			    << "not found." << std::endl;
               }
           }
       }
@@ -989,8 +990,8 @@ int XC::ConstrContainer::sendData(CommParameters &cp)
     res+= cp.sendMovable(*theMPs,getDbTagData(),CommMetaData(1));
     res+= cp.sendMovable(*theMRMPs,getDbTagData(),CommMetaData(2));
     
-    res+= sendNLockersTags(3,4,cp); //Guardamos los bloqueadores de nodo "activos".
-    res+= sendLPatternsTags(5,6,cp); //Guardamos los casos de carga "activos".
+    res+= sendNLockersTags(3,4,cp); //Active node lockers.
+    res+= sendLPatternsTags(5,6,cp); //Active load patterns.
     return res;
   }
 

@@ -34,12 +34,12 @@
 namespace XC {
 //! @ingroup ElemLoads
 //
-//! @brief Carga debida a deformación impuesta en un elemento Truss.
+//! @brief Load due to restricted material expansion or contraction on truss elements.
 class TrussStrainLoad : public ElementBodyLoad
   {
   private:
-    double e1; //!< Deformación impuesta en el nodo 1	
-    double e2; //!< Deformación impuesta en el nodo 2
+    double e1; //!< Restricted strain in node 1	
+    double e2; //!< Restricted strain in node 2
   protected:
 
   public:

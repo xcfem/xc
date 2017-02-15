@@ -156,10 +156,10 @@ const XC::Matrix &XC::Beam3dPointLoad::getAppliedSectionForces(const double &L,c
     return retval;
   }
 
-//! @brief Añade la carga al vector de cargas consistentes (ver página 108 libro Eugenio Oñate).
+//! @brief Añade the load al consistent load vector (ver página 108 libro Eugenio Oñate).
 //! @param L Longitud del elemento.
-//! @param loadFactor Ponderación de la carga.
-//! @param p0 Vector de cargas del elemento.
+//! @param loadFactor Load factor.
+//! @param p0 element load vector.
 void XC::Beam3dPointLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0)
   {
     const double aOverL= X();
@@ -167,7 +167,7 @@ void XC::Beam3dPointLoad::addReactionsInBasicSystem(const double &L,const double
     if(aOverL < 0.0 || aOverL > 1.0)
       {
         std::cerr << "XC::Element1D::addReactionsInBasicSystem; el valor de x ("
-                  << aOverL << ") es incorrecto, debe estar entre 0 y 1. Se ignora la carga." << std::endl;
+                  << aOverL << ") es incorrecto, debe estar entre 0 y 1. Load ignored." << std::endl;
         return;
       }
     else
@@ -193,7 +193,7 @@ void XC::Beam3dPointLoad::addReactionsInBasicSystem(const double &L,const double
 
 //! @brief ??
 //! @param L Longitud del elemento.
-//! @param loadFactor Ponderación de la carga.
+//! @param loadFactor Load factor.
 //! @param q0 ??.
 void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0)
   {
@@ -202,7 +202,7 @@ void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const d
     if(aOverL < 0.0 || aOverL > 1.0)
       {
         std::cerr << "XC::Element1D::fixedEndForcesInBasicSystem; el valor de x ("
-                  << aOverL << ") es incorrecto, debe estar entre 0 y 1. Se ignora la carga." << std::endl;
+                  << aOverL << ") es incorrecto, debe estar entre 0 y 1. Load ignored." << std::endl;
       }
     else
       {
@@ -395,7 +395,7 @@ int XC::Beam3dPointLoad::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Imprime la carga.
+//! @brief Print load information.
 void XC::Beam3dPointLoad::Print(std::ostream &s, int flag) const
   {
     s << "Beam3dPointLoad - Reference load" << std::endl;

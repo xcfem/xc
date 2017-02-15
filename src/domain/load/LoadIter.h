@@ -67,7 +67,7 @@ class Load;
 
 //! @ingroup Loads
 //
-//! @brief Iterador sobre las cargas.
+//! @brief Iterator over loads.
 class LoadIter
   {
   private:

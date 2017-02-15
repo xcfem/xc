@@ -37,7 +37,7 @@ class BeamIntegration;
 
 //! \ingroup Ldrs
 //! 
-//! @brief Cargador de BeamIntegrators.
+//! @brief Beam integrators handler.
 class BeamIntegratorLoader: public Loader
   {
   public:

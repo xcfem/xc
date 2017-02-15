@@ -142,12 +142,12 @@ bool XC::SFreedom_Constraint::isHomogeneous(void) const
       return false;
   }
 
-//! @brief Establece el "patrón de carga" que se emplea para la coacción.
-//! @param tag: Identificador del "patron de carga".
+//! @brief Sets the load pattern tag for the constraint.
+//! @param tag: load pattern identifier.
 void XC::SFreedom_Constraint::setLoadPatternTag(int tag)
   { loadPatternTag = tag; }
 
-//! @brief Returns the identificador del "patrón de carga" de la coacción.
+//! @brief Returns the load pattern tag of the constraint.
 int XC::SFreedom_Constraint::getLoadPatternTag(void) const
   { return loadPatternTag;  }
 
