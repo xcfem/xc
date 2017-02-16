@@ -228,11 +228,11 @@ python tests/preprocessor/cad/split_linea_01.py
 python tests/preprocessor/cad/split_linea_02.py
 python tests/preprocessor/cad/split_linea_03.py
 echo "$BLEU" "  Meshing routines tests." "$NORMAL"
-python tests/preprocessor/test_malla_superficies_01.py
-python tests/preprocessor/test_malla_superficies_02.py
-python tests/preprocessor/test_malla_superficies_03.py
-python tests/preprocessor/test_malla_superficies_04.py
-python tests/preprocessor/test_malla_superficies_05.py
+python tests/preprocessor/test_surface_meshing_01.py
+python tests/preprocessor/test_surface_meshing_02.py
+python tests/preprocessor/test_surface_meshing_03.py
+python tests/preprocessor/test_surface_meshing_04.py
+python tests/preprocessor/test_surface_meshing_05.py
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/mueve_set.py
 python tests/preprocessor/sets/test_set_01.py

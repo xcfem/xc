@@ -34,7 +34,7 @@
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "preprocessor/cad/entidades/Body.h"
 #include "preprocessor/cad/entidades/Block.h"
-#include "preprocessor/cad/entidades/SupCuadrilatera.h"
+#include "preprocessor/cad/entidades/QuadSurface.h"
 #include "preprocessor/set_mgmt/Set.h"
 
 

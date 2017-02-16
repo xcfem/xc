@@ -35,7 +35,7 @@
 
 namespace XC {
 //! \ingroup MATYS
-//! @brief Superficie de fluencia de tipo El Tawil 2D.
+//! @brief El Tawil 2D yield surface.
 class ElTawil2D : public YieldSurface_BC2D
   {
   protected:

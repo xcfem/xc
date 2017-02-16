@@ -55,6 +55,8 @@
 namespace XC {
 class Material_Model;
 
+//! @ingroup Matrix
+//
 class Cosseratstresstensor : public BJtensor
 {
   public:

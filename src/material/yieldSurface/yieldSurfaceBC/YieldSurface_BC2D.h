@@ -36,12 +36,11 @@
 
 namespace XC {
 //! \ingroup MATYS
-//! @brief Superficie de fluencia 2D.
-class YieldSurface_BC2D : public YieldSurface_BC
+//! @brief BC 2D yield surface.
+class YieldSurface_BC2D: public YieldSurface_BC
   {
-protected:
+  protected:
 //        UniaxialMaterial  *kpMatX, *kpMatY;
-
     double xPos, xNeg, yPos, yNeg;          // Extent along X and Y
     double a1, b1, a2, b2, a3, b3, a4, b4;  // y = ax +b -> inner quad
     double offset, increment;

@@ -97,6 +97,8 @@
 
 
 namespace XC {
+//! @ingroup Matrix
+//
 class BJmatrix : public nDarray
   {
     friend class BJvector; // explanation why this one should be a friend

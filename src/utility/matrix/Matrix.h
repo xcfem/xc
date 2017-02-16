@@ -77,6 +77,8 @@ class AuxMatrix;
 
 #define MATRIX_VERY_LARGE_VALUE 1.0e213
 
+//! @ingroup Matrix
+//
 class Matrix: public EntCmd
   {
   private:

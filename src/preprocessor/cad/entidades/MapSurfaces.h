@@ -24,21 +24,21 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapSuperficies.h
+//MapSurfaces.h
 
-#ifndef MAPSuperficies_H
-#define MAPSuperficies_H
+#ifndef MAPSurfaces_H
+#define MAPSurfaces_H
 
 #include "MapEnt.h"
 #include "Face.h"
 
 namespace XC {
-  class SupCuadrilatera;
+  class QuadSurface;
 
 //! @ingroup Cad
 //
 //! @brief Contenedor de puntos del modelo.
-class MapSuperficies: public MapEnt<Face>
+class MapSurfaces: public MapEnt<Face>
   {
   private:
     void UpdateSets(Face *) const;
@@ -46,7 +46,7 @@ class MapSuperficies: public MapEnt<Face>
 
 
   public:
-    MapSuperficies(Cad *cad= NULL);
+    MapSurfaces(Cad *cad= NULL);
 
     bool conciliaNDivs(void);
     bool checkNDivs(void) const;
@@ -54,18 +54,18 @@ class MapSuperficies: public MapEnt<Face>
     template <class F>
     Face *Nueva(void);
 
-    SupCuadrilatera *newQuadSurfacePts(const size_t &, const size_t &,const size_t &,const size_t &);
-    SupCuadrilatera *newQuadSurfaceLines(const size_t &, const size_t &,const size_t &,const size_t &);
-    SupCuadrilatera *newQuadSurfaceGridPoints(const boost::python::list &);
+    QuadSurface *newQuadSurfacePts(const size_t &, const size_t &,const size_t &,const size_t &);
+    QuadSurface *newQuadSurfaceLines(const size_t &, const size_t &,const size_t &,const size_t &);
+    QuadSurface *newQuadSurfaceGridPoints(const boost::python::list &);
   };
 
 
-//! @brief Crea una nueva superficie.
+//! @brief Creates a new surface.
 template <class F>
-Face *MapSuperficies::Nueva(void)
+Face *MapSurfaces::Nueva(void)
   {
     Face *retval= busca(getTag());
-    if(!retval) //La superficie es nueva.
+    if(!retval) //Surface is new.
       {
         Preprocessor *preprocessor= getPreprocessor();
         retval= new F(preprocessor);

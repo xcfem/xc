@@ -68,6 +68,12 @@
 #include <boost/python/list.hpp>
 
 namespace XC {
+//! @ingroup Utils
+//
+//! @defgroup Matrix Vector, matrix and tensors classes.
+//
+//! @ingroup Matrix
+//
 class ID: public EntCmd, public std::vector<int>
   {
   public:

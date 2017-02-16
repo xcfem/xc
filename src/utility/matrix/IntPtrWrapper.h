@@ -32,6 +32,8 @@
 #include <boost/python/list.hpp>
 
 namespace XC {
+//! @ingroup Matrix
+//
 class IntPtrWrapper: public EntCmd
   {
   private:

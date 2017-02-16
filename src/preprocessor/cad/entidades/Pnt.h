@@ -90,7 +90,7 @@ class Pnt: public EntMdlr
     const size_t getNLines(void) const
       { return EdgesTocan().size(); }
     std::set<const Edge *> EdgesExtremo(void) const;
-    //! @brief Returns the nombres de las superficies que tocan a a línea.
+    //! @brief Returns the names of the surfaces that touch the line (neighbors).
     const std::string &NombresEdgesTocan(void) const;
     bool Toca(const Edge &l) const;
     bool Extremo(const Edge &l) const;

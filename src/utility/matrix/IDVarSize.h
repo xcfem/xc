@@ -35,6 +35,8 @@
 #include "ID.h"
 
 namespace XC {
+//! @ingroup Matrix
+//
 class IDVarSize: public ID
   {
   public:

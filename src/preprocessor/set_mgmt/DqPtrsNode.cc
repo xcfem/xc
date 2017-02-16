@@ -228,8 +228,8 @@ void XC::DqPtrsNode::numera(void)
       }
   }
 
-//! @brief Returns true ifel nodo, cuyo tag se
-//! pasa como parámetro, pertenece al conjunto.
+//! @brief Returns true if the node with the tag
+//! is being passed as parameter, belongs to the set.
 bool XC::DqPtrsNode::InNodeTag(const int tag_nodo) const
   {
     for(const_iterator i= begin();i!=end();i++)
@@ -237,8 +237,8 @@ bool XC::DqPtrsNode::InNodeTag(const int tag_nodo) const
     return false;
   }
 
-//! @brief Returns true iftodos los nodos, cuyos tags se
-//! pasan como parámetro, pertenecen al conjunto.
+//! @brief Returns true if the nodes, with the tags
+//! are being passed as parameter, belong to the set.
 bool XC::DqPtrsNode::InNodeTags(const ID &tag_nodos) const
   {
     const int sz= tag_nodos.Size();

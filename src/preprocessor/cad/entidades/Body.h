@@ -66,15 +66,15 @@ class Body: public EntMdlr
   protected:
     //! \ingroup Geom
     //!
-    //! @brief Esta clase sirve para almacenar cada una de las superficies que limitan el cuerpo.
-    class Cara
+    //! @brief Surface that limits the body (face as seen by the body).
+    class BodyFace
       {
-        Face *superficie; //!< Puntero a superficie.
-        SecuenciaLados sec_lados; //!< Secuencia de lados.
+        Face *surface; //!< Face geometry.
+        SecuenciaLados sec_lados; //!< Edge sequence.
       public:
-        Cara(Face *ptr=NULL,const size_t &p=1,const bool &d=true);
-	Face *Superficie(void);
-        const Face *Superficie(void) const;
+        BodyFace(Face *ptr=NULL,const size_t &p=1,const bool &d=true);
+	Face *Surface(void);
+        const Face *Surface(void) const;
         void SetSurf(Face *s);
 
         const std::string &GetNombre(void) const;
@@ -93,7 +93,7 @@ class Body: public EntMdlr
 
     void set_surf(Face *s);
 
-    virtual Cara *GetCara(const size_t &i)= 0;
+    virtual BodyFace *GetFace(const size_t &i)= 0;
   public:
     Body(Preprocessor *m,const std::string &nombre= "");
     //! @brief Return the dimensión del objeto
@@ -104,9 +104,9 @@ class Body: public EntMdlr
     //! @brief Returns the número de vértices del objeto.
     virtual size_t NumVertices(void) const= 0;
     //! @brief Returns the número de vértices del objeto.
-    virtual size_t NumCaras(void) const= 0;
-    virtual std::set<const Face *> GetSuperficies(void)= 0;
-    virtual const Cara *GetCara(const size_t &i) const= 0;
+    virtual size_t NumFaces(void) const= 0;
+    virtual std::set<const Face *> getSurfaces(void)= 0;
+    virtual const BodyFace *GetFace(const size_t &i) const= 0;
     virtual const CmbEdge::Lado *GetArista(const size_t &i) const= 0;
     virtual const Pnt *GetVertice(const size_t &i) const= 0;
     std::vector<int> getIndicesVertices(void) const;

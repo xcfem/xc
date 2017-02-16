@@ -37,7 +37,7 @@
 namespace XC {
 //! \ingroup MATYS
 //!
-//! @brief Superficie de fluencia.
+//! @brief 2D yield surface evolution.
 class YS_Evolution2D: public YS_Evolution
   {
   public:

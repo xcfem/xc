@@ -73,7 +73,7 @@ class ElementalLoadIter;
 class GroundMotion;
 class Vector;
 
-//! \ingroup Loads
+//! @ingroup BoundCond
 //!
 //!
 //! @defgroup LPatterns Load patterns.

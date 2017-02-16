@@ -44,7 +44,7 @@ def VtkDefineActorKPoint(recordGrid, renderer, radius):
   renderer.AddActor(visKPts)
 
 def VtkDefineActorCells(recordGrid, renderer, tipoRepr):
-  # Creamos el actor para las superficies.
+  # Actor for the surfaces.
   uGridMapper= vtk.vtkDataSetMapper()
   uGridMapper.SetInput(recordGrid.uGrid)
   cellActor= vtk.vtkActor()

@@ -68,7 +68,7 @@ namespace XC {
   class Information;
   class Vector;
 
-//! \ingroup Loads
+//! @ingroup LPatterns
 //!
 //!
 //! @defgroup TSeries Time series.

@@ -117,11 +117,11 @@ bool XC::Pnt::Toca(const Edge &l) const
     return (i!=lineas_pt.end());
   }
 
-//! @brief Returns true ifel punto es un extremo de la línea.
+//! @brief Returns true if the point is an end of the edge.
 bool XC::Pnt::Extremo(const Edge &l) const
   { return l.Extremo(*this); }
 
-//! @brief Returns true ifel punto toca a la superficie.
+//! @brief Returns true if the points touches the surface.
 bool XC::Pnt::Toca(const Face &s) const
   {
     for(std::set<const Edge *>::const_iterator i= lineas_pt.begin(); i!=lineas_pt.end();i++)

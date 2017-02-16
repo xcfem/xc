@@ -115,6 +115,8 @@ class straintensor;
 
 
 
+//! @ingroup Matrix
+//
 class nDarray_rep
   {
   public:
@@ -151,6 +153,8 @@ class nDarray_rep
                                    // and ECKEL page 529.
   };
 
+//! @ingroup Matrix
+//
 class nDarray
   {
 //  public:

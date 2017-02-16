@@ -126,18 +126,18 @@ class_<XC::Set::lst_ptr_lineas, bases<dq_ptrs_lineas>, boost::noncopyable >("lst
   .def("__len__",&XC::Set::lst_ptr_lineas::size, "Returns list size.")
    ;
 
-typedef XC::DqPtrs<XC::Face> dq_ptrs_superficies;
-class_<dq_ptrs_superficies, bases<EntCmd>, boost::noncopyable >("dq_ptrs_superficies",no_init)
-  .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_superficies::indBegin, &dq_ptrs_superficies::indEnd))
-  .def("at",make_function(&dq_ptrs_superficies::get, return_internal_reference<>() ), "Access specified surface with bounds checking.")
-  .def("clear",&dq_ptrs_superficies::clear,"Removes all items.")
+typedef XC::DqPtrs<XC::Face> dq_ptrs_surfaces;
+class_<dq_ptrs_surfaces, bases<EntCmd>, boost::noncopyable >("dq_ptrs_surfaces",no_init)
+  .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_surfaces::indBegin, &dq_ptrs_surfaces::indEnd))
+  .def("at",make_function(&dq_ptrs_surfaces::get, return_internal_reference<>() ), "Access specified surface with bounds checking.")
+  .def("clear",&dq_ptrs_surfaces::clear,"Removes all items.")
    ;
 
-class_<XC::Set::lst_ptr_superficies, bases<dq_ptrs_superficies>, boost::noncopyable >("lstSurfaces",no_init)
-  .def("append", &XC::Set::lst_ptr_superficies::push_back,"Appends surface at the end of the list.")
-  .def("pushFront", &XC::Set::lst_ptr_superficies::push_front,"Push surface at the beginning of the list.")
-  .add_property("size", &XC::Set::lst_ptr_superficies::size, "Returns list size.")
-  .def("__len__",&XC::Set::lst_ptr_superficies::size, "Returns list size.")
+class_<XC::Set::lst_surface_ptrs, bases<dq_ptrs_surfaces>, boost::noncopyable >("lstSurfaces",no_init)
+  .def("append", &XC::Set::lst_surface_ptrs::push_back,"Appends surface at the end of the list.")
+  .def("pushFront", &XC::Set::lst_surface_ptrs::push_front,"Push surface at the beginning of the list.")
+  .add_property("size", &XC::Set::lst_surface_ptrs::size, "Returns list size.")
+  .def("__len__",&XC::Set::lst_surface_ptrs::size, "Returns list size.")
    ;
 
 typedef XC::DqPtrs<XC::Body> dq_ptrs_cuerpos;
@@ -157,12 +157,12 @@ class_<XC::Set::lst_ptr_cuerpos, bases<dq_ptrs_cuerpos>, boost::noncopyable >("l
 
 XC::Set::lst_ptr_puntos &(XC::Set::*GetPuntos)(void)= &XC::Set::GetPuntos;
 XC::Set::lst_ptr_lineas &(XC::Set::*GetLineas)(void)= &XC::Set::GetLineas;
-XC::Set::lst_ptr_superficies &(XC::Set::*GetSuperficies)(void)= &XC::Set::GetSuperficies;
+XC::Set::lst_surface_ptrs &(XC::Set::*getSurfaces)(void)= &XC::Set::getSurfaces;
 XC::Set::lst_ptr_cuerpos &(XC::Set::*GetCuerpos)(void)= &XC::Set::GetCuerpos;
 class_<XC::Set, bases<XC::SetMeshComp> >("Set")
   .add_property("getPoints", make_function(GetPuntos, return_internal_reference<>() ))
   .add_property("getLines", make_function(GetLineas, return_internal_reference<>() ))
-  .add_property("getSurfaces", make_function(GetSuperficies, return_internal_reference<>() ))
+  .add_property("getSurfaces", make_function(getSurfaces, return_internal_reference<>() ))
   .add_property("getBodies", make_function(GetCuerpos, return_internal_reference<>() ))
   .def("append", &XC::Set::agrega_listas,"Append components to this set.")
   .def("fillUpwards", &XC::Set::CompletaHaciaArriba,"add entities upwards.")

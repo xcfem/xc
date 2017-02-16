@@ -24,7 +24,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SupCuadrilatera.h
+//QuadSurface.h
 
 #ifndef SUPCUADRILATERA_H
 #define SUPCUADRILATERA_H
@@ -37,13 +37,13 @@ namespace XC {
 //! \ingroup CadEnt
 //!
 //! @brief Cuadrilátero entre cuatro puntos.
-class SupCuadrilatera: public Face
+class QuadSurface: public Face
   {
   protected:
     MatrizPos3d get_posiciones(void) const;
     const Edge *get_lado_homologo(const Edge *l) const;
   public:
-    SupCuadrilatera(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
+    QuadSurface(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
     virtual SetEstruct *getCopy(void) const;
     //! @brief Returns the número de vértices.
     inline virtual size_t NumVertices(void) const

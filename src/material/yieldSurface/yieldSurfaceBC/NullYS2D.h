@@ -36,24 +36,23 @@
 namespace XC {
 class NullEvolution;
 //! \ingroup MATYS
-//! @brief Superficie de fluencia de ??.
+//! @brief Null 2D yield surface.
 class NullYS2D : public YieldSurface_BC2D
-{
-public:
+  {
+  private:
+    static NullEvolution evolModel;    
+  public:
     NullYS2D(int tag);
 
-	virtual YieldSurface_BC *getCopy(void);
-	virtual void	Print(std::ostream &s, int flag =0);
+    virtual YieldSurface_BC *getCopy(void);
+    virtual void Print(std::ostream &s, int flag =0);
 
 //protected:
 //  For the following 2 methods, x, y already non-dimensionalized
     virtual void 	getGradient(double &gx, double &gy, double x, double y);
     virtual double 	getSurfaceDrift(double x, double y);
     virtual void	setExtent();
-
-private:
- static NullEvolution evolModel;    
-};
+  };
 } // end of XC namespace
 
 #endif

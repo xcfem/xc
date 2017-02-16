@@ -122,11 +122,11 @@ void XC::SetMeshComp::agregaNodo(Node *nPtr)
 void XC::SetMeshComp::agregaElemento(Element *ePtr)
   { elementos.push_back(ePtr); }
 
-//! @brief Returns true ifel nodo pertenece al conjunto.
+//! @brief Returns true if the node belongs to the set.
 bool XC::SetMeshComp::In(const Node *n) const
   { return nodos.in(n); }
 
-//! @brief Returns true ifel «edge» pertenece al conjunto.
+//! @brief Returns true if the element belongs to the set.
 bool XC::SetMeshComp::In(const Element *e) const
   { return elementos.in(e); }
 
@@ -338,17 +338,17 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
     return retval;    
   }
 
-//! @brief Returns true ifel nodo, cuyo tag se
-//! pasa como parámetro, pertenece al conjunto.
+//! @brief Returns true if the node with the tag
+//! being passed as parameter, belongs to the set.
 bool XC::SetMeshComp::InNodeTag(const int tag_nodo) const
   { return nodos.InNodeTag(tag_nodo); }
 
-//! @brief Returns true iftodos los nodos, cuyos tags se
-//! pasan como parámetro, pertenecen al conjunto.
+//! @brief Returns true if the nodes, with the tags
+//! being passed as parameter, belongs to the set.
 bool XC::SetMeshComp::InNodeTags(const ID &tag_nodos) const
   { return nodos.InNodeTags(tag_nodos); }
 
-//! @brief Returns the tags de los nodos.
+//! @brief Returns node tags.
 std::set<int> XC::SetMeshComp::getNodeTags(void) const
   { return nodos.getTags(); }
 

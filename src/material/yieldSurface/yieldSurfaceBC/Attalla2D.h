@@ -35,7 +35,7 @@
 
 namespace XC {
 //! \ingroup MATYS
-//! @brief Superficie de fluencia de tipo Attalla 2D.
+//! @brief Atalla 2D yield surface.
 class Attalla2D : public YieldSurface_BC2D
   {
   protected:

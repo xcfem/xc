@@ -29,7 +29,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     self.nodos= None
     self.gridMapper= None
   def VtkDefineActorElementos(self, tipoRepr,field):
-    # Creamos el actor para las superficies.
+    # Actor for the surfaces.
     if(field):
       field.setupOnGrid(self.gridRecord.uGrid)
     self.gridMapper= vtk.vtkDataSetMapper()

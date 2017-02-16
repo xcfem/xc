@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SupCuadrilatera.cc
+//QuadSurface.cc
 
-#include "SupCuadrilatera.h"
+#include "QuadSurface.h"
 #include "Pnt.h"
 #include "preprocessor/cad/Cad.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
@@ -36,12 +36,12 @@
 #include "xc_basic/src/matrices/matrizT.h"
 
 //! @brief Constructor.
-XC::SupCuadrilatera::SupCuadrilatera(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
+XC::QuadSurface::QuadSurface(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
   : Face(m,ndivI,ndivJ) {}
 
 //! @brief Virtual constructor.
-XC::SetEstruct *XC::SupCuadrilatera::getCopy(void) const
-  { return new SupCuadrilatera(*this); }
+XC::SetEstruct *XC::QuadSurface::getCopy(void) const
+  { return new QuadSurface(*this); }
 
 size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
   {
@@ -86,7 +86,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
   }
 
 //! @brief Returns the lado homólogo al being passed as parameter.
-const XC::Edge *XC::SupCuadrilatera::get_lado_homologo(const Edge *l) const
+const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
   {
     const Edge *retval= nullptr;   
     const size_t indice= IndiceEdge(l);
@@ -104,18 +104,18 @@ const XC::Edge *XC::SupCuadrilatera::get_lado_homologo(const Edge *l) const
           retval= lineas[1].Borde();
       }
     else //No la encuentra.
-      std::cerr << "La línea :" << l->GetNombre() 
-                << " no es un borde de la superficie: " << GetNombre() << std::endl;    
+      std::cerr << "Line :" << l->GetNombre() 
+                << " is not an edge of the surface: " << GetNombre() << std::endl;    
     return retval;
   }
 
 
 //! @brief Asigna el número de divisiones en el eje i.
-void XC::SupCuadrilatera::SetNDivI(const size_t &ndi)
+void XC::QuadSurface::SetNDivI(const size_t &ndi)
   {
     if(lineas.size()<4)
-      std::cerr << "XC::SupCuadrilatera::SetNDivI, la superficie no es un cuadrilatero, tiene " 
-                << lineas.size() << " lados." << std::endl;
+      std::cerr << "XC::QuadSurface::SetNDivI, surface is not a quadrilateral, it has " 
+                << lineas.size() << " sides." << std::endl;
     else
       {
         Edge *edge0= lineas[0].Borde();
@@ -131,11 +131,11 @@ void XC::SupCuadrilatera::SetNDivI(const size_t &ndi)
   }
 
 //! @brief Asigna el número de divisiones en el eje j.
-void XC::SupCuadrilatera::SetNDivJ(const size_t &ndj)
+void XC::QuadSurface::SetNDivJ(const size_t &ndj)
   {
     if(lineas.size()<4)
-      std::cerr << "SupCuadrilatera::SetNDivJ, la superficie no es un cuadrilatero., tiene " 
-                << lineas.size() << " lados." << std::endl;
+      std::cerr << "XC::QuadSurface::SetNDivJ, surface is not a quadrilateral, it has " 
+                << lineas.size() << " sides." << std::endl;
     else
       {
         Edge *edge1= lineas[1].Borde();
@@ -150,9 +150,9 @@ void XC::SupCuadrilatera::SetNDivJ(const size_t &ndj)
       }
   }
 
-//! @brief Concilia el numero de divisiones de las líneas
-//! con los de la superficie.
-void XC::SupCuadrilatera::ConciliaNDivIJ(void)
+//! @brief Conciliate lines division numbers with
+//! those of the surface.
+void XC::QuadSurface::ConciliaNDivIJ(void)
   {
     if(checkNDivs())
       {
@@ -162,17 +162,17 @@ void XC::SupCuadrilatera::ConciliaNDivIJ(void)
   }
 
 //! @brief Comprueba que los números de divisiones de las líneas son compatibles.
-bool XC::SupCuadrilatera::checkNDivs(const size_t &i,const size_t &j) const
+bool XC::QuadSurface::checkNDivs(const size_t &i,const size_t &j) const
   {
     const size_t ndivA= lineas[i].Borde()->NDiv();
     const size_t ndivB= lineas[j].Borde()->NDiv();
     if(ndivA!=ndivB)
       {
-        std::cerr << "SupCuadrilatera::checkNDivs, las líneas: "
-                  << lineas[i].Borde()->GetNombre() << " y "
+        std::cerr << "QuadSurface::checkNDivs, lines: "
+                  << lineas[i].Borde()->GetNombre() << " and "
                   << lineas[j].Borde()->GetNombre() 
-                  << " de la superficie: " << GetNombre()
-                  << " tienen diferente número de divisiones ("
+                  << " of surface: " << GetNombre()
+                  << " have different number of divisions ("
                   << ndivA << " y " << ndivB << ')' << std::endl;
         return false;
       }
@@ -181,12 +181,12 @@ bool XC::SupCuadrilatera::checkNDivs(const size_t &i,const size_t &j) const
   }
 
 //! @brief Comprueba que los números de divisiones de las líneas son compatibles.
-bool XC::SupCuadrilatera::checkNDivs(void) const
+bool XC::QuadSurface::checkNDivs(void) const
   { return (checkNDivs(0,2) && checkNDivs(1,3)); }
 
 //! @brief Calcula el número de divisiones en el eje i para que
 //! el tamaño del lado I del elemento sea aproximadamente el being passed as parameter.
-void XC::SupCuadrilatera::SetElemSizeI(const double &sz)
+void XC::QuadSurface::SetElemSizeI(const double &sz)
   {
     const double l1= lineas[0].getLongitud();
     const double l2= lineas[2].getLongitud();
@@ -196,7 +196,7 @@ void XC::SupCuadrilatera::SetElemSizeI(const double &sz)
 
 //! @brief Calcula el número de divisiones en el eje i para que
 //! el tamaño del lado I del elemento sea aproximadamente el being passed as parameter.
-void XC::SupCuadrilatera::SetElemSizeJ(const double &sz)
+void XC::QuadSurface::SetElemSizeJ(const double &sz)
   {
     const double l1= lineas[1].getLongitud();
     const double l2= lineas[3].getLongitud();
@@ -207,7 +207,7 @@ void XC::SupCuadrilatera::SetElemSizeJ(const double &sz)
 
 //! @brief Calcula el número de divisiones en los ejes para que
 //! el tamaño de los lados del elemento sea aproximadamente el being passed as parameter.
-void XC::SupCuadrilatera::SetElemSizeIJ(const double &szI,const double &szJ)
+void XC::QuadSurface::SetElemSizeIJ(const double &szI,const double &szJ)
   {
     SetElemSizeI(szI);
     SetElemSizeJ(szJ);
@@ -215,42 +215,40 @@ void XC::SupCuadrilatera::SetElemSizeIJ(const double &szI,const double &szJ)
 
 //! @brief Crea e inserta las líneas a partir de los puntos cuyos índices se pasan
 //! como parámetro.
-void XC::SupCuadrilatera::setPuntos(const ID &indices_ptos)
+void XC::QuadSurface::setPuntos(const ID &indices_ptos)
   {
     const size_t np= indices_ptos.Size(); //No. de índices leídos.
     if(np!=4)
-      std::cerr << "XC::SupCuadrilatera::setPuntos; para definir la superficie se necesitan"
-                << 4 << " puntos, se pasaron: " << np << ".\n";
+      std::cerr << "XC::QuadSurface::setPuntos; surface definition needs "
+                << 4 << " points, we got: " << np << ".\n";
     else
       {
         if(NumEdges()>0)
-          std::cerr << "SupCuadrilatera::setPuntos; ojo se redefine la superficie: "
-                    << GetNombre() << ".\n";
+          std::cerr << "QuadSurface::setPuntos; warning redefinition of surface: '"
+                    << GetNombre() << "'.\n";
 
 	Face::addPoints(indices_ptos);
         cierra();
       }
     int tagV1= GetVertice(1)->GetTag();
     if(tagV1!=indices_ptos(0))
-      std::cerr << "La superficie: " << GetTag()
-                << "está invertida." << std::endl;
+      std::cerr << "Surface: " << GetTag()
+                << "is inverted." << std::endl;
   }
 
-//! @brief Crea e inserta las líneas a partir de los puntos cuyos índices se pasan
-//! como parámetro. Si el algún índice es negativo quiere decir que esa posición
-//! no se usa para definir la superficie.
-void XC::SupCuadrilatera::setPuntos(const MatrizPtrPnt &pntPtrs)
+//! @brief Creates and inserts the lines from the points being passed as parameter.
+void XC::QuadSurface::setPuntos(const MatrizPtrPnt &pntPtrs)
   {
     const size_t nf= pntPtrs.getNumFilas(); //No. de filas de puntos.
     if(nf<2)
       {
-        std::cerr << "SupCuadrilatera::setPuntos; la matriz de pointers debe tener al menos dos filas." << std::endl;
+        std::cerr << "QuadSurface::setPuntos; la matriz de pointers debe tener al menos dos filas." << std::endl;
         return;
       }
     const size_t nc= pntPtrs.getNumCols(); //No. de columnas de puntos.
     if(nc<2)
       {
-        std::cerr << "SupCuadrilatera::setPuntos; la matriz de pointers debe tener al menos dos columnas." << std::endl;
+        std::cerr << "QuadSurface::setPuntos; la matriz de pointers debe tener al menos dos columnas." << std::endl;
         return;
       }
     if(nf==2)
@@ -289,10 +287,10 @@ void XC::SupCuadrilatera::setPuntos(const MatrizPtrPnt &pntPtrs)
       }
   }
 
-//! @brief Crea e inserta las líneas a partir de los puntos cuyos índices se pasan
-//! como parámetro. Si el algún índice es negativo quiere decir que esa posición
-//! no se usa para definir la superficie.
-void XC::SupCuadrilatera::setPuntos(const m_int &indices_ptos)
+//! @brief Creates and inserts the lines from the points being passed as parameter.
+//! If some of the indices is negative it means that this position is not needed
+//! to define the surface.
+void XC::QuadSurface::setPuntos(const m_int &indices_ptos)
   {
     const size_t nf= indices_ptos.getNumFilas(); //No. de filas de puntos.
     const size_t nc= indices_ptos.getNumCols(); //No. de columnas de puntos.
@@ -321,15 +319,15 @@ void XC::SupCuadrilatera::setPuntos(const m_int &indices_ptos)
               if(p)
                 puntos(i,j)= p;
               else
-	        std::cerr << "SupCuadrilatera::setPuntos; no se encontró el punto de índices: ("
-                          << i << ',' << j << ") para definir la superficie: '"
+	        std::cerr << "QuadSurface::setPuntos; NULL pointer to point in position: ("
+                          << i << ',' << j << ") in definition of surface: '"
                           << GetNombre() << "'" << std::endl;
             }
         }
     setPuntos(puntos);
   }
 
-void XC::SupCuadrilatera::defGridPoints(const boost::python::list &l)
+void XC::QuadSurface::defGridPoints(const boost::python::list &l)
   {
     int nRows= len(l);
     boost::python::list row0= boost::python::extract<boost::python::list>(l[0]);
@@ -346,7 +344,7 @@ void XC::SupCuadrilatera::defGridPoints(const boost::python::list &l)
   }
 
 //! @brief Returns (ndivI+1)*(ndivJ+1) posiciones para los nodos.
-MatrizPos3d XC::SupCuadrilatera::get_posiciones(void) const
+MatrizPos3d XC::QuadSurface::get_posiciones(void) const
   {
     MatrizPos3d retval;
     const int numEdges= NumEdges();
@@ -366,7 +364,7 @@ MatrizPos3d XC::SupCuadrilatera::get_posiciones(void) const
     return retval;
   }
 
-Vector3d XC::SupCuadrilatera::getIVector(void) const
+Vector3d XC::QuadSurface::getIVector(void) const
   {
     const Pos3d p1= GetVertice(1)->GetPos();
     const Pos3d p2= GetVertice(2)->GetPos();
@@ -376,7 +374,7 @@ Vector3d XC::SupCuadrilatera::getIVector(void) const
     return retval;
   }
 
-Vector3d XC::SupCuadrilatera::getJVector(void) const
+Vector3d XC::QuadSurface::getJVector(void) const
   {
     const Pos3d p1= GetVertice(1)->GetPos();
     const Pos3d p2= GetVertice(2)->GetPos();
@@ -386,15 +384,15 @@ Vector3d XC::SupCuadrilatera::getJVector(void) const
     return retval;
   }
 
-Vector3d XC::SupCuadrilatera::getKVector(void) const
+Vector3d XC::QuadSurface::getKVector(void) const
   {
     const Vector3d vI= getIVector();
     const Vector3d vJ= getJVector();
     return vI.getCross(vJ);
   }
 
-//! @brief Crea los nodos de la superficie.
-void XC::SupCuadrilatera::crea_nodos(void)
+//! @brief Creates surface nodes.
+void XC::QuadSurface::crea_nodos(void)
   {
 
     checkNDivs();
@@ -435,11 +433,11 @@ void XC::SupCuadrilatera::crea_nodos(void)
       }
     else
       if(verborrea>2)
-        std::clog << "SupCuadrilatera::crea_nodos; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
+        std::clog << "QuadSurface::crea_nodos; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
   }
 
 //! @brief Triggers mesh creation.
-void XC::SupCuadrilatera::genMesh(meshing_dir dm)
+void XC::QuadSurface::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
       std::clog << "Meshing SupCuadrilátera...(" << GetNombre() << ")...";
@@ -448,7 +446,7 @@ void XC::SupCuadrilatera::genMesh(meshing_dir dm)
       crea_elementos(dm);
     else
       if(verborrea>2)
-        std::clog << "SupCuadrilatera::genMesh; los elementos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
+        std::clog << "QuadSurface::genMesh; los elementos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
     if(verborrea>3)
       std::clog << "hecho." << std::endl;
   }

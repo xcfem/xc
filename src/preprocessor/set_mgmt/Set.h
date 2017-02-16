@@ -72,9 +72,9 @@ class Set: public SetMeshComp
     typedef lst_ptr_lineas::iterator lin_iterator; //!< line set iterator.
     typedef lst_ptr_lineas::const_iterator lin_const_iterator; //!< line set const iterator.
 
-    typedef DqPtrsNmb<Face> lst_ptr_superficies; //!< surface set.
-    typedef lst_ptr_superficies::iterator sup_iterator; //!< surface set iterator.
-    typedef lst_ptr_superficies::const_iterator sup_const_iterator; //!< surface set const iterator.
+    typedef DqPtrsNmb<Face> lst_surface_ptrs; //!< surface set.
+    typedef lst_surface_ptrs::iterator sup_iterator; //!< surface set iterator.
+    typedef lst_surface_ptrs::const_iterator sup_const_iterator; //!< surface set const iterator.
 
     typedef DqPtrsNmb<Body> lst_ptr_cuerpos; //!< body set.
 
@@ -83,7 +83,7 @@ class Set: public SetMeshComp
   protected:
     lst_ptr_puntos puntos; //!< point set.
     lst_ptr_lineas lineas; //!< line set.
-    lst_ptr_superficies superficies; //!< surface set.
+    lst_surface_ptrs surfaces; //!< surface set.
     lst_ptr_cuerpos cuerpos; //!< body set.
     lst_ptr_uniform_grids uniform_grids; //! Uniform mesh set.
 
@@ -129,13 +129,13 @@ class Set: public SetMeshComp
     void sel_lineas_lista(const ID &);
     bool In(const Edge *) const;
 
-    //! @brief Return the lista de superficies del conjunto.
-    virtual const lst_ptr_superficies &GetSuperficies(void) const
-      { return superficies; }
-    //! @brief Return the lista de superficies del conjunto.
-    virtual lst_ptr_superficies &GetSuperficies(void)
-      { return superficies; }
-    void sel_superficies_lista(const ID &);
+    //! @brief Returns a const reference to the surface container.
+    virtual const lst_surface_ptrs &getSurfaces(void) const
+      { return surfaces; }
+    //! @brief Returns a reference to the surface container.
+    virtual lst_surface_ptrs &getSurfaces(void)
+      { return surfaces; }
+    void sel_surfaces_lst(const ID &);
     bool In(const Face *) const;
 
     //! @brief Return the lista de cuerpos del conjunto.

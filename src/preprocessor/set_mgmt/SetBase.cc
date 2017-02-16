@@ -86,23 +86,23 @@ const XC::ID &XC::SetBase::getIdElementTags(void) const
     return retval;
   }
 
-//! @brief Returns true ifel punto pertenece al conjunto.
+//! @brief Returns true if the point belongs to the set.
 bool XC::SetBase::In(const Pnt *) const
   { return false; }
 
-//! @brief Returns true ifel «edge» pertenece al conjunto.
+//! @brief Returns true if the edge belongs to the set.
 bool XC::SetBase::In(const Edge *) const
   { return false; }
 
-//! @brief Returns true ifla superficie pertenece al conjunto.
+//! @brief Returns true if the surface belongs to the set.
 bool XC::SetBase::In(const Face *) const
   { return false; }
 
-//! @brief Returns true ifel cuerpo pertenece al conjunto.
+//! @brief Returns true if the body belongs to the set.
 bool XC::SetBase::In(const Body *) const
   { return false; }
 
-//! @brief Returns true ifla «uniform grid» pertenece al conjunto.
+//! @brief Returns true if the «uniform grid» belongs to the set.
 bool XC::SetBase::In(const UniformGrid *) const
   { return false; }
 

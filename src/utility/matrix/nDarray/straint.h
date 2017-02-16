@@ -61,7 +61,9 @@
 
 namespace XC {
 
-  //! @brief Tensor de deformaciones.
+//! @ingroup Matrix
+//
+//! @brief Strain tensor
 class straintensor : public BJtensor
   {
   public: // just send appropriate arguments to the base constructor

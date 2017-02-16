@@ -35,7 +35,7 @@
 
 namespace XC {
 //! \ingroup MATYS
-//! @brief Superficie de fluencia de tipo ??.
+//! @brief Bounding 2D yield surface.
 class BoundingSurface2D : public YS_Evolution2D
   {
   protected:

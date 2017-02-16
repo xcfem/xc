@@ -28,7 +28,7 @@
 
 #include "Block.h"
 #include "Pnt.h"
-#include "SupCuadrilatera.h"
+#include "QuadSurface.h"
 #include "xc_basic/src/matrices/m_int.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "Face.h"
@@ -93,24 +93,24 @@ bool XC::Block::checkNDivs(void) const
     return (sups[0].checkNDivs() && sups[1].checkNDivs() && sups[2].checkNDivs() && sups[3].checkNDivs() && sups[4].checkNDivs() && sups[5].checkNDivs());
   }
 
-//! @brief Returns the número de líneas del objeto.
+//! @brief Returns the number of edges.
 size_t XC::Block::NumLineas(void) const
   { return 12; }
 
-//! @brief Returns the número de vértices del objeto.
+//! @brief Returns the number of vertices.
 size_t XC::Block::NumVertices(void) const
   { return 8; }
 
-//! @brief Returns the número de vértices del objeto.
-size_t XC::Block::NumCaras(void) const
+//! @brief Returns the number of faces.
+size_t XC::Block::NumFaces(void) const
   { return 6; }
 
-//! @brief Return the cara del sólido cuyo índice se pasa como parámetro.
-const XC::Block::Cara *XC::Block::GetCara(const size_t &i) const
+//! @brief Return the face with the index being passed as parameter.
+const XC::Block::BodyFace *XC::Block::GetFace(const size_t &i) const
   { return &sups[i-1]; }
 
-//! @brief Return the cara del sólido cuyo índice se pasa como parámetro.
-XC::Block::Cara *XC::Block::GetCara(const size_t &i)
+//! @brief Return the face with the index being passed as parameter.
+XC::Block::BodyFace *XC::Block::GetFace(const size_t &i)
   { return &sups[i-1]; }
 
 //! @brief Return the arista del sólido cuyo índice se pasa como parámetro.
@@ -166,38 +166,38 @@ XC::Pnt *XC::Block::GetVertice(const size_t &i)
       return nullptr;
   }
 
-//! @brief Returns the superficies que limitan el sólido.
-std::set<const XC::Face *> XC::Block::GetSuperficies(void)
+//! @brief Returns the surfaces that close the solid.
+std::set<const XC::Face *> XC::Block::getSurfaces(void)
   {
     std::set<const Face *> retval;
-    if(!sups[0].Vacia()) retval.insert(sups[0].Superficie());
-    if(!sups[1].Vacia()) retval.insert(sups[1].Superficie());
-    if(!sups[2].Vacia()) retval.insert(sups[2].Superficie());
-    if(!sups[3].Vacia()) retval.insert(sups[3].Superficie());
-    if(!sups[4].Vacia()) retval.insert(sups[4].Superficie());
-    if(!sups[5].Vacia()) retval.insert(sups[5].Superficie());
+    if(!sups[0].Vacia()) retval.insert(sups[0].Surface());
+    if(!sups[1].Vacia()) retval.insert(sups[1].Surface());
+    if(!sups[2].Vacia()) retval.insert(sups[2].Surface());
+    if(!sups[3].Vacia()) retval.insert(sups[3].Surface());
+    if(!sups[4].Vacia()) retval.insert(sups[4].Surface());
+    if(!sups[5].Vacia()) retval.insert(sups[5].Surface());
     return retval;
   }
 
-//! @brief Actualiza la topología de las superficies que limitan el sólido.
+//! @brief Updates topology of the enclosing surface (neighbors).
 void XC::Block::actualiza_topologia(void)
   {
-    if(!sups[0].Vacia()) set_surf(sups[0].Superficie());
-    if(!sups[1].Vacia()) set_surf(sups[1].Superficie());
-    if(!sups[2].Vacia()) set_surf(sups[2].Superficie());
-    if(!sups[3].Vacia()) set_surf(sups[3].Superficie());
-    if(!sups[4].Vacia()) set_surf(sups[4].Superficie());
-    if(!sups[5].Vacia()) set_surf(sups[5].Superficie());
+    if(!sups[0].Vacia()) set_surf(sups[0].Surface());
+    if(!sups[1].Vacia()) set_surf(sups[1].Surface());
+    if(!sups[2].Vacia()) set_surf(sups[2].Surface());
+    if(!sups[3].Vacia()) set_surf(sups[3].Surface());
+    if(!sups[4].Vacia()) set_surf(sups[4].Surface());
+    if(!sups[5].Vacia()) set_surf(sups[5].Surface());
   }
 
-//! Returns the índice que corresponde a la superficie que se pasa como
-//! parámetro de acuerdo con el siguiente criterio:
-//! - Si la superficie es la primera que define el sólido, entonces es
-//!  la base.
-//! - Si ya hay alguna superficie definida entonces buscamos el índice
+//! Returns the index of the surface being passed as parameter
+//! as follows:
+//! - If the surface is the first one that defines the solid,
+//! then that one is the base.
+//! - Si ya hay alguna surface definida entonces buscamos el índice
 //!  en la base de la línea común de está última con la que se pasa como
 //!  parámetro. Si tal línea existe, dicho índice es el que corresponde
-//!  a la superficie en el sólido.
+//!  a la surface en el sólido.
 size_t XC::Block::indice(Face *s) const
   {
     size_t retval= 0;
@@ -205,7 +205,7 @@ size_t XC::Block::indice(Face *s) const
       retval= 0; //Es la base.
     else //La base ya está asignada.
       {
-        const Face *base= sups[0].Superficie();
+        const Face *base= sups[0].Surface();
         size_t primero= base->BordeComun(*s); //Linea comun de "s" con la base.
         if(primero)
           retval= primero; //Es un lateral.
@@ -215,14 +215,14 @@ size_t XC::Block::indice(Face *s) const
     return retval;
   }
 
-//! @brief Establece como límite del sólido la superficie being passed as parameter.
+//! @brief Sets the surface as solid limit.
 void XC::Block::coloca(const size_t &i,Face *s)
   {
     size_t primero= 1;
     int sentido= 1;
     if( (i>0) && (i<5)) //Es un lateral
       {
-        const Face *base= sups[0].Superficie();
+        const Face *base= sups[0].Surface();
         primero= s->BordeComun(*base); //Indice de la línea común de s con la base.
         const Edge *linea= base->GetLado(i)->Borde();
         sentido= base->SentidoBorde(linea,*s);
@@ -231,10 +231,10 @@ void XC::Block::coloca(const size_t &i,Face *s)
       {
         //Buscamos una cara asignada.
         size_t icara= 1;
-        Face *cara= sups[1].Superficie();
-        if(!cara) { icara=2; cara= sups[icara].Superficie(); }
-        if(!cara) { icara=3; cara= sups[icara].Superficie(); }
-        if(!cara) { icara=4; cara= sups[icara].Superficie(); }
+        Face *cara= sups[1].Surface();
+        if(!cara) { icara=2; cara= sups[icara].Surface(); }
+        if(!cara) { icara=3; cara= sups[icara].Surface(); }
+        if(!cara) { icara=4; cara= sups[icara].Surface(); }
         if(!cara)
           std::cerr << "Error: Block; antes de introducir la cara 5 hay que introducir la 1 o la 2 o la 3 o la 4." << std::endl;
         else
@@ -259,18 +259,20 @@ void XC::Block::coloca(const size_t &i,Face *s)
       if(sentido==-1)
         directo= false;
       else
-        std::cerr << "Las superficies no tienen borde común." << std::endl;
-    sups[i]= Cara(s,primero,directo);
+        std::cerr << "The surfaces have not an common edge." << std::endl;
+    sups[i]= BodyFace(s,primero,directo);
   }
 
-//! @brief Inserta la superficie cuyo identificador se pasa como parámetro (si la encuentra).
+//! @brief Inserts the surface with the identifier being passed as parameter
+//! (if found).
 void XC::Block::inserta(const size_t &i)
   {
     Face *s= BuscaFace(i);
     if(s)
       coloca(indice(s),s);
     else
-      std::cerr << "Block::inserta; No se encontró la superficie: " << i << std::endl;
+      std::cerr << "Block::inserta; surface: " << i
+		<< " not found." << std::endl;
   }
 
 //! @brief Crea e inserta las caras partir de los índices que se pasan
@@ -357,12 +359,12 @@ void XC::Block::crea_nodos(void)
     if(nodos.Null())
       {
         crea_nodos_caras();
-        Cara &base= sups[0];
-        Cara &tapa= sups[5];
-        Cara &latIzdo= sups[1];
-        Cara &latDcho= sups[3];
-        Cara &caraFrontal= sups[2];
-        Cara &caraDorsal= sups[4];
+        BodyFace &base= sups[0];
+        BodyFace &tapa= sups[5];
+        BodyFace &latIzdo= sups[1];
+        BodyFace &latDcho= sups[3];
+        BodyFace &caraFrontal= sups[2];
+        BodyFace &caraDorsal= sups[4];
 
         const size_t capas= NDivK()+1;
         const size_t filas= NDivJ()+1;
@@ -395,9 +397,9 @@ void XC::Block::crea_nodos(void)
 
     std::cout << "base" << std::endl;
         //Enlazamos con los nodos de la base i=1
-        ID IJK1= base.Superficie()->getNodeIndices(n1);
-        ID IJK2= base.Superficie()->getNodeIndices(n2);
-        ID IJK4= base.Superficie()->getNodeIndices(n4);
+        ID IJK1= base.Surface()->getNodeIndices(n1);
+        ID IJK2= base.Surface()->getNodeIndices(n2);
+        ID IJK4= base.Surface()->getNodeIndices(n4);
         size_t ind_i= 0, ind_j= 0;
         if((IJK2[1]-IJK1[1])>0)
           { ind_i= 1; ind_j= 2; }
@@ -430,8 +432,8 @@ void XC::Block::crea_nodos(void)
 	/*
     std::cout << "tapa" << std::endl;
         //Tapa i=capas
-        IJK1= tapa.Superficie()->getNodeIndices(n5);
-        IJK2= tapa.Superficie()->getNodeIndices(n7);
+        IJK1= tapa.Surface()->getNodeIndices(n5);
+        IJK2= tapa.Surface()->getNodeIndices(n7);
         for(size_t i=1;i<=filas;i++)
           for(size_t j=1;j<=cols;j++)
             {
@@ -441,8 +443,8 @@ void XC::Block::crea_nodos(void)
             }
 
         //Lateral izquierdo j=1.
-        IJK1= latIzdo.Superficie()->getNodeIndices(n1);
-        IJK2= latIzdo.Superficie()->getNodeIndices(n6);
+        IJK1= latIzdo.Surface()->getNodeIndices(n1);
+        IJK2= latIzdo.Surface()->getNodeIndices(n6);
         for(size_t i=1;i<=filas;i++)
           for(size_t j=1;j<=cols;j++)
             {

@@ -42,7 +42,7 @@ class YieldSurface_BC;
 
 //! \ingroup MATYS
 //!
-//! @brief Evolución de una superficie de fluencia.
+//! @brief Yield surface evolution.
 class YS_Evolution: public TaggedObject, public MovableObject
   {
   public:

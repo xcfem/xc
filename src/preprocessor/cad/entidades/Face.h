@@ -37,12 +37,12 @@ class Body;
 
 //! \ingroup CadEnt
 //!
-//! @brief Superficie.
+//! @brief Surface.
 class Face: public CmbEdge
   {
     friend class Edge;
     friend class Body;
-    std::set<const Body *> cuerpos_sup; //!< Cuerpos uno de cuyos límites es esta superficie.
+    std::set<const Body *> cuerpos_sup; //!< Bodies that touch this surface (neighbors).
 
     void inserta_body(Body *b);
     Node *GetNodo(const size_t &i);
@@ -70,7 +70,7 @@ class Face: public CmbEdge
     size_t NumVertices(void) const
       { return NumEdges(); }
     virtual const Pnt *GetVertice(const size_t &i) const;
-    //! @brief Return the lista de cuerpos que tocan a la superficie.
+    //! @brief Return the bodies that touch this surface (neighbors).
     const std::set<const Body *> &CuerposTocan(void) const
       { return cuerpos_sup; }
     size_t BordeComun(const Face &otra) const;
