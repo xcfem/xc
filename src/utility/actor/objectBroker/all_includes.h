@@ -398,7 +398,7 @@
 #include "preprocessor/cad/entidades/Linea.h"
 #include "preprocessor/cad/entidades/LineaTramos.h"
 #include "preprocessor/cad/entidades/ArcoCircunf.h"
-#include "preprocessor/cad/entidades/SupCuadrilatera.h"
+#include "preprocessor/cad/entidades/QuadSurface.h"
 #include "preprocessor/cad/entidades/UniformGrid.h"
 #include "preprocessor/cad/entidades/Body.h"
 #include "preprocessor/cad/entidades/Block.h"

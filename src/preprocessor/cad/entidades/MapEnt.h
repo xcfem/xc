@@ -37,7 +37,7 @@ namespace XC {
 
 //! @ingroup Cad
 //
-//! @brief Contenedor de entidades de CAD (puntos, líneas, superficies,...).
+//! @brief Geometric entities container (points, lines, surfaces,...).
 template <class T>
 class MapEnt: public MapCadMember<T>
   {

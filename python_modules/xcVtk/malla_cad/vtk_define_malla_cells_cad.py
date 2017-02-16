@@ -29,7 +29,7 @@ def VtkDibujaIdsCells(nmbUGrid,setName,entTypeName,renderer):
   renderer.AddActor2D(cellLabels)
 
 def VtkDefineActorCells(nmbUGrid,renderer,tipoRepr):
-  # Creamos el actor para las superficies.
+  # Actor for surfaces.
   gridMapper= vtk.VtkDataSetMapper()
   gridMapper.setInput(nmbUGrid)
   cellActor= vtk.VtkActor()

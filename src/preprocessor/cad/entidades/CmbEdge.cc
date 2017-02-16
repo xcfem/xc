@@ -432,13 +432,13 @@ void XC::CmbEdge::addPoints(const ID &indices_ptos)
         {
           Pnt *pA= BuscaPnt(indices_ptos(i-1));
           if(!pA)
-	    std::cerr << "CmbEdge::addPoints; no se encontró el punto de índice: "
-                      << indices_ptos(i-1) << " para definir la superficie: '"
+	    std::cerr << "CmbEdge::addPoints; point: "
+                      << indices_ptos(i-1) << " not found in definition of surface: '"
                       << GetNombre() << "'" << std::endl;
           Pnt *pB= BuscaPnt(indices_ptos(i));
           if(!pB)
-	    std::cerr << "CmbEdge::addPoints; no se encontró el punto de índice: "
-                      << indices_ptos(i) << " para definir la superficie: '"
+	    std::cerr << "CmbEdge::addPoints; point: "
+                      << indices_ptos(i) << " not found in definition of surface: '"
                       << GetNombre() << "'" << std::endl;
           NuevaLinea(pA,pB);
         }
@@ -479,9 +479,9 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
           }
       }    
     else
-       std::cerr << "CmbEdge::NuevaLinea; no se pudo obtener una linea"
-                 << " entre los puntos: " << pA->GetNombre()
-                 << " y " << pB->GetNombre() << " para definir la superficie: '"
+       std::cerr << "CmbEdge::NuevaLinea; line between points: "
+                 << pA->GetNombre()
+                 << " and " << pB->GetNombre() << " not found in definition of surface: '"
                  << GetNombre() << "'" << std::endl;
     return retval;
   }
@@ -496,9 +496,9 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
     if(retval)
       inserta(retval);
     else
-      std::cerr << "CmbEdge::NuevaLinea; no se pudo obtener un arco de circunferencia"
-                << " entre los puntos: " << pA->GetNombre() << ", " << pB->GetNombre()
-                << " y " << pC->GetNombre() << " para definir la superficie: '"
+      std::cerr << "CmbEdge::NuevaLinea; arc between points: "
+                << pA->GetNombre() << ", " << pB->GetNombre()
+                << " and " << pC->GetNombre() << " not found in definition of surface: '"
                 << GetNombre() << "'" << std::endl;
     return retval;
   }
@@ -517,8 +517,8 @@ void XC::CmbEdge::inserta(const size_t &i)
 //! @brief Inserts the line which pointer is being passed as parameter.
 void XC::CmbEdge::inserta(Edge *l)
   {
-    if(IndiceEdge(l)!= 0) //La línea ya pertenece al conjunto.
-      std::cerr << "CmdEdge; la línea ya pertenece al conjunto, no se vuelve a agregar.\n";
+    if(IndiceEdge(l)!= 0) //Line already belongs to the set.
+      std::cerr << "CmdEdge; Line already belongs to the set, insertion ignored.\n";
     else
       {
         if(lineas.empty())

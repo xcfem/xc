@@ -159,8 +159,8 @@ class ijkGrid(object):
     surfaces= self.prep.getCad.getSurfaces
     retval= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
     retval.name= getSupName(pto1,pto2,pto3,pto4)
-    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (en otro caso
-    retval.nDivJ=1 #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
+    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (otherwise
+    retval.nDivJ=1 #it creates at least 4 divisions on edges common to existing surfaces).
     return retval
 
   def newQuadSurfaceConstJ(self,i,j,k):
@@ -172,8 +172,8 @@ class ijkGrid(object):
     surfaces= self.prep.getCad.getSurfaces
     retval= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
     retval.name= getSupName(pto1,pto2,pto3,pto4)
-    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (en otro caso
-    retval.nDivJ=1 #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
+    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (otherwise
+    retval.nDivJ=1 #it creates at least 4 divisions on edges common to existing surfaces).
     return retval
 
   def newQuadSurfaceConstI(self,i,j,k):
@@ -185,21 +185,21 @@ class ijkGrid(object):
     surfaces= self.prep.getCad.getSurfaces
     retval= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
     retval.name= getSupName(pto1,pto2,pto3,pto4)
-    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (en otro caso
-    retval.nDivJ=1 #crea como mínimo 4 divisiones en lados comunes a superficies existentes)
+    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (otherwise
+    retval.nDivJ=1 #t creates at least 4 divisions on edges common to existing surfaces).
     return retval
 
   def generateAreas(self,ijkRange,dicQuadSurf):
-    'genera las superficies contenidas en un rectángulo comprendido entre las coordenadas'
-    'que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
+    'generates the surfaces contained in a rectangle defined by the coordinates'
+    'that correspond to the positions in the grid ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
     'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
-    'también rellena el diccionario de superficies'
+    'it fills also the surfaces dictionary.'
     retval= list()
     i= ijkRange.ijkMin[0]
     j= ijkRange.ijkMin[1]
     k= ijkRange.ijkMin[2]
     if ijkRange.ijkMax[2]== ijkRange.ijkMin[2]:
-        'superf. contenidas en plano XY'
+        'surfaces in XY plane'
         while i<= ijkRange.ijkMax[0]-1:
             j= ijkRange.ijkMin[1]
             while j<= ijkRange.ijkMax[1]-1:
@@ -209,7 +209,7 @@ class ijkGrid(object):
                 j+=1
             i+=1
     elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
-        'superf. contenidas en plano XZ'
+        'surfaces in XZ plane'
         while i<= ijkRange.ijkMax[0]-1:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]-1:
@@ -219,7 +219,7 @@ class ijkGrid(object):
                 k+=1
             i+=1
     elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
-        'superf. contenidas en plano YZ'
+        'surfaces in YZ plane'
         while j<= ijkRange.ijkMax[1]-1:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]-1:
@@ -280,7 +280,7 @@ class ijkGrid(object):
     return retval
 
   def getSetInRange(self,ijkRange,dicQuadSurf,nmbrSet):
-    'devuelve el set de entidades (superficies y todas las asociadas a estas superficies)'
+    'devuelve el set de entidades (surfaced and all entities related to them)'
     'contenidas en un rectángulo comprendido entre las coordenadas'
     'que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
     'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
@@ -289,7 +289,7 @@ class ijkGrid(object):
     j= ijkRange.ijkMin[1]
     k= ijkRange.ijkMin[2]
     if ijkRange.ijkMax[2]== ijkRange.ijkMin[2]:
-        'superf. contenidas en plano XY'
+        'surfaces in XY plane'
         while i<= ijkRange.ijkMax[0]-1:
             j= ijkRange.ijkMin[1]
             while j<= ijkRange.ijkMax[1]-1:
@@ -303,7 +303,7 @@ class ijkGrid(object):
                 j+=1
             i+=1
     elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
-        'superf. contenidas en plano XZ'
+        'surfaces in XZ plane'
         while i<= ijkRange.ijkMax[0]-1:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]-1:
@@ -317,7 +317,7 @@ class ijkGrid(object):
                 k+=1
             i+=1
     elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
-        'superf. contenidas en plano YZ'
+        'surfaces in YZ plane'
         while j<= ijkRange.ijkMax[1]-1:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]-1:
@@ -388,7 +388,7 @@ class ijkGrid(object):
     j= ijkRange.ijkMin[1]
     k= ijkRange.ijkMin[2]
     if ijkRange.ijkMax[2]== ijkRange.ijkMin[2]:
-        'superf. contenidas en plano XY'
+        'surfaces in XY plane'
         while i<= ijkRange.ijkMax[0]:
             j= ijkRange.ijkMin[1]
             while j<= ijkRange.ijkMax[1]:
@@ -398,7 +398,7 @@ class ijkGrid(object):
                 j+=1
             i+=1
     elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
-        'superf. contenidas en plano XZ'
+        'surfaces in XZ plane'
         while i<= ijkRange.ijkMax[0]:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]:
@@ -409,7 +409,7 @@ class ijkGrid(object):
                 k+=1
             i+=1
     elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
-        'superf. contenidas en plano YZ'
+        'surfaces in YZ plane'
         while j<= ijkRange.ijkMax[1]:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]:

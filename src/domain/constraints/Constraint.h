@@ -34,7 +34,12 @@
 
 namespace XC {
 //! \ingroup Dom
-//!
+//
+//
+//! @defgroup BoundCond Boundary conditions.
+//
+//! @ingroup BoundCond
+//
 //!
 //! @defgroup CCont Essential boundary conditions (displacements).
 //

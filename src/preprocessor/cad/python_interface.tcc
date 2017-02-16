@@ -51,7 +51,7 @@ XC::MapSisRef &(XC::Cad::*getReferenceSystems)(void)= &XC::Cad::getReferenceSyst
 XC::MapTrfGeom &(XC::Cad::*getGeometricTransformations)(void)= &XC::Cad::getTransformacionesGeometricas;
 XC::MapPuntos &(XC::Cad::*getMapPuntosRef)(void)= &XC::Cad::getPuntos;
 XC::MapLineas &(XC::Cad::*getMapLineasRef)(void)= &XC::Cad::getLineas;
-XC::MapSuperficies &(XC::Cad::*getMapSuperficiesRef)(void)= &XC::Cad::getSuperficies;
+XC::MapSurfaces &(XC::Cad::*getMapSurfacesRef)(void)= &XC::Cad::getSurfaces;
 XC::MapEsquemas2d &(XC::Cad::*getEsquemas2dRef)(void)= &XC::Cad::getEsquemas2d;
 XC::MapEsquemas3d &(XC::Cad::*getEsquemas3dRef)(void)= &XC::Cad::getEsquemas3d;
 XC::MapUniformGrids &(XC::Cad::*getUniformGridsRef)(void)= &XC::Cad::getUniformGrids;
@@ -61,7 +61,7 @@ class_<XC::Cad, bases<EntCmd>, boost::noncopyable >("Cad", no_init)
   .add_property("getGeometricTransformations", make_function( getGeometricTransformations, return_internal_reference<>() ))
   .add_property("getPoints", make_function( getMapPuntosRef, return_internal_reference<>() ))
   .add_property("getLines", make_function( getMapLineasRef, return_internal_reference<>() ))
-  .add_property("getSurfaces", make_function( getMapSuperficiesRef, return_internal_reference<>() ))
+  .add_property("getSurfaces", make_function( getMapSurfacesRef, return_internal_reference<>() ))
   .add_property("get2DNets", make_function( getEsquemas2dRef, return_internal_reference<>() ))
   .add_property("get3DNets", make_function( getEsquemas3dRef, return_internal_reference<>() ))
   .add_property("getUniformGrids", make_function( getUniformGridsRef, return_internal_reference<>() ))

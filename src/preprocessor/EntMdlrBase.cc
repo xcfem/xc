@@ -140,7 +140,7 @@ XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face)
     if(preprocessor)
       {
         Cad &cad= get_preprocessor()->getCad();
-        retval= cad.getSuperficies().busca(id_face);
+        retval= cad.getSurfaces().busca(id_face);
       }
     else
       std::cerr << "XC::EntMdlrBase::BuscaFace: el objeto: '"
@@ -156,7 +156,7 @@ const XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face) const
     if(preprocessor)
       {
         const Cad &cad= get_preprocessor()->getCad();
-        retval= cad.getSuperficies().busca(id_face);
+        retval= cad.getSurfaces().busca(id_face);
       }
     else
       std::cerr << "EntMdlrBase::BuscaFace: el objeto: '" 

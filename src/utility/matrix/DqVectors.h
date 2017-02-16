@@ -36,6 +36,8 @@ namespace XC {
 
 class Vector;
 
+//! @ingroup Matrix
+//
 class DqVectors: public std::deque<Vector *>
   {
   private:

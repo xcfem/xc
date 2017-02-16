@@ -36,7 +36,7 @@
 
 namespace XC {
 //! \ingroup MATYS
-//! @brief Superficie de fluencia de tipo Orbison 2D.
+//! @brief Orbison 2D yield surface.
 class Orbison2D : public YieldSurface_BC2D
   {
   public:

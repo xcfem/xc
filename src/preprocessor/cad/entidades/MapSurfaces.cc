@@ -24,41 +24,41 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapSuperficies.cc
+//MapSurfaces.cc
 
-#include "MapSuperficies.h"
+#include "MapSurfaces.h"
 #include "preprocessor/Preprocessor.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "preprocessor/cad/entidades/Face.h"
-#include "preprocessor/cad/entidades/SupCuadrilatera.h"
+#include "preprocessor/cad/entidades/QuadSurface.h"
 #include "preprocessor/set_mgmt/Set.h"
 
 
 
 //! @brief Constructor.
-XC::MapSuperficies::MapSuperficies(Cad *cad)
+XC::MapSurfaces::MapSurfaces(Cad *cad)
   : MapEnt<Face>(cad) {}
 
 //! @brief Inserta la nueva linea en el conjunto total y los conjuntos abiertos.
-void XC::MapSuperficies::UpdateSets(Face *nueva_face) const
+void XC::MapSurfaces::UpdateSets(Face *nueva_face) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());
-    preprocessor->get_sets().get_set_total()->GetSuperficies().push_back(nueva_face);
+    preprocessor->get_sets().get_set_total()->getSurfaces().push_back(nueva_face);
     preprocessor->get_sets().inserta_ent_mdlr(nueva_face);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->GetSuperficies().push_back(nueva_face);
+        ptr_set->getSurfaces().push_back(nueva_face);
       }
   }
 
 //! @brief Crea concilia el número de divisiones de las líneas.
-bool XC::MapSuperficies::conciliaNDivs(void)
+bool XC::MapSurfaces::conciliaNDivs(void)
   { 
     getCad()->conciliaNDivs();
     return checkNDivs();
@@ -66,7 +66,7 @@ bool XC::MapSuperficies::conciliaNDivs(void)
 
 //! @brief Verifica que los números de divisiones de los lados
 //! son compatibles.
-bool XC::MapSuperficies::checkNDivs(void) const
+bool XC::MapSurfaces::checkNDivs(void) const
   {
     size_t conta= 0;
     if(!empty())
@@ -76,9 +76,9 @@ bool XC::MapSuperficies::checkNDivs(void) const
   }
 
 //! @brief New quadrilateral surface.
-XC::SupCuadrilatera *XC::MapSuperficies::newQuadSurfacePts(const size_t &id_p1, const size_t &id_p2, const size_t &id_p3, const size_t &id_p4)
+XC::QuadSurface *XC::MapSurfaces::newQuadSurfacePts(const size_t &id_p1, const size_t &id_p2, const size_t &id_p3, const size_t &id_p4)
   {
-    SupCuadrilatera *retval= dynamic_cast<SupCuadrilatera *>(Nueva<SupCuadrilatera>());
+    QuadSurface *retval= dynamic_cast<QuadSurface *>(Nueva<QuadSurface>());
     assert(retval);
     ID tmp(4);
     tmp[0]= id_p1; tmp[1]= id_p2; tmp[2]= id_p3; tmp[3]= id_p4;
@@ -87,9 +87,9 @@ XC::SupCuadrilatera *XC::MapSuperficies::newQuadSurfacePts(const size_t &id_p1, 
   }
 
 //! @brief New quadrilateral surface.
-XC::SupCuadrilatera *XC::MapSuperficies::newQuadSurfaceLines(const size_t &id_p1, const size_t &id_p2, const size_t &id_p3, const size_t &id_p4)
+XC::QuadSurface *XC::MapSurfaces::newQuadSurfaceLines(const size_t &id_p1, const size_t &id_p2, const size_t &id_p3, const size_t &id_p4)
   {
-    SupCuadrilatera *retval= dynamic_cast<SupCuadrilatera *>(Nueva<SupCuadrilatera>());
+    QuadSurface *retval= dynamic_cast<QuadSurface *>(Nueva<QuadSurface>());
     assert(retval);
     ID tmp(4);
     tmp[0]= id_p1; tmp[1]= id_p2; tmp[2]= id_p3; tmp[3]= id_p4;
@@ -98,9 +98,9 @@ XC::SupCuadrilatera *XC::MapSuperficies::newQuadSurfaceLines(const size_t &id_p1
   }
 
 //! @brief New quadrilateral surface.
-XC::SupCuadrilatera *XC::MapSuperficies::newQuadSurfaceGridPoints(const boost::python::list &l)
+XC::QuadSurface *XC::MapSurfaces::newQuadSurfaceGridPoints(const boost::python::list &l)
   {
-    SupCuadrilatera *retval= dynamic_cast<SupCuadrilatera *>(Nueva<SupCuadrilatera>());
+    QuadSurface *retval= dynamic_cast<QuadSurface *>(Nueva<QuadSurface>());
     assert(retval);
     retval->defGridPoints(l);
     return retval;

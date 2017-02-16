@@ -313,7 +313,7 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t 
     return getPuntos(tmp);
   }
 
-// //! @brief Crea superficies cuadriláteras entre los los puntos del rango being passed as parameter, colocándolos
+// //! @brief Creates quad surfaces between the point range passed as paramete, it places them
 // //! entre las posiciones de la tritriz que resultan de sumar a los índices (i,j) del
 // //! punto los valores del vector offsetIndices es decir:
 // //! Punto 1: (i+offsetIndices[0,0],j+offsetIndices[0,1],k+offsetIndices[0,2])

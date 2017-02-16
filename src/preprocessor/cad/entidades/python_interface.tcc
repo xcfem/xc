@@ -57,14 +57,14 @@ class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_
   .add_property("nDivJ", &XC::Face::NDivJ, &XC::Face::SetNDivJ)
    ;
 
-class_<XC::SupCuadrilatera, XC::SupCuadrilatera *, bases<XC::Face>, boost::noncopyable >("QuadSurface", no_init)
-  .def("defGridPoints",&XC::SupCuadrilatera::defGridPoints)
-  .def("setElemSizeI",&XC::SupCuadrilatera::SetElemSizeI)
-  .def("setElemSizeJ",&XC::SupCuadrilatera::SetElemSizeJ)
-  .def("setElemSizeIJ",&XC::SupCuadrilatera::SetElemSizeIJ)
-  .add_property("getIVector", &XC::SupCuadrilatera::getIVector,"Returns the local x vector.")
-  .add_property("getJVector", &XC::SupCuadrilatera::getJVector,"Returns the local x vector.")
-  .add_property("getKVector", &XC::SupCuadrilatera::getKVector,"Returns the local x vector.")
+class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >("QuadSurface", no_init)
+  .def("defGridPoints",&XC::QuadSurface::defGridPoints)
+  .def("setElemSizeI",&XC::QuadSurface::SetElemSizeI)
+  .def("setElemSizeJ",&XC::QuadSurface::SetElemSizeJ)
+  .def("setElemSizeIJ",&XC::QuadSurface::SetElemSizeIJ)
+  .add_property("getIVector", &XC::QuadSurface::getIVector,"Returns the local x vector.")
+  .add_property("getJVector", &XC::QuadSurface::getJVector,"Returns the local x vector.")
+  .add_property("getKVector", &XC::QuadSurface::getKVector,"Returns the local x vector.")
    ;
 
 
@@ -153,13 +153,13 @@ typedef XC::MapEnt<XC::Face> map_faces;
 class_<map_faces, bases<map_cm_faces>, boost::noncopyable >("map_faces", no_init)
    ;
 
-class_<XC::MapSuperficies, bases<map_faces>, boost::noncopyable >("MapSuperficies", no_init)
-   .def("newQuadSurfacePts", &XC::MapSuperficies::newQuadSurfacePts, return_internal_reference<>(),"Creates a quadrilateral surface.")
-   .def("newQuadSurfaceLines", &XC::MapSuperficies::newQuadSurfaceLines, return_internal_reference<>(),"Creates a quadrilateral surface.")
-   .def("newQuadSurfaceGridPts", &XC::MapSuperficies::newQuadSurfaceGridPoints, return_internal_reference<>(),"Creates a quadrilateral surface.")
-   .def("get", &XC::MapSuperficies::get, return_internal_reference<>(),"Returns the i-th face.")
-   .def("conciliaNDivs", &XC::MapSuperficies::conciliaNDivs)
-   .def("checkNDivs",&XC::MapSuperficies::checkNDivs)
+class_<XC::MapSurfaces, bases<map_faces>, boost::noncopyable >("MapSurfaces", no_init)
+   .def("newQuadSurfacePts", &XC::MapSurfaces::newQuadSurfacePts, return_internal_reference<>(),"Creates a quadrilateral surface.")
+   .def("newQuadSurfaceLines", &XC::MapSurfaces::newQuadSurfaceLines, return_internal_reference<>(),"Creates a quadrilateral surface.")
+   .def("newQuadSurfaceGridPts", &XC::MapSurfaces::newQuadSurfaceGridPoints, return_internal_reference<>(),"Creates a quadrilateral surface.")
+   .def("get", &XC::MapSurfaces::get, return_internal_reference<>(),"Returns the i-th face.")
+   .def("conciliaNDivs", &XC::MapSurfaces::conciliaNDivs)
+   .def("checkNDivs",&XC::MapSurfaces::checkNDivs)
    ;
 
 typedef XC::MapCadMember<XC::Body> map_cm_bodies;

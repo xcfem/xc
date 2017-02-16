@@ -67,8 +67,8 @@ class MapSet: public EntCmd, public MovableObject
     Preprocessor *preprocessor; //!< Pointer to preprocessor.
 
     map_sets sets; //!< Conjuntos de entidades.
-    map_ent_mdlr entidades; //! Entidades del preprocessor (puntos, lineas, superficies,...).
-    Set *total; //!< Puntero al conjunto universal (Se crea en el constructor).
+    map_ent_mdlr entidades; //! Geometric entities (points, lines, surfaces,...).
+    Set *total; //!< Pointer to total set (Created in constructor).
     map_sets abiertos; //!< Conjuntos abiertos (aquellos a los que se añade cada nueva entidad creada en Cad).
 
     bool existe(const std::string &nmb) const;

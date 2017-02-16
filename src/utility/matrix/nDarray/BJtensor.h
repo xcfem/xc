@@ -105,6 +105,8 @@
 
 
 namespace XC {
+//! @ingroup Matrix
+//
 class BJtensor: public nDarray
   {
     friend class stresstensor;

@@ -60,50 +60,50 @@ XC::SecuenciaLados::SecuenciaLados(const size_t primero,const bool &directo)
   }
 
 //! @brief Constructor.
-XC::Body::Cara::Cara(XC::Face *ptr,const size_t &p,const bool &d)
-  : superficie(ptr), sec_lados(p,d) {}
+XC::Body::BodyFace::BodyFace(XC::Face *ptr,const size_t &p,const bool &d)
+  : surface(ptr), sec_lados(p,d) {}
 
-//! @brief Returns a pointer to the la superficie que limita el sólido.
-XC::Face *XC::Body::Cara::Superficie(void)
-  { return superficie; }
-//! @brief Returns a pointer to the la superficie que limita el sólido.
-const XC::Face *XC::Body::Cara::Superficie(void) const
-  { return superficie; }
-//! @brief Asigna la superficie que limita el sólido.
-void XC::Body::Cara::SetSurf(XC::Face *s)
-  { superficie= s; }
-//! @brief Returns the nombre de la superficie que limita el sólido.
-const std::string &XC::Body::Cara::GetNombre(void) const
-  { return superficie->GetNombre(); }
-//! @brief Returns true ifla superficie no existe.
-bool XC::Body::Cara::Vacia(void) const
-  { return (superficie==nullptr); }
-//! @brief Returns the número de líneas de la superficie.
-size_t XC::Body::Cara::NumLineas(void) const
-  { return superficie->NumEdges(); }
-//! @brief Returns the número de líneas de la superficie.
-size_t XC::Body::Cara::NumVertices(void) const
-  { return superficie->NumVertices(); }
+//! @brief Returns a pointer to the surface that limits the solid.
+XC::Face *XC::Body::BodyFace::Surface(void)
+  { return surface; }
+//! @brief Returns a pointer to the surface that limits the solid.
+const XC::Face *XC::Body::BodyFace::Surface(void) const
+  { return surface; }
+//! @brief Sets the surface that limites the solid.
+void XC::Body::BodyFace::SetSurf(XC::Face *s)
+  { surface= s; }
+//! @brief Returns the name of the surface that limits the solid.
+const std::string &XC::Body::BodyFace::GetNombre(void) const
+  { return surface->GetNombre(); }
+//! @brief Returns true if the surface doesn't exists.
+bool XC::Body::BodyFace::Vacia(void) const
+  { return (surface==nullptr); }
+//! @brief Returns the number of edges of the surface.
+size_t XC::Body::BodyFace::NumLineas(void) const
+  { return surface->NumEdges(); }
+//! @brief Returns the number of vertices of the surface.
+size_t XC::Body::BodyFace::NumVertices(void) const
+  { return surface->NumVertices(); }
 
 //! @brief Returns the pointer al lado de la cara, cuyo índice se pasa como parámetro.
-const XC::CmbEdge::Lado *XC::Body::Cara::GetLado(const size_t &i) const
+const XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i) const
   {
-    if(!superficie) return nullptr;
+    if(!surface) return nullptr;
     const CmbEdge::Lado *retval(nullptr);
     const size_t idx= (i-1)%4+1;
     switch(idx)
       {
         case 1:
-          retval= superficie->GetLado(sec_lados.l1);
+          retval= surface->GetLado(sec_lados.l1);
           break;
         case 2:
-          retval= superficie->GetLado(sec_lados.l2);
+          retval= surface->GetLado(sec_lados.l2);
           break;
         case 3:
-          retval= superficie->GetLado(sec_lados.l3);
+          retval= surface->GetLado(sec_lados.l3);
           break;
         case 4:
-          retval= superficie->GetLado(sec_lados.l4);
+          retval= surface->GetLado(sec_lados.l4);
           break;
         default:
           retval= nullptr;
@@ -113,11 +113,11 @@ const XC::CmbEdge::Lado *XC::Body::Cara::GetLado(const size_t &i) const
   }
 
 //! @brief Returns the pointer al lado de la cara, cuyo índice se pasa como parámetro.
-XC::CmbEdge::Lado *XC::Body::Cara::GetLado(const size_t &i)
-  { return const_cast<CmbEdge::Lado *>(static_cast<const Cara &>(*this).GetLado(i)); }
+XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i)
+  { return const_cast<CmbEdge::Lado *>(static_cast<const BodyFace &>(*this).GetLado(i)); }
 
 //! @brief Returns the pointer al vértice de la cara, cuyo índice se pasa como parámetro.
-const XC::Pnt *XC::Body::Cara::GetVertice(const size_t &i) const
+const XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i) const
   {
     const CmbEdge::Lado *l= GetLado(i);
     if(l)
@@ -131,25 +131,25 @@ const XC::Pnt *XC::Body::Cara::GetVertice(const size_t &i) const
   }
 
 //! @brief Returns the pointer al vértice de la cara, cuyo índice se pasa como parámetro.
-XC::Pnt *XC::Body::Cara::GetVertice(const size_t &i)
-  { return const_cast<Pnt *>(static_cast<const Cara &>(*this).GetVertice(i)); }
+XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i)
+  { return const_cast<Pnt *>(static_cast<const BodyFace &>(*this).GetVertice(i)); }
 
 //! @brief Returns the pointer to the node de la cara, cuyos índices se pasan como parámetro.
-XC::Node *XC::Body::Cara::GetNodo(const size_t &i,const size_t &j)
+XC::Node *XC::Body::BodyFace::GetNodo(const size_t &i,const size_t &j)
   {
-    assert(superficie);
-    return superficie->GetNodo(i,j);
+    assert(surface);
+    return surface->GetNodo(i,j);
   }
 
 //! @brief Return the posiciones para los nodos de la cara.
-MatrizPos3d XC::Body::Cara::get_posiciones(void) const
+MatrizPos3d XC::Body::BodyFace::get_posiciones(void) const
   {
-    if(!superficie)
+    if(!surface)
       {
-        std::cerr << "The pointer a superficie es nulo." << std::endl;
+        std::cerr << "Pointer to surface is null." << std::endl;
         return MatrizPos3d(); 
       }
-    const int numEdges= superficie->NumEdges();
+    const int numEdges= surface->NumEdges();
     if(numEdges!=4)
       {
         std::cerr << "Can't mesh " << numEdges
@@ -179,18 +179,18 @@ MatrizPos3d XC::Body::Cara::get_posiciones(void) const
     return MatrizPos3d(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
   }
 
-//! @brief Comprueba el número de divisiones de la superficie.
-bool XC::Body::Cara::checkNDivs(void) const
-  { return superficie->checkNDivs(); }
+//! @brief Checks the number of divisions.
+bool XC::Body::BodyFace::checkNDivs(void) const
+  { return surface->checkNDivs(); }
 
 //! @brief Lanza la creación de nodos de las cara.
-void XC::Body::Cara::crea_nodos(void)
+void XC::Body::BodyFace::crea_nodos(void)
   {
-    if(superficie)
-      superficie->crea_nodos();
+    if(surface)
+      surface->crea_nodos();
     else
-      std::cerr << ":Body::Cara::crea_nodos; the pointer "
-                << "a la superficie es nulo." << std::endl;
+      std::cerr << ":Body::BodyFace::crea_nodos; pointer "
+                << "to surface is null." << std::endl;
   }
 
 //! @brief Constructor.
@@ -219,8 +219,8 @@ BND3d XC::Body::Bnd(void) const
     return retval;
   }
 
-//! @brief Return the lista de sólidos en contacto con la superficie que
-//! pasa como parámetro.
+//! @brief Return the bodies that touch the surface
+//! being passed as parameter (neighbors).
 std::set<const XC::Body *> XC::GetCuerposTocan(const Face &s)
   { return s.CuerposTocan(); }
 
@@ -249,7 +249,7 @@ void XC::Body::add_to_sets(std::set<SetBase *> &sets)
       }
   }
 
-//! @brief Actualiza la topología de la superficie being passed as parameter.
+//! @brief Unpdates topology of the surface being passed as parameter (inserts neighbor).
 void XC::Body::set_surf(Face *s)
   {
     if(s)

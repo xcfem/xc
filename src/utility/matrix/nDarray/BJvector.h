@@ -95,6 +95,8 @@
 // I tried to understand idioms and I think I succeded.
 
 namespace XC {
+//! @ingroup Matrix
+//
 class BJvector: virtual public BJmatrix
   {
     public:

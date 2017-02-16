@@ -49,7 +49,7 @@ class Edge: public EntMdlr
     friend class Face;
   private:
     size_t ndiv; //!< Número de divisiones
-    std::set<const Face *> sups_linea; //!< Superficies uno de cuyos bordes es esta línea (topología).
+    std::set<const Face *> sups_linea; //!< Surface neighbors (topology).
   protected:
 
     void inserta_surf(Face *s);
@@ -84,10 +84,10 @@ class Edge: public EntMdlr
     std::set<const XC::Edge *> GetLadosHomologos(const std::set<const XC::Edge *> &) const;
     void actualiza_topologia(void);
 
-    //! @brief Return the lista de superficies que tocan a a línea.
+    //! @brief Returns the surfaces that touch the line.
     const std::set<const Face *> &SupsTocan(void) const
       { return sups_linea; }
-    //! @brief Returns the nombres de las superficies que tocan a a línea.
+    //! @brief Returns the surface names that touch the line.
     const std::string &NombresSupsTocan(void) const;
     bool Toca(const Face &s) const;
     bool Toca(const Body &b) const;

@@ -47,7 +47,7 @@
 
 //! @brief Constructor.
 XC::Set::Set(const std::string &nmb,Preprocessor *md)
-  : SetMeshComp(nmb,md), puntos(this), lineas(this), superficies(this),
+  : SetMeshComp(nmb,md), puntos(this), lineas(this), surfaces(this),
     cuerpos(this), uniform_grids(this) {}
 
 //! @brief Constructor de copia.
@@ -76,8 +76,8 @@ void XC::Set::copia_listas(const Set &otro)
     puntos.set_owner(this);
     lineas= otro.lineas;
     lineas.set_owner(this);
-    superficies= otro.superficies;
-    superficies.set_owner(this);
+    surfaces= otro.surfaces;
+    surfaces.set_owner(this);
     cuerpos= otro.cuerpos;
     cuerpos.set_owner(this);
     uniform_grids= otro.uniform_grids;
@@ -91,7 +91,7 @@ void XC::Set::agrega_listas(const Set &otro)
     SetMeshComp::agrega_listas(otro);
     puntos.agrega(otro.puntos);
     lineas.agrega(otro.lineas);
-    superficies.agrega(otro.superficies);
+    surfaces.agrega(otro.surfaces);
     cuerpos.agrega(otro.cuerpos);
     uniform_grids.agrega(otro.uniform_grids);
   }
@@ -103,7 +103,7 @@ void XC::Set::agrega_listas(const Set &otro)
 //     SetMeshComp::agrega_listas_cond(otro,cond);
 //     puntos.agrega_cond(otro.puntos,cond);
 //     lineas.agrega_cond(otro.lineas,cond);
-//     superficies.agrega_cond(otro.superficies,cond);
+//     surfaces.agrega_cond(otro.surfaces,cond);
 //     cuerpos.agrega_cond(otro.cuerpos,cond);
 //     uniform_grids.agrega_cond(otro.uniform_grids,cond);
 //   }
@@ -114,7 +114,7 @@ void XC::Set::clear(void)
     SetMeshComp::clear();
     puntos.clear();
     lineas.clear();
-    superficies.clear();
+    surfaces.clear();
     cuerpos.clear();
     uniform_grids.clear();
   }
@@ -125,7 +125,7 @@ void XC::Set::clearAll(void)
     SetMeshComp::clearAll();
     puntos.clearAll();
     lineas.clearAll();
-    superficies.clearAll();
+    surfaces.clearAll();
     cuerpos.clearAll();
     uniform_grids.clearAll();
   }
@@ -136,7 +136,7 @@ void XC::Set::numera(void)
     SetMeshComp::numera();
     SetMeshComp::numera_lista(puntos);
     SetMeshComp::numera_lista(lineas);
-    SetMeshComp::numera_lista(superficies);
+    SetMeshComp::numera_lista(surfaces);
 //     numera_lista(cuerpos);
   }
 
@@ -234,12 +234,12 @@ void XC::Set::line_meshing(meshing_dir dm)
       std::clog << "hecho." << std::endl;
   }
 
-//! @brief Create nodes and, where appropriate, elements on set surfaces.
+//! @brief Create nodes and, where appropriate, elements on surfaces.
 void XC::Set::surface_meshing(meshing_dir dm)
   {
     if(verborrea>2)
       std::clog << "Meshing surfaces...";
-    for(lst_ptr_superficies::iterator i= superficies.begin();i!=superficies.end();i++)
+    for(lst_surface_ptrs::iterator i= surfaces.begin();i!=surfaces.end();i++)
       (*i)->genMesh(dm);
     if(verborrea>2)
       std::clog << "hecho." << std::endl;
@@ -291,23 +291,23 @@ void XC::Set::genMesh(meshing_dir dm)
       std::clog << "hecho." << std::endl;
   }
 
-//! @brief Returns true ifel punto pertenece al conjunto.
+//! @brief Returns true if the point belongs to the set.
 bool XC::Set::In(const Pnt *p) const
   { return puntos.in(p); }
 
-//! @brief Returns true ifel «edge» pertenece al conjunto.
+//! @brief Returns true if the edge belongs to the set.
 bool XC::Set::In(const Edge *e) const
   { return lineas.in(e); }
 
-//! @brief Returns true ifla superficie pertenece al conjunto.
+//! @brief Returns true if the surface belongs to the set.
 bool XC::Set::In(const Face *f) const
-  { return superficies.in(f); }
+  { return surfaces.in(f); }
 
-//! @brief Returns true ifel cuerpo pertenece al conjunto.
+//! @brief Returns true if the body belongs to the set.
 bool XC::Set::In(const Body *b) const
   { return cuerpos.in(b); }
 
-//! @brief Returns true ifla «uniform grid» pertenece al conjunto.
+//! @brief Returns true if the «uniform grid» belongs to the set.
 bool XC::Set::In(const UniformGrid *ug) const
   { return uniform_grids.in(ug); }
 
@@ -318,10 +318,10 @@ void XC::Set::CompletaHaciaAbajo(void)
   {
 //     for(lst_cuerpos::iterator i=cuerpos.begin();i!=cuerpos.end();i++)
 //       {
-//         lst_superficies ss= (*i)->GetSuperficies();
-//         superficies.insert(superficies.end(),ss.begin(),ss.end());
+//         lst_surfaces ss= (*i)->getSurfaces();
+//         surfaces.insert(surfaces.end(),ss.begin(),ss.end());
 //       }
-    for(sup_iterator i=superficies.begin();i!=superficies.end();i++)
+    for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
       {
         //Lineas.
         lst_ptr_lineas ll((*i)->GetEdges());
@@ -372,10 +372,10 @@ void XC::Set::CompletaHaciaArriba(void)
       }
     for(lin_iterator i=lineas.begin();i!=lineas.end();i++)
       {
-        lst_ptr_superficies ss(GetSupsTocan(**i));
-        superficies.insert(superficies.end(),ss.begin(),ss.end());
+        lst_surface_ptrs ss(GetSupsTocan(**i));
+        surfaces.insert(surfaces.end(),ss.begin(),ss.end());
       }
-//     for(lst_superficies::iterator i=superficies.begin();i!=superficies.end();i++)
+//     for(lst_surfaces::iterator i=surfaces.begin();i!=surfaces.end();i++)
 //       {
 //         lst_cuerpos bb= GetCuerposTocan(**i);
 //         cuerpos.insert(cuerpos.end(),bb.begin(),bb.end());
@@ -430,8 +430,8 @@ void XC::Set::sel_lineas_lista(const ID &tags)
       }
   }
 
-//! @brief Selecciona las superficies cuyos tags se pasan como parámetro.
-void XC::Set::sel_superficies_lista(const ID &tags)
+//! @brief Selects the surfaces with the identifiers being passed as parameter.
+void XC::Set::sel_surfaces_lst(const ID &tags)
   {
     const size_t sz= tags.Size();
     if(sz>0)
@@ -442,11 +442,11 @@ void XC::Set::sel_superficies_lista(const ID &tags)
             Cad &cad= get_preprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
-	        Face *iface= cad.getSuperficies().busca(tags(i)); 
+	        Face *iface= cad.getSurfaces().busca(tags(i)); 
                 if(iface)
-                  superficies.push_back(iface);
+                  surfaces.push_back(iface);
                 else
-		  std::cerr << "No se encontró la superficie de tag: " << tags(i) << std::endl;
+		  std::cerr << "Surface with tag: " << tags(i) << " not found." << std::endl;
               }
           }
         else
@@ -468,7 +468,7 @@ int XC::Set::sendData(CommParameters &cp)
     int res= SetMeshComp::sendData(cp);
 //     res+= puntos.sendTags(9,10,getDbTagData(),cp);
 //     res+= lineas.sendTags(11,12,getDbTagData(),cp);
-//     res+= superficies.sendTags(13,14,getDbTagData(),cp);
+//     res+= surfaces.sendTags(13,14,getDbTagData(),cp);
 //     res+= cuerpos.sendTags(15,16,getDbTagData(),cp);
 //     res+= uniform_grids.sendTags(17,18,getDbTagData(),cp);
     return res;
@@ -483,8 +483,8 @@ int XC::Set::recvData(const CommParameters &cp)
 //     sel_puntos_lista(tmp);
 //     tmp= lineas.receiveTags(11,12,getDbTagData(),cp);
 //     sel_lineas_lista(tmp);
-//     tmp= superficies.receiveTags(13,14,getDbTagData(),cp);
-//     sel_superficies_lista(tmp);
+//     tmp= surfaces.receiveTags(13,14,getDbTagData(),cp);
+//     sel_surfaces_lst(tmp);
 //     tmp= cuerpos.receiveTags(15,16,getDbTagData(),cp);
 //     sel_cuerpos_lista(tmp);
 //     tmp= uniform_grids.receiveTags(17,18,getDbTagData(),cp);

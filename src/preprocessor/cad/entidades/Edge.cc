@@ -52,7 +52,7 @@ XC::Edge::Edge(Preprocessor *m,const size_t &nd)
 XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : EntMdlr(nombre,0,m), ndiv(nd) {}
 
-//! @brief Inserta una superficie en contacto con la línea.
+//! @brief Inserts a surface in contact with the line (neighbour).
 void XC::Edge::inserta_surf(Face *s)
   { sups_linea.insert(s); }
 
@@ -119,12 +119,12 @@ void XC::Edge::SetNDiv(const size_t &nd)
             const size_t ns= sups_linea.size();
             if(ns>1)
               {
-// 	        std::clog << "Edge::SetNDiv; el borde: " << GetNombre()
-//                           << " lo es de las superficies: "
+// 	        std::clog << "Edge::SetNDiv; " << GetNombre()
+//                           << " is an edge of the surfaces: "
 //                           << NombresSupsTocan()
-//                           << ". Se había definido el"
-//                           << " número de divisiones en " << ndiv
-//                           << " se adopta: " << nd << std::endl;
+//                           << ". Number of divisions"
+//                           << " was " << ndiv
+//                           << " we adopt: " << nd << std::endl;
                 ndiv= std::max(ndiv,nd);
               }
             else
@@ -277,7 +277,7 @@ MatrizPos3d XC::Edge::GetPosNodosInv(void) const
     return retval;
   }
 
-//! @brief Returns the nombres de las superficies que tocan a a línea.
+//! @brief Returns the surface names that touch the line (neighbors).
 const std::string &XC::Edge::NombresSupsTocan(void) const
   {
     static std::string retval;
@@ -337,7 +337,7 @@ size_t XC::calcula_ndiv_lados(const std::set<const XC::Edge *> &lados)
     return nd;
   }
 
-//! @brief Returns true ifla línea toca a la superficie.
+//! @brief Returns true if the line touches the surface (neighbor).
 bool XC::Edge::Toca(const Face &s) const
   {
     std::set<const Face *>::const_iterator i= sups_linea.find(&s);

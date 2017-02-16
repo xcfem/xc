@@ -257,12 +257,12 @@ double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
     const double umbralMax= rMax*10.0;
     if(d<mchne_eps_dbl) //Si el punto está muy cerca del origen.
       retval= 0.0;//Devolvemos el máximo factor de capacidad que puede presentarse.
-    else if(d>umbralMax) //El punto está lejos de la superficie del diagrama.
+    else if(d>umbralMax) //Point is far from diagram surface.
       retval= d/rMax;
     else
       {
         const double umbralMin= rMin/10.0;
-        if(d<umbralMin) //El punto está dentro de la superficie del diagrama.
+        if(d<umbralMin) //Point is inside the diagram.
           retval= d/rMin;
         const GeomObj::list_Pos3d lst_intersec= get_interseccion(esf_d);
         if(!lst_intersec.empty())

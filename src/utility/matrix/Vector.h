@@ -77,6 +77,8 @@ class Matrix;
 class Message;
 class SystemOfEqn;
 
+//! @ingroup Matrix
+//
 class Vector: public EntCmd
   {
   private:

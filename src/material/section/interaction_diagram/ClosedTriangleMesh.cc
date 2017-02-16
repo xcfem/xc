@@ -271,8 +271,8 @@ const Triedro3d *XC::ClosedTriangleMesh::BuscaPtrTriedro(const Pos3d &p) const
     return retval;
   }
 
-//! @brief Return the intersección de la semirrecta que une el origen (0,0,0) y el
-//! el punto p con la superficie.
+//! @brief Returns the intersection of triangle mesh with the ray
+//! from origin (0,0,0) to p.
 GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_interseccion(const Pos3d &p) const
   {
     GeomObj::list_Pos3d lst_intersec;

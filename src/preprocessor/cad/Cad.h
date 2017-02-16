@@ -34,7 +34,7 @@
 #include "boost/lexical_cast.hpp"
 #include "preprocessor/cad/entidades/MapPuntos.h"
 #include "preprocessor/cad/entidades/MapLineas.h"
-#include "preprocessor/cad/entidades/MapSuperficies.h"
+#include "preprocessor/cad/entidades/MapSurfaces.h"
 #include "preprocessor/cad/entidades/MapCuerpos.h"
 #include "preprocessor/cad/entidades/MapUniformGrids.h"
 #include "preprocessor/cad/trf/MapTrfGeom.h"
@@ -81,10 +81,10 @@ class Cad: public EntCmd
     MapSisRef reference_systems; //!< Reference systems container.
     MapTrfGeom transformaciones_geometricas; //!< Geometric transformation container.
 
-    MapPuntos puntos; //!< Lista de puntos.
-    MapLineas edges; //!< Lista de edges.
-    MapSuperficies faces; //!< Lista de superficies.
-    MapCuerpos cuerpos; //!< Lista de cuerpos.
+    MapPuntos puntos; //!< Point container.
+    MapLineas edges; //!< Edge container.
+    MapSurfaces faces; //!< Surface container.
+    MapCuerpos cuerpos; //!< Body container.
     MapUniformGrids unif_grid; //!< Uniform grid container.
     MapEsquemas2d esquemas2d; //!< Bi-dimensional scheme container.
     MapEsquemas3d esquemas3d; //!< Three-dimensional scheme container.
@@ -118,9 +118,9 @@ class Cad: public EntCmd
       { return edges; }
     inline MapLineas &getLineas(void)
       { return edges; }
-    inline const MapSuperficies &getSuperficies(void) const
+    inline const MapSurfaces &getSurfaces(void) const
       { return faces; }
-    inline MapSuperficies &getSuperficies(void)
+    inline MapSurfaces &getSurfaces(void)
       { return faces; }
     inline const MapTrfGeom &getTransformacionesGeometricas(void) const
       { return transformaciones_geometricas; }

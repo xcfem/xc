@@ -25,7 +25,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //Block.h
-//Objeto superficie del preprocesador.
 
 #ifndef BLOCK_H
 #define BLOCK_H
@@ -36,10 +35,10 @@ namespace XC {
 
 //! \ingroup CadEnt
 //!
-//! @brief Representación de un sólido de seis caras.
+//! @brief Six faces body.
 class Block: public Body
   {
-    Cara sups[6];
+    BodyFace sups[6];
     size_t indice(Face *s) const;
     void coloca(const size_t &i,Face *s);
   protected:
@@ -49,17 +48,17 @@ class Block: public Body
     void crea_nodos_caras(void);
     TritrizPos3d get_posiciones(void) const;
 
-    virtual Cara *GetCara(const size_t &i);
+    virtual BodyFace *GetFace(const size_t &i);
   public:
     Block(Preprocessor *m,const std::string &nombre= "");
     SetEstruct *getCopy(void) const;
     //! @brief Returns the número de líneas del objeto.
     virtual size_t NumLineas(void) const;
     virtual size_t NumVertices(void) const;
-    virtual size_t NumCaras(void) const;
+    virtual size_t NumFaces(void) const;
     void actualiza_topologia(void);
-    virtual std::set<const Face *> GetSuperficies(void);
-    const Cara *GetCara(const size_t &i) const;
+    virtual std::set<const Face *> getSurfaces(void);
+    const BodyFace *GetFace(const size_t &i) const;
     const CmbEdge::Lado *GetArista(const size_t &i) const;
     Pnt *GetVertice(const size_t &i);
     const Pnt *GetVertice(const size_t &i) const;

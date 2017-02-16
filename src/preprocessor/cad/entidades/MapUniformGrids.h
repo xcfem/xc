@@ -59,9 +59,5 @@ class MapUniformGrids: public MapEnt<UniformGrid>
     UniformGrid *Nueva(void);
   };
 
-
-//! @brief Crea una nueva superficie.
-
-
 } //end of XC namespace
 #endif

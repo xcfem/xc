@@ -449,13 +449,13 @@ int XC::MapSet::receiveAbiertos(int posDbTag1, int posDbTag2,const CommParameter
 int XC::MapSet::sendData(CommParameters &cp)
   {
     const size_t sz= sets.size();
-    int res= cp.sendInt(sz,getDbTagData(),CommMetaData(0)); //Número de conjuntos.
+    int res= cp.sendInt(sz,getDbTagData(),CommMetaData(0)); //number of sets
     if(sz>0)
       {
         res+= sendSets(1,2,3,cp);
         res+= sendAbiertos(4,5,cp);
       }
-    //XX Falta enviar las entidades (puntos, lineas, superficies,...).
+    //XX Entities sending (points, lines, surfaces,...) pending.
     return res;
   }
 
@@ -469,7 +469,7 @@ int XC::MapSet::recvData(const CommParameters &cp)
         res+= receiveSets(1,2,3,sz,cp);
         res+= receiveAbiertos(4,5,cp);
       }
-    //XX Falta enviar las entidades (puntos, lineas, superficies,...).
+    //XX Entities receiving (points, lines, surfaces,...) pending.
     return res;
   }
 
@@ -546,7 +546,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Edge *e)
     return retval;
   }
 
-//! @brief Returns the conjuntos que contienen the pointer a superficie
+//! @brief Returns the sets than contain a pointer to the face
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Face *f)
   {

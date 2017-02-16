@@ -59,6 +59,8 @@
 #include "utility/matrix/nDarray/BJtensor.h"
 
 namespace XC {
+//! @ingroup Matrix
+//
 class Cosseratstraintensor : public BJtensor
 {
   public: // just send appropriate arguments to the base constructor

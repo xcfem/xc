@@ -37,6 +37,8 @@ namespace XC {
 
 #define MATRIX_VERY_LARGE_VALUE 1.0e213
 
+//! @ingroup Matrix
+//
 class AuxMatrix: public EntCmd
   {
   private:

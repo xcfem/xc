@@ -61,7 +61,7 @@ namespace XC {
 
 //! @ingroup FDNDMat
 //
-//! @defgroup FDYieldNDMat Superficie de fluencia.
+//! @defgroup FDYieldNDMat Yield surface.
 //
 //! @ingroup FDYieldNDMat
 //

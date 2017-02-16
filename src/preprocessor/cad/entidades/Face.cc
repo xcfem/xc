@@ -60,8 +60,8 @@ void XC::Face::SetNDivI(const size_t &ndi)
 void XC::Face::SetNDivJ(const size_t &ndj)
   { ndivj= ndj; }
 
-//! @brief Inserta el cuerpo being passed as parameter en la lista de los
-//! que tocan a esta superficie.
+//! @brief Inserts the body being passed as parameter neighbors
+//! container of this surface.
 void XC::Face::inserta_body(Body *b)
   { cuerpos_sup.insert(b); }
 
@@ -72,7 +72,8 @@ void XC::Face::actualiza_topologia(void)
       (*i).Borde()->inserta_surf(this);
   }
 
-//! @brief Returns the índice en esta superficie del borde común con otra superficie si existe.
+//! @brief Returns the index of the edge in common with the surface
+//! being passed as parameter (if it exists).
 size_t XC::Face::BordeComun(const XC::Face &otra) const
   {
     size_t cont= 1;
@@ -86,27 +87,27 @@ size_t XC::Face::BordeComun(const XC::Face &otra) const
   }
 
 //! Returns:
-//! - 1 si la línea es común a ambas superficies y la orientación es la misma.
-//! - -1 si la línea es común a ambas superficies y la orientación es la contraria.
-//! - 0 si la línea no es común a ambas superficies.
+//! - 1 if the line belongs to both surfaces and the orientation is the same.
+//! - -1 if the line belongs to both surfaces and the orientation is the opposite.
+//! - 0 line doesn't belongs to both surfaces.
 int XC::Face::SentidoBorde(const XC::Edge *l,const XC::Face &otra) const
   {
     //Buscamos los indices de las lineas en una 
     const size_t ind_l_esta= IndiceEdge(l);
     if(ind_l_esta == 0)
       {
-        std::cerr << "La línea :" << l->GetNombre() 
-                  << " no es un borde de la superficie: " << GetNombre() << std::endl;
+        std::cerr << "Line :" << l->GetNombre() 
+                  << " is not an edge of the surface: " << GetNombre() << std::endl;
         return 0;
       }
     const size_t ind_l_otra= otra.IndiceEdge(l);
     if(ind_l_otra == 0)
       {
-        std::cerr << "La línea :" << l->GetNombre() 
-                  << " no es un borde de la superficie: " << otra.GetNombre() << std::endl;
+        std::cerr << "Line :" << l->GetNombre() 
+                  << " is not an edge of the surface: " << otra.GetNombre() << std::endl;
         return 0;
       }
-    //Buscamos los Lado en cada superficie;
+    //Search the edges on each surface;
     const Lado *l_esta= GetLado(ind_l_esta);
     const Lado *l_otra= otra.GetLado(ind_l_otra);
     if(l_esta->P2() == l_otra->P2())
@@ -119,18 +120,18 @@ int XC::Face::SentidoBorde(const XC::Edge *l,const XC::Face &otra) const
 const XC::Pnt *XC::Face::GetVertice(const size_t &i) const
   { return GetLado(i)->P1(); }
 
-//! @brief Return the lista de superficies que tocan a la línea.
+//! @brief Return the surfaces that touch the line.
 std::set<const XC::Face *> XC::GetSupsTocan(const Edge &p)
   { return p.SupsTocan(); }
 
-//! @brief Returns true ifla línea toca al cuerpo.
+//! @brief Returns true if the lines touches the body (neighbor).
 bool XC::Face::Toca(const XC::Body &b) const
   {
     std::set<const Body *>::const_iterator i= cuerpos_sup.find(&b);
     return (i!=cuerpos_sup.end());
   }
 
-//! @brief Returns the conjuntos a los que pertenece esta superficie.
+//! @brief Returns the sets that contains this surface.
 std::set<XC::SetBase *> XC::Face::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -145,13 +146,13 @@ std::set<XC::SetBase *> XC::Face::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega la superficie a los conjuntos que se pasan como parámetro.
+//! @brief Appends the surface to each of the sets being passed as parameter.
 void XC::Face::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
       {
         Set *s= dynamic_cast<Set *>(*i);
-        if(s) s->GetSuperficies().push_back(this);
+        if(s) s->getSurfaces().push_back(this);
       }
   }
 

@@ -48,7 +48,7 @@
 */
 namespace XC {
 //! \ingroup MATYS
-//! @brief Superficie de fluencia de Tipo El Tawil 2D no simétrica.
+//! @brief Unsymmetric 2D El Tawil yield surface.
 class ElTawil2DUnSym : public YieldSurface_BC2D
   {
   protected:

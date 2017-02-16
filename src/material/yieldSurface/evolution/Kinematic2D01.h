@@ -35,7 +35,7 @@
 
 namespace XC {
 //! \ingroup MATYS
-//! @brief Superficie de fluencia de tipo Cinemático 2D.
+//! @brief 2D kinematic yield surface.
 class Kinematic2D01: public PlasticHardening2D
   {
   private:

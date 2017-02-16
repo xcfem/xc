@@ -33,7 +33,7 @@
 #include "preprocessor/cad/entidades/LineaTramos.h"
 #include "preprocessor/cad/entidades/CmbEdge.h"
 #include "preprocessor/cad/entidades/ArcoCircunf.h"
-#include "preprocessor/cad/entidades/SupCuadrilatera.h"
+#include "preprocessor/cad/entidades/QuadSurface.h"
 #include "preprocessor/cad/entidades/Block.h"
 #include "preprocessor/cad/entidades/UniformGrid.h"
 #include "preprocessor/cad/matrices/MatrizPtrPnt.h"
@@ -144,7 +144,7 @@ void XC::Cad::conciliaNDivs(void)
                 break;
               }
           }
-        for(MapSuperficies::iterator i=faces.begin();i!= faces.end();i++)
+        for(MapSurfaces::iterator i=faces.begin();i!= faces.end();i++)
           (*i).second->ConciliaNDivIJ();        
       }
   }
