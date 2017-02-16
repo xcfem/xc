@@ -80,6 +80,7 @@ class RecordDefDisplay(object):
     self.bgBComp= 0.65
     self.hCamFct=1.0
 
+
   def setView(self,viewUpVc,posCVc):
     '''Sets the view
 
@@ -104,8 +105,14 @@ class RecordDefDisplay(object):
     Yneg: View from negative Y axis (Y-)
     Xpos: View from positive X axis (X+)
     Xneg: View from negative X axis (X-)
-    XYZPos: View from point (1,1,1)
-    XYZNeg: View from point (-1,-1,-1)
+    XYZPos or +X+Y+Z: View from point (1,1,1)
+    +X+Y-Z: View from point (1,1,-1)
+    +X-Y+Z: View from point (1,-1,1)
+    +X-Y-Z: View from point (1,-1,-1)
+    -X+Y+Z: View from point (-1,1,1)
+    -X+Y-Z: View from point (-1,1,-1)
+    -X-Y+Z: View from point (-1,-1,1)
+    XYZNeg or -X-Y-Z: View from point (-1,-1,-1)
     '''
     if(self.viewName=="ZPos"):
       self.setView(viewUpVc=[0,1,0],posCVc=[0,0,100])
@@ -119,9 +126,21 @@ class RecordDefDisplay(object):
       self.setView(viewUpVc=[0,0,1],posCVc=[100,0,0])
     elif(self.viewName=="XNeg"):
       self.setView(viewUpVc=[0,0,1],posCVc=[-100,0,0])
-    elif(self.viewName=="XYZPos"):
+    elif(self.viewName=="XYZPos" or self.viewName=="+X+Y+Z"):
       self.setView(viewUpVc=[-1,-1,1],posCVc=[100,100,self.hCamFct*100])
-    elif(self.viewName=="XYZNeg"):
+    elif(self.viewName=="+X+Y-Z"):
+      self.setView(viewUpVc=[1,1,1],posCVc=[100,100,-1*self.hCamFct*100])
+    elif(self.viewName=="+X-Y+Z"):
+      self.setView(viewUpVc=[-1,1,1],posCVc=[100,-100,self.hCamFct*100])
+    elif(self.viewName=="+X-Y-Z"):
+      self.setView(viewUpVc=[1,-1,1],posCVc=[100,-100,-1*self.hCamFct*100])
+    elif(self.viewName=="-X+Y+Z"):
+      self.setView(viewUpVc=[1,-1,1],posCVc=[-100,100,self.hCamFct*100])
+    elif(self.viewName=="-X+Y-Z"):
+      self.setView(viewUpVc=[-1,+1,1],posCVc=[-100,100,-1*self.hCamFct*100])
+    elif(self.viewName=="-X-Y+Z"):
+      self.setView(viewUpVc=[1,1,1],posCVc=[-100,-100,self.hCamFct*100])
+    elif(self.viewName=="XYZNeg" or self.viewName=="-X-Y-Z"):
       self.setView(viewUpVc=[-1,-1,1],posCVc=[-100,-100,-1*self.hCamFct*100])
     else:
       sys.stderr.write("View name: '"+self.viewName+"' unknown.")
