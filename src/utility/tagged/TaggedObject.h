@@ -72,11 +72,17 @@ class Vector;
 class Matrix;
 class FEM_ObjectBroker;
 
-//! @brief Objeto con identificador de tipo entero.
+//! @ingroup Utils
+//
+//! @defgroup Tagged Tagged object storage and convenience functions.
+//
+//! @ingroup Tagged
+//
+//! @brief Object idenfied by an integer (tag).
 class TaggedObject: public EntCmd
   {
   private:    
-    int theTag;
+    int theTag; //!< object identifier.
   protected:
     friend class ElementLoader;
     friend class CommParameters;

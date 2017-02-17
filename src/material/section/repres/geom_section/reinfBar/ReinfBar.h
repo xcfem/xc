@@ -68,17 +68,17 @@ class Matrix;
 
 //! @ingroup MATSCCRepresGeom
 //
-//! @defgroup MATSCCArmaduras Representación de las barras de refuerzo (armaduras).
+//! @defgroup MATSCCArmaduras Reinforcing layers representation (rebars).
 //
 //! @ingroup MATSCCArmaduras
 //
-//! @brief Barra de refuerzo (armadura).
+//! @brief Reinforcing bar.
 class ReinfBar: public DiscretBase
   {
   private:
-    double diameter;
-    double area;
-    Vector posit;
+    double diameter; //!< bar diameter.
+    double area; //!< bar area.
+    Vector posit;  //!< bar position.
   public:
     ReinfBar(Material *mat= NULL);
     ReinfBar(const double &barArea, Material *, const Vector &position);

@@ -30,6 +30,8 @@
 
 
 namespace XC {
+//! @ingroup Tagged
+//
 //! @brief Default tag
 class DefaultTag
   {

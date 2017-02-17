@@ -59,9 +59,7 @@
 // Revision: A
 //
 // Description: This file contains the class definition for 
-// MapOfTaggedObjectsIter. A MapOfTaggedObjectsIter is an iter for 
-// returning the TaggedObjects of a storage objects of type 
-// MapOfTaggedComponents.
+// MapOfTaggedObjectsIter. 
 
 #include <utility/tagged/storage/TaggedObjectIter.h>
 
@@ -71,6 +69,11 @@ using namespace std;
 namespace XC {
 class MapOfTaggedObjects;
 
+//! @ingroup Tagged
+//
+//! @brief MapOfTaggedObjectsIter is an iter for 
+//! returning the TaggedObjects of a storage objects of type 
+//! MapOfTaggedComponents.
 class MapOfTaggedObjectsIter: public TaggedObjectIter
   {
   private:

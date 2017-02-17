@@ -56,10 +56,7 @@
 // Revision: A
 //
 // Description: This file contains the class definition for TaggedObjectIter.
-// TaggedObjectIter is an abstract base class. An TaggedObjectIter is an 
-// iter for returning the Components of an object of class TaggedObjectStorage.
-// It must be written for each subclass of TaggedObjectStorage (this is done 
-// for efficiency reasons), hence the abstract base class.
+// TaggedObjectIter is an abstract base class. 
 
 #ifndef TaggedObjectIter_h
 #define TaggedObjectIter_h
@@ -67,6 +64,12 @@
 namespace XC {
 class TaggedObject;
 
+//! @ingroup Tagged
+//
+//! @brief An TaggedObjectIter is an iter for returning the Components
+//! of an object of class TaggedObjectStorage.
+//! It must be written for each subclass of TaggedObjectStorage (this is done 
+//! for efficiency reasons), hence the abstract base class.
 class TaggedObjectIter
   {
   public:

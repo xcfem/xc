@@ -59,13 +59,7 @@
 // Revision: A
 //
 // Description: This file contains the class definition for
-// ArrayOfTaggedObjects. ArrayOfTaggedObjects is a storage class. The class
-// is responsible for holding and providing access to objects of type
-// TaggedObject. The data structure used to hold the objects is a simple
-// array of pointers. As a one dimensional array is used certain ideas are tried
-// to improve performance: (1) if the array needs to be larger to hold more
-// components, the array size is doubled and (2) when adding/retrieving components,
-// the array location given by the components tag is first checked.
+// ArrayOfTaggedObjects. 
 //
 // What: "@(#) ArrayOfTaggedObjects.h, revA"
 
@@ -75,6 +69,15 @@
 
 namespace XC
   {
+//! @ingroup Tagged
+//
+//! @brief ArrayOfTaggedObjects is a storage class. The class
+//! is responsible for holding and providing access to objects of type
+//! TaggedObject. The data structure used to hold the objects is a simple
+//! array of pointers. As a one dimensional array is used certain ideas are tried
+//! to improve performance: (1) if the array needs to be larger to hold more
+//! components, the array size is doubled and (2) when adding/retrieving components,
+//! the array location given by the components tag is first checked.
 class ArrayOfTaggedObjects : public TaggedObjectStorage
   {
     typedef std::vector<TaggedObject *> tagged_vector;
