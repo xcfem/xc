@@ -143,7 +143,7 @@ class QuickGraphics(object):
                          'My', 'Mz', 'T') to be depicted 
     :param setToDisplay: set of entities (elements of type beam) to be represented
     :param fConvUnits:   factor of conversion to be applied to the results (defalts to 1)
-    :param scaleFactor:  factor of scale to apply to the diagram display
+    :param scaleFactor:  factor of scale to apply to the diagram display of
     :param unitDescription: string like '[kN/m] or [kN m/m]'
     :param viewName:     name of the view  that contains the renderer (possible
                          options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
