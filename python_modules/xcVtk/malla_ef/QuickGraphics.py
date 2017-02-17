@@ -74,7 +74,7 @@ class QuickGraphics(object):
       return 'N1'
 
 
-  def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',fileName=None):
+  def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
     '''displays the component of the displacement or rotations in the 
     set of entities.
     
@@ -96,6 +96,8 @@ class QuickGraphics(object):
       n.setProp('propToDisp',n.getDisp[vCompDisp])
     field= Fields.ScalarField('propToDisp',"getProp",None,fConvUnits)
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay.viewName=viewName
+    defDisplay.hCamFct=hCamFct
     defDisplay.displayMesh(xcSet=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.name)
 
   def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
