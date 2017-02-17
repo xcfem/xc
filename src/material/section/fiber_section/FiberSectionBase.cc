@@ -96,7 +96,7 @@ XC::FiberSectionBase &XC::FiberSectionBase::operator=(const FiberSectionBase &ot
     return *this;
   }
 
-//! @brief Prepara la representación de la sección.
+//! @brief Creates a new fiber section representation.
 void XC::FiberSectionBase::setup_repres(void)
   {
     if(!section_repres)
@@ -201,22 +201,37 @@ const XC::Vector &XC::FiberSectionBase::getSectionDeformation(void) const
     return retval;
   }
 
+//! @brief Returns a const pointer to section geometry.
+const XC::GeomSection *XC::FiberSectionBase::getGeomSection(void) const
+  {
+    const GeomSection *retval= nullptr;
+    if(section_repres)
+      {
+        retval= section_repres->getGeom();
+        if(!retval)
+	  std::cerr << "FiberSectionBase::getGeomSection; section geometry not defined."
+                    << std::endl;
+      }
+    else
+      std::cerr << "FiberSectionBase::getGeomSection; fiber section representation not defined."
+                << std::endl;
+    return retval;
+  }
+
+//! @brief Returns a pointer to section geometry.
+XC::GeomSection *XC::FiberSectionBase::getGeomSection(void)
+  {
+    FiberSectionBase *this_no_const= const_cast<XC::FiberSectionBase *>(this);
+    return this_no_const->getGeomSection();
+  }
+
 //! @brief Returns cross section contour.
 Poligono2d XC::FiberSectionBase::getRegionsContour(void) const
   {
     Poligono2d retval;
-    if(section_repres)
-      {
-        const GeomSection *geom= section_repres->getGeom();
-        if(geom)
-          retval= geom->getRegionsContour();
-        else
-	  std::cerr << "FiberSectionBase::getRegionsContour; no se ha definido la geometría de la sección."
-                    << std::endl;
-      }
-    else
-      std::cerr << "FiberSectionBase::getRegionsContour; no se ha definido la representación de la sección."
-                << std::endl;
+    const GeomSection *geom= getGeomSection();
+    if(geom)
+      retval= geom->getRegionsContour();
     return retval;
   }
 
@@ -224,18 +239,9 @@ Poligono2d XC::FiberSectionBase::getRegionsContour(void) const
 double XC::FiberSectionBase::getCantoMecanico(void) const
   {
     double retval= 0.0;
-    if(section_repres)
-      {
-        const GeomSection *geom= section_repres->getGeom();
-        if(geom)
-          retval= geom->getCantoMecanico(getTrazaPlanoFlexion());
-        else
-	  std::cerr << "FiberSectionBase::getCantoMecanico; no se ha definido la geometría de la sección."
-                    << std::endl;
-      }
-    else
-      std::cerr << "FiberSectionBase::getCantoMecanico; no se ha definido la representación de la sección."
-                << std::endl;
+    const GeomSection *geom= getGeomSection();
+    if(geom)
+      retval= geom->getCantoMecanico(getTrazaPlanoFlexion());
     return retval;
   }
 
@@ -243,28 +249,19 @@ double XC::FiberSectionBase::getCantoMecanico(void) const
 double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(const Recta2d &r) const
   {
     double retval= 0.0;
-    if(section_repres)
+    const GeomSection *geom= getGeomSection();
+    if(geom)
       {
-        const GeomSection *geom= section_repres->getGeom();
-        if(geom)
-          {
-            const Semiplano2d comp= getSemiplanoCompresiones(r);
-            if(comp.exists())
-              retval= geom->getCantoMecanicoZonaComprimida(comp);
-            else
-              {
-                retval= NAN;
-	        std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimidaR; no se ha podido obtener el semiplano comprimido."
-                          << std::endl;
-	      }
-          }
+        const Semiplano2d comp= getSemiplanoCompresiones(r);
+        if(comp.exists())
+          retval= geom->getCantoMecanicoZonaComprimida(comp);
         else
-	  std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimidaR; no se ha definido la geometría de la sección."
-                    << std::endl;
+          {
+            retval= NAN;
+	    std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimidaR; no se ha podido obtener el semiplano comprimido."
+                      << std::endl;
+	  }
       }
-    else
-      std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimidaR; no se ha definido la representación de la sección."
-                << std::endl;
     return retval;
   }
 
@@ -272,28 +269,19 @@ double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(const Recta2d &r) co
 double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(void) const
   {
     double retval= 0.0;
-    if(section_repres)
+    const GeomSection *geom= getGeomSection();
+    if(geom)
       {
-        const GeomSection *geom= section_repres->getGeom();
-        if(geom)
-          {
-            const Semiplano2d comp= getSemiplanoCompresiones();
-            if(comp.exists())
-              retval= geom->getCantoMecanicoZonaComprimida(comp);
-            else
-              {
-                retval= NAN;
-	        std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimida; no se ha podido obtener el semiplano comprimido."
-                          << std::endl;
-              }
-          }
+        const Semiplano2d comp= getSemiplanoCompresiones();
+        if(comp.exists())
+          retval= geom->getCantoMecanicoZonaComprimida(comp);
         else
-	  std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimida; no se ha definido la geometría de la sección."
-                    << std::endl;
-      }
-    else
-      std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimida; no se ha definido la representación de la sección."
-                << std::endl;
+          {
+            retval= NAN;
+            std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimida; no se ha podido obtener el semiplano comprimido."
+                      << std::endl;
+          }
+       }
     return retval;
   }
 
@@ -301,24 +289,15 @@ double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(void) const
 double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(void) const
   {
     double retval= 0.0;
-    if(section_repres)
+    const GeomSection *geom= getGeomSection();
+    if(geom)
       {
-        const GeomSection *geom= section_repres->getGeom();
-        if(geom)
-          {
-            const Semiplano2d comp= getSemiplanoCompresiones();
-            if(comp.exists())
-              retval= geom->getCantoMecanicoZonaTraccionada(comp);
-            else //Toda la sección esta en tracción.
-              retval= geom->getCantoMecanico(getTrazaPlanoFlexion());
-          }
-        else
-	  std::cerr << "FiberSectionBase::getCantoMecanicoZonaTraccionada; no se ha definido la geometría de la sección."
-                    << std::endl;
+        const Semiplano2d comp= getSemiplanoCompresiones();
+        if(comp.exists())
+          retval= geom->getCantoMecanicoZonaTraccionada(comp);
+        else //Toda la sección esta en tracción.
+          retval= geom->getCantoMecanico(getTrazaPlanoFlexion());
       }
-    else
-      std::cerr << "FiberSectionBase::getCantoMecanicoZonaTraccionada; no se ha definido la representación de la sección."
-                << std::endl;
     return retval;
   }
 
@@ -326,36 +305,26 @@ double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(void) const
 double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(const Recta2d &r) const
   {
     double retval= 0.0;
-    if(section_repres)
+    const GeomSection *geom= getGeomSection();
+    if(geom)
       {
-        const GeomSection *geom= section_repres->getGeom();
-        if(geom)
-          {
-            const Semiplano2d comp= getSemiplanoCompresiones(r);
-            if(comp.exists())
-              retval= geom->getCantoMecanicoZonaTraccionada(comp);
-            else
-              {
-                retval= NAN;
-	        std::cerr << "FiberSectionBase::getCantoMecanicoZonaTraccionada; no se ha podido obtener el semiplano comprimido."
-                          << std::endl;
-              }
-          }
+        const Semiplano2d comp= getSemiplanoCompresiones(r);
+        if(comp.exists())
+          retval= geom->getCantoMecanicoZonaTraccionada(comp);
         else
-	  std::cerr << "FiberSectionBase::getCantoMecanicoZonaTraccionada; no se ha definido la geometría de la sección."
-                    << std::endl;
+          {
+            retval= NAN;
+            std::cerr << "FiberSectionBase::getCantoMecanicoZonaTraccionada; no se ha podido obtener el semiplano comprimido."
+                      << std::endl;
+          }
       }
-    else
-      std::cerr << "FiberSectionBase::getCantoMecanicoZonaTraccionada; no se ha definido la representación de la sección."
-                << std::endl;
     return retval;
   }
 
 //! @brief Return the profundidad de la fibra neutra.
 double XC::FiberSectionBase::getNeutralAxisDepth(void) const
   {
-    double retval= getCantoMecanicoZonaComprimida();
-    return retval;
+    return getCantoMecanicoZonaComprimida();
   }
 
 //! @brief Return the distancia desde la fibra neutra
@@ -490,18 +459,9 @@ void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras
     if(i!=sets_fibras.end())
       {
         const DqFibras &armaduras= (*i).second; //Armaduras.
-        if(section_repres)
-          {
-            const GeomSection *geom= section_repres->getGeom();
-            if(geom)
-              armaduras.calcRecubrimientos(*geom);
-            else
-	      std::cerr << "FiberSectionBase::calcRecubrimientos; no se ha definido la geometría de la sección."
-                        << std::endl;
-          }
-        else
-          std::cerr << "FiberSectionBase::calcRecubrimientos; no se ha definido la representación de la sección."
-                    << std::endl;    
+        const GeomSection *geom= getGeomSection();
+        if(geom)
+          armaduras.calcRecubrimientos(*geom);
       }
     else
       std::cerr << "FiberSectionBase::calcRecubrimientos; no se encotró el conjunto de fibras: "
@@ -828,18 +788,9 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoCompresion(void) const
 double XC::FiberSectionBase::getAnchoMecanico(void) const
   {
     double retval= 0.0;
-    if(section_repres)
-      {
-        const GeomSection *geom= section_repres->getGeom();
-        if(geom)
-          retval= geom->getAnchoMecanico(getTrazaPlanoFlexion());
-        else
-	  std::cerr << "FiberSectionBase::getAnchoMecanico; no se ha definido la geometría de la sección."
-                    << std::endl;
-      }
-    else
-      std::cerr << "FiberSectionBase::getAnchoMecanico; no se ha definido la representación de la sección."
-                << std::endl;
+    const GeomSection *geom= getGeomSection();
+    if(geom)
+      retval= geom->getAnchoMecanico(getTrazaPlanoFlexion());
     return retval;
   }
 
@@ -847,18 +798,9 @@ double XC::FiberSectionBase::getAnchoMecanico(void) const
 double XC::FiberSectionBase::getAnchoBielaComprimida(void) const
   {
     double retval= 0.0;
-    if(section_repres)
-      {
-        const GeomSection *geom= section_repres->getGeom();
-        if(geom)
-          retval= geom->getAnchoBielaComprimida(getSegmentoBrazoMecanico());
-        else
-	  std::cerr << "FiberSectionBase::getAnchoBielaComprimida; no se ha definido la geometría de la sección."
-                    << std::endl;
-      }
-    else
-      std::cerr << "FiberSectionBase::getAnchoBielaComprimida; no se ha definido la representación de la sección."
-                << std::endl;
+    const GeomSection *geom= getGeomSection();
+    if(geom)
+      retval= geom->getAnchoBielaComprimida(getSegmentoBrazoMecanico());
     return retval;
   }
 
@@ -866,18 +808,9 @@ double XC::FiberSectionBase::getAnchoBielaComprimida(void) const
 double XC::FiberSectionBase::getRecubrimiento(const Pos2d &p) const
   {
     double retval= 0.0;
-    if(section_repres)
-      {
-        const GeomSection *geom= section_repres->getGeom();
-        if(geom)
-          retval= geom->getRecubrimiento(p);
-        else
-	  std::cerr << "FiberSectionBase::getRecubrimiento; no se ha definido la geometría de la sección."
-                    << std::endl;
-      }
-    else
-      std::cerr << "FiberSectionBase::getRecubrimiento; no se ha definido la representación de la sección."
-                << std::endl;
+    const GeomSection *geom= getGeomSection();
+    if(geom)
+      retval= geom->getRecubrimiento(p);
     return retval;
   }
 

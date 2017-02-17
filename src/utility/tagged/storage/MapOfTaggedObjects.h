@@ -59,10 +59,7 @@
 // Revision: A
 //
 // Description: This file contains the class definition for 
-// MapOfTaggedObjects. MapOfTaggedObjects is a storage class. The class 
-// is responsible for holding and providing access to objects of type 
-// TaggedObject. A map template of the standard template class is used to store
-// the pointers to these objects.
+// MapOfTaggedObjects. MapOfTaggedObjects is a storage class. 
 //
 // What: "@(#) MapOfTaggedObjects.h, revA"
 
@@ -71,6 +68,11 @@
 #include <utility/tagged/storage/MapOfTaggedObjectsIter.h>
 
 namespace XC {
+//! @ingroup Tagged
+//
+//! @brief The class is responsible for holding and providing access
+//! to objects of type TaggedObject. A map template of the standard
+//! template class is used to store the pointers to these objects.
 class MapOfTaggedObjects : public TaggedObjectStorage
   {
     typedef std::map<int, TaggedObject *> tagged_map;

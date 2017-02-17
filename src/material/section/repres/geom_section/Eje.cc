@@ -39,11 +39,11 @@ XC::Eje::Eje(GeomSection *sr,const size_t &nd)
   : EntGeomSection("",sr), ndiv(nd) {}
 
 //! @brief Constructor.
-//! @param nombre: Identificador del objeto.
-//! @param i: Índice para gráficos.
-//! @param m: Pointer to la representación de la sección.
-XC::Eje::Eje(const std::string &nombre,GeomSection *sr,const size_t &nd)
-  : EntGeomSection(nombre,sr), ndiv(nd) {}
+//! @param name: object identifier.
+//! @param sr: pointer to section geometry.
+//! @param nd: number of divisions.
+XC::Eje::Eje(const std::string &name,GeomSection *sr,const size_t &nd)
+  : EntGeomSection(name,sr), ndiv(nd) {}
 
 //! @brief Destructor.
 XC::Eje::~Eje(void)

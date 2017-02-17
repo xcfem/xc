@@ -56,9 +56,7 @@
 // Revision: A
 //
 // Description: This file contains the class definition for
-// TaggedObjectStorage. A TaggedObjectStorage object a container object
-// used to hold objects of type TaggedObject; each object of which has
-// some UNIQUE identifier.
+// TaggedObjectStorage. 
 //
 // What: "@(#) TaggedObjectStorage.h, revA"
 
@@ -70,6 +68,8 @@ namespace XC {
 class TaggedObject;
 class TaggedObjectIter;
 
+//! @ingroup Tagged
+//
 //! @brief TaggedObjectStorage. A TaggedObjectStorage object a container object
 //! used to hold objects of type TaggedObject; each object of which has
 //! some UNIQUE identifier.

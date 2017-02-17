@@ -60,7 +60,7 @@ struct SecuenciaLados
 
 //! \ingroup CadEnt
 //!
-//! @brief Representación de un sólido de seis caras.
+//! @brief Six faces solid.
 class Body: public EntMdlr
   {
   protected:

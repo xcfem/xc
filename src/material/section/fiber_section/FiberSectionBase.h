@@ -106,6 +106,8 @@ class FiberSectionBase: public SeccionBarraPrismatica
     const Vector &getSectionDeformation(void) const;
 
     FiberSectionRepr *getFiberSectionRepr(void);
+    GeomSection *getGeomSection(void);
+    const GeomSection *getGeomSection(void) const;
     Poligono2d getRegionsContour(void) const;
     double getCantoMecanicoZonaComprimida(const Recta2d &) const;
     double getCantoMecanicoZonaComprimida(void) const;

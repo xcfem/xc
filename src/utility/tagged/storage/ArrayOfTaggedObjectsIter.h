@@ -67,6 +67,8 @@
 namespace XC {
 class ArrayOfTaggedObjects;
 
+//! @ingroup Tagged
+//
 class ArrayOfTaggedObjectsIter: public TaggedObjectIter
   {
   private:
