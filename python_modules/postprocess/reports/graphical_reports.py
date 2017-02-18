@@ -62,8 +62,10 @@ class RecordLoadCaseDisp(object):
                  (defaults to ['N', 'My', 'Mz', 'Qy', 'Qz','T'])
   :ivar setsToDispBeamIntForc: ordered list of sets of elements (of type «beam»)
                     to display internal forces (defaults to [])
-  :ivar scaleDispBeamIntForc: scale to apply to displays of beam  internal 
-                   forces (defaults to 1.0)
+  :ivar scaleDispBeamIntForc: tuple (escN,escQ,escM) correponding to the scales to apply to 
+                  displays of, respectively, axial forces (N), shear forces (Q)
+                  or bending moments (M) in beam elements
+                  (defaults to (1.0,1.0,1.0))
   :ivar unitsScaleForc: factor to apply to internal forces if we want to change
                    the units (defaults to 1).
   :ivar unitsForc: text to especify the units in which forces are 
@@ -78,6 +80,9 @@ class RecordLoadCaseDisp(object):
   :ivar hCamFct:   factor that applies to the height of the camera position 
                    in order to change perspective of isometric views 
                    (defaults to 1, usual values 0.1 to 10)
+  :ivar viewNameBeams: name of the view  for beam elements displays (defaults to v"XYZPos")
+  :ivar hCamFctBeams:  factor that applies to the height of the camera position for
+                 beam displays (defaults to 1)
 
   '''
 
@@ -101,14 +106,16 @@ class RecordLoadCaseDisp(object):
     self.setsToDispIntForc=setsToDispIntForc
     self.listBeamIntForc=['N', 'My', 'Mz', 'Qy', 'Qz','T']
     self.setsToDispBeamIntForc=[]
-    self.scaleDispBeamIntForc=1.0
+    self.scaleDispBeamIntForc=(1.0,1.0,1.0)
     self.unitsScaleForc=1.0
     self.unitsForc='[kN/m]'
     self.unitsScaleMom=1.0
     self.unitsMom='[kN.m/m]'
     self.viewName="XYZPos"
     self.hCamFct=1.0
-
+    self.viewNameBeams="XYZPos"
+    self.hCamFctBeams=1.0
+    
   def loadReports(self,gridmodl,pathGr,texFile,grWdt):
     '''Creates the graphics files of loads for the load case and insert them in
     a LaTex file
@@ -160,7 +167,7 @@ class RecordLoadCaseDisp(object):
                 unDesc=''
             grfname=pathGr+self.loadCaseName+st.elSet.name+arg
             lcs.displayDispRot(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits=fcUn,unitDescription=unDesc,fileName=grfname+'.jpg')
-            lcs.displayDispRot(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits=fcUn,unitDescription=unDesc,fileName=grfname+'.eps')
+            lcs.displayDispRot(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits=fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.eps')
             capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     #Internal forces displays on sets of «shell» elements
@@ -183,12 +190,17 @@ class RecordLoadCaseDisp(object):
             if arg[0]=='M':
                 fcUn=self.unitsScaleMom
                 unDesc=self.unitsMom
+                scaleFact=self.scaleDispBeamIntForc[2]
             else:
                 fcUn=self.unitsScaleForc
                 unDesc=self.unitsForc
+                if arg[0]=='N':
+                  scaleFact=self.scaleDispBeamIntForc[0]
+                else:
+                  scaleFact=self.scaleDispBeamIntForc[1]
             grfname=pathGr+self.loadCaseName+st.elSet.name+arg
-            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=self.scaleDispBeamIntForc,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.jpg')
-            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=self.scaleDispBeamIntForc,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.eps')
+            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=scaleFact,unitDescription=unDesc,viewName=self.viewNameBeams,hCamFct=self.hCamFctBeams,fileName=grfname+'.jpg')
+            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=scaleFact,unitDescription=unDesc,viewName=self.viewNameBeams,hCamFct=self.hCamFctBeams,fileName=grfname+'.eps')
             capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     texFile.write('\\clearpage\n')
