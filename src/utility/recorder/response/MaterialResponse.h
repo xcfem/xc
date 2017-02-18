@@ -61,19 +61,22 @@
 namespace XC {
 class Material;
 
+//! @ingroup Recorder
+//
+//! @brief Recorder for material response.
 class MaterialResponse : public Response
-{
-private:
-  Material *theMaterial;
-  int responseID;
- public:
-  MaterialResponse(Material *mat, int id);
-  MaterialResponse(Material *mat, int id, int val);
-  MaterialResponse(Material *mat, int id, double val);
-  MaterialResponse(Material *mat, int id, const ID &val);
-  MaterialResponse(Material *mat, int id, const Vector &val);
-  MaterialResponse(Material *mat, int id, const Matrix &val);
-  MaterialResponse(Material *mat, int ID, const BJtensor &val);
+  {
+  private:
+    Material *theMaterial; //!< pointer to material.
+    int responseID; //!< response identifier.
+  public:
+    MaterialResponse(Material *mat, int id);
+    MaterialResponse(Material *mat, int id, int val);
+    MaterialResponse(Material *mat, int id, double val);
+    MaterialResponse(Material *mat, int id, const ID &val);
+    MaterialResponse(Material *mat, int id, const Vector &val);
+    MaterialResponse(Material *mat, int id, const Matrix &val);
+    MaterialResponse(Material *mat, int ID, const BJtensor &val);
   
     int getResponse(void);
   };

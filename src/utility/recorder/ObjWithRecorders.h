@@ -38,6 +38,8 @@ namespace XC {
 class Recorder;
  class Domain;
 
+//! @ingroup Recorder
+//
 //! @brief Objeto capaz de gestionar Recorders.
 class ObjWithRecorders: public EntCmd
   {

@@ -69,6 +69,11 @@ namespace XC {
 class Domain;
 class FE_Datastore;
 
+//! @ingroup Recorder
+//
+//! @brief  GSA_Recorder is used to create an o/p file
+//! which can be read by the Ove Arup's GSA program for
+//! postprocessing.
 class GSA_Recorder: public DomainRecorderBase
   {
   private:	

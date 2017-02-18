@@ -72,15 +72,15 @@ class GaussQuadRule1d01;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra con material de tipo SeccionBarraPrismatica para problemas bidimensionales.
+//! @brief displacement based 2D beam element with SeccionBarraPrismatica type material.
 class DispBeamColumn2d : public BeamColumnWithSectionFDTrf2d
   {
   private:
-    mutable Vector q;	// Basic force
-    FVectorBeamColumn2d q0; // Fixed end forces in basic system
-    FVectorBeamColumn2d p0; // Reactions in basic system
+    mutable Vector q; //!< Basic force
+    FVectorBeamColumn2d q0; //!< Fixed end forces in basic system
+    FVectorBeamColumn2d p0; //!< Reactions in basic system
 
-    double rho;			// Mass density per unit length
+    double rho;	//!< Mass density per unit length
 
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     int parameterID;

@@ -67,7 +67,7 @@ class SeccionBarraPrismatica;
 //!
 //! \ingroup OneDimensionalElemF
 //
-//! @brief Elemento barra no lineal con material de tipo SeccionBarraPrismatica para problemas bidimensionales.
+//! @brief Force based 2D beam column element with SeccionBarraPrismatica type nonlinear material.
 class ForceBeamColumn2d: public NLForceBeamColumn2dBase
   {
   private:

@@ -36,7 +36,7 @@ class CrdTransf2d;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Clase base para elementos barra en problemas bidimensionales.
+//! @brief Base class for 2D beam elements.
 class ProtoBeam2d : public Element1D
   {
   protected:

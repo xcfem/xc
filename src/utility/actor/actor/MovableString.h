@@ -35,6 +35,9 @@
 
 namespace XC {
 
+//! @ingroup IPComm
+//
+//! @brief String that can move between processes.
 class MovableString: public MovableID
   {
   public:

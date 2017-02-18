@@ -38,15 +38,15 @@ class FE_Datastore;
 class DataOutputHandler;
  class ID;
 
-//! @brief Se emplea como base de los recorders que obtienen
-//! la respuesta de uno o más nodos during the analysis.
+//! @ingroup Recorder
+//
+//! @brief Base class for the node recorders.
 class NodeRecorderBase: public MeshCompRecorder
   {
   protected:	
-    ID *theDofs;
-    ID *theNodalTags;
-    std::vector<Node *> theNodes;
-
+    ID *theDofs; //!< DOFs identifiers.
+    ID *theNodalTags; //!< ??
+    std::vector<Node *> theNodes; //!< Pointer to nodes.
 
     int dataFlag; //!< flag indicating what it is to be stored in recorder.
     int numValidNodes;

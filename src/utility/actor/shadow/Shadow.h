@@ -75,6 +75,8 @@ class ID;
 
 class FEM_ObjectBroker;
 
+//! @ingroup IPComm
+//
 class Shadow
   {
   private:

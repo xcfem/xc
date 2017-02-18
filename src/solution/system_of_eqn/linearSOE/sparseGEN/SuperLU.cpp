@@ -298,7 +298,7 @@ int XC::SuperLU::setSize(void)
       {
         const size_t sizePerm= perm_r.Size();
         if((sizePerm>0) && (sizePerm<n))
-          std::clog << "SuperLU, a veces, da problemas al cambiar la dimensión del sistema." << std::endl;
+          std::clog << "SuperLU, sometimes, fails when dimension of the system is changerd." << std::endl;
         alloc(n);
         
         // set the refact variable to 'N' after first factorization with new_ size 

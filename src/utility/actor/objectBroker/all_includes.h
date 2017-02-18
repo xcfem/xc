@@ -84,7 +84,7 @@
 #include "material/section/repres/geom_section/region/ListRegiones.h"
 #include "material/section/repres/geom_section/reinfBar/ReinfBar.h"
 #include "material/section/repres/geom_section/reinfBar/VectorReinfBar.h"
-#include "material/section/repres/geom_section/reinfLayer/BarraSuelta.h"
+#include "material/section/repres/geom_section/reinfLayer/SingleBar.h"
 #include "material/section/repres/geom_section/reinfLayer/StraightReinfLayer.h"
 #include "material/section/repres/geom_section/reinfLayer/CircReinfLayer.h"
 #include "material/section/repres/geom_section/reinfLayer/ListReinfLayer.h"

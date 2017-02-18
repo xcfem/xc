@@ -35,6 +35,9 @@
 
 namespace XC {
 
+//! @ingroup IPComm
+//
+//! @brief Container that can move between processes.
 template <class C>
 class MovableContainer: public MovableObject
   {

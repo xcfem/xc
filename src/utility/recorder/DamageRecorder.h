@@ -56,10 +56,6 @@
 // Created: 04/04
 // Revision: Arash Altoontash
 //
-// Description: This file contains the class definition for DamageRecorder.
-// A DamageRecorder is used to obtain a response from an element section/material during 
-// the analysis and apply the information to the damage model and record the damage index.
-//
 // What: "@(#) DamageRecorder.h, revA"
 
 #include <utility/recorder/DomainRecorderBase.h>
@@ -76,12 +72,17 @@ class Response;
 class FE_Datastore;
 class DamageModel;
 
+//! @ingroup Recorder
+//
+//! @brief Used to obtain a response from an element section/material during 
+//! the analysis and apply the information to the damage model
+//! and record the damage index.
 class DamageRecorder: public DomainRecorderBase
   {
   private:	
     int eleID, numSec, dofID;
-    ID responseID;                 // integer element returns in setResponse
-    ID sectionTags;
+    ID responseID; //! response identifiers
+    ID sectionTags; //! section identifiers.
 
     std::vector<Response *> theResponses;
     std::vector<DamageModel *> theDamageModels;

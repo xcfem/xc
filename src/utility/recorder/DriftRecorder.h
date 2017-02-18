@@ -59,16 +59,19 @@
 
 #include "HandlerRecorder.h"
 #include <vector>
+#include "utility/matrix/Vector.h"
 
 namespace XC {
 class Domain;
 class DataOutputHandler;
 class Node;
-class Vector;
 class ID;
 
-//! @brief Obtiene una medida del desplazamiento relativo entre dos nodos. The drift is taken 
-//! as the ratio between the prescribed relative displacement and the specified distance between the nodes.
+//! @ingroup Recorder
+//
+//! @brief Records relative displacement between nodes. The drift is taken 
+//! as the ratio between the prescribed relative displacement and
+//! the specified distance between the nodes.
 class DriftRecorder: public HandlerRecorder
   {
   private:	
@@ -76,11 +79,11 @@ class DriftRecorder: public HandlerRecorder
 
     ID *ndI;
     ID *ndJ;
-    std::vector<Node *> theNodes; // i & j nodes
-    int dof;
+    std::vector<Node *> theNodes; //!< i & j nodes
+    int dof; //! degree of freedom.
     int perpDirn;
-    Vector *oneOverL;
-    Vector *data;
+    Vector oneOverL;
+    Vector data;
     int numNodes;
   protected:
     void libera_nodes(void);

@@ -63,9 +63,6 @@
 //          rms 06/00 (making copy of the sections)
 //          rms 06/00 (storing section history variables at the element level)
 //            
-// Purpose: This file contains the class definition for NLBeamColumn3d.
-// NLBeamColumn3d is a materially nonlinear flexibility based frame element.
-
 #ifndef NLBeamColumn3d_h
 #define NLBeamColumn3d_h
 
@@ -79,7 +76,7 @@ class GaussLobattoQuadRule1d01;
 
 //! \ingroup OneDimensionalElemNL
 //
-//! @brief Elemento barra no lineal para problemas tridimensionales.
+//! @brief 3D materially nonlinear flexibility based frame element.
 class NLBeamColumn3d: public  NLForceBeamColumn3dBase
   {
   private:

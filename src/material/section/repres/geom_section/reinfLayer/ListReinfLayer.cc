@@ -27,7 +27,7 @@
 //ListReinfLayer.cc
 
 #include "ListReinfLayer.h"
-#include "material/section/repres/geom_section/reinfLayer/BarraSuelta.h"
+#include "material/section/repres/geom_section/reinfLayer/SingleBar.h"
 #include "material/section/repres/geom_section/reinfLayer/StraightReinfLayer.h"
 #include "material/section/repres/geom_section/reinfLayer/CircReinfLayer.h"
 #include "preprocessor/loaders/MaterialLoader.h"
@@ -95,12 +95,14 @@ XC::CircReinfLayer *XC::ListReinfLayer::newCircReinfLayer(const std::string &cod
     return dynamic_cast<CircReinfLayer *>(ptr);
   }
 
-XC::BarraSuelta *XC::ListReinfLayer::newReinfBar(const std::string &cod_mat)
+//! Returns a single bar with the material with the identifier being passed
+//! as parameter.
+XC::SingleBar *XC::ListReinfLayer::newReinfBar(const std::string &cod_mat)
   {
-    BarraSuelta tmp(this,material_loader->find_ptr(cod_mat));
+    SingleBar tmp(this,material_loader->find_ptr(cod_mat));
     ReinfLayer *ptr= push_back(tmp);
     ptr->set_owner(this);
-    return dynamic_cast<BarraSuelta *>(ptr);
+    return dynamic_cast<SingleBar *>(ptr);
   }
 
 //! @brief Destructor.

@@ -74,7 +74,7 @@ class CrossSectionProperties3d;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra para problemas bidimensionales.
+//! @brief 2D elastic beam element.
 class ElasticBeam2d: public ProtoBeam2d
   {
   private:
@@ -82,7 +82,7 @@ class ElasticBeam2d: public ProtoBeam2d
     double alpha;
     double d; //!< Section depth.
     
-    double rho;
+    double rho; //!< Mass denstity per unit length.
     
     static Matrix K;
     static Vector P;

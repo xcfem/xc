@@ -34,6 +34,8 @@ namespace XC {
 
 class Channel;
 
+//! @ingroup IPComm
+//
 //! @brief Datos acerca de la posición, tamaño,... del
 //! objeto a transmitir.
 class ChannelQueue: public std::deque<Channel *>

@@ -31,8 +31,10 @@
 
 namespace XC {
 
-//! @brief Datos acerca de la posición, tamaño,... del
-//! objeto a transmitir.
+//! @ingroup IPComm
+//
+//! @brief Data about the index, size,,... of the 
+//! object to transmit.
 class CommMetaData
   {
   private:

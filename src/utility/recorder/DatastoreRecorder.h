@@ -71,6 +71,8 @@ namespace XC {
 class Domain;
 class FE_Datastore;
 
+//! @ingroup Recorder
+//
 class DatastoreRecorder: public Recorder
   {
   private:	

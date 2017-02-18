@@ -39,13 +39,9 @@
 #include "vtkCellType.h"
 
 namespace XC {
-//! \ingroup Elem
-//
-//! @defgroup ElemPlanos Elementos bidimensionales (problemas planos, láminas,...).
-//!
 //! \ingroup ElemPlanos
 //
-//! @brief Clase base para los cuadriláteros de cuatro nodos.
+//! @brief Base class for 3 node triangles.
 template <class PhysProp> //3 Gauss point by default.
 class TriBase3N: public ElemPlano<3,PhysProp>
   {

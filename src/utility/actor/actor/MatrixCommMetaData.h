@@ -33,8 +33,10 @@
 
 namespace XC {
 
-//! @brief Datos acerca de la posición, tamaño,... del
-//! objeto a transmitir.
+//! @ingroup IPComm
+//
+//! @brief Data about the position, size,... of 
+//! the object to transmit.
 class MatrixCommMetaData: public ArrayCommMetaData
   {
   private:

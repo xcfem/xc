@@ -66,6 +66,8 @@ class Matrix;
 class BJtensor;
 
 
+//! @ingroup Recorder
+//
 class Response
   {
   protected:

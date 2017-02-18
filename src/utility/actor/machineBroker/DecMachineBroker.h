@@ -67,6 +67,9 @@
 #include <utility/actor/machineBroker/MachineBroker.h>
 
 namespace XC {
+//! @ingroup IPComm
+//
+//! @brief Broker for DEC machines.
 class DecMachineBroker : public AlphaBaseMachineBroker
   {
   public:

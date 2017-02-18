@@ -34,7 +34,7 @@ namespace XC {
 
 class DbTagData;
 
-//! @ingroup ACTOR
+//! @ingroup IPComm
 //
 //! @brief Objeto base para procesamiento distribuido.
 class DistributedBase

@@ -37,6 +37,9 @@ namespace XC {
 class Channel;
 class FEM_ObjectBroker;
 
+//! @ingroup IPComm
+//
+//! @brief ID that can move between processes.
 class MovableID: public ID, public MovableObject
   {
   protected:

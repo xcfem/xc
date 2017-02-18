@@ -48,13 +48,6 @@
 // Written: rkaul
 // Created: 7/30
 //
-// Description: This file contains the class definition for Elastic2dGNL.
-
-// Elastic2dGNL is a subclass of UpdatedLagrangianBeam2D, that can be 
-// used to model 2d beam column elements with large deformation effects. 
-// Most of the virtual Element methods have been implemented by the parent 
-// class (see UpdatedLagrangianBeam2D.h for details, 
-// including the recorder arguments)
 
 #ifndef Elastic2dGNL_H
 #define Elastic2dGNL_H
@@ -66,7 +59,8 @@
 namespace XC {
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra con formulación lagrangiana para problemas bidimensionales.
+//! @brief Elastic2dGNL is a subclass of UpdatedLagrangianBeam2D, that can be 
+// used to model 2d beam column elements with large deformation effects.
 class Elastic2dGNL : public UpdatedLagrangianBeam2D  
   {
   private:

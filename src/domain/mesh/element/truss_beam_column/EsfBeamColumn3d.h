@@ -41,7 +41,7 @@ class CommParameters;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Esfuerzos en un elemento barra tridimensional.
+//! @brief 3D beam column internal forces.
 class EsfBeamColumn3d: public Vector
   {
   public:

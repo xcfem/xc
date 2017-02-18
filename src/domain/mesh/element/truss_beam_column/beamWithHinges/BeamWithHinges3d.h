@@ -69,11 +69,11 @@ class Renderer;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Barra con rótulas en los extremos para problemas tridimensionales.
+//! @brief 3D beam with hinges in both ends.
 class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
   {
   private:
-    CrossSectionProperties3d ctes_scc; //Mechanical properties of the section E,A,Iy,...
+    CrossSectionProperties3d ctes_scc; //!< mechanical properties of the section E,A,Iy,...
     double beta1, beta2;
     double rho;
 

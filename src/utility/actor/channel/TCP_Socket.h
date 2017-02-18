@@ -53,11 +53,6 @@
 // Created: 11/96
 // Revision: A
 //
-// Purpose: This file contains the class definition for TCP_Socket.
-// TCP_Socket is a sub-class of channel. It is implemented with Berkeley
-// stream sockets using the TCP protocol. Messages delivery is garaunteed. 
-// Communication is full-duplex between a pair of connected sockets.
-//
 // What: "@(#) TCP_Socket.h, revA"
 
 #ifndef TCP_Socket_h
@@ -68,6 +63,11 @@
 #include "../address/SocketAddress.h"
 
 namespace XC {
+//! @ingroup IPComm
+//
+//! @brief TCP_Socket is a sub-class of channel. It is implemented with Berkeley
+//! stream sockets using the TCP protocol. Messages delivery is garaunteed. 
+//! Communication is full-duplex between a pair of connected sockets.
 class TCP_Socket : public Channel
   {
   private:

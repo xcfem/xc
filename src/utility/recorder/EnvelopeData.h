@@ -34,6 +34,8 @@ namespace XC {
 class Vector;
 class Matrix;
 
+//! @ingroup Recorder
+//
 class EnvelopeData: public MovableObject
   {
   private:	

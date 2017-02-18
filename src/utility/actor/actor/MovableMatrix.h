@@ -37,6 +37,9 @@ namespace XC {
 class Channel;
 class FEM_ObjectBroker;
 
+//! @ingroup IPComm
+//
+//! @brief Matrix that can move between processes.
 class MovableMatrix: public Matrix, public MovableObject
   {
   protected:
@@ -51,7 +54,6 @@ class MovableMatrix: public Matrix, public MovableObject
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
-
   };
 
 } // end of XC namespace

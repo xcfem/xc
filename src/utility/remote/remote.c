@@ -41,7 +41,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-char  remotecmd[400];	
+char remotecmd[400];	
 
 int main(int argv, char **argc)
   {

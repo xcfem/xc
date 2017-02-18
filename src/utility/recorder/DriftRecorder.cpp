@@ -75,10 +75,8 @@
 
 void XC::DriftRecorder::libera_nodes(void)
   {
-    if(oneOverL) delete oneOverL;
-    oneOverL= nullptr;
-    if(data) delete data;
-    data= nullptr;
+    oneOverL.resize(0);
+    data.resize(0);
     theNodes.clear();
   }
 
@@ -86,13 +84,8 @@ int XC::DriftRecorder::alloc_nodes(const int &numNodes,const int &timeOffset)
   {
     libera_nodes();
     theNodes= std::vector<Node *>(2*numNodes,static_cast<Node *>(nullptr));
-    oneOverL=new Vector(numNodes);
-    data=new Vector(numNodes+timeOffset); // data(0) allocated for time
-    if(!oneOverL || !data)
-      {
-        std::cerr << "DriftRecorder::initialize() - out of memory\n";
-        return -3;
-      }
+    oneOverL= Vector(numNodes);
+    data= Vector(numNodes+timeOffset); // data(0) allocated for time
     return 0;
   }
 
@@ -134,7 +127,7 @@ void XC::DriftRecorder::setup_ndIJ(const int &sz)
 
 XC::DriftRecorder::DriftRecorder(void)
   :HandlerRecorder(RECORDER_TAGS_DriftRecorder),
-   ndI(nullptr), ndJ(nullptr), theNodes(0), dof(0), perpDirn(0), oneOverL(0), data(0),numNodes(0)
+   ndI(nullptr), ndJ(nullptr), theNodes(0), dof(0), perpDirn(0), oneOverL(), data(),numNodes(0)
   {}
 
 
@@ -145,8 +138,8 @@ XC::DriftRecorder::DriftRecorder(int ni, int nj,
                              DataOutputHandler &theDataOutputHandler,
                              bool timeFlag)
   :HandlerRecorder(RECORDER_TAGS_DriftRecorder,theDom,theDataOutputHandler,timeFlag),
-   ndI(nullptr), ndJ(nullptr), theNodes(0), dof(df), perpDirn(dirn), oneOverL(0), data(0),
-   numNodes(0)
+   ndI(nullptr), ndJ(nullptr), theNodes(0), dof(df), perpDirn(dirn),
+   oneOverL(), data(), numNodes(0)
   {
     setup_ndIJ(1);
     (*ndI)(0)= ni;
@@ -154,11 +147,10 @@ XC::DriftRecorder::DriftRecorder(int ni, int nj,
   }
 
 
-XC::DriftRecorder::DriftRecorder(const ID &nI,const ID &nJ, int df,int dirn, Domain &theDom,
-                             DataOutputHandler &theDataOutputHandler, bool timeFlag)
+XC::DriftRecorder::DriftRecorder(const ID &nI,const ID &nJ, int df,int dirn, Domain &theDom, DataOutputHandler &theDataOutputHandler, bool timeFlag)
   :HandlerRecorder(RECORDER_TAGS_DriftRecorder,theDom,theDataOutputHandler,timeFlag),
-   ndI(nullptr), ndJ(nullptr), theNodes(0), dof(df), perpDirn(dirn), oneOverL(0), data(0),
-   numNodes(0)
+   ndI(nullptr), ndJ(nullptr), theNodes(0), dof(df), perpDirn(dirn),
+   oneOverL(), data(), numNodes(0)
   {
     assert(nI.Size()==nJ.Size());
     set_ndIJ(nI,nJ);
@@ -178,7 +170,7 @@ int XC::DriftRecorder::record(int commitTag, double timeStamp)
 
     if(!theHandler)
       {
-        std::cerr << "XC::DriftRecorder::record() - no XC::DataOutputHandler has been set\n";
+        std::cerr << "XC::DriftRecorder::record() - no DataOutputHandler has been set\n";
         return -1;
       }
 
@@ -189,13 +181,13 @@ int XC::DriftRecorder::record(int commitTag, double timeStamp)
           return -1;
         }
 
-    if(numNodes == 0 || data == 0)
+    if(numNodes == 0 || data.Nulo())
       return 0;
 
     int timeOffset = 0;
     if(echoTimeFlag == true)
       {
-        (*data)(0) = theDomain->getTimeTracker().getCurrentTime();
+        data(0) = theDomain->getTimeTracker().getCurrentTime();
         timeOffset = 1;
       }
 
@@ -204,19 +196,19 @@ int XC::DriftRecorder::record(int commitTag, double timeStamp)
         Node *nodeI = theNodes[2*i];
         Node *nodeJ = theNodes[2*i+1];
 
-        if((*oneOverL)(i) != 0.0)
+        if(oneOverL(i) != 0.0)
           {
-            const XC::Vector &dispI = nodeI->getTrialDisp();
-            const XC::Vector &dispJ = nodeJ->getTrialDisp();
+            const Vector &dispI= nodeI->getTrialDisp();
+            const Vector &dispJ= nodeJ->getTrialDisp();
 
-            const double dx = dispJ(dof)-dispI(dof);
-            (*data)(i+timeOffset) =  dx* (*oneOverL)(i);
+            const double dx= dispJ(dof)-dispI(dof);
+            data(i+timeOffset)=  dx* oneOverL(i);
           }
         else
-          (*data)(i+timeOffset) = 0.0;
+          data(i+timeOffset) = 0.0;
       }
 
-    theHandler->write(*data);
+    theHandler->write(data);
     return 0;
   }
 
@@ -333,7 +325,7 @@ int XC::DriftRecorder::initialize(void)
             if(crdI.Size() > perpDirn  && crdJ.Size() > perpDirn)
               if(crdI(perpDirn) != crdJ(perpDirn))
                 {
-                  (*oneOverL)(counter) = 1.0/fabs(crdJ(perpDirn) - crdI(perpDirn));
+                  oneOverL(counter) = 1.0/fabs(crdJ(perpDirn) - crdI(perpDirn));
                   theNodes[counterI] = nodeI;
                   theNodes[counterJ] = nodeJ;
                   counterI+=2;

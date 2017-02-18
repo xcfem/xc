@@ -61,11 +61,13 @@
 namespace XC {
 class Element;
 
+//! @ingroup Recorder
+//
 class ElementResponse : public Response
   {
   private:
-    Element *theElement;
-    int responseID;
+    Element *theElement; //!< to element.
+    int responseID; //!< element's response identifier.
   public:
     ElementResponse(Element *ele, int id);
     ElementResponse(Element *ele, int id, int val);

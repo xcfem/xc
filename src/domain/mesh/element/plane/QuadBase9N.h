@@ -41,11 +41,11 @@
 namespace XC {
 //! \ingroup Elem
 //
-//! @defgroup ElemPlanos Elementos bidimensionales (problemas planos, láminas,...).
+//! @defgroup ElemPlanos bi-dimensional elements (2D problems, shells,...).
 //!
 //! \ingroup ElemPlanos
 //
-//! @brief Clase base para los cuadriláteros de cuatro nodos.
+//! @brief Base class for nine node quads.
 template <class PhysProp>
 class QuadBase9N : public ElemPlano<9,PhysProp>
   {

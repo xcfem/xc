@@ -35,12 +35,15 @@
 namespace XC {
 class Element;
 
+//! @ingroup Recorder
+//
+//! @brief Objects to record element data at each commit.
 class ElementPropRecorder: public PropRecorder
   {
   public:
-    typedef std::deque<Element *> dq_elements; //Contenedor de pointers to elementos.
+    typedef std::deque<Element *> dq_elements; //!< Pointes to elements.
   private:
-    dq_elements elements; //!< Elementos cuya(s) propiedad(es) se registran.
+    dq_elements elements; //!< Element's wich data will be recorded.
   public:
     ElementPropRecorder(Domain *ptr_dom= NULL);
 

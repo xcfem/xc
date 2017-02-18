@@ -33,15 +33,17 @@
 
 namespace XC {
 
+//! @ingroup Recorder
+//
 class PropRecorder: public Recorder
   {
   protected:
-    std::string CallbackRecord; //!< Instrucciones que se ejecutan en cada llamada a record.
-    std::string CallbackRestart; //!< Instrucciones que se ejecutan en cada llamada a restart.
-    int lastCommitTag; //!< CommitTag de la última llamada a record.
-    double lastTimeStamp; //!< TimeStamp de la última llamada a record.
+    std::string CallbackRecord; //!< Python script to execute on each record call.
+    std::string CallbackRestart; //!< Python script to execute on each restart call.
+    int lastCommitTag; //!< CommitTag of the last record call.
+    double lastTimeStamp; //!< TimeStamp of the last record call.
 
-    Domain *theDomain;
+    Domain *theDomain; //!< poiter to the domain.
 
   public:
     PropRecorder(int classTag, Domain *ptr_dom= NULL);

@@ -69,8 +69,8 @@ class CrdTransf2d;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra 02 para problemas bidimensionales.
-class beam2d02 : public beam2d
+//! @brief 2D beam 02 element.
+class beam2d02: public beam2d
   {
   private:
     // private attributes - a copy for each object of the class        

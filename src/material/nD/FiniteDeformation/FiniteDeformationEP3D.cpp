@@ -59,7 +59,6 @@
 #include <material/nD/FiniteDeformation/fdFlow/fdFlow.h>
 #include <material/nD/FiniteDeformation/fdEvolution/fdEvolution_S.h>
 #include <material/nD/FiniteDeformation/fdEvolution/fdEvolution_T.h>
-#include <utility/handler/ConsoleErrorHandler.h>
 #include "utility/matrix/nDarray/BJmatrix.h"
 #include <material/nD/TipoMaterialND.h>
 

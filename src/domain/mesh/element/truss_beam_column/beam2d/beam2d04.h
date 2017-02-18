@@ -69,7 +69,7 @@ class Channel;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra 04 para problemas bidimensionales.
+//! @brief 2D beam element 04.
 class beam2d04 : public beam2d
   {
   private:    
@@ -83,7 +83,7 @@ class beam2d04 : public beam2d
     mutable int isStiffFormed;
 
     static Matrix k;
-    static Matrix trans;  // hold part of transformation matrix
+    static Matrix trans; //!< hold part of transformation matrix
 
     const Matrix &getStiff(void) const;    
     void formVar(void) const;

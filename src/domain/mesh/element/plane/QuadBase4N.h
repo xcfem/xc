@@ -43,7 +43,7 @@ namespace XC {
 //
 //! \ingroup ElemPlanos
 //
-//! @brief Clase base para los cuadriláteros de cuatro nodos.
+//! @brief Base class for 4 node quads.
 template <class PhysProp>
 class QuadBase4N : public ElemPlano<4,PhysProp>
   {

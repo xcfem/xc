@@ -84,7 +84,7 @@ class ActorMethod
       : tag(tg), theMethod(f) {}
   };
 
-//! @ingroup ACTOR
+//! @ingroup IPComm
 //
 //! @brief 
 class Actor

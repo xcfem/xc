@@ -35,6 +35,9 @@
 
 namespace XC {
 
+//! @ingroup IPComm
+//
+//! @brief Vector that can move between processes.
 class MovableVector: public Vector, public MovableObject
   {
   protected:

@@ -55,8 +55,7 @@
 // Revised:
 //
 // Purpose: This file contains the class definition for MPI_ChannelAddress.
-// It is used to encapsulate the addresses used to send/recv messages
-// using the MPI library.
+// 
 
 
 #ifndef MPI_ChannelAddress_h
@@ -66,6 +65,10 @@
 #include <mpi/mpi.h>
 
 namespace XC {
+//! @ingroup IPComm
+//
+//! @brief It is used to encapsulate the addresses used to send/recv messages
+//! using the MPI library.
 class MPI_ChannelAddress: public ChannelAddress
   {
   private:

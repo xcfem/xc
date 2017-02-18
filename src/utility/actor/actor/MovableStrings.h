@@ -35,10 +35,11 @@
 
 namespace XC {
 
+//! @ingroup IPComm
+//
+//! @brief Strings that can move between processes.
 class MovableStrings: public MovableContainer<std::deque<std::string> >
   {
-  protected:
-    
   public:
     explicit MovableStrings(std::deque<std::string> &);
     int sendItem(const std::string &s,CommParameters &,DbTagData &, const CommMetaData &);

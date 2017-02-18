@@ -168,24 +168,24 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
 //! - truss_section[tag]: Define un elemento de tipo barra articulada (TrussSection) con material de  tipo sección.
 //! - corot_truss[tag]: Define un elemento de tipo barra articulada (CorotTruss) con formulación corrotacional. 
 //! - corot_truss_section[tag]: Define un elemento de tipo barra articulada (CorotTrussSection) con formulación  corrotacional y material de tipo sección.
-//! - beam2d_02[tag]: Define un elemento de tipo barra (beam2d02) para problemas planos. 
-//! - beam2d_03[tag]: Define un elemento de tipo barra (beam2d03) para problemas planos. 
-//! - beam2d_04[tag]: Define un elemento de tipo barra (beam2d04) para problemas planos.
-//! - beam3d_01[tag]: Define un elemento de tipo barra (beam3d01) para problemas tridimensionales.
-//! - beam3d_02[tag]: Define un elemento de tipo barra (beam2d02) para problemas tridimensionales.
-//! - elastic_beam2d[tag]: Define un elemento de tipo barra (ElasticBeam2d) para problemas planos.
-//! - elastic_beam3d[tag]: Define un elemento de tipo barra (ElasticBeam3d) para problemas tridimensionales.
+//! - beam2d_02[tag]: Define un elemento de tipo barra (beam2d02) for plane problems. 
+//! - beam2d_03[tag]: Define un elemento de tipo barra (beam2d03) for plane problems. 
+//! - beam2d_04[tag]: Define un elemento de tipo barra (beam2d04) for plane problems.
+//! - beam3d_01[tag]: Define un elemento de tipo barra (beam3d01) for 3D problems.
+//! - beam3d_02[tag]: Define un elemento de tipo barra (beam2d02) for 3D problems.
+//! - elastic_beam2d[tag]: Define un elemento de tipo barra (ElasticBeam2d) for plane problems.
+//! - elastic_beam3d[tag]: Define un elemento de tipo barra (ElasticBeam3d) for 3D problems.
 //! - force_beam_column_2d[tag]: Define un elemento de tipo barra (ForceBeamColumn2d) no lineal,
-//!   para problemas planos.
+//!   for plane problems.
 //! - force_beam_column_3d[tag]: Define un elemento de tipo barra (ForceBeamColumn3d) no lineal,
-//!   para problemas tridimensionales.
+//!   for 3D problems.
 //! - shell_mitc4[tag]: Define un elemento de tipo shell (ShellMITC4),
 //! - corot_shell_mitc4[tag]: Define un elemento de tipo shell con formulación corrotacional (CorotShellMITC4),
 //! - shell_nl[tag]: Define un elemento de tipo shell (ShellNL),
-//!   para problemas de láminas.
+//!   for shell problems.
 //! - quad4n[tag]: Define un elemento cuadrilátero de cuatro nodos (FourNodeQuad),
 //! - tri31[tag]: Define un elemento triangular de tres nodos y un sólo punto de gauss (Tri31),
-//!   para problemas planos.
+//!   for plane problems.
 //! - brick[tag]: Define un elemento hexaédrico de ocho nodos (Brick),
 //!   para solid analysis.
 //! - zero_length[tag]: Define un elemento de dimensión cero (ZeroLength).

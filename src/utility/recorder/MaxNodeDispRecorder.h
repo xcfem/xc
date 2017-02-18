@@ -58,11 +58,6 @@
 // Created: 11/98
 // Revision: A
 //
-// Description: This file contains the class definition for MaxNodeDispRecorder.
-// A MaxNodeDispRecorder is used to determine the max nodal displacement
-// at a collection of nodes over an analysis. (between commitTag of 0 and
-// last commitTag).
-//
 // What: "@(#) MaxNodeDispRecorder.h, revA"
 
 #include <utility/recorder/DomainRecorderBase.h>
@@ -72,12 +67,17 @@
 namespace XC {
 class Domain;
 
+//! @ingroup Recorder
+//
+//! @brief A MaxNodeDispRecorder is used to determine the max nodal displacement
+//! at a collection of nodes over an analysis. (between commitTag of 0 and
+//! last commitTag).
 class MaxNodeDispRecorder: public DomainRecorderBase
   {
   private:	
-    ID theNodes;
-    Vector maxDisp;
-    int dof;
+    ID theNodes; //!< node identifier.
+    Vector maxDisp; //!< max displacements values.
+    int dof; //!< degree of freedom.
   public:
     MaxNodeDispRecorder(void);
     MaxNodeDispRecorder(int dof,const ID &theNodes, Domain &theDomain);

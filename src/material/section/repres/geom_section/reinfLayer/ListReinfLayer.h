@@ -41,7 +41,7 @@ namespace XC {
 class ReinfLayer;
 class CircReinfLayer;
 class StraightReinfLayer;
-class BarraSuelta;
+class SingleBar;
 class MaterialLoader;
 class Vector;
 class Matrix;
@@ -82,7 +82,7 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SeccionInerte
 
     StraightReinfLayer *newStraightReinfLayer(const std::string &);
     CircReinfLayer *newCircReinfLayer(const std::string &);
-    BarraSuelta *newReinfBar(const std::string &);
+    SingleBar *newReinfBar(const std::string &);
 
 
     size_t getNumReinfBars(void) const;

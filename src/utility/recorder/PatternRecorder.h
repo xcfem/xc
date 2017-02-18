@@ -54,9 +54,6 @@
 // Written: MHS
 // Created: 2002
 //
-// Description: This file contains the class definition for 
-// PatternRecorder. A PatternRecorder records loads values from
-// a LoadPattern.
 
 
 #include <utility/recorder/DomainRecorderBase.h>
@@ -66,6 +63,10 @@ namespace XC {
 class Domain;
 class FE_Datastore;
 
+//! @ingroup Recorder
+//
+//! @brief A PatternRecorder records loads values from
+//! a LoadPattern.
 class PatternRecorder: public DomainRecorderBase
   {
   private:

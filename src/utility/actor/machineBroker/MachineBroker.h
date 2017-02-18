@@ -54,8 +54,7 @@
 //
 // Purpose: This file contains the class definition for MachineBroker.
 // MachineBroker is an abstract base class, a subclass of which must
-// be written for each parallel machine. A MachineBroker is responsible
-// for getting an actor process running on the parallel machine.
+// be written for each parallel machine.
 //
 // What: "@(#) MachineBroker.h, revA"
 
@@ -69,6 +68,10 @@ class Channel;
 class FEM_ObjectBroker;
 class ID;
 
+//! @ingroup IPComm
+//
+//! @brief A MachineBroker is responsible
+//! for getting an actor process running on the parallel machine.
 class MachineBroker
   {
   private:

@@ -65,6 +65,9 @@
 #include "FEM_ObjectBroker.h"
 
 namespace XC {
+//! @ingroup IPComm
+//
+//! @brief The same as FEM_ObjectBroker?
 class FEM_ObjectBrokerAllClasses: public FEM_ObjectBroker
   {
   private:

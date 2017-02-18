@@ -61,7 +61,7 @@ void XC::MEDMeshing::clear(void)
     for(std::deque<MEDFieldInfo *>::iterator i= med_fields.begin();i!=med_fields.end();i++)
       delete *i;
     med_fields.clear();
-    //mesh= MEDMEM::MESHING(); //Da problemas 2012/10/03
+    //mesh= MEDMEM::MESHING(); //Not working 2012/10/03
   }
 //! Constructor.
 XC::MEDMeshing::~MEDMeshing(void)

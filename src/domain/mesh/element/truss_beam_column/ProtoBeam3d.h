@@ -35,8 +35,7 @@
 namespace XC {
 //! \ingroup OneDimensionalElem
 //
-//! @brief Clase base para elementos viga en
-//! problemas tridimensionales.
+//! @brief Base class for 3D beams.
 class ProtoBeam3d : public Element1D
   {
   protected:

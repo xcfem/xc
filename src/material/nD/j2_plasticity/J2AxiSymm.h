@@ -86,7 +86,7 @@ namespace XC{
 //! @ingroup J2NDMat
 //
 //! @brief J2 Isotropic hardening material class para
-  //! problemas axilsimétricos.
+  //! axysimmetric problems.
 class J2AxiSymm: public J2Plasticity
   {
   private :

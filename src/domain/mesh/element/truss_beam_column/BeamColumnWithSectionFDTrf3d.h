@@ -61,7 +61,7 @@ class CrdTransf3d;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra con material de tipo SeccionBarraPrismatica para problemas tridimensionales.
+//! @brief 3D beam colun element with SeccionBarraPrismatica material type.
 class BeamColumnWithSectionFDTrf3d: public BeamColumnWithSectionFD
   {
     BeamColumnWithSectionFDTrf3d &operator=(const BeamColumnWithSectionFDTrf3d &);

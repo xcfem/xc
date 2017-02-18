@@ -69,7 +69,7 @@ class Renderer;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Barra con rótulas en los extremos para problemas bidimensionales.
+//! @brief 2D beam with hinges in both ends.
 class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
   {
   private:

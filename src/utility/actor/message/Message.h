@@ -60,11 +60,15 @@
 #define Message_h
 
 namespace XC {
+
+//! @ingroup IPComm
+//
+//! @brief Message between processes.
 class Message
   {
   private:
-    int length;
-    char *data;
+    int length; //!< message length.
+    char *data; //!< pointer to data.
   public:
     Message(void);
     Message(double *, int);

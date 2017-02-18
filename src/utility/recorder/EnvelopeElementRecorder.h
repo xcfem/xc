@@ -63,6 +63,8 @@ class Vector;
 class Matrix;
 class Element;
 
+//! @ingroup Recorder
+//
 class EnvelopeElementRecorder: public ElementRecorderBase
   {
   private:	

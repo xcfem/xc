@@ -71,7 +71,7 @@ class Response;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra con formulación lagrangiana para problemas bidimensionales.
+//! @brief Lagrangian 2D beam element.
 class UpdatedLagrangianBeam2D : public Element1D
   {
   protected:

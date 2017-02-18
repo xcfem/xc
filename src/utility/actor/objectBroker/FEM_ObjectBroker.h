@@ -131,6 +131,11 @@ class Actor;
 
 class Parameter;
 
+//! @ingroup IPComm
+//
+//! @brief FEM_ObjectBroker is is an object broker class for the finite element
+//! method. All methods are virtual to allow for subclasses; which can be
+//! used by programmers when introducing new subclasses of the main objects.
 class FEM_ObjectBroker
   {
   private:

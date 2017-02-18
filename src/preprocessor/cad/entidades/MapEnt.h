@@ -63,8 +63,8 @@ MapEnt<T>::MapEnt(Cad *cad)
 template <class T>
 T *MapEnt<T>::getNearest(const Pos3d &p)
   {
-    //El código comentado da problemas (recursión infinita) si
-    //se llama a la función desde boost.python
+    //Commented code is buggy (inifinite recursion) if
+    //the function is called from Python
     /* MapEnt<T> *this_no_const= const_cast<MapEnt<T> *>(this); */
     /* return const_cast<T *>(this_no_const->getNearest(p)); */
     T *retval= NULL;

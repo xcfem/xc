@@ -77,7 +77,7 @@ class UniaxialMaterial;
 
 //! \ingroup ElemJoint
 //
-//! @brief Elemento conexión viga-columna para probleas tridimensionales.
+//! @brief 3D beam-column joint element.
 class BeamColumnJoint3d : public ElemWithMaterial<4,BeamColumnJointPhysicalProperties>
   {
   private:

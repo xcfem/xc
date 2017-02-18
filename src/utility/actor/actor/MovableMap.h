@@ -40,6 +40,9 @@
 
 namespace XC {
 
+//! @ingroup IPComm
+//
+//! @brief Template class for maps that can move between processes.
 template <class T>
 class MovableMap: public MovableObject
   {

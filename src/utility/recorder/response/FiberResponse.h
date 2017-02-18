@@ -61,8 +61,11 @@
 namespace XC {
 class Fiber;
 
+//! @ingroup Recorder
+//
+//! @brief Recorder for fiber response.
 class FiberResponse : public Response
-{
+  {
   private:
    Fiber *theFiber;
    int responseID;

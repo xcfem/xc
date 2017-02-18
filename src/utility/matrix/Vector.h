@@ -90,7 +90,7 @@ class Vector: public EntCmd
     void alloc(const size_t &sz);
   public:
     // constructors and destructor
-    Vector();
+    Vector(void);
     explicit Vector(const int &, const double &valor= 0.0);
     explicit Vector(const std::vector<double> &v);
     explicit Vector(const Vector2d &v);

@@ -56,11 +56,6 @@
 
 // Written: fmk 
 //
-// Description: This file contains the class definition for EnvelopeRecorder.
-// A EnvelopeRecorder is used to record the envelop of specified dof responses 
-// at a collection of nodes over an analysis. (between commitTag of 0 and
-// last commitTag).
-//
 // What: "@(#) EnvelopeNodeRecorder.h, revA"
 
 
@@ -72,6 +67,11 @@ namespace XC {
  class Vector;
  class Matrix;
 
+//! @ingroup Recorder
+//
+//! @brief A EnvelopeRecorder is used to record the envelop of specified
+//! DOF responses at a collection of nodes over an analysis.
+//! (between commitTag of 0 and last commitTag).
 class EnvelopeNodeRecorder: public NodeRecorderBase
   {
   private:	

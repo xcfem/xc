@@ -37,7 +37,7 @@ namespace XC {
 class CommParameters;
 class CommMetaData;
 
-//! @ingroup ACTOR
+//! @ingroup IPComm
 //
 //! @brief Vector que almacena los dbTags de los miembros de la clase.
 class DbTagData

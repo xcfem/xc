@@ -61,7 +61,7 @@
 namespace XC{
 //! @ingroup NDMat
 //
-//! @brief Material para problemas de tensión plana.
+//! @brief Material for plane stress problems.
 class PlaneStressMaterial: public NDAdaptorMaterial
   {
   private :
