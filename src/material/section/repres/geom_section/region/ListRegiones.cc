@@ -64,12 +64,12 @@ void XC::ListRegiones::copia(const ListRegiones &otra)
 XC::ListRegiones::ListRegiones(MaterialLoader *ml)
   : l_reg(), material_loader(ml) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ListRegiones::ListRegiones(const ListRegiones  &otro)
   : l_reg(), material_loader(otro.material_loader)
   { copia(otro); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ListRegiones &XC::ListRegiones::operator=(const ListRegiones &otro)
   {
     SeccionInerte::operator=(otro);

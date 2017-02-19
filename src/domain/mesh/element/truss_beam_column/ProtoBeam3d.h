@@ -35,8 +35,7 @@
 namespace XC {
 //! \ingroup OneDimensionalElem
 //
-//! @brief Clase base para elementos viga en
-//! problemas tridimensionales.
+//! @brief Base class for 3D beams.
 class ProtoBeam3d : public Element1D
   {
   protected:
@@ -55,10 +54,10 @@ class ProtoBeam3d : public Element1D
     void setSectionProperties(const CrossSectionProperties3d &ctes)
       { ctes_scc= ctes; }
 
-    Vector getVDirEjeFuerteLocales(void) const;
-    Vector getVDirEjeDebilLocales(void) const;
-    double getAnguloEjeFuerte(void) const;
-    double getAnguloEjeDebil(void) const;
+    Vector getVDirStrongAxisLocalCoord(void) const;
+    Vector getVDirWeakAxisLocalCoord(void) const;
+    double getStrongAxisAngle(void) const;
+    double getWeakAxisAngle(void) const;
   };
 } // end of XC namespace
 

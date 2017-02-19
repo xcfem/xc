@@ -87,14 +87,14 @@ XC::KRSeccion::KRSeccion(const size_t &dim)
     zero();
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::KRSeccion::KRSeccion(const KRSeccion &otra)
   : R(nullptr), K(nullptr)
   {
     copia(otra);
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::KRSeccion &XC::KRSeccion::operator=(const KRSeccion &otro)
   {
     copia(otro);

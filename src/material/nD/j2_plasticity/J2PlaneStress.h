@@ -84,7 +84,7 @@ namespace XC{
 //! @ingroup J2NDMat
 //
 //! @brief J2 Isotropic hardening material class
-//! para problemas de tensión plana.
+//! for plane stress problems.
 class J2PlaneStress: public J2Plasticity
   {
   private: 

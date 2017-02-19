@@ -63,7 +63,7 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "ListReinfLayer.h"
-#include "BarraSuelta.h"
+#include "SingleBar.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
@@ -133,7 +133,7 @@ XC::Vector XC::ReinfLayer::getCdg(void) const
 //     VectorReinfBar::const_iterator i= barras.begin();
 //     for(;i!= barras.end();i++)
 //       if((*i)->verdadero(cond))
-//         retval.push_back(BarraSuelta(**i));
+//         retval.push_back(SingleBar(**i));
 //   }
 
 //! @brief Returns the barras contenidas total o parcialmente en el polígono.
@@ -145,7 +145,7 @@ void XC::ReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bo
     VectorReinfBar::const_iterator i= barras.begin();
     for(;i!= barras.end();i++)
       if(plg.In((*i)->getPos2d()))
-        retval.push_back(BarraSuelta(**i));
+        retval.push_back(SingleBar(**i));
   }
 
 //! @brief Returns the barras contenidas total o parcialmente en el semiplano.
@@ -157,7 +157,7 @@ void XC::ReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bo
     VectorReinfBar::const_iterator i= barras.begin();
     for(;i!= barras.end();i++)
       if(sp.In((*i)->getPos2d()))
-        retval.push_back(BarraSuelta(**i));
+        retval.push_back(SingleBar(**i));
   }
 
 //! @brief Returns a vector con las barras de la capa de armadura.

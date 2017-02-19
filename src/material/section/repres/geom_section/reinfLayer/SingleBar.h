@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//BarraSuelta.h
+//SingleBar.h
 
-#ifndef BarraSuelta_h 
-#define BarraSuelta_h 
+#ifndef SingleBar_h 
+#define SingleBar_h 
 
 #include <material/section/repres/geom_section/reinfLayer/ReinfLayer.h>
 #include <utility/matrix/Vector.h>
@@ -37,8 +37,8 @@ class ReinfBar;
 
 //! @ingroup MATSCCArmaduras
 //
-//! @brief Armadura (barra) suelta (no incluida en una capa).
-class BarraSuelta : public ReinfLayer
+//! @brief Single rebar (not included in a reinforcement layer).
+class SingleBar : public ReinfLayer
   {
   private:
     Vector posit; //!< Posición del centro de la barra.
@@ -47,9 +47,9 @@ class BarraSuelta : public ReinfLayer
 
     friend class ListReinfLayer;
     friend class ReinfLayer;
-    BarraSuelta(ListReinfLayer *,Material *mat);
-    BarraSuelta(ListReinfLayer *,Material *mat, double  reinfBarArea, const Vector &position);
-    BarraSuelta(const ReinfBar &bar);
+    SingleBar(ListReinfLayer *,Material *mat);
+    SingleBar(ListReinfLayer *,Material *mat, double  reinfBarArea, const Vector &position);
+    SingleBar(const ReinfBar &bar);
     ReinfLayer *getCopy(void) const;
     
   public:

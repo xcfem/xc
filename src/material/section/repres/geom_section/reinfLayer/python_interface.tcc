@@ -31,7 +31,7 @@ class_<XC::ReinfLayer,XC::ReinfLayer *, bases<XC::DiscretBase>, boost::noncopyab
   .def("getArea",&XC::ReinfLayer::getArea)
   ;
 
-class_<XC::BarraSuelta , bases<XC::ReinfLayer>, boost::noncopyable >("BarraSuelta", no_init);
+class_<XC::SingleBar , bases<XC::ReinfLayer>, boost::noncopyable >("SingleBar", no_init);
 
 class_<XC::CircReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("CircReinfLayer", no_init)
   .add_property("initAngle",&XC::CircReinfLayer::getInitAngle,&XC::CircReinfLayer::setInitAngle,"Initial angle.")

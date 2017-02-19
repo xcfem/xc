@@ -76,12 +76,18 @@ class Vector;
 class ID;
 class FEM_ObjectBroker;
 
+//! @ingroup IPComm
+//
+//! @brief Channel is an abstract base class which defines the channel
+//! interface.
+//! A channel is a point of communication in a program, a mailbox to/from
+//! which data enters/leaves a program.
 class Channel: public EntCmd
   {
   private:
     static int numChannel;
-    int tag; //! Tag del canal;
-    std::set<int> usedDbTags;//!< dbTags usados.
+    int tag; //! channel identifier;
+    std::set<int> usedDbTags;//!< dbTags already used.
   protected:
     int sendMovable(int commitTag, MovableObject &);
     int receiveMovable(int commitTag, MovableObject &, FEM_ObjectBroker &);

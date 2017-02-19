@@ -115,7 +115,7 @@ int XC::Bidirectional::setTrialSectionDeformation(const XC::Vector &e)
     return 0;
   }
 
-//! @brief Return the tangent stiffness matrix.
+//! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::Bidirectional::getSectionTangent(void) const
   {
     static Vector def;
@@ -188,7 +188,7 @@ const XC::Matrix &XC::Bidirectional::getSectionTangent(void) const
     return ks;
   }
 
-//! @brief Return the matriz de rigidez inicial.
+//! @brief Returns the initial tangent stiffness matrix.
 const XC::Matrix &XC::Bidirectional::getInitialTangent(void) const
   {
     ks(0,0) = ks(1,1) = E;
@@ -196,7 +196,7 @@ const XC::Matrix &XC::Bidirectional::getInitialTangent(void) const
     return ks;
   }
 
-//! @brief Return the resultante de las tensiones en la sección.
+//! @brief Returns the resultante de las tensiones en la sección.
 const XC::Vector &XC::Bidirectional::getStressResultant(void) const
   {
     // Compute trial stress using elastic tangent

@@ -103,13 +103,13 @@ EjesPrincInercia2d XC::SeccionInerte::getEjesInerciaHomogenizedSection(const dou
 Vector2d XC::SeccionInerte::getVDirEje1HomogenizedSection(const double &E0) const
   { return getEjesInerciaHomogenizedSection(E0).getVDirEje1(); }
 //! @brief Direction of the major principal axis of inertia of the homogenized section.
-Vector2d XC::SeccionInerte::getVDirEjeFuerteHomogenizedSection(const double &E0) const
+Vector2d XC::SeccionInerte::getVDirStrongAxisHomogenizedSection(const double &E0) const
   { return getEjesInerciaHomogenizedSection(E0).getVDirEje1(); }
 //! @brief Direction of the minor principal axis of inertia of the homogenized section.
 Vector2d XC::SeccionInerte::getVDirEje2HomogenizedSection(const double &E0) const
   { return getEjesInerciaHomogenizedSection(E0).getVDirEje2(); }
 //! @brief Direction of the minor principal axis of inertia of the homogenized section.
-Vector2d XC::SeccionInerte::getVDirEjeDebilHomogenizedSection(const double &E0) const
+Vector2d XC::SeccionInerte::getVDirWeakAxisHomogenizedSection(const double &E0) const
   { return getEjesInerciaHomogenizedSection(E0).getVDirEje2(); }
 
 //! @brief Inertia tensor (i,j) component of the homogenized section.
@@ -260,13 +260,13 @@ EjesPrincInercia2d XC::SeccionInerte::getEjesInerciaGrossSection(void) const
 Vector2d XC::SeccionInerte::getVDirEje1GrossSection(void) const
   { return getEjesInerciaGrossSection().getVDirEje1(); }
 //! @brief Direction of the major principal axis of inertia of the gross section.
-Vector2d XC::SeccionInerte::getVDirEjeFuerteGrossSection(void) const
+Vector2d XC::SeccionInerte::getVDirStrongAxisGrossSection(void) const
   { return getEjesInerciaGrossSection().getVDirEje1(); }
 //! @brief Direction of the minor principal axis of inertia of the gross section.
 Vector2d XC::SeccionInerte::getVDirEje2GrossSection(void) const
   { return getEjesInerciaGrossSection().getVDirEje2(); }
 //! @brief Direction of the minor principal axis of inertia of the gross section.
-Vector2d XC::SeccionInerte::getVDirEjeDebilGrossSection(void) const
+Vector2d XC::SeccionInerte::getVDirWeakAxisGrossSection(void) const
   { return getEjesInerciaGrossSection().getVDirEje2(); }
 
 //! @brief Return the componente i,j del tensor de inercia calculado respecto al CDG.

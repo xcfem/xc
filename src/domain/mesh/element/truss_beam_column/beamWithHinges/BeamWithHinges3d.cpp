@@ -104,7 +104,7 @@ XC::BeamWithHinges3d::BeamWithHinges3d(int tag, int nodeI, int nodeJ,
     theSections.setSectionCopy(1,&sectionRefJ);
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::BeamWithHinges3d::BeamWithHinges3d(const XC::BeamWithHinges3d &otro)
   :BeamColumnWithSectionFDTrf3d(otro), ctes_scc(otro.ctes_scc), beta1(otro.beta1), beta2(otro.beta2), rho(otro.rho),
    kb(otro.kb), q(otro.q), kbCommit(otro.kbCommit), qCommit(otro.qCommit),
@@ -112,7 +112,7 @@ XC::BeamWithHinges3d::BeamWithHinges3d(const XC::BeamWithHinges3d &otro)
    applied_sf(nullptr), p0(otro.p0),v0(otro.v0)
   {}
 
-// //! @brief Operador asignación.
+// //! @brief Assignment operator.
 // XC::BeamWithHinges3d &XC::BeamWithHinges3d::operator=(const XC::BeamWithHinges3d &otro)
 //   {
 //     BeamColumnWithSectionFDTrf3d::operator=(otro);

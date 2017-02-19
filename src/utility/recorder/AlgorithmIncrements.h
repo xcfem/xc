@@ -53,10 +53,6 @@
 // Created: 01/01
 // Revision: A
 //
-// Description: This file contains the class definition for AlgorithmIncrements.
-// A AlgorithmIncrements will display the X and B in the SOE associated with the
-// algorithm on a record.
-
 //
 // What: "@(#) ModelBuilder.h, revA"
 
@@ -72,6 +68,10 @@ class EquiSolnAlgo;
 class ID;
 class Vector;
 
+//! @ingroup Recorder
+//
+//! @brief AlgorithmIncrements will display the X and B in the SOE
+//! associated with the algorithm on a record.
 class AlgorithmIncrements : public Recorder
   {
   private:

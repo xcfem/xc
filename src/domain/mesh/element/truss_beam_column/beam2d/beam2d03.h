@@ -69,14 +69,14 @@ class Channel;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra 03 para problemas bidimensionales.
+//! @brief 2D 03 beam element.
 class beam2d03 : public beam2d
   {
   private:
-    Matrix k; // the stiffness matrix
+    Matrix k; //!< the stiffness matrix
 	
     mutable Vector rForce;
-    Matrix trans;  // hold part of transformation matrix
+    Matrix trans;  //!< hold part of transformation matrix
 
     const Matrix &getStiff(void);
   protected:

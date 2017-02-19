@@ -67,6 +67,8 @@
 #include <utility/actor/machineBroker/MachineBroker.h>
 
 namespace XC {
+//! @ingroup IPComm
+//
 class MillMachineBroker : public AlphaBaseMachineBroker
   {
   public:

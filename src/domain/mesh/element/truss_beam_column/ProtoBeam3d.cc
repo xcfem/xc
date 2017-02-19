@@ -83,34 +83,34 @@ int XC::ProtoBeam3d::recvData(const CommParameters &cp)
 
 //! @brief Returns the direction vector of element strong axis
 //! expressed in the local coordinate system.
-XC::Vector XC::ProtoBeam3d::getVDirEjeFuerteLocales(void) const
+XC::Vector XC::ProtoBeam3d::getVDirStrongAxisLocalCoord(void) const
   {
-    const Vector2d ejeFuerteSeccion= ctes_scc.getVDirEjeFuerte();
-    Vector eF(3); eF(0)= 0.0; eF(1)= ejeFuerteSeccion.x(); eF(2)= ejeFuerteSeccion.y();
+    const Vector2d sectionStrongAxis= ctes_scc.getVDirStrongAxis();
+    Vector eF(3); eF(0)= 0.0; eF(1)= sectionStrongAxis.x(); eF(2)= sectionStrongAxis.y();
     return eF;
   }
 
 //! @brief Returns the direction vector of element weak axis
 //! expressed in the local coordinate system.
-XC::Vector XC::ProtoBeam3d::getVDirEjeDebilLocales(void) const
+XC::Vector XC::ProtoBeam3d::getVDirWeakAxisLocalCoord(void) const
   {
-    const Vector2d ejeDebilSeccion= ctes_scc.getVDirEjeDebil();
-    Vector eD(3); eD(0)= 0.0; eD(1)= ejeDebilSeccion.x(); eD(2)= ejeDebilSeccion.y();
+    const Vector2d sectionWeakAxis= ctes_scc.getVDirWeakAxis();
+    Vector eD(3); eD(0)= 0.0; eD(1)= sectionWeakAxis.x(); eD(2)= sectionWeakAxis.y();
     return eD;
   }
 
 //! @brief Returns the angle between element strong axis
 //! and local XZ plane.
-double XC::ProtoBeam3d::getAnguloEjeFuerte(void) const
+double XC::ProtoBeam3d::getStrongAxisAngle(void) const
   {
-    Vector eF= getVDirEjeFuerteLocales();
+    Vector eF= getVDirStrongAxisLocalCoord();
     return atan2(eF(2),eF(1));
   }
 
 //! @brief Returns the angle between element weak axis
 //! and local XZ plane.
-double XC::ProtoBeam3d::getAnguloEjeDebil(void) const
+double XC::ProtoBeam3d::getWeakAxisAngle(void) const
   {
-    Vector eD= getVDirEjeDebilLocales();
+    Vector eD= getVDirWeakAxisLocalCoord();
     return atan2(eD(2),eD(1));
   }

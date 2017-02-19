@@ -189,7 +189,7 @@ XC::SectionAggregator::SectionAggregator(int tag, SeccionBarraPrismatica &theSec
     alloc_storage_ptrs();
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::SectionAggregator::SectionAggregator(const SectionAggregator &otro)
   : SeccionBarraPrismatica(otro), theSection(nullptr), theAdditions(otro.theAdditions),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
@@ -221,7 +221,7 @@ XC::SectionAggregator::SectionAggregator(MaterialLoader *mat_ldr)
   : SeccionBarraPrismatica(0, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr) {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator &otro)
   {
     libera();
@@ -347,7 +347,7 @@ double XC::SectionAggregator::getStrain(const double &y,const double &z) const
     return retval;
   }
 
-//! @brief Return the initial deformation de la sección.
+//! @brief Returns the initial deformation de la sección.
 const XC::Vector &XC::SectionAggregator::getInitialSectionDeformation(void) const
   {
     int theSectionOrder= 0;
@@ -379,7 +379,7 @@ const XC::Vector &XC::SectionAggregator::getSectionDeformation(void) const
     return retval;
   }
 
-//! @brief Return the tangent stiffness matrix.
+//! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::SectionAggregator::getSectionTangent(void) const
   {
     int theSectionOrder= 0;
@@ -400,7 +400,7 @@ const XC::Matrix &XC::SectionAggregator::getSectionTangent(void) const
     return *ks;
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Returns the initial tangent stiffness matrix.
 const XC::Matrix &XC::SectionAggregator::getInitialTangent(void) const
   {
     int theSectionOrder= 0;
@@ -420,7 +420,7 @@ const XC::Matrix &XC::SectionAggregator::getInitialTangent(void) const
     return *ks;
   }
 
-//! @brief Return the matriz de flexibilidad.
+//! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::SectionAggregator::getSectionFlexibility(void) const
   {
     int theSectionOrder= 0;
@@ -439,7 +439,7 @@ const XC::Matrix &XC::SectionAggregator::getSectionFlexibility(void) const
     return *fs;
   }
 
-//! @brief Return the matriz de flexibilidad noval.
+//! @brief Returns the initial flexibility matrix.
 const XC::Matrix &XC::SectionAggregator::getInitialFlexibility(void) const
   {
     int theSectionOrder= 0;
@@ -459,7 +459,7 @@ const XC::Matrix &XC::SectionAggregator::getInitialFlexibility(void) const
     return *fs;
   }
 
-//! @brief Return the resultante de tensiones.
+//! @brief Returns the resultante de tensiones.
 const XC::Vector &XC::SectionAggregator::getStressResultant(void) const
   {
     int theSectionOrder= 0;
@@ -478,8 +478,7 @@ const XC::Vector &XC::SectionAggregator::getStressResultant(void) const
 XC::SectionForceDeformation *XC::SectionAggregator::getCopy(void) const
   { return new SectionAggregator(*this); }
 
-//! @brief Returns the códigos de los esfuerzos para los que la
-//! sección aporta rigidez.
+//! @brief Section stiffness contribution response identifiers.
 const XC::ResponseId &XC::SectionAggregator::getType(void) const
   {
     int theSectionOrder= 0;

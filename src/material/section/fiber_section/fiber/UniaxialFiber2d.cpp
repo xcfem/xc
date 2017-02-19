@@ -100,7 +100,7 @@ int XC::UniaxialFiber2d::setTrialFiberStrain(const Vector &vs)
     return theMaterial->setTrialStrain(strain);
   }
 
-//! @brief Return the resultante de tensiones en la fibra.
+//! @brief Returns the resultante de tensiones en la fibra.
 XC::Vector &XC::UniaxialFiber2d::getFiberStressResultants(void) 
   {
     // Use the section kinematic matrix to get the fiber 
@@ -119,8 +119,7 @@ XC::Vector &XC::UniaxialFiber2d::getFiberStressResultants(void)
 
 
 
-//! @brief Return the contribución de la fibra a la matriz de
-//! rigidez tangente.
+//! @brief Fiber contribution to the tangent stiffness matrix.
 XC::Matrix &XC::UniaxialFiber2d::getFiberTangentStiffContr(void) 
   {
     if(isAlive())
@@ -145,7 +144,7 @@ XC::Matrix &XC::UniaxialFiber2d::getFiberTangentStiffContr(void)
 XC::Fiber *XC::UniaxialFiber2d::getCopy(void) const
   { return new UniaxialFiber2d(*this); }  
 
-//! @brief Return the dimensión del vector resultante de tensiones.
+//! @brief Returns the dimensión del vector resultante de tensiones.
 int XC::UniaxialFiber2d::getOrder(void) const
   { return 2; }
 
@@ -233,7 +232,7 @@ int XC::UniaxialFiber2d::getResponse(int responseID, Information &fibInfo)
       }
   }
 
-//! @brief Return the posición de la fibra.
+//! @brief Returns fiber position.
 void XC::UniaxialFiber2d::getFiberLocation(double &yLoc, double &zLoc) const
   {
     yLoc= -y;

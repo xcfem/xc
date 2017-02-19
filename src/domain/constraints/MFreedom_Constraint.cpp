@@ -122,7 +122,7 @@ XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeCo
     set_constraint(constr);
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::MFreedom_Constraint::MFreedom_Constraint(const MFreedom_Constraint &otro)
   : MFreedom_ConstraintBase(otro), retainedNodeTag(otro.retainedNodeTag)
   {

@@ -35,12 +35,14 @@
 namespace XC {
 class Node;
 
+//! @ingroup Recorder
+//
 class NodePropRecorder: public PropRecorder
   {
   public:
-    typedef std::deque<Node *> dq_nodes; //Contenedor de pointers to nodes.
+    typedef std::deque<Node *> dq_nodes; //!< Pointer to nodes.
   private:
-    dq_nodes nodes; //!< Ndos cuya(s) propiedad(es) se registran.
+    dq_nodes nodes; //!< Nodes which properties are recorded.
   public:
     NodePropRecorder(Domain *ptr_dom= NULL);
 

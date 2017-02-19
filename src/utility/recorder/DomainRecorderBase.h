@@ -34,6 +34,9 @@
 namespace XC {
 class Domain;
 
+//! @ingroup Recorder
+//
+//! @brief Recording of domain information.
 class DomainRecorderBase: public Recorder
   {
   protected:

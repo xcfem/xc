@@ -69,14 +69,14 @@ XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int nu
     isTorsion= theSections.isTorsion();
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(const NLForceBeamColumn3dBase &otro)
   : BeamColumnWithSectionFDTrf3d(otro), rho(otro.rho), maxIters(otro.maxIters), tol(otro.tol), initialFlag(otro.initialFlag), isTorsion(otro.isTorsion),
     kv(otro.kv), Se(otro.Se), kvcommit(otro.kvcommit), Secommit(otro.Secommit),
     fs(otro.fs), vs(otro.vs), Ssr(otro.Ssr),vscommit(otro.vscommit), sp(otro.sp), p0(), Ki(otro.Ki)
   {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::NLForceBeamColumn3dBase &XC::NLForceBeamColumn3dBase::operator=(const NLForceBeamColumn3dBase &)
   {
     std::cerr << "NLForceBeamColumn3dBase: No se debe llamar al operador de asignación."

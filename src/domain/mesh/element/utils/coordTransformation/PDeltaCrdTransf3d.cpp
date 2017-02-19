@@ -169,7 +169,7 @@ const XC::Vector &XC::PDeltaCrdTransf3d::getGlobalResistingForce(const Vector &p
     return local_to_global_resisting_force(pl);
   }
 
-//! @brief Return the matriz de rigidez expresada en el sistema global del elemento.
+//! @brief Returns the stiffness matrix expresada en el sistema global del elemento.
 const XC::Matrix &XC::PDeltaCrdTransf3d::getGlobalStiffMatrix(const XC::Matrix &KB, const XC::Vector &pb) const
   {
     double oneOverL = 1.0/L;

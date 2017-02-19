@@ -36,6 +36,9 @@
 
 namespace XC {
 
+//! @ingroup IPComm
+//
+//! @brief Vector can move between processes.
 class MovableVectors: public MovableContainer<std::vector<Vector> >
   {
   public:

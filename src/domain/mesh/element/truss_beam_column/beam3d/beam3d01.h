@@ -64,7 +64,7 @@ namespace XC {
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra 01 para problemas tridimensionales.
+//! @brief 01 3D beam element.
 class beam3d01 : public beam3dBase
   {
   private:

@@ -37,7 +37,7 @@ namespace XC {
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra Base para problemas tridimensionales.
+//! @brief Base class for 3D beam elements.
 class beam3dBase : public ProtoBeam3d
   {
   protected:

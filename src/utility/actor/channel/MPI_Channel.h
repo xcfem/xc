@@ -53,9 +53,6 @@
 // Revised:
 //
 // Purpose: This file contains the class definition for MPI_Channel.
-// MPI_Channel is a sub-class of channel. It is implemented with Berkeley
-// stream sockets using the TCP protocol. Messages delivery is garaunteed. 
-// Communication is full-duplex between a pair of connected sockets.
 
 #ifndef MPI_Channel_h
 #define MPI_Channel_h
@@ -64,6 +61,11 @@
 #include <mpi/mpi.h>
 
 namespace XC {
+//! @ingroup IPComm
+//
+//! @brief MPI_Channel is a sub-class of channel. It is implemented with Berkeley
+//! stream sockets using the TCP protocol. Messages delivery is garaunteed. 
+//! Communication is full-duplex between a pair of connected sockets.
 class MPI_Channel: public Channel
   {
   private:

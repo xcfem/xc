@@ -47,17 +47,17 @@ void XC::DqPtrsElem::crea_arbol(void)
 XC::DqPtrsElem::DqPtrsElem(EntCmd *owr)
   : DqPtrs<Element>(owr) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::DqPtrsElem::DqPtrsElem(const DqPtrsElem &otro)
   : DqPtrs<Element>(otro)
   { crea_arbol(); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::DqPtrsElem::DqPtrsElem(const std::deque<Element *> &ts)
   : DqPtrs<Element>(ts)
   { crea_arbol(); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::DqPtrsElem::DqPtrsElem(const std::set<const Element *> &st)
   : DqPtrs<Element>()
   {

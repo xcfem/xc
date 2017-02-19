@@ -138,8 +138,7 @@ class Response;
 
 //! \ingroup ElemZL
 //
-//! @brief Elemento de longitud cero para problemas
-//! de contacto tridimensionales.
+//! @brief Zero lenght element for 3D problems.
 class ZeroLengthContact3D: public ZeroLengthContact
   {
   private:

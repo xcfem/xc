@@ -39,7 +39,7 @@ class Response;
 
 //! \ingroup ElemZL
 //
-//! @brief Elemento de longitud cero para problemas de contacto.
+//! @brief Zero length contact element.
 class ZeroLengthContact: public Element0D
   {
   protected:

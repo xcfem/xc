@@ -33,11 +33,11 @@
 XC::DqVectors::DqVectors(const size_t &num)
   : dq_ptr_Vectors(num,static_cast<Vector *>(nullptr)) {}
 
-// //! @brief Constructor de copia.
+// //! @brief Copy constructor.
 // XC::DqVectors::DqVectors(const DqVectors &otro)
 //   : dq_ptr_Vectors(otro) {}
 
-// //! @brief Operador asignación.
+// //! @brief Assignment operator.
 // XC::DqVectors &XC::DqVectors::operator=(const DqVectors &otro)
 //   {
 //     dq_ptr_Vectors::operator=(otro);

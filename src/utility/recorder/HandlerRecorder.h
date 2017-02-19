@@ -35,6 +35,8 @@ namespace XC {
 class Domain;
 class DataOutputHandler;
 
+//! @ingroup Recorder
+//
 //! @brief Se emplea como base de los recorders que obtienen
 //! la respuesta de uno o más nodos during the analysis.
 class HandlerRecorder: public DomainRecorderBase

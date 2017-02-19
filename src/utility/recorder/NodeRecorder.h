@@ -55,10 +55,6 @@
 // Created: 09/00
 // Revision: A
 //
-// Description: This file contains the class definition for 
-// NodeRecorder. A NodeRecorder is used to store the specified nodal dof responses
-// for the specified nodes in a file.
-//
 // What: "@(#) NodeRecorder.h, revA"
 
 
@@ -71,6 +67,9 @@ class FE_Datastore;
 class DataOutputHandler;
 class Node;
 
+//! @ingroup Recorder
+//
+//! @brief Recording of specified nodal DOF responses for the specified nodes.
 class NodeRecorder: public NodeRecorderBase
   {
   private:	

@@ -67,6 +67,8 @@
 #include <utility/actor/machineBroker/AlphaBaseMachineBroker.h>
 
 namespace XC {
+//! @ingroup IPComm
+//
 class AlphaMachineBroker: public AlphaBaseMachineBroker
   {
   private:

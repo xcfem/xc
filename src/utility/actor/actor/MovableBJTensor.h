@@ -35,6 +35,9 @@
 
 namespace XC {
 
+//! @ingroup IPComm
+//
+//! @brief BJTensor that can move between processes.
 class MovableBJTensor: public BJtensor, public MovableObject
   {
   public:

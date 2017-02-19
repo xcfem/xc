@@ -125,12 +125,12 @@ void XC::ProcSolu::libera(void)
 XC::ProcSolu::ProcSolu(ProblemaEF *owr)
   : EntCmd(owr), solu_control(this), theAnalysis(nullptr) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ProcSolu::ProcSolu(const ProcSolu &otro)
   : EntCmd(otro), solu_control(otro.solu_control), theAnalysis(nullptr)
   { copia_analysis(otro.theAnalysis); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ProcSolu &XC::ProcSolu::operator=(const ProcSolu &otro)
   {
     EntCmd::operator=(otro);

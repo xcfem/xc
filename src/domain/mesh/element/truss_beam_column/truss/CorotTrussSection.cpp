@@ -99,7 +99,7 @@ XC::CorotTrussSection::CorotTrussSection(void)
   :CorotTrussBase(0,ELE_TAG_CorotTrussSection,0,0,0),theSection(nullptr)
   {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::CorotTrussSection::CorotTrussSection(const CorotTrussSection &otro)
   : CorotTrussBase(otro), theSection(nullptr)
   {
@@ -107,7 +107,7 @@ XC::CorotTrussSection::CorotTrussSection(const CorotTrussSection &otro)
       theSection= otro.theSection->getCopy();
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::CorotTrussSection &XC::CorotTrussSection::operator=(const CorotTrussSection &otro)
   {
     CorotTrussBase::operator=(otro);

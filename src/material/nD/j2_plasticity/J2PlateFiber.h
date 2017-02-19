@@ -84,7 +84,7 @@ namespace XC{
 //! @ingroup J2NDMat
 //
 //! @brief J2 Isotropic hardening material class
-//! para problemas de placas.
+//! for plate problems.
 class J2PlateFiber : public J2Plasticity
   {
   private : 

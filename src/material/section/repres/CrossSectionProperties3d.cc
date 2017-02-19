@@ -96,31 +96,31 @@ EjesPrincInercia2d XC::CrossSectionProperties3d::getEjesInercia(void) const
 Vector2d XC::CrossSectionProperties3d::getVDirEje1(void) const
   { return getEjesInercia().getVDirEje1(); }
 //! @brief Returns principal axis I (strong).
-Vector2d XC::CrossSectionProperties3d::getVDirEjeFuerte(void) const
+Vector2d XC::CrossSectionProperties3d::getVDirStrongAxis(void) const
   { return getEjesInercia().getVDirEje1(); }
 //! @brief Returns principal axis II (weak).
 Vector2d XC::CrossSectionProperties3d::getVDirEje2(void) const
   { return getEjesInercia().getVDirEje2(); }
 //! @brief Returns principal axis II (weak).
-Vector2d XC::CrossSectionProperties3d::getVDirEjeDebil(void) const
+Vector2d XC::CrossSectionProperties3d::getVDirWeakAxis(void) const
   { return getEjesInercia().getVDirEje2(); }
 
-//! @brief Return the tangent stiffness matrix.
+//! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties3d::getSectionTangent4x4(void) const
   {
-    ks4(0,0)= EA(); //Rigidez frente al esfuerzo axil.
-    ks4(1,1)= EIz(); //Rigidez frente al giro en torno a z.
+    ks4(0,0)= EA(); //Axial stiffness.
+    ks4(1,1)= EIz(); //z bending stiffness.
     ks4(1,2)= ks4(2,1)= -EIyz(); //Colaboración del producto de inercia.
-    ks4(2,2)= EIy(); //Rigidez frente al giro en torno a y.
-    ks4(3,3)= GJ(); //Rigidez frente a la torsión.
+    ks4(2,2)= EIy(); //y bending stiffness.
+    ks4(3,3)= GJ(); //Torsional stiffness.
     return ks4;
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Returns the initial tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties3d::getInitialTangent4x4(void) const
   { return getSectionTangent4x4(); }
 
-//! @brief Return the matriz de flexibilidad.
+//! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility4x4(void) const
   {
     const double eiyz= EIyz();
@@ -146,18 +146,18 @@ const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility4x4(void) c
     return ks4;
   }
 
-//! @brief Return the matriz de flexibilidad noval.
+//! @brief Returns the initial flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties3d::getInitialFlexibility4x4(void) const
   { return getSectionFlexibility4x4(); }
 
-//! @brief Return the tangent stiffness matrix.
+//! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties3d::getSectionTangent6x6(void) const
   {
-    ks6(0,0) = EA(); //Rigidez frente al esfuerzo axil.
-    ks6(1,1) = EIz(); //Rigidez frente al giro en torno a z.
+    ks6(0,0) = EA(); //Axial stiffness.
+    ks6(1,1) = EIz(); //z bending stiffness.
     ks4(1,3)= ks4(3,1)= -EIyz(); //Colaboración del producto de inercia.
-    ks6(3,3) = EIy(); //Rigidez frente al giro en torno a y.
-    ks6(5,5) = GJ(); //Rigidez frente a la torsión.
+    ks6(3,3) = EIy(); //y bending stiffness.
+    ks6(5,5) = GJ(); //Torsional stiffness.
 
     const double GA = GAAlpha();
     ks6(2,2)= GA;
@@ -165,11 +165,11 @@ const XC::Matrix &XC::CrossSectionProperties3d::getSectionTangent6x6(void) const
     return ks6;
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Returns the initial tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties3d::getInitialTangent6x6(void) const
   { return getSectionTangent6x6(); }
 
-//! @brief Return the matriz de flexibilidad.
+//! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility6x6(void) const
   {
     const double eiyz= EIyz();
@@ -204,7 +204,7 @@ const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility6x6(void) c
     return ks6;
   }
 
-//! @brief Return the matriz de flexibilidad noval.
+//! @brief Returns the initial flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties3d::getInitialFlexibility6x6(void) const
   { return getSectionFlexibility6x6(); }
 

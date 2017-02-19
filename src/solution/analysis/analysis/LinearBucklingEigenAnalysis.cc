@@ -61,7 +61,7 @@ int XC::LinearBucklingEigenAnalysis::setupPreviousStep(void)
 	    return -1;
 	  }
       }
-    result = getLinearBucklingIntegratorPtr()->formKt(); //Matriz de rigidez en el paso previo.
+    result = getLinearBucklingIntegratorPtr()->formKt(); //Previous step stiffness matrix.
     return result;
   }
 

@@ -97,19 +97,19 @@ const XC::Vector &XC::ElasticSection3d::getStressResultant(void) const
     return s;
   }
 
-//! @brief Return the tangent stiffness matrix.
+//! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::ElasticSection3d::getSectionTangent(void) const
   { return ctes_scc.getSectionTangent4x4(); }
 
-//! @brief Return the tangent stiffness matrix en el estado inicial.
+//! @brief Returns the tangent stiffness matrix en el estado inicial.
 const XC::Matrix &XC::ElasticSection3d::getInitialTangent(void) const
   { return ctes_scc.getInitialTangent4x4(); }
 
-//! @brief Return the matriz de flexibilidad.
+//! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::ElasticSection3d::getSectionFlexibility(void) const
   { return ctes_scc.getSectionFlexibility4x4(); }
 
-//! @brief Return the matriz de flexibilidad en el estado inicial.
+//! @brief Returns the flexibility matrix en el estado inicial.
 const XC::Matrix &XC::ElasticSection3d::getInitialFlexibility(void) const
   { return ctes_scc.getInitialFlexibility4x4(); }
 
@@ -117,7 +117,7 @@ const XC::Matrix &XC::ElasticSection3d::getInitialFlexibility(void) const
 XC::SectionForceDeformation *XC::ElasticSection3d::getCopy(void) const
   { return new ElasticSection3d(*this); }
 
-//! @brief Returns the GDL a los que la sección aporta rigidez.
+//! @brief Response identifiers for section stiffness contribution.
 const XC::ResponseId &XC::ElasticSection3d::getType(void) const
   { return RespElasticSection3d; }
 

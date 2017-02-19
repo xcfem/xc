@@ -68,8 +68,8 @@ beam3d= elementos.newElement("force_beam_column_3d",xc.ID([1,2]));
 
 
 
-fuerte= beam3d.getVDirEjeFuerteGlobales(0)
-debil= beam3d.getVDirEjeDebilGlobales(0)
+fuerte= beam3d.getVDirStrongAxisGlobalCoord(0)
+debil= beam3d.getVDirWeakAxisGlobalCoord(0)
 ratio1= ((fuerte[0])**2+(fuerte[2])**2)
 ratio2= ((debil[0])**2+(debil[1])**2)
 

@@ -73,16 +73,16 @@
 #include "boost/lexical_cast.hpp"
 
 XC::ElementRecorder::ElementRecorder()
-  :ElementRecorderBase(RECORDER_TAGS_ElementRecorder),data(nullptr)
+  :ElementRecorderBase(RECORDER_TAGS_ElementRecorder),data()
   {}
 
 XC::ElementRecorder::ElementRecorder(const ID &ele,const std::vector<std::string> &argv, bool echoTime, 
                                      Domain &theDom, DataOutputHandler &theOutputHandler, double dT)
-  :ElementRecorderBase(RECORDER_TAGS_ElementRecorder,ele,argv,echoTime,theDom,theOutputHandler,dT),data(nullptr)
+  :ElementRecorderBase(RECORDER_TAGS_ElementRecorder,ele,argv,echoTime,theDom,theOutputHandler,dT),data()
   {}
 
 XC::ElementRecorder::~ElementRecorder(void)
-  { if(data) delete data; }
+  {}
 
 
 int XC::ElementRecorder::record(int commitTag, double timeStamp)
@@ -101,7 +101,6 @@ int XC::ElementRecorder::record(int commitTag, double timeStamp)
       }
 
     assert(theHandler);
-    assert(data);
     int result = 0;
     if(deltaT == 0.0 || timeStamp >= nextTimeStampToRecord)
       {
@@ -109,7 +108,7 @@ int XC::ElementRecorder::record(int commitTag, double timeStamp)
           nextTimeStampToRecord = timeStamp + deltaT;
         int loc = 0;
         if(echoTimeFlag == true) 
-          (*data)(loc++) = timeStamp;
+          data(loc++) = timeStamp;
     
         //
         // for each element if responses exist, put them in response vector
@@ -129,7 +128,7 @@ int XC::ElementRecorder::record(int commitTag, double timeStamp)
 	            Information &eleInfo = theResponses[i]->getInformation();
 	            const Vector &eleData = eleInfo.getData();
 	            for(int j=0; j<eleData.Size(); j++)
-	              (*data)(loc++) = eleData(j);
+	              data(loc++) = eleData(j);
 	          }
               } 
           }
@@ -137,7 +136,7 @@ int XC::ElementRecorder::record(int commitTag, double timeStamp)
         // send the response vector to the output handler for o/p
         //
 
-        theHandler->write(*data);
+        theHandler->write(data);
       }
     // succesfull completion - return 0
     return result;
@@ -145,7 +144,7 @@ int XC::ElementRecorder::record(int commitTag, double timeStamp)
 
 int XC::ElementRecorder::restart(void)
   {
-    if(data) data->Zero();
+    data.Zero();
     return 0;
   }
 
@@ -264,13 +263,8 @@ int XC::ElementRecorder::initialize(void)
     theHandler->open(dbColumns);
 
     // create the vector to hold the data
-    data = new Vector(numDbColumns);
+    data= Vector(numDbColumns);
 
-    if(!data)
-      {
-        std::cerr << "XC::ElementRecorder::initialize() - out of memory\n";
-        return -1;
-      }
     initializationDone = true;
     return 0;
   }

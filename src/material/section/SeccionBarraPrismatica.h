@@ -86,9 +86,9 @@ class SeccionBarraPrismatica: public SectionForceDeformation
     double getEI2(void) const;
     EjesPrincInercia2d getEjesInercia(void) const;
     Vector2d getVDirEje1(void) const;
-    Vector2d getVDirEjeFuerte(void) const;
+    Vector2d getVDirStrongAxis(void) const;
     Vector2d getVDirEje2(void) const;
-    Vector2d getVDirEjeDebil(void) const;
+    Vector2d getVDirWeakAxis(void) const;
 
     bool hayAxil(const double &tol=1e-4) const;
     bool hayCortante(const double &tol=1e-4) const;

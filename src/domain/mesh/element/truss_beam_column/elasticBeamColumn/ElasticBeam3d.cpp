@@ -179,7 +179,7 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformat
     p0.zero();
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ElasticBeam3d::ElasticBeam3d(const XC::ElasticBeam3d &otro)
   :ProtoBeam3d(otro), eInic(otro.eInic), rho(otro.rho),
    sectionTag(otro.sectionTag), q(otro.q), theCoordTransf(nullptr)
@@ -574,16 +574,16 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
 
 //! @brief Returns the direction vector of element strong axis
 //! expressed in the global coordinate system.
-const XC::Vector &XC::ElasticBeam3d::getVDirEjeFuerteGlobales(void) const
+const XC::Vector &XC::ElasticBeam3d::getVDirStrongAxisGlobalCoord(void) const
   {
     if(theCoordTransf)
       {
-        const Vector eF= getVDirEjeFuerteLocales();
+        const Vector eF= getVDirStrongAxisLocalCoord();
         return theCoordTransf->getVectorGlobalCoordFromLocal(eF);
       }
     else
       {
-        std::cerr << "ElasticBeam3d::getVDirEjeFuerteGlobales; no se ha asignado una coordinate transformation."
+        std::cerr << "ElasticBeam3d::getVDirStrongAxisGlobalCoord; no se ha asignado una coordinate transformation."
                   << std::endl;
         return P;
       }
@@ -591,16 +591,16 @@ const XC::Vector &XC::ElasticBeam3d::getVDirEjeFuerteGlobales(void) const
 
 //! @brief Returns the direction vector of element weak axis
 //! expressed in the global coordinate system.
-const XC::Vector &XC::ElasticBeam3d::getVDirEjeDebilGlobales(void) const
+const XC::Vector &XC::ElasticBeam3d::getVDirWeakAxisGlobalCoord(void) const
   {
     if(theCoordTransf)
       {
-        const Vector eD= getVDirEjeDebilLocales();
+        const Vector eD= getVDirWeakAxisLocalCoord();
         return theCoordTransf->getVectorGlobalCoordFromLocal(eD);
       }
     else
       {
-        std::cerr << "ElasticBeam3d::getVDirEjeDebilGlobales; no se ha asignado una coordinate transformation."
+        std::cerr << "ElasticBeam3d::getVDirWeakAxisGlobalCoord; no se ha asignado una coordinate transformation."
                   << std::endl;
         return P;
       }

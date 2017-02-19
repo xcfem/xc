@@ -31,9 +31,6 @@
 #define ElementRecorderBase_h
 
 
-// A ElementRecorderBase is used to obtain a response from an element during 
-// the analysis.
-//
 // What: "@(#) ElementRecorderBase.h, revA"
 
 #include <utility/recorder/MeshCompRecorder.h>
@@ -43,8 +40,9 @@ namespace XC {
 class Response;
 class DataOutputHandler;
 
-//! @brief Se emplea como base de los recorders que obtienen
-//! la respuesta de uno o más elementos during the analysis.
+//! @ingroup Recorder
+//
+//! @brief Base class for the finite element response recorders.
 class ElementRecorderBase: public MeshCompRecorder
   {
   protected:        

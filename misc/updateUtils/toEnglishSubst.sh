@@ -111,5 +111,13 @@ do
 # sed -i 's/parametrosPerfilMetalico/paramMetallicProfile/g' $fl
 #20160925 LCPT
 # sed -i 's/PlanoDeformacion/DeformationPlane/g' $fl
-
+#20170219 LCPT
+sed -i 's/getVDirEjeFuerteLocales/getVDirStrongAxisLocalCoord/g' $fl
+sed -i 's/getVDirEjeDebilLocales/getVDirWeakAxisLocalCoord/g' $fl
+sed -i 's/getVDirEjeFuerteGlobales/getVDirStrongAxisGlobalCoord/g' $fl
+sed -i 's/getVDirEjeDebilGlobales/getVDirWeakAxisGlobalCoord/g' $fl
+sed -i 's/getVDirEjeFuerte/getVDirStrongAxis/g' $fl
+sed -i 's/getVDirEjeDebil/getVDirWeakAxis/g' $fl
+sed -i 's/AnguloEjeFuerte/StrongAxisAngle/g' $fl
+sed -i 's/AnguloEjeDebil/WeakAxisAngle/g' $fl
 done

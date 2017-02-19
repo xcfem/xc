@@ -121,8 +121,7 @@ class Response;
 
 //! \ingroup ElemZL
 //
-//! @brief Elemento de longitud cero para problemas
-//! de contacto bidimensionales.
+//! @brief Zero length element for 2D contact problems.
 class ZeroLengthContact2D: public ZeroLengthContact
   {
   private:

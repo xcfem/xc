@@ -74,7 +74,7 @@ XC::ClosedTriangleMesh::ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &
     tol= 0.0;//longDiagonalBND/1e6;
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ClosedTriangleMesh::ClosedTriangleMesh(const ClosedTriangleMesh &otro)
   : GeomObj3d(otro), MovableObject(otro), triedros(otro.triedros), tol(otro.tol), rMax(otro.rMax),rMin(otro.rMin)
   {}

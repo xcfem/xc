@@ -38,7 +38,7 @@ namespace XC {
 
 //! @ingroup Analysis
 //
-//! @brief Vector de fuerza desequilibrada y matriz de rigidez tangente.
+//! @brief Vector de fuerza desequilibrada y tangent stiffness matrix.
 class UnbalAndTangentStorage
   {
   private:

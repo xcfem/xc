@@ -93,12 +93,12 @@ XC::ArrayOfTaggedObjects::ArrayOfTaggedObjects(EntCmd *owr,int size,const std::s
 
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ArrayOfTaggedObjects::ArrayOfTaggedObjects(const ArrayOfTaggedObjects &otro)
   : TaggedObjectStorage(otro), numComponents(otro.numComponents),sizeComponentArray(otro.sizeComponentArray), positionLastEntry(otro.positionLastEntry), positionLastNoFitEntry(otro.positionLastNoFitEntry),fitFlag(otro.fitFlag), theComponents(otro.theComponents.size(),nullptr), myIter(*this)
   { copia(otro); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ArrayOfTaggedObjects &XC::ArrayOfTaggedObjects::operator=(const ArrayOfTaggedObjects &otro)
   {
     TaggedObjectStorage::operator=(otro);

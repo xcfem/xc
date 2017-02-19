@@ -36,8 +36,8 @@ class_<XC::ElasticBeam2d, bases<XC::ProtoBeam2d>, boost::noncopyable >("ElasticB
   .add_property("getM2", &XC::ElasticBeam2d::getM2, "Internal bending moment at front end.")
   .add_property("getMz1", &XC::ElasticBeam2d::getM1, "Internal bending moment at back end.")
   .add_property("getMz2", &XC::ElasticBeam2d::getM2, "Internal bending moment at front end.")
-  .def("getVDirEjeFuerteGlobales",make_function(&XC::ElasticBeam2d::getVDirEjeFuerteGlobales, return_value_policy<copy_const_reference>()),"Returns the direction vector of element strong axis expressed in the global coordinate system.")
-  .def("getVDirEjeDebilGlobales",make_function(&XC::ElasticBeam2d::getVDirEjeDebilGlobales, return_value_policy<copy_const_reference>()),"Returns the direction vector of element weak axis expressed in the global coordinate system.")
+  .def("getVDirStrongAxisGlobalCoord",make_function(&XC::ElasticBeam2d::getVDirStrongAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element strong axis expressed in the global coordinate system.")
+  .def("getVDirWeakAxisGlobalCoord",make_function(&XC::ElasticBeam2d::getVDirWeakAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element weak axis expressed in the global coordinate system.")
    ;
 
 class_<XC::ElasticBeam3d, bases<XC::ProtoBeam3d>, boost::noncopyable >("ElasticBeam3d", no_init)
@@ -67,6 +67,6 @@ class_<XC::ElasticBeam3d, bases<XC::ProtoBeam3d>, boost::noncopyable >("ElasticB
   .add_property("getT1", &XC::ElasticBeam3d::getT1,"Torque at the back end of the element.")
   .add_property("getT2", &XC::ElasticBeam3d::getT2,"Torque at the front end of the element.")
 
-  .def("getVDirEjeFuerteGlobales",make_function(&XC::ElasticBeam3d::getVDirEjeFuerteGlobales, return_value_policy<copy_const_reference>()),"Returns the direction vector of element strong axis expressed in the global coordinate system.")
-  .def("getVDirEjeDebilGlobales",make_function(&XC::ElasticBeam3d::getVDirEjeDebilGlobales, return_value_policy<copy_const_reference>()),"Returns the direction vector of element weak axis expressed in the global coordinate system.")
+  .def("getVDirStrongAxisGlobalCoord",make_function(&XC::ElasticBeam3d::getVDirStrongAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element strong axis expressed in the global coordinate system.")
+  .def("getVDirWeakAxisGlobalCoord",make_function(&XC::ElasticBeam3d::getVDirWeakAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element weak axis expressed in the global coordinate system.")
    ;

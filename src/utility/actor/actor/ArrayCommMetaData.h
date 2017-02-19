@@ -34,8 +34,10 @@
 
 namespace XC {
 
-//! @brief Datos acerca de la posición, tamaño,... del
-//! objeto a transmitir.
+//! @ingroup IPComm
+//
+//! @brief Data about the position, size, ... of the
+//! array to transmit.
 class ArrayCommMetaData: public PtrCommMetaData
   {
   protected:
@@ -43,11 +45,11 @@ class ArrayCommMetaData: public PtrCommMetaData
   public:
     ArrayCommMetaData(const int &,const int &,const size_t &);
 
-    //! @brief Return the posición del tamaño del array.
+    //! @brief Return the index of the array size.
     inline const std::size_t &getPosSize(void) const
       { return posSz; }
 
-    //! @brief Returns the tamaño del array.
+    //! @brief Returns the array size.
     inline const std::size_t &getSize(void) const
       { return posSz; }
   };

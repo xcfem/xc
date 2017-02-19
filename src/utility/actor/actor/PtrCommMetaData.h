@@ -33,8 +33,8 @@
 
 namespace XC {
 
-//! @brief Datos acerca de la posición, tamaño,... del
-//! objeto a transmitir.
+//! @brief Data about the position, size,... of the pointer
+//! to transmit.
 class PtrCommMetaData: public CommMetaData
   {
   private:

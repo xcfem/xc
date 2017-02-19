@@ -112,19 +112,19 @@ template <class T>
 DqPtrs<T>::DqPtrs(EntCmd *owr)
   : EntCmd(owr),lst_ptr() {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 template <class T>
 DqPtrs<T>::DqPtrs(const DqPtrs<T> &otro)
   : EntCmd(otro), lst_ptr(otro)
   {}
 
-//! @brief Constructor de copia.
+//! @brief Copy from deque container.
 template <class T>
 DqPtrs<T>::DqPtrs(const std::deque<T *> &ts)
   : EntCmd(), lst_ptr(ts)
   {}
 
-//! @brief Constructor de copia.
+//! @brief Copy from set container.
 template <class T>
 DqPtrs<T>::DqPtrs(const std::set<const T *> &st)
   : EntCmd(), lst_ptr()
@@ -135,7 +135,7 @@ DqPtrs<T>::DqPtrs(const std::set<const T *> &st)
       lst_ptr::push_back(const_cast<T *>(*k));
   }
 
-//! @brief Operator asignación.
+//! @brief Assignment operator.
 template <class T>
 DqPtrs<T> &DqPtrs<T>::operator=(const DqPtrs &otro)
   {

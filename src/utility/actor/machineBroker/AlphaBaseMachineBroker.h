@@ -32,6 +32,9 @@
 #include <utility/actor/machineBroker/MachineBroker.h>
 
 namespace XC {
+//! @ingroup IPComm
+//
+//! @brief DEC Alpha machine broker?
 class AlphaBaseMachineBroker: public MachineBroker
   {
   private:
@@ -40,7 +43,6 @@ class AlphaBaseMachineBroker: public MachineBroker
     std::vector<std::string> machines;
   public:
     AlphaBaseMachineBroker(FEM_ObjectBroker *theBroker, int currentMachine,int maxNumMachines);
-
   };
 } // end of XC namespace
 

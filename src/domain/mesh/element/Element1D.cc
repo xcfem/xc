@@ -446,9 +446,32 @@ void XC::Element1D::setDomain(Domain *theDomain)
 XC::CrdTransf *XC::Element1D::getCoordTransf(void)
   { return nullptr; }
 
-//! @brief Returns (if possible) a pointer to the coordinate transformation.
+//! @brief Returns (if possible) a const pointer to the coordinate transformation.
 const XC::CrdTransf *XC::Element1D::getCoordTransf(void) const
   { return nullptr; }
+
+//! @brief Returns (and checks that it exists) a const pointer to the coordinate transformation.
+XC::CrdTransf *XC::Element1D::checkCoordTransf(void)
+  {
+    CrdTransf *ct= getCoordTransf();
+    if(!ct)
+      std::cerr << nombre_clase() << __FUNCTION__
+                << "; coordinate transformation not defined."
+                << std::endl;
+    return ct;
+  }
+
+//! @brief Returns (and checks that it exists) a const pointer to the coordinate transformation.
+const XC::CrdTransf *XC::Element1D::checkCoordTransf(void) const
+  {
+    const CrdTransf *ct= getCoordTransf();
+    if(!ct)
+      std::cerr << nombre_clase() << __FUNCTION__
+                << "; coordinate transformation not defined."
+                << std::endl;
+    return ct;
+  }
+
 
 //! @brief Returs a matrix with the axes of the element as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]

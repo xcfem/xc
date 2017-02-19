@@ -64,6 +64,11 @@
 #include "utility/actor/address/ChannelAddress.h"
 
 namespace XC {
+//! @ingroup IPComm
+//
+//! @brief It is used to encapsulate the addresses used to send/recv messages
+//! using Berkeley sockets. SocketAddress is needed as a friend by 
+//! UDP_Socket & TCP_Socket.
 class SocketAddress: public ChannelAddress
   {
   public:

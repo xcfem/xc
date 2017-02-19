@@ -57,26 +57,22 @@
 // Created: 09/99
 // Revision: A
 //
-// Description: This file contains the class definition for ElementRecorder.
-// A ElementRecorder is used to obtain a response from an element during 
-// the analysis.
-//
 // What: "@(#) ElementRecorder.h, revA"
 
 #include "ElementRecorderBase.h"
+#include "utility/matrix/Vector.h"
 
 namespace XC {
-class Vector;
 class Element;
 
+//! @ingroup Recorder
+//
+//! @brief Recording of element response.
 class ElementRecorder: public ElementRecorderBase
   {
   private:	
     int initialize(void);
-    Vector *data;
-
-  protected:
-
+    Vector data;
   public:
     ElementRecorder(void);
     ElementRecorder(const ID &eleID, 

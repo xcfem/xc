@@ -61,12 +61,12 @@ void XC::DamageModelVector::alloc(const std::vector<DamageModel *> &dmgs)
       }
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::DamageModelVector::DamageModelVector(const DamageModelVector &otro)
   : std::vector<DamageModel *>(otro.size(),nullptr), MovableObject(0)
   { alloc(otro); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::DamageModelVector &XC::DamageModelVector::operator=(const DamageModelVector &otro)
   { 
     alloc(otro);

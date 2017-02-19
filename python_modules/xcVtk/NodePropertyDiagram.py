@@ -18,7 +18,7 @@ class NodePropertyDiagram(cd.ColoredDiagram):
     #   eSet: Element set.
     elems= eSet.getElements
     for e in elems:
-      self.vDir= e.getVDirEjeDebilGlobales()
+      self.vDir= e.getVDirWeakAxisGlobalCoord()
       v0= e.getNodes[0].getProp(self.propertyName)
       v1= e.getNodes[1].getProp(self.propertyName)
       indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,v0,v1)

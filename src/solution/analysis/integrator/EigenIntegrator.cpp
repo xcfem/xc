@@ -74,9 +74,8 @@
 XC::EigenIntegrator::EigenIntegrator(SoluMethod *owr)
   :Integrator(owr,EigenINTEGRATOR_TAGS_Eigen) {}
 
-//! @brief Solicita al elemento being passed as parameter
-//! que forme su matriz de rigidez o de masas dependiendo
-//! del valor de flagK.
+//! @brief Asks the elemento being passed as parameter
+//! to build its mass(flagK= false) or stiffness matrix (flagK= true).
 int XC::EigenIntegrator::formEleTangent(FE_Element *theEle)
   {
     if(flagK == 0)
@@ -100,7 +99,7 @@ int XC::EigenIntegrator::newStep(void)
 int XC::EigenIntegrator::getLastResponse(Vector &result, const XC::ID &id)
   { return 0; }
 
-//! @brief Ensambla la matriz de rigidez.
+//! @brief Stiffness matrix assembly.
 int XC::EigenIntegrator::formK()
   {
     AnalysisModel *mdl= getAnalysisModelPtr();
@@ -119,7 +118,7 @@ int XC::EigenIntegrator::formK()
     // FE_EleIter &theEles1= mdl->getFEs();
     FE_Element *elePtr;
 
-    flagK= 0; //matriz de rigidez (ver formEleTangent)
+    flagK= 0; //stiffness matrix (see formEleTangent)
     theSOE->zeroA();
 
     //while((elePtr = theEles1()) != 0) 
@@ -140,7 +139,7 @@ int XC::EigenIntegrator::formK()
     return result;    
   }
 
-//! @brief Ensambla la matriz de masas.
+//! @brief Ensambla la mass matrix.
 int XC::EigenIntegrator::formM(void)
   {
     AnalysisModel *mdl= getAnalysisModelPtr();
@@ -156,7 +155,7 @@ int XC::EigenIntegrator::formM(void)
     // efficiency when performing parallel computations
 
 
-    flagK = 1; //matriz de masas (ver formEleTangent)
+    flagK = 1; //mass matrix (see formEleTangent)
     theSOE->zeroM();
 
     // while((elePtr = theEles1()) != 0) 
@@ -192,8 +191,8 @@ int XC::EigenIntegrator::formM(void)
     return result;    
   }
 
-//! @brief Solicita al elemento being passed as parameter
-//! que forme su matriz de rigidez.
+//! @brief Asks the element being passed as parameter
+//! to build its tangent stiffness matrix.
 int XC::EigenIntegrator::formEleTangK(FE_Element *theEle)
   {
     theEle->zeroTangent();
@@ -201,8 +200,8 @@ int XC::EigenIntegrator::formEleTangK(FE_Element *theEle)
     return 0;
   }
 
-//! @brief Solicita al elemento being passed as parameter
-//! que forme su matriz de masas.
+//! @brief Asks the element being passed as parameter
+//! to build its mass matrix.
 int XC::EigenIntegrator::formEleTangM(FE_Element *theEle)
   {
     theEle->zeroTangent();

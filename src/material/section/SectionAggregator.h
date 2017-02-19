@@ -85,7 +85,7 @@ class SectionAggregator : public SeccionBarraPrismatica
     Vector *s; //!< Storage for stress resultants
     Matrix *ks;//!< Storage for section stiffness
     Matrix *fs;//!< Storage for section flexibility
-    ResponseId *theCode; //!< GDLs a los que éste material agrega rigidez.
+    ResponseId *theCode; //!< identifiers for stiffness contribution.
 
     static double workArea[];
     //static int codeArea[];

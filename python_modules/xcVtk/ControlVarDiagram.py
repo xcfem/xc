@@ -46,7 +46,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
                          Valid components are: 'N', 'Qy', 'Vy', 'Qz', 'Vz', 'My', 'Mz', 'T'
                                
     '''
-#    elemVDir= elem.getVDirEjeDebilGlobales() # default values 16/02/2017 it
+#    elemVDir= elem.getVDirWeakAxisGlobalCoord() # default values 16/02/2017 it
                                               #doesn't work.
     elemVDir= elem.getCoordTransf.getKVector # default values.
     if self.attributeName <> "intForce":

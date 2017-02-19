@@ -24,57 +24,68 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//BarraSuelta.cpp
+//SingleBar.cpp
 
 #include <cmath>
 #include <utility/matrix/Matrix.h>
 
-#include <material/section/repres/geom_section/reinfLayer/BarraSuelta.h>
+#include <material/section/repres/geom_section/reinfLayer/SingleBar.h>
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
 
 #include "xc_basic/src/texto/cadena_carac.h"
 
 
-XC::BarraSuelta::BarraSuelta(ListReinfLayer *owr,Material *mat)
+//! @brief Constructor.
+XC::SingleBar::SingleBar(ListReinfLayer *owr,Material *mat)
   : ReinfLayer(owr,mat,0,0.0,0.0),
     posit(2) {}
 
-XC::BarraSuelta::BarraSuelta(ListReinfLayer *owr,Material *mat, double reinfBarArea,const Vector &position)
+//! @brief Constructor.
+XC::SingleBar::SingleBar(ListReinfLayer *owr,Material *mat, double reinfBarArea,const Vector &position)
   : ReinfLayer(owr,mat,1,0.0,reinfBarArea),posit(position) {}
 
-XC::BarraSuelta::BarraSuelta(const ReinfBar &bar)
+//! @brief Constructor.
+XC::SingleBar::SingleBar(const ReinfBar &bar)
   : ReinfLayer(nullptr,bar.getMaterialPtr(),1,bar.getDiameter(),bar.getArea()),posit(getPosition()) 
   { set_owner(const_cast<EntCmd *>(bar.Owner())); }
 
-void XC::BarraSuelta::setPosition(const Vector &Position)
+//! @brief Sets the position of the bar.
+void XC::SingleBar::setPosition(const Vector &Position)
   { posit= Position; }
 
-double XC::BarraSuelta::getMaxY(void) const
+//! @brief Returns the max y coordinate.
+double XC::SingleBar::getMaxY(void) const
   { return posit(0); }
-double XC::BarraSuelta::getMaxZ(void) const
+//! @brief Returns the max z coordinate.
+double XC::SingleBar::getMaxZ(void) const
   { return posit(1); }
-double XC::BarraSuelta::getMinY(void) const
+//! @brief Returns the min y coordinate.
+double XC::SingleBar::getMinY(void) const
   { return posit(0); }
-double XC::BarraSuelta::getMinZ(void) const
+//! @brief Returns the min z coordinate.
+double XC::SingleBar::getMinZ(void) const
   { return posit(1); }
 
-//! @brief Returns a array de barras de refuerzo.
-const XC::VectorReinfBar &XC::BarraSuelta::getReinfBars(void) const
+//! @brief Returns a rebars array.
+const XC::VectorReinfBar &XC::SingleBar::getReinfBars(void) const
   {
     reinfBars.resize(1);
     reinfBars.put(1,ReinfBar(getReinfBarArea(),getMaterialPtr(),posit));
     return reinfBars;         
   }
 
-const XC::Vector &XC::BarraSuelta::getPosition(void) const
+//! @brief Returns the position of the bar.
+const XC::Vector &XC::SingleBar::getPosition(void) const
   { return posit; }
 
-XC::ReinfLayer *XC::BarraSuelta::getCopy (void) const
-  { return new BarraSuelta(*this); }
+//! @brief Virtual constructor.
+XC::ReinfLayer *XC::SingleBar::getCopy (void) const
+  { return new SingleBar(*this); }
 
-void XC::BarraSuelta::Print(std::ostream &s, int flag) const
+//! @brif Displays information about the bar.
+void XC::SingleBar::Print(std::ostream &s, int flag) const
   {
-     s << "\nReinforcing Layer type:  Suelta";
+     s << "\nReinforcing Layer type:  Single";
      ReinfLayer::Print(s,flag);
      s << "\n Position: " << posit;
   }

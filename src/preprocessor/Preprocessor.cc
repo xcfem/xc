@@ -46,7 +46,7 @@ XC::Preprocessor::Preprocessor(EntCmd *owr,DataOutputHandler::map_output_handler
     cad(this),sets(this)
   { domain= new Domain(this,oh); }
 
-//! @brief Constructor de copia (prohibida).
+//! @brief Copy constructor (prohibida).
 XC::Preprocessor::Preprocessor(const Preprocessor &otro)
   : EntCmd(otro), MovableObject(otro), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this),
     nodes(this), elements(this), loads(this), constraints(this),
@@ -55,7 +55,7 @@ XC::Preprocessor::Preprocessor(const Preprocessor &otro)
     std::cerr << "No se puede copiar un objeto de clase Preprocessor." << std::endl;
   }
 
-//! @brief Operador asignación (prohibida).
+//! @brief Assignment operator (prohibida).
 XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &otro)
   {
     std::cerr << "No se puede asignar un objeto de clase Preprocessor." << std::endl;

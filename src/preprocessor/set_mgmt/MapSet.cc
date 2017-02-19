@@ -216,12 +216,12 @@ XC::MapSet::MapSet(Preprocessor *m)
   : EntCmd(m), MovableObject(0), preprocessor(m),total(nullptr)
   { setup_total(); }
 
-//! @brief Constructor de copia (NO COPIA LOS CONJUNTOS).
+//! @brief Copy constructor (NO COPIA LOS CONJUNTOS).
 XC::MapSet::MapSet(const MapSet &otro)
   : EntCmd(otro), MovableObject(otro), preprocessor(otro.preprocessor), total(nullptr)
   { setup_total(); }
 
-//! @brief Operador asignación (NO COPIA LOS CONJUNTOS).
+//! @brief Assignment operator (NO COPIA LOS CONJUNTOS).
 XC::MapSet &XC::MapSet::operator=(const MapSet &otro)
   {
     EntCmd::operator=(otro);

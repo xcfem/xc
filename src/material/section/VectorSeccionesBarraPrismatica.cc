@@ -87,7 +87,7 @@ XC::VectorSeccionesBarraPrismatica::VectorSeccionesBarraPrismatica(const size_t 
       setupSection(m);
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::VectorSeccionesBarraPrismatica::VectorSeccionesBarraPrismatica(const VectorSeccionesBarraPrismatica &otro)
   : EntCmd(otro), std::vector<SeccionBarraPrismatica *>(otro.size(),nullptr), MovableObject(otro)
   {
@@ -103,7 +103,7 @@ XC::VectorSeccionesBarraPrismatica::VectorSeccionesBarraPrismatica(const VectorS
       }
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::VectorSeccionesBarraPrismatica &XC::VectorSeccionesBarraPrismatica::operator=(const VectorSeccionesBarraPrismatica &)
   {
     std::cerr << "VectorSeccionesBarraPrismatica: No se debe llamar al operador de asignación."
@@ -199,7 +199,7 @@ int XC::VectorSeccionesBarraPrismatica::revertToStart(void)
     return retVal;
   }
 
-//! @brief Returns true iflas secciones tienen rigidez a torsión.
+//! @brief Returns true iflas secciones tienen torsional stiffness.
 bool XC::VectorSeccionesBarraPrismatica::isTorsion(void) const
   {
     bool isTorsion= false;
@@ -247,7 +247,7 @@ bool XC::VectorSeccionesBarraPrismatica::setSections(const std::vector<SeccionBa
     return isTorsion;
   }
 
-//! @brief Asigna valores a las deformaciones iniciales.
+//! @brief Asigna valores a las initial strains.
 void XC::VectorSeccionesBarraPrismatica::setInitialSectionDeformations(const std::vector<Vector> &vs)
   {
     const size_t nSections= std::min(size(),vs.size());
@@ -257,7 +257,7 @@ void XC::VectorSeccionesBarraPrismatica::setInitialSectionDeformations(const std
       (*this)[i]->setInitialSectionDeformation(vs[i]);
   }
 
-//! @brief Asigna valores a las deformaciones iniciales interpolando entre e1 y e2.
+//! @brief Asigna valores a las initial strains interpolando entre e1 y e2.
 void XC::VectorSeccionesBarraPrismatica::addInitialSectionDeformations(const BeamStrainLoad &strainLoad,const double &loadFactor,const Matrix &xi, const double &L)
   {
     const size_t numAbcisas= xi.noRows();

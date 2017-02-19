@@ -51,7 +51,7 @@
 XC::SetMeshComp::SetMeshComp(const std::string &nmb,Preprocessor *md)
   : SetBase(nmb,md), nodos(this), elementos(this), constraints(this) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::SetMeshComp::SetMeshComp(const SetMeshComp &otro)
   : SetBase(otro)
   { copia_listas(otro); }

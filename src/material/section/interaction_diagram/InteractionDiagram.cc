@@ -64,7 +64,7 @@ XC::InteractionDiagram::InteractionDiagram(const Pos3d &org,const Triang3dMesh &
     clasifica_triedros();
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::InteractionDiagram::InteractionDiagram(const InteractionDiagram &otro)
   : ClosedTriangleMesh(otro)
   {

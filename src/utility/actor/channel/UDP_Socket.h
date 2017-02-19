@@ -68,6 +68,11 @@
 namespace XC {
 class SocketAddress;
 
+//! @ingroup IPComm
+//
+//! @brief DP_Socket is a sub-class of channel. It is implemented with
+//! Berkeley datagram sockets using the UDP protocol. Messages delivery
+//! is thus unreliable.
 class UDP_Socket : public Channel
   {
   private:

@@ -383,8 +383,7 @@ XC::Material *load_plate_section_material(int tag_mat,const std::string &cmd,XC:
 //! - elastic_shear_section_3d: Elastic material with shear stiffness for 1D elements in 2D problems.
 //! - fiber_section_2d: Cross-section fiber model for 1D elements in 2D problems.
 //! - fiber_section_3d: Cross-section fiber model for 1D elements in 3D problems.
-//! - fiber_section_GJ: Cross-section fiber model for 1D elements with shear and torsion stiffness.
-//!    a torsión (problemas tridimensionales).
+//! - fiber_section_GJ: Cross-section fiber model for 1D elements with shear and torsion stiffness (3D problems).
 //! - section_aggregator: Agreggation of cross-section mechanical properties.
 XC::Material *load_section_material(int tag_mat,const std::string &cmd,XC::MaterialLoader *mloader)
   {

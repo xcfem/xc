@@ -72,7 +72,7 @@ XC::IncrementalIntegrator::IncrementalIntegrator(SoluMethod *owr,int clasTag)
   : Integrator(owr,clasTag), statusFlag(CURRENT_TANGENT) {}
 
 
-//! @brief Forma la matriz de rigidez tangente.
+//! @brief Builds tangent stiffness matrix.
 int XC::IncrementalIntegrator::formTangent(int statFlag)
   {
     int result = 0;
@@ -105,7 +105,7 @@ int XC::IncrementalIntegrator::formTangent(int statFlag)
     return result;
   }
 
-//! @brief Forma el load vector no equilibradas (el lado derecho de la ecuación).
+//! @brief Builds the unbalanced load vector (right hand side of the equation).
 int XC::IncrementalIntegrator::formUnbalance(void)
   {
     AnalysisModel *mdl= getAnalysisModelPtr();
@@ -219,7 +219,7 @@ const XC::LinearSOE *XC::IncrementalIntegrator::getLinearSOEPtr(void) const
     return sm->getLinearSOEPtr();
   }
 
-//! @brief Forma el load vector no equilibradas en los nodos.
+//! @brief Builds the nodal unbalanced load vector.
 int XC::IncrementalIntegrator::formNodalUnbalance(void)
   {
     // loop through the DOF_Groups and add the unbalance

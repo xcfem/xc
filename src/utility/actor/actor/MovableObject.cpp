@@ -73,7 +73,7 @@ XC::MovableObject::MovableObject(int cTag, int dTag)
 XC::MovableObject::MovableObject(int theTag)
   :classTag(theTag), dbTag(0) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::MovableObject::MovableObject(const MovableObject &otro)
   :classTag(otro.classTag), dbTag(0) {}
 

@@ -54,8 +54,6 @@
 #ifndef FiniteDeformationElastic3D_h
 #define FiniteDeformationElastic3D_h
 
-#include <utility/handler/ConsoleErrorHandler.h>
-
 #include <material/nD/NDMaterial.h>
 
 namespace XC {

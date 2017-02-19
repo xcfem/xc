@@ -66,6 +66,9 @@
 
 namespace XC {
 
+//! @ingroup IPComm
+//
+//! @brief Base class for brokers.
 class ObjectBroker
   {
     public:

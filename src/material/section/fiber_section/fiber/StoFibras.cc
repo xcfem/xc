@@ -74,12 +74,12 @@ void XC::StoFibras::libera(void)
 XC::StoFibras::StoFibras(const size_t &num)
   : DqFibras(num) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::StoFibras::StoFibras(const StoFibras &otro)
   : DqFibras()
   { copia_fibras(otro); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::StoFibras &XC::StoFibras::operator=(const StoFibras &otro)
   {
     DqFibras::operator=(otro);

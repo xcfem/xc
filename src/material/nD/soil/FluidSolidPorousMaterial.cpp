@@ -123,7 +123,7 @@ XC::FluidSolidPorousMaterial::FluidSolidPorousMaterial(int tag)
     e2p = 0;
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::FluidSolidPorousMaterial::FluidSolidPorousMaterial(const FluidSolidPorousMaterial &a)
  : NDMaterial(a), theSoilMaterial(nullptr)
   {
@@ -137,7 +137,7 @@ XC::FluidSolidPorousMaterial::FluidSolidPorousMaterial(const FluidSolidPorousMat
     e2p = a.e2p;
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::FluidSolidPorousMaterial &XC::FluidSolidPorousMaterial::operator=(const FluidSolidPorousMaterial &a)
   {
     NDMaterial::operator=(a);

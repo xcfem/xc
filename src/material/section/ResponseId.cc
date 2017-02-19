@@ -174,7 +174,7 @@ std::string XC::ResponseId::getString(void) const
     return retval;
   }
 
-//! @brief Constructor; asigna los códigos a los gdl a los que el material aporta rigidez.
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespPMz::RespPMz(void)
   : ResponseId(2)
   {
@@ -182,7 +182,7 @@ XC::RespPMz::RespPMz(void)
     (*this)(1)= SECTION_RESPONSE_MZ; // Mz is the second
   }
 
-//! @brief Constructor; asigna los códigos a los gdl a los que el material aporta rigidez.
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespPMzV::RespPMzV(void)
   : ResponseId(3)
   {
@@ -191,7 +191,7 @@ XC::RespPMzV::RespPMzV(void)
     (*this)(2)= SECTION_RESPONSE_VY; // Vy is the third
   }
 
-//! @brief Constructor; asigna los códigos a los gdl a los que el material aporta rigidez.
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespVyP::RespVyP(void)
   : ResponseId(2)
   {
@@ -199,7 +199,7 @@ XC::RespVyP::RespVyP(void)
     (*this)(1)= SECTION_RESPONSE_P; // P is the second
   }
 
-//! @brief Constructor; asigna los códigos a los gdl a los que el material aporta rigidez.
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespPMzMy::RespPMzMy(void)
   : ResponseId(3)
   {
@@ -208,7 +208,7 @@ XC::RespPMzMy::RespPMzMy(void)
     (*this)(2)= SECTION_RESPONSE_MY; // My is the third 
   }
 
-//! @brief Constructor; asigna los códigos a los gdl a los que el material aporta rigidez.
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespPMzMyT::RespPMzMyT(void)
   : ResponseId(4)
   {
@@ -218,7 +218,7 @@ XC::RespPMzMyT::RespPMzMyT(void)
     (*this)(3)= SECTION_RESPONSE_T; // T is the fourth
   }
 
-//! @brief Constructor; asigna los códigos a los gdl a los que el material aporta rigidez.
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespPMzVyMyVzT::RespPMzVyMyVzT(void)
   : ResponseId(6)
   {
@@ -230,7 +230,7 @@ XC::RespPMzVyMyVzT::RespPMzVyMyVzT(void)
     (*this)(5)= SECTION_RESPONSE_T;        // T is the sixth
   }
 
-//! @brief Constructor; asigna los códigos a los gdl a los que el material aporta rigidez.
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespFiberSectionShear3d::RespFiberSectionShear3d(void)
   : ResponseId(6)
   {
@@ -242,7 +242,7 @@ XC::RespFiberSectionShear3d::RespFiberSectionShear3d(void)
     (*this)(5)= SECTION_RESPONSE_T;
   }
 
-//! @brief Constructor; asigna los códigos a los gdl a los que el material aporta rigidez.
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespPVyMz::RespPVyMz(void)
   : ResponseId(3)
   {
@@ -251,7 +251,7 @@ XC::RespPVyMz::RespPVyMz(void)
     (*this)(2)= SECTION_RESPONSE_MZ; // Mz is the third 
   }
 
-//! @brief Constructor; asigna las etiquetas a los gdl a los que el material aporta rigidez.
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespMembraneMaterial::RespMembraneMaterial(void)
   : ResponseId(3)
   {
@@ -260,7 +260,7 @@ XC::RespMembraneMaterial::RespMembraneMaterial(void)
     (*this)(2)= MEMBRANE_RESPONSE_n12;
   }
 
-//! @brief Constructor; asigna las etiquetas a los gdl a los que el material aporta rigidez.
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespPlateMaterial::RespPlateMaterial(void)
   : ResponseId(5)
   {
@@ -271,7 +271,7 @@ XC::RespPlateMaterial::RespPlateMaterial(void)
     (*this)(4)= PLATE_RESPONSE_q23;
   }
 
-//! @brief Constructor; asigna las etiquetas a los gdl a los que el material aporta rigidez.
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespShellMaterial::RespShellMaterial(void)
   : ResponseId(8)
   {

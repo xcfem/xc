@@ -108,12 +108,12 @@ XC::Graph::Graph(void)
 XC::Graph::Graph(int numVertices)
   :MovableObject(Graph_TAG), myVertices(nullptr,numVertices,"vertice"), theVertexIter(&myVertices), numEdge(0), nextFreeTag(START_VERTEX_NUM) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::Graph::Graph(const Graph &other) 
   :MovableObject(other), myVertices(nullptr,32,"vertice"), theVertexIter(&myVertices), numEdge(0), nextFreeTag(START_VERTEX_NUM)
   { copia(other); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::Graph &XC::Graph::operator=(const Graph &other) 
   {
     MovableObject::operator=(other);

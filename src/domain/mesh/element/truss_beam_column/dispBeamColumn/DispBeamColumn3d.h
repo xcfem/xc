@@ -72,7 +72,7 @@ class Response;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra con material de tipo SeccionBarraPrismatica  para problemas tridimensionales.
+//! @brief 3D beam element with SeccionBarraPrismatica type material.
 class DispBeamColumn3d : public BeamColumnWithSectionFDTrf3d
   {
   private:

@@ -64,25 +64,25 @@ int XC::LinearBucklingAlgo::solveCurrentStep(int numModes)
         return -1;
       }
 
-    if(theIntegrator->formKtplusDt()<0) //Forma la matriz de rigidez.
+    if(theIntegrator->formKtplusDt()<0) //Builds stiffness matrix.
       {
         std::cerr << "WARNING LinearBucklingAlgo::solverCurrentStep() - ";
         std::cerr << "the Integrator failed in formKtplusDt().\n";
         return -3;
       }
 
-    if(theSOE->solve(numModes) < 0) //Calcula los modos propios.
+    if(theSOE->solve(numModes) < 0) //Computes eigenmodes.
       {
         std::cerr << "Warning LinearBucklingAlgo::solveCurrentStep() - ";
         std::cerr << "the EigenSOE failed in solve().\n";
         return -4;
       }
 
-    eigen_to_model(numModes); //Envia eigenvectors (modos) y eigenvalues al modelo.
+    eigen_to_model(numModes); //Send eigenvectors (modos) y eigenvalues to the model.
     return 0;
   }
 
-//! @brief Vuelca los eigenvalues en el modelo (ver Finite Element Procedures. Klaus Jurgen Bathe página 632).
+//! @brief Vuelca los eigenvalues en el modelo (see Finite Element Procedures. Klaus Jurgen Bathe página 632).
 void XC::LinearBucklingAlgo::eigen_to_model(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();

@@ -37,8 +37,9 @@ class FE_Datastore;
 class DataOutputHandler;
 class Node;
 
-//! @brief Se emplea como base de los recorders que obtienen
-//! la respuesta de uno o más nodos during the analysis.
+//! @ingroup Recorder
+//
+//! @brief Base class for mesh components recorders.
 class MeshCompRecorder: public HandlerRecorder
   {
   protected:

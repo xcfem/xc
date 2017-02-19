@@ -64,11 +64,11 @@
 XC::SectionRepres::SectionRepres(int tag,MaterialLoader *ml)
   : TaggedObject(tag), material_loader(ml), gmSecc(nullptr) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::SectionRepres::SectionRepres(const SectionRepres &otro)
   : TaggedObject(otro), material_loader(otro.material_loader), gmSecc(otro.gmSecc) {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::SectionRepres &XC::SectionRepres::operator=(const SectionRepres &otro)
   {
     SectionRepres::operator=(otro);

@@ -33,8 +33,10 @@
 
 namespace XC {
 
-//! @brief Datos acerca de la posición, tamaño,... del
-//! objeto a transmitir.
+//! @ingroup IPComm
+//
+//! @brief Data about the address, size,... of the tensor
+//! to transmit.
 class TensorCommMetaData: public MatrixCommMetaData
   {
   public:

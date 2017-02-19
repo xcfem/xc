@@ -68,11 +68,11 @@ XC::BeamIntegratorLoader::BeamIntegratorLoader(Preprocessor *owr)
     newBI("NewtonCotes","NewtonCotes");
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::BeamIntegratorLoader::BeamIntegratorLoader(const BeamIntegratorLoader &otro) : Loader(otro)
   { std::cerr << "No se debe copiar este objeto." << std::endl; }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::BeamIntegratorLoader &XC::BeamIntegratorLoader::operator=(const BeamIntegratorLoader &otro)
   {
     Loader::operator=(otro);

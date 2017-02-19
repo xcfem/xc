@@ -67,6 +67,10 @@ namespace XC {
 class ID;
 class Vector;
 
+//! @ingroup Recorder
+//
+//! @brief A FilePlotter will create a line graph using xy points
+//! found in a file. Probably to deprecate.
 class FilePlotter : public Recorder
   {
   private:

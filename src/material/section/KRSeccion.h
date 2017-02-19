@@ -40,10 +40,10 @@ namespace XC {
 class KRSeccion: public EntCmd
   {
     friend class DqFibras;
-    double rData[4]; //Datos del vector resultante de tensiones.
-    Vector *R; //Vector resultante de tensiones.
-    double kData[16]; //Datos de la matriz de rigidez.
-    Matrix *K; //Matriz de rigidez.
+    double rData[4]; //!< stress resultant vector data.
+    Vector *R; //!< stress resultant vector.
+    double kData[16]; //!< Stiffness matrix vector.
+    Matrix *K; //!< Stiffness matrix.
 
     static double value,vas1,vas2,vas1as2;//Para guardar resultados parciales.
   protected:
@@ -65,7 +65,7 @@ class KRSeccion: public EntCmd
         value= tangent * areaFibra;
         vas1= y*value;
 
-        k[0]+= value; //Rigidez axil
+        k[0]+= value; //Axial stiffness
         k[1]+= vas1;
         k[2]+= vas1 * y;
       }
@@ -78,7 +78,7 @@ class KRSeccion: public EntCmd
         vas2= z*value;
         vas1as2= vas1*z;
 
-        k[0]+= value; //Rigidez axil
+        k[0]+= value; //Axial stiffness
         k[1]+= vas1;
         k[2]+= vas2;
 
@@ -122,9 +122,9 @@ class KRSeccion: public EntCmd
       { return *R; }
     inline Vector &Resultante(void)
       { return *R; }
-    inline const Matrix &Rigidez(void) const
+    inline const Matrix &Stiffness(void) const
       { return *K; }
-    inline Matrix &Rigidez(void)
+    inline Matrix &Stiffness(void)
       { return *K; }
   };
 

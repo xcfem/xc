@@ -45,7 +45,7 @@ void XC::DqMeshRegion::libera(void)
 XC::DqMeshRegion::DqMeshRegion(void)
   : dq_Reg() {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::DqMeshRegion::DqMeshRegion(const DqMeshRegion  &otro)
   : dq_Reg(otro)
   {
@@ -58,7 +58,7 @@ XC::DqMeshRegion::DqMeshRegion(const DqMeshRegion  &otro)
       }
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::DqMeshRegion &XC::DqMeshRegion::operator=(const DqMeshRegion &otro)
   {
     resize(otro.size());

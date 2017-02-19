@@ -68,6 +68,14 @@
 namespace XC {
 class Domain;
 
+//! @ingroup Utils
+//
+//! @defgroup Recorder retrieving information at each commit.
+//
+//! @ingroup Recorder
+//
+//! @brief An Recorder object is used in the program to
+//! store/restore information at each commit().
 class Recorder: public MovableObject, public EntCmd
   {
   public:

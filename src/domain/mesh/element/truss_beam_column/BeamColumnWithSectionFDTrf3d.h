@@ -61,7 +61,7 @@ class CrdTransf3d;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra con material de tipo SeccionBarraPrismatica para problemas tridimensionales.
+//! @brief 3D beam colun element with SeccionBarraPrismatica material type.
 class BeamColumnWithSectionFDTrf3d: public BeamColumnWithSectionFD
   {
     BeamColumnWithSectionFDTrf3d &operator=(const BeamColumnWithSectionFDTrf3d &);
@@ -82,12 +82,12 @@ class BeamColumnWithSectionFDTrf3d: public BeamColumnWithSectionFD
     virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
 
-    Vector getVDirEjeFuerteLocales(const size_t &i) const;
-    Vector getVDirEjeDebilLocales(const size_t &i) const;
-    double getAnguloEjeFuerte(const size_t &i) const;
-    double getAnguloEjeDebil(const size_t &i) const;
-    const Vector &getVDirEjeFuerteGlobales(const size_t &i) const;
-    const Vector &getVDirEjeDebilGlobales(const size_t &i) const;
+    Vector getVDirStrongAxisLocalCoord(const size_t &i) const;
+    Vector getVDirWeakAxisLocalCoord(const size_t &i) const;
+    double getStrongAxisAngle(const size_t &i) const;
+    double getWeakAxisAngle(const size_t &i) const;
+    const Vector &getVDirStrongAxisGlobalCoord(const size_t &i) const;
+    const Vector &getVDirWeakAxisGlobalCoord(const size_t &i) const;
   };
 } // end of XC namespace
 

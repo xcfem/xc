@@ -78,17 +78,17 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
       { return j; }
     inline void setJ(const double &i)
       { j= i; }
-    //! @brief Return the rigidez a flexión en z.
+    //! @brief Returns the z bending stiffness.
     inline double EIz(void) const
       { return CrossSectionProperties2d::EI(); }
-    //! @brief Return the rigidez a flexión en y.
+    //! @brief Returns the y bending stiffness.
     inline double EIy(void) const
       { return E()*iy; }
-    //! @brief Return the colaboración del producto
-    //! de inercia a la rigidez a flexión.
+    //! @brief Returns the colaboración del producto
+    //! de inercia a la bending stiffness.
     inline double EIyz(void) const
       { return E()*iyz; }
-    //! @brief Return the rigidez a torsión.
+    //! @brief Returns the torsional stiffness.
     inline double GJ(void) const
       { return G()*j; }
 
@@ -97,9 +97,9 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     double getI2(void) const;
     EjesPrincInercia2d getEjesInercia(void) const;
     Vector2d getVDirEje1(void) const;
-    Vector2d getVDirEjeFuerte(void) const;
+    Vector2d getVDirStrongAxis(void) const;
     Vector2d getVDirEje2(void) const;
-    Vector2d getVDirEjeDebil(void) const;
+    Vector2d getVDirWeakAxis(void) const;
 
     const Matrix &getSectionTangent4x4(void) const;
     const Matrix &getInitialTangent4x4(void) const;

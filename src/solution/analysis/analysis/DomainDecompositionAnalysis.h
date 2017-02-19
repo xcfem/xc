@@ -91,7 +91,7 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
     // and formTangVectProduct() to be called before formTangent()
     // - this must be allowed as typical elements will not have to fromTangent
     // before being asked to form Residual(). 
-    bool tangFormed; //!< Verdadero si la matriz de rigidez tangente ya está formada.
+    bool tangFormed; //!< Verdadero si la tangent stiffness matrix ya está formada.
     int tangFormedCount; // saves the expense of computing formTangent() 
 	               // for same state of Subdomain.
   protected:

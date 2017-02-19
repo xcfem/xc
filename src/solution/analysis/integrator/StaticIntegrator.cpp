@@ -72,8 +72,8 @@
 XC::StaticIntegrator::StaticIntegrator(SoluMethod *owr,int clasTag)
   :IncrementalIntegrator(owr,clasTag) {}
 
-//! @brief Solicita al elemento being passed as parameter
-//! que forme su matriz de rigidez.
+//! @brief Asks the element  being passed as parameter to build
+//! its tangent stiffness matrix.
 int XC::StaticIntegrator::formEleTangent(FE_Element *theEle)
   {
     // only elements stiffness matrix needed

@@ -119,7 +119,7 @@ XC::Actor::Actor(Channel &theChan,FEM_ObjectBroker &myBroker,int numActorMethods
   
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::Actor::Actor(const Actor &otro)
   : numMethods(otro.numMethods), maxNumMethods(otro.maxNumMethods), actorMethods(), 
    theRemoteShadowsAddress(otro.theRemoteShadowsAddress), commitTag(otro.commitTag),
@@ -128,7 +128,7 @@ XC::Actor::Actor(const Actor &otro)
     alloc(otro.actorMethods);
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::Actor &XC::Actor::operator=(const Actor &otro)
   {
     numMethods= otro.numMethods;

@@ -58,12 +58,12 @@ XC::DqFibras::DqFibras(const size_t &num)
   : EntCmd(), dq_ptr_fibras(num,static_cast<Fiber *>(nullptr)), yCDG(0.0), zCDG(0.0)
   {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::DqFibras::DqFibras(const DqFibras &otro)
   : EntCmd(otro), dq_ptr_fibras(otro), yCDG(otro.yCDG), zCDG(otro.zCDG)
   {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::DqFibras &XC::DqFibras::operator=(const DqFibras &otro)
   {
     EntCmd::operator=(otro);
@@ -205,11 +205,11 @@ GeomObj::list_Pos2d XC::DqFibras::getPosiciones(void) const
     return retval;
   }
 
-//! @brief Return the esquina superior derecha del rectángulo envolvente. 
+//! @brief Returns the esquina superior derecha del rectángulo envolvente. 
 Pos2d XC::DqFibras::GetPMax(void) const
   { return Pos2d(GetYMax(),GetZMax()); }
 
-//! @brief Return the esquina inferior izquierda del rectángulo envolvente. 
+//! @brief Returns the esquina inferior izquierda del rectángulo envolvente. 
 Pos2d XC::DqFibras::GetPMin(void) const
   { return Pos2d(GetYMin(),GetZMin()); }
 
@@ -390,7 +390,7 @@ double XC::DqFibras::getPyzHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Return the componente i,j del tensor de inercia calculado respecto al CDG.
+//! @brief Returns the componente i,j del tensor de inercia calculado respecto al CDG.
 double XC::DqFibras::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
@@ -624,7 +624,7 @@ double XC::DqFibras::getTh1(const double &y0,const double &z0) const
     return th1;
   }
 
-//! @brief Return the dirección del eje del momento de inercia principal mayor.
+//! @brief Returns the dirección del eje del momento de inercia principal mayor.
 XC::Vector XC::DqFibras::getEje1(const double &y0,const double &z0) const
   {
     Vector retval(2);
@@ -634,7 +634,7 @@ XC::Vector XC::DqFibras::getEje1(const double &y0,const double &z0) const
     return retval;
   }
 
-//! @brief Return the dirección del eje del momento de inercia principal menor.
+//! @brief Returns the dirección del eje del momento de inercia principal menor.
 XC::Vector XC::DqFibras::getEje2(const double &y0,const double &z0) const
   {
     Vector retval(2);
@@ -644,7 +644,7 @@ XC::Vector XC::DqFibras::getEje2(const double &y0,const double &z0) const
     return retval;
   }
 
-//! @brief Return the resultante de tensiones.
+//! @brief Returns the resultante de tensiones.
 double XC::DqFibras::Resultante(void) const
   {
     register double retval= 0;
@@ -676,13 +676,13 @@ double XC::DqFibras::getMy(const double &z0) const
     return retval;
   }
 
-//! @brief Return the excentricidad correspondiente al momento
+//! @brief Returns the excentricidad correspondiente al momento
 //! de la fuerza ejercida por las fibras
 //! respecto al eje paralelo al «z» que pasa por y0
 double XC::DqFibras::getExcentricidadMz(const double &y0) const
   { return getMz(y0)/Resultante(); }
 
-//! @brief Return the excentricidad correspondiente al momento
+//! @brief Returns the excentricidad correspondiente al momento
 //! de la fuerza ejercida por las fibras
 //! respecto al eje  al eje paralelo al «y» que pasa por z0.
 double XC::DqFibras::getExcentricidadMy(const double &z0) const
@@ -701,7 +701,7 @@ Pos2d XC::DqFibras::getPosResultante(const double &y0,const double &z0) const
     return Pos2d(getMz(y0)/R,getMy(z0)/R);
   }
 
-//! @brief Return the fibra neutra.
+//! @brief Returns the fibra neutra.
 Recta2d XC::DqFibras::getFibraNeutra(void) const
   {
     const double R= Resultante();
@@ -724,7 +724,7 @@ bool XC::DqFibras::hayMomento(const double &tol) const
       return false;
   }
 
-//! @brief Return the resultante de las compresiones en las fibras.
+//! @brief Returns the resultante de las compresiones en las fibras.
 double XC::DqFibras::ResultanteComp(void) const
   {
     register double retval= 0;
@@ -813,7 +813,7 @@ double XC::DqFibras::getMyComp(const double &z0) const
     return retval;
   }
 
-//! @brief Return the resultante de las tracciones en las fibras.
+//! @brief Returns the resultante de las tracciones en las fibras.
 double XC::DqFibras::ResultanteTracc(void) const
   {
     register double retval= 0;
@@ -976,7 +976,7 @@ void XC::DqFibras::SelMatTag(const int &matTag,DqFibras &retval,bool clear)
         std::cerr << "DqFibras::SelMatTag; Pointer to fiber is null." << std::endl;
   }
 
-//! @brief Return the deformación mínima.
+//! @brief Returns the deformación mínima.
 double XC::DqFibras::getStrainMin(void) const
   {
     double retval= 0.0;
@@ -991,7 +991,7 @@ double XC::DqFibras::getStrainMin(void) const
     return retval;
   }
 
-//! @brief Return the deformación mínima.
+//! @brief Returns the deformación mínima.
 double XC::DqFibras::getStrainMax(void) const
   {
     double retval= 0.0;
@@ -1006,7 +1006,7 @@ double XC::DqFibras::getStrainMax(void) const
     return retval;
   }
 
-//! @brief Return the deformación media.
+//! @brief Returns the deformación media.
 double XC::DqFibras::getStrainMed(void) const
   {
     double retval= 0.0;
@@ -1047,7 +1047,7 @@ const XC::Vector &XC::DqFibras::getDeformation(void) const
     return pDef.getDeformation();
   }
 
-//! @brief Return the tensión mínima.
+//! @brief Returns the tensión mínima.
 double XC::DqFibras::getStressMin(void) const
   {
     double retval= 0.0;
@@ -1062,7 +1062,7 @@ double XC::DqFibras::getStressMin(void) const
     return retval;
   }
 
-//! @brief Return the tensión mínima.
+//! @brief Returns the tensión mínima.
 double XC::DqFibras::getStressMax(void) const
   {
     double retval= 0.0;
@@ -1077,7 +1077,7 @@ double XC::DqFibras::getStressMax(void) const
     return retval;
   }
 
-//! @brief Return the tensión media.
+//! @brief Returns the tensión media.
 double XC::DqFibras::getStressMed(void) const
   {
     double retval= 0.0;
@@ -1169,11 +1169,11 @@ std::string XC::DqFibras::getStrClaseEsfuerzo(const double &tol) const
     return retval;
   }
 
-//! @brief Return the posición del centro de gravedad.
+//! @brief Returns the posición del centro de gravedad.
 Pos2d XC::DqFibras::getCdg(void) const
   { return Pos2d(getYCdg(),getZCdg()); }
 
-//! @brief Return the profundidad de la fibra neutra, es decir la distancia desde
+//! @brief Returns the profundidad de la fibra neutra, es decir la distancia desde
 //! la fibra mas comprimida a la fibra neutra.
 //! El algoritmo empleado se basa en que get_dist_to_neutral_axis returns distancias negativas
 //! para fibras comprimidas (deformación negativa).
@@ -1233,11 +1233,11 @@ Segmento2d XC::DqFibras::getSegmentoBrazoMecanico(void) const
     return retval;
   }
 
-//! @brief Return the traza del plano de flexión en el plano de la sección.
+//! @brief Returns the traza del plano de flexión en el plano de la sección.
 Recta2d XC::DqFibras::getTrazaPlanoFlexion(void) const
   { return getSegmentoBrazoMecanico().RectaSoporte(); }
 
-//! @brief Return the traza de un plano perpendicular al de flexión
+//! @brief Returns the traza de un plano perpendicular al de flexión
 //! que pasa por el baricentro de tracciones.
 Recta2d XC::DqFibras::getTrazaPlanoTraccion(void) const
   { 
@@ -1252,7 +1252,7 @@ Recta2d XC::DqFibras::getTrazaPlanoTraccion(void) const
     return trazaFlexion.Perpendicular(pt);
   }
 
-//! @brief Return the traza de un plano perpendicular al de flexión
+//! @brief Returns the traza de un plano perpendicular al de flexión
 //! que pasa por el baricentro de compresiones.
 Recta2d XC::DqFibras::getTrazaPlanoCompresion(void) const
   { 
@@ -1271,7 +1271,7 @@ Recta2d XC::DqFibras::getTrazaPlanoCompresion(void) const
 double XC::DqFibras::getBrazoMecanico(void) const
   { return getVectorBrazoMecanico().Norm(); }
 
-//! @brief Return the distancia media entre fibras.
+//! @brief Returns the distancia media entre fibras.
 double XC::DqFibras::getDistMediaFibras(void) const
   {
     double retval= 0;
@@ -1286,7 +1286,7 @@ double XC::DqFibras::getDistMediaFibras(void) const
   }
 
 //! @brief Calcula las áreas eficaces a fisuración en torno a las fibras que representan la armadura
-//! (ver artículo 49.2.4 de la EHE-08 (área rallada figura 49.2.4b).
+//! (see artículo 49.2.4 de la EHE-08 (área rallada figura 49.2.4b).
 //! Ver también figuras 47.5 y 47.6 del tomo II del libro "Proyecto y cálculo de estructuras
 //! de hormigón" de Calavera.
 //En lugar de un cuadrado se considera un dodecágono del mismo área
@@ -1364,7 +1364,7 @@ double XC::DqFibras::getAcEficazFibra(const size_t &i) const
     return area(dq_ac_eficaz[i].begin(),dq_ac_eficaz[i].end());
   }
 
-//! @brief Return the suma de las áreas eficaces de las fibras.
+//! @brief Returns the suma de las áreas eficaces de las fibras.
 double XC::DqFibras::getAcEficazFibras(void) const
   {
     const size_t sz= dq_ac_eficaz.size();
@@ -1421,7 +1421,7 @@ double XC::DqFibras::getDiamEqFibra(const size_t &i) const
 
 
 
-//! @brief Return the tensión en la fibra i en el instante en el que
+//! @brief Returns the tensión en la fibra i en el instante en el que
 //! se produce la fisuración de su área eficaz.
 double XC::DqFibras::getSigmaSRFibra(const size_t &i,const double &Ec,const double &Es,const double &fctm) const
   {
@@ -1460,7 +1460,7 @@ int XC::DqFibras::updateCDG(void)
     return 0;
   }
 
-//! @brief Actualiza los parámetros CDG, rigidez y resultante.
+//! @brief Actualiza los parámetros CDG, stiffness and resultant.
 int XC::DqFibras::updateKRCDG(FiberSection2d &Section2d,KRSeccion &kr2)
   {
     kr2.zero();
@@ -1481,11 +1481,11 @@ int XC::DqFibras::updateKRCDG(FiberSection2d &Section2d,KRSeccion &kr2)
             Atot+= areaFibra;
             Qz+= -yLoc*areaFibra; //Coordenada y cambiada de signo.
 
-            //Actualizamos matriz de rigidez.
+            //Updating stiffness matrix.
             tangent= (*i)->getMaterial()->getTangent();
             kr2.updateK2d(areaFibra,yLoc,tangent);
 
-            //Actualizamos resultante de tensiones.
+            //Updating stress resultant.
             stress= (*i)->getMaterial()->getStress();
             fs0= stress * areaFibra;
             kr2.updateNMz(fs0,yLoc);
@@ -1513,7 +1513,7 @@ int XC::DqFibras::commitState(void)
     return err;
   }
 
-//! @brief Establece los valores de las deformaciones iniciales.
+//! @brief Establece los valores de las initial strains.
 int XC::DqFibras::setInitialSectionDeformation(const FiberSection2d &Section2d)
   {
     int retval= 0;
@@ -1549,10 +1549,10 @@ int XC::DqFibras::setTrialSectionDeformation(const FiberSection2d &Section2d,KRS
             strain= Section2d.get_strain(y);
             retval+= theMat->setTrial(strain, stress, tangent);
 
-            //Actualizamos matriz de rigidez.
+            //Updating stiffness matrix.
             kr2.updateK2d(areaFibra,y,tangent);
 
-            //Actualizamos resultante de tensiones.
+            //Updating stress resultant.
             fs0= stress * areaFibra;
             kr2.updateNMz(fs0,y);
           }
@@ -1585,7 +1585,7 @@ int XC::DqFibras::revertToStart(FiberSection2d &Section2d,KRSeccion &kr2)
     return err;
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Returns the initial tangent stiffness matrix.
 const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSection2d &Section2d) const
   {
     static double kInitial[4];
@@ -1648,7 +1648,7 @@ int XC::DqFibras::commitSensitivity(const XC::Vector& defSens, int gradNumber, i
     return 0;
   }
 
-//! @brief Actualiza los parámetros CDG, matriz de rigidez rigidez y resultante.
+//! @brief Actualiza los parámetros CDG, stiffness matrix and resultant.
 int XC::DqFibras::updateKRCDG(FiberSection3d &Section3d,KRSeccion &kr3)
   {
     kr3.zero();
@@ -1671,12 +1671,12 @@ int XC::DqFibras::updateKRCDG(FiberSection3d &Section3d,KRSeccion &kr3)
             Qz+= -yLoc*areaFibra; //Coordenada y cambiada de signo.
             Qy+= zLoc*areaFibra;
 
-            //Actualizamos matriz de rigidez.
+            //Updating stiffness matrix.
             tangent= (*i)->getMaterial()->getTangent();
 
             kr3.updateK3d(areaFibra,yLoc,zLoc,tangent);
 
-            //Actualizamos la resultante de tensiones.
+            //Updating stress resultant.
             stress= (*i)->getMaterial()->getStress();
             fs0= stress * areaFibra;
             kr3.updateNMzMy(fs0,yLoc,zLoc);
@@ -1684,7 +1684,7 @@ int XC::DqFibras::updateKRCDG(FiberSection3d &Section3d,KRSeccion &kr3)
       }
     yCDG= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
     zCDG= Qy/Atot; //Coordenada z del CDG 
-    kr3.kData[3]= kr3.kData[1]; //Simetría de la matriz de rigidez.
+    kr3.kData[3]= kr3.kData[1]; //Stiffness matrix symmetry.
     kr3.kData[6]= kr3.kData[2];
     kr3.kData[7]= kr3.kData[5];
     return 0;
@@ -1698,7 +1698,7 @@ XC::Fiber *XC::DqFibras::addFiber(FiberSection3d &Section3d,Fiber &newFiber,KRSe
     return retval;
   }
 
-//! @brief Establece los valores de las deformaciones iniciales.
+//! @brief Establece los valores de las initial strains.
 int XC::DqFibras::setInitialSectionDeformation(const FiberSection3d &Section3d)
   {
     int retval= 0;
@@ -1733,18 +1733,18 @@ int XC::DqFibras::setTrialSectionDeformation(FiberSection3d &Section3d,KRSeccion
         // determine material strain and set it
         retval+= theMat->setTrial(Section3d.get_strain(y,z), stress, tangent);
 
-        //Actualizamos matriz de rigidez.
+        //Updating stiffness matrix.
         areaFibra= (*i)->getArea();
         if(areaFibra!=0.0)
           {
             kr3.updateK3d(areaFibra,y,z,tangent);
 
-            //Actualizamos la resultante de tensiones.
+            //Updating stress resultant.
             fs0= stress * areaFibra;
             kr3.updateNMzMy(fs0,y,z);
           }
       }
-    kr3.kData[3]= kr3.kData[1]; //Simetría de la matriz de rigidez.
+    kr3.kData[3]= kr3.kData[1]; //Stiffness matrix symmetry.
     kr3.kData[6]= kr3.kData[2];
     kr3.kData[7]= kr3.kData[5];
     return retval;
@@ -1775,7 +1775,7 @@ int XC::DqFibras::revertToStart(FiberSection3d &Section3d,KRSeccion &kr3)
     return err;
   }
 
-//! @brief Return the tangent stiffness matrix inicial.
+//! @brief Returns the tangent stiffness matrix inicial.
 const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSection3d &Section3d) const
   {
     static double kInitialData[9];
@@ -1801,14 +1801,14 @@ const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSection3d &Section3
             KRSeccion::updateK3d(kInitialData,areaFibra,y,z,tangent);
           }
       }
-    kInitialData[3]= kInitialData[1]; //Simetría de la matriz de rigidez.
+    kInitialData[3]= kInitialData[1]; //Stiffness matrix symmetry.
     kInitialData[6]= kInitialData[2];
     kInitialData[7]= kInitialData[5];
 
     return kInitial;
   }
 
-//! @brief Actualiza los parámetros CDG, rigidez y resultante.
+//! @brief Actualiza los parámetros CDG, stiffness and resultant.
 int XC::DqFibras::updateKRCDG(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
   {
     krGJ.zero();
@@ -1833,10 +1833,10 @@ int XC::DqFibras::updateKRCDG(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
 
             tangent= (*i)->getMaterial()->getTangent();
 
-            //Actualizamos matriz de rigidez.
+            //Updating stiffness matrix.
             krGJ.updateKGJ(areaFibra,yLoc,zLoc,tangent);
 
-            //Actualizamos la resultante de tensiones.
+            //Updating stress resultant.
             stress= (*i)->getMaterial()->getStress();
             fs0= stress * areaFibra;
             krGJ.updateNMzMy(fs0,yLoc,zLoc);
@@ -1844,7 +1844,7 @@ int XC::DqFibras::updateKRCDG(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
       }
     yCDG= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
     zCDG= Qy/Atot; //Coordenada z del CDG 
-    krGJ.kData[4]= krGJ.kData[1]; //Simetría de la matriz de rigidez.
+    krGJ.kData[4]= krGJ.kData[1]; //Stiffness matrix symmetry.
     krGJ.kData[8]= krGJ.kData[2];
     krGJ.kData[9]= krGJ.kData[6];
     krGJ.kData[15]= SectionGJ.getGJ(); //(3,3)->15 //Los seis elementos restantes de krGJ.kData son nulos.
@@ -1861,7 +1861,7 @@ XC::Fiber *XC::DqFibras::addFiber(FiberSectionGJ &SectionGJ,Fiber &newFiber,KRSe
     return retval;
   }
 
-//! @brief Establece los valores de las deformaciones iniciales.
+//! @brief Establece los valores de las initial strains.
 int XC::DqFibras::setInitialSectionDeformation(const FiberSectionGJ &SectionGJ)
   {
     int retval= 0;
@@ -1899,15 +1899,15 @@ int XC::DqFibras::setTrialSectionDeformation(FiberSectionGJ &SectionGJ,KRSeccion
             // determine material strain and set it
             retval= theMat->setTrial(SectionGJ.get_strain(y,z), stress, tangent);
 
-            //Actualizamos matriz de rigidez.
+            //Updating stiffness matrix.
             krGJ.updateKGJ(areaFibra,y,z,tangent);
 
-            //Actualizamos la resultante de tensiones.
+            //Updating stress resultant.
             fs0= stress * areaFibra;
             krGJ.updateNMzMy(fs0,y,z);
 	  }
       }
-    krGJ.kData[4]= krGJ.kData[1]; //Simetría de la matriz de rigidez.
+    krGJ.kData[4]= krGJ.kData[1]; //Stiffness matrix symmetry.
     krGJ.kData[8]= krGJ.kData[2];
     krGJ.kData[9]= krGJ.kData[6];
     krGJ.kData[15]= SectionGJ.getGJ(); //(3,3)->15 //Los seis elementos restantes de krGJ.kData son nulos.
@@ -1941,7 +1941,7 @@ int XC::DqFibras::revertToStart(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
     return err;
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Returns the initial tangent stiffness matrix.
 const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSectionGJ &SectionGJ) const
   {
     static double kInitialData[16];
@@ -1965,7 +1965,7 @@ const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSectionGJ &SectionG
         if(areaFibra!= 0.0)
           {
             tangent= theMat->getInitialTangent();
-            //Actualizamos matriz de rigidez.
+            //Updating stiffness matrix.
             KRSeccion::updateKGJ(kInitialData,areaFibra,y,z,tangent);
           }
       }

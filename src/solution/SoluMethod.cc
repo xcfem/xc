@@ -443,7 +443,7 @@ XC::SoluMethod::SoluMethod(Analysis *owr,ModelWrapper *b)
   }
 
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::SoluMethod::SoluMethod(const SoluMethod &otro)
   : EntCmd(otro), base(otro.base), theSolnAlgo(nullptr),theIntegrator(nullptr),
     theSOE(nullptr), theTest(nullptr)
@@ -454,7 +454,7 @@ XC::SoluMethod::SoluMethod(const SoluMethod &otro)
   }
 
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::SoluMethod &XC::SoluMethod::operator=(const SoluMethod &otro)
   {
     EntCmd::operator=(otro);

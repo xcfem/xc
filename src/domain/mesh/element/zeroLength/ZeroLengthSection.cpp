@@ -137,7 +137,7 @@ XC::ZeroLengthSection::ZeroLengthSection(int tag, int dimension,const Material *
       setup_section(sec);
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ZeroLengthSection::ZeroLengthSection(const ZeroLengthSection &otro)
   : Element0D(otro), A(otro.A), v(otro.v), K(nullptr), P(nullptr), theSection(nullptr), order(0)
   {
@@ -145,7 +145,7 @@ XC::ZeroLengthSection::ZeroLengthSection(const ZeroLengthSection &otro)
       setup_section(otro.theSection);
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ZeroLengthSection &XC::ZeroLengthSection::operator=(const ZeroLengthSection &otro)
   {
     Element0D::operator=(otro);
@@ -349,14 +349,14 @@ const XC::Vector &XC::ZeroLengthSection::getResistingForceIncInertia(void) const
 
 //! @brief Returns the direction vector of element strong axis
 //! expressed in the local coordinate system.
-XC::Vector XC::ZeroLengthSection::getVDirEjeFuerteLocales(void) const
+XC::Vector XC::ZeroLengthSection::getVDirStrongAxisLocalCoord(void) const
   {
     Vector retval(3);
     const SeccionBarraPrismatica *sccBarra= dynamic_cast<const SeccionBarraPrismatica *>(theSection);
     if(sccBarra)
       {
-        const Vector2d ejeFuerteSeccion= sccBarra->getVDirEjeFuerte();
-        retval(0)= 0.0; retval(1)= ejeFuerteSeccion.x(); retval(2)= ejeFuerteSeccion.y();
+        const Vector2d sectionStrongAxis= sccBarra->getVDirStrongAxis();
+        retval(0)= 0.0; retval(1)= sectionStrongAxis.x(); retval(2)= sectionStrongAxis.y();
       }
     else
       std::cerr << "Element's section doesn't returns inertia axis." << std::endl;
@@ -365,14 +365,14 @@ XC::Vector XC::ZeroLengthSection::getVDirEjeFuerteLocales(void) const
 
 //! @brief Returns the direction vector of element weak axis
 //! expressed in the local coordinate system.
-XC::Vector XC::ZeroLengthSection::getVDirEjeDebilLocales(void) const
+XC::Vector XC::ZeroLengthSection::getVDirWeakAxisLocalCoord(void) const
   {
     Vector retval(3);
     const SeccionBarraPrismatica *sccBarra= dynamic_cast<const SeccionBarraPrismatica *>(theSection);
     if(sccBarra)
       {
-        const Vector2d ejeDebilSeccion= sccBarra->getVDirEjeDebil();
-        retval(0)= 0.0; retval(1)= ejeDebilSeccion.x(); retval(2)= ejeDebilSeccion.y();
+        const Vector2d sectionWeakAxis= sccBarra->getVDirWeakAxis();
+        retval(0)= 0.0; retval(1)= sectionWeakAxis.x(); retval(2)= sectionWeakAxis.y();
       }
     else
       std::cerr << "Element's section doesn't returns inertia axis." << std::endl;
@@ -380,26 +380,26 @@ XC::Vector XC::ZeroLengthSection::getVDirEjeDebilLocales(void) const
   }
 //! @brief Returns the angle between element strong axis
 //! and local XZ plane.
-double XC::ZeroLengthSection::getAnguloEjeFuerte(void) const
+double XC::ZeroLengthSection::getStrongAxisAngle(void) const
   {
-    Vector eF= getVDirEjeFuerteLocales();
+    Vector eF= getVDirStrongAxisLocalCoord();
     return atan2(eF(2),eF(1));
   }
 
 //! @brief Returns the angle between element weak axis
 //! and local XZ plane.
-double XC::ZeroLengthSection::getAnguloEjeDebil(void) const
+double XC::ZeroLengthSection::getWeakAxisAngle(void) const
   {
-    Vector eD= getVDirEjeDebilLocales();
+    Vector eD= getVDirWeakAxisLocalCoord();
     return atan2(eD(2),eD(1));
   }
 
 //! @brief Returns the direction vector of element strong axis
 //! expressed in the global coordinate system.
-const XC::Vector &XC::ZeroLengthSection::getVDirEjeFuerteGlobales(void) const
+const XC::Vector &XC::ZeroLengthSection::getVDirStrongAxisGlobalCoord(void) const
   {
     const SisCooRect3d3d sis_coo= getSisCoo();
-    const Vector eF= getVDirEjeFuerteLocales();
+    const Vector eF= getVDirStrongAxisLocalCoord();
     const Vector3d v= sis_coo.GetCooGlobales(Vector3d(eF[0],eF[1],eF[2]));
     static Vector retval(3);
     retval[0]= v.x(); retval[1]= v.y(); retval[2]= v.z();
@@ -408,10 +408,10 @@ const XC::Vector &XC::ZeroLengthSection::getVDirEjeFuerteGlobales(void) const
 
 //! @brief Returns the direction vector of element weak axis
 //! expressed in the global coordinate system.
-const XC::Vector &XC::ZeroLengthSection::getVDirEjeDebilGlobales(void) const
+const XC::Vector &XC::ZeroLengthSection::getVDirWeakAxisGlobalCoord(void) const
   {
     const SisCooRect3d3d sis_coo= getSisCoo();
-    const Vector eD= getVDirEjeDebilLocales();
+    const Vector eD= getVDirWeakAxisLocalCoord();
     const Vector3d v= sis_coo.GetCooGlobales(Vector3d(eD[0],eD[1],eD[2]));
     static Vector retval(3);
     retval[0]= v.x(); retval[1]= v.y(); retval[2]= v.z();

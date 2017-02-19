@@ -137,7 +137,7 @@ XC::Concrete01::Concrete01(void)
     revertToLastCommit();
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::Concrete01::Concrete01(const Concrete01 &otro)
   :ConcreteBase(otro), fpcu(otro.fpcu), parameterID(otro.parameterID), SHVs(nullptr) 
   {
@@ -145,7 +145,7 @@ XC::Concrete01::Concrete01(const Concrete01 &otro)
       alloc(*otro.SHVs);
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::Concrete01 &XC::Concrete01::operator=(const Concrete01 &otro)
   {
     ConcreteBase::operator=(otro);

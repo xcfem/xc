@@ -89,7 +89,7 @@
 std::deque<XC::Matrix> XC::Element::theMatrices;
 std::deque<XC::Vector> XC::Element::theVectors1;
 std::deque<XC::Vector> XC::Element::theVectors2;
-double XC::Element::dead_srf= 1e-6;//Factor de reducción de la rigidez para elementos desactivados.
+double XC::Element::dead_srf= 1e-6;//Stiffness reduction factor for dead (non active) elements.
 XC::DefaultTag XC::Element::defaultTag;
 
 //! @brief Constructor that takes the element's unique tag and the number
@@ -150,7 +150,7 @@ int XC::Element::setRayleighDampingFactors(const RayleighDampingFactors &rF) con
     return 0;
   }
 
-//! @brief Return the dimensión del elemento.
+//! @brief Returns the dimensión del elemento.
 size_t XC::Element::getDimension(void) const
   {
     std::cerr << "Element::getDimension no implementada para '"
@@ -198,7 +198,7 @@ void XC::Element::compute_damping_matrix(Matrix &theMatrix) const
       theMatrix.addMatrix(1.0, Kc, rayFactors.getBetaKc());
   }
 
-//! @brief Return the matriz de amortiguamiento.
+//! @brief Returns the matriz de amortiguamiento.
 const XC::Matrix &XC::Element::getDamp(void) const
   {
     if(index == -1)
@@ -212,7 +212,7 @@ const XC::Matrix &XC::Element::getDamp(void) const
   }
 
 
-//! @brief Return the matriz de masas.
+//! @brief Returns the mass matrix.
 const XC::Matrix &XC::Element::getMass(void) const
   {
     if(index  == -1)
@@ -224,7 +224,7 @@ const XC::Matrix &XC::Element::getMass(void) const
     return theMatrix;
   }
 
-//! @brief Return the acción del elemento sobre los nodos Forma la matriz de amortiguamiento.
+//! @brief Returns the acción del elemento sobre los nodos Forma la matriz de amortiguamiento.
 const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
   {
     if(index == -1)
@@ -282,7 +282,7 @@ const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
     return theVector;
   }
 
-//! @brief Return the fuerza generalizada del elemento sobre el nodo cuyo
+//! @brief Returns the fuerza generalizada del elemento sobre el nodo cuyo
 //! índice se pasa como parámetro.
 const XC::Vector &XC::Element::getNodeResistingComponents(const size_t &iNod,const Vector &rf) const
   {
@@ -294,7 +294,7 @@ const XC::Vector &XC::Element::getNodeResistingComponents(const size_t &iNod,con
     return retval; 
   }
 
-//! @brief Return the fuerza generalizada del elemento sobre el nodo cuyo
+//! @brief Returns the fuerza generalizada del elemento sobre el nodo cuyo
 //! índice se pasa como parámetro.
 const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
   {
@@ -302,7 +302,7 @@ const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
     return getNodeResistingComponents(iNod,rf);
   }
 
-//! @brief Return the fuerza generalizada (incluyendo fuerzas de inercia)
+//! @brief Returns the fuerza generalizada (incluyendo fuerzas de inercia)
 //! del elemento sobre el nodo cuyo índice se pasa como parámetro.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const size_t &iNod) const
   {
@@ -310,7 +310,7 @@ const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const size_t &iNo
     return getNodeResistingComponents(iNod,rf);
   }
 
-//! @brief Return the fuerza generalizada del elemento sobre el nodo al
+//! @brief Returns the fuerza generalizada del elemento sobre el nodo al
 //! que apunta el parámetro.
 const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
   {
@@ -319,7 +319,7 @@ const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
     return getNodeResistingForce(iNodo);
   }
 
-//! @brief Return the fuerza generalizada (incluyendo fuerzas de inercia) del elemento sobre el nodo al
+//! @brief Returns the fuerza generalizada (incluyendo fuerzas de inercia) del elemento sobre el nodo al
 //! que apunta el parámetro.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNod) const
   {
@@ -328,7 +328,7 @@ const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNo
     return getNodeResistingForceIncInertia(iNodo);
   }
 
-//! @brief Return the fuerza estática equivalente para el modo
+//! @brief Returns the fuerza estática equivalente para el modo
 //! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Element::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
@@ -339,7 +339,7 @@ XC::Vector XC::Element::getEquivalentStaticLoad(int mode,const double &accel_mod
     return retval;
   }
 
-//! @brief Return the fuerza estática equivalente en cada nodo para el modo
+//! @brief Returns the fuerza estática equivalente en cada nodo para el modo
 //! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Matrix XC::Element::getEquivalentStaticNodalLoads(int mode,const double &accel_mode) const
   {
@@ -772,7 +772,7 @@ XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
   }
 
 
-//! @brief Return the posición del nodo cuyo índice se
+//! @brief Returns the posición del nodo cuyo índice se
 //! pasa como parámetro.
 Pos3d XC::Element::getPosNodo(const size_t &i,bool initialGeometry) const
   { return getNodePtrs().getPosNodo(i,initialGeometry); }
@@ -804,12 +804,12 @@ void XC::Element::calculaLongsTributarias(bool initialGeometry) const
               << std::endl;
   }
 
-//! @brief Return the longitud tributaria correspondiente to the node que se pasa
+//! @brief Returns the longitud tributaria correspondiente to the node que se pasa
 //! como parámetro.
 double XC::Element::getLongTributaria(const Node *) const
   { return 0; }
 
-//! @brief Return the longitud tributaria correspondiente to the node cuyo tag se pasa
+//! @brief Returns the longitud tributaria correspondiente to the node cuyo tag se pasa
 //! como parámetro.
 double XC::Element::getLongTributariaByTag(const int &tag) const
   {
@@ -870,7 +870,7 @@ double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Return the distancia desde el elemento al punto que
+//! @brief Returns the distancia desde el elemento al punto que
 //! se pasa como parámetro.
 double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
   {
@@ -888,7 +888,7 @@ double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Return the distancia desde el elemento al punto que
+//! @brief Returns the distancia desde el elemento al punto que
 //! se pasa como parámetro.
 double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
   {

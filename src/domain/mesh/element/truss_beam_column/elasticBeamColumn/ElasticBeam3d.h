@@ -74,12 +74,12 @@ class SectionForceDeformation;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Elemento barra para problemas tridimensionales.
+//! @brief 3D elastic beam element.
 class ElasticBeam3d : public ProtoBeam3d
   {
   private:
     Vector eInic; //!< section initial deformations
-    double rho;  //!< Densidad.
+    double rho;  //!< Density.
     int sectionTag;
     mutable EsfBeamColumn3d q;
     FVectorBeamColumn3d q0;  //!< Fixed end forces in basic system (no torsion)
@@ -144,8 +144,8 @@ class ElasticBeam3d : public ProtoBeam3d
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
 
-    const Vector &getVDirEjeFuerteGlobales(void) const;
-    const Vector &getVDirEjeDebilGlobales(void) const;
+    const Vector &getVDirStrongAxisGlobalCoord(void) const;
+    const Vector &getVDirWeakAxisGlobalCoord(void) const;
     
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

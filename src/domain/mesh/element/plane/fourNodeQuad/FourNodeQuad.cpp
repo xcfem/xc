@@ -234,7 +234,7 @@ const XC::Matrix &XC::FourNodeQuad::getTangentStiff(void) const
     return K;
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::FourNodeQuad::getInitialStiff(void) const
   {
     if(!Ki)

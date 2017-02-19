@@ -59,9 +59,9 @@ class CrdTransf2d;
 class CrdTransf3d;
 class BeamIntegration;
 
-//! @ingroup ACTOR
+//! @ingroup IPComm
 //
-//! @brief Parámetros para comunicación entre procesos.
+//! @brief Communication parameters between processes.
 class CommParameters
   {
   private:

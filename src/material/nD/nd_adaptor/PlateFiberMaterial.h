@@ -61,9 +61,8 @@
 namespace XC{
 //! @ingroup NDMat
 //
-//! @brief Construye un material apto para ser empleado como fibra
-//! de material de tipo placa a partir de su definición como material
-//! tridimensional.
+//! @brief Builds a material that can be used in a plate fiber from
+//! its definition as three-dimensional material.
 class PlateFiberMaterial: public NDAdaptorMaterial
   {
   private :

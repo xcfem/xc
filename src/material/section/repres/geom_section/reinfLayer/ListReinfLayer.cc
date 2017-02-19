@@ -27,7 +27,7 @@
 //ListReinfLayer.cc
 
 #include "ListReinfLayer.h"
-#include "material/section/repres/geom_section/reinfLayer/BarraSuelta.h"
+#include "material/section/repres/geom_section/reinfLayer/SingleBar.h"
 #include "material/section/repres/geom_section/reinfLayer/StraightReinfLayer.h"
 #include "material/section/repres/geom_section/reinfLayer/CircReinfLayer.h"
 #include "preprocessor/loaders/MaterialLoader.h"
@@ -61,12 +61,12 @@ void XC::ListReinfLayer::copia(const ListReinfLayer &otra)
 XC::ListReinfLayer::ListReinfLayer(GeomSection *owr,MaterialLoader *ml)
   :  l_reg(), SeccionInerte(owr), material_loader(ml) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ListReinfLayer::ListReinfLayer(const ListReinfLayer  &otro)
   : l_reg(), material_loader(otro.material_loader)
   { copia(otro); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ListReinfLayer &XC::ListReinfLayer::operator=(const ListReinfLayer &otro)
   {
     SeccionInerte::operator=(otro);
@@ -95,12 +95,14 @@ XC::CircReinfLayer *XC::ListReinfLayer::newCircReinfLayer(const std::string &cod
     return dynamic_cast<CircReinfLayer *>(ptr);
   }
 
-XC::BarraSuelta *XC::ListReinfLayer::newReinfBar(const std::string &cod_mat)
+//! Returns a single bar with the material with the identifier being passed
+//! as parameter.
+XC::SingleBar *XC::ListReinfLayer::newReinfBar(const std::string &cod_mat)
   {
-    BarraSuelta tmp(this,material_loader->find_ptr(cod_mat));
+    SingleBar tmp(this,material_loader->find_ptr(cod_mat));
     ReinfLayer *ptr= push_back(tmp);
     ptr->set_owner(this);
-    return dynamic_cast<BarraSuelta *>(ptr);
+    return dynamic_cast<SingleBar *>(ptr);
   }
 
 //! @brief Destructor.

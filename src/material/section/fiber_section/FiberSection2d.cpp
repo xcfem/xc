@@ -138,7 +138,7 @@ double XC::FiberSection2d::getStrain(const double &y,const double &) const
                              // de signo
                              // ver constructor UniaxialFiber2d y otras líneas.
 
-//! @brief Establece los valores de las deformaciones iniciales.
+//! @brief Establece los valores de las initial strains.
 int XC::FiberSection2d::setInitialSectionDeformation(const Vector &deforms)
   {
     FiberSectionBase::setInitialSectionDeformation(deforms);
@@ -152,7 +152,7 @@ int XC::FiberSection2d::setTrialSectionDeformation(const Vector &deforms)
     return fibras.setTrialSectionDeformation(*this,kr);
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::FiberSection2d::getInitialTangent(void) const
   { return fibras.getInitialTangent(*this); }
 

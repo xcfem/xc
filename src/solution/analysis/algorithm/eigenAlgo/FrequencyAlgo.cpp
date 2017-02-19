@@ -87,14 +87,14 @@ int XC::FrequencyAlgo::solveCurrentStep(int nModes)
         return -1;
       }
 
-    if(theIntegrator->formK()<0) //Forma la matriz de rigidez tangente.
+    if(theIntegrator->formK()<0) //Builds tangent stiffness matrix.
       {
         std::cerr << "WARNING FrequencyAlgo::solverCurrentStep() - ";
         std::cerr << "the Integrator failed in formK().\n";
         return -2;
       }
 
-    if(theIntegrator->formM()<0) //Forma la matriz de masas.
+    if(theIntegrator->formM()<0) //Forma la mass matrix.
       {
         std::cerr << "WARNING FrequencyAlgo::solverCurrentStep() - ";
         std::cerr << "the Integrator failed in formM().\n";

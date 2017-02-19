@@ -33,11 +33,11 @@
 XC::DqMatrices::DqMatrices(const size_t &num)
   : dq_ptr_Matrices(num,static_cast<Matrix *>(nullptr)) {}
 
-// //! @brief Constructor de copia.
+// //! @brief Copy constructor.
 // XC::DqMatrices::DqMatrices(const DqMatrices &otro)
 //   : dq_ptr_Matrices(otro) {}
 
-// //! @brief Operador asignación.
+// //! @brief Assignment operator.
 // XC::DqMatrices &XC::DqMatrices::operator=(const DqMatrices &otro)
 //   {
 //     dq_ptr_Matrices::operator=(otro);

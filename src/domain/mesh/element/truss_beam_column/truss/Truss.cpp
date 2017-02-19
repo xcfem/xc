@@ -166,7 +166,7 @@ XC::Truss::Truss(void)
   :TrussBase(ELE_TAG_Truss), theMaterial(nullptr), A(0.0),theLoadSens(nullptr)
   { inicializa(); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::Truss::Truss(const Truss &otro)
   :TrussBase(otro), theMaterial(nullptr), A(otro.A),theLoadSens(nullptr)
   {
@@ -176,7 +176,7 @@ XC::Truss::Truss(const Truss &otro)
       set_load_sens(*otro.theLoadSens);
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::Truss &XC::Truss::operator=(const Truss &otro)
   {
     TrussBase::operator=(otro);
@@ -280,7 +280,7 @@ int XC::Truss::update(void)
     return theMaterial->setTrialStrain(strain, rate);
   }
 
-//! @brief Return the tangent stiffness matrix.
+//! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::Truss::getTangentStiff(void) const
   {
     if(L == 0.0)
@@ -313,7 +313,7 @@ const XC::Matrix &XC::Truss::getTangentStiff(void) const
     return stiff;
   }
 
-//! @brief Return the matriz de rigidez inicial.
+//! @brief Returns the initial tangent stiffness matrix.
 const XC::Matrix &XC::Truss::getInitialStiff(void) const
   {
     if(L == 0.0)
@@ -345,7 +345,7 @@ const XC::Matrix &XC::Truss::getInitialStiff(void) const
     return *theMatrix;
   }
 
-//! @brief Return the matriz de amortiguamiento.
+//! @brief Returns the matriz de amortiguamiento.
 const XC::Matrix &XC::Truss::getDamp(void) const
   {
     if(L == 0.0) { // - problem in setDomain() no further warnings
@@ -381,11 +381,11 @@ const XC::Material *XC::Truss::getMaterial(void) const
   { return theMaterial; }
 XC::Material *XC::Truss::getMaterial(void)
   { return theMaterial; }
-//! @brief Return the densidad del material.
+//! @brief Returns the material density.
 double XC::Truss::getRho(void) const
   { return theMaterial->getRho(); }
 
-//! @brief Return the matriz de masas.
+//! @brief Returns the mass matrix.
 const XC::Matrix &XC::Truss::getMass(void) const
   {
     // zero the matrix
@@ -555,7 +555,7 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
   return 0;
 }
 
-//! @brief Return the reacción del elemento.
+//! @brief Returns the reacción del elemento.
 const XC::Vector &XC::Truss::getResistingForce(void) const
   {
     if(L == 0.0)
@@ -584,7 +584,7 @@ const XC::Vector &XC::Truss::getResistingForce(void) const
     return *theVector;
   }
 
-//! @brief Return the reacción del elemento incluyendo fuerzas de inercia.
+//! @brief Returns the reacción del elemento incluyendo fuerzas de inercia.
 const XC::Vector &XC::Truss::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();

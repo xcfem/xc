@@ -45,7 +45,7 @@ XC::GeomSection *XC::EntGeomSection::getGeomSection(void)
 XC::EntGeomSection::EntGeomSection(const std::string &nmb,GeomSection *s)
   : EntConNmb(nmb),sccGeom(s) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::EntGeomSection::EntGeomSection(const EntGeomSection &otro)
   : EntConNmb(otro), sccGeom(otro.sccGeom)
   {}

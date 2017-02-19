@@ -93,7 +93,7 @@ void XC::FiberSectionGJ::setupFibers(void)
 XC::Fiber *XC::FiberSectionGJ::addFiber(Fiber &newFiber)
   { return fibras.addFiber(*this,newFiber,kr); }
 
-//! @brief Establece los valores de las deformaciones iniciales.
+//! @brief Establece los valores de las initial strains.
 int XC::FiberSectionGJ::setInitialSectionDeformation(const Vector &deforms)
   {
     FiberSection3dBase::setInitialSectionDeformation(deforms);
@@ -107,7 +107,7 @@ int XC::FiberSectionGJ::setTrialSectionDeformation(const XC::Vector &deforms)
     return fibras.setTrialSectionDeformation(*this,kr);
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::FiberSectionGJ::getInitialTangent(void) const
   { return fibras.getInitialTangent(*this);  }
 

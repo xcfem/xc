@@ -63,7 +63,7 @@ class BeamIntegration;
 
 //! \ingroup OneDimensionalElemF
 //
-//! @brief Elemento barra no lineal con material de tipo SeccionBarraPrismatica para problemas tridimensionales.
+//! @brief 3D force based beam column element with nonlinear SeccionBarraPrismatica type material.
 class ForceBeamColumn3d: public NLForceBeamColumn3dBase
   {
   private:

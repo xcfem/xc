@@ -38,6 +38,8 @@ class ColorMap;
 class Renderer;
  class Element;
 
+//! @ingroup Recorder
+//
 class YsVisual : public Recorder
   {
   private:

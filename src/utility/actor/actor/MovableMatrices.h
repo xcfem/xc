@@ -36,6 +36,9 @@
 
 namespace XC {
 
+//! @ingroup IPComm
+//
+//! @brief Matrices that can move between objects.
 class MovableMatrices: public MovableObject
   {
   protected:

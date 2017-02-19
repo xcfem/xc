@@ -64,12 +64,12 @@ XC::BeamColumnWithSectionFDTrf2d::BeamColumnWithSectionFDTrf2d(int tag, int clas
   :BeamColumnWithSectionFD(tag, classTag,numSec,nullptr,nodeI,nodeJ), theCoordTransf(nullptr)
   { set_transf(&coordTransf); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::BeamColumnWithSectionFDTrf2d::BeamColumnWithSectionFDTrf2d(const BeamColumnWithSectionFDTrf2d &otro)
   :BeamColumnWithSectionFD(otro), theCoordTransf(nullptr)
   { set_transf(otro.theCoordTransf); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::BeamColumnWithSectionFDTrf2d &XC::BeamColumnWithSectionFDTrf2d::operator=(const BeamColumnWithSectionFDTrf2d &otro)
   {
     //BeamColumnWithSectionFD::operator=(otro);

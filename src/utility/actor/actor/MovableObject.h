@@ -81,9 +81,13 @@ class Information;
 class CommParameters;
 class CommMetaData;
 
-//! @ingroup ACTOR
+//! @ingroup Utils
 //
-//! @brief Objeto que puede enviarse a otro proceso.
+//! @defgroup IPComm Inter process communication.
+//
+//! @ingroup IPComm
+//
+//! @brief Object that can move between processes.
 class MovableObject: public DistributedBase
   {
   private:

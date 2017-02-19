@@ -209,12 +209,12 @@ XC::ModelWrapper::ModelWrapper(SoluMethod *owr)
   : EntCmd(owr), theModel(nullptr), theHandler(nullptr), theDOFNumberer(nullptr)
   { alloc_analysis_model(); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ModelWrapper::ModelWrapper(const ModelWrapper &otro)
   : EntCmd(otro), theModel(nullptr), theHandler(nullptr),theDOFNumberer(nullptr)
   { copia(otro); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ModelWrapper &XC::ModelWrapper::operator=(const ModelWrapper &otro)
   {
     EntCmd::operator=(otro);

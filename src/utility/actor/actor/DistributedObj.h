@@ -38,9 +38,9 @@ namespace XC {
 class Graph;
 class CommParameters;
 
-//! @ingroup ACTOR
+//! @ingroup IPComm
 //
-//! @brief Objeto distribuido en varios procesadores
+//! @brief Object distributed on many processes.
 class DistributedObj: public DistributedBase
   {
   protected:

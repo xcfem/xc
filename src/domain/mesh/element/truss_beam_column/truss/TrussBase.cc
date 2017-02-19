@@ -74,11 +74,11 @@ XC::TrussBase::TrussBase(int classTag)
   :ProtoTruss(0,classTag,0,0,0,0), L(0.0)
   { inicializa(); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::TrussBase::TrussBase(const TrussBase &otro)
   :ProtoTruss(otro), L(otro.L) {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::TrussBase &XC::TrussBase::operator=(const TrussBase &otro)
   {
     ProtoTruss::operator=(otro);

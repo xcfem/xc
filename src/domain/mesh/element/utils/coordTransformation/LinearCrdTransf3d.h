@@ -68,10 +68,9 @@ namespace XC {
 
 //! \ingroup ElemCT
 //
-//! @brief Coordinate transformation lineal.
-//! este objeto realiza una transformación geométrica lineal de la
-//! rigidez y de la respuesta en fuerzas de un elemento desde el sistema local
-//! al sistema global.
+//! @brief Linear coordinate transformation.
+//! Performs a linear transformation of element stiffness and responses
+//! between local and global reference systems.
 class LinearCrdTransf3d: public SmallDispCrdTransf3d
   {
   public:

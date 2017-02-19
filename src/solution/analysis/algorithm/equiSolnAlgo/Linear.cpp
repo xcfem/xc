@@ -90,14 +90,14 @@ int XC::Linear::resuelve(void)
 	return -5;
       }
 
-    if(theIncIntegrator->formTangent()<0) //Forma la matriz de rigidez tangente.
+    if(theIncIntegrator->formTangent()<0) //Builds tangent stiffness matrix.
       {
 	std::cerr << "WARNING Linear::solveCurrentStep() -";
 	std::cerr << "the XC::Integrator failed in formTangent()\n";
 	return -1;
       }
     
-    if(theIncIntegrator->formUnbalance()<0) //Forma el load vector.
+    if(theIncIntegrator->formUnbalance()<0) //Builds load vector.
       {
 	std::cerr << "WARNING XC::Linear::solveCurrentStep() -";
 	std::cerr << "the XC::Integrator failed in formUnbalance()\n";	

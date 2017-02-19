@@ -169,7 +169,7 @@ const XC::Matrix &XC::ElasticMembranePlateSection::getSectionTangent(void) const
   }
 
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::ElasticMembranePlateSection::getInitialTangent(void) const
   {
     const double M= membraneModulus(); //membrane modulus
