@@ -40,7 +40,7 @@ nod= nodes.newNodeXYZ(L,0.0,0)
 caracMecSeccion= xc.CrossSectionProperties3d()
 caracMecSeccion.A= A; caracMecSeccion.E= E; caracMecSeccion.G= G;
 caracMecSeccion.Iz= Iz; caracMecSeccion.Iy= Iy; caracMecSeccion.J= J
-caracMecSeccion.gira(math.radians(90))
+caracMecSeccion.rotate(math.radians(90))
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",caracMecSeccion)
 
 trfs= preprocessor.getTransfCooLoader

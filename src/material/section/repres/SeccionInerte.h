@@ -33,7 +33,7 @@
 
 class Pos2d;
 class Recta2d;
-class EjesPrincInercia2d;
+class PrincipalAxesOfInertia2D;
 class Vector2d;
 
 namespace XC {
@@ -63,7 +63,7 @@ class SeccionInerte: public EntCmd
     Vector getDirEjeI_bGrossSection(void) const;
     double getI1GrossSection(void) const;
     double getI2GrossSection(void) const;
-    EjesPrincInercia2d getEjesInerciaGrossSection(void) const;
+    PrincipalAxesOfInertia2D getEjesInerciaGrossSection(void) const;
     Vector2d getVDirEje1GrossSection(void) const;
     Vector2d getVDirStrongAxisGrossSection(void) const;
     Vector2d getVDirEje2GrossSection(void) const;
@@ -88,7 +88,7 @@ class SeccionInerte: public EntCmd
     Vector getDirEjeI_bHomogenizedSection(void) const;
     double getI1HomogenizedSection(const double &) const;
     double getI2HomogenizedSection(const double &) const;
-    EjesPrincInercia2d getEjesInerciaHomogenizedSection(const double &) const;
+    PrincipalAxesOfInertia2D getEjesInerciaHomogenizedSection(const double &) const;
     Vector2d getVDirEje1HomogenizedSection(const double &) const;
     Vector2d getVDirStrongAxisHomogenizedSection(const double &) const;
     Vector2d getVDirEje2HomogenizedSection(const double &) const;

@@ -30,7 +30,7 @@
 #ifndef SeccionBarraPrismatica_h
 #define SeccionBarraPrismatica_h
 
-class EjesPrincInercia2d;
+class PrincipalAxesOfInertia2D;
 
 #include "material/section/SectionForceDeformation.h"
 
@@ -84,7 +84,7 @@ class SeccionBarraPrismatica: public SectionForceDeformation
     double getTheta(void) const;
     double getEI1(void) const;
     double getEI2(void) const;
-    EjesPrincInercia2d getEjesInercia(void) const;
+    PrincipalAxesOfInertia2D getEjesInercia(void) const;
     Vector2d getVDirEje1(void) const;
     Vector2d getVDirStrongAxis(void) const;
     Vector2d getVDirEje2(void) const;

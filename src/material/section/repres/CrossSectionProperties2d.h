@@ -32,7 +32,7 @@
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "utility/actor/actor/MovableObject.h"
 
-class EjesPrincInercia2d;
+class PrincipalAxesOfInertia2D;
 class Vector2d;
 
 namespace XC {
@@ -109,7 +109,7 @@ class CrossSectionProperties2d: public EntCmd, public MovableObject
     virtual double getTheta(void) const;
     virtual double getI1(void) const;
     virtual double getI2(void) const;
-    virtual EjesPrincInercia2d getEjesInercia(void) const;
+    virtual PrincipalAxesOfInertia2D getEjesInercia(void) const;
     virtual Vector2d getVDirEje1(void) const;
     virtual Vector2d getVDirStrongAxis(void) const;
     virtual Vector2d getVDirEje2(void) const;

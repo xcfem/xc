@@ -7,7 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-''' Verificación del funcionamiento del comando «gira» para una sección elástica en 3d.
+''' Verificación del funcionamiento del comando «rotate» para una sección elástica en 3d.
    Ménsula sometida a carga vertical en su extremo con la sección y la carga inclinadas
    45 grados. '''
 

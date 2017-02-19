@@ -44,7 +44,7 @@ class_<XC::CrossSectionProperties3d, bases<XC::CrossSectionProperties2d> >("Cros
   .add_property("Iy", make_function( getIy, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setIy)
   .add_property("Iyz", make_function( getIyz, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setIyz)
   .add_property("J", make_function( getJ, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setJ)
-  .def("gira",&XC::CrossSectionProperties3d::gira,"Rotate section (deprecated).")
+  .def("rotate",&XC::CrossSectionProperties3d::rotate,"Rotate section (deprecated).")
   .def("getI1",&XC::CrossSectionProperties3d::getI1)
   .def("getI2",&XC::CrossSectionProperties3d::getI2)
   .def("getVDirEje1",&XC::CrossSectionProperties3d::getVDirEje1)

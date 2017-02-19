@@ -28,7 +28,7 @@
 
 #include <material/section/repres/CrossSectionProperties2d.h>
 #include "xc_basic/src/util/inercia.h"
-#include "xc_utils/src/geom/sis_ref/EjesPrincInercia2d.h"
+#include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
 #include "domain/mesh/element/utils/Information.h"
 
 #include <utility/matrix/Vector.h>
@@ -104,10 +104,10 @@ double XC::CrossSectionProperties2d::getI2(void) const
   { return 0.0; }
 
 //! @brief Returns the principal axis of inertia.
-EjesPrincInercia2d XC::CrossSectionProperties2d::getEjesInercia(void) const
+PrincipalAxesOfInertia2D XC::CrossSectionProperties2d::getEjesInercia(void) const
   {
     const Pos2d cdg(0,0);
-    return EjesPrincInercia2d(cdg,0.0,I(),0.0);
+    return PrincipalAxesOfInertia2D(cdg,0.0,I(),0.0);
   }
 //! @brief Returns principal axis I (strong).
 Vector2d XC::CrossSectionProperties2d::getVDirEje1(void) const

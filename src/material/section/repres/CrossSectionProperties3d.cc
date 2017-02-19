@@ -28,7 +28,7 @@
 
 #include <material/section/repres/CrossSectionProperties3d.h>
 #include "xc_basic/src/util/inercia.h"
-#include "xc_utils/src/geom/sis_ref/EjesPrincInercia2d.h"
+#include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
 #include <domain/mesh/element/utils/Information.h>
 
 #include <utility/matrix/Vector.h>
@@ -87,10 +87,10 @@ double XC::CrossSectionProperties3d::getI2(void) const
   { return I2_inercia(Iy(),Iz(),Iyz()); }
 
 //! @brief Returns the principal axis of inertia.
-EjesPrincInercia2d XC::CrossSectionProperties3d::getEjesInercia(void) const
+PrincipalAxesOfInertia2D XC::CrossSectionProperties3d::getEjesInercia(void) const
   {
     const Pos2d cdg(0,0);
-    return EjesPrincInercia2d(cdg,Iy(),Iz(),Iyz());
+    return PrincipalAxesOfInertia2D(cdg,Iy(),Iz(),Iyz());
   }
 //! @brief Returns principal axis I (strong).
 Vector2d XC::CrossSectionProperties3d::getVDirEje1(void) const
@@ -209,9 +209,8 @@ const XC::Matrix &XC::CrossSectionProperties3d::getInitialFlexibility6x6(void) c
   { return getSectionFlexibility6x6(); }
 
 
-//! @brief Calcula el efecto de girar la sección en sentido
-//! antihorario el ángulo being passed as parameter.
-void XC::CrossSectionProperties3d::gira(const double &theta)
+//! @brief Couterclockwise rotation of the section by the angle being passed as parameter.
+void XC::CrossSectionProperties3d::rotate(const double &theta)
   {
     const double &iiy= Iy();
     const double &iiz= Iz();
@@ -221,9 +220,9 @@ void XC::CrossSectionProperties3d::gira(const double &theta)
     const double dosTheta= 2*theta;
     const double cos2theta= cos(dosTheta);
     const double sin2theta= sin(dosTheta);
-    iy= media_suma+media_resta*cos2theta-iiyz*sin2theta;
-    Iz()= media_suma-media_resta*cos2theta+iiyz*sin2theta;
-    iyz= media_resta*sin2theta+iiyz*cos2theta;
+    setIy(media_suma+media_resta*cos2theta-iiyz*sin2theta);
+    setIz(media_suma-media_resta*cos2theta+iiyz*sin2theta);
+    setIyz(media_resta*sin2theta+iiyz*cos2theta);
   }
 
 

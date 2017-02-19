@@ -44,7 +44,7 @@
 #include "xc_utils/src/geom/d2/Semiplano2d.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "xc_utils/src/geom/sis_ref/EjesPrincInercia2d.h"
+#include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
 #include "xc_basic/src/util/inercia.h"
 
 //! @brief Constructor.
@@ -163,8 +163,8 @@ double XC::SeccionBarraPrismatica::getEI2(void) const
   { return I2_inercia(EIy(),EIz(),EIyz()); }
 
 //! @brief Returns the ejes principales de inercia de la sección.
-EjesPrincInercia2d XC::SeccionBarraPrismatica::getEjesInercia(void) const
-  { return EjesPrincInercia2d(getCdg(),EIy(),EIz(),EIyz());  }
+PrincipalAxesOfInertia2D XC::SeccionBarraPrismatica::getEjesInercia(void) const
+  { return PrincipalAxesOfInertia2D(getCdg(),EIy(),EIz(),EIyz());  }
 //! @brief Returns the vector del eje principal I.
 Vector2d XC::SeccionBarraPrismatica::getVDirEje1(void) const
   { return getEjesInercia().getVDirEje1(); }

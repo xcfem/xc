@@ -5,7 +5,7 @@ import xc
 from materials import typical_materials
 import math
 
-# Test de funcionamiento del comando «gira» para una sección elástica en 3d.
+# Test de funcionamiento del comando «rotate» para una sección elástica en 3d.
 Iz= 2
 Iy= 3
 
@@ -13,7 +13,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 # Definimos materiales
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",1,1,1,Iz,Iy,4)
-scc.sectionProperties.gira(math.radians(90))
+scc.sectionProperties.rotate(math.radians(90))
 ratio0= abs(Iy-scc.sectionProperties.Iz)/Iy
 ratio1= abs(Iz-scc.sectionProperties.Iy)/Iz
 ratio2= abs(scc.sectionProperties.Iyz)

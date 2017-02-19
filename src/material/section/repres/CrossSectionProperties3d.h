@@ -59,7 +59,7 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     inline const double &Iz(void) const
       { return CrossSectionProperties2d::I(); }
     inline void setIz(const double &i)
-      { CrossSectionProperties2d::I()= i; }
+      { CrossSectionProperties2d::setI(i); }
     inline double &Iy(void)
       { return iy; }
     inline const double &Iy(void) const
@@ -84,8 +84,8 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     //! @brief Returns the y bending stiffness.
     inline double EIy(void) const
       { return E()*iy; }
-    //! @brief Returns the colaboración del producto
-    //! de inercia a la bending stiffness.
+    //! @brief Returns the contribution to the bending stiffness matrix
+    //! of the product of inertia.
     inline double EIyz(void) const
       { return E()*iyz; }
     //! @brief Returns the torsional stiffness.
@@ -95,7 +95,7 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     double getTheta(void) const;
     double getI1(void) const;
     double getI2(void) const;
-    EjesPrincInercia2d getEjesInercia(void) const;
+    PrincipalAxesOfInertia2D getEjesInercia(void) const;
     Vector2d getVDirEje1(void) const;
     Vector2d getVDirStrongAxis(void) const;
     Vector2d getVDirEje2(void) const;
@@ -110,7 +110,7 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     const Matrix &getSectionFlexibility6x6(void) const;
     const Matrix &getInitialFlexibility6x6(void) const;
 
-    void gira(const double &theta);
+    void rotate(const double &theta);
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

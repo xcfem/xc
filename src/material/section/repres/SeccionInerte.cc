@@ -32,7 +32,7 @@
 #include "utility/matrix/Matrix.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
-#include "xc_utils/src/geom/sis_ref/EjesPrincInercia2d.h"
+#include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
@@ -93,11 +93,11 @@ double XC::SeccionInerte::getI2HomogenizedSection(const double &E0) const
   }
 
 //! @brief Principal axis of inertia of the homogenized section.
-EjesPrincInercia2d XC::SeccionInerte::getEjesInerciaHomogenizedSection(const double &E0) const
+PrincipalAxesOfInertia2D XC::SeccionInerte::getEjesInerciaHomogenizedSection(const double &E0) const
   {
     const Vector v= getCdgHomogenizedSection(E0);
     const Pos2d cdg(v[0],v[1]);
-    return EjesPrincInercia2d(cdg,getIyHomogenizedSection(E0),getIzHomogenizedSection(E0),getPyzHomogenizedSection(E0));
+    return PrincipalAxesOfInertia2D(cdg,getIyHomogenizedSection(E0),getIzHomogenizedSection(E0),getPyzHomogenizedSection(E0));
   }
 //! @brief Direction of the major principal axis of inertia of the homogenized section.
 Vector2d XC::SeccionInerte::getVDirEje1HomogenizedSection(const double &E0) const
@@ -250,11 +250,11 @@ double XC::SeccionInerte::getI2GrossSection(void) const
   }
 
 //! @brief Principal axis of inertia of the gross section.
-EjesPrincInercia2d XC::SeccionInerte::getEjesInerciaGrossSection(void) const
+PrincipalAxesOfInertia2D XC::SeccionInerte::getEjesInerciaGrossSection(void) const
   {
     const Vector v= getCdgGrossSection();
     const Pos2d cdg(v[0],v[1]);
-    return EjesPrincInercia2d(cdg,getIyGrossSection(),getIzGrossSection(),getPyzGrossSection());
+    return PrincipalAxesOfInertia2D(cdg,getIyGrossSection(),getIzGrossSection(),getPyzGrossSection());
   }
 //! @brief Direction of the major principal axis of inertia of the gross section.
 Vector2d XC::SeccionInerte::getVDirEje1GrossSection(void) const

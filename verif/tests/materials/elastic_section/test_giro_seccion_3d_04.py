@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento del comando «gira» para una sección elástica en 3d.
+# Test de funcionamiento del comando «rotate» para una sección elástica en 3d.
 
 import xc_base
 import geom
@@ -17,7 +17,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 # Definimos materiales
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",1,1,1,Iz,Iy,4)
-scc.sectionProperties.gira(math.radians(45))
+scc.sectionProperties.rotate(math.radians(45))
 
 I1= scc.sectionProperties.getI1()
 I2= scc.sectionProperties.getI2()

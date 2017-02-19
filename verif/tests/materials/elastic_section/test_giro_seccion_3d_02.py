@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Verificación del funcionamiento del comando «gira» para una sección elástica en 3d.
+# Verificación del funcionamiento del comando «rotate» para una sección elástica en 3d.
 #    Ménsula sometida a carga vertical en su extremo con la sección y la carga inclinadas
 #    45 grados.
 
@@ -45,7 +45,7 @@ lin.xzVector= xc.Vector([0,1,0])
 
 # Materials definition
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
-scc.sectionProperties.gira(math.radians(90))
+scc.sectionProperties.rotate(math.radians(90))
 
 # Elements definition
 elementos= preprocessor.getElementLoader

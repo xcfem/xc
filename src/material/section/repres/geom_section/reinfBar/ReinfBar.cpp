@@ -156,8 +156,8 @@ double XC::ReinfBar::getI1(void) const
 double XC::ReinfBar::getI2(void) const
   { return Iz(); }
 
-//     inline EjesPrincInercia2d Inercia(void)
-//       { return EjesPrincInercia2d(Cdg(),Iy(),Iz(),Pyz()); }
+//     inline PrincipalAxesOfInertia2D Inercia(void)
+//       { return PrincipalAxesOfInertia2D(Cdg(),Iy(),Iz(),Pyz()); }
 
 //! @brief Return the componente i,j del tensor de inercia calculado respecto al CDG.
 double XC::ReinfBar::getI(const unsigned short int &i,const unsigned short int &j) const
