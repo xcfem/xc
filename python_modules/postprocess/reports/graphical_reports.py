@@ -166,7 +166,7 @@ class RecordLoadCaseDisp(object):
                 fcUn=1.0
                 unDesc=''
             grfname=pathGr+self.loadCaseName+st.elSet.name+arg
-            lcs.displayDispRot(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits=fcUn,unitDescription=unDesc,fileName=grfname+'.jpg')
+            lcs.displayDispRot(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits=fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.jpg')
             lcs.displayDispRot(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits=fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.eps')
             capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
