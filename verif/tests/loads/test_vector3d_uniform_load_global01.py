@@ -67,6 +67,7 @@ fiberSectionRepr.setGeomNamed("geomCuadFibrasTN")
 cuadFibrasTN.setupFibers()
 A= cuadFibrasTN.getFibers().getSumaAreas(1.0)
 
+
 agg= materiales.newMaterial("section_aggregator","cuadFibras")
 agg.setSection("cuadFibrasTN")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
@@ -82,8 +83,6 @@ elementos.numSections= 2 # Número de secciones a lo largo del elemento.
 elementos.defaultTag= 1
 el= elementos.newElement("force_beam_column_3d",xc.ID([1,2]))
 
-
-
 # Constraints
 coacciones= preprocessor.getConstraintLoader
 fix_node_6dof.fixNode6DOF(coacciones,1)
@@ -98,7 +97,6 @@ casos.currentTimeSeries= "ts"
 lp0= casos.newLoadPattern("default","0")
 casos.currentLoadPattern= "0"
 el.vector3dUniformLoadGlobal(xc.Vector([f*math.sqrt(2)/2,f*math.sqrt(2)/2,0]))
-
 
 cargas= preprocessor.getLoadLoader
 

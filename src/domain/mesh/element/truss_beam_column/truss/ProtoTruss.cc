@@ -49,12 +49,12 @@ XC::ProtoTruss::ProtoTruss(int tag, int classTag,int Nd1,int Nd2,int ndof,int nd
   {}
 
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ProtoTruss::ProtoTruss(const ProtoTruss &otro)
   : Element1D(otro),numDOF(otro.numDOF),dimSpace(otro.dimSpace),theMatrix(otro.theMatrix), theVector(otro.theVector)
   {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ProtoTruss &XC::ProtoTruss::operator=(const ProtoTruss &otro)
   {
     Element1D::operator=(otro);

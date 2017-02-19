@@ -119,13 +119,13 @@ XC::ShellMITC4Base::ShellMITC4Base(int tag, int classTag,int node1,int node2,int
     theCoordTransf->initialize(theNodes);
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ShellMITC4Base::ShellMITC4Base(const ShellMITC4Base &otro)
   : QuadBase4N<SectionFDPhysicalProperties>(otro), theCoordTransf(nullptr),
     p0(otro.p0), inicDisp(otro.inicDisp)
   { alloc(otro.theCoordTransf); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ShellMITC4Base &XC::ShellMITC4Base::operator=(const ShellMITC4Base &otro)
   {
     QuadBase4N<SectionFDPhysicalProperties>::operator=(otro);

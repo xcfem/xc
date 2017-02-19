@@ -76,7 +76,7 @@
 XC::TransientIntegrator::TransientIntegrator(SoluMethod *owr,int clasTag)
   : IncrementalIntegrator(owr,clasTag) {}
 
-//! @brief Forma la matriz de rigidez tangente.
+//! @brief Builds tangent stiffness matrix.
 int XC::TransientIntegrator::formTangent(int statFlag)
   {
     int result = 0;

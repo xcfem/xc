@@ -93,7 +93,7 @@ XC::UnbalAndTangent::UnbalAndTangent(const size_t &n,UnbalAndTangentStorage &a)
   :nDOF(n), theResidual(nullptr), theTangent(nullptr), unbalAndTangentArray(a) 
   { alloc(); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::UnbalAndTangent::UnbalAndTangent(const UnbalAndTangent &otro)
   :nDOF(0), theResidual(nullptr), theTangent(nullptr), unbalAndTangentArray(otro.unbalAndTangentArray) 
   {
@@ -102,7 +102,7 @@ XC::UnbalAndTangent::UnbalAndTangent(const UnbalAndTangent &otro)
     copia(otro);
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::UnbalAndTangent &XC::UnbalAndTangent::operator=(const UnbalAndTangent &otro)
   {
     libera();

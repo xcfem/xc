@@ -124,7 +124,7 @@ XC::ForceBeamColumn2d::ForceBeamColumn2d(int tag)
   : NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d), beamIntegr(nullptr), v0()
   {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ForceBeamColumn2d::ForceBeamColumn2d(const ForceBeamColumn2d &otro)
   : NLForceBeamColumn2dBase(otro), beamIntegr(nullptr), v0(otro.v0), maxSubdivisions(otro.maxSubdivisions)
   {
@@ -132,7 +132,7 @@ XC::ForceBeamColumn2d::ForceBeamColumn2d(const ForceBeamColumn2d &otro)
       alloc(*otro.beamIntegr);
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ForceBeamColumn2d &XC::ForceBeamColumn2d::operator=(const ForceBeamColumn2d &otro)
   {
 //     NLForceBeamColumn2dBase::operator=(otro);

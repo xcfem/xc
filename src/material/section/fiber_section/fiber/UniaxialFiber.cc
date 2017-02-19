@@ -106,12 +106,12 @@ XC::UniaxialFiber::UniaxialFiber(int tag, int classTag,const MaterialLoader &ldr
   : Fiber(tag, classTag), theMaterial(nullptr), area(Area)
   { setMaterial(ldr,nmbMat); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::UniaxialFiber::UniaxialFiber(const UniaxialFiber &otra)
   : Fiber(otra),theMaterial(nullptr), area(otra.area)
   { setMaterial(otra.theMaterial); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::UniaxialFiber &XC::UniaxialFiber::operator=(const UniaxialFiber &otra)
   {
     Fiber::operator=(otra);

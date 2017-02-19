@@ -121,7 +121,7 @@ const XC::Vector &XC::LinearCrdTransf3d::getGlobalResistingForce(const Vector &p
     return local_to_global_resisting_force(pl);
   }
 
-//! @brief Return the matriz de rigidez expresada en el sistema global del elemento.
+//! @brief Returns the stiffness matrix expresada en el sistema global del elemento.
 const XC::Matrix &XC::LinearCrdTransf3d::getGlobalStiffMatrix(const Matrix &KB, const Vector &pb) const
   {
     const Matrix &kl= basic_to_local_stiff_matrix(KB); // Local stiffness

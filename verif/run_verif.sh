@@ -258,7 +258,7 @@ python tests/constraints/test_glue_node_to_element_03.py
 python tests/constraints/test_glue_node_to_element_04.py
 
 #Tests de cargas
-echo "$BLEU" "Force constraints tests." "$NORMAL"
+echo "$BLEU" "Loads tests." "$NORMAL"
 python tests/loads/beam2dNodalLoad.py
 python tests/loads/beam2dNodalLoad02.py
 python tests/loads/beam2dPointLoad.py

@@ -108,7 +108,7 @@ template <class FILATTZNOD,class FILATTZELEM>
 SetFila<FILATTZNOD,FILATTZELEM>::SetFila(const SetFila &otro)
   : SetEstruct(otro), fila_nod(otro.fila_nod), fila_elem(otro.fila_elem) {}
 
-  //! @brief Operador asignación.
+  //! @brief Assignment operator.
 template <class FILATTZNOD,class FILATTZELEM>
 SetFila<FILATTZNOD,FILATTZELEM> &XC::SetFila<FILATTZNOD,FILATTZELEM>::operator=(const SetFila &otro)
   {

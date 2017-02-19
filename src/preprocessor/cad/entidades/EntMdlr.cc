@@ -56,11 +56,11 @@ XC::EntMdlr::EntMdlr(const std::string &nombre,const size_t &i,Preprocessor *m)
   : SetEstruct(nombre,m), idx(i), doGenMesh(true), nodos(), elementos() {}
 
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::EntMdlr::EntMdlr(const EntMdlr &otro)
   : SetEstruct(otro), idx(otro.idx), doGenMesh(true), nodos(otro.nodos), elementos(otro.elementos) {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::EntMdlr &XC::EntMdlr::operator=(const EntMdlr &otro)
   {
     SetEstruct::operator=(otro);

@@ -85,17 +85,17 @@ XC::beam3dBase::beam3dBase(int tag, int classTag, double a, double e, double g,
    theta(Theta), L(0.0), rForce(12), isStiffFormed(false)
   {load.reset(12);}
 
-//! @brief Vuelve al último estado consumado del elemento.
+//! @brief Returns to the last commited state.
 int XC::beam3dBase::revertToLastCommit(void)
   {
     return 0; // linear element - nothing to commit
   }
 
-//! @brief Vuelve la matriz de rigidez tangente.
+//! @brief Returns tangent stiffness matrix.
 const XC::Matrix &XC::beam3dBase::getTangentStiff(void) const
   { return getStiff(); }
 
-//! @brief Vuelve el valor inicial de la matriz de rigidez tangente.
+//! @brief Returns initial tangent stiffness matrix.
 const XC::Matrix &XC::beam3dBase::getInitialStiff(void) const
   { return getStiff(); }
 

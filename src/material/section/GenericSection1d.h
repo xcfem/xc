@@ -74,9 +74,9 @@ class UniaxialMaterial;
 //! @brief ??.
 class GenericSection1d : public SeccionBarraPrismatica
   {
-    //XXX Agregar constructor de copia y operador de asignación.
+    //XXX Add copy constructor and assignment operator.
   protected:
-    UniaxialMaterial *theModel;//!< Modelización del material.
+    UniaxialMaterial *theModel;//!< Material model.
     int code;
 
     static Vector s;

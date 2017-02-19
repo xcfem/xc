@@ -104,7 +104,7 @@ XC::AnalysisModel::AnalysisModel(int theClassTag,EntCmd *owr)
    theFEconst_iter(&theFEs), theDOFGroupconst_iter(&theDOFGroups),
    myDOFGraph(*this), myGroupGraph(*this), updateGraphs(false) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::AnalysisModel::AnalysisModel(const AnalysisModel &otro)
   : MovableObject(otro), EntCmd(otro),
    numFE_Ele(otro.numFE_Ele), numDOF_Grp(otro.numDOF_Grp), numEqn(otro.numEqn),
@@ -112,7 +112,7 @@ XC::AnalysisModel::AnalysisModel(const AnalysisModel &otro)
    theFEconst_iter(&theFEs), theDOFGroupconst_iter(&theDOFGroups),
    myDOFGraph(*this), myGroupGraph(*this), updateGraphs(false) {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::AnalysisModel &XC::AnalysisModel::operator=(const AnalysisModel &otro)
   { 
     MovableObject::operator=(otro);

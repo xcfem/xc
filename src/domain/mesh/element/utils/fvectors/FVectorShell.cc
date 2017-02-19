@@ -33,7 +33,7 @@
 XC::FVectorShell::FVectorShell(void)
   : FVectorData<24>() { zero(); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::FVectorShell::FVectorShell(const XC::FVectorShell &otro)
   : FVectorData<24>(otro)
   {
@@ -97,7 +97,7 @@ XC::FVectorShell::FVectorShell(const XC::Vector &v)
       std::cerr << "FVectorShell::FVectorShell; se esperaba un vector de dimensión 6" << std::endl;
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::FVectorShell &XC::FVectorShell::operator=(const XC::FVectorShell &otro)
   {
     p[0] = otro.p[0];

@@ -139,12 +139,12 @@ class ZeroLengthSection: public Element0D
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
 
-    Vector getVDirEjeFuerteLocales(void) const;
-    Vector getVDirEjeDebilLocales(void) const;
-    double getAnguloEjeFuerte(void) const;
-    double getAnguloEjeDebil(void) const;
-    const Vector &getVDirEjeFuerteGlobales(void) const;
-    const Vector &getVDirEjeDebilGlobales(void) const;
+    Vector getVDirStrongAxisLocalCoord(void) const;
+    Vector getVDirWeakAxisLocalCoord(void) const;
+    double getStrongAxisAngle(void) const;
+    double getWeakAxisAngle(void) const;
+    const Vector &getVDirStrongAxisGlobalCoord(void) const;
+    const Vector &getVDirWeakAxisGlobalCoord(void) const;
 
     inline SectionForceDeformation *getSection(void)
       { return theSection; }

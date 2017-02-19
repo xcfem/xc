@@ -121,12 +121,12 @@ XC::FiberSectionShear3d::FiberSectionShear3d(int tag, MaterialLoader *mat_ldr)
   : FiberSection3d(tag, SEC_TAG_FiberSectionShear3d,mat_ldr),
     respVy(nullptr), respVz(nullptr), respT(nullptr) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::FiberSectionShear3d::FiberSectionShear3d(const FiberSectionShear3d &otro)
   : FiberSection3d(otro), respVy(nullptr), respVz(nullptr), respT(nullptr)
    { setRespVyVzT(otro.respVy,otro.respVz,otro.respT); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::FiberSectionShear3d &XC::FiberSectionShear3d::operator=(const FiberSectionShear3d &otro)
   {
     libera();
@@ -243,7 +243,7 @@ int XC::FiberSectionShear3d::setTrialSectionDeformation(const Vector &def)
     return ret;
   }
 
-//! @brief Return the initial deformation de la sección.
+//! @brief Returns the initial deformation de la sección.
 const XC::Vector &XC::FiberSectionShear3d::getInitialSectionDeformation(void) const
   {
     defzero.Zero();
@@ -267,7 +267,7 @@ const XC::Vector &XC::FiberSectionShear3d::getSectionDeformation(void) const
     return def;
   }
 
-//! @brief Return the tangent stiffness matrix.
+//! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::FiberSectionShear3d::getSectionTangent(void) const
   {
     // Zero before assembly
@@ -282,7 +282,7 @@ const XC::Matrix &XC::FiberSectionShear3d::getSectionTangent(void) const
     return ks;
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Returns the initial tangent stiffness matrix.
 const XC::Matrix &XC::FiberSectionShear3d::getInitialTangent(void) const
   {
     // Zero before assembly
@@ -297,7 +297,7 @@ const XC::Matrix &XC::FiberSectionShear3d::getInitialTangent(void) const
     return ks;
   }
 
-//! @brief Return the matriz de flexibilidad.
+//! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::FiberSectionShear3d::getSectionFlexibility(void) const
   {
     fs.Zero(); // Zero before assembly
@@ -311,7 +311,7 @@ const XC::Matrix &XC::FiberSectionShear3d::getSectionFlexibility(void) const
     return fs;
   }
 
-//! @brief Return the matriz de flexibilidad noval.
+//! @brief Returns the initial flexibility matrix.
 const XC::Matrix &XC::FiberSectionShear3d::getInitialFlexibility(void) const
   {
     fs.Zero(); // Zero before assembly
@@ -325,7 +325,7 @@ const XC::Matrix &XC::FiberSectionShear3d::getInitialFlexibility(void) const
     return fs;
   }
 
-//! @brief Return the resultante de tensiones.
+//! @brief Returns stress resultant.
 const XC::Vector &XC::FiberSectionShear3d::getStressResultant(void) const
   {
     s.Zero();
@@ -337,11 +337,11 @@ const XC::Vector &XC::FiberSectionShear3d::getStressResultant(void) const
     return s;
   }
 
+//! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::FiberSectionShear3d::getCopy(void) const
   { return new FiberSectionShear3d(*this); }
 
-//! @brief Returns the códigos de los esfuerzos para los que la
-//! sección aporta rigidez.
+//! @brief Section stiffness contribution response identifiers.
 const XC::ResponseId &XC::FiberSectionShear3d::getType(void) const
   { return RespFiberSectionSh3d; }
 

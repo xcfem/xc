@@ -47,12 +47,12 @@ void XC::TransfCooLoader::libera(void)
 XC::TransfCooLoader::TransfCooLoader(Preprocessor *owr)
   : Loader(owr), tag_trf(0) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::TransfCooLoader::TransfCooLoader(const TransfCooLoader &otro)
  : Loader(otro)
   { std::cerr << "No se debe copiar este objeto." << std::endl; }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::TransfCooLoader &XC::TransfCooLoader::operator=(const TransfCooLoader &otro)
   {
     Loader::operator=(otro);

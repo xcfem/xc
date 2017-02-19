@@ -68,9 +68,11 @@ class Element1D : public ElementBase<2>
     Element1D(int tag, int classTag);
     Element1D(int tag, int classTag,int Nd1,int Nd2);
     void setDomain(Domain *theDomain);
-    virtual CrdTransf *getCoordTransf(void);
     Matrix getLocalAxes(bool) const;
+    virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
+    virtual CrdTransf *checkCoordTransf(void);
+    virtual const CrdTransf *checkCoordTransf(void) const;
     virtual const Matrix &getCooPuntos(const size_t &ndiv) const;
     virtual const Vector &getCooPunto(const double &xrel) const;
     Segmento3d getSegmento(bool initialGeometry= true) const;

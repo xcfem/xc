@@ -107,13 +107,13 @@ XC::MeshRegion::MeshRegion(int tag, int cTag)
   :ContinuaReprComponent(tag, cTag), rayFactors(), theNodes(nullptr), theElements(nullptr),
    currentGeoTag(0), lastGeoSendTag(-1) {}
 
-//! @brief Constructor de copia
+//! @brief Copy constructor
 XC::MeshRegion::MeshRegion(const MeshRegion &otra) 
   :ContinuaReprComponent(otra), rayFactors(otra.rayFactors), theNodes(nullptr), theElements(nullptr),
    currentGeoTag(otra.currentGeoTag), lastGeoSendTag(otra.lastGeoSendTag)
   { copia(otra); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::MeshRegion &XC::MeshRegion::operator=(const MeshRegion &otra)
   {
     ContinuaReprComponent::operator=(otra);

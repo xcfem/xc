@@ -32,12 +32,12 @@ class_<XC::ZeroLengthSection, bases<XC::Element0D>, boost::noncopyable >("ZeroLe
   .def("getSection",make_function(&XC::ZeroLengthSection::getSection,return_internal_reference<>()),"Returns element's section.")
   .def("getMaterial",make_function(&XC::ZeroLengthSection::getSection,return_internal_reference<>()),"Returns element's section.")
   .add_property("getInternalForcesTransformation",make_function(&XC::ZeroLengthSection::getInternalForcesTransformation, return_internal_reference<>() ),"Returns element transformation.")
-  .def("getVDirEjeFuerteLocales",&XC::ZeroLengthSection::getVDirEjeFuerteLocales,"Returns the direction vector of element strong axis expressed in the local coordinate system.")
-  .def("getVDirEjeDebilLocales",&XC::ZeroLengthSection::getVDirEjeDebilLocales,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
-.def("getAnguloEjeFuerte",&XC::ZeroLengthSection::getAnguloEjeFuerte,"Returns the angle between element strong axis and local XZ plane.")
-  .def("getAnguloEjeDebil",&XC::ZeroLengthSection::getAnguloEjeDebil,"Returns the angle between element weak axis and local XZ plane.")
-  .def("getVDirEjeFuerteGlobales",make_function(&XC::ZeroLengthSection::getVDirEjeFuerteGlobales, return_value_policy<copy_const_reference>()),"Returns the direction vector of element strong axis expressed in the global coordinate system.")
-  .def("getVDirEjeDebilGlobales",make_function(&XC::ZeroLengthSection::getVDirEjeDebilGlobales, return_value_policy<copy_const_reference>()),"Returns the direction vector of element weak axis expressed in the global coordinate system.")
+  .def("getVDirStrongAxisLocalCoord",&XC::ZeroLengthSection::getVDirStrongAxisLocalCoord,"Returns the direction vector of element strong axis expressed in the local coordinate system.")
+  .def("getVDirWeakAxisLocalCoord",&XC::ZeroLengthSection::getVDirWeakAxisLocalCoord,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
+.def("getStrongAxisAngle",&XC::ZeroLengthSection::getStrongAxisAngle,"Returns the angle between element strong axis and local XZ plane.")
+  .def("getWeakAxisAngle",&XC::ZeroLengthSection::getWeakAxisAngle,"Returns the angle between element weak axis and local XZ plane.")
+  .def("getVDirStrongAxisGlobalCoord",make_function(&XC::ZeroLengthSection::getVDirStrongAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element strong axis expressed in the global coordinate system.")
+  .def("getVDirWeakAxisGlobalCoord",make_function(&XC::ZeroLengthSection::getVDirWeakAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element weak axis expressed in the global coordinate system.")
   ;
 
 class_<XC::ZeroLengthContact, bases<XC::Element0D>, boost::noncopyable >("ZeroLengthContact", no_init);

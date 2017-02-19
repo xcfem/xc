@@ -130,7 +130,7 @@ XC::Steel01::Steel01(int tag)
 XC::Steel01::Steel01(void)
   :SteelBase0103(MAT_TAG_Steel01), parameterID(0), SHVs(nullptr) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::Steel01::Steel01(const Steel01 &otro)
   :SteelBase0103(otro), parameterID(otro.parameterID), SHVs(nullptr) 
   {
@@ -138,7 +138,7 @@ XC::Steel01::Steel01(const Steel01 &otro)
       alloc(*otro.SHVs);
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::Steel01 &XC::Steel01::operator=(const Steel01 &otro)
   {
     SteelBase0103::operator=(otro);

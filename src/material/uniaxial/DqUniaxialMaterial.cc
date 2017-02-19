@@ -113,12 +113,12 @@ XC::DqUniaxialMaterial::DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial 
   }
 
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::DqUniaxialMaterial::DqUniaxialMaterial(const DqUniaxialMaterial &otro)
   : EntCmd(otro), MovableObject(otro), lst_ptr()
   { copia_lista(otro); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::DqUniaxialMaterial::DqUniaxialMaterial(const DqUniaxialMaterial &otro,SectionForceDeformation *s)
   : EntCmd(otro), MovableObject(0), lst_ptr()
   { copia_lista(otro,s); }
@@ -236,7 +236,7 @@ int XC::DqUniaxialMaterial::setTrialStrain(const double &strain,const double &st
   }
 
 
-//! @brief Returns the deformaciones iniciales.
+//! @brief Returns the initial strains.
 void XC::DqUniaxialMaterial::getInitialStrain(Vector &def,const size_t &offset) const
   {
     size_t j= offset;
@@ -245,7 +245,7 @@ void XC::DqUniaxialMaterial::getInitialStrain(Vector &def,const size_t &offset) 
       def(j)= (*i)->getInitialStrain();
   }
 
-//! @brief Returns the deformaciones.
+//! @brief Returns strains vector.
 void XC::DqUniaxialMaterial::getStrain(Vector &def,const size_t &offset) const
   {
     size_t j= offset;
@@ -263,7 +263,7 @@ void XC::DqUniaxialMaterial::getTangent(Matrix &k,const size_t &offset) const
       k(j,j)= (*i)->getTangent();
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Return the initial tangent stiffness matrix.
 void XC::DqUniaxialMaterial::getInitialTangent(Matrix &k,const size_t &offset) const
   {
     size_t j= offset;
@@ -281,7 +281,7 @@ void XC::DqUniaxialMaterial::getFlexibility(Matrix &f,const size_t &offset) cons
       f(j,j)= (*i)->getFlexibility();
   }
 
-//! @brief Return the matriz de flexibilidad noval.
+//! @brief Return the initial flexibility matrix.
 void XC::DqUniaxialMaterial::getInitialFlexibility(Matrix &f,const size_t &offset) const
   {
     size_t j= offset;

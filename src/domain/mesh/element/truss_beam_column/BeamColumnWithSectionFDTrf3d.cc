@@ -68,12 +68,12 @@ XC::BeamColumnWithSectionFDTrf3d::BeamColumnWithSectionFDTrf3d(int tag, int clas
   :BeamColumnWithSectionFD(tag, classTag,numSec,nullptr,nodeI,nodeJ), theCoordTransf(nullptr)
   { set_transf(&coordTransf); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::BeamColumnWithSectionFDTrf3d::BeamColumnWithSectionFDTrf3d(const XC::BeamColumnWithSectionFDTrf3d &otro)
   :BeamColumnWithSectionFD(otro), theCoordTransf(nullptr)
   { set_transf(otro.theCoordTransf); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::BeamColumnWithSectionFDTrf3d &XC::BeamColumnWithSectionFDTrf3d::operator=(const XC::BeamColumnWithSectionFDTrf3d &otro)
   {
     //BeamColumnWithSectionFD::operator=(otro);
@@ -106,94 +106,88 @@ XC::CrdTransf *XC::BeamColumnWithSectionFDTrf3d::getCoordTransf(void)
 const XC::CrdTransf *XC::BeamColumnWithSectionFDTrf3d::getCoordTransf(void) const
   { return theCoordTransf; }
 
-//! @brief Returns the vector dirección del eje fuerte (mayor inercia) de la sección 
-//! del elemento cuyo índice is being passed as parameter expresado en coordenadas locales.
-XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirEjeFuerteLocales(const size_t &i) const
+//! @brief Returns i-th cross section strong axis direction vector expressed in local coordinates.
+XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord(const size_t &i) const
   {
     Vector retval(3);
     retval(2)= 1;
     const SeccionBarraPrismatica *tmp= dynamic_cast<const SeccionBarraPrismatica *>(theSections[i]);
     if(tmp)
       {
-        const Vector2d ejeFuerteSeccion= tmp->getVDirEjeFuerte();
-        retval(0)= 0.0; retval(1)= ejeFuerteSeccion.x(); retval(2)= ejeFuerteSeccion.y();
+        const Vector2d sectionStrongAxis= tmp->getVDirStrongAxis();
+        retval(0)= 0.0; retval(1)= sectionStrongAxis.x(); retval(2)= sectionStrongAxis.y();
       }
     else
       {
-        std::cerr << "BeamColumnWithSectionFDTrf3d::getVDirEjeFuerte; la sección: "
-                  << i << " doesn't returnsejes principales." << std::endl;
+        std::cerr << "BeamColumnWithSectionFDTrf3d::getVDirStrongAxis; la sección: "
+                  << i << " doesn't returns principal axes." << std::endl;
       }
     return retval;
   }
 
-//! @brief Returns the vector dirección del eje débil (menor inercia) de la sección 
-//! del elemento cuyo índice is being passed as parameter expresado en coordenadas locales.
-XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirEjeDebilLocales(const size_t &i) const
+//! @brief Returns i-th cross section weak axis direction vector expressed in local coordinates.
+XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisLocalCoord(const size_t &i) const
   {
     Vector retval(3);
     retval(2)= 1;
     const SeccionBarraPrismatica *tmp= dynamic_cast<const SeccionBarraPrismatica *>(theSections[i]);
     if(tmp)
       {
-        const Vector2d ejeDebilSeccion= tmp->getVDirEjeDebil();
-        retval(0)= 0.0; retval(1)= ejeDebilSeccion.x(); retval(2)= ejeDebilSeccion.y();
+        const Vector2d sectionWeakAxis= tmp->getVDirWeakAxis();
+        retval(0)= 0.0; retval(1)= sectionWeakAxis.x(); retval(2)= sectionWeakAxis.y();
       }
     else
       {
-        std::cerr << "BeamColumnWithSectionFDTrf3d::getVDirEjeDebil; la sección: "
-                  << i << " doesn't returnsejes principales." << std::endl;
+        std::cerr << "BeamColumnWithSectionFDTrf3d::getVDirWeakAxis; la sección: "
+                  << i << " doesn't returns principal axes." << std::endl;
         return retval;
       }
     return retval;
   }
 
-//! @brief Returns the ángulo del eje fuerte (mayor inercia) del elemento
-//! con su plano XZ.
-double XC::BeamColumnWithSectionFDTrf3d::getAnguloEjeFuerte(const size_t &i) const
+//! @brief Returns the angle between i-th cross section strong axis
+//! and the local XZ plane.
+double XC::BeamColumnWithSectionFDTrf3d::getStrongAxisAngle(const size_t &i) const
   {
-    Vector eF= getVDirEjeFuerteLocales(i);
+    Vector eF= getVDirStrongAxisLocalCoord(i);
     return atan2(eF(2),eF(1));
   }
 
-//! @brief Returns the ángulo del eje débil (menor inercia) del elemento
-//! con su plano XZ.
-double XC::BeamColumnWithSectionFDTrf3d::getAnguloEjeDebil(const size_t &i) const
+//! @brief Returns the angle between i-th cross section weak axis
+//! and the local XZ plane.
+double XC::BeamColumnWithSectionFDTrf3d::getWeakAxisAngle(const size_t &i) const
   {
-    Vector eD= getVDirEjeDebilLocales(i);
+    Vector eD= getVDirWeakAxisLocalCoord(i);
     return atan2(eD(2),eD(1));
   }
 
-//! @brief Returns the vector dirección del eje fuerte (mayor inercia) de la sección 
-//! del elemento cuyo índice is being passed as parameter.
-const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirEjeFuerteGlobales(const size_t &i) const
+//! @brief Returns i-th cross section strong axis direction vector expressed in global coordinates.
+const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord(const size_t &i) const
   {
-    if(theCoordTransf)
+    const CrdTransf *ct= checkCoordTransf();
+    if(ct)
       {
-        const Vector eF= getVDirEjeFuerteLocales(i);
+        const Vector eF= getVDirStrongAxisLocalCoord(i);
         return theCoordTransf->getVectorGlobalCoordFromLocal(eF);
       }
     else
       {
-        std::cerr << "BeamColumnWithSectionFDTrf3d::getVDirEjeFuerte; no se ha asignado una coordinate transformation."
-                  << std::endl;
         static Vector tmp(3);
         return tmp;
       }
   }
 
-//! @brief Returns the vector dirección del eje débil (menor inercia) de la sección 
-//! del elemento cuyo índice is being passed as parameter.
-const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirEjeDebilGlobales(const size_t &i) const
+//! @brief Returns i-th cross section weak axis direction vector expressed in global coordinates.
+const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(const size_t &i) const
   {
-    if(theCoordTransf)
+    const CrdTransf *ct= checkCoordTransf();
+    if(ct)
       {
-        const Vector eD= getVDirEjeDebilLocales(i);
+        const Vector eD= getVDirWeakAxisLocalCoord(i);
         return theCoordTransf->getVectorGlobalCoordFromLocal(eD);
       }
     else
       {
-        std::cerr << "XC::BeamColumnWithSectionFDTrf3d::getVDirEjeDebil; no se ha asignado una coordinate transformation."
-                  << std::endl;
         static Vector tmp(3);
         return tmp;
       }

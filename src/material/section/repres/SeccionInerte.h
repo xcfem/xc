@@ -65,9 +65,9 @@ class SeccionInerte: public EntCmd
     double getI2GrossSection(void) const;
     EjesPrincInercia2d getEjesInerciaGrossSection(void) const;
     Vector2d getVDirEje1GrossSection(void) const;
-    Vector2d getVDirEjeFuerteGrossSection(void) const;
+    Vector2d getVDirStrongAxisGrossSection(void) const;
     Vector2d getVDirEje2GrossSection(void) const;
-    Vector2d getVDirEjeDebilGrossSection(void) const;
+    Vector2d getVDirWeakAxisGrossSection(void) const;
     double getIGrossSection(const unsigned short int &,const unsigned short int &) const;
     double getIGrossSection(const unsigned short int &,const unsigned short int &,const Pos2d &) const;
     double getIGrossSection(const Pos2d &,const Vector &) const;
@@ -90,9 +90,9 @@ class SeccionInerte: public EntCmd
     double getI2HomogenizedSection(const double &) const;
     EjesPrincInercia2d getEjesInerciaHomogenizedSection(const double &) const;
     Vector2d getVDirEje1HomogenizedSection(const double &) const;
-    Vector2d getVDirEjeFuerteHomogenizedSection(const double &) const;
+    Vector2d getVDirStrongAxisHomogenizedSection(const double &) const;
     Vector2d getVDirEje2HomogenizedSection(const double &) const;
-    Vector2d getVDirEjeDebilHomogenizedSection(const double &) const;
+    Vector2d getVDirWeakAxisHomogenizedSection(const double &) const;
     double getIHomogenizedSection(const double &,const unsigned short int &,const unsigned short int &) const;
     double getIHomogenizedSection(const double &,const unsigned short int &,const unsigned short int &,const Pos2d &) const;
     double getIHomogenizedSection(const double &,const Pos2d &,const Vector &) const;

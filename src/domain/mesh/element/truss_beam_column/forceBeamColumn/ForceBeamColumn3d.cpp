@@ -88,7 +88,7 @@ XC::ForceBeamColumn3d::ForceBeamColumn3d(int tag)
   : NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d), beamIntegr(nullptr), v0()
   {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ForceBeamColumn3d::ForceBeamColumn3d(const ForceBeamColumn3d &otro)
   : NLForceBeamColumn3dBase(otro), beamIntegr(nullptr), v0(otro.v0), maxSubdivisions(otro.maxSubdivisions)
   {
@@ -96,7 +96,7 @@ XC::ForceBeamColumn3d::ForceBeamColumn3d(const ForceBeamColumn3d &otro)
       alloc(*otro.beamIntegr);
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ForceBeamColumn3d &XC::ForceBeamColumn3d::operator=(const ForceBeamColumn3d &otro)
   {
 //     NLForceBeamColumn3dBase::operator=(otro);

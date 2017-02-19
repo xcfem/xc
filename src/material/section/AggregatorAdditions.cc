@@ -84,7 +84,7 @@ XC::AggregatorAdditions::AggregatorAdditions(EntCmd *owner,const UniaxialMateria
     (*matCodes)(0) = c;
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::AggregatorAdditions::AggregatorAdditions(const AggregatorAdditions &otro)
   : DqUniaxialMaterial(otro), matCodes(nullptr)
   {
@@ -92,7 +92,7 @@ XC::AggregatorAdditions::AggregatorAdditions(const AggregatorAdditions &otro)
       alloc_ptrs(otro.matCodes);
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::AggregatorAdditions::AggregatorAdditions(const AggregatorAdditions &otro,SectionForceDeformation *s)
   : DqUniaxialMaterial(otro,s)
   { 
@@ -118,8 +118,7 @@ XC::AggregatorAdditions::~AggregatorAdditions(void)
 void XC::AggregatorAdditions::putMatCodes(const ResponseId &codes)
   { alloc_ptrs(codes); }
 
-//! @brief Returns the códigos de los esfuerzos para los que la
-//! sección aporta rigidez.
+//! @brief Response identifiers for material stiffness contributions.
 void XC::AggregatorAdditions::getType(ResponseId &retval,const size_t &offset) const
   {
     const size_t n= size();

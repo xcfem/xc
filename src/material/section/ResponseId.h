@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //ResponseId.h
-//Etiquetas de los esfuerzos o GDLs para los que el material aporta rigidez.
+//Stiffness material contribution response identifiers.
 
 #ifndef ResponseId_h
 #define ResponseId_h
@@ -56,7 +56,7 @@ const int PLATE_RESPONSE_q23= 18; // Cortante por unidad de longitud, perpendicu
 
 //! \ingroup MATSCC
 //
-//! @brief Etiquetas de los esfuerzos o de los GDLs para los que el material aporta rigidez.
+//! @brief Stiffness material contribution response identifiers.
 class ResponseId: public ID
   {
   public:

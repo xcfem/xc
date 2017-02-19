@@ -54,9 +54,9 @@ elementos.defaultMaterial= "seccion"
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 
-fuerte= beam3d.getVDirEjeFuerteGlobales()
-debil= beam3d.getVDirEjeDebilGlobales()
-angSeccion= beam3d.getAnguloEjeFuerte()
+fuerte= beam3d.getVDirStrongAxisGlobalCoord()
+debil= beam3d.getVDirWeakAxisGlobalCoord()
+angSeccion= beam3d.getStrongAxisAngle()
 ratio1= ((fuerte[0])**2+(fuerte[2])**2)
 ratio2= ((debil[0])**2+(debil[1])**2)
 ratio3= abs(angSeccion-math.pi/2)/(math.pi/2)

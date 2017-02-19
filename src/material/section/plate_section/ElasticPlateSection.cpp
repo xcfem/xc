@@ -115,7 +115,7 @@ const XC::Matrix& XC::ElasticPlateSection::getSectionTangent(void) const
     return tangent;
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix& XC::ElasticPlateSection::getInitialTangent(void) const
   { return getSectionTangent(); }
 

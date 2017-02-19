@@ -52,7 +52,7 @@ XC::RgQuadCell::RgQuadCell(Material *mat)
 XC::RgQuadCell::RgQuadCell(Material *mat, int numSubdivIJ, int numSubdivJK)
   : RegionSecc(mat), rejilla(nullptr), nDivIJ(numSubdivIJ), nDivJK(numSubdivJK) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::RgQuadCell::RgQuadCell(const RgQuadCell &otro)
   : RegionSecc(otro), rejilla(nullptr), nDivIJ(otro.nDivIJ), nDivJK(otro.nDivJK) 
   {
@@ -60,7 +60,7 @@ XC::RgQuadCell::RgQuadCell(const RgQuadCell &otro)
       alloc(*otro.rejilla);
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::RgQuadCell &XC::RgQuadCell::operator=(const RgQuadCell &otro)
   {
     RegionSecc::operator=(otro);

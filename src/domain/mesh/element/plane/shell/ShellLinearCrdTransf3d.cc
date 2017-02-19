@@ -164,7 +164,7 @@ const XC::Vector &XC::ShellLinearCrdTransf3d::local_to_global_resisting_force(co
     return pg;
   }
 
-//! @brief Transformación a globales de la matriz de rigidez (NO SE USA).
+//! @brief Transformación a globales de la stiffness matrix (NO SE USA).
 const XC::Matrix &XC::ShellLinearCrdTransf3d::local_to_global_stiff_matrix(const Matrix &kl) const
   {
     static Matrix kg(24,24);

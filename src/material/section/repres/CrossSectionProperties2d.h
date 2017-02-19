@@ -96,13 +96,13 @@ class CrossSectionProperties2d: public EntCmd, public MovableObject
       { return i; }
     inline void setI(const double &ii)
       { i= ii; }
-    //! @brief Return the rigidez a tracción.
+    //! @brief Return axial stiffness.
     inline double EA(void) const
       { return e*a; }
-    //! @brief Return the rigidez a flexión en z.
+    //! @brief Return z bending stiffness.
     inline double EI(void) const
       { return e*i; }
-    //! @brief Return the rigidez a cortante.
+    //! @brief Returns shear stiffness.
     inline double GAAlpha(void) const
       { return g*a*alpha; }
 
@@ -111,9 +111,9 @@ class CrossSectionProperties2d: public EntCmd, public MovableObject
     virtual double getI2(void) const;
     virtual EjesPrincInercia2d getEjesInercia(void) const;
     virtual Vector2d getVDirEje1(void) const;
-    virtual Vector2d getVDirEjeFuerte(void) const;
+    virtual Vector2d getVDirStrongAxis(void) const;
     virtual Vector2d getVDirEje2(void) const;
-    virtual Vector2d getVDirEjeDebil(void) const;
+    virtual Vector2d getVDirWeakAxis(void) const;
 
     const Matrix &getSectionTangent2x2(void) const;
     const Matrix &getInitialTangent2x2(void) const;

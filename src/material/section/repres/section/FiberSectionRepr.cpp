@@ -82,12 +82,12 @@ void XC::FiberSectionRepr::copia_fibras(const FiberSectionRepr &otro)
 XC::FiberSectionRepr::FiberSectionRepr(int sectionID,MaterialLoader *ml)
   :SectionRepres(sectionID, ml), sectID(sectionID) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::FiberSectionRepr::FiberSectionRepr(const FiberSectionRepr &otro)
   :SectionRepres(otro), sectID(otro.sectID)
   { copia_fibras(otro); }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::FiberSectionRepr &XC::FiberSectionRepr::operator=(const FiberSectionRepr &otro)
   {
     SectionRepres::operator=(otro);

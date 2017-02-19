@@ -136,7 +136,7 @@ double XC::UniaxialMaterial::getSecant(void) const
       return this->getTangent();
   }
 
-//! @brief Return the inversa de la rigidez.
+//! @brief Return the inverse of stiffness matrix.
 double XC::UniaxialMaterial::getFlexibility(void) const
   {
     double retval;
@@ -151,7 +151,7 @@ double XC::UniaxialMaterial::getFlexibility(void) const
     return retval;
   }
 
-//! @brief Return the inversa de la rigidez inicial.
+//! @brief Return the inverse of stiffness matrix inicial.
 double XC::UniaxialMaterial::getInitialFlexibility(void) const
   {
     double retval;
@@ -166,11 +166,11 @@ double XC::UniaxialMaterial::getInitialFlexibility(void) const
     return retval;
   }
 
-//! @brief Return the densidad del material.
+//! @brief Return the material density.
 double XC::UniaxialMaterial::getRho(void) const
   { return rho; }
 
-//! @brief Assigns la densidad del material.
+//! @brief Assigns la material density.
 void XC::UniaxialMaterial::setRho(const double &r)
   { rho= r; }
 
@@ -182,7 +182,7 @@ XC::UniaxialMaterial* XC::UniaxialMaterial::getCopy(SectionForceDeformation *s) 
 int XC::UniaxialMaterial::setInitialStrain(double strain)
   {
     std::clog << "El material: " << nombre_clase() 
-              << " no admite deformaciones iniciales." << std::endl;
+              << " no admite initial strains." << std::endl;
     return 0;
   }
 

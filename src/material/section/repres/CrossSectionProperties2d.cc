@@ -113,28 +113,28 @@ EjesPrincInercia2d XC::CrossSectionProperties2d::getEjesInercia(void) const
 Vector2d XC::CrossSectionProperties2d::getVDirEje1(void) const
   { return getEjesInercia().getVDirEje1(); }
 //! @brief Returns principal axis I (strong).
-Vector2d XC::CrossSectionProperties2d::getVDirEjeFuerte(void) const
+Vector2d XC::CrossSectionProperties2d::getVDirStrongAxis(void) const
   { return getEjesInercia().getVDirEje1(); }
 //! @brief Returns principal axis II (weak).
 Vector2d XC::CrossSectionProperties2d::getVDirEje2(void) const
   { return getEjesInercia().getVDirEje2(); }
 //! @brief Returns principal axis II (weak).
-Vector2d XC::CrossSectionProperties2d::getVDirEjeDebil(void) const
+Vector2d XC::CrossSectionProperties2d::getVDirWeakAxis(void) const
   { return getEjesInercia().getVDirEje2(); }
 
-//! @brief Return the tangent stiffness matrix.
+//! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionTangent2x2(void) const
   {
-    ks2(0,0) = EA(); //Rigidez frente al esfuerzo axil.
-    ks2(1,1) = EI(); //Rigidez frente al giro en torno a z.
+    ks2(0,0) = EA(); //Axial stiffness.
+    ks2(1,1) = EI(); //z bending stiffness.
     return ks2;
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Returns the initial tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getInitialTangent2x2(void) const
   { return getSectionTangent2x2(); }
 
-//! @brief Return the matriz de flexibilidad.
+//! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionFlexibility2x2(void) const
   {
     ks2(0,0) = 1.0/(EA());
@@ -142,33 +142,33 @@ const XC::Matrix &XC::CrossSectionProperties2d::getSectionFlexibility2x2(void) c
     return ks2;
   }
 
-//! @brief Return the matriz de flexibilidad noval.
+//! @brief Returns the initial flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getInitialFlexibility2x2(void) const
   { return getSectionFlexibility2x2(); }
 
-//! @brief Return the tangent stiffness matrix.
+//! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionTangent3x3(void) const
   {
-    ks3(0,0)= EA(); //Rigidez frente al esfuerzo axil.
-    ks3(1,1)= EI(); //Rigidez frente al giro en torno a z.
-    ks3(2,2)= GAAlpha(); //Rigidez frente a la deformación por cortante.
+    ks3(0,0)= EA(); //Axial stiffness.
+    ks3(1,1)= EI(); //z bending stiffness.
+    ks3(2,2)= GAAlpha(); //Shear stiffness.
     return ks3;
   }
 
-//! @brief Return the matriz de rigidez noval.
+//! @brief Returns the initial tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getInitialTangent3x3(void) const
   { return getSectionTangent3x3(); }
 
-//! @brief Return the matriz de flexibilidad.
+//! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionFlexibility3x3(void) const
   {
     ks3(0,0)= 1.0/(EA());
     ks3(1,1)= 1.0/(EI());
-    ks3(2,2)= 1.0/GAAlpha(); //Rigidez frente a la deformación por cortante.
+    ks3(2,2)= 1.0/GAAlpha(); //Shear stiffness.
     return ks3;
   }
 
-//! @brief Return the matriz de flexibilidad noval.
+//! @brief Returns the initial flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getInitialFlexibility3x3(void) const
   { return getSectionFlexibility3x3(); }
 

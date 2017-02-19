@@ -41,7 +41,7 @@
 XC::SetEstruct::SetEstruct(const std::string &nmb,Preprocessor *md)
   : SetBase(nmb,md) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::SetEstruct::SetEstruct(const SetEstruct &otro)
   : SetBase(otro) {}
 

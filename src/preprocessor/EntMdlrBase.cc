@@ -48,7 +48,7 @@ XC::Preprocessor *XC::EntMdlrBase::get_preprocessor(void)
 XC::EntMdlrBase::EntMdlrBase(const std::string &nmb,Preprocessor *md)
   : EntConNmb(nmb), MovableObject(0),preprocessor(md) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::EntMdlrBase::EntMdlrBase(const EntMdlrBase &otro)
   : EntConNmb(otro), MovableObject(otro), preprocessor(otro.preprocessor)
   {}

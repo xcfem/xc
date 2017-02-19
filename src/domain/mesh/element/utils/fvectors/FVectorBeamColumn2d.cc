@@ -33,7 +33,7 @@
 XC::FVectorBeamColumn2d::FVectorBeamColumn2d(void)
   { zero(); }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::FVectorBeamColumn2d::FVectorBeamColumn2d(const XC::FVectorBeamColumn2d &otro)
   {
     p[0] = otro.p[0];
@@ -54,7 +54,7 @@ XC::FVectorBeamColumn2d::FVectorBeamColumn2d(const XC::Vector &v)
       std::cerr << "FVectorBeamColumn2d::FVectorBeamColumn2d; se esperaba un vector de dimensión 3" << std::endl;
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::FVectorBeamColumn2d &XC::FVectorBeamColumn2d::operator=(const XC::FVectorBeamColumn2d &otro)
   {
     p[0] = otro.p[0];

@@ -51,11 +51,11 @@
 XC::SeccionBarraPrismatica::SeccionBarraPrismatica(int tag, int classTag,MaterialLoader *mat_ldr)
   : SectionForceDeformation(tag,classTag,mat_ldr) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::SeccionBarraPrismatica::SeccionBarraPrismatica(const SeccionBarraPrismatica &otro)
   : SectionForceDeformation(otro) {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::SeccionBarraPrismatica &XC::SeccionBarraPrismatica::operator=(const SeccionBarraPrismatica &otro)
   {
     SectionForceDeformation::operator=(otro);
@@ -66,7 +66,7 @@ XC::SeccionBarraPrismatica &XC::SeccionBarraPrismatica::operator=(const SeccionB
 int XC::SeccionBarraPrismatica::setTrialDeformationPlane(const DeformationPlane &plano)
   { return setTrialSectionDeformation(getVectorDeformacion(plano)); }
 
-//! @brief Establece el plano de deformaciones iniciales de la sección.
+//! @brief Establece el plano de initial strains de la sección.
 int XC::SeccionBarraPrismatica::setInitialDeformationPlane(const DeformationPlane &plano)
   { return setInitialSectionDeformation(getVectorDeformacion(plano)); }
 
@@ -75,7 +75,7 @@ XC::DeformationPlane XC::SeccionBarraPrismatica::getInitialDeformationPlane(void
   { return DeformationPlane(getInitialSectionDeformation()); }
 
 
-//! @brief Returns the vector de deformaciones generalizadas que corresponde
+//! @brief Returns the generalized strains vector que corresponde
 //! al plano de deformaciones being passed as parameter.
 const XC::Vector &XC::SeccionBarraPrismatica::getVectorDeformacion(const DeformationPlane &plano) const
   {
@@ -99,15 +99,15 @@ double XC::SeccionBarraPrismatica::getStrain(const double &y,const double &z) co
     return 0.0;
   }
 
-//! @brief Return the coordenada «y» del centro de gravedad de la sección.
+//! @brief Returns the coordenada «y» del centro de gravedad de la sección.
 double XC::SeccionBarraPrismatica::getCdgY(void) const
   { return 0.0; }
 
-//! @brief Return the coordenada «z» del centro de gravedad de la sección.
+//! @brief Returns the coordenada «z» del centro de gravedad de la sección.
 double XC::SeccionBarraPrismatica::getCdgZ(void) const
   { return 0.0; }
 
-//! @brief Return the posición del centro de gravedad de la sección.
+//! @brief Returns the posición del centro de gravedad de la sección.
 Pos2d XC::SeccionBarraPrismatica::getCdg(void) const
   { return Pos2d(getCdgY(),getCdgZ()); }
 
@@ -134,13 +134,13 @@ double XC::SeccionBarraPrismatica::getMy(void) const
 double XC::SeccionBarraPrismatica::getMz(void) const
   { return getStressResultant(SECTION_RESPONSE_MZ); }
 
-//! @brief Return the rigidez a tracción de la sección.
+//! @brief Returns the section axial stiffness.
 const double &XC::SeccionBarraPrismatica::EA(void) const
   { return getSectionTangent()(0,0); }
-//! @brief Return the rigidez a flexión de la sección en torno al eje z.
+//! @brief Returns the bending stiffness de la sección en torno al eje z.
 const double &XC::SeccionBarraPrismatica::EIz(void) const
   { return getSectionTangent()(1,1); }
-//! @brief Return the rigidez a flexión de la sección en torno al eje y.
+//! @brief Returns the bending stiffness de la sección en torno al eje y.
 const double &XC::SeccionBarraPrismatica::EIy(void) const
   { return getSectionTangent()(2,2); }
 //! @brief Returns the producto de inercia multiplicado por el
@@ -152,12 +152,12 @@ const double &XC::SeccionBarraPrismatica::EIyz(void) const
 double XC::SeccionBarraPrismatica::getTheta(void) const
   { return theta_inercia(EIy(),EIz(),EIyz()); }
 
-//! @brief Return the rigidez a flexión en
+//! @brief Returns the bending stiffness en
 //! torno al eje de inercia principal mayor.
 double XC::SeccionBarraPrismatica::getEI1(void) const
   { return I1_inercia(EIy(),EIz(),EIyz()); }
 
-//! @brief Return the rigidez a flexión en
+//! @brief Returns the bending stiffness en
 //! torno al eje de inercia principal menor.
 double XC::SeccionBarraPrismatica::getEI2(void) const
   { return I2_inercia(EIy(),EIz(),EIyz()); }
@@ -169,13 +169,13 @@ EjesPrincInercia2d XC::SeccionBarraPrismatica::getEjesInercia(void) const
 Vector2d XC::SeccionBarraPrismatica::getVDirEje1(void) const
   { return getEjesInercia().getVDirEje1(); }
 //! @brief Returns the vector del eje principal I.
-Vector2d XC::SeccionBarraPrismatica::getVDirEjeFuerte(void) const
+Vector2d XC::SeccionBarraPrismatica::getVDirStrongAxis(void) const
   { return getVDirEje1(); }
 //! @brief Returns the vector del eje principal II.
 Vector2d XC::SeccionBarraPrismatica::getVDirEje2(void) const
   { return getEjesInercia().getVDirEje2(); }
 //! @brief Returns the vector del eje principal II.
-Vector2d XC::SeccionBarraPrismatica::getVDirEjeDebil(void) const
+Vector2d XC::SeccionBarraPrismatica::getVDirWeakAxis(void) const
   { return getVDirEje2(); }
 
 //! @brief Returns true ifla sección está sometida
@@ -204,7 +204,7 @@ bool XC::SeccionBarraPrismatica::hayCortante(const double &tol) const
     return retval;
   }
 
-//! @brief Returns true ifla sección está sometida
+//! @brief Returns true if the section está sometida
 //! a axil.
 bool XC::SeccionBarraPrismatica::hayTorsor(const double &tol) const
   {
@@ -215,7 +215,7 @@ bool XC::SeccionBarraPrismatica::hayTorsor(const double &tol) const
     return retval;
   }
 
-//! @brief Return the fibra neutra.
+//! @brief Returns the fibra neutra.
 Recta2d XC::SeccionBarraPrismatica::getFibraNeutra(void) const
   { return getDeformationPlane().getFibraNeutra(); }
 

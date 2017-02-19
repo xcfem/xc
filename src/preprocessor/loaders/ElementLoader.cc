@@ -42,11 +42,11 @@ void XC::ElementLoader::SeedElemLoader::libera(void)
     semilla= nullptr;
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ElementLoader::SeedElemLoader::SeedElemLoader(const SeedElemLoader &otro)
   : ProtoElementLoader(otro), semilla(otro.semilla->getCopy()) {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ElementLoader::SeedElemLoader &XC::ElementLoader::SeedElemLoader::operator=(const SeedElemLoader &otro)
   {
     ProtoElementLoader::operator=(otro);

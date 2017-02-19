@@ -36,11 +36,11 @@
 XC::DqGroundMotions::DqGroundMotions(const size_t &num)
   : EntCmd(), MovableObject(0), gMotions(num,static_cast<GroundMotion *>(nullptr)) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::DqGroundMotions::DqGroundMotions(const DqGroundMotions &otro)
   : EntCmd(otro), MovableObject(0), gMotions(otro.gMotions) {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::DqGroundMotions &XC::DqGroundMotions::operator=(const DqGroundMotions &otro)
   {
     EntCmd::operator=(otro);

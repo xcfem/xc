@@ -56,7 +56,7 @@ void XC::VectorCells::alloc(const size_t i,const Cell &c)
 XC::VectorCells::VectorCells(const size_t &sz)
   : v_cell(sz,nullptr) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::VectorCells::VectorCells(const VectorCells  &otro)
   : v_cell(otro.size(),nullptr)
   {
@@ -69,7 +69,7 @@ XC::VectorCells::VectorCells(const VectorCells  &otro)
       }
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::VectorCells &XC::VectorCells::operator=(const VectorCells &otro)
   {
     resize(otro.size());

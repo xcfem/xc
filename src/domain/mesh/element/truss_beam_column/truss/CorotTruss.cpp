@@ -92,7 +92,7 @@ XC::CorotTruss::CorotTruss(int tag,int dim,const Material *ptr_mat)
 XC::CorotTruss::CorotTruss(void)
   :CorotTrussBase(0,ELE_TAG_CorotTruss,0,0,0), theMaterial(nullptr), A(0.0) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::CorotTruss::CorotTruss(const CorotTruss &otro)
   : CorotTrussBase(otro), theMaterial(nullptr), A(otro.A)
   {

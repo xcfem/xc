@@ -69,7 +69,7 @@ class FiberSectionRepr;
 //! \ingroup MATSCCModeloFibras
 //
 //! @brief Sección formada por fibras de material, con
-//! rigidez a torsión.
+//! torsional stiffness.
 class FiberSectionGJ: public FiberSection3dBase
   {
   private:

@@ -80,7 +80,7 @@ XC::ElementBase<NNODOS>::ElementBase(const ElementBase<NNODOS> &otro)
   : Element(otro), theNodes(otro.theNodes) 
   { theNodes.set_owner(this); }
 
-//! @brief Operador asignación
+//! @brief Assignment operator.
 template <int NNODOS>
 XC::ElementBase<NNODOS> &XC::ElementBase<NNODOS>::operator=(const ElementBase &otro)
   {
@@ -123,7 +123,7 @@ TIPOMAT *ElementBase<NNODOS>::cast_material(const Material *ptr_mat)
     if(!retval)
       {
 	std::cerr << "FATAL XC::ElementBase::cast_material - elemento:" << getTag() <<
-	  "no se pudo obtener una copia del material con identificador: " << ptr_mat->getTag() << std::endl;
+	  "can't get a copy of the material with tag: " << ptr_mat->getTag() << std::endl;
         abort();
       }
     return retval;

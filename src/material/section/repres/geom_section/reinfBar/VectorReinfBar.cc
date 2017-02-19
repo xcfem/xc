@@ -66,7 +66,7 @@ void XC::VectorReinfBar::alloc(const size_t i,const ReinfBar &c)
 XC::VectorReinfBar::VectorReinfBar(const size_t &sz)
   : v_rfBar(sz,nullptr) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::VectorReinfBar::VectorReinfBar(const VectorReinfBar  &otro)
   : v_rfBar(otro.size(),nullptr)
   {
@@ -79,7 +79,7 @@ XC::VectorReinfBar::VectorReinfBar(const VectorReinfBar  &otro)
       }
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::VectorReinfBar &XC::VectorReinfBar::operator=(const VectorReinfBar &otro)
   {
     resize(otro.size());

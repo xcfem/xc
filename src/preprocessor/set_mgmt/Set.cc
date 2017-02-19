@@ -50,7 +50,7 @@ XC::Set::Set(const std::string &nmb,Preprocessor *md)
   : SetMeshComp(nmb,md), puntos(this), lineas(this), surfaces(this),
     cuerpos(this), uniform_grids(this) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::Set::Set(const Set &otro)
   : SetMeshComp(otro)
   {

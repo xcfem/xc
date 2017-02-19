@@ -84,18 +84,17 @@ int XC::NewUniaxialMaterial::setTrialStrain(double strain, double strainRate)
     return 0;
   }
 
-//! @brief Return the tensión del material.
+//! @brief Return the material stress.
 double XC::NewUniaxialMaterial::getStress(void) const
   { return Tstress; }
 
-//! @brief Returns the módulo de rigidez tangente del material.
+//! @brief Returns the material tangent stiffness modulus.
 double XC::NewUniaxialMaterial::getTangent(void) const
   { return Ttangent; }
 
-//! @brief Returns the módulo de rigidez tangente inicial del material.
+//! @brief Returns the material initial tangent stiffness modulus.
 double XC::NewUniaxialMaterial::getInitialTangent(void) const
   {
-    // return the initial tangent
     return 0.0;
   }
 

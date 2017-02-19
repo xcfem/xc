@@ -24,7 +24,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         eTag= tags[i]
         elem= preprocessor.getElementLoader.getElement(eTag)
         if(self.component=='axialComponent'):
-          self.vDir= elem.getVDirEjeDebilGlobales
+          self.vDir= elem.getVDirWeakAxisGlobalCoord
           indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.axialComponent,el.axialComponent)
         elif(self.component=='transComponent'):
           self.vDir= elem.getCoordTransf.getJVector 

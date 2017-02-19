@@ -147,8 +147,8 @@ class ElasticBeam2d: public ProtoBeam2d
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
-    const Vector &getVDirEjeFuerteGlobales(void) const;
-    const Vector &getVDirEjeDebilGlobales(void) const;
+    const Vector &getVDirStrongAxisGlobalCoord(void) const;
+    const Vector &getVDirWeakAxisGlobalCoord(void) const;
 
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;            

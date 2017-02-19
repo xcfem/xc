@@ -41,7 +41,7 @@ XC::CorotTrussBase::CorotTrussBase(int tag, int classTag,int dimension)
   :ProtoTruss(tag,classTag,0,0,0,dimension), Lo(0.0), Ln(0.0), R(3,3)
   {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::CorotTrussBase::CorotTrussBase(const CorotTrussBase &otro)
   : ProtoTruss(otro), Lo(otro.Lo), Ln(otro.Ln), R(otro.R)
   {}

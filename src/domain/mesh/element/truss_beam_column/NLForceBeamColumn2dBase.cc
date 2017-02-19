@@ -62,14 +62,14 @@ XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(int tag,int classTag,int nu
     fs(numSec), vs(numSec), Ssr(numSec), vscommit(numSec), p0()
   {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(const NLForceBeamColumn2dBase &otro)
   : BeamColumnWithSectionFDTrf2d(otro), rho(otro.rho), maxIters(otro.maxIters), tol(otro.tol), initialFlag(otro.initialFlag),
     kv(otro.kv), Se(otro.Se), kvcommit(otro.kvcommit), Secommit(otro.Secommit),
     fs(otro.fs), vs(otro.vs), Ssr(otro.Ssr), vscommit(otro.vscommit), sp(otro.sp), p0(otro.p0), Ki(otro.Ki)
   {}
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::NLForceBeamColumn2dBase &XC::NLForceBeamColumn2dBase::operator=(const NLForceBeamColumn2dBase &)
   {
     std::cerr << "NLForceBeamColumn2dBase: No se debe llamar al operador de asignación."

@@ -67,7 +67,7 @@ XC::MEDMesh::MEDMesh(const MEDMesh &otro)
     alloc(otro);
   }
 
-//! Operador asignación.
+//! Assignment operator.
 XC::MEDMesh &XC::MEDMesh::operator=(const MEDMesh &otro)
   {
     MEDObject::operator=(otro);

@@ -73,7 +73,7 @@ class NDMaterial;
 //! @brief ??
 class GenericSectionNd: public SectionForceDeformation
   {
-    //XXX Agregar constructor de copia y operador de asignación.
+    //XXX Add copy constructor and assignment operator.
   protected:
     NDMaterial *theModel;
     ResponseId *code;

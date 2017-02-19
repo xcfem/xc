@@ -37,13 +37,13 @@
 XC::LinearBucklingIntegrator::LinearBucklingIntegrator(SoluMethod *owr)
   :EigenIntegrator(owr) {}
 
-//! @brief Ensambla la matriz de rigidez en el paso siguiente a formKt()
-//! y la guarda en la matriz A del SOE.
+//! @brief Assemblies stiffness matrix for the step following formKt()
+//! and stores it in the SOE A matrix.
 int XC::LinearBucklingIntegrator::formKtplusDt(void)
   { return EigenIntegrator::formK(); }
 
-//! @brief Ensambla la matriz de rigidez en el paso previo
-//! y la guarda en la matriz M del SOE.
+//! @brief Assemblies previous step stiffness matrix 
+//! and stores it in the SOE M matrix.
 int XC::LinearBucklingIntegrator::formKt(void)
   {
     EigenSOE *theSOE= getEigenSOEPtr();
@@ -61,7 +61,7 @@ int XC::LinearBucklingIntegrator::formKt(void)
     // loop through the FE_Elements getting them to form the tangent
     // FE_EleIter &theEles1 = mdl->getFEs();
     FE_Element *elePtr= nullptr;
-    flagK= 0; //matriz de masas (ver formEleTangent)
+    flagK= 0; //mass matrix (see formEleTangent)
     theSOE->zeroM(); //hace nula la matriz M.
 
     // while((elePtr = theEles1()) != 0) 

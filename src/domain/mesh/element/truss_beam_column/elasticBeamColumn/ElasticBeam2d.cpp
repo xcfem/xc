@@ -154,7 +154,7 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1,
 
   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &otro)
   :ProtoBeam2d(otro), eInic(otro.eInic), alpha(otro.alpha), d(otro.d), rho(otro.rho),
   q(otro.q), theCoordTransf(nullptr)
@@ -170,7 +170,7 @@ XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &otro)
     p0[2] = otro.p0[2];
   }
 
-//! @brief Operador asignación.
+//! @brief Assignment operator.
 XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const XC::ElasticBeam2d &otro)
   {
     ProtoBeam2d::operator=(otro);
@@ -288,16 +288,16 @@ int XC::ElasticBeam2d::update(void)
 
 //! @brief Returns the direction vector of element strong axis
 //! expressed in the global coordinate system.
-const XC::Vector &XC::ElasticBeam2d::getVDirEjeFuerteGlobales(void) const
+const XC::Vector &XC::ElasticBeam2d::getVDirStrongAxisGlobalCoord(void) const
   {
     if(theCoordTransf)
       {
-        const Vector eF= getVDirEjeFuerteLocales();
+        const Vector eF= getVDirStrongAxisLocalCoord();
         return theCoordTransf->getVectorGlobalCoordFromLocal(eF);
       }
     else
       {
-        std::cerr << "ElasticBeam2d::getVDirEjeFuerteGlobales; no se ha asignado una coordinate transformation."
+        std::cerr << "ElasticBeam2d::getVDirStrongAxisGlobalCoord; no se ha asignado una coordinate transformation."
                   << std::endl;
         return P;
       }
@@ -305,16 +305,16 @@ const XC::Vector &XC::ElasticBeam2d::getVDirEjeFuerteGlobales(void) const
 
 //! @brief Returns the direction vector of element weak axis
 //! expressed in the global coordinate system.
-const XC::Vector &XC::ElasticBeam2d::getVDirEjeDebilGlobales(void) const
+const XC::Vector &XC::ElasticBeam2d::getVDirWeakAxisGlobalCoord(void) const
   {
     if(theCoordTransf)
       {
-        const Vector eD= getVDirEjeDebilLocales();
+        const Vector eD= getVDirWeakAxisLocalCoord();
         return theCoordTransf->getVectorGlobalCoordFromLocal(eD);
       }
     else
       {
-        std::cerr << "ElasticBeam2d::getVDirEjeDebilGlobales; no se ha asignado una coordinate transformation."
+        std::cerr << "ElasticBeam2d::getVDirWeakAxisGlobalCoord; no se ha asignado una coordinate transformation."
                   << std::endl;
         return P;
       }
