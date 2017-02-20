@@ -38,7 +38,7 @@ class Matrix;
 
 //! \ingroup ElemPlanos
 //
-//! @brief Datos auxiliares para los elementos «shell».
+//! @brief Auxiliary data for shell elements.
 class ShellBData
   {
   private: 

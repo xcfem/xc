@@ -99,7 +99,7 @@ XC::DbTagData &XC::BidimStrainLoad::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los datos through the channel being passed as parameter.
+//! @brief Send data through the channel being passed as parameter.
 int XC::BidimStrainLoad::sendData(CommParameters &cp)
   {
     int res= BidimLoad::sendData(cp);
@@ -107,7 +107,7 @@ int XC::BidimStrainLoad::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos through the channel being passed as parameter.
+//! @brief Receive data through the channel being passed as parameter.
 int XC::BidimStrainLoad::recvData(const CommParameters &cp)
   {
     int res= BidimLoad::recvData(cp);

@@ -36,8 +36,8 @@ class Channel;
 
 //! @ingroup IPComm
 //
-//! @brief Datos acerca de la posición, tamaño,... del
-//! objeto a transmitir.
+//! @brief Data about the postion, size,... of the
+//! object to transmit.
 class ChannelQueue: public std::deque<Channel *>
   {
   };

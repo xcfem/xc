@@ -174,7 +174,7 @@ int XC::UniaxialFiber3d::getOrder(void) const
 const XC::ResponseId &XC::UniaxialFiber3d::getType(void) const
   { return RespFiberSection3d; }
 
-//! @brief Envia los datos through the channel being passed as parameter.
+//! @brief Send data through the channel being passed as parameter.
 int XC::UniaxialFiber3d::sendData(CommParameters &cp)
   {
     int res= UniaxialFiber::sendData(cp);
@@ -182,7 +182,7 @@ int XC::UniaxialFiber3d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos through the channel being passed as parameter.
+//! @brief Receive data through the channel being passed as parameter.
 int XC::UniaxialFiber3d::recvData(const CommParameters &cp)
   {    
     int res= UniaxialFiber::recvData(cp);
@@ -190,7 +190,7 @@ int XC::UniaxialFiber3d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia el objeto through the channel being passed as parameter.
+//! @brief Sends object through the channel being passed as parameter.
 int XC::UniaxialFiber3d::sendSelf(CommParameters &cp)
    {
     setDbTag(cp);

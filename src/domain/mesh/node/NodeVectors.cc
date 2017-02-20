@@ -40,8 +40,6 @@ void XC::NodeVectors::libera(void)
     commitData= nullptr;
     if(trialData) delete trialData;
     trialData= nullptr;
-    if(data) delete [] data;
-    data= nullptr;
   }
 
 void XC::NodeVectors::copia(const NodeVectors &otro)
@@ -58,18 +56,18 @@ void XC::NodeVectors::copia(const NodeVectors &otro)
             exit(-1);
           }
         for(register size_t i=0;i<sz;i++)
-          data[i] = otro.data[i];
+          values[i] = otro.values[i];
       }
   }
 
 //! @brief Constructor.
 XC::NodeVectors::NodeVectors(const size_t &nv)
-  :EntCmd(),MovableObject(NOD_TAG_NodeVectors), numVectors(nv), commitData(nullptr),trialData(nullptr),data(nullptr) {}
+  :EntCmd(),MovableObject(NOD_TAG_NodeVectors), numVectors(nv), commitData(nullptr),trialData(nullptr), values() {}
 
 
 //! @brief Constructor de copia.
 XC::NodeVectors::NodeVectors(const NodeVectors &otro)
-  : EntCmd(otro),MovableObject(NOD_TAG_NodeVectors), numVectors(otro.numVectors), commitData(nullptr), trialData(nullptr), data(nullptr)
+  : EntCmd(otro),MovableObject(NOD_TAG_NodeVectors), numVectors(otro.numVectors), commitData(nullptr), trialData(nullptr), values()
   { copia(otro); }
 
 XC::NodeVectors &XC::NodeVectors::operator=(const NodeVectors &otro)
@@ -93,7 +91,7 @@ size_t XC::NodeVectors::getVectorsSize(void) const
       return 0;
   }
 
-//! @brief Returns the vector de datos.
+//! @brief Returns the data vector.
 const XC::Vector &XC::NodeVectors::getData(const size_t &nDOF) const
   {
     if(!commitData)
@@ -116,7 +114,7 @@ const XC::Vector &XC::NodeVectors::getCommitData(void) const
     return *commitData;
   }
 
-//! @brief Returns the vector de datos de prueba.
+//! @brief Returns the data vector de prueba.
 const XC::Vector &XC::NodeVectors::getTrialData(const size_t &nDOF) const
   {
     if(!trialData)
@@ -149,8 +147,8 @@ int XC::NodeVectors::setTrialData(const size_t &nDOF,const double &value,const s
 
     // perform the assignment .. we dont't go through Vector interface
     // as we are sure of size and this way is quicker
-    if(data)
-      data[dof]= value;
+    if(!values.Nulo())
+      values[dof]= value;
     return 0;
   }
 
@@ -167,7 +165,7 @@ int XC::NodeVectors::setTrialData(const size_t &nDOF,const Vector &newTrialData)
     // construct memory and Vectors for trial and committed
     // accel on first call to this method, getTrialData(),
     // getData(), or incrTrialData()
-    if(!data)
+    if(values.Nulo())
       {
         if(this->createData(nDOF) < 0)
           {
@@ -179,7 +177,7 @@ int XC::NodeVectors::setTrialData(const size_t &nDOF,const Vector &newTrialData)
     // perform the assignment .. we dont't go through XC::Vector interface
     // as we are sure of size and this way is quicker
     for(size_t i=0;i<nDOF;i++)
-      data[i]= newTrialData(i);
+      values[i]= newTrialData(i);
     return 0;
   }
 
@@ -194,7 +192,7 @@ int XC::NodeVectors::incrTrialData(const size_t &nDOF,const Vector &incrData)
       }
 
     // create a copy if no trial exists andd add committed
-    if(!data)
+    if(values.Nulo())
       {
         if(this->createData(nDOF) < 0)
           {
@@ -204,7 +202,7 @@ int XC::NodeVectors::incrTrialData(const size_t &nDOF,const Vector &incrData)
       }
     // set trial = incr + trial
     for(size_t i= 0;i<nDOF;i++)
-      data[i]+= incrData(i);
+      values[i]+= incrData(i);
     return 0;
   }
 
@@ -214,7 +212,7 @@ int XC::NodeVectors::commitState(const size_t &nDOF)
     if(trialData)
       {
         for(register size_t i=0; i<nDOF; i++)
-          data[i+nDOF] = data[i];
+          values[i+nDOF] = values[i];
       }
     return 0;
   }
@@ -224,10 +222,10 @@ int XC::NodeVectors::commitState(const size_t &nDOF)
 int XC::NodeVectors::revertToLastCommit(const size_t &nDOF)
   {
     // check data exists, if does set trial = last commit, incr = 0
-    if(data)
+    if(!values.Nulo())
       {
         for(size_t i=0;i<nDOF;i++)
-          data[i] = data[nDOF+i];
+          values[i] = values[nDOF+i];
       }
     return 0;
   }
@@ -238,10 +236,10 @@ int XC::NodeVectors::revertToStart(const size_t &nDOF)
   {
     // check data exists, if does set all to zero
     const size_t sz= numVectors*nDOF;
-    if(data)
+    if(!values.Nulo())
       {
         for(size_t i=0;i<sz;i++)
-          data[i]= 0.0;
+          values[i]= 0.0;
       }
     return 0;
   }
@@ -254,15 +252,15 @@ int XC::NodeVectors::createData(const size_t &nDOF)
     libera();
     // trial , committed, incr = (committed-trial)
     const size_t sz= numVectors*nDOF;
-    data= new double[sz];
+    values= Vector(sz);
 
-    if(data)
+    if(!values.Nulo())
       {
         for(size_t i=0;i<sz;i++)
-          data[i]= 0.0;
+          values[i]= 0.0;
 
-        trialData= new Vector(&data[0], nDOF);
-        commitData= new Vector(&data[nDOF], nDOF);
+        trialData= new Vector(&values[0], nDOF);
+        commitData= new Vector(&values[nDOF], nDOF);
 
         if(!commitData || !trialData)
           {
@@ -290,36 +288,36 @@ XC::DbTagData &XC::NodeVectors::getDbTagData(void) const
 int XC::NodeVectors::sendData(CommParameters &cp)
   {
     int res= 0;
-    ID datos(3);
+    ID idData(3);
     if(!commitData)
-      datos(0) = 1;
+      idData(0) = 1;
     else
       {
-        datos(0)= 0;
-        datos(1)= cp.getDbTag();
-        datos(2)= commitData->Size();
-        res+= cp.sendVector(*commitData,datos(1));
+        idData(0)= 0;
+        idData(1)= cp.getDbTag();
+        idData(2)= commitData->Size();
+        res+= cp.sendVector(*commitData,idData(1));
         if(res < 0)
           {
             std::cerr << "NodeVectors::sendSelf() - failed to send Disp data\n";
             return res;
           }
       }
-    res+= cp.sendID(datos,getDbTagData(),CommMetaData(1));
+    res+= cp.sendID(idData,getDbTagData(),CommMetaData(1));
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::NodeVectors::recvData(const CommParameters &cp)
   {
-    ID datos(3);
-    int res= cp.receiveID(datos,getDbTagData(),CommMetaData(1));
+    ID idData(3);
+    int res= cp.receiveID(idData,getDbTagData(),CommMetaData(1));
 
 
-    const int dbTag1= datos(1);
-    const int nDOF= datos(2);
+    const int dbTag1= idData(1);
+    const int nDOF= idData(2);
 
-    if(datos(0) == 0)
+    if(idData(0) == 0)
       {
         // create the disp vectors if node is a total blank
         createData(nDOF);
@@ -332,7 +330,7 @@ int XC::NodeVectors::recvData(const CommParameters &cp)
 
         // set the trial quantities equal to committed
         for(int i=0; i<nDOF; i++)
-          data[i] = data[i+nDOF];  // set trial equal commited
+          values[i]= values[i+nDOF]; // set trial equal commited
       }
     else if(commitData)
       {

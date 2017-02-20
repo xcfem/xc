@@ -66,22 +66,22 @@ XC::DrainBilinearMaterial::DrainBilinearMaterial(int tag,
 // 17 history variables and 16 material parameters
  XC::DrainMaterial(tag, MAT_TAG_DrainBilinear, 17, 16, b)
 {
-	data[0]  = E;
-	data[1]  = fyp;
-	data[2]  = fyn;
-	data[3]  = alpha;
-	data[4]  = ecaps;
-	data[5]  = ecapk;
-	data[6]  = ecapa;
-	data[7]  = ecapd;
-	data[8]  = cs;
-	data[9]  = ck;
-	data[10] = ca;
-	data[11] = cd;
-	data[12] = capSlope;
-	data[13] = capDispP;
-	data[14] = capDispN;
-	data[15] = res;
+	matParams[0]  = E;
+	matParams[1]  = fyp;
+	matParams[2]  = fyn;
+	matParams[3]  = alpha;
+	matParams[4]  = ecaps;
+	matParams[5]  = ecapk;
+	matParams[6]  = ecapa;
+	matParams[7]  = ecapd;
+	matParams[8]  = cs;
+	matParams[9]  = ck;
+	matParams[10] = ca;
+	matParams[11] = cd;
+	matParams[12] = capSlope;
+	matParams[13] = capDispP;
+	matParams[14] = capDispN;
+	matParams[15] = res;
 
 	// Initialize history variables
 	this->revertToStart();
@@ -92,7 +92,7 @@ XC::DrainBilinearMaterial::DrainBilinearMaterial(int tag, const XC::Vector &inpu
  XC::DrainMaterial(tag, MAT_TAG_DrainBilinear, 17, 16, b)
 {
 	for (int i = 0; i < 16; i++)
-		data[i] = input(i);
+		matParams[i] = input(i);
 
 	// Initialize history variables
 	this->revertToStart();
@@ -111,21 +111,21 @@ int XC::DrainBilinearMaterial::revertToStart(void)
 {
 	hstv[0]  = 0.0;
 	hstv[1]  = 0.0;
-	hstv[2]  = data[1];		// fyp
-	hstv[3]  = data[1];		// fyp
-	hstv[4]  = data[2];		// fyn
-	hstv[5]  = data[2];		// fyn
-	hstv[6]  = data[0];		// E
-	hstv[7]  = data[0];		// E
-	hstv[8]  = data[13];	// capDispP
-	hstv[9]  = data[13];	// capDispP
-	hstv[10] = data[14];	// capDispN
-	hstv[11] = data[14];	// capDispN
+	hstv[2]  = matParams[1];		// fyp
+	hstv[3]  = matParams[1];		// fyp
+	hstv[4]  = matParams[2];		// fyn
+	hstv[5]  = matParams[2];		// fyn
+	hstv[6]  = matParams[0];		// E
+	hstv[7]  = matParams[0];		// E
+	hstv[8]  = matParams[13];	// capDispP
+	hstv[9]  = matParams[13];	// capDispP
+	hstv[10] = matParams[14];	// capDispN
+	hstv[11] = matParams[14];	// capDispN
 	hstv[12] = 0.0;
 	hstv[13] = 0.0;
 	hstv[14] = 0.0;
-	hstv[15] = data[0];		// E
-	hstv[16] = data[15];	// res
+	hstv[15] = matParams[0];		// E
+	hstv[16] = matParams[15];	// res
 
 	// Set trial history variables to committed values
 	for (int i = 0; i < 17; i++)

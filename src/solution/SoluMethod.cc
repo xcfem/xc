@@ -646,7 +646,7 @@ XC::EigenAlgorithm *XC::SoluMethod::getEigenSolutionAlgorithmPtr(void)
   {
     EigenAlgorithm *ptr= dynamic_cast<EigenAlgorithm *>(theSolnAlgo);
     if(!ptr)
-      std::clog << "SoluMethod; el algoritmo no sirve para obtener eigenvalues." << std::endl;
+      std::clog << "SoluMethod; the algorithm can't compute eigenvalues." << std::endl;
     return ptr;
   }
 

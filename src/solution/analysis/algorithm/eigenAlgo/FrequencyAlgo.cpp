@@ -101,7 +101,7 @@ int XC::FrequencyAlgo::solveCurrentStep(int nModes)
         return -3;
       }
 
-    if(theSOE->solve(nModes) < 0) //Calcula los modos propios.
+    if(theSOE->solve(nModes) < 0) //Computes eigenmodes.
       {
         std::cerr << "Warning XC::FrequencyAlgo::solveCurrentStep() - ";
         std::cerr << "the XC::EigenSOE failed in solve().\n";

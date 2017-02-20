@@ -186,7 +186,7 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
 //! - quad4n[tag]: Define un elemento cuadrilátero de cuatro nodos (FourNodeQuad),
 //! - tri31[tag]: Define un elemento triangular de tres nodos y un sólo punto de gauss (Tri31),
 //!   for plane problems.
-//! - brick[tag]: Define un elemento hexaédrico de ocho nodos (Brick),
+//! - brick[tag]: Defines an eight node hexahedron (Brick),
 //!   para solid analysis.
 //! - zero_length[tag]: Define un elemento de dimensión cero (ZeroLength).
 //! - zero_length_section[tag]: Define un elemento de dimensión cero (ZeroLengthSection) con material de tipo sección.

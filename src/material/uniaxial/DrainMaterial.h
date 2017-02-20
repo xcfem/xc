@@ -80,7 +80,7 @@ class DrainMaterial : public UniaxialMaterial
     double tangent; //!< Trial tangent
   protected:
     
-    std::vector<double> data; //!< Material parameters array
+    std::vector<double> matParams; //!< Material parameters array
     std::vector<double> hstv; //!< History array: first half is committed, second half is trial
 
     int numData; //!< Number of material parameters

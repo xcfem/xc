@@ -40,8 +40,8 @@ namespace XC {
 
 //! @ingroup GMotion
 //
-//! @brief Datos que definen las aceleraciones velocidades y
-//! desplazamientos del terreno producidos por un terremoto.
+//! @brief Data that define acceleration, velocities and
+//! displacements due to a earthquake.
 class MotionHistory: public EntCmd
   {
   private:

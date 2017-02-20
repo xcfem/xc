@@ -66,13 +66,13 @@ XC::FedeasBond2Material::FedeasBond2Material(int tag,
   : FedeasBondMaterial(tag, MAT_TAG_FedeasBond2, 27, 15,u1p,q1p,u2p,u3p,q3p,u1n,q1n,u2n,u3n,q3n,s0,bb)// 27 history variables and 15 material parameters
   {
 
-    data[12] = alp;
-    data[13] = aln;
+    matParams[12] = alp;
+    matParams[13] = aln;
 
     const double E0p = q1p*u1p/(1.0+bb) + q1p*(u2p-u1p) + 0.5*(q1p+q3p)*(u3p-u2p);
     const double E0n = q1n*u1n/(1.0+bb) + q1n*(u2n-u1n) + 0.5*(q1n+q3n)*(u3n-u2n);
 
-    data[14]= (E0p > E0n) ? E0p : E0n;
+    matParams[14]= (E0p > E0n) ? E0p : E0n;
 
   }
 

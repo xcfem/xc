@@ -71,7 +71,7 @@
 
 XC::FedeasMaterial::FedeasMaterial(int tag, int classTag, int nhv, int ndata)
   :UniaxialMaterial(tag,classTag),
-   data(nullptr), hstv(nullptr), numData(ndata), numHstv(nhv), converged(), trial()
+   matParams(nullptr), hstv(nullptr), numData(ndata), numHstv(nhv), converged(), trial()
   {
     if(numHstv < 0)
       numHstv = 0;
@@ -95,8 +95,8 @@ XC::FedeasMaterial::FedeasMaterial(int tag, int classTag, int nhv, int ndata)
   
   if (numData > 0) {
     // Allocate material parameter array
-    data = new double[numData];
-    if (data == 0) {
+    matParams = new double[numData];
+    if (matParams == 0) {
       std::cerr << "XC::FedeasMaterial::FedeasMaterial -- failed to allocate data array -- type : " <<
         this->getClassTag() << std::endl;
       exit(-1);
@@ -104,7 +104,7 @@ XC::FedeasMaterial::FedeasMaterial(int tag, int classTag, int nhv, int ndata)
                             
     // Initialize to zero
     for (int i = 0; i < numData; i++)
-      data[i] = 0.0;
+      matParams[i] = 0.0;
   }
 }
 
@@ -113,9 +113,9 @@ XC::FedeasMaterial::~FedeasMaterial(void)
     if(hstv)
       delete [] hstv;
     hstv= nullptr;
-    if(data)
-      delete [] data;
-    data= nullptr;
+    if(matParams)
+      delete [] matParams;
+    matParams= nullptr;
   }
 
 int XC::FedeasMaterial::setTrialStrain(double strain, double strainRate)
@@ -197,7 +197,7 @@ int XC::FedeasMaterial::sendData(CommParameters &cp)
   {
     int res= UniaxialMaterial::sendData(cp);
     setDbTagDataPos(4,numData);
-    res+= cp.sendDoublePtr(data,getDbTagData(),ArrayCommMetaData(2,3,4));
+    res+= cp.sendDoublePtr(matParams,getDbTagData(),ArrayCommMetaData(2,3,4));
     setDbTagDataPos(7,numHstv);
     res+= cp.sendDoublePtr(hstv,getDbTagData(),ArrayCommMetaData(5,6,7));
     res+= cp.sendMovable(converged,getDbTagData(),CommMetaData(8));
@@ -210,9 +210,9 @@ int XC::FedeasMaterial::recvData(const CommParameters &cp)
   {
     int res= UniaxialMaterial::recvData(cp);
     numData= getDbTagDataPos(4);
-    data= cp.receiveDoublePtr(data,getDbTagData(),ArrayCommMetaData(2,3,4));
+    matParams= cp.receiveDoublePtr(matParams,getDbTagData(),ArrayCommMetaData(2,3,4));
     numHstv= getDbTagDataPos(7);
-    data= cp.receiveDoublePtr(hstv,getDbTagData(),ArrayCommMetaData(5,6,7));
+    hstv= cp.receiveDoublePtr(hstv,getDbTagData(),ArrayCommMetaData(5,6,7));
     res+= cp.receiveMovable(converged,getDbTagData(),CommMetaData(8));
     res+= cp.receiveMovable(trial,getDbTagData(),CommMetaData(9));
     return res;

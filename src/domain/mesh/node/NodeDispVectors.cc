@@ -116,9 +116,9 @@ int XC::NodeDispVectors::setTrialDispComponent(const size_t &nDOF,const double &
     // perform the assignment .. we dont't go through Vector interface
     // as we are sure of size and this way is quicker
     const double tDisp = value;
-    data[dof+2*nDOF]= tDisp - data[dof+nDOF];
-    data[dof+3*nDOF]= tDisp - data[dof];
-    data[dof]= tDisp;
+    values[dof+2*nDOF]= tDisp - values[dof+nDOF];
+    values[dof+3*nDOF]= tDisp - values[dof];
+    values[dof]= tDisp;
 
     return 0;
   }
@@ -149,9 +149,9 @@ int XC::NodeDispVectors::setTrialDisp(const size_t &nDOF,const Vector &newTrialD
     for(size_t i=0;i<nDOF;i++)
       {
         const double tDisp = newTrialDisp(i);
-        data[i+2*nDOF]= tDisp - data[i+nDOF];
-        data[i+3*nDOF]= tDisp - data[i];
-        data[i] = tDisp;
+        values[i+2*nDOF]= tDisp - values[i+nDOF];
+        values[i+3*nDOF]= tDisp - values[i];
+        values[i] = tDisp;
       }
     return 0;
   }
@@ -177,9 +177,9 @@ int XC::NodeDispVectors::incrTrialDisp(const size_t &nDOF,const XC::Vector &incr
         for(size_t i=0;i<nDOF;i++)
           {
             double incrDispI = incrDispl(i);
-            data[i]= incrDispI;
-            data[i+2*nDOF]= incrDispI;
-            data[i+3*nDOF]= incrDispI;
+            values[i]= incrDispI;
+            values[i+2*nDOF]= incrDispI;
+            values[i+3*nDOF]= incrDispI;
           }
         return 0;
       }
@@ -188,9 +188,9 @@ int XC::NodeDispVectors::incrTrialDisp(const size_t &nDOF,const XC::Vector &incr
     for(size_t i= 0;i<nDOF;i++)
       {
         double incrDispI = incrDispl(i);
-        data[i]+= incrDispI;
-        data[i+2*nDOF]+= incrDispI;
-        data[i+3*nDOF]= incrDispI;
+        values[i]+= incrDispI;
+        values[i+2*nDOF]+= incrDispI;
+        values[i+3*nDOF]= incrDispI;
       }
     return 0;
   }
@@ -202,9 +202,9 @@ int XC::NodeDispVectors::commitState(const size_t &nDOF)
       {
         for(size_t i=0; i<nDOF; i++)
           {
-            data[i+nDOF]= data[i];
-            data[i+2*nDOF]= 0.0;
-            data[i+3*nDOF]= 0.0;
+            values[i+nDOF]= values[i];
+            values[i+2*nDOF]= 0.0;
+            values[i+3*nDOF]= 0.0;
           }
       }
     return 0;
@@ -214,13 +214,13 @@ int XC::NodeDispVectors::commitState(const size_t &nDOF)
 int XC::NodeDispVectors::revertToLastCommit(const size_t &nDOF)
   {
     // check disp exists, if does set trial = last commit, incr = 0
-    if(data)
+    if(!values.Nulo())
       {
         for(size_t i=0;i<nDOF;i++)
           {
-            data[i] = data[i+nDOF];
-            data[i+2*nDOF]= 0.0;
-            data[i+3*nDOF]= 0.0;
+            values[i] = values[i+nDOF];
+            values[i+2*nDOF]= 0.0;
+            values[i+3*nDOF]= 0.0;
           }
       }
     return 0;
@@ -240,8 +240,8 @@ int XC::NodeDispVectors::createDisp(const size_t &nDOF)
     // trial , committed, incr = (committed-trial)
     NodeVectors::createData(nDOF);
 
-    incrDisp = new Vector(&data[2*nDOF], nDOF);
-    incrDeltaDisp = new Vector(&data[3*nDOF], nDOF);
+    incrDisp = new Vector(&values[2*nDOF], nDOF);
+    incrDeltaDisp = new Vector(&values[3*nDOF], nDOF);
 
     if(incrDisp == nullptr || incrDeltaDisp == nullptr)
       {

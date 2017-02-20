@@ -125,16 +125,16 @@ XC::Vector XC::VectorReinfBar::getCdgHomogenizedSection(const double &E0) const
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
 
     Vector retval(2);
-    double peso= 0.0;
+    double weight= 0.0;
     double divisor= 0.0;
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
         if(mat)
           {
-            peso= mat->getTangent()/E0*(*i)->getArea();
-            retval+= peso*(*i)->getPosition();
-            divisor+= peso;
+            weight= mat->getTangent()/E0*(*i)->getArea();
+            retval+= weight*(*i)->getPosition();
+            divisor+= weight;
           }
         else
 	  std::cerr << "VectorReinfBar::getCdgHomogenizedSection; region material undefined." << std::endl;
@@ -227,13 +227,13 @@ double XC::VectorReinfBar::getAreaGrossSection(void) const
 XC::Vector XC::VectorReinfBar::getCdgGrossSection(void) const
   {
     Vector retval(2);
-    double peso= 0.0;
+    double weight= 0.0;
     double divisor= 0.0;
     for(const_iterator i= begin();i!=end();i++)
       {
-        peso= (*i)->getArea();
-        retval+= peso*(*i)->getPosition();
-        divisor+= peso;
+        weight= (*i)->getArea();
+        retval+= weight*(*i)->getPosition();
+        divisor+= weight;
       }
     retval/= divisor;
     return retval;

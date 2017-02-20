@@ -48,17 +48,17 @@ class DistributedLinSOE: public DistributedObj
   protected:
     std::vector<ID> localCol;
 
-    int sendGraph(Graph &theGraph,ID &datos);
+    int sendGraph(Graph &,ID &);
     int getSubGraphs(Graph &);
-    int sendSizeData(const ID &datos);
-    void calcLocalMap(const int &size);
-    int getSendID(CommParameters &cp);
+    int sendSizeData(const ID &);
+    void calcLocalMap(const int &);
+    int getSendID(CommParameters &);
     int send(CommParameters &);
     int receive(const CommParameters &);
 
     DistributedLinSOE(void);
   public:
-    int setChannels(const ChannelQueue &theChannels);
+    int setChannels(const ChannelQueue &);
   };
 } // end of XC namespace
 

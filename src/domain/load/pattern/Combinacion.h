@@ -74,7 +74,7 @@ class Combinacion: public ForceReprComponent
   private:
     std::string nombre;
     TDescomp descomp;
-    //sólo se usa para recibir datos.
+    //used only to receive data.
     static std::map<int,std::string> map_str_descomp;
   protected:
     void set_gamma_f(void);

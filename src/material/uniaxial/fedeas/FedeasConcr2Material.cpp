@@ -63,9 +63,9 @@ XC::FedeasConcr2Material::FedeasConcr2Material(int tag,double fc, double ec, dou
 // 2 history variables and 7 material parameters
  XC::FedeasConcrMaterial(tag, MAT_TAG_FedeasConcrete2, 2, 7,fc,ec,fu,eu)
   {
-    data[4]  = ratio;
-    data[5]  = ft;
-    data[6]  = Ets;
+    matParams[4]  = ratio;
+    matParams[5]  = ft;
+    matParams[6]  = Ets;
   }
 
 XC::FedeasConcr2Material::FedeasConcr2Material(int tag, const XC::Vector &d):

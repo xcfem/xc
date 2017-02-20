@@ -447,52 +447,49 @@ int XC::Matrix::addMatrix(double factThis, const Matrix &other, double factOther
     if(factThis == 1.0) {
 
       // want: this += other * factOther
+      double *dblDataPtr= getDataPtr();
       if(factOther == 1.0) {
-	double *dataPtr= getDataPtr();
 	const double *otherDataPtr= other.getDataPtr();		    
 	for(int i=0; i<dataSize; i++)
-	  *dataPtr++ += *otherDataPtr++;
+	  *dblDataPtr++ += *otherDataPtr++;
       } else {
-	double *dataPtr= getDataPtr();
 	const double *otherDataPtr= other.getDataPtr();
 	for(int i=0; i<dataSize; i++)
-	  *dataPtr++ += *otherDataPtr++ * factOther;
+	  *dblDataPtr++ += *otherDataPtr++ * factOther;
       }
     } 
 
     else if(factThis == 0.0) {
 
       // want: this= other * factOther
+      double *dblDataPtr= getDataPtr();
       if(factOther == 1.0) {
-	double *dataPtr= getDataPtr();
 	const double *otherDataPtr= other.getDataPtr();		    
 	for(int i=0; i<dataSize; i++)
-	  *dataPtr++= *otherDataPtr++;
+	  *dblDataPtr++= *otherDataPtr++;
       } else {
-	double *dataPtr= getDataPtr();
 	const double *otherDataPtr= other.getDataPtr();		    
 	for(int i=0; i<dataSize; i++)
-	  *dataPtr++= *otherDataPtr++ * factOther;
+	  *dblDataPtr++= *otherDataPtr++ * factOther;
       }
     } 
 
     else {
 
       // want: this= this * thisFact + other * factOther
+      double *dblDataPtr= getDataPtr();
       if(factOther == 1.0) {
-	double *dataPtr= getDataPtr();
 	const double *otherDataPtr= getDataPtr();
 	for(int i=0; i<dataSize; i++)
           {
-	    const double value= *dataPtr * factThis + *otherDataPtr++;
-	    *dataPtr++= value;
+	    const double value= *dblDataPtr * factThis + *otherDataPtr++;
+	    *dblDataPtr++= value;
 	  }
       } else {
-	double *dataPtr= getDataPtr();
 	const double *otherDataPtr= other.getDataPtr();		    
 	for(int i=0; i<dataSize; i++) {
-	  double value= *dataPtr * factThis + *otherDataPtr++ * factOther;
-	  *dataPtr++= value;
+	  double value= *dblDataPtr * factThis + *otherDataPtr++ * factOther;
+	  *dblDataPtr++= value;
 	}
       }
     } 
@@ -537,9 +534,9 @@ int XC::Matrix::addMatrixProduct(double thisFact, const Matrix &B, const Matrix 
     else if(thisFact == 0.0) {
 
       // want: this= B * C  otherFact
-      double *dataPtr= data.getDataPtr();
+      double *dblDataPtr= data.getDataPtr();
       for(int i=0; i<dataSize; i++)
-	  *dataPtr++= 0.0;
+	  *dblDataPtr++= 0.0;
       const int numColB= B.numCols;
       const double *ckjPtr = &(C.data)(0);
       for(int j=0; j<numCols; j++) {
@@ -556,9 +553,9 @@ int XC::Matrix::addMatrixProduct(double thisFact, const Matrix &B, const Matrix 
 
     else {
       // want: this= B * C  otherFact
-      double *dataPtr= getDataPtr();
+      double *dblDataPtr= getDataPtr();
       for(int i=0; i<dataSize; i++)
-	*dataPtr++ *= thisFact;
+	*dblDataPtr++ *= thisFact;
       int numColB= B.numCols;
       const double *ckjPtr = &(C.data)(0);
       for(int j=0; j<numCols; j++) {
@@ -630,7 +627,7 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
     // NOTE: looping as per blas3 dgemm_: j,i,k
     if(thisFact == 1.0)
       {
-        double *dataPtr= &data(0);
+        double *dblDataPtr= &data(0);
         for(int j=0; j< numCols; j++)
           {
 	    const double *workkjPtrA= &matrixWork[j*dimB];
@@ -641,13 +638,13 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 	        double aij= 0.0;
 	        for(int k=0; k< dimB; k++)
 	          aij += *ckiPtr++ * *workkjPtr++;
-	        *dataPtr++ += aij;
+	        *dblDataPtr++ += aij;
 	      }
           }
       }
     else if(thisFact == 0.0)
       {
-        double *dataPtr= &data[0];
+        double *dblDataPtr= &data[0];
         for(int j=0; j< numCols; j++)
           {
 	    const double *workkjPtrA= &matrixWork[j*dimB];
@@ -658,13 +655,13 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 	        double aij= 0.0;
 	        for(int k=0; k< dimB; k++)
 	          aij += *ckiPtr++ * *workkjPtr++;
-	        *dataPtr++= aij;
+	        *dblDataPtr++= aij;
 	      }
           }
       }
     else
       {
-        double *dataPtr= &data(0);
+        double *dblDataPtr= &data(0);
         for(int j=0; j< numCols; j++)
           {
 	    const double *workkjPtrA= &matrixWork[j*dimB];
@@ -675,8 +672,8 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 	        double aij= 0.0;
 	        for(int k=0; k< dimB; k++)
 	          aij+= *ckiPtr++ * *workkjPtr++;
-	        const double value= *dataPtr * thisFact + aij;
-	        *dataPtr++= value;
+	        const double value= *dblDataPtr * thisFact + aij;
+	        *dblDataPtr++= value;
 	      }
           }
       }
@@ -694,10 +691,10 @@ XC::Matrix XC::Matrix::operator()(const ID &rows, const ID & cols) const
     const int nRows= rows.Size();
     const int nCols= cols.Size();
     Matrix result(nRows,nCols);
-    double *dataPtr= result.getDataPtr();
+    double *dblDataPtr= result.getDataPtr();
     for(int i=0; i<nCols; i++)
       for(int j=0; j<nRows; j++)
-	*dataPtr++= (*this)(rows(j),cols(i));
+	*dblDataPtr++= (*this)(rows(j),cols(i));
     return result;
   }
 
@@ -742,10 +739,10 @@ XC::Matrix &XC::Matrix::operator+=(double fact)
   {
     if(fact != 0.0)
       {
-        double *dataPtr= data.getDataPtr();
+        double *dblDataPtr= data.getDataPtr();
         const int dataSize= data.Size();
         for(int i=0; i<dataSize; i++)
-          *dataPtr++ += fact;
+          *dblDataPtr++ += fact;
       }
     return *this;
   }
@@ -758,10 +755,10 @@ XC::Matrix &XC::Matrix::operator-=(double fact)
 
     if(fact!= 0.0)
       {
-        double *dataPtr= data.getDataPtr();
+        double *dblDataPtr= data.getDataPtr();
         const int dataSize= data.Size();
         for(int i=0; i<dataSize; i++)
-          *dataPtr++ -= fact;
+          *dblDataPtr++ -= fact;
       }
     return *this;
   }
@@ -771,10 +768,10 @@ XC::Matrix &XC::Matrix::operator*=(double fact)
   {
     if(fact!=1.0)
       {
-        double *dataPtr= data.getDataPtr();
+        double *dblDataPtr= data.getDataPtr();
         const int dataSize= data.Size();
         for(int i=0; i<dataSize; i++)
-          *dataPtr++ *= fact;
+          *dblDataPtr++ *= fact;
       }
     return *this;
   }
@@ -783,13 +780,13 @@ XC::Matrix &XC::Matrix::operator/=(double fact)
   {
     if(fact!=1.0)
       {
-        double *dataPtr= data.getDataPtr();
+        double *dblDataPtr= data.getDataPtr();
         const int dataSize= data.Size();
         if(fact!=0.0)
           {
             const double val= 1.0/fact;
             for(int i=0; i<dataSize; i++)
-	      *dataPtr++*= val;
+	      *dblDataPtr++*= val;
           }
         else
           {
@@ -798,7 +795,7 @@ XC::Matrix &XC::Matrix::operator/=(double fact)
             std::cerr << MATRIX_VERY_LARGE_VALUE << std::endl;
 
             for(int i=0; i<dataSize; i++)
-	      *dataPtr++= MATRIX_VERY_LARGE_VALUE;
+	      *dblDataPtr++= MATRIX_VERY_LARGE_VALUE;
           }
       }
     return *this;
@@ -858,10 +855,10 @@ XC::Vector XC::Matrix::operator*(const Vector &V) const
 	return result;
       } 
     
-    const double *dataPtr= getDataPtr();
+    const double *dblDataPtr= getDataPtr();
     for(int i=0; i<numCols; i++)
       for(int j=0; j<numRows; j++)
-	result(j) += *dataPtr++ * V(i);
+	result(j) += *dblDataPtr++ * V(i);
 
     /*
     std::cerr << "HELLO: " << V;
@@ -891,10 +888,10 @@ XC::Vector XC::Matrix::operator^(const Vector &V) const
         return result;
       } 
 
-    const double *dataPtr= getDataPtr();
+    const double *dblDataPtr= getDataPtr();
     for(int i=0; i<numCols; i++)
       for(int j=0; j<numRows; j++)
-	result(i) += *dataPtr++ * V(j);
+	result(i) += *dblDataPtr++ * V(j);
 
     return result;
   }
@@ -1003,11 +1000,11 @@ XC::Matrix &XC::Matrix::operator+=(const Matrix &M)
   }
 #endif
 
-    double *dataPtr= getDataPtr();
+    double *dblDataPtr= getDataPtr();
     const double *otherData= M.getDataPtr();
     const int dataSize= data.Size();
     for(int i=0; i<dataSize; i++)
-      *dataPtr++ += *otherData++;
+      *dblDataPtr++ += *otherData++;
     return *this;
   }
 
@@ -1022,11 +1019,11 @@ XC::Matrix &XC::Matrix::operator-=(const Matrix &M)
   }
 #endif
 
-    double *dataPtr= getDataPtr();
+    double *dblDataPtr= getDataPtr();
     const double *otherData= M.getDataPtr();
     const int dataSize= data.Size();
     for(int i=0; i<dataSize; i++)
-      *dataPtr++ -= *otherData++;
+      *dblDataPtr++ -= *otherData++;
     return *this;
   }
 

@@ -880,7 +880,7 @@ XC::DbTagData &XC::Domain::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los datos through the channel being passed as parameter.
+//! @brief Send data through the channel being passed as parameter.
 int XC::Domain::sendData(CommParameters &cp)
   {
     int res= ObjWithRecorders::sendData(cp);
@@ -903,7 +903,7 @@ int XC::Domain::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos through the channel being passed as parameter.
+//! @brief Receive data through the channel being passed as parameter.
 int XC::Domain::recvData(const CommParameters &cp)
   {
     int res= ObjWithRecorders::recvData(cp);
@@ -1023,7 +1023,7 @@ XC::Preprocessor *XC::Domain::GetPreprocessor(void)
     return retval;
   }
 
-//! @brief Envía el domain through the channelespecificado.
+//! @brief Sends domain through the specified channel.
 int XC::sendDomain(Domain &dom,int posDbTag,DbTagData &dt,CommParameters &cp)
   {
     int retval= dom.sendSelf(cp);
@@ -1031,7 +1031,7 @@ int XC::sendDomain(Domain &dom,int posDbTag,DbTagData &dt,CommParameters &cp)
     return retval;
   }
 
-//! @brief Recibe el domain through the channelespecificado.
+//! @brief Recibe el domain through the specified channel.
 int XC::receiveDomain(Domain &dom,int posDbTag,DbTagData &dt,const CommParameters &cp)
   {
     int res= cp.receiveInt(dom.dbTag,dt,CommMetaData(posDbTag));

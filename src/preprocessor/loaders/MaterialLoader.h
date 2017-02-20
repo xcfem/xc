@@ -96,11 +96,11 @@ class MaterialLoader: public Loader
     GeomSection *newSectionGeometry(const std::string &);
     GeomSection &getGeomSection(const std::string &);
     InteractionDiagram *newInteractionDiagram(const std::string &);
-    InteractionDiagram *calcInteractionDiagram(const std::string &,const InteractionDiagramData &datos_diag);
+    InteractionDiagram *calcInteractionDiagram(const std::string &,const InteractionDiagramData &diag_data);
     InteractionDiagram &getInteractionDiagram(const std::string &);
     InteractionDiagram2d *new2DInteractionDiagram(const std::string &);
-    InteractionDiagram2d *calcInteractionDiagramNMy(const std::string &,const InteractionDiagramData &datos_diag);
-    InteractionDiagram2d *calcInteractionDiagramNMz(const std::string &,const InteractionDiagramData &datos_diag);
+    InteractionDiagram2d *calcInteractionDiagramNMy(const std::string &,const InteractionDiagramData &diag_data);
+    InteractionDiagram2d *calcInteractionDiagramNMz(const std::string &,const InteractionDiagramData &diag_data);
     InteractionDiagram2d &getNMzInteractionDiagram(const std::string &);
     ~MaterialLoader(void);
     void clearAll(void);

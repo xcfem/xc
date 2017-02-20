@@ -71,7 +71,7 @@
 
 XC::DrainMaterial::DrainMaterial(int tag, int classTag, int nhv, int ndata, double b)
   :UniaxialMaterial(tag,classTag),epsilon(0.0), epsilonDot(0.0), sigma(0.0), tangent(0.0),
-   data(ndata), hstv(2*nhv,0.0), numData(ndata), numHstv(nhv),
+   matParams(ndata), hstv(2*nhv,0.0), numData(ndata), numHstv(nhv),
    epsilonP(0.0), sigmaP(0.0), tangentP(0.0), beto(b)
   {
     if(numHstv < 0)
@@ -182,7 +182,7 @@ int XC::DrainMaterial::sendData(CommParameters &cp)
   {
     int res= UniaxialMaterial::sendData(cp);
     res+= cp.sendDoubles(epsilon,epsilonDot,sigma,tangent,getDbTagData(),CommMetaData(3));
-    res+= cp.sendVector(data,getDbTagData(),CommMetaData(4));
+    res+= cp.sendVector(matParams,getDbTagData(),CommMetaData(4));
     res+= cp.sendVector(hstv,getDbTagData(),CommMetaData(5));
     res+= cp.sendInts(numData,numHstv,getDbTagData(),CommMetaData(6));
     res+= cp.sendDoubles(epsilonP,sigmaP,tangentP,beto,initialTangent,getDbTagData(),CommMetaData(7));
@@ -194,7 +194,7 @@ int XC::DrainMaterial::recvData(const CommParameters &cp)
   {
     int res= UniaxialMaterial::recvData(cp);
     res+= cp.receiveDoubles(epsilon,epsilonDot,sigma,tangent,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveVector(data,getDbTagData(),CommMetaData(4));
+    res+= cp.receiveVector(matParams,getDbTagData(),CommMetaData(4));
     res+= cp.receiveVector(hstv,getDbTagData(),CommMetaData(5));
     res+= cp.receiveInts(numData,numHstv,getDbTagData(),CommMetaData(6));
     res+= cp.receiveDoubles(epsilonP,sigmaP,tangentP,beto,initialTangent,getDbTagData(),CommMetaData(7));
@@ -263,7 +263,7 @@ void XC::DrainMaterial::Print(std::ostream &s, int flag)
   }
 
 // Declarations for the Hardening subroutines
-extern "C" int fill00_(double *data, double *hstv, double *stateP);
+extern "C" int fill00_(double *, double *hstv, double *stateP);
 extern "C" int resp00_(int *kresis, int *ksave, int *kgem, int *kstep,
                                                                 int *ndof, int *kst, int *kenr,
                                                                 double *ener, double *ened, double *enso, double *beto,
@@ -275,7 +275,7 @@ extern "C" int get00_(double *hstv);
 
 // I don't know which subroutines to call, so fill in the XX for XC::Bilinear later -- MHS
 // Declarations for the XC::Bilinear subroutines
-//extern "C" int fillXX_(double *data, double *hstv, double *stateP);
+//extern "C" int fillXX_(double *, double *hstv, double *stateP);
 //extern "C" int respXX_(int *kresis, int *ksave, int *kgem, int *kstep,
 //                                                                int *ndof, int *kst, int *kenr,
 //                                                                double *ener, double *ened, double *enso, double *beto,
@@ -287,7 +287,7 @@ extern "C" int get00_(double *hstv);
 
 // I don't know which subroutines to call, so fill in the XX for Clough1 later -- MHS
 // Declarations for the Clough1 subroutines
-//extern "C" int fillXX_(double *data, double *hstv, double *stateP);
+//extern "C" int fillXX_(double *, double *hstv, double *stateP);
 //extern "C" int respXX_(int *kresis, int *ksave, int *kgem, int *kstep,
 //                                                                int *ndof, int *kst, int *kenr,
 //                                                                double *ener, double *ened, double *enso, double *beto,
@@ -299,7 +299,7 @@ extern "C" int get00_(double *hstv);
 
 // I don't know which subroutines to call, so fill in the XX for Clough2 later -- MHS
 // Declarations for the Clough2 subroutines
-//extern "C" int fillXX_(double *data, double *hstv, double *stateP);
+//extern "C" int fillXX_(double *, double *hstv, double *stateP);
 //extern "C" int respXX_(int *kresis, int *ksave, int *kgem, int *kstep,
 //                                                                int *ndof, int *kst, int *kenr,
 //                                                                double *ener, double *ened, double *enso, double *beto,
@@ -311,7 +311,7 @@ extern "C" int get00_(double *hstv);
 
 // I don't know which subroutines to call, so fill in the XX for Pinch1 later -- MHS
 // Declarations for the Pinch1 subroutines
-//extern "C" int fillXX_(double *data, double *hstv, double *stateP);
+//extern "C" int fillXX_(double *, double *hstv, double *stateP);
 //extern "C" int respXX_(int *kresis, int *ksave, int *kgem, int *kstep,
 //                                                                int *ndof, int *kst, int *kenr,
 //                                                                double *ener, double *ened, double *enso, double *beto,
@@ -375,10 +375,10 @@ int XC::DrainMaterial::invokeSubroutine(void)
     // Stiffness computed in STIFXX subroutine
     static double fk[NDOF*NDOF];
 
-    double *dataPtr= new double[numData];
-    assert(dataPtr);
+    double *dblDataPtr= new double[numData];
+    assert(dblDataPtr);
     for(int i= 0;i<numData;i++)
-      dataPtr[i]= data[i];
+      dblDataPtr[i]= matParams[i];
     double *hstvPtr= new double[2*numHstv];
     assert(hstvPtr);
     for(int i= 0;i<2*numHstv;i++)
@@ -388,7 +388,7 @@ int XC::DrainMaterial::invokeSubroutine(void)
       {
       case MAT_TAG_DrainHardening:
         // Fill the common block with parameters and history variables
-        fill00_(dataPtr, hstvPtr, stateP);
+        fill00_(dblDataPtr, hstvPtr, stateP);
 
                 // Call the response subroutine
                 resp00_(&kresis, &ksave, &kgem, &kstep, &ndof, &kst, &kenr,
@@ -406,7 +406,7 @@ int XC::DrainMaterial::invokeSubroutine(void)
                 std::cerr << "DrainMaterial::invokeSubroutine -- Bilinear subroutine not yet linked\n"; exit(-1);
 
 
-                //fillXX_(dataPtr, hstvPtr, stateP);
+                //fillXX_(dblDataPtr, hstvPtr, stateP);
                 //respXX_(&kresis, &ksave, &kgem, &kstep, &ndof, &kst, &kenr,
                 //        &ener, &ened, &enso, &beto, relas, rdamp, rinit, ddise, dise, vele);
                 //stifXX_(&kstt, &ktype, &ndof, fk);
@@ -417,7 +417,7 @@ int XC::DrainMaterial::invokeSubroutine(void)
                 // I don't know which subroutines to call, so fill in the XX for Clough1 later -- MHS
                 std::cerr << "XC::DrainMaterial::invokeSubroutine -- Clough1 subroutine not yet linked\n"; exit(-1);
 
-                //fillXX_(dataPtr, hstvPtr, stateP);
+                //fillXX_(dblDataPtr, hstvPtr, stateP);
                 //respXX_(&kresis, &ksave, &kgem, &kstep, &ndof, &kst, &kenr,
                 //        &ener, &ened, &enso, &beto, relas, rdamp, rinit, ddise, dise, vele);
                 //stifXX_(&kstt, &ktype, &ndof, fk);
@@ -428,7 +428,7 @@ int XC::DrainMaterial::invokeSubroutine(void)
                 // I don't know which subroutines to call, so fill in the XX for Clough2 later -- MHS
                 std::cerr << "XC::DrainMaterial::invokeSubroutine -- Clough2 subroutine not yet linked\n"; exit(-1);
                           
-                //fillXX_(dataPtr, hstvPtr, stateP);
+                //fillXX_(dblDataPtr, hstvPtr, stateP);
                 //respXX_(&kresis, &ksave, &kgem, &kstep, &ndof, &kst, &kenr,
                 //        &ener, &ened, &enso, &beto, relas, rdamp, rinit, ddise, dise, vele);
                 //stifXX_(&kstt, &ktype, &ndof, fk);
@@ -439,7 +439,7 @@ int XC::DrainMaterial::invokeSubroutine(void)
                 // I don't know which subroutines to call, so fill in the XX for Pinch1 later -- MHS
                 std::cerr << "XC::DrainMaterial::invokeSubroutine -- Pinch1 subroutine not yet linked\n"; exit(-1);
                 
-                //fillXX_(dataPtr, hstvPtr, stateP);
+                //fillXX_(dblDataPtr, hstvPtr, stateP);
                 //respXX_(&kresis, &ksave, &kgem, &kstep, &ndof, &kst, &kenr,
                 //        &ener, &ened, &enso, &beto, relas, rdamp, rinit, ddise, dise, vele);
                 //stifXX_(&kstt, &ktype, &ndof, fk);
@@ -453,7 +453,7 @@ int XC::DrainMaterial::invokeSubroutine(void)
                 return -1;
         }
     for(int i= 0;i<numData;i++)
-      data[i]= dataPtr[i];
+      matParams[i]= dblDataPtr[i];
     for(int i= 0;i<2*numHstv;i++)
       hstv[i]= hstvPtr[i];
 

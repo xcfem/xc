@@ -22,7 +22,7 @@
 //python_interface.tcc
 
 class_<XC::DOF_Numberer, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("DOFNumberer", no_init)
-    .def("useAlgorithm", &XC::DOF_Numberer::useAlgorithm,return_internal_reference<>(),"Establece el algoritmo que se usará para numerar el grafo «Reverse Cuthill-Macgee» o simple.")
+    .def("useAlgorithm", &XC::DOF_Numberer::useAlgorithm,return_internal_reference<>(),"Sets the algorithm to use to numerate the graph; «Reverse Cuthill-Macgee» or simple.")
     ;
 
 // class_<XC::ParallelNumberer, bases<XC::DOF_Numberer>, boost::noncopyable >("ParallelNumberer", no_init);

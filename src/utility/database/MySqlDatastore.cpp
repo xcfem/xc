@@ -264,10 +264,10 @@ int XC::MySqlDatastore::recvMatrix(int dbTag, int commitTag, Matrix &theMatrix, 
       }
 
     // place the results into the vectors double array
-    const double *data = reinterpret_cast<const double *>(row[0]);
+    const double *dblPtrData = reinterpret_cast<const double *>(row[0]);
     double *matrixData= theMatrix.getDataPtr();
     for(int i=0; i<theMatrix.getDataSize(); i++)
-      matrixData[i] = data[i];
+      matrixData[i] = dblPtrData[i];
 
     // free the MYSQL_RES structure
     mysql_free_result(results);
@@ -384,9 +384,9 @@ int XC::MySqlDatastore::recvVector(int dbTag, int commitTag, Vector &theVector,C
       }
 
     // place the results into the vectors double array
-    double *data = (double *)row[0];
+    double *dblPtrData = (double *)row[0];
     for(int i=0; i<theVector.Size(); i++)
-      theVector[i] = data[i];
+      theVector[i] = dblPtrData[i];
 
 
     // free the MYSQL_RES structure
@@ -506,9 +506,9 @@ int XC::MySqlDatastore::recvID(int dbTag, int commitTag,ID &theID,ChannelAddress
       }
 
     // place the results into the vectors double array
-    int *data = (int *)row[0];
+    int *intPtrData = (int *)row[0];
     for(int i=0; i<theID.Size(); i++)
-      theID[i] = data[i];
+      theID[i] = intPtrData[i];
 
 
     // free the MYSQL_RES structure
@@ -639,11 +639,11 @@ int XC::MySqlDatastore::getData(const std::string &tableName,const std::vector<s
       }
 
     // place the results into the vectors double array
-    char *dataRes;
+    char *resultsData;
     for(int i=0; i<data.Size(); i++)
       {
-        dataRes= row[i+2];
-        data[i]= atof(dataRes);
+        resultsData= row[i+2];
+        data[i]= atof(resultsData);
       }
 
     // free the MYSQL_RES structure

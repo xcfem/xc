@@ -42,14 +42,14 @@ XC::DistributedLinSOE::DistributedLinSOE()
 
 
 //! @brief Collect graph, send it off, vector back containing size of system, etc.
-int XC::DistributedLinSOE::sendGraph(Graph &theGraph,ID &datos)
+int XC::DistributedLinSOE::sendGraph(Graph &theGraph,ID &data)
   {
     int res= 0;
     CommParameters cp(0,*theChannels[0]);
     inicComm(3);
     res+= cp.sendMovable(theGraph,getDbTagData(),CommMetaData(0));
     
-    res+= cp.receiveID(datos,getDbTagData(),CommMetaData(1));
+    res+= cp.receiveID(data,getDbTagData(),CommMetaData(1));
 
     ID subMap(theGraph.getNumVertex());
     localCol[0]= subMap;
@@ -85,7 +85,7 @@ int XC::DistributedLinSOE::getSubGraphs(Graph &theGraph)
   }
 
 //! @brief To each distributed SOE send the size data and merge them into master graph
-int XC::DistributedLinSOE::sendSizeData(const ID &datos)
+int XC::DistributedLinSOE::sendSizeData(const ID &data)
   {
     int res= 0;
     FEM_ObjectBroker theBroker;
@@ -94,7 +94,7 @@ int XC::DistributedLinSOE::sendSizeData(const ID &datos)
       {
         CommParameters cp(0,*theChannels[j],theBroker);
         inicComm(3);
-        res+= cp.sendID(datos,getDbTagData(),CommMetaData(1));
+        res+= cp.sendID(data,getDbTagData(),CommMetaData(1));
         res+= cp.receiveID(localCol[j],getDbTagData(),CommMetaData(2));
       }
     return res;

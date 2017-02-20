@@ -189,7 +189,7 @@ int XC::EigenAnalysis::domainChanged(void)
     return 0;
   }
 
-//! @brief Sets the algoritmo to use in the analysis.
+//! @brief Sets the algorithm to use in the analysis.
 int XC::EigenAnalysis::setAlgorithm(EigenAlgorithm &theAlgo)
   {
     Analysis::setAlgorithm(theAlgo);

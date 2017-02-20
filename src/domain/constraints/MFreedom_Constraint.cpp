@@ -157,7 +157,7 @@ int XC::MFreedom_Constraint::applyConstraint(double timeStamp)
     return 0;
   }
 
-//! @brief Envía los datos through the channel being passed as parameter.
+//! @brief Send data through the channel being passed as parameter.
 int XC::MFreedom_Constraint::sendData(CommParameters &cp)
   {
     int res= MFreedom_ConstraintBase::sendData(cp);
@@ -166,7 +166,7 @@ int XC::MFreedom_Constraint::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos through the channel being passed as parameter.
+//! @brief Receive data through the channel being passed as parameter.
 int XC::MFreedom_Constraint::recvData(const CommParameters &cp)
   {
     int res= MFreedom_ConstraintBase::recvData(cp);

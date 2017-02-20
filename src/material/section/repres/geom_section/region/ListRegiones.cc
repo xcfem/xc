@@ -194,19 +194,19 @@ double XC::ListRegiones::getAreaGrossSection(void) const
 XC::Vector XC::ListRegiones::getCdgGrossSection(void) const
   {
     Vector retval(2);
-    double peso= 0.0;
+    double weight= 0.0;
     double divisor= 0.0;
     for(const_iterator i= begin();i!=end();i++)
       {
-        peso= (*i)->Area();
-        if(peso>0)
+        weight= (*i)->Area();
+        if(weight>0)
           {
-            retval+= peso*(*i)->Cdg();
-            divisor+= peso;
+            retval+= weight*(*i)->Cdg();
+            divisor+= weight;
           }
         else
           std::cerr << "ListRegiones::getCdgGrossSection; la región: "
-                    << *i << " tiene peso nulo o negativo." 
+                    << *i << " tiene weight nulo o negativo." 
                         << std::endl;
       }
     retval/= divisor;
@@ -295,26 +295,26 @@ XC::Vector XC::ListRegiones::getCdgHomogenizedSection(const double &E0) const
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     Vector retval(2);
-    double peso= 0.0;
+    double weight= 0.0;
     double divisor= 0.0;
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
         if(mat)
           {
-            peso= mat->getTangent()/E0*(*i)->Area();
-            if(peso>0)
+            weight= mat->getTangent()/E0*(*i)->Area();
+            if(weight>0)
               {
-                retval+= peso*(*i)->Cdg();
-                divisor+= peso;
+                retval+= weight*(*i)->Cdg();
+                divisor+= weight;
               }
             else
-	      std::cerr << "ListRegiones::getCdgHomogenizedSection; la región: "
-                        << *i << " tiene peso nulo o negativo." 
+	      std::cerr << "ListRegiones::getCdgHomogenizedSection; region: "
+                        << *i << " weight is zero or negative." 
                         << std::endl;
           }
         else
-	  std::cerr << "ListRegiones::getCdgHomogenizedSection; no se pudo obtener el material la región." << std::endl;
+	  std::cerr << "ListRegiones::getCdgHomogenizedSection; can't get material for region." << std::endl;
       }
     retval/= divisor;
     return retval;

@@ -57,7 +57,7 @@ XC::Domain *XC::ProblemaEF::theActiveDomain= nullptr;
 XC::ProblemaEF::ProblemaEF(void)
   : preprocessor(this,&output_handlers),proc_solu(this), dataBase(nullptr) {}
 
-//! @brief Define el objeto base de datos.
+//! @brief Database definition.
 XC::FE_Datastore *XC::ProblemaEF::defineDatabase(const std::string &tipo, const std::string &nombre)
   {
     if(dataBase)

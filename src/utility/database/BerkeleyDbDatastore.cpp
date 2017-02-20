@@ -93,7 +93,7 @@ int XC::BerkeleyDbDatastore::createDB(void)
     return retval;
   }
 
-//! @brief Abre la base de datos
+//! @brief Opens database
 int XC::BerkeleyDbDatastore::open(const DBTYPE &type)
   {
     // open the database files .. use DB_UNKNOWN first to see if database already exists
@@ -165,7 +165,7 @@ DBTYPE XC::BerkeleyDbDatastore::get_type(const std::string &dbType)
     return retval;
   }
 
-//! @brief Cierra la base de datos
+//! @brief Closes database
 void XC::BerkeleyDbDatastore::close(void)
   {
     if(connection) 
@@ -177,7 +177,7 @@ void XC::BerkeleyDbDatastore::close(void)
       }
   }
 
-//! @brief Cierra la base de datos
+//! @brief Closes database
 bool XC::BerkeleyDbDatastore::create_aux_entities(void)
   {
     // create the directory if the database directory does not exist

@@ -33,12 +33,12 @@
 XC::FedeasConcrMaterial::FedeasConcrMaterial(int tag, int classTag, int nhv, int ndata, double fc, double ec, double fu, double eu)
   : XC::FedeasMaterial(tag, classTag, nhv, ndata)
   {
-    data[0]  = fc;
-    data[1]  = ec;
-    data[2]  = fu;
-    data[3]  = eu;
+    matParams[0]  = fc;
+    matParams[1]  = ec;
+    matParams[2]  = fu;
+    matParams[3]  = eu;
 
-    trial.Tangent()= 2.0*data[0]/data[1];
+    trial.Tangent()= 2.0*matParams[0]/matParams[1];
     converged.Tangent()= trial.getTangent();
   }
 
@@ -52,9 +52,9 @@ XC::FedeasConcrMaterial::FedeasConcrMaterial(int tag, int classTag, int nhv, int
       }
 
     for(int i = 0; i < numData; i++)
-      data[i] = d(i);
+      matParams[i] = d(i);
 
-    trial.Tangent()= 2.0*data[0]/data[1];
+    trial.Tangent()= 2.0*matParams[0]/matParams[1];
     converged.Tangent()= trial.getTangent();
   }
 
@@ -65,5 +65,5 @@ XC::FedeasConcrMaterial::FedeasConcrMaterial(int tag, int classTag, int nhv, int
 double XC::FedeasConcrMaterial::getInitialTangent(void) const
   {
     //return 2.0*fc/ec;
-    return 2.0*data[0]/data[1];
+    return 2.0*matParams[0]/matParams[1];
   }

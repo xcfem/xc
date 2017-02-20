@@ -43,7 +43,7 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
-//sólo se usa para recibir datos.
+//used only to receive data.
 std::map<int,std::string> XC::Combinacion::map_str_descomp;
 
 //! @brief constructor.

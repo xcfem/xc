@@ -37,7 +37,7 @@
 namespace XC {
 //! @ingroup ElemLoads
 //
-//! @brief Peso propio sobre elemento hexaédrico.
+//! @brief Hexahedron self weight.
 class BrickSelfWeight: public ElementBodyLoad
   {
   private:

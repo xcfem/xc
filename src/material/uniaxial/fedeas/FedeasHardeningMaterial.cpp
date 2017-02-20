@@ -65,10 +65,10 @@ XC::FedeasHardeningMaterial::FedeasHardeningMaterial(int tag,
  XC::FedeasMaterial(tag, MAT_TAG_FedeasHardening, 3, 4)
   {
 	// Fill in material parameters
-	data[0] = E;
-	data[1] = sigmaY;
-	data[2] = Hiso;
-	data[3] = Hkin;
+	matParams[0] = E;
+	matParams[1] = sigmaY;
+	matParams[2] = Hiso;
+	matParams[3] = Hkin;
 
     trial.Tangent()=  E;
     converged.Tangent()= trial.getTangent();
@@ -84,9 +84,9 @@ XC::FedeasHardeningMaterial::FedeasHardeningMaterial(int tag, const Vector &d):
   }
 
   for (int i = 0; i < numData; i++)
-    data[i] = d(i);
+    matParams[i] = d(i);
 
-    trial.Tangent()= data[0];
+    trial.Tangent()= matParams[0];
     converged.Tangent()= trial.getTangent();
   }
 
@@ -99,5 +99,5 @@ XC::UniaxialMaterial* XC::FedeasHardeningMaterial::getCopy(void) const
 double XC::FedeasHardeningMaterial::getInitialTangent(void) const
   { 
     //return E;
-    return data[0];
+    return matParams[0];
   }

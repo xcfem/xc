@@ -132,7 +132,7 @@ XC::DOF_Numberer &XC::DOF_Numberer::operator=(const DOF_Numberer &otro)
     return *this;
   }
 
-//! @brief Sets the algoritmo que se usará para numerar el grafo
+//! @brief Sets the algorithm que se usará para numerar el grafo
 //! «Reverse Cuthill-Macgee» o simple.
 void XC::DOF_Numberer::useAlgorithm(const std::string &nmb)
   { alloc(nmb); }

@@ -135,47 +135,47 @@ void XC::InteractionDiagram2d::Print(std::ostream &os) const
     std::cerr << "InteractionDiagram2d::Print no implementada." << std::endl;
   }
 
-XC::InteractionDiagram2d XC::calcPlaneInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &datos, const double &theta)
+XC::InteractionDiagram2d XC::calcPlaneInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &data, const double &theta)
   {
     InteractionDiagram2d retval;
     FiberSectionBase *tmp= dynamic_cast<FiberSectionBase *>(scc.getCopy());
     if(tmp)
       {
-        retval= tmp->GetInteractionDiagramForPlane(datos,theta);
+        retval= tmp->GetInteractionDiagramForPlane(data,theta);
         delete tmp;
       }
     else
-      std::cerr << "XC::calcPlaneInteractionDiagram, no se pudo obtener una copia de la sección."
+      std::cerr << "XC::calcPlaneInteractionDiagram, can't get a copy of the section."
                 << std::endl;
     return retval;
   }
 
-XC::InteractionDiagram2d XC::calcNMyInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &datos= InteractionDiagramData())
+XC::InteractionDiagram2d XC::calcNMyInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &data= InteractionDiagramData())
   {
     InteractionDiagram2d retval;
     FiberSectionBase *tmp= dynamic_cast<FiberSectionBase *>(scc.getCopy());
     if(tmp)
       {
-        retval= tmp->GetNMyInteractionDiagram(datos);
+        retval= tmp->GetNMyInteractionDiagram(data);
         delete tmp;
       }
     else
-      std::cerr << "XC::calcNMyInteractionDiagram, no se pudo obtener una copia de la sección."
+      std::cerr << "XC::calcNMyInteractionDiagram, can't get a copy of the section."
                 << std::endl;
     return retval;
   }
 
-XC::InteractionDiagram2d XC::calcNMzInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &datos= InteractionDiagramData())
+XC::InteractionDiagram2d XC::calcNMzInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &data= InteractionDiagramData())
   {
     InteractionDiagram2d retval;
     FiberSectionBase *tmp= dynamic_cast<FiberSectionBase *>(scc.getCopy());
     if(tmp)
       {
-        retval= tmp->GetNMzInteractionDiagram(datos);
+        retval= tmp->GetNMzInteractionDiagram(data);
         delete tmp;
       }
     else
-      std::cerr << "XC::calcNMzInteractionDiagram, no se pudo obtener una copia de la sección."
+      std::cerr << "XC::calcNMzInteractionDiagram, can't get a copy of the section."
                 << std::endl;
     return retval;
   }

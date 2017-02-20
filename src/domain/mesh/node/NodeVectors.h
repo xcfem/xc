@@ -32,6 +32,7 @@
 
 #include "utility/actor/actor/MovableObject.h"
 #include "xc_utils/src/nucleo/EntCmd.h"
+#include "utility/matrix/Vector.h"
 
 namespace XC {
 
@@ -51,7 +52,7 @@ class NodeVectors: public EntCmd, public MovableObject
     Vector *commitData; //!< commited quantities
     Vector *trialData; //!< trial quantities
     
-    double *data; //!< double array holding the displ.
+    Vector values; //!< double array holding the displacement/velocity/acceleration.
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);

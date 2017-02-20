@@ -424,14 +424,14 @@ double XC::GeomSection::getAreaHomogenizedSection(const double &E0) const
 XC::Vector XC::GeomSection::getCdgHomogenizedSection(const double &E0) const
   {
     Vector retval(2);
-    double peso= 0.0;
+    double weight= 0.0;
     double divisor= 0.0;
-    peso= regiones.getAreaHomogenizedSection(E0);
-    retval+= peso*regiones.getCdgHomogenizedSection(E0);
-    divisor+= peso;
-    peso= capas_armado.getAreaHomogenizedSection(E0);
-    retval+= peso*capas_armado.getCdgHomogenizedSection(E0);
-    divisor+= peso;
+    weight= regiones.getAreaHomogenizedSection(E0);
+    retval+= weight*regiones.getCdgHomogenizedSection(E0);
+    divisor+= weight;
+    weight= capas_armado.getAreaHomogenizedSection(E0);
+    retval+= weight*capas_armado.getCdgHomogenizedSection(E0);
+    divisor+= weight;
     retval/= divisor;
     return retval;
   }
@@ -513,19 +513,7 @@ double XC::GeomSection::getAreaGrossSection(void) const
 
 //! @brief Returns gross section centroid position.
 XC::Vector XC::GeomSection::getCdgGrossSection(void) const
-  {
-    return regiones.getCdgGrossSection();
-    // Vector retval(2);
-    // double peso= regiones.getAreaGrossSection();
-    // double divisor= 0.0;
-    // retval+= peso*regiones.getCdgGrossSection();
-    // divisor+= peso;
-    // peso= capas_armado.getAreaGrossSection();
-    // retval+= peso*capas_armado.getCdgGrossSection();
-    // divisor+= peso;
-    // retval/= divisor;
-    // return retval;
-  }
+  { return regiones.getCdgGrossSection(); }
 
 //! @brief Inertia of the gross section about an axis parallel to y through its centroid.
 double XC::GeomSection::getIyGrossSection(void) const

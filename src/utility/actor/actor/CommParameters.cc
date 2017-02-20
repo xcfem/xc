@@ -52,7 +52,7 @@ XC::CommParameters::CommParameters(int cTag, Channel &theChannel)
 XC::CommParameters::CommParameters(int cTag, Channel &theChannel, FEM_ObjectBroker &theBroker)
   : commitTag(cTag),canal(&theChannel),broker(&theBroker) {}
 
-//! @brief Solicita al canal que devuelva un tag para la base de datos.
+//! @brief Solicita al canal que devuelva un tag para la database.
 int XC::CommParameters::getDbTag(void) const
   {
     assert(canal);
@@ -68,7 +68,7 @@ bool XC::CommParameters::isDatastore(void) const
     return retval;
   }
 
-//! @brief Envía el vector.
+//! @brief Sends vector.
 int XC::CommParameters::sendID(const ID &v,const int &dataTag)
   {
     assert(canal);
@@ -319,7 +319,7 @@ int XC::CommParameters::receiveString(std::string &str,DbTagData &dt, const Comm
     return res;
   }
 
-//! @brief Envía el tensor through the channel being passed as parameter.
+//! @brief Sends tensor through the channel being passed as parameter.
 int XC::CommParameters::sendTensor(const BJtensor &t,DbTagData &dt, const CommMetaData &meta)
   {
     MovableBJTensor mv(t);
@@ -368,7 +368,7 @@ int XC::CommParameters::receiveStrings(std::vector<std::string> &strings,DbTagDa
     return res;
   }
 
-//! @brief Envía el miembro data through the channel being passed as parameter.
+//! @brief Sends miembro data through the channel being passed as parameter.
 int XC::CommParameters::sendIdData(const DbTagData &data,const int &dataTag)
   { return data.sendIdData(*this,dataTag); }
 
@@ -376,7 +376,7 @@ int XC::CommParameters::sendIdData(const DbTagData &data,const int &dataTag)
 int XC::CommParameters::receiveIdData(DbTagData &data,const int &dataTag) const
   { return data.receiveIdData(*this,dataTag); }
 
-//! @brief Envía el vector.
+//! @brief Sends vector.
 int XC::CommParameters::sendVector(const Vector &v,const int &dataTag)
   {
     assert(canal);
@@ -390,7 +390,7 @@ int XC::CommParameters::receiveVector(Vector &v,const int &dataTag) const
     return canal->recvVector(dataTag,commitTag,v);
   }
 
-//! @brief Envía el vector.
+//! @brief Sends vector.
 int XC::CommParameters::sendVector(const Vector &v,DbTagData &dt, const CommMetaData &meta)
   {
     MovableVector mov(v);
@@ -406,7 +406,7 @@ int XC::CommParameters::receiveVector(Vector &v,DbTagData &dt, const CommMetaDat
     return res;
   }
 
-//! @brief Envía el vector.
+//! @brief Sends vector.
 int XC::CommParameters::sendVector(const std::vector<double> &v,DbTagData &dt, const CommMetaData &meta)
   { return sendVector(Vector(v),dt, meta); }
 
@@ -519,7 +519,7 @@ double *XC::CommParameters::receiveDoublePtr(double* &ptr,DbTagData &dt, const A
   }
 
 
-//! @brief Envía el double through the channel being passed as parameter.
+//! @brief Sends double through the channel being passed as parameter.
 int XC::CommParameters::sendDouble(const double &db1,DbTagData &dt, const CommMetaData &meta)
   {
     MovableVector v(1);
@@ -635,7 +635,7 @@ int XC::CommParameters::receiveDoubles(double &db1,double &db2,double &db3,doubl
   }
 
 
-//! @brief Envía el bool through the channel being passed as parameter.
+//! @brief Sends bool through the channel being passed as parameter.
 int XC::CommParameters::sendBool(const bool &b,DbTagData &dt, const CommMetaData &meta)
   { return sendInt(b,dt,meta); }
 
@@ -647,7 +647,7 @@ int XC::CommParameters::receiveBool(bool &b,DbTagData &dt, const CommMetaData &m
     return res;
   }
 
-//! @brief Envía el entero through the channel being passed as parameter.
+//! @brief Sends entero through the channel being passed as parameter.
 int XC::CommParameters::sendInt(const int &i,DbTagData &dt, const CommMetaData &meta)
   {
     MovableID v(1);
@@ -762,7 +762,7 @@ int XC::CommParameters::receiveInts(int &i1,int &i2,int &i3,int &i4,int &i5,int 
     return res;
   }
 
-//! @brief Envía el entero through the channel being passed as parameter.
+//! @brief Sends entero through the channel being passed as parameter.
 size_t XC::CommParameters::sendSzt(const size_t &i,DbTagData &dt, const CommMetaData &meta)
   { return sendDouble(i,dt,meta); }
 
@@ -902,8 +902,8 @@ int XC::CommParameters::receiveMovable(MovableObject &mv,DbTagData &dt, const Co
     return res;
   }
 
-//! @brief Envía a pointer a un objeto móvil through the channel being passed as parameter.
-//! @param meta: Datos posiciones en las que se guardan el flag y el dbTag
+//! @brief Sends a pointer to movable object through the channel being passed as parameter.
+//! @param meta: posiciones en las que se guardan el flag y el dbTag
 int XC::CommParameters::sendMovablePtr(MovableObject *ptr,DbTagData &dt, const PtrCommMetaData &meta)
   {
     int retval= 0;
@@ -919,7 +919,7 @@ int XC::CommParameters::sendMovablePtr(MovableObject *ptr,DbTagData &dt, const P
 
 
 //! @brief Envía a pointer a un objeto móvil through the channel being passed as parameter.
-//! @param meta: Datos posiciones en las que se guardan el flag, el dbTag y el classTag
+//! @param meta: posiciones where the flag, the dbTag and classTag are stored
 int XC::CommParameters::sendBrokedPtr(MovableObject *ptr,DbTagData &dt, const BrokedPtrCommMetaData &meta)
   {
     int retval= 0;

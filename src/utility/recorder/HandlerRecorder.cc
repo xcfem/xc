@@ -36,12 +36,12 @@ XC::HandlerRecorder::HandlerRecorder(int classTag)
 XC::HandlerRecorder::HandlerRecorder(int classTag,Domain &theDom,DataOutputHandler &theOutputHandler,bool tf)
   :DomainRecorderBase(classTag,&theDom), theHandler(&theOutputHandler), initializationDone(false), echoTimeFlag(tf) {}
 
-//! @brief Asigna el manejador de salida de datos
+//! @brief Sets de data output handler
 void XC::HandlerRecorder::SetOutputHandler(DataOutputHandler *tH)
   { theHandler= tH; }
 
 
-//! @brief Envia el objet por el canal definido en el parámetro.
+//! @brief Sends objet por el canal definido en el parámetro.
 int XC::HandlerRecorder::sendData(CommParameters &cp)
   {
     cp.sendBrokedPtr(theHandler,getDbTagData(),BrokedPtrCommMetaData(0,1,2));

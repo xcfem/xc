@@ -45,7 +45,7 @@ class ListReinfLayer;
 
 //! @ingroup MATSCCRepresGeom
 //
-//! @brief Datos de las fibras.
+//! @brief Fiber data.
 class FiberData
   {
     std::vector<Material *> fibersMaterial; //!< Material pointers for cells and rebars.

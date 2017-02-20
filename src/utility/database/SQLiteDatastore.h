@@ -43,11 +43,11 @@ class SQLiteDatastore: public DBDatastore
   {
   private:
     bool connection;
-    SqLiteDatabase db; //!< Base de datos SqLite.
+    SqLiteDatabase db; //!< database SqLite.
     std::string query;
-    bool insertaDatos(const std::string &,const int &,const int &,const void *,const int &,const int &);
-    bool actualizaDatos(const std::string &,const int &,const int &,const void *,const int &,const int &);
-    const void *recuperaDatos(const std::string &tbName,const int &dbTag,const int &commitTag,const int &sz);
+    bool insertData(const std::string &,const int &,const int &,const void *,const int &,const int &);
+    bool updateData(const std::string &,const int &,const int &,const void *,const int &,const int &);
+    const void *retrieveData(const std::string &tbName,const int &dbTag,const int &commitTag,const int &sz);
   protected:
     int createOpenSeesDatabase(const std::string &projectName);
     int execute(const std::string &query);

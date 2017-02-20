@@ -302,17 +302,17 @@ void XC::InteractionDiagram::setMatrizPosiciones(const Matrix &m)
     clasifica_triedros();   
   }
 
-XC::InteractionDiagram XC::calc_interaction_diagram(const FiberSectionBase &scc,const InteractionDiagramData &datos= InteractionDiagramData())
+XC::InteractionDiagram XC::calc_interaction_diagram(const FiberSectionBase &scc,const InteractionDiagramData &data= InteractionDiagramData())
   {
     InteractionDiagram retval;
     FiberSectionBase *tmp= dynamic_cast<FiberSectionBase *>(scc.getCopy());
     if(tmp)
       {
-        retval= tmp->GetInteractionDiagram(datos);
+        retval= tmp->GetInteractionDiagram(data);
         delete tmp;
       }
     else
-      std::cerr << "XC::calcInteractionDiagram, no se pudo obtener una copia de la sección."
+      std::cerr << "XC::calcInteractionDiagram, can't get a copy of the section."
                 << std::endl;
     return retval;
   }

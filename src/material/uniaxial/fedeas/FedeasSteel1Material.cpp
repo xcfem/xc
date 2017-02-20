@@ -65,13 +65,13 @@ XC::FedeasSteel1Material::FedeasSteel1Material(int tag,
 // 7 history variables and 7 material parameters
  XC::FedeasMaterial(tag, MAT_TAG_FedeasSteel1, 7, 7)
 {
-	data[0]  = fy;
-	data[1]  = E0;
-	data[2]  = b;
-	data[3]  = a1;
-	data[4]  = a2;
-	data[5]  = a3;
-	data[6]  = a4;
+	matParams[0]  = fy;
+	matParams[1]  = E0;
+	matParams[2]  = b;
+	matParams[3]  = a1;
+	matParams[4]  = a2;
+	matParams[5]  = a3;
+	matParams[6]  = a4;
 
 	trial.Tangent()= E0;
 	converged.Tangent()= E0;
@@ -82,15 +82,15 @@ XC::FedeasSteel1Material::FedeasSteel1Material(int tag,
 // 7 history variables and 7 material parameters
  XC::FedeasMaterial(tag, MAT_TAG_FedeasSteel1, 7, 7)
 {
-	data[0]  = fy;
-	data[1]  = E0;
-	data[2]  = b;
+	matParams[0]  = fy;
+	matParams[1]  = E0;
+	matParams[2]  = b;
 
 	// Default values for no isotropic hardening
-	data[3]  = 0.0;
-	data[4]  = 1.0;
-	data[5]  = 0.0;
-	data[6]  = 1.0;
+	matParams[3]  = 0.0;
+	matParams[4]  = 1.0;
+	matParams[5]  = 0.0;
+	matParams[6]  = 1.0;
 
 	trial.Tangent()= E0;
 	converged.Tangent()= E0;
@@ -106,9 +106,9 @@ XC::FedeasSteel1Material::FedeasSteel1Material(int tag, const XC::Vector &d):
   }
 
   for (int i = 0; i < numData; i++)
-    data[i] = d(i);
-  trial.Tangent()= data[1];
-  converged.Tangent()= data[1];
+    matParams[i] = d(i);
+  trial.Tangent()= matParams[1];
+  converged.Tangent()= matParams[1];
 }
 
 XC::FedeasSteel1Material::FedeasSteel1Material(int tag)
@@ -121,5 +121,5 @@ XC::UniaxialMaterial *XC::FedeasSteel1Material::getCopy(void) const
 double XC::FedeasSteel1Material::getInitialTangent(void) const
   {
     //return E;
-    return data[1];
+    return matParams[1];
   }

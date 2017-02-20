@@ -59,7 +59,7 @@ SVD3d XC::BidimMecLoad::getResultant(const Pos3d &centro, bool initialGeometry) 
     return SVD3d(centro);
   }
 
-//! @brief Envía los datos through the channel being passed as parameter.
+//! @brief Send data through the channel being passed as parameter.
 int XC::BidimMecLoad::sendData(CommParameters &cp)
   {
     int res= BidimLoad::sendData(cp);
@@ -67,7 +67,7 @@ int XC::BidimMecLoad::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos through the channel being passed as parameter.
+//! @brief Receive data through the channel being passed as parameter.
 int XC::BidimMecLoad::recvData(const CommParameters &cp)
   {
     int res= BidimLoad::recvData(cp);

@@ -67,26 +67,26 @@ XC::FedeasHyster2Material::FedeasHyster2Material(int tag,
 // 6 history variables and 16 material parameters
  XC::FedeasMaterial(tag, MAT_TAG_FedeasHysteretic2, 6, 16)
 {
-	data[0]  = mom1p;
-	data[1]  = rot1p;
-	data[2]  = mom2p;
-	data[3]  = rot2p;
-	data[4]  = mom3p;
-	data[5]  = rot3p;
+	matParams[0]  = mom1p;
+	matParams[1]  = rot1p;
+	matParams[2]  = mom2p;
+	matParams[3]  = rot2p;
+	matParams[4]  = mom3p;
+	matParams[5]  = rot3p;
 
-	data[6]  = mom1n;
-	data[7]  = rot1n;
-	data[8]  = mom2n;
-	data[9]  = rot2n;
-	data[10] = mom3n;
-	data[11] = rot3n;
+	matParams[6]  = mom1n;
+	matParams[7]  = rot1n;
+	matParams[8]  = mom2n;
+	matParams[9]  = rot2n;
+	matParams[10] = mom3n;
+	matParams[11] = rot3n;
 
-	data[12] = pinchX;
-	data[13] = pinchY;
-	data[14] = damfc1;
-	data[15] = damfc2;
+	matParams[12] = pinchX;
+	matParams[13] = pinchY;
+	matParams[14] = damfc1;
+	matParams[15] = damfc2;
 
-    trial.Tangent() =  data[0]/data[1];
+    trial.Tangent() =  matParams[0]/matParams[1];
     converged.Tangent()= trial.getTangent();
   }
 
@@ -97,26 +97,26 @@ XC::FedeasHyster2Material::FedeasHyster2Material(int tag,
 // 6 history variables and 16 material parameters
  XC::FedeasMaterial(tag, MAT_TAG_FedeasHysteretic2, 6, 16)
 {
-	data[0]  = mom1p;
-	data[1]  = rot1p;
-	data[2]  = 0.5*(mom1p+mom2p);
-	data[3]  = 0.5*(rot1p+rot2p);
-	data[4]  = mom2p;
-	data[5]  = rot2p;
+	matParams[0]  = mom1p;
+	matParams[1]  = rot1p;
+	matParams[2]  = 0.5*(mom1p+mom2p);
+	matParams[3]  = 0.5*(rot1p+rot2p);
+	matParams[4]  = mom2p;
+	matParams[5]  = rot2p;
 
-	data[6]  = mom1n;
-	data[7]  = rot1n;
-	data[8]  = 0.5*(mom1n+mom2n);
-	data[9]  = 0.5*(rot1n+rot2n);
-	data[10] = mom2n;
-	data[11] = rot2n;
+	matParams[6]  = mom1n;
+	matParams[7]  = rot1n;
+	matParams[8]  = 0.5*(mom1n+mom2n);
+	matParams[9]  = 0.5*(rot1n+rot2n);
+	matParams[10] = mom2n;
+	matParams[11] = rot2n;
 
-	data[12] = pinchX;
-	data[13] = pinchY;
-	data[14] = damfc1;
-	data[15] = damfc2;
+	matParams[12] = pinchX;
+	matParams[13] = pinchY;
+	matParams[14] = damfc1;
+	matParams[15] = damfc2;
 
-    trial.Tangent() =  data[0]/data[1];
+    trial.Tangent() =  matParams[0]/matParams[1];
     converged.Tangent()= trial.getTangent();
   }
 
@@ -130,7 +130,7 @@ XC::FedeasHyster2Material::FedeasHyster2Material(int tag, const Vector &d):
   }
 
   for (int i = 0; i < numData; i++)
-    data[i] = d(i);
+    matParams[i] = d(i);
 }
 
 XC::FedeasHyster2Material::FedeasHyster2Material(int tag)
@@ -143,5 +143,5 @@ XC::UniaxialMaterial* XC::FedeasHyster2Material::getCopy(void) const
 double XC::FedeasHyster2Material::getInitialTangent(void) const
   {
     //return mom1p/rot1p;
-    return data[0]/data[1];
+    return matParams[0]/matParams[1];
   }

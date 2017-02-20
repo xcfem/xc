@@ -1173,10 +1173,10 @@ std::string XC::DqFibras::getStrClaseEsfuerzo(const double &tol) const
 Pos2d XC::DqFibras::getCdg(void) const
   { return Pos2d(getYCdg(),getZCdg()); }
 
-//! @brief Returns the profundidad de la fibra neutra, es decir la distancia desde
-//! la fibra mas comprimida a la fibra neutra.
-//! El algoritmo empleado se basa en que get_dist_to_neutral_axis returns distancias negativas
-//! para fibras comprimidas (deformación negativa).
+//! @brief Returns neutral fiber depth, i. e. distance from neutral fiber to
+//! the most compressed one.
+//! The algorithm is based on the fact that get_dist_to_neutral_axis returns
+//! negative distances for compressed fibers (negative strain).
 double XC::DqFibras::getNeutralAxisDepth(const FiberSectionBase &Section) const
   {
     double retval= 0.0;

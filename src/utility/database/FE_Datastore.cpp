@@ -102,7 +102,7 @@ int XC::FE_Datastore::sendObj(int commitTag,MovableObject &theObject, ChannelAdd
 int XC::FE_Datastore::recvObj(int commitTag,MovableObject &theObject, FEM_ObjectBroker &theNewBroker, ChannelAddress *theAddress)
   { return receiveMovable(commitTag,theObject,theNewBroker); }
 
-//! @brief Salva el estado en la base de datos.
+//! @brief Salva el estado en la database.
 int XC::FE_Datastore::commitState(int commitTag)
   {
     int res = 0;
@@ -130,7 +130,7 @@ int XC::FE_Datastore::commitState(int commitTag)
   }
 
 //! @brief Returns true ifel estado se salvó
-//" con anterioridad en la base de datos.
+//" con anterioridad en la database.
 bool XC::FE_Datastore::isSaved(int commitTag) const
   { return (savedStates.count(commitTag)>0); }
 

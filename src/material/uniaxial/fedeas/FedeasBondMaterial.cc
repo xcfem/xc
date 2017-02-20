@@ -37,18 +37,18 @@ XC::FedeasBondMaterial::FedeasBondMaterial(int tag, int classTag, int nhv, int n
  XC::FedeasMaterial(tag, classTag, nhv, ndata)
   {
     // Fill in material parameters
-    data[0]= u1p;
-    data[1]= q1p;
-    data[2]= u2p;
-    data[3]= u3p;
-    data[4]= q3p;
-    data[5]= u1n;
-    data[6]= q1n;
-    data[7]= u2n;
-    data[8]= u3n;
-    data[9]= q3n;
-    data[10]= s0;
-    data[11]= bb;
+    matParams[0]= u1p;
+    matParams[1]= q1p;
+    matParams[2]= u2p;
+    matParams[3]= u3p;
+    matParams[4]= q3p;
+    matParams[5]= u1n;
+    matParams[6]= q1n;
+    matParams[7]= u2n;
+    matParams[8]= u3n;
+    matParams[9]= q3n;
+    matParams[10]= s0;
+    matParams[11]= bb;
   
     trial.Tangent()= q1p/u1p;
     converged.Tangent()= trial.getTangent();
@@ -64,9 +64,9 @@ XC::FedeasBondMaterial::FedeasBondMaterial(int tag, int classTag, int nhv, int n
       }
 		
     for(int i= 0; i < numData; i++)
-      data[i]= d(i);
+      matParams[i]= d(i);
 
-    trial.Tangent()=  data[1]/data[0];
+    trial.Tangent()=  matParams[1]/matParams[0];
     converged.Tangent()= trial.getTangent();
   }
 
@@ -78,5 +78,5 @@ XC::FedeasBondMaterial::FedeasBondMaterial(int tag, int classTag, int nhv, int n
 double XC::FedeasBondMaterial::getInitialTangent(void) const
   {
     //return q1p/u1p;
-    return data[1]/data[0];
+    return matParams[1]/matParams[0];
   }

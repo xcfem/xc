@@ -106,6 +106,15 @@ class fElement : public Element
     static std::vector<double> tl; // nodal temp (nen)
     static std::vector<int> ix; // nodal tags (nen)
     static int numfElements;
+  protected:
+    // protected methods 
+    virtual int invokefRoutine(int ior, int iow, double *ctan, int isw);
+    virtual int readyfRoutine(bool incInertia);
+    virtual int invokefInit(int isw, int iow); 
+
+    // protected data
+    Vector feapData;
+    ID connectedNodes;    
   public:
     // constructors
     fElement(int tag, 
@@ -154,18 +163,7 @@ class fElement : public Element
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
     virtual void Print(std::ostream &s, int flag =0);    
-
-  protected:
-    // protected methods 
-    virtual int invokefRoutine(int ior, int iow, double *ctan, int isw);
-    virtual int readyfRoutine(bool incInertia);
-    virtual int invokefInit(int isw, int iow); 
-
-    // protected data
-    Vector *data;
-    ID *connectedNodes;
-	
-};
+ };
 } // end of XC namespace
 
 #endif

@@ -65,15 +65,15 @@ int XC::LinearBucklingEigenAnalysis::setupPreviousStep(void)
     return result;
   }
 
-//! @brief Asigna el algoritmo to use in the analysis.
+//! @brief Sets the algorithm to use in the analysis.
 int XC::LinearBucklingEigenAnalysis::setAlgorithm(LinearBucklingAlgo &theAlgo)
   { return EigenAnalysis::setAlgorithm(theAlgo); }
 
-//! @brief Asigna el integrator to use in the analysis.
+//! @brief Sets the integrator to use in the analysis.
 int XC::LinearBucklingEigenAnalysis::setIntegrator(LinearBucklingIntegrator &theIntegrator)
   { return EigenAnalysis::setIntegrator(theIntegrator); }
 
-//! @brief Asigna el sistema de eigenvalues to use in the analysis.
+//! @brief Sets the sistema de eigenvalues to use in the analysis.
 int XC::LinearBucklingEigenAnalysis::setEigenSOE(ArpackSOE &theSOE)
   { return EigenAnalysis::setEigenSOE(theSOE); }
 

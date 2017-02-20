@@ -61,10 +61,10 @@ XC::DrainHardeningMaterial::DrainHardeningMaterial(int tag,
 	double E, double sigY, double Hiso, double Hkin, double b)
   : DrainMaterial(tag, MAT_TAG_DrainHardening, 3, 4, b)// 3 history variables and 4 material parameters
   {
-    data[0] = E;
-    data[1] = sigY;
-    data[2] = Hiso;
-    data[3] = Hkin;
+    matParams[0] = E;
+    matParams[1] = sigY;
+    matParams[2] = Hiso;
+    matParams[3] = Hkin;
   }
 
 //! @brief Constructor.

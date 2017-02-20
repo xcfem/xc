@@ -77,7 +77,7 @@ class FedeasMaterial : public UniaxialMaterial
     // Invokes the FORTRAN subroutine
     virtual int invokeSubroutine(int ist);
   
-    double *data; //!< Material parameters array
+    double *matParams; //!< Material parameters array
     double *hstv; //!< History array: first half is committed, second half is trial
   
     int numData; //!< Number of material parameters

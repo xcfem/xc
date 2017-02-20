@@ -70,7 +70,7 @@
 namespace XC {
 //! @ingroup GMotion
 //
-//! @brief Datos que definen un terremoto real.
+//! @brief Data from a real earthquake.
 class GroundMotionRecord : public GroundMotion
   {
   private:

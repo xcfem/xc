@@ -95,7 +95,7 @@ class TaggedObjectStorage: public EntCmd, public MovableObject
     DbTagData &getDbTagData(void) const;
 
     template <class T>
-    int recibeDatos(const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
+    int receiveData(const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
     void copia(const TaggedObjectStorage &);
   public:
     TaggedObjectStorage(EntCmd *owr,const std::string &containerName);
@@ -168,7 +168,7 @@ int TaggedObjectStorage::createObjects(const CommParameters &cp,T *(FEM_ObjectBr
 
 //! @brief Receives members through the channel being passed as parameter.
 template <class T>
-int TaggedObjectStorage::recibeDatos(const CommParameters &cp,T *(FEM_ObjectBroker::*ptrFunc)(int))
+int TaggedObjectStorage::receiveData(const CommParameters &cp,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {
     setDbTag(getDbTagDataPos(0));
     int sz= getDbTagDataPos(1);
@@ -196,7 +196,7 @@ int TaggedObjectStorage::recibe(int dbTag,const CommParameters &cp,T *(FEM_Objec
     if(res<0)
       std::cerr << "TaggedObjectStorage::recvData - failed to recv the initial ID\n";
     else
-      res+= TaggedObjectStorage::recibeDatos(cp,ptrFunc);
+      res+= TaggedObjectStorage::receiveData(cp,ptrFunc);
     return res;
   }
 

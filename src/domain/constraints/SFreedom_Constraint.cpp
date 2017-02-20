@@ -159,7 +159,7 @@ XC::DbTagData &XC::SFreedom_Constraint::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los datos through the channel being passed as parameter.
+//! @brief Send data through the channel being passed as parameter.
 int XC::SFreedom_Constraint::sendData(CommParameters &cp)
   {
     int res= Constraint::sendData(cp);
@@ -169,7 +169,7 @@ int XC::SFreedom_Constraint::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos through the channel being passed as parameter.
+//! @brief Receive data through the channel being passed as parameter.
 int XC::SFreedom_Constraint::recvData(const CommParameters &cp)
   {
     int res= Constraint::recvData(cp);

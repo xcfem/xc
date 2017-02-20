@@ -543,7 +543,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::new2DInteractionDiagram(const std:
   }
 
 //! @brief New interaction diagram
-XC::InteractionDiagram *XC::MaterialLoader::calcInteractionDiagram(const std::string &cod_scc,const InteractionDiagramData &datos_diag)
+XC::InteractionDiagram *XC::MaterialLoader::calcInteractionDiagram(const std::string &cod_scc,const InteractionDiagramData &diag_data)
   {
     iterator mat= materials.find(cod_scc);
     InteractionDiagram *diagI= nullptr;
@@ -561,7 +561,7 @@ XC::InteractionDiagram *XC::MaterialLoader::calcInteractionDiagram(const std::st
               }
             else
               {
-                diagI= new InteractionDiagram(calc_interaction_diagram(*tmp,datos_diag));
+                diagI= new InteractionDiagram(calc_interaction_diagram(*tmp,diag_data));
                 diagramas_interaccion[cod_diag]= diagI;
               }
           }
@@ -576,7 +576,7 @@ XC::InteractionDiagram *XC::MaterialLoader::calcInteractionDiagram(const std::st
   }
 
 //! @brief New 2D interaction diagram (N-My)
-XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMy(const std::string &cod_scc,const InteractionDiagramData &datos_diag)
+XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMy(const std::string &cod_scc,const InteractionDiagramData &diag_data)
   {
     iterator mat= materials.find(cod_scc);
     InteractionDiagram2d *diagI= nullptr;
@@ -594,7 +594,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMy(const st
               }
             else
               {
-                diagI= new InteractionDiagram2d(calcNMyInteractionDiagram(*tmp,datos_diag));
+                diagI= new InteractionDiagram2d(calcNMyInteractionDiagram(*tmp,diag_data));
                 diagramas_interaccion2d[cod_diag]= diagI;
               }
           }
@@ -609,7 +609,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMy(const st
   }
 
 //! @brief New 2D interaction diagram (N-Mz)
-XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMz(const std::string &cod_scc,const InteractionDiagramData &datos_diag)
+XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMz(const std::string &cod_scc,const InteractionDiagramData &diag_data)
   {
     iterator mat= materials.find(cod_scc);
     InteractionDiagram2d *diagI= nullptr;
@@ -627,7 +627,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMz(const st
               }
             else
               {
-                diagI= new InteractionDiagram2d(calcNMzInteractionDiagram(*tmp,datos_diag));
+                diagI= new InteractionDiagram2d(calcNMzInteractionDiagram(*tmp,diag_data));
                 diagramas_interaccion2d[cod_diag]= diagI;
               }
           }

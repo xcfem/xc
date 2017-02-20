@@ -259,8 +259,8 @@ int XC::MPI_Channel::recvMatrix(int dbTag, int commitTag, Matrix &theMatrix, Cha
 
     // if o.k. get a ponter to the data in the XC::Matrix and 
     // place the incoming data there
-    const double *data= theMatrix.getDataPtr();
-    const char *gMsg= reinterpret_cast<const char *>(data);
+    const double *matrixData= theMatrix.getDataPtr();
+    const char *gMsg= reinterpret_cast<const char *>(matrixData);
     int nleft =  theMatrix.getDataSize();
 
     MPI_Status status;
@@ -305,8 +305,8 @@ int XC::MPI_Channel::sendMatrix(int dbTag, int commitTag, const Matrix &theMatri
 
     // if o.k. get a ponter to the data in the Matrix and 
     // place the incoming data there
-    const double *data= theMatrix.getDataPtr();
-    const char *gMsg= reinterpret_cast<const char *>(data);
+    const double *matrixData= theMatrix.getDataPtr();
+    const char *gMsg= reinterpret_cast<const char *>(matrixData);
     int nleft =  theMatrix.getDataSize();
 
     MPI_Send((void *)gMsg, nleft, MPI_DOUBLE, otherTag, 0, otherComm);
@@ -339,8 +339,8 @@ int XC::MPI_Channel::recvVector(int dbTag, int commitTag, Vector &theVector, Cha
 
     // if o.k. get a ponter to the data in the Vector and 
     // place the incoming data there
-    const double *data = theVector.getDataPtr();
-    const char *gMsg = reinterpret_cast<const char *>(data);
+    const double *vectorData = theVector.getDataPtr();
+    const char *gMsg = reinterpret_cast<const char *>(vectorData);
     int nleft =  theVector.Size();
 
     MPI_Status status;
@@ -384,8 +384,8 @@ int XC::MPI_Channel::sendVector(int dbTag, int commitTag, const Vector &theVecto
       }
     // if o.k. get a ponter to the data in the Vector and 
     // place the incoming data there
-    const double *data = theVector.getDataPtr();
-    const char *gMsg = reinterpret_cast<const char *>(data);
+    const double *vectorData = theVector.getDataPtr();
+    const char *gMsg = reinterpret_cast<const char *>(vectorData);
     int nleft =  theVector.Size();
 
     MPI_Send((void *)gMsg, nleft, MPI_DOUBLE, otherTag, 0, otherComm);
@@ -417,8 +417,8 @@ int XC::MPI_Channel::recvID(int dbTag, int commitTag, ID &theID, ChannelAddress 
 
     // if o.k. get a ponter to the data in the XC::ID and 
     // place the incoming data there
-    const int *data = theID.getDataPtr();
-    const char *gMsg = reinterpret_cast<const char *>(data);
+    const int *idData = theID.getDataPtr();
+    const char *gMsg = reinterpret_cast<const char *>(idData);
     int nleft =  theID.Size();
 
     MPI_Status status;
@@ -467,10 +467,10 @@ int XC::MPI_Channel::sendID(int dbTag, int commitTag, const ID &theID, ChannelAd
           }		    
       }
 
-    // if o.k. get a ponter to the data in the XC::ID and 
+    // if o.k. get a ponter to the data in the ID and 
     // place the incoming data there
-    const int *data = theID.getDataPtr();
-    const char *gMsg = reinterpret_cast<const char *>(data);
+    const int *idData = theID.getDataPtr();
+    const char *gMsg = reinterpret_cast<const char *>(idData);
     int nleft =  theID.Size();
 
     MPI_Send((void *)gMsg, nleft, MPI_INT, otherTag, 0, otherComm);

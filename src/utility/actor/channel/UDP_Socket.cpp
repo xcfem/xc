@@ -174,21 +174,21 @@ int XC::UDP_Socket::setUpConnection(void)
 
     // send a message to address.
     SocketAddress other(shadow_inetAddr, shadow_port);
-    char data = 'a';
-    sendto(sockfd, &data, 1, 0, &other.address.addr, other.addrLength);    
+    char charData = 'a';
+    sendto(sockfd, &charData, 1, 0, &other.address.addr, other.addrLength);    
     bcopy((char *) &other.address.addr, (char *) &last_Addr, addrLength);
     
     // receive a message from other
-    recvfrom(sockfd, &data, 1, 0, &last_Addr.addr, &addrLength);    
+    recvfrom(sockfd, &charData, 1, 0, &last_Addr.addr, &addrLength);    
 
   } else {
 
     // wait for remote process to send message;
-    char data = 'b';
-    recvfrom(sockfd, &data, 1, 0, &last_Addr.addr, &addrLength);    
+    char charData = 'b';
+    recvfrom(sockfd, &charData, 1, 0, &last_Addr.addr, &addrLength);    
     
     // then send a message back
-    sendto(sockfd, &data, 1, 0, &last_Addr.addr, addrLength);        
+    sendto(sockfd, &charData, 1, 0, &last_Addr.addr, addrLength);        
   }
 
   return 0;    
@@ -389,8 +389,8 @@ int XC::UDP_Socket::recvMatrix(int dbTag, int commitTag, Matrix &theMatrix, Chan
       std::cerr << "Error en UDP_Socket::recvMatrix" << std::endl;
     // if o.k. get a ponter to the data in the message and 
     // place the incoming data there
-    double *data= theMatrix.getDataPtr();
-    char *gMsg= reinterpret_cast<char *>(data);
+    double *matrixData= theMatrix.getDataPtr();
+    char *gMsg= reinterpret_cast<char *>(matrixData);
     int size=  theMatrix.getNumBytes();
 
     while(size > 0)
@@ -461,8 +461,8 @@ int XC::UDP_Socket::sendMatrix(int dbTag, int commitTag, const XC::Matrix &theMa
     }
     
     // send the data
-    const double *data = theMatrix.getDataPtr();
-    const char *gMsg = reinterpret_cast<const char *>(data);
+    const double *matrixData = theMatrix.getDataPtr();
+    const char *gMsg = reinterpret_cast<const char *>(matrixData);
     int size =  theMatrix.getNumBytes();
 
     while (size > 0) {
@@ -493,8 +493,8 @@ int XC::UDP_Socket::recvVector(int dbTag, int commitTag, Vector &theVector, Chan
     // if o.k. get a ponter to the data in the message and 
     // place the incoming data there
     int size;
-    double *data = theVector.theData;
-    char *gMsg = (char *)data;;
+    double *vectorData = theVector.theData;
+    char *gMsg = (char *)vectorData;;
     size =  theVector.sz * sizeof(double);
 
     while (size > 0) {
@@ -563,8 +563,8 @@ int XC::UDP_Socket::sendVector(int dbTag, int commitTag, const XC::Vector &theVe
     
     // send the data
     int size; 
-    double *data = theVector.theData;
-    char *gMsg = (char *)data;;
+    double *vectorData = theVector.theData;
+    char *gMsg = (char *)vectorData;;
     size =  theVector.sz * sizeof(double);
 
     while (size > 0) {
@@ -593,8 +593,8 @@ int XC::UDP_Socket::recvID(int dbTag, int commitTag, ID &theID, ChannelAddress *
 
     // if o.k. get a ponter to the data in the message and 
     // place the incoming data there
-    int *data = theID.getDataPtr();
-    char *gMsg = (char *)data;;
+    int *idData = theID.getDataPtr();
+    char *gMsg = (char *)idData;;
     int size=  theID.Size() * sizeof(int);
 
     while (size > 0) {
@@ -662,8 +662,8 @@ int XC::UDP_Socket::sendID(int dbTag, int commitTag, const XC::ID &theID, Channe
     }
     
     // send the data 
-    const int *data = theID.getDataPtr();
-    char *gMsg = (char *)data;;
+    const int *idData = theID.getDataPtr();
+    char *gMsg = (char *)idData;;
     int size =  theID.Size() * sizeof(int);
 
     while (size > 0) {

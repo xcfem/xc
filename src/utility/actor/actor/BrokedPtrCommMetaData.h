@@ -35,7 +35,7 @@ namespace XC {
 
 //! @ingroup IPComm
 //
-//! @brief Datos a transmitir para a pointer «broked».
+//! @brief Data to transmit for a pointer «broked».
 class BrokedPtrCommMetaData: public PtrCommMetaData
   {
   private:

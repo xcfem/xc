@@ -66,22 +66,22 @@ XC::DrainClough2Material::DrainClough2Material(int tag,
 // 19 history variables and 16 material parameters
  XC::DrainMaterial(tag, MAT_TAG_DrainClough2, 19, 16, b)
 {
-	data[0]  = E;
-	data[1]  = fyp;
-	data[2]  = fyn;
-	data[3]  = alpha;
-	data[4]  = ecaps;
-	data[5]  = ecapk;
-	data[6]  = ecapa;
-	data[7]  = ecapd;
-	data[8]  = cs;
-	data[9]  = ck;
-	data[10] = ca;
-	data[11] = cd;
-	data[12] = capSlope;
-	data[13] = capDispP;
-	data[14] = capDispN;
-	data[15] = res;
+	matParams[0]  = E;
+	matParams[1]  = fyp;
+	matParams[2]  = fyn;
+	matParams[3]  = alpha;
+	matParams[4]  = ecaps;
+	matParams[5]  = ecapk;
+	matParams[6]  = ecapa;
+	matParams[7]  = ecapd;
+	matParams[8]  = cs;
+	matParams[9]  = ck;
+	matParams[10] = ca;
+	matParams[11] = cd;
+	matParams[12] = capSlope;
+	matParams[13] = capDispP;
+	matParams[14] = capDispN;
+	matParams[15] = res;
 
 	// Initialize history variables
 	this->revertToStart();
@@ -92,7 +92,7 @@ XC::DrainClough2Material::DrainClough2Material(int tag, const XC::Vector &input,
  XC::DrainMaterial(tag, MAT_TAG_DrainClough2, 19, 16, b)
 {
 	for (int i = 0; i < 16; i++)
-		data[i] = input(i);
+		matParams[i] = input(i);
 
 	// Initialize history variables
 	this->revertToStart();
@@ -112,24 +112,24 @@ XC::DrainClough2Material::DrainClough2Material(void):
 int
 XC::DrainClough2Material::revertToStart(void)
 {
-	double dyp = data[1]/data[0];	// fyp/E
-	double dyn = data[2]/data[0];	// fyn/E
+	double dyp = matParams[1]/matParams[0];	// fyp/E
+	double dyn = matParams[2]/matParams[0];	// fyn/E
 
-	hstv[0]  = data[0];		// E
-	hstv[1]  = data[0];		// E
+	hstv[0]  = matParams[0];		// E
+	hstv[1]  = matParams[0];		// E
 	hstv[2]  = dyp;
 	hstv[3]  = dyn; 
 	hstv[4]  = 0.0;
 	hstv[5]  = dyp;
 	hstv[6]  = dyn;
-	hstv[7]  = data[1];		// fyp
-	hstv[8]  = data[2];		// fyn
-	hstv[9]  = data[13];	// capDispP
-	hstv[10] = data[14];	// capDispN
+	hstv[7]  = matParams[1];		// fyp
+	hstv[8]  = matParams[2];		// fyn
+	hstv[9]  = matParams[13];	// capDispP
+	hstv[10] = matParams[14];	// capDispN
 	hstv[11] = 0.0;
 	hstv[12] = 0.0;
 	hstv[13] = 0.0;
-	hstv[14] = data[0];		// E
+	hstv[14] = matParams[0];		// E
 	hstv[15] = 0.0;
 	hstv[16] = 0.0;
 	hstv[17] = 0.0;

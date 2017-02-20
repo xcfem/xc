@@ -88,11 +88,11 @@ XC::MovableObject &XC::MovableObject::operator=(const MovableObject &otro)
 int XC::MovableObject::getClassTag(void) const
   { return classTag; }
 
-//! @brief Returns the tag para la base de datos.
+//! @brief Returns the tag para la database.
 int XC::MovableObject::getDbTag(void) const
   { return dbTag; }
 
-//! @brief Returns the tag para la base de datos.
+//! @brief Returns the tag para la database.
 int XC::MovableObject::getDbTag(CommParameters &cp)
   {
     if(dbTag==0)
@@ -100,11 +100,11 @@ int XC::MovableObject::getDbTag(CommParameters &cp)
     return dbTag;
   }
 
-//! @brief Asigna el tag para la base de datos.
+//! @brief Asigna el tag para la database.
 void XC::MovableObject::setDbTag(int newTag)
   { dbTag = newTag; }
 
-//! @brief Asigna, sólo si es preciso, el tag para la base de datos.
+//! @brief Asigna, sólo si es preciso, el tag para la database.
 void XC::MovableObject::setDbTag(CommParameters &cp)
   {
     if(dbTag==0)

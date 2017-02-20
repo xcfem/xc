@@ -94,8 +94,7 @@ XC::fElement::fElement(int tag,
                    int NDM, int NDF,
                    int numNh1, int numNh3)
 :Element(tag,classTag), nh1(numNh1), nh3(numNh3), h(0), eleType(EleType),
-  theNodes(0), u(0), nen(NEN), ndf(NDF), ndm(NDM), d(0), data(0),
- connectedNodes(0),nrCount(0), Ki(0)
+  theNodes(0), u(0), nen(NEN), ndf(NDF), ndm(NDM), d(0), nrCount(0), Ki(0)
 
 {
     // allocate space for h array
@@ -125,16 +124,16 @@ XC::fElement::fElement(int tag,
           h[i] = 0.0;
     }
 
-    connectedNodes = new XC::ID(NEN);
+    connectedNodes= ID(NEN);
     d = new double[sizeD];
     for(int i=0; i<sizeD; i++) d[i] = 0.0;
-    data = new XC::Vector(d, sizeD);
+    feapData= Vector(d, sizeD);
 
     // allocate space for static varaibles on creation of first instance
     if(numfElements == 0)
       {
-        fElementM[0] = new XC::Matrix(1,1); // dummy for error
-        fElementV[0] = new XC::Vector(1);
+        fElementM[0]= new Matrix(1,1); // dummy for error
+        fElementV[0]= new Vector(1);
       }
 
     // increment number of elements
@@ -148,13 +147,12 @@ XC::fElement::fElement(int tag,
                    int sizeD, int NEN,
                    int NDM, int NDF, int iow)
 :Element(tag,classTag), nh1(0), nh3(0), h(0), eleType(EleType),
-  theNodes(0), u(0), nen(NEN), ndf(NDF), ndm(NDM), d(0), data(0),
- connectedNodes(0), nrCount(0), Ki(0)
+  theNodes(0), u(0), nen(NEN), ndf(NDF), ndm(NDM), d(0), nrCount(0), Ki(0)
 {
-    connectedNodes = new XC::ID(NEN);
+    connectedNodes= ID(NEN);
     d = new double[sizeD];
-    data = new XC::Vector(d, sizeD);
-    if(d == 0 || data == 0) {
+    feapData= Vector(d, sizeD);
+    if(d == 0 || feapData.Nulo()) {
         std::cerr << "FATAL: XC::fElement::fElement() - eleTag: " << tag;
         std::cerr << " ran out of memory creating d of size " << sizeD << std::endl;
         exit(-1);
@@ -207,8 +205,7 @@ XC::fElement::fElement(int tag,
 //   to be invoked upon
 XC::fElement::fElement(int classTag)
 :Element(0, classTag), nh1(0), nh3(0), h(0),
- theNodes(0), u(0), nen(0), ndf(0), ndm(0), d(0), data(0), connectedNodes(0),
- Ki(0)
+ theNodes(0), u(0), nen(0), ndf(0), ndm(0), d(0), Ki(0)
 {
     // does nothing
 }
@@ -227,10 +224,6 @@ XC::fElement::~fElement()
     if(theNodes != 0)
         delete [] theNodes;
 
-    if(data != 0)
-        delete  data;
-    if(connectedNodes != 0)
-        delete  connectedNodes;
     if(d != 0)
         delete [] d;
 
@@ -251,10 +244,10 @@ XC::fElement::~fElement()
   }
 
 int XC::fElement::getNumExternalNodes(void) const
-  {  return connectedNodes->Size(); }
+  {  return connectedNodes.Size(); }
 
 const XC::ID &XC::fElement::getExternalNodes(void) const
-  { return *connectedNodes; }
+  { return connectedNodes; }
 
 int XC::fElement::getNumDOF(void) const
   { return ndf*nen; }

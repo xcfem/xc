@@ -154,7 +154,7 @@ void XC::Preprocessor::clearAll(void)
     materialHandler.clearAll();
   }
 
-//! @brief Returns a pointer to the la base de datos.
+//! @brief Returns a pointer to the la database.
 XC::FE_Datastore *XC::Preprocessor::getDataBase(void)
   {
     FE_Datastore *retval= nullptr;
@@ -172,7 +172,7 @@ XC::DbTagData &XC::Preprocessor::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los datos through the channel being passed as parameter.
+//! @brief Send data through the channel being passed as parameter.
 int XC::Preprocessor::sendData(CommParameters &cp)
   {
     //res+= cp.sendMovable(materialHandler,getDbTagData(),CommMetaData(0));
@@ -189,7 +189,7 @@ int XC::Preprocessor::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos through the channel being passed as parameter.
+//! @brief Receive data through the channel being passed as parameter.
 int XC::Preprocessor::recvData(const CommParameters &cp)
   {
     //res+= cp.receiveMovable(materialHandler,getDbTagData(),CommMetaData(0));

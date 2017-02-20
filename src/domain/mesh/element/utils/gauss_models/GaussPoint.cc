@@ -49,7 +49,7 @@ XC::GaussPoint::GaussPoint(const Pos3d &p,const double &w)
   : ParticlePos3d(p)
   { set_weights(w); }
 
-//! @brief Asigna valores a los pesos.
+//! @brief Sets weights values.
 void XC::GaussPoint::set_weights(const double &r_weight, const double &s_weight, const double &t_weight)
   {
     rw = r_weight;

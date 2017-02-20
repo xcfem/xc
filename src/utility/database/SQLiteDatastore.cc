@@ -54,27 +54,27 @@ int XC::SQLiteDatastore::recvMsg(int dataTag, int commitTag, Message &, ChannelA
     return -1;
   }
 
-//! @brief Inserta los datos en un campo BLOB.
-bool XC::SQLiteDatastore::insertaDatos(const std::string &tbName,const int &dbTag,const int &commitTag,const void *data,const int &sz,const int &szTipo)
+//! @brief Inserts data on a BLOB field.
+bool XC::SQLiteDatastore::insertData(const std::string &tbName,const int &dbTag,const int &commitTag,const void *blobData,const int &sz,const int &szTipo)
   {
     const int numBytes= sz*szTipo;
     query= "INSERT INTO " + tbName + " VALUES (" + boost::lexical_cast<std::string>(dbTag) + ",";
     query+= boost::lexical_cast<std::string>(commitTag) + ",";
     query+= boost::lexical_cast<std::string>(sz) + ",?)";
-    return db.getDefaultQuery()->insert_blob1(query,data,numBytes);
+    return db.getDefaultQuery()->insert_blob1(query,blobData,numBytes);
   }
 
-//! @brief Actualiza los datos en un campo BLOB.
-bool XC::SQLiteDatastore::actualizaDatos(const std::string &tbName,const int &dbTag,const int &commitTag,const void *data,const int &sz,const int &szTipo)
+//! @brief Updates data o a BLOB field.
+bool XC::SQLiteDatastore::updateData(const std::string &tbName,const int &dbTag,const int &commitTag,const void *blobData,const int &sz,const int &szTipo)
   {
     const int numBytes= sz*szTipo;
     query= "UPDATE " + tbName + " SET data= ? WHERE dbTag= " + boost::lexical_cast<std::string>(dbTag);
     query+= " AND commitTag= " + boost::lexical_cast<std::string>(commitTag) + " AND size= ";
     query+= boost::lexical_cast<std::string>(sz);
-    return db.getDefaultQuery()->insert_blob1(query,data,numBytes);
+    return db.getDefaultQuery()->insert_blob1(query,blobData,numBytes);
   }
 
-const void *XC::SQLiteDatastore::recuperaDatos(const std::string &tbName,const int &dbTag,const int &commitTag,const int &sz)
+const void *XC::SQLiteDatastore::retrieveData(const std::string &tbName,const int &dbTag,const int &commitTag,const int &sz)
   {
     const void *retval= nullptr;
     // check that we have a connection
@@ -94,7 +94,7 @@ const void *XC::SQLiteDatastore::recuperaDatos(const std::string &tbName,const i
         if(!result)
           {
             // no data stored in db with these keys
-            std::cerr << "SQLiteDatastore::recuperaDatos - no data in table= " << tbName << " for object with dbTag= "
+            std::cerr << "SQLiteDatastore::retrieveData - no data in table= " << tbName << " for object with dbTag= "
                       << dbTag << " commitTag= " << commitTag << " and size= " << sz << " query= " << query << std::endl;
           }
         else
@@ -104,7 +104,7 @@ const void *XC::SQLiteDatastore::recuperaDatos(const std::string &tbName,const i
             if(!retval)
               {
                 // no vector stored in db with these keys
-                std::cerr << "SQLiteDatastore::recuperaDatos - no data in table= " << tbName << " for object with dbTag= "
+                std::cerr << "SQLiteDatastore::retrieveData - no data in table= " << tbName << " for object with dbTag= "
                       << dbTag << " and commitTag= " << commitTag << " and size= " << sz << " query= " << query << std::endl;
                 db.getDefaultQuery()->free_result();
               }
@@ -124,9 +124,9 @@ int XC::SQLiteDatastore::sendMatrix(int dbTag, int commitTag, const Matrix &theM
         // 1. try to INSERT the data into the database
         // 2. if INSERT fails we have to reformulate the query to UPDATE the existing data,
         //    as the row given by dbTag, commitTag and vectorSize may already already exist.
-        bool ok= insertaDatos("Matrices",dbTag,commitTag,theMatrix.getDataPtr(),theMatrix.getDataSize(),sizeof(double));
+        bool ok= insertData("Matrices",dbTag,commitTag,theMatrix.getDataPtr(),theMatrix.getDataSize(),sizeof(double));
         if(!ok)
-          ok= actualizaDatos("Matrices",dbTag,commitTag,theMatrix.getDataPtr(),theMatrix.getDataSize(),sizeof(double));
+          ok= updateData("Matrices",dbTag,commitTag,theMatrix.getDataPtr(),theMatrix.getDataSize(),sizeof(double));
         if(ok)
           retval= 0;
       }
@@ -140,14 +140,14 @@ int XC::SQLiteDatastore::recvMatrix(int dbTag, int commitTag, Matrix &theMatrix,
     int retval= -1;
     if(connection)
       {
-        const void *blob= recuperaDatos("Matrices",dbTag,commitTag,theMatrix.getDataSize());
+        const void *blob= retrieveData("Matrices",dbTag,commitTag,theMatrix.getDataSize());
 	if(blob)
           {
             // place the results into the vectors double array
-            const double *data = reinterpret_cast<const double *>(blob);
+            const double *blobData = reinterpret_cast<const double *>(blob);
             double *matrixData= theMatrix.getDataPtr();
             for(int i=0; i<theMatrix.getDataSize(); i++)
-              matrixData[i] = data[i];
+              matrixData[i] = blobData[i];
             // free the SQLITE_RES structure
             db.getDefaultQuery()->free_result();
             retval= 0;
@@ -169,9 +169,9 @@ int XC::SQLiteDatastore::sendVector(int dbTag, int commitTag, const Vector &theV
         // 1. try to INSERT the data into the database
         // 2. if INSERT fails we have to reformulate the query to UPDATE the existing data,
         //    as the row given by dbTag, commitTag and vectorSize may already already exist.
-        bool ok= (insertaDatos("Vectors",dbTag,commitTag,theVector.getDataPtr(),theVector.Size(),sizeof(double))!= SQLITE_OK);
+        bool ok= (insertData("Vectors",dbTag,commitTag,theVector.getDataPtr(),theVector.Size(),sizeof(double))!= SQLITE_OK);
         if(!ok)
-          ok= actualizaDatos("Vectors",dbTag,commitTag,theVector.getDataPtr(),theVector.Size(),sizeof(double));
+          ok= updateData("Vectors",dbTag,commitTag,theVector.getDataPtr(),theVector.Size(),sizeof(double));
         if(ok)
           retval= 0;
       }
@@ -185,13 +185,13 @@ int XC::SQLiteDatastore::recvVector(int dbTag, int commitTag, Vector &theVector,
     int retval= -1;
     if(connection)
       {
-        const void *blob= recuperaDatos("Vectors",dbTag,commitTag,theVector.Size());
+        const void *blob= retrieveData("Vectors",dbTag,commitTag,theVector.Size());
 	if(blob)
           {
             // place the results into the vectors double array
-            const double *data = reinterpret_cast<const double *>(blob);
+            const double *blobData = reinterpret_cast<const double *>(blob);
             for(int i=0; i<theVector.Size(); i++)
-              theVector[i] = data[i];
+              theVector[i] = blobData[i];
             // free the SQLITE_RES structure
             db.getDefaultQuery()->free_result();
             retval= 0;
@@ -212,9 +212,9 @@ int XC::SQLiteDatastore::sendID(int dbTag, int commitTag, const ID &theID, Chann
         // 1. try to INSERT the data into the database
         // 2. if INSERT fails we have to reformulate the query to UPDATE the existing data,
         //    as the row given by dbTag, commitTag and vectorSize may already already exist.
-        bool ok= insertaDatos("IDs",dbTag,commitTag,theID.getDataPtr(),theID.Size(),sizeof(int));
+        bool ok= insertData("IDs",dbTag,commitTag,theID.getDataPtr(),theID.Size(),sizeof(int));
         if(!ok)
-          ok= actualizaDatos("IDs",dbTag,commitTag,theID.getDataPtr(),theID.Size(),sizeof(int));
+          ok= updateData("IDs",dbTag,commitTag,theID.getDataPtr(),theID.Size(),sizeof(int));
         if(ok)
           retval= 0;
       }
@@ -228,13 +228,13 @@ int XC::SQLiteDatastore::recvID(int dbTag, int commitTag,ID &theID,ChannelAddres
     int retval= -1;
     if(connection)
       {
-        const void *blob= recuperaDatos("IDs",dbTag,commitTag,theID.Size());
+        const void *blob= retrieveData("IDs",dbTag,commitTag,theID.Size());
 	if(blob)
           {
             // place the results into the vectors double array
-            const int *data = reinterpret_cast<const int *>(blob);
+            const int *blobData = reinterpret_cast<const int *>(blob);
             for(int i=0; i<theID.Size(); i++)
-              theID[i] = data[i];
+              theID[i] = blobData[i];
             // free the SQLITE_RES structure
             db.getDefaultQuery()->free_result();
             retval= 0;

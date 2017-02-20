@@ -193,13 +193,13 @@ double XC::ListReinfLayer::getAreaHomogenizedSection(const double &E0) const
 XC::Vector XC::ListReinfLayer::getCdgHomogenizedSection(const double &E0) const
   {
     Vector retval(2);
-    double peso= 0.0;
+    double weight= 0.0;
     double divisor= 0.0;
     for(const_iterator i= begin();i!=end();i++)
       {
-        peso= (*i)->getReinfBars().getAreaHomogenizedSection(E0);
-        retval+= peso*(*i)->getReinfBars().getCdgHomogenizedSection(E0);
-        divisor+= peso;
+        weight= (*i)->getReinfBars().getAreaHomogenizedSection(E0);
+        retval+= weight*(*i)->getReinfBars().getCdgHomogenizedSection(E0);
+        divisor+= weight;
       }
     retval/= divisor;
     return retval;
@@ -264,13 +264,13 @@ double XC::ListReinfLayer::getAreaGrossSection(void) const
 XC::Vector XC::ListReinfLayer::getCdgGrossSection(void) const
   {
     Vector retval(2);
-    double peso= 0.0;
+    double weight= 0.0;
     double divisor= 0.0;
     for(const_iterator i= begin();i!=end();i++)
       {
-        peso= (*i)->getReinfBars().getAreaGrossSection();
-        retval+= peso*(*i)->getReinfBars().getCdgGrossSection();
-        divisor+= peso;
+        weight= (*i)->getReinfBars().getAreaGrossSection();
+        retval+= weight*(*i)->getReinfBars().getCdgGrossSection();
+        divisor+= weight;
       }
     retval/= divisor;
     return retval;

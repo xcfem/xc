@@ -80,14 +80,14 @@ XC::DbTagData &XC::PseudoTimeTracker::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los datos through the channel being passed as parameter.
+//! @brief Send data through the channel being passed as parameter.
 int XC::PseudoTimeTracker::sendData(CommParameters &cp)
   {
     int res= cp.sendDoubles(currentTime,committedTime,dT,eigenvalueTimeSet,getDbTagData(),CommMetaData(1));
     return res;
   }
 
-//! @brief Recibe los datos through the channel being passed as parameter.
+//! @brief Receive data through the channel being passed as parameter.
 int XC::PseudoTimeTracker::recvData(const CommParameters &cp)
   {
     int res= cp.receiveDoubles(currentTime,committedTime,dT,eigenvalueTimeSet,getDbTagData(),CommMetaData(1));

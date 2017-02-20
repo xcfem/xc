@@ -48,7 +48,7 @@ XC::PathSeriesBase::PathSeriesBase(int classTag,const Vector &theLoadPath,const 
 size_t XC::PathSeriesBase::getNumDataPoints(void) const
   { return thePath.Size(); }
 
-//! @brief Returns the número de datos en el archivo cuyo nombre se pasa como parámetro.
+//! @brief Returns the number of data en on the file with the name being passed as parameter.
 size_t XC::PathSeriesBase::getNumDataPointsOnFile(const std::string &fName) const
   {
     double dataPoint;

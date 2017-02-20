@@ -75,7 +75,7 @@ class DamageModel;
 
 //! \ingroup ElemJoint
 //
-//! @brief Elemento conexión para probleas bidimensionales.
+//! @brief 2D joint element.
 class Joint2D : public ElemWithMaterial<5,Joint2DPhysicalProperties>
   {
   private:

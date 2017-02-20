@@ -72,7 +72,7 @@ class InteractionDiagram: public ClosedTriangleMesh
     void Print(std::ostream &os) const;
   };
 
-InteractionDiagram calc_interaction_diagram(const FiberSectionBase &scc,const InteractionDiagramData &datos);
+InteractionDiagram calc_interaction_diagram(const FiberSectionBase &,const InteractionDiagramData &);
 
 } // end of XC namespace
 

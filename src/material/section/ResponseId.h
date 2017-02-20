@@ -63,7 +63,7 @@ class ResponseId: public ID
     ResponseId(int sz);
     ResponseId(const std::deque<std::string> &indices);
     ResponseId(const std::vector<std::string> &indices);
-    //ResponseId(int *data, int size, bool cleanIt = false);
+    //ResponseId(int *, int size, bool cleanIt = false);
     explicit ResponseId(const ID &);
     bool hasResponse(const int &ri) const;
     static int StringToRespId(const std::string &str);

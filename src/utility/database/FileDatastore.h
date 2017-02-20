@@ -90,14 +90,14 @@ typedef MAP_FILES::iterator                      MAP_FILES_ITERATOR;
 typedef struct intData
   {
     int *dbTag;
-    int *data;     
+    int *values;     
   } IntData;
 
 
 typedef struct doubleData
   {
     int *dbTag;
-    double *data;     
+    double *values;     
   } DoubleData;
 
 
@@ -123,7 +123,7 @@ class FileDatastore: public FE_Datastore
 
     int lastDomainChangeStamp;
     int currentCommitTag;
-    char *data;
+    char *charPtrData;
     int sizeData;
     
     IntData    theIntData;
@@ -154,8 +154,8 @@ class FileDatastore: public FE_Datastore
     int recvID(int dbTag, int commitTag,ID &, ChannelAddress *theAddress= NULL);
 
     int createTable(const std::string &tableName,const std::vector<std::string> &columns);
-    int insertData(const std::string &tableName,const std::vector<std::string> &columns, int commitTag, const Vector &data);
-    int getData(const std::string &tableName,const std::vector<std::string> &columns, int commitTag, Vector &data);
+    int insertData(const std::string &tableName,const std::vector<std::string> &columns, int commitTag, const Vector &);
+    int getData(const std::string &tableName,const std::vector<std::string> &columns, int commitTag, Vector &);
 
     // the commitState method
     int commitState(int commitTag);        

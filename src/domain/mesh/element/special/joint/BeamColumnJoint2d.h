@@ -76,7 +76,7 @@ class UniaxialMaterial;
 
 //! \ingroup ElemJoint
 //
-//! @brief Elemento conexión viga-columna, para probleas bidimensionales.
+//! @brief 2D beam column joint.
 class BeamColumnJoint2d : public ElemWithMaterial<4,BeamColumnJointPhysicalProperties>
   {
   private:

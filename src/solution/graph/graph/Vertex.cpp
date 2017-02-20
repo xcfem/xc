@@ -66,11 +66,11 @@ XC::Vertex::Vertex(int tag, int ref, double weight, int color)
    myDegree(0), myTmp(0) {}    
 
 
-//! @brief Asigna el peso del vértice en el grafo.
+//! @brief Assigns a weight to the vertex.
 void XC::Vertex::setWeight(double newWeight) 
   { myWeight = newWeight; }
 
-//! @brief Asigna el color del vértice en el grafo.
+//! @brief Assigns a color to the vertex.
 void XC::Vertex::setColor(int newColor) 
   { myColor = newColor; }
 
@@ -80,18 +80,18 @@ void XC::Vertex::setTmp(int newTmp)
 int XC::Vertex::getRef(void) const 
   { return myRef; }
 
-//! @brief Returns the peso del vértice en el grafo.
+//! @brief Returns the weight of the vertex.
 double XC::Vertex::getWeight(void) const 
   { return myWeight; }
 
-//! @brief Returns the color del vértice en el grafo.
+//! @brief Returns the color of the vertex.
 int XC::Vertex::getColor(void) const
   { return myColor; }
 
 int XC::Vertex::getTmp(void) const
   { return myTmp; }
 
-//! @brief Añade una arista al vértice.
+//! @brief Appends an edge to the vertex.
 int XC::Vertex::addEdge(int otherTag)
   {
     if(otherTag != this->getTag()) // don't allow itself to be added

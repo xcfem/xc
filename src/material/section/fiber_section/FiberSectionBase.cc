@@ -550,9 +550,9 @@ Pos3d XC::FiberSectionBase::getNMyMz(const DeformationPlane &def)
 //    +------->y
 //
 //! @brief Returns the puntos que definen el diagrama de interacción de la sección para un ángulo theta (con el eje Z) dado.
-void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &datos_diag,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
+void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &diag_data,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
   {
-    CalcPivotes cp(datos_diag.getDefsAgotPivotes(),fibras,fsC,fsS,theta);
+    CalcPivotes cp(diag_data.getDefsAgotPivotes(),fibras,fsC,fsS,theta);
     Pivotes pivotes(cp);
     if(pivotes.Ok())
       {
@@ -561,9 +561,9 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
         Pos3d P2= P1+100.0*cp.GetK(); //Flexión en torno al eje Z local.
         Pos3d P3;
         DeformationPlane def;
-        const double inc_eps_B= datos_diag.getIncEps();
-        const double eps_agot_A= datos_diag.getDefsAgotPivotes().getDefAgotPivoteA();
-        const double eps_agot_B= datos_diag.getDefsAgotPivotes().getDefAgotPivoteB();
+        const double inc_eps_B= diag_data.getIncEps();
+        const double eps_agot_A= diag_data.getDefsAgotPivotes().getDefAgotPivoteA();
+        const double eps_agot_B= diag_data.getDefsAgotPivotes().getDefAgotPivoteB();
         for(double e= eps_agot_A;e>=eps_agot_B;e-=inc_eps_B)
           {
             P3= pivotes.getPuntoB(e);
@@ -572,7 +572,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
         //Domains 3 and 4
         P1= pivotes.getPivoteB(); //Pivote
         P2= P1+100.0*cp.GetK(); 
-        const double inc_eps_A= datos_diag.getIncEps();
+        const double inc_eps_A= diag_data.getIncEps();
         for(double e= eps_agot_A;e>=0.0;e-=inc_eps_A)
           {
             P3= pivotes.getPuntoA(e);
@@ -588,7 +588,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
         const double recorr_eps_D4a= eps_D4a;
         if(recorr_eps_D4a>(eps_agot_A/200.0)) //Si el recorrido es positivo y "apreciable"
           {
-            const double inc_eps_D4a= datos_diag.getIncEps(); //recorr_eps_D4a/n_div_domain; //Intervalos de cálculo.
+            const double inc_eps_D4a= diag_data.getIncEps(); //recorr_eps_D4a/n_div_domain; //Intervalos de cálculo.
             for(double e= eps_D4a;e>=0.0;e-=inc_eps_D4a)
               {
                 P3= pivotes.getPuntoD(e);
@@ -598,8 +598,8 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
         //Domain 5
         P1= pivotes.getPivoteC(); //Pivote
         P2= P1+100.0*cp.GetK(); 
-        const double eps_agot_C= datos_diag.getDefsAgotPivotes().getDefAgotPivoteC();
-        const double inc_eps_D= datos_diag.getIncEps();
+        const double eps_agot_C= diag_data.getDefsAgotPivotes().getDefAgotPivoteC();
+        const double inc_eps_D= diag_data.getIncEps();
         for(double e= 0.0;e>=eps_agot_C;e-=inc_eps_D)
           {
             P3= pivotes.getPuntoD(e);
@@ -609,26 +609,26 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
   }
 
 //! @brief Returns the puntos que definen el diagrama de interacción en el plano definido por el ángulo being passed as parameter.
-const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlane(const InteractionDiagramData &datos_diag, const double &theta)
+const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlane(const InteractionDiagramData &diag_data, const double &theta)
   {
     static NMPointCloud retval;
     retval.clear();
-    retval.setUmbral(datos_diag.getUmbral());
-    const DqFibras &fsC= sel_mat_tag(datos_diag.getNmbSetHormigon(),datos_diag.getTagHormigon())->second;
+    retval.setUmbral(diag_data.getUmbral());
+    const DqFibras &fsC= sel_mat_tag(diag_data.getNmbSetHormigon(),diag_data.getTagHormigon())->second;
     if(fsC.empty())
-      std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagHormigon()
+      std::cerr << "No se han encontrado fibras del material de tag: " << diag_data.getTagHormigon()
                 << " que corresponde al hormigón." << std::endl;
-    const DqFibras &fsS= sel_mat_tag(datos_diag.getNmbSetArmadura(),datos_diag.getTagArmadura())->second;
+    const DqFibras &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
     if(fsS.empty())
-      std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagArmadura()
+      std::cerr << "No se han encontrado fibras del material de tag: " << diag_data.getTagArmadura()
                 << " que corresponde al acero de armar." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
         static NMyMzPointCloud tmp;
         tmp.clear();
-        tmp.setUmbral(datos_diag.getUmbral());
-        getInteractionDiagramPointsForTheta(tmp,datos_diag,fsC,fsS,theta);
-        getInteractionDiagramPointsForTheta(tmp,datos_diag,fsC,fsS,theta+M_PI); //theta+M_PI
+        tmp.setUmbral(diag_data.getUmbral());
+        getInteractionDiagramPointsForTheta(tmp,diag_data,fsC,fsS,theta);
+        getInteractionDiagramPointsForTheta(tmp,diag_data,fsC,fsS,theta+M_PI); //theta+M_PI
         retval= tmp.getNM(theta);
         revertToStart();
       }
@@ -638,23 +638,23 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
   }
 
 //! @brief Returns the puntos que definen el diagrama de interacción de la sección.
-const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(const InteractionDiagramData &datos_diag)
+const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(const InteractionDiagramData &diag_data)
   {
     static NMyMzPointCloud lista_esfuerzos;
     lista_esfuerzos.clear();
-    lista_esfuerzos.setUmbral(datos_diag.getUmbral());
-    const DqFibras &fsC= sel_mat_tag(datos_diag.getNmbSetHormigon(),datos_diag.getTagHormigon())->second;
+    lista_esfuerzos.setUmbral(diag_data.getUmbral());
+    const DqFibras &fsC= sel_mat_tag(diag_data.getNmbSetHormigon(),diag_data.getTagHormigon())->second;
     if(fsC.empty())
-      std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagHormigon()
+      std::cerr << "No se han encontrado fibras del material de tag: " << diag_data.getTagHormigon()
                 << " que corresponde al hormigón." << std::endl;
-    const DqFibras &fsS= sel_mat_tag(datos_diag.getNmbSetArmadura(),datos_diag.getTagArmadura())->second;
+    const DqFibras &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
     if(fsS.empty())
-      std::cerr << "No se han encontrado fibras del material de tag: " << datos_diag.getTagArmadura()
+      std::cerr << "No se han encontrado fibras del material de tag: " << diag_data.getTagArmadura()
                 << " que corresponde al acero de armar." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
-        for(double theta= 0.0;theta<2*M_PI;theta+=datos_diag.getIncTheta())
-          getInteractionDiagramPointsForTheta(lista_esfuerzos,datos_diag,fsC,fsS,theta);
+        for(double theta= 0.0;theta<2*M_PI;theta+=diag_data.getIncTheta())
+          getInteractionDiagramPointsForTheta(lista_esfuerzos,diag_data,fsC,fsS,theta);
         revertToStart();
       }
     else
@@ -663,9 +663,9 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
   }
 
 //! @brief Returns the diagrama de interacción.
-XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const InteractionDiagramData &datos_diag)
+XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const InteractionDiagramData &diag_data)
   {
-    const NMyMzPointCloud lp= getInteractionDiagramPoints(datos_diag);
+    const NMyMzPointCloud lp= getInteractionDiagramPoints(diag_data);
     InteractionDiagram retval;
     if(!lp.empty())
       {
@@ -679,9 +679,9 @@ XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const Interac
   }
 
 //! @brief Returns the diagrama de interacción.
-XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(const InteractionDiagramData &datos_diag, const double &theta)
+XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(const InteractionDiagramData &diag_data, const double &theta)
   {
-    const NMPointCloud lp= getInteractionDiagramPointsForPlane(datos_diag, theta);
+    const NMPointCloud lp= getInteractionDiagramPointsForPlane(diag_data, theta);
     InteractionDiagram2d retval;
     if(!lp.empty())
       {
@@ -695,12 +695,12 @@ XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(con
   }
 
 //! @brief Returns the diagrama de interacción en el plano N-My.
-XC::InteractionDiagram2d XC::FiberSectionBase::GetNMyInteractionDiagram(const InteractionDiagramData &datos_diag)
-  { return GetInteractionDiagramForPlane(datos_diag,M_PI/2.0); }
+XC::InteractionDiagram2d XC::FiberSectionBase::GetNMyInteractionDiagram(const InteractionDiagramData &diag_data)
+  { return GetInteractionDiagramForPlane(diag_data,M_PI/2.0); }
 
 //! @brief Returns the diagrama de interacción en el plano N-Mz.
-XC::InteractionDiagram2d XC::FiberSectionBase::GetNMzInteractionDiagram(const InteractionDiagramData &datos_diag)
-  { return GetInteractionDiagramForPlane(datos_diag,0.0); }
+XC::InteractionDiagram2d XC::FiberSectionBase::GetNMzInteractionDiagram(const InteractionDiagramData &diag_data)
+  { return GetInteractionDiagramForPlane(diag_data,0.0); }
 
 //! @brief Returns a vector orientado desde el centro de tracciones al de compresiones.
 XC::Vector XC::FiberSectionBase::getVectorBrazoMecanico(void) const

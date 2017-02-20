@@ -83,17 +83,17 @@ void XC::HingeRadauTwoBeamIntegration3d::getSectionLocations(int numSections, do
       xi[i] = 0.0;
   }
 
-//! @brief Returns the pesos correspondientes a cada sección.
+//! @brief Returns the weights of each section.
 void XC::HingeRadauTwoBeamIntegration3d::getSectionWeights(int numSections, double L, double *wt) const
   {
-    const double oneOverL = 1.0/L;
+    const double oneOverL= 1.0/L;
 
-    wt[0] = 0.25*lpI*oneOverL;
-    wt[1] = 3.0*wt[0];
-    wt[3] = 0.25*lpJ*oneOverL;
-    wt[2] = 3.0*wt[3];
-    for(int i = 4; i < numSections; i++)
-      wt[i] = 1.0;
+    wt[0]= 0.25*lpI*oneOverL;
+    wt[1]= 3.0*wt[0];
+    wt[3]= 0.25*lpJ*oneOverL;
+    wt[2]= 3.0*wt[3];
+    for(int i= 4; i < numSections; i++)
+      wt[i]= 1.0;
   }
 
 

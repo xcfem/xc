@@ -81,18 +81,18 @@
 
 void XC::FileDatastore::libera(void)
   {
-    if(data)
+    if(charPtrData)
       {
-        delete data;
-        data= nullptr;
+        delete charPtrData;
+        charPtrData= nullptr;
         sizeData= 0;
       }
   }
 void XC::FileDatastore::alloc(const size_t &sz)
   {
     libera();
-    data= new char[sz];
-    if(data)
+    charPtrData= new char[sz];
+    if(charPtrData)
       sizeData= sz;
     else
       {
@@ -102,7 +102,7 @@ void XC::FileDatastore::alloc(const size_t &sz)
   }
 
 XC::FileDatastore::FileDatastore(const std::string &dataBaseName,Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker)
-  :FE_Datastore(preprocessor, theObjBroker), dataBase(dataBaseName), data(nullptr), sizeData(0), currentMaxInt(0), currentMaxDouble(0)
+  :FE_Datastore(preprocessor, theObjBroker), dataBase(dataBaseName), charPtrData(nullptr), sizeData(0), currentMaxInt(0), currentMaxDouble(0)
   { resizeDouble(1024); }
 
 XC::FileDatastore::~FileDatastore(void)
@@ -171,7 +171,7 @@ void XC::FileDatastore::resetFilePointers(void)
     if(theFile != 0) {
       theFile->seekp(0, std::ios::beg);
       *(theIntData.dbTag) = theFileStruct->maxDbTag;
-      theFile->write(data, sizeof(int));
+      theFile->write(charPtrData, sizeof(int));
       theFile->close();
       delete theFile;
       theFileStruct->theFile = 0;
@@ -184,7 +184,7 @@ void XC::FileDatastore::resetFilePointers(void)
     if(theFile != 0) {
       theFile->seekp(0, std::ios::beg);
       *(theIntData.dbTag) = theFileStruct->maxDbTag;
-      theFile->write(data, sizeof(int));
+      theFile->write(charPtrData, sizeof(int));
       theFile->close();
       delete theFile;
       theFileStruct->theFile = 0;
@@ -197,7 +197,7 @@ void XC::FileDatastore::resetFilePointers(void)
     if(theFile != 0) {
       theFile->seekp(0, std::ios::beg);
       *(theIntData.dbTag) = theFileStruct->maxDbTag;
-      theFile->write(data, sizeof(int));
+      theFile->write(charPtrData, sizeof(int));
       theFile->close();
       delete theFile;
       theFileStruct->theFile = 0;
@@ -321,7 +321,7 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
     // try current location
     if(pos < fileEnd && found == false)
       {
-        theStream->read(data, stepSize);
+        theStream->read(charPtrData, stepSize);
         if(*(theIntData.dbTag) == dBTag )
           { found = true; }
       }
@@ -334,7 +334,7 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
         theStream->seekg(pos, std::ios::beg);
         while(pos < fileEnd && found == false)
           {
-            theStream->read(data, stepSize);
+            theStream->read(charPtrData, stepSize);
             if(*(theIntData.dbTag) == dBTag)
 	      found = true;
             else
@@ -350,7 +350,7 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
 
     *(theIntData.dbTag) = dBTag;
     for(int i=0; i<idSize; i++)
-      theIntData.data[i] = theID(i);
+      theIntData.values[i] = theID(i);
 
     //
     // we now write the data
@@ -358,7 +358,7 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
 
     theStream->seekp(pos, std::ios::beg); // reset so can go write at the end
 
-    theStream->write(data, stepSize);
+    theStream->write(charPtrData, stepSize);
     if(theStream->bad())
       {
         std::cerr << "FileDatastore::sendID() - error writing to file\n";
@@ -462,7 +462,7 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
 
     if(pos < fileEnd)
       {
-        theStream->read(data, stepSize);
+        theStream->read(charPtrData, stepSize);
         if(*(theIntData.dbTag) == dBTag)
           {
             found = true;
@@ -477,7 +477,7 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
         theStream->seekg(pos, std::ios::beg);
         while((pos < fileEnd) && (found == false))
           {
-            theStream->read(data, stepSize);
+            theStream->read(charPtrData, stepSize);
             if(*(theIntData.dbTag) == dBTag)
 	      found = true;
             else
@@ -494,7 +494,7 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
 
     // we now place the received data into the XC::ID
     for(int i=0; i<idSize; i++)
-      theID(i) = theIntData.data[i];
+      theID(i) = theIntData.values[i];
     return 0;
   }		
 
@@ -601,7 +601,7 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const XC::Matrix &the
     // try current location
     if(pos < fileEnd && found == false)
       {
-        theStream->read(data, stepSize);
+        theStream->read(charPtrData, stepSize);
         if(*(theIntData.dbTag) == dBTag )
           { found = true; }
       }
@@ -614,7 +614,7 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const XC::Matrix &the
         theStream->seekg(pos, std::ios::beg);
         while(pos < fileEnd && found == false)
           {
-            theStream->read(data, stepSize);
+            theStream->read(charPtrData, stepSize);
             if(*(theIntData.dbTag) == dBTag)
 	      found = true;
             else
@@ -633,7 +633,7 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const XC::Matrix &the
     for(int j=0; j<noMatCols; j++)
     for(int k=0; k < noMatRows; k++)
       {
-        theDoubleData.data[loc] = theMatrix(k,j);
+        theDoubleData.values[loc] = theMatrix(k,j);
         loc++;
       }
 
@@ -642,7 +642,7 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const XC::Matrix &the
     //
 
     theStream->seekp(pos, std::ios::beg); // reset so can go write at the end
-    theStream->write(data, stepSize);
+    theStream->write(charPtrData, stepSize);
 
     // update the size of file if we have added to eof
     if(theFileStruct->fileEnd <= pos)
@@ -740,7 +740,7 @@ int XC::FileDatastore::recvMatrix(int dBTag, int commitTag,Matrix &theMatrix,Cha
   // we try the current file position first
 
   if(pos < fileEnd) {
-    theStream->read(data, stepSize);
+    theStream->read(charPtrData, stepSize);
     if((*(theIntData.dbTag) == dBTag)) {
       found = true;
       pos += stepSize;
@@ -752,7 +752,7 @@ int XC::FileDatastore::recvMatrix(int dBTag, int commitTag,Matrix &theMatrix,Cha
     pos = sizeof(int);
     theStream->seekg(pos, std::ios::beg);
     while((pos < fileEnd) && (found == false)) {
-      theStream->read(data, stepSize);
+      theStream->read(charPtrData, stepSize);
       if(*(theIntData.dbTag) == dBTag)
 	found = true;
       else
@@ -768,7 +768,7 @@ int XC::FileDatastore::recvMatrix(int dBTag, int commitTag,Matrix &theMatrix,Cha
   int loc=0;
   for(int j=0; j<noMatCols; j++)
     for(int k=0; k < noMatRows; k++) {
-      theMatrix(k,j) = theDoubleData.data[loc];
+      theMatrix(k,j) = theDoubleData.values[loc];
       loc++;
     }
 
@@ -876,7 +876,7 @@ int XC::FileDatastore::sendVector(int dBTag, int commitTag,const XC::Vector &the
     // must be a bug in the vc compiler! .. we are here already tellg() above!!
     theStream->seekg(pos, std::ios::beg);
 // #endif
-    theStream->read(data, stepSize);
+    theStream->read(charPtrData, stepSize);
     if(*(theIntData.dbTag) == dBTag ) {
       found = true;
     }
@@ -888,7 +888,7 @@ int XC::FileDatastore::sendVector(int dBTag, int commitTag,const XC::Vector &the
     pos = sizeof(int);
     theStream->seekg(pos, std::ios::beg);
     while(pos < fileEnd && found == false) {
-      theStream->read(data, stepSize);
+      theStream->read(charPtrData, stepSize);
 
       if(*(theIntData.dbTag) == dBTag)
 	found = true;
@@ -907,14 +907,14 @@ int XC::FileDatastore::sendVector(int dBTag, int commitTag,const XC::Vector &the
 
   *(theDoubleData.dbTag) = dBTag;
   for(int i=0; i<vectSize; i++)
-    theDoubleData.data[i] = theVector(i);
+    theDoubleData.values[i] = theVector(i);
 
   //
   // we now write the data
   //
 
   theStream->seekp(pos, std::ios::beg); // reset so can go write at the end
-  theStream->write(data, stepSize);
+  theStream->write(charPtrData, stepSize);
 
   // update the size of file if we have added to eof
   if(theFileStruct->fileEnd <= pos)
@@ -1008,7 +1008,7 @@ int XC::FileDatastore::recvVector(int dBTag, int commitTag, Vector &theVector, C
   // we try the current file position first
 
   if(pos < fileEnd) {
-    theStream->read(data, stepSize);
+    theStream->read(charPtrData, stepSize);
     if((*(theIntData.dbTag) == dBTag)) {
       found = true;
       pos += stepSize;
@@ -1020,7 +1020,7 @@ int XC::FileDatastore::recvVector(int dBTag, int commitTag, Vector &theVector, C
     pos = sizeof(int);
     theStream->seekg(pos, std::ios::beg);
     while((pos < fileEnd) && (found == false)) {
-      theStream->read(data, stepSize);
+      theStream->read(charPtrData, stepSize);
       if(*(theIntData.dbTag) == dBTag)
 	found = true;
       else
@@ -1034,7 +1034,7 @@ int XC::FileDatastore::recvVector(int dBTag, int commitTag, Vector &theVector, C
   }
 
   for(int i=0; i<vectSize; i++)
-    theVector(i) = theDoubleData.data[i];
+    theVector(i) = theDoubleData.values[i];
 
   return 0;
 }		
@@ -1067,7 +1067,7 @@ int XC::FileDatastore::createTable(const std::string &tableName,const std::vecto
     return res;
   }
 
-int XC::FileDatastore::insertData(const std::string &tableName,const std::vector<std::string> &columns,int commitTag, const XC::Vector &data)
+int XC::FileDatastore::insertData(const std::string &tableName,const std::vector<std::string> &columns,int commitTag, const XC::Vector &vectorData)
   {
     // open the file
     const std::string fileName= dataBase + "." + tableName;
@@ -1083,8 +1083,8 @@ int XC::FileDatastore::insertData(const std::string &tableName,const std::vector
   table << std::setprecision(16);
 
   // write the data
-  for(int i=0; i<data.Size(); i++) {
-    table << data(i) << "\t";
+  for(int i=0; i<vectorData.Size(); i++) {
+    table << vectorData(i) << "\t";
   }
 
   table << "\n";
@@ -1094,7 +1094,7 @@ int XC::FileDatastore::insertData(const std::string &tableName,const std::vector
 }
 
 
-int XC::FileDatastore::getData(const std::string &tableName,const std::vector<std::string> &columns, int commitTag, Vector &data)
+int XC::FileDatastore::getData(const std::string &tableName,const std::vector<std::string> &columns, int commitTag, Vector &)
   { return 0; }
 
 
@@ -1105,7 +1105,7 @@ int XC::FileDatastore::getData(const std::string &tableName,const std::vector<st
 
 int XC::FileDatastore::openFile(const std::string &fileName, FileDatastoreOutputFile *theFileStruct, int dataSize)
   {
-    fstream *res = new fstream();
+    fstream *res= new fstream();
     if(res == 0)
       {
         std::cerr << "FileDatastore::openFile - out of memory; failed to open file: " << fileName << std::endl;
@@ -1142,12 +1142,12 @@ int XC::FileDatastore::openFile(const std::string &fileName, FileDatastoreOutput
 
   if(fileEnd == 0 || fileEnd == -1) {
     *(theIntData.dbTag) = maxDataTag;
-    res->write(data, sizeof(int));
+    res->write(charPtrData, sizeof(int));
     fileEnd = sizeof(int);
     maxDataTag = -1;
   } else {
     res->seekg(0, std::ios::beg);
-    res->read(data, sizeof(int));
+    res->read(charPtrData, sizeof(int));
     maxDataTag = *(theIntData.dbTag);
   }
 
@@ -1184,11 +1184,11 @@ int XC::FileDatastore::resizeInt(int newSize)
 
     currentMaxInt = (sizeData/sizeOfChar-sizeOfInt)/sizeOfInt;
     currentMaxDouble = (sizeData/sizeOfChar-sizeOfInt)/sizeOfDouble;
-    char *dataPtr = &data[sizeof(int)];
-    theIntData.dbTag = reinterpret_cast<int *>(data);
-    theIntData.data = reinterpret_cast<int *>(dataPtr);
-    theDoubleData.dbTag = reinterpret_cast<int *>(data);
-    theDoubleData.data = reinterpret_cast<double *>(dataPtr);
+    char *dataPtr = &charPtrData[sizeof(int)];
+    theIntData.dbTag = reinterpret_cast<int *>(charPtrData);
+    theIntData.values = reinterpret_cast<int *>(dataPtr);
+    theDoubleData.dbTag = reinterpret_cast<int *>(charPtrData);
+    theDoubleData.values = reinterpret_cast<double *>(dataPtr);
     return 0;
   }
 
@@ -1211,10 +1211,10 @@ int XC::FileDatastore::resizeDouble(int newSize)
 
     currentMaxInt = (sizeOfChar*sizeData-sizeOfInt)/sizeOfInt;
     currentMaxDouble = (sizeOfChar*sizeData-sizeOfInt)/sizeOfDouble;
-    char *dataPtr = &data[sizeof(int)];
-    theIntData.dbTag = reinterpret_cast<int *>(data);
-    theIntData.data = reinterpret_cast<int *>(dataPtr);
-    theDoubleData.dbTag = reinterpret_cast<int *>(data);
-    theDoubleData.data = reinterpret_cast<double *>(dataPtr);
+    char *dataPtr = &charPtrData[sizeof(int)];
+    theIntData.dbTag = reinterpret_cast<int *>(charPtrData);
+    theIntData.values = reinterpret_cast<int *>(dataPtr);
+    theDoubleData.dbTag = reinterpret_cast<int *>(charPtrData);
+    theDoubleData.values = reinterpret_cast<double *>(dataPtr);
     return 0;
   }

@@ -87,7 +87,7 @@ class ProblemaEF: public EntCmd
     Preprocessor preprocessor; //!< Object that manages the model.
     ProcSolu proc_solu; //!< Solution procedure.
     MapFields fields; //!< Definición de campos para salida de resultados.
-    FE_Datastore *dataBase; //!< Base de datos para salvar estados.
+    FE_Datastore *dataBase; //!< database para salvar estados.
     static FEM_ObjectBrokerAllClasses theBroker;
 
   public:

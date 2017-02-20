@@ -106,7 +106,7 @@ int XC::MFreedom_ConstraintBase::addResistingForceToNodalReaction(bool inclInert
 const XC::Matrix &XC::MFreedom_ConstraintBase::getConstraint(void) const
   { return constraintMatrix; }
 
-//! @brief Envía los datos through the channel being passed as parameter.
+//! @brief Send data through the channel being passed as parameter.
 int XC::MFreedom_ConstraintBase::sendData(CommParameters &cp)
   {
     int res= Constraint::sendData(cp);
@@ -115,7 +115,7 @@ int XC::MFreedom_ConstraintBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los datos through the channel being passed as parameter.
+//! @brief Receive data through the channel being passed as parameter.
 int XC::MFreedom_ConstraintBase::recvData(const CommParameters &cp)
   {
     int res= Constraint::recvData(cp);

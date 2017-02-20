@@ -72,7 +72,7 @@ double XC::VPDependentFriction::getDFFrcDNFrc(void)
 XC::FrictionModel* XC::VPDependentFriction::getCopy(void) const
   { return new VPDependentFriction(*this); }
 
-//! @brief Envia los datos through the channel being passed as parameter.
+//! @brief Send data through the channel being passed as parameter.
 int XC::VPDependentFriction::sendData(CommParameters &cp)
   {
     int res= VDependentFriction::sendData(cp);
@@ -81,7 +81,7 @@ int XC::VPDependentFriction::sendData(CommParameters &cp)
   }
 
 
-//! @brief Recibe los datos through the channel being passed as parameter.
+//! @brief Receive data through the channel being passed as parameter.
 int XC::VPDependentFriction::recvData(const CommParameters &cp)
   {
     int res= VDependentFriction::recvData(cp);
