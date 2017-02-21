@@ -27,7 +27,8 @@ class_<XC::DeformationPlane, bases<Plano3d> >("DeformationPlane")
   .def(init<Pos2d,double,Pos2d,double,Pos2d,double>())
   .def(init<Pos3d,Pos3d,Pos3d>())
   .def("constantStrain",&XC::DeformationPlane::ConstantStrain)
-  .def("getDeformation",&XC::DeformationPlane::Deformacion)
+.def("getDeformation",&XC::DeformationPlane::Strain,"DEPRECATED; returns strain at position.")
+  .def("getStrain",&XC::DeformationPlane::Strain,"returns strain at position.")
   ;
 
 class_<XC::CalcPivotes, bases<Ref3d3d>, boost::noncopyable >("CalcPivotes", no_init)

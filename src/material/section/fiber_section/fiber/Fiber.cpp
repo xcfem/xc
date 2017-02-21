@@ -86,8 +86,8 @@ double XC::Fiber::getFuerza(void) const
     return retval;
   }
 
-//! @brief Return the fuerza con la que actúa la fibra.
-double XC::Fiber::getDeformacion(void) const
+//! @brief Returns fiber strain.
+double XC::Fiber::getStrain(void) const
   { return getMaterial()->getStrain(); }
 
 //! @brief Return the posición de la fibra.

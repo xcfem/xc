@@ -45,9 +45,9 @@ class_<XC::Fiber,XC::Fiber*, bases<XC::TaggedObject>, boost::noncopyable >("Fibe
   .def("getPos",&XC::Fiber::getPos)
 
   .def("getArea",&XC::Fiber::getArea,"Returns fiber area.")
-  .def("getDeformacion",&XC::Fiber::getDeformacion,"DEPRECATED (change to getDeformation); returns fiber strain.") //Change to getDeformation 
+  .def("getDeformacion",&XC::Fiber::getStrain,"DEPRECATED (change to getStrain); returns fiber strain.") //Change to getDeformation 
   .def("getFuerza",&XC::Fiber::getFuerza,"DEPRECATED (change to getForce); returns fiber internal force.") //Change to getForce
-  .def("getStrain",&XC::Fiber::getDeformacion,"Returns fiber strain.")
+  .def("getStrain",&XC::Fiber::getStrain,"Returns fiber strain.")
   .def("getForce",&XC::Fiber::getFuerza,"Returns fiber internal force.")
   .def("getMz",&XC::Fiber::getMz)
   .def("getMy",&XC::Fiber::getMy)

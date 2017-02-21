@@ -85,9 +85,9 @@ class Beam2dPointLoad: public BeamPointLoad
     const Matrix &getLocalForces(void) const;
     const Matrix &getLocalMoments(void) const;
 
-    const Matrix &getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor);
-    void addReactionsInBasicSystem(const double &,const double &,FVector &);
-    void addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &);
+    const Matrix &getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor) const;
+    void addReactionsInBasicSystem(const double &,const double &,FVector &) const;
+    void addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &) const;
     void addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
 
     int sendSelf(CommParameters &);  

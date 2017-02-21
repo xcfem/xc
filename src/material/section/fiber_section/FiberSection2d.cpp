@@ -131,21 +131,21 @@ double XC::FiberSection2d::get_strain(const double &y) const
     return (def(0) + y*def(1));
   }
 
-//! @brief Return the deformación correspondiente a la posición being passed as parameter.
+//! @brief Returns the strains in the position being passed as parameter.
 double XC::FiberSection2d::getStrain(const double &y,const double &) const
   { return get_strain(-y); } //XXX El cambio de signo de la y se debe al lío
                              // que produce el que la coordenada este cambiada
                              // de signo
                              // ver constructor UniaxialFiber2d y otras líneas.
 
-//! @brief Establece los valores de las initial strains.
+//! @brief Sets values for initial strains.
 int XC::FiberSection2d::setInitialSectionDeformation(const Vector &deforms)
   {
     FiberSectionBase::setInitialSectionDeformation(deforms);
     return fibras.setInitialSectionDeformation(*this);
   }
 
-//! @brief Establece los valores de las deformaciones de prueba.
+//! @brief Sets values for trial strains.
 int XC::FiberSection2d::setTrialSectionDeformation(const Vector &deforms)
   {
     FiberSectionBase::setTrialSectionDeformation(deforms);

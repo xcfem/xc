@@ -44,8 +44,8 @@ class ShellMecLoad: public BidimMecLoad
     ShellMecLoad(int tag, int classTag,const double &Trans,const double &,const double &,const ID &theElementTags);
     ShellMecLoad(int tag, int classTag);
 
-    virtual void addReactionsInBasicSystem(const double &,const double &,FVectorShell &);
-    virtual void addFixedEndForcesInBasicSystem(const double &,const double &,FVectorShell &);
+    virtual void addReactionsInBasicSystem(const double &,const double &,FVectorShell &) const;
+    virtual void addFixedEndForcesInBasicSystem(const double &,const double &,FVectorShell &) const;
 
     virtual size_t getDimVectorFuerza(void) const;
     virtual size_t getDimVectorMomento(void) const;

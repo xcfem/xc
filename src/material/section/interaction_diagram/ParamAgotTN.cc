@@ -31,18 +31,18 @@
 #include "xc_basic/src/util/matem.h"
 
 
-//Factor de cumplimiento para la deformación máxima.
-//válido si es mayor que uno.
+//! @brief Factor de cumplimiento para la max strain.
+//! válido si es mayor que uno.
 double XC::ParamAgotTN::fc_tracc(void) const
   { return agot_pivotes.getDefAgotPivoteA()/eps_c_max; }
 
-//Factor de cumplimiento para la deformación mínima.
-//válido si es mayor que uno.
+//! @brief Factor de cumplimiento para la min strain.
+//! válido si es mayor que uno.
 double XC::ParamAgotTN::fc_comp(void) const
   { return agot_pivotes.getDefAgotPivoteB()/eps_c_min; }
 
-//Factor de cumplimiento para la deformación en el pivote C.
-//válido si es mayor que uno.
+//! @brief Factor de cumplimiento for C pivot strain.
+//! válido si es mayor que uno.
 double XC::ParamAgotTN::fc_pC(void) const
   { 
     if(eps_c_pC < 0)

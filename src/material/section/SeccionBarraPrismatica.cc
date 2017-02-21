@@ -62,29 +62,29 @@ XC::SeccionBarraPrismatica &XC::SeccionBarraPrismatica::operator=(const SeccionB
     return *this;
   }
 
-//! @brief Establece el plano de deformaciones de la sección.
+//! @brief Sets the deformation plane de la sección.
 int XC::SeccionBarraPrismatica::setTrialDeformationPlane(const DeformationPlane &plano)
-  { return setTrialSectionDeformation(getVectorDeformacion(plano)); }
+  { return setTrialSectionDeformation(getGeneralizedStrainVector(plano)); }
 
-//! @brief Establece el plano de initial strains de la sección.
+//! @brief Sets the plano de initial strains de la sección.
 int XC::SeccionBarraPrismatica::setInitialDeformationPlane(const DeformationPlane &plano)
-  { return setInitialSectionDeformation(getVectorDeformacion(plano)); }
+  { return setInitialSectionDeformation(getGeneralizedStrainVector(plano)); }
 
-//! @brief Returns initial deformation plane.
+//! @brief Returns initial strain plane.
 XC::DeformationPlane XC::SeccionBarraPrismatica::getInitialDeformationPlane(void) const
   { return DeformationPlane(getInitialSectionDeformation()); }
 
 
 //! @brief Returns the generalized strains vector que corresponde
-//! al plano de deformaciones being passed as parameter.
-const XC::Vector &XC::SeccionBarraPrismatica::getVectorDeformacion(const DeformationPlane &plano) const
+//! al deformation plane being passed as parameter.
+const XC::Vector &XC::SeccionBarraPrismatica::getGeneralizedStrainVector(const DeformationPlane &plano) const
   {
     const int order= getOrder();
     const ResponseId &code= getType();
     return plano.getDeformation(order,code);
   }
 
-//! @brief Returns the vector de deformaciones de la sección.
+//! @brief Returns the generalized strains vector de la sección.
 XC::DeformationPlane XC::SeccionBarraPrismatica::getDeformationPlane(void) const
   {
     DeformationPlane retval= DeformationPlane(getSectionDeformation());
@@ -144,7 +144,7 @@ const double &XC::SeccionBarraPrismatica::EIz(void) const
 const double &XC::SeccionBarraPrismatica::EIy(void) const
   { return getSectionTangent()(2,2); }
 //! @brief Returns the producto de inercia multiplicado por el
-//! módulo de deformación.
+//! Young's modulus.
 const double &XC::SeccionBarraPrismatica::EIyz(void) const
   { return getSectionTangent()(1,2); }
 

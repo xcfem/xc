@@ -44,11 +44,11 @@ class CalcPivotes;
 //! un plano de flexión determinado.
 class Pivotes
   {
-    Pos3d A; //!< Pivote A (deformación máxima en el acero a tracción).
-    Pos3d B; //!< Pivote B (deformación mínima en el hormigón comprimido).
+    Pos3d A; //!< Pivote A (max strain in tensioned steel).
+    Pos3d B; //!< Pivote B (min strain in compressed concrete).
     Pos3d C; //!< Pivote C (ver diagrama de pivotes en EHE).
-    Pos3d D; //!< Deformación nula en el hormigón más traccionado.
-    bool ok; //!< True if positions ok (see checkPositions).
+    Pos3d D; //!< Zero strain concrete.
+    bool ok; //!< True if positions are ok (see checkPositions).
 
   public:
     Pivotes(const Pos3d &a,const Pos3d &b,const Pos3d &c,const Pos3d &d);

@@ -129,7 +129,7 @@ class Fiber: public TaggedObject, public MovableObject
     virtual UniaxialMaterial *getMaterial(void) =0;
     virtual const UniaxialMaterial *getMaterial(void) const= 0;
     virtual double getArea(void) const=0;
-    double getDeformacion(void) const;
+    double getStrain(void) const;
     double getFuerza(void) const;
     double getMz(const double &y0= 0.0) const;
     double getMy(const double &z0= 0.0) const;

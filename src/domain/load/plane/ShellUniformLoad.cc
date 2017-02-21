@@ -95,7 +95,7 @@ const XC::Matrix &XC::ShellUniformLoad::getLocalMoments(void) const
 //! @param area Area del elemento.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
-void XC::ShellUniformLoad::addReactionsInBasicSystem(const double &area,const double &loadFactor,FVectorShell &p0)
+void XC::ShellUniformLoad::addReactionsInBasicSystem(const double &area,const double &loadFactor,FVectorShell &p0) const
   {
     //Loads over nodes.
     const double Px= Wx()*loadFactor*area/4;
@@ -132,7 +132,7 @@ void XC::ShellUniformLoad::addReactionsInBasicSystem(const double &area,const do
 //! @param area Area del elemento.
 //! @param loadFactor Load factor.
 //! @param q0 
-void XC::ShellUniformLoad::addFixedEndForcesInBasicSystem(const double &area,const double &loadFactor,FVectorShell &q0)
+void XC::ShellUniformLoad::addFixedEndForcesInBasicSystem(const double &area,const double &loadFactor,FVectorShell &q0) const
   {
     std::cerr << "ShellUniformLoad::addFixedEndForcesInBasicSystem no implementada." << std::endl;
   }

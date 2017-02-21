@@ -74,7 +74,7 @@ XC::FedeasBondMaterial::FedeasBondMaterial(int tag, int classTag, int nhv, int n
 XC::FedeasBondMaterial::FedeasBondMaterial(int tag, int classTag, int nhv, int ndata)
   : XC::FedeasMaterial(tag, classTag, nhv, ndata) {}
 
-//! @brief Returns the valor noval del módulo de deformación.
+//! @brief Returns Young's modulus initial value.
 double XC::FedeasBondMaterial::getInitialTangent(void) const
   {
     //return q1p/u1p;

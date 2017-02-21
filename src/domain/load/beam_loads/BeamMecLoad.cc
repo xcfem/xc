@@ -44,7 +44,7 @@ XC::BeamMecLoad::BeamMecLoad(int tag,int classTag)
   :BeamLoad(tag, classTag), Trans(0.0), Axial(0.0) {}
 
 //! @brief Returns applied section forces due to this load (called in element's addLoad method). 
-const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const Matrix &xi,const double &loadFactor)
+const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const Matrix &xi,const double &loadFactor) const
   {
     static Matrix retval;
     std::cerr << "getAppliedSectionForces no definida." << std::endl;
@@ -55,7 +55,7 @@ const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const
 //! @param L Longitud del elemento.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
-void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FVector &)
+void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FVector &) const
   {
     std::cerr << "addReactionsInBasicSystem no definida." << std::endl;
   }
@@ -64,7 +64,7 @@ void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FV
 //! @param L Longitud del elemento.
 //! @param loadFactor Load factor.
 //! @param q0 ??
-void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &)
+void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &) const
   {
     std::cerr << "addFixedEndForcesInBasicSystem no definida." << std::endl;
   }

@@ -41,13 +41,13 @@ namespace XC {
 class InteractionDiagramData: public EntCmd
   {
     double umbral; //!< Distancia mínima entre puntos del diagrama.
-    double inc_eps; //!< Tamaño del paso en deformaciones.
-    double inc_t; //!< Tamaño del paso en ángulo.
-    DefAgotPivotes agot_pivotes; //!< Deformaciones de agotamiento en pivotes.
-    std::string nmb_set_hormigon; //!< Nombre del conjunto de fibras de hormigón.
-    int tag_hormigon; //!< Tag del material empleado para modelizar el hormigón.
-    std::string nmb_set_armadura; //!< Nombre del conjunto de fibras de armadura. 
-    int tag_armadura; //!< Tag del material empleado para modelizar la armadura.
+    double inc_eps; //!< Strain step size.
+    double inc_t; //!< Angle step size.
+    DefAgotPivotes agot_pivotes; //!< Ultimate strains at pivots.
+    std::string nmb_set_hormigon; //!< Concrete fibers set name.
+    int tag_hormigon; //!< Concrete material tag.
+    std::string nmb_set_armadura; //!< Steel fibers set name. 
+    int tag_armadura; //!< Steel material tag.
   public:
     InteractionDiagramData(void);
     InteractionDiagramData(const double &u,const double &inc_e,const double &inc_t= M_PI/4,const DefAgotPivotes &agot= DefAgotPivotes());

@@ -42,7 +42,7 @@ class RawConcrete: public UniaxialMaterial
   {
   protected:
     double fpc; //!< Resistencia a compresión
-    double epsc0; //!< Deformación cuando se alcanza la resistencia a compresión
+    double epsc0; //!< Strain when compression strength is reached.
     double epscu; //!< Strain at crushing strength
 
     virtual void setup_parameters(void)= 0;

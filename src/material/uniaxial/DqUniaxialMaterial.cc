@@ -204,7 +204,7 @@ int XC::DqUniaxialMaterial::revertToStart(void)
   }
 
 
-//! @brief Asigna la initial deformation.
+//! @brief Asigna la initial strain.
 int XC::DqUniaxialMaterial::setInitialStrain(const Vector &def,const size_t &offset)
   {
     int err= 0;
@@ -215,7 +215,7 @@ int XC::DqUniaxialMaterial::setInitialStrain(const Vector &def,const size_t &off
     return err;
   }
 
-//! @brief Asigna la deformación de prueba.
+//! @brief Asigna la trial strain.
 int XC::DqUniaxialMaterial::setTrialStrain(const Vector &def,const size_t &offset)
   {
     int err= 0;
@@ -226,7 +226,7 @@ int XC::DqUniaxialMaterial::setTrialStrain(const Vector &def,const size_t &offse
     return err;
   }
 
-//! @brief Asigna la deformación de prueba (se emplea en ParallelMaterial).
+//! @brief Asigna la trial strain (se emplea en ParallelMaterial).
 int XC::DqUniaxialMaterial::setTrialStrain(const double &strain,const double &strainRate)
   {
     int err= 0;

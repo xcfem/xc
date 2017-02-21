@@ -112,7 +112,7 @@ const XC::Matrix &XC::Beam3dPointLoad::getLocalMoments(void) const
   }
 
 //! @brief Applied section forces due to element point load
-const XC::Matrix &XC::Beam3dPointLoad::getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor)
+const XC::Matrix &XC::Beam3dPointLoad::getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor) const
   {
     const size_t nSections= xi.noCols();
     static Matrix retval(5,nSections); //Sólo se ejecuta una vez.
@@ -160,7 +160,7 @@ const XC::Matrix &XC::Beam3dPointLoad::getAppliedSectionForces(const double &L,c
 //! @param L Longitud del elemento.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
-void XC::Beam3dPointLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0)
+void XC::Beam3dPointLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0) const
   {
     const double aOverL= X();
 
@@ -195,7 +195,7 @@ void XC::Beam3dPointLoad::addReactionsInBasicSystem(const double &L,const double
 //! @param L Longitud del elemento.
 //! @param loadFactor Load factor.
 //! @param q0 ??.
-void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0)
+void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0) const
   {
     const double aOverL= X();
 

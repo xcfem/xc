@@ -77,7 +77,7 @@ XC::SteelBase0103::SteelBase0103(int classTag)
 int XC::SteelBase0103::setTrialStrain(double strain, double strainRate)
   {
     if(fabs(strain)>fabs(10.0*getEpsy()))
-      std::clog << "¡Ojo!; la deformación del material SteelBase0103 es muy grande: "
+      std::clog << "¡Ojo!; la material strain SteelBase0103 es muy grande: "
                 << strain << std::endl;
     // Reset history variables to last converged state
     TminStrain= CminStrain;

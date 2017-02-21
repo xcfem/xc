@@ -219,7 +219,7 @@ void XC::FiberSectionShear3d::setRespVyVzTByName(const std::string &rvy,const st
 XC::FiberSectionShear3d::~FiberSectionShear3d(void)
   { libera(); }
 
-//! @brief Asigna la initial deformation.
+//! @brief Asigna la initial strain.
 int XC::FiberSectionShear3d::setInitialSectionDeformation(const Vector &def)
   {
     static Vector v(3);
@@ -231,7 +231,7 @@ int XC::FiberSectionShear3d::setInitialSectionDeformation(const Vector &def)
     return ret;
   }
 
-//! @brief Asigna la deformación de prueba.
+//! @brief Asigna la trial strain.
 int XC::FiberSectionShear3d::setTrialSectionDeformation(const Vector &def)
   {
     static Vector v(3);
@@ -243,7 +243,7 @@ int XC::FiberSectionShear3d::setTrialSectionDeformation(const Vector &def)
     return ret;
   }
 
-//! @brief Returns the initial deformation de la sección.
+//! @brief Returns the initial strain de la sección.
 const XC::Vector &XC::FiberSectionShear3d::getInitialSectionDeformation(void) const
   {
     defzero.Zero();

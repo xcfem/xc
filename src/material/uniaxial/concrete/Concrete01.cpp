@@ -204,7 +204,7 @@ void XC::Concrete01::calcula_trial_state(const double &dStrain)
         trialState.Tangent()= 0.0;
       }
   }
-//! @brief Establece el valor de la deformación de prueba.
+//! @brief Sets the trial strain value.
 int XC::Concrete01::setTrialStrain(double strain, double strainRate)
   {
     // Reset trial state variables to last committed state
@@ -403,7 +403,7 @@ int XC::Concrete01::revertToStart(void)
     return 0;
   }
 
-//! @brief Returns a copia del material.
+//! @brief Returns a material copy.
 XC::UniaxialMaterial* XC::Concrete01::getCopy(void) const
   { return new Concrete01(*this); }
 

@@ -911,7 +911,7 @@ int XC::ForceBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
             sp+= beamMecLoad->getAppliedSectionForces(L,xi,loadFactor); // Accumulate applied section forces due to element loads
             beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
           }
-        else if(BeamStrainLoad *strainLoad= dynamic_cast<BeamStrainLoad *>(theLoad)) //Deformaciones impuestas.
+        else if(BeamStrainLoad *strainLoad= dynamic_cast<BeamStrainLoad *>(theLoad)) //Prescribed deformations.
           {
             const size_t numSections= getNumSections();
             const Matrix &xi= beamIntegr->getIntegrPointCoords(numSections,L);

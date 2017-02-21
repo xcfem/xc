@@ -60,8 +60,7 @@ bool XC::NDMaterialPhysicalProperties::check_material_elast_plana(const std::str
       return true;
   }
 
-//! @brief returns los vectores con la deformación de cada uno de los
-//! puntos de Gauss.
+//! @brief returns commited strains at each Gauss point.
 XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStrain(void) const
   {
     const size_t nfilas= theMaterial.size();
@@ -76,8 +75,7 @@ XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStrain(void) const
     return retval;
   }   
 
-//! @brief returns los vectores con la deformación de cada uno de los
-//! puntos de Gauss.
+//! @brief returns commited stresses at each Gauss point.
 XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStress(void) const
   {
     const size_t nfilas= theMaterial.size();
@@ -126,7 +124,7 @@ double XC::NDMaterialPhysicalProperties::getCommittedAvgStress(const size_t &iCo
     return retval;
   }
 
-//! @brief Return the componente iComp de la deformación media en el elemento.
+//! @brief Return the componente iComp de la average strain en el elemento.
 double XC::NDMaterialPhysicalProperties::getCommittedAvgStrain(const size_t &iComp) const
   {
     const size_t numMaterials= theMaterial.size();

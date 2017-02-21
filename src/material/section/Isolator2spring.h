@@ -86,8 +86,8 @@ class Isolator2spring : public SectionForceDeformation
     double Pe;
     double po;
 
-    double utptTrial[2]; //!< Deformaciones de prueba.
-    double utptInic[2]; //!< Deformaciones iniciales.
+    double utptTrial[2]; //!< Trial strains.
+    double utptInic[2]; //!< Initial strains.
     double sP_n;
     mutable double sP_n1;
 

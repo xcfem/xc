@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test comprobación del cálculo de la deformación por fluencia
-   según EHE-08. '''
+''' Creep strain computation test according to EHE-08. '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

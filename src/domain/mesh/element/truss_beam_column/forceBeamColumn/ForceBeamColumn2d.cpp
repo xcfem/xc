@@ -819,7 +819,7 @@ int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
 
         // Accumulate elastic deformations in basic system
         beamIntegr->addElasticDeformations(theLoad, loadFactor, L, v0);
-        if(BeamMecLoad *beamMecLoad= dynamic_cast<BeamMecLoad *>(theLoad))
+        if(const BeamMecLoad *beamMecLoad= dynamic_cast<const BeamMecLoad *>(theLoad))
           {
             const size_t numSections= getNumSections();
             if(sp.Nula())
@@ -828,7 +828,7 @@ int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
             sp+= beamMecLoad->getAppliedSectionForces(L,xi,loadFactor); // Accumulate applied section forces due to element loads
             beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
           }
-        else if(BeamStrainLoad *strainLoad= dynamic_cast<BeamStrainLoad *>(theLoad)) //Deformaciones impuestas.
+        else if(const BeamStrainLoad *strainLoad= dynamic_cast<const BeamStrainLoad *>(theLoad)) //Prescribed deformations.
           {
             const size_t numSections= getNumSections();
             const Matrix &xi= beamIntegr->getIntegrPointCoords(numSections,L);

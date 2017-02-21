@@ -43,15 +43,15 @@ XC::ConcreteBase::ConcreteBase(int tag, int classTag, double FPC, double EPSC0, 
 XC::ConcreteBase::ConcreteBase(int tag, int classTag)
   :RawConcrete(tag, classTag) {}
 
-//! @brief Return the tensión en el material.
+//! @brief Returns the material stress.
 double XC::ConcreteBase::getStress(void) const
   { return trialState.getStress(); }
 
-//! @breif Return the deformación del material.
+//! @breif Returns material strain.
 double XC::ConcreteBase::getStrain(void) const
   { return trialState.getStrain(); }
 
-//! @breif Return the tangente al diagrama tensión - deformación.
+//! @breif Returns the tangent to stress-strain diagram.
 double XC::ConcreteBase::getTangent(void) const
   { return trialState.getTangent(); }
 

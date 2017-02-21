@@ -302,7 +302,7 @@ void XC::SectionAggregator::setAddtionsPyList(const boost::python::list &respons
 XC::SectionAggregator::~SectionAggregator(void)
   { libera(); }
 
-//! @brief Asigna la initial deformation.
+//! @brief Asigna la initial strain.
 int XC::SectionAggregator::setInitialSectionDeformation(const Vector &def)
   {
     int ret= 0;
@@ -320,7 +320,7 @@ int XC::SectionAggregator::setInitialSectionDeformation(const Vector &def)
     return ret;
   }
 
-//! @brief Asigna la deformación de prueba.
+//! @brief Asigna la trial strain.
 int XC::SectionAggregator::setTrialSectionDeformation(const Vector &def)
   {
     int ret= 0;
@@ -347,7 +347,7 @@ double XC::SectionAggregator::getStrain(const double &y,const double &z) const
     return retval;
   }
 
-//! @brief Returns the initial deformation de la sección.
+//! @brief Returns the initial strain de la sección.
 const XC::Vector &XC::SectionAggregator::getInitialSectionDeformation(void) const
   {
     int theSectionOrder= 0;

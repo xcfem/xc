@@ -144,7 +144,7 @@ int XC::Brick::getNumDOF(void) const
 XC::Vector XC::Brick::getAvgStress(void) const
   { return physicalProperties.getCommittedAvgStress(); }
 
-//! Returns the índice de la componente (i,j) del tensor de deformaciones (tensiones)
+//! Returns the índice de la componente (i,j) del strain tensor (tensiones)
 //! en el vector que se usa para guardar dichas componentes.
 size_t XC::Brick::getVectorIndex(const size_t &i,const size_t &j)
   {
@@ -170,11 +170,11 @@ double XC::Brick::getAvgStress(const size_t &i,const size_t &j) const
     return physicalProperties.getCommittedAvgStress(iComp);
   }
 
-//! @brief Return the deformación media en el elemento.
+//! @brief Return the average strain en el elemento.
 XC::Vector XC::Brick::getAvgStrain(void) const
   { return physicalProperties.getCommittedAvgStrain(); }
 
-//! @brief Return the componente (i,j) de la deformación media en el elemento.
+//! @brief Return the componente (i,j) de la average strain en el elemento.
 double XC::Brick::getAvgStrain(const size_t &i,const size_t &j) const
   {
     const size_t iComp= getVectorIndex(i,j);

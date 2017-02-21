@@ -56,7 +56,7 @@ class_<XC::ShellUniformLoad, bases<XC::ShellMecLoad>, boost::noncopyable >("Shel
   ;
 
 class_<XC::BidimStrainLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimStrainLoad", no_init)
-  .def("getStrain",make_function(&XC::BidimStrainLoad::getDeformacion, return_internal_reference<>() ))
+  .def("getStrain",make_function(&XC::BidimStrainLoad::getStrain, return_internal_reference<>() ))
   .def("setStrainComp",&XC::BidimStrainLoad::setStrainComp)
   ;
 

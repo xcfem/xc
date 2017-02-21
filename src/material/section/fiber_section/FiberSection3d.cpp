@@ -98,14 +98,14 @@ XC::Fiber *XC::FiberSection3d::addFiber(Fiber &newFiber)
   { return fibras.addFiber(*this,newFiber,kr); }
 
 
-//! @brief Establece los valores de las deformaciones iniciales.
+//! @brief Sets values for initial generalized strains.
 int XC::FiberSection3d::setInitialSectionDeformation(const Vector &deforms)
   {
     FiberSectionBase::setInitialSectionDeformation(deforms);
     return fibras.setInitialSectionDeformation(*this);
   }
 
-//! @brief Establece los valores de las deformaciones de prueba.
+//! @brief Establece los valores de las trial strains.
 int XC::FiberSection3d::setTrialSectionDeformation(const Vector &deforms)
   {
     FiberSection3dBase::setTrialSectionDeformation(deforms);

@@ -108,35 +108,35 @@ const XC::Vector &XC::NDMaterial::getCommittedStrain(void)
   { return this->getStrain(); }
 
 // methods to set and retrieve state.
-//! @brief Asigna el valor de la deformación de prueba.
+//! @brief Asigna el trial strain value.
 int XC::NDMaterial::setTrialStrain(const Vector &v)
   {
     std::cerr << "XC::NDMaterial::setTrialStrain -- subclass responsibility\n";
     return -1;    
   }
 
-//! @brief Asigna el valor de la deformación de prueba.
+//! @brief Asigna el trial strain value.
 int XC::NDMaterial::setTrialStrain(const Vector &v, const Vector &r)
   {
     std::cerr << "XC::NDMaterial::setTrialStrain -- subclass responsibility\n";
     return -1;    
   }
 
-//! @brief Asigna el valor del incremento de la deformación de prueba.
+//! @brief Asigna el valor del incremento de la trial strain.
 int XC::NDMaterial::setTrialStrainIncr(const Vector &v)
   {
     std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";
     return -1;    
   }
 
-//! @brief Asigna el valor del incremento de la deformación de prueba.
+//! @brief Asigna el valor del incremento de la trial strain.
 int XC::NDMaterial::setTrialStrainIncr(const Vector &v, const Vector &r)
   {
      std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";
      return -1;    
   }
 
-//! @brief Asigna el valor de la initial deformation.
+//! @brief Asigna el initial strain value.
 void XC::NDMaterial::setInitialGeneralizedStrain(const Vector &)
   {
      std::cerr << "XC::NDMaterial::setInitialGeneralizedStrain -- subclass responsibility\n";
@@ -156,42 +156,42 @@ const XC::Vector &XC::NDMaterial::getStress(void) const
     return errVector;    
   }
 
-//! @brief Return the deformación.
+//! @brief Returns strain.
 const XC::Vector &XC::NDMaterial::getStrain(void) const
   {
     std::cerr << "XC::NDMaterial::getStrain -- subclass responsibility\n";
     return errVector;    
   }
 
-//! @brief Return the initial deformation.
+//! @brief Return the initial strain.
 const XC::Vector &XC::NDMaterial::getInitialGeneralizedStrain(void) const
   {
     std::cerr << "XC::NDMaterial::getStrain -- subclass responsibility\n";
     return errVector;    
   }
 
-//! @brief Asigna el valor de la deformación de prueba.
+//! @brief Asigna el trial strain value.
 int XC::NDMaterial::setTrialStrain(const Tensor &v)
   {
     std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";
     return -1;    
   }
 
-//! @brief Asigna el valor de la deformación de prueba.
+//! @brief Asigna el trial strain value.
 int XC::NDMaterial::setTrialStrain(const Tensor &v, const XC::Tensor &r)    
   {
     std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";
     return -1;    
   }
 
-//! @brief Asigna el valor del incremento de la deformación de prueba.
+//! @brief Asigna el valor del incremento de la trial strain.
 int XC::NDMaterial::setTrialStrainIncr(const Tensor &v)
   {
     std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";
     return -1;    
   }
 
-//! @brief Asigna el valor del incremento de la deformación de prueba.
+//! @brief Asigna el valor del incremento de la trial strain.
 int XC::NDMaterial::setTrialStrainIncr(const XC::Tensor &v, const XC::Tensor &r)
   {
     std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";

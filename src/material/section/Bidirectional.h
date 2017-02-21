@@ -76,8 +76,8 @@ class Bidirectional: public SectionForceDeformation
     double Hiso;
     double Hkin;
 
-    double e_n1Trial[2]; //!< Deformación de prueba.
-    double e_n1Inic[2]; //!< Deformación inicial.
+    double e_n1Trial[2]; //!< Trial strain.
+    double e_n1Inic[2]; //!< Initial strain.
     double eP_n[2];
     mutable double eP_n1[2];
 

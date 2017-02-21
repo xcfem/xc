@@ -91,7 +91,7 @@ XC::UniaxialFiber2d::UniaxialFiber2d(int tag,const MaterialLoader &ldr,const std
   : UniaxialFiber(tag, FIBER_TAG_Uniaxial2d,ldr,nmbMat,Area), y(-position) //Sign of Y coordinate is changed.
   {}
 
-//! @brief Asigna la deformación a la fibra.
+//! @brief Sets the fiber trial strain.
 int XC::UniaxialFiber2d::setTrialFiberStrain(const Vector &vs)
   {
     // Use the section kinematic matrix to get the fiber strain

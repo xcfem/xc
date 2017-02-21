@@ -248,7 +248,7 @@ template <class MAT>
 size_t MaterialVector<MAT>::getGeneralizedStressSize(void) const
   { return (*this)[0]->getGeneralizedStress().Size(); }
 
-//! @brief Returns the tamaño del vector de deformaciones.
+//! @brief Returns the tamaño del generalized strains vector.
 template <class MAT>
 size_t MaterialVector<MAT>::getGeneralizedStrainSize(void) const
   { return (*this)[0]->getGeneralizedStrain().Size(); }
@@ -317,7 +317,7 @@ template <class MAT>
 double MaterialVector<MAT>::getMeanGeneralizedStrain(const int &defID) const
   {
     double retval= 0.0;
-    const Vector &e= getMeanGeneralizedStrain(); //Vector de deformaciones.
+    const Vector &e= getMeanGeneralizedStrain(); //generalized strains vector.
     const ResponseId &code= (*this)[0]->getType();
     const int order= code.Size();
     for(register int i= 0;i<order;i++)
@@ -433,21 +433,21 @@ m_double MaterialVector<MAT>::getGeneralizedStrain(const int &defID) const
     return retval;
   }
 
-//! @brief Assigns initial values to materials initial deformations.
+//! @brief Assigns initial values to materials initial strains.
 template <class MAT>
 void MaterialVector<MAT>::setInitialGeneralizedStrains(const std::vector<Vector> &iS)
   {
     const size_t nMat= this->size();
     const size_t sz= std::min(nMat,iS.size());
     if(iS.size()<nMat)
-      std::cerr << "MaterialVector::setInitialGeneralizedStrains; se recibieron: "
-                << iS.size() << " vectores deformación, se esperaban: "
+      std::cerr << "MaterialVector::setInitialGeneralizedStrains; received: "
+                << iS.size() << " generalized strain vectors, expected: "
                 << nMat << ".\n";
     for(size_t i= 0;i<sz;i++)
       (*this)[i]->setInitialGeneralizedStrain(iS[i]);
   }
 
-//! \brief Adds to the materials initial deformations the values being passed as parameters.
+//! \brief Adds to the materials initial strains the values being passed as parameters.
 template <class MAT>
 void MaterialVector<MAT>::addInitialGeneralizedStrains(const std::vector<Vector> &iS)
   {
@@ -455,7 +455,7 @@ void MaterialVector<MAT>::addInitialGeneralizedStrains(const std::vector<Vector>
     const size_t sz= std::min(nMat,iS.size());
     if(iS.size()<nMat)
       std::cerr << "MaterialVector::setInitialGeneralizedStrains; se recibieron: "
-                << iS.size() << " vectores deformación, se esperaban: "
+                << iS.size() << " generalized strain vectors, se esperaban: "
                 << nMat << ".\n";
     for(size_t i= 0;i<sz;i++)
       (*this)[i]->addInitialGeneralizedStrain(iS[i]);

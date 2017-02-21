@@ -254,12 +254,12 @@ const std::string &XC::MatPoint3D::getType(void)const
 int XC::MatPoint3D::getTag(void) const
   { return matmodel->getTag(); }
 
-//! @brief Returns the tensor de tensiones.
+//! @brief Returns the stress tensor.
 const XC::stresstensor &XC::MatPoint3D::getStressTensor(void) const
   { return matmodel->getStressTensor(); }
 
 
-//! @brief Returns the tensor de deformaciones.
+//! @brief Returns the strain tensor.
 const XC::straintensor &XC::MatPoint3D::getStrainTensor() const
   { return matmodel->getStrainTensor(); }
 

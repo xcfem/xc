@@ -34,9 +34,9 @@ XC::InteractionDiagramData::InteractionDiagramData(void)
     nmb_set_hormigon("hormigon"), tag_hormigon(0),
     nmb_set_armadura("armadura"), tag_armadura(0)
   {
-    inc_eps= agot_pivotes.getIncEpsAB(); //Incremento de tensiones.
+    inc_eps= agot_pivotes.getIncEpsAB(); //Strain increment.
     if(inc_eps<=1e-6)
-      std::cerr << "El incremento para deformaciones es muy pequeño o negativo: " << inc_eps << std::endl; 
+      std::cerr << "Strain increment too small (or negative): " << inc_eps << std::endl; 
   }
 
 XC::InteractionDiagramData::InteractionDiagramData(const double &u,const double &inc_e,const double &inc_theta,const DefAgotPivotes &agot)

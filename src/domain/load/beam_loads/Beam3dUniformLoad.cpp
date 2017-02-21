@@ -82,7 +82,7 @@ int XC::Beam3dUniformLoad::getType(void)
   { return LOAD_TAG_Beam3dUniformLoad; }
 
 //! @brief Applied section forces due to element uniform load
-const XC::Matrix &XC::Beam3dUniformLoad::getAppliedSectionForces(const double &L,const Matrix &xi_pt,const double &loadFactor)
+const XC::Matrix &XC::Beam3dUniformLoad::getAppliedSectionForces(const double &L,const Matrix &xi_pt,const double &loadFactor) const
   {
     const size_t nSections=  xi_pt.noRows();
     static Matrix retval(5,nSections); //Sólo se ejecuta una vez.
@@ -113,7 +113,7 @@ const XC::Matrix &XC::Beam3dUniformLoad::getAppliedSectionForces(const double &L
 //! @param L Longitud del elemento.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
-void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0)
+void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0) const
   {
     const double wy= Wy()*loadFactor;  // Transverse
     const double wz= Wz()*loadFactor;  // Transverse
@@ -137,7 +137,7 @@ void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
 //! @param L Longitud del elemento.
 //! @param loadFactor Load factor.
 //! @param q0 ??
-void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0)
+void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0) const
   {
     const double wy = Wy()*loadFactor;  // Transverse
     const double wz = Wz()*loadFactor;  // Transverse
@@ -157,7 +157,7 @@ void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const
     q0[4]+= -My;
   }
 
-//! @brief Agrega las deformaciones elásticas al vector v0.
+//! @brief Adds elastic strains to the v0 vector.
 void XC::Beam3dUniformLoad::addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
   {
     // Length of elastic interior

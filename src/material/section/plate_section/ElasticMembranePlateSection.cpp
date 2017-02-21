@@ -61,14 +61,14 @@
 #include <cmath> 
 #include "material/section/ResponseId.h"
 
-//Deformaciones.
+//Strains.
 
-// De membrana.
+// Membrane.
 // strain(0): epsilon_1 (Longitudinal eje 1)
 // strain(1): epsilon_2 (Lontitudinal eje 2)
 // strain(2): epsilon_12 (Cortante contenido en plano 12)
 
-// De placa.
+// Plate.
 // strain(3): m_xx bending first axis.
 // strain(4): m_yy bending second axis.
 // strain(4): m_xy

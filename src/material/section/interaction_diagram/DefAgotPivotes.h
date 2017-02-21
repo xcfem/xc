@@ -35,14 +35,12 @@ namespace XC {
 
 //! @ingroup MATSCCDiagInt
 //
-//! @brief Definición de las deformaciones de agotamiento en pivotes
-//! de acuerdo con la norma empleada (ver por ejemplo diagrama de pivotes
-//! en la EHE.
+//! @brief Definition of ultimate strains for the pivots
 class DefAgotPivotes: public EntCmd
   {
-    double eps_agot_A; //!< Deformación de agotamiento en el pivote A.
-    double eps_agot_B; //!< Deformación de agotamiento en el pivote B.
-    double eps_agot_C; //!< Deformación de agotamiento en el pivote C.
+    double eps_agot_A; //!< A pivot ultimate strain.
+    double eps_agot_B; //!< B pivot ultimate strain.
+    double eps_agot_C; //!< C pivot ultimate strain.
   protected:
     
   public:

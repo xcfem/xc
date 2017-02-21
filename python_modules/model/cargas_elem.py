@@ -30,5 +30,5 @@ def beamStrainLoadSetLineas(preprocessor,setNameLineas, strain):
     for e in elems:
       eleLoad= lp0.newElementalLoad("beam_strain_load")
       eleLoad.elementTags= xc.ID([e.tag])
-      eleLoad.planoDeformacionDorsal= pDef
-      eleLoad.planoDeformacionFrontal= pDef
+      eleLoad.backEndDeformationPlane= pDef
+      eleLoad.frontEndDeformationPlane= pDef

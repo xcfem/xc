@@ -777,8 +777,8 @@ const XC::Vector &XC::DqFibras::baricentroCompresiones(void) const
     return retval;
   }
 
-//! @brief Returns the baricentro de las fibras cuya deformacion es
-//! menor que la being passed as parameter.
+//! @brief Returns the centroid of the fibers whose strain is less than
+//! the value passed as parameter.
 const XC::Vector &XC::DqFibras::baricentroDefMenores(const double &defRef) const
   {
     static Vector retval(2);
@@ -787,7 +787,7 @@ const XC::Vector &XC::DqFibras::baricentroDefMenores(const double &defRef) const
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       {
-        def=  (*i)->getDeformacion();
+        def=  (*i)->getStrain();
         if(def<defRef)
           {
             r+= (*i)->getFuerza();
@@ -877,8 +877,8 @@ const XC::Vector &XC::DqFibras::baricentroTracciones(void) const
     return retval;
   }
 
-//! @brief Returns the baricentro de las fibras cuya deformacion es
-//! mayor que la being passed as parameter.
+//! @brief Returns the centroid of the fibers whose strain is greater than
+//! the value being passed as parameter.
 const XC::Vector &XC::DqFibras::baricentroDefMayores(const double &defRef) const
   {
     static Vector retval(2);
@@ -887,7 +887,7 @@ const XC::Vector &XC::DqFibras::baricentroDefMayores(const double &defRef) const
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       {
-        def=  (*i)->getDeformacion();
+        def=  (*i)->getStrain();
         if(def>defRef)
           {
             r+= (*i)->getFuerza();
@@ -976,7 +976,7 @@ void XC::DqFibras::SelMatTag(const int &matTag,DqFibras &retval,bool clear)
         std::cerr << "DqFibras::SelMatTag; Pointer to fiber is null." << std::endl;
   }
 
-//! @brief Returns the deformación mínima.
+//! @brief Returns the min strain.
 double XC::DqFibras::getStrainMin(void) const
   {
     double retval= 0.0;
@@ -991,7 +991,7 @@ double XC::DqFibras::getStrainMin(void) const
     return retval;
   }
 
-//! @brief Returns the deformación mínima.
+//! @brief Returns the min strain.
 double XC::DqFibras::getStrainMax(void) const
   {
     double retval= 0.0;
@@ -1006,7 +1006,7 @@ double XC::DqFibras::getStrainMax(void) const
     return retval;
   }
 
-//! @brief Returns the deformación media.
+//! @brief Returns the average strain.
 double XC::DqFibras::getStrainMed(void) const
   {
     double retval= 0.0;
@@ -1023,7 +1023,7 @@ double XC::DqFibras::getStrainMed(void) const
     return retval;
   }
 
-//! @brief Returns the plano de deformaciones ajustado por mínimos cuadrados.
+//! @brief Returns the deformation plane ajustado por mínimos cuadrados.
 XC::DeformationPlane XC::DqFibras::getDeformationPlane(void) const
   {
     GeomObj::list_Pos3d puntos;
@@ -1040,7 +1040,7 @@ XC::DeformationPlane XC::DqFibras::getDeformationPlane(void) const
     return retval;
   }
 
-//! @brief Returns the vector de deformaciones.
+//! @brief Returns the generalized strain vector.
 const XC::Vector &XC::DqFibras::getDeformation(void) const
   {
     const DeformationPlane pDef= getDeformationPlane();
@@ -1530,7 +1530,7 @@ int XC::DqFibras::setInitialSectionDeformation(const FiberSection2d &Section2d)
     return retval;
   }
 
-//! @brief Establece los valores de las deformaciones de prueba.
+//! @brief Establece los valores de las trial strains.
 int XC::DqFibras::setTrialSectionDeformation(const FiberSection2d &Section2d,KRSeccion &kr2)
   {
     int retval= 0;
@@ -1716,7 +1716,7 @@ int XC::DqFibras::setInitialSectionDeformation(const FiberSection3d &Section3d)
     return retval;
   }
 
-//! @brief Establece los valores de las deformaciones de prueba.
+//! @brief Establece los valores de las trial strains.
 int XC::DqFibras::setTrialSectionDeformation(FiberSection3d &Section3d,KRSeccion &kr3)
   {
     int retval= 0;
@@ -1879,7 +1879,7 @@ int XC::DqFibras::setInitialSectionDeformation(const FiberSectionGJ &SectionGJ)
     return retval;
   }
 
-//! @brief Establece los valores de las deformaciones de prueba.
+//! @brief Sets generalized trial strains values.
 int XC::DqFibras::setTrialSectionDeformation(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
   {
     int retval= 0;

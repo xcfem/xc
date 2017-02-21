@@ -38,7 +38,7 @@ namespace XC {
 class BidimStrainLoad: public BidimLoad
   {
   private:
-    std::vector<Vector> deformaciones; //!< Restricted strains on each Gauss point.	
+    std::vector<Vector> strains; //!< Restricted strains on each Gauss point.	
   protected:
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
@@ -52,15 +52,15 @@ class BidimStrainLoad: public BidimLoad
     BidimStrainLoad(int tag, const size_t &);
     BidimStrainLoad(const size_t &s= 4);
   
-    inline const std::vector<Vector> &getDeformaciones(void) const
-      { return deformaciones; }
-    inline std::vector<Vector> &Deformaciones(void)
-      { return deformaciones; }
-    inline const Vector &getDeformacion(const size_t &i) const
-      { return deformaciones[i]; }
-    inline Vector &Deformacion(const size_t &i)
-      { return deformaciones[i]; }
-    void setDeformaciones(const Matrix &);
+    inline const std::vector<Vector> &getStrains(void) const
+      { return strains; }
+    inline std::vector<Vector> &Strains(void)
+      { return strains; }
+    inline const Vector &getStrain(const size_t &i) const
+      { return strains[i]; }
+    inline Vector &Strain(const size_t &i)
+      { return strains[i]; }
+    void setStrains(const Matrix &);
     void setStrainComp(const size_t &,const size_t &,const double &);
 
   

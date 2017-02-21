@@ -191,7 +191,7 @@ const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadGlobal(const 
   }
 
 //! @brief  
-void XC::ShellMITC4Base::strainLoad(const Matrix &deformaciones)
+void XC::ShellMITC4Base::strainLoad(const Matrix &strains)
   {
     Preprocessor *preprocessor= GetPreprocessor();
     if(preprocessor)
@@ -204,7 +204,7 @@ void XC::ShellMITC4Base::strainLoad(const Matrix &deformaciones)
         if(lp)
           {
             ShellStrainLoad *tmp= new ShellStrainLoad(loadTag,eTags);
-            tmp->setDeformaciones(deformaciones);
+            tmp->setStrains(strains);
             if(tmp)
               {
                 tmp->set_owner(this);

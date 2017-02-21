@@ -46,7 +46,7 @@ class Fiber;
 //! on the section.
 class CalcPivotes: public Ref3d3d
   {
-    const DefAgotPivotes &agot_pivotes; //!< Deformaciones de agotamiento en pivotes.
+    const DefAgotPivotes &agot_pivotes; //!< Ultimate strains at pivots.
     const StoFibras &fibras;//!< Section fibers.
     const DqFibras &fibrasC; //!< Concrete fibers (u otro material comprimido).
     const DqFibras &fibrasS; //!< Steel fibers (u otro material a tracción). 

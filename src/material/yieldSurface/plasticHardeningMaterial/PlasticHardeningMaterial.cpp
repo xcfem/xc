@@ -86,7 +86,7 @@ int XC::PlasticHardeningMaterial::revertToStart (void)
     return 0;	
   }
 
-//! @brief Returns the valor de la generalized stress.
+//! @brief Returns the generalized stress value.
 const XC::Vector &XC::PlasticHardeningMaterial::getGeneralizedStress(void) const
   {
     static Vector retval;
@@ -94,7 +94,7 @@ const XC::Vector &XC::PlasticHardeningMaterial::getGeneralizedStress(void) const
     return retval;
   }
 
-//! @brief Returns the valor de la deformación generalizada.
+//! @brief Returns the generalized strain value.
 const XC::Vector &XC::PlasticHardeningMaterial::getGeneralizedStrain(void) const
   {
     static Vector retval;
@@ -102,13 +102,13 @@ const XC::Vector &XC::PlasticHardeningMaterial::getGeneralizedStrain(void) const
     return retval;
   }
 
-//! @brief Asigna a la initial deformation el valor being passed as parameter.
+//! @brief Asigna a la initial strain el valor being passed as parameter.
 void XC::PlasticHardeningMaterial::setInitialGeneralizedStrain(const Vector &)
   {
     std::cerr << "PlasticHardeningMaterial::setInitialGeneralizedStrain no implementada." << std::endl;
   }
 
-//! @brief Añade a la initial deformation el valor being passed as parameter.
+//! @brief Añade a la initial strain el valor being passed as parameter.
 const XC::Vector &XC::PlasticHardeningMaterial::getInitialGeneralizedStrain(void) const
   {
     static Vector retval;

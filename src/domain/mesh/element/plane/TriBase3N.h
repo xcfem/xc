@@ -162,10 +162,10 @@ int XC::TriBase3N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << this->getTag() << std::endl;
     else
       {
-        if(BidimStrainLoad *strainLoad= dynamic_cast<BidimStrainLoad *>(theLoad)) //Deformaciones impuestas.
+        if(const BidimStrainLoad *strainLoad= dynamic_cast<const BidimStrainLoad *>(theLoad)) //Prescribed deformations.
           {
             static std::vector<Vector> initStrains;
-            initStrains= strainLoad->Deformaciones();
+            initStrains= strainLoad->getStrains();
             for(std::vector<Vector>::iterator i= initStrains.begin();i!=initStrains.end();i++)
               (*i)*= loadFactor;
             this->physicalProperties.getMaterialsVector().addInitialGeneralizedStrains(initStrains);

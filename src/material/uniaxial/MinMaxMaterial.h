@@ -63,8 +63,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Material uniaxial que guarda los valores
-//! extremos de su deformación.
+//! @brief Stores max and min strain values.
 class MinMaxMaterial: public EncapsulatedMaterial
   {
   private:

@@ -68,22 +68,22 @@
 #include <cfloat>
 
 
-//! @brief Asigna el valor de la deformación de cedencia a tracción.
+//! @brief Sets the positive yield stress value (tension).
 void XC::ElasticPPMaterial::set_fyp(const double &f)
   {
     fyp= f;
     if(fyp < 0)
       {
-        std::cerr << "XC::ElasticPPMaterial::ElasticPPMaterial() - fyp < 0, setting > 0\n";
+        std::cerr << "ElasticPPMaterial::ElasticPPMaterial() - fyp < 0, setting > 0\n";
         fyp*= -1.;
       }
   }
 
-//! @brief Asigna el valor de la deformación de cedencia a tracción.
+//! @brief Sets the positive el yield strain value (tension).
 void XC::ElasticPPMaterial::set_eyp(const double &eyp)
   { set_fyp(E*eyp); }
 
-//! @brief Asigna el valor de la deformación de cedencia a compresión.
+//! @brief Asigna el yield stress a compresión value.
 void XC::ElasticPPMaterial::set_fyn(const double &f)
   {
     fyn= f;
@@ -94,7 +94,7 @@ void XC::ElasticPPMaterial::set_fyn(const double &f)
       }  
   }
 
-//! @brief Asigna el valor de la deformación de cedencia a compresión.
+//! @brief Asigna el yield stress a compresión value.
 void XC::ElasticPPMaterial::set_eyn(const double &eyn)
   { set_fyn(E*eyn); }
 
@@ -122,7 +122,7 @@ XC::ElasticPPMaterial::ElasticPPMaterial(void)
 XC::ElasticPPMaterial::ElasticPPMaterial(int tag)
   :EPPBaseMaterial(tag,MAT_TAG_ElasticPPMaterial,0.0,0.0), fyp(0.0), fyn(0.0) {}
 
-//! Asigna el valor de la tensión de prueba.
+//! Asigna el tensión de prueba value.
 int XC::ElasticPPMaterial::setTrialStrain(double strain, double strainRate)
   {
   /*

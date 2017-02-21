@@ -254,7 +254,7 @@ const XC::Vector &XC::Bidirectional::getStressResultant(void) const
     return s;
   }
 
-//! @brief Returns the vector de deformaciones de la sección.
+//! @brief Returns the initial generalized strains.
 const XC::Vector &XC::Bidirectional::getInitialSectionDeformation(void) const
   {
     // Write to static variable for return

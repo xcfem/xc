@@ -71,8 +71,7 @@ const XC::Fiber *XC::CalcPivotes::getFiberCMaxY(void) const
   }
 
 
-//! @brief Returns the punto que corresponde a deformación nula
-//! en la fibra más traccionada de hormigón.
+//! @brief Returns the points with zero strain in concrete (XXX enhance explanation).
 Pos3d XC::CalcPivotes::GetPuntoD(void) const
   {
     Pos3d retval;
@@ -88,7 +87,7 @@ Pos3d XC::CalcPivotes::calcPositionPivotA(void) const
     if(!fibrasS.empty()) //Hay armadura.
       {
         const Fiber *t= getFiberSMinY();
-        const Pos3d pos_t= getPos3d(t,agot_pivotes.getDefAgotPivoteA()); //Deformación de agotamiento en pivote A.
+        const Pos3d pos_t= getPos3d(t,agot_pivotes.getDefAgotPivoteA()); //Yield strain in A pivot.
         const double v_min_s= GetPosLocal(pos_t)(2);
         if(v_min_s<0) //La tesela está en la zona de tracciones.
           retval= pos_t;

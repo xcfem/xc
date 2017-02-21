@@ -59,11 +59,11 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @brief Material elastico con deformación finita en tres dimensiones.
+//! @brief 3D finite deformation elastic material.
 class FiniteDeformationElastic3D : public NDMaterial
   {
   protected:
-    double rho;
+    double rho; //!< Material density.
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

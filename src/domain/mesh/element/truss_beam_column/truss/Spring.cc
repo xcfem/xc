@@ -271,7 +271,7 @@ int XC::Spring::revertToLastCommit(void)
 int XC::Spring::revertToStart(void)
   { return theMaterial->revertToStart(); }
 
-//! @brief Calcula la deformación actual a partir de los desplazamientos de prueba en los nodos.
+//! @brief Computes current trial strain from trial displacements at the nodes.
 int XC::Spring::update(void)
   {
     double strain= this->computeCurrentStrain();

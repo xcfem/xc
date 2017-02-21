@@ -65,16 +65,10 @@ lp0= casos.newLoadPattern("default","0")
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([1,2])
 defTermica= xc.DeformationPlane(alpha*AT)
-eleLoad.planoDeformacionDorsal= defTermica
-eleLoad.planoDeformacionFrontal= defTermica
+eleLoad.backEndDeformationPlane= defTermica
+eleLoad.frontEndDeformationPlane= defTermica
 
 
-
-        # \for_each{\strain_load
-
-        #     \plano_deformacion_1{ \constante{alpha*AT} }
-        #     \plano_deformacion_2{ \constante{alpha*AT} }
-        #   }}
 
 cargas= preprocessor.getLoadLoader
 

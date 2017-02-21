@@ -56,7 +56,7 @@ class SeccionBarraPrismatica: public SectionForceDeformation
 
     int setTrialDeformationPlane(const DeformationPlane &);
     int setInitialDeformationPlane(const DeformationPlane &);
-    virtual const Vector &getVectorDeformacion(const DeformationPlane &) const;
+    virtual const Vector &getGeneralizedStrainVector(const DeformationPlane &) const;
     DeformationPlane getDeformationPlane(void) const;
     DeformationPlane getInitialDeformationPlane(void) const;
     virtual double getStrain(const double &y,const double &z= 0) const;

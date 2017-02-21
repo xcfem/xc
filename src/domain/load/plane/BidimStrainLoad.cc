@@ -37,45 +37,46 @@
 
 
 XC::BidimStrainLoad::BidimStrainLoad(int tag, const std::vector<Vector> &t,const ID &theElementTags)
-  :BidimLoad(tag, LOAD_TAG_BidimStrainLoad, theElementTags), deformaciones(t) {}
+  :BidimLoad(tag, LOAD_TAG_BidimStrainLoad, theElementTags), strains(t) {}
 XC::BidimStrainLoad::BidimStrainLoad(int tag,const size_t &sz,const Vector &t,const ID &theElementTags)
-  :BidimLoad(tag, LOAD_TAG_BidimStrainLoad, theElementTags), deformaciones(sz,t) {}
+  :BidimLoad(tag, LOAD_TAG_BidimStrainLoad, theElementTags), strains(sz,t) {}
 
 XC::BidimStrainLoad::BidimStrainLoad(int tag,const size_t &sz, const ID &theElementTags)
-  :BidimLoad(tag, LOAD_TAG_BidimStrainLoad, theElementTags), deformaciones(sz) {}
+  :BidimLoad(tag, LOAD_TAG_BidimStrainLoad, theElementTags), strains(sz) {}
 
 XC::BidimStrainLoad::BidimStrainLoad(int tag,const size_t &sz, const Vector &t)
-  :BidimLoad(tag, LOAD_TAG_BidimStrainLoad), deformaciones(sz,t) {}
+  :BidimLoad(tag, LOAD_TAG_BidimStrainLoad), strains(sz,t) {}
 
 XC::BidimStrainLoad::BidimStrainLoad(int tag,const size_t &sz)
-  :BidimLoad(tag, LOAD_TAG_BidimStrainLoad), deformaciones(sz) {}
+  :BidimLoad(tag, LOAD_TAG_BidimStrainLoad), strains(sz) {}
 
 XC::BidimStrainLoad::BidimStrainLoad(const size_t &sz)
-  :BidimLoad(0,LOAD_TAG_BidimStrainLoad), deformaciones(sz) {}
+  :BidimLoad(0,LOAD_TAG_BidimStrainLoad), strains(sz) {}
 
-//! @brief Asigna el valor de la deformación de uno de los puntos de Gauss.
-//! el primer índice es el del punto de gauss y el segundo la dirección de
-//! la deformación.
+//! @brief Sets the strains for a Gauss point.
+//! @param i: Gauss point index.
+//! @param j: Strain component.
+//! @param strain: Strain value.
 void XC::BidimStrainLoad::setStrainComp(const size_t &i,const size_t &j,const double &strain)
   {
-    if(i<deformaciones.size())
+    if(i<strains.size())
       {
-        Vector &def= deformaciones.at(i);
+        Vector &def= strains.at(i);
         if(j<size_t(def.Size()))
           def(j)= strain;
         else
           std::cerr << nombre_clase() << "::setStrainComp "
-                    << " no existe la componente del vector deformación de índice: "
-                    << j << "." << std::endl;
+                    << " component: " << j
+	            << " doesn't exist." << std::endl;
       }
     else
       std::cerr << nombre_clase() << "::setStrainComp "
-                << " no existe el punto de Gauss de índice: "  << i
-                << std::endl;
+                << " gauss point: "  << i
+                << " doesn't exist." << std::endl;
   }
 
-//! @brief Asigna las deformaciones.
-void XC::BidimStrainLoad::setDeformaciones(const Matrix &def)
+//! @brief Asigna las strains.
+void XC::BidimStrainLoad::setStrains(const Matrix &def)
   {
     const int nRows= def.noRows();
     const int nCols= def.noCols();
@@ -87,7 +88,7 @@ void XC::BidimStrainLoad::setDeformaciones(const Matrix &def)
           ri[j]= def(i,j);
         tmp[i]= ri;
       }
-    deformaciones= tmp;
+    strains= tmp;
   }
 
 
@@ -103,7 +104,7 @@ XC::DbTagData &XC::BidimStrainLoad::getDbTagData(void) const
 int XC::BidimStrainLoad::sendData(CommParameters &cp)
   {
     int res= BidimLoad::sendData(cp);
-    res+= cp.sendVectors(deformaciones,getDbTagData(),CommMetaData(5));
+    res+= cp.sendVectors(strains,getDbTagData(),CommMetaData(5));
     return res;
   }
 
@@ -111,7 +112,7 @@ int XC::BidimStrainLoad::sendData(CommParameters &cp)
 int XC::BidimStrainLoad::recvData(const CommParameters &cp)
   {
     int res= BidimLoad::recvData(cp);
-    res+= cp.receiveVectors(deformaciones,getDbTagData(),CommMetaData(5));
+    res+= cp.receiveVectors(strains,getDbTagData(),CommMetaData(5));
     return res;
   }
 
@@ -142,11 +143,11 @@ int XC::BidimStrainLoad::recvSelf(const CommParameters &cp)
 void XC::BidimStrainLoad::Print(std::ostream &s, int flag) const
   {
     s << "BidimStrainLoad" << std::endl;
-    if(!deformaciones.empty())
+    if(!strains.empty())
       {
-        std::vector<Vector>::const_iterator i= deformaciones.begin();
+        std::vector<Vector>::const_iterator i= strains.begin();
         s << *i;
-        for(;i!=deformaciones.end();i++)
+        for(;i!=strains.end();i++)
           s << ", " << *i;
       }
     BidimLoad::Print(s,flag);

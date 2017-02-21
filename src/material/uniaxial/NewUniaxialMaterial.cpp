@@ -72,7 +72,7 @@ XC::NewUniaxialMaterial::NewUniaxialMaterial()
    Tstrain(0.0), Tstress(0.0), Ttangent(0.0)
   {}
 
-//! @brief Asigna la deformación al material.
+//! @brief Sets material trial strain.
 int XC::NewUniaxialMaterial::setTrialStrain(double strain, double strainRate)
   {
     // set the trial strain
@@ -98,7 +98,7 @@ double XC::NewUniaxialMaterial::getInitialTangent(void) const
     return 0.0;
   }
 
-//! @brief Return the deformación del material.
+//! @brief Return the material strain.
 double XC::NewUniaxialMaterial::getStrain(void) const
   { return Tstrain; }
 

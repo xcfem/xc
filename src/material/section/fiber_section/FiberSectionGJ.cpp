@@ -100,7 +100,7 @@ int XC::FiberSectionGJ::setInitialSectionDeformation(const Vector &deforms)
     return fibras.setInitialSectionDeformation(*this);
   }
 
-//! @brief Establece los valores de las deformaciones de prueba.
+//! @brief Sets trial generalized strains values.
 int XC::FiberSectionGJ::setTrialSectionDeformation(const XC::Vector &deforms)
   {
     FiberSection3dBase::setTrialSectionDeformation(deforms);

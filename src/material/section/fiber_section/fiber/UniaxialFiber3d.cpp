@@ -102,7 +102,7 @@ XC::UniaxialFiber3d::UniaxialFiber3d(int tag,const MaterialLoader &ldr,const std
   : UniaxialFiber(tag, classTag,ldr,nmbMat,Area)
   { set_position(position); }
 
-//! @brief Asigna la deformación de prueba para la fibra.
+//! @brief Asigna la trial strain para la fibra.
 int XC::UniaxialFiber3d::setTrialFiberStrain(const Vector &vs)
   {
     //Sign of Y coordinate is changed.

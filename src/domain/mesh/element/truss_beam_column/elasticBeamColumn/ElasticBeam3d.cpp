@@ -262,7 +262,7 @@ int XC::ElasticBeam3d::setInitialSectionDeformation(const Vector &def)
     return 0;
   }
 
-//! @brief Return the deformación de la sección del elemento.
+//! @brief Return the section generalized strain.
 const XC::Vector &XC::ElasticBeam3d::getSectionDeformation(void) const
   {
     static Vector retval(5);
@@ -441,13 +441,13 @@ int XC::ElasticBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << std::endl;
     else
       {
-        if(BeamMecLoad *beamMecLoad= dynamic_cast<BeamMecLoad *>(theLoad))
+        if(const BeamMecLoad *beamMecLoad= dynamic_cast<const BeamMecLoad *>(theLoad))
           {
             const double L = theCoordTransf->getInitialLength();
             beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
             beamMecLoad->addFixedEndForcesInBasicSystem(L,loadFactor,q0); // Fixed end forces in basic system
           }
-        else if(BeamStrainLoad *strainLoad= dynamic_cast<BeamStrainLoad *>(theLoad)) //Deformaciones impuestas.
+        else if(const BeamStrainLoad *strainLoad= dynamic_cast<const BeamStrainLoad *>(theLoad)) //Prescribed strains.
           {
             const int order= 3;
             const RespPMzMy code;

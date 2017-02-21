@@ -100,15 +100,15 @@ XC::GenericSection1d::GenericSection1d()
 XC::GenericSection1d::~GenericSection1d(void)
   { if (theModel) delete theModel; }
 
-//! @brief Asigna la initial deformation (axial y curvaturas) de la sección.
+//! @brief Asigna la initial strain (axial y curvaturas) de la sección.
 int XC::GenericSection1d::setInitialSectionDeformation(const Vector &def)
   { return theModel->setInitialStrain(def(0)); }
 
-//! @brief Asigna la deformación de prueba (axial y curvaturas) de la sección.
+//! @brief Asigna la trial strain (axial y curvaturas) de la sección.
 int XC::GenericSection1d::setTrialSectionDeformation(const Vector &def)
   { return theModel->setTrialStrain(def(0)); }
 
-//! @brief Return the initial deformation (axial y curvaturas) de la sección.
+//! @brief Return the initial strain (axial y curvaturas) de la sección.
 const XC::Vector &XC::GenericSection1d::getInitialSectionDeformation(void) const
   {
     static Vector e(1); // static for class-wide returns

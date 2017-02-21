@@ -226,7 +226,7 @@ db= prueba.newDatabase("BerkeleyDB","/tmp/test_retraccion_02.db")
 # Fase 0: pretensado, retracción
 # Fase 1: pretensado, retracción y fluencia
 
-# Deformaciones de retracción.
+# Shrinkage strains.
 sets= preprocessor.getSets
 
 shells= preprocessor.getSets.defSet("shells")

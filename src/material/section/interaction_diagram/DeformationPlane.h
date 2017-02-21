@@ -64,13 +64,13 @@ class DeformationPlane: public Plano3d, public MovableObject
   public:
     DeformationPlane( const Pos3d &p1,const Pos3d &p2, const Pos3d &p3);
     explicit DeformationPlane(const Plano3d &);
-    DeformationPlane( const Pos2d &yz1, const double &e_1, //Deformaciones en tres fibras de la sección.
+    DeformationPlane( const Pos2d &yz1, const double &e_1, //Strains at three fiber sections.
                       const Pos2d &yz2, const double &e_2,
                       const Pos2d &yz3, const double &e_3);
     explicit DeformationPlane(const double &eps= 0.0);
     DeformationPlane(const Vector &e);
 
-    double Deformacion(const Pos2d &p) const;
+    double Strain(const Pos2d &p) const;
     const Vector &getDeformation(const size_t &order,const ResponseId &code) const;
 
     void ConstantStrain(const double &);

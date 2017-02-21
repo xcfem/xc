@@ -111,7 +111,7 @@ const XC::Matrix &XC::Beam2dUniformLoad::getLocalMoments(void) const
   }
 
 //! @brief Applied section forces due to element uniform load
-const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L,const Matrix &xi_pt,const double &loadFactor)
+const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L,const Matrix &xi_pt,const double &loadFactor) const
   {
     const size_t nSections= xi_pt.noRows();
     static Matrix retval(3,1); //Compile time definition.
@@ -136,7 +136,7 @@ const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L
 //! @param L Longitud del borde del elemento.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
-void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0)
+void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0) const
   {
     const double wa= WAxial()*loadFactor;  // Axial
     const double wy= WTrans()*loadFactor;  // Transverse
@@ -155,7 +155,7 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
 //! @param L Longitud del borde del elemento.
 //! @param loadFactor Load factor.
 //! @param q0 ??.
-void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0)
+void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0) const
   {
     const double wy = WTrans()*loadFactor;  // Transverse
     const double wx = WAxial()*loadFactor;  // Axial (+ve from node I to J)

@@ -88,7 +88,7 @@ int XC::UniaxialMaterial::setTrial(double strain, double &stress, double &tangen
     return res;
   }
 
-//! @brief Return the initial deformation.
+//! @brief Return the initial strain.
 double XC::UniaxialMaterial::getInitialStrain(void) const
   { return 0.0; }
 
@@ -105,7 +105,7 @@ const XC::Vector &XC::UniaxialMaterial::getGeneralizedStress(void) const
     return retval;
   }
 
-//! @brief Return the deformación generalizada.
+//! @brief Return the generalized strain.
 const XC::Vector &XC::UniaxialMaterial::getGeneralizedStrain(void) const
   {
     static Vector retval(1);
@@ -174,19 +174,19 @@ double XC::UniaxialMaterial::getRho(void) const
 void XC::UniaxialMaterial::setRho(const double &r)
   { rho= r; }
 
-//! @brief Returns a copia del material.
+//! @brief Virtual constructor.
 XC::UniaxialMaterial* XC::UniaxialMaterial::getCopy(SectionForceDeformation *s) const
   { return getCopy(); }
 
-//! @brief Establece el valor de la initial deformation.
+//! @brief Sets the initial strain value.
 int XC::UniaxialMaterial::setInitialStrain(double strain)
   {
-    std::clog << "El material: " << nombre_clase() 
-              << " no admite initial strains." << std::endl;
+    std::clog << "Material: " << nombre_clase() 
+              << " can't handle initial strains." << std::endl;
     return 0;
   }
 
-//! @brief Asigna a la initial deformation el valor being passed as parameter.
+//! @brief Sets the initial generalized strain to the value being passed as parameter.
 void XC::UniaxialMaterial::setInitialGeneralizedStrain(const Vector &iS)
   { setInitialStrain(iS[0]); }
 

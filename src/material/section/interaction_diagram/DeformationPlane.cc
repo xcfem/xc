@@ -80,7 +80,8 @@ XC::DeformationPlane::DeformationPlane(const Plano3d &p)
   : Plano3d(p), MovableObject(0) {}
 
 
-XC::DeformationPlane::DeformationPlane( const Pos2d &yz1, const double &e_1, //Deformaciones en tres fibras de la sección.
+//! @brief Strains at three fibers.
+XC::DeformationPlane::DeformationPlane( const Pos2d &yz1, const double &e_1, 
                   const Pos2d &yz2, const double &e_2,
                   const Pos2d &yz3, const double &e_3)
   : Plano3d(), MovableObject(0)
@@ -91,17 +92,19 @@ XC::DeformationPlane::DeformationPlane( const Pos2d &yz1, const double &e_1, //D
     check_positions(p1,p2,p3);
     TresPuntos(p1,p2,p3);
   }
-XC::DeformationPlane::DeformationPlane(const double &eps) //Deformación constante en toda la sección.
+
+//! Constant strain over the section.
+XC::DeformationPlane::DeformationPlane(const double &eps) 
   :Plano3d(Pos3d(eps,100,0),Pos3d(eps,0,100),Pos3d(eps,100,100)), MovableObject(0) {}
 
 XC::DeformationPlane::DeformationPlane(const Vector &e)
   : Plano3d(), MovableObject(0)
   {
-    const double e_1= e(0); //Deformación en (0,0)
-    const double e_2= e(0)+e(1); //Deformación en (1,0)
-    double e_3= e(0); //Deformación en (0,1)
+    const double e_1= e(0); //strain at (0,0)
+    const double e_2= e(0)+e(1); //Strain at (1,0)
+    double e_3= e(0); //Strain at (0,1)
     if(e.Size()>2)
-      e_3+= e(2); //Deformación en (0,1)
+      e_3+= e(2); //Strain at (0,1)
     
     const Pos3d p1(e_1,0.0,0.0);
     const Pos3d p2(e_2,1.0,0.0);
@@ -117,22 +120,22 @@ void XC::DeformationPlane::ConstantStrain(const double &e)
     TresPuntos(p1,p2,p3);
   }
 
-//! @brief Return the deformación que corresponde a la
-//! fibra de posición "p"
-double XC::DeformationPlane::Deformacion(const Pos2d &p) const
+//! @brief Return the strain of the fiber at the position
+//! being passed as parameter.
+double XC::DeformationPlane::Strain(const Pos2d &p) const
   { return Plano3d::x(p); }
 
-//! @brief Returns the vector de deformaciones.
+//! @brief Returns the generalized strains vector.
 const XC::Vector &XC::DeformationPlane::getDeformation(void) const
   {
     static Vector retval(3);
-    retval(0)= Deformacion(Pos2d(0,0));
-    retval(1)= Deformacion(Pos2d(1,0))-retval(0);
-    retval(2)= Deformacion(Pos2d(0,1))-retval(0);
+    retval(0)= Strain(Pos2d(0,0));
+    retval(1)= Strain(Pos2d(1,0))-retval(0);
+    retval(2)= Strain(Pos2d(0,1))-retval(0);
     return retval;
   }
 
-//! @brief Returns the vector de deformaciones.
+//! @brief Returns the generalized strains vector.
 const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const ResponseId &code) const
   {
     static Vector retval;
@@ -181,11 +184,11 @@ Pos2d XC::DeformationPlane::getPuntoSemiplanoTracciones(void) const
         //const Vector2d v(RectaMaximaPendienteYZ().ProyeccionYZ2d().VDir());
         const Vector2d v= fn.VDir().Normal();
         retval= p0+1000*v;
-        if(Deformacion(retval)<0) //Lado compresiones.
+        if(Strain(retval)<0) //Lado compresiones.
           retval= p0-1000*v;
       }
     else //La fibra neutra es impropia.
-      retval.setExists(Deformacion(retval)>0.0);
+      retval.setExists(Strain(retval)>0.0);
     return retval;
   }
 
@@ -202,11 +205,11 @@ Pos2d XC::DeformationPlane::getPuntoSemiplanoCompresiones(void) const
         //const Vector2d v(RectaMaximaPendienteYZ().ProyeccionYZ2d().VDir());
         const Vector2d v= fn.VDir().Normal();
         retval= p0+1000*v;
-        if(Deformacion(retval)>0) //Lado tracciones.
+        if(Strain(retval)>0) //Lado tracciones.
           retval= p0-1000*v;
       }
     else //La fibra neutra es impropia.
-      retval.setExists(Deformacion(retval)<0.0);
+      retval.setExists(Strain(retval)<0.0);
     return retval;
   }
 
@@ -248,11 +251,11 @@ Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(void) const
         const Pos2d p0(fn.Punto());
         const Vector2d v= fn.VDir().Normal();
         tmp= p0+1000*v;
-        if(Deformacion(tmp)<0) //Lado compresiones.
+        if(Strain(tmp)<0) //Lado compresiones.
           tmp= p0-1000*v;
       }
     else //La fibra neutra es impropia.
-      exists= (Deformacion(tmp)>0.0);
+      exists= (Strain(tmp)>0.0);
 
     Semiplano2d retval;
     if(exists)
@@ -273,11 +276,11 @@ Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(const Recta2d &r) con
         const Pos2d p0(fn.Punto());
         const Vector2d v= fn.VDir().Normal();
         tmp= p0+1000*v;
-        if(Deformacion(tmp)>0) //Lado tracciones.
+        if(Strain(tmp)>0) //Lado tracciones.
           tmp= p0-1000*v;
       }
     else //La fibra neutra es impropia.
-      exists= (Deformacion(tmp)<0.0);
+      exists= (Strain(tmp)<0.0);
 
     Semiplano2d retval;
     if(exists)

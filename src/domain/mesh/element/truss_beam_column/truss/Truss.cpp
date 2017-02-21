@@ -272,7 +272,7 @@ int XC::Truss::revertToLastCommit()
 int XC::Truss::revertToStart()
   { return theMaterial->revertToStart(); }
 
-//! @brief Calcula la deformación actual a partir de los desplazamientos de prueba en los nodos.
+//! @brief Computes current strain from the trial displacements of the nodes.
 int XC::Truss::update(void)
   {
     double strain = this->computeCurrentStrain();

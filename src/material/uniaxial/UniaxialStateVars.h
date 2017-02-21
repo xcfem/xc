@@ -33,8 +33,8 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief UniaxialStateVars almacena los valores de la
-//! deformación, la tensión and the material stiffness.
+//! @brief UniaxialStateVars stores values for
+//! material strain, stress and stiffness.
 class UniaxialStateVars: public MovableObject
   {
   private:

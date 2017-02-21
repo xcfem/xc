@@ -179,21 +179,21 @@ XC::Fiber *XC::FiberSectionBase::addFiber(const std::string &nmbMat,const double
   }
 
 
-//! @brief Establece los valores de las deformaciones iniciales.
+//! @brief Sets generalized initial strains values.
 int XC::FiberSectionBase::setInitialSectionDeformation(const Vector &deforms)
   {
     eInic= deforms;
     return 0;
   }
 
-//! @brief Establece los valores de las deformaciones de prueba.
+//! @brief Sets generalized trial strains values.
 int XC::FiberSectionBase::setTrialSectionDeformation(const Vector &deforms)
   {
     eTrial= deforms;
     return 0;
   }
 
-//! @brief Returns material's trial generalized deformation.
+//! @brief Returns material's trial generalized strain.
 const XC::Vector &XC::FiberSectionBase::getSectionDeformation(void) const
   {
     static Vector retval;
@@ -536,7 +536,8 @@ int XC::FiberSectionBase::revertToStart(void)
 Pos3d XC::FiberSectionBase::Esf2Pos3d(void) const
   { return Pos3d(getStressResultant(XC::SECTION_RESPONSE_P),getStressResultant(XC::SECTION_RESPONSE_MY),getStressResultant(XC::SECTION_RESPONSE_MZ)); }
 
-//! @brief Returns the resultante de tensiones normales en la sección para el plano de deformación.
+//! @brief Returns the section normal stresses resultant for the
+//! deformation plane being passed as parameter.
 Pos3d XC::FiberSectionBase::getNMyMz(const DeformationPlane &def)
   {
     setTrialDeformationPlane(def);
@@ -579,12 +580,12 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
             lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
           }
         //Domain 4a
-        //Calculamos la deformación en D cuando el pivote es B
-        //y la deformación en A es nula (inicio del domain 4a).
-        const Pos3d PA0= pivotes.getPuntoA(0.0); //Deformación nula en la armadura.
+        //Compute strain in D when the pivot point is B
+        //and strain in A is zero (domain 4a starts).
+        const Pos3d PA0= pivotes.getPuntoA(0.0); //Zero strain at rebars.
         const DeformationPlane def_lim_4a= DeformationPlane(P1,P2,PA0);
         const Pos2d PD= pivotes.getPosPuntoD();
-        const double eps_D4a= def_lim_4a.Deformacion(PD);
+        const double eps_D4a= def_lim_4a.Strain(PD);
         const double recorr_eps_D4a= eps_D4a;
         if(recorr_eps_D4a>(eps_agot_A/200.0)) //Si el recorrido es positivo y "apreciable"
           {

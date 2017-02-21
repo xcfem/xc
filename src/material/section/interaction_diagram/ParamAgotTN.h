@@ -39,10 +39,10 @@ class DefAgotPivotes;
 //! section under normal stresses.
 class ParamAgotTN
   {
-    const DefAgotPivotes &agot_pivotes; //!< Deformaciones de agotamiento en pivotes.
-    double eps_c_max; //!< Deformación máxima en el hormigón (fibra más traccionada).
-    double eps_c_min; //!< Deformación mínima en el hormigón (fibra más comprimida).
-    double eps_c_pC; //!< Deformación en el hormigón en el pivote C.
+    const DefAgotPivotes &agot_pivotes; //!< Ultimate strain at pivots.
+    double eps_c_max; //!< concrete max strain (most tensioned fiber).
+    double eps_c_min; //!< concrete min strain (most compressed fiber).
+    double eps_c_pC; //!< concrte strain at C pivot.
 
   private:
     double fc_tracc(void) const;
