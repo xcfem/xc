@@ -33,8 +33,7 @@
 
 namespace XC {
 
-//! @brief Clase base para componentes que sirven
-//! para representar el contínuo.
+//! @brief Base class for components used to represent the material (continuum).
 class ContinuaReprComponent: public DomainComponent
   {
     bool dead; //!< True if domain component is not active.

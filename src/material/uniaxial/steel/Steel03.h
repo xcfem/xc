@@ -81,7 +81,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Clase base para la modelización del acero 03.
+//! @brief Steel 03 uniaxial material.
 class Steel03 : public SteelBase0103
   {
   private:

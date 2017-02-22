@@ -37,7 +37,7 @@ class UniaxialMaterial;
 
 //! \ingroup TrussElem
 //
-//! @brief Clase base para la barra articulada.
+//! @brief Base class for truss elements.
 class TrussBase : public ProtoTruss
   {
   protected:

@@ -41,7 +41,7 @@ const double STEEL_0103_DEFAULT_A4= 55.0;
 
 //! @ingroup MatUnx
 //
-//! @brief Clase base para la modelización del acero.
+//! @brief Base class for Steel01 and Steel03.
 class SteelBase0103: public SteelBase
   {
   protected:

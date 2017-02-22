@@ -38,7 +38,7 @@ namespace XC {
 
 //! @ingroup AnalysisFE
 //
-//! @brief Clase base para MFreedom_FE y SFreedom_FE.
+//! @brief Base class for MFreedom_FE y SFreedom_FE.
 class MPSPBaseFE: public FE_Element
   {
   protected:

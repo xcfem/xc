@@ -40,7 +40,7 @@ class FE_Element;
 
 //! @ingroup StaticIntegrator
 //
-//! @brief Clase base para ??.
+//! @brief Base class for arc length integrators.
 class ProtoArcLength: public StaticIntegrator
   {
   protected:

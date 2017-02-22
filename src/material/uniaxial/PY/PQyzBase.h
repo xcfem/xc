@@ -34,7 +34,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Clase base para PySimple1 y QzSimple1.
+//! @brief Base class for PySimple1 y QzSimple1.
 class PQyzBase: public PYBase
   {
   protected:

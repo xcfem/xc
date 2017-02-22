@@ -33,7 +33,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Clase base para la modelización del acero.
+//! @brief Base class for steel uniaxial materials.
 class SteelBase : public UniaxialMaterial
   {
   protected:

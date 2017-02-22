@@ -20,7 +20,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDObject.h
-//Envoltorio para objetos de MED (para exportar archivos a «salome»).
+//Wrapper for MED objects (to export models to «Salome»).
 
 #ifndef MEDOBJECT_H
 #define MEDOBJECT_H
@@ -35,7 +35,7 @@ namespace XC {
 //
 //! @ingroup MED
 //
-//!  @brief Clase base para objetos MED.
+//!  @brief Base class for MED objects.
 class MEDObject: public EntCmd
   {
   public:

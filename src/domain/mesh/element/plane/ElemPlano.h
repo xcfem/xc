@@ -44,18 +44,14 @@ namespace XC {
 //!
 //! \ingroup ElemPlanos
 //
-//! @brief Clase base para los cuadriláteros de cuatro nodos.
+//! @brief Base class for plane elements.
 template <int NNODOS,class PhysProp>
 class ElemPlano : public ElemWithMaterial<NNODOS, PhysProp>
   {
   protected:
     mutable std::vector<double> areasTributarias;
-
-
   public:
     ElemPlano(int tag, int classTag,const PhysProp &);
-
-
     void checkElem(void);
     void setDomain(Domain *theDomain);
 

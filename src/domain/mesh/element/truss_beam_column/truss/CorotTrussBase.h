@@ -36,8 +36,7 @@
 namespace XC {
 //! \ingroup TrussElem
 //
-//! @brief Clase base para los elementos
-//! de tipo barra articulada con formulación corrotacional.
+//! @brief Base class for corotational truss elements.
 class CorotTrussBase: public ProtoTruss
   {
   protected:

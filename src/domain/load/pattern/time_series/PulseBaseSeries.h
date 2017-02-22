@@ -34,7 +34,7 @@
 namespace XC {
 //! @ingroup TSeries
 //
-//! @brief Clase base para las funciones del tiempo de tipo pulso.
+//! @brief Base class for pulse type time series.
 class PulseBaseSeries: public CFactorSeries
   {
   protected:

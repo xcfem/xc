@@ -37,7 +37,7 @@ class Pos3d;
 namespace XC {
 class Matrix;
 
-//! @brief Clase base para nodos y elementos.
+//! @brief Base class for nodes and elements (mesh components).
 class MeshComponent: public ContinuaReprComponent
   {
   private:

@@ -36,7 +36,7 @@ class AnalysisModel;
 
 //! @ingroup Graph
 //
-//! @brief Clase base para el grafo del problema.
+//! @brief Base class for model graph.
 class ModelGraph: public Graph
   {
   protected:

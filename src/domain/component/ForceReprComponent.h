@@ -33,7 +33,7 @@
 
 namespace XC {
 
-//! @brief Clase base para componentes que representan fuerzas.
+//! @brief Base class for components that represent forces.
 class ForceReprComponent: public DomainComponent
   {
   public:

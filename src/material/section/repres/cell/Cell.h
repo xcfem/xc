@@ -70,7 +70,7 @@ namespace XC {
 //
 //! @ingroup MATSCCCell
 //
-//! @brief Clase base para las teselas.
+//! @brief Base class for cells (cross-section discretization).
 class Cell
   {
   protected:
