@@ -47,11 +47,11 @@ class InteractionDiagram2d;
 class NMPointCloud;
 class NMyMzPointCloud;
 
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @defgroup MATSCCModeloFibras Fiber model for cross-sections.
 //
-//! \ingroup MATSCCModeloFibras
+//! @ingroup MATSCCModeloFibras
 //
 //! @brief Base class for fiber sections.
 class FiberSectionBase: public SeccionBarraPrismatica
@@ -65,9 +65,9 @@ class FiberSectionBase: public SeccionBarraPrismatica
     Vector eCommit; //!< committed section deformations 
   protected:
     KRSeccion kr; //!< Stiffness and internal forces resultant on the section.
-    StoFibras fibras; //!< Cola de pointers to fibras.
-    int tag_fibra; //!< Tag para la próxima fibra.
-    FiberSets sets_fibras;//!< Conjuntos de fibras.
+    StoFibras fibras; //!< Pointers to fibers container.
+    int tag_fibra; //!< Tag for next fiber.
+    FiberSets sets_fibras;//!< Fibers sets.
     friend class DqFibras;
     friend class StoFibras;
     FiberSectionRepr *section_repres; //! Section representation.

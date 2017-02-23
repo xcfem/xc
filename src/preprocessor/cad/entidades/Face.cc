@@ -179,7 +179,7 @@ const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j) const
     else if(nodos.EsCapaKCte())
       retval= CmbEdge::GetNodo(i,j,1);
     else
-      std::cerr << "Face::GetNodo; el conjunto de nodos no es unidimensional." << std::endl;
+      std::cerr << "Face::GetNodo; el node set is not one-dimensional." << std::endl;
     return retval;
   }
 

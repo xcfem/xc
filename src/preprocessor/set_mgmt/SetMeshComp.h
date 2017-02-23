@@ -54,11 +54,11 @@ class LimiteElemento
     int indice; //!< Índice del borde, arista o cara del elemento.
   };
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
-//!  \brief Conjunto de objetos.
+//!  @brief Set of mesh components (nodes, elements and constraints).
 //! 
-//!  Un objeto SetMeshComp contiene un conjunto de 0 o más:
+//!  A SetMeshComp object contains zero or more:
 //!  - Nodes.
 //!  - Finite elements.
 //!  - Essential boundary conditions (displacements).
@@ -70,22 +70,22 @@ class SetMeshComp: public SetBase
     void numera(void);
   public:
     //Nodos.
-    typedef DqPtrsNode::iterator nod_iterator; //!< Iterador sobre el conjunto de nodos.
-    typedef DqPtrsNode::const_iterator nod_const_iterator; //!< Iterador sobre el conjunto de nodos.
+    typedef DqPtrsNode::iterator nod_iterator; //!< Iterador sobre el node set.
+    typedef DqPtrsNode::const_iterator nod_const_iterator; //!< Iterador sobre el node set.
 
     //Elementos.
-    typedef DqPtrsElem::iterator elem_iterator; //!< Iterador sobre el conjunto de elementos.
-    typedef DqPtrsElem::const_iterator elem_const_iterator; //!< Iterador sobre el conjunto de elementos.
+    typedef DqPtrsElem::iterator elem_iterator; //!< Iterador sobre the set de elementos.
+    typedef DqPtrsElem::const_iterator elem_const_iterator; //!< Iterador sobre the set de elementos.
 
     //Constraints.
-    typedef DqPtrsConstraint lst_ptr_constraints; //!< Conjunto de constraints.
-    typedef DqPtrsConstraint::iterator constraint_iterator; //!< Iterador sobre el conjunto de constraints.
-    typedef DqPtrsConstraint::const_iterator constraint_const_iterator; //!< Iterador sobre el conjunto de constraints.
+    typedef DqPtrsConstraint lst_ptr_constraints; //!< Set of constraints.
+    typedef DqPtrsConstraint::iterator constraint_iterator; //!< Iterador sobre the set de constraints.
+    typedef DqPtrsConstraint::const_iterator constraint_const_iterator; //!< Iterador sobre the set de constraints.
 
   private:
-    DqPtrsNode nodos; //!< Conjunto de nodos.
-    DqPtrsElem elementos; //!< Conjunto de elementos.
-    lst_ptr_constraints constraints; //!< Conjunto de constraints.
+    DqPtrsNode nodos; //!< node set.
+    DqPtrsElem elementos; //!< Set of elementos.
+    lst_ptr_constraints constraints; //!< Set of constraints.
   protected:
     void clearAll(void);
     void copia_listas(const SetMeshComp &);
@@ -105,47 +105,47 @@ class SetMeshComp: public SetBase
     SetMeshComp(const SetMeshComp &otro);
     SetMeshComp &operator=(const SetMeshComp &otro);
 
-    //! @brief Returns the número de nodos del conjunto.
+    //! @brief Returns the number of nodes of the set.
     size_t NumNodos(void) const
       { return nodos.size(); }
-    //! @brief Agrega un nodo a la lista de nodos del conjunto.
+    //! @brief Agrega un nodo a la lista de nodos of the set.
     void agregaNodo(Node *nPtr);
-    //! @brief Return the lista de nodos del conjunto.
+    //! @brief Return the lista de nodos of the set.
     virtual const DqPtrsNode &GetNodos(void) const
       { return nodos; }
-    //! @brief Return the lista de nodos del conjunto.
+    //! @brief Return the lista de nodos of the set.
     virtual DqPtrsNode &GetNodos(void)
       { return nodos; }
-    //! @brief Borra la lista de nodos del conjunto.
+    //! @brief Borra la lista de nodos of the set.
     void clearNodos(void)
       { nodos.clearAll(); }
     void sel_nodos_lista(const ID &);
     bool In(const Node *) const;
 
-    //! @brief Returns the número de elementos del conjunto.
+    //! @brief Returns the number of elements of the set.
     size_t NumElementos(void) const
       { return elementos.size(); }
-    //! @brief Agrega un elemento la lista de elementos del conjunto.
+    //! @brief Agrega un elemento la lista de elementos of the set.
     void agregaElemento(Element *ePtr);
-    //! @brief Return the lista de elementos del conjunto.
+    //! @brief Return the lista de elementos of the set.
     virtual const DqPtrsElem &GetElementos(void) const
       { return elementos; }
-    //! @brief Return the lista de elementos del conjunto.
+    //! @brief Return the lista de elementos of the set.
     virtual DqPtrsElem &GetElementos(void)
       { return elementos; }
-    //! @brief Borra la lista de elementos del conjunto.
+    //! @brief Borra la lista de elementos of the set.
     void clearElementos(void)
       { elementos.clearAll(); }
     void sel_elementos_lista(const ID &tags);
     bool In(const Element *) const;
 
-    //! @brief Return the lista de constraints del conjunto.
+    //! @brief Return the lista de constraints of the set.
     virtual const DqPtrsConstraint &GetConstraints(void) const
       { return constraints; }
-    //! @brief Return the lista de constraints del conjunto.
+    //! @brief Return the lista de constraints of the set.
     virtual DqPtrsConstraint &GetConstraints(void)
       { return constraints; }
-    //! @brief Borra la lista de constraints del conjunto.
+    //! @brief Borra la lista de constraints of the set.
     void clearConstraints(void)
       { constraints.clearAll(); }
     void sel_constraints_lista(const ID &tags);

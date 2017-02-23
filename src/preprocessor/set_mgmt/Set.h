@@ -48,9 +48,9 @@ class Element;
 class Node;
 class Constraint;
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
-//!  \brief Conjunto de objetos.
+//!  @brief Object set.
 //! 
 //!  A set object contains 0 or more:
 //!  - Nodes.
@@ -68,9 +68,9 @@ class Set: public SetMeshComp
     typedef lst_ptr_puntos::iterator pnt_iterator; //!< point set iterator.
     typedef lst_ptr_puntos::const_iterator pnt_const_iterator; //!< point set const iterator.
 
-    typedef DqPtrsNmb<Edge> lst_ptr_lineas; //!< Conjunto de líneas.
-    typedef lst_ptr_lineas::iterator lin_iterator; //!< line set iterator.
-    typedef lst_ptr_lineas::const_iterator lin_const_iterator; //!< line set const iterator.
+    typedef DqPtrsNmb<Edge> lst_ptr_lineas; //!< Line set.
+    typedef lst_ptr_lineas::iterator lin_iterator; //!< Line set iterator.
+    typedef lst_ptr_lineas::const_iterator lin_const_iterator; //!< Line set const iterator.
 
     typedef DqPtrsNmb<Face> lst_surface_ptrs; //!< surface set.
     typedef lst_surface_ptrs::iterator sup_iterator; //!< surface set iterator.
@@ -111,19 +111,19 @@ class Set: public SetMeshComp
 
     void clear(void);
 
-    //! @brief Return the lista de puntos del conjunto.
+    //! @brief Returns a const reference to the point container.
     virtual const lst_ptr_puntos &GetPuntos(void) const
       { return puntos; }
-    //! @brief Return the lista de puntos del conjunto.
+    //! @brief Return a reference to the the point container.
     virtual lst_ptr_puntos &GetPuntos(void)
       { return puntos; }
     void sel_puntos_lista(const ID &);
     bool In(const Pnt *) const;
 
-    //! @brief Return the lista de lineas del conjunto.
+    //! @brief Return a const reference to the line container.
     virtual const lst_ptr_lineas &GetLineas(void) const
       { return lineas; }
-    //! @brief Return the lista de lineas del conjunto.
+    //! @brief Return a reference to the line container.
     virtual lst_ptr_lineas &GetLineas(void)
       { return lineas; }
     void sel_lineas_lista(const ID &);
@@ -138,18 +138,18 @@ class Set: public SetMeshComp
     void sel_surfaces_lst(const ID &);
     bool In(const Face *) const;
 
-    //! @brief Return the lista de cuerpos del conjunto.
+    //! @brief Return a const reference to the body container.
     virtual const lst_ptr_cuerpos &GetCuerpos(void) const
       { return cuerpos; }
-    //! @brief Return the lista de cuerpos del conjunto.
+    //! @brief Return a reference to the body container.
     virtual lst_ptr_cuerpos &GetCuerpos(void)
       { return cuerpos; }
     bool In(const Body *) const;
 
-    //! @brief Return the lista de UniformGrids del conjunto.
+    //! @brief Return a const reference to the UniformGrids container.
     virtual const lst_ptr_uniform_grids &GetUniformGrids(void) const
       { return uniform_grids; }
-    //! @brief Return the lista de UniformGrids del conjunto.
+    //! @brief Return a reference to the UniformGrids container.
     virtual lst_ptr_uniform_grids &GetUniformGrids(void)
       { return uniform_grids; }
     bool In(const UniformGrid *) const;

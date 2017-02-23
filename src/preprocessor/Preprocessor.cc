@@ -62,8 +62,8 @@ XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &otro)
     return *this;
   }
 
-//! @brief Inserta the pointer to the node en el conjunto «total» y en los conjuntos
-//! que estén abiertos.
+//! @brief Inserts the pointer to the node in the "total" set and in the 
+//! sets that are currently opened.
 void XC::Preprocessor::UpdateSets(Node *nuevo_nodo)
   {
     sets.get_set_total()->agregaNodo(nuevo_nodo);
@@ -76,8 +76,8 @@ void XC::Preprocessor::UpdateSets(Node *nuevo_nodo)
       }
   }
 
-//! @brief Inserta the pointer al elemento en el conjunto «total» y en los conjuntos
-//! que estén abiertos.
+//! @brief Inserts the pointer to the element in the "total" set and in the 
+//! sets that are currently opened.
 void XC::Preprocessor::UpdateSets(Element *nuevo_elem)
   {
     sets.get_set_total()->agregaElemento(nuevo_elem);
@@ -90,8 +90,8 @@ void XC::Preprocessor::UpdateSets(Element *nuevo_elem)
       }
   }
 
-//! @brief  Inserta the pointer a la coacción en el conjunto «total» y en los conjuntos
-//! que estén abiertos.
+//! @brief Inserts the pointer to the constraint in the "total" set and in the 
+//! sets that are currently opened.
 void XC::Preprocessor::UpdateSets(Constraint *nuevo_constraint)
   {
     sets.get_set_total()->GetConstraints().push_back(nuevo_constraint);
@@ -117,7 +117,8 @@ XC::Preprocessor::~Preprocessor(void)
 void XC::Preprocessor::setDeadSRF(const double &d)
   { Element::setDeadSRF(d); }
 
-//! @brief Busca el conjunto o entidad del preprocessador (punto,linea,...) cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the set or geometric entity with
+//! the name being passed as paramenter.
 XC::SetEstruct *XC::Preprocessor::busca_set_estruct(const std::string &nmb)
   {
     SetEstruct *retval= sets.busca_set_estruct(nmb);

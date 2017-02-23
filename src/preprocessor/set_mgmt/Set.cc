@@ -65,9 +65,9 @@ XC::Set &XC::Set::operator=(const Set &otro)
     return *this;
   }
 
-//! @brief Copia las listas de objetos del conjunto s.
+//! @brief Copia las listas de objetos of the set s.
 //!
-//! Copia en ESTE objeto las listas de objetos del conjunto
+//! Copia en ESTE objeto las listas de objetos of the set
 //! being passed as parameter.
 void XC::Set::copia_listas(const Set &otro)
   {
@@ -84,7 +84,7 @@ void XC::Set::copia_listas(const Set &otro)
     uniform_grids.set_owner(this);
   }
 
-//! @brief Agrega a este conjunto los objetos del conjunto
+//! @brief Agrega a this set los objetos of the set
 //! being passed as parameter.
 void XC::Set::agrega_listas(const Set &otro)
   {
@@ -96,7 +96,7 @@ void XC::Set::agrega_listas(const Set &otro)
     uniform_grids.agrega(otro.uniform_grids);
   }
 
-// //! @brief Agrega a este conjunto los objetos del conjunto
+// //! @brief Agrega a this set los objetos of the set
 // //! being passed as parameter que cumplen la condición.
 // void XC::Set::agrega_listas_cond(const Set &otro,const std::string &cond)
 //   {
@@ -108,7 +108,7 @@ void XC::Set::agrega_listas(const Set &otro)
 //     uniform_grids.agrega_cond(otro.uniform_grids,cond);
 //   }
 
-//! @brief Vacía las listas del conjunto.
+//! @brief Vacía las listas of the set.
 void XC::Set::clear(void)
   {
     SetMeshComp::clear();
@@ -119,7 +119,7 @@ void XC::Set::clear(void)
     uniform_grids.clear();
   }
 
-//!  \brief Borra todos los objetos del conjunto.
+//!  @brief Borra todos los objetos of the set.
 void XC::Set::clearAll(void)
   {
     SetMeshComp::clearAll();
@@ -130,7 +130,7 @@ void XC::Set::clearAll(void)
     uniform_grids.clearAll();
   }
 
-//! @brief Asigna índices a los objetos del conjunto (nodos,elementos,puntos...) poder emplearlos en VTK.
+//! @brief Asigna índices a los objetos of the set (nodos,elementos,puntos...) poder emplearlos en VTK.
 void XC::Set::numera(void)
   {
     SetMeshComp::numera();
@@ -140,7 +140,7 @@ void XC::Set::numera(void)
 //     numera_lista(cuerpos);
   }
 
-//! @brief Desplaza los elementos del conjunto.
+//! @brief Desplaza los elementos of the set.
 void XC::Set::mueve(const Vector3d &desplaz)
   {
     for(lst_ptr_puntos::iterator i= puntos.begin();i!=puntos.end();i++)
@@ -148,7 +148,7 @@ void XC::Set::mueve(const Vector3d &desplaz)
     SetMeshComp::mueve(desplaz);
   }
 
-//! @brief Aplica la transformación a los elementos del conjunto.
+//! @brief Aplica la transformación a los elementos of the set.
 void XC::Set::Transforma(const TrfGeom &trf)
   {
     for(lst_ptr_puntos::iterator i= puntos.begin();i!=puntos.end();i++)
@@ -156,7 +156,7 @@ void XC::Set::Transforma(const TrfGeom &trf)
     SetMeshComp::Transforma(trf);
   }
 
-//! @brief Aplica al conjunto la transformación cuyo índice se pasa como parámetro.
+//! @brief Aplica to the set the transformation with the index being passed as parameter.
 void XC::Set::Transforma(const size_t &indice_trf)
   {
     TrfGeom *trf= get_preprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
@@ -164,8 +164,8 @@ void XC::Set::Transforma(const size_t &indice_trf)
       Transforma(*trf);
   }
 
-//! @brief Crea una copia de los elementos del conjunto y los mete en otro
-//! cuyo nombre se pasa como parámetro.Las coordenadas de los
+//! @brief Creates a copia de los elementos of the set y los mete en otro
+//! which name is being passed as parameter.Las coordenadas de los
 //! nuevos puntos serán las que resulten de sumar a las del primitivo el
 //! vector being passed as parameter.
 void XC::Set::crea_copia(const std::string &nombre,const Vector3d &v= Vector3d())
@@ -256,7 +256,7 @@ void XC::Set::body_meshing(meshing_dir dm)
       std::clog << "hecho." << std::endl;
   }
 
-//! @brief Crea nodos y, en su caso, elementos en los puntos del conjunto.
+//! @brief Crea nodos y, en su caso, elementos en los puntos of the set.
 void XC::Set::uniform_grid_meshing(meshing_dir dm)
   {
     if(verborrea>2)
@@ -267,14 +267,14 @@ void XC::Set::uniform_grid_meshing(meshing_dir dm)
       std::clog << "hecho." << std::endl;
   }
 
-//!  \brief Triggers mesh generation from set components.
+//!  @brief Triggers mesh generation from set components.
 //!
 //! @param dm: Meshing direction.
 void XC::Set::genMesh(meshing_dir dm)
   {
     Preprocessor *mdl= get_preprocessor();
     assert(mdl);
-    mdl->get_sets().abre_set(GetNombre()); //Para que nodos y elementos entren en ESTE conjunto.
+    mdl->get_sets().abre_set(GetNombre()); //Para que nodos y elementos entren en this set.
 
     if(verborrea>1)
       std::clog << "Meshing set: " << GetNombre() << " ...";
@@ -311,9 +311,9 @@ bool XC::Set::In(const Body *b) const
 bool XC::Set::In(const UniformGrid *ug) const
   { return uniform_grids.in(ug); }
 
-//! @brief Agrega al conjunto being passed as parameter
+//! @brief Agrega to the set being passed as parameter
 //! los elementos que intervienen en la
-//! definición de los que ya están en el conjunto.
+//! definición de los que ya están en the set.
 void XC::Set::CompletaHaciaAbajo(void)
   {
 //     for(lst_cuerpos::iterator i=cuerpos.begin();i!=cuerpos.end();i++)
@@ -491,7 +491,7 @@ int XC::Set::recvData(const CommParameters &cp)
     return res;
   }
 
-//!  \brief Destructor.
+//!  @brief Destructor.
 XC::Set::~Set(void)
   { clearAll(); }
 

@@ -67,12 +67,12 @@ class ReinfBar;
 
 //! @ingroup MATSCCArmaduras
 //
-//! @brief Conjunto de armaduras distribuídas a la largo de un segmento.
+//! @brief Set of rebars distributed along a segment.
 class StraightReinfLayer : public ReinfLayer
   {
   private:
-    Vector initPosit;
-    Vector finalPosit;
+    Vector initPosit; //!< Segment back end.
+    Vector finalPosit; //!< Segment front end.
   protected:
 
 

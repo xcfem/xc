@@ -43,7 +43,7 @@
 XC::MapCuerpos::MapCuerpos(Cad *cad)
   : MapEnt<Body>(cad) {}
 
-//! @brief Inserta el nuevo cuerpo en el conjunto total y los conjuntos abiertos.
+//! @brief Inserta el nuevo cuerpo en the set total y the opened sets.
 void XC::MapCuerpos::UpdateSets(Body *nuevo) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());

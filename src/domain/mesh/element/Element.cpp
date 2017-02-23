@@ -283,7 +283,7 @@ const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
   }
 
 //! @brief Returns the fuerza generalizada del elemento sobre el nodo cuyo
-//! índice se pasa como parámetro.
+//! índice is being passed as parameter.
 const XC::Vector &XC::Element::getNodeResistingComponents(const size_t &iNod,const Vector &rf) const
   {
     static Vector retval;
@@ -295,7 +295,7 @@ const XC::Vector &XC::Element::getNodeResistingComponents(const size_t &iNod,con
   }
 
 //! @brief Returns the fuerza generalizada del elemento sobre el nodo cuyo
-//! índice se pasa como parámetro.
+//! índice is being passed as parameter.
 const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
   {
     const Vector &rf= getResistingForce();
@@ -303,7 +303,7 @@ const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
   }
 
 //! @brief Returns the fuerza generalizada (incluyendo fuerzas de inercia)
-//! del elemento sobre el nodo cuyo índice se pasa como parámetro.
+//! del elemento sobre el nodo cuyo índice is being passed as parameter.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const size_t &iNod) const
   {
     const Vector &rf= getResistingForceIncInertia();
@@ -612,7 +612,7 @@ XC::MEDGaussModel XC::Element::getMEDGaussModel(void) const
   }
 
 //! @brief Returns the nodos del borde (o arista) del elemento
-//! cuyo índice se pasa como parámetro.
+//! cuyo índice is being passed as parameter.
 XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
   {
     NodesEdge retval;
@@ -654,7 +654,7 @@ XC::ID XC::Element::getEdgesNode(const Node *) const
   }
 
 //! @brief Returns the bordes del elemento que tienen ambos extremos
-//! en el conjunto de nodos being passed as parameter.
+//! en el node set being passed as parameter.
 std::set<int> XC::Element::getEdgesNodes(const NodePtrSet &nodos) const
   {
     std::set<int> retval;
@@ -674,7 +674,7 @@ std::set<int> XC::Element::getEdgesNodes(const NodePtrSet &nodos) const
   }
 
 //! @brief Returns the bordes del elemento
-//! que tienen por extremo el nodo cuyo tag se pasa como parámetro.
+//! que tienen por extremo el nodo cuyo tag is being passed as parameter.
 XC::ID XC::Element::getEdgesNodeByTag(const int &iN) const
   {
     const Domain *dom= this->getDomain();
@@ -693,7 +693,7 @@ XC::ID XC::Element::getLocalIndexNodesEdge(const size_t &i) const
     return retval;
   }
 
-//! @brief Returns the conjuntos a los que pertenece este elemento.
+//! @brief Returns the sets a los que pertenece este elemento.
 std::set<XC::SetBase *> XC::Element::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -708,7 +708,7 @@ std::set<XC::SetBase *> XC::Element::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el elemento a los conjuntos que se pasan como parámetro.
+//! @brief Agrega el elemento a the sets que se pasan como parámetro.
 void XC::Element::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
@@ -862,7 +862,7 @@ double XC::Element::getVolTributarioByTag(const int &tag) const
   }
 
 //! @brief Returns the cuadrado de la distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! is being passed as parameter.
 double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
   {
     std::cerr << "Function getDist2(Pos2d) is not defined for element of type: '"
@@ -871,7 +871,7 @@ double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
   }
 
 //! @brief Returns the distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! is being passed as parameter.
 double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
   {
     std::cerr << "Function getDist(Pos2d) is not defined for element of type: '"
@@ -880,7 +880,7 @@ double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
   }
 
 //! @brief Returns the cuadrado de la distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! is being passed as parameter.
 double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
   {
     std::cerr << "Function getDist2(Pos3d) is not defined for element of type: '"
@@ -889,7 +889,7 @@ double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
   }
 
 //! @brief Returns the distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! is being passed as parameter.
 double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
   {
     std::cerr << "Function getDist(Pos3d) is not defined for element of type: '"

@@ -48,7 +48,7 @@
 
 namespace XC{
 
-//! \ingroup CadMR
+//! @ingroup CadMR
 //! 
 //! @brief "Tritriz" de pointers to objetos.
 template <class MatrizPtr>
@@ -258,7 +258,7 @@ size_t TritrizPtrBase<MatrizPtr>::GetDim(void) const
     return retval;
   }
 
-//! @brief Returns the número de elementos de la tritriz.
+//! @brief Returns the number of elements de la tritriz.
 template <class MatrizPtr>
 size_t TritrizPtrBase<MatrizPtr>::NumPtrs(void) const
   {
@@ -311,7 +311,7 @@ void TritrizPtrBase<MatrizPtr>::clearAll(void)
   }
 
 
-//! @brief Returns true ifel único índice que varía es el I.
+//! @brief Returns true if the único índice que varía es el I.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsFilaI(void) const
   {
@@ -319,7 +319,7 @@ bool TritrizPtrBase<MatrizPtr>::EsFilaI(void) const
     return true;
   }
 
-//! @brief Returns true ifel único índice que varía es el J.
+//! @brief Returns true if the único índice que varía es el J.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsFilaJ(void) const
   {
@@ -327,7 +327,7 @@ bool TritrizPtrBase<MatrizPtr>::EsFilaJ(void) const
     return true;
   }
 
-//! @brief Returns true ifel único índice que varía es el K.
+//! @brief Returns true if the único índice que varía es el K.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsFilaK(void) const
   {
@@ -350,12 +350,12 @@ template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsCapaKCte(void) const
   { return (this->getNumCols()==1); }
 
-//! @brief Return the capa cuyo índice se pasa como parámetro.
+//! @brief Return the capa cuyo índice is being passed as parameter.
 template <class MatrizPtr>
 const MatrizPtr &TritrizPtrBase<MatrizPtr>::operator()(const size_t &capa) const
   { return (*this)[capa-1]; }
 
-//! @brief Return the capa cuyo índice se pasa como parámetro.
+//! @brief Return the capa cuyo índice is being passed as parameter.
 template <class MatrizPtr>
 MatrizPtr &TritrizPtrBase<MatrizPtr>::operator()(const size_t &capa)
   { return (*this)[capa-1]; }
@@ -376,7 +376,7 @@ typename TritrizPtrBase<MatrizPtr>::const_reference TritrizPtrBase<MatrizPtr>::g
       return operator()(1,1,i);
     else
       {
-	std::cerr << "TritrizPtrBase::getAtI; el conjunto no es unidimensional." << std::endl;
+	std::cerr << "TritrizPtrBase::getAtI; the set is not one-dimensional." << std::endl;
         return operator()(1,1,1);
       }
   }
@@ -406,7 +406,7 @@ typename TritrizPtrBase<MatrizPtr>::const_reference TritrizPtrBase<MatrizPtr>::g
       return operator()(i,j,1);
     else
       {
-	std::cerr << "SetEstruct::getNodoI; el conjunto de nodos no es bidimensional." << std::endl;
+	std::cerr << "SetEstruct::getNodoI; el node set no es bidimensional." << std::endl;
         return NULL;
       } 
   }

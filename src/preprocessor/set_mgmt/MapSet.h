@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MapSet.h
-//Contenedor de conjuntos.
+//Sets container.
 
 #ifndef MAPSET_H
 #define MAPSET_H
@@ -50,14 +50,14 @@ class Face;
 class Body;
 class UniformGrid;
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
-//!  \brief Contenedor de conjuntos
+//!  @brief Sets container.
 //!  
 class MapSet: public EntCmd, public MovableObject
   {
-    static ID setsDbTags;//! dbTags para los conjuntos.
-    static std::deque<std::string> setsClassNames; //! nombres de clase de conjuntos.
+    static ID setsDbTags;//! dbTags para the sets.
+    static std::deque<std::string> setsClassNames; //! sets class names.
   public:
     typedef std::map<std::string,SetBase *> map_sets;
     typedef map_sets::iterator iterator;
@@ -66,10 +66,10 @@ class MapSet: public EntCmd, public MovableObject
   private:
     Preprocessor *preprocessor; //!< Pointer to preprocessor.
 
-    map_sets sets; //!< Conjuntos de entidades.
+    map_sets sets; //!< Sets of entidades.
     map_ent_mdlr entidades; //! Geometric entities (points, lines, surfaces,...).
     Set *total; //!< Pointer to total set (Created in constructor).
-    map_sets abiertos; //!< Conjuntos abiertos (aquellos a los que se añade cada nueva entidad creada en Cad).
+    map_sets abiertos; //!< Opened sets (aquellos a los que se añade cada nueva entidad creada en Cad).
 
     bool existe(const std::string &nmb) const;
     friend class EntMdlr;

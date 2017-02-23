@@ -50,7 +50,7 @@ class ElementPtrs: public EntCmd
     typedef vector_ptr_elements::const_iterator const_iterator;
 
   private:
-    vector_ptr_elements theElements; //!< conjunto de elementos.
+    vector_ptr_elements theElements; //!< element set.
   protected:
 
   public:

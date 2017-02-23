@@ -34,7 +34,7 @@ XC::FiberSets::FiberSets(void)
   : std::map<std::string,DqFibras>()
   {}
 
-//! @brief Crea un nuevo conjunto de fibras.
+//! @brief Creates a nuevo fiber set.
 XC::DqFibras &XC::FiberSets::crea_set_fibras(const std::string &nmb)
   {
     if(find(nmb) == end()) //Set doesn't exists
@@ -45,7 +45,7 @@ XC::DqFibras &XC::FiberSets::crea_set_fibras(const std::string &nmb)
     return (*this)[nmb];
   }
 
-//! @brief Crea un conjunto de fibras cuyo nombre se pasa como parámetro.
+//! @brief Creates a fiber set which name is being passed as parameter.
 XC::FiberSets::iterator XC::FiberSets::get_set_fibras(const std::string &nmb_set)
   {
     iterator i= find(nmb_set);
@@ -60,7 +60,7 @@ XC::FiberSets::iterator XC::FiberSets::get_set_fibras(const std::string &nmb_set
     return i;
   }
 
-//! @brief Crea un conjunto de fibras cuyo material tiene el tag being passed as parameter.
+//! @brief Creates a fiber set which material has the tag being passed as parameter.
 XC::FiberSets::iterator XC::FiberSets::sel_mat_tag(DqFibras &fibras, const std::string &nmb_set,const int &matTag)
   {
     iterator i= get_set_fibras(nmb_set);
@@ -68,7 +68,11 @@ XC::FiberSets::iterator XC::FiberSets::sel_mat_tag(DqFibras &fibras, const std::
     return i;
   }
 
-//! @brief Crea un conjunto de fibras que perteneciendo al conjunto nmb_set_org, cumplen que el material tiene el tag being passed as parameter.
+//! @brief Creates a fiber set with the fibers that belongs to the set named
+//! nmb_set_org, and have the material identified with the tag being passed as parameter.
+//! @param nmb_set: name of the new set.
+//! @param nmb_set_org: name of the set that contains the fibers.
+//! @matTag: material tag.
 XC::FiberSets::iterator XC::FiberSets::resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag)
   {
     iterator i= end();

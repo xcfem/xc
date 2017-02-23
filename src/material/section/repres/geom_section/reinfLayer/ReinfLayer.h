@@ -69,7 +69,7 @@ class GeomSection;
 
 //! @ingroup MATSCCArmaduras
 //
-//! @brief Conjunto de armaduras que forma una capa.
+//! @brief Rebar layer.
 class ReinfLayer: public DiscretBase
   {
   private:

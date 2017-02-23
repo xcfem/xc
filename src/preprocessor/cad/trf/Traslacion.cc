@@ -39,10 +39,10 @@
 void XC::Traslacion::setVector(const Vector3d &v)
   { tr= Traslacion3d(v); }
 
-//! @brief Aplica la transformación a los elementos del conjunto.
+//! @brief Aplica la transformación a los elementos of the set.
 Pos3d XC::Traslacion::Transforma(const Pos3d &p) const
   { return tr.Transforma(p); }
 
-//! @brief Aplica la transformación a los elementos del conjunto.
+//! @brief Aplica la transformación a los elementos of the set.
 Vector3d XC::Traslacion::Transforma(const Vector3d &v) const
   { return tr.Transforma(v); }

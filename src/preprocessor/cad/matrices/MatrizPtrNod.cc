@@ -37,7 +37,7 @@
 #include "boost/lexical_cast.hpp"
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 XC::Node *XC::MatrizPtrNod::buscaNodo(const int &tag)
   {
     Node *retval= nullptr;
@@ -61,7 +61,7 @@ XC::Node *XC::MatrizPtrNod::buscaNodo(const int &tag)
   }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 const XC::Node *XC::MatrizPtrNod::buscaNodo(const int &tag) const
   {
     const Node *retval= nullptr;
@@ -95,7 +95,7 @@ XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p)
     if(nfilas*ncols>500)
       std::clog << "La matriz de nodos es tiene "
                 << nfilas*ncols << " elementos "
-                << " es mejor buscar por coordenadas en el conjunto asociado."
+                << " es mejor buscar por coordenadas en the set asociado."
                 << std::endl;
     for(size_t j= 1;j<=nfilas;j++)
       for(size_t k= 1;k<=ncols;k++)
@@ -118,7 +118,7 @@ const XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p) const
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Impone desplazamiento nulo en los nodos de este conjunto.
+//! @brief Impone desplazamiento nulo en los nodos de this set.
 void XC::MatrizPtrNod::fix(const SFreedom_Constraint &semilla) const
   {
     if(Null()) return;

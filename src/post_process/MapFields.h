@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MapFields.h
-//Contenedor de conjuntos.
+//Sets container.
 
 #ifndef MAPFIELDS_H
 #define MAPFIELDS_H
@@ -38,7 +38,7 @@
 namespace XC {
 class Preprocessor;
 
-//!  \ingroup POST_PROCESS
+//!  @ingroup POST_PROCESS
 // 
 //!  @brief Contenedor de definiciones de campo.
 class MapFields: public EntCmd, public MovableObject, public std::deque<FieldInfo>

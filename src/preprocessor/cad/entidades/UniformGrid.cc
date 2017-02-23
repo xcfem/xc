@@ -78,7 +78,7 @@ BND3d XC::UniformGrid::Bnd(void) const
 Pos3d XC::UniformGrid::GetCentro(void) const
   { return Pos3d(org.x()+Lx/2,org.y()+Ly/2,org.z()+Lz/2); }
 
-//! @brief Returns the conjuntos a los que pertenece este objeto.
+//! @brief Returns the sets a los que pertenece este objeto.
 std::set<XC::SetBase *> XC::UniformGrid::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -93,7 +93,7 @@ std::set<XC::SetBase *> XC::UniformGrid::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el «uniform grid» a los conjuntos que se pasan como parámetro.
+//! @brief Agrega el «uniform grid» a the sets que se pasan como parámetro.
 void XC::UniformGrid::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)

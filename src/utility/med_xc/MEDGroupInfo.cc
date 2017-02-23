@@ -46,7 +46,7 @@ XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const Set &set)
     indices= mesh->getMapIndicesCeldas();
     const size_t numNodos= set.NumNodos();
     const size_t numElementos= set.NumElementos();
-    if(numElementos==0) //Conjunto de nodos.
+    if(numElementos==0) //node set.
       {
         tipo_entidad= MED_EN::MED_NODE;
 	const DqPtrsNode nodos= set.GetNodos();
@@ -54,7 +54,7 @@ XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const Set &set)
         for(Set::nod_const_iterator i= nodos.begin();i!=nodos.end();i++)
           nuevo_vertice((*i)->getTag(),indices_nodos);
       }
-    else if(numNodos==0) //Conjunto de elementos.
+    else if(numNodos==0) //Set of elementos.
       {
         tipo_entidad= MED_EN::MED_CELL;   
 	const DqPtrsElem elementos= set.GetElementos();

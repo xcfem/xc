@@ -580,17 +580,17 @@ XC::Vector XC::Node::getAlphaXYZ(void) const
   { return extrae_rotacion(getAccel(),getDim(),numberDOF); }
 
 //! @brief Returns the cuadrado de la distancia desde el nodo al punto que
-//! se pasa como parámetro.
+//! is being passed as parameter.
 double XC::Node::getDist2(const Pos2d &p,bool initialGeometry) const
   { return getDist2(To3dXY2d(p),initialGeometry); }
 
 //! @brief Return the distancia desde el nodo al punto que
-//! se pasa como parámetro.
+//! is being passed as parameter.
 double XC::Node::getDist(const Pos2d &p,bool initialGeometry) const
   { return sqrt(getDist2(p,initialGeometry)); }
 
 //! @brief Returns the cuadrado de la distancia desde el nodo al punto que
-//! se pasa como parámetro.
+//! is being passed as parameter.
 double XC::Node::getDist2(const Pos3d &p,bool initialGeometry) const
   {
     if(initialGeometry)
@@ -600,7 +600,7 @@ double XC::Node::getDist2(const Pos3d &p,bool initialGeometry) const
   }
 
 //! @brief Return the distancia desde el nodo al punto que
-//! se pasa como parámetro.
+//! is being passed as parameter.
 double XC::Node::getDist(const Pos3d &p,bool initialGeometry) const
   { return sqrt(getDist2(p,initialGeometry)); }
 
@@ -623,7 +623,7 @@ void XC::Node::setPos(const Pos3d &p)
       }
   }
 
-//! @brief Aplica a nodo la transformación cuyo índice se pasa como parámetro.
+//! @brief Aplica a nodo la transformación cuyo índice is being passed as parameter.
 void XC::Node::Transforma(const TrfGeom &trf)
   {
     static Pos3d p;
@@ -1081,8 +1081,8 @@ XC::Vector XC::Node::getModalParticipationFactors(void) const
 
 //! @brief Returns the factor de participación modal
 //! correspondiente al modo i. Si el parámetro gdls
-//! no está vacío «proyecta» el modo i sobre
-//! los gdls indicados en el conjunto. Se escribió para poder
+//! is not empty «proyecta» el modo i sobre
+//! los gdls indicados en the set. Se escribió para poder
 //! expresar ls participación según un gdl
 //! (ver test de verificación test_cqc_01.xc).
 //! LOS RESULTADOS DE ESTA FUNCIÓN NO COINCIDEN CON LOS
@@ -1116,8 +1116,8 @@ double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &gdls)
   }
 
 //! @brief Returns the factores de participación modal. Si el parámetro gdls
-//! no está vacío «proyecta» el modo i sobre
-//! los gdls indicados en el conjunto.
+//! is not empty «proyecta» el modo i sobre
+//! los gdls indicados en the set.
 XC::Vector XC::Node::getModalParticipationFactors(const std::set<int> &gdls) const
   {
     const int nm= getNumModes();
@@ -1128,8 +1128,8 @@ XC::Vector XC::Node::getModalParticipationFactors(const std::set<int> &gdls) con
   }
 
 //! @brief Returns the factores de participación modal. Si el parámetro gdls
-//! no está vacío «proyecta» el modo i sobre
-//! los gdls indicados en el conjunto.
+//! is not empty «proyecta» el modo i sobre
+//! los gdls indicados en the set.
 XC::Vector XC::Node::getModalParticipationFactorsForGdls(const boost::python::list &l) const
   {
     std::set<int> tmp= set_int_from_py_list(l);
@@ -1143,8 +1143,8 @@ XC::Vector XC::Node::getDistributionFactor(int mode) const
 
 //! @brief Returns the factor de distribución correspondiente al modo
 //! being passed as parameter. Si el parámetro gdls
-//! no está vacío «proyecta» el modo i sobre
-//! los gdls indicados en el conjunto.
+//! is not empty «proyecta» el modo i sobre
+//! los gdls indicados en the set.
 XC::Vector XC::Node::getDistributionFactor(int mode,const std::set<int> &gdls) const
   { return getModalParticipationFactor(mode,gdls)*getEigenvector(mode); }
 
@@ -1343,7 +1343,7 @@ int XC::Node::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Returns the conjuntos a los que pertenece este nodo.
+//! @brief Returns the sets a los que pertenece este nodo.
 std::set<XC::SetBase *> XC::Node::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -1358,7 +1358,7 @@ std::set<XC::SetBase *> XC::Node::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el nodo a los conjuntos que se pasan como parámetro.
+//! @brief Agrega el nodo a the sets que se pasan como parámetro.
 void XC::Node::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
@@ -1585,7 +1585,7 @@ const XC::MeshEdge *XC::Node::next(const std::deque<MeshEdge> &edges, const std:
   }
 
 
-//! @brief Return the acción de los elementos del conjunto sobre el nodo.
+//! @brief Return the acción de los elementos of the set sobre el nodo.
 const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &elementos,const bool &inc_inertia) const
   {
     static Vector retval;
@@ -1616,7 +1616,7 @@ const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &e
   }
 
 //! @brief Returns the sistema de vectores deslizantes que representa
-//! la acción de los elementos del conjunto sobre el nodo.
+//! la acción de los elementos of the set sobre el nodo.
 SVD3d XC::Node::getResistingSVD3d(const std::set<const Element *> &elementos,const bool &inc_inertia) const
   {
     SVD3d retval;

@@ -113,16 +113,16 @@ XC::FiberSectionRepr *XC::FiberSectionBase::getFiberSectionRepr(void)
     return section_repres;
   }
 
-//! @brief Crea un nuevo conjunto de fibras.
+//! @brief Creare a new fiber set.
 void XC::FiberSectionBase::crea_set_fibras(const std::string &nmb)
   { sets_fibras.crea_set_fibras(nmb); }
 
-//! @brief Crea un conjunto de fibras cuyo nombre se pasa como parámetro.
+//! @brief Creates a fiber set which name is being passed as parameter.
 XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::get_set_fibras(const std::string &nmb_set)
   { return sets_fibras.get_set_fibras(nmb_set); }
 
 
-// //! @brief Crea un conjunto de fibras que cumplen la condición being passed as parameter.
+// //! @brief Creates a fiber set que cumplen la condición being passed as parameter.
 // XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel(const std::string &nmb_set,const std::string &cond)
 //   {
 //     set_fibras_iterator i= get_set_fibras(nmb_set);
@@ -130,7 +130,7 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::get_set_fibras(c
 //     return i;
 //   }
 
-// //! @brief Crea un conjunto de fibras que perteneciendo al conjunto nmb_set_org, cumplen la condición being passed as parameter.
+// //! @brief Creates a fiber set that belongs to the set with the name nmb_set_org, and satisfy the contition being passed as parameter.
 // XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond)
 //   {
 //     set_fibras_iterator i= sets_fibras.end();
@@ -149,7 +149,7 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::get_set_fibras(c
 //     return i;
 //   }
 
-//! @brief Crea un conjunto de fibras cuyo material tiene el tag being passed as parameter.
+//! @brief Creates a fiber set which material has the tag being passed as parameter.
 XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel_mat_tag(const std::string &nmb_set,const int &matTag)
   {
     set_fibras_iterator i= get_set_fibras(nmb_set);
@@ -157,7 +157,10 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel_mat_tag(cons
     return i;
   }
 
-//! @brief Crea un conjunto de fibras que perteneciendo al conjunto nmb_set_org, cumplen que el material tiene el tag being passed as parameter.
+//! @brief Creates a fiber set with those that belongs to the set with the name nmb_set_org, and have the material indetified with the tag being passed as parameter.
+//! @param nmb_set: new set name.
+//! @param nmb_set_org: set that contains the fibers.
+//! @param matTag: material tag.
 XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag)
   { return sets_fibras.resel_mat_tag(nmb_set,nmb_set_org,matTag); }
  
@@ -422,7 +425,7 @@ double XC::FiberSectionBase::getAcEficazNeta(const double &hEfMax,const std::str
             retval= armaduras.calcAcEficazFibras(contourAcEficazBruta,factor);
           }
         else
-          std::cerr << "No se encotró el conjunto de fibras: "
+          std::cerr << "No se encotró el fiber set: "
                     << nmbSetArmaduras << std::endl;
       }
     else
@@ -444,7 +447,7 @@ double XC::FiberSectionBase::calcAcEficazFibras(const double &hEfMax,const std::
             retval= armaduras.calcAcEficazFibras(contourAcEficazBruta,factor);
           }
         else
-          std::cerr << "FiberSectionBase::calcAcEficazFibras; no se encotró el conjunto de fibras: "
+          std::cerr << "FiberSectionBase::calcAcEficazFibras; no se encotró el fiber set: "
                     << nmbSetArmaduras << std::endl;
       }
     else
@@ -464,7 +467,7 @@ void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras
           armaduras.calcRecubrimientos(*geom);
       }
     else
-      std::cerr << "FiberSectionBase::calcRecubrimientos; no se encotró el conjunto de fibras: "
+      std::cerr << "FiberSectionBase::calcRecubrimientos; no se encotró el fiber set: "
                 << nmbSetArmaduras << std::endl;
   }
 
@@ -478,7 +481,7 @@ void XC::FiberSectionBase::calcSeparaciones(const std::string &nmbSetArmaduras) 
         armaduras.calcSeparaciones();
       }
     else
-      std::cerr << "FiberSectionBase::calcSeparaciones; no se encontró el conjunto de fibras: "
+      std::cerr << "FiberSectionBase::calcSeparaciones; no se encontró el fiber set: "
                 << nmbSetArmaduras << std::endl;
   }
 

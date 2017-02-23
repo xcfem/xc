@@ -40,8 +40,7 @@ class CalcPivotes;
 
 //! @ingroup MATSCCDiagInt
 //
-//! @brief Conjunto de pivotes calculado para
-//! un plano de flexión determinado.
+//! @brief Pivot positions computed for a bending plane.
 class Pivotes
   {
     Pos3d A; //!< Pivote A (max strain in tensioned steel).

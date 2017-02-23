@@ -40,11 +40,11 @@
 XC::ID XC::MapSet::setsDbTags;
 std::deque<std::string> XC::MapSet::setsClassNames;
 
-//! @brief Returns true ifel conjunto existe.
+//! @brief Returns true if the sets already exists.
 bool XC::MapSet::existe(const std::string &nmb) const
   { return (sets.find(nmb)!=sets.end()); }
 
-//! @brief Returns a pointer to the conjunto cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the set which name is being passed as parameter.
 XC::SetBase *XC::MapSet::busca_set(const std::string &nmb)
   {
     if(existe(nmb))
@@ -55,7 +55,7 @@ XC::SetBase *XC::MapSet::busca_set(const std::string &nmb)
       return nullptr;
   }
 
-//! @brief Returns a pointer to the conjunto cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the set which name is being passed as parameter.
 const XC::SetBase *XC::MapSet::busca_set(const std::string &nmb) const
   {
     const_iterator i= sets.find(nmb);
@@ -71,7 +71,7 @@ const XC::SetBase *XC::MapSet::busca_set(const std::string &nmb) const
       }
   }
 
-//! @brief Returns the conjunto cuyo nombre se pasa como parámetro.
+//! @brief Returns the set which name is being passed as parameter.
 XC::SetBase &XC::MapSet::getSet(const std::string &nmb)
   {
     SetBase *retval= busca_set(nmb);
@@ -97,16 +97,16 @@ XC::MapSet::iterator XC::MapSet::begin(void)
 XC::MapSet::iterator XC::MapSet::end(void)
   { return sets.end(); }
 
-//! @brief Crea un nuevo conjunto con el nombre que se le pasa como parámetro.
+//! @brief Creates a new set con el nombre que se le pasa como parámetro.
 XC::Set *XC::MapSet::crea_set(const std::string &nmb)
   {
     Set *tmp =nullptr;
-    if(!existe(nmb)) //El conjunto es nuevo.
+    if(!existe(nmb)) //Set is new.
       {
         tmp= new Set(nmb,preprocessor);
         sets[nmb]= tmp;
       }
-    else //El conjunto existe
+    else //Set already exists
       tmp= dynamic_cast<Set *>(busca_set(nmb));
     return tmp;
   }
@@ -114,10 +114,10 @@ XC::Set *XC::MapSet::crea_set(const std::string &nmb)
 void XC::MapSet::abre_set(const std::string &nmb)
   {
     SetBase *tmp =nullptr;
-    if(!existe(nmb)) //El conjunto no existe.
-      std::cerr << "MapSet::abre_set; el conjunto: '"
-                << nmb << "' no existe.\n";
-    else //El conjunto existe
+    if(!existe(nmb)) //Set doesn't exists.
+      std::cerr << "MapSet::abre_set; the set: '"
+                << nmb << "' doesn't exists.\n";
+    else //The set exists
       {
         tmp= busca_set(nmb);
         assert(tmp);
@@ -126,31 +126,31 @@ void XC::MapSet::abre_set(const std::string &nmb)
   }
 void XC::MapSet::cierra_set(const std::string &nmb)
   {
-    if(!existe(nmb)) //El conjunto no existe.
-      std::cerr << "MapSet::cierra_set; el conjunto: '"
-                << nmb << "' no existe.\n";
-    else //El conjunto existe
+    if(!existe(nmb)) //Set doesn't exists.
+      std::cerr << "MapSet::cierra_set; the set: '"
+                << nmb << "' doesn't exists.\n";
+    else //The set exists
       {
 	iterator i= abiertos.find(nmb);
         if(i!= abiertos.end())
           abiertos.erase(i);
         else
           if(verborrea>1)
-	    std::cerr << "MapSet::cierra_set; el conjunto: '"
+	    std::cerr << "MapSet::cierra_set; the set: '"
                       << nmb << "' no está abierto.\n";
       }
   }
 
-//! @bref Crea un conjunto estructurado copia del que se le pasa como parámetro.
+//! @bref Creates a structured set copia del que se le pasa como parámetro.
 XC::SetEstruct *XC::MapSet::crea_set_estruct(const SetEstruct &set_estruct)
   {
     const std::string nmb= set_estruct.GetNombre();
-    if(existe(nmb)) //El conjunto existe
+    if(existe(nmb)) //The set exists
       {
-	std::cerr << "El conjunto: " << nmb << " ya existe. No se inserta el nuevo." << std::endl;
+	std::cerr << "the set: " << nmb << " ya existe. No se inserta el nuevo." << std::endl;
         return nullptr;
       }
-    else //El conjunto es nuevo.
+    else //the set es nuevo.
       {
 	SetEstruct *retval= set_estruct.getCopy();
         if(retval) sets[nmb]= retval;
@@ -158,13 +158,13 @@ XC::SetEstruct *XC::MapSet::crea_set_estruct(const SetEstruct &set_estruct)
       }
   }
 
-//! @bref Crea un conjunto estructurado copia del que se le pasa como parámetro.
+//! @bref Creates a structured set copia del que se le pasa como parámetro.
 XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb_clase)
   {
     SetBase *retval= nullptr;
-    if(existe(nmb)) //El conjunto existe
+    if(existe(nmb)) //The set exists
       retval= busca_set(nmb);
-    else //El conjunto es nuevo.
+    else //the set es nuevo.
       {
         if(nmb_clase == "XC::Set")
           retval= new Set(nmb,preprocessor);
@@ -177,24 +177,24 @@ XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb
     return retval;
   }
 
-//! @bref Inserta, como conjunto, una entidad del preprocesador.
+//! @bref Inserta, as a set, una entidad del preprocesador.
 XC::EntMdlr *XC::MapSet::inserta_ent_mdlr(EntMdlr *ent_mdlr)
   {
     assert(ent_mdlr);
     const std::string nmb= ent_mdlr->GetNombre();
-    if(existe(nmb)) //El conjunto existe
+    if(existe(nmb)) //The set exists
       {
-	std::cerr << "El conjunto: " << nmb << " ya existe. No se inserta el nuevo." << std::endl;
+	std::cerr << "the set: " << nmb << " ya existe. No se inserta el nuevo." << std::endl;
         return nullptr;
       }
-    else //El conjunto es nuevo.
+    else //the set es nuevo.
       {
         entidades[nmb]= ent_mdlr;
         return ent_mdlr;
       }
   }
 
-//! @brief Returns a pointer to the conjunto estructurado cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the set estructurado which name is being passed as parameter.
 XC::SetEstruct *XC::MapSet::busca_set_estruct(const std::string &nmb)
   {
     SetBase *set= busca_set(nmb);
@@ -204,7 +204,7 @@ XC::SetEstruct *XC::MapSet::busca_set_estruct(const std::string &nmb)
     return retval;
   }
 
-//! @brief Inicializa el conjunto total.
+//! @brief Inicializa the set total.
 void XC::MapSet::setup_total(void)
   {
     const std::string str_tot= "total";
@@ -216,12 +216,12 @@ XC::MapSet::MapSet(Preprocessor *m)
   : EntCmd(m), MovableObject(0), preprocessor(m),total(nullptr)
   { setup_total(); }
 
-//! @brief Copy constructor (NO COPIA LOS CONJUNTOS).
+//! @brief Copy constructor (DOESN'T COPY SETS).
 XC::MapSet::MapSet(const MapSet &otro)
   : EntCmd(otro), MovableObject(otro), preprocessor(otro.preprocessor), total(nullptr)
   { setup_total(); }
 
-//! @brief Assignment operator (NO COPIA LOS CONJUNTOS).
+//! @brief Assignment operator (DOESN'T COPY SETS).
 XC::MapSet &XC::MapSet::operator=(const MapSet &otro)
   {
     EntCmd::operator=(otro);
@@ -250,7 +250,7 @@ void XC::MapSet::removeSet(const std::string &nmb)
                 << nmb << " not found." << std::endl;
   }
 
-//! @brief Borra todos los conjuntos definidos.
+//! @brief Clears all defined sets.
 void XC::MapSet::clearSets(void)
   {
     for(iterator i= begin();i!=end();i++)
@@ -281,7 +281,7 @@ void XC::MapSet::reset(void)
 XC::MapSet::~MapSet(void)
   { clearAll(); }
 
-//! @brief Returns the DBTags de los conjuntos.
+//! @brief Returns the DBTags of the sets.
 const XC::ID &XC::MapSet::getSetsDBTags(CommParameters &cp)
   {
     static ID retval;
@@ -300,7 +300,7 @@ const XC::ID &XC::MapSet::getSetsDBTags(CommParameters &cp)
     return retval;
   }
 
-//! @brief Returns the nombres de clase de los conjuntos.
+//! @brief Returns the nombres de clase of the sets.
 const std::deque<std::string> &XC::MapSet::getSetsClassNames(void)
   {
     const int size= sets.size();
@@ -326,7 +326,7 @@ XC::DbTagData &XC::MapSet::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los dbTags de los conjuntos través del canal being passed as parameter.
+//! @brief Envía los dbTags of the sets través del canal being passed as parameter.
 int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
   {
     const int size= sets.size();
@@ -341,7 +341,7 @@ int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
     return res;
   }
 
-//! @brief Envía los nombres de clase de los conjuntos través del canal being passed as parameter.
+//! @brief Envía los nombres de clase of the sets través del canal being passed as parameter.
 int XC::MapSet::sendSetsClassNames(int posDbTag,CommParameters &cp)
   {
     const int size= sets.size();
@@ -356,7 +356,7 @@ int XC::MapSet::sendSetsClassNames(int posDbTag,CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los dbTags de los conjuntos through the channel being passed as parameter.
+//! @brief Recibe los dbTags of the sets through the channel being passed as parameter.
 int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const CommParameters &cp)
   {
     setsDbTags.resize(size);
@@ -368,7 +368,7 @@ int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const CommParameters &cp
     return res;
   }
 
-//! @brief Recibe los nombres de clase de los conjuntos through the channel being passed as parameter.
+//! @brief Recibe los nombres de clase of the sets through the channel being passed as parameter.
 int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const CommParameters &cp)
   {
     setsClassNames.resize(size);
@@ -380,7 +380,7 @@ int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const CommParameters
     return res;
   }
 
-//! @brief Envía los conjuntos definidos through the channel being passed as parameter.
+//! @brief Envía the sets definidos through the channel being passed as parameter.
 int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,CommParameters &cp)
   {
     std::deque<std::string> nombres;
@@ -397,7 +397,7 @@ int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,CommParamet
     return res;
   }
 
-//! @brief Recibe los conjuntos definidos through the channel being passed as parameter.
+//! @brief Recibe the sets definidos through the channel being passed as parameter.
 int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const int &sz,const CommParameters &cp)
   {
     std::deque<std::string> nombres;
@@ -412,7 +412,7 @@ int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const in
         if(tmp)
           cp.receiveMovable(*tmp,tags,CommMetaData(loc));
         else
-	  std::cerr << "Error al recibir el conjunto: '" << *i << "'.\n";
+	  std::cerr << "Error al recibir the set: '" << *i << "'.\n";
       }
     return res;
   }
@@ -463,7 +463,7 @@ int XC::MapSet::sendData(CommParameters &cp)
 int XC::MapSet::recvData(const CommParameters &cp)
   {
     int sz= 0;
-    int res= cp.receiveInt(sz,getDbTagData(),CommMetaData(0)); //Número de conjuntos.
+    int res= cp.receiveInt(sz,getDbTagData(),CommMetaData(0)); //Number of sets.
     if(sz>0)
       {
         res+= receiveSets(1,2,3,sz,cp);
@@ -506,7 +506,7 @@ int XC::MapSet::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Returns the conjuntos que contienen the pointer a nodo
+//! @brief Returns the sets que contienen the pointer a nodo
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
   {
@@ -516,7 +516,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
     return retval;
   }
 
-//! @brief Returns the conjuntos que contienen the pointer a elemento
+//! @brief Returns the sets que contienen the pointer a elemento
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
   {
@@ -526,7 +526,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
     return retval;
   }
 
-//! @brief Returns the conjuntos que contienen the pointer a punto
+//! @brief Returns the sets que contienen the pointer a punto
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Pnt *p)
   {
@@ -536,7 +536,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Pnt *p)
     return retval;
   }
 
-//! @brief Returns the conjuntos que contienen the pointer a «edge»
+//! @brief Returns the sets que contienen the pointer a «edge»
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Edge *e)
   {
@@ -556,7 +556,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Face *f)
     return retval;
   }
 
-//! @brief Returns the conjuntos que contienen the pointer a cuerpo
+//! @brief Returns the sets que contienen the pointer a cuerpo
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Body *b)
   {
@@ -566,7 +566,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Body *b)
     return retval;
   }
 
-//! @brief Returns the conjuntos que contienen the pointer a «uniform grid»
+//! @brief Returns the sets que contienen the pointer a «uniform grid»
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const UniformGrid *ug)
   {

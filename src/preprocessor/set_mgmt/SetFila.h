@@ -36,9 +36,9 @@ namespace XC {
 
 class SFreedom_Constraint;
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
-//!  \brief Conjunto de objetos.
+//!  @brief Set of objects in a row.
 //! 
 //!  A SetFila object contains 0 or more:
 //!  - Nodes.
@@ -124,7 +124,7 @@ SetEstruct *XC::SetFila<FILATTZNOD,FILATTZELEM>::getCopy(void) const
   { return new SetFila<FILATTZNOD,FILATTZELEM>(*this); }
 
 
-/* //! @brief Impone desplazamiento nulo en los nodos de este conjunto. */
+/* //! @brief Impone desplazamiento nulo en los nodos de this set. */
 /* template <class FILATTZNOD,class FILATTZELEM> */
 /* void XC::SetFila<FILATTZNOD,FILATTZELEM>::fix(const SFreedom_Constraint &spc) */
 /*   { fix(fila_nod,spc); } */

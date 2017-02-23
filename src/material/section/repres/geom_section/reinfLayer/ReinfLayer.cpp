@@ -123,8 +123,8 @@ XC::Vector XC::ReinfLayer::getCdg(void) const
     return barras.getCdgGrossSection();
   }
 
-// //! @brief Returns the subconjunto de barras de ésta que cumplen la condición que se
-// //! pasa como parámetro.
+// //! @brief Returns the rebar subset of the layer that fulfill the condition
+// //! being passed as parameter.
 // void XC::ReinfLayer::Cumplen(const std::string &cond,ListReinfLayer &retval,bool clear)
 //   {
 //     if(clear) retval.clear();

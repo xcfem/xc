@@ -73,7 +73,7 @@ const XC::MEDMapIndices &XC::MEDMeshing::getMapIndicesVertices(void) const
 const XC::MEDMapIndices &XC::MEDMeshing::getMapIndicesCeldas(void) const
   { return cells.getMapIndices(); }
 
-//! @brief Define los grupos de MEDMEM correspondientes a los conjuntos
+//! @brief Define los grupos de MEDMEM correspondientes a the sets
 //! de XC.
 void XC::MEDMeshing::defineMEDGroups(void)
   {
@@ -158,7 +158,7 @@ void XC::MEDMeshing::defineMEDDblField(const Set &set,const FieldInfo &fi,MEDGro
       }
   }
 
-//! @brief Define un campo sobre un conjunto.
+//! @brief Defines a field over a set.
 void XC::MEDMeshing::defineMEDIntField(const Set &set,const FieldInfo &fi,MEDGroupInfo *grupo) const
   {
     MEDIntFieldInfo *med_fi= new MEDIntFieldInfo(fi,grupo);
@@ -201,7 +201,7 @@ void XC::MEDMeshing::defineMEDFields(void) const
 	      }
           }
         else
-	  std::cerr << "MEDMeshing::defineMEDFields; no se encontró el conjunto: " 
+	  std::cerr << "MEDMeshing::defineMEDFields; no se encontró the set: " 
                     << fi.getSetName() << " en el que se define el campo: "
                     << fi.GetNombre() << std::endl;
       }

@@ -133,7 +133,7 @@ const XC::Element *XC::DqPtrsElem::getNearestElement(const Pos3d &p) const
   }
 
 //! @brief Returns (if it exists) a pointer al elemento
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag)
   {
     Element *retval= nullptr;
@@ -154,7 +154,7 @@ XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag)
   }
 
 //! @brief Returns (if it exists) a pointer al elemento
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 const XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag) const
   {
     const Element *retval= nullptr;
@@ -174,7 +174,7 @@ const XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag) const
     return retval;
   }
 
-//! @brief Returns the número de elementos del conjunto que están activos.
+//! @brief Returns the number of elements of the set que están activos.
 size_t XC::DqPtrsElem::getNumLiveElements(void) const
   {
     size_t retval= 0;
@@ -188,7 +188,7 @@ size_t XC::DqPtrsElem::getNumLiveElements(void) const
     return retval;
   }
 
-//! @brief Returns the número de elementos del conjunto que están inactivos.
+//! @brief Returns the number of elements of the set que están inactivos.
 size_t XC::DqPtrsElem::getNumDeadElements(void) const
   {
     size_t retval= 0;

@@ -257,8 +257,8 @@ double XC::ListRegiones::getPyzGrossSection(void) const
     return retval;
   }
 
-// //! Returns the subconjunto de regiones de éste que cumplen la condición que se
-// //! pasa como parámetro.
+// //! Returns the regions subset that satisfy the condition
+// //! being passed as parameter.
 // void XC::ListRegiones::Cumplen(const std::string &cond,ListRegiones &retval,bool clear)
 //   {
 //     if(clear) retval.clear();

@@ -462,7 +462,7 @@ const XC::Vector &XC::Edge::getTang(const double &s) const
     return retval;
   }
 
-//! @brief Returns the conjuntos a los que pertenece este «edge».
+//! @brief Returns the sets a los que pertenece este «edge».
 std::set<XC::SetBase *> XC::Edge::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -477,7 +477,7 @@ std::set<XC::SetBase *> XC::Edge::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el «edge» a los conjuntos que se pasan como parámetro.
+//! @brief Agrega el «edge» a the sets que se pasan como parámetro.
 void XC::Edge::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)

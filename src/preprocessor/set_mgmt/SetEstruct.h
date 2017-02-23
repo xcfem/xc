@@ -38,9 +38,9 @@ class TritrizPtrElem;
 class Node;
 class Element;
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
-//!  \brief Conjunto estructurado, es decir que puede devolver
+//!  @brief structured set, es decir que puede devolver
 //!  a pointer a un nodo o a un elemento a partir de sus índices i,j y k.
 class SetEstruct: public SetBase
   {

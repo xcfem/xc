@@ -235,7 +235,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
     const size_t dimf2= f2.Dimension();
     if(dimf1!=dimf2)
       {
-	std::cerr << "Los conjuntos: " << f1.GetNombre() << " y " << f2.GetNombre()
+	std::cerr << "the sets: " << f1.GetNombre() << " y " << f2.GetNombre()
                   << " son de distinta dimensión (" << dimf1  << " y " << dimf2
                   << ")." << std::endl;
         return retval;

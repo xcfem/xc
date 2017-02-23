@@ -118,7 +118,7 @@ XC::Edge *XC::Linea::split_at(Pnt *p,const double &lambda,const double &longitud
     const double sz_elem= longitud/NDiv();
     SetNDiv(ceil(getLongitud()/sz_elem));
     retval->SetNDiv(ceil(retval->getLongitud()/sz_elem));
-    //copiamos los conjuntos.
+    //copiamos the sets.
     std::set<SetBase *> sets= get_sets();
     retval->add_to_sets(sets);
     return retval;

@@ -55,7 +55,7 @@ class UniformGrid;
 class SetEstruct;
 class SisRef;
 
-//! \ingroup Preprocessor
+//! @ingroup Preprocessor
 //
 //! @defgroup Cad Model geometry (block topology).
 //
@@ -65,10 +65,7 @@ class SisRef;
 //! Management of geometry entities:
 //! points, lines, surfaces, bodies, etc.
 //!
-//! Mantiene las listas de estas entidades y crea, para
-//! cada una de ellas un conjunto destinado a alojar a pointer a la
-//! propia entidad, así como pointers to los nodos y elementos contenidos
-//! en la entidad.
+//! Maintains containers for this entities.
 class Cad: public EntCmd
   {
   private:

@@ -110,7 +110,7 @@ const std::string &XC::Pnt::NombresEdgesTocan(void) const
     return retval;
   }
 
-//! @brief Returns true ifel punto toca a la línea.
+//! @brief Returns true if the punto toca a la línea.
 bool XC::Pnt::Toca(const Edge &l) const
   {
     std::set<const Edge *>::const_iterator i= lineas_pt.find(&l);
@@ -129,7 +129,7 @@ bool XC::Pnt::Toca(const Face &s) const
     return false;
   }
 
-//! @brief Returns true ifel punto toca al cuerpo.
+//! @brief Returns true if the punto toca al cuerpo.
 bool XC::Pnt::Toca(const Body &b) const
   {
     for(std::set<const Edge *>::const_iterator i= lineas_pt.begin(); i!=lineas_pt.end();i++)
@@ -191,7 +191,7 @@ XC::Node *XC::Pnt::getNode(void)
     return nod;
   }
 
-//! @brief Returns the conjuntos a los que pertenece este punto.
+//! @brief Returns the sets a los que pertenece este punto.
 std::set<XC::SetBase *> XC::Pnt::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -206,7 +206,7 @@ std::set<XC::SetBase *> XC::Pnt::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el punto a los conjuntos que se pasan como parámetro.
+//! @brief Agrega el punto a the sets que se pasan como parámetro.
 void XC::Pnt::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
@@ -223,11 +223,11 @@ void XC::Pnt::Mueve(const Vector3d &desplaz)
     return;
   }
 
-//! @brief Aplica al punto la transformación cuyo índice se pasa como parámetro.
+//! @brief Aplica al punto la transformación cuyo índice is being passed as parameter.
 void XC::Pnt::Transforma(const TrfGeom &trf)
   { p= trf.Transforma(p); }
 
-//! @brief Aplica al punto la transformación cuyo índice se pasa como parámetro.
+//! @brief Aplica al punto la transformación cuyo índice is being passed as parameter.
 void XC::Pnt::Transforma(const size_t &indice_trf)
   {
     TrfGeom *trf= get_preprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);

@@ -44,7 +44,7 @@ XC::MapPuntos::MapPuntos(Cad *cad)
   : MapEnt<Pnt>(cad) {}
 
 
-//! @brief Inserta el nuevo punto en el conjunto total y los conjuntos abiertos.
+//! @brief Inserta el nuevo punto en the set total y the opened sets.
 void XC::MapPuntos::UpdateSets(Pnt *nuevo_punto) const
   {
     Cad *cad= const_cast<Cad *>(dynamic_cast<const Cad *>(Owner()));
@@ -109,7 +109,7 @@ Plano3d XC::MapPuntos::getPlano(const Indice &i,const Indice &j,const Indice &k)
   }
 
 
-//! @brief Crea un nuevo punto.
+//! @brief Creates a nuevo punto.
 XC::Pnt *XC::MapPuntos::Crea(void)
   {
     Preprocessor *preprocessor= getPreprocessor();
@@ -121,7 +121,7 @@ XC::Pnt *XC::MapPuntos::Crea(void)
     return retval;
   }
 
-//! @brief Crea un nuevo punto.
+//! @brief Creates a nuevo punto.
 XC::Pnt *XC::MapPuntos::Nuevo(void)
   {
     Pnt *retval= busca(getTag());
@@ -131,7 +131,7 @@ XC::Pnt *XC::MapPuntos::Nuevo(void)
   }
 
 
-//! @brief Crea un nuevo punto en la posición being passed as parameter.
+//! @brief Creates a nuevo punto en la posición being passed as parameter.
 XC::Pnt *XC::MapPuntos::Nuevo(const Pos3d &pos)
   {
     Pnt *retval= busca(getTag());
@@ -164,7 +164,7 @@ XC::Pnt *XC::MapPuntos::Nuevo(const size_t &tag,const Pos3d &pos)
     return retval;
   }
 
-//! @brief Crea un nuevo punto, copia del being passed as parameter con
+//! @brief Creates a nuevo punto, copia del being passed as parameter con
 //! el nombre que le toca según el valor del tag. Las coordenadas del
 //! nuevo punto serán las que resulten de sumar a las del primitivo el
 //! vector being passed as parameter.

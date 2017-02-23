@@ -35,13 +35,12 @@ class Set;
 //
 //! @ingroup POST_PROCESS
 //
-//! @brief Información sobre un campo definido sobre un
-//! conjunto.
+//! @brief Information about a field defined over a set.
 class FieldInfo: public EntConNmb
   {
   protected:
-    std::string nmb_set; //!< nombre del conjunto sobre el que se define.
-    bool sobre_nodos; //!< Verdadero si se define sobre los nodos del conjunto.
+    std::string nmb_set; //!< nombre of the set sobre el que se define.
+    bool sobre_nodos; //!< True if defined over the nodes of the set.
     bool sobre_puntos_gauss; //!< Verdadero si se define sobre puntos de Gauss de los elementos.
     std::vector<std::string> componentNames; //!< Nombre de las componentes del campo.
     std::vector<std::string> componentDescriptions; //!< Descripción de las componentes del campo.

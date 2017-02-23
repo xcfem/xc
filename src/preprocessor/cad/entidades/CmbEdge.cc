@@ -462,8 +462,8 @@ void XC::CmbEdge::cierra(void)
       std::cerr << "CmbEdge::cierra; la línea ya está cerrada." << std::endl;
   }
 
-//! @brief Crea una nueva línea entre los puntos que se pasan como parámetro
-//! y la inserta en el conjunto de lados.
+//! @brief Creates a nueva línea entre los puntos que se pasan como parámetro
+//! y la inserta en the set de lados.
 XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
   {
     Linea *retval= nullptr;
@@ -486,8 +486,8 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
     return retval;
   }
 
-//! @brief Crea un nuevo arco de circunferencia entre los puntos que se pasan como parámetro
-//! y la inserta en el conjunto de lados.
+//! @brief Creates a nuevo arco de circunferencia entre los puntos que se pasan como parámetro
+//! y la inserta en the set de lados.
 XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
   {
     ArcoCircunf *retval= nullptr;
@@ -654,7 +654,7 @@ BND3d XC::CmbEdge::Bnd(void) const
   { 
     BND3d retval;
     const size_t nv= NumVertices();
-    if(nv<1) //El conjunto está vacío.
+    if(nv<1) //the set is empty.
       {
 	std::cerr << "XC::CmbEdge::Bnd(); la polilinea está vacia." << std::endl;
         return retval;

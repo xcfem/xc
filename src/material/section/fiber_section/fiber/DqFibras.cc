@@ -86,7 +86,7 @@ void XC::DqFibras::push_back(Fiber *f)
    { dq_ptr_fibras::push_back(f); }
 
 
-//! @brief Busca la fibra cuyo tag se pasa como parámetro.
+//! @brief Busca la fibra cuyo tag is being passed as parameter.
 const XC::Fiber *XC::DqFibras::buscaFibra(const int &tag) const
   {
     const Fiber *retval= nullptr;
@@ -100,7 +100,7 @@ const XC::Fiber *XC::DqFibras::buscaFibra(const int &tag) const
     return retval;
   }
 
-//! @brief Busca la fibra cuyo tag se pasa como parámetro.
+//! @brief Busca la fibra cuyo tag is being passed as parameter.
 XC::Fiber *XC::DqFibras::buscaFibra(const int &tag)
   {
     Fiber *retval= nullptr;
@@ -114,7 +114,7 @@ XC::Fiber *XC::DqFibras::buscaFibra(const int &tag)
     return retval;
   }
 
-//! @brief Returns the valor mínimo de la coordenada y de las teselas.
+//! @brief Returns minimal y coordinate value of the fibers.
 double XC::DqFibras::GetYMin(void) const
   {
     double retval= 0.0;
@@ -129,11 +129,11 @@ double XC::DqFibras::GetYMin(void) const
             std::cerr << "DqFibras::GetYMin; Pointer to fiber is null." << std::endl;
       }
     else
-      std::cerr << "DqFibras::GetYMin; el conjunto de fibras está vacío." << std::endl;
+      std::cerr << "DqFibras::GetYMin; fiber set is empty." << std::endl;
     return retval;
   }
 
-//! @brief Returns the valor mínimo de la coordenada z de las teselas.
+//! @brief Returns minimal z coordinate value of the fibers.
 double XC::DqFibras::GetZMin(void) const
   {
     double retval= 0.0;
@@ -148,11 +148,11 @@ double XC::DqFibras::GetZMin(void) const
             std::cerr << "DqFibras::GetZMin; Pointer to fiber is null." << std::endl;
       }
     else
-      std::cerr << "DqFibras::GetZMin; el conjunto de fibras está vacío." << std::endl;
+      std::cerr << "DqFibras::GetZMin; fiber set is empty." << std::endl;
     return retval;
   }
 
-//! @brief Returns the valor máximo de la coordenada y de las teselas.
+//! @brief Returns maximal y coordinate value of the fibers.
 double XC::DqFibras::GetYMax(void) const
   {
     double retval= 0.0;
@@ -167,11 +167,11 @@ double XC::DqFibras::GetYMax(void) const
             std::cerr << "DqFibras::GetYMax; Pointer to fiber is null." << std::endl;
       }
     else
-      std::cerr << "DqFibras::GetYMax; el conjunto de fibras está vacío." << std::endl;
+      std::cerr << "DqFibras::GetYMax; fiber set is empty." << std::endl;
     return retval;
   }
 
-//! @brief Returns the valor máximo de la coordenada z de las teselas.
+//! @brief Returns maximal z coordinate value of the fibers.
 double XC::DqFibras::GetZMax(void) const
   {
     double retval= 0.0;
@@ -186,11 +186,11 @@ double XC::DqFibras::GetZMax(void) const
             std::cerr << "DqFibras::GetZMax; Pointer to fiber is null." << std::endl;
       }
     else
-      std::cerr << "DqFibras::GetZMax; el conjunto de fibras está vacío." << std::endl;
+      std::cerr << "DqFibras::GetZMax; fiber set is empty." << std::endl;
     return retval;
   }
 
-//! @brief Returns the posiciones de las teselas.
+//! @brief Returns fibers positions.
 GeomObj::list_Pos2d XC::DqFibras::getPosiciones(void) const
   {
     GeomObj::list_Pos2d retval;
@@ -217,7 +217,7 @@ Pos2d XC::DqFibras::GetPMin(void) const
 BND2d XC::DqFibras::Bnd(void) const
   { return BND2d(GetPMin(),GetPMax()); }
 
-//! @brief Returns the suma de las áreas de las teselas.
+//! @brief Returns the sum of the fibers areas.
 double XC::DqFibras::getSumaAreas(const double &factor) const
   {
     double retval= 0.0;
@@ -445,7 +445,7 @@ double XC::DqFibras::getIHomogenizedSection(const double &E0,const Recta2d &r) c
   { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir()));  }
 
 //! @brief Returns the momento estático de las áreas de las fibras situadas por encima de yf (y_fibra-yf > 0)
-//! respecto al eje paralelo al z cuya y se pasa como parámetro (brazo= y_fibra-y0).
+//! respecto al eje paralelo al z cuya y is being passed as parameter (brazo= y_fibra-y0).
 double XC::DqFibras::getSzPos(const double &yf,const double &y0,const double &factor) const
   {
     double retval= 0.0;
@@ -467,7 +467,7 @@ double XC::DqFibras::getSzPos(const double &yf,const double &y0,const double &fa
   }
 
 //! @brief Returns the momento estático de las áreas de las fibras situadas por debajo de yf (y_fibra-yf < 0)
-//! respecto al eje paralelo al z cuya y se pasa como parámetro (brazo= y_fibra-y0).
+//! respecto al eje paralelo al z cuya y is being passed as parameter (brazo= y_fibra-y0).
 double XC::DqFibras::getSzNeg(const double &yf,const double &y0,const double &factor) const
   {
     double retval= 0.0;
@@ -489,7 +489,7 @@ double XC::DqFibras::getSzNeg(const double &yf,const double &y0,const double &fa
   }
 
 //! @brief Returns the momento estático de las áreas de las fibras situada por encima de zf (z_fibra-zf > 0)
-//! respecto al eje paralelo al y cuya z se pasa como parámetro (brazo= z_fibra-z0).
+//! respecto al eje paralelo al y cuya z is being passed as parameter (brazo= z_fibra-z0).
 double XC::DqFibras::getSyPos(const double &zf,const double &z0,const double &factor) const
   {
     double retval= 0.0;
@@ -508,7 +508,7 @@ double XC::DqFibras::getSyPos(const double &zf,const double &z0,const double &fa
   }
 
 //! @brief Returns the momento estático de las áreas de las fibras situadas por debajo  de zf (z_fibra-zf < 0)
-//! respecto al eje paralelo al y cuya z se pasa como parámetro (brazo= z_fibra-z0).
+//! respecto al eje paralelo al y cuya z is being passed as parameter (brazo= z_fibra-z0).
 double XC::DqFibras::getSyNeg(const double &zf,const double &z0,const double &factor) const
   {
     double retval= 0.0;
@@ -938,7 +938,7 @@ size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
     return retval;
   }
 
-// //! Returns the subconjunto de fibras de éste que cumplen la condición que se
+// //! Returns the subfiber set de éste que cumplen la condición que se
 // //! pasa como parámetro.
 // void XC::DqFibras::Cumplen(const std::string &cond,DqFibras &retval,bool clear)
 //   {
@@ -955,7 +955,7 @@ size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
 //     retval.updateCDG();
 //   }
 
-//! Returns the subconjunto de fibras de éste cuyo material tiene por tag el que se
+//! Returns the subfiber set de éste cuyo material tiene por tag el que se
 //! pasa como parámetro.
 void XC::DqFibras::SelMatTag(const int &matTag,DqFibras &retval,bool clear)
   {
@@ -1350,12 +1350,12 @@ double XC::DqFibras::calcAcEficazFibras(const std::list<Poligono2d> &contourAcEf
   }
 
 //! @brief Returns the contours of the área eficaz de la fibra cuyo índice
-//! se pasa como parámetro.
+//! is being passed as parameter.
 const std::list<Poligono2d> &XC::DqFibras::getContourAcEficazFibra(const size_t &i) const
   { return dq_ac_eficaz[i]; }
 
 //! @brief Returns the valor del área eficaz de la fibra cuyo índice
-//! se pasa como parámetro.
+//! is being passed as parameter.
 double XC::DqFibras::getAcEficazFibra(const size_t &i) const
   {
     if(dq_ac_eficaz.size()!=size())
@@ -1395,7 +1395,7 @@ void XC::DqFibras::calcSeparaciones(void) const
   { seps= getPosiciones().GetSeparaciones(); }
 
 //! @brief Returns the valor del recubrimiento de la fibra cuyo índice
-//! se pasa como parámetro.
+//! is being passed as parameter.
 const double &XC::DqFibras::getRecubrimientoFibra(const size_t &i) const
   {
     if(recubs.size()!=size())
@@ -1405,7 +1405,7 @@ const double &XC::DqFibras::getRecubrimientoFibra(const size_t &i) const
   }
 
 //! @brief Returns the valor de la separación recubrimiento de la fibra cuyo índice
-//! se pasa como parámetro.
+//! is being passed as parameter.
 const double &XC::DqFibras::getSeparacionFibra(const size_t &i) const
   {
     if(seps.size()!=size())
@@ -2081,7 +2081,7 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
       return 0;
   }
 
-// //! Returns the valor máximo en el conjunto de fibras de la propiedad que se
+// //! Returns the valor máximo en el fiber set de la propiedad que se
 // //! pasa como parámetro.
 // size_t XC::DqFibras::IMaxProp(const std::string &nmb_prop) const
 //   {
@@ -2124,7 +2124,7 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
 //   }
 
 // //! Returns the indice de la fibra que presenta el valor mínimo
-// //! en el conjunto de fibras de la propiedad being passed as parameter.
+// //! en el fiber set de la propiedad being passed as parameter.
 // size_t XC::DqFibras::IMinProp(const std::string &nmb_prop) const
 //   {
 //     size_t retval= 0;

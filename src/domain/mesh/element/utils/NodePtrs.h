@@ -44,11 +44,11 @@ class ID;
 class Matrix;
 class Vector; 
 
-//! \ingroup Elem
+//! @ingroup Elem
 //
 //! @defgroup FEMisc Utilities for finite element calculations.
 //
-//! \ingroup FEMisc
+//! @ingroup FEMisc
 //
 //! @brief Pointers to nodes.
 class NodePtrs: public EntCmd
@@ -61,7 +61,7 @@ class NodePtrs: public EntCmd
     typedef vector_ptr_nodes::const_iterator const_iterator;
 
   private:
-    vector_ptr_nodes theNodes; //!< conjunto de Nodos.
+    vector_ptr_nodes theNodes; //!< node set.
   protected:
     void disconnect(void);
     void setPtrs(Domain *theDomain, const ID &theNodeTags);

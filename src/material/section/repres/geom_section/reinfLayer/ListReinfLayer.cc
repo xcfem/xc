@@ -153,8 +153,8 @@ size_t XC::ListReinfLayer::getNumReinfBars(void) const
     return nbars;
   }
 
-// //! Returns the subconjunto de barras de ésta que cumplen la condición que se
-// //! pasa como parámetro.
+// //! Returns the rebar subset that fulfills the condition
+// //! being passed as parameter.
 // void XC::ListReinfLayer::Cumplen(const std::string &cond,ListReinfLayer &retval,bool clear)
 //   {
 //     if(clear) retval.clear();
@@ -163,7 +163,9 @@ size_t XC::ListReinfLayer::getNumReinfBars(void) const
 //       (*i)->Cumplen(cond,retval,false);
 //   }
 
-//! Returns the subconjunto de barras cuyo centro esta contenido en el polígono.
+//! Returns the rebar subset which center lies inside the polygon.
+//! @param plg: 2D polygon.
+//! @param retval: rebars which centers lies inside the polygon.
 void XC::ListReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
@@ -172,7 +174,9 @@ void XC::ListReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retva
       (*i)->getBarrasIn(plg,retval,false);
   }
 
-//! Returns the subconjunto de barras cuyo centro esta contenido en el semiplano.
+//! Returns the rebar subset which center lies in the half plane.
+//! @param sp: Half plane.
+//! @param retval: rebars which centers lies inside the half plane.
 void XC::ListReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();

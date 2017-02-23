@@ -94,7 +94,7 @@ XC::CmbEdge *XC::MapLineas::newLineSequence(void)
     return retval;
   }
 
-//! @brief Inserta la nueva linea en el conjunto total y los conjuntos abiertos.
+//! @brief Inserta la nueva linea en the set total y the opened sets.
 void XC::MapLineas::UpdateSets(Edge *nueva_linea) const
   {
     Cad *cad= const_cast<Cad *>(dynamic_cast<const Cad *>(Owner()));
@@ -110,8 +110,8 @@ void XC::MapLineas::UpdateSets(Edge *nueva_linea) const
       }
   }
 
-//! @brief Crea una nueva línea entre los puntos que se pasan como parámetro
-//! y la inserta en el conjunto de lados.
+//! @brief Creates a nueva línea entre los puntos que se pasan como parámetro
+//! y la inserta en the set de lados.
 XC::Edge *XC::MapLineas::Line(Pnt *pA,Pnt *pB)
   {
     Edge *tmp= nullptr;
@@ -141,8 +141,8 @@ XC::Edge *XC::MapLineas::Line(Pnt *pA,Pnt *pB)
     return tmp;
   }
 
-//! @brief Crea una nueva línea entre los puntos que se pasan como parámetro
-//! y la inserta en el conjunto de lados.
+//! @brief Creates a nueva línea entre los puntos que se pasan como parámetro
+//! y la inserta en the set de lados.
 XC::Edge *XC::MapLineas::DividedLine(Pnt *pA,Pnt *pB)
   {
     Edge *tmp= nullptr;
@@ -172,8 +172,8 @@ XC::Edge *XC::MapLineas::DividedLine(Pnt *pA,Pnt *pB)
     return tmp;
   }
 
-//! @brief Crea un nuevo arco de circunferencia entre los puntos que se pasan como parámetro
-//! y la inserta en el conjunto de lados.
+//! @brief Creates a nuevo arco de circunferencia entre los puntos que se pasan como parámetro
+//! y la inserta en the set de lados.
 XC::Edge *XC::MapLineas::Arc(Pnt *pA,Pnt *pB,Pnt *pC)
   {
     Edge *tmp= nullptr;
@@ -199,8 +199,8 @@ XC::Edge *XC::MapLineas::Arc(Pnt *pA,Pnt *pB,Pnt *pC)
     return tmp;
   }
 
-//! @brief Crea una secuencia de líneas (polyline) con las que se pasan como parámetro
-//! y la inserta en el conjunto de lados.
+//! @brief Creates a secuencia de líneas (polyline) con las que se pasan como parámetro
+//! y la inserta en the set de lados.
 XC::Edge *XC::MapLineas::LineSequence(void)
   {
     Edge *tmp= Nueva<CmbEdge>();
@@ -208,7 +208,7 @@ XC::Edge *XC::MapLineas::LineSequence(void)
     return tmp;
   }
 
-//! @brief Crea una nueva línea, copia de la being passed as parameter con
+//! @brief Creates a nueva línea, copia de la being passed as parameter con
 //! el nombre being passed as parameter.
 XC::Edge *XC::MapLineas::Copia(const Edge *l)
   {

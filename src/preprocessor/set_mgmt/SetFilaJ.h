@@ -39,14 +39,14 @@ namespace XC {
 
 class EntMdlr;
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
-//!  \brief Conjunto de objetos.
+//!  @brief Objects in a row.
 //! 
-//!  Un objeto SetFilaJ contiene un conjunto de 0 o más:
-//!  - Nodos.
-//!  - Elementos finitos.
-//!  que corresponden a una fila_j de un objeto EntMdlr.
+//!  A SetFilaJ objects contains 0 or more:
+//!  - Nodoe.
+//!  - Finite elements.
+//!  that correspond to a row of an EntMdlr object.
 class SetFilaJ: public SetFila<TritrizPtrNod::var_ref_fila_j,TritrizPtrElem::var_ref_fila_j>
   {
   public:

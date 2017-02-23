@@ -64,10 +64,7 @@ XC::SetMeshComp &XC::SetMeshComp::operator=(const SetMeshComp &otro)
     return *this;
   }
 
-//! @brief Copia las listas de objetos del conjunto s.
-//!
-//! Copia en ESTE objeto las listas de objetos del conjunto
-//! being passed as parameter.
+//! @brief Copy (into this set) the lists from the set being passed as parameter.
 void XC::SetMeshComp::copia_listas(const SetMeshComp &otro)
   {
     nodos= otro.nodos;
@@ -78,7 +75,7 @@ void XC::SetMeshComp::copia_listas(const SetMeshComp &otro)
     constraints.set_owner(this);
   }
 
-//! @brief Agrega a este conjunto los objetos del conjunto
+//! @brief Appends to this set the objects from the set
 //! being passed as parameter.
 void XC::SetMeshComp::agrega_listas(const SetMeshComp &otro)
   {
@@ -87,8 +84,8 @@ void XC::SetMeshComp::agrega_listas(const SetMeshComp &otro)
     constraints.agrega(otro.constraints);
   }
 
-// //! @brief Agrega a este conjunto los objetos del conjunto
-// //! being passed as parameter que cumplen la condición.
+// ///! @brief Appends to this set the objects from the set
+// //! being passed as parameter that satisfy the condition.
 // void XC::SetMeshComp::agrega_listas_cond(const SetMeshComp &otro,const std::string &cond)
 //   {
 //     nodos.agrega_cond(otro.nodos,cond);
@@ -96,7 +93,7 @@ void XC::SetMeshComp::agrega_listas(const SetMeshComp &otro)
 //     constraints.agrega_cond(otro.constraints,cond);
 //   }
 
-//!  \brief Borra todos los objetos de las listas.
+//!  @brief Borra todos los objetos de las listas.
 void XC::SetMeshComp::clear(void)
   {
     //SetBase::clear();
@@ -105,7 +102,7 @@ void XC::SetMeshComp::clear(void)
     elementos.clear();
   }
 
-//!  \brief Borra todos los objetos del conjunto.
+//!  @brief Clears all objects from the set.
 void XC::SetMeshComp::clearAll(void)
   {
     SetBase::clearPyProps();
@@ -130,7 +127,8 @@ bool XC::SetMeshComp::In(const Node *n) const
 bool XC::SetMeshComp::In(const Element *e) const
   { return elementos.in(e); }
 
-//! @brief Asigna índices a los objetos del conjunto (nodos,elementos,puntos...) poder emplearlos en VTK.
+//! @brief Assigns index to each object in the set (nodes,elements,points...)
+//! to be able to use them in VTK.
 void XC::SetMeshComp::numera(void)
   {
     nodos.numera();
@@ -138,11 +136,11 @@ void XC::SetMeshComp::numera(void)
     numera_lista(constraints);
   }
 
-//! @brief Desplaza los nodos del conjunto.
+//! @brief Moves the nodes.
 void XC::SetMeshComp::mueve(const Vector3d &desplaz)
   { nodos.mueve(desplaz); }
 
-//! @brief Aplica la transformación a los elementos del conjunto.
+//! @brief Aplies the transformation to the positions of the nodes.
 void XC::SetMeshComp::Transforma(const TrfGeom &trf)
   { nodos.transforma(trf); }
 
@@ -154,7 +152,7 @@ void XC::SetMeshComp::Transforma(const size_t &indice_trf)
       Transforma(*trf);
   }
 
-//! @brief Impone desplazamiento nulo en los nodos de este conjunto.
+//! @brief Applies the single freedom constraint being passed as parameter to the nodes.
 void XC::SetMeshComp::fix(const SFreedom_Constraint &spc)
   {
     ConstraintLoader &cl= GetPreprocessor()->getConstraintLoader();
@@ -179,12 +177,12 @@ XC::SetMeshComp::nod_const_iterator XC::SetMeshComp::nodos_end(void) const
   { return nodos.end(); }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 XC::Node *XC::SetMeshComp::buscaNodo(const int &tag)
   { return nodos.buscaNodo(tag); }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 const XC::Node *XC::SetMeshComp::buscaNodo(const int &tag) const
   { return nodos.buscaNodo(tag); }
 
@@ -215,12 +213,12 @@ XC::SetMeshComp::constraint_const_iterator XC::SetMeshComp::constraints_end(void
   { return constraints.end(); }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 XC::Element *XC::SetMeshComp::buscaElemento(const int &tag)
   { return elementos.buscaElemento(tag); }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 const XC::Element *XC::SetMeshComp::buscaElemento(const int &tag) const
   { return elementos.buscaElemento(tag); }
 
@@ -266,28 +264,28 @@ const XC::Constraint *XC::SetMeshComp::buscaConstraint(const int &tag) const
     return retval;
   }
 
-//! @brief Returns the número de elementos del conjunto que están activos.
+//! @brief Returns the number of active elements.
 size_t XC::SetMeshComp::getNumLiveElements(void) const
   { return elementos.getNumLiveElements(); }
 
-//! @brief Returns the número de elementos del conjunto que están inactivos.
+//! @brief Returns the number of inactive elements.
 size_t XC::SetMeshComp::getNumDeadElements(void) const
   { return elementos.getNumDeadElements(); }
 
-//! @brief Returns the número de nods del conjunto que están activos.
+//! @brief Returns the número de active nodes.
 size_t XC::SetMeshComp::getNumLiveNodes(void) const
   { return nodos.getNumLiveNodes(); }
 
 
-//! @brief Returns the número de nodos del conjunto que están inactivos.
+//! @brief Returns the number of inactive nodes.
 size_t XC::SetMeshComp::getNumDeadNodes(void) const
   { return nodos.getNumDeadNodes(); }
 
-//! @brief Desactiva los elementos del conjunto.
+//! @brief Deactivates the elements.
 void XC::SetMeshComp::kill_elements(void)
   { elementos.kill_elements(); }
 
-//! @brief Reactiva los elementos del conjunto.
+//! @brief Reactivates the elements.
 void XC::SetMeshComp::alive_elements(void)
   { elementos.alive_elements(); }
 
@@ -389,9 +387,8 @@ std::set<int> XC::SetMeshComp::getConstraintTags(void) const
   }
 
 
-//! @brief Agrega al conjunto being passed as parameter
-//! los elementos que intervienen en la
-//! definición de los que ya están en el conjunto.
+//! @brief Appends to the set being passed as parameter
+//! the nodes that touch any of the elements of the set.
 void XC::SetMeshComp::CompletaHaciaAbajo(void)
   {
     const DqPtrsElem &elems= elementos;
@@ -499,7 +496,7 @@ int XC::SetMeshComp::recvData(const CommParameters &cp)
     return res;
   }
 
-//!  \brief Destructor.
+//!  @brief Destructor.
 XC::SetMeshComp::~SetMeshComp(void)
   { clearAll(); }
 

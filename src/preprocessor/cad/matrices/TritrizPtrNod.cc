@@ -53,7 +53,7 @@ XC::TritrizPtrNod::TritrizPtrNod(const size_t capas,const size_t filas,const siz
   }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 XC::Node *XC::TritrizPtrNod::buscaNodo(const int &tag)
   {
     Node *retval= nullptr;
@@ -84,7 +84,7 @@ XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
     if(ncapas>100)
       std::clog << "La «tritriz» de nodos es tiene "
                 << ncapas << " capas "
-                << " es mejor buscar por coordenadas en el conjunto asociado."
+                << " es mejor buscar por coordenadas en the set asociado."
                 << std::endl;
     for(size_t i=1;i<=ncapas;i++)
       {
@@ -125,7 +125,7 @@ XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
   }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 const XC::Node *XC::TritrizPtrNod::buscaNodo(const int &tag) const
   {
     const Node *retval= nullptr;
@@ -174,7 +174,7 @@ XC::Vector XC::TritrizPtrNod::IntegSimpsonFilaK(const size_t &capa,const size_t 
     return retval;
   }
 
-//! @brief Impone desplazamiento nulo en los nodos de este conjunto.
+//! @brief Impone desplazamiento nulo en los nodos de this set.
 void XC::TritrizPtrNod::fix(const SFreedom_Constraint &spc) const
   {
     if(Null()) return;

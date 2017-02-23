@@ -182,7 +182,7 @@ XC::Element *XC::EntMdlr::buscaElemento(const int &tag)
 const XC::Element *XC::EntMdlr::buscaElemento(const int &tag) const
   { return elementos.buscaElemento(tag); }
 
-//! @brief Crea un conjunto que corresponde a una fila de nodos y elementos.
+//! @brief Creates a set that corresponds to a row of nodes and elements.
 XC::SetEstruct *XC::EntMdlr::crea_set_fila(const RangoTritriz &rango,const std::string &nmb)
   {
     SetEstruct *retval= nullptr;
@@ -203,7 +203,7 @@ XC::SetEstruct *XC::EntMdlr::crea_set_fila(const RangoTritriz &rango,const std::
             retval= map_set.crea_set_estruct(GetVarRefFilaK(rango,nmb));
           }
         else
-	  std::cerr <<  "EntMdlr::crea_set_fila; no se pudo crear el conjunto fila." << std::endl;
+	  std::cerr <<  "EntMdlr::crea_set_fila; no se pudo crear the set fila." << std::endl;
       }
     else
       {
@@ -227,7 +227,7 @@ XC::Vector XC::EntMdlr::getSimpsonWeights(const std::string &ijk,const std::stri
     return retval;
   }
 
-//! @brief Crea un nodos en la posición being passed as parameter.
+//! @brief Creates a nodos en la posición being passed as parameter.
 XC::Node *XC::EntMdlr::crea_nodo(const Pos3d &pos,size_t i,size_t j, size_t k)
   {
     Node *retval= get_preprocessor()->getNodeLoader().nuevoNodo(pos);
@@ -297,15 +297,15 @@ bool XC::EntMdlr::crea_elementos(meshing_dir dm)
     return retval;
   }
 
-//! @brief Returns true ifel punto toca a la línea.
+//! @brief Returns true if the punto toca a la línea.
 void XC::EntMdlr::setGenMesh(bool m)
   { doGenMesh= m; }
 
-//! @brief Returns true ifel punto toca a la línea.
+//! @brief Returns true if the punto toca a la línea.
 const bool &XC::EntMdlr::getGenMesh(void) const
   { return doGenMesh; }
 
-//! @brief Crea un punto en la posición being passed as parameter.
+//! @brief Creates a punto en la posición being passed as parameter.
 XC::Pnt *XC::EntMdlr::crea_punto(const Pos3d &pos)
   { return get_preprocessor()->getCad().getPuntos().Nuevo(pos); }
 
@@ -366,7 +366,7 @@ double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
 double XC::EntMdlr::DistanciaA(const Pos3d &pt) const
   { return sqrt(DistanciaA2(pt)); }
 
-//! @brief Impone desplazamiento nulo en los nodos de este conjunto.
+//! @brief Impone desplazamiento nulo en los nodos de this set.
 void XC::EntMdlr::fix(const SFreedom_Constraint &spc)
   { nodos.fix(spc); }
 

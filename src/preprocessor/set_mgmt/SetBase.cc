@@ -48,7 +48,7 @@ void XC::SetBase::genMesh(meshing_dir dm)
     std::cerr << "Método genMesh() no implementado." << std::endl;
   }
 
-//! @brief Impone desplazamiento nulo en los nodos de este conjunto.
+//! @brief Impone desplazamiento nulo en los nodos de this set.
 void XC::SetBase::fix(const SFreedom_Constraint &)
   {
     std::cerr << "Método fix() no implementado." << std::endl;
@@ -131,7 +131,7 @@ void XC::SetBase::resetTributarias(void) const
   }
  
 //! @brief Calcula las longitudes tributarias correspondientes a cada
-//! nodo de los elementos del conjunto.
+//! nodo de los elementos of the set.
 void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
@@ -155,7 +155,7 @@ void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
   }
 
 //! @brief Calcula las áreas tributarias correspondientes a cada
-//! nodo de los elementos del conjunto.
+//! nodo de los elementos of the set.
 void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
@@ -179,7 +179,7 @@ void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
   }
 
 //! @brief Calcula los volúmenes tributarios correspondientes a cada
-//! nodo de los elementos del conjunto.
+//! nodo de los elementos of the set.
 void XC::SetBase::calculaVolsTributarios(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();

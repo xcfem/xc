@@ -130,7 +130,7 @@ const XC::Node *XC::DqPtrsNode::getNearestNode(const Pos3d &p) const
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Desplaza los nodos del conjunto.
+//! @brief Desplaza los nodos of the set.
 void XC::DqPtrsNode::mueve(const Vector3d &desplaz)
   {
     for(iterator i= begin();i!=end();i++)
@@ -138,7 +138,7 @@ void XC::DqPtrsNode::mueve(const Vector3d &desplaz)
     crea_arbol();
   }
 
-//! @brief Aplica la transformación a los elementos del conjunto.
+//! @brief Aplica la transformación a los elementos of the set.
 void XC::DqPtrsNode::transforma(const TrfGeom &trf)
   {
     //Transforma 
@@ -148,7 +148,7 @@ void XC::DqPtrsNode::transforma(const TrfGeom &trf)
   }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag)
   {
     Node *retval= nullptr;
@@ -169,7 +169,7 @@ XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag)
   }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 const XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag) const
   {
     const Node *retval= nullptr;
@@ -189,7 +189,7 @@ const XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag) const
     return retval;
   }
 
-//! @brief Returns the número de nods del conjunto que están activos.
+//! @brief Returns the número de nods of the set que están activos.
 size_t XC::DqPtrsNode::getNumLiveNodes(void) const
   {
     size_t retval= 0;
@@ -203,7 +203,7 @@ size_t XC::DqPtrsNode::getNumLiveNodes(void) const
     return retval;
   }
 
-//! @brief Returns the número de nodos del conjunto que están inactivos.
+//! @brief Returns the number of nodes of the set que están inactivos.
 size_t XC::DqPtrsNode::getNumDeadNodes(void) const
   {
     size_t retval= 0;

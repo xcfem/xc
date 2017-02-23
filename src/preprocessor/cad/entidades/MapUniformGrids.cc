@@ -42,7 +42,7 @@
 XC::MapUniformGrids::MapUniformGrids(Cad *cad)
   : MapEnt<UniformGrid>(cad) {}
 
-//! @brief Inserta la nueva linea en el conjunto total y los conjuntos abiertos.
+//! @brief Inserta la nueva linea en the set total y the opened sets.
 void XC::MapUniformGrids::UpdateSets(UniformGrid *nuevo_unif_grid) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());

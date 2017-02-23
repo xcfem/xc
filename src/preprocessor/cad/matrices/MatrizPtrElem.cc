@@ -35,7 +35,7 @@
 #include "boost/lexical_cast.hpp"
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 XC::Element *XC::MatrizPtrElem::buscaElemento(const int &tag)
   {
     Element *retval= nullptr;
@@ -59,7 +59,7 @@ XC::Element *XC::MatrizPtrElem::buscaElemento(const int &tag)
   }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 const XC::Element *XC::MatrizPtrElem::buscaElemento(const int &tag) const
   {
     const Element *retval= nullptr;
@@ -93,7 +93,7 @@ XC::Element *XC::MatrizPtrElem::getNearestElement(const Pos3d &p)
     if(nfilas*ncols>500)
       std::clog << "La matriz de elementos es tiene "
                 << nfilas*ncols << " componentes "
-                << " es mejor buscar por coordenadas en el conjunto asociado."
+                << " es mejor buscar por coordenadas en the set asociado."
                 << std::endl;
     for(size_t j= 1;j<=nfilas;j++)
       for(size_t k= 1;k<=ncols;k++)

@@ -34,14 +34,14 @@
 #include "domain/mesh/node/Node.h"
 
 
-//! @brief Returns true ifel conjunto existe.
+//! @brief Returns true if the set existe.
 bool XC::MapFields::existe(const std::string &nmb) const
   {
     const_iterator i= buscaField(nmb);
     return (i!=end());
   }
 
-//! @brief Returns a pointer to the conjunto cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the set wich name is being passed as parameter.
 XC::MapFields::iterator XC::MapFields::buscaField(const std::string &nmb)
   {
     iterator i=begin();
@@ -50,7 +50,7 @@ XC::MapFields::iterator XC::MapFields::buscaField(const std::string &nmb)
     return i;
   }
 
-//! @brief Returns a pointer to the conjunto cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the set which name is being passed as parameter.
 XC::MapFields::const_iterator XC::MapFields::buscaField(const std::string &nmb) const
   {
     const_iterator i=begin();

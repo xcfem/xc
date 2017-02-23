@@ -39,14 +39,14 @@ namespace XC {
 
 class EntMdlr;
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
-//!  \brief Conjunto de objetos.
+//!  @brief Set of objects in a row.
 //! 
-//!  Un objeto SetFilaK contiene un conjunto de 0 o más:
-//!  - Nodos.
-//!  - Elementos finitos.
-//!  que corresponden a una fila_k de un objeto EntMdlr.
+//!  A SetFilaK object contains zero o more:
+//!  - Nodes.
+//!  - Finite elements.
+//!  that correspond to a fila_k of an EntMdlr object.
 class SetFilaK: public SetFila<TritrizPtrNod::var_ref_fila_k,TritrizPtrElem::var_ref_fila_k>
   {
   public:

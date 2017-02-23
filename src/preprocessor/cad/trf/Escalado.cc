@@ -35,10 +35,10 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-//! @brief Aplica la transformación a los elementos del conjunto.
+//! @brief Aplica la transformación a los elementos of the set.
 Pos3d XC::Escalado::Transforma(const Pos3d &p) const
   { return ee.Transforma(p); }
 
-//! @brief Aplica la transformación a los elementos del conjunto.
+//! @brief Aplica la transformación a los elementos of the set.
 Vector3d XC::Escalado::Transforma(const Vector3d &v) const
   { return ee.Transforma(v); }

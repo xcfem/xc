@@ -42,7 +42,7 @@
 XC::MapSurfaces::MapSurfaces(Cad *cad)
   : MapEnt<Face>(cad) {}
 
-//! @brief Inserta la nueva linea en el conjunto total y los conjuntos abiertos.
+//! @brief Inserta la nueva linea en the set total y the opened sets.
 void XC::MapSurfaces::UpdateSets(Face *nueva_face) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());

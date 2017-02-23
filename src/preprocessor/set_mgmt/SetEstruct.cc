@@ -57,21 +57,21 @@ size_t XC::SetEstruct::NumNodos(void) const
 size_t XC::SetEstruct::NumElementos(void) const
   { return GetNumCapasElementos()*GetNumFilasElementos()*GetNumColsElementos(); }
 
-//! @brief Returns true ifel único índice que varía es el I.
+//! @brief Returns true if the único índice que varía es el I.
 bool XC::SetEstruct::EsFilaI(void) const
   {
     if((GetNumFilasNodos()>1) || (GetNumColsNodos()>1)) return false;
     return true;
   }
 
-//! @brief Returns true ifel único índice que varía es el J.
+//! @brief Returns true if the único índice que varía es el J.
 bool XC::SetEstruct::EsFilaJ(void) const
   {
     if((GetNumCapasNodos()>1) || (GetNumColsNodos()>1)) return false;
     return true;
   }
 
-//! @brief Returns true ifel único índice que varía es el K.
+//! @brief Returns true if the único índice que varía es el K.
 bool XC::SetEstruct::EsFilaK(void) const
   {
     if((GetNumCapasNodos()>1) || (GetNumFilasNodos()>1)) return false;
@@ -90,7 +90,7 @@ bool XC::SetEstruct::EsCapaJCte(void) const
 bool XC::SetEstruct::EsCapaKCte(void) const
   { return (GetNumColsNodos()==1); }
 
-//! @brief Returns the tipo del conjunto filaI,filaJ,filaK,capaICte,...
+//! @brief Returns the set type filaI, filaJ, filaK, capaICte,...
 std::string XC::SetEstruct::GetStrTipo(void) const
   {
     if(EsFilaI()) return "filaI";
@@ -112,7 +112,7 @@ size_t XC::SetEstruct::Dimension(void) const
     return retval;
   }
 
-//! @brief Returns the pointers to los nodos del conjunto.
+//! @brief Returns the pointers to the set nodes.
 XC::NodePtrSet XC::SetEstruct::getNodePtrSet(void)
   {
     NodePtrSet retval;
@@ -126,8 +126,8 @@ XC::NodePtrSet XC::SetEstruct::getNodePtrSet(void)
     return retval;    
   }
 
-//! @brief Returns the bordes de elemento que cuyos dos extremos
-//! están entre los nodos del conjunto.
+//! @brief Returns the element edges with both end nodes
+//! belong to the nodes of the set.
 XC::ElementEdges XC::SetEstruct::getElementEdges(void)
   {
     const NodePtrSet nodos= getNodePtrSet();
@@ -222,7 +222,7 @@ boost::python::list XC::SetEstruct::getElements(void)
     return retval;
   }
 
-//! @brief Returns true ifel nodo está en el conjunto.
+//! @brief Returns true if the nodo belongs to the set.
 bool XC::SetEstruct::In(const Node *n) const
   {
     bool retval= false;
@@ -243,7 +243,7 @@ bool XC::SetEstruct::In(const Node *n) const
     return retval;
   }
 
-//! @brief Returns true ifel elemento está en el conjunto.
+//! @brief Returns true if the element belongs to the set.
 bool XC::SetEstruct::In(const Element *e) const
   {
     bool retval= false;
@@ -275,7 +275,7 @@ XC::Node *XC::SetEstruct::getNodeI(const size_t &i)
       return GetNodo(1,1,i);
     else
       {
-	std::cerr << "SetEstruct::getNodoI; el conjunto de nodos no es unidimensional." << std::endl;
+	std::cerr << "SetEstruct::getNodoI; node set is not one-dimensional." << std::endl;
         return nullptr;
       }
   }
@@ -291,7 +291,7 @@ XC::Node *XC::SetEstruct::getNodeIJ(const size_t &i,const size_t &j)
       return GetNodo(i,j,1);
     else
       {
-	std::cerr << "SetEstruct::getNodoI; el conjunto de nodos no es bidimensional." << std::endl;
+	std::cerr << "SetEstruct::getNodoI; el node set no es bidimensional." << std::endl;
         return nullptr;
       } 
   }

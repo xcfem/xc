@@ -51,9 +51,9 @@ class FE_Datastore;
 
 //!  @defgroup Preprocessor Preprocessor.
 
-//!  \ingroup Preprocessor
+//!  @ingroup Preprocessor
 //! 
-//!  \brief Finite element model generation tools.
+//!  @brief Finite element model generation tools.
 //!  
 class Preprocessor: public EntCmd, public MovableObject
   {
@@ -72,7 +72,7 @@ class Preprocessor: public EntCmd, public MovableObject
 
     Cad cad; //!< Geometric entities: points, lines,...
 
-    MapSet sets; //!< Conjuntos de entidades.
+    MapSet sets; //!< Sets of entidades.
 
     friend class Cad;
     friend class SetMeshComp;

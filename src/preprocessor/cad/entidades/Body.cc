@@ -85,7 +85,7 @@ size_t XC::Body::BodyFace::NumLineas(void) const
 size_t XC::Body::BodyFace::NumVertices(void) const
   { return surface->NumVertices(); }
 
-//! @brief Returns the pointer al lado de la cara, cuyo índice se pasa como parámetro.
+//! @brief Returns the pointer al lado de la cara, cuyo índice is being passed as parameter.
 const XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i) const
   {
     if(!surface) return nullptr;
@@ -112,11 +112,11 @@ const XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i) const
     return retval;
   }
 
-//! @brief Returns the pointer al lado de la cara, cuyo índice se pasa como parámetro.
+//! @brief Returns the pointer al lado de la cara, cuyo índice is being passed as parameter.
 XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i)
   { return const_cast<CmbEdge::Lado *>(static_cast<const BodyFace &>(*this).GetLado(i)); }
 
-//! @brief Returns the pointer al vértice de la cara, cuyo índice se pasa como parámetro.
+//! @brief Returns the pointer al vértice de la cara, cuyo índice is being passed as parameter.
 const XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i) const
   {
     const CmbEdge::Lado *l= GetLado(i);
@@ -130,7 +130,7 @@ const XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i) const
     return nullptr;
   }
 
-//! @brief Returns the pointer al vértice de la cara, cuyo índice se pasa como parámetro.
+//! @brief Returns the pointer al vértice de la cara, cuyo índice is being passed as parameter.
 XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i)
   { return const_cast<Pnt *>(static_cast<const BodyFace &>(*this).GetVertice(i)); }
 
@@ -202,7 +202,7 @@ BND3d XC::Body::Bnd(void) const
   { 
     BND3d retval;
     const size_t nv= NumVertices();
-    if(nv<1) //El conjunto está vacío.
+    if(nv<1) //the set is empty.
       {
 	std::cerr << "Body::Bnd(); la polilinea está vacia." << std::endl;
         return retval;
@@ -224,7 +224,7 @@ BND3d XC::Body::Bnd(void) const
 std::set<const XC::Body *> XC::GetCuerposTocan(const Face &s)
   { return s.CuerposTocan(); }
 
-//! @brief Returns the conjuntos a los que pertenece este cuerpo.
+//! @brief Returns the sets a los que pertenece este cuerpo.
 std::set<XC::SetBase *> XC::Body::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -239,7 +239,7 @@ std::set<XC::SetBase *> XC::Body::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el cuerpo a los conjuntos que se pasan como parámetro.
+//! @brief Agrega el cuerpo a the sets que se pasan como parámetro.
 void XC::Body::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)

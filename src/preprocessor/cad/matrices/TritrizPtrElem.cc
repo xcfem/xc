@@ -47,7 +47,7 @@ XC::TritrizPtrElem::TritrizPtrElem(const size_t capas,const size_t filas,const s
   }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 XC::Element *XC::TritrizPtrElem::buscaElemento(const int &tag)
   {
     Element *retval= nullptr;
@@ -62,7 +62,7 @@ XC::Element *XC::TritrizPtrElem::buscaElemento(const int &tag)
   }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag is being passed as parameter.
 const XC::Element *XC::TritrizPtrElem::buscaElemento(const int &tag) const
   {
     const Element *retval= nullptr;
@@ -86,7 +86,7 @@ XC::Element *XC::TritrizPtrElem::getNearestElement(const Pos3d &p)
     if(ncapas>100)
       std::clog << "La «tritriz» de elementos es tiene "
                 << ncapas << " capas "
-                << " es mejor buscar por coordenadas en el conjunto asociado."
+                << " es mejor buscar por coordenadas en the set asociado."
                 << std::endl;
     for(size_t i=1;i<=ncapas;i++)
       {

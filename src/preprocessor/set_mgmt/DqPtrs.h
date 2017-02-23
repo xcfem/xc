@@ -42,9 +42,9 @@
 
 namespace XC {
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
-//!  \brief Pointer to (nodes, elements, points, lines,...) container.
+//!  @brief Pointer to (nodes, elements, points, lines,...) container.
 //! 
 //!  This obnect contains 0 o more pointers to objects of ONE of this types:
 //!  - Nodde.
@@ -243,7 +243,7 @@ const ID &DqPtrs<T>::getTags(void) const
     return retval;
   }
 
-//! @brief Envía los dbTags de los conjuntos través del canal being passed as parameter.
+//! @brief Sends the dbTags of the sets trough the channel being passed as parameter.
 template <class T>
 int DqPtrs<T>::sendTags(int posSz,int posDbTag,DbTagData &dt,CommParameters &cp)
   {
@@ -259,7 +259,7 @@ int DqPtrs<T>::sendTags(int posSz,int posDbTag,DbTagData &dt,CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los dbTags de los conjuntos through the channel being passed as parameter.
+//! @brief Sends the dbTags of the sets through the channel being passed as parameter.
 template <class T>
 const ID &DqPtrs<T>::receiveTags(int posSz,int posDbTag,DbTagData &dt,const CommParameters &cp)
   {
