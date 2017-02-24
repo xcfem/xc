@@ -350,6 +350,6 @@ std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
 std::vector<int> XC::getIdNodosQuad9N(const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(9,-1);
-    std::cerr << "getIdNodosQuad9N no implementada." << std::endl;
+    std::cerr << "getIdNodosQuad9N not implemented." << std::endl;
     return retval;
   }

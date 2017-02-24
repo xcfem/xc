@@ -132,7 +132,7 @@ XC::Vector XC::InteractionDiagram2d::FactorCapacidad(const GeomObj::list_Pos2d &
 
 void XC::InteractionDiagram2d::Print(std::ostream &os) const
   {
-    std::cerr << "InteractionDiagram2d::Print no implementada." << std::endl;
+    std::cerr << "InteractionDiagram2d::Print not implemented." << std::endl;
   }
 
 XC::InteractionDiagram2d XC::calcPlaneInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &data, const double &theta)

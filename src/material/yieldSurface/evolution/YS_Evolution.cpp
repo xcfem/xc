@@ -249,13 +249,13 @@ void XC::YS_Evolution::Print(std::ostream &s, int flag)
 const XC::Vector &XC::YS_Evolution::getGeneralizedStress(void) const
   {
     static Vector retval(1);
-    std::cerr << "YS_Evolution::getGeneralizedStress no implementada." << std::endl;
+    std::cerr << "YS_Evolution::getGeneralizedStress not implemented." << std::endl;
     return retval;
   }
 const XC::Vector &XC::YS_Evolution::getGeneralizedStrain(void) const
   {
     static Vector retval(1);
-    std::cerr << "YS_Evolution::getGeneralizedStrain no implementada." << std::endl;
+    std::cerr << "YS_Evolution::getGeneralizedStrain not implemented." << std::endl;
     return retval;
   }
 

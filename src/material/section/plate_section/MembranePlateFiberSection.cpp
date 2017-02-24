@@ -196,12 +196,12 @@ double XC::MembranePlateFiberSection::getRho(void) const
 
 int XC::MembranePlateFiberSection::setInitialSectionDeformation(const Vector &strainResultant_from_element)
   {
-    std::cerr << "MembranePlateFiberSection::setInitialSectionDeformation no implementada." << std::endl;
+    std::cerr << "MembranePlateFiberSection::setInitialSectionDeformation not implemented." << std::endl;
     return 0;
   }
 const XC::Vector &XC::MembranePlateFiberSection::getInitialSectionDeformation(void) const
   {
-    std::cerr << "MembranePlateFiberSection::getInitialSectionDeformation no implementada." << std::endl;
+    std::cerr << "MembranePlateFiberSection::getInitialSectionDeformation not implemented." << std::endl;
     return strainResultant;
   }
 

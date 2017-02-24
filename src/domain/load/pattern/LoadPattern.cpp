@@ -196,7 +196,7 @@ XC::LoadPattern::LoadPattern(int tag)
 
 XC::LoadPattern *XC::LoadPattern::getCopy(void)
   {
-    std::cerr << "LoadPattern::getCopy, no implementada." << std::endl;
+    std::cerr << "LoadPattern::getCopy, not implemented." << std::endl;
     return nullptr;
   }
 
@@ -631,7 +631,7 @@ int XC::LoadPattern::setParameter(const std::vector<std::string> &argv, Paramete
       {
         if(argv.size() < 3)
           return -1;
-        std::cerr << "elementPointLoad no implementada." << std::endl;
+        std::cerr << "elementPointLoad not implemented." << std::endl;
 //       RVisRandomProcessDiscretizer = false;
 
 //       int eleNumber = atoi(argv[1]);

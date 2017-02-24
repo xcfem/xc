@@ -672,7 +672,7 @@ int XC::FEM_ObjectBrokerAllClasses::addUniaxialMaterial(int classTag,const char 
 //     theMat->funcPtr = funcPtr;
 //     theMat->next = theUniaxialPackage;
 //     theUniaxialPackage = theMat;
-    std::cerr << "FEM_ObjectBrokerAllClasses::addUniaxialMaterial no implementada." << std::endl;
+    std::cerr << "FEM_ObjectBrokerAllClasses::addUniaxialMaterial not implemented." << std::endl;
     return 0;
   }
 

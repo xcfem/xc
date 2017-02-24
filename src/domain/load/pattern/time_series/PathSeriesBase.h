@@ -37,7 +37,8 @@ class Vector;
 
 //! @ingroup TSeries
 //
-//! @brief Función del tiempo expresada mediante una seríe de puntos (ti,fi).
+//! @brief Base class for time-dependent functions defined
+//! by a series of points (ti,fi).
 class PathSeriesBase: public CFactorSeries
   {
   protected:

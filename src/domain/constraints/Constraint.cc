@@ -142,7 +142,7 @@ void XC::Constraint::Print(std::ostream &s, int flag)
 //! @brief returns the VTK cell type.
 int XC::Constraint::getVtkCellType(void) const
   {
-    std::cerr << "Constraint::getVtkCellType; no implementada." << std::endl;
+    std::cerr << "Constraint::getVtkCellType; not implemented." << std::endl;
     return VTK_EMPTY_CELL;
   }
 

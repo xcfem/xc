@@ -134,7 +134,7 @@ void XC::ShellUniformLoad::addReactionsInBasicSystem(const double &area,const do
 //! @param q0 
 void XC::ShellUniformLoad::addFixedEndForcesInBasicSystem(const double &area,const double &loadFactor,FVectorShell &q0) const
   {
-    std::cerr << "ShellUniformLoad::addFixedEndForcesInBasicSystem no implementada." << std::endl;
+    std::cerr << "ShellUniformLoad::addFixedEndForcesInBasicSystem not implemented." << std::endl;
   }
 
 //! brief Returns load resultant (force and moment integration over the elements).

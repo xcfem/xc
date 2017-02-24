@@ -31,13 +31,13 @@
 //! @brief Agrega la fuerza being passed as parameter.
 void XC::FVector::addForce(const size_t &inod,const double &,const double &,const double &)
   {
-    std::cerr << "addForce no implementada." << std::endl;
+    std::cerr << "addForce not implemented." << std::endl;
   }
 
 //! @brief Agrega el momento being passed as parameter.
 void XC::FVector::addMoment(const size_t &inod,const double &,const double &,const double &)
   {
-    std::cerr << "addMoment no implementada." << std::endl;
+    std::cerr << "addMoment not implemented." << std::endl;
   }
 
 std::ostream &XC::operator<<(std::ostream &os,const FVector &f)

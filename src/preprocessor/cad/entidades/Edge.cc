@@ -458,7 +458,7 @@ void XC::Edge::genMesh(meshing_dir dm)
 const XC::Vector &XC::Edge::getTang(const double &s) const
   {
     static XC::Vector retval(1);
-    std::cerr << "Edge::getTang; no implementada." << std::endl;
+    std::cerr << "Edge::getTang; not implemented." << std::endl;
     return retval;
   }
 

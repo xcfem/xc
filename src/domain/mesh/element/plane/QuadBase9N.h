@@ -92,7 +92,7 @@ template <class PhysProp>
 Poligono3d XC::QuadBase9N<PhysProp>::getPoligono(bool initialGeometry) const
   {
     Poligono3d retval;
-    std::cerr << "QuadBase9N<PhysProp>::getPoligono no implementada." << std::endl;
+    std::cerr << "QuadBase9N<PhysProp>::getPoligono not implemented." << std::endl;
     return retval;
   }
 
@@ -101,7 +101,7 @@ template <class PhysProp>
 Segmento3d XC::QuadBase9N<PhysProp>::getLado(const size_t &i,bool initialGeometry) const
   {
     Segmento3d retval;
-    std::cerr << "QuadBase9N<PhysProp>::getLado no implementada." << std::endl;
+    std::cerr << "QuadBase9N<PhysProp>::getLado not implemented." << std::endl;
     return retval;
   }
 
@@ -110,7 +110,7 @@ template <class PhysProp>
 XC::Element::NodesEdge XC::QuadBase9N<PhysProp>::getNodesEdge(const size_t &i) const
   {
     Element::NodesEdge retval(3,static_cast<Node *>(NULL));
-    std::cerr << "QuadBase9N<PhysProp>::getNodesEdge no implementada." << std::endl;
+    std::cerr << "QuadBase9N<PhysProp>::getNodesEdge not implemented." << std::endl;
     return retval;    
   }
 
@@ -120,7 +120,7 @@ template <class PhysProp>
 int XC::QuadBase9N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
   {
     int retval= -1;
-    std::cerr << "QuadBase9N<PhysProp>::getEdgeNodes no implementada." << std::endl;
+    std::cerr << "QuadBase9N<PhysProp>::getEdgeNodes not implemented." << std::endl;
     return retval;
   }
 
@@ -130,7 +130,7 @@ template <class PhysProp>
 ID XC::QuadBase9N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
   {
     ID retval(2);
-    std::cerr << "QuadBase9N<PhysProp>::getEdgeNodes no implementada." << std::endl;
+    std::cerr << "QuadBase9N<PhysProp>::getEdgeNodes not implemented." << std::endl;
     return retval;
   }
 

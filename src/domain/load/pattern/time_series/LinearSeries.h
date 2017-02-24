@@ -70,7 +70,7 @@
 namespace XC {
 //! @ingroup TSeries
 //
-//! @brief Función lineal en el tiempo.
+//! @brief Linear function over time.
 class LinearSeries : public CFactorSeries
   {
   protected:

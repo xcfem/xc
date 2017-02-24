@@ -141,14 +141,14 @@ int XC::FiberSection3d::revertToStart(void)
 int XC::FiberSection3d::sendSelf(CommParameters &cp)
   {
     int res= 0;
-    std::cerr << "FiberSection3d::sendSelf - no implementada.\n";
+    std::cerr << "FiberSection3d::sendSelf - not implemented.\n";
     return res;
   }
 
 int XC::FiberSection3d::recvSelf(const CommParameters &cp)
   {
     int res= 0;
-    std::cerr << "FiberSection3d::recvSelf - no implementada.\n";
+    std::cerr << "FiberSection3d::recvSelf - not implemented.\n";
     return res;
   }
 

@@ -75,7 +75,7 @@ XC::DiscretizedRandomProcessSeries::DiscretizedRandomProcessSeries(int num, cons
 
 XC::TimeSeries *XC::DiscretizedRandomProcessSeries::getCopy(void) const
   {
-    std::cerr << "DiscretizedRandomProcessSeries::getCopy no implementada. " << std::endl;
+    std::cerr << "DiscretizedRandomProcessSeries::getCopy not implemented. " << std::endl;
     return nullptr;
   }
 
@@ -275,7 +275,7 @@ int XC::DiscretizedRandomProcessSeries::setParameter(const std::vector<std::stri
 
 //         // The random variable number is returned as a parameter XC::ID
 //        return rvNumber;
-    std::cerr << "XC::DiscretizedRandomProcessSeries::setParameter no implementada." << std::endl;
+    std::cerr << "XC::DiscretizedRandomProcessSeries::setParameter not implemented." << std::endl;
     return -1;
   }
 

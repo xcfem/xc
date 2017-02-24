@@ -59,11 +59,7 @@
 // Revision: A
 //
 // Purpose: This file contains the class definition for TrigSeries.
-// TrigSeries is a concrete class. A TrigSeries object provides
-// a sine time series. the factor is given by the pseudoTime (x),
-// pulse period (T), phase shift (phi), i.e. by sin(2*PI*(x-xo)/T + phi),
-// and a constant factor provided in the constructor,
-// the duration by tStart and tFinal;
+// TrigSeries is a concrete class. 
 //
 // What: "@(#) TrigSeries.h, revA"
 
@@ -72,17 +68,19 @@
 namespace XC {
 //! @ingroup TSeries
 //
-//! @brief Variación en el tiempo según una función trigonométrica.
+//! @brief Trigonometric functions over time. A TrigSeries object provides
+//! a sine time series. the factor is given by the pseudoTime (x),
+//! pulse period (T), phase shift (phi), i.e. by sin(2*PI*(x-xo)/T + phi),
+//! and a constant factor provided in the constructor,
+//! the duration by tStart and tFinal;
 class TrigSeries: public PeriodSeries
   {
-  protected:
-
   public:
     // constructors
     TrigSeries(double tStart, double tFinish,
 		double period, double shift, double cFactor = 1.0);
     TrigSeries(void);
-    
+    //! @brief Virtual constructor.
     TimeSeries *getCopy(void) const
       { return new TrigSeries(*this); }
     

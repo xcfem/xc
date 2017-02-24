@@ -125,7 +125,7 @@ const XC::Vector &XC::GroundMotion::getDispVelAccel(double time) const
 
 int  XC::GroundMotion::sendSelf(CommParameters &cp)
   {
-    std::cerr << "XC::GroundMotion::sendSelf no implementada." << std::endl;
+    std::cerr << "XC::GroundMotion::sendSelf not implemented." << std::endl;
 
 
   return 0;
@@ -134,7 +134,7 @@ int  XC::GroundMotion::sendSelf(CommParameters &cp)
 
 int XC::GroundMotion::recvSelf(const CommParameters &cp)
   {
-    std::cerr << "XC::GroundMotion::recvSelf no implementada." << std::endl;
+    std::cerr << "XC::GroundMotion::recvSelf not implemented." << std::endl;
 
 
     return 0;

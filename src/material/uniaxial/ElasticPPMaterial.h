@@ -68,13 +68,13 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Material elasto-plástico perfecto.
+//! @brief Elastic perfectly plastic material.
 class ElasticPPMaterial : public EPPBaseMaterial
   {
   private:
     double fyp, fyn; //!< positive and negative yield stress
 
-    //! @brief Evalúa la función de cedencia.
+    //! @brief Computes yield function value.
     inline double yield_function(const double &sigtrial) const
       {
         if(sigtrial>=0.0)

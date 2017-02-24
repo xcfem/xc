@@ -298,12 +298,12 @@ int XC::Metis::partition(Graph &theGraph, int numPart)
     if(myPtype == 1)
       {
 	//PMETIS(&numVertex, xadj.getDataPtr(), adjncy.getDataPtr(), vwgts, ewgts, &weightflag, &numPart, options.getDataPtr(), &numbering, &edgecut, partition.getDataPtr());
-	std::cerr << "PMETIS no implementada." << std::endl; //LCPT: No encuentro esta rutina por ninguna parte.
+	std::cerr << "PMETIS not implemented." << std::endl; //LCPT: No encuentro esta rutina por ninguna parte.
       }
     else
       {		
 	//KMETIS(&numVertex, xadj.getDataPtr(), adjncy.getDataPtr(), vwgts, ewgts, &weightflag, &numPart, options.getDataPtr(), &numbering, &edgecut, partition.getDataPtr());
-	std::cerr << "KMETIS no implementada." << std::endl; //LCPT: No encuentro esta rutina por ninguna parte.
+	std::cerr << "KMETIS not implemented." << std::endl; //LCPT: No encuentro esta rutina por ninguna parte.
       }
 
 

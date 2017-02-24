@@ -69,7 +69,7 @@
 namespace XC {
 //! @ingroup TSeries
 //
-//! @brief Función del tiempo de tipo pulso.
+//! @brief Pulse type function.
 class PulseSeries : public PeriodSeries
   {
   private:

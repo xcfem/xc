@@ -249,14 +249,14 @@ XC::Matrix *XC::CommParameters::receiveMatrixPtr(Matrix* &ptr,DbTagData &dt, con
 int XC::CommParameters::sendTensorPtr(BJtensor *ptr,DbTagData &dt, const TensorCommMetaData &)
   {
     int retval= 0;
-    std::cerr << "CommParameters::sendTensorPtr no implementada." << std::endl;
+    std::cerr << "CommParameters::sendTensorPtr not implemented." << std::endl;
     return retval;
   }
 
 //! @brief Recibe a pointer a matriz through the channel being passed as parameter.
 XC::BJtensor *XC::CommParameters::receiveTensorPtr(BJtensor* &ptr,DbTagData &dt, const TensorCommMetaData &) const
   {
-    std::cerr << "CommParameters::receiveTensorPtr no implementada." << std::endl;
+    std::cerr << "CommParameters::receiveTensorPtr not implemented." << std::endl;
     return ptr;
   }
 

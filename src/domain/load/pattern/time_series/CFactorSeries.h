@@ -34,8 +34,7 @@
 namespace XC {
 //! @ingroup TSeries
 //
-//! @brief Función del tiempo que tiene un factor que multiplica
-//! o se suma al valor devuelto (clase abstracta).
+//! @brief Base class for constant factor time series.
 class CFactorSeries: public TimeSeries
   {
   protected:

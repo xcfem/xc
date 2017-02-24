@@ -59,14 +59,14 @@ Poligono2d XC::RgSccPoligono::getPoligono(void) const
 
 const Rejilla2d &XC::RgSccPoligono::getMesh(void) const
   {
-    std::cerr << "RgSccPoligono::getMesh no implementada." << std::endl;
+    std::cerr << "RgSccPoligono::getMesh not implemented." << std::endl;
     static Rejilla2d retval;
     return retval;
   }
 
 const XC::VectorCells &XC::RgSccPoligono::getCells(void) const
   {
-    std::cerr << "RgSccPoligono::getCells no implementada." << std::endl;
+    std::cerr << "RgSccPoligono::getCells not implemented." << std::endl;
     return cells;
   }
 

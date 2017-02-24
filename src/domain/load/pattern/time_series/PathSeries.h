@@ -58,11 +58,6 @@
 // Created: 07/99
 // Revision: A
 //
-// Description: This file contains the class definition for PathSeries.
-// PathSeries is a PathSeriesBase class which linear interpolates the
-// load factor using user specified control points provided in a vector object.
-// the points in the vector are given at regular time increments pathTimeIncr
-// apart. (could be provided in another vector if different)
 //
 // What: "@(#) PathSeries.h, revA"
 
@@ -74,9 +69,10 @@ class Vector;
 
 //! @ingroup TSeries
 //
-//! @brief Función del tiempo expresada mediante una seríe de puntos (ti,fi) en
-//! los que la diferencia entre abcisas consecutivas (incremento de tiempo)
-//! ti - t(i-1) es una cantidad constante.
+//! @brief Time-dependent function that linear interpolates the
+//! load factor using user specified control points provided in a vector object.
+//! the points in the vector are given at regular time increments pathTimeIncr
+//! apart.
 class PathSeries : public PathSeriesBase
   {
   private:

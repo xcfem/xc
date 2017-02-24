@@ -264,14 +264,14 @@ XC::MFreedom_Joint3D::isTimeVarying(void) const
 
 int XC::MFreedom_Joint3D::sendSelf(CommParameters &cp)
   {
-    std::cerr << "MFreedom_Joint3D::sendSelf no implementada." << std::endl;
+    std::cerr << "MFreedom_Joint3D::sendSelf not implemented." << std::endl;
     return 0;
   }
 
 
 int XC::MFreedom_Joint3D::recvSelf(const CommParameters &cp)
   {
-    std::cerr << "MFreedom_Joint3D::recvSelf no implementada." << std::endl;
+    std::cerr << "MFreedom_Joint3D::recvSelf not implemented." << std::endl;
     return 0;
   }
 

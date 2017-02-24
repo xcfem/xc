@@ -59,9 +59,7 @@
 // Revision: A
 //
 // Description: This file contains the class definition for PathTimeSeries.
-// PathTimeSeries is a CFactorSeries class which linear interpolates the
-// load factor using user specified control points provided in a vector object.
-// the points in the vector are given at time points specified in another vector.
+// PathTimeSeries is a CFactorSeries class which 
 // object. 
 //
 // What: "@(#) PathTimeSeries.h, revA"
@@ -73,7 +71,9 @@ class Vector;
 
 //! @ingroup TSeries
 //
-//! @brief Función del tiempo expresada mediante una seríe de puntos (ti,fi).
+//! @brief Time-dependent function that linear interpolates the
+//! load factor using user specified control points provided in a vector object.
+//! the points in the vector are given at time points specified in another vector.
 class PathTimeSeries : public PathSeriesBase
   {
   private:

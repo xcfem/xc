@@ -104,7 +104,7 @@ void XC::MEDIntFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
 //! @brief Asigna los valores del campo en los puntos de Gauss.
 void XC::MEDIntFieldInfo::populateOnGaussPoints(const Set &set,const FieldInfo &fi)
   {
-    std::cerr << "MEDIntFieldInfo::populateOnGaussPoints no implementada" << std::endl;
+    std::cerr << "MEDIntFieldInfo::populateOnGaussPoints not implemented" << std::endl;
 
     // const DqPtrsElem &elementos= set.GetElementos();
     // const size_t dim= fi.getNumberOfComponents();

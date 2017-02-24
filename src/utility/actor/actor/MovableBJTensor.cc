@@ -50,14 +50,14 @@ void XC::MovableBJTensor::setBJTensor(const BJtensor &v)
 //! @brief Envia el vector through the channel being passed as parameter.
 int XC::MovableBJTensor::sendSelf(CommParameters &cp)
   {
-    std::cerr << "MovableBJTensor::sendSelf() - no implementada.\n";
+    std::cerr << "MovableBJTensor::sendSelf() - not implemented.\n";
     return 0;
   }
 
 //! @brief Recibe el vector through the channel being passed as parameter.
 int XC::MovableBJTensor::recvSelf(const CommParameters &cp)
   {
-    std::cerr << "MovableBJTensor::recvSelf() - no implementada.\n";
+    std::cerr << "MovableBJTensor::recvSelf() - not implemented.\n";
     return 0;
   }
 

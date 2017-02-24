@@ -111,22 +111,22 @@ const XC::Matrix &XC::RgSccCirc::getVertCoords(void) const
 
 double XC::RgSccCirc::getMaxY(void) const
   {
-    std::cerr << "RgSccCirc::getMaxY no implementada." << std::endl;
+    std::cerr << "RgSccCirc::getMaxY not implemented." << std::endl;
     return 0.0;
   }
 double XC::RgSccCirc::getMaxZ(void) const
   {
-    std::cerr << "RgSccCirc::getMaxZ no implementada." << std::endl;
+    std::cerr << "RgSccCirc::getMaxZ not implemented." << std::endl;
     return 0.0;
   }
 double XC::RgSccCirc::getMinY(void) const
   {
-    std::cerr << "RgSccCirc::getMinY no implementada." << std::endl;
+    std::cerr << "RgSccCirc::getMinY not implemented." << std::endl;
     return 0.0;
   }
 double XC::RgSccCirc::getMinZ(void) const
   {
-    std::cerr << "RgSccCirc::getMinZ no implementada." << std::endl;
+    std::cerr << "RgSccCirc::getMinZ not implemented." << std::endl;
     return 0.0;
   }
 

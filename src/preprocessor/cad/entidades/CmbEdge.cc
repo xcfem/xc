@@ -635,7 +635,7 @@ const XC::Pnt *XC::CmbEdge::GetVertice(const size_t &i) const
 
 void XC::CmbEdge::SetVertice(const size_t &,Pnt *)
   {
-    std::cerr << "Función XC::CmbEdge::SetVertice no implementada." << std::endl;
+    std::cerr << "Function XC::CmbEdge::SetVertice not implemented." << std::endl;
   }
 
 //! @brief Returns object k-points.

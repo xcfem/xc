@@ -381,7 +381,7 @@ int XC::FiberSectionShear3d::revertToStart(void)
 int XC::FiberSectionShear3d::sendData(CommParameters &cp)
   {
     int res= FiberSection3d::sendData(cp);
-    std::cerr << "FiberSectionShear3d::sendData - no implementada.\n";
+    std::cerr << "FiberSectionShear3d::sendData - not implemented.\n";
     return res;
   }
 
@@ -389,7 +389,7 @@ int XC::FiberSectionShear3d::sendData(CommParameters &cp)
 int XC::FiberSectionShear3d::recvData(const CommParameters &cp)
   {
     int res= FiberSection3d::recvData(cp);
-    std::cerr << "FiberSectionShear3d::recvData - no implementada.\n";
+    std::cerr << "FiberSectionShear3d::recvData - not implemented.\n";
     return res;
   }
 

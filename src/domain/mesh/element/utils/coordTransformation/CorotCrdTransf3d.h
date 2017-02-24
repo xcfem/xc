@@ -100,7 +100,7 @@ class CorotCrdTransf3d: public CrdTransf3d
 
     inline int computeElemtLengthAndOrient(void) const
       {
-        std::cerr << "CorotCrdTransf3d::computeElemtLengthAndOrient; no implementada."
+        std::cerr << "CorotCrdTransf3d::computeElemtLengthAndOrient; not implemented."
                   << std::endl;
 	return 0;
       }

@@ -61,7 +61,7 @@ XC::Loader::~Loader(void)
 //! @brief Sends object through the channel being passed as parameter.
 int XC::Loader::sendSelf(CommParameters &cp)
   {
-    std::cerr << "Loader::sendSelf() no implementada.\n";    
+    std::cerr << "Loader::sendSelf() not implemented.\n";    
     return -1;
   }
 
@@ -69,7 +69,7 @@ int XC::Loader::sendSelf(CommParameters &cp)
 //! @brief Receives object through the channel being passed as parameter.
 int XC::Loader::recvSelf(const CommParameters &cp)
   {
-    std::cerr << "Loader::recvSelf() no implementada.\n";    
+    std::cerr << "Loader::recvSelf() not implemented.\n";    
     return -1;
   }
 

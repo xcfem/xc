@@ -309,7 +309,7 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_interseccion(const Pos3d &p) con
 
 void XC::ClosedTriangleMesh::Print(std::ostream &os) const
   {
-    std::cerr << "ClosedTriangleMesh::Print no implementada." << std::endl;
+    std::cerr << "ClosedTriangleMesh::Print not implemented." << std::endl;
   }
 
 //! @brief Returns a matriz con las coordenadas de los puntos

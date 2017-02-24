@@ -34,7 +34,7 @@
 namespace XC {
 //! @ingroup TSeries
 //
-//! @brief Función del tiempo de tipo pulso.
+//! @brief Periodic function over time.
 class PeriodSeries: public PulseBaseSeries
   {
   protected:

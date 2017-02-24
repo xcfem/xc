@@ -42,7 +42,7 @@ XC::RegionSecc::RegionSecc(Material *mat)
 
 Poligono2d XC::RegionSecc::getPoligono(void) const
   {
-    std::cerr << "RegionSecc::getPoligono no implementada." << std::endl;
+    std::cerr << "RegionSecc::getPoligono not implemented." << std::endl;
     Poligono2d retval;
     return retval;
   }

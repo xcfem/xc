@@ -293,7 +293,7 @@ XC::Vector XC::InteractionDiagram::FactorCapacidad(const GeomObj::list_Pos3d &lp
 
 void XC::InteractionDiagram::Print(std::ostream &os) const
   {
-    std::cerr << "InteractionDiagram::Print no implementada." << std::endl;
+    std::cerr << "InteractionDiagram::Print not implemented." << std::endl;
   }
 
 void XC::InteractionDiagram::setMatrizPosiciones(const Matrix &m)

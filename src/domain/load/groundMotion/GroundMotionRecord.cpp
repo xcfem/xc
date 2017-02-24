@@ -109,7 +109,7 @@ double XC::GroundMotionRecord::getDisp(double time) const
 
 int XC::GroundMotionRecord::sendSelf(CommParameters &cp)
   {
-    std::cerr << "XC::GroundMotionRecord::sendSelf no implementada." << std::endl;
+    std::cerr << "XC::GroundMotionRecord::sendSelf not implemented." << std::endl;
 //   int dbTag = this->getDbTag();
 
 //   static XC::ID idData(6);
@@ -184,7 +184,7 @@ int XC::GroundMotionRecord::sendSelf(CommParameters &cp)
 
 int XC::GroundMotionRecord::recvSelf(const CommParameters &cp)
   {
-    std::cerr << "XC::GroundMotionRecord::recvSelf no implementada." << std::endl;
+    std::cerr << "XC::GroundMotionRecord::recvSelf not implemented." << std::endl;
 //   int dbTag = this->getDbTag();
 //   static XC::ID idData(6);
 //   int res = cp.receiveIdData(dbTag);

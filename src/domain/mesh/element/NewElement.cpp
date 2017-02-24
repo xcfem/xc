@@ -81,14 +81,14 @@ XC::NewElement::NewElement()
 
 XC::NodePtrsWithIDs &XC::NewElement::getNodePtrs(void)
   {
-    std::cerr << "NewElement::getNodePtrs() - no implementada\n";
+    std::cerr << "NewElement::getNodePtrs() - not implemented\n";
     static NodePtrsWithIDs retval(this,1);
     return retval;
   }
 
 const XC::NodePtrsWithIDs &XC::NewElement::getNodePtrs(void) const
   {
-    std::cerr << "NewElement::getNodePtrs() - no implementada\n";
+    std::cerr << "NewElement::getNodePtrs() - not implemented\n";
     static NodePtrsWithIDs retval(const_cast<NewElement *>(this),1);
     return retval;
   }

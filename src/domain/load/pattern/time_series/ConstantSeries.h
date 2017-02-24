@@ -69,7 +69,7 @@
 namespace XC {
 //! @ingroup TSeries
 //
-//! @brief Función constante en el tiempo.
+//! @brief Constant function over time.
 class ConstantSeries : public CFactorSeries
   {
   public:

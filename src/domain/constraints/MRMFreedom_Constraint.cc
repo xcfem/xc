@@ -239,14 +239,14 @@ void XC::MRMFreedom_Constraint::Print(std::ostream &s, int flag)
 //! @brief Interfaz con VTK.
 int XC::MRMFreedom_Constraint::getVtkCellType(void) const
   {
-    std::cerr << "MRMFreedom_Constraint::getVtkCellType; no implementada." << std::endl;
+    std::cerr << "MRMFreedom_Constraint::getVtkCellType; not implemented." << std::endl;
     return VTK_EMPTY_CELL;
   }
 
 //! @brief Interfaz con el formato MED de Salome.
 int XC::MRMFreedom_Constraint::getMEDCellType(void) const
   { 
-    std::cerr << "MRMFreedom_Constraint::getMEDCellType; no implementada." << std::endl;
+    std::cerr << "MRMFreedom_Constraint::getMEDCellType; not implemented." << std::endl;
     return MED_SEG2; 
   }
 

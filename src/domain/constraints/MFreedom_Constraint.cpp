@@ -216,7 +216,7 @@ void XC::MFreedom_Constraint::Print(std::ostream &s, int flag)
 //! @brief Interfaz con VTK.
 int XC::MFreedom_Constraint::getVtkCellType(void) const
   {
-    std::cerr << "MFreedom_Constraint::getVtkCellType; no implementada." << std::endl;
+    std::cerr << "MFreedom_Constraint::getVtkCellType; not implemented." << std::endl;
     return VTK_EMPTY_CELL;
   }
 

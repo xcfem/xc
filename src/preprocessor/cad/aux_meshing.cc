@@ -192,19 +192,19 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
 //! @ brief Meshes one layer (i= constant).
 void meshing_quad9N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,XC::TritrizPtrElem::var_ref_capa_i_cte &elementos)
   {
-    std::cerr << "meshing_quad9N_on_jk no implementada." << std::endl;
+    std::cerr << "meshing_quad9N_on_jk not implemented." << std::endl;
   }
 
 //! @ brief Meshes one row (j= constant).
 void meshing_quad9N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodos,XC::TritrizPtrElem::var_ref_capa_j_cte &elementos)
   {
-    std::cerr << "meshing_quad9N_on_ik no implementada." << std::endl;
+    std::cerr << "meshing_quad9N_on_ik not implemented." << std::endl;
   }
 
 //! @ brief Meshes one column (k= constant).
 void meshing_quad9N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodos,XC::TritrizPtrElem::var_ref_capa_k_cte &elementos)
   {
-    std::cerr << "meshing_quad9N_on_ij no implementada." << std::endl;
+    std::cerr << "meshing_quad9N_on_ij not implemented." << std::endl;
   }
 
 void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elementos)

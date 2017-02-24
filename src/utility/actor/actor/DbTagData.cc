@@ -92,11 +92,11 @@ void XC::DbTagData::setDbTagDataPos(const size_t &i,const int &v)
                 << "]." << std::endl;
   }
 
-//! @brief Función de conveniencia.
+//! @brief Convenience function.
 int XC::DbTagData::sendIdData(CommParameters &cp,const int &dataTag) const
   { return cp.sendID(data,dataTag); }
 
-//! @brief Función de conveniencia.
+//! @brief Convenience function.
 int XC::DbTagData::receiveIdData(const CommParameters &cp,const int &dataTag)
   { return cp.receiveID(data,dataTag); }
 

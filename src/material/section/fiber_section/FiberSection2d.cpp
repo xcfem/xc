@@ -182,14 +182,14 @@ int XC::FiberSection2d::revertToStart(void)
 int XC::FiberSection2d::sendSelf(CommParameters &cp)
   {
     int res= 0;
-    std::cerr <<  "XC::FiberSection2d::sendSelf - no implementada.\n";
+    std::cerr <<  "XC::FiberSection2d::sendSelf - not implemented.\n";
     return res;
   }
 
 int XC::FiberSection2d::recvSelf(const CommParameters &)
   {
     int res= 0;
-    std::cerr <<  "XC::FiberSection2d::recvSelf - no implementada.\n";
+    std::cerr <<  "XC::FiberSection2d::recvSelf - not implemented.\n";
     return res;
   }
 

@@ -153,7 +153,7 @@ int XC::Element::setRayleighDampingFactors(const RayleighDampingFactors &rF) con
 //! @brief Returns the dimensión del elemento.
 size_t XC::Element::getDimension(void) const
   {
-    std::cerr << "Element::getDimension no implementada para '"
+    std::cerr << "Element::getDimension not implemented para '"
               << nombre_clase() << "'\n";
     return 0;
   }
@@ -900,7 +900,7 @@ double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
 //! @brief Returns the coordenadas del centro de gravedad del elemento.
 Pos3d XC::Element::getPosCdg(bool initialGeometry) const
   {
-    std::cerr << "getPosCdg no implementada para los elementos de tipo: "
+    std::cerr << "getPosCdg not implemented para los elementos de tipo: "
               << nombre_clase() << std::endl;
     static Pos3d retval;
     return retval;
