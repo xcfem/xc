@@ -1,10 +1,30 @@
 # -*- coding: utf-8 -*-
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
+
 import BasicEntities as be
 import MeshEntities as me
 from miscUtils import LogMessages as lmsg
 
 class PointRecord(me.NodeRecord):
-  '''kPoint entities'''
+  '''kPoint type entity'''
+  def __init__(self,id, coords, labels= None):
+    '''
+    Key point constructor.
+
+    :param id: identifier for the point.
+    :param coords: coordinates of the point.
+    :param labels: string list that helps to identify the role of the point in the model.
+    '''    
+    super(PointRecord,self).__init__(id,coords)
+    if(labels):
+      self.labels= labels
+    else:
+      self.labels= list()
   def getStrXCCommand(self,pointLoaderName):
     strId= str(self.id)
     strCommand= '.newPntIDPos3d(' + strId + ',geom.Pos3d(' + str(self.coords[0]) + ',' + str(self.coords[1]) +','+ str(self.coords[2])+'))'
@@ -26,21 +46,46 @@ class PointDict(me.NodeDict):
     for key in self:
       strCommand= self[key].getStrXCCommand(xcImportExportData.pointLoaderName)
       f.write(strCommand+'\n')
+      if(self.labels):
+        pointName= strCommand.split('= ')[0]
+        strCommand= pointName+'.setProp("labels",'+str(self.labels)+')'
+        f.write(strCommand+'\n')
 
 class BlockRecord(me.CellRecord):
   '''Block type entities: line, face, body,...'''
+  def __init__(self,id, typ, kPoints, labels= None,thk= 0.0):
+    '''
+    Block record constructor.
+
+    :param id: identifier for the block.
+    :param typ: block type.
+    :param kPoints: key points that define block geometry and topology.
+    :param labels: string list that helps to identify the role of the block in the model.
+    '''    
+    super(BlockRecord,self).__init__(id,typ,kPoints,thk)
+    if(labels):
+      self.labels= labels
+    else:
+      self.labels= list()
   def getType(self):
     return self.cellType
+  def getStrKeyPointsIds(self):
+    tmp= str(self.nodeIds)
+    return tmp[tmp.index("[") + 1:tmp.rindex("]")]
   def getStrXCCommand(self,xcImportExportData):
     strId= str(self.id)
     loaderName= xcImportExportData.getBlockLoaderName(self.getType())
     strCommand= None
     if(self.cellType=='line'):
-      strCommand= 'l' + strId + '= ' + loaderName + '.newLine(' + str(self.nodeIds[0]) + ',' + str(self.nodeIds[1]) +')'
+      strId= 'l'+strId
+      strCommand= strId + '= ' + loaderName + '.newLine(' + self.getStrKeyPointsIds() +')'
     elif(self.cellType=='face'):
-      strCommand= 'f' + strId + '= ' + loaderName + '.newQuadSurfacePts(' + str(self.nodeIds[0]) + ',' + str(self.nodeIds[1]) + ',' + str(self.nodeIds[2]) + ',' + str(self.nodeIds[3])  +')'
+      strId= 'f'+strId
+      strCommand= strId + '= ' + loaderName + '.newQuadSurfacePts(' + self.getStrKeyPointsIds()  +')'
     else:
       lmsg.error('BlockRecord::getStrXCCommand not implemented for blocks of type: '+ self.cellType)
+    if(self.labels):
+      strCommand+= '; '+strId+'.setProp("labels",'+str(self.labels)+')'
     return strCommand
 
 class BlockDict(dict):
@@ -116,7 +161,7 @@ class PointSupportDict(dict):
           supportId+= 1
 
 class BlockData(object):
-  '''Block topology entities: points, lines, faces, solids,... '''
+  '''Block topology entities container: points, lines, faces, solids,... '''
   def __init__(self):
     self.name= None
     self.materials= me.MaterialDict()
@@ -125,8 +170,8 @@ class BlockData(object):
     self.pointSupports= PointSupportDict()
 
 
-  def appendPoint(self,id,x,y,z):
-    self.points[id]= PointRecord(int(id),[x,y,z])
+  def appendPoint(self,id,x,y,z,labels= None):
+    self.points[id]= PointRecord(int(id),[x,y,z],labels)
   def appendBlock(self,block):
     self.blocks[block.id]= block
 

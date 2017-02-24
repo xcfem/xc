@@ -24,6 +24,12 @@ class MaterialDict(dict):
 class NodeRecord(object):
   '''Node of a finite element mesh'''
   def __init__(self,id, coords):
+    '''
+    Node constructor.
+
+    :param id: identifier for the node.
+    :param coords: coordinates of the node.
+    '''    
     self.id= id
     self.coords= [coords[0],coords[1],coords[2]]
   def __str__(self):
@@ -88,9 +94,16 @@ class NodeDict(dict):
       retval+= str(self[key]) + '\n'
 
 class CellRecord(object):
-  def __init__(self,id, type, nodes,thk= 0.0):
+  def __init__(self,id, typ, nodes,thk= 0.0):
+    '''
+    Cell record constructor.
+
+    :param id: identifier for the cell.
+    :param typ: cell type.
+    :param nodes: nodes that define block geometry and topology.
+    '''    
     self.id= id
-    self.cellType= type
+    self.cellType= typ
     self.nodeIds= nodes
     self.thickness= thk
   def __str__(self):
