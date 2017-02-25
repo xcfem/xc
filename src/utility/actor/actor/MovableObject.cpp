@@ -121,7 +121,7 @@ int XC::MovableObject::activateParameter(int parameterID)
   { return 0; }
 
 //! @brief Returns the identificador de la variable cuyo
-//! nombre se pasa como parámetro.
+//! nombre being passed as parameter.
 int XC::MovableObject::setVariable(const std::string &variable, Information &theInfo)
   { return -1; }
 

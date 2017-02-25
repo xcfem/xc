@@ -34,7 +34,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Parámetros internos de un material que representa una curva p-y.
+//! @brief Internal parameters for a p-y material.
   class InternalParamsA: public MovableObject
   {
   protected:

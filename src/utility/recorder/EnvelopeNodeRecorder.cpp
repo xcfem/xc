@@ -370,7 +370,7 @@ int XC::EnvelopeNodeRecorder::restart(void)
   { return envelope.restart(); }
 
 //! @brief Envía el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::EnvelopeNodeRecorder::sendData(CommParameters &cp)
   {
     int res= NodeRecorderBase::sendData(cp);
@@ -379,7 +379,7 @@ int XC::EnvelopeNodeRecorder::sendData(CommParameters &cp)
   }
 
 //! @brief Recibe el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::EnvelopeNodeRecorder::receiveData(const CommParameters &cp)
   {
     int res= NodeRecorderBase::receiveData(cp);
@@ -388,7 +388,7 @@ int XC::EnvelopeNodeRecorder::receiveData(const CommParameters &cp)
   }
 
 //! @brief Envía el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::EnvelopeNodeRecorder::sendSelf(CommParameters &cp)
   {
     int res= 0;
@@ -411,7 +411,7 @@ int XC::EnvelopeNodeRecorder::sendSelf(CommParameters &cp)
   }
 
 //! @brief Recibe el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::EnvelopeNodeRecorder::recvSelf(const CommParameters &cp)
   {
     int res= 0;
@@ -432,7 +432,7 @@ int XC::EnvelopeNodeRecorder::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Asigna valores iniciales.
+//! @brief Asigna initial values.
 int XC::EnvelopeNodeRecorder::initialize(void)
 {
   if (theDofs == 0 || theNodalTags == 0 || theDomain == 0) {

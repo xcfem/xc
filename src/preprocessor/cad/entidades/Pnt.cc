@@ -206,7 +206,7 @@ std::set<XC::SetBase *> XC::Pnt::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el punto a the sets que se pasan como parámetro.
+//! @brief Agrega el punto a the sets being passed as parameters.
 void XC::Pnt::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
@@ -302,7 +302,7 @@ XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB, const Pnt &pC)
     return retval;
   }
 
-//! @brief Busca una línea cuyos extremos son los puntos que se pasan como parámetro.
+//! @brief Busca una línea cuyos extremos son los puntos being passed as parameters.
 XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB)
   {
     Edge *retval= nullptr;
@@ -330,7 +330,7 @@ XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB, const Pnt &pC
     return retval;
   }
 
-//! @brief Busca una línea cuyos extremos son los puntos que se pasan como parámetro.
+//! @brief Busca una línea cuyos extremos son los puntos being passed as parameters.
 const XC::Edge *XC::busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB)
   {
     const Edge *retval= nullptr;

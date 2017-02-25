@@ -93,7 +93,7 @@ std::set<XC::SetBase *> XC::UniformGrid::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el «uniform grid» a the sets que se pasan como parámetro.
+//! @brief Agrega el «uniform grid» a the sets being passed as parameters.
 void XC::UniformGrid::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)

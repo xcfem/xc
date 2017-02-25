@@ -53,7 +53,7 @@ XC::DbTagData &XC::MovableID::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envia el ID con los parámetros (canal,...) que se pasan como argumento.
+//! @brief Envia el ID with the parameters (channel,...) being passed as argument.
 int XC::MovableID::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -77,7 +77,7 @@ int XC::MovableID::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el ID con los parámetros (canal,...) que se pasan como argumento.
+//! @brief Receives the ID through the communicator being passed as argument.
 int XC::MovableID::recvSelf(const CommParameters &cp)
   {
     inicComm(2);

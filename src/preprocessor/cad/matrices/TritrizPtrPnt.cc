@@ -232,7 +232,7 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getRangoPuntos(const RangoTritriz &rango)
     return retval;
   }
 
-//! @brief Returns the puntos cuyos índices se pasan como parámetro.
+//! @brief Returns the puntos cuyos índices being passed as parameter.
 XC::Pnt *XC::TritrizPtrPnt::getPunto(const VIndices &iPunto)
   {
     Pnt *retval= nullptr;
@@ -247,7 +247,7 @@ XC::Pnt *XC::TritrizPtrPnt::getPunto(const VIndices &iPunto)
     return retval;    
   }
 
-//! @brief Returns the puntos cuyos índices se pasan como parámetro.
+//! @brief Returns the puntos cuyos índices being passed as parameter.
 XC::TritrizPtrPnt XC::TritrizPtrPnt::getPuntos(const TritrizIndices &indices)
   {
     const size_t nCapas= indices.GetCapas();
@@ -268,7 +268,7 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getPuntos(const TritrizIndices &indices)
     return retval;
   }
 
-//! @brief Returns the puntos cuyos índices se pasan como parámetro.
+//! @brief Returns the puntos cuyos índices being passed as parameters.
 XC::MatrizPtrPnt XC::TritrizPtrPnt::getPuntos(const MatrizIndices &indices)
   {
     const size_t nFilas= indices.getNumFilas();

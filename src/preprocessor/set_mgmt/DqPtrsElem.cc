@@ -75,14 +75,14 @@ XC::DqPtrsElem &XC::DqPtrsElem::operator=(const DqPtrsElem &otro)
     return *this;
   }
 
-//! @brief Agrega a ésta lista los elementos de la que se le pasa como parámetro.
+//! @brief Agrega a ésta lista los elementos de la que se le being passed as parameter.
 void XC::DqPtrsElem::agrega(const DqPtrsElem &otro)
   {
     for(register const_iterator i= otro.begin();i!=otro.end();i++)
       push_back(*i);
   }
 
-// //! @brief Agrega a ésta lista los elementos de la que se le pasa como parámetro,
+// //! @brief Agrega a ésta lista los elementos de la que se le being passed as parameter,
 // //! si cumplen la condición.
 // void XC::DqPtrsElem::agrega_cond(const DqPtrsElem &otro,const std::string &cond)
 //   {

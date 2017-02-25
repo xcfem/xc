@@ -374,7 +374,7 @@ bool XC::PartitionedDomain::removeElement(int tag)
   }
 
 
-//! @brief Elimina el nodo cuyo tag se pasa como parámetro.
+//! @brief Elimina el nodo cuyo tag being passed as parameter.
 bool XC::PartitionedDomain::removeNode(int tag)
   {
     // we first remove it form the original domain (in case on boundary)

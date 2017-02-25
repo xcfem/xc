@@ -293,12 +293,12 @@ XC::DamageModel *XC::Kratzig::getCopy(void) const
 }
 
 //! @brief Returns the identificador de la variable cuyo
-//! nombre se pasa como parámetro.
+//! nombre being passed as parameter.
 int XC::Kratzig::setVariable(const std::string &argv)
   { return -1; }
 
 //! @brief Returns the valor de la variable cuyo
-//! identificador se pasa como parámetro.
+//! identificador being passed as parameter.
 int XC::Kratzig::getVariable(int variableID, double &info)
   { return -1; }
 

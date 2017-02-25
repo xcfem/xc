@@ -103,14 +103,14 @@ void XC::InteractionDiagram2d::Simplify(void)
 Pos2d XC::InteractionDiagram2d::getIntersection(const Pos2d &esf_d) const
   { return get_interseccion(esf_d); }
 
-//! @brief Returns the factor de capacidad para la terna de esfuerzos que se pasan como parámetro.
+//! @brief Returns the capacity factor for the internal forces triplet being passed as parameters.
 double XC::InteractionDiagram2d::FactorCapacidad(const Pos2d &esf_d) const
   {
     double retval= 1e6;
     static const Pos2d O= Pos2d(0.0,0.0);
     const double d= dist(O,esf_d); //Distancia desde la terna de esfuerzos al origen.
     if(d<mchne_eps_dbl) //Si el punto está muy cerca del origen.
-      retval= 0.0;//Devolvemos el máximo factor de capacidad que puede presentarse.
+      retval= 0.0;//Devolvemos el máximo capacity factor que puede presentarse.
     else
       {
         const Pos2d C= get_interseccion(esf_d);

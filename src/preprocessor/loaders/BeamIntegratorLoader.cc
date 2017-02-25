@@ -100,15 +100,15 @@ XC::BeamIntegratorLoader::iterator XC::BeamIntegratorLoader::begin(void)
 XC::BeamIntegratorLoader::iterator XC::BeamIntegratorLoader::end(void)
   { return beam_integrators.end(); }
 
-//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa como parámetro returns an iterator which points to mismo.
+//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa as parameter returns an iterator which points to mismo.
 XC::BeamIntegratorLoader::const_iterator XC::BeamIntegratorLoader::find(const std::string &nmb) const
   { return beam_integrators.find(nmb); }
 
-//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa como parámetro returns an iterator which points to mismo.
+//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa as parameter returns an iterator which points to mismo.
 XC::BeamIntegratorLoader::iterator XC::BeamIntegratorLoader::find(const std::string &nmb)
   { return beam_integrators.find(nmb); }
 
-//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 XC::BeamIntegration *XC::BeamIntegratorLoader::find_ptr(const std::string &nmb)
   {
@@ -119,7 +119,7 @@ XC::BeamIntegration *XC::BeamIntegratorLoader::find_ptr(const std::string &nmb)
       return nullptr; 
   }
 
-//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa como parámetro returns a pointer al mismo,
+//! @brief Si encuentra el BeamIntegrator cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 const XC::BeamIntegration *XC::BeamIntegratorLoader::find_ptr(const std::string &nmb) const
   {

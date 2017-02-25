@@ -40,7 +40,7 @@ XC::MapModelWrapper::MapModelWrapper(ProcSoluControl *owr)
   : EntCmd(owr) {}
 
 //! @brief Returns true ifexiste el método cuyo nombre
-//! se pasa como parámetro.
+//! being passed as parameter.
 bool XC::MapModelWrapper::existeModelWrapper(const std::string &cod) const
   { 
     map_model_wrapper::const_iterator i= solu_models.find(cod);

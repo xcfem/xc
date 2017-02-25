@@ -156,11 +156,11 @@ void XC::Face::add_to_sets(std::set<SetBase *> &sets)
       }
   }
 
-//! @brief Returns a pointer to nodo cuyos índices se pasan como parámetro.
+//! @brief Returns a pointer to nodo cuyos índices being passed as parameters.
 XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   { return CmbEdge::GetNodo(i,j,k); }
 
-//! @brief Returns a pointer to nodo cuyos índices se pasan como parámetro.
+//! @brief Returns a pointer to nodo cuyos índices being passed as parameters.
 const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   { return CmbEdge::GetNodo(i,j,k); }
 

@@ -103,7 +103,7 @@ void XC::EntMdlr::BorraPtrNodElem(void)
     elementos.clearAll();
   }
 
-//! @brief Returns a pointer to the nodo cuyos índices se pasan como parámetros.
+//! @brief Returns a pointer to the nodo cuyos índices being passed as paremeters.
 XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   {
     if(!nodos.Null())
@@ -112,7 +112,7 @@ XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
       return nullptr;
   }
 
-//! @brief Returns a pointer to the nodo cuyos índices se pasan como parámetros.
+//! @brief Returns a pointer to the nodo cuyos índices being passed as paremeters.
 const XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   {
     if(!nodos.Null())
@@ -132,7 +132,7 @@ const XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p) const
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Returns the índices del nodo que se paras como parámetro.
+//! @brief Returns the índices del nodo que se paras as parameter.
 XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
   { return nodos.getNodeIndices(n); }
 
@@ -140,7 +140,7 @@ XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
 std::vector<int> XC::EntMdlr::getTagsNodos(void) const
   { return nodos.getTags(); }
 
-//! @brief Returns a pointer to the elemento cuyos índices se pasan como parámetros.
+//! @brief Returns a pointer to the elemento cuyos índices being passed as paremeters.
 XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size_t &k)
   {
     if(!elementos.Null())
@@ -149,7 +149,7 @@ XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size
       return nullptr;
   }
 
-//! @brief Returns a pointer to the elemento cuyos índices se pasan como parámetros.
+//! @brief Returns a pointer to the elemento cuyos índices being passed as paremeters.
 const XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size_t &k) const
   {
     if(!elementos.Null())
@@ -235,7 +235,7 @@ XC::Node *XC::EntMdlr::crea_nodo(const Pos3d &pos,size_t i,size_t j, size_t k)
     return retval;
   }
 
-//! @brief Crea los nodos en las posiciones que se pasan como parámetro.
+//! @brief Crea los nodos en las posiciones being passed as parameters.
 void XC::EntMdlr::crea_nodos(const TritrizPos3d &posiciones)
   {
     const size_t capas= posiciones.GetCapas();
@@ -309,7 +309,7 @@ const bool &XC::EntMdlr::getGenMesh(void) const
 XC::Pnt *XC::EntMdlr::crea_punto(const Pos3d &pos)
   { return get_preprocessor()->getCad().getPuntos().Nuevo(pos); }
 
-//! @brief Crea los puntos en las posiciones que se pasan como parámetro.
+//! @brief Crea los puntos en las posiciones being passed as parameters.
 void XC::EntMdlr::crea_puntos(const MatrizPos3d &posiciones)
   {
     if(verborrea>4)

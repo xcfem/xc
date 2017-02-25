@@ -38,8 +38,7 @@ XC::DbTagData::DbTagData(const int &sz)
 XC::DbTagData::DbTagData(const ID &id)
   : data(id) {}
 
-//! @brief Inicializa los parámetros para comenzar la comunicación
-//! de sz objetos.
+//! @brief Parameter initialization to communicate sz objects.
 void XC::DbTagData::inicComm(const int &sz)
   {
     const int szOld= data.Size();
@@ -54,8 +53,7 @@ void XC::DbTagData::inicComm(const int &sz)
     visitados.clear();
   }
 
-//! @brief Returns the entero en la posición que se pasa como
-//! parámetro.
+//! @brief Returns the integer in the position being passed as parameter.
 const int &XC::DbTagData::getDbTagDataPos(const size_t &i) const
   {
     static int retval= 0;
@@ -74,8 +72,7 @@ const int &XC::DbTagData::getDbTagDataPos(const size_t &i) const
     return retval;
   }
 
-//! @brief Asigna el entero en la posición que se pasa como
-//! parámetro.
+//! @brief Sets the integer in the  position being passed as parameter.
 void XC::DbTagData::setDbTagDataPos(const size_t &i,const int &v)
   {
     if(i<size_t(data.Size()))

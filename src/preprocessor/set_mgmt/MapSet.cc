@@ -97,7 +97,7 @@ XC::MapSet::iterator XC::MapSet::begin(void)
 XC::MapSet::iterator XC::MapSet::end(void)
   { return sets.end(); }
 
-//! @brief Creates a new set con el nombre que se le pasa como parámetro.
+//! @brief Creates a new set con el nombre que se le being passed as parameter.
 XC::Set *XC::MapSet::crea_set(const std::string &nmb)
   {
     Set *tmp =nullptr;
@@ -141,7 +141,7 @@ void XC::MapSet::cierra_set(const std::string &nmb)
       }
   }
 
-//! @bref Creates a structured set copia del que se le pasa como parámetro.
+//! @bref Creates a structured set copia del que se le being passed as parameter.
 XC::SetEstruct *XC::MapSet::crea_set_estruct(const SetEstruct &set_estruct)
   {
     const std::string nmb= set_estruct.GetNombre();
@@ -158,7 +158,7 @@ XC::SetEstruct *XC::MapSet::crea_set_estruct(const SetEstruct &set_estruct)
       }
   }
 
-//! @bref Creates a structured set copia del que se le pasa como parámetro.
+//! @bref Creates a structured set copia del que se le being passed as parameter.
 XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb_clase)
   {
     SetBase *retval= nullptr;

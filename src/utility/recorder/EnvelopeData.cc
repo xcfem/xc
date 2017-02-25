@@ -68,7 +68,7 @@ int XC::EnvelopeData::restart(void)
   }
 
 //! @brief Envía el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::EnvelopeData::sendData(CommParameters &cp)
   {
     int res= cp.sendMatrixPtr(data,getDbTagData(),MatrixCommMetaData(0,1,2,3));
@@ -78,7 +78,7 @@ int XC::EnvelopeData::sendData(CommParameters &cp)
   }
 
 //! @brief Recibe el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::EnvelopeData::receiveData(const CommParameters &cp)
   {
     data= cp.receiveMatrixPtr(data,getDbTagData(),MatrixCommMetaData(0,1,2,3));

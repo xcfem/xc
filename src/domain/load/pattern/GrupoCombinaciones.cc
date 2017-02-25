@@ -43,7 +43,7 @@ XC::GrupoCombinaciones::GrupoCombinaciones(LoadLoader *owr)
   : LoadLoaderMember(owr) {}
 
 
-//! @brief Returns a pointer to the la combinación cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the la combinación cuyo nombre being passed as parameter.
 XC::Combinacion *XC::GrupoCombinaciones::busca_combinacion(const std::string &comb_code)
   {
     Combinacion *retval= nullptr;
@@ -53,7 +53,7 @@ XC::Combinacion *XC::GrupoCombinaciones::busca_combinacion(const std::string &co
     return retval;
   }
 
-//! @brief Returns a pointer to the la combinación cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the la combinación cuyo nombre being passed as parameter.
 const XC::Combinacion *XC::GrupoCombinaciones::buscaCombinacion(const std::string &comb_code) const
   {
     Combinacion *retval= nullptr;
@@ -63,7 +63,7 @@ const XC::Combinacion *XC::GrupoCombinaciones::buscaCombinacion(const std::strin
     return retval;
   }
 
-//! @brief Returns the nombre de la combinación a la que apunta el parámetro.
+//! @brief Returns the nombre de la combinación pointed by the parameter.
 const std::string &XC::GrupoCombinaciones::getNombreCombinacion(const Combinacion *ptr) const
   {
     static std::string retval;

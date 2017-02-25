@@ -296,7 +296,7 @@ const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
   }
 
 //! @brief Return the posición del nodo cuyo índice se
-//! pasa como parámetro.
+//! being passed as parameter.
 Pos3d XC::NodePtrs::getPosNodo(const size_t &i,bool initialGeometry) const
   {
     if(initialGeometry)

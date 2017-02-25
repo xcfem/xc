@@ -107,9 +107,8 @@ XC::Response* XC::Material::setResponse(const std::vector<std::string> &argv, In
 int XC::Material::getResponse(int responseID, Information &info)
   { return -1; }
 
-//! @brief Actualiza las variables de material state
-//! de acuerdo con los nuevos valores de los parámetros del
-//! mismo.
+//! @brief Update state variables for the material
+//! according to the new values of the parameters.
 void XC::Material::update(void)
    {return;}
 

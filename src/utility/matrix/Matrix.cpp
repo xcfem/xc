@@ -698,7 +698,7 @@ XC::Matrix XC::Matrix::operator()(const ID &rows, const ID & cols) const
     return result;
   }
 
-//! @brief Return the fila cuyo índice se pasa como parámetro.
+//! @brief Return the fila cuyo índice being passed as parameter.
 XC::Vector XC::Matrix::getRow(int row) const
   {
     Vector retval(numCols);
@@ -707,7 +707,7 @@ XC::Vector XC::Matrix::getRow(int row) const
     return retval;
   }
 
-//! @brief Return the columna cuyo índice se pasa como parámetro.
+//! @brief Return the columna cuyo índice being passed as parameter.
 XC::Vector XC::Matrix::getCol(int col) const
   {
     Vector retval(numRows);

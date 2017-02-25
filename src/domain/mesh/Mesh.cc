@@ -332,7 +332,7 @@ bool XC::Mesh::removeElement(int tag)
     return res;
   }
 
-//! @brief Elimina del domain el nodo cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain el nodo cuyo tag being passed as parameter.
 bool XC::Mesh::removeNode(int tag)
   {
 
@@ -422,7 +422,7 @@ const XC::Element *XC::Mesh::getNearestElement(const Pos3d &p) const
 bool XC::Mesh::existNode(int tag)
  { return theNodes->existComponent(tag); }
 
-//! @brief Returns a pointer to the nodo cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo tag being passed as parameter.
 XC::Node *XC::Mesh::getNode(int tag)
   {
     TaggedObject *mc = theNodes->getComponentPtr(tag);
@@ -433,7 +433,7 @@ XC::Node *XC::Mesh::getNode(int tag)
     return result;
   }
 
-//! @brief Returns a pointer to the nodo cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo tag being passed as parameter.
 const XC::Node *XC::Mesh::getNode(int tag) const
   {
     const TaggedObject *mc = theNodes->getComponentPtr(tag);
@@ -1047,7 +1047,7 @@ double XC::Mesh::getNodeDisp(int nodeTag, int dof,int &errorFlag)
     return result;
   }
 
-//! @brief Asigna la matriz de masas al nudo cuyo tag se pasa como parámetro.
+//! @brief Asigna la matriz de masas al nudo cuyo tag being passed as parameter.
 int XC::Mesh::setMass(const XC::Matrix &mass, int nodeTag)
   {
     Node *theNode = this->getNode(nodeTag);

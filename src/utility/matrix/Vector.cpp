@@ -315,13 +315,13 @@ XC::Vector XC::Vector::NormalizedInf(void) const
     return retval;
   }
 
-//! @brief Returns the vector normalizado del que se pasa
-//! como parámetro (norma euclídea).
+//! @brief Returns the vector normalizado del being passed
+//! as parameter (norma euclídea).
 XC::Vector XC::normalize(const Vector &v)
   { return v.Normalized(); }
 
-//! @brief Returns the vector normalizado del que se pasa
-//! como parámetro (norma_infinito).
+//! @brief Returns the vector normalizado del being passed
+//! as parameter (norma_infinito).
 XC::Vector XC::normalize_inf(const Vector &v)
   { return v.NormalizedInf(); }
 
@@ -749,7 +749,7 @@ double XC::Vector::pNorm(int p) const
 }
 
 
-//! @brief Returns the elemento cuya fila se pasa como parámetro.
+//! @brief Returns the elemento cuya fila being passed as parameter.
 double &XC::Vector::at(const size_t &f)
   {
     if(CheckIndice0(f))
@@ -757,7 +757,7 @@ double &XC::Vector::at(const size_t &f)
     else
       return VECTOR_NOT_VALID_ENTRY;
   }
-//! @brief Returns the elemento cuya fila se pasa como parámetro.
+//! @brief Returns the elemento cuya fila being passed as parameter.
 const double &XC::Vector::at(const size_t &f) const
   {
     if(CheckIndice0(f))
@@ -765,7 +765,7 @@ const double &XC::Vector::at(const size_t &f) const
     else
       return VECTOR_NOT_VALID_ENTRY;
   }
-//! @brief Chequea el índice que se le pasa como parámetro.
+//! @brief Chequea el índice que se le being passed as parameter.
 bool XC::Vector::CheckIndice0(const size_t &i) const
   {
     if(i<0 || i>=size_t(sz))

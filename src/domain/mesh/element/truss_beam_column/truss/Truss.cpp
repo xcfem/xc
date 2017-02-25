@@ -125,7 +125,7 @@ void XC::Truss::set_load_sens(const Vector &v)
       }
   }
 
-//! @brief Pone a cero los pointers to node, los cosenos directores y los parámetros de sensibilidad.
+//! @brief Pone a cero los pointers to node, los cosenos directores y los sensibility parameters.
 void XC::Truss::inicializa(void)
   {
     TrussBase::inicializa();
@@ -828,7 +828,7 @@ int XC::Truss::updateParameter(int parameterID, Information &info)
       case 1:
         this->A = info.theDouble;
         return 0;
-//       case 2: //El parámetro rho es del material.
+//       case 2: // rho parameter belongs to the material.
 //         this->rho= info.theDouble;
 //         return 0;
       default:

@@ -214,7 +214,7 @@ void XC::QuadSurface::SetElemSizeIJ(const double &szI,const double &szJ)
   }
 
 //! @brief Crea e inserta las líneas a partir de los puntos cuyos índices se pasan
-//! como parámetro.
+//! as parameter.
 void XC::QuadSurface::setPuntos(const ID &indices_ptos)
   {
     const size_t np= indices_ptos.Size(); //No. de índices leídos.

@@ -331,7 +331,7 @@ double XC::FiberSectionBase::getNeutralAxisDepth(void) const
   }
 
 //! @brief Returns the distancia desde la fibra neutra
-//! hasta el punto cuyas coordenadas se pasan como parámetro.
+//! hasta el punto cuyas coordenadas being passed as parameters.
 double XC::FiberSectionBase::getDistFibraNeutra(const double &y,const double &) const
   {
     double retval= 0.0;
@@ -486,7 +486,7 @@ void XC::FiberSectionBase::calcSeparaciones(const std::string &nmbSetArmaduras) 
   }
 
 //! @brief Returns the distancia (con signo) desde la fibra neutra
-//! hasta el punto cuyas coordenadas se pasan como parámetro.
+//! hasta el punto cuyas coordenadas being passed as parameters.
 double XC::FiberSectionBase::get_dist_to_neutral_axis(const double &y,const double &z) const
   {
     double retval= 0;

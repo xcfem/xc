@@ -66,7 +66,7 @@
 XC::MapLoadPatterns::MapLoadPatterns(LoadLoader *owr)
   : LoadLoaderMember(owr), nmb_ts("nil"), lpcode("nil"), tag_el(0), tag_nl(0), tag_spc(0) {}
 
-//! @brief Returns a pointer to the TS cuyo dbTag se pasa como parámetro.
+//! @brief Returns a pointer to the TS cuyo dbTag being passed as parameter.
 //! se usa en LoadPattern::recvData.
 XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag)
   {
@@ -80,7 +80,7 @@ XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag)
     return retval;
   }
 
-//! @brief Returns a pointer to the TS cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the TS cuyo nombre being passed as parameter.
 const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag) const
   {
     const TimeSeries *retval= nullptr;
@@ -93,7 +93,7 @@ const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag) const
     return retval;
   }
 
-//! @brief Returns a pointer to the TimeSeries cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the TimeSeries cuyo nombre being passed as parameter.
 XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code)
   {
     TimeSeries *retval= nullptr;
@@ -103,7 +103,7 @@ XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code)
     return retval;
   }
 
-//! @brief Returns a pointer to the TimeSeries cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the TimeSeries cuyo nombre being passed as parameter.
 const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code) const
   {
     const TimeSeries *retval= nullptr;
@@ -113,7 +113,7 @@ const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code) c
     return retval;
   }
 
-//! @brief Returns a pointer to the load pattern cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the load pattern cuyo nombre being passed as parameter.
 XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_code)
   {
     LoadPattern *retval= nullptr;
@@ -123,7 +123,7 @@ XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_cod
     return retval;
   }
 
-//! @brief Returns a pointer to the load pattern cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the load pattern cuyo nombre being passed as parameter.
 const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_code) const
   {
     const LoadPattern *retval= nullptr;
@@ -133,7 +133,7 @@ const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &
     return retval;
   }
 
-//! @brief Returns a pointer to the caso cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the caso cuyo tag being passed as parameter.
 XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag)
   {
     LoadPattern *retval= nullptr;
@@ -146,7 +146,7 @@ XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag)
     return retval;
   }
 
-//! @brief Returns a pointer to the caso cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the caso cuyo tag being passed as parameter.
 const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag) const
   {
     const LoadPattern *retval= nullptr;
@@ -159,7 +159,7 @@ const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag) con
     return retval;
   }
 
-//! @brief Returns the nombre del caso al que apunta el parámetro.
+//! @brief Returns the nombre del caso pointed by the parameter.
 const std::string &XC::MapLoadPatterns::getNombreLoadPattern(const LoadPattern *ptr) const
   {
     static std::string retval;
@@ -209,7 +209,7 @@ void XC::MapLoadPatterns::removeAllFromDomain(void)
       dom->removeLoadPattern((*i).second);
   }
 
-//! @brief Define un objeto TimeSeries con el tipo y el nombre que se pasan como parámetro.
+//! @brief Define un objeto TimeSeries con el tipo y el nombre being passed as parameters.
 //! Interpreta los siguientes tipos:
 //!
 //! - constant_ts: Defines a constant time series (ConstantSeries).
@@ -247,7 +247,7 @@ XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &tipo, cons
     return ts;
   }
 
-//! @brief Define un objeto LoasPattern con el tipo y el nombre que se pasan como parámetro.
+//! @brief Define un objeto LoasPattern con el tipo y el nombre being passed as parameters.
 XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &tipo,const std::string &cod_lp)
   {
     LoadPattern *retval= nullptr;

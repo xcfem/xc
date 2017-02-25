@@ -210,7 +210,7 @@ XC::Node *XC::NodeLoader::newNodeIDXY(const int &tag,const double &x,const doubl
   } 
 
 
-//! @brief Crea el nodo cuyo identificador se pasa como parámetro.
+//! @brief Crea el nodo cuyo identificador being passed as parameter.
 XC::Node *XC::NodeLoader::getNode(const int &tag)
   { return getDomain()->getNode(tag); }
 

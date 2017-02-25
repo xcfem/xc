@@ -213,8 +213,8 @@ Pos2d XC::DeformationPlane::getPuntoSemiplanoCompresiones(void) const
     return retval;
   }
 
-//! @brief Returns the semiplano cuyo borde es la recta que se pasa
-//! como parámetro y que está contenido en el semiplano de tracción.
+//! @brief Returns the half plane which border is the line being passed
+//! as parameter and is contained in the half plane in traction.
 Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(const Recta2d &r) const
   {
     const Semiplano2d spt= getSemiplanoTracciones();
@@ -263,8 +263,8 @@ Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(void) const
     return retval;
   }
 
-//! @brief Returns the semiplano cuyo borde es la recta que se pasa
-//! como parámetro y en el que las tensiones son de compresión.
+//! @brief Returns the semiplano cuyo borde es la recta being passed
+//! as parameter y en el que las tensiones son de compresión.
 Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(const Recta2d &r) const
   {
     const Recta2d fn= getFibraNeutra();

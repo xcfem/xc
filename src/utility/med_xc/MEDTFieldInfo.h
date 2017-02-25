@@ -216,7 +216,7 @@ void MEDTFieldInfo<T>::to_med(void) const
     campo->setTime(getXCFieldInfo().getTime());
   }
 
-//! @brief Escribe el campo en el archivo cuyo nombre se pasa como parámetro.
+//! @brief Escribe el campo en el archivo cuyo nombre being passed as parameter.
 template <class T>
 void MEDTFieldInfo<T>::write(const std::string &filename) const
   {

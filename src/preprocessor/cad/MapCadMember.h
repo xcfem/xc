@@ -66,7 +66,7 @@ template <class T>
 MapCadMember<T>::MapCadMember(Cad *cad)
   : MapCadMemberBase(cad) {}
 
-//! @brief Returns a pointer to the la entidad cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the la entidad cuyo identificador being passed as parameter.
 template <class T>
 T * MapCadMember<T>::busca(const Indice &id)
   {    T * retval= NULL;
@@ -76,7 +76,7 @@ T * MapCadMember<T>::busca(const Indice &id)
     return retval;
   }
 
-//! @brief Returns a pointer to the la entidad cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the la entidad cuyo nombre being passed as parameter.
 template <class T>
 const T * MapCadMember<T>::busca(const Indice &id) const
   {

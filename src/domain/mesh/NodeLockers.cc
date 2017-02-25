@@ -43,7 +43,7 @@
 XC::NodeLockers::NodeLockers(Mesh *owr)
   : EntCmd(owr), MovableObject(0),  tag(0), code("nil") {}
 
-//! @brief Returns a pointer to the bloqueador cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the bloqueador cuyo nombre being passed as parameter.
 XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb)
   {
     NodeLocker *retval= nullptr;
@@ -53,7 +53,7 @@ XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb)
     return retval;
   }
 
-//! @brief Returns a pointer to the bloqueador cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the bloqueador cuyo nombre being passed as parameter.
 const XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb) const
   {
     const XC::NodeLocker *retval= nullptr;
@@ -63,7 +63,7 @@ const XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb)
     return retval;
   }
 
-//! @brief Returns a pointer to the bloqueador cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the bloqueador cuyo tag being passed as parameter.
 XC::NodeLocker *XC::NodeLockers::buscaNodeLocker(const int &tag)
   {
     NodeLocker *retval= nullptr;
@@ -76,7 +76,7 @@ XC::NodeLocker *XC::NodeLockers::buscaNodeLocker(const int &tag)
     return retval;
   }
 
-//! @brief Returns a pointer to the bloqueador cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the bloqueador cuyo tag being passed as parameter.
 const XC::NodeLocker *XC::NodeLockers::buscaNodeLocker(const int &tag) const
   {
     NodeLocker *retval= nullptr;

@@ -171,7 +171,7 @@ bool XC::Graph::addVertex(const Vertex &vrt, bool checkAdjacency)
 
 
 //! @brief Añade una arista al grafo. Previamente se comprueba que los
-//! vértices extremos de la arista (los que se pasan como parámetro) forman
+//! vértices extremos de la arista (los being passed as parameters) forman
 //! parte del grafo. Si no existieran se returns -1.
 int XC::Graph::addEdge(int vertexTag, int otherVertexTag)
   {
@@ -220,7 +220,7 @@ int XC::Graph::addEdge(int vertexTag, int otherVertexTag)
     return retval;
   }
 
-//! @brief Returns a pointer to the vértice cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the vértice cuyo tag being passed as parameter.
 XC::Vertex *XC::Graph::getVertexPtr(int vertexTag)
   {
     TaggedObject *res = myVertices.getComponentPtr(vertexTag);
@@ -230,7 +230,7 @@ XC::Vertex *XC::Graph::getVertexPtr(int vertexTag)
       return nullptr;
   }
 
-//! @brief Returns a pointer to the vértice cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the vértice cuyo tag being passed as parameter.
 const XC::Vertex *XC::Graph::getVertexPtr(int vertexTag) const
   {
     const TaggedObject *res= myVertices.getComponentPtr(vertexTag);
@@ -260,7 +260,7 @@ int XC::Graph::getNumEdge(void) const
 int XC::Graph::getFreeTag(void)
   { return nextFreeTag; }
 
-//! @brief Elimina del grafo el vértice cuyo tag se pasa como parámetro.
+//! @brief Elimina del grafo el vértice cuyo tag being passed as parameter.
 bool XC::Graph::removeVertex(int tag, bool flag)
   {
     Vertex *result= nullptr;

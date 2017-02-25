@@ -112,7 +112,7 @@ const XC::SisRefScc *XC::GeomSection::get_reference_system(const size_t &id) con
     return retval;
   }
 
-//! @brief Returns a pointer to the punto cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the punto cuyo identificador being passed as parameter.
 XC::Spot *XC::GeomSection::busca_spot(const size_t &id)
   {
     Spot *retval= nullptr;
@@ -122,7 +122,7 @@ XC::Spot *XC::GeomSection::busca_spot(const size_t &id)
     return retval;
   }
 
-//! @brief Returns a pointer to the punto cuyo identificador se pasa como parámetro.
+//! @brief Returns a pointer to the punto cuyo identificador being passed as parameter.
 const XC::Spot *XC::GeomSection::busca_spot(const size_t &id) const
   {
     Spot *retval= nullptr;
@@ -132,7 +132,7 @@ const XC::Spot *XC::GeomSection::busca_spot(const size_t &id) const
     return retval;
   }
 
-//! @brief Returns a pointer to the eje cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the eje cuyo nombre being passed as parameter.
 XC::Eje *XC::GeomSection::busca_eje(const size_t &id)
   {
     Eje *retval= nullptr;
@@ -142,7 +142,7 @@ XC::Eje *XC::GeomSection::busca_eje(const size_t &id)
     return retval;
   }
 
-//! @brief Returns a pointer to the eje cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the eje cuyo nombre being passed as parameter.
 const XC::Eje *XC::GeomSection::busca_eje(const size_t &id) const
   {
     const Eje *retval= nullptr;
@@ -215,7 +215,7 @@ XC::Segment *XC::GeomSection::newSegment(size_t p1,size_t p2)
   }
 
 
-//! @brief Return the distancia entre los puntos cuyos identificadores se pasan como parámetro.
+//! @brief Return the distancia entre los puntos cuyos identificadores being passed as parameters.
 double XC::GeomSection::DistSpots(const size_t &i,const size_t &j) const
   {
     double retval(-1.0);
@@ -405,7 +405,7 @@ double XC::GeomSection::getRecubrimiento(const Pos2d &p) const
   {
     const double retval= -getRegionsContour().DistSigno(p);
     if(retval<0)
-      std::clog << "¡Ojo! la posición: " << p
+      std::clog << "Warning! la posición: " << p
                 << " está fuera de la sección." << std::endl;
     return retval;
   }

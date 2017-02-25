@@ -34,12 +34,12 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Parámetros internos de un material que representa una curva p-y.
+//! @brief Internal parameters for a p-y material.
 class InternalParamsLRIn: public InternalParamsLR
   {
   protected:
-    double RLeft; // p at start of current plastic loading cycle - left side
-    double RRight; //                                            - right side
+    double RLeft; //!< p at start of current plastic loading cycle - left side
+    double RRight; //!< p at start of current plastic loading cycle - right side
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:

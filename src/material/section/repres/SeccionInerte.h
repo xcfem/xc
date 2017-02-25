@@ -44,8 +44,8 @@ class Matrix;
 
 //! @ingroup MATSCCRepres
 //
-//! @brief Seccion capaz de devolver parámetros mecánicos:
-//! area, momentos de inercia, ...
+//! @brief Cross-section representation able to
+//! return mechanical propertis a area, moments of inertia,...
 class SeccionInerte: public EntCmd
   {
   public:

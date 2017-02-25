@@ -133,7 +133,7 @@ void XC::UniaxialFiber::setMaterial(const UniaxialMaterial *theMat)
       libera();
   }
 
-//! @brief Asigna a la fibra el material cuyo nombre se pasa como parámetro.
+//! @brief Asigna a la fibra el material cuyo nombre being passed as parameter.
 void XC::UniaxialFiber::setMaterial(const MaterialLoader &ldr,const std::string &nmbMat)
   {
     const UniaxialMaterial *theMat= dynamic_cast<const UniaxialMaterial *>(ldr.find_ptr(nmbMat));

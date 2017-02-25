@@ -53,7 +53,7 @@ XC::FiberData::FiberData(const GeomSection &gmSecc)
     k= PutCapasArmadura(k,gmSecc.getCapasArmadura());
   }
 
-//! @brief Coloca las celdas que se pasan como parámetro.
+//! @brief Coloca las celdas being passed as parameters.
 size_t XC::FiberData::put_cells(const size_t &offset,const VectorCells &cells,Material *matPtr)
   {
     const size_t numCells= cells.size();
@@ -74,7 +74,7 @@ size_t XC::FiberData::put_cells(const size_t &offset,const VectorCells &cells,Ma
     return k;
   }
 
-//! @brief Coloca las barras que se pasan como parámetro.
+//! @brief Coloca las barras being passed as parameters.
 size_t XC::FiberData::put_reinf_bars(const size_t &offset,const VectorReinfBar &bars,Material *matPtr)
   {
     int k= offset;
@@ -95,7 +95,7 @@ size_t XC::FiberData::put_reinf_bars(const size_t &offset,const VectorReinfBar &
     return k;
   }
 
-//! @brief Coloca las celdas de las regiones que se pasan como parámetro.
+//! @brief Coloca las celdas de las regiones being passed as parameters.
 size_t XC::FiberData::PutCells(const size_t &offset,const ListRegiones &regiones)
   {
     Material *matPtr= nullptr;

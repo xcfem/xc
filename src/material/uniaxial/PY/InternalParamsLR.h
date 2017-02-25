@@ -34,23 +34,23 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Parámetros internos de un material que representa una curva p-y.
+//! @brief Internal parameters for a p-y material.
 class InternalParamsLR: public InternalParamsA
   {
   protected:
-    double vLeft; // left reference point
-    double vRight; //  right reference point
+    double vLeft; //!< left reference point
+    double vRight; //!< right reference point
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
     InternalParamsLR(const double &V= 0.0,const double &r= 0.0,const double &t= 0.0,const double &yl= 0.0,const double &yr= 0.0);
-    inline const double &yleft(void) const //Para PySimple1
+    inline const double &yleft(void) const // for PySimple1
       { return vLeft; }
-    inline double &yleft(void) //Para PySimple1
+    inline double &yleft(void) // for PySimple1
       { return vLeft; }
-    inline const double &yright(void) const //Para PySimple1
+    inline const double &yright(void) const // for PySimple1
       { return vRight; }
-    inline double &yright(void) //Para PySimple1
+    inline double &yright(void) // for PySimple1
       { return vRight; }
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);

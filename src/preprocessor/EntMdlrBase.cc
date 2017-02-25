@@ -69,7 +69,7 @@ size_t XC::EntMdlrBase::GetTag(void) const
     return boost::lexical_cast<size_t>(tmp);
   }
 
-//! @brief Returns a pointer to the punto cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to the punto cuyo índice being passed as parameter.
 XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto)
   {
     Pnt *retval= nullptr;
@@ -85,7 +85,7 @@ XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto)
     return retval;
   }
 
-//! @brief Returns a pointer to the punto cuyo índice se pasa como parámetro
+//! @brief Returns a pointer to the punto cuyo índice being passed as parameter
 const XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto) const
   {
     const Pnt *retval= nullptr;
@@ -101,7 +101,7 @@ const XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto) const
     return retval;
   }
 
-//! @brief Returns a pointer to the edge cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to the edge cuyo índice being passed as parameter.
 XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge)
   {
     Edge *retval= nullptr;
@@ -117,7 +117,7 @@ XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge)
     return retval;
   }
 
-//! @brief Returns a pointer to the edge cuyo índice se pasa como parámetro
+//! @brief Returns a pointer to the edge cuyo índice being passed as parameter
 const XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge) const
   {
     const Edge *retval= nullptr;
@@ -133,7 +133,7 @@ const XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge) const
     return retval;
   }
 
-//! @brief Returns a pointer to the edge cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to the edge cuyo índice being passed as parameter.
 XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face)
   {
     Face *retval= nullptr;
@@ -149,7 +149,7 @@ XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face)
     return retval;
   }
 
-//! @brief Returns a pointer to the edge cuyo índice se pasa como parámetro
+//! @brief Returns a pointer to the edge cuyo índice being passed as parameter
 const XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face) const
   {
     const Face *retval= nullptr;

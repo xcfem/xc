@@ -44,7 +44,7 @@ double XC::ModalAnalysis::getAcceleration(const double &T) const
   { return espectro(T); }
 
 //! @brief Returns the aceleraciones que corresponden a los periodos
-//! que se pasan como parámetro.
+//! being passed as parameters.
 XC::Vector XC::ModalAnalysis::getAccelerations(const Vector &periodos) const
   {
     const int sz= periodos.Size();

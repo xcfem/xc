@@ -227,7 +227,7 @@ double XC::DqFibras::getSumaAreas(const double &factor) const
     return factor*retval;
   }
 
-//! @brief Returns the momento de inercia respecto al paralelo al z a una
+//! @brief Returns the moment of inertia respecto al paralelo al z a una
 //! distancia y0 del origen.
 double XC::DqFibras::getIz(const double &factor,const double &y0) const
   {
@@ -242,7 +242,7 @@ double XC::DqFibras::getIz(const double &factor,const double &y0) const
     return retval;
   }
 
-//! @brief Returns the momento de inercia respecto al eje paralelo al y a una
+//! @brief Returns the moment of inertia respecto al eje paralelo al y a una
 //! distancia z0 del origen.
 double XC::DqFibras::getIy(const double &factor,const double &z0) const
   {
@@ -390,7 +390,7 @@ double XC::DqFibras::getPyzHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Returns the componente i,j del tensor de inercia calculado respecto al CDG.
+//! @brief Returns the i,j component of the tensor of inertia calculado respecto al CDG.
 double XC::DqFibras::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
@@ -411,7 +411,7 @@ double XC::DqFibras::getIHomogenizedSection(const double &E0,const unsigned shor
     return retval;
   }
 
-//! @brief Returns the tensor de inercia calculado desde el centro de gravedad del objeto.
+//! @brief Returns the tensor of inertia calculado desde el centro de gravedad del objeto.
 XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0) const
   {
     static Matrix i(2,2);
@@ -420,7 +420,7 @@ XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0) const
     return i;
   }
 
-//! @brief Returns the tensor de inercia respector al punto o.
+//! @brief Returns the tensor of inertia respector al punto o.
 XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0,const Pos2d &o) const
   {
     static Matrix retval(2,2);
@@ -432,15 +432,15 @@ XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0,const Pos2d &o
     return retval;
   }
 
-//! @brief Returns the momento de inercia respecto al eje que pasa por O con dirección la de e.
+//! @brief Returns the moment of inertia respecto al eje que pasa por O con dirección la de e.
 double XC::DqFibras::getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const
   {
     const Matrix Io(getIHomogenizedSection(E0,O));
     return dot(e,Io*e)/e.Norm2();
   }
 
-//! @brief Returns the momento de inercia respecto a la recta que se pasa
-//! como parámetro.
+//! @brief Returns the moment of inertia respecto a la recta being passed
+//! as parameter.
 double XC::DqFibras::getIHomogenizedSection(const double &E0,const Recta2d &r) const
   { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir()));  }
 
@@ -577,7 +577,7 @@ double XC::DqFibras::getSNegHomogenizedSection(const double &E0,const Semiplano2
 inline double R(const double &Iy,const double &Iz,const double Pyz)
   { return sqrt(sqr((Iy-Iz)/2)+sqr(Pyz)); }
 
-//! @brief Returns the momento de inercia principal mayor.
+//! @brief Returns the moment of inertia principal mayor.
 double XC::DqFibras::getI1(const double &factor,const double &y0,const double &z0) const
   {
     const double iy= getIy(factor,z0);
@@ -588,7 +588,7 @@ double XC::DqFibras::getI1(const double &factor,const double &y0,const double &z
   }
 
 
-//! @brief Returns the momento de inercia principal menor.
+//! @brief Returns the moment of inertia principal menor.
 double XC::DqFibras::getI2(const double &factor,const double &y0,const double &z0) const
   {
     const double iy= getIy(factor,z0);
@@ -602,7 +602,7 @@ double XC::DqFibras::getI2(const double &factor,const double &y0,const double &z
 inline double theta_p(const double &Iy,const double &Iz,const double &Pyz)
   { return (atan(-2*Pyz/(Iy-Iz)))/2.0; }
 
-//! @brief Returns the ángulo del eje del momento de inercia principal mayor con el eje y.
+//! @brief Returns the ángulo del eje del moment of inertia principal mayor con el eje y.
 double XC::DqFibras::getTh1(const double &y0,const double &z0) const
   {
     const double Iy= getIy(1.0,z0);
@@ -624,7 +624,7 @@ double XC::DqFibras::getTh1(const double &y0,const double &z0) const
     return th1;
   }
 
-//! @brief Returns the dirección del eje del momento de inercia principal mayor.
+//! @brief Returns the dirección del eje del moment of inertia principal mayor.
 XC::Vector XC::DqFibras::getEje1(const double &y0,const double &z0) const
   {
     Vector retval(2);
@@ -634,7 +634,7 @@ XC::Vector XC::DqFibras::getEje1(const double &y0,const double &z0) const
     return retval;
   }
 
-//! @brief Returns the dirección del eje del momento de inercia principal menor.
+//! @brief Returns the dirección del eje del moment of inertia principal menor.
 XC::Vector XC::DqFibras::getEje2(const double &y0,const double &z0) const
   {
     Vector retval(2);
@@ -939,7 +939,7 @@ size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
   }
 
 // //! Returns the subfiber set de éste que cumplen la condición que se
-// //! pasa como parámetro.
+// //! being passed as parameter.
 // void XC::DqFibras::Cumplen(const std::string &cond,DqFibras &retval,bool clear)
 //   {
 //     if(clear) retval.clear();
@@ -956,7 +956,7 @@ size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
 //   }
 
 //! Returns the subfiber set de éste cuyo material tiene por tag el que se
-//! pasa como parámetro.
+//! being passed as parameter.
 void XC::DqFibras::SelMatTag(const int &matTag,DqFibras &retval,bool clear)
   {
     if(clear) retval.clear();
@@ -1386,7 +1386,7 @@ void XC::DqFibras::calcRecubrimientos(const GeomSection &g) const
     const size_t sz= recubs.size();
     for(size_t i= 0;i<sz;i++)
       if(recubs[i]<0)
-        std::clog << "¡Ojo! la posición: " << posiciones[i]
+        std::clog << "Warning! la posición: " << posiciones[i]
                   << " está fuera de la sección." << std::endl;
   }
 
@@ -1460,7 +1460,7 @@ int XC::DqFibras::updateCDG(void)
     return 0;
   }
 
-//! @brief Actualiza los parámetros CDG, stiffness and resultant.
+//! @brief Update the parameters CDG, stiffness and resultant.
 int XC::DqFibras::updateKRCDG(FiberSection2d &Section2d,KRSeccion &kr2)
   {
     kr2.zero();
@@ -1496,7 +1496,7 @@ int XC::DqFibras::updateKRCDG(FiberSection2d &Section2d,KRSeccion &kr2)
     return 0;
   }
 
-//! @brief Añade una fibra XXX Mejorar actualización de parámetros.
+//! @brief Añade una fibra XXX Enhance parameter updating.
 XC::Fiber *XC::DqFibras::addFiber(FiberSection2d &Section2d,Fiber &newFiber,KRSeccion &kr2)
   {
     Fiber *retval= inserta(newFiber);
@@ -1648,7 +1648,7 @@ int XC::DqFibras::commitSensitivity(const XC::Vector& defSens, int gradNumber, i
     return 0;
   }
 
-//! @brief Actualiza los parámetros CDG, stiffness matrix and resultant.
+//! @brief Update the parameters CDG, stiffness matrix and resultant.
 int XC::DqFibras::updateKRCDG(FiberSection3d &Section3d,KRSeccion &kr3)
   {
     kr3.zero();
@@ -1690,7 +1690,7 @@ int XC::DqFibras::updateKRCDG(FiberSection3d &Section3d,KRSeccion &kr3)
     return 0;
   }
 
-//! @brief Añade una fibra a la sección XXX Mejorar actualización de parámetros.
+//! @brief Adds a fiber to the section XXX Enhance parameter updating.
 XC::Fiber *XC::DqFibras::addFiber(FiberSection3d &Section3d,Fiber &newFiber,KRSeccion &kr3)
   {
     Fiber *retval= inserta(newFiber);
@@ -1808,7 +1808,7 @@ const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSection3d &Section3
     return kInitial;
   }
 
-//! @brief Actualiza los parámetros CDG, stiffness and resultant.
+//! @brief Update the parameters CDG, stiffness and resultant.
 int XC::DqFibras::updateKRCDG(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
   {
     krGJ.zero();
@@ -1853,7 +1853,7 @@ int XC::DqFibras::updateKRCDG(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
     return 0;
   }
 
-//! @brief Añade una fibra XXX Mejorar actualización de parámetros.
+//! @brief Añade una fibra XXX Enhance parameter updating.
 XC::Fiber *XC::DqFibras::addFiber(FiberSectionGJ &SectionGJ,Fiber &newFiber,KRSeccion &krGJ)
   {
     Fiber *retval= inserta(newFiber);
@@ -1977,7 +1977,7 @@ const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSectionGJ &SectionG
     return kInitial;
   }
 
-//! @brief Obtiene algún parámetro de la respuesta de la sección.
+//! @brief Gets one of the response parameters of the section.
 XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, Information &sectInfo)
   {
     const size_t numFibers= getNumFibers();
@@ -2082,7 +2082,7 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
   }
 
 // //! Returns the valor máximo en el fiber set de la propiedad que se
-// //! pasa como parámetro.
+// //! being passed as parameter.
 // size_t XC::DqFibras::IMaxProp(const std::string &nmb_prop) const
 //   {
 //     size_t retval= 0;

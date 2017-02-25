@@ -48,7 +48,7 @@ int XC::MeshCompRecorder::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives object through the channeldefinido en el parámetro.
+//! @brief Receives object through the communicator being passed as parameter.
 int XC::MeshCompRecorder::receiveData(const CommParameters &cp)
   {
     int res= HandlerRecorder::receiveData(cp);

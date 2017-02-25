@@ -32,20 +32,20 @@ class_<XC::NodeLoader, bases<XC::Loader>, boost::noncopyable >("NodeLoader", no_
   .add_property("dimEspace", &XC::NodeLoader::getDimEspacio, &XC::NodeLoader::setDimEspacio)
   .add_property("defaultTag", &XC::NodeLoader::getDefaultTag, &XC::NodeLoader::setDefaultTag)
   .def("calculateNodalReactions", &XC::NodeLoader::calculateNodalReactions,"Calcula las reacciones en los nodos.")
-  .def("getNode", &XC::NodeLoader::getNode,return_internal_reference<>(),"Returns the nodo cuyo identificador se pasa como parámetro.")
-  .def("newNodeXYZ", nuevoNodoFromXYZ,return_internal_reference<>(),"Crea un nodo con las coordenadas que se pasan como parámetro.")
-  .def("newNodeFromVector", nuevoNodoFromVector,return_internal_reference<>(),"Crea un nodo con las coordenadas que se pasan como parámetro.")
-  .def("newNodeIDXYZ", &XC::NodeLoader::newNodeIDXYZ,return_internal_reference<>(),"Crea un nodo con el tag y las coordenadas que se pasan como parámetro.")
-  .def("newNodeXY", nuevoNodoFromXY,return_internal_reference<>(),"Crea un nodo con las coordenadas que se pasan como parámetro.")
-  .def("newNodeIDXY", &XC::NodeLoader::newNodeIDXY,return_internal_reference<>(),"Crea un nodo con el tag y las coordenadas que se pasan como parámetro.")
-  .def("newNodeIDV", &XC::NodeLoader::newNodeIDV,return_internal_reference<>(),"Crea un nodo con el tag y las coordenadas que se pasan como parámetro.")
-  .def("newSeedNode", &XC::NodeLoader::newSeedNode,return_internal_reference<>(),"Crea un nodo con las coordenadas que se pasan como parámetro.")
+  .def("getNode", &XC::NodeLoader::getNode,return_internal_reference<>(),"Returns the nodo cuyo identificador being passed as parameter.")
+  .def("newNodeXYZ", nuevoNodoFromXYZ,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
+  .def("newNodeFromVector", nuevoNodoFromVector,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
+  .def("newNodeIDXYZ", &XC::NodeLoader::newNodeIDXYZ,return_internal_reference<>(),"Crea un nodo con el tag y las coordenadas being passed as parameters.")
+  .def("newNodeXY", nuevoNodoFromXY,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
+  .def("newNodeIDXY", &XC::NodeLoader::newNodeIDXY,return_internal_reference<>(),"Crea un nodo con el tag y las coordenadas being passed as parameters.")
+  .def("newNodeIDV", &XC::NodeLoader::newNodeIDV,return_internal_reference<>(),"Crea un nodo con el tag y las coordenadas being passed as parameters.")
+  .def("newSeedNode", &XC::NodeLoader::newSeedNode,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
   .def("duplicateNode", &XC::NodeLoader::duplicateNode,return_internal_reference<>(),"Duplicates the hode.")
   ;
 
 class_<XC::MaterialLoader, bases<XC::Loader>, boost::noncopyable >("MaterialLoader", no_init)
   .def("newMaterial", &XC::MaterialLoader::nuevoMaterial,return_internal_reference<>(),"Crea un material.")
-  .def("getMaterial", &XC::MaterialLoader::getMaterial,return_internal_reference<>(),"Returns the material cuyo nombre se pasa como parámetro.")
+  .def("getMaterial", &XC::MaterialLoader::getMaterial,return_internal_reference<>(),"Returns the material cuyo nombre being passed as parameter.")
   .def("materialExists",&XC::MaterialLoader::existeMaterial,"True if material is already defined.")
   .def("newSectionGeometry", &XC::MaterialLoader::newSectionGeometry,return_internal_reference<>())
   .def("getSectionGeometry", &XC::MaterialLoader::getGeomSection,return_internal_reference<>(),"Returns section geometry whose name is given.")
@@ -83,7 +83,7 @@ class_<XC::ElementLoader::SeedElemLoader, bases<XC::ProtoElementLoader>, boost::
 
 class_<XC::ElementLoader, bases<XC::ProtoElementLoader>, boost::noncopyable >("ElementLoader", no_init)
   .add_property("seedElemLoader", make_function( &XC::ElementLoader::getSeedElemLoader, return_internal_reference<>() ))
-  .def("getElement", &XC::ElementLoader::getElement,return_internal_reference<>(),"Returns the elemento cuyo identificador se pasa como parámetro.")
+  .def("getElement", &XC::ElementLoader::getElement,return_internal_reference<>(),"Returns the elemento cuyo identificador being passed as parameter.")
   .add_property("defaultTag", &XC::ElementLoader::getDefaultTag, &XC::ElementLoader::setDefaultTag)
    ;
 

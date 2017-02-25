@@ -310,8 +310,8 @@ const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const size_t &iNo
     return getNodeResistingComponents(iNod,rf);
   }
 
-//! @brief Returns the fuerza generalizada del elemento sobre el nodo al
-//! que apunta el parámetro.
+//! @brief Returns the fuerza generalizada del elemento sobre el nodo pointed
+//! by the parameter.
 const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
   {
     const int iNodo= getNodePtrs().getIndiceNodo(ptrNod);
@@ -319,8 +319,8 @@ const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
     return getNodeResistingForce(iNodo);
   }
 
-//! @brief Returns the fuerza generalizada (incluyendo fuerzas de inercia) del elemento sobre el nodo al
-//! que apunta el parámetro.
+//! @brief Returns the fuerza generalizada (incluyendo fuerzas de inercia) del elemento 
+//! over the node pointed by the parameter.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNod) const
   {
     const int iNodo= getNodePtrs().getIndiceNodo(ptrNod);
@@ -623,7 +623,7 @@ XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
   }
 
 //! @brief Returns the borde (o arista) del elemento
-//! que tiene por extremos los nodos que se pasan como parámetros.
+//! que tiene por extremos los nodos being passed as parameters.
 int XC::Element::getEdgeNodes(const Node *,const Node *) const
   {
     std::cerr << nombre_clase()
@@ -633,7 +633,7 @@ int XC::Element::getEdgeNodes(const Node *,const Node *) const
   }
 
 //! @brief Returns the borde del elemento
-//! que tiene por extremos los nodos que se pasan como parámetros.
+//! que tiene por extremos los nodos being passed as parameters.
 int XC::Element::getEdgeNodes(const int &iN1,const int &iN2) const
   {
     const Domain *dom= this->getDomain();
@@ -708,7 +708,7 @@ std::set<XC::SetBase *> XC::Element::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el elemento a the sets que se pasan como parámetro.
+//! @brief Agrega el elemento a the sets being passed as parameters.
 void XC::Element::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
@@ -773,7 +773,7 @@ XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
 
 
 //! @brief Returns the posición del nodo cuyo índice se
-//! pasa como parámetro.
+//! being passed as parameter.
 Pos3d XC::Element::getPosNodo(const size_t &i,bool initialGeometry) const
   { return getNodePtrs().getPosNodo(i,initialGeometry); }
 
@@ -804,13 +804,13 @@ void XC::Element::calculaLongsTributarias(bool initialGeometry) const
               << std::endl;
   }
 
-//! @brief Returns the longitud tributaria correspondiente to the node que se pasa
-//! como parámetro.
+//! @brief Returns the longitud tributaria correspondiente to the node being passed
+//! as parameter.
 double XC::Element::getLongTributaria(const Node *) const
   { return 0; }
 
 //! @brief Returns the longitud tributaria correspondiente to the node cuyo tag se pasa
-//! como parámetro.
+//! as parameter.
 double XC::Element::getLongTributariaByTag(const int &tag) const
   {
     const Node *nod= getDomain()->getNode(tag);
@@ -826,13 +826,13 @@ void XC::Element::calculaAreasTributarias(bool initialGeometry) const
               << std::endl;
   }
 
-//! @brief Returns the área tributaria correspondiente to the node que se pasa
-//! como parámetro.
+//! @brief Returns the área tributaria correspondiente to the node being passed
+//! as parameter.
 double XC::Element::getAreaTributaria(const Node *) const
   { return 0; }
 
 //! @brief Returns the área tributaria correspondiente to the node cuyo tag se pasa
-//! como parámetro.
+//! as parameter.
 double XC::Element::getAreaTributariaByTag(const int &tag) const
   {
     const Node *nod= getDomain()->getNode(tag);
@@ -848,13 +848,13 @@ void XC::Element::calculaVolsTributarios(bool initialGeometry) const
               << std::endl;
   }
 
-//! @brief Returns the volumen tributario correspondiente to the node que se pasa
-//! como parámetro.
+//! @brief Returns the volumen tributario correspondiente to the node being passed
+//! as parameter.
 double XC::Element::getVolTributario(const Node *) const
   { return 0; }
 
 //! @brief Returns the volumen tributario correspondiente to the node cuyo tag se pasa
-//! como parámetro.
+//! as parameter.
 double XC::Element::getVolTributarioByTag(const int &tag) const
   {
     const Node *nod= getDomain()->getNode(tag);

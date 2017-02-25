@@ -59,7 +59,7 @@ class DqPtrsNmb: public DqPtrs<T>
 
   };
 
-//! @brief Returns a pointer to the objeto cuyo nombre se pasa como parámetro.
+//! @brief Returns a pointer to the objeto cuyo nombre being passed as parameter.
 template <class T>
 T *DqPtrsNmb<T>::BuscaNmb(const std::string &nmb)
   {

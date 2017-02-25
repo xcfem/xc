@@ -1080,7 +1080,7 @@ XC::Vector XC::Node::getModalParticipationFactors(void) const
   }
 
 //! @brief Returns the factor de participación modal
-//! correspondiente al modo i. Si el parámetro gdls
+//! correspondiente al modo i. If the gdls argument
 //! is not empty «proyecta» el modo i sobre
 //! los gdls indicados en the set. Se escribió para poder
 //! expresar ls participación según un gdl
@@ -1115,7 +1115,7 @@ double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &gdls)
     return retval;
   }
 
-//! @brief Returns the factores de participación modal. Si el parámetro gdls
+//! @brief Returns the factores de participación modal. If gdls argument
 //! is not empty «proyecta» el modo i sobre
 //! los gdls indicados en the set.
 XC::Vector XC::Node::getModalParticipationFactors(const std::set<int> &gdls) const
@@ -1127,7 +1127,7 @@ XC::Vector XC::Node::getModalParticipationFactors(const std::set<int> &gdls) con
     return retval;
   }
 
-//! @brief Returns the factores de participación modal. Si el parámetro gdls
+//! @brief Returns the factores de participación modal. If gdls argument
 //! is not empty «proyecta» el modo i sobre
 //! los gdls indicados en the set.
 XC::Vector XC::Node::getModalParticipationFactorsForGdls(const boost::python::list &l) const
@@ -1142,7 +1142,7 @@ XC::Vector XC::Node::getDistributionFactor(int mode) const
   { return getModalParticipationFactor(mode)*getEigenvector(mode); }
 
 //! @brief Returns the factor de distribución correspondiente al modo
-//! being passed as parameter. Si el parámetro gdls
+//! being passed as parameter. If gdls argument
 //! is not empty «proyecta» el modo i sobre
 //! los gdls indicados en the set.
 XC::Vector XC::Node::getDistributionFactor(int mode,const std::set<int> &gdls) const
@@ -1224,8 +1224,8 @@ XC::Vector XC::Node::getMaxModalAcceleration(int mode,const double &accel_mode) 
     return accel_mode*getDistributionFactor(mode);
   }
 
-//! @brief Returns the desplazamiento modal máximo en los gdls y modo que se pasan
-//! como parámetro y la aceleración correspondiente a dicho modo.
+//! @brief Returns the desplazamiento modal máximo en los gdls y modo being passed
+//! as parameter y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Node::getMaxModalDisplacementForGdls(int mode,const double &accel_mode,const std::set<int> &gdls) const
   {
     return getMaxModalAccelerationForGdls(mode,accel_mode,gdls)/sqr(getPulsacion(mode));
@@ -1251,8 +1251,8 @@ XC::Vector XC::Node::getMaxModalVelocityForGdls(int mode,const double &accel_mod
     return getMaxModalVelocityForGdls(mode,accel_mode,tmp);
   }
 
-//! @brief Return the aceleración modal máxima en los gdls y modo que se pasan
-//! como parámetro y la aceleración correspondiente a dicho modo.
+//! @brief Return the aceleración modal máxima en los gdls y modo being passed
+//! as parameter y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Node::getMaxModalAccelerationForGdls(int mode,const double &accel_mode,const std::set<int> &gdls) const
   {
     return accel_mode*getDistributionFactor(mode,gdls);
@@ -1358,7 +1358,7 @@ std::set<XC::SetBase *> XC::Node::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el nodo a the sets que se pasan como parámetro.
+//! @brief Agrega el nodo a the sets being passed as parameters.
 void XC::Node::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)

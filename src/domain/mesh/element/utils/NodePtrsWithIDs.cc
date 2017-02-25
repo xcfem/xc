@@ -58,7 +58,7 @@ XC::NodePtrs &XC::NodePtrsWithIDs::getNodePtrs(void)
 const XC::ID &XC::NodePtrsWithIDs::getExternalNodes(void) const
   { return connectedExternalNodes; }
 
-//! @brief Returns the tag del nodo cuyo índice se pasa como parámetro.
+//! @brief Returns the tag del nodo cuyo índice being passed as parameter.
 int XC::NodePtrsWithIDs::getTagNode(const int &i) const
   { return connectedExternalNodes(i); }
 

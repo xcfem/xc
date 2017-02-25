@@ -73,8 +73,8 @@
 
 //int count= 0;
 
-//! @brief Se asegura de que todos los parámetros que
-//! definen el hormigón sean negativos.
+//! @brief Verifies that all concrete parameters
+//! for compression are negative.
 void XC::Concrete01::make_negative(void)
   {
     if(fpc > 0.0) fpc= -fpc;
@@ -83,7 +83,7 @@ void XC::Concrete01::make_negative(void)
     if(epscu > 0.0) epscu= -epscu;
   }
 
-//! @brief Establece los valores iniciales de los parámetros.
+//! @brief Sets initial values for the concrete parameters.
 void XC::Concrete01::setup_parameters(void)
   {
     // Initial tangent
@@ -95,7 +95,7 @@ void XC::Concrete01::setup_parameters(void)
     revertToLastCommit();
   }
 
-//! @brief Libera la memoria reservada para SHVs.
+//! @brief Frees memory reserved for SHVs.
 void XC::Concrete01::libera(void)
   {
     if(SHVs)

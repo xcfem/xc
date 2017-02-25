@@ -52,7 +52,7 @@ XC::SymArpackSOE::SymArpackSOE(SoluMethod *owr,double theShift)
    nblks(0), xblk(0), invp(0), diag(0), penv(0), rowblks(0),
    begblk(0), first(0) {}
 
-//! @brief Sets the solver que se empleará para resolver the eigenproblem.
+//! @brief Sets the solver that will be used to solve the eigenproblem.
 bool XC::SymArpackSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;
@@ -177,7 +177,8 @@ int XC::SymArpackSOE::setSize(Graph &theGraph)
     return result;
   }
 
-//! @brief Ensambla en A la matriz being passed as parameter multiplicada por the parámetro fact.
+//! @brief Assemblies into A the matrix being passed as parameter multiplied
+//! by the fact parameter.
 int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a XC::quick return
@@ -295,7 +296,8 @@ int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, double fact)
     return 0;
   }
 
-//! @brief Ensambla en M la matriz being passed as parameter multiplicada por the parámetro fact.    
+//! @brief Assemblies into M the matrix being passed as parameter multiplied
+//! by the fact parameter.
 int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, double fact)
   { 
     //Añadido LCPT.

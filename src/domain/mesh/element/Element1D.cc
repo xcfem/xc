@@ -659,8 +659,8 @@ void XC::Element1D::calculaLongsTributarias(bool initialGeometry) const
     vuelcaTributarias(longsTributarias);
   }
 
-//! @brief Return the longitud tributaria correspondiente to the node que se pasa
-//! como parámetro.
+//! @brief Return the longitud tributaria correspondiente to the node being passed
+//! as parameter.
 double XC::Element1D::getLongTributaria(const Node *nod) const
   {
     double retval= 0;

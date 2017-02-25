@@ -409,7 +409,7 @@ void XC::SetMeshComp::CompletaHaciaArriba(void)
     std::cerr << "SetMeshComp::CompletaHaciaArriba() implementation pending." << std::endl;
   }
 
-//! @brief Selecciona los nodos cuyos tags se pasan como parámetro.
+//! @brief Selecciona los nodos cuyos tags being passed as parameters.
 void XC::SetMeshComp::sel_nodos_lista(const ID &tags)
   {
     const size_t sz= tags.Size();
@@ -424,7 +424,7 @@ void XC::SetMeshComp::sel_nodos_lista(const ID &tags)
       }
   }
 
-//! @brief Selecciona los elementos cuyos tags se pasan como parámetro.
+//! @brief Selecciona los elementos cuyos tags being passed as parameters.
 void XC::SetMeshComp::sel_elementos_lista(const ID &tags)
   {
     const size_t sz= tags.Size();
@@ -439,7 +439,7 @@ void XC::SetMeshComp::sel_elementos_lista(const ID &tags)
       }
   }
 
-//! @brief Selecciona las coacciones cuyos tags se pasan como parámetro.
+//! @brief Selecciona las coacciones cuyos tags being passed as parameters.
 void XC::SetMeshComp::sel_constraints_lista(const ID &tags)
   {
     const size_t sz= tags.Size();

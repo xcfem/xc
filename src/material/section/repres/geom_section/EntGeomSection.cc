@@ -106,7 +106,7 @@ const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto) const
     return retval;
   }
 
-//! @brief Returns a pointer to the Eje cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to the Eje cuyo índice being passed as parameter.
 XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje)
   {
     Eje *retval= nullptr;
@@ -121,7 +121,7 @@ XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje)
     return retval;
   }
 
-//! @brief Returns a pointer to the Eje cuyo índice se pasa como parámetro
+//! @brief Returns a pointer to the Eje cuyo índice being passed as parameter
 const XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje) const
   {
     const Eje *retval= nullptr;

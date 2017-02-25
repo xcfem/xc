@@ -49,7 +49,7 @@ XC::NodeRecorderBase::~NodeRecorderBase(void)
   }
 
 //! @brief Envía el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::NodeRecorderBase::sendData(CommParameters &cp)
   {
     int res= MeshCompRecorder::sendData(cp);
@@ -60,7 +60,7 @@ int XC::NodeRecorderBase::sendData(CommParameters &cp)
   }
 
 //! @brief Recibe el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::NodeRecorderBase::receiveData(const CommParameters &cp)
   {
     int res= MeshCompRecorder::receiveData(cp);

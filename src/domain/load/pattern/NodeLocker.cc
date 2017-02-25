@@ -197,7 +197,7 @@ void XC::NodeLocker::clearAll(void)
 XC::SFreedom_Constraint *XC::NodeLocker::newSPConstraint(const int &tag_nod,const int &id_gdl,const double &valor)
   { return addSFreedom_Constraint(tag_nod,id_gdl,valor); }
 
-//! @brief Elimina la coacción mononodal cuyo tag se pasa como parámetro.
+//! @brief Elimina la coacción mononodal cuyo tag being passed as parameter.
 bool XC::NodeLocker::removeSFreedom_Constraint(int tag)
   {
     const bool retval= theSPs->removeComponent(tag);

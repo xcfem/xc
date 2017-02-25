@@ -69,7 +69,7 @@
 #include <cmath>
 #include <cfloat>
 
-//! @brief Establece los valores iniciales de los parámetros.
+//! @brief Sets initial values of concrete parameters.
 void XC::Concrete04::setup_parameters(void)
   {
     // Make all concrete parameters negative

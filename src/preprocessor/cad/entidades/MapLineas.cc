@@ -110,7 +110,7 @@ void XC::MapLineas::UpdateSets(Edge *nueva_linea) const
       }
   }
 
-//! @brief Creates a nueva línea entre los puntos que se pasan como parámetro
+//! @brief Creates a nueva línea entre los puntos being passed as parameters
 //! y la inserta en the set de lados.
 XC::Edge *XC::MapLineas::Line(Pnt *pA,Pnt *pB)
   {
@@ -141,7 +141,7 @@ XC::Edge *XC::MapLineas::Line(Pnt *pA,Pnt *pB)
     return tmp;
   }
 
-//! @brief Creates a nueva línea entre los puntos que se pasan como parámetro
+//! @brief Creates a nueva línea entre los puntos being passed as parameters
 //! y la inserta en the set de lados.
 XC::Edge *XC::MapLineas::DividedLine(Pnt *pA,Pnt *pB)
   {
@@ -172,7 +172,7 @@ XC::Edge *XC::MapLineas::DividedLine(Pnt *pA,Pnt *pB)
     return tmp;
   }
 
-//! @brief Creates a nuevo arco de circunferencia entre los puntos que se pasan como parámetro
+//! @brief Creates a nuevo arco de circunferencia entre los puntos being passed as parameters
 //! y la inserta en the set de lados.
 XC::Edge *XC::MapLineas::Arc(Pnt *pA,Pnt *pB,Pnt *pC)
   {
@@ -199,7 +199,7 @@ XC::Edge *XC::MapLineas::Arc(Pnt *pA,Pnt *pB,Pnt *pC)
     return tmp;
   }
 
-//! @brief Creates a secuencia de líneas (polyline) con las que se pasan como parámetro
+//! @brief Creates a secuencia de líneas (polyline) con las being passed as parameters
 //! y la inserta en the set de lados.
 XC::Edge *XC::MapLineas::LineSequence(void)
   {

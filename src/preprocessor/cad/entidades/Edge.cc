@@ -95,7 +95,7 @@ const XC::Pnt *XC::Edge::P2(void) const
     return nullptr;
   }
 
-//! @brief Returns true iflos puntos que se pasan como parámetro
+//! @brief Returns true iflos puntos being passed as parameters
 //! son los extremos de la línea.
 bool XC::Edge::ExtremosEn(const Pnt *p1,const Pnt *p2) const
   {
@@ -153,11 +153,11 @@ void XC::Edge::divide(void)
     crea_puntos(posiciones);
   }
 
-//! @brief Returns a pointer to nodo cuyos índices se pasan como parámetro.
+//! @brief Returns a pointer to nodo cuyos índices being passed as parameters.
 XC::Node *XC::Edge::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   { return EntMdlr::GetNodo(i,j,k); }
 
-//! @brief Returns a pointer to nodo cuyos índices se pasan como parámetro.
+//! @brief Returns a pointer to nodo cuyos índices being passed as parameters.
 const XC::Node *XC::Edge::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   { return EntMdlr::GetNodo(i,j,k); }
 
@@ -477,7 +477,7 @@ std::set<XC::SetBase *> XC::Edge::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el «edge» a the sets que se pasan como parámetro.
+//! @brief Agrega el «edge» a the sets being passed as parameters.
 void XC::Edge::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)

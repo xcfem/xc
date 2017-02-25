@@ -60,7 +60,7 @@ void XC::MapPuntos::UpdateSets(Pnt *nuevo_punto) const
       }
   }
 
-//! @brief Returns the vector definido por los puntos cuyos índices se pasan como parámetro.
+//! @brief Returns the vector definido por los puntos cuyos índices being passed as parameters.
 Vector3d XC::MapPuntos::getVector(const Indice &i,const Indice &j) const
   {
     Vector3d retval;
@@ -75,7 +75,7 @@ Vector3d XC::MapPuntos::getVector(const Indice &i,const Indice &j) const
     return retval;
   }
 
-//! @brief Return the recta que pasa por los puntos cuyos índices se pasan como parámetro.
+//! @brief Return the recta que pasa por los puntos cuyos índices being passed as parameters.
 Recta3d XC::MapPuntos::getRecta(const Indice &i,const Indice &j) const
   {
     Recta3d retval;
@@ -90,7 +90,7 @@ Recta3d XC::MapPuntos::getRecta(const Indice &i,const Indice &j) const
     return retval;
   }
 
-//! @brief Returns the plano que pasa por los puntos cuyos índices se pasan como parámetro.
+//! @brief Returns the plano que pasa por los puntos cuyos índices being passed as parameters.
 Plano3d XC::MapPuntos::getPlano(const Indice &i,const Indice &j,const Indice &k) const
   {
     Plano3d retval;
@@ -197,7 +197,7 @@ XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
     return retval;
   }
 
-//! @brief Crea copias de los puntos cuyos identificadores se pasan como parámetro.
+//! @brief Crea copias de los puntos cuyos identificadores being passed as parameters.
 void XC::MapPuntos::Copia(const std::vector<Indice> &indices)
   {
     for(std::vector<Indice>::const_iterator i= indices.begin();i!=indices.end();i++)
@@ -210,7 +210,7 @@ void XC::MapPuntos::Copia(const std::vector<Indice> &indices)
       }
   }
 
-//! @brief Aplica la transformación a los puntos cuyos identificadores se pasan como parámetro.
+//! @brief Aplica la transformación a los puntos cuyos identificadores being passed as parameters.
 void XC::MapPuntos::Transforma(const TrfGeom &trf,const std::vector<Indice> &indices)
   {
     for(std::vector<Indice>::const_iterator i= indices.begin();i!=indices.end();i++)
@@ -223,7 +223,7 @@ void XC::MapPuntos::Transforma(const TrfGeom &trf,const std::vector<Indice> &ind
       }
   }
 
-//! @brief Return the distancia entre los puntos cuyos identificadores se pasan como parámetro.
+//! @brief Return the distancia entre los puntos cuyos identificadores being passed as parameters.
 double XC::MapPuntos::Dist(const Indice &i,const Indice &j) const
   {
     double retval(-1.0);

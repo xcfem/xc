@@ -50,7 +50,7 @@ XC::DqPtrsConstraint::DqPtrsConstraint(const std::set<const Constraint *> &st)
   }
 
 //! @brief Returns (if it exists) a pointer al elemento
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag being passed as parameter.
 XC::Constraint *XC::DqPtrsConstraint::buscaConstrainto(const int &tag)
   {
     Constraint *retval= nullptr;
@@ -71,7 +71,7 @@ XC::Constraint *XC::DqPtrsConstraint::buscaConstrainto(const int &tag)
   }
 
 //! @brief Returns (if it exists) a pointer al elemento
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag being passed as parameter.
 const XC::Constraint *XC::DqPtrsConstraint::buscaConstrainto(const int &tag) const
   {
     const Constraint *retval= nullptr;

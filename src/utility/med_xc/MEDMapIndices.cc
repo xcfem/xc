@@ -35,7 +35,7 @@ void XC::MEDMapIndices::nuevo_tag(size_t i)
   }
 
 //! @brief Returns the índice correspondiente al que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::MEDMapIndices::getMEDIndice(const size_t &i) const
   {
     const_iterator iter= indices.find(i);
@@ -50,7 +50,7 @@ int XC::MEDMapIndices::getMEDIndice(const size_t &i) const
   }
 
 //! @brief Returns the índices correspondientes a los que
-//! se pasan como parámetro.
+//! being passed as parameter.
 std::vector<int> XC::MEDMapIndices::getMEDIndices(const std::vector<int> &idx) const
   {
     const size_t sz= idx.size();

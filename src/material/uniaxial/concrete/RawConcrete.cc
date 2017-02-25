@@ -49,7 +49,7 @@ void XC::RawConcrete::setFpc(const double &d)
     if(fpc > 0.0)
       {
         fpc= -fpc;
-        std::clog << "!Ojo!, los parámetros del hormigón deben ser negativos." << std::endl;
+        std::clog << "Warning!, compressive strengths must be negative." << std::endl;
       }
     setup_parameters();
   }
@@ -63,7 +63,7 @@ void XC::RawConcrete::setEpsc0(const double &d)
     if(epsc0 > 0.0)
       {
         epsc0= -epsc0;
-        std::clog << "!Ojo!, los parámetros del hormigón deben ser negativos." << std::endl;
+        std::clog << "Warning!, compressive strains must be negative." << std::endl;
       }
     setup_parameters();
   }
@@ -77,7 +77,7 @@ void XC::RawConcrete::setEpscu(const double &d)
     if(epscu > 0.0)
       {
         epscu= -epscu;
-        std::clog << "!Ojo!, los parámetros del hormigón deben ser negativos." << std::endl;
+        std::clog << "Warning!, compressive strains must be negative." << std::endl;
       }
   }
 

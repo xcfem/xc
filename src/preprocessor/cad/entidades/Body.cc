@@ -134,7 +134,7 @@ const XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i) const
 XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i)
   { return const_cast<Pnt *>(static_cast<const BodyFace &>(*this).GetVertice(i)); }
 
-//! @brief Returns the pointer to the node de la cara, cuyos índices se pasan como parámetro.
+//! @brief Returns the pointer to the node de la cara, cuyos índices being passed as parameters.
 XC::Node *XC::Body::BodyFace::GetNodo(const size_t &i,const size_t &j)
   {
     assert(surface);
@@ -239,7 +239,7 @@ std::set<XC::SetBase *> XC::Body::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el cuerpo a the sets que se pasan como parámetro.
+//! @brief Agrega el cuerpo a the sets being passed as parameters.
 void XC::Body::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)

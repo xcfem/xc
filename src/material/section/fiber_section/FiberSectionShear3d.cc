@@ -438,7 +438,7 @@ void XC::FiberSectionShear3d::Print(std::ostream &s, int flag) const
       }
   }
 
-//! @brief Returns the identificador de la variable cuyo nombre se pasa como parámetro.
+//! @brief Returns the identificador de la variable cuyo nombre being passed as parameter.
 int XC::FiberSectionShear3d::setVariable(const std::string &argv)
   {
     // Axial strain
@@ -452,7 +452,7 @@ int XC::FiberSectionShear3d::setVariable(const std::string &argv)
       return -1;
   }
 
-//! @brief Returns the valor de la variable cuyo nombre se pasa como parámetro.
+//! @brief Returns the valor de la variable cuyo nombre being passed as parameter.
 int XC::FiberSectionShear3d::getVariable(int variableID, double &info)
   {
     int i;

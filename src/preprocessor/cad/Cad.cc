@@ -73,7 +73,7 @@ void XC::Cad::numera(void)
   }
 
 //! @brief Returns the «edge» que tiene por extremos los puntos
-//! cuyos índices se pasan como parámetro.
+//! cuyos índices being passed as parameter.
 XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPuntos::Indice &pB)
   {
     Edge *retval= nullptr;
@@ -94,7 +94,7 @@ XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPunt
   }
 
 //! @brief Returns the «edge» que tiene por extremos los puntos
-//! cuyos índices se pasan como parámetro.
+//! cuyos índices being passed as parameter.
 const XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPuntos::Indice &pB) const
   {
     const Edge *retval= nullptr;
@@ -149,7 +149,7 @@ void XC::Cad::conciliaNDivs(void)
       }
   }
 
-//! @brief Busca la entidad cuyo nombre se pasa como parámetro.
+//! @brief Busca la entidad cuyo nombre being passed as parameter.
 XC::SetEstruct *XC::Cad::busca_set_estruct(const MapUniformGrids::Indice &id)
   {
     SetEstruct *retval= puntos.busca(id);

@@ -32,7 +32,7 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 
-//! @brief Pone a cero los pointers to node, los cosenos directores y los parámetros de sensibilidad.
+//! @brief Pone a cero los pointers to node, los cosenos directores y los sensibility parameters.
 void XC::TrussBase::inicializa(void)
   {
     // set node pointers to nullptr

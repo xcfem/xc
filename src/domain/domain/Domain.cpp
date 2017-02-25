@@ -268,11 +268,11 @@ bool XC::Domain::addElementalLoad(ElementalLoad *load, int pattern)
     return result;
   }
 
-//! @brief Borra el elemento cuyo identificador se pasa como parámetro.
+//! @brief Borra el elemento cuyo identificador being passed as parameter.
 bool XC::Domain::removeElement(int tag)
   { return mesh.removeElement(tag); }
 
-//! @brief Elimina del domain el nodo cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain el nodo cuyo tag being passed as parameter.
 bool XC::Domain::removeNode(int tag)
   { return mesh.removeNode(tag); }
 
@@ -284,7 +284,7 @@ bool XC::Domain::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatt
     return retval;
   }
 
-//! @brief Elimina del domain la constraint monopunto cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain la constraint monopunto cuyo tag being passed as parameter.
 bool XC::Domain::removeSFreedom_Constraint(int tag)
   {
     bool retval= constraints.removeSFreedom_Constraint(tag);
@@ -293,7 +293,7 @@ bool XC::Domain::removeSFreedom_Constraint(int tag)
     return retval;
   }
 
-//! @brief Elimina del domain la constraint multipunto cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain la constraint multipunto cuyo tag being passed as parameter.
 bool XC::Domain::removeMFreedom_Constraint(int tag)
   {
     bool result = constraints.removeMFreedom_Constraint(tag);
@@ -303,7 +303,7 @@ bool XC::Domain::removeMFreedom_Constraint(int tag)
   }
 
 
-//! @brief Elimina del domain la constraint multi retained node cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain la constraint multi retained node cuyo tag being passed as parameter.
 bool XC::Domain::removeMRMFreedom_Constraint(int tag)
   {
     bool result = constraints.removeMRMFreedom_Constraint(tag);
@@ -361,7 +361,7 @@ bool XC::Domain::addCombinacion(Combinacion *comb)
     return retval;
   }
 
-//! @brief Elimina del domain el load pattern cuyo tag se pasa como parámetro.
+//! @brief Elimina del domain el load pattern cuyo tag being passed as parameter.
 bool XC::Domain::removeLoadPattern(int tag)
   {
     int numSPs= 0;
@@ -511,16 +511,16 @@ XC::ConstrContainer &XC::Domain::getConstraints(void)
 **   only elements can be added to theElements
 */
 
-//! @brief Returns true ifel elemento cuyo tag se pasa como parámetro
+//! @brief Returns true ifel elemento cuyo tag being passed as parameter
 //! ya existe en el domain.
 bool XC::Domain::existElement(int tag)
  { return mesh.existElement(tag); }
 
-//! @brief Returns a pointer to the elemento cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the elemento cuyo tag being passed as parameter.
 XC::Element *XC::Domain::getElement(int tag)
   { return mesh.getElement(tag); }
 
-//! @brief Returns a pointer to the elemento cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the elemento cuyo tag being passed as parameter.
 const XC::Element *XC::Domain::getElement(int tag) const
   { return mesh.getElement(tag); }
 
@@ -530,11 +530,11 @@ bool XC::Domain::existNode(int tag)
  { return mesh.existNode(tag); }
 
 
-//! @brief Returns a pointer to the nodo cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo tag being passed as parameter.
 XC::Node *XC::Domain::getNode(int tag)
   { return mesh.getNode(tag); }
 
-//! @brief Returns a pointer to the nodo cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the nodo cuyo tag being passed as parameter.
 const XC::Node *XC::Domain::getNode(int tag) const
   { return mesh.getNode(tag); }
 
@@ -855,7 +855,7 @@ int XC::Domain::addRegion(MeshRegion &theRegion)
     return 0;
   }
 
-//! @brief Returns a pointer to the la región cuyo tag se pasa como parámetro.
+//! @brief Returns a pointer to the la región cuyo tag being passed as parameter.
 XC::MeshRegion *XC::Domain::getRegion(int tag)
   {
     MeshRegion *retval= nullptr;
@@ -984,7 +984,7 @@ int XC::Domain::recvSelf(const CommParameters &cp)
 double XC::Domain::getNodeDisp(int nodeTag, int dof,int &errorFlag)
   { return mesh.getNodeDisp(nodeTag,dof,errorFlag); }
 
-//! @brief Asigna la matriz de masas al nudo cuyo tag se pasa como parámetro.
+//! @brief Asigna la matriz de masas al nudo cuyo tag being passed as parameter.
 int XC::Domain::setMass(const XC::Matrix &mass, int nodeTag)
   { return mesh.setMass(mass,nodeTag); }
 

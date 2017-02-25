@@ -448,7 +448,7 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
   }
 
 //! @brief Envía el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::NodeRecorder::sendData(CommParameters &cp)
   {
     int res= NodeRecorderBase::sendData(cp);
@@ -457,7 +457,7 @@ int XC::NodeRecorder::sendData(CommParameters &cp)
   }
 
 //! @brief Recibe el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::NodeRecorder::receiveData(const CommParameters &cp)
   {
     int res= NodeRecorderBase::receiveData(cp);
@@ -466,7 +466,7 @@ int XC::NodeRecorder::receiveData(const CommParameters &cp)
   }
 
 //! @brief Envía el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::NodeRecorder::sendSelf(CommParameters &cp)
   {
     int res= 0;
@@ -489,7 +489,7 @@ int XC::NodeRecorder::sendSelf(CommParameters &cp)
   }
 
 //! @brief Recibe el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::NodeRecorder::recvSelf(const CommParameters &cp)
   {
     int res= 0;

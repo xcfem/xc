@@ -640,7 +640,7 @@ int XC::SectionAggregator::getResponse(int responseID, Information &info)
     return XC::SeccionBarraPrismatica::getResponse(responseID, info);
   }
 
-//! @brief Returns the identificador de la variable cuyo nombre se pasa como parámetro.
+//! @brief Returns the identificador de la variable cuyo nombre being passed as parameter.
 int XC::SectionAggregator::setVariable(const std::string &argv)
   {
     // Axial strain
@@ -654,7 +654,7 @@ int XC::SectionAggregator::setVariable(const std::string &argv)
       return -1;
   }
 
-//! @brief Returns the valor de la variable cuyo nombre se pasa como parámetro.
+//! @brief Returns the valor de la variable cuyo nombre being passed as parameter.
 int XC::SectionAggregator::getVariable(int variableID, double &info)
   {
     int i;

@@ -228,7 +228,7 @@ int XC::EnvelopeElementRecorder::restart(void)
   { return envelope.restart(); }
 
 //! @brief Envía el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::EnvelopeElementRecorder::sendData(CommParameters &cp)
   {
     int res= ElementRecorderBase::sendData(cp);
@@ -237,7 +237,7 @@ int XC::EnvelopeElementRecorder::sendData(CommParameters &cp)
   }
 
 //! @brief Recibe el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::EnvelopeElementRecorder::receiveData(const CommParameters &cp)
   {
     int res= ElementRecorderBase::receiveData(cp);
@@ -246,7 +246,7 @@ int XC::EnvelopeElementRecorder::receiveData(const CommParameters &cp)
   }
 
 //! @brief Envía el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::EnvelopeElementRecorder::sendSelf(CommParameters &cp)
   {
     int res= 0;
@@ -270,7 +270,7 @@ int XC::EnvelopeElementRecorder::sendSelf(CommParameters &cp)
 
 
 //! @brief Recibe el objeto a través del comunicador que
-//! se pasa como parámetro.
+//! being passed as parameter.
 int XC::EnvelopeElementRecorder::recvSelf(const CommParameters &cp)
   {
     int res= 0;

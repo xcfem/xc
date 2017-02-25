@@ -37,10 +37,10 @@ namespace XC {
 
 //! \@ingroup MATSCCDiagInt
 //
-//! @brief Parámetros necesarios para la obtención del diagrama de interacción.
+//! @brief Parameters needed to obtain the interaction diagram.
 class InteractionDiagramData: public EntCmd
   {
-    double umbral; //!< Distancia mínima entre puntos del diagrama.
+    double umbral; //!< Minimal distance between diagram points.
     double inc_eps; //!< Strain step size.
     double inc_t; //!< Angle step size.
     DefAgotPivotes agot_pivotes; //!< Ultimate strains at pivots.

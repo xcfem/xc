@@ -110,7 +110,7 @@ XC::Element::NodesEdge XC::TriBase3N<PhysProp>::getNodesEdge(const size_t &i) co
   }
 
 //! @brief Returns the borde del elemento
-//! que tiene por extremos los nodos que se pasan como parámetros.
+//! que tiene por extremos los nodos being passed as parameters.
 template <class PhysProp>
 int XC::TriBase3N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
   {

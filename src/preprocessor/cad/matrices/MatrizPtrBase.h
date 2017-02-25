@@ -112,8 +112,8 @@ bool MatrizPtrBase<T>::HasNull(void) const
     return retval;
   }
 
-//! @brief Pide a cada uno de los objetos de la fila que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Asks each of the objects on the row to execute
+//! the code being passed as parameter.
 template <class T>
 std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsFila(const size_t &f)
   {
@@ -125,8 +125,8 @@ std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsFila(const size_t &f)
     return retval;
   }
 
-//! @brief Pide a cada uno de los objetos de la columna que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Asks each of the objects on the column to execute
+//! the code being passed as parameter.
 template <class T>
 std::vector<int>  XC::MatrizPtrBase<T>::getTagsObjsColumna(const size_t &c)
   {
@@ -138,8 +138,8 @@ std::vector<int>  XC::MatrizPtrBase<T>::getTagsObjsColumna(const size_t &c)
     return retval;
   }
 
-//! @brief Pide a cada uno de los objetos interiores de la fila que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Asks each of the objects at the interior of the row to execute
+//! the code being passed as parameter.
 template <class T>
 std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsInterioresFila(const size_t &f)
   {
@@ -151,8 +151,8 @@ std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsInterioresFila(const size_t &f
     return retval;
   }
 
-//! @brief Pide a cada uno de los objetos interiores de la columna que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Asks each of the objects at the interior of the column to execute
+//! the code being passed as parameter.
 template <class T>
 std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsInterioresColumna(const size_t &c)
   {
@@ -164,8 +164,8 @@ std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsInterioresColumna(const size_t
     return retval;
   }
 
-//! @brief Pide a cada uno de los objetos interiores que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Asks each of the objects at the interior to execute
+//! the code being passed as parameter.
 template <class T>
 std::vector<int> XC::MatrizPtrBase<T>::getTagsInteriorObjs(void)
   {

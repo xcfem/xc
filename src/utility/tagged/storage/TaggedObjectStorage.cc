@@ -58,7 +58,7 @@ void XC::TaggedObjectStorage::copia(const TaggedObjectStorage &otro)
   }
 
 //! @brief Returns true ifexiste la componente
-//! cuyo tag se pasa como parámetro.
+//! cuyo tag being passed as parameter.
 bool XC::TaggedObjectStorage::existComponent(int tag)
   { return (getComponentPtr(tag)!=nullptr); }
 

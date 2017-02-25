@@ -78,7 +78,7 @@ XC::MFreedom_ConstraintBase::MFreedom_ConstraintBase(int tag, int nodeConstr, co
     set_constraint(constr);
   }
 
-//! @brief Returns true ifafecta to the node cuyo tag se pasa como parámetro.
+//! @brief Returns true ifafecta to the node cuyo tag being passed as parameter.
 bool XC::MFreedom_ConstraintBase::afectaANodo(int tagNodo) const
   {
     return (tagNodo== getNodeConstrained());

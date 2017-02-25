@@ -254,8 +254,8 @@ Pos2d XC::SeccionBarraPrismatica::getPuntoSemiplanoTracciones(void) const
 Pos2d XC::SeccionBarraPrismatica::getPuntoSemiplanoCompresiones(void) const
   { return getDeformationPlane().getPuntoSemiplanoCompresiones(); }
 
-//! @brief Returns the semiplano cuyo borde es la recta que se pasa
-//! como parámetro y en el que las tensiones son de tracción.
+//! @brief Returns the semiplano cuyo borde es la recta being passed
+//! as parameter y en el que las tensiones son de tracción.
 Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoTracciones(const Recta2d &r) const
   { return getDeformationPlane().getSemiplanoTracciones(r); }
 
@@ -264,8 +264,8 @@ Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoTracciones(const Recta2d &r)
 Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoTracciones(void) const
   { return getDeformationPlane().getSemiplanoTracciones(); }
 
-//! @brief Returns the semiplano cuyo borde es la recta que se pasa
-//! como parámetro y en el que las tensiones son de compresión.
+//! @brief Returns the semiplano cuyo borde es la recta being passed
+//! as parameter y en el que las tensiones son de compresión.
 Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoCompresiones(const Recta2d &r) const
   { return getDeformationPlane().getSemiplanoCompresiones(r); }
 

@@ -127,11 +127,11 @@ class Vector: public EntCmd
     int addMatrixTransposeVector(double factThis, const Matrix &m, const Vector &v, double factOther);
 
     
-    //! @brief Returns the elemento cuya fila se pasa como parámetro.
+    //! @brief Returns the elemento cuya fila being passed as parameter.
     virtual double &at(const size_t &f);
-    //! @brief Returns the elemento cuya fila se pasa como parámetro.
+    //! @brief Returns the elemento cuya fila being passed as parameter.
     virtual const double &at(const size_t &f) const;
-    //! @brief Chequea el índice que se le pasa como parámetro.
+    //! @brief Chequea el índice que se le being passed as parameter.
     virtual bool CheckIndice0(const size_t &i) const;
 
     // overloaded operators

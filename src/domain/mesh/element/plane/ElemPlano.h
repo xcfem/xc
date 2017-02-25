@@ -180,25 +180,25 @@ Segmento3d XC::ElemPlano<NNODOS, PhysProp>::getLado(const size_t &i,bool initial
   }
 
 //! @brief Returns the cuadrado de la distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! being passed as parameter.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getDist2(const Pos2d &p,bool initialGeometry) const
   { return getDist2(To3dXY2d(p),initialGeometry); }
 
 //! @brief Return the distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! being passed as parameter.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getDist(const Pos2d &p,bool initialGeometry) const
   { return getDist(To3dXY2d(p),initialGeometry); }
 
 //! @brief Returns the cuadrado de la distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! being passed as parameter.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getDist2(const Pos3d &p,bool initialGeometry) const
   { return getPoligono(initialGeometry).dist2(p); }
 
 //! @brief Return the distancia desde el elemento al punto que
-//! se pasa como parámetro.
+//! being passed as parameter.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getDist(const Pos3d &p,bool initialGeometry) const
   { return getPoligono(initialGeometry).dist(p); }

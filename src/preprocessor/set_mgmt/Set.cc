@@ -382,7 +382,7 @@ void XC::Set::CompletaHaciaArriba(void)
 //       }
   }
 
-//! @brief Selecciona los puntos cuyos tags se pasan como parámetro.
+//! @brief Selecciona los puntos cuyos tags being passed as parameters.
 void XC::Set::sel_puntos_lista(const ID &tags)
   {
     const size_t sz= tags.Size();
@@ -406,7 +406,7 @@ void XC::Set::sel_puntos_lista(const ID &tags)
       }
   }
 
-//! @brief Selecciona las lineas cuyos tags se pasan como parámetro.
+//! @brief Selecciona las lineas cuyos tags being passed as parameters.
 void XC::Set::sel_lineas_lista(const ID &tags)
   {
     const size_t sz= tags.Size();

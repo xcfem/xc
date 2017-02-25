@@ -134,7 +134,7 @@ XC::ElementEdges XC::SetEstruct::getElementEdges(void)
     return getElementEdgesEntreNodos(nodos);
   }
 
-//! @brief Agrega al modelo los elementos que se pasan como parámetro.
+//! @brief Agrega al modelo los elementos being passed as parameters.
 void XC::SetEstruct::agrega_elementos(const TritrizPtrElem &elementos)
   {
     const size_t capas= elementos.GetCapas();

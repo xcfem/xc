@@ -113,7 +113,7 @@ const XC::Block::BodyFace *XC::Block::GetFace(const size_t &i) const
 XC::Block::BodyFace *XC::Block::GetFace(const size_t &i)
   { return &sups[i-1]; }
 
-//! @brief Return the arista del sólido cuyo índice se pasa como parámetro.
+//! @brief Return the arista del sólido cuyo índice being passed as parameter.
 const XC::CmbEdge::Lado *XC::Block::GetArista(const size_t &i) const
   {
     const CmbEdge::Lado *retval(nullptr);
@@ -144,7 +144,7 @@ const XC::CmbEdge::Lado *XC::Block::GetArista(const size_t &i) const
     return retval;
   }
 
-//! @brief Returns the vértice del sólido cuyo índice se pasa como parámetro.
+//! @brief Returns the vértice del sólido cuyo índice being passed as parameter.
 const XC::Pnt *XC::Block::GetVertice(const size_t &i) const
   {
     if(i<=4)
@@ -155,7 +155,7 @@ const XC::Pnt *XC::Block::GetVertice(const size_t &i) const
       return nullptr;
   }
 
-//! @brief Returns the vértice del sólido cuyo índice se pasa como parámetro.
+//! @brief Returns the vértice del sólido cuyo índice being passed as parameter.
 XC::Pnt *XC::Block::GetVertice(const size_t &i)
   {
     if(i<=4)
@@ -195,8 +195,8 @@ void XC::Block::actualiza_topologia(void)
 //! - If the surface is the first one that defines the solid,
 //! then that one is the base.
 //! - Si ya hay alguna surface definida entonces buscamos el índice
-//!  en la base de la línea común de está última con la que se pasa como
-//!  parámetro. Si tal línea existe, dicho índice es el que corresponde
+//!  en la base de la línea común de está última con la being passed as
+//!  parameter. Si tal línea existe, dicho índice es el que corresponde
 //!  a la surface en el sólido.
 size_t XC::Block::indice(Face *s) const
   {
@@ -275,8 +275,8 @@ void XC::Block::inserta(const size_t &i)
 		<< " not found." << std::endl;
   }
 
-//! @brief Crea e inserta las caras partir de los índices que se pasan
-//! como parámetro.
+//! @brief Crea e inserta las caras partir de los índices being passed
+//! as parameter.
 void XC::Block::add_caras(const std::vector<size_t> &indices_caras)
   {
     const size_t nc= indices_caras.size(); //No. de índices leídos.

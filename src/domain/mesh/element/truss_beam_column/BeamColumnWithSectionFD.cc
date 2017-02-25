@@ -86,7 +86,7 @@ bool XC::BeamColumnWithSectionFD::setSections(const std::vector<SeccionBarraPris
 void XC::BeamColumnWithSectionFD::setTrialSectionDeformations(const std::vector<Vector> &vs)
   { return theSections.setTrialSectionDeformations(vs); }
 
-//! @brief Returns a pointer to the la sección del elemento cuyo índice se pasa como parámetro.
+//! @brief Returns a pointer to the la sección del elemento cuyo índice being passed as parameter.
 const XC::SeccionBarraPrismatica *XC::BeamColumnWithSectionFD::getSectionPtr(const size_t &i) const
   { return theSections[i]; }
 

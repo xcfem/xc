@@ -62,7 +62,7 @@ void XC::ElementEdges::setPtrs(Domain *theDomain, const ID &theElementTags, cons
       }
   }
 
-//! @brief Returns an iterator al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns an iterator al elemento cuyo tag being passed as parameter.
 XC::ElementEdges::iterator XC::ElementEdges::find(const int &tag)
   {
     iterator retval= end();
@@ -72,7 +72,7 @@ XC::ElementEdges::iterator XC::ElementEdges::find(const int &tag)
     return retval;
   }
 
-//! @brief Returns an iterator al elemento cuyo tag se pasa como parámetro.
+//! @brief Returns an iterator al elemento cuyo tag being passed as parameter.
 XC::ElementEdges::const_iterator XC::ElementEdges::find(const int &tag) const
   {
     const_iterator retval= end();
@@ -96,7 +96,7 @@ int XC::ElementEdges::getLocElement(const Element *ptr) const
     return retval;
   }
 
-//! @brief Elimina el elemento cuyo tag se pasa como parámetro.
+//! @brief Elimina el elemento cuyo tag being passed as parameter.
 size_t XC::ElementEdges::removeElement(const int &tag) 
   {
     iterator i= find(tag);

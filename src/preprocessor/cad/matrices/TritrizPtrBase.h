@@ -530,14 +530,12 @@ void TritrizPtrBase<MatrizPtr>::PutCaja(size_t offset_capa,size_t offset_fila,si
   }
 
 
-//! @brief Pide a cada uno de los elementos de la capa que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Returns the identifiers of the objects on the layer.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsCapa(const size_t &c)
   { return (*this)(c).getTagsObjs(); }
 
-//! @brief Pide a cada uno de los elementos de la fila que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Returns the identifiers of the objects on the row.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsFila(const size_t &c,const size_t &f)
   {
@@ -548,8 +546,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsFila(const size_t &c,cons
     return retval;
   }
 
-//! @brief Pide a cada uno de los elementos de las filas de indice f que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Returns the identifiers of the objects on the f-th rows.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsFilas(const size_t &f)
   {
@@ -562,8 +559,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsFilas(const size_t &f)
     return retval.getVector();
   }
 
-//! @brief Pide a cada uno de los elementos de la columna que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Returns the identifiers of the objects on the column.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsColumna(const size_t &capa,const size_t &c)
   {
@@ -574,8 +570,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsColumna(const size_t &cap
     return retval;
   }
 
-//! @brief Pide a cada uno de los elementos de las columnas de índice c que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Returns the identifiers of the objects on the c-th columns.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsColumnas(const size_t &c)
   {
@@ -588,14 +583,12 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsColumnas(const size_t &c)
     return retval.getVector();
   }
 
-//! @brief Pide a cada uno de los elementos interiores de la capa que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Returns the identifiers of the objects on the layer interior.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresCapa(const size_t &c)
   { return (*this)(c).getObjsInteriores(); }
 
-//! @brief Pide a cada uno de los elementos interiores de la fila que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Returns the identifiers of the objects on the row interior.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresFila(const size_t &c,const size_t &f)
   {
@@ -606,8 +599,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresFila(const size
     return retval;
   }
 
-//! @brief Pide a cada uno de los elementos interiores de las filas de índice f que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Returns the identifiers of the objects on the c-th rows interior.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresFilas(const size_t &f)
   {
@@ -620,8 +612,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresFilas(const siz
     return retval.getVector();
   }
 
-//! @brief Pide a cada uno de los elementos interiores de la columna que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Returns the identifiers of the objects on the c-th column interior.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresColumna(const size_t &capa,const size_t &c)
   {
@@ -632,8 +623,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresColumna(const s
     return retval;
   }
 
-//! @brief Pide a cada uno de los elementos interiores de las columnas de índice c que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Returns the identifiers of the objects on the c-th columns interior.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresColumnas(const size_t &c)
   {
@@ -646,8 +636,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresColumnas(const 
     return retval.getVector();
   }
 
-//! @brief Pide a cada uno de los elementos interiores que ejecuten el código que se pasa como
-//! parámetro.
+//! @brief Returns the tabs of the inerior elements.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsInteriorObjs(void)
   {

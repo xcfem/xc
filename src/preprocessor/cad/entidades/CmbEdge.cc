@@ -71,7 +71,7 @@ const XC::Pnt *XC::CmbEdge::Lado::P2(void) const
   }
 
 
-//! @brief Returns true iflos puntos que se pasan como parámetro
+//! @brief Returns true iflos puntos being passed as parameters
 //! son los extremos del lado.
 bool XC::CmbEdge::Lado::ExtremosEn(const Pnt *p1,const Pnt *p2) const
   {
@@ -413,8 +413,8 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
       std::clog << "hecho." << std::endl;
   }
 
-//! @brief Crea e inserta las líneas a partir de los índices que se pasan
-//! como parámetro.
+//! @brief Crea e inserta las líneas a partir de los índices being passed
+//! as parameter.
 void XC::CmbEdge::addLines(const ID &indices_lineas)
   {
     const size_t nl= indices_lineas.Size(); //No. de índices leídos.
@@ -423,7 +423,7 @@ void XC::CmbEdge::addLines(const ID &indices_lineas)
   }
  
 //! @brief Crea e inserta las líneas a partir de los puntos cuyos índices se pasan
-//! como parámetro.
+//! as parameter.
 void XC::CmbEdge::addPoints(const ID &indices_ptos)
   {
     const size_t np= indices_ptos.Size(); //No. de índices leídos.
@@ -462,7 +462,7 @@ void XC::CmbEdge::cierra(void)
       std::cerr << "CmbEdge::cierra; la línea ya está cerrada." << std::endl;
   }
 
-//! @brief Creates a nueva línea entre los puntos que se pasan como parámetro
+//! @brief Creates a nueva línea entre los puntos being passed as parameters
 //! y la inserta en the set de lados.
 XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
   {
@@ -486,7 +486,7 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
     return retval;
   }
 
-//! @brief Creates a nuevo arco de circunferencia entre los puntos que se pasan como parámetro
+//! @brief Creates a nuevo arco de circunferencia entre los puntos being passed as parameters
 //! y la inserta en the set de lados.
 XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
   {
@@ -569,7 +569,7 @@ XC::CmbEdge::Lado *XC::CmbEdge::GetLado(const size_t &i)
   { return &lineas[i-1]; }
 
 //! @brief Returns the lado que tiene por extremos los puntos
-//! que se pasan como parámetros.
+//! being passed as parameters.
 const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *p2) const
   {
     const Lado *retval= nullptr;
@@ -583,7 +583,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *
   }
 
 //! @brief Returns the lado que tiene por extremos los puntos
-//! que se pasan como parámetros.
+//! being passed as parameters.
 XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *p2)
   {
     Lado *retval= nullptr;
@@ -597,7 +597,7 @@ XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *p2)
   }
 
 //! @brief Returns the lado que tiene por extremos los puntos
-//! que se pasan como parámetros.
+//! being passed as parameters.
 const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const size_t &idP1,const size_t &idP2) const
   {
     const Pnt *p1= BuscaPnt(idP1);
@@ -606,7 +606,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const size_t &idP1,const 
   }
 
 //! @brief Returns the lado que tiene por extremos los puntos
-//! que se pasan como parámetros.
+//! being passed as parameters.
 XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const size_t &idP1,const size_t &idP2)
   {
     const Pnt *p1= BuscaPnt(idP1);

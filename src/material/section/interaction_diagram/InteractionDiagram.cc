@@ -247,7 +247,7 @@ Pos3d XC::InteractionDiagram::getIntersection(const Pos3d &esf_d) const
     return retval;    
   }
 
-//! @brief Returns the factor de capacidad para la terna de esfuerzos que se pasan como parámetro.
+//! @brief Returns the capacity factor for the internal forces triplet being passed as parameters.
 double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
   {
     double retval= 1e6;
@@ -256,7 +256,7 @@ double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
     const double d= dist(O,esf_d); //Distancia desde la terna de esfuerzos al origen.
     const double umbralMax= rMax*10.0;
     if(d<mchne_eps_dbl) //Si el punto está muy cerca del origen.
-      retval= 0.0;//Devolvemos el máximo factor de capacidad que puede presentarse.
+      retval= 0.0;//Devolvemos el máximo capacity factor que puede presentarse.
     else if(d>umbralMax) //Point is far from diagram surface.
       retval= d/rMax;
     else

@@ -60,7 +60,7 @@ void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
       std::cerr << "Material handler not defined." << std::endl;
   }
 
-//! \brief Returns the parámetros estáticos de la sección.
+//! \brief Returns the mechanical properties of the section.
 const XC::CrossSectionProperties3d &XC::BaseElasticSection3d::getCrossSectionProperties(void) const
   { return ctes_scc; }
 

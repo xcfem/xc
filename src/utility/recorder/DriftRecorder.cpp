@@ -378,7 +378,7 @@ int XC::DriftRecorder::initialize(void)
   }
 
 
-//! @brief Envia el objet por el canal definido en el parámetro.
+//! @brief Sends the object through the communicator being passed as parameter.
 int XC::DriftRecorder::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -397,7 +397,7 @@ int XC::DriftRecorder::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto por el canal definido en el parámetro.
+//! @brief Receives the object through the communicator being passed as parameter.
 int XC::DriftRecorder::recvSelf(const CommParameters &cp)
   {
     inicComm(12);
