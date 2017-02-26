@@ -32,7 +32,7 @@ void export_material_base(void)
         .def("commitState", &XC::Material::commitState,"Commits material's state.")
         .def("revertToLastCommit", &XC::Material::revertToLastCommit,"Returns the material to the last commited state.")
         .def("revertToStart", &XC::Material::revertToStart,"Returns the material to its initial state.")
-        .def("getName",&XC::MaterialLoader::getName,"Returns the name of the material.")
+        .def("getName",&XC::Material::getName,"Returns the name of the material.")
        ;
   }
 
