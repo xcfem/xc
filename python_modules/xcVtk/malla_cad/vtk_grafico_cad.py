@@ -4,11 +4,12 @@
 import vtk
 from xcVtk import cadMesh
 from xcVtk import vtk_grafico_base
+from miscUtils import LogMessages as lmsg
 
 class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
-  ''' Define la salida gráfica.'''
+  ''' Defines graphic output.'''
   def defineEscenaMalla(self, field):
-    # Define la escena de la malla en el dispositivo de salida.
+    ''' Defines mesh scene on ouput display.'''
     self.gridRecord.uGrid= vtk.vtkUnstructuredGrid()
     self.gridRecord.cellType= "lines"
     setToDraw= self.gridRecord.xcSet
@@ -20,6 +21,8 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
       cadMesh.VtkDefineActorKPoint(self.gridRecord,self.renderer,0.02)
       cadMesh.VtkDefineActorCells(self.gridRecord,self.renderer,"wireframe")
       self.renderer.ResetCamera()
+    else:
+      lmsg.warning("Error when drawing set: '"+setToDraw.name+"' it has not key points so I can't get set geometry (use fillDownwards?)")
 
     #Implementar dibujo de etiquetas.
     # if(entToLabel=="cells"):

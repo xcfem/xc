@@ -204,6 +204,11 @@ class RecordDefDisplay(object):
     return iren
 
   def displayScene(self,caption= '', fName= None):
+    ''' Displaying scene
+
+    :param caption: caption to display with the scene.
+    :param fName: name of the image file, in none -> screen window.
+    '''
     self.defineView()
     self.setupWindow(caption)
     if(fName):
@@ -225,7 +230,10 @@ class RecordDefDisplay(object):
     return self.gridRecord
 
   def displayGrid(self, caption= ''):
-    '''Displays the grid in the output device'''
+    '''Displays the grid in the output device
+
+    :param caption: caption to display with the scene.
+    '''
     self.defineEscenaMalla(None)
     self.displayScene(caption)
 
