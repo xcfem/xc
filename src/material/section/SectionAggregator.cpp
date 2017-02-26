@@ -244,6 +244,7 @@ XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator 
     return *this;
   }
 
+//! @brief Assigns the section.
 void XC::SectionAggregator::setSection(const std::string &sectionName)
   {
     assert(material_loader);
@@ -283,13 +284,13 @@ void XC::SectionAggregator::setAddtions(const std::vector<std::string> &response
               theAdditions.push_back(tmp);
             else
               std::cerr << "SectionAggregator::setAddition; "
-                        << "el material de código: '" << nmbMats[i]
-                        << "' no corresponde a un material uniaxial.\n";
+                        << "material with code: '" << nmbMats[i]
+                        << "' is not an uniaxial material.\n";
           }
         else
           std::cerr << "SectionAggregator::setAddition; "
-                    << "no se encontró el material de código: '" << nmbMats[i]
-                    << "'.\n";
+                    << "material: '" << nmbMats[i]
+                    << "' not found.\n";
       }
     alloc_storage_ptrs();
   }
@@ -302,7 +303,11 @@ void XC::SectionAggregator::setAddtionsPyList(const boost::python::list &respons
 XC::SectionAggregator::~SectionAggregator(void)
   { libera(); }
 
-//! @brief Asigna la initial strain.
+//! @brief Virtual constructor.
+XC::SectionForceDeformation *XC::SectionAggregator::getCopy(void) const
+  { return new SectionAggregator(*this); }
+
+//! @brief Sets initial strain.
 int XC::SectionAggregator::setInitialSectionDeformation(const Vector &def)
   {
     int ret= 0;
@@ -320,7 +325,7 @@ int XC::SectionAggregator::setInitialSectionDeformation(const Vector &def)
     return ret;
   }
 
-//! @brief Asigna la trial strain.
+//! @brief Sets trial strain.
 int XC::SectionAggregator::setTrialSectionDeformation(const Vector &def)
   {
     int ret= 0;
@@ -347,7 +352,7 @@ double XC::SectionAggregator::getStrain(const double &y,const double &z) const
     return retval;
   }
 
-//! @brief Returns the initial strain de la sección.
+//! @brief Returns material initial generalized strain.
 const XC::Vector &XC::SectionAggregator::getInitialSectionDeformation(void) const
   {
     int theSectionOrder= 0;
@@ -362,7 +367,7 @@ const XC::Vector &XC::SectionAggregator::getInitialSectionDeformation(void) cons
     return *defzero;
   }
 
-//! @brief Returns material's trial generalized deformation.
+//! @brief Returns material trial generalized strain.
 const XC::Vector &XC::SectionAggregator::getSectionDeformation(void) const
   {
     int theSectionOrder= 0;
@@ -459,7 +464,7 @@ const XC::Matrix &XC::SectionAggregator::getInitialFlexibility(void) const
     return *fs;
   }
 
-//! @brief Returns the resultante de tensiones.
+//! @brief Returns the stress resultant.
 const XC::Vector &XC::SectionAggregator::getStressResultant(void) const
   {
     int theSectionOrder= 0;
@@ -474,9 +479,6 @@ const XC::Vector &XC::SectionAggregator::getStressResultant(void) const
     theAdditions.getStress(*s,theSectionOrder);
     return *s;
   }
-
-XC::SectionForceDeformation *XC::SectionAggregator::getCopy(void) const
-  { return new SectionAggregator(*this); }
 
 //! @brief Section stiffness contribution response identifiers.
 const XC::ResponseId &XC::SectionAggregator::getType(void) const
@@ -493,6 +495,7 @@ const XC::ResponseId &XC::SectionAggregator::getType(void) const
     return *theCode;
   }
 
+//! @brief Returns the order of the section.
 int XC::SectionAggregator::getOrder(void) const
   {
     int order= theAdditions.size();
@@ -523,6 +526,7 @@ int XC::SectionAggregator::revertToLastCommit(void)
     return err;
   }        
 
+//! @brief Reverts the material to its initial state. 
 int XC::SectionAggregator::revertToStart(void)
   {
     int err= 0;

@@ -44,9 +44,10 @@ class_<XC::NodeLoader, bases<XC::Loader>, boost::noncopyable >("NodeLoader", no_
   ;
 
 class_<XC::MaterialLoader, bases<XC::Loader>, boost::noncopyable >("MaterialLoader", no_init)
-  .def("newMaterial", &XC::MaterialLoader::nuevoMaterial,return_internal_reference<>(),"Crea un material.")
+  .def("newMaterial", &XC::MaterialLoader::nuevoMaterial,return_internal_reference<>(),"Creates a new material.")
   .def("getMaterial", &XC::MaterialLoader::getMaterial,return_internal_reference<>(),"Returns the material cuyo nombre being passed as parameter.")
   .def("materialExists",&XC::MaterialLoader::existeMaterial,"True if material is already defined.")
+  .def("getName",&XC::MaterialLoader::getName,"Returns the name thats corresponds to the identifier.")
   .def("newSectionGeometry", &XC::MaterialLoader::newSectionGeometry,return_internal_reference<>())
   .def("getSectionGeometry", &XC::MaterialLoader::getGeomSection,return_internal_reference<>(),"Returns section geometry whose name is given.")
   .def("geomSectionExists",&XC::MaterialLoader::existeGeomSection,"True if section's shape is already defined.")

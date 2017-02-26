@@ -32,6 +32,7 @@
 #define AGGREGATORADDITIONS_H
 
 #include <material/uniaxial/DqUniaxialMaterial.h>
+#include "material/section/ResponseId.h"
 
 namespace XC {
 
@@ -43,11 +44,8 @@ class ResponseId;
 //! of freedom associated to each of them (used in SectionAggregator).
 class AggregatorAdditions: public DqUniaxialMaterial
   {
-    ResponseId *matCodes; //!< Response for each material.
+    ResponseId matCodes; //!< Response for each material.
   protected:
-    void libera(void);
-    void alloc_ptrs(const ResponseId &);
-    void alloc_ptrs(const ResponseId *);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
@@ -56,10 +54,11 @@ class AggregatorAdditions: public DqUniaxialMaterial
     AggregatorAdditions(EntCmd *owner,const UniaxialMaterial &,int c);
     AggregatorAdditions(const AggregatorAdditions &otro);
     AggregatorAdditions(const AggregatorAdditions &otro,SectionForceDeformation *s);
-    AggregatorAdditions &operator=(const AggregatorAdditions &otro);
     ~AggregatorAdditions(void);
 
-    bool check_ptrs(void) const;
+    inline bool check_ptrs(void) const
+      { return !matCodes.Nulo(); }
+
     void putMatCodes(const ResponseId &codes);
 
     void getType(ResponseId &retval,const size_t &offset) const;

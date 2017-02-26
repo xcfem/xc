@@ -64,14 +64,11 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
 
-
-
 //! @brief Constructor.
 XC::Material::Material(int tag, int clasTag)
   :TaggedObject(tag), MovableObject(clasTag) {}
 
-
-//! @brief Returns (if possible) a pointer al preprocesador.
+//! @brief Returns (if possible) a pointer to the material handler (owner).
 const XC::MaterialLoader *XC::Material::GetMaterialLoader(void) const
   {
     const XC::MaterialLoader *retval= dynamic_cast<const MaterialLoader *>(Owner());
@@ -89,6 +86,13 @@ XC::MaterialLoader *XC::Material::GetMaterialLoader(void)
     return retval;
   }
 
+//! @brief Returns the name of the material.
+std::string XC::Material::getName(void) const
+  {
+    const MaterialLoader *mloader= GetMaterialLoader();
+    return mloader->getName(getTag());
+  }
+
 int XC::Material::setVariable(const std::string &argv)
   { return -1; }
 
@@ -104,6 +108,7 @@ int XC::Material::updateParameter(int responseID, Information &eleInformation)
 XC::Response* XC::Material::setResponse(const std::vector<std::string> &argv, Information &eleInformation)
   { return nullptr; }
 
+//! @brief Returns material response.
 int XC::Material::getResponse(int responseID, Information &info)
   { return -1; }
 
@@ -112,11 +117,14 @@ int XC::Material::getResponse(int responseID, Information &info)
 void XC::Material::update(void)
    {return;}
 
+//! @brief Increments generalized strain
+//! @param incS: strain increment.
 void XC::Material::addInitialGeneralizedStrain(const Vector &incS)
   {
     setInitialGeneralizedStrain(getInitialGeneralizedStrain()+incS);
   }
 
+//! @brief zeroes initial generalized strain
 void XC::Material::zeroInitialGeneralizedStrain(void)
   {
     Vector tmp= getInitialGeneralizedStrain();
@@ -125,9 +133,9 @@ void XC::Material::zeroInitialGeneralizedStrain(void)
   }
 
 
-//! @brief Envía a pointer a material through the channel being passed as parameter.
-//! @param posClassTag: Posición de ID del identificador de la clase del material.
-//! @param posDbTag: Posición de ID en la que se guarda el dbTag.
+//! @brief Sends a pointer to material through the communicator being passed as parameter.
+//! @param posClassTag: Index of the material class identifier.
+//! @param posDbTag: Index of the dbTag.
 int XC::sendMaterialPtr(Material *ptr,DbTagData &dt,CommParameters &cp,const BrokedPtrCommMetaData &md)
   {
     int res= 0;
@@ -142,9 +150,9 @@ int XC::sendMaterialPtr(Material *ptr,DbTagData &dt,CommParameters &cp,const Bro
     return res;
   }
 
-//! @brief Recibe a pointer a material through the channel being passed as parameter.
-//! @param posClassTag: Posición de ID del identificador de la clase del material.
-//! @param posDbTag: Posición de ID en la que se guarda el dbTag.
+//! @brief Receives a pointer to material through the communicator being passed as parameter.
+//! @param posClassTag: Index of the material class identifier.
+//! @param posDbTag: Index of the dbTag.
 XC::Material *XC::receiveMaterialPtr(Material* ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)
   {
     Material *retval= nullptr;

@@ -81,6 +81,7 @@ class MaterialLoader: public Loader
     const Material *find_ptr(const std::string &nmb) const;
     Material *find_ptr(const int &tag);
     const Material *find_ptr(const int &tag) const;
+    std::string getName(const int &tag) const;
     GeomSection *find_ptr_geom_section(const std::string &nmb);
     const GeomSection *find_ptr_geom_section(const std::string &nmb) const;
     InteractionDiagram *find_ptr_interaction_diagram(const std::string &nmb);

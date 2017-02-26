@@ -27,117 +27,60 @@
 //AggregatorAdditions.cc
 
 #include "AggregatorAdditions.h"
-#include "material/section/ResponseId.h"
 
 
 #include "utility/actor/actor/MovableID.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-//! @brief Comprueba que los pointers no sean nulos.
-bool XC::AggregatorAdditions::check_ptrs(void) const
-  {
-    if(!matCodes)
-      {
-        std::cerr << "AggregatorAdditions::AggregatorAdditions -- out of memory\n";
-        return false;
-      }
-    return true;
-  }
-
-//! @brief Reserva memoria.
-void XC::AggregatorAdditions::alloc_ptrs(const ResponseId &addCodes)
-  {
-    libera();
-    matCodes = new ResponseId(addCodes);
-    check_ptrs();
-  }
-
-//! @brief Reserva memoria.
-void XC::AggregatorAdditions::alloc_ptrs(const ResponseId *addCodes)
-  {
-     if(addCodes)
-       alloc_ptrs(*addCodes);
-     else
-       std::cerr << "AggregatorAdditions::alloc_ptrs;"
-                 << " se pasó a null pointer." << std::endl;
-  }
-
-//! @brief Libera memoria.
-void XC::AggregatorAdditions::libera(void)
-  {
-    if(matCodes)
-      {
-        delete matCodes;
-        matCodes= nullptr;
-      }
-  }
-
 //! @brief Constructor.
 XC::AggregatorAdditions::AggregatorAdditions(EntCmd *owner)
-  : DqUniaxialMaterial(owner), matCodes(nullptr) {}
+  : DqUniaxialMaterial(owner), matCodes(0) {}
 
 //! @brief Constructor.
 XC::AggregatorAdditions::AggregatorAdditions(EntCmd *owner,const UniaxialMaterial &um, int c)
-  : DqUniaxialMaterial(owner,um), matCodes(nullptr)
+  : DqUniaxialMaterial(owner,um), matCodes(1)
   {
-    alloc_ptrs(XC::ResponseId(1));
-    (*matCodes)(0) = c;
+    matCodes(0)= c;
   }
 
 //! @brief Copy constructor.
 XC::AggregatorAdditions::AggregatorAdditions(const AggregatorAdditions &otro)
-  : DqUniaxialMaterial(otro), matCodes(nullptr)
-  {
-    if(otro.matCodes)
-      alloc_ptrs(otro.matCodes);
-  }
+  : DqUniaxialMaterial(otro), matCodes(otro.matCodes)
+  {}
 
 //! @brief Copy constructor.
 XC::AggregatorAdditions::AggregatorAdditions(const AggregatorAdditions &otro,SectionForceDeformation *s)
-  : DqUniaxialMaterial(otro,s)
-  { 
-    if(otro.matCodes)
-      alloc_ptrs(otro.matCodes);
-  }
-
-//! @brief Operator asignación.
-XC::AggregatorAdditions &XC::AggregatorAdditions::operator=(const AggregatorAdditions &otro)
-  {
-    DqUniaxialMaterial::operator=(otro);
-    if(otro.matCodes)
-      alloc_ptrs(otro.matCodes);
-    return *this;
-  }
-
+  : DqUniaxialMaterial(otro,s), matCodes(otro.matCodes)
+  {}
 
 //! @brief Destructor.
 XC::AggregatorAdditions::~AggregatorAdditions(void)
-  { libera(); }
+  {}
 
 
 void XC::AggregatorAdditions::putMatCodes(const ResponseId &codes)
-  { alloc_ptrs(codes); }
+  { matCodes= codes; }
 
 //! @brief Response identifiers for material stiffness contributions.
 void XC::AggregatorAdditions::getType(ResponseId &retval,const size_t &offset) const
   {
     const size_t n= size();
     for(register size_t i=0;i<n;i++)
-      retval(offset+i)= (*matCodes)(i);
+      retval(offset+i)= matCodes(i);
   }
 
 //! @brief Imprime el objeto.
 void XC::AggregatorAdditions::Print(std::ostream &s, int flag) const
   {
     DqUniaxialMaterial::Print(s,flag);
-    s << "\tUniaxial codes " << *matCodes << std::endl;
+    s << "\tUniaxial codes " << matCodes << std::endl;
   }
 
 //! @brief Send members del objeto through the channel being passed as parameter.
 int XC::AggregatorAdditions::sendData(CommParameters &cp)
   {
     int res= DqUniaxialMaterial::sendData(cp);
-    res+= cp.sendIDPtr(matCodes,getDbTagData(),ArrayCommMetaData(2,3,4));
+    res+= cp.sendID(matCodes,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -145,8 +88,7 @@ int XC::AggregatorAdditions::sendData(CommParameters &cp)
 int XC::AggregatorAdditions::recvData(const CommParameters &cp)
   {
     int res= DqUniaxialMaterial::recvData(cp);
-    libera();
-    matCodes= cp.receiveResponseIdPtr(matCodes,getDbTagData(),ArrayCommMetaData(2,3,4));
+    res+= cp.receiveID(matCodes,getDbTagData(),CommMetaData(2));
     return res;
   }
 

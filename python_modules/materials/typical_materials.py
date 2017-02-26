@@ -40,6 +40,7 @@ def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
   materiales.newMaterial("elasticpp_material",name)
   retval= materiales.getMaterial(name)
   retval.E= E
+  retval.name= name
   retval.fyp= fyp
   retval.fyn= fyn
   return retval

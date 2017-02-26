@@ -89,6 +89,7 @@ class Material: public TaggedObject, public MovableObject
 
     const MaterialLoader *GetMaterialLoader(void) const;
     MaterialLoader *GetMaterialLoader(void);
+    std::string getName(void) const;
 
     virtual int setVariable(const std::string &argv);
     virtual int getVariable(int variableID, double &info);

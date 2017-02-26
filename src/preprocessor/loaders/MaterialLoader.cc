@@ -732,6 +732,20 @@ const XC::Material *XC::MaterialLoader::find_ptr(const int &tag) const
     return retval;
   }
 
+//! @brief Returns the name that corresponds to the material tag being passed as parameter.
+std::string XC::MaterialLoader::getName(const int &tag) const
+  {
+    std::string retval= "";
+    const_iterator i= begin();
+    for(;i!= end();i++)
+      if((*i).second->getTag() == tag)
+        {
+          retval= (*i).first;
+          break;
+        }
+    return retval;
+  }
+
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nmb)
