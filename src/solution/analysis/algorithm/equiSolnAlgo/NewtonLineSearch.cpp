@@ -122,7 +122,7 @@ void XC::NewtonLineSearch::copia(LineSearch *ptr)
         theLineSearch->set_owner(this);
       }
     else
-     std::cerr << "NewtonLineSearch::copia; se pasó a null pointer." << std::endl;
+     std::cerr << "NewtonLineSearch::copia; pointer to line search is null." << std::endl;
   }
 
 XC::NewtonLineSearch::~NewtonLineSearch(void)

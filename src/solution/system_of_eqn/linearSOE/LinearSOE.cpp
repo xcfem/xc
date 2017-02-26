@@ -144,7 +144,7 @@ bool XC::LinearSOE::setSolver(LinearSOESolver *newSolver)
         retval= true;
       }
     else
-      std::cerr << "LinearSOE::setSolver; se pasó a null pointer." << std::endl;
+      std::cerr << "LinearSOE::setSolver; null pointer to solver." << std::endl;
     return retval;
   }
 

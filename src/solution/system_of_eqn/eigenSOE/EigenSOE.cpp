@@ -102,7 +102,7 @@ bool XC::EigenSOE::setSolver(EigenSolver *newSolver)
         retval= true;
       }
     else
-      std::cerr << "EigenSOE::setSolver; se pasó a null pointer." << std::endl;
+      std::cerr << "EigenSOE::setSolver; pointer to solver is null." << std::endl;
     return retval;
   }
 

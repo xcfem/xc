@@ -94,7 +94,7 @@ XC::CmbEdge *XC::MapLineas::newLineSequence(void)
     return retval;
   }
 
-//! @brief Inserta la nueva linea en the set total y the opened sets.
+//! @brief Inserta la nueva linea en the set total and the opened sets.
 void XC::MapLineas::UpdateSets(Edge *nueva_linea) const
   {
     Cad *cad= const_cast<Cad *>(dynamic_cast<const Cad *>(Owner()));
@@ -110,8 +110,10 @@ void XC::MapLineas::UpdateSets(Edge *nueva_linea) const
       }
   }
 
-//! @brief Creates a nueva línea entre los puntos being passed as parameters
-//! y la inserta en the set de lados.
+//! @brief Creates a new line entre los puntos being passed as parameters
+//! and inserts it on the container
+//! @param pA: pointer to back end of the line.
+//! @param pB: pointer to front end of the line.
 XC::Edge *XC::MapLineas::Line(Pnt *pA,Pnt *pB)
   {
     Edge *tmp= nullptr;
@@ -132,17 +134,19 @@ XC::Edge *XC::MapLineas::Line(Pnt *pA,Pnt *pB)
             tmp->SetVertice(2,pB);
           }
         if(!tmp)
-	  std::cerr << "MapLineas::Line; no se pudo obtener una linea"
-                    << " entre los puntos: " << pA->GetNombre()
-                    << " y " << pB->GetNombre() << std::endl;
+	  std::cerr << "MapLineas::Line; can't get a line"
+                    << " between points: " << pA->GetNombre()
+                    << " and " << pB->GetNombre() << std::endl;
       }
     else
-      std::cerr << "MapLineas::Line; error, se pasó a null pointer." << std::endl;
+      std::cerr << "MapLineas::Line; error, null pointer to point (A, B or both)." << std::endl;
     return tmp;
   }
 
-//! @brief Creates a nueva línea entre los puntos being passed as parameters
-//! y la inserta en the set de lados.
+//! @brief Creates a new line between the points being passed as parameters
+//! and inserts it on the container
+//! @param pA: pointer to back end of the line.
+//! @param pB: pointer to front end of the line.
 XC::Edge *XC::MapLineas::DividedLine(Pnt *pA,Pnt *pB)
   {
     Edge *tmp= nullptr;
@@ -163,17 +167,17 @@ XC::Edge *XC::MapLineas::DividedLine(Pnt *pA,Pnt *pB)
             tmp->SetVertice(2,pB);
           }
         if(!tmp)
-	  std::cerr << "MapLineas::DividedLine; no se pudo obtener una linea"
-                    << " entre los puntos: " << pA->GetNombre()
-                    << " y " << pB->GetNombre() << std::endl;
+	  std::cerr << "MapLineas::DividedLine; can't get a line"
+                    << " between points: " << pA->GetNombre()
+                    << " and " << pB->GetNombre() << std::endl;
       }
     else
-      std::cerr << "MapLineas::DividedLine; error, se pasó a null pointer." << std::endl;
+      std::cerr << "MapLineas::DividedLine; error, null pointer to point (A, B or both)." << std::endl;
     return tmp;
   }
 
 //! @brief Creates a nuevo arco de circunferencia entre los puntos being passed as parameters
-//! y la inserta en the set de lados.
+//! and la inserta en the set de lados.
 XC::Edge *XC::MapLineas::Arc(Pnt *pA,Pnt *pB,Pnt *pC)
   {
     Edge *tmp= nullptr;
@@ -190,17 +194,17 @@ XC::Edge *XC::MapLineas::Arc(Pnt *pA,Pnt *pB,Pnt *pC)
             tmp->SetVertice(3,pB); //Punto intermedio.
           }
         if(!tmp)
-	  std::cerr << "MapLineas::Arc; no se pudo obtener un arco de circunferencia"
-                    << " entre los puntos: " << pA->GetNombre() << ", " << pB->GetNombre()
-                    << " y " << pC->GetNombre() << std::endl;
+	  std::cerr << "MapLineas::Arc; can't get an arc"
+                    << " between the points: " << pA->GetNombre() << ", " << pB->GetNombre()
+                    << " and " << pC->GetNombre() << std::endl;
       }
     else
-      std::cerr << "MapLineas::Arc; error, se pasó a null pointer." << std::endl;
+      std::cerr << "MapLineas::Arc; error, null pointer to point (A, B and/or C)." << std::endl;
     return tmp;
   }
 
 //! @brief Creates a secuencia de líneas (polyline) con las being passed as parameters
-//! y la inserta en the set de lados.
+//! and la inserta en the set de lados.
 XC::Edge *XC::MapLineas::LineSequence(void)
   {
     Edge *tmp= Nueva<CmbEdge>();
@@ -208,7 +212,7 @@ XC::Edge *XC::MapLineas::LineSequence(void)
     return tmp;
   }
 
-//! @brief Creates a nueva línea, copia de la being passed as parameter con
+//! @brief Creates a new line, copia de la being passed as parameter con
 //! el nombre being passed as parameter.
 XC::Edge *XC::MapLineas::Copia(const Edge *l)
   {

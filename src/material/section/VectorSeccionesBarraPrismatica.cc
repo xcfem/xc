@@ -131,12 +131,12 @@ void XC::VectorSeccionesBarraPrismatica::setSection(const SeccionBarraPrismatica
 void XC::VectorSeccionesBarraPrismatica::setupSection(const Material *sec)
   {
     if(!sec)
-      std::cerr << "XC::VectorSeccionesBarraPrismatica::setupSection; se pasó a pointer a material nulo." << std::endl;
+      std::cerr << "XC::VectorSeccionesBarraPrismatica::setupSection; material pointer is null." << std::endl;
     else
       {
         const SeccionBarraPrismatica *ptr= dynamic_cast<const SeccionBarraPrismatica *>(sec);
         if(!ptr)
-          std::cerr << "XC::VectorSeccionesBarraPrismatica::setupSection; se pasó a pointer a material no válido." 
+          std::cerr << "XC::VectorSeccionesBarraPrismatica::setupSection; material type not valid." 
                     << std::endl;
         else
           setSection(ptr);

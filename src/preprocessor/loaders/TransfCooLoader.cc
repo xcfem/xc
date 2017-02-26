@@ -68,6 +68,7 @@ XC::LinearCrdTransf2d *XC::TransfCooLoader::newLinearCrdTransf2d(const std::stri
   {
     LinearCrdTransf2d *retval= new LinearCrdTransf2d(tag_trf++);
     assert(retval);
+    retval->set_owner(this);
     transfcoo[cod_trf]= retval;
     return retval;    
   } 
@@ -76,6 +77,7 @@ XC::LinearCrdTransf3d *XC::TransfCooLoader::newLinearCrdTransf3d(const std::stri
   { 
     LinearCrdTransf3d *retval= new LinearCrdTransf3d(tag_trf++);
     assert(retval);
+    retval->set_owner(this);
     transfcoo[cod_trf]= retval;
     return retval;    
   } 
@@ -84,6 +86,7 @@ XC::PDeltaCrdTransf2d *XC::TransfCooLoader::newPDeltaCrdTransf2d(const std::stri
   {
     PDeltaCrdTransf2d *retval= new PDeltaCrdTransf2d(tag_trf++);
     assert(retval);
+    retval->set_owner(this);
     transfcoo[cod_trf]= retval;
     return retval;
   } 
@@ -92,6 +95,7 @@ XC::PDeltaCrdTransf3d *XC::TransfCooLoader::newPDeltaCrdTransf3d(const std::stri
   {
     PDeltaCrdTransf3d *retval= new PDeltaCrdTransf3d(tag_trf++);
     assert(retval);
+    retval->set_owner(this);
     transfcoo[cod_trf]= retval;
     return retval;
   }
@@ -100,6 +104,7 @@ XC::CorotCrdTransf2d *XC::TransfCooLoader::newCorotCrdTransf2d(const std::string
   {
     CorotCrdTransf2d *retval= new CorotCrdTransf2d(tag_trf++);
     assert(retval);
+    retval->set_owner(this);
     transfcoo[cod_trf]= retval;
     return retval;
   } 
@@ -108,6 +113,7 @@ XC::CorotCrdTransf3d *XC::TransfCooLoader::newCorotCrdTransf3d(const std::string
   {
     CorotCrdTransf3d *retval= new CorotCrdTransf3d(tag_trf++);
     assert(retval);
+    retval->set_owner(this);
     transfcoo[cod_trf]= retval;
     return retval;
   }
@@ -145,6 +151,51 @@ XC::CrdTransf *XC::TransfCooLoader::find_ptr(const std::string &nmb)
       return (*i).second;
     else
       return nullptr; 
+  }
+
+//! @brief Returns a pointer to the coordinate transformation with
+//! the tag being passed as parameter (null if not found).
+XC::CrdTransf *XC::TransfCooLoader::find_ptr(const int &tag)
+  {
+    CrdTransf *retval= nullptr;
+    iterator i= begin();
+    for(;i!= end();i++)
+      if((*i).second->getTag() == tag)
+        {
+          retval= (*i).second;
+          break;
+        }
+    return retval;
+  }
+
+//! @brief Returns a pointer to the coordinate transformation with
+//! the tag being passed as parameter (null if not found).
+const XC::CrdTransf *XC::TransfCooLoader::find_ptr(const int &tag) const
+  {
+    const CrdTransf *retval= nullptr;
+    const_iterator i= begin();
+    for(;i!= end();i++)
+      if((*i).second->getTag() == tag)
+        {
+          retval= (*i).second;
+          break;
+        }
+    return retval;
+  }
+
+//! @brief Returns the name that corresponds to the coordinate transformation
+//! tag being passed as parameter.
+std::string XC::TransfCooLoader::getName(const int &tag) const
+  {
+    std::string retval= "";
+    const_iterator i= begin();
+    for(;i!= end();i++)
+      if((*i).second->getTag() == tag)
+        {
+          retval= (*i).first;
+          break;
+        }
+    return retval;
   }
 
 //! @brief Deletes all members.

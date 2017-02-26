@@ -117,7 +117,7 @@ XC::IntPtrWrapper::IntPtrWrapper(int *d, int size, bool cleanIt)
   {
     if(!d)
       {
-        std::cerr << "IntPtrWrapper; se pasó a null pointer." << std::endl;
+        std::cerr << "IntPtrWrapper; pointer to integer is null." << std::endl;
         sz= 0;
         data= nullptr;
         fromFree = 0;
@@ -125,7 +125,7 @@ XC::IntPtrWrapper::IntPtrWrapper(int *d, int size, bool cleanIt)
         // create the space
         if(size!=0)
           {
-            std::cerr << "IntPtrWrapperWrapper; llama a malloc" << std::endl;
+            std::cerr << "IntPtrWrapperWrapper; calls malloc" << std::endl;
             data=  (int *)malloc(size*sizeof(int));
             if(!data)
               {

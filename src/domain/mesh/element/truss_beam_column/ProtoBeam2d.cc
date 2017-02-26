@@ -42,12 +42,12 @@ void XC::ProtoBeam2d::set_material(const Material *m)
           ctes_scc= scc->getCrossSectionProperties();
         else
           {
-            std::cerr << "ProtoBeam2d::ProtoBeam2d -- el material no es del tipo adecuado.\n";
+            std::cerr << "ProtoBeam2d::ProtoBeam2d -- material type is not valid.\n";
           }
       }
     else
       if(verborrea>0)
-        std::cerr << "ProtoBeam2d::set_material; se pasó a null pointer." << std::endl;
+        std::cerr << "ProtoBeam2d::set_material; pointer to material is null." << std::endl;
   }
 
 //! @brief Default constructor.

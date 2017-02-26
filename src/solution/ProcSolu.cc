@@ -105,7 +105,7 @@ void XC::ProcSolu::copia_analysis(Analysis *ptr)
         theAnalysis->set_owner(this);
       }
     else
-     std::cerr << "ProcSolu::copia_analysis; se pasó a null pointer." << std::endl;
+     std::cerr << "ProcSolu::copia_analysis; pointer to analysis is null." << std::endl;
   }
 
 //! @brief Define el analysis type (estático, dinámico,...)

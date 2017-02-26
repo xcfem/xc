@@ -77,6 +77,10 @@ class TransfCooLoader: public Loader
     const_iterator find(const std::string &str) const;
     iterator find(const std::string &str);
     CrdTransf *find_ptr(const std::string &str);
+    CrdTransf *find_ptr(const int &tag);
+    const CrdTransf *find_ptr(const int &tag) const;
+    std::string getName(const int &tag) const;
+    
     ~TransfCooLoader(void);
 
     void clearAll(void);

@@ -124,7 +124,7 @@ XC::Edge *XC::Linea::split_at(Pnt *p,const double &lambda,const double &longitud
     return retval;
   }
 
-//! @brief Divide la línea por el punto being passed as parameter.
+//! @brief Divides the line by the point being passed as parameter.
 XC::Edge *XC::Linea::splitAtPoint(Pnt *p)
   {
     Edge *retval= nullptr;
@@ -138,7 +138,7 @@ XC::Edge *XC::Linea::splitAtPoint(Pnt *p)
       }
     else
       {
-        std::cerr << "error Linea::splitAtPoint: se pasó a null pointer."
+        std::cerr << "error Linea::splitAtPoint: pointer to point is null."
                   << std::endl;
       }
     return retval;

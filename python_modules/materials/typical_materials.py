@@ -13,6 +13,15 @@ from miscUtils import LogMessages as lmsg
 
 # Typical material definition.
 
+class BasicElasticMaterial(object):
+  '''Basic elastic material'''
+
+  def __init__(self, E, nu):
+    self.E= E
+    self.nu= nu
+
+  def G(self):
+    return self.E/(2*(1+self.nu))
 
 def defElasticMaterial(preprocessor,name,E):
   '''Constructs an elastic uniaxial material.

@@ -71,6 +71,7 @@ class TritrizPos3d;
 namespace XC {
 class Matrix;
 class Node;
+class TransfCooLoader;
 
 
 //! \ingroup FEMisc
@@ -104,6 +105,10 @@ class CrdTransf: public TaggedObject, public MovableObject
     CrdTransf(void);
     virtual ~CrdTransf(void);
     
+    const TransfCooLoader *GetTransfCooLoader(void) const;
+    TransfCooLoader *GetTransfCooLoader(void);
+    std::string getName(void) const;
+
     virtual int initialize(Node *node1Pointer, Node *node2Pointer) = 0;
     virtual int update(void) = 0;
     virtual double getInitialLength(void) const= 0;

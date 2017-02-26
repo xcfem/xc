@@ -101,7 +101,7 @@ XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
 void XC::ZeroLengthMaterials::push_back(const int &dir,const UniaxialMaterial *t)
   {
     if(!t)
-      std::cerr << "XC::DqUniaxialMaterial::push_back; se pasó a pointer a material nulo." << std::endl;
+      std::cerr << "XC::DqUniaxialMaterial::push_back; material pointer is null." << std::endl;
     else
       {
         UniaxialMaterial *tmp= nullptr;
@@ -112,7 +112,7 @@ void XC::ZeroLengthMaterials::push_back(const int &dir,const UniaxialMaterial *t
             direcciones.push_back(dir);
           }
         else
-          std::cerr << "DqUniaxialMaterial::push_back; no se pudo crear un objeto UniaxialMaterial" << std::endl;
+          std::cerr << "DqUniaxialMaterial::push_back; can't create UniaxialMaterial" << std::endl;
       }
   }
 

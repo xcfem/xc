@@ -82,12 +82,12 @@ void XC::ZeroLengthSection::setup_section(const Material *sec)
   {
     libera();
     if(!sec)
-      std::cerr << "ZeroLengthSection::setup_section; se pasó a pointer a material nulo." << std::endl;
+      std::cerr << "ZeroLengthSection::setup_section; pointer to material is null." << std::endl;
     else
       {
         const SectionForceDeformation *ptr= dynamic_cast<const SectionForceDeformation *>(sec);
         if(!ptr)
-          std::cerr << "ZeroLengthSection::setup_section; se pasó a pointer a material no válido."
+          std::cerr << "ZeroLengthSection::setup_section; material type is not valid."
                     << std::endl;
         else
           {

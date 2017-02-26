@@ -69,7 +69,7 @@ void XC::ModelWrapper::copia_analysis_model(AnalysisModel *ptr)
         theModel->set_owner(this);
       }
     else
-      std::cerr << "ModelWrapper::copia_analysis_model; se pasó a null pointer." << std::endl;
+      std::cerr << "ModelWrapper::copia_analysis_model; null pointer to analysis model." << std::endl;
   }
 
 void XC::ModelWrapper::libera_constraint_handler(void)
@@ -112,7 +112,7 @@ void XC::ModelWrapper::copia_constraint_handler(const ConstraintHandler *ptr)
         theHandler->set_owner(this);
       }
     else
-      std::cerr << "ModelWrapper::copia_constraint_handler; se pasó a null pointer." << std::endl;
+      std::cerr << "ModelWrapper::copia_constraint_handler; null pointer to constraint handler." << std::endl;
   }
 
 //! @brief Crea un numerador del tipo being passed as parameter.
@@ -172,7 +172,7 @@ void XC::ModelWrapper::copia_numerador(const DOF_Numberer *dn)
         setup_numerador();
       }
     else
-     std::cerr << "ModelWrapper::copia_numerador; se pasó a null pointer." << std::endl;
+     std::cerr << "ModelWrapper::copia_numerador; null pointer to DOF freedom." << std::endl;
   }
 
 //! @brief Crea un numerador del tipo being passed as parameter.

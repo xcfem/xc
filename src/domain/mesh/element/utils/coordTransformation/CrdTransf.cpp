@@ -60,7 +60,7 @@
 // coordinate transformation. It is an abstract base class and
 // thus no objects of  it's type can be instatiated.
 
-#include <domain/mesh/element/utils/coordTransformation/CrdTransf.h>
+#include "CrdTransf.h"
 #include <domain/mesh/node/Node.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
@@ -70,6 +70,7 @@
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
+#include "preprocessor/loaders/TransfCooLoader.h"
 
 
 //! @brief Constructor.
@@ -81,6 +82,32 @@ XC::CrdTransf::CrdTransf(int tag, int classTag, int dim_joint_offset)
 //! @brief Destructor virtual.
 XC::CrdTransf::~CrdTransf(void)
   {}
+
+//! @brief Returns (if possible) a pointer to the coordinate transformation handler (owner).
+const XC::TransfCooLoader *XC::CrdTransf::GetTransfCooLoader(void) const
+  {
+    const XC::TransfCooLoader *retval= dynamic_cast<const TransfCooLoader *>(Owner());
+    if(!retval)
+      std::cerr << "CrdTransf::GetTransfCooLoader; coordinate transformation handler not defined." << std::endl;
+    return retval;
+  }
+
+//! @brief Returs a pointer to the coordinate transformation handler (if possible).
+XC::TransfCooLoader *XC::CrdTransf::GetTransfCooLoader(void)
+  {
+    XC::TransfCooLoader *retval= dynamic_cast<TransfCooLoader *>(Owner());
+    if(!retval)
+      std::cerr << "CrdTransf::GetTransfCooLoader; coordinate transformation handler not defined." << std::endl;
+    return retval;
+  }
+
+//! @brief Returns the name of the material.
+std::string XC::CrdTransf::getName(void) const
+  {
+    const TransfCooLoader *ctloader= GetTransfCooLoader();
+    return ctloader->getName(getTag());
+  }
+
 
 //! @brief Asigna los pointers to node dorsal y frontal.
 int XC::CrdTransf::set_ptr_nodos(Node *nodeIPointer, Node *nodeJPointer)

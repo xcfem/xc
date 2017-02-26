@@ -302,7 +302,7 @@ void XC::DqUniaxialMaterial::getStress(Vector &s,const size_t &offset) const
 void XC::DqUniaxialMaterial::push_back(const UniaxialMaterial *t,SectionForceDeformation *s)
   {
     if(!t)
-      std::cerr << "DqUniaxialMaterial::push_back; se pasó a pointer a material nulo." << std::endl;
+      std::cerr << "DqUniaxialMaterial::push_back; pointer to material is null." << std::endl;
     else
       {
         UniaxialMaterial *tmp= nullptr;
@@ -313,7 +313,7 @@ void XC::DqUniaxialMaterial::push_back(const UniaxialMaterial *t,SectionForceDef
         if(tmp)
           lst_ptr::push_back(tmp);
         else
-          std::cerr << "DqUniaxialMaterial::push_back; no se pudo crear un objeto UniaxialMaterial" << std::endl;
+          std::cerr << "DqUniaxialMaterial::push_back; can't create an UniaxialMaterial" << std::endl;
       }
   }
 
@@ -321,7 +321,7 @@ void XC::DqUniaxialMaterial::push_front(const UniaxialMaterial *t,SectionForceDe
   {
     UniaxialMaterial *tmp= nullptr;
     if(!t)
-      std::cerr << "DqUniaxialMaterial::push_back; se pasó a pointer a material nulo." << std::endl;
+      std::cerr << "DqUniaxialMaterial::push_back; pointer to material is null." << std::endl;
     else
       {
         if(s)
@@ -331,7 +331,7 @@ void XC::DqUniaxialMaterial::push_front(const UniaxialMaterial *t,SectionForceDe
         if(tmp)
           lst_ptr::push_front(tmp);
         else
-          std::cerr << "DqUniaxialMaterial::push_front; no se pudo crear un objeto UniaxialMaterial" << std::endl;
+          std::cerr << "DqUniaxialMaterial::push_front; can't create UniaxialMaterial" << std::endl;
       }
   }
 

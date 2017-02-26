@@ -53,7 +53,7 @@ void XC::BeamColumnWithSectionFDTrf3d::set_transf(const CrdTransf *trf)
           }
       }
     else
-      std::cerr << "BeamColumnWithSectionFDTrf3d::set_transf; se pasó a null pointer." << std::endl;
+      std::cerr << "BeamColumnWithSectionFDTrf3d::set_transf; pointer to coordinate transformation is null." << std::endl;
   }
 
 XC::BeamColumnWithSectionFDTrf3d::BeamColumnWithSectionFDTrf3d(int tag, int classTag,int numSec)

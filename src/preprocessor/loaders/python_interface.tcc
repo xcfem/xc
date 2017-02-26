@@ -121,4 +121,5 @@ class_<XC::TransfCooLoader, bases<XC::Loader>, boost::noncopyable >("TransfCooLo
   .def("newPDeltaCrdTransf3d", &XC::TransfCooLoader::newPDeltaCrdTransf3d,return_internal_reference<>(),"New P-Delta 3d coordinate transformation.")
   .def("newCorotCrdTransf2d", &XC::TransfCooLoader::newCorotCrdTransf2d,return_internal_reference<>(),"New P-Delta 2d coordinate transformation.")
   .def("newCorotCrdTransf3d", &XC::TransfCooLoader::newCorotCrdTransf3d,return_internal_reference<>(),"New P-Delta 3d coordinate transformation.")
+  .def("getName",&XC::TransfCooLoader::getName,"Returns the name thats corresponds to the identifier.")
   ;

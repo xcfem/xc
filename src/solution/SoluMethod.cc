@@ -111,7 +111,7 @@ void XC::SoluMethod::copia_soln_algo(SolutionAlgorithm *ptr)
         theSolnAlgo->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_soln_algo; se pasó a null pointer." << std::endl;
+     std::cerr << "SoluMethod::copia_soln_algo; null pointer to solution algorithm." << std::endl;
   }
 
 //! @brief Creates a new solution algorithm with the name being passed as parameter.
@@ -256,7 +256,7 @@ void XC::SoluMethod::copia_integrator(Integrator *ptr)
         theIntegrator->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_integrator; se pasó a null pointer." << std::endl;
+     std::cerr << "SoluMethod::copia_integrator; null pointer to integrator." << std::endl;
   }
 
 //! @brief Define un nuevo integrator.
@@ -343,7 +343,7 @@ void XC::SoluMethod::copia_system_of_equations(SystemOfEqn *ptr)
         theSOE->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_system_of_equations; se pasó a null pointer." << std::endl;
+     std::cerr << "SoluMethod::copia_system_of_equations; null pointer to SOE." << std::endl;
   }
 
 //! @brief Sets the system of equations type to use.
@@ -406,7 +406,7 @@ void XC::SoluMethod::copia_conv_test(ConvergenceTest *ptr)
         theTest->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_conv_test; se pasó a null pointer." << std::endl;
+     std::cerr << "SoluMethod::copia_conv_test; null pointer to convergence test." << std::endl;
   }
 
 //! @brief Sets convergence test to use.
