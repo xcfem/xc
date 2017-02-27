@@ -352,6 +352,15 @@ double XC::SectionAggregator::getStrain(const double &y,const double &z) const
     return retval;
   }
 
+//! @brief Zeroes material initial generalized strain.
+void XC::SectionAggregator::zeroInitialSectionDeformation(void)
+  {
+    if(theSection)
+      theSection->zeroInitialSectionDeformation();
+    theAdditions.zeroInitialStrain();
+  }
+
+
 //! @brief Returns material initial generalized strain.
 const XC::Vector &XC::SectionAggregator::getInitialSectionDeformation(void) const
   {

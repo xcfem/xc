@@ -884,6 +884,7 @@ const XC::Matrix &XC::ForceBeamColumn3d::getMass(void) const
 
 void XC::ForceBeamColumn3d::zeroLoad(void)
   {
+    NLForceBeamColumn3dBase::zeroLoad();
     sp.Zero();
     p0.zero();
     v0.zero();

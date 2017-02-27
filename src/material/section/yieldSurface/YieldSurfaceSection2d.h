@@ -79,6 +79,7 @@ class YieldSurfaceSection2d: public SeccionBarraPrismatica
   
     virtual int setInitialSectionDeformation (const Vector&);
     virtual int setTrialSectionDeformation (const Vector&);
+    void zeroInitialSectionDeformation(void);
     virtual const Vector &getInitialSectionDeformation(void) const;
     virtual const Vector &getSectionDeformation(void) const;
   

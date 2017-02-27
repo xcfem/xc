@@ -72,6 +72,7 @@ class VectorSeccionesBarraPrismatica: public EntCmd, public std::vector<SeccionB
     void setSectionCopy(size_t i,SeccionBarraPrismatica *nueva_secc);
     void setupSection(const Material *sec);
     bool setSections(const std::vector<SeccionBarraPrismatica *> &sectionPtrs);
+    void zeroInitialSectionDeformations(void);
     void setInitialSectionDeformations(const std::vector<Vector> &vs);
     void addInitialSectionDeformations(const BeamStrainLoad &,const double &,const Matrix &, const double &L);
     void setTrialSectionDeformations(const std::vector<Vector> &vs);

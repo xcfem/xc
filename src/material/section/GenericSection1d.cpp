@@ -108,6 +108,10 @@ int XC::GenericSection1d::setInitialSectionDeformation(const Vector &def)
 int XC::GenericSection1d::setTrialSectionDeformation(const Vector &def)
   { return theModel->setTrialStrain(def(0)); }
 
+//! @brief Zeroes initial strain.
+void XC::GenericSection1d::zeroInitialSectionDeformation(void)
+  { theModel->setInitialStrain(0.0); }
+
 //! @brief Return the initial strain (axial y curvaturas) de la sección.
 const XC::Vector &XC::GenericSection1d::getInitialSectionDeformation(void) const
   {

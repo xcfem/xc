@@ -90,6 +90,7 @@ class GenericSectionNd: public SectionForceDeformation
 
     int setInitialSectionDeformation(const Vector&);
     int setTrialSectionDeformation(const Vector&);
+    void zeroInitialSectionDeformation(void);
     const Vector &getInitialSectionDeformation(void) const;
     const Vector &getSectionDeformation(void) const;
     double getStrain(const double &,const double &) const;

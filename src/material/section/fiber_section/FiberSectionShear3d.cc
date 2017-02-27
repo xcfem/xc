@@ -243,6 +243,15 @@ int XC::FiberSectionShear3d::setTrialSectionDeformation(const Vector &def)
     return ret;
   }
 
+//! @brief Zeroes initial strain of the section.
+void XC::FiberSectionShear3d::zeroInitialSectionDeformation(void)
+  {
+    FiberSection3d::zeroInitialSectionDeformation();
+    if(respVy) respVy->setInitialStrain(0.0);
+    if(respVz) respVz->setInitialStrain(0.0);
+    if(respT) respT->setInitialStrain(0.0);
+  }
+
 //! @brief Returns the initial strain de la sección.
 const XC::Vector &XC::FiberSectionShear3d::getInitialSectionDeformation(void) const
   {

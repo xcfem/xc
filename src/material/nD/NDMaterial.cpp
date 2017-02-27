@@ -111,90 +111,90 @@ const XC::Vector &XC::NDMaterial::getCommittedStrain(void)
 //! @brief Asigna el trial strain value.
 int XC::NDMaterial::setTrialStrain(const Vector &v)
   {
-    std::cerr << "XC::NDMaterial::setTrialStrain -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::setTrialStrain -- subclass responsibility\n";
     return -1;    
   }
 
 //! @brief Asigna el trial strain value.
 int XC::NDMaterial::setTrialStrain(const Vector &v, const Vector &r)
   {
-    std::cerr << "XC::NDMaterial::setTrialStrain -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::setTrialStrain -- subclass responsibility\n";
     return -1;    
   }
 
 //! @brief Asigna el valor del incremento de la trial strain.
 int XC::NDMaterial::setTrialStrainIncr(const Vector &v)
   {
-    std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::setTrialStrainIncr -- subclass responsibility\n";
     return -1;    
   }
 
 //! @brief Asigna el valor del incremento de la trial strain.
 int XC::NDMaterial::setTrialStrainIncr(const Vector &v, const Vector &r)
   {
-     std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";
+     std::cerr << nombre_clase() << "::setTrialStrainIncr -- subclass responsibility\n";
      return -1;    
   }
 
 //! @brief Asigna el initial strain value.
 void XC::NDMaterial::setInitialGeneralizedStrain(const Vector &)
   {
-     std::cerr << "XC::NDMaterial::setInitialGeneralizedStrain -- subclass responsibility\n";
+     std::cerr << nombre_clase() << "::setInitialGeneralizedStrain -- subclass responsibility\n";
   }
 
 //! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::NDMaterial::getTangent(void) const
   {
-     std::cerr << "XC::NDMaterial::getTangent -- subclass responsibility\n";
+     std::cerr << nombre_clase() << "::getTangent -- subclass responsibility\n";
      return errMatrix;    
   }
 
 //! @brief Return the tensión.
 const XC::Vector &XC::NDMaterial::getStress(void) const
   {
-    std::cerr << "XC::NDMaterial::getStress -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::getStress -- subclass responsibility\n";
     return errVector;    
   }
 
 //! @brief Returns strain.
 const XC::Vector &XC::NDMaterial::getStrain(void) const
   {
-    std::cerr << "XC::NDMaterial::getStrain -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::getStrain -- subclass responsibility\n";
     return errVector;    
   }
 
 //! @brief Return the initial strain.
 const XC::Vector &XC::NDMaterial::getInitialGeneralizedStrain(void) const
   {
-    std::cerr << "XC::NDMaterial::getStrain -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::getInitialGeneralizedStrain -- subclass responsibility\n";
     return errVector;    
   }
 
 //! @brief Asigna el trial strain value.
 int XC::NDMaterial::setTrialStrain(const Tensor &v)
   {
-    std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::setTrialStrainIncr -- subclass responsibility\n";
     return -1;    
   }
 
 //! @brief Asigna el trial strain value.
 int XC::NDMaterial::setTrialStrain(const Tensor &v, const XC::Tensor &r)    
   {
-    std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::setTrialStrainIncr -- subclass responsibility\n";
     return -1;    
   }
 
 //! @brief Asigna el valor del incremento de la trial strain.
 int XC::NDMaterial::setTrialStrainIncr(const Tensor &v)
   {
-    std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::setTrialStrainIncr -- subclass responsibility\n";
     return -1;    
   }
 
 //! @brief Asigna el valor del incremento de la trial strain.
 int XC::NDMaterial::setTrialStrainIncr(const XC::Tensor &v, const XC::Tensor &r)
   {
-    std::cerr << "XC::NDMaterial::setTrialStrainIncr -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::setTrialStrainIncr -- subclass responsibility\n";
     return -1;    
   }
 
@@ -202,87 +202,87 @@ int XC::NDMaterial::setTrialStrainIncr(const XC::Tensor &v, const XC::Tensor &r)
 // added Sept 22 2003 for Large Deformation, F is the Deformation Grandient
 int XC::NDMaterial::setTrialF(const straintensor &f)
   {
-    std::cerr << "XC::NDMaterial::setTrialF -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::setTrialF -- subclass responsibility\n";
     return -1;
   }
 
 int XC::NDMaterial::setTrialFIncr(const XC::straintensor &df)
   {
-    std::cerr << "XC::NDMaterial::setTrialF -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::setTrialF -- subclass responsibility\n";
     return -1;
   }
 
 int XC::NDMaterial::setTrialC(const XC::straintensor &c)
   {
-     std::cerr << "XC::NDMaterial::setTrialC -- subclass responsibility\n";
+     std::cerr << nombre_clase() << "::setTrialC -- subclass responsibility\n";
      return -1;
   }
 
 int XC::NDMaterial::setTrialCIncr(const XC::straintensor &c)
   {
-     std::cerr << "XC::NDMaterial::setTrialC -- subclass responsibility\n";
+     std::cerr << nombre_clase() << "::setTrialC -- subclass responsibility\n";
      return -1;
   }
 
 const XC::stresstensor XC::NDMaterial::getPK1StressTensor(void)
   {
-    std::cerr << "XC::NDMaterial::getPK1StressTensor -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::getPK1StressTensor -- subclass responsibility\n";
     return errstresstensor;    
   }
 
 const XC::stresstensor XC::NDMaterial::getCauchyStressTensor(void)
   {
-     std::cerr << "XC::NDMaterial::getCauchyStressTensor -- subclass responsibility\n";
+     std::cerr << nombre_clase() << "::getCauchyStressTensor -- subclass responsibility\n";
      return errstresstensor;    
   }
 
 const XC::straintensor &XC::NDMaterial::getF(void) const
   {
-    std::cerr << "XC::NDMaterial::getF -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::getF -- subclass responsibility\n";
     return errstraintensor;    
   }
 
 const XC::straintensor &XC::NDMaterial::getC(void) const
   {
-    std::cerr << "XC::NDMaterial::getF -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::getF -- subclass responsibility\n";
     return errstraintensor;    
   }
 
 const XC::straintensor XC::NDMaterial::getFp(void)
   {
-    std::cerr << "XC::NDMaterial::getFp -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::getFp -- subclass responsibility\n";
     return errstraintensor;    
   }
 // Only For Large Deformation, END////////////////////////////
 
 const XC::Tensor &XC::NDMaterial::getTangentTensor(void) const
   {
-    std::cerr << "XC::NDMaterial::getTangentTensor -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::getTangentTensor -- subclass responsibility\n";
     return errTensor;    
   }
 
 const XC::stresstensor &XC::NDMaterial::getStressTensor(void) const
   {
-    std::cerr << "XC::NDMaterial::getStressTensor -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::getStressTensor -- subclass responsibility\n";
     return errstresstensor;    
   }
 
 const XC::straintensor &XC::NDMaterial::getStrainTensor(void) const
 {
-   std::cerr << "XC::NDMaterial::getStrainTensor -- subclass responsibility\n";
+   std::cerr << nombre_clase() << "::getStrainTensor -- subclass responsibility\n";
    return errstraintensor;    
 }
 
 const XC::straintensor &XC::NDMaterial::getPlasticStrainTensor(void) const
 {
-   std::cerr << "XC::NDMaterial::getPlasticStrainTensor -- subclass responsibility\n";
+   std::cerr << nombre_clase() << "::getPlasticStrainTensor -- subclass responsibility\n";
    return errstraintensor;    
 }
 
 
 //const XC::Tensor &XC::NDMaterial::getStrainTensor(void)
 //{
-//   std::cerr << "XC::NDMaterial::getStrainTensor -- subclass responsibility\n";
+//   std::cerr << nombre_clase() << "::getStrainTensor -- subclass responsibility\n";
 //   return errTensor;    
 //}
 

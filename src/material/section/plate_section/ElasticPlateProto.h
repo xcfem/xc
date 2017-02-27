@@ -63,6 +63,8 @@ class ElasticPlateProto : public ElasticPlateBase
     int setInitialSectionDeformation(const Vector &strain);
     int setTrialSectionDeformation(const Vector &strain_from_element);
     //send back the strain
+    void zeroInitialSectionDeformation(void)
+      { initialStrain.Zero(); }
     inline const Vector &getInitialSectionDeformation(void) const
       { return initialStrain; }
     const Vector& getSectionDeformation(void) const;

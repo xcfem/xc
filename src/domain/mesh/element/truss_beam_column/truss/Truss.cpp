@@ -411,6 +411,15 @@ const XC::Matrix &XC::Truss::getMass(void) const
     return mass;
   }
 
+//! @brief Zeroes loads on element.
+void XC::Truss::zeroLoad(void)
+  {
+    TrussBase::zeroLoad();
+    theMaterial->setInitialStrain(0.0); //Removes initial strains.
+    return;
+  }
+
+
 //! @brief Adds a load.
 int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
   {

@@ -203,6 +203,14 @@ int XC::DqUniaxialMaterial::revertToStart(void)
     return err;
   }
 
+//! @brief Zeroes initial strains.
+int XC::DqUniaxialMaterial::zeroInitialStrain(void)
+  {
+    int err= 0;
+    for(register iterator i= begin();i!=end(); i++)
+      err+= (*i)->setInitialStrain(0.0);
+    return err;
+  }
 
 //! @brief Asigna la initial strain.
 int XC::DqUniaxialMaterial::setInitialStrain(const Vector &def,const size_t &offset)
@@ -211,7 +219,7 @@ int XC::DqUniaxialMaterial::setInitialStrain(const Vector &def,const size_t &off
     size_t j= offset;
     assert(static_cast<size_t>(def.Size()) >= (size()+offset));
     for(register iterator i= begin();i!=end(); i++,j++)
-      err += (*i)->setInitialStrain(def(j));
+      err+= (*i)->setInitialStrain(def(j));
     return err;
   }
 

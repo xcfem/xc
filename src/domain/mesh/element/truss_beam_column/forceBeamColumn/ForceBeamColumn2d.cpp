@@ -800,6 +800,7 @@ const XC::Matrix &XC::ForceBeamColumn2d::getMass(void) const
 
 void XC::ForceBeamColumn2d::zeroLoad(void)
   {
+    NLForceBeamColumn2dBase::zeroLoad();
     sp.Zero();
     p0.zero();
     v0.zero();

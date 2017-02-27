@@ -422,11 +422,11 @@ const XC::Matrix &XC::BeamWithHinges2d::getMass(void) const
 
 void  XC::BeamWithHinges2d::zeroLoad(void)
   {
+    BeamColumnWithSectionFDTrf2d::zeroLoad();
     if(sp)
       sp->Zero();
     p0.zero();
     v0.zero();
-    BeamColumnWithSectionFDTrf2d::zeroLoad();
   }
 
 //! @brief Effect of the load over the element.

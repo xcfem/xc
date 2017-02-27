@@ -181,8 +181,9 @@ XC::UniaxialMaterial* XC::UniaxialMaterial::getCopy(SectionForceDeformation *s) 
 //! @brief Sets the initial strain value.
 int XC::UniaxialMaterial::setInitialStrain(double strain)
   {
-    std::clog << "Material: " << nombre_clase() 
-              << " can't handle initial strains." << std::endl;
+    if(strain!=0.0)
+      std::clog << "Material: " << nombre_clase() 
+                << " can't handle initial strains." << std::endl;
     return 0;
   }
 

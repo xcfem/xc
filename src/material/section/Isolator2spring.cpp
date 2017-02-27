@@ -313,6 +313,13 @@ const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
     return s3;
   }
 
+//! @brief Zeroes initial strain.
+void XC::Isolator2spring::zeroInitialSectionDeformation(void)
+  {
+    utptInic[0]= 0.0;
+    utptInic[1]= 0.0;
+  }
+
 //! @brief Return the initial deformation del material.
 const XC::Vector &XC::Isolator2spring::getInitialSectionDeformation(void) const
   {

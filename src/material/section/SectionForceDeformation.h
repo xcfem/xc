@@ -102,6 +102,7 @@ class SectionForceDeformation: public Material
     inline MaterialLoader *getMaterialLoader(void)
       { return material_loader; }
 
+    virtual void zeroInitialSectionDeformation(void)= 0;
     virtual int setInitialSectionDeformation(const Vector &)= 0;
     virtual int addInitialSectionDeformation(const Vector &);
     inline void setInitialGeneralizedStrain(const Vector &iS)

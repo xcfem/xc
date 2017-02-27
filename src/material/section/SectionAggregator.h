@@ -121,6 +121,7 @@ class SectionAggregator : public SeccionBarraPrismatica
     int setInitialSectionDeformation(const Vector &deforms); 
     int setTrialSectionDeformation(const Vector &deforms); 
     virtual double getStrain(const double &y,const double &z) const;
+    void zeroInitialSectionDeformation(void);
     const Vector &getInitialSectionDeformation(void) const;
     const Vector &getSectionDeformation(void) const;
     const Vector &getStressResultant(void) const;

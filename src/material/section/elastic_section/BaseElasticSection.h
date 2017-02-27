@@ -63,6 +63,8 @@ class BaseElasticSection: public SeccionBarraPrismatica
 
     int setInitialSectionDeformation(const Vector&);
     int setTrialSectionDeformation(const Vector&);
+    void zeroInitialSectionDeformation(void)
+      { eInic.Zero(); }
     inline const Vector &getInitialSectionDeformation(void) const
       { return eInic; }
     const Vector &getSectionDeformation(void) const;

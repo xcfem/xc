@@ -58,7 +58,7 @@ class ShellMITC4Base : public QuadBase4N<SectionFDPhysicalProperties>
 
     mutable Matrix Ki;
 
-    std::vector<Vector> inicDisp; //!< Desplazamientos iniciales.
+    std::vector<Vector> inicDisp; //!< Initial displacements.
 
     //static data
     static Matrix stiff;

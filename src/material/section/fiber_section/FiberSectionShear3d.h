@@ -77,6 +77,7 @@ class FiberSectionShear3d : public FiberSection3d
 
     int setInitialSectionDeformation(const Vector &deforms); 
     int setTrialSectionDeformation(const Vector &deforms); 
+    void zeroInitialSectionDeformation(void);
     const Vector &getInitialSectionDeformation(void) const;
     const Vector &getSectionDeformation(void) const;
     const Vector &getStressResultant(void) const;

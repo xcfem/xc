@@ -123,6 +123,12 @@ const XC::Vector &XC::ElasticIsotropicPlaneStress2D::getStress(void) const
     return sigma;
   }
 
+//! @brief zeroes initial generalized strain
+void XC::ElasticIsotropicPlaneStress2D::zeroInitialGeneralizedStrain(void)
+  {
+    //Initial strains not yet implemented so nothing to do.
+  }
+
 int XC::ElasticIsotropicPlaneStress2D::commitState(void)
   { return 0; }
 

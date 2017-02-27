@@ -99,6 +99,7 @@ class MembranePlateFiberSection: public PlateBase
     int revertToStart(void); //revert to start
 
     int setInitialSectionDeformation(const Vector &strain_from_element);
+    void zeroInitialSectionDeformation(void);
     int setTrialSectionDeformation(const Vector &strain_from_element);
     const Vector &getInitialSectionDeformation(void) const;
     const Vector& getSectionDeformation(void) const; //send back the strain

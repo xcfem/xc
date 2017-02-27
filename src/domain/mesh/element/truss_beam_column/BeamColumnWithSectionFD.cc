@@ -51,6 +51,12 @@ XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const
   : Element1D(tag,classTag,Nd1,Nd2), theSections(numSecc,sccModel)
   {}
 
+//! @brief Zeroes loads on element.
+void XC::BeamColumnWithSectionFD::zeroLoad(void)
+  {
+    Element1D::zeroLoad();
+    theSections.zeroInitialSectionDeformations(); //Removes initial strains.
+  }
 
 int XC::BeamColumnWithSectionFD::commitState(void)
   {

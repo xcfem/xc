@@ -93,6 +93,7 @@ class GenericSection1d : public SeccionBarraPrismatica
 
     int setInitialSectionDeformation (const Vector&);
     int setTrialSectionDeformation (const Vector&);
+    void zeroInitialSectionDeformation(void);
     const Vector &getInitialSectionDeformation(void) const;
     const Vector &getSectionDeformation(void) const;
 

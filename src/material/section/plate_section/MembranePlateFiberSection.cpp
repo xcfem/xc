@@ -199,6 +199,12 @@ int XC::MembranePlateFiberSection::setInitialSectionDeformation(const Vector &st
     std::cerr << "MembranePlateFiberSection::setInitialSectionDeformation not implemented." << std::endl;
     return 0;
   }
+
+void XC::MembranePlateFiberSection::zeroInitialSectionDeformation(void)
+  {
+    std::cerr << "MembranePlateFiberSection::zeroInitialSectionDeformation not implemented." << std::endl;
+  }
+
 const XC::Vector &XC::MembranePlateFiberSection::getInitialSectionDeformation(void) const
   {
     std::cerr << "MembranePlateFiberSection::getInitialSectionDeformation not implemented." << std::endl;

@@ -476,11 +476,11 @@ const XC::Matrix &XC::BeamWithHinges3d::getMass(void) const
 
 void XC::BeamWithHinges3d::zeroLoad(void)
   {
+    BeamColumnWithSectionFDTrf3d::zeroLoad();
     if(applied_sf != 0) applied_sf->Zero();
 
     p0.zero();
     v0.zero();
-    BeamColumnWithSectionFDTrf3d::zeroLoad();
   }
 
 //! @brief Effect of the load on the element.

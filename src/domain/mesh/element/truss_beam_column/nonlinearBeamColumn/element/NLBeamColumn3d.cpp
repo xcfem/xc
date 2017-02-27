@@ -92,12 +92,12 @@ XC::GaussLobattoQuadRule1d01 XC::NLBeamColumn3d::quadRule;
 // constructor:
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
 XC::NLBeamColumn3d::NLBeamColumn3d(int tag)
-  : XC::NLForceBeamColumn3dBase(tag,ELE_TAG_NLBeamColumn3d) {load.reset(NEGD);}
+  : NLForceBeamColumn3dBase(tag,ELE_TAG_NLBeamColumn3d) {load.reset(NEGD);}
 
 // constructor:
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
 XC::NLBeamColumn3d::NLBeamColumn3d(int tag,int numSec,const Material *m,const CrdTransf *coordTransf)
-  : XC::NLForceBeamColumn3dBase(tag,ELE_TAG_NLBeamColumn3d,numSec,m,coordTransf)
+  : NLForceBeamColumn3dBase(tag,ELE_TAG_NLBeamColumn3d,numSec,m,coordTransf)
   {load.reset(NEGD);}
 
 // constructor which takes the unique element tag, sections,
@@ -107,7 +107,7 @@ XC::NLBeamColumn3d::NLBeamColumn3d(int tag, int nodeI, int nodeJ,
                                 int numSections,const std::vector<SeccionBarraPrismatica *> &sectionPtrs,
                                 CrdTransf3d &coordTransf, double massDensPerUnitLength,
                                 int maxNumIters, double tolerance)
-  : XC::NLForceBeamColumn3dBase(tag,ELE_TAG_NLBeamColumn3d,numSections,nullptr,&coordTransf)
+  : NLForceBeamColumn3dBase(tag,ELE_TAG_NLBeamColumn3d,numSections,nullptr,&coordTransf)
   {
     load.reset(NEGD);
     theNodes.set_id_nodos(nodeI,nodeJ);
@@ -861,9 +861,9 @@ const XC::Matrix &XC::NLBeamColumn3d::getMass(void) const
 
 void XC::NLBeamColumn3d::zeroLoad(void)
   {
+    NLForceBeamColumn3dBase::zeroLoad();
     sp.Zero();
     p0.zero();
-    NLForceBeamColumn3dBase::zeroLoad();
   }
 
 int XC::NLBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)

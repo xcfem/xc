@@ -247,6 +247,14 @@ bool XC::VectorSeccionesBarraPrismatica::setSections(const std::vector<SeccionBa
     return isTorsion;
   }
 
+//! @brief Zeroes initial strains.
+void XC::VectorSeccionesBarraPrismatica::zeroInitialSectionDeformations(void)
+  {
+    const size_t nSections= size();
+    for(size_t i= 0;i<nSections;i++)
+      (*this)[i]->zeroInitialSectionDeformation();
+  }
+
 //! @brief Asigna valores a las initial strains.
 void XC::VectorSeccionesBarraPrismatica::setInitialSectionDeformations(const std::vector<Vector> &vs)
   {

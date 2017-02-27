@@ -429,6 +429,7 @@ void XC::ElasticBeam3d::zeroLoad(void)
     ProtoBeam3d::zeroLoad();
     q0.zero();
     p0.zero();
+    eInic.Zero(); //Removes also initial strains.
     return;
   }
 
@@ -455,7 +456,7 @@ int XC::ElasticBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
             const Vector &e2= strainLoad->getSection2Deformation(order,code)*loadFactor;
             Vector ezero= getInitialSectionDeformation();
             ezero+= (e2+e1)/2;
-            setInitialSectionDeformation(ezero);
+            setInitialSectionDeformation(ezero); 
           }
         else
           {

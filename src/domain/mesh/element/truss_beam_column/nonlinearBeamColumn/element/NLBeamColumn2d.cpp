@@ -90,8 +90,8 @@ XC::GaussLobattoQuadRule1d01 XC::NLBeamColumn2d::quadRule;
 
 // constructor:
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
-XC::NLBeamColumn2d::NLBeamColumn2d(int tag):
- NLForceBeamColumn2dBase(tag,ELE_TAG_NLBeamColumn2d,0),
+XC::NLBeamColumn2d::NLBeamColumn2d(int tag)
+  : NLForceBeamColumn2dBase(tag,ELE_TAG_NLBeamColumn2d,0),
  maxSubdivisions(0), cosTheta(0.0), sinTheta(0.0)
   {
     load.reset(NEGD);
@@ -101,8 +101,8 @@ XC::NLBeamColumn2d::NLBeamColumn2d(int tag):
   }
 
 //! @brief Constructor.
-XC::NLBeamColumn2d::NLBeamColumn2d(int tag,int numSec, const Material *m,const CrdTransf *coordTransf):
-  NLForceBeamColumn2dBase(tag,ELE_TAG_NLBeamColumn2d,numSec,m,coordTransf),
+XC::NLBeamColumn2d::NLBeamColumn2d(int tag,int numSec, const Material *m,const CrdTransf *coordTransf)
+  : NLForceBeamColumn2dBase(tag,ELE_TAG_NLBeamColumn2d,numSec,m,coordTransf),
   maxSubdivisions(0), cosTheta(0.0), sinTheta(0.0)
   {
     load.reset(NEGD);
@@ -117,8 +117,8 @@ XC::NLBeamColumn2d::NLBeamColumn2d(int tag,int numSec, const Material *m,const C
 XC::NLBeamColumn2d::NLBeamColumn2d (int tag, int nodeI, int nodeJ,
                                 int numSections,const std::vector<SeccionBarraPrismatica *> &sectionPtrs,
                                 CrdTransf2d &coordTransf, double massDensPerUnitLength,
-                                int maxNumIters, double tolerance, int maxSub):
- NLForceBeamColumn2dBase(tag,ELE_TAG_NLBeamColumn2d,numSections),
+                                int maxNumIters, double tolerance, int maxSub)
+  : NLForceBeamColumn2dBase(tag,ELE_TAG_NLBeamColumn2d,numSections),
  maxSubdivisions(maxSub), cosTheta(0.0), sinTheta(0.0)
   {
     load.reset(NEGD);
@@ -873,9 +873,9 @@ const XC::Matrix &XC::NLBeamColumn2d::getMass(void) const
 
 void XC::NLBeamColumn2d::zeroLoad(void)
   {
+    NLForceBeamColumn2dBase::zeroLoad();
     sp.Zero();
     p0.zero();
-    NLForceBeamColumn2dBase::zeroLoad();
   }
 
 int XC::NLBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)

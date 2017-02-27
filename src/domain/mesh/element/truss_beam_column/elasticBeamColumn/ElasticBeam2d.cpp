@@ -406,6 +406,7 @@ void XC::ElasticBeam2d::zeroLoad(void)
     p0[1] = 0.0;
     p0[2] = 0.0;
 
+    eInic.Zero(); //Removes also initial strains.
     return;
   }
 

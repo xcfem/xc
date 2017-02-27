@@ -66,9 +66,8 @@ class QuadBase9N : public ElemPlano<9,PhysProp>
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
 
+    void zeroLoad(void);	
     int addLoad(ElementalLoad *theLoad, double loadFactor);
-
-
   };
 
 //! @brief Constructor
@@ -134,6 +133,15 @@ ID XC::QuadBase9N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
     return retval;
   }
 
+//! @brief Zeroes loads on element.
+template <class PhysProp>
+void XC::QuadBase9N<PhysProp>::zeroLoad(void)
+  {
+    ElemPlano<9,PhysProp>::zeroLoad();
+    this->physicalProperties.getMaterialsVector().zeroInitialGeneralizedStrains(); //Removes initial deformations.
+    return;
+  }
+ 
 //! @brief Añade al elemento the load being passed as parameter.
 template <class PhysProp>
 int XC::QuadBase9N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)

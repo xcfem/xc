@@ -119,6 +119,7 @@ XC::Steel02::Steel02(int tag)
 XC::Steel02::Steel02(void)
   : SteelBase(0, MAT_TAG_Steel02),sigini(0.0), konP(0) {}
 
+//! @brief Sets the initial stress value.
 void XC::Steel02::setInitialStress(const double &d)
   {
     sigini= d;

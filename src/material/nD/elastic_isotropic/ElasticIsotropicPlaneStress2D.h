@@ -69,7 +69,7 @@ namespace XC {
 //! @ingroup EINDMat
 //
 //! @brief Elastic isotropic material for plane stress problems.
-class ElasticIsotropicPlaneStress2D : public ElasticIsotropic2D
+class ElasticIsotropicPlaneStress2D: public ElasticIsotropic2D
   {
   private:
     static Vector sigma; //!< Stress vector ... class-wide for returns
@@ -85,6 +85,7 @@ class ElasticIsotropicPlaneStress2D : public ElasticIsotropic2D
 
     const Vector &getStress(void) const;
         
+    void zeroInitialGeneralizedStrain(void);
     int commitState(void);
     int revertToLastCommit(void);
     int revertToStart(void);

@@ -123,6 +123,11 @@ int XC::GenericSectionNd::setInitialSectionDeformation(const Vector& def)
 int XC::GenericSectionNd::setTrialSectionDeformation(const Vector& def)
   { return theModel->setTrialStrain(def); }
 
+void XC::GenericSectionNd::zeroInitialSectionDeformation(void)
+  {
+    std::cerr << "GenericSectionNd::zeroInitialSectionDeformation not implemented." << std::endl;
+  }
+
 const XC::Vector &XC::GenericSectionNd::getInitialSectionDeformation(void) const
   {
     std::cerr << "GenericSectionNd::getInitialStrain not implemented." << std::endl;

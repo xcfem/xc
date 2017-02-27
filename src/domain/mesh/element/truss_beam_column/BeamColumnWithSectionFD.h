@@ -73,6 +73,8 @@ class BeamColumnWithSectionFD : public Element1D
     int commitState(void);
     int revertToLastCommit(void);
     int revertToStart(void);
+
+    void zeroLoad(void);
   };
 
 } //end of XC namespace

@@ -133,6 +133,7 @@ class Truss : public TrussBase
     const Matrix &getDamp(void) const;    
     const Matrix &getMass(void) const; 
 
+    void zeroLoad(void);	
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

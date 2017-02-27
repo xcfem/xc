@@ -101,6 +101,8 @@ class FiberSectionBase: public SeccionBarraPrismatica
     Fiber *addFiber(const std::string &nmbMat,const double &area,const Vector &coo);
     int setInitialSectionDeformation(const Vector &deforms); 
     int setTrialSectionDeformation(const Vector &deforms);
+    inline void zeroInitialSectionDeformation(void)
+      { eInic.Zero(); }
     inline const Vector &getInitialSectionDeformation(void) const
       { return eInic; }
     const Vector &getSectionDeformation(void) const;

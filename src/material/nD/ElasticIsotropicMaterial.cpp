@@ -217,7 +217,7 @@ const XC::Matrix &XC::ElasticIsotropicMaterial::getInitialTangent(void) const
     exit(-1);
 
     // Just to make it compile
-    XC::Matrix *ret = new XC::Matrix();
+    XC::Matrix *ret = new Matrix();
     return *ret;
   }
 
@@ -227,7 +227,7 @@ const XC::Vector &XC::ElasticIsotropicMaterial::getStress(void) const
     exit(-1);
     
     // Just to make it compile
-    XC::Vector *ret = new XC::Vector();
+    XC::Vector *ret = new Vector();
     return *ret;
   }
 

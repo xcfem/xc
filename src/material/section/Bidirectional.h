@@ -102,6 +102,7 @@ class Bidirectional: public SectionForceDeformation
     const Matrix &getSectionTangent(void) const;
     const Matrix &getInitialTangent(void) const;
     const Vector &getStressResultant(void) const;
+    void zeroInitialSectionDeformation(void);
     const Vector &getInitialSectionDeformation(void) const;
     const Vector &getSectionDeformation(void) const;
     virtual double getStrain(const double &,const double &) const;

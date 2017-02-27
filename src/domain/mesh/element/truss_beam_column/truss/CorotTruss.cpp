@@ -400,6 +400,13 @@ const XC::Matrix &XC::CorotTruss::getMass(void) const
     return *theMatrix;
   }
 
+//! @brief Zeroes loads on element.
+void XC::CorotTruss::zeroLoad(void)
+  {
+    theMaterial->setInitialStrain(0.0); //Removes initial strains.
+    return;
+  }
+
 //! @brief Adds a load.
 int XC::CorotTruss::addLoad(ElementalLoad *theLoad, double loadFactor)
   {

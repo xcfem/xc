@@ -200,6 +200,10 @@ int XC::YieldSurfaceSection2d::setTrialSectionDeformation(const XC::Vector &def)
     return 0;
   }
 
+//! @brief Zeroes initial strains.
+void XC::YieldSurfaceSection2d::zeroInitialSectionDeformation(void)
+  { return eInic.Zero(); }
+
 const XC::Vector &XC::YieldSurfaceSection2d::getInitialSectionDeformation(void) const
   { return eInic; }
 
