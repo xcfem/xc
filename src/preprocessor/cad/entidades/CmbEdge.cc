@@ -32,6 +32,7 @@
 #include "ArcoCircunf.h"
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
+#include "xc_utils/src/geom/d1/Polilinea3d.h"
 
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "xc_basic/src/texto/cadena_carac.h"
@@ -645,6 +646,15 @@ XC::ID XC::CmbEdge::getKPoints(void) const
     ID retval(numVertices);
     for(size_t i= 0;i<numVertices;i++)
       retval[i]= GetLado(i+1)->P1()->GetTag();
+    return retval;
+  }
+
+Polilinea3d XC::CmbEdge::getPolyline(void) const
+  {
+    Polilinea3d retval;
+    retval.push_back(P1()->GetPos());
+    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+      retval.push_back((*i).P2()->GetPos());
     return retval;
   }
 

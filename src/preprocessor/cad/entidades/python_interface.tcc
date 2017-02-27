@@ -55,6 +55,7 @@ class_<XC::Pnt, XC::Pnt *, bases<XC::EntMdlr>, boost::noncopyable >("Pnt", no_in
 class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_init)
   .add_property("nDivI", &XC::Face::NDivI, &XC::Face::SetNDivI)
   .add_property("nDivJ", &XC::Face::NDivJ, &XC::Face::SetNDivJ)
+  .def("getContour",&XC::Face::getContour,"Returns the face contour as a 3D polyline.")
    ;
 
 class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >("QuadSurface", no_init)

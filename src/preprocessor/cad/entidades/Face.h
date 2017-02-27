@@ -70,6 +70,7 @@ class Face: public CmbEdge
     size_t NumVertices(void) const
       { return NumEdges(); }
     virtual const Pnt *GetVertice(const size_t &i) const;
+    Polilinea3d getContour(void) const;
     //! @brief Return the bodies that touch this surface (neighbors).
     const std::set<const Body *> &CuerposTocan(void) const
       { return cuerpos_sup; }
@@ -88,8 +89,6 @@ class Face: public CmbEdge
 
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
-
-
   };
 
 std::set<const Face *> GetSupsTocan(const Edge &l);

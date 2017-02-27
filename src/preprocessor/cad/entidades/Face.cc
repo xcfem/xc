@@ -29,6 +29,7 @@
 #include "Face.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
+#include "xc_utils/src/geom/d1/Polilinea3d.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -119,6 +120,9 @@ int XC::Face::SentidoBorde(const XC::Edge *l,const XC::Face &otra) const
 //! @brief Returns the vértice cuyo índice is being passed as parameter.
 const XC::Pnt *XC::Face::GetVertice(const size_t &i) const
   { return GetLado(i)->P1(); }
+
+Polilinea3d XC::Face::getContour(void) const
+  { return getPolyline(); }
 
 //! @brief Return the surfaces that touch the line.
 std::set<const XC::Face *> XC::GetSupsTocan(const Edge &p)

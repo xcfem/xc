@@ -33,6 +33,7 @@
 #include <deque>
 #include "Edge.h"
 
+class Polilinea3d;
 
 namespace XC {
 //! \ingroup CadEnt
@@ -151,6 +152,7 @@ class CmbEdge: public Edge
     virtual const Pnt *GetVertice(const size_t &i) const;
     virtual void SetVertice(const size_t &,Pnt *);
     virtual ID getKPoints(void) const;
+    Polilinea3d getPolyline(void) const;
 
     BND3d Bnd(void) const;
     void genMesh(meshing_dir dm);
