@@ -340,23 +340,24 @@ class permLoadResult(object):
     """moment de flexion induit par la résultant de la poussée laterale entre les rotules B et D, par rapport à la rotule D [Nm]"""
     return self.gm.arcEffL*(self.fc.getKp()*self.fc.mp*(self.fc.eqThickRoad*self.fc.swSupStr*(self.gm.getYRot()[3]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])-self.gm.getYRot()[3]*self.gm.getYRot()[3]/2+self.gm.getYRot()[1]*self.gm.getYRot()[1]/2))+self.fc.swFill*(self.fc.fillThick*self.gm.getYRot()[3]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])-self.fc.fillThick*(self.gm.getYRot()[3]*self.gm.getYRot()[3]/2-self.gm.getYRot()[1]*self.gm.getYRot()[1]/2)-self.gm.getYRot()[3]*(self.gm.getYRot()[3]*self.gm.getYRot()[3]/2-self.gm.getYRot()[1]*self.gm.getYRot()[1]/2)+pow(self.gm.getYRot()[3],3)/3-pow(self.gm.getYRot()[1],3)/3)+self.fc.cohesion*self.fc.mc*self.fc.getKc()*(self.gm.getYRot()[3]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])-self.gm.getYRot()[3]*self.gm.getYRot()[3]/2+self.gm.getYRot()[1]*self.gm.getYRot()[1]/2))
 
-  def __str__(self,fillChar):
+  def __str__(self):
     retval= "Résultante de la charge permanente (voir 6.3 et A 11.1); eta= "+ str(self.getEta()) +" N\n"
     retval+= "Moment de flexion induit par la resultante de la charge permanente, par rapport à la rotule B  (voir 6.4 et A 11.2); etaW= "+ str(self.getEtaW()) +" N.m\n"
     retval+= "Résultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules A et C (voir 6.5 et A 11.3); phi= "+ str(self.getPhi()) +" N\n"
     retval+= "Moment de flexion induit par la resultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules A et C, par rapport à la rotule C (voir 6.6 et A 11.4); phiS= "+ str(self.getPhiS()) +" Nm\n"
-    retval+= "Résultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules D et B (voir 6.7 et A 11.5); psi= "+ str(self.getPsi) +" N\n"
+    retval+= "Résultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules D et B (voir 6.7 et A 11.5); psi= "+ str(self.getPsi()) +" N\n"
     retval+= "Moment de flexion induit  par la resultante de la charge permanente appliquée sur la portion d'arc comprise entre les rotules B et D, par rapport à la rotule D (voir 6.8 et A 11.6); psiT= "+ str(self.getPsiT()) +" Nm\n"
-    retval+= "Facteur de correction; mp= "+ str(fillChar.mp) +'\n'
-    retval+= "Coefficient de pousée des terres (voir 6.10); Kp= "+fillChar.getKp()
-    retval+= "Facteur de correction; mc= "+ str(fillChar.mc) +'\n'
-    retval+= "Coefficient de pousée des terres (voir 6.11); Kc= "+fillChar.getKc()
+    retval+= "Facteur de correction; mp= "+ str(self.fillChar.mp) +'\n'
+    retval+= "Coefficient de pousée des terres (voir 6.10); Kp= "+str(self.fillChar.getKp())+"\n"
+    retval+= "Facteur de correction; mc= "+ str(self.fillChar.mc) +'\n'
+    retval+= "Coefficient de pousée des terres (voir 6.11); Kc= "+str(self.fillChar.getKc())+"\n"
     retval+= "Resultante de la force horizontale (voir 6.12 et A 12.1); R= "+ str(self.getR()/1e3) + " kN\n"
-    retval+= "Moment de flexion induit par la résultante de la force horizontale R para rapport a la rotule B (voir 6.13 et A 12.2); RzB= "+ self.getRzB()+ " N\n"
-    retval+= "Moment de flexion induit par la résultante de la force horizontale R para rapport a la rotule D (voir 6.14 et A 12.3); RzD= "+ self.getRzD()+ " N\n"
+    retval+= "Moment de flexion induit par la résultante de la force horizontale R para rapport a la rotule B (voir 6.13 et A 12.2); RzB= "+ str(self.getRzB())+ " N\n"
+    retval+= "Moment de flexion induit par la résultante de la force horizontale R para rapport a la rotule D (voir 6.14 et A 12.3); RzD= "+ str(self.getRzD())+ " N\n"
     return retval
   
   def printResults(self,fillChar):
+    self.fillChar= fillChar
     print str(self)
 
 class trafficLoadResult(object):
@@ -414,6 +415,13 @@ class resistance(object):
   def getMinimFunc(self,x):
     self.gm.XRot=x
     retval= self.getSafCoef()
+    xA= x[0] #Hinge outside span.
+    if(xA<0.0):
+      retval+= (1-xA)**2
+    xB= x[1]
+    L= self.gm.arcSpan
+    if(xB>L): #Hinge outside span.
+      retval+= (1+xB-L)**2
     if(self.verbose):
       print 'n= ', retval, 'x= ', x
     return retval
