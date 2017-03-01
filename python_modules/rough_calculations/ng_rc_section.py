@@ -11,6 +11,7 @@ from materials.sia262 import concreteSIA262
 from materials.sia262 import steelSIA262
 from materials.sia262 import minimal_reinforcement
 from postprocess.reports import common_formats as fmt
+from miscUtils import LogMessages as lmsg
 
 
 class RCSection(object):
@@ -57,5 +58,16 @@ class RCSection(object):
     ancrage= famArm.getBasicAnchorageLength(beton)
     ng_rebar_def.writeRebars(outputFile,beton,famArm,AsMin)
     if(abs(Nd)>0):
-      print "ERROR; tension not implemented."
+      lmsg.error("ERROR; tension not implemented.")
+  def writeResultCompression(self,outputFile,Nd,AsTrsv):
+    ''' Results for compressed rebars.
+
+    :param AsTrsv: Rebar area in transverse direction.
+     '''
+    famArm= self.tensionRebars #Even if they're not in tension...
+    beton= self.beton
+    AsMin= 0.2*AsTrsv # 20% of the transversal area.
+    ng_rebar_def.writeRebars(outputFile,beton,famArm,AsMin)
+    if(abs(Nd)!=0.0):
+      lmsg.error("ERROR; not implemented.")
 

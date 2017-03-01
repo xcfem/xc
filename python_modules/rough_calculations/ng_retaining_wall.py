@@ -24,21 +24,32 @@ from rough_calculations import ng_rc_section
 import os
 from miscUtils import LogMessages as lmsg
 
+def filterRepeatedValues(yList,mList,vList):
+  sz= len(yList)
+
+  mapM={}
+  mapV= {}
+  for i in range(0,sz):
+    y= abs(yList[i])
+    mapM[y]= mList[i]
+    mapV[y]= vList[i]
+
+  retY= list()
+  retM= list()
+  retV= list()
+  for y in mapM:
+    retY.append(y)
+  retY.sort()
+  for y in retY:
+    retM.append(mapM[y])
+    retV.append(mapV[y])
+  return retY, retM, retV
+
 class InternalForces(object):
   '''Internal forces for a retaining wall obtained from
      Laryx (Cubus suite) software.'''
-  y= [0,1]
-  mdMax= [0,1]
-  vdMax= [0,1]
-  mdMaxVoile= scipy.interpolate.interp1d(y,mdMax)
-  vdMaxVoile= scipy.interpolate.interp1d(y,vdMax)
-  hauteurVoile= y[-1]
-  MdSemelle= 0.0
-  VdSemelle= 0.0
   def __init__(self,y,mdMax,vdMax,MdSemelle,VdSemelle):
-    self.y= y
-    self.mdMax= mdMax
-    self.vdMax= vdMax
+    self.y, self.mdMax, self.vdMax= filterRepeatedValues(y,mdMax,vdMax)
     self.mdMaxVoile= scipy.interpolate.interp1d(self.y,self.mdMax)
     self.vdMaxVoile= scipy.interpolate.interp1d(self.y,self.vdMax)
     self.hauteurVoile= self.y[-1]
@@ -168,7 +179,7 @@ class RetainingWall(object):
     return ng_rc_section.RCSection(self.armatures[8],self.beton,self.exigeanceFisuration,self.b,self.hSemelle)
   def getSection11(self):
     '''Returns RC section for armature in position 11.'''
-    return ng_rc_section.RCSection(self.armatures[11],self.beton,self.exigeanceFisuration,self.b,self.hSemelle)
+    return ng_rc_section.RCSection(self.armatures[11],self.beton,self.exigeanceFisuration,self.b,(self.hCouronnement+self.hEncastrement)/2.0)
 
   def setInternalForcesEnvelope(self,effortsMur):
     '''Assigns the infernal forces envelope for the stem.'''
@@ -265,33 +276,36 @@ class RetainingWall(object):
     outputFile.write("\\textbf{Armature 3 (armature supérieure semelle):}\\\\\n")
     C3.writeResultFlexion(outputFile,Nd3,Md3,Vd3)
 
-    #Coupe 4. armature intérieure en attente. Encastrement voile 
     C4= self.getSection4()
+    C5= C4
+    C6= self.getSection6()
+    C7= self.getSection7()
+    C8= self.getSection8()
+    C9= C8
+    C11= self.getSection11()
+    C12= C11
+
+    #Coupe 4. armature intérieure en attente. Encastrement voile 
     outputFile.write("\\textbf{Armature 4 (armature intérieure en attente):}\\\\\n")
-    C4.writeResultFlexion(outputFile,0.0,0.0,0.0)
+    C4.writeResultCompression(outputFile,0.0,C12.tensionRebars.getAs())
 
     #Coupe 5. armature intérieure en voile.
-    C5= C4
     outputFile.write("\\textbf{Armature 5 (armature intérieure en voile):}\\\\\n")
-    C5.writeResultFlexion(outputFile,0.0,0.0,0.0)
+    C5.writeResultCompression(outputFile,0.0,C12.tensionRebars.getAs())
 
     #Coupe 6. armature couronnement.
-    C6= self.getSection6()
     outputFile.write("\\textbf{Armature 6 (armature couronnement):}\\\\\n")
     C6.writeResultFlexion(outputFile,0.0,0.0,0.0)
 
     #Coupe 7. armature inférieure semelle.
-    C7= self.getSection7()
     outputFile.write("\\textbf{Armature 7 (armature trsv. inférieure semelle):}\\\\\n")
-    C7.writeResultFlexion(outputFile,0.0,0.0,0.0)
+    C7.writeResultCompression(outputFile,0.0,C8.tensionRebars.getAs())
 
     #Coupe 8. armature long. inférieure semelle.
-    C8= self.getSection8()
     outputFile.write("\\textbf{Armature 8 (armature long. inférieure semelle):}\\\\\n")
     C8.writeResultTraction(outputFile,0.0)
 
     #Coupe 9. armature long. supérieure semelle.
-    C9= C8
     outputFile.write("\\textbf{Armature 9 (armature long. supérieure semelle):}\\\\\n")
     C9.writeResultTraction(outputFile,0.0)
 
@@ -301,12 +315,10 @@ class RetainingWall(object):
     #writeRebars(outputFile,self.beton,self.armatures[10],1e-5)
 
     #Coupe 11. armature long. extérieure voile.
-    C11= self.getSection11()
     outputFile.write("\\textbf{Armature 11 (armature long. extérieure voile):}\\\\\n")
     C11.writeResultTraction(outputFile,0.0)
 
     #Coupe 12. armature long. intérieure voile.
-    C12= C11
     outputFile.write("\\textbf{Armature 12 (armature long. intérieure voile):}\\\\\n")
     C12.writeResultTraction(outputFile,0.0)
 
