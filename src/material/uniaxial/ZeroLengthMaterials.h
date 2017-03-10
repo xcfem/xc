@@ -62,7 +62,7 @@ class ZeroLengthMaterials: public DqUniaxialMaterial
     ZeroLengthMaterials(ZeroLength *owner,UniaxialMaterial *theMaterial,int direction );
     // Constructor for a multiple 1d material models
     ZeroLengthMaterials(ZeroLength *owner,const DqUniaxialMaterial &theMaterial,const ID &direction);
-    ZeroLengthMaterials(ZeroLength *owner=NULL);
+    ZeroLengthMaterials(ZeroLength *owner= nullptr);
     void push_back(const int &dir,const UniaxialMaterial *);
     void push_front(const int &dir,const UniaxialMaterial *);
 

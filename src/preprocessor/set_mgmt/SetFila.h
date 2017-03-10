@@ -56,7 +56,7 @@ class SetFila: public SetEstruct
     typedef typename FILATTZELEM::reference reference_elem;
     typedef typename FILATTZELEM::const_reference const_reference_elem; 
   public:
-    SetFila(const FILATTZNOD &fn,const FILATTZELEM &fe,const std::string &nmb="",Preprocessor *preprocessor= NULL);
+    SetFila(const FILATTZNOD &fn,const FILATTZELEM &fe,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     SetFila(const SetFila &otro);
     SetFila &operator=(const SetFila &otro);
     virtual SetEstruct *getCopy(void) const;

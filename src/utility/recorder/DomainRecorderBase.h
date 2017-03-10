@@ -43,7 +43,7 @@ class DomainRecorderBase: public Recorder
     Domain *theDomain;
 
   public:
-    DomainRecorderBase(int classTag,Domain *ptr_dom= NULL);
+    DomainRecorderBase(int classTag,Domain *ptr_dom= nullptr);
 
     int setDomain(Domain &theDomain);
   };

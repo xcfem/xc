@@ -47,7 +47,7 @@ class SisRefScc: public EntGeomSection
     //! @brief Constructor.
     SisRefScc(GeomSection *m)
       : EntGeomSection("",m) {}
-    SisRefScc(const std::string &nombre= "",GeomSection *m= NULL)
+    SisRefScc(const std::string &nombre= "",GeomSection *m= nullptr)
       : EntGeomSection(nombre,m) {}
 
     //! @brief Returns the vector unitario en la dirección del eje que se

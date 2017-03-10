@@ -411,8 +411,8 @@ double XC::EigenAnalysis::getTotalMass(void) const
     return retval;
   }
 
-//! @brief Return the fuerza estática equivalente para el modo
-//! being passed as parameter.
+//! @brief Returns the equivalent static load for the
+//! mode being passed as parameter.
 XC::Vector XC::EigenAnalysis::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
     Vector retval;

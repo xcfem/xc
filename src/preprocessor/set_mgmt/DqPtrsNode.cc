@@ -189,7 +189,7 @@ const XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag) const
     return retval;
   }
 
-//! @brief Returns the número de nods of the set que están activos.
+//! @brief Returns the number of nodes of the set which are active.
 size_t XC::DqPtrsNode::getNumLiveNodes(void) const
   {
     size_t retval= 0;
@@ -203,7 +203,7 @@ size_t XC::DqPtrsNode::getNumLiveNodes(void) const
     return retval;
   }
 
-//! @brief Returns the number of nodes of the set que están inactivos.
+//! @brief Returns the number of nodes of the set which are inactive.
 size_t XC::DqPtrsNode::getNumDeadNodes(void) const
   {
     size_t retval= 0;

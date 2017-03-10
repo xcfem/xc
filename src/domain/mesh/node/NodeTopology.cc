@@ -93,7 +93,7 @@ XC::ElementEdges XC::getElementEdgesEntreNodos(const NodePtrSet &nodos)
   }
 
 //! @brief Returns true if the node pointers in nodes_edget
-//! están contenidos en the set being passed as parameter.
+//! are in the set being passed as parameter.
 bool XC::in(const NodePtrSet &nodos,const std::vector<const Node *> &nodes_edge)
   {
     bool retval= true;

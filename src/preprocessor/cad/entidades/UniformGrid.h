@@ -53,7 +53,7 @@ class UniformGrid: public EntMdlr
     void crea_nodos(void);
   public:
     UniformGrid(Preprocessor *m,const size_t &i= 0);
-    UniformGrid(const std::string &nombre= "",Preprocessor *m= NULL,const size_t &i= 0);
+    UniformGrid(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &i= 0);
     SetEstruct *getCopy(void) const;
     virtual unsigned short int GetDimension(void) const;
 

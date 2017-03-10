@@ -50,7 +50,7 @@ class BaseElasticSection2d: public BaseElasticSection
 
   public:
     BaseElasticSection2d(int tag,int classTag,const size_t &dim, const double &E, const double &A, const double &I,double G, const double &alpha);
-    BaseElasticSection2d(int tag,int classTag,const size_t &dim,MaterialLoader *mat_ldr= NULL);    
+    BaseElasticSection2d(int tag,int classTag,const size_t &dim,MaterialLoader *mat_ldr= nullptr);    
     BaseElasticSection2d(int classTag,const size_t &dim);
 
     const CrossSectionProperties2d &getCrossSectionProperties(void) const;   

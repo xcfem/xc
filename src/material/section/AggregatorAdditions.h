@@ -50,7 +50,7 @@ class AggregatorAdditions: public DqUniaxialMaterial
     int recvData(const CommParameters &);
 
   public:
-    AggregatorAdditions(EntCmd *owner= NULL);
+    AggregatorAdditions(EntCmd *owner= nullptr);
     AggregatorAdditions(EntCmd *owner,const UniaxialMaterial &,int c);
     AggregatorAdditions(const AggregatorAdditions &otro);
     AggregatorAdditions(const AggregatorAdditions &otro,SectionForceDeformation *s);

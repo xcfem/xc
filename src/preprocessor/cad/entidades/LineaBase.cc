@@ -61,6 +61,19 @@ const XC::Pnt *XC::LineaBase::GetVertice(const size_t &i) const
       return p2;
   }
 
+//! @brief Checks that the points are defined.
+bool XC::LineaBase::check_points(void) const
+  {
+    bool retval= false;
+    if(p1 && p2)
+      retval= true;
+    else
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; entity: '" << GetNombre()
+                << " is not defined." << std::endl;
+    return retval;
+  }
+
 //! @brief Asigna el vértice de índice i.
 void XC::LineaBase::SetVertice(const size_t &i,Pnt *p)
   {

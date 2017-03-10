@@ -101,7 +101,7 @@ class SetMeshComp: public SetBase
 
     void mueve(const Vector3d &);
   public:
-    SetMeshComp(const std::string &nmb="",Preprocessor *preprocessor= NULL);
+    SetMeshComp(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     SetMeshComp(const SetMeshComp &otro);
     SetMeshComp &operator=(const SetMeshComp &otro);
 

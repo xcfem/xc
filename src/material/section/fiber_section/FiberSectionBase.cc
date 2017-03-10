@@ -743,8 +743,9 @@ Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
     return retval;
   }
 
-//! @brief Returns the segmento definido por el canto útil con el que está trabajando la sección.
-//! el segmento se orienta desde el centro de tracciones hacia la fibra más comprimida.
+//! @brief Returns the segment defined by the current effective
+//! depth of the section. The segment is oriented from the centroid
+//! of the tensioned fibers to the most compressed fiber.
 Segmento2d XC::FiberSectionBase::getSegmentoCantoUtil(void) const
   {
     Segmento2d retval;
@@ -818,15 +819,15 @@ double XC::FiberSectionBase::getRecubrimiento(const Pos2d &p) const
     return retval;
   }
 
-//! @brief Returns the brazo mecánico con el que está trabajando la sección.
+//! @brief Returns the lever arm of the section.
 double XC::FiberSectionBase::getBrazoMecanico(void) const
   { return fibras.getBrazoMecanico(); }
 
-//! @brief Returns the canto útil con el que está trabajando la sección.
+//! @brief Returns the effective depth of the section.
 double XC::FiberSectionBase::getCantoUtil(void) const
   { return getVectorCantoUtil().Norm(); }
 
-//! @brief Returns the area.
+//! @brief Returns the section area.
 double XC::FiberSectionBase::getArea(void) const
   { return fibras.getSumaAreas(); }
 

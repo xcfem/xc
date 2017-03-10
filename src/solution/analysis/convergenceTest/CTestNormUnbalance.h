@@ -73,7 +73,7 @@ class LinearSOE;
 class CTestNormUnbalance: public ConvergenceTestTol
   {
   public:
-    CTestNormUnbalance(EntCmd *owr= NULL);	    	
+    CTestNormUnbalance(EntCmd *owr= nullptr);	    	
     CTestNormUnbalance(EntCmd *owr,double tol, int maxNumIter, int printFlag, int normType=2);
 
     ConvergenceTest *getCopy(void) const;

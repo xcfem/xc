@@ -50,7 +50,7 @@ class MapCadMemberBase: public EntCmd
 
 
   public:
-    MapCadMemberBase(Cad *cad= NULL);
+    MapCadMemberBase(Cad *cad= nullptr);
 
     const Cad *getCad(void) const;
     Cad *getCad(void);

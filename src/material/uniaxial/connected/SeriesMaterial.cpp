@@ -262,9 +262,9 @@ int XC::SeriesMaterial::recvData(const CommParameters &cp)
   {
     int res= ConnectedMaterial::recvData(cp);
     res+= cp.receiveDoubles(Tstrain,Cstrain,Tstress,Cstress,Ttangent,Ctangent,getDbTagData(),CommMetaData(3));
-    int iflag;
-    res+= cp.receiveInts(maxIterations,iflag,getDbTagData(),CommMetaData(4));
-    initialFlag= iflag;
+    int iFlag;
+    res+= cp.receiveInts(maxIterations,iFlag,getDbTagData(),CommMetaData(4));
+    initialFlag= iFlag;
     res+= cp.receiveDouble(tolerance,getDbTagData(),CommMetaData(5));
     res+= cp.receiveVector(stress,getDbTagData(),CommMetaData(6));
     res+= cp.receiveVector(flex,getDbTagData(),CommMetaData(7));

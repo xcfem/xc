@@ -52,13 +52,13 @@ class DqUniaxialMaterial: public EntCmd, public MovableObject, public std::deque
     typedef lst_ptr::const_reference const_reference;
     typedef lst_ptr::size_type size_type;
   protected:
-    void copia_lista(const DqUniaxialMaterial &,SectionForceDeformation *s= NULL);
+    void copia_lista(const DqUniaxialMaterial &,SectionForceDeformation *s= nullptr);
     int sendData(CommParameters &);  
     int recvData(const CommParameters &);
 
 
   public:
-    DqUniaxialMaterial(EntCmd *owner= NULL,const size_t &sz= 0);
+    DqUniaxialMaterial(EntCmd *owner= nullptr,const size_t &sz= 0);
     DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial &);
     DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial &um,const size_t &sz);
     DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial *um,const size_t &sz);
@@ -66,8 +66,8 @@ class DqUniaxialMaterial: public EntCmd, public MovableObject, public std::deque
     DqUniaxialMaterial(const DqUniaxialMaterial &otro,SectionForceDeformation *s);
     DqUniaxialMaterial &operator=(const DqUniaxialMaterial &otro);
     ~DqUniaxialMaterial(void);
-    void push_back(const UniaxialMaterial *,SectionForceDeformation *s= NULL);
-    void push_front(const UniaxialMaterial *,SectionForceDeformation *s= NULL);
+    void push_back(const UniaxialMaterial *,SectionForceDeformation *s= nullptr);
+    void push_front(const UniaxialMaterial *,SectionForceDeformation *s= nullptr);
     inline iterator begin(void)
       { return lst_ptr::begin(); }
     const_iterator begin(void) const

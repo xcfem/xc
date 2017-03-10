@@ -217,7 +217,7 @@ inline double *Vector::getDataPtr(void)
   { return theData; }
 
 inline bool Vector::Nulo(void) const
-  { return (theData==NULL); }
+  { return (theData== nullptr); }
 
 inline void Vector::Zero(void)
   {

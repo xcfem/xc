@@ -46,7 +46,7 @@ class PropRecorder: public Recorder
     Domain *theDomain; //!< poiter to the domain.
 
   public:
-    PropRecorder(int classTag, Domain *ptr_dom= NULL);
+    PropRecorder(int classTag, Domain *ptr_dom= nullptr);
 
     int setDomain(Domain &theDomain);
     std::string getNombreCombActual(void) const;

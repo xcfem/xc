@@ -76,7 +76,7 @@ class ElasticShearSection3d : public BaseElasticSection3d
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
-    ElasticShearSection3d(int tag, MaterialLoader *mat_ldr= NULL);
+    ElasticShearSection3d(int tag, MaterialLoader *mat_ldr= nullptr);
     ElasticShearSection3d(void);
   
     const char *getClassType(void) const {return "ElasticShearSection3d";};

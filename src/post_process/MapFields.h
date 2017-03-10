@@ -63,7 +63,7 @@ class MapFields: public EntCmd, public MovableObject, public std::deque<FieldInf
     int recvData(const CommParameters &);
     friend class Preprocessor;
   public:
-    MapFields(Preprocessor *preprocessor= NULL);
+    MapFields(Preprocessor *preprocessor= nullptr);
  
     FieldInfo &newField(const std::string &);
 

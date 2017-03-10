@@ -109,8 +109,8 @@ double XC::InteractionDiagram2d::FactorCapacidad(const Pos2d &esf_d) const
     double retval= 1e6;
     static const Pos2d O= Pos2d(0.0,0.0);
     const double d= dist(O,esf_d); //Distancia desde la terna de esfuerzos al origen.
-    if(d<mchne_eps_dbl) //Si el punto está muy cerca del origen.
-      retval= 0.0;//Devolvemos el máximo capacity factor que puede presentarse.
+    if(d<mchne_eps_dbl) //If the point is almost at the origin.
+      retval= 0.0;//Returns the maximum capactity factor.
     else
       {
         const Pos2d C= get_interseccion(esf_d);

@@ -405,8 +405,8 @@ double XC::GeomSection::getRecubrimiento(const Pos2d &p) const
   {
     const double retval= -getRegionsContour().DistSigno(p);
     if(retval<0)
-      std::clog << "Warning! la posición: " << p
-                << " está fuera de la sección." << std::endl;
+      std::clog << "Warning! position: " << p
+                << " is outside the section." << std::endl;
     return retval;
   }
 

@@ -211,7 +211,7 @@ void XC::ObjWithRecorders::setLinks(Domain *ptr_dom)
           }
       }
     else
-      std::cerr << "ObjWithRecorders::setLinks; el domain no está asignado." << std::endl;
+      std::cerr << "ObjWithRecorders::setLinks; domain no set." << std::endl;
   }
 
 //! @brief Asigna el almacén de gestores de salida.

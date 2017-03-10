@@ -149,7 +149,7 @@ class AnalysisModel: public MovableObject, public EntCmd
 
     friend class ModelWrapper;
     friend class FEM_ObjectBroker;
-    AnalysisModel(ModelWrapper *owr= NULL);
+    AnalysisModel(ModelWrapper *owr= nullptr);
     AnalysisModel(int classTag,EntCmd *owr);
     AnalysisModel(const AnalysisModel &);
     AnalysisModel &operator=(const AnalysisModel &);

@@ -38,7 +38,7 @@ namespace XC {
 class PtrCommMetaData: public CommMetaData
   {
   private:
-    int posFlag; //!< Index on data to use when pointer is NULL.
+    int posFlag; //!< Index on data to use when pointer is nullptr.
   public:
     PtrCommMetaData(const int &pos,const int &flag);
 

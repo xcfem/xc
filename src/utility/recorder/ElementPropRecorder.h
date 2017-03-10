@@ -45,7 +45,7 @@ class ElementPropRecorder: public PropRecorder
   private:
     dq_elements elements; //!< Element's wich data will be recorded.
   public:
-    ElementPropRecorder(Domain *ptr_dom= NULL);
+    ElementPropRecorder(Domain *ptr_dom= nullptr);
 
     void setElements(const ID &);
 

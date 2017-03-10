@@ -46,7 +46,7 @@ class MapEsquemas2d: public MapCadMember<MatrizPtrPnt>
 
 
   public:
-    MapEsquemas2d(Cad *cad= NULL);
+    MapEsquemas2d(Cad *cad= nullptr);
 
     MatrizPtrPnt *makeNew(void);
   };

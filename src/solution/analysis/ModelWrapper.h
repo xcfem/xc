@@ -81,7 +81,7 @@ class ModelWrapper: public EntCmd
     friend class SoluMethod;
 
   public:
-    ModelWrapper(SoluMethod *owr=NULL);
+    ModelWrapper(SoluMethod *owr= nullptr);
     ModelWrapper(const ModelWrapper &);
     ModelWrapper &operator=(const ModelWrapper &);
     ~ModelWrapper(void);

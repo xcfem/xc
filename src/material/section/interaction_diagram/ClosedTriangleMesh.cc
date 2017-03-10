@@ -218,7 +218,7 @@ const Triedro3d *XC::ClosedTriangleMesh::BuscaPtrTriedro(const Pos3d &p) const
     const Triedro3d *retval= nullptr;
     if(triedros.empty())
       {
-	std::cerr << "ClosedTriangleMesh::BuscaPtrTriedro; la lista de triedros está vacía."
+	std::cerr << "ClosedTriangleMesh::BuscaPtrTriedro; trihedron list is emplty."
                   << std::endl;
         return retval;
       }
@@ -232,7 +232,7 @@ const Triedro3d *XC::ClosedTriangleMesh::BuscaPtrTriedro(const Pos3d &p) const
                 break;
               }
           }
-        if(!retval) //Sigue sin encontrarlo, buscamos aquel cuyo eje está más próximo.
+        if(!retval) //Not found, we search the one with the nearest axis.
           {
 	    ClosedTriangleMesh::const_iterator i= begin();
             const Triedro3d *tr= &(*i);

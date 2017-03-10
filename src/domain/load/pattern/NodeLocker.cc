@@ -320,7 +320,8 @@ std::deque<int> XC::NodeLocker::getTagsSPsNode(int theNode) const
     return retval;
   }
 
-//! @brief Returns true iflas SPs afectan to the node being passed as parameter.
+//! @brief Returns true if the single freedom constraints affect the node
+//! which identifier is being passed as parameter.
 bool XC::NodeLocker::nodeAffectedBySPs(int tagNodo) const
   {
     bool retval= false;

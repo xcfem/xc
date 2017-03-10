@@ -92,7 +92,7 @@ class Cad: public EntCmd
     SetEstruct *busca_set_estruct(const MapUniformGrids::Indice &nmb);
   public:
     //! @brief Constructor.
-    Cad(Preprocessor *mod= NULL);
+    Cad(Preprocessor *mod= nullptr);
     inline Preprocessor *getPreprocessor(void)
       { return preprocessor; } 
     inline const Preprocessor *getPreprocessor(void) const

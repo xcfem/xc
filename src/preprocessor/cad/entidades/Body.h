@@ -53,7 +53,7 @@ struct SecuenciaLados
     bool dirt; //!< Directo o inverso.
 
     SecuenciaLados(const size_t primero= 1,const bool &directo= true);
-    //! @brief Returns true ifla secuencia de lados es directa.
+    //! @brief Returns true if the edge sequence is direct (edge1 -> edge4).
     const bool &Directo(void) const
       { return dirt; }
   };
@@ -72,7 +72,7 @@ class Body: public EntMdlr
         Face *surface; //!< Face geometry.
         SecuenciaLados sec_lados; //!< Edge sequence.
       public:
-        BodyFace(Face *ptr=NULL,const size_t &p=1,const bool &d=true);
+        BodyFace(Face *ptr= nullptr,const size_t &p=1,const bool &d=true);
 	Face *Surface(void);
         const Face *Surface(void) const;
         void SetSurf(Face *s);

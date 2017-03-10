@@ -53,7 +53,7 @@ class BaseElasticSection: public SeccionBarraPrismatica
 
 
   public:
-    BaseElasticSection(int tag,int classTag,const size_t &dim,MaterialLoader *mat_ldr= NULL);    
+    BaseElasticSection(int tag,int classTag,const size_t &dim,MaterialLoader *mat_ldr= nullptr);    
 
     int commitState(void);
     int revertToLastCommit (void);

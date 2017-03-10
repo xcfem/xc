@@ -48,7 +48,7 @@ class Eje: public EntGeomSection
 
     friend class GeomSection;
     Eje(GeomSection *sr,const size_t &nd= 4);
-    Eje(const std::string &nombre= "",GeomSection *m= NULL,const size_t &nd= 4);
+    Eje(const std::string &nombre= "",GeomSection *m= nullptr,const size_t &nd= 4);
   public:
     ~Eje(void);
     //! @brief Return the dimensión del objeto.

@@ -120,7 +120,7 @@ int MovableMap<T>::recvData(const CommParameters &cp)
         ID classTags(sz);
         res+= cp.receiveID(classTags,getDbTagData(),CommMetaData(3));
         std::string label;
-        T *tmp= NULL;
+        T *tmp= nullptr;
         for(size_t i= 0;i<sz;i++)
           {
             res+= cp.receiveString(label,labelData,CommMetaData(i));
@@ -170,7 +170,7 @@ int MovableMap<T>::recvSelf(const CommParameters &cp)
 template <class T>
 int sendMap(const std::map<std::string,T *> &m,CommParameters &cp,DbTagData &dt,const CommMetaData &meta)
   {
-    MovableMap<T> mm(m,NULL);
+    MovableMap<T> mm(m,nullptr);
     return cp.sendMovable(mm,dt,meta);
   }
 

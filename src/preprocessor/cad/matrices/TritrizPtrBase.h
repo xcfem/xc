@@ -198,7 +198,7 @@ void TritrizPtrBase<MatrizPtr>::set_owner_matrices(void)
 //! @brief Matrix dimensions.
 template <class T>
 void XC::TritrizPtrBase<T>::dim(const size_t &nLayers,const size_t &nRows,const size_t &nCols)
-  { this->resize(nLayers,nRows,nCols,NULL); }
+  { this->resize(nLayers,nRows,nCols,nullptr); }
 
 //! @brief Cambia el tamaño de la tritriz.
 template <class MatrizPtr>
@@ -272,7 +272,7 @@ size_t TritrizPtrBase<MatrizPtr>::NumPtrs(void) const
       }
   }
 
-//! @brief Returns true ifestá vacía o si los pointers son nulos.
+//! @brief Returns true if it's empty or the pointers are null.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::Null(void) const
   {
@@ -282,7 +282,7 @@ bool TritrizPtrBase<MatrizPtr>::Null(void) const
       return (*this)[0].Null();
   }
 
-//! @brief Returns true ifestá vacía o si tiene algún null pointer.
+//! @brief Returns true if it's empty or some of the pointers are null.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::HasNull(void) const
   {
@@ -384,7 +384,7 @@ typename TritrizPtrBase<MatrizPtr>::const_reference TritrizPtrBase<MatrizPtr>::g
 template <class MatrizPtr>
 typename TritrizPtrBase<MatrizPtr>::value_type TritrizPtrBase<MatrizPtr>::getAtIJK(const size_t &i,const size_t &j,const size_t &k)
   {
-    typename TritrizPtrBase<MatrizPtr>::value_type retval= NULL;
+    typename TritrizPtrBase<MatrizPtr>::value_type retval= nullptr;
     if(this->check_range(i,j,k))
       retval= (*this)(i,j,k);
     return retval;
@@ -407,7 +407,7 @@ typename TritrizPtrBase<MatrizPtr>::const_reference TritrizPtrBase<MatrizPtr>::g
     else
       {
 	std::cerr << "SetEstruct::getNodoI; el node set no es bidimensional." << std::endl;
-        return NULL;
+        return nullptr;
       } 
   }
 

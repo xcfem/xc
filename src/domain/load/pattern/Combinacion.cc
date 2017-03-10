@@ -244,7 +244,7 @@ void XC::Combinacion::interpreta_descomp(const std::string &str_descomp)
         dq_string str_prod= separa_cadena(str_sum_i,"*");
         const size_t sz= str_prod.size();
         if(sz!=2)
-	  std::cerr << "El sumando: " << str_sum_i << " está mal expresado." << std::endl;
+	  std::cerr << "Term: " << str_sum_i << " is incorrect." << std::endl;
         else
           {
             const float factor= boost::lexical_cast<float>(q_blancos(str_prod[0]));

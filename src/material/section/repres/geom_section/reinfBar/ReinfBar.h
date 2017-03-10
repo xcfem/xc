@@ -80,7 +80,7 @@ class ReinfBar: public DiscretBase
     double area; //!< bar area.
     Vector posit;  //!< bar position.
   public:
-    ReinfBar(Material *mat= NULL);
+    ReinfBar(Material *mat= nullptr);
     ReinfBar(const double &barArea, Material *, const Vector &position);
     ReinfBar(const double &barArea,const double &barDiameter, Material *, const Vector &);
     virtual ReinfBar *getCopy(void) const;

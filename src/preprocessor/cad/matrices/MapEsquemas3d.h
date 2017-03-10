@@ -42,7 +42,7 @@ class TritrizPtrPnt;
 class MapEsquemas3d: public MapCadMember<TritrizPtrPnt>
   {
   public:
-    MapEsquemas3d(Cad *cad= NULL);
+    MapEsquemas3d(Cad *cad= nullptr);
 
     TritrizPtrPnt *makeNew(void);
   };

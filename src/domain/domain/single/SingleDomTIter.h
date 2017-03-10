@@ -62,7 +62,7 @@ T *getIterPtr(TIter &titer)
     // if not return 0, indicating we are done
     TaggedObject *theComponent= titer.getIterPtr();
     if(!theComponent)
-      return NULL;
+      return nullptr;
     else
       return dynamic_cast<T *>(theComponent);
   }

@@ -47,7 +47,7 @@ namespace XC {
 template <class ELEM_LOAD>
 ELEM_LOAD *new_elem_load(LoadPattern *lp,int &tag_el)
   {
-    ELEM_LOAD *load= NULL;
+    ELEM_LOAD *load= nullptr;
     if(lp)
       {
         load= new ELEM_LOAD(tag_el);

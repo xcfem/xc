@@ -60,7 +60,7 @@ class MatrizPtrBase: public MatrizT<T *,std::vector<T *> >, public EntCmd
 
     //! @brief Constructor.
     MatrizPtrBase(const size_t &f=0,const size_t &c=0)
-      : m_ptr(f,c,NULL), EntCmd() {}
+      : m_ptr(f,c,nullptr), EntCmd() {}
   public:
     bool Null(void) const;
     bool HasNull(void) const;
@@ -78,19 +78,19 @@ class MatrizPtrBase: public MatrizT<T *,std::vector<T *> >, public EntCmd
 //! @brief Matrix dimensions.
 template <class T>
 void XC::MatrizPtrBase<T>::dim(const size_t &nRows,const size_t &nCols)
-  { this->resize(nRows,nCols,NULL); }
+  { this->resize(nRows,nCols,nullptr); }
 
-//! @brief Returns true ifestá vacía o si los pointers son nulos.
+//! @brief Returns true if it's empty or the pointers are NULL.
 template <class T>
 bool MatrizPtrBase<T>::Null(void) const
   {
     if(this->empty())
       return true;
     else
-      return (this->operator()(1,1)==NULL);
+      return (this->operator()(1,1)== nullptr);
   }
 
-//! @brief Returns true ifestá vacía o si algún pointer is null.
+//! @brief Returns true if it's empty or any of the pointers are NULL.
 template <class T>
 bool MatrizPtrBase<T>::HasNull(void) const
   {
@@ -103,7 +103,7 @@ bool MatrizPtrBase<T>::HasNull(void) const
         const size_t ncols= this->getNumCols();
         for(size_t j= 1;j<=nfilas;j++)
           for(size_t k= 1;k<=ncols;k++)
-            if(this->operator()(j,k)==NULL)
+            if(this->operator()(j,k)== nullptr)
               {
                 retval= true;
                 break;

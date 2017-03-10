@@ -280,11 +280,11 @@ class Node: public MeshComponent
     Vector getDistributionFactor(int mode,const std::set<int> &gdls) const;
     Matrix getDistributionFactors(void) const;
 
-    //Masas modales efectivas.
+    //Effective modal masses
     double getEffectiveModalMass(int mode) const;
     Vector getEffectiveModalMasses(void) const;
 
-    //Fuerza estática equivalente.
+    //Equivalent static load.
     Vector getEquivalentStaticLoad(int mode,const double &) const;
 
     //Valores máximos modales

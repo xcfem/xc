@@ -59,7 +59,7 @@ XC::Vector XC::ModalAnalysis::getAccelerations(const Vector &periodos) const
 XC::Vector XC::ModalAnalysis::getModalAccelerations(void) const
   { return getAccelerations(getPeriodos()); }
 
-//! @brief Return the fuerzas estática equivalente para el modo
+//! @brief Return the equivalent static load for the mode
 //! being passed as parameter.
 XC::Vector XC::ModalAnalysis::getEquivalentStaticLoad(int mode) const
   {

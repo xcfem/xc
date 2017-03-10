@@ -88,7 +88,7 @@ class AlgorithmIncrements : public Recorder
 			const char *windowTitle, 
 			int xLoc, int yLoc, int width, int height,
 			bool displayRecord = false,
-			const char *fileName= NULL);
+			const char *fileName= nullptr);
     ~AlgorithmIncrements(void);
     int plotData(const Vector &X, const Vector &B);
     int record(int commitTag, double timeStamp);

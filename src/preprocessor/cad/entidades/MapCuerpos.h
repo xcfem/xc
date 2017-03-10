@@ -45,7 +45,7 @@ class MapCuerpos: public MapEnt<Body>
 
 
   public:
-    MapCuerpos(Cad *cad= NULL);
+    MapCuerpos(Cad *cad= nullptr);
 
     bool conciliaNDivs(void);
     bool checkNDivs(void) const;

@@ -50,7 +50,7 @@ class SetEstruct: public SetBase
 
     NodePtrSet getNodePtrSet(void);
   public:
-    SetEstruct(const std::string &nmb="",Preprocessor *preprocessor= NULL);
+    SetEstruct(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     SetEstruct(const SetEstruct &otro);
     SetEstruct &operator=(const SetEstruct &otro);
     virtual SetEstruct *getCopy(void) const= 0;

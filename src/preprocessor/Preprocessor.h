@@ -97,7 +97,7 @@ class Preprocessor: public EntCmd, public MovableObject
 
     SetEstruct *busca_set_estruct(const std::string &nmb);
   public:
-    Preprocessor(EntCmd *owr,DataOutputHandler::map_output_handlers *oh= NULL);
+    Preprocessor(EntCmd *owr,DataOutputHandler::map_output_handlers *oh= nullptr);
     inline Domain *getDomain(void)
       { return domain; }
     inline const Domain *getDomain(void) const

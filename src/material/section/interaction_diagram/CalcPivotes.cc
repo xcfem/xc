@@ -89,9 +89,9 @@ Pos3d XC::CalcPivotes::calcPositionPivotA(void) const
         const Fiber *t= getFiberSMinY();
         const Pos3d pos_t= getPos3d(t,agot_pivotes.getDefAgotPivoteA()); //Yield strain in A pivot.
         const double v_min_s= GetPosLocal(pos_t)(2);
-        if(v_min_s<0) //La tesela está en la zona de tracciones.
+        if(v_min_s<0) //Cell is in tension zone.
           retval= pos_t;
-        else //La tesela está en la zona de compresiones.
+        else //Cell is in compression zone.
           retval= GetPuntoD();
       }
     else //no hay armadura.

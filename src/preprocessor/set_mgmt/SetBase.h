@@ -50,7 +50,7 @@ class UniformGrid;
 class SetBase: public EntMdlrBase
   {
   public:
-    SetBase(const std::string &nmb="",Preprocessor *preprocessor= NULL);
+    SetBase(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     inline virtual ~SetBase(void)
       {}
     virtual void genMesh(meshing_dir dm);

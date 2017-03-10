@@ -47,7 +47,7 @@ class SisRefCartesianas3d: public SisRef
     //! @brief Constructor.
     SisRefCartesianas3d(Preprocessor *m)
       : SisRef(m) {}
-    SisRefCartesianas3d(const std::string &nombre= "",Preprocessor *m= NULL)
+    SisRefCartesianas3d(const std::string &nombre= "",Preprocessor *m= nullptr)
       : SisRef(nombre,m) {}
 
     Vector3d GetVDirEje(const size_t &,const Pos3d &) const;

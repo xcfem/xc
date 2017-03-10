@@ -89,7 +89,7 @@ const Triedro3d *XC::InteractionDiagram::BuscaPtrTriedro(const Pos3d &p) const
     const Triedro3d *retval= nullptr;
     if(triedros.empty())
       {
-	std::cerr << "InteractionDiagram::BuscaPtrTriedro; la lista de triedros está vacía."
+	std::cerr << "InteractionDiagram::BuscaPtrTriedro; trihedron list empty."
                   << std::endl;
         return retval;
       }
@@ -133,7 +133,7 @@ const Triedro3d *XC::InteractionDiagram::BuscaPtrTriedro(const Pos3d &p) const
     //     if(distMin>tol)
     //       retval= nullptr;
     //   }
-    if(!retval) //Sigue sin encontrarlo, buscamos aquel cuyo eje está más próximo.
+    if(!retval) //Not found, we search the one with the nearest axis.
       {
 	InteractionDiagram::const_iterator i= begin();
         const Triedro3d *tr= &(*i);
@@ -255,8 +255,8 @@ double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
     static const Pos3d O= Pos3d(0.0,0.0,0.0);
     const double d= dist(O,esf_d); //Distancia desde la terna de esfuerzos al origen.
     const double umbralMax= rMax*10.0;
-    if(d<mchne_eps_dbl) //Si el punto está muy cerca del origen.
-      retval= 0.0;//Devolvemos el máximo capacity factor que puede presentarse.
+    if(d<mchne_eps_dbl) //Point is almost at origin.
+      retval= 0.0;//Return maximum possible capacity factor.
     else if(d>umbralMax) //Point is far from diagram surface.
       retval= d/rMax;
     else

@@ -174,7 +174,7 @@ const XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag) const
     return retval;
   }
 
-//! @brief Returns the number of elements of the set que están activos.
+//! @brief Returns the number of elements of the set which are active.
 size_t XC::DqPtrsElem::getNumLiveElements(void) const
   {
     size_t retval= 0;
@@ -188,7 +188,7 @@ size_t XC::DqPtrsElem::getNumLiveElements(void) const
     return retval;
   }
 
-//! @brief Returns the number of elements of the set que están inactivos.
+//! @brief Returns the number of elements of the set which are inactive.
 size_t XC::DqPtrsElem::getNumDeadElements(void) const
   {
     size_t retval= 0;

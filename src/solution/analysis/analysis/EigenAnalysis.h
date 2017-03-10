@@ -118,12 +118,12 @@ class EigenAnalysis : public Analysis
     Vector getDistributionFactor(int mode) const;
     Matrix getDistributionFactors(void) const;
 
-    //Masas modales efectivas.
+    //Effective modal masses.
     double getEffectiveModalMass(int mode) const;
     Vector getEffectiveModalMasses(void) const;
     double getTotalMass(void) const;
 
-    //Fuerza estática equivalente.
+    //Equivalent static load.
     Vector getEquivalentStaticLoad(int mode,const double &) const;
   };
 

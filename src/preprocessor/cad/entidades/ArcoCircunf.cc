@@ -82,27 +82,34 @@ void XC::ArcoCircunf::SetVertice(const size_t &i,Pnt *p)
       }
   }
 
+//! @brief Checks that the points are defined.
+bool XC::ArcoCircunf::check_points(void) const
+  {
+    bool retval= false;
+    if(p1 && p2 && p3)
+      retval= true;
+    else
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; arc: '" << GetNombre()
+                << " is not defined." << std::endl;
+    return retval;
+  }
+  
 //! @brief Returns the sector circular definido por el arco.
 const SectorCircular3d XC::ArcoCircunf::get_sector_circular3d(void) const
   {
     SectorCircular3d retval;
-    if(p1 && p2 && p3)
+    if(check_points())
       retval= SectorCircular3d(p1->GetPos(),p3->GetPos(),p2->GetPos());
-    else
-      std::cerr << "ArcoCircunf::get_sector_circular3d; el arco no esta definido." << std::endl;
     return retval;
-
   }
 
 //! @brief Return the longitud de la línea.
 double XC::ArcoCircunf::getLongitud(void) const
   {
     double retval= 0;
-    if(p1 && p2 && p3)
+    if(check_points())
       retval= get_sector_circular3d().LongitudArco();
-    else
-      std::cerr << "error en ArcoCircunf::getLongitud, el arco: '" << GetNombre()
-                << " no está definido." << std::endl;
     return retval;
   }
 
@@ -110,11 +117,8 @@ double XC::ArcoCircunf::getLongitud(void) const
 double XC::ArcoCircunf::getAnguloComprendido(void) const
   {
     double retval= 0;
-    if(p1 && p2 && p3)
+    if(check_points())
       retval= get_sector_circular3d().AnguloComprendido();
-    else
-      std::cerr << "error en ArcoCircunf::getAnguloComprendido, el arco: '" << GetNombre()
-                << " no está definido." << std::endl;
     return retval;
   }
 
@@ -122,11 +126,8 @@ double XC::ArcoCircunf::getAnguloComprendido(void) const
 double XC::ArcoCircunf::getTheta1(void) const
   {
     double retval= 0;
-    if(p1 && p2 && p3)
+    if(check_points())
       retval= get_sector_circular3d().Theta1();
-    else
-      std::cerr << "error en ArcoCircunf::getTheta1, el arco: '" << GetNombre()
-                << " no está definido." << std::endl;
     return retval;
   }
 
@@ -134,11 +135,8 @@ double XC::ArcoCircunf::getTheta1(void) const
 double XC::ArcoCircunf::getTheta2(void) const
   {
     double retval= 0;
-    if(p1 && p2 && p3)
+    if(check_points())
       retval= get_sector_circular3d().Theta2();
-    else
-      std::cerr << "error en ArcoCircunf::getTheta2, el arco: '" << GetNombre()
-                << " no está definido." << std::endl;
     return retval;
   }
 
@@ -146,11 +144,8 @@ double XC::ArcoCircunf::getTheta2(void) const
 double XC::ArcoCircunf::getLambda(const Pos3d &p) const
   {
     double retval= 0;
-    if(p1 && p2 && p3)
+    if(check_points())
       retval= get_sector_circular3d().getLambda(p);
-    else
-      std::cerr << "error in ArcoCircunf::getLambda, arc: '" << GetNombre()
-                << " undefined." << std::endl;
     return retval;
   }
 
@@ -158,11 +153,8 @@ double XC::ArcoCircunf::getLambda(const Pos3d &p) const
 Pos3d XC::ArcoCircunf::getCentro(void) const
   {
     Pos3d retval;
-    if(p1 && p2 && p3)
+    if(check_points())
       retval= get_sector_circular3d().Centro();
-    else
-      std::cerr << "error en ArcoCircunf::getCentro, el arco: '" << GetNombre()
-                << " no está definido." << std::endl;
     return retval;
   }
 
@@ -170,11 +162,8 @@ Pos3d XC::ArcoCircunf::getCentro(void) const
 Pos3d XC::ArcoCircunf::getPInic(void) const
   {
     Pos3d retval;
-    if(p1 && p2 && p3)
+    if(check_points())
       retval= get_sector_circular3d().PInic();
-    else
-      std::cerr << "error en ArcoCircunf::getPInic, el arco: '" << GetNombre()
-                << " no está definido." << std::endl;
     return retval;
   }
 
@@ -182,11 +171,8 @@ Pos3d XC::ArcoCircunf::getPInic(void) const
 Pos3d XC::ArcoCircunf::getPFin(void) const
   {
     Pos3d retval;
-    if(p1 && p2 && p3)
+    if(check_points())
       retval= get_sector_circular3d().PFin();
-    else
-      std::cerr << "error en ArcoCircunf::getPFin, el arco: '" << GetNombre()
-                << " no está definido." << std::endl;
     return retval;
   }
 
@@ -194,11 +180,8 @@ Pos3d XC::ArcoCircunf::getPFin(void) const
 Pos3d XC::ArcoCircunf::getPMed(void) const
   {
     Pos3d retval;
-    if(p1 && p2 && p3)
+    if(check_points())
       retval= get_sector_circular3d().PMed();
-    else
-      std::cerr << "error en ArcoCircunf::getPMed, el arco: '" << GetNombre()
-                << " no está definido." << std::endl;
     return retval;
   }
 
@@ -206,11 +189,8 @@ Pos3d XC::ArcoCircunf::getPMed(void) const
 double XC::ArcoCircunf::getRadio(void) const
   {
     double retval= 0;
-    if(p1 && p2 && p3)
+    if(check_points())
       retval= get_sector_circular3d().Radio();
-    else
-      std::cerr << "error en ArcoCircunf::getRadio, el arco: '" << GetNombre()
-                << " no está definido." << std::endl;
     return retval;
   }
 

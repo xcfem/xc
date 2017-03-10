@@ -72,7 +72,7 @@ class EntMdlr: public SetEstruct
     void clearAll(void);
   public:
     EntMdlr(Preprocessor *m,const size_t &i= 0);
-    EntMdlr(const std::string &nombre= "",const size_t &i= 0,Preprocessor *m=NULL);
+    EntMdlr(const std::string &nombre= "",const size_t &i= 0,Preprocessor *m= nullptr);
     EntMdlr(const EntMdlr &otro);
     EntMdlr &operator=(const EntMdlr &otro);
 

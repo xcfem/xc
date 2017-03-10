@@ -47,7 +47,7 @@ template <class T>
     typedef typename map_base::iterator iterator;
     typedef typename map_base::const_iterator const_iterator;
 
-    MapCadMember(Cad *cad= NULL);
+    MapCadMember(Cad *cad= nullptr);
 
     T * busca(const Indice &);
     const T * busca(const Indice &) const;
@@ -69,7 +69,7 @@ MapCadMember<T>::MapCadMember(Cad *cad)
 //! @brief Returns a pointer to the la entidad cuyo identificador being passed as parameter.
 template <class T>
 T * MapCadMember<T>::busca(const Indice &id)
-  {    T * retval= NULL;
+  {    T * retval= nullptr;
     iterator i= this->find(id);
     if(i!= this->end()) //La entidad existe.
       retval= (*i).second;
@@ -80,17 +80,17 @@ T * MapCadMember<T>::busca(const Indice &id)
 template <class T>
 const T * MapCadMember<T>::busca(const Indice &id) const
   {
-    const T * retval= NULL;
+    const T * retval= nullptr;
     const_iterator i= this->find(id);
     if(i!= this->end()) //La entidad existe.
       retval= (*i).second;
     return retval;
   }
 
-//! @brief Returns true ifla entidad ya está definida.
+//! @brief Returns true if the entity already exists.
 template <class T>
 bool MapCadMember<T>::existe(const Indice &id) const
-  { return (busca(id)!=NULL); }
+  { return (busca(id)!=nullptr); }
 
 
 //! @brief Returns the entity with tag iEnt.
@@ -113,7 +113,7 @@ void MapCadMember<T>::clearAll(void)
         T * tmp= (*i).second;
         if(tmp)
           delete tmp;
-        tmp= NULL;
+        tmp= nullptr;
       }
     this->clear();
   }

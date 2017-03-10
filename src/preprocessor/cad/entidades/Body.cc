@@ -204,12 +204,12 @@ BND3d XC::Body::Bnd(void) const
     const size_t nv= NumVertices();
     if(nv<1) //the set is empty.
       {
-	std::cerr << "Body::Bnd(); la polilinea está vacia." << std::endl;
+	std::cerr << "Body::Bnd(); polyline is empty." << std::endl;
         return retval;
       }
     if(nv<2)
       {
-	std::cerr << "Body::Bnd(); la polilinea sólo tiene un punto." << std::endl;
+	std::cerr << "Body::Bnd(); polyline has only one point." << std::endl;
         retval= BND3d(GetVertice(1)->GetPos(),GetVertice(1)->GetPos());
         return retval;
       }

@@ -105,7 +105,7 @@ class Set: public SetMeshComp
 
     void mueve(const Vector3d &);
   public:
-    Set(const std::string &nmb="",Preprocessor *preprocessor= NULL);
+    Set(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     Set(const Set &otro);
     Set &operator=(const Set &otro);
 

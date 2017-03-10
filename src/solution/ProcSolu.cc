@@ -108,7 +108,7 @@ void XC::ProcSolu::copia_analysis(Analysis *ptr)
      std::cerr << "ProcSolu::copia_analysis; pointer to analysis is null." << std::endl;
   }
 
-//! @brief Define el analysis type (estático, dinámico,...)
+//! @brief Defines type of analysis (static, dynamic,...)
 XC::Analysis &XC::ProcSolu::newAnalysis(const std::string &nmb,const std::string &cod_solu_metodo,const std::string &cod_solu_eigenM)
   {
     alloc_analysis(nmb,cod_solu_metodo,cod_solu_eigenM);

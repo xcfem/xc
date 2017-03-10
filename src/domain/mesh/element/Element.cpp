@@ -328,8 +328,8 @@ const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNo
     return getNodeResistingForceIncInertia(iNodo);
   }
 
-//! @brief Returns the fuerza estática equivalente para el modo
-//! being passed as parameter y la aceleración correspondiente a dicho modo.
+//! @brief Returns the equivalent static load for the mode
+//! being passed as parameter and the acceleration that corresponding that mode.
 XC::Vector XC::Element::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
     const Matrix &matriz_masas= getMass();
@@ -339,7 +339,7 @@ XC::Vector XC::Element::getEquivalentStaticLoad(int mode,const double &accel_mod
     return retval;
   }
 
-//! @brief Returns the fuerza estática equivalente en cada nodo para el modo
+//! @brief Returns the equivalent static load en cada nodo para el modo
 //! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Matrix XC::Element::getEquivalentStaticNodalLoads(int mode,const double &accel_mode) const
   {

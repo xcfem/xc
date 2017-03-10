@@ -207,7 +207,7 @@ XC::StaticIntegrator *XC::Analysis::getStaticIntegratorPtr(void)
   }
 
 //! @brief Return a pointer to the eigenproblem solution
-//! algorithm (if it's not defined returns NULL).
+//! algorithm (if it's not defined it returns nullptr).
 XC::EigenAlgorithm *XC::Analysis::getEigenSolutionAlgorithmPtr(void)
   {
     if(metodo_solu)
@@ -217,7 +217,7 @@ XC::EigenAlgorithm *XC::Analysis::getEigenSolutionAlgorithmPtr(void)
   }
 
 //! @brief Return a pointer to the linear SOE solution
-//! algorithm (if it's not defined returns NULL).
+//! algorithm (if it's not defined it returns nullptr).
 XC::EquiSolnAlgo *XC::Analysis::getEquiSolutionAlgorithmPtr(void)
   {
     if(metodo_solu)
@@ -227,7 +227,7 @@ XC::EquiSolnAlgo *XC::Analysis::getEquiSolutionAlgorithmPtr(void)
   }
 
 //! @brief Return a pointer to the domain decomposition solution
-//! algorithm (if it's not defined returns NULL).
+//! algorithm (if it's not defined it returns nullptr).
 XC::DomainDecompAlgo *XC::Analysis::getDomainDecompSolutionAlgorithmPtr(void)
   {
     if(metodo_solu)
@@ -289,7 +289,7 @@ XC::Subdomain *XC::Analysis::getSubdomain(void)
 //! @brief Deletes all members (Constraint handler, analysis model,...).
 void XC::Analysis::clearAll(void)
   {
-    std::cerr << "Analysis::clearAll() está obsoleta." << std::endl;
+    std::cerr << "Analysis::clearAll() DEPRECATED." << std::endl;
   }
 
 //! @brief Sets the renumerador to use in the analysis.

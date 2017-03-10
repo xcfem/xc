@@ -55,17 +55,17 @@ class SQLiteDatastore: public DBDatastore
     SQLiteDatastore(const std::string &,Preprocessor &, FEM_ObjectBroker &,int dbRun = 0);    
 
     // methods for sending and recieving matrices, vectors and id's
-    int sendMsg(int , int , const Message &, ChannelAddress *a= NULL);    
-    int recvMsg(int , int , Message &, ChannelAddress *a= NULL);        
+    int sendMsg(int , int , const Message &, ChannelAddress *a= nullptr);    
+    int recvMsg(int , int , Message &, ChannelAddress *a= nullptr);        
 
-    int sendMatrix(int , int , const Matrix &,ChannelAddress *a= NULL);
-    int recvMatrix(int , int , Matrix &, ChannelAddress *a= NULL);
+    int sendMatrix(int , int , const Matrix &,ChannelAddress *a= nullptr);
+    int recvMatrix(int , int , Matrix &, ChannelAddress *a= nullptr);
 
-    int sendVector(int , int , const Vector &,ChannelAddress *a= NULL);
-    int recvVector(int , int , Vector &,ChannelAddress *a= NULL);
+    int sendVector(int , int , const Vector &,ChannelAddress *a= nullptr);
+    int recvVector(int , int , Vector &,ChannelAddress *a= nullptr);
     
-    int sendID(int , int ,const ID &,ChannelAddress *a= NULL);
-    int recvID(int , int ,ID &,ChannelAddress *a= NULL);    
+    int sendID(int , int ,const ID &,ChannelAddress *a= nullptr);
+    int recvID(int , int ,ID &,ChannelAddress *a= nullptr);    
 
     int createTable(const std::string &,const std::vector<std::string> &);
     int insertData(const std::string &,const std::vector<std::string> &, int , const Vector &);

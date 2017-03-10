@@ -109,7 +109,7 @@ XC::NodePtrsWithIDs &XC::ElementBase<NNODOS>::getNodePtrs(void)
 template <int NNODOS> template <class TIPOMAT>
 TIPOMAT *ElementBase<NNODOS>::cast_material(const Material *ptr_mat)
   {
-    TIPOMAT *retval= NULL;
+    TIPOMAT *retval= nullptr;
     const TIPOMAT *tmp = dynamic_cast<const TIPOMAT *>(ptr_mat);
     if(tmp)
       retval= tmp->getCopy();

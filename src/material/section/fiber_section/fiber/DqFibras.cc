@@ -444,8 +444,9 @@ double XC::DqFibras::getIHomogenizedSection(const double &E0,const Pos2d &O,cons
 double XC::DqFibras::getIHomogenizedSection(const double &E0,const Recta2d &r) const
   { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir()));  }
 
-//! @brief Returns the momento estático de las áreas de las fibras situadas por encima de yf (y_fibra-yf > 0)
-//! respecto al eje paralelo al z cuya y is being passed as parameter (brazo= y_fibra-y0).
+//! @brief Returns the static moment of the cell areas that rely
+//! above yf (y_fibra-yf > 0) with respect to the axis parallel to z
+//! at the y coordinate being passed as parameter (lever arm= y_fiber-y0).
 double XC::DqFibras::getSzPos(const double &yf,const double &y0,const double &factor) const
   {
     double retval= 0.0;
@@ -466,8 +467,9 @@ double XC::DqFibras::getSzPos(const double &yf,const double &y0,const double &fa
     return retval;
   }
 
-//! @brief Returns the momento estático de las áreas de las fibras situadas por debajo de yf (y_fibra-yf < 0)
-//! respecto al eje paralelo al z cuya y is being passed as parameter (brazo= y_fibra-y0).
+//! @brief Returns the static moment of the cell areas that rely
+//! below yf (y_fibra-yf < 0) with respect to the axis parallel to z
+//! at the y coordinate being passed as parameter (lever arm= y_fiber-y0).
 double XC::DqFibras::getSzNeg(const double &yf,const double &y0,const double &factor) const
   {
     double retval= 0.0;
@@ -488,8 +490,9 @@ double XC::DqFibras::getSzNeg(const double &yf,const double &y0,const double &fa
     return retval;
   }
 
-//! @brief Returns the momento estático de las áreas de las fibras situada por encima de zf (z_fibra-zf > 0)
-//! respecto al eje paralelo al y cuya z is being passed as parameter (brazo= z_fibra-z0).
+//! @brief Returns the static moment of the cell areas that rely
+//! above zf (z_fibra-zf > 0) with respect to the axis parallel to y
+//! at the z coordinate being passed as parameter (lever arm= z_fiber-z0).
 double XC::DqFibras::getSyPos(const double &zf,const double &z0,const double &factor) const
   {
     double retval= 0.0;
@@ -507,8 +510,9 @@ double XC::DqFibras::getSyPos(const double &zf,const double &z0,const double &fa
     return retval;
   }
 
-//! @brief Returns the momento estático de las áreas de las fibras situadas por debajo  de zf (z_fibra-zf < 0)
-//! respecto al eje paralelo al y cuya z is being passed as parameter (brazo= z_fibra-z0).
+//! @brief Returns the static moment of the cell areas that rely
+//! below zf (z_fibra-zf < 0) with respect to the axis parallel to y
+//! at the z coordinate being passed as parameter (lever arm= z_fiber-z0).
 double XC::DqFibras::getSyNeg(const double &zf,const double &z0,const double &factor) const
   {
     double retval= 0.0;
@@ -526,8 +530,8 @@ double XC::DqFibras::getSyNeg(const double &zf,const double &z0,const double &fa
     return retval;
   }
 
-//! @brief Returns the momento estático de las áreas de las fibras situadas dentro
-//! del semiplano being passed as parameter.
+//! @brief Returns the static moments of the fiber areas inside the halfplane
+//! being passed as parameter.
 double XC::DqFibras::getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const
   {
     if(fabs(E0)<1e-6)
@@ -550,8 +554,8 @@ double XC::DqFibras::getSPosHomogenizedSection(const double &E0,const Semiplano2
   }
 
 
-//! @brief Returns the momento estático de las áreas de las fibras situadas fuera
-//! del semiplano being passed as parameter.
+//! @brief Returns the static moments of the fiber areas outside the halfplane
+//! being passed as parameter.
 double XC::DqFibras::getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const
   {
     if(fabs(E0)<1e-6)
@@ -712,8 +716,7 @@ Recta2d XC::DqFibras::getFibraNeutra(void) const
     return Recta2d(org,v);
   }
 
-//! @brief Returns true ifla sección está sometida
-//! a momento flector.
+//! @brief Returns true if the section is subject to a under bending moment.
 bool XC::DqFibras::hayMomento(const double &tol) const
   {
     if(std::abs(getMz())>=tol)
@@ -1126,15 +1129,15 @@ XC::ClaseEsfuerzo XC::DqFibras::getClaseEsfuerzo(const double &tol) const
     return retval;
   }
 
-//! @brief Returns true ifla sección está en tracción simple o compuesta.
+//! @brief Returns true if all the fibers are tensioned.
 bool XC::DqFibras::enTraccion(void) const
   { return ((getStrainMin()>=0) && (getStrainMax()>0)); }
 
-//! @brief Returns true ifla sección está en flexión simple o compuesta.
+//! @brief Returns true if some fibers are tensioned and other are compressed (bending with or without axial force).
 bool XC::DqFibras::enFlexion(void) const
   { return ((getStrainMin()<0) && (getStrainMax()>0)); }
 
-//! @brief Returns true ifla sección está en compresión simple o compuesta.
+//! @brief Returns true if all the fibers are compressed.
 bool XC::DqFibras::enCompresion(void) const
   { return ((getStrainMin()<0) && (getStrainMax()<=0)); }
 
@@ -1267,7 +1270,7 @@ Recta2d XC::DqFibras::getTrazaPlanoCompresion(void) const
     return trazaFlexion.Perpendicular(pt);
   }
 
-//! @brief Returns the brazo mecánico con el que está trabajando la sección.
+//! @brief Returns the lever arm of forces in the section.
 double XC::DqFibras::getBrazoMecanico(void) const
   { return getVectorBrazoMecanico().Norm(); }
 
@@ -1386,8 +1389,8 @@ void XC::DqFibras::calcRecubrimientos(const GeomSection &g) const
     const size_t sz= recubs.size();
     for(size_t i= 0;i<sz;i++)
       if(recubs[i]<0)
-        std::clog << "Warning! la posición: " << posiciones[i]
-                  << " está fuera de la sección." << std::endl;
+        std::clog << "Warning! position: " << posiciones[i]
+                  << " is outside the section." << std::endl;
   }
 
 //! @brief Calcula la distancia de cada fibra a la más proxima.

@@ -92,7 +92,7 @@ std::ostream &operator<<(std::ostream &, const IntPtrWrapper &);
 std::vector<int> id_to_std_vector(const IntPtrWrapper &);
 
 inline bool IntPtrWrapper::Nulo(void) const
-  { return (data==NULL); }
+  { return (data== nullptr); }
 
 //! @brief check if argument is inside range [0,sz-1]
 inline bool IntPtrWrapper::checkRange(const int &i) const

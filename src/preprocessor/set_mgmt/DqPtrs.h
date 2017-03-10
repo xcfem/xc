@@ -174,7 +174,7 @@ const T &DqPtrs<T>::get(const size_t &i) const
     return *ptr; 
   }
 
-//! @brief Returns true ifthe pointer está en el contenedor.
+//! @brief Returns true if the pointer is in the container.
 template<class T>
 bool DqPtrs<T>::in(const T *ptr) const
   {

@@ -88,7 +88,7 @@ class Response;
 //! @brief Section fiber.
 class Fiber: public TaggedObject, public MovableObject
   {
-    bool dead; //!< Verdadero si la fibra está desactivada.
+    bool dead; //!< True if fiber is inactive.
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

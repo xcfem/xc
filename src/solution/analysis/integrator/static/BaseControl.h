@@ -35,8 +35,8 @@ namespace XC {
 
 //! @ingroup StaticIntegrator
 //
-//! @brief Integrador estático de tipo BaseControl.
-class BaseControl : public StaticIntegrator
+//! @brief Base class for load and displacement control static integrators .
+class BaseControl: public StaticIntegrator
   {
   protected:
     double specNumIncrStep; //!< Jd factor relating load increment at subsequent time steps. (optional, default: 1.0)

@@ -82,7 +82,7 @@ class BandGenLinSOE : public FactoredSOEBase
     friend class FEM_ObjectBroker;
     BandGenLinSOE(SoluMethod *);
     BandGenLinSOE(SoluMethod *,int classTag);
-    BandGenLinSOE(SoluMethod *,int N, int numSuperDiagonals, int numSubDiagonal,BandGenLinSolver *theSolver= NULL);        
+    BandGenLinSOE(SoluMethod *,int N, int numSuperDiagonals, int numSubDiagonal,BandGenLinSolver *theSolver= nullptr);        
     SystemOfEqn *getCopy(void) const;
   public:
     virtual int setSize(Graph &theGraph);

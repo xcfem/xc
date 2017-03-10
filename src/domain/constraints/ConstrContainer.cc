@@ -712,7 +712,7 @@ std::deque<int> XC::ConstrContainer::getTagsMPsNode(int theNode, int theDOF) con
   {
     std::deque<int> retval; 
 
-    std::cerr << "XC::ConstrContainer::getTagsMPsNode no está implementada." << std::endl;
+    std::cerr << "XC::ConstrContainer::getTagsMPsNode not implemented." << std::endl;
     return retval;
   }
 
@@ -721,7 +721,7 @@ std::deque<int> XC::ConstrContainer::getTagsMPsNode(int theNode) const
   {
     std::deque<int> retval; 
 
-    std::cerr << "XC::ConstrContainer::getTagsMPsNode no está implementada." << std::endl;
+    std::cerr << "XC::ConstrContainer::getTagsMPsNode not implemented." << std::endl;
     return retval;
   }
 

@@ -52,8 +52,8 @@ class SetFilaK: public SetFila<TritrizPtrNod::var_ref_fila_k,TritrizPtrElem::var
   public:
     typedef TritrizPtrNod::var_ref_fila_k tfilanod;
     typedef TritrizPtrElem::var_ref_fila_k tfilaelem;
-    SetFilaK(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= NULL);
-    SetFilaK(EntMdlr &e,const size_t &capa,const size_t &f,const RangoIndice &,const std::string &nmb="",Preprocessor *preprocessor=NULL);
+    SetFilaK(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
+    SetFilaK(EntMdlr &e,const size_t &capa,const size_t &f,const RangoIndice &,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
   };
 } //end of XC namespace
 #endif

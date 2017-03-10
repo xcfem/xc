@@ -52,7 +52,7 @@ class SisRef: public EntMdlrBase
     //! @brief Constructor.
     SisRef(Preprocessor *m)
       : EntMdlrBase("",m) {}
-    SisRef(const std::string &nombre= "",Preprocessor *m= NULL)
+    SisRef(const std::string &nombre= "",Preprocessor *m= nullptr)
       : EntMdlrBase(nombre,m) {}
     inline virtual ~SisRef(void)
       {}

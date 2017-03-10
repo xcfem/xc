@@ -49,7 +49,7 @@ class ElementLoader: public ProtoElementLoader
         void agrega(Element *);
       public:
         SeedElemLoader(Preprocessor *preprocessor)
-          : ProtoElementLoader(preprocessor), semilla(NULL) {}
+          : ProtoElementLoader(preprocessor), semilla(nullptr) {}
 	Element *GetElementoSemilla(void)
           { return semilla; }
 	const Element *GetElementoSemilla(void) const

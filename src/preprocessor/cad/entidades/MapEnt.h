@@ -47,7 +47,7 @@ class MapEnt: public MapCadMember<T>
     typedef typename MapCadMember<T>::iterator iterator;
     typedef typename MapCadMember<T>::const_iterator const_iterator;
 
-    MapEnt(Cad *cad= NULL);
+    MapEnt(Cad *cad= nullptr);
 
     T *getNearest(const Pos3d &p);
     const T *getNearest(const Pos3d &p) const;
@@ -67,7 +67,7 @@ T *MapEnt<T>::getNearest(const Pos3d &p)
     //the function is called from Python
     /* MapEnt<T> *this_no_const= const_cast<MapEnt<T> *>(this); */
     /* return const_cast<T *>(this_no_const->getNearest(p)); */
-    T *retval= NULL;
+    T *retval= nullptr;
     if(!this->empty())
       {
 	iterator i= this->begin();
@@ -91,7 +91,7 @@ T *MapEnt<T>::getNearest(const Pos3d &p)
 template <class T>
 const T *MapEnt<T>::getNearest(const Pos3d &p) const
   {
-    const T *retval= NULL;
+    const T *retval= nullptr;
     if(!this->empty())
       {
 	const_iterator i= this->begin();

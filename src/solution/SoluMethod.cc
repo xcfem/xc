@@ -356,7 +356,7 @@ XC::SystemOfEqn &XC::SoluMethod::newSystemOfEqn(const std::string &tipo)
         alloc_system_of_equations(tipo,theModel);
       }
     else
-      std::cerr << "No está definido el modelo de cálculo." << std::endl;
+      std::cerr << "Analysis model is not defined." << std::endl;
     assert(theSOE);
     return *theSOE;
   }
@@ -636,7 +636,7 @@ XC::StaticIntegrator *XC::SoluMethod::getStaticIntegratorPtr(void)
   {
     StaticIntegrator *ptr= dynamic_cast<StaticIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; el integrator no es de tipo estático." << std::endl;
+      std::cerr << "SoluMethod; integrator is not static." << std::endl;
     return ptr;
   }
 

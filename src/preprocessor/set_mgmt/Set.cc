@@ -311,9 +311,9 @@ bool XC::Set::In(const Body *b) const
 bool XC::Set::In(const UniformGrid *ug) const
   { return uniform_grids.in(ug); }
 
-//! @brief Agrega to the set being passed as parameter
-//! los elementos que intervienen en la
-//! definición de los que ya están en the set.
+//! @brief Appends to the set being passed as parameter
+//! the elements that intervene on the definition
+//! of those entities that are already in the set.
 void XC::Set::CompletaHaciaAbajo(void)
   {
 //     for(lst_cuerpos::iterator i=cuerpos.begin();i!=cuerpos.end();i++)
@@ -363,7 +363,7 @@ void XC::Set::CompletaHaciaAbajo(void)
 void XC::Set::CompletaHaciaArriba(void)
   {
     SetMeshComp::CompletaHaciaArriba();
-    std::cerr << "Set::CompletaHaciaArriba() está sin terminar." << std::endl;
+    std::cerr << "Set::CompletaHaciaArriba() work in progress." << std::endl;
     for(pnt_iterator i=puntos.begin();i!=puntos.end();i++)
       {
         std::set<const Edge *> ll= GetLineasTocan(**i);

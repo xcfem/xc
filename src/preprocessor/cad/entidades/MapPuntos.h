@@ -57,7 +57,7 @@ class MapPuntos: public MapEnt<Pnt>
 
     Pnt *Crea(void);
   public:
-    MapPuntos(Cad *cad= NULL);
+    MapPuntos(Cad *cad= nullptr);
 
     Vector3d getVector(const Indice &i,const Indice &j) const;
     Recta3d getRecta(const Indice &i,const Indice &j) const;

@@ -307,7 +307,7 @@ std::set<const XC::Edge *> XC::Edge::GetLadosHomologos(const std::set<const XC::
             if(h!=this)
               {
                 std::set<const XC::Edge *>::const_iterator k= lh.find(h);
-                if(k==lh.end()) //No está
+                if(k==lh.end()) //Not already added
                   nuevos_adyacentes.insert(h);
               }
           }
@@ -344,7 +344,7 @@ bool XC::Edge::Toca(const Face &s) const
     return (i!=sups_linea.end());
   }
 
-//! @brief Returns true ifla línea toca al cuerpo.
+//! @brief Returns true if the line touches the body.
 bool XC::Edge::Toca(const Body &b) const
   {
     for(std::set<const Face *>::const_iterator i= sups_linea.begin(); i!=sups_linea.end();i++)
@@ -371,7 +371,7 @@ void XC::Edge::crea_nodos_en_extremos(void)
       std::clog << "Creando nodos en extremos linea: '" << GetNombre() << "'...";   
     if(!P1())
       {
-	std::cerr << "Edge::crea_nodos_en_extremos; no está definido el start point." << std::endl;
+	std::cerr << "Edge::crea_nodos_en_extremos; start point undefined." << std::endl;
         return;
       }
     else
@@ -383,7 +383,7 @@ void XC::Edge::crea_nodos_en_extremos(void)
       
     if(!P2())
       {
-	std::cerr << "Edge::crea_nodos_en_extremos; no está definido el end point." << std::endl;
+	std::cerr << "Edge::crea_nodos_en_extremos; end point undefined." << std::endl;
         return;
       }
     else
@@ -409,7 +409,7 @@ void XC::Edge::crea_nodos(void)
     if(nodos.Null())
       {
         if(!get_preprocessor())
-          std::cerr << "Edge::crea_nodos; no está definido el preprocesador." << std::endl;
+          std::cerr << "Edge::crea_nodos; preprocessor undefined." << std::endl;
         else
           {
             const MatrizPos3d posiciones= get_pos_nodos();

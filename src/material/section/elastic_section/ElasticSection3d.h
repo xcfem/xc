@@ -81,7 +81,7 @@ class ElasticSection3d: public BaseElasticSection3d
   protected:
 
   public:
-    ElasticSection3d(int tag, MaterialLoader *mat_ldr= NULL, const CrossSectionProperties3d &ctes= CrossSectionProperties3d());
+    ElasticSection3d(int tag, MaterialLoader *mat_ldr= nullptr, const CrossSectionProperties3d &ctes= CrossSectionProperties3d());
     ElasticSection3d(int tag, double E, double A, double Iz, double Iy, double G, double J);
     ElasticSection3d(int tag, double EA, double EIz, double EIy, double GJ);
     ElasticSection3d(void);

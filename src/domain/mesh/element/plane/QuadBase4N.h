@@ -95,7 +95,7 @@ XC::TritrizPtrElem XC::QuadBase4N<PhysProp>::put_on_mesh(const XC::TritrizPtrNod
 template <class PhysProp>
 XC::Element::NodesEdge XC::QuadBase4N<PhysProp>::getNodesEdge(const size_t &i) const
   {
-    Element::NodesEdge retval(2,static_cast<Node *>(NULL));
+    Element::NodesEdge retval(2,static_cast<Node *>(nullptr));
     const NodePtrsWithIDs &nodos= ElemPlano<4,PhysProp>::getNodePtrs();
     const size_t sz= nodos.size();
     if(i<sz)

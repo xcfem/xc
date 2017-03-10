@@ -50,7 +50,7 @@ class Combinacion: public ForceReprComponent
         LoadPattern *lpattern; //!< Load pattern.
         void neg(void);
       public:
-        sumando(const float &f= 1.0,LoadPattern *lp= NULL);
+        sumando(const float &f= 1.0,LoadPattern *lp= nullptr);
         //! @brief Returns the factor that multiplies the load pattern.
         const float &Factor(void) const;
         const LoadPattern *Caso(void) const;
@@ -103,7 +103,7 @@ class Combinacion: public ForceReprComponent
 
 
     friend class GrupoCombinaciones;
-    Combinacion(GrupoCombinaciones *owr= NULL,const std::string &nmb= "",int tag= 0,LoadLoader *ll= NULL);
+    Combinacion(GrupoCombinaciones *owr= nullptr,const std::string &nmb= "",int tag= 0,LoadLoader *ll= nullptr);
     inline void setNombre(const std::string &nmb)
       { nombre= nmb;}
     inline void setLoader(LoadLoader *ll)

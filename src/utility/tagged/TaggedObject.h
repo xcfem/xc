@@ -90,7 +90,7 @@ class TaggedObject: public EntCmd
     void setTag(int newTag);  // CAUTION: this is a dangerous method to call
 
   public:
-    TaggedObject(int tag,EntCmd *owr= NULL);
+    TaggedObject(int tag,EntCmd *owr= nullptr);
     virtual TaggedObject *getCopy(void) const;
     virtual ~TaggedObject(void) {}
 

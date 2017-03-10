@@ -91,9 +91,8 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
     // and formTangVectProduct() to be called before formTangent()
     // - this must be allowed as typical elements will not have to fromTangent
     // before being asked to form Residual(). 
-    bool tangFormed; //!< Verdadero si la tangent stiffness matrix ya está formada.
-    int tangFormedCount; // saves the expense of computing formTangent() 
-	               // for same state of Subdomain.
+    bool tangFormed; //!< True if the tangent stiffness matrix is already formed.
+    int tangFormedCount; //!< saves the expense of computing formTangent() for same state of Subdomain.
   protected:
     int domainStamp;
     //! @brief Returns a pointer to the subdomain.
@@ -104,9 +103,9 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
 
     friend class ProcSolu;
     friend class FEM_ObjectBroker;
-    DomainDecompositionAnalysis(Subdomain &theDomain,SoluMethod *s= NULL);
-    DomainDecompositionAnalysis(Subdomain &theDomain,DomainSolver &theSolver,SoluMethod *s= NULL);
-    DomainDecompositionAnalysis(int classTag, Subdomain &theDomain,SoluMethod *s= NULL);
+    DomainDecompositionAnalysis(Subdomain &theDomain,SoluMethod *s= nullptr);
+    DomainDecompositionAnalysis(Subdomain &theDomain,DomainSolver &theSolver,SoluMethod *s= nullptr);
+    DomainDecompositionAnalysis(int classTag, Subdomain &theDomain,SoluMethod *s= nullptr);
     DomainDecompositionAnalysis(int classTag, Subdomain &theDomain,DomainSolver &theSolver,SoluMethod *s);
     Analysis *getCopy(void) const;
   public:

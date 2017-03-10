@@ -580,7 +580,7 @@ const XC::Vector &XC::fElement::getResistingForce(void) const
 
     // return the matrix
     if(isDead())
-      std::cerr << "No está implementada la respuesta con el elemento desactivado." << std::endl;
+      std::cerr << "Response of inactive elements not implemented." << std::endl;
     return *(fElementV[nstR]);
   }
 
@@ -624,7 +624,7 @@ const XC::Vector &XC::fElement::getResistingForceIncInertia(void) const
 
     // return the matrix
     if(isDead())
-      std::cerr << "No está implementada la respuesta con el elemento desactivado." << std::endl;
+      std::cerr << "Response of inactive elements not implemented." << std::endl;
     return *(fElementV[nstR]);
   }
 

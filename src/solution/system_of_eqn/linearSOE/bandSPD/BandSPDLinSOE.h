@@ -90,7 +90,7 @@ class BandSPDLinSOE: public FactoredSOEBase
     friend class FEM_ObjectBroker;
     BandSPDLinSOE(SoluMethod *);    
     BandSPDLinSOE(SoluMethod *,int classTag);    
-    BandSPDLinSOE(SoluMethod *,int N, int bandwidth, BandSPDLinSolver *the_Solver= NULL);
+    BandSPDLinSOE(SoluMethod *,int N, int bandwidth, BandSPDLinSolver *the_Solver= nullptr);
     SystemOfEqn *getCopy(void) const;
   public:
     virtual int setSize(Graph &theGraph);

@@ -55,11 +55,8 @@ XC::SetEstruct *XC::Linea::getCopy(void) const
 double XC::Linea::getLongitud(void) const
   {
     double retval= 0;
-    if(p1 && p2)
+    if(check_points())
       retval= dist(p1->GetPos(),p2->GetPos());
-    else
-      std::cerr << "error Linea::getLongitud la línea: '" << GetNombre()
-                << " no está definida." << std::endl;
     return retval;
   }
 
@@ -67,11 +64,8 @@ double XC::Linea::getLongitud(void) const
 double XC::Linea::getLambda(const Pos3d &p) const
   {
     double retval= 0;
-    if(p1 && p2)
+    if(check_points())
       retval= getSegmento().getLambda(p);
-    else
-      std::cerr << "error Linea::getLambda the line: '" << GetNombre()
-                << " undefined." << std::endl;
     return retval;
   }
 
@@ -80,11 +74,8 @@ double XC::Linea::getLambda(const Pos3d &p) const
 Segmento3d XC::Linea::getSegmento(void) const
   {
     Segmento3d retval;
-    if(p1 && p2)
+    if(check_points())
       retval= Segmento3d(p1->GetPos(),p2->GetPos());
-    else
-      std::cerr << "error Linea::getSegmento la línea: '" << GetNombre()
-                << " no está definida." << std::endl;
     return retval;
   }
 
@@ -179,10 +170,8 @@ BND3d XC::Linea::Bnd(void) const
 MatrizPos3d XC::Linea::get_posiciones(void) const
   {
     MatrizPos3d retval;
-    if(p1 && p2)
+    if(check_points())
       retval= MatrizPos3d(p1->GetPos(),p2->GetPos(),NDiv());
-    else
-      std::cerr << "Linea::get_posiciones; la línea no esté definida." << std::endl;
     return retval;
   }
 
@@ -190,10 +179,8 @@ MatrizPos3d XC::Linea::get_posiciones(void) const
 const XC::Vector &XC::Linea::getVector(void) const
   {
     static XC::Vector retval(3);
-    if(p1 && p2)
+    if(check_points())
       retval= (*p2)-(*p1);
-    else
-      std::cerr << "Linea::getVector; alguno de los pointers to punto es nulo." << std::endl;
     return retval;
   }
 

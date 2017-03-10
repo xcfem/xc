@@ -77,7 +77,7 @@
         env   - block diag envelope
         lnz   - on input, contains nonzeros of a, and on
                 return, the nonzeros of l.
-        iflag - the error flag.  it is set to 1 if a zero
+        iFlag - the error flag.  it is set to 1 if a zero
                 or negative square root occurs during the
                 factorization.
    working parameters -
@@ -96,7 +96,7 @@ int pfsfct(int neqns, double *diag, double **penv, int nblks,
 /*************************************************************** 
  ***************************************************************/
   {  
-   int blk, nextblk, jbeg, iflag ;
+   int blk, nextblk, jbeg, iFlag ;
    int iband, blkbeg, blkend, blksze ;
    int jrow, krow ;
    int jblk, jb, kb, pos ;
@@ -181,8 +181,8 @@ int pfsfct(int neqns, double *diag, double **penv, int nblks,
       perform envelope fct on diag block blk.
       -------------------------------------------------------
 */
-      iflag = pfefct(blksze, penv+blkbeg, diag+ blkbeg) ;
-      if (iflag) return(nextblk);
+      iFlag= pfefct(blksze, penv+blkbeg, diag+ blkbeg) ;
+      if (iFlag) return(nextblk);
 
 /*    -------------------------------------------------------
       for each row "node" in this block, do
@@ -214,7 +214,7 @@ int pfsfct(int neqns, double *diag, double **penv, int nblks,
    updated parameters -
         penv - the envelope of l overwrites that of a.
         diag - the diagonal of l overwrites that of a.
-        iflag - the error flag.  it is set to 1 if a zero or
+        iFlag - the error flag.  it is set to 1 if a zero or
                 negative square root is detected during the
                 factorization.
    program subroutines

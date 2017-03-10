@@ -50,7 +50,7 @@ class DeformationPlane;
 class SeccionBarraPrismatica: public SectionForceDeformation
   {
   public:
-    SeccionBarraPrismatica(int tag,int classTag,MaterialLoader *mat_ldr= NULL);
+    SeccionBarraPrismatica(int tag,int classTag,MaterialLoader *mat_ldr= nullptr);
     SeccionBarraPrismatica(const SeccionBarraPrismatica &otro);
     SeccionBarraPrismatica &operator=(const SeccionBarraPrismatica &otro);
 

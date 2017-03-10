@@ -58,7 +58,7 @@ class Pnt: public EntMdlr
     void crea_nodos(void);
   public:
     Pnt(Preprocessor *m,const Pos3d &pto= Pos3d());
-    Pnt(const std::string &nombre= "",Preprocessor *m= NULL,const Pos3d &pto= Pos3d());
+    Pnt(const std::string &nombre= "",Preprocessor *m= nullptr,const Pos3d &pto= Pos3d());
 
     SetEstruct *getCopy(void) const;
     //! @brief Return the dimensión del objeto.

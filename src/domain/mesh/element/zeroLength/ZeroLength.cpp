@@ -322,9 +322,9 @@ int XC::ZeroLength::update(void)
   {
     // get trial displacements and take difference
     if(!theNodes[0])
-      std::cerr << "ZeroLength::update; el nodo 0 del elemento: " << getTag() << " no está asignado." << std::endl;
+      std::cerr << "ZeroLength::update; node 0 of element: " << getTag() << " is not set." << std::endl;
     if(!theNodes[1])
-      std::cerr << "ZeroLength::update; el nodo 1 del elemento: " << getTag() << " no está asignado." << std::endl;
+      std::cerr << "ZeroLength::update; node 1 of element: " << getTag() << " is not set." << std::endl;
 
     int ret = 0;
     if(theNodes[0] && theNodes[1])

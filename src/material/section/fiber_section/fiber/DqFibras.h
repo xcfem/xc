@@ -233,7 +233,7 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     Matrix &getIHomogenizedSection(const double &E0,const Pos2d &o) const;
     double getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const;
     double getIHomogenizedSection(const double &E0,const Recta2d &r) const;
-    //Momento estático.
+    //Static moments.
     double getSzPos(const double &yf,const double &y0,const double &factor= 1.0) const;
     double getSzNeg(const double &yf,const double &y0,const double &factor= 1.0) const;
     double getSyPos(const double &zf,const double &z0,const double &factor= 1.0) const;

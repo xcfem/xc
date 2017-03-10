@@ -45,7 +45,7 @@ class MapTrfGeom: public MapCadMember<TrfGeom>
 
 
   public:
-    MapTrfGeom(Cad *cad= NULL);
+    MapTrfGeom(Cad *cad= nullptr);
 
     template <class T>
     TrfGeom *Nueva(void);

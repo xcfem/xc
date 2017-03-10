@@ -83,7 +83,7 @@ class DomainSolver: public virtual LinearSOESolver
   public:
 
     virtual int condenseA(int numInt) =0;
-    virtual int condenseRHS(int numInt, Vector *u= NULL) =0;
+    virtual int condenseRHS(int numInt, Vector *u= nullptr) =0;
     virtual int computeCondensedMatVect(int numInt, const Vector &u) =0;
     virtual const Matrix &getCondensedA(void) =0;
     virtual const Vector &getCondensedRHS(void) =0;

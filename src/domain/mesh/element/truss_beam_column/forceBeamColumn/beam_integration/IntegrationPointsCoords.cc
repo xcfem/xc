@@ -50,7 +50,7 @@ XC::IntegrationPointsCoords::IntegrationPointsCoords(const BeamIntegration &bInt
     for(int i= 0;i<nIP;i++)
       xyz(i,1)= locales(i,1);
 
-    //Las globales ya están listas.
+    //Global ones are already prepared.
   }
 
 //! @brief Returns the mapa de valores necesario para evaluar la expresión.

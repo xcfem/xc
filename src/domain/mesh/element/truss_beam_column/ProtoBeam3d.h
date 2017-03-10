@@ -45,7 +45,7 @@ class ProtoBeam3d : public Element1D
     void set_material(const Material *m);
 
   public:
-    ProtoBeam3d(int tag, int class_tag,const Material *m= NULL);
+    ProtoBeam3d(int tag, int class_tag,const Material *m= nullptr);
     ProtoBeam3d(int tag, int class_tag, int Nd1, int Nd2);
     ProtoBeam3d(int tag, int class_tag, double A, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2);
     int getNumDOF(void) const;

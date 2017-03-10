@@ -46,7 +46,7 @@ class ProtoBeam2d : public Element1D
     void set_material(const Material *m);
 
   public:
-    ProtoBeam2d(int tag, int class_tag,const Material *m= NULL);
+    ProtoBeam2d(int tag, int class_tag,const Material *m= nullptr);
     ProtoBeam2d(int tag, int class_tag, double A, double E, double I, int Nd1, int Nd2);
     int getNumDOF(void) const;
     inline CrossSectionProperties2d getSectionProperties(void) const

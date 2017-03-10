@@ -46,8 +46,8 @@ void XC::NodePropRecorder::setNodes(const ID &iNodos)
           nodes.push_back(theDomain->getNode(iNodos(i)));
       }
     else
-      std::cerr << "Error; setNodes"
-                << "la lista de nodos está vacia." << std::endl;
+      std::cerr << "Error; " << nombre_clase() << "::" << __FUNCTION__
+                << " node list is empty." << std::endl;
   }
 
 //! @brief Registra la(s) propiedad(es) del objeto tras el commit.

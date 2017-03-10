@@ -1194,7 +1194,7 @@ XC::Vector XC::Node::getEffectiveModalMasses(void) const
     return retval;
   }
 
-//! @brief Return the fuerza estática equivalente para el modo
+//! @brief Return the equivalent static load para el modo
 //! being passed as parameter y la aceleración correspondiente a dicho modo.
 XC::Vector XC::Node::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {

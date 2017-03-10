@@ -60,10 +60,10 @@ class ObjWithRecorders: public EntCmd
       { return theRecorders.size(); }
     virtual Domain *get_domain_ptr(void)= 0;
   public:
-    ObjWithRecorders(EntCmd *owr,DataOutputHandler::map_output_handlers *oh= NULL);
+    ObjWithRecorders(EntCmd *owr,DataOutputHandler::map_output_handlers *oh= nullptr);
     virtual ~ObjWithRecorders(void);
 
-    Recorder *newRecorder(const std::string &,DataOutputHandler *oh= NULL);
+    Recorder *newRecorder(const std::string &,DataOutputHandler *oh= nullptr);
     virtual int addRecorder(Recorder &theRecorder);
     inline recorder_iterator recorder_begin(void)
       { return theRecorders.begin(); }

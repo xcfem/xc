@@ -122,9 +122,9 @@ XC::Graph &XC::Graph::operator=(const Graph &other)
     return *this;
   }
 
-//! @brief Añade un vértice al grafo. Si la lista de adyacencia del
-//! vértice no está vacía, se chequeará previamente que todos los vértices
-//! de dicha lista existen en el grafo antes de añadirlo.
+//! @brief Appends a vertex to the graph. If the adjacency list of the
+//! vertex is not empty, we check before that all the vertices of the
+//! list are already on the graph.
 bool XC::Graph::addVertex(const Vertex &vrt, bool checkAdjacency)
   {
     Vertex *vertexPtr=new Vertex(vrt);

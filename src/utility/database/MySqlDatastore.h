@@ -87,17 +87,17 @@ class MySqlDatastore: public DBDatastore
     ~MySqlDatastore();
 
     // methods for sending and recieving matrices, vectors and id's
-    int sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress= NULL);    
-    int recvMsg(int dbTag, int commitTag, Message &, ChannelAddress *theAddress= NULL);        
+    int sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress= nullptr);    
+    int recvMsg(int dbTag, int commitTag, Message &, ChannelAddress *theAddress= nullptr);        
 
-    int sendMatrix(int dbTag, int commitTag, const Matrix &,ChannelAddress *theAddress= NULL);
-    int recvMatrix(int dbTag, int commitTag, Matrix &, ChannelAddress *theAddress= NULL);
+    int sendMatrix(int dbTag, int commitTag, const Matrix &,ChannelAddress *theAddress= nullptr);
+    int recvMatrix(int dbTag, int commitTag, Matrix &, ChannelAddress *theAddress= nullptr);
 
-    int sendVector(int dbTag, int commitTag, const Vector &,ChannelAddress *theAddress= NULL);
-    int recvVector(int dbTag, int commitTag, Vector &,ChannelAddress *theAddress= NULL);
+    int sendVector(int dbTag, int commitTag, const Vector &,ChannelAddress *theAddress= nullptr);
+    int recvVector(int dbTag, int commitTag, Vector &,ChannelAddress *theAddress= nullptr);
     
-    int sendID(int dbTag, int commitTag,const ID &,ChannelAddress *theAddress= NULL);
-    int recvID(int dbTag, int commitTag,ID &,ChannelAddress *theAddress= NULL);    
+    int sendID(int dbTag, int commitTag,const ID &,ChannelAddress *theAddress= nullptr);
+    int recvID(int dbTag, int commitTag,ID &,ChannelAddress *theAddress= nullptr);    
 
     int createTable(const std::string &tableName,const std::vector<std::string> &columns);
     int insertData(const std::string &tableName,const std::vector<std::string> &columns, int commitTag, const Vector &data);

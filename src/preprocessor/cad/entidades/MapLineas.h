@@ -56,7 +56,7 @@ class MapLineas: public MapEnt<Edge>
 
 
   public:
-    MapLineas(Cad *cad= NULL);
+    MapLineas(Cad *cad= nullptr);
 
     Vector3d getVector(const Indice &i,const Indice &j) const;
     Recta3d getRecta(const Indice &i,const Indice &j) const;

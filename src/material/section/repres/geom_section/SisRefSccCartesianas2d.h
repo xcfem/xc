@@ -47,7 +47,7 @@ class SisRefSccCartesianas2d: public SisRefScc
     //! @brief Constructor.
     SisRefSccCartesianas2d(GeomSection *m)
       : SisRefScc(m) {}
-    SisRefSccCartesianas2d(const std::string &nombre= "",GeomSection *m= NULL)
+    SisRefSccCartesianas2d(const std::string &nombre= "",GeomSection *m= nullptr)
       : SisRefScc(nombre,m) {}
 
     Vector2d GetVDirEje(const size_t &,const Pos2d &) const;

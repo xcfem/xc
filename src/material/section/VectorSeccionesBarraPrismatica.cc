@@ -199,7 +199,7 @@ int XC::VectorSeccionesBarraPrismatica::revertToStart(void)
     return retVal;
   }
 
-//! @brief Returns true iflas secciones tienen torsional stiffness.
+//! @brief Returns true if the sections have torsional stiffness.
 bool XC::VectorSeccionesBarraPrismatica::isTorsion(void) const
   {
     bool isTorsion= false;

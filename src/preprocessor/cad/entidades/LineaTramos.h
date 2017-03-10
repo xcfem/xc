@@ -44,7 +44,7 @@ class LineaTramos: public Linea
     MatrizPos3d get_posiciones(void) const;
   public:
     LineaTramos(Preprocessor *m,const size_t &ndiv= 4);
-    LineaTramos(const std::string &nombre= "",Preprocessor *m= NULL,const size_t &ndiv= 4);
+    LineaTramos(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
     void setLongs(const XC::Vector &);
     virtual SetEstruct *getCopy(void) const;
 

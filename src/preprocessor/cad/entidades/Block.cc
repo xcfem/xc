@@ -195,7 +195,7 @@ void XC::Block::actualiza_topologia(void)
 //! - If the surface is the first one that defines the solid,
 //! then that one is the base.
 //! - Si ya hay alguna surface definida entonces buscamos el índice
-//!  en la base de la línea común de está última con la being passed as
+//!  en la base de la línea común de esta última con la being passed as
 //!  parameter. Si tal línea existe, dicho índice es el que corresponde
 //!  a la surface en el sólido.
 size_t XC::Block::indice(Face *s) const
@@ -203,7 +203,7 @@ size_t XC::Block::indice(Face *s) const
     size_t retval= 0;
     if(sups[0].Vacia())
       retval= 0; //Es la base.
-    else //La base ya está asignada.
+    else //Base is already set.
       {
         const Face *base= sups[0].Surface();
         size_t primero= base->BordeComun(*s); //Linea comun de "s" con la base.

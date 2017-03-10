@@ -111,8 +111,7 @@ double XC::SeccionBarraPrismatica::getCdgZ(void) const
 Pos2d XC::SeccionBarraPrismatica::getCdg(void) const
   { return Pos2d(getCdgY(),getCdgZ()); }
 
-//! @brief Returns true ifla sección está sometida
-//! a axil.
+//! @brief Returns true if the section is subjected to an axial force.
 bool XC::SeccionBarraPrismatica::hayAxil(const double &tol) const
   {
     bool retval= false;
@@ -178,8 +177,7 @@ Vector2d XC::SeccionBarraPrismatica::getVDirEje2(void) const
 Vector2d XC::SeccionBarraPrismatica::getVDirWeakAxis(void) const
   { return getVDirEje2(); }
 
-//! @brief Returns true ifla sección está sometida
-//! a momento flector.
+//! @brief Returns true if the section is subjected to a bending moment.
 bool XC::SeccionBarraPrismatica::hayMomento(const double &tol) const
   {
     bool retval= false;
@@ -191,8 +189,7 @@ bool XC::SeccionBarraPrismatica::hayMomento(const double &tol) const
     return retval;
   }
 
-//! @brief Returns true ifla sección está sometida
-//! a cortante.
+//! @brief Returns true if the section is subjected to a shearing force.
 bool XC::SeccionBarraPrismatica::hayCortante(const double &tol) const
   {
     bool retval= false;
@@ -204,8 +201,7 @@ bool XC::SeccionBarraPrismatica::hayCortante(const double &tol) const
     return retval;
   }
 
-//! @brief Returns true if the section está sometida
-//! a axil.
+//! @brief Returns true if the section is subjected to a torsional force.
 bool XC::SeccionBarraPrismatica::hayTorsor(const double &tol) const
   {
     bool retval= false;

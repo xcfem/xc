@@ -460,7 +460,7 @@ void XC::CmbEdge::cierra(void)
     if(pA!=pB)
       NuevaLinea(pA,pB);
     else
-      std::cerr << "CmbEdge::cierra; la línea ya está cerrada." << std::endl;
+      std::cerr << "CmbEdge::cierra; line is already closed." << std::endl;
   }
 
 //! @brief Creates a nueva línea entre los puntos being passed as parameters
@@ -666,7 +666,7 @@ BND3d XC::CmbEdge::Bnd(void) const
     const size_t nv= NumVertices();
     if(nv<1) //the set is empty.
       {
-	std::cerr << "XC::CmbEdge::Bnd(); la polilinea está vacia." << std::endl;
+	std::cerr << "XC::CmbEdge::Bnd(); polyline is empty." << std::endl;
         return retval;
       }
     if(nv<2)

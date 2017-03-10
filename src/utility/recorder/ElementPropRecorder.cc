@@ -47,8 +47,8 @@ void XC::ElementPropRecorder::setElements(const ID &iElements)
           elements.push_back(theDomain->getElement(iElements(i)));
       }
     else
-      std::cerr << "Error; setElements"
-                << "la lista de elementos está vacia." << std::endl;
+      std::cerr << "Error; " << nombre_clase() << "::" << __FUNCTION__
+                << " element list is empty." << std::endl;
   }
 
 //! @brief Registra la(s) propiedad(es) del objeto tras el commit.

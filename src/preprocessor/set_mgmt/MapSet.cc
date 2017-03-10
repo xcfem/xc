@@ -137,7 +137,7 @@ void XC::MapSet::cierra_set(const std::string &nmb)
         else
           if(verborrea>1)
 	    std::cerr << "MapSet::cierra_set; the set: '"
-                      << nmb << "' no está abierto.\n";
+                      << nmb << "' is already closed.\n";
       }
   }
 

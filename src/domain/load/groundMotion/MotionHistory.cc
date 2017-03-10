@@ -175,19 +175,19 @@ double XC::MotionHistory::getPeakAccel(void) const
 // if theAccel is not nullptr, integrate accel series to get a vel series
 void XC::MotionHistory::calcVel(void) const
   {
-    if(theVelSeries) return; //Ya están calculadas.
+    if(theVelSeries) return; //Already computed.
     if(theAccelSeries) 
-      theVelSeries = this->integrate(theAccelSeries); //Calcula velocidades.
+      theVelSeries = this->integrate(theAccelSeries); //Computes velocities.
   }
 
 // if theVel or theAccel is not nullptr, integrate vel series to get disp series
 void XC::MotionHistory::calcDisp(void) const
   {
-    if(theDispSeries) return; //Ya están calculados.
+    if(theDispSeries) return; //Already computed.
     if(!theVelSeries)
       calcVel(); //Calcula velocidades.
     if(theVelSeries)
-      theDispSeries = this->integrate(theVelSeries); //Calcula desplazamientos.
+      theDispSeries = this->integrate(theVelSeries); //Computes displacements.
   }
 
 double XC::MotionHistory::getPeakVel(void) const

@@ -108,7 +108,7 @@ Segmento3d XC::QuadBase9N<PhysProp>::getLado(const size_t &i,bool initialGeometr
 template <class PhysProp>
 XC::Element::NodesEdge XC::QuadBase9N<PhysProp>::getNodesEdge(const size_t &i) const
   {
-    Element::NodesEdge retval(3,static_cast<Node *>(NULL));
+    Element::NodesEdge retval(3,static_cast<Node *>(nullptr));
     std::cerr << "QuadBase9N<PhysProp>::getNodesEdge not implemented." << std::endl;
     return retval;    
   }

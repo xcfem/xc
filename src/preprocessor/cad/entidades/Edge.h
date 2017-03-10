@@ -59,7 +59,7 @@ class Edge: public EntMdlr
     void crea_nodos_en_extremos(void);
   public:
     Edge(Preprocessor *m,const size_t &nd= 4);
-    Edge(const std::string &nombre= "",Preprocessor *m= NULL,const size_t &nd= 4);
+    Edge(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &nd= 4);
     //! @brief Return the dimensión del objeto.
     inline virtual unsigned short int GetDimension(void) const
       { return 1; }

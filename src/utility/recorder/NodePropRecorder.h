@@ -44,7 +44,7 @@ class NodePropRecorder: public PropRecorder
   private:
     dq_nodes nodes; //!< Nodes which properties are recorded.
   public:
-    NodePropRecorder(Domain *ptr_dom= NULL);
+    NodePropRecorder(Domain *ptr_dom= nullptr);
 
     void setNodes(const ID &);
 

@@ -218,7 +218,7 @@ int XC::GrupoCombinaciones::sendSelf(CommParameters &cp)
 int XC::GrupoCombinaciones::recvSelf(const CommParameters &cp)
   {
     int res= 0;
-    //Si no está vacío entendemos que valen las definiciones existentes.
+    //If it's not empty we suppose that current definitions are OK.
     if(empty())
       {
         inicComm(1);
@@ -260,7 +260,7 @@ XC::GrupoCombinaciones::const_iterator XC::GrupoCombinaciones::buscaCombPrevia(c
             else
               {
                 tmpDif= c-(*tmp);
-                if(tmpDif.size()<dif.size()) //Está más cerca.
+                if(tmpDif.size()<dif.size()) //It's closer.
                   {
                     retval= i;
                     dif= tmpDif; 

@@ -46,9 +46,10 @@ class ArcoCircunf: public LineaBase
 
     const SectorCircular3d get_sector_circular3d(void) const;
     MatrizPos3d get_posiciones(void) const;
+    bool check_points(void) const;
   public:
     ArcoCircunf(Preprocessor *m);
-    ArcoCircunf(const std::string &nombre= "",Preprocessor *m= NULL);
+    ArcoCircunf(const std::string &nombre= "",Preprocessor *m= nullptr);
     virtual SetEstruct *getCopy(void) const;
     const Pnt *P3(void) const;
 

@@ -46,7 +46,7 @@ class MapSurfaces: public MapEnt<Face>
 
 
   public:
-    MapSurfaces(Cad *cad= NULL);
+    MapSurfaces(Cad *cad= nullptr);
 
     bool conciliaNDivs(void);
     bool checkNDivs(void) const;

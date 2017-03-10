@@ -105,7 +105,7 @@ class SoluMethod: public EntCmd
     void copia(const SoluMethod &);
 
   public:
-    SoluMethod(Analysis *a=NULL,ModelWrapper *b= NULL);
+    SoluMethod(Analysis *a= nullptr,ModelWrapper *b= nullptr);
     SoluMethod(const SoluMethod &);
     SoluMethod &operator=(const SoluMethod &);
     ~SoluMethod(void);

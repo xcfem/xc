@@ -93,7 +93,7 @@ ELEM *nuevo_elemento_ns_gen_mat_crd_integ(int tag_elem, Material *ptrMat, int ns
 template <typename ELEM, typename MAT>
 ELEM *nuevo_elemento_mat(int tag_elem, Material *ptrMat)
   {
-    ELEM *retval= NULL;
+    ELEM *retval= nullptr;
     const MAT *ptr_mat= dynamic_cast<const MAT *>(ptrMat);
     if(ptr_mat)
       retval= new ELEM(tag_elem,ptr_mat); //Lo creamos.

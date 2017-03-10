@@ -45,7 +45,7 @@ class MapSisRef: public MapCadMember<SisRef>
 
 
   public:
-    MapSisRef(Cad *cad= NULL);
+    MapSisRef(Cad *cad= nullptr);
 
     SisRef *Nuevo(const std::string &);
 

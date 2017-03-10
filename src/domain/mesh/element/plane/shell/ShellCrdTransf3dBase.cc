@@ -292,14 +292,16 @@ XC::Matrix XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Matri
     return retval;
   }
 
-//! @brief Return the tangent stiffness matrix expresada en globales.
+//! @brief Return the tangent stiffness matrix expressed in
+//! the global coordinate sistem.
 void XC::ShellCrdTransf3dBase::getGlobalTangent(Matrix &stiff) const
-{ //Por defecto ya está en globales.
+{ //Already in global coordinates by default.
   }
 
-//! @brief Returns the vector residuo y la tangent stiffness matrix expresados en globales.
+//! @brief Returns the residual vector and tangent stiffness matrix expressed in
+//! the global coordinate sistem.
 void XC::ShellCrdTransf3dBase::getGlobalResidAndTangent(Vector &resid,Matrix &stiff) const
-  { //Por defecto ya está en globales.
+  { //Already in global coordinates by default.
   }
 
 //! @brief Returns the vector expressed in global coordinates.

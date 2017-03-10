@@ -56,7 +56,7 @@ class EntMdlrBase: public EntConNmb, public MovableObject
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
-    EntMdlrBase(const std::string &nmb="",Preprocessor *preprocessor= NULL);
+    EntMdlrBase(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     EntMdlrBase(const EntMdlrBase &otro);
     EntMdlrBase &operator=(const EntMdlrBase &otro);
     inline const Preprocessor *GetPreprocessor(void) const

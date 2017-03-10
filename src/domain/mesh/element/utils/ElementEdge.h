@@ -45,7 +45,7 @@ class ElementEdge: public EntCmd
     typedef Element::NodesEdge NodesEdge; //!< Nodos de un borde del elemento.
     typedef std::set<const Element *> ElementConstPtrSet;
 
-    ElementEdge(Element *eptr= NULL,const int &i=-1);
+    ElementEdge(Element *eptr= nullptr,const int &i=-1);
     const Element *getElementPtr(void) const;
     const int &getEdgeIndex(void) const; 
     ID getLocalIndexNodes(void) const;

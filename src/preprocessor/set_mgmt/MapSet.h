@@ -111,7 +111,7 @@ class MapSet: public EntCmd, public MovableObject
     int recvData(const CommParameters &);
 
     friend class Preprocessor;
-    MapSet(Preprocessor *preprocessor= NULL);
+    MapSet(Preprocessor *preprocessor= nullptr);
   public:
 
     virtual ~MapSet(void);

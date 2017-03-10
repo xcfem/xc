@@ -141,7 +141,7 @@ int TaggedObjectStorage::createObjects(const CommParameters &cp,T *(FEM_ObjectBr
         int loc = 0;
         for(int i=0; i<size; i++)
           {
-            T *ptr= NULL;
+            T *ptr= nullptr;
             ptr= cp.getBrokedTagged(ptr,dbTags(loc),objTags(loc),classTags(loc),ptrFunc);
             if(ptr)
               {

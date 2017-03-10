@@ -49,7 +49,7 @@ class Matrix;
 class SeccionInerte: public EntCmd
   {
   public:
-    SeccionInerte(EntCmd *owr= NULL);
+    SeccionInerte(EntCmd *owr= nullptr);
 
     virtual double getAreaGrossSection(void) const= 0;
     virtual Vector getCdgGrossSection(void) const= 0;

@@ -70,7 +70,7 @@ class MEDTFieldInfo: public MEDFieldInfo
 //! @brief Constructor.
 template <class T>
 MEDTFieldInfo<T>::MEDTFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)
-  : MEDFieldInfo(fi,grp), campo(NULL), has_gauss_points(false) {}
+  : MEDFieldInfo(fi,grp), campo(nullptr), has_gauss_points(false) {}
 
 //! @brief Destructor.
 template <class T>
@@ -84,7 +84,7 @@ void MEDTFieldInfo<T>::libera(void) const
     if(campo)
       {
         delete campo;
-        campo= NULL;
+        campo= nullptr;
       }
   }
 
@@ -109,7 +109,7 @@ void MEDTFieldInfo<T>::alloc(void) const
 template <class T>
 typename MEDTFieldInfo<T>::ArrayGauss *MEDTFieldInfo<T>::getArrayGauss(void) const
   {
-    ArrayGauss *retval= NULL;
+    ArrayGauss *retval= nullptr;
     const int numberOfComponents= getXCFieldInfo().getNumberOfComponents();
     const MEDMapNumCeldasPorTipo &cell_types= getGrupo().getMapCellTypes();
     const size_t numberOfTypes= cell_types.getNumberOfTypes();

@@ -36,7 +36,7 @@ namespace XC {
 
 //! \ingroup CadEnt
 //!
-//! @brief Segmento de recta entre dos puntos.
+//! @brief Base class for 1D entities.
 class LineaBase: public Edge
   {
   protected:
@@ -47,6 +47,7 @@ class LineaBase: public Edge
       { return p1; }
     virtual Pnt *P2(void)
       { return p2; }
+    virtual bool check_points(void) const;
   public:
     LineaBase(Preprocessor *m,const size_t &ndiv= 4);
     LineaBase(const std::string &nombre,Preprocessor *m,const size_t &ndiv= 4);

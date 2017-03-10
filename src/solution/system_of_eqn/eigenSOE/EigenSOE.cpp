@@ -313,7 +313,7 @@ double XC::EigenSOE::getTotalMass(void) const
     return retval;
   }
 
-//! @brief Return the fuerza estática equivalente para the modo
+//! @brief Return the equivalennt static force for the mode
 //! being passed as parameter.
 XC::Vector XC::EigenSOE::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {

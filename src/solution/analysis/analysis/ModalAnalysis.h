@@ -57,7 +57,7 @@ class ModalAnalysis : public EigenAnalysis
     Vector getModalAccelerations(void) const;
     Matrix getCQCModalCrossCorrelationCoefficients(const Vector &zetas) const;
 
-    //Fuerza estática equivalente.
+    //Equivalent static load.
     Vector getEquivalentStaticLoad(int mode) const;
   };
 

@@ -109,24 +109,24 @@ class Channel: public EntCmd
     int getTag(void) const;
     
     // methods to send/receive messages and objects on channels.
-    virtual int sendObj(int commitTag, MovableObject &, ChannelAddress *theAddress= NULL) =0;
-    virtual int recvObj(int commitTag, MovableObject &, FEM_ObjectBroker &, ChannelAddress *theAddress= NULL) =0;
+    virtual int sendObj(int commitTag, MovableObject &, ChannelAddress *theAddress= nullptr) =0;
+    virtual int recvObj(int commitTag, MovableObject &, FEM_ObjectBroker &, ChannelAddress *theAddress= nullptr) =0;
     template <class inputIterator>
-    int sendObjs(int commitTag,const inputIterator &first,const inputIterator &last,ChannelAddress *theAddress= NULL);
+    int sendObjs(int commitTag,const inputIterator &first,const inputIterator &last,ChannelAddress *theAddress= nullptr);
     template <class inputIterator>
-    int recvObjs(int commitTag,const inputIterator &first,const inputIterator &last, FEM_ObjectBroker &, ChannelAddress *theAddress= NULL);
+    int recvObjs(int commitTag,const inputIterator &first,const inputIterator &last, FEM_ObjectBroker &, ChannelAddress *theAddress= nullptr);
 
-    virtual int sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress= NULL) =0;  
-    virtual int recvMsg(int dbTag, int commitTag, Message &,ChannelAddress *theAddress= NULL) =0;  
+    virtual int sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress= nullptr) =0;  
+    virtual int recvMsg(int dbTag, int commitTag, Message &,ChannelAddress *theAddress= nullptr) =0;  
     
-    virtual int sendMatrix(int dbTag, int commitTag, const Matrix &,ChannelAddress *theAddress= NULL) =0;  
-    virtual int recvMatrix(int dbTag, int commitTag, Matrix &, ChannelAddress *theAddress= NULL) =0;  
+    virtual int sendMatrix(int dbTag, int commitTag, const Matrix &,ChannelAddress *theAddress= nullptr) =0;  
+    virtual int recvMatrix(int dbTag, int commitTag, Matrix &, ChannelAddress *theAddress= nullptr) =0;  
  
-    virtual int sendVector(int dbTag, int commitTag, const Vector &, ChannelAddress *theAddress= NULL) =0;
-    virtual int recvVector(int dbTag, int commitTag, Vector &, ChannelAddress *theAddress= NULL) =0;
+    virtual int sendVector(int dbTag, int commitTag, const Vector &, ChannelAddress *theAddress= nullptr) =0;
+    virtual int recvVector(int dbTag, int commitTag, Vector &, ChannelAddress *theAddress= nullptr) =0;
 
-    virtual int sendID(int dbTag, int commitTag,const ID &, ChannelAddress *theAddress= NULL) =0;  
-    virtual int recvID(int dbTag, int commitTag,ID &, ChannelAddress *theAddress= NULL) =0;      
+    virtual int sendID(int dbTag, int commitTag,const ID &, ChannelAddress *theAddress= nullptr) =0;  
+    virtual int recvID(int dbTag, int commitTag,ID &, ChannelAddress *theAddress= nullptr) =0;      
   };
 
 //! @brief Envía una serie de objetos.

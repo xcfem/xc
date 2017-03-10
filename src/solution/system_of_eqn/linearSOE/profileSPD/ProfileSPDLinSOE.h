@@ -86,7 +86,7 @@ class ProfileSPDLinSOE : public FactoredSOEBase
     friend class FEM_ObjectBroker;
     ProfileSPDLinSOE(SoluMethod *);
     ProfileSPDLinSOE(SoluMethod *,int classTag);
-    ProfileSPDLinSOE(SoluMethod *,int N, int *iLoc, ProfileSPDLinSolver *theSolver= NULL);
+    ProfileSPDLinSOE(SoluMethod *,int N, int *iLoc, ProfileSPDLinSolver *theSolver= nullptr);
     SystemOfEqn *getCopy(void) const;
   public:
     virtual int setSize(Graph &theGraph);

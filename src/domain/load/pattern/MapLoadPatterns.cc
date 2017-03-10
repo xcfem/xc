@@ -348,7 +348,7 @@ int XC::MapLoadPatterns::recvSelf(const CommParameters &cp)
   {
     inicComm(5);
     int res= 0;
-    //Si no está vacío entendemos que valen las definiciones existentes.
+    //If not empty we suppose that current definitions are OK.
     if(empty())
       {
         const int dataTag= getDbTag();

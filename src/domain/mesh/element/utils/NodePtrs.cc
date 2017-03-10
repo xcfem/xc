@@ -331,7 +331,7 @@ Pos3d XC::NodePtrs::getPosCdg(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns true iflos nodos están contenidos en el semiespacio.
+//! @brief Returns true if the node are in the halfspace.
 bool XC::NodePtrs::In(const SemiEspacio3d &semiEsp,const double &tol,bool initialGeometry) const
   {
     bool retval= true;
@@ -342,7 +342,7 @@ bool XC::NodePtrs::In(const SemiEspacio3d &semiEsp,const double &tol,bool initia
     return retval;
   }
 
-//! @brief Returns true iflos nodos están fuera en el semiespacio.
+//! @brief Returns true if the node are outside the halfspace.
 bool XC::NodePtrs::Out(const SemiEspacio3d &semiEsp,const double &tol,bool initialGeometry) const
   {
     SemiEspacio3d complementario(semiEsp);
@@ -350,7 +350,7 @@ bool XC::NodePtrs::Out(const SemiEspacio3d &semiEsp,const double &tol,bool initi
     return In(complementario,tol,initialGeometry);
   }
 
-//! @brief Returns true iflos nodos están a uno y otro lado del plano.
+//! @brief Returns true if there are nodes in both sides of the plane.
 bool XC::NodePtrs::Corta(const Plano3d &plano,bool initialGeometry) const
   {
     bool in= In(plano,0.0,initialGeometry);

@@ -51,7 +51,7 @@ class FVector
     virtual size_t size(void) const
       { return 0; }
     virtual double *getPtr(void)
-      { return NULL; }
+      { return nullptr; }
     virtual void Print(std::ostream &os) const= 0;
     virtual ~FVector(void)
       {}
