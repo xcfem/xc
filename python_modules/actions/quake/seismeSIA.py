@@ -2,16 +2,24 @@
 from __future__ import division
 # Earthquake loads according to SIA-261 (2003).
 
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, A_OO   LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
+
 import math
 import sys
 
 def S(soilClass):
   '''
   parameter to obtain the elastic response spectrum.
-  according SIA 261 2003 (16.2 tableau 25).
+  according SIA 261 2014 (16.2 tableau 24).
   '''
-  retval= 1
-  if(soilClass== 'B'):
+  retval= 1.4
+  if(soilClass=='A'):
+    retval= 1.0
+  elif(soilClass== 'B'):
     retval= 1.2
   elif(soilClass== 'C'):
     retval= 1.15
@@ -29,7 +37,7 @@ def Tb(soilClass):
   according SIA 261 2003 (16.2 tableau 25).
   '''
   retval= 0.15
-  if(soilClass== 'B'):
+  if((soilClass=='A') or (soilClass== 'B')):
     retval= 0.15
   elif(soilClass== 'C'):
     retval= 0.20
@@ -47,7 +55,9 @@ def Tc(soilClass):
   according SIA 261 2003 (16.2 tableau 25).
   '''
   retval= 0.4
-  if(soilClass== 'B'):
+  if(soilClass== 'A'):
+    retval= 0.4
+  elif(soilClass== 'B'):
     retval= 0.5
   elif(soilClass== 'C'):
     retval= 0.6
@@ -99,7 +109,7 @@ def gammaF(CO):
   importance factor for buildings and bridges
   according SIA 261 2003 (16.3.2 tableau 26).
   '''
-  retval
+  retval= 1.4
   if(CO==1):
     retval= 1.0
   elif(CO==2):
@@ -110,28 +120,28 @@ def gammaF(CO):
     sys.stderr.write("importance class: '"+str(CO)+"' unknown.\n")
   return retval
 
-def designSpectrum(soilClass,accelTerrain,CO,T):
+def designSpectrum(soilClass,accelTerrain,CO,T,q):
   '''
   design spectrum for elastic response analysis
-  according SIA 261 2003 (16.2.4.1).
+  according SIA 261 2014 (16.2.4.1).
   '''
   s= S(soilClass)
   tb= Tb(soilClass)
   tc= Tc(soilClass)
   td= Td(soilClass)
-  g= 9.81
-  q= 1.5
   gf= gammaF(CO)
-  retval= accelTerrain*s*gf/g
+  retval= accelTerrain*s*gf
+  factor= 10.0
   if(T<=tb):
-    retval*= (0.67+(2.5/q-0.67)*T/tb)
+    factor= (0.67+(2.5/q-0.67)*T/tb)
   elif(T<=tc):
-    retval*= 2.5/q
+    factor= 2.5/q
   elif(T<=td):
-    retval*= 2.5*tc/T/q
+    factor= 2.5*tc/T/q
   else:
-    retval*= 2.5*tc*td/(T**2)/q
-    retval= math.max(retval,0.1*gf*accelTerrain/g)
+    factor= max(2.5*tc*td/(T**2)/q,0.1/s)
+  retval*= factor
+  print 'S= ', s, ' gf= ', gf, ' factor= ', factor, 'retval= ', retval
   return retval
 
 
@@ -140,11 +150,13 @@ def alpha(soilClass):
   alpha correction factor
   according SIA 261 2003 (16.4.4).
   '''
-  retval= 1
+  retval= 2
   if((soilClass== 'B') or (soilClass== 'C')):
     retval= 1.5
   elif((soilClass== 'D') or (soilClass== 'D')):
     retval= 2
+  elif(soilClass=='A'):
+    retval= 1
   else:
     sys.stderr.write("soil class: '"+soilClass+"' unknown.\n")
   return retval
