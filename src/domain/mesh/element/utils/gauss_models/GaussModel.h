@@ -85,7 +85,7 @@ const GaussModel gauss_model_quad4(Pos2d(-1,-1),Pos2d(1,-1),Pos2d(1,1),Pos2d(-1,
 const double root5= sqrt(5.0);
 const double root3_over_root5= root3/root5;
 
-//Modelo de Gauus para el cuadrilátero de nueve nodos.
+//Gauss model for nine node quads.
 //
 //  6----5----4
 //  |         |

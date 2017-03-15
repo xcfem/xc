@@ -451,7 +451,7 @@ void XC::Edge::genMesh(meshing_dir dm)
     crea_nodos();
     crea_elementos(dm);
     if(verborrea>3)
-      std::clog << "hecho." << std::endl;
+      std::clog << "done." << std::endl;
   }
 
 //! @brief Returns a vector tangente a la línea en el punto s

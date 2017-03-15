@@ -24,13 +24,13 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//RgSccCuadrilatero.cpp                                                                        
+//RgSccQuad.cpp                                                                        
                                                                         
-// File: RgSccCuadrilatero.C
+// File: RgSccQuad.C
 // Written by Remo M. de Souza
 // December 1998
 
-#include <material/section/repres/geom_section/region/RgSccCuadrilatero.h>
+#include <material/section/repres/geom_section/region/RgSccQuad.h>
 #include <material/section/repres/cell/QuadCell.h>
 
 #include "xc_basic/src/texto/cadena_carac.h"
@@ -48,16 +48,16 @@
 const int I= 0, J=1, K= 2, L= 3;
 const int Y= 0, Z=1;
 
-XC::RgSccCuadrilatero::RgSccCuadrilatero(Material *mat)
+XC::RgSccQuad::RgSccQuad(Material *mat)
   : RgQuadCell(mat), vertCoord(4,2) {}
 
 
-XC::RgSccCuadrilatero::RgSccCuadrilatero(Material *mat, int numSubdivIJ, int numSubdivJK,const XC::Matrix &vertexCoords)
+XC::RgSccQuad::RgSccQuad(Material *mat, int numSubdivIJ, int numSubdivJK,const XC::Matrix &vertexCoords)
   : RgQuadCell(mat,numSubdivIJ,numSubdivJK), vertCoord(vertexCoords)
   {}
   
 //! @brief Sets numbers of divisions to get a tile IJ side smaller than size.
-int XC::RgSccCuadrilatero::setTileSizeIJ(const double &size)
+int XC::RgSccQuad::setTileSizeIJ(const double &size)
   {
     const double longIJ= Segmento2d(getIVertex(),getJVertex()).Longitud();
     const double longKL= Segmento2d(getKVertex(),getLVertex()).Longitud();
@@ -66,7 +66,7 @@ int XC::RgSccCuadrilatero::setTileSizeIJ(const double &size)
   }
 
 //! @brief Sets numbers of divisions to get a tile JK side smaller than size.
-int XC::RgSccCuadrilatero::setTileSizeJK(const double &size)
+int XC::RgSccQuad::setTileSizeJK(const double &size)
   {
     const double longJK= Segmento2d(getJVertex(),getKVertex()).Longitud();
     const double longIL= Segmento2d(getIVertex(),getLVertex()).Longitud();
@@ -75,14 +75,14 @@ int XC::RgSccCuadrilatero::setTileSizeJK(const double &size)
   }
 
 //! @brief Sets numbers of divisions to get tile sizes smaller than sizeIJ and sizeJK.
-int XC::RgSccCuadrilatero::setTileSize(const double &sizeIJ, const double &sizeJK)
+int XC::RgSccQuad::setTileSize(const double &sizeIJ, const double &sizeJK)
   {
     const int ndIJ= setTileSizeIJ(sizeIJ);
     const int ndJK= setTileSizeJK(sizeJK);
     return ndIJ*ndJK;
   }
 
-double XC::RgSccCuadrilatero::getMaxY(void) const
+double XC::RgSccQuad::getMaxY(void) const
   {
     double retval= vertCoord(I,Y);
     retval= std::max(retval,vertCoord(J,Y));
@@ -90,7 +90,7 @@ double XC::RgSccCuadrilatero::getMaxY(void) const
     retval= std::max(retval,vertCoord(L,Y));
     return retval;
   }
-double XC::RgSccCuadrilatero::getMaxZ(void) const
+double XC::RgSccQuad::getMaxZ(void) const
   {
     double retval= vertCoord(I,Z);
     retval= std::max(retval,vertCoord(J,Z));
@@ -98,7 +98,7 @@ double XC::RgSccCuadrilatero::getMaxZ(void) const
     retval= std::max(retval,vertCoord(L,Z));
     return retval;
   }
-double XC::RgSccCuadrilatero::getMinY(void) const
+double XC::RgSccQuad::getMinY(void) const
   {
     double retval= vertCoord(I,Y);
     retval= std::min(retval,vertCoord(J,Y));
@@ -106,7 +106,7 @@ double XC::RgSccCuadrilatero::getMinY(void) const
     retval= std::min(retval,vertCoord(L,Y));
     return retval;
   }
-double XC::RgSccCuadrilatero::getMinZ(void) const
+double XC::RgSccQuad::getMinZ(void) const
   {
     double retval= vertCoord(I,Z);
     retval= std::min(retval,vertCoord(J,Z));
@@ -117,11 +117,11 @@ double XC::RgSccCuadrilatero::getMinZ(void) const
 
 
 //! @brief Returns upper rigth corner.
-Pos2d XC::RgSccCuadrilatero::getPMax(void) const
+Pos2d XC::RgSccQuad::getPMax(void) const
   { return Pos2d(getMaxY(),getMaxZ()); }
 
 //! @brief Sets upper rigth corner.
-void XC::RgSccCuadrilatero::setPMax(const Pos2d &p)
+void XC::RgSccQuad::setPMax(const Pos2d &p)
   {
     const double y= p.x();
     vertCoord(J,Y)= y;
@@ -132,11 +132,11 @@ void XC::RgSccCuadrilatero::setPMax(const Pos2d &p)
   }
 
 //! @brief Returns lower left corner.
-Pos2d XC::RgSccCuadrilatero::getPMin(void) const
+Pos2d XC::RgSccQuad::getPMin(void) const
   { return Pos2d(getMinY(),getMinZ()); }
 
 //! @brief Sets upper rigth corner.
-void XC::RgSccCuadrilatero::setPMin(const Pos2d &p)
+void XC::RgSccQuad::setPMin(const Pos2d &p)
   {
     const double y= p.x();
     vertCoord(I,Y)= y;
@@ -147,26 +147,26 @@ void XC::RgSccCuadrilatero::setPMin(const Pos2d &p)
   }
 
 //! @brief Returns position of I vertex.
-Pos2d XC::RgSccCuadrilatero::getIVertex(void) const
+Pos2d XC::RgSccQuad::getIVertex(void) const
   { return Pos2d(vertCoord(I,Y),vertCoord(I,Z)); }
 
 //! @brief Returns position of J vertex.
-Pos2d XC::RgSccCuadrilatero::getJVertex(void) const
+Pos2d XC::RgSccQuad::getJVertex(void) const
   { return Pos2d(vertCoord(J,Y),vertCoord(J,Z)); }
 
 //! @brief Returns position of K vertex.
-Pos2d XC::RgSccCuadrilatero::getKVertex(void) const
+Pos2d XC::RgSccQuad::getKVertex(void) const
   { return Pos2d(vertCoord(K,Y),vertCoord(K,Z)); }
 
 //! @brief Returns position of L vertex.
-Pos2d XC::RgSccCuadrilatero::getLVertex(void) const
+Pos2d XC::RgSccQuad::getLVertex(void) const
   { return Pos2d(vertCoord(L,Y),vertCoord(L,Z)); }
 
 //! @brief Returns a quadrilateral object (geometry).
-Cuadrilatero2d XC::RgSccCuadrilatero::getCuadrilatero(void) const
+Cuadrilatero2d XC::RgSccQuad::getQuad(void) const
   { return Cuadrilatero2d( getIVertex(),getJVertex(), getKVertex(),getLVertex()); }
 
-void XC::RgSccCuadrilatero::swap(void)
+void XC::RgSccQuad::swap(void)
   {
     Matrix tmp(vertCoord);
     tmp(I,Y)= vertCoord(L,Y); tmp(I,Z)= vertCoord(L,Z);
@@ -177,7 +177,7 @@ void XC::RgSccCuadrilatero::swap(void)
   }
 
 //! @brief Assigns vertex coordinates.
-void XC::RgSccCuadrilatero::setQuad(const Cuadrilatero2d &quad)
+void XC::RgSccQuad::setQuad(const Cuadrilatero2d &quad)
   {
     Pos2d vI= quad.Vertice0(I); Pos2d vJ= quad.Vertice0(J);
     Pos2d vK= quad.Vertice0(K); Pos2d vL= quad.Vertice0(L);
@@ -187,21 +187,21 @@ void XC::RgSccCuadrilatero::setQuad(const Cuadrilatero2d &quad)
     vertCoord(L,Y)= vL.x(); vertCoord(L,Z)= vL.y();
   }
 
-Poligono2d XC::RgSccCuadrilatero::getPoligono(void) const
-  { return getCuadrilatero(); }
+Poligono2d XC::RgSccQuad::getPoligono(void) const
+  { return getQuad(); }
 
-void XC::RgSccCuadrilatero::setVertCoords(const XC::Matrix &vertexCoords)
+void XC::RgSccQuad::setVertCoords(const XC::Matrix &vertexCoords)
   {
     vertCoord = vertexCoords;
   }
 
-const XC::Matrix &XC::RgSccCuadrilatero::getVertCoords(void) const
+const XC::Matrix &XC::RgSccQuad::getVertCoords(void) const
   { return vertCoord; }
 
-const Rejilla2d &XC::RgSccCuadrilatero::getMesh(void) const
-  { return alloc(Rejilla2d(getCuadrilatero().genBilinMesh(nDivIJ,nDivJK))); }
+const Rejilla2d &XC::RgSccQuad::getMesh(void) const
+  { return alloc(Rejilla2d(getQuad().genBilinMesh(nDivIJ,nDivJK))); }
 
-const XC::VectorCells &XC::RgSccCuadrilatero::getCells(void) const
+const XC::VectorCells &XC::RgSccQuad::getCells(void) const
   {
     if(nDivIJ > 0  && nDivJK > 0)
       {
@@ -260,12 +260,12 @@ const XC::VectorCells &XC::RgSccCuadrilatero::getCells(void) const
   }
 
 
-XC::RegionSecc *XC::RgSccCuadrilatero::getCopy (void) const
-  { return new XC::RgSccCuadrilatero(*this); }
+XC::RegionSecc *XC::RgSccQuad::getCopy (void) const
+  { return new XC::RgSccQuad(*this); }
  
-void XC::RgSccCuadrilatero::Print(std::ostream &s, int flag) const
+void XC::RgSccQuad::Print(std::ostream &s, int flag) const
   {
-    s << "\nRgQuadCell Type: RgSccCuadrilatero";
+    s << "\nRgQuadCell Type: RgSccQuad";
     //s << "\nMaterial Id: " << getMaterialID();
     s << "\nNumber of subdivisions in the IJ direction: " << nDivIJ;
     s << "\nNumber of subdivisions in the JK direction: " << nDivJK;
@@ -273,8 +273,8 @@ void XC::RgSccCuadrilatero::Print(std::ostream &s, int flag) const
   }
 
 
-std::ostream &XC::operator<<(std::ostream &s, XC::RgSccCuadrilatero &rg_scc_cuad)
+std::ostream &XC::operator<<(std::ostream &s, XC::RgSccQuad &rg_scc_quad)
   {
-    rg_scc_cuad.Print(s);
+    rg_scc_quad.Print(s);
     return s;
   }

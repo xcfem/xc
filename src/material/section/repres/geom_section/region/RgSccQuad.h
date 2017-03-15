@@ -24,12 +24,12 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//RgSccCuadrilatero.h
+//RgSccQuad.h
 // Written by Remo M. de Souza
 // December 1998
 
-#ifndef RgSccCuadrilatero_h 
-#define RgSccCuadrilatero_h 
+#ifndef RgSccQuad_h 
+#define RgSccQuad_h
 
 #include <material/section/repres/geom_section/region/RgQuadCell.h>
 #include "utility/matrix/Matrix.h"
@@ -40,25 +40,25 @@ namespace XC {
 
 // Orden de los vértices I->J->K->L.
 //
-//         nDivIJ= 4
 // L +---+---+---+---+ K
 //   |   |   |   |   |
-//   +---+---+---+---+ nDivKL= 2
+//   +---+---+---+---+ nDivJK= 2
 //   |   |   |   |   |
 // I +---+---+---+---+ J
+//         nDivIJ= 4
 
 //! @ingroup MATSCCRegiones
 //
-//! Region cuadrilátera para la discretización.
-class RgSccCuadrilatero: public RgQuadCell
+//! @brief Quad that discretizes in quad cells.
+class RgSccQuad: public RgQuadCell
   {
   private:
     Matrix vertCoord; //!< Coordenadas de los vértices.
   protected:
 
   public:
-    RgSccCuadrilatero(Material *);
-    RgSccCuadrilatero(Material *, int numSubdivIJ, int numSubdivJK, const Matrix &vertexCoords);
+    RgSccQuad(Material *);
+    RgSccQuad(Material *, int numSubdivIJ, int numSubdivJK, const Matrix &vertexCoords);
 
     // edition functions
     void setVertCoords(const Matrix &vertexCoords);
@@ -84,14 +84,14 @@ class RgSccCuadrilatero: public RgQuadCell
     Pos2d getJVertex(void) const;
     Pos2d getKVertex(void) const;
     Pos2d getLVertex(void) const;
-    Cuadrilatero2d getCuadrilatero(void) const;
+    Cuadrilatero2d getQuad(void) const;
     void setQuad(const Cuadrilatero2d &);
     Poligono2d getPoligono(void) const;
     void swap(void);
 
 
     void Print(std::ostream &s, int flag =0) const;   
-    friend std::ostream &operator<<(std::ostream &s, RgSccCuadrilatero &rg_scc_cuad);    
+    friend std::ostream &operator<<(std::ostream &s, RgSccQuad &);    
   };
 } // end of XC namespace
 

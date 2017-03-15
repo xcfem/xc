@@ -476,5 +476,5 @@ void XC::Block::genMesh(meshing_dir dm)
       if(verborrea>2)
         std::clog << "Block::genMesh; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
     if(verborrea>3)
-      std::clog << "hecho." << std::endl;
+      std::clog << "done." << std::endl;
   }

@@ -440,13 +440,13 @@ void XC::QuadSurface::crea_nodos(void)
 void XC::QuadSurface::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
-      std::clog << "Meshing SupCuadrilátera...(" << GetNombre() << ")...";
+      std::clog << "Meshing quadrilateral surface...(" << GetNombre() << ")...";
     crea_nodos();
     if(elementos.Null())
       crea_elementos(dm);
     else
       if(verborrea>2)
-        std::clog << "QuadSurface::genMesh; los elementos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
+        std::clog << "QuadSurface::genMesh; elements for surface: '" << GetNombre() << "' already exist." << std::endl;      
     if(verborrea>3)
-      std::clog << "hecho." << std::endl;
+      std::clog << "done." << std::endl;
   }

@@ -183,8 +183,8 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
 //! - corot_shell_mitc4[tag]: Define un elemento de tipo shell con formulación corrotacional (CorotShellMITC4),
 //! - shell_nl[tag]: Define un elemento de tipo shell (ShellNL),
 //!   for shell problems.
-//! - quad4n[tag]: Define un elemento cuadrilátero de cuatro nodos (FourNodeQuad),
-//! - tri31[tag]: Define un elemento triangular de tres nodos y un sólo punto de gauss (Tri31),
+//! - quad4n[tag]: Defines a four node quad (FourNodeQuad),
+//! - tri31[tag]: Defines a three node triangle with just a Gauss point (Tri31),
 //!   for plane problems.
 //! - brick[tag]: Defines an eight node hexahedron (Brick),
 //!   para solid analysis.
@@ -250,43 +250,48 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
       {
         retval= nuevo_elemento_mat<ShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error en ProtoElementLoader::nuevo_elemento; el material: '"
+          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__ << "; material: '"
                     << nmb_mat << "' no es del tipo adecuado." << std::endl;
       }
     else if(cmd == "corot_shell_mitc4")
       {
         retval= nuevo_elemento_mat<CorotShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error en ProtoElementLoader::nuevo_elemento; el material: '"
-                    << nmb_mat << "' no es del tipo adecuado." << std::endl;
+          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
+		    << "; material: '" << nmb_mat << "' is not suitable for "
+		    << cmd << " elements." << std::endl;
       }
     else if(cmd == "shell_nl")
       {
         retval= nuevo_elemento_mat<ShellNL,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error en ProtoElementLoader::nuevo_elemento; el material: '"
-                    << nmb_mat << "' no es del tipo adecuado." << std::endl;
+          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
+		    << "; material: '" << nmb_mat << "' is not suitable for "
+		    << cmd << " elements." << std::endl;
       }
     else if(cmd == "quad4n")
       {
         retval= nuevo_elemento_mat<FourNodeQuad,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error en ProtoElementLoader::nuevo_elemento; el material: '"
-                    << nmb_mat << "' no es del tipo adecuado." << std::endl;
+          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
+		    << "; material: '" << nmb_mat << "' is not suitable for "
+		    << cmd << " elements." << std::endl;
       }
     else if(cmd == "tri31")
       {
         retval= nuevo_elemento_mat<Tri31,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error en ProtoElementLoader::nuevo_elemento; el material: '"
-                    << nmb_mat << "' no es del tipo adecuado." << std::endl;
+          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
+		    << "; material: '" << nmb_mat << "' is not suitable for "
+		    << cmd << " elements." << std::endl;
       }
     else if(cmd == "brick")
       {
         retval= nuevo_elemento_mat<Brick,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error en ProtoElementLoader::nuevo_elemento; el material: '"
-                    << nmb_mat << "' no es del tipo adecuado." << std::endl;
+          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
+		    << "; material: '" << nmb_mat << "' is not suitable for "
+		    << cmd << " elements." << std::endl;
       }
     else
       std::cerr << "Element type: " << cmd << " unknown." << std::endl;

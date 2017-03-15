@@ -65,13 +65,11 @@ class NDMaterial;
 
 //! \ingroup ElemPlanos
 //
-//! @brief Cuadrilátero de nueve nodos.
+//! @brief Nine node quad.
 class NineNodeMixedQuad : public ElemWithMaterial<9,NDMaterialPhysicalProperties>
   {
-  private : 
-
-    //nodal coordinates, two coordinates for each of nine nodes
-    static double xl[][9]; 
+  private: 
+    static double xl[][9]; //!< nodal coordinates, two coordinates for each of nine nodes
     mutable Matrix *Ki;
 
     //static data

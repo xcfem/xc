@@ -52,27 +52,30 @@ class Response;
 
 //! \ingroup ElemPlanos
 //
-//! @brief Cuadrilátero de cuatro nodos UP.
+//! @brief Four-node plane-strain element using bilinear isoparametric formulation.
+//! This element is implemented for simulating dynamic response of solid-fluid fully
+//! coupled material, based on Biot's theory of porous medium. Each element node
+//! has 3 degrees-of-freedom (DOF): DOF 1 and 2 for solid displacement (u)
+//! and DOF 3 for fluid pressure (p).
 class FourNodeQuadUP : public QuadBase4N<SolidMech2D>
   {
   private:
 
-    static Matrix K;		// Element stiffness, damping, and mass Matrix
-    static Vector P;		// Element resisting force vector
-    BodyForces2D bf;  //!< Body forces
-    Vector pressureLoad;	// Pressure load at nodes
+    static Matrix K; //!< Element stiffness, damping, and mass Matrix
+    static Vector P; //!< Element resisting force vector
+    BodyForces2D bf; //!< Body forces
+    Vector pressureLoad; //!< Pressure load at nodes
 
-    double rho;			// Fluid mass per unit volume
-    double kc;   // combined bulk modulus
-    double pressure;	// Normal surface traction (pressure) over entire element
-    // Note: positive for outward normal
-    double perm[2];  // lateral/vertical permeability
+    double rho; //!< Fluid mass per unit volume
+    double kc; //!< combined bulk modulus
+    double pressure; //!< Normal surface traction (pressure) over entire element (note: positive for outward normal).
+    double perm[2]; //!< lateral/vertical permeability
 
-    static double shp[3][4][4];	// Stores shape functions and derivatives (overwritten)
-    static double pts[4][2];	// Stores quadrature points
-    static double wts[4];		// Stores quadrature weights
-    static double dvol[4];  // Stores detJacobian (overwritten)
-    static double shpBar[3][4]; // Stores averaged shap functions (overwritten)
+    static double shp[3][4][4];	//!< Stores shape functions and derivatives (overwritten)
+    static double pts[4][2]; //!< Stores quadrature points
+    static double wts[4]; //!< Stores quadrature weights
+    static double dvol[4];  //!< Stores detJacobian (overwritten)
+    static double shpBar[3][4]; //!< Stores averaged shap functions (overwritten)
 
     Node *nd1Ptr(void);
     const Node *nd1Ptr(void) const;

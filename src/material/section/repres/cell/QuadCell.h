@@ -66,7 +66,7 @@ namespace XC {
 
 //! @ingroup MATSCCCell
 //
-//! @brief Tesela en forma de cuadrilátero.
+//! @brief Quadrilateral cell.
 class QuadCell: public Cell
   {
   public:

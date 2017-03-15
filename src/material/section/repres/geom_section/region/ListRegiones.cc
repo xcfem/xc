@@ -27,7 +27,7 @@
 //ListRegiones.cc
 
 #include "ListRegiones.h"
-#include <material/section/repres/geom_section/region/RgSccCuadrilatero.h>
+#include <material/section/repres/geom_section/region/RgSccQuad.h>
 #include <material/section/repres/geom_section/region/RgSccCirc.h>
 #include <material/section/repres/geom_section/region/RgSccPoligono.h>
 #include "material/uniaxial/UniaxialMaterial.h" 
@@ -79,14 +79,14 @@ XC::ListRegiones &XC::ListRegiones::operator=(const ListRegiones &otro)
   }
 
 //! @brief Aggregates a new quadrilateral region.
-XC::RgSccCuadrilatero *XC::ListRegiones::newQuadRegion(const std::string &cod_mat)
+XC::RgSccQuad *XC::ListRegiones::newQuadRegion(const std::string &cod_mat)
   {
     Material *mat= material_loader->find_ptr(cod_mat);
     if(!mat)
       std::cerr << "ListRegiones::newQuadRegion; ¡ojo!, no se encontró el material: '"
                 << cod_mat << "' deberá asignarse un material a la región.\n";
-    RgSccCuadrilatero tmp(mat);
-    RgSccCuadrilatero *ptr= dynamic_cast<XC::RgSccCuadrilatero *>(push_back(tmp));
+    RgSccQuad tmp(mat);
+    RgSccQuad *ptr= dynamic_cast<XC::RgSccQuad *>(push_back(tmp));
     ptr->set_owner(this);
     return ptr;
   }

@@ -220,7 +220,7 @@ void XC::Set::point_meshing(meshing_dir dm)
     for(lst_ptr_puntos::iterator i= puntos.begin();i!=puntos.end();i++)
       (*i)->genMesh(dm);
     if(verborrea>2)
-      std::clog << "hecho." << std::endl;
+      std::clog << "done." << std::endl;
   }
 
 //! @brief Create nodes and, where appropriate, elements on set lines.
@@ -231,7 +231,7 @@ void XC::Set::line_meshing(meshing_dir dm)
     for(lst_ptr_lineas::iterator i= lineas.begin();i!=lineas.end();i++)
       (*i)->genMesh(dm);
     if(verborrea>2)
-      std::clog << "hecho." << std::endl;
+      std::clog << "done." << std::endl;
   }
 
 //! @brief Create nodes and, where appropriate, elements on surfaces.
@@ -242,7 +242,7 @@ void XC::Set::surface_meshing(meshing_dir dm)
     for(lst_surface_ptrs::iterator i= surfaces.begin();i!=surfaces.end();i++)
       (*i)->genMesh(dm);
     if(verborrea>2)
-      std::clog << "hecho." << std::endl;
+      std::clog << "done." << std::endl;
   }
 
 //! @brief Create nodes and, where appropriate, elements on set bodies.
@@ -253,7 +253,7 @@ void XC::Set::body_meshing(meshing_dir dm)
     for(lst_ptr_cuerpos::iterator i= cuerpos.begin();i!=cuerpos.end();i++)
       (*i)->genMesh(dm);
     if(verborrea>2)
-      std::clog << "hecho." << std::endl;
+      std::clog << "done." << std::endl;
   }
 
 //! @brief Crea nodos y, en su caso, elementos en los puntos of the set.
@@ -264,7 +264,7 @@ void XC::Set::uniform_grid_meshing(meshing_dir dm)
     for(lst_ptr_uniform_grids::iterator i= uniform_grids.begin();i!=uniform_grids.end();i++)
       (*i)->genMesh(dm);
     if(verborrea>2)
-      std::clog << "hecho." << std::endl;
+      std::clog << "done." << std::endl;
   }
 
 //!  @brief Triggers mesh generation from set components.
@@ -288,7 +288,7 @@ void XC::Set::genMesh(meshing_dir dm)
     mdl->get_sets().cierra_set(GetNombre()); //Cerramos.
 
     if(verborrea>1)
-      std::clog << "hecho." << std::endl;
+      std::clog << "done." << std::endl;
   }
 
 //! @brief Returns true if the point belongs to the set.

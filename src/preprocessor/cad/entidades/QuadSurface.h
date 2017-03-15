@@ -26,8 +26,8 @@
 //----------------------------------------------------------------------------
 //QuadSurface.h
 
-#ifndef SUPCUADRILATERA_H
-#define SUPCUADRILATERA_H
+#ifndef QUADSURFACE_H
+#define QUADSURFACE_H
 
 #include "Face.h"
 #include "preprocessor/cad/matrices/MatrizPtrPnt.h"
@@ -36,7 +36,7 @@ namespace XC {
 
 //! \ingroup CadEnt
 //!
-//! @brief Cuadrilátero entre cuatro puntos.
+//! @brief Quadrangle defined by its four vertices.
 class QuadSurface: public Face
   {
   protected:

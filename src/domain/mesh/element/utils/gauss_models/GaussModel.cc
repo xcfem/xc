@@ -40,7 +40,7 @@ XC::GaussModel::GaussModel(const Pos2d &n1,const Pos2d &n2,const Pos2d &n3,const
     gauss_points.push_back(p1);
   }
 
-//! @brief  Constructor: triángulo 3 nodos. 
+//! @brief  Constructor: three node triangle. 
 XC::GaussModel::GaussModel(const Pos2d &n1,const Pos2d &n2,const Pos2d &n3,const GaussPoint &p1,const GaussPoint &p2,const GaussPoint &p3)
   {
     coo_ref_nodes.push_back(Pos3d(n1.x(),n1.y(),0));
@@ -51,7 +51,7 @@ XC::GaussModel::GaussModel(const Pos2d &n1,const Pos2d &n2,const Pos2d &n3,const
     gauss_points.push_back(p3);
   }
 
-//! @brief  Constructor: cuadrilátero 4 nodos. 
+//! @brief  Constructor: four node quad. 
 XC::GaussModel::GaussModel(const Pos2d &n1,const Pos2d &n2,const Pos2d &n3,const Pos2d &n4,const GaussPoint &p1,const GaussPoint &p2,const GaussPoint &p3,const GaussPoint &p4)
   {
     coo_ref_nodes.push_back(Pos3d(n1.x(),n1.y(),0));
@@ -64,7 +64,7 @@ XC::GaussModel::GaussModel(const Pos2d &n1,const Pos2d &n2,const Pos2d &n3,const
     gauss_points.push_back(p4);
   }
 
-//! @brief  Constructor: cuadrilátero 9 nodos. 
+//! @brief  Constructor: nine node quad. 
 XC::GaussModel::GaussModel(const Pos2d &n1,const Pos2d &n2,const Pos2d &n3,const Pos2d &n4,
                const Pos2d &n5,const Pos2d &n6,const Pos2d &n7,const Pos2d &n8,const Pos2d &n9,
                const GaussPoint &p1,const GaussPoint &p2,const GaussPoint &p3,const GaussPoint &p4,

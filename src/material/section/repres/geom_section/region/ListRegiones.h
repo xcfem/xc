@@ -40,7 +40,7 @@ class Semiplano2d;
 namespace XC {
 
 class RegionSecc;
-class RgSccCuadrilatero;
+class RgSccQuad;
 class RgSccCirc;
 class MaterialLoader;
 class Vector;
@@ -84,7 +84,7 @@ class ListRegiones: protected std::list<RegionSecc *>, public SeccionInerte
     iterator begin(void);
     iterator end(void);
 
-    RgSccCuadrilatero *newQuadRegion(const std::string &);
+    RgSccQuad *newQuadRegion(const std::string &);
     RgSccCirc *newCircularRegion(const std::string &);
 
     size_t getNumCells(void) const;

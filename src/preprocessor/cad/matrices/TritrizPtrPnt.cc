@@ -322,7 +322,7 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t 
 // //! ...
 // //! @param nf: Number of rows of the matrix that holds the pointers to point.
 // //! @param nc: Number of columns of the matrix that holds the pointers to point.
-// std::deque<size_t> XC::TritrizPtrPnt::CreaCuadrilateros(const RangoTritriz &rango,const size_t &nf,const size_t &nc,const m_int &offsetIndices,const double &elemSizeI,const double &elemeSizeJ)
+// std::deque<size_t> XC::TritrizPtrPnt::CreaQuads(const RangoTritriz &rango,const size_t &nf,const size_t &nc,const m_int &offsetIndices,const double &elemSizeI,const double &elemeSizeJ)
 //   {
 //     Cad *cad= getCad();
 //     std::deque<size_t> retval;

@@ -69,15 +69,14 @@ class GaussPoint;
 
 //! \ingroup ElemPlanos
 //
-//! @brief Cuadrilátero de cuatro nodos.
+//! @brief Four node quad.
 class FourNodeQuad: public QuadBase4N<SolidMech2D>
   {
   private:    
     BodyForces2D bf; //!< Body forces.
     Vector pressureLoad; //!< Pressure load at nodes
 
-    double pressure; //!< Normal surface traction (pressure) over entire element
-                     // Note: positive for outward normal
+    double pressure; //!< Normal surface traction (pressure) over entire element (note: positive for outward normal).
     mutable Matrix *Ki;
 
     static double matrixData[64]; //!< array data for matrix

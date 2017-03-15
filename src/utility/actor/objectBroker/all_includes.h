@@ -78,7 +78,7 @@
 #include "material/section/repres/geom_section/SisRefScc.h"
 #include "material/section/repres/geom_section/SisRefSccCartesianas2d.h"
 #include "material/section/repres/geom_section/region/RgQuadCell.h"
-#include "material/section/repres/geom_section/region/RgSccCuadrilatero.h"
+#include "material/section/repres/geom_section/region/RgSccQuad.h"
 #include "material/section/repres/geom_section/region/RgSccCirc.h"
 #include "material/section/repres/geom_section/region/RgSccPoligono.h"
 #include "material/section/repres/geom_section/region/ListRegiones.h"

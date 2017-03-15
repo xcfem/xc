@@ -53,16 +53,16 @@ class_<XC::RgSccCirc, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccCirc", n
   .add_property("finalAngle",&XC::RgSccCirc::getFinalAngle,&XC::RgSccCirc::setFinalAngle,"Final angle.")
   ;
 
-class_<XC::RgSccCuadrilatero, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccCuadrilatero", no_init)
-  .add_property("pMin",&XC::RgSccCuadrilatero::getPMin,&XC::RgSccCuadrilatero::setPMin,"Lower left corner.")
-  .add_property("pMax",&XC::RgSccCuadrilatero::getPMax,&XC::RgSccCuadrilatero::setPMax,"Upper right corner.")
-  .def("setTileSizeIJ",&XC::RgSccCuadrilatero::setTileSizeIJ,"Sets numbers of divisions to get a tile IJ side smaller than size.")
-  .def("setTileSizeJK",&XC::RgSccCuadrilatero::setTileSizeJK,"Sets numbers of divisions to get a tile JK side smaller than size.")
-  .def("setTileSize",&XC::RgSccCuadrilatero::setTileSize,"Sets numbers of divisions to get tile sizes smaller than sizeIJ and sizeJK.")
-  .def("swap",&XC::RgSccCuadrilatero::swap)
-  .def("getQuad",&XC::RgSccCuadrilatero::getCuadrilatero)
-  .def("getPolygon",&XC::RgSccCuadrilatero::getPoligono)
-  .def("setQuad",&XC::RgSccCuadrilatero::setQuad)
+class_<XC::RgSccQuad, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccQuad", no_init)
+  .add_property("pMin",&XC::RgSccQuad::getPMin,&XC::RgSccQuad::setPMin,"Lower left corner.")
+  .add_property("pMax",&XC::RgSccQuad::getPMax,&XC::RgSccQuad::setPMax,"Upper right corner.")
+  .def("setTileSizeIJ",&XC::RgSccQuad::setTileSizeIJ,"Sets numbers of divisions to get a tile IJ side smaller than size.")
+  .def("setTileSizeJK",&XC::RgSccQuad::setTileSizeJK,"Sets numbers of divisions to get a tile JK side smaller than size.")
+  .def("setTileSize",&XC::RgSccQuad::setTileSize,"Sets numbers of divisions to get tile sizes smaller than sizeIJ and sizeJK.")
+  .def("swap",&XC::RgSccQuad::swap)
+  .def("getQuad",&XC::RgSccQuad::getQuad)
+  .def("getPolygon",&XC::RgSccQuad::getPoligono)
+  .def("setQuad",&XC::RgSccQuad::setQuad)
   ;
 
 class_<XC::RgSccPoligono, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccPoligono", no_init);

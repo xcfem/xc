@@ -411,7 +411,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
         offset_j+= (*i).Borde()->GetNumFilasElementos()-1;
       }
     if(verborrea>3)
-      std::clog << "hecho." << std::endl;
+      std::clog << "done." << std::endl;
   }
 
 //! @brief Crea e inserta las líneas a partir de los índices being passed
