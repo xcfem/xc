@@ -36,7 +36,7 @@ class Vector;
 
 //! \ingroup ElemFV
 //
-//! @brief Esfuerzos en un elemento de tipo lámina.
+//! @brief Ingernal forces for a shell element.
 class FVectorShell: public FVectorData<24>
   {
   public:

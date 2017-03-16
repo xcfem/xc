@@ -68,7 +68,7 @@ void XC::FiberSectionShear3d::liberaRespVyVzT(void)
       }
   }
 
-//! @brief Libera la memoria reservada dinámicamente.
+//! @brief Frees memory.
 void XC::FiberSectionShear3d::libera(void)
   { liberaRespVyVzT(); }
 

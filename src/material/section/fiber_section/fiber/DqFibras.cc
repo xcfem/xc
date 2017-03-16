@@ -205,15 +205,15 @@ GeomObj::list_Pos2d XC::DqFibras::getPosiciones(void) const
     return retval;
   }
 
-//! @brief Returns the esquina superior derecha del rectángulo envolvente. 
+//! @brief Returns the upper right corner of the bounding rectangle.
 Pos2d XC::DqFibras::GetPMax(void) const
   { return Pos2d(GetYMax(),GetZMax()); }
 
-//! @brief Returns the esquina inferior izquierda del rectángulo envolvente. 
+//! @brief Returns the lower left corner of the bounding rectangle.
 Pos2d XC::DqFibras::GetPMin(void) const
   { return Pos2d(GetYMin(),GetZMin()); }
 
-//! @brief Returns the rectángulo envolvente. 
+//! @brief Returns the bounding rectangle.
 BND2d XC::DqFibras::Bnd(void) const
   { return BND2d(GetPMin(),GetPMax()); }
 
@@ -602,11 +602,11 @@ double XC::DqFibras::getI2(const double &factor,const double &y0,const double &z
     return suma-R(iy,iz,pyz);
   }
 
-//! @brief Returns the ángulo que define un eje principal de inercia.
+//! @brief Returns the angle of the principal axis of inertia.
 inline double theta_p(const double &Iy,const double &Iz,const double &Pyz)
   { return (atan(-2*Pyz/(Iy-Iz)))/2.0; }
 
-//! @brief Returns the ángulo del eje del moment of inertia principal mayor con el eje y.
+//! @brief Returns the angle between major principal axis and the y axis.
 double XC::DqFibras::getTh1(const double &y0,const double &z0) const
   {
     const double Iy= getIy(1.0,z0);
@@ -905,14 +905,14 @@ const XC::Vector &XC::DqFibras::baricentroDefMayores(const double &defRef) const
     return retval;
   }
 
-//! @brief Returns the índice de la fibra más proxima a la posición being passed as parameter.
+//! @brief Returns the fiber that is closest to the given position.
 size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
   {
     size_t retval= 0;
     const size_t nf= getNumFibers();
     if(nf<1)
       {
-        std::cerr << "DqFibras::nearest_fiber; No hay fibras definidas." << std::endl;
+        std::cerr << "DqFibras::nearest_fiber; fiber container empty." << std::endl;
         return retval;
       }
     register size_t i= 0;
@@ -1288,13 +1288,13 @@ double XC::DqFibras::getDistMediaFibras(void) const
     return retval;
   }
 
-//! @brief Calcula las áreas eficaces a fisuración en torno a las fibras que representan la armadura
-//! (see artículo 49.2.4 de la EHE-08 (área rallada figura 49.2.4b).
-//! Ver también figuras 47.5 y 47.6 del tomo II del libro "Proyecto y cálculo de estructuras
-//! de hormigón" de Calavera.
-//En lugar de un cuadrado se considera un dodecágono del mismo área
-//en torno al eje de la fibra. Creo que esto es menos anisótropo.
-//! @param contourAcEficazBruta: Contour of the área eficaz bruta obtenido de la sección.
+//! @brief Computes crack effective areas on the fibers that represent reinforcing bars
+//! (see article 49.2.4 from EHE-08 (hatched area in figure 49.2.4b).
+//! See also figures 47.5 y 47.6 from volume II of the book
+//! "Proyecto y cálculo de estructuras de hormigón" José Calavera.
+//! Instead to consider an square shape we consider a dodecagone with the
+//! same area. I think it's less anisotropic.
+//! @param contourAcEficazBruta: Contour of the gross effective area obtained from the section.
 double XC::DqFibras::calcAcEficazFibras(const std::list<Poligono2d> &contourAcEficazBruta,const double &factor) const
   {
     double retval= 0.0;
@@ -1307,7 +1307,7 @@ double XC::DqFibras::calcAcEficazFibras(const std::list<Poligono2d> &contourAcEf
     for(size_t i= 0;i<sz;i++)
       {
         dm= getDiamEqFibra(i);
-        L= factor*dm; //Lado del cuadrado prescrito por la norma.
+        L= factor*dm; //Side of the square prescribed by the standard.
         R= L*sqrt(2/(n*sin(2*M_PI/n)));
         const Pos2d pos= (*this)[i]->getPos();
         tmp= Circulo2d(pos,R).getPoligonoInscrito(n);
@@ -1347,34 +1347,36 @@ double XC::DqFibras::calcAcEficazFibras(const std::list<Poligono2d> &contourAcEf
       }
     const double area_contour= area(contourAcEficazBruta.begin(),contourAcEficazBruta.end());
     if(retval>1.01*area_contour)
-      std::cerr << "El área eficaz: " << retval
-                << " es mayor que la máxima: " << area_contour << std::endl;
+      std::cerr << "Effective area: " << retval
+                << " is greater than the theoretical maximum: " << area_contour << std::endl;
     return retval;
   }
 
-//! @brief Returns the contours of the área eficaz de la fibra cuyo índice
+//! @brief Returns the contours of the effective area of the fiber which index
 //! is being passed as parameter.
 const std::list<Poligono2d> &XC::DqFibras::getContourAcEficazFibra(const size_t &i) const
   { return dq_ac_eficaz[i]; }
 
-//! @brief Returns the valor del área eficaz de la fibra cuyo índice
+//! @brief Returns the effective area value of the fiber which index
 //! is being passed as parameter.
 double XC::DqFibras::getAcEficazFibra(const size_t &i) const
   {
     if(dq_ac_eficaz.size()!=size())
-      std::cerr << "DqFibras::getAcEficazFibra; no se han calculado las áreas eficaces."
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; effective areas are not computed yet."
                 << std::endl;
     return area(dq_ac_eficaz[i].begin(),dq_ac_eficaz[i].end());
   }
 
-//! @brief Returns the suma de las áreas eficaces de las fibras.
+//! @brief Returns the sum of fibers effective areas.
 double XC::DqFibras::getAcEficazFibras(void) const
   {
     const size_t sz= dq_ac_eficaz.size();
     if(sz!=size())
-      std::cerr << "DqFibras::getAcEficazFibras; no se han calculado las áreas eficaces."
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; effective areas are not computed yet."
                 << std::endl;
-    double retval= 0;
+    double retval= 0.0;
     for(size_t i= 0;i<sz;i++)
       retval+= area(dq_ac_eficaz[i].begin(),dq_ac_eficaz[i].end());
     return retval;
@@ -1393,7 +1395,7 @@ void XC::DqFibras::calcRecubrimientos(const GeomSection &g) const
                   << " is outside the section." << std::endl;
   }
 
-//! @brief Calcula la distancia de cada fibra a la más proxima.
+//! @brief Computes the distance from each fiber to the nearest one.
 void XC::DqFibras::calcSeparaciones(void) const
   { seps= getPosiciones().GetSeparaciones(); }
 
@@ -1417,15 +1419,15 @@ const double &XC::DqFibras::getSeparacionFibra(const size_t &i) const
     return seps[i];
   }
 
-//! @brief Returns the valor del diámetro que tendría la fibra si
-//! su área fuera circular.
+//! @brief Returns the diameter of the circle that has the same area
+//! of the fiber which index is being passed as parameter.
 double XC::DqFibras::getDiamEqFibra(const size_t &i) const
   { return 2.0*sqrt((*this)[i]->getArea()/M_PI); }
 
 
 
-//! @brief Returns the tensión en la fibra i en el instante en el que
-//! se produce la fisuración de su área eficaz.
+//! @brief Returns the stress on the i-th fiber when cracking occurs
+//! in its effective area.
 double XC::DqFibras::getSigmaSRFibra(const size_t &i,const double &Ec,const double &Es,const double &fctm) const
   {
     double retval= 0.0;
@@ -1468,8 +1470,8 @@ int XC::DqFibras::updateKRCDG(FiberSection2d &Section2d,KRSeccion &kr2)
   {
     kr2.zero();
     double Qz= 0.0;
-    double Atot= 0.0;//!< Área total de las fibras.
-    double areaFibra= 0.0;//!< Área de una fibra.
+    double Atot= 0.0;//!< Total area of the fibers.
+    double areaFibra= 0.0;//!< Area of a fiber.
     double yLoc= 0.0, zLoc= 0.0;
 
     double tangent,stress,fs0;
@@ -2084,7 +2086,7 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
       return 0;
   }
 
-// //! Returns the valor máximo en el fiber set de la propiedad que se
+// //! Returns the max value of the property being passed as parameter over the fiber set.
 // //! being passed as parameter.
 // size_t XC::DqFibras::IMaxProp(const std::string &nmb_prop) const
 //   {

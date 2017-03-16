@@ -171,22 +171,22 @@ XC::VectorReinfBar &XC::ReinfLayer::getReinfBars(void)
 int XC::ReinfLayer::getNumReinfBars(void) const
   { return nReinfBars; }
 
-//! @brief Establece el diámetro de las barras de refuerzo.
+//! @brief Sets bars diameter.
 void XC::ReinfLayer::setReinfBarDiameter(double reinfBarDiameter)
   {
     barDiam = reinfBarDiameter;
     area = M_PI * barDiam*barDiam/4.0;
   }
 
-//! @brief Establece el área de las barras de refuerzo.
+//! @brief Sets the bars area.
 void XC::ReinfLayer::setReinfBarArea(double reinfBarArea)
   { area = reinfBarArea; }
 
-//! @brief Returns the diámetro de las barras.
+//! @brief Returns the bars diameter.
 const double &XC::ReinfLayer::getReinfBarDiameter(void) const
   { return barDiam; }
 
-//! @brief Returns the área de las barras.
+//! @brief Returns the bars area.
 const double &XC::ReinfLayer::getReinfBarArea(void) const
   { return area; }
 

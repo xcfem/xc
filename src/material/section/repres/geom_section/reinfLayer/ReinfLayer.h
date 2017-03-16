@@ -73,9 +73,9 @@ class GeomSection;
 class ReinfLayer: public DiscretBase
   {
   private:
-    int nReinfBars; //!< Número de barras de la capa.
-    double barDiam; //!< Diámetro de las barras.
-    double area; //!< Área de las barras.
+    int nReinfBars; //!< Number of bars in the layer.
+    double barDiam; //!< Bar diameter.
+    double area; //!< Bar area.
   protected:
     mutable VectorReinfBar reinfBars;
 
