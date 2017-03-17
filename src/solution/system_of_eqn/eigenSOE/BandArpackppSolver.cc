@@ -73,9 +73,9 @@ void XC::BandArpackppSolver::setup_autos(const size_t &nmodos,const size_t &n)
 ARluNonSymGenEig<double> getEigenProblem(const int &nmodes,ARbdNonSymMatrix<double, double> &ak,ARbdNonSymMatrix<double, double> &am,const double &shift)
   {
     if(shift<0.0)
-      return ARluNonSymGenEig<double>(nmodes, ak, am); //Los eigenvalues más grandes.
+      return ARluNonSymGenEig<double>(nmodes, ak, am); //Greatest eigenvalues.
     else
-      return ARluNonSymGenEig<double>(nmodes, ak, am,shift); //Los eigenvalues más proximos a shift.
+      return ARluNonSymGenEig<double>(nmodes, ak, am,shift); //Eigenvalues nearest to shift.
   }
 
 

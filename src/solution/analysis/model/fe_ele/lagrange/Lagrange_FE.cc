@@ -18,7 +18,6 @@
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCANTIL o de APTITUD PARA UN PROPÓSITO DETERMINADO.
 //  GNU General Public License for more details.
-//  una información más detallada.
 //
 // You should have received a copy of the GNU General Public License
 // junto a este programa.

@@ -118,14 +118,14 @@ bool XC::DqPtrsElem::push_front(Element *e)
     return retval;
   }
 
-//! @brief Returns the elemento más próximo al punto being passed as parameter.
+//! @brief Returns the element closest to the point being passed as parameter.
 XC::Element *XC::DqPtrsElem::getNearestElement(const Pos3d &p)
   {
     Element *retval= const_cast<Element *>(kdtreeElements.getNearestElement(p));
     return retval;
   }
 
-//! @brief Returns the elemento más próximo al punto being passed as parameter.
+//! @brief Returns the element closest to the point being passed as parameter.
 const XC::Element *XC::DqPtrsElem::getNearestElement(const Pos3d &p) const
   {
     DqPtrsElem *this_no_const= const_cast<DqPtrsElem *>(this);

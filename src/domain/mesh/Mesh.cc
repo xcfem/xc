@@ -269,7 +269,7 @@ void XC::Mesh::update_bounds(const Vector &crds)
       }
   }
 
-//! @brief Añade un nodo al domain.
+//! @brief Adds a node to the domain.
 void XC::Mesh::add_node_to_domain(Node *node)
   {
     Domain *dom= getDomain();
@@ -294,7 +294,7 @@ void XC::Mesh::add_nodes_to_domain(void)
       }
   }
 
-//! @brief Agrega al domain el nodo being passed as parameter.
+//! @brief Adds to the domain the node being passed as parameter.
 bool XC::Mesh::addNode(Node * node)
   {
     int nodTag = node->getTag();
@@ -332,7 +332,8 @@ bool XC::Mesh::removeElement(int tag)
     return res;
   }
 
-//! @brief Elimina del domain el nodo cuyo tag being passed as parameter.
+//! @brief Removes from domain the node identified by
+//! the tag being passed as parameter.
 bool XC::Mesh::removeNode(int tag)
   {
 
@@ -444,14 +445,14 @@ const XC::Node *XC::Mesh::getNode(int tag) const
     return result;
   }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo closest to the point being passed as parameter.
 XC::Node *XC::Mesh::getNearestNode(const Pos3d &p)
   {
     Node *retval= const_cast<Node *>(kdtreeNodos.getNearestNode(p));
     return retval;
   }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the nodo closest to the point being passed as parameter.
 const XC::Node *XC::Mesh::getNearestNode(const Pos3d &p) const
   {
     Mesh *this_no_const= const_cast<Mesh *>(this);

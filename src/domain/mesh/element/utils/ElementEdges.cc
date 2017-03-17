@@ -85,7 +85,7 @@ XC::ElementEdges::const_iterator XC::ElementEdges::find(const int &tag) const
 
 //! @brief Returns the índice el elemento en el vector,
 //! si no lo encuentra returns -1.
-//XXX: Funciona mal si el elemento aparece más de una vez en el vector.
+//XXX: It doesn't works if the elements appears more than once in the vector.
 int XC::ElementEdges::getLocElement(const Element *ptr) const
   {
     int retval= -1;

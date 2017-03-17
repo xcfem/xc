@@ -156,7 +156,7 @@ const XC::Pnt *XC::MatrizPtrPnt::buscaPunto(const size_t &tag) const
     return retval;
   }
 
-//! @brief Returns the punto más próximo al punto being passed as parameter.
+//! @brief Returns the point closest to the point being passed as parameter.
 XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;
@@ -181,7 +181,7 @@ XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p)
     return retval;
   }
 
-//! @brief Returns the punto más próximo al punto being passed as parameter.
+//! @brief Returns the ppoint closest to the point being passed as parameter.
 const XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p) const
   {
     MatrizPtrPnt *this_no_const= const_cast<MatrizPtrPnt *>(this);

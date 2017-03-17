@@ -238,7 +238,7 @@ Poligono2d XC::FiberSectionBase::getRegionsContour(void) const
     return retval;
   }
 
-//! @brief Returns the canto con el que trabaja la sección a partir de la posición de la fibra neutra.
+//! @brief Returns current section lever arm from the position of neutral axis.
 double XC::FiberSectionBase::getCantoMecanico(void) const
   {
     double retval= 0.0;
@@ -248,7 +248,8 @@ double XC::FiberSectionBase::getCantoMecanico(void) const
     return retval;
   }
 
-//! @brief Returns the canto desde la recta being passed as parameter a la fibra más comprimida.
+//! @brief Returns section depth from the line being passed as parameter
+//! to the most compressed fiber.
 double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(const Recta2d &r) const
   {
     double retval= 0.0;
@@ -268,7 +269,8 @@ double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(const Recta2d &r) co
     return retval;
   }
 
-//! @brief Returns the canto desde la fibra neutra a la fibra más comprimida.
+//! @brief Returns section depth from the neutral axis to the
+//! most compressed fiber.
 double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(void) const
   {
     double retval= 0.0;
@@ -288,7 +290,8 @@ double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(void) const
     return retval;
   }
 
-//! @brief Returns the canto desde la fibra neutra a la fibra más traccionada.
+//! @brief Returns section depth from the neutral axis to the
+//! most tensioned fiber.
 double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(void) const
   {
     double retval= 0.0;
@@ -304,7 +307,8 @@ double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(void) const
     return retval;
   }
 
-//! @brief Returns the canto desde la recta being passed as parameter a la fibra más traccionada.
+//! @brief Returns section depth from the line being passed as parameter
+//! to the most tensioned fiber.
 double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(const Recta2d &r) const
   {
     double retval= 0.0;
@@ -324,14 +328,14 @@ double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(const Recta2d &r) c
     return retval;
   }
 
-//! @brief Returns the profundidad de la fibra neutra.
+//! @brief Returns neutral axis depth.
 double XC::FiberSectionBase::getNeutralAxisDepth(void) const
   {
     return getCantoMecanicoZonaComprimida();
   }
 
-//! @brief Returns the distancia desde la fibra neutra
-//! hasta el punto cuyas coordenadas being passed as parameters.
+//! @brief Returns the distance from the neutral axis
+//! to the point whose coordinates are being passed as parameters.
 double XC::FiberSectionBase::getDistFibraNeutra(const double &y,const double &) const
   {
     double retval= 0.0;
@@ -485,8 +489,8 @@ void XC::FiberSectionBase::calcSeparaciones(const std::string &nmbSetArmaduras) 
                 << nmbSetArmaduras << std::endl;
   }
 
-//! @brief Returns the distancia (con signo) desde la fibra neutra
-//! hasta el punto cuyas coordenadas being passed as parameters.
+//! @brief Returns the signed distance from the neutral axis
+//! to the point whose coordinates are being passed as parameters.
 double XC::FiberSectionBase::get_dist_to_neutral_axis(const double &y,const double &z) const
   {
     double retval= 0;
@@ -710,8 +714,8 @@ XC::InteractionDiagram2d XC::FiberSectionBase::GetNMzInteractionDiagram(const In
 XC::Vector XC::FiberSectionBase::getVectorBrazoMecanico(void) const
   { return fibras.getVectorBrazoMecanico(); }
 
-//! @brief Returns a vector orientado desde el centro de tracciones a
-//! la fibra más comprimida.
+//! @brief Returns a vector oriented from the centroid of the tensioned area
+//! to the most compressed fiber.
 XC::Vector XC::FiberSectionBase::getVectorCantoUtil(void) const
   {
     Vector retval(2);
@@ -723,7 +727,8 @@ XC::Vector XC::FiberSectionBase::getVectorCantoUtil(void) const
     return retval;
   }
 
-//! @brief Returns a segmento orientado desde el centro de tracciones al de compresiones.
+//! @brief Returns a segment from the centroid of the tensioned area
+//! to the centroid of the compressed area.
 Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
   {
     Segmento2d retval= fibras.getSegmentoBrazoMecanico();

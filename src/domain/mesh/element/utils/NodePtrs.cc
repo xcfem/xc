@@ -189,7 +189,7 @@ XC::NodePtrs::const_reference XC::NodePtrs::operator()(const size_t &i) const
 XC::NodePtrs::const_reference XC::NodePtrs::operator[](const size_t &i) const
   { return theNodes[i]; }
 
-//!@brief Asigna the pointer to nodo i.
+//!@brief Asigna the pointer to node i.
 void XC::NodePtrs::set_node(const size_t &i,Node *n)
   {
     ContinuaReprComponent *owr= dynamic_cast<ContinuaReprComponent *>(Owner());
@@ -295,7 +295,7 @@ const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
     return retval;
   }
 
-//! @brief Return the posición del nodo cuyo índice se
+//! @brief Return the posición del node cuyo índice se
 //! being passed as parameter.
 Pos3d XC::NodePtrs::getPosNodo(const size_t &i,bool initialGeometry) const
   {
@@ -358,7 +358,7 @@ bool XC::NodePtrs::Corta(const Plano3d &plano,bool initialGeometry) const
     return (!in && !out);
   }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry)
   {
     Node *retval= nullptr;
@@ -382,14 +382,14 @@ XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry)
     return retval;
   }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 const XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry) const
   {
     NodePtrs *this_no_const= const_cast<NodePtrs *>(this);
     return this_no_const->getNearestNode(p,initialGeometry);
   }
 
-//! @brief Return the posición of the pointer a nodo en el array.
+//! @brief Return the posición of the pointer a node en el array.
 int XC::NodePtrs::getIndiceNodo(const Node *ptrNod) const
   {
     int retval= -1;
@@ -412,7 +412,7 @@ void XC::NodePtrs::resetTributarias(void) const
       theNodes[i]->resetTributaria();    
   }
 
-//! @brief Agrega al la magnitud tributaria de cada nodo i
+//! @brief Agrega al la magnitud tributaria de cada node i
 //! la componente i del vector being passed as parameter.
 void XC::NodePtrs::vuelcaTributarias(const std::vector<double> &t) const
   {
@@ -423,7 +423,7 @@ void XC::NodePtrs::vuelcaTributarias(const std::vector<double> &t) const
   }
 
 //! @brief Returns a vector que contiene los factores de distribución
-//! de cada nodo que corresponden al modo being passed as parameter.
+//! de cada node que corresponden al modo being passed as parameter.
 XC::Vector XC::NodePtrs::getDistributionFactor(int mode) const
   {
     const int nrows= getTotalDOFs();
@@ -440,7 +440,7 @@ XC::Vector XC::NodePtrs::getDistributionFactor(int mode) const
     return retval;
   }
 
-//! @brief Returns the vectores correspondientes a cada nodo colocados por filas.
+//! @brief Returns the vectors correspondientes a cada node colocados por filas.
 XC::Matrix XC::NodePtrs::getNodeVectors(const Vector &v) const
   {
     const int numNodes= size();

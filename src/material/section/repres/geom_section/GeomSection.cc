@@ -282,8 +282,8 @@ double XC::GeomSection::getCantoMecanico(const Recta2d &trazaPF) const
     return dpos-dneg;
   }
 
-//! @brief Returns the canto desde el borde del semiplano being passed as parameter
-//! a la fibra más comprimida.
+//! @brief Returns the section depth from the border of the half-plane
+//! being passed as parameter to the most compressed fiber.
 double XC::GeomSection::getCantoMecanicoZonaComprimida(const Semiplano2d &sp_compresiones) const
   {
     Poligono2d contour= getRegionsContour();
@@ -298,8 +298,8 @@ double XC::GeomSection::getCantoMecanicoZonaComprimida(const Semiplano2d &sp_com
     return dneg;
   }
 
-//! @brief Returns the canto desde el borde del semiplano being passed as parameter
-//! a la fibra más traccionada.
+//! @brief Returns the section depth from the border of the half-plane
+//! being passed as parameter to the most tensioned fiber.
 double XC::GeomSection::getCantoMecanicoZonaTraccionada(const Semiplano2d &sp_compresiones) const
   {
     Poligono2d contour= getRegionsContour();

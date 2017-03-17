@@ -61,8 +61,9 @@ XC::ClosedTriangleMesh::ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &
     rMin= 10*rMax;
     for(Triang3dMesh::Point_const_iterator i= mll.points_begin();i!=mll.points_end();i++)
       rMin= std::min(rMin,dist(Pos3d(*i),org3d));
-    rMin/=3; //Radio de la esfera inscrita en el tetraedro cuya
-             //esfera circunscrita pasa por el punto más cercano al origen.
+    rMin/=3; //Radius of the sphere inscribed on the tetrahedron which 
+             //circunscribed sphere passes through
+             //the point closest to the origin.
     size_t cont= 0;
     for(Triang3dMesh::Facet_const_iterator i= mll.facets_begin();i!=mll.facets_end();i++)
       {

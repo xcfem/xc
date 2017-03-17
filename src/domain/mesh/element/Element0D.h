@@ -44,7 +44,7 @@ class Material;
 class Element0D : public ElementBase<2>
   {
   protected:
-    static const double LenTol; // Tolerance for zero length of element
+    static const double LenTol; //!< Tolerance for zero length of element.
     class Vxy: public EntCmd
       {
         Vector x,y;
@@ -57,9 +57,9 @@ class Element0D : public ElementBase<2>
 	  { return y; }
         bool check(void) const;
       };
-    int dimension; // = 2 or 3 dimensions
-    int numDOF;	   // number of dof for ZeroLengthSection
-    Matrix transformation; // transformation matrix for orientation
+    int dimension; //!< = 2 or 3 dimensions
+    int numDOF;	   //!< number of dof for ZeroLengthSection
+    Matrix transformation; //!< transformation matrix for orientation
 
     virtual void setUp(int Nd1, int Nd2,const Vector &x,const Vector &y);
     TritrizPtrElem cose(const SetEstruct &f1,const SetEstruct &f2) const;

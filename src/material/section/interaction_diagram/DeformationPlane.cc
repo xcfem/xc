@@ -154,7 +154,7 @@ const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const
     return retval;
   }
 
-//! @brief Return the fibra neutra.
+//! @brief Return the neutral axis.
 Recta2d XC::DeformationPlane::getFibraNeutra(void)const
   {
     const double a= angulo(*this,PlanoYZ3d);
@@ -165,7 +165,7 @@ Recta2d XC::DeformationPlane::getFibraNeutra(void)const
         if(traza.exists())
           retval= traza.ProyeccionYZ2d();
       }
-    else //Casi paralelos: No es capaz de encontrar la intersección.
+    else //Almost parallel: can't find intersection.
       retval.setExists(false);
     return retval;
   }
@@ -187,7 +187,7 @@ Pos2d XC::DeformationPlane::getPuntoSemiplanoTracciones(void) const
         if(Strain(retval)<0) //Lado compresiones.
           retval= p0-1000*v;
       }
-    else //La fibra neutra es impropia.
+    else //Degenerated neutral axis.
       retval.setExists(Strain(retval)>0.0);
     return retval;
   }
@@ -208,7 +208,7 @@ Pos2d XC::DeformationPlane::getPuntoSemiplanoCompresiones(void) const
         if(Strain(retval)>0) //Lado tracciones.
           retval= p0-1000*v;
       }
-    else //La fibra neutra es impropia.
+    else //Degenerated neutral axis.
       retval.setExists(Strain(retval)<0.0);
     return retval;
   }
@@ -238,8 +238,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(const Recta2d &r) const
     return retval;
   }
 
-//! @brief Returns the semiplano cuyo borde es la fibra neutra
-//! y en el que las tensiones son de tracción.
+//! @brief Returns the tensioned half-plane.
 Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(void) const
   {
     const Recta2d fn= getFibraNeutra();
@@ -254,7 +253,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(void) const
         if(Strain(tmp)<0) //Lado compresiones.
           tmp= p0-1000*v;
       }
-    else //La fibra neutra es impropia.
+    else //Degenerated neutral axis.
       exists= (Strain(tmp)>0.0);
 
     Semiplano2d retval;
@@ -263,8 +262,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(void) const
     return retval;
   }
 
-//! @brief Returns the semiplano cuyo borde es la recta being passed
-//! as parameter y en el que las tensiones son de compresión.
+//! @brief Returns the compressed half-plane.
 Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(const Recta2d &r) const
   {
     const Recta2d fn= getFibraNeutra();
@@ -279,7 +277,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(const Recta2d &r) con
         if(Strain(tmp)>0) //Lado tracciones.
           tmp= p0-1000*v;
       }
-    else //La fibra neutra es impropia.
+    else //Degenerated neutral axis.
       exists= (Strain(tmp)<0.0);
 
     Semiplano2d retval;
@@ -288,8 +286,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(const Recta2d &r) con
     return retval;
   }
 
-//! @brief Returns the semiplano cuyo borde es la fibra neutra
-//! y en el que las tensiones son de compresión.
+//! @brief Returns the compressed half plane.
 Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(void) const
   {
     const Recta2d fn= getFibraNeutra();

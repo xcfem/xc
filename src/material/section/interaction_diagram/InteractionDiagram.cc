@@ -112,7 +112,7 @@ const Triedro3d *XC::InteractionDiagram::BuscaPtrTriedro(const Pos3d &p) const
               }
           }
       }
-    // if(!retval) //No lo encuentra, lo intentamos por fuerza más bruta.
+    // if(!retval) //Not found, we try even harder.
     //   {
     // 	InteractionDiagram::const_iterator i= begin();
     //     const Triedro3d *tr= &(*i);

@@ -705,14 +705,14 @@ Pos2d XC::DqFibras::getPosResultante(const double &y0,const double &z0) const
     return Pos2d(getMz(y0)/R,getMy(z0)/R);
   }
 
-//! @brief Returns the fibra neutra.
+//! @brief Returns the neutral axis.
 Recta2d XC::DqFibras::getFibraNeutra(void) const
   {
     const double R= Resultante();
     const double My= getMy();
     const double Mz= getMz();
     const Pos2d org(Mz/R,My/R);//Posición de la resultante.
-    const Vector2d v(My,Mz); //Dirección de la fibra neutra.
+    const Vector2d v(My,Mz); //Direction of the neutral axis.
     return Recta2d(org,v);
   }
 
@@ -1176,7 +1176,7 @@ std::string XC::DqFibras::getStrClaseEsfuerzo(const double &tol) const
 Pos2d XC::DqFibras::getCdg(void) const
   { return Pos2d(getYCdg(),getZCdg()); }
 
-//! @brief Returns neutral fiber depth, i. e. distance from neutral fiber to
+//! @brief Returns neutral axisr depth, i. e. distance from neutral axis to
 //! the most compressed one.
 //! The algorithm is based on the fact that get_dist_to_neutral_axis returns
 //! negative distances for compressed fibers (negative strain).

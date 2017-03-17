@@ -116,21 +116,21 @@ bool XC::DqPtrsNode::push_front(Node *n)
     return retval;
   }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 XC::Node *XC::DqPtrsNode::getNearestNode(const Pos3d &p)
   {
     Node *retval= const_cast<Node *>(kdtreeNodos.getNearestNode(p));
     return retval;
   }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 const XC::Node *XC::DqPtrsNode::getNearestNode(const Pos3d &p) const
   {
     DqPtrsNode *this_no_const= const_cast<DqPtrsNode *>(this);
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Desplaza los nodos of the set.
+//! @brief Desplaza los nodes of the set.
 void XC::DqPtrsNode::mueve(const Vector3d &desplaz)
   {
     for(iterator i= begin();i!=end();i++)
@@ -228,26 +228,26 @@ void XC::DqPtrsNode::numera(void)
       }
   }
 
-//! @brief Returns true if the node with the tag
-//! is being passed as parameter, belongs to the set.
-bool XC::DqPtrsNode::InNodeTag(const int tag_nodo) const
+//! @brief Returns true if the node identified by the tag
+//! being passed as parameter, belongs to the set.
+bool XC::DqPtrsNode::InNodeTag(const int tag_node) const
   {
     for(const_iterator i= begin();i!=end();i++)
-      if(tag_nodo == (*i)->getTag()) return true;
+      if(tag_node == (*i)->getTag()) return true;
     return false;
   }
 
 //! @brief Returns true if the nodes, with the tags
 //! are being passed as parameter, belong to the set.
-bool XC::DqPtrsNode::InNodeTags(const ID &tag_nodos) const
+bool XC::DqPtrsNode::InNodeTags(const ID &tag_nodes) const
   {
-    const int sz= tag_nodos.Size();
+    const int sz= tag_nodes.Size();
     for(int i=0;i<sz;i++)
-      if(!InNodeTag(tag_nodos(i))) return false;
+      if(!InNodeTag(tag_nodes(i))) return false;
     return true;
   }
 
-//! @brief Returns the tags de los nodos.
+//! @brief Returns the tags de los nodes.
 std::set<int> XC::DqPtrsNode::getTags(void) const
   {
     std::set<int> retval;

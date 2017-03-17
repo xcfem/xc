@@ -54,7 +54,7 @@ XC::TritrizPtrPnt::TritrizPtrPnt(const size_t capas)
 XC::TritrizPtrPnt::TritrizPtrPnt(const size_t capas,const size_t filas,const size_t cols)
   : TritrizPtrBase<MatrizPtrPnt>(capas,filas,cols) {}
 
-void XC::TritrizPtrPnt::setPnt(const size_t &i,const size_t &j,const size_t &k,const int &id_punto)
+void XC::TritrizPtrPnt::setPnt(const size_t &i,const size_t &j,const size_t &k,const int &id_point)
   {
     if(check_range(i,j,k))
       {
@@ -65,7 +65,7 @@ void XC::TritrizPtrPnt::setPnt(const size_t &i,const size_t &j,const size_t &k,c
                     << i << "," << j << "," << k 
                     << ") is already assigned to point: "
                     << tmp->GetNombre() << std::endl;
-        TritrizPtrPnt::operator()(i,j,k)= c->getPuntos().busca(id_punto);
+        TritrizPtrPnt::operator()(i,j,k)= c->getPuntos().busca(id_point);
       }
     else
      std::cerr << "(MatrizPtrPnt::setPnt): '"
@@ -98,8 +98,8 @@ Pos3d XC::TritrizPtrPnt::getCentroide(void) const
   }
 
 
-//! @brief Returns (if it exists) a pointer to punto
-//! cuyo tag is being passed as parameter.
+//! @brief Returns (if it exists) a pointer to the point
+//! identified by the tag being passed as parameter.
 XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag)
   {
     Pnt *retval= nullptr;
@@ -139,14 +139,14 @@ XC::Cad *XC::TritrizPtrPnt::getCad(void)
     return retval;
   }
 
-//! @brief Returns the punto más próximo al punto being passed as parameter.
+//! @brief Returns the point closest to the one being passed as parameter.
 const XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p) const
   {
     TritrizPtrPnt *this_no_const= const_cast<TritrizPtrPnt *>(this);
     return this_no_const->getNearestPnt(p);
   }
 
-//! @brief Returns the punto más próximo al punto being passed as parameter.
+//! @brief Returns the point closest to the one being passed as parameter.
 XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;
@@ -170,8 +170,8 @@ XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
     return retval;
   }
 
-//! @brief Returns (if it exists) a pointer to punto
-//! cuyo tag is being passed as parameter.
+//! @brief Returns (if it exists) a pointer to the point
+//! identified by the tag being passed as parameter.
 const XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag) const
   {
     const Pnt *retval= nullptr;

@@ -84,7 +84,7 @@ const XC::Node *XC::MatrizPtrNod::buscaNodo(const int &tag) const
     return retval;
   }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p)
   {
     Node *retval= nullptr, *ptrNod= nullptr;
@@ -111,7 +111,7 @@ XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p)
     return retval;
   }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 const XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p) const
   {
     MatrizPtrNod *this_no_const= const_cast<MatrizPtrNod *>(this);

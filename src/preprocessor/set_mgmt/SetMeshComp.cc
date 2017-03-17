@@ -111,11 +111,11 @@ void XC::SetMeshComp::clearAll(void)
     elementos.clearAll();
   }
 
-//! @brief Agrega the pointer a nodo being passed as parameter.
+//! @brief Adds the pointer to node being passed as parameter.
 void XC::SetMeshComp::agregaNodo(Node *nPtr)
   { nodos.push_back(nPtr); }
 
-//! @brief Agrega el elemento being passed as parameter.
+//! @brief Adds the pointer to element being passed as parameter.
 void XC::SetMeshComp::agregaElemento(Element *ePtr)
   { elementos.push_back(ePtr); }
 
@@ -163,16 +163,16 @@ void XC::SetMeshComp::fix(const SFreedom_Constraint &spc)
       }
   }
 
-// //! @brief Returns an iterator which points to principio de la lista de nodos.
+// //! @brief Returns an iterator that points to the first item of the node container.
 // XC::SetMeshComp::nod_iterator XC::SetMeshComp::nodos_begin(void)
 //   { return nodos.begin(); }
-//! @brief Returns an iterator which points to principio de la lista de nodos.
+//! @brief Returns an iterator that points to the first item of the node container.
 XC::SetMeshComp::nod_const_iterator XC::SetMeshComp::nodos_begin(void) const
   { return nodos.begin(); }
-// //! @brief Returns an iterator apuntando tras el final de la lista de nodos.
+// //! @brief Returns an iterator that points to the past-the-end item in the node container.
 // XC::SetMeshComp::nod_iterator XC::SetMeshComp::nodos_end(void)
 //   { return nodos.end(); }
-//! @brief Returns an iterator apuntando tras el final de la lista de nodos.
+//! @brief Returns an iterator that points to the past-the-end item in the node container.
 XC::SetMeshComp::nod_const_iterator XC::SetMeshComp::nodos_end(void) const
   { return nodos.end(); }
 
@@ -338,23 +338,23 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
 
 //! @brief Returns true if the node with the tag
 //! being passed as parameter, belongs to the set.
-bool XC::SetMeshComp::InNodeTag(const int tag_nodo) const
-  { return nodos.InNodeTag(tag_nodo); }
+bool XC::SetMeshComp::InNodeTag(const int tag_node) const
+  { return nodos.InNodeTag(tag_node); }
 
 //! @brief Returns true if the nodes, with the tags
 //! being passed as parameter, belongs to the set.
-bool XC::SetMeshComp::InNodeTags(const ID &tag_nodos) const
-  { return nodos.InNodeTags(tag_nodos); }
+bool XC::SetMeshComp::InNodeTags(const ID &tag_nodes) const
+  { return nodos.InNodeTags(tag_nodes); }
 
 //! @brief Returns node tags.
 std::set<int> XC::SetMeshComp::getNodeTags(void) const
   { return nodos.getTags(); }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p)
   { return nodos.getNearestNode(p); }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 const XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p) const
   {
     SetMeshComp *this_no_const= const_cast<SetMeshComp *>(this);
@@ -366,11 +366,11 @@ const XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p) const
 std::set<int> XC::SetMeshComp::getElementTags(void) const
   { return elementos.getTags(); }
 
-//! @brief Returns the elemento más próximo al punto being passed as parameter.
+//! @brief Returns the element closest to the point being passed as parameter.
 XC::Element *XC::SetMeshComp::getNearestElement(const Pos3d &p)
   { return elementos.getNearestElement(p); }
 
-//! @brief Returns the elemento más próximo al punto being passed as parameter.
+//! @brief Returns the element closest to the point being passed as parameter.
 const XC::Element *XC::SetMeshComp::getNearestElement(const Pos3d &p) const
   {
     SetMeshComp *this_no_const= const_cast<SetMeshComp *>(this);
@@ -409,7 +409,7 @@ void XC::SetMeshComp::CompletaHaciaArriba(void)
     std::cerr << "SetMeshComp::CompletaHaciaArriba() implementation pending." << std::endl;
   }
 
-//! @brief Selecciona los nodos cuyos tags being passed as parameters.
+//! @brief Select the nodes identified by the tags being passed as parameters.
 void XC::SetMeshComp::sel_nodos_lista(const ID &tags)
   {
     const size_t sz= tags.Size();
@@ -420,7 +420,7 @@ void XC::SetMeshComp::sel_nodos_lista(const ID &tags)
           for(size_t i= 0;i<sz;i++)
             nodos.push_back(preprocessor->getDomain()->getNode(tags(i)));
         else
-          std::cerr << "SetMeshComp::sel_nodos_lista; necesito un preprocesador." << std::endl;
+          std::cerr << "SetMeshComp::sel_nodos_lista; preprocessor needed." << std::endl;
       }
   }
 

@@ -240,9 +240,9 @@ std::deque<std::string> XC::GrupoCombinaciones::getListaNombres(void) const
     return retval;
   }
 
-//! @brief Busca la combinación más próxima a la being passed as parameter
-//! de entre las que tienen sus coeficientes de ponderación iguales o menores
-//! que los de ésta.
+//! @brief Search for the nearest combination to the one
+//! being passed as parameter from those that have their
+//! factors equal or lesser than those of the parameter (c).
 XC::GrupoCombinaciones::const_iterator XC::GrupoCombinaciones::buscaCombPrevia(const Combinacion &c) const
   {
     const_iterator retval= end();

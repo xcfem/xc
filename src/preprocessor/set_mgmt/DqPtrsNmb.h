@@ -68,7 +68,7 @@ T *DqPtrsNmb<T>::BuscaNmb(const std::string &nmb)
     return nullptr;
   }
 
-//! @brief Returns the objeto más cercano a la posición being passed as parameter.
+//! @brief Returns the object closest to the position being passed as parameter.
 template <class T>
 T *DqPtrsNmb<T>::getNearest(const Pos3d &p)
   {
@@ -92,7 +92,7 @@ T *DqPtrsNmb<T>::getNearest(const Pos3d &p)
     return retval;
   }
 
-//! @brief Returns the objeto más cercano a la posición being passed as parameter.
+//! @brief Returns the object closest to the position being passed as parameter.
 template <class T>
 const T *DqPtrsNmb<T>::getNearest(const Pos3d &p) const
   {

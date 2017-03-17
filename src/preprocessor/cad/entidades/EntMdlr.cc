@@ -103,7 +103,7 @@ void XC::EntMdlr::BorraPtrNodElem(void)
     elementos.clearAll();
   }
 
-//! @brief Returns a pointer to the nodo cuyos índices being passed as paremeters.
+//! @brief Returns a pointer to the node cuyos índices being passed as paremeters.
 XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   {
     if(!nodos.Null())
@@ -112,7 +112,7 @@ XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
       return nullptr;
   }
 
-//! @brief Returns a pointer to the nodo cuyos índices being passed as paremeters.
+//! @brief Returns a pointer to the node cuyos índices being passed as paremeters.
 const XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   {
     if(!nodos.Null())
@@ -121,18 +121,18 @@ const XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_
       return nullptr;
   }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p)
   { return nodos.getNearestNode(p); }
 
-//! @brief Returns the nodo más próximo al punto being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 const XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p) const
   {
     EntMdlr *this_no_const= const_cast<EntMdlr *>(this);
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Returns the índices del nodo que se paras as parameter.
+//! @brief Returns the índices del node que se paras as parameter.
 XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
   { return nodos.getNodeIndices(n); }
 
@@ -140,7 +140,7 @@ XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
 std::vector<int> XC::EntMdlr::getTagsNodos(void) const
   { return nodos.getTags(); }
 
-//! @brief Returns a pointer to the elemento cuyos índices being passed as paremeters.
+//! @brief Returns a pointer to the element cuyos índices being passed as paremeters.
 XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size_t &k)
   {
     if(!elementos.Null())
@@ -149,7 +149,7 @@ XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size
       return nullptr;
   }
 
-//! @brief Returns a pointer to the elemento cuyos índices being passed as paremeters.
+//! @brief Returns a pointer to the element cuyos índices being passed as paremeters.
 const XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size_t &k) const
   {
     if(!elementos.Null())
@@ -158,27 +158,27 @@ const XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,cons
       return nullptr;
   }
 
-//! @brief Returns the elemento más próximo al punto being passed as parameter.
+//! @brief Returns the element closest to the point being passed as parameter.
 XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p)
   { return elementos.getNearestElement(p); }
 
-//! @brief Returns the elemento más próximo al punto being passed as parameter.
+//! @brief Returns the element closest to the point being passed as parameter.
 const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
   {
     EntMdlr *this_no_const= const_cast<EntMdlr *>(this);
     return this_no_const->getNearestElement(p);
   }
 
-//! @brief Returns a pointer to the nodo cuyo identificador is being passed as parameter.
+//! @brief Returns a pointer to the node cuyo identificador is being passed as parameter.
 XC::Node *XC::EntMdlr::buscaNodo(const int &tag)
   { return nodos.buscaNodo(tag); }
-//! @brief Returns a pointer to the nodo cuyo identificador is being passed as parameter.
+//! @brief Returns a pointer to the node cuyo identificador is being passed as parameter.
 const XC::Node *XC::EntMdlr::buscaNodo(const int &tag) const
   { return nodos.buscaNodo(tag); }
-//! @brief Returns a pointer to the elemento cuyo identificador is being passed as parameter.
+//! @brief Returns a pointer to the element cuyo identificador is being passed as parameter.
 XC::Element *XC::EntMdlr::buscaElemento(const int &tag)
   { return elementos.buscaElemento(tag); }
-//! @brief Returns a pointer to the elemento cuyo identificador is being passed as parameter.
+//! @brief Returns a pointer to the element cuyo identificador is being passed as parameter.
 const XC::Element *XC::EntMdlr::buscaElemento(const int &tag) const
   { return elementos.buscaElemento(tag); }
 
@@ -283,16 +283,16 @@ bool XC::EntMdlr::crea_elementos(meshing_dir dm)
                       retval= true;
                     }
                   else if(verborrea>0)
-                    std::clog << "EntMdlr::crea_elementos; no se estableció el elemento semilla." << std::endl;
+                    std::clog << "EntMdlr::crea_elementos; seed element not set." << std::endl;
                   if(verborrea>4)
                     std::clog << "creados." << std::endl;
                 }
               else
-                std::cerr << "EntMdlr::crea_elementos; falta a pointer to preprocesador." << std::endl;
+                std::cerr << "EntMdlr::crea_elementos; pointer to preprocessor needed." << std::endl;
             }
       }
     else
-      std::cerr << "EntMdlr::crea_elementos; no hay nodos para los elementos." << std::endl;
+      std::cerr << "EntMdlr::crea_elementos; there is no nodes for the elements." << std::endl;
 
     return retval;
   }

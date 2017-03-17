@@ -54,8 +54,8 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
     
     v_triedros triedros;
     double tol;
-    double rMax; //! Radio de una esfera circunscrita al convex-hull.
-    double rMin; //! Radio de una esfera que toca al vértice más cercano.
+    double rMax; //! Radius of the convex-hull circunscribed sphere.
+    double rMin; //! Radius of the sphere that passes through the nearest vertex.
 
     GeomObj::list_Pos3d get_interseccion(const Pos3d &p) const;
   protected:

@@ -37,12 +37,12 @@ class DataOutputHandler;
 
 //! @ingroup Recorder
 //
-//! @brief Se emplea como base de los recorders que obtienen
-//! la respuesta de uno o más nodos during the analysis.
+//! @brief Base class for recorders that get
+//! the response of one or more nodes during the analysis.
 class HandlerRecorder: public DomainRecorderBase
   {
   protected:
-    DataOutputHandler *theHandler; //!< Manejador para salida de resultados.
+    DataOutputHandler *theHandler; //!< Output handler (TO DEPRECATE).
     bool initializationDone;
     bool echoTimeFlag;   // flag indicating whether time to be included in o/p
   protected:

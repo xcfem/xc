@@ -211,7 +211,7 @@ bool XC::SeccionBarraPrismatica::hayTorsor(const double &tol) const
     return retval;
   }
 
-//! @brief Returns the fibra neutra.
+//! @brief Returns the neutral axis.
 Recta2d XC::SeccionBarraPrismatica::getFibraNeutra(void) const
   { return getDeformationPlane().getFibraNeutra(); }
 
@@ -255,8 +255,7 @@ Pos2d XC::SeccionBarraPrismatica::getPuntoSemiplanoCompresiones(void) const
 Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoTracciones(const Recta2d &r) const
   { return getDeformationPlane().getSemiplanoTracciones(r); }
 
-//! @brief Returns the semiplano cuyo borde es la fibra neutra
-//! y en el que las tensiones son de tracción.
+//! @brief Returns the tensioned half-plane.
 Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoTracciones(void) const
   { return getDeformationPlane().getSemiplanoTracciones(); }
 
@@ -265,8 +264,7 @@ Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoTracciones(void) const
 Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoCompresiones(const Recta2d &r) const
   { return getDeformationPlane().getSemiplanoCompresiones(r); }
 
-//! @brief Returns the semiplano cuyo borde es la fibra neutra
-//! y en el que las tensiones son de compresión.
+//! @brief Returns the compressed half-plane.
 Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoCompresiones(void) const
   { return getDeformationPlane().getSemiplanoCompresiones(); }
 
