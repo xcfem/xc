@@ -50,11 +50,32 @@ class InternalForces(object):
      Laryx (Cubus suite) software.'''
   def __init__(self,y,mdMax,vdMax,MdSemelle,VdSemelle):
     self.y, self.mdMax, self.vdMax= filterRepeatedValues(y,mdMax,vdMax)
-    self.mdMaxVoile= scipy.interpolate.interp1d(self.y,self.mdMax)
-    self.vdMaxVoile= scipy.interpolate.interp1d(self.y,self.vdMax)
+    self.interpolate()
     self.hauteurVoile= self.y[-1]
     self.MdSemelle= MdSemelle
     self.VdSemelle= VdSemelle
+  def interpolate(self):
+    self.mdMaxVoile= scipy.interpolate.interp1d(self.y,self.mdMax)
+    self.vdMaxVoile= scipy.interpolate.interp1d(self.y,self.vdMax)    
+  def __imul__(self,f):
+    for m in self.mdMax:
+      m*=f
+    for v in self.vdMax:
+      v*=f
+    #self.interpolate()
+    self.mdMaxVoile*=f
+    self.vdMaxVoile*=f
+    self.MdSemelle*=f
+    self.VdSemelle*=f
+    return self
+  def clone(self):
+    return InternalForces(self.y, self.mdMax, self.vdMax,self.MdSemelle,self.VdSemelle)
+  def __mul__(self, f):
+    retval= self.clone()
+    retval*= f
+    return retval
+  def __rmul__(self,f):
+    return self*f
   def MdEncastrement(self):
     '''Bending moment (envelope) at stem base.'''
     return self.mdMax[-1]

@@ -170,7 +170,7 @@ int XC::EntMdlrBase::sendIdsEtiquetas(const int &posSize,const int &posDbTag, Co
   {
     int res= 0;
     static ID etiqIds;
-    const std::set<int> ids= etiquetas.getIdsEtiquetas();
+    const std::set<int> ids= labels.getIdsEtiquetas();
     const size_t sz= ids.size();
     setDbTagDataPos(posSize,sz);
     if(sz>0)
@@ -194,12 +194,12 @@ int XC::EntMdlrBase::recvIdsEtiquetas(const int &posSize,const int &posDbTag,con
     const size_t sz= getDbTagDataPos(posSize);
     if(sz>0)
       {
-        const DiccionarioEtiquetas &dic= etiquetas.getDiccionario();
+        const DiccionarioEtiquetas &dic= labels.getDiccionario();
         res= cp.receiveID(etiqIds,getDbTagData(),CommMetaData(posDbTag));
     
         const size_t sz= etiqIds.Size();
         for(size_t i=0;i<sz;i++)
-          etiquetas.addEtiqueta(dic(etiqIds[i]));
+          labels.addEtiqueta(dic(etiqIds[i]));
       }
     return res;
   }

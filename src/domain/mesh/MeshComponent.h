@@ -45,7 +45,7 @@ class MeshComponent: public ContinuaReprComponent
     void nueva_matriz(std::deque<Matrix> &matrices,const int &ndof) const;
   protected:
     mutable int index;
-    LabelContainer etiquetas;
+    LabelContainer labels; //!< Label container.
 
     void setup_matrices(std::deque<Matrix> &matrices,const int &ndof) const;
     int sendIdsEtiquetas(int posDbTag,CommParameters &);

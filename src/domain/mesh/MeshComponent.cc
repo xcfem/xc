@@ -68,7 +68,7 @@ int XC::MeshComponent::sendIdsEtiquetas(int posDbTag,CommParameters &cp)
   {
     int res= 0;
     static ID etiqIds;
-    const std::set<int> ids= etiquetas.getIdsEtiquetas();
+    const std::set<int> ids= labels.getIdsEtiquetas();
     const size_t sz= ids.size();
     if(sz>0)
       {
@@ -90,12 +90,12 @@ int XC::MeshComponent::recvIdsEtiquetas(int posDbTag,const CommParameters &cp)
     static ID etiqIds;
     if(getDbTagDataPos(posDbTag)!= 0)
       {
-        const DiccionarioEtiquetas &dic= etiquetas.getDiccionario();
+        const DiccionarioEtiquetas &dic= labels.getDiccionario();
         res= cp.receiveID(etiqIds,getDbTagData(),CommMetaData(posDbTag));
     
         const size_t sz= etiqIds.Size();
         for(size_t i=0;i<sz;i++)
-          etiquetas.addEtiqueta(dic(etiqIds[i]));
+          labels.addEtiqueta(dic(etiqIds[i]));
       }
     return res;
   }

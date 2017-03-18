@@ -47,7 +47,7 @@ class EntMdlrBase: public EntConNmb, public MovableObject
   private:
     Preprocessor *preprocessor; //!< Preprocessor.
   protected:
-    LabelContainer etiquetas;
+    LabelContainer labels; //!< Label container.
 
     const Preprocessor *get_preprocessor(void) const;
     Preprocessor *get_preprocessor(void);
