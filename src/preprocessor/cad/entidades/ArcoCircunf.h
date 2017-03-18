@@ -66,7 +66,7 @@ class ArcoCircunf: public LineaBase
     double getRadio(void) const;
     double getLambda(const Pos3d &) const;
 
-    //! @brief Returns the número de vértices.
+    //! @brief Returns the number of vertices.
     inline virtual size_t NumVertices(void) const
       { return 3; }
     virtual const Pnt *GetVertice(const size_t &i) const;

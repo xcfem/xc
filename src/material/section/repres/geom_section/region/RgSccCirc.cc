@@ -38,8 +38,8 @@
 #include "xc_utils/src/geom/d2/SectorAnilloCircular2d.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 
-const int I= 0, J=1, K= 2, L= 3; //Índices de los vértices.
-const int Y= 0, Z=1; //Índices de las coordenadas.
+const int I= 0, J=1, K= 2, L= 3; //Index of vertices.
+const int Y= 0, Z=1; //Index of Y and Z components.
 
 //! @brief Default constructor.
 XC::RgSccCirc::RgSccCirc(Material *mat)

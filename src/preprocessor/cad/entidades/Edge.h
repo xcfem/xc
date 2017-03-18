@@ -67,7 +67,7 @@ class Edge: public EntMdlr
     virtual const Pnt *P1(void) const;
     virtual const Pnt *P2(void) const;
     bool ExtremosEn(const Pnt *,const Pnt *) const;
-    //! @brief Returns the número de vértices.
+    //! @brief Returns the number of vertices.
     virtual size_t NumVertices(void) const= 0;
 
     virtual double getLongitud(void) const= 0;

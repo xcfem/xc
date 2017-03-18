@@ -38,7 +38,7 @@ class Cuadrilatero2d;
 
 namespace XC {
 
-// Orden de los vértices I->J->K->L.
+// Vertices order: I->J->K->L.
 //
 // L +---+---+---+---+ K
 //   |   |   |   |   |
@@ -53,7 +53,7 @@ namespace XC {
 class RgSccQuad: public RgQuadCell
   {
   private:
-    Matrix vertCoord; //!< Coordenadas de los vértices.
+    Matrix vertCoord; //!< Coordinates of the vertices.
   protected:
 
   public:

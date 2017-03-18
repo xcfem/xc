@@ -52,7 +52,7 @@ const XC::Pnt *XC::LineaBase::P1(void) const
 const XC::Pnt *XC::LineaBase::P2(void) const
   { return p2; }
 
-//! @brief Returns the vértice de índice i.
+//! @brief Returns the i-th vertex.
 const XC::Pnt *XC::LineaBase::GetVertice(const size_t &i) const
   {
     if(i==1)
@@ -74,7 +74,7 @@ bool XC::LineaBase::check_points(void) const
     return retval;
   }
 
-//! @brief Asigna el vértice de índice i.
+//! @brief Sets the i-th vertex.
 void XC::LineaBase::SetVertice(const size_t &i,Pnt *p)
   {
     if((i==1) && (p1!=p))
@@ -90,13 +90,13 @@ void XC::LineaBase::SetVertice(const size_t &i,Pnt *p)
     actualiza_topologia();
   }
 
-//! @brief Asigna el vértice de índice i.
+//! @brief Sets the i-th vertex.
 void XC::LineaBase::SetVertice(const size_t &i,const size_t &id_punto)
   {
     SetVertice(i,BuscaPnt(id_punto));
     if(!GetVertice(i))
-      std::cerr << "LineaBase; no se encontró el punto: '" 
-                << id_punto << "' \n";
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; point: '" << id_punto << "' not found \n";
   }
 
 //! @brief Asigna los extremos de la línea.

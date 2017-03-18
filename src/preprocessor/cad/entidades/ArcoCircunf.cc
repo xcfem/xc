@@ -55,7 +55,7 @@ XC::SetEstruct *XC::ArcoCircunf::getCopy(void) const
 const XC::Pnt *XC::ArcoCircunf::P3(void) const
   { return p3; }
 
-//! @brief Returns the vértice de índice i.
+//! @brief Returns the i-th vertex.
 const XC::Pnt *XC::ArcoCircunf::GetVertice(const size_t &i) const
   {
     if(i<3)
@@ -65,7 +65,7 @@ const XC::Pnt *XC::ArcoCircunf::GetVertice(const size_t &i) const
   }
 
 
-//! @brief Asigna el vértice de índice i.
+//! @brief Sets the i-th vertex.
 void XC::ArcoCircunf::SetVertice(const size_t &i,Pnt *p)
   {
     if(i<3)

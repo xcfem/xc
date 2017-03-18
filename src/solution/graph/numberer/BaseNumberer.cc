@@ -72,7 +72,7 @@ XC::BaseNumberer::BaseNumberer(int classTag)
 
 
 //! @brief Reserva espacio suficiente para el vector theRefResult.
-//! Returns true ifel número de vértices es distinto de cero.
+//! Returns true ifel number of vertices es distinto de cero.
 bool XC::BaseNumberer::checkSize(const Graph &theGraph)
   {
     // first check our size, if not same make new

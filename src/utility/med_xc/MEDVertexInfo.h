@@ -36,11 +36,11 @@ class Mesh;
 //!  @brief Information about mesh vertex.
 class MEDVertexInfo: public MEDBaseInfo
   {
-    std::vector<double> coordenadas; //!< Coordenadas de los vértices.
+    std::vector<double> coordenadas; //!< Coordinates of the vertices.
     size_t spaceDimension; //!< Mesh space dimension.
     std::string tipoCoordenadas; //!< "CARTESIAN", "CYLINDRICAL" or "SPHERICAL"
-    std::vector<std::string> nombresCoordenadas; //!< Nombres de las coordenadas ("X","Y","Z",...).
-    std::vector<std::string> nombresUnidades; //!< Nombres de las unidades ("cm","cm","cm",...).
+    std::vector<std::string> nombresCoordenadas; //!< Names of the coordinate components ("X","Y","Z",...).
+    std::vector<std::string> nombresUnidades; //!< Names of the units ("cm","cm","cm",...).
 
   protected:
     void nuevo_vertice(size_t i,const std::vector<double> &coo);
@@ -49,7 +49,7 @@ class MEDVertexInfo: public MEDBaseInfo
     MEDVertexInfo(void);
     MEDVertexInfo(const Mesh &);
 
-    //! @brief Returns the número de vertices.
+    //! @brief Returns the number of vertices.
     inline size_t getNumVertices(void) const
       { return coordenadas.size()/spaceDimension; }
     const std::vector<double> &getCoordenadas(void) const;

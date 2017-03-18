@@ -45,7 +45,7 @@ class QuadSurface: public Face
   public:
     QuadSurface(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
     virtual SetEstruct *getCopy(void) const;
-    //! @brief Returns the número de vértices.
+    //! @brief Returns the number of vertices.
     inline virtual size_t NumVertices(void) const
       { return 4; }
 

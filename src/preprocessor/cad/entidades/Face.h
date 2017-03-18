@@ -66,7 +66,7 @@ class Face: public CmbEdge
       { return ndivj; }
     virtual void SetNDivJ(const size_t &ndj);
     virtual void ConciliaNDivIJ(void)= 0;
-    //! @brief Returns the número de vértices.
+    //! @brief Returns the number of vertices.
     size_t NumVertices(void) const
       { return NumEdges(); }
     virtual const Pnt *GetVertice(const size_t &i) const;

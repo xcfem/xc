@@ -96,14 +96,14 @@ class Body: public EntMdlr
     virtual BodyFace *GetFace(const size_t &i)= 0;
   public:
     Body(Preprocessor *m,const std::string &nombre= "");
-    //! @brief Return the dimensión del objeto
+    //! @brief Return the dimension of the object
     inline virtual unsigned short int GetDimension(void) const
       { return 3; }
-    //! @brief Returns the número de líneas del objeto.
+    //! @brief Returns the number of lines of the object.
     virtual size_t NumLineas(void) const= 0;
-    //! @brief Returns the número de vértices del objeto.
+    //! @brief Returns the number of vertices of the object.
     virtual size_t NumVertices(void) const= 0;
-    //! @brief Returns the número de vértices del objeto.
+    //! @brief Returns the number of vertices of the object.
     virtual size_t NumFaces(void) const= 0;
     virtual std::set<const Face *> getSurfaces(void)= 0;
     virtual const BodyFace *GetFace(const size_t &i) const= 0;

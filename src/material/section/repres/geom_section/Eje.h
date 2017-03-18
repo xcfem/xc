@@ -59,7 +59,7 @@ class Eje: public EntGeomSection
     virtual const Spot *P1(void) const;
     virtual Spot *P2(void);
     virtual const Spot *P2(void) const;
-    //! @brief Returns the número de vértices.
+    //! @brief Returns the number of vertices.
     virtual size_t NumVertices(void) const= 0;
 
     virtual const Spot *GetVertice(const size_t &i) const= 0;

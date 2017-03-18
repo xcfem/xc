@@ -95,7 +95,7 @@ std::vector<int> &XC::MEDGroupInfo::getIndicesElementosTipo(const MED_EN::medGeo
       return (indices_tipo[tipo]= std::vector<int>());
   }
 
-//! @brief Agrega un vértice al grupo.
+//! @brief Appends a vertex to the group.
 void XC::MEDGroupInfo::nuevo_vertice(size_t tag,const MEDMapIndices &ind)
   {
     tipo_entidad= MED_EN::MED_NODE;
@@ -105,7 +105,7 @@ void XC::MEDGroupInfo::nuevo_vertice(size_t tag,const MEDMapIndices &ind)
     MEDCellBaseInfo::new_cell(tag,MED_EN::MED_NONE);
   }
 
-//! @brief Agrega una celda al grupo.
+//! @brief Appends a cell to the group.
 void XC::MEDGroupInfo::nueva_celda(size_t tag,const MED_EN::medGeometryElement &tipo)
   {
     tipo_entidad= MED_EN::MED_CELL;

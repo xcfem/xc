@@ -34,11 +34,11 @@
 void XC::MEDBaseInfo::clear(void)
   { indices.clear(); }
 
-//! @brief Agrega las coordenadas del vértice de índice i.
+//! @brief Appends i to the indices.
 void XC::MEDBaseInfo::nuevo_tag(size_t i)
   { indices.nuevo_tag(i); }
 
-//! @brief Acceso al mapa de índices.
+//! @brief Returns a const reference to the indices container.
 const XC::MEDMapIndices &XC::MEDBaseInfo::getMapIndices(void) const
   { return indices; }
 

@@ -69,14 +69,14 @@ namespace XC {
 
 //! @ingroup Graph
 //
-//! @brief Vértice de un grafo.
+//! @brief Vertex of a graph.
 class Vertex: public TaggedObject, public MovableObject
   {
   private:
-    int myRef; //!< Tag del objeto al que representa el vértice.
-    double myWeight; //!< Peso del vértice en el grafo.
-    int myColor; //!< Color del vértice en el grafo.
-    int myDegree; //!< Grado del vértice en el grafo.
+    int myRef; //!< Tag of the object represented by the vertex.
+    double myWeight; //!< Vertex weigth on the graph.
+    int myColor; //!< Color of the vertex.
+    int myDegree; //!< Degree of the vertex.
     int myTmp;
     std::set<int> myAdjacency;
   protected:

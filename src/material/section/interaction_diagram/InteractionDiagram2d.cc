@@ -77,8 +77,8 @@ Pos2d XC::InteractionDiagram2d::get_interseccion(const Pos2d &p) const
       return p2;
   }
 
-//! @brief Convierte el diagrama en un rombo con vértices en los
-//! extremos del diagrama de interacción.
+//! @brief Converts the diagram in a diamond with vertex
+//! on the intersections of the diagram with the coordinate axes.
 void XC::InteractionDiagram2d::Simplify(void)
   {
     const double xMax= GetMax(1);

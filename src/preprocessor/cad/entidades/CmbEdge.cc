@@ -624,7 +624,7 @@ std::deque<XC::Edge *> XC::CmbEdge::GetEdges(void)
     return retval;
   }
 
-//! @brief Returns the vértice cuyo índice is being passed as parameter.
+//! @brief Returns the i-th vertex.
 const XC::Pnt *XC::CmbEdge::GetVertice(const size_t &i) const
   {
     if(i<NumVertices())
@@ -634,6 +634,7 @@ const XC::Pnt *XC::CmbEdge::GetVertice(const size_t &i) const
   }
 
 
+//! @brief Sets the i-th vertex.
 void XC::CmbEdge::SetVertice(const size_t &,Pnt *)
   {
     std::cerr << "Function XC::CmbEdge::SetVertice not implemented." << std::endl;

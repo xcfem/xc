@@ -207,7 +207,7 @@ void XC::MEDMeshing::defineMEDFields(void) const
       }
   }
 
-//! @brief Vuelca la definición de vértices y celdas en la
+//! @brief Dumps vertices and cells definition onto
 //! mesh MED
 void XC::MEDMeshing::to_med(void)
   {

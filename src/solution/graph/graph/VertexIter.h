@@ -71,7 +71,7 @@ class TaggedObjectIter;
 
 //! @ingroup Graph
 //
-//! @brief Iterador sobre los vértices del grafo.
+//! @brief Iterator over the vertices of the graph.
 class VertexIter 
   {
   private:

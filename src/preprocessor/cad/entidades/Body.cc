@@ -112,11 +112,11 @@ const XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i) const
     return retval;
   }
 
-//! @brief Returns the pointer al lado de la cara, cuyo índice is being passed as parameter.
+//! @brief Returns a pointer to the i-th edge of the face.
 XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i)
   { return const_cast<CmbEdge::Lado *>(static_cast<const BodyFace &>(*this).GetLado(i)); }
 
-//! @brief Returns the pointer al vértice de la cara, cuyo índice is being passed as parameter.
+//! @brief Returns a pointer to the i-th vertex of the face.
 const XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i) const
   {
     const CmbEdge::Lado *l= GetLado(i);
@@ -130,11 +130,11 @@ const XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i) const
     return nullptr;
   }
 
-//! @brief Returns the pointer al vértice de la cara, cuyo índice is being passed as parameter.
+//! @brief Returns a pointer to the i-th vertex of the face.
 XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i)
   { return const_cast<Pnt *>(static_cast<const BodyFace &>(*this).GetVertice(i)); }
 
-//! @brief Returns the pointer to the node de la cara, cuyos índices being passed as parameters.
+//! @brief Returns a pointer to the (i,j) node of the face.
 XC::Node *XC::Body::BodyFace::GetNodo(const size_t &i,const size_t &j)
   {
     assert(surface);
@@ -174,8 +174,8 @@ MatrizPos3d XC::Body::BodyFace::get_posiciones(void) const
       }
     MatrizPos3d ptos_l1= l1->GetPosNodosDir();
     MatrizPos3d ptos_l2= l2->GetPosNodosDir();
-    MatrizPos3d ptos_l3= l3->GetPosNodosInv(); //Ordenados al revés.
-    MatrizPos3d ptos_l4= l4->GetPosNodosInv(); //Ordenados al revés.
+    MatrizPos3d ptos_l3= l3->GetPosNodosInv(); //Reverse order.
+    MatrizPos3d ptos_l4= l4->GetPosNodosInv(); //Reverse order.
     return MatrizPos3d(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
   }
 

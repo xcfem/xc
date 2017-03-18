@@ -117,10 +117,11 @@ int XC::Face::SentidoBorde(const XC::Edge *l,const XC::Face &otra) const
       return -1;
   }
 
-//! @brief Returns the vértice cuyo índice is being passed as parameter.
+//! @brief Returns the i-th vertex.
 const XC::Pnt *XC::Face::GetVertice(const size_t &i) const
   { return GetLado(i)->P1(); }
 
+//! @brief Returns the contour of the face as a 3D polyline.
 Polilinea3d XC::Face::getContour(void) const
   { return getPolyline(); }
 

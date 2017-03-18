@@ -60,15 +60,15 @@ XC::Cell::Cell(int numVert)
   : vertCoord(numVert,2), Centroid(2) {}
 
 //! @brief Constructor
-XC::Cell::Cell(const XC::Matrix &vertexCoords)
+XC::Cell::Cell(const Matrix &vertexCoords)
   : vertCoord(vertexCoords), Centroid(2) {}
 
-//! @brief Returns the coordenadas de los vértices.
+//! @brief Returns the coordinates of the vertices.
 const XC::Matrix &XC::Cell::getVertCoords(void) const
   { return vertCoord; }
 
-//! @brief Asigna las coordenadas de los vértics.
-void XC::Cell::setVertCoords(const XC::Matrix &vertexCoords)
+//! @brief Sets vertices coordinates.
+void XC::Cell::setVertCoords(const Matrix &vertexCoords)
   { vertCoord = vertexCoords; }
 
 //! @brief Calcula la posición del centroide de la celda.

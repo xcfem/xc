@@ -134,7 +134,7 @@ class CmbEdge: public Edge
 
     double getLongitud(void) const;
 
-    //! @brief Returns the número de vértices.
+    //! @brief Returns the number of vertices.
     virtual size_t NumVertices(void) const
       { return NumEdges()+1; }
 

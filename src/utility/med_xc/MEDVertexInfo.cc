@@ -59,7 +59,7 @@ void XC::MEDVertexInfo::clear(void)
     MEDBaseInfo::clear();
   }
 
-//! @brief Agrega las coordenadas del vértice de índice i.
+//! @brief Creates the i-th vertex.
 void XC::MEDVertexInfo::nuevo_vertice(size_t i,const std::vector<double> &coo)
   {
     const size_t sz= coo.size();
@@ -70,12 +70,14 @@ void XC::MEDVertexInfo::nuevo_vertice(size_t i,const std::vector<double> &coo)
         nuevo_tag(i);
       }
     else
-      std::cerr << "MEDVertexInfo::nuevo_vertice; se esperaban: "
-                << spaceDimension << " coordenadas, se obtuvieron: "
-                << sz << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; " << spaceDimension << " components expected "
+                << sz << " obtained." << std::endl;
   }
 
-//! @brief Agrega las coordenadas del vértice de índice i.
+//! @brief Appends a new vertex.
+//! @param i index of the vertex in the container.
+//! @paral l coordinates of the vertex.
 void XC::MEDVertexInfo::newVertex(const size_t &i,const boost::python::list &l)
   {
     const size_t sz= len(l);

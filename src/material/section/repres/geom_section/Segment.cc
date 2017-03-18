@@ -71,7 +71,7 @@ void XC::Segment::setEndPoints(size_t idP1, size_t idP2)
     actualiza_topologia();
   }
 
-//! @brief Returns the vértice de índice i.
+//! @brief Returns the i-th vertex.
 const XC::Spot *XC::Segment::GetVertice(const size_t &i) const
   {
     if(i==1)
@@ -80,7 +80,7 @@ const XC::Spot *XC::Segment::GetVertice(const size_t &i) const
       return p2;
   }
 
-//! @brief Returns the vértice de índice i.
+//! @brief Returns the i-th vertex.
 XC::Spot *XC::Segment::GetVertice(const size_t &i)
   {
     if(i==1)
@@ -89,7 +89,7 @@ XC::Spot *XC::Segment::GetVertice(const size_t &i)
       return p2;
   }
 
-//! @brief Asigna el vértice de índice i.
+//! @brief Sets the i-th vertex.
 void XC::Segment::SetVertice(const size_t &i,Spot *p)
   {
     if(i==1)

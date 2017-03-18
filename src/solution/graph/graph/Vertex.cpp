@@ -99,15 +99,15 @@ int XC::Vertex::addEdge(int otherTag)
     return 0;
   }
 
-//! @brief Returns the grado del vértice en el grafo.
+//! @brief Returns the vertex degree on the graph.
 int XC::Vertex::getDegree(void) const
   { return myDegree; }
 
-//! @brief Return the lista de adyacencia del vértice en el grafo.
+//! @brief Return the adjacency list of the vertex in the graph.
 const std::set<int> &XC::Vertex::getAdjacency(void) const
   { return myAdjacency; }
 
-//! @brief Imprime.
+//! @brief Prints.
 void XC::Vertex::Print(std::ostream &s, int flag)
   {
     s << this->getTag() << " " ;

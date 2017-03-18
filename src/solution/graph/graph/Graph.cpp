@@ -170,9 +170,10 @@ bool XC::Graph::addVertex(const Vertex &vrt, bool checkAdjacency)
   }
 
 
-//! @brief Añade una arista al grafo. Previamente se comprueba que los
-//! vértices extremos de la arista (los being passed as parameters) forman
-//! parte del grafo. Si no existieran se returns -1.
+//! @brief Adds an edge to the graph. Previously we check that its vertices
+//! are already defined in the graph, otherwise it returns -1 (error condition)
+//! @param vertexTag: end of the edge.
+//! @param otherVertexTag: the other end of the edge.
 int XC::Graph::addEdge(int vertexTag, int otherVertexTag)
   {
     int retval= -1;
@@ -183,7 +184,7 @@ int XC::Graph::addEdge(int vertexTag, int otherVertexTag)
     if((!vertex1) || (!vertex2))
       {
 	std::cerr << "WARNING XC::Graph::addEdge() - one or both of the vertices ";
-	std::cerr << vertexTag << " " << otherVertexTag << " not in XC::Graph\n";
+	std::cerr << vertexTag << " " << otherVertexTag << " not in the graph\n";
 	retval= -1;
       }
     else
@@ -220,7 +221,7 @@ int XC::Graph::addEdge(int vertexTag, int otherVertexTag)
     return retval;
   }
 
-//! @brief Returns a pointer to the vértice cuyo tag being passed as parameter.
+//! @brief Returns a pointer to the vertex identified by the tag being passed as parameter.
 XC::Vertex *XC::Graph::getVertexPtr(int vertexTag)
   {
     TaggedObject *res = myVertices.getComponentPtr(vertexTag);
@@ -230,7 +231,7 @@ XC::Vertex *XC::Graph::getVertexPtr(int vertexTag)
       return nullptr;
   }
 
-//! @brief Returns a pointer to the vértice cuyo tag being passed as parameter.
+//! @brief Returns a pointer to the vertex identified by the tag being passed as parameter.
 const XC::Vertex *XC::Graph::getVertexPtr(int vertexTag) const
   {
     const TaggedObject *res= myVertices.getComponentPtr(vertexTag);
@@ -240,7 +241,7 @@ const XC::Vertex *XC::Graph::getVertexPtr(int vertexTag) const
       return nullptr;
   }
 
-//! @brief Returns an iterator a los vértices del grafo.
+//! @brief Returns an iterator to the vertices of the graph.
 XC::VertexIter &XC::Graph::getVertices(void)
   {
     // reset the iter and then return it
@@ -248,7 +249,7 @@ XC::VertexIter &XC::Graph::getVertices(void)
     return theVertexIter;
   }
 
-//! @brief Returns the número de vértices del grafo.
+//! @brief Returns the number of vertices del grafo.
 int XC::Graph::getNumVertex(void) const
   { return myVertices.getNumComponents(); }
 
@@ -260,7 +261,7 @@ int XC::Graph::getNumEdge(void) const
 int XC::Graph::getFreeTag(void)
   { return nextFreeTag; }
 
-//! @brief Elimina del grafo el vértice cuyo tag being passed as parameter.
+//! @brief Removes from the graph the vertex identified by the tag being passed as parameter.
 bool XC::Graph::removeVertex(int tag, bool flag)
   {
     Vertex *result= nullptr;
@@ -353,7 +354,7 @@ void XC::Graph::getBand(int &numSubD,int &numSuperD) const
     numSubD*= -1;
   }
 
-//! @brief Returns the máximo (positivo) de la diferencia entre índices de vértices.
+//! @brief Returns the maximum (positive) of the difference between vertices indexes.
 int XC::Graph::getVertexDiffMaxima(void) const
   {
     int retval = 0;
@@ -377,7 +378,7 @@ int XC::Graph::getVertexDiffMaxima(void) const
     return retval;
   }
 
-//! @brief Returns the máximo de la diferencia entre índices de vértices.
+//! @brief Returns the extreme (positive or negative) of the difference between vertices indexes.
 int XC::Graph::getVertexDiffExtrema(void) const
   {
     int retval = 0;

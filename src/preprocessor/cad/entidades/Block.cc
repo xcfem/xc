@@ -42,7 +42,7 @@
 #include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
 #include "vtkCellType.h"
 
-// Numeración de los vértices:
+// Numbering of vertices:
 //
 //       5        8
 //       +--------+
@@ -56,15 +56,15 @@
 //    +--------+
 //    2        3
 //
-// Numeración de las caras:
+// Numbering of faces:
 //
 //                
-//       +--------+         0: Base; vértices 1,2,3,4.
-//      /   5    /|         1: Lateral izquierdo; vértices 1,2,6,5.
-//     /        / |         2: Cara frontal; vértices 2,3,7,6.
-//    +--------+  |         3: Lateral derecho; vértices 3,4,8,7.
-//    |        | 3|         4: Cara dorsal; vértices 1,4,8,5.
-//    |        |  +         5: Tapa; vértices 5,6,7,8.
+//       +--------+         0: Base; vertices 1,2,3,4.
+//      /   5    /|         1: Lateral izquierdo; vertices 1,2,6,5.
+//     /        / |         2: Cara frontal; vertices 2,3,7,6.
+//    +--------+  |         3: Lateral derecho; vertices 3,4,8,7.
+//    |        | 3|         4: Cara dorsal; vertices 1,4,8,5.
+//    |        |  +         5: Tapa; vertices 5,6,7,8.
 //    |   2    | /
 //    |        |/
 //    +--------+
@@ -144,7 +144,7 @@ const XC::CmbEdge::Lado *XC::Block::GetArista(const size_t &i) const
     return retval;
   }
 
-//! @brief Returns the vértice del sólido cuyo índice being passed as parameter.
+//! @brief Returns the i-th vertex.
 const XC::Pnt *XC::Block::GetVertice(const size_t &i) const
   {
     if(i<=4)
@@ -155,7 +155,7 @@ const XC::Pnt *XC::Block::GetVertice(const size_t &i) const
       return nullptr;
   }
 
-//! @brief Returns the vértice del sólido cuyo índice being passed as parameter.
+//! @brief Returns the i-th vertex.
 XC::Pnt *XC::Block::GetVertice(const size_t &i)
   {
     if(i<=4)
@@ -295,10 +295,10 @@ void XC::Block::crea_nodos_caras(void)
     sups[5].crea_nodos();
   }
 
-//! @brief Returns (ndivI+1)*(ndivJ+1)*(ndivK+1) posiciones para los nodos.
+//! @brief Returns (ndivI+1)*(ndivJ+1)*(ndivK+1) positions for the nodes.
 //!
 //! La "tritriz" de puntos devuelta esta organizada de la siguiente manera.
-//! - El punto de índices (0,1,1) (capa,fila,col) coincide con el vértice 1.
+//! - El punto de índices (0,1,1) (capa,fila,col) correspond with vertex  1.
 //! - El índice de capa avanza desde 0 para la cara 1 hasta ncapas para la cara 6.
 //! - El índice de fila avanza desde 1 para la cara 5 hasta nfilas para la cara 3.
 //! - El índice de columna avanza desde 1 para la cara 2 hasta ncol para la cara 4.
@@ -372,7 +372,7 @@ void XC::Block::crea_nodos(void)
         nodos = TritrizPtrNod(capas,filas,cols); //Punteros a nodo.
         TritrizPos3d pos_nodos= get_posiciones(); //Posiciones de los nodos.
 
-        //Vértices.
+        //Vertices.
 	nodos(1,1,1)= GetVertice(1)->GetNodo();
         nodos(1,filas,1)= GetVertice(2)->GetNodo();
 	nodos(1,filas,cols)= GetVertice(3)->GetNodo();

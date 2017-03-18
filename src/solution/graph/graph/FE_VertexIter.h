@@ -70,7 +70,7 @@ class FE_Graph;
 
 //! @ingroup Graph
 //
-//! @brief Iterador sobre los vértices del grafo.
+//! @brief Iterador over the vertices of the graph.
 class FE_VertexIter: public VertexIter
   {
   private:

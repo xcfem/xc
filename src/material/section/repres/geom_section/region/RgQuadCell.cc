@@ -114,7 +114,7 @@ XC::Vector XC::RgQuadCell::getVertCoords(const size_t &i,const size_t &j) const
     return retval;
   }
 
-//! @brief Returns the coordenadas de los vértices de la celda i,j.
+//! @brief Returns the coordinates of the vertices of the (i,j) cell.
 //                                                                             i+1,j +---+ i+1,j+1
 //                                                                                   |   |
 //                                                                                   |   |
