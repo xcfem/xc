@@ -133,7 +133,6 @@ class RetainingWall(object):
     #Materials.
     self.beton= concreteSIA262.c25_30
     self.acier= steelSIA262.B500B
-    self.exigeanceFisuration= "B"
     #Default reinforcement
     AdefA= ng_rebar_def.RebarFamily(self.acier,8e-3,0.15,enrobage)
     #AdefB= RebarFamily(self.acier,10e-3,0.30,enrobage)
@@ -177,29 +176,29 @@ class RetainingWall(object):
     return (self.hEncastrement-self.hCouronnement)/self.hauteurVoile*y+self.hCouronnement
   def getSection1(self):
     '''Returns RC section for armature in position 1.'''
-    return ng_rc_section.RCSection(self.armatures[1],self.beton,self.exigeanceFisuration,self.b,self.hEncastrement)
+    return ng_rc_section.RCSection(self.armatures[1],self.beton,self.b,self.hEncastrement)
   def getSection2(self,y):
     '''Returns RC section for armature in position 2.'''
     c= self.getDepth(y)
-    return ng_rc_section.RCSection(self.armatures[2],self.beton,self.exigeanceFisuration,self.b,c)
+    return ng_rc_section.RCSection(self.armatures[2],self.beton,self.b,c)
   def getSection3(self):
     '''Returns RC section for armature in position 3.'''
-    return ng_rc_section.RCSection(self.armatures[3],self.beton,self.exigeanceFisuration,self.b,self.hSemelle)
+    return ng_rc_section.RCSection(self.armatures[3],self.beton,self.b,self.hSemelle)
   def getSection4(self):
     '''Returns RC section for armature in position 4.'''
-    return ng_rc_section.RCSection(self.armatures[4],self.beton,self.exigeanceFisuration,self.b,self.hEncastrement)
+    return ng_rc_section.RCSection(self.armatures[4],self.beton,self.b,self.hEncastrement)
   def getSection6(self):
     '''Returns RC section for armature in position 6.'''
-    return ng_rc_section.RCSection(self.armatures[6],self.beton,self.exigeanceFisuration,self.b,self.hCouronnement)
+    return ng_rc_section.RCSection(self.armatures[6],self.beton,self.b,self.hCouronnement)
   def getSection7(self):
     '''Returns RC section for armature in position 7.'''
-    return ng_rc_section.RCSection(self.armatures[7],self.beton,self.exigeanceFisuration,self.b,self.hSemelle)
+    return ng_rc_section.RCSection(self.armatures[7],self.beton,self.b,self.hSemelle)
   def getSection8(self):
     '''Returns RC section for armature in position 8.'''
-    return ng_rc_section.RCSection(self.armatures[8],self.beton,self.exigeanceFisuration,self.b,self.hSemelle)
+    return ng_rc_section.RCSection(self.armatures[8],self.beton,self.b,self.hSemelle)
   def getSection11(self):
     '''Returns RC section for armature in position 11.'''
-    return ng_rc_section.RCSection(self.armatures[11],self.beton,self.exigeanceFisuration,self.b,(self.hCouronnement+self.hEncastrement)/2.0)
+    return ng_rc_section.RCSection(self.armatures[11],self.beton,self.b,(self.hCouronnement+self.hEncastrement)/2.0)
 
   def setULSInternalForcesEnvelope(self,wallInternalForces):
     '''Assigns the ultimate limit state infernal forces envelope for the stem.'''
@@ -254,10 +253,9 @@ class RetainingWall(object):
 
     outputFile.write("\\hline\n")
     outputFile.write("\\begin{tabular}{llll}\n")
-    outputFile.write("\\multicolumn{4}{c}{\\textsc{Matériels}}\\\\\n")
+    outputFile.write("\\multicolumn{3}{c}{\\textsc{Matériels}}\\\\\n")
     outputFile.write("  Béton: " + self.beton.materialName +" & ")
     outputFile.write("  Acier: " + self.acier.materialName +" & ")
-    outputFile.write("  Exigeance fisuration: " + self.exigeanceFisuration +" & ")
     outputFile.write("  Enrobage: "+ fmt.Diam.format(self.enrobage*1e3)+ " mm\\\\\n")
     outputFile.write("\\end{tabular} \\\\\n")
     outputFile.write("\\hline\n")

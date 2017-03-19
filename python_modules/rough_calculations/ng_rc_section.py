@@ -17,22 +17,20 @@ from miscUtils import LogMessages as lmsg
 class RCSection(object):
   tensionRebars= None
   beton= concreteSIA262.c25_30
-  exigeanceFisuration= "B"
   b= 0.25
   h= 0.25
-  def __init__(self,tensionRebars,beton,exigFis,b,h):
+  def __init__(self,tensionRebars,beton,b,h):
     self.tensionRebars= tensionRebars
     self.beton= beton
-    self.exigeanceFisuration= exigFis
     self.b= b
     self.h= h
     self.stressLimitUnderPermanentLoads= 230e6
   def setArmature(self,tensionRebars):
     self.tensionRebars= tensionRebars
   def getAsMinFlexion(self):
-    return self.tensionRebars.getAsMinFlexion(self.beton,self.exigeanceFisuration,self.h)
+    return self.tensionRebars.getAsMinFlexion(self.beton,self.h)
   def getAsMinTraction(self):
-    return self.tensionRebars.getAsMinTraction(self.beton,self.exigeanceFisuration,self.h)
+    return self.tensionRebars.getAsMinTraction(self.beton,self.h)
   def getMR(self):
     return self.tensionRebars.getMR(self.beton,self.b,self.h)
   def getVR(self,Nd,Md):

@@ -10,18 +10,17 @@ import math
 
 
 class RebarFamily(object):
-  acier= steelSIA262.B500B
-  diam= 8e-3
-  ecartement= 0.15
-  enrobage= 40e-3
   minDiams= 50
-  def __init__(self,acier,diam,ecartement,enrobage):
+  def __init__(self,acier,diam,ecartement,enrobage,exigenceFissuration= 'B'):
     self.acier= acier
     self.diam= diam
     self.ecartement= ecartement
     self.enrobage= enrobage
+    self.exigenceFissuration= exigenceFissuration
   def __repr__(self):
     return self.acier.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.ecartement*1e3))
+  def getCopy(self,exigenceFissuration):
+    return RebarFamily(self.acier,self.diam,self.ecartement,self.enrobage,exigenceFissuration)
   def getDiam(self):
     return self.diam
   def getBarArea(self):
@@ -32,11 +31,13 @@ class RebarFamily(object):
     return self.getNumBarsPerMeter()*self.getBarArea()
   def getBasicAnchorageLength(self,beton):
     return max(anchorage.getBasicAnchorageLength(self.getDiam(),beton.fck,self.acier.fyd()),self.minDiams*self.diam)
-  def getAsMinFlexion(self,beton,exigeanceFisuration,epaisseur):
-    retval= minimal_reinforcement.AsMinFlexion(beton,self.getEnrobageMec(),exigeanceFisuration,self.ecartement,epaisseur)
+  def getExigenceFissuration(self):
+    return self.exigenceFissuration
+  def getAsMinFlexion(self,beton,epaisseur):
+    retval= minimal_reinforcement.AsMinFlexion(beton,self.getEnrobageMec(),self.exigenceFissuration,self.ecartement,epaisseur)
     return retval
-  def getAsMinTraction(self,beton,exigeanceFisuration,epaisseur):
-    retval= minimal_reinforcement.AsMinTraction(beton,exigeanceFisuration,self.ecartement,epaisseur)
+  def getAsMinTraction(self,beton,epaisseur):
+    retval= minimal_reinforcement.AsMinTraction(beton,self.exigenceFissuration,self.ecartement,epaisseur)
     return retval
   def getMR(self,beton,b,epaisseur):
     return ng_simple_bending_reinforcement.Mu(self.getAs(),beton.fcd(),self.acier.fyd(),b,epaisseur-self.getEnrobageMec())
@@ -76,13 +77,13 @@ class FamNBars(RebarFamily):
 
 
 class DoubleRebarFamily(object):
-  f1= RebarFamily(steelSIA262.B500B,8e-3,0.15,40e-3)
-  f2= RebarFamily(steelSIA262.B500B,8e-3,0.15,40e-3)
   def __init__(self,f1,f2):
     self.f1= f1
     self.f2= f2
   def __repr__(self):
     return self.f1.__repr__() + " + " + self.f2.__repr__()
+  def getCopy(self,exigenceFissuration):
+    return DoubleRebarFamily(self.f1.getCopy(exigenceFissuration),self.f2.getCopy(exigenceFissuration))
   def getAs(self):
     return self.f1.getAs()+self.f2.getAs()
   def getEcartement(self):
@@ -98,11 +99,16 @@ class DoubleRebarFamily(object):
     l1= self.f1.getBasicAnchorageLength(beton)
     l2= self.f2.getBasicAnchorageLength(beton)
     return max(l1,l2)
-  def getAsMinFlexion(self,beton,exigeanceFisuration,epaisseur):
-    retval= minimal_reinforcement.AsMinFlexion(beton,self.getEnrobageMec(),exigeanceFisuration,self.getEcartement(),epaisseur)
+  def getAsMinFlexion(self,beton,epaisseur):
+    retval= minimal_reinforcement.AsMinFlexion(beton,self.getEnrobageMec(),self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
     return retval
-  def getAsMinTraction(self,beton,exigeanceFisuration,epaisseur):
-    retval= minimal_reinforcement.AsMinTraction(beton,exigeanceFisuration,self.getEcartement(),epaisseur)
+  def getAsMinTraction(self,beton,epaisseur):
+    retval= minimal_reinforcement.AsMinTraction(beton,self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
+    return retval
+  def getExigenceFissuration(self):
+    retval= self.f1.exigenceFissuration
+    if(retval!=self.f2.exigenceFissuration):
+      cmsg.error("Different specifications for crack control.")
     return retval
   def getMR(self,beton,b,epaisseur):
     MR1= self.f1.getMR(beton,b,epaisseur)
@@ -126,7 +132,7 @@ class DoubleRebarFamily(object):
 
 def writeRebars(outputFile,beton,famArm,AsMin):
   famArm.writeDef(outputFile,beton)
-  outputFile.write("  area: As= "+ fmt.Areas.format(famArm.getAs()*1e4) + " cm2/m areaMin: " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
+  outputFile.write("  area: As= "+ fmt.Areas.format(famArm.getAs()*1e4) + " cm2/m areaMin("+famArm.getExigenceFissuration()+"): " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
   writeF(outputFile,"  F(As)", famArm.getAs()/AsMin)
 
 def writeF(outputFile,text,F):
