@@ -62,9 +62,7 @@ class InternalForces(object):
       m*=f
     for v in self.vdMax:
       v*=f
-    #self.interpolate()
-    self.mdMaxVoile*=f
-    self.vdMaxVoile*=f
+    self.interpolate()
     self.MdSemelle*=f
     self.VdSemelle*=f
     return self
@@ -76,9 +74,10 @@ class InternalForces(object):
     return retval
   def __rmul__(self,f):
     return self*f
-  def MdEncastrement(self):
+  def MdEncastrement(self,footingThickness):
     '''Bending moment (envelope) at stem base.'''
-    return self.mdMax[-1]
+    yEncastrement= self.hauteurVoile-footingThickness/2.0
+    return self.Md(yEncastrement)
   def VdEncastrement(self,epaisseurEncastrement):
     '''Shear force (envelope) at stem base.'''
     yV= self.hauteurVoile-epaisseurEncastrement
@@ -202,20 +201,29 @@ class RetainingWall(object):
     '''Returns RC section for armature in position 11.'''
     return ng_rc_section.RCSection(self.armatures[11],self.beton,self.exigeanceFisuration,self.b,(self.hCouronnement+self.hEncastrement)/2.0)
 
-  def setInternalForcesEnvelope(self,effortsMur):
-    '''Assigns the infernal forces envelope for the stem.'''
+  def setULSInternalForcesEnvelope(self,wallInternalForces):
+    '''Assigns the ultimate limit state infernal forces envelope for the stem.'''
     if(hasattr(self,'hauteurVoile')):
-      if(self.hauteurVoile!=effortsMur.hauteurVoile):
-        lmsg.warning('stem height (' + str(self.hauteurVoile) + ' m) different from length of internal forces envelope law('+ str(effortsMur.hauteurVoile)+ ' m') 
+      if(self.hauteurVoile!=wallInternalForces.hauteurVoile):
+        lmsg.warning('stem height (' + str(self.hauteurVoile) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.hauteurVoile)+ ' m') 
     else:
-      self.hauteurVoile= effortsMur.hauteurVoile
-    self.internalForces= effortsMur
+      self.hauteurVoile= wallInternalForces.hauteurVoile
+    self.internalForcesULS= wallInternalForces
 
+  def setSLSInternalForcesEnvelope(self,wallInternalForces):
+    '''Assigns the serviceability limit state infernal forces envelope for the stem.'''
+    if(hasattr(self,'hauteurVoile')):
+      if(self.hauteurVoile!=wallInternalForces.hauteurVoile):
+        lmsg.warning('stem height (' + str(self.hauteurVoile) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.hauteurVoile)+ ' m') 
+    else:
+      self.hauteurVoile= wallInternalForces.hauteurVoile
+    self.internalForcesSLS= wallInternalForces
+    
   def writeDef(self,pth,outputFile):
     '''Write wall definition in LaTeX format.'''
     pathFiguraEPS= pth+self.name+".eps"
     pathFiguraPDF= pth+self.name+".pdf"
-    self.internalForces.writeGraphic(pathFiguraEPS)
+    self.internalForcesULS.writeGraphic(pathFiguraEPS)
     os.system("convert "+pathFiguraEPS+" "+pathFiguraPDF)
     outputFile.write("\\begin{table}\n")
     outputFile.write("\\begin{center}\n")
@@ -274,28 +282,31 @@ class RetainingWall(object):
 
     #Coupe 1. Béton armé. Encastrement.
     C1= self.getSection1()
-    VdEncastrement= self.internalForces.VdEncastrement(self.hEncastrement)
-    MdEncastrement= self.internalForces.MdEncastrement()
+    VdEncastrement= self.internalForcesULS.VdEncastrement(self.hEncastrement)
+    MdEncastrement= self.internalForcesULS.MdEncastrement(self.hSemelle)
     outputFile.write("\\textbf{Armature 1 (armature extérieure en attente) :} \\\\\n")
     NdEncastrement= 0.0 #we neglect axial force
     C1.writeResultFlexion(outputFile,NdEncastrement, MdEncastrement,VdEncastrement)
+    C1.writeResultStress(outputFile,self.internalForcesSLS.MdEncastrement(self.hSemelle))
 
     #Coupe 2. Béton armé. Voile
-    yCoupe2= self.internalForces.getYVoile(self.getBasicAnchorageLength(1))
+    yCoupe2= self.internalForcesULS.getYVoile(self.getBasicAnchorageLength(1))
     C2= self.getSection2(yCoupe2)
     Nd2= 0.0 #we neglect axial force
-    Vd2= self.internalForces.Vd(yCoupe2)
-    Md2= self.internalForces.Md(yCoupe2)
+    Vd2= self.internalForcesULS.Vd(yCoupe2)
+    Md2= self.internalForcesULS.Md(yCoupe2)
     outputFile.write("\\textbf{Armature 2 (armature extériéure voile):}\\\\\n")
     C2.writeResultFlexion(outputFile,Nd2,Md2,Vd2)
+    C2.writeResultStress(outputFile,self.internalForcesSLS.Md(yCoupe2))
 
     #Coupe 3. Béton armé. Semelle
     C3= self.getSection3()
     Nd3= 0.0 #we neglect axial force
-    Vd3= self.internalForces.VdSemelle
-    Md3= self.internalForces.MdSemelle
+    Vd3= self.internalForcesULS.VdSemelle
+    Md3= self.internalForcesULS.MdSemelle
     outputFile.write("\\textbf{Armature 3 (armature supérieure semelle):}\\\\\n")
     C3.writeResultFlexion(outputFile,Nd3,Md3,Vd3)
+    C3.writeResultStress(outputFile,self.internalForcesSLS.MdSemelle)
 
     C4= self.getSection4()
     C5= C4
@@ -363,7 +374,7 @@ class RetainingWall(object):
 
     defStrings= {}
     defStrings[1]= self.getSection1().tensionRebars.getDefStrings()
-    yCoupe2= self.internalForces.getYVoile(self.getBasicAnchorageLength(1))
+    yCoupe2= self.internalForcesULS.getYVoile(self.getBasicAnchorageLength(1))
     defStrings[2]= self.getSection2(yCoupe2).tensionRebars.getDefStrings()
     defStrings[3]= self.getSection3().tensionRebars.getDefStrings()
     defStrings[4]= self.getSection4().tensionRebars.getDefStrings()
