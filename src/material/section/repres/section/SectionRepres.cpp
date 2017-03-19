@@ -93,15 +93,15 @@ void XC::SectionRepres::setGeomNamed(const std::string &nmbGeom)
       gmSecc= tmp;
     else
      std::cerr << "(SectionRepres::setGeom;" 
-                    << " no se encontró la geometría de nombre: '"
-                    << nmbGeom << "'.\n";
+                    << " section geometry: '"
+                    << nmbGeom << "' not found.\n";
   }
 
-//! @brief Asigna la geometría a la sección.
+//! @brief Sets section geometry.
 void XC::SectionRepres::setGeom(const GeomSection *g)
   { gmSecc= g; }
 
-//! @brief Returns a pointer to the la geometría de la sección.
+//! @brief Returns a pointer to section geometry.
 const XC::GeomSection *XC::SectionRepres::getGeom(void) const
   { return gmSecc; }
 

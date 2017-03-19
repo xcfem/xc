@@ -57,36 +57,36 @@ size_t XC::SetEstruct::NumNodos(void) const
 size_t XC::SetEstruct::NumElementos(void) const
   { return GetNumCapasElementos()*GetNumFilasElementos()*GetNumColsElementos(); }
 
-//! @brief Returns true if the único índice que varía es el I.
+//! @brief Returns true if only the I index varies.
 bool XC::SetEstruct::EsFilaI(void) const
   {
     if((GetNumFilasNodos()>1) || (GetNumColsNodos()>1)) return false;
     return true;
   }
 
-//! @brief Returns true if the único índice que varía es el J.
+//! @brief Returns true if only the J index varies.
 bool XC::SetEstruct::EsFilaJ(void) const
   {
     if((GetNumCapasNodos()>1) || (GetNumColsNodos()>1)) return false;
     return true;
   }
 
-//! @brief Returns true if the único índice que varía es el K.
+//! @brief Returns true if only the K index varies.
 bool XC::SetEstruct::EsFilaK(void) const
   {
     if((GetNumCapasNodos()>1) || (GetNumFilasNodos()>1)) return false;
     return true;
   }
 
-//! @brief Returns true iflos indices que varían son los J y K.
+//! @brief Returns true if only J and K indices varies.
 bool XC::SetEstruct::EsCapaICte(void) const
   { return (GetNumCapasNodos()==1); }
 
-//! @brief Returns true iflos indices que varían son los I y K.
+//! @brief Returns true if only J and K indices varies.
 bool XC::SetEstruct::EsCapaJCte(void) const
   { return (GetNumFilasNodos()==1); }
 
-//! @brief Returns true iflos indices que varían son los I y J.
+//! @brief Returns true if only I and J indices varies.
 bool XC::SetEstruct::EsCapaKCte(void) const
   { return (GetNumColsNodos()==1); }
 

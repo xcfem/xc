@@ -49,8 +49,8 @@ class Constraint;
 
 class LimiteElemento
   {
-    Element *ptr_elemento; //!< Puntero al elemento.
-    int indice; //!< Índice del borde, arista o cara del elemento.
+    Element *ptr_elemento; //!< Pointer to element.
+    int indice; //!< Edge of face index.
   };
 
 //!  @ingroup Set
@@ -206,7 +206,7 @@ class SetMeshComp: public SetBase
     ~SetMeshComp(void);
   };
 
-//!  @brief Asigna índices a los objetos de la lista para poder emplearlos en VTK.
+//!  @brief Set indices to the object to allow its use in VTK.
 template <class L>
 void XC::SetMeshComp::numera_lista(L &l)
   {

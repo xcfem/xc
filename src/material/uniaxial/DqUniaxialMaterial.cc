@@ -136,14 +136,14 @@ XC::DqUniaxialMaterial &XC::DqUniaxialMaterial::operator=(const DqUniaxialMateri
 XC::DqUniaxialMaterial::~DqUniaxialMaterial(void)
   { clearAll(); }
 
-//! @brief Vacía la lista de pointers.
+//! @brief Clears the container.
 void XC::DqUniaxialMaterial::clear(void)
   {
     libera();
     lst_ptr::clear();
   }
 
-//! @brief Vacía la lista de pointers y elimina las propiedades que pudiera tener el objeto.
+//! @brief Clears the container and deletes the properties of the object.
 void XC::DqUniaxialMaterial::clearAll(void)
   {
     clear();

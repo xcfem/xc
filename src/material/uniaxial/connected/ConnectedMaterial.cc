@@ -86,7 +86,7 @@ XC::ConnectedMaterial &XC::ConnectedMaterial::operator=(const ConnectedMaterial 
   }
 
 
-//! @brief Envía sus miembros through the channel being passed as parameter.
+//! @brief Send its members through the channel being passed as parameter.
 int XC::ConnectedMaterial::sendData(CommParameters &cp)
   {
     int res= UniaxialMaterial::sendData(cp);
@@ -96,7 +96,7 @@ int XC::ConnectedMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe sus miembros through the channel being passed as parameter.
+//! @brief Receives its members through the channel being passed as parameter.
 int XC::ConnectedMaterial::recvData(const CommParameters &cp)
   {
     int res= UniaxialMaterial::recvData(cp);

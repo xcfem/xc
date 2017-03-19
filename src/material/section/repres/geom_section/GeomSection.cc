@@ -56,8 +56,8 @@
 XC::GeomSection::GeomSection(MaterialLoader *ml)
   : SeccionInerte(),material_loader(ml), regiones(ml), capas_armado(this,ml), tag_sis_ref(0),tag_spot(0) {}
 
-//! @brief Returns a geometría que sólo contiene las regiones
-//! definidas en ésta.
+//! @brief Returns a geometry that contains only the regions
+//! defined in this object.
 XC::GeomSection XC::GeomSection::getGMRegiones(void) const
   {
     GeomSection retval(material_loader);
@@ -65,8 +65,8 @@ XC::GeomSection XC::GeomSection::getGMRegiones(void) const
     return retval;
   }
 
-//! @brief Returns a geometría que sólo contiene las capas de
-//! armado definidas en ésta.
+//! @brief Returns a geometry that contains only the regions
+//! defined in this object.
 XC::GeomSection XC::GeomSection::getGMCapasArmado(void) const
   {
     GeomSection retval(material_loader);

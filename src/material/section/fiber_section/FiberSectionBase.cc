@@ -510,12 +510,12 @@ const XC::Matrix &XC::FiberSectionBase::getSectionTangent(void) const
 const XC::Vector &XC::FiberSectionBase::getStressResultant(void) const
   { return kr.Resultante(); }
 
-//! @brief Returns the componente de la resultante de tensiones en la sección de índice i.
+//! @brief Returns i-th component of the stress resultant.
 double XC::FiberSectionBase::getStressResultant(const int &i) const
   { return SeccionBarraPrismatica::getStressResultant(i); }
 
 
-//! @brief Consuma el estado de la sección.
+//! @brief Commits state.
 int XC::FiberSectionBase::commitState(void)
   {
     int err= fibras.commitState();
@@ -523,7 +523,7 @@ int XC::FiberSectionBase::commitState(void)
     return err;
   }
 
-//! @brief Returns the estado de la sección al último consumado
+//! @brief Returns to the last commited state.
 int XC::FiberSectionBase::revertToLastCommit(void)
   {
     // Last committed section deformations

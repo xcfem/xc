@@ -87,7 +87,7 @@ int XC::Block::getVtkCellType(void) const
 int XC::Block::getMEDCellType(void) const
   { return MED_HEXA8; }
 
-//! @brief Comprueba que los números de divisiones de las líneas son compatibles.
+//! @brief Check that number of divisions of the lines are compatible.
 bool XC::Block::checkNDivs(void) const
   {
     return (sups[0].checkNDivs() && sups[1].checkNDivs() && sups[2].checkNDivs() && sups[3].checkNDivs() && sups[4].checkNDivs() && sups[5].checkNDivs());
@@ -113,7 +113,7 @@ const XC::Block::BodyFace *XC::Block::GetFace(const size_t &i) const
 XC::Block::BodyFace *XC::Block::GetFace(const size_t &i)
   { return &sups[i-1]; }
 
-//! @brief Return the arista del sólido cuyo índice being passed as parameter.
+//! @brief Return the i-th edge of the solid.
 const XC::CmbEdge::Lado *XC::Block::GetArista(const size_t &i) const
   {
     const CmbEdge::Lado *retval(nullptr);
@@ -194,10 +194,9 @@ void XC::Block::actualiza_topologia(void)
 //! as follows:
 //! - If the surface is the first one that defines the solid,
 //! then that one is the base.
-//! - Si ya hay alguna surface definida entonces buscamos el índice
-//!  en la base de la línea común de esta última con la being passed as
-//!  parameter. Si tal línea existe, dicho índice es el que corresponde
-//!  a la surface en el sólido.
+//! - If one or more of the faces are already defined, we search for the index
+//!  on the base of the line in common with it.
+//! If this line exists, that index corresponds to the surface in the solid.
 size_t XC::Block::indice(Face *s) const
   {
     size_t retval= 0;
@@ -223,7 +222,7 @@ void XC::Block::coloca(const size_t &i,Face *s)
     if( (i>0) && (i<5)) //Es un lateral
       {
         const Face *base= sups[0].Surface();
-        primero= s->BordeComun(*base); //Indice de la línea común de s con la base.
+        primero= s->BordeComun(*base); //Index of the line in common with the base.
         const Edge *linea= base->GetLado(i)->Borde();
         sentido= base->SentidoBorde(linea,*s);
       }
@@ -239,7 +238,7 @@ void XC::Block::coloca(const size_t &i,Face *s)
           std::cerr << "Error: Block; antes de introducir la cara 5 hay que introducir la 1 o la 2 o la 3 o la 4." << std::endl;
         else
           {
-            primero= cara->BordeComun(*s); //Indice de la línea común de s con la cara.
+            primero= cara->BordeComun(*s); //Index of the line in common of s with the face.
             if(primero) //Tienen lado común.
               {
                 const Edge *linea= cara->GetLado(primero)->Borde();
@@ -275,11 +274,11 @@ void XC::Block::inserta(const size_t &i)
 		<< " not found." << std::endl;
   }
 
-//! @brief Crea e inserta las caras partir de los índices being passed
+//! @brief Creates and inserts the faces from the indices being passed
 //! as parameter.
 void XC::Block::add_caras(const std::vector<size_t> &indices_caras)
   {
-    const size_t nc= indices_caras.size(); //No. de índices leídos.
+    const size_t nc= indices_caras.size(); //Number of indices.
     for(size_t i= 0;i<nc;i++)
       inserta(indices_caras[i]);
   }
@@ -298,26 +297,26 @@ void XC::Block::crea_nodos_caras(void)
 //! @brief Returns (ndivI+1)*(ndivJ+1)*(ndivK+1) positions for the nodes.
 //!
 //! La "tritriz" de puntos devuelta esta organizada de la siguiente manera.
-//! - El punto de índices (0,1,1) (capa,fila,col) correspond with vertex  1.
-//! - El índice de capa avanza desde 0 para la cara 1 hasta ncapas para la cara 6.
-//! - El índice de fila avanza desde 1 para la cara 5 hasta nfilas para la cara 3.
-//! - El índice de columna avanza desde 1 para la cara 2 hasta ncol para la cara 4.
+//! - The point (0,1,1) (capa,fila,col) correspond with vertex  1.
+//! - The layer index goes from 0 for face 1 1 to ncapas for face 6.
+//! - The row index goes from 1 for face 5 to nfilas for face 3.
+//! - The column index goes from 1 for face 2 to ncol for face 4.
 //!
 //! En consecuencia:
-//! - La arista 1 tiene indices (0,j=1..nfil,1) 
-//! - La arista 2 tiene indices (0,nfil,k=1..ncol) 
-//! - La arista 3 tiene indices (0,j=1..nfil,ncol)
-//! - La arista 4 tiene indices (0,1,k=1..ncol)
+//! - The edge 1 has indices (0,j=1..nfil,1) 
+//! - The edge 2 has indices (0,nfil,k=1..ncol) 
+//! - The edge 3 has indices (0,j=1..nfil,ncol)
+//! - The edge 4 has indices (0,1,k=1..ncol)
 
-//! - La arista 5 tiene indices (i=0..ncapas,1,1) 
-//! - La arista 6 tiene indices (i=0..ncapas,nfil,1) 
-//! - La arista 7 tiene indices (i=0..ncapas,nfil,ncol) 
-//! - La arista 8 tiene indices (i=0..ncapas,1,ncol) 
+//! - The edge 5 has indices (i=0..ncapas,1,1) 
+//! - The edge 6 has indices (i=0..ncapas,nfil,1) 
+//! - The edge 7 has indices (i=0..ncapas,nfil,ncol) 
+//! - The edge 8 has indices (i=0..ncapas,1,ncol) 
 
-//! - La arista 9 tiene indices (ncapas,j=1..nfil,1) 
-//! - La arista 10 tiene indices (ncapas,nfil,k=1..ncol) 
-//! - La arista 11 tiene indices (ncapas,j=1..nfil,ncol) 
-//! - La arista 12 tiene indices (ncapas,1,k=1..ncol) 
+//! - The edge 9 has indices (ncapas,j=1..nfil,1) 
+//! - The edge 10 has indices (ncapas,nfil,k=1..ncol) 
+//! - The edge 11 has indices (ncapas,j=1..nfil,ncol) 
+//! - The edge 12 has indices (ncapas,1,k=1..ncol) 
 TritrizPos3d XC::Block::get_posiciones(void) const
   {
     const size_t ndiv_12= NDivI();

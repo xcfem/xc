@@ -130,7 +130,7 @@ void XC::Set::clearAll(void)
     uniform_grids.clearAll();
   }
 
-//! @brief Asigna índices a los objetos of the set (nodos,elementos,puntos...) poder emplearlos en VTK.
+//! @brief Set indices for the set objects (nodos,elementos,puntos...) to its use in VTK.
 void XC::Set::numera(void)
   {
     SetMeshComp::numera();
@@ -190,7 +190,7 @@ void XC::Set::crea_copia(const std::string &nombre,const Vector3d &v= Vector3d()
         nuevo_set->puntos.push_back(nuevo_punto);
         nombres_nuevos_puntos[nombre_viejo]= nombre_nuevo;
       }
-    //Copiamos las líneas.
+    //Copy lines.
     std::map<std::string,std::string> nombres_nuevos_lineas;
     for(lst_ptr_lineas::iterator i= lineas.begin();i!=lineas.end();i++)
       {

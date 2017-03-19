@@ -177,7 +177,7 @@ XC::UniaxialMaterial *XC::DrainMaterial::getCopy(void) const
   { return new DrainMaterial(*this); }
 
 
-//! @brief Envía sus miembros through the channel being passed as parameter.
+//! @brief Send its members through the channel being passed as parameter.
 int XC::DrainMaterial::sendData(CommParameters &cp)
   {
     int res= UniaxialMaterial::sendData(cp);
@@ -189,7 +189,7 @@ int XC::DrainMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe sus miembros through the channel being passed as parameter.
+//! @brief Receives its members through the channel being passed as parameter.
 int XC::DrainMaterial::recvData(const CommParameters &cp)
   {
     int res= UniaxialMaterial::recvData(cp);

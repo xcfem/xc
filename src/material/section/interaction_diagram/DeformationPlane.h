@@ -59,7 +59,7 @@ class DeformationPlane: public Plano3d, public MovableObject
     int recvData(const CommParameters &);
     friend class SectionForceDeformation;
     friend class DqFibras;
-    friend class FiberSectionBase; //Borrar esta línea.
+    friend class FiberSectionBase; //Erase this line.
     const Vector &getDeformation(void) const;
   public:
     DeformationPlane( const Pos3d &p1,const Pos3d &p2, const Pos3d &p3);

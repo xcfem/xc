@@ -202,7 +202,7 @@ size_t XC::DqPtrsElem::getNumDeadElements(void) const
     return retval;
   }
 
-//!  @brief Asigna índices a los objetos de la lista para poder emplearlos en VTK.
+//!  @brief Set indices to the objects to allow its use in VTK.
 void XC::DqPtrsElem::numera(void)
   {
     size_t idx= 0;

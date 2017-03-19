@@ -114,7 +114,7 @@ Pos3d XC::CalcPivotes::calcPositionPivotC(void) const
     const Pos3d B= calcPositionPivotB();
     const Recta3d s(D,B);
     GeomObj::list_Pos3d lp= s.Interseccion(1,agot_pivotes.getDefAgotPivoteC());
-    assert(lp.size()>0); //La lista no puede estar vacía.
+    assert(lp.size()>0); //List must not be empty.
     const Pos3d retval= *lp.begin();
     return retval;
   }

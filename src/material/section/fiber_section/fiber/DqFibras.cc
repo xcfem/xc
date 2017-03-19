@@ -1026,7 +1026,7 @@ double XC::DqFibras::getStrainMed(void) const
     return retval;
   }
 
-//! @brief Returns the deformation plane ajustado por mínimos cuadrados.
+//! @brief Returns the deformation plane (least squares adjustment).
 XC::DeformationPlane XC::DqFibras::getDeformationPlane(void) const
   {
     GeomObj::list_Pos3d puntos;
@@ -1050,7 +1050,7 @@ const XC::Vector &XC::DqFibras::getDeformation(void) const
     return pDef.getDeformation();
   }
 
-//! @brief Returns the tensión mínima.
+//! @brief Returns the minimal stress.
 double XC::DqFibras::getStressMin(void) const
   {
     double retval= 0.0;
@@ -1065,7 +1065,7 @@ double XC::DqFibras::getStressMin(void) const
     return retval;
   }
 
-//! @brief Returns the tensión mínima.
+//! @brief Returns the minimal stress.
 double XC::DqFibras::getStressMax(void) const
   {
     double retval= 0.0;
@@ -1399,22 +1399,20 @@ void XC::DqFibras::calcRecubrimientos(const GeomSection &g) const
 void XC::DqFibras::calcSeparaciones(void) const
   { seps= getPosiciones().GetSeparaciones(); }
 
-//! @brief Returns the valor del recubrimiento de la fibra cuyo índice
-//! is being passed as parameter.
+//! @brief Returns the value of concrete cover for the i-th fiber.
 const double &XC::DqFibras::getRecubrimientoFibra(const size_t &i) const
   {
     if(recubs.size()!=size())
-      std::cerr << "DqFibras::getRecubrimientoFibra; no se han calculado los recubrimientos."
+      std::cerr << "DqFibras::getRecubrimientoFibra; cover not computed."
                 << std::endl;
     return recubs[i];
   }
 
-//! @brief Returns the valor de la separación recubrimiento de la fibra cuyo índice
-//! is being passed as parameter.
+//! @brief Returns the spacing of the i-th fiber.
 const double &XC::DqFibras::getSeparacionFibra(const size_t &i) const
   {
     if(seps.size()!=size())
-      std::cerr << "DqFibras::getSeparacionFibra; no se han calculado las separaciones."
+      std::cerr << "DqFibras::getSeparacionFibra; spacing not computed."
                 << std::endl;
     return seps[i];
   }
@@ -2128,8 +2126,8 @@ XC::Response *XC::DqFibras::setResponse(const std::vector<std::string> &argv, In
 //     return retval;
 //   }
 
-// //! Returns the indice de la fibra que presenta el valor mínimo
-// //! en el fiber set de la propiedad being passed as parameter.
+// //! Returns the index of the fiber that presents the minimal value
+// //! of the property which name is being passed as parameter.
 // size_t XC::DqFibras::IMinProp(const std::string &nmb_prop) const
 //   {
 //     size_t retval= 0;

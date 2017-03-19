@@ -60,37 +60,41 @@ void XC::MapPuntos::UpdateSets(Pnt *nuevo_punto) const
       }
   }
 
-//! @brief Returns the vector definido por los puntos cuyos índices being passed as parameters.
+//! @brief Returns the vector defined by the points which indices are being passed as parameters.
 Vector3d XC::MapPuntos::getVector(const Indice &i,const Indice &j) const
   {
     Vector3d retval;
     const Pnt *pA= busca(i);
     const Pnt *pB= busca(j);
     if(!pA)
-      std::cerr << "MapPuntos::getVector; no se encontró el punto: " << i << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__ << "; point: " << i
+		<< " not found." << std::endl;
     else if(!pB)
-      std::cerr << "MapPuntos::getVector; no se encontró el punto: " << j << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__ << "; point: " << j 
+		<< " not found." << std::endl;
     else
       retval= Vector3d(pA->GetPos(),pB->GetPos());
     return retval;
   }
 
-//! @brief Return the recta que pasa por los puntos cuyos índices being passed as parameters.
+//! @brief Return the line defined by the points which indices are being passed as parameters.
 Recta3d XC::MapPuntos::getRecta(const Indice &i,const Indice &j) const
   {
     Recta3d retval;
     const Pnt *pA= busca(i);
     const Pnt *pB= busca(j);
     if(!pA)
-      std::cerr << "MapPuntos::getRecta; no se encontró el punto: " << i << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__ << "; point: " << i
+		<< " not found." << std::endl;
     else if(!pB)
-      std::cerr << "MapPuntos::getRecta; no se encontró el punto: " << j << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__ << "; point: " << j 
+		<< " not found." << std::endl;
     else
       retval= Recta3d(pA->GetPos(),pB->GetPos());
     return retval;
   }
 
-//! @brief Returns the plano que pasa por los puntos cuyos índices being passed as parameters.
+//! @brief Returns the plane defined by the points which indices are being passed as parameters.
 Plano3d XC::MapPuntos::getPlano(const Indice &i,const Indice &j,const Indice &k) const
   {
     Plano3d retval;
@@ -98,11 +102,14 @@ Plano3d XC::MapPuntos::getPlano(const Indice &i,const Indice &j,const Indice &k)
     const Pnt *pB= busca(j);
     const Pnt *pC= busca(k);
     if(!pA)
-      std::cerr << "MapPuntos::getRecta; no se encontró el punto: " << i << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__ << "; point: " << i
+		<< " not found." << std::endl;
     else if(!pB)
-      std::cerr << "MapPuntos::getRecta; no se encontró el punto: " << j << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__ << "; point: " << j 
+		<< " not found." << std::endl;
     else if(!pC)
-      std::cerr << "MapPuntos::getRecta; no se encontró el punto: " << k << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__ << "; point: " << k 
+		<< " not found." << std::endl;
     else
       retval= Plano3d(pA->GetPos(),pB->GetPos(),pC->GetPos());
     return retval;
@@ -131,13 +138,13 @@ XC::Pnt *XC::MapPuntos::Nuevo(void)
   }
 
 
-//! @brief Creates a nuevo punto en la posición being passed as parameter.
+//! @brief Creates a new point at the position being passed as parameter.
 XC::Pnt *XC::MapPuntos::Nuevo(const Pos3d &pos)
   {
     Pnt *retval= busca(getTag());
     if(retval)
-      std::cerr << "MapPuntos::Nuevo; el punto de índice: " 
-                << getTag() << " ya existe, no se hacen cambios." << std::endl;
+      std::cerr << "MapPuntos::Nuevo; point with tag: " 
+                << getTag() << " already exists, doing nothing." << std::endl;
     else //El punto es nuevo.
       {
         retval= Crea();
@@ -206,7 +213,8 @@ void XC::MapPuntos::Copia(const std::vector<Indice> &indices)
         if(original)
           Copia(original);
         else
-	  std::cerr << "MapPuntos::CopiaPuntos; no se encontró el punto de índice: " << *i << ".\n";
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; point: " << *i << " not found.\n";
       }
   }
 
@@ -219,7 +227,8 @@ void XC::MapPuntos::Transforma(const TrfGeom &trf,const std::vector<Indice> &ind
         if(p)
           p->Transforma(trf);
         else
-	  std::cerr << "MapPuntos::TransformaPuntos; no se encontró el punto de índice: " << *i << ".\n";
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; point: " << *i << " not found.\n";
       }
   }
 

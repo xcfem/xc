@@ -51,7 +51,7 @@ double XC::ParamAgotTN::fc_pC(void) const
       return 1.0+eps_c_pC;
   }
 
-//Factor de cumplimiento mínimo.
+//! @brief Minimal factor de cumplimiento.
 double XC::ParamAgotTN::fc_min(void) const
   { return std::min(fabs(fc_tracc()),std::min(fabs(fc_comp()),fabs(fc_pC()))); }
 

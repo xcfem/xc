@@ -255,7 +255,7 @@ const Triedro3d *XC::ClosedTriangleMesh::BuscaPtrTriedro(const Pos3d &p) const
                   }
               }
           }
-//     if(!retval) //Si sigue sin encontrarlo buscamos un punto en la misma línea.
+//     if(!retval) //Not found yet, we search for a point in the same line.
 //       {
 //         const GEOM_FT denom= 100.0; //Abs(p.VectorPos())/100;
 //         const Pos3d perturb= Pos3d(p.x()/denom,p.y()/denom,p.z()/denom); // + Vector3d(tol/1e2,tol/1e2,tol/1e2);

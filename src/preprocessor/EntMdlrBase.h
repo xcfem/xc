@@ -51,6 +51,7 @@ class EntMdlrBase: public EntConNmb, public MovableObject
 
     const Preprocessor *get_preprocessor(void) const;
     Preprocessor *get_preprocessor(void);
+    bool check_preprocessor(void) const;
     int sendIdsEtiquetas(const int &,const int &, CommParameters &);
     int recvIdsEtiquetas(const int &,const int &, const CommParameters &);
     int sendData(CommParameters &);

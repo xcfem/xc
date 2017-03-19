@@ -111,7 +111,7 @@ const T *MapEnt<T>::getNearest(const Pos3d &p) const
     return retval;
   }
 
-//!  @brief Asigna índices a los objetos de la lista para poder emplearlos en VTK.
+//!  @brief Set indices to the objects to allow its use in VTK.
 template <class T>
 void MapEnt<T>::numera(void)
   {

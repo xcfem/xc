@@ -91,7 +91,7 @@ const XC::Constraint *XC::DqPtrsConstraint::buscaConstrainto(const int &tag) con
     return retval;
   }
 
-//!  @brief Asigna índices a los objetos de la lista para poder emplearlos en VTK.
+//!  @brief Set indices to the objects to allow its use in VTK. 
 void XC::DqPtrsConstraint::numera(void)
   {
     size_t idx= 0;

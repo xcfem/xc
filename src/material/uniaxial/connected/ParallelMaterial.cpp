@@ -164,7 +164,7 @@ int XC::ParallelMaterial::revertToStart(void)
 XC::UniaxialMaterial * XC::ParallelMaterial::getCopy(void) const
   { return new ParallelMaterial(*this); }
 
-//! @brief Envía sus miembros through the channel being passed as parameter.
+//! @brief Send its members through the channel being passed as parameter.
 int XC::ParallelMaterial::sendData(CommParameters &cp)
   {
     int res= ConnectedMaterial::sendData(cp);
@@ -172,7 +172,7 @@ int XC::ParallelMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe sus miembros through the channel being passed as parameter.
+//! @brief Receives its members through the channel being passed as parameter.
 int XC::ParallelMaterial::recvData(const CommParameters &cp)
   {
     int res= ConnectedMaterial::recvData(cp);

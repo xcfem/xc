@@ -176,8 +176,8 @@ int XC::PressureMultiYieldBase::sendData(CommParameters &cp)
   {
     int res= NDMaterial::sendData(cp);
     res+= cp.sendInts(matN,e2p,activeSurfaceNum,committedActiveSurf,getDbTagData(),CommMetaData(1));
-    //theSurfaces; // XXX no se envía (reservamos la posición 2).
-    //committedSurfaces;  // XXX no se envía (reservamos la posición 3).
+    //theSurfaces; // XXX not send (reservamos la posición 2).
+    //committedSurfaces;  // XXX not send (reservamos la posición 3).
     res+= cp.sendMovable(currentStress,getDbTagData(),CommMetaData(4));
     res+= cp.sendMovable(trialStress,getDbTagData(),CommMetaData(5));
     res+= cp.sendMovable(currentStrain,getDbTagData(),CommMetaData(6));
@@ -190,8 +190,8 @@ int XC::PressureMultiYieldBase::recvData(const CommParameters &cp)
   {
     int res= NDMaterial::recvData(cp);
     res+= cp.receiveInts(matN,e2p,activeSurfaceNum,committedActiveSurf,getDbTagData(),CommMetaData(1));
-    //theSurfaces; // XXX no se envía (reservamos la posición 2).
-    //committedSurfaces;  // XXX no se envía (reservamos la posición 3).
+    //theSurfaces; // XXX not received (reservamos la posición 2).
+    //committedSurfaces;  // XXX not received (reservamos la posición 3).
     res+= cp.receiveMovable(currentStress,getDbTagData(),CommMetaData(4));
     res+= cp.receiveMovable(trialStress,getDbTagData(),CommMetaData(5));
     res+= cp.receiveMovable(currentStrain,getDbTagData(),CommMetaData(6));

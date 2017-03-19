@@ -40,8 +40,8 @@ class Element;
 
 //!  @ingroup Set
 //! 
-//!  @brief structured set, es decir que puede devolver
-//!  a pointer a un nodo o a un elemento a partir de sus índices i,j y k.
+//!  @brief structured set, i. e. a set that can return 
+//!  a pointer a to a node or an element from its indices i,j and k.
 class SetEstruct: public SetBase
   {
   protected:

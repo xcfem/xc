@@ -52,7 +52,7 @@ XC::Eje::~Eje(void)
     if(P2()) P2()->borra_linea(this);
   }
 
-//! @brief Actualiza la topología.
+//! @brief Updates topology.
 void XC::Eje::actualiza_topologia(void)
   {
     if(P1()) P1()->inserta_linea(this);

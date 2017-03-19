@@ -168,15 +168,15 @@ const XC::Matrix &XC::GenericSection1d::getInitialFlexibility(void) const
     return ks;
   }
 
-//! @brief Returns the índice del estado consumado.
+//! @brief Returns the index of the commited state.
 int XC::GenericSection1d::commitState(void)
   { return theModel->commitState(); }
 
-//! @brief Returns the estado de la sección al último consumado.
+//! @brief Returns to the last commited state.
 int XC::GenericSection1d::revertToLastCommit ()
   { return theModel->revertToLastCommit(); }
 
-//! @brief Returns the estado de la sección al inicial.
+//! @brief Returns to the initial state.
 int XC::GenericSection1d::revertToStart ()
   { return theModel->revertToStart(); }
 
