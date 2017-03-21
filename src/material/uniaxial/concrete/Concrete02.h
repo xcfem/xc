@@ -122,7 +122,8 @@ inline std::ostream &operator<<(std::ostream &os,const Conc02HistoryVars &hv)
 
 //! @ingroup MatUnx
 //
-//! @brief Modelización 1D del hormigón con módulo de daño.
+//! @brief Uniaxial model for concrete with tensile strength and tension softenint.
+//! Reference: Mohd Hisham Mohd Yassin, "Nonlinear Analysis of Prestressed Concrete Structures under Monotonic and Cycling Loads", PhD dissertation, University of California, Berkeley, 1994. 
 class Concrete02: public RawConcrete
   {
   private:

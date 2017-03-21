@@ -432,17 +432,21 @@ XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0,const Pos2d &o
     return retval;
   }
 
-//! @brief Returns the moment of inertia respecto al eje que pasa por O con dirección la de e.
+//! @brief Returns the moment of inertia of the homogenized section
+//! with respect to the axis parallel to vector e through the point O.
+//! @param E0: reference elastic modulus.
+//! @param O: point for axis definition.
+//! @param v: vector for axis definition.
 double XC::DqFibras::getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const
   {
     const Matrix Io(getIHomogenizedSection(E0,O));
     return dot(e,Io*e)/e.Norm2();
   }
 
-//! @brief Returns the moment of inertia respecto a la recta being passed
+//! @brief Returns the moment of inertia with respect to the line being passed
 //! as parameter.
 double XC::DqFibras::getIHomogenizedSection(const double &E0,const Recta2d &r) const
-  { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir()));  }
+  { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir())); }
 
 //! @brief Returns the static moment of the cell areas that rely
 //! above yf (y_fibra-yf > 0) with respect to the axis parallel to z
@@ -628,7 +632,7 @@ double XC::DqFibras::getTh1(const double &y0,const double &z0) const
     return th1;
   }
 
-//! @brief Returns the dirección del eje del moment of inertia principal mayor.
+//! @brief Returns the direction of the major axis.
 XC::Vector XC::DqFibras::getEje1(const double &y0,const double &z0) const
   {
     Vector retval(2);
@@ -638,7 +642,7 @@ XC::Vector XC::DqFibras::getEje1(const double &y0,const double &z0) const
     return retval;
   }
 
-//! @brief Returns the dirección del eje del moment of inertia principal menor.
+//! @brief Returns the direction of the minor axis.
 XC::Vector XC::DqFibras::getEje2(const double &y0,const double &z0) const
   {
     Vector retval(2);
@@ -711,7 +715,7 @@ Recta2d XC::DqFibras::getFibraNeutra(void) const
     const double R= Resultante();
     const double My= getMy();
     const double Mz= getMz();
-    const Pos2d org(Mz/R,My/R);//Posición de la resultante.
+    const Pos2d org(Mz/R,My/R);//Position of the resultant.
     const Vector2d v(My,Mz); //Direction of the neutral axis.
     return Recta2d(org,v);
   }
@@ -744,8 +748,8 @@ double XC::DqFibras::ResultanteComp(void) const
     return retval;
   }
 
-//! @brief Returns the momento de la compresión ejercida por las fibras
-//! respecto al eje z.
+//! @brief Returns the moment of the compressed fibers
+//! with respect to the z axis.
 double XC::DqFibras::getMzComp(const double &y0) const
   {
     double retval= 0.0;
@@ -805,8 +809,8 @@ const XC::Vector &XC::DqFibras::baricentroDefMenores(const double &defRef) const
     return retval;
   }
 
-//! @brief Returns the momento de la compresión ejercida por las fibras
-//! respecto al eje y.
+//! @brief Returns the moment of the compressed fibers
+//! with respect to the y axis.
 double XC::DqFibras::getMyComp(const double &z0) const
   {
     double retval= 0.0;
@@ -833,8 +837,8 @@ double XC::DqFibras::ResultanteTracc(void) const
     return retval;
   }
 
-//! @brief Returns the momento de la tracción ejercida por las fibras
-//! respecto al eje z.
+//! @brief Returns the moment of the tensioned fibers
+//! with respect to the z axis.
 double XC::DqFibras::getMzTracc(const double &y0) const
   {
     double retval= 0.0;
@@ -844,8 +848,8 @@ double XC::DqFibras::getMzTracc(const double &y0) const
     return retval;
   }
 
-//! @brief Returns the momento de la tracción ejercida por las fibras
-//! respecto al eje y.
+//! @brief Returns the moment of the tensioned fibers
+//! with respect to the y axis.
 double XC::DqFibras::getMyTracc(const double &z0) const
   {
     double retval= 0.0;
@@ -941,7 +945,7 @@ size_t XC::DqFibras::nearest_fiber(const double &y,const double &z) const
     return retval;
   }
 
-// //! Returns the subfiber set de éste que cumplen la condición que se
+// //! Returns the fiber set that fulfill the condition
 // //! being passed as parameter.
 // void XC::DqFibras::Cumplen(const std::string &cond,DqFibras &retval,bool clear)
 //   {
@@ -1080,7 +1084,7 @@ double XC::DqFibras::getStressMax(void) const
     return retval;
   }
 
-//! @brief Returns the tensión media.
+//! @brief Returns the average stress.
 double XC::DqFibras::getStressMed(void) const
   {
     double retval= 0.0;
@@ -1102,7 +1106,7 @@ XC::ClaseEsfuerzo XC::DqFibras::getClaseEsfuerzo(const double &tol) const
     ClaseEsfuerzo retval= ERROR;
     const double epsMin= getStrainMin();
     const double epsMax= getStrainMax();
-    if(epsMin>0) //Tracción.
+    if(epsMin>0) //Tension.
       {
         const double r= (epsMax-epsMin)/epsMax;
         if(r<tol)
@@ -1110,7 +1114,7 @@ XC::ClaseEsfuerzo XC::DqFibras::getClaseEsfuerzo(const double &tol) const
         else
           retval= TRACCION_COMPUESTA;
       }
-    else if(epsMax>0) //Flexión.
+    else if(epsMax>0) //Bending.
       {
         const double R= Resultante()/epsMax;
         if(fabs(R)>tol)
@@ -1172,7 +1176,7 @@ std::string XC::DqFibras::getStrClaseEsfuerzo(const double &tol) const
     return retval;
   }
 
-//! @brief Returns the posición del centro de gravedad.
+//! @brief Returns the position of the centroid.
 Pos2d XC::DqFibras::getCdg(void) const
   { return Pos2d(getYCdg(),getZCdg()); }
 
@@ -1236,12 +1240,14 @@ Segmento2d XC::DqFibras::getSegmentoBrazoMecanico(void) const
     return retval;
   }
 
-//! @brief Returns the traza del plano de flexión en el plano de la sección.
+//! @brief Returns the intercept of the bending plane with
+//! the plane that contains the section.
 Recta2d XC::DqFibras::getTrazaPlanoFlexion(void) const
   { return getSegmentoBrazoMecanico().RectaSoporte(); }
 
-//! @brief Returns the traza de un plano perpendicular al de flexión
-//! que pasa por el baricentro de tracciones.
+//! @brief Returns the intercept of a plane perpendicular to the
+//! bending plane through the tensions centroid with the plane
+//! that contains the section.
 Recta2d XC::DqFibras::getTrazaPlanoTraccion(void) const
   { 
     const Recta2d trazaFlexion= getTrazaPlanoFlexion();
@@ -1255,8 +1261,9 @@ Recta2d XC::DqFibras::getTrazaPlanoTraccion(void) const
     return trazaFlexion.Perpendicular(pt);
   }
 
-//! @brief Returns the traza de un plano perpendicular al de flexión
-//! que pasa por el baricentro de compresiones.
+//! @brief Returns the intercept of a plane perpendicular to the
+//! bending plane through the compressions centroid with the plane
+//! that contains the section.
 Recta2d XC::DqFibras::getTrazaPlanoCompresion(void) const
   { 
     const Recta2d trazaFlexion= getTrazaPlanoFlexion();
@@ -1753,7 +1760,7 @@ int XC::DqFibras::setTrialSectionDeformation(FiberSection3d &Section3d,KRSeccion
     return retval;
   }
 
-//! @brief Returns the estado de la sección al del último commit.
+//! @brief Returns to the last commited state.
 int XC::DqFibras::revertToLastCommit(FiberSection3d &Section3d,KRSeccion &kr3)
   {
     int err= 0;
@@ -1765,7 +1772,7 @@ int XC::DqFibras::revertToLastCommit(FiberSection3d &Section3d,KRSeccion &kr3)
     return err;
   }
 
-//! @brief Returns the fibras a su estado inicial.
+//! @brief Returns to the initial state.
 int XC::DqFibras::revertToStart(FiberSection3d &Section3d,KRSeccion &kr3)
   {
     // revert the fibers to start
@@ -1852,11 +1859,11 @@ int XC::DqFibras::updateKRCDG(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
     krGJ.kData[9]= krGJ.kData[6];
     krGJ.kData[15]= SectionGJ.getGJ(); //(3,3)->15 //Los seis elementos restantes de krGJ.kData son nulos.
 
-    krGJ.rData[3]= SectionGJ.getGJ()*SectionGJ.getSectionDeformation()(3); //Torsión.
+    krGJ.rData[3]= SectionGJ.getGJ()*SectionGJ.getSectionDeformation()(3); //Torsion.
     return 0;
   }
 
-//! @brief Añade una fibra XXX Enhance parameter updating.
+//! @brief Adds a fiber to the container. XXX Enhance parameter updating.
 XC::Fiber *XC::DqFibras::addFiber(FiberSectionGJ &SectionGJ,Fiber &newFiber,KRSeccion &krGJ)
   {
     Fiber *retval= inserta(newFiber);
@@ -1915,11 +1922,11 @@ int XC::DqFibras::setTrialSectionDeformation(FiberSectionGJ &SectionGJ,KRSeccion
     krGJ.kData[9]= krGJ.kData[6];
     krGJ.kData[15]= SectionGJ.getGJ(); //(3,3)->15 //Los seis elementos restantes de krGJ.kData son nulos.
 
-    krGJ.rData[3]= SectionGJ.getGJ()*SectionGJ.getSectionDeformation()(3); //Torsión.
+    krGJ.rData[3]= SectionGJ.getGJ()*SectionGJ.getSectionDeformation()(3); //Torsion.
     return retval;
   }
 
-//! @brief Returns the estado de la sección al del último commit.
+//! @brief Returns to the last commited state.
 int XC::DqFibras::revertToLastCommit(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
   {
     int err= 0;
@@ -1931,7 +1938,7 @@ int XC::DqFibras::revertToLastCommit(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
     return err;
   }
 
-//! @brief Returns the fibras a su estado inicial.
+//! @brief Returns to the initial state.
 int XC::DqFibras::revertToStart(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
   {
     // revert the fibers to start

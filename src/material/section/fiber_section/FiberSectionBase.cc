@@ -122,7 +122,8 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::get_set_fibras(c
   { return sets_fibras.get_set_fibras(nmb_set); }
 
 
-// //! @brief Creates a fiber set que cumplen la condición being passed as parameter.
+// //! @brief Creates a fiber set with those that fulfill the condition
+// //! being passed as parameter.
 // XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel(const std::string &nmb_set,const std::string &cond)
 //   {
 //     set_fibras_iterator i= get_set_fibras(nmb_set);
@@ -301,7 +302,7 @@ double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(void) const
         const Semiplano2d comp= getSemiplanoCompresiones();
         if(comp.exists())
           retval= geom->getCantoMecanicoZonaTraccionada(comp);
-        else //Toda la sección esta en tracción.
+        else //Full section is in tension.
           retval= geom->getCantoMecanico(getTrazaPlanoFlexion());
       }
     return retval;
@@ -345,10 +346,10 @@ double XC::FiberSectionBase::getDistFibraNeutra(const double &y,const double &) 
     return retval;
   }
 
-//! @brief Returns the recta que limita el área eficaz de hormigón Ac,ef
-//! según el artículo 49.2.4 de la EHE-08 (área rallada figura 49.2.4b).
-//! Ver también figuras 47.5 y 47.6 del tomo II del libro "Proyecto y cálculo de estructuras
-//! de hormigón" de Calavera.
+//! @brief Returns the line that limits the concrete efficient area $A_{c,ef}$
+//! as in article 49.2.4 from EHE-08 (hatched area in figure 49.2.4b).
+//! See also figures 47.5 y 47.6 from volume II of the
+//! book: "Proyecto y cálculo de estructuras de hormigón" author: J. Calavera.
 Recta2d XC::FiberSectionBase::getRectaLimiteAcEficaz(const double &hEfMax) const
   {
     Recta2d retval;
@@ -371,10 +372,10 @@ Recta2d XC::FiberSectionBase::getRectaLimiteAcEficaz(const double &hEfMax) const
     return retval;
   }
 
-//! @brief Returns the contours that limits el área eficaz de hormigón Ac,ef
-//! según el artículo 49.2.4 de la EHE-08 (área rallada figura 49.2.4b).
-//! Ver también figuras 47.5 y 47.6 del tomo II del libro "Proyecto y cálculo de estructuras
-//! de hormigón" de Calavera.
+//! @brief Returns the contours of the concrete efficient area $A_{c,ef}$
+//! as in article 49.2.4 from EHE-08 (hatched area in figure 49.2.4b).
+//! See also figures 47.5 y 47.6 from volume II of the
+//! book: "Proyecto y cálculo de estructuras de hormigón" author: J. Calavera.
 std::list<Poligono2d> XC::FiberSectionBase::getContourAcEficazBruta(const double &hEfMax) const
   {
     std::list<Poligono2d> retval;
@@ -382,9 +383,9 @@ std::list<Poligono2d> XC::FiberSectionBase::getContourAcEficazBruta(const double
 
     const double epsMin= fibras.getStrainMin();
     const double epsMax= fibras.getStrainMax();
-    if(epsMin>0) //Toda la sección en tracción.
+    if(epsMin>0) //Full section is in tension.
       retval.push_back(contour);
-    else if(epsMax>0) //Flexión.
+    else if(epsMax>0) //Bending.
       {
         if(hEfMax>1e-6)
           {
@@ -399,7 +400,8 @@ std::list<Poligono2d> XC::FiberSectionBase::getContourAcEficazBruta(const double
               retval.push_back(contour);
           }
         else
-          std::cerr << "FiberSectionBase::getContourAcEficazBruta; la altura eficaz máxima es nula." << std::endl;
+          std::cerr << nombre_clase() << __FUNCTION__
+	            << "; maximum efficient height is zero." << std::endl;
       }
     if(retval.empty())
       {
@@ -415,7 +417,7 @@ double XC::FiberSectionBase::getAcEficazBruta(const double &hEfMax) const
     return area(tmp.begin(),tmp.end());
   }
 
-//! @brief Returns the suma de las áreas eficaces de las barras a tracción.
+//! @brief Returns the sum of the efficient areas of rebars in tension.
 double XC::FiberSectionBase::getAcEficazNeta(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
   {
     double retval= 0.0;
@@ -429,15 +431,17 @@ double XC::FiberSectionBase::getAcEficazNeta(const double &hEfMax,const std::str
             retval= armaduras.calcAcEficazFibras(contourAcEficazBruta,factor);
           }
         else
-          std::cerr << "No se encotró el fiber set: "
-                    << nmbSetArmaduras << std::endl;
+          std::cerr << nombre_clase() << __FUNCTION__
+	            << "; fiber set: "
+                    << nmbSetArmaduras << " not found." << std::endl;
       }
     else
-      std::cerr << "La sección no tiene área eficaz." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+		<< "; can't compute efficient area." << std::endl;
     return retval;
   }
 
-//! @brief Calcula las áreas eficaces a fisuración en torno a las fibras
+//! @brief Computes crack effcient areas around the fibers.
 double XC::FiberSectionBase::calcAcEficazFibras(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
   {
     double retval= 0;
@@ -451,15 +455,17 @@ double XC::FiberSectionBase::calcAcEficazFibras(const double &hEfMax,const std::
             retval= armaduras.calcAcEficazFibras(contourAcEficazBruta,factor);
           }
         else
-          std::cerr << "FiberSectionBase::calcAcEficazFibras; no se encotró el fiber set: "
-                    << nmbSetArmaduras << std::endl;
+          std::cerr << nombre_clase() << __FUNCTION__
+	            << "; fiber set: "
+                    << nmbSetArmaduras << " not found." << std::endl;
       }
     else
-      std::cerr << "FiberSectionBase::calcAcEficazFibras; la sección no tiene área eficaz." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+		<< "; can't compute efficient area." << std::endl;
     return retval;
   }
 
-//! @brief Calcula los recubrimientos de las fibras.
+//! @brief Computes concrete cover of the fibers.
 void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras) const
   {
     set_fibras_const_iterator i= sets_fibras.find(nmbSetArmaduras);
@@ -471,11 +477,12 @@ void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras
           armaduras.calcRecubrimientos(*geom);
       }
     else
-      std::cerr << "FiberSectionBase::calcRecubrimientos; no se encotró el fiber set: "
-                << nmbSetArmaduras << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+                << "; fiber set: "
+                << nmbSetArmaduras << " not found." << std::endl;
   }
 
-//! @brief Calcula las separaciones de las fibras.
+//! @brief Computes spacing of the fibers.
 void XC::FiberSectionBase::calcSeparaciones(const std::string &nmbSetArmaduras) const
   {
     set_fibras_const_iterator i= sets_fibras.find(nmbSetArmaduras);
@@ -485,8 +492,9 @@ void XC::FiberSectionBase::calcSeparaciones(const std::string &nmbSetArmaduras) 
         armaduras.calcSeparaciones();
       }
     else
-      std::cerr << "FiberSectionBase::calcSeparaciones; no se encontró el fiber set: "
-                << nmbSetArmaduras << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+                << "; fiber set: "
+                << nmbSetArmaduras << " not found." << std::endl;
   }
 
 //! @brief Returns the signed distance from the neutral axis
@@ -506,7 +514,7 @@ double XC::FiberSectionBase::get_dist_to_neutral_axis(const double &y,const doub
 const XC::Matrix &XC::FiberSectionBase::getSectionTangent(void) const
   { return kr.Stiffness(); }
 
-//! @brief Returns the resultante de las tensiones en la sección.
+//! @brief Returns the resultant of section stresses.
 const XC::Vector &XC::FiberSectionBase::getStressResultant(void) const
   { return kr.Resultante(); }
 
@@ -531,15 +539,15 @@ int XC::FiberSectionBase::revertToLastCommit(void)
     return 0;
   }
 
-//! @brief Returns the sección a su estado inicial.
+//! @brief Returns to the initial state.
 int XC::FiberSectionBase::revertToStart(void)
   {
     eCommit.Zero();
     return 0;
   }
 
-//! @brief Returns the punto que corresponde a la resultante
-//! de tensiones normales en la sección.
+//! @brief Returns the point (N,My,Mz) that corresponds to the resultant
+//! of normal stresses in the section.
 Pos3d XC::FiberSectionBase::Esf2Pos3d(void) const
   { return Pos3d(getStressResultant(XC::SECTION_RESPONSE_P),getStressResultant(XC::SECTION_RESPONSE_MY),getStressResultant(XC::SECTION_RESPONSE_MZ)); }
 
@@ -557,7 +565,8 @@ Pos3d XC::FiberSectionBase::getNMyMz(const DeformationPlane &def)
 //    | / theta
 //    +------->y
 //
-//! @brief Returns the puntos que definen el diagrama de interacción de la sección para un ángulo theta (con el eje Z) dado.
+//! @brief Returns the points that define the interaction diagram
+//! of the section for an angle $\theta$ with respect to the z axis.
 void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &diag_data,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
   {
     CalcPivotes cp(diag_data.getDefsAgotPivotes(),fibras,fsC,fsS,theta);
@@ -565,8 +574,8 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
     if(pivotes.Ok())
       {
         //Domains 1 and 2
-        Pos3d P1= pivotes.getPivoteA(); //Pivote.
-        Pos3d P2= P1+100.0*cp.GetK(); //Flexión en torno al eje Z local.
+        Pos3d P1= pivotes.getPivoteA(); //Pivot.
+        Pos3d P2= P1+100.0*cp.GetK(); //Bending arount local z axis.
         Pos3d P3;
         DeformationPlane def;
         const double inc_eps_B= diag_data.getIncEps();
@@ -616,7 +625,8 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
       }
   }
 
-//! @brief Returns the puntos que definen el diagrama de interacción en el plano definido por el ángulo being passed as parameter.
+//! @brief Returns the points that define the interaction diagram
+//! on the plane defined by the $\theta$ angle being passed as parameter.
 const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlane(const InteractionDiagramData &diag_data, const double &theta)
   {
     static NMPointCloud retval;
@@ -624,12 +634,13 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
     retval.setUmbral(diag_data.getUmbral());
     const DqFibras &fsC= sel_mat_tag(diag_data.getNmbSetHormigon(),diag_data.getTagHormigon())->second;
     if(fsC.empty())
-      std::cerr << "No se han encontrado fibras del material de tag: " << diag_data.getTagHormigon()
-                << " que corresponde al hormigón." << std::endl;
+      std::cerr << "Fibers for concrete material, identified by tag: "
+		<< diag_data.getTagHormigon()
+                << ", not found." << std::endl;
     const DqFibras &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
     if(fsS.empty())
-      std::cerr << "No se han encontrado fibras del material de tag: " << diag_data.getTagArmadura()
-                << " que corresponde al acero de armar." << std::endl;
+      std::cerr << "Fibers for steel material, identified by tag: " << diag_data.getTagArmadura()
+                << ", not found." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
         static NMyMzPointCloud tmp;
@@ -641,11 +652,11 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
         revertToStart();
       }
     else
-      std::cerr << "No se pudo obtener el diagrama de interacción." << std::endl;
+      std::cerr << "Can't compute interaction diagram." << std::endl;
     return retval;
   }
 
-//! @brief Returns the puntos que definen el diagrama de interacción de la sección.
+//! @brief Returns the points that define the interaction diagram of the section.
 const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(const InteractionDiagramData &diag_data)
   {
     static NMyMzPointCloud lista_esfuerzos;
@@ -653,12 +664,13 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
     lista_esfuerzos.setUmbral(diag_data.getUmbral());
     const DqFibras &fsC= sel_mat_tag(diag_data.getNmbSetHormigon(),diag_data.getTagHormigon())->second;
     if(fsC.empty())
-      std::cerr << "No se han encontrado fibras del material de tag: " << diag_data.getTagHormigon()
-                << " que corresponde al hormigón." << std::endl;
+      std::cerr << "Fibers for concrete material, identified by tag: "
+		<< diag_data.getTagHormigon()
+                << ", not found." << std::endl;
     const DqFibras &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
     if(fsS.empty())
-      std::cerr << "No se han encontrado fibras del material de tag: " << diag_data.getTagArmadura()
-                << " que corresponde al acero de armar." << std::endl;
+      std::cerr << "Fibers for steel material, identified by tag: " << diag_data.getTagArmadura()
+                << ", not found." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
         for(double theta= 0.0;theta<2*M_PI;theta+=diag_data.getIncTheta())
@@ -666,11 +678,11 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
         revertToStart();
       }
     else
-      std::cerr << "No se pudo obtener el diagrama de interacción." << std::endl;
+      std::cerr << "Can't compute interaction diagram." << std::endl;
     return lista_esfuerzos;
   }
 
-//! @brief Returns the diagrama de interacción.
+//! @brief Returns the interaction diagram.
 XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const InteractionDiagramData &diag_data)
   {
     const NMyMzPointCloud lp= getInteractionDiagramPoints(diag_data);
@@ -680,13 +692,14 @@ XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const Interac
         retval= InteractionDiagram(Pos3d(0,0,0),Triang3dMesh(get_convex_hull(lp)));
         const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
-	  std::cerr << "FiberSectionBase::GetInteractionDiagram; el error en el cálculo del diagrama de interacción ("
-                    << error << ") es grande." << std::endl;
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; error in computation of interaction diagram ("
+                    << error << ") seems too big." << std::endl;
       }
     return retval;
   }
 
-//! @brief Returns the diagrama de interacción.
+//! @brief Returns the interaction diagram.
 XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(const InteractionDiagramData &diag_data, const double &theta)
   {
     const NMPointCloud lp= getInteractionDiagramPointsForPlane(diag_data, theta);
@@ -696,25 +709,26 @@ XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(con
         retval= InteractionDiagram2d(get_convex_hull2d(lp));
         const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
-	  std::cerr << "FiberSectionBase::GetInteractionDiagramForPlane; el error en el cálculo del diagrama de interacción ("
-                    << error << ") es grande." << std::endl;
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; error in computation of interaction diagram ("
+                    << error << ") seems too big." << std::endl;
       }
     return retval;
   }
 
-//! @brief Returns the diagrama de interacción en el plano N-My.
+//! @brief Returns the interaction diagram on plane N-My.
 XC::InteractionDiagram2d XC::FiberSectionBase::GetNMyInteractionDiagram(const InteractionDiagramData &diag_data)
   { return GetInteractionDiagramForPlane(diag_data,M_PI/2.0); }
 
-//! @brief Returns the diagrama de interacción en el plano N-Mz.
+//! @brief Returns the interaction diagram on plane N-Mz.
 XC::InteractionDiagram2d XC::FiberSectionBase::GetNMzInteractionDiagram(const InteractionDiagramData &diag_data)
   { return GetInteractionDiagramForPlane(diag_data,0.0); }
 
-//! @brief Returns a vector orientado desde el centro de tracciones al de compresiones.
+//! @brief Returns a vector from the centroid of tensions to the centroid of compressions.
 XC::Vector XC::FiberSectionBase::getVectorBrazoMecanico(void) const
   { return fibras.getVectorBrazoMecanico(); }
 
-//! @brief Returns a vector oriented from the centroid of the tensioned area
+//! @brief Returns a vector oriented from the centroid of the area in tension
 //! to the most compressed fiber.
 XC::Vector XC::FiberSectionBase::getVectorCantoUtil(void) const
   {
@@ -761,7 +775,8 @@ Segmento2d XC::FiberSectionBase::getSegmentoCantoUtil(void) const
     return retval;
   }
 
-//! @brief Returns the traza del plano de flexión en el plano de la sección.
+//! @brief Returns the intercept of the bending plane with the
+//! plane that contains the cross section.
 Recta2d XC::FiberSectionBase::getTrazaPlanoFlexion(void) const
   {
     Recta2d retval= fibras.getTrazaPlanoFlexion();
@@ -774,27 +789,30 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoFlexion(void) const
     return retval;
   }
 
-//! @brief Returns the traza de un plano perpendicular al de flexión
-//! que pasa por el baricentro de tracciones.
+//! @brief Returns the intercept of a plane perpendicular to the bending
+//! plane through the centroid of the tensioned fibers with the
+//! plane that contains the cross section.
 Recta2d XC::FiberSectionBase::getTrazaPlanoTraccion(void) const
   {
     Recta2d retval= fibras.getTrazaPlanoTraccion();
     if(!retval.exists())
-      std::cerr << "No se encontró la traza del plano de tracción." << std::endl;
+      std::cerr << "Intercept of the tension plane not found." << std::endl;
     return retval;
   }
 
-//! @brief Returns the traza de un plano perpendicular al de flexión
-//! que pasa por el baricentro de compresiones.
+//! @brief Returns the intercept of a plane perpendicular to the bending
+//! plane through the centroid of the compressed fibers with the
+//! plane that contains the cross section.
 Recta2d XC::FiberSectionBase::getTrazaPlanoCompresion(void) const
   {
     Recta2d retval= fibras.getTrazaPlanoCompresion();
     if(!retval.exists())
-      std::cerr << "No se encontró la traza del plano de compresión." << std::endl;
+      std::cerr << "Intercept of the compression plane not found." << std::endl;
     return retval;
   }
 
-//! @brief Returns the ancho con el que trabaja la sección.
+//! @brief Returns the width of the section for shear checking
+//! see (figure 44.2.1.a in article 44 of EHE-08).
 double XC::FiberSectionBase::getAnchoMecanico(void) const
   {
     double retval= 0.0;
@@ -814,7 +832,8 @@ double XC::FiberSectionBase::getAnchoBielaComprimida(void) const
     return retval;
   }
 
-//! @brief Returns the recubrimiento de la posición being passed as parameter.
+//! @brief Returns the concrete cover for the position
+//! being passed as parameter.
 double XC::FiberSectionBase::getRecubrimiento(const Pos2d &p) const
   {
     double retval= 0.0;

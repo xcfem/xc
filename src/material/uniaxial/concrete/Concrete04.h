@@ -71,26 +71,27 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Modelo unidimensional de tipo hormigón.
+//! @brief Uniaxial Popovics concrete material object with degraded
+//! linear unloading/reloading stiffness according to the work of
+//! Karsan-Jirsa and tensile strength with exponential decay.
 class Concrete04: public ConcreteBase
   {
    private:
       /*** Material Properties ***/
-    double fpc;    // Compressive strength
-    double epsc0;  // Strain at compressive strength
-    double epscu;  // Strain at crushing strength
-    double Ec0;    // initial tangent
-    double fct;   // Concrete tensile strength
-    double etu;   // ultimate tensile strain              
-    double beta;  // exponential curve parameter, residual stress (as a factor of ft)
-	                // at etu. 
+    double fpc; //!< Compressive strength
+    double epsc0; //!< Strain at compressive strength
+    double epscu; //!< Strain at crushing strength
+    double Ec0; //!< initial tangent
+    double fct; //!< Concrete tensile strength
+    double etu; //!< ultimate tensile strain              
+    double beta; //!< exponential curve parameter, residual stress (as a factor of ft) at etu. 
 
       /*** CONVERGED History Variables ***/
     double CmaxStrain;  
-    double CcompStrain;   // strain value at which the compression unloading intersects the   
-                          // zero stress value or the strain value at which tensile reloading starts.                                  
-    double CUtenStress;   // tensile stress value at which unloading begins
-    double CUtenSlope;    // unloading tensile slope value
+    double CcompStrain; //!< strain value at which the compression unloading intersects the   
+                        // zero stress value or the strain value at which tensile reloading starts.                                  
+    double CUtenStress; //!< tensile stress value at which unloading begins
+    double CUtenSlope;  //!< unloading tensile slope value
 
       /*** TRIAL History Variables ***/
     double TmaxStrain;

@@ -67,8 +67,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Modelización 1D del hormigón.
-//! Uniaxial Kent-Scott-Park concrete model with linear
+//! @brief Uniaxial Kent-Scott-Park concrete model with linear
 //! unloading/reloading according to the work of Karsan-Jirsa and no
 //! strength in tension. The model contains a compressive strength of fpc,
 //! a strain at the compressive strength of epsc0, a crushing strength of
