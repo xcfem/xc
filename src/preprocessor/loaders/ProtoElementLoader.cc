@@ -133,8 +133,9 @@ XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void) const
       retval= iInteg->second;
     else
       if(verborrea>0)
-        std::cerr << "ProtoElementLoader - no se encontró el integrator: '" 
-                  << nmb_integ << "'.\n";
+        std::cerr << nombre_clase() << __FUNCTION__
+	          << "; integrator named: '" 
+                  << nmb_integ << "' not found.\n";
     return retval;
   }
 
@@ -155,8 +156,9 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
       retval= itrf->second;
     else
       if(verborrea>0)
-        std::cerr << "ProtoElementLoader::get_ptr_transf_coo - no se encontró la coordinate transformation: '" 
-                  << nmb_transf << "'.\n";
+        std::cerr << nombre_clase() << __FUNCTION__
+	          << "; coordinate transformation named: '" 
+                  << nmb_transf << "' not found.\n";
     return retval;
   }
 //! @brief Procesa los comandos que se emplean para definir
@@ -165,9 +167,9 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
 //! specified a default value will be assigned):
 //!
 //! - truss[tag]: Define un elemento de tipo barra articulada (Truss). 
-//! - truss_section[tag]: Define un elemento de tipo barra articulada (TrussSection) con material de  tipo sección.
-//! - corot_truss[tag]: Define un elemento de tipo barra articulada (CorotTruss) con formulación corrotacional. 
-//! - corot_truss_section[tag]: Define un elemento de tipo barra articulada (CorotTrussSection) con formulación  corrotacional y material de tipo sección.
+//! - truss_section[tag]: Defines a truss element with section type material.
+//! - corot_truss[tag]: Defines a truss element with corotational formulation. 
+//! - corot_truss_section[tag]: Defines a truss element with corotational formulation and section type material.
 //! - beam2d_02[tag]: Define un elemento de tipo barra (beam2d02) for plane problems. 
 //! - beam2d_03[tag]: Define un elemento de tipo barra (beam2d03) for plane problems. 
 //! - beam2d_04[tag]: Define un elemento de tipo barra (beam2d04) for plane problems.
@@ -180,7 +182,6 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
 //! - force_beam_column_3d[tag]: Define un elemento de tipo barra (ForceBeamColumn3d) no lineal,
 //!   for 3D problems.
 //! - shell_mitc4[tag]: Define un elemento de tipo shell (ShellMITC4),
-//! - corot_shell_mitc4[tag]: Define un elemento de tipo shell con formulación corrotacional (CorotShellMITC4),
 //! - shell_nl[tag]: Define un elemento de tipo shell (ShellNL),
 //!   for shell problems.
 //! - quad4n[tag]: Defines a four node quad (FourNodeQuad),
@@ -188,8 +189,8 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
 //!   for plane problems.
 //! - brick[tag]: Defines an eight node hexahedron (Brick),
 //!   para solid analysis.
-//! - zero_length[tag]: Define un elemento de dimensión cero (ZeroLength).
-//! - zero_length_section[tag]: Define un elemento de dimensión cero (ZeroLengthSection) con material de tipo sección.
+//! - zero_length[tag]: Defines a zero length element (ZeroLength).
+//! - zero_length_section[tag]: Defines a zero length element with section type material (ZeroLengthSection).
 XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int tag_elem)
   {
     Element *retval= nullptr;

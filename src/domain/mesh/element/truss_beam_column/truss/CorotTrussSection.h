@@ -53,11 +53,6 @@
 
 // Written: MHS 
 // Created: May 2001
-//
-// Description: This file contains the class definition for CorotTrussSection,
-// a small strain, large displacement corotational space truss element,
-// as described by Crisfield in "Nonlinear Finite Element Analysis of
-// Solids and Structures", Vol. 1, 1991, J.T. Wiley.
 
 #include "CorotTrussBase.h"
 #include <utility/matrix/Matrix.h>
@@ -69,8 +64,11 @@ class SectionForceDeformation;
 
 //! \ingroup TrussElem
 //
-//! @brief Elemento de tipo barra articulada con material de tipo SectionForceDeformation
-//! y formulación corrotacional.
+//! @brief Truss element with corotatinal formulation and material
+//! of type SectionForceDeformation. Small strain, large displacement
+//! corotational space truss element, as described by Crisfield
+//! in "Nonlinear Finite Element Analysis of
+//! Solids and Structures", Vol. 1, 1991, J.T. Wiley.
 class CorotTrussSection : public CorotTrussBase
   {
   private:

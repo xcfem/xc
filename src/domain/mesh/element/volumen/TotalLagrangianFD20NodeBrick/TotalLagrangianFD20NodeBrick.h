@@ -58,32 +58,33 @@
 #include "domain/mesh/element/utils/body_forces/BodyForces3D.h"
 
 namespace XC {
-  class BJtensor;
-  class NDMaterial;
+class BJtensor;
+class NDMaterial;
+
 //! \ingroup ElemVol
 //
-//! @brief Hexaedro de veinte nodos con formulación lagrangiana.
+//! @brief Twenty node hexahedron with lagrangian formulation.
 class TotalLagrangianFD20NodeBrick: public ElemWithMaterial<20,NDMaterialPhysicalProperties>
   {
   private:
-    static Matrix K;    // Element stiffness Matrix
-//    static Matrix C;    // Element damping matrix
-    static Matrix M;    // Element mass matrix
-    static Vector P;    // Element resisting force vector
-    static const double pts[3];   // Stores quadrature points
-    static const double wts[3];   // Stores quadrature weights
+    static Matrix K; //!< Element stiffness Matrix
+//    static Matrix C; //!< Element damping matrix
+    static Matrix M; //!< Element mass matrix
+    static Vector P; //!< Element resisting force vector
+    static const double pts[3]; //!< Stores quadrature points
+    static const double wts[3]; //!< Stores quadrature weights
     BodyForces3D bf; //!< Body forces
 
-    double rho;    // Mass per unit volume
+    double rho;    //!< Mass per unit volume
 
     double det_of_Jacobian;
     
     mutable Matrix *Ki;
 
-    static const int  NumIntegrationPts;
+    static const int  NumIntegrationPts; //!< Number of integration points.
     static const int  NumTotalGaussPts;
-    static const int  NumNodes;
-    static const int  NumDof;
+    static const int  NumNodes; //!< Number of nodes.
+    static const int  NumDof; //!< Number of degrees of freedom.
     static const int  NumElemDof;
     
     static BJtensor shapeFunction(double , double , double );

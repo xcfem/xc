@@ -65,48 +65,45 @@ class stresstensor;
 
 //! \ingroup ElemVol
 //
-//! @brief Hexaedro de veintisiete nodos con formulación lagrangiana.
+//! @brief Twenty seven node hexahedron with lagrangian formulation.
 class TwentySevenNodeBrick: public ElementBase<27>
   {
   private:
 
-    double determinant_of_Jacobian;
+    double determinant_of_Jacobian; //!< Determinant of the jacobian.
 
-    NDMaterial *mmodel;     // pointer to GLOBAL material models
+    NDMaterial *mmodel; //!< pointer to GLOBAL material models
 
-    int r_integration_order; // Gauss-Legendre integration order in r direction
-    int s_integration_order; // Gauss-Legendre integration order in s direction
-    int t_integration_order; // Gauss-Legendre integration order in t direction
+    int r_integration_order; //!< Gauss-Legendre integration order in r direction
+    int s_integration_order; //!< Gauss-Legendre integration order in s direction
+    int t_integration_order; //!< Gauss-Legendre integration order in t direction
 
     // Now I want 3D array of Material points!
     // MatPoint3D[r_integration_order][s_integration_order][t_integration_order]
     // 3D array of Material points
-    std::vector<MatPoint3D> matpoint;  // pointer to array of Material Points
+    std::vector<MatPoint3D> matpoint; //!< Pointer to array of material Points
 
     // this is LM array. This array holds DOFs for this element
     //int  LM[60]; // for 20noded x 3 = 60
 
-  private:
-    // private attributes - a copy for each object of the class
-
-    int numDOF;          // Number of element DOF
+    int numDOF;          //!< Number of element DOF
 
     mutable Matrix *Ki;
 
-    static Matrix K;    // Element stiffness Matrix
-    static Matrix C;    // Element damping matrix
-    static Matrix M;    // Element mass matrix
-    static Vector P;    // Element resisting force vector
+    static Matrix K; //!< Element stiffness Matrix
+    static Matrix C; //!< Element damping matrix
+    static Matrix M; //!< Element mass matrix
+    static Vector P; //!< Element resisting force vector
     BodyForces3D bf; //!< Body forces
 
     // double thickness;  // Element thickness
-    double rho;    // Mass per unit volume DO WE GET THIS ONE OUT!!!
-    double pressure;  // Normal surface traction (pressure) over entire element
-    int    order;    // Order of the quadrature rule
+    double rho; //!< Mass per unit volume DO WE GET THIS ONE OUT!!!
+    double pressure; //!< Normal surface traction (pressure) over entire element
+    int    order; //!< Order of the quadrature rule
 
-    //Matrix J;    // Jacobian of transformation
-    //Matrix L;    // Inverse of J
-    //Matrix B;    // Strain interpolation matrix
+    //Matrix J; //!< Jacobian of transformation
+    //Matrix L; //!< Inverse of J
+    //Matrix B; //!< Strain interpolation matrix
   public:
     TwentySevenNodeBrick(int element_number,
                    int node_numb_1,  int node_numb_2,  int node_numb_3,  int node_numb_4,
