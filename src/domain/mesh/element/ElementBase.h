@@ -58,6 +58,7 @@ class ElementBase: public Element
     ElementBase(const ElementBase &otro);
     ElementBase &operator=(const ElementBase &otro);
 
+    //! @brief Returns the element number of nodes.
     static inline const int numNodos(void)
       { return NNODOS; }
     // public methods to obtain inforrmation about dof & connectivity    

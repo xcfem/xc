@@ -66,8 +66,8 @@ namespace XC {
 
 //! @ingroup CTest
 //
-//! @brief Especifica una tolerancia para la norma del incremento de 
-//! desplazamiento en la iteración actual.
+//! @brief Specifies a tolerace for the displacement increment norm
+//! to be used on each iteration.
 class CTestNormDispIncr: public ConvergenceTestTol
   {
   public:

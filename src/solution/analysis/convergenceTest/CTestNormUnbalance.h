@@ -68,8 +68,8 @@ class LinearSOE;
 
 //! @ingroup CTest
 //
-//! @brief Especifica una tolerancia para la norma de the load no equilibrada
-//! en la iteración actual.
+//! @brief Specifies a tolerance for the norm of the unbalanced load vector
+//! on each iteration.
 class CTestNormUnbalance: public ConvergenceTestTol
   {
   public:

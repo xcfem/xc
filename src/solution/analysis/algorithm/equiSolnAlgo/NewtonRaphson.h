@@ -73,8 +73,8 @@ namespace XC {
 
 //! @ingroup EQSolAlgo
 //
-//! @brief Emplea la tangent stiffness matrix en cada iteración para iterar
-//! hasta alcanzar la convengencia.
+//! @brief Uses the tangent stiffness matrix on each iteration
+//! until convergence is achieved.
 class NewtonRaphson: public NewtonBased
   {
   protected:

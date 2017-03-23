@@ -45,7 +45,7 @@ class MEDTFieldInfo: public MEDFieldInfo
     typedef typename MEDMEM::MEDMEM_ArrayInterface<T,MEDMEM::FullInterlace,MEDMEM::Gauss>::Array ArrayGauss;
     typedef typename MEDMEM::FIELD<T> TipoCampo;
   protected:
-    mutable TipoCampo *campo; //!< Definición del campo en MEDMEM.
+    mutable TipoCampo *campo; //!< Field definition in MEDMEM.
     bool has_gauss_points;
     void libera(void) const;
     void alloc(void) const;
@@ -77,7 +77,7 @@ template <class T>
 MEDTFieldInfo<T>::~MEDTFieldInfo(void)
   { libera(); }
 
-//! @brief Borra la definición del campo en MEDMEM;
+//! @brief Frees memory (and erases the field definition).
 template <class T>
 void MEDTFieldInfo<T>::libera(void) const
   {
@@ -88,7 +88,7 @@ void MEDTFieldInfo<T>::libera(void) const
       }
   }
 
-//! @brief Crea la definición del campo en MEDMEM;
+//! @brief Creates MEDMEM field definition.
 template <class T>
 void MEDTFieldInfo<T>::alloc(void) const
   {
@@ -200,17 +200,17 @@ void MEDTFieldInfo<T>::setValueIJK(int i, int j,int k,int t,const T &valor)
     campo->setValueIJK(i,j,k,valor);
   }
 
-//! @brief Vuelca la definición del campo en MEDMEM
+//! @brief Dumps the field definition into MEDMEM.
 template <class T>
 void MEDTFieldInfo<T>::to_med(void) const
   {
     alloc();
     campo->setName(getXCFieldInfo().GetNombre());
-    //Información sobre las componentes.
+    //Information about components.
     campo->setComponentsNames(getComponentNamesPtr());
     campo->setComponentsDescriptions(getComponentDescriptionsPtr());
     campo->setMEDComponentsUnits(getComponentUnitsPtr());
-    //Información sobre la iteración.
+    //Information about iteration.
     campo->setIterationNumber(getXCFieldInfo().getIterationNumber());
     campo->setOrderNumber(getXCFieldInfo().getOrderNumber());
     campo->setTime(getXCFieldInfo().getTime());

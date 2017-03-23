@@ -67,9 +67,9 @@ namespace XC {
 
 //! @ingroup CTest
 //
-//! @brief Especifica una tolerancia para el producto del load vector no
-//! equilibradas y el vector incremento de desplazamientos
-//! en la iteración actual.
+//! @brief Specifies a tolerance for the product of unbalanced load vector
+//! and 0.5 times the displacement increment vector (energy increment) to
+//! be used as convergence criterion on each iteration.
 class CTestEnergyIncr: public ConvergenceTestTol
   {
   public:

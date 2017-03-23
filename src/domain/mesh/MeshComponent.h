@@ -44,7 +44,7 @@ class MeshComponent: public ContinuaReprComponent
     void check_matrices(const std::deque<Matrix> &matrices,const int &ndof) const;
     void nueva_matriz(std::deque<Matrix> &matrices,const int &ndof) const;
   protected:
-    mutable int index;
+    mutable int index; //!< Index for VTK arrays.
     LabelContainer labels; //!< Label container.
 
     void setup_matrices(std::deque<Matrix> &matrices,const int &ndof) const;

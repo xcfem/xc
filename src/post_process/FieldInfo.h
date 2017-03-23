@@ -39,17 +39,17 @@ class Set;
 class FieldInfo: public EntConNmb
   {
   protected:
-    std::string nmb_set; //!< nombre of the set sobre el que se define.
+    std::string nmb_set; //!< name of the set.
     bool sobre_nodos; //!< True if defined over the nodes of the set.
     bool sobre_puntos_gauss; //!< Verdadero si se define sobre puntos de Gauss de los elementos.
-    std::vector<std::string> componentNames; //!< Nombre de las componentes del campo.
-    std::vector<std::string> componentDescriptions; //!< Descripción de las componentes del campo.
-    std::vector<std::string> componentUnits; //!< Unidades en las que se expresan las componentes del campo.
+    std::vector<std::string> componentNames; //!< Name of the field components.
+    std::vector<std::string> componentDescriptions; //!< Field components description.
+    std::vector<std::string> componentUnits; //!< Units for each component.
     std::string componentsProperty; //!< Propiedad mediante la cual se obtienen los valores de las componentes.
-    std::string componentsType; //!< Tipo de las componentes ("int", "double", "string",...)
-    int iterationNumber; //!< Número de iteración a la que corresponden los valores.
-    int orderNumber; //!< Número de orden.
-    double time; //!< Instante.
+    std::string componentsType; //!< Component data type ("int", "double", "string",...)
+    int iterationNumber; //!< Number of the iteration in which this values were obtained.
+    int orderNumber; //!< Order number.
+    double time; //!< Time.
 
   public:
     FieldInfo(const std::string &);

@@ -36,8 +36,8 @@ class ConvergenceTest;
 
 //! @ingroup EQSolAlgo
 //
-//! @brief Emplea la tangent stiffness matrix en la
-//! primera iteración para iterar hasta alcanzar la convengencia.
+//! @brief Uses the tangent stiffness matrix on each
+//! iteration (with or without updating) until convergence is achieved.
 class NewtonBased: public EquiSolnAlgo
   {
   protected:
