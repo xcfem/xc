@@ -167,7 +167,8 @@ const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadLocal(const V
                         << " Load ignored." << std::endl; 
           }
         else
-          std::cerr << "ShellMITC4Base::vector3dUniformLoadLocal; el vector debe ser de dimensión 3" << std::endl;
+          std::cerr << nombre_clase() << __FUNCTION__
+                    << "; a vector of dimension 3 was expected." << std::endl;
       }
     else
       std::cerr << "ShellMITC4Base::vector3dUniformLoadLocal; modeler not defined." << std::endl;
@@ -186,7 +187,8 @@ const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadGlobal(const 
         retval= vector3dUniformLoadLocal(vTrf);
       }
     else
-      std::cerr << "ShellMITC4Base::vector3dUniformLoadGlobal; el vector debe ser de dimensión 3" << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; a vector of dimension 3 was expected." << std::endl;
     return retval;
   }
 
@@ -288,7 +290,7 @@ void XC::ShellMITC4Base::alive(void)
         capturaInicDisp(); //Node displacements at element activation.
       }
     else
-      std::cerr << "Se intentó reactivar un elemento activo."
+      std::cerr << "Trying to activate an element already active."
                 << std::endl;
   }
 
@@ -745,7 +747,7 @@ int XC::ShellMITC4Base::commitState(void)
     return retval;
   }
 
-//! @brief Returns the estado de la transformación al último commit.
+//! @brief Returns to the last commited state.
 int XC::ShellMITC4Base::revertToLastCommit(void)
   {
     int retval= theCoordTransf->revertToLastCommit();
@@ -753,7 +755,7 @@ int XC::ShellMITC4Base::revertToLastCommit(void)
     return retval;
   }
 
-//! @brief Returns the estado de la transformación al inicial.
+//! @brief Returns the initial state.
 int XC::ShellMITC4Base::revertToStart(void)
   {
     zeroLoad();

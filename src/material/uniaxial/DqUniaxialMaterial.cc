@@ -123,7 +123,7 @@ XC::DqUniaxialMaterial::DqUniaxialMaterial(const DqUniaxialMaterial &otro,Sectio
   : EntCmd(otro), MovableObject(0), lst_ptr()
   { copia_lista(otro,s); }
 
-//! @brief Operator asignación.
+//! @brief Assignment operator.
 XC::DqUniaxialMaterial &XC::DqUniaxialMaterial::operator=(const DqUniaxialMaterial &otro)
   {
     EntCmd::operator=(otro);

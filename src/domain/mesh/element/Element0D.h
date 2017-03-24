@@ -40,7 +40,8 @@ class Material;
 
 //! \ingroup Elem
 //
-//! @brief Elemento de dimensión 0 (los dos nodos ocupan la misma posición en el espacio).
+//! @brief Element of dimension 0 (both nodes have the
+//! same position).
 class Element0D : public ElementBase<2>
   {
   protected:

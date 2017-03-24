@@ -45,7 +45,7 @@ XC::SetEstruct::SetEstruct(const std::string &nmb,Preprocessor *md)
 XC::SetEstruct::SetEstruct(const SetEstruct &otro)
   : SetBase(otro) {}
 
-//! @brief Operator asignación.
+//! @brief Assignment operator.
 XC::SetEstruct &XC::SetEstruct::operator=(const SetEstruct &otro)
   {
     SetBase::operator=(otro);
@@ -102,7 +102,10 @@ std::string XC::SetEstruct::GetStrTipo(void) const
     return "bloqueIJK";
   }
 
-//! @brief Return the dimensión del rango (0,1,2 ó 3).
+//! @brief Return the dimension of the range (0,1,2 or 3).
+//! Zero if the range is empty, 1 if there is more than one layer, 2
+//! if there are more than one row and three if there are more
+//! than one column.
 size_t XC::SetEstruct::Dimension(void) const
   {
     size_t retval= 0;

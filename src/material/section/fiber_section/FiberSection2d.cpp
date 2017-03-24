@@ -97,11 +97,11 @@ XC::FiberSection2d::FiberSection2d(XC::MaterialLoader *mat_ldr)
 // AddingSensitivity:END //////////////////////////////////////
   }
 
-//! @brief Añade una fibra a la sección.
+//! @brief Adds a fiber to the section.
 XC::Fiber *XC::FiberSection2d::addFiber(Fiber &newFiber)
   { return fibras.addFiber(*this,newFiber,kr); }
 
-//! @brief Añade una fibra a la sección.
+//! @brief Adds a fiber to the section.
 XC::Fiber *XC::FiberSection2d::addFiber(int tag,const MaterialLoader &ldr,const std::string &nmbMat,const double &Area, const Vector &position)
   {
     Fiber *retval= fibras.buscaFibra(tag);
@@ -110,7 +110,7 @@ XC::Fiber *XC::FiberSection2d::addFiber(int tag,const MaterialLoader &ldr,const 
     else
       {
         if(position.Size()<1)
-          std::cerr << "(FiberSection2d::addFiber; el vector de posición debe ser de dimensión 1." << std::endl;
+          std::cerr << "(FiberSection2d::addFiber; position vector must be of dimension 2." << std::endl;
         UniaxialFiber2d f(tag,ldr,nmbMat,Area,position(0));
         retval= addFiber(f);
       }
@@ -165,6 +165,7 @@ const XC::ResponseId &XC::FiberSection2d::getType(void) const
 int XC::FiberSection2d::getOrder(void) const
   { return getType().Size(); }
 
+//! @brief Returns the section to its last commited state.
 int XC::FiberSection2d::revertToLastCommit(void)
   {
     // Last committed section deformations
@@ -172,7 +173,7 @@ int XC::FiberSection2d::revertToLastCommit(void)
     return fibras.revertToLastCommit(*this,kr);
   }
 
-//! @brief Return the sección a su estado inicial.
+//! @brief Returns the section to its initial state.
 int XC::FiberSection2d::revertToStart(void)
   {
     FiberSectionBase::revertToStart();

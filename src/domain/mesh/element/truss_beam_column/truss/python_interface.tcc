@@ -22,7 +22,7 @@
 //python_interface.tcc
 
 class_<XC::ProtoTruss, bases<XC::Element1D>, boost::noncopyable >("ProtoTruss", no_init)
-  .def("getDim", &XC::ProtoTruss::getNumDIM,"Return the dimensión del espacio en el que se define el elemento (1, 2 ó 3).")
+  .def("getDim", &XC::ProtoTruss::getNumDIM,"Return the dimension of the space in which the element is defined (1, 2 or 3).")
   .def("getMaterial",&XC::ProtoTruss::getMaterialRef,return_internal_reference<>(),"Returns element's material")
   ;
 

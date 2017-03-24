@@ -144,7 +144,7 @@ XC::Matrix &XC::UniaxialFiber2d::getFiberTangentStiffContr(void)
 XC::Fiber *XC::UniaxialFiber2d::getCopy(void) const
   { return new UniaxialFiber2d(*this); }  
 
-//! @brief Returns the dimensión del vector resultante de tensiones.
+//! @brief Returns the dimension of the stress resultant vector.
 int XC::UniaxialFiber2d::getOrder(void) const
   { return 2; }
 

@@ -42,8 +42,9 @@ XC::EsfBeamColumn3d::EsfBeamColumn3d(const Vector &v)
       for(int i=0;i<6;i++)
         (*this)[i]= v[i];
     else
-      std::cerr << "EsfBeamColumn3d; se esperaba un vector de dimensión 6"
-                << " se obtuvo: " << v << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << " vector of dimension 6 expected "
+                << v << " was obtained." << std::endl;
   }
 
 //! @brief Copy constructor.

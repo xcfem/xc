@@ -94,7 +94,8 @@ XC::FVectorShell::FVectorShell(const XC::Vector &v)
         p[23] = v[23];
       }
     else
-      std::cerr << "FVectorShell::FVectorShell; se esperaba un vector de dimensión 6" << std::endl;
+      std::cerr << getClassName() << __FUNCTION__
+	        << "; a vector of dimension 6 was expected." << std::endl;
   }
 
 //! @brief Assignment operator.

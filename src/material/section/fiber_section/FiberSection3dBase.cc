@@ -76,7 +76,7 @@ double XC::FiberSection3dBase::get_strain(const double &y,const double &z) const
     return (def(0) + y*def(1) + z*def(2));
   }
 
-//! @brief Añade una fibra a la sección.
+//! @brief Adds a fiber to the section.
 XC::Fiber *XC::FiberSection3dBase::addFiber(int tag,const MaterialLoader &ldr,const std::string &nmbMat,const double &Area, const Vector &position)
   {
     Fiber *retval= fibras.buscaFibra(tag);
@@ -85,7 +85,7 @@ XC::Fiber *XC::FiberSection3dBase::addFiber(int tag,const MaterialLoader &ldr,co
     else
       {
         if(position.Size()<2)
-          std::cerr << "(FiberSection2d::addFiber; el vector de posición debe ser de dimensión 2." << std::endl;
+          std::cerr << "(FiberSection2d::addFiber; the position vector must be of dimension 2." << std::endl;
         UniaxialFiber3d f(tag,ldr,nmbMat,Area,position);
         retval= addFiber(f);
       }

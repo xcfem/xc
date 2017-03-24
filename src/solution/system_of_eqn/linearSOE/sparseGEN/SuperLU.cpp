@@ -165,9 +165,10 @@ XC::SuperLU::SuperLU(const SuperLU &otro)
               << std::endl;
   }
 
+//! @brief Assignment operator.
 XC::SuperLU &XC::SuperLU::operator=(const SuperLU &otro)
   {
-    std::cerr << "SuperLU::SuperLU operador asignación."
+    std::cerr << "SuperLU::SuperLU assignment operator."
               << std::endl;
     return *this;
   }

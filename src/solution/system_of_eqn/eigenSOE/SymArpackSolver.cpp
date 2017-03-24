@@ -228,7 +228,7 @@ int XC::SymArpackSolver::setSize(void)
     return 0;
   }
 
-//! @brief Return the dimensión de los eigenvectors.
+//! @brief Return the eigenvectors dimension.
 const int &XC::SymArpackSolver::getSize(void) const
   { return theSOE->size; }
 

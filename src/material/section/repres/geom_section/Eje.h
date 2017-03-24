@@ -51,7 +51,7 @@ class Eje: public EntGeomSection
     Eje(const std::string &nombre= "",GeomSection *m= nullptr,const size_t &nd= 4);
   public:
     ~Eje(void);
-    //! @brief Return the dimensión del objeto.
+    //! @brief Returns the object dimension (0, 1, 2 or 3).
     inline virtual unsigned short int GetDimension(void) const
       { return 1; }
 

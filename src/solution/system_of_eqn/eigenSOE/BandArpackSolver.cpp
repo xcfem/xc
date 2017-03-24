@@ -455,7 +455,7 @@ int XC::BandArpackSolver::setSize(void)
     return 0;
   }
 
-//! @brief Return the dimensión de los eigenvectors.
+//! @brief Returns the eigenvectors dimension.
 const int &XC::BandArpackSolver::getSize(void) const
   { return theSOE->size; }
 

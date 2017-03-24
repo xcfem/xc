@@ -65,7 +65,7 @@ XC::DqPtrsNode::DqPtrsNode(const std::set<const Node *> &st)
       push_back(const_cast<Node *>(*k));
   }
 
-//! @brief Operator asignación.
+//! @brief Assignment operator.
 XC::DqPtrsNode &XC::DqPtrsNode::operator=(const DqPtrsNode &otro)
   {
     DqPtrs<Node>::operator=(otro);

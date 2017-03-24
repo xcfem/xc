@@ -282,7 +282,7 @@ void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane
                 << std::endl; 
   }
 
-//! @brief Return the dimensión del elemento.
+//! @brief Return the element dimension (0, 1, 2 or 3).
 size_t XC::Element1D::getDimension(void) const
   { return 1; }
 
@@ -358,7 +358,7 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing
     const size_t mesh_dim= nodos.GetDim();
     TritrizPtrElem retval;
     if(mesh_dim<1)
-      std::cerr << "Existe un sólo nodo, no se pudieron crear elementos." << std::endl;
+      std::cerr << "There is only one node, can't create elements." << std::endl;
     else
       {
        if(mesh_dim<2) //Bidimensional mesh
@@ -369,7 +369,9 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing
               {
               case dirm_i:
                 if(ncapas<2)
-		  std::cerr << "Element1D::put_on_mesh; número insuficiente de nodos en dirección i. No se crean elementos." << std::endl;
+		  std::cerr << nombre_clase() << "::" << __FUNCTION__
+		            << " insufficient number of nodes on i direction."
+		            << " Can't create elements." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas-1,MatrizPtrElem(nfilas,ncols));
@@ -383,7 +385,9 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing
                 break;
               case dirm_j:
                 if(nfilas<2)
-		  std::cerr << "Element1D::put_on_mesh; número insuficiente de nodos en dirección j. No se crean elementos." << std::endl;
+		  std::cerr << nombre_clase() << "::" << __FUNCTION__
+		            << " insufficient number of nodes on j direction."
+		            << " Can't create elements." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas-1,ncols));
@@ -397,7 +401,9 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing
                 break;
               case dirm_k:
                 if(ncols<2)
-		  std::cerr << "Element1D::put_on_mesh; número insuficiente de nodos en dirección k. No se crean elementos." << std::endl;
+		  std::cerr << nombre_clase() << "::" << __FUNCTION__
+		            << " insufficient number of nodes on k direction."
+		            << " Can't create elements." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas,ncols-1));
@@ -613,7 +619,8 @@ XC::CrdTransf2d *XC::Element1D::recvCoordTransf2d(int posFlag,const int &posClas
         retval= dynamic_cast<CrdTransf2d *>(tmp);
         if(!retval)
           {
-	    std::cerr << "El tipo de la transformación no es adecuado"
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "Incompatible transformation type."
                       << std::endl;
             delete tmp;
           }
@@ -631,7 +638,8 @@ XC::CrdTransf3d *XC::Element1D::recvCoordTransf3d(int posFlag,const int &posClas
         retval= dynamic_cast<CrdTransf3d *>(tmp);
         if(!retval)
           {
-	    std::cerr << "El tipo de la transformación no es adecuado"
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "Incompatible transformation type."
                       << std::endl;
             delete tmp;
           }

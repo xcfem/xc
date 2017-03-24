@@ -32,6 +32,7 @@
 #include "FVector.h"
 #include "utility/matrix/Vector.h"
 #include "utility/actor/actor/MovableVector.h"
+#include <typeinfo>
 
 namespace XC {
 
@@ -56,6 +57,7 @@ class FVectorData: public FVector
       { return p; }
     const Vector &getVector(void) const;
     void putVector(const Vector &v);
+    std::string getClassName(void) const;
     int sendData(CommParameters &cp,DbTagData &dt,const CommMetaData &);
     int receiveData(const CommParameters &cp,DbTagData &dt,const CommMetaData &);
 
@@ -78,6 +80,10 @@ void FVectorData<SZ>::putVector(const Vector &v)
       p[i]= v[i];
   }
 
+template <size_t SZ>
+std::string FVectorData<SZ>::getClassName(void) const
+  { return typeid(*this).name(); }
+ 
 template <size_t SZ>
 int FVectorData<SZ>::sendData(CommParameters &cp,DbTagData &dt,const CommMetaData &md)
   { return cp.sendVector(getVector(),dt,md); }

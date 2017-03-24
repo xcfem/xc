@@ -49,11 +49,7 @@ void XC::MEDIntFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
             if(tmp != boost::python::object())
               {
                 valor= vector_int_from_py_object(tmp);
-                if(valor.size()!=dim)
-  	          std::cerr << "La propiedad: '" << nmb_prop
-                            << "' returns un vector de dimensión: "
-                            << valor.size() << " se esperaba uno de dimensión "
-                            << dim << std::endl;
+		checkVectorDimension(nmb_prop,valor,dim);
                 for(size_t k= 1;k<=dim;k++)
                   setValueIJ(conta,k,valor[k-1]);
               }
@@ -84,11 +80,7 @@ void XC::MEDIntFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
             if(tmp != boost::python::object())
               {
                 valor= vector_int_from_py_object(tmp);
-                if(valor.size()!=dim)
-	          std::cerr << "La propiedad: '" << nmb_prop
-                            << "' returns un vector de dimensión: "
-                            << valor.size() << " se esperaba uno de dimensión "
-                            << dim << std::endl;
+ 		checkVectorDimension(nmb_prop,valor,dim);
                 for(size_t k= 1;k<=dim;k++)
                   setValueIJ(conta,k,valor[k-1]);
               }

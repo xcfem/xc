@@ -43,8 +43,8 @@ class Eje;
 class Spot: public EntGeomSection
   {
   private:
-    Pos2d p; //!< Posición del punto.
-    std::set<const Eje *> ejes_pt; //!< Ejes uno de cuyos extremos es este punto:
+    Pos2d p; //!< Position of the point.
+    std::set<const Eje *> ejes_pt; //!< Edges that begin or end in this point (topology).
     friend class Eje;
     void inserta_linea(Eje *l);
     void borra_linea(Eje *l);
@@ -63,15 +63,15 @@ class Spot: public EntGeomSection
       : EntGeomSection(nombre,m) {}
 
   public:
-    //! @brief Return the dimensión del objeto.
+    //! @brief Return the object dimension (0, 1, 2 or 3).
     inline virtual unsigned short int GetDimension(void) const
       { return 0; }
     BND2d Bnd(void) const;
 
-    //! @brief Return the posición del objeto.
+    //! @brief Return the object position.
     const Pos2d &GetPos(void) const
       { return p; }
-    //! @brief Return the posición del objeto.
+    //! @brief Return the object position.
     Pos2d &GetPos(void)
       { return p; }
     inline void setPos(const Pos2d &pos)

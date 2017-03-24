@@ -58,16 +58,16 @@ bool XC::Element0D::Vxy::check(void) const
     const double nx= x.Norm();
     if(nx<1e-6)
       {
-        std::cerr << "Element0D::check; el vector I= " << x
-                  << " tiene un módulo muy pequeño: "
+        std::cerr << "Element0D::check; vector I= " << x
+                  << " has a very small modulus: "
                   << nx << std::endl;
         retval= false;
       }
     const double ny= y.Norm();
     if(ny<1e-6)
       {
-        std::cerr << "Element0D::check; el vector J= " << y
-                  << "  tiene un módulo muy pequeño: "
+        std::cerr << "Element0D::check; vector J= " << y
+                  << " has a very small modulus: "
                   << ny << std::endl;
         retval= false;
       }
@@ -75,9 +75,9 @@ bool XC::Element0D::Vxy::check(void) const
     Vector3d vy(y[0],y[1],y[2]);
     if(paralelos(vx,vy))
       {
-        std::cerr << "Element0D::check; los vectores I= " << x
-                  << " y J= " << y << " forman un ángulo muy pequeño: "
-                  << angulo(vx,vy) << std::endl;
+        std::cerr << "Element0D::check; vector I= " << x
+                  << " and J= " << y << " are almost parallel, angle: "
+                  << angulo(vx,vy) << " radians." << std::endl;
         retval= false;
       }
     return retval;
@@ -109,14 +109,14 @@ XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2,int dim, const Ve
     setUp(Nd1,Nd2,x,yprime);
   }
 
-//! @brief Return the dimensión del elemento.
+//! @brief Return the element dimension (0, 1, 2 o3 3).
 size_t XC::Element0D::getDimension(void) const
   { return 0; }
 
 int XC::Element0D::getNumDOF(void) const
   { return numDOF; }
 
-//! @brief Returns the vector dirección del eje X local (primera fila de la transformación).
+//! @brief Returns the direction vector of local X axis (first row of the transformation).
 const XC::Vector &XC::Element0D::getX(void) const
   {
     static Vector retval(3);
@@ -126,7 +126,7 @@ const XC::Vector &XC::Element0D::getX(void) const
     return retval;
   }
 
-//! @brief Returns the vector dirección del eje Y local (segunda fila de la transformación).
+//! @brief Returns the direction vector of local Y axis (second row of the transformation).
 const XC::Vector &XC::Element0D::getY(void) const
   {
     static Vector retval(3);
@@ -136,7 +136,7 @@ const XC::Vector &XC::Element0D::getY(void) const
     return retval;
   }
 
-//! @brief Returns the vector dirección del eje Z local (tercera fila de la transformación).
+//! @brief Returns the direction vector of local Z axis (third row of the transformation).
 const XC::Vector &XC::Element0D::getZ(void) const
   {
     static Vector retval(3);
@@ -236,7 +236,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
     if(dimf1!=dimf2)
       {
 	std::cerr << "the sets: " << f1.GetNombre() << " y " << f2.GetNombre()
-                  << " son de distinta dimensión (" << dimf1  << " y " << dimf2
+                  << " have different dimension (" << dimf1  << " y " << dimf2
                   << ")." << std::endl;
         return retval;
       }
@@ -362,7 +362,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
       }
     if(dimf1>1)
       {
-	std::cerr << "No se ha implementado el cosido en 2 ó 3 dimensiones." << std::endl;
+	std::cerr << "Sewing in 2 or 3 dimensions not implemented." << std::endl;
       }
     return retval;
   }

@@ -65,7 +65,7 @@ class Matrix;
 
 //! \ingroup Cuadratura
 //
-//! @brief Cuadratura de Gauss para una dimensión.
+//! @brief One-dimensional Gauss quadrature.
 class GaussQuadRule1d: public QuadRule1d
   {
   private:

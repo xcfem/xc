@@ -50,7 +50,7 @@ XC::EntGeomSection::EntGeomSection(const EntGeomSection &otro)
   : EntConNmb(otro), sccGeom(otro.sccGeom)
   {}
 
-//! @brief Operator asignación.
+//! @brief Assignment operator.
 XC::EntGeomSection &XC::EntGeomSection::operator=(const EntGeomSection &otro)
   {
     EntConNmb::operator=(otro);

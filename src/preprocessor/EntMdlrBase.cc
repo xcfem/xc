@@ -53,7 +53,7 @@ XC::EntMdlrBase::EntMdlrBase(const EntMdlrBase &otro)
   : EntConNmb(otro), MovableObject(otro), preprocessor(otro.preprocessor)
   {}
 
-//! @brief Operator asignación.
+//! @brief Assignment operator.
 XC::EntMdlrBase &XC::EntMdlrBase::operator=(const EntMdlrBase &otro)
   {
     EntConNmb::operator=(otro);

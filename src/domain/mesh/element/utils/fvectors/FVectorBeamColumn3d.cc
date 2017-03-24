@@ -55,7 +55,8 @@ XC::FVectorBeamColumn3d::FVectorBeamColumn3d(const XC::Vector &v)
         p[4] = v[4];
       }
     else
-      std::cerr << "FVectorBeamColumn2d::FVectorBeamColumn2d; se esperaba un vector de dimensión 5" << std::endl;
+      std::cerr << getClassName() << __FUNCTION__
+	        << "; a vector of dimension 5 was expected." << std::endl;
   }
 
 //! @brief Assignment operator.

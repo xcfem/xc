@@ -75,7 +75,7 @@ class Matrix;
 
 //! \ingroup Cuadratura
 //
-//! @brief Cuadratura para una dimensión.
+//! @brief One-dimensional quadrature.
 class QuadRule1d01: public QuadRule
   {
   public:

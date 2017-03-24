@@ -113,12 +113,12 @@ void XC::ElemPlano<NNODOS, PhysProp>::setDomain(Domain *theDomain)
       std::cerr << "ElemPlano::setDomain -- Domain is null\n";
   }
 
-//! @brief Return the posición del centro de gravedad del elemento.
+//! @brief Return the position of the element centroid.
 template <int NNODOS,class PhysProp>
 Pos3d XC::ElemPlano<NNODOS, PhysProp>::getPosCdg(bool initialGeometry) const
   { return getPoligono(initialGeometry).Cdg(); }
 
-//! @brief Return the dimensión del elemento.
+//! @brief Return the element dimension (0, 1, 2 o3 3).
 template <int NNODOS,class PhysProp>
 size_t XC::ElemPlano<NNODOS, PhysProp>::getDimension(void) const
   { return 2; }

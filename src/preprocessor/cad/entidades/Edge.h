@@ -60,7 +60,7 @@ class Edge: public EntMdlr
   public:
     Edge(Preprocessor *m,const size_t &nd= 4);
     Edge(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &nd= 4);
-    //! @brief Return the dimensión del objeto.
+    //! @brief Return the object dimension (0, 1, 2 or 3).
     inline virtual unsigned short int GetDimension(void) const
       { return 1; }
 

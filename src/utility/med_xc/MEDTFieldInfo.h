@@ -50,6 +50,7 @@ class MEDTFieldInfo: public MEDFieldInfo
     void libera(void) const;
     void alloc(void) const;
     ArrayGauss *getArrayGauss(void) const;
+    static void checkVectorDimension(const std::string &,const std::vector<T> &, const size_t &);
 
   private:
     MEDTFieldInfo(const MEDTFieldInfo &);
@@ -128,6 +129,17 @@ typename MEDTFieldInfo<T>::ArrayGauss *MEDTFieldInfo<T>::getArrayGauss(void) con
     return retval;
   }
 
+//! @brief Checks vector dimension.
+template <class T>
+  void XC::MEDTFieldInfo<T>::checkVectorDimension(const std::string &nmb_prop,const std::vector<T> &valor, const size_t &dim)
+  {
+     if(valor.size()!=dim)
+       std::cerr << "The property: '" << nmb_prop
+                 << "' returns a vector with dimension: "
+                 << valor.size() << "; a vector of dimension "
+                 << dim << " was expected" << std::endl;
+  }
+ 
 //! @brief Sets the Gauss integration model.
 template <class T>
 void MEDTFieldInfo<T>::setGaussModel(const MEDGaussModel &gm)

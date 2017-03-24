@@ -56,7 +56,7 @@ XC::SetMeshComp::SetMeshComp(const SetMeshComp &otro)
   : SetBase(otro)
   { copia_listas(otro); }
 
-//! @brief Operator asignación.
+//! @brief Assignment operator.
 XC::SetMeshComp &XC::SetMeshComp::operator=(const SetMeshComp &otro)
   {
     SetBase::operator=(otro);

@@ -127,5 +127,5 @@ void XC::MEDVertexInfo::to_med(MEDMEM::MESHING &mesh) const
         mesh.setCoordinatesUnits(&nombresUnidades[0]);
       }
     else
-      std::cerr << "Espacio de dimensión cero." << std::endl;
+      std::cerr << "Space of dimension zero." << std::endl;
   }

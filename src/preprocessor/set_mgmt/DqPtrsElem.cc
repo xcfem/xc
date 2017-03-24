@@ -67,7 +67,7 @@ XC::DqPtrsElem::DqPtrsElem(const std::set<const Element *> &st)
       push_back(const_cast<Element *>(*k));
   }
 
-//! @brief Operator asignación.
+//! @brief Assignment operator.
 XC::DqPtrsElem &XC::DqPtrsElem::operator=(const DqPtrsElem &otro)
   {
     DqPtrs<Element>::operator=(otro);

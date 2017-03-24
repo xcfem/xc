@@ -49,7 +49,7 @@ XC::BrickBase::BrickBase(int tag, int classTag, int node1, int node2, int node3,
     theNodes.set_id_nodos(node1,node2,node3,node4,node5,node6,node7,node8);
   }
 
-//! @brief Return the dimensión del elemento.
+//! @brief Return the element dimension (0, 1, 2 o3 3).
 size_t XC::BrickBase::getDimension(void) const
   { return 3; }
 

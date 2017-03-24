@@ -311,7 +311,7 @@ int XC::SymBandEigenSolver::setSize(void)
     return 0;
   }
 
-//! @brief Return the dimensión de los eigenvectors.
+//! @brief Return the eigenvectors dimension.
 const int &XC::SymBandEigenSolver::getSize(void) const
   { return theSOE->size; }
 

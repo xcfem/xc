@@ -50,8 +50,8 @@ class Pnt: public EntMdlr
   {
     friend class Edge;
   private:
-    Pos3d p; //!< Posición del punto.
-    mutable std::set<const Edge *> lineas_pt; //!< Líneas uno de cuyos extremos es este punto:
+    Pos3d p; //!< Position of the point.
+    mutable std::set<const Edge *> lineas_pt; //!< Lines that begin or end in this point (topology).
   protected:
 
     virtual void actualiza_topologia(void);
@@ -61,7 +61,7 @@ class Pnt: public EntMdlr
     Pnt(const std::string &nombre= "",Preprocessor *m= nullptr,const Pos3d &pto= Pos3d());
 
     SetEstruct *getCopy(void) const;
-    //! @brief Return the dimensión del objeto.
+    //! @brief Return the object dimension (0, 1, 2 or 3).
     inline virtual unsigned short int GetDimension(void) const
       { return 0; }
     BND3d Bnd(void) const;
@@ -70,13 +70,13 @@ class Pnt: public EntMdlr
     Node *getNode(void);
     virtual void genMesh(meshing_dir dm);
 
-    //! @brief Return the posición del objeto.
+    //! @brief Returns the object position.
     const Pos3d &GetPos(void) const
       { return p; }
-    //! @brief Return the posición del objeto.
+    //! @brief Returns the object position.
     Pos3d &Pos(void)
       { return p; }
-    //! @brief Asigna la posición del objeto.
+    //! @brief Sets the position of the object.
     void setPos(const Pos3d &pos)
       { p= pos; }
     Vector3d VectorPos(void) const;

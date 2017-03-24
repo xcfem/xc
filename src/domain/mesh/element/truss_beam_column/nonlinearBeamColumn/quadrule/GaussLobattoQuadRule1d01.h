@@ -65,7 +65,7 @@ class Matrix;
 
 //! \ingroup Cuadratura
 //
-//! @brief Cuadratura de Gauss-Lobatto para una dimensión.
+//! @brief One-dimensional Gauss-Lobatto quadrature.
 class GaussLobattoQuadRule1d01: public QuadRule1d
   {
   private:

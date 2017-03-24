@@ -74,7 +74,8 @@ XC::BeamColumnWithSectionFDTrf2d &XC::BeamColumnWithSectionFDTrf2d::operator=(co
   {
     //BeamColumnWithSectionFD::operator=(otro);
     //set_transf(otro.theCoordTransf);
-    std::cerr << "BeamColumnWithSectionFDTrf2d; operador asignación no implementado." << std::endl;
+    std::cerr << nombre_clase()
+	      << "; assignment operator not implemented." << std::endl;
     return *this;
   }
 

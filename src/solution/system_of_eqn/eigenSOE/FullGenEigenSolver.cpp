@@ -238,7 +238,7 @@ int XC::FullGenEigenSolver::setSize(void)
   }
 
 
-//! @brief Return the dimensión de los eigenvectors.
+//! @brief Return the eigenvectors dimension.
 const int &XC::FullGenEigenSolver::getSize(void) const
   { return theSOE->size; }
 

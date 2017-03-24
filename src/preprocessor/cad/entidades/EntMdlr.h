@@ -53,8 +53,8 @@ class SetFilaK;
 class EntMdlr: public SetEstruct
   {
   private:
-    size_t idx; //!< @brief Índice del objeto (se emplea sólo para numerar entidades para VTK).
-    bool doGenMesh; //!< True if the point must be meshed (node will be created). Por ejemplo es falso cuando es un punto intermedio de una línea.
+    size_t idx; //!< @brief Object index (to be used as index for VTK arrays).
+    bool doGenMesh; //!< True if the point must be meshed (node will be created). For exemple is false when it's the middle point of a line.
   protected:
     TritrizPtrNod nodos;
     TritrizPtrElem elementos;
@@ -120,7 +120,7 @@ class EntMdlr: public SetEstruct
       { return elementos; }
     const TritrizPtrElem &GetTtzElementos(void) const
       { return elementos; }
-    //! @brief Return the dimensión del objeto.
+    //! @brief Return the object dimension (0, 1, 2 or 3).
     virtual unsigned short int GetDimension(void) const= 0;
     virtual BND3d Bnd(void) const= 0;
 
