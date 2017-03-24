@@ -32,24 +32,28 @@
 
 #include "utility/actor/actor/MovableID.h"
 
+
+//! @brief Checks matrices number of rows.
 void XC::MeshComponent::check_matrices(const std::deque<Matrix> &matrices,const int &ndof) const
   {
     const size_t numMatrices= matrices.size();
     for(size_t i=0; i<numMatrices; i++)
       if(matrices[i].noRows() == ndof)
         {
-          index = i;
-          i = numMatrices;
+          index= i;
+          i= numMatrices;
         }
   }
 
+//! @brief Appends a new matrix to the container.
 void XC::MeshComponent::nueva_matriz(std::deque<Matrix> &matrices,const int &ndof) const
   {
     const size_t numMatrices= matrices.size();
     matrices.push_back(Matrix(ndof,ndof));
-    index = numMatrices;
+    index= numMatrices;
   }
 
+//! @brief Initializes the matrix container.
 void XC::MeshComponent::setup_matrices(std::deque<Matrix> &matrices,const int &ndof) const
   {
     check_matrices(matrices,ndof);
@@ -57,9 +61,11 @@ void XC::MeshComponent::setup_matrices(std::deque<Matrix> &matrices,const int &n
       nueva_matriz(matrices,ndof);
   }
 
+//! @brief Constructor.
 XC::MeshComponent::MeshComponent(int classTag)
   : ContinuaReprComponent(0,classTag), index(-1){}
 
+//! @brief Constructor.
 XC::MeshComponent::MeshComponent(int tag, int classTag)
   : ContinuaReprComponent(tag,classTag), index(-1){}
 

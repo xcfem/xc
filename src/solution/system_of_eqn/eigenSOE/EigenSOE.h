@@ -102,19 +102,19 @@ class EigenSOE : public SystemOfEqn
 
     //Eigenvalues
     virtual const double &getEigenvalue(int mode) const;
-    double getPulsacion(int mode) const;
+    double getAngularFrequency(int mode) const;
     double getPeriodo(int mode) const;
     double getFrecuencia(int mode) const;
     Vector getEigenvalues(void) const;
-    Vector getPulsaciones(void) const;
+    Vector getAngularFrequencies(void) const;
     Vector getPeriodos(void) const;
     Vector getFrecuencias(void) const;
 
-    //Factores de participación modal
+    //Modal participation factors.
     virtual double getModalParticipationFactor(int mode) const;
     Vector getModalParticipationFactors(void) const;
 
-    //Factores de distribución
+    //Distribution factors.
     Vector getDistributionFactor(int mode) const;
     Matrix getDistributionFactors(void) const;
 

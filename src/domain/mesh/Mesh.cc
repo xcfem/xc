@@ -699,7 +699,7 @@ int XC::Mesh::setRayleighDampingFactors(const RayleighDampingFactors &rF)
     return result;
   }
 
-//! @brief Consuma el estado del modelo y llama al método record de todos los recorders definidos.
+//! @brief Commits mesh state.
 int XC::Mesh::commit(void)
   {
     // invoke commit on all nodes and elements in the mesh
@@ -716,7 +716,7 @@ int XC::Mesh::commit(void)
     return 0;
   }
 
-//! @brief Returns the estado del modelo al último consumado.
+//! @brief Returns the mesh to its last commited state.
 int XC::Mesh::revertToLastCommit(void)
   {
     //

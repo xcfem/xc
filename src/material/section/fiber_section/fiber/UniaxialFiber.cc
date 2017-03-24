@@ -140,15 +140,15 @@ void XC::UniaxialFiber::setMaterial(const MaterialLoader &ldr,const std::string 
     setMaterial(theMat);
   }
 
-//! @brief Consuma el material state.
+//! @brief Commits material state.
 int XC::UniaxialFiber::commitState(void)
   { return theMaterial->commitState(); }
 
-//! @brief Returns the material state al último consumado.
+//! @brief Returns to its last commited state.
 int XC::UniaxialFiber::revertToLastCommit(void)
   { return theMaterial->revertToLastCommit(); }
 
-//! @brief Returns the material de la fibra al estado inicial.
+//! @brief Returns to the initial state.
 int XC::UniaxialFiber::revertToStart(void)
   { return theMaterial->revertToStart(); }
 

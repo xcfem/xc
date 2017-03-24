@@ -107,7 +107,7 @@ const XC::Vector &XC::NodeVectors::getData(const size_t &nDOF) const
     return *commitData;
   }
   
-//! @brief Returns the valores "consumados"
+//! @brief Returns commited values.
 const XC::Vector &XC::NodeVectors::getCommitData(void) const
   {
     assert(commitData);

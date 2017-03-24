@@ -168,7 +168,7 @@ int XC::DqUniaxialMaterial::commitState(void)
     return err;
   }
 
-//! @brief Returns the estado de la sección al último consumado.
+//! @brief Returns to the last commited state.
 int XC::DqUniaxialMaterial::revertToLastCommit(void)
   {
     int err = 0;
@@ -186,6 +186,7 @@ int XC::DqUniaxialMaterial::revertToLastCommit(void)
     return err;
   }
 
+//! @brief Returns to the initial state.
 int XC::DqUniaxialMaterial::revertToStart(void)
   {
     int err = 0;
@@ -212,7 +213,7 @@ int XC::DqUniaxialMaterial::zeroInitialStrain(void)
     return err;
   }
 
-//! @brief Asigna la initial strain.
+//! @brief Sets initial strain.
 int XC::DqUniaxialMaterial::setInitialStrain(const Vector &def,const size_t &offset)
   {
     int err= 0;
@@ -223,7 +224,7 @@ int XC::DqUniaxialMaterial::setInitialStrain(const Vector &def,const size_t &off
     return err;
   }
 
-//! @brief Asigna la trial strain.
+//! @brief Sets trial strain.
 int XC::DqUniaxialMaterial::setTrialStrain(const Vector &def,const size_t &offset)
   {
     int err= 0;

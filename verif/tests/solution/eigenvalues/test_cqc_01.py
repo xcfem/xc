@@ -93,7 +93,7 @@ solver= soe.newSolver("full_gen_eigen_solver")
 analysis= solu.newAnalysis("modal_analysis","smt","")
 analOk= analysis.analyze(3)
 periodos= analysis.getPeriods()
-pulsaciones= analysis.getPulsatances()
+angularFrequencies= analysis.getAngularFrequencies()
 aceleraciones= [2.27,2.45,6.98]
 crossCQCCoefficients= analysis.getCQCModalCrossCorrelationCoefficients(xc.Vector([0.05,0.05,0.05]))
 
@@ -117,9 +117,9 @@ maxDispMod3= A3[0:3] #getCaja(A3,1,1,3,1)
 
 
 # Los valores teóricos estan tomados deel ejemplo E26.8 del libro: Clough, R. W., and Penzien, J., Dynamics of Structures
-pulsacionesTeor= xc.Vector([4.59,4.83,14.56])
+angularFrequenciesTeor= xc.Vector([4.59,4.83,14.56])
 periodosTeor= xc.Vector([2*math.pi/4.59,2*math.pi/4.83,2*math.pi/14.56])
-ratio0= (pulsaciones-pulsacionesTeor).Norm()
+ratio0= (angularFrequencies-angularFrequenciesTeor).Norm()
 frecuenciasTeor= [4.59/2/math.pi,4.83/2/math.pi,14.56/2/math.pi]
 ratio1= (periodos-periodosTeor).Norm()
 modosTeor= numpy.matrix([[-0.731,0.271,-1],
@@ -136,9 +136,9 @@ ratio3= (crossCQCCoefficients-crossCQCCoefficientsTeor).Norm()
 factoresParticipacionModalXTeor= xc.Vector([-.731/1.588,.271/1.075,-1/1.678])
 ratio4= (factoresParticipacionModalX-factoresParticipacionModalXTeor).Norm()
 ''' 
-maxDispMod1Teor= modo1Teor*factoresParticipacionModalXTeor[0]*aceleraciones[0]/sqr(pulsacionesTeor[0])
-maxDispMod2Teor= modo2Teor*factoresParticipacionModalXTeor[1]*aceleraciones[1]/sqr(pulsacionesTeor[1])
-maxDispMod3Teor= modo3Teor*factoresParticipacionModalXTeor[2]*aceleraciones[2]/sqr(pulsacionesTeor[2])
+maxDispMod1Teor= modo1Teor*factoresParticipacionModalXTeor[0]*aceleraciones[0]/sqr(angularFrequenciesTeor[0])
+maxDispMod2Teor= modo2Teor*factoresParticipacionModalXTeor[1]*aceleraciones[1]/sqr(angularFrequenciesTeor[1])
+maxDispMod3Teor= modo3Teor*factoresParticipacionModalXTeor[2]*aceleraciones[2]/sqr(angularFrequenciesTeor[2])
 maxDispMod1Teor= [0.119,-0.038,0.162]*0.3048
 maxDispMod2Teor= [0.039,0.143,0.005]*0.3048
 maxDispMod3Teor= [0.064,-0.016,-0.055]*0.3048
@@ -176,8 +176,8 @@ ratioDispCQC= (maxDispCQC-maxDispCQCTeor).Norm()
 
 
 ''' 
-print "pulsaciones: ",pulsaciones
-print "pulsacionesTeor: ",pulsacionesTeor
+print "angular frequencies: ",angularFrequencies
+print "angular frequencies (teor.): ",angularFrequenciesTeor
 print "ratio0= ",ratio0
 print "periodos: ",periodos
 print "periodosTeor: ",periodosTeor

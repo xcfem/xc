@@ -42,9 +42,8 @@ class FEM_ObjectBroker;
 
 //! \ingroup Nod
 //
-//! @brief Vectores para almacenar los valores de prueba («trial»)
-//! y los valores consumados («commited») del desplazamiento, velocidad, etc.
-//! del nodo.
+//! @brief Vectores to store trial and commited
+//! values of node displacement, velocity, etc.
 class NodeVectors: public EntCmd, public MovableObject
   {
   protected:

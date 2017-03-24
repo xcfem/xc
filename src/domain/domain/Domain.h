@@ -226,12 +226,12 @@ class Domain: public ObjWithRecorders, public DistributedBase
      // methods for eigenvalue analysis
     int getNumModes(void) const;
     virtual int setEigenvalues(const Vector &);
-    virtual const double &getEigenvalue(int mode) const;
-    double getPulsacion(int mode) const;
-    double getPeriodo(int mode) const;
-    double getFrecuencia(int mode) const;
+    virtual const double &getEigenvalue(int) const;
+    double getAngularFrequency(int) const;
+    double getPeriodo(int) const;
+    double getFrecuencia(int) const;
     virtual const Vector &getEigenvalues(void) const;
-    Vector getPulsaciones(void) const;
+    Vector getAngularFrequencies(void) const;
     Vector getPeriodos(void) const;
     Vector getFrecuencias(void) const;
     virtual int setModalParticipationFactors(const Vector &);

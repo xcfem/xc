@@ -93,16 +93,16 @@ XC::LinearCrdTransf3d::LinearCrdTransf3d(void)
   : XC::SmallDispCrdTransf3d(0, CRDTR_TAG_LinearCrdTransf3d) {}
 
 
-//! @brief Consuma la coordinate transformation de acuerdo con el estado actual.
+//! @brief Commits state of the coordinate transformation.
 int XC::LinearCrdTransf3d::commitState(void)
   { return 0; }
 
 
-//! @brief Returns the estado de la transformación al último consumado.
+//! @brief Returns to the last commited state.
 int XC::LinearCrdTransf3d::revertToLastCommit(void)
   { return 0; }
 
-//! @brief Returns the estado de la transformación al inicial.
+//! @brief Returns to the initial state.
 int XC::LinearCrdTransf3d::revertToStart(void)
   { return 0; }
 

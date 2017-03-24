@@ -41,13 +41,13 @@ class Matrix;
 class MeshComponent: public ContinuaReprComponent
   {
   private:
-    void check_matrices(const std::deque<Matrix> &matrices,const int &ndof) const;
-    void nueva_matriz(std::deque<Matrix> &matrices,const int &ndof) const;
+    void check_matrices(const std::deque<Matrix> &,const int &) const;
+    void nueva_matriz(std::deque<Matrix> &,const int &) const;
   protected:
     mutable int index; //!< Index for VTK arrays.
     LabelContainer labels; //!< Label container.
 
-    void setup_matrices(std::deque<Matrix> &matrices,const int &ndof) const;
+    void setup_matrices(std::deque<Matrix> &,const int &) const;
     int sendIdsEtiquetas(int posDbTag,CommParameters &);
     int recvIdsEtiquetas(int posDbTag,const CommParameters &);
     int sendData(CommParameters &);
@@ -57,8 +57,6 @@ class MeshComponent: public ContinuaReprComponent
     // constructors
     MeshComponent(int classTag);
     MeshComponent(int tag, int classTag);
-
-
   };
 
 } // end of XC namespace

@@ -36,8 +36,8 @@ namespace XC {
 
 //! \ingroup Nod
 //
-//! @brief Vectores para almacenar los valores de prueba
-//! y los valores consumados de la velocidad del nodo.
+//! @brief Vectores to store trial and commited values
+//! of node velocity.
 class NodeVelVectors: public NodeVectors
   {
   public:

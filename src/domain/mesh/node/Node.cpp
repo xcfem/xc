@@ -356,9 +356,9 @@ void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &val
         ConstraintLoader &cl= GetPreprocessor()->getConstraintLoader();
         const int sz= std::min(idGdls.size(),valores.size());
         if(valores.size()<idGdls.size())
-	  std::cerr << "El vector de desplazamientos prescritos"
-                    << " debería tener dimensión " << idGdls.size()
-                    << std::endl;
+	  std::cerr << "Vector of prescribed displacements"
+                    << " must be of " << idGdls.size()
+                    << " dimension." << std::endl;
         if(sz)
           {
             for(int i= 0;i<sz;i++)
@@ -370,7 +370,7 @@ void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &val
       }
     else
       std::cerr << "Node::coarta_movs; "
-                << "the pointer al domain es nulo. Se ignora la coacción." << std::endl;
+                << " domain not defined. Constraint ignored." << std::endl;
   }
 
 //! @brief Sets prescribed displacements on the DOFs being passed as parameter.
@@ -399,7 +399,7 @@ XC::DOF_Group *XC::Node::getDOF_GroupPtr(void)
   }
 
 
-//! @brief Return the dimensión del nodo (1,2 ó 3).
+//! @brief Return the dimension of the node vector position (1,2 or 3).
 size_t XC::Node::getDim(void) const
   { return Crd.Size(); }
 
@@ -429,7 +429,7 @@ XC::Vector XC::Node::getCrds3d(void) const
     return retval;
   }
 
-//! @brief Return the posición inicial del nodo.
+//! @brief Return the intial position of the node in 2D.
 Pos2d XC::Node::getPosInicial2d(void) const
   {
     Pos2d retval;
@@ -441,7 +441,7 @@ Pos2d XC::Node::getPosInicial2d(void) const
     return retval;
   }
 
-//! @brief Return the posición inicial del nodo.
+//! @brief Return the intial position of the node in 3D.
 Pos3d XC::Node::getPosInicial3d(void) const
   {
     Pos3d retval;
@@ -455,7 +455,7 @@ Pos3d XC::Node::getPosInicial3d(void) const
     return retval;
   }
 
-//! @brief Return the posición final del nodo.
+//! @brief Return the final position of the node.
 Pos2d XC::Node::getPosFinal2d(void) const
   {
     const Vector &d= getDisp();
@@ -478,7 +478,7 @@ Pos2d XC::Node::getPosFinal2d(void) const
     return retval;
   }
 
-//! @brief Return the posición final del nodo.
+//! @brief Return the final position of the node.
 Pos3d XC::Node::getPosFinal3d(void) const
   {
     const Vector &d= getDisp();
@@ -512,7 +512,8 @@ Pos3d XC::Node::getPosFinal3d(void) const
     return retval;
   }
 
-//! @brief Extrae del vector d las componentes XYZ de la traslación del nodo
+//! @brief Extracts translational components from d vector.
+//! @param d: displacement (or velocity or acceleration) vector
 XC::Vector extrae_traslacion(const XC::Vector &d,const size_t &dim,const size_t numDOF)
   {
     XC::Vector retval(3,0.0);
@@ -544,7 +545,8 @@ XC::Vector extrae_traslacion(const XC::Vector &d,const size_t &dim,const size_t 
     return retval;
   }
 
-//! @brief Extrae del vector d las componentes XYZ de la rotación del nodo
+//! @brief Extracts rotational components from d vector.
+//! @param d: displacement (or velocity or acceleration) vector
 XC::Vector extrae_rotacion(const XC::Vector &d,const size_t &dim,const size_t numDOF)
   {
     XC::Vector retval(3,0.0);
@@ -555,42 +557,48 @@ XC::Vector extrae_rotacion(const XC::Vector &d,const size_t &dim,const size_t nu
     return retval;
   }
 
-//! @brief Returns the componentes XYZ de la traslación del nodo
+//! @brief Returns the XYZ components of node displacement.
 XC::Vector XC::Node::getDispXYZ(void) const
   { return extrae_traslacion(getDisp(),getDim(),numberDOF); }
 
-//! @brief Returns the componentes XYZ de la rotación del nodo
+//! @brief Returns the XYZ components of node rotation.
 XC::Vector XC::Node::getRotXYZ(void) const
   { return extrae_rotacion(getDisp(),getDim(),numberDOF); }
 
-//! @brief Returns the componentes XYZ de la velocity de traslación del nodo
+//! @brief Returns the XYZ components of the translational velocity of the node.
 XC::Vector XC::Node::getVelXYZ(void) const
   { return extrae_traslacion(getVel(),getDim(),numberDOF); }
 
-//! @brief Returns the componentes XYZ de la velocity de rotación del nodo
+//! @brief Returns the XYZ components of the angular velocity of the node.
 XC::Vector XC::Node::getOmegaXYZ(void) const
   { return extrae_rotacion(getVel(),getDim(),numberDOF); }
 
-//! @brief Returns the componentes XYZ de la aceleración de traslación del nodo
+//! @brief Returns the XYZ components of the translational acceleration of the node.
 XC::Vector XC::Node::getAccelXYZ(void) const
   { return extrae_traslacion(getAccel(),getDim(),numberDOF); }
 
-//! @brief Returns the componentes XYZ de la aceleración de rotación del nodo
+//! @brief Returns the XYZ components of the angular acceleration of the node.
 XC::Vector XC::Node::getAlphaXYZ(void) const
   { return extrae_rotacion(getAccel(),getDim(),numberDOF); }
 
-//! @brief Returns the cuadrado de la distancia desde el nodo al punto que
-//! is being passed as parameter.
+//! @brief Returns the square of the distance from the node to the point
+//! being passed as parameter.
+//! @param p: 2D point to calculate the distance.
+//! @param initialGeometry: if true initial position of the node is considered.
 double XC::Node::getDist2(const Pos2d &p,bool initialGeometry) const
   { return getDist2(To3dXY2d(p),initialGeometry); }
 
-//! @brief Return the distancia desde el nodo al punto que
-//! is being passed as parameter.
+//! @brief Returns the distance from the node to the point
+//! being passed as parameter.
+//! @param p: 2D point to calculate the distance.
+//! @param initialGeometry: if true initial position of the node is considered.
 double XC::Node::getDist(const Pos2d &p,bool initialGeometry) const
   { return sqrt(getDist2(p,initialGeometry)); }
 
-//! @brief Returns the cuadrado de la distancia desde el nodo al punto que
-//! is being passed as parameter.
+//! @brief Returns the square of the distance from the node to the point
+//! being passed as parameter.
+//! @param p: 3D point to calculate the distance.
+//! @param initialGeometry: if true initial position of the node is considered.
 double XC::Node::getDist2(const Pos3d &p,bool initialGeometry) const
   {
     if(initialGeometry)
@@ -599,12 +607,14 @@ double XC::Node::getDist2(const Pos3d &p,bool initialGeometry) const
       return ::dist2(getPosFinal3d(),p);
   }
 
-//! @brief Return the distancia desde el nodo al punto que
-//! is being passed as parameter.
+//! @brief Returns the distance from the node to the point
+//! being passed as parameter.
+//! @param p: 3D point to calculate the distance.
+//! @param initialGeometry: if true initial position of the node is considered.
 double XC::Node::getDist(const Pos3d &p,bool initialGeometry) const
   { return sqrt(getDist2(p,initialGeometry)); }
 
-//! @brief Asigna la posición del nodo.
+//! @brief Sets the node position.
 void XC::Node::setPos(const Pos3d &p)
   {
     const size_t sz= getDim();
@@ -623,14 +633,15 @@ void XC::Node::setPos(const Pos3d &p)
       }
   }
 
-//! @brief Aplica a nodo la transformación cuyo índice is being passed as parameter.
+//! @brief Applies to the node position the transformation being passed as parameter.
 void XC::Node::Transforma(const TrfGeom &trf)
   {
     static Pos3d p;
     setPos(trf.Transforma(getPosInicial3d()));
   }
 
-//! @brief Return the posición de un nodo.
+//! @brief Return the 3D position of the node.
+//! @param initialGeometry: if true initial position of the node is considered.
 Pos3d XC::pos_nodo(const Node &nod,bool initialGeometry)
   {
     if(initialGeometry)
@@ -640,14 +651,15 @@ Pos3d XC::pos_nodo(const Node &nod,bool initialGeometry)
   }
 
 
-//! @brief Returns the desplazamiento del nodo
+//! @brief Returns the displacement of the node
 const XC::Vector &XC::Node::getDisp(void) const
   { return disp.getData(numberDOF); }
 
+//! @brief Returns the velocity of the node
 const XC::Vector &XC::Node::getVel(void) const
   { return vel.getData(numberDOF); }
 
-//! @brief Return the aceleración
+//! @brief Returns the acceleration of the node
 const XC::Vector &XC::Node::getAccel(void) const
   { return accel.getData(numberDOF); }
 
@@ -658,12 +670,15 @@ const XC::Vector &XC::Node::getAccel(void) const
 **
 ** *********************************************************************/
 
+//! @brief Returns the trial value of the displacement of the node
 const XC::Vector &XC::Node::getTrialDisp(void) const
   { return disp.getTrialData(numberDOF); }
 
+//! @brief Returns the trial value of the velocity of the node
 const XC::Vector &XC::Node::getTrialVel(void) const
   { return vel.getTrialData(numberDOF); }
 
+//! @brief Returns the trial value of the acceleration of the node
 const XC::Vector &XC::Node::getTrialAccel(void) const
   { return accel.getTrialData(numberDOF); }
 
@@ -807,7 +822,7 @@ const XC::Vector &XC::Node::getUnbalancedLoadIncInertia(void)
     return unbalLoadWithInertia;
   }
 
-//! @brief Consuma el estado del nodo.
+//! @brief Commits the state of the node.
 int XC::Node::commitState(void)
   {
     disp.commitState(numberDOF);
@@ -817,7 +832,7 @@ int XC::Node::commitState(void)
   }
 
 
-//! @brief Returns the nodo al estado correspondiente al último consumado.
+//! @brief Returns to the last commited state.
 int XC::Node::revertToLastCommit(void)
   {
     disp.revertToLastCommit(numberDOF);
@@ -828,7 +843,7 @@ int XC::Node::revertToLastCommit(void)
   }
 
 
-//! @brief Returns the nodo a su estado inicial.
+//! @brief Returns to the initial state.
 int XC::Node::revertToStart(void)
   {
     disp.revertToStart(numberDOF);
@@ -1011,23 +1026,23 @@ int XC::Node::setEigenvector(int mode, const Vector &eigenvector)
     return 0;
   }
 
-//! @brief Return the pulsación correspondiente al modo i.
-double XC::Node::getPulsacion(int mode) const
+//! @brief Return the angular frequency corresponding to the i-th mode.
+double XC::Node::getAngularFrequency(int i) const
   {
     const Domain *dom= getDomain();
     assert(dom);
-    return dom->getPulsacion(mode);
+    return dom->getAngularFrequency(i);
   }
 
 //! @brief Returns the angular frequencies from the modal analysis.
-XC::Vector XC::Node::getPulsaciones(void) const
+XC::Vector XC::Node::getAngularFrequencies(void) const
   {
     const Domain *dom= getDomain();
     assert(dom);
     const int nm= getNumModes();
     Vector retval(nm);
     for(int i= 1;i<=nm;i++)
-      retval[i-1]= dom->getPulsacion(i);
+      retval[i-1]= dom->getAngularFrequency(i);
     return retval;
   }
 
@@ -1060,16 +1075,16 @@ XC::Matrix XC::Node::getNormalizedEigenvectors(void) const
     return retval;
   }
 
-//! @brief Returns the factor de participación modal
-//! correspondiente al modo i.
-double XC::Node::getModalParticipationFactor(int mode) const
+//! @brief Returns the modal participation factor
+//! corresponding to i-th mode.
+double XC::Node::getModalParticipationFactor(int i) const
   {
     const Domain *dom= getDomain();
     assert(dom);
-    return dom->getModalParticipationFactor(mode);
+    return dom->getModalParticipationFactor(i);
   }
 
-//! @brief Returns the factores de participación modal.
+//! @brief Returns the modal participation factors.
 XC::Vector XC::Node::getModalParticipationFactors(void) const
   {
     const int nm= getNumModes();
@@ -1079,14 +1094,16 @@ XC::Vector XC::Node::getModalParticipationFactors(void) const
     return retval;
   }
 
-//! @brief Returns the factor de participación modal
-//! correspondiente al modo i. If the gdls argument
-//! is not empty «proyecta» el modo i sobre
-//! los gdls indicados en the set. Se escribió para poder
-//! expresar ls participación según un gdl
-//! (ver test de verificación test_cqc_01.xc).
-//! LOS RESULTADOS DE ESTA FUNCIÓN NO COINCIDEN CON LOS
-//! OBTENIDOS DEL PROBLEMA DE AUTOVALORES
+//! @brief Returns the modal participation factor
+//! corresponding to i-th mode. If the gdls argument
+//! is not empty it "projects" the i-th mode over
+//! the selected DOFs in the argument. It's written to allow
+//! expressing the participation with respect to a DOF
+//! (see verification test: test_cqc_01.xc).
+//! THE RESULTS OF THIS FUNCTION DOESN'T MATCH WITH THOSE
+//! OBTAINED FROM THE EIGENVALUE PROBLEM
+//! @param mode: index of the mode.
+//! @param gdls: degrees of freedom to project on.
 double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &gdls) const
   {
     double retval= 0;
@@ -1099,8 +1116,8 @@ double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &gdls)
         double num= 0;
         if((mass.noRows()!=sz) || (mass.noCols()!=sz))
           std::cerr << "Node::getModalParticipationFactor; ERROR "
-                    << "el autovector es de dimensión " << sz
-                    << " y la matriz de masas de " << mass.noRows()
+                    << "the eigenvector has dimension " << sz
+                    << " and the mass matrix has dimension " << mass.noRows()
                     << "x" << mass.noCols() << ".\n";
         Vector J(sz,0.0);
         for(std::set<int>::const_iterator i= gdls.begin();i!=gdls.end();i++)
@@ -1115,9 +1132,10 @@ double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &gdls)
     return retval;
   }
 
-//! @brief Returns the factores de participación modal. If gdls argument
-//! is not empty «proyecta» el modo i sobre
-//! los gdls indicados en the set.
+//! @brief Returns the modal participation factors. If gdls argument
+//! is not empty it "projects" the i-th mode over
+//! the selected DOFs in the argument.
+//! @param gdls: degrees of freedom to project on.
 XC::Vector XC::Node::getModalParticipationFactors(const std::set<int> &gdls) const
   {
     const int nm= getNumModes();
@@ -1127,29 +1145,31 @@ XC::Vector XC::Node::getModalParticipationFactors(const std::set<int> &gdls) con
     return retval;
   }
 
-//! @brief Returns the factores de participación modal. If gdls argument
-//! is not empty «proyecta» el modo i sobre
-//! los gdls indicados en the set.
+//! @brief Returns the modal participation factors. If gdls argument
+//! is not empty it "projects" the i-th mode over
+//! the selected DOFs in the argument.
+//! @param l: degrees of freedom to project on.
 XC::Vector XC::Node::getModalParticipationFactorsForGdls(const boost::python::list &l) const
   {
     std::set<int> tmp= set_int_from_py_list(l);
     return getModalParticipationFactors(tmp);
   }
 
-//! @brief Returns the factor de distribución correspondiente al modo
-//! being passed as parameter.
-XC::Vector XC::Node::getDistributionFactor(int mode) const
-  { return getModalParticipationFactor(mode)*getEigenvector(mode); }
+//! @brief Returns the distribution factor of the i-th mode.
+XC::Vector XC::Node::getDistributionFactor(int i) const
+  { return getModalParticipationFactor(i)*getEigenvector(i); }
 
-//! @brief Returns the factor de distribución correspondiente al modo
+//! @brief Returns the distribution factor corresponding to the mode
 //! being passed as parameter. If gdls argument
-//! is not empty «proyecta» el modo i sobre
-//! los gdls indicados en the set.
+//! is not it "projects" the i-th mode over
+//! the selected DOFs in the argument.
+//! @param mode: index of the mode.
+//! @param gdls: degrees of freedom to project on.
 XC::Vector XC::Node::getDistributionFactor(int mode,const std::set<int> &gdls) const
   { return getModalParticipationFactor(mode,gdls)*getEigenvector(mode); }
 
-//! @brief Returns a matriz con los factores de distribución
-//! calculados colocados por columnas.
+//! @brief Returns the matrix with the computed distribution factors
+//! placed by columns.
 XC::Matrix XC::Node::getDistributionFactors(void) const
   {
     Matrix retval;
@@ -1184,7 +1204,7 @@ double XC::Node::getEffectiveModalMass(int mode) const
     return retval;
   }
 
-//! @brief Returns the masas modales efectivas.
+//! @brief Returns the effective modal mases.
 XC::Vector XC::Node::getEffectiveModalMasses(void) const
   {
     const int nm= getNumModes();
@@ -1194,8 +1214,8 @@ XC::Vector XC::Node::getEffectiveModalMasses(void) const
     return retval;
   }
 
-//! @brief Return the equivalent static load para el modo
-//! being passed as parameter y la aceleración correspondiente a dicho modo.
+//! @brief Return the equivalent static load for the mode
+//! being passed as parameter and the acceleration corresponding to that mode.
 XC::Vector XC::Node::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
     Vector retval= mass*getDistributionFactor(mode);
@@ -1203,34 +1223,38 @@ XC::Vector XC::Node::getEquivalentStaticLoad(int mode,const double &accel_mode) 
     return retval;
   }
 
-//! @brief Returns the desplazamiento modal máximo para el modo
-//! being passed as parameter y la aceleración correspondiente a dicho modo.
+//! @brief Returns the maximal modal displacement for the node
+//! being passed as parameter and the acceleration corresponding to that mode.
 XC::Vector XC::Node::getMaxModalDisplacement(int mode,const double &accel_mode) const
   {
-    return getMaxModalAcceleration(mode,accel_mode)/sqr(getPulsacion(mode));
+    return getMaxModalAcceleration(mode,accel_mode)/sqr(getAngularFrequency(mode));
   }
 
-//! @brief Return the velocity modal máxima para el modo
-//! being passed as parameter y la aceleración correspondiente a dicho modo.
+//! @brief Return the maximal modal velocity for the mode
+//! being passed as parameter and the acceleration corresponding to that mode.
 XC::Vector XC::Node::getMaxModalVelocity(int mode,const double &accel_mode) const
   {
-    return getMaxModalAcceleration(mode,accel_mode)/getPulsacion(mode);
+    return getMaxModalAcceleration(mode,accel_mode)/getAngularFrequency(mode);
   }
 
-//! @brief Return the aceleración modal máxima para el modo
-//! being passed as parameter y la aceleración correspondiente a dicho modo.
+//! @brief Return the maximal modal acceleration for the mode
+//! being passed as parameter and the acceleration corresponding to that mode.
 XC::Vector XC::Node::getMaxModalAcceleration(int mode,const double &accel_mode) const
   {
     return accel_mode*getDistributionFactor(mode);
   }
 
-//! @brief Returns the desplazamiento modal máximo en los gdls y modo being passed
-//! as parameter y la aceleración correspondiente a dicho modo.
+//! @brief Returns the maximal modal displacement on the DOFs and mode being passed
+//! as parameter and the acceleration corresponding to that mode.
+//! @param gdls: degrees of freedom to deal with.
 XC::Vector XC::Node::getMaxModalDisplacementForGdls(int mode,const double &accel_mode,const std::set<int> &gdls) const
   {
-    return getMaxModalAccelerationForGdls(mode,accel_mode,gdls)/sqr(getPulsacion(mode));
+    return getMaxModalAccelerationForGdls(mode,accel_mode,gdls)/sqr(getAngularFrequency(mode));
   }
 
+//! @brief Returns the maximal modal displacement on the DOFs and mode being passed
+//! as parameter and the acceleration corresponding to that mode.
+//! @param gdls: degrees of freedom to deal with.
 XC::Vector XC::Node::getMaxModalDisplacementForGdls(int mode,const double &accel_mode,const boost::python::list &gdls) const
   {
     std::set<int> tmp= set_int_from_py_list(gdls);
@@ -1239,25 +1263,33 @@ XC::Vector XC::Node::getMaxModalDisplacementForGdls(int mode,const double &accel
 
 
 //! @brief Returns the maximum modal velocity on the DOFs and mode being passed
-//! as parameter y la aceleración correspondiente a dicho modo.
+//! as parameter and the acceleration corresponding to that mode.
+//! @param gdls: degrees of freedom to deal with.
 XC::Vector XC::Node::getMaxModalVelocityForGdls(int mode,const double &accel_mode,const std::set<int> &gdls) const
   {
-    return getMaxModalAccelerationForGdls(mode,accel_mode,gdls)/getPulsacion(mode);
+    return getMaxModalAccelerationForGdls(mode,accel_mode,gdls)/getAngularFrequency(mode);
   }
 
+//! @brief Returns the maximum modal velocity on the DOFs and mode being passed
+//! as parameter and the acceleration corresponding to that mode.
+//! @param gdls: degrees of freedom to deal with.
 XC::Vector XC::Node::getMaxModalVelocityForGdls(int mode,const double &accel_mode,const boost::python::list &gdls) const
   {
     std::set<int> tmp= set_int_from_py_list(gdls);
     return getMaxModalVelocityForGdls(mode,accel_mode,tmp);
   }
 
-//! @brief Return the aceleración modal máxima en los gdls y modo being passed
-//! as parameter y la aceleración correspondiente a dicho modo.
+//! @brief Return the maximal modal acceleration on the DOFs and mode being passed
+//! as parameter and the acceleration corresponding to that mode.
+//! @param gdls: degrees of freedom to deal with.
 XC::Vector XC::Node::getMaxModalAccelerationForGdls(int mode,const double &accel_mode,const std::set<int> &gdls) const
   {
     return accel_mode*getDistributionFactor(mode,gdls);
   }
 
+//! @brief Return the maximal modal acceleration on the DOFs and mode being passed
+//! as parameter and the acceleration corresponding to that mode.
+//! @param gdls: degrees of freedom to deal with.
 XC::Vector XC::Node::getMaxModalAccelerationForGdls(int mode,const double &accel_mode,const boost::python::list &gdls) const
   {
     std::set<int> tmp= set_int_from_py_list(gdls);
@@ -1585,7 +1617,7 @@ const XC::MeshEdge *XC::Node::next(const std::deque<MeshEdge> &edges, const std:
   }
 
 
-//! @brief Return the acción de los elementos of the set sobre el nodo.
+//! @brief Return the action of the elements from the set over this node.
 const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &elementos,const bool &inc_inertia) const
   {
     static Vector retval;
@@ -1615,8 +1647,8 @@ const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &e
     return retval; 
   }
 
-//! @brief Returns the sistema de vectores deslizantes que representa
-//! la acción de los elementos of the set sobre el nodo.
+//! @brief Returns the sliding vector system that represents
+//! the action of the elements of the set over the node.
 SVD3d XC::Node::getResistingSVD3d(const std::set<const Element *> &elementos,const bool &inc_inertia) const
   {
     SVD3d retval;
@@ -1638,11 +1670,11 @@ SVD3d XC::Node::getResistingSVD3d(const std::set<const Element *> &elementos,con
     return retval; 
   }
 
-//! @brief Return the reacción en el nodo.
+//! @brief Return the node reaction
 const XC::Vector &XC::Node::getReaction(void) const
   { return reaction; }
 
-//! @brief Incrementa la reacción en el nodo.
+//! @brief Increments the node reaction.
 int XC::Node::addReactionForce(const Vector &add, double factor)
   {
     // check vector of appropraie size
@@ -1662,7 +1694,7 @@ int XC::Node::addReactionForce(const Vector &add, double factor)
     return 0;
   }
 
-//! @brief Chequea la reacción en el nodo.
+//! @brief Checks reaction on the node.
 void XC::Node::checkReactionForce(const double &tol)
   {
     const ConstrContainer &cc= getDomain()->getConstraints();
@@ -1671,9 +1703,9 @@ void XC::Node::checkReactionForce(const double &tol)
       {
         if(!cc.nodeAffectedBySPsOMPs(getTag()) && !isFrozen())
           std::cerr << "Node::checkReactionForce el nodo: " << getTag()
-                    << " no esta sujeto a constraints y sin embargo"
-                    << " tiene una reacción de valor: " << reaction 
-                    << " y norma: " << sqrt(norm2)
+                    << " has not constraints and however"
+                    << " is has a reaction with value: " << reaction 
+                    << " and norm: " << sqrt(norm2)
                     << " the solution method is not well suited to the problem. "
                     << std::endl;
       }
@@ -1692,7 +1724,7 @@ int XC::Node::resetReactionForce(bool inclInertia)
     return 0;
   }
 
-//! @brief Desplaza la posición del nodo (sólo esta previsto que se use desde XC::Set).
+//! @brief Moves the node (intended only for its use from XC::Set).
 void XC::Node::Mueve(const Vector3d &desplaz)
   {
     Crd(0)+= desplaz.x();

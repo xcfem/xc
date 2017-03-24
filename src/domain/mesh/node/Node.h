@@ -265,17 +265,17 @@ class Node: public MeshComponent
     virtual const Matrix &getEigenvectors(void);
     Matrix getNormalizedEigenvectors(void) const;
     
-    //Factores de participación modal
-    double getPulsacion(int mode) const;
-    Vector getPulsaciones(void) const;
+    //Angular frequencies.
+    double getAngularFrequency(int) const;
+    Vector getAngularFrequencies(void) const;
 
-    //Factores de participación modal
+    //Modal participation factors.
     virtual double getModalParticipationFactor(int mode) const;
     Vector getModalParticipationFactors(void) const;
     virtual double getModalParticipationFactor(int mode,const std::set<int> &gdls) const;
     Vector getModalParticipationFactors(const std::set<int> &gdls) const;
     Vector getModalParticipationFactorsForGdls(const boost::python::list &) const;
-    //Factores de distribución
+    //Distribution factors.
     Vector getDistributionFactor(int mode) const;
     Vector getDistributionFactor(int mode,const std::set<int> &gdls) const;
     Matrix getDistributionFactors(void) const;

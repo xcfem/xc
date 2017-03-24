@@ -81,8 +81,8 @@ class_<XC::Node, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
   .add_property("getEigenvectors",make_function(&XC::Node::getEigenvectors,return_internal_reference<>()))
   .add_property("getNormalizedEigenvectors",&XC::Node::getNormalizedEigenvectors)
     
-  .def("getPulsacion",&XC::Node::getPulsacion)
-  .add_property("getPulsaciones",&XC::Node::getPulsaciones)
+  .def("getAngularFrequency",&XC::Node::getAngularFrequency)
+  .add_property("getAngularFrequencies",&XC::Node::getAngularFrequencies)
 
   .def("getModalParticipationFactor",getModalParticipationFactor)
   .add_property("getModalParticipationFactors",getModalParticipationFactors)

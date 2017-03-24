@@ -267,22 +267,19 @@ const double &XC::EigenAnalysis::getEigenvalue(int mode) const
     return retval;
   }
 
-//! @brief Return the pulsación correspondiente al modo
-//! being passed as parameter.
-double XC::EigenAnalysis::getPulsacion(int mode) const
-  { return sqrt(getEigenvalue(mode)); }
+//! @brief Return the angular frequency for the i-th mode.
+double XC::EigenAnalysis::getAngularFrequency(int i) const
+  { return sqrt(getEigenvalue(i)); }
 
-//! @brief Returns the período correspondiente al modo
-//! being passed as parameter.
-double XC::EigenAnalysis::getPeriodo(int mode) const
-  { return 2.0*M_PI/getPulsacion(mode); }
+//! @brief Returns the period for the i-th mode.
+double XC::EigenAnalysis::getPeriodo(int i) const
+  { return 2.0*M_PI/getAngularFrequency(i); }
 
-//! @brief Return the frecuencia correspondiente al modo
-//! being passed as parameter.
-double XC::EigenAnalysis::getFrecuencia(int mode) const
-  { return 1./getPeriodo(mode); }
+//! @brief Return the frequency for the i-th mode.
+double XC::EigenAnalysis::getFrecuencia(int i) const
+  { return 1./getPeriodo(i); }
 
-//! @brief Returns a vector con los eigenvalues calculados.
+//! @brief Returns a vector with the computed eigenvalues for each mode.
 XC::Vector XC::EigenAnalysis::getEigenvalues(void) const
   {
     Vector retval;
@@ -292,17 +289,17 @@ XC::Vector XC::EigenAnalysis::getEigenvalues(void) const
     return retval;
   }
 
-//! @brief Returns a vector con las pulsaciones calculadas.
-XC::Vector XC::EigenAnalysis::getPulsaciones(void) const
+//! @brief Returns a vector with the computed angular frequencies for each mode.
+XC::Vector XC::EigenAnalysis::getAngularFrequencies(void) const
   {
     Vector retval;
     EigenSOE *ptr_soe= getEigenSOEPtr();
     if(ptr_soe)
-      retval= ptr_soe->getPulsaciones();
+      retval= ptr_soe->getAngularFrequencies();
     return retval;
   }
 
-//! @brief Returns a vector con las periodos calculados.
+//! @brief Returns a vector with the computed vectors for each mode.
 XC::Vector XC::EigenAnalysis::getPeriodos(void) const
   {
     Vector retval;

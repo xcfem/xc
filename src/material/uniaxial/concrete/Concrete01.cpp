@@ -375,7 +375,7 @@ void XC::Concrete01::unload(void)
       }
   }
 
-//! @brief Consuma el material state.
+//! @brief Commits material state.
 int XC::Concrete01::commitState(void)
   {
     convergedHistory= trialHistory;// History variables
@@ -383,14 +383,14 @@ int XC::Concrete01::commitState(void)
     return 0;
   }
 
-//! @brief Returns the material state al último consumado.
+//! @brief Returns to the last commited state.
 int XC::Concrete01::revertToLastCommit(void)
   {
     commit_to_trial();
     return 0;
   }
 
-//! @brief Returns the material state al inicial.
+//! @brief Returns to the initial state.
 int XC::Concrete01::revertToStart(void)
   {
     const double Ec0= 2.0*fpc/epsc0;

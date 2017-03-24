@@ -740,7 +740,7 @@ int XC::AnalysisModel::newStepDomain(double dT)
   }
 
 
-//! @brief Consuma el estado del domain.
+//! @brief Commits domain state.
 int XC::AnalysisModel::commitDomain(void)
   {
     // check to see there is a domain linked to the Model
@@ -760,7 +760,7 @@ int XC::AnalysisModel::commitDomain(void)
     return retval;
   }
 
-//! @brief Returns the estado del domain al último consumado.
+//! @brief Returns to the last commited state.
 int XC::AnalysisModel::revertDomainToLastCommit(void)
   {
     // check to see there is a XC::Domain linked to the Model

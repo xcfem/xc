@@ -168,7 +168,7 @@ void XC::VectorSeccionesBarraPrismatica::clearAll(void)
   }
 
 
-//! @brief Consuma el estado de los secciones.
+//! @brief Commits sections state.
 int XC::VectorSeccionesBarraPrismatica::commitState(void)
   {
     int retVal= 0;
@@ -178,7 +178,7 @@ int XC::VectorSeccionesBarraPrismatica::commitState(void)
     return retVal;
   }
 
-//! @brief Returns the estado de los secciones al del último consumado.
+//! @brief Returns the sections to its last commited state.
 int XC::VectorSeccionesBarraPrismatica::revertToLastCommit(void)
   {
     int retVal= 0;
@@ -189,7 +189,7 @@ int XC::VectorSeccionesBarraPrismatica::revertToLastCommit(void)
   }
 
 
-//! @brief Returns the estado de los secciones al inicial.
+//! @brief Returns the sections to its initial state.
 int XC::VectorSeccionesBarraPrismatica::revertToStart(void)
   {
     int retVal = 0;

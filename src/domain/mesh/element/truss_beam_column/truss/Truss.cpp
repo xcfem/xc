@@ -253,7 +253,7 @@ void XC::Truss::setDomain(Domain *theDomain)
       ptrCableMaterial->setLength(L);
   }
 
-//! @brief Consuma el estado del elemento.
+//! @brief Commits trusst state.
 int XC::Truss::commitState()
   {
     int retVal = 0;
@@ -264,11 +264,11 @@ int XC::Truss::commitState()
     return retVal;
   }
 
-//! @brief Returns the estado del elemento al último consumado.
+//! @brief Returns to the last commited state.
 int XC::Truss::revertToLastCommit()
   { return theMaterial->revertToLastCommit(); }
 
-//! @brief Returns the estado del elemento al inicial.
+//! @brief Returns the initial state.
 int XC::Truss::revertToStart()
   { return theMaterial->revertToStart(); }
 

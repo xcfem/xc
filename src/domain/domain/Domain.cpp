@@ -601,7 +601,8 @@ int XC::Domain::initialize(void)
 int XC::Domain::setRayleighDampingFactors(const RayleighDampingFactors &rF)
   { return mesh.setRayleighDampingFactors(rF); }
 
-//! @brief Consuma el estado del modelo y llama al método record de todos los recorders definidos.
+//! @brief Commits domain state and triggers "record" method
+//! for all defined recorders.
 int XC::Domain::commit(void)
   {
     //
@@ -622,7 +623,7 @@ int XC::Domain::commit(void)
     return 0;
   }
 
-//! @brief Returns the estado del modelo al último consumado.
+//! @brief Returns the domain to its last commited state.
 int XC::Domain::revertToLastCommit(void)
   {
     //
@@ -639,8 +640,8 @@ int XC::Domain::revertToLastCommit(void)
     return update();
   }
 
-//! @brief Returns the estado del modelo al inicial del cálculo y llama
-//! al método restart() de todos los recorders.
+//! @brief Returns the domain to its initial state and
+//! triggers the "restart" method for all the recorders.
 int XC::Domain::revertToStart(void)
   {
     //
@@ -663,7 +664,7 @@ int XC::Domain::revertToStart(void)
     return update();
   }
 
-//! @brief Actualiza el estado de los elementos del modelo.
+//! @brief Updates the state of the mesh.
 int XC::Domain::update(void)
   {
     // set the global constants
@@ -683,7 +684,7 @@ int XC::Domain::newStep(double dT)
   { return 0; }
 
 
-//! @brief Establece el valor del vector de eigenvalues.
+//! @brief Sets eigenvalues.
 int XC::Domain::setEigenvalues(const Vector &theValues)
   {
     theEigenvalues= theValues;
@@ -694,31 +695,28 @@ int XC::Domain::setEigenvalues(const Vector &theValues)
     return 0;
   }
 
-//! @brief Returns the autovalor que corresponde al modo being passed as parameter.
-const double &XC::Domain::getEigenvalue(int mode) const
-  { return theEigenvalues(mode-1); }
+//! @brief Returns the eigenvalue of the i-th mode.
+const double &XC::Domain::getEigenvalue(int i) const
+  { return theEigenvalues(i-1); }
 
-//! @brief Return the pulsación correspondiente al modo
-//! being passed as parameter.
-double XC::Domain::getPulsacion(int mode) const
-  { return sqrt(getEigenvalue(mode)); }
+//! @brief Return the angular frequency of the i-th mode.
+double XC::Domain::getAngularFrequency(int i) const
+  { return sqrt(getEigenvalue(i)); }
 
-//! @brief Returns the período correspondiente al modo
-//! being passed as parameter.
-double XC::Domain::getPeriodo(int mode) const
-  { return 2.0*M_PI/getPulsacion(mode); }
+//! @brief Returns the period of the i-th mode.
+double XC::Domain::getPeriodo(int i) const
+  { return 2.0*M_PI/getAngularFrequency(i); }
 
-//! @brief Return the frecuencia correspondiente al modo
-//! being passed as parameter.
-double XC::Domain::getFrecuencia(int mode) const
-  { return 1./getPeriodo(mode); }
+//! @brief Return the frequency of the i-th mode.
+double XC::Domain::getFrecuencia(int i) const
+{ return 1./getPeriodo(i); }
 
-//! @brief Returns the vector de eigenvalues.
+//! @brief Returns the eigenvalues vector.
 const XC::Vector &XC::Domain::getEigenvalues(void) const
   { return theEigenvalues; }
 
-//! @brief Returns a vector con las pulsaciones calculadas.
-XC::Vector XC::Domain::getPulsaciones(void) const
+//! @brief Returns a vector with the computed angular frequencies (for each mode).
+XC::Vector XC::Domain::getAngularFrequencies(void) const
   {
     Vector retval= getEigenvalues();
     const int dim= retval.Size();
@@ -727,17 +725,17 @@ XC::Vector XC::Domain::getPulsaciones(void) const
     return retval;
   }
 
-//! @brief Returns a vector con las periodos calculados.
+//! @brief Returns a vector with the computed periods (for each mode).
 XC::Vector XC::Domain::getPeriodos(void) const
   {
-    Vector retval= getPulsaciones();
+    Vector retval= getAngularFrequencies();
     const int dim= retval.Size();
     for(int i= 0;i<dim;i++)
       retval[i]= 2.0*M_PI/retval(i);
     return retval;
   }
 
-//! @brief Returns a vector con las frecuencias calculadas.
+//! @brief Returns a vector with the computed frequencies (for each mode).
 XC::Vector XC::Domain::getFrecuencias(void) const
   {
     Vector retval= getPeriodos();
@@ -747,39 +745,37 @@ XC::Vector XC::Domain::getFrecuencias(void) const
     return retval;
   }
 
-//! @brief Returns the número de eigenvalues que se han calculado.
+//! @brief Returns the number of computed eigenvalues.
 int XC::Domain::getNumModes(void) const
   { return getEigenvalues().Size(); }
 
-//! @brief Establece el valor del vector de eigenvalues.
+//! @brief Sets the values of the modal participation factors.
 int XC::Domain::setModalParticipationFactors(const Vector &theValues)
   {
     modalParticipationFactors= theValues;
     return 0;
   }
 
-//! @brief Returns the factor de participación modal
-//! que corresponde al modo being passed as parameter.
-const double &XC::Domain::getModalParticipationFactor(int mode) const
-  { return modalParticipationFactors(mode-1); }
+//! @brief Returns the modal participation factor of the i-th mode.
+const double &XC::Domain::getModalParticipationFactor(int i) const
+  { return modalParticipationFactors(i-1); }
 
-//! @brief Returns the vector de factores de participación modal.
+//! @brief Returns the modal participation factors.
 const XC::Vector &XC::Domain::getModalParticipationFactors(void) const
   { return modalParticipationFactors; }
 
-//! @brief Return the masa modal efectiva correspondiente
-//! al modo being passed as parameter.
-const double XC::Domain::getEffectiveModalMass(int mode) const
-  { return mesh.getEffectiveModalMass(mode); }
+//! @brief Return the effective modal mass of the i-th mode.
+const double XC::Domain::getEffectiveModalMass(int i) const
+  { return mesh.getEffectiveModalMass(i); }
 
-//! @brief Returns the masas modales efectivas en cada modo.
+//! @brief Returns the effective modal masses for each mode.
 XC::Vector XC::Domain::getEffectiveModalMasses(void) const
   {
     const int nm= getNumModes();
     return mesh.getEffectiveModalMasses(nm);
   }
 
-//! @brief Return the masa total del nodo.
+//! @brief Return the total effective modal mass.
 double XC::Domain::getTotalMass(void) const
   {
     double retval= 0;

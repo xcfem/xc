@@ -184,52 +184,51 @@ XC::Matrix XC::EigenSOE::getNormalizedEigenvectors(void) const
 const double &XC::EigenSOE::getEigenvalue(int mode) const
   { return theSolver->getEigenvalue(mode); }
 
-//! @brief Return the pulsación correspondiente al modo
-//! being passed as parameter.
-double XC::EigenSOE::getPulsacion(int mode) const
-  { return sqrt(getEigenvalue(mode)); }
+//! @brief Returns the angular frequency of the i-th mode.
+double XC::EigenSOE::getAngularFrequency(int i) const
+  { return sqrt(getEigenvalue(i)); }
 
-//! @brief Returns the período correspondiente al modo
-//! being passed as parameter.
-double XC::EigenSOE::getPeriodo(int mode) const
-  { return 2.0*M_PI/getPulsacion(mode); }
+//! @brief Returns the period of the i-th mode.
+double XC::EigenSOE::getPeriodo(int i) const
+  { return 2.0*M_PI/getAngularFrequency(i); }
 
-//! @brief Return the frecuencia correspondiente al modo
-//! being passed as parameter.
-double XC::EigenSOE::getFrecuencia(int mode) const
-  { return 1./getPeriodo(mode); }
+//! @brief Return the frecuency of the i-th mode.
+double XC::EigenSOE::getFrecuencia(int i) const
+  { return 1./getPeriodo(i); }
 
-//! @brief Returns a vector con los eigenvalues calculados.
+//! @brief Returns a vector with computed eigenvalues for each mode.
 XC::Vector XC::EigenSOE::getEigenvalues(void) const
   { return theSolver->getEigenvalues(); }
 
-//! @brief Returns a vector con las pulsaciones calculadas.
-XC::Vector XC::EigenSOE::getPulsaciones(void) const
-  { return theSolver->getPulsaciones(); }
+//! @brief Returns a vector with the computed angular frequencies
+//! for each mode.
+XC::Vector XC::EigenSOE::getAngularFrequencies(void) const
+  { return theSolver->getAngularFrequencies(); }
 
 
-//! @brief Returns a vector con las periodos calculados.
+//! @brief Returns a vector with the computed periods
+//! for each mode.
 XC::Vector XC::EigenSOE::getPeriodos(void) const
   { return theSolver->getPeriodos(); }
 
-//! @brief Returns a vector con las frecuencias calculadas.
+//! @brief Returns a vector with the computed frequencies
+//! for each mode.
 XC::Vector XC::EigenSOE::getFrecuencias(void) const
   { return theSolver->getFrecuencias(); }
 
-//! @brief Returns the number of eigenvalues que se han calculado.
+//! @brief Returns the number of computed eigenvalues.
 const int &XC::EigenSOE::getNumModes(void) const
   { return theSolver->getNumModes(); }
 
-//! @brief Returns the factor de participación modal
-//! correspondiente al modo i.
+//! @brief Returns the modal participation factor for the mode.
 double XC::EigenSOE::getModalParticipationFactor(int mode) const
   {
     const Vector ev= getEigenvector(mode);
     const size_t sz= ev.Size();
     if((massMatrix.size1()!=sz) || (massMatrix.size2()!=sz))
       std::cerr << "EigenSOE::getModalParticipationFactor; ERROR "
-                << "el autovector es de dimensión " << sz
-                << " y la matriz de masas de " << massMatrix.size1()
+                << "the eigenvector has dimension " << sz
+                << " and the mass matrix " << massMatrix.size1()
                 << "x" << massMatrix.size2() << ".\n";
     boost::numeric::ublas::vector<double> fi_mode(sz);
     for(size_t i= 0;i<sz;i++)
@@ -241,7 +240,7 @@ double XC::EigenSOE::getModalParticipationFactor(int mode) const
     return num/denom;
   }
 
-//! @brief Returns the factores de participación modal.
+//! @brief Returns the modal participation factors.
 XC::Vector XC::EigenSOE::getModalParticipationFactors(void) const
   {
     const int nm= getNumModes();
@@ -251,13 +250,12 @@ XC::Vector XC::EigenSOE::getModalParticipationFactors(void) const
     return retval;
   }
 
-//! @brief Returns the factor de distribución correspondiente al modo
-//! being passed as parameter.
-XC::Vector XC::EigenSOE::getDistributionFactor(int mode) const
-  { return getModalParticipationFactor(mode)*getEigenvector(mode); }
+//! @brief Returns the distribution factors for the i-th mode.
+XC::Vector XC::EigenSOE::getDistributionFactor(int i) const
+  { return getModalParticipationFactor(i)*getEigenvector(i); }
 
-//! @brief Returns a matriz con los factores de distribución
-//! calculados colocados por columnas.
+//! @brief Returns a matrix with the computed distribution factors 
+//! placed by columns.
 XC::Matrix XC::EigenSOE::getDistributionFactors(void) const
   {
     Matrix retval;
@@ -279,12 +277,11 @@ XC::Matrix XC::EigenSOE::getDistributionFactors(void) const
     return retval;
   }
 
-//! @brief Return the masa modal efectiva 
-//! correspondiente al modo i.
-double XC::EigenSOE::getEffectiveModalMass(int mode) const
+//! @brief Return the effective modal mass for the i-th mode.
+double XC::EigenSOE::getEffectiveModalMass(int i) const
   {
-    const double tau= getModalParticipationFactor(mode);
-    const Vector ev= getEigenvector(mode);
+    const double tau= getModalParticipationFactor(i);
+    const Vector ev= getEigenvector(i);
     const int sz= ev.Size();
     boost::numeric::ublas::vector<double> fi_mode(sz);
     for(int i= 0;i<sz;i++)
@@ -294,7 +291,7 @@ double XC::EigenSOE::getEffectiveModalMass(int mode) const
     return tau*p;
   }
 
-//! @brief Returns the masas modales efectivas.
+//! @brief Returns the effective modal masses for each mode.
 XC::Vector XC::EigenSOE::getEffectiveModalMasses(void) const
   {
     const int nm= getNumModes();
@@ -304,7 +301,7 @@ XC::Vector XC::EigenSOE::getEffectiveModalMasses(void) const
     return retval;
   }
 
-//! @brief Return the masa total del modelo.
+//! @brief Return the model total mass.
 double XC::EigenSOE::getTotalMass(void) const
   {
     const size_t sz= massMatrix.size1();

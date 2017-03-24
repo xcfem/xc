@@ -150,7 +150,7 @@ int XC::Element::setRayleighDampingFactors(const RayleighDampingFactors &rF) con
     return 0;
   }
 
-//! @brief Returns the dimensión del elemento.
+//! @brief Returns the element dimension (0, 1, 3 or 3).
 size_t XC::Element::getDimension(void) const
   {
     std::cerr << "Element::getDimension not implemented para '"
@@ -224,11 +224,12 @@ const XC::Matrix &XC::Element::getMass(void) const
     return theMatrix;
   }
 
-//! @brief Returns the acción del elemento sobre los nodos Forma la matriz de amortiguamiento.
+//! @brief Returns the action of the element over its attached nodes.
+//! Computes damping matrix.
 const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
   {
     if(index == -1)
-      setRayleighDampingFactors(RayleighDampingFactors()); //Anula los factores de amortiguamiento.
+      setRayleighDampingFactors(RayleighDampingFactors()); //Zeroes dumping factors.
 
     Matrix &theMatrix= theMatrices[index];
     Vector &theVector= theVectors2[index];
@@ -339,8 +340,8 @@ XC::Vector XC::Element::getEquivalentStaticLoad(int mode,const double &accel_mod
     return retval;
   }
 
-//! @brief Returns the equivalent static load en cada nodo para el modo
-//! being passed as parameter y la aceleración correspondiente a dicho modo.
+//! @brief Returns the equivalent static load on each node for the mode
+//! being passed as parameter and the corresponding acceleration to the mode.
 XC::Matrix XC::Element::getEquivalentStaticNodalLoads(int mode,const double &accel_mode) const
   {
     const Vector element_load= getEquivalentStaticLoad(mode,accel_mode);
@@ -772,8 +773,9 @@ XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
   }
 
 
-//! @brief Returns the posición del nodo cuyo índice se
-//! being passed as parameter.
+//! @brief Returns the position of the i-th node.
+//! @param i: index of the node in the element.
+//! @param initialGeometry: if true initial position of the node is returned.
 Pos3d XC::Element::getPosNodo(const size_t &i,bool initialGeometry) const
   { return getNodePtrs().getPosNodo(i,initialGeometry); }
 

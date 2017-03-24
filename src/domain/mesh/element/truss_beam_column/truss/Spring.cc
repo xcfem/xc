@@ -252,7 +252,7 @@ void XC::Spring::setDomain(Domain *theDomain)
       }
   }
 
-//! @brief Consuma el estado del elemento.
+//! @brief Commits its state.
 int XC::Spring::commitState(void)
   {
     int retVal= 0;
@@ -263,11 +263,11 @@ int XC::Spring::commitState(void)
     return retVal;
   }
 
-//! @brief Returns the estado del elemento al último consumado.
+//! @brief Returns to the last commited state.
 int XC::Spring::revertToLastCommit(void)
   { return theMaterial->revertToLastCommit(); }
 
-//! @brief Returns the estado del elemento al inicial.
+//! @brief Returns to the initial state.
 int XC::Spring::revertToStart(void)
   { return theMaterial->revertToStart(); }
 

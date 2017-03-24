@@ -36,8 +36,8 @@ namespace XC {
 
 //! \ingroup Nod
 //
-//! @brief Vectores para almacenar los valores de prueba
-//! y los valores consumados («commited») del desplazamiento del nodo.
+//! @brief Vectores to store trial and commited
+//! values («commited») on node displacements.
 class NodeDispVectors: public NodeVectors
   {
   private:

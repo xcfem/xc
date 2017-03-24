@@ -50,20 +50,17 @@
 XC::EigenSolver::EigenSolver(const int &classTag,const int &nModes)
   :Solver(classTag), numModes(nModes) {}
 
-//! @brief Return the pulsación correspondiente al modo
-//! being passed as parameter.
-double XC::EigenSolver::getPulsacion(int mode) const
-  { return sqrt(getEigenvalue(mode)); }
+//! @brief Return the angular frequency for the i-th mode.
+double XC::EigenSolver::getAngularFrequency(int i) const
+  { return sqrt(getEigenvalue(i)); }
 
-//! @brief Returns the período correspondiente al modo
-//! being passed as parameter.
-double XC::EigenSolver::getPeriodo(int mode) const
-  { return 2.0*M_PI/getPulsacion(mode); }
+//! @brief Returns the period for the i-th mode.
+double XC::EigenSolver::getPeriodo(int i) const
+  { return 2.0*M_PI/getAngularFrequency(i); }
 
-//! @brief Return the frecuencia correspondiente al modo
-//! being passed as parameter.
-double XC::EigenSolver::getFrecuencia(int mode) const
-  { return 1./getPeriodo(mode); }
+//! @brief Return the frecuency for the i-th mode.
+double XC::EigenSolver::getFrecuencia(int i) const
+  { return 1./getPeriodo(i); }
 
 //! @brief Returns a vector con los eigenvalues calculados.
 XC::Vector XC::EigenSolver::getEigenvalues(void) const
@@ -74,8 +71,9 @@ XC::Vector XC::EigenSolver::getEigenvalues(void) const
     return retval;
   }
 
-//! @brief Returns a vector con las pulsaciones calculadas.
-XC::Vector XC::EigenSolver::getPulsaciones(void) const
+//! @brief Returns a vector with the computed angular frequencies
+//! for each mode.
+XC::Vector XC::EigenSolver::getAngularFrequencies(void) const
   {
     Vector retval= getEigenvalues();
     const int dim= retval.Size();
@@ -84,17 +82,19 @@ XC::Vector XC::EigenSolver::getPulsaciones(void) const
     return retval;
   }
 
-//! @brief Returns a vector con las periodos calculados.
+//! @brief Returns a vector with the computed periods
+//! for each mode.
 XC::Vector XC::EigenSolver::getPeriodos(void) const
   {
-    Vector retval= getPulsaciones();
+    Vector retval= getAngularFrequencies();
     const int dim= retval.Size();
     for(int i= 0;i<dim;i++)
       retval[i]= 2.0*M_PI/retval(i);
     return retval;
   }
 
-//! @brief Returns a vector con las frecuencias calculadas.
+//! @brief Returns a vector with the computed frequencies
+//! for each mode.
 XC::Vector XC::EigenSolver::getFrecuencias(void) const
   {
     Vector retval= getPeriodos();
@@ -104,13 +104,12 @@ XC::Vector XC::EigenSolver::getFrecuencias(void) const
     return retval;
   }
 
-//! @brief Returns the autovector correspondiente al modo i
-//! normalizado de modo que la componente máxima valga 1 (norma_infinito).
-XC::Vector XC::EigenSolver::getNormalizedEigenvector(int mode) const
-  { return normalize_inf(getEigenvector(mode)); }
+//! @brief Returns the autovector of the i-th mode
+//! normalized so the maximal component is 1 (norma_infinito).
+XC::Vector XC::EigenSolver::getNormalizedEigenvector(int i) const
+  { return normalize_inf(getEigenvector(i)); }
 
-//! @brief Returns a matriz con los eigenvectors calculados colocados
-//! por columnas.
+//! @brief Returns a matrix of eigenvectors placed in columns.
 XC::Matrix XC::EigenSolver::getEigenvectors(void) const
   {
     const int nFilas= getSize();

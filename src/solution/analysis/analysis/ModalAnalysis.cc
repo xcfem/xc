@@ -38,12 +38,12 @@
 XC::ModalAnalysis::ModalAnalysis(SoluMethod *metodo)
   :EigenAnalysis(metodo), espectro() {}
 
-//! @brief Return the aceleración que corresponde al periodo
+//! @brief Returns the acceleration that corresponds to the period
 //! being passed as parameter.
 double XC::ModalAnalysis::getAcceleration(const double &T) const
   { return espectro(T); }
 
-//! @brief Returns the aceleraciones que corresponden a los periodos
+//! @brief Returns the accelerations that correspond to the periods
 //! being passed as parameters.
 XC::Vector XC::ModalAnalysis::getAccelerations(const Vector &periodos) const
   {
@@ -67,13 +67,13 @@ XC::Vector XC::ModalAnalysis::getEquivalentStaticLoad(int mode) const
     return EigenAnalysis::getEquivalentStaticLoad(mode,accel);
   }
 
-//! @brief Returns the coeficientes de correlación entre modos que
-//! se emplean en el método CQC.
-//! @param zeta: Amortiguamiento en cada modo analizado.
-//! Ver expresión 26-107 del libro Dynamics of Structurs de Clough and Penzien
+//! @brief Returns the correlation coefficients between modes
+//! being used in CQC method.
+//! @param zeta: Dumping for each mode.
+//! See expression 26-107 from book "Dynamics of Structures" from Clough and Penzien
 XC::Matrix XC::ModalAnalysis::getCQCModalCrossCorrelationCoefficients(const Vector &zeta) const
   {
-    const Vector omega= getPulsaciones();
+    const Vector omega= getAngularFrequencies();
     const size_t sz= omega.Size();
     Matrix retval(sz,sz);
     for(size_t i= 0;i<sz;i++)
@@ -82,7 +82,7 @@ XC::Matrix XC::ModalAnalysis::getCQCModalCrossCorrelationCoefficients(const Vect
           const double r= omega[i]/omega[j];
           if(r>1)
 	    std::cerr << "ModalAnalysis::getCQCModalCrossCorrelationCoefficients; ERROR"
-                      << " las pulsaciones deberían estar en orden creciente." << std::endl;
+                      << " the angular frequencies should be in increasing order." << std::endl;
           retval(i,j)= 8*sqrt(zeta[i]*zeta[j])*(zeta[i]+r*zeta[j])*pow(r,1.5)/(sqr(1-r*r)+4*zeta[i]*zeta[j]*r*(1+r*r)+4*(sqr(zeta[i])+sqr(zeta[j]))*r*r);
           if(i!=j)
             retval(j,i)= retval(i,j);

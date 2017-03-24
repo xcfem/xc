@@ -55,7 +55,7 @@ XC::ShellCorotCrdTransf3d::ShellCorotCrdTransf3d(const NodePtrs &theNodes)
 XC::ShellCrdTransf3dBase *XC::ShellCorotCrdTransf3d::getCopy(void) const
   { return new ShellCorotCrdTransf3d(*this); }
 
-//! @brief Establece la transformación a partir de las posiciones de los nodos.
+//! @brief Sets the transformations from node positions.
 int XC::ShellCorotCrdTransf3d::initialize(const NodePtrs &ptrs)
   {
     ShellCrdTransf3dBase::initialize(ptrs);
@@ -85,7 +85,7 @@ inline XC::Vector get_traslational_disp(const XC::Vector &disp)
 inline XC::Vector get_rotational_disp(const XC::Vector &disp)
   { return XC::Vector(disp[3],disp[4],disp[5]); }
 
-//! @brief Actualiza la transformación a partir de las posiciones de los nodos.
+//! @brief Updates the transformation from current node positions.
 int XC::ShellCorotCrdTransf3d::update(void)
   {
     const Vector d1= get_traslational_disp((*theNodes)[0]->getTrialDisp());
@@ -106,13 +106,13 @@ int XC::ShellCorotCrdTransf3d::update(void)
     return 0;
   }
 
-//! @brief Return the matriz de transformación correspondiente
-//! a la configuración inicial del elemento.
+//! @brief Returns the transformation matrix corresponding
+//! to element initial configuration.
 XC::Matrix XC::ShellCorotCrdTransf3d::getR0(void) const
   { return getTrfMatrix(); }
 
-//! @brief Return the traspuesta de la matriz de transformación correspondiente
-//! a la configuración inicial del elemento.
+//! @brief Returns the transposed of the transformation matrix corresponding
+//! to element initial configuration.
 XC::Matrix XC::ShellCorotCrdTransf3d::getR0T(void) const
   {
     Matrix R(3,3);
@@ -123,8 +123,8 @@ XC::Matrix XC::ShellCorotCrdTransf3d::getR0T(void) const
     return R;
   }
 
-//! @brief Return the matriz de transformación correspondiente
-//! a la configuración actual del elemento.
+//! @brief Returns the transformation matrix corresponding
+//! to element current configuration.
 XC::Matrix XC::ShellCorotCrdTransf3d::getR(void) const
   {
     Matrix retval(3,3);
@@ -156,8 +156,7 @@ XC::Vector XC::ShellCorotCrdTransf3d::global_to_local(const Vector &di,const Vec
     return retval;
   }
 
-//! @brief Return the traslación del nodo expresada en coordenadas
-//! locales a partir del desplazamiento expresado en globales.
+//! @brief Returns the i-th node translation vector expressed in local coordinates.
 XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_disp_nod(const int &i) const
   {
     const Vector di= (*theNodes)[i]->getTrialDisp();
@@ -165,9 +164,8 @@ XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_disp_nod(const int &i) con
     return global_to_local(di,vi0);
   }
 
-//! @brief Returns the componentes traslacionales de la
-//! velocidad del nodo expresada en coordenadas locales a
-//! partir del desplazamiento expresado en globales.
+//! @brief Returns the i-th node translational components of
+//! its velocity vector expressed in global coordinates.
 XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_vel_nod(const int &i) const
   {
     const Vector di= (*theNodes)[i]->getTrialVel();
@@ -175,9 +173,8 @@ XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_vel_nod(const int &i) cons
     return global_to_local(di,vi0);
   }
 
-//! @brief Returns the componentes traslacionales de la
-//! aceleración del nodo expresada en coordenadas locales a
-//! partir del desplazamiento expresado en globales.
+//! @brief Returns the i-th node translational components of
+//! its acceleration vector expressed in local coordinates.
 XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_accel_nod(const int &i) const
   {
     const Vector di= (*theNodes)[i]->getTrialAccel();
@@ -185,7 +182,8 @@ XC::Vector XC::ShellCorotCrdTransf3d::global_to_local_accel_nod(const int &i) co
     return global_to_local(di,vi0);
   }
 
-//! @brief Transformación a globales del load vector.
+//! @brief Returns the global coordinates of the load vector.
+//! @param pl: load vector.
 const XC::Vector &XC::ShellCorotCrdTransf3d::local_to_global_resisting_force(const Vector &pl) const
   {
     // transform resisting forces  from local to global coordinates
@@ -207,7 +205,7 @@ int XC::ShellCorotCrdTransf3d::commitState(void)
   }
 
 
-//! @brief Returns the estado de la transformación al último consumado.
+//! @brief Returns to the last commited state.
 int XC::ShellCorotCrdTransf3d::revertToLastCommit(void)
   { 
     g1trial= g1commit;
@@ -217,7 +215,7 @@ int XC::ShellCorotCrdTransf3d::revertToLastCommit(void)
   }
 
 
-//! @brief Returns the estado de la transformación al inicial.
+//! @brief Returns to the initial state.
 int XC::ShellCorotCrdTransf3d::revertToStart(void)
   {
     g1trial= g1; g2trial= g2; g3trial= g3;
@@ -237,50 +235,52 @@ XC::Vector XC::ShellCorotCrdTransf3d::getBasicTrialVel(const int &iNod) const
 XC::Vector XC::ShellCorotCrdTransf3d::getBasicTrialAccel(const int &iNod) const
   { return global_to_local_accel_nod(iNod); }
 
-//! @brief Transformación a globales de un vector desplazamiento.
-XC::Vector XC::ShellCorotCrdTransf3d::local_to_global(const Matrix &R,const Matrix &Rd,const Vector &pl) const
+//! @brief Returns the global coordinates of the displacement vector.
+//! @param displ: displacement vector expressed in local coordinates.
+XC::Vector XC::ShellCorotCrdTransf3d::local_to_global(const Matrix &R,const Matrix &Rd,const Vector &displ) const
   {
     Vector retval(24);
     //Nodo 1.
-    retval(0)= R(0,0)*pl[0] + R(1,0)*pl[1] + R(2,0)*pl[2];
-    retval(1)= R(0,1)*pl[0] + R(1,1)*pl[1] + R(2,1)*pl[2];
-    retval(2)= R(0,2)*pl[0] + R(1,2)*pl[1] + R(2,2)*pl[2];
+    retval(0)= R(0,0)*displ[0] + R(1,0)*displ[1] + R(2,0)*displ[2];
+    retval(1)= R(0,1)*displ[0] + R(1,1)*displ[1] + R(2,1)*displ[2];
+    retval(2)= R(0,2)*displ[0] + R(1,2)*displ[1] + R(2,2)*displ[2];
 
-    retval(3)= Rd(0,0)*pl[3] + Rd(1,0)*pl[4] + Rd(2,0)*pl[5];
-    retval(4)= Rd(0,1)*pl[3] + Rd(1,1)*pl[4] + Rd(2,1)*pl[5];
-    retval(5)= Rd(0,2)*pl[3] + Rd(1,2)*pl[4] + Rd(2,2)*pl[5];
+    retval(3)= Rd(0,0)*displ[3] + Rd(1,0)*displ[4] + Rd(2,0)*displ[5];
+    retval(4)= Rd(0,1)*displ[3] + Rd(1,1)*displ[4] + Rd(2,1)*displ[5];
+    retval(5)= Rd(0,2)*displ[3] + Rd(1,2)*displ[4] + Rd(2,2)*displ[5];
 
     //Nodo 2.
-    retval(6)= R(0,0)*pl[6] + R(1,0)*pl[7] + R(2,0)*pl[8];
-    retval(7)= R(0,1)*pl[6] + R(1,1)*pl[7] + R(2,1)*pl[8];
-    retval(8)= R(0,2)*pl[6] + R(1,2)*pl[7] + R(2,2)*pl[8];
+    retval(6)= R(0,0)*displ[6] + R(1,0)*displ[7] + R(2,0)*displ[8];
+    retval(7)= R(0,1)*displ[6] + R(1,1)*displ[7] + R(2,1)*displ[8];
+    retval(8)= R(0,2)*displ[6] + R(1,2)*displ[7] + R(2,2)*displ[8];
 
-    retval(9)= Rd(0,0)*pl[9] + Rd(1,0)*pl[10] + Rd(2,0)*pl[11];
-    retval(10)= Rd(0,1)*pl[9] + Rd(1,1)*pl[10] + Rd(2,1)*pl[11];
-    retval(11)= Rd(0,2)*pl[9] + Rd(1,2)*pl[10] + Rd(2,2)*pl[11];
+    retval(9)= Rd(0,0)*displ[9] + Rd(1,0)*displ[10] + Rd(2,0)*displ[11];
+    retval(10)= Rd(0,1)*displ[9] + Rd(1,1)*displ[10] + Rd(2,1)*displ[11];
+    retval(11)= Rd(0,2)*displ[9] + Rd(1,2)*displ[10] + Rd(2,2)*displ[11];
 
     //Nodo 3.
-    retval(12)= R(0,0)*pl[12] + R(1,0)*pl[13] + R(2,0)*pl[14];
-    retval(13)= R(0,1)*pl[12] + R(1,1)*pl[13] + R(2,1)*pl[14];
-    retval(14)= R(0,2)*pl[12] + R(1,2)*pl[13] + R(2,2)*pl[14];
+    retval(12)= R(0,0)*displ[12] + R(1,0)*displ[13] + R(2,0)*displ[14];
+    retval(13)= R(0,1)*displ[12] + R(1,1)*displ[13] + R(2,1)*displ[14];
+    retval(14)= R(0,2)*displ[12] + R(1,2)*displ[13] + R(2,2)*displ[14];
 
-    retval(15)= Rd(0,0)*pl[15] + Rd(1,0)*pl[16] + Rd(2,0)*pl[17];
-    retval(16)= Rd(0,1)*pl[15] + Rd(1,1)*pl[16] + Rd(2,1)*pl[17];
-    retval(17)= Rd(0,2)*pl[15] + Rd(1,2)*pl[16] + Rd(2,2)*pl[17];
+    retval(15)= Rd(0,0)*displ[15] + Rd(1,0)*displ[16] + Rd(2,0)*displ[17];
+    retval(16)= Rd(0,1)*displ[15] + Rd(1,1)*displ[16] + Rd(2,1)*displ[17];
+    retval(17)= Rd(0,2)*displ[15] + Rd(1,2)*displ[16] + Rd(2,2)*displ[17];
 
     //Nodo 4.
-    retval(18)= R(0,0)*pl[18] + R(1,0)*pl[19] + R(2,0)*pl[20];
-    retval(19)= R(0,1)*pl[18] + R(1,1)*pl[19] + R(2,1)*pl[20];
-    retval(20)= R(0,2)*pl[18] + R(1,2)*pl[19] + R(2,2)*pl[20];
+    retval(18)= R(0,0)*displ[18] + R(1,0)*displ[19] + R(2,0)*displ[20];
+    retval(19)= R(0,1)*displ[18] + R(1,1)*displ[19] + R(2,1)*displ[20];
+    retval(20)= R(0,2)*displ[18] + R(1,2)*displ[19] + R(2,2)*displ[20];
 
-    retval(21)= Rd(0,0)*pl[21] + Rd(1,0)*pl[22] + Rd(2,0)*pl[23];
-    retval(22)= Rd(0,1)*pl[21] + Rd(1,1)*pl[22] + Rd(2,1)*pl[23];
-    retval(23)= Rd(0,2)*pl[21] + Rd(1,2)*pl[22] + Rd(2,2)*pl[23];
+    retval(21)= Rd(0,0)*displ[21] + Rd(1,0)*displ[22] + Rd(2,0)*displ[23];
+    retval(22)= Rd(0,1)*displ[21] + Rd(1,1)*displ[22] + Rd(2,1)*displ[23];
+    retval(23)= Rd(0,2)*displ[21] + Rd(1,2)*displ[22] + Rd(2,2)*displ[23];
 
     return retval;
   }
 
-//! @brief Transformación a globales de una matriz.
+//! @brief Return the matrix expressed in global coordinates.
+//! @param kl: matrix expressed in local coordinates.
 XC::Matrix XC::ShellCorotCrdTransf3d::local_to_global(const Matrix &R,const Matrix &Rd,const Matrix &kl) const
   {
     static Matrix tmp(24,24);
