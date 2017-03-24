@@ -348,6 +348,7 @@ XC::Matrix XC::Element::getEquivalentStaticNodalLoads(int mode,const double &acc
     return getNodePtrs().getNodeVectors(element_load);
   }
 
+//! @brief Returns element Rayleigh damping forces.
 const XC::Vector &XC::Element::getRayleighDampingForces(void) const
   {
 
@@ -919,6 +920,7 @@ XC::Vector XC::Element::getCooCdg(bool initialGeometry) const
     return retval;
   }
 
+//! @brief Places the element on the mesh.
 XC::TritrizPtrElem XC::Element::put_on_mesh(const XC::TritrizPtrNod &,meshing_dir) const
   {
     std::cerr << "Método put_on_mesh no implementado" << std::endl;
