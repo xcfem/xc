@@ -35,9 +35,7 @@
 XC::DistributedBase::DistributedBase(void)
   {}
 
-
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store class dbTags.
 XC::DbTagData &XC::DistributedBase::getDbTagData(void) const
   {
     static DbTagData retval(0);
@@ -47,12 +45,15 @@ XC::DbTagData &XC::DistributedBase::getDbTagData(void) const
     return retval;
   }
 
+//! @brief Returns the data at the i-th position.
 const int &XC::DistributedBase::getDbTagDataPos(const int &i) const
   { return getDbTagData().getDbTagDataPos(i); }
 
+//! @brief Sets the data at the i-th position.
 void XC::DistributedBase::setDbTagDataPos(const int &i,const int &v)
   { return getDbTagData().setDbTagDataPos(i,v); }
 
+//! @brief Initializes communication.
 void XC::DistributedBase::inicComm(const int &dataSize) const
   { return getDbTagData().inicComm(dataSize); }
 

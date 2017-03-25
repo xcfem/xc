@@ -36,7 +36,7 @@ class DbTagData;
 
 //! @ingroup IPComm
 //
-//! @brief Objeto base para procesamiento distribuido.
+//! @brief Base class for distributed processing.
 class DistributedBase
   {
   public:
