@@ -61,7 +61,6 @@
 #include <material/uniaxial/steel/Steel01.h>
 #include "domain/component/Parameter.h"
 #include <utility/matrix/Vector.h>
-#include <utility/matrix/Matrix.h>
 
 #include <domain/mesh/element/utils/Information.h>
 #include <cmath>
@@ -97,26 +96,9 @@ int XC::Steel01::setup_parameters(void)
     return 0;
   }
 
-//! @brief Libera la memoria reservada para SHVs.
-void XC::Steel01::libera(void)
-  {
-    if(SHVs)
-      {
-        delete SHVs;
-        SHVs= nullptr;
-      }
-  }
-
-//! @brief Asigna SHVs.
-void XC::Steel01::alloc(const Matrix &m)
-  {
-    libera();
-    SHVs= new Matrix(m);
-  }
-
 //! @brief Constructor.
 XC::Steel01::Steel01(int tag, double FY, double E, double B,double A1, double A2, double A3, double A4)
-  : SteelBase0103(tag,MAT_TAG_Steel01,FY,E,B,A1,A2,A3,A4), parameterID(0), SHVs(nullptr)
+  : SteelBase0103(tag,MAT_TAG_Steel01,FY,E,B,A1,A2,A3,A4), parameterID(0), SHVs()
   {
     // Sets all history and state variables to initial values
     setup_parameters();
@@ -124,32 +106,14 @@ XC::Steel01::Steel01(int tag, double FY, double E, double B,double A1, double A2
 
 //! @brief Constructor.
 XC::Steel01::Steel01(int tag)
-  :SteelBase0103(tag,MAT_TAG_Steel01), parameterID(0), SHVs(nullptr) {}
+  :SteelBase0103(tag,MAT_TAG_Steel01), parameterID(0), SHVs() {}
 
 //! @brief Constructor.
 XC::Steel01::Steel01(void)
-  :SteelBase0103(MAT_TAG_Steel01), parameterID(0), SHVs(nullptr) {}
-
-//! @brief Copy constructor.
-XC::Steel01::Steel01(const Steel01 &otro)
-  :SteelBase0103(otro), parameterID(otro.parameterID), SHVs(nullptr) 
-  {
-    if(otro.SHVs)
-      alloc(*otro.SHVs);
-  }
-
-//! @brief Assignment operator.
-XC::Steel01 &XC::Steel01::operator=(const Steel01 &otro)
-  {
-    SteelBase0103::operator=(otro);
-    parameterID= otro.parameterID;
-    if(otro.SHVs)
-      alloc(*otro.SHVs);
-    return *this;
-  }
+  :SteelBase0103(MAT_TAG_Steel01), parameterID(0), SHVs() {}
 
 XC::Steel01::~Steel01(void)
-  { libera(); }
+  {}
 
 //! @brief Calculates the trial state variables based on the trial strain
 void XC::Steel01::determineTrialState(double dStrain)
@@ -269,7 +233,7 @@ int XC::Steel01::revertToStart(void)
   {
     SteelBase0103::revertToStart();
 // AddingSensitivity:BEGIN /////////////////////////////////
-    if(SHVs) SHVs->Zero();
+    if(!SHVs.Nula()) SHVs.Zero();
 // AddingSensitivity:END //////////////////////////////////
     return 0;
   }
@@ -284,7 +248,7 @@ int XC::Steel01::sendData(CommParameters &cp)
     int res= SteelBase0103::sendData(cp);
     const double pid= parameterID;
     res+= cp.sendDouble(pid,getDbTagData(),CommMetaData(8));
-    res+= cp.sendMatrixPtr(SHVs,getDbTagData(),MatrixCommMetaData(9,10,11,12));
+    res+= cp.sendMatrix(SHVs,getDbTagData(),CommMetaData(9));
     return res;
   }
 
@@ -295,8 +259,7 @@ int XC::Steel01::recvData(const CommParameters &cp)
     double pid;
     res+= cp.receiveDouble(pid,getDbTagData(),CommMetaData(7));
     parameterID= pid;
-    libera();
-    SHVs= cp.receiveMatrixPtr(SHVs,getDbTagData(),MatrixCommMetaData(9,10,11,12));
+    res+= cp.receiveMatrix(SHVs,getDbTagData(),CommMetaData(9));
     return res;
   }
 
@@ -424,10 +387,10 @@ double XC::Steel01::getStressSensitivity(int gradNumber, bool conditional)
     // Pick up sensitivity history variables
     double CstrainSensitivity = 0.0;
     double CstressSensitivity = 0.0;
-    if(SHVs)
+    if(!SHVs.Nula())
       {
-        CstrainSensitivity= (*SHVs)(0,(gradNumber-1));
-        CstressSensitivity= (*SHVs)(1,(gradNumber-1));
+        CstrainSensitivity= (SHVs)(0,(gradNumber-1));
+        CstressSensitivity= (SHVs)(1,(gradNumber-1));
       }
 
     // Assign values to parameter derivatives (depending on what's random)
@@ -490,8 +453,8 @@ double XC::Steel01::getInitialTangentSensitivity(int gradNumber)
 
 int XC::Steel01::commitSensitivity(double TstrainSensitivity, int gradNumber, int numGrads)
   {
-    if(!SHVs)
-      alloc(Matrix(2,numGrads));
+    if(SHVs.Nula())
+      SHVs= Matrix(2,numGrads);
 
     // Initialize unconditaional stress sensitivity
     double gradient= 0.0;
@@ -499,10 +462,10 @@ int XC::Steel01::commitSensitivity(double TstrainSensitivity, int gradNumber, in
     // Pick up sensitivity history variables
     double CstrainSensitivity = 0.0;
     double CstressSensitivity         = 0.0;
-    if(SHVs)
+    if(!SHVs.Nula())
       {
-        CstrainSensitivity= (*SHVs)(0,(gradNumber-1));
-        CstressSensitivity= (*SHVs)(1,(gradNumber-1));
+        CstrainSensitivity= SHVs(0,(gradNumber-1));
+        CstressSensitivity= SHVs(1,(gradNumber-1));
       }
 
     // Assign values to parameter derivatives (depending on what's random)
@@ -553,8 +516,8 @@ int XC::Steel01::commitSensitivity(double TstrainSensitivity, int gradNumber, in
       }
 
     // Commit history variables
-    (*SHVs)(0,(gradNumber-1)) = TstrainSensitivity;
-    (*SHVs)(1,(gradNumber-1)) = gradient;
+    SHVs(0,(gradNumber-1)) = TstrainSensitivity;
+    SHVs(1,(gradNumber-1)) = gradient;
     return 0;
   }
 

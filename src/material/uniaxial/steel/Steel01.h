@@ -65,13 +65,13 @@
 //
 // What: "@(#) Steel01.h, revA"
 
-
 #include "material/uniaxial/steel/SteelBase0103.h"
+#include <utility/matrix/Matrix.h>
 
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Clase para la modelización del acero 01.
+//! @brief Uniaxial material model for steel.
 class Steel01 : public SteelBase0103
   {
   private:
@@ -79,10 +79,8 @@ class Steel01 : public SteelBase0103
     void detectLoadReversal(double dStrain);
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////
-    void libera(void);
-    void alloc(const Matrix &);
     int parameterID;
-    Matrix *SHVs;
+    Matrix SHVs;
 // AddingSensitivity:END ///////////////////////////////////////////
 
   protected:
@@ -96,8 +94,6 @@ class Steel01 : public SteelBase0103
        double a3 = STEEL_0103_DEFAULT_A3, double a4 = STEEL_0103_DEFAULT_A4);
     Steel01(int tag);
     Steel01(void);
-    Steel01(const Steel01 &);
-    Steel01 &operator=(const Steel01 &);
     ~Steel01(void);
 
     UniaxialMaterial *getCopy(void) const;

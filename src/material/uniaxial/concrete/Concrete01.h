@@ -63,6 +63,7 @@
 
 
 #include <material/uniaxial/concrete/ConcreteBase.h>
+#include <utility/matrix/Matrix.h>
 
 namespace XC {
 //! @ingroup MatUnx
@@ -92,10 +93,8 @@ class Concrete01: public ConcreteBase
     void envelope(void);
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////
-    void libera(void);
-    void alloc(const Matrix &);
     int parameterID;
-    Matrix *SHVs;
+    Matrix SHVs;
 // AddingSensitivity:END ///////////////////////////////////////////
   protected:
     int sendData(CommParameters &);
@@ -106,12 +105,12 @@ class Concrete01: public ConcreteBase
     Concrete01(int tag, double fpc, double eco, double fpcu, double ecu);
     Concrete01(int tag);
     Concrete01(void);
-    Concrete01(const Concrete01 &);
-    Concrete01 &operator=(const Concrete01 &);
     ~Concrete01(void);
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
     int setTrial(double strain, double &stress, double &tangent, double strainRate = 0.0);
+
+    //! @brief Returns initial tangent stiffness.
     inline double getInitialTangent(void) const
       {return 2.0*fpc/epsc0;}
 

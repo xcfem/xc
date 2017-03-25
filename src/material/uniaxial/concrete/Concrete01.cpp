@@ -64,7 +64,6 @@
 #include <material/uniaxial/concrete/Concrete01.h>
 #include "domain/component/Parameter.h"
 #include <utility/matrix/Vector.h>
-#include <utility/matrix/Matrix.h>
 
 #include <domain/mesh/element/utils/Information.h>
 #include <cmath>
@@ -95,26 +94,10 @@ void XC::Concrete01::setup_parameters(void)
     revertToLastCommit();
   }
 
-//! @brief Frees memory reserved for SHVs.
-void XC::Concrete01::libera(void)
-  {
-    if(SHVs)
-      {
-        delete SHVs;
-        SHVs= nullptr;
-      }
-  }
-
-//! @brief Asigna SHVs.
-void XC::Concrete01::alloc(const Matrix &m)
-  {
-    libera();
-    SHVs= new Matrix(m);
-  }
-
 //! @brief Constructor.
 XC::Concrete01::Concrete01(int tag, double FPC, double EPSC0, double FPCU, double EPSCU)
-  :ConcreteBase(tag, MAT_TAG_Concrete01,FPC,EPSC0,EPSCU), fpcu(FPCU), parameterID(0), SHVs(nullptr)
+  :ConcreteBase(tag, MAT_TAG_Concrete01,FPC,EPSC0,EPSCU), fpcu(FPCU),
+   parameterID(0), SHVs()
   {
     //count++;
     //Make all concrete parameters negative
@@ -124,36 +107,19 @@ XC::Concrete01::Concrete01(int tag, double FPC, double EPSC0, double FPCU, doubl
 
 //! @brief Constructor
 XC::Concrete01::Concrete01(int tag)
-  :ConcreteBase(tag, MAT_TAG_Concrete01,0.0,0.0,0.0), fpcu(0.0), parameterID(0), SHVs(nullptr)
+  :ConcreteBase(tag, MAT_TAG_Concrete01,0.0,0.0,0.0), fpcu(0.0),
+   parameterID(0), SHVs()
   {
     // Set trial values
     revertToLastCommit();
   }
 
 XC::Concrete01::Concrete01(void)
-  :ConcreteBase(0, MAT_TAG_Concrete01,0.0,0.0,0.0),fpcu(0.0), parameterID(0), SHVs(nullptr)
+  :ConcreteBase(0, MAT_TAG_Concrete01,0.0,0.0,0.0),fpcu(0.0),
+   parameterID(0), SHVs()
   {
     // Set trial values
     revertToLastCommit();
-  }
-
-//! @brief Copy constructor.
-XC::Concrete01::Concrete01(const Concrete01 &otro)
-  :ConcreteBase(otro), fpcu(otro.fpcu), parameterID(otro.parameterID), SHVs(nullptr) 
-  {
-    if(otro.SHVs)
-      alloc(*otro.SHVs);
-  }
-
-//! @brief Assignment operator.
-XC::Concrete01 &XC::Concrete01::operator=(const Concrete01 &otro)
-  {
-    ConcreteBase::operator=(otro);
-    fpcu= otro.fpcu;
-    parameterID= otro.parameterID;
-    if(otro.SHVs)
-      alloc(*otro.SHVs);
-    return *this;
   }
 
 //! @brief Assigns concrete compressive strenght.
@@ -173,7 +139,7 @@ double XC::Concrete01::getFpcu(void) const
 
 //! @brief Destructor.
 XC::Concrete01::~Concrete01(void)
-  { libera(); }
+  {}
 
 //! @brief Calculate the trial state given the change in strain
 void XC::Concrete01::calcula_trial_state(const double &dStrain)
@@ -413,7 +379,7 @@ int XC::Concrete01::sendData(CommParameters &cp)
     int res= ConcreteBase::sendData(cp);
     const double PI= parameterID;
     res+= cp.sendDoubles(fpcu,PI,getDbTagData(),CommMetaData(7));
-    res+= cp.sendMatrixPtr(SHVs,getDbTagData(),MatrixCommMetaData(8,9,10,11));
+    res+= cp.sendMatrix(SHVs,getDbTagData(),CommMetaData(8));
     return res;
   }
 
@@ -424,8 +390,7 @@ int XC::Concrete01::recvData(const CommParameters &cp)
     double PI;
     res+= cp.receiveDoubles(fpcu,PI,getDbTagData(),CommMetaData(7));
     parameterID= PI;
-    libera();
-    SHVs= cp.receiveMatrixPtr(SHVs,getDbTagData(),MatrixCommMetaData(8,9,10,11));
+    res+= cp.receiveMatrix(SHVs,getDbTagData(),CommMetaData(8));
     return res;
   }
 
@@ -538,13 +503,13 @@ double XC::Concrete01::getStressSensitivity(int gradNumber, bool conditional)
     // Pick up sensitivity history variables
     UniaxialHistoryVars convergedHistorySensitivity;
     UniaxialStateVars convergedStateSensitivity;
-    if(SHVs)
+    if(!SHVs.Nula())
       {
-        convergedHistorySensitivity.MinStrain()= (*SHVs)(0,(gradNumber-1));
-        convergedHistorySensitivity.UnloadSlope()= (*SHVs)(1,(gradNumber-1));
-        convergedHistorySensitivity.EndStrain()= (*SHVs)(2,(gradNumber-1));
-        convergedStateSensitivity.Stress()= (*SHVs)(3,(gradNumber-1));
-        convergedStateSensitivity.Strain()= (*SHVs)(4,(gradNumber-1));
+        convergedHistorySensitivity.MinStrain()= SHVs(0,(gradNumber-1));
+        convergedHistorySensitivity.UnloadSlope()= SHVs(1,(gradNumber-1));
+        convergedHistorySensitivity.EndStrain()= SHVs(2,(gradNumber-1));
+        convergedStateSensitivity.Stress()= SHVs(3,(gradNumber-1));
+        convergedStateSensitivity.Strain()= SHVs(4,(gradNumber-1));
       }
 
     // Assign values to parameter derivatives (depending on what's random)
@@ -659,18 +624,18 @@ int XC::Concrete01::commitSensitivity(const double &strainGradient, int gradNumb
     UniaxialHistoryVars convergedHistorySensitivity;
     UniaxialStateVars convergedStateSensitivity;
 
-    if(!SHVs)
+    if(SHVs.Nula())
       {
-        SHVs= new Matrix(5,numGrads);
+        SHVs= Matrix(5,numGrads);
         convergedHistorySensitivity.UnloadSlope()= (2.0*fpcSensitivity*epsc0-2.0*fpc*epsc0Sensitivity) / (epsc0*epsc0);
       }
     else
       {
-        convergedHistorySensitivity.MinStrain()= (*SHVs)(0,(gradNumber-1));
-        convergedHistorySensitivity.UnloadSlope()= (*SHVs)(1,(gradNumber-1));
-        convergedHistorySensitivity.EndStrain()= (*SHVs)(2,(gradNumber-1));
-        convergedStateSensitivity.Stress()= (*SHVs)(3,(gradNumber-1));
-        convergedStateSensitivity.Strain()= (*SHVs)(4,(gradNumber-1));
+        convergedHistorySensitivity.MinStrain()= SHVs(0,(gradNumber-1));
+        convergedHistorySensitivity.UnloadSlope()= SHVs(1,(gradNumber-1));
+        convergedHistorySensitivity.EndStrain()= SHVs(2,(gradNumber-1));
+        convergedStateSensitivity.Stress()= SHVs(3,(gradNumber-1));
+        convergedStateSensitivity.Strain()= SHVs(4,(gradNumber-1));
       }
 
     // Strain increment
@@ -736,8 +701,8 @@ int XC::Concrete01::commitSensitivity(const double &strainGradient, int gradNumb
       }
 
     // Commit some history variables
-    (*SHVs)(3,(gradNumber-1))= trialStateSensitivity.getStress();
-    (*SHVs)(4,(gradNumber-1))= trialStateSensitivity.getStrain();
+    SHVs(3,(gradNumber-1))= trialStateSensitivity.getStress();
+    SHVs(4,(gradNumber-1))= trialStateSensitivity.getStrain();
 
     // Possibly update history variables for the three ordinary history variable derivatives
     double epsTemp, epsTempSensitivity;
@@ -794,9 +759,9 @@ int XC::Concrete01::commitSensitivity(const double &strainGradient, int gradNumb
       }
     else
       { trialHistorySensitivity= convergedHistorySensitivity; }
-    (*SHVs)(0,(gradNumber-1))= trialHistorySensitivity.getMinStrain();
-    (*SHVs)(1,(gradNumber-1))= trialHistorySensitivity.getUnloadSlope();
-    (*SHVs)(2,(gradNumber-1))= trialHistorySensitivity.getEndStrain();
+    SHVs(0,(gradNumber-1))= trialHistorySensitivity.getMinStrain();
+    SHVs(1,(gradNumber-1))= trialHistorySensitivity.getUnloadSlope();
+    SHVs(2,(gradNumber-1))= trialHistorySensitivity.getEndStrain();
     return 0;
   }
 

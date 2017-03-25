@@ -70,11 +70,12 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Modelización del acero 02.
+//! @brief Uniaxial material for steel. Menegotto-Pinto steel
+//! model with Filippou isotropic hardening.
 class Steel02 : public SteelBase
   {
   private:
-    double sigini; //!< Tensión inicial.
+    double sigini; //!< Initial strees.
     // matpar : STEEL FIXED PROPERTIES
     double R0;  //!<  = matpar(4)  : exp transition elastic-plastic
     double cR1; //!<  = matpar(5)  : coefficient for changing R0 to R
@@ -103,7 +104,7 @@ class Steel02 : public SteelBase
     int kon;
     double sig;
     double e;
-    double eps;   //!<  = strain at current step
+    double eps;   //!< strain at current step
   protected:
     int setup_parameters(void);
     DbTagData &getDbTagData(void) const;
