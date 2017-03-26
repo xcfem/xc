@@ -10,6 +10,7 @@ import xc
 from solution import predefined_solutions
 from postprocess import PhantomModel as phm
 from materials import RCsectionsContainer as sc
+from model import setMgmtUtils as sUtils
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT and AO_O"
@@ -39,6 +40,7 @@ class RCMaterialDistribution(object):
     #                      a spatial distribution of the sections over
     #                      the structure.
     self.sectionDistribution= ElementSectionMap.ElementSectionMap()
+    self.elementSetNames= list() #Elements sets with an assigned section.
 
   def assign(self,elemSet,setRCSects):
     '''Assigns the sections names: setRCSectsName+'1', setRCSectsName+'2', ...
@@ -49,6 +51,20 @@ class RCMaterialDistribution(object):
                           rebar positions,...
     '''
     self.sectionDistribution.assign(elemSet,setRCSects)
+    self.elementSetNames.append(elemSet.owner.name)
+
+  def getElementSet(self,preprocessor):
+    '''Returns an XC set that contains all the elements with an
+       assigned section.'''
+    retvalName= ''
+    for name in self.elementSetNames:
+      retvalName+= '|'+name
+    retval= preprocessor.getSets.defSet(retvalName)
+    sets= list()
+    for name in self.elementSetNames:
+      sets.append(preprocessor.getSets.getSet(name))
+    sUtils.appendSets(retval,sets)
+    return retval
 
   def getSectionNamesForElement(self,tagElem):
     '''Returns the section names for the element which tag is being passed
