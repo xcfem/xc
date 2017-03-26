@@ -38,6 +38,8 @@ class_<XC::BeamStrainLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamStrain
 class_<XC::BeamMecLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamMecLoad", no_init)
   .add_property("axialComponent", &XC::BeamMecLoad::getAxialComponent, &XC::BeamMecLoad::setAxialComponent)
   .add_property("transComponent", &XC::BeamMecLoad::getTransComponent, &XC::BeamMecLoad::setTransComponent)
+  .def("getLocalForce",&XC::BeamMecLoad::getLocalForce,"Returns local coordinates or force vector.")
+  .def("getLocalMoment",&XC::BeamMecLoad::getLocalMoment,"Returns local coordinates of bending moment vector.")
   .def("getLocalForces",make_function(&XC::BeamMecLoad::getLocalForces, return_internal_reference<>() ),"Returns punctual/distributed force vectors (one for each element) expressed in element local coordinates.")
   .def("getLocalMoments",make_function(&XC::BeamMecLoad::getLocalMoments, return_internal_reference<>() ),"Returns puntual/distributed force moments (one for each element) expressed in element local coordinates." )
   .def("getGlobalVectors",make_function(&XC::BeamMecLoad::getGlobalVectors, return_internal_reference<>() ))

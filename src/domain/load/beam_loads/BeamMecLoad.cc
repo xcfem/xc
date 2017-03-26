@@ -87,6 +87,23 @@ size_t XC::BeamMecLoad::getDimVectorFuerza(void) const
 size_t XC::BeamMecLoad::getDimVectorMomento(void) const
   { return 1; }
 
+//! @brief Returns force expressed in local coordinates.
+XC::Vector XC::BeamMecLoad::getLocalForce(void) const
+  {
+    Vector retval(2);
+    retval(0)= Axial;
+    retval(1)= Trans;
+    return retval;
+  }
+
+//! @brief Returns moment expressed in local coordinates.
+XC::Vector XC::BeamMecLoad::getLocalMoment(void) const
+  {
+    Vector retval(1);
+    retval(0)= 0.0;
+    return retval;
+  }
+
 //! @brief Returns punctual/distributed force vectors (one for each element) expressed in local coordinates.
 const XC::Matrix &XC::BeamMecLoad::getLocalForces(void) const
   {

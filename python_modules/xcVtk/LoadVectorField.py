@@ -42,12 +42,15 @@ class LoadVectorField(vf.VectorField):
       for i in range(0,len(tags)):
         eTag= tags[i]
         elem= preprocessor.getElementLoader.getElement(eTag)
-        vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
-        if(self.multiplyByElementArea):
-          vLoad*=elem.getArea(True)
-        vx= vLoad[i]; vy= vLoad[j]; vz= vLoad[k]
-        p= elem.getPosCentroid(True)
-        self.data.insertNextPair(p.x,p.y,p.z,vx,vy,vz,self.fUnitConv,self.showPushing)
+        if(elem.getDimension==2):
+          vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
+          if(self.multiplyByElementArea):
+            vLoad*=elem.getArea(True)
+          vx= vLoad[i]; vy= vLoad[j]; vz= vLoad[k]
+          p= elem.getPosCentroid(True)
+          self.data.insertNextPair(p.x,p.y,p.z,vx,vy,vz,self.fUnitConv,self.showPushing)
+        else:
+          lmsg.warning('displaying of loads over 1D elements not yet implemented')
       elementLoad= lIter.next()
       count+= 1
     return count

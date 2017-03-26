@@ -80,6 +80,8 @@ class Beam2dUniformLoad : public BeamUniformLoad
 
     size_t getDimVectorFuerza(void) const;
     size_t getDimVectorMomento(void) const;
+    virtual Vector getLocalForce(void) const;
+    virtual Vector getLocalMoment(void) const;
     const Matrix &getLocalForces(void) const;
     const Matrix &getLocalMoments(void) const;
 

@@ -267,6 +267,26 @@ size_t XC::Beam3dUniformLoad::getDimVectorFuerza(void) const
 size_t XC::Beam3dUniformLoad::getDimVectorMomento(void) const
   { return 3; }
 
+//! @brief Returns force expressed in local coordinates.
+XC::Vector XC::Beam3dUniformLoad::getLocalForce(void) const
+  {
+    Vector retval(3);
+    retval(0)= Wx();
+    retval(1)= Wy();
+    retval(2)= Wz();
+    return retval;
+  }
+
+//! @brief Returns moment expressed in local coordinates.
+XC::Vector XC::Beam3dUniformLoad::getLocalMoment(void) const
+  {
+    Vector retval(3);
+    retval(0)= Tx();
+    retval(1)= 0.0;
+    retval(2)= 0.0;
+    return retval;
+  }
+
 //! @brief Returns distributed force vectors (one for each element) expressed in local coordinates.
 const XC::Matrix &XC::Beam3dUniformLoad::getLocalForces(void) const
   {

@@ -82,6 +82,25 @@ size_t XC::Beam2dPointLoad::getDimVectorFuerza(void) const
 size_t XC::Beam2dPointLoad::getDimVectorMomento(void) const
   { return 1; }
 
+//! @brief Returns force expressed in local coordinates.
+XC::Vector XC::Beam2dPointLoad::getLocalForce(void) const
+  {
+    Vector retval(2);
+    retval(0)= pAxial();
+    retval(1)= pTrans();
+    return retval;
+  }
+
+//! @brief Returns the bending moment expressed in local coordinates.
+XC::Vector XC::Beam2dPointLoad::getLocalMoment(void) const
+  {
+    Vector retval(1);
+    retval(0)= 0.0;
+    retval(1)= 0.0;
+    retval(2)= 0.0;
+    return retval;
+  }
+
 //! @brief Returns force vectors (one for each element) expressed in local coordinates.
 const XC::Matrix &XC::Beam2dPointLoad::getLocalForces(void) const
   {
