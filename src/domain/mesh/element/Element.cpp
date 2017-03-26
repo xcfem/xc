@@ -933,7 +933,7 @@ XC::TritrizPtrElem XC::Element::cose(const SetEstruct &f1,const SetEstruct &f2) 
     return TritrizPtrElem();
   }
 
-//! @brief Envia los miembros del objeto through the channel being passed as parameter.
+//! @brief Sends object members through the channel being passed as parameter.
 int XC::Element::sendData(CommParameters &cp)
   {
     int res= MeshComponent::sendData(cp);
@@ -942,7 +942,7 @@ int XC::Element::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Element::recvData(const CommParameters &cp)
   {
     int res= MeshComponent::recvData(cp);

@@ -128,7 +128,7 @@ XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(int clsTag, Subdoma
     domainStamp(0) {}
 
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
+//! @brief Clears all object members (constraint handler, analysis model,...).
 void XC::DomainDecompositionAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation

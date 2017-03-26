@@ -78,14 +78,14 @@ class DomainComponent: public TaggedObject, public MovableObject
   {
   private:    
     Domain *theDomain; // a pointer to the enclosing Domain object
-    size_t idx; //!< @brief Índice del objeto (se emplea sólo para numerar entidades para VTK).
+    size_t idx; //!< @brief Index of the object (to be used in VTK arrays).
   protected:
     DomainComponent(int tag, int classTag);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
     ~DomainComponent(void);
-    //! @brief Returns the índice (NO EL TAG) del objeto.
+    //! @brief Returns the index of the object (to be used in VTK arrays).
     inline size_t getIdx(void) const
       { return idx; }
     virtual void setDomain(Domain *theDomain);

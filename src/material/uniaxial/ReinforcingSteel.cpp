@@ -396,7 +396,7 @@ int XC::ReinforcingSteel::revertToStart(void)
 XC::UniaxialMaterial * XC::ReinforcingSteel::getCopy(void) const
   { return new ReinforcingSteel(*this); }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::ReinforcingSteel::sendData(CommParameters &cp)
   {
     int res= UniaxialMaterial::sendData(cp);
@@ -453,7 +453,7 @@ int XC::ReinforcingSteel::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::ReinforcingSteel::recvData(const CommParameters &cp)
   {
     int res= UniaxialMaterial::recvData(cp);

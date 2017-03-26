@@ -266,8 +266,8 @@ XC::DbTagData &XC::NodalLoad::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members del objeto a través del
-//! canal being passed as parameter.
+//! @brief Sends object member through the communicator
+//! being passed as parameter.
 int XC::NodalLoad::sendData(CommParameters &cp)
   {
     int res= Load::sendData(cp);
@@ -277,8 +277,8 @@ int XC::NodalLoad::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto a través del
-//! canal being passed as parameter.
+//! @brief Receives object member through the communicator
+//! being passed as parameter.
 int XC::NodalLoad::recvData(const CommParameters &cp)
   {
     int res= Load::recvData(cp);

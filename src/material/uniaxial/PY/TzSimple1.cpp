@@ -388,7 +388,7 @@ int XC::TzSimple1::revertToStart(void)
 XC::UniaxialMaterial *XC::TzSimple1::getCopy(void) const
   { return new XC::TzSimple1(*this); }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::TzSimple1::sendData(CommParameters &cp)
   {
     int res= PYBase::sendData(cp);
@@ -397,7 +397,7 @@ int XC::TzSimple1::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::TzSimple1::recvData(const CommParameters &cp)
   {
     int res= PYBase::recvData(cp);

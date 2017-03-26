@@ -245,7 +245,7 @@ int XC::Newmark1::update(const XC::Vector &deltaU)
     return 0;
   }    
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::Newmark1::sendData(CommParameters &cp)
   {
     int res= NewmarkBase2::sendData(cp);
@@ -254,7 +254,7 @@ int XC::Newmark1::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Newmark1::recvData(const CommParameters &cp)
   {
     int res= NewmarkBase2::recvData(cp);

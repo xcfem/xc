@@ -1305,7 +1305,7 @@ XC::DbTagData &XC::Node::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envia los miembros del objeto through the channel being passed as parameter.
+//! @brief Sends object members through the channel being passed as parameter.
 int XC::Node::sendData(CommParameters &cp)
   {
     int res= MeshComponent::sendData(cp);
@@ -1325,7 +1325,7 @@ int XC::Node::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Node::recvData(const CommParameters &cp)
   {
     int res= MeshComponent::recvData(cp);

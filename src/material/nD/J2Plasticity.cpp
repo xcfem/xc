@@ -778,7 +778,7 @@ int XC::J2Plasticity::revertToStart( )
     return 0;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::J2Plasticity::sendData(CommParameters &cp)
   {
     int res= NDMaterial::sendData(cp);
@@ -796,7 +796,7 @@ int XC::J2Plasticity::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::J2Plasticity::recvData(const CommParameters &cp)
   {
     int res= NDMaterial::recvData(cp);

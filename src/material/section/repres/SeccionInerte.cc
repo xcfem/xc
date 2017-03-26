@@ -162,7 +162,7 @@ double XC::SeccionInerte::getIOHomogenizedSection(const double &E0,const Pos2d &
   { return (getIHomogenizedSection(E0,1,1,o)+getIHomogenizedSection(E0,2,2,o)+getIHomogenizedSection(E0,3,3,o))/2; }
 
 
-//! @brief Returns the tensor of inertia calculado desde el centro de gravedad del objeto.
+//! @brief Returns the tensor of inertia computed with respect to the object centroid.
 XC::Matrix XC::SeccionInerte::getIHomogenizedSection(const double &E0) const
   {
     Matrix i(2,2);
@@ -319,7 +319,7 @@ double XC::SeccionInerte::getIOGrossSection(const Pos2d &o) const
   { return (getIGrossSection(1,1,o)+getIGrossSection(2,2,o)+getIGrossSection(3,3,o))/2; }
 
 
-//! @brief Returns the tensor of inertia calculado desde el centro de gravedad del objeto.
+//! @brief Returns the tensor of inertia computed with respect to the object centroid.
 XC::Matrix XC::SeccionInerte::getIGrossSection(void) const
   {
     Matrix i(2,2);

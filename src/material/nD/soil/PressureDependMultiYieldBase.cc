@@ -447,7 +447,7 @@ int XC::PressureDependMultiYieldBase::updateParameter(int responseID, Informatio
   return 0;
 }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::PressureDependMultiYieldBase::sendData(CommParameters &cp)
   {
     int res= PressureMultiYieldBase::sendData(cp);
@@ -466,7 +466,7 @@ int XC::PressureDependMultiYieldBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::PressureDependMultiYieldBase::recvData(const CommParameters &cp)
   {
     int res= PressureMultiYieldBase::recvData(cp);

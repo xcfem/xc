@@ -126,7 +126,7 @@ void XC::Vertex::Print(std::ostream &s, int flag)
       s << ' ' << *i;    	
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::Vertex::sendData(CommParameters &cp)
   {
     setDbTagDataPos(0,getTag());
@@ -137,7 +137,7 @@ int XC::Vertex::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Vertex::recvData(const CommParameters &cp)
   {
     setTag(getDbTagDataPos(0));

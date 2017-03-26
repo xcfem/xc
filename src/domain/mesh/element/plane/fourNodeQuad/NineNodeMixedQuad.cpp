@@ -1098,7 +1098,7 @@ double XC::NineNodeMixedQuad::shape1d( int code, int node, double xi )
     return result;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::NineNodeMixedQuad::sendData(CommParameters &cp)
   {
     int res= ElemWithMaterial<9,NDMaterialPhysicalProperties>::sendData(cp);
@@ -1109,7 +1109,7 @@ int XC::NineNodeMixedQuad::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::NineNodeMixedQuad::recvData(const CommParameters &cp)
   {
     int res= ElemWithMaterial<9,NDMaterialPhysicalProperties>::recvData(cp);

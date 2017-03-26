@@ -47,14 +47,14 @@ void XC::UniaxialHistoryVars::zero(void)
     endStrain= 0.0;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::UniaxialHistoryVars::sendData(CommParameters &cp)
   {
     int res= cp.sendDoubles(minStrain,unloadSlope,endStrain,getDbTagData(),CommMetaData(0));
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::UniaxialHistoryVars::recvData(const CommParameters &cp)
   {
     int res= cp.receiveDoubles(minStrain,unloadSlope,endStrain,getDbTagData(),CommMetaData(0));

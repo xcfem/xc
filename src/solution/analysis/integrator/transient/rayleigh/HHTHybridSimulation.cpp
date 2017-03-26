@@ -310,7 +310,7 @@ int XC::HHTHybridSimulation::commit(void)
     return commitModel();
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::HHTHybridSimulation::sendData(CommParameters &cp)
   {
     int res= HHTBase::sendData(cp);
@@ -318,7 +318,7 @@ int XC::HHTHybridSimulation::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::HHTHybridSimulation::recvData(const CommParameters &cp)
   {
     int res= HHTBase::recvData(cp);

@@ -180,7 +180,7 @@ int XC::Information::setTensor(const Tensor &newTensor)
     return -1;
 }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::Information::sendData(CommParameters &cp)
   {
     //setDbTagDataPos(0,getTag());
@@ -194,7 +194,7 @@ int XC::Information::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Information::recvData(const CommParameters &cp)
   {
     //setTag(getDbTagDataPos(0));

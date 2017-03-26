@@ -197,7 +197,7 @@ void XC::Body::BodyFace::crea_nodos(void)
 XC::Body::Body(Preprocessor *m,const std::string &nombre)
   : EntMdlr(nombre,0,m) {}
 
-//! @brief Returns the BND del objeto.
+//! @brief Returns object BND.
 BND3d XC::Body::Bnd(void) const
   { 
     BND3d retval;

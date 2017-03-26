@@ -76,7 +76,7 @@ void XC::AggregatorAdditions::Print(std::ostream &s, int flag) const
     s << "\tUniaxial codes " << matCodes << std::endl;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::AggregatorAdditions::sendData(CommParameters &cp)
   {
     int res= DqUniaxialMaterial::sendData(cp);
@@ -84,7 +84,7 @@ int XC::AggregatorAdditions::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::AggregatorAdditions::recvData(const CommParameters &cp)
   {
     int res= DqUniaxialMaterial::recvData(cp);

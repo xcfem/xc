@@ -79,11 +79,11 @@ XC::DbTagData &XC::CFactorSeries::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::CFactorSeries::sendData(CommParameters &cp)
   { return cp.sendDouble(cFactor,getDbTagData(),CommMetaData(0)); }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::CFactorSeries::recvData(const CommParameters &cp)
   { return cp.receiveDouble(cFactor,getDbTagData(),CommMetaData(0)); }
 

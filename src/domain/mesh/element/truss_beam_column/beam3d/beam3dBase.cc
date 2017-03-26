@@ -160,7 +160,7 @@ const XC::Vector &XC::beam3dBase::getResistingForce(void) const
     return rForce;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::beam3dBase::sendData(CommParameters &cp)
   {
     int res= ProtoBeam3d::sendData(cp);
@@ -171,7 +171,7 @@ int XC::beam3dBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::beam3dBase::recvData(const CommParameters &cp)
   {
     int res= ProtoBeam3d::recvData(cp);

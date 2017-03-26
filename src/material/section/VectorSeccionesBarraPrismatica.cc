@@ -296,7 +296,7 @@ void XC::VectorSeccionesBarraPrismatica::setTrialSectionDeformations(const std::
       (*this)[i]->setTrialSectionDeformation(vs[i]);
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::VectorSeccionesBarraPrismatica::sendData(CommParameters &cp)
   {
     const size_t sz= size();

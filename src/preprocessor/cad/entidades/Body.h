@@ -96,7 +96,7 @@ class Body: public EntMdlr
     virtual BodyFace *GetFace(const size_t &i)= 0;
   public:
     Body(Preprocessor *m,const std::string &nombre= "");
-    //! @brief Return the dimension of the object
+    //! @brief Return the object dimension.
     inline virtual unsigned short int GetDimension(void) const
       { return 3; }
     //! @brief Returns the number of lines of the object.

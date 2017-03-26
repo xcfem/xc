@@ -256,11 +256,11 @@ XC::DbTagData &XC::NodePtrsWithIDs::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envia los miembros del objeto through the channel being passed as parameter.
+//! @brief Sends object members through the channel being passed as parameter.
 int XC::NodePtrsWithIDs::sendData(CommParameters &cp)
   { return cp.sendID(connectedExternalNodes,getDbTagData(),CommMetaData(0));  }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::NodePtrsWithIDs::recvData(const CommParameters &cp)
   { return cp.receiveID(connectedExternalNodes,getDbTagData(),CommMetaData(0)); }
 

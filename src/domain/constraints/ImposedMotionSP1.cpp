@@ -92,7 +92,7 @@ int XC::ImposedMotionSP1::applyConstraint(double time)
     return 0;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::ImposedMotionSP1::sendData(CommParameters &cp)
   {
     int result= ImposedMotionBase::sendData(cp);
@@ -100,7 +100,7 @@ int XC::ImposedMotionSP1::sendData(CommParameters &cp)
     return result;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::ImposedMotionSP1::recvData(const CommParameters &cp)
   {
     int res= ImposedMotionBase::recvData(cp);

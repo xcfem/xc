@@ -207,7 +207,7 @@ XC::DbTagData &XC::CableMaterial::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::CableMaterial::sendData(CommParameters &cp)
   {
     int res= ElasticBaseMaterial::sendData(cp);
@@ -215,7 +215,7 @@ int XC::CableMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::CableMaterial::recvData(const CommParameters &cp)
   {
     int res= ElasticBaseMaterial::recvData(cp);

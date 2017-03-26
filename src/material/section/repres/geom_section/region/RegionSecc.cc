@@ -157,7 +157,7 @@ double XC::RegionSecc::getI(const unsigned short int i,const unsigned short int 
 double XC::RegionSecc::getIO(const Pos2d &o)
   { return getPoligono().IO(o); }
 
-//! @brief Returns the tensor of inertia calculado desde el centro de gravedad del objeto.
+//! @brief Returns the tensor of inertia computed with respect to the object centroid.
 XC::Matrix &XC::RegionSecc::getI(void) const
   {
     static Matrix i(2,2);

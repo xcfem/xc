@@ -128,7 +128,7 @@ XC::UniaxialMaterial *XC::ViscousMaterial::getCopy(void) const
   { return new ViscousMaterial(*this); }
 
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::ViscousMaterial::sendData(CommParameters &cp)
   {
     int res= UniaxialMaterial::sendData(cp);
@@ -136,7 +136,7 @@ int XC::ViscousMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::ViscousMaterial::recvData(const CommParameters &cp)
   {
     int res= UniaxialMaterial::recvData(cp);

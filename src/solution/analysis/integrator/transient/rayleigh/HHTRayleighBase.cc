@@ -54,7 +54,7 @@ XC::HHTRayleighBase::HHTRayleighBase(SoluMethod *owr,int classTag,double _alpha,
     Ut(0), U(0), Ualpha(0) {}
 
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::HHTRayleighBase::sendData(CommParameters &cp)
   {
     int res= RayleighBase::sendData(cp);
@@ -65,7 +65,7 @@ int XC::HHTRayleighBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::HHTRayleighBase::recvData(const CommParameters &cp)
   {
     int res= RayleighBase::recvData(cp);

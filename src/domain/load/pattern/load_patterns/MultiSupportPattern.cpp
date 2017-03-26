@@ -125,7 +125,7 @@ bool XC::MultiSupportPattern::addElementalLoad(ElementalLoad *)
     return false;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::MultiSupportPattern::sendData(CommParameters &cp)
   {
     int res= EQBasePattern::sendData(cp);
@@ -134,7 +134,7 @@ int XC::MultiSupportPattern::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::MultiSupportPattern::recvData(const CommParameters &cp)
   {
     int res= EQBasePattern::recvData(cp);

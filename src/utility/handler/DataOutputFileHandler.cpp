@@ -179,7 +179,7 @@ int XC::DataOutputFileHandler::write(Vector &data)
     return 0;
   }
 
-//! @brief Envía los miembros del objeto a través del canal definido en el argumento.
+//! @brief Sends object members through the communicator being passed as parameter.
 int XC::DataOutputFileHandler::sendData(CommParameters &cp)
   {
     int res= cp.sendString(fileName,getDbTagData(),CommMetaData(0));
@@ -200,7 +200,7 @@ int XC::DataOutputFileHandler::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los miembros del objeto a través del canal definido en el argumento.
+//! @brief Receives object members through the communicator being passed as parameter.
 int XC::DataOutputFileHandler::recvData(const CommParameters &cp)
   {
     int res= cp.receiveString(fileName,getDbTagData(),CommMetaData(0));

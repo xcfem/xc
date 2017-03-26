@@ -96,7 +96,7 @@ XC::DirectIntegrationAnalysis::~DirectIntegrationAnalysis(void)
     // clearAll() must be invoked if user wishes to invoke destructor
   }
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
+//! @brief Clears all object members (constraint handler, analysis model,...).
 void XC::DirectIntegrationAnalysis::clearAll(void)
   {
 // AddingSensitivity:BEGIN ////////////////////////////////////

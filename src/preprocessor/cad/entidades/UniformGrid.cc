@@ -42,7 +42,7 @@ XC::UniformGrid::UniformGrid(Preprocessor *m,const size_t &i)
   {}
 
 //! @brief Constructor.
-//! @param nombre: Identificador del objeto.
+//! @param nombre: Object identifier.
 //! @param m: Pointer to preprocesador.
 //! @param i: Índice para gráficos.
 XC::UniformGrid::UniformGrid(const std::string &nombre,Preprocessor *m,const size_t &i)

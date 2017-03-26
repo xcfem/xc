@@ -86,7 +86,7 @@ XC::EigenAnalysis::EigenAnalysis(SoluMethod *metodo)
 XC::Analysis *XC::EigenAnalysis::getCopy(void) const
   { return new EigenAnalysis(*this); }
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
+//! @brief Clears all object members (constraint handler, analysis model,...).
 void XC::EigenAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation

@@ -479,7 +479,7 @@ XC::DbTagData &MaterialVector<MAT>::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 template <class MAT>
 int MaterialVector<MAT>::sendData(CommParameters &cp)
   {

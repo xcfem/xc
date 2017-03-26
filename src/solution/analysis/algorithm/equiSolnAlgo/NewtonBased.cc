@@ -32,7 +32,7 @@
 XC::NewtonBased::NewtonBased(SoluMethod *owr,int classTag,int theTangentToUse)
   :EquiSolnAlgo(owr,classTag), tangent(theTangentToUse) {}
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::NewtonBased::sendData(CommParameters &cp)
   {
     int res= EquiSolnAlgo::sendData(cp);
@@ -40,7 +40,7 @@ int XC::NewtonBased::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::NewtonBased::recvData(const CommParameters &cp)
   {
     int res= EquiSolnAlgo::recvData(cp);

@@ -53,14 +53,14 @@ void XC::InternalParamsA::revertToStart(const double &tg)
     Tang= tg;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::InternalParamsA::sendData(CommParameters &cp)
   {
     int res= cp.sendDoubles(v,R,Tang,getDbTagData(),CommMetaData(0));
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::InternalParamsA::recvData(const CommParameters &cp)
   {
     int res= cp.receiveDoubles(v,R,Tang,getDbTagData(),CommMetaData(0));

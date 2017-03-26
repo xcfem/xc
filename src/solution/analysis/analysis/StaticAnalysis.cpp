@@ -91,7 +91,7 @@ XC::StaticAnalysis::~StaticAnalysis(void)
   // clearAll() must be invoked if user wishes to invoke destructor
   }
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
+//! @brief Clears all object members (constraint handler, analysis model,...).
 void XC::StaticAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation

@@ -57,11 +57,11 @@ Vector2d XC::Spot::VectorPos(void) const
 void XC::Spot::actualiza_topologia(void)
   {}
 
-//! @brief Returns the BND del objeto.
+//! @brief Returns the object BND.
 BND2d XC::Spot::Bnd(void) const
   { return BND2d(p,p);  }
 
-//! @brief Returns true ifel punto toca a la línea.
+//! @brief Returns true if the point is an end of the line.
 bool XC::Spot::Toca(const Eje &l) const
   {
     std::set<const Eje *>::const_iterator i= ejes_pt.find(&l);

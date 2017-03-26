@@ -975,7 +975,7 @@ XC::DbTagData &XC::Mesh::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::Mesh::sendData(CommParameters &cp)
   {
     int res=cp.sendMovable(*theNodes,getDbTagData(),CommMetaData(0));
@@ -986,7 +986,7 @@ int XC::Mesh::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Mesh::recvData(const CommParameters &cp)
   {
     int res= theNodes->recibe<Node>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewNode);

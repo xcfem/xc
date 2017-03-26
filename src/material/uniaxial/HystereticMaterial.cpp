@@ -411,7 +411,7 @@ int XC::HystereticMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::HystereticMaterial::getCopy(void) const
   { return new HystereticMaterial(*this); }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::HystereticMaterial::sendData(CommParameters &cp)
   {
     int res= UniaxialMaterial::sendData(cp);
@@ -427,7 +427,7 @@ int XC::HystereticMaterial::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::HystereticMaterial::recvData(const CommParameters &cp)
   {
     int res= UniaxialMaterial::recvData(cp);

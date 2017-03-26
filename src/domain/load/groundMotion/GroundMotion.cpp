@@ -141,8 +141,8 @@ int XC::GroundMotion::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Envía a pointer al «ground motion» through the channel being passed as parameter.
-//! @param posClassTag: Posición de ID del identificador de la clase del objeto.
-//! @param posDbTag: Posición de ID en la que se guarda el dbTag.
+//! @param posClassTag: Index for the class identifier of the object (in ID).
+//! @param posDbTag: Index for the dbTag of the object (in ID).
 int XC::sendGroundMotionPtr(GroundMotion *ptr,DbTagData &dt,CommParameters &cp,const BrokedPtrCommMetaData &md)
   {
     int res= 0;
@@ -158,8 +158,8 @@ int XC::sendGroundMotionPtr(GroundMotion *ptr,DbTagData &dt,CommParameters &cp,c
   }
 
 //! @brief Recibe a pointer a «ground motion» through the channel being passed as parameter.
-//! @param posClassTag: Posición de ID del identificador de la clase del objeto.
-//! @param posDbTag: Posición de ID en la que se guarda el dbTag.
+//! @param posClassTag: Index for the class identifier of the object (in ID).
+//! @param posDbTag: Index for the dbTag of the object (in ID).
 XC::GroundMotion *XC::receiveGroundMotionPtr(GroundMotion* ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)
   {
     GroundMotion *retval= nullptr;

@@ -581,7 +581,7 @@ const XC::Vector &XC::NineFourNodeQuadUP::getResistingForceIncInertia(void) cons
     return P;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::NineFourNodeQuadUP::sendData(CommParameters &cp)
   {
     int res= ElemWithMaterial<9,SolidMech2D>::sendData(cp);
@@ -591,7 +591,7 @@ int XC::NineFourNodeQuadUP::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::NineFourNodeQuadUP::recvData(const CommParameters &cp)
   {
     int res= ElemWithMaterial<9,SolidMech2D>::recvData(cp);

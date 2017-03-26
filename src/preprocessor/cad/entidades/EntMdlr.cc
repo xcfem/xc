@@ -49,7 +49,7 @@ XC::EntMdlr::EntMdlr(Preprocessor *m,const size_t &i)
   : SetEstruct("",m), idx(i), doGenMesh(true), nodos(), elementos() {}
 
 //! @brief Constructor.
-//! @param nombre: Identificador del objeto.
+//! @param nombre: Object identifier.
 //! @param i: Índice para gráficos.
 //! @param m: Pointer to preprocesador.
 XC::EntMdlr::EntMdlr(const std::string &nombre,const size_t &i,Preprocessor *m)
@@ -89,14 +89,14 @@ int XC::EntMdlr::getMEDCellType(void) const
     return MED_NONE;
   }
 
-//! @brief Borra todo el contenido del objeto.
+//! @brief Clears object contents.
 void XC::EntMdlr::clearAll(void)
   {
     SetEstruct::clearPyProps();
     BorraPtrNodElem();
   }
 
-//! @brief Borra los pointers to nodes y elementos.
+//! @brief Clears pointer to nodes and elements.
 void XC::EntMdlr::BorraPtrNodElem(void)
   {
     nodos.clearAll();

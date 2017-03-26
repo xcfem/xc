@@ -81,7 +81,7 @@ void XC::ResponseQuantities::Zero(void)
     Rdotdot.Zero();
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::ResponseQuantities::sendData(CommParameters &cp)
   {
     int res= 0;//MovableObject::sendData(cp);
@@ -91,7 +91,7 @@ int XC::ResponseQuantities::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::ResponseQuantities::recvData(const CommParameters &cp)
   {
     int res= 0;//MovableObject::receiveData(cp);

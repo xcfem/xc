@@ -62,7 +62,7 @@
 XC::FactorsConstraintHandler::FactorsConstraintHandler(ModelWrapper *owr,int classTag,const double &sp,const double &mp)
   :ConstraintHandler(owr,classTag), alphaSP(sp), alphaMP(mp) {}
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::FactorsConstraintHandler::sendData(CommParameters &cp)
   {
     int res= ConstraintHandler::sendData(cp);
@@ -70,7 +70,7 @@ int XC::FactorsConstraintHandler::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::FactorsConstraintHandler::recvData(const CommParameters &cp)
   {
     int res= ConstraintHandler::recvData(cp);

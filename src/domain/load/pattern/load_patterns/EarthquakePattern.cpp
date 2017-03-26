@@ -220,7 +220,7 @@ bool XC::EarthquakePattern::addElementalLoad(ElementalLoad *)
     return false;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::EarthquakePattern::sendData(CommParameters &cp)
   {
     int res= EQBasePattern::sendData(cp);
@@ -230,7 +230,7 @@ int XC::EarthquakePattern::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::EarthquakePattern::recvData(const CommParameters &cp)
   {
     int res= EQBasePattern::recvData(cp);

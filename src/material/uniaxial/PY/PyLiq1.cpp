@@ -424,7 +424,7 @@ XC::UniaxialMaterial *XC::PyLiq1::getCopy(void) const
   { return new PyLiq1(*this); }
 
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::PyLiq1::sendData(CommParameters &cp)
   {
     int res= PySimple1::sendData(cp);
@@ -436,7 +436,7 @@ int XC::PyLiq1::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::PyLiq1::recvData(const CommParameters &cp)
   {
     int res= PySimple1::recvData(cp);

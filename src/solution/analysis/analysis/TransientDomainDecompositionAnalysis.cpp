@@ -89,7 +89,7 @@ XC::TransientDomainDecompositionAnalysis::~TransientDomainDecompositionAnalysis(
     // clearAll() must be invoked if user wishes to invoke destructor
   }    
 
-//! Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
+//! Clears all object members (Constraint handler, analysis model,...).
 void XC::TransientDomainDecompositionAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation

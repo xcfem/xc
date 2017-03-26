@@ -444,7 +444,7 @@ const XC::Matrix &XC::PDeltaCrdTransf2d::getInitialGlobalStiffMatrix (const XC::
 XC::CrdTransf2d *XC::PDeltaCrdTransf2d::getCopy(void) const
   { return new PDeltaCrdTransf2d(*this); }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::PDeltaCrdTransf2d::sendData(CommParameters &cp)
   {
     int res= SmallDispCrdTransf2d::sendData(cp);
@@ -452,7 +452,7 @@ int XC::PDeltaCrdTransf2d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::PDeltaCrdTransf2d::recvData(const CommParameters &cp)
   {
     int res= SmallDispCrdTransf2d::recvData(cp);

@@ -76,7 +76,7 @@ class Pnt: public EntMdlr
     //! @brief Returns the object position.
     Pos3d &Pos(void)
       { return p; }
-    //! @brief Sets the position of the object.
+    //! @brief Sets the object position.
     void setPos(const Pos3d &pos)
       { p= pos; }
     Vector3d VectorPos(void) const;

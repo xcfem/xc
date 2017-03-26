@@ -78,7 +78,7 @@ int XC::PYBase::revertToLastCommit(void)
     return 0;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::PYBase::sendData(CommParameters &cp)
   {
     int res= UniaxialMaterial::sendData(cp);
@@ -93,7 +93,7 @@ int XC::PYBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::PYBase::recvData(const CommParameters &cp)
   {
     int res= UniaxialMaterial::recvData(cp);

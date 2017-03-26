@@ -487,7 +487,7 @@ const XC::Vector &XC::CrdTransf3d::getCooPunto(const double &xrel) const
 void XC::CrdTransf3d::gira(const double &theta)
   { set_xz_vector(m_double_to_matrix(GiroX(-theta))*get_xz_vector()); }
 
-//! @brief Envia los miembros del objeto through the channel being passed as parameter.
+//! @brief Sends object members through the channel being passed as parameter.
 int XC::CrdTransf3d::sendData(CommParameters &cp)
   {
     int res= CrdTransf::sendData(cp);
@@ -497,7 +497,7 @@ int XC::CrdTransf3d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::CrdTransf3d::recvData(const CommParameters &cp)
   {
     int res= CrdTransf::recvData(cp);

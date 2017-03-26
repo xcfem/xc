@@ -313,7 +313,7 @@ int XC::HHTGeneralized::commit(void)
     return commitModel();
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::HHTGeneralized::sendData(CommParameters &cp)
   {
     int res= RayleighBase::sendData(cp);
@@ -325,7 +325,7 @@ int XC::HHTGeneralized::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::HHTGeneralized::recvData(const CommParameters &cp)
   {
     int res= RayleighBase::recvData(cp);

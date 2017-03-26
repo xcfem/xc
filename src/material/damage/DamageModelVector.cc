@@ -193,7 +193,7 @@ XC::DbTagData &XC::DamageModelVector::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::DamageModelVector::sendData(CommParameters &cp)
   {
     int res= 0;

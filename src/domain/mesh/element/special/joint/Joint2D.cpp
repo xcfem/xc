@@ -746,7 +746,7 @@ int XC::Joint2D::getResponse(int responseID, Information &eleInformation)
 }
 
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::Joint2D::sendData(CommParameters &cp)
   {
     int res= Joint2dBase::sendData(cp);
@@ -755,7 +755,7 @@ int XC::Joint2D::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Joint2D::recvData(const CommParameters &cp)
   {
     int res= Joint2dBase::recvData(cp);

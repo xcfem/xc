@@ -39,14 +39,14 @@ int XC::UniaxialStateVars::revertToStart(const double &E)
     return 0;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::UniaxialStateVars::sendData(CommParameters &cp)
   {
     int res= cp.sendDoubles(strain,stress,tangent,getDbTagData(),CommMetaData(0));
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::UniaxialStateVars::recvData(const CommParameters &cp)
   {
     int res= cp.receiveDoubles(strain,stress,tangent,getDbTagData(),CommMetaData(0));

@@ -547,7 +547,7 @@ int XC::SectionAggregator::revertToStart(void)
     return err;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::SectionAggregator::sendData(CommParameters &cp)
   {
     int res= SeccionBarraPrismatica::sendData(cp);
@@ -562,7 +562,7 @@ int XC::SectionAggregator::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::SectionAggregator::recvData(const CommParameters &cp)
   {
     int res= SeccionBarraPrismatica::recvData(cp);

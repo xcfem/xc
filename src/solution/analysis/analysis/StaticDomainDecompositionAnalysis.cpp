@@ -89,7 +89,7 @@ XC::StaticDomainDecompositionAnalysis::~StaticDomainDecompositionAnalysis(void)
     // clearAll() must be invoked if user wishes to invoke destructor
   }    
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
+//! @brief Clears object members (Constraint handler, analysis model,...).
 void XC::StaticDomainDecompositionAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation

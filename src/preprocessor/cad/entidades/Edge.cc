@@ -46,9 +46,9 @@ XC::Edge::Edge(Preprocessor *m,const size_t &nd)
   : EntMdlr(m), ndiv(nd) {}
 
 //! @brief Constructor.
-//! @param nombre: Identificador del objeto.
-//! @param i: Índice para gráficos.
+//! @param nombre: Object identifier.
 //! @param m: Pointer to preprocesador.
+//! @param nd: Number of divisions.
 XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : EntMdlr(nombre,0,m), ndiv(nd) {}
 
@@ -364,14 +364,15 @@ std::set<const XC::Edge *> XC::GetLineasTocan(const Pnt &p)
 MatrizPos3d XC::Edge::get_pos_nodos(void) const
   { return get_posiciones(); }
 
-//! @brief Crea los nodos en los puntos extremos del objeto.
+//! @brief Creates the nodes for both end points of the edge.
 void XC::Edge::crea_nodos_en_extremos(void)
   {
     if(verborrea>4)
-      std::clog << "Creando nodos en extremos linea: '" << GetNombre() << "'...";   
+      std::clog << "Creating nodes for '" << GetNombre() << "' edge ends...";   
     if(!P1())
       {
-	std::cerr << "Edge::crea_nodos_en_extremos; start point undefined." << std::endl;
+	std::cerr << nombre_clase() << __FUNCTION__
+	          << "; start point undefined." << std::endl;
         return;
       }
     else
@@ -383,7 +384,8 @@ void XC::Edge::crea_nodos_en_extremos(void)
       
     if(!P2())
       {
-	std::cerr << "Edge::crea_nodos_en_extremos; end point undefined." << std::endl;
+	std::cerr << nombre_clase() << __FUNCTION__
+	          << "; end point undefined." << std::endl;
         return;
       }
     else
@@ -399,11 +401,11 @@ void XC::Edge::crea_nodos_en_extremos(void)
      std::cerr << "Edge::crea_nodos_en_extremos(); creados." << std::endl;
   }
 
-//! @brief Crea los nodos del objeto.
+//! @brief Cretes nodes of the object.
 void XC::Edge::crea_nodos(void)
   {
     if(verborrea>4)
-      std::clog << "Creando nodos linea: '" << GetNombre() << "'...";
+      std::clog << "Creating nodes for edge: '" << GetNombre() << "'...";
 
  
     if(nodos.Null())

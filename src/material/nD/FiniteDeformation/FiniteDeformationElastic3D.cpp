@@ -235,7 +235,7 @@ int XC::FiniteDeformationElastic3D::getOrder(void) const
    return 0;
 }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::FiniteDeformationElastic3D::sendData(CommParameters &cp)
   {
     int res= NDMaterial::sendData(cp);
@@ -243,7 +243,7 @@ int XC::FiniteDeformationElastic3D::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::FiniteDeformationElastic3D::recvData(const CommParameters &cp)
   {
     int res= NDMaterial::recvData(cp);

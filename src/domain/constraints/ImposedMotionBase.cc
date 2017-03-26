@@ -102,7 +102,7 @@ int XC::ImposedMotionBase::getMotion(void)
     return 0;
   }
 
-//! @brief Envía los miembreos del objeto through the channel being passed as parameter.
+//! @brief Sends object members through the channel being passed as parameter.
 int XC::ImposedMotionBase::sendData(CommParameters &cp)
   {
     int result= SFreedom_Constraint::sendData(cp);

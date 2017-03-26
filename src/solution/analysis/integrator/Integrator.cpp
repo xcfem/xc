@@ -126,13 +126,13 @@ void XC::Integrator::Print(std::ostream &s, int flag)
       s << "\t XC::LoadPath - no associated AnalysisModel\n"; 
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::Integrator::sendData(CommParameters &cp)
   {
     return 0;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Integrator::recvData(const CommParameters &cp)
   {
     return 0;

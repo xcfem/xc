@@ -994,7 +994,7 @@ const XC::Matrix &XC::BrickUP::computeB( int node, const double shp[4][8] ) cons
   return Mtran ;
 }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::BrickUP::sendData(CommParameters &cp)
   {
     int res= BrickBase::sendData(cp);
@@ -1004,7 +1004,7 @@ int XC::BrickUP::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::BrickUP::recvData(const CommParameters &cp)
   {
     int res= BrickBase::recvData(cp);

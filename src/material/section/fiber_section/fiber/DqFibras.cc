@@ -411,7 +411,7 @@ double XC::DqFibras::getIHomogenizedSection(const double &E0,const unsigned shor
     return retval;
   }
 
-//! @brief Returns the tensor of inertia calculado desde el centro de gravedad del objeto.
+//! @brief Returns the tensor of inertia computed with respect to the object centroid.
 XC::Matrix &XC::DqFibras::getIHomogenizedSection(const double &E0) const
   {
     static Matrix i(2,2);

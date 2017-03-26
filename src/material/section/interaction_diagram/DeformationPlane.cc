@@ -297,7 +297,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(void) const
     return retval;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::DeformationPlane::sendData(CommParameters &cp)
   {
     //setDbTagDataPos(0,getTag());
@@ -308,7 +308,7 @@ int XC::DeformationPlane::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::DeformationPlane::recvData(const CommParameters &cp)
   {
     //setTag(getDbTagDataPos(0));

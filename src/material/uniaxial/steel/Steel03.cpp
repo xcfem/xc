@@ -274,7 +274,7 @@ int XC::Steel03::revertToLastCommit(void)
 XC::UniaxialMaterial* XC::Steel03::getCopy(void) const
   { return new Steel03(*this); }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::Steel03::sendData(CommParameters &cp)
   {
     int res= SteelBase0103::sendData(cp);
@@ -284,7 +284,7 @@ int XC::Steel03::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Steel03::recvData(const CommParameters &cp)
   {
     int res= SteelBase0103::recvData(cp);

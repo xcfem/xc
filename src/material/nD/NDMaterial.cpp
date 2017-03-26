@@ -313,14 +313,14 @@ int XC::NDMaterial::getResponse(int responseID, Information &matInfo)
       }
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::NDMaterial::sendData(CommParameters &cp)
   {
     setDbTagDataPos(0,getTag());
     return 0;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::NDMaterial::recvData(const CommParameters &cp)
   {
     setTag(getDbTagDataPos(0));

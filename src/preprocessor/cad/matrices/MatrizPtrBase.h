@@ -112,7 +112,7 @@ bool MatrizPtrBase<T>::HasNull(void) const
     return retval;
   }
 
-//! @brief Asks each of the objects on the row to execute
+//! @brief Asks each of the objects in the row to execute
 //! the code being passed as parameter.
 template <class T>
 std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsFila(const size_t &f)
@@ -125,7 +125,7 @@ std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsFila(const size_t &f)
     return retval;
   }
 
-//! @brief Asks each of the objects on the column to execute
+//! @brief Asks each of the objects in the column to execute
 //! the code being passed as parameter.
 template <class T>
 std::vector<int>  XC::MatrizPtrBase<T>::getTagsObjsColumna(const size_t &c)

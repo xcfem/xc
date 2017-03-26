@@ -74,11 +74,11 @@ Vector3d XC::Pnt::VectorPos(void) const
 void XC::Pnt::actualiza_topologia(void)
   {}
 
-//! @brief Returns the BND del objeto.
+//! @brief Returns the object BND.
 BND3d XC::Pnt::Bnd(void) const
   { return BND3d(p,p);  }
 
-//! @brief Returns the líneas que comienzan o acaban en este punto.
+//! @brief Returns the lines that start o finish in this point.
 std::set<const XC::Edge *> XC::Pnt::EdgesExtremo(void) const
   {
     std::set<const Edge *> retval;

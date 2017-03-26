@@ -65,14 +65,14 @@ int XC::RayleighDampingFactors::updateParameter(int parameterID, Information &in
       }
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::RayleighDampingFactors::sendData(CommParameters &cp)
   {
     int res=cp.sendDoubles(alphaM,betaK,betaK0,betaKc,getDbTagData(),CommMetaData(1));
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::RayleighDampingFactors::recvData(const CommParameters &cp)
   {
     int res= cp.receiveDoubles(alphaM,betaK,betaK0,betaKc,getDbTagData(),CommMetaData(1));

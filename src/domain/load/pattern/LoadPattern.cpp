@@ -459,7 +459,7 @@ void XC::LoadPattern::applyLoad(double pseudoTime)
 void XC::LoadPattern::setLoadConstant(void)
   { isConstant = 0; }
 
-//! @brief Returns the factor de ponderación obtenido del objeto TimeSeries.
+//! @brief Returns the factor de ponderación obtenido of the TimeSeries object.
 const double &XC::LoadPattern::getLoadFactor(void) const
   { return loadFactor; }
 

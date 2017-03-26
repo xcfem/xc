@@ -482,7 +482,7 @@ const XC::Vector &XC::Tri31::getResistingForceIncInertia() const
     return P;
  }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::Tri31::sendData(CommParameters &cp)
   {
     int res= TriBase3N<SolidMech2D>::sendData(cp);
@@ -492,7 +492,7 @@ int XC::Tri31::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Tri31::recvData(const CommParameters &cp)
   {
     int res= TriBase3N<SolidMech2D>::recvData(cp);

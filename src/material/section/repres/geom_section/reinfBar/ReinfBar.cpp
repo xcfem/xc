@@ -191,7 +191,7 @@ double XC::ReinfBar::getI(const unsigned short int i,const unsigned short int j,
 double XC::ReinfBar::getIO(const Pos2d &o) const
   { return (getI(1,1,o)+getI(2,2,o)+getI(3,3,o))/2; }
 
-//! @brief Returns the tensor de inercia calculado desde el centro de gravedad del objeto.
+//! @brief Returns the tensor de inercia computed with respect to the object centroid.
 XC::Matrix &XC::ReinfBar::getI(void) const
   {
     static Matrix i(2,2);

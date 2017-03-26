@@ -1148,7 +1148,7 @@ void XC::ConstantPressureVolumeQuad::shape2d( double ss, double tt,
   return;
 }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::ConstantPressureVolumeQuad::sendData(CommParameters &cp)
   {
     int res= QuadBase4N<NDMaterialPhysicalProperties>::sendData(cp);
@@ -1157,7 +1157,7 @@ int XC::ConstantPressureVolumeQuad::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::ConstantPressureVolumeQuad::recvData(const CommParameters &cp)
   {
     int res= QuadBase4N<NDMaterialPhysicalProperties>::recvData(cp);

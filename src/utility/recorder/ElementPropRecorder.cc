@@ -51,7 +51,7 @@ void XC::ElementPropRecorder::setElements(const ID &iElements)
                 << " element list is empty." << std::endl;
   }
 
-//! @brief Registra la(s) propiedad(es) del objeto tras el commit.
+//! @brief Records object properties when commit is achieved.
 int XC::ElementPropRecorder::record(int commitTag, double timeStamp)
   {
     lastCommitTag= commitTag;

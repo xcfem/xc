@@ -471,7 +471,7 @@ const std::string &XC::FDdecoupledElastic3D::getType(void) const
 int XC::FDdecoupledElastic3D::getOrder(void) const
   { return 6; }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::FDdecoupledElastic3D::sendData(CommParameters &cp)
   {
     int res= FiniteDeformationElastic3D::sendData(cp);
@@ -488,7 +488,7 @@ int XC::FDdecoupledElastic3D::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::FDdecoupledElastic3D::recvData(const CommParameters &cp)
   {
     int res= FiniteDeformationElastic3D::recvData(cp);

@@ -92,7 +92,7 @@ double XC::PulseSeries::getFactor(double pseudoTime) const
       return 0;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::PulseSeries::sendData(CommParameters &cp)
   {
     int res= PeriodSeries::sendData(cp);
@@ -100,7 +100,7 @@ int XC::PulseSeries::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::PulseSeries::recvData(const CommParameters &cp)
   {
     int res= PeriodSeries::recvData(cp);

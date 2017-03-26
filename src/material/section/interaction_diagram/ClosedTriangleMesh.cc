@@ -375,7 +375,7 @@ void XC::ClosedTriangleMesh::read(std::ifstream &is)
     setMatrizPosiciones(m);
   }
 
-//! @brief Envia los miembros del objeto through the channel being passed as parameter.
+//! @brief Sends object members through the channel being passed as parameter.
 int XC::ClosedTriangleMesh::sendData(CommParameters &cp)
   {
     int res= 0; //MovableObject::sendData(cp);
@@ -386,7 +386,7 @@ int XC::ClosedTriangleMesh::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::ClosedTriangleMesh::recvData(const CommParameters &cp)
   {
     int res= 0;

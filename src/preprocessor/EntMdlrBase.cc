@@ -62,7 +62,7 @@ XC::EntMdlrBase &XC::EntMdlrBase::operator=(const EntMdlrBase &otro)
     return *this;
   }
 
-//! @brief Returns the código del objeto.
+//! @brief Returns the object identifier in the model (tag).
 size_t XC::EntMdlrBase::GetTag(void) const
   {
     const std::string tmp= GetNombre().substr(1);

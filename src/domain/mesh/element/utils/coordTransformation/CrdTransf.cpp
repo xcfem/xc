@@ -185,7 +185,7 @@ const XC::Vector &XC::CrdTransf::getBasicTrialDispShapeSensitivity(void)
     return dummy;
   }
 
-//! @brief Envia los miembros del objeto through the channel being passed as parameter.
+//! @brief Sends object members through the channel being passed as parameter.
 int XC::CrdTransf::sendData(CommParameters &cp)
   {
     //data(0)= getTag();
@@ -200,7 +200,7 @@ int XC::CrdTransf::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::CrdTransf::recvData(const CommParameters &cp)
   {
     //setTag(data(0));

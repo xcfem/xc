@@ -386,7 +386,7 @@ int XC::FiberSectionShear3d::revertToStart(void)
     return err;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::FiberSectionShear3d::sendData(CommParameters &cp)
   {
     int res= FiberSection3d::sendData(cp);
@@ -394,7 +394,7 @@ int XC::FiberSectionShear3d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::FiberSectionShear3d::recvData(const CommParameters &cp)
   {
     int res= FiberSection3d::recvData(cp);

@@ -275,7 +275,7 @@ XC::T2Vector::isZero(void) const
   return 1;
 }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::T2Vector::sendData(CommParameters &cp)
   {
     //setDbTagDataPos(0,getTag());
@@ -285,7 +285,7 @@ int XC::T2Vector::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::T2Vector::recvData(const CommParameters &cp)
   {
     //setTag(getDbTagDataPos(0));

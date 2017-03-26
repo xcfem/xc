@@ -743,7 +743,7 @@ void   XC::Twenty_Node_Brick::computeBasis(void) const
 
 }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::Twenty_Node_Brick::sendData(CommParameters &cp)
   {
     int res= Twenty_Node_Brick_Base::sendData(cp);
@@ -752,7 +752,7 @@ int XC::Twenty_Node_Brick::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Twenty_Node_Brick::recvData(const CommParameters &cp)
   {
     int res= Twenty_Node_Brick_Base::recvData(cp);

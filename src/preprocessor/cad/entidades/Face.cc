@@ -47,7 +47,7 @@ XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
   : CmbEdge(m,ndivI), ndivj(ndivJ) {}
 
 //! @brief Constructor.
-//! @param nombre: Identificador del objeto.
+//! @param nombre: Object identifier.
 //! @param m: Pointer to preprocesador.
 //! @param nd: Número de divisiones.
 XC::Face::Face(const std::string &nombre,Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)

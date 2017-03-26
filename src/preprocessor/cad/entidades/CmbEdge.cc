@@ -229,7 +229,7 @@ XC::CmbEdge::CmbEdge(Preprocessor *m,const size_t &nd)
   : Edge(m,nd), lineas(0) {}
 
 //! @brief Constructor.
-//! @param nombre: Identificador del objeto.
+//! @param nombre: Object identifier.
 //! @param m: Pointer to preprocesador.
 //! @param nd: Número de divisiones.
 XC::CmbEdge::CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd)
@@ -660,19 +660,21 @@ Polilinea3d XC::CmbEdge::getPolyline(void) const
   }
 
 
-//! @brief Returns the BND del objeto.
+//! @brief Returns object BND.
 BND3d XC::CmbEdge::Bnd(void) const
   { 
     BND3d retval;
     const size_t nv= NumVertices();
     if(nv<1) //the set is empty.
       {
-	std::cerr << "XC::CmbEdge::Bnd(); polyline is empty." << std::endl;
+	std::cerr << nombre_clase() << __FUNCTION__
+	          << "; polyline empty." << std::endl;
         return retval;
       }
     if(nv<2)
       {
-	std::cerr << "XC::CmbEdge::Bnd(); la polilinea sólo tiene un punto." << std::endl;
+	std::cerr << nombre_clase() << __FUNCTION__
+		  << "; the polyline has only a point." << std::endl;
         retval= BND3d(GetVertice(1)->GetPos(),GetVertice(1)->GetPos());
         return retval;
       }

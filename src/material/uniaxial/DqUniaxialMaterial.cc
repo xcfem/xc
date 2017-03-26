@@ -143,7 +143,7 @@ void XC::DqUniaxialMaterial::clear(void)
     lst_ptr::clear();
   }
 
-//! @brief Clears the container and deletes the properties of the object.
+//! @brief Clears the container and deletes object properties.
 void XC::DqUniaxialMaterial::clearAll(void)
   {
     clear();

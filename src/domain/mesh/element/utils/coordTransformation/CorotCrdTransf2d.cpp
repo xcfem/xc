@@ -928,7 +928,7 @@ double XC::CorotCrdTransf2d::getDeformedLength(void) const
 XC::CrdTransf2d *XC::CorotCrdTransf2d::getCopy(void) const
   { return new CorotCrdTransf2d(*this); }
 
-//! @brief Envia los miembros del objeto through the channel being passed as parameter.
+//! @brief Sends object members through the channel being passed as parameter.
 int XC::CorotCrdTransf2d::sendData(CommParameters &cp)
   {
     int res= CrdTransf2d::sendData(cp);
@@ -943,7 +943,7 @@ int XC::CorotCrdTransf2d::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::CorotCrdTransf2d::recvData(const CommParameters &cp)
   {
     int res= CrdTransf2d::recvData(cp);

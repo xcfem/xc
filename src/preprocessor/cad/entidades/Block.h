@@ -52,7 +52,7 @@ class Block: public Body
   public:
     Block(Preprocessor *m,const std::string &nombre= "");
     SetEstruct *getCopy(void) const;
-    //! @brief Returns the número de líneas del objeto.
+    //! @brief Returns the number of lines of the object.
     virtual size_t NumLineas(void) const;
     virtual size_t NumVertices(void) const;
     virtual size_t NumFaces(void) const;

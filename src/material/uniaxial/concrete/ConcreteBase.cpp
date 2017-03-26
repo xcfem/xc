@@ -55,7 +55,7 @@ double XC::ConcreteBase::getStrain(void) const
 double XC::ConcreteBase::getTangent(void) const
   { return trialState.getTangent(); }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::ConcreteBase::sendData(CommParameters &cp)
   {
     int res= RawConcrete::sendData(cp);
@@ -67,7 +67,7 @@ int XC::ConcreteBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::ConcreteBase::recvData(const CommParameters &cp)
   {
     int res= RawConcrete::recvData(cp);

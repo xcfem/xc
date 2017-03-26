@@ -309,7 +309,7 @@ XC::DbTagData &XC::Steel02::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::Steel02::sendData(CommParameters &cp)
   {
     int res= SteelBase::sendData(cp);
@@ -321,7 +321,7 @@ int XC::Steel02::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::Steel02::recvData(const CommParameters &cp)
   {
     int res= SteelBase::recvData(cp);

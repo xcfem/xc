@@ -50,7 +50,7 @@ void XC::NodePropRecorder::setNodes(const ID &iNodos)
                 << " node list is empty." << std::endl;
   }
 
-//! @brief Registra la(s) propiedad(es) del objeto tras el commit.
+//! @brief Records object properties when commit is triggered.
 int XC::NodePropRecorder::record(int commitTag, double timeStamp)
   {
     lastCommitTag= commitTag;
@@ -64,7 +64,8 @@ int XC::NodePropRecorder::record(int commitTag, double timeStamp)
             EntCmd_exec(pyObj,CallbackRecord);
           }
         else
-	  std::cerr << "XC::NodePropRecorder::record(); se intentó llamar a a null pointer." << std::endl;
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; trying to use a NULL pointer." << std::endl;
       }
     return 0;
   }

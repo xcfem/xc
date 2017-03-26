@@ -153,7 +153,7 @@ void XC::UniformExcitation::applyLoadSensitivity(double time)
       }
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::UniformExcitation::sendData(CommParameters &cp)
   {
     int res= EarthquakePattern::sendData(cp);
@@ -163,7 +163,7 @@ int XC::UniformExcitation::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::UniformExcitation::recvData(const CommParameters &cp)
   {
     int res= EarthquakePattern::recvData(cp);

@@ -49,7 +49,7 @@ XC::LinearBucklingAnalysis::LinearBucklingAnalysis(SoluMethod *metodo,SoluMethod
   :StaticAnalysis(metodo), eigen_solu(esolu), linearBucklingEigenAnalysis(esolu),
    numModes(0),linear_buckling_analysis_step(0) {}
 
-//! @brief Borra todos los miembros del objeto (Manejador coacciones, analysis model,...).
+//! @brief Clears all object members (constraint handler, analysis model,...).
 void XC::LinearBucklingAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation

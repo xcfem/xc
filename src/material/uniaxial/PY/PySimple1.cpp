@@ -580,7 +580,7 @@ int XC::PySimple1::revertToStart(void)
 XC::UniaxialMaterial *XC::PySimple1::getCopy(void) const
   { return new PySimple1(*this); }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::PySimple1::sendData(CommParameters &cp)
   {
     int res= PQyzBase::sendData(cp);
@@ -592,7 +592,7 @@ int XC::PySimple1::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::PySimple1::recvData(const CommParameters &cp)
   {
     int res= PQyzBase::recvData(cp);

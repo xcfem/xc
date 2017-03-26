@@ -39,7 +39,7 @@ void XC::InternalParamsIn::revertToStart(const double &tg)
     InternalParamsA::revertToStart(tg);
   }
 
-//! @brief Send members del objeto through the channel being passed as parameter.
+//! @brief Send object members through the channel being passed as parameter.
 int XC::InternalParamsIn::sendData(CommParameters &cp)
   {
     int res= InternalParamsA::sendData(cp);
@@ -47,7 +47,7 @@ int XC::InternalParamsIn::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members del objeto through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as parameter.
 int XC::InternalParamsIn::recvData(const CommParameters &cp)
   {
     int res= InternalParamsA::recvData(cp);
