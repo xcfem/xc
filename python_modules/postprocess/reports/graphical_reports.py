@@ -14,6 +14,7 @@ from xcVtk.malla_ef import Fields
 from postprocess import utils_display
 from model.grid_based import GridModel
 from xcVtk import ControlVarDiagram as cvd
+from xcVtk.malla_ef import QuickGraphics as QGrph
 
 class RecordLoadCaseDisp(object):
   '''Generation of graphic files and adding to report-tex files for a load case
@@ -142,18 +143,18 @@ class RecordLoadCaseDisp(object):
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
     return
 
-  def simplLCReports(self,gridmodl,pathGr,texFile,grWdt,capStdTexts):
+  def simplLCReports(self,FEproblem,pathGr,texFile,grWdt,capStdTexts):
     '''Creates the graphics files of displacements and internal forces 
     calculated for a simple load case and insert them in a LaTex file
     
-    :param gridmodl:   object of type GridModel
+    :param FEproblem:  finite element problem
     :param pathGr:     directory to place figures (ex: 'text/graphics/loads/')
     :param texFile:    laTex file where to include the graphics 
                        (e.g.:'text/report_loads.tex')
     :param grWdt:      width to be applied to graphics
     :param capStdTexts:dictionary with the standard captions
     '''
-    lcs=GridModel.QuickGraphics(gridmodl)
+    lcs=QGrph.QuickGraphics(FEproblem)
     #solve for load case
     lcs.solve(loadCaseName=self.loadCaseName,loadCaseExpr=self.loadCaseExpr)
     #Displacements and rotations displays
