@@ -8,7 +8,7 @@ import geom
 import xc
 
 from model import fix_node_3dof
-from model import fija_nodos_lineas
+from model import fix_nodes_lines
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
@@ -61,8 +61,8 @@ l1.genMesh(xc.meshDir.I)
     
 # Constraints
 coacciones= preprocessor.getConstraintLoader
-fija_nodos_lineas.ConstraintsForLineExtremeNodes(l1,coacciones,fix_node_3dof.fixNode000)
-fija_nodos_lineas.ConstraintsForLineInteriorNodes(l1,coacciones,fix_node_3dof.fixNodeFF0)
+fix_nodes_lines.ConstraintsForLineExtremeNodes(l1,coacciones,fix_node_3dof.fixNode000)
+fix_nodes_lines.ConstraintsForLineInteriorNodes(l1,coacciones,fix_node_3dof.fixNodeFF0)
 
 
 Nstep= 10  #  apply load in 10 steps

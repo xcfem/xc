@@ -16,8 +16,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
-from model import fija_nodos_lineas
-from model import cargas_nodo
 from materials import typical_materials
 
 # Problem type

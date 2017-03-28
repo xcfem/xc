@@ -9,7 +9,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
-from model import fija_nodos_lineas
+from model import fix_nodes_lines
 from model import cargas_nodo
 
 NumDiv= 100
@@ -59,8 +59,8 @@ l1.genMesh(xc.meshDir.I)
     
 # Constraints
 coacciones= preprocessor.getConstraintLoader
-fija_nodos_lineas.ConstraintsForLineExtremeNodes(l,coacciones,fix_node_6dof.fixNode6DOF)
-fija_nodos_lineas.ConstraintsForLineInteriorNodes(l,coacciones,fix_node_6dof.Nodo6DOFGirosImpedidos)
+fix_nodes_lines.ConstraintsForLineExtremeNodes(l,coacciones,fix_node_6dof.fixNode6DOF)
+fix_nodes_lines.ConstraintsForLineInteriorNodes(l,coacciones,fix_node_6dof.Nodo6DOFGirosImpedidos)
     # \CondContornoNodosExtremosLinea("l1",fix_node_6dof.fixNode6DOF)
     # \CondContornoNodosInterioresLinea("l1","Nodo6GDLGirosImpedidos")
 
