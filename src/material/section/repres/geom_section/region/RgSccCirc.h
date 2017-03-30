@@ -41,16 +41,15 @@ class Matrix;
 
 //! @ingroup MATSCCRegiones
 //
-//! @brief Region en forma de sector de anillo empleada
-//! para la discretización.
+//! @brief Circular shaped patch.
 class RgSccCirc: public RgQuadCell
   {
   private:
-    Vector centerPosit;
-    double intRad, extRad;
-    double initAng, finalAng;
-  protected:
-
+    Vector centerPosit; //!< Center position.
+    double intRad; //!< Internal radius.
+    double extRad; //!< External radius.
+    double initAng; //!< Starting angle.
+    double finalAng; //!< Final angle.
   public:
     RgSccCirc(Material *mat);
     RgSccCirc(Material *, int numSubdivCircunf, int numSubdivRadial,
@@ -61,20 +60,28 @@ class RgSccCirc: public RgQuadCell
     void setCenterPosition(const Vector &);
     void setCenterPos(const Pos2d &);
     Pos2d getCenterPos(void) const;
+    //! @brief Returns internal radius.
     inline double getInteriorRadius(void) const
       { return intRad; }
+    //! @brief Returns extenal radius.
     inline double getExteriorRadius(void) const
       { return extRad; }
+    //! @brief Returns initial angle.
     inline double getInitialAngle(void) const
       { return initAng; }
+    //! @brief Returns final angle.
     inline double getFinalAngle(void) const
       { return finalAng; }
+    //! @brief Sets internal radius.
     void setInteriorRadius(const double &d)
       { intRad= d; }
+    //! @brief Sets external radius.
     void setExteriorRadius(const double &d)
       { extRad= d; }
+    //! @brief Sets starting angle.
     void setInitialAngle(const double &d)
       { initAng= d; }
+    //! @brief Sets final angle.
     void setFinalAngle(const double &d)
       { finalAng= d; }
     void setRadii(double internRadius, double externRadius);

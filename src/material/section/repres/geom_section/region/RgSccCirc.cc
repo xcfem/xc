@@ -147,7 +147,7 @@ SectorAnilloCircular2d &XC::RgSccCirc::getSector(void) const
     return retval;
   }
 
-//! @brief Return the rejilla que corresponde a la discretización.
+//! @brief Return the discretization grid.
 const Rejilla2d &XC::RgSccCirc::getMesh(void) const
   { return alloc(Rejilla2d(getSector().genMesh(nDivRad(),nDivCirc()))); }
 

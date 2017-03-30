@@ -39,11 +39,11 @@ namespace XC {
 
 //! @ingroup MATSCCRegiones
 //
-//! Region poligonal para la discretización.
+//! Poligonal patch for cross-section discretization.
 class RgSccPoligono: public RgQuadCell
   {
   private:
-    Poligono2d plg;
+    Poligono2d plg;//!< Polygon that defines the patch.
   protected:
 
   public:

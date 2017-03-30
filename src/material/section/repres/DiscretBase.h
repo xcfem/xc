@@ -41,11 +41,11 @@ namespace XC {
 //
 //! @ingroup MATSCCRepres
 //!
-//! @brief Base class for section discretization.
+//! @brief Base class for cross-section discretization.
 class DiscretBase: public EntConNmb
   {
   private:
-    Material *mat; //!< Pointer to the material constituye el elemento de la discretización.
+    Material *mat; //!< Pointer to the fibers material.
   protected:
 
   public:
