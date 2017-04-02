@@ -97,7 +97,8 @@
 std::deque<XC::Matrix> XC::Node::theMatrices;
 XC::DefaultTag XC::Node::defaultTag;
 
-// for FEM_Object Broker to use
+//! @brief Default constructor.
+//! @param theClassTag: tag of the class.
 XC::Node::Node(int theClassTag)
  :MeshComponent(defaultTag++,theClassTag),numberDOF(0), theDOF_GroupPtr(nullptr), 
   disp(), vel(), accel(), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
@@ -108,7 +109,9 @@ XC::Node::Node(int theClassTag)
     // AddingSensitivity:END ///////////////////////////////////////////
   }
 
-
+//! @brief Constructor.
+//! @param tag: node identifier.
+//! @param theClassTag: tag of the class.
 XC::Node::Node(int tag, int theClassTag)
   :MeshComponent(tag,theClassTag),
    numberDOF(0), theDOF_GroupPtr(nullptr),
@@ -122,6 +125,10 @@ XC::Node::Node(int tag, int theClassTag)
     // AddingSensitivity:END ///////////////////////////////////////////
   }
 
+//! @brief Constructor.
+//! @param tag: node identifier.
+//! @param ndof: number of degrees of freedom for the node.
+//! @param Crd1: node position (one single coordinate).
 XC::Node::Node(int tag, int ndof, double Crd1)
   :MeshComponent(tag,NOD_TAG_Node),
    numberDOF(ndof), theDOF_GroupPtr(nullptr),
@@ -142,6 +149,10 @@ XC::Node::Node(int tag, int ndof, double Crd1)
 
 
 //! @brief Constructor for 2d nodes
+//! @param tag: node identifier.
+//! @param ndof: number of degrees of freedom for the node.
+//! @param Crd1: node position (first coordinate).
+//! @param Crd2: node position (second coordinate).
 XC::Node::Node(int tag, int ndof, double Crd1, double Crd2)
   :MeshComponent(tag,NOD_TAG_Node),numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(2), disp(), vel(), accel(),
@@ -162,6 +173,11 @@ XC::Node::Node(int tag, int ndof, double Crd1, double Crd2)
 
 
 //! @brief constructor for 3d nodes
+//! @param tag: node identifier.
+//! @param ndof: number of degrees of freedom for the node.
+//! @param Crd1: node position (first coordinate).
+//! @param Crd2: node position (second coordinate).
+//! @param Crd3: node position (third coordinate).
 XC::Node::Node(int tag, int ndof, double Crd1, double Crd2, double Crd3)
   :MeshComponent(tag,NOD_TAG_Node), numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(3), disp(), vel(), accel(),
@@ -182,6 +198,9 @@ XC::Node::Node(int tag, int ndof, double Crd1, double Crd2, double Crd3)
   }
 
 //! @brief Constructor.
+//! @param tag: node identifier.
+//! @param ndof: number of degrees of freedom for the node.
+//! @param crds: vector of node coordinates.
 XC::Node::Node(int tag, int ndof, const Vector &crds)
   :MeshComponent(tag,NOD_TAG_Node),
    numberDOF(ndof), theDOF_GroupPtr(nullptr),
@@ -239,12 +258,15 @@ void XC::Node::disconnect(ContinuaReprComponent *el) const
       connected.erase(i);
   }
 
+//! @brief Virtual constructor.
 XC::Node *XC::Node::getCopy(void) const
   { return new Node(*this,true); }
 
+//! @brief True if node is inactive.
 const bool XC::Node::isDead(void) const
   { return !isAlive(); }
 
+//! @brief True if node is active.
 const bool XC::Node::isAlive(void) const
   {
     bool retval= false;
@@ -288,7 +310,7 @@ void XC::Node::freeze_if_dead(NodeLocker *locker)
       }
   }
 
-//! @brief Returns a vector con los identificadores de las coacciones 
+//! @brief Returns a vector with the constraints identifiers. 
 const XC::ID &XC::Node::get_id_coacciones(void) const
   {
     static ID retval;
@@ -299,6 +321,7 @@ const XC::ID &XC::Node::get_id_coacciones(void) const
     return retval;
   }
 
+//! @brief Sets the constraints identifiers. 
 void XC::Node::set_id_coacciones(const ID &coacciones)
   {
     const int sz= coacciones.Size();
@@ -322,17 +345,19 @@ void XC::Node::melt_if_alive(NodeLocker *locker)
       }
   }
 
+//! @brief returns true if the node is frozen.
 const bool XC::Node::isFrozen(void) const
   { return !coacciones_freeze.empty(); }
 
+//! @brief returns true if the node has no constraints.
 const bool XC::Node::isFree(void) const
   { return connected.empty(); }
 
 void XC::Node::kill(void)
-  { std::cerr << "No se debe llamar a Node::kill" << std::endl; }
+  { std::cerr << "Node::kill must not be called." << std::endl; }
 
 void XC::Node::alive(void)
-  { std::cerr << "No se debe llamar a Node::alive" << std::endl; }
+  { std::cerr << "Node::alive must not be called." << std::endl; }
 
 //! @brief destructor
 XC::Node::~Node(void)
@@ -340,6 +365,7 @@ XC::Node::~Node(void)
     if(theDOF_GroupPtr) theDOF_GroupPtr->resetNodePtr();
   }
 
+//! @brief Returns a default value for node identifier.
 XC::DefaultTag &XC::Node::getDefaultTag(void)
   { return defaultTag; }
 
@@ -384,19 +410,14 @@ void XC::Node::fix(const ID &idGdls,const Vector &valores)
 int XC::Node::getNumberDOF(void) const
   { return numberDOF; }
 
-
+//! @brief Sets the DOF_Group pointer
 void XC::Node::setDOF_GroupPtr(DOF_Group *theDOF_Grp)
-  {
-    // set the DOF_Group pointer
-    theDOF_GroupPtr= theDOF_Grp;
-  }
+  { theDOF_GroupPtr= theDOF_Grp; }
 
 
+//! @brief Gets the DOF_Group pointer
 XC::DOF_Group *XC::Node::getDOF_GroupPtr(void)
-  {
-    // return the XC::DOF_Group pointer
-    return theDOF_GroupPtr;
-  }
+  { return theDOF_GroupPtr; }
 
 
 //! @brief Return the dimension of the node vector position (1,2 or 3).
@@ -682,6 +703,7 @@ const XC::Vector &XC::Node::getTrialVel(void) const
 const XC::Vector &XC::Node::getTrialAccel(void) const
   { return accel.getTrialData(numberDOF); }
 
+//! @breif Returns the displacement increment.
 const XC::Vector &XC::Node::getIncrDisp(void) const
   { return disp.getIncrDisp(numberDOF); }
 

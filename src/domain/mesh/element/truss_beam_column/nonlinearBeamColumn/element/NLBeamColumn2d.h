@@ -85,9 +85,8 @@ class CrdTransf2d;
 //! \ingroup OneDimensionalElem
 //
 //! @defgroup OneDimensionalElemNL Nonlinear beam-column bidimensional elements.
-//!
-//! \ingroup OneDimensionalElemNL
 //
+//! \ingroup OneDimensionalElemNL
 //! @brief Nonlinear beam-column bidimensional elements.
 class NLBeamColumn2d: public NLForceBeamColumn2dBase
   {

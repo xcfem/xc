@@ -45,9 +45,8 @@ class DeformationPlane;
 //! \ingroup Elem
 //
 //! @defgroup OneDimensionalElem One-dimensional elements.
-//!
-//! \ingroup OneDimensionalElem
 //
+//! @ingroup OneDimensionalElem
 //! @brief Elemento unidimensional (beam,truss,...)
 class Element1D : public ElementBase<2>
   {

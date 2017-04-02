@@ -62,7 +62,8 @@ XC::NodeDispVectors &XC::NodeDispVectors::operator=(const NodeDispVectors &otro)
 XC::NodeDispVectors::~NodeDispVectors(void)
   { libera(); }
 
-
+//! @brief Returns displacement increment.
+//! @param nDOF: number of degrees of freedom
 const XC::Vector &XC::NodeDispVectors::getIncrDisp(const size_t &nDOF) const
   {
     if(!incrDisp)
@@ -77,6 +78,8 @@ const XC::Vector &XC::NodeDispVectors::getIncrDisp(const size_t &nDOF) const
     return *incrDisp;
   }
 
+//! @brief Returns delta displacement increment.
+//! @param nDOF: number of degrees of freedom
 const XC::Vector &XC::NodeDispVectors::getIncrDeltaDisp(const size_t &nDOF) const
   {
     if(!incrDeltaDisp)
@@ -91,7 +94,9 @@ const XC::Vector &XC::NodeDispVectors::getIncrDeltaDisp(const size_t &nDOF) cons
     return *incrDeltaDisp;
   }
 
-
+//! @brief Sets trial values for the displacement components.
+//! @param nDOF: number of degrees of freedom.
+//! @param dof: component of the displacement to set.
 int XC::NodeDispVectors::setTrialDispComponent(const size_t &nDOF,const double &value,const size_t &dof)
   {
     // check vector arg is of correct size
@@ -123,6 +128,9 @@ int XC::NodeDispVectors::setTrialDispComponent(const size_t &nDOF,const double &
     return 0;
   }
 
+//! @brief Sets trial values for the displacement vector.
+//! @param nDOF: number of degrees of freedom.
+//! @param newTrialDisp: new trial displacement vector.
 int XC::NodeDispVectors::setTrialDisp(const size_t &nDOF,const Vector &newTrialDisp)
   {
     // check vector arg is of correct size
@@ -157,12 +165,15 @@ int XC::NodeDispVectors::setTrialDisp(const size_t &nDOF,const Vector &newTrialD
   }
 
 
-int XC::NodeDispVectors::incrTrialDisp(const size_t &nDOF,const XC::Vector &incrDispl)
+//! @brief Increments trial displacements.
+//! @param nDOF: number of degrees of freedom.
+//! @param incrTrialDisp: increment for trial displacement vector.
+int XC::NodeDispVectors::incrTrialDisp(const size_t &nDOF,const Vector &incrDispl)
   {
     // check vector arg is of correct size
     if(size_t(incrDispl.Size()) != nDOF)
       {
-        std::cerr << "WARNING NodeDispVectors::incrTrialDisp() - incompatable sizes\n";
+        std::cerr << "WARNING NodeDispVectors::incrTrialDisp() - incompatible sizes\n";
         return -2;
       }
 
@@ -195,6 +206,8 @@ int XC::NodeDispVectors::incrTrialDisp(const size_t &nDOF,const XC::Vector &incr
     return 0;
   }
 
+//! @brief Commits state of displacement vectors.
+//! @param nDOF: number of degrees of freedom.
 int XC::NodeDispVectors::commitState(const size_t &nDOF)
   {
     // check disp exists, if does set commit = trial, incr = 0.0
@@ -211,6 +224,7 @@ int XC::NodeDispVectors::commitState(const size_t &nDOF)
   }
 
 //! @brief Returns the vectores al estado correspondiente al último commit.
+//! @param nDOF: number of degrees of freedom.
 int XC::NodeDispVectors::revertToLastCommit(const size_t &nDOF)
   {
     // check disp exists, if does set trial = last commit, incr = 0
@@ -226,6 +240,7 @@ int XC::NodeDispVectors::revertToLastCommit(const size_t &nDOF)
     return 0;
   }
 
+//! @brief Printing.
 void XC::NodeDispVectors::Print(std::ostream &s,int flag)
   {
     if(commitData)
@@ -235,6 +250,7 @@ void XC::NodeDispVectors::Print(std::ostream &s,int flag)
 
 //! @brief private method to create the arrays to hold the disp
 //! values and the Vector objects for the committed and trial quantaties.
+//! @param nDOF: number of degrees of freedom.
 int XC::NodeDispVectors::createDisp(const size_t &nDOF)
   {
     // trial , committed, incr = (committed-trial)

@@ -98,9 +98,8 @@ class ParticlePos3d;
 //! \ingroup Mesh
 //
 //! @defgroup Elem Finite elements.
-//!
-//! \ingroup Elem
 //
+//! \ingroup Elem
 //! @brief Base calass for the finite elements.
 class Element: public MeshComponent
   {

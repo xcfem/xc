@@ -75,9 +75,8 @@ class UniaxialMaterial;
 //!
 //!
 //! @defgroup fElem Interface with FEAP elements.
-//!
-//! \ingroup fElem
 //
+//! \ingroup fElem
 //! @brief Wrapper used to call fortran element subroutines from FEAP.
 class fElement : public Element
   {

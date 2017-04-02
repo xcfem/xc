@@ -168,7 +168,6 @@ XC::Vector::Vector(const double &x,const double &y,const double &z)
     theData[2]= z;
   }
 
-// XC::Vector::Vector(double *data, int size)
 //! @brief Constructor.
 XC::Vector::Vector(double *data, int size)
   : sz(0),theData(nullptr),fromFree(0)

@@ -38,9 +38,8 @@ class Vector;
 //! \ingroup FEMisc
 //
 //! @defgroup ElemFV Element internal forces.
-//!
-//! \ingroup ElemFV
 //
+//! \ingroup ElemFV
 //! @brief Esfuerzos en un elemento.
 class FVector
   {

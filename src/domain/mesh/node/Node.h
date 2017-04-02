@@ -93,9 +93,8 @@ class DqPtrsElem;
 //!
 //!
 //! @defgroup Nod Mesh nodes.
-//!
-//! \ingroup Nod
 //
+//! \ingroup Nod
 //! @brief Mesh node.
 class Node: public MeshComponent
   {
@@ -142,8 +141,8 @@ class Node: public MeshComponent
     int recvData(const CommParameters &);
   public:
     // typedefs.
-    typedef std::set<Element *> ElementPtrSet;
-    typedef std::set<const Element *> ElementConstPtrSet;
+    typedef std::set<Element *> ElementPtrSet; //!< Container of element pointers.
+    typedef std::set<const Element *> ElementConstPtrSet; //!< Container of const element pointers.
     
     // constructors
     Node(int classTag);

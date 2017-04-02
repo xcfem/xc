@@ -41,9 +41,8 @@ namespace XC {
 //! \ingroup Elem
 //
 //! @defgroup ElemPlanos Bidimensional elements (plane problems, shells,...).
-//!
-//! \ingroup ElemPlanos
 //
+//! \ingroup ElemPlanos
 //! @brief Base class for plane elements.
 template <int NNODOS,class PhysProp>
 class ElemPlano : public ElemWithMaterial<NNODOS, PhysProp>

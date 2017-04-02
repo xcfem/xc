@@ -39,10 +39,7 @@
 #include "vtkCellType.h"
 
 namespace XC {
-//! \ingroup Elem
-//
-//! \ingroup ElemPlanos
-//
+//! @ingroup ElemPlanos
 //! @brief Base class for 4 node quads.
 template <class PhysProp>
 class QuadBase4N : public ElemPlano<4,PhysProp>
