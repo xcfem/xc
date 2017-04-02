@@ -1002,7 +1002,8 @@ const XC::Vector &XC::CorotCrdTransf2d::getPointGlobalDisplFromBasic(double xi, 
     return uxg;  
   }
 
-//! @brief Returns the vector unitario i de los ejes locales del elemento en su posición actual.
+//! @brief Returns the $\vec{i}$ unit vector of the local axis
+//! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CorotCrdTransf2d::getI(void)
   {
     static Vector vectorI(2);
@@ -1011,7 +1012,8 @@ const XC::Vector &XC::CorotCrdTransf2d::getI(void)
     return vectorI;
   }
 
-//! @brief Returns the vector unitario j de los ejes locales del elemento en su posición actual.
+//! @brief Returns the $\vec{j}$ unit vector of the local axis
+//! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CorotCrdTransf2d::getJ(void)
   {
     static Vector vectorJ(2);
@@ -1020,8 +1022,8 @@ const XC::Vector &XC::CorotCrdTransf2d::getJ(void)
     return vectorJ;
   }
 
-//| @brief Returns the vectores dirección de los ejes locales en la posición
-//! actual del elemento.
+//| @brief Returns the direction vectors of the local axis in the current
+//! element position.
 int XC::CorotCrdTransf2d::getLocalAxes(Vector &XAxis, Vector &YAxis) const
   {
     XAxis(0)= cosAlpha; XAxis(1)= sinAlpha;
@@ -1029,6 +1031,7 @@ int XC::CorotCrdTransf2d::getLocalAxes(Vector &XAxis, Vector &YAxis) const
     return 0;
   }
 
+//! @brief Printing
 void XC::CorotCrdTransf2d::Print(std::ostream &s, int flag)
   {
     s << "\nCrdTransf: " << this->getTag() << " Type: LinearCrdTransf2d";

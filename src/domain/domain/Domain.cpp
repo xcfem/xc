@@ -77,7 +77,7 @@
 #include <domain/load/NodalLoad.h>
 #include <domain/load/ElementalLoad.h>
 #include <domain/load/pattern/LoadPattern.h>
-#include <domain/load/pattern/Combinacion.h>
+#include <domain/load/pattern/LoadCombination.h>
 
 #include <utility/tagged/storage/MapOfTaggedObjects.h>
 #include <utility/tagged/storage/MapOfTaggedObjectsIter.h>
@@ -342,16 +342,17 @@ bool XC::Domain::addNodeLocker(NodeLocker *nl)
     return result;
   }
 
-//! @brief Añade al modelo la combinacion being passed as parameter.
-bool XC::Domain::addCombinacion(Combinacion *comb)
+//! @brief Adds to the domain the load combination being passed as parameter.
+bool XC::Domain::addLoadCombination(LoadCombination *comb)
   {      
     bool retval= false;
     if(comb)
       {
         if(nmbCombActual!= "")
-	  std::clog << "Domain::addCombinacion; ¡ojo! "
-                    << "se agrega la combinación: " << comb->getNombre()
-                    << " sin haber quitado la combinación: " << nmbCombActual
+	  std::clog << nombre_clase() << __FUNCTION__
+	            << "; warning! "
+                    << "adding combination: " << comb->getNombre()
+                    << " without removing: " << nmbCombActual
                     << ".\n";
         nmbCombActual= comb->getNombre();
         if(comb->getDomain()!=this)
@@ -411,19 +412,20 @@ bool XC::Domain::removeNodeLocker(NodeLocker *nl)
     return retval;
   }
 
-//! @brief Returns the nombre de la combinación actual.
+//! @brief Returns the name of the current load combination.
 const std::string &XC::Domain::getNombreCombActual(void) const
   { return nmbCombActual; }
 
-//! @brief Elimina del domain la combinación being passed as parameter.
-void XC::Domain::removeCombinacion(Combinacion *comb)
+//! @brief Removes from the domain the load combination
+//! being passed as parameter.
+void XC::Domain::removeLoadCombination(LoadCombination *comb)
   {
     if(comb)
       {
         if((nmbCombActual!= comb->getNombre())&& (!nmbCombActual.empty()))
-	  std::clog << "Domain::removeCombinacion; ¡ojo! "
-                    << "se quita la combinación: " << comb->getNombre()
-                    << " sin haber quitado la combinación: " << nmbCombActual
+	  std::clog << "Domain::removeLoadCombination; ¡ojo! "
+                    << "removing load combination: " << comb->getNombre()
+                    << " without removing: " << nmbCombActual
                     << ".\n";
         nmbCombActual= "";
         if(comb->getDomain()!=this)

@@ -83,21 +83,23 @@ XC::RgSccQuad *XC::ListRegiones::newQuadRegion(const std::string &cod_mat)
   {
     Material *mat= material_loader->find_ptr(cod_mat);
     if(!mat)
-      std::cerr << "ListRegiones::newQuadRegion; ¡ojo!, no se encontró el material: '"
-                << cod_mat << "' deberá asignarse un material a la región.\n";
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; warning!, material: '"
+                << cod_mat << "' not found. Material definition pending.\n";
     RgSccQuad tmp(mat);
     RgSccQuad *ptr= dynamic_cast<XC::RgSccQuad *>(push_back(tmp));
     ptr->set_owner(this);
     return ptr;
   }
 
-//! @brief Aggregates a new quadrilateral region.
+//! @brief Aggregates a new circularl region.
 XC::RgSccCirc *XC::ListRegiones::newCircularRegion(const std::string &cod_mat)
   {
     Material *mat= material_loader->find_ptr(cod_mat);
     if(!mat)
-      std::cerr << "ListRegiones::newQuadRegion; ¡ojo!, no se encontró el material: '"
-                << cod_mat << "' deberá asignarse un material a la región.\n";
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; warning!, material: '"
+                << cod_mat << "' not found. Material definition pending.\n";
     RgSccCirc tmp(mat);
     RgSccCirc *ptr= dynamic_cast<XC::RgSccCirc *>(push_back(tmp));
     ptr->set_owner(this);
@@ -269,7 +271,7 @@ double XC::ListRegiones::getPyzGrossSection(void) const
 //   }
 
 
-//! @brief Returns the área homogeneizada de las regiones.
+//! @brief Returns the homogenized area de las regiones.
 double XC::ListRegiones::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)

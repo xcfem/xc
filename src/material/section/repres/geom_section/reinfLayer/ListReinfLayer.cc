@@ -185,7 +185,7 @@ void XC::ListReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retva
       (*i)->getBarrasIn(sp,retval,false);
   }
 
-//! @brief Returns the área homogeneizada de las regiones.
+//! @brief Returns the homogenized area de las regiones.
 double XC::ListReinfLayer::getAreaHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;

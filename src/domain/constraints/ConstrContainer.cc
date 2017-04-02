@@ -976,8 +976,9 @@ int XC::ConstrContainer::recvNLockersTags(const int &posFlag,const int &posDbTag
                   nl->setDomain(dom);
               }
             else
-              std::cerr << "ConstrContainer::recvNLockersTags; no se encontró el bloqueador de nodos de tag: "
-                        << nLockersTags[i] << std::endl;
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+		        << "; node locker identified by : "
+                        << nLockersTags[i] << " not found." << std::endl;
           }
       }
     return res;

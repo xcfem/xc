@@ -31,9 +31,8 @@
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 
 
-//! @brief Returns the vector unitario en la dirección del eje que se
-//! pasa as parameter expresado en el sistema global 
-//! para la posición being passed as parameter.
+//! @brief Returns the i-th axis unit vector expressed in global coordinates
+//! for the position being passed as parameter.
 Vector2d XC::SisRefSccCartesianas2d::GetVDirEje(const size_t &i,const Pos2d &) const
   { return ref.GetVDirEje(i); }
 

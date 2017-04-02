@@ -232,8 +232,9 @@ const XC::Node *XC::NodalLoad::get_node_ptr(void) const
         retval= theDomain->getNode(myNode);
         if(!retval)
           {
-            std::cerr << "NodalLoad::get_node_ptr() - No se encontró el nodo:"
-                      << myNode << std::endl;
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+	              << "; node identified by: "
+                      << myNode << " not found." << std::endl;
           }
       }
     return retval;

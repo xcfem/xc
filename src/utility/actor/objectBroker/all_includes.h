@@ -360,8 +360,8 @@
 
 // load patterns
 #include "domain/load/pattern/LoadPattern.h"
-#include "domain/load/pattern/Combinacion.h"
-#include "domain/load/pattern/GrupoCombinaciones.h"
+#include "domain/load/pattern/LoadCombination.h"
+#include "domain/load/pattern/LoadCombinationGroup.h"
 #include "domain/load/pattern/load_patterns/UniformExcitation.h"
 #include "domain/load/pattern/load_patterns/MultiSupportPattern.h"
 #include "domain/load/pattern/load_patterns/PBowlLoading.h"

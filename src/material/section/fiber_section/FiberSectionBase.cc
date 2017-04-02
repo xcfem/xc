@@ -263,7 +263,7 @@ double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(const Recta2d &r) co
         else
           {
             retval= NAN;
-	    std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimidaR; no se ha podido obtener el semiplano comprimido."
+	    std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimidaR; no se ha podido obtener el half-plane comprimido."
                       << std::endl;
 	  }
       }
@@ -284,7 +284,7 @@ double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(void) const
         else
           {
             retval= NAN;
-            std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimida; no se ha podido obtener el semiplano comprimido."
+            std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimida; no se ha podido obtener el half-plane comprimido."
                       << std::endl;
           }
        }
@@ -322,7 +322,7 @@ double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(const Recta2d &r) c
         else
           {
             retval= NAN;
-            std::cerr << "FiberSectionBase::getCantoMecanicoZonaTraccionada; no se ha podido obtener el semiplano comprimido."
+            std::cerr << "FiberSectionBase::getCantoMecanicoZonaTraccionada; no se ha podido obtener el half-plane comprimido."
                       << std::endl;
           }
       }
@@ -400,7 +400,7 @@ std::list<Poligono2d> XC::FiberSectionBase::getContourAcEficazBruta(const double
               retval.push_back(contour);
           }
         else
-          std::cerr << nombre_clase() << __FUNCTION__
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
 	            << "; maximum efficient height is zero." << std::endl;
       }
     if(retval.empty())
@@ -431,12 +431,12 @@ double XC::FiberSectionBase::getAcEficazNeta(const double &hEfMax,const std::str
             retval= armaduras.calcAcEficazFibras(contourAcEficazBruta,factor);
           }
         else
-          std::cerr << nombre_clase() << __FUNCTION__
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
 	            << "; fiber set: "
                     << nmbSetArmaduras << " not found." << std::endl;
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
 		<< "; can't compute efficient area." << std::endl;
     return retval;
   }
@@ -455,12 +455,12 @@ double XC::FiberSectionBase::calcAcEficazFibras(const double &hEfMax,const std::
             retval= armaduras.calcAcEficazFibras(contourAcEficazBruta,factor);
           }
         else
-          std::cerr << nombre_clase() << __FUNCTION__
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
 	            << "; fiber set: "
                     << nmbSetArmaduras << " not found." << std::endl;
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
 		<< "; can't compute efficient area." << std::endl;
     return retval;
   }
@@ -477,7 +477,7 @@ void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras
           armaduras.calcRecubrimientos(*geom);
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
                 << "; fiber set: "
                 << nmbSetArmaduras << " not found." << std::endl;
   }
@@ -492,7 +492,7 @@ void XC::FiberSectionBase::calcSeparaciones(const std::string &nmbSetArmaduras) 
         armaduras.calcSeparaciones();
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
                 << "; fiber set: "
                 << nmbSetArmaduras << " not found." << std::endl;
   }
@@ -692,7 +692,7 @@ XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const Interac
         retval= InteractionDiagram(Pos3d(0,0,0),Triang3dMesh(get_convex_hull(lp)));
         const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
 	            << "; error in computation of interaction diagram ("
                     << error << ") seems too big." << std::endl;
       }
@@ -709,7 +709,7 @@ XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(con
         retval= InteractionDiagram2d(get_convex_hull2d(lp));
         const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
 	            << "; error in computation of interaction diagram ("
                     << error << ") seems too big." << std::endl;
       }

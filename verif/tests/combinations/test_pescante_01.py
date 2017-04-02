@@ -20,7 +20,6 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
-from solution import resuelve_combinacion
 
 #
 #     3   2     4
@@ -136,10 +135,9 @@ numSteps= 1
 
 # Lanzamos la obtención de soluciones.
 analysis= predefined_solutions.simple_static_linear(prueba)
-from solution import resuelve_combinacion as rc
 
 for key in combs.getKeys():
-  rc.resuelveComb(preprocessor, key,analysis,numSteps)
+  predefined_solutions.resuelveComb(preprocessor, key,analysis,numSteps)
   procesResultVerif(key)
 
 NMin1Teor= 440.7e3

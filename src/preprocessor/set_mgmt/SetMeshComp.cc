@@ -455,12 +455,14 @@ void XC::SetMeshComp::sel_constraints_lista(const ID &tags)
               else if((tmp=preprocessor->getDomain()->getConstraints().getMFreedom_Constraint(tags(i))))
                 constraints.push_back(tmp);
               else
-		std::cerr << "SetMeshComp::sel_constraints_lista;no se encontró la coacción de tag: "
-                          << tags(i) << std::endl;
+		std::cerr << nombre_clase() << "::" << __FUNCTION__
+		          << "; constraint idenfified by: "
+                          << tags(i) << " not found." << std::endl;
             }
 
         else
-          std::cerr << "SetMeshComp::sel_constraints_lista; necesito un preprocesador." << std::endl;
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "preprocessor needed." << std::endl;
       }
   }
 

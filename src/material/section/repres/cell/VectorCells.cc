@@ -29,7 +29,7 @@
 #include "VectorCells.h"
 #include <material/section/repres/cell/Cell.h> 
 
-//! @brief Liberta todas las pociciones.
+//! @brief Frees memory for all the cells.
 void XC::VectorCells::libera(void)
   {
     const size_t sz= size();
@@ -37,7 +37,7 @@ void XC::VectorCells::libera(void)
       libera(i);
   }
 
-//! @brief Libera la posición i.
+//! @brief Frees the memory reserved for the cell at i-th position.
 void XC::VectorCells::libera(const size_t i)
   {
     if((*this)[i])
@@ -45,7 +45,7 @@ void XC::VectorCells::libera(const size_t i)
     (*this)[i]= nullptr;
   }
 
-//! @brief Guarda una copia de la celda en la posición i.
+//! @brief Stores a copy of the cell at the i-th position.
 void XC::VectorCells::alloc(const size_t i,const Cell &c)
   {
     libera(i);

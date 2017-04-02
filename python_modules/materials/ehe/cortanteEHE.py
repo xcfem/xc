@@ -182,7 +182,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
        XXX Falta tener en cuenta la dirección de las barras de refuerzo
        a cortante.
     '''
-    print "Postproceso combinación: ",nmbComb
+    print "Postprocessing combination: ",nmbComb
     secHAParamsTorsion=  torsionEHE.TorsionParameters()
     # XXX Ignoramos la deformación por torsión.
     secHAParamsTorsion.ue= 0

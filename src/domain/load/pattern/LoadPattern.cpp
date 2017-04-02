@@ -463,14 +463,15 @@ void XC::LoadPattern::setLoadConstant(void)
 const double &XC::LoadPattern::getLoadFactor(void) const
   { return loadFactor; }
 
-//! @brief Returns the factor de ponderación impuesto por la combinación de hipótesis.
+//! @brief Returns the weighting factor set by the load combination.
 const double &XC::LoadPattern::GammaF(void) const
   { return gamma_f; }
-//! @brief Returns the factor de ponderación impuesto por la combinación de hipótesis.
+
+//! @brief Returns the weighting factor set by the load combination.
 double &XC::LoadPattern::GammaF(void)
   { return gamma_f; }
 
-//! @brief Asigna el factor de ponderación impuesto por la combinación de hipótesis.
+//! @brief Sets the weighting factor set by the load combination.
 void XC::LoadPattern::setGammaF(const double &g)
   { gamma_f= g; }
 

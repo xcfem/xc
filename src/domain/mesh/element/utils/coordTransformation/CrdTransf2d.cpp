@@ -176,7 +176,7 @@ int XC::CrdTransf2d::initialize(Node *nodeIPointer, Node *nodeJPointer)
     return 0;
   }
 
-//! @brief Calcula la longitud y la orientación del elemento.
+//! @brief Computes the length and the orientation of the associated element.
 int XC::CrdTransf2d::computeElemtLengthAndOrient(void) const
   {
     // element projection
@@ -227,7 +227,7 @@ int XC::CrdTransf2d::computeElemtLengthAndOrient(void) const
         sinTheta= dx(1)/L;
       }
     else
-      std::cerr << "CrdTransf2d::computeElemtLengthAndOrient; pointer to nodo nulo." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; pointer to nodo nulo." << std::endl;
     return 0;
   }
 
@@ -258,9 +258,9 @@ const XC::Vector &XC::CrdTransf2d::getBasicTrialDisp(void) const
       }
     
     static Vector ub(3);
-    // ub(0)= dx2-dx1: Elongación sufrida por el elemento.
-    // ub(1)= (dy1-dy2)/L+gz1: Giro en torno a z.
-    // ub(2)= (dy1-dy2)/L+gz2: Giro en torno a z.
+    // ub(0)= dx2-dx1: Element elongation.
+    // ub(1)= (dy1-dy2)/L+gz1: Rotation about z axis.
+    // ub(2)= (dy1-dy2)/L+gz2: Rotation about z axis.
     
     const double oneOverL = 1.0/L;
     const double sl = sinTheta*oneOverL;
@@ -434,8 +434,8 @@ const XC::Vector &XC::CrdTransf2d::getBasicTrialAccel(void) const
     return ab;
   }
 
-//! @brief Returns the vector unitario i de los ejes locales del elemento
-//! en su posición inicial.
+//! @brief Returns the $\vec{i}$ unit vector of the local axis
+//! expressed in global coordinates for the initial (undeformed) geometry.
 const XC::Vector &XC::CrdTransf2d::getInitialI(void) const
   {
     computeElemtLengthAndOrient();
@@ -445,14 +445,14 @@ const XC::Vector &XC::CrdTransf2d::getInitialI(void) const
     return vectorI;
   }
 
-//! @brief Returns the vector unitario i de los ejes locales del elemento
-//! en su posición actual.
+//! @brief Returns the $\vec{i}$ unit vector of the local axis
+//! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CrdTransf2d::getI(void) const
   { return getInitialI(); }
 
 
-//! @brief Returns the vector unitario j de los ejes locales del elemento
-//! en su posición inicial.
+//! @brief Returns the $\vec{j}$ unit vector of the local axis
+//! expressed in global coordinates for the initial (undeformed) geometry.
 const XC::Vector &XC::CrdTransf2d::getInitialJ(void) const
   {
     computeElemtLengthAndOrient();
@@ -462,13 +462,13 @@ const XC::Vector &XC::CrdTransf2d::getInitialJ(void) const
     return vectorJ;
   }
 
-//! @brief Returns the vector unitario j de los ejes locales del elemento
-//! en su posición actual.
+//! @brief Returns the $\vec{j}$ unit vector of the local axis
+//! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CrdTransf2d::getJ(void) const
   { return getInitialJ(); }
 
-//| @brief Returns the vectores dirección de los ejes locales en la posición
-//! inicial del elemento.
+//| @brief Returns the $\vec{i}$ and $\vec{j}$ unit vector of the local
+//! axis for the initial (undeformed) geometry.
 int XC::CrdTransf2d::getInitialLocalAxes(Vector &XAxis, Vector &YAxis) const
   {
     XAxis(0)= cosTheta; XAxis(1)= sinTheta;
@@ -476,8 +476,8 @@ int XC::CrdTransf2d::getInitialLocalAxes(Vector &XAxis, Vector &YAxis) const
     return 0;
   }
 
-//| @brief Returns the vectores dirección de los ejes locales en la posición
-//! actual del elemento.
+//| @brief Returns the direction vectors of local axis in the element
+//! current position.
 int XC::CrdTransf2d::getLocalAxes(Vector &XAxis, Vector &YAxis) const
   { return getInitialLocalAxes(XAxis,YAxis); }
 
@@ -507,7 +507,7 @@ const XC::Vector &XC::CrdTransf2d::getPointGlobalCoordFromBasic(const double &xi
     return global_coord;
   }
 
-//! @brief Return the posición del nodo I.
+//! @brief Return the position of the node I.
 Pos2d XC::CrdTransf2d::getPosNodeI(void) const
   {
     Pos2d retval= nodeIPtr->getPosFinal2d();
@@ -517,7 +517,7 @@ Pos2d XC::CrdTransf2d::getPosNodeI(void) const
     return retval;
   }
 
-//! @brief Return the posición del nodo J.
+//! @brief Return the position of the node J.
 Pos2d XC::CrdTransf2d::getPosNodeJ(void) const
   {
     Pos2d retval= nodeJPtr->getPosFinal2d();

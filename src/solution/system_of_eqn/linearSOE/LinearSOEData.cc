@@ -44,7 +44,7 @@ void XC::LinearSOEData::inic(const size_t &sz)
         zero();
       }
     else
-      std::cerr << "¡WARNING! " << nombre_clase() << __FUNCTION__
+      std::cerr << "¡WARNING! " << nombre_clase() << "::" << __FUNCTION__
 	        << " model has zero DOFs"
                 << " add nodes or reduce constraints." << std::endl;
   }
@@ -203,12 +203,12 @@ double XC::LinearSOEData::normRHS(void) const
 
 void XC::LinearSOEData::receiveB(const CommParameters &cp)
   {
-    cp.receiveVector(B,CommMetaData(0)); //XXX asignar posición.
+    cp.receiveVector(B,CommMetaData(0)); //XXX assign position.
   }
 
 void XC::LinearSOEData::receiveX(const CommParameters &cp)
   {
-    cp.receiveVector(X,CommMetaData(0));//XXX asignar posición.
+    cp.receiveVector(X,CommMetaData(0));//XXX assign position.
   }
 
 void XC::LinearSOEData::receiveBX(const CommParameters &cp)
@@ -219,12 +219,12 @@ void XC::LinearSOEData::receiveBX(const CommParameters &cp)
 
 void XC::LinearSOEData::sendB(CommParameters &cp) const
   {
-    cp.sendVector(B,CommMetaData(0));//XXX asignar posición.
+    cp.sendVector(B,CommMetaData(0));//XXX assign position.
   }
 
 void XC::LinearSOEData::sendBX(CommParameters &cp) const
   {
-    cp.sendVector(X,CommMetaData(0));//XXX asignar posición.
+    cp.sendVector(X,CommMetaData(0));//XXX assign position.
     sendB(cp);
   }
 

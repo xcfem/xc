@@ -84,11 +84,13 @@ XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPunt
     else
       {
         if(!p1)
-          std::cerr << "Cad::busca_edge_extremos; no se encontró el punto de índice: "
-                    << pA << std::endl;
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; point identified by : "
+                    << pA << " not found." << std::endl;
         if(!p2)
-          std::cerr << "Cad::busca_edge_extremos; no se encontró el punto de índice: "
-                    << pB << std::endl;
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; point identified by : "
+                    << pB << " not found." << std::endl;
       }
     return retval;
   }
@@ -105,11 +107,13 @@ const XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const M
     else
       {
         if(!p1)
-          std::cerr << "Cad::busca_edge_extremos; no se encontró el punto de índice: "
-                    << pA << std::endl;
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; point identified by : "
+                    << pA << " not found." << std::endl;
         if(!p2)
-          std::cerr << "Cad::busca_edge_extremos; no se encontró el punto de índice: "
-                    << pB << std::endl;
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; point identified by : "
+                    << pB << " not found." << std::endl;
       }
     return retval;
   }
@@ -140,7 +144,7 @@ void XC::Cad::conciliaNDivs(void)
             conta++;
             if(conta>max_num_iter)
               {
-		std::cerr << "Demasiadas iteraciones." << std::endl;
+		std::cerr << "Too much iterations." << std::endl;
                 break;
               }
           }

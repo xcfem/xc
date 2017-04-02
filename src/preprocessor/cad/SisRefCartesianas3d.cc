@@ -43,9 +43,8 @@ void XC::SisRefCartesianas3d::setOrg(const Pos3d &p)
 void XC::SisRefCartesianas3d::TresPuntos(const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)
   { ref= Ref3d3d(p1,p2,p3); }
 
-//! @brief Returns the vector unitario en la dirección del eje que se
-//! pasa as parameter expresado en el sistema global 
-//! para la posición being passed as parameter.
+//! @brief Returns the i-th axis unit vector expressed in global coordinates
+//! for the position being passed as parameter.
 Vector3d XC::SisRefCartesianas3d::GetVDirEje(const size_t &i,const Pos3d &) const
   { return ref.GetVDirEje(i); }
 

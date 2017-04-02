@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import xc_base
 import geom
 import xc
@@ -233,3 +239,46 @@ def penalty_newton_raphson(prb):
 def frequency_analysis(prb):
   solution= SolutionProcedure()
   return solution.frequencyAnalysis(prb)
+
+def resuelveComb(preprocessor,nmbComb,analysis,numSteps):
+  preprocessor.resetLoadCase()
+  preprocessor.getLoadLoader.addToDomain(nmbComb)
+  analOk= analysis.analyze(numSteps)
+  preprocessor.getLoadLoader.removeFromDomain(nmbComb)
+  # print "Resuelta combinación: ",nmbComb,"\n"
+
+def resuelveCombEstatLin(preprocessor,nmbComb,analysis,numSteps):
+  print "DEPRECATED; use resuelveComb"
+  resuelveComb(preprocessor,nmbComb,analysis,numSteps)
+
+
+def resuelveCombEstat2ndOrderLin(preprocessor,nmbComb,analysis,numSteps):
+  preprocessor.resetLoadCase()
+  preprocessor.getLoadLoader.addToDomain(nmbComb)
+  analOk= analysis.analyze(numSteps)
+  analOk= analysis.analyze(numSteps)
+  preprocessor.getLoadLoader.removeFromDomain(nmbComb)
+  # print "Resuelta combinación: ",nmbComb,"\n"
+
+def resuelveCasoEstatNoLin(nmbComb):
+  print "DEPRECATED; use use resuelveComb"
+  resuelveComb(preprocessor,nmbComb,analysis,numSteps)
+
+# def resuelveCasoEstatNoLinNR(nmbComb):
+#     \preprocessor \dom{\nuevo_caso
+#     cargas.addToDomain(nmbComb)
+
+#     \sol_proc
+#       {
+#         \control
+#           {
+#             \solu_method["smt","sm"]
+#               {
+#                 \norm_unbalance_conv_test \tol{1.0e-2} \print_flag{0} \max_num_iter{10}
+#               }
+#           }
+#         \static_analysis["smt"]  \analyze{1} analOk= result 
+#       }
+#     cargas.removeFromDomain(nmbComb)
+#     # print "Resuelto caso: ",nmbComb,"\n"
+#   }

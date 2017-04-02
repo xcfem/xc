@@ -51,7 +51,7 @@ double XC::PropRecorder::getCommittedTime(void) const
 int XC::PropRecorder::getCommitTag(void) const
   { return theDomain->getCommitTag(); }
 
-//! @brief Returns the nombre de la combinación actual.
+//! @brief Returns the name of the current combination.
 std::string XC::PropRecorder::getNombreCombActual(void) const
   {
     std::string retval= "";

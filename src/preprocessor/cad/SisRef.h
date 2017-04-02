@@ -56,9 +56,8 @@ class SisRef: public EntMdlrBase
       : EntMdlrBase(nombre,m) {}
     inline virtual ~SisRef(void)
       {}
-    //! @brief Returns the vector unitario en la dirección del eje que se
-    //! pasa as parameter expresado en el sistema global 
-    //! para la posición being passed as parameter.
+    //! @brief Returns the i-th axis unit vector
+    //! for the position being passed as parameter.
     virtual Vector3d GetVDirEje(const size_t &,const Pos3d &) const= 0;
     Vector3d GetI(const Pos3d &) const;
     Vector3d GetJ(const Pos3d &) const;

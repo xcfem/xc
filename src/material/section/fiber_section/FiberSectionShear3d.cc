@@ -102,17 +102,17 @@ void XC::FiberSectionShear3d::setRespVyVzT(const UniaxialMaterial *rvy,const Uni
     if(rvy)
       respVy= rvy->getCopy();
     else
-      std::cerr << "FiberSectionShear3d::setRespVyVzT; "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
                 << " no se ha definido la respuesta al cortante según «y»." << std::endl;
     if(rvz)
       respVz= rvz->getCopy();
     else
-      std::cerr << "FiberSectionShear3d::setRespVyVzT; "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
                 << " no se ha definido la respuesta al cortante según «z»." << std::endl;
     if(rt)
       respT= rt->getCopy();
     else
-      std::cerr << "FiberSectionShear3d::setRespVyVzT; "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
                 << " no se ha definido la respuesta al torsor." << std::endl;
   }
 
@@ -146,14 +146,14 @@ void XC::FiberSectionShear3d::setRespVyByName(const std::string &nmb_mat)
         if(tmp)
           setRespVy(tmp);
         else
-          std::cerr << "FiberSectionShear3d::setRespVyByName; "
+          std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
                     << "el material de código: '" << nmb_mat
                     << "' no corresponde a un material uniaxial.\n";
       }
     else
-      std::cerr << "FiberSectionShear3d::setRespVyByName; "
-                << "no se encontró el material de código: '" << nmb_mat
-                << "'.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+                << "material identified by: '" << nmb_mat
+                << "' not found.\n";
   }
 
 //! @brief Returns shear y response.
@@ -170,14 +170,14 @@ void XC::FiberSectionShear3d::setRespVzByName(const std::string &nmb_mat)
         if(tmp)
           setRespVz(tmp);
         else
-          std::cerr << "FiberSectionShear3d::setRespVzByName; "
-                    << "el material de código: '" << nmb_mat
-                    << "' no corresponde a un material uniaxial.\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+                    << "material identified by: '" << nmb_mat
+                    << "' is not uniaxial.\n";
       }
     else
-      std::cerr << "FiberSectionShear3d::setRespVzByName; "
-                << "no se encontró el material de código: '" << nmb_mat
-                << "'.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+                << "material identified by: '" << nmb_mat
+                << "'. not found.\n";
   }
 
 //! @brief Returns shear z response.
@@ -194,12 +194,12 @@ void XC::FiberSectionShear3d::setRespTByName(const std::string &nmb_mat)
         if(tmp)
           setRespT(tmp);
         else
-          std::cerr << "FiberSectionShear3d::setRespTByName; "
+          std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
                     << "el material de código: '" << nmb_mat
                     << "' no corresponde a un material uniaxial.\n";
       }
     else
-      std::cerr << "FiberSectionShear3d::setRespTByName; "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
                 << "no se encontró el material de código: '" << nmb_mat
                 << "'.\n";
   }
@@ -390,7 +390,7 @@ int XC::FiberSectionShear3d::revertToStart(void)
 int XC::FiberSectionShear3d::sendData(CommParameters &cp)
   {
     int res= FiberSection3d::sendData(cp);
-    std::cerr << "FiberSectionShear3d::sendData - not implemented.\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__ << " - not implemented.\n";
     return res;
   }
 
@@ -398,7 +398,7 @@ int XC::FiberSectionShear3d::sendData(CommParameters &cp)
 int XC::FiberSectionShear3d::recvData(const CommParameters &cp)
   {
     int res= FiberSection3d::recvData(cp);
-    std::cerr << "FiberSectionShear3d::recvData - not implemented.\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__ << " - not implemented.\n";
     return res;
   }
 

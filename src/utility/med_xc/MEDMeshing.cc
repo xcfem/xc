@@ -201,9 +201,9 @@ void XC::MEDMeshing::defineMEDFields(void) const
 	      }
           }
         else
-	  std::cerr << "MEDMeshing::defineMEDFields; no se encontró the set: " 
-                    << fi.getSetName() << " en el que se define el campo: "
-                    << fi.GetNombre() << std::endl;
+	  std::cerr << "MEDMeshing::defineMEDFields; set: '" 
+                    << fi.getSetName() << "' for the field : '"
+                    << fi.GetNombre() << "' not found." << std::endl;
       }
   }
 

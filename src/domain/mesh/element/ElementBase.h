@@ -148,7 +148,7 @@ int XC::ElementBase<NNODOS>::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Return the posición del centroide del elemento.
+//! @brief Return position of the element centroid.
 template <int NNODOS>
 Pos3d XC::ElementBase<NNODOS>::getPosCdg(bool initialGeometry) const
   { return theNodes.getPosCdg(initialGeometry); }

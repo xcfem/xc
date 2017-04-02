@@ -38,7 +38,7 @@ class Node;
 
 //! \ingroup Nod
 //
-//! @brief Posición de un nodo para el KDTree.
+//! @brief Node position for its use in the KDTree.
 class NodePos: public KDTreePos
   {
   private:

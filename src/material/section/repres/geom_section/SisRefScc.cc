@@ -30,13 +30,13 @@
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 
 
-//! @brief Returns the vector unitario I expresado en el sistema global
-//! en la posición being passed as parameter.
+//! @brief Returns the $\vec{i}$ unit vector expressed in global coordinates
+//! for the position being passed as parameter.
 Vector2d XC::SisRefScc::GetI(const Pos2d &p) const
   { return GetVDirEje(1,p); }
 
-//! @brief Returns the vector unitario J expresado en el sistema global
-//! en la posición being passed as parameter.
+//! @brief Returns the $\vec{j}$ unit vector expressed in global coordinates
+//! for the position being passed as parameter.
 Vector2d XC::SisRefScc::GetJ(const Pos2d &p) const
   { return GetVDirEje(2,p); }
 

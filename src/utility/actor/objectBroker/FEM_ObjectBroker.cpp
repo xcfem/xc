@@ -782,14 +782,14 @@ XC::LoadPattern *XC::FEM_ObjectBroker::getNewLoadPattern(int classTag)
       }
   }
 
-XC::Combinacion *XC::FEM_ObjectBroker::getNewCombinacion(int classTag)
+XC::LoadCombination *XC::FEM_ObjectBroker::getNewLoadCombination(int classTag)
   {
     switch(classTag)
       {
-      case LOAD_TAG_Combinacion:
-        return new Combinacion();
+      case LOAD_TAG_LoadCombination:
+        return new LoadCombination();
       default:
-        std::cerr << "FEM_ObjectBroker::getNewCombinacion - ";
+        std::cerr << "FEM_ObjectBroker::getNewLoadCombination - ";
         std::cerr << " - no load type exists for class tag ";
         std::cerr << classTag << std::endl;
         return nullptr;

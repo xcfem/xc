@@ -64,7 +64,7 @@ int XC::NodePropRecorder::record(int commitTag, double timeStamp)
             EntCmd_exec(pyObj,CallbackRecord);
           }
         else
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
 	            << "; trying to use a NULL pointer." << std::endl;
       }
     return 0;

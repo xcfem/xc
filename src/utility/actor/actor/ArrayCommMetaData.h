@@ -41,7 +41,7 @@ namespace XC {
 class ArrayCommMetaData: public PtrCommMetaData
   {
   protected:
-    std::size_t posSz; //!< Posición del tamaño del array ó tamaño del array.
+    std::size_t posSz; //!< Index of the array size.
   public:
     ArrayCommMetaData(const int &,const int &,const size_t &);
 

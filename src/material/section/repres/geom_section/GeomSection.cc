@@ -74,8 +74,7 @@ XC::GeomSection XC::GeomSection::getGMCapasArmado(void) const
     return retval;
   }
 
-//! @brief Return the sección que tiene la misma armadura que ésta
-//! pero sólo las regiones comprimidas.
+//! @brief Return a section with only the compressed regions of the section.
 XC::GeomSection XC::GeomSection::getSeccionFisurada(const Semiplano2d &sp_compresiones) const
   {
     GeomSection retval(getGMCapasArmado());
@@ -209,7 +208,7 @@ XC::Segment *XC::GeomSection::newSegment(size_t p1,size_t p2)
     if(s)
       s->setEndPoints(p1,p2);
     else
-      std::cerr << "GeomSection::newSegment; can't assign endpoints."
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; can't assign endpoints."
                 << std::endl;
     return s;
   }
@@ -222,9 +221,11 @@ double XC::GeomSection::DistSpots(const size_t &i,const size_t &j) const
     const Spot *pA= busca_spot(i);
     const Spot *pB= busca_spot(j);
     if(!pA)
-      std::cerr << "XC::GeomSection::DistSpots; no se encontró el punto: " << i << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; point: " << i << " not found. " << std::endl;
     else if(!pB)
-      std::cerr << "XC::GeomSection::DistSpots; no se encontró el punto: " << j << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; point: " << j << " not found. " << std::endl;
     else
       retval= pA->DistanciaA(pB->GetPos());
     return retval;
@@ -238,7 +239,7 @@ Poligono2d XC::GeomSection::getRegionsContour(void) const
     if(!tmp.empty())
       {
         if(tmp.size()>1)
-	  std::cerr << "GeomSection::getRegionsContour; la sección no es simplemente conexa."
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; la sección no es simplemente conexa."
                     << std::endl;
         retval= *tmp.begin();
       }
@@ -254,16 +255,18 @@ Poligono2d XC::GeomSection::getCompressedZoneContour(const Semiplano2d &sp_compr
       {
 	std::list<Poligono2d> tmpList= tmp.Interseccion(sp_compresiones);
         if(tmpList.size()>1)
-	  std::cerr << "GeomSection::getCompressedZoneContour; la sección no es simplemente conexa."
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; is not a simply connected region."
                     << std::endl;
         retval= *tmpList.begin();
       }
     return retval;
   }
 
-//! @brief Returns the canto con el que trabaja la sección a partir de la posición
-//! del semiplano being passed as parameter.
-//! @param trazaPF: Intersección del plano de flexión con el plano de la sección.
+//! @brief Returns the working cross-section depth from the position
+//! of the half-plane being passed as parameter.
+//! @param trazaPF: Intersection of the bending plane with the plane that
+//! contains the cross section.
 double XC::GeomSection::getCantoMecanico(const Recta2d &trazaPF) const
   {
     Poligono2d contour= getRegionsContour();
@@ -314,9 +317,9 @@ double XC::GeomSection::getCantoMecanicoZonaTraccionada(const Semiplano2d &sp_co
     return dpos;
   }
 
-//! @brief Return the longitud del segmento que resulta
-//! de cortar la recta being passed as parameter con el
-//! contour de la sección.
+//! @brief Returns the lengths of the segments that results of
+//! cutting the line being passed as parameter with the section
+//! contour.
 double XC::GeomSection::getLongCorte(const Recta2d &r) const
   {
     double retval= 0.0;
@@ -326,9 +329,9 @@ double XC::GeomSection::getLongCorte(const Recta2d &r) const
     return retval;
   }
 
-//! @brief Returns the longitudes de los segmentos que resultan
-//! de cortar la recta being passed as parameter con el
-//! contour de la sección.
+//! @brief Returns the lengths of the segments that results of
+//! cutting the line being passed as parameter with the section
+//! contour.
 std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr) const
   {
     const size_t sz= lr.size();
@@ -347,7 +350,8 @@ std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr)
     return retval;
   }
 
-//! @brief Returns the ancho de la sección para el plano de flexión.
+//! @brief Returns the section width for the bending plane intersect
+//! being passed as parameter.
 double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) const
   {
     const Poligono2d contour= agrega_puntos_medios(getRegionsContour());
@@ -400,7 +404,7 @@ double XC::GeomSection::getAnchoBielaComprimida(const Segmento2d &brazo_mecanico
     return 2*sqrt(bmin2);
   }
 
-//! @brief Returns the recubrimiento de la posición being passed as parameter.
+//! @brief Returns the cover for the position being passed as parameter.
 double XC::GeomSection::getRecubrimiento(const Pos2d &p) const
   {
     const double retval= -getRegionsContour().DistSigno(p);
@@ -410,7 +414,7 @@ double XC::GeomSection::getRecubrimiento(const Pos2d &p) const
     return retval;
   }
 
-//! @brief Returns the área homogeneizada de las regiones.
+//! @brief Returns the homogenized area of the regions.
 double XC::GeomSection::getAreaHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
@@ -578,7 +582,7 @@ double XC::GeomSection::getPyzGrossSection(void) const
   }
 
 
-//! @brief Imprime información sobre el objeto.
+//! @brief Printing.
 void XC::GeomSection::Print(std::ostream &s, int flag)
   {
     s << "\nCurrent Número de regiones: "       << regiones.size();

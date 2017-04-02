@@ -90,7 +90,7 @@ double XC::Fiber::getFuerza(void) const
 double XC::Fiber::getStrain(void) const
   { return getMaterial()->getStrain(); }
 
-//! @brief Return the posición de la fibra.
+//! @brief Returns fiber position.
 Pos2d XC::Fiber::getPos(void) const
   { return Pos2d(getLocY(),getLocZ()); }
 

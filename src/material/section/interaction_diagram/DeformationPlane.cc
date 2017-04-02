@@ -233,7 +233,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(const Recta2d &r) const
           retval= Semiplano2d(r,p);
         else
 	  std::cerr << "DeformationPlane::getSemiplanoTracciones; no se pudo encontrar"
-                    << " el semiplano traccionado cuyo borde es r= " << r << std::endl;
+                    << " el half-plane traccionado cuyo borde es r= " << r << std::endl;
       }
     return retval;
   }

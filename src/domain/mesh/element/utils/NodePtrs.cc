@@ -295,8 +295,7 @@ const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
     return retval;
   }
 
-//! @brief Return the posición del node cuyo índice se
-//! being passed as parameter.
+//! @brief Return the position of the i-th node.
 Pos3d XC::NodePtrs::getPosNodo(const size_t &i,bool initialGeometry) const
   {
     if(initialGeometry)
@@ -389,7 +388,7 @@ const XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry
     return this_no_const->getNearestNode(p,initialGeometry);
   }
 
-//! @brief Return the posición of the pointer a node en el array.
+//! @brief Return the index of the node pointer in the array.
 int XC::NodePtrs::getIndiceNodo(const Node *ptrNod) const
   {
     int retval= -1;
@@ -422,13 +421,13 @@ void XC::NodePtrs::vuelcaTributarias(const std::vector<double> &t) const
       theNodes[i]->addTributaria(t[i]);
   }
 
-//! @brief Returns a vector que contiene los factores de distribución
-//! de cada node que corresponden al modo being passed as parameter.
+//! @brief Returns a vector that contains the distribution factors
+//! of each node for the mode being passed as parameter.
 XC::Vector XC::NodePtrs::getDistributionFactor(int mode) const
   {
     const int nrows= getTotalDOFs();
     Vector retval(nrows);
-    // Calculamos el factor de distribución
+    // Distribution factor computation
     const int numNodes= size();
     int loc = 0;
     for(int i=0; i<numNodes; i++)

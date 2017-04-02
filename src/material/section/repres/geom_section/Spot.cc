@@ -49,11 +49,11 @@ void XC::Spot::borra_linea(Eje *l)
     if(i!= ejes_pt.end()) //La ha encontrado.
       ejes_pt.erase(i);
   }
-//! Returns the vector de posición del punto.
+//! Returns position vector of the point.
 Vector2d XC::Spot::VectorPos(void) const
   { return p.VectorPos();  }
 
-//! @brief Actualiza la topología.
+//! @brief Updates topology.
 void XC::Spot::actualiza_topologia(void)
   {}
 
@@ -71,7 +71,7 @@ bool XC::Spot::Toca(const Eje &l) const
   }
 
 
-//! @brief Return the distancia a la posición being passed as parameter.
+//! @brief Return the distance to the position being passed as parameter.
 double XC::Spot::DistanciaA(const Pos2d &pt) const
   { return dist(p,pt);  }
 

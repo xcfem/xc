@@ -229,10 +229,11 @@ Pos3d XC::MatrizPtrPnt::getCentroide(void) const
     return retval;
   }
 
-//! @brief Copia los puntos del rango being passed as parameter, colocándolos
-//! en las posiciones de la matriz que resultan de sumar a los índices (i,j) del
-//! punto los valores del vector offsetIndices es decir (i,j)->(i+offsetIndices[0],j+offsetIndices[1])
-//! y desplazando su posición geométrica según el vector vectorOffset.
+//! @brief Copy the points from the range being passed as parameter, and places
+//! the at the positions of the matrix that result form adding to the (i,j)
+//! indexes of the point the values of the offsetIndices vector; i.e.:
+//! (i,j)->(i+offsetIndices[0],j+offsetIndices[1])
+//! and moving the by the vectorOffset vector.
 std::deque<size_t> XC::MatrizPtrPnt::CopiaPuntos(const RangoMatriz &rango,const std::vector<size_t> &offsetIndices,const Vector3d &vectorOffset= Vector3d())
   {
     Cad *cad= getCad();

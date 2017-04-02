@@ -10,7 +10,6 @@ import xc_base
 import geom
 import xc
 from solution import predefined_solutions
-from solution import resuelve_combinacion
 from model import predefined_spaces
 from materials import typical_materials
 from model import fix_node_3dof
@@ -127,7 +126,7 @@ casos.addToDomain("0")
 solution= predefined_solutions.SolutionProcedure()
 solution.convergenceTestTol= 1.0e-2
 analysis= solution.simpleNewtonRaphsonBandGen(prueba)
-resuelve_combinacion.resuelveComb(preprocessor, "0",analysis,10)
+predefined_solutions.resuelveComb(preprocessor, "0",analysis,10)
 
 Lmedios= L/2
 EIbeta3= F/(E*I*pow(beta,3))

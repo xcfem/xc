@@ -149,7 +149,7 @@ const XC::Matrix &XC::NDMaterial::getTangent(void) const
      return errMatrix;    
   }
 
-//! @brief Return the tensión.
+//! @brief Returns stress.
 const XC::Vector &XC::NDMaterial::getStress(void) const
   {
     std::cerr << nombre_clase() << "::getStress -- subclass responsibility\n";
@@ -360,7 +360,7 @@ const XC::Matrix &XC::NDMaterial::getDampTangentSensitivity(int gradNumber)
 
 const XC::Matrix &XC::NDMaterial::getTangentSensitivity(int gradNumber)
   {
-    static XC::Matrix dummy(1,1);
+    static Matrix dummy(1,1);
     return dummy;
   }
 
@@ -369,8 +369,6 @@ int XC::NDMaterial::commitSensitivity(XC::Vector & strainSensitivity, int gradNu
 // AddingSensitivity:END //////////////////////////////////////////
 
 //! @brief Recibe a pointer a material through the channel being passed as parameter.
-//! @param posClassTag: Posición de ID del identificador de la clase del material.
-//! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::NDMaterial *XC::receiveNDMaterialPtr(NDMaterial *ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)
   {
     NDMaterial *retval= nullptr;

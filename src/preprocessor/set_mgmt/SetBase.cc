@@ -121,13 +121,13 @@ void XC::SetBase::resetTributarias(void) const
             if(elem)
               elem->resetTributarias();
             else
-	      std::cerr << "SetBase::resetTributarias; "
-                        << " no se encontró el elemento: "
-                        << tag_elem << std::endl;
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                        << " element identified by: "
+                        << tag_elem << " not found." << std::endl;
           }
       }
     else
-      std::cerr << "No se ha definido el domain." << std::endl;    
+      std::cerr << "Undefined domain." << std::endl;    
   }
  
 //! @brief Calcula las longitudes tributarias correspondientes a cada
@@ -145,13 +145,13 @@ void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
             if(elem)
               elem->calculaLongsTributarias(initialGeometry);
             else
-	      std::cerr << "SetBase::calculaLongsTributarias; "
-                        << " no se encontró el elemento: "
-                        << tag_elem << std::endl;
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                        << " element identified by: "
+                        << tag_elem << " not found." << std::endl;
           }
       }
     else
-      std::cerr << "No se ha definido el domain." << std::endl;
+      std::cerr << "Undefined domain." << std::endl;
   }
 
 //! @brief Calcula las áreas tributarias correspondientes a cada
@@ -169,13 +169,13 @@ void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
             if(elem)
               elem->calculaAreasTributarias(initialGeometry);
             else
-	      std::cerr << "SetBase::calculaLongsTributarias; "
-                        << " no se encontró el elemento: "
-                        << tag_elem << std::endl;
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                        << " element identified by: "
+                        << tag_elem << " not found." << std::endl;
           }
       }
     else
-      std::cerr << "No se ha definido el domain." << std::endl;
+      std::cerr << "Undefined domain." << std::endl;
   }
 
 //! @brief Calcula los volúmenes tributarios correspondientes a cada
@@ -193,13 +193,13 @@ void XC::SetBase::calculaVolsTributarios(bool initialGeometry) const
             if(elem)
               elem->calculaVolsTributarios(initialGeometry);
             else
-	      std::cerr << "SetBase::calculaLongsTributarias; "
-                        << " no se encontró el elemento: "
-                        << tag_elem << std::endl;
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                        << " element identified by: "
+                        << tag_elem << " not found." << std::endl;
           }
       }
     else
-      std::cerr << "No se ha definido el domain." << std::endl;
+      std::cerr << "Undefined domain." << std::endl;
   }
 
 

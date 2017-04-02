@@ -185,10 +185,11 @@ const XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag) const
     return retval;
   }
 
-//! @brief Copia los puntos del rango being passed as parameter, colocándolos
-//! en las posiciones de la matriz que resultan de sumar a los índices (i,j) del
-//! punto los valores del vector offsetIndices es decir (i,j)->(i+offsetIndices[0],j+offsetIndices[1])
-//! y desplazando su posición geométrica según el vector vectorOffset.
+//! @brief Copy the points from the range being passed as parameter, and places
+//! the at the positions of the matrix that result form adding to the (i,j,k)
+//! indexes of the point the values of the offsetIndices vector; i.e.:
+//! (i,j,k)->(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])
+//! and moving the by the vectorOffset vector.
 std::deque<size_t> XC::TritrizPtrPnt::CopiaPuntos(const RangoTritriz &rango,const std::vector<size_t> &offsetIndices,const Vector3d &vectorOffset= Vector3d())
   {
     Cad *cad= getCad();
@@ -242,7 +243,7 @@ XC::Pnt *XC::TritrizPtrPnt::getPunto(const VIndices &iPunto)
           { retval= (*this)(iPunto[0],iPunto[1],iPunto[2]); }
       }
     else
-      std::cerr << "TritrizPtrPnt::getPunto; el vector de índices: "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; el vector de índices: "
                 << iPunto << " no es válido." << std::endl;
     return retval;    
   }
@@ -262,7 +263,7 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getPuntos(const TritrizIndices &indices)
             if(iPunto.size()>2)
               { retval(i,j,k)= getPunto(iPunto); }
             else
-	      std::cerr << "TritrizPtrPnt::getPuntos; el vector de índices: "
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; el vector de índices: "
                         << iPunto << " no es válido." << std::endl;
           }
     return retval;
@@ -281,7 +282,7 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getPuntos(const MatrizIndices &indices)
           if(iPunto.size()>2)
             { retval(i,j)= getPunto(iPunto); }
           else
-            std::cerr << "TritrizPtrPnt::getPuntos; el vector de índices: "
+            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; el vector de índices: "
                       << iPunto << " no es válido." << std::endl;
         }
     return retval;
@@ -453,10 +454,10 @@ std::vector<size_t> XC::getIdPuntosQuad(const TritrizPtrPnt::const_ref_capa_i_ct
       {
         std::cerr << "Al obtener la celda de índices (" << j << ',' << k
                   << ") se obtuvo un área muy pequeña (" << area << ").\n";
-        std::cerr << " posición del punto (j,k) " << p1 << std::endl;
-	std::cerr << " posición del punto (j+1,k) " << p2 << std::endl;
-	std::cerr << " posición del punto (j+1,k+1) " << p3 << std::endl;
-	std::cerr << " posición del punto (1,k+1) " << p4 << std::endl;
+        std::cerr << " position of the point (j,k) " << p1 << std::endl;
+	std::cerr << " position of the point (j+1,k) " << p2 << std::endl;
+	std::cerr << " position of the point (j+1,k+1) " << p3 << std::endl;
+	std::cerr << " position of the point (1,k+1) " << p4 << std::endl;
       }
     return retval;
   }

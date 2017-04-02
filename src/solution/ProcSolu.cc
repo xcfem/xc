@@ -88,8 +88,9 @@ bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &cod_
 	  }
       }
     else
-      std::cerr << "ProcSolu::alloc_analysis; no se encontró el analysis method: '"
-                << cod_solu_metodo << "' para el comando: " << nmb << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; analysis method: '"
+                << cod_solu_metodo << "' not found, in command: " << nmb << std::endl;
     if(theAnalysis)
       theAnalysis->set_owner(this);
 

@@ -453,14 +453,17 @@ void XC::CmbEdge::cierra(void)
     //Cierra la polilinea.
     Pnt *pA= P2();
     if(!pA)
-      std::cerr << "CmbEdge::cierra; no se encontró el último punto." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; last point not found." << std::endl;
     Pnt *pB= P1();
     if(!pB)
-      std::cerr << "CmbEdge::cierra; no se encontró el primer punto " << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; first point not found." << std::endl;
     if(pA!=pB)
       NuevaLinea(pA,pB);
     else
-      std::cerr << "CmbEdge::cierra; line is already closed." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; line is already closed." << std::endl;
   }
 
 //! @brief Creates a nueva línea entre los puntos being passed as parameters
@@ -509,8 +512,8 @@ void XC::CmbEdge::inserta(const size_t &i)
   {
     Edge *tmp= BuscaEdge(i);
     if(!tmp)
-      std::cerr << "CmdEdge; no se encontró la línea de índice: '" 
-                    << i << "' \n";
+      std::cerr << "CmdEdge; line identified by: '" 
+                    << i << "' not found.\n";
     else
       inserta(tmp);
   }
@@ -667,13 +670,13 @@ BND3d XC::CmbEdge::Bnd(void) const
     const size_t nv= NumVertices();
     if(nv<1) //the set is empty.
       {
-	std::cerr << nombre_clase() << __FUNCTION__
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << "; polyline empty." << std::endl;
         return retval;
       }
     if(nv<2)
       {
-	std::cerr << nombre_clase() << __FUNCTION__
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
 		  << "; the polyline has only a point." << std::endl;
         retval= BND3d(GetVertice(1)->GetPos(),GetVertice(1)->GetPos());
         return retval;

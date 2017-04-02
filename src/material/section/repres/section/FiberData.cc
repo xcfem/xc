@@ -58,7 +58,7 @@ size_t XC::FiberData::put_cells(const size_t &offset,const VectorCells &cells,Ma
   {
     const size_t numCells= cells.size();
     size_t k= offset;
-    static Vector fiberPosition(2); //Posición de las fibras.
+    static Vector fiberPosition(2); //!< Position of the fiber.
 
     for(size_t j= 0;j<numCells;j++)
       {
@@ -79,7 +79,7 @@ size_t XC::FiberData::put_reinf_bars(const size_t &offset,const VectorReinfBar &
   {
     int k= offset;
     const size_t sz= bars.size();
-    static Vector fiberPosition(2); //Posición de las barras.
+    static Vector fiberPosition(2); //Position of the bars.
 
     for(size_t j= 0;j<sz;j++)
       {
@@ -144,7 +144,7 @@ void XC::FiberData::getFibras2d(contenedor_fibras &retval) const
               }
 
             if(Area(k)<=0)
-              std::cerr << "ERROR, área negativa o nula en la fibra que ocupa la posición: (" 
+              std::cerr << "ERROR, zero or negative area for the fiber in position: (" 
                         << Position(0,k) << "," << 0.0 << ")." << std::endl;
             tmp_fiber = new UniaxialFiber2d(k,*material,Area(k),Position(0,k));
             if(!tmp_fiber)
@@ -182,7 +182,7 @@ void XC::FiberData::getFibras3d(contenedor_fibras &retval) const
             fiberPosition(0)= Position(0,k);
             fiberPosition(1)= Position(1,k);
             if(Area(k)<=0)
-              std::cerr << "ERROR, área negativa o nula en la fibra que ocupa la posición: (" 
+              std::cerr << "ERROR, zero or negative area for the fiber in position: (" 
                         << fiberPosition(0) << "," << fiberPosition(1) << ")." << std::endl;
             tmp_fiber= new UniaxialFiber3d(k, *material, Area(k), fiberPosition);
             if(!tmp_fiber)

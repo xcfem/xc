@@ -186,8 +186,9 @@ void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
                     << lp_code << "'\n";
       }
     else
-      std::cerr << "MapLoadPatterns::addToDomain: no se encontró el load pattern: " 
-                << lp_code << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; load pattern: '" 
+                << lp_code << "' not found." << std::endl;
   }
 
 //! @brief Elimina el load pattern del domain.
@@ -197,8 +198,9 @@ void XC::MapLoadPatterns::removeFromDomain(const std::string &lp_code)
     if(lp)
       getDomain()->removeLoadPattern(lp);
     else
-      std::cerr << "MapLoadPatterns::removeFromDomain: no se encontró el load pattern: " 
-                << lp_code << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; load pattern: '" 
+                << lp_code << "' not found." << std::endl;
   }
 
 //! @brief Elimina las loadpatterns del domain.

@@ -39,7 +39,7 @@
 
 
 
-//! @brief Libera todas las pociciones.
+//! @brief Frees memory for all the bars.
 void XC::VectorReinfBar::libera(void)
   {
     const size_t sz= size();
@@ -47,7 +47,7 @@ void XC::VectorReinfBar::libera(void)
       libera(i);
   }
 
-//! @brief Libera la posición i.
+//! @brief Frees memory for the i-th bar.
 void XC::VectorReinfBar::libera(const size_t i)
   {
     if((*this)[i])
@@ -55,7 +55,7 @@ void XC::VectorReinfBar::libera(const size_t i)
     (*this)[i]= nullptr;
   }
 
-//! @brief Guarda una copia de la celda en la posición i.
+//! @brief Stores a copy of the bar at the i-th position.
 void XC::VectorReinfBar::alloc(const size_t i,const ReinfBar &c)
   {
     libera(i);
@@ -97,7 +97,7 @@ XC::VectorReinfBar &XC::VectorReinfBar::operator=(const VectorReinfBar &otro)
 XC::VectorReinfBar::~VectorReinfBar(void)
   { libera(); }
 
-//! @brief Returns the área homogeneizada de las regiones.
+//! @brief Returns the homogenized area de las regiones.
 double XC::VectorReinfBar::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
@@ -114,7 +114,7 @@ double XC::VectorReinfBar::getAreaHomogenizedSection(const double &E0) const
             retval+= n*(*i)->getArea();
           }
         else
-	  std::cerr << "VectorReinfBar::getAreaHomogenizedSection; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; material not found." << std::endl; 
       }
     return retval;
   }
@@ -137,7 +137,7 @@ XC::Vector XC::VectorReinfBar::getCdgHomogenizedSection(const double &E0) const
             divisor+= weight;
           }
         else
-	  std::cerr << "VectorReinfBar::getCdgHomogenizedSection; region material undefined." << std::endl;
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; region material undefined." << std::endl;
       }
     retval/= divisor;
     return retval;
@@ -161,7 +161,7 @@ double XC::VectorReinfBar::getIyHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Iy()+(*i)->getArea()*sqr(d));
           }
         else
-	  std::cerr << "VectorReinfBar::getIyHomogenizedSection; region material undefined." << std::endl; 
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; region material undefined." << std::endl; 
       }
     return retval;
   }
@@ -184,7 +184,7 @@ double XC::VectorReinfBar::getIzHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Iz()+(*i)->getArea()*sqr(d));
           }
         else
-	  std::cerr << "VectorReinfBar::getIyHomogenizedSection; region material undefined." << std::endl; 
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; region material undefined." << std::endl; 
       }
     return retval;
   }
@@ -208,7 +208,7 @@ double XC::VectorReinfBar::getPyzHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Pyz()+(*i)->getArea()*d2);
           }
         else
-	  std::cerr << "VectorReinfBar::getIyHomogenizedSection; region material not found." << std::endl; 
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; region material not found." << std::endl; 
       }
     return retval;
   }

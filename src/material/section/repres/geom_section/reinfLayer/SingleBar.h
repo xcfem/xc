@@ -41,7 +41,7 @@ class ReinfBar;
 class SingleBar : public ReinfLayer
   {
   private:
-    Vector posit; //!< Posición del centro de la barra.
+    Vector posit; //!< Position of the bar center.
   protected:
 
 

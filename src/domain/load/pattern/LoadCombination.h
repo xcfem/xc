@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Combinacion.h
+//LoadCombination.h
 
-#ifndef COMBINACION_H
-#define COMBINACION_H
+#ifndef LOADCOMBINATION_H
+#define LOADCOMBINATION_H
 
 #include "domain/component/ForceReprComponent.h"
 
@@ -35,14 +35,14 @@ namespace XC {
 class MapLoadPatterns;
 class LoadPattern;
 class LoadLoader;
-class GrupoCombinaciones;
+class LoadCombinationGroup;
 
 //! @ingroup LPatterns
 //
 //! @brief Load pattern combination (1.5*PP+1.0*CP+1.6*SC ...).
-class Combinacion: public ForceReprComponent
+class LoadCombination: public ForceReprComponent
   {
-    LoadLoader *loader; //!< Puntero al objeto que conoce los nombres de las combinaciones.
+    LoadLoader *loader; //!< Pointer to the load case manager.
     //! @brief Each of the terms (factor*LoadPattern) of the combination.
     class sumando: public EntCmd
       {
@@ -68,7 +68,7 @@ class Combinacion: public ForceReprComponent
     
       };
   public:
-    typedef std::deque<sumando> TDescomp; //!< Tipo contenedor para la descomposición de la combinación (1.5*PP+1.0*CP+1.6*SC ...).
+    typedef std::deque<sumando> TDescomp; //!< Container type for the combination expression (1.5*PP+1.0*CP+1.6*SC ...).
     typedef TDescomp::iterator iterator;
     typedef TDescomp::const_iterator const_iterator;
   private:
@@ -93,8 +93,8 @@ class Combinacion: public ForceReprComponent
     iterator end(void)
       { return descomp.end(); }
 
-    Combinacion &suma(const Combinacion &otro);
-    Combinacion &resta(const Combinacion &otro);
+    LoadCombination &suma(const LoadCombination &otro);
+    LoadCombination &resta(const LoadCombination &otro);
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
@@ -102,15 +102,15 @@ class Combinacion: public ForceReprComponent
     int recvDescomp(void);
 
 
-    friend class GrupoCombinaciones;
-    Combinacion(GrupoCombinaciones *owr= nullptr,const std::string &nmb= "",int tag= 0,LoadLoader *ll= nullptr);
+    friend class LoadCombinationGroup;
+    LoadCombination(LoadCombinationGroup *owr= nullptr,const std::string &nmb= "",int tag= 0,LoadLoader *ll= nullptr);
     inline void setNombre(const std::string &nmb)
       { nombre= nmb;}
     inline void setLoader(LoadLoader *ll)
       { loader= ll; }
 
   public:
-    ~Combinacion(void);
+    ~LoadCombination(void);
 
     virtual void setDomain(Domain *theDomain);
     bool addToDomain(void);
@@ -122,8 +122,8 @@ class Combinacion: public ForceReprComponent
     inline void setDescomp(const std::string &descomp)
       { interpreta_descomp(descomp); }
 
-    const GrupoCombinaciones *getGrupo(void) const;
-    GrupoCombinaciones *getGrupo(void);
+    const LoadCombinationGroup *getGrupo(void) const;
+    LoadCombinationGroup *getGrupo(void);
 
     const_iterator begin(void) const
       { return descomp.begin(); }
@@ -136,28 +136,28 @@ class Combinacion: public ForceReprComponent
 
     float getCoefCaso(const LoadPattern *) const;
 
-    Combinacion &multiplica(const float &otro);
-    Combinacion &divide(const float &otro);
-    Combinacion &suma(const std::string &);
-    Combinacion &resta(const std::string &);
-    Combinacion &asigna(const std::string &);
-    inline Combinacion &operator+=(const Combinacion &c)
+    LoadCombination &multiplica(const float &otro);
+    LoadCombination &divide(const float &otro);
+    LoadCombination &suma(const std::string &);
+    LoadCombination &resta(const std::string &);
+    LoadCombination &asigna(const std::string &);
+    inline LoadCombination &operator+=(const LoadCombination &c)
       { return suma(c); }
-    Combinacion &operator-=(const Combinacion &c)
+    LoadCombination &operator-=(const LoadCombination &c)
       { return resta(c); }
-    Combinacion &operator*=(const float &f)
+    LoadCombination &operator*=(const float &f)
       { return multiplica(f); }
-    Combinacion &operator/=(const float &f)
+    LoadCombination &operator/=(const float &f)
       { return divide(f); }
-    Combinacion operator+(const Combinacion &) const;
-    Combinacion operator-(const Combinacion &) const;
-    Combinacion operator*(const float &) const;
-    Combinacion operator/(const float &) const;
-    bool operator==(const Combinacion &) const;
-    bool operator!=(const Combinacion &) const;
-    bool dominaA(const Combinacion &otra) const;
+    LoadCombination operator+(const LoadCombination &) const;
+    LoadCombination operator-(const LoadCombination &) const;
+    LoadCombination operator*(const float &) const;
+    LoadCombination operator/(const float &) const;
+    bool operator==(const LoadCombination &) const;
+    bool operator!=(const LoadCombination &) const;
+    bool dominaA(const LoadCombination &otra) const;
 
-    const Combinacion *getPtrCombPrevia(void) const;
+    const LoadCombination *getPtrCombPrevia(void) const;
     const std::string getNombreCombPrevia(void) const;
     int getTagCombPrevia(void) const;
     const std::string getDescompCombPrevia(void) const;
@@ -171,7 +171,7 @@ class Combinacion: public ForceReprComponent
 
   };
 
-std::ostream &operator<<(std::ostream &os,const Combinacion &);
+std::ostream &operator<<(std::ostream &os,const LoadCombination &);
 
 } // end of XC namespace
 

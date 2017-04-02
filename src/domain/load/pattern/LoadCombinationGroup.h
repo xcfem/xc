@@ -24,29 +24,29 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//GrupoCombinaciones.h
+//LoadCombinationGroup.h
 
-#ifndef GRUPOCOMBINACIONES_H
-#define GRUPOCOMBINACIONES_H
+#ifndef LOADCOMBINATIONGROUP_H
+#define LOADCOMBINATIONGROUP_H
 
 #include "preprocessor/loaders/LoadLoaderMember.h"
 #include <map>
 #include "boost/python/list.hpp"
 
 namespace XC {
-class Combinacion;
+class LoadCombination;
 class LoadLoader;
 class Domain;
 
-typedef std::map<std::string,Combinacion *> map_combinaciones; //!< Combinaciones.
+typedef std::map<std::string,LoadCombination *> LoadCombinationMap; //!< LoadCombinations.
 
 //! @ingroup LPatterns
 //
-//! @brief Contenedor de combinaciones.
- class GrupoCombinaciones: public LoadLoaderMember, public map_combinaciones
+//! @brief Load combination container.
+class LoadCombinationGroup: public LoadLoaderMember, public LoadCombinationMap
   {
   protected:
-    Combinacion *busca_combinacion(const std::string &);
+    LoadCombination *find_combination(const std::string &);
     friend class LoadLoader;
 
     DbTagData &getDbTagData(void) const;
@@ -54,25 +54,25 @@ typedef std::map<std::string,Combinacion *> map_combinaciones; //!< Combinacione
     int recvData(const CommParameters &cp);
 
   public:
-    GrupoCombinaciones(LoadLoader *owr);
-    ~GrupoCombinaciones(void);
+    LoadCombinationGroup(LoadLoader *owr);
+    ~LoadCombinationGroup(void);
 
     boost::python::list getKeys(void) const;
     void remove(const std::string &);
     void clear(void);
 
-    XC::Combinacion *newLoadCombination(const std::string &,const std::string &);
+    XC::LoadCombination *newLoadCombination(const std::string &,const std::string &);
 
     void addToDomain(const std::string &);
     void removeFromDomain(const std::string &);
     void removeAllFromDomain(void);
 
     std::deque<std::string> getListaNombres(void) const;
-    const std::string &getNombreCombinacion(const Combinacion *) const;
+    const std::string &getNombreLoadCombination(const LoadCombination *) const;
 
-    const Combinacion *buscaCombinacion(const std::string &) const;
-    const_iterator buscaCombPrevia(const Combinacion &) const;
-    const Combinacion *getPtrCombPrevia(const Combinacion &) const;
+    const LoadCombination *buscaLoadCombination(const std::string &) const;
+    const_iterator buscaCombPrevia(const LoadCombination &) const;
+    const LoadCombination *getPtrCombPrevia(const LoadCombination &) const;
     const_iterator buscaCombPrevia(const std::string &) const;
     const std::string getNombreCombPrevia(const std::string &) const;
     int getTagCombPrevia(const std::string &) const;

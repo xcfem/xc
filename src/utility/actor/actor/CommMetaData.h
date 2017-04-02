@@ -38,7 +38,7 @@ namespace XC {
 class CommMetaData
   {
   private:
-    int posDbTag;
+    int posDbTag; //!< index of dbTag in the data vector.
   public:
     CommMetaData(const int &);
 

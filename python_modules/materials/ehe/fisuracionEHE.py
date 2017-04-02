@@ -130,7 +130,7 @@ class CrackControl(cc.CrackControlBaseParameters):
       self.tensSRMediaBarrasTracc= self.tensSRMediaBarrasTracc/self.areaRebarTracc
   def check(self,elements,nmbComb):
     # Comprobación de las secciones de hormigón frente a fisuración.
-    print "Postproceso combinación: ",nmbComb,"\n"
+    print "Postprocessing combination: ",nmbComb,"\n"
 
     defParamsFisuracion("secHAParamsFisuracion")
     materiales= preprocessor.getMaterialLoader

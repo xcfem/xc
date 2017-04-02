@@ -50,36 +50,36 @@ class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern
 
 #include "load_patterns/python_interface.tcc"
 
-XC::Combinacion &(XC::Combinacion::*suma)(const std::string &)= &XC::Combinacion::suma;
-XC::Combinacion &(XC::Combinacion::*resta)(const std::string &)= &XC::Combinacion::resta;
-class_<XC::Combinacion, XC::Combinacion *, bases<XC::ForceReprComponent>, boost::noncopyable >("LoadCombination", no_init)
-  .add_property("getName", make_function( &XC::Combinacion::getNombre, return_value_policy<return_by_value>() ), "Returns combination's name.")
-  .def("addToDomain", &XC::Combinacion::addToDomain,"Add combination to the domain.")
-  .def("removeFromDomain", &XC::Combinacion::removeFromDomain,"Eliminates combination from domain.")
-  .def("getCombPrevia", &XC::Combinacion::getPtrCombPrevia,return_internal_reference<>(),"Returns previous load combination.")
-  .def("getDescomp", &XC::Combinacion::getString,"Returns combination expression.")
+XC::LoadCombination &(XC::LoadCombination::*suma)(const std::string &)= &XC::LoadCombination::suma;
+XC::LoadCombination &(XC::LoadCombination::*resta)(const std::string &)= &XC::LoadCombination::resta;
+class_<XC::LoadCombination, XC::LoadCombination *, bases<XC::ForceReprComponent>, boost::noncopyable >("LoadCombination", no_init)
+  .add_property("getName", make_function( &XC::LoadCombination::getNombre, return_value_policy<return_by_value>() ), "Returns combination's name.")
+  .def("addToDomain", &XC::LoadCombination::addToDomain,"Add combination to the domain.")
+  .def("removeFromDomain", &XC::LoadCombination::removeFromDomain,"Eliminates combination from domain.")
+  .def("getCombPrevia", &XC::LoadCombination::getPtrCombPrevia,return_internal_reference<>(),"Returns previous load combination.")
+  .def("getDescomp", &XC::LoadCombination::getString,"Returns combination expression.")
   .def("suma",suma,return_internal_reference<>())
   .def("resta",resta,return_internal_reference<>())
-  .def("multiplica",&XC::Combinacion::multiplica,return_internal_reference<>())
-  .def("divide",&XC::Combinacion::divide,return_internal_reference<>())
-  .def("asigna",&XC::Combinacion::asigna,return_internal_reference<>())
+  .def("multiplica",&XC::LoadCombination::multiplica,return_internal_reference<>())
+  .def("divide",&XC::LoadCombination::divide,return_internal_reference<>())
+  .def("asigna",&XC::LoadCombination::asigna,return_internal_reference<>())
   ;
 
-class_<XC::map_combinaciones, boost::noncopyable>("map_combinaciones")
-//.def(map_indexing_suite<XC::map_combinaciones>() )
+class_<XC::LoadCombinationMap, boost::noncopyable>("LoadCombinationMap")
+//.def(map_indexing_suite<XC::LoadCombinationMap>() )
   ;
 
-class_<XC::GrupoCombinaciones, bases<XC::LoadLoaderMember,XC::map_combinaciones>, boost::noncopyable >("LoadCombinationGroup", no_init)
-  .def("newLoadCombination", &XC::GrupoCombinaciones::newLoadCombination,return_internal_reference<>(),"Creates a new load combination.")
-  .def("addToDomain", &XC::GrupoCombinaciones::addToDomain,return_internal_reference<>(),"Add combination to the domain.")
-  .def("remove", &XC::GrupoCombinaciones::remove,"Removes combination.")
-  .def("removeFromDomain", &XC::GrupoCombinaciones::removeFromDomain,return_internal_reference<>(),"Eliminates combination from domain.")
-  .def("removeAllFromDomain", &XC::GrupoCombinaciones::removeAllFromDomain,return_internal_reference<>(),"Eliminates all loads cases from domain.")
-  .def("getComb", &XC::GrupoCombinaciones::buscaCombinacion,return_internal_reference<>(),"Returns load combination.")
-  .def("getCombPrevia", &XC::GrupoCombinaciones::getPtrCombPrevia,return_internal_reference<>(),"Returns previous load combination.")
-  .def("getKeys", &XC::GrupoCombinaciones::getKeys)
-  .def("__getitem__",&XC::GrupoCombinaciones::buscaCombinacion, return_value_policy<reference_existing_object>())
-  .def("clear", &XC::GrupoCombinaciones::clear)
+class_<XC::LoadCombinationGroup, bases<XC::LoadLoaderMember,XC::LoadCombinationMap>, boost::noncopyable >("LoadCombinationGroup", no_init)
+  .def("newLoadCombination", &XC::LoadCombinationGroup::newLoadCombination,return_internal_reference<>(),"Creates a new load combination.")
+  .def("addToDomain", &XC::LoadCombinationGroup::addToDomain,return_internal_reference<>(),"Add combination to the domain.")
+  .def("remove", &XC::LoadCombinationGroup::remove,"Removes combination.")
+  .def("removeFromDomain", &XC::LoadCombinationGroup::removeFromDomain,return_internal_reference<>(),"Eliminates combination from domain.")
+  .def("removeAllFromDomain", &XC::LoadCombinationGroup::removeAllFromDomain,return_internal_reference<>(),"Eliminates all loads cases from domain.")
+  .def("getComb", &XC::LoadCombinationGroup::buscaLoadCombination,return_internal_reference<>(),"Returns load combination.")
+  .def("getCombPrevia", &XC::LoadCombinationGroup::getPtrCombPrevia,return_internal_reference<>(),"Returns previous load combination.")
+  .def("getKeys", &XC::LoadCombinationGroup::getKeys)
+  .def("__getitem__",&XC::LoadCombinationGroup::buscaLoadCombination, return_value_policy<reference_existing_object>())
+  .def("clear", &XC::LoadCombinationGroup::clear)
   ;
 
 class_<XC::TimeSeries, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("TimeSeries", no_init)

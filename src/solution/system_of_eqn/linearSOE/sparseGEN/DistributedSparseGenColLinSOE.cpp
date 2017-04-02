@@ -186,8 +186,8 @@ int XC::DistributedSparseGenColLinSOE::setSize(Graph &theGraph)
        for(size_t j=0; j<theChannels.size(); j++)
          {
            CommParameters cp(0,*theChannels[j]);
-           cp.sendID(rowAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(3));//XXX asignar posición.
-           cp.sendID(colStartAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(4));//XXX asignar posición.
+           cp.sendID(rowAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(3));//XXX assign position.
+           cp.sendID(colStartAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(4));//XXX assign position.
          }
       }
     if(nnz > A.Size())
@@ -322,7 +322,7 @@ int XC::DistributedSparseGenColLinSOE::solve(void)
              if(!factored)
                {
                  Vector vectA(workArea);
-                 cp.receiveVector(vectA,CommMetaData(1));//XXX asignar posición.
+                 cp.receiveVector(vectA,CommMetaData(1));//XXX assign position.
                  for(int i=0; i<nnz; i++)
                    A[i]+= workArea[i];
                }
@@ -359,7 +359,7 @@ const XC::Vector &XC::DistributedSparseGenColLinSOE::getB(void) const
       {
         CommParameters cp(0,*theChannels[0]);
         // send B & recv merged B
-        cp.sendVector(myVectB,CommMetaData(0));//XXX asignar posición.
+        cp.sendVector(myVectB,CommMetaData(0));//XXX assign position.
         this_no_const->receiveB(cp);
       }
     else

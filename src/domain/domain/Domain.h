@@ -79,7 +79,7 @@ class NodeIter;
 class SingleDomEleIter;
 class SingleDomNodIter;
 
-class Combinacion;
+class LoadCombination;
 
 class MeshRegion;
 class DqMeshRegion;
@@ -139,7 +139,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual bool addMRMFreedom_Constraint(MRMFreedom_Constraint *);
     virtual bool addLoadPattern(LoadPattern *);
     virtual bool addNodeLocker(NodeLocker *);
-    virtual bool addCombinacion(Combinacion *);
+    virtual bool addLoadCombination(LoadCombination *);
 
     void setNodeReactionException(const int &);
     void checkNodalReactions(const double &);
@@ -161,7 +161,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual bool removeNodeLocker(int nlTag);
     bool removeLoadPattern(LoadPattern *lp);
     bool removeNodeLocker(NodeLocker *lp);
-    void removeCombinacion(Combinacion *comb);
+    void removeLoadCombination(LoadCombination *comb);
     void removeLPs(void);
     void removeNLs(void);
 

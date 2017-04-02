@@ -336,12 +336,12 @@ std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
     const double area= tmp.Area();
     if(area<1e-3)
       {
-        std::cerr << "Al obtener la celda de índices (" << j << ',' << k
-                  << ") se obtuvo un área muy pequeña (" << area << ").\n";
-        std::cerr << " posición del nodo (j,k) " << p1 << std::endl;
-	std::cerr << " posición del nodo (j+1,k) " << p2 << std::endl;
-	std::cerr << " posición del nodo (j+1,k+1) " << p3 << std::endl;
-	std::cerr << " posición del nodo (1,k+1) " << p4 << std::endl;
+        std::cerr << "Area for (" << j << ',' << k
+                  << ") cell is too small (" << area << ").\n";
+        std::cerr << " position of the node (j,k) " << p1 << std::endl;
+	std::cerr << " position of the node (j+1,k) " << p2 << std::endl;
+	std::cerr << " position of the node (j+1,k+1) " << p3 << std::endl;
+	std::cerr << " position of the node (1,k+1) " << p4 << std::endl;
       }
     return retval;
   }

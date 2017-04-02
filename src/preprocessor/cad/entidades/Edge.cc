@@ -371,7 +371,7 @@ void XC::Edge::crea_nodos_en_extremos(void)
       std::clog << "Creating nodes for '" << GetNombre() << "' edge ends...";   
     if(!P1())
       {
-	std::cerr << nombre_clase() << __FUNCTION__
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << "; start point undefined." << std::endl;
         return;
       }
@@ -384,7 +384,7 @@ void XC::Edge::crea_nodos_en_extremos(void)
       
     if(!P2())
       {
-	std::cerr << nombre_clase() << __FUNCTION__
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << "; end point undefined." << std::endl;
         return;
       }

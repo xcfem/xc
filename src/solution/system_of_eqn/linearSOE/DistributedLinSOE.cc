@@ -74,7 +74,7 @@ int XC::DistributedLinSOE::getSubGraphs(Graph &theGraph)
         inicComm(1);
 
         Graph theSubGraph;
-        cp.receiveMovable(theSubGraph,getDbTagData(),CommMetaData(0));//XXX asignar posición.
+        cp.receiveMovable(theSubGraph,getDbTagData(),CommMetaData(0));//XXX assign position.
         theGraph.merge(theSubGraph);
         const int numSubVertex= theSubGraph.getNumVertex();
         ID subMap(numSubVertex);
@@ -150,7 +150,7 @@ int XC::DistributedLinSOE::send(CommParameters &cp)
     // send remotes processID
     ID idData(1);
     idData(0)= sendID;
-    int res= cp.sendID(idData,getDbTagData(),CommMetaData(0));//XXX asignar posición.
+    int res= cp.sendID(idData,getDbTagData(),CommMetaData(0));//XXX assign position.
     if(res < 0)
       {
         std::cerr <<"WARNING DistributedLinSOE::sendSelf() - failed to send data\n";
@@ -162,7 +162,7 @@ int XC::DistributedLinSOE::send(CommParameters &cp)
 int XC::DistributedLinSOE::receive(const CommParameters &cp)
   {
     ID idData(1);
-    int res= cp.receiveID(idData,getDbTagData(),CommMetaData(0));//XXX asignar posición.
+    int res= cp.receiveID(idData,getDbTagData(),CommMetaData(0));//XXX assign position.
     if(res < 0)
       {
         std::cerr <<"WARNING DistributedLinSOE::recvSelf() - failed to send data\n";

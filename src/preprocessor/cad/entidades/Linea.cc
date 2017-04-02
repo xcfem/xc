@@ -79,15 +79,12 @@ Segmento3d XC::Linea::getSegmento(void) const
     return retval;
   }
 
-//! @brief Returns the cuadrado de la distancia a
-//! la posición being passed as parameter.
+//! @brief Returns the squared distance to the
+//! position being passed as parameter.
 double XC::Linea::DistanciaA2(const Pos3d &pt) const
-  {
-    const double retval= getSegmento().dist2(pt);
-    return retval;
-  }
+  { return getSegmento().dist2(pt); }
 
-//! @brief Divide la línea por el punto being passed as parameter.
+//! @brief Divides the line by the point being passed as parameter.
 XC::Edge *XC::Linea::split_at(Pnt *p,const double &lambda,const double &longitud)
   {
     Cad &cad= get_preprocessor()->getCad();
@@ -184,7 +181,9 @@ const XC::Vector &XC::Linea::getVector(void) const
     return retval;
   }
 
-//! @brief Returns a vector unitario tangente a la línea en el punto s
+//! @brief Returns a unit vector in the tangent direction in the point
+//! defined by s.
+//! @param s: parameter that defines the point of tangency.
 const XC::Vector &XC::Linea::getTang(const double &s) const
   {
     static Vector retval(3);

@@ -34,8 +34,7 @@ void XC::MEDMapIndices::nuevo_tag(size_t i)
     indices[i]= numVertices;
   }
 
-//! @brief Returns the índice correspondiente al que
-//! being passed as parameter.
+//! @brief Returns the index that corresponds to the argument.
 int XC::MEDMapIndices::getMEDIndice(const size_t &i) const
   {
     const_iterator iter= indices.find(i);
@@ -43,8 +42,9 @@ int XC::MEDMapIndices::getMEDIndice(const size_t &i) const
       return iter->second;
     else
       {
-        std::cerr << "MEDMapIndices::getMEDIndice; no se encontró el índice"
-                  << " correspondiente al " << i << std::endl;
+        std::cerr << "MEDMapIndices" << "::" << __FUNCTION__
+	          << "; index that corresponds with " << i
+                  << " not found." << std::endl;
         return -1;
       }
   }

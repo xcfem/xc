@@ -172,7 +172,7 @@
 #define LOAD_TAG_BeamStrainLoad           8 //Modificado LCPT.
 #define PATTERN_TAG_PBowlLoading	  10
 #define LOAD_TAG_TrussStrainLoad          20 //Añadido LCPT.
-#define LOAD_TAG_Combinacion              30 //Añadido LCPT.
+#define LOAD_TAG_LoadCombination              30 //Añadido LCPT.
 #define LOAD_TAG_ShellUniformLoad         40 //Añadido LCPT.
 #define LOAD_TAG_BidimStrainLoad          50 //Añadido LCPT.
 #define LOAD_TAG_ShellStrainLoad          60 //Añadido LCPT.

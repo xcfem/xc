@@ -566,12 +566,12 @@ XC::InteractionDiagram *XC::MaterialLoader::calcInteractionDiagram(const std::st
               }
           }
         else
-          std::cerr << "El material: '" << cod_scc
-                    << "' no corresponde a una sección de fibras." << std::endl;
+          std::cerr << "Material: '" << cod_scc
+                    << "' is not a fiber section material." << std::endl;
       }
     else
-      std::cerr << "No se encontró el material : '"
-                      << cod_scc << "' se ignora la entrada.\n";
+      std::cerr << "Material: '"
+                      << cod_scc << "' not found. Ignored.\n";
     return diagI;     
   }
 
@@ -599,12 +599,12 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMy(const st
               }
           }
         else
-          std::cerr << "El material: '" << cod_scc
-                    << "' no corresponde a una sección de fibras." << std::endl;
+          std::cerr << "Material: '" << cod_scc
+                    << "' is not a fiber section material." << std::endl;
       }
     else
-      std::cerr << "No se encontró el material : '"
-                      << cod_scc << "' se ignora la entrada.\n";
+      std::cerr << "Material : '"
+                      << cod_scc << "' not found. Ignored.\n";
     return diagI;     
   }
 
@@ -632,12 +632,12 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMz(const st
               }
           }
         else
-          std::cerr << "El material: '" << cod_scc
-                    << "' no corresponde a una sección de fibras." << std::endl;
+          std::cerr << "Material: '" << cod_scc
+                    << "' is not a fiber section material." << std::endl;
       }
     else
-      std::cerr << "No se encontró el material : '"
-                      << cod_scc << "' se ignora la entrada.\n";
+      std::cerr << "Material : '"
+                      << cod_scc << "' not found. Ignored.\n";
     return diagI;     
   }
 

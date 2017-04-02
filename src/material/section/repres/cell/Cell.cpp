@@ -71,7 +71,7 @@ const XC::Matrix &XC::Cell::getVertCoords(void) const
 void XC::Cell::setVertCoords(const Matrix &vertexCoords)
   { vertCoord = vertexCoords; }
 
-//! @brief Calcula la posición del centroide de la celda.
+//! @brief Computes the centroid position.
 void XC::Cell::calcCentroidPosition(void)
   {
     const size_t sz= vertCoord.noRows();

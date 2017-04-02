@@ -125,8 +125,9 @@ void XC::NodeLockers::borraNodeLocker(const std::string &nmb)
         node_lockers.erase(i);
       }
     else
-      std::cerr << "NodeLockers::borraNodeLocker; no se encontró: '"
-                << nmb << "'\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; node locker: '"
+                << nmb << "' not found.\n";
   }
 
 void XC::NodeLockers::removeFromDomain(const std::string &cod)
@@ -136,8 +137,9 @@ void XC::NodeLockers::removeFromDomain(const std::string &cod)
       getDomain()->removeNodeLocker(p);
     else
       {
-        std::cerr << "removeFromDomain: no se encontró la hipótesis: " 
-                  << cod << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; load case: '" 
+                  << cod << "' not found." << std::endl;
       }
   }
 

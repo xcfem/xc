@@ -261,9 +261,9 @@ void XC::SectionAggregator::setSection(const std::string &sectionName)
         alloc_storage_ptrs();
       }
     else
-      std::cerr << "XC::SectionAggregator::setSection "
-                << "no se encontró el material de código: '" << sectionName
-                << "'.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; material identified by: '" << sectionName
+                << "' not found.\n";
   }
 
 void XC::SectionAggregator::setAddtions(const std::vector<std::string> &responseCodes,const std::vector<std::string> &nmbMats)
@@ -272,7 +272,8 @@ void XC::SectionAggregator::setAddtions(const std::vector<std::string> &response
     theAdditions.putMatCodes(codes);
     const size_t n= nmbMats.size();
     if(n!= responseCodes.size())
-      std::cerr << "Error in number of materials; index number: " << responseCodes.size()
+      std::cerr << "Error in number of materials; index number: "
+		<< responseCodes.size()
                 << " number of materials: " << n << std::endl;
     for(size_t i= 0;i<n;i++)
       {

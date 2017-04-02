@@ -127,19 +127,22 @@ void XC::ZeroLength::setMaterial(const int &dir,const std::string &nmbMat)
             if(tmp)
               theMaterial1d.push_back(dir,tmp);
             else
-	      std::cerr << "ZeroLengthMaterials::setMaterial; "
-                        << "el material de código: '" << nmbMat
-                        << "' no corresponde a un material uniaxial.\n";
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+                        << "material identified by: '" << nmbMat
+                        << "' is not an uniaxial material.\n";
           }
         else
-          std::cerr << "ZeroLengthMaterials::setMaterial; "
-                    << "no se encontró el material de código: '" << nmbMat
-                    << "'.\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+                    << "material identified by: '" << nmbMat
+                    << "' not found.\n";
         if(theMaterial1d.size() > 0 )
           setTran1d(elemType, theMaterial1d.size());
       }
     else
-      { std::cerr << "ZeroLength::set_materials; the pointer al preprocesador es nulo." << std::endl; }
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; null pointer to preprocessor." << std::endl;
+      }
   }
 
 void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<std::string> &nmbMats)
@@ -161,20 +164,23 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
                 if(tmp)
                   theMaterial1d.push_back(dirs[i],tmp);
                 else
-	      std::cerr << "ZeroLengthMaterials::setMaterials; "
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
                             << "el material de código: '" << nmbMats[i]
                             << "' no corresponde a un material uniaxial.\n";
               }
             else
-              std::cerr << "ZeroLengthMaterials::setMaterials; "
-            << "no se encontró el material de código: '" << nmbMats[i]
-            << "'.\n";
+              std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+                        << "material identified by : '" << nmbMats[i]
+                        << "' not found.\n";
           }
         if(theMaterial1d.size() > 0 )
           setTran1d(elemType, theMaterial1d.size());
       }
     else
-      { std::cerr << "ZeroLength::set_materials; the pointer al preprocesador es nulo." << std::endl; }
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; null pointer to preprocessor." << std::endl;
+      }
   }
 
 //! @brief Virtual constructor.

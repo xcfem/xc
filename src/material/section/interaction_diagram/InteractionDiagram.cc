@@ -181,8 +181,8 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_interseccion(const Pos3d &p) con
     const Triedro3d *i= BuscaPtrTriedro(p);
     if(!i)
       {
-	std::cerr << "InteractionDiagram::get_interseccion: no se encontró un triedro que contuviera a:"
-                  << p << " cuadrante: " << p.Cuadrante() << std::endl;
+	std::cerr << "InteractionDiagram::get_interseccion: bounding trihedron for: "
+                  << p << " not found. Quadrant: " << p.Cuadrante() << std::endl;
       }
     else
       {
@@ -273,9 +273,10 @@ double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
           }
         else
           {
-	    std::cerr << "InteractionDiagram::FactorCapacidad; no se encontró la intersección para la terna: "
-                      << esf_d << std::endl;
-            retval= d/rMin; //No ha encontrado la intersección.
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	              << "; intersection for the triplet: "
+                      << esf_d << " not found." << std::endl;
+            retval= d/rMin; //Intersection not found.
           }
       }
     return retval;

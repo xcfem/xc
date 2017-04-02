@@ -294,8 +294,6 @@ int XC::UniaxialMaterial::recvData(const CommParameters &cp)
   }
 
 //! @brief Recibe a pointer a material through the channel being passed as parameter.
-//! @param posClassTag: Posición de ID del identificador de la clase del material.
-//! @param posDbTag: Posición de ID en la que se guarda el dbTag.
 XC::UniaxialMaterial *XC::receiveUniaxialMaterialPtr(UniaxialMaterial *ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)
   {
     UniaxialMaterial *retval= nullptr;

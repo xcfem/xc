@@ -34,7 +34,7 @@
 #include "domain/load/groundMotion/InterpolatedGroundMotion.h"
 
 
-#include "domain/load/pattern/Combinacion.h"
+#include "domain/load/pattern/LoadCombination.h"
 
 
 
@@ -42,7 +42,7 @@
 
 //! @brief Default constructor.
 XC::LoadLoader::LoadLoader(Preprocessor *owr)
-  : Loader(owr), lpatterns(this), tag_lp(0), combinaciones(this) {}
+  : Loader(owr), lpatterns(this), tag_lp(0), combinations(this) {}
 
 //! @brief Agrega el load pattern al domain.
 void XC::LoadLoader::addToDomain(const std::string &lp_code)
@@ -56,7 +56,7 @@ void XC::LoadLoader::addToDomain(const std::string &lp_code)
                     << lp_code << "'\n";
       }
     else
-      combinaciones.addToDomain(lp_code);
+      combinations.addToDomain(lp_code);
   }
 
 //! @brief Elimina el load pattern del domain.
@@ -66,19 +66,19 @@ void XC::LoadLoader::removeFromDomain(const std::string &lp_code)
     if(lp)
       getDomain()->removeLoadPattern(lp);
     else
-      combinaciones.removeFromDomain(lp_code);
+      combinations.removeFromDomain(lp_code);
   }
 
 void XC::LoadLoader::removeAllFromDomain(void)
   {
-    combinaciones.removeAllFromDomain();
+    combinations.removeAllFromDomain();
     lpatterns.removeAllFromDomain();
   }
 
 //! @brief Borra todos los objetos.
 void XC::LoadLoader::clearAll(void)
   {
-    combinaciones.clear();
+    combinations.clear();
     lpatterns.clear();
   }
 
@@ -100,7 +100,7 @@ int XC::LoadLoader::sendData(CommParameters &cp)
     int res= sendMap(ground_motions,cp,getDbTagData(),CommMetaData(0));
     res+= cp.sendMovable(lpatterns,getDbTagData(),CommMetaData(1));
     res+= cp.sendInt(tag_lp,getDbTagData(),CommMetaData(2));
-    res+= cp.sendMovable(combinaciones,getDbTagData(),CommMetaData(3));
+    res+= cp.sendMovable(combinations,getDbTagData(),CommMetaData(3));
     return res;
   }
 
@@ -110,7 +110,7 @@ int XC::LoadLoader::recvData(const CommParameters &cp)
     int res= receiveMap(ground_motions,cp,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewGroundMotion);
     res+= cp.receiveMovable(lpatterns,getDbTagData(),CommMetaData(1));
     res+= cp.receiveInt(tag_lp,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveMovable(combinaciones,getDbTagData(),CommMetaData(3));
+    res+= cp.receiveMovable(combinations,getDbTagData(),CommMetaData(3));
     return res;
   }
 

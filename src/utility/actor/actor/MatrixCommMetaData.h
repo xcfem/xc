@@ -44,16 +44,16 @@ class MatrixCommMetaData: public ArrayCommMetaData
   public:
     MatrixCommMetaData(const int &pos,const int &flag,const size_t &nf,const size_t &nc);
 
-    //! @brief Return the posición del número de filas.
+    //! @brief Return a const reference to the the index of the row number.
     inline const size_t &getPosNumFilas(void) const
       { return posSz; }
-    //! @brief Return the posición del número de columnas.
+    //! @brief Return a const reference to the the index of the column number.
     inline const size_t &getPosNumCols(void) const
       { return posNc; }
-    //! @brief Returns the número de filas.
+    //! @brief Return a reference to the the index of the row number.
     inline const size_t &getNumFilas(void) const
       { return posSz; }
-    //! @brief Returns the número de columnas.
+    //! @brief Return a reference to the the index of the column number.
     inline const size_t &getNumCols(void) const
       { return posNc; }
   };

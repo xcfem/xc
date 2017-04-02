@@ -82,12 +82,13 @@ XC::PenaltySFreedom_FE::PenaltySFreedom_FE(int tag, Domain &theDomain, SFreedom_
     theNode = theDomain.getNode(theSP->getNodeTag());
     if(!theNode)
       {
-	std::cerr << "Error en PenaltySFreedom_FE::PenaltySFreedom_FE() - no se encontró el nodo de tag: ";
-	std::cerr << theSP->getNodeTag() << " en el domain.\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; node identified by: "
+	          << theSP->getNodeTag() << " not found.\n";
 	exit(-1);
       }
 
-    // set the XC::DOF_Group tags
+    // set the DOF_Group tags
     DOF_Group *dofGrpPtr = theNode->getDOF_GroupPtr();
     if(dofGrpPtr != 0) 
       myDOF_Groups(0) = dofGrpPtr->getTag();	    

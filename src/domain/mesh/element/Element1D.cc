@@ -461,7 +461,7 @@ XC::CrdTransf *XC::Element1D::checkCoordTransf(void)
   {
     CrdTransf *ct= getCoordTransf();
     if(!ct)
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
                 << "; coordinate transformation not defined."
                 << std::endl;
     return ct;
@@ -472,7 +472,7 @@ const XC::CrdTransf *XC::Element1D::checkCoordTransf(void) const
   {
     const CrdTransf *ct= getCoordTransf();
     if(!ct)
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
                 << "; coordinate transformation not defined."
                 << std::endl;
     return ct;

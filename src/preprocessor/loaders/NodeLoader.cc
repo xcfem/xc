@@ -90,8 +90,9 @@ XC::Node *XC::NodeLoader::duplicateNode(const int &tagNodoOrg)
     Node *retval= nullptr;
     Node *ptr_nodo_org= getDomain()->getNode(tagNodoOrg);
     if(!ptr_nodo_org)
-      std::cerr << "Preprocessor::nuevoNodo; no se encontró el nodo de tag:"
-                << tagNodoOrg << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; node identified by:"
+                << tagNodoOrg << " not found." << std::endl;
     else
       {
         const int ngdl= ptr_nodo_org->getNumberDOF();    
@@ -157,15 +158,15 @@ XC::Node *XC::NodeLoader::nuevoNodo(const double &x)
     return retval;
   }
 
-//! @brief Crea un nodo en la posición being passed as parameter.
+//! @brief Creates a nede at the position being passed as parameter.
 XC::Node *XC::NodeLoader::nuevoNodo(const Pos3d &p)
   { return nuevoNodo(p.x(),p.y(),p.z()); }
 
-//! @brief Crea un nodo en la posición being passed as parameter.
+//! @brief Creates a nede at the position being passed as parameter.
 XC::Node *XC::NodeLoader::nuevoNodo(const Pos2d &p)
   { return nuevoNodo(p.x(),p.y()); }
 
-//! @brief Crea un nodo en la posición being passed as parameter.
+//! @brief Creates a nede at the position being passed as parameter.
 XC::Node *XC::NodeLoader::nuevoNodo(const Vector &coo)
   {
     int sz= coo.Size();
@@ -177,7 +178,7 @@ XC::Node *XC::NodeLoader::nuevoNodo(const Vector &coo)
     else if(sz>=3)
       retval= nuevoNodo(coo[0],coo[1],coo[2]);
     else
-      std::cerr << "NodeLoader::newNodeIDV; vector empty."
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; vector empty."
                 << std::endl;
     return retval;
   }

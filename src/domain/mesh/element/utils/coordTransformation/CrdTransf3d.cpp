@@ -166,23 +166,23 @@ void XC::CrdTransf3d::calc_Wu(const double *ug,double *ul,double *Wu) const
 //! Sean dx1,dy1,dz1,gx1,gy1,gz1 los desplazamientos y giros del nodo dorsal y dx2,dy2,dz2,gx2,gy2,gz2
 //! los del nodo frontal expresados en coordenadas locales. This function gets the following displacements
 //! on the ul parameter and returns the following magnitudes on the ub vector:
-//! -ub(0)= dx2-dx1: Elongación sufrida por el elemento.
-//! -ub(1)= (dy1-dy2)/L+gz1: Giro en torno a z del nodo 1.
-//! -ub(2)= (dy1-dy2)/L+gz2: Giro en torno a z del nodo 2.
-//! -ub(3)= (dz2-dz1)/L+gy1: Giro en torno a y del nodo 1.
-//! -ub(4)= (dz2-dz1)/L+gy2: Giro en torno a y del nodo 2.
-//! -ub(5)= dx2-dx1: Torsión sufrida por el elemento.
+//! -ub(0)= dx2-dx1: element elongation.
+//! -ub(1)= (dy1-dy2)/L+gz1: rotation of node 1 about z axis.
+//! -ub(2)= (dy1-dy2)/L+gz2: rotation of node 2 about z axis.
+//! -ub(3)= (dz2-dz1)/L+gy1: rotation of node 1 about y axis.
+//! -ub(4)= (dz2-dz1)/L+gy2: rotation of node 2 about y axis.
+//! -ub(5)= dx2-dx1: element torsion.
 const XC::Vector &XC::CrdTransf3d::calc_ub(const double *ul,Vector &ub) const
   {
     const double oneOverL = 1.0/L;
-    ub(0) = ul[6]-ul[0]; //Incremento de longitud.
-    double tmp= oneOverL*(ul[1]-ul[7]); //Giro del elemento en torno a z.
-    ub(1) = ul[5] + tmp; //Giro del nodo 1 en torno a z.
-    ub(2) = ul[11] + tmp; //Giro del nodo 2 en torno a z.
-    tmp = oneOverL*(ul[8]-ul[2]); //Giro del elemento en torno a y.
-    ub(3) = ul[4] + tmp; //Giro del nodo 1 en torno a y.
-    ub(4) = ul[10] + tmp; //Giro del nodo 2 en torno a y.
-    ub(5) = ul[9] - ul[3]; //Giro torsión.
+    ub(0) = ul[6]-ul[0]; //Length increment.
+    double tmp= oneOverL*(ul[1]-ul[7]); //Rotation of the element about z axis.
+    ub(1) = ul[5] + tmp; //Rotation of node 1 about z axis.
+    ub(2) = ul[11] + tmp; //Rotation of node 2 about z axis.
+    tmp = oneOverL*(ul[8]-ul[2]); //Rotation of element about y axis.
+    ub(3) = ul[4] + tmp; //Rotation of node 1 about y axis.
+    ub(4) = ul[10] + tmp; //Rotation of node 2 about y axis.
+    ub(5) = ul[9] - ul[3]; //Twist.
 
     return ub;
   }
@@ -279,28 +279,31 @@ int XC::CrdTransf3d::initialize(Node *nodeIPointer, Node *nodeJPointer)
     return 0;
   }
 
-//! @brief Returns the vector unitario i de los ejes locales del elemento.
+//! @brief Returns the $\vec{i}$ unit vector of the local axis
+//! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CrdTransf3d::getI(void) const
   {
     calculaEjesLocales();
     return vectorI;
   }
 
-//! @brief Returns the vector unitario j de los ejes locales del elemento.
+//! @brief Returns the $\vec{j}$ unit vector of the local axis
+//! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CrdTransf3d::getJ(void) const
   {
     calculaEjesLocales();
     return vectorJ;
   }
 
-//! @brief Returns the vector unitario k de los ejes locales del elemento.
+//! @brief Returns the $\vec{k}$ unit vector of the local axis
+//! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CrdTransf3d::getK(void) const
   {
     calculaEjesLocales();
     return vectorK;
   }
 
-//| @brief Returns the vectores dirección de los ejes locales.
+//| @brief Returns of the directions vectors of the local axis.
 int XC::CrdTransf3d::getLocalAxes(Vector &XAxis, Vector &YAxis, Vector &ZAxis) const
   {
     int retval= calculaEjesLocales();
@@ -329,7 +332,7 @@ XC::Matrix XC::CrdTransf3d::getLocalAxes(bool initialGeometry) const
   }
 
 
-//! @brief Return the posición del nodo I.
+//! @brief Return the posición of node I.
 Pos3d XC::CrdTransf3d::getPosNodeI(void) const
   {
     Pos3d retval= nodeIPtr->getPosFinal3d();
@@ -339,7 +342,7 @@ Pos3d XC::CrdTransf3d::getPosNodeI(void) const
     return retval;
   }
 
-//! @brief Return the posición del nodo J.
+//! @brief Return the position of node J.
 Pos3d XC::CrdTransf3d::getPosNodeJ(void) const
   {
     Pos3d retval= nodeJPtr->getPosFinal3d();

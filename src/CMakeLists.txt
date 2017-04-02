@@ -204,7 +204,7 @@ SET(domain_pattern_load_patterns domain/load/pattern/load_patterns/EQBasePattern
 
 SET(domain_pattern_time_series_integ domain/load/pattern/time_series_integrator/TrapezoidalTimeSeriesIntegrator)
 
-SET(domain_pattern domain/load/pattern/NodeLocker domain/load/pattern/NodeLockerIter domain/load/pattern/LoadPattern domain/load/pattern/MapLoadPatterns domain/load/pattern/Combinacion domain/load/pattern/GrupoCombinaciones domain/load/pattern/LoadPatternIter domain/load/pattern/TimeSeries domain/load/pattern/TimeSeriesIntegrator ${domain_pattern_time_series_integ} ${domain_pattern_time_series} ${domain_pattern_load_patterns})
+SET(domain_pattern domain/load/pattern/NodeLocker domain/load/pattern/NodeLockerIter domain/load/pattern/LoadPattern domain/load/pattern/MapLoadPatterns domain/load/pattern/LoadCombination domain/load/pattern/LoadCombinationGroup domain/load/pattern/LoadPatternIter domain/load/pattern/TimeSeries domain/load/pattern/TimeSeriesIntegrator ${domain_pattern_time_series_integ} ${domain_pattern_time_series} ${domain_pattern_load_patterns})
 
 SET(domain_ground_motion domain/load/groundMotion/MotionHistory domain/load/groundMotion/GroundMotion domain/load/groundMotion/DqGroundMotions domain/load/groundMotion/GroundMotionRecord domain/load/groundMotion/InterpolatedGroundMotion)
 

@@ -95,7 +95,7 @@ void XC::LineaBase::SetVertice(const size_t &i,const size_t &id_punto)
   {
     SetVertice(i,BuscaPnt(id_punto));
     if(!GetVertice(i))
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
 	        << "; point: '" << id_punto << "' not found \n";
   }
 

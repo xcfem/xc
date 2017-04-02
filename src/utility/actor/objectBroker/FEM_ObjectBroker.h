@@ -80,7 +80,7 @@ class NodalLoad;
 class ElementalLoad;
 class ElementEdgeLoad;
 class LoadPattern;
-class Combinacion;
+class LoadCombination;
 class TimeSeries;
 class TimeSeriesIntegrator;
 
@@ -178,7 +178,7 @@ class FEM_ObjectBroker
     virtual ConvergenceTest *getNewConvergenceTest(EntCmd *owr,int classTag);
     virtual NodeLocker *getNewNodeLocker(int classTag);
     virtual LoadPattern *getNewLoadPattern(int classTag);
-    virtual Combinacion *getNewCombinacion(int classTag);
+    virtual LoadCombination *getNewLoadCombination(int classTag);
     virtual GroundMotion *getNewGroundMotion(int classTag);
     virtual TimeSeries  *getNewTimeSeries(int classTag);
     virtual TimeSeriesIntegrator  *getNewTimeSeriesIntegrator(int classTag);

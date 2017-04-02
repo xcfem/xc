@@ -76,7 +76,7 @@ bool XC::EntMdlrBase::check_preprocessor(void) const
       return true;
     else
       {
-        std::cerr << nombre_clase() << __FUNCTION__
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << ": preprocessor not set for object: '"
                   << GetNombre() << "'."
                   << std::endl;

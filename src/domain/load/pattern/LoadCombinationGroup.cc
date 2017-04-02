@@ -24,12 +24,12 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//GrupoCombinaciones.cc
+//LoadCombinationGroup.cc
 
-#include "GrupoCombinaciones.h"
+#include "LoadCombinationGroup.h"
 #include "preprocessor/loaders/LoadLoader.h"
 
-#include "domain/load/pattern/Combinacion.h"
+#include "domain/load/pattern/LoadCombination.h"
 #include "domain/domain/Domain.h"
 
 
@@ -39,32 +39,34 @@
 
 
 //! @brief Default constructor.
-XC::GrupoCombinaciones::GrupoCombinaciones(LoadLoader *owr)
+XC::LoadCombinationGroup::LoadCombinationGroup(LoadLoader *owr)
   : LoadLoaderMember(owr) {}
 
 
-//! @brief Returns a pointer to the la combinación cuyo nombre being passed as parameter.
-XC::Combinacion *XC::GrupoCombinaciones::busca_combinacion(const std::string &comb_code)
+//! @brief Returns a pointer to the load combination identified by the
+//! name being passed as parameter.
+XC::LoadCombination *XC::LoadCombinationGroup::find_combination(const std::string &comb_code)
   {
-    Combinacion *retval= nullptr;
+    LoadCombination *retval= nullptr;
     const_iterator icomb= find(comb_code);
     if(icomb!=end())
       retval= icomb->second;
     return retval;
   }
 
-//! @brief Returns a pointer to the la combinación cuyo nombre being passed as parameter.
-const XC::Combinacion *XC::GrupoCombinaciones::buscaCombinacion(const std::string &comb_code) const
+//! @brief Returns a pointer to the load combination identified by the
+//! name being passed as parameter.
+const XC::LoadCombination *XC::LoadCombinationGroup::buscaLoadCombination(const std::string &comb_code) const
   {
-    Combinacion *retval= nullptr;
+    LoadCombination *retval= nullptr;
     const_iterator icomb= find(comb_code);
     if(icomb!=end())
       retval= icomb->second;
     return retval;
   }
 
-//! @brief Returns the nombre de la combinación pointed by the parameter.
-const std::string &XC::GrupoCombinaciones::getNombreCombinacion(const Combinacion *ptr) const
+//! @brief Returns the name of the load combination pointed by the parameter.
+const std::string &XC::LoadCombinationGroup::getNombreLoadCombination(const LoadCombination *ptr) const
   {
     static std::string retval;
     retval= "";
@@ -77,68 +79,71 @@ const std::string &XC::GrupoCombinaciones::getNombreCombinacion(const Combinacio
     return retval;
   }
 
-//! @brief Elimina la combinación del domain.
-void XC::GrupoCombinaciones::remove(const std::string &comb_code)
+//! @brief Removes the combination from the domain.
+void XC::LoadCombinationGroup::remove(const std::string &comb_code)
   {
-    Combinacion *comb= nullptr;
+    LoadCombination *comb= nullptr;
     iterator icomb= find(comb_code);
     if(icomb!=end())
       comb= icomb->second;
     if(comb)
       {
-        getDomain()->removeCombinacion(comb);
+        getDomain()->removeLoadCombination(comb);
         delete comb;
         (*icomb).second= nullptr;
         erase(icomb);
       }
     else
-      std::cerr << "GrupoCombinaciones::remove: no se encontró la combinación: " 
-                << comb_code << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; load combination: '" 
+                << comb_code << "' not found." << std::endl;
   }
 
-//! @brief Agrega la combinación al domain.
-void XC::GrupoCombinaciones::addToDomain(const std::string &comb_code)
+//! @brief Adds the combination to the domain.
+void XC::LoadCombinationGroup::addToDomain(const std::string &comb_code)
   {
-    Combinacion *comb= busca_combinacion(comb_code);
+    LoadCombination *comb= find_combination(comb_code);
     if(comb)
-      getDomain()->addCombinacion(comb);
+      getDomain()->addLoadCombination(comb);
     else
-      std::cerr << "GrupoCombinaciones::addToDomain: no se encontró la combinación: " 
-                << comb_code << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; load combination: '" 
+                << comb_code << "' not found." << std::endl;
   }
 
-//! @brief Elimina la combinación del domain.
-void XC::GrupoCombinaciones::removeFromDomain(const std::string &comb_code)
+//! @brief Removes the combination from the domain.
+void XC::LoadCombinationGroup::removeFromDomain(const std::string &comb_code)
   {
-    Combinacion *comb= busca_combinacion(comb_code);
+    LoadCombination *comb= find_combination(comb_code);
     if(comb)
-      getDomain()->removeCombinacion(comb);
+      getDomain()->removeLoadCombination(comb);
     else
-      std::cerr << "GrupoCombinaciones::removeFromDomain: no se encontró la combinación: " 
-                << comb_code << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; load combination: '" 
+                << comb_code << "' not found." << std::endl;
   }
 
-//! @brief Elimina las combinaciones del domain.
-void XC::GrupoCombinaciones::removeAllFromDomain(void)
+//! @brief Remomves all the load combinations from the domain.
+void XC::LoadCombinationGroup::removeAllFromDomain(void)
   {
     Domain *dom= getDomain();
     for(iterator i= begin();i!=end();i++)
-      dom->removeCombinacion((*i).second);
+      dom->removeLoadCombination((*i).second);
   }
 
-XC::Combinacion *XC::GrupoCombinaciones::newLoadCombination(const std::string &code,const std::string &descomp)
+XC::LoadCombination *XC::LoadCombinationGroup::newLoadCombination(const std::string &code,const std::string &descomp)
   {
     int tag_comb= getLoadLoader()->getTagLP();
-    Combinacion *comb= busca_combinacion(code);
-    if(comb) //La combinación ya existe.
+    LoadCombination *comb= find_combination(code);
+    if(comb) //Load combination already exists.
       {
-        std::cerr << "La combinación: " << code
-                  << " ya existe, se redefine." << std::endl;
+        std::cerr << "Load combination: " << code
+                  << " already exists, redefined." << std::endl;
         comb->setDescomp(descomp);
       }
-    else //La combinación es nueva.
+    else //New combination
       {
-        comb= new Combinacion(this,code,tag_comb,getLoadLoader());
+        comb= new LoadCombination(this,code,tag_comb,getLoadLoader());
         getLoadLoader()->setTagLP(tag_comb+1);
         if(comb)
           {
@@ -151,7 +156,7 @@ XC::Combinacion *XC::GrupoCombinaciones::newLoadCombination(const std::string &c
   }
 
 //! @brief Returns container's keys.
-boost::python::list XC::GrupoCombinaciones::getKeys(void) const
+boost::python::list XC::LoadCombinationGroup::getKeys(void) const
   {
     boost::python::list retval;
     for(const_iterator i=begin();i!=end();i++)
@@ -159,8 +164,8 @@ boost::python::list XC::GrupoCombinaciones::getKeys(void) const
     return retval;
   }
 
-//! @brief Borra todas las combinaciones.
-void XC::GrupoCombinaciones::clear(void)
+//! @brief Deletes all the combinations.
+void XC::LoadCombinationGroup::clear(void)
   {
     removeAllFromDomain();
     for(iterator i= begin();i!=end();i++)
@@ -168,30 +173,30 @@ void XC::GrupoCombinaciones::clear(void)
         delete (*i).second;
         (*i).second= nullptr;
       }
-    map_combinaciones::clear();
+    LoadCombinationMap::clear();
   }
 
 //! @brief Destructor.
-XC::GrupoCombinaciones::~GrupoCombinaciones(void)
+XC::LoadCombinationGroup::~LoadCombinationGroup(void)
   { clear(); }
 
 //! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
-XC::DbTagData &XC::GrupoCombinaciones::getDbTagData(void) const
+XC::DbTagData &XC::LoadCombinationGroup::getDbTagData(void) const
   {
     static DbTagData retval(1);
     return retval;
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::GrupoCombinaciones::sendData(CommParameters &cp)
+int XC::LoadCombinationGroup::sendData(CommParameters &cp)
   { return sendMap(*this,cp,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::GrupoCombinaciones::recvData(const CommParameters &cp)
+int XC::LoadCombinationGroup::recvData(const CommParameters &cp)
   {
     clear();
-    int res= receiveMap(*this,cp,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewCombinacion);
+    int res= receiveMap(*this,cp,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewLoadCombination);
     for(iterator i= begin();i!= end();i++)
       {
         (*i).second->set_owner(this);
@@ -202,20 +207,20 @@ int XC::GrupoCombinaciones::recvData(const CommParameters &cp)
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::GrupoCombinaciones::sendSelf(CommParameters &cp)
+int XC::LoadCombinationGroup::sendSelf(CommParameters &cp)
   {
     inicComm(1);
     int res= sendData(cp);
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "GrupoCombinaciones::sendSelf() - failed to send data.\n";    
+      std::cerr << "LoadCombinationGroup::sendSelf() - failed to send data.\n";    
     return res;
   }
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::GrupoCombinaciones::recvSelf(const CommParameters &cp)
+int XC::LoadCombinationGroup::recvSelf(const CommParameters &cp)
   {
     int res= 0;
     //If it's not empty we suppose that current definitions are OK.
@@ -225,14 +230,14 @@ int XC::GrupoCombinaciones::recvSelf(const CommParameters &cp)
         const int dataTag= getDbTag();
         res= cp.receiveIdData(getDbTagData(),dataTag);
         if(res<0)
-          std::cerr << "GrupoCombinaciones::recvSelf() - data could not be received.\n" ;
+          std::cerr << "LoadCombinationGroup::recvSelf() - data could not be received.\n" ;
         else
           res+= recvData(cp);
       }
     return res;
   }
 
-std::deque<std::string> XC::GrupoCombinaciones::getListaNombres(void) const
+std::deque<std::string> XC::LoadCombinationGroup::getListaNombres(void) const
   {
     std::deque<std::string> retval;
     for(const_iterator i= begin();i!= end();i++)
@@ -243,13 +248,13 @@ std::deque<std::string> XC::GrupoCombinaciones::getListaNombres(void) const
 //! @brief Search for the nearest combination to the one
 //! being passed as parameter from those that have their
 //! factors equal or lesser than those of the parameter (c).
-XC::GrupoCombinaciones::const_iterator XC::GrupoCombinaciones::buscaCombPrevia(const Combinacion &c) const
+XC::LoadCombinationGroup::const_iterator XC::LoadCombinationGroup::buscaCombPrevia(const LoadCombination &c) const
   {
     const_iterator retval= end();
-    Combinacion dif, tmpDif;
+    LoadCombination dif, tmpDif;
     for(const_iterator i= begin();i!= end();i++)
       {
-        const Combinacion *tmp= (*i).second;
+        const LoadCombination *tmp= (*i).second;
         if(c.dominaA(*tmp))
           {
             if(retval==end())
@@ -271,16 +276,16 @@ XC::GrupoCombinaciones::const_iterator XC::GrupoCombinaciones::buscaCombPrevia(c
     return retval;
   }
 
-const XC::Combinacion *XC::GrupoCombinaciones::getPtrCombPrevia(const Combinacion &c) const
+const XC::LoadCombination *XC::LoadCombinationGroup::getPtrCombPrevia(const LoadCombination &c) const
   {
-    const Combinacion *retval= nullptr;
+    const LoadCombination *retval= nullptr;
     const_iterator i= buscaCombPrevia(c);
     if(i!=end())
       retval= (*i).second;
     return retval;
   }
 
-XC::GrupoCombinaciones::const_iterator XC::GrupoCombinaciones::buscaCombPrevia(const std::string &nmb) const
+XC::LoadCombinationGroup::const_iterator XC::LoadCombinationGroup::buscaCombPrevia(const std::string &nmb) const
   {
     const_iterator retval= end();
     const_iterator i= find(nmb);
@@ -289,7 +294,7 @@ XC::GrupoCombinaciones::const_iterator XC::GrupoCombinaciones::buscaCombPrevia(c
     return retval;
   }
 
-const std::string XC::GrupoCombinaciones::getNombreCombPrevia(const std::string &nmb) const
+const std::string XC::LoadCombinationGroup::getNombreCombPrevia(const std::string &nmb) const
   {
     std::string retval= "";
     const_iterator i= buscaCombPrevia(nmb);
@@ -298,7 +303,7 @@ const std::string XC::GrupoCombinaciones::getNombreCombPrevia(const std::string 
     return retval;
   }
 
-int XC::GrupoCombinaciones::getTagCombPrevia(const std::string &nmb) const
+int XC::LoadCombinationGroup::getTagCombPrevia(const std::string &nmb) const
   {
     int retval= -1;
     const_iterator i= buscaCombPrevia(nmb);

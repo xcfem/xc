@@ -398,7 +398,8 @@ void XC::Set::sel_puntos_lista(const ID &tags)
                 if(ipt)
                   puntos.push_back(ipt);
                 else
-		  std::cerr << "No se encontró el punto de tag: " << tags(i) << std::endl;
+		  std::cerr << "Point identified by tag: "
+			    << tags(i) << " not found." << std::endl;
               }
           }
         else
@@ -422,7 +423,8 @@ void XC::Set::sel_lineas_lista(const ID &tags)
                 if(iedge)
                   lineas.push_back(iedge);
                 else
-		  std::cerr << "No se encontró la linea de tag: " << tags(i) << std::endl;
+		  std::cerr << "Line identified by tag: "
+			    << tags(i) << " not found." << std::endl;
               }
           }
         else

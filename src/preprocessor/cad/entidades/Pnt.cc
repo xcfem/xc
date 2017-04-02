@@ -66,7 +66,7 @@ void XC::Pnt::borra_linea(Edge *l) const
     if(i!= lineas_pt.end()) //La ha encontrado.
       lineas_pt.erase(i);
   }
-//! Returns the vector de posición del punto.
+//! Returns the position vector of the point.
 Vector3d XC::Pnt::VectorPos(void) const
   { return p.VectorPos();  }
 
@@ -137,7 +137,8 @@ bool XC::Pnt::Toca(const Body &b) const
     return false;
   }
 
-//! @brief Returns the cuadrado de la distancia a la posición being passed as parameter.
+//! @brief Returns the squared distance to the position
+//! being passed as parameter.
 double XC::Pnt::DistanciaA2(const Pos3d &pt) const
   { return dist2(p,pt);  }
 
@@ -175,7 +176,7 @@ int XC::Pnt::getTagNode(void) const
     if(nod)
       retval= nod->getTag();
     else
-      std::cerr << "Pnt::getTagNode; the point: '" << GetNombre()
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; the point: '" << GetNombre()
                 << "' has not a node (is not meshed)." << std::endl;
     return retval;
   }
@@ -186,7 +187,7 @@ XC::Node *XC::Pnt::getNode(void)
   {
     Node *nod= GetNodo();
     if(!nod)
-      std::cerr << "Pnt::getTagNode; the point: '" << GetNombre()
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; the point: '" << GetNombre()
                 << "' has not a node (is not meshed)." << std::endl;
     return nod;
   }
@@ -216,18 +217,20 @@ void XC::Pnt::add_to_sets(std::set<SetBase *> &sets)
       }
   }
 
-//! @brief Desplaza la posición del punto (sólo esta previsto que se use desde Set).
+//! @brief Moves the point (used by XC::Set only).
+//! @param desplaz: displacement vector.
 void XC::Pnt::Mueve(const Vector3d &desplaz)
   {
     p+=desplaz;
     return;
   }
 
-//! @brief Aplica al punto la transformación cuyo índice is being passed as parameter.
+//! @brief Applies to the point the transformation being passed as parameter.
 void XC::Pnt::Transforma(const TrfGeom &trf)
   { p= trf.Transforma(p); }
 
-//! @brief Aplica al punto la transformación cuyo índice is being passed as parameter.
+//! @brief Applies to the point the transformation
+//! identified by the index being passed as parameter.
 void XC::Pnt::Transforma(const size_t &indice_trf)
   {
     TrfGeom *trf= get_preprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);

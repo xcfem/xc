@@ -666,7 +666,7 @@ XC::DomainDecompAlgo *XC::SoluMethod::getDomainDecompSolutionAlgorithmPtr(void)
   {
     DomainDecompAlgo *ptr= dynamic_cast<DomainDecompAlgo *>(theSolnAlgo);
     if(!ptr)
-      std::cerr << "SoluMethod; el algortimo no sirve para descomposición de domain." << std::endl;
+      std::cerr << "SoluMethod; the algorithm can't make domain decomposition." << std::endl;
     return ptr;
   }
 

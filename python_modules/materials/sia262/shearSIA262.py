@@ -91,7 +91,7 @@ class ShearController(lsc.LimitStateControllerBase):
        XXX Falta tener en cuenta la dirección de las barras de refuerzo
        a cortante.
     '''
-    print "Postproceso combinación: ",nmbComb
+    print "Postprocesing combination: ",nmbComb
     # XXX Ignoramos la deformación por torsión.
 
     for e in elements:

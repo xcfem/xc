@@ -167,7 +167,7 @@ const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadLocal(const V
                         << " Load ignored." << std::endl; 
           }
         else
-          std::cerr << nombre_clase() << __FUNCTION__
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
                     << "; a vector of dimension 3 was expected." << std::endl;
       }
     else
@@ -187,7 +187,7 @@ const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadGlobal(const 
         retval= vector3dUniformLoadLocal(vTrf);
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
 	        << "; a vector of dimension 3 was expected." << std::endl;
     return retval;
   }

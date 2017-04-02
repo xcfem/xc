@@ -50,9 +50,9 @@ class SisRefScc: public EntGeomSection
     SisRefScc(const std::string &nombre= "",GeomSection *m= nullptr)
       : EntGeomSection(nombre,m) {}
 
-    //! @brief Returns the vector unitario en la dirección del eje que se
-    //! pasa as parameter expresado en el sistema global 
-    //! para la posición being passed as parameter.
+    //! @brief Returns the i-th axis unit vector 
+    //! expressed in global coordinates 
+    //! for the position being passed as parameter.
     virtual Vector2d GetVDirEje(const size_t &,const Pos2d &) const= 0;
     Vector2d GetI(const Pos2d &) const;
     Vector2d GetJ(const Pos2d &) const;

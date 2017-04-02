@@ -268,12 +268,14 @@ int XC::DriftRecorder::initialize(void)
 
         Node *nodeI = theDomain->getNode(ni);
         if(!nodeI)
-	  std::cerr << "DriftRecorder::initialize(); no se encontró el nodo: "
-                    << ni << std::endl;
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; node identified by: "
+                    << ni << " not found." << std::endl;
         Node *nodeJ = theDomain->getNode(nj);
         if(!nodeJ)
-	  std::cerr << "DriftRecorder::initialize(); no se encontró el nodo: "
-                    << nj << std::endl;
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; node identified by: "
+                    << nj << " not found." << std::endl;
 
         if(nodeI && nodeJ )
           {

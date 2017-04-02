@@ -70,7 +70,7 @@ XC::HingeRadauTwoBeamIntegration3d::HingeRadauTwoBeamIntegration3d(double e,
 XC::HingeRadauTwoBeamIntegration3d::HingeRadauTwoBeamIntegration3d(const CrossSectionProperties3d &cts,const double &lpi,const double &lpj)
   : HingeBeamIntegration3d(BEAM_INTEGRATION_TAG_HingeRadauTwo3d,cts,lpi,lpj) {}
 
-//! @brief Return the posición de las secciones en el vector xi.
+//! @brief Returns the abcissae of the sections in the xi vector.
 void XC::HingeRadauTwoBeamIntegration3d::getSectionLocations(int numSections, double L, double *xi) const
   {
     const double two3oneOverL = (2.0/3.0)/L;

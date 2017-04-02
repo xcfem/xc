@@ -39,7 +39,7 @@ namespace XC {
 class BrokedPtrCommMetaData: public PtrCommMetaData
   {
   private:
-    int posClassTag; //!< Posición de data en la que se guarda el classTag.
+    int posClassTag; //!< Index or the classTag in "data".
   public:
     BrokedPtrCommMetaData(const int &posDb,const int &posFlag,const int &posClassTag);
 

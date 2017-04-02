@@ -105,10 +105,10 @@ class_<XC::ConstraintLoader, bases<XC::Loader>, boost::noncopyable >("Constraint
    ;
 
 XC::MapLoadPatterns &(XC::LoadLoader::*getLoadPatternsRef)(void)= &XC::LoadLoader::getLoadPatterns;
-XC::GrupoCombinaciones &(XC::LoadLoader::*getCombinacionesRef)(void)= &XC::LoadLoader::getCombinaciones;
+XC::LoadCombinationGroup &(XC::LoadLoader::*getLoadCombinationsRef)(void)= &XC::LoadLoader::getLoadCombinations;
 class_<XC::LoadLoader, bases<XC::Loader>, boost::noncopyable >("LoadLoader", no_init)
   .add_property("getLoadPatterns", make_function( getLoadPatternsRef, return_internal_reference<>() ))
-  .add_property("getLoadCombinations", make_function( getCombinacionesRef, return_internal_reference<>() ))
+  .add_property("getLoadCombinations", make_function( getLoadCombinationsRef, return_internal_reference<>() ))
   .def("addToDomain", &XC::LoadLoader::addToDomain,return_internal_reference<>(),"Add combination to the domain.")
   .def("removeFromDomain", &XC::LoadLoader::removeFromDomain,return_internal_reference<>(),"Eliminates combination from domain.")
   .def("removeAllFromDomain", &XC::LoadLoader::removeAllFromDomain,return_internal_reference<>(),"Eliminates all loads cases from domain.")

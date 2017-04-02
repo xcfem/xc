@@ -118,7 +118,7 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
 
 def procesResultVerifFISSIA262(preprocessor,nmbComb,limitStress):
   # Comprobación de las secciones de hormigón frente a fisuración.
-  print "Postproceso combinación: ",nmbComb,"\n"
+  print "Postprocesing combination: ",nmbComb,"\n"
 
   secHAParamsFis= CrackControlSIA262(limitStress)
   elements= preprocessor.getSets.getSet("total").getElements
@@ -126,7 +126,7 @@ def procesResultVerifFISSIA262(preprocessor,nmbComb,limitStress):
 
 def procesResultVerifFISSIA262PlanB(preprocessor,nmbComb,limitStress):
   # Comprobación de las secciones de hormigón frente a fisuración estimando la tensión en la reinforcement.
-  print "Postproceso combinación: ",nmbComb,"\n"
+  print "Postprocesing combination: ",nmbComb,"\n"
 
   secHAParamsFis= CrackControlSIA262PlanB(limitStress)
   elements= preprocessor.getSets.getSet("total").getElements

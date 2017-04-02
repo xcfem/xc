@@ -227,7 +227,7 @@ XC::Vector XC::EntMdlr::getSimpsonWeights(const std::string &ijk,const std::stri
     return retval;
   }
 
-//! @brief Creates a nodos en la posición being passed as parameter.
+//! @brief Creates a node at the position being passed as parameter.
 XC::Node *XC::EntMdlr::crea_nodo(const Pos3d &pos,size_t i,size_t j, size_t k)
   {
     Node *retval= get_preprocessor()->getNodeLoader().nuevoNodo(pos);
@@ -235,7 +235,7 @@ XC::Node *XC::EntMdlr::crea_nodo(const Pos3d &pos,size_t i,size_t j, size_t k)
     return retval;
   }
 
-//! @brief Crea los nodos en las posiciones being passed as parameters.
+//! @brief Creates nodes at the positions being passed as parameters.
 void XC::EntMdlr::crea_nodos(const TritrizPos3d &posiciones)
   {
     const size_t capas= posiciones.GetCapas();
@@ -305,11 +305,11 @@ void XC::EntMdlr::setGenMesh(bool m)
 const bool &XC::EntMdlr::getGenMesh(void) const
   { return doGenMesh; }
 
-//! @brief Creates a punto en la posición being passed as parameter.
+//! @brief Creates a point at the position being passed as parameter.
 XC::Pnt *XC::EntMdlr::crea_punto(const Pos3d &pos)
   { return get_preprocessor()->getCad().getPuntos().Nuevo(pos); }
 
-//! @brief Crea los puntos en las posiciones being passed as parameters.
+//! @brief Creates points at the positions being passed as parameters.
 void XC::EntMdlr::crea_puntos(const MatrizPos3d &posiciones)
   {
     if(verborrea>4)
@@ -354,7 +354,8 @@ XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(size_t capa,size_t f,const RangoIndice 
 XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(const RangoTritriz &rango,const std::string &nmb)
   { return GetVarRefFilaK(rango.GetRangoCapas().Inf(),rango.GetRangoFilas().Inf(),rango.GetRangoCols(),nmb); }
 
-//! @brief Returns the cuadrado de la distancia a la posición being passed as parameter.
+//! @brief Returns the squared distance to
+//! the position being passed as parameter.
 double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
   {
     std::cerr << nombre_clase()
@@ -362,11 +363,11 @@ double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
     return 0.0;
   }
 
-//! @brief Return the distancia a la posición being passed as parameter.
+//! @brief Returns the distance to the position being passed as parameter.
 double XC::EntMdlr::DistanciaA(const Pos3d &pt) const
   { return sqrt(DistanciaA2(pt)); }
 
-//! @brief Impone desplazamiento nulo en los nodos de this set.
+//! @brief Fixes the nodes of the set.
 void XC::EntMdlr::fix(const SFreedom_Constraint &spc)
   { nodos.fix(spc); }
 

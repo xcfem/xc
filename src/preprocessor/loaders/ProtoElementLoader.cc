@@ -133,7 +133,7 @@ XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void) const
       retval= iInteg->second;
     else
       if(verborrea>0)
-        std::cerr << nombre_clase() << __FUNCTION__
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << "; integrator named: '" 
                   << nmb_integ << "' not found.\n";
     return retval;
@@ -156,7 +156,7 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
       retval= itrf->second;
     else
       if(verborrea>0)
-        std::cerr << nombre_clase() << __FUNCTION__
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << "; coordinate transformation named: '" 
                   << nmb_transf << "' not found.\n";
     return retval;

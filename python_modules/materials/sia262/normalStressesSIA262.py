@@ -24,7 +24,7 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
     Parameters:
       elements:    elements to check
     '''
-    #print "Postproceso combinación: ",nmbComb
+    #print "Postprocessing combination: ",nmbComb
     for e in elements:
       e.getResistingForce()
       TagTmp= e.tag
@@ -59,9 +59,8 @@ class UniaxialBendingNormalStressController(lsc.LimitStateControllerBase):
     Parameters:
       elements:    elements to check
     '''
-    #print "Postproceso combinación: ",nmbComb
+    #print "Postprocessing combination: ",nmbComb
     for e in elements:
-      #print "Postproceso combinación: ",nmbComb
       e.getResistingForce()
       TagTmp= e.tag
       scc= e.getSection()

@@ -85,8 +85,9 @@ MapValores XC::IntegrationPointsCoords::getMapValores(const size_t &i,const std:
         else if(nmb == "Z")
           retval["Z"]= ExprAlgebra(Z(i));
         else
-	  std::cerr << "IntegrationPointsCoords::getMapValores; no se encontró la variable: '"
-                    << nmb << "'\n";
+	  std::cerr << "IntegrationPointsCoords" << "::" << __FUNCTION__
+	            << " variable: '"
+                    << nmb << "' not found.\n";
       }
     return retval;
   }

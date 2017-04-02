@@ -21,10 +21,10 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-//Exposición de los nodos.
+//Python exposition of nodes.
 #include "domain/mesh/node/python_interface.tcc"
 
-//Exposición de los elementos.
+//Python exposition of the elements.
 #include "domain/mesh/element/python_interface.tcc"
 
 class_<XC::MeshComponentContainer, bases<EntCmd>, boost::noncopyable >("MeshComponentContainer", no_init)

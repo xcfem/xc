@@ -28,7 +28,6 @@ from materials import typical_materials
 from materials import paramRectangularSection
 from postprocess import ControlVars as cv
 from solution import predefined_solutions
-from solution import resuelve_combinacion
 from miscUtils import LogMessages as lmsg
 from materials import CrossSectionInternalForces as csif
 from collections import defaultdict
@@ -204,7 +203,7 @@ class PhantomModel(object):
     for key in combs.getKeys():
       comb= combs[key]
       #print "Resolviendo para acción: ",key
-      resuelve_combinacion.resuelveComb(self.preprocessor,key,analysis,1)
+      predefined_solutions.resuelveComb(self.preprocessor,key,analysis,1)
       controller.check(elements,key)
 
   def write(self,controller,outputFileName):

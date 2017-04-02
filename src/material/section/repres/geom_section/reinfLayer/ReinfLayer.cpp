@@ -148,7 +148,7 @@ void XC::ReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bo
         retval.push_back(SingleBar(**i));
   }
 
-//! @brief Returns the barras contenidas total o parcialmente en el semiplano.
+//! @brief Returns the barras contenidas total o parcialmente en el half-plane.
 void XC::ReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();

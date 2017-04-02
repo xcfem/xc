@@ -31,11 +31,11 @@
 
 #include "Loader.h"
 #include "domain/load/pattern/MapLoadPatterns.h"
-#include "domain/load/pattern/GrupoCombinaciones.h"
+#include "domain/load/pattern/LoadCombinationGroup.h"
 
 namespace XC {
 class GroundMotion;
-class Combinacion;
+class LoadCombination;
 
 //!  \ingroup Ldrs
 //! 
@@ -49,10 +49,10 @@ class LoadLoader: public Loader
     MapLoadPatterns lpatterns; //!< Load patterns container.
     int tag_lp; //!< Default identifier for load patterns or load combinations.
 
-    GrupoCombinaciones combinaciones; //!< Load combination container.
+    LoadCombinationGroup combinations; //!< Load combination container.
 
   protected:
-    friend class Combinacion;
+    friend class LoadCombination;
     friend class Domain;
  
     DbTagData &getDbTagData(void) const;
@@ -76,10 +76,10 @@ class LoadLoader: public Loader
       { return lpatterns; }
     const MapLoadPatterns &getLoadPatterns(void) const
       { return lpatterns; }
-    GrupoCombinaciones &getCombinaciones(void)
-      { return combinaciones; }
-    const GrupoCombinaciones &getCombinaciones(void) const
-      { return combinaciones; }
+    LoadCombinationGroup &getLoadCombinations(void)
+      { return combinations; }
+    const LoadCombinationGroup &getLoadCombinations(void) const
+      { return combinations; }
 
     void clearAll(void);
 

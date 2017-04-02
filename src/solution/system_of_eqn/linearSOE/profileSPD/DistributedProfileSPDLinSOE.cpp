@@ -89,7 +89,7 @@ int XC::DistributedProfileSPDLinSOE::setSize(Graph &theGraph)
         CommParameters cp(0,*theChannels[0]);
         // receive my iDiagLoad
         ID iLoc(size);
-        cp.receiveID(iLoc,DistributedBandLinSOE::getDbTagData(),CommMetaData(0));//XXX asignar posición.
+        cp.receiveID(iLoc,DistributedBandLinSOE::getDbTagData(),CommMetaData(0));//XXX Assign position.
 
         Vertex *vertex;
         VertexIter &theSubVertices = theGraph.getVertices();
@@ -354,7 +354,7 @@ int XC::DistributedProfileSPDLinSOE::solve(void)
 	        int localSize = sizeLocal(j);
                 workArea.resize(localSize);
 	        Vector vectA(workArea);    
-	        cp.receiveVector(vectA,CommMetaData(1));//XXX asignar posición.
+	        cp.receiveVector(vectA,CommMetaData(1));//XXX Assign position.
 		int loc = 0;
 	        for(int i=0; i<localMap.Size(); i++)
                   {
@@ -404,7 +404,7 @@ const XC::Vector &XC::DistributedProfileSPDLinSOE::getB(void) const
       {
         CommParameters cp(0,*theChannels[0]);
         // send B & recv merged B
-        cp.sendVector(myVectB,CommMetaData(0));//XXX asignar posición.
+        cp.sendVector(myVectB,CommMetaData(0));//XXX Assign position.
         this_no_const->receiveB(cp);
       }
     else

@@ -156,8 +156,8 @@ double XC::BeamIntegration::getIntegral(const ExprAlgebra &expr,int nIP,const Cr
   }
 
 //! @brief Envía a pointer a material through the channel being passed as parameter.
-//! @param posClassTag: Posición de ID del identificador de la clase del material.
-//! @param posDbTag: Posición de ID en la que se guarda el dbTag.
+//! @param posClassTag: index of the class tags in the data vector
+//! @param posDbTag: index of the dbTag in the data vector
 int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTag,DbTagData &dt,CommParameters &cp)
   {
     int res= 0;
@@ -173,8 +173,8 @@ int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTa
   }
 
 //! @brief Recibe a pointer a material through the channel being passed as parameter.
-//! @param posClassTag: Posición de ID del identificador de la clase del material.
-//! @param posDbTag: Posición de ID en la que se guarda el dbTag.
+//! @param posClassTag: index of the class tags in the data vector
+//! @param posDbTag: index of the dbTag in the data vector
 XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posClassTag, int posDbTag,DbTagData &dt,const CommParameters &cp)
   {
     BeamIntegration *retval= nullptr;
