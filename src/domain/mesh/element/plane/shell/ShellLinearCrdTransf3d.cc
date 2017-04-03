@@ -54,7 +54,7 @@ XC::ShellLinearCrdTransf3d::ShellLinearCrdTransf3d(const NodePtrs &theNodes)
 XC::ShellCrdTransf3dBase *XC::ShellLinearCrdTransf3d::getCopy(void) const
   { return new ShellLinearCrdTransf3d(*this); }
 
-//! @brief Establece la transformación a partir de las posiciones de los nodos.
+//! @brief Sets the transformation from the positions of the nodes.
 int XC::ShellLinearCrdTransf3d::initialize(const NodePtrs &ptrs)
   {
     ShellCrdTransf3dBase::initialize(ptrs);
@@ -123,21 +123,21 @@ int XC::ShellLinearCrdTransf3d::initialize(const NodePtrs &ptrs)
     return 0;
   }
 
-//! @brief Actualiza la transformación a partir de las posiciones de los nodos.
+//! @brief Updates the transformation.
 int XC::ShellLinearCrdTransf3d::update(void)
   { return 0; }
 
-//! @brief Consuma la coordinate transformation de acuerdo con el estado actual.
+//! @brief Commits state (normally after convergence is achieved).
 int XC::ShellLinearCrdTransf3d::commitState(void)
   { return 0; }
 
 
-//! @brief Returns the estado de la transformación al último commit.
+//! @brief Returns to the las commited state.
 int XC::ShellLinearCrdTransf3d::revertToLastCommit(void)
   { return 0; }
 
 
-//! @brief Returns the estado de la transformación al inicial.
+//! @brief Returns to the initial state.
 int XC::ShellLinearCrdTransf3d::revertToStart(void)
   { return 0; }
 
@@ -153,7 +153,7 @@ XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialVel(const int &i) const
 XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialAccel(const int &i) const
   { return (*theNodes)[i]->getTrialAccel(); }
 
-//! @brief Transformación a globales del load vector.
+//! @brief Returs the load vector in global coordinates.
 const XC::Vector &XC::ShellLinearCrdTransf3d::local_to_global_resisting_force(const Vector &pl) const
   {
     // transform resisting forces  from local to global coordinates
@@ -164,7 +164,7 @@ const XC::Vector &XC::ShellLinearCrdTransf3d::local_to_global_resisting_force(co
     return pg;
   }
 
-//! @brief Transformación a globales de la stiffness matrix (NO SE USA).
+//! @brief Returns the stiffenes matrix in global coordinates.
 const XC::Matrix &XC::ShellLinearCrdTransf3d::local_to_global_stiff_matrix(const Matrix &kl) const
   {
     static Matrix kg(24,24);

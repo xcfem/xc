@@ -24,22 +24,32 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Reflexion.cc
+//Translation.h
 
-#include "Reflexion.h"
-#include "preprocessor/cad/Cad.h"
-#include "preprocessor/Preprocessor.h"
-#include "preprocessor/cad/entidades/Pnt.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d2/Plano3d.h"
-#include "domain/mesh/node/Node.h"
-#include "domain/mesh/element/Element.h"
+#ifndef TRANSLATION_H
+#define TRANSLATION_H
 
-//! @brief Aplica la transformación a los elementos of the set.
-Pos3d XC::Reflexion::Transforma(const Pos3d &p) const
-  { return rf.Transforma(p); }
+#include "TrfGeom.h"
+#include "xc_utils/src/geom/trf/Translation3d.h"
 
-//! @brief Aplica la transformación a los elementos of the set.
-Vector3d XC::Reflexion::Transforma(const Vector3d &v) const
-  { return rf.Transforma(v); }
+namespace XC {
+
+//! \ingroup CadTrf
+//!
+//! \brief Translation transformation.
+class Translation: public TrfGeom
+  {
+    Translation3d tr; //!< Traslation.
+  protected:
+
+  public:
+    //! @brief Constructor.
+    Translation(Preprocessor *m)
+      : TrfGeom(m), tr() {}
+    void setVector(const Vector3d &v);
+    virtual Pos3d Transforma(const Pos3d &p) const;
+    virtual Vector3d Transforma(const Vector3d &v) const;
+  };
+} //end of XC namespace
+
+#endif

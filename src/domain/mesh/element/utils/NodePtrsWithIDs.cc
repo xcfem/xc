@@ -58,7 +58,7 @@ XC::NodePtrs &XC::NodePtrsWithIDs::getNodePtrs(void)
 const XC::ID &XC::NodePtrsWithIDs::getExternalNodes(void) const
   { return connectedExternalNodes; }
 
-//! @brief Returns the tag del nodo cuyo índice being passed as parameter.
+//! @brief Returns the tag of the i-th node.
 int XC::NodePtrsWithIDs::getTagNode(const int &i) const
   { return connectedExternalNodes(i); }
 
@@ -232,7 +232,7 @@ bool XC::NodePtrsWithIDs::checkNumDOF(const size_t &numDOF, const size_t &elemTa
     return retval;
   }
 
-//! @brief Muestra información sobre el elemento.
+//! @brief Printing...
 void XC::NodePtrsWithIDs::Print(std::ostream &os) const
   { 
     os << "Connected Nodes: " << connectedExternalNodes;

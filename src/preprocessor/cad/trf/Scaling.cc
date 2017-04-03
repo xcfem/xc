@@ -24,11 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Rotacion.cc
+//Scaling.cc
 
-#include "Rotacion.h"
+#include "Scaling.h"
 #include "preprocessor/cad/Cad.h"
-#include "preprocessor/Preprocessor.h"
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
@@ -36,10 +35,10 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-//! @brief Aplica la transformación a los elementos of the set.
-Pos3d XC::Rotacion::Transforma(const Pos3d &p) const
-  { return rr.Transforma(p); }
+//! @brief Applies the transformation to the elements of the set.
+Pos3d XC::Scaling::Transforma(const Pos3d &p) const
+  { return ee.Transforma(p); }
 
-//! @brief Aplica la transformación a los elementos of the set.
-Vector3d XC::Rotacion::Transforma(const Vector3d &v) const
-  { return rr.Transforma(v); }
+//! @brief Applies the transformation to the elements of the set.
+Vector3d XC::Scaling::Transforma(const Vector3d &v) const
+  { return ee.Transforma(v); }

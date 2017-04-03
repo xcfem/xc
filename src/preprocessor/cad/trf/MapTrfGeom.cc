@@ -36,10 +36,10 @@
 #include "preprocessor/set_mgmt/Set.h"
 
 
-#include "Rotacion.h"
-#include "Reflexion.h"
-#include "Escalado.h"
-#include "Traslacion.h"
+#include "Rotation.h"
+#include "Reflection.h"
+#include "Scaling.h"
+#include "Translation.h"
 
 //! @brief Constructor.
 XC::MapTrfGeom::MapTrfGeom(Cad *cad)
@@ -50,13 +50,13 @@ XC::TrfGeom *XC::MapTrfGeom::newTransformation(const std::string &type)
   {
     TrfGeom *retval= nullptr;
     if(type == "rotation") //Crea una nueva rotación.
-      retval= Nueva<Rotacion>();
+      retval= Nueva<Rotation>();
     else if(type == "reflection") //Crea una nueva reflexión.
-      retval= Nueva<Reflexion>();
-    else if(type == "scaling") //Crea un nuevo escalado.
-      retval= Nueva<Escalado>();
-    else if(type == "translation") //Crea una nueva traslacion.
-      retval= Nueva<Traslacion>();
+      retval= Nueva<Reflection>();
+    else if(type == "scaling") //Crea un nuevo scaling.
+      retval= Nueva<Scaling>();
+    else if(type == "translation") //Crea una nueva translation.
+      retval= Nueva<Translation>();
     else
       std::cerr << "Transformation type: '" << type
                 << "' unknown." << std::endl;

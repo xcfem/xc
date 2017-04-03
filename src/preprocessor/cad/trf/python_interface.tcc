@@ -28,20 +28,20 @@ class_<XC::TrfGeom, bases<XC::EntMdlrBase>, boost::noncopyable >("TrfGeom", no_i
   .def("getTrfVector",getTrfVector)
   ;
 
-class_<XC::Traslacion, bases<XC::TrfGeom>, boost::noncopyable >("Traslacion", no_init)
-  .def("setVector",&XC::Traslacion::setVector)
+class_<XC::Translation, bases<XC::TrfGeom>, boost::noncopyable >("Translation", no_init)
+  .def("setVector",&XC::Translation::setVector)
   ;
 
-class_<XC::Escalado, bases<XC::TrfGeom>, boost::noncopyable >("Escalado", no_init)
-  .def("setScaleFactor",&XC::Escalado::setScaleFactor)
+class_<XC::Scaling, bases<XC::TrfGeom>, boost::noncopyable >("Scaling", no_init)
+  .def("setScaleFactor",&XC::Scaling::setScaleFactor)
   ;
 
-class_<XC::Reflexion, bases<XC::TrfGeom>, boost::noncopyable >("Reflexion", no_init)
-  .def("setPlane",&XC::Reflexion::setPlane)
+class_<XC::Reflection, bases<XC::TrfGeom>, boost::noncopyable >("Reflection", no_init)
+  .def("setPlane",&XC::Reflection::setPlane)
   ;
 
-class_<XC::Rotacion, bases<XC::TrfGeom>, boost::noncopyable >("Rotacion", no_init)
-  .def("setAxisAng",&XC::Rotacion::setAxisAng)
+class_<XC::Rotation, bases<XC::TrfGeom>, boost::noncopyable >("Rotation", no_init)
+  .def("setAxisAng",&XC::Rotation::setAxisAng)
   ;
 
 typedef XC::MapCadMember<XC::TrfGeom> MapCadTrfGeom;

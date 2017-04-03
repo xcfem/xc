@@ -24,32 +24,22 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Traslacion.h
+//Reflection.cc
 
-#ifndef TRASLACION_H
-#define TRASLACION_H
+#include "Reflection.h"
+#include "preprocessor/cad/Cad.h"
+#include "preprocessor/Preprocessor.h"
+#include "preprocessor/cad/entidades/Pnt.h"
+#include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "xc_utils/src/geom/d2/Plano3d.h"
+#include "domain/mesh/node/Node.h"
+#include "domain/mesh/element/Element.h"
 
-#include "TrfGeom.h"
-#include "xc_utils/src/geom/trf/Traslacion3d.h"
+//! @brief Applies the transformation to the elements of the set.
+Pos3d XC::Reflection::Transforma(const Pos3d &p) const
+  { return rf.Transforma(p); }
 
-namespace XC {
-
-//! \ingroup CadTrf
-//!
-//! \brief Aplica una transformación "traslación".
-class Traslacion: public TrfGeom
-  {
-    Traslacion3d tr; //!< Traslación.
-  protected:
-
-  public:
-    //! @brief Constructor.
-    Traslacion(Preprocessor *m)
-      : TrfGeom(m), tr() {}
-    void setVector(const Vector3d &v);
-    virtual Pos3d Transforma(const Pos3d &p) const;
-    virtual Vector3d Transforma(const Vector3d &v) const;
-  };
-} //end of XC namespace
-
-#endif
+//! @brief Applies the transformation to the elements of the set.
+Vector3d XC::Reflection::Transforma(const Vector3d &v) const
+  { return rf.Transforma(v); }

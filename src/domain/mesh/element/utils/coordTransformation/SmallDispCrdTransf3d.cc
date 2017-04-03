@@ -144,14 +144,15 @@ double  XC::SmallDispCrdTransf3d::getInitialLength(void) const
 double XC::SmallDispCrdTransf3d::getDeformedLength(void) const
   { return L; }
 
-//! @brief Returns the desplazamientos del elemento al que pertenece la transformación
-//! Returns the siguientes magnitudes en el vector ub (ver calc_ub):
-//! -ub(0)= dx2-dx1: Elongación sufrida por el elemento.
-//! -ub(1)= (dy1-dy2)/L+gz1: Giro en torno a z del nodo 1.
-//! -ub(2)= (dy1-dy2)/L+gz2: Giro en torno a z del nodo 2.
-//! -ub(3)= (dz2-dz1)/L+gy1: Giro en torno a y del nodo 1.
-//! -ub(4)= (dz2-dz1)/L+gy2: Giro en torno a y del nodo 2.
-//! -ub(5)= dx2-dx1: Torsión sufrida por el elemento.
+//! @brief Returns the displacements of the element to which the
+//! transformation belongs
+//! Returns the following quantities in ub vector (see calc_ub):
+//! -ub(0)= dx2-dx1: Elongation sufrida por el elemento.
+//! -ub(1)= (dy1-dy2)/L+gz1: Rotation about z axis of node 1.
+//! -ub(2)= (dy1-dy2)/L+gz2: Rotation about z axis of node 2.
+//! -ub(3)= (dz2-dz1)/L+gy1: Rotation about y axis of node 1.
+//! -ub(4)= (dz2-dz1)/L+gy2: Rotation about y axis of node 2.
+//! -ub(5)= dx2-dx1: Twist.
 const XC::Vector &XC::SmallDispCrdTransf3d::getBasicTrialDisp(void) const
   {
     // determine global displacements

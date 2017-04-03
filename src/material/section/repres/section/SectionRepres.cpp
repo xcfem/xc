@@ -105,7 +105,7 @@ void XC::SectionRepres::setGeom(const GeomSection *g)
 const XC::GeomSection *XC::SectionRepres::getGeom(void) const
   { return gmSecc; }
 
-//! @brief Imprime información sobre el objeto.
+//! @brief Printing...
 void XC::SectionRepres::Print(std::ostream &s, int flag)
   {
     s << "\nSection representation type: " << getType();

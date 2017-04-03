@@ -535,7 +535,7 @@ Pos3d XC::Node::getPosFinal3d(void) const
 
 //! @brief Extracts translational components from d vector.
 //! @param d: displacement (or velocity or acceleration) vector
-XC::Vector extrae_traslacion(const XC::Vector &d,const size_t &dim,const size_t numDOF)
+XC::Vector extract_translation(const XC::Vector &d,const size_t &dim,const size_t numDOF)
   {
     XC::Vector retval(3,0.0);
     if(dim==1)
@@ -568,7 +568,7 @@ XC::Vector extrae_traslacion(const XC::Vector &d,const size_t &dim,const size_t 
 
 //! @brief Extracts rotational components from d vector.
 //! @param d: displacement (or velocity or acceleration) vector
-XC::Vector extrae_rotacion(const XC::Vector &d,const size_t &dim,const size_t numDOF)
+XC::Vector extract_rotation(const XC::Vector &d,const size_t &dim,const size_t numDOF)
   {
     XC::Vector retval(3,0.0);
     if((dim==2) && (numDOF==3)) //RM 2D.
@@ -580,27 +580,27 @@ XC::Vector extrae_rotacion(const XC::Vector &d,const size_t &dim,const size_t nu
 
 //! @brief Returns the XYZ components of node displacement.
 XC::Vector XC::Node::getDispXYZ(void) const
-  { return extrae_traslacion(getDisp(),getDim(),numberDOF); }
+  { return extract_translation(getDisp(),getDim(),numberDOF); }
 
 //! @brief Returns the XYZ components of node rotation.
 XC::Vector XC::Node::getRotXYZ(void) const
-  { return extrae_rotacion(getDisp(),getDim(),numberDOF); }
+  { return extract_rotation(getDisp(),getDim(),numberDOF); }
 
 //! @brief Returns the XYZ components of the translational velocity of the node.
 XC::Vector XC::Node::getVelXYZ(void) const
-  { return extrae_traslacion(getVel(),getDim(),numberDOF); }
+  { return extract_translation(getVel(),getDim(),numberDOF); }
 
 //! @brief Returns the XYZ components of the angular velocity of the node.
 XC::Vector XC::Node::getOmegaXYZ(void) const
-  { return extrae_rotacion(getVel(),getDim(),numberDOF); }
+  { return extract_rotation(getVel(),getDim(),numberDOF); }
 
 //! @brief Returns the XYZ components of the translational acceleration of the node.
 XC::Vector XC::Node::getAccelXYZ(void) const
-  { return extrae_traslacion(getAccel(),getDim(),numberDOF); }
+  { return extract_translation(getAccel(),getDim(),numberDOF); }
 
 //! @brief Returns the XYZ components of the angular acceleration of the node.
 XC::Vector XC::Node::getAlphaXYZ(void) const
-  { return extrae_rotacion(getAccel(),getDim(),numberDOF); }
+  { return extract_rotation(getAccel(),getDim(),numberDOF); }
 
 //! @brief Returns the square of the distance from the node to the point
 //! being passed as parameter.

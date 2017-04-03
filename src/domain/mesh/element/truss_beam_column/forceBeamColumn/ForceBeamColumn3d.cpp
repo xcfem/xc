@@ -104,7 +104,8 @@ XC::ForceBeamColumn3d &XC::ForceBeamColumn3d::operator=(const ForceBeamColumn3d 
 //       alloc(*otro.beamIntegr);
 //     v0= otro.v0;
 //     maxSubdivisions= otro.maxSubdivisions;
-    std::cerr << "ForceBeamColumn3d: No se debe llamar al operador de asignación."
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; assignment operator must not be called."
               << std::endl;
     return *this;    
   }
@@ -212,7 +213,7 @@ int XC::ForceBeamColumn3d::commitState(void)
     return err;
   }
 
-//! @brief Returns the estado de la transformación al último commit.
+//! @brief Returns to the last commited state.
 int XC::ForceBeamColumn3d::revertToLastCommit(void)
   {
     int err;
@@ -247,7 +248,7 @@ int XC::ForceBeamColumn3d::revertToLastCommit(void)
     return err;
   }
 
-//! @brief Returns the estado de la transformación al inicial.
+//! @brief Returns to the initial state.
 int XC::ForceBeamColumn3d::revertToStart(void)
   {
     // revert the sections state to start
@@ -1031,7 +1032,7 @@ int XC::ForceBeamColumn3d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Return the matriz de flexibilidad de una sección.
+//! @brief Return the initial flexibility matrix.
 int XC::ForceBeamColumn3d::getInitialFlexibility(Matrix &fe) const
   {
     fe.Zero();

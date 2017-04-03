@@ -80,8 +80,8 @@ void XC::DqPtrsNode::agrega(const DqPtrsNode &otro)
       push_back(*i);
   }
 
-// //! @brief Agrega a ésta lista los elementos de la que se le being passed as parameter,
-// //! si cumplen la condición.
+// //! @brief Adds to this list the elements from the list being passed
+// //! as parameter, that fulfill the condition.
 // void XC::DqPtrsNode::agrega_cond(const DqPtrsNode &otro,const std::string &cond)
 //   {
 //     bool result= false;
@@ -138,7 +138,7 @@ void XC::DqPtrsNode::mueve(const Vector3d &desplaz)
     crea_arbol();
   }
 
-//! @brief Aplica la transformación a los elementos of the set.
+//! @brief Applies the transformation to the elements of the set.
 void XC::DqPtrsNode::transforma(const TrfGeom &trf)
   {
     //Transforma 

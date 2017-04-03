@@ -24,30 +24,28 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Reflexion.h
+//Reflection.h
 
-#ifndef REFLEXION_H
-#define REFLEXION_H
+#ifndef REFLECTION_H
+#define REFLECTION_H
 
 #include "TrfGeom.h"
-#include "xc_utils/src/geom/trf/Reflexion3d.h"
+#include "xc_utils/src/geom/trf/Reflection3d.h"
 
 namespace XC {
 
 //! \ingroup CadTrf
 //!
-//! \brief Aplica una transformación "reflexión".
-class Reflexion: public TrfGeom
+//! \brief Reflection transformation.
+class Reflection: public TrfGeom
   {
-    Reflexion3d rf; //!< Reflexion.
-  protected:
-
+    Reflection3d rf; //!< Reflection.
   public:
     //! @brief Constructor.
-    Reflexion(Preprocessor *m)
+    Reflection(Preprocessor *m)
       : TrfGeom(m), rf() {}
     void setPlane(const Plano3d &p)
-      { rf= Reflexion3d(p); }
+      { rf= Reflection3d(p); }
     virtual Pos3d Transforma(const Pos3d &p) const;
     virtual Vector3d Transforma(const Vector3d &v) const;
   };

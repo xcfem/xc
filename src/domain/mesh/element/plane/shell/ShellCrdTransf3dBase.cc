@@ -157,7 +157,7 @@ XC::ParticlePos3d XC::ShellCrdTransf3dBase::getNaturalCoordinates(const Pos3d &p
   }   
 
 
-//! @brief Return the matriz de la transformación.
+//! @brief Return the transformation matrix.
 XC::Matrix XC::ShellCrdTransf3dBase::getTrfMatrix(void) const
   {
     Matrix R(3,3);
@@ -168,7 +168,7 @@ XC::Matrix XC::ShellCrdTransf3dBase::getTrfMatrix(void) const
     return R;
   }
 
-//! @brief Transformación a globales de un vector.
+//! @brief Returns the vector in global coordinates.
 XC::Vector XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Vector &pl) const
   {
     Vector retval(24);
@@ -211,7 +211,7 @@ XC::Vector XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Vecto
     return retval;
   }
 
-//! @brief Transformación a globales de una matriz.
+//! @brief Returns the matrix in global coordinates.
 XC::Matrix XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Matrix &kl) const
   {
     static Matrix tmp(24,24);

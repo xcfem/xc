@@ -109,7 +109,7 @@ int XC::LinearCrdTransf3d::revertToStart(void)
 
 
 
-//! @brief Actualiza la transformación.
+//! @brief Updates the transformation.
 int XC::LinearCrdTransf3d::update(void)
   { return 0; }
 

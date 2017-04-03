@@ -24,31 +24,31 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Rotacion.h
+//Rotation.h
 
-#ifndef ROTACION_H
-#define ROTACION_H
+#ifndef ROTATION_H
+#define ROTATION_H
 
 #include "TrfGeom.h"
-#include "xc_utils/src/geom/trf/Rotacion3d.h"
+#include "xc_utils/src/geom/trf/Rotation3d.h"
 
 namespace XC {
 
 //! \ingroup CadTrf
 //!
-//! \brief Aplica una transformación "rotación".
-class Rotacion: public TrfGeom
+//! \brief Rotation transformation.
+class Rotation: public TrfGeom
   {
-    Rotacion3d rr; //!< Rotación.
+    Rotation3d rr; //!< Rotación.
   protected:
 
   public:
     //! @brief Constructor.
-    Rotacion(Preprocessor *m)
+    Rotation(Preprocessor *m)
       : TrfGeom(m), rr() {}
 
     void setAxisAng(const Recta3d &r,const double &ang)
-      { rr= Rotacion3d(r,ang); }
+      { rr= Rotation3d(r,ang); }
     virtual Pos3d Transforma(const Pos3d &p) const;
     virtual Vector3d Transforma(const Vector3d &v) const;
  };

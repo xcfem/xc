@@ -54,12 +54,12 @@ class MapTrfGeom: public MapCadMember<TrfGeom>
 
   };
 
-//! @brief Crea una nueva transformación geométrica.
+//! @brief Creates a new geometric transformation.
 template <class T>
 XC::TrfGeom *XC::MapTrfGeom::Nueva(void)
   {
     TrfGeom *retval= busca(getTag());
-    if(!retval) //La transformación es nueva.
+    if(!retval) //Doesn't already exist.
       {
         Preprocessor *preprocessor= getPreprocessor();
         retval= new T(preprocessor);

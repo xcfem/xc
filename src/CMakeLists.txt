@@ -325,7 +325,7 @@ SET(siseq_no solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinThreadSolver sol
 
 SET(unittest unittest/unittest)
 
-SET(preprocessor_cad_trf preprocessor/cad/trf/TrfGeom preprocessor/cad/trf/MapTrfGeom preprocessor/cad/trf/Rotacion preprocessor/cad/trf/Escalado preprocessor/cad/trf/Reflexion preprocessor/cad/trf/Traslacion)
+SET(preprocessor_cad_trf preprocessor/cad/trf/TrfGeom preprocessor/cad/trf/MapTrfGeom preprocessor/cad/trf/Rotation preprocessor/cad/trf/Scaling preprocessor/cad/trf/Reflection preprocessor/cad/trf/Translation)
 
 SET(preprocessor_cad_entidades preprocessor/cad/entidades/EntMdlr preprocessor/cad/entidades/Pnt preprocessor/cad/entidades/MapPuntos preprocessor/cad/entidades/Edge preprocessor/cad/entidades/LineaBase preprocessor/cad/entidades/Linea preprocessor/cad/entidades/LineaTramos preprocessor/cad/entidades/ArcoCircunf preprocessor/cad/entidades/CmbEdge preprocessor/cad/entidades/MapLineas preprocessor/cad/entidades/Face preprocessor/cad/entidades/QuadSurface preprocessor/cad/entidades/MapSurfaces preprocessor/cad/entidades/MapCuerpos preprocessor/cad/entidades/Body preprocessor/cad/entidades/Block preprocessor/cad/entidades/UniformGrid preprocessor/cad/entidades/MapUniformGrids)
 

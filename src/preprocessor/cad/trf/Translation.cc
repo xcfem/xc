@@ -24,33 +24,25 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Escalado.h
+//Translation.cc
 
-#ifndef ESCALADO_H
-#define ESCALADO_H
+#include "Translation.h"
+#include "preprocessor/cad/Cad.h"
+#include "preprocessor/Preprocessor.h"
+#include "preprocessor/cad/entidades/Pnt.h"
+#include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "xc_utils/src/geom/d2/Plano3d.h"
+#include "domain/mesh/node/Node.h"
+#include "domain/mesh/element/Element.h"
 
-#include "TrfGeom.h"
-#include "xc_utils/src/geom/trf/Escalado3d.h"
+void XC::Translation::setVector(const Vector3d &v)
+  { tr= Translation3d(v); }
 
-namespace XC {
+//! @brief Applies the transformation to the elements of the set.
+Pos3d XC::Translation::Transforma(const Pos3d &p) const
+  { return tr.Transforma(p); }
 
-//! @ingroup CadTrf
-//
-//! @brief Aplica una transformación "escala".
-class Escalado: public TrfGeom
-  {
-    Escalado3d ee; //!< Escalado.
-  protected:
-
-  public:
-    //! @brief Constructor.
-    Escalado(Preprocessor *m)
-      : TrfGeom(m), ee(1) {}
-    void setScaleFactor(const double &fe)
-      { ee= Escalado3d(fe); }
-    virtual Pos3d Transforma(const Pos3d &p) const;
-    virtual Vector3d Transforma(const Vector3d &v) const;
-  };
-} //end of XC namespace
-
-#endif
+//! @brief Applies the transformation to the elements of the set.
+Vector3d XC::Translation::Transforma(const Vector3d &v) const
+  { return tr.Transforma(v); }

@@ -96,8 +96,8 @@ void XC::Set::agrega_listas(const Set &otro)
     uniform_grids.agrega(otro.uniform_grids);
   }
 
-// //! @brief Agrega a this set los objetos of the set
-// //! being passed as parameter que cumplen la condición.
+// //! @brief Adds to this set the object from the set
+// //! being passed as parameter that fulfill the condition.
 // void XC::Set::agrega_listas_cond(const Set &otro,const std::string &cond)
 //   {
 //     SetMeshComp::agrega_listas_cond(otro,cond);
@@ -148,7 +148,7 @@ void XC::Set::mueve(const Vector3d &desplaz)
     SetMeshComp::mueve(desplaz);
   }
 
-//! @brief Aplica la transformación a los elementos of the set.
+//! @brief Applies the transformation to the elements of the set.
 void XC::Set::Transforma(const TrfGeom &trf)
   {
     for(lst_ptr_puntos::iterator i= puntos.begin();i!=puntos.end();i++)

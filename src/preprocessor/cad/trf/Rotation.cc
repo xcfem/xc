@@ -24,25 +24,22 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Traslacion.cc
+//Rotation.cc
 
-#include "Traslacion.h"
+#include "Rotation.h"
 #include "preprocessor/cad/Cad.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d2/Plano3d.h"
+#include "xc_utils/src/geom/d1/Recta3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-void XC::Traslacion::setVector(const Vector3d &v)
-  { tr= Traslacion3d(v); }
+//! @brief Applies the transformation to the elements of the set.
+Pos3d XC::Rotation::Transforma(const Pos3d &p) const
+  { return rr.Transforma(p); }
 
-//! @brief Aplica la transformación a los elementos of the set.
-Pos3d XC::Traslacion::Transforma(const Pos3d &p) const
-  { return tr.Transforma(p); }
-
-//! @brief Aplica la transformación a los elementos of the set.
-Vector3d XC::Traslacion::Transforma(const Vector3d &v) const
-  { return tr.Transforma(v); }
+//! @brief Applies the transformation to the elements of the set.
+Vector3d XC::Rotation::Transforma(const Vector3d &v) const
+  { return rr.Transforma(v); }
