@@ -61,8 +61,8 @@ XC::InteractionDiagram2d::InteractionDiagram2d(const Poligono2d &pts)
 XC::InteractionDiagram2d *XC::InteractionDiagram2d::clon(void) const
   { return new InteractionDiagram2d(*this); }
 
-//! @brief Return the intersección de la semirrecta que une el origen (0,0,0) y el
-//! el punto p con el diagrama de interacción.
+//! @brief Return the intersection of the half-line that links
+//! the origin (0,0,0) with p an the interaction diagram.
 Pos2d XC::InteractionDiagram2d::get_interseccion(const Pos2d &p) const
   {
     const Pos2d O= Pos2d(0.0,0.0);

@@ -82,7 +82,7 @@ XC::SectionForceDeformation *XC::ElasticPlateSection::getCopy(void) const
 
 
 
-//! @brief Return the resultante de las tensiones en la sección.
+//! @brief Return the cross-section stress resultant.
 const XC::Vector& XC::ElasticPlateSection::getStressResultant(void) const
   {
     const Vector &strain= getSectionDeformation();

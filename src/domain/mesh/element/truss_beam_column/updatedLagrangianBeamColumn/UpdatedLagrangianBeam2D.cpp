@@ -200,7 +200,7 @@ int XC::UpdatedLagrangianBeam2D::commitState()
         return success;
 }
 
-//! @brief Actualiza los valores de longitud y dirección del elemento.
+//! @brief Updates the values of element length and direction.
 void XC::UpdatedLagrangianBeam2D::updateState(void) const
   {
     // Update the direction cosines to the new trial state

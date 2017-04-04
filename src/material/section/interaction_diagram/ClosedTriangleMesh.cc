@@ -80,7 +80,7 @@ XC::ClosedTriangleMesh::ClosedTriangleMesh(const ClosedTriangleMesh &otro)
   : GeomObj3d(otro), MovableObject(otro), triedros(otro.triedros), tol(otro.tol), rMax(otro.rMax),rMin(otro.rMin)
   {}
 
-//! @brief Operador de asignación.
+//! @brief Assignment operator.
 XC::ClosedTriangleMesh &XC::ClosedTriangleMesh::operator=(const ClosedTriangleMesh &otro)
   {
     GeomObj3d::operator=(otro);
@@ -290,10 +290,10 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_interseccion(const Pos3d &p) con
     else
       {
         Triangulo3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
-        //Calculamos el plano que contiene al triangulo.
+        //Plane of the triangle.
         const Plano3d plano= triang.GetPlano();
         SemiRecta3d Op(O,p);
-        //Calculamos la intersección entre la semirrecta y dicho plano.
+        //Itersection of the half-line and the plane.
         lst_intersec= interseccion(plano,Op);
         if(lst_intersec.empty())
           {

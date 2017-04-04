@@ -119,7 +119,8 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord(const s
       }
     else
       {
-        std::cerr << "BeamColumnWithSectionFDTrf3d::getVDirStrongAxis; la sección: "
+        std::cerr << nombre_clase() << __FUNCTION__
+	          << "; section: "
                   << i << " doesn't returns principal axes." << std::endl;
       }
     return retval;
@@ -138,7 +139,8 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisLocalCoord(const siz
       }
     else
       {
-        std::cerr << "BeamColumnWithSectionFDTrf3d::getVDirWeakAxis; la sección: "
+        std::cerr << nombre_clase() << __FUNCTION__
+	          << "; section: "
                   << i << " doesn't returns principal axes." << std::endl;
         return retval;
       }

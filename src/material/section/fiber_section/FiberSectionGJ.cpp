@@ -89,7 +89,7 @@ void XC::FiberSectionGJ::setupFibers(void)
       fibras.updateKRCDG(*this,kr);
   }
 
-//! @brief Añade una fibra a la sección.
+//! @brief Adds a fiber to the section.
 XC::Fiber *XC::FiberSectionGJ::addFiber(Fiber &newFiber)
   { return fibras.addFiber(*this,newFiber,kr); }
 
@@ -120,14 +120,14 @@ const XC::ResponseId &XC::FiberSectionGJ::getType(void) const
 int XC::FiberSectionGJ::getOrder(void) const
   { return kr.dim(); }
 
-//! @brief Returns the estado de la sección al del último commit.
+//! @brief Returns to last commited state.
 int XC::FiberSectionGJ::revertToLastCommit(void)
   {
     FiberSection3dBase::revertToLastCommit();
     return fibras.revertToLastCommit(*this,kr);
   }
 
-//! @brief Return the sección a su estado inicial.
+//! @brief Return to the initial state.
 int XC::FiberSectionGJ::revertToStart(void)
   { return fibras.revertToStart(*this,kr); }
 

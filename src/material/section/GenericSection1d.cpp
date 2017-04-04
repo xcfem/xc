@@ -100,11 +100,13 @@ XC::GenericSection1d::GenericSection1d()
 XC::GenericSection1d::~GenericSection1d(void)
   { if (theModel) delete theModel; }
 
-//! @brief Asigna la initial strain (axial y curvaturas) de la sección.
+//! @brief Sets the cross-section initial strain
+//! (generalized: axial and bending).
 int XC::GenericSection1d::setInitialSectionDeformation(const Vector &def)
   { return theModel->setInitialStrain(def(0)); }
 
-//! @brief Asigna la trial strain (axial y curvaturas) de la sección.
+//! @brief Sets the cross-section trial strain
+//! (generalized: axial and bending).
 int XC::GenericSection1d::setTrialSectionDeformation(const Vector &def)
   { return theModel->setTrialStrain(def(0)); }
 
@@ -112,7 +114,8 @@ int XC::GenericSection1d::setTrialSectionDeformation(const Vector &def)
 void XC::GenericSection1d::zeroInitialSectionDeformation(void)
   { theModel->setInitialStrain(0.0); }
 
-//! @brief Return the initial strain (axial y curvaturas) de la sección.
+//! @brief Returns the cross-section initial strain
+//! (generalized: axial and bending).
 const XC::Vector &XC::GenericSection1d::getInitialSectionDeformation(void) const
   {
     static Vector e(1); // static for class-wide returns
@@ -128,7 +131,7 @@ const XC::Vector &XC::GenericSection1d::getSectionDeformation(void) const
     return e;
   }
 
-//! @brief Return the resultante del campo de tensiones sobre la sección.
+//! @brief Return the stress resultant over the section.
 const XC::Vector &XC::GenericSection1d::getStressResultant(void) const
   {
     s(0) = theModel->getStress();

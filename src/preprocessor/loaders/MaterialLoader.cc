@@ -491,7 +491,7 @@ XC::Material *XC::MaterialLoader::nuevoMaterial(const std::string &cmd,const std
 XC::GeomSection *XC::MaterialLoader::newSectionGeometry(const std::string &cod)
   {
     XC::GeomSection *retval= nullptr;
-    if(geom_secciones.find(cod)!=geom_secciones.end()) //La geometria de la sección existe.
+    if(geom_secciones.find(cod)!=geom_secciones.end()) //La geometria of the section existe.
       {
 	std::cerr << "MaterialLoader::newSectionGeometry; warning! section: '"
                       << cod << "' already exists. "<< '.' << std::endl;
@@ -512,7 +512,7 @@ XC::InteractionDiagram *XC::MaterialLoader::newInteractionDiagram(const std::str
     InteractionDiagram *retval= nullptr;
     if(diagramas_interaccion.find(cod_diag)!=diagramas_interaccion.end()) //El diagrama existe.
       {
-         std::clog << "MaterialLoader::newInteractionDiagram; ¡ojo! el diagrama de interacción de nombre: '"
+         std::clog << "MaterialLoader::newInteractionDiagram; ¡ojo! el interaction diagram de nombre: '"
                    << cod_diag << "' ya existe. " << std::endl;
          retval= diagramas_interaccion[cod_diag];
       }
@@ -530,7 +530,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::new2DInteractionDiagram(const std:
     InteractionDiagram2d *retval= nullptr;
     if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //El diagrama existe.
       {
-         std::clog << "MaterialLoader::new2DInteractionDiagram; ¡ojo! el diagrama de interacción de nombre: '"
+         std::clog << "MaterialLoader::new2DInteractionDiagram; ¡ojo! el interaction diagram de nombre: '"
                    << cod_diag << "' ya existe. " << std::endl;
          retval= diagramas_interaccion2d[cod_diag];
       }
@@ -555,7 +555,7 @@ XC::InteractionDiagram *XC::MaterialLoader::calcInteractionDiagram(const std::st
             const std::string cod_diag= "diagInt"+cod_scc;
             if(diagramas_interaccion.find(cod_diag)!=diagramas_interaccion.end()) //Diagram exists.
               {
-	        std::clog << "MaterialLoader::calcInteractionDiagram; ¡ojo! se redefine el diagrama de interacción de nombre: '"
+	        std::clog << "MaterialLoader::calcInteractionDiagram; ¡ojo! se redefine el interaction diagram de nombre: '"
                           << cod_diag << "'." << std::endl;
                 delete diagramas_interaccion[cod_diag];
               }
@@ -588,7 +588,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMy(const st
             const std::string cod_diag= "diagIntNMy"+cod_scc;
             if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //Diagram exists.
               {
-	        std::clog << "MaterialLoader::calcInteractionDiagramNMy; ¡ojo! se redefine el diagrama de interacción de nombre: '"
+	        std::clog << "MaterialLoader::calcInteractionDiagramNMy; ¡ojo! se redefine el interaction diagram de nombre: '"
                           << cod_diag << "'." << std::endl;
                 delete diagramas_interaccion2d[cod_diag];
               }
@@ -621,7 +621,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMz(const st
             const std::string cod_diag= "diagIntNMz"+cod_scc;
             if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //Diagram exists.
               {
-	        std::clog << "MaterialLoader::calcInteractionDiagramNMz; ¡ojo! se redefine el diagrama de interacción de nombre: '"
+	        std::clog << "MaterialLoader::calcInteractionDiagramNMz; ¡ojo! se redefine el interaction diagram de nombre: '"
                           << cod_diag << "'." << std::endl;
                 delete diagramas_interaccion2d[cod_diag];
               }
@@ -662,13 +662,13 @@ const XC::MaterialLoader::map_materials &XC::MaterialLoader::Map(void) const
 //! @brief Returns an iterator which points to principio de la lista.
 XC::MaterialLoader::const_iterator XC::MaterialLoader::begin(void) const
   { return materials.begin(); }
-//! @brief Returns an iterator apuntando después del final de la lista.
+//! @brief Returns an iterator apuntando después of the final de la lista.
 XC::MaterialLoader::const_iterator XC::MaterialLoader::end(void) const
   { return materials.end(); }
 //! @brief Returns an iterator which points to principio de la lista.
 XC::MaterialLoader::iterator XC::MaterialLoader::begin(void)
   { return materials.begin(); }
-//! @brief Returns an iterator apuntando después del final de la lista.
+//! @brief Returns an iterator apuntando después of the final de la lista.
 XC::MaterialLoader::iterator XC::MaterialLoader::end(void)
   { return materials.end(); }
 
@@ -843,15 +843,18 @@ XC::InteractionDiagram &XC::MaterialLoader::getInteractionDiagram(const std::str
 bool XC::MaterialLoader::existeMaterial(const std::string &nmb) const
   { return (materials.find(nmb)!=materials.end()); }
 
-//! @brief Returns true ifexiste la geometría de la sección cuyo código being passed as parameter.
+//! @brief Returns true if the section geometry identified by
+//! the string being passed as parameter exists.
 bool XC::MaterialLoader::existeGeomSection(const std::string &nmb) const
   { return (geom_secciones.find(nmb)!=geom_secciones.end()); }
 
-//! @brief Returns true ifexiste el diagrama de interacción cuyo código being passed as parameter.
+//! @brief Returns true if the 3D interaction diagram identified by
+//! the string being passed as parameter exists.
 bool XC::MaterialLoader::InteractionDiagramExists(const std::string &nmb) const
   { return (diagramas_interaccion.find(nmb)!=diagramas_interaccion.end()); }
 
-//! @brief Returns true ifexiste el diagrama de interacción cuyo código being passed as parameter.
+//! @brief Returns true if the 2D interaction diagram identified by
+//! the string being passed as parameter exists.
 bool XC::MaterialLoader::InteractionDiagramExists2d(const std::string &nmb) const
   { return (diagramas_interaccion2d.find(nmb)!=diagramas_interaccion2d.end()); }
 

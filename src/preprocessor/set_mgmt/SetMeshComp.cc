@@ -293,13 +293,13 @@ void XC::SetMeshComp::alive_elements(void)
 void XC::SetMeshComp::calc_resisting_force(void)
   { elementos.calc_resisting_force(); }
 
-//! @brief Return the resultante de las fuerzas que ejercen sobre
-//! los nodos próximos al plano, los elementos situados tras el plano.
+//! @brief Return the resultant of the forces over the nodes
+//! near to the plane, of the elements behind the plane.
 SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centro,const double &tol,const bool &inc_inertia) const
   {
-    //XX Se puede mejorar calculando la resultante en la intersección de
-    //los lados del elemento con el plano e interpolando el valor en ese
-    //punto a partir de los valores en los nodos extremos del lado.
+    //XX Can be enhanced computing the resultant in the intersection of
+    //the element edges with the plane and interpolating the value at this
+    //point from the values in the nodes at the ends of the edge.
     const double tol2= tol*tol;
     const Node *ptrNod= nullptr;
     const SemiEspacio3d se(plano);

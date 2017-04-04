@@ -74,14 +74,14 @@ XC::RgQuadCell &XC::RgQuadCell::operator=(const RgQuadCell &otro)
 XC::RgQuadCell::~RgQuadCell(void)
   { libera(); }
 
-//! @brief Asigna el número de divisiones en cada dirección.
+//! @brief Sets the number of divisions on each direction.
 void XC::RgQuadCell::setDiscretization(int numSubdivIJ, int numSubdivJK)
   {
     nDivIJ = numSubdivIJ;
     nDivJK = numSubdivJK;
   }
 
-//! @brief Returns the número de divisiones en cada dirección.
+//! @brief Returns the number of divisions on each direction.
 void XC::RgQuadCell::getDiscretization(int &numSubdivIJ, int &numSubdivJK) const
   {
      numSubdivIJ = nDivIJ;
@@ -104,7 +104,7 @@ XC::Vector XC::RgQuadCell::getCdgRejilla(void) const
     return retval;
   }
 
-//! @brief Returns the coordenadas del punto i,j.
+//! @brief Returns the coordenadas of the punto i,j.
 XC::Vector XC::RgQuadCell::getVertCoords(const size_t &i,const size_t &j) const
   {
     Vector retval(2);

@@ -71,7 +71,7 @@ XC::InteractionDiagram::InteractionDiagram(const InteractionDiagram &otro)
     clasifica_triedros();
   }
 
-//! @brief Operador de asignación.
+//! @brief Assignment operator.
 XC::InteractionDiagram &XC::InteractionDiagram::operator=(const InteractionDiagram &otro)
   {
     ClosedTriangleMesh::operator=(otro);
@@ -171,8 +171,8 @@ const Triedro3d *XC::InteractionDiagram::BuscaPtrTriedro(const Pos3d &p) const
     return retval;
   }
 
-//! @brief Return the intersección de la semirrecta que une el origen (0,0,0) y el
-//! el punto p con el diagrama de interacción.
+//! @brief Return the intersection of the half-line thats links the
+//! origin (0,0,0) and p and the interaction diagram.
 GeomObj::list_Pos3d XC::InteractionDiagram::get_interseccion(const Pos3d &p) const
   {
     GeomObj::list_Pos3d lst_intersec;
@@ -190,7 +190,7 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_interseccion(const Pos3d &p) con
         //Calculamos el plano que contiene al triangulo.
         const Plano3d plano= triang.GetPlano();
         SemiRecta3d Op(O,p);
-        //Calculamos la intersección entre la semirrecta y dicho plano.
+        //Intersection of the half-line with the plane.
         lst_intersec= interseccion(plano,Op);
         if(lst_intersec.empty())
           {

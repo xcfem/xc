@@ -196,7 +196,7 @@ const XC::Matrix &XC::Bidirectional::getInitialTangent(void) const
     return ks;
   }
 
-//! @brief Returns the resultante de las tensiones en la sección.
+//! @brief Returns the cross-section stress resultant.
 const XC::Vector &XC::Bidirectional::getStressResultant(void) const
   {
     // Compute trial stress using elastic tangent

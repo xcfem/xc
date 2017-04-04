@@ -329,7 +329,7 @@ void XC::beam2d02::Print(std::ostream &s, int flag)
     s << "Element: " << this->getTag();
     s << " type: beam2d02  iNode: " << theNodes.getTagNode(0);
     s << " jNode: " << theNodes.getTagNode(1);
-    s << " sección : " << ctes_scc << std::endl;
+    s << " section : " << ctes_scc << std::endl;
     s << " resisting Force: " << rForce;
   }
 

@@ -116,7 +116,7 @@ int XC::SectionForceDeformation::addInitialSectionDeformation(const Vector &def)
 
 
 
-//! @brief Returns the flexibility matrix tangente de la sección.
+//! @brief Returns the tangent flexibility matrix of the section.
 const XC::Matrix &XC::SectionForceDeformation::getSectionFlexibility(void) const
   {
     int order = this->getOrder();
@@ -150,7 +150,7 @@ const XC::Matrix &XC::SectionForceDeformation::getSectionFlexibility(void) const
     return *fDefault;
   }
 
-//! @brief Returns the initial flexibility matrix de la sección.
+//! @brief Returns the initial flexibility matrix of the section.
 const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibility(void) const
   {
     int order = this->getOrder();
@@ -185,7 +185,7 @@ const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibility(void) const
   }
 
 //! @brief Returns the densidad (masa por unidad de longitud/area/volumen)
-//! de la sección.
+//! of the section.
 double XC::SectionForceDeformation::getRho(void) const
   { return 0.0; }
 
@@ -242,7 +242,7 @@ XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, I
 }
 */
 
-//! @brief Returns the respuesta de la sección
+//! @brief Returns the respuesta of the section
 XC::Response *XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, Information &sectInfo)
   {
     // deformations

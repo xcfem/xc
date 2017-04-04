@@ -239,7 +239,8 @@ Poligono2d XC::GeomSection::getRegionsContour(void) const
     if(!tmp.empty())
       {
         if(tmp.size()>1)
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; la sección no es simplemente conexa."
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; cross section is not a simply connected region."
                     << std::endl;
         retval= *tmp.begin();
       }

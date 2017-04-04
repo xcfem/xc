@@ -108,7 +108,7 @@ void XC::ElasticMembranePlateSection::setRho(const double &r)
 const XC::ResponseId &XC::ElasticMembranePlateSection::getType(void) const 
   { return RespShellMat; }
 
-//! @brief Return the resultante de las tensiones en la sección.
+//! @brief Return the cross-section stress resultant.
 const XC::Vector &XC::ElasticMembranePlateSection::getStressResultant(void) const
   {
     const double M= membraneModulus(); //membrane modulus

@@ -88,7 +88,7 @@ void XC::FiberSectionShear3d::setRespVz(const UniaxialMaterial *rvz)
     respVz= rvz->getCopy();
   }
 
-//! @brief Asigna el material que define la respuesta a torsión.
+//! @brief Sets the material that defines the torsional response.
 void XC::FiberSectionShear3d::setRespT(const UniaxialMaterial *rt)
   {
     if(respT)
@@ -147,8 +147,8 @@ void XC::FiberSectionShear3d::setRespVyByName(const std::string &nmb_mat)
           setRespVy(tmp);
         else
           std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
-                    << "el material de código: '" << nmb_mat
-                    << "' no corresponde a un material uniaxial.\n";
+                    << "material identified by: '" << nmb_mat
+                    << "' is not uniaxial.\n";
       }
     else
       std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
@@ -195,13 +195,13 @@ void XC::FiberSectionShear3d::setRespTByName(const std::string &nmb_mat)
           setRespT(tmp);
         else
           std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
-                    << "el material de código: '" << nmb_mat
-                    << "' no corresponde a un material uniaxial.\n";
+                    << "material identified by: '" << nmb_mat
+                    << "' is not uniaxial.\n";
       }
     else
       std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
-                << "no se encontró el material de código: '" << nmb_mat
-                << "'.\n";
+                << "material identified by: '" << nmb_mat
+                << "' not found.\n";
   }
 
 //! @brief Returns torsion response.
@@ -252,7 +252,7 @@ void XC::FiberSectionShear3d::zeroInitialSectionDeformation(void)
     if(respT) respT->setInitialStrain(0.0);
   }
 
-//! @brief Returns the initial strain de la sección.
+//! @brief Returns the initial strain of the section.
 const XC::Vector &XC::FiberSectionShear3d::getInitialSectionDeformation(void) const
   {
     defzero.Zero();

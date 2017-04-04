@@ -88,7 +88,7 @@ XC::ElasticSection2d::ElasticSection2d(int tag, double EA, double EI)
   :BaseElasticSection2d(tag, SEC_TAG_Elastic2d,2,1,EA,EI,0.0,0.0)
   {}
 
-//! @brief Returns the resultante de las tensiones en la sección.
+//! @brief Returns the cross-section stress resultant.
 const XC::Vector &XC::ElasticSection2d::getStressResultant(void) const
   {
     const Vector &e= getSectionDeformation();

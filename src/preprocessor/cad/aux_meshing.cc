@@ -133,7 +133,9 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
 
     TritrizPtrElem retval;
     if(mesh_dim<2 && (e.GetNivelVerborrea() > 4))
-      std::cerr << "put_quad4N_on_mesh; bidimensional mesh needed, no se pudieron crear elementos." << std::endl;
+      std::cerr << __FUNCTION__
+	        << "; bidimensional mesh needed, can't create elements."
+		<< std::endl;
     else
       {
         if(mesh_dim<3) //Bidimensional mesh
@@ -144,7 +146,9 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
               {
               case dirm_i:
                 if(ncapas<2)
-		  std::cerr << "Número insuficiente de nodos en dirección i. No se crean elementos." << std::endl;
+		  std::cerr << __FUNCTION__
+			    << "Not enough nodes in 'i' direction."
+		            << " Elements were not created." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas-1,ncols-1));
@@ -157,7 +161,9 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
                 break;
               case dirm_j:
                 if(nfilas<2)
-		  std::cerr << "Número insuficiente de nodos en dirección j. No se crean elementos." << std::endl;
+		  std::cerr <<  __FUNCTION__
+			    << "Not enough nodes in 'j' direction."
+		            << " Elements were not created." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas-1,MatrizPtrElem(nfilas,ncols-1));
@@ -170,7 +176,9 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
                 break;
               case dirm_k:
                 if(ncols<2)
-		  std::cerr << "Número insuficiente de nodos en dirección k. No se crean elementos." << std::endl;
+		  std::cerr <<  __FUNCTION__
+			    << "Not enough nodes in 'k' direction."
+		            << " Elements were not created." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas-1,MatrizPtrElem(nfilas-1,ncols));
@@ -234,7 +242,8 @@ void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
           }
       }
     else  //Hay pointers nulos.
-      std::cerr << "meshing_quad9N_bidimensional; existen pointers to node nulos." << std::endl;
+      std::cerr <<  __FUNCTION__
+		<< "; there were null pointers to nodes." << std::endl;
   }
 
 //! @brief Places the element on the mesh being passed as parameter.
@@ -248,7 +257,9 @@ XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &
 
     TritrizPtrElem retval;
     if(mesh_dim<2 && (e.GetNivelVerborrea() > 4))
-      std::cerr << "put_quad9N_on_mesh; bidimensional mesh needed, can't create elements." << std::endl;
+      std::cerr <<  __FUNCTION__
+	        << "; bidimensional mesh needed, can't create elements."
+		<< std::endl;
     else
       {
         if(mesh_dim<3) //Bidimensional mesh
@@ -259,7 +270,9 @@ XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &
               {
               case dirm_i:
                 if(ncapas<2)
-		  std::cerr << "Número insuficiente de nodos en dirección i. No se crean elementos." << std::endl;
+		  std::cerr <<  __FUNCTION__
+			    << "Not enough nodes in 'i' direction."
+		            << " Elements were not created." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas-1,ncols-1));
@@ -272,7 +285,9 @@ XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &
                 break;
               case dirm_j:
                 if(nfilas<2)
-		  std::cerr << "Número insuficiente de nodos en dirección j. No se crean elementos." << std::endl;
+		  std::cerr <<  __FUNCTION__
+			    << "Not enough nodes in 'j' direction."
+		            << " Elements were not created." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas-1,MatrizPtrElem(nfilas,ncols-1));
@@ -285,7 +300,9 @@ XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &
                 break;
               case dirm_k:
                 if(ncols<2)
-		  std::cerr << "Número insuficiente de nodos en dirección k. No se crean elementos." << std::endl;
+		  std::cerr <<  __FUNCTION__
+			    << "Not enough nodes in 'k' direction."
+		            << " Elements were not created." << std::endl;
                 else
                   {
                     retval= TritrizPtrElem(ncapas-1,MatrizPtrElem(nfilas-1,ncols));

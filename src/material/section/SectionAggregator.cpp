@@ -256,8 +256,8 @@ void XC::SectionAggregator::setSection(const std::string &sectionName)
           theSection= dynamic_cast<SeccionBarraPrismatica *>(tmp->getCopy());
         else
           std::cerr << "XC::SectionAggregator::setSection" 
-                    << "; el material de código: '" << sectionName
-                    << "' no corresponde a una sección.\n";
+                    << "; material identified by: '" << sectionName
+                    << "' is not a prismatic bar cross-section material.\n";
         alloc_storage_ptrs();
       }
     else

@@ -114,7 +114,7 @@ XC::ListRegiones::~ListRegiones(void)
 void XC::ListRegiones::clear(void)
   { libera(); }
 
-//! @brief Agrega una región al contenedor.
+//! @brief Adds a region to the container.
 XC::RegionSecc *XC::ListRegiones::push_back(const RegionSecc &reg)
   {
     RegionSecc *tmp= reg.getCopy();
@@ -192,7 +192,7 @@ double XC::ListRegiones::getAreaGrossSection(void) const
     return retval;
   }
 
-//! @brief Returns the centro de gravedad de la sección bruta.
+//! @brief Returns the centro de gravedad of the gross cross-section.
 XC::Vector XC::ListRegiones::getCdgGrossSection(void) const
   {
     Vector retval(2);
@@ -207,9 +207,10 @@ XC::Vector XC::ListRegiones::getCdgGrossSection(void) const
             divisor+= weight;
           }
         else
-          std::cerr << "ListRegiones::getCdgGrossSection; la región: "
-                    << *i << " tiene weight nulo o negativo." 
-                        << std::endl;
+          std::cerr << nombre_clase() << __FUNCTION__
+		    << "; region: "
+                    << *i << " has zero or negative weight." 
+                    << std::endl;
       }
     retval/= divisor;
     return retval;
@@ -229,7 +230,7 @@ double XC::ListRegiones::getIyGrossSection(void) const
     return retval;
   }
 
-//! @brief Returns the momento de inercia de la sección bruta respecto al eje paralelo al z por el CDG.
+//! @brief Returns the moment of inertia of the gross cross-section with respect to the axis paralelo al z por el centroid.
 double XC::ListRegiones::getIzGrossSection(void) const
   {
     double retval= 0.0;
@@ -243,7 +244,7 @@ double XC::ListRegiones::getIzGrossSection(void) const
     return retval;
   }
 
-//! @brief Returns the producto de inercia de la sección bruta respecto a los ejes paralelos al y y al z por el CDG.
+//! @brief Returns the producto de inercia of the gross cross-section respecto a los ejes paralelos al y y al z por el centroid.
 double XC::ListRegiones::getPyzGrossSection(void) const
   {
     double retval= 0.0;
@@ -287,7 +288,8 @@ double XC::ListRegiones::getAreaHomogenizedSection(const double &E0) const
             retval+= n*(*i)->Area();
           }
         else
-	  std::cerr << "ListRegiones::getAreaHomogenizedSection; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << nombre_clase() << __FUNCTION__
+		    << "; can't get region material." << std::endl; 
       }
     return retval;
   }
@@ -311,12 +313,14 @@ XC::Vector XC::ListRegiones::getCdgHomogenizedSection(const double &E0) const
                 divisor+= weight;
               }
             else
-	      std::cerr << "ListRegiones::getCdgHomogenizedSection; region: "
+	      std::cerr << nombre_clase() << __FUNCTION__
+			<< "; region: "
                         << *i << " weight is zero or negative." 
                         << std::endl;
           }
         else
-	  std::cerr << "ListRegiones::getCdgHomogenizedSection; can't get material for region." << std::endl;
+	  std::cerr << nombre_clase() << __FUNCTION__
+		    << "; can't get region material." << std::endl; 
       }
     retval/= divisor;
     return retval;
@@ -342,7 +346,8 @@ double XC::ListRegiones::getIyHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Iy()+(*i)->Area()*sqr(d));
           }
         else
-	  std::cerr << "ListRegiones::getIyHomogenizedSection; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; can't get section material." << std::endl; 
       }
     return retval;
   }
@@ -367,7 +372,8 @@ double XC::ListRegiones::getIzHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Iz()+(*i)->Area()*sqr(d));
           }
         else
-	  std::cerr << "ListRegiones::getIyHomogenizedSection; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; can't get region material." << std::endl; 
       }
     return retval;
   }
@@ -394,7 +400,8 @@ double XC::ListRegiones::getPyzHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Pyz()+(*i)->Area()*d2);
           }
         else
-	  std::cerr << "ListRegiones::getIyHomogenizedSection; no se pudo obtener el material la región." << std::endl; 
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; can't get region material." << std::endl; 
       }
     return retval;
   }

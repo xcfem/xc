@@ -77,11 +77,11 @@ XC::Beam2dUniformLoad::Beam2dUniformLoad(void)
 int XC::Beam2dUniformLoad::getType(void)
   { return LOAD_TAG_Beam2dUniformLoad; }
 
-//! @brief Return the dimension del vector fuerza.
+//! @brief Return the dimension of the vector fuerza.
 size_t XC::Beam2dUniformLoad::getDimVectorFuerza(void) const
   { return 2; }
 
-//! @brief Return the dimension del vector momento.
+//! @brief Return the dimension of the vector momento.
 size_t XC::Beam2dUniformLoad::getDimVectorMomento(void) const
   { return 1; }
 
@@ -142,15 +142,15 @@ const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L
       {
         const double x= xi_pt(i,0)*L;
 
-        retval(0,i)= wa*(L-x); //Integral del axil entre x y L.
-        retval(1,i)= wy*0.5*x*(x-L); //Momento en la sección x.
-        retval(2,i)= wy*(x-0.5*L); //Cortante en la sección x.
+        retval(0,i)= wa*(L-x); //Integral of the axial force between x and L.
+        retval(1,i)= wy*0.5*x*(x-L); //Bending moment on the section at x.
+        retval(2,i)= wy*(x-0.5*L); //Shear force on the section at x.
       }
     return retval;
   }
 
 //! @brief Returns the consistent load vector (ver página 108 libro Eugenio Oñate).
-//! @param L Longitud del borde del elemento.
+//! @param L Length of the borde of the elemento.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
 void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0) const
@@ -159,17 +159,17 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
     const double wy= WTrans()*loadFactor;  // Transverse
 
     //Esfuerzos sobre elemento.
-    const double V = 0.5*wy*L; // Cortante en los extremos del elemento.
+    const double V = 0.5*wy*L; // Cortante en los extremos of the elemento.
     const double P= wa*L; //Axil.
 
     // Reactions in basic system
     p0[0]-= P; //Resta el axil. 
-    p0[1]-= V; //Resta la reacción en el extremo dorsal.
-    p0[2]-= V; //Resta la reacción en el extremo frontal.
+    p0[1]-= V; //Substracts the reaction at the back end.
+    p0[2]-= V; //Substracts the reaction at the front end.
   }
 
 //! @brief Returns the consistent load vector (ver página 108 libro Eugenio Oñate).
-//! @param L Longitud del borde del elemento.
+//! @param L Length of the borde of the elemento.
 //! @param loadFactor Load factor.
 //! @param q0 ??.
 void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0) const
@@ -178,7 +178,7 @@ void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const
     const double wx = WAxial()*loadFactor;  // Axial (+ve from node I to J)
 
     //Esfuerzos sobre elemento.
-    const double Mz = wy*L*L/12.0; // Momento flector en z en los extremos del elemento: wy*L*L/12
+    const double Mz = wy*L*L/12.0; // Momento flector en z en los extremos of the elemento: wy*L*L/12
     const double P = wx*L; //Axil en el extremo dorsal.
 
     // Fixed end forces in basic system

@@ -77,8 +77,8 @@ class UpdatedLagrangianBeam2D : public Element1D
   protected:
     bool    isLinear;
     int     numDof;
-    mutable double  L; //Longitud del elemento.
-    mutable double sn, cs; //Dirección del elemento.
+    mutable double  L; //!< Element length.
+    mutable double sn, cs; //!< Element direction.
     double massDof;
   
     Node *end1Ptr(void);

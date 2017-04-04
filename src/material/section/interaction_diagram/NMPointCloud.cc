@@ -36,6 +36,7 @@ XC::NMPointCloud::NMPointCloud(const double &u)
     lastInserted= nullptr;
   }
 
+//! @brief Erases objects members.
 void XC::NMPointCloud::clear(void)
   {
     GeomObj::list_Pos2d::clear();
@@ -43,8 +44,8 @@ void XC::NMPointCloud::clear(void)
     lastInserted= nullptr;
   }
 
-//! @brief Inserta en la lista de esfuerzos being passed as parameter
-//! la resultante de tensiones normales en la sección.
+//! @brief Appends the cross-section normal stresses resultant
+//! being passed as parameter.
 const Pos2d *XC::NMPointCloud::append(const Pos2d &NM)
   {
     if(lastInserted)
