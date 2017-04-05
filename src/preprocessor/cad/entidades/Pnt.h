@@ -84,7 +84,7 @@ class Pnt: public EntMdlr
     void inserta_linea(Edge *l) const;
     void borra_linea(Edge *l) const;
 
-    //! @brief Return the lista de líneas que tocan al punto.
+    //! @brief Return the list of the lines that begin or end at the point.
     const std::set<const Edge *> &EdgesTocan(void) const
       { return lineas_pt; }
     const size_t getNLines(void) const

@@ -396,7 +396,7 @@
 #include "preprocessor/cad/SisRefCartesianas3d.h"
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "preprocessor/cad/entidades/Linea.h"
-#include "preprocessor/cad/entidades/LineaTramos.h"
+#include "preprocessor/cad/entidades/DividedLine.h"
 #include "preprocessor/cad/entidades/ArcoCircunf.h"
 #include "preprocessor/cad/entidades/QuadSurface.h"
 #include "preprocessor/cad/entidades/UniformGrid.h"

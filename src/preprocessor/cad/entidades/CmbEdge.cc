@@ -49,10 +49,10 @@ XC::Edge *XC::CmbEdge::Lado::Borde(void)
 //! @brief Returns a pointer constante a la linea.
 const XC::Edge *XC::CmbEdge::Lado::Borde(void) const
   { return edge; }
-//! @brief Asigna la línea.
+//! @brief Assigns the line.
 void XC::CmbEdge::Lado::SetEdge(Edge *l)
   { edge= l; }
-//! @brief Returns a constant pointer to punto origen de la línea.
+//! @brief Returns a constant pointer to point origen of the line.
 const XC::Pnt *XC::CmbEdge::Lado::P1(void) const
   {
     if(!edge) return nullptr;
@@ -61,7 +61,7 @@ const XC::Pnt *XC::CmbEdge::Lado::P1(void) const
     else
       return edge->P2();
   }
-//! @brief Returns a constant pointer to punto destino de la línea.
+//! @brief Returns a constant pointer to point destino of the line.
 const XC::Pnt *XC::CmbEdge::Lado::P2(void) const
   {
     if(!edge) return nullptr;
@@ -72,7 +72,7 @@ const XC::Pnt *XC::CmbEdge::Lado::P2(void) const
   }
 
 
-//! @brief Returns true iflos puntos being passed as parameters
+//! @brief Returns true if the points being passed as parameters
 //! son los extremos del lado.
 bool XC::CmbEdge::Lado::ExtremosEn(const Pnt *p1,const Pnt *p2) const
   {
@@ -88,7 +88,7 @@ bool XC::CmbEdge::Lado::ExtremosEn(const Pnt *p1,const Pnt *p2) const
     return retval;
   }
 
-//! @brief Returns the nombre de la línea.
+//! @brief Returns the nombre of the line.
 const std::string &XC::CmbEdge::Lado::GetNombre(void) const
   { return edge->GetNombre(); }
 
@@ -144,7 +144,7 @@ MatrizPos3d XC::CmbEdge::Lado::GetPosNodosInv(void) const
       return edge->GetPosNodosDir();
   }
 
-//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el principio.
+//! @brief Returns the nodo which index is being passed as parameter empezando por el principio.
 XC::Node *XC::CmbEdge::Lado::GetNodoDir(const size_t &i)
   {
     if(!edge)
@@ -156,7 +156,7 @@ XC::Node *XC::CmbEdge::Lado::GetNodoDir(const size_t &i)
         return edge->GetNodoInv(i);
   }
 
-//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el final.
+//! @brief Returns the nodo which index is being passed as parameter empezando por el final.
 XC::Node *XC::CmbEdge::Lado::GetNodoInv(const size_t &i)
   {
     if(!edge)
@@ -168,7 +168,7 @@ XC::Node *XC::CmbEdge::Lado::GetNodoInv(const size_t &i)
         return edge->GetNodoDir(i);
   }
 
-//! @brief Returns the nodo cuyo índice is being passed as parameter.
+//! @brief Returns the nodo which index is being passed as parameter.
 XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i)
   {
     XC::Node *retval= nullptr;
@@ -185,7 +185,7 @@ XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i)
     return retval;
   }
 
-//! @brief Returns the nodo cuyo índice is being passed as parameter.
+//! @brief Returns the nodo which index is being passed as parameter.
 const XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i) const
   {
     if(!edge) return nullptr;
@@ -200,15 +200,15 @@ const XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i) const
 void XC::CmbEdge::Lado::genMesh(meshing_dir dm)
   { edge->genMesh(dm); }
 
-//! @brief Asigna el número de divisiones de la línea.
+//! @brief Asigna el number of divisions of the line.
 void XC::CmbEdge::Lado::SetNDiv(const size_t &nd)
   { edge->SetNDiv(nd); }
 
-//! @brief Returns the número de divisiones de la línea.
+//! @brief Returns the number of divisions of the line.
 size_t XC::CmbEdge::Lado::NDiv(void) const
   { return edge->NDiv(); }
 
-//! @brief Returns the identificador de la línea.
+//! @brief Returns the identificador of the line.
 size_t XC::CmbEdge::Lado::GetTag(void) const
   { return edge->GetTag(); }
 
@@ -230,8 +230,8 @@ XC::CmbEdge::CmbEdge(Preprocessor *m,const size_t &nd)
 
 //! @brief Constructor.
 //! @param nombre: Object identifier.
-//! @param m: Pointer to preprocesador.
-//! @param nd: Número de divisiones.
+//! @param m: Pointer to preprocessor.
+//! @param nd: number of divisions.
 XC::CmbEdge::CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : Edge(nombre,m,nd), lineas(0) {}
 
@@ -240,7 +240,7 @@ XC::SetEstruct *XC::CmbEdge::getCopy(void) const
   { return new CmbEdge(*this); }
 
 
-//! @brief Returns a pointer to the primer lado.
+//! @brief Returns a pointer to the first lado.
 XC::CmbEdge::Lado *XC::CmbEdge::primera_linea(void)
   {
     if(lineas.empty())
@@ -248,7 +248,7 @@ XC::CmbEdge::Lado *XC::CmbEdge::primera_linea(void)
     else
       return &(*lineas.begin());
   }
-//! @brief Returns a pointer to the primer lado.
+//! @brief Returns a pointer to the first lado.
 const XC::CmbEdge::Lado *XC::CmbEdge::primera_linea(void) const
   {
     if(lineas.empty())
@@ -273,7 +273,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::ultima_linea(void) const
       return &(*lineas.rbegin());
   }
 
-//! @brief Returns a pointer to the primer punto.
+//! @brief Returns a pointer to the first punto.
 const XC::Pnt *XC::CmbEdge::primer_punto(void) const
   {
     const Lado *pl= primera_linea();
@@ -311,7 +311,7 @@ void XC::CmbEdge::reverse(void)
       (*i).reverse();
   }
 
-//! @brief Return the longitud de la línea.
+//! @brief Return the longitud of the line.
 double XC::CmbEdge::getLongitud(void) const
   {
     double retval= 0;
@@ -320,7 +320,7 @@ double XC::CmbEdge::getLongitud(void) const
     return retval;
   }
 
-//! @brief Returns the número de divisiones total.
+//! @brief Returns the number of divisions total.
 size_t XC::CmbEdge::NDiv(void) const
   {
     size_t &nd= const_cast<size_t &>(ndiv);
@@ -330,7 +330,7 @@ size_t XC::CmbEdge::NDiv(void) const
     return ndiv;
   }
 
-//! @brief Establece el número de divisiones total.
+//! @brief Establece el number of divisions total.
 void XC::CmbEdge::SetNDiv(const size_t &nd)
   {
     const size_t nl= NumEdges();
@@ -338,7 +338,7 @@ void XC::CmbEdge::SetNDiv(const size_t &nd)
       {
         const size_t resto= nd % nl;
         if(resto != 0)
-          std::clog << "XC::CmbEdge::SetNDiv; el número de divisiones ("
+          std::clog << "XC::CmbEdge::SetNDiv; el number of divisions ("
                     << nd << ") no es múltiplo del número de segmentos ("
                     << nl << ")." << std::endl;
         const size_t q= nd/nl;
@@ -373,7 +373,7 @@ MatrizPos3d XC::CmbEdge::get_posiciones(void) const
   }
 
 
-//! @brief Lanza la creación de nodos de las líneas.
+//! @brief Triggers node creation on the edges.
 void XC::CmbEdge::crea_nodos_lineas(void)
   {
     for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
@@ -414,20 +414,20 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
       std::clog << "done." << std::endl;
   }
 
-//! @brief Crea e inserta las líneas a partir de los índices being passed
-//! as parameter.
+//! @brief Creates and inserts the edges from the indexes
+//! being passed as parameter.
 void XC::CmbEdge::addLines(const ID &indices_lineas)
   {
-    const size_t nl= indices_lineas.Size(); //No. de índices leídos.
+    const size_t nl= indices_lineas.Size(); //Number of indexes.
     for(size_t i= 0;i<nl;i++)
       inserta(indices_lineas(i));
   }
  
-//! @brief Crea e inserta las líneas a partir de los puntos cuyos índices se pasan
-//! as parameter.
+//! @brief Creates and inserts the the edges that link the points
+//! from the indexes being passed as parameter.
 void XC::CmbEdge::addPoints(const ID &indices_ptos)
   {
-    const size_t np= indices_ptos.Size(); //No. de índices leídos.
+    const size_t np= indices_ptos.Size(); //Number of indexes.
     if(np>=2)
       for(size_t i= 1;i<np;i++)
         {
@@ -447,7 +447,7 @@ void XC::CmbEdge::addPoints(const ID &indices_ptos)
       std::cerr << "CmbEdge::puntos; error se necesitan al menos dos puntos." << std::endl;
   }
 
-//! @brief Cierra la línea.
+//! @brief Closes the line.
 void XC::CmbEdge::cierra(void)
   {
     //Cierra la polilinea.
@@ -466,17 +466,17 @@ void XC::CmbEdge::cierra(void)
 	        << "; line is already closed." << std::endl;
   }
 
-//! @brief Creates a nueva línea entre los puntos being passed as parameters
-//! y la inserta en the set de lados.
+//! @brief Creates a new line between the points being passed as parameters
+//! and inserts it on the edge set set.
 XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
   {
     Linea *retval= nullptr;
     assert(get_preprocessor());
-    retval= dynamic_cast<Linea *>(get_preprocessor()->getCad().getLineas().Line(pA,pB));
+    retval= dynamic_cast<Linea *>(get_preprocessor()->getCad().getLineas().createLine(pA,pB));
     if(retval)
       {
         inserta(retval);
-        if(lineas.size()==1) //Es la primera línea.
+        if(lineas.size()==1) //Is the first one.
           {
             if(pA!=lineas[0].P1())
               lineas[0].reverse();
@@ -496,7 +496,7 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
   {
     ArcoCircunf *retval= nullptr;
     assert(get_preprocessor());
-    retval= dynamic_cast<ArcoCircunf *>(get_preprocessor()->getCad().getLineas().Arc(pA,pB,pC));
+    retval= dynamic_cast<ArcoCircunf *>(get_preprocessor()->getCad().getLineas().createArc(pA,pB,pC));
     if(retval)
       inserta(retval);
     else
@@ -507,7 +507,7 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
     return retval;
   }
 
-//! @brief Inserta (si la encuentra) la línea cuyo índice is being passed as parameter.
+//! @brief Inserts (if found) the line which index is being passed as parameter.
 void XC::CmbEdge::inserta(const size_t &i)
   {
     Edge *tmp= BuscaEdge(i);
@@ -550,7 +550,7 @@ void XC::CmbEdge::inserta(Edge *l)
       }
   }
 
-//! @brief Busca la línea l entre las de esta línea compuesta.
+//! @brief Searchs the line l from those of this compound line.
 size_t XC::CmbEdge::IndiceEdge(const Edge *l) const
   {
     size_t retval= 1;
@@ -564,11 +564,11 @@ size_t XC::CmbEdge::IndiceEdge(const Edge *l) const
     return 0; //No la encuentra.
   }
 
-//! @brief Returns a lado de la línea compuesta.
+//! @brief Returns a lado of the line compuesta.
 const XC::CmbEdge::Lado *XC::CmbEdge::GetLado(const size_t &i) const
   { return &lineas[i-1]; }
 
-//! @brief Returns a lado de la línea compuesta.
+//! @brief Returns a lado of the line compuesta.
 XC::CmbEdge::Lado *XC::CmbEdge::GetLado(const size_t &i)
   { return &lineas[i-1]; }
 
@@ -618,7 +618,7 @@ XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const size_t &idP1,const size_t
     return GetLadoPorPuntos(p1,p2);
   }
 
-//! @brief Return the lista de líneas que definen los lados.
+//! @brief Return the deque of lines that define the edges.
 std::deque<XC::Edge *> XC::CmbEdge::GetEdges(void)
   {
     std::deque<XC::Edge *> retval;

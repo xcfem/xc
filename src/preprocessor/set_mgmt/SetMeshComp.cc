@@ -435,7 +435,8 @@ void XC::SetMeshComp::sel_elementos_lista(const ID &tags)
           for(size_t i= 0;i<sz;i++)
             elementos.push_back(preprocessor->getDomain()->getElement(tags(i)));
         else
-          std::cerr << "SetMeshComp::sel_elementos_lista; necesito un preprocesador." << std::endl;
+          std::cerr << nombre_clase() << __FUNCTION__
+	            << "; preprocessor needed." << std::endl;
       }
   }
 

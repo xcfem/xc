@@ -47,7 +47,7 @@ XC::Edge::Edge(Preprocessor *m,const size_t &nd)
 
 //! @brief Constructor.
 //! @param nombre: Object identifier.
-//! @param m: Pointer to preprocesador.
+//! @param m: Pointer to preprocessor.
 //! @param nd: Number of divisions.
 XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : EntMdlr(nombre,0,m), ndiv(nd) {}
@@ -56,7 +56,7 @@ XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
 void XC::Edge::inserta_surf(Face *s)
   { sups_linea.insert(s); }
 
-//! @brief Actualiza la topología.
+//! @brief Updates topology.
 void XC::Edge::actualiza_topologia(void)
   {
     if(P1()) P1()->inserta_linea(this);
@@ -95,8 +95,8 @@ const XC::Pnt *XC::Edge::P2(void) const
     return nullptr;
   }
 
-//! @brief Returns true iflos puntos being passed as parameters
-//! son los extremos de la línea.
+//! @brief Returns true if the points being passed as parameters
+//! are the ends of the edge.
 bool XC::Edge::ExtremosEn(const Pnt *p1,const Pnt *p2) const
   {
     bool retval= false;
@@ -109,10 +109,10 @@ bool XC::Edge::ExtremosEn(const Pnt *p1,const Pnt *p2) const
     return retval;
   }
 
-//! @brief Asigna el número de divisiones.
+//! @brief Asigna el number of divisions.
 void XC::Edge::SetNDiv(const size_t &nd)
   {
-    if(ndiv!=nd) //Si cambia el número de divisiones
+    if(ndiv!=nd) //Si cambia el number of divisions
       {
         if(nodos.empty()) //Not meshed.
           {
@@ -137,7 +137,7 @@ void XC::Edge::SetNDiv(const size_t &nd)
       }
   }
 
-//! @brief Calcula el número de divisiones para que
+//! @brief Calcula el number of divisions para que
 //! el tamaño del elemento sea aproximadamente el being passed as parameter.
 void XC::Edge::SetElemSize(const double &sz)
   {
@@ -153,39 +153,39 @@ void XC::Edge::divide(void)
     crea_puntos(posiciones);
   }
 
-//! @brief Returns a pointer to nodo cuyos índices being passed as parameters.
+//! @brief Returns a pointer to node which indices are being passed as parameters.
 XC::Node *XC::Edge::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   { return EntMdlr::GetNodo(i,j,k); }
 
-//! @brief Returns a pointer to nodo cuyos índices being passed as parameters.
+//! @brief Returns a pointer to node which indices are being passed as parameters.
 const XC::Node *XC::Edge::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   { return EntMdlr::GetNodo(i,j,k); }
 
-//! @brief Returns a pointer to nodo cuyo índice is being passed as parameter.
+//! @brief Returns a pointer to node which index is being passed as parameter.
 XC::Node *XC::Edge::GetNodo(const size_t &i)
   {  return const_cast<Node *>(static_cast<const Edge &>(*this).GetNodo(i)); }
 
-//! @brief Returns a pointer to nodo cuyo índice is being passed as parameter.
+//! @brief Returns a pointer to node which index is being passed as parameter.
 const XC::Node *XC::Edge::GetNodo(const size_t &i) const
   { return nodos.getAtI(i); }
 
-//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el principio.
+//! @brief Returns the nodo which index is being passed as parameter empezando por el principio.
 XC::Node *XC::Edge::GetNodoDir(const size_t &i)
   { return GetNodo(i); }
 
-//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el principio.
+//! @brief Returns the nodo which index is being passed as parameter empezando por el principio.
 const XC::Node *XC::Edge::GetNodoDir(const size_t &i) const
   { return GetNodo(i); }
 
-//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el final.
+//! @brief Returns the nodo which index is being passed as parameter empezando por el final.
 XC::Node *XC::Edge::GetNodoInv(const size_t &i)
   { return GetNodo(NumNodos()-i+1); }
 
-//! @brief Returns the nodo cuyo índice is being passed as parameter empezando por el final.
+//! @brief Returns the nodo which index is being passed as parameter empezando por el final.
 const XC::Node *XC::Edge::GetNodoInv(const size_t &i) const
   { return GetNodo(NumNodos()-i+1); }
 
-//! @brief Returns the primer nodo de la línea.
+//! @brief Returns the first node of the line.
 const XC::Node *XC::Edge::GetPrimerNodo(void) const
   { 
     const Node *retval= GetNodo(1);
@@ -198,7 +198,7 @@ const XC::Node *XC::Edge::GetPrimerNodo(void) const
     return retval;
   }
 
-//! @brief Returns the primer nodo de la línea.
+//! @brief Returns the first node of the line.
 XC::Node *XC::Edge::GetPrimerNodo(void)
   { 
     Node *retval= GetNodo(1);
@@ -211,7 +211,7 @@ XC::Node *XC::Edge::GetPrimerNodo(void)
     return retval;
   }
 
-//! @brief Returns the último nodo de la línea.
+//! @brief Returns the último nodo of the line.
 const XC::Node *XC::Edge::GetUltimoNodo(void) const
   { 
     const Node *retval= GetNodoInv(1);
@@ -224,7 +224,7 @@ const XC::Node *XC::Edge::GetUltimoNodo(void) const
     return retval;
   }
 
-//! @brief Returns the último nodo de la línea.
+//! @brief Returns the último nodo of the line.
 XC::Node *XC::Edge::GetUltimoNodo(void)
   { 
     Node *retval= GetNodoInv(1);
@@ -352,15 +352,15 @@ bool XC::Edge::Toca(const Body &b) const
     return false;
   }
 
-//! @brief Returns verdadero el punto es un extremo de la línea.
+//! @brief Returns verdadero el punto es un extremo of the line.
 bool XC::Edge::Extremo(const Pnt &p) const
   { return ((&p == P1()) || (&p == P2()));  }
 
-//! @brief Return the lista de líneas que tocan al punto.
+//! @brief Return the lista of edges that begin or end in this point.
 std::set<const XC::Edge *> XC::GetLineasTocan(const Pnt &p)
   { return p.EdgesTocan(); }
 
-//! @brief Returns posiciones de los nodos lo largo de la línea.
+//! @brief Returns an matrix of positions along the line.
 MatrizPos3d XC::Edge::get_pos_nodos(void) const
   { return get_posiciones(); }
 
@@ -439,7 +439,7 @@ void XC::Edge::crea_nodos(void)
     else
       {
         if(verborrea>2)
-          std::clog << "Edge::crea_nodos; los nodos de la línea: '" << GetNombre() << "' ya existen." << std::endl;
+          std::clog << "Edge::crea_nodos; los nodos of the line: '" << GetNombre() << "' ya existen." << std::endl;
       }
     if(verborrea>4)
       std::clog << "creados." << std::endl;
@@ -456,7 +456,7 @@ void XC::Edge::genMesh(meshing_dir dm)
       std::clog << "done." << std::endl;
   }
 
-//! @brief Returns a vector tangente a la línea en el punto s
+//! @brief Returns a vector tangent to the line in point at parameter s.
 const XC::Vector &XC::Edge::getTang(const double &s) const
   {
     static XC::Vector retval(1);
@@ -464,7 +464,7 @@ const XC::Vector &XC::Edge::getTang(const double &s) const
     return retval;
   }
 
-//! @brief Returns the sets a los que pertenece este «edge».
+//! @brief Returns the sets to wich this edge belongs.
 std::set<XC::SetBase *> XC::Edge::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -475,7 +475,8 @@ std::set<XC::SetBase *> XC::Edge::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << "Edge::get_sets; no se ha definido el preprocesador." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
     return retval;
   }
 

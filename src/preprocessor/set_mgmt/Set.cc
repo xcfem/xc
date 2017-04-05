@@ -196,7 +196,7 @@ void XC::Set::crea_copia(const std::string &nombre,const Vector3d &v= Vector3d()
       {
         const std::string nombre_viejo= (*i)->GetNombre();
         const std::string nombre_nuevo= nombre+nombre_viejo;
-        Edge *nuevo_edge= get_preprocessor()->getCad().getLineas().Copia(*i);
+        Edge *nuevo_edge= get_preprocessor()->getCad().getLineas().createCopy(*i);
         nuevo_edge->BorraPtrNodElem();
         nuevo_set->lineas.push_back(nuevo_edge);
         nombres_nuevos_lineas[nombre_viejo]= nombre_nuevo;
@@ -403,7 +403,8 @@ void XC::Set::sel_puntos_lista(const ID &tags)
               }
           }
         else
-          std::cerr << "Set::sel_puntos_lista; necesito un preprocesador." << std::endl;
+          std::cerr << nombre_clase() << __FUNCTION__
+	            << "; preprocessor needed." << std::endl;
       }
   }
 
@@ -428,7 +429,8 @@ void XC::Set::sel_lineas_lista(const ID &tags)
               }
           }
         else
-          std::cerr << "Set::sel_lineas_lista; necesito un preprocesador." << std::endl;
+          std::cerr << nombre_clase() << __FUNCTION__
+	            << "; preprocessor needed." << std::endl;
       }
   }
 
@@ -452,7 +454,8 @@ void XC::Set::sel_surfaces_lst(const ID &tags)
               }
           }
         else
-          std::cerr << "Set::sel_elementos_lista; necesito un preprocesador." << std::endl;
+          std::cerr << nombre_clase() << __FUNCTION__
+	            << "; preprocessor needed." << std::endl;
       }
   }
 

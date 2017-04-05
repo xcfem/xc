@@ -34,7 +34,7 @@
 #include "preprocessor/cad/entidades/Edge.h"
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "preprocessor/cad/entidades/Linea.h"
-#include "preprocessor/cad/entidades/LineaTramos.h"
+#include "preprocessor/cad/entidades/DividedLine.h"
 #include "preprocessor/cad/entidades/CmbEdge.h"
 #include "preprocessor/cad/entidades/ArcoCircunf.h"
 #include "preprocessor/set_mgmt/Set.h"
@@ -53,20 +53,20 @@ XC::Linea *XC::MapLineas::newLine(const size_t &id_p1, const size_t &id_p2)
     Cad &cad= preprocessor->getCad();
     Pnt *p1= cad.getPuntos().busca(id_p1);
     Pnt *p2= cad.getPuntos().busca(id_p2);
-    Linea *retval= dynamic_cast<Linea *>(Line(p1,p2));
+    Linea *retval= dynamic_cast<Linea *>(createLine(p1,p2));
     assert(retval);
     return retval;
   }
 
 //! @brief Divided line.
-XC::LineaTramos *XC::MapLineas::newDividedLine(const size_t &id_p1, const size_t &id_p2)
+XC::DividedLine *XC::MapLineas::newDividedLine(const size_t &id_p1, const size_t &id_p2)
   {
     Preprocessor *preprocessor= getPreprocessor();
     assert(preprocessor);
     Cad &cad= preprocessor->getCad();
     Pnt *p1= cad.getPuntos().busca(id_p1);
     Pnt *p2= cad.getPuntos().busca(id_p2);
-    LineaTramos *retval= dynamic_cast<LineaTramos *>(DividedLine(p1,p2));
+    DividedLine *retval= dynamic_cast<DividedLine *>(createDividedLine(p1,p2));
     assert(retval);
     return retval;
   }
@@ -80,7 +80,7 @@ XC::ArcoCircunf *XC::MapLineas::newCircleArc(const size_t &id_p1, const size_t &
     Pnt *p1= cad.getPuntos().busca(id_p1);
     Pnt *p2= cad.getPuntos().busca(id_p2);
     Pnt *p3= cad.getPuntos().busca(id_p3);
-    ArcoCircunf *retval= dynamic_cast<ArcoCircunf *>(Arc(p1,p2,p3));
+    ArcoCircunf *retval= dynamic_cast<ArcoCircunf *>(createArc(p1,p2,p3));
     assert(retval);
     return retval;
   }
@@ -89,7 +89,7 @@ XC::ArcoCircunf *XC::MapLineas::newCircleArc(const size_t &id_p1, const size_t &
 //! @brief Circle arc.
 XC::CmbEdge *XC::MapLineas::newLineSequence(void)
   {
-    CmbEdge *retval= dynamic_cast<CmbEdge *>(LineSequence());
+    CmbEdge *retval= dynamic_cast<CmbEdge *>(createLineSequence());
     assert(retval);
     return retval;
   }
@@ -114,16 +114,17 @@ void XC::MapLineas::UpdateSets(Edge *nueva_linea) const
 //! and inserts it on the container
 //! @param pA: pointer to back end of the line.
 //! @param pB: pointer to front end of the line.
-XC::Edge *XC::MapLineas::Line(Pnt *pA,Pnt *pB)
+XC::Edge *XC::MapLineas::createLine(Pnt *pA,Pnt *pB)
   {
     Edge *tmp= nullptr;
     if(pA && pB)
       {
         if(pA==pB)
-	  std::cerr << "MapLineas::Line; los extremos: ("
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; ends of the line: ("
                     << pA->GetNombre() << ","
                     << pB->GetNombre() 
-                    << ") de la línea, coinciden." << std::endl;
+                    << "), are the same." << std::endl;
         tmp= busca_edge_ptr_extremos(*pA,*pB);
         if(!tmp)
           {
@@ -134,12 +135,15 @@ XC::Edge *XC::MapLineas::Line(Pnt *pA,Pnt *pB)
             tmp->SetVertice(2,pB);
           }
         if(!tmp)
-	  std::cerr << "MapLineas::Line; can't get a line"
+	  std::cerr << nombre_clase() << __FUNCTION__
+		    << "; can't get a line"
                     << " between points: " << pA->GetNombre()
                     << " and " << pB->GetNombre() << std::endl;
       }
     else
-      std::cerr << "MapLineas::Line; error, null pointer to point (A, B or both)." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+		<< "; error, null pointer to point (A, B or both)."
+		<< std::endl;
     return tmp;
   }
 
@@ -147,38 +151,42 @@ XC::Edge *XC::MapLineas::Line(Pnt *pA,Pnt *pB)
 //! and inserts it on the container
 //! @param pA: pointer to back end of the line.
 //! @param pB: pointer to front end of the line.
-XC::Edge *XC::MapLineas::DividedLine(Pnt *pA,Pnt *pB)
+XC::Edge *XC::MapLineas::createDividedLine(Pnt *pA,Pnt *pB)
   {
     Edge *tmp= nullptr;
     if(pA && pB)
       {
         if(pA==pB)
-	  std::cerr << "MapLineas::DividedLine; los extremos: ("
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; ends of the line: ("
                     << pA->GetNombre() << ","
                     << pB->GetNombre() 
-                    << ") de la línea, coinciden." << std::endl;
+                    << "), are the same." << std::endl;
         tmp= busca_edge_ptr_extremos(*pA,*pB);
         if(!tmp)
           {
             assert(get_preprocessor());
-            tmp= Nueva<LineaTramos>();
+            tmp= Nueva<DividedLine>();
             assert(tmp);
             tmp->SetVertice(1,pA);
             tmp->SetVertice(2,pB);
           }
         if(!tmp)
-	  std::cerr << "MapLineas::DividedLine; can't get a line"
+	  std::cerr << nombre_clase() << __FUNCTION__
+		    << "; can't get a line"
                     << " between points: " << pA->GetNombre()
                     << " and " << pB->GetNombre() << std::endl;
       }
     else
-      std::cerr << "MapLineas::DividedLine; error, null pointer to point (A, B or both)." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+		<< "; error, null pointer to point (A, B or both)."
+		<< std::endl;
     return tmp;
   }
 
 //! @brief Creates a nuevo arco de circunferencia entre los puntos being passed as parameters
 //! and la inserta en the set de lados.
-XC::Edge *XC::MapLineas::Arc(Pnt *pA,Pnt *pB,Pnt *pC)
+XC::Edge *XC::MapLineas::createArc(Pnt *pA,Pnt *pB,Pnt *pC)
   {
     Edge *tmp= nullptr;
     if(pA && pB && pC)
@@ -194,18 +202,21 @@ XC::Edge *XC::MapLineas::Arc(Pnt *pA,Pnt *pB,Pnt *pC)
             tmp->SetVertice(3,pB); //Punto intermedio.
           }
         if(!tmp)
-	  std::cerr << "MapLineas::Arc; can't get an arc"
-                    << " between the points: " << pA->GetNombre() << ", " << pB->GetNombre()
+	  std::cerr << nombre_clase() << __FUNCTION__
+		    << "; can't get an arc"
+                    << " between the points: "
+		    << pA->GetNombre() << ", " << pB->GetNombre()
                     << " and " << pC->GetNombre() << std::endl;
       }
     else
-      std::cerr << "MapLineas::Arc; error, null pointer to point (A, B and/or C)." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+		<< "; error, null pointer to point (A, B and/or C)." << std::endl;
     return tmp;
   }
 
-//! @brief Creates a secuencia de líneas (polyline) con las being passed as parameters
-//! and la inserta en the set de lados.
-XC::Edge *XC::MapLineas::LineSequence(void)
+//! @brief Creates a line sequence (polyline) with those being
+//! passed as parameters and inserts it in the edge set.
+XC::Edge *XC::MapLineas::createLineSequence(void)
   {
     Edge *tmp= Nueva<CmbEdge>();
     assert(tmp);
@@ -214,13 +225,14 @@ XC::Edge *XC::MapLineas::LineSequence(void)
 
 //! @brief Creates a new line, copia de la being passed as parameter con
 //! el nombre being passed as parameter.
-XC::Edge *XC::MapLineas::Copia(const Edge *l)
+XC::Edge *XC::MapLineas::createCopy(const Edge *l)
   {
     Edge *retval= busca(getTag());
     if(retval)
-      std::cerr << "MapLineas::Copia; la línea con identificador: " 
-                << getTag() << " ya existe, no se hacen cambios." << std::endl;
-    else //La línea es nueva.
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; line identified by: " 
+                << getTag() << " already exist, do nothing." << std::endl;
+    else //Line is new.
       {
         retval= dynamic_cast<Edge *>(l->getCopy());
         if(retval)
@@ -231,8 +243,9 @@ XC::Edge *XC::MapLineas::Copia(const Edge *l)
             tag++;
 	  }
         else
-	  std::cerr << "MapLineas::Copia; memoria agotada o el objeto: '"
-                    << l->GetNombre() << " no es una línea." << std::endl; 
+	  std::cerr << nombre_clase() << __FUNCTION__
+	            << "; memory exhausted or the objet: '"
+                    << l->GetNombre() << "is not a line." << std::endl; 
       }
     return retval;
   }

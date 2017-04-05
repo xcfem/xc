@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //CmbEdge.h
-//Línea compuesta.
+//Compound line.
 
 #ifndef CMBEDGE_H
 #define CMBEDGE_H
@@ -38,7 +38,7 @@ class Polilinea3d;
 namespace XC {
 //! \ingroup CadEnt
 //!
-//! @brief Línea compuesta.
+//! @brief Compound line.
 class CmbEdge: public Edge
   {
 
@@ -46,18 +46,18 @@ class CmbEdge: public Edge
 
     //! \ingroup Geom
     //!
-    //! @brief Componente de una línea compuesta.
+    //! @brief Component of a compound line.
     //!
-    //! Una Edge compuesta es una secuencia de pointers to líneas (Linea) (que
-    //! aqui llamaremos lados), tal que el extremo de una de ellas es el
-    //! origen de la siguiente. Como quiera que la orientación de la línea definida
-    //! en el modelo, puede no coincidir con la necesaria para la secuencia, cada
-    //! puntero a línea se acompaña de un valor booleano que indica si debe
-    //! interpretarse la línea con su sentido directo o con el inverso.
+    //! A compound line is a sequence of pointers to lines (Linea) (we
+    //! call them lados here), such that the end of one of them is the origin
+    //! of the edge that follows. Since the orientation of the line defined
+    //! in the model, can not coincide with the orientation needed here, each
+    //! pointer to line is accompanied by a boolean that indicates if the 
+    //! line must be taken with its reversed direction or not.
     class Lado: public EntCmd
       {
-        Edge *edge; //!< Pointer to línea.
-        bool directo; //!< true: directo (P1->P2), false: inverso (P2->P1)
+        Edge *edge; //!< Pointer to line.
+        bool directo; //!< true: direct (P1->P2), false: reversed (P2->P1)
       protected:
     
       public:
@@ -92,7 +92,7 @@ class CmbEdge: public Edge
     
       };
   protected:
-    std::deque<Lado> lineas; //!< Líneas que componen el objeto.
+    std::deque<Lado> lineas; //!< Lines that compose the object.
     MatrizPos3d get_posiciones(void) const;
 
     Lado *primera_linea(void);

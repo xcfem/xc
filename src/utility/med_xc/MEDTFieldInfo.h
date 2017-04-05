@@ -171,43 +171,43 @@ void MEDTFieldInfo<T>::defineGaussModels(const Set &set)
       campo->setArray(getArrayGauss());
   }
 
-//! @brief Valor del campo de índices i,j.
+//! @brief Value of the field at indexes i,j.
 template <class T>
 void MEDTFieldInfo<T>::setValueIJ(int i, int j,const T &valor)
   {
     const int nc= getXCFieldInfo().getNumberOfComponents();
     if(j>nc)
-      std::cerr << "índice j= " << j
-                << " fuera de rango (1," << nc
+      std::cerr << "j index: " << j
+                << " out of range (1," << nc
                 << ").\n" << std::endl;
     const int ne= getGrupo().getNumeroElementos();
     if(i>ne)
-      std::cerr << "índice i= " << i
-                << " fuera de rango (1," << ne
+      std::cerr << "i index: " << i
+                << " out of range (1," << ne
                 << ").\n" << std::endl;
     assert(campo);
     campo->setValueIJ(i,j,valor);
   }
 
-//! @brief Valor del campo de índices i,j y k (punto de Gauss).
+//! @brief Value of the field at indexes i,j y k (punto de Gauss).
 template <class T>
 void MEDTFieldInfo<T>::setValueIJK(int i, int j,int k,int t,const T &valor)
   {
     const int nc= getXCFieldInfo().getNumberOfComponents();
     if(j>nc)
-      std::cerr << "índice j= " << j
-                << " fuera de rango (1," << nc
+      std::cerr << "j index: " << j
+                << " out of range (1," << nc
                 << ").\n" << std::endl;
     const int ne= getGrupo().getNumeroElementos();
     if(i>ne)
-      std::cerr << "índice i= " << i
-                << " fuera de rango (1," << ne
+      std::cerr << "i index: " << i
+                << " out of range (1," << ne
                 << ").\n" << std::endl;
     assert(campo);
     const int num_ptos_gauss= campo->getNumberOfGaussPoints(t);
     if(k>num_ptos_gauss)
-      std::cerr << "índice k= " << k
-                << " fuera de rango (1," << num_ptos_gauss
+      std::cerr << "k index: " << k
+                << " out of range (1," << num_ptos_gauss
                 << ").\n" << std::endl;
     campo->setValueIJK(i,j,k,valor);
   }

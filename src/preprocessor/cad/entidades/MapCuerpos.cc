@@ -58,15 +58,15 @@ void XC::MapCuerpos::UpdateSets(Body *nuevo) const
       }
   }
 
-//! @brief Crea concilia el número de divisiones de las líneas.
+//! @brief Conciliates the number of divisions of the lines.
 bool XC::MapCuerpos::conciliaNDivs(void)
   {
     getCad()->conciliaNDivs();
     return checkNDivs();
   }
 
-//! @brief Verifica que los números de divisiones de los lados
-//! son compatibles.
+//! @brief Checks that the number of divisions of the edges
+//! are compatible.
 bool XC::MapCuerpos::checkNDivs(void) const
   {
     size_t conta= 0;

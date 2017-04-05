@@ -100,7 +100,7 @@ XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
     return retval;
   }
 
-//! @brief Returns the índices del nodo indicado por the pointer
+//! @brief Returns the indexes of the node identified by the pointer
 //! being passed as parameter.
 XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
   {
@@ -252,7 +252,7 @@ void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SFreedom_
       } 
   }
 
-//! @brief Returns the índices de los nodos (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
+//! @brief Returns the indexes of the nodes (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
 std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(4,-1);
@@ -260,12 +260,12 @@ std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
     const size_t ncols= nodos.getNumCols();
     if(j>=nfilas)
       {
-        std::cerr << "getIdNodosQuad; índice de fila j= " << j << " fuera de rango.\n";
+        std::cerr << "getIdNodosQuad; row index j= " << j << " out of range.\n";
         return retval;
       }
     if(k>=ncols)
       {
-        std::cerr << "getIdNodosQuad; índice de columna k= " << k << " fuera de rango.\n";
+        std::cerr << "getIdNodosQuad; column index k= " << k << " out of range.\n";
         return retval;
       }
 
@@ -346,7 +346,7 @@ std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
     return retval;
   }
 
-//! @brief Returns the índices de los nodos (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
+//! @brief Returns the indexes of the nodes (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
 std::vector<int> XC::getIdNodosQuad9N(const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(9,-1);

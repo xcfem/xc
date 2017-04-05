@@ -177,14 +177,14 @@ XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb
     return retval;
   }
 
-//! @bref Inserta, as a set, una entidad del preprocesador.
+//! @bref Inserts, as a set, a preprocessor entity.
 XC::EntMdlr *XC::MapSet::inserta_ent_mdlr(EntMdlr *ent_mdlr)
   {
     assert(ent_mdlr);
     const std::string nmb= ent_mdlr->GetNombre();
     if(existe(nmb)) //The set exists
       {
-	std::cerr << "the set: " << nmb << " ya existe. No se inserta el nuevo." << std::endl;
+	std::cerr << "the set: " << nmb << " already exists. New set not inserted." << std::endl;
         return nullptr;
       }
     else //the set es nuevo.

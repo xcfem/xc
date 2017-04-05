@@ -266,7 +266,7 @@ int XC::Vector::Assemble(const XC::Vector &V, const XC::ID &l, double fact )
     return result;
   }
     
-//! @brief Normaliza el vector con la norma euclídea.
+//! @brief Normalizes the vector with the euclidean norm.
 int XC::Vector::Normalize(void)
   {
     double length= 0.0;
@@ -298,7 +298,7 @@ int XC::Vector::NormalizeInf(void)
     return 0;
   }
 
-//! @brief Returns the vector normalizado con la norma euclidea.
+//! @brief Returns the normalized vector con la norma euclidea.
 XC::Vector XC::Vector::Normalized(void) const
   {
     Vector retval(*this);
@@ -306,7 +306,7 @@ XC::Vector XC::Vector::Normalized(void) const
     return retval;
   }
 
-//! @brief Returns the vector normalizado con la norma_infinito.
+//! @brief Returns the normalized vector con la norma_infinito.
 XC::Vector XC::Vector::NormalizedInf(void) const
   {
     Vector retval(*this);
@@ -314,13 +314,11 @@ XC::Vector XC::Vector::NormalizedInf(void) const
     return retval;
   }
 
-//! @brief Returns the vector normalizado del being passed
-//! as parameter (norma euclídea).
+//! @brief Returns the normalized vector (euclidean norm).
 XC::Vector XC::normalize(const Vector &v)
   { return v.Normalized(); }
 
-//! @brief Returns the vector normalizado del being passed
-//! as parameter (norma_infinito).
+//! @brief Returns the normalized vector (infinite norm).
 XC::Vector XC::normalize_inf(const Vector &v)
   { return v.NormalizedInf(); }
 
@@ -764,12 +762,14 @@ const double &XC::Vector::at(const size_t &f) const
     else
       return VECTOR_NOT_VALID_ENTRY;
   }
-//! @brief Chequea el índice que se le being passed as parameter.
+//! @brief Checks the renge for the index being passed as parameter.
 bool XC::Vector::CheckIndice0(const size_t &i) const
   {
     if(i<0 || i>=size_t(sz))
       {
-        std::cerr << "XC::Vector índice" << i << " fuera de rango: 0 - << " << sz-1 << std::endl;
+        std::cerr << nombre_clase() << __FUNCTION__
+	          << "; index: " << i
+		  << " out of range: 0 - << " << sz-1 << std::endl;
         return false;
       }
     else
@@ -1256,7 +1256,7 @@ m_double XC::vector_to_m_double(const XC::Vector &v)
 // void XC::Vector::from_string(const std::string &str)
 //   {
 //     std::vector<double> tmp= crea_vector_double(str);
-//     const int nc=tmp.size(); //No. de valores leídos.
+//     const int nc=tmp.size(); //Number of values.
 //     resize(nc);
 //     for(register int i= 0;i<nc;i++)
 //       theData[i]= tmp[i];

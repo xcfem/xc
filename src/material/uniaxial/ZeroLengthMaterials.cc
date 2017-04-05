@@ -88,13 +88,16 @@ XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
             if(preprocessor)
               retval= &preprocessor->getMaterialLoader();
             else
-              std::cerr << "ZeroLengthMaterials::get_material_loader; the pointer al preprocesador es nulo." << std::endl;
+              std::cerr << nombre_clase() << __FUNCTION__
+		        << "; null pointer to preprocessor." << std::endl;
           }
         else
-          std::cerr << "ZeroLengthMaterials::get_material_loader; el propietario no es un elemento." << std::endl;
+          std::cerr << nombre_clase() << __FUNCTION__
+		    << "; owner is not an element." << std::endl;
       }
     else
-      std::cerr << "ZeroLengthMaterials::get_material_loader; pointer to owner not found." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+		<< "; pointer to owner not found." << std::endl;
     return retval;
   }
 

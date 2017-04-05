@@ -60,14 +60,14 @@ const int &XC::DbTagData::getDbTagDataPos(const size_t &i) const
     if(i<size_t(data.Size()))
       {
         if(visitados.find(i)!=visitados.end())
-	  std::cerr << "DbTagData::getDbTagDataPos: el índice "
-                << i << " ya se ha utilizado." << std::endl;
+	  std::cerr << "DbTagData::getDbTagDataPos: index "
+                << i << " already used." << std::endl;
         retval= data(i);
         visitados.insert(i);
       }
     else
-      std::cerr << "DbTagData::getDbTagDataPos: índice "
-                << i << " fuera de rango; [0," << data.Size()-1
+      std::cerr << "DbTagData::getDbTagDataPos: index "
+                << i << " out of range; [0," << data.Size()-1
                 << "]." << std::endl;
     return retval;
   }
@@ -78,14 +78,14 @@ void XC::DbTagData::setDbTagDataPos(const size_t &i,const int &v)
     if(i<size_t(data.Size()))
       {
         if(visitados.find(i)!=visitados.end())
-	  std::cerr << "DbTagData::setDbTagDataPos: el índice "
-                << i << " ya se ha utilizado." << std::endl;
+	  std::cerr << "DbTagData::setDbTagDataPos: index "
+                << i << " already used." << std::endl;
         data[i]= v;
         visitados.insert(i);
       }
     else
-      std::cerr << "DbTagData::setDbTagDataPos: índice "
-                << i << " fuera de rango; [0," << data.Size()-1
+      std::cerr << "DbTagData::setDbTagDataPos: index "
+                << i << " out of range; [0," << data.Size()-1
                 << "]." << std::endl;
   }
 
@@ -97,7 +97,7 @@ int XC::DbTagData::sendIdData(CommParameters &cp,const int &dataTag) const
 int XC::DbTagData::receiveIdData(const CommParameters &cp,const int &dataTag)
   { return cp.receiveID(data,dataTag); }
 
-//! @brief Envía el objeto.
+//! @brief Sends the object.
 int XC::DbTagData::send(DbTagData &dt,CommParameters &cp, const CommMetaData &meta) const
   { return cp.sendID(data,dt,meta); }
 

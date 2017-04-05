@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//LineaTramos.h
+//DividedLine.h
 
-#ifndef LINEATRAMOS_H
-#define LINEATRAMOS_H
+#ifndef DIVIDEDLINE_H
+#define DIVIDEDLINE_H
 
 #include "Linea.h"
 
@@ -36,15 +36,15 @@ namespace XC {
 //! \ingroup CadEnt
 //!
 //! @brief Segmento de recta entre dos Pnt.
-class LineaTramos: public Linea
+class DividedLine: public Linea
   {
-    std::vector<double> longs; //!< Longitudes de los tramos de la línea.
+    std::vector<double> longs; //!< Lenght of the line segments.
   protected:
 
     MatrizPos3d get_posiciones(void) const;
   public:
-    LineaTramos(Preprocessor *m,const size_t &ndiv= 4);
-    LineaTramos(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
+    DividedLine(Preprocessor *m,const size_t &ndiv= 4);
+    DividedLine(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
     void setLongs(const XC::Vector &);
     virtual SetEstruct *getCopy(void) const;
 

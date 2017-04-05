@@ -212,7 +212,7 @@ std::deque<size_t> XC::TritrizPtrPnt::CopiaPuntos(const RangoTritriz &rango,cons
     return retval;
   }  
 
-//! @brief Returns the puntos del rango being passed as parameter.
+//! @brief Returns the points del rango being passed as parameter.
 XC::TritrizPtrPnt XC::TritrizPtrPnt::getRangoPuntos(const RangoTritriz &rango)
   {
     TritrizPtrPnt retval(rango.NumCapas(),rango.NumFilas(),rango.NumCols());
@@ -233,7 +233,7 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getRangoPuntos(const RangoTritriz &rango)
     return retval;
   }
 
-//! @brief Returns the puntos cuyos índices being passed as parameter.
+//! @brief Returns the points which indices are being passed as parameter.
 XC::Pnt *XC::TritrizPtrPnt::getPunto(const VIndices &iPunto)
   {
     Pnt *retval= nullptr;
@@ -243,12 +243,13 @@ XC::Pnt *XC::TritrizPtrPnt::getPunto(const VIndices &iPunto)
           { retval= (*this)(iPunto[0],iPunto[1],iPunto[2]); }
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; el vector de índices: "
-                << iPunto << " no es válido." << std::endl;
+      std::cerr  << "::" << __FUNCTION__
+		<< "; vector of indexes: "
+                << iPunto << " is not valid." << std::endl;
     return retval;    
   }
 
-//! @brief Returns the puntos cuyos índices being passed as parameter.
+//! @brief Returns the points which indices are being passed as parameter.
 XC::TritrizPtrPnt XC::TritrizPtrPnt::getPuntos(const TritrizIndices &indices)
   {
     const size_t nCapas= indices.GetCapas();
@@ -263,13 +264,14 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getPuntos(const TritrizIndices &indices)
             if(iPunto.size()>2)
               { retval(i,j,k)= getPunto(iPunto); }
             else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; el vector de índices: "
-                        << iPunto << " no es válido." << std::endl;
+	      std::cerr  << "::" << __FUNCTION__
+			<< "; vector of indexes: "
+                        << iPunto << " is not valid." << std::endl;
           }
     return retval;
   }
 
-//! @brief Returns the puntos cuyos índices being passed as parameters.
+//! @brief Returns the points which indices are being passed as parameters.
 XC::MatrizPtrPnt XC::TritrizPtrPnt::getPuntos(const MatrizIndices &indices)
   {
     const size_t nFilas= indices.getNumFilas();
@@ -282,16 +284,17 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getPuntos(const MatrizIndices &indices)
           if(iPunto.size()>2)
             { retval(i,j)= getPunto(iPunto); }
           else
-            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; el vector de índices: "
-                      << iPunto << " no es válido." << std::endl;
+            std::cerr  << "::" << __FUNCTION__
+		      << "; vector of indexes: "
+                      << iPunto << " is not valid." << std::endl;
         }
     return retval;
   }
 
-//! @brief Return the celda formada por los puntos que se obtienen de las
-//! posiciones de la tritriz que resultan de sumar a los índices (i,j,k) del
-//! punto los valores del vector offsetIndices es decir:
-//! Punto (i,j,k): (i+offsetIndices(i,j,k)[0],j+offsetIndices(i,j,k)[1],k+offsetIndices(i,j,k)[2])
+//! @brief Return the cell builded by the points obtained from the positions
+//! of the tritrix that result for adding to the indexex (i,j,k) of each point
+//! the values of the vector offsetIndices i. e.:
+//! Point (i,j,k): (i+offsetIndices(i,j,k)[0],j+offsetIndices(i,j,k)[1],k+offsetIndices(i,j,k)[2])
 XC::TritrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t &j,const size_t &k,const TritrizIndices &offsetIndices)
   {
     VIndices org(3);
@@ -301,10 +304,10 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t
     return getPuntos(tmp);
   }
 
-//! @brief Return the celda formada por los puntos que se obtienen de las
-//! posiciones de la tritriz que resultan de sumar a los índices (i,j) del
-//! punto los valores del vector offsetIndices es decir:
-//! Punto (i,j): (i+offsetIndices(i,j)[0],j+offsetIndices(i,j)[1],k+offsetIndices(i,j)[2])
+//! @brief Return the cell builded by the points obtained from the positions
+//! of the tritrix that result for adding to the indexes (i,j) of each point
+//! the values of the vector offsetIndices i. e.:
+//! Point (i,j): (i+offsetIndices(i,j)[0],j+offsetIndices(i,j)[1])
 XC::MatrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t &j,const MatrizIndices &offsetIndices)
   {
     VIndices org(2);
@@ -315,11 +318,11 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t 
   }
 
 // //! @brief Creates quad surfaces between the point range passed as paramete, it places them
-// //! entre las posiciones de la tritriz que resultan de sumar a los índices (i,j) del
-// //! punto los valores del vector offsetIndices es decir:
-// //! Punto 1: (i+offsetIndices[0,0],j+offsetIndices[0,1],k+offsetIndices[0,2])
-// //! Punto 2: (i+offsetIndices[1,0],j+offsetIndices[1,1],k+offsetIndices[1,2])
-// //! Punto 3: (i+offsetIndices[2,0],j+offsetIndices[2,1],k+offsetIndices[2,2])
+// //! between the positions of the tritrix that result from adding to the
+// //! indexes (i,j) of the point the values of offsetIndices so:
+// //! Point 1: (i+offsetIndices[0,0],j+offsetIndices[0,1])
+// //! Point 2: (i+offsetIndices[1,0],j+offsetIndices[1,1])
+// //! Point 3: (i+offsetIndices[2,0],j+offsetIndices[2,1])
 // //! ...
 // //! @param nf: Number of rows of the matrix that holds the pointers to point.
 // //! @param nc: Number of columns of the matrix that holds the pointers to point.
@@ -368,7 +371,7 @@ std::ostream &XC::operator<<(std::ostream &os, const TritrizPtrPnt &t)
     return os;
   }
 
-//! @brief Returns the índices de los puntos (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
+//! @brief Returns the indexes of the points (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
 std::vector<size_t> XC::getIdPuntosQuad(const TritrizPtrPnt::const_ref_capa_i_cte &puntos,const size_t &j,const size_t &k)
   {
     std::vector<size_t> retval(4,-1);
@@ -376,12 +379,14 @@ std::vector<size_t> XC::getIdPuntosQuad(const TritrizPtrPnt::const_ref_capa_i_ct
     const size_t ncols= puntos.getNumCols();
     if(j>=nfilas)
       {
-        std::cerr << "getIdPuntosQuad; índice de fila j= " << j << " fuera de rango.\n";
+        std::cerr  << __FUNCTION__
+	          << "; row index j= " << j << " out of range.\n";
         return retval;
       }
     if(k>=ncols)
       {
-        std::cerr << "getIdPuntosQuad; índice de columna k= " << k << " fuera de rango.\n";
+        std::cerr  << __FUNCTION__
+	          << "; column index k= " << k << " out of range.\n";
         return retval;
       }
 
@@ -452,8 +457,8 @@ std::vector<size_t> XC::getIdPuntosQuad(const TritrizPtrPnt::const_ref_capa_i_ct
     const double area= tmp.Area();
     if(area<1e-3)
       {
-        std::cerr << "Al obtener la celda de índices (" << j << ',' << k
-                  << ") se obtuvo un área muy pequeña (" << area << ").\n";
+        std::cerr << "When computing cell with indexes (" << j << ',' << k
+                  << ") a very small area was obtained (" << area << ").\n";
         std::cerr << " position of the point (j,k) " << p1 << std::endl;
 	std::cerr << " position of the point (j+1,k) " << p2 << std::endl;
 	std::cerr << " position of the point (j+1,k+1) " << p3 << std::endl;

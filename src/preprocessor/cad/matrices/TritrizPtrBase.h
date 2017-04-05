@@ -311,7 +311,7 @@ void TritrizPtrBase<MatrizPtr>::clearAll(void)
   }
 
 
-//! @brief Returns true if the único índice que varía es el I.
+//! @brief Returns true if only index I varies.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsFilaI(void) const
   {
@@ -319,7 +319,7 @@ bool TritrizPtrBase<MatrizPtr>::EsFilaI(void) const
     return true;
   }
 
-//! @brief Returns true if the único índice que varía es el J.
+//! @brief Returns true if only index J varies.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsFilaJ(void) const
   {
@@ -327,7 +327,7 @@ bool TritrizPtrBase<MatrizPtr>::EsFilaJ(void) const
     return true;
   }
 
-//! @brief Returns true if the único índice que varía es el K.
+//! @brief Returns true if only index K varies.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsFilaK(void) const
   {
@@ -335,27 +335,27 @@ bool TritrizPtrBase<MatrizPtr>::EsFilaK(void) const
     return true;
   }
 
-//! @brief Returns true iflos indices que varían son los J y K.
+//! @brief Returns true if the indexes that vary are los J y K.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsCapaICte(void) const
   { return (this->GetCapas()==1); }
 
-//! @brief Returns true iflos indices que varían son los I y K.
+//! @brief Returns true if the indexes that vary are los I y K.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsCapaJCte(void) const
   { return (this->getNumFilas()==1); }
 
-//! @brief Returns true iflos indices que varían son los I y J.
+//! @brief Returns true if the indexes that vary are los I y J.
 template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::EsCapaKCte(void) const
   { return (this->getNumCols()==1); }
 
-//! @brief Return the capa cuyo índice is being passed as parameter.
+//! @brief Return the capa which index is being passed as parameter.
 template <class MatrizPtr>
 const MatrizPtr &TritrizPtrBase<MatrizPtr>::operator()(const size_t &capa) const
   { return (*this)[capa-1]; }
 
-//! @brief Return the capa cuyo índice is being passed as parameter.
+//! @brief Return the capa which index is being passed as parameter.
 template <class MatrizPtr>
 MatrizPtr &TritrizPtrBase<MatrizPtr>::operator()(const size_t &capa)
   { return (*this)[capa-1]; }
@@ -510,17 +510,17 @@ void TritrizPtrBase<MatrizPtr>::PutCaja(size_t offset_capa,size_t offset_fila,si
     const size_t ncols= otra.getNumCols();
     if((ncapas+offset_capa)>GetCapas())
       {
-        std::cerr << "TritrizPtrNod::PutCaja; índice de capa fuera de rango." << std::endl;
+        std::cerr << "TritrizPtrNod::PutCaja; layer index out of range." << std::endl;
         return;
       }
     if((nfilas+offset_fila)>this->getNumFilas())
       {
-        std::cerr << "TritrizPtrNod::PutCaja; índice de fila fuera de rango." << std::endl;
+        std::cerr << "TritrizPtrNod::PutCaja; row index out of range." << std::endl;
         return;
       }
     if((ncols+offset_col)>this->getNumCols())
       {
-        std::cerr << "TritrizPtrNod::PutCaja; índice de columna fuera de rango." << std::endl;
+        std::cerr << "TritrizPtrNod::PutCaja; column index out of range." << std::endl;
         return;
       }
     for(size_t i=1;i<=ncapas;i++)

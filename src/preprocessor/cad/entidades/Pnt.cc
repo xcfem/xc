@@ -53,24 +53,25 @@ XC::Pnt::Pnt(const std::string &nombre, Preprocessor *m,const Pos3d &pto)
 XC::SetEstruct *XC::Pnt::getCopy(void) const
   { return new Pnt(*this); }
 
-//! Inserta la línea being passed as parameter en la lista
-//! de líneas que tocan al punto.
+//! Inserts the line being passed as parameter in the list of lines
+//! that begin or end in the point.
 void XC::Pnt::inserta_linea(Edge *l) const
   { lineas_pt.insert(l); }
 
-//! Borra la línea being passed as parameter de la lista
-//! de líneas que tocan al punto.
+//! Erases the line being passed as parameter in the list of lines
+//! that begin or end in the point.
 void XC::Pnt::borra_linea(Edge *l) const
   {
     std::set<const Edge *>::iterator i= lineas_pt.find(l);
     if(i!= lineas_pt.end()) //La ha encontrado.
       lineas_pt.erase(i);
   }
+
 //! Returns the position vector of the point.
 Vector3d XC::Pnt::VectorPos(void) const
   { return p.VectorPos();  }
 
-//! @brief Actualiza la topología.
+//! @brief Updates topology.
 void XC::Pnt::actualiza_topologia(void)
   {}
 
@@ -110,7 +111,7 @@ const std::string &XC::Pnt::NombresEdgesTocan(void) const
     return retval;
   }
 
-//! @brief Returns true if the punto toca a la línea.
+//! @brief Returns true if the line starts or ends in this point.
 bool XC::Pnt::Toca(const Edge &l) const
   {
     std::set<const Edge *>::const_iterator i= lineas_pt.find(&l);
@@ -203,7 +204,8 @@ std::set<XC::SetBase *> XC::Pnt::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << "Pnt::get_sets; no se ha definido el preprocesador." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
     return retval;
   }
 
@@ -305,7 +307,7 @@ XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB, const Pnt &pC)
     return retval;
   }
 
-//! @brief Busca una línea cuyos extremos son los puntos being passed as parameters.
+//! @brief Search for a line that connects the points.
 XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB)
   {
     Edge *retval= nullptr;
@@ -333,7 +335,7 @@ XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB, const Pnt &pC
     return retval;
   }
 
-//! @brief Busca una línea cuyos extremos son los puntos being passed as parameters.
+//! @brief Search for a line that connects the points.
 const XC::Edge *XC::busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB)
   {
     const Edge *retval= nullptr;

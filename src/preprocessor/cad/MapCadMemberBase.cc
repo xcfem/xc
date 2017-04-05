@@ -50,11 +50,11 @@ XC::Cad *XC::MapCadMemberBase::getCad(void)
     return retval;
   }
 
-//! @brief Returns a pointer to preprocesador.
+//! @brief Returns a pointer to preprocessor.
 const XC::Preprocessor *XC::MapCadMemberBase::getPreprocessor(void) const
   { return getCad()->getPreprocessor(); }
 
-//! @brief Returns a pointer to preprocesador.
+//! @brief Returns a pointer to preprocessor.
 XC::Preprocessor *XC::MapCadMemberBase::getPreprocessor(void)
   { return getCad()->getPreprocessor(); }
 

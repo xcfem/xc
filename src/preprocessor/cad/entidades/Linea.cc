@@ -51,7 +51,7 @@ XC::Linea::Linea(const std::string &nombre,Preprocessor *m,const size_t &nd)
 XC::SetEstruct *XC::Linea::getCopy(void) const
   { return new Linea(*this); }
 
-//! @brief Return the longitud de la línea.
+//! @brief Return the line length.
 double XC::Linea::getLongitud(void) const
   {
     double retval= 0;
@@ -69,8 +69,7 @@ double XC::Linea::getLambda(const Pos3d &p) const
     return retval;
   }
 
-//! @brief Returns the segmento que une los extremos
-//! de la línea.
+//! @brief Returns the segment than links the line ends.
 Segmento3d XC::Linea::getSegmento(void) const
   {
     Segmento3d retval;
@@ -90,12 +89,12 @@ XC::Edge *XC::Linea::split_at(Pnt *p,const double &lambda,const double &longitud
     Cad &cad= get_preprocessor()->getCad();
     Edge *tmp= nullptr;
     if(lambda<0)
-      tmp= cad.getLineas().Line(p,P1());
+      tmp= cad.getLineas().createLine(p,P1());
     else if(lambda>longitud)
-      tmp= cad.getLineas().Line(P2(),p);
+      tmp= cad.getLineas().createLine(P2(),p);
     else
       {
-        tmp= cad.getLineas().Line(p,p2);
+        tmp= cad.getLineas().createLine(p,p2);
         SetVertices(p1,p);
       }
     Linea *retval= dynamic_cast<Linea *>(tmp);
@@ -132,7 +131,7 @@ XC::Edge *XC::Linea::splitAtPoint(Pnt *p)
     return retval;
   }
 
-//! @brief Divide la línea por el punto que se obtiene mediante: p1+lambda*VDir().
+//! @brief Divides the line by the point obtained by: p1+lambda*VDir().
 XC::Edge *XC::Linea::splitAtLambda(const double &lambda)
   {
     Edge *retval= nullptr;
@@ -144,7 +143,7 @@ XC::Edge *XC::Linea::splitAtLambda(const double &lambda)
     return retval;
   }
 
-//! @brief Divide la línea por el punto que se obtiene mediante: p1+lambda*VDir().
+//! @brief Divides the line by the point obtained by: p1+lambda*VDir().
 XC::Edge *XC::Linea::splitAtCooNatural(const double &chi)
   {
     Edge *retval= nullptr;
@@ -163,7 +162,7 @@ BND3d XC::Linea::Bnd(void) const
     return retval;
   }
 
-//! @brief Returns ndiv+1 posiciones equiespaciadas a lo largo de la línea.
+//! @brief Returns ndiv+1 positions equally spaced along the line.
 MatrizPos3d XC::Linea::get_posiciones(void) const
   {
     MatrizPos3d retval;
@@ -172,7 +171,7 @@ MatrizPos3d XC::Linea::get_posiciones(void) const
     return retval;
   }
 
-//! @brief Returns the vector que une los extremos de la línea
+//! @brief Returns the vector that goes for back end to front end.
 const XC::Vector &XC::Linea::getVector(void) const
   {
     static XC::Vector retval(3);

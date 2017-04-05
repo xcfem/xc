@@ -48,8 +48,8 @@ class_<XC::Linea, bases<XC::LineaBase>, boost::noncopyable >("Line", no_init)
   .def("splitAtNaturalCoordinate", make_function(&XC::Linea::splitAtCooNatural, return_internal_reference<>()),"Breaks the line at the point defined by the natural coordinate (0.0->1.0).")
    ;
 
-class_<XC::LineaTramos, bases<XC::Linea>, boost::noncopyable >("DividedLine", no_init)
-  .def("setLongs",&XC::LineaTramos::setLongs,"Asigns length for each division.")
+class_<XC::DividedLine, bases<XC::Linea>, boost::noncopyable >("DividedLine", no_init)
+  .def("setLongs",&XC::DividedLine::setLongs,"Asigns length for each division.")
   ;
 
 class_<XC::ArcoCircunf, bases<XC::LineaBase>, boost::noncopyable >("CircleArc", no_init)

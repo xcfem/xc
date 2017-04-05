@@ -30,7 +30,7 @@
 
 #include "preprocessor/cad/entidades/Pnt.h"
 #include "preprocessor/cad/entidades/Linea.h"
-#include "preprocessor/cad/entidades/LineaTramos.h"
+#include "preprocessor/cad/entidades/DividedLine.h"
 #include "preprocessor/cad/entidades/CmbEdge.h"
 #include "preprocessor/cad/entidades/ArcoCircunf.h"
 #include "preprocessor/cad/entidades/QuadSurface.h"
@@ -63,7 +63,8 @@ XC::Cad::Cad(Preprocessor *mod)
     puntos(this), edges(this), faces(this), cuerpos(this), unif_grid(this),
     esquemas2d(this), esquemas3d(this) {}
 
-//!  @brief Asigna índices a los objetos (nodos,elementos,puntos...) para poder emplearlos en VTK.
+//! @brief Assigns indexes to the objects (nodes,elements,points,...)
+//! to be used in VTK arrays.
 void XC::Cad::numera(void)
   {
     puntos.numera();
@@ -73,7 +74,7 @@ void XC::Cad::numera(void)
   }
 
 //! @brief Returns the «edge» que tiene por extremos los puntos
-//! cuyos índices being passed as parameter.
+//! which indices are being passed as parameter.
 XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPuntos::Indice &pB)
   {
     Edge *retval= nullptr;
@@ -96,7 +97,7 @@ XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPunt
   }
 
 //! @brief Returns the «edge» que tiene por extremos los puntos
-//! cuyos índices being passed as parameter.
+//! which indices are being passed as parameter.
 const XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPuntos::Indice &pB) const
   {
     const Edge *retval= nullptr;
@@ -118,7 +119,7 @@ const XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const M
     return retval;
   }
 
-//! @brief Crea concilia el número de divisiones de las líneas.
+//! @brief Conciliates number of divisions of the lines.
 void XC::Cad::conciliaNDivs(void)
   {
     if(!faces.empty())

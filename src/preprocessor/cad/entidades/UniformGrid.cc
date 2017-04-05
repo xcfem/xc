@@ -43,7 +43,7 @@ XC::UniformGrid::UniformGrid(Preprocessor *m,const size_t &i)
 
 //! @brief Constructor.
 //! @param nombre: Object identifier.
-//! @param m: Pointer to preprocesador.
+//! @param m: Pointer to preprocessor.
 //! @param i: Índice para gráficos.
 XC::UniformGrid::UniformGrid(const std::string &nombre,Preprocessor *m,const size_t &i)
   : EntMdlr(nombre,i,m),Lx(0.0),Ly(0.0),Lz(0.0),ndiv_x(0),ndiv_y(0),ndiv_z(0)
@@ -89,7 +89,8 @@ std::set<XC::SetBase *> XC::UniformGrid::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << "UniformGrid::get_sets; no se ha definido el preprocesador." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
     return retval;
   }
 

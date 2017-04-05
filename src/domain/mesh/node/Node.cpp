@@ -1408,7 +1408,8 @@ std::set<XC::SetBase *> XC::Node::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << "Node::get_sets; no se ha definido el preprocesador." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
     return retval;
   }
 

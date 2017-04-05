@@ -37,12 +37,13 @@
 XC::Spot::Spot(const Pos2d &pto)
   : EntGeomSection(), p(pto) {}
 
-//! Inserta la línea being passed as parameter en la lista
-//! de líneas que tocan al punto.
+//! Inserts the line being passed as parameter in the list
+//! of the lines that begin or end in this point.
 void XC::Spot::inserta_linea(Eje *l)
   { ejes_pt.insert(l); }
-//! Borra la línea being passed as parameter de la lista
-//! de líneas que tocan al punto.
+
+//! Erases the line being passed as parameter from the list
+//! of the lines that begin or end in this point.
 void XC::Spot::borra_linea(Eje *l)
   {
     std::set<const Eje *>::iterator i= find(ejes_pt.begin(),ejes_pt.end(),l);

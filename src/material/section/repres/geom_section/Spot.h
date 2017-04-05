@@ -78,7 +78,7 @@ class Spot: public EntGeomSection
       { p= pos; }
     Vector2d VectorPos(void) const;
 
-    //! @brief Return the lista de líneas que tocan al punto.
+    //! @brief Return the list of lines that begin or end in this point.
     const std::set<const Eje *> &EjesTocan(void) const
       { return ejes_pt; }
     bool Toca(const Eje &l) const;

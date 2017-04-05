@@ -85,7 +85,7 @@ size_t XC::Body::BodyFace::NumLineas(void) const
 size_t XC::Body::BodyFace::NumVertices(void) const
   { return surface->NumVertices(); }
 
-//! @brief Returns the pointer al lado de la cara, cuyo índice is being passed as parameter.
+//! @brief Returns the pointer al lado de la cara, which index is being passed as parameter.
 const XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i) const
   {
     if(!surface) return nullptr;
@@ -235,7 +235,8 @@ std::set<XC::SetBase *> XC::Body::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << "Body::get_sets; no se ha definido el preprocesador." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
     return retval;
   }
 

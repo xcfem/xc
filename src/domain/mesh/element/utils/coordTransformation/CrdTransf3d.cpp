@@ -332,7 +332,7 @@ XC::Matrix XC::CrdTransf3d::getLocalAxes(bool initialGeometry) const
   }
 
 
-//! @brief Return the posición of node I.
+//! @brief Returns the position of node I.
 Pos3d XC::CrdTransf3d::getPosNodeI(void) const
   {
     Pos3d retval= nodeIPtr->getPosFinal3d();

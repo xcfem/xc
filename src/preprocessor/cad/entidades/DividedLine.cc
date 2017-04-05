@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//LineaTramos.cc
+//DividedLine.cc
 
-#include "LineaTramos.h"
+#include "DividedLine.h"
 #include "Pnt.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
@@ -35,22 +35,22 @@
 #include "domain/mesh/element/Element.h"
 
 //! @brief Constructor.
-XC::LineaTramos::LineaTramos(Preprocessor *m,const size_t &nd)
+XC::DividedLine::DividedLine(Preprocessor *m,const size_t &nd)
   : Linea(m,nd), longs(nd,1.0){}
 
 //! @brief Virtual constructor.
-XC::SetEstruct *XC::LineaTramos::getCopy(void) const
-  { return new LineaTramos(*this); }
+XC::SetEstruct *XC::DividedLine::getCopy(void) const
+  { return new DividedLine(*this); }
 
-void XC::LineaTramos::setLongs(const XC::Vector &ls)
+void XC::DividedLine::setLongs(const XC::Vector &ls)
   {
     longs= vector_to_std_vector(ls);
     SetNDiv(longs.size());
   }
 
-//! @brief Returns ndiv+1 posiciones a lo largo de la línea espaciadas
-//! según las longitudes que contenga el miembro longs.
-MatrizPos3d XC::LineaTramos::get_posiciones(void) const
+//! @brief Returns ndiv+1 positions along the line spaced
+//! according to the lengths specifiend in the longs member.
+MatrizPos3d XC::DividedLine::get_posiciones(void) const
   {
     static MatrizPos3d retval;
     if(P1() && P2())
@@ -61,7 +61,8 @@ MatrizPos3d XC::LineaTramos::get_posiciones(void) const
         retval= MatrizPos3d(P1()->GetPos(),P2()->GetPos(),tmp);
       }
     else
-      std::cerr << "LineaTramos::get_posiciones; la línea no esté definida." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+		<< "; undifined line." << std::endl;
     return retval;
   }
 

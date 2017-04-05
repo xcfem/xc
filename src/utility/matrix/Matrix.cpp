@@ -698,7 +698,7 @@ XC::Matrix XC::Matrix::operator()(const ID &rows, const ID & cols) const
     return result;
   }
 
-//! @brief Return the fila cuyo índice being passed as parameter.
+//! @brief Return the fila which index being passed as parameter.
 XC::Vector XC::Matrix::getRow(int row) const
   {
     Vector retval(numCols);
@@ -707,7 +707,7 @@ XC::Vector XC::Matrix::getRow(int row) const
     return retval;
   }
 
-//! @brief Return the columna cuyo índice being passed as parameter.
+//! @brief Return the columna which index being passed as parameter.
 XC::Vector XC::Matrix::getCol(int col) const
   {
     Vector retval(numRows);
@@ -1290,7 +1290,7 @@ double XC::Matrix::columnSum(int j) const
     return sumac;
   }
 
-//! @brief Returns the cuadrado del módulo (norma euclídea) de la matriz.
+//! @brief Returns the squared modulus (euclidean norm) of the matrix.
 double XC::Matrix::Norm2(void) const
   {
     double r= 0.0;
@@ -1311,7 +1311,7 @@ double XC::Matrix::Norm2(void) const
 
 
 
-//! @brief Returns the módulo (norma euclídea) de la matriz.
+//! @brief Returns the modulus (euclidean norm) of the matrix.
 double XC::Matrix::Norm(void) const
   { return sqrt(Norm2()); }
 

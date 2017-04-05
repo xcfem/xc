@@ -37,10 +37,10 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
-//! @brief Returns a pointer to the preprocesador.
+//! @brief Returns a pointer to the preprocessor.
 const XC::Preprocessor *XC::EntMdlrBase::get_preprocessor(void) const
   { return preprocessor; }
-//! @brief Returns a pointer to the preprocesador.
+//! @brief Returns a pointer to the preprocessor.
 XC::Preprocessor *XC::EntMdlrBase::get_preprocessor(void)
   { return preprocessor; }
 

@@ -48,16 +48,16 @@ XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
 
 //! @brief Constructor.
 //! @param nombre: Object identifier.
-//! @param m: Pointer to preprocesador.
-//! @param nd: Número de divisiones.
+//! @param m: Pointer to preprocessor.
+//! @param nd: number of divisions.
 XC::Face::Face(const std::string &nombre,Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
   : CmbEdge(nombre,m,ndivI), ndivj(ndivJ) {}
 
-//! @brief Asigna el número de divisiones en el eje i.
+//! @brief Asigna el number of divisions en el eje i.
 void XC::Face::SetNDivI(const size_t &ndi)
   { CmbEdge::ndiv= ndi; }
 
-//! @brief Asigna el número de divisiones en el eje j.
+//! @brief Asigna el number of divisions en el eje j.
 void XC::Face::SetNDivJ(const size_t &ndj)
   { ndivj= ndj; }
 
@@ -66,7 +66,7 @@ void XC::Face::SetNDivJ(const size_t &ndj)
 void XC::Face::inserta_body(Body *b)
   { cuerpos_sup.insert(b); }
 
-//! @brief Actualiza la topología.
+//! @brief Updates topology.
 void XC::Face::actualiza_topologia(void)
   {
     for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
@@ -147,7 +147,8 @@ std::set<XC::SetBase *> XC::Face::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << "Face::get_sets; no se ha definido el preprocesador." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
     return retval;
   }
 
@@ -161,19 +162,19 @@ void XC::Face::add_to_sets(std::set<SetBase *> &sets)
       }
   }
 
-//! @brief Returns a pointer to nodo cuyos índices being passed as parameters.
+//! @brief Returns a pointer to node which indices are being passed as parameters.
 XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   { return CmbEdge::GetNodo(i,j,k); }
 
-//! @brief Returns a pointer to nodo cuyos índices being passed as parameters.
+//! @brief Returns a pointer to node which indices are being passed as parameters.
 const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   { return CmbEdge::GetNodo(i,j,k); }
 
-//! @brief Returns a pointer to nodo cuyos índices is being passed as parameter.
+//! @brief Returns a pointer to node which indices are is being passed as parameter.
 XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j)
   { return const_cast<Node *>(static_cast<const Face &>(*this).GetNodo(i,j)); }
 
-//! @brief Returns a pointer to nodo cuyos índices is being passed as parameter.
+//! @brief Returns a pointer to node which indices are is being passed as parameter.
 const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j) const
   {
     const Node *retval= nullptr;
@@ -188,14 +189,15 @@ const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j) const
     return retval;
   }
 
-//! @brief Returns a pointer to nodo cuyo índice is being passed as parameter.
+//! @brief Returns a pointer to node which index is being passed as parameter.
 XC::Node *XC::Face::GetNodo(const size_t &i)
   {
-    std::cerr << "No debe llamarse a Face::GetNodo con un sólo índice." << std::endl; 
+    std::cerr << nombre_clase() << __FUNCTION__
+              << "; must not be called with only one index." << std::endl; 
     return nullptr;
   }
 
-//! @brief Returns a pointer to nodo cuyo índice is being passed as parameter.
+//! @brief Returns a pointer to node which index is being passed as parameter.
 const XC::Node *XC::Face::GetNodo(const size_t &i) const
   { return const_cast<Node *>(static_cast<const Face &>(*this).GetNodo(i)); }
 

@@ -50,8 +50,8 @@ XC::EntMdlr::EntMdlr(Preprocessor *m,const size_t &i)
 
 //! @brief Constructor.
 //! @param nombre: Object identifier.
-//! @param i: Índice para gráficos.
-//! @param m: Pointer to preprocesador.
+//! @param i: index to be used in VTK arrays.
+//! @param m: Pointer to preprocessor.
 XC::EntMdlr::EntMdlr(const std::string &nombre,const size_t &i,Preprocessor *m)
   : SetEstruct(nombre,m), idx(i), doGenMesh(true), nodos(), elementos() {}
 
@@ -71,7 +71,8 @@ XC::EntMdlr &XC::EntMdlr::operator=(const EntMdlr &otro)
     return *this;
   }
 
-//! @brief Asigna el índice al objeto (ver numera en Set).
+//! @brief Assigns the objects index for its use in
+//! VTK arrays(see numera in Set).
 void XC::EntMdlr::set_indice(const size_t &i)
   { idx= i; }
 
@@ -103,7 +104,8 @@ void XC::EntMdlr::BorraPtrNodElem(void)
     elementos.clearAll();
   }
 
-//! @brief Returns a pointer to the node cuyos índices being passed as paremeters.
+//! @brief Returns a pointer to the node which indexes are
+//! being passed as parameters.
 XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   {
     if(!nodos.Null())
@@ -112,7 +114,8 @@ XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
       return nullptr;
   }
 
-//! @brief Returns a pointer to the node cuyos índices being passed as paremeters.
+//! @brief Returns a pointer to the node which indexes are
+//! being passed as parameters.
 const XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   {
     if(!nodos.Null())
@@ -132,15 +135,16 @@ const XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p) const
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Returns the índices del node que se paras as parameter.
+//! @brief Returns the indexes of the node being passed as parameter.
 XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
   { return nodos.getNodeIndices(n); }
 
-//! @brief Returns the tags de los nodos.
+//! @brief Returns the tags of the nodes.
 std::vector<int> XC::EntMdlr::getTagsNodos(void) const
   { return nodos.getTags(); }
 
-//! @brief Returns a pointer to the element cuyos índices being passed as paremeters.
+//! @brief Returns a pointer to the element which indexes
+//! are being passed as paremeters.
 XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size_t &k)
   {
     if(!elementos.Null())
@@ -149,7 +153,7 @@ XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size
       return nullptr;
   }
 
-//! @brief Returns a pointer to the element cuyos índices being passed as paremeters.
+//! @brief Returns a pointer to the element which indices are being passed as paremeters.
 const XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size_t &k) const
   {
     if(!elementos.Null())
@@ -207,7 +211,7 @@ XC::SetEstruct *XC::EntMdlr::crea_set_fila(const RangoTritriz &rango,const std::
       }
     else
       {
-	std::cerr << "EntMdlr::crea_set_fila; falta a pointer to preprocesador." << std::endl;
+	std::cerr << "EntMdlr::crea_set_fila; falta a pointer to preprocessor." << std::endl;
         return nullptr;
       }
     return retval;
@@ -297,11 +301,11 @@ bool XC::EntMdlr::crea_elementos(meshing_dir dm)
     return retval;
   }
 
-//! @brief Returns true if the punto toca a la línea.
+//! @brief Returns true if the points begins or ends in the line.
 void XC::EntMdlr::setGenMesh(bool m)
   { doGenMesh= m; }
 
-//! @brief Returns true if the punto toca a la línea.
+//! @brief Returns true if the points begins or ends in the line.
 const bool &XC::EntMdlr::getGenMesh(void) const
   { return doGenMesh; }
 
@@ -328,7 +332,8 @@ void XC::EntMdlr::crea_puntos(const MatrizPos3d &posiciones)
             }
       }
     else
-      std::cerr << "Edge::crea_nodos; falta el preprocesador." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
     if(verborrea>4)
       std::clog << "creados." << std::endl;
   }

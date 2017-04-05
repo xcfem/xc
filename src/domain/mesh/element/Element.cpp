@@ -283,8 +283,8 @@ const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
     return theVector;
   }
 
-//! @brief Returns the fuerza generalizada del elemento sobre el nodo cuyo
-//! índice is being passed as parameter.
+//! @brief Returns the generalized force of the element over the iNod-th
+//! node.
 const XC::Vector &XC::Element::getNodeResistingComponents(const size_t &iNod,const Vector &rf) const
   {
     static Vector retval;
@@ -295,8 +295,8 @@ const XC::Vector &XC::Element::getNodeResistingComponents(const size_t &iNod,con
     return retval; 
   }
 
-//! @brief Returns the fuerza generalizada del elemento sobre el nodo cuyo
-//! índice is being passed as parameter.
+//! @brief Returns the generalized force of the element over the iNod-th
+//! node.
 const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
   {
     const Vector &rf= getResistingForce();
@@ -304,7 +304,7 @@ const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
   }
 
 //! @brief Returns the fuerza generalizada (incluyendo fuerzas de inercia)
-//! del elemento sobre el nodo cuyo índice is being passed as parameter.
+//! del elemento sobre el nodo which index is being passed as parameter.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const size_t &iNod) const
   {
     const Vector &rf= getResistingForceIncInertia();
@@ -614,7 +614,7 @@ XC::MEDGaussModel XC::Element::getMEDGaussModel(void) const
   }
 
 //! @brief Returns the nodos del borde (o arista) del elemento
-//! cuyo índice is being passed as parameter.
+//!which index is being passed as parameter.
 XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
   {
     NodesEdge retval;
@@ -684,8 +684,8 @@ XC::ID XC::Element::getEdgesNodeByTag(const int &iN) const
     return getEdgesNode(n);
   }
  
-//! @brief Returns the índices locales de los nodos del elemento
-//! situados sobre el borde (o arista) being passed as parameters.
+//! @brief Returns the local indexes of the element nodes
+//! that lie over the i-th edge.
 XC::ID XC::Element::getLocalIndexNodesEdge(const size_t &i) const
   {
     ID retval;
@@ -706,7 +706,8 @@ std::set<XC::SetBase *> XC::Element::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << "Element::get_sets; no se ha definido el preprocesador." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; preprocessor needed." << std::endl;
     return retval;
   }
 
@@ -751,7 +752,7 @@ std::vector<int> XC::Element::getIdxNodes(void) const
 double XC::Element::MaxCooNod(int icoo) const
   { return getNodePtrs().MaxCooNod(icoo); }
 
-//! @brief Returns the valor mínimo de la coordenada i de los nodos del elemento.
+//! @brief Returns the minimum value de la coordenada i de los nodos del elemento.
 double XC::Element::MinCooNod(int icoo) const
   { return getNodePtrs().MinCooNod(icoo); }
 

@@ -39,7 +39,7 @@ namespace XC {
 
 class Edge;
 class Linea;
-class LineaTramos;
+class DividedLine;
 class CmbEdge;
 class ArcoCircunf;
 
@@ -64,19 +64,19 @@ class MapLineas: public MapEnt<Edge>
 
     template <class E>
     Edge *Nueva(void);
-    Edge *Line(Pnt *,Pnt *);
-    Edge *DividedLine(Pnt *,Pnt *);
-    Edge *Arc(Pnt *,Pnt *,Pnt *);
-    Edge *LineSequence(void);
-    Edge *Copia(const Edge *l);
+    Edge *createLine(Pnt *,Pnt *);
+    Edge *createDividedLine(Pnt *,Pnt *);
+    Edge *createArc(Pnt *,Pnt *,Pnt *);
+    Edge *createLineSequence(void);
+    Edge *createCopy(const Edge *l);
  
     Linea *newLine(const size_t &, const size_t &);
-    LineaTramos *newDividedLine(const size_t &, const size_t &);
+    DividedLine *newDividedLine(const size_t &, const size_t &);
     ArcoCircunf *newCircleArc(const size_t &, const size_t &, const size_t &);
     CmbEdge *newLineSequence(void);
   };
 
-//! @brief Crea una nueva línea.
+//! @brief Creates a new line.
 template <class E>
 Edge *XC::MapLineas::Crea(void)
   {

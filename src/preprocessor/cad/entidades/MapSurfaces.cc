@@ -57,15 +57,15 @@ void XC::MapSurfaces::UpdateSets(Face *nueva_face) const
       }
   }
 
-//! @brief Crea concilia el número de divisiones de las líneas.
+//! @brief Crea concilia el number of divisions of the lines.
 bool XC::MapSurfaces::conciliaNDivs(void)
   { 
     getCad()->conciliaNDivs();
     return checkNDivs();
   }
 
-//! @brief Verifica que los números de divisiones de los lados
-//! son compatibles.
+//! @brief Verifica que los number of divisions of the edges
+//! are compatible.
 bool XC::MapSurfaces::checkNDivs(void) const
   {
     size_t conta= 0;

@@ -40,7 +40,7 @@ class Preprocessor;
 
 //!  @ingroup POST_PROCESS
 // 
-//!  @brief Contenedor de definiciones de campo.
+//!  @brief Container of field definitions.
 class MapFields: public EntCmd, public MovableObject, public std::deque<FieldInfo>
   {
   public:
@@ -48,7 +48,7 @@ class MapFields: public EntCmd, public MovableObject, public std::deque<FieldInf
     typedef dq_fields::iterator iterator;
     typedef dq_fields::const_iterator const_iterator;
   private:
-    Preprocessor *preprocessor; //!< Puntero al preprocesador.
+    Preprocessor *preprocessor; //!< pointer to preprocessor.
 
     bool existe(const std::string &nmb) const;
 

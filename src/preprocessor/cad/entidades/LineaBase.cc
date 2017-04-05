@@ -99,7 +99,7 @@ void XC::LineaBase::SetVertice(const size_t &i,const size_t &id_punto)
 	        << "; point: '" << id_punto << "' not found \n";
   }
 
-//! @brief Asigna los extremos de la línea.
+//! @brief Assigns line ends.
 void XC::LineaBase::SetVertices(Pnt *pA,Pnt *pB)
   {
     if(pA==pB)

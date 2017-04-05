@@ -46,12 +46,13 @@ XC::Domain *XC::Loader::getDomain(void) const
       return preprocessor->getDomain();
     else
       {
-	std::cerr << "(Loader) necesito un preprocesador." << std::endl;
+	std::cerr << nombre_clase() << __FUNCTION__
+	          << "; preprocessor needed." << std::endl;
         return nullptr;
       }
   }
 
-//! @brief Asigna el preprocesador.
+//! @brief Assigns the preprocessor.
 void XC::Loader::set_preprocessor(Preprocessor *p)
   { preprocessor= p; }
 

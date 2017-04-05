@@ -110,7 +110,7 @@ const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
   }
 
 
-//! @brief Asigna el número de divisiones en el eje i.
+//! @brief Asigna el number of divisions en el eje i.
 void XC::QuadSurface::SetNDivI(const size_t &ndi)
   {
     if(lineas.size()<4)
@@ -130,7 +130,7 @@ void XC::QuadSurface::SetNDivI(const size_t &ndi)
       }
   }
 
-//! @brief Asigna el número de divisiones en el eje j.
+//! @brief Asigna el number of divisions en el eje j.
 void XC::QuadSurface::SetNDivJ(const size_t &ndj)
   {
     if(lineas.size()<4)
@@ -161,7 +161,8 @@ void XC::QuadSurface::ConciliaNDivIJ(void)
       }
   }
 
-//! @brief Comprueba que los números de divisiones de las líneas son compatibles.
+//! @brief Verifies that the number of divisions of the lines are
+//! compatible.
 bool XC::QuadSurface::checkNDivs(const size_t &i,const size_t &j) const
   {
     const size_t ndivA= lineas[i].Borde()->NDiv();
@@ -180,12 +181,14 @@ bool XC::QuadSurface::checkNDivs(const size_t &i,const size_t &j) const
       return true;
   }
 
-//! @brief Comprueba que los números de divisiones de las líneas son compatibles.
+//! @brief Verifies that the number of divisions of the lines are
+//! compatible.
 bool XC::QuadSurface::checkNDivs(void) const
   { return (checkNDivs(0,2) && checkNDivs(1,3)); }
 
-//! @brief Calcula el número de divisiones en el eje i para que
-//! el tamaño del lado I del elemento sea aproximadamente el being passed as parameter.
+//! @brief Computes the number of divisions on the i axis
+//! for an element edge size equal or lesser than the
+//! size being passed as parameter.
 void XC::QuadSurface::SetElemSizeI(const double &sz)
   {
     const double l1= lineas[0].getLongitud();
@@ -194,8 +197,9 @@ void XC::QuadSurface::SetElemSizeI(const double &sz)
     SetNDivI(n);
   }
 
-//! @brief Calcula el número de divisiones en el eje i para que
-//! el tamaño del lado I del elemento sea aproximadamente el being passed as parameter.
+//! @brief Computes the number of divisions on the j axis
+//! for an element edge size equal or lesser than the
+//! size being passed as parameter.
 void XC::QuadSurface::SetElemSizeJ(const double &sz)
   {
     const double l1= lineas[1].getLongitud();
@@ -205,26 +209,29 @@ void XC::QuadSurface::SetElemSizeJ(const double &sz)
   }
 
 
-//! @brief Calcula el número de divisiones en los ejes para que
-//! el tamaño de los lados del elemento sea aproximadamente el being passed as parameter.
+//! @brief Computes the number of divisions on the i and j axis
+//! for an element edges sizes equal or lesser than the
+//! sizes being passed as parameter.
 void XC::QuadSurface::SetElemSizeIJ(const double &szI,const double &szJ)
   {
     SetElemSizeI(szI);
     SetElemSizeJ(szJ);
   }
 
-//! @brief Crea e inserta las líneas a partir de los puntos cuyos índices se pasan
-//! as parameter.
+//! @brief Creates and inserts the lines from the points identified
+//! by the indexes being passed as parameter.
 void XC::QuadSurface::setPuntos(const ID &indices_ptos)
   {
-    const size_t np= indices_ptos.Size(); //No. de índices leídos.
+    const size_t np= indices_ptos.Size(); //Number of indexes.
     if(np!=4)
-      std::cerr << "XC::QuadSurface::setPuntos; surface definition needs "
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; surface definition needs "
                 << 4 << " points, we got: " << np << ".\n";
     else
       {
         if(NumEdges()>0)
-          std::cerr << "QuadSurface::setPuntos; warning redefinition of surface: '"
+          std::cerr << nombre_clase() << __FUNCTION__
+	            << "; warning redefinition of surface: '"
                     << GetNombre() << "'.\n";
 
 	Face::addPoints(indices_ptos);
@@ -296,16 +303,16 @@ void XC::QuadSurface::setPuntos(const m_int &indices_ptos)
     const size_t nc= indices_ptos.getNumCols(); //No. de columnas de puntos.
     if(nf<2)
       {
-        std::cerr << "La matriz de índices: '"
+        std::cerr << "Matrix of indexes: '"
                   << indices_ptos 
-                  << "' debe tener al menos dos filas." << std::endl;
+                  << "' must have at least two rows." << std::endl;
         return;
       }
     if(nc<2)
       {
-        std::cerr << "La matriz de índices: '"
+        std::cerr << "Matrix of indexes: '"
                   << indices_ptos 
-                  << "' debe tener al menos dos columnas." << std::endl;
+                  << "' must have at least two columns." << std::endl;
         return;
       }
     MatrizPtrPnt puntos(nf,nc);
