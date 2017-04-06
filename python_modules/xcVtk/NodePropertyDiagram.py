@@ -1,17 +1,35 @@
  # -*- coding: utf-8 -*-
 
-''' Diagram display a property defined at nodes over linear elements. '''
+''' Diagram to display a property defined at nodes over linear elements. '''
 
 import geom
 import vtk
 from xcVtk import ColoredDiagram as cd
 
+
+
 class NodePropertyDiagram(cd.ColoredDiagram):
-  '''Diagram of internal forces (N,My,Mz,T,Vy,Vz)'''
-  def __init__(self,scale,fUnitConv,sets,propertyName):
-    super(NodePropertyDiagram,self).__init__(scale,fUnitConv)
+  '''Diagram to display a property defined at nodes over linear elements.'''
+  def __init__(self,scaleFactor,fUnitConv,sets,attributeName):
+    super(NodePropertyDiagram,self).__init__(scaleFactor,fUnitConv)
     self.conjuntos= sets
-    self.propertyName= propertyName
+    self.propertyName= attributeName
+
+  def getValueForNode(self,node):
+    if self.propertyName == 'uX':
+      return node.getDispXYZ[0]
+    elif self.propertyName == 'uY':
+      return node.getDispXYZ[1]
+    elif self.propertyName == 'uZ':
+      return node.getDispXYZ[2]
+    elif self.propertyName == 'rotX':
+      return node.getRotXYZ[0]
+    elif self.propertyName == 'rotY':
+      return node.getRotXYZ[1]
+    elif self.propertyName == 'rotZ':
+      return node.getRotXYZ[2]
+    else:
+      return node.getProp(self.propertyName)
 
   def appendDataToDiagram(self, eSet,indxDiagrama):
     # Append property values to diagram .
@@ -19,8 +37,8 @@ class NodePropertyDiagram(cd.ColoredDiagram):
     elems= eSet.getElements
     for e in elems:
       self.vDir= e.getVDirWeakAxisGlobalCoord()
-      v0= e.getNodes[0].getProp(self.propertyName)
-      v1= e.getNodes[1].getProp(self.propertyName)
+      v0= self.getValueForNode(e.getNodes[0])
+      v1= self.getValueForNode(e.getNodes[1])
       indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,v0,v1)
 
   def agregaDiagrama(self):

@@ -58,7 +58,7 @@ def defVarsControlMovModulus(nodes):
       lmsg.warning('span property not defined for node: '+str(n.tag) + '.')
     tags.append(n.tag)
     n.setProp("dispMax",0.0)
-    n.setProp("CombdispMax","")
+    n.setProp("CombDispMax","")
   return tags
 
 

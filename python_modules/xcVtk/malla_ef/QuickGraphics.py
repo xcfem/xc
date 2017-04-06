@@ -17,6 +17,7 @@ from xcVtk.malla_ef import Fields
 from xcVtk import ControlVarDiagram as cvd
 from xcVtk import LinearLoadDiagram as lld
 from xcVtk import LoadVectorField as lvf
+from xcVtk import NodePropertyDiagram as npd
 
 class QuickGraphics(object):
   '''This class is aimed at providing the user with a quick and easy way to 
@@ -73,6 +74,21 @@ class QuickGraphics(object):
       lmsg.error('Item '+str(componentName) +'is not a valid component. Displayable items are: N1, N2, N12, M1, M2, M12, Q1, Q2')
       return 'N1'
 
+  def getDisplay(self,vwName= 'XYZPos',hCamF=1.0):
+    '''Returns a suitable display to show the graphics.
+    
+    :param viewName:     name of the view that contains the renderer (possible
+                         options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
+                         "ZPos", "ZNeg") (defaults to "XYZPos")
+    :param hCamFct:     factor that applies to the height of the camera position
+                        in order to change perspective of isometric views 
+                        (defaults to 1, usual values 0.1 to 10)
+    '''
+    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay.viewName=vwName
+    defDisplay.hCamFct=hCamF
+    return defDisplay
+
 
   def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
     '''displays the component of the displacement or rotations in the 
@@ -95,9 +111,7 @@ class QuickGraphics(object):
     for n in nodSet:
       n.setProp('propToDisp',n.getDisp[vCompDisp])
     field= Fields.ScalarField('propToDisp',"getProp",None,fConvUnits)
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.viewName=viewName
-    defDisplay.hCamFct=hCamFct
+    defDisplay= self.getDisplay(vwName=viewName,hCamF= CamFct)
     defDisplay.displayMesh(xcSet=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.name)
 
   def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
@@ -130,9 +144,7 @@ class QuickGraphics(object):
       mat= e.getPhysicalProperties.getVectorMaterials
       e.setProp(propName,mat.getMeanGeneralizedStressByName(vCompDisp))
     field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.viewName=viewName
-    defDisplay.hCamFct=hCamFct
+    defDisplay= self.getDisplay(vwName=viewName,hCamF= CamFct)
     field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name)
 
   def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
@@ -160,9 +172,7 @@ class QuickGraphics(object):
       lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
     diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
     diagram.agregaDiagrama()
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.viewName=viewName
-    defDisplay.hCamFct=hCamFct
+    defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.setupGrid(self.xcSet)
     defDisplay.defineEscenaMalla(None)
     defDisplay.appendDiagram(diagram) #Append diagram to the scene.
@@ -191,9 +201,7 @@ class QuickGraphics(object):
     preprocessor= self.feProblem.getPreprocessor
     loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
     loadPatterns.addToDomain(loadCaseName)
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.viewName=viewName
-    defDisplay.hCamFct=hCamFct
+    defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.setupGrid(self.xcSet)
     defDisplay.defineEscenaMalla(None)
     orNodalLBar='H'  #default orientation of scale bar for nodal loads
@@ -214,4 +222,35 @@ class QuickGraphics(object):
       defDisplay.renderer.AddActor2D(vField.scalarBar)
     defDisplay.displayScene(caption=caption,fName=fileName)
 
+  def displayNodeValueDiagram(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
+    '''displays the a displacement (uX,uY,...) or a property defined in nodes 
+    as a diagram over lines (i.e. appropiated for beam elements).
+    
+    :param itemToDisp:   item to display.
+    :param setToDisplay: set of entities (elements of type beam) to be represented
+    :param fConvUnits:   factor of conversion to be applied to the results (defalts to 1)
+    :param scaleFactor:  factor of scale to apply to the diagram display of
+    :param unitDescription: string like '[m]' or '[rad]' or '[m/s2]'
+    :param viewName:     name of the view  that contains the renderer (possible
+                         options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
+                         "ZPos", "ZNeg") (defaults to "XYZPos")
+    :param hCamFct:     factor that applies to the height of the camera position
+                        in order to change perspective of isometric views 
+                        (defaults to 1, usual values 0.1 to 10)
+    :param fileName:     name of the file to plot the graphic. Defaults to None,
+                         in that case an screen display is generated
+    '''
+    if(setToDisplay):
+      self.xcSet= setToDisplay
+    else:
+      lmsg.warning('QuickGraphics::displayNodeValueDiagram; set to display not defined; using previously defined set (total if None).')
+    diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= itemToDisp)
+    diagram.agregaDiagrama()
+    defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+    defDisplay.setupGrid(self.xcSet)
+    defDisplay.defineEscenaMalla(None)
+    defDisplay.appendDiagram(diagram) #Append diagram to the scene.
+
+    caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
+    defDisplay.displayScene(caption=caption,fName=fileName)
  

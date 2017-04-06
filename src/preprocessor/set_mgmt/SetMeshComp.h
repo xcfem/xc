@@ -68,23 +68,23 @@ class SetMeshComp: public SetBase
     static void numera_lista(L &l);
     void numera(void);
   public:
-    //Nodos.
-    typedef DqPtrsNode::iterator nod_iterator; //!< Iterador sobre el node set.
-    typedef DqPtrsNode::const_iterator nod_const_iterator; //!< Iterador sobre el node set.
+    //Nodes.
+    typedef DqPtrsNode::iterator nod_iterator; //!< Iterator over the node set.
+    typedef DqPtrsNode::const_iterator nod_const_iterator; //!< Iterator over the node set.
 
-    //Elementos.
-    typedef DqPtrsElem::iterator elem_iterator; //!< Iterador sobre the set de elementos.
-    typedef DqPtrsElem::const_iterator elem_const_iterator; //!< Iterador sobre the set de elementos.
+    //Elements.
+    typedef DqPtrsElem::iterator elem_iterator; //!< Iterator over the element set.
+    typedef DqPtrsElem::const_iterator elem_const_iterator; //!< Iterator over the element set.
 
     //Constraints.
     typedef DqPtrsConstraint lst_ptr_constraints; //!< Set of constraints.
-    typedef DqPtrsConstraint::iterator constraint_iterator; //!< Iterador sobre the set de constraints.
-    typedef DqPtrsConstraint::const_iterator constraint_const_iterator; //!< Iterador sobre the set de constraints.
+    typedef DqPtrsConstraint::iterator constraint_iterator; //!< Iterator over the set de constraints.
+    typedef DqPtrsConstraint::const_iterator constraint_const_iterator; //!< Iterator over the set de constraints.
 
   private:
-    DqPtrsNode nodos; //!< node set.
-    DqPtrsElem elementos; //!< Set of elementos.
-    lst_ptr_constraints constraints; //!< Set of constraints.
+    DqPtrsNode nodes; //!< node set.
+    DqPtrsElem elements; //!< element set.
+    lst_ptr_constraints constraints; //!< constraints set.
   protected:
     void clearAll(void);
     void copia_listas(const SetMeshComp &);
@@ -106,35 +106,35 @@ class SetMeshComp: public SetBase
 
     //! @brief Returns the number of nodes of the set.
     size_t NumNodos(void) const
-      { return nodos.size(); }
-    //! @brief Agrega un nodo a la lista de nodos of the set.
+      { return nodes.size(); }
+    //! @brief Appends a node.
     void agregaNodo(Node *nPtr);
-    //! @brief Return the lista de nodos of the set.
+    //! @brief Return the nodes of the set.
     virtual const DqPtrsNode &GetNodos(void) const
-      { return nodos; }
-    //! @brief Return the lista de nodos of the set.
+      { return nodes; }
+    //! @brief Return the nodes of the set.
     virtual DqPtrsNode &GetNodos(void)
-      { return nodos; }
-    //! @brief Borra la lista de nodos of the set.
+      { return nodes; }
+    //! @brief Clears the nodes of the set.
     void clearNodos(void)
-      { nodos.clearAll(); }
+      { nodes.clearAll(); }
     void sel_nodos_lista(const ID &);
     bool In(const Node *) const;
 
     //! @brief Returns the number of elements of the set.
     size_t NumElementos(void) const
-      { return elementos.size(); }
+      { return elements.size(); }
     //! @brief Agrega un elemento la lista de elementos of the set.
     void agregaElemento(Element *ePtr);
-    //! @brief Return the lista de elementos of the set.
+    //! @brief Returns the elements of the set.
     virtual const DqPtrsElem &GetElementos(void) const
-      { return elementos; }
-    //! @brief Return the lista de elementos of the set.
+      { return elements; }
+    //! @brief Returns the elements of the set.
     virtual DqPtrsElem &GetElementos(void)
-      { return elementos; }
-    //! @brief Borra la lista de elementos of the set.
+      { return elements; }
+    //! @brief Clears out the elements of the set.
     void clearElementos(void)
-      { elementos.clearAll(); }
+      { elements.clearAll(); }
     void sel_elementos_lista(const ID &tags);
     bool In(const Element *) const;
 
@@ -149,6 +149,8 @@ class SetMeshComp: public SetBase
       { constraints.clearAll(); }
     void sel_constraints_lista(const ID &tags);
 
+    void appendFromGeomEntity(const SetBase &);
+
     void clear(void);
 
     void fix(const SFreedom_Constraint &);
@@ -159,8 +161,8 @@ class SetMeshComp: public SetBase
     nod_const_iterator nodos_end(void) const;
     Node *buscaNodo(const int &tag);
     const Node *buscaNodo(const int &tag) const;
-    bool InNodeTag(const int tag_nodo) const;
-    bool InNodeTags(const ID &tag_nodos) const;
+    bool InNodeTag(const int) const;
+    bool InNodeTags(const ID &) const;
     std::set<int> getNodeTags(void) const;
     std::set<int> getElementTags(void) const;
     std::set<int> getConstraintTags(void) const;

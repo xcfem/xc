@@ -95,6 +95,7 @@ class_<XC::SetMeshComp, bases<XC::SetBase>, boost::noncopyable >("SetMeshComp",n
   .def("getNumLiveNodes",&XC::SetMeshComp::getNumLiveNodes,"Number of active nodes.")
   .def("transforms",transforms,"Apply transformation to set members.")
   .def("getResistingSVD3d",&XC::SetMeshComp::getResistingSVD3d)
+  .def("appendFromGeomEntity", &XC::SetMeshComp::appendFromGeomEntity,"Extend this set with the nodes and elements of the geometric entity being passed as parameter.")
   .def("clear",&XC::SetMeshComp::clear,"Removes all items.")
    ;
 
