@@ -256,11 +256,11 @@ int XC::IntPtrWrapper::removeValue(int value)
   }
 
 
-//! @brief Returns the máximo de las componentes del vector.
+//! @brief Returns the maximum of vector components.
 const int &XC::IntPtrWrapper::max(void) const
   { return *std::max_element(data,data+Size()); }
 
-//! @brief Returns the mínimo de las componentes del vector.
+//! @brief Returns the minimum of vector components.
 const int &XC::IntPtrWrapper::min(void) const
   { return *std::min_element(data,data+Size()); }
 

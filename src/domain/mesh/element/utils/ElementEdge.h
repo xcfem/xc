@@ -39,8 +39,8 @@ class MeshEdge;
 //! @brief Element edge (TO DEPRECATE?? LP 7.02.2017).
 class ElementEdge: public EntCmd
   {
-    Element *elem; //! Elemento al que pertenece el borde.
-    int iedge; //! índice del borde.
+    Element *elem; //! Element that owns this border.
+    int iedge; //! edge index.
   public:
     typedef Element::NodesEdge NodesEdge; //!< Nodos de un borde del elemento.
     typedef std::set<const Element *> ElementConstPtrSet;

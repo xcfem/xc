@@ -134,8 +134,7 @@ int XC::TriBase3N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
     return retval;
   }
 
-//! @brief Returns the índices locales de los nodos del elemento
-//! situados sobre el borde (o arista) being passed as parameters.
+//! @brief Returns the local indexes of the nodes that lies on the i-th edge.
 template <class PhysProp>
 ID XC::TriBase3N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
   {

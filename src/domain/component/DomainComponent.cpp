@@ -80,7 +80,8 @@ XC::DomainComponent::~DomainComponent(void)
 void XC::DomainComponent::setDomain(Domain *model)
   { theDomain = model; }
 
-//! @brief Asigna el índice al objeto (ver numera en Set).
+//! @brief Set the index for the object (see numera in Set). This index
+//! is used on VTK arrays.
 void XC::DomainComponent::set_indice(const size_t &i)
   { idx= i; }
 

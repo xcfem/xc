@@ -132,7 +132,7 @@ const XC::GeomSection *XC::ListReinfLayer::getGeomSection(void) const
     return retval;
   }
 
-//! @brief Returns the valor mínimo del recubrimiento de las barras.
+//! @brief Returns the minimum value del recubrimiento de las barras.
 double XC::ListReinfLayer::getRecubrimiento(void) const
   {
     double retval= 0;

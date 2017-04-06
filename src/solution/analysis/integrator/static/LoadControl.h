@@ -76,7 +76,7 @@ class LoadControl : public BaseControl
   {
   private:
     double deltaLambda;  //!< Valor de dLambda en el paso (i-1).
-    double dLambdaMin, dLambdaMax; //!< Valores máximo y mínimo para dlambda en el paso (i).
+    double dLambdaMin, dLambdaMax; //!< Maximum and minimum values for dlambda at i-th step.
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

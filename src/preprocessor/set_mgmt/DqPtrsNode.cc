@@ -93,7 +93,7 @@ void XC::DqPtrsNode::agrega(const DqPtrsNode &otro)
 //       }
 //   }
 
-//! @brief Vacía la lista de pointers y elimina las propiedades que pudiera tener el objeto.
+//! @brief Clears out the list of pointers and erases the properties of the object (if any).
 void XC::DqPtrsNode::clearAll(void)
   {
     DqPtrs<Node>::clear();

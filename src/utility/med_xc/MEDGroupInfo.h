@@ -39,9 +39,9 @@ class MEDGroupInfo: public MEDCellBaseInfo
     typedef std::map<int,std::vector<int> > map_indices_tipo;
   private:
     std::string nombre; //!< nombre of the set.
-    map_indices_tipo indices_tipo; //!< índices de los elementos por tipo. 
-    MED_EN::medEntityMesh tipo_entidad; //!< tipo de entidad que almacena the set (node,cell,face,edge,...).
-    mutable MEDMEM::GROUP *med_group; //!< Definición del grupo en MEDMEM.
+    map_indices_tipo indices_tipo; //!< indexex of the elements by type. 
+    MED_EN::medEntityMesh tipo_entidad; //!< type of the entity stored by the set (node,cell,face,edge,...).
+    mutable MEDMEM::GROUP *med_group; //!< Group definition in MEDMEM.
   protected:
     friend class MEDMeshing;
     friend class MEDFieldInfo;

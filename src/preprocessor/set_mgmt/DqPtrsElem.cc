@@ -95,7 +95,7 @@ void XC::DqPtrsElem::agrega(const DqPtrsElem &otro)
 //       }
 //   }
 
-//! @brief Vacía la lista de pointers y elimina las propiedades que pudiera tener el objeto.
+//! @brief Clears out the list of pointers and erases the properties of the object (if any).
 void XC::DqPtrsElem::clearAll(void)
   {
     DqPtrs<Element>::clear();

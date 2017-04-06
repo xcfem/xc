@@ -144,8 +144,8 @@ int XC::Brick::getNumDOF(void) const
 XC::Vector XC::Brick::getAvgStress(void) const
   { return physicalProperties.getCommittedAvgStress(); }
 
-//! Returns the índice de la componente (i,j) del strain tensor (tensiones)
-//! en el vector que se usa para guardar dichas componentes.
+//! Returns the index of the (i,j) component of the strain tensor
+//! (resp. stress tensor) in the vector that stores these components.
 size_t XC::Brick::getVectorIndex(const size_t &i,const size_t &j)
   {
     size_t retval= 0;

@@ -49,7 +49,7 @@ int XC::MEDMapIndices::getMEDIndice(const size_t &i) const
       }
   }
 
-//! @brief Returns the índices correspondientes a los que
+//! @brief Returns the indexes that correspond to those
 //! being passed as parameter.
 std::vector<int> XC::MEDMapIndices::getMEDIndices(const std::vector<int> &idx) const
   {
@@ -60,7 +60,7 @@ std::vector<int> XC::MEDMapIndices::getMEDIndices(const std::vector<int> &idx) c
     return retval;
   }
 
-//! @brief Imprime el mapa de índices.
+//! @brief Prints indexes map.
 void XC::MEDMapIndices::print(std::ostream &os) const
   {
     if(!indices.empty())

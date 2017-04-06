@@ -56,7 +56,7 @@ class Constraint;
 //!  - Nodes.
 //!  - Finite elements.
 //!  - Points.
-//!  - Línes.
+//!  - Lines.
 //!  - Surfaces.
 //!  - Bodies.
 //!  - Uniform meshes.

@@ -49,7 +49,7 @@ class SetFilaK;
 
 //!  \ingroup Cad
 //! 
-//!  \brief Multiblock topology object (point, líne, face, block,...).
+//!  \brief Multiblock topology object (point, line, face, block,...).
 class EntMdlr: public SetEstruct
   {
   private:

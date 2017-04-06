@@ -37,14 +37,11 @@ class Mesh;
 class MEDBaseInfo: public MEDObject
   {
   protected:
-    MEDMapIndices indices; //!< Correspondencia de índices XC y MED.
+    MEDMapIndices indices; //!< Map between XC and MED indexes.
     void nuevo_tag(size_t tag);
-
   public:
     const MEDMapIndices &getMapIndices(void) const;
     virtual void clear(void);
-
-
   };
 } // end of XC namespace
 #endif

@@ -32,10 +32,10 @@
 namespace XC {
 //! @ingroup MED
 //
-//!  @brief Correspondencia de índices entre XC y MEDMEM.
+//!  @brief Map between the indexes in XC and in MEDMEM.
 class MEDMapIndices
   {
-    std::map<int,int> indices; //!< Índices.
+    std::map<int,int> indices; //!< Indexes.
     typedef std::map<int,int>::const_iterator const_iterator;
     typedef std::map<int,int>::iterator iterator;
 

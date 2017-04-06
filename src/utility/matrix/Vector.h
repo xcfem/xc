@@ -131,7 +131,7 @@ class Vector: public EntCmd
     virtual double &at(const size_t &f);
     //! @brief Returns the elemento cuya fila being passed as parameter.
     virtual const double &at(const size_t &f) const;
-    //! @brief Chequea el índice que se le being passed as parameter.
+    //! @brief Check the index being passed as parameter.
     virtual bool CheckIndice0(const size_t &i) const;
 
     // overloaded operators

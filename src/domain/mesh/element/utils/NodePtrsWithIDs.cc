@@ -62,24 +62,26 @@ const XC::ID &XC::NodePtrsWithIDs::getExternalNodes(void) const
 int XC::NodePtrsWithIDs::getTagNode(const int &i) const
   { return connectedExternalNodes(i); }
 
-//! @brief Asigna los identificadores (tags) de los nodos.
+//! @brief Sets the node identifiers (tags).
 void XC::NodePtrsWithIDs::set_id_nodos(const std::vector<int> &inodos)
   {
     const size_t numNodes= getNumExternalNodes();
     if(numNodes != inodos.size())
-      std::cerr << "NodePtrsWithIDs::NodePtrsWithIDs - se esperaban " 
-                << numNodes << " índices de nodo." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; " 
+                << numNodes << " node indexes were expected." << std::endl;
     for(register size_t i= 0;i<numNodes;i++)
       connectedExternalNodes(i) = inodos[i];
   }
 
-//! @brief Asigna los identificadores (tags) de los nodos.
+//! @brief Sets the node identifiers (tags).
 void XC::NodePtrsWithIDs::set_id_nodos(const ID &inodos)
   {
     const int numNodes= getNumExternalNodes();
     if(numNodes != inodos.Size())
-      std::cerr << "NodePtrsWithIDs::NodePtrsWithIDs - se esperaban " 
-                << numNodes << " índices de nodo." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; " 
+                << numNodes << " node indexes were expected." << std::endl;
     for(register int i= 0;i<numNodes;i++)
       connectedExternalNodes(i) = inodos(i);
   }
@@ -91,7 +93,7 @@ void XC::NodePtrsWithIDs::set_ptr_nodos(Domain *domain)
       NodePtrs::setPtrs(domain,connectedExternalNodes);
   }
 
-//! @brief Asigna los índices de los nodos 1 y 2.
+//! @brief Sets identifiers for nodes 1 and 2.
 void XC::NodePtrsWithIDs::set_id_nodos(int Nd1,int Nd2)
   {
     assert(connectedExternalNodes.Size()>=2);
@@ -99,7 +101,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(int Nd1,int Nd2)
     connectedExternalNodes(1)= Nd2;
   }
 
-//! @brief Asigna los índices de los nodos 1 a 3.
+//! @brief Sets identifiers for nodes 1 to 3.
 void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3)
   {
     set_id_nodos(nd1,nd2);
@@ -107,7 +109,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3)
     connectedExternalNodes(2)= nd3;
   }
 
-//! @brief Asigna los índices de los nodos 1 a 4.
+//! @brief Sets identifiers for nodes 1 to 4.
 void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4)
   {
     set_id_nodos(nd1,nd2,nd3);
@@ -115,7 +117,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4)
     connectedExternalNodes(3)= nd4;
   }
 
-//! @brief Asigna los índices de los nodos 1 a 5.
+//! @brief Sets identifiers for nodes 1 to 5.
 void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4, int nd5)
   {
     set_id_nodos(nd1,nd2,nd3,nd4);
@@ -123,7 +125,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4, int n
     connectedExternalNodes(4)= nd5;
   }
 
-//! @brief Asigna los índices de los nodos 1 a 6.
+//! @brief Sets identifiers for nodes 1 to 6.
 void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4, int nd5, int nd6)
   {
     set_id_nodos(nd1,nd2,nd3,nd4,nd5);
@@ -131,7 +133,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4, int n
     connectedExternalNodes(5)= nd6;
   }
 
-//! @brief Asigna los índices de los nodos 1 a 7.
+//! @brief Sets identifiers for nodes 1 to 7.
 void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4, int nd5, int nd6, int nd7)
   {
     set_id_nodos(nd1,nd2,nd3,nd4,nd5,nd6);
@@ -139,7 +141,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4, int n
     connectedExternalNodes(6)= nd7;
   }
 
-//! @brief Asigna los índices de los nodos 1 a 8.
+//! @brief Sets identifiers for nodes 1 to 8.
 void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8)
   {
     set_id_nodos(nd1,nd2,nd3,nd4,nd5,nd6,nd7);
@@ -147,7 +149,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4,int nd
     connectedExternalNodes(7)= nd8;
   }
 
-//! @brief Asigna los índices de los nodos 1 a 9.
+//! @brief Sets identifiers for nodes 1 to 9.
 void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8,int nd9)
   {
     set_id_nodos(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8);
@@ -155,7 +157,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4,int nd
     connectedExternalNodes(8)= nd9;
   }
 
-//! @brief Asigna los índices de los nodos 1 a 20.
+//! @brief Sets identifiers for nodes 1 to 20.
 void XC::NodePtrsWithIDs::set_id_nodos(int nd1,  int nd2,  int nd3,  int nd4,
                    int nd5,  int nd6,  int nd7,  int nd8,
                    int nd9,  int nd10, int nd11, int nd12,
@@ -177,7 +179,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(int nd1,  int nd2,  int nd3,  int nd4,
     connectedExternalNodes(19)= nd20;
   }
 
-//! @brief Asigna los índices de los nodos 1 a 27.
+//! @brief Sets identifiers for nodes 1 to 27.
 void XC::NodePtrsWithIDs::set_id_nodos(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,
                                            int nd8,int nd9,int nd10,int nd11,int nd12,int nd13,
                                            int nd14,int nd15,int nd16,int nd17,int nd18,int nd19,

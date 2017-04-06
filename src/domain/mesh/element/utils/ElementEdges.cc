@@ -83,8 +83,8 @@ XC::ElementEdges::const_iterator XC::ElementEdges::find(const int &tag) const
   }
 
 
-//! @brief Returns the índice el elemento en el vector,
-//! si no lo encuentra returns -1.
+//! @brief Returns the element index on the vector,
+//! returns -1 if not found.
 //XXX: It doesn't works if the elements appears more than once in the vector.
 int XC::ElementEdges::getLocElement(const Element *ptr) const
   {
@@ -96,7 +96,7 @@ int XC::ElementEdges::getLocElement(const Element *ptr) const
     return retval;
   }
 
-//! @brief Elimina el elemento cuyo tag being passed as parameter.
+//! @brief Removes the element identified by the tag being passed as parameter.
 size_t XC::ElementEdges::removeElement(const int &tag) 
   {
     iterator i= find(tag);

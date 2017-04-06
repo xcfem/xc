@@ -231,7 +231,7 @@ int XC::NodePtrs::getTotalDOFs(void) const
     return retval;
   }
 
-//! @brief Returns the valor máximo de la coordenada i de los nodos.
+//! @brief Returns the maximum value de la coordenada i de los nodos.
 double XC::NodePtrs::MaxCooNod(int icoo) const
   {
     assert(!theNodes.empty());
@@ -243,7 +243,7 @@ double XC::NodePtrs::MaxCooNod(int icoo) const
     return retval;
   }
 
-//! @brief Returns the valor mínimo de la coordenada i de los nodos.
+//! @brief Returns the minimum value de la coordenada i de los nodos.
 double XC::NodePtrs::MinCooNod(int icoo) const
   {
     assert(!theNodes.empty());

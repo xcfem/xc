@@ -50,7 +50,7 @@ namespace XC {
 //!  - Nodde.
 //!  - Finite elements.
 //!  - Point.
-//!  - Líne.
+//!  - Line.
 //!  - Suprface.
 //!  - Bodiy.
 template <class T>
@@ -153,12 +153,12 @@ void DqPtrs<T>::agrega(const DqPtrs &otro)
       push_back(*i);
   }
 
-//! @brief Vacía la lista de pointers.
+//! @brief Clears out the list of pointers.
 template<class T>
 void DqPtrs<T>::clear(void)
   { lst_ptr::clear(); }
 
-//! @brief Vacía la lista de pointers y elimina las propiedades que pudiera tener el objeto.
+//! @brief Clears out the list of pointers and erases the properties of the object (if any).
 template<class T>
 void DqPtrs<T>::clearAll(void)
   {
