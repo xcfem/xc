@@ -99,8 +99,9 @@ T * MapCadMember<T>::get(const size_t &iEnt)
   {
     T *retval= busca(iEnt);
     if(!retval)
-      std::cerr << "MapCadMember::get; no se encontró la entidad: '" 
-                << iEnt << "'.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; entity: '" 
+                << iEnt << "' not found.\n";
     return retval;   
   }
 

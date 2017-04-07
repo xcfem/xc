@@ -54,7 +54,7 @@ class BandArpackSolver : public EigenSolver
     Vector value;
     Vector eigenvector;
     double tol; //!< Tolerancia para los eigenvalues obtenidos.
-    int maxitr; //!< Número máximo de iteraciones.
+    int maxitr; //!< Maximum number of iterations.
     ID iPiv;
     mutable Vector eigenV;
     

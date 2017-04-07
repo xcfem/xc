@@ -48,7 +48,7 @@ class Edge: public EntMdlr
     friend class CmbEdge;
     friend class Face;
   private:
-    size_t ndiv; //!< Número de divisiones
+    size_t ndiv; //!< number of divisions
     std::set<const Face *> sups_linea; //!< Surface neighbors (topology).
   protected:
 

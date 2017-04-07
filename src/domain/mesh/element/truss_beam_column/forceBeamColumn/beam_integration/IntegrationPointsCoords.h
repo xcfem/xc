@@ -42,14 +42,14 @@ class CrdTransf;
 
 //! \ingroup BeamInteg
 //
-//! @brief Almacena las coordenadas de los puntos de control.
+//! @brief Stores the coordinates of the integration points.
 class IntegrationPointsCoords
   {
   protected:
-    Matrix rst; //!< Coordenadas naturales (varían entre -1 y 1).
-    Matrix rnsntn; //!< Coordenadas normalizadas (varían entre 0 y 1).
-    Matrix xyz; //!< Coordenadas locales.
-    Matrix XYZ; //!< Coordenadas globales.
+    Matrix rst; //!< Natural coordinates (they vary between -1 y 1).
+    Matrix rnsntn; //!< Normalized coordinates (they vary between 0 y 1).
+    Matrix xyz; //!< Local coordinates.
+    Matrix XYZ; //!< Global coordinates.
 
     MapValores getMapValores(const size_t &i,const std::vector<std::string> &) const;
   public:

@@ -286,7 +286,7 @@ class Node: public MeshComponent
     //Equivalent static load.
     Vector getEquivalentStaticLoad(int mode,const double &) const;
 
-    //Valores máximos modales
+    //Maximum modal values
     Vector getMaxModalDisplacement(int mode,const double &) const;
     Vector getMaxModalVelocity(int mode,const double &) const;
     Vector getMaxModalAcceleration(int mode,const double &) const;

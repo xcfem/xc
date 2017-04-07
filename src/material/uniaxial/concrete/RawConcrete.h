@@ -41,7 +41,7 @@ namespace XC {
 class RawConcrete: public UniaxialMaterial
   {
   protected:
-    double fpc; //!< Resistencia a compresión
+    double fpc; //!< Compression strength.
     double epsc0; //!< Strain when compression strength is reached.
     double epscu; //!< Strain at crushing strength
 

@@ -31,20 +31,20 @@ class_<XC::DeformationPlane, bases<Plano3d> >("DeformationPlane")
   .def("getStrain",&XC::DeformationPlane::Strain,"returns strain at position.")
   ;
 
-class_<XC::CalcPivotes, bases<Ref3d3d>, boost::noncopyable >("CalcPivotes", no_init)
+class_<XC::ComputePivots, bases<Ref3d3d>, boost::noncopyable >("ComputePivots", no_init)
   ;
 
-class_<XC::DefAgotPivotes, bases<EntCmd>, boost::noncopyable >("DefAgotPivotes", no_init)
-  .add_property("defAgotPivoteA",make_function(&XC::DefAgotPivotes::getDefAgotPivoteA,return_value_policy<copy_const_reference>()),&XC::DefAgotPivotes::setDefAgotPivoteA)
-  .add_property("defAgotPivoteB",make_function(&XC::DefAgotPivotes::getDefAgotPivoteB,return_value_policy<copy_const_reference>()),&XC::DefAgotPivotes::setDefAgotPivoteB)
-  .add_property("defAgotPivoteC",make_function(&XC::DefAgotPivotes::getDefAgotPivoteC,return_value_policy<copy_const_reference>()),&XC::DefAgotPivotes::setDefAgotPivoteC)
+class_<XC::PivotsUltimateStrains, bases<EntCmd>, boost::noncopyable >("PivotsUltimateStrains", no_init)
+  .add_property("defAgotPivotA",make_function(&XC::PivotsUltimateStrains::getDefAgotPivotA,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setDefAgotPivotA)
+  .add_property("defAgotPivotB",make_function(&XC::PivotsUltimateStrains::getDefAgotPivotB,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setDefAgotPivotB)
+  .add_property("defAgotPivotC",make_function(&XC::PivotsUltimateStrains::getDefAgotPivotC,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setDefAgotPivotC)
   ;
 
 class_<XC::InteractionDiagramData, bases<EntCmd>>("InteractionDiagramParameters")
   .add_property("umbral",make_function(&XC::InteractionDiagramData::getUmbral,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setUmbral)
   .add_property("incEps",make_function(&XC::InteractionDiagramData::getIncEps,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setIncEps)
   .add_property("incTheta",make_function(&XC::InteractionDiagramData::getIncTheta,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setIncTheta)
-  .add_property("defsAgotPivotes",make_function(&XC::InteractionDiagramData::getDefsAgotPivotes,return_internal_reference<>()),&XC::InteractionDiagramData::setDefsAgotPivotes)
+  .add_property("defsAgotPivots",make_function(&XC::InteractionDiagramData::getDefsAgotPivots,return_internal_reference<>()),&XC::InteractionDiagramData::setDefsAgotPivots)
   .add_property("nmbSetHormigon",make_function(&XC::InteractionDiagramData::getNmbSetHormigon,return_internal_reference<>()),&XC::InteractionDiagramData::setNmbSetHormigon)
   .add_property("tagHormigon",make_function(&XC::InteractionDiagramData::getTagHormigon,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setTagHormigon)
   .add_property("nmbSetArmadura",make_function(&XC::InteractionDiagramData::getNmbSetArmadura,return_internal_reference<>()),&XC::InteractionDiagramData::setNmbSetArmadura)

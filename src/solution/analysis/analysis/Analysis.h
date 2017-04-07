@@ -109,7 +109,7 @@ class CommParameters;
 class Analysis: public EntCmd
   {
   protected:
-    int analysis_result; //!< igual a cero si se analizó con éxito.
+    int analysis_result; //!< Equal to zero if success.
     SoluMethod *metodo_solu; //!< Solution method.
 
     int newStepDomain(AnalysisModel *theModel,const double &dT =0.0);

@@ -52,11 +52,6 @@
 // Created: 09/05
 // Revision: A
 
-// Purpose: This file contains the class definition for CTestFixedNumIter.
-// A CTestFixedNumIter object performs a fixed number of iterations without
-// testing for convergence. This test is useful for hybrid simulation where
-// the residual error is corrected for.
-
 #ifndef CTestFixedNumIter_h
 #define CTestFixedNumIter_h
 
@@ -66,8 +61,8 @@ namespace XC {
 
 //! @ingroup CTest
 //
-//! @brief convergence test con un número fijo de
-//! iteraciones.This test is useful for hybrid simulation where
+//! @brief This object performs a fixed number of iterations without
+//! testing for convergence. This test is useful for hybrid simulation where
 //! the residual error is corrected for.
 class CTestFixedNumIter: public ConvergenceTest
   {

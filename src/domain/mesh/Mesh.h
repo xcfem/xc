@@ -81,7 +81,7 @@ class Mesh: public MeshComponentContainer
     KDTreeElements kdtreeElements; //!< space-partitioning data structure for organizing nodes. Search finite element by its position (x,y,x).
 
     Vector theBounds;
-    int tagNodeCheckReactionException;//!< excepción para comprobación de reacciones (ver Domain::checkNodalReactions).
+    int tagNodeCheckReactionException;//!< Exception for checking reactions (see Domain::checkNodalReactions).
 
     NodeLockers lockers; //!< To block deactivated (dead) nodes.
 

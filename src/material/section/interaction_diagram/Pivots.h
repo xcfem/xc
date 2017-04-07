@@ -24,41 +24,41 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Pivotes.h
-//Calcula los pivotes para un plano de flexión determinado.
+//Pivots.h
+//Pivots for a bending plane.
 
 
-#ifndef PIVOTES_H
-#define PIVOTES_H
+#ifndef PIVOTS_H
+#define PIVOTS_H
 
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 
 namespace XC {
 
-class CalcPivotes;
+class ComputePivots;
 
 //! @ingroup MATSCCDiagInt
 //
 //! @brief Pivot positions computed for a bending plane.
-class Pivotes
+class Pivots
   {
-    Pos3d A; //!< Pivote A (max strain in tensioned steel).
-    Pos3d B; //!< Pivote B (min strain in compressed concrete).
-    Pos3d C; //!< Pivote C (ver diagrama de pivotes en EHE).
+    Pos3d A; //!< Pivot A (max strain in tensioned steel).
+    Pos3d B; //!< Pivot B (min strain in compressed concrete).
+    Pos3d C; //!< Pivot C (ver diagrama de pivots en EHE).
     Pos3d D; //!< Zero strain concrete.
     bool ok; //!< True if positions are ok (see checkPositions).
 
   public:
-    Pivotes(const Pos3d &a,const Pos3d &b,const Pos3d &c,const Pos3d &d);
-    Pivotes(const CalcPivotes &cp);
+    Pivots(const Pos3d &a,const Pos3d &b,const Pos3d &c,const Pos3d &d);
+    Pivots(const ComputePivots &cp);
     inline const Pos3d &getPuntoD(void) const
       { return D; }
-    inline const Pos3d &getPivoteA(void) const
+    inline const Pos3d &getPivotA(void) const
       { return A; }
-    inline const Pos3d &getPivoteB(void) const
+    inline const Pos3d &getPivotB(void) const
       { return B; }
-    inline const Pos3d &getPivoteC(void) const
+    inline const Pos3d &getPivotC(void) const
       { return C; }
     inline Pos3d getPuntoA(const double &epsilon)
       { return Pos3d(epsilon,A.y(),A.z()); }
@@ -74,11 +74,11 @@ class Pivotes
       { return C.x(); }
     inline double getEpsilonD(void) const
       { return B.x(); }
-    inline Pos2d getPosPivoteA(void) const
+    inline Pos2d getPosPivotA(void) const
       { return Pos2d(A.y(),A.z()); }
-    inline Pos2d getPosPivoteB(void) const
+    inline Pos2d getPosPivotB(void) const
       { return Pos2d(B.y(),B.z()); }
-    inline Pos2d getPosPivoteC(void) const
+    inline Pos2d getPosPivotC(void) const
       { return Pos2d(C.y(),C.z()); }
     inline Pos2d getPosPuntoD(void) const
       { return Pos2d(D.y(),D.z()); }
@@ -88,7 +88,7 @@ class Pivotes
     void print(std::ostream &) const;
   };
 
-inline std::ostream &operator<<(std::ostream &os, const Pivotes &p)
+inline std::ostream &operator<<(std::ostream &os, const Pivots &p)
   {
     p.print(os);
     return os;

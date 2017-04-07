@@ -24,19 +24,19 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Pivotes.cc
+//Pivots.cc
 
-#include "Pivotes.h"
-#include "CalcPivotes.h"
+#include "Pivots.h"
+#include "ComputePivots.h"
 
 
-bool XC::Pivotes::checkPositions(void) const
+bool XC::Pivots::checkPositions(void) const
   {
     bool retval= true;
     const double dMin= 1e-4;
-    const Pos2d pA= getPosPivoteA();
-    const Pos2d pB= getPosPivoteB();
-    const Pos2d pC= getPosPivoteC();
+    const Pos2d pA= getPosPivotA();
+    const Pos2d pB= getPosPivotB();
+    const Pos2d pC= getPosPivotC();
     const Pos2d pD= getPosPuntoD();
     const double dAB= dist(pA,pB);
     if(dAB<dMin)
@@ -79,20 +79,20 @@ bool XC::Pivotes::checkPositions(void) const
   }
 
 //! @brief Constructor.
-XC::Pivotes::Pivotes(const Pos3d &a,const Pos3d &b,const Pos3d &c,const Pos3d &d)
+XC::Pivots::Pivots(const Pos3d &a,const Pos3d &b,const Pos3d &c,const Pos3d &d)
   : A(a), B(b), C(c), D(d) 
   { ok= checkPositions(); }
 
 //! @brief Constructor.
-XC::Pivotes::Pivotes(const CalcPivotes &cp)
+XC::Pivots::Pivots(const ComputePivots &cp)
   : A(cp.calcPositionPivotA()), B(cp.calcPositionPivotB()), C(cp.calcPositionPivotC()), D(cp.GetPuntoD())
   { ok= checkPositions(); }
 
 //! @brief Print pivots definition
-void XC::Pivotes::print(std::ostream &os) const
+void XC::Pivots::print(std::ostream &os) const
   {
-    os << "pos(A): " << getPosPivoteA() << " epsilon(A)= " << getEpsilonA() << std::endl;
-    os << "pos(B): " << getPosPivoteB() << " epsilon(B)= " << getEpsilonB() << std::endl;
-    os << "pos(C): " << getPosPivoteC() << " epsilon(C)= " << getEpsilonC() << std::endl;
+    os << "pos(A): " << getPosPivotA() << " epsilon(A)= " << getEpsilonA() << std::endl;
+    os << "pos(B): " << getPosPivotB() << " epsilon(B)= " << getEpsilonB() << std::endl;
+    os << "pos(C): " << getPosPivotC() << " epsilon(C)= " << getEpsilonC() << std::endl;
     os << "pos(D): " << getPosPuntoD() << " epsilon(D)= " << getEpsilonD() << std::endl;
   }

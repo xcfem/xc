@@ -48,7 +48,7 @@ class Face: public CmbEdge
     Node *GetNodo(const size_t &i);
     const Node *GetNodo(const size_t &i) const;
   protected:
-    size_t ndivj; //Número de divisiones en el eje j.
+    size_t ndivj; //number of divisions en el eje j.
     virtual const Edge *get_lado_homologo(const Edge *l) const= 0;
 
   public:

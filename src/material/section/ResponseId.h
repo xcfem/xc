@@ -42,7 +42,7 @@ const int SECTION_RESPONSE_P= 2; // Axial strain
 const int SECTION_RESPONSE_VY= 3;
 const int SECTION_RESPONSE_MY= 4; // Curvature about the section y-axis
 const int SECTION_RESPONSE_VZ= 5;
-const int SECTION_RESPONSE_T= 6; // Torsión.
+const int SECTION_RESPONSE_T= 6; // Torsion.
 
 
 const int MEMBRANE_RESPONSE_n1= 11; // Axil por unidad de longitud, paralelo al eje 1

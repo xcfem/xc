@@ -86,8 +86,8 @@ class ProblemaEF: public EntCmd
     mutable DataOutputHandler::map_output_handlers output_handlers; //Manejadores para salida de resultados.
     Preprocessor preprocessor; //!< Object that manages the model.
     ProcSolu proc_solu; //!< Solution procedure.
-    MapFields fields; //!< Definición de campos para salida de resultados.
-    FE_Datastore *dataBase; //!< database para salvar estados.
+    MapFields fields; //!< Definition of fields for results output.
+    FE_Datastore *dataBase; //!< database to save states in.
     static FEM_ObjectBrokerAllClasses theBroker;
 
   public:

@@ -107,7 +107,7 @@
 #include "material/section/interaction_diagram/InteractionDiagramData.h"
 #include "material/section/interaction_diagram/InteractionDiagram.h"
 #include "material/section/interaction_diagram/InteractionDiagram2d.h"
-#include "material/section/interaction_diagram/CalcPivotes.h"
+#include "material/section/interaction_diagram/ComputePivots.h"
 
 // NDMaterials
 #include "material/nD/elastic_isotropic/ElasticIsotropicPlaneStrain2D.h"

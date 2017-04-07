@@ -30,16 +30,16 @@
 
 
 XC::InteractionDiagramData::InteractionDiagramData(void)
-  : umbral(10), inc_eps(0.0), inc_t(M_PI/4), agot_pivotes(),
+  : umbral(10), inc_eps(0.0), inc_t(M_PI/4), agot_pivots(),
     nmb_set_hormigon("hormigon"), tag_hormigon(0),
     nmb_set_armadura("armadura"), tag_armadura(0)
   {
-    inc_eps= agot_pivotes.getIncEpsAB(); //Strain increment.
+    inc_eps= agot_pivots.getIncEpsAB(); //Strain increment.
     if(inc_eps<=1e-6)
       std::cerr << "Strain increment too small (or negative): " << inc_eps << std::endl; 
   }
 
-XC::InteractionDiagramData::InteractionDiagramData(const double &u,const double &inc_e,const double &inc_theta,const DefAgotPivotes &agot)
-  : umbral(u), inc_eps(inc_e), inc_t(inc_theta), agot_pivotes(agot),
+XC::InteractionDiagramData::InteractionDiagramData(const double &u,const double &inc_e,const double &inc_theta,const PivotsUltimateStrains &agot)
+  : umbral(u), inc_eps(inc_e), inc_t(inc_theta), agot_pivots(agot),
     nmb_set_hormigon("hormigon"), tag_hormigon(0),
     nmb_set_armadura("armadura"), tag_armadura(0) {}

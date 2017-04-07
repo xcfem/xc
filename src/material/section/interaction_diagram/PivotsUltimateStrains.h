@@ -24,41 +24,36 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//CalcPivotes.h
-//Calcula los pivotes para un plano de flexión determinado.
+//PivotsUltimateStrains
 
+#ifndef PIVOTSULTIMATESTRAINS_H
+#define PIVOTSULTIMATESTRAINS_H
 
-#ifndef CALCPIVOTES_H
-#define CALCPIVOTES_H
-
-#include "xc_utils/src/geom/sis_ref/Ref3d3d.h"
+#include "xc_utils/src/nucleo/EntCmd.h"
 
 namespace XC {
 
-class DefAgotPivotes;
-class DqFibras;
-class StoFibras;
-class Fiber;
-
 //! @ingroup MATSCCDiagInt
 //
-//! @brief Given a bending plane, computes the "pivots" position
-//! on the section.
-class CalcPivotes: public Ref3d3d
+//! @brief Definition of ultimate strains for the pivots
+class PivotsUltimateStrains: public EntCmd
   {
-    const DefAgotPivotes &agot_pivotes; //!< Ultimate strains at pivots.
-    const StoFibras &fibras;//!< Section fibers.
-    const DqFibras &fibrasC; //!< Concrete fibers (u otro material comprimido).
-    const DqFibras &fibrasS; //!< Steel fibers (u otro material a tracción). 
+    double eps_agot_A; //!< A pivot ultimate strain.
+    double eps_agot_B; //!< B pivot ultimate strain.
+    double eps_agot_C; //!< C pivot ultimate strain.
+  protected:
+    
   public:
-    CalcPivotes(const DefAgotPivotes &ap,const StoFibras &fs,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
-    const Fiber *getFiberCMinY(void) const;
-    const Fiber *getFiberSMinY(void) const;
-    const Fiber *getFiberCMaxY(void) const;
-    Pos3d GetPuntoD(void) const;
-    Pos3d calcPositionPivotA(void) const;
-    Pos3d calcPositionPivotB(void) const;
-    Pos3d calcPositionPivotC(void) const;
+    PivotsUltimateStrains(const double &eA= 0.01,const double &eB= -0.0035,const double &eC= -0.002);
+
+    const double &getDefAgotPivotA(void) const;
+    const double &getDefAgotPivotB(void) const;
+    const double &getDefAgotPivotC(void) const;
+    void setDefAgotPivotA(const double &);
+    void setDefAgotPivotB(const double &);
+    void setDefAgotPivotC(const double &);
+    const double getIncEpsAB(const double &ndiv= 25) const;
+
   };
 
 } // end of XC namespace

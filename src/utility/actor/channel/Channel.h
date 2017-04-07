@@ -129,7 +129,7 @@ class Channel: public EntCmd
     virtual int recvID(int dbTag, int commitTag,ID &, ChannelAddress *theAddress= nullptr) =0;      
   };
 
-//! @brief Envía una serie de objetos.
+//! @brief Send the objects on interval [first,last).
 template <class inputIterator>
 int Channel::sendObjs(int commitTag,const inputIterator &first,const inputIterator &last,ChannelAddress *theAddress)
   {

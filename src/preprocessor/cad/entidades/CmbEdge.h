@@ -125,7 +125,7 @@ class CmbEdge: public Edge
     size_t NDiv(void) const;
     void SetNDiv(const size_t &nd);
 
-    //! @brief Returns the número de lados.
+    //! @brief Returns the number of sides.
     size_t NumEdges(void) const
       { return lineas.size(); }
     inline std::deque<Lado> &getLados(void)

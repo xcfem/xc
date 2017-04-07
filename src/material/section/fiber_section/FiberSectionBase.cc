@@ -37,8 +37,8 @@
 #include "material/section/interaction_diagram/DeformationPlane.h"
 #include "material/section/interaction_diagram/ParamAgotTN.h"
 #include "material/section/interaction_diagram/InteractionDiagramData.h"
-#include "material/section/interaction_diagram/CalcPivotes.h"
-#include "material/section/interaction_diagram/Pivotes.h"
+#include "material/section/interaction_diagram/ComputePivots.h"
+#include "material/section/interaction_diagram/Pivots.h"
 #include "material/section/interaction_diagram/InteractionDiagram.h"
 #include "material/section/interaction_diagram/InteractionDiagram2d.h"
 #include "material/section/interaction_diagram/NMPointCloud.h"
@@ -569,38 +569,38 @@ Pos3d XC::FiberSectionBase::getNMyMz(const DeformationPlane &def)
 //! of the section for an angle $\theta$ with respect to the z axis.
 void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &diag_data,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
   {
-    CalcPivotes cp(diag_data.getDefsAgotPivotes(),fibras,fsC,fsS,theta);
-    Pivotes pivotes(cp);
-    if(pivotes.Ok())
+    ComputePivots cp(diag_data.getDefsAgotPivots(),fibras,fsC,fsS,theta);
+    Pivots pivots(cp);
+    if(pivots.Ok())
       {
         //Domains 1 and 2
-        Pos3d P1= pivotes.getPivoteA(); //Pivot.
+        Pos3d P1= pivots.getPivotA(); //Pivot.
         Pos3d P2= P1+100.0*cp.GetK(); //Bending arount local z axis.
         Pos3d P3;
         DeformationPlane def;
         const double inc_eps_B= diag_data.getIncEps();
-        const double eps_agot_A= diag_data.getDefsAgotPivotes().getDefAgotPivoteA();
-        const double eps_agot_B= diag_data.getDefsAgotPivotes().getDefAgotPivoteB();
+        const double eps_agot_A= diag_data.getDefsAgotPivots().getDefAgotPivotA();
+        const double eps_agot_B= diag_data.getDefsAgotPivots().getDefAgotPivotB();
         for(double e= eps_agot_A;e>=eps_agot_B;e-=inc_eps_B)
           {
-            P3= pivotes.getPuntoB(e);
+            P3= pivots.getPuntoB(e);
             lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
           }
         //Domains 3 and 4
-        P1= pivotes.getPivoteB(); //Pivote
+        P1= pivots.getPivotB(); //Pivot
         P2= P1+100.0*cp.GetK(); 
         const double inc_eps_A= diag_data.getIncEps();
         for(double e= eps_agot_A;e>=0.0;e-=inc_eps_A)
           {
-            P3= pivotes.getPuntoA(e);
+            P3= pivots.getPuntoA(e);
             lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
           }
         //Domain 4a
         //Compute strain in D when the pivot point is B
         //and strain in A is zero (domain 4a starts).
-        const Pos3d PA0= pivotes.getPuntoA(0.0); //Zero strain at rebars.
+        const Pos3d PA0= pivots.getPuntoA(0.0); //Zero strain at rebars.
         const DeformationPlane def_lim_4a= DeformationPlane(P1,P2,PA0);
-        const Pos2d PD= pivotes.getPosPuntoD();
+        const Pos2d PD= pivots.getPosPuntoD();
         const double eps_D4a= def_lim_4a.Strain(PD);
         const double recorr_eps_D4a= eps_D4a;
         if(recorr_eps_D4a>(eps_agot_A/200.0)) //Si el recorrido es positivo y "apreciable"
@@ -608,18 +608,18 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
             const double inc_eps_D4a= diag_data.getIncEps(); //recorr_eps_D4a/n_div_domain; //Intervalos de cálculo.
             for(double e= eps_D4a;e>=0.0;e-=inc_eps_D4a)
               {
-                P3= pivotes.getPuntoD(e);
+                P3= pivots.getPuntoD(e);
                 lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
               }
           }
         //Domain 5
-        P1= pivotes.getPivoteC(); //Pivote
+        P1= pivots.getPivotC(); //Pivot
         P2= P1+100.0*cp.GetK(); 
-        const double eps_agot_C= diag_data.getDefsAgotPivotes().getDefAgotPivoteC();
+        const double eps_agot_C= diag_data.getDefsAgotPivots().getDefAgotPivotC();
         const double inc_eps_D= diag_data.getIncEps();
         for(double e= 0.0;e>=eps_agot_C;e-=inc_eps_D)
           {
-            P3= pivotes.getPuntoD(e);
+            P3= pivots.getPuntoD(e);
             lista_esfuerzos.append(getNMyMz(DeformationPlane(P1,P2,P3)));
           }
       }

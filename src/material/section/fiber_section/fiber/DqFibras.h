@@ -69,12 +69,12 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     typedef std::deque<Fiber *> dq_ptr_fibras;
   protected:
 
-    double yCDG; //!< Coordenada y del centro de gravedad.
-    double zCDG; //!< Coordenada z del centro de gravedad.
+    double yCDG; //!< Y coordinate of the centroid.
+    double zCDG; //!< Z coordinate of the centroid.
 
-    mutable std::deque<std::list<Poligono2d> > dq_ac_eficaz; //!< (En su caso) áreas eficaces para cada fibra.
-    mutable std::deque<double> recubs; //! Recubrimiento de cada fibra.
-    mutable std::deque<double> seps; //! Separación de cada fibra.
+    mutable std::deque<std::list<Poligono2d> > dq_ac_eficaz; //!< (Where appropriate) effective areas for each fiber.
+    mutable std::deque<double> recubs; //! Cover for each fiber.
+    mutable std::deque<double> seps; //! Spacing for each fiber.
 
     Fiber *inserta(const Fiber &f);
     inline void resize(const size_t &nf)

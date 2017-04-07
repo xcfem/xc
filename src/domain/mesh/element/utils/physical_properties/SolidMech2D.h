@@ -39,7 +39,7 @@ class SolidMech2D: public NDMaterialPhysicalProperties
   {
   protected:
     double thickness; //!< Element thickness
-    double rho; //!< Mass per unit volume (ya se define en el material ¿por qué repetirla aquí?).
+    double rho; //!< Mass per unit volume (it's already defined in the material, why to repeat it here?).
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);

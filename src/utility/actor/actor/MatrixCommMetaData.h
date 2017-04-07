@@ -40,7 +40,7 @@ namespace XC {
 class MatrixCommMetaData: public ArrayCommMetaData
   {
   private:
-    std::size_t posNc; //!< Número de columnas de la matriz.
+    std::size_t posNc; //!< Number of matrix columns.
   public:
     MatrixCommMetaData(const int &pos,const int &flag,const size_t &nf,const size_t &nc);
 

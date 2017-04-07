@@ -202,7 +202,8 @@ bool DqPtrs<T>::push_back(T *t)
           }
       }
     else
-      std::cerr << "DqPtrs::push_back; se intentó insertar a null pointer." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; attempt to insert a null pointer." << std::endl;
     return retval;
   }
 
@@ -212,14 +213,15 @@ bool DqPtrs<T>::push_front(T *t)
     bool retval= false;
     if(t)
       {
-        if(find(begin(),end(),t) == end()) //El elemento es nuevo.
+        if(find(begin(),end(),t) == end()) //New element.
           {
             lst_ptr::push_front(t);
             retval= true;
           }
       }
     else
-      std::cerr << "DqPtrs::push_front; se intentó insertar a null pointer." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; attempt to insert a null pointer." << std::endl;
     return retval;
   }
 

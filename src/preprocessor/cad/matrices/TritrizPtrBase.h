@@ -397,7 +397,8 @@ typename TritrizPtrBase<MatrizPtr>::reference TritrizPtrBase<MatrizPtr>::getAtIJ
 template <class MatrizPtr>
 typename TritrizPtrBase<MatrizPtr>::const_reference TritrizPtrBase<MatrizPtr>::getAtIJ(const size_t &i, const size_t &j) const
   {
-    //XXX Falta obtener la capa (no ncesariemente será la 1),
+    //XXX We still need to get the layer
+    // (It will not necessarily be the first one).
     if(EsCapaICte())
       return operator()(1,i,j);
     else if(EsCapaJCte()) 
@@ -406,7 +407,8 @@ typename TritrizPtrBase<MatrizPtr>::const_reference TritrizPtrBase<MatrizPtr>::g
       return operator()(i,j,1);
     else
       {
-	std::cerr << "SetEstruct::getNodoI; el node set no es bidimensional." << std::endl;
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; the node set is not bidimensional." << std::endl;
         return nullptr;
       } 
   }

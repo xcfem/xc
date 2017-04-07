@@ -10,7 +10,7 @@
 //  Except for the restrictions that may arise from the copyright
 //  of the original program (see copyright_opensees.txt)
 //  software es libre: usted puede redistribuirlo y/o modificarlo
-//  bajo los términos de la Licencia Pública General GNU publicada
+//  under the terms of the GNU General Public License published by 
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //

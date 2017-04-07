@@ -57,14 +57,17 @@ ELEM_LOAD *new_elem_load(LoadPattern *lp,int &tag_el)
             if(!lp->addElementalLoad(load))
               {
                 delete load;
-                std::cerr << "LoadLoader::new_elem_load; no se agregó the load sobre el elemento." << std::endl;
+                std::cerr << __FUNCTION__
+		          << "; load over element was not added." << std::endl;
               }
           }
         else
-          std::cerr << "new_elem_load: no se pudo crear the load over elements: " << tag_el << std::endl;
+          std::cerr << __FUNCTION__
+		    << "; can't create load over elements: " << tag_el << std::endl;
       }
     else
-       std::cerr << "new_elem_load: se paso a null pointer." << std::endl;
+       std::cerr << __FUNCTION__
+		 << "; null pointer to load." << std::endl;
     return load;
   }
 

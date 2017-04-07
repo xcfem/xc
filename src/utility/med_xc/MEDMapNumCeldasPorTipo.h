@@ -32,7 +32,7 @@
 namespace XC {
 //! @ingroup MED
 //
-//!  @brief Número de celdas de cada tipo.
+//!  @brief Number of cells de cada tipo.
 class MEDMapNumCeldasPorTipo
   {
     std::map<MED_EN::medGeometryElement,int> tipos;

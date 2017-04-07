@@ -24,13 +24,13 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//CalcPivotes.cc
+//ComputePivots.cc
 
-#include "CalcPivotes.h"
+#include "ComputePivots.h"
 #include "material/section/fiber_section/fiber/StoFibras.h"
 #include "xc_utils/src/geom/d1/Segmento3d.h"
 #include "material/section/fiber_section/fiber/Fiber.h"
-#include "DefAgotPivotes.h"
+#include "PivotsUltimateStrains.h"
 #include "utility/matrix/Vector.h"
 #include "material/uniaxial/UniaxialMaterial.h"
 
@@ -49,22 +49,22 @@ Ref3d3d getRef3d(const XC::DqFibras &fs, const double &theta)
   }
 
 //! @brief Constructor.
-XC::CalcPivotes::CalcPivotes(const DefAgotPivotes &ap,const StoFibras &fs,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
-  : Ref3d3d(getRef3d(fs, theta)), agot_pivotes(ap), fibras(fs),fibrasC(fsC),fibrasS(fsS) {}
+XC::ComputePivots::ComputePivots(const PivotsUltimateStrains &ap,const StoFibras &fs,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
+  : Ref3d3d(getRef3d(fs, theta)), agot_pivots(ap), fibras(fs),fibrasC(fsC),fibrasS(fsS) {}
 
-const XC::Fiber *XC::CalcPivotes::getFiberSMinY(void) const
+const XC::Fiber *XC::ComputePivots::getFiberSMinY(void) const
   {
     const size_t i= fibrasS.getFibraCooMin(*this,2);
     return fibrasS[i];
   }
 
-const XC::Fiber *XC::CalcPivotes::getFiberCMinY(void) const
+const XC::Fiber *XC::ComputePivots::getFiberCMinY(void) const
   {
     const size_t i= fibrasC.getFibraCooMin(*this,2);
     return fibrasC[i];
   }
 
-const XC::Fiber *XC::CalcPivotes::getFiberCMaxY(void) const
+const XC::Fiber *XC::ComputePivots::getFiberCMaxY(void) const
   {
     const size_t i= fibrasC.getFibraCooMax(*this,2);
     return fibrasC[i];
@@ -72,7 +72,7 @@ const XC::Fiber *XC::CalcPivotes::getFiberCMaxY(void) const
 
 
 //! @brief Returns the points with zero strain in concrete (XXX enhance explanation).
-Pos3d XC::CalcPivotes::GetPuntoD(void) const
+Pos3d XC::ComputePivots::GetPuntoD(void) const
   {
     Pos3d retval;
     const Fiber *t= getFiberCMinY();
@@ -81,13 +81,13 @@ Pos3d XC::CalcPivotes::GetPuntoD(void) const
   }
 
 //! @brief Most tensioned steel fiber
-Pos3d XC::CalcPivotes::calcPositionPivotA(void) const
+Pos3d XC::ComputePivots::calcPositionPivotA(void) const
   {
     Pos3d retval;
     if(!fibrasS.empty()) //Hay armadura.
       {
         const Fiber *t= getFiberSMinY();
-        const Pos3d pos_t= getPos3d(t,agot_pivotes.getDefAgotPivoteA()); //Yield strain in A pivot.
+        const Pos3d pos_t= getPos3d(t,agot_pivots.getDefAgotPivotA()); //Yield strain in A pivot.
         const double v_min_s= GetPosLocal(pos_t)(2);
         if(v_min_s<0) //Cell is in tension zone.
           retval= pos_t;
@@ -100,20 +100,20 @@ Pos3d XC::CalcPivotes::calcPositionPivotA(void) const
   }
 
 //! @brief Most compressed concrete fiber.
-Pos3d XC::CalcPivotes::calcPositionPivotB(void) const
+Pos3d XC::ComputePivots::calcPositionPivotB(void) const
   {
     const Fiber *t= getFiberCMaxY();
-    Pos3d retval= getPos3d(t,agot_pivotes.getDefAgotPivoteB());
+    Pos3d retval= getPos3d(t,agot_pivots.getDefAgotPivotB());
     return retval;
   }
 
 //! @brief Intersection of uniform strain (typically 2%) line and line BD 
-Pos3d XC::CalcPivotes::calcPositionPivotC(void) const
+Pos3d XC::ComputePivots::calcPositionPivotC(void) const
   {
     const Pos3d D= GetPuntoD();
     const Pos3d B= calcPositionPivotB();
     const Recta3d s(D,B);
-    GeomObj::list_Pos3d lp= s.Interseccion(1,agot_pivotes.getDefAgotPivoteC());
+    GeomObj::list_Pos3d lp= s.Interseccion(1,agot_pivots.getDefAgotPivotC());
     assert(lp.size()>0); //List must not be empty.
     const Pos3d retval= *lp.begin();
     return retval;

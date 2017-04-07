@@ -89,14 +89,14 @@ void XC::ElemPlano<NNODOS, PhysProp>::checkElem(void)
         const double area= this->getArea();
         if(area<1e-3)
           {
-            std::cerr << "El elemento: " << this->getTag() << " de nodos: [";
+            std::cerr << "Elemento: " << this->getTag() << " with nodes: [";
             const std::vector<int> inodos= this->getNodePtrs().getTags();
             std::vector<int>::const_iterator i= inodos.begin();
             std::cerr << *i;
             i++;
             for(;i!=inodos.end();i++)
 	      std::cerr << "," << *i;
-            std::cerr << "] tiene un área muy pequeña (" << area << ").\n";
+            std::cerr << "] has a very little area (" << area << ").\n";
           }
       }
   }
@@ -122,17 +122,17 @@ template <int NNODOS,class PhysProp>
 size_t XC::ElemPlano<NNODOS, PhysProp>::getDimension(void) const
   { return 2; }
 
-//! @brief Returns the perímetro del elemento.
+//! @brief Returns the perimeter of the element.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getPerimetro(bool initialGeometry) const
   { return getPoligono(initialGeometry).Perimetro(); }
 
-//! @brief Returns the área del elemento.
+//! @brief Returns element area.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getArea(bool initialGeometry) const
   { return getPoligono(initialGeometry).Area(); }
 
-//! @brief Calcula las áreas tributarias correspondientes a cada nodo.
+//! @brief Computes tributary areas that correspond to each node.
 template <int NNODOS,class PhysProp>
 void XC::ElemPlano<NNODOS, PhysProp>::calculaAreasTributarias(bool initialGeometry) const
   {
@@ -140,7 +140,7 @@ void XC::ElemPlano<NNODOS, PhysProp>::calculaAreasTributarias(bool initialGeomet
     this->vuelcaTributarias(areasTributarias);
   }
 
-//! @brief Returns the área del elemento.
+//! @brief Returns tributary area for the node being passed as parameter.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getAreaTributaria(const Node *nod) const
   {

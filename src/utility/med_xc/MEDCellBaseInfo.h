@@ -39,7 +39,7 @@ class ID;
 class MEDCellBaseInfo: public MEDBaseInfo
   {
   protected:
-    MEDMapNumCeldasPorTipo cell_types; //!< Tipo y número de elementos de ese tipo.
+    MEDMapNumCeldasPorTipo cell_types; //!< Type and number of elements for each of those types.
   public:
     size_t getNumeroElementos(void) const;
     void new_cell(size_t i,const MED_EN::medGeometryElement &);

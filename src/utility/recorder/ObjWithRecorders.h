@@ -55,7 +55,7 @@ class ObjWithRecorders: public EntCmd
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
 
-    //! @brief Returns the número de recorders definidos.
+    //! @brief Returns the number of recorders already defined.
     inline size_t getNumRecorders(void) const
       { return theRecorders.size(); }
     virtual Domain *get_domain_ptr(void)= 0;

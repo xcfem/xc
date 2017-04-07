@@ -48,7 +48,7 @@ class NodeLocker: public ForceReprComponent
     NodeLocker(const NodeLocker &otro);
     NodeLocker &operator=(const NodeLocker &otro);
   protected:
-    int nextTag; //!< Valor del tag para la siguiente condición.
+    int nextTag; //!< Default tag for next node locker.
     int currentGeoTag;
     int lastGeoSendTag;
 

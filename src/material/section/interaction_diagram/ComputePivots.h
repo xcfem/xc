@@ -24,36 +24,41 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DefAgotPivotes
+//ComputePivots.h
+//Computes the pivots for a bending plane.
 
-#ifndef DEFAGOTPIVOTES_H
-#define DEFAGOTPIVOTES_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#ifndef COMPUTEPIVOTS_H
+#define COMPUTEPIVOTS_H
+
+#include "xc_utils/src/geom/sis_ref/Ref3d3d.h"
 
 namespace XC {
 
+class PivotsUltimateStrains;
+class DqFibras;
+class StoFibras;
+class Fiber;
+
 //! @ingroup MATSCCDiagInt
 //
-//! @brief Definition of ultimate strains for the pivots
-class DefAgotPivotes: public EntCmd
+//! @brief Given a bending plane, computes the "pivots" position
+//! on the section.
+class ComputePivots: public Ref3d3d
   {
-    double eps_agot_A; //!< A pivot ultimate strain.
-    double eps_agot_B; //!< B pivot ultimate strain.
-    double eps_agot_C; //!< C pivot ultimate strain.
-  protected:
-    
+    const PivotsUltimateStrains &agot_pivots; //!< Ultimate strains at pivots.
+    const StoFibras &fibras;//!< Section fibers.
+    const DqFibras &fibrasC; //!< Concrete fibers (or another material that works in compression).
+    const DqFibras &fibrasS; //!< Steel fibers (or another material that works in tension). 
   public:
-    DefAgotPivotes(const double &eA= 0.01,const double &eB= -0.0035,const double &eC= -0.002);
-
-    const double &getDefAgotPivoteA(void) const;
-    const double &getDefAgotPivoteB(void) const;
-    const double &getDefAgotPivoteC(void) const;
-    void setDefAgotPivoteA(const double &);
-    void setDefAgotPivoteB(const double &);
-    void setDefAgotPivoteC(const double &);
-    const double getIncEpsAB(const double &ndiv= 25) const;
-
+    ComputePivots(const PivotsUltimateStrains &ap,const StoFibras &fs,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
+    const Fiber *getFiberCMinY(void) const;
+    const Fiber *getFiberSMinY(void) const;
+    const Fiber *getFiberCMaxY(void) const;
+    Pos3d GetPuntoD(void) const;
+    Pos3d calcPositionPivotA(void) const;
+    Pos3d calcPositionPivotB(void) const;
+    Pos3d calcPositionPivotC(void) const;
   };
 
 } // end of XC namespace

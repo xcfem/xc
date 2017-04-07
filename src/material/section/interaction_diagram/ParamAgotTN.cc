@@ -27,26 +27,26 @@
 //ParamAgotTN.cc
 
 #include "ParamAgotTN.h"
-#include "DefAgotPivotes.h"
+#include "PivotsUltimateStrains.h"
 #include "xc_basic/src/util/matem.h"
 
 
 //! @brief Factor de cumplimiento para la max strain.
 //! válido si es mayor que uno.
 double XC::ParamAgotTN::fc_tracc(void) const
-  { return agot_pivotes.getDefAgotPivoteA()/eps_c_max; }
+  { return agot_pivots.getDefAgotPivotA()/eps_c_max; }
 
 //! @brief Factor de cumplimiento para la min strain.
 //! válido si es mayor que uno.
 double XC::ParamAgotTN::fc_comp(void) const
-  { return agot_pivotes.getDefAgotPivoteB()/eps_c_min; }
+  { return agot_pivots.getDefAgotPivotB()/eps_c_min; }
 
 //! @brief Factor de cumplimiento for C pivot strain.
 //! válido si es mayor que uno.
 double XC::ParamAgotTN::fc_pC(void) const
   { 
     if(eps_c_pC < 0)
-      return agot_pivotes.getDefAgotPivoteC()/eps_c_pC;
+      return agot_pivots.getDefAgotPivotC()/eps_c_pC;
     else
       return 1.0+eps_c_pC;
   }
@@ -55,8 +55,8 @@ double XC::ParamAgotTN::fc_pC(void) const
 double XC::ParamAgotTN::fc_min(void) const
   { return std::min(fabs(fc_tracc()),std::min(fabs(fc_comp()),fabs(fc_pC()))); }
 
-XC::ParamAgotTN::ParamAgotTN(const DefAgotPivotes &ap,const double &emx,const double &emn,const double &ec)
-  : agot_pivotes(ap), eps_c_max(emx), eps_c_min(emn), eps_c_pC(ec) {}
+XC::ParamAgotTN::ParamAgotTN(const PivotsUltimateStrains &ap,const double &emx,const double &emn,const double &ec)
+  : agot_pivots(ap), eps_c_max(emx), eps_c_min(emn), eps_c_pC(ec) {}
 
 bool XC::ParamAgotTN::Cumple(void) const
   { return (fc_min()>=1.0); }

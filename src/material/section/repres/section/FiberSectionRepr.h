@@ -53,7 +53,7 @@
 // Written by Remo M. de Souza (November 1998)
 // modified by rms (July 1999) - doesn't prespecify number of regions and reinf. layers
 //             rms (August 1999) - add fibers to section for the analysis
-// modificado por lcpt (Septiembre 2006) - modificación grande. 
+// modified by lcpt (September 2006) - big modification. 
 		    
 #ifndef FiberSectionRepr_h 
 #define FiberSectionRepr_h 

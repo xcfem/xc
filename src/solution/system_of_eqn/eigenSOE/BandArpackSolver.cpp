@@ -144,23 +144,25 @@ int XC::BandArpackSolver::solve(void)
     // check iPiv is large enough
     if(iPiv.Size() < n)
       {
-        std::cerr << "WARNING XC::BandGenLinLapackSolver::solve(void)- ";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "WARNING - ";
         std::cerr << " iPiv not large enough - has setSize() been called?\n";
         return -1;
       }
 
     // set some variables
-    int kl = theSOE->numSubD; //Número de subdiagonales de la matriz.
-    int ku = theSOE->numSuperD; //Número de superdiagonales de la matriz.
+    int kl = theSOE->numSubD; //Number of subdiagonals of the matrix.
+    int ku = theSOE->numSuperD; //Number of superdiagonals of the matrix.
     int ldA = 2*kl + ku +1;
     int nrhs = 1;
     int ldB = n;
-    double *Aptr = theSOE->A.getDataPtr(); //Puntero a la matriz A.
-    int *iPIV = iPiv.getDataPtr(); //Índices de los pivotes.
+    double *Aptr = theSOE->A.getDataPtr(); //Pointer to A matrix.
+    int *iPIV = iPiv.getDataPtr(); //Pivots indexes.
 
     if(numModes==n)
-      std::cerr << "BandArpackSolver::solve; the número de modos a calcular ("
-                << numModes << ") debe ser inferior a N= "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; number of modes to obtain ("
+                << numModes << ") must be lesser than N= "
                 << n << ".\n" << std::endl;
     int nev= numModes;
     int ncv= getNCV(n, nev);
@@ -388,7 +390,8 @@ bool XC::BandArpackSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::setEigenSOE: the system of equations no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << nombre_clase() << __FUNCTION__
+                << ": the system of equations no es del tipo adecuado para este solver." << std::endl;
     return retval;
   }
 

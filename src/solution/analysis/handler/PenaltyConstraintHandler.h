@@ -71,7 +71,7 @@ namespace XC {
 class FE_Element;
 class DOF_Group;
 
- const double DefaultPenaltyFactor= 1e7; //10^(p/2) siendo p el número de dígitos decimales.
+ const double DefaultPenaltyFactor= 1e7; //10^(p/2) siendo p el number of digits decimales.
 
 //! @ingroup AnalysisCH
 //

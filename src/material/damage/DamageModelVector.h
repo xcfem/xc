@@ -10,7 +10,7 @@
 //  Except for the restrictions that may arise from the copyright
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
-//  bajo los términos de l Licencia Pública General GNU publicada 
+//  under the terms of the GNU General Public License published by 
 //  the Free Software Foundation, either version 3 of the License, or 
 //  (at your option) any later version.
 //

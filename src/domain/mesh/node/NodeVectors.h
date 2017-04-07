@@ -47,7 +47,7 @@ class FEM_ObjectBroker;
 class NodeVectors: public EntCmd, public MovableObject
   {
   protected:
-    size_t numVectors; //!< número de vectores.
+    size_t numVectors; //!< number of vectors.
     Vector *commitData; //!< commited quantities
     Vector *trialData; //!< trial quantities
     

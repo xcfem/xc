@@ -24,29 +24,29 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DefAgotPivotes.cc
+//PivotsUltimateStrains.cc
 
-#include "DefAgotPivotes.h"
+#include "PivotsUltimateStrains.h"
 
 
-XC::DefAgotPivotes::DefAgotPivotes(const double &eA,const double &eB,const double &eC)
+XC::PivotsUltimateStrains::PivotsUltimateStrains(const double &eA,const double &eB,const double &eC)
  : eps_agot_A(eA), eps_agot_B(eB), eps_agot_C(eC) {}
 
-const double &XC::DefAgotPivotes::getDefAgotPivoteA(void) const
+const double &XC::PivotsUltimateStrains::getDefAgotPivotA(void) const
   { return eps_agot_A; }
 
-const double &XC::DefAgotPivotes::getDefAgotPivoteB(void) const
+const double &XC::PivotsUltimateStrains::getDefAgotPivotB(void) const
   { return eps_agot_B; }
 
-const double &XC::DefAgotPivotes::getDefAgotPivoteC(void) const
+const double &XC::PivotsUltimateStrains::getDefAgotPivotC(void) const
   { return eps_agot_C; }
 
-void XC::DefAgotPivotes::setDefAgotPivoteA(const double &v)
+void XC::PivotsUltimateStrains::setDefAgotPivotA(const double &v)
   { eps_agot_A= v; }
-void XC::DefAgotPivotes::setDefAgotPivoteB(const double &v)
+void XC::PivotsUltimateStrains::setDefAgotPivotB(const double &v)
   { eps_agot_B= v; }
-void XC::DefAgotPivotes::setDefAgotPivoteC(const double &v)
+void XC::PivotsUltimateStrains::setDefAgotPivotC(const double &v)
   { eps_agot_C= v; }
 
-const double XC::DefAgotPivotes::getIncEpsAB(const double &ndiv) const
+const double XC::PivotsUltimateStrains::getIncEpsAB(const double &ndiv) const
   { return (eps_agot_A-eps_agot_B)/ndiv; }

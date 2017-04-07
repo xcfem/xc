@@ -56,7 +56,7 @@
 // Description: This file contains the class defination for 
 // bar-slip material. The file generates the 4 point envelope for both positive 
 // and negative loading and is basically a wrapper for the Pinching4 material at it's outset.
-// Updates: nuevos cálculos de daño e interfaz de usuario.
+// Updates: new damage analysis and user interface.
 
 
 #ifndef BarSlipMaterial_h

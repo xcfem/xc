@@ -39,7 +39,7 @@ namespace XC {
 //! \brief Rotation transformation.
 class Rotation: public TrfGeom
   {
-    Rotation3d rr; //!< Rotación.
+    Rotation3d rr; //!< Rotation.
   protected:
 
   public:

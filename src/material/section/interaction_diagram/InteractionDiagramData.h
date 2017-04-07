@@ -30,7 +30,7 @@
 #define DATOSDIAGINTERACCION_H
 
 
-#include "DefAgotPivotes.h"
+#include "PivotsUltimateStrains.h"
 
 namespace XC {
 
@@ -43,14 +43,14 @@ class InteractionDiagramData: public EntCmd
     double umbral; //!< Minimal distance between diagram points.
     double inc_eps; //!< Strain step size.
     double inc_t; //!< Angle step size.
-    DefAgotPivotes agot_pivotes; //!< Ultimate strains at pivots.
+    PivotsUltimateStrains agot_pivots; //!< Ultimate strains at pivots.
     std::string nmb_set_hormigon; //!< Concrete fibers set name.
     int tag_hormigon; //!< Concrete material tag.
     std::string nmb_set_armadura; //!< Steel fibers set name. 
     int tag_armadura; //!< Steel material tag.
   public:
     InteractionDiagramData(void);
-    InteractionDiagramData(const double &u,const double &inc_e,const double &inc_t= M_PI/4,const DefAgotPivotes &agot= DefAgotPivotes());
+    InteractionDiagramData(const double &u,const double &inc_e,const double &inc_t= M_PI/4,const PivotsUltimateStrains &agot= PivotsUltimateStrains());
 
     inline const double &getUmbral(void) const
       { return umbral; }
@@ -64,10 +64,10 @@ class InteractionDiagramData: public EntCmd
       { return inc_t; }
     inline void setIncTheta(const double &v)
       { inc_t= v; }
-    inline const DefAgotPivotes &getDefsAgotPivotes(void) const
-      { return agot_pivotes; }
-    inline void setDefsAgotPivotes(const DefAgotPivotes &v)
-      { agot_pivotes= v; }
+    inline const PivotsUltimateStrains &getDefsAgotPivots(void) const
+      { return agot_pivots; }
+    inline void setDefsAgotPivots(const PivotsUltimateStrains &v)
+      { agot_pivots= v; }
     inline const std::string &getNmbSetHormigon(void) const
       { return nmb_set_hormigon; }
     inline void setNmbSetHormigon(const std::string &v)

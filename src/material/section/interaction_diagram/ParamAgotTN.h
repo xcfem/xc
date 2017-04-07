@@ -31,7 +31,7 @@
 
 namespace XC {
 
-class DefAgotPivotes;
+class PivotsUltimateStrains;
 
 //! @ingroup MATSCCDiagInt
 //
@@ -39,7 +39,7 @@ class DefAgotPivotes;
 //! section under normal stresses.
 class ParamAgotTN
   {
-    const DefAgotPivotes &agot_pivotes; //!< Ultimate strain at pivots.
+    const PivotsUltimateStrains &agot_pivots; //!< Ultimate strain at pivots.
     double eps_c_max; //!< concrete max strain (most tensioned fiber).
     double eps_c_min; //!< concrete min strain (most compressed fiber).
     double eps_c_pC; //!< concrte strain at C pivot.
@@ -50,7 +50,7 @@ class ParamAgotTN
     double fc_pC(void) const;
     double fc_min(void) const;
   public:
-    ParamAgotTN(const DefAgotPivotes &ap,const double &emx= 0.0,const double &emn= 0.0,const double &ec= 0.0);
+    ParamAgotTN(const PivotsUltimateStrains &ap,const double &emx= 0.0,const double &emn= 0.0,const double &ec= 0.0);
     
     bool Cumple(void) const;
     bool Agotada(void) const;
