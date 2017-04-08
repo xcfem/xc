@@ -300,7 +300,7 @@ int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, double fact)
 //! by the fact parameter.
 int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, double fact)
   { 
-    //Añadido LCPT.
+    //Added by LCPT.
     // check that m and id are of same size
     const int idSize = id.Size();
     if(idSize != m.noRows() && idSize != m.noCols())
@@ -313,7 +313,7 @@ int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, double fact)
     for(int i=0; i<idSize; i++)
       for(int j=0; j<idSize; j++)
         massMatrix(i,j)+= m(j,i);
-    //Fin añadido LCPT.
+    //Added by LCPT ends.
 
     return this->addA(m, id, -shift);
   }

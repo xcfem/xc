@@ -194,7 +194,7 @@ void XC::Beam2dPointLoad::addReactionsInBasicSystem(const double &L,const double
   }
 
 //! @brief ??
-//! @param L Longitud del elemento.
+//! @param L Length of the element.
 //! @param loadFactor Load factor.
 //! @param q0 ??
 void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0) const

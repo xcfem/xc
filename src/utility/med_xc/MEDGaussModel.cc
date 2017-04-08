@@ -33,7 +33,7 @@
 XC::MEDGaussModel::MEDGaussModel(const std::string &nmb,const MED_EN::medGeometryElement &tp,const GaussModel &gm)
   : nombre(nmb),tipo(tp), num_nodos(gm.getNumberOfReferenceNodes()),num_gauss_pt(gm.getNumGaussPoints()), model(nullptr)
   { 
-    const size_t dim= tp/100; //Dimensión del espacio en que se define el elemento.
+    const size_t dim= tp/100; //Dimension of the space in which the element is defined.
     coo_nodos_ref.resize(num_nodos*dim,0);
     const std::deque<Pos3d> &nodos= gm.getReferenceNodesPositions(); size_t conta= 0;
     for(std::deque<Pos3d>::const_iterator i=nodos.begin();i!=nodos.end();i++)
@@ -70,7 +70,7 @@ XC::MEDGaussModel::med_gauss_model *XC::MEDGaussModel::getGaussModelMED(void) co
 const std::string &XC::MEDGaussModel::getNombre(void) const
   { return nombre; }
 
-//! @brief Returns the tipo del elemento al que se refiere el modelo.
+//! @brief Returns the element type the model.
 const MED_EN::medGeometryElement &XC::MEDGaussModel::getTipo(void) const
   { return tipo; }
 

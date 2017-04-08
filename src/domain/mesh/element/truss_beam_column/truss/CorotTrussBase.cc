@@ -57,11 +57,11 @@ XC::CorotTrussBase &XC::CorotTrussBase::operator=(const CorotTrussBase &otro)
   }
 
 
-//! @brief Return the longitud inicial del elemento.
+//! @brief Return the longitud inicial of the element.
 const double &XC::CorotTrussBase::getLo(void) const
   { return Lo; }
 
-//! @brief Return the longitud actual del elemento.
+//! @brief Return the longitud actual of the element.
 const double &XC::CorotTrussBase::getLn(void) const
   { return Ln; }
 

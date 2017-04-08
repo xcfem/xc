@@ -96,7 +96,7 @@ void XC::MapSoluMethod::revertToStart(void)
       (*i).second.revertToStart();
   }
 
-//! @brief Borra todo.
+//! @brief Clears all.
 void XC::MapSoluMethod::clearAll(void)
   { solu_methods.clear(); }
 

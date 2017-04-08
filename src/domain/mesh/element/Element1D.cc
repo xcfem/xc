@@ -142,7 +142,7 @@ void XC::Element1D::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
     const CrdTransf *crd_trf= getCoordTransf();
     const double x= crd_trf->getPointBasicCoordFromGlobal(p);
     if(x<0.0 || x>1.0)
-      std::cerr << "Error vector2dPointLoadGlobal; la distancia relativa x= "
+      std::cerr << "Error vector2dPointLoadGlobal; the relative distance x= "
                 << x << " obtenida del punto: " << p
                 << " debe estar comprendida entre 0 y 1." << std::endl;
     vector2dPointByRelDistLoadGlobal(x,v);
@@ -153,7 +153,7 @@ void XC::Element1D::vector2dPointLoadLocal(const Vector &p,const Vector &v)
     const CrdTransf *crd_trf= getCoordTransf();
     const double x= crd_trf->getPointBasicCoordFromGlobal(p);
     if(x<0.0 || x>1.0)
-      std::cerr << "Error vector2dPointLoadGlobal; la distancia relativa x= "
+      std::cerr << "Error vector2dPointLoadGlobal; the relative distance x= "
                 << x << " obtenida del punto: " << p
                 << " debe estar comprendida entre 0 y 1." << std::endl;
     vector2dPointByRelDistLoadLocal(x,v);
@@ -243,7 +243,7 @@ void XC::Element1D::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
     const CrdTransf *crd_trf= getCoordTransf();
     const double x= crd_trf->getPointBasicCoordFromGlobal(p);
     if(x<0.0 || x>1.0)
-      std::cerr << "Error vector3dPointLoadGlobal; la distancia relativa x= "
+      std::cerr << "Error vector3dPointLoadGlobal; the relative distance x= "
                 << x << " obtenida del punto: " << p
                 << " debe estar comprendida entre 0 y 1." << std::endl;
     vector3dPointByRelDistLoadGlobal(x,v);
@@ -254,7 +254,7 @@ void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
     const CrdTransf *crd_trf= getCoordTransf();
     const double x= crd_trf->getPointBasicCoordFromGlobal(p);
     if(x<0.0 || x>1.0)
-      std::cerr << "Error vector3dPointLoadGlobal; la distancia relativa x= "
+      std::cerr << "Error vector3dPointLoadGlobal; the relative distance x= "
                 << x << " obtenida del punto: " << p
                 << " debe estar comprendida entre 0 y 1." << std::endl;
     vector3dPointByRelDistLoadLocal(x,v);
@@ -532,7 +532,7 @@ const XC::Vector &XC::Element1D::getCooPunto(const double &xrel) const
     return retval;
   }
 
-//! @brief Returns the segmento definido por el elemento.
+//! @brief Returns the segment defined by the element.
 Segmento3d XC::Element1D::getSegmento(bool initialGeometry) const
   {
     if(initialGeometry)
@@ -541,17 +541,17 @@ Segmento3d XC::Element1D::getSegmento(bool initialGeometry) const
       return Segmento3d(theNodes[0]->getPosFinal3d(),theNodes[1]->getPosFinal3d());
   }
 
-//! @brief Returns the cuadrado de la distancia desde el elemento al punto que
+//! @brief Returns the squared distance from the element to the point que
 //! is being passed as parameter.
 double XC::Element1D::getDist2(const Pos2d &p,bool initialGeometry) const
   { return getDist2(To3dXY2d(p),initialGeometry); }
 
-//! @brief Return the distancia desde el elemento al punto que
+//! @brief Return the the distance from the element to punto que
 //! is being passed as parameter.
 double XC::Element1D::getDist(const Pos2d &p,bool initialGeometry) const
   { return getDist(To3dXY2d(p),initialGeometry); }
 
-//! @brief Returns the cuadrado de la distancia desde el elemento al punto que
+//! @brief Returns the squared distance from the element to the point que
 //! is being passed as parameter.
 double XC::Element1D::getDist2(const Pos3d &p,bool initialGeometry) const
   {
@@ -559,7 +559,7 @@ double XC::Element1D::getDist2(const Pos3d &p,bool initialGeometry) const
     return sg.dist2(p);
   }
 
-//! @brief Return the distancia desde el elemento al punto que
+//! @brief Return the the distance from the element to punto que
 //! is being passed as parameter.
 double XC::Element1D::getDist(const Pos3d &p,bool initialGeometry) const
   {
@@ -657,8 +657,8 @@ int XC::Element1D::getMEDCellType(void) const
   { return MED_SEG2; }
 
 
-//! @brief Calcula las longitudes tributarias correspondientes a cada
-//! nodo del elemento
+//! @brief Calcula the tributary lengths that corresponds to cada
+//! nodo of the element
 void XC::Element1D::calculaLongsTributarias(bool initialGeometry) const
   {
     const double lt= getSegmento(initialGeometry).Longitud()/2.0;
@@ -667,7 +667,7 @@ void XC::Element1D::calculaLongsTributarias(bool initialGeometry) const
     vuelcaTributarias(longsTributarias);
   }
 
-//! @brief Return the longitud tributaria correspondiente to the node being passed
+//! @brief Return the tributary length corresponding to the node being passed
 //! as parameter.
 double XC::Element1D::getLongTributaria(const Node *nod) const
   {

@@ -215,7 +215,7 @@ int XC::SymArpackSolver::solve(void)
     return 0;
   }
 
-//! @brief Sets the tamaño del problema.
+//! @brief Sets the size of the system.
 int XC::SymArpackSolver::setSize(void)
   {
     // nothing to do

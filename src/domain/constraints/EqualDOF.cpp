@@ -32,19 +32,23 @@
 #include <domain/mesh/node/Node.h>
 #include <domain/domain/Domain.h>
 
+//! @brief Constructor.
 XC::EqualDOF::EqualDOF(int tag)
   : MFreedom_Constraint(tag) {}
 
+//! @brief Constructor.
 XC::EqualDOF::EqualDOF(int tag,const int &masterNode,const int &slaveNode,const ID &dofs)
   : MFreedom_Constraint(tag,masterNode,slaveNode,0)
   { setDofs(dofs); }
 
+//! @brief Sets retained degrees of fredom.
 void XC::EqualDOF::setDofs(const ID &dofs)
   {
      set_retained_dofs(dofs);
      set_constrained_dofs(retainDOF);
   }
 
+//! @brief Computes constraint matrix.
 void XC::EqualDOF::setup_matrix(void)
   {
     // The number of DOF to be coupled
@@ -59,6 +63,7 @@ void XC::EqualDOF::setup_matrix(void)
     set_constraint(Ccr);
   }
 
+//! @brief Constraint setup.
 void XC::EqualDOF::setup(Domain *theDomain)
   {  setup_matrix(); }
 

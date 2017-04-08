@@ -194,7 +194,7 @@ void XC::BandArpackSOE::zeroA(void)
 int XC::BandArpackSOE::addM(const Matrix &m, const ID &id, double fact)
   {
     bool retval= 0;
-    //Añadido LCPT.
+    //Added by LCPT.
     if(fact!=0.0)
       {
         const int idSize = id.Size();
@@ -230,7 +230,7 @@ int XC::BandArpackSOE::addM(const Matrix &m, const ID &id, double fact)
               }
           }
       }
-    //Fin añadido LCPT.
+    //Added by LCPT ends.
     retval= this->addA(m, id, -shift);
     return retval;
   }

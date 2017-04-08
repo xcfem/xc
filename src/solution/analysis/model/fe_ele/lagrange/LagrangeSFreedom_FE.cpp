@@ -180,21 +180,21 @@ const XC::Vector &XC::LagrangeSFreedom_FE::getTangForce(const XC::Vector &disp, 
 const XC::Vector &XC::LagrangeSFreedom_FE::getK_Force(const XC::Vector &disp, double fact)
   {
     std::cerr << "WARNING LagrangeSFreedom_FE::getK_Force() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::LagrangeSFreedom_FE::getC_Force(const XC::Vector &disp, double fact)
   {
     std::cerr << "WARNING LagrangeSFreedom_FE::getC_Force() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::LagrangeSFreedom_FE::getM_Force(const XC::Vector &disp, double fact)
   {
     std::cerr << "WARNING LagrangeSFreedom_FE::getM_Force() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 

@@ -75,7 +75,7 @@ void XC::LoadLoader::removeAllFromDomain(void)
     lpatterns.removeAllFromDomain();
   }
 
-//! @brief Borra todos los objetos.
+//! @brief Clears all the objects.
 void XC::LoadLoader::clearAll(void)
   {
     combinations.clear();

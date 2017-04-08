@@ -166,23 +166,23 @@ int XC::EigenAnalysis::domainChanged(void)
     result= getEigenSOEPtr()->setSize(theGraph);
     if(result < 0)
       {
-        std::cerr << "EigenAnalysis::domainChanged() - ";
-        std::cerr << "fallo al asingnar el tamaño del system of equations." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; error when setting system size." << std::endl;
         return -4;
       }
 
     result= getEigenIntegratorPtr()->domainChanged();
     if(result < 0)
       {
-        std::cerr << "EigenAnalysis::domainChanged() - ";
-        std::cerr << "fallo en Integrator::domainChanged()." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; error in Integrator::domainChanged()." << std::endl;
         return -5;
       }
     result= getEigenSolutionAlgorithmPtr()->domainChanged();
     if(result < 0)
       {
-        std::cerr << "EigenAnalysis::domainChanged() - ";
-        std::cerr << "fallo en Algorithm::domainChanged()." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; error in Algorithm::domainChanged()." << std::endl;
         return -5;
       }
 

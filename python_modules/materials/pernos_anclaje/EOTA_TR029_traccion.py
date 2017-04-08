@@ -21,7 +21,7 @@ def axialResistanceSteelFailure(As, fuk):
 def axialInitialResistancePullOut(d, hEf, tauRk):
     ''' Valor inicial de la resistencia de un perno a tracción por fallo combinado de arrancamiento y extracción de cono de hormigón según la expresión 5.2a del artículo 5.2.2.3 a) de EOTA TR029.
 
-    :param d: Diámetro del perno (m).
+    :param d: Anchor diameter (m).
     :param hEf: Profundidad efectiva del anclaje (m).
     :param tauRk: Valor característico de la tensión de adherencia (debe tomarse del documento ETA que resulte aplicable) (Pa).
     '''   
@@ -83,6 +83,7 @@ def getFactor2pN(A0pN, ApN):
 def getFactor1N(C, CcrN):
     '''
     Factor que introduce en el cálculo la influencia en la distribución de tensiones de la distancia al borde de la pieza soporte, según la expresión 5.2e del artículo 5.2.2.3 c).
+
      :param C: Distancia al borde del perno.
      :param CcrN: Semi-lado del área de influencia (distancia crítica al borde).
     '''

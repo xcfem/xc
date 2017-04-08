@@ -176,21 +176,21 @@ const XC::Vector &XC::PenaltySFreedom_FE::getTangForce(const XC::Vector &disp, d
 const XC::Vector &XC::PenaltySFreedom_FE::getK_Force(const XC::Vector &disp, double fact)
   {
     std::cerr << "WARNING PenaltySFreedom_FE::getK_Force() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::PenaltySFreedom_FE::getC_Force(const XC::Vector &disp, double fact)
   {
     std::cerr << "WARNING PenaltySFreedom_FE::getC_Force() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::PenaltySFreedom_FE::getM_Force(const XC::Vector &disp, double fact)
   {
     std::cerr << "WARNING PenaltySFreedom_FE::getM_Force() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 

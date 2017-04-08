@@ -775,7 +775,7 @@ int XC::Mesh::update(void)
 
 
 
-//! @brief Returns true ifel modelo ha cambiado.
+//! @brief Returns true if the modelo ha cambiado.
 void XC::Mesh::setGraphBuiltFlags(const bool &f)
   {
     nodeGraphBuiltFlag= f;

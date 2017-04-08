@@ -81,7 +81,7 @@ XC::ModelWrapper &XC::MapModelWrapper::creaModelWrapper(const std::string &cod)
     return *retval;
   }
 
-//! @brief Borra todo.
+//! @brief Clears all.
 void XC::MapModelWrapper::clearAll(void)
   { solu_models.clear(); }
 

@@ -97,28 +97,28 @@ const XC::Vector &XC::PenaltyMRMFreedom_FE::getResidual(Integrator *theNewIntegr
 const XC::Vector &XC::PenaltyMRMFreedom_FE::getTangForce(const Vector &disp, double fact)
   {
     std::cerr << "WARNING PenaltyMRMFreedom_FE::getTangForce() - not yet implemented.";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::PenaltyMRMFreedom_FE::getK_Force(const Vector &disp, double fact)
   {
     std::cerr << "WARNING PenaltyMRMFreedom_FE::getK_Force() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::PenaltyMRMFreedom_FE::getC_Force(const Vector &disp, double fact)
   {
     std::cerr << "WARNING PenaltyMRMFreedom_FE::getC_Force() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::PenaltyMRMFreedom_FE::getM_Force(const Vector &disp, double fact)
   {
     std::cerr << "WARNING PenaltyMRMFreedom_FE::getM_Force() - not yet implemented.\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 

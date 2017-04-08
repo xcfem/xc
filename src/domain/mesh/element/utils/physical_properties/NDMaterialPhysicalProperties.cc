@@ -91,7 +91,7 @@ XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStress(void) const
   }   
 
 
-//! @brief Return the tensión media en el elemento.
+//! @brief Return the tensión media in the element.
 XC::Vector XC::NDMaterialPhysicalProperties::getCommittedAvgStress(void) const
   {
     const size_t numMaterials= theMaterial.size();
@@ -102,7 +102,7 @@ XC::Vector XC::NDMaterialPhysicalProperties::getCommittedAvgStress(void) const
     return retval;
   }
 
-//! @brief Return the tensión media en el elemento.
+//! @brief Return the tensión media in the element.
 XC::Vector XC::NDMaterialPhysicalProperties::getCommittedAvgStrain(void) const
   {
     const size_t numMaterials= theMaterial.size();
@@ -113,7 +113,7 @@ XC::Vector XC::NDMaterialPhysicalProperties::getCommittedAvgStrain(void) const
     return retval;
   }
 
-//! @brief Return the componente iComp de la tensión media en el elemento.
+//! @brief Return the componente iComp de la tensión media in the element.
 double XC::NDMaterialPhysicalProperties::getCommittedAvgStress(const size_t &iComp) const
   {
     const size_t numMaterials= theMaterial.size();
@@ -124,7 +124,7 @@ double XC::NDMaterialPhysicalProperties::getCommittedAvgStress(const size_t &iCo
     return retval;
   }
 
-//! @brief Return the componente iComp de la average strain en el elemento.
+//! @brief Return the componente iComp de la average strain in the element.
 double XC::NDMaterialPhysicalProperties::getCommittedAvgStrain(const size_t &iComp) const
   {
     const size_t numMaterials= theMaterial.size();

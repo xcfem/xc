@@ -200,7 +200,7 @@ template <class T>
 void XC::TritrizPtrBase<T>::dim(const size_t &nLayers,const size_t &nRows,const size_t &nCols)
   { this->resize(nLayers,nRows,nCols,nullptr); }
 
-//! @brief Cambia el tamaño de la tritriz.
+//! @brief Cambia el size of tritriz.
 template <class MatrizPtr>
 void TritrizPtrBase<MatrizPtr>::resize(const size_t &capas)
   {
@@ -208,7 +208,7 @@ void TritrizPtrBase<MatrizPtr>::resize(const size_t &capas)
     set_owner_matrices();
   }
 
-//! @brief Cambia el tamaño de la tritriz.
+//! @brief Cambia el size of tritriz.
 template <class MatrizPtr>
 void TritrizPtrBase<MatrizPtr>::resize(const size_t &capas,const size_t &filas,const size_t &cols,const value_type &v)
   {
@@ -302,7 +302,7 @@ bool TritrizPtrBase<MatrizPtr>::HasNull(void) const
     return retval;
   }
 
-//! @brief Borra todo.
+//! @brief Clears all.
 template <class MatrizPtr>
 void TritrizPtrBase<MatrizPtr>::clearAll(void)
   {

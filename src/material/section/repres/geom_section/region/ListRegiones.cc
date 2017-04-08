@@ -110,7 +110,7 @@ XC::RgSccCirc *XC::ListRegiones::newCircularRegion(const std::string &cod_mat)
 XC::ListRegiones::~ListRegiones(void)
   { libera(); }
 
-//! @brief Borra todas las regiones.
+//! @brief Erases todas las regiones.
 void XC::ListRegiones::clear(void)
   { libera(); }
 

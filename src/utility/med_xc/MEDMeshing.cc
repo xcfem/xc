@@ -52,7 +52,7 @@ XC::MEDMeshing::MEDMeshing(const Mesh &mesh,const MapSet &s, const MapFields &f)
 MEDMEM::MESHING &XC::MEDMeshing::getMEDMesh(void) const
   { return mesh; }
 
-//! Borra la mesh.
+//! Erases la mesh.
 void XC::MEDMeshing::clear(void)
   {
     vertices.clear();

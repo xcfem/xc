@@ -34,7 +34,7 @@ void XC::MEDMapNumCeldasPorTipo::agrega_celda(const MED_EN::medGeometryElement &
       tipos[tipo]= 1;
   }
 
-//! Borra los indices.
+//! Erases los indices.
 void XC::MEDMapNumCeldasPorTipo::clear(void)
   { tipos.clear(); }
 

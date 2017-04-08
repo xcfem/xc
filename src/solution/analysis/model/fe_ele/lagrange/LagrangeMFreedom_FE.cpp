@@ -150,28 +150,28 @@ const XC::Vector &XC::LagrangeMFreedom_FE::getResidual(Integrator *theNewIntegra
 const XC::Vector &XC::LagrangeMFreedom_FE::getTangForce(const Vector &disp, double fact)
   {
     std::cerr << "WARNING LagrangeMFreedom_FE::getTangForce() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return  resid;
   }
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getK_Force(const Vector &disp, double fact)
   {
     std::cerr << "WARNING LagrangeMFreedom_FE::getK_Force() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getC_Force(const Vector &disp, double fact)
   {
     std::cerr << "WARNING LagrangeMFreedom_FE::getC_Force() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getM_Force(const XC::Vector &disp, double fact)
   {
     std::cerr << "WARNING LagrangeMFreedom_FE::getM_Force() - not yet implemented\n";
-    resid.Zero(); //Añadida LCPT.
+    resid.Zero(); //Added by LCPT.
     return resid;
   }
 

@@ -105,7 +105,7 @@ T * MapCadMember<T>::get(const size_t &iEnt)
     return retval;   
   }
 
-//! @brief Borra todas las entidades.
+//! @brief Erases todas las entidades.
 template <class T>
 void MapCadMember<T>::clearAll(void)
   {

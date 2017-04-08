@@ -84,7 +84,7 @@ class_<XC::ElementLoader::SeedElemLoader, bases<XC::ProtoElementLoader>, boost::
 
 class_<XC::ElementLoader, bases<XC::ProtoElementLoader>, boost::noncopyable >("ElementLoader", no_init)
   .add_property("seedElemLoader", make_function( &XC::ElementLoader::getSeedElemLoader, return_internal_reference<>() ))
-  .def("getElement", &XC::ElementLoader::getElement,return_internal_reference<>(),"Returns the elemento cuyo identificador being passed as parameter.")
+  .def("getElement", &XC::ElementLoader::getElement,return_internal_reference<>(),"Returns the element identified by the parameter.")
   .add_property("defaultTag", &XC::ElementLoader::getDefaultTag, &XC::ElementLoader::setDefaultTag)
    ;
 
@@ -97,7 +97,7 @@ class_<XC::ConstraintLoader, bases<XC::Loader>, boost::noncopyable >("Constraint
   .def("newSPConstraint", &XC::ConstraintLoader::newSPConstraint,return_internal_reference<>(),"New single freedom constraint.")
   .def("removeSPConstraint", &XC::ConstraintLoader::removeSPConstraint,return_internal_reference<>(),"Deletes a single freedom constraint.")
   .def("newMPConstraint", &XC::ConstraintLoader::newMPConstraint,return_internal_reference<>(),"New multi-freedom constraint.")
-  .def("newEqualDOF", &XC::ConstraintLoader::newEqualDOF,return_internal_reference<>())
+  .def("newEqualDOF", &XC::ConstraintLoader::newEqualDOF,return_internal_reference<>(),"Imposes the same displacements on two nodes for the components specified in the argument.")
   .def("newRigidBeam", &XC::ConstraintLoader::newRigidBeam,return_internal_reference<>())
   .def("newRigidRod", &XC::ConstraintLoader::newRigidRod,return_internal_reference<>())
   .def("newMRMPConstraint", &XC::ConstraintLoader::newMRMPConstraint,return_internal_reference<>(),"Creates a new multi retained nodes constraint.")

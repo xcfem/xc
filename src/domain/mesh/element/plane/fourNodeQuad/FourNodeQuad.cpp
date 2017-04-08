@@ -328,7 +328,7 @@ const XC::Matrix &XC::FourNodeQuad::getMass(void) const
     return K;
   }
 
-//! @brief Returns the puntos de Gauss del elemento.
+//! @brief Returns the puntos de Gauss of the element.
 const XC::GaussModel &XC::FourNodeQuad::getGaussModel(void) const
   { return gauss_model_quad4; }
 
@@ -384,7 +384,7 @@ int XC::FourNodeQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
     return 0;
   }
 
-//! @brief Return the fuerza de respuesta del elemento.
+//! @brief Return the fuerza de respuesta of the element.
 const XC::Vector &XC::FourNodeQuad::getResistingForce(void) const
   {
     P.Zero();
@@ -434,7 +434,7 @@ const XC::Vector &XC::FourNodeQuad::getResistingForce(void) const
     return P;
   }
 
-//! @brief Return the fuerza de respuesta del elemento incluyendo la debida a la inercia.
+//! @brief Return the fuerza de respuesta of the element incluyendo la debida a la inercia.
 const XC::Vector &XC::FourNodeQuad::getResistingForceIncInertia(void) const
   {
     static Vector rhoi(4);
@@ -542,7 +542,7 @@ int XC::FourNodeQuad::recvSelf(const CommParameters &cp)
   }
 
 
-//! @brief Imprime el elemento.
+//! @brief Prints element information.
 void XC::FourNodeQuad::Print(std::ostream &s, int flag)
   {
     if(flag == 2)

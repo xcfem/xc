@@ -69,7 +69,7 @@ class MapSet: public EntCmd, public MovableObject
     map_sets sets; //!< Sets of entidades.
     map_ent_mdlr entidades; //! Geometric entities (points, lines, surfaces,...).
     Set *total; //!< Pointer to total set (Created in constructor).
-    map_sets abiertos; //!< Opened sets (aquellos a los que se añade cada nueva entidad creada en Cad).
+    map_sets abiertos; //!< Opened sets (those for wich each new entity will be added to).
 
     bool existe(const std::string &nmb) const;
     friend class EntMdlr;

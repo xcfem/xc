@@ -146,7 +146,7 @@ XC::BeamWithHinges3d::~BeamWithHinges3d(void)
 int XC::BeamWithHinges3d::getNumDOF(void) const
   { return 12; }
 
-//! @brief Establece el domain del elemento.
+//! @brief Establece el domain of the element.
 void XC::BeamWithHinges3d::setDomain(Domain *theDomain)
   {
   //This function may be called after a beam is constructed, so

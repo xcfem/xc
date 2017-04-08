@@ -208,7 +208,7 @@ int XC::Vector::setData(double *newData, int size)
   }
 
 
-//! @brief Cambia el tamaño del vector.
+//! @brief Changes vector size.
 int XC::Vector::resize(int newSize)
   {
     if(fromFree!=0)
@@ -746,7 +746,7 @@ double XC::Vector::pNorm(int p) const
 }
 
 
-//! @brief Returns the elemento cuya fila being passed as parameter.
+//! @brief Returns the number at the row being passed as parameter.
 double &XC::Vector::at(const size_t &f)
   {
     if(CheckIndice0(f))
@@ -754,7 +754,7 @@ double &XC::Vector::at(const size_t &f)
     else
       return VECTOR_NOT_VALID_ENTRY;
   }
-//! @brief Returns the elemento cuya fila being passed as parameter.
+//! @brief Returns the number at the row being passed as parameter.
 const double &XC::Vector::at(const size_t &f) const
   {
     if(CheckIndice0(f))

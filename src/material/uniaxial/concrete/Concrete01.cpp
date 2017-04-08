@@ -180,7 +180,7 @@ int XC::Concrete01::setTrialStrain(double strain, double strainRate)
     const double dStrain= strain - convergedState.getStrain();
 
     if(fabs(dStrain) < DBL_EPSILON)
-      return 0; //Si el cambio es muy pequeño no hace nada.
+      return 0; //If the change is very small we do nothing.
 
     // Set trial strain
     trialState.Strain()= strain;

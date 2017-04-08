@@ -806,7 +806,7 @@ void XC::ForceBeamColumn2d::zeroLoad(void)
     v0.zero();
   }
 
-//! @brief Calcula la respuesta del elemento a the load being passed as parameter.
+//! @brief Calcula la respuesta of the element a the load being passed as parameter.
 int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
@@ -869,7 +869,7 @@ int XC::ForceBeamColumn2d::addInertiaLoadToUnbalance(const Vector &accel)
     return 0;
   }
 
-//! @brief Returns the acciones del elemento sobre los nodos incluidas
+//! @brief Returns the acciones of the element sobre los nodos incluidas
 //! las de inercia.
 const XC::Vector &XC::ForceBeamColumn2d::getResistingForceIncInertia(void) const
   {
@@ -1122,7 +1122,7 @@ void XC::ForceBeamColumn2d::compSectionDisplacements(std::vector<Vector> &sectio
    return;
 }
 
-//! @brief Imprime el elemento en el stream being passed as parameter.
+//! @brief Prints element information in the stream being passed as parameter.
 void XC::ForceBeamColumn2d::Print(std::ostream &s, int flag)
   {
     const size_t numSections= getNumSections();
@@ -1205,7 +1205,7 @@ void XC::ForceBeamColumn2d::Print(std::ostream &s, int flag)
       }
   }
 
-//! @brief Imprime el elemento en el stream de salida.
+//! @brief Prints element information in the ouput stream.
 std::ostream &XC::operator<<(std::ostream &s, ForceBeamColumn2d &E)
   {
     E.Print(s);

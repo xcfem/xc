@@ -135,19 +135,19 @@ int XC::SmallDispCrdTransf3d::calculaEjesLocales(void) const
     return 0;
   }
 
-//! @brief Return the longitud inicial del elemento.
+//! @brief Return the longitud inicial of the element.
 double  XC::SmallDispCrdTransf3d::getInitialLength(void) const
   { return L; }
 
 
-//! @brief Return the longitud del elemento deformado.
+//! @brief Return the longitud of the element deformado.
 double XC::SmallDispCrdTransf3d::getDeformedLength(void) const
   { return L; }
 
 //! @brief Returns the displacements of the element to which the
 //! transformation belongs
 //! Returns the following quantities in ub vector (see calc_ub):
-//! -ub(0)= dx2-dx1: Elongation sufrida por el elemento.
+//! -ub(0)= dx2-dx1: Element elongation.
 //! -ub(1)= (dy1-dy2)/L+gz1: Rotation about z axis of node 1.
 //! -ub(2)= (dy1-dy2)/L+gz2: Rotation about z axis of node 2.
 //! -ub(3)= (dz2-dz1)/L+gy1: Rotation about y axis of node 1.

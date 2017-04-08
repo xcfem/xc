@@ -123,7 +123,8 @@ int XC::TransientIntegrator::formTangent(int statFlag)
     return result;
   }
 
-//! @brief Forma el vector residuo del elemento being passed as parameter.    
+//! @brief Assembles the unbalanced vector of the element
+//! being passed as parameter.    
 int XC::TransientIntegrator::formEleResidual(FE_Element *theEle)
   {
     theEle->zeroResidual();

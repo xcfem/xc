@@ -356,7 +356,7 @@ int XC::ZeroLength::update(void)
           }
       }
     else
-      std::cerr << "ZeroLength::update; no se pudo actualizar el elemento: " << getTag() << std::endl;
+      std::cerr << "ZeroLength::update; no se pudo actualizar the element: " << getTag() << std::endl;
     return ret;
   }
 

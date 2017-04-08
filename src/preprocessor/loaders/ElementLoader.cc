@@ -92,7 +92,8 @@ int XC::ElementLoader::getDefaultTag(void) const
 void XC::ElementLoader::setDefaultTag(const int &tag)
   { Element::getDefaultTag().setTag(tag); }
 
-//! @brief Returns a pointer to the elemento cuyo tag se pasa como parametro.
+//! @brief Returns a pointer to the element identified
+//! by the tag being passed as parameter.
 XC::Element *XC::ElementLoader::getElement(int tag)
   {
     Element *retval= nullptr;
@@ -100,17 +101,16 @@ XC::Element *XC::ElementLoader::getElement(int tag)
     if(tmp)
       retval= tmp->getElement(tag);
     else
-      std::cerr << "XC::ElementLoader::getElement; the pointer al domain es nulo." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; domain not yet defined." << std::endl;
     return retval;
   }
 
-//! @brief Agrega el elemento al modelo.
-void XC::ElementLoader::agrega(XC::Element *e)
+//! @brief Adds the element to the model.
+void XC::ElementLoader::agrega(Element *e)
   {
     if(e)
-      {
-        nuevo_elemento(e);
-      }
+      new_element(e);
   }
 
 void XC::ElementLoader::clearAll(void)
@@ -119,9 +119,9 @@ void XC::ElementLoader::clearAll(void)
     Element::getDefaultTag().setTag(0);
   }
 
-//! @brief Agrega el elemento asignándole primero el tag que corresponde,
+//! @brief Adds the element to asignándole primero el tag que corresponde,
 //! se emplea en la clase EntPMdlr.
-void XC::ElementLoader::Agrega(XC::Element *e)
+void XC::ElementLoader::Agrega(Element *e)
   {
     if(e)
       {
@@ -132,8 +132,8 @@ void XC::ElementLoader::Agrega(XC::Element *e)
   }
 
 
-//! @brief Añade un nuevo elemento al modelo.
-void XC::ElementLoader::nuevo_elemento(Element *e)
+//! @brief Adds a new element to the model.
+void XC::ElementLoader::new_element(Element *e)
   {
     getDomain()->addElement(e);
     preprocessor->UpdateSets(e);

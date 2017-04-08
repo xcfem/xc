@@ -117,7 +117,7 @@ class Element: public MeshComponent
     static std::deque<Vector> theVectors2;
 
     void compute_damping_matrix(Matrix &) const;
-    static DefaultTag defaultTag; //<! tag para un nuevo elemento.
+    static DefaultTag defaultTag; //<! default tag for next new element.
   protected:
     friend class EntMdlr;
     friend class Preprocessor;

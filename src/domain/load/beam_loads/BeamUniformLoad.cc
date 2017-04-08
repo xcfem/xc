@@ -70,7 +70,7 @@ SVD3d XC::BeamUniformLoad::getResultant(const Pos3d &centro, bool initialGeometr
 		    retval+= VDesliz3d(ptrElem->getPosCdg(),force);
 		  }
                 else
-		  std::cerr << nombre_clase() << "::getResultant; el elemento: "
+		  std::cerr << nombre_clase() << "::getResultant; the element: "
                             << elemTag << " no tiene coordinate transformation." << std::endl;
 
               }

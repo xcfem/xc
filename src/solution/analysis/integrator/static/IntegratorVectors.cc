@@ -38,7 +38,7 @@ XC::IntegratorVectors::IntegratorVectors(void)
   :MovableObject(0), deltaLambdaStep(0.0), currentLambda(0.0) {}
 
 
-//! @brief Cambia el tamaño de los vectores.
+//! @brief Changes vectors size.
 void XC::IntegratorVectors::resize(const int &size)
   {
     if(deltaUhat.Size() != size)

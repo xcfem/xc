@@ -43,7 +43,7 @@
 
 namespace XC {
 
-//! @brief Añade una load over elements.
+//! @brief Adds a load over elements.
 template <class ELEM_LOAD>
 ELEM_LOAD *new_elem_load(LoadPattern *lp,int &tag_el)
   {

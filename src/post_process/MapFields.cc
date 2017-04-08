@@ -72,7 +72,7 @@ XC::FieldInfo &XC::MapFields::newField(const std::string &nmb_field)
     return back();
   }
 
-//! @brief Borra todo.
+//! @brief Clears all.
 void XC::MapFields::clearAll(void)
   { clear(); }
 

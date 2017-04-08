@@ -99,9 +99,8 @@ XC::Edge *XC::Linea::split_at(Pnt *p,const double &lambda,const double &longitud
       }
     Linea *retval= dynamic_cast<Linea *>(tmp);
     assert(retval);
-    //Asignamos número de divisiones de manera
-    //que se conserve aproximadamente el tamaño
-    //del elemento.
+    //Settint the number of divisions so
+    //the element size remains almost constant.
     const double sz_elem= longitud/NDiv();
     SetNDiv(ceil(getLongitud()/sz_elem));
     retval->SetNDiv(ceil(retval->getLongitud()/sz_elem));

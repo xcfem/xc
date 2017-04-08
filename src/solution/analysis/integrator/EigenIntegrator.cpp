@@ -74,7 +74,7 @@
 XC::EigenIntegrator::EigenIntegrator(SoluMethod *owr)
   :Integrator(owr,EigenINTEGRATOR_TAGS_Eigen) {}
 
-//! @brief Asks the elemento being passed as parameter
+//! @brief Asks the element being passed as parameter
 //! to build its mass(flagK= false) or stiffness matrix (flagK= true).
 int XC::EigenIntegrator::formEleTangent(FE_Element *theEle)
   {

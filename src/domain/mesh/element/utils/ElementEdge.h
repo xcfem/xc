@@ -42,7 +42,7 @@ class ElementEdge: public EntCmd
     Element *elem; //! Element that owns this border.
     int iedge; //! edge index.
   public:
-    typedef Element::NodesEdge NodesEdge; //!< Nodos de un borde del elemento.
+    typedef Element::NodesEdge NodesEdge; //!< Nodos de un borde of the element.
     typedef std::set<const Element *> ElementConstPtrSet;
 
     ElementEdge(Element *eptr= nullptr,const int &i=-1);

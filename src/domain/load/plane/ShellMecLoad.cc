@@ -42,8 +42,8 @@ XC::ShellMecLoad::ShellMecLoad(int tag,int classTag,const double &wt,const doubl
 XC::ShellMecLoad::ShellMecLoad(int tag,int classTag)
   :BidimMecLoad(tag, classTag) {}
 
-//! @brief Añade the load al consistent load vector (ver página 108 libro Eugenio Oñate).
-//! @param area Area del elemento.
+//! @brief Adds the load al consistent load vector (ver página 108 libro Eugenio Oñate).
+//! @param area Area of the element.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
 void XC::ShellMecLoad::addReactionsInBasicSystem(const double &,const double &,FVectorShell &) const
@@ -52,7 +52,7 @@ void XC::ShellMecLoad::addReactionsInBasicSystem(const double &,const double &,F
   }
 
 //! @brief ??
-//! @param area Area del elemento.
+//! @param area Area of the element.
 //! @param loadFactor Load factor.
 //! @param q0 
 void XC::ShellMecLoad::addFixedEndForcesInBasicSystem(const double &,const double &loadFactor,FVectorShell &) const
@@ -137,7 +137,7 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
                 if(ptrTransf)
                   retval= ptrTransf->getVectorGlobalCoordFromLocal(localVectors);
                 else
-		  std::cerr << "ShellMecLoad::getGlobalVectors; el elemento: "
+		  std::cerr << "ShellMecLoad::getGlobalVectors; the element: "
                         << elemTag << " no tiene coordinate transformation." << std::endl;
               }
             else if(const ShellNL *ptrShell= dynamic_cast<const ShellNL *>(ptrElem))
@@ -146,7 +146,7 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
                 if(ptrTransf)
                   retval= ptrTransf->getVectorGlobalCoordFromLocal(localVectors);
                 else
-		  std::cerr << "ShellMecLoad::getGlobalVectors; el elemento: "
+		  std::cerr << "ShellMecLoad::getGlobalVectors; the element: "
                         << elemTag << " no tiene coordinate transformation." << std::endl;
               }
             else

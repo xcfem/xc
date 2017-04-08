@@ -1506,7 +1506,7 @@ int XC::DqFibras::updateKRCDG(FiberSection2d &Section2d,KRSeccion &kr2)
     return 0;
   }
 
-//! @brief Añade una fibra XXX Enhance parameter updating.
+//! @brief Adds a fiber XXX Enhance parameter updating.
 XC::Fiber *XC::DqFibras::addFiber(FiberSection2d &Section2d,Fiber &newFiber,KRSeccion &kr2)
   {
     Fiber *retval= inserta(newFiber);

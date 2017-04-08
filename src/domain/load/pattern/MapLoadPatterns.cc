@@ -164,7 +164,6 @@ const std::string &XC::MapLoadPatterns::getNombreLoadPattern(const LoadPattern *
   {
     static std::string retval;
     retval= "";
-    //Borramos las loadpatterns.
     for(const_iterator i= begin();i!=end();i++)
       if((*i).second == ptr)
         {
@@ -264,20 +263,20 @@ XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &tipo,con
     return retval;
   }
 
-//! @brief Borra todos los load patterns.
+//! @brief Clears all the load patterns.
 void XC::MapLoadPatterns::clear_time_series(void)
   {
-    //Borramos la lista de timeseries.
+    //Clears time series.
     for(map_timeseries::iterator i= tseries.begin();i!=tseries.end();i++)
       delete (*i).second;
     tseries.erase(tseries.begin(),tseries.end());
   }
 
-//! @brief Borra todas las loadpatterns.
+//! @brief Clears all the load patterns.
 void XC::MapLoadPatterns::clear(void)
   {
     removeAllFromDomain();
-    //Borramos las loadpatterns.
+    //Clear loads patterns.
     for(iterator i= begin();i!=end();i++)
       {
         delete (*i).second;

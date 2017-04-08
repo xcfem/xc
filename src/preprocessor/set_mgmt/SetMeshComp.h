@@ -144,7 +144,7 @@ class SetMeshComp: public SetBase
     //! @brief Return the lista de constraints of the set.
     virtual DqPtrsConstraint &GetConstraints(void)
       { return constraints; }
-    //! @brief Borra la lista de constraints of the set.
+    //! @brief Erases la lista de constraints of the set.
     void clearConstraints(void)
       { constraints.clearAll(); }
     void sel_constraints_lista(const ID &tags);

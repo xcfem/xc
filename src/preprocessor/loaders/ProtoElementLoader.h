@@ -50,7 +50,7 @@ class ProtoElementLoader: public Loader
   {
     Element *crea_elemento(const std::string &cmd,int tag_elem);
 
-    std::string nmb_mat; //!< En su caso, nombre del material para el nuevo elemento.
+    std::string nmb_mat; //!< When appropriate, material name for the new element.
     int num_sec; //!< When appropriate, number of sections (integration points) on one-dimensional elements.
     int dim_elem; //!< If required, dimension of the new element (0,1,2 or 3)
     std::string nmb_transf; //!< If required, transformation identifier for the new element.

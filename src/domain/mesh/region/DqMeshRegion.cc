@@ -77,7 +77,7 @@ XC::DqMeshRegion::~DqMeshRegion(void)
   { libera(); }
 
 
-//! @brief Cambia el tamaño del vector.
+//! @brief Changes the container size.
 void XC::DqMeshRegion::resize(const size_t sz)
   {
     libera();

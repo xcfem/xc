@@ -24,7 +24,7 @@
 #include "MEDMapIndices.h"
 #include <iostream>
 
-//! Borra los indices.
+//! Erases los indices.
 void XC::MEDMapIndices::clear(void)
   { indices.clear(); }
 

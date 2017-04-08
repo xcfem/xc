@@ -87,9 +87,9 @@ void XC::MEDDblFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
                   setValueIJ(conta,k,valor[k-1]);
               }
             else
-	      std::cerr << "MEDDblFieldInfo::populateOnElements; el elemento: "
+	      std::cerr << "MEDDblFieldInfo::populateOnElements; the element: "
                         << (*j)->getTag()
-                        << " no pudo devolver la propiedad: '"
+                        << " can't return property: '"
                         << nmb_prop << "'\n";
           }
       }

@@ -159,7 +159,7 @@
 #define DEG_TAG_STRENGTH_Energy		5
 #define DEG_TAG_STRENGTH_Section	6
 
-#define PATTERN_TAG_NodeLocker		  1 //Modificado LCPT.Añadido LCPT.
+#define PATTERN_TAG_NodeLocker		  1 //Modificado LCPT.Added by LCPT.
 #define PATTERN_TAG_LoadPattern		  2 //Modificado LCPT.
 #define PATTERN_TAG_MultiSupportPattern	  4 //Modificado LCPT.
 #define PATTERN_TAG_UniformExcitation     3 //Modificado LCPT.
@@ -171,11 +171,11 @@
 #define LOAD_TAG_BrickSelfWeight          7
 #define LOAD_TAG_BeamStrainLoad           8 //Modificado LCPT.
 #define PATTERN_TAG_PBowlLoading	  10
-#define LOAD_TAG_TrussStrainLoad          20 //Añadido LCPT.
-#define LOAD_TAG_LoadCombination              30 //Añadido LCPT.
-#define LOAD_TAG_ShellUniformLoad         40 //Añadido LCPT.
-#define LOAD_TAG_BidimStrainLoad          50 //Añadido LCPT.
-#define LOAD_TAG_ShellStrainLoad          60 //Añadido LCPT.
+#define LOAD_TAG_TrussStrainLoad          20 //Added by LCPT.
+#define LOAD_TAG_LoadCombination              30 //Added by LCPT.
+#define LOAD_TAG_ShellUniformLoad         40 //Added by LCPT.
+#define LOAD_TAG_BidimStrainLoad          50 //Added by LCPT.
+#define LOAD_TAG_ShellStrainLoad          60 //Added by LCPT.
 
 
 #define MAT_TAG_IsotropicLinElastic         1001
@@ -325,7 +325,7 @@
 
 #define NOD_TAG_Node      	1
 #define NOD_TAG_DummyNode 	2
-#define NOD_TAG_NodeVectors    	3 //Añadido LCPT.
+#define NOD_TAG_NodeVectors    	3 //Added by LCPT.
 
 #define LOAD_TAG_LoadCase  	0
 #define LOAD_TAG_NodalLoad 	1

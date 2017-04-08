@@ -63,7 +63,7 @@ XC::ShellNL::ShellNL(void)
   :QuadBase9N<SectionFDPhysicalProperties>( 0, ELE_TAG_ShellNL, SectionFDPhysicalProperties(9,nullptr)), Ktt(0.0),theCoordTransf(), Ki(nullptr)
   { }
 
-//! @brief Returns the puntos de Gauss del elemento.
+//! @brief Returns the puntos de Gauss of the element.
 const XC::GaussModel &XC::ShellNL::getGaussModel(void) const
   { return gauss_model_quad9; }
 
@@ -308,7 +308,7 @@ const XC::Matrix &XC::ShellNL::getMass(void) const
     return mass;
   }
 
-//! @brief Anula el element load vector.
+//! @brief Zeroes the element load vector.
 void XC::ShellNL::zeroLoad(void)
   {
     QuadBase9N<SectionFDPhysicalProperties>::zeroLoad();

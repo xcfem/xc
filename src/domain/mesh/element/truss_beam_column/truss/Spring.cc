@@ -395,7 +395,7 @@ int XC::Spring::addLoad(ElementalLoad *theLoad, double loadFactor)
     return -1;
   }
 
-//! @brief Añade las fuerzas de inercia.
+//! @brief Adds las fuerzas de inercia.
 int XC::Spring::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
     const double M= getRho(); //Aqui rho es la masa concentrada.
@@ -431,7 +431,7 @@ int XC::Spring::addInertiaLoadToUnbalance(const XC::Vector &accel)
     return 0;
   }
 
-//! @brief Returns the reacción del elemento.
+//! @brief Returns the reacción of the element.
 const XC::Vector &XC::Spring::getResistingForce(void) const
   {
     // R= Ku - Pext
@@ -453,7 +453,7 @@ const XC::Vector &XC::Spring::getResistingForce(void) const
     return *theVector;
   }
 
-//! @brief Returns the reacción del elemento incluyendo fuerzas de inercia.
+//! @brief Returns the reacción of the element incluyendo fuerzas de inercia.
 const XC::Vector &XC::Spring::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();

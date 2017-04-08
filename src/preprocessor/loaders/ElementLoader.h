@@ -66,7 +66,7 @@ class ElementLoader: public ProtoElementLoader
     ElementLoader(Preprocessor *);
     Element *getElement(int tag);
 
-    void nuevo_elemento(Element *e);
+    void new_element(Element *e);
     inline SeedElemLoader &getSeedElemLoader(void)
       { return seed_elem_loader; }
     const Element *get_elemento_semilla(void) const

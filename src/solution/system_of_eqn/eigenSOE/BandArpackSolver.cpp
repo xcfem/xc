@@ -445,7 +445,7 @@ const double &XC::BandArpackSolver::getEigenvalue(int mode) const
     return retval;
   }
 
-//! @brief Establece the tamaño del problema.
+//! @brief Sets the system size.
 int XC::BandArpackSolver::setSize(void)
   {
     int size = theSOE->size;

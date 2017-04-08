@@ -140,7 +140,7 @@ void  XC::Brick::setDomain(Domain *theDomain)
 int XC::Brick::getNumDOF(void) const
   { return 24 ; }
 
-//! @brief Return the tensión media en el elemento.
+//! @brief Return the tensión media in the element.
 XC::Vector XC::Brick::getAvgStress(void) const
   { return physicalProperties.getCommittedAvgStress(); }
 
@@ -163,18 +163,18 @@ size_t XC::Brick::getVectorIndex(const size_t &i,const size_t &j)
     return retval;
   }
 
-//! @brief Return the componente (i,j) de la tensión media en el elemento.
+//! @brief Return the componente (i,j) de la tensión media in the element.
 double XC::Brick::getAvgStress(const size_t &i,const size_t &j) const
   {
     const size_t iComp= getVectorIndex(i,j);
     return physicalProperties.getCommittedAvgStress(iComp);
   }
 
-//! @brief Return the average strain en el elemento.
+//! @brief Return the average strain in the element.
 XC::Vector XC::Brick::getAvgStrain(void) const
   { return physicalProperties.getCommittedAvgStrain(); }
 
-//! @brief Return the componente (i,j) de la average strain en el elemento.
+//! @brief Return the componente (i,j) de la average strain in the element.
 double XC::Brick::getAvgStrain(const size_t &i,const size_t &j) const
   {
     const size_t iComp= getVectorIndex(i,j);

@@ -238,12 +238,15 @@ void XC::ElasticBeam2d::setDomain(Domain *theDomain)
         double L= theCoordTransf->getInitialLength();
         if(L == 0.0)
           {
-            std::cerr << "XC::ElasticBeam2d::setDomain -- Element has zero length\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; element has zero length\n";
             exit(-1);
           }
       }
     else
-      std::cerr << "XC::ElasticBeam2d::setDomain -- El elemento no tiene coordinate transformation." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; the element has not coordinate transformation."
+		<< std::endl;
    }
 
 int XC::ElasticBeam2d::setInitialSectionDeformation(const Vector &def)
@@ -257,9 +260,9 @@ const XC::Vector &XC::ElasticBeam2d::getSectionDeformation(void) const
     static Vector retval(3);
     theCoordTransf->update();
     const double L = theCoordTransf->getInitialLength();
-    // retval(0)= (dx2-dx1)/L: Elongación sufrida por el elemento/L.
-    // retval(1)= (dy1-dy2)/L: Giro en torno a z/L.
-    // retval(2)= (dy1-dy2)/L: Giro en torno a z/L.
+    // retval(0)= (dx2-dx1)/L: Element elongation/L.
+    // retval(1)= (dy1-dy2)/L: Rotation about z/L.
+    // retval(2)= (dy1-dy2)/L: Rotation about z/L.
     retval= theCoordTransf->getBasicTrialDisp()/L;
     retval(0)-= eInic(0);
     retval(1)-= eInic(1);

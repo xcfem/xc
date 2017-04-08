@@ -91,8 +91,8 @@ const XC::Matrix &XC::ShellUniformLoad::getLocalMoments(void) const
     return retval;
   }
 
-//! @brief Añade the load al consistent load vector (ver página 108 libro Eugenio Oñate).
-//! @param area Area del elemento.
+//! @brief Adds the load al consistent load vector (ver página 108 libro Eugenio Oñate).
+//! @param area Area of the element.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
 void XC::ShellUniformLoad::addReactionsInBasicSystem(const double &area,const double &loadFactor,FVectorShell &p0) const
@@ -129,7 +129,7 @@ void XC::ShellUniformLoad::addReactionsInBasicSystem(const double &area,const do
   }
 
 //! @brief ??
-//! @param area Area del elemento.
+//! @param area Area of the element.
 //! @param loadFactor Load factor.
 //! @param q0 
 void XC::ShellUniformLoad::addFixedEndForcesInBasicSystem(const double &area,const double &loadFactor,FVectorShell &q0) const

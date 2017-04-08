@@ -114,7 +114,7 @@ void XC::ProcSoluControl::revertToStart(void)
     solu_methods.revertToStart();
   }
 
-//! @brief Borra todo.
+//! @brief Clears all.
 void XC::ProcSoluControl::clearAll(void)
   {
     solu_models.clearAll();

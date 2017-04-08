@@ -262,7 +262,7 @@ void XC::MapSet::clearSets(void)
     sets.clear();
   }
 
-//! @brief Borra todo.
+//! @brief Clears all.
 void XC::MapSet::clearAll(void)
   {
     total= nullptr;
@@ -270,7 +270,7 @@ void XC::MapSet::clearAll(void)
     clearSets();
   }
 
-//! @brief Borra todo.
+//! @brief Clears all.
 void XC::MapSet::reset(void)
   {
     clearAll();

@@ -109,7 +109,7 @@ XC::SingleBar *XC::ListReinfLayer::newReinfBar(const std::string &cod_mat)
 XC::ListReinfLayer::~ListReinfLayer(void)
   { libera(); }
 
-//! @brief Borra las armaduras definidas.
+//! @brief Erases las armaduras definidas.
 void XC::ListReinfLayer::clear(void)
   { libera(); }
 

@@ -51,8 +51,8 @@ const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const
     return retval;
   }
 
-//! @brief Añade the load al consistent load vector (ver página 108 libro Eugenio Oñate).
-//! @param L Longitud del elemento.
+//! @brief Adds the load al consistent load vector (ver página 108 libro Eugenio Oñate).
+//! @param L Length of the element.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
 void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FVector &) const
@@ -61,7 +61,7 @@ void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FV
   }
 
 //! @brief ??
-//! @param L Longitud del elemento.
+//! @param L Length of the element.
 //! @param loadFactor Load factor.
 //! @param q0 ??
 void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &) const
@@ -147,11 +147,11 @@ const XC::Matrix &XC::BeamMecLoad::getGlobalVectors(const Matrix &localVectors) 
                 if(ptrTransf)
                   retval= ptrTransf->getVectorGlobalCoordFromLocal(localVectors);
                 else
-		  std::cerr << "BeamMecLoad::getGlobalVectors; el elemento: "
+		  std::cerr << "BeamMecLoad::getGlobalVectors; the element: "
                         << elemTag << " no tiene coordinate transformation." << std::endl;
               }
             else
-	      std::cerr << "BeamMecLoad::getGlobalVectors; el elemento: "
+	      std::cerr << "BeamMecLoad::getGlobalVectors; the element: "
                         << elemTag << " no es unidimensional." << std::endl;
           }
       }

@@ -137,8 +137,8 @@ void XC::Edge::SetNDiv(const size_t &nd)
       }
   }
 
-//! @brief Calcula el number of divisions para que
-//! el tamaño del elemento sea aproximadamente el being passed as parameter.
+//! @brief Computes the number of divisions necessary to 
+//! have the element size being passed as parameter.
 void XC::Edge::SetElemSize(const double &sz)
   {
     const double l= getLongitud();
@@ -439,7 +439,7 @@ void XC::Edge::crea_nodos(void)
     else
       {
         if(verborrea>2)
-          std::clog << "Edge::crea_nodos; los nodos of the line: '" << GetNombre() << "' ya existen." << std::endl;
+          std::clog << "Edge::crea_nodos; los nodos of the line: '" << GetNombre() << "' already exist." << std::endl;
       }
     if(verborrea>4)
       std::clog << "creados." << std::endl;
@@ -480,7 +480,7 @@ std::set<XC::SetBase *> XC::Edge::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el «edge» a the sets being passed as parameters.
+//! @brief Adds the «edge» a the sets being passed as parameters.
 void XC::Edge::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)

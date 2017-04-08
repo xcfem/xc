@@ -258,8 +258,8 @@ void XC::ShellMITC4Base::setDomain(Domain *theDomain)
 
 void XC::ShellMITC4Base::setupInicDisp(void)
   {
-    capturaInicDisp(); //Asigna los tamaños adecuados.
-    zeroInicDisp(); //Pone todo a cero.
+    capturaInicDisp(); //Sets suitable sizes.
+    zeroInicDisp(); //Initializes all.
   }
 
 void XC::ShellMITC4Base::capturaInicDisp(void)
@@ -278,7 +278,7 @@ void XC::ShellMITC4Base::zeroInicDisp(void)
 int XC::ShellMITC4Base::getNumDOF(void) const
   { return 24; }
 
-//! @brief Reactiva el elemento.
+//! @brief Reactivates the element.
 void XC::ShellMITC4Base::alive(void)
   {
     if(isDead())
@@ -644,7 +644,7 @@ const XC::Matrix& XC::ShellMITC4Base::getMass(void) const
 const XC::GaussModel &XC::ShellMITC4Base::getGaussModel(void) const
   { return gauss_model_quad4; }
 
-//! @brief Anula el element load vector.
+//! @brief Zeroes the element load vector.
 void XC::ShellMITC4Base::zeroLoad(void)
   {
     QuadBase4N<SectionFDPhysicalProperties>::zeroLoad();
@@ -914,9 +914,9 @@ void XC::ShellMITC4Base::formInertiaTerms( int tangFlag ) const
                    //node-node translational mass
                    for(int p= 0;p<3;p++)
                      mass(jj+p,kk+p)+= massJK;
-                   //la masa rotacional la hacemos muy pequeña
-                   //(el error es despreciable) pero no nula.
-                   //así evitamos la singularidad de la matriz M.
+                   //we put a very small rotational mass
+                   //(error is negligible) but not zero.
+                   //This way we avoid singularity of M.
                    for(int p= 3;p<6;p++)
                      mass(jj+p,kk+p)+= massJK*1.0e-10;
                  } // end for k loop
@@ -1580,7 +1580,7 @@ int XC::ShellMITC4Base::recvData(const CommParameters &cp)
 XC::Matrix XC::ShellMITC4Base::getLocalAxes(bool initialGeometry) const
   { return theCoordTransf->getLocalAxes(initialGeometry); }
 
-//! @brief Returns a pointer a la coordinate transformation.
+//! @brief Returns a pointer to the coordinate transformation.
 XC::ShellCrdTransf3dBase *XC::ShellMITC4Base::getCoordTransf(void)
   { return theCoordTransf; }
 

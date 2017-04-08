@@ -69,16 +69,16 @@ class ShellCrdTransf3dBase: public EntCmd, public MovableObject
 
     //! @brief Returns the transformation matrix.
     Matrix getTrfMatrix(void) const;
-    //! @brief Returns the eje 1 local (contenido en el plano del elemento)
+    //! @brief Returns the eje 1 local (contained in the plane of the element)
     inline const Vector &G1(void) const
       { return g1; }
-    //! @brief Returns the eje 2 local (contenido en el plano del elemento)
+    //! @brief Returns the eje 2 local (contained in the plane of the element)
     inline const Vector &G2(void) const
       { return g2; }
-    //! @brief Returns the eje 3 local (normal al plano del elemento)
+    //! @brief Returns the eje 3 local (normal al plano of the element)
     inline const Vector &G3(void) const
       { return g3; }
-    //! @brief Returns the centroide calculado para el elemento.
+    //! @brief Returns the element centroid.
     inline const Vector &getVPosCentroide(void) const
       { return vpos_centroide; }
     Plano3d getPlane(void) const;

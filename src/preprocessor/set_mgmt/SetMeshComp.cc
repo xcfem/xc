@@ -107,7 +107,7 @@ void XC::SetMeshComp::appendFromGeomEntity(const SetBase &s)
 //     constraints.agrega_cond(otro.constraints,cond);
 //   }
 
-//!  @brief Borra todos los objetos de las listas.
+//!  @brief Clears all the objectsof the lists.
 void XC::SetMeshComp::clear(void)
   {
     //SetBase::clear();

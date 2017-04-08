@@ -174,7 +174,7 @@ const XC::Matrix &XC::ShellLinearCrdTransf3d::local_to_global_stiff_matrix(const
     return kg;
   }
 
-//! @brief Returns the load vector expresado en el sistema global del elemento.
+//! @brief Returns the load vector expresado en el sistema global of the element.
 const XC::Vector &XC::ShellLinearCrdTransf3d::getGlobalResistingForce(const Vector &p0) const
   { return local_to_global_resisting_force(p0); }
 

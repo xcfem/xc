@@ -194,7 +194,7 @@ XC::SuperLU::SuperLU(int perm, double drop_tolerance, int panel, int relx, char 
     U.ncol= 0;
     A.ncol= 0;
     B.ncol= 0;
-    AC.ncol= 0; //Añadido LCPT.
+    AC.ncol= 0; //Added by LCPT.
   }
 
 

@@ -446,7 +446,7 @@ int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
     return 0;
   }
 
-//! @brief Añade las fuerzas de inercia.
+//! @brief Adds las fuerzas de inercia.
 int XC::Truss::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
     const double rho= getRho();
@@ -564,7 +564,7 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
   return 0;
 }
 
-//! @brief Returns the reacción del elemento.
+//! @brief Returns the reacción of the element.
 const XC::Vector &XC::Truss::getResistingForce(void) const
   {
     if(L == 0.0)
@@ -593,7 +593,7 @@ const XC::Vector &XC::Truss::getResistingForce(void) const
     return *theVector;
   }
 
-//! @brief Returns the reacción del elemento incluyendo fuerzas de inercia.
+//! @brief Returns the reacción of the element incluyendo fuerzas de inercia.
 const XC::Vector &XC::Truss::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();

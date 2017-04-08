@@ -335,7 +335,7 @@ const XC::Matrix &XC::Tri31::getMass(void) const
     return K;
   }
 
-//! @brief Returns the puntos de Gauss del elemento.
+//! @brief Returns the puntos de Gauss of the element.
 const XC::GaussModel &XC::Tri31::getGaussModel(void) const
   { return gauss_model_tria1; }
 

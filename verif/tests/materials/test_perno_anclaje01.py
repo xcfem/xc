@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# Test comprobación de perno de anclaje según EOTA TR 029.
-# comparado en parte con los resultados que da Hilti en el documento
-# Hilti HIT-HY 150 with rebar.
+# Verification test according to EOTA TR 029.
+# results compared with those of the document
+# "Hilti HIT-HY 150 with rebar".
 
 from materials.pernos_anclaje import EOTA_TR029
 from materials.pernos_anclaje import EOTA_TR029_traccion
@@ -12,26 +12,26 @@ def sqr(a):
   return a*a
 
 # Datos
-gammaMs= 1.4 # Minoración de la resistencia del acero.
-gammaMc= 2.1 # Minoración de la resistencia del acero.
-diamBarra= 25e-3 # Diámetro del perno en metros.
-areaBarra= math.pi*sqr(diamBarra/2) # Área de la barra en metros cuadrados.
-h= 274e-3 # Espesor de la pieza.
-hef= 210e-3 # Profundidad efectiva del anclaje.
-posAnc=  geom.Pos2d(.135,0) # Posición del anclaje
-contornoPiezaSoporte=  geom.Poligono2d() # Contorno de la pieza.
+gammaMs= 1.4 # Partial safety factor for steel.
+gammaMc= 2.1 # Partial safety factor for concrete.
+diamBarra= 25e-3 # Bar diameter in meters.
+areaBarra= math.pi*sqr(diamBarra/2.0) # Bar area in square meters.
+h= 274e-3 # Concrete element thickness.
+hef= 210e-3 # Effective anchor depth.
+posAnc=  geom.Pos2d(.135,0) # Anchor position
+contornoPiezaSoporte=  geom.Poligono2d() # Contour of concrete element.
 contornoPiezaSoporte.agregaVertice(geom.Pos2d(0,-1))
 contornoPiezaSoporte.agregaVertice(geom.Pos2d(1,-1))
 contornoPiezaSoporte.agregaVertice(geom.Pos2d(1,1))
 contornoPiezaSoporte.agregaVertice(geom.Pos2d(0,1))    
 
 
-fuk= 550e6 # Resistencia a tracción del acero  del perno en Pa.
-tauRk= 7.5e6 # Valor característico de la tensión de adherencia (tomado de ETA-05/0051 tabla 11).
-tauRkUcr= 7.5e6 # Valor característico de la tensión de adherencia para hormigón no fisurado.
-k1= 10.1 # 7.2 para hormigón fisurado y 10.1 para hormigón no fisurado.
-fckCube= 25e6 # Resistencia característica a compresión del hormigón medida en probeta cúbica.
-# Resistencia del propio perno
+fuk= 550e6 # Characteristic steel ultimate tensile strength (Pa).
+tauRk= 7.5e6 # Characteristic bond strength (taken from ETA-05/0051 table 11).
+tauRkUcr= 7.5e6 # Characteristic bond strength for non-cracked concrete.
+k1= 10.1 # 7.2 for cracked concrete and 10.1 for non-cracked concrete.
+fckCube= 25e6 # Caracteristic concrete compression strength measured on cubes with a side length of 150 mm.
+# Strength of the anchor itself.
 NRds= EOTA_TR029_traccion.axialResistanceSteelFailure(areaBarra,fuk)/gammaMs
 
 
@@ -41,7 +41,7 @@ C= contornoPiezaSoporte.getRecubrimiento(posAnc)
 Cmin= 5*diamBarra+10e-3
 
 if (C<Cmin):
-  print "El coverrimiento del perno es insuficiente."
+  print "Too little concrete cover for the anchor."
 
 f1N= EOTA_TR029_traccion.getFactor1N(C,CcrN)
 

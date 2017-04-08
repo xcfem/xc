@@ -45,7 +45,8 @@ void XC::DbTagData::inicComm(const int &sz)
     if(sz!=szOld)
       {
         data.resize(sz);
-	std::cerr << "DbTagData::inicComm; se cambió el tamaño del vector: ("
+	std::cerr << __FUNCTION__
+	          << "; vector size was changed: ("
                   << szOld << "->" << sz << ")" << std::endl;
         print_trace();
       }

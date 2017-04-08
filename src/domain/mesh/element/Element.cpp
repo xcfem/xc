@@ -107,7 +107,7 @@ XC::DefaultTag &XC::Element::getDefaultTag(void)
 int XC::Element::getNumEdges(void) const
   { return getNumExternalNodes(); }
 
-//! @brief Consuma el estado del elemento.
+//! @brief Consuma el estado of the element.
 int XC::Element::commitState(void)
   {
     if(!Kc.Nula())
@@ -115,7 +115,7 @@ int XC::Element::commitState(void)
     return 0;
   }
 
-//! @brief Actualiza el estado del elemento.
+//! @brief Actualiza el estado of the element.
 int XC::Element::update(void)
   { return 0; }
 
@@ -180,7 +180,7 @@ void XC::Element::setDomain(Domain *theDomain)
   }
 
 
-//! @brief Anula el load vector aplicadas del elemento.
+//! @brief Anula el load vector aplicadas of the element.
 void XC::Element::zeroLoad(void)
   { load.Zero(); }
 
@@ -304,14 +304,14 @@ const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
   }
 
 //! @brief Returns the fuerza generalizada (incluyendo fuerzas de inercia)
-//! del elemento sobre el nodo which index is being passed as parameter.
+//! of the element sobre el nodo which index is being passed as parameter.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const size_t &iNod) const
   {
     const Vector &rf= getResistingForceIncInertia();
     return getNodeResistingComponents(iNod,rf);
   }
 
-//! @brief Returns the fuerza generalizada del elemento sobre el nodo pointed
+//! @brief Returns the fuerza generalizada of the element sobre el nodo pointed
 //! by the parameter.
 const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
   {
@@ -320,7 +320,7 @@ const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
     return getNodeResistingForce(iNodo);
   }
 
-//! @brief Returns the fuerza generalizada (incluyendo fuerzas de inercia) del elemento 
+//! @brief Returns the fuerza generalizada (incluyendo fuerzas de inercia) of the element 
 //! over the node pointed by the parameter.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNod) const
   {
@@ -613,7 +613,7 @@ XC::MEDGaussModel XC::Element::getMEDGaussModel(void) const
     return retval;
   }
 
-//! @brief Returns the nodos del borde (o arista) del elemento
+//! @brief Returns the nodos del borde (o arista) of the element
 //!which index is being passed as parameter.
 XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
   {
@@ -624,7 +624,7 @@ XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
     return retval;
   }
 
-//! @brief Returns the borde (o arista) del elemento
+//! @brief Returns the borde (o arista) of the element
 //! que tiene por extremos los nodos being passed as parameters.
 int XC::Element::getEdgeNodes(const Node *,const Node *) const
   {
@@ -634,7 +634,7 @@ int XC::Element::getEdgeNodes(const Node *,const Node *) const
     return -1;
   }
 
-//! @brief Returns the borde del elemento
+//! @brief Returns the borde of the element
 //! que tiene por extremos los nodos being passed as parameters.
 int XC::Element::getEdgeNodes(const int &iN1,const int &iN2) const
   {
@@ -644,7 +644,7 @@ int XC::Element::getEdgeNodes(const int &iN1,const int &iN2) const
     return getEdgeNodes(n1,n2);
   }
  
-//! @brief Returns the bordes del elemento
+//! @brief Returns the bordes of the element
 //! que tienen por extremo el nodo being passed as parameter.
 XC::ID XC::Element::getEdgesNode(const Node *) const
   {
@@ -655,7 +655,7 @@ XC::ID XC::Element::getEdgesNode(const Node *) const
     return retval;
   }
 
-//! @brief Returns the bordes del elemento que tienen ambos extremos
+//! @brief Returns the bordes of the element que tienen ambos extremos
 //! en el node set being passed as parameter.
 std::set<int> XC::Element::getEdgesNodes(const NodePtrSet &nodos) const
   {
@@ -675,7 +675,7 @@ std::set<int> XC::Element::getEdgesNodes(const NodePtrSet &nodos) const
     return retval;
   }
 
-//! @brief Returns the bordes del elemento
+//! @brief Returns the bordes of the element
 //! que tienen por extremo el nodo cuyo tag is being passed as parameter.
 XC::ID XC::Element::getEdgesNodeByTag(const int &iN) const
   {
@@ -711,7 +711,7 @@ std::set<XC::SetBase *> XC::Element::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el elemento a the sets being passed as parameters.
+//! @brief Adds the element to the sets being passed as parameters.
 void XC::Element::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
@@ -748,11 +748,11 @@ int XC::Element::setMaterialParameter(Material *theMaterial,const std::vector<st
 std::vector<int> XC::Element::getIdxNodes(void) const
   { return getNodePtrs().getIdx(); }
 
-//! @brief Returns the valor máximo de la coordenada i de los nodos del elemento.
+//! @brief Returns the valor máximo de la coordenada i de los nodos of the element.
 double XC::Element::MaxCooNod(int icoo) const
   { return getNodePtrs().MaxCooNod(icoo); }
 
-//! @brief Returns the minimum value de la coordenada i de los nodos del elemento.
+//! @brief Returns the minimum value de la coordenada i de los nodos of the element.
 double XC::Element::MinCooNod(int icoo) const
   { return getNodePtrs().MinCooNod(icoo); }
 
@@ -781,7 +781,7 @@ XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
 Pos3d XC::Element::getPosNodo(const size_t &i,bool initialGeometry) const
   { return getNodePtrs().getPosNodo(i,initialGeometry); }
 
-//! @brief Returns puntos distribuidos en el elemento.
+//! @brief Returns a grid of points distributed along the line.
 TritrizPos3d XC::Element::getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)
   {
     TritrizPos3d retval;
@@ -794,13 +794,13 @@ TritrizPos3d XC::Element::getPuntos(const size_t &ni,const size_t &nj,const size
 void XC::Element::resetTributarias(void) const
   { getNodePtrs().resetTributarias(); }
 
-//! @brief Agrega al la magnitud tributaria de cada nodo i
-//! la componente i del vector being passed as parameter.
+//! @brief Adds to the tributary magnitude of each node
+//! the vector being passed as parameter.
 void XC::Element::vuelcaTributarias(const std::vector<double> &t) const
   { getNodePtrs().vuelcaTributarias(t); }
 
-//! @brief Calcula las longitudes tributarias correspondientes a cada
-//! nodo del elemento
+//! @brief Computes the tributary lengths that corresponds to each
+//! node of the element
 void XC::Element::calculaLongsTributarias(bool initialGeometry) const
   {
     std::cerr << "Function calculaLongsTributarias "
@@ -808,12 +808,12 @@ void XC::Element::calculaLongsTributarias(bool initialGeometry) const
               << std::endl;
   }
 
-//! @brief Returns the longitud tributaria correspondiente to the node being passed
+//! @brief Returns the tributary length corresponding to the node being passed
 //! as parameter.
 double XC::Element::getLongTributaria(const Node *) const
   { return 0; }
 
-//! @brief Returns the longitud tributaria correspondiente to the node cuyo tag se pasa
+//! @brief Returns the tributary length corresponding to the node cuyo tag se pasa
 //! as parameter.
 double XC::Element::getLongTributariaByTag(const int &tag) const
   {
@@ -821,8 +821,8 @@ double XC::Element::getLongTributariaByTag(const int &tag) const
     return getLongTributaria(nod);
   }
 
-//! @brief Calcula las áreas tributarias correspondientes a cada
-//! nodo del elemento
+//! @brief Calcula las áreas tributarias that corresponds to cada
+//! nodo of the element
 void XC::Element::calculaAreasTributarias(bool initialGeometry) const
   {
     std::cerr << "Function calculaAreasTributarias "
@@ -830,12 +830,12 @@ void XC::Element::calculaAreasTributarias(bool initialGeometry) const
               << std::endl;
   }
 
-//! @brief Returns the área tributaria correspondiente to the node being passed
+//! @brief Returns the área tributaria corresponding to the node being passed
 //! as parameter.
 double XC::Element::getAreaTributaria(const Node *) const
   { return 0; }
 
-//! @brief Returns the área tributaria correspondiente to the node cuyo tag se pasa
+//! @brief Returns the área tributaria corresponding to the node cuyo tag se pasa
 //! as parameter.
 double XC::Element::getAreaTributariaByTag(const int &tag) const
   {
@@ -843,8 +843,8 @@ double XC::Element::getAreaTributariaByTag(const int &tag) const
     return getAreaTributaria(nod);
   }
 
-//! @brief Calcula los volúmenes tributarios correspondientes a cada
-//! nodo del elemento
+//! @brief Calcula los volúmenes tributarios that corresponds to cada
+//! nodo of the element
 void XC::Element::calculaVolsTributarios(bool initialGeometry) const
   {
     std::cerr << "Function calculaVolsTributarios "
@@ -852,12 +852,12 @@ void XC::Element::calculaVolsTributarios(bool initialGeometry) const
               << std::endl;
   }
 
-//! @brief Returns the volumen tributario correspondiente to the node being passed
+//! @brief Returns the tributary volume corresponding to the node being passed
 //! as parameter.
 double XC::Element::getVolTributario(const Node *) const
   { return 0; }
 
-//! @brief Returns the volumen tributario correspondiente to the node cuyo tag se pasa
+//! @brief Returns the tributary volume corresponding to the node cuyo tag se pasa
 //! as parameter.
 double XC::Element::getVolTributarioByTag(const int &tag) const
   {
@@ -865,8 +865,8 @@ double XC::Element::getVolTributarioByTag(const int &tag) const
     return getVolTributario(nod);
   }
 
-//! @brief Returns the cuadrado de la distancia desde el elemento al punto que
-//! is being passed as parameter.
+//! @brief Returns the squared distance from the element to the point
+//! being passed as parameter.
 double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
   {
     std::cerr << "Function getDist2(Pos2d) is not defined for element of type: '"
@@ -874,8 +874,8 @@ double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Returns the distancia desde el elemento al punto que
-//! is being passed as parameter.
+//! @brief Returns the the distance from the element to the point
+//! being passed as parameter.
 double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
   {
     std::cerr << "Function getDist(Pos2d) is not defined for element of type: '"
@@ -883,8 +883,8 @@ double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Returns the cuadrado de la distancia desde el elemento al punto que
-//! is being passed as parameter.
+//! @brief Returns the squared distance from the element to the point
+//! being passed as parameter.
 double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
   {
     std::cerr << "Function getDist2(Pos3d) is not defined for element of type: '"
@@ -892,8 +892,8 @@ double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Returns the distancia desde el elemento al punto que
-//! is being passed as parameter.
+//! @brief Returns the the distance from the element to the point
+//! being passed as parameter.
 double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
   {
     std::cerr << "Function getDist(Pos3d) is not defined for element of type: '"
@@ -901,7 +901,7 @@ double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Returns the coordenadas del centro de gravedad del elemento.
+//! @brief Returns the coordenadas del centro de gravedad of the element.
 Pos3d XC::Element::getPosCdg(bool initialGeometry) const
   {
     std::cerr << "getPosCdg not implemented para los elementos de tipo: "
@@ -910,7 +910,7 @@ Pos3d XC::Element::getPosCdg(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns the coordenadas del centro de gravedad del elemento.
+//! @brief Returns the coordenadas del centro de gravedad of the element.
 XC::Vector XC::Element::getCooCdg(bool initialGeometry) const
   {
     const Pos3d cdg= getPosCdg(initialGeometry);

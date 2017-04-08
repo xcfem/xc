@@ -268,12 +268,12 @@ const XC::Vector &XC::ElasticBeam3d::getSectionDeformation(void) const
     static Vector retval(5);
     theCoordTransf->update();
     const double L = theCoordTransf->getInitialLength();
-    // retval(0)= dx2-dx1: Elongación sufrida por el elemento/L.
-    // retval(1)= (dy1-dy2)/L+gz1: Giro en torno a z/L.
-    // retval(2)= (dy1-dy2)/L+gz2: Giro en torno a z/L.
-    // retval(3)= (dz2-dz1)/L+gy1: Giro en torno a y/L.
-    // retval(4)= (dz2-dz1)/L+gy2: Giro en torno a y/L.
-    // retval(5)= dx2-dx1: Torsión sufrida por el elemento/L.
+    // retval(0)= dx2-dx1: Element elongation/L.
+    // retval(1)= (dy1-dy2)/L+gz1: Rotation about z/L.
+    // retval(2)= (dy1-dy2)/L+gz2: Rotation about z/L.
+    // retval(3)= (dz2-dz1)/L+gy1: Rotation about y/L.
+    // retval(4)= (dz2-dz1)/L+gy2: Rotation about y/L.
+    // retval(5)= dx2-dx1: Element twist/L.
     retval= theCoordTransf->getBasicTrialDisp()/L;
     retval(0)-= eInic(0);
     retval(1)-= eInic(1);
@@ -313,9 +313,9 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
     const double eiyz= ctes_scc.EIyz();
     const double eimax= std::max(ctes_scc.EIz(),ctes_scc.EIy());
     if(std::abs(eiyz/eimax)>1e-5) //Producto de inercia no nulo.
-      std::cerr << "ElasticBeam3d::getTangentStiff; este elemento no"
-                << " debe usarse con secciones que tienen"
-                << " su producto de inercia no nulo."
+      std::cerr << "ElasticBeam3d::getTangentStiff; this element must not"
+                << " be used with section that have a non-zero"
+                << " product of inertia."
                 << std::endl;
 
     const double E= ctes_scc.E();
@@ -326,13 +326,13 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
     const double EIy4= 2.0*EIy2; // 4EIy
     const double GJ= ctes_scc.GJ(); // GJ
 
-    //Esfuerzos en el elemento debidos a las acciones de la estructura sobre sus nodos.
-    q.N()= EA*v(0); //Axil en el elemento.
-    q.Mz1()= EIz4*v(1) + EIz2*v(2); //Momento z en el nodo 1: 4EI/L*v(1)+2EI/L*v(2).
-    q.Mz2()= EIz2*v(1) + EIz4*v(2); //Momento z en el nodo 2: 2EI/L*v(1)+4EI/L*v(2).
-    q.My1()= EIy4*v(3) + EIy2*v(4); //Momento y en el nodo 1: 4EI/L*v(3)+2EI/L*v(4).
-    q.My2()= EIy2*v(3) + EIy4*v(4); //Momento y en el nodo 2: 2EI/L*v(3)+4EI/L*v(4).
-    q.T() = GJ*v(5); //Torsor en el elemento.
+    //Element internal forces due to the actions of the domain on its nodes.
+    q.N()= EA*v(0); //axial force in the element.
+    q.Mz1()= EIz4*v(1) + EIz2*v(2); //z bending moment in node 1: 4EI/L*v(1)+2EI/L*v(2).
+    q.Mz2()= EIz2*v(1) + EIz4*v(2); //z bending moment in node 2: 2EI/L*v(1)+4EI/L*v(2).
+    q.My1()= EIy4*v(3) + EIy2*v(4); //y bending moment in node 1: 4EI/L*v(3)+2EI/L*v(4).
+    q.My2()= EIy2*v(3) + EIy4*v(4); //y bending moment in node 2: 2EI/L*v(3)+4EI/L*v(4).
+    q.T() = GJ*v(5); //Torsion in the element.
 
     q.N()+= q0[0];
     q.Mz1()+= q0[1];
@@ -394,7 +394,7 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
     return retval;
   }
 
-//! @brief Return the matriz de masas del elemento.
+//! @brief Return the matriz de masas of the element.
 const XC::Matrix &XC::ElasticBeam3d::getMass(void) const
   {
     K.Zero();
@@ -542,13 +542,13 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
     const double EIy4= 2.0*EIy2; // 4EIy
     const double GJ= ctes_scc.GJ(); // GJ
 
-    //Esfuerzos en el elemento debidos a las acciones de la estructura sobre sus nodos.
-    q.N()= EA*v(0); //Axil en el elemento.
-    q.Mz1()= EIz4*v(1) + EIz2*v(2); //Momento z en el nodo 1: 4EI/L*v(1)+2EI/L*v(2).
-    q.Mz2()= EIz2*v(1) + EIz4*v(2); //Momento z en el nodo 2: 2EI/L*v(1)+4EI/L*v(2).
-    q.My1()= EIy4*v(3) + EIy2*v(4); //Momento y en el nodo 1: 4EI/L*v(3)+2EI/L*v(4).
-    q.My2()= EIy2*v(3) + EIy4*v(4); //Momento y en el nodo 2: 2EI/L*v(3)+4EI/L*v(4).
-    q.T()= GJ*v(5); //Torsor en el elemento.
+    //Element internal forces debidos a las acciones de la estructura sobre sus nodos.
+    q.N()= EA*v(0); //axial force in the element.
+    q.Mz1()= EIz4*v(1) + EIz2*v(2); //z bending moment in node 1: 4EI/L*v(1)+2EI/L*v(2).
+    q.Mz2()= EIz2*v(1) + EIz4*v(2); //z bending moment in node 2: 2EI/L*v(1)+4EI/L*v(2).
+    q.My1()= EIy4*v(3) + EIy2*v(4); //y bending moment in node 1: 4EI/L*v(3)+2EI/L*v(4).
+    q.My2()= EIy2*v(3) + EIy4*v(4); //y bending moment in node 2: 2EI/L*v(3)+4EI/L*v(4).
+    q.T()= GJ*v(5); //Torsor in the element.
 
     q.N()+= q0[0];
     q.Mz1()+= q0[1];

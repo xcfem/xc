@@ -180,15 +180,15 @@ void XC::Domain::setDeadSRF(const double &d)
   { Element::setDeadSRF(d); }
 
 
-//! @brief Agrega al domain el elemento being passed as parameter.
+//! @brief Adds to the domain the element being passed as parameter.
 bool XC::Domain::addElement(Element *element)
   { return mesh.addElement(element); }
 
-//! @brief Agrega al domain el nodo being passed as parameter.
+//! @brief Adds to the domain el nodo being passed as parameter.
 bool XC::Domain::addNode(Node * node)
   { return mesh.addNode(node); }
 
-//! @brief Agrega al domain una constraint monopunto.
+//! @brief Adds to the domain una constraint monopunto.
 bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint)
   {
     bool result= constraints.addSFreedom_Constraint(spConstraint);
@@ -200,7 +200,7 @@ bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint)
     return true;
   }
 
-//! @brief Agrega al domain una constraint multipunto.
+//! @brief Adds to the domain una constraint multipunto.
 bool XC::Domain::addMFreedom_Constraint(MFreedom_Constraint *mpConstraint)
   {
     bool result= constraints.addMFreedom_Constraint(mpConstraint);
@@ -212,7 +212,7 @@ bool XC::Domain::addMFreedom_Constraint(MFreedom_Constraint *mpConstraint)
     return result;
   }
 
-//! @brief Agrega al domain una constraint multi retained node.
+//! @brief Adds to the domain una constraint multi retained node.
 bool XC::Domain::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmpConstraint)
   {
     bool result= constraints.addMRMFreedom_Constraint(mrmpConstraint);
@@ -224,7 +224,7 @@ bool XC::Domain::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmpConstraint)
     return result;
   }
 
-//! @brief Agrega al domain una constraint monopunto.
+//! @brief Adds to the domain una constraint monopunto.
 bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int pattern)
   {
     bool result= constraints.addSFreedom_Constraint(spConstraint,pattern);
@@ -252,7 +252,7 @@ bool XC::Domain::addNodalLoad(NodalLoad *load, int pattern)
     return result;
   }
 
-//! @brief Agrega al caso being passed as parameter una load over elements.
+//! @brief Adds to the caso being passed as parameter una load over elements.
 bool XC::Domain::addElementalLoad(ElementalLoad *load, int pattern)
   {
     bool result= constraints.addElementalLoad(load,pattern);
@@ -268,11 +268,11 @@ bool XC::Domain::addElementalLoad(ElementalLoad *load, int pattern)
     return result;
   }
 
-//! @brief Borra el elemento cuyo identificador being passed as parameter.
+//! @brief Clears the element identified by the tag being passed as parameter.
 bool XC::Domain::removeElement(int tag)
   { return mesh.removeElement(tag); }
 
-//! @brief Elimina del domain el nodo cuyo tag being passed as parameter.
+//! @brief Elimina the node identified by the tag being passed as parameter.
 bool XC::Domain::removeNode(int tag)
   { return mesh.removeNode(tag); }
 
@@ -312,7 +312,7 @@ bool XC::Domain::removeMRMFreedom_Constraint(int tag)
     return result;
   }
 
-//! @brief Añade al modelo la hipótesis simple being passed as parameter.
+//! @brief Adds al modelo la hipótesis simple being passed as parameter.
 bool XC::Domain::addLoadPattern(LoadPattern *load)
   {
     bool result= constraints.addLoadPattern(load);
@@ -330,7 +330,7 @@ bool XC::Domain::addLoadPattern(LoadPattern *load)
     return result;
   }
 
-//! @brief Añade al modelo 
+//! @brief Adds al modelo 
 bool XC::Domain::addNodeLocker(NodeLocker *nl)
   {
     bool result= constraints.addNodeLocker(nl);
@@ -513,16 +513,18 @@ XC::ConstrContainer &XC::Domain::getConstraints(void)
 **   only elements can be added to theElements
 */
 
-//! @brief Returns true ifel elemento cuyo tag being passed as parameter
-//! ya existe en el domain.
+//! @brief Returns true if the element identified by the
+//! tag being passed as parameter already exists en el domain.
 bool XC::Domain::existElement(int tag)
  { return mesh.existElement(tag); }
 
-//! @brief Returns a pointer to the elemento cuyo tag being passed as parameter.
+//! @brief Returns a pointer to the element identified
+//! by the tag being passed as parameter.
 XC::Element *XC::Domain::getElement(int tag)
   { return mesh.getElement(tag); }
 
-//! @brief Returns a pointer to the elemento cuyo tag being passed as parameter.
+//! @brief Returns a const pointer to the element identified
+//! by the tag being passed as parameter.
 const XC::Element *XC::Domain::getElement(int tag) const
   { return mesh.getElement(tag); }
 
@@ -551,7 +553,7 @@ int XC::Domain::getNumElements(void) const
 int XC::Domain::getNumNodes(void) const
   { return mesh.getNumNodes(); }
 
-//! @brief Returns the BND del modelo.
+//! @brief Returns the BND of the model.
 const XC::Vector &XC::Domain::getPhysicalBounds(void)
   { return mesh.getPhysicalBounds(); }
 
@@ -792,11 +794,11 @@ void XC::Domain::setDomainChangeStamp(int newStamp)
   { currentGeoTag= newStamp; }
 
 
-//! @brief Establece que el modelo ha cambiado.
+//! @brief Establece que the model ha cambiado.
 void XC::Domain::domainChange(void)
   { hasDomainChangedFlag= true; }
 
-//! @brief Returns true ifel modelo ha cambiado.
+//! @brief Returns true if the modelo ha cambiado.
 int XC::Domain::hasDomainChanged(void)
   {
     // if the flag indicating the domain has changed since the

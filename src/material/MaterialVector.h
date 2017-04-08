@@ -243,12 +243,12 @@ int MaterialVector<MAT>::revertToStart(void)
     return retVal;
   }
 
-//! @brief Returns the tamaño del vector de tensiones.
+//! @brief Returns the size of stress vector.
 template <class MAT>
 size_t MaterialVector<MAT>::getGeneralizedStressSize(void) const
   { return (*this)[0]->getGeneralizedStress().Size(); }
 
-//! @brief Returns the tamaño del generalized strains vector.
+//! @brief Returns the size of generalized strains vector.
 template <class MAT>
 size_t MaterialVector<MAT>::getGeneralizedStrainSize(void) const
   { return (*this)[0]->getGeneralizedStrain().Size(); }

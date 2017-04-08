@@ -105,7 +105,8 @@ int XC::CableMaterial::setTrialStrain(double strain, double strainRate)
       U_bound = E * trialStrain + Ps;
 
     if(L<1e-4)
-      std::clog << "CableMaterial::setTrialStrain; la longitud es extremadamente pequeña; L= " << L << std::endl; 
+      std::clog << nombre_clase() << "::" << __FUNCTION__
+	        << "; element is extremely short; L= " << L << std::endl; 
 
     // Check if slack in cable has been taken out and it is a bar
     e0= Mue*Mue*L*L/(24*Ps*Ps) - Ps/E;

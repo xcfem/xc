@@ -369,7 +369,7 @@ void XC::ShellCorotCrdTransf3d::getGlobalTangent(Matrix &stiff) const
     stiff= local_to_global(R,Rd,stiff);
   }
 
-//! @brief Returns the vector residuo expresado en globales.
+//! @brief Returns the unbalanced vector expresado en globales.
 void XC::ShellCorotCrdTransf3d::getGlobalResidAndTangent(Vector &resid,Matrix &stiff) const
   {
     //std::cout << "antes resid= " << resid << std::endl;
@@ -382,7 +382,7 @@ void XC::ShellCorotCrdTransf3d::getGlobalResidAndTangent(Vector &resid,Matrix &s
     stiff= local_to_global(R,Rd,stiff);
   }
 
-//! @brief Returns the load vector expresado en el sistema global del elemento.
+//! @brief Returns the load vector expresado en el sistema global of the element.
 const XC::Vector &XC::ShellCorotCrdTransf3d::getGlobalResistingForce(const Vector &p0) const
   { return local_to_global_resisting_force(p0); }
 

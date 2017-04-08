@@ -53,7 +53,7 @@ bool XC::BandArpackppSOE::setSolver(EigenSolver *newSolver)
     return retval;
   }
 
-//! @brief Sets the tamaño del problema.
+//! @brief Sets the system size.
 int XC::BandArpackppSOE::setSize(Graph &theGraph)
   {
     int result = 0;
@@ -149,7 +149,7 @@ void XC::BandArpackppSOE::zeroA(void)
 int XC::BandArpackppSOE::addM(const Matrix &m, const ID &id, double fact)
   { 
     int retval= 0;
-    //Añadido LCPT.
+    //Added by LCPT.
     if(fact!=0.0)
       {
         const int idSize = id.Size();
@@ -197,7 +197,7 @@ int XC::BandArpackppSOE::addM(const Matrix &m, const ID &id, double fact)
                }
            }
       }
-    //Fin añadido LCPT.
+    //Added by LCPT ends.
     retval= addToMatrix(M,m,id,fact);
     return retval;
   }

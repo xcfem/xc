@@ -150,16 +150,16 @@ const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L
   }
 
 //! @brief Returns the consistent load vector (ver página 108 libro Eugenio Oñate).
-//! @param L Length of the borde of the elemento.
+//! @param L Length of the element edge.
 //! @param loadFactor Load factor.
-//! @param p0 element load vector.
+//! @param p0 element Load vector.
 void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0) const
   {
     const double wa= WAxial()*loadFactor;  // Axial
     const double wy= WTrans()*loadFactor;  // Transverse
 
     //Esfuerzos sobre elemento.
-    const double V = 0.5*wy*L; // Cortante en los extremos of the elemento.
+    const double V = 0.5*wy*L; // Shear force in the element ends.
     const double P= wa*L; //Axil.
 
     // Reactions in basic system
@@ -169,7 +169,7 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
   }
 
 //! @brief Returns the consistent load vector (ver página 108 libro Eugenio Oñate).
-//! @param L Length of the borde of the elemento.
+//! @param L Length of the element edge.
 //! @param loadFactor Load factor.
 //! @param q0 ??.
 void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0) const
@@ -178,8 +178,8 @@ void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const
     const double wx = WAxial()*loadFactor;  // Axial (+ve from node I to J)
 
     //Esfuerzos sobre elemento.
-    const double Mz = wy*L*L/12.0; // Momento flector en z en los extremos of the elemento: wy*L*L/12
-    const double P = wx*L; //Axil en el extremo dorsal.
+    const double Mz = wy*L*L/12.0; // z bending moment at the ends of the element.
+    const double P = wx*L; //Axial force at the back end.
 
     // Fixed end forces in basic system
     q0[0]-= 0.5*P;

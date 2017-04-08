@@ -103,7 +103,7 @@ const XC::Element *XC::ElementPtrs::findPtr(const int &tag) const
   }
 
 
-//! @brief Elimina el elemento cuyo tag being passed as parameter.
+//! @brief Erases the element identified by the tag being passed as parameter.
 size_t XC::ElementPtrs::removeElement(const int &tag) 
   {
     iterator i= find(tag);

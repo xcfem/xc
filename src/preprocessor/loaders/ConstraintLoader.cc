@@ -97,6 +97,11 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newMPConstraint(const int &master
     return mp;
   }
 
+//! @brief Imposes the same displacements on both nodes for the components
+//! specified in the argument.
+//! @param masterNode: tag of the master node.
+//! @param slaveNode: tag of the slave node.
+//! @param dofs: degrees of freedom to impose the constraint on.
 XC::MFreedom_Constraint *XC::ConstraintLoader::newEqualDOF(const int &masterNode, const int &slaveNode, const ID &dofs)
   {
     EqualDOF *mp= new EqualDOF(tag_mp_constraint,masterNode,slaveNode,dofs);
@@ -183,7 +188,7 @@ void XC::ConstraintLoader::removeSPConstraint(const int &tagC)
 XC::ConstraintLoader::~ConstraintLoader(void)
   { clearAll(); }
 
-//! @brief Borra todos los objetos.
+//! @brief Clears all the objects.
 void XC::ConstraintLoader::clearAll(void)
   {
     tag_sp_constraint= 0;

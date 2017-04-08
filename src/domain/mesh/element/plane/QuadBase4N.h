@@ -88,7 +88,7 @@ template <class PhysProp>
 XC::TritrizPtrElem XC::QuadBase4N<PhysProp>::put_on_mesh(const XC::TritrizPtrNod &nodos,meshing_dir dm) const
   { return put_quad4N_on_mesh(*this,nodos,dm); }
 
-//! @brief Returns the nodos de un lado del elemento.
+//! @brief Returns the nodos de un lado of the element.
 template <class PhysProp>
 XC::Element::NodesEdge XC::QuadBase4N<PhysProp>::getNodesEdge(const size_t &i) const
   {
@@ -106,7 +106,7 @@ XC::Element::NodesEdge XC::QuadBase4N<PhysProp>::getNodesEdge(const size_t &i) c
     return retval;    
   }
 
-//! @brief Returns the borde del elemento
+//! @brief Returns the borde of the element
 //! que tiene por extremos los nodos being passed as parameters.
 template <class PhysProp>
 int XC::QuadBase4N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
@@ -157,7 +157,7 @@ void XC::QuadBase4N<PhysProp>::zeroLoad(void)
     return;
   }
 
-//! @brief Añade al elemento the load being passed as parameter.
+//! @brief Adds to the element the load being passed as parameter.
 template <class PhysProp>
 int XC::QuadBase4N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
   {

@@ -84,7 +84,7 @@ void XC::Set::copia_listas(const Set &otro)
     uniform_grids.set_owner(this);
   }
 
-//! @brief Agrega a this set los objetos of the set
+//! @brief Agrega a this set the objects of the set
 //! being passed as parameter.
 void XC::Set::agrega_listas(const Set &otro)
   {
@@ -119,7 +119,7 @@ void XC::Set::clear(void)
     uniform_grids.clear();
   }
 
-//!  @brief Borra todos los objetos of the set.
+//!  @brief Clears all the objects of the set.
 void XC::Set::clearAll(void)
   {
     SetMeshComp::clearAll();

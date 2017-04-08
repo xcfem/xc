@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Diseño de anclajes según EOTA TR029
+''' Anchor design according to EOTA TR029'''
 
 from materials.pernos_anclaje import EOTA_TR029_traccion
 
 '''
- ************************************************************************
-    ****************** Resistencia a cortante ******************************
-    ************************************************************************
+************************************************************************
+************************ Shear resistance ******************************
+************************************************************************
 '''
 
 '''
@@ -28,30 +28,33 @@ def shearResistanceGroupWithoutLeverArm(As, fuk, nr):
 
 '''
 Resistencia de un perno a cortante por desprendimiento de cuña de hormigón
-   según las expresiones 5.7 y 5.7a del artículo 5.2.3.3 de EOTA TR029.
-   NRkp: Valor característico del axíl máximo por Pull-Out.
-   NRkc: Valor característico del axíl máximo por desprendimiento de cono.
-   hEf: Profundidad efectiva del anclaje (m).
+   según las expresiones 5.7 y 5.7a del artículo 5.2.3.3 of EOTA TR029.
+
+   :param NRkp: Characteristic resistance of combined pull-out and
+                concrete cone failure (5.2.2.3 of EOTA TR029).
+   :param NRkc: Characteristic resistance in case of concrete cone
+                failure (5.2.2.4 of EOTA TR029).
+   :parma hEf: Profundidad efectiva of the anchor (m).
 '''
 def shearResistanceConcretePryOut(NRkp, NRkc, hEf):
     k= 1.0
-    if(hEf>=60/1000): # 60mm
+    if(hEf>=60e-3): # 60mm
       k=2
     return k*min(NRkp,NRkc)
 
 '''
  ************************************************************************
-    *********** Resistencia a cortante: fallo del borde ********************
-    ************************************************************************
+ *********** Shear resistance: concrete edge failure ********************
+ ************************************************************************
 '''
 
 '''
-Coeficiente que introduce la influencia del tipo de refuerzo empleado en hormigón fisurado
+Coeficiente que introduce la influencia del tipo de refuerzo empleado en cracked concrete
  en la expresión 5.8 de EOTA TR029, calculado según el apartado g) del artículo 5.2.3.4 de EOTA TR029.
   descr: Descriptor que puede tomar los valores:
-  1: Anclaje en hormigón fisurado o no fisurado sin reinforcement de refuerzo en el borde.
-  2: Anclaje en hormigón fisurado con reinforcement de refuerzo en el borde (diámetro > 12mm).
-  3: Anclaje en hormigón fisurado con reinforcement de refuerzo en el borde y estribos próximos entre si (separados menos de 10 cm).
+  1: Anclaje en cracked concrete o no fisurado sin reinforcement de refuerzo en el borde.
+  2: Anclaje en cracked concrete con reinforcement de refuerzo en el borde (diámetro > 12mm).
+  3: Anclaje en cracked concrete con reinforcement de refuerzo en el borde y estribos próximos entre si (separados menos de 10 cm).
 '''
 def psiReVFactor(descr):
   return ifte(descr<=1,1.0,ifte(descr<=2,1.2,1.4))
@@ -126,19 +129,19 @@ def AcV2PernosC2(h, c1, c2, s2):
 '''
 Coeficiente que introduce la influencia de la fisuración del hormigón en la expresión 5.8a de EOTA TR029.
   descr: Descriptor que puede tomar los valores:
-  1: Anclaje en hormigón fisurado.
-  2: Anclaje en hormigón no fisurado.
+  1: Anclaje en cracked concrete.
+  2: Anclaje en non-cracked concrete.
 '''
 def k1Expr58A(descr):
   return ifte(descr<=1,1.7,2.4)
 
 '''
-Valor inicial de la resistencia característica del anclaje a cortante
+Valor inicial de la resistencia característica of the anchor a cortante
    por fallo del borde según la expresión 5.8a del apartado
   a del artículo 5.2.3.4 de EOTA TR029.
   c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
   d: Diámetro del perno.
-  hEf: Profundidad efectiva del anclaje.
+  hEf: Profundidad efectiva of the anchor.
   
 '''
 def VRkC0Expr58(k1, d, hEf, fckCube, c1):

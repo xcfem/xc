@@ -152,7 +152,7 @@ void XC::NodeLockers::removeAllFromDomain(void)
       removeFromDomain(*i);
   }
 
-//! @brief Borra todos los objetos.
+//! @brief Clears all the objects.
 void XC::NodeLockers::clearAll(void)
   {
     removeAllFromDomain();

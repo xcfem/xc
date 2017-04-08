@@ -162,7 +162,7 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
     return retval;
   }
 //! @brief Procesa los comandos que se emplean para definir
-//! los elementos del modelo de elementos finitos. Interpreta
+//! los elementos of the finite element model. Interpreta
 //! los siguientes comandos (if the identifier (tag) is not
 //! specified a default value will be assigned):
 //!
@@ -195,68 +195,68 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
   {
     Element *retval= nullptr;
     if(cmd == "truss")
-      retval= nuevo_elemento_dim_gen_mat<Truss>(tag_elem, dim_elem, get_ptr_material());
+      retval= new_element_dim_gen_mat<Truss>(tag_elem, dim_elem, get_ptr_material());
     else if(cmd == "truss_section")
-      retval= nuevo_elemento_dim_gen_mat<TrussSection>(tag_elem, dim_elem, get_ptr_material());
+      retval= new_element_dim_gen_mat<TrussSection>(tag_elem, dim_elem, get_ptr_material());
     else if(cmd == "corot_truss")
-      retval= nuevo_elemento_dim_gen_mat<CorotTruss>(tag_elem, dim_elem, get_ptr_material());
+      retval= new_element_dim_gen_mat<CorotTruss>(tag_elem, dim_elem, get_ptr_material());
     else if(cmd == "corot_truss_section")
-      retval= nuevo_elemento_dim_gen_mat<CorotTrussSection>(tag_elem, dim_elem, get_ptr_material());
+      retval= new_element_dim_gen_mat<CorotTrussSection>(tag_elem, dim_elem, get_ptr_material());
     else if(cmd == "muelle")
       {
         std::cerr << "ProtoElementLoader::crea_elemento; 'muelle' is DEPRECATED use 'spring'" << std::endl;
-        retval= nuevo_elemento_dim_gen_mat<Spring>(tag_elem, dim_elem, get_ptr_material());
+        retval= new_element_dim_gen_mat<Spring>(tag_elem, dim_elem, get_ptr_material());
       }
     else if(cmd == "spring")
-      retval= nuevo_elemento_dim_gen_mat<Spring>(tag_elem, dim_elem, get_ptr_material());
+      retval= new_element_dim_gen_mat<Spring>(tag_elem, dim_elem, get_ptr_material());
     else if(cmd == "beam2d_02")
-      retval= nuevo_elemento<beam2d02>(tag_elem);
+      retval= new_element<beam2d02>(tag_elem);
     else if(cmd == "beam2d_03")
-      retval= nuevo_elemento<beam2d03>(tag_elem);
+      retval= new_element<beam2d03>(tag_elem);
     else if(cmd == "beam2d_04")
-      retval= nuevo_elemento<beam2d04>(tag_elem);
+      retval= new_element<beam2d04>(tag_elem);
     else if(cmd == "beam3d_01")
-      retval= nuevo_elemento<beam3d01>(tag_elem);
+      retval= new_element<beam3d01>(tag_elem);
     else if(cmd == "beam3d_02")
-      retval= nuevo_elemento<beam3d02>(tag_elem);
+      retval= new_element<beam3d02>(tag_elem);
     else if(cmd == "elastic_beam_2d")
-      retval= nuevo_elemento_mat_crd<ElasticBeam2d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
+      retval= new_element_mat_crd<ElasticBeam2d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
     else if(cmd == "elastic_beam_3d")
-      retval= nuevo_elemento_mat_crd<ElasticBeam3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
+      retval= new_element_mat_crd<ElasticBeam3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
     else if(cmd == "beam_with_hinges_2d")
-      retval= nuevo_elemento_gen_mat_crd<BeamWithHinges2d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
+      retval= new_element_gen_mat_crd<BeamWithHinges2d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
     else if(cmd == "beam_with_hinges_3d")
-      retval= nuevo_elemento_gen_mat_crd<BeamWithHinges3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
+      retval= new_element_gen_mat_crd<BeamWithHinges3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
     else if(cmd == "disp_beam_column_2d")
-      retval= nuevo_elemento_dim_gen_mat_crd<DispBeamColumn2d>(tag_elem, dim_elem, get_ptr_material(), get_ptr_transf_coo());
+      retval= new_element_dim_gen_mat_crd<DispBeamColumn2d>(tag_elem, dim_elem, get_ptr_material(), get_ptr_transf_coo());
     else if(cmd == "disp_beam_column_3d")
-      retval= nuevo_elemento_dim_gen_mat_crd<DispBeamColumn3d>(tag_elem, dim_elem, get_ptr_material(), get_ptr_transf_coo());
+      retval= new_element_dim_gen_mat_crd<DispBeamColumn3d>(tag_elem, dim_elem, get_ptr_material(), get_ptr_transf_coo());
     else if(cmd == "nl_beam_column_2d")
-      retval= nuevo_elemento_ns_gen_mat_crd<NLBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo());
+      retval= new_element_ns_gen_mat_crd<NLBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo());
     else if(cmd == "nl_beam_column_3d")
-      retval= nuevo_elemento_ns_gen_mat_crd<NLBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo());
+      retval= new_element_ns_gen_mat_crd<NLBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo());
     else if(cmd == "force_beam_column_2d")
-      retval= nuevo_elemento_ns_gen_mat_crd_integ<ForceBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(),get_ptr_beam_integrator());
+      retval= new_element_ns_gen_mat_crd_integ<ForceBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(),get_ptr_beam_integrator());
     else if(cmd == "force_beam_column_3d")
-      retval= nuevo_elemento_ns_gen_mat_crd_integ<ForceBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(),get_ptr_beam_integrator());
+      retval= new_element_ns_gen_mat_crd_integ<ForceBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(),get_ptr_beam_integrator());
     else if(cmd == "zero_length")
-      retval= nuevo_elemento_dim_gen_mat_dir<ZeroLength>(tag_elem, dim_elem, get_ptr_material(),dir);
+      retval= new_element_dim_gen_mat_dir<ZeroLength>(tag_elem, dim_elem, get_ptr_material(),dir);
     else if(cmd == "zero_length_contact_2d")
-      retval= nuevo_elemento<ZeroLengthContact2D>(tag_elem);
+      retval= new_element<ZeroLengthContact2D>(tag_elem);
     else if(cmd == "zero_length_contact_3d")
-      retval= nuevo_elemento<ZeroLengthContact3D>(tag_elem);
+      retval= new_element<ZeroLengthContact3D>(tag_elem);
     else if(cmd == "zero_length_section")
-      retval= nuevo_elemento_dim_gen_mat<ZeroLengthSection>(tag_elem, dim_elem, get_ptr_material());
+      retval= new_element_dim_gen_mat<ZeroLengthSection>(tag_elem, dim_elem, get_ptr_material());
     else if(cmd == "shell_mitc4")
       {
-        retval= nuevo_elemento_mat<ShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
+        retval= new_element_mat<ShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
           std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__ << "; material: '"
-                    << nmb_mat << "' no es del tipo adecuado." << std::endl;
+                    << nmb_mat << "' has not a suitable type." << std::endl;
       }
     else if(cmd == "corot_shell_mitc4")
       {
-        retval= nuevo_elemento_mat<CorotShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
+        retval= new_element_mat<CorotShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
           std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
 		    << "; material: '" << nmb_mat << "' is not suitable for "
@@ -264,7 +264,7 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
       }
     else if(cmd == "shell_nl")
       {
-        retval= nuevo_elemento_mat<ShellNL,SectionForceDeformation>(tag_elem, get_ptr_material());
+        retval= new_element_mat<ShellNL,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
           std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
 		    << "; material: '" << nmb_mat << "' is not suitable for "
@@ -272,7 +272,7 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
       }
     else if(cmd == "quad4n")
       {
-        retval= nuevo_elemento_mat<FourNodeQuad,NDMaterial>(tag_elem, get_ptr_material());
+        retval= new_element_mat<FourNodeQuad,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
           std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
 		    << "; material: '" << nmb_mat << "' is not suitable for "
@@ -280,7 +280,7 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
       }
     else if(cmd == "tri31")
       {
-        retval= nuevo_elemento_mat<Tri31,NDMaterial>(tag_elem, get_ptr_material());
+        retval= new_element_mat<Tri31,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
           std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
 		    << "; material: '" << nmb_mat << "' is not suitable for "
@@ -288,7 +288,7 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
       }
     else if(cmd == "brick")
       {
-        retval= nuevo_elemento_mat<Brick,NDMaterial>(tag_elem, get_ptr_material());
+        retval= new_element_mat<Brick,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
           std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
 		    << "; material: '" << nmb_mat << "' is not suitable for "
@@ -299,7 +299,7 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
     return retval;
   }
 
-//! @brief Crea un nuevo elemento.
+//! @brief Creates a new element.
 XC::Element *XC::ProtoElementLoader::nuevoElemento(const std::string &tipo,const ID &iNodos)
   {
     const int tag_elem= getDefaultTag();
@@ -314,8 +314,9 @@ XC::Element *XC::ProtoElementLoader::nuevoElemento(const std::string &tipo,const
           }
       }
     else
-      std::cerr << "ProtoElementLoader::nuevoElemento; ERROR el elemento: "
-                << tag_elem << " ya existe.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; ERROR the element: "
+                << tag_elem << " already exists.\n";
     return retval;
   }
 

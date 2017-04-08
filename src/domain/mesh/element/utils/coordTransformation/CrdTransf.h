@@ -87,7 +87,7 @@ class TransfCooLoader;
 class CrdTransf: public TaggedObject, public MovableObject
   {
   protected:
-    Node *nodeIPtr, *nodeJPtr; //!< pointers to los nodos extremos del elemento.
+    Node *nodeIPtr, *nodeJPtr; //!< pointers to los nodos extremos of the element.
     mutable double L; //!< element length
     Vector nodeIOffset,nodeJOffset; //!< rigid joint offsets
     std::vector<double> nodeIInitialDisp; //!< Initial displacement for I node.

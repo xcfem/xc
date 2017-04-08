@@ -163,7 +163,7 @@ XC::SetEstruct *XC::Cad::busca_set_estruct(const MapUniformGrids::Indice &id)
     return retval;
   }
 
-//! @brief Borra todas las entidades geométricas.
+//! @brief Erases todas las entidades geométricas.
 void XC::Cad::clearAll(void)
   {
     reference_systems.clearAll();

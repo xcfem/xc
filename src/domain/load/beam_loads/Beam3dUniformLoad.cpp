@@ -109,8 +109,8 @@ const XC::Matrix &XC::Beam3dUniformLoad::getAppliedSectionForces(const double &L
     return retval;
   }
 
-//! @brief Añade the load al consistent load vector (ver página 108 libro Eugenio Oñate).
-//! @param L Longitud del elemento.
+//! @brief Adds the load al consistent load vector (ver página 108 libro Eugenio Oñate).
+//! @param L Length of the element.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
 void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0) const
@@ -121,7 +121,7 @@ void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
     //const double tx= Tx()*loadFactor;  // Torsor
 
     //Esfuerzos sobre elemento.
-    const double Vy = 0.5*wy*L; // Cortante en y en los extremos del elemento.
+    const double Vy = 0.5*wy*L; // Cortante en y en los extremos of the element.
     const double Vz = 0.5*wz*L; // Cortante en z.
     const double P = wx*L; //Axil.
 
@@ -134,7 +134,7 @@ void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
   }
 
 //! @brief ??
-//! @param L Longitud del elemento.
+//! @param L Length of the element.
 //! @param loadFactor Load factor.
 //! @param q0 ??
 void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0) const
@@ -145,8 +145,8 @@ void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const
     //const double tx= Tx()*loadFactor;  // Torsor
 
     //Esfuerzos sobre elemento.
-    const double Mz = wy*L*L/12.0; // Momento flector en z en los extremos del elemento: wy*L*L/12
-    const double My = wz*L*L/12.0; // Momento flector en y en los extremos del elemento: wz*L*L/12
+    const double Mz = wy*L*L/12.0; // Momento flector en z en los extremos of the element: wy*L*L/12
+    const double My = wz*L*L/12.0; // Momento flector en y en los extremos of the element: wz*L*L/12
     const double P = wx*L; //Axil.
 
     // Fixed end forces in basic system

@@ -60,7 +60,7 @@ int XC::NodeLoader::getDefaultTag(void) const
 void XC::NodeLoader::setDefaultTag(const int &tag)
   { Node::getDefaultTag().setTag(tag); }
 
-//! @brief Borra todos los nodos y 
+//! @brief Clears all. los nodos y 
 void XC::NodeLoader::clearAll(void)
   {
     libera();
